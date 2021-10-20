@@ -26,8 +26,6 @@ describe('PoEmailComponent:', () => {
     component.label = 'Label de teste';
     component.help = 'Help de teste';
     component.clean = true;
-
-    fixture.detectChanges();
   });
 
   it('should be created', () => {
@@ -35,6 +33,7 @@ describe('PoEmailComponent:', () => {
   });
 
   it('should return null in extraValidation()', () => {
+    fixture.detectChanges();
     expect(component.extraValidation(null)).toBeNull();
   });
 
@@ -107,6 +106,7 @@ describe('PoEmailComponent:', () => {
     const eventKeyup = new KeyboardEvent('keyup', { 'key': 'a' });
 
     it('should have `mail` icon', () => {
+      fixture.detectChanges();
       expect(fixture.debugElement.nativeElement.querySelector('.po-icon-mail')).toBeTruthy();
     });
 

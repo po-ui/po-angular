@@ -7,7 +7,9 @@ import {
   ViewChild,
   AfterViewInit,
   Renderer2,
-  OnDestroy
+  OnDestroy,
+  SimpleChanges,
+  OnChanges
 } from '@angular/core';
 import { NG_VALIDATORS, NG_VALUE_ACCESSOR } from '@angular/forms';
 
@@ -77,7 +79,7 @@ const providers = [
 })
 export class PoDatepickerRangeComponent
   extends PoDatepickerRangeBaseComponent
-  implements AfterViewInit, OnInit, OnDestroy {
+  implements AfterViewInit, OnInit, OnDestroy, OnChanges {
   @ViewChild('dateRangeField', { read: ElementRef, static: true }) dateRangeField: ElementRef;
   @ViewChild('endDateInput', { read: ElementRef, static: true }) endDateInput: ElementRef;
   @ViewChild('startDateInput', { read: ElementRef, static: true }) startDateInput: ElementRef;
@@ -166,6 +168,12 @@ export class PoDatepickerRangeComponent
   ngOnInit() {
     // Classe de máscara
     this.poMaskObject = this.buildMask();
+  }
+
+  ngOnChanges(changes: SimpleChanges): void {
+    if (changes.minDate || changes.maxDate) {
+      this.validateModel(this.dateRange);
+    }
   }
 
   ngOnDestroy() {

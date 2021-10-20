@@ -1,5 +1,5 @@
 import { AbstractControl, NG_VALIDATORS, NG_VALUE_ACCESSOR } from '@angular/forms';
-import { Component, ElementRef, forwardRef, Input } from '@angular/core';
+import { ChangeDetectionStrategy, ChangeDetectorRef, Component, ElementRef, forwardRef, Input } from '@angular/core';
 
 import { convertToBoolean } from '../../../utils/util';
 import { PoInputGeneric } from '../po-input-generic/po-input-generic';
@@ -30,6 +30,7 @@ import { PoInputGeneric } from '../po-input-generic/po-input-generic';
 @Component({
   selector: 'po-password',
   templateUrl: './po-password.component.html',
+  changeDetection: ChangeDetectionStrategy.OnPush,
   providers: [
     {
       provide: NG_VALUE_ACCESSOR,
@@ -75,8 +76,8 @@ export class PoPasswordComponent extends PoInputGeneric {
   }
 
   /* istanbul ignore next */
-  constructor(el: ElementRef) {
-    super(el);
+  constructor(el: ElementRef, cd: ChangeDetectorRef) {
+    super(el, cd);
   }
 
   extraValidation(c: AbstractControl): { [key: string]: any } {

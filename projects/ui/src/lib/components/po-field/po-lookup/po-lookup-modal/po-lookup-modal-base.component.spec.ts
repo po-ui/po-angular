@@ -1,4 +1,4 @@
-import { Directive } from '@angular/core';
+import { ChangeDetectorRef, Directive } from '@angular/core';
 import { ComponentFixture, TestBed } from '@angular/core/testing';
 import { Observable, of, throwError } from 'rxjs';
 
@@ -23,23 +23,15 @@ describe('PoLookupModalBaseComponent:', () => {
   let fakeSubscription = <any>{ unsubscribe: () => {} };
   let items;
 
-  configureTestSuite(() => {
-    TestBed.configureTestingModule({
-      providers: [PoLanguageService]
-    }).compileComponents();
-  });
-
   beforeEach(() => {
-    // component = new PoLookupModalComponent(new PoLanguageService(), changeDetector);
-    fixture = TestBed.createComponent(PoLookupModalComponent);
-    component = fixture.componentInstance;
+    const changeDetector: any = { detectChanges: () => {} };
+    component = new PoLookupModalComponent(new PoLanguageService(), changeDetector);
+
     component.filterService = {
       getFilteredItems: ({ filter, pageSize }) => of({ items: [], hasNext: false }),
       getObjectByValue: () => of()
     };
-
     fakeSubscription = { unsubscribe: () => {} };
-
     items = [
       { value: 1, label: 'Água' },
       { value: 2, label: 'Café' },
@@ -48,8 +40,9 @@ describe('PoLookupModalBaseComponent:', () => {
       { value: 5, label: 'Suco em lata' }
     ];
 
+    component.poTable = <any>{ selectRowItem: () => {} };
+
     component.ngOnInit();
-    fixture.detectChanges();
   });
 
   it('should init modal with items', () => {

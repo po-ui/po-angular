@@ -23,19 +23,21 @@ describe('PoNumberComponent:', () => {
     component = fixture.componentInstance;
     component.clean = true;
     component.type = 'password';
-    fixture.detectChanges();
     nativeElement = fixture.debugElement.nativeElement;
   });
 
   it('should be created', () => {
+    fixture.detectChanges();
     expect(component).toBeTruthy();
   });
 
   it('should return null in extraValidation()', () => {
+    fixture.detectChanges();
     expect(component.extraValidation(null)).toBeNull();
   });
 
   it('should be type password', () => {
+    fixture.detectChanges();
     expect(component.type === 'password').toBeTruthy();
   });
 
