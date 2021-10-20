@@ -34,7 +34,7 @@ const closeModalInstance = (modalInstance: ComponentRef<any>) => {
 
 export const routes: Routes = [{ path: '', redirectTo: 'home', pathMatch: 'full' }];
 
-fdescribe('PoLookupComponent:', () => {
+describe('PoLookupComponent:', () => {
   let component: PoLookupComponent;
   let fixture: ComponentFixture<PoLookupComponent>;
   const fakeSubscription = <any>{ unsubscribe: () => {} };
