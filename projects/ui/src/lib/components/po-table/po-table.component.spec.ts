@@ -1848,18 +1848,18 @@ describe('PoTableComponent:', () => {
       });
 
       it('unselectRowItem: should set false in "selectAll" if all items are unselected', () => {
-        const item = {
+        const newItem = {
           value: 1,
           label: 'teste'
         };
 
         component.items = [
           {
-            item
+            newItem
           }
         ];
 
-        component['toggleSelect'](item, true);
+        component['toggleSelect'](newItem, true);
 
         component.unselectRowItem(item => false);
 
@@ -1867,40 +1867,40 @@ describe('PoTableComponent:', () => {
       });
 
       it(`unselectRowItem: should set null in selectAll if it doesn't contain all selected items`, () => {
-        const item = {
+        const newItem = {
           value: 1,
           label: 'teste'
         };
-        const item2 = {
+        const newItem2 = {
           value: 2,
           label: 'teste2'
         };
 
-        component.items = [item, item2];
+        component.items = [newItem, newItem2];
 
-        component['toggleSelect'](item, false);
-        component['toggleSelect'](item2, true);
+        component['toggleSelect'](newItem, false);
+        component['toggleSelect'](newItem2, true);
 
-        component.unselectRowItem(item);
+        component.unselectRowItem(newItem);
 
         expect(component.selectAll).toBeNull();
       });
 
       it('selectRowItem: should set true in "selectAll" if all items are selected', () => {
-        const item = {
+        const newItem = {
           value: 1,
           label: 'teste'
         };
 
         component.items = [
           {
-            item
+            newItem
           }
         ];
 
-        component['toggleSelect'](item, true);
+        component['toggleSelect'](newItem, true);
 
-        component.selectRowItem(item => true);
+        component.selectRowItem(newItem => true);
 
         expect(component.selectAll).toBeTruthy();
       });
@@ -1926,20 +1926,20 @@ describe('PoTableComponent:', () => {
       });
 
       it('toggleSelect: should add item as "selected"', () => {
-        const item = {
+        const newItem = {
           value: 1,
           label: 'teste'
         };
-        const item2 = {
+        const newItem2 = {
           value: 2,
           label: 'teste2'
         };
 
-        component.items = [item, item2];
+        component.items = [newItem, newItem2];
 
-        component['toggleSelect'](item, true);
+        component['toggleSelect'](newItem, true);
 
-        const listSelected: any[] = component.getSelectedRows();
+        const listSelected: Array<any> = component.getSelectedRows();
 
         expect(listSelected.length).toEqual(1);
       });
