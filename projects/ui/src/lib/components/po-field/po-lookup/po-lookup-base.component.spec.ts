@@ -1,15 +1,11 @@
-import { Directive, Inject, Injector } from '@angular/core';
+import { Directive, Injector, SimpleChanges } from '@angular/core';
 import { fakeAsync, inject, TestBed, tick } from '@angular/core/testing';
 import { FormControl, NgControl } from '@angular/forms';
-
 import { Observable, of, throwError } from 'rxjs';
-
-import { expectPropertiesValues, expectSettersMethod, configureTestSuite } from '../../../util-test/util-expect.spec';
-
+import { configureTestSuite, expectPropertiesValues, expectSettersMethod } from '../../../util-test/util-expect.spec';
 import * as ValidatorsFunctions from '../validators';
-
-import { PoLookupBaseComponent } from './po-lookup-base.component';
 import { PoLookupFilter } from './interfaces/po-lookup-filter.interface';
+import { PoLookupBaseComponent } from './po-lookup-base.component';
 import { PoLookupFilterService } from './services/po-lookup-filter.service';
 
 class LookupFilterService implements PoLookupFilter {
@@ -86,6 +82,19 @@ describe('PoLookupBaseComponent:', () => {
     expectSettersMethod(component, 'required', NaN, 'required', false);
     expectSettersMethod(component, 'required', 'undefined', 'required', false);
     expectSettersMethod(component, 'required', undefined, 'required', false);
+  });
+
+  it('should set no autocomplete', () => {
+    expectSettersMethod(component, 'noAutocomplete', true, 'noAutocomplete', true);
+    expectSettersMethod(component, 'noAutocomplete', true, '_noAutocomplete', true);
+    expectSettersMethod(component, 'noAutocomplete', false, 'noAutocomplete', false);
+    expectSettersMethod(component, 'noAutocomplete', false, '_noAutocomplete', false);
+    expectSettersMethod(component, 'noAutocomplete', '', 'noAutocomplete', true);
+    expectSettersMethod(component, 'noAutocomplete', '', '_noAutocomplete', true);
+    expectSettersMethod(component, 'noAutocomplete', null, 'noAutocomplete', false);
+    expectSettersMethod(component, 'noAutocomplete', null, '_noAutocomplete', false);
+    expectSettersMethod(component, 'noAutocomplete', undefined, 'noAutocomplete', false);
+    expectSettersMethod(component, 'noAutocomplete', undefined, '_noAutocomplete', false);
   });
 
   it('p-infinite-scroll: should update property `p-infinite-scroll`', () => {
@@ -291,6 +300,45 @@ describe('PoLookupBaseComponent:', () => {
 
   describe('ngOnChanges', () => {});
 
+  it('multiple', () => {
+    spyOn<any>(component['defaultService'], 'setConfig');
+    component.multiple = true;
+    component.fieldValue = 'value';
+    component.filterService = 'http://url.com';
+
+    const changes: SimpleChanges = {
+      multiple: {
+        previousValue: false,
+        currentValue: true,
+        firstChange: true,
+        isFirstChange: () => false
+      }
+    };
+
+    component.ngOnChanges(changes);
+
+    expect(component['defaultService'].setConfig).toHaveBeenCalledWith('http://url.com', 'value', true);
+  });
+  it('not multiple', () => {
+    spyOn<any>(component['defaultService'], 'setConfig');
+    component.multiple = false;
+    component.fieldValue = 'value';
+    component.filterService = 'http://url.com';
+
+    const changes: SimpleChanges = {
+      multiple: {
+        previousValue: false,
+        currentValue: true,
+        firstChange: true,
+        isFirstChange: () => false
+      }
+    };
+
+    component.ngOnChanges(changes);
+
+    expect(component['defaultService'].setConfig).not.toHaveBeenCalledWith('http://url.com', 'value', true);
+  });
+
   it('selectModel: should call `setViewValue` with `test label` and object selected', () => {
     const objectSelected = { value: 123, label: 'test label' };
     component['keysDescription'] = ['label'];
@@ -374,7 +422,7 @@ describe('PoLookupBaseComponent:', () => {
         spyOn(component, 'selectValue');
         const spyPending = spyOn(component['control'], 'markAsPending');
         const spyUpdate = spyOn(component['control'], 'updateValueAndValidity');
-        spyOn(component.service, 'getObjectByValue').and.returnValue(of({ id: 1, name: 'po' }));
+        spyOn(component.service, 'getObjectByValue').and.returnValue(of([{ id: 1, name: 'po' }]));
 
         component.searchById(searchValue);
 
@@ -382,8 +430,6 @@ describe('PoLookupBaseComponent:', () => {
 
         expect(spyPending).toHaveBeenCalled();
         expect(spyUpdate).toHaveBeenCalled();
-        expect(component['setDisclaimers']).toHaveBeenCalled();
-        expect(component['updateVisibleItems']).toHaveBeenCalled();
         expect(component.service.getObjectByValue).toHaveBeenCalledWith(searchValue, filterParams);
       })
     ));
@@ -425,6 +471,142 @@ describe('PoLookupBaseComponent:', () => {
       (lookupFilterService: LookupFilterService) => {
         const expectedValue = ' Item X';
         component.service = lookupFilterService;
+
+        spyOn(component.service, 'getObjectByValue').and.returnValue(throwError({ id: 1 }));
+
+        component.filterParams = undefined;
+        component.searchById(expectedValue);
+
+        expect(component.service['getObjectByValue']).toHaveBeenCalledWith(expectedValue, component.filterParams);
+      }
+    ));
+
+    it('searchById: multiple should call `selectValue` if `getObjectByValue` return array of value', fakeAsync(
+      inject([LookupFilterService], (lookupFilterService: LookupFilterService) => {
+        const searchValue = 'po';
+        const filterParams = { code: '' };
+
+        component['control'] = { markAsPending: () => {}, updateValueAndValidity: () => {} } as FormControl;
+        component.filterParams = filterParams;
+        component.service = lookupFilterService;
+        component.multiple = true;
+
+        spyOn(component, 'selectValue');
+        const spyPending = spyOn(component['control'], 'markAsPending');
+        const spyUpdate = spyOn(component['control'], 'updateValueAndValidity');
+        spyOn(component.service, 'getObjectByValue').and.returnValue(
+          of([
+            { id: 1, name: 'po' },
+            { id: 2, name: 'ui' }
+          ])
+        );
+        spyOn(component, <any>'setDisclaimers');
+        spyOn(component, <any>'updateVisibleItems');
+
+        component.searchById(searchValue);
+
+        tick();
+
+        expect(spyPending).toHaveBeenCalled();
+        expect(spyUpdate).toHaveBeenCalled();
+        expect(component['setDisclaimers']).toHaveBeenCalled();
+        expect(component['updateVisibleItems']).toHaveBeenCalled();
+        expect(component.service.getObjectByValue).toHaveBeenCalledWith(searchValue, filterParams);
+      })
+    ));
+    it('searchById: multiple should call `selectValue` if `getObjectByValue` return empty value', fakeAsync(
+      inject([LookupFilterService], (lookupFilterService: LookupFilterService) => {
+        const searchValue = 'po';
+        const filterParams = { code: '' };
+
+        component['control'] = { markAsPending: () => {}, updateValueAndValidity: () => {} } as FormControl;
+        component.filterParams = filterParams;
+        component.service = lookupFilterService;
+        component.multiple = true;
+
+        spyOn(component, 'selectValue');
+        const spyPending = spyOn(component['control'], 'markAsPending');
+        const spyUpdate = spyOn(component['control'], 'updateValueAndValidity');
+        spyOn(component.service, 'getObjectByValue').and.returnValue(of([]));
+        spyOn(component, <any>'cleanModel');
+
+        component.searchById(searchValue);
+
+        tick();
+
+        expect(spyPending).toHaveBeenCalled();
+        expect(spyUpdate).toHaveBeenCalled();
+        expect(component.service.getObjectByValue).toHaveBeenCalledWith(searchValue, filterParams);
+        expect(component.cleanModel).toHaveBeenCalled();
+      })
+    ));
+    it('searchById: multiple should call `selectValue` if `getObjectByValue` return value 3', fakeAsync(
+      inject([LookupFilterService], (lookupFilterService: LookupFilterService) => {
+        const searchValue = 'po';
+        const filterParams = { code: '' };
+
+        component['control'] = { markAsPending: () => {}, updateValueAndValidity: () => {} } as FormControl;
+        component.filterParams = filterParams;
+        component.service = lookupFilterService;
+        component.multiple = true;
+
+        spyOn(component, 'selectValue');
+        const spyPending = spyOn(component['control'], 'markAsPending');
+        const spyUpdate = spyOn(component['control'], 'updateValueAndValidity');
+        spyOn(component.service, 'getObjectByValue').and.returnValue(of(undefined));
+        spyOn(component, <any>'cleanModel');
+
+        component.searchById(searchValue);
+
+        tick();
+
+        expect(spyPending).toHaveBeenCalled();
+        expect(spyUpdate).toHaveBeenCalled();
+        expect(component.service.getObjectByValue).toHaveBeenCalledWith(searchValue, filterParams);
+        expect(component.cleanModel).toHaveBeenCalled();
+      })
+    ));
+
+    it('searchById: multiple should call `cleanModel` when execute the method `searchById` with empty param.', () => {
+      spyOn(component, <any>'cleanModel');
+      component.multiple = true;
+
+      component.searchById('');
+
+      expect(component['cleanModel']).toHaveBeenCalled();
+    });
+
+    it('searchById: should call `cleanModel` when execute the method `searchById` with `space` param.', () => {
+      spyOn(component, <any>'cleanModel');
+
+      component.searchById(' ');
+
+      expect(component['cleanModel']).toHaveBeenCalled();
+    });
+
+    it('searchById: multiple should call `cleanModel` and emit `onError` when return a 404 error.', inject(
+      [LookupFilterService],
+      (lookupFilterService: LookupFilterService) => {
+        component.service = lookupFilterService;
+        component.multiple = true;
+
+        spyOn(component, <any>'cleanModel');
+        spyOn(component.onError, 'emit');
+        spyOn(component.service, 'getObjectByValue').and.returnValue(throwError({ status: 404 }));
+
+        component.searchById('aaa');
+
+        expect(component['cleanModel']).toHaveBeenCalled();
+        expect(component.onError['emit']).toHaveBeenCalled();
+      }
+    ));
+
+    it('searchById: multiple should call getObjectByValue with value starting with white spaces', inject(
+      [LookupFilterService],
+      (lookupFilterService: LookupFilterService) => {
+        const expectedValue = ' Item X';
+        component.service = lookupFilterService;
+        component.multiple = true;
 
         spyOn(component.service, 'getObjectByValue').and.returnValue(throwError({ id: 1 }));
 
