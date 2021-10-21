@@ -29,7 +29,7 @@ class PoLookupComponent extends PoLookupBaseComponent {
   updateVisibleItems() {}
 }
 
-fdescribe('PoLookupBaseComponent:', () => {
+describe('PoLookupBaseComponent:', () => {
   let component: PoLookupComponent;
   let defaultService: PoLookupFilterService;
   let injector: Injector;
