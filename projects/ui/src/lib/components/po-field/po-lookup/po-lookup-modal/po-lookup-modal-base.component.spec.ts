@@ -16,7 +16,7 @@ class PoLookupModalComponent extends PoLookupModalBaseComponent {
   destroyDynamicForm(): void {}
 }
 
-fdescribe('PoLookupModalBaseComponent:', () => {
+describe('PoLookupModalBaseComponent:', () => {
   let component: PoLookupModalComponent;
   let fixture: ComponentFixture<PoLookupModalComponent>;
 
