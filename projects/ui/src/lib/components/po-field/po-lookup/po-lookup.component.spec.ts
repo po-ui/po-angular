@@ -116,7 +116,10 @@ describe('PoLookupComponent:', () => {
   });
 
   describe('Methods:', () => {
-    const objectSelected: any = { label: 'teste', value: 123 };
+    const objectSelected = [
+      { label: 'teste', value: 123 },
+      { label: 'teste1', value: 456 }
+    ];
 
     describe('ngAfterViewInit:', () => {
       let inputFocus: jasmine.Spy;
@@ -288,6 +291,25 @@ describe('PoLookupComponent:', () => {
 
       expect(component['selectModel']).toHaveBeenCalledWith(objectSelected);
       expect(component['modalSubscription']).toBeDefined();
+    }));
+
+    it(`openLookup: should set 'modalSubscription' and call 'setDisclaimers' if 'selectedOptions' is greater than one and
+    'modalSubscription' is undefined`, inject([LookupFilterService], (lookupFilterService: LookupFilterService) => {
+      component.service = lookupFilterService;
+      component['modalSubscription'] = undefined;
+      component['poLookupModalService'].selectValueEvent = <any>of(objectSelected);
+
+      spyOn(component, 'setDisclaimers');
+      spyOn(component, 'updateVisibleItems');
+      spyOn(component, <any>'selectModel');
+      spyOn(component, <any>'isAllowedOpenModal').and.returnValue(true);
+
+      component.openLookup();
+
+      expect(component['selectModel']).toHaveBeenCalledWith(objectSelected);
+      expect(component['modalSubscription']).toBeDefined();
+      expect(component['setDisclaimers']).toHaveBeenCalled();
+      expect(component['updateVisibleItems']).toBeDefined();
     }));
 
     it('setViewValue: should call `setInputValueWipoieldFormat` when `fieldFormat` is defined', () => {
