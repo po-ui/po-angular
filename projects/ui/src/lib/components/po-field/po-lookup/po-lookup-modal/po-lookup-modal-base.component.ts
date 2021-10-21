@@ -327,7 +327,6 @@ export abstract class PoLookupModalBaseComponent implements OnDestroy, OnInit {
           this.isLoading = false;
           this.changeDetector.detectChanges();
           this.setSelectedItems();
-          this.setDisclaimersItems();
         },
         () => {}
       );
@@ -335,14 +334,14 @@ export abstract class PoLookupModalBaseComponent implements OnDestroy, OnInit {
 
   //Método responsável por selecionar as linhas quando abre o modal.
   setSelectedItems() {
-    if (this.selectedItems && this.selectedItems.length > 1) {
-      this.selectedItems.forEach(selectedItem =>
+    if (this.selecteds && this.selecteds.length > 1) {
+      this.selecteds.forEach(selectedItem =>
         this.poTable.selectRowItem(item => item[this.fieldValue] === selectedItem.value)
       );
-    } else if (!Array.isArray(this.selectedItems)) {
-      this.poTable.selectRowItem(item => item[this.fieldValue] === this.selectedItems);
+    } else if (!Array.isArray(this.selecteds)) {
+      this.poTable.selectRowItem(item => item[this.fieldValue] === this.selecteds);
     } else {
-      this.selectedItems.forEach(selectedItem =>
+      this.selecteds.forEach(selectedItem =>
         this.poTable.selectRowItem(item => item[this.fieldValue] === selectedItem?.value)
       );
     }
@@ -350,6 +349,11 @@ export abstract class PoLookupModalBaseComponent implements OnDestroy, OnInit {
 
   //Método responsável por criar os disclaimers quando abre o modal.
   setDisclaimersItems() {
+    if (this.selectedItems && !Array.isArray(this.selectedItems)) {
+      this.selecteds = [{ value: this.selectedItems }];
+      return;
+    }
+
     if (this.selectedItems && this.selectedItems.length) {
       this.selecteds = [...this.selectedItems];
     }
@@ -448,8 +452,8 @@ export abstract class PoLookupModalBaseComponent implements OnDestroy, OnInit {
     this.hasNext = data?.hasNext ?? false;
     this.isLoading = false;
     this.changeDetector.detectChanges();
-    this.setSelectedItems();
     this.setDisclaimersItems();
+    this.setSelectedItems();
   }
 
   private setTableLiterals() {
