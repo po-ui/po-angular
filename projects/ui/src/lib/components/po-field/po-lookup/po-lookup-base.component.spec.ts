@@ -481,7 +481,7 @@ describe('PoLookupBaseComponent:', () => {
       }
     ));
 
-    it('searchById: multiple should call `selectValue` if `getObjectByValue` return array of value', fakeAsync(
+    it('searchById: should be muliple and call `selectValue` if `getObjectByValue` return array of value', fakeAsync(
       inject([LookupFilterService], (lookupFilterService: LookupFilterService) => {
         const searchValue = 'po';
         const filterParams = { code: '' };
@@ -514,7 +514,32 @@ describe('PoLookupBaseComponent:', () => {
         expect(component.service.getObjectByValue).toHaveBeenCalledWith(searchValue, filterParams);
       })
     ));
-    it('searchById: multiple should call `selectValue` if `getObjectByValue` return empty value', fakeAsync(
+    it('searchById: ALOK should be muliple and call `selectValue` if `getObjectByValue` return array of value', fakeAsync(
+      inject([LookupFilterService], (lookupFilterService: LookupFilterService) => {
+        const searchValue = 'po';
+        const filterParams = { code: '' };
+
+        component['control'] = { markAsPending: () => {}, updateValueAndValidity: () => {} } as FormControl;
+        component.filterParams = filterParams;
+        component.service = lookupFilterService;
+        component.multiple = true;
+
+        spyOn(component, 'selectValue');
+        const spyPending = spyOn(component['control'], 'markAsPending');
+        const spyUpdate = spyOn(component['control'], 'updateValueAndValidity');
+        spyOn(component.service, 'getObjectByValue').and.returnValue(of([]));
+
+        component.searchById(searchValue);
+
+        tick();
+
+        expect(spyPending).toHaveBeenCalled();
+        expect(spyUpdate).toHaveBeenCalled();
+        expect(component.service.getObjectByValue).toHaveBeenCalledWith(searchValue, filterParams);
+      })
+    ));
+
+    it('searchById: should be multiple and call `selectValue` if `getObjectByValue` return empty value', fakeAsync(
       inject([LookupFilterService], (lookupFilterService: LookupFilterService) => {
         const searchValue = 'po';
         const filterParams = { code: '' };
@@ -540,7 +565,7 @@ describe('PoLookupBaseComponent:', () => {
         expect(component.cleanModel).toHaveBeenCalled();
       })
     ));
-    it('searchById: multiple should call `selectValue` if `getObjectByValue` return value 3', fakeAsync(
+    it('searchById: should be multiple and call `selectValue` if `getObjectByValue` return value 3', fakeAsync(
       inject([LookupFilterService], (lookupFilterService: LookupFilterService) => {
         const searchValue = 'po';
         const filterParams = { code: '' };
@@ -567,7 +592,7 @@ describe('PoLookupBaseComponent:', () => {
       })
     ));
 
-    it('searchById: multiple should call `cleanModel` when execute the method `searchById` with empty param.', () => {
+    it('searchById: should be multiple and call `cleanModel` when execute the method `searchById` with empty param.', () => {
       spyOn(component, <any>'cleanModel');
       component.multiple = true;
 
@@ -584,7 +609,7 @@ describe('PoLookupBaseComponent:', () => {
       expect(component['cleanModel']).toHaveBeenCalled();
     });
 
-    it('searchById: multiple should call `cleanModel` and emit `onError` when return a 404 error.', inject(
+    it('searchById: should be multiple and call `cleanModel` and emit `onError` when return a 404 error.', inject(
       [LookupFilterService],
       (lookupFilterService: LookupFilterService) => {
         component.service = lookupFilterService;
@@ -601,7 +626,7 @@ describe('PoLookupBaseComponent:', () => {
       }
     ));
 
-    it('searchById: multiple should call getObjectByValue with value starting with white spaces', inject(
+    it('searchById: should be multiple and call getObjectByValue with value starting with white spaces', inject(
       [LookupFilterService],
       (lookupFilterService: LookupFilterService) => {
         const expectedValue = ' Item X';

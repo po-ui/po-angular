@@ -1,31 +1,29 @@
-import { AbstractControl, ControlValueAccessor, NgControl, Validator, FormControl } from '@angular/forms';
 import {
+  AfterViewInit,
+  Directive,
   EventEmitter,
+  Inject,
+  InjectFlags,
+  Injector,
   Input,
+  OnChanges,
   OnDestroy,
   OnInit,
   Output,
-  Directive,
-  Injector,
-  AfterViewInit,
-  Inject,
-  InjectFlags,
-  SimpleChanges,
-  OnChanges
+  SimpleChanges
 } from '@angular/core';
-
+import { AbstractControl, ControlValueAccessor, FormControl, NgControl, Validator } from '@angular/forms';
 import { Subscription } from 'rxjs';
+import { finalize } from 'rxjs/operators';
 
+import { InputBoolean } from '../../../decorators';
 import { convertToBoolean, isTypeof } from '../../../utils/util';
 import { requiredFailed } from '../validators';
-
 import { PoLookupAdvancedFilter } from './interfaces/po-lookup-advanced-filter.interface';
 import { PoLookupColumn } from './interfaces/po-lookup-column.interface';
 import { PoLookupFilter } from './interfaces/po-lookup-filter.interface';
-import { PoLookupFilterService } from './services/po-lookup-filter.service';
 import { PoLookupLiterals } from './interfaces/po-lookup-literals.interface';
-import { InputBoolean } from '../../../decorators';
-import { finalize } from 'rxjs/operators';
+import { PoLookupFilterService } from './services/po-lookup-filter.service';
 
 /**
  * @description
@@ -549,7 +547,7 @@ export abstract class PoLookupBaseComponent
         .subscribe(
           element => {
             if (element?.length || (!Array.isArray(element) && element)) {
-              if (element?.length > 1) {
+              if (Array.isArray(element) && element.length > 1) {
                 this.setDisclaimers(element);
                 this.updateVisibleItems();
               }
@@ -601,12 +599,17 @@ export abstract class PoLookupBaseComponent
 
   // Chama o método writeValue e preenche o model.
   protected selectModel(options: Array<any>) {
-    const newModel = this.multiple ? options.map(option => option[this.fieldValue]) : options[0][this.fieldValue];
-    this.selectValue(newModel);
+    if (options.length) {
+      const newModel = this.multiple ? options.map(option => option[this.fieldValue]) : options[0][this.fieldValue];
+      this.selectValue(newModel);
 
-    if (options.length === 1) {
-      this.oldValue = options[0][this.fieldLabel];
-      this.setViewValue(this.getFormattedLabel(options[0]), options[0]);
+      if (options.length === 1) {
+        this.oldValue = options[0][this.fieldLabel];
+        this.setViewValue(this.getFormattedLabel(options[0]), options[0]);
+      }
+    } else {
+      this.selectValue(undefined);
+      this.cleanViewValue();
     }
   }
 
