@@ -59,7 +59,11 @@ export class PoLookupModalComponent extends PoLookupModalBaseComponent implement
 
   // Seleciona um item na tabela
   onSelect(item) {
-    this.selecteds = [...this.selecteds, { value: item[this.fieldValue], label: item[this.fieldLabel] }];
+    if (this.multiple) {
+      this.selecteds = [...this.selecteds, { value: item[this.fieldValue], label: item[this.fieldLabel] }];
+    } else {
+      this.selecteds = [{ value: item[this.fieldValue], label: item[this.fieldLabel] }];
+    }
   }
 
   // Remove a seleção de um item na tabela
