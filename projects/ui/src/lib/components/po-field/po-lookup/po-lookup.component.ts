@@ -196,7 +196,7 @@ export class PoLookupComponent extends PoLookupBaseComponent implements AfterVie
 
       if (!this.modalSubscription) {
         this.modalSubscription = this.poLookupModalService.selectValueEvent.subscribe(selectedOptions => {
-          if (selectedOptions.length > 1) {
+          if (selectedOptions.length > 1 || this.disclaimers.length) {
             this.setDisclaimers(selectedOptions);
             this.updateVisibleItems();
           }

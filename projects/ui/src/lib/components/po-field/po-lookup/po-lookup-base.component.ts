@@ -599,12 +599,17 @@ export abstract class PoLookupBaseComponent
 
   // Chama o método writeValue e preenche o model.
   protected selectModel(options: Array<any>) {
-    const newModel = this.multiple ? options.map(option => option[this.fieldValue]) : options[0][this.fieldValue];
-    this.selectValue(newModel);
+    if (options.length) {
+      const newModel = this.multiple ? options.map(option => option[this.fieldValue]) : options[0][this.fieldValue];
+      this.selectValue(newModel);
 
-    if (options.length === 1) {
-      this.oldValue = options[0][this.fieldLabel];
-      this.setViewValue(this.getFormattedLabel(options[0]), options[0]);
+      if (options.length === 1) {
+        this.oldValue = options[0][this.fieldLabel];
+        this.setViewValue(this.getFormattedLabel(options[0]), options[0]);
+      }
+    } else {
+      this.selectValue(undefined);
+      this.cleanViewValue();
     }
   }
 

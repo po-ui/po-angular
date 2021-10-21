@@ -71,15 +71,15 @@
       </po-table>
     </div>
 
-    <div class="po-row" *ngIf="multiple">
-      <po-disclaimer-group
-        class="po-md-12"
-        [p-disclaimers]="selecteds"
-        (p-remove)="onUnselectFromDisclaimer($event.removedDisclaimer)"
-        (p-remove-all)="onAllUnselected($event)"
-      >
-      </po-disclaimer-group>
-    </div>
+    <!-- DISCLAIMER -->
+    <po-disclaimer-group
+      *ngIf="multiple"
+      class="po-md-12"
+      [p-disclaimers]="selecteds"
+      (p-remove)="onUnselectFromDisclaimer($event.removedDisclaimer)"
+      (p-remove-all)="onAllUnselected($event)"
+    >
+    </po-disclaimer-group>
   </div>
   <div [hidden]="!isAdvancedFilter">
     <ng-container #container> </ng-container>

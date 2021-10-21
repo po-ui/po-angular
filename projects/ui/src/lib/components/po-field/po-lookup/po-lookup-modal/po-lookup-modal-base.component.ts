@@ -325,6 +325,9 @@ export abstract class PoLookupModalBaseComponent implements OnDestroy, OnInit {
           this.items = [...this.items, ...data.items];
           this.hasNext = data.hasNext;
           this.isLoading = false;
+          this.changeDetector.detectChanges();
+          this.setSelectedItems();
+          this.setDisclaimersItems();
         },
         () => {}
       );
