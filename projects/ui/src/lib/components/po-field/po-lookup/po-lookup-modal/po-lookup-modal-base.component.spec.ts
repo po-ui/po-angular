@@ -342,7 +342,7 @@ describe('PoLookupModalBaseComponent:', () => {
     });
 
     it('setSelectedItems: should call `selectRowItem`', () => {
-      component.selectedItems = [{ value: 1495832652942 }, { value: 1495832596999 }];
+      component.selecteds = [{ value: 1495832652942 }, { value: 1495832596999 }];
 
       const spySelectRowItem = spyOn(component.poTable, 'selectRowItem').and.callThrough();
 
@@ -352,7 +352,7 @@ describe('PoLookupModalBaseComponent:', () => {
     });
 
     it('setSelectedItems: should call `selectRowItem` is selectedItems contains one item', () => {
-      component.selectedItems = [{ value: 1495832652942 }];
+      component.selecteds = [{ value: 1495832652942 }];
 
       const spySelectRowItem = spyOn(component.poTable, 'selectRowItem').and.callThrough();
 
