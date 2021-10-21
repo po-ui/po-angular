@@ -15,7 +15,6 @@ import { PoLookupBaseComponent } from './po-lookup-base.component';
 import { PoLookupComponent } from './po-lookup.component';
 import { PoLookupFilter } from './interfaces/po-lookup-filter.interface';
 import { NgControl } from '@angular/forms';
-
 class LookupFilterService implements PoLookupFilter {
   getFilteredItems(params: any): Observable<any> {
     return of({ items: [{ value: 123, label: 'teste' }] });
@@ -337,25 +336,25 @@ describe('PoLookupComponent:', () => {
     it('checkSelectedItems: should return disclaimers if contain `disclaimers` and `valueToModel`', () => {
       component.multiple = true;
       const expectedValue = {
-        value: 'teste',
-        label: 'testeLabel'
+        value: 'test',
+        label: 'testLabel'
       };
 
       component.disclaimers = [
         {
-          value: 'teste',
-          label: 'testeLabel'
+          value: 'test',
+          label: 'testLabel'
         }
       ];
 
       component['valueToModel'] = [
         {
-          value: 'teste',
-          label: 'testeLabel'
+          value: 'test',
+          label: 'testLabel'
         },
         {
-          value: 'teste2',
-          label: 'testeLabel2'
+          value: 'test2',
+          label: 'testLabel2'
         }
       ];
 
@@ -369,8 +368,8 @@ describe('PoLookupComponent:', () => {
       const expectedValue = [
         {
           value: {
-            value: 'teste',
-            label: 'testeLabel'
+            value: 'test',
+            label: 'testLabel'
           },
           label: ''
         }
@@ -380,8 +379,8 @@ describe('PoLookupComponent:', () => {
 
       component['valueToModel'] = [
         {
-          value: 'teste',
-          label: 'testeLabel'
+          value: 'test',
+          label: 'testLabel'
         }
       ];
 
@@ -394,8 +393,8 @@ describe('PoLookupComponent:', () => {
       component.multiple = false;
       const expectedValue = [
         {
-          value: 'teste',
-          label: 'testeLabel'
+          value: 'test',
+          label: 'testLabel'
         }
       ];
 
@@ -403,14 +402,210 @@ describe('PoLookupComponent:', () => {
 
       component['valueToModel'] = [
         {
-          value: 'teste',
-          label: 'testeLabel'
+          value: 'test',
+          label: 'testLabel'
         }
       ];
 
       const valueCheckSelectedItems = component.checkSelectedItems();
 
       expect(valueCheckSelectedItems).toEqual(expectedValue);
+    });
+
+    it('setDisclaimers: should set disclaimers with items selected', () => {
+      const selectedOptions = [
+        {
+          value: 1,
+          label: 'label'
+        },
+        {
+          value: 2,
+          label: 'label2'
+        }
+      ];
+
+      component.visibleDisclaimers = [
+        {
+          value: 1,
+          label: 'label'
+        }
+      ];
+
+      component.setDisclaimers(selectedOptions);
+
+      expect(component.visibleDisclaimers.length).toEqual(2);
+      expect(component.disclaimers.length).toEqual(2);
+    });
+
+    it('closeDisclaimer: should set disclaimers with items selected', () => {
+      const itemsDisclaimers = [
+        {
+          value: 'test',
+          label: 'testLabel'
+        },
+        {
+          value: 'test1',
+          label: 'testLabel1'
+        }
+      ];
+
+      const spyUpdateVisibleItems = spyOn(component, 'updateVisibleItems');
+      const spyCallOnChange = spyOn(component, 'callOnChange').and.callThrough();
+
+      component.disclaimers = itemsDisclaimers;
+      component['valueToModel'] = itemsDisclaimers;
+
+      component.closeDisclaimer('test');
+
+      expect(component.disclaimers.length).toEqual(1);
+      expect(spyUpdateVisibleItems).toHaveBeenCalled();
+      expect(spyCallOnChange).toHaveBeenCalled();
+    });
+
+    it('closeDisclaimer: should set disclaimers with items selected and call `callOnChange` sent undefined', () => {
+      const itemsDisclaimers = [
+        {
+          value: 'test',
+          label: 'testLabel'
+        },
+        {
+          value: 'test1',
+          label: 'testLabel1'
+        }
+      ];
+
+      const spyUpdateVisibleItems = spyOn(component, 'updateVisibleItems');
+      const spyCallOnChange = spyOn(component, 'callOnChange').and.callThrough();
+
+      component.disclaimers = itemsDisclaimers;
+      component['valueToModel'] = [];
+
+      component.closeDisclaimer('test');
+
+      expect(component.disclaimers.length).toEqual(1);
+      expect(spyUpdateVisibleItems).toHaveBeenCalled();
+      expect(spyCallOnChange).toHaveBeenCalled();
+    });
+
+    it('updateVisibleItems: should concat `visibleDisclaimers` with items of disclaimers', () => {
+      const itemsDisclaimers = [
+        {
+          value: 'test',
+          label: 'testLabel'
+        },
+        {
+          value: 'test1',
+          label: 'testLabel1'
+        }
+      ];
+
+      const spyDebounceResize = spyOn(component, 'debounceResize');
+
+      component.disclaimers = itemsDisclaimers;
+
+      component.updateVisibleItems();
+
+      expect(component.visibleDisclaimers.length).toEqual(2);
+      expect(spyDebounceResize).toHaveBeenCalled();
+    });
+
+    it(`updateVisibleItems: shouldn't concat 'visibleDisclaimers' with items of disclaimers`, () => {
+      const spyDebounceResize = spyOn(component, 'debounceResize');
+
+      component.disclaimers = [];
+
+      component.visibleDisclaimers = [
+        {
+          value: 'test',
+          label: 'test'
+        }
+      ];
+      component.updateVisibleItems();
+
+      expect(component.disclaimers.length).toEqual(0);
+      expect(component.visibleDisclaimers.length).toEqual(1);
+      expect(spyDebounceResize).toHaveBeenCalled();
+    });
+
+    it('updateVisibleItems: should set true in `isCalculateVisibleItems` if `offsetWidth` is false', () => {
+      const spyDebounceResize = spyOn(component, 'debounceResize');
+      component.disclaimers = [];
+
+      spyOnProperty(component.inputEl.nativeElement, 'offsetWidth').and.returnValue(false);
+
+      component.updateVisibleItems();
+
+      expect(component['isCalculateVisibleItems']).toBeTruthy();
+      expect(spyDebounceResize).toHaveBeenCalled();
+    });
+
+    it('updateVisibleItems: should set false in `isCalculateVisibleItems` if `offsetWidth` is true', () => {
+      component['isCalculateVisibleItems'] = false;
+      const spyDebounceResize = spyOn(component, 'debounceResize');
+      component.disclaimers = [];
+
+      spyOnProperty(component.inputEl.nativeElement, 'offsetWidth').and.returnValue(true);
+
+      component.updateVisibleItems();
+
+      expect(component['isCalculateVisibleItems']).toBeFalsy();
+      expect(spyDebounceResize).toHaveBeenCalled();
+    });
+
+    it(`debounceResize: should call 'calculateVisibleItems'`, fakeAsync(() => {
+      component.autoHeight = false;
+
+      const spyCalculateVisibleItems = spyOn(component, 'calculateVisibleItems');
+
+      component.debounceResize();
+      tick(201);
+
+      expect(spyCalculateVisibleItems).toHaveBeenCalled();
+    }));
+
+    it(`debounceResize: shouldn't call 'calculateVisibleItems'`, fakeAsync(() => {
+      component.autoHeight = true;
+
+      const spyCalculateVisibleItems = spyOn(component, 'calculateVisibleItems');
+
+      component.debounceResize();
+      tick(201);
+
+      expect(spyCalculateVisibleItems).not.toHaveBeenCalled();
+    }));
+
+    it(`getInputWidth: should decrease by 40 the value of 'offsetWidth'`, () => {
+      spyOnProperty(component.inputEl.nativeElement, 'offsetWidth').and.returnValue(100);
+
+      const inputWidthValue = component.getInputWidth();
+
+      expect(inputWidthValue).toEqual(60);
+    });
+
+    it(`getDisclaimersWidth: should return a Array of width disclaimers'`, () => {
+      const itemsOfDisclaimer = [
+        {
+          value: 'valueTest',
+          label: 'valueLabel',
+          offsetWidth: 106
+        },
+        {
+          value: 'valueTest2',
+          label: 'valueLabel2',
+          offsetWidth: 97
+        }
+      ];
+
+      component.visibleDisclaimers = itemsOfDisclaimer;
+      component.disclaimers = itemsOfDisclaimer;
+
+      spyOnProperty(component.inputEl.nativeElement, 'offsetWidth');
+
+      fixture.detectChanges();
+
+      const getDisclaimersWidthValue = component.getDisclaimersWidth();
+
+      expect(getDisclaimersWidthValue.length).toEqual(2);
     });
 
     it('setInputValueWipoieldFormat: should set `inputValue` and `oldValue` with value returned of `fieldFormat`', () => {
