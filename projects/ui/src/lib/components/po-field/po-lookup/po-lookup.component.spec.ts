@@ -714,7 +714,8 @@ describe('PoLookupComponent:', () => {
       const spyGetInputWidth = spyOn(component, 'getInputWidth').and.returnValue(1);
       const expectValue = [
         {
-          value: 'test'
+          value: '',
+          label: '+3'
         }
       ];
 

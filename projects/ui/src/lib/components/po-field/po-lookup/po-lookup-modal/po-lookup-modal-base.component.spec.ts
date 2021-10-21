@@ -16,7 +16,7 @@ class PoLookupModalComponent extends PoLookupModalBaseComponent {
   destroyDynamicForm(): void {}
 }
 
-describe('PoLookupModalBaseComponent:', () => {
+fdescribe('PoLookupModalBaseComponent:', () => {
   let component: PoLookupModalComponent;
   let fixture: ComponentFixture<PoLookupModalComponent>;
 
@@ -339,6 +339,26 @@ describe('PoLookupModalBaseComponent:', () => {
       expect(component.items.length).toBe([...items, ...returnedItems].length);
       expect(component.page).toBe(2);
       expect(component.isLoading).toBeFalsy();
+    });
+
+    it('setSelectedItems: should call `selectRowItem`', () => {
+      component.selectedItems = [{ value: 1495832652942 }, { value: 1495832596999 }];
+
+      const spySelectRowItem = spyOn(component.poTable, 'selectRowItem').and.callThrough();
+
+      component.setSelectedItems();
+
+      expect(spySelectRowItem).toHaveBeenCalled();
+    });
+
+    it('setSelectedItems: should call `selectRowItem` is selectedItems contains one item', () => {
+      component.selectedItems = [{ value: 1495832652942 }];
+
+      const spySelectRowItem = spyOn(component.poTable, 'selectRowItem').and.callThrough();
+
+      component.setSelectedItems();
+
+      expect(spySelectRowItem).toHaveBeenCalled();
     });
 
     it('setTableLiterals: should set table literals.', () => {
