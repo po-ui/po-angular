@@ -814,6 +814,76 @@ describe('PoLookupComponent:', () => {
       expect(component['isCalculateVisibleItems']).toBeFalsy();
     });
 
+    it(`calculateVisibleItems: should calc visible items and not set 'isCalculateVisibleItems' to false when disclaimers width is 0`, () => {
+      const disclaimers = [
+        { label: 'label', value: 1 },
+        { label: 'label', value: 2 },
+        { label: 'label', value: 3 }
+      ];
+      const fakeThis = {
+        getDisclaimersWidth: () => [0, 0, 0],
+        getInputWidth: () => 100,
+        visibleDisclaimers: [],
+        disclaimers: disclaimers,
+        isCalculateVisibleItems: true
+      };
+
+      component.calculateVisibleItems.call(fakeThis);
+
+      expect(fakeThis.visibleDisclaimers.length).toBe(3);
+      expect(fakeThis.isCalculateVisibleItems).toBeTruthy();
+    });
+
+    it(`calculateVisibleItems: should not set isCalculateVisibleItems to false if inputWidth is 0`, () => {
+      const fakeThis = {
+        getDisclaimersWidth: () => [0, 0, 0],
+        getInputWidth: () => 0,
+        visibleDisclaimers: [],
+        disclaimers: [],
+        isCalculateVisibleItems: false
+      };
+
+      component.calculateVisibleItems.call(fakeThis);
+
+      expect(fakeThis.visibleDisclaimers.length).toBe(0);
+      expect(fakeThis.isCalculateVisibleItems).toBe(false);
+    });
+
+    it('calculateVisibleItems: should calc visible items with a little space', () => {
+      const disclaimers = [
+        { label: 'label', value: 1 },
+        { label: 'label', value: 2 },
+        { label: 'label', value: 3 }
+      ];
+      const fakeThis = {
+        getDisclaimersWidth: () => [100, 100, 100],
+        getInputWidth: () => 200,
+        visibleDisclaimers: [],
+        disclaimers: disclaimers,
+        isCalculateVisibleItems: true
+      };
+
+      component.calculateVisibleItems.call(fakeThis);
+
+      expect(fakeThis.visibleDisclaimers.length).toBe(2);
+      expect(fakeThis.visibleDisclaimers[1].value).toBe('');
+      expect(fakeThis.isCalculateVisibleItems).toBeFalsy();
+    });
+
+    it('calculateVisibleItems: shouldn`t calc visible items when not have `disclaimers`', () => {
+      const fakeThis = {
+        getDisclaimersWidth: () => [0],
+        getInputWidth: () => 200,
+        visibleDisclaimers: [],
+        disclaimers: [],
+        isCalculateVisibleItems: true
+      };
+
+      component.calculateVisibleItems.call(fakeThis);
+      expect(fakeThis.visibleDisclaimers.length).toBe(0);
+      expect(fakeThis.isCalculateVisibleItems).toBeFalsy();
+    });
+
     it('setInputValueWipoieldFormat: should set `inputValue` and `oldValue` with value returned of `fieldFormat`', () => {
       component.fieldFormat = valueFormated => `${valueFormated.value} - ${valueFormated.label}`;
 
