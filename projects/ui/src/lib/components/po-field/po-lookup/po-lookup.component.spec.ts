@@ -182,6 +182,34 @@ describe('PoLookupComponent:', () => {
       expect(fnError).not.toThrow();
     });
 
+    it(`searchEvent: should call searchById if 'oldValue' is null`, () => {
+      component['oldValue'] = null;
+      const spySearchById = spyOn(component, 'searchById');
+
+      component.searchEvent();
+      expect(spySearchById).toHaveBeenCalled();
+    });
+
+    it(`searchEvent: should call searchById if 'oldValue' is different than value`, () => {
+      component['oldValue'] = 'test';
+      const spySearchById = spyOn(component, 'searchById');
+      spyOn(component, 'getViewValue').and.returnValue('test1');
+
+      component.searchEvent();
+
+      expect(spySearchById).toHaveBeenCalled();
+    });
+
+    it(`searchEvent: shouldn´t call searchById if 'oldValue' is equal value`, () => {
+      component['oldValue'] = 'test';
+      const spySearchById = spyOn(component, 'searchById');
+      spyOn(component, 'getViewValue').and.returnValue('test');
+
+      component.searchEvent();
+
+      expect(spySearchById).not.toHaveBeenCalled();
+    });
+
     it('modalSubscription: should `unsubscribe` on destroy.', () => {
       component['modalSubscription'] = fakeSubscription;
 
