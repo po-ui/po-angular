@@ -3,8 +3,6 @@ import { ComponentFixture, fakeAsync, flush, TestBed, waitForAsync } from '@angu
 
 import { of, throwError } from 'rxjs';
 
-import { configureTestSuite } from './../../util-test/util-expect.spec';
-
 import { PoStepperOrientation } from './enums/po-stepper-orientation.enum';
 import { PoStepperStatus } from './enums/po-stepper-status.enum';
 import { PoStepComponent } from './po-step/po-step.component';
@@ -103,35 +101,6 @@ describe('PoStepperComponent:', () => {
 
       expect(spyOnGetPoSteps).not.toHaveBeenCalled();
       expect(spyOnChangeStep).not.toHaveBeenCalled();
-    });
-
-    it('active: shouldn`t call `changeStep` with `step` active if `step` is disabled', () => {
-      spyOnProperty(component, 'usePoSteps').and.returnValue(true);
-      const position = 2;
-
-      poSteps[2].status = PoStepperStatus.Disabled;
-
-      spyOn(component, <any>'getPoSteps').and.returnValue(poSteps);
-      const spyOnChangeStep = spyOn(component, 'changeStep');
-
-      component.active(position);
-
-      expect(spyOnChangeStep).not.toHaveBeenCalled();
-    });
-
-    it('active: should call `getPoSteps` and `changeStep` with `step` active if `usePoSteps` is true and `step status` is error', () => {
-      spyOnProperty(component, 'usePoSteps').and.returnValue(true);
-      const position = 2;
-
-      poSteps[2].status = PoStepperStatus.Error;
-
-      const spyOnGetPoSteps = spyOn(component, <any>'getPoSteps').and.returnValue(poSteps);
-      const spyOnChangeStep = spyOn(component, 'changeStep');
-
-      component.active(position);
-
-      expect(spyOnGetPoSteps).toHaveBeenCalled();
-      expect(spyOnChangeStep).toHaveBeenCalledWith(position, poSteps[position]);
     });
 
     it('active: should call `getPoSteps` and `changeStep` with `step` active if `usePoSteps` is true and `step` not is disabled', () => {
@@ -318,23 +287,22 @@ describe('PoStepperComponent:', () => {
       expect(component['currentActiveStep']).toEqual(step);
     });
 
-    it('onStepActive: should call `setPreviousStepAsDone` and set `previousActiveStep` with previous active step', () => {
-      component['previousActiveStep'] = undefined;
-
+    it('onStepActive: should set previous steps with status Done', () => {
       const poStepsMock = new QueryList<PoStepComponent>();
-      poStepsMock['_results'] = poSteps;
+      poStepsMock['_results'] = poSteps.map(step => ({ ...step, status: PoStepperStatus.Default }));
       component.poSteps = poStepsMock;
-      component.poSteps.toArray()[1].status = PoStepperStatus.Active;
+      component.poSteps.toArray()[0].status = PoStepperStatus.Active;
 
-      const stepActive = poSteps[1];
-      const step = poSteps[2];
+      const lastStepIndex = poSteps.length - 1;
+      const lastStep = poSteps[lastStepIndex];
 
-      const spyOnSetPreviousStepAsDone = spyOn(component, <any>'setPreviousStepAsDone');
+      component.onStepActive(lastStep);
 
-      component.onStepActive(step);
+      const stepsArray = component.poSteps.toArray();
+      const everySteps = stepsArray.filter((step, index) => index < stepsArray.length - 1);
+      const allIsDone = everySteps.every(step => step.status === PoStepperStatus.Done);
 
-      expect(component['previousActiveStep']).toEqual(stepActive);
-      expect(spyOnSetPreviousStepAsDone).toHaveBeenCalled();
+      expect(allIsDone).toBeTrue();
     });
 
     it('activeFirstStep: should call `changeStep` with first step if `usePoSteps` is true and has no step activated', () => {
@@ -716,22 +684,6 @@ describe('PoStepperComponent:', () => {
       expect(component.poSteps[lastStepIndex].status).not.toEqual(PoStepperStatus.Default);
     });
 
-    it('setPreviousStepAsDone: shouldn`t set `previousActiveStep.status` as `Done` if `previousActiveStep` is invalid.', () => {
-      component['previousActiveStep'] = undefined;
-
-      component['setPreviousStepAsDone']();
-
-      expect(component['previousActiveStep']).toBeUndefined();
-    });
-
-    it('setPreviousStepAsDone: should set `previousActiveStep.status` as `Done` if `previousActiveStep` is valid.', () => {
-      component['previousActiveStep'] = <any>{ label: 'Step 1', status: PoStepperStatus.Active };
-
-      component['setPreviousStepAsDone']();
-
-      expect(component['previousActiveStep'].status).toBe(PoStepperStatus.Done);
-    });
-
     it('setStepAsActive: should set `step.status` as `active`.', () => {
       const step: PoStepComponent = <any>{ label: 'Step 1', status: PoStepperStatus.Default };
 
@@ -756,22 +708,6 @@ describe('PoStepperComponent:', () => {
       component['setNextStepAsDefault'](poSteps[0]);
 
       expect(component.steps[1].status).toEqual(PoStepperStatus.Default);
-    });
-
-    it('setPreviousStepAsDone: shouldn`t set `previousActiveStep.status` as `Done` if `previousActiveStep` is invalid.', () => {
-      component['previousActiveStep'] = undefined;
-
-      component['setPreviousStepAsDone']();
-
-      expect(component['previousActiveStep']).toBeUndefined();
-    });
-
-    it('setPreviousStepAsDone: should set `previousActiveStep.status` as `Done` if `previousActiveStep` is valid.', () => {
-      component['previousActiveStep'] = <any>{ label: 'Step 1', status: PoStepperStatus.Active };
-
-      component['setPreviousStepAsDone']();
-
-      expect(component['previousActiveStep'].status).toBe(PoStepperStatus.Done);
     });
 
     it('getStepperStatusByCanActive: should return status `done` if canActiveNextStep is true.', () => {
