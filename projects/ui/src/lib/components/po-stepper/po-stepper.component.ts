@@ -27,6 +27,12 @@ import { PoStepperItem } from './po-stepper-item.interface';
  *  <file name="sample-po-stepper-sales/sample-po-stepper-sales.component.html"> </file>
  *  <file name="sample-po-stepper-sales/sample-po-stepper-sales.component.ts"> </file>
  * </example>
+ *
+ * <example name="po-stepper-active" title="PO Stepper - Active">
+ *  <file name="sample-po-stepper-active/sample-po-stepper-active.component.html"> </file>
+ *  <file name="sample-po-stepper-active/sample-po-stepper-active.component.ts"> </file>
+ *  <file name="sample-po-stepper-active/sample-po-stepper-active.service.ts"> </file>
+ * </example>
  */
 @Component({
   selector: 'po-stepper',
@@ -36,7 +42,6 @@ export class PoStepperComponent extends PoStepperBaseComponent implements AfterC
   @ContentChildren(PoStepComponent) poSteps: QueryList<PoStepComponent>;
 
   private currentActiveStep: PoStepComponent;
-  private previousActiveStep: PoStepComponent;
 
   get currentStepIndex(): number {
     return this.step - 1;
@@ -76,12 +81,7 @@ export class PoStepperComponent extends PoStepperBaseComponent implements AfterC
 
     const stepsArray = this.getPoSteps();
     const step = stepsArray[index];
-    const isDisabledStep = step.status === PoStepperStatus.Disabled;
-    const isErrorStep = step.status === PoStepperStatus.Error;
-
-    if (!isDisabledStep || isErrorStep) {
-      this.changeStep(index, step);
-    }
+    this.changeStep(index, step);
   }
 
   /**
@@ -155,11 +155,13 @@ export class PoStepperComponent extends PoStepperBaseComponent implements AfterC
   onStepActive(step: PoStepComponent) {
     this.currentActiveStep = step;
 
-    this.previousActiveStep = this.poSteps.find(
-      stepChild => stepChild.status === PoStepperStatus.Active && stepChild.id !== step.id
-    );
+    const { stepIndex } = this.getStepsAndIndex(this.currentActiveStep);
 
-    this.setPreviousStepAsDone();
+    this.poSteps.forEach((stepChild, i) => {
+      if (i < stepIndex) {
+        stepChild.status = PoStepperStatus.Done;
+      }
+    });
   }
 
   trackByFn(step: PoStepComponent) {
@@ -257,12 +259,6 @@ export class PoStepperComponent extends PoStepperBaseComponent implements AfterC
 
     if (nextIndex < this.poSteps.length) {
       steps[nextIndex].status = PoStepperStatus.Default;
-    }
-  }
-
-  private setPreviousStepAsDone(): void {
-    if (this.previousActiveStep) {
-      this.previousActiveStep.status = PoStepperStatus.Done;
     }
   }
 }
