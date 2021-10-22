@@ -1,0 +1,103 @@
+<po-stepper>
+  <po-step p-label="Basic information">
+    <form #basicInformationForm="ngForm">
+      <div class="po-row">
+        <po-input class="po-md-6" name="name" [(ngModel)]="basicInformation.name" p-clean p-label="Name" p-required>
+        </po-input>
+        <po-email class="po-md-6" name="email" [(ngModel)]="basicInformation.email" p-clean p-label="Email" p-required>
+        </po-email>
+        <po-input class="po-md-4" name="phone" [(ngModel)]="basicInformation.phone" p-label="Phone" p-optional>
+        </po-input>
+        <po-select
+          class="po-md-4"
+          name="state"
+          [(ngModel)]="basicInformation.state"
+          p-label="State"
+          [p-options]="stateOptions"
+          (p-change)="onChangeState()"
+        >
+        </po-select>
+        <po-select
+          class="po-md-4"
+          name="city"
+          [(ngModel)]="basicInformation.city"
+          p-label="City"
+          [p-options]="cityOptions"
+        >
+        </po-select>
+      </div>
+    </form>
+  </po-step>
+  <po-step p-label="Academic formation">
+    <form #academicFormationForm="ngForm">
+      <div class="po-row">
+        <po-divider class="po-md-12" p-label="High school"></po-divider>
+        <po-input class="po-md-6" name="highSchoolName" [(ngModel)]="highSchool.name" p-clean p-label="Name">
+        </po-input>
+        <po-input class="po-md-3" name="highSchoolCity" [(ngModel)]="highSchool.city" p-clean p-label="City">
+        </po-input>
+        <po-input class="po-md-3" name="highSchoolPeriod" [(ngModel)]="highSchool.conclusionYear" p-label="Period">
+        </po-input>
+      </div>
+      <div class="po-row">
+        <po-divider class="po-md-12" p-label="University education"> </po-divider>
+        <po-input
+          class="po-md-6"
+          name="universityEducationName"
+          [(ngModel)]="universityEducation.name"
+          p-clean
+          p-label="Name"
+        >
+        </po-input>
+        <po-input
+          class="po-md-3"
+          name="universityEducationCity"
+          [(ngModel)]="universityEducation.city"
+          p-clean
+          p-label="City"
+        >
+        </po-input>
+        <po-input
+          class="po-md-3"
+          name="universityEducationPeriod"
+          [(ngModel)]="universityEducation.conclusionYear"
+          p-label="Period"
+        >
+        </po-input>
+      </div>
+    </form>
+  </po-step>
+  <po-step p-label="Professional experiences">
+    <form #professionalExperiencesForm="ngForm">
+      <div class="po-row">
+        <po-input
+          class="po-md-12"
+          name="experienceTitle"
+          [(ngModel)]="experienceTitle"
+          p-label="Professional position"
+        ></po-input>
+        <po-textarea
+          class="po-md-12"
+          name="experienceDescripton"
+          [(ngModel)]="experienceDescripton"
+          p-label="Describe your responsibilities"
+          p-rows="4"
+        ></po-textarea>
+        <po-button
+          class="po-md-4"
+          type="submit"
+          p-label="Add professional experience"
+          (p-click)="addProfessionalExperiences(professionalExperiencesForm); professionalExperiencesForm.reset()"
+        ></po-button>
+      </div>
+    </form>
+    <div class="po-row" *ngIf="professionalExperiences">
+      <po-divider class="po-md-12"> </po-divider>
+      <div class="po-md-12" *ngFor="let experience of professionalExperiences">
+        <po-widget class="po-md-12" [p-title]="experience.title">
+          <p>{{ experience.description }}</p>
+        </po-widget>
+      </div>
+    </div>
+  </po-step>
+</po-stepper>
