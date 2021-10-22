@@ -515,7 +515,7 @@ export abstract class PoLookupBaseComponent
     this.oldValueToModel = this.valueToModel;
   }
 
-  searchById(value: string) {
+  searchById(value) {
     let checkedValue = value;
 
     if (typeof checkedValue === 'string') {

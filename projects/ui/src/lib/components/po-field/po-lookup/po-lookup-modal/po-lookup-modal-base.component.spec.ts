@@ -40,7 +40,7 @@ describe('PoLookupModalBaseComponent:', () => {
       { value: 5, label: 'Suco em lata' }
     ];
 
-    component.poTable = <any>{ selectRowItem: () => {} };
+    component.poTable = <any>{ selectRowItem: cb => cb({}) };
 
     component.ngOnInit();
   });
@@ -351,16 +351,6 @@ describe('PoLookupModalBaseComponent:', () => {
       expect(spySelectRowItem).toHaveBeenCalled();
     });
 
-    it('setSelectedItems: should call `selectRowItem` is selectedItems contains one item', () => {
-      component.selecteds = [{ value: 1495832652942 }];
-
-      const spySelectRowItem = spyOn(component.poTable, 'selectRowItem').and.callThrough();
-
-      component.setSelectedItems();
-
-      expect(spySelectRowItem).toHaveBeenCalled();
-    });
-
     it('setTableLiterals: should set table literals.', () => {
       component.literals = {
         'modalTableLoadMoreData': 'moreData',
@@ -521,6 +511,26 @@ describe('PoLookupModalBaseComponent:', () => {
       const booleanInvalidValues = [undefined, null, NaN, 2, 'string'];
       expectPropertiesValues(component, 'infiniteScroll', booleanInvalidValues, false);
       expectPropertiesValues(component, 'infiniteScroll', booleanValidTrueValues, true);
+    });
+
+    it('setDisclaimersItems: should set selecteds with component.selectedItems if component.selectedItems is array', () => {
+      const expectSelecteds = [{ value: 123, label: '123' }];
+
+      component.selectedItems = [...expectSelecteds];
+
+      component.setDisclaimersItems();
+
+      expect(component.selecteds).toEqual(expectSelecteds);
+    });
+
+    it('setDisclaimersItems: should set selecteds with [{ value: component.selectedItems }] if selectedItems isnt array', () => {
+      const expectSelecteds = [{ value: 123456789 }];
+
+      component.selectedItems = 123456789;
+
+      component.setDisclaimersItems();
+
+      expect(component.selecteds).toEqual(expectSelecteds);
     });
   });
 });

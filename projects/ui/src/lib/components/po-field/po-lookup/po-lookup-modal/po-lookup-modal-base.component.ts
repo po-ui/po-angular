@@ -135,7 +135,7 @@ export abstract class PoLookupModalBaseComponent implements OnDestroy, OnInit {
   @Output('p-change-model') model: EventEmitter<any> = new EventEmitter<any>();
 
   /** Classe de serviço com items selecionados */
-  @Input('p-selected-items') selectedItems: Array<any>;
+  @Input('p-selected-items') selectedItems: any;
 
   /** Indica a coluna que será utilizada como descrição do campo e como filtro dentro da janela. */
   @Input('p-field-label') fieldLabel: string;
@@ -334,17 +334,9 @@ export abstract class PoLookupModalBaseComponent implements OnDestroy, OnInit {
 
   //Método responsável por selecionar as linhas quando abre o modal.
   setSelectedItems() {
-    if (this.selecteds && this.selecteds.length > 1) {
-      this.selecteds.forEach(selectedItem =>
-        this.poTable.selectRowItem(item => item[this.fieldValue] === selectedItem.value)
-      );
-    } else if (!Array.isArray(this.selecteds)) {
-      this.poTable.selectRowItem(item => item[this.fieldValue] === this.selecteds);
-    } else {
-      this.selecteds.forEach(selectedItem =>
-        this.poTable.selectRowItem(item => item[this.fieldValue] === selectedItem?.value)
-      );
-    }
+    this.selecteds.forEach(selectedItem =>
+      this.poTable.selectRowItem(item => item[this.fieldValue] === selectedItem.value)
+    );
   }
 
   //Método responsável por criar os disclaimers quando abre o modal.

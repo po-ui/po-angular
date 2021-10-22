@@ -207,34 +207,6 @@ describe('PoLookupBaseComponent:', () => {
     expect(component['getFormattedLabel'](undefined)).toBe('');
   });
 
-  // teste será descontinuado
-  xit('call writeValue with object', () => {
-    component['keysDescription'] = ['value', 'label'];
-    component.fieldValue = 'value';
-    component.writeValue({ value: 123, label: 'test label' });
-
-    expect(component['valueToModel']).toBe(123);
-  });
-
-  // teste será descontinuado
-  xit('writeValue: call `setViewValue` with `label-value` and object selected', inject(
-    [LookupFilterService],
-    (lookupFilterService: LookupFilterService) => {
-      const objectSelected = { label: 'teste', value: 123 };
-
-      component.fieldLabel = 'label';
-      component.fieldValue = 'value';
-      component.service = lookupFilterService;
-      component['keysDescription'] = ['value', 'label'];
-
-      spyOn(component, 'setViewValue').and.callThrough();
-
-      component.writeValue(objectSelected);
-
-      expect(component.setViewValue).toHaveBeenCalledWith('123 - teste', objectSelected);
-    }
-  ));
-
   it('callOnChange: should call change.emit with value', () => {
     const objectSelected = { value: 1495832652942, label: 'Kakaroto' };
     component.fieldValue = 'value';
@@ -244,33 +216,6 @@ describe('PoLookupBaseComponent:', () => {
     component.selectValue(objectSelected[component.fieldValue]);
     expect(component.change.emit).toHaveBeenCalledWith(1495832652942);
   });
-
-  // teste será descontinuado
-  xit('call writeValue with invalid Id', inject([LookupFilterService], (lookupFilterService: LookupFilterService) => {
-    component.service = lookupFilterService;
-
-    spyOn(component, 'setViewValue');
-    spyOn(component, <any>'cleanModel');
-
-    component.service.getObjectByValue = function (value: any) {
-      return of(null);
-    };
-    component['keysDescription'] = ['value', 'label'];
-    component.writeValue(1234);
-
-    expect(component['cleanModel']).toHaveBeenCalled();
-  }));
-
-  // teste será descontinuado
-  xit('call writeValue with undefined value', inject(
-    [LookupFilterService],
-    (lookupFilterService: LookupFilterService) => {
-      component.service = lookupFilterService;
-      component.writeValue(undefined);
-
-      expect(component.getModelValue()).toBe('');
-    }
-  ));
 
   it('call initialize columns in the ngOnInit method', () => {
     spyOn(component, <any>'initializeColumn');
@@ -298,9 +243,7 @@ describe('PoLookupBaseComponent:', () => {
     });
   });
 
-  describe('ngOnChanges', () => {});
-
-  it('multiple', () => {
+  it('ngOnChanges: should call defaultService.setConfig if is multiple and filterService is string', () => {
     spyOn<any>(component['defaultService'], 'setConfig');
     component.multiple = true;
     component.fieldValue = 'value';
@@ -319,48 +262,37 @@ describe('PoLookupBaseComponent:', () => {
 
     expect(component['defaultService'].setConfig).toHaveBeenCalledWith('http://url.com', 'value', true);
   });
-  it('not multiple', () => {
-    spyOn<any>(component['defaultService'], 'setConfig');
+
+  it('ngOnChanges: should call only one time defaultService.setConfig if is not multiple', () => {
     component.multiple = false;
     component.fieldValue = 'value';
-    component.filterService = 'http://url.com';
+    component.filterService = <any>{};
 
     const changes: SimpleChanges = {
       multiple: {
         previousValue: false,
-        currentValue: true,
+        currentValue: false,
         firstChange: true,
         isFirstChange: () => false
       }
     };
 
+    spyOn(component['defaultService'], 'setConfig');
+
     component.ngOnChanges(changes);
 
-    expect(component['defaultService'].setConfig).not.toHaveBeenCalledWith('http://url.com', 'value', true);
+    expect(component['defaultService'].setConfig).not.toHaveBeenCalled();
   });
 
   it('selectModel: should call `setViewValue` with `test label` and object selected', () => {
     const objectSelected = { value: 123, label: 'test label' };
     component['keysDescription'] = ['label'];
 
-    console.log(objectSelected);
-
     spyOn(component, 'setViewValue');
 
     component['selectModel']([objectSelected]);
 
     expect(component.setViewValue).toHaveBeenCalledWith('test label', objectSelected);
-  });
-
-  // teste será descontinuado
-  xit('should call writeValue method with 123 value', () => {
-    const objectSelected: any = 123;
-    spyOn(component, 'writeValue');
-
-    component['keysDescription'] = ['label'];
-    component['selectModel'](objectSelected);
-
-    expect(component.writeValue).toHaveBeenCalledWith(objectSelected);
   });
 
   it('should be request the search for by Id', () => {
@@ -514,7 +446,7 @@ describe('PoLookupBaseComponent:', () => {
         expect(component.service.getObjectByValue).toHaveBeenCalledWith(searchValue, filterParams);
       })
     ));
-    it('searchById: ALOK should be muliple and call `selectValue` if `getObjectByValue` return array of value', fakeAsync(
+    it('searchById: should be muliple and call `selectValue` if `getObjectByValue` return array of value', fakeAsync(
       inject([LookupFilterService], (lookupFilterService: LookupFilterService) => {
         const searchValue = 'po';
         const filterParams = { code: '' };
@@ -567,7 +499,7 @@ describe('PoLookupBaseComponent:', () => {
     ));
     it('searchById: should be multiple and call `selectValue` if `getObjectByValue` return value 3', fakeAsync(
       inject([LookupFilterService], (lookupFilterService: LookupFilterService) => {
-        const searchValue = 'po';
+        const searchValue = ['po'];
         const filterParams = { code: '' };
 
         component['control'] = { markAsPending: () => {}, updateValueAndValidity: () => {} } as FormControl;
@@ -642,13 +574,32 @@ describe('PoLookupBaseComponent:', () => {
       }
     ));
 
-    // teste será descontinuado
-    xit('writeValue: should call `cleanViewValue` when execute the method `writeValue` with undefined param.', () => {
+    it('writeValue: should call `cleanViewValue` when execute the method `writeValue` with undefined param.', () => {
       spyOn(component, <any>'cleanViewValue');
 
       component.writeValue(undefined);
 
       expect(component['cleanViewValue']).toHaveBeenCalled();
+    });
+
+    it('writeValue: should call searchById with string value param', () => {
+      const value = '123';
+
+      spyOn(component, 'searchById');
+
+      component.writeValue(value);
+
+      expect(component.searchById).toHaveBeenCalledWith(value);
+    });
+
+    it('writeValue: should call searchById with array value param', () => {
+      const value = [123];
+
+      spyOn(component, 'searchById');
+
+      component.writeValue(value);
+
+      expect(component.searchById).toHaveBeenCalledWith(value);
     });
 
     it('getSubscription: should `unsubscribe` on destroy.', () => {
@@ -716,36 +667,6 @@ describe('PoLookupBaseComponent:', () => {
       expect(component['validatorChange']).toBeUndefined();
     });
 
-    // teste será descontinuado
-    xit('selectModel: should emit selected, call writeValue.', () => {
-      const objectSelected: any = 'teste';
-
-      spyOn(component, 'writeValue');
-
-      component['selectModel'](objectSelected);
-
-      expect(component.writeValue).toHaveBeenCalled();
-    });
-
-    // teste será descontinuado
-    xit('selectModel: should call selectValue when value is object.', () => {
-      spyOn(component, 'selectValue').and.returnValue(null);
-      spyOn(component, 'writeValue').and.returnValue(null);
-
-      component['selectModel']([{ value: 123, label: 'test label' }]);
-
-      expect(component.selectValue).toHaveBeenCalled();
-    });
-
-    // teste será descontinuado
-    xit('selectModel: should not call selectValue when value is not a object.', () => {
-      spyOn(component, 'selectValue');
-
-      component['selectModel'](['']);
-
-      expect(component.selectValue).not.toHaveBeenCalled();
-    });
-
     it('selectModel: should validate if `newModel` has more than one item', () => {
       const options: Array<any> = [
         { label: 'John', value: 1 },
@@ -780,7 +701,7 @@ describe('PoLookupBaseComponent:', () => {
       expect(component.selectValue).toHaveBeenCalledWith(newModel);
     });
 
-    it('selectModel: ', () => {
+    it('selectModel: should set oldValue and call setViewValue if options.length is equal to 1', () => {
       const options: Array<any> = [{ label: 'John', value: 1 }];
 
       component.fieldLabel = 'label';
@@ -791,7 +712,20 @@ describe('PoLookupBaseComponent:', () => {
 
       component['selectModel'](options);
 
+      expect(component['setViewValue']).toHaveBeenCalled();
       expect(component['oldValue']).toEqual(oldValue);
+    });
+
+    it('selectModel: should call selectValue and cleanViewValue if options.length is equal to 0', () => {
+      const options: Array<any> = [];
+
+      spyOn(component, <any>'selectValue');
+      spyOn(component, <any>'cleanViewValue');
+
+      component['selectModel'](options);
+
+      expect(component['selectValue']).toHaveBeenCalledWith(undefined);
+      expect(component['cleanViewValue']).toHaveBeenCalled();
     });
 
     it('setService: should set `service` with `defaultService` and call `setConfig` if `serviceUrl` is a string and just one value', () => {

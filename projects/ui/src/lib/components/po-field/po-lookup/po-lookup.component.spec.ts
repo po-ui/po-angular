@@ -116,10 +116,7 @@ describe('PoLookupComponent:', () => {
   });
 
   describe('Methods:', () => {
-    const objectSelected = [
-      { label: 'teste', value: 123 },
-      { label: 'teste1', value: 456 }
-    ];
+    const objectSelected = { label: 'teste', value: 123 };
 
     describe('ngAfterViewInit:', () => {
       let inputFocus: jasmine.Spy;
@@ -282,14 +279,14 @@ describe('PoLookupComponent:', () => {
       'modalSubscription' is undefined`, inject([LookupFilterService], (lookupFilterService: LookupFilterService) => {
       component.service = lookupFilterService;
       component['modalSubscription'] = undefined;
-      component['poLookupModalService'].selectValueEvent = <any>of(objectSelected);
+      component['poLookupModalService'].selectValueEvent = <any>of([objectSelected]);
 
       spyOn(component, <any>'selectModel');
       spyOn(component, <any>'isAllowedOpenModal').and.returnValue(true);
 
       component.openLookup();
 
-      expect(component['selectModel']).toHaveBeenCalledWith(objectSelected);
+      expect(component['selectModel']).toHaveBeenCalledWith([objectSelected]);
       expect(component['modalSubscription']).toBeDefined();
     }));
 
@@ -297,7 +294,7 @@ describe('PoLookupComponent:', () => {
     'modalSubscription' is undefined`, inject([LookupFilterService], (lookupFilterService: LookupFilterService) => {
       component.service = lookupFilterService;
       component['modalSubscription'] = undefined;
-      component['poLookupModalService'].selectValueEvent = <any>of(objectSelected);
+      component['poLookupModalService'].selectValueEvent = <any>of([objectSelected, objectSelected]);
 
       spyOn(component, 'setDisclaimers');
       spyOn(component, 'updateVisibleItems');
@@ -306,13 +303,13 @@ describe('PoLookupComponent:', () => {
 
       component.openLookup();
 
-      expect(component['selectModel']).toHaveBeenCalledWith(objectSelected);
+      expect(component['selectModel']).toHaveBeenCalledWith([objectSelected, objectSelected]);
       expect(component['modalSubscription']).toBeDefined();
       expect(component['setDisclaimers']).toHaveBeenCalled();
       expect(component['updateVisibleItems']).toBeDefined();
     }));
 
-    it('setViewValue: should call `setInputValueWipoieldFormat` when `fieldFormat` is defined', () => {
+    it('setViewValue: should call `setInputValueWipoieldFormat` if `fieldFormat` is defined', () => {
       component.fieldFormat = valueFormated => `${valueFormated.value} - ${valueFormated.label}`;
 
       spyOn(component, <any>'setInputValueWipoieldFormat');
@@ -322,7 +319,7 @@ describe('PoLookupComponent:', () => {
       expect(component['setInputValueWipoieldFormat']).toHaveBeenCalledWith(objectSelected);
     });
 
-    it('setViewValue: should set nativeElement value with value when not have a formatField and have a valueToModel', () => {
+    it('setViewValue: should set nativeElement value with value if not have a formatField and have a valueToModel', () => {
       component.fieldFormat = undefined;
       component['valueToModel'] = 123;
 
@@ -343,7 +340,7 @@ describe('PoLookupComponent:', () => {
       expect(component.inputEl.nativeElement.value).toBe('valueTeste');
     });
 
-    it('setViewValue: should set nativeElement value with `` when not have a formatField and not have a valueToModel', () => {
+    it('setViewValue: should set nativeElement value with `` if not have a formatField and not have a valueToModel', () => {
       component.fieldFormat = undefined;
       component['valueToModel'] = undefined;
 
@@ -352,6 +349,19 @@ describe('PoLookupComponent:', () => {
       component.setViewValue('valueTeste', objectSelected);
 
       expect(component.inputEl.nativeElement.value).toBe('');
+      expect(component['setInputValueWipoieldFormat']).not.toHaveBeenCalled();
+    });
+
+    it('setViewValue: should not set input.value if inputEl is undefined', () => {
+      component.fieldFormat = undefined;
+      component.inputEl = undefined;
+      component['valueToModel'] = undefined;
+
+      spyOn(component, <any>'setInputValueWipoieldFormat');
+
+      component.setViewValue(null, null);
+
+      expect(component.inputEl).toBeUndefined();
       expect(component['setInputValueWipoieldFormat']).not.toHaveBeenCalled();
     });
 
@@ -383,6 +393,15 @@ describe('PoLookupComponent:', () => {
       const valueCheckSelectedItems = component.checkSelectedItems();
 
       expect(valueCheckSelectedItems[0]).toEqual(expectedValue);
+    });
+
+    it('checkSelectedItems: should return disclaimers if `valueToModel.length` is falsy', () => {
+      component.multiple = true;
+
+      component.disclaimers = [];
+      component['valueToModel'] = undefined;
+
+      expect(component.checkSelectedItems()).toEqual(component.disclaimers);
     });
 
     it('checkSelectedItems: should return object with value and label if not contain `disclaimers` but contain `valueToModel`', () => {

@@ -64,7 +64,6 @@ describe('PoLookupModalComponent', () => {
   });
 
   it('should init modal with items', () => {
-    console.log('ou esse!');
     component.ngOnInit();
 
     expect(component.items.length).toBe(2);
@@ -92,15 +91,6 @@ describe('PoLookupModalComponent', () => {
 
     component.primaryAction.action();
     expect(component.model.emit).toHaveBeenCalled();
-  });
-
-  it('call primaryAction in the modal with unselected line', () => {
-    component.ngOnInit();
-
-    spyOn(component.model, 'emit');
-
-    component.primaryAction.action();
-    expect(component.model.emit).not.toHaveBeenCalled();
   });
 
   it('call secondaryAction in the modal', () => {
@@ -365,7 +355,28 @@ describe('PoLookupModalComponent', () => {
       expect(component['sort']).toEqual(expectedValue);
     });
 
-    it('onSelect: should be called and select a item on table', () => {
+    it('onSelect: should concat table item in selecteds', () => {
+      component.multiple = true;
+      component.selecteds = [{ value: 'Doe', label: 'Jane' }];
+
+      component.fieldLabel = 'name';
+      component.fieldValue = 'value';
+      const item = {
+        name: 'John',
+        value: 'Lenon'
+      };
+      component.onSelect(item);
+
+      expect(component.selecteds).toEqual([
+        { value: 'Doe', label: 'Jane' },
+        { value: 'Lenon', label: 'John' }
+      ]);
+    });
+
+    it('onSelect: should override table item in selecteds', () => {
+      component.multiple = false;
+      component.selecteds = [{ value: 'Doe', label: 'Jane' }];
+
       component.fieldLabel = 'name';
       component.fieldValue = 'value';
       const item = {
