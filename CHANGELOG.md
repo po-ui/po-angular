@@ -2,6 +2,16 @@
 
 All notable changes to this project will be documented in this file. See [standard-version](https://github.com/conventional-changelog/standard-version) for commit guidelines.
 
+# [5.18.0](https://github.com/po-ui/po-angular/compare/v5.17.0...v5.18.0) (2021-10-25)
+
+
+### Features
+
+* **lookup:** implementa múltipla seleção através da propriedade `p-multiple` ([51aee93](https://github.com/po-ui/po-angular/commit/51aee93a1226e0130ba3a9ec5f10460eddffd89d))
+* **stepper:** possibilita ativar o step desejado através do método `active` ([5320748](https://github.com/po-ui/po-angular/commit/53207489864fbef7b7db2db900be5c2023f8c9a3))
+
+
+
 # [5.17.0](https://github.com/po-ui/po-angular/compare/v5.16.0...v5.17.0) (2021-10-18)
 
 ### Bug Fixes
