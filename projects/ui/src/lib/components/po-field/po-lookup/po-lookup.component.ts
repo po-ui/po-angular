@@ -1,5 +1,6 @@
 import {
   AfterViewInit,
+  DoCheck,
   Component,
   ElementRef,
   forwardRef,
@@ -96,7 +97,7 @@ const providers = [
   templateUrl: './po-lookup.component.html',
   providers
 })
-export class PoLookupComponent extends PoLookupBaseComponent implements AfterViewInit, OnDestroy, OnInit {
+export class PoLookupComponent extends PoLookupBaseComponent implements AfterViewInit, OnDestroy, OnInit, DoCheck {
   @ViewChild('inp', { read: ElementRef, static: false }) inputEl: ElementRef;
 
   initialized = false;
