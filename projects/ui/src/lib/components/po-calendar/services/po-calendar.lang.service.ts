@@ -142,6 +142,13 @@ export class PoCalendarLangService {
     ru: 'Год'
   };
 
+  private todayLabel = {
+    pt: 'Hoje',
+    en: 'Today',
+    es: 'Hoy',
+    ru: 'Сегодня'
+  };
+
   getMonth(month: number) {
     return this.months[month][this.language];
   }
@@ -173,6 +180,10 @@ export class PoCalendarLangService {
 
   getYearLabel() {
     return this.yearLabel[this.language];
+  }
+
+  getTodayLabel() {
+    return this.todayLabel[this.language];
   }
 
   setLanguage(language: string) {

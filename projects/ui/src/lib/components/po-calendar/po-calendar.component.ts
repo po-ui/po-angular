@@ -106,6 +106,7 @@ export class PoCalendarComponent extends PoCalendarBaseComponent implements OnIn
       }
     } else {
       newValue = selectedDate;
+      this.setActivateDate(selectedDate);
     }
 
     this.value = newValue;

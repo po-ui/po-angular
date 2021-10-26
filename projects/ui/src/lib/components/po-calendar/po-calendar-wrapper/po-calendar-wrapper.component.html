@@ -91,4 +91,14 @@
       </div>
     </div>
   </ng-container>
+
+  <ng-container *ngIf="!range">
+    <div class="po-calendar-footer">
+      <div class="po-calendar-footer-today">
+        <button class="po-calendar-footer-today-button" (click)="onSelectDate(today)" [disabled]="isTodayUnavailable()">
+          {{ displayToday }}
+        </button>
+      </div>
+    </div>
+  </ng-container>
 </div>
