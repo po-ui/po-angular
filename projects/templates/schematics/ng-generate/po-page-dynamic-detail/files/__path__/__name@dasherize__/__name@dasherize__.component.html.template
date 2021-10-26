@@ -2,6 +2,4 @@
   p-title="<%= classify(name) %>"
   [p-fields]="fields"
   [p-service-api]="apiService">
-
-  <!-- BUILD YOUR CONTENT PAGE HERE -->
 </po-page-dynamic-detail>
