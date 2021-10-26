@@ -166,6 +166,75 @@ describe('PoCalendarWrapperComponent', () => {
       expect(component.getForegroundColor(11, 10)).toBe('po-calendar-box-foreground');
     });
 
+    it('isTodayUnavailable: should return `false` if minDate is less than date', () => {
+      const date: string | Date = new Date();
+      const minDate: string | Date = new Date(date);
+
+      minDate.setDate(minDate.getDate() - 1);
+
+      component['today'] = date;
+      component.minDate = minDate;
+
+      expect(minDate.getTime()).toBeLessThan(date.getTime());
+      expect(component.isTodayUnavailable()).toBeFalse();
+    });
+
+    it('isTodayUnavailable: should return `false` if minDate is equal date', () => {
+      const date: string | Date = new Date();
+      const minDate: string | Date = new Date(date);
+
+      component['today'] = date;
+      component.minDate = minDate;
+
+      expect(component.isTodayUnavailable()).toBeFalse();
+    });
+
+    it('isTodayUnavailable: should return `true` if minDate is greater than date', () => {
+      const date: string | Date = new Date();
+      const minDate: string | Date = new Date(date);
+
+      minDate.setDate(minDate.getDate() + 1);
+
+      component['today'] = date;
+      component.minDate = minDate;
+
+      expect(component.isTodayUnavailable()).toBeTrue();
+    });
+
+    it('isTodayUnavailable: should return `false` if maxDate is greater than date', () => {
+      const date: string | Date = new Date();
+      const maxDate: string | Date = new Date(date);
+
+      maxDate.setDate(maxDate.getDate() + 1);
+
+      component['today'] = date;
+      component.maxDate = maxDate;
+
+      expect(component.isTodayUnavailable()).toBeFalse();
+    });
+
+    it('isTodayUnavailable: should return `false` if maxDate is equal date', () => {
+      const date: string | Date = new Date();
+      const maxDate: string | Date = new Date(date);
+
+      component['today'] = date;
+      component.maxDate = maxDate;
+
+      expect(component.isTodayUnavailable()).toBeFalse();
+    });
+
+    it('isTodayUnavailable: should return `true` if maxDate is less than date', () => {
+      const date: string | Date = new Date();
+      const maxDate: string | Date = new Date(date);
+
+      maxDate.setDate(maxDate.getDate() - 1);
+
+      component['today'] = date;
+      component.maxDate = maxDate;
+
+      expect(component.isTodayUnavailable()).toBeTrue();
+    });
+
     it(`monthLabel: should call 'poCalendarLangService.getMonthLabel'`, () => {
       spyOn(component['poCalendarLangService'], 'getMonthLabel').and.callThrough();
 

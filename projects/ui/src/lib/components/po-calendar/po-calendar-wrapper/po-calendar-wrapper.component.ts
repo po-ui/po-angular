@@ -50,11 +50,12 @@ export class PoCalendarWrapperComponent implements OnInit, OnChanges {
   displayStartDecade: number;
   displayWeekDays: Array<any> = Array();
   displayYear: number;
+  displayToday: string;
+  today: Date = new Date();
 
   protected currentMonthNumber: number;
   protected date: Date;
   protected lastDisplay: string;
-  protected today: Date = new Date();
 
   private _locale: string;
 
@@ -127,6 +128,10 @@ export class PoCalendarWrapperComponent implements OnInit, OnChanges {
 
   getForegroundColor(displayValue: number, propertyValue: number) {
     return displayValue === propertyValue ? 'po-calendar-box-foreground-selected' : 'po-calendar-box-foreground';
+  }
+
+  isTodayUnavailable() {
+    return this.minDate > this.today || this.maxDate < this.today;
   }
 
   onNextMonth() {
@@ -273,6 +278,7 @@ export class PoCalendarWrapperComponent implements OnInit, OnChanges {
     this.displayWeekDays = this.poCalendarLangService.getWeekDaysArray();
     this.displayMonths = this.poCalendarLangService.getMonthsArray();
     this.displayMonth = this.displayMonths[this.displayMonthNumber];
+    this.displayToday = this.poCalendarLangService.getTodayLabel();
   }
 
   private updateDate(value: Date = new Date()) {
