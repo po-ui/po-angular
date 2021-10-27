@@ -12,7 +12,9 @@ class PoTextareaComponent extends PoTextareaBaseComponent {
 }
 
 describe('PoTextareaBase:', () => {
-  const component = new PoTextareaComponent();
+  const cd = <any>{ markForCheck: () => {} };
+
+  const component = new PoTextareaComponent(cd);
 
   it('should be created', () => {
     expect(component instanceof PoTextareaBaseComponent).toBeTruthy();
@@ -73,7 +75,11 @@ describe('PoTextareaBase:', () => {
 
   it('should call writeValueModel', () => {
     spyOn(component, 'writeValueModel');
+    spyOn(component.cd, 'markForCheck');
+
     component.writeValue(1);
+
+    expect(component.cd.markForCheck).toHaveBeenCalled();
     expect(component.writeValueModel).toHaveBeenCalledWith(1);
   });
 
@@ -189,7 +195,12 @@ describe('PoTextareaBase:', () => {
 
       it('setDisabledState: should set `component.disabled` with boolean parameter', () => {
         const expectedValue = true;
+
+        spyOn(component.cd, 'markForCheck');
+
         component.setDisabledState(expectedValue);
+
+        expect(component.cd.markForCheck).toHaveBeenCalled();
         expect(component.disabled).toBe(expectedValue);
       });
 
