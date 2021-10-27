@@ -2,19 +2,23 @@ import { ComponentFixture, fakeAsync, TestBed, tick } from '@angular/core/testin
 import { EventEmitter } from '@angular/core';
 import { FormsModule } from '@angular/forms';
 
-import { configureTestSuite } from './../../../util-test/util-expect.spec';
+import { configureTestSuite, expectPropertiesValues } from './../../../util-test/util-expect.spec';
+import * as UtilsFunctions from '../../../utils/util';
 
 import { PoFieldContainerBottomComponent } from './../po-field-container/po-field-container-bottom/po-field-container-bottom.component';
 import { PoFieldContainerComponent } from '../po-field-container/po-field-container.component';
 import { PoSelectComponent } from './po-select.component';
+import { removeDuplicatedOptions, removeUndefinedAndNullOptions } from '../../../utils/util';
 
 describe('PoSelectComponent:', () => {
   let component: PoSelectComponent;
   let fixture: ComponentFixture<PoSelectComponent>;
   let nativeElement;
+  const booleanValidFalseValues = [false, 'false'];
+  const booleanValidTrueValues = [true, 'true', ''];
+  const booleanInvalidValues = [undefined, null, 2, 'string'];
 
-  const event = document.createEvent('MouseEvent');
-  event.initEvent('click', false, true);
+  const event = new MouseEvent('click', { 'bubbles': false, 'cancelable': true });
 
   configureTestSuite(() => {
     TestBed.configureTestingModule({
@@ -81,14 +85,14 @@ describe('PoSelectComponent:', () => {
   it('should update model from onOptionClick Function', () => {
     const fakeThis = {
       toggleButton: function () {},
-      updateModel: function (value, label) {}
+      updateValues: function (value, label) {}
     };
 
-    spyOn(fakeThis, 'updateModel');
+    spyOn(fakeThis, 'updateValues');
 
     component.onOptionClick.call(fakeThis, 1, 'test');
 
-    expect(fakeThis.updateModel).toHaveBeenCalled();
+    expect(fakeThis.updateValues).toHaveBeenCalled();
   });
 
   it('should click in document', () => {
@@ -102,39 +106,13 @@ describe('PoSelectComponent:', () => {
   });
 
   it('should execute isEqual', () => {
-    const isEqual = component.isEqual(null, 'null');
+    const isEqual = component['isEqual'](null, 'null');
     expect(isEqual).toBe(true);
   });
 
   it('should execute isEqual when value is undefined and input have value', () => {
-    const isEqual = component.isEqual(undefined, 'teste');
+    const isEqual = component['isEqual'](undefined, 'teste');
     expect(isEqual).toBe(false);
-  });
-
-  it('should execute onModelChange Function', () => {
-    const fakeThis = {
-      onModelChange: function () {},
-      ngModelChange: function () {}
-    };
-
-    spyOn(fakeThis, 'onModelChange');
-
-    component.callModelChange.call(fakeThis, 2);
-
-    expect(fakeThis.onModelChange).toHaveBeenCalled();
-  });
-
-  it('should execute ngModelChange Function', () => {
-    const fakeThis = {
-      onModelChange: undefined,
-      ngModelChange: new EventEmitter<any>()
-    };
-
-    spyOn(fakeThis.ngModelChange, 'emit');
-
-    component.callModelChange.call(fakeThis, 2);
-
-    expect(fakeThis.ngModelChange.emit).toHaveBeenCalled();
   });
 
   describe('Properties:', () => {
@@ -240,6 +218,12 @@ describe('PoSelectComponent:', () => {
       expect(component['getSelectItemHeight']()).toBe(5);
     });
 
+    it('extraValidation: should return null', () => {
+      const returnExtraValidation = component.extraValidation(null);
+
+      expect(returnExtraValidation).toBeNull();
+    });
+
     it('getSelectItemHeight: should return undefined if `selectItem` is undefined', () => {
       const selectItem = undefined;
 
@@ -251,14 +235,14 @@ describe('PoSelectComponent:', () => {
     it('hideDropDown: should update `icon`, set variable `open` to false and call `markForCheck()`', () => {
       const classIconArrowDown = 'po-icon-arrow-down';
 
-      spyOn(component.changeDetector, 'markForCheck');
+      spyOn(component['changeDetector'], 'markForCheck');
       spyOn(component, <any>'removeListeners');
 
       component.hideDropDown();
 
       expect(component.selectIcon).toBe(classIconArrowDown);
       expect(component.open).toBe(false);
-      expect(component.changeDetector.markForCheck).toHaveBeenCalled();
+      expect(component['changeDetector'].markForCheck).toHaveBeenCalled();
       expect(component['removeListeners']).toHaveBeenCalled();
     });
 
@@ -502,37 +486,37 @@ describe('PoSelectComponent:', () => {
       expect(component['showDropdown']).toHaveBeenCalled();
     });
 
-    it('updateModel: should execute updateModel and call onChange', () => {
+    it('updateValues: should execute updateValues and call onChange', () => {
       const option = { value: '1', label: '' };
       const fakeThis = {
         selectElement: component.selectElement,
         selectedValue: '',
         displayValue: label => {},
-        callModelChange: value => {},
-        onChange: value => {}
+        updateModel: value => {},
+        emitChange: value => {}
       };
 
-      spyOn(fakeThis, 'onChange');
-      component.updateModel.call(fakeThis, option);
+      spyOn(fakeThis, 'emitChange');
+      component['updateValues'].call(fakeThis, option);
 
-      expect(fakeThis.onChange).toHaveBeenCalledWith(option.value);
+      expect(fakeThis.emitChange).toHaveBeenCalledWith(option.value);
       expect(fakeThis.selectedValue).toBe('1');
     });
 
-    it('updateModel: shouldn`t execute methods if `selectedValue` is equal `option.value`.', () => {
+    it('updateValues: shouldn`t execute methods if `selectedValue` is equal `option.value`.', () => {
       const option = { value: '1', label: 'tst' };
       const fakeThis = {
         selectElement: component.selectElement,
         selectedValue: '1',
         displayValue: label => {},
-        callModelChange: value => {},
-        onChange: value => {}
+        updateModel: value => {},
+        emitChange: value => {}
       };
 
-      spyOn(fakeThis, 'onChange');
-      component.updateModel.call(fakeThis, option);
+      spyOn(fakeThis, 'emitChange');
+      component['updateValues'].call(fakeThis, option);
 
-      expect(fakeThis.onChange).not.toHaveBeenCalled();
+      expect(fakeThis.emitChange).not.toHaveBeenCalled();
       expect(fakeThis.selectedValue).toBe('1');
     });
 
@@ -657,30 +641,53 @@ describe('PoSelectComponent:', () => {
       expect(component['setScrollPosition']).not.toHaveBeenCalled();
     });
 
-    it('onSelectChange: shouldn`t call `updateModel` and `setScrollPosition` if value is undefined', () => {
-      spyOn(component, 'updateModel');
+    it('p-options: should call `removeDuplicatedOptions`, `removeUndefinedAndNullOptions` and `onUpdateOptions`.', () => {
+      const options = [{ label: 'option', value: 'option' }];
+
+      spyOn(UtilsFunctions, 'removeUndefinedAndNullOptions');
+      spyOn(UtilsFunctions, 'removeDuplicatedOptions');
+      spyOn(component, 'onUpdateOptions');
+
+      component.options = options;
+
+      expect(removeUndefinedAndNullOptions).toHaveBeenCalledWith(options);
+      expect(removeDuplicatedOptions).toHaveBeenCalledWith(options);
+      expect(component.onUpdateOptions).toHaveBeenCalled();
+    });
+
+    it('p-readonly: should update with valid values.', () => {
+      expectPropertiesValues(component, 'readonly', booleanValidFalseValues, false);
+      expectPropertiesValues(component, 'readonly', booleanValidTrueValues, true);
+    });
+
+    it('p-readonly: should update with invalid values.', () => {
+      expectPropertiesValues(component, 'readonly', booleanInvalidValues, false);
+    });
+
+    it('onSelectChange: shouldn`t call `updateValues` and `setScrollPosition` if value is undefined', () => {
+      spyOn(component, 'updateValues');
       spyOn(component, <any>'setScrollPosition');
 
       component.onSelectChange(undefined);
-      expect(component.updateModel).not.toHaveBeenCalled();
+      expect(component.updateValues).not.toHaveBeenCalled();
       expect(component['setScrollPosition']).not.toHaveBeenCalled();
     });
 
-    it('onSelectChange: should call `updateModel` and `setScrollPosition` if value is valid', () => {
-      spyOn(component, 'updateModel');
+    it('onSelectChange: should call `updateValues` and `setScrollPosition` if value is valid', () => {
+      spyOn(component, 'updateValues');
       spyOn(component, <any>'setScrollPosition');
 
       component.onSelectChange(component.options[0].value);
-      expect(component.updateModel).toHaveBeenCalledWith(component.options[0]);
+      expect(component.updateValues).toHaveBeenCalledWith(component.options[0]);
       expect(component['setScrollPosition']).toHaveBeenCalledWith(component.options[0].value);
     });
 
-    it('onSelectChange: shouldn`t call `updateModel` and `setScrollPosition` if value is invalid', () => {
-      spyOn(component, 'updateModel');
+    it('onSelectChange: shouldn`t call `updateValues` and `setScrollPosition` if value is invalid', () => {
+      spyOn(component, 'updateValues');
       spyOn(component, <any>'setScrollPosition');
 
       component.onSelectChange(5);
-      expect(component.updateModel).not.toHaveBeenCalled();
+      expect(component.updateValues).not.toHaveBeenCalled();
       expect(component['setScrollPosition']).not.toHaveBeenCalled();
     });
 

@@ -73,6 +73,10 @@ export abstract class PoFieldModel<T> implements ControlValueAccessor {
     this.onWriteValue(value);
   }
 
+  emitChange(value) {
+    this.change.emit(value);
+  }
+
   protected updateModel(value: T) {
     if (this.propagateChange) {
       this.propagateChange(value);

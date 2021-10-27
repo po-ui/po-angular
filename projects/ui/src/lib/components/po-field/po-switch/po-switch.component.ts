@@ -188,7 +188,7 @@ export class PoSwitchComponent extends PoFieldModel<boolean> implements AfterVie
     if (this.value !== value) {
       this.value = value;
       this.updateModel(value);
-      this.change.emit(this.value);
+      this.emitChange(this.value);
     }
   }
 

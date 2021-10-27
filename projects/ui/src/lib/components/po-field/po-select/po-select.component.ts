@@ -10,23 +10,27 @@ import {
   HostListener,
   IterableDiffers,
   Renderer2,
-  ViewChild
+  ViewChild,
+  Input,
+  Output,
+  EventEmitter
 } from '@angular/core';
-import { NG_VALUE_ACCESSOR, NG_VALIDATORS } from '@angular/forms';
+import { NG_VALUE_ACCESSOR, NG_VALIDATORS, AbstractControl } from '@angular/forms';
 
 import { isMobile, removeDuplicatedOptions, removeUndefinedAndNullOptions, validValue } from '../../../utils/util';
 import { PoControlPositionService } from './../../../services/po-control-position/po-control-position.service';
 import { PoKeyCodeEnum } from './../../../enums/po-key-code.enum';
 
-import { PoSelectBaseComponent } from './po-select-base.component';
 import { PoSelectOption } from './po-select-option.interface';
 import { PoSelectOptionTemplateDirective } from './po-select-option-template/po-select-option-template.directive';
+import { PoFieldValidateModel } from '../po-field-validate.model';
+import { InputBoolean } from '../../../decorators';
 
 const poSelectContentOffset = 8;
 const poSelectContentPositionDefault = 'bottom';
 
 /**
- * @docsExtends PoSelectBaseComponent
+ * @docsExtends PoFieldValidateModel
  *
  * @example
  *
@@ -47,6 +51,18 @@ const poSelectContentPositionDefault = 'bottom';
  *   <file name='sample-po-select-customer-registration/sample-po-select-customer-registration.component.e2e-spec.ts'> </file>
  *   <file name='sample-po-select-customer-registration/sample-po-select-customer-registration.component.po.ts'> </file>
  * </example>
+ *
+ * @description
+ *
+ * O componente po-select exibe uma lista de valores e permite que o usuário selecione um desses valores.
+ * Os valores listados podem ser fixos ou dinâmicos de acordo com a necessidade do desenvolvedor, dando mais flexibilidade ao componente.
+ * O po-select não permite que o usuário informe um valor diferente dos valores listados, isso garante a consistência da informação.
+ * O po-select não permite que sejam passados valores duplicados, undefined e null para as opções, excluindo-os da lista.
+ *
+ * > Ao passar um valor para o _model_ que não está na lista de opções, o mesmo será definido como `undefined`.
+ *
+ * Também existe a possibilidade de utilizar um _template_ para a exibição dos itens da lista,
+ * veja mais em **[p-select-option-template](/documentation/po-select-option-template)**.
  */
 @Component({
   selector: 'po-select',
@@ -66,7 +82,7 @@ const poSelectContentPositionDefault = 'bottom';
     PoControlPositionService
   ]
 })
-export class PoSelectComponent extends PoSelectBaseComponent implements AfterViewInit, DoCheck {
+export class PoSelectComponent extends PoFieldValidateModel<any> implements AfterViewInit, DoCheck {
   @ContentChild(PoSelectOptionTemplateDirective, { static: true })
   selectOptionTemplate: PoSelectOptionTemplateDirective;
 
@@ -75,9 +91,33 @@ export class PoSelectComponent extends PoSelectBaseComponent implements AfterVie
   @ViewChild('select', { read: ElementRef, static: true }) selectElement: ElementRef;
   @ViewChild('selectButton', { read: ElementRef, static: true }) selectButtonElement: ElementRef;
 
+  /**
+   * @optional
+   *
+   * @description
+   *
+   * Função para atualizar o ngModel do componente, necessário quando não for utilizado dentro da tag form.
+   */
+  @Output('ngModelChange') ngModelChange: EventEmitter<any> = new EventEmitter<any>();
+
+  /**
+   * @optional
+   *
+   * @description
+   *
+   * Indica que o campo será somente para leitura.
+   *
+   * @default `false`
+   */
+  @Input('p-readonly') @InputBoolean() readonly: boolean = false;
+
+  /** Mensagem que aparecerá enquanto nenhuma opção estiver selecionada. */
+  @Input('p-placeholder') placeholder?: string;
+
   displayValue;
   isMobile: any = isMobile();
   modelValue: any;
+  onModelChange: any;
   open: boolean = false;
   selectedValue: any;
   selectIcon: string = 'po-icon-arrow-down';
@@ -86,17 +126,46 @@ export class PoSelectComponent extends PoSelectBaseComponent implements AfterVie
   eventListenerFunction: () => void;
   eventResizeListener: () => void;
 
+  onModelTouched: any;
+  protected clickoutListener: () => void;
   private differ: any;
+  private _options: Array<PoSelectOption>;
 
+  /**
+   * Nesta propriedade deve ser definido uma coleção de objetos que implementam a interface `PoSelectOption`.
+   *
+   * Caso esta lista estiver vazia, o model será `undefined`.
+   *
+   * > Essa propriedade é imutável, ou seja, sempre que quiser atualizar a lista de opções disponíveis
+   * atualize a referência do objeto:
+   *
+   * ```
+   * // atualiza a referência do objeto garantindo a atualização do template
+   * this.options = [...this.options, { value: 'x', label: 'Nova opção' }];
+   *
+   * // evite, pois não atualiza a referência do objeto podendo gerar atrasos na atualização do template
+   * this.options.push({ value: 'x', label: 'Nova opção' });
+   * ```
+   */
+  @Input('p-options') set options(options: Array<PoSelectOption>) {
+    this._options = options;
+    removeDuplicatedOptions(this._options);
+    removeUndefinedAndNullOptions(this._options);
+    this.onUpdateOptions();
+  }
+
+  get options() {
+    return this._options;
+  }
+  /* istanbul ignore next */
   constructor(
-    element: ElementRef,
-    changeDetector: ChangeDetectorRef,
+    private element: ElementRef,
+    private changeDetector: ChangeDetectorRef,
     differs: IterableDiffers,
     public renderer: Renderer2,
     private controlPosition: PoControlPositionService
   ) {
-    super(element, changeDetector);
-
+    super();
     this.differ = differs.find([]).create(null);
   }
 
@@ -182,24 +251,12 @@ export class PoSelectComponent extends PoSelectBaseComponent implements AfterVie
     this.removeListeners();
   }
 
-  isEqual(value: any, inputValue: any): boolean {
-    if ((value || value === 0) && inputValue) {
-      return value.toString() === inputValue.toString();
-    }
-
-    if ((value === null && inputValue !== null) || (value === undefined && inputValue !== undefined)) {
-      value = `${value}`; // Transformando em string
-    }
-
-    return value === inputValue;
-  }
-
   onBlur() {
     this.onModelTouched?.();
   }
 
   onOptionClick(option: PoSelectOption) {
-    this.updateModel(option);
+    this.updateValues(option);
     this.toggleButton();
   }
 
@@ -209,7 +266,7 @@ export class PoSelectComponent extends PoSelectBaseComponent implements AfterVie
       const optionFound: PoSelectOption = this.findOptionValue(value);
 
       if (optionFound) {
-        this.updateModel(optionFound);
+        this.updateValues(optionFound);
         this.setScrollPosition(optionFound.value);
       }
     }
@@ -236,13 +293,13 @@ export class PoSelectComponent extends PoSelectBaseComponent implements AfterVie
   }
 
   // Atualiza valores
-  updateModel(option: PoSelectOption): void {
+  updateValues(option: PoSelectOption): void {
     if (this.selectedValue !== option.value) {
       this.selectedValue = option.value;
       this.selectElement.nativeElement.value = option.value;
-      this.callModelChange(option.value);
+      this.updateModel(option.value);
       this.displayValue = option.label;
-      this.onChange(option.value);
+      this.emitChange(option.value);
     }
   }
 
@@ -257,7 +314,7 @@ export class PoSelectComponent extends PoSelectBaseComponent implements AfterVie
   }
 
   // Recebe as alterações do model
-  writeValue(value: any) {
+  onWriteValue(value: any) {
     const optionFound: PoSelectOption = this.findOptionValue(value);
 
     if (optionFound) {
@@ -267,13 +324,29 @@ export class PoSelectComponent extends PoSelectBaseComponent implements AfterVie
       this.setScrollPosition(optionFound.value);
     } else if (validValue(this.selectedValue)) {
       this.selectElement.nativeElement.value = undefined;
-      this.callModelChange(undefined);
+      this.updateModel(undefined);
       this.selectedValue = undefined;
       this.displayValue = undefined;
     }
 
     this.modelValue = value;
     this.changeDetector.detectChanges();
+  }
+
+  extraValidation(c: AbstractControl): { [key: string]: any } {
+    return null;
+  }
+
+  private isEqual(value: any, inputValue: any): boolean {
+    if ((value || value === 0) && inputValue) {
+      return value.toString() === inputValue.toString();
+    }
+
+    if ((value === null && inputValue !== null) || (value === undefined && inputValue !== undefined)) {
+      value = `${value}`; // Transformando em string
+    }
+
+    return value === inputValue;
   }
 
   // Método necessário para bloquear o evento default do select nativo.
