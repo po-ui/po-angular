@@ -567,6 +567,19 @@ describe('PoDecimalComponent:', () => {
     expect(isLessDot).toBeTruthy();
   });
 
+  it('hasLessDot: should return true', () => {
+    const fakeThis = {
+      regex: {
+        thousand: '.'
+      },
+      oldDotsLength: 2
+    };
+
+    const isLessDot = component['hasLessDot'].call(fakeThis, '12.100');
+
+    expect(isLessDot).toBeTruthy();
+  });
+
   it('should have a call hasMoreDot method if path', () => {
     fixture.detectChanges();
     component['oldDotsLength'] = 1;

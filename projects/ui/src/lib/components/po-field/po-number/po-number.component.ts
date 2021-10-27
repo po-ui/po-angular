@@ -1,5 +1,5 @@
 import { AbstractControl, NG_VALUE_ACCESSOR, NG_VALIDATORS } from '@angular/forms';
-import { Component, ElementRef, forwardRef, Input } from '@angular/core';
+import { ChangeDetectorRef, ChangeDetectionStrategy, Component, ElementRef, forwardRef, Input } from '@angular/core';
 
 import { minFailed, maxFailed } from '../validators';
 
@@ -34,6 +34,7 @@ import { PoNumberBaseComponent } from './po-number-base.component';
 @Component({
   selector: 'po-number',
   templateUrl: './po-number.component.html',
+  changeDetection: ChangeDetectionStrategy.OnPush,
   providers: [
     {
       provide: NG_VALUE_ACCESSOR,
@@ -80,8 +81,8 @@ export class PoNumberComponent extends PoNumberBaseComponent {
   }
 
   /* istanbul ignore next */
-  constructor(el: ElementRef) {
-    super(el);
+  constructor(el: ElementRef, cd: ChangeDetectorRef) {
+    super(el, cd);
   }
 
   extraValidation(abstractControl: AbstractControl): { [key: string]: any } {
