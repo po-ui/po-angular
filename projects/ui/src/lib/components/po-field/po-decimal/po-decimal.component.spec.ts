@@ -43,8 +43,6 @@ describe('PoDecimalComponent:', () => {
     component.clean = true;
     inputEl = component.inputEl;
 
-    fixture.detectChanges();
-
     nativeElement = fixture.debugElement.nativeElement;
   });
 
@@ -155,19 +153,23 @@ describe('PoDecimalComponent:', () => {
   });
 
   it('should create button clean', () => {
+    fixture.detectChanges();
     expect(nativeElement.querySelector('po-clean')).not.toBeNull();
   });
 
   it('should not create button clean', () => {
+    fixture.detectChanges();
     component.clean = false;
     expect(nativeElement.querySelector('po-clean').length).toBe(undefined);
   });
 
   it('should have a Label', () => {
+    fixture.detectChanges();
     expect(fixture.debugElement.nativeElement.innerHTML).toContain('Label de teste');
   });
 
   it('should have a Help', () => {
+    fixture.detectChanges();
     expect(fixture.debugElement.nativeElement.innerHTML).toContain('Help de teste');
   });
 
@@ -382,6 +384,7 @@ describe('PoDecimalComponent:', () => {
   });
 
   it('should have a call replaceCommaToDot method', () => {
+    fixture.detectChanges();
     const valueFormatted = component['replaceCommaToDot']('123,10');
     expect(valueFormatted).toEqual('123.10');
   });
@@ -392,6 +395,7 @@ describe('PoDecimalComponent:', () => {
   });
 
   it('should have a call formatValueWithoutThousandSeparator method', () => {
+    fixture.detectChanges();
     const valueFormatted = component['formatValueWithoutThousandSeparator']('12345.10');
     expect(valueFormatted).toEqual('1234510');
   });
@@ -411,6 +415,7 @@ describe('PoDecimalComponent:', () => {
   });
 
   it('should return `true` value if call isKeyDecimalSeparator() with event.char `,`', () => {
+    fixture.detectChanges();
     const event = {
       key: '',
       char: ','
@@ -421,6 +426,7 @@ describe('PoDecimalComponent:', () => {
   });
 
   it('should have a call containsComma method', () => {
+    fixture.detectChanges();
     const containsComma = component['containsComma']('123456789,10');
     expect(containsComma).toBeTruthy();
   });
@@ -446,6 +452,7 @@ describe('PoDecimalComponent:', () => {
   });
 
   it('should have a call addZeroBefore method', () => {
+    fixture.detectChanges();
     const addZeroBefore = component['addZeroBefore'](',');
     expect(addZeroBefore).toEqual('0,');
   });
@@ -561,6 +568,7 @@ describe('PoDecimalComponent:', () => {
   });
 
   it('should have a call hasMoreDot method if path', () => {
+    fixture.detectChanges();
     component['oldDotsLength'] = 1;
 
     const hasMoreDot = component['hasMoreDot']('1234.121.100');
@@ -581,11 +589,13 @@ describe('PoDecimalComponent:', () => {
   });
 
   it('should have a call formatMask method', () => {
+    fixture.detectChanges();
     const valueFormatted = component['formatMask']('12345');
     expect(valueFormatted).toEqual('12.345');
   });
 
   it('should have a call formatMask method else path', () => {
+    fixture.detectChanges();
     const valueFormatted = component['formatMask']('10123,4');
     expect(valueFormatted).toEqual('10.123,4');
   });
@@ -631,6 +641,7 @@ describe('PoDecimalComponent:', () => {
   }));
 
   it('should have a call formatToViewValue method', () => {
+    fixture.detectChanges();
     component['_decimalsLength'] = 0;
 
     const returnMethod = component['formatToViewValue']('123400');
@@ -639,12 +650,14 @@ describe('PoDecimalComponent:', () => {
   });
 
   it('should have a call formatToViewValue method else path', () => {
+    fixture.detectChanges();
     const returnMethod = component['formatToViewValue']('1234');
 
     expect(returnMethod).toBe('1.234,00');
   });
 
   it('should have a call verifyInsertComma method', () => {
+    fixture.detectChanges();
     const fakeEvent = {
       target: {
         value: '123,00'
@@ -657,6 +670,7 @@ describe('PoDecimalComponent:', () => {
   });
 
   it('should have a call verifyValueAfterComma method', () => {
+    fixture.detectChanges();
     const fakeEvent = {
       target: {
         value: '10.245,60',
@@ -1088,6 +1102,7 @@ describe('PoDecimalComponent:', () => {
       });
 
       it('should return true if all validators equal true', () => {
+        fixture.detectChanges();
         spyOn(component, <any>'isKeyDecimalSeparator');
 
         expect(component['validateCursorPositionBeforeSeparator'](fakeEvent)).toBeTruthy();
@@ -1122,6 +1137,7 @@ describe('PoDecimalComponent:', () => {
       });
 
       it('should return false if isKeyDecimalSeparator is true', () => {
+        fixture.detectChanges();
         spyOn(component, <any>'isKeyDecimalSeparator').and.returnValue(true);
 
         expect(component['validateCursorPositionBeforeSeparator'](fakeEvent)).toBeFalsy();
@@ -1143,6 +1159,7 @@ describe('PoDecimalComponent:', () => {
       });
 
       it('should return true if all validators equal true', () => {
+        fixture.detectChanges();
         spyOn(component, <any>'isKeyDecimalSeparator').and.returnValue(false);
         spyOn(component, <any>'isPositionAfterDecimalSeparator').and.returnValue(true);
 
@@ -1158,6 +1175,7 @@ describe('PoDecimalComponent:', () => {
       });
 
       it('should return false if isKeyDecimalSeparator is true', () => {
+        fixture.detectChanges();
         spyOn(component, <any>'isKeyDecimalSeparator').and.returnValue(true);
 
         expect(component['verifyThousandLength'](fakeEvent)).toBeFalsy();
@@ -1178,6 +1196,7 @@ describe('PoDecimalComponent:', () => {
 
     it(`onBlur: should call 'setViewValue' with empty string and 'callOnChange' with undefined if 'target.value'
       contains more than one comma`, () => {
+      fixture.detectChanges();
       const fakeEvent = {
         target: {
           value: '1,200,50'
@@ -1214,6 +1233,7 @@ describe('PoDecimalComponent:', () => {
       });
 
       it('should return `true` if param contains more than one comma', () => {
+        fixture.detectChanges();
         const value = '1.444,200,55';
 
         expect(component['containsMoreThanOneDecimalSeparator'](value)).toBeTruthy();
