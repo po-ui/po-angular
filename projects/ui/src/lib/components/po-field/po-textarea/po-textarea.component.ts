@@ -1,4 +1,12 @@
-import { Component, ElementRef, forwardRef, ViewChild, AfterViewInit } from '@angular/core';
+import {
+  Component,
+  ElementRef,
+  ChangeDetectorRef,
+  forwardRef,
+  ViewChild,
+  AfterViewInit,
+  ChangeDetectionStrategy
+} from '@angular/core';
 import { NG_VALIDATORS, NG_VALUE_ACCESSOR } from '@angular/forms';
 
 import { PoTextareaBaseComponent } from './po-textarea-base.component';
@@ -32,6 +40,7 @@ import { PoTextareaBaseComponent } from './po-textarea-base.component';
 @Component({
   selector: 'po-textarea',
   templateUrl: './po-textarea.component.html',
+  changeDetection: ChangeDetectionStrategy.OnPush,
   providers: [
     {
       provide: NG_VALUE_ACCESSOR,
@@ -51,8 +60,8 @@ export class PoTextareaComponent extends PoTextareaBaseComponent implements Afte
   valueBeforeChange: any;
   fireChange: boolean = false;
 
-  constructor() {
-    super();
+  constructor(cd: ChangeDetectorRef) {
+    super(cd);
   }
 
   /**

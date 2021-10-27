@@ -1,5 +1,5 @@
 import { AbstractControl, ControlValueAccessor, Validator } from '@angular/forms';
-import { EventEmitter, Input, Output, Directive } from '@angular/core';
+import { EventEmitter, Input, Output, Directive, ChangeDetectorRef } from '@angular/core';
 
 import { convertToBoolean, convertToInt } from '../../../utils/util';
 import { maxlengpoailed, minlengpoailed, requiredFailed } from '../validators';
@@ -224,6 +224,8 @@ export abstract class PoTextareaBaseComponent implements ControlValueAccessor, V
     return this._rows;
   }
 
+  constructor(public cd: ChangeDetectorRef) {}
+
   callOnChange(value: any) {
     // Quando o input não possui um formulário, então esta função não é registrada
     if (this.onChangePropagate) {
@@ -244,6 +246,7 @@ export abstract class PoTextareaBaseComponent implements ControlValueAccessor, V
   // Usada para interceptar os estados de habilitado via forms api
   setDisabledState(isDisabled: boolean) {
     this.disabled = isDisabled;
+    this.cd.markForCheck();
   }
 
   // Funções `registerOnChange`, `registerOnTouched` e `registerOnValidatorChange` implementadas referentes ao ControlValueAccessor
@@ -289,6 +292,7 @@ export abstract class PoTextareaBaseComponent implements ControlValueAccessor, V
   // Função implementada do ControlValueAccessor
   writeValue(value: any) {
     this.writeValueModel(value);
+    this.cd.markForCheck();
   }
 
   protected validateModel() {
