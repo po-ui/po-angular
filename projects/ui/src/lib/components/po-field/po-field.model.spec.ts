@@ -69,4 +69,11 @@ describe('PoFieldModel', () => {
 
     expect(spyOnWriteValue).toHaveBeenCalledWith(expectedValue);
   });
+
+  it('should emit change', () => {
+    spyOn(component.change, 'emit');
+    component.emitChange('test');
+
+    expect(component.change.emit).toHaveBeenCalled();
+  });
 });
