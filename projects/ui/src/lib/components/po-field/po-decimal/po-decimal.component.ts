@@ -1,4 +1,14 @@
-import { AfterViewInit, Component, ElementRef, forwardRef, Input, OnInit, ViewChild } from '@angular/core';
+import {
+  AfterViewInit,
+  ChangeDetectionStrategy,
+  ChangeDetectorRef,
+  Component,
+  ElementRef,
+  forwardRef,
+  Input,
+  OnInit,
+  ViewChild
+} from '@angular/core';
 import { AbstractControl, NG_VALUE_ACCESSOR, NG_VALIDATORS } from '@angular/forms';
 import { PoLanguageService } from '../../../services/po-language/po-language.service';
 
@@ -55,6 +65,7 @@ const poDecimalTotalLengthLimit = 16;
 @Component({
   selector: 'po-decimal',
   templateUrl: './po-decimal.component.html',
+  changeDetection: ChangeDetectionStrategy.OnPush,
   providers: [
     {
       provide: NG_VALUE_ACCESSOR,
@@ -225,8 +236,8 @@ export class PoDecimalComponent extends PoInputBaseComponent implements AfterVie
     return this._max;
   }
 
-  constructor(private el: ElementRef, private poLanguageService: PoLanguageService) {
-    super();
+  constructor(private el: ElementRef, private poLanguageService: PoLanguageService, cd: ChangeDetectorRef) {
+    super(cd);
     this.isKeyboardAndroid = !!navigator.userAgent.match(/Android/i);
   }
 
