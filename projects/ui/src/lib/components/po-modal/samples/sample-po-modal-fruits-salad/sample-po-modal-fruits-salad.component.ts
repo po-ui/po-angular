@@ -3,8 +3,9 @@ import { NgForm } from '@angular/forms';
 
 import { PoCheckboxGroupOption, PoComboOption } from '@po-ui/ng-components';
 
-import { PoModalAction, PoModalComponent } from '@po-ui/ng-components';
+import { PoModalAction } from '@po-ui/ng-components';
 import { PoNotificationService } from '@po-ui/ng-components';
+import { PoModalComponent } from '@po-ui/ng-components';
 
 @Component({
   selector: 'sample-po-modal-fruits-salad',
@@ -52,6 +53,14 @@ export class SamplePoModalFruitsSaladComponent {
   closeModal() {
     this.form.reset();
     this.poModal.close();
+  }
+
+  confirmFruits() {
+    this.proccessOrder();
+  }
+
+  restore() {
+    this.form.reset();
   }
 
   openQuestionnaire() {

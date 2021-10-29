@@ -1,6 +1,7 @@
-import { Component, ElementRef, ViewChild } from '@angular/core';
+import { Component, ContentChild, ElementRef, ViewChild } from '@angular/core';
 
 import { PoModalBaseComponent } from './po-modal-base.component';
+import { PoModalFooterComponent } from './po-modal-footer/po-modal-footer.component';
 import { uuid } from '../../utils/util';
 
 import { PoActiveOverlayService } from '../../services/po-active-overlay/po-active-overlay.service';
@@ -33,6 +34,7 @@ import { PoLanguageService } from '../../services/po-language/po-language.servic
 })
 export class PoModalComponent extends PoModalBaseComponent {
   @ViewChild('modalContent', { read: ElementRef }) modalContent: ElementRef;
+  @ContentChild(PoModalFooterComponent) modalFooter: PoModalFooterComponent;
 
   private firstElement;
   private focusFunction;
