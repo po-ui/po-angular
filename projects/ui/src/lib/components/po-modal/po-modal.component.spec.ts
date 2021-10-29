@@ -14,6 +14,7 @@ import { PoInputComponent } from './../po-field/po-input/po-input.component';
 import { PoModalAction } from './po-modal-action.interface';
 import { PoModalBaseComponent } from './po-modal-base.component';
 import { PoModalComponent } from './po-modal.component';
+import { PoModalFooterComponent } from '.';
 
 @Component({
   template: `
@@ -45,6 +46,7 @@ describe('PoModalComponent:', () => {
       imports: [FormsModule, PoButtonModule],
       declarations: [
         PoModalComponent,
+        PoModalFooterComponent,
         PoInputComponent,
         PoCleanComponent,
         PoFieldContainerComponent,
@@ -77,6 +79,7 @@ describe('PoModalComponent:', () => {
   it('should be loaded with just primaryAction', () => {
     component.open();
     fixture.detectChanges();
+
     expect(element.query(By.css('.po-modal-footer')).nativeElement.textContent).toContain('primaryLabel');
   });
 
@@ -562,6 +565,14 @@ describe('PoModalComponent:', () => {
       containerElement.dispatchEvent(new Event('mousedown'));
 
       expect(component.onClickOut).toHaveBeenCalled();
+    });
+
+    it('should not found `.po-button` if `modalFooter` is truthy', () => {
+      component.modalFooter = <any>{};
+      component.open();
+      fixture.detectChanges();
+
+      expect(fixture.debugElement.query(By.css('.po-button'))).toBeNull();
     });
   });
 });

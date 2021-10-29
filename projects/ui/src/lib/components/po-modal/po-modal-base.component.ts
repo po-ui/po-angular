@@ -17,7 +17,8 @@ import { poModalLiterals } from './po-modal.literals';
  * `po-table` e os demais componentes do PO.
  *
  * No rodapé encontram-se os botões de ação primária e secundária, no qual permitem definir uma ação e um rótulo, bem como
- * definir um estado de carregando e / ou desabilitado. Também é possível definir o botão com o tipo *danger*.
+ * definir um estado de carregando e / ou desabilitado e / ou definir o botão com o tipo *danger*. Também é possível utilizar
+ * o componente [`PoModalFooter`](/documentation/po-modal-footer).
  *
  * > É possível fechar a modal através da tecla *ESC*, quando a propriedade `p-hide-close` não estiver habilitada.
  */
