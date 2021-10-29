@@ -17,27 +17,33 @@
             <ng-content></ng-content>
           </div>
 
-          <div class="po-modal-footer">
-            <po-button
-              *ngIf="secondaryAction"
-              [p-disabled]="secondaryAction.disabled"
-              [p-label]="secondaryAction.label"
-              [p-loading]="secondaryAction.loading"
-              [p-type]="getSecondaryActionButtonType()"
-              (p-click)="secondaryAction.action()"
-            >
-            </po-button>
+          <ng-container *ngIf="modalFooter; else defaultModalFooterTemplate">
+            <ng-content select="po-modal-footer"></ng-content>
+          </ng-container>
 
-            <po-button
-              class="po-button-modal-first-action"
-              [p-disabled]="primaryAction.disabled"
-              [p-label]="primaryAction.label"
-              [p-loading]="primaryAction.loading"
-              [p-type]="getPrimaryActionButtonType()"
-              (p-click)="primaryAction.action()"
-            >
-            </po-button>
-          </div>
+          <ng-template #defaultModalFooterTemplate>
+            <po-modal-footer>
+              <po-button
+                *ngIf="secondaryAction"
+                [p-disabled]="secondaryAction.disabled"
+                [p-label]="secondaryAction.label"
+                [p-loading]="secondaryAction.loading"
+                [p-type]="getSecondaryActionButtonType()"
+                (p-click)="secondaryAction.action()"
+              >
+              </po-button>
+
+              <po-button
+                class="po-button-modal-first-action"
+                [p-disabled]="primaryAction.disabled"
+                [p-label]="primaryAction.label"
+                [p-loading]="primaryAction.loading"
+                [p-type]="getPrimaryActionButtonType()"
+                (p-click)="primaryAction.action()"
+              >
+              </po-button>
+            </po-modal-footer>
+          </ng-template>
         </div>
       </div>
     </div>
