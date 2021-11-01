@@ -2,6 +2,22 @@
 
 All notable changes to this project will be documented in this file. See [standard-version](https://github.com/conventional-changelog/standard-version) for commit guidelines.
 
+# [5.19.0](https://github.com/po-ui/po-angular/compare/v5.18.0...v5.19.0) (2021-11-01)
+
+
+### Features
+
+* **calendar:** adiciona botão `hoje` ([5915cd4](https://github.com/po-ui/po-angular/commit/5915cd49f522e498c996321231f364baf78a65f8))
+
+
+### Performance Improvements
+
+* **decimal:** implementa ChangeDetectionStrategy.OnPush ([4093926](https://github.com/po-ui/po-angular/commit/4093926df60b640429dba9d406b2d839917958fd))
+* **number:** implementa ChangeDetectionStrategy.OnPush ([1e06cee](https://github.com/po-ui/po-angular/commit/1e06ceedff2616c3b6dac4bd844bd0a4febbd73e))
+* **textarea:** implementa ChangeDetectionStrategy.OnPush ([ea2f979](https://github.com/po-ui/po-angular/commit/ea2f979e55b3cbef367ac672aae50e78e9256252))
+
+
+
 # [5.18.0](https://github.com/po-ui/po-angular/compare/v5.17.0...v5.18.0) (2021-10-25)
 
 
