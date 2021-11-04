@@ -1,8 +1,6 @@
-import { NgModule } from '@angular/core';
 import { CommonModule } from '@angular/common';
-
+import { NgModule } from '@angular/core';
 import { PoIconModule } from '../po-icon/po-icon.module';
-
 import { PoPopupComponent } from './po-popup.component';
 
 /**

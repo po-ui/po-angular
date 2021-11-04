@@ -1,0 +1,7 @@
+{
+  "ngPackage": {
+    "lib": {
+      "entryFile": "../../../lib/wrapper_index.ts"
+    }
+  }
+}
