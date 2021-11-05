@@ -2,7 +2,7 @@ import { Component, ElementRef, EventEmitter, Input, Output, ViewChild } from '@
 
 import { isTypeof } from '../../../../utils/util';
 
-import { PoMultiselectLiterals } from '../../index';
+import { PoMultiselectLiterals } from '../po-multiselect-literals.interface';
 
 /**
  * @docsPrivate

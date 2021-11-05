@@ -1,6 +1,6 @@
 import { Component, ElementRef, EventEmitter, HostListener, Input, Output, ViewChild } from '@angular/core';
 
-import { PoMultiselectLiterals } from '../../index';
+import { PoMultiselectLiterals } from '../po-multiselect-literals.interface';
 import { PoMultiselectOption } from '../po-multiselect-option.interface';
 import { PoMultiselectSearchComponent } from './../po-multiselect-search/po-multiselect-search.component';
 
