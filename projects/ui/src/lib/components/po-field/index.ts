@@ -18,13 +18,6 @@ export * from './po-decimal/po-decimal.component';
 export * from './po-email/po-email.component';
 export * from './po-input/po-input.component';
 export * from './po-login/po-login.component';
-export * from './po-lookup/interfaces/po-lookup-column.interface';
-export * from './po-lookup/interfaces/po-lookup-filter.interface';
-export * from './po-lookup/interfaces/po-lookup-filtered-items-params.interface';
-export * from './po-lookup/interfaces/po-lookup-literals.interface';
-export * from './po-lookup/interfaces/po-lookup-response-api.interface';
-export * from './po-lookup/po-lookup-modal/po-lookup-modal.component';
-export * from './po-lookup/po-lookup.component';
 export * from './po-multiselect/po-multiselect-filter-mode.enum';
 export * from './po-multiselect/po-multiselect-literals.interface';
 export * from './po-multiselect/po-multiselect-option.interface';
@@ -50,3 +43,7 @@ export * from './po-checkbox-group/po-checkbox-group.module';
 export * from './po-datepicker/po-datepicker.module';
 
 export * from './po-field.module';
+
+export * from './po-field-container/index';
+export * from './po-clean/index';
+export * from './po-lookup/index';
