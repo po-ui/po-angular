@@ -2,6 +2,15 @@
 
 All notable changes to this project will be documented in this file. See [standard-version](https://github.com/conventional-changelog/standard-version) for commit guidelines.
 
+# [5.20.0](https://github.com/po-ui/po-angular/compare/v5.19.0...v5.20.0) (2021-11-05)
+
+
+### Features
+
+* **modal-footer:** cria componente `modal-footer` ([c9d3831](https://github.com/po-ui/po-angular/commit/c9d383100b93f4a6f8f17f9ef20154b2e2924dd5))
+
+
+
 # [5.19.0](https://github.com/po-ui/po-angular/compare/v5.18.0...v5.19.0) (2021-11-01)
 
 
