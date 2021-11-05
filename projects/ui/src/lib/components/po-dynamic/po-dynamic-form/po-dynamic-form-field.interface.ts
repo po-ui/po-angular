@@ -1,8 +1,8 @@
-import { PoComboFilter, PoLookupFilter } from '../../po-field';
+import { PoComboFilter } from '../../po-field/po-combo/interfaces/po-combo-filter.interface';
 import { PoLookupColumn } from '../../po-field/po-lookup/interfaces/po-lookup-column.interface';
+import { PoLookupFilter } from '../../po-field/po-lookup/interfaces/po-lookup-filter.interface';
 import { PoMultiselectOption } from '../../po-field/po-multiselect/po-multiselect-option.interface';
 import { PoSelectOption } from '../../po-field/po-select/po-select-option.interface';
-
 import { PoDynamicField } from '../po-dynamic-field.interface';
 
 /**
