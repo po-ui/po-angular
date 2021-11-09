@@ -581,6 +581,7 @@ export abstract class PoLookupBaseComponent
   }
 
   protected cleanViewValue() {
+    this.setDisclaimers([]);
     this.setViewValue('', {});
     this.oldValue = '';
     this.valueToModel = null;

@@ -10,7 +10,7 @@ import {
   Renderer2,
   ViewChild
 } from '@angular/core';
-import { NG_VALIDATORS, NG_VALUE_ACCESSOR } from '@angular/forms';
+import { NgControl, NG_VALIDATORS, NG_VALUE_ACCESSOR } from '@angular/forms';
 import { Subscription } from 'rxjs';
 
 import { PoLookupBaseComponent } from './po-lookup-base.component';
@@ -32,6 +32,11 @@ const providers = [
     // eslint-disable-next-line
     useExisting: forwardRef(() => PoLookupComponent),
     multi: true
+  },
+  {
+    provide: NgControl,
+    useExisting: forwardRef(() => PoLookupComponent),
+    multi: false
   }
 ];
 
