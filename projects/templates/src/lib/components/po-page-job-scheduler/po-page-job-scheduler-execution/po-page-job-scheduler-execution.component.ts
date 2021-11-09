@@ -24,6 +24,8 @@ export class PoPageJobSchedulerExecutionComponent implements OnInit, AfterViewIn
 
   @Input('p-literals') literals = <any>{};
 
+  @Input('p-no-parameters') noParameters: Boolean = true;
+
   @Output('p-change-process') changeProcess: EventEmitter<any> = new EventEmitter<any>();
 
   dayPattern = '^(3[0-1]|[0-2][0-9]|[1-9]|0[1-9])$';
@@ -100,7 +102,7 @@ export class PoPageJobSchedulerExecutionComponent implements OnInit, AfterViewIn
   }
 
   private subscribeProcessIdValueChanges() {
-    this.form.controls['processID'].valueChanges.subscribe(processId => {
+    this.form.controls['processID']?.valueChanges.subscribe(processId => {
       this.changeProcess.emit({ processId, existAPI: this.existProcessAPI });
     });
   }

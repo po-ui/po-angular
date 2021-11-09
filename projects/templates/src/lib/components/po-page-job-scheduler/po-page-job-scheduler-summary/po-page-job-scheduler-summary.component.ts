@@ -16,6 +16,8 @@ export class PoPageJobSchedulerSummaryComponent implements OnInit {
 
   @Input('p-value') value: PoJobSchedulerInternal = <any>{};
 
+  @Input('p-no-parameters') noParameters: Boolean = true;
+
   executionValue = '';
   firstExecutionValue = '';
   infoOrientation = PoInfoOrientation.Horizontal;
