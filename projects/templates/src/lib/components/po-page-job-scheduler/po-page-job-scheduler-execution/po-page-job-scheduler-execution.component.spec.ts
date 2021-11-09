@@ -159,6 +159,16 @@ describe('PoPageJobSchedulerExecutionComponent:', () => {
       expect(inputComponent).toBeTruthy();
     });
 
+    it(`shouldn't find po-lookup[name="processID"] if 'p-not-parameters' is false`, () => {
+      component.noParameters = false;
+
+      fixture.detectChanges();
+
+      const lookupComponent = debugElement.querySelector('po-lookup[name="processID"]');
+
+      expect(lookupComponent).toBeFalsy();
+    });
+
     it('should find po-lookup[name="processID"] and shouldn`t find po-input[name="processID"] if existProcessAPI is true', () => {
       component.existProcessAPI = true;
 

@@ -14,6 +14,7 @@
       <form #formScheduler="ngForm">
         <div class="po-row">
           <po-page-job-scheduler-execution
+            [p-no-parameters]="parametersEmpty"
             [hidden]="step !== 1"
             #schedulerExecution
             class="po-md-12"
@@ -35,6 +36,7 @@
           </po-page-job-scheduler-parameters>
 
           <po-page-job-scheduler-summary
+            [p-no-parameters]="parametersEmpty"
             *ngIf="step === 3"
             class="po-md-12"
             [p-literals]="literals"

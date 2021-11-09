@@ -1,7 +1,7 @@
 import { AbstractControl } from '@angular/forms';
 import { Input, Directive, OnDestroy } from '@angular/core';
 
-import { PoBreadcrumb } from '@po-ui/ng-components';
+import { PoBreadcrumb, PoDynamicFormField } from '@po-ui/ng-components';
 
 import { PoJobSchedulerInternal } from './interfaces/po-job-scheduler-internal.interface';
 import { PoPageJobSchedulerInternal } from './po-page-job-scheduler-internal';
@@ -83,7 +83,8 @@ export class PoPageJobSchedulerBaseComponent implements OnDestroy {
    *
    * Caso seja necessário informar parâmetros e adicionar configurações no processo selecionado, será realizado um `GET`
    * como exemplificado abaixo. Os parâmetros devem retornar uma lista de objetos que seguem a interface
-   * [PoDynamicFormField](/documentation/po-dynamic-form).
+   * [PoDynamicFormField](/documentation/po-dynamic-form). Porém, caso utilizar a propriedade `p-parameters` o componente não
+   * realizará a busca automática e o campo de processos não será exibido.
    *
    * ```
    * GET {service-api}/processes/:id/parameters
@@ -156,6 +157,14 @@ export class PoPageJobSchedulerBaseComponent implements OnDestroy {
 
   /** Título da página. */
   @Input('p-title') title: string;
+
+  /**
+   * Parâmetros que serão utilizados para criação e edição dos agendamentos.
+   *
+   * Ao utilizar esta propriedade, o componente não buscará automaticamente os parâmetros da API e o campo para preenchimento do processo não será exibido.
+   *
+   */
+  @Input('p-parameters') parameters: Array<PoDynamicFormField> = [];
 
   model: PoJobSchedulerInternal = new PoPageJobSchedulerInternal();
 

@@ -53,10 +53,11 @@ export class PoPageJobSchedulerComponent extends PoPageJobSchedulerBaseComponent
   literals = {
     ...poPageJobSchedulerLiteralsDefault[poLocaleDefault]
   };
-  parameters: Array<PoDynamicFormField> = [];
+
   publicValues: PoJobSchedulerInternal;
   saveOperation: Observable<any>;
   step: number = 1;
+  parametersEmpty: boolean = true;
 
   readonly steps: Array<PoStepperItem> = [];
 
@@ -123,6 +124,10 @@ export class PoPageJobSchedulerComponent extends PoPageJobSchedulerBaseComponent
 
     this.poPageJobSchedulerService.configServiceApi({ endpoint: this.serviceApi });
 
+    if (this.parameters.length) {
+      this.parametersEmpty = false;
+    }
+
     this.loadData(paramId);
   }
 
@@ -170,9 +175,8 @@ export class PoPageJobSchedulerComponent extends PoPageJobSchedulerBaseComponent
   }
 
   onChangeProcess(process: { processId: string; existAPI: boolean }) {
-    if (process.existAPI && process.processId) {
+    if (process.existAPI && process.processId && this.parametersEmpty) {
       this.getParametersByProcess(process.processId);
-
       if (!this.isEdit) {
         this.model.executionParameter = {};
       }
