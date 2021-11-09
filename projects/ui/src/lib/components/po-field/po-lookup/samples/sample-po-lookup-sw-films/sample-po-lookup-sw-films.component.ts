@@ -1,7 +1,5 @@
 import { Component, OnInit } from '@angular/core';
-
 import { PoRadioGroupOption } from '@po-ui/ng-components';
-
 import { SamplePoLookupSwFilmsService } from './sample-po-lookup-sw-films.service';
 
 @Component({
@@ -68,7 +66,12 @@ export class SamplePoLookupSwFilmsComponent implements OnInit {
   }
 
   onSelected(entity) {
-    this.filmItemsFiltered = this.filmItems.filter(film => entity.films.includes(film.url));
+    this.filterService.getObjectByValue(entity, this.filterParams).subscribe(
+      result => {
+        this.filmItemsFiltered = this.filmItems.filter(film => result?.films.includes(film.url));
+      },
+      err => console.error(err)
+    );
   }
 
   private getEntityColumns(entity) {
