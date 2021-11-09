@@ -318,6 +318,14 @@ describe('PoLookupBaseComponent:', () => {
   });
 
   describe('Methods:', () => {
+    it('cleanViewValue: should call `setDisclaimers` when execute the method `cleanViewValue`.', () => {
+      spyOn(component, <any>'setDisclaimers');
+
+      component['cleanViewValue']();
+
+      expect(component['setDisclaimers']).toHaveBeenCalled();
+    });
+
     it('cleanViewValue: should call `setViewValue` when execute the method `cleanViewValue`.', () => {
       spyOn(component, <any>'setViewValue');
 
