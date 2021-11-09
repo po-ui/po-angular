@@ -45,7 +45,7 @@ module.exports = function (config) {
             },
             'src/lib/components/po-page-job-scheduler/po-page-job-scheduler.component.ts': {
               branches: 0,
-              statements: 24,
+              statements: 23,
               lines: 23,
               functions: 0
             }

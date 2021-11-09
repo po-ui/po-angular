@@ -1,5 +1,11 @@
 <div class="po-md-12">
-  <po-info [p-label]="literals.process" [p-orientation]="infoOrientation" [p-value]="value.processID"> </po-info>
+  <po-info
+    *ngIf="noParameters"
+    [p-label]="literals.process"
+    [p-orientation]="infoOrientation"
+    [p-value]="value.processID"
+  >
+  </po-info>
 
   <po-info [p-label]="literals.periodicity" [p-orientation]="infoOrientation" [p-value]="periodicityValue"> </po-info>
 
