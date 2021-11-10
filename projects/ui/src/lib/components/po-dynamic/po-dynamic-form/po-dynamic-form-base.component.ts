@@ -3,7 +3,7 @@ import { NgForm } from '@angular/forms';
 
 import { convertToBoolean } from '../../../utils/util';
 
-import { PoDynamicFormField } from './po-dynamic-form-field.interface';
+import type { PoDynamicFormField } from './po-dynamic-form-field.interface';
 
 /**
  *

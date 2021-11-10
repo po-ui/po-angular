@@ -1,28 +1,26 @@
-import { EventEmitter, Input, OnDestroy, OnInit, Output, ViewChild, Directive, ChangeDetectorRef } from '@angular/core';
-
+import { ChangeDetectorRef, Directive, EventEmitter, Input, OnDestroy, OnInit, Output, ViewChild } from '@angular/core';
 import { Observable, Subscription, throwError } from 'rxjs';
 import { catchError } from 'rxjs/operators';
 
-import { InputBoolean } from '../../../../decorators';
-
-import { isTypeof } from '../../../../utils/util';
-import { poLocaleDefault } from '../../../../services/po-language/po-language.constant';
 import { PoModalAction } from '../../../../components/po-modal';
 import { PoModalComponent } from '../../../../components/po-modal/po-modal.component';
-import { PoTableColumnSort } from '../../../po-table/interfaces/po-table-column-sort.interface';
-import { PoTableColumnSortType } from '../../../po-table';
-import { poTableLiteralsDefault } from '../../../po-table/po-table-base.component';
+import { InputBoolean } from '../../../../decorators';
+import { poLocaleDefault } from '../../../../services/po-language/po-language.constant';
 import { PoLanguageService } from '../../../../services/po-language/po-language.service';
-
-import { PoLookupColumn } from '../interfaces/po-lookup-column.interface';
-import { PoLookupFilter } from '../interfaces/po-lookup-filter.interface';
-import { PoLookupFilteredItemsParams } from '../interfaces/po-lookup-filtered-items-params.interface';
-import { PoLookupLiterals } from '../interfaces/po-lookup-literals.interface';
-import { PoLookupResponseApi } from '../interfaces/po-lookup-response-api.interface';
-import { PoDisclaimer } from './../../../po-disclaimer/po-disclaimer.interface';
+import { isTypeof } from '../../../../utils/util';
+import { PoTableColumnSortType } from '../../../po-table';
+import { PoTableColumnSort } from '../../../po-table/interfaces/po-table-column-sort.interface';
+import { poTableLiteralsDefault } from '../../../po-table/po-table-base.component';
 import { PoDisclaimerGroup } from './../../../po-disclaimer-group/po-disclaimer-group.interface';
-import { PoLookupAdvancedFilter } from '../interfaces/po-lookup-advanced-filter.interface';
+import { PoDisclaimer } from './../../../po-disclaimer/po-disclaimer.interface';
 import { PoTableComponent } from './../../../po-table/po-table.component';
+
+import type { PoLookupAdvancedFilter } from '../interfaces/po-lookup-advanced-filter.interface';
+import type { PoLookupColumn } from '../interfaces/po-lookup-column.interface';
+import type { PoLookupFilter } from '../interfaces/po-lookup-filter.interface';
+import type { PoLookupFilteredItemsParams } from '../interfaces/po-lookup-filtered-items-params.interface';
+import type { PoLookupLiterals } from '../interfaces/po-lookup-literals.interface';
+import type { PoLookupResponseApi } from '../interfaces/po-lookup-response-api.interface';
 
 export const poLookupLiteralsDefault = {
   en: <PoLookupLiterals>{

@@ -1,11 +1,12 @@
-import { Component, ChangeDetectorRef, OnChanges, QueryList, SimpleChanges, ViewChildren } from '@angular/core';
-import { ControlContainer, NgForm } from '@angular/forms';
 import { TitleCasePipe } from '@angular/common';
+import { ChangeDetectorRef, Component, OnChanges, QueryList, SimpleChanges, ViewChildren } from '@angular/core';
+import { ControlContainer, NgForm } from '@angular/forms';
 
-import { PoDynamicFormField } from '../po-dynamic-form-field.interface';
-import { PoDynamicFormFieldsBaseComponent } from './po-dynamic-form-fields-base.component';
-import { PoDynamicFormFieldValidation } from '../po-dynamic-form-validation/po-dynamic-form-field-validation.interface';
 import { PoDynamicFormValidationService } from '../po-dynamic-form-validation/po-dynamic-form-validation.service';
+import { PoDynamicFormFieldsBaseComponent } from './po-dynamic-form-fields-base.component';
+
+import type { PoDynamicFormField } from '../po-dynamic-form-field.interface';
+import type { PoDynamicFormFieldValidation } from '../po-dynamic-form-validation/po-dynamic-form-field-validation.interface';
 
 /**
  * @docsPrivate

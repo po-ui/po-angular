@@ -19,11 +19,13 @@ import { finalize } from 'rxjs/operators';
 import { InputBoolean } from '../../../decorators';
 import { convertToBoolean, isTypeof } from '../../../utils/util';
 import { requiredFailed } from '../validators';
-import { PoLookupAdvancedFilter } from './interfaces/po-lookup-advanced-filter.interface';
-import { PoLookupColumn } from './interfaces/po-lookup-column.interface';
-import { PoLookupFilter } from './interfaces/po-lookup-filter.interface';
-import { PoLookupLiterals } from './interfaces/po-lookup-literals.interface';
-import { PoLookupFilterService } from './services/po-lookup-filter.service';
+
+import type { PoLookupFilterService } from './services/po-lookup-filter.service';
+
+import type { PoLookupAdvancedFilter } from './interfaces/po-lookup-advanced-filter.interface';
+import type { PoLookupColumn } from './interfaces/po-lookup-column.interface';
+import type { PoLookupFilter } from './interfaces/po-lookup-filter.interface';
+import type { PoLookupLiterals } from './interfaces/po-lookup-literals.interface';
 
 /**
  * @description

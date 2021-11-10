@@ -1,7 +1,7 @@
 import {
   AfterViewInit,
-  DoCheck,
   Component,
+  DoCheck,
   ElementRef,
   forwardRef,
   Injector,

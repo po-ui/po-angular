@@ -1,14 +1,14 @@
-import { Component, ChangeDetectorRef, OnDestroy, OnInit, ViewChild } from '@angular/core';
+import { ChangeDetectorRef, Component, OnDestroy, OnInit, ViewChild } from '@angular/core';
 import { NgForm } from '@angular/forms';
-
 import { Observable, Subject, Subscription } from 'rxjs';
 
 import { PoDynamicFormBaseComponent } from './po-dynamic-form-base.component';
-import { PoDynamicFormField } from './po-dynamic-form-field.interface';
-import { PoDynamicFormLoad } from './po-dynamic-form-load/po-dynamic-form-load.interface';
 import { PoDynamicFormLoadService } from './po-dynamic-form-load/po-dynamic-form-load.service';
-import { PoDynamicFormValidation } from './po-dynamic-form-validation/po-dynamic-form-validation.interface';
 import { PoDynamicFormValidationService } from './po-dynamic-form-validation/po-dynamic-form-validation.service';
+
+import type { PoDynamicFormField } from './po-dynamic-form-field.interface';
+import type { PoDynamicFormLoad } from './po-dynamic-form-load/po-dynamic-form-load.interface';
+import type { PoDynamicFormValidation } from './po-dynamic-form-validation/po-dynamic-form-validation.interface';
 
 /**
  * @docsExtends PoDynamicFormBaseComponent

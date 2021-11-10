@@ -8,7 +8,7 @@ import { PoDynamicFieldType } from '../../po-dynamic-field-type.enum';
 import { PoDynamicFormField } from '../po-dynamic-form-field.interface';
 import { PoDynamicFormFieldInternal } from './po-dynamic-form-field-internal.interface';
 import { PoComboFilter } from '../../../po-field/po-combo/interfaces/po-combo-filter.interface';
-import { PoLookupFilter } from '../../../po-field/po-lookup/interfaces/po-lookup-filter.interface';
+import type { PoLookupFilter } from '../../../po-field/po-lookup/interfaces/po-lookup-filter.interface';
 
 @Directive()
 export class PoDynamicFormFieldsBaseComponent {
