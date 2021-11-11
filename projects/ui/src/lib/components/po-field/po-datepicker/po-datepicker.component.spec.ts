@@ -44,7 +44,6 @@ describe('PoDatepickerComponent:', () => {
     component.required = true;
     component.clean = true;
     component.date = new Date();
-    fixture.detectChanges();
   });
 
   it('should be created', () => {
@@ -52,10 +51,14 @@ describe('PoDatepickerComponent:', () => {
   });
 
   it('should have label', () => {
+    component.label = 'Label de teste';
+    fixture.detectChanges();
     expect(fixture.debugElement.nativeElement.innerHTML).toContain('Label de teste');
   });
 
   it('should have help', () => {
+    component.help = 'Help de teste';
+    fixture.detectChanges();
     expect(fixture.debugElement.nativeElement.innerHTML).toContain('Help de teste');
   });
 
@@ -237,8 +240,6 @@ describe('PoDatepicker mocked with form', () => {
   beforeEach(() => {
     fixture = TestBed.createComponent(ContentProjectionComponent);
     component = fixture.componentInstance;
-
-    fixture.detectChanges();
   });
 
   it('should be created', () => {
@@ -247,6 +248,7 @@ describe('PoDatepicker mocked with form', () => {
 
   it('should be required', () => {
     const input = fixture.debugElement.nativeElement.querySelector('input');
+    fixture.detectChanges();
     expect(input.getAttribute('required')).not.toBeNull();
   });
 });
@@ -273,7 +275,6 @@ describe('PoDatepickerComponent:', () => {
     component.minDate = new Date(2017, 1, 1);
     component.maxDate = new Date(2017, 11, 10);
     component.date = new Date();
-    fixture.detectChanges();
   });
 
   describe('Properties:', () => {
@@ -369,7 +370,6 @@ describe('PoDatepickerComponent:', () => {
 
   it('simulate click out behavior the datepicker field read-only', () => {
     component.dialogPicker = undefined;
-    fixture.detectChanges();
 
     spyOn(fixture.nativeElement, 'contains');
 
@@ -405,6 +405,7 @@ describe('PoDatepickerComponent:', () => {
         value: ''
       }
     };
+    fixture.detectChanges();
 
     spyOn(component['objMask'], 'click');
     component.eventOnClick.call(component, fakeEvent);
@@ -423,7 +424,7 @@ describe('PoDatepickerComponent:', () => {
         value: ''
       }
     };
-
+    fixture.detectChanges();
     component.eventOnBlur(fakeEvent);
 
     expect(component['onTouchedModel']).toHaveBeenCalled();
@@ -604,7 +605,7 @@ describe('PoDatepickerComponent:', () => {
         component.date = new Date(2017, 5, 2);
         component.inputEl.nativeElement.value = '06/11/2019';
         component['onTouchedModel'] = () => {};
-
+        fixture.detectChanges();
         spyOn(component, <any>'verifyMobile').and.returnValue(false);
         spyOn(component, 'controlModel');
         spyOn(component, <any>'controlChangeEmitter');
@@ -622,6 +623,7 @@ describe('PoDatepickerComponent:', () => {
         component.date = new Date(2017, 5, 2);
         component.inputEl.nativeElement.value = '06/11/2019';
         component['onTouchedModel'] = () => {};
+        fixture.detectChanges();
 
         spyOn(component, <any>'verifyMobile').and.returnValue(false);
         spyOn(component, 'controlModel');
@@ -638,7 +640,7 @@ describe('PoDatepickerComponent:', () => {
         component.date = new Date(2017, 5, 2);
         component.inputEl.nativeElement.value = '06/11/2019';
         component['onTouchedModel'] = () => {};
-
+        fixture.detectChanges();
         spyOn(component, <any>'verifyMobile').and.returnValue(false);
         spyOn(component, 'controlModel');
         spyOn(component, <any>'onTouchedModel');
@@ -653,6 +655,7 @@ describe('PoDatepickerComponent:', () => {
         component['onTouchedModel'] = null;
 
         const fnError = () => component.eventOnBlur(fakeEvent);
+        fixture.detectChanges();
 
         expect(fnError).not.toThrow();
       });
