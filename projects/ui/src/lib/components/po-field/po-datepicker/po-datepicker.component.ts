@@ -1,5 +1,6 @@
 import {
   AfterViewInit,
+  ChangeDetectionStrategy,
   Component,
   ElementRef,
   forwardRef,
@@ -63,7 +64,8 @@ const poCalendarPositionDefault = 'bottom-left';
       multi: true
     },
     PoControlPositionService
-  ]
+  ],
+  changeDetection: ChangeDetectionStrategy.OnPush
 })
 export class PoDatepickerComponent extends PoDatepickerBaseComponent implements AfterViewInit, OnDestroy {
   @ViewChild('calendar', { static: true }) calendar: PoCalendarComponent;
