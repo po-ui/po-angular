@@ -9,7 +9,8 @@ import {
   Renderer2,
   OnDestroy,
   SimpleChanges,
-  OnChanges
+  OnChanges,
+  ChangeDetectionStrategy
 } from '@angular/core';
 import { NG_VALIDATORS, NG_VALUE_ACCESSOR } from '@angular/forms';
 
@@ -75,7 +76,8 @@ const providers = [
 @Component({
   selector: 'po-datepicker-range',
   templateUrl: './po-datepicker-range.component.html',
-  providers
+  providers,
+  changeDetection: ChangeDetectionStrategy.OnPush
 })
 export class PoDatepickerRangeComponent
   extends PoDatepickerRangeBaseComponent
@@ -136,6 +138,7 @@ export class PoDatepickerRangeComponent
     private changeDetector: ChangeDetectorRef,
     private controlPosition: PoControlPositionService,
     private renderer: Renderer2,
+    private cd: ChangeDetectorRef,
     poDateService: PoDateService,
     poDatepickerRangeElement: ElementRef,
     poLanguageService: PoLanguageService
@@ -231,7 +234,10 @@ export class PoDatepickerRangeComponent
     this.updateModelByScreen(isStartDateTargetEvent, start || '', end || '');
 
     if (start && end) {
-      setTimeout(() => (this.isCalendarVisible = false), 300);
+      setTimeout(() => {
+        this.isCalendarVisible = false;
+        this.cd.markForCheck();
+      }, 300);
     }
   }
 
@@ -573,5 +579,6 @@ export class PoDatepickerRangeComponent
     ) {
       this.isCalendarVisible = false;
     }
+    this.cd.markForCheck();
   }
 }

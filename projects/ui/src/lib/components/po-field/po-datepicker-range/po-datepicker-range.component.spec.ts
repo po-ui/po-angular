@@ -35,8 +35,6 @@ describe('PoDatepickerRangeComponent:', () => {
     fixture = TestBed.createComponent(PoDatepickerRangeComponent);
     component = fixture.componentInstance;
 
-    fixture.detectChanges();
-
     nativeElement = fixture.debugElement.nativeElement;
   });
 
@@ -276,6 +274,7 @@ describe('PoDatepickerRangeComponent:', () => {
     });
 
     it('eventOnClick: should click when select text and edit model', () => {
+      fixture.detectChanges();
       spyOn(component['poMaskObject'], 'click');
       const eventMock = { target: { name: '' } };
 
@@ -354,6 +353,7 @@ describe('PoDatepickerRangeComponent:', () => {
     });
 
     it('onFocus: should call `applyFocusOnDatePickerRangeField`', () => {
+      fixture.detectChanges();
       spyOn(component, <any>'applyFocusOnDatePickerRangeField');
       spyOn(component['poMaskObject'], 'resetPositions');
       const eventMock = { target: { name: '' } };
@@ -366,6 +366,7 @@ describe('PoDatepickerRangeComponent:', () => {
     it('onKeydown: should call `poMaskObject.keydown` if `readonly` is false', () => {
       const eventMock = { target: { name: '' } };
       component.readonly = false;
+      fixture.detectChanges();
       spyOn(component['poMaskObject'], 'keydown');
 
       component.onKeydown(eventMock);
@@ -375,6 +376,7 @@ describe('PoDatepickerRangeComponent:', () => {
 
     it('onKeydown: shouldn`t call `poMaskObject.keydown` if `readonly` is true', () => {
       const eventMock = {};
+      fixture.detectChanges();
       component.readonly = true;
       spyOn(component['poMaskObject'], 'keydown');
 
@@ -387,6 +389,8 @@ describe('PoDatepickerRangeComponent:', () => {
       const fakeEvent: any = {
         preventDefault: () => {}
       };
+      fixture.detectChanges();
+
       spyOn(component, <any>['isSetFocusOnBackspace']).and.returnValue(true);
       spyOn(component, <any>['setFocusOnBackspace']);
       spyOn(component['poMaskObject'], 'keydown');
@@ -401,6 +405,7 @@ describe('PoDatepickerRangeComponent:', () => {
 
     it('onKeydown: shouldn`t call `setFocusOnBackspace` if `isSetFocusOnBackspace` returns false.', () => {
       const fakeEvent: any = {};
+      fixture.detectChanges();
       spyOn(component, <any>['isSetFocusOnBackspace']).and.returnValue(false);
       spyOn(component, <any>['setFocusOnBackspace']);
       spyOn(component['poMaskObject'], 'keydown');
@@ -414,6 +419,7 @@ describe('PoDatepickerRangeComponent:', () => {
     it('onKeyup: shouldn`t call `setFocus`, `updateModelWhenComplete` and `poMaskObject.keyup` if `readonly` is true', () => {
       const eventMock = {};
       component.readonly = true;
+      fixture.detectChanges();
 
       spyOn(component['poMaskObject'], 'keyup');
       spyOn(component, <any>'setFocus');
@@ -430,6 +436,8 @@ describe('PoDatepickerRangeComponent:', () => {
       const eventMock = { key: '1', target: { name: component.startDateInputName } };
       const isStartDateTargetEvent = true;
       component.readonly = false;
+
+      fixture.detectChanges();
 
       spyOn(component['poMaskObject'], 'keyup');
       spyOn(component, <any>'setFocus');
@@ -450,6 +458,8 @@ describe('PoDatepickerRangeComponent:', () => {
       const eventMock = { key: '1', target: { name: component.endDateInputName } };
       const isStartDateTargetEvent = false;
       component.readonly = false;
+
+      fixture.detectChanges();
 
       spyOn(component['poMaskObject'], 'keyup');
       spyOn(component, <any>'setFocus');
@@ -903,7 +913,7 @@ describe('PoDatepickerRangeComponent:', () => {
       const inputName = component.endDateInputName;
       const inputElement = component.endDateInput.nativeElement;
       const eventMock = { keyCode, target: inputElement };
-
+      fixture.detectChanges();
       spyOn(component, <any>'setFocusOnArrowLeft');
       spyOn(component, <any>'setFocusOnArrowRight');
       spyOn(component, <any>'setFocusOnStartDateCompleted');
@@ -1091,6 +1101,7 @@ describe('PoDatepickerRangeComponent:', () => {
 
     it('setFocusAndPosition: should call `focusOnElement`.', fakeAsync(() => {
       const elementPosition = 0;
+      fixture.detectChanges();
       const inputStart = component.startDateInput;
       spyOn(component, <any>'focusOnElement');
       spyOn(inputStart.nativeElement, 'setSelectionRange');
@@ -1147,6 +1158,7 @@ describe('PoDatepickerRangeComponent:', () => {
       });
 
       it('shouldn`t call `setFocusAndPosition` if cursor isn`t at start of input.', () => {
+        fixture.detectChanges();
         component.endDateInput.nativeElement.value = '19/12/2';
         component.endDateInput.nativeElement.focus();
 
@@ -1194,6 +1206,7 @@ describe('PoDatepickerRangeComponent:', () => {
       });
 
       it('shouldn`t call `setFocusAndPosition` if cursor isn`t at start of input.', () => {
+        fixture.detectChanges();
         startDateElement.value = '19/12/2';
         startDateElement.focus();
         startDateElement.selectionEnd = 0;
@@ -1226,6 +1239,7 @@ describe('PoDatepickerRangeComponent:', () => {
       });
 
       it('should call `setFocusAndPosition` if input name is `start date` and key code is `56`.', () => {
+        fixture.detectChanges();
         startDateElement.value = '19/12/2018';
         startDateElement.focus();
         startDateElement.selectionStart = 10;
@@ -1246,6 +1260,7 @@ describe('PoDatepickerRangeComponent:', () => {
       });
 
       it('shouldn`t call `setFocusAndPosition` if cursor isn`t in the last position.', () => {
+        fixture.detectChanges();
         startDateElement.value = '19/12/201';
         startDateElement.focus();
         startDateElement.selectionStart = 9;
@@ -1290,6 +1305,7 @@ describe('PoDatepickerRangeComponent:', () => {
       });
 
       it('should return `false` if cursor isn`t at start of input.', () => {
+        fixture.detectChanges();
         endDateElement.value = '19/1';
         endDateElement.focus();
         endDateElement.selectionStart = 3;
@@ -1298,6 +1314,7 @@ describe('PoDatepickerRangeComponent:', () => {
       });
 
       it('should return `false` if end date input is selected.', () => {
+        fixture.detectChanges();
         endDateElement.value = '20/12/2018';
         endDateElement.focus();
         endDateElement.selectionStart = 3;
@@ -1424,11 +1441,10 @@ describe('PoDatepickerRangeComponent:', () => {
 
     it(`setCalendarPosition: should call 'controlPosition.setElements' and 'controlPosition.adjustPosition'.`, () => {
       component.isCalendarVisible = true;
+      fixture.detectChanges();
 
       const setElements = spyOn(component['controlPosition'], 'setElements');
       const adjustPosition = spyOn(component['controlPosition'], 'adjustPosition');
-
-      fixture.detectChanges();
 
       component['setCalendarPosition']();
 
@@ -1935,6 +1951,7 @@ describe('PoDatepickerRangeComponent:', () => {
     });
 
     it('should set cursor to end date input if last letter of start date is typed', () => {
+      fixture.detectChanges();
       spyOn(component.endDateInput.nativeElement, 'focus');
 
       component.startDateInput.nativeElement.value = '24/11/2018';
@@ -1950,6 +1967,7 @@ describe('PoDatepickerRangeComponent:', () => {
     });
 
     it('should keep start date input active if typed key isn`t a number', () => {
+      fixture.detectChanges();
       const shiftKeyEvent = new KeyboardEvent('keyup', <any>{ keyCode: 16 });
       spyOn(component.startDateInput.nativeElement, 'focus');
 
@@ -1966,7 +1984,7 @@ describe('PoDatepickerRangeComponent:', () => {
     it('should set cursor to end date input if typed key is arrowRight and cursor position is last number of start date', () => {
       const arrowRightKeyEvent = new KeyboardEvent('keyup', <any>{ keyCode: 39 });
       spyOn(component.endDateInput.nativeElement, 'focus');
-
+      fixture.detectChanges();
       component.endDateInput.nativeElement.value = '';
       component.startDateInput.nativeElement.value = '24/11/2018';
       component.startDateInput.nativeElement.setSelectionRange(10, 10);
@@ -1981,6 +1999,7 @@ describe('PoDatepickerRangeComponent:', () => {
     it('should set cursor to start date input if typed key is arrowLeft and cursor position is first number of end date', () => {
       const arrowLeftKeyEvent = new KeyboardEvent('keyup', <any>{ keyCode: 37 });
       spyOn(component.startDateInput.nativeElement, 'focus');
+      fixture.detectChanges();
 
       component.startDateInput.nativeElement.value = '24/11/2018';
       component.endDateInput.nativeElement.value = '24/11/2018';
@@ -1998,6 +2017,7 @@ describe('PoDatepickerRangeComponent:', () => {
       component.startDateInput.nativeElement.value = '24/1';
       component.endDateInput.nativeElement.value = '';
 
+      fixture.detectChanges();
       spyOn(component.endDateInput.nativeElement, 'focus');
 
       component.startDateInput.nativeElement.focus();
@@ -2017,7 +2037,7 @@ describe('PoDatepickerRangeComponent:', () => {
       const keydownBoardEventSetFocus = new KeyboardEvent('keydown', <any>{ keyCode: 8 });
       component.startDateInput.nativeElement.value = '24/1';
       component.endDateInput.nativeElement.value = '';
-
+      fixture.detectChanges();
       spyOn(component.startDateInput.nativeElement, 'focus');
 
       component.endDateInput.nativeElement.focus();
@@ -2040,6 +2060,8 @@ describe('PoDatepickerRangeComponent:', () => {
       component.startDateInput.nativeElement.value = '24/12';
       component.endDateInput.nativeElement.value = '';
 
+      fixture.detectChanges();
+
       component.startDateInput.nativeElement.focus();
       component.startDateInput.nativeElement.dispatchEvent(keydownBoardEventSetFocus);
 
@@ -2050,6 +2072,7 @@ describe('PoDatepickerRangeComponent:', () => {
 
     it(`should delete last caracter of start date input if typed key is backspace, end date cursor position is 0 and
       end date input has value`, () => {
+      fixture.detectChanges();
       // keyCode 8 is backspace
       const keydownBoardEventBackspace = new KeyboardEvent('keydown', <any>{ keyCode: 8 });
       spyOn(component.startDateInput.nativeElement, 'focus');
@@ -2069,6 +2092,8 @@ describe('PoDatepickerRangeComponent:', () => {
       // press the backspace key
       component.endDateInput.nativeElement.dispatchEvent(keydownBoardEventBackspace);
 
+      fixture.detectChanges();
+
       expect(component.startDateInput.nativeElement.focus).toHaveBeenCalled();
       expect(component.startDateInput.nativeElement.selectionStart).toBe(3);
       expect(component.startDateInput.nativeElement.selectionEnd).toBe(3);
@@ -2077,6 +2102,7 @@ describe('PoDatepickerRangeComponent:', () => {
     });
 
     it('should delete last caracter of start date input if typed key is backspace and start date input cursor position is 5', () => {
+      fixture.detectChanges();
       // keyCode 8 is backspace
       const keyupBoardEventBackspace = new KeyboardEvent('keyup', <any>{ keyCode: 8 });
       const keyDownBoardEventBackspace = new KeyboardEvent('keydown', <any>{ keyCode: 8 });
@@ -2084,6 +2110,8 @@ describe('PoDatepickerRangeComponent:', () => {
       component.startDateInput.nativeElement.value = '24/12';
       component.startDateInput.nativeElement.focus();
       component.endDateInput.nativeElement.value = '';
+
+      fixture.detectChanges();
 
       // posiciona o cursor depois do numero 1
       component.endDateInput.nativeElement.setSelectionRange(0, 0);
@@ -2105,6 +2133,8 @@ describe('PoDatepickerRangeComponent:', () => {
         target: { name: component.endDateInputName }
       });
 
+      fixture.detectChanges();
+
       spyOn(component.startDateInput.nativeElement, 'focus');
 
       component.startDateInput.nativeElement.value = '24/1';
@@ -2122,6 +2152,7 @@ describe('PoDatepickerRangeComponent:', () => {
     });
 
     it('shouldn`t set cursor to start date input if element is end data input, typed keys aren`t backspace and arrowLeft', () => {
+      fixture.detectChanges();
       // keyCode 16 is shift
       const keyupBoardEventSetFocus = new KeyboardEvent('keyup', <any>{ keyCode: 16 });
       const keydownBoardEventSetFocus = new KeyboardEvent('keydown', <any>{
@@ -2144,6 +2175,7 @@ describe('PoDatepickerRangeComponent:', () => {
     });
 
     it('shouldn`t set cursor to end date input if element is start date input, typed keys aren`t backspace and arrowRight', () => {
+      fixture.detectChanges();
       // keyCode 16 is shift
       const keyupBoardEventSetFocus = new KeyboardEvent('keyup', <any>{ keyCode: 16 });
       const keydownBoardEventSetFocus = new KeyboardEvent('keydown', <any>{
@@ -2166,27 +2198,22 @@ describe('PoDatepickerRangeComponent:', () => {
     it(`should contain 'po-datepicker-range-field-focused' in 'po-datepicker-range-field' if 'startDateInput' is
       active element`, () => {
       const startDateInputName = `input[name="${component.startDateInputName}"]`;
-
+      fixture.detectChanges();
       const startDateInput = fixture.debugElement.query(By.css(startDateInputName));
       const eventMock = { target: { name: '' } };
       startDateInput.triggerEventHandler('focus', eventMock);
 
-      fixture.detectChanges();
-
       const poDatepickerField = nativeElement.querySelector('.po-datepicker-range-field');
-
       expect(poDatepickerField.classList).toContain('po-datepicker-range-field-focused');
     });
 
     it(`should contain 'po-datepicker-range-field-focused' in 'po-datepicker-range-field' if 'endDateInput' is
       active element`, () => {
       const endDateInputName = `input[name="${component.endDateInputName}"]`;
-
+      fixture.detectChanges();
       const endDateInput = fixture.debugElement.query(By.css(endDateInputName));
       const eventMock = { target: { name: '' } };
       endDateInput.triggerEventHandler('focus', eventMock);
-
-      fixture.detectChanges();
 
       const poDatepickerField = nativeElement.querySelector('.po-datepicker-range-field');
 
@@ -2197,11 +2224,12 @@ describe('PoDatepickerRangeComponent:', () => {
       startDateInput aren't active elements`, () => {
       const endDateInputName = `input[name="${component.endDateInputName}"]`;
       const startDateInputName = `input[name="${component.startDateInputName}"]`;
+      fixture.detectChanges();
 
       const endDateInput = fixture.debugElement.query(By.css(endDateInputName));
       const startDateInput = fixture.debugElement.query(By.css(startDateInputName));
       const mockEvent = { target: { name: '' } };
-
+      fixture.detectChanges();
       endDateInput.triggerEventHandler('blur', mockEvent);
       startDateInput.triggerEventHandler('blur', mockEvent);
 
