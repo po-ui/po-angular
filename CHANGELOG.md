@@ -2,6 +2,20 @@
 
 All notable changes to this project will be documented in this file. See [standard-version](https://github.com/conventional-changelog/standard-version) for commit guidelines.
 
+# [5.21.0](https://github.com/po-ui/po-angular/compare/v5.20.0...v5.21.0) (2021-11-16)
+
+
+### Bug Fixes
+
+* **lookup:** campo não atualiza ao alterar o model ([b93de32](https://github.com/po-ui/po-angular/commit/b93de32f3e718f98131b641ef826530373633f8b))
+
+
+### Features
+
+* **page-job-scheduler:** adiciona propriedade `p-parameters` ([f9bfb85](https://github.com/po-ui/po-angular/commit/f9bfb856c77ec6de699fcf3534b2d67af21bfed7))
+
+
+
 # [5.20.0](https://github.com/po-ui/po-angular/compare/v5.19.0...v5.20.0) (2021-11-05)
 
 
