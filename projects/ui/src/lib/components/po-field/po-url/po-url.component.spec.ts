@@ -1,4 +1,4 @@
-import { ComponentFixture, fakeAsync, TestBed, tick } from '@angular/core/testing';
+import { ComponentFixture, fakeAsync, flush, TestBed, tick } from '@angular/core/testing';
 
 import { configureTestSuite } from './../../../util-test/util-expect.spec';
 
@@ -208,6 +208,7 @@ describe('PoUrlComponent:', () => {
 
       expect(component.getScreenValue).toHaveBeenCalled();
       expect(component.verifyPattern).toHaveBeenCalled();
+      flush();
     }));
 
     it(`should show optional if the field isn't 'required', has 'label' and 'p-optional' is true.`, () => {
@@ -253,6 +254,7 @@ describe('PoUrlComponent:', () => {
 
       expect(input.value).toContain(fakeURL);
       expect(fixture.debugElement.nativeElement.querySelectorAll('po-url.ng-dirty.ng-valid')).toBeTruthy();
+      flush();
     }));
 
     it('url: should be invalid and have `ng-invalid`', fakeAsync(() => {
@@ -268,6 +270,7 @@ describe('PoUrlComponent:', () => {
 
       expect(input.value).toContain(fakeURL);
       expect(fixture.debugElement.nativeElement.querySelectorAll('po-url.ng-dirty.ng-invalid')).toBeTruthy();
+      flush();
     }));
   });
 });
