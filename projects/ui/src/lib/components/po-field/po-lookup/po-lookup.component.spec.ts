@@ -1,5 +1,5 @@
 import { ComponentRef, Injector } from '@angular/core';
-import { ComponentFixture, inject, TestBed, fakeAsync, tick } from '@angular/core/testing';
+import { ComponentFixture, inject, TestBed, fakeAsync, tick, flush } from '@angular/core/testing';
 import { Routes } from '@angular/router';
 import { RouterTestingModule } from '@angular/router/testing';
 
@@ -1092,6 +1092,7 @@ describe('PoLookupComponent:', () => {
       fixture.detectChanges();
 
       expect(component.inputEl.nativeElement.value).toBe('Peter Parker');
+      flush();
     }));
   });
 });
