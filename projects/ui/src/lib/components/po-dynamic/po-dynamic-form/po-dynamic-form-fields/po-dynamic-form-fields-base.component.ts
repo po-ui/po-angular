@@ -211,7 +211,7 @@ export class PoDynamicFormFieldsBaseComponent {
   private isMultiselect(field: PoDynamicFormField) {
     const { optionsService, optionsMulti, options } = field;
 
-    return !optionsService && optionsMulti && !!options && options.length > 3;
+    return optionsMulti && (!!optionsService || (!!options && options.length > 3));
   }
 
   private isNumberType(field: PoDynamicFormField, type: string) {

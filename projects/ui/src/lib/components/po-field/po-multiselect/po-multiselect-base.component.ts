@@ -199,9 +199,11 @@ export abstract class PoMultiselectBaseComponent implements ControlValueAccessor
    *
    */
   @Input('p-filter-service') set filterService(value: PoMultiselectFilter | string) {
-    this._filterService = value;
-    this.autoHeight = this.autoHeightInitialValue !== undefined ? this.autoHeightInitialValue : true;
-    this.options = [];
+    if (value) {
+      this._filterService = value;
+      this.autoHeight = this.autoHeightInitialValue !== undefined ? this.autoHeightInitialValue : true;
+      this.options = [];
+    }
   }
 
   get filterService() {
