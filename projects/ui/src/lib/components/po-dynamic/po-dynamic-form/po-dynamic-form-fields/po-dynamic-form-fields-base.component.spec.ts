@@ -815,19 +815,7 @@ describe('PoDynamicFormFieldsBaseComponent:', () => {
       expect(component['isMultiselect'](field)).toBe(true);
     });
 
-    it('isMultiselect: should return false if `optionsMulti` is false', () => {
-      const options = [
-        { label: '1', value: 1 },
-        { label: '2', value: 2 },
-        { label: '3', value: 3 },
-        { label: '4', value: 4 }
-      ];
-      const field = { property: 'products', options, optionsMulti: false };
-
-      expect(component['isMultiselect'](field)).toBe(false);
-    });
-
-    it('isMultiselect: should return false if `optionsService` is truthy', () => {
+    it('isMultiselect: should return true if `optionsService` and `optionsMulti` is true', () => {
       const options = [
         { label: '1', value: 1 },
         { label: '2', value: 2 },
@@ -840,6 +828,18 @@ describe('PoDynamicFormFieldsBaseComponent:', () => {
         optionsMulti: true,
         optionsService: 'http://www.po.com.br/api/customers'
       };
+
+      expect(component['isMultiselect'](field)).toBe(true);
+    });
+
+    it('isMultiselect: should return false if `optionsMulti` is false', () => {
+      const options = [
+        { label: '1', value: 1 },
+        { label: '2', value: 2 },
+        { label: '3', value: 3 },
+        { label: '4', value: 4 }
+      ];
+      const field = { property: 'products', options, optionsMulti: false };
 
       expect(component['isMultiselect'](field)).toBe(false);
     });
