@@ -12,7 +12,7 @@
   (p-show-more)="showMore($event)"
   (p-sort-by)="sort($event)"
 >
-  <ng-template p-table-column-template [p-property]="'type'" let-value>
+  <ng-template p-table-column-template [p-property]="'component.type'" let-value>
     <div class="badge {{ value }}">{{ value | uppercase }}</div>
   </ng-template>
 </po-table>

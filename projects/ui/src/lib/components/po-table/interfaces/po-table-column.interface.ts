@@ -161,7 +161,12 @@ export interface PoTableColumn {
    */
   link?: string;
 
-  /** Nome identificador da coluna. */
+  /** Nome identificador da coluna. Também permite objetos aninhados conforme exemplo abaixo.
+   *
+   * ```
+   * { property: 'address.street', label: 'Rua' }
+   * ```
+   */
   property?: string;
 
   /**
