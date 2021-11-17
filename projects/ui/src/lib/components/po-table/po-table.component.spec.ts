@@ -1065,6 +1065,64 @@ describe('PoTableComponent:', () => {
       });
     });
 
+    describe('getCellData:', () => {
+      it('should return the last string in arrayProperty', () => {
+        const column: any = {
+          property: 'address.street',
+          label: 'Rua'
+        };
+        const row: any = {
+          name: 'teste',
+          address: {
+            street: 'Rua dos Alfeneiros, nº 4'
+          }
+        };
+        const result = component.getCellData(row, column);
+        expect(result).toEqual(row.address.street);
+      });
+
+      it('should return property if property is only item in array', () => {
+        const column: any = {
+          property: 'address',
+          label: 'Rua'
+        };
+        const row: any = {
+          name: 'teste',
+          address: 'Rua dos Alfeneiros, nº 4'
+        };
+        const result = component.getCellData(row, column);
+        expect(result).toEqual(row.address);
+      });
+
+      it('should return a empty string when property is `undefined`', () => {
+        const column: any = {
+          property: 'address.street',
+          label: 'Rua'
+        };
+        const row: any = {
+          name: 'teste',
+          address: {}
+        };
+        const expectedResult = '';
+        const result = component.getCellData(row, column);
+        expect(result).toEqual(expectedResult);
+      });
+
+      it('should return property if property value is equal 0', () => {
+        const column: any = {
+          property: 'status',
+          label: 'Status'
+        };
+        const row: any = {
+          name: 'teste',
+          status: 0
+        };
+        const expectedResult = 0;
+        const result = component.getCellData(row, column);
+        expect(result).toEqual(expectedResult);
+      });
+    });
+
     describe('formatNumber:', () => {
       it('should return formatted value.', () => {
         const format = '1.2-5';
@@ -1153,7 +1211,7 @@ describe('PoTableComponent:', () => {
 
       it(`shouldn't call 'mergeCustomIcons' or 'findCustomIcon' if doesn't have column.icons and return undefined.`, () => {
         const row: any = { po: 'favorite' };
-        const column: any = { type: 'icon' };
+        const column: any = { property: 'po', type: 'icon' };
 
         const spyOnMergeCustomIcons = spyOn(component, <any>'mergeCustomIcons');
         const spyOFindCustomIcon = spyOn(component, <any>'findCustomIcon');

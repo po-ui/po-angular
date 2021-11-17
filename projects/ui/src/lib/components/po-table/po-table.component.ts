@@ -372,6 +372,20 @@ export class PoTableComponent extends PoTableBaseComponent implements AfterViewI
     return this.decimalPipe.transform(value, format);
   }
 
+  getCellData(row: any, column: PoTableColumn): any {
+    const arrayProperty = column.property.split('.');
+    if (arrayProperty.length > 1) {
+      const nestedProperties = arrayProperty;
+      let value: any = row;
+      for (const property of nestedProperties) {
+        value = value[property] || value[property] === 0 ? value[property] : '';
+      }
+      return value;
+    } else {
+      return row[column.property];
+    }
+  }
+
   getBooleanLabel(rowValue: any, columnBoolean: PoTableColumn): string {
     if (rowValue || rowValue === false || rowValue === 0) {
       rowValue = convertToBoolean(rowValue);
@@ -387,7 +401,7 @@ export class PoTableComponent extends PoTableBaseComponent implements AfterViewI
   }
 
   getColumnIcons(row: any, column: PoTableColumn) {
-    const rowIcons = row[column.property];
+    const rowIcons = this.getCellData(row, column);
 
     if (column.icons) {
       if (Array.isArray(rowIcons)) {
@@ -401,11 +415,11 @@ export class PoTableComponent extends PoTableBaseComponent implements AfterViewI
   }
 
   getColumnLabel(row: any, columnLabel: PoTableColumn): PoTableColumnLabel {
-    return columnLabel.labels.find(labelItem => row[columnLabel.property] === labelItem.value);
+    return columnLabel.labels.find(labelItem => this.getCellData(row, columnLabel) === labelItem.value);
   }
 
   getSubtitleColumn(row: any, subtitleColumn: PoTableColumn): PoTableSubtitleColumn {
-    return subtitleColumn.subtitles.find(subtitleItem => row[subtitleColumn.property] === subtitleItem.value);
+    return subtitleColumn.subtitles.find(subtitleItem => this.getCellData(row, subtitleColumn) === subtitleItem.value);
   }
 
   isShowMasterDetail(row) {

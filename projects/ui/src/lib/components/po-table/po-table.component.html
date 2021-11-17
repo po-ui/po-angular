@@ -198,7 +198,7 @@
               (mouseleave)="tooltipMouseLeave()"
             >
               <span *ngSwitchCase="'columnTemplate'">
-                <ng-container *ngTemplateOutlet="getTemplate(column); context: { $implicit: row[column.property] }">
+                <ng-container *ngTemplateOutlet="getTemplate(column); context: { $implicit: getCellData(row, column) }">
                 </ng-container>
               </span>
 
@@ -208,27 +208,27 @@
               </span>
 
               <span *ngSwitchCase="'boolean'">
-                {{ getBooleanLabel(row[column.property], column) }}
+                {{ getBooleanLabel(getCellData(row, column), column) }}
               </span>
 
               <span *ngSwitchCase="'currency'">
-                {{ row[column.property] | currency: column.format:'symbol':'1.2-2' }}
+                {{ getCellData(row, column) | currency: column.format:'symbol':'1.2-2' }}
               </span>
 
               <span *ngSwitchCase="'date'">
-                {{ row[column.property] | date: column.format || 'dd/MM/yyyy' }}
+                {{ getCellData(row, column) | date: column.format || 'dd/MM/yyyy' }}
               </span>
 
               <span *ngSwitchCase="'time'">
-                {{ row[column.property] | po_time: column.format || 'HH:mm:ss.ffffff' }}
+                {{ getCellData(row, column) | po_time: column.format || 'HH:mm:ss.ffffff' }}
               </span>
 
               <span *ngSwitchCase="'dateTime'">
-                {{ row[column.property] | date: column.format || 'dd/MM/yyyy HH:mm:ss' }}
+                {{ getCellData(row, column) | date: column.format || 'dd/MM/yyyy HH:mm:ss' }}
               </span>
 
               <span *ngSwitchCase="'number'">
-                {{ formatNumber(row[column.property], column.format) }}
+                {{ formatNumber(getCellData(row, column), column.format) }}
               </span>
 
               <po-table-column-link
@@ -237,7 +237,7 @@
                 [p-disabled]="checkDisabled(row, column)"
                 [p-link]="row[column.link]"
                 [p-row]="row"
-                [p-value]="row[column.property]"
+                [p-value]="getCellData(row, column)"
                 (click)="onClickLink($event, row, column)"
               >
               </po-table-column-link>
@@ -254,9 +254,9 @@
                 <po-table-subtitle-circle [p-subtitle]="getSubtitleColumn(row, column)"></po-table-subtitle-circle>
               </span>
               <span *ngSwitchCase="'label'">
-                <po-table-column-label [p-value]="getColumnLabel(row, column)"></po-table-column-label>
+                <po-table-column-label [p-value]="getColumnLabel(row, column)"> </po-table-column-label>
               </span>
-              <span *ngSwitchDefault>{{ row[column.property] }}</span>
+              <span *ngSwitchDefault>{{ getCellData(row, column) }}</span>
             </div>
           </td>
 

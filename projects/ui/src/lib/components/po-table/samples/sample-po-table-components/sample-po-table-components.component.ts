@@ -23,8 +23,9 @@ export class SamplePoTableComponentsComponent {
 
   public readonly columns: Array<PoTableColumn> = [
     {
-      property: 'status',
+      property: 'component.status',
       type: 'label',
+      label: 'Status',
       width: '5%',
       labels: <Array<PoTableColumnLabel>>[
         {
@@ -47,11 +48,15 @@ export class SamplePoTableComponentsComponent {
         }
       ]
     },
-    { property: 'component', type: 'link' },
-    { property: 'type', label: 'Type', type: 'columnTemplate', width: '10%' },
-    { property: 'description', color: this.experimentalColor.bind(this) },
     {
-      property: 'extra',
+      property: 'component.name',
+      label: 'Name',
+      type: 'link'
+    },
+    { property: 'component.type', label: 'Type', type: 'columnTemplate', width: '10%' },
+    { property: 'component.description', label: 'Descrição', color: this.experimentalColor.bind(this) },
+    {
+      property: 'component.extra',
       label: 'Extras',
       type: 'link',
       tooltip: 'Additional details',
@@ -61,7 +66,7 @@ export class SamplePoTableComponentsComponent {
       disabled: this.canShowExtras.bind(this)
     },
     {
-      property: 'favorite',
+      property: 'component.favorite',
       label: 'Actions',
       type: 'icon',
       sortable: false,
@@ -87,7 +92,7 @@ export class SamplePoTableComponentsComponent {
   constructor(public sampleComponents: SamplePoTableComponentsService, private router: Router) {}
 
   experimentalColor(row) {
-    return row.status === SamplePoTableComponentStatus.Experimental ? 'color-08' : 'color-11';
+    return row?.component?.status === SamplePoTableComponentStatus.Experimental ? 'color-08' : 'color-11';
   }
 
   extras(value, row) {
@@ -98,7 +103,7 @@ export class SamplePoTableComponentsComponent {
   }
 
   goToDocumentation(row) {
-    this.router.navigate([row.link]);
+    this.router.navigate([row?.component?.link]);
   }
 
   showMore(sort: PoTableColumnSort) {
@@ -119,15 +124,15 @@ export class SamplePoTableComponentsComponent {
   }
 
   private canGoToDocumentation(row) {
-    return row.status !== SamplePoTableComponentStatus.Stable;
+    return row?.component?.status !== SamplePoTableComponentStatus.Stable;
   }
 
   private canShowExtras(row: any) {
-    return row.status !== SamplePoTableComponentStatus.Stable || row.extras.length === 0;
+    return row?.component?.status !== SamplePoTableComponentStatus.Stable || row?.component?.extras.length === 0;
   }
 
   private favorite(row) {
-    row.isFavorite = !row.isFavorite;
+    row.component.isFavorite = !row.component.isFavorite;
   }
 
   private getItems(sort: PoTableColumnSort) {
@@ -135,6 +140,6 @@ export class SamplePoTableComponentsComponent {
   }
 
   private isFavorite(row) {
-    return row.isFavorite ? 'color-08' : 'color-11';
+    return row?.component?.isFavorite ? 'color-08' : 'color-11';
   }
 }
