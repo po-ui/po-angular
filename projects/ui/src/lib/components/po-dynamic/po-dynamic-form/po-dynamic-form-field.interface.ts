@@ -41,8 +41,6 @@ export interface PoDynamicFormField extends PoDynamicField {
 
   /**
    * Permite que o usuário faça múltipla seleção dentro da lista de opções.
-   *
-   * > Caso utilizar a propriedade `optionsService` esta propriedade será ignorada.
    */
   optionsMulti?: boolean;
 
