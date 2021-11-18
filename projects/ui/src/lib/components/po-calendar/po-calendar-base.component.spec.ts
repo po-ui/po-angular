@@ -195,7 +195,7 @@ describe('PoCalendarBaseComponent:', () => {
 
       spyOn(component, <any>'verifyActivateDate').and.callThrough();
 
-      expect(component.activateDate.getDate()).toEqual(today.getDate());
+      expect(component.activateDate).toEqual(today);
     });
   });
 });
