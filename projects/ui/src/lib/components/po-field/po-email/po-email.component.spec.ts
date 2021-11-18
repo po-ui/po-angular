@@ -1,4 +1,4 @@
-import { ComponentFixture, fakeAsync, TestBed, tick } from '@angular/core/testing';
+import { ComponentFixture, fakeAsync, flush, TestBed, tick } from '@angular/core/testing';
 import { FormControl } from '@angular/forms';
 
 import { configureTestSuite } from './../../../util-test/util-expect.spec';
@@ -125,6 +125,7 @@ describe('PoEmailComponent:', () => {
 
       expect(component.getScreenValue).toHaveBeenCalled();
       expect(component.verifyPattern).toHaveBeenCalled();
+      flush();
     }));
 
     it(`should show optional if the field isn't 'required', has 'label' and 'p-optional' is true.`, () => {
