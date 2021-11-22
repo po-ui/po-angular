@@ -2,6 +2,22 @@
 
 All notable changes to this project will be documented in this file. See [standard-version](https://github.com/conventional-changelog/standard-version) for commit guidelines.
 
+# [5.22.0](https://github.com/po-ui/po-angular/compare/v5.21.0...v5.22.0) (2021-11-22)
+
+
+### Features
+
+* **dynamic-form:** permite multiselect com serviço ([d49ac5e](https://github.com/po-ui/po-angular/commit/d49ac5ea0e555cab959b64b3fb99c989997f12b4))
+* **page-job-scheduler:** permite configuração da frequência ([de052f7](https://github.com/po-ui/po-angular/commit/de052f74fb6007c516fcbbf9e38d44b0e11897ed))
+
+
+### Performance Improvements
+
+* **datepicker-range:** implementa ChangeDetectionStrategy OnPush ([157a2a4](https://github.com/po-ui/po-angular/commit/157a2a43c5edc2a2adbb591211509056b21d003e))
+* **datepicker:** implementa ChangeDetectionStrategy OnPush ([b0a342c](https://github.com/po-ui/po-angular/commit/b0a342c391cfacc4bdc75dfaf6d64d575b1c6771))
+
+
+
 # [5.21.0](https://github.com/po-ui/po-angular/compare/v5.20.0...v5.21.0) (2021-11-16)
 
 
