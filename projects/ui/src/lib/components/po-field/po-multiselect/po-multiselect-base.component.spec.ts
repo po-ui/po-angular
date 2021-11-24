@@ -567,6 +567,17 @@ describe('PoMultiselectBaseComponent:', () => {
       expect(component.updateVisibleItems).toHaveBeenCalled();
     });
 
+    it('updateSelectedOptions: should set `0` for `lastLengthModel` if `newOptions.lenght` is `0`', () => {
+      spyOn(component, 'updateVisibleItems');
+      const params = [];
+      const options = [];
+      component.filterService = poMultiselectFilterServiceStub;
+      component['updateSelectedOptions'](params, options);
+      expect(component.selectedOptions).toEqual([]);
+      expect(component.lastLengthModel).toBe(0);
+      expect(component.updateVisibleItems).toHaveBeenCalled();
+    });
+
     it('searchByLabel: should set visibleOptionsDropdown with component.options if search is empty', () => {
       component.options = [
         { label: 'Label 1', value: 'Value 1' },
