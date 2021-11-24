@@ -24,7 +24,7 @@ ng update @angular/cli@<version> @angular/core@<version> --force
 Por exemplo:
 
 ```
-ng update @angular/cli@12 @angular/core@12 --force
+ng update @angular/cli@13 @angular/core@13 --force
 ```
 
 > Para realizar a migração completa e avaliar se não precisa fazer alguma alteração veja o [**Guia de Upgrade do Angular**](https://update.angular.io/).

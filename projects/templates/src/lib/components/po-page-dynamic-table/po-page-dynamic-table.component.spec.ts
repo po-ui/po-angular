@@ -191,7 +191,7 @@ describe('PoPageDynamicTableComponent:', () => {
         expect(component.tableCustomActions).toEqual([{ label: 'Details', action: 'endpoint/' }]);
 
         component.ngOnDestroy();
-        expect(component['subscriptions']['_subscriptions']).toBeNull();
+        expect(component['subscriptions']['_subscriptions']).toBeUndefined();
       }));
 
       it('should configure properties based on the return of onload route', fakeAsync(() => {

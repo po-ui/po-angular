@@ -65,7 +65,7 @@ describe('PoResizeObserverDirective', () => {
   it('ngOnInit: should emit when the resizeObserver fire', fakeAsync(() => {
     const spy = spyOn(directive.resize, 'emit');
 
-    directive['chartWidthResize$'].next();
+    directive['chartWidthResize$'].next({});
 
     tick(100);
     expect(spy).toHaveBeenCalled();

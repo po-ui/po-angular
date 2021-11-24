@@ -24,7 +24,6 @@ import { PoChartSvgContainerService } from './services/po-chart-svg-container.se
 import { PoChartDynamicTypeComponent } from './po-chart-types/po-chart-dynamic-type.component';
 import { PoChartGaugeComponent } from './po-chart-types/po-chart-gauge/po-chart-gauge.component';
 import { PoChartType } from './enums/po-chart-type.enum';
-import { PoChartContainerSize } from './interfaces/po-chart-container-size.interface';
 import { PoColorService } from '../../services/po-color/po-color.service';
 import { PoChartMathsService } from './services/po-chart-maths.service';
 
@@ -91,7 +90,7 @@ export class PoChartComponent extends PoChartBaseComponent implements AfterViewI
   @HostListener('window:resize')
   onResize = () => {
     this.getSvgContainerSize();
-    this.windowResizeListener.next();
+    this.windowResizeListener.next({});
   };
 
   ngAfterViewInit() {
@@ -124,7 +123,7 @@ export class PoChartComponent extends PoChartBaseComponent implements AfterViewI
 
   resizeAction() {
     this.getSvgContainerSize();
-    this.windowResizeListener.next();
+    this.windowResizeListener.next({});
     this.changeDetector.detectChanges();
   }
 

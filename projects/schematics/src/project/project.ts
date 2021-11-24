@@ -1,4 +1,4 @@
-import { parseJson, JsonParseMode } from '@angular-devkit/core';
+import { parse } from 'jsonc-parser';
 import { SchematicsException, Tree } from '@angular-devkit/schematics';
 import { WorkspaceProject, WorkspaceSchema } from '@schematics/angular/utility/workspace-models';
 
@@ -16,7 +16,7 @@ export function getWorkspaceConfigGracefully(tree: Tree): null | WorkspaceSchema
   try {
     // Parse the workspace file as JSON5 which is also supported for CLI
     // workspace configurations.
-    return (parseJson(configBuffer.toString(), JsonParseMode.Json5) as unknown) as WorkspaceSchema;
+    return (parse(configBuffer.toString()) as unknown) as WorkspaceSchema;
   } catch (e) {
     return null;
   }

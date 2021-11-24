@@ -26,15 +26,6 @@ Atualmente o PO está homologado para os seguintes navegadores:
         <td class="po-table-column">2 últimas versões principais</td>
       </tr>
       <tr class="po-table-row">
-        <th class="po-table-column">IE</th>
-        <td class="po-table-column">
-          11 *deprecated, 
-          <a href="https://angular.io/guide/deprecations#internet-explorer-11" target="_blank">
-            veja o guia de depreciação oficial do Angular
-          </a>
-        </td>
-      </tr>
-      <tr class="po-table-row">
         <th class="po-table-column">Safari</th>
         <td class="po-table-column">2 últimas versões principais</td>
       </tr>
