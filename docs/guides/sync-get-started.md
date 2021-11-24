@@ -11,9 +11,9 @@ Para maiores detalhes sobre os serviços e métodos utilizados neste tutorial, c
 ### Pré-requisitos
 
 - [Node.js e NPM](https://nodejs.org/en/)
-- [Angular CLI](https://cli.angular.io/) (^12.0.0):
+- [Angular CLI](https://cli.angular.io/) (^13.0.0):
   - ```shell
-    npm install -g @angular/cli@12
+    npm install -g @angular/cli@13
     ```
 - [Ionic](https://ionicframework.com/docs/cli/) (^6.0.0):
   - ```shell
@@ -53,31 +53,31 @@ Antes de executar a instalação, é necessário que todas as dependências do p
 ```typescript
   ...
   "dependencies": {
-    "@angular/animations": "^12.0.1",
-    "@angular/common": "^12.0.1",
-    "@angular/core": "^12.0.1",
-    "@angular/forms": "^12.0.1",
-    "@angular/platform-browser": "^12.0.1",
-    "@angular/platform-browser-dynamic": "^12.0.1",
-    "@angular/router": "^12.0.1",
-    "@angular/service-worker": "^12.0.1",
+    "@angular/animations": "^13.0.2",
+    "@angular/common": "^13.0.2",
+    "@angular/core": "^13.0.2",
+    "@angular/forms": "^13.0.2",
+    "@angular/platform-browser": "^13.0.2",
+    "@angular/platform-browser-dynamic": "^13.0.2",
+    "@angular/router": "^13.0.2",
+    "@angular/service-worker": "^13.0.2",
     "@ionic-native/core": "^5.0.0",
     "@ionic-native/splash-screen": "^5.0.0",
     "@ionic-native/status-bar": "^5.0.0",
     "@ionic/angular": "^5.5.2",
-    "rxjs": "~6.6.0",
-    "tslib": "^2.1.0",
+    "rxjs": "~7.4.0",
+    "tslib": "^2.3.0",
     "zone.js": "~0.11.4"
     ...
   },
   "devDependencies": {
-    "@angular-devkit/build-angular": "^12.0.1",
-    "@angular/cli": "^12.0.1",
-    "@angular/compiler": "^12.0.1",
-    "@angular/compiler-cli": "^12.0.1",
-    "@angular/language-service": "^12.0.1",
+    "@angular-devkit/build-angular": "^13.0.2",
+    "@angular/cli": "^13.0.2",
+    "@angular/compiler": "^13.0.2",
+    "@angular/compiler-cli": "^13.0.2",
+    "@angular/language-service": "^13.0.2",
     "@ionic/angular-toolkit": "^4.0.0",
-    "typescript": "~4.3.0"
+    "typescript": "~4.4.4"
   },
   ...
 ```
@@ -286,6 +286,8 @@ No arquivo `src/app/home/home.page.html` crie a seguinte estrutura:
 ### Passo 8 - Executando o aplicativo
 
 Execute o comando `ionic serve` e verifique o funcionamento do aplicativo Ionic com `po-sync`.
+
+> Pode ocorrer o seguinte erro `TS2320: Interface 'HTMLIonIconElement' cannot simultaneously extend types 'IonIcon' and 'HTMLStencilElement'` por conta da versão do TypeScript (4.4.x) conforme esta [issue](https://github.com/ionic-team/ionicons/issues/1011), neste caso adicione no arquivo **tsconfig.json** `"skipLibCheck": true`.
 
 #### Passo 8.1 - Entendendo o funcionamento do `po-sync`
 

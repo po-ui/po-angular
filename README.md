@@ -24,12 +24,12 @@ Para começar a utilizar o **PO UI** é pré-requisito ter o `Node.js` instalado
 
 Instalando com npm:
 ```
-npm i -g @angular/cli@12
+npm i -g @angular/cli@^13
 ```
 
 Caso prefira instalar com o yarn:
 ```
-yarn global add @angular/cli@12
+yarn global add @angular/cli@^13
 ```
 
 ### Passo 1 - Crie o seu primeiro projeto
@@ -52,24 +52,23 @@ Antes de executar a instalação ou inserir o **Po** no seu projeto existente, �
 Veja abaixo a lista de dependências e as versões compatíveis, elas devem ser conferidas e se necessário, ajustadas no seu projeto.
 
 ```
-  "dependencies": {
-    "@angular/animations": "^12.0.1",
-    "@angular/common": "^12.0.1",
-    "@angular/compiler": "^12.0.1",
-    "@angular/core": "^12.0.1",
-    "@angular/forms": "^12.0.1",
-    "@angular/platform-browser": "^12.0.1",
-    "@angular/platform-browser-dynamic": "^12.0.1",
-    "@angular/platform-server": "^12.0.1",
-    "@angular/router": "^12.0.1",
-    "tslib": "^2.1.0",
-    "rxjs": "~6.6.0",
+ "dependencies": {
+    "@angular/animations": "^13.0.3",
+    "@angular/common": "^13.0.3",
+    "@angular/compiler": "^13.0.3",
+    "@angular/core": "^13.0.3",
+    "@angular/forms": "^13.0.3",
+    "@angular/platform-browser": "^13.0.3",
+    "@angular/platform-browser-dynamic": "^13.0.3",
+    "@angular/router": "^13.0.3",
+    "rxjs": "~7.4.0",
+    "tslib": "^2.3.0",
     "zone.js": "~0.11.4"
     ...
   },
   "devDependencies": {
     ...
-    "typescript": "~4.3.0"
+    "typescript": "~4.4.4"
   }
 ```
 

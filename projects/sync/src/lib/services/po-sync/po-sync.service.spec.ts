@@ -1,21 +1,19 @@
-import { fakeAsync, tick } from '@angular/core/testing';
 import { HttpResponse } from '@angular/common/http';
-
-import * as TypeMoq from 'typemoq';
-import { Subscriber, of } from 'rxjs';
+import { fakeAsync, tick } from '@angular/core/testing';
+import { of, Subscriber } from 'rxjs';
 import { TestScheduler } from 'rxjs/testing';
-import * as utilsFunctions from '../../utils/utils';
-
-import { PoDataMessage, PoDataTransform, PoEntity, PoNetworkStatus } from './../../models';
-import { PoEventSourcingService } from '../po-event-sourcing/po-event-sourcing.service';
-import { PoHttpClientService } from '../po-http-client/po-http-client.service';
-import { PoHttpRequestData } from '../po-http-client/interfaces/po-http-request-data.interface';
-import { PoHttpRequestType } from '../po-http-client/po-http-request-type.enum';
-import { PoNetworkService } from './../po-network/po-network.service';
+import * as TypeMoq from 'typemoq';
 import { PoNetworkType } from '../../models/po-network-type.enum';
+import * as utilsFunctions from '../../utils/utils';
+import { PoEventSourcingService } from '../po-event-sourcing/po-event-sourcing.service';
+import { PoHttpRequestData } from '../po-http-client/interfaces/po-http-request-data.interface';
+import { PoHttpClientService } from '../po-http-client/po-http-client.service';
+import { PoHttpRequestType } from '../po-http-client/po-http-request-type.enum';
+import { PoDataMessage, PoDataTransform, PoEntity, PoNetworkStatus } from './../../models';
+import { PoNetworkService } from './../po-network/po-network.service';
 import { PoSchemaDefinitionService } from './../po-schema/po-schema-definition/po-schema-definition.service';
-import { PoSchemaService } from './../po-schema/po-schema.service';
 import { PoSchemaUtil } from './../po-schema/po-schema-util/po-schema-util.model';
+import { PoSchemaService } from './../po-schema/po-schema.service';
 import { PoSyncConfig } from './interfaces/po-sync-config.interface';
 import { PoSyncSchema } from './interfaces/po-sync-schema.interface';
 import { PoSyncService } from './po-sync.service';
@@ -355,7 +353,7 @@ describe('PoSyncService:', () => {
 
       await poSync.resumeSync();
 
-      poSync['finishSyncSubject']['next']();
+      poSync['finishSyncSubject']['next'](null);
 
       expect(poSync['finishSyncSubject']['asObservable']).toHaveBeenCalledBefore(spySync);
       expect(poSync.sync).toHaveBeenCalled();

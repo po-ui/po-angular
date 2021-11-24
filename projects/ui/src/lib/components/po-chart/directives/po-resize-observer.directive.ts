@@ -1,7 +1,7 @@
 /// <reference types="resize-observer-browser" />
 
 import { Directive, ElementRef, EventEmitter, OnDestroy, OnInit, Output } from '@angular/core';
-import { Subscription, Subject } from 'rxjs';
+import { Subject, Subscription } from 'rxjs';
 import { debounceTime } from 'rxjs/operators';
 
 @Directive({
@@ -26,7 +26,7 @@ export class PoResizeObserverDirective implements OnDestroy, OnInit {
   ngOnInit() {
     if (this.isResizeObserverSupported) {
       this.observer = new window.ResizeObserver(() => {
-        this.chartWidthResize$.next();
+        this.chartWidthResize$.next({});
       });
 
       this.observer.observe(this.elementRef.nativeElement);

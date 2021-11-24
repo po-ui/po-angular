@@ -288,7 +288,7 @@ export class PoSyncService {
 
   private finishSync(): void {
     this.syncing = false;
-    this.finishSyncSubject.next();
+    this.finishSyncSubject.next(null);
   }
 
   private getOnePage(schema: PoSyncSchema, page: number = 1): Observable<any> {

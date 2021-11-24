@@ -373,7 +373,7 @@ export class PoChartCircular extends PoChartDynamicTypeComponent implements OnDe
     this.calculateSVGDimensions();
     this.renderer.setAttribute(this.svgElement, 'width', `${this.centerX}`);
     this.renderer.setAttribute(this.svgElement, 'height', `${this.svgHeight}`);
-    this.windowResizeEmitter.next();
+    this.windowResizeEmitter.next({});
   }
 
   private removeWindowResizeListener() {
