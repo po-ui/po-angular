@@ -1,12 +1,11 @@
+import { Tree } from '@angular-devkit/schematics';
 import { SchematicTestRunner, UnitTestTree } from '@angular-devkit/schematics/testing';
 import { Schema as WorkspaceOptions } from '@schematics/angular/workspace/schema';
-import { Tree } from '@angular-devkit/schematics';
-
 import * as path from 'path';
 
 const collectionPath = path.join(__dirname, '../../collection.json');
 
-describe('po-page-dynamic-edit:', () => {
+xdescribe('po-page-dynamic-edit:', () => {
   const runner = new SchematicTestRunner('schematics', collectionPath);
 
   const workspaceOptions: WorkspaceOptions = {

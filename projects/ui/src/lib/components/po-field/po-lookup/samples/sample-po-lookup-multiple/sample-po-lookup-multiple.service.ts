@@ -9,7 +9,7 @@ import { pluck } from 'rxjs/operators';
 export class SamplePoLookupMultipleService {
   constructor(public http: HttpClient) {}
 
-  getHeroes(data): Observable<Array<any>> {
+  getHeroes(data): Observable<any> {
     const values = data?.length ? data.toString() : data;
     return this.http.get(`https://po-sample-api.herokuapp.com/v1/heroes?value=${values}`).pipe(pluck('items'));
   }

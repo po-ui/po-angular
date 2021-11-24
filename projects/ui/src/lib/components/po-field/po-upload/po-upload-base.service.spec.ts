@@ -146,7 +146,7 @@ describe('PoUploadBaseService:', () => {
     const fakeThis = {
       getRequest: (url: any, formData: any) =>
         new Observable(observer => {
-          observer.next('');
+          observer.next({});
           observer.complete();
         }),
       addRequest: service.addRequest,

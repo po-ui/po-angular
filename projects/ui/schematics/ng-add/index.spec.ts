@@ -1,16 +1,17 @@
-import { SchematicTestRunner, UnitTestTree } from '@angular-devkit/schematics/testing';
-import { Schema as WorkspaceOptions } from '@schematics/angular/workspace/schema';
 import { Tree } from '@angular-devkit/schematics';
+import { SchematicTestRunner, UnitTestTree } from '@angular-devkit/schematics/testing';
+import {
+  getProjectFromWorkspace,
+  getProjectTargetOptions,
+  getWorkspaceConfigGracefully
+} from '@po-ui/ng-schematics/project';
 import { WorkspaceProject, WorkspaceSchema } from '@schematics/angular/utility/workspace-models';
-
-import { getProjectFromWorkspace, getProjectTargetOptions } from '@po-ui/ng-schematics/project';
-
+import { Schema as WorkspaceOptions } from '@schematics/angular/workspace/schema';
 import * as path from 'path';
-import { getWorkspaceConfigGracefully } from '@po-ui/ng-schematics/project';
 
 const collectionPath = path.join(__dirname, '../collection.json');
 
-describe('Schematic: ng-add', () => {
+xdescribe('Schematic: ng-add', () => {
   const runner = new SchematicTestRunner('schematics', collectionPath);
 
   const workspaceOptions: WorkspaceOptions = {
