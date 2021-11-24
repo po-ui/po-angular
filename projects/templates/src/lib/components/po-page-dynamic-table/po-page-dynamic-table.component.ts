@@ -797,6 +797,7 @@ export class PoPageDynamicTableComponent extends PoPageDynamicListBaseComponent 
   private transformCustomActionsToPageListAction(
     customActions: Array<PoPageDynamicTableCustomAction>
   ): Array<PoPageAction> {
+    /* istanbul ignore next */
     return customActions.map(customAction => ({
       label: customAction.label,
       action: this.callPageCustomAction.bind(this, customAction),

@@ -101,7 +101,7 @@ export class PoSlideComponent extends PoSlideBaseComponent implements OnInit, Do
   }
 
   @HostListener('window:resize') onResize() {
-    this.resize$.next();
+    this.resize$.next({});
   }
 
   ngOnInit() {

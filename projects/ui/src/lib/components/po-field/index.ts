@@ -50,3 +50,6 @@ export * from './po-checkbox-group/po-checkbox-group.module';
 export * from './po-datepicker/po-datepicker.module';
 
 export * from './po-field.module';
+
+export * from './po-field-container/index';
+export * from './po-clean/index';

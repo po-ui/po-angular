@@ -30,7 +30,7 @@ module.exports = function (config) {
           statements: 96,
           branches: 95,
           functions: 96,
-          lines: 96
+          lines: 95
         },
         each: {
           branches: 99,
@@ -45,8 +45,8 @@ module.exports = function (config) {
             },
             'src/lib/components/po-page-job-scheduler/po-page-job-scheduler.component.ts': {
               branches: 0,
-              statements: 23,
-              lines: 23,
+              statements: 11,
+              lines: 9,
               functions: 0
             }
           }
