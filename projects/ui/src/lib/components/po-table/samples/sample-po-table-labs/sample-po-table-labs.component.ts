@@ -86,7 +86,8 @@ export class SamplePoTableLabsComponent implements OnInit {
     { label: 'Hide detail', value: 'hideDetail' },
     { label: 'Loading', value: 'loading' },
     { label: 'Auto collapse', value: 'autoCollapse' },
-    { label: 'Hide columns manager', value: 'hideColumnsManager' }
+    { label: 'Hide columns manager', value: 'hideColumnsManager' },
+    { label: 'Actions Right', value: 'actionsRight' }
   ];
 
   public readonly typeHeaderOptions: Array<PoRadioGroupOption> = [
