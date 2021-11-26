@@ -75,6 +75,13 @@
           class="po-table-header-column po-table-header-master-detail"
         ></th>
 
+        <!-- Coluna criada para caso as ações fiquem no lado esquerdo -->
+        <th
+          *ngIf="!actionRight && (visibleActions.length > 1 || isSingleAction)"
+          [class.po-table-header-master-detail]="!isSingleAction"
+          [class.po-table-header-single-action]="isSingleAction"
+        ></th>
+
         <th *ngIf="!hasMainColumns" #noColumnsHeader class="po-table-header-column po-text-center">
           <ng-container *ngIf="height; then noColumnsWithHeight; else noColumnsWithoutHeight"> </ng-container>
         </th>
@@ -106,7 +113,7 @@
         ></th>
 
         <th
-          *ngIf="hasVisibleActions && hideColumnsManager"
+          *ngIf="hasVisibleActions && hideColumnsManager && actionRight"
           [class.po-table-header-single-action]="isSingleAction"
           [class.po-table-header-actions]="!isSingleAction"
         ></th>
@@ -114,9 +121,9 @@
         <th
           #columnManager
           *ngIf="hasValidColumns && !hideColumnsManager"
-          [class.po-table-header-column-manager]="!isSingleAction"
+          [class.po-table-header-column-manager]="!isSingleAction || !actionRight"
           [class.po-table-header-column-manager-border]="!height && container"
-          [class.po-table-header-single-action]="isSingleAction"
+          [class.po-table-header-single-action]="isSingleAction && actionRight"
         >
           <div
             [class.po-table-header-column-manager-border]="height && container"
@@ -163,6 +170,14 @@
             >
             </ng-template>
           </td>
+
+          <!-- Coluna com as ações na esquerda (padrão)-->
+          <ng-template
+            *ngIf="!actionRight && (visibleActions.length > 1 || isSingleAction)"
+            [ngTemplateOutlet]="ActionsColumnTemplate"
+            [ngTemplateOutletContext]="{ row: row, rowIndex: rowIndex }"
+          >
+          </ng-template>
 
           <!-- Valida se a origem do detail é pela diretiva -->
           <td
@@ -272,25 +287,19 @@
             </ng-template>
           </td>
 
-          <td *ngIf="isSingleAction" class="po-table-column po-table-column-single-action">
-            <div
-              *ngIf="firstAction.visible !== false"
-              class="po-table-single-action po-clickable"
-              [class.po-table-action-disabled]="firstAction.disabled ? validateTableAction(row, firstAction) : false"
-              (click)="executeTableAction(row, firstAction)"
-            >
-              <po-icon
-                *ngIf="firstAction.icon"
-                class="po-table-single-action-content"
-                [p-icon]="firstAction.icon"
-              ></po-icon>
-              {{ firstAction.label }}
-            </div>
-          </td>
+          <!-- Coluna de açoes na direita -->
+          <ng-template
+            *ngIf="actionRight"
+            [ngTemplateOutlet]="ActionsColumnTemplate"
+            [ngTemplateOutletContext]="{ row: row, rowIndex: rowIndex }"
+          >
+          </ng-template>
 
-          <td *ngIf="visibleActions.length > 1" class="po-table-column-actions">
-            <span #popupTarget class="po-icon po-icon-more po-clickable" (click)="togglePopup(row, popupTarget)"></span>
-          </td>
+          <!-- Coluna para não ficar em branco nas linhas de gerenciamento -->
+          <ng-container *ngIf="!actionRight && (visibleActions.length > 1 || isSingleAction) && !hideColumnsManager">
+            <td class="po-table-column"></td>
+          </ng-container>
+
           <!-- Column Manager -->
           <td
             *ngIf="!hasVisibleActions && !hideColumnsManager && !hasRowTemplateWithArrowDirectionRight"
@@ -373,6 +382,25 @@
 
 <ng-template #noColumnsWithoutHeight>
   {{ hasValidColumns ? literals.noVisibleColumn : literals.noColumns }}
+</ng-template>
+
+<!-- Template de ações -->
+<ng-template #ActionsColumnTemplate let-row="row" let-rowIndex="rowIndex">
+  <td *ngIf="isSingleAction" class="po-table-column po-table-column-single-action">
+    <div
+      *ngIf="firstAction.visible !== false"
+      class="po-table-single-action po-clickable"
+      [class.po-table-action-disabled]="firstAction.disabled ? validateTableAction(row, firstAction) : false"
+      (click)="executeTableAction(row, firstAction)"
+    >
+      <po-icon *ngIf="firstAction.icon" class="po-table-single-action-content" [p-icon]="firstAction.icon"></po-icon>
+      {{ firstAction.label }}
+    </div>
+  </td>
+
+  <td *ngIf="visibleActions.length > 1" class="po-table-column-actions">
+    <span #popupTarget class="po-icon po-icon-more po-clickable" (click)="togglePopup(row, popupTarget)"></span>
+  </td>
 </ng-template>
 
 <po-table-column-manager

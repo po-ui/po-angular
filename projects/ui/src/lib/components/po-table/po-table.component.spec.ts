@@ -756,6 +756,7 @@ describe('PoTableComponent:', () => {
     component.actions = actions;
     component.hideDetail = false;
     component.columns = columnsWithDetail;
+    component.actionRight = true;
 
     fixture.detectChanges();
 
@@ -775,6 +776,22 @@ describe('PoTableComponent:', () => {
 
     const singleActionColumn = nativeElement.querySelector('.po-table-header-single-action');
     expect(singleActionColumn).toBeNull();
+  });
+
+  it('should contain more than 1 "header-master-detail" if actionRight is false and "isSingleAction" is false', () => {
+    component.selectable = true;
+    component.actions = [
+      { label: 'PO1', visible: true },
+      { label: 'PO2', visible: true }
+    ];
+    component.hideDetail = false;
+    component.columns = columnsWithDetail;
+
+    fixture.detectChanges();
+
+    const masterDetails = nativeElement.querySelectorAll('.po-table-header-master-detail');
+
+    expect(masterDetails.length).toBe(2);
   });
 
   it('should not call debounceResize in ngDoCheck when visibleElement is true', () => {
@@ -2281,6 +2298,7 @@ describe('PoTableComponent:', () => {
       component.columns = [{ property: 'name' }, { property: 'age' }];
       component.actions = [{ label: 'First Action', action: () => {} }];
       component.hideColumnsManager = false;
+      component.actionRight = true;
 
       component.tableRowTemplate = {
         ...mockTableDetailDiretive,

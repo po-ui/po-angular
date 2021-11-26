@@ -196,6 +196,17 @@ export abstract class PoTableBaseComponent implements OnChanges, OnDestroy {
    *
    * @description
    *
+   * Define que a coluna de ações ficará no lado direito da tabela.
+   *
+   * @default `false`
+   */
+  @Input('p-actions-right') @InputBoolean() actionRight?: boolean = false;
+
+  /**
+   * @optional
+   *
+   * @description
+   *
    * Define uma quantidade máxima de colunas que serão exibidas na tabela.
    *
    * Quando chegar no valor informado, as colunas que não estiverem selecionadas ficarão
