@@ -2,6 +2,15 @@
 
 All notable changes to this project will be documented in this file. See [standard-version](https://github.com/conventional-changelog/standard-version) for commit guidelines.
 
+## [5.22.1](https://github.com/po-ui/po-angular/compare/v5.22.0...v5.22.1) (2021-11-29)
+
+
+### Bug Fixes
+
+* **multiselect:** componente não dispara evento de change ([cddb993](https://github.com/po-ui/po-angular/commit/cddb993ae663fdf6a01cf24b18041ecad3904d13))
+
+
+
 # [5.22.0](https://github.com/po-ui/po-angular/compare/v5.21.0...v5.22.0) (2021-11-22)
 
 
