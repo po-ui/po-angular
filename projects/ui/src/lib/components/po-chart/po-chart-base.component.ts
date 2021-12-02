@@ -3,7 +3,6 @@ import { EventEmitter, Input, Output, Directive, OnChanges, SimpleChanges } from
 import { convertToInt, isTypeof } from '../../utils/util';
 
 import { PoChartContainerSize } from './interfaces/po-chart-container-size.interface';
-import { PoChartGaugeSerie } from './po-chart-types/po-chart-gauge/po-chart-gauge-series.interface';
 import { PoChartType } from './enums/po-chart-type.enum';
 import { PoChartOptions } from './interfaces/po-chart-options.interface';
 import { PoChartSerie } from './interfaces/po-chart-serie.interface';
@@ -47,7 +46,7 @@ export abstract class PoChartBaseComponent implements OnChanges {
    * - *area*, *line*, *column* e *bar*: um objeto contendo o nome da série, valor e categoria do eixo do gráfico.
    */
   @Output('p-series-click')
-  seriesClick = new EventEmitter<PoChartSerie | PoChartGaugeSerie>();
+  seriesClick = new EventEmitter<PoChartSerie>();
 
   /**
    * @optional
@@ -61,17 +60,17 @@ export abstract class PoChartBaseComponent implements OnChanges {
    * - *area*, *line*, *column* e *bar*: um objeto contendo a categoria, valor da série e categoria do eixo do gráfico.
    */
   @Output('p-series-hover')
-  seriesHover = new EventEmitter<PoChartSerie | PoChartGaugeSerie>();
+  seriesHover = new EventEmitter<PoChartSerie>();
 
   // manipulação das séries tratadas internamente para preservar 'p-series';
-  chartSeries: Array<PoChartSerie | PoChartGaugeSerie> = [];
+  chartSeries: Array<PoChartSerie> = [];
   chartType: PoChartType;
   svgContainerSize: PoChartContainerSize;
 
   private _options: PoChartOptions;
   private _categories: Array<string>;
   private _height: number;
-  private _series: Array<PoChartSerie> | PoChartGaugeSerie;
+  private _series: Array<PoChartSerie>;
   private _type: PoChartType;
 
   private defaultType: PoChartType;
@@ -140,13 +139,13 @@ export abstract class PoChartBaseComponent implements OnChanges {
    *
    * Define os elementos do gráfico que serão criados dinamicamente.
    */
-  @Input('p-series') set series(value: Array<PoChartSerie> | PoChartGaugeSerie) {
+  @Input('p-series') set series(value: Array<PoChartSerie>) {
     this._series = value || [];
 
     if (Array.isArray(this._series) && this._series.length) {
       this.setTypeDefault(this._series[0]);
     } else {
-      this.transformObjectToArrayObject(this.series as PoChartGaugeSerie);
+      this.transformObjectToArrayObject(this.series);
       this.rebuildComponentRef();
     }
   }
@@ -225,7 +224,7 @@ export abstract class PoChartBaseComponent implements OnChanges {
       (changes.type && isArrayOfseries) ||
       (changes.categories && isArrayOfseries)
     ) {
-      this.validateSerieAndAddType(this.series as Array<PoChartSerie>);
+      this.validateSerieAndAddType(this.series);
     }
 
     if ((changes.type && !this.isTypeCircular) || (changes.categories && !this.isTypeCircular)) {
@@ -245,15 +244,15 @@ export abstract class PoChartBaseComponent implements OnChanges {
   }
 
   private setDefaultHeight() {
-    return this.type === PoChartType.Gauge ? poChartMinHeight : poChartDefaultHeight;
+    return poChartDefaultHeight;
   }
 
-  private transformObjectToArrayObject(serie: PoChartGaugeSerie) {
+  private transformObjectToArrayObject(serie) {
     this.chartSeries = typeof serie === 'object' && Object.keys(serie).length ? [{ ...serie }] : [];
   }
 
   private setTypeDefault(serie: PoChartSerie) {
-    const data = serie.data ?? serie.value;
+    const data = serie.data;
     const serieType = (<any>Object).values(PoChartType).includes(serie.type) ? serie.type : undefined;
 
     this.defaultType = serieType ? serieType : Array.isArray(data) ? PoChartType.Column : PoChartType.Pie;
@@ -261,9 +260,7 @@ export abstract class PoChartBaseComponent implements OnChanges {
 
   private validateSerieAndAddType(series: Array<PoChartSerie>): void {
     const filteredSeries = series.filter(serie =>
-      this.isTypeCircular
-        ? typeof serie.data === 'number' || typeof serie.value === 'number'
-        : Array.isArray(serie.data)
+      this.isTypeCircular ? typeof serie.data === 'number' : Array.isArray(serie.data)
     );
 
     this.chartSeries = this.appendType(this.appendColors(filteredSeries));
