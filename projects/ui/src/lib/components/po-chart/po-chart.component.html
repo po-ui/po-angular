@@ -4,7 +4,6 @@
   </div>
 
   <po-chart-container
-    *ngIf="!isChartGaugeType"
     [p-options]="options"
     [p-type]="chartType"
     [p-series]="chartSeries"
@@ -17,7 +16,7 @@
   <!-- Injeção de gráficos do tipo gauge. Remover na depreciação.  -->
   <ng-template #chartContainer></ng-template>
 
-  <div *ngIf="!isChartGaugeType && options?.legend !== false">
+  <div *ngIf="options?.legend !== false">
     <ng-container *ngTemplateOutlet="chartLegendGroup"></ng-container>
   </div>
 </div>
