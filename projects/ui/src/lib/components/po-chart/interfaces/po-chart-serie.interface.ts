@@ -79,30 +79,4 @@ export interface PoChartSerie {
    * > O componente só exibirá as séries que tiverem o mesmo `type` definido, exceto para mesclagem para tipos `column` e `line`.
    */
   type?: PoChartType;
-
-  /**
-   * @deprecated 6.x.x
-   *
-   * @optional
-   *
-   * @description
-   *
-   * **Deprecated 6.x.x**.
-   *
-   * Define o valor do objeto.
-   */
-  value?: number;
-
-  /**
-   * @deprecated 6.x.x
-   *
-   * @optional
-   *
-   * @description
-   *
-   * **Deprecated 6.x.x**.
-   *
-   * Define o valor da categoria do objeto.
-   */
-  category?: string;
 }
