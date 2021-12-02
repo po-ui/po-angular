@@ -13,20 +13,6 @@ describe('PoChartDynamicTypeComponent:', () => {
     component = new PoChartDynamicTypeComponentMock();
   });
 
-  describe('Properties:', () => {
-    it('isChartGaugeType: should return `true` if type is equal `PoChartType.Gauge`', () => {
-      component.type = PoChartType.Gauge;
-
-      expect(component.isChartGaugeType).toBeTruthy();
-    });
-
-    it('isChartGaugeType: should return `false` if type is diferent from `PoChartType.Gauge`', () => {
-      component.type = PoChartType.Pie;
-
-      expect(component.isChartGaugeType).toBeFalsy();
-    });
-  });
-
   describe('Methods:', () => {
     describe('calculateSVGContainerDimensions:', () => {
       it(`should set 'svgHeight' and 'centerX'`, () => {
@@ -96,17 +82,6 @@ describe('PoChartDynamicTypeComponent:', () => {
         component['series'] = [{ value: 1 }, { value: 4 }, { value: 7 }];
 
         const totalSum = 12;
-
-        component['calculateTotalValue']();
-
-        expect(component['totalValue']).toBe(totalSum);
-      });
-
-      it('should be 100 if PoChartType is Gauge', () => {
-        component['series'] = [{ value: 1 }, { value: 4 }, { value: 7 }];
-        component.type = PoChartType.Gauge;
-
-        const totalSum = 100;
 
         component['calculateTotalValue']();
 

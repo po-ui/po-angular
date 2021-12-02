@@ -2,7 +2,6 @@ import { ElementRef, ViewChild, Directive } from '@angular/core';
 
 import { Subject } from 'rxjs';
 
-import { PoChartGaugeSerie } from './po-chart-gauge/po-chart-gauge-series.interface';
 import { PoChartType } from '../enums/po-chart-type.enum';
 
 const Padding: number = 24;
@@ -24,8 +23,8 @@ export abstract class PoChartDynamicTypeComponent {
   colors: Array<string>;
   height: number;
   innerRadius: number = 0;
-  onSerieClick: Subject<PoChartGaugeSerie> = new Subject();
-  onSerieHover: Subject<PoChartGaugeSerie> = new Subject();
+  onSerieClick: Subject<any> = new Subject();
+  onSerieHover: Subject<any> = new Subject();
   svgElement: HTMLObjectElement;
   svgHeight: number;
   target: HTMLInputElement & EventTarget;
@@ -37,11 +36,7 @@ export abstract class PoChartDynamicTypeComponent {
   protected windowResizeListener: () => void;
   protected windowScrollListener: () => void;
   // eslint-disable-next-line
-  protected _series: Array<PoChartGaugeSerie> = [];
-
-  get isChartGaugeType(): boolean {
-    return this.type === PoChartType.Gauge;
-  }
+  protected _series: Array<any> = [];
 
   calculateSVGContainerDimensions(chartWrapperElement: number, chartHeaderElement: number, chartLegendElement: number) {
     const svgContainerHeightCalc = this.height - chartHeaderElement - chartLegendElement - Padding * 2;
@@ -51,10 +46,10 @@ export abstract class PoChartDynamicTypeComponent {
   }
 
   calculateTotalValue() {
-    this.totalValue =
-      this.type === PoChartType.Gauge
-        ? 100
-        : this.series.reduce((previousValue, serie) => previousValue + (serie.data ? serie.data : serie.value), 0);
+    this.totalValue = this.series.reduce(
+      (previousValue, serie) => previousValue + (serie.data ? serie.data : serie.value),
+      0
+    );
   }
 
   set series(value: Array<any>) {

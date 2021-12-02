@@ -22,7 +22,6 @@ import { PoDefaultColors } from '../../services/po-color/po-colors.constant';
 import { PoChartBaseComponent } from './po-chart-base.component';
 import { PoChartSvgContainerService } from './services/po-chart-svg-container.service';
 import { PoChartDynamicTypeComponent } from './po-chart-types/po-chart-dynamic-type.component';
-import { PoChartGaugeComponent } from './po-chart-types/po-chart-gauge/po-chart-gauge.component';
 import { PoChartType } from './enums/po-chart-type.enum';
 import { PoChartContainerSize } from './interfaces/po-chart-container-size.interface';
 import { PoColorService } from '../../services/po-color/po-color.service';
@@ -68,9 +67,7 @@ export class PoChartComponent extends PoChartBaseComponent implements AfterViewI
   private windowResizeListener: Subject<any> = new Subject();
   private subscription = new Subscription();
 
-  private mappings = {
-    [PoChartType.Gauge]: PoChartGaugeComponent
-  };
+  private mappings = {};
 
   constructor(
     protected colorService: PoColorService,
@@ -82,10 +79,6 @@ export class PoChartComponent extends PoChartBaseComponent implements AfterViewI
     private renderer: Renderer2
   ) {
     super(colorService);
-  }
-
-  get isChartGaugeType(): boolean {
-    return this.type === PoChartType.Gauge;
   }
 
   @HostListener('window:resize')
@@ -106,14 +99,9 @@ export class PoChartComponent extends PoChartBaseComponent implements AfterViewI
     // Permite que o chart seja calculado na primeira vez que o componente torna-se visível,
     // evitando com isso, problemas com Tabs ou Divs que iniciem escondidas.
     // Quando modificada a estrutura dos gráficos do tipo circular isto será melhorado.
-    if (charWrapperWidth && this.initialized) {
-      if (!isDynamicChart && !this.calculatedSvgContainerElement) {
-        this.getSvgContainerSize();
-        this.calculatedSvgContainerElement = true;
-      } else if (isDynamicChart && !this.calculatedComponentRefElement) {
-        this.dynamicComponentSetting();
-        this.calculatedComponentRefElement = true;
-      }
+    if (charWrapperWidth && this.initialized && !isDynamicChart && !this.calculatedSvgContainerElement) {
+      this.getSvgContainerSize();
+      this.calculatedSvgContainerElement = true;
     }
   }
 
@@ -135,10 +123,6 @@ export class PoChartComponent extends PoChartBaseComponent implements AfterViewI
   rebuildComponentRef() {
     if (this.componentRef) {
       this.componentRef.destroy();
-
-      if (this.isChartGaugeType) {
-        this.dynamicComponentSetting();
-      }
     }
   }
 

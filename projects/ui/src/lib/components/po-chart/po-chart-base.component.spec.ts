@@ -5,6 +5,7 @@ import { expectPropertiesValues } from './../../util-test/util-expect.spec';
 import { PoChartBaseComponent } from './po-chart-base.component';
 import { PoChartType } from './enums/po-chart-type.enum';
 import { PoColorService } from '../../services/po-color/po-color.service';
+import { PoChartSerie } from './interfaces/po-chart-serie.interface';
 
 @Directive()
 class PoCharComponent extends PoChartBaseComponent {
@@ -111,16 +112,6 @@ describe('PoChartBaseComponent:', () => {
       component.series = [];
 
       expect(spySetTypeDefault).not.toHaveBeenCalled();
-    });
-
-    it('p-series: should call `transformObjectToArrayObject` and `rebuildComponentRef` if series is an object', () => {
-      const spyTransformObjectToArrayObject = spyOn(component, <any>'transformObjectToArrayObject');
-      const spyRebuildComponentRef = spyOn(component, <any>'rebuildComponentRef');
-
-      component.series = { value: 1, description: 'value' };
-
-      expect(spyTransformObjectToArrayObject).toHaveBeenCalled();
-      expect(spyRebuildComponentRef).toHaveBeenCalled();
     });
 
     it('p-series: shouldn`t call `transformObjectToArrayObject` neither `rebuildComponentRef` if series is an array', () => {
@@ -241,7 +232,7 @@ describe('PoChartBaseComponent:', () => {
     });
 
     it('onSeriesClick: should call `seriesClick.emit` with `event`', () => {
-      const eventMock = { target: '', name: 'value', value: 1, category: 'value' };
+      const eventMock: PoChartSerie = { label: '' };
       component.seriesClick = new EventEmitter();
 
       spyOn(component.seriesClick, 'emit');
@@ -252,7 +243,7 @@ describe('PoChartBaseComponent:', () => {
     });
 
     it('onSeriesHover: should call `seriesClick.emit` with `event`', () => {
-      const eventMock = { target: '', name: 'value', value: 1, category: 'value' };
+      const eventMock: PoChartSerie = { label: '' };
       component.seriesHover = new EventEmitter();
 
       spyOn(component.seriesHover, 'emit');
@@ -262,28 +253,12 @@ describe('PoChartBaseComponent:', () => {
       expect(component.seriesHover.emit).toHaveBeenCalledWith(eventMock);
     });
 
-    it('setDefaultHeight: should return `200` if type is `Gauge`', () => {
-      component.type = PoChartType.Gauge;
-
-      const expectedResult = component['setDefaultHeight']();
-
-      expect(expectedResult).toBe(200);
-    });
-
     it('setDefaultHeight: should return `400` if type is different from `Gauge`', () => {
       component.type = PoChartType.Pie;
 
       const expectedResult = component['setDefaultHeight']();
 
       expect(expectedResult).toBe(400);
-    });
-
-    it('transformObjectToArrayObject: should set an array containing the serie`s object to `chartSeries`', () => {
-      const serie = { value: 1, description: 'description' };
-
-      component['transformObjectToArrayObject'](serie);
-
-      expect(component.chartSeries).toEqual([serie]);
     });
 
     it('transformObjectToArrayObject: should set empty array to `chartSeries` if the serie is an object without length', () => {
@@ -336,22 +311,6 @@ describe('PoChartBaseComponent:', () => {
         const expectedResult = [
           { label: 'serie 1', data: 1, type: PoChartType.Pie, color: '#0C6C94' },
           { label: 'serie 2', data: 2, type: PoChartType.Pie, color: '#29B6C5' }
-        ];
-
-        component['validateSerieAndAddType'](component.series);
-
-        expect(component.chartSeries).toEqual(expectedResult);
-      });
-
-      it('should apply to `chartSeries` a list with two objects with `value` and `pie` as default type', () => {
-        component.series = [
-          { label: 'serie 1', value: 1 },
-          { label: 'serie 2', value: 2 }
-        ];
-
-        const expectedResult = [
-          { label: 'serie 1', value: 1, type: PoChartType.Pie, color: '#0C6C94' },
-          { label: 'serie 2', value: 2, type: PoChartType.Pie, color: '#29B6C5' }
         ];
 
         component['validateSerieAndAddType'](component.series);

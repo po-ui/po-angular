@@ -6,7 +6,6 @@ import { PoChartBaseComponent } from './po-chart-base.component';
 import { PoChartComponent } from './po-chart.component';
 import { PoChartModule } from './po-chart.module';
 import { PoChartType } from './enums/po-chart-type.enum';
-import { PoChartGaugeComponent } from './po-chart-types/po-chart-gauge/po-chart-gauge.component';
 
 describe('PoChartComponent:', () => {
   let component: PoChartComponent;
@@ -33,20 +32,6 @@ describe('PoChartComponent:', () => {
   it('should be create', () => {
     expect(component instanceof PoChartComponent).toBeTruthy();
     expect(component instanceof PoChartBaseComponent).toBeTruthy();
-  });
-
-  describe('Properties', () => {
-    it('isChartGaugeType: should return `true` if type is equal `PoChartType.Gauge`', () => {
-      component.type = PoChartType.Gauge;
-
-      expect(component.isChartGaugeType).toBeTruthy();
-    });
-
-    it('isChartGaugeType: should return `false` if type is diferent from `PoChartType.Gauge`', () => {
-      component.type = PoChartType.Pie;
-
-      expect(component.isChartGaugeType).toBeFalsy();
-    });
   });
 
   describe('Methods:', () => {
@@ -82,24 +67,6 @@ describe('PoChartComponent:', () => {
         expect(spy).toHaveBeenCalled();
       }));
 
-      it('should call `dynamicComponentSetting` on first loading and if chartWrapper has width', () => {
-        Object.defineProperty(component.chartWrapper.nativeElement, 'offsetWidth', {
-          writable: true,
-          value: 500
-        });
-
-        component.type = PoChartType.Gauge;
-        component['calculatedComponentRefElement'] = false;
-        component['initialized'] = true;
-
-        spyOn(component, <any>'dynamicComponentSetting');
-
-        component.ngDoCheck();
-
-        expect(component['calculatedComponentRefElement']).toBeTruthy();
-        expect(component['dynamicComponentSetting']).toHaveBeenCalled();
-      });
-
       it('should call `getSvgContainerSize` on first loading and if chartWrapper has width', () => {
         Object.defineProperty(component.chartWrapper.nativeElement, 'offsetWidth', {
           writable: true,
@@ -133,23 +100,6 @@ describe('PoChartComponent:', () => {
         component.ngDoCheck();
 
         expect(component['getSvgContainerSize']).not.toHaveBeenCalled();
-      });
-
-      it('shouldn`t call `dynamicComponentSetting` if `calculatedComponentRefElement` is true', () => {
-        Object.defineProperty(component.chartWrapper.nativeElement, 'offsetWidth', {
-          writable: true,
-          value: 500
-        });
-
-        component.type = PoChartType.Gauge;
-        component['initialized'] = true;
-        component['calculatedComponentRefElement'] = true;
-
-        spyOn(component, <any>'dynamicComponentSetting');
-
-        component.ngDoCheck();
-
-        expect(component['dynamicComponentSetting']).not.toHaveBeenCalled();
       });
 
       it('shouldn`t call `dynamicComponentSetting` if chartWrapper width is 0', () => {
@@ -201,14 +151,12 @@ describe('PoChartComponent:', () => {
       const sourceObject = { componentRef: { destroy: () => {} } };
       Object.assign(component, sourceObject);
 
-      spyOnProperty(component, 'isChartGaugeType').and.returnValue(true);
       spyOn(sourceObject.componentRef, 'destroy');
       spyOn(component, <any>'dynamicComponentSetting');
 
       component['rebuildComponentRef']();
 
       expect(sourceObject.componentRef.destroy).toHaveBeenCalled();
-      expect(component['dynamicComponentSetting']).toHaveBeenCalled();
     });
 
     it('rebuildComponentRef: shouldn`t call `dynamicComponentSetting` if type is line', () => {
@@ -219,41 +167,6 @@ describe('PoChartComponent:', () => {
       component['rebuildComponentRef']();
 
       expect(component['dynamicComponentSetting']).not.toHaveBeenCalled();
-    });
-
-    it('rebuildComponentRef: shouldn`t call `dynamicComponentSetting` if type is line', () => {
-      const sourceObject = { componentRef: { destroy: () => {} } };
-      Object.assign(component, sourceObject);
-
-      spyOnProperty(component, 'isChartGaugeType').and.returnValue(false);
-      spyOn(sourceObject.componentRef, 'destroy');
-      spyOn(component, <any>'dynamicComponentSetting');
-
-      component['rebuildComponentRef']();
-
-      expect(component['dynamicComponentSetting']).not.toHaveBeenCalled();
-    });
-
-    it('setComponentRefProperties: should apply PoChartDynamicTypeComponent property values', () => {
-      const instance: any = {
-        chartHeader: { nativeElement: { offsetHeight: 200 } },
-        chartLegend: { nativeElement: { offsetHeight: 200 } },
-        chartWrapper: { nativeElement: { offsetWidth: 200 } }
-      };
-
-      component.type = PoChartType.Gauge;
-      component.height = 400;
-      component.series = { description: 'A', value: 10 };
-
-      component['setComponentRefProperties'](instance);
-
-      expect(instance.height).toBe(component.height);
-      expect(instance.type).toBe(component.type);
-      expect(instance.series).toEqual([component.series]);
-      expect(instance.colors).toEqual(['#29B6C5']);
-      expect(instance.chartHeader).toBe(component.chartHeader.nativeElement.offsetHeight);
-      expect(instance.chartLegend).toBe(component.chartLegend.nativeElement.offsetHeight);
-      expect(instance.chartWrapper).toBe(component.chartWrapper.nativeElement.offsetWidth);
     });
 
     it('setComponentRefProperties: should set `instance.series` with empty array if `series` is undefined', () => {
@@ -331,12 +244,6 @@ describe('PoChartComponent:', () => {
       expect(component['changeDetector'].detectChanges).toHaveBeenCalled();
       expect(component['setClickSubscribe']).toHaveBeenCalled();
       expect(component['setHoverSubscribe']).toHaveBeenCalled();
-    });
-
-    it('getComponentType: should return component of the mappings by key', () => {
-      const type = 'gauge';
-
-      expect(component['getComponentType'](type)).toBe(PoChartGaugeComponent);
     });
 
     it('onResize: should trigger onResize method when window is resized ', () => {

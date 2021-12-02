@@ -11,8 +11,6 @@ import { PoChartBarComponent } from './po-chart-container/po-chart-bar/po-chart-
 import { PoChartColumnComponent } from './po-chart-container/po-chart-bar/po-chart-column/po-chart-column.component';
 import { PoChartComponent } from './po-chart.component';
 import { PoChartContainerComponent } from './po-chart-container/po-chart-container.component';
-import { PoChartGaugeComponent } from './po-chart-types/po-chart-gauge/po-chart-gauge.component';
-import { PoChartGaugeTextContentComponent } from './po-chart-types/po-chart-gauge/po-chart-gauge-text-content/po-chart-gauge-text-content.component';
 import { PoChartLegendComponent } from './po-chart-legend/po-chart-legend.component';
 import { PoChartLineComponent } from './po-chart-container/po-chart-line/po-chart-line.component';
 import { PoChartBarPathComponent } from './po-chart-container/po-chart-bar/po-chart-bar-path/po-chart-bar-path.component';
@@ -39,8 +37,6 @@ import { PoResizeObserverDirective } from './directives/po-resize-observer.direc
     PoChartAxisLabelComponent,
     PoChartComponent,
     PoChartContainerComponent,
-    PoChartGaugeComponent,
-    PoChartGaugeTextContentComponent,
     PoChartLegendComponent,
     PoChartLineComponent,
     PoChartPathComponent,

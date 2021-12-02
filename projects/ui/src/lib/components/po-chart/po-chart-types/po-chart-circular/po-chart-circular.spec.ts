@@ -4,9 +4,8 @@ import { Component, ElementRef, NgZone, Renderer2 } from '@angular/core';
 import { PoDefaultColors, PoDefaultColorsTextBlack } from 'projects/ui/src/lib/services/po-color/po-colors.constant';
 
 import { PoChartCircular } from './po-chart-circular';
-import { poChartCompleteCircle, poChartGaugeSerieWidth } from './po-chart-circular.constant';
+import { poChartCompleteCircle } from './po-chart-circular.constant';
 import { PoChartDynamicTypeComponent } from '../po-chart-dynamic-type.component';
-import { PoChartGaugeSerie } from '../po-chart-gauge/po-chart-gauge-series.interface';
 import { PoChartType } from '../../enums/po-chart-type.enum';
 
 @Component({
@@ -45,8 +44,8 @@ describe('PoChartCircular:', () => {
   describe('Methods:', () => {
     it('ngOnDestroy: should call `removeWindowResizeListener`, `removeWindowScrollListener` and set `animationRunning` to false', () => {
       component['animationRunning'] = true;
-      spyOn(component, <any>'removeWindowResizeListener');
-      spyOn(component, <any>'removeWindowScrollListener');
+      spyOn(component, <any>'removeWindowResizeListener').and.callThrough();
+      spyOn(component, <any>'removeWindowScrollListener').and.callThrough();
 
       component.ngOnDestroy();
 
@@ -207,51 +206,6 @@ describe('PoChartCircular:', () => {
       expect(component['animationSetup']).toHaveBeenCalled();
     });
 
-    describe('changeTooltipPosition:', () => {
-      it('should call `setTooltipPositions` and `renderer.setStyle` to set tooltip position', () => {
-        const tooltipPositions = { left: 10, top: 20 };
-        const event = new MouseEvent('leave');
-
-        const tooltipElement = component.chartBody.nativeElement.querySelector('.po-chart-tooltip');
-
-        component.tooltipElement = tooltipElement;
-
-        spyOn(component, <any>'showTooltip');
-        spyOn(component, <any>'setTooltipPositions').and.returnValue(tooltipPositions);
-        spyOn(component['renderer'], 'setStyle');
-
-        component['changeTooltipPosition'](event);
-
-        expect(component['renderer'].setStyle).toHaveBeenCalledWith(
-          component.tooltipElement,
-          'left',
-          `${tooltipPositions.left}px`
-        );
-        expect(component['renderer'].setStyle).toHaveBeenCalledWith(
-          component.tooltipElement,
-          'top',
-          `${tooltipPositions.top}px`
-        );
-        expect(component['setTooltipPositions']).toHaveBeenCalledWith(event);
-        expect(component['showTooltip']).toHaveBeenCalled();
-      });
-
-      it('should not call `showTooltip` if tooltipElement is not declared', () => {
-        const tooltipPositions = { left: 10, top: 20 };
-        const event = new MouseEvent('leave');
-
-        component.tooltipElement = undefined;
-
-        spyOn(component, <any>'showTooltip');
-        spyOn(component, <any>'setTooltipPositions').and.returnValue(tooltipPositions);
-        spyOn(component['renderer'], 'setStyle');
-
-        component['changeTooltipPosition'](event);
-
-        expect(component['showTooltip']).not.toHaveBeenCalled();
-      });
-    });
-
     it('createPath: should create a svg path element with some attributes and append it into `svgPathsWrapper`', () => {
       const serie = { category: 'po', value: 2 };
       const svgPathsWrapper = { appendChild: () => {} };
@@ -288,7 +242,6 @@ describe('PoChartCircular:', () => {
       const eventMock = { target: { getAttributeNS: () => 'First' } };
       const serie = { value: 10, description: 'First' };
 
-      component.type = PoChartType.Gauge;
       component.colors = PoDefaultColors[0];
       component['series'] = [{ ...serie }];
 
@@ -324,16 +277,6 @@ describe('PoChartCircular:', () => {
       });
     });
 
-    it('showTooltip: should remove `po-invisible` class', () => {
-      component.tooltipElement = component.chartBody.nativeElement.lastChild;
-
-      spyOn(component['renderer'], 'removeClass');
-
-      component['showTooltip']();
-
-      expect(component['renderer'].removeClass).toHaveBeenCalledWith(component.tooltipElement, 'po-invisible');
-    });
-
     it('onWindowResize: should call `calculateSVGDimensions` and set `svgElement` attribute values ', () => {
       spyOn(component['renderer'], 'setAttribute');
       spyOn(component, <any>'calculateSVGDimensions');
@@ -352,18 +295,22 @@ describe('PoChartCircular:', () => {
       expect(component['windowResizeListener']).toHaveBeenCalled();
     });
 
-    it('setTooltipPositions: should set the tooltip coordinates if triggers mouse enter`s event', () => {
-      component.tooltipElement = component.chartBody.nativeElement.lastChild;
-      const event: any = { clientX: 200, clientY: 200 };
-      const displacement = 8;
-      const expectedReturnValue = {
-        left: event.clientX - component.tooltipElement.offsetWidth / 2,
-        top: event.clientY - component.tooltipElement.offsetHeight - displacement
-      };
+    it('removeWindowResizeListener: shouldn`t remove resize listener', () => {
+      spyOn(component, <any>'windowResizeListener');
 
-      const tooltipPosition = component['setTooltipPositions'](event);
+      component['windowResizeListener'] = undefined;
+      component['removeWindowResizeListener']();
 
-      expect(tooltipPosition).toEqual(expectedReturnValue);
+      expect(component['windowResizeListener']).toBeUndefined();
+    });
+
+    it('removeWindowResizeListener: shouldn`t remove Scroll Listener', () => {
+      spyOn(component, <any>'windowScrollListener');
+
+      component['windowScrollListener'] = undefined;
+      component['removeWindowScrollListener']();
+
+      expect(component['windowScrollListener']).toBeUndefined();
     });
 
     it('drawPath: should call `setAttribute` with `d` and `coordinates` of path object', () => {
@@ -390,36 +337,9 @@ describe('PoChartCircular:', () => {
       expect(path.d.includes('Z')).toBe(true);
     });
 
-    it('drawPath: should call `setAttribute` with `d` and `coordinates` of path without line `L` if type is gauge', () => {
-      const chartItemStartAngle = 10;
-      const chartItemEndAngle = 20;
-
-      const path = {
-        d: '',
-        setAttribute: function f(attr, value) {
-          this[attr] = value;
-        }
-      };
-
-      component['centerX'] = 10;
-      component.type = PoChartType.Gauge;
-
-      spyOn(path, 'setAttribute').and.callThrough();
-
-      component['drawPath'](path, chartItemStartAngle, chartItemEndAngle);
-
-      expect(typeof path.d === 'string').toBe(true);
-      expect(path.setAttribute).toHaveBeenCalled();
-      expect(path.d.includes('M')).toBe(true);
-      expect(path.d.includes('A')).toBe(true);
-      expect(path.d.includes('L')).toBe(false);
-      expect(path.d.includes('Z')).toBe(true);
-    });
-
     it(`onMouseClick: should call 'onSerieClick.next' passing the serie object if type is gauge`, () => {
       const serie = { value: 10, description: 'First' };
 
-      component.type = PoChartType.Gauge;
       component.colors = PoDefaultColors[0];
       component['series'] = [{ ...serie }];
 
@@ -499,47 +419,12 @@ describe('PoChartCircular:', () => {
       spyOn(component['renderer'], 'createElement');
       spyOn(component['series'], 'forEach').and.callThrough();
       spyOn(component, <any>'createPath');
-      spyOn(component, <any>'appendGaugeBackgroundPathElement');
 
       component['createPaths']();
 
       expect(component['renderer'].createElement).toHaveBeenCalledWith('svg:g', 'svg');
       expect(component['series'].forEach).toHaveBeenCalled();
       expect(component['createPath']).toHaveBeenCalled();
-      expect(component['appendGaugeBackgroundPathElement']).not.toHaveBeenCalled();
-    });
-
-    it('createPaths: should call `appendGaugeBackgroundPathElement` if type is `gauge`', () => {
-      component.colors = PoDefaultColors[0];
-      component['series'] = [{ value: 10, description: 'First' }];
-      component.type = PoChartType.Gauge;
-
-      spyOn(component, <any>'appendGaugeBackgroundPathElement');
-
-      component['createPaths']();
-
-      expect(component['appendGaugeBackgroundPathElement']).toHaveBeenCalled();
-    });
-
-    it('createPaths: shouldn`t call `createPath` if type is gauge and serie`s property value is equal 0', () => {
-      const fakeThis = {
-        colors: PoDefaultColors[1],
-        series: [{ value: 0, description: 'First' }],
-        type: PoChartType.Gauge,
-        isChartGaugeType: true,
-        renderer: {
-          createElement: () => {}
-        },
-        createPath: () => {},
-        appendGaugeBackgroundPathElement: () => {},
-        isSerieValueEqualZero: () => true
-      };
-
-      spyOn(fakeThis, 'createPath');
-
-      component['createPaths'].call(fakeThis);
-
-      expect(fakeThis.createPath).not.toHaveBeenCalled();
     });
 
     it(`createSVGElements: should create svgElement and call 'createPaths', 'createTexts',
@@ -560,19 +445,6 @@ describe('PoChartCircular:', () => {
       expect(component['renderer'].createElement).toHaveBeenCalledWith('svg:svg', 'svg');
       expect(component['renderer'].setAttribute).toHaveBeenCalledTimes(5);
       expect(component['svgContainer'].nativeElement.appendChild).toHaveBeenCalledWith(component.svgElement);
-    });
-
-    it('createSVGElements: should set `xMidYMax` to `preservAspectRatio` if type is `gauge`', () => {
-      const expectedPreserveAspectRatio = 'xMidYMax meet';
-      component.type = PoChartType.Gauge;
-      component.colors = PoDefaultColors[0];
-      component.series = [{ category: 'po', value: 1 }];
-      component.centerX = 500;
-      component.chartWrapper = 1000;
-
-      component['createSVGElements']();
-
-      expect(component['svgElement'].getAttribute('preserveAspectRatio')).toEqual(expectedPreserveAspectRatio);
     });
 
     it('createSVGElements: should set `xMidYMin` to `preservAspectRatio` if type different from `gauge`', () => {
@@ -602,22 +474,7 @@ describe('PoChartCircular:', () => {
       );
     });
 
-    it('createSVGElements: should set properly viewBox attribute values if type is `gauge`', () => {
-      component.type = PoChartType.Gauge;
-      component.colors = PoDefaultColors[0];
-      component.series = [{ category: 'po', value: 1 }];
-      component.centerX = 500;
-      component.chartWrapper = 1000;
-      const expectedGaugeHeight = (component.centerX + component.centerX * poChartGaugeSerieWidth).toString();
-
-      component['createSVGElements']();
-
-      expect(component['svgElement'].getAttribute('viewBox')).toEqual(
-        `0 0 ${component.chartWrapper} ${expectedGaugeHeight}`
-      );
-    });
-
-    it('setEventListeners: should call `renderer.listen` ten times and set `windowResizeListener`', () => {
+    it('setEventListeners: should call `renderer.listen` set `windowResizeListener`', () => {
       const chartSeries = [
         '<svg:path class="po-path-item" fill="#0C6C94" data-tooltip-value="1"></svg:path>',
         '<svg:path class="po-path-item" fill="#0B92B4" data-tooltip-value="2"></svg:path>'
@@ -640,31 +497,6 @@ describe('PoChartCircular:', () => {
       component['setEventListeners']();
       expect(component['windowResizeListener']).toBeDefined();
       expect(component['windowScrollListener']).toBeDefined();
-      expect(component['renderer'].listen).toHaveBeenCalledTimes(10);
-    });
-
-    it('setEventListeners: should call `renderer.listen` 6 times if type is `gauge`', () => {
-      const chartSeries = [
-        '<svg:path class="po-path-item" fill="#0C6C94" data-tooltip-value="1"></svg:path>',
-        '<svg:path class="po-path-item" fill="#0B92B4" data-tooltip-value="2"></svg:path>'
-      ];
-
-      component['el'] = <any>{
-        nativeElement: {
-          querySelectorAll: () => {}
-        }
-      };
-
-      component.type = PoChartType.Gauge;
-
-      spyOn(component['el'].nativeElement, 'querySelectorAll').and.returnValue(chartSeries);
-      spyOn(component, <any>'checkingIfScrollsWithPoPage').and.returnValue(window);
-
-      spyOn(component['renderer'], 'listen').and.returnValue(() => {});
-
-      component['setEventListeners']();
-
-      expect(component['renderer'].listen).toHaveBeenCalledTimes(6);
     });
 
     it('setEventListeners: should call `renderer.listen` twice times and set `windowResizeListener` and `windowScrollListener`', () => {
@@ -736,11 +568,6 @@ describe('PoChartCircular:', () => {
     it('calculateEndAngle: should return endAngle number', () => {
       const expectedResult = component['calculateEndAngle'](10, 100);
       expect(typeof expectedResult === 'number').toBe(true);
-
-      component.type = PoChartType.Gauge;
-
-      const expectedGaugeResult = component['calculateEndAngle'](10, 100);
-      expect(typeof expectedGaugeResult === 'number').toBe(true);
     });
 
     it('setElementAttributes: should call renderer.setAttribute 3 times and with `data-tooltip-text`', () => {
@@ -809,25 +636,6 @@ describe('PoChartCircular:', () => {
       expect(component['getTooltipValue']).toHaveBeenCalledWith(serie.value);
       expect(component['renderer'].setAttribute).toHaveBeenCalledTimes(3);
       expect(component['renderer'].setAttribute).toHaveBeenCalledWith(svgPath, 'data-tooltip-text', `po: 2`);
-    });
-
-    it('setElementAttributes: shouldn`t call `getTooltipValue` and call `setAttribute` passing `description` as param`', () => {
-      const serie: PoChartGaugeSerie = { description: 'Description', value: 2 };
-      const svgPath = '<text></text>';
-      component.type = PoChartType.Gauge;
-
-      spyOn(component['renderer'], 'setAttribute');
-      spyOn(component['renderer'], 'createElement').and.returnValue(svgPath);
-      spyOn(component, <any>'getTooltipValue').and.callThrough();
-
-      component['setElementAttributes'](svgPath, serie);
-
-      expect(component['getTooltipValue']).not.toHaveBeenCalled();
-      expect(component['renderer'].setAttribute).toHaveBeenCalledWith(
-        svgPath,
-        'data-tooltip-description',
-        `${serie.description}`
-      );
     });
 
     it('getTooltipValue: should return value as string if `type` is pie', () => {
@@ -1098,17 +906,6 @@ describe('PoChartCircular:', () => {
       expect(expectedResult).toBe(expectedValue);
     });
 
-    it('setInnerRadius: should update `innerRadius` with `470` if `type` is gauge', () => {
-      const expectedValue = 470;
-
-      component.centerX = 500;
-      const type = PoChartType.Gauge;
-
-      const expectedResult = component['setInnerRadius'](type);
-
-      expect(expectedResult).toBe(expectedValue);
-    });
-
     it('getSeriesWithValue: should return only series with value and color attr', () => {
       const invalidSeries = [{ description: 'Valor 0', value: 0 }];
       const series = [
@@ -1166,32 +963,6 @@ describe('PoChartCircular:', () => {
       const validSeries = component['getSeriesWithValue'](seriesParam);
 
       expect(validSeries.length).toEqual(series.length);
-    });
-
-    it('appendGaugeBackgroundPathElement: should create a svg path and append it into `svgPathsWrapper`', () => {
-      const svgPathsWrapper = { appendChild: () => {} };
-
-      spyOn(component['renderer'], 'setAttribute');
-      spyOn(component['renderer'], 'appendChild');
-      spyOn(svgPathsWrapper, 'appendChild');
-
-      component['appendGaugeBackgroundPathElement'](svgPathsWrapper);
-
-      expect(component['renderer'].setAttribute).toHaveBeenCalledTimes(1);
-      expect(component['renderer'].appendChild).toHaveBeenCalledTimes(1);
-      expect(svgPathsWrapper.appendChild).toHaveBeenCalled();
-    });
-
-    it('isSerieValueEqualZero: should return true if serie`s value is equal 0', () => {
-      const fakeSerie = { series: [{ value: 0, description: 'Zero' }] };
-
-      expect(component['isSerieValueEqualZero'].call(fakeSerie)).toBeTruthy();
-    });
-
-    it('isSerieValueEqualZero: should return false if serie`s value different from 0', () => {
-      const fakeSerie = { series: [{ value: 1, description: 'One' }] };
-
-      expect(component['isSerieValueEqualZero'].call(fakeSerie)).toBeFalsy();
     });
   });
 });
