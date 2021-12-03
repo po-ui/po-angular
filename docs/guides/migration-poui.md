@@ -54,7 +54,7 @@ ng update @po-ui/ng-components@<version> --allow-dirty
 Por exemplo:
 
 ```
-ng update @po-ui/ng-components@5 --allow-dirty
+ng update @po-ui/ng-components@6 --allow-dirty
 ```
 
 O `ng update` ajudará nas alterações necessárias para seu projeto seguir atualizado, que são elas:
@@ -78,13 +78,13 @@ Para realizar a migração, devemos executar o comando `ng update`, conforme exe
 *flag* `--allow-dirty` em conjunto.
 
 ```
-ng update @po-ui/ng-sync@<version> --allow-dirty
+ng update @po-ui/ng-sync@<version> --allow-dirty --force
 ```
 
 Por exemplo:
 
 ```
-ng update @po-ui/ng-sync@5 --allow-dirty
+ng update @po-ui/ng-sync@6 --allow-dirty --force
 ```
 
 O `ng update` ajudará nas alterações necessárias para seu projeto, que será atualizar as versões dos pacotes:
