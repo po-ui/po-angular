@@ -2,6 +2,66 @@
 
 All notable changes to this project will be documented in this file. See [standard-version](https://github.com/conventional-changelog/standard-version) for commit guidelines.
 
+# [6.0.0-rc.1](https://github.com/po-ui/po-angular/compare/v5.22.1...v6.0.0-rc.1) (2021-12-06)
+
+
+### Code Refactoring
+
+* **chart:** remove a propriedade `p-value`, `p-category` e interface `PoChartGaugeSerie` ([94a1d95](https://github.com/po-ui/po-angular/commit/94a1d9564e29c38a56bb0d066f5ffc993d6ae8ac))
+* **navbar:** remove a propriedade `p-menu` ([28fa3b7](https://github.com/po-ui/po-angular/commit/28fa3b78338c0c99459456796559a644d17a6ee0))
+
+
+### Features
+
+* **angular:** atualiza para o angular v13 ([f5e81f2](https://github.com/po-ui/po-angular/commit/f5e81f2db27be09a25f625328686ff9bb7ac0fef))
+* **migration:** adiciona schematics de ng update e atualiza documentação de migração para v6 ([24f0b6c](https://github.com/po-ui/po-angular/commit/24f0b6c243dfc9c1cc0104ae299a98143696c49c))
+* **table:** move coluna de ações para esquerda e incluí propriedade `p-actions-right` ([75d77a4](https://github.com/po-ui/po-angular/commit/75d77a4cc38e98b3a3440256c32a4ffd196068d8))
+* **table:** permite utilizar objetos aninhados ([679caa4](https://github.com/po-ui/po-angular/commit/679caa45425a7c2429ba847b388bf1967b9e25ac))
+
+
+### BREAKING CHANGES
+
+* **angular:** deve ser utilizado o Angular v13
+
+* **chart:** removida propriedade `p-value`, `p-category` e a interface `PoChartGaugeSerie`
+
+Antes:
+```
+<po-chart p-series="PoChartGaugeSerie" ></po-chart>
+```
+
+Depois:
+```
+<po-gauge></po-gauge>
+```
+
+Antes:
+```
+<po-chart p-value="number" p-category="category"></po-chart>
+```
+
+Depois:
+```
+<po-chart p-data="number | Array<Number" p-label="label"></po-chart>
+```
+
+* **navbar:** removida propriedade p-menu
+
+Foi removida a propriedade `p-menu` do po-navbar que se torna
+desnecessário, pois o NavBar recupera o menu corrente da aplicação, para popular
+os itens do Navbar no Menu quando estiver responsivo.
+
+Antes:
+```
+<po-navbar p-menu="PoMenuComponent" ...></po-navbar>
+```
+
+Depois:
+```
+<po-navbar ...></po-navbar>
+```
+
+
 ## [5.22.1](https://github.com/po-ui/po-angular/compare/v5.22.0...v5.22.1) (2021-11-29)
 
 
