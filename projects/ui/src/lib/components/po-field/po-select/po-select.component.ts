@@ -97,6 +97,13 @@ export class PoSelectComponent extends PoFieldValidateModel<any> implements Afte
    * @description
    *
    * Função para atualizar o ngModel do componente, necessário quando não for utilizado dentro da tag form.
+   *
+   * Na versão 12.2.0 do Angular a verificação `strictTemplates` vem true como default. Portanto, para utilizar
+   * two-way binding no componente deve se utilizar da seguinte forma:
+   *
+   * ```
+   * <po-select ... [ngModel]="selectModel" (ngModelChange)="selectModel = $event"> </po-select>
+   * ```
    */
   @Output('ngModelChange') ngModelChange: EventEmitter<any> = new EventEmitter<any>();
 
