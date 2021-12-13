@@ -864,11 +864,11 @@ describe('PoDynamicFormFieldsBaseComponent:', () => {
 
     it('printError: should call console.error with error message', () => {
       const error = 'error';
-      spyOn(global.console, 'error');
+      spyOn(console, 'error');
 
       component['printError'](error);
 
-      expect(global.console.error).toHaveBeenCalledWith(error);
+      expect(console.error).toHaveBeenCalledWith(error);
     });
   });
 });
