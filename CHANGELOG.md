@@ -2,6 +2,19 @@
 
 All notable changes to this project will be documented in this file. See [standard-version](https://github.com/conventional-changelog/standard-version) for commit guidelines.
 
+## [5.22.2](https://github.com/po-ui/po-angular/compare/v5.22.1...v5.22.2) (2021-12-13)
+
+### Docs
+
+**select** ajusta documentação para utilização do `ngModelChange` em novas aplicações a partir da versão 12.2.0 do Angular ([a237859](https://github.com/po-ui/po-angular/commit/a2378598886468025eb50914ff9edd90fc5d3be8))
+
+**upload** ajusta documentação para utilização do `ngModelChange` em novas aplicações a partir da versão 12.2.0 do Angular ([b40bff7](https://github.com/po-ui/po-angular/commit/b40bff7c58570c1ac476aeae0bbe5901fcad9e0c))
+
+**checkbox-group** ajusta documentação para utilização do `ngModelChange` em novas aplicações a partir da versão 12.2.0 do Angular ([6322adb](https://github.com/po-ui/po-angular/commit/6322adb5687cf5746df25ddc072f416c0aa7a47b))
+
+**combo** ajusta documentação para utilização do `ngModelChange` em novas aplicações a partir da versão 12.2.0 do Angular ([17a873a](https://github.com/po-ui/po-angular/commit/17a873a952421765f5a900daba837eaa37ac1c2f))
+
+
 ## [5.22.1](https://github.com/po-ui/po-angular/compare/v5.22.0...v5.22.1) (2021-11-29)
 
 

@@ -1,7 +1,7 @@
 {
   "name": "@po-ui/ng-storage",
   "version": "0.0.0-PLACEHOLDER",
-  "tag": "next",
+  "tag": "v5-lts",
   "description": "PO UI - Storage",
   "author": "PO UI",
   "license": "MIT",
