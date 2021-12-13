@@ -22,7 +22,7 @@
       "factory": "./ng-update/v5/index"
     },
     "migration-v6": {
-      "version": "0.0.0-PLACEHOLDER",
+      "version": "6",
       "description": "Atualiza @po-ui/ng-components para v6",
       "factory": "./ng-update/v6/index"
     }
