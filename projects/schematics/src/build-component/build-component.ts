@@ -8,12 +8,13 @@ import {
   Tree,
   url,
   filter,
-  noop
+  noop,
+  SchematicsException
 } from '@angular-devkit/schematics';
 import { buildRelativePath, findModuleFromOptions } from '@schematics/angular/utility/find-module';
-import { normalize, strings } from '@angular-devkit/core';
+import { normalize, strings, tags } from '@angular-devkit/core';
 import { parseName } from '@schematics/angular/utility/parse-name';
-import { validateHtmlSelector, validateName } from '@schematics/angular/utility/validation';
+import { validateHtmlSelector } from '@schematics/angular/utility/validation';
 
 import { supportedCssExtensions } from '../utils/supported-css-extensions';
 import { getProjectFromWorkspace, getDefaultPath, getWorkspaceConfigGracefully } from '../project';
@@ -60,6 +61,13 @@ export function buildComponent(options: ComponentOptions): Rule {
       mergeWith(templateSource)
     ]);
   };
+}
+
+function validateName(name: string): void {
+  if (name && /^\d/.test(name)) {
+    throw new SchematicsException(tags.oneLine`name (${name})
+        can not start with a digit.`);
+  }
 }
 
 function buildSelector(options: ComponentOptions, projectPrefix: string) {

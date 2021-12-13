@@ -1,8 +1,17 @@
-import { apply, applyTemplates, chain, mergeWith, move, Rule, url, Tree } from '@angular-devkit/schematics';
+import {
+  apply,
+  applyTemplates,
+  chain,
+  mergeWith,
+  move,
+  Rule,
+  url,
+  Tree,
+  SchematicsException
+} from '@angular-devkit/schematics';
 
-import { strings } from '@angular-devkit/core';
+import { strings, tags } from '@angular-devkit/core';
 import { parseName } from '@schematics/angular/utility/parse-name';
-import { validateName } from '@schematics/angular/utility/validation';
 
 import { getProjectFromWorkspace, getDefaultPath, getWorkspaceConfigGracefully } from '../project';
 import { FileOptions } from './file-options.interface';
@@ -33,4 +42,11 @@ export function buildFile(options: FileOptions): Rule {
 
     return chain([mergeWith(templateSource)]);
   };
+}
+
+function validateName(name: string): void {
+  if (name && /^\d/.test(name)) {
+    throw new SchematicsException(tags.oneLine`name (${name})
+        can not start with a digit.`);
+  }
 }
