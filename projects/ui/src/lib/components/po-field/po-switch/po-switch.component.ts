@@ -15,6 +15,8 @@ import { PoKeyCodeEnum } from './../../../enums/po-key-code.enum';
 
 import { PoSwitchLabelPosition } from './po-switch-label-position.enum';
 
+import '@animaliads/ani-switch';
+
 /**
  * @docsExtends PoFieldModel
  *
