@@ -320,9 +320,9 @@ export class PoTableColumnManagerComponent implements OnChanges, OnDestroy {
   }
 
   private stringify(columns: Array<PoTableColumn>) {
-    // não faz o stringify da propriedade icon, pois pode conter objeto complexo e disparar um erro.
+    // não faz o stringify da propriedade icon e searchService, pois pode conter objeto complexo e disparar um erro.
     return JSON.stringify(columns, (key, value) => {
-      if (key !== 'icon') {
+      if (key !== 'icon' && key !== 'searchService') {
         return value;
       }
     });

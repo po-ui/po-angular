@@ -1105,6 +1105,13 @@ describe('PoTableColumnManagerComponent:', () => {
         const filter = component['stringify'](columns);
         expect(filter).toEqual(result);
       });
+
+      it('should return stringify value with filter without searchService', () => {
+        const columns: Array<any> = [{ property: 'test' }, { searchService: 'service/test' }];
+        const result = '[{"property":"test"},{}]';
+        const filter = component['stringify'](columns);
+        expect(filter).toEqual(result);
+      });
     });
   });
 });
