@@ -47,6 +47,13 @@ describe('PoPageDynamicSearchBaseComponent:', () => {
       expectPropertiesValues(component, 'filters', validValues, validValues);
     });
 
+    it('should return stringify value with filter without searchService', () => {
+      const columns: Array<any> = [{ property: 'test' }, { searchService: 'service/test' }];
+      const result = '[{"property":"test"},{}]';
+      const filter = component['stringify'](columns);
+      expect(filter).toEqual(result);
+    });
+
     describe('p-literals:', () => {
       it('should be in portuguese if browser is setted with an unsupported language', () => {
         component['language'] = 'zw';
