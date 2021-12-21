@@ -239,7 +239,7 @@ export abstract class PoPageDynamicSearchBaseComponent {
   @Input('p-filters') set filters(filters: Array<PoPageDynamicSearchFilters>) {
     this._filters = Array.isArray(filters) ? [...filters] : [];
 
-    if (JSON.stringify(this._filters) !== JSON.stringify(this.previousFilters)) {
+    if (this.stringify(this._filters) !== this.stringify(this.previousFilters)) {
       this.onChangeFilters(this.filters);
 
       this.previousFilters = [...this._filters];
@@ -277,6 +277,15 @@ export abstract class PoPageDynamicSearchBaseComponent {
       confirmLabel: literals.filterConfirmLabel,
       title: literals.filterTitle
     };
+  }
+
+  private stringify(columns: Array<PoPageDynamicSearchFilters>) {
+    // não faz o stringify da propriedade searchService, pois pode conter objeto complexo e disparar um erro.
+    return JSON.stringify(columns, (key, value) => {
+      if (key !== 'searchService') {
+        return value;
+      }
+    });
   }
 
   abstract onChangeFilters(filters: Array<PoPageDynamicSearchFilters>);
