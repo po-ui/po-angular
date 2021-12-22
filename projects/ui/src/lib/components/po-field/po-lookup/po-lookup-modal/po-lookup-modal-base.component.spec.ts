@@ -532,5 +532,17 @@ describe('PoLookupModalBaseComponent:', () => {
 
       expect(component.selecteds).toEqual(expectSelecteds);
     });
+
+    it('Should emit item selected when component is not multiple ', () => {
+      component.selecteds = [{ value: 123456789 }];
+      component.multiple = true;
+      component.poModal = <any>{ close: () => {} };
+
+      spyOn(component.model, 'emit');
+
+      component.primaryAction.action();
+
+      expect(component.model.emit).toHaveBeenCalledWith([{ value: 123456789 }]);
+    });
   });
 });

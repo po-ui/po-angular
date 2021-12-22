@@ -179,8 +179,16 @@ export abstract class PoLookupModalBaseComponent implements OnDestroy, OnInit {
   // eslint-disable-next-line @typescript-eslint/member-ordering
   primaryAction: PoModalAction = {
     action: () => {
-      const selectedsItems = this.selecteds;
-
+      let selectedsItems: Array<any> = [];
+      if (!this.multiple) {
+        this.items.forEach(element => {
+          if (element['$selected']) {
+            selectedsItems.push(element);
+          }
+        });
+      } else {
+        selectedsItems = this.selecteds;
+      }
       this.model.emit(selectedsItems);
       this.poModal.close();
     },
