@@ -1,6 +1,6 @@
-import { HttpClient } from '@angular/common/http';
+import { HttpClient, HttpHeaders } from '@angular/common/http';
 import { Injectable } from '@angular/core';
-import { Observable, of } from 'rxjs';
+import { Observable } from 'rxjs';
 import { map, tap } from 'rxjs/operators';
 import { CustomComponent, CustomComponents } from '../po-custom-area.interface';
 
@@ -71,7 +71,18 @@ export class PoCustomAreaService {
       // return of(true);
     }
 
-    return this.http.get<CustomComponent>(`${this.api}/${component}`).pipe(
+    // Este `authorization` precisa ser recebido do backend do produto padrão
+    const authorization =
+      'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ1c2VybmFtZSI6ImpvaG4iLCJzdWIiOjEsImlhdCI6MTY0MDI4ODA2NiwiZXhwIjoxNjQwMjg4NjY2fQ.8_mM-1m8BuJzRPHonc_2yb4EFw2ICMoqs9BG7-c9axo';
+
+    const customHeaders = {
+      'Authorization': `Bearer ${authorization}`
+    };
+    const requestOptions = {
+      headers: new HttpHeaders(customHeaders)
+    };
+
+    return this.http.get<CustomComponent>(`${this.api}/${component}`, requestOptions).pipe(
       map(custom => ({ ...custom, src: atob(custom.src) })),
       map(custom => {
         const { src, ...customNoSrc } = custom;
