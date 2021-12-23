@@ -1,5 +1,7 @@
 import {
   AfterViewInit,
+  ChangeDetectionStrategy,
+  ChangeDetectorRef,
   Component,
   DoCheck,
   ElementRef,
@@ -47,6 +49,7 @@ import { PoRadioGroupBaseComponent } from './po-radio-group-base.component';
 @Component({
   selector: 'po-radio-group',
   templateUrl: './po-radio-group.component.html',
+  changeDetection: ChangeDetectionStrategy.OnPush,
   providers: [
     {
       provide: NG_VALUE_ACCESSOR,
@@ -72,7 +75,7 @@ export class PoRadioGroupComponent extends PoRadioGroupBaseComponent implements 
 
   differ: any;
 
-  constructor(differs: IterableDiffers) {
+  constructor(differs: IterableDiffers, private cd: ChangeDetectorRef) {
     super();
     this.differ = differs.find([]).create(null);
   }
@@ -88,6 +91,7 @@ export class PoRadioGroupComponent extends PoRadioGroupBaseComponent implements 
     if (change) {
       removeDuplicatedOptions(this.options);
     }
+    this.cd.markForCheck();
   }
 
   eventClick(value: any, disabled: any) {
