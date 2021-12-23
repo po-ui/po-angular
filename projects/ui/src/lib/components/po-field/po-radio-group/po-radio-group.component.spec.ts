@@ -30,8 +30,6 @@ describe('PoRadioGroupComponent:', () => {
     component.help = 'Help de teste';
     component.options = [{ value: '1', label: '1' }];
 
-    fixture.detectChanges();
-
     debugElement = fixture.debugElement.nativeElement;
   });
 
@@ -41,10 +39,12 @@ describe('PoRadioGroupComponent:', () => {
   });
 
   it('should have label', () => {
+    fixture.detectChanges();
     expect(debugElement.innerHTML).toContain('Label de teste');
   });
 
   it('should have help', () => {
+    fixture.detectChanges();
     expect(debugElement.innerHTML).toContain('Help de teste');
   });
 
@@ -61,6 +61,7 @@ describe('PoRadioGroupComponent:', () => {
   });
 
   it('should return input when exists a input with this value', () => {
+    fixture.detectChanges();
     expect(component.getElementByValue('1')).not.toBeNull();
   });
 
@@ -72,11 +73,12 @@ describe('PoRadioGroupComponent:', () => {
     const fakeThis = {
       differ: {
         diff: (opt: any) => false
+      },
+      cd: {
+        markForCheck: () => {}
       }
     };
-
     spyOn(UtilsFunctions, 'removeDuplicatedOptions');
-
     component.ngDoCheck.call(fakeThis);
     expect(removeDuplicatedOptions).not.toHaveBeenCalled();
   });
@@ -228,7 +230,7 @@ describe('PoRadioGroupComponent:', () => {
 
     it('keyup: should call `onKeyUp` when a arrowKey is pressed.', () => {
       spyOn(component, 'onKeyUp');
-
+      fixture.detectChanges();
       const input = debugElement.querySelector('input.po-radio-group-input');
       input.dispatchEvent(eventKeyBoard);
 
