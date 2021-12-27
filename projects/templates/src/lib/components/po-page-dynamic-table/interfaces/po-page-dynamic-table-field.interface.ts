@@ -23,6 +23,18 @@ export interface PoPageDynamicTableField extends PoDynamicFormField {
   allowColumnsManager?: boolean;
 
   /**
+   * @optional
+   *
+   * @description
+   *
+   * Controla se a coluna será considerada como "ordenável". Caso seja definido um valor falso, a coluna não será usada para
+   * ordenação.
+   *
+   * @default `true`
+   */
+  sortable?: boolean;
+
+  /**
    * Lista de objetos do tipo `PoTableColumnLabel` que representa as labels disponíveis na coluna do tipo `label`.
    *
    * Exemplo de utilização
