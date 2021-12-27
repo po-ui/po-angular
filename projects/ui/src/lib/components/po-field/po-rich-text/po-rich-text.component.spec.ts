@@ -33,7 +33,6 @@ describe('PoRichTextComponent:', () => {
   beforeEach(() => {
     fixture = TestBed.createComponent(PoRichTextComponent);
     component = fixture.componentInstance;
-    fixture.detectChanges();
     nativeElement = fixture.debugElement.nativeElement;
   });
 
