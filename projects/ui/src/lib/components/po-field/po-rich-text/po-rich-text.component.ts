@@ -1,4 +1,12 @@
-import { AfterViewInit, Component, ElementRef, forwardRef, OnDestroy, ViewChild } from '@angular/core';
+import {
+  AfterViewInit,
+  ChangeDetectionStrategy,
+  Component,
+  ElementRef,
+  forwardRef,
+  OnDestroy,
+  ViewChild
+} from '@angular/core';
 
 import { NG_VALIDATORS, NG_VALUE_ACCESSOR } from '@angular/forms';
 
@@ -49,7 +57,8 @@ const providers = [
 @Component({
   selector: 'po-rich-text',
   templateUrl: './po-rich-text.component.html',
-  providers
+  providers,
+  changeDetection: ChangeDetectionStrategy.OnPush
 })
 export class PoRichTextComponent extends PoRichTextBaseComponent implements AfterViewInit, OnDestroy {
   @ViewChild(PoRichTextBodyComponent, { static: true }) bodyElement: PoRichTextBodyComponent;
