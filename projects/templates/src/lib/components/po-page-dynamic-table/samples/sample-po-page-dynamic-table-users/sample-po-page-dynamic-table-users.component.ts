@@ -44,7 +44,7 @@ export class SamplePoPageDynamicTableUsersComponent {
   readonly fields: Array<any> = [
     { property: 'id', key: true, visible: false, filter: true },
     { property: 'name', label: 'Name', filter: true, gridColumns: 6 },
-    { property: 'genre', label: 'Genre', filter: true, gridColumns: 6, duplicate: true },
+    { property: 'genre', label: 'Genre', filter: true, gridColumns: 6, duplicate: true, sortable: false },
     { property: 'search', filter: true, visible: false },
     {
       property: 'birthdate',
