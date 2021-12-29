@@ -28,8 +28,6 @@ describe('PoMultiselectDropdownComponent:', () => {
       { label: 'label1', value: 'value1' },
       { label: 'label2', value: 'value2' }
     ];
-
-    fixture.detectChanges();
   });
 
   it('should be created', () => {
@@ -61,6 +59,7 @@ describe('PoMultiselectDropdownComponent:', () => {
   });
 
   it('should call updateSelectedValues and setFocus', () => {
+    fixture.detectChanges();
     component.hideSearch = false;
     spyOn(component, 'updateSelectedValues');
     spyOn(component.searchElement, 'setFocus');
@@ -70,6 +69,7 @@ describe('PoMultiselectDropdownComponent:', () => {
   });
 
   it('shouldn`t call setFocus in searchElement', () => {
+    fixture.detectChanges();
     component.hideSearch = true;
     spyOn(component, 'updateSelectedValues');
     spyOn(component.searchElement, 'setFocus');
@@ -189,7 +189,7 @@ describe('PoMultiselectDropdownComponent:', () => {
   it('should call setFocus and clean from searchElement', fakeAsync(() => {
     component.hideSearch = false;
     component.show = false;
-
+    fixture.detectChanges();
     spyOn(component.searchElement, 'setFocus');
     spyOn(component.searchElement, 'clean');
 
@@ -203,6 +203,7 @@ describe('PoMultiselectDropdownComponent:', () => {
   }));
 
   it('shouldn`t call setFocus and clean from searchElement because is hide', fakeAsync(() => {
+    fixture.detectChanges();
     component.hideSearch = true;
     component.show = false;
 
@@ -220,6 +221,8 @@ describe('PoMultiselectDropdownComponent:', () => {
   it('shouldn`t call setFocus and clean from searchElement because is not to open', fakeAsync(() => {
     component.hideSearch = false;
     component.show = true;
+
+    fixture.detectChanges();
 
     spyOn(component.searchElement, 'setFocus');
     spyOn(component.searchElement, 'clean');

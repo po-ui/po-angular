@@ -1,4 +1,13 @@
-import { Component, ElementRef, EventEmitter, Input, Output, ViewChild } from '@angular/core';
+import {
+  ChangeDetectionStrategy,
+  ChangeDetectorRef,
+  Component,
+  ElementRef,
+  EventEmitter,
+  Input,
+  Output,
+  ViewChild
+} from '@angular/core';
 
 import { isTypeof } from '../../../../utils/util';
 
@@ -13,7 +22,8 @@ import { PoMultiselectLiterals } from '../../index';
  */
 @Component({
   selector: 'po-multiselect-search',
-  templateUrl: './po-multiselect-search.component.html'
+  templateUrl: './po-multiselect-search.component.html',
+  changeDetection: ChangeDetectionStrategy.OnPush
 })
 export class PoMultiselectSearchComponent {
   @ViewChild('inputElement', { read: ElementRef, static: true }) inputElement: ElementRef;
@@ -25,6 +35,8 @@ export class PoMultiselectSearchComponent {
   @Output('p-change') change = new EventEmitter();
 
   private _placeholder?: string;
+
+  constructor(private cd: ChangeDetectorRef) {}
 
   /**
    * @optional
@@ -59,5 +71,6 @@ export class PoMultiselectSearchComponent {
 
   clean() {
     this.inputElement.nativeElement.value = '';
+    this.cd.markForCheck();
   }
 }

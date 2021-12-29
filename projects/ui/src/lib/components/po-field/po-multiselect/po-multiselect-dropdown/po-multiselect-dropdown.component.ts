@@ -1,4 +1,14 @@
-import { Component, ElementRef, EventEmitter, HostListener, Input, Output, ViewChild } from '@angular/core';
+import {
+  ChangeDetectionStrategy,
+  ChangeDetectorRef,
+  Component,
+  ElementRef,
+  EventEmitter,
+  HostListener,
+  Input,
+  Output,
+  ViewChild
+} from '@angular/core';
 
 import { PoMultiselectLiterals } from '../../index';
 import { PoMultiselectOption } from '../po-multiselect-option.interface';
@@ -13,7 +23,8 @@ import { PoMultiselectSearchComponent } from './../po-multiselect-search/po-mult
  */
 @Component({
   selector: 'po-multiselect-dropdown',
-  templateUrl: './po-multiselect-dropdown.component.html'
+  templateUrl: './po-multiselect-dropdown.component.html',
+  changeDetection: ChangeDetectionStrategy.OnPush
 })
 export class PoMultiselectDropdownComponent {
   /** Propriedade que indica se deve exibir o loading. */
@@ -60,6 +71,8 @@ export class PoMultiselectDropdownComponent {
   scrollTop = 0;
   show: boolean = false;
 
+  constructor(private cd: ChangeDetectorRef) {}
+
   get hasOptions() {
     return !!this.options?.length;
   }
@@ -73,6 +86,7 @@ export class PoMultiselectDropdownComponent {
 
   scrollTo(index) {
     this.scrollTop = index <= 2 ? 0 : index * 44 - 88;
+    this.cd.markForCheck();
   }
 
   isSelectedItem(option: PoMultiselectOption) {
@@ -95,7 +109,6 @@ export class PoMultiselectDropdownComponent {
     } else {
       this.selectedOptions = this.uniqueSelectedOptions(selectedValues);
     }
-
     this.change.emit(this.selectedOptions);
   }
 
@@ -105,7 +118,6 @@ export class PoMultiselectDropdownComponent {
     } else {
       this.selectedOptions = this.selectedOptions.filter(selectedOption => selectedOption.value !== option.value);
     }
-
     this.change.emit(this.selectedOptions);
   }
 
@@ -142,6 +154,7 @@ export class PoMultiselectDropdownComponent {
         this.searchElement.clean();
       }
     });
+    this.cd.markForCheck();
   }
 
   private uniqueSelectedOptions(selectedValues) {
