@@ -44,8 +44,6 @@ describe('PoComboComponent:', () => {
     component = fixture.componentInstance;
     component.label = 'Label de teste';
     component.help = 'Help de teste';
-
-    fixture.detectChanges();
   });
 
   it('should be created', () => {
@@ -53,10 +51,12 @@ describe('PoComboComponent:', () => {
   });
 
   it('should have a Label', () => {
+    fixture.detectChanges();
     expect(fixture.debugElement.nativeElement.innerHTML).toContain('Label de teste');
   });
 
   it('should have a Help', () => {
+    fixture.detectChanges();
     expect(fixture.debugElement.nativeElement.innerHTML).toContain('Help de teste');
   });
 
@@ -1164,6 +1164,7 @@ describe('PoComboComponent:', () => {
     });
 
     it('setContainerPosition: should call `controlPosition.setElements` and `adjustContainerPosition`', () => {
+      fixture.detectChanges();
       const containerOffset = 8;
       const customPositions = ['top', 'bottom'];
       const isSetElementWidth = true;
@@ -1420,7 +1421,6 @@ describe('PoComboComponent:', () => {
     beforeEach(() => {
       fixture = TestBed.createComponent(PoComboComponent);
       component = fixture.componentInstance;
-      fixture.detectChanges();
       nativeElement = fixture.debugElement.nativeElement;
     });
 
@@ -1604,12 +1604,8 @@ describe('PoComboComponent:', () => {
     it('shouldn´t display `noDataTemplate` if have `visibleOptions` and visibleOptions.length.', () => {
       component.visibleOptions = [{ label: '1', value: '1' }];
 
-      fixture.detectChanges();
-
       const comboInput = nativeElement.querySelector('.po-combo-input');
       comboInput.dispatchEvent(eventClick);
-
-      fixture.detectChanges();
 
       const noDataTemplate = nativeElement.querySelector('.po-combo-container-no-data');
 
@@ -1668,9 +1664,7 @@ describe('PoComboComponent:', () => {
         { label: 'São Paulo', value: 'sp' },
         { label: 'Rio Janeiro', value: 'rj' }
       ];
-
       fixture.debugElement.query(By.css('input')).triggerEventHandler('keyup', keyUpEvent);
-      fixture.detectChanges();
 
       expect(component.visibleOptions).toEqual([]);
       expect(fixture.debugElement.query(By.css('.po-combo-container-no-data'))).toBeTruthy();
@@ -1683,7 +1677,6 @@ describe('PoComboComponent:', () => {
       component.options = [...optionFound, { label: 'São Paulo', value: 'sp' }, { label: 'Rio Janeiro', value: 'rj' }];
 
       fixture.debugElement.query(By.css('input')).triggerEventHandler('keyup', keyUpEvent);
-      fixture.detectChanges();
 
       expect(component.visibleOptions).toEqual(optionFound);
       expect(fixture.debugElement.query(By.css('.po-combo-container-no-data'))).toBeNull();
@@ -1712,8 +1705,6 @@ describe('PoComboComponent - with service:', () => {
     component = fixture.componentInstance;
     component.label = 'Label de teste';
     component.help = 'Help de teste';
-
-    fixture.detectChanges();
 
     comboService = TestBed.inject(PoComboFilterService);
     httpMock = TestBed.inject(HttpTestingController);
