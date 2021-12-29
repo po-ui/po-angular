@@ -23,8 +23,6 @@ describe('PoMultiselectSearchComponent:', () => {
     component = fixture.componentInstance;
 
     component.literals = poMultiselectLiteralsDefault[poLocaleDefault];
-
-    fixture.detectChanges();
   });
 
   it('should be created', () => {
@@ -78,10 +76,24 @@ describe('PoMultiselectSearchComponent:', () => {
       expect(component.placeholder).toBe(poMultiselectLiteralsDefault.es.placeholderSearch);
     });
 
+    it('p-placeholder: should be poMultiselectLiteralsDefault.placeholderSearch if _placeholder is null', () => {
+      component.literals = poMultiselectLiteralsDefault.es;
+
+      component['_placeholder'] = null;
+
+      expect(component.placeholder).toBe(poMultiselectLiteralsDefault.es.placeholderSearch);
+    });
+
     it('p-placeholder: should return the "placeholderString"', () => {
       const placeholderString = 'placeholder test';
 
       expectPropertiesValues(component, 'placeholder', placeholderString, placeholderString);
+    });
+
+    it('inputValue: should be the same value as nativeElement.value', () => {
+      component.inputElement.nativeElement.value = 'test';
+
+      expect(component.inputValue).toBe('test');
     });
   });
 });

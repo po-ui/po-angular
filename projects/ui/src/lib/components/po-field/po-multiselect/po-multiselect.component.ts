@@ -1,5 +1,6 @@
 import {
   AfterViewInit,
+  ChangeDetectionStrategy,
   ChangeDetectorRef,
   Component,
   DoCheck,
@@ -80,6 +81,7 @@ const providers = [
 @Component({
   selector: 'po-multiselect',
   templateUrl: './po-multiselect.component.html',
+  changeDetection: ChangeDetectionStrategy.OnPush,
   providers
 })
 export class PoMultiselectComponent
@@ -212,6 +214,7 @@ export class PoMultiselectComponent
         }
       }
     }
+    this.changeDetector.markForCheck();
   }
 
   changeItems(changedItems) {
@@ -244,6 +247,7 @@ export class PoMultiselectComponent
         this.calculateVisibleItems();
       }, 200);
     }
+    this.changeDetector.markForCheck();
   }
 
   onBlur() {
@@ -293,6 +297,7 @@ export class PoMultiselectComponent
 
   setVisibleOptionsDropdown(options) {
     this.visibleOptionsDropdown = options;
+    this.changeDetector.markForCheck();
   }
 
   changeSearch(event) {
@@ -420,6 +425,7 @@ export class PoMultiselectComponent
     }
 
     window.removeEventListener('scroll', this.onScroll, true);
+    this.changeDetector.markForCheck();
   }
 
   private setPositionDropdown(): void {

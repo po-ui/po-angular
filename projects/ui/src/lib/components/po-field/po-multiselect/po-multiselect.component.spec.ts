@@ -62,8 +62,6 @@ describe('PoMultiselectComponent:', () => {
     component.options = [{ label: 'label', value: 1 }];
     component.autoHeight = true;
 
-    fixture.detectChanges();
-
     multiSelectService = TestBed.inject(PoMultiselectFilterService);
     httpMock = TestBed.inject(HttpTestingController);
 
@@ -108,6 +106,9 @@ describe('PoMultiselectComponent:', () => {
     const fakeThis = {
       getDisclaimersWidth: () => [100, 100, 100],
       getInputWidth: () => 150,
+      changeDetector: {
+        markForCheck: () => {}
+      },
       visibleDisclaimers: [],
       selectedOptions: selectedOptions,
       isCalculateVisibleItems: true
@@ -124,6 +125,9 @@ describe('PoMultiselectComponent:', () => {
     component.initialized = false;
     component.autoFocus = true;
     component.ngAfterViewInit();
+
+    fixture.detectChanges();
+
     expect(document.activeElement.tagName.toLowerCase()).toBe('div');
     expect(component.initialized).toBeTruthy();
   });
@@ -456,6 +460,9 @@ describe('PoMultiselectComponent:', () => {
       const fakeThis = {
         getDisclaimersWidth: () => [0, 0, 0],
         getInputWidth: () => 100,
+        changeDetector: {
+          markForCheck: () => {}
+        },
         visibleDisclaimers: [],
         selectedOptions: selectedOptions,
         isCalculateVisibleItems: true
@@ -471,6 +478,9 @@ describe('PoMultiselectComponent:', () => {
       const fakeThis = {
         getDisclaimersWidth: () => [0, 0, 0],
         getInputWidth: () => 0,
+        changeDetector: {
+          markForCheck: () => {}
+        },
         visibleDisclaimers: [],
         selectedOptions: [],
         isCalculateVisibleItems: false
@@ -511,6 +521,9 @@ describe('PoMultiselectComponent:', () => {
       const fakeThis = {
         getDisclaimersWidth: () => [100, 100, 100],
         getInputWidth: () => 200,
+        changeDetector: {
+          markForCheck: () => {}
+        },
         visibleDisclaimers: [],
         selectedOptions: selectedOptions,
         isCalculateVisibleItems: true
