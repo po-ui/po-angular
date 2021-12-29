@@ -1,5 +1,6 @@
 import {
   AfterViewInit,
+  ChangeDetectionStrategy,
   ChangeDetectorRef,
   Component,
   ContentChild,
@@ -81,6 +82,7 @@ const poComboContainerPositionDefault = 'bottom';
 @Component({
   selector: 'po-combo',
   templateUrl: './po-combo.component.html',
+  changeDetection: ChangeDetectionStrategy.OnPush,
   providers: [
     PoComboFilterService,
     PoControlPositionService,
