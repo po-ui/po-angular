@@ -1,4 +1,13 @@
-import { Component, ElementRef, forwardRef, Renderer2, ViewChild, AfterViewInit } from '@angular/core';
+import {
+  Component,
+  ElementRef,
+  forwardRef,
+  Renderer2,
+  ViewChild,
+  AfterViewInit,
+  ChangeDetectionStrategy,
+  ChangeDetectorRef
+} from '@angular/core';
 import { NG_VALIDATORS, NG_VALUE_ACCESSOR } from '@angular/forms';
 
 import { formatBytes, isMobile } from '../../../utils/util';
@@ -42,6 +51,7 @@ import { PoUploadStatus } from './po-upload-status.enum';
 @Component({
   selector: 'po-upload',
   templateUrl: './po-upload.component.html',
+  changeDetection: ChangeDetectionStrategy.OnPush,
   providers: [
     PoI18nPipe,
     PoUploadService,
@@ -87,6 +97,7 @@ export class PoUploadComponent extends PoUploadBaseComponent implements AfterVie
     public renderer: Renderer2,
     private i18nPipe: PoI18nPipe,
     private notification: PoNotificationService,
+    private cd: ChangeDetectorRef,
     languageService: PoLanguageService
   ) {
     super(uploadService, languageService);
@@ -286,6 +297,7 @@ export class PoUploadComponent extends PoUploadBaseComponent implements AfterVie
       } else {
         this.stopUploadHandler(file);
       }
+      this.cd.markForCheck();
     });
   }
 
@@ -327,6 +339,7 @@ export class PoUploadComponent extends PoUploadBaseComponent implements AfterVie
   private responseHandler(file: PoUploadFile, status: PoUploadStatus) {
     file.status = status;
     file.percent = 100;
+    this.cd.markForCheck();
   }
 
   // método responsável por setar os argumentos do i18nPipe de acordo com a restrição.
@@ -339,6 +352,7 @@ export class PoUploadComponent extends PoUploadBaseComponent implements AfterVie
   private stopUploadHandler(file: PoUploadFile) {
     file.status = PoUploadStatus.None;
     file.percent = 0;
+    this.cd.markForCheck();
   }
 
   private updateFiles(files) {
@@ -361,6 +375,7 @@ export class PoUploadComponent extends PoUploadBaseComponent implements AfterVie
   private uploadingHandler(file: any, percent: number) {
     file.status = PoUploadStatus.Uploading;
     file.percent = percent;
+    this.cd.markForCheck();
   }
 
   // retorna os objetos do array sem as propriedades: percent e displayName

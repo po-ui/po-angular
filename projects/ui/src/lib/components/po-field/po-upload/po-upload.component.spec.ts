@@ -58,7 +58,6 @@ describe('PoUploadComponent:', () => {
 
     fixture = TestBed.createComponent(PoUploadComponent);
     component = fixture.componentInstance;
-    fixture.detectChanges();
   });
 
   it('should be created', () => {
@@ -422,7 +421,6 @@ describe('PoUploadComponent:', () => {
         };
         spyOnProperty(component, 'displayDragDrop').and.returnValue(false);
 
-        fixture.detectChanges();
         const spy = spyOn(component['poUploadDragDropComponent'], 'focus');
 
         component.focus();
@@ -520,6 +518,9 @@ describe('PoUploadComponent:', () => {
             callBack();
           }
         },
+        cd: {
+          markForCheck: () => {}
+        },
         removeFile: function () {},
         stopUploadHandler: function () {}
       };
@@ -538,6 +539,9 @@ describe('PoUploadComponent:', () => {
           stopRequestByFile: function (fileParam, callBack) {
             callBack();
           }
+        },
+        cd: {
+          markForCheck: () => {}
         },
         removeFile: function () {},
         stopUploadHandler: function () {}
