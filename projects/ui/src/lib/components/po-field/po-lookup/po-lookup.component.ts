@@ -8,7 +8,9 @@ import {
   OnDestroy,
   OnInit,
   Renderer2,
-  ViewChild
+  ViewChild,
+  ChangeDetectionStrategy,
+  ChangeDetectorRef
 } from '@angular/core';
 import { NgControl, NG_VALIDATORS, NG_VALUE_ACCESSOR } from '@angular/forms';
 import { Subscription } from 'rxjs';
@@ -100,6 +102,7 @@ const providers = [
 @Component({
   selector: 'po-lookup',
   templateUrl: './po-lookup.component.html',
+  changeDetection: ChangeDetectionStrategy.OnPush,
   providers
 })
 export class PoLookupComponent extends PoLookupBaseComponent implements AfterViewInit, OnDestroy, OnInit, DoCheck {
@@ -123,6 +126,7 @@ export class PoLookupComponent extends PoLookupBaseComponent implements AfterVie
     private renderer: Renderer2,
     poLookupFilterService: PoLookupFilterService,
     private poLookupModalService: PoLookupModalService,
+    private cd: ChangeDetectorRef,
     injector: Injector
   ) {
     super(poLookupFilterService, injector);
@@ -146,6 +150,7 @@ export class PoLookupComponent extends PoLookupBaseComponent implements AfterVie
       this.debounceResize();
       this.visibleElement = true;
     }
+    this.cd.markForCheck();
   }
 
   ngOnDestroy() {
@@ -245,6 +250,7 @@ export class PoLookupComponent extends PoLookupBaseComponent implements AfterVie
     }));
 
     this.visibleDisclaimers = [...this.disclaimers];
+    this.cd.markForCheck();
   }
 
   setViewValue(value: any, object: any): void {
@@ -253,6 +259,7 @@ export class PoLookupComponent extends PoLookupBaseComponent implements AfterVie
     } else if (this.inputEl) {
       this.inputEl.nativeElement.value = this.valueToModel || this.valueToModel === 0 ? value : '';
     }
+    this.cd.markForCheck();
   }
 
   getViewValue(): string {

@@ -54,7 +54,6 @@ describe('PoLookupComponent:', () => {
       { property: 'label', label: 'Nome', type: 'string', fieldLabel: true }
     ];
     component['initializeColumn']();
-    fixture.detectChanges();
   });
 
   afterEach(() => {
@@ -78,6 +77,7 @@ describe('PoLookupComponent:', () => {
   }));
 
   it('should get value po by getViewValue method', () => {
+    fixture.detectChanges();
     component['valueToModel'] = '123';
     component.setViewValue('po', {});
 
@@ -87,6 +87,7 @@ describe('PoLookupComponent:', () => {
   it('method selectModel should not be called', inject(
     [LookupFilterService],
     (lookupFilterService: LookupFilterService) => {
+      fixture.detectChanges();
       component['oldValue'] = 'po';
       component.inputEl.nativeElement.value = 'po';
       component['onTouched'] = () => {};
@@ -141,6 +142,7 @@ describe('PoLookupComponent:', () => {
     it('searchEvent: should call `searchById` when the current value isn`t equal to the old value.', inject(
       [LookupFilterService],
       (lookupFilterService: LookupFilterService) => {
+        fixture.detectChanges();
         component.service = lookupFilterService;
         component.inputEl.nativeElement.value = 'po JOI';
         component['oldValue'] = 'po SP';
@@ -159,6 +161,7 @@ describe('PoLookupComponent:', () => {
     it('searchEvent: shouldn`t call `searchById` when the current value is equal to old value.', inject(
       [LookupFilterService],
       (lookupFilterService: LookupFilterService) => {
+        fixture.detectChanges();
         component.service = lookupFilterService;
         component.inputEl.nativeElement.value = 'po';
         component['oldValue'] = 'po';
@@ -175,6 +178,7 @@ describe('PoLookupComponent:', () => {
     ));
 
     it('searchEvent: shouldn´t throw error if onTouched is falsy', () => {
+      fixture.detectChanges();
       component['onTouched'] = null;
 
       const fnError = () => component.searchEvent();
@@ -183,6 +187,7 @@ describe('PoLookupComponent:', () => {
     });
 
     it(`searchEvent: should call searchById if 'oldValue' is null`, () => {
+      fixture.detectChanges();
       component['oldValue'] = null;
       const spySearchById = spyOn(component, 'searchById');
 
@@ -338,6 +343,7 @@ describe('PoLookupComponent:', () => {
     }));
 
     it('setViewValue: should call `setInputValueWipoieldFormat` if `fieldFormat` is defined', () => {
+      fixture.detectChanges();
       component.fieldFormat = valueFormated => `${valueFormated.value} - ${valueFormated.label}`;
 
       spyOn(component, <any>'setInputValueWipoieldFormat');
@@ -348,6 +354,7 @@ describe('PoLookupComponent:', () => {
     });
 
     it('setViewValue: should set nativeElement value with value if not have a formatField and have a valueToModel', () => {
+      fixture.detectChanges();
       component.fieldFormat = undefined;
       component['valueToModel'] = 123;
 
@@ -360,6 +367,7 @@ describe('PoLookupComponent:', () => {
     });
 
     it('setViewValue: should set nativeElement value with value if not have a formatField and valueToModel is 0', () => {
+      fixture.detectChanges();
       component.fieldFormat = undefined;
       component['valueToModel'] = 0;
 
@@ -369,6 +377,7 @@ describe('PoLookupComponent:', () => {
     });
 
     it('setViewValue: should set nativeElement value with `` if not have a formatField and not have a valueToModel', () => {
+      fixture.detectChanges();
       component.fieldFormat = undefined;
       component['valueToModel'] = undefined;
 
@@ -557,6 +566,7 @@ describe('PoLookupComponent:', () => {
     });
 
     it('updateVisibleItems: should concat `visibleDisclaimers` with items of disclaimers', () => {
+      fixture.detectChanges();
       const itemsDisclaimers = [
         {
           value: 'test',
@@ -579,6 +589,7 @@ describe('PoLookupComponent:', () => {
     });
 
     it(`updateVisibleItems: shouldn't concat 'visibleDisclaimers' with items of disclaimers`, () => {
+      fixture.detectChanges();
       const spyDebounceResize = spyOn(component, 'debounceResize');
 
       component.disclaimers = [];
@@ -597,6 +608,7 @@ describe('PoLookupComponent:', () => {
     });
 
     it('updateVisibleItems: should set true in `isCalculateVisibleItems` if `offsetWidth` is false', () => {
+      fixture.detectChanges();
       const spyDebounceResize = spyOn(component, 'debounceResize');
       component.disclaimers = [];
 
@@ -609,6 +621,7 @@ describe('PoLookupComponent:', () => {
     });
 
     it('updateVisibleItems: should set false in `isCalculateVisibleItems` if `offsetWidth` is true', () => {
+      fixture.detectChanges();
       component['isCalculateVisibleItems'] = false;
       const spyDebounceResize = spyOn(component, 'debounceResize');
       component.disclaimers = [];
@@ -644,6 +657,7 @@ describe('PoLookupComponent:', () => {
     }));
 
     it(`getInputWidth: should decrease by 40 the value of 'offsetWidth'`, () => {
+      fixture.detectChanges();
       spyOnProperty(component.inputEl.nativeElement, 'offsetWidth').and.returnValue(100);
 
       const inputWidthValue = component.getInputWidth();
@@ -652,6 +666,7 @@ describe('PoLookupComponent:', () => {
     });
 
     it(`getDisclaimersWidth: should return a Array of width disclaimers'`, () => {
+      fixture.detectChanges();
       const itemsOfDisclaimer = [
         {
           value: 'valueTest',
@@ -885,6 +900,7 @@ describe('PoLookupComponent:', () => {
     });
 
     it('setInputValueWipoieldFormat: should set `inputValue` and `oldValue` with value returned of `fieldFormat`', () => {
+      fixture.detectChanges();
       component.fieldFormat = valueFormated => `${valueFormated.value} - ${valueFormated.label}`;
 
       component['setInputValueWipoieldFormat'](objectSelected);
@@ -894,6 +910,7 @@ describe('PoLookupComponent:', () => {
     });
 
     it('setInputValueWipoieldFormat: should set input value and old value with formatedField  if fieldFormat is array', () => {
+      fixture.detectChanges();
       component.fieldFormat = ['label', 'value'];
       component['setInputValueWipoieldFormat'](objectSelected);
       expect(component['oldValue']).toBe('teste - 123');
@@ -922,6 +939,7 @@ describe('PoLookupComponent:', () => {
     });
 
     it('setInputValueWipoieldFormat: should set `oldValue` and `inputValue` to `` ', () => {
+      fixture.detectChanges();
       component.fieldFormat = valueFormated => `${valueFormated.value} - ${valueFormated.label}`;
       component['oldValue'] = '';
       component.inputEl.nativeElement.value = '';
@@ -1017,6 +1035,7 @@ describe('PoLookupComponent:', () => {
     });
 
     it('ngDoCheck: should call debounceResize if isCalculateVisibleItems is true', () => {
+      fixture.detectChanges();
       component.visibleElement = true;
       component.initialized = true;
       component['isCalculateVisibleItems'] = true;
@@ -1061,6 +1080,7 @@ describe('PoLookupComponent:', () => {
     });
 
     it('should find .po-input-double-icon-right if clean and inputValue are truthy', () => {
+      fixture.detectChanges();
       component.clean = true;
       component.inputEl.nativeElement.value = 'abc';
 
@@ -1070,6 +1090,7 @@ describe('PoLookupComponent:', () => {
     });
 
     it('should find .po-input-icon-right if clean and inputValue are falsy', () => {
+      fixture.detectChanges();
       component.clean = false;
       component.inputEl.nativeElement.value = '';
 
@@ -1081,6 +1102,7 @@ describe('PoLookupComponent:', () => {
 
   describe('Integration', () => {
     it('should set input element value according with fieldLabel', fakeAsync(() => {
+      fixture.detectChanges();
       const serviceResponse = { id: 1234, name: 'Peter Parker', email: 'peterP@mail.com' };
       component.fieldValue = 'id';
       component.fieldLabel = 'name';
