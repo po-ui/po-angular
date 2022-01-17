@@ -2,6 +2,17 @@
 
 All notable changes to this project will be documented in this file. See [standard-version](https://github.com/conventional-changelog/standard-version) for commit guidelines.
 
+## [5.22.3](https://github.com/po-ui/po-angular/compare/v5.22.2...v5.22.3) (2022-01-17)
+
+
+### Bug Fixes
+
+* **dynamic-search:** corrige erro no gerenciador de colunas ([a8dd3bd](https://github.com/po-ui/po-angular/commit/a8dd3bd6bc1d39e4080a22d4062016a777a72fd7))
+* **lookup:** corrige model apagado ao selecionar a mesma opção ([b27d996](https://github.com/po-ui/po-angular/commit/b27d9960b90809ea508fec1f793816069f0f5861))
+* **table:** corrige erro no gerenciador de colunas ([a6b6d26](https://github.com/po-ui/po-angular/commit/a6b6d26ac59c6f3f54d4a86c097e768633b6363c))
+
+
+
 ## [5.22.2](https://github.com/po-ui/po-angular/compare/v5.22.1...v5.22.2) (2021-12-13)
 
 ### Docs
