@@ -2,6 +2,30 @@
 
 All notable changes to this project will be documented in this file. See [standard-version](https://github.com/conventional-changelog/standard-version) for commit guidelines.
 
+# [6.1.0](https://github.com/po-ui/po-angular/compare/v6.0.0...v6.1.0) (2022-01-17)
+
+
+### Bug Fixes
+
+* **dynamic-search:** corrige erro no gerenciador de colunas ([403be1a](https://github.com/po-ui/po-angular/commit/403be1a1b48862f11a5abe58c8d4588736b9b665))
+* **lookup:** corrige model apagado ao selecionar a mesma opção ([8c38c29](https://github.com/po-ui/po-angular/commit/8c38c29a690168e38435d03101e93e9e35d4871d))
+* **table:** corrige erro no gerenciador de colunas ([494033d](https://github.com/po-ui/po-angular/commit/494033db234deb5fa55315632f20ab56c1791df0))
+
+
+### Features
+
+* **page-dynamic-table:** adiciona propriedade `sortable` na interface `PoPageDynamicTableField` ([93e2f32](https://github.com/po-ui/po-angular/commit/93e2f3254c5c27e62114a122d6770a378bb7d32e))
+
+
+### Performance Improvements
+
+* **lookup:** implementa ChangeDetectionStrategy.OnPush ([7810d4d](https://github.com/po-ui/po-angular/commit/7810d4d94bd80410dcf255fdb253281a1ef90f9e))
+* **radio-group:** implementa ChangeDetectionStrategy.OnPush ([34fa74c](https://github.com/po-ui/po-angular/commit/34fa74c2b3647de56859c6d4da136109ab661ccf))
+* **rich-text:** implementa ChangeDetectionStrategy.OnPush ([73a1740](https://github.com/po-ui/po-angular/commit/73a17407838c94964540127f6d53747045fbd3e0))
+* **upload:** implementa ChangeDetectionStrategy.OnPush ([e663dfc](https://github.com/po-ui/po-angular/commit/e663dfcfe6847d78bae49f5a23ab0c14bb0d8dde))
+
+
+
 # [6.0.0](https://github.com/po-ui/po-angular/compare/v5.22.1...v6.0.0) (2021-12-13)
 
 ### BREAKING CHANGES
