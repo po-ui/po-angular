@@ -170,6 +170,19 @@ export class PoPageDynamicTableComponent extends PoPageDynamicListBaseComponent 
    *
    * @description
    *
+   * Define que a coluna de ações ficará no lado direito da tabela.
+   *
+   * @default `false`
+   */
+  @InputBoolean()
+  @Input('p-actions-right')
+  actionRight?: boolean = false;
+
+  /**
+   * @optional
+   *
+   * @description
+   *
    * Permite a utilização da pesquisa rápida junto com a pesquisa avançada.
    *
    * Desta forma, ao ter uma pesquisa avançada estabelecida e ser
