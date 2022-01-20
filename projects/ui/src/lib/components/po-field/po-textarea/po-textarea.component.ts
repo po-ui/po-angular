@@ -11,6 +11,8 @@ import { NG_VALIDATORS, NG_VALUE_ACCESSOR } from '@angular/forms';
 
 import { PoTextareaBaseComponent } from './po-textarea-base.component';
 
+import '@animaliads/ani-textarea';
+
 /**
  * @docsExtends PoTextareaBaseComponent
  *
@@ -83,7 +85,7 @@ export class PoTextareaComponent extends PoTextareaBaseComponent implements Afte
    */
   focus(): void {
     if (!this.disabled) {
-      this.inputEl.nativeElement.focus();
+      this.inputEl.nativeElement.setFocus();
     }
   }
 
