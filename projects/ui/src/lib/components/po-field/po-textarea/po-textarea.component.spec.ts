@@ -160,15 +160,15 @@ describe('PoTextareaComponent:', () => {
     it('focus: should call `focus` of textarea', () => {
       component.inputEl = {
         nativeElement: {
-          focus: () => {}
+          setFocus: () => {}
         }
       };
 
-      spyOn(component.inputEl.nativeElement, 'focus');
+      spyOn(component.inputEl.nativeElement, 'setFocus');
 
       component.focus();
 
-      expect(component.inputEl.nativeElement.focus).toHaveBeenCalled();
+      expect(component.inputEl.nativeElement.setFocus).toHaveBeenCalled();
     });
 
     it('focus: should`t call `focus` of textarea if `disabled`', () => {
