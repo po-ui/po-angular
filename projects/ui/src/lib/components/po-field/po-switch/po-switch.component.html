@@ -1,7 +1,13 @@
 <po-field-container [p-label]="label" [p-help]="help">
   <div class="po-field-container-content" [class.po-switch-content]="getSwitchPosition() === 'left'" [attr.name]="name">
     <div [class.po-switch-container-right]="getSwitchPosition() === 'right'">
-      <ani-switch #switchContainer [attr.disabled]="disabled" [attr.checked]="value" (click)="eventClick()">
+      <ani-switch
+        #switchContainer
+        [attr.disabled]="disabled"
+        [attr.checked]="value"
+        (click)="eventClick()"
+        (keydown)="onKeyDown($event)"
+      >
       </ani-switch>
     </div>
     <span class="po-switch-label po-clickable po-switch-label-{{ getLabelPosition() }}" (click)="eventClick()">
