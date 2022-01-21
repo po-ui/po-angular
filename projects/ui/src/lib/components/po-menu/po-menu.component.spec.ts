@@ -31,6 +31,8 @@ export const routes: Routes = [
   { path: '', redirectTo: 'home', pathMatch: 'full' },
   { path: 'home', component: HomeComponent },
   { path: 'test', component: HomeComponent },
+  { path: 'test/list', component: HomeComponent },
+  { path: 'test2/list', component: HomeComponent },
   { path: 'search', component: SearchComponent }
 ];
 
@@ -105,14 +107,34 @@ describe('PoMenuComponent:', () => {
           { label: 'Level 2.3' }
         ]
       },
-      { label: 'Level 1.2', icon: 'copy' }
+      { label: 'Level 1.2', icon: 'copy' },
+      {
+        label: 'Test',
+        icon: 'home',
+        subItems: [
+          {
+            label: 'list',
+            link: '/test/list'
+          }
+        ]
+      },
+      {
+        label: 'Test2',
+        icon: 'home',
+        subItems: [
+          {
+            label: 'list',
+            link: '/test2/list'
+          }
+        ]
+      }
     ];
-
-    fixture.detectChanges();
 
     fixture.ngZone.run(() => {
       router.initialNavigation();
     });
+
+    fixture.detectChanges();
   });
 
   it('should be created', () => {
@@ -120,7 +142,7 @@ describe('PoMenuComponent:', () => {
   });
 
   it('should create menu items', () => {
-    expect(nativeElement.querySelectorAll('po-menu-item').length).toBe(18); // All itens that are until level 4
+    expect(nativeElement.querySelectorAll('po-menu-item').length).toBe(22); // All itens that are until level 4
   });
 
   it('should toggle overlay of menu mobile', () => {
@@ -383,7 +405,7 @@ describe('PoMenuComponent:', () => {
 
   it('should have icons in all first level items', () => {
     expect(component.allowIcons).toBeTruthy();
-    expect(nativeElement.querySelectorAll('.po-menu-icon-container').length).toBe(7);
+    expect(nativeElement.querySelectorAll('.po-menu-icon-container').length).toBe(9);
   });
 
   it('should not have icons in first level items', () => {
@@ -1448,6 +1470,20 @@ describe('PoMenuComponent:', () => {
           component.activateMenuByUrl(urlPath, component.menus);
           expect(component['activateMenuItem']).toHaveBeenCalled();
           expect(component.linkActive).toBe(urlPath);
+          done();
+        });
+      });
+    });
+
+    it(`activateMenuByUrl: 'linkActive' should be equal to 'urlPath'`, done => {
+      const urlPath = '/test2/list';
+      spyOn(component, <any>'activateMenuItem');
+
+      fixture.ngZone.run(() => {
+        router.navigate(['/test2/list']).then(() => {
+          component.activateMenuByUrl(urlPath, component.menus);
+          expect(component.linkActive).toBe('/test2/list');
+
           done();
         });
       });
