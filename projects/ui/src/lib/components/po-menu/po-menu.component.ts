@@ -213,7 +213,7 @@ export class PoMenuComponent extends PoMenuBaseComponent implements AfterViewIni
           formattedMenuLink.lastIndexOf('/')
         )}`;
 
-        if (menuLinkPath === urlPath) {
+        if (menuLinkPath === urlPath && menuLinkPath === formattedMenuLink) {
           this.linkActive = formattedMenuLink;
           this.activateMenuItem(menu);
           return true;
