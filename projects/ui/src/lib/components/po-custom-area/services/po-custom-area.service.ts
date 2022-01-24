@@ -73,7 +73,7 @@ export class PoCustomAreaService {
 
     // Este `authorization` precisa ser recebido do backend do produto padrão
     const authorization =
-      'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ1c2VybmFtZSI6ImpvaG4iLCJzdWIiOjEsImlhdCI6MTY0MDI4ODA2NiwiZXhwIjoxNjQwMjg4NjY2fQ.8_mM-1m8BuJzRPHonc_2yb4EFw2ICMoqs9BG7-c9axo';
+      'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ1c2VybmFtZSI6ImpvaG4iLCJzdWIiOjEsImlhdCI6MTY0MDI5MzQyNiwiZXhwIjoxNjQwMjk0MDI2fQ.14LWwTJUW037g9IED3wLc9rBuEppA5oqPI2zuV_cT60';
 
     const customHeaders = {
       'Authorization': `Bearer ${authorization}`
