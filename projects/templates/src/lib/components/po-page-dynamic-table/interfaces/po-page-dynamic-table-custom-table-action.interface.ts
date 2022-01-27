@@ -43,6 +43,14 @@ export interface PoPageDynamicTableCustomTableAction {
    * > Ao utilizar a propriedade `url` e a `action`, somente a `action` será executada.
    */
   url?: string;
+  /**
+   * Permite concatenar o valor de propriedades definidas como keys na url via path parameter.
+   *
+   * Caso exista a necessidade de se utiizar mais de uma key, a concatenação entre as keys será separado por vírgulas, conforme exemplo: `/cidade/2,Joinville`
+   *
+   * > Poderá ser utilizada somente em conjunto com a propriedade PoPageDynamicTableCustomTableAction.url, tanto para URL interna quanto url externa.
+   */
+  concatKeys?: boolean;
 
   /**
    * @description
