@@ -38,6 +38,7 @@ import { PoPageDynamicTableBeforeDuplicate } from './interfaces/po-page-dynamic-
 import { PoPageDynamicTableBeforeRemoveAll } from './interfaces/po-page-dynamic-table-before-remove-all.interface';
 import { PoPageDynamicTableCustomAction } from './interfaces/po-page-dynamic-table-custom-action.interface';
 import { PoPageDynamicTableCustomTableAction } from './interfaces/po-page-dynamic-table-custom-table-action.interface';
+import { isExternalLink, openExternalLink } from '../../utils/util';
 
 type UrlOrPoCustomizationFunction = string | (() => PoPageDynamicTableOptions);
 
@@ -507,6 +508,11 @@ export class PoPageDynamicTableComponent extends PoPageDynamicListBaseComponent 
     });
   }
 
+  private createConcatenatedUrl(concatKeys: boolean, url: string, selectedItem): string {
+    const keys = this.keys.map(key => encodeURIComponent(selectedItem[key])).join();
+    return concatKeys ? `${url}/${keys}` : url;
+  }
+
   private openDetail(action: PoPageDynamicTableActions['detail'], item) {
     const id = this.formatUniqueKey(item);
     this.subscriptions.add(
@@ -847,7 +853,13 @@ export class PoPageDynamicTableComponent extends PoPageDynamicListBaseComponent 
 
       this.subscriptions.add(sendCustomActionSubscription);
     } else if (customAction.url) {
-      this.navigateTo({ path: customAction.url });
+      if (isExternalLink(customAction.url)) {
+        openExternalLink(this.createConcatenatedUrl(customAction.concatKeys, customAction.url, selectedItem));
+      } else {
+        this.navigateTo({
+          path: this.createConcatenatedUrl(customAction.concatKeys, customAction.url, selectedItem)
+        });
+      }
     }
   }
 
