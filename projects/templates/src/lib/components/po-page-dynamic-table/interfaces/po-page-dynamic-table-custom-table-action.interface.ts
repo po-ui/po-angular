@@ -93,4 +93,20 @@ export interface PoPageDynamicTableCustomTableAction {
    * ```
    */
   icon?: string | TemplateRef<void>;
+
+  /**
+   * @description
+   *
+   * Define se a ação será visível.
+   *
+   * > Caso o valor não seja especificado a ação será visível.
+   *
+   * Opções para tornar a ação visível ou não:
+   *
+   *  - Função que deve retornar um booleano.
+   *
+   *  - Informar diretamente um valor booleano.
+   *
+   */
+  visible?: boolean | Function;
 }
