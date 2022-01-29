@@ -832,7 +832,8 @@ export class PoPageDynamicTableComponent extends PoPageDynamicListBaseComponent 
       label: tableCustomAction.label,
       icon: tableCustomAction.icon,
       action: this.callTableCustomAction.bind(this, tableCustomAction),
-      disabled: tableCustomAction.disabled
+      disabled: tableCustomAction.disabled,
+      visible: tableCustomAction.visible
     }));
   }
 
