@@ -2,6 +2,26 @@
 
 All notable changes to this project will be documented in this file. See [standard-version](https://github.com/conventional-changelog/standard-version) for commit guidelines.
 
+# [6.2.0](https://github.com/po-ui/po-angular/compare/v6.1.0...v6.2.0) (2022-01-31)
+
+
+### Bug Fixes
+
+* **menu:** ajusta sinalização de item ativo ([336036a](https://github.com/po-ui/po-angular/commit/336036a560d1fc4b6f2b72484389b27e70cb853c))
+
+### Features
+
+* **page-dynamic-table:** adiciona a propriedade p-actions-right ([178799f](https://github.com/po-ui/po-angular/commit/178799f131ceb5e0626dd573d580153fc250305c))
+
+
+### Performance Improvements
+
+* **combo:** implementa ChangeDetectionStrategy.OnPush ([bb5ce63](https://github.com/po-ui/po-angular/commit/bb5ce632f50123bdffac31ccad54ed92fc3f95a7))
+
+* **multiselect:** implementa ChangeDetectionStrategy.OnPush ([35a4a63](https://github.com/po-ui/po-angular/commit/35a4a639fc9ef277ee2fb2454bd48561d2ebb5da))
+
+
+
 # [6.1.0](https://github.com/po-ui/po-angular/compare/v6.0.0...v6.1.0) (2022-01-17)
 
 
