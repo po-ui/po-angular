@@ -34,7 +34,6 @@ export class PoCustomAreaService {
     events?: { [key: string]: (event: any) => void },
     slotText?: string
   ): Observable<boolean> {
-    console.log({ tileKind });
     return this.load(tileKind).pipe(
       tap(loaded => {
         if (loaded) {
@@ -45,10 +44,15 @@ export class PoCustomAreaService {
     );
   }
 
+  /**
+   *
+   * @param props
+   *
+   * Função utilizada para comunicação entre componente pai e webcomponent.
+   */
   notifyAll(props?: any) {
-    // console.log('notify', this._model);
+    console.log(props);
     this.componentsAdded.forEach(component => {
-      console.log('testinho', props, this._model);
       if (typeof component.notify === 'function') {
         component.notify(props, this._model);
       }
@@ -57,14 +61,10 @@ export class PoCustomAreaService {
 
   setModel(model) {
     this._model = { ...this._model, ...model };
-    console.log('setModel', model, this._model);
   }
 
   private load(component: string): Observable<boolean> {
-    const teste = this.loaded.find(custom => custom.component === component);
-    console.log(teste);
     if (this.loaded.find(custom => custom.component === component)) {
-      console.log('retornei');
       const element = document.getElementById(component);
       document.body.removeChild(element);
       this.loaded.shift();
@@ -73,7 +73,7 @@ export class PoCustomAreaService {
 
     // Este `authorization` precisa ser recebido do backend do produto padrão
     const authorization =
-      'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ1c2VybmFtZSI6ImpvaG4iLCJzdWIiOjEsImlhdCI6MTY0MDI5MzQyNiwiZXhwIjoxNjQwMjk0MDI2fQ.14LWwTJUW037g9IED3wLc9rBuEppA5oqPI2zuV_cT60';
+      'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ1c2VybmFtZSI6ImpvaG4iLCJzdWIiOjEsImlhdCI6MTY0MzcyMjg5MiwiZXhwIjoxNjQzODA5MjkyfQ.cOnEMXRCTE_y0LkSrgMUhTtbTD18_-ivOMTHYtSfrHQ';
 
     const customHeaders = {
       'Authorization': `Bearer ${authorization}`
@@ -82,7 +82,7 @@ export class PoCustomAreaService {
       headers: new HttpHeaders(customHeaders)
     };
 
-    return this.http.get<CustomComponent>(`${this.api}/${component}`, requestOptions).pipe(
+    return this.http.get<CustomComponent>(`${this.api}/${component}`).pipe(
       map(custom => ({ ...custom, src: atob(custom.src) })),
       map(custom => {
         const { src, ...customNoSrc } = custom;
@@ -96,12 +96,9 @@ export class PoCustomAreaService {
           script.crossOrigin = 'anonymous';
         }
         const element = document.getElementById(customId);
-        console.log({ element });
         if (element == null) {
-          console.log('nao exite');
           document.body.appendChild(script);
         } else {
-          console.log('existe');
           document.body.removeChild(element);
           document.body.appendChild(script);
         }
@@ -119,7 +116,6 @@ export class PoCustomAreaService {
     slotText?: string
   ) {
     const tile = document.createElement(tileKind);
-
     if (props) {
       Object.keys(props).forEach(prop => {
         tile.setAttribute(prop, props[prop]);
