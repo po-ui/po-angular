@@ -5,11 +5,7 @@
 
   <div *ngIf="!isInternetExplorer" class="po-rich-text-toolbar-button-align">
     <div class="po-rich-text-toolbar-color-picker-container">
-      <button
-        class="po-button po-rich-text-toolbar-color-picker-button"
-        [disabled]="readonly"
-        [p-tooltip]="literals.textColor"
-      >
+      <ani-button class="po-button" [attr.disabled]="readonly" [p-tooltip]="literals.textColor" size="small">
         <input
           #colorPickerInput
           class="po-rich-text-toolbar-color-picker-input"
@@ -17,7 +13,7 @@
           [disabled]="readonly"
           (change)="changeTextColor($event.target.value)"
         />
-      </button>
+      </ani-button>
     </div>
   </div>
 

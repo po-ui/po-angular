@@ -264,10 +264,8 @@ describe('PoRichTextToolbarComponent:', () => {
 
       fixture.detectChanges();
 
-      const colorPickerButton = nativeElement.querySelector('.po-rich-text-toolbar-color-picker-button:disabled');
       const colorPickerInput = nativeElement.querySelector('.po-rich-text-toolbar-color-picker-input:disabled');
 
-      expect(colorPickerButton).toBeTruthy();
       expect(colorPickerInput).toBeTruthy();
     });
 
