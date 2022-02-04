@@ -23,9 +23,13 @@ const PO_BUTTON_TYPE_DEFAULT = 'default';
 @Directive()
 export class PoButtonBaseComponent {
   /**
+   * @deprecated 14.x.x
+   *
    * @optional
    *
    * @description
+   *
+   * **Deprecated 14.x.x**.
    *
    * Aplica foco no elemento ao ser iniciado.
    * > Caso mais de um elemento seja configurado com essa propriedade,
