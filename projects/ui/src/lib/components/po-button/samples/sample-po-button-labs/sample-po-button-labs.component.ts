@@ -16,6 +16,7 @@ export class SamplePoButtonLabsComponent implements OnInit {
     { value: 'disabled', label: 'Disabled' },
     { value: 'loading', label: 'Loading' },
     { value: 'small', label: 'Small' },
+    { value: 'large', label: 'Large' },
     { value: 'danger', label: 'danger' }
   ];
 
