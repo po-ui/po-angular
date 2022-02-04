@@ -110,6 +110,11 @@ type UrlOrPoCustomizationFunction = string | (() => PoPageDynamicTableOptions);
  *  <file name="sample-po-page-dynamic-table-basic/sample-po-page-dynamic-table-basic.component.ts"> </file>
  * </example>
  *
+ * <example name="po-page-dynamic-table-people" title="PO Page Dynamic Table - People">
+ *  <file name="sample-po-page-dynamic-table-people/sample-po-page-dynamic-table-people.component.html"> </file>
+ *  <file name="sample-po-page-dynamic-table-people/sample-po-page-dynamic-table-people.component.ts"> </file>
+ * </example>
+ *
  * <example name="po-page-dynamic-table-users" title="PO Page Dynamic Table - Users">
  *  <file name="sample-po-page-dynamic-table-users/sample-po-page-dynamic-table-users.component.html"> </file>
  *  <file name="sample-po-page-dynamic-table-users/sample-po-page-dynamic-table-users.component.ts"> </file>
@@ -205,6 +210,23 @@ export class PoPageDynamicTableComponent extends PoPageDynamicListBaseComponent 
   @Input('p-concat-filters')
   concatFilters: boolean = false;
 
+  /**
+   * @optional
+   *
+   * @description
+   *
+   * Se verdadeiro, ativa a funcionalidade de scroll infinito para a tabela e o botão "Carregar Mais" deixará de ser exibido. Ao chegar no fim da tabela
+   * executará a função `p-show-more`.
+   *
+   * **Regras de utilização:**
+   *  - O scroll infinito só funciona para tabelas que utilizam a propriedade `p-height` e que possuem o scroll já na carga inicial dos dados.
+   *
+   * @default `false`
+   */
+  @InputBoolean()
+  @Input('p-infinite-scroll')
+  infiniteScroll?: boolean = false;
+
   hasNext = false;
   items = [];
   literals;
@@ -213,6 +235,7 @@ export class PoPageDynamicTableComponent extends PoPageDynamicListBaseComponent 
 
   private _actions: PoPageDynamicTableActions = {};
   private _pageCustomActions: Array<PoPageDynamicTableCustomAction> = [];
+  private _height: number;
   private _quickSearchWidth: number;
   private _tableCustomActions: Array<PoPageDynamicTableCustomTableAction> = [];
 
@@ -338,6 +361,21 @@ export class PoPageDynamicTableComponent extends PoPageDynamicListBaseComponent 
 
   get quickSearchWidth(): number {
     return this._quickSearchWidth;
+  }
+
+  /**
+   * @optional
+   *
+   * @description
+   *
+   * Define a altura da tabela em *pixels* e fixa o cabeçalho.
+   */
+  @Input('p-height') set height(value: number) {
+    this._height = util.convertToInt(value);
+  }
+
+  get height(): number {
+    return this._height;
   }
 
   constructor(
