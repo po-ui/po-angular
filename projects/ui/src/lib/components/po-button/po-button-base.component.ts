@@ -27,6 +27,8 @@ import { PoButtonSize } from './po-button-size.enum';
 @Directive()
 export class PoButtonBaseComponent {
   /**
+   * @deprecated 14.x.x
+   *
    * @optional
    *
    * @description
