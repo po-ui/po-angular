@@ -7,6 +7,7 @@ import { PoButtonType } from './po-button-type.enum';
 
 const PO_BUTTON_TYPES = ['primary', 'secondary', 'tertiary'];
 const PO_BUTTON_TYPE_DEFAULT = 'secondary';
+const PO_BUTTON_TYPE_PRIMARY = 'primary';
 
 /**
  * @description
@@ -182,7 +183,7 @@ export class PoButtonBaseComponent {
    */
   @Input('p-danger') @InputBoolean() set danger(value: boolean) {
     this._danger = value;
-    if (this.type && value && this.type !== PO_BUTTON_TYPE_DEFAULT) {
+    if (this.type && value && this.type !== PO_BUTTON_TYPE_DEFAULT && this.type !== PO_BUTTON_TYPE_PRIMARY) {
       this.type = PO_BUTTON_TYPE_DEFAULT;
     }
   }
