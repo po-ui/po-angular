@@ -31,6 +31,15 @@ describe('PoButtonBaseComponent', () => {
     expectPropertiesValues(component, 'small', booleanInvalidValues, false);
   });
 
+  it('should update property `p-large` with valid values', () => {
+    expectPropertiesValues(component, 'large', booleanValidTrueValues, true);
+    expectPropertiesValues(component, 'large', booleanValidFalseValues, false);
+  });
+
+  it('should update property `p-large` with `false` when invalid values', () => {
+    expectPropertiesValues(component, 'large', booleanInvalidValues, false);
+  });
+
   it('should update property `p-type` with `primary`', () => {
     const validValues = ['primary'];
     component.danger = false;
@@ -78,9 +87,31 @@ describe('PoButtonBaseComponent', () => {
     expectPropertiesValues(component, 'type', invalidValues, 'secondary');
   });
 
-  it('should update property `p-type` with `secondary` if `danger` is true', () => {
+  it('should update property `p-type` with `secondary` if `danger` is true and type is tertiary', () => {
+    component.type = 'tertiary';
     component.danger = true;
     const expectedValue = 'secondary';
     expect(component.type).toEqual(expectedValue);
+  });
+
+  it('should update the size of the button with `medium` if `p-small` and `p-large` are true', () => {
+    component.small = true;
+    component.large = true;
+
+    expect(component.size).toEqual('medium');
+  });
+
+  it('should update the size of the button with `large` if `p-small` is false and `p-large` is true', () => {
+    component.small = false;
+    component.large = true;
+
+    expect(component.size).toEqual('large');
+  });
+
+  it('should update the size of the button with `medium` if `p-small` and `p-large` are false', () => {
+    component.small = false;
+    component.large = false;
+
+    expect(component.size).toEqual('medium');
   });
 });

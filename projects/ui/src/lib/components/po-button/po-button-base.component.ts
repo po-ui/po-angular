@@ -5,10 +5,8 @@ import { InputBoolean } from '../../decorators';
 
 import { PoButtonType } from './po-button-type.enum';
 
-
 const PO_BUTTON_TYPES = ['primary', 'secondary', 'tertiary'];
 const PO_BUTTON_TYPE_DEFAULT = 'secondary';
-
 
 /**
  * @description
@@ -64,12 +62,12 @@ export class PoButtonBaseComponent {
   /** Ação que será executada quando o usuário clicar sobre o `po-button`. */
   @Output('p-click') click = new EventEmitter<null>();
 
-
   private _danger?: boolean = false;
 
   private _disabled?: boolean = false;
   private _loading?: boolean = false;
   private _small?: boolean = false;
+  private _large?: boolean = false;
   private _type?: string = 'secondary';
 
   /**
@@ -112,6 +110,23 @@ export class PoButtonBaseComponent {
    *
    * @description
    *
+   * Deixa o botão maior.
+   *
+   * @default `false`
+   */
+  @Input('p-large') set large(value: boolean) {
+    this._large = <any>value === '' ? true : convertToBoolean(value);
+  }
+
+  get large(): boolean {
+    return this._large;
+  }
+
+  /**
+   * @optional
+   *
+   * @description
+   *
    * Define o estilo do `po-button`.
    *
    * Valore válidos:
@@ -125,10 +140,13 @@ export class PoButtonBaseComponent {
    * @default `secondary`
    */
   @Input('p-type') set type(value: string) {
-    this._type = PO_BUTTON_TYPES.includes(value) ? value : PoButtonType[value] ? PoButtonType[value] : PO_BUTTON_TYPE_DEFAULT;
+    this._type = PO_BUTTON_TYPES.includes(value)
+      ? value
+      : PoButtonType[value]
+      ? PoButtonType[value]
+      : PO_BUTTON_TYPE_DEFAULT;
 
     this.danger = value === 'danger' ? true : this.danger;
-
   }
 
   get type(): string {
@@ -171,5 +189,9 @@ export class PoButtonBaseComponent {
 
   get danger(): boolean {
     return this._danger;
+  }
+
+  get size(): string {
+    return this.small && this.large ? 'medium' : this.small ? 'small' : this.large ? 'large' : 'medium';
   }
 }
