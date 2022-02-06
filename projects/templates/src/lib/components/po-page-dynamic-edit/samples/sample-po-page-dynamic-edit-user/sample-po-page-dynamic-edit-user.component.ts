@@ -35,9 +35,31 @@ export class SamplePoPageDynamicEditUserComponent {
     { property: 'nationality' },
     { property: 'birthPlace', label: 'Place of birth' },
     { property: 'graduation' },
-    { property: 'father', label: 'Father`s name', divider: 'Relationship' },
-    { property: 'mother', label: 'Mother`s name' },
-    { property: 'street', divider: 'Address' },
-    { property: 'city', optionsService: 'https://po-sample-api.herokuapp.com/v1/cities?transform=true' }
+    {
+      property: 'father',
+      label: 'Father`s name',
+      divider: 'Relationship',
+      gridMdColumns: 4,
+      gridLgColumns: 4
+    },
+    {
+      property: 'mother',
+      label: 'Mother`s name',
+      offsetMdColumns: 4,
+      offsetLgColumns: 4,
+      gridMdColumns: 4,
+      gridLgColumns: 4
+    },
+    {
+      property: 'street',
+      divider: 'Address',
+      gridColumns: 4
+    },
+    {
+      property: 'city',
+      optionsService: 'https://po-sample-api.herokuapp.com/v1/cities?transform=true',
+      offsetColumns: 4,
+      gridColumns: 4
+    }
   ];
 }

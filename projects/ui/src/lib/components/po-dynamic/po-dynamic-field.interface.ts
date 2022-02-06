@@ -68,6 +68,55 @@ export interface PoDynamicField {
   gridXlColumns?: number;
 
   /**
+   * Tamanho do espaço de exibição do campo em telas.
+   *
+   * Deve ser usado o sistema de **grid** do PO (1 ... 12 colunas).
+   *
+   * > Esta propriedade é genérica, aplica o valor em todos os tamanhos de telas.
+   */
+  offsetColumns?: number;
+
+  /**
+   * Tamanho do espaço de exibição do campo em telas menores (sm).
+   *
+   * Deve ser usado o sistema de **grid** do PO (1 ... 12 colunas).
+   *
+   * > Esta propriedade sobrescreve o valor definido para o tamanho dela na `offsetColumns`.
+   *
+   */
+  offsetSmColumns?: number;
+
+  /**
+   * Tamanho do espaço de exibição do campo em telas médias (md).
+   *
+   * Deve ser usado o sistema de **grid** do PO (1 ... 12 colunas).
+   *
+   * > Esta propriedade sobrescreve o valor definido para o tamanho dela na `offsetColumns`.
+   *
+   */
+  offsetMdColumns?: number;
+
+  /**
+   * Tamanho do espaço de exibição do campo em telas grandes (lg).
+   *
+   * Deve ser usado o sistema de **grid** do PO (1 ... 12 colunas).
+   *
+   * > Esta propriedade sobrescreve o valor definido para o tamanho dela na `offsetColumns`.
+   *
+   */
+  offsetLgColumns?: number;
+
+  /**
+   * Tamanho do espaço de exibição do campo em telas extra grandes (xl).
+   *
+   * Deve ser usado o sistema de **grid** do PO (1 ... 12 colunas).
+   *
+   * > Esta propriedade sobrescreve o valor definido para o tamanho dela na `offsetColumns`.
+   *
+   */
+  offsetXlColumns?: number;
+
+  /**
    * Tamanho do espaçamento após o campo antes da exibição do próximo campo em telas menores (sm).
    *
    * Deve ser usado o sistema de **grid** do PO (1 ... 11 colunas).
