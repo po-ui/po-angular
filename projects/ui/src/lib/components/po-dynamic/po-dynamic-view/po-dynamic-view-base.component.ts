@@ -171,11 +171,20 @@ export class PoDynamicViewBaseComponent {
     const value = this.transformValue(field.type, this.value[property], field.format);
 
     const classesGridColumns = getGridColumnsClasses(
-      field.gridSmColumns,
-      field.gridMdColumns,
-      field.gridLgColumns,
-      field.gridXlColumns,
       field.gridColumns,
+      field.offsetColumns,
+      {
+        smGrid: field.gridSmColumns,
+        mdGrid: field.gridMdColumns,
+        lgGrid: field.gridLgColumns,
+        xlGrid: field.gridXlColumns
+      },
+      {
+        smOffset: field.offsetSmColumns,
+        mdOffset: field.offsetMdColumns,
+        lgOffset: field.offsetLgColumns,
+        xlOffset: field.offsetXlColumns
+      },
       {
         smPull: field.gridSmPull,
         mdPull: field.gridMdPull,
