@@ -6,7 +6,7 @@ import * as path from 'path';
 
 const collectionPath = path.join(__dirname, '../../collection.json');
 
-xdescribe('schema:', () => {
+describe('schema:', () => {
   const runner = new SchematicTestRunner('schematics', collectionPath);
 
   const workspaceOptions: WorkspaceOptions = {

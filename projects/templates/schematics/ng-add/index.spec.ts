@@ -11,7 +11,7 @@ import * as path from 'path';
 
 const collectionPath = path.join(__dirname, '../collection.json');
 
-xdescribe('Schematic: ng-add', () => {
+describe('Schematic: ng-add', () => {
   const runner = new SchematicTestRunner('schematics', collectionPath);
 
   const workspaceOptions: WorkspaceOptions = {
