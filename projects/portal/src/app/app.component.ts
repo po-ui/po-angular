@@ -1,6 +1,6 @@
 import { Component, OnInit } from '@angular/core';
 
-import { PoMenuItem, PoNavbarItem, PoNavbarIconAction } from '@po-ui/ng-components';
+import { PoMenuItem, PoNavbarItem, PoNavbarIconAction, PoNotificationService } from '@po-ui/ng-components';
 
 import { VersionService } from './shared/version.service';
 
@@ -17,7 +17,7 @@ export class AppComponent implements OnInit {
 
   private location;
 
-  constructor(private versionService: VersionService) {}
+  constructor(private versionService: VersionService, private notification: PoNotificationService) {}
 
   async ngOnInit() {
     const version = await this.versionService.getCurrentVersion().toPromise();
@@ -38,9 +38,19 @@ export class AppComponent implements OnInit {
       { icon: 'po-icon-social-twitter', link: 'https://twitter.com/@pouidev', label: 'Twitter' },
       { icon: 'po-icon-social-instagram', link: 'https://www.instagram.com/pouidev/', label: 'Instagram' }
     ];
+
+    setTimeout(this.showVersionNamingChangeNotification.bind(this), 1000);
   }
 
   openExternalLink(url) {
     window.open(url, '_blank');
+  }
+
+  private showVersionNamingChangeNotification() {
+    this.notification.information({
+      message: 'Mudança de nomenclatura das versões a partir da v7.x.x',
+      action: this.openExternalLink.bind(this, 'https://github.com/po-ui/po-angular/issues/1184'),
+      actionLabel: 'Mais informações'
+    });
   }
 }

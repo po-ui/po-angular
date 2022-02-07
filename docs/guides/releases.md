@@ -21,7 +21,7 @@ O número da versão principal é incrementado com base na versão do Angular qu
 ## Caminhos de atualização suportados
 Em alinhamento com o esquema de controle de versão descrito acima, nos comprometemos a oferecer suporte aos seguintes caminhos de atualização:
 - Se você estiver atualizando na **versão principal**, poderá pular todas as versões intermediárias e atualizar diretamente para a versão de destino. Por exemplo, você pode atualizar diretamente da versão 4.0.0 para a 4.17.0.
-- Se você estiver  atualizando de **uma versão principal para outra**, recomendamos que **não ignore as versões principais**. Siga as instruções para atualizar de forma incremental para a próxima versão principal, testando e validando em cada erapa. Por exemplo, se você deseja atualizar da versão 2.xx para a versão 4.xx, recomendamos que vocÊ atualize para a versão 3.xx mais recente primeiro. Depois de atualizar com sucesso para a versão 3.xx, você pode atualizar para a 4.xx.
+- Se você estiver  atualizando de **uma versão principal para outra**, recomendamos que **não ignore as versões principais**. Siga as instruções para atualizar de forma incremental para a próxima versão principal, testando e validando em cada erapa. Por exemplo, se você deseja atualizar da versão 2.xx para a versão 4.xx, recomendamos que você atualize para a versão 3.xx mais recente primeiro. Depois de atualizar com sucesso para a versão 3.xx, você pode atualizar para a 4.xx.
 
 Consulte abaixo nossos guias de migração de versão para obter mais informações sobre como atualizar o PO UI para a versão mais recente nos seus projetos Angular.
 
@@ -72,6 +72,8 @@ Consulte abaixo nossos guias de migração de versão para obter mais informaç�
     </table>
   </div>
 </div>
+
+> Conforme agenda de publicação de novas versões estáveis do Angular, nós atualizaremos nossas versões como de costume e aproveitaremos para fazer uma mudança na nomenclatura das nossas versões. A próxima `v7.x.x` será lançada como **`v14.x.x`**, assim `a versão 14.x.x do PO UI terá compatibilidade com a v14 do Angular` e assim por diante. [Mais informações](https://github.com/po-ui/po-angular/issues/1184).
 
 ## Versões prévias
 
