@@ -20,6 +20,8 @@ export class SamplePoPageDynamicTableUsersComponent {
   @ViewChild('dependentsModal') dependentsModal: PoModalComponent;
 
   readonly serviceApi = 'https://po-sample-api.herokuapp.com/v1/people';
+
+  actionsRight = false;
   detailedUser;
   dependents;
   quickSearchWidth: number = 3;
@@ -72,6 +74,18 @@ export class SamplePoPageDynamicTableUsersComponent {
   ];
 
   pageCustomActions: Array<PoPageDynamicTableCustomAction> = [
+    {
+      label: 'Actions Right',
+      action: this.onClickActionsSide.bind(this),
+      visible: this.isVisibleActionsRight.bind(this),
+      icon: 'po-icon-arrow-right'
+    },
+    {
+      label: 'Actions Left',
+      action: this.onClickActionsSide.bind(this),
+      visible: this.isVisibleActionsLeft.bind(this),
+      icon: 'po-icon-arrow-left'
+    },
     { label: 'Print', action: this.printPage.bind(this), icon: 'po-icon-print' },
     {
       label: 'Download .csv',
@@ -138,5 +152,16 @@ export class SamplePoPageDynamicTableUsersComponent {
     this.dependents = user.dependents;
 
     this.dependentsModal.open();
+  }
+
+  private onClickActionsSide(value) {
+    this.actionsRight = !this.actionsRight;
+  }
+
+  private isVisibleActionsRight() {
+    return !this.actionsRight;
+  }
+  private isVisibleActionsLeft() {
+    return this.actionsRight;
   }
 }
