@@ -51,7 +51,6 @@ export class PoCustomAreaService {
    * Função utilizada para comunicação entre componente pai e webcomponent.
    */
   notifyAll(props?: any) {
-    console.log(props);
     this.componentsAdded.forEach(component => {
       if (typeof component.notify === 'function') {
         component.notify(props, this._model);
