@@ -2,6 +2,16 @@
 
 All notable changes to this project will be documented in this file. See [standard-version](https://github.com/conventional-changelog/standard-version) for commit guidelines.
 
+# [6.3.0](https://github.com/po-ui/po-angular/compare/v6.2.0...v6.3.0) (2022-02-07)
+
+
+### Features
+
+* **page-dynamic-table:** cria propriedade `concatKey` ([df12f5e](https://github.com/po-ui/po-angular/commit/df12f5ec647f765ab81a772a0d6215fa8ba5999b))
+* **page-dynamic-table:** permite url externa e implementa `concatKey` ([2759cfe](https://github.com/po-ui/po-angular/commit/2759cfe09f297413fbd92661f95f1b2b44401334))
+
+
+
 # [6.2.0](https://github.com/po-ui/po-angular/compare/v6.1.0...v6.2.0) (2022-01-31)
 
 

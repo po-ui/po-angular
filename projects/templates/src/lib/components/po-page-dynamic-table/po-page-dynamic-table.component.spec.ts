@@ -2229,6 +2229,32 @@ describe('PoPageDynamicTableComponent:', () => {
       expect(component['router'].navigate).toHaveBeenCalledWith(['test/'], { queryParams: undefined });
     });
 
+    it('should navigate to `test/1` if action of tableCustomAction is undefined and url is defined and concatKeys is true', () => {
+      component.actions = {
+        detail: '/detail',
+        edit: '/edit'
+      };
+      const selectedItemKey = { id: '1' };
+
+      component.items = [
+        { id: '1', name: 'angular', $selected: true },
+        { id: '2', name: 'react' },
+        { id: '3', name: 'vue' }
+      ];
+      component.fields = [{ property: 'id', key: true }];
+
+      const tableCustomAction = { label: 'Table Custom Action 1', url: 'test', concatKeys: true };
+
+      component.tableCustomActions = [tableCustomAction];
+
+      spyOn(component['router'], 'navigate').and.callThrough();
+
+      const tableActions = visibleTableActions();
+      tableActions[2].action(selectedItemKey, tableCustomAction);
+
+      expect(component['router'].navigate).toHaveBeenCalledWith(['test/1'], { queryParams: undefined });
+    });
+
     it('shouldn`t navigate and call action from tableActions if action and url are undefined', () => {
       component.actions = {
         detail: '/detail',
@@ -2247,6 +2273,72 @@ describe('PoPageDynamicTableComponent:', () => {
 
       expect(routerNavigateSpy).not.toHaveBeenCalled();
       expect(customActionServiceSpy).not.toHaveBeenCalled();
+    });
+
+    it('should open an external url', () => {
+      const tableCustomAction = { label: 'External', url: 'https://fakeUrl.com' };
+      component.actions = {};
+      component.tableCustomActions = [tableCustomAction];
+
+      const openExternalLink = spyOn(utilsFunctions, 'openExternalLink');
+      const createConcatenatedUrlSpy = spyOn(component, <any>'createConcatenatedUrl').and.callThrough();
+
+      const tableActions = visibleTableActions();
+      tableActions[0].action(tableCustomAction);
+
+      expect(createConcatenatedUrlSpy).toHaveBeenCalled();
+      expect(openExternalLink).toHaveBeenCalledWith('https://fakeUrl.com');
+    });
+
+    it('should open an external url with concatenated key and has a unique key', () => {
+      const tableCustomAction = { label: 'External', url: 'https://fakeUrl.com', concatKeys: true };
+
+      const selectedItemKey = { id: '1' };
+
+      component.items = [
+        { id: '1', name: 'angular', $selected: true },
+        { id: '2', name: 'react' },
+        { id: '3', name: 'vue' }
+      ];
+      component.fields = [{ property: 'id', key: true }];
+
+      component.tableCustomActions = [tableCustomAction];
+
+      const openExternalLink = spyOn(utilsFunctions, 'openExternalLink');
+      const createConcatenatedUrlSpy = spyOn(component, <any>'createConcatenatedUrl').and.callThrough();
+
+      const tableActions = visibleTableActions();
+      tableActions[0].action(selectedItemKey, tableCustomAction);
+
+      expect(createConcatenatedUrlSpy).toHaveBeenCalled();
+      expect(openExternalLink).toHaveBeenCalledWith('https://fakeUrl.com/1');
+    });
+
+    it('should open an external url with a concatenated key and has multiple keys', () => {
+      const tableCustomAction = { label: 'External', url: 'https://fakeUrl.com', concatKeys: true };
+
+      const selectedItemKey = { id: '1', name: 'angular' };
+
+      component.items = [
+        { id: '1', name: 'angular', $selected: true },
+        { id: '2', name: 'react' },
+        { id: '3', name: 'vue' }
+      ];
+      component.fields = [
+        { property: 'id', key: true },
+        { property: 'name', key: true }
+      ];
+
+      component.tableCustomActions = [tableCustomAction];
+
+      const openExternalLink = spyOn(utilsFunctions, 'openExternalLink');
+      const createConcatenatedUrlSpy = spyOn(component, <any>'createConcatenatedUrl').and.callThrough();
+
+      const tableActions = visibleTableActions();
+      tableActions[0].action(selectedItemKey, tableCustomAction);
+
+      expect(createConcatenatedUrlSpy).toHaveBeenCalled();
+      expect(openExternalLink).toHaveBeenCalledWith('https://fakeUrl.com/1,angular');
     });
 
     it('should call action from tableActions and call modifyUITableItem if return an object', () => {
