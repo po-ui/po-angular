@@ -2,6 +2,22 @@
 
 All notable changes to this project will be documented in this file. See [standard-version](https://github.com/conventional-changelog/standard-version) for commit guidelines.
 
+# [6.4.0](https://github.com/po-ui/po-angular/compare/v6.3.0...v6.4.0) (2022-02-14)
+
+
+### Bug Fixes
+
+* **schematics:** corrige erro no `ng add @po-ui/ng-components` ([4884cdc](https://github.com/po-ui/po-angular/commit/4884cdc50b8e09c8223d13b908e79d4d7164a451)), closes [#1159](https://github.com/po-ui/po-angular/issues/1159)
+
+
+### Features
+
+* **button:** deprecia propriedade `p-autofocus` ([f888c84](https://github.com/po-ui/po-angular/commit/f888c8427e8fe34896490378990d996608e5450b))
+* **page-dynamic-table:** adiciona visible na `p-page-custom-actions` ([f4ab803](https://github.com/po-ui/po-angular/commit/f4ab803d9fa1fd4086ce1bfb7fc8f9d86153b7e6)), closes [#1158](https://github.com/po-ui/po-angular/issues/1158)
+* **page-dynamic-table:** adiciona visible na `p-table-custom-actions` ([a315986](https://github.com/po-ui/po-angular/commit/a3159865356659b0368b859c1bea9e7fc5d13f23)), closes [#1156](https://github.com/po-ui/po-angular/issues/1156)
+* **popup:** permite informar uma função para controle de visibilidade ([a315986](https://github.com/po-ui/po-angular/commit/a3159865356659b0368b859c1bea9e7fc5d13f23)), closes [#1156](https://github.com/po-ui/po-angular/issues/1156)
+
+
 # [6.3.0](https://github.com/po-ui/po-angular/compare/v6.2.0...v6.3.0) (2022-02-07)
 
 
