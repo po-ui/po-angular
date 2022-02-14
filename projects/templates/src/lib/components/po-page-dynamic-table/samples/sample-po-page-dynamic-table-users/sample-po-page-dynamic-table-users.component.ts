@@ -17,9 +17,13 @@ import { SamplePoPageDynamicTableUsersService } from './sample-po-page-dynamic-t
 })
 export class SamplePoPageDynamicTableUsersComponent {
   @ViewChild('userDetailModal') userDetailModal: PoModalComponent;
+  @ViewChild('dependentsModal') dependentsModal: PoModalComponent;
 
   readonly serviceApi = 'https://po-sample-api.herokuapp.com/v1/people';
+
+  actionsRight = false;
   detailedUser;
+  dependents;
   quickSearchWidth: number = 3;
 
   readonly actions: PoPageDynamicTableActions = {
@@ -70,6 +74,18 @@ export class SamplePoPageDynamicTableUsersComponent {
   ];
 
   pageCustomActions: Array<PoPageDynamicTableCustomAction> = [
+    {
+      label: 'Actions Right',
+      action: this.onClickActionsSide.bind(this),
+      visible: this.isVisibleActionsRight.bind(this),
+      icon: 'po-icon-arrow-right'
+    },
+    {
+      label: 'Actions Left',
+      action: this.onClickActionsSide.bind(this),
+      visible: this.isVisibleActionsLeft.bind(this),
+      icon: 'po-icon-arrow-left'
+    },
     { label: 'Print', action: this.printPage.bind(this), icon: 'po-icon-print' },
     {
       label: 'Download .csv',
@@ -83,6 +99,12 @@ export class SamplePoPageDynamicTableUsersComponent {
       label: 'Details',
       action: this.onClickUserDetail.bind(this),
       disabled: this.isUserInactive.bind(this),
+      icon: 'po-icon-user'
+    },
+    {
+      label: 'Dependents',
+      action: this.onClickDependents.bind(this),
+      visible: this.hasDependents.bind(this),
       icon: 'po-icon-user'
     }
   ];
@@ -112,6 +134,10 @@ export class SamplePoPageDynamicTableUsersComponent {
     return person.status === 'inactive';
   }
 
+  hasDependents(person) {
+    return person.dependents.length !== 0;
+  }
+
   printPage() {
     window.print();
   }
@@ -120,5 +146,22 @@ export class SamplePoPageDynamicTableUsersComponent {
     this.detailedUser = user;
 
     this.userDetailModal.open();
+  }
+
+  private onClickDependents(user) {
+    this.dependents = user.dependents;
+
+    this.dependentsModal.open();
+  }
+
+  private onClickActionsSide(value) {
+    this.actionsRight = !this.actionsRight;
+  }
+
+  private isVisibleActionsRight() {
+    return !this.actionsRight;
+  }
+  private isVisibleActionsLeft() {
+    return this.actionsRight;
   }
 }

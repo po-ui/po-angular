@@ -821,7 +821,8 @@ export class PoPageDynamicTableComponent extends PoPageDynamicListBaseComponent 
       label: customAction.label,
       action: this.callPageCustomAction.bind(this, customAction),
       disabled: this.isDisablePageCustomAction.bind(this, customAction),
-      ...(customAction.icon && { icon: customAction.icon })
+      ...(customAction.icon && { icon: customAction.icon }),
+      visible: customAction.visible
     }));
   }
 
@@ -832,7 +833,8 @@ export class PoPageDynamicTableComponent extends PoPageDynamicListBaseComponent 
       label: tableCustomAction.label,
       icon: tableCustomAction.icon,
       action: this.callTableCustomAction.bind(this, tableCustomAction),
-      disabled: tableCustomAction.disabled
+      disabled: tableCustomAction.disabled,
+      visible: tableCustomAction.visible
     }));
   }
 
