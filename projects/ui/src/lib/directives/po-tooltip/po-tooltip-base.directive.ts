@@ -4,7 +4,6 @@ import { InputBoolean } from '../../decorators';
 
 import { PO_CONTROL_POSITIONS } from './../../services/po-control-position/po-control-position.constants';
 
-const CONTENT_MAX_LENGTH = 140;
 const PO_TOOLTIP_POSITION_DEFAULT = 'bottom';
 
 /**
@@ -43,14 +42,12 @@ export abstract class PoTooltipBaseDirective {
   /**
    * @description
    *
-   * Habilita e atribui um texto ao po-tooltip, com limitação de 140 caracteres.
+   * Habilita e atribui um texto ao po-tooltip.
+   *
+   * **Como boa prática, indica-se utilizar um texto com até 140 caracteres.**
    */
   @Input('p-tooltip') set tooltip(tooltip: string) {
-    if (tooltip && tooltip.length > CONTENT_MAX_LENGTH) {
-      this._tooltip = tooltip.substring(0, CONTENT_MAX_LENGTH);
-    } else {
-      this._tooltip = tooltip;
-    }
+    this._tooltip = tooltip;
   }
   get tooltip() {
     return this._tooltip;
