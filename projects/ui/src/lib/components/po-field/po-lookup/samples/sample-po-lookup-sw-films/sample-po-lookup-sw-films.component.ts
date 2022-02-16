@@ -66,7 +66,7 @@ export class SamplePoLookupSwFilmsComponent implements OnInit {
   }
 
   onSelected(entity) {
-    this.filterService.getObjectByValue(entity, this.filterParams).subscribe(
+    this.filterService.getObjectByValue(entity.name, this.filterParams).subscribe(
       result => {
         this.filmItemsFiltered = this.filmItems.filter(film => result?.films.includes(film.url));
       },

@@ -156,17 +156,42 @@ describe('PoLookupBaseComponent:', () => {
     expect(component['keysDescription'].length).toBe(1);
   });
 
-  it('selectValue: should call `callOnChange` with `valueToModel` and call `selected.emit` with objectSelected', () => {
+  it('selectValue: should call `callOnChange` with `valueToModel.fieldvalue` and call `selected.emit` with objectSelected', () => {
     const objectSelected = { value: 123, label: 'test label' };
     component.fieldValue = 'value';
 
     spyOn(component.selected, 'emit');
     spyOn(component, 'callOnChange');
 
-    component.selectValue(objectSelected[component.fieldValue]);
+    component.selectValue(objectSelected);
 
-    expect(component.callOnChange).toHaveBeenCalledWith(123);
-    expect(component.selected.emit).toHaveBeenCalledWith(objectSelected[component.fieldValue]);
+    expect(component.callOnChange).toHaveBeenCalledWith(objectSelected[component.fieldValue]);
+    expect(component.selected.emit).toHaveBeenCalledWith(objectSelected);
+  });
+
+  it('selectValue: should call `callOnChange` with `valueToModel` and call `selected.emit` with objectSelected if is multiple', () => {
+    const objectSelected = { value: 123, label: 'test label' };
+    component.fieldValue = 'value';
+    component.multiple = true;
+
+    spyOn(component.selected, 'emit');
+    spyOn(component, 'callOnChange');
+
+    component.selectValue(objectSelected);
+
+    expect(component.callOnChange).toHaveBeenCalledWith({ value: 123, label: 'test label' });
+    expect(component.selected.emit).toHaveBeenCalledWith(objectSelected);
+  });
+
+  it('selectValue: should call `callOnChange` with `undefined` if not contain `valueSelected`', () => {
+    component.fieldValue = 'value';
+    component.multiple = false;
+
+    spyOn(component, 'callOnChange');
+
+    component.selectValue(undefined);
+
+    expect(component.callOnChange).toHaveBeenCalledWith(undefined);
   });
 
   it('should be called the onChangePropated event', () => {
@@ -213,7 +238,7 @@ describe('PoLookupBaseComponent:', () => {
 
     spyOn(component.change, 'emit');
 
-    component.selectValue(objectSelected[component.fieldValue]);
+    component.selectValue(objectSelected);
     expect(component.change.emit).toHaveBeenCalledWith(1495832652942);
   });
 
@@ -700,13 +725,11 @@ describe('PoLookupBaseComponent:', () => {
 
       component.fieldValue = 'value';
 
-      const newModel = 1;
-
       spyOn(component, 'selectValue');
 
       component['selectModel'](options);
 
-      expect(component.selectValue).toHaveBeenCalledWith(newModel);
+      expect(component.selectValue).toHaveBeenCalledWith({ label: 'John', value: 1 });
     });
 
     it('selectModel: should set oldValue and call setViewValue if options.length is equal to 1', () => {
