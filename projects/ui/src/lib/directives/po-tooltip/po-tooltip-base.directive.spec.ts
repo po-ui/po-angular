@@ -26,7 +26,7 @@ describe('PoTooltipBaseDirective', () => {
     expectPropertiesValues(component, 'tooltip', '1234567890', '1234567890');
     expectPropertiesValues(component, 'tooltip', null, null);
     expectPropertiesValues(component, 'tooltip', text, text);
-    expectPropertiesValues(component, 'tooltip', text + 'abcd', text);
+    expectPropertiesValues(component, 'tooltip', text + 'abcd', text + 'abcd');
   });
 
   it('should set valid positions', () => {
