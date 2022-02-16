@@ -491,7 +491,11 @@ export abstract class PoLookupBaseComponent
   // Seleciona o valor do model.
   selectValue(valueSelected: any) {
     this.valueToModel = valueSelected;
-    this.callOnChange(this.valueToModel);
+    this.multiple
+      ? this.callOnChange(this.valueToModel)
+      : this.valueToModel
+      ? this.callOnChange(this.valueToModel[this.fieldValue])
+      : this.callOnChange(undefined);
     this.selected.emit(valueSelected);
   }
 
@@ -502,7 +506,7 @@ export abstract class PoLookupBaseComponent
     }
 
     if (this.oldValueToModel !== this.valueToModel) {
-      this.change.emit(this.valueToModel);
+      this.change.emit(value);
     }
 
     // Armazenar o valor antigo do model
@@ -597,7 +601,7 @@ export abstract class PoLookupBaseComponent
     if (options.length) {
       this.selectedOptions = [...options];
 
-      const newModel = this.multiple ? options.map(option => option[this.fieldValue]) : options[0][this.fieldValue];
+      const newModel = this.multiple ? options.map(option => option[this.fieldValue]) : options[0];
       this.selectValue(newModel);
 
       if (options.length === 1) {
