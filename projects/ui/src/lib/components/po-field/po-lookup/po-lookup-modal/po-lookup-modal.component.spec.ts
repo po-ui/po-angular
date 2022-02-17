@@ -55,12 +55,10 @@ describe('PoLookupModalComponent', () => {
         }),
       getObjectByValue: () => of({ items: [{ value: 123, label: 'teste' }] })
     };
-    fixture.detectChanges();
   });
 
   afterEach(() => {
     component.poModal.close();
-    fixture.detectChanges();
   });
 
   it('should init modal with items', () => {
@@ -71,6 +69,7 @@ describe('PoLookupModalComponent', () => {
 
   it('should be show data searched', () => {
     component.searchValue = 'test';
+    fixture.detectChanges();
     component.search();
 
     expect(component.items.length).toBe(2);
@@ -78,6 +77,7 @@ describe('PoLookupModalComponent', () => {
 
   it('should be show all data, invalid search', () => {
     component.searchValue = undefined;
+    fixture.detectChanges();
     component.search();
 
     expect(component.items.length).toBe(2);
@@ -274,6 +274,7 @@ describe('PoLookupModalComponent', () => {
     beforeEach(
       waitForAsync(() => {
         component.advancedFilters = advancedFilters;
+        fixture.detectChanges();
         component.onAdvancedFilter();
         fixture.detectChanges();
       })
@@ -316,8 +317,6 @@ describe('PoLookupModalComponent', () => {
       const spyComponentRefDestroy = spyOn(component.componentRef, <any>'destroy');
 
       component.secondaryActionAdvancedFilter.action();
-      fixture.detectChanges();
-
       expect(component.isAdvancedFilter).toBe(false);
       expect(spyComponentRefDestroy).toHaveBeenCalled();
     });
@@ -326,7 +325,6 @@ describe('PoLookupModalComponent', () => {
       const spyCreateDisclaimer = spyOn(component, <any>'createDisclaimer');
       const spyComponentRefDestroy = spyOn(component.componentRef, <any>'destroy');
       component.ngOnInit();
-
       component.primaryActionAdvancedFilter.action();
 
       expect(component.isAdvancedFilter).toBe(false);
@@ -337,7 +335,6 @@ describe('PoLookupModalComponent', () => {
     it('should not destroy dynamicForm if its null', () => {
       const spyDestroyDynamicForm = spyOn(component.componentRef, <any>'destroy');
       component.componentRef = null;
-
       component.destroyDynamicForm();
 
       expect(spyDestroyDynamicForm).not.toHaveBeenCalled();
@@ -401,6 +398,7 @@ describe('PoLookupModalComponent', () => {
       spyOn(component['poTable'], 'unselectRowItem').and.callThrough();
 
       component.fieldValue = 'value';
+      fixture.detectChanges();
 
       const removedDisclaimer = { label: 'John', value: 1 };
 
