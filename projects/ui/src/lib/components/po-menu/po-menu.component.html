@@ -1,71 +1,73 @@
 <div *ngIf="mobileOpened" class="po-menu-overlay" (click)="toggleMenuMobile()"></div>
-<div class="po-menu-mobile po-clickable" (click)="toggleMenuMobile()">
-  <span class="po-icon po-icon-menu"></span>
-</div>
-
-<div class="po-menu" [ngClass]="{ 'po-menu-animation': mobileOpened }">
-  <div class="po-menu-header">
-    <div *ngIf="logo || (shortLogo && enableCollapse)" class="po-menu-header-container-logo">
-      <a href="./">
-        <img
-          [ngClass]="enableCollapse ? 'po-menu-short-logo' : 'po-menu-logo'"
-          [src]="enableCollapse ? shortLogo || logo : logo"
-        />
-      </a>
-    </div>
-
-    <div *ngIf="!enableCollapse && menuHeaderTemplate" class="po-menu-header-template">
-      <ng-container *ngTemplateOutlet="menuHeaderTemplate.templateRef"></ng-container>
-    </div>
-
-    <po-menu-filter *ngIf="filter && !enableCollapse" [p-loading]="filterLoading" (p-filter)="debounceFilter($event)">
-    </po-menu-filter>
+<nav>
+  <div class="po-menu-mobile po-clickable" (click)="toggleMenuMobile()">
+    <span class="po-icon po-icon-menu"></span>
   </div>
 
-  <nav class="po-menu-body">
-    <!-- Inner e outer para esconder scroll -->
-    <div class="po-menu-outer">
-      <div class="po-menu-inner">
-        <div *ngIf="noData" class="po-menu-item-wrapper">
-          <div class="po-menu-item-first">
-            <div class="po-menu-icon-container po-menu-item-no-data">
-              <po-icon class="po-icon po-icon-info po-menu-icon-item po-lg-2"></po-icon>
-              <div class="po-lg-10 po-menu-icon-label">{{ literals.itemNotFound }}</div>
+  <div class="po-menu" [ngClass]="{ 'po-menu-animation': mobileOpened }">
+    <div class="po-menu-header">
+      <div *ngIf="logo || (shortLogo && enableCollapse)" class="po-menu-header-container-logo">
+        <a href="./">
+          <img
+            [ngClass]="enableCollapse ? 'po-menu-short-logo' : 'po-menu-logo'"
+            [src]="enableCollapse ? shortLogo || logo : logo"
+          />
+        </a>
+      </div>
+
+      <div *ngIf="!enableCollapse && menuHeaderTemplate" class="po-menu-header-template">
+        <ng-container *ngTemplateOutlet="menuHeaderTemplate.templateRef"></ng-container>
+      </div>
+
+      <po-menu-filter *ngIf="filter && !enableCollapse" [p-loading]="filterLoading" (p-filter)="debounceFilter($event)">
+      </po-menu-filter>
+    </div>
+
+    <div class="po-menu-body">
+      <!-- Inner e outer para esconder scroll -->
+      <div class="po-menu-outer">
+        <div class="po-menu-inner">
+          <div *ngIf="noData" class="po-menu-item-wrapper">
+            <div class="po-menu-item-first">
+              <div class="po-menu-icon-container po-menu-item-no-data">
+                <po-icon class="po-icon po-icon-info po-menu-icon-item po-lg-2"></po-icon>
+                <div class="po-lg-10 po-menu-icon-label">{{ literals.itemNotFound }}</div>
+              </div>
             </div>
           </div>
-        </div>
 
-        <div *ngFor="let menu of filteredItems; let menuIndex = index" class="po-menu-item-wrapper">
-          <po-menu-item
-            [class.po-menu-item-first]="menuIndex === 0"
-            [p-action]="menu.action"
-            [p-badge-alert]="menu.badgeAlert"
-            [p-badge-color]="menu.badge ? menu.badge.color : undefined"
-            [p-badge-value]="menu.badge ? menu.badge.value : undefined"
-            [p-collapsed-menu]="enableCollapse"
-            [p-icon]="allowIcons ? menu.icon : null"
-            [p-id]="menu.id"
-            [p-label]="menu.label"
-            [p-level]="menu.level"
-            [p-link]="menu.link"
-            [p-short-label]="menu.shortLabel"
-            [p-sub-items]="menu.subItems"
-            [p-type]="menu.type"
-          >
-          </po-menu-item>
+          <div *ngFor="let menu of filteredItems; let menuIndex = index" class="po-menu-item-wrapper">
+            <po-menu-item
+              [class.po-menu-item-first]="menuIndex === 0"
+              [p-action]="menu.action"
+              [p-badge-alert]="menu.badgeAlert"
+              [p-badge-color]="menu.badge ? menu.badge.color : undefined"
+              [p-badge-value]="menu.badge ? menu.badge.value : undefined"
+              [p-collapsed-menu]="enableCollapse"
+              [p-icon]="allowIcons ? menu.icon : null"
+              [p-id]="menu.id"
+              [p-label]="menu.label"
+              [p-level]="menu.level"
+              [p-link]="menu.link"
+              [p-short-label]="menu.shortLabel"
+              [p-sub-items]="menu.subItems"
+              [p-type]="menu.type"
+            >
+            </po-menu-item>
+          </div>
         </div>
       </div>
     </div>
-  </nav>
 
-  <div *ngIf="hasFooter" class="po-menu-footer">
-    <a class="po-menu-collapse-button-icon po-clickable" (click)="toggle()">
-      <span
-        class="po-icon"
-        [class.po-icon-menu-close]="enableCollapseButton"
-        [class.po-icon-menu-open]="enableCollapse"
-      >
-      </span>
-    </a>
+    <div *ngIf="hasFooter" class="po-menu-footer">
+      <a class="po-menu-collapse-button-icon po-clickable" (click)="toggle()">
+        <span
+          class="po-icon"
+          [class.po-icon-menu-close]="enableCollapseButton"
+          [class.po-icon-menu-open]="enableCollapse"
+        >
+        </span>
+      </a>
+    </div>
   </div>
-</div>
+</nav>
