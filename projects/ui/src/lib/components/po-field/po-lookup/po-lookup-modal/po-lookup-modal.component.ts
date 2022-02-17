@@ -1,5 +1,6 @@
 import {
   AfterViewInit,
+  ChangeDetectionStrategy,
   ChangeDetectorRef,
   Component,
   ComponentFactoryResolver,
@@ -25,7 +26,8 @@ import { PoTableComponent } from './../../../po-table/po-table.component';
  */
 @Component({
   selector: 'po-lookup-modal',
-  templateUrl: './po-lookup-modal.component.html'
+  templateUrl: './po-lookup-modal.component.html',
+  changeDetection: ChangeDetectionStrategy.OnPush
 })
 export class PoLookupModalComponent extends PoLookupModalBaseComponent implements OnInit, AfterViewInit {
   @ViewChild(PoTableComponent, { static: true }) poTable: PoTableComponent;
@@ -162,5 +164,6 @@ export class PoLookupModalComponent extends PoLookupModalBaseComponent implement
       .subscribe(() => {
         this.primaryActionAdvancedFilter.disabled = this.dynamicForm.invalid;
       });
+    this.changeDetector.markForCheck();
   }
 }
