@@ -73,6 +73,14 @@ describe('PoRadioGroupBase: ', () => {
     expect(spy).not.toHaveBeenCalled();
   });
 
+  it('should register function registerOnTouched', () => {
+    component['onTouched'] = undefined;
+    const func = () => true;
+
+    component.registerOnTouched(func);
+    expect(component['onTouched']).toBe(func);
+  });
+
   describe('Methods: ', () => {
     const onChangePropagate: any = 'onChangePropagate';
 
