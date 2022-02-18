@@ -62,7 +62,9 @@ const poSelectContentPositionDefault = 'bottom';
  * > Ao passar um valor para o _model_ que não está na lista de opções, o mesmo será definido como `undefined`.
  *
  * Também existe a possibilidade de utilizar um _template_ para a exibição dos itens da lista,
- * veja mais em **[p-select-option-template](/documentation/po-select-option-template)**.
+ * veja mais em **[p-combo-option-template](/documentation/po-combo-option-template)**.
+ *
+ * > Obs: o template **[p-select-option-template](/documentation/po-select-option-template)** será depreciado na versão 14.x.x.
  */
 @Component({
   selector: 'po-select',

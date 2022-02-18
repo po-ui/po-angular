@@ -3,11 +3,15 @@ import { Directive, TemplateRef } from '@angular/core';
 /**
  * @usedBy PoSelectComponent
  *
+ * @deprecated 14.x.x
+ *
  * @description
+ *
+ * > **Deprecated 14.x.x**. Utilize o `PoComboOptionTemplate` em conjunto com o componente `po-combo`.
  *
  * Esta diretiva permite personalizar o conteúdo dos itens exibidos na lista suspensa do componente.
  *
- * > Quando utilizada em _mobile_ será exibido o componente nativo.
+ * Quando utilizada em _mobile_ será exibido o componente nativo.
  *
  * Para personalizar o conteúdo de cada item da lista deve-se utilizar a diretiva `p-select-option-template` com `ng-template`
  * dentro da tag `po-select`.
