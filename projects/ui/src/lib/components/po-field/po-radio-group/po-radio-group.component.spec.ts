@@ -49,15 +49,41 @@ describe('PoRadioGroupComponent:', () => {
   });
 
   it('should call changeValue when clicked and enabled', () => {
+    component['onTouched'] = value => {};
+    spyOn(component, <any>'onTouched');
     spyOn(component, 'changeValue');
+
     component.eventClick('valor', false);
+
     expect(component.changeValue).toHaveBeenCalledWith('valor');
+    expect(component['onTouched']).toHaveBeenCalledWith();
   });
 
   it('shouldn`t call changeValue when clicked and disabled', () => {
+    component['onTouched'] = value => {};
+    spyOn(component, <any>'onTouched');
     spyOn(component, 'changeValue');
+
     component.eventClick('valor', true);
+
     expect(component.changeValue).not.toHaveBeenCalledWith('valor');
+    expect(component['onTouched']).not.toHaveBeenCalledWith();
+  });
+
+  it('eventClick: shouldn´t throw error if onTouched is falsy when clicked and enabled', () => {
+    component['onTouched'] = null;
+
+    const fnError = () => component.eventClick('valor', false);
+
+    expect(fnError).not.toThrow();
+  });
+
+  it('eventClick: shouldn´t throw error if onTouched is falsy when clicked and disabled', () => {
+    component['onTouched'] = null;
+
+    const fnError = () => component.eventClick('valor', true);
+
+    expect(fnError).not.toThrow();
   });
 
   it('should return input when exists a input with this value', () => {

@@ -67,6 +67,8 @@ export abstract class PoRadioGroupBaseComponent implements ControlValueAccessor,
   mdColumns: number = poRadioGroupColumnsDefaultLength;
   value: any;
 
+  protected onTouched: any = null;
+
   private _columns: number = poRadioGroupColumnsDefaultLength;
   private _disabled?: boolean = false;
   private _options: Array<PoRadioGroupOption>;
@@ -174,7 +176,9 @@ export abstract class PoRadioGroupBaseComponent implements ControlValueAccessor,
     this.onChangePropagate = fn;
   }
 
-  registerOnTouched(fn: any) {}
+  registerOnTouched(fn: any): void {
+    this.onTouched = fn;
+  }
 
   registerOnValidatorChange(fn: any) {
     this.validatorChange = fn;

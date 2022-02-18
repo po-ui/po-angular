@@ -96,6 +96,7 @@ export class PoRadioGroupComponent extends PoRadioGroupBaseComponent implements 
 
   eventClick(value: any, disabled: any) {
     if (!disabled) {
+      this.onTouched?.();
       this.changeValue(value);
     }
   }
