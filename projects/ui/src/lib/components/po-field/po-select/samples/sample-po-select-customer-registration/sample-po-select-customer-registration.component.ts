@@ -1,4 +1,4 @@
-import { Component, OnDestroy, OnInit } from '@angular/core';
+import { ChangeDetectorRef, Component, OnDestroy, OnInit } from '@angular/core';
 
 import { Subscription } from 'rxjs';
 
@@ -55,7 +55,7 @@ export class SamplePoSelectCustomerRegistrationComponent implements OnDestroy, O
   private citiesSubscription: Subscription;
   private statesSubscription: Subscription;
 
-  constructor(private sampleService: SamplePoSelectCustomerRegistrationService) {}
+  constructor(private sampleService: SamplePoSelectCustomerRegistrationService, private cdRef: ChangeDetectorRef) {}
 
   ngOnDestroy() {
     this.citiesSubscription?.unsubscribe();
@@ -111,6 +111,7 @@ export class SamplePoSelectCustomerRegistrationComponent implements OnDestroy, O
       .getCitiesByState(state)
       .subscribe((cities: { items: Array<PoSelectOption> }) => {
         this.cityOptions = cities.items;
+        this.cdRef.detectChanges();
         this.city = this.cityOptions[0].value as number;
       });
   }
