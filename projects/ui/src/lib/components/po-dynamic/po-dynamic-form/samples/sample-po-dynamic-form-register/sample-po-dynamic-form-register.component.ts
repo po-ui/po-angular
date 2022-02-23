@@ -150,7 +150,7 @@ export class SamplePoDynamicFormRegisterComponent implements OnInit {
         {
           property: 'city',
           gridColumns: 6,
-          options: this.registerService.getCity(changedValue.value.state),
+          options: this.registerService.getCity(parseInt(changedValue.value.state, 10)),
           disabled: false
         }
       ]

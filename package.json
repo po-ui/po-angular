@@ -74,6 +74,7 @@
     "@animaliads/ani-button": "1.1.0-dev.24",
     "@animaliads/ani-switch": "dev",
     "@animaliads/ani-textarea": "dev",
+    "@animaliads/ani-select": "dev",
     "@ionic-native/core": "5.33.0",
     "@ionic-native/network": "5.33.0",
     "@po-ui/style": "6.0.0",

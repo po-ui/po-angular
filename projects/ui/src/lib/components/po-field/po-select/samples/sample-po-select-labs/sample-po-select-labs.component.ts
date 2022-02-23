@@ -18,9 +18,9 @@ export class SamplePoSelectLabsComponent implements OnInit {
 
   readonly propertiesOptions: Array<PoCheckboxGroupOption> = [
     { value: 'disabled', label: 'Disabled' },
-    { value: 'optional', label: 'Optional' },
     { value: 'required', label: 'Required' },
-    { value: 'readonly', label: 'Read Only' }
+    { value: 'optional', label: 'Optional' },
+    { value: 'required', label: 'Required' }
   ];
 
   ngOnInit() {

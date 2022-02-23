@@ -1,62 +1,15 @@
 <po-field-container [p-label]="label" [p-help]="help" [p-optional]="!required && optional">
-  <select
+  <ani-select
     #select
-    class="po-select"
-    [attr.name]="name"
-    [disabled]="disabled"
-    [ngClass]="{ 'po-select-mobile': isMobile, 'po-invisible': isInvisibleSelectNative }"
-    [required]="required"
-    (change)="onSelectChange($event.target.value)"
-    (blur)="onBlur()"
+    [attr.label-choose-option]="placeholder"
+    [attr.disabled]="disabled"
+    (onBlur)="onBlur()"
+    (onChange)="onSelectChange($event.target.value)"
+    [attr.items]="options"
+    [attr.value]="selectedValue"
+    [attr.required]="required"
   >
-    <option *ngIf="isMobile" disabled hidden selected></option>
-    <option *ngFor="let option of options" [disabled]="readonly" [value]="option.value" (click)="onOptionClick(option)">
-      {{ option?.label }}
-    </option>
-  </select>
-
-  <div class="po-select-container">
-    <div
-      #selectButton
-      class="po-select-button"
-      [ngClass]="{ 'po-select-button-disabled': disabled, 'po-select-button-readonly': readonly }"
-      (click)="toggleButton()"
-    >
-      <span>{{ displayValue || placeholder }}</span>
-
-      <div class="po-field-icon-container-right">
-        <span
-          #icon
-          class="po-icon {{ selectIcon }} po-field-icon"
-          [ngClass]="{ 'po-field-icon-disabled': disabled, 'po-field-icon-readonly': readonly }"
-        ></span>
-      </div>
-    </div>
-
-    <ul #contentList class="po-select-content" [ngClass]="{ 'po-invisible': isMobile }">
-      <li
-        *ngFor="let option of options"
-        [class.po-select-item-selected]="selectedValue === option.value"
-        [value]="option.value"
-        (click)="onOptionClick(option)"
-      >
-        <div class="po-select-item">
-          <ng-container *ngIf="selectOptionTemplate; then optionTemplate; else defaultOptionTemplate"></ng-container>
-
-          <ng-template #defaultOptionTemplate>
-            <span>{{ option?.label }}</span>
-          </ng-template>
-
-          <ng-template
-            #optionTemplate
-            [ngTemplateOutlet]="selectOptionTemplate?.templateRef"
-            [ngTemplateOutletContext]="{ $implicit: option }"
-          >
-          </ng-template>
-        </div>
-      </li>
-    </ul>
-  </div>
+  </ani-select>
 
   <po-field-container-bottom></po-field-container-bottom>
 </po-field-container>

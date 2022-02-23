@@ -29,7 +29,7 @@
     <po-input class="po-md-6" name="address" [(ngModel)]="address" p-label="Address"> </po-input>
   </div>
 
-  <div class="po-row">
+  <div class="po-row po-mb-2">
     <po-select
       class="po-md-6"
       name="state"
@@ -38,17 +38,6 @@
       [p-options]="stateOptions"
       (p-change)="onChangeState()"
     >
-      <ng-template p-select-option-template let-option>
-        <div class="sample-select-option-template-container">
-          <po-avatar p-size="xs" p-src="https://po-sample-api.herokuapp.com/v1/sampleSelect/{{ option.value }}.png">
-          </po-avatar>
-
-          <div class="sample-select-option-template-margin">
-            <div class="sample-select-option-template-label">{{ option.label }}</div>
-            <div class="sample-select-option-template-value">{{ option.value }}</div>
-          </div>
-        </div>
-      </ng-template>
     </po-select>
 
     <po-select class="po-md-6" name="city" [(ngModel)]="city" p-label="City" [p-options]="cityOptions"> </po-select>
