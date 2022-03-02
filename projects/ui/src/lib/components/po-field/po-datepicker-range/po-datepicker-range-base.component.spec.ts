@@ -95,6 +95,14 @@ describe('PoDatepickerRangeBaseComponent:', () => {
       expect(component['_minDate'].getFullYear()).toBe(2021);
     });
 
+    it('should be update property p-locale', () => {
+      expectPropertiesValues(component, 'locale', '', 'pt');
+      expectPropertiesValues(component, 'locale', ['pt', 'x'], 'pt');
+      expectPropertiesValues(component, 'locale', 'en', 'en');
+      expectPropertiesValues(component, 'locale', 'es', 'es');
+      expectPropertiesValues(component, 'locale', 'ru', 'ru');
+    });
+
     it('disabled: should update with true value.', () => {
       const booleanValidTrueValues = [true, 'true', 1, ''];
 

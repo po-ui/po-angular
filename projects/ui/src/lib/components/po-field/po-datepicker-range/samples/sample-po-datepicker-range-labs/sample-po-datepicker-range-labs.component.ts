@@ -1,6 +1,11 @@
 import { Component, OnInit } from '@angular/core';
 
-import { PoCheckboxGroupOption, PoDatepickerRange, PoDatepickerRangeLiterals } from '@po-ui/ng-components';
+import {
+  PoCheckboxGroupOption,
+  PoDatepickerRange,
+  PoDatepickerRangeLiterals,
+  PoSelectOption
+} from '@po-ui/ng-components';
 
 @Component({
   selector: 'sample-po-datepicker-range-labs',
@@ -19,6 +24,7 @@ export class SamplePoDatepickerRangeLabsComponent implements OnInit {
   startDate: string | Date;
   maxDate: string | Date;
   minDate: string | Date;
+  locale: string;
 
   public readonly propertiesOptions: Array<PoCheckboxGroupOption> = [
     { value: 'clean', label: 'Clean' },
@@ -27,6 +33,13 @@ export class SamplePoDatepickerRangeLabsComponent implements OnInit {
     { value: 'optional', label: 'Optional' },
     { value: 'readonly', label: 'Read Only' },
     { value: 'required', label: 'Required' }
+  ];
+
+  public readonly localeOptions: Array<PoSelectOption> = [
+    { label: 'English', value: 'en' },
+    { label: 'Español', value: 'es' },
+    { label: 'Português', value: 'pt' },
+    { label: 'Pусский', value: 'ru' }
   ];
 
   ngOnInit() {
@@ -61,6 +74,7 @@ export class SamplePoDatepickerRangeLabsComponent implements OnInit {
     this.startDate = undefined;
     this.maxDate = undefined;
     this.minDate = undefined;
+    this.locale = undefined;
     setTimeout(() => (this.datepickerRange = undefined));
   }
 }
