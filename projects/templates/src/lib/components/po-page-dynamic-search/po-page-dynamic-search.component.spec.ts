@@ -214,7 +214,7 @@ describe('PoPageDynamicSearchComponent:', () => {
       expect(component.poAdvancedFilter.open).toHaveBeenCalled();
     });
 
-    it(`onAdvancedSearch: should call 'setDisclaimers', 'setFilters' and 'advancedSearch.emit'`, () => {
+    it(`onAdvancedSearch: should call 'setDisclaimers', 'setFilters', 'addComplexFilter' and 'advancedSearch.emit'`, () => {
       const filter = { property: 'value1' };
       const optionsService = undefined;
 
@@ -224,6 +224,7 @@ describe('PoPageDynamicSearchComponent:', () => {
           : component.filters;
 
       spyOn(component, <any>'setDisclaimers');
+      spyOn(component, <any>'addComplexFilter').and.returnValue(filter);
       spyOn(component.advancedSearch, 'emit');
       spyOn(component, <any>'setFilters');
 
@@ -231,6 +232,7 @@ describe('PoPageDynamicSearchComponent:', () => {
 
       expect(component['setDisclaimers']).toHaveBeenCalledWith(filter, optionsService, visibleFilters);
       expect(component['setFilters']).toHaveBeenCalledBefore(component.advancedSearch.emit);
+      expect(component['addComplexFilter']).toHaveBeenCalledWith(filter);
       expect(component.advancedSearch.emit).toHaveBeenCalledWith(filter);
     });
 
@@ -285,7 +287,8 @@ describe('PoPageDynamicSearchComponent:', () => {
         },
         poPageList: {
           clearInputSearch: () => {}
-        }
+        },
+        addComplexFilter: () => ({})
       };
       const filteredItems = { filter: 'fakeFilter', optionsService: 'fakeOptionsService' };
       const isAdvancedSearch = true;
@@ -588,6 +591,84 @@ describe('PoPageDynamicSearchComponent:', () => {
       ];
 
       expect(component['setDisclaimers'](filters)).toEqual(result);
+    });
+
+    it(`addComplexFilter: should return {}`, () => {
+      component.filters = [{ property: 'name' }, { property: 'genre' }, { property: 'birthdate' }];
+
+      const filters = {};
+
+      const result = {};
+
+      expect(component['addComplexFilter'](filters)).toEqual(result);
+    });
+
+    it(`addComplexFilter: should return filter without attribute 'range'`, () => {
+      component.filters = [{ property: 'name' }, { property: 'genre' }, { property: 'birthdate' }];
+
+      const filters = { name: 'Name1', genre: 'male', birthdate: '2020-01-15' };
+
+      const result = { name: 'Name1', genre: 'male', birthdate: '2020-01-15' };
+
+      expect(component['addComplexFilter'](filters)).toEqual(result);
+    });
+
+    it(`addComplexFilter: should return filter with attribute 'range'`, () => {
+      component.filters = [{ property: 'name' }, { property: 'genre' }, { property: 'birthdate', range: true }];
+
+      const filters = { name: 'Name1', genre: 'male', birthdate: { start: '2020-01-01', end: '2020-01-31' } };
+
+      const result = {
+        name: 'Name1',
+        genre: 'male',
+        $filter: `birthdate ge '2020-01-01' and birthdate le '2020-01-31'`
+      };
+
+      expect(component['addComplexFilter'](filters)).toEqual(result);
+    });
+
+    it(`addComplexFilter: should return filter with attribute 'range' and final date 'undefined'`, () => {
+      component.filters = [{ property: 'name' }, { property: 'genre' }, { property: 'birthdate', range: true }];
+
+      const filters = { name: 'Name1', genre: 'male', birthdate: { start: '2020-01-01', end: undefined } };
+
+      const result = { name: 'Name1', genre: 'male', birthdate: { start: '2020-01-01', end: undefined } };
+
+      expect(component['addComplexFilter'](filters)).toEqual(result);
+    });
+
+    it(`addComplexFilter: should return filter with attribute 'range' and initial date 'undefined'`, () => {
+      component.filters = [{ property: 'name' }, { property: 'genre' }, { property: 'birthdate', range: true }];
+
+      const filters = { name: 'Name1', genre: 'male', birthdate: { start: undefined, end: '2020-01-31' } };
+
+      const result = { name: 'Name1', genre: 'male', birthdate: { start: undefined, end: '2020-01-31' } };
+
+      expect(component['addComplexFilter'](filters)).toEqual(result);
+    });
+
+    it(`addComplexFilter: should return filter with two attribute 'range'`, () => {
+      component.filters = [
+        { property: 'name' },
+        { property: 'genre' },
+        { property: 'birthdate', range: true },
+        { property: 'deathdate', range: true }
+      ];
+
+      const filters = {
+        name: 'Name1',
+        genre: 'male',
+        birthdate: { start: '2020-01-01', end: '2020-01-31' },
+        deathdate: { start: '2021-01-01', end: '2021-01-31' }
+      };
+
+      const result = {
+        name: 'Name1',
+        genre: 'male',
+        $filter: `birthdate ge '2020-01-01' and birthdate le '2020-01-31' and deathdate ge '2021-01-01' and deathdate le '2021-01-31'`
+      };
+
+      expect(component['addComplexFilter'](filters)).toEqual(result);
     });
 
     it('getFilterValueToDisclaimer: should return formated date if field type is PoDynamicFieldType.Date', () => {
