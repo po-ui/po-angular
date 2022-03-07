@@ -2,6 +2,15 @@
 
 All notable changes to this project will be documented in this file. See [standard-version](https://github.com/conventional-changelog/standard-version) for commit guidelines.
 
+## [5.22.5](https://github.com/po-ui/po-angular/compare/v5.22.4...v5.22.5) (2022-03-07)
+
+
+### Bug Fixes
+
+* **lookup:** corrige retorno do evento p-selected ([562bc79](https://github.com/po-ui/po-angular/commit/562bc79d67a5e6608e1b1ff6413ee14c683204a1))
+
+
+
 ## [5.22.4](https://github.com/po-ui/po-angular/compare/v5.22.3...v5.22.4) (2022-01-31)
 
 
