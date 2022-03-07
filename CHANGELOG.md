@@ -2,6 +2,28 @@
 
 All notable changes to this project will be documented in this file. See [standard-version](https://github.com/conventional-changelog/standard-version) for commit guidelines.
 
+# [6.5.0](https://github.com/po-ui/po-angular/compare/v6.4.0...v6.5.0) (2022-03-07)
+
+
+### Bug Fixes
+
+* **lookup:** corrige retorno do evento p-selected ([84256df](https://github.com/po-ui/po-angular/commit/84256df39fc60c6efdddc201796677b6f6bf9367))
+
+
+### Features
+
+* **field:** deprecia propriedade `autofocus` no po-switch e po-select ([dcdf1ff](https://github.com/po-ui/po-angular/commit/dcdf1ff7627f7d61d2276172516672f4b3a45c6d))
+* **menu:** melhora acessibilidade no menu ([0686352](https://github.com/po-ui/po-angular/commit/0686352585317e0313728b6f2a921d558760f72a))
+* **select:** deprecia o PoSelectOptionTemplate ([fb23f7e](https://github.com/po-ui/po-angular/commit/fb23f7e041152a003b83062f19e9c625fa911ec3))
+* **tooltip:** remove restrição de caracteres ([d4a54c4](https://github.com/po-ui/po-angular/commit/d4a54c4151980d43371803cef6968b52e4f23cde))
+
+
+### Performance Improvements
+
+* **lookup-modal:** implementa ChangeDetectionStrategy.OnPush ([0cbbb75](https://github.com/po-ui/po-angular/commit/0cbbb75e3163ddf652729d349bf41a73a3e369a5))
+
+
+
 # [6.4.0](https://github.com/po-ui/po-angular/compare/v6.3.0...v6.4.0) (2022-02-14)
 
 
