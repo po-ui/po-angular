@@ -375,6 +375,7 @@ export abstract class PoLookupModalBaseComponent implements OnDestroy, OnInit {
       action: () => {
         this.destroyDynamicForm();
         this.isAdvancedFilter = false;
+        this.page = 1;
         this.createDisclaimer();
       },
       label: this.literals.modalAdvancedSearchPrimaryActionLabel
