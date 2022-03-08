@@ -254,6 +254,16 @@ describe('PoLookupModalBaseComponent:', () => {
       expect(advancedFilters).toEqual(expectedValue);
     });
 
+    it('getAdvancedFilters: should return correct page after uses AdvancedFilter, call `showMore` and call the AdvancedFilter again', () => {
+      component.primaryActionAdvancedFilter.action();
+      component.showMoreEvent();
+
+      expect(component.page).toBe(2);
+
+      component.primaryActionAdvancedFilter.action();
+      expect(component.page).toBe(1);
+    });
+
     it('getAdvancedFilters: should return undefined if advancedParams length is equal to 0', () => {
       const emptyAdvancedParams = [];
       const advancedFilters = component['getAdvancedFilters'](emptyAdvancedParams);
