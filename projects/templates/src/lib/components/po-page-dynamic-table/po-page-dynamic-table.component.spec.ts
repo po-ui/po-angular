@@ -368,6 +368,17 @@ describe('PoPageDynamicTableComponent:', () => {
       expect(component['loadData']).toHaveBeenCalledWith(<any>{ 0: 'paramValue', page: 2 });
     });
 
+    it('refresh: should call `loadData` with next page and `params`', () => {
+      component['page'] = 2;
+      component['params'] = ['paramValue'];
+
+      spyOn(component, <any>'loadData').and.returnValue(EMPTY);
+
+      component['refresh']();
+
+      expect(component['loadData']).toHaveBeenCalledWith(<any>{ 0: 'paramValue', page: 1, pageSize: 20 });
+    });
+
     it('confirmRemove: should call `poDialogService.confirm`', () => {
       const path = '/people/:id';
 
@@ -1725,6 +1736,49 @@ describe('PoPageDynamicTableComponent:', () => {
       const pageAction = [
         {
           label: component.literals.pageAction,
+          action: jasmine.any(Function)
+        }
+      ];
+
+      expect(component.pageActions).toEqual(pageAction);
+    });
+
+    it('setRefreshAction: shouldn`t set `refresh` page action if haven`t `actions.refresh`', () => {
+      component['_refreshAction'] = [];
+
+      const actions = undefined;
+      component['setRefreshAction'](actions);
+
+      expect(component.pageActions).toEqual([]);
+    });
+
+    it('setRefreshAction: shouldn`t set `refresh` page action if haven`t `actions.refresh`', () => {
+      component['_refreshAction'] = [];
+
+      const actions = { refresh: undefined };
+      component['setRefreshAction'](actions);
+
+      expect(component.pageActions).toEqual([]);
+    });
+
+    it('setRefreshAction: shouldn`t set `refresh` page action if haven`t `actions.refresh`', () => {
+      component['_refreshAction'] = [];
+
+      const actions = { refresh: false };
+      component['setRefreshAction'](actions);
+
+      expect(component.pageActions).toEqual([]);
+    });
+
+    it('setRefreshAction: should set `refresh` page action if have `actions.refresh`', () => {
+      component['_refreshAction'] = [];
+
+      const actions = { refresh: true };
+      component['setRefreshAction'](actions);
+
+      const pageAction = [
+        {
+          label: component.literals.pageActionRefresh,
           action: jasmine.any(Function)
         }
       ];

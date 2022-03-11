@@ -111,6 +111,16 @@ export interface PoPageDynamicTableActions {
    */
   new?: string | Function;
 
+  /**
+   * @description
+   *
+   * Habilita a ação que dipara uma requisição para atualização do recusos exibidos na pagina.
+   *
+   * > A requição será feita com a quantidade de recursos já estão exibidas na pagina.
+   *
+   */
+  refresh?: boolean;
+
   /** Habilita a ação de exclusão na tabela. */
   remove?: boolean | ((id: string, resource: any) => boolean);
 

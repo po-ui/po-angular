@@ -1,6 +1,7 @@
 export const poPageDynamicTableLiteralsDefault = {
   en: {
     pageAction: 'New',
+    pageActionRefresh: 'Refresh',
     pageActionRemoveAll: 'Delete',
     tableActionView: 'View',
     tableActionEdit: 'Edit',
@@ -16,6 +17,7 @@ export const poPageDynamicTableLiteralsDefault = {
   },
   es: {
     pageAction: 'Nuevo',
+    pageActionRefresh: 'Atualizar',
     pageActionRemoveAll: 'Borrar',
     tableActionView: 'Visualizar',
     tableActionEdit: 'Editar',
@@ -31,6 +33,7 @@ export const poPageDynamicTableLiteralsDefault = {
   },
   pt: {
     pageAction: 'Novo',
+    pageActionRefresh: 'Atualizar',
     pageActionRemoveAll: 'Excluir',
     tableActionView: 'Visualizar',
     tableActionEdit: 'Editar',
@@ -47,6 +50,7 @@ export const poPageDynamicTableLiteralsDefault = {
   },
   ru: {
     pageAction: 'Новый',
+    pageActionRefresh: 'Обновить',
     pageActionRemoveAll: 'Удалить',
     tableActionView: 'Просмотр',
     tableActionEdit: 'Редактировать',

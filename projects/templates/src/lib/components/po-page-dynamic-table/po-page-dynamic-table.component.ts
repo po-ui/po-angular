@@ -217,6 +217,7 @@ export class PoPageDynamicTableComponent extends PoPageDynamicListBaseComponent 
   private _tableCustomActions: Array<PoPageDynamicTableCustomTableAction> = [];
 
   private page: number = 1;
+  private pageSize: number = 10;
   private params = {};
   private sortedColumn: PoTableColumnSort;
   private subscriptions = new Subscription();
@@ -259,6 +260,7 @@ export class PoPageDynamicTableComponent extends PoPageDynamicListBaseComponent 
     this._actions = value && typeof value === 'object' && Object.keys(value).length > 0 ? value : {};
 
     this.setPageActions(this.actions);
+    this.setRefreshAction(this.actions);
     this.setRemoveAllAction();
     this.setTableActions(this.actions);
   }
@@ -457,14 +459,14 @@ export class PoPageDynamicTableComponent extends PoPageDynamicListBaseComponent 
     return { order: `${column.property}` };
   }
 
-  private loadData(params: { page?: number; search?: string } = {}) {
+  private loadData(params: { page?: number; pageSize?: number; search?: string } = {}) {
     if (!this.serviceApi) {
       this.poNotification.error(this.literals.loadDataErrorNotification);
       return EMPTY;
     }
 
     const orderParam = this.getOrderParam(this.sortedColumn);
-    const defaultParams: any = { page: 1, pageSize: 10 };
+    const defaultParams: any = { page: 1, pageSize: this.pageSize };
     const fullParams: any = { ...defaultParams, ...params, ...orderParam };
 
     return this.poPageDynamicService.getResources(fullParams).pipe(
@@ -754,6 +756,10 @@ export class PoPageDynamicTableComponent extends PoPageDynamicListBaseComponent 
     );
   }
 
+  private refresh() {
+    this.subscriptions.add(this.loadData({ page: 1, pageSize: this.page * this.pageSize, ...this.params }).subscribe());
+  }
+
   private getSelectedItemsKeys() {
     const resources = this.items.filter(item => item.$selected);
 
@@ -888,6 +894,15 @@ export class PoPageDynamicTableComponent extends PoPageDynamicListBaseComponent 
           action: this.confirmRemoveAll.bind(this, action.removeAll, action.beforeRemoveAll),
           disabled: this.disableRemoveAll.bind(this)
         }
+      ];
+    }
+  }
+
+  private setRefreshAction(actions: PoPageDynamicTableActions) {
+    if (actions?.refresh) {
+      this.defaultPageActions = [
+        ...this._defaultPageActions,
+        { label: this.literals.pageActionRefresh, action: this.refresh.bind(this) }
       ];
     }
   }
