@@ -261,6 +261,39 @@ describe('PoPageDynamicTableComponent:', () => {
       expect(component['params']).toBe(filter);
     });
 
+    it('updateDataTable: should be called with the parameters passed to the method', () => {
+      const expectValue = { Page: 2, search: 'test' };
+
+      spyOn(component, <any>'loadData').and.returnValue(EMPTY);
+
+      component.updateDataTable(expectValue);
+
+      expect(component['loadData']).toHaveBeenCalledWith(expectValue);
+    });
+
+    it('updateDataTable: should be called with the current parameters', () => {
+      const expectValue = { page: 1, search: 'test' };
+      component['currentPage'] = 1;
+      component['params'] = { search: 'test' };
+
+      spyOn(component, <any>'loadData').and.returnValue(EMPTY);
+
+      component.updateDataTable();
+
+      expect(component['loadData']).toHaveBeenCalledWith(expectValue);
+    });
+
+    it(`updateDataTable: 'currentPage' should be 2 if the index of 'itemSelectedAction' is greater than 9`, () => {
+      for (let i = 0; i <= 10; i++) {
+        component.items.push({ id: i });
+      }
+      component['itemSelectedAction'] = component.items[10];
+
+      component.updateDataTable();
+
+      expect(component['currentPage']).toBe(2);
+    });
+
     it('onAdvancedSearch: should call `updateFilterValue` with filter if `keepFilters` is true', () => {
       const filter = 'filterValue';
       component.keepFilters = true;

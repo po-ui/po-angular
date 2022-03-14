@@ -386,3 +386,31 @@ export function removeKeysProperties(keys: Array<any>, newItemValue: any) {
   keys.forEach(key => delete newItemValue[key]);
   return newItemValue;
 }
+
+/**
+ * Remove objetos duplicados.
+ *
+ * Exemplo:
+ *
+ * ```
+ * item: [{country: 'japao'}, {country: 'brasil'} , {country: 'china'}]
+ * item2: [{country: 'chile'}, {country: 'brasil'}, {country: 'canada'}]
+ * key: 'country'
+ * Resultado:
+ *    item2 = [{country: 'chile'}, {country: 'canada'} ]
+ * ```
+ *
+ * @param item lista comparada.
+ * @param item2 lista para remover items duplicados.
+ * @param key propriedade que será utilizada para realizar a comparação.
+ */
+export function removeDuplicateItems(item, item2, key) {
+  for (let i = 0, len = item.length; i < len; i++) {
+    for (let j = 0, len2 = item2.length; j < len2; j++) {
+      if (item[i][key] === item2[j][key]) {
+        item2.splice(j, 1);
+        len2 = item2.length;
+      }
+    }
+  }
+}
