@@ -2,6 +2,16 @@
 
 All notable changes to this project will be documented in this file. See [standard-version](https://github.com/conventional-changelog/standard-version) for commit guidelines.
 
+## [5.22.6](https://github.com/po-ui/po-angular/compare/v5.22.5...v5.22.6) (2022-03-14)
+
+
+### Bug Fixes
+
+* **calendar:** corrige focus quando pressionada a tecla `ENTER` ([517c553](https://github.com/po-ui/po-angular/commit/517c553ee8600139ff2e5c2695f9fcb2db789f47))
+* **lookup:** ajusta pesquisa de filtro avançado ([eb14807](https://github.com/po-ui/po-angular/commit/eb148077de9fc32adb0ed9cd4ad722ca81f735a2))
+
+
+
 ## [5.22.5](https://github.com/po-ui/po-angular/compare/v5.22.4...v5.22.5) (2022-03-07)
 
 
