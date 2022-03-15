@@ -124,6 +124,26 @@ describe('PoComboBaseComponent:', () => {
       expect(spycomboListDefinitions).toHaveBeenCalled();
     });
 
+    it('p-infinite-scroll: should update property `p-infinite-scroll` with false.', () => {
+      expectPropertiesValues(component, 'infiniteScroll', falseValues, false);
+    });
+
+    it('p-infinite-scroll: should update property `p-infinite-scroll` with true.', () => {
+      expectPropertiesValues(component, 'infiniteScroll', trueValues, true);
+    });
+
+    it('p-infinite-scroll-distance: should update property `p-infinite-scroll-distance` with valid values .', () => {
+      expectSettersMethod(component, 'infiniteScrollDistance', 50, 'infiniteScrollDistance', 50);
+    });
+
+    it('p-infinite-scroll-distance: should update property `p-infinite-scroll-distance` with negative values .', () => {
+      expectSettersMethod(component, 'infiniteScrollDistance', -50, 'infiniteScrollDistance', 100);
+    });
+
+    it('p-infinite-scroll-distance: should update property `p-infinite-scroll-distance` with values > 100 .', () => {
+      expectSettersMethod(component, 'infiniteScrollDistance', 150, 'infiniteScrollDistance', 100);
+    });
+
     describe('p-literals:', () => {
       it('should be set `literals` with browser language if `literals` is `undefined`', () => {
         component['language'] = Utils.browserLanguage();

@@ -1,0 +1,24 @@
+<div class="po-row">
+  <po-widget class="po-lg-6">
+    <po-combo
+      p-filter-service="https://po-sample-api.herokuapp.com/v1/people"
+      p-label="People"
+      name="people"
+      [(ngModel)]="peopleName"
+      (p-change)="onChangePeople($event)"
+      [p-infinite-scroll]="true"
+      p-field-label="name"
+      p-field-value="id"
+    ></po-combo>
+
+    <ng-container *ngIf="people$ | async as people">
+      <div class="po-row">
+        <po-info class="po-md-4" p-label="Name" [p-value]="people.name"> </po-info>
+
+        <po-info class="po-md-4" p-label="Nickname" [p-value]="people.nickname"> </po-info>
+
+        <po-info class="po-md-4" p-label="Email" [p-value]="people.email"> </po-info>
+      </div>
+    </ng-container>
+  </po-widget>
+</div>
