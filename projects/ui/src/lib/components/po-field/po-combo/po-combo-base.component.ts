@@ -105,6 +105,41 @@ export abstract class PoComboBaseComponent implements ControlValueAccessor, OnIn
    *
    * @description
    *
+   * Se verdadeiro ativa a funcionalidade de scroll infinito para o combo, Ao chegar ao fim da tabela executará nova busca dos dados conforme paginação.
+   *
+   * @default `false`
+   */
+  @Input('p-infinite-scroll') set infiniteScroll(value: boolean) {
+    this._infiniteScroll = convertToBoolean(value);
+  }
+
+  get infiniteScroll() {
+    return this._infiniteScroll;
+  }
+
+  /**
+   * @optional
+   *
+   * @description
+   *
+   * Define o percentual necessário para disparar o evento `show-more`, que é responsável por carregar mais dados no combo. Caso o valor seja maior que 100 ou menor que 0, o valor padrão será 100%.
+   *
+   * **Exemplos**
+   * - p-infinite-scroll-distance = 80: Quando atingir 80% do scroll do combo, o `show-more` será disparado.
+   */
+  @Input('p-infinite-scroll-distance') set infiniteScrollDistance(value: number) {
+    this._infiniteScrollDistance = value > 100 || value < 0 ? 100 : value;
+  }
+
+  get infiniteScrollDistance() {
+    return this._infiniteScrollDistance;
+  }
+
+  /**
+   * @optional
+   *
+   * @description
+   *
    * Define o ícone que será exibido no início do campo.
    *
    * É possível usar qualquer um dos ícones da [Biblioteca de ícones](/guides/icons). conforme exemplo abaixo:
@@ -208,6 +243,9 @@ export abstract class PoComboBaseComponent implements ControlValueAccessor, OnIn
   selectedView: any;
   service: PoComboFilterService;
   visibleOptions: Array<PoComboOption | PoComboGroup> = [];
+  page: number = 1;
+  pageSize: number = 10;
+  loading: boolean = false;
 
   protected cacheStaticOptions: Array<PoComboOption | PoComboGroup> = [];
   protected comboOptionsList: Array<PoComboOption | PoComboGroup> = [];
@@ -228,6 +266,9 @@ export abstract class PoComboBaseComponent implements ControlValueAccessor, OnIn
   private _required?: boolean = false;
   private _sort?: boolean = false;
   private language: string;
+  private _infiniteScrollDistance?: number = 100;
+  private _infiniteScroll?: boolean = false;
+  private _height?: number;
 
   // utilizado para fazer o controle de atualizar o model.
   // não deve forçar a atualização se o gatilho for o writeValue para não deixar o campo dirty.
@@ -652,7 +693,8 @@ export abstract class PoComboBaseComponent implements ControlValueAccessor, OnIn
   updateComboList(options?: Array<PoComboOption | PoComboGroup>) {
     const copyOptions = options || [...this.comboOptionsList];
 
-    const newOptions = !options && this.selectedValue ? [{ ...this.selectedOption }] : copyOptions;
+    const newOptions =
+      !options && !this.infiniteScroll && this.selectedValue ? [{ ...this.selectedOption }] : copyOptions;
 
     this.visibleOptions = newOptions;
 
