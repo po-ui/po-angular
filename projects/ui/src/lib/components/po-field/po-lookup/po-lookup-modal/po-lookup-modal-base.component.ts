@@ -236,7 +236,7 @@ export abstract class PoLookupModalBaseComponent implements OnDestroy, OnInit {
     return this._title;
   }
 
-  constructor(languageService: PoLanguageService, private changeDetector: ChangeDetectorRef) {
+  constructor(languageService: PoLanguageService, protected changeDetector: ChangeDetectorRef) {
     this.language = languageService.getShortLanguage();
   }
 
@@ -342,15 +342,19 @@ export abstract class PoLookupModalBaseComponent implements OnDestroy, OnInit {
 
   //Método responsável por selecionar as linhas quando abre o modal.
   setSelectedItems() {
-    this.selecteds.forEach(selectedItem =>
-      this.poTable.selectRowItem(item => item[this.fieldValue] === selectedItem.value)
-    );
+    this.selecteds.forEach(selectedItem => {
+      if (this.multiple) {
+        this.poTable.selectRowItem(item => item[this.fieldValue] === selectedItem.value);
+      } else {
+        this.poTable.selectRowItem(item => item[this.fieldValue] === selectedItem[this.fieldValue]);
+      }
+    });
   }
 
   //Método responsável por criar os disclaimers quando abre o modal.
   setDisclaimersItems() {
     if (this.selectedItems && !Array.isArray(this.selectedItems)) {
-      this.selecteds = [{ value: this.selectedItems }];
+      this.multiple ? (this.selecteds = [{ value: this.selectedItems }]) : (this.selecteds = [this.selectedItems]);
       return;
     }
 
@@ -371,6 +375,7 @@ export abstract class PoLookupModalBaseComponent implements OnDestroy, OnInit {
       action: () => {
         this.destroyDynamicForm();
         this.isAdvancedFilter = false;
+        this.page = 1;
         this.createDisclaimer();
       },
       label: this.literals.modalAdvancedSearchPrimaryActionLabel

@@ -41,6 +41,7 @@ export interface PoLookupColumn {
    * - number: valores numéricos
    * - date: data
    * - currency: valores monetários
+   * - dateTime: data e hora
    */
   type?: string;
 

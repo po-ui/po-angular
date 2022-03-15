@@ -254,6 +254,16 @@ describe('PoLookupModalBaseComponent:', () => {
       expect(advancedFilters).toEqual(expectedValue);
     });
 
+    it('getAdvancedFilters: should return correct page after uses AdvancedFilter, call `showMore` and call the AdvancedFilter again', () => {
+      component.primaryActionAdvancedFilter.action();
+      component.showMoreEvent();
+
+      expect(component.page).toBe(2);
+
+      component.primaryActionAdvancedFilter.action();
+      expect(component.page).toBe(1);
+    });
+
     it('getAdvancedFilters: should return undefined if advancedParams length is equal to 0', () => {
       const emptyAdvancedParams = [];
       const advancedFilters = component['getAdvancedFilters'](emptyAdvancedParams);
@@ -344,6 +354,16 @@ describe('PoLookupModalBaseComponent:', () => {
     it('setSelectedItems: should call `selectRowItem`', () => {
       component.selecteds = [{ value: 1495832652942 }, { value: 1495832596999 }];
 
+      const spySelectRowItem = spyOn(component.poTable, 'selectRowItem').and.callThrough();
+
+      component.setSelectedItems();
+
+      expect(spySelectRowItem).toHaveBeenCalled();
+    });
+
+    it('setSelectedItems: should call `selectRowItem` if is multiple', () => {
+      component.selecteds = [{ value: 1495832652942 }, { value: 1495832596999 }];
+      component.multiple = true;
       const spySelectRowItem = spyOn(component.poTable, 'selectRowItem').and.callThrough();
 
       component.setSelectedItems();
@@ -514,8 +534,18 @@ describe('PoLookupModalBaseComponent:', () => {
     });
 
     it('setDisclaimersItems: should set selecteds with component.selectedItems if component.selectedItems is array', () => {
-      const expectSelecteds = [{ value: 123, label: '123' }];
+      const expectSelecteds = { value: 123, label: '123' };
+      component.multiple = false;
+      component.selectedItems = expectSelecteds;
 
+      component.setDisclaimersItems();
+
+      expect(component.selecteds[0]).toEqual(expectSelecteds);
+    });
+
+    it('setDisclaimersItems: should set selecteds with component.selectedItems if component.selectedItems is array and is multiple', () => {
+      const expectSelecteds = [{ value: 123, label: '123' }];
+      component.multiple = true;
       component.selectedItems = [...expectSelecteds];
 
       component.setDisclaimersItems();
@@ -525,7 +555,7 @@ describe('PoLookupModalBaseComponent:', () => {
 
     it('setDisclaimersItems: should set selecteds with [{ value: component.selectedItems }] if selectedItems isnt array', () => {
       const expectSelecteds = [{ value: 123456789 }];
-
+      component.multiple = true;
       component.selectedItems = 123456789;
 
       component.setDisclaimersItems();
