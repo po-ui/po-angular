@@ -2956,6 +2956,27 @@ describe('PoTableComponent:', () => {
     expect(spyIncludeInfiniteScroll).not.toHaveBeenCalled();
   });
 
+  it('syncronizeHorizontalScroll, should syncronize two separated tables during horizontal scroll', () => {
+    const fakeThis = {
+      poTableTbody: {
+        nativeElement: {
+          scrollLeft: 100
+        }
+      },
+      poTableThead: {
+        nativeElement: {
+          scrollLeft: 10
+        }
+      }
+    };
+
+    fixture.detectChanges();
+
+    component['syncronizeHorizontalScroll'].call(fakeThis);
+
+    expect(fakeThis.poTableThead.nativeElement.scrollLeft).toEqual(100);
+  });
+
   it('hasInfiniteScroll: should return false if infiniteScroll is false', () => {
     component.infiniteScroll = false;
     component.poTableTbody = {
