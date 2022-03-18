@@ -2,7 +2,6 @@ import { CommonModule } from '@angular/common';
 import { NgModule } from '@angular/core';
 
 import { PoButtonModule } from './../po-button/index';
-import { PoTooltipModule } from '../../directives/po-tooltip/index';
 
 import { PoButtonGroupComponent } from './po-button-group.component';
 
@@ -12,7 +11,7 @@ import { PoButtonGroupComponent } from './po-button-group.component';
  * Módulo do componente po-button-group.
  */
 @NgModule({
-  imports: [CommonModule, PoButtonModule, PoTooltipModule],
+  imports: [CommonModule, PoButtonModule],
   declarations: [PoButtonGroupComponent],
   exports: [PoButtonGroupComponent]
 })

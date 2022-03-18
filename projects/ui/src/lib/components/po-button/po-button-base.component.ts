@@ -52,6 +52,15 @@ export class PoButtonBaseComponent {
    * @optional
    *
    * @description
+   *
+   * Tooltip no botão para ser utilizado quando o botão tiver apenas ícone
+   */
+  @Input('p-tooltip') tooltip?: string;
+
+  /**
+   * @optional
+   *
+   * @description
    * Ícone exibido ao lado esquerdo do label do botão.
    *
    * É possível usar qualquer um dos ícones da [Biblioteca de ícones](/guides/icons). conforme exemplo abaixo:

@@ -7,6 +7,8 @@
   [class.po-button-primary]="type === 'primary'"
   [class.po-button-sm]="small"
   [class.po-clickable]="type === 'link'"
+  [p-tooltip]="tooltip"
+  [attr.aria-label]="tooltip"
   [disabled]="disabled || loading"
   (click)="onClick()"
 >
