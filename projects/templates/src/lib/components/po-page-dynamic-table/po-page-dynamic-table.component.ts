@@ -38,7 +38,9 @@ import { PoPageDynamicTableBeforeDuplicate } from './interfaces/po-page-dynamic-
 import { PoPageDynamicTableBeforeRemoveAll } from './interfaces/po-page-dynamic-table-before-remove-all.interface';
 import { PoPageDynamicTableCustomAction } from './interfaces/po-page-dynamic-table-custom-action.interface';
 import { PoPageDynamicTableCustomTableAction } from './interfaces/po-page-dynamic-table-custom-table-action.interface';
-import { isExternalLink, openExternalLink } from '../../utils/util';
+import { isExternalLink, openExternalLink, removeDuplicateItems } from '../../utils/util';
+
+const PAGE_SIZE_DEFAULT = 10;
 
 type UrlOrPoCustomizationFunction = string | (() => PoPageDynamicTableOptions);
 
@@ -217,6 +219,8 @@ export class PoPageDynamicTableComponent extends PoPageDynamicListBaseComponent 
   private _tableCustomActions: Array<PoPageDynamicTableCustomTableAction> = [];
 
   private page: number = 1;
+  private currentPage: number = 1;
+  private itemSelectedAction;
   private params = {};
   private sortedColumn: PoTableColumnSort;
   private subscriptions = new Subscription();
@@ -410,6 +414,58 @@ export class PoPageDynamicTableComponent extends PoPageDynamicListBaseComponent 
     return !!this.actions.removeAll;
   }
 
+  /**
+   * Função que realiza a atualização dos dados da tabela.
+   *
+   * Para utilizá-la é necessário capturar a instância do `page dynamic table`, como por exemplo:
+   *
+   * ``` html
+   * <po-page-dynamic-table #dynamicTable [p-service-api]="serviceApi"></po-page-dynamic-table>
+   * ```
+   *
+   * ``` javascript
+   * import { PoPageDynamicTableComponent, PoDynamicFormField } from '@po-ui/ng-components';
+   *
+   * ...
+   *
+   * @ViewChild('dynamicTable', { static: true }) dynamicTable: PoPageDynamicTableComponent;
+   *
+   * pageCustomActions: Array<PoPageDynamicTableCustomAction> = [
+   * {
+   *   label: 'Update',
+   *   action: this.updateTable.bind(this),
+   *   icon: 'po-icon-refresh'
+   * }]
+   *
+   * updateTable() {
+   *   this.dynamicTable.updateDataTable();
+   * }
+   * ```
+   *
+   *
+   * @param {{page: number, key: value }} filter Propriedade para envio de um filtro customizado.
+   * Exemplo de envio:
+   *
+   *```
+   * this.dynamicTable.updateDataTable({page: 3, search: 'Brasil'});
+   * ```
+   * Caso não seja passado um filtro customizado para o método `updateDataTable` a tabela será atualizada conforme a página do ultimo item modificado.
+   */
+  public updateDataTable(filter?: any) {
+    const indexItemSelected = this.items.findIndex(item => item === this.itemSelectedAction);
+    const pageNumber = Math.floor(indexItemSelected / PAGE_SIZE_DEFAULT);
+    this.currentPage = pageNumber < 0 ? this.currentPage : pageNumber + 1;
+    if (this.currentPage === undefined) {
+      this.currentPage = 1;
+    }
+
+    if (filter) {
+      this.subscriptions.add(this.loadData(filter).subscribe());
+    } else {
+      this.subscriptions.add(this.loadData({ page: this.currentPage, ...this.params }).subscribe());
+    }
+  }
+
   private confirmRemove(
     actionRemove: PoPageDynamicTableActions['remove'],
     actionBeforeRemove: PoPageDynamicTableActions['beforeRemove'],
@@ -458,17 +514,19 @@ export class PoPageDynamicTableComponent extends PoPageDynamicListBaseComponent 
   }
 
   private loadData(params: { page?: number; search?: string } = {}) {
+    const key = this.keys ? this.keys[0] : 'id';
     if (!this.serviceApi) {
       this.poNotification.error(this.literals.loadDataErrorNotification);
       return EMPTY;
     }
 
     const orderParam = this.getOrderParam(this.sortedColumn);
-    const defaultParams: any = { page: 1, pageSize: 10 };
+    const defaultParams: any = { page: 1, pageSize: PAGE_SIZE_DEFAULT };
     const fullParams: any = { ...defaultParams, ...params, ...orderParam };
 
     return this.poPageDynamicService.getResources(fullParams).pipe(
       tap(response => {
+        removeDuplicateItems(response.items, this.items, key);
         this.items = fullParams.page === 1 ? response.items : [...this.items, ...response.items];
         this.page = fullParams.page;
         this.hasNext = response.hasNext;
@@ -857,6 +915,7 @@ export class PoPageDynamicTableComponent extends PoPageDynamicListBaseComponent 
   }
 
   private callTableCustomAction(customAction: PoPageDynamicTableCustomTableAction, selectedItem) {
+    this.itemSelectedAction = selectedItem;
     if (customAction.action) {
       const sendCustomActionSubscription = this.poPageDynamicTableActionsService
         .customAction(customAction.action, selectedItem)

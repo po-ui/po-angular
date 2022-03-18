@@ -25,7 +25,8 @@ import {
   sortValues,
   validateDateRange,
   validValue,
-  valuesFromObject
+  valuesFromObject,
+  removeDuplicateItems
 } from './util';
 import { changeChromeProperties } from '../util-test/util-expect.spec';
 
@@ -366,6 +367,18 @@ describe('Function removeUndefinedAndNullOptions:', () => {
     ];
     removeUndefinedAndNullOptions(options);
     expect(options.length).toBe(3);
+  });
+});
+
+describe('Function removeDuplicateItems:', () => {
+  it('should remove duplicate items', () => {
+    const item = [{ country: 'brasil' }, { country: 'china' }, { country: 'japao' }];
+
+    const item2 = [{ country: 'brasil' }, { country: 'chile' }, { country: 'canada' }];
+
+    const key = 'country';
+    removeDuplicateItems(item, item2, key);
+    expect(item2).toEqual([{ country: 'chile' }, { country: 'canada' }]);
   });
 });
 

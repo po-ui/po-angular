@@ -597,7 +597,7 @@ export abstract class PoComboBaseComponent implements ControlValueAccessor, OnIn
     }
 
     if (isUpdateModel) {
-      const optionValue = (option && option.value) || undefined;
+      const optionValue = option?.value !== undefined ? option.value : undefined;
 
       this.updateModel(optionValue);
     }
