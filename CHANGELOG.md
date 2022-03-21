@@ -2,6 +2,21 @@
 
 All notable changes to this project will be documented in this file. See [standard-version](https://github.com/conventional-changelog/standard-version) for commit guidelines.
 
+# [6.6.0](https://github.com/po-ui/po-angular/compare/v6.5.1...v6.6.0) (2022-03-21)
+
+
+### Bug Fixes
+
+* **combo:** corrige retorno `undefined` do `p-filter-service` ([cb11001](https://github.com/po-ui/po-angular/commit/cb110017de209001c871522afd9c73afc01acba3)), closes [#1183](https://github.com/po-ui/po-angular/issues/1183)
+
+
+### Features
+
+* **page-dynamic-table:** cria função para atualizar a tabela ([abc422c](https://github.com/po-ui/po-angular/commit/abc422c4d7d96fc50eb6c2f089a67837de445873))
+* **radio-group:** ativa o estado `onTouched` no componente ([4a31f92](https://github.com/po-ui/po-angular/commit/4a31f920a6579fa714ef8cf5d70e0935df4545c6)), closes [#1202](https://github.com/po-ui/po-angular/issues/1202)
+
+
+
 ## [6.5.1](https://github.com/po-ui/po-angular/compare/v6.5.0...v6.5.1) (2022-03-14)
 
 
