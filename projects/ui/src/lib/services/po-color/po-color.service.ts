@@ -14,6 +14,7 @@ interface PoColorArgs {
 })
 export class PoColorService {
   defaultColors: Array<string> = [];
+  private readonly colorBlack = '#000000';
 
   /**
    * Avalia a propriedade `color` na lista de items passada. Caso sim, trata se é decimal ou string `po-color`. Caso não haja, retorna a cor default.
@@ -30,7 +31,7 @@ export class PoColorService {
         return dataItem;
       }
 
-      const color = this.defaultColors[index];
+      const color = this.defaultColors[index] === undefined ? this.colorBlack : this.defaultColors[index];
       return { ...dataItem, color };
     });
   }

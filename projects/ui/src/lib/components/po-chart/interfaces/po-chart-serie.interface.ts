@@ -29,6 +29,9 @@ export interface PoChartSerie {
    *    - <span class="dot po-color-10"></span> `color-10`
    *    - <span class="dot po-color-11"></span> `color-11`
    *    - <span class="dot po-color-12"></span> `color-12`
+   *
+   *
+   * - A partir da 13° série o valor da cor será preta caso não seja enviada uma cor customizada.
    */
   color?: string;
 
