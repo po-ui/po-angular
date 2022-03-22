@@ -1,0 +1,911 @@
+<po-page-default class="app-portal app-portal-home">
+  <po-widget class="widget-sticky po-lg-12 po-pl-2 po-pr-2">
+    <div class="container">
+      <div class="container-item">
+        <span class="arrow-back po-button po-button-link" [routerLink]="['/']" (click)="resetCss()"
+          ><a class="text-back">Voltar</a></span
+        >
+
+        <label for="color" class="po-mr-2 po-ml-1">Action:</label>
+        <input class="style-inputColor" type="color" id="colorbrandS" [formControl]="brandFormS.get('colorAction')" />
+
+        <div class="vertical-line"></div>
+
+        <label for="color" class="po-mr-2 po-ml-1">Brand 2:</label>
+        <input class="style-inputColor" type="color" id="colorbrandP" [formControl]="brandFormP.get('colorAction')" />
+
+        <div class="vertical-line"></div>
+
+        <label for="color" class="po-mr-2 po-ml-1">Brand 3:</label>
+        <input class="style-inputColor" type="color" id="colorbrandT" [formControl]="brandFormT.get('colorAction')" />
+
+        <div class="vertical-line"></div>
+
+        <button class="po-button po-button-primary-theme" (click)="resetCss()">Reset css</button>
+      </div>
+
+      <div class="container-item tag-nav">
+        <div class="po-tag-container-theme">
+          <div class="po-tag-theme">
+            <span>versão beta</span>
+          </div>
+        </div>
+      </div>
+
+      <div class="container-item">
+        <button
+          type="button"
+          [ngClass]="!verifyCss() ? 'btn-disabled' : ''"
+          class="po-button po-button-secondary-theme"
+          (click)="openGetcss()"
+          [disabled]="!verifyCss()"
+        >
+          Ver css
+        </button>
+
+        <button class="po-button po-button-secondary-theme" (click)="pageSlide.open()">Configuração</button>
+      </div>
+    </div>
+  </po-widget>
+
+  <div
+    [class.hide]="
+      !botaoDefaultView &&
+      !botaoPrimaryView &&
+      !botaoLinkView &&
+      !switchView &&
+      !radioView &&
+      !disclaimerView &&
+      !inputView &&
+      !selectView &&
+      !textareaView
+    "
+    class="po-lg-3 po-mb-1 po-pb-2 po-pl-2 container-overflow"
+  >
+    <po-accordion *ngIf="botaoPrimaryView">
+      <po-accordion-item [class.hide]="!botaoPrimaryView" p-label="Botão primário">
+        <div class="container-space-between po-mb-1">
+          <label for="borderRadiusButtonD" class="po-mr-2 po-ml-1">Border radius: </label>
+          <input
+            type="range"
+            id="borderRadiusButtonD"
+            min="1"
+            max="40"
+            [formControl]="buttonFormPrimary.get('borderRadius')"
+          />
+        </div>
+
+        <div class="container-space-between po-mb-1">
+          <label for="paddingButtonD" class="po-mr-2 po-ml-1">Padding: </label>
+          <input type="range" id="paddingButtonD" min="1" max="30" [formControl]="buttonFormPrimary.get('padding')" />
+        </div>
+
+        <div class="container-space-between po-mb-1">
+          <label for="colorP" class="po-mr-2 po-ml-1">Cor principal: </label>
+          <input type="color" id="colorP" class="style-inputColor" [formControl]="buttonFormPrimary.get('color')" />
+        </div>
+
+        <div class="container-space-between po-mb-1">
+          <label for="colorHoverP" class="po-mr-2 po-ml-1">Cor principal Hover: </label>
+          <input
+            type="color"
+            id="colorHoverP"
+            class="style-inputColor"
+            [formControl]="buttonFormPrimary.get('colorHover')"
+          />
+        </div>
+
+        <div class="container-space-between po-mb-1">
+          <label for="borderColorP" class="po-mr-2 po-ml-1">Cor da borda: </label>
+          <input
+            type="color"
+            id="borderColorP"
+            class="style-inputColor"
+            [formControl]="buttonFormPrimary.get('borderColor')"
+          />
+        </div>
+
+        <div class="container-space-between po-mb-1">
+          <label for="textColorP" class="po-mr-2 po-ml-1">Cor do texto: </label>
+          <input
+            type="color"
+            id="textColorP"
+            class="style-inputColor"
+            [formControl]="buttonFormPrimary.get('textColor')"
+          />
+        </div>
+      </po-accordion-item>
+    </po-accordion>
+
+    <po-accordion *ngIf="botaoDefaultView">
+      <po-accordion-item [class.hide]="!botaoDefaultView" p-label="Botão secundário">
+        <div class="container-space-between po-mb-1">
+          <label for="borderRadiusBotaoD" class="po-mr-2 po-ml-1">Border radius: </label>
+          <input
+            type="range"
+            id="borderRadiusBotaoD"
+            min="1"
+            max="40"
+            [formControl]="buttonFormDefault.get('borderRadius')"
+          />
+        </div>
+
+        <div class="container-space-between po-mb-1">
+          <label for="paddingBotaoD" class="po-mr-2 po-ml-1">Padding: </label>
+          <input type="range" id="paddingBotaoD" min="1" max="30" [formControl]="buttonFormDefault.get('padding')" />
+        </div>
+
+        <div class="container-space-between po-mb-1">
+          <label for="borderWidthBotaoD" class="po-mr-2 po-ml-1">Espessura da borda: </label>
+          <input
+            type="range"
+            id="borderWidthBotaoD"
+            min="1"
+            max="10"
+            [formControl]="buttonFormDefault.get('borderWidth')"
+          />
+        </div>
+
+        <div class="container-space-between po-mb-1">
+          <label for="colorD" class="po-mr-2 po-ml-1">Cor principal: </label>
+          <input type="color" id="colorD" class="style-inputColor" [formControl]="buttonFormDefault.get('color')" />
+        </div>
+
+        <div class="container-space-between po-mb-1">
+          <label for="colorHoverD" class="po-mr-2 po-ml-1">Cor Principal Hover: </label>
+          <input
+            type="color"
+            id="colorHoverD"
+            class="style-inputColor"
+            [formControl]="buttonFormDefault.get('colorHover')"
+          />
+        </div>
+
+        <div class="container-space-between po-mb-1">
+          <label for="colorBackgroundHover" class="po-mr-2 po-ml-1">Cor do background Hover: </label>
+          <input
+            type="color"
+            id="colorBackgroundHover"
+            class="style-inputColor"
+            [formControl]="buttonFormDefault.get('colorBackgroundHover')"
+          />
+        </div>
+      </po-accordion-item>
+    </po-accordion>
+
+    <po-accordion *ngIf="botaoLinkView">
+      <po-accordion-item [class.hide]="!botaoLinkView" p-label="Botão terciário">
+        <div class="container-space-between po-mb-1">
+          <label for="borderRadiusBotaoL" class="po-mr-2 po-ml-1">Border radius: </label>
+          <input
+            type="range"
+            id="borderRadiusBotaoL"
+            min="1"
+            max="40"
+            [formControl]="buttonFormLink.get('borderRadius')"
+          />
+        </div>
+
+        <div class="container-space-between po-mb-1">
+          <label for="paddingBotaoL" class="po-mr-2 po-ml-1">Padding: </label>
+          <input type="range" id="paddingBotaoL" min="1" max="30" [formControl]="buttonFormLink.get('padding')" />
+        </div>
+
+        <div class="container-space-between po-mb-1">
+          <label for="colorL" class="po-mr-2 po-ml-1">Cor principal: </label>
+          <input type="color" id="colorL" class="style-inputColor" [formControl]="buttonFormLink.get('color')" />
+        </div>
+
+        <div class="container-space-between po-mb-1">
+          <label for="colorHoverL" class="po-mr-2 po-ml-1">Cor principal Hover: </label>
+          <input
+            type="color"
+            id="colorHoverL"
+            class="style-inputColor"
+            [formControl]="buttonFormLink.get('colorHover')"
+          />
+        </div>
+
+        <div class="container-space-between po-mb-1">
+          <label for="colorBackgroundHoverL" class="po-mr-2 po-ml-1">Cor do background Hover: </label>
+          <input
+            type="color"
+            id="colorBackgroundHoverL"
+            class="style-inputColor"
+            [formControl]="buttonFormLink.get('colorBackgroundHover')"
+          />
+        </div>
+      </po-accordion-item>
+    </po-accordion>
+
+    <po-accordion *ngIf="switchView">
+      <po-accordion-item [class.hide]="!switchView" p-label="Switch">
+        <div class="container-space-between po-mb-1">
+          <label for="colorSwitch" class="po-mr-2 po-ml-1">Cor principal: </label>
+          <input
+            type="color"
+            id="colorSwitch"
+            class="style-inputColor"
+            [formControl]="switchForm.get('backgroundColor')"
+          />
+        </div>
+
+        <div class="container-space-between po-mb-1">
+          <label for="colorTrackSwitch" class="po-mr-2 po-ml-1">Cor do track ativado: </label>
+          <input type="color" id="colorTrackSwitch" class="style-inputColor" [formControl]="switchForm.get('color')" />
+        </div>
+
+        <div class="container-space-between po-mb-1">
+          <label for="colorTrackUncheckedSwitch" class="po-mr-2 po-ml-1">Cor do track desativado: </label>
+          <input
+            type="color"
+            id="colorTrackUncheckedSwitch"
+            class="style-inputColor"
+            [formControl]="switchForm.get('colorDois')"
+          />
+        </div>
+
+        <div class="container-space-between po-mb-1">
+          <label for="colorIcon" class="po-mr-2 po-ml-1">Cor do icone: </label>
+          <input type="color" id="colorIcon" class="style-inputColor" [formControl]="switchForm.get('colorIcon')" />
+        </div>
+
+        <div class="container-space-between po-mb-1">
+          <label for="borderColorSwitch" class="po-mr-2 po-ml-1">Cor da borda: </label>
+          <input
+            type="color"
+            id="borderColorSwitch"
+            class="style-inputColor"
+            [formControl]="switchForm.get('borderColor')"
+          />
+        </div>
+      </po-accordion-item>
+    </po-accordion>
+
+    <po-accordion *ngIf="radioView">
+      <po-accordion-item [class.hide]="!radioView" p-label="Radio">
+        <div class="container-space-between po-mb-1">
+          <label for="backgroundColorRadio" class="po-mr-2 po-ml-1">Cor Principal: </label>
+          <input
+            type="color"
+            id="backgroundColorRadio"
+            class="style-inputColor"
+            [formControl]="radioForm.get('color')"
+          />
+        </div>
+
+        <div class="container-space-between po-mb-1">
+          <label for="backgroundHoverRadio" class="po-mr-2 po-ml-1">Cor do background: </label>
+          <input
+            type="color"
+            id="backgroundHoverRadio"
+            class="style-inputColor"
+            [formControl]="radioForm.get('backgroundColor')"
+          />
+        </div>
+
+        <div class="container-space-between po-mb-1">
+          <label for="shadowRadio" class="po-mr-2 po-ml-1">Cor da sombra: </label>
+          <input type="color" id="shadowRadio" class="style-inputColor" [formControl]="radioForm.get('colorHover')" />
+        </div>
+
+        <div class="container-space-between po-mb-1">
+          <label for="shadowRadio" class="po-mr-2 po-ml-1">Cor da borda: </label>
+          <input type="color" id="shadowRadio" class="style-inputColor" [formControl]="radioForm.get('borderColor')" />
+        </div>
+      </po-accordion-item>
+    </po-accordion>
+
+    <po-accordion *ngIf="disclaimerView">
+      <po-accordion-item [class.hide]="!disclaimerView" p-label="Disclaimer">
+        <div class="container-space-between po-mb-1">
+          <label for="fontSizeDisclaimer" class="po-mr-2 po-ml-1">Tamanho da fonte: </label>
+          <input
+            type="range"
+            id="fontSizeDisclaimer"
+            min="10"
+            max="40"
+            [formControl]="disclaimerForm.get('fontSize')"
+          />
+        </div>
+
+        <div class="container-space-between po-mb-1">
+          <label for="borderRadiusDisclaimer" class="po-mr-2 po-ml-1">Border radius: </label>
+          <input
+            type="range"
+            id="borderRadiusDisclaimer"
+            min="1"
+            max="32"
+            [formControl]="disclaimerForm.get('borderRadius')"
+          />
+        </div>
+
+        <div class="container-space-between po-mb-1">
+          <label for="colorDisclaimer" class="po-mr-2 po-ml-1">Cor do background: </label>
+          <input
+            type="color"
+            id="colorDisclaimer"
+            class="style-inputColor"
+            [formControl]="disclaimerForm.get('color')"
+          />
+        </div>
+
+        <div class="container-space-between po-mb-1">
+          <label for="borderColorDisclaimer" class="po-mr-2 po-ml-1">Cor da borda: </label>
+          <input
+            type="color"
+            id="borderColorDisclaimer"
+            class="style-inputColor"
+            [formControl]="disclaimerForm.get('borderColor')"
+          />
+        </div>
+
+        <div class="container-space-between po-mb-1">
+          <label for="textColorDisclaimer" class="po-mr-2 po-ml-1">Cor do texto: </label>
+          <input
+            type="color"
+            id="textColorDisclaimer"
+            class="style-inputColor"
+            [formControl]="disclaimerForm.get('textColor')"
+          />
+        </div>
+
+        <div class="container-space-between po-mb-1">
+          <label for="iconColorDisclaimer" class="po-mr-2 po-ml-1">Cor do icone: </label>
+          <input
+            type="color"
+            id="iconColorDisclaimer"
+            class="style-inputColor"
+            [formControl]="disclaimerForm.get('colorIcon')"
+          />
+        </div>
+
+        <div class="container-space-between po-mb-1">
+          <label for="ColorHoverDisclaimer" class="po-mr-2 po-ml-1">Background hover para remover: </label>
+          <input
+            type="color"
+            id="ColorHoverDisclaimer"
+            class="style-inputColor"
+            [formControl]="disclaimerForm.get('colorHover')"
+          />
+        </div>
+      </po-accordion-item>
+    </po-accordion>
+
+    <po-accordion *ngIf="inputView">
+      <po-accordion-item [class.hide]="!inputView" p-label="Input">
+        <div class="container-space-between po-mb-1">
+          <label for="fontSizeInput" class="po-mr-2 po-ml-1">Tamanho da fonte: </label>
+          <input type="range" id="fontSizeInput" min="10" max="32" [formControl]="inputForm.get('fontSize')" />
+        </div>
+
+        <div class="container-space-between po-mb-1">
+          <label for="paddingInput" class="po-mr-2 po-ml-1">Padding: </label>
+          <input type="range" id="paddingInput" min="0" max="22" [formControl]="inputForm.get('padding')" />
+        </div>
+
+        <div class="container-space-between po-mb-1">
+          <label for="colorInput" class="po-mr-2 po-ml-1">Cor da borda: </label>
+          <input type="color" id="colorInput" class="style-inputColor" [formControl]="inputForm.get('borderColor')" />
+        </div>
+
+        <div class="container-space-between po-mb-1">
+          <label for="colorHoverInput" class="po-mr-2 po-ml-1">Cor da borda Hover: </label>
+          <input
+            type="color"
+            id="colorHoverInput"
+            class="style-inputColor"
+            [formControl]="inputForm.get('borderColorHover')"
+          />
+        </div>
+
+        <div class="container-space-between po-mb-1">
+          <label for="colorBackgroundInput" class="po-mr-2 po-ml-1">Cor do background: </label>
+          <input
+            type="color"
+            id="colorBackgroundInput"
+            class="style-inputColor"
+            [formControl]="inputForm.get('backgroundColor')"
+          />
+        </div>
+
+        <div class="container-space-between po-mb-1">
+          <label for="colorBackgroundHoverInput" class="po-mr-2 po-ml-1">Cor do background Hover: </label>
+          <input
+            type="color"
+            id="colorBackgroundHoverInput"
+            class="style-inputColor"
+            [formControl]="inputForm.get('backgroundColorHover')"
+          />
+        </div>
+
+        <div class="container-space-between po-mb-1">
+          <label for="colorTextInput" class="po-mr-2 po-ml-1">Cor do texto: </label>
+          <input type="color" id="colorTextInput" class="style-inputColor" [formControl]="inputForm.get('textColor')" />
+        </div>
+      </po-accordion-item>
+    </po-accordion>
+
+    <po-accordion *ngIf="selectView">
+      <po-accordion-item [class.hide]="!selectView" p-label="Select">
+        <div class="container-space-between po-mb-1">
+          <label for="fontSizeSelect" class="po-mr-2 po-ml-1">Tamanho da fonte: </label>
+          <input type="range" id="fontSizeSelect" min="10" max="32" [formControl]="selectForm.get('fontSize')" />
+        </div>
+
+        <div class="container-space-between po-mb-1">
+          <label for="paddingHorizontalSelect" class="po-mr-2 po-ml-1">Padding horizontal: </label>
+          <input
+            type="range"
+            id="paddingHorizontalSelect"
+            min="0"
+            max="50"
+            [formControl]="selectForm.get('paddingHorizontal')"
+          />
+        </div>
+
+        <div class="container-space-between po-mb-1">
+          <label for="paddingVerticalSelect" class="po-mr-2 po-ml-1">Padding vertical: </label>
+          <input
+            type="range"
+            id="paddingVerticalSelect"
+            min="0"
+            max="50"
+            [formControl]="selectForm.get('paddingVertical')"
+          />
+        </div>
+
+        <div class="container-space-between po-mb-1">
+          <label for="colorSelect" class="po-mr-2 po-ml-1">Cor da borda: </label>
+          <input type="color" id="colorSelect" class="style-inputColor" [formControl]="selectForm.get('borderColor')" />
+        </div>
+
+        <div class="container-space-between po-mb-1">
+          <label for="colorHoverSelect" class="po-mr-2 po-ml-1">Cor da borda Hover: </label>
+          <input
+            type="color"
+            id="colorHoverSelect"
+            class="style-inputColor"
+            [formControl]="selectForm.get('borderColorHover')"
+          />
+        </div>
+
+        <div class="container-space-between po-mb-1">
+          <label for="colorBackgroundSelect" class="po-mr-2 po-ml-1">Cor do background: </label>
+          <input
+            type="color"
+            id="colorBackgroundSelect"
+            class="style-inputColor"
+            [formControl]="selectForm.get('colorBackground')"
+          />
+        </div>
+
+        <div class="container-space-between po-mb-1">
+          <label for="colorBackgroundHoverSelect" class="po-mr-2 po-ml-1">Cor do background Hover: </label>
+          <input
+            type="color"
+            id="colorBackgroundHoverSelect"
+            class="style-inputColor"
+            [formControl]="selectForm.get('colorBackgroundHover')"
+          />
+        </div>
+
+        <div class="container-space-between po-mb-1">
+          <label for="colorTextSelect" class="po-mr-2 po-ml-1">Cor do texto: </label>
+          <input
+            type="color"
+            id="colorTextSelect"
+            class="style-inputColor"
+            [formControl]="selectForm.get('colorText')"
+          />
+        </div>
+      </po-accordion-item>
+    </po-accordion>
+
+    <po-accordion *ngIf="textareaView">
+      <po-accordion-item [class.hide]="!textareaView" p-label="TextArea">
+        <div class="container-space-between po-mb-1">
+          <label for="fontSizeTextarea" class="po-mr-2 po-ml-1">Tamanho da fonte: </label>
+          <input type="range" id="fontSizeTextarea" min="10" max="32" [formControl]="textareaForm.get('fontSize')" />
+        </div>
+
+        <div class="container-space-between po-mb-1">
+          <label for="colorTextarea" class="po-mr-2 po-ml-1">Cor da borda: </label>
+          <input
+            type="color"
+            id="colorTextarea"
+            class="style-inputColor"
+            [formControl]="textareaForm.get('borderColor')"
+          />
+        </div>
+
+        <div class="container-space-between po-mb-1">
+          <label for="colorHoverTextarea" class="po-mr-2 po-ml-1">Cor da borda Hover: </label>
+          <input
+            type="color"
+            id="colorHoverTextarea"
+            class="style-inputColor"
+            [formControl]="textareaForm.get('borderColorHover')"
+          />
+        </div>
+
+        <div class="container-space-between po-mb-1">
+          <label for="colorbackgroundTextarea" class="po-mr-2 po-ml-1">Cor do background:</label>
+          <input
+            type="color"
+            id="colorbackgroundTextarea"
+            class="style-inputColor"
+            [formControl]="textareaForm.get('backgroundColor')"
+          />
+        </div>
+
+        <div class="container-space-between po-mb-1">
+          <label for="colorbackgroundHoverTextarea" class="po-mr-2 po-ml-1">Cor do background Hover:</label>
+          <input
+            type="color"
+            id="colorbackgroundHoverTextarea"
+            class="style-inputColor"
+            [formControl]="textareaForm.get('backgroundColorHover')"
+          />
+        </div>
+
+        <div class="container-space-between po-mb-1">
+          <label for="colorTextTextarea" class="po-mr-2 po-ml-1">Cor do texto:</label>
+          <input
+            type="color"
+            id="colorTextTextarea"
+            class="style-inputColor"
+            [formControl]="textareaForm.get('textColor')"
+          />
+        </div>
+      </po-accordion-item>
+    </po-accordion>
+  </div>
+
+  <po-widget
+    [class.po-lg-12]="
+      !botaoDefaultView &&
+      !botaoPrimaryView &&
+      !botaoLinkView &&
+      !switchView &&
+      !radioView &&
+      !disclaimerView &&
+      !inputView &&
+      !selectView &&
+      !textareaView
+    "
+    class="po-lg-9 po-p-2"
+    [class.hide]="
+      !botaoDefaultView &&
+      !botaoPrimaryView &&
+      !botaoLinkView &&
+      !switchView &&
+      !inputView &&
+      !selectView &&
+      !textareaView &&
+      !disclaimerView &&
+      !acordionView &&
+      !calendarView &&
+      !stepperView &&
+      !radioView
+    "
+  >
+    <div
+      [class.hide]="
+        !botaoDefaultView &&
+        !botaoPrimaryView &&
+        !botaoLinkView &&
+        !switchView &&
+        !radioView &&
+        !disclaimerView &&
+        !inputView &&
+        !selectView &&
+        !textareaView
+      "
+    >
+      <h2>Componentes já implementando o AnimaliaDS</h2>
+      <br />
+    </div>
+    <div class="container-around-button">
+      <po-button [class.hide]="!botaoPrimaryView" p-label="Text" p-kind="primary" #buttonP></po-button>
+
+      <po-button [class.hide]="!botaoDefaultView" p-label="Text" #buttonD></po-button>
+
+      <po-button [class.hide]="!botaoLinkView" p-label="Text" p-kind="tertiary" #buttonL></po-button>
+    </div>
+    <hr [class.hide]="!switchView" />
+
+    <div class="container-component">
+      <po-switch [class.hide]="!switchView" name="switch" #switch [(ngModel)]="switchSampleBuilder"> </po-switch>
+    </div>
+
+    <hr [class.hide]="!radioView" />
+
+    <div class="container-component">
+      <form>
+        <po-radio id="myRadio" [class.hide]="!radioView" #radio p-label="Option 1" [p-checked]="true"></po-radio>
+        <po-radio id="myRadio2" [class.hide]="!radioView" #radio p-label="Option 2" [p-checked]="false"></po-radio>
+      </form>
+    </div>
+
+    <hr [class.hide]="!disclaimerView" />
+
+    <div class="container-component">
+      <po-disclaimer [class.hide]="!disclaimerView" #disclaimer p-value="PO-UI - Disclaimer"></po-disclaimer>
+    </div>
+
+    <hr [class.hide]="!inputView" />
+
+    <po-input #input [class.hide]="!inputView" name="input" p-label="PO Input" p-placeholder="Customize seu po-input">
+    </po-input>
+
+    <hr [class.hide]="!selectView" />
+
+    <po-select
+      #select
+      [class.hide]="!selectView"
+      name="select"
+      p-label="PO Select"
+      [p-options]="[
+        { label: 'Option 1', value: '1' },
+        { label: 'Option 2', value: '2' }
+      ]"
+      p-placeholder="Customize seu po-select"
+    >
+    </po-select>
+
+    <hr [class.hide]="!textareaView" />
+
+    <po-textarea
+      #textarea
+      [class.hide]="!textareaView"
+      name="textarea"
+      p-label="PO Textarea"
+      p-placeholder="Customize seu po-textarea"
+    >
+    </po-textarea>
+
+    <po-divider
+      [class.hide]="
+        (!textareaView ||
+          !selectView ||
+          !inputView ||
+          !radioView ||
+          !switchView ||
+          !botaoDefaultView ||
+          !botaoPrimaryView ||
+          !botaoLinkView) &&
+        !acordionView &&
+        !calendarView &&
+        !stepperView
+      "
+    ></po-divider>
+
+    <div [class.hide]="!acordionView && !calendarView && !stepperView">
+      <h2>Demais componentes</h2>
+      <br />
+    </div>
+
+    <po-accordion [class.hide]="!acordionView">
+      <po-accordion-item p-label="PO Accordion 1">
+        Lorem ipsum dolor sit amet, consectetur adipiscing elit.
+      </po-accordion-item>
+      <po-accordion-item p-label="PO Accordion 2">
+        In rhoncus condimentum elit, egestas efficitur orci tincidunt a. Etiam ut neque
+      </po-accordion-item>
+    </po-accordion>
+    <hr [class.hide]="!acordionView" />
+
+    <div class="container-component">
+      <po-calendar [class.hide]="!calendarView"></po-calendar>
+    </div>
+    <hr [class.hide]="!calendarView" />
+
+    <po-stepper [class.hide]="!stepperView">
+      <po-step p-label="Step 1"></po-step>
+      <po-step p-label="Step 2"></po-step>
+      <po-step p-label="Step 3"></po-step>
+    </po-stepper>
+    <hr [class.hide]="!stepperView" />
+  </po-widget>
+
+  <po-widget
+    class="po-lg-12 po-p-2"
+    *ngIf="
+      !botaoDefaultView &&
+      !botaoPrimaryView &&
+      !botaoLinkView &&
+      !switchView &&
+      !inputView &&
+      !selectView &&
+      !textareaView &&
+      !disclaimerView &&
+      !acordionView &&
+      !calendarView &&
+      !stepperView &&
+      !radioView
+    "
+  >
+    <div class="container" style="justify-content: center">
+      <span class="po-icon po-icon-info"></span>
+      <h2 class="po-ml-2">Nenhum componente selecionado</h2>
+    </div>
+  </po-widget>
+
+  <po-modal #viewCSSModal p-title="CSS">
+    <div class="po-row">
+      <po-button
+        class="po-sm-4 po-pr-1 po-pl-1 po-pt-1 po-mb-1"
+        p-icon="po-icon-copy"
+        p-label="Copy"
+        (p-click)="copyToClipboard()"
+      >
+      </po-button>
+    </div>
+
+    <div class="tools-jumbotron">
+      <div id="fieldsCSS">
+        <pre [ngClass]="resultButtonD?.innerText.length ? '' : 'pre-none'" #resultButtonD></pre>
+        <pre [ngClass]="resultButtonP?.innerText.length ? '' : 'pre-none'" #resultButtonP></pre>
+        <pre [ngClass]="resultButtonL?.innerText.length ? '' : 'pre-none'" class="teste" #resultButtonL></pre>
+        <pre [ngClass]="resultSwitch?.innerText.length ? '' : 'pre-none'" class="teste" #resultSwitch></pre>
+        <pre [ngClass]="resultRadio?.innerText.length ? '' : 'pre-none'" class="teste" #resultRadio></pre>
+        <pre [ngClass]="resultDisclaimer?.innerText.length ? '' : 'pre-none'" class="teste" #resultDisclaimer></pre>
+        <pre [ngClass]="resultInput?.innerText.length ? '' : 'pre-none'" class="teste" #resultInput></pre>
+        <pre [ngClass]="resultSelect?.innerText.length ? '' : 'pre-none'" class="teste" #resultSelect></pre>
+        <pre [ngClass]="resultTextarea?.innerText.length ? '' : 'pre-none'" class="teste" #resultTextarea></pre>
+      </div>
+    </div>
+
+    <h3>
+      <a href="https://po-ui.io/guides/colors-customization" target="_blank">Customizando cores do tema padrão</a>
+    </h3>
+
+    <hr />
+
+    <h3>
+      Dúvidas sobre as possíveis customizações? Entre em contato com o time
+      <a href="https://github.com/po-ui/po-angular/discussions/new?category=tire-suas-d%C3%BAvidas" target="_blank"
+        >PO-UI pelo GitHub</a
+      >
+    </h3>
+  </po-modal>
+
+  <po-page-slide #pageSlide p-title="Configuração" [p-click-out]="true">
+    <div class="po-row po-mb-2">
+      <po-switch
+        class="po-sm-6"
+        p-label-off="Escondido"
+        p-label-on="Visível"
+        p-label="Botão Primário"
+        name="Botão Primário"
+        [(ngModel)]="botaoPrimaryView"
+        (p-change)="switchIndividual()"
+      ></po-switch>
+
+      <po-switch
+        class="po-sm-6"
+        p-label-off="Escondido"
+        p-label-on="Visível"
+        p-label="Botão Secundário"
+        name="Botão Secundario"
+        [(ngModel)]="botaoDefaultView"
+        (p-change)="switchIndividual()"
+      ></po-switch>
+
+      <po-switch
+        class="po-sm-6"
+        p-label-off="Escondido"
+        p-label-on="Visível"
+        p-label="Botão Terciário"
+        name="Botão Terciario"
+        [(ngModel)]="botaoLinkView"
+        (p-change)="switchIndividual()"
+      ></po-switch>
+
+      <po-switch
+        class="po-sm-6"
+        p-label-off="Escondido"
+        p-label-on="Visível"
+        p-label="Switch"
+        name="Switch"
+        [(ngModel)]="switchView"
+        (p-change)="switchIndividual()"
+      ></po-switch>
+
+      <po-switch
+        class="po-sm-6"
+        p-label-off="Escondido"
+        p-label-on="Visível"
+        p-label="Input"
+        name="Input"
+        [(ngModel)]="inputView"
+        (p-change)="switchIndividual()"
+      ></po-switch>
+
+      <po-switch
+        class="po-sm-6"
+        p-label-off="Escondido"
+        p-label-on="Visível"
+        p-label="Select"
+        name="Select"
+        [(ngModel)]="selectView"
+        (p-change)="switchIndividual()"
+      ></po-switch>
+
+      <po-switch
+        class="po-sm-6"
+        p-label-off="Escondido"
+        p-label-on="Visível"
+        p-label="Textarea"
+        name="Textarea"
+        [(ngModel)]="textareaView"
+        (p-change)="switchIndividual()"
+      ></po-switch>
+
+      <po-switch
+        class="po-sm-6"
+        p-label-off="Escondido"
+        p-label-on="Visível"
+        p-label="Radio"
+        name="Radio"
+        [(ngModel)]="radioView"
+        (p-change)="switchIndividual()"
+      ></po-switch>
+
+      <po-switch
+        class="po-sm-6"
+        p-label-off="Escondido"
+        p-label-on="Visível"
+        p-label="Disclaimer"
+        name="Disclaimer"
+        [(ngModel)]="disclaimerView"
+        (p-change)="switchIndividual()"
+      ></po-switch>
+
+      <po-switch
+        class="po-sm-6"
+        p-label-off="Escondido"
+        p-label-on="Visível"
+        p-label="Acordion"
+        name="Acordion"
+        [(ngModel)]="acordionView"
+        (p-change)="switchIndividual()"
+      ></po-switch>
+
+      <po-switch
+        class="po-sm-6"
+        p-label-off="Escondido"
+        p-label-on="Visível"
+        p-label="Calendar"
+        name="Calendar"
+        [(ngModel)]="calendarView"
+        (p-change)="switchIndividual()"
+      ></po-switch>
+
+      <po-switch
+        class="po-sm-6"
+        p-label-off="Escondido"
+        p-label-on="Visível"
+        p-label="Stepper"
+        name="Stepper"
+        [(ngModel)]="stepperView"
+        (p-change)="switchIndividual()"
+      ></po-switch>
+
+      <div>
+        <po-divider></po-divider>
+        <po-switch
+          class="po-sm-6"
+          p-label-off="Escondido"
+          p-label-on="Visível"
+          p-label="Mostrar todos"
+          name="allComponents"
+          [(ngModel)]="switchAllComponentes"
+          (p-change)="switchAllEmit($event)"
+        ></po-switch>
+      </div>
+      <po-divider></po-divider>
+    </div>
+  </po-page-slide>
+</po-page-default>

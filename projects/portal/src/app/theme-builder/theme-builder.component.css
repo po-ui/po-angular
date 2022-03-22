@@ -1,0 +1,250 @@
+.tools-jumbotron {
+  overflow-y: scroll;
+  max-height: calc(100vh - 400px);
+}
+
+.tools-jumbotron pre {
+  background-color: #060402c7;
+  color: #f7f6f5;
+}
+
+.tools-jumbotron {
+  background-color: black;
+}
+
+.pre-none {
+  display: none;
+}
+
+.style-inputColor {
+  -webkit-animation: none;
+  -moz-appearance: none;
+  min-width: 32px;
+  max-width: 32px;
+  min-height: 32px;
+  max-height: 32px;
+  border: none;
+  cursor: pointer;
+  background-color: transparent;
+}
+
+.style-inputColor::-webkit-color-swatch {
+  border-radius: 5px;
+  border: none;
+}
+
+.style-inputColor::-moz-color-swatch {
+  border-radius: 15px;
+  border: none;
+}
+
+.container {
+  display: flex;
+  align-items: center;
+  flex-direction: row;
+  justify-content: space-between;
+}
+
+.container-item {
+  display: flex;
+  align-items: center;
+  flex-direction: row;
+}
+
+.po-tag-container-theme {
+  display: inline-flex;
+  flex-direction: column;
+  gap: 0.5em;
+  min-height: 1.5em;
+  min-width: max-content;
+}
+
+.po-tag-theme {
+  border-radius: 400px;
+  border-style: solid;
+  border-color: transparent;
+  max-width: 15em;
+  align-items: center;
+  border-width: 5px;
+  display: flex;
+  gap: 0.25em;
+  height: 1.5em;
+  justify-content: center;
+  overflow: hidden;
+  background: #e3e9f7;
+  color: #173782;
+  font-size: 24px;
+  padding-left: 0.5rem;
+  padding-right: 0.5rem;
+}
+
+.version {
+  font-size: 1.125rem;
+}
+
+.container-between {
+  display: flex;
+  align-items: center;
+}
+
+.container-between po-button {
+  margin-right: auto;
+}
+
+.vertical-line {
+  margin-left: 15px;
+  margin-right: 5px;
+  height: 32px;
+  border-left: 1px solid rgb(177, 169, 169);
+}
+
+.container-space-between {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  padding: 0 4% 0 0;
+}
+
+.hide {
+  display: none;
+}
+
+.arrow-back {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  position: relative;
+  padding-left: 1.5rem;
+  padding-right: 0.5rem;
+  min-width: 75px;
+}
+
+.arrow-back:before {
+  content: '\e913';
+  color: #753399;
+  font-weight: 900;
+  font-size: 2em;
+  font-family: PoIcon !important;
+  position: absolute;
+  left: 0;
+  top: 25%;
+}
+
+.text-back {
+  color: #753399;
+  font-weight: bolder;
+  text-decoration: none;
+}
+
+.text-back:hover {
+  text-decoration: none;
+  color: #5e1f80 !important;
+}
+
+.text-get-css {
+  color: #fff;
+  font-weight: bolder;
+  text-decoration: none !important;
+  text-align: center;
+}
+
+.text-get-css:hover {
+  color: #fff;
+  text-decoration: none;
+}
+
+.po-button-primary-theme {
+  background-color: #753399;
+  border-color: #753399;
+  color: #fff;
+  cursor: pointer;
+  margin-right: 15px;
+  min-width: 85px;
+}
+
+.po-button-secondary-theme {
+  margin-left: 10px;
+  margin-right: 10px;
+  background-color: transparent;
+  border-color: #753399;
+  color: #753399;
+  cursor: pointer;
+  min-width: max-content;
+}
+
+.po-button-secondary-theme:not(:disabled):hover {
+  background-color: #d9c2e5;
+  border-color: #260538;
+  color: #260538;
+}
+
+.btn-disabled {
+  background-color: transparent;
+  border-color: #b6bdbf;
+  color: #b6bdbf;
+  cursor: not-allowed;
+}
+
+.po-button-primary-theme:hover {
+  background-color: #5b1c7d;
+  border-color: #5b1c7d;
+}
+
+.widget-sticky {
+  position: sticky;
+  top: 0;
+  z-index: 999;
+}
+
+#myRadio {
+  margin-right: 2rem;
+}
+
+po-disclaimer {
+  display: inline-block;
+}
+
+.container-component {
+  display: flex;
+  justify-content: center;
+}
+
+.container-around-button {
+  display: flex;
+  justify-content: space-around;
+}
+
+.container-overflow {
+  overflow: scroll;
+  overflow-x: hidden;
+  overflow-y: scroll;
+  height: 90vh !important;
+  padding-top: 6px;
+}
+
+/* width */
+::-webkit-scrollbar {
+  width: 6px;
+  border-radius: 2px;
+}
+
+/* Track */
+::-webkit-scrollbar-track {
+  background: white;
+}
+
+/* Handle */
+::-webkit-scrollbar-thumb {
+  background: #753399;
+  border-radius: 4px;
+}
+
+input[type='range'] {
+  accent-color: #753399;
+}
+
+@media (max-width: 960px) {
+  .container-overflow {
+    height: 30vh !important;
+  }
+}
