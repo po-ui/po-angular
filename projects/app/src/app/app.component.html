@@ -1,0 +1,41 @@
+<po-container>
+  <po-button p-label="teste" p-type="primary" #button></po-button>
+</po-container>
+
+<br /><br />
+
+<label for="color">Cor:</label>
+<input type="color" id="color" [formControl]="form.get('color')" />
+
+<br /><br />
+
+<po-select
+  class="po-md-3"
+  p-label="Border radius"
+  [formControl]="form.get('borderRadius')"
+  [p-options]="[
+    { label: 'none', value: 'border-radius-none' },
+    { label: 'sm', value: 'border-radius-sm' },
+    { label: 'md', value: 'border-radius-md' },
+    { label: 'lg', value: 'border-radius-lg' },
+    { label: 'pill', value: 'border-radius-pill' },
+  ]"
+>
+</po-select>
+
+<po-select
+  class="po-md-3"
+  p-label="Font Size"
+  [formControl]="form.get('fontSize')"
+  [p-options]="[
+    { label: 'xs', value: 'font-size-xs' },
+    { label: 'sm', value: 'font-size-sm' },
+    { label: 'default', value: 'font-size-default' },
+    { label: 'md', value: 'font-size-md' },
+    { label: 'lg', value: 'font-size-lg' },
+    { label: 'xl', value: 'font-size-xl' },
+    { label: '2xl', value: 'font-size-2xl' },
+    { label: '3xl', value: 'font-size-3xl' },
+  ]"
+>
+</po-select>
