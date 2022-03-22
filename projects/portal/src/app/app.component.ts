@@ -1,4 +1,5 @@
 import { Component, OnInit } from '@angular/core';
+import { Router } from '@angular/router';
 
 import { PoMenuItem, PoNavbarItem, PoNavbarIconAction, PoNotificationService } from '@po-ui/ng-components';
 
@@ -17,7 +18,11 @@ export class AppComponent implements OnInit {
 
   private location;
 
-  constructor(private versionService: VersionService, private notification: PoNotificationService) {}
+  constructor(
+    private versionService: VersionService,
+    private notification: PoNotificationService,
+    public router: Router
+  ) {}
 
   async ngOnInit() {
     const version = await this.versionService.getCurrentVersion().toPromise();
@@ -27,6 +32,7 @@ export class AppComponent implements OnInit {
       { label: 'Componentes', link: '/documentation' },
       { label: 'Guias', link: '/guides' },
       { label: 'Ferramentas', link: '/tools' },
+      { label: 'Construtor de temas', link: '/construtor-de-temas' },
       { label: 'Como contribuir', link: 'https://github.com/po-ui/po-angular/blob/master/CONTRIBUTING.md' },
       { label: 'Licença', link: 'https://github.com/po-ui/po-angular/blob/master/LICENSE' },
       { label: 'Core Team', link: 'https://github.com/orgs/po-ui/people' },

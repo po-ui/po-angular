@@ -1,4 +1,11 @@
-<po-navbar p-logo="./assets/graphics/po.png" p-shadow [p-icon-actions]="iconActions" [p-items]="items"> </po-navbar>
+<po-navbar
+  *ngIf="router.url !== '/construtor-de-temas'"
+  p-logo="./assets/graphics/po.png"
+  p-shadow
+  [p-icon-actions]="iconActions"
+  [p-items]="items"
+>
+</po-navbar>
 
 <!-- <po-menu #userMenu [p-menus]="menus" p-filter></po-menu> -->
 

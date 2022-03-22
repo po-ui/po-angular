@@ -1,4 +1,11 @@
-import { ChangeDetectionStrategy, ChangeDetectorRef, Component, ElementRef, forwardRef } from '@angular/core';
+import {
+  ChangeDetectionStrategy,
+  ChangeDetectorRef,
+  Component,
+  ElementRef,
+  forwardRef,
+  ViewChild
+} from '@angular/core';
 import { AbstractControl, NG_VALUE_ACCESSOR, NG_VALIDATORS } from '@angular/forms';
 
 import { uuid } from '../../../utils/util';
@@ -43,6 +50,8 @@ import { PoInputGeneric } from '../po-input-generic/po-input-generic';
   changeDetection: ChangeDetectionStrategy.OnPush
 })
 export class PoInputComponent extends PoInputGeneric {
+  @ViewChild('inp', { static: true }) inp: ElementRef;
+
   id = `po-input[${uuid()}]`;
 
   /* istanbul ignore next */
