@@ -65,7 +65,7 @@
         <label *ngIf="option?.options; else optionLink" class="po-combo-item-title">{{ option.label }}</label>
         <ng-template #optionLink>
           <a class="po-combo-item">
-            <span [innerHTML]="getLabelFormatted(option?.label)"></span>
+            <span style="pointer-events: none" [innerHTML]="getLabelFormatted(option?.label)"></span>
           </a>
         </ng-template>
       </ng-template>
