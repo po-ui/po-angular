@@ -276,5 +276,13 @@ describe('PoRichTextToolbarComponent:', () => {
 
       expect(colorPickerInput).toBeTruthy();
     });
+
+    it('aria-label: check if ari-label has value ', () => {
+      const inputColorPicker = nativeElement.querySelector('.po-rich-text-toolbar-color-picker-input');
+      const buttonColorPicker = nativeElement.querySelector('.po-rich-text-toolbar-color-picker-button');
+
+      expect(inputColorPicker.getAttribute('aria-label')).toBe(component.literals.textColor);
+      expect(buttonColorPicker.getAttribute('aria-label')).toBe(component.literals.textColor);
+    });
   });
 });
