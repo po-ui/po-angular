@@ -8,17 +8,20 @@ import { PoButtonComponent } from '../../../ui/src/lib';
 })
 export class AppComponent implements AfterViewInit {
   @ViewChild('button') button: PoButtonComponent;
+  @ViewChild('result') result: HTMLElement;
 
   form = this.formBuilder.group({
     borderRadius: [null],
     fontSize: [null],
-    color: [null]
+    color: [null],
+    textColor: [null]
   });
 
   private readonly formPropertyDict = {
     borderRadius: '--border-radius',
     fontSize: '--font-size',
-    color: '--color'
+    color: '--color',
+    textColor: '--text-color'
   };
 
   constructor(private formBuilder: FormBuilder) {}
@@ -28,17 +31,18 @@ export class AppComponent implements AfterViewInit {
   }
 
   private checkChanges(changes: { [key: string]: string }): void {
+    this.result['nativeElement'].innerHTML = 'po-button {<br>';
+
     Object.keys(changes).forEach((fieldName: string) => {
-      console.log(changes[fieldName]);
-      if (fieldName.includes('color')) {
-        this.button.buttonElement.nativeElement.style.setProperty(this.formPropertyDict[fieldName], changes[fieldName]);
-      }
+      const value = /color/i.test(fieldName) ? changes[fieldName] : `var(--${changes[fieldName]})`;
+
       if (changes[fieldName]) {
-        this.button.buttonElement.nativeElement.style.setProperty(
-          this.formPropertyDict[fieldName],
-          `var(--${changes[fieldName]})`
-        );
+        this.button.buttonElement.nativeElement.style.setProperty(this.formPropertyDict[fieldName], value);
+
+        this.result['nativeElement'].innerHTML += `${this.formPropertyDict[fieldName]}: ${value};<br>`;
       }
     });
+
+    this.result['nativeElement'].innerHTML += '}';
   }
 }
