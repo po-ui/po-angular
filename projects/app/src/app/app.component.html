@@ -1,16 +1,22 @@
 <po-container>
   <po-button p-label="teste" p-type="primary" #button></po-button>
+  <po-checkbox name="checkbox" p-label="PO Checkbox"> </po-checkbox>
 </po-container>
 
-<br /><br />
+<po-divider p-label="Marca"></po-divider>
+
+<label for="color">Cor de ação da marca:</label>
+<input type="color" id="color" [formControl]="brandForm.get('colorAction')" />
+
+<po-divider p-label="Botão"></po-divider>
 
 <label for="color">Cor principal:</label>
-<input type="color" id="color" [formControl]="form.get('color')" />
+<input type="color" id="color" [formControl]="buttonForm.get('color')" />
 
 <br /><br />
 
 <label for="color">Cor do texto:</label>
-<input type="color" id="text-color" [formControl]="form.get('textColor')" />
+<input type="color" id="text-color" [formControl]="buttonForm.get('textColor')" />
 
 <br /><br />
 
@@ -18,7 +24,7 @@
   <po-select
     class="po-md-3"
     p-label="Border radius"
-    [formControl]="form.get('borderRadius')"
+    [formControl]="buttonForm.get('borderRadius')"
     [p-options]="[
     { label: 'none', value: 'border-radius-none' },
     { label: 'sm', value: 'border-radius-sm' },
@@ -32,7 +38,7 @@
   <po-select
     class="po-md-3"
     p-label="Font Size"
-    [formControl]="form.get('fontSize')"
+    [formControl]="buttonForm.get('fontSize')"
     [p-options]="[
     { label: 'xs', value: 'font-size-xs' },
     { label: 'sm', value: 'font-size-sm' },
