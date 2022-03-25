@@ -2,6 +2,7 @@
   #button
   class="po-button po-text-ellipsis"
   type="button"
+  [class.po-button-default]="type === 'default'"
   [class.po-button-danger]="type === 'danger'"
   [class.po-button-link]="type === 'link'"
   [class.po-button-primary]="type === 'primary'"
