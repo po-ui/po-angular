@@ -2,6 +2,14 @@
 
 All notable changes to this project will be documented in this file. See [standard-version](https://github.com/conventional-changelog/standard-version) for commit guidelines.
 
+## [5.22.7](https://github.com/po-ui/po-angular/compare/v5.22.6...v5.22.7) (2022-03-28)
+
+### Bug Fixes
+
+* **chart:** exibe gráfico após adicionada 12ª série ([d9222fe](https://github.com/po-ui/po-angular/commit/d9222fefb0fba7af66ebd97d0d8094644edc7fc6))
+* **combo:** possibilita a seleção do item pela palavra filtrada ([177a7a1](https://github.com/po-ui/po-angular/commit/177a7a1e71a358bd2ed1116b65583e6bfc8fcc19))
+
+
 ## [5.22.6](https://github.com/po-ui/po-angular/compare/v5.22.5...v5.22.6) (2022-03-14)
 
 
