@@ -91,6 +91,16 @@ describe('PoCheckboxBaseComponent:', () => {
       expect(spyOnChangeModelValue).not.toHaveBeenCalled();
     });
 
+    it('checkOption: should call `changeModelValue` with true if value is mixed', () => {
+      const spyOnChangeValue = spyOn(component, 'changeValue');
+      const spyOnChangeModelValue = spyOn(component, <any>'changeModelValue');
+
+      component.checkOption('mixed');
+
+      expect(spyOnChangeValue).toHaveBeenCalled();
+      expect(spyOnChangeModelValue).toHaveBeenCalledWith(true);
+    });
+
     it('registerOnChange: should set `propagateChange` with value of `fnParam`', () => {
       const fnParam = () => {};
 

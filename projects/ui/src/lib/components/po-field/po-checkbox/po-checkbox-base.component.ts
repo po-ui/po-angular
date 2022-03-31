@@ -10,10 +10,18 @@ import { InputBoolean } from '../../../decorators';
  * O componente `po-checkbox` exibe uma caixa de opção com um texto ao lado, na qual é possível marcar e desmarcar através tanto
  * no *click* do *mouse* quanto por meio da tecla *space* quando estiver com foco.
  *
- * Cada opção poderá receber um estado de marcado, desmarcado, indeterminado e desabilitado, como também uma ação que será disparada quando
+ * Cada opção poderá receber um estado de marcado, desmarcado, indeterminado/mixed e desabilitado, como também uma ação que será disparada quando
  * ocorrer mudanças do valor.
  *
- * > O *model* deste componente aceitará valores igual à `true`, `false` ou `null` para quando for indeterminado.
+ * > O *model* deste componente aceitará valores igual à `true`, `false` ou `null` para quando for indeterminado/mixed.
+ *
+ * **Acessibilidade tratada no componente:**
+ *
+ * Algumas diretrizes de acessibilidade já são tratadas no componente, internamente, e não podem ser alteradas pelo proprietário do conteúdo. São elas:
+ *
+ * - O componente foi desenvolvido utilizando controles padrões HTML para permitir a identificação do mesmo na interface por tecnologias assistivas. [WCAG 4.1.2: Name, Role, Value](https://www.w3.org/WAI/WCAG21/Understanding/name-role-value)
+ * - A área do foco precisar ter uma espessura de pelo menos 2 pixels CSS e o foco não pode ficar escondido por outros elementos da tela. [WCAG 2.4.12: Focus Appearance](https://www.w3.org/WAI/WCAG22/Understanding/focus-appearance-enhanced)
+ * - A cor não deve ser o único meio para diferenciar o componente do seu estado marcado e desmarcado. [WGAG 1.4.1: Use of Color, 3.2.4: Consistent Identification](https://www.w3.org/WAI/WCAG21/Understanding/use-of-color)
  */
 @Directive()
 export abstract class PoCheckboxBaseComponent implements ControlValueAccessor {
@@ -45,7 +53,7 @@ export abstract class PoCheckboxBaseComponent implements ControlValueAccessor {
    */
   @Output('p-change') change: EventEmitter<any> = new EventEmitter<any>();
 
-  checkboxValue: boolean | null;
+  checkboxValue: boolean | null | string;
   id = uuid();
   propagateChange: any;
   onTouched;
@@ -77,9 +85,9 @@ export abstract class PoCheckboxBaseComponent implements ControlValueAccessor {
     this.change.emit(this.checkboxValue);
   }
 
-  checkOption(value: boolean | null) {
+  checkOption(value: boolean | null | string) {
     if (!this.disabled) {
-      this.changeModelValue(!value);
+      value === 'mixed' ? this.changeModelValue(true) : this.changeModelValue(!value);
       this.changeValue();
     }
   }

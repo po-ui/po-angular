@@ -87,7 +87,7 @@ export class PoCheckboxComponent extends PoCheckboxBaseComponent implements Afte
     }
   }
 
-  onKeyDown(event: KeyboardEvent, value: boolean) {
+  onKeyDown(event: KeyboardEvent, value: boolean | string) {
     if (event.which === PoKeyCodeEnum.space || event.keyCode === PoKeyCodeEnum.space) {
       this.checkOption(value);
 
@@ -95,8 +95,12 @@ export class PoCheckboxComponent extends PoCheckboxBaseComponent implements Afte
     }
   }
 
-  protected changeModelValue(value: boolean | null) {
-    this.checkboxValue = typeof value === 'boolean' || value === null ? value : false;
+  protected changeModelValue(value: boolean | null | string) {
+    if (value === null) {
+      this.checkboxValue = 'mixed';
+    } else {
+      this.checkboxValue = typeof value === 'boolean' || value === null ? value : false;
+    }
     this.changeDetector.detectChanges();
   }
 }
