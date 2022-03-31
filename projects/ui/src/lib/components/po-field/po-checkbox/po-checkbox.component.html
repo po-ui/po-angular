@@ -1,25 +1,21 @@
-<div class="po-checkbox">
-  <input
-    class="po-input po-checkbox-input"
-    type="checkbox"
-    [class.po-checkbox-input-checked]="checkboxValue"
-    [class.po-checkbox-input-indeterminate]="checkboxValue === null"
-    [checked]="checkboxValue"
-    [disabled]="disabled"
+<div
+  class="container-po-checkbox"
+  [attr.checked]="checkboxValue"
+  (click)="checkOption(checkboxValue)"
+  (keydown)="onKeyDown($event, checkboxValue)"
+>
+  <span
+    [attr.aria-checked]="checkboxValue"
+    [attr.aria-label]="label"
     [id]="id"
-    [value]="checkboxValue"
-  />
-
-  <label
-    #checkboxLabel
-    class="po-checkbox-label"
-    [class.po-clickable]="!disabled"
-    [for]="id"
+    class="po-checkbox"
+    role="checkbox"
+    [attr.aria-disabled]="disabled"
     [tabindex]="disabled ? -1 : 0"
-    (blur)="onBlur()"
-    (click)="checkOption(checkboxValue)"
-    (keydown)="onKeyDown($event, checkboxValue)"
   >
+  </span>
+
+  <label #checkboxLabel [for]="id" class="po-checkbox-label" tabindex="-1">
     {{ label }}
   </label>
 </div>
