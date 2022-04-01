@@ -9,6 +9,7 @@
         class="po-button po-text-ellipsis po-rich-text-toolbar-color-picker-button"
         [disabled]="readonly"
         [p-tooltip]="literals.textColor"
+        [attr.aria-label]="literals.textColor"
       >
         <input
           #colorPickerInput
@@ -16,6 +17,7 @@
           type="color"
           [disabled]="readonly"
           (change)="changeTextColor($event.target.value)"
+          [attr.aria-label]="literals.textColor"
         />
       </button>
     </div>

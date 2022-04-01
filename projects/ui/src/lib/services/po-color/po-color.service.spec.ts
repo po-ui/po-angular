@@ -105,6 +105,27 @@ describe('PoColorService', () => {
 
         expect(service.getColors(data)).toEqual(expectedResult);
       });
+
+      it('the 13th item color should be black if no color is sent', () => {
+        const data = [
+          { label: '1', data: 8 },
+          { label: '2', data: 10 },
+          { label: '3', data: 14 },
+          { label: '4', data: 7 },
+          { label: '5', data: 6 },
+          { label: '6', data: 22 },
+          { label: '7', data: 11 },
+          { label: '8', data: 8 },
+          { label: '9', data: 2 },
+          { label: '10', data: 3 },
+          { label: '11', data: 14 },
+          { label: '12', data: 14 },
+          { label: '13', data: 14 }
+        ];
+        const getColor = service.getColors<any>(data);
+
+        expect(getColor[12].color).toEqual('#000000');
+      });
     });
   });
 });

@@ -2,6 +2,21 @@
 
 All notable changes to this project will be documented in this file. See [standard-version](https://github.com/conventional-changelog/standard-version) for commit guidelines.
 
+# [6.7.0](https://github.com/po-ui/po-angular/compare/v6.6.0...v6.7.0) (2022-03-28)
+
+
+### Bug Fixes
+
+* **chart:** exibe gráfico após adicionada 12ª série ([6b81497](https://github.com/po-ui/po-angular/commit/6b81497b85fc3fb588dd2a22659dddfe232cd7be))
+* **combo:** possibilita a seleção do item pela palavra filtrada ([50aae42](https://github.com/po-ui/po-angular/commit/50aae429c37de4668ed4c13572f830154059dc59))
+
+
+### Features
+
+* **rich-text:** adiciona atributo aria-label ([c0aa187](https://github.com/po-ui/po-angular/commit/c0aa187820058fbd4a139cc34c77be66e0bbdd6a))
+
+
+
 # [6.6.0](https://github.com/po-ui/po-angular/compare/v6.5.1...v6.6.0) (2022-03-21)
 
 
