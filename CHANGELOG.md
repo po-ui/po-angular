@@ -2,6 +2,15 @@
 
 All notable changes to this project will be documented in this file. See [standard-version](https://github.com/conventional-changelog/standard-version) for commit guidelines.
 
+# [6.8.0](https://github.com/po-ui/po-angular/compare/v6.7.0...v6.8.0) (2022-04-04)
+
+
+### Features
+
+* **checkbox:** melhora acessibilidade e contraste do componente ([ae9b308](https://github.com/po-ui/po-angular/commit/ae9b3086164dc15bd85242df9035c753534b723b))
+
+
+
 # [6.7.0](https://github.com/po-ui/po-angular/compare/v6.6.0...v6.7.0) (2022-03-28)
 
 
