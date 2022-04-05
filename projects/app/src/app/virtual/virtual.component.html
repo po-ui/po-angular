@@ -1,0 +1,14 @@
+<po-page-default p-title="Virtual">
+  <po-table
+    [p-items]="items"
+    p-height="1000"
+    [p-columns]="columns"
+    [p-loading]="loading"
+    (p-selected)="onSelectRow($event)"
+    [p-selectable]="true"
+    p-single-select
+    [p-virtual-scroll]="true"
+  >
+  </po-table>
+  {{ items.length }}
+</po-page-default>
