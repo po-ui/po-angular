@@ -66,12 +66,14 @@ export class PoTableColumnManagerComponent implements OnChanges, OnDestroy {
   literals;
   columnsOptions: Array<PoCheckboxGroupOption> = [];
   visibleColumns: Array<string> = [];
+  columnUpdate;
 
   private _maxColumns: number = PoTableColumnManagerMaxColumnsDefault;
   private defaultColumns: Array<PoTableColumn> = [];
   private resizeListener: () => void;
   private restoreDefaultEvent: boolean;
   private lastEmittedValue: Array<string>;
+  private minColumns: number = 1;
 
   @Input('p-max-columns') set maxColumns(value: number) {
     this._maxColumns = convertToInt(value, PoTableColumnManagerMaxColumnsDefault);
@@ -129,9 +131,13 @@ export class PoTableColumnManagerComponent implements OnChanges, OnDestroy {
 
   private verifyToEmitChange(event: Array<string>) {
     const newColumns = [...event];
-
-    if (this.allowsChangeVisibleColumns()) {
+    if (newColumns.length >= 1 && this.allowsChangeVisibleColumns()) {
       this.emitChangesToSelectedColumns(newColumns);
+    }
+    // Desabilita ultimo checkbox ativo
+    if (newColumns.length === 1) {
+      const columnsOptions = this.mapTableColumnsToCheckboxOptions(this.columnUpdate);
+      this.columnsOptions = this.disabledLastColumn(columnsOptions);
     }
   }
 
@@ -285,7 +291,8 @@ export class PoTableColumnManagerComponent implements OnChanges, OnDestroy {
         columnsOptions.push({
           value: column.property,
           label: this.getColumnTitleLabel(column),
-          disabled: this.isDisableColumn(column.property)
+          disabled: this.isDisableColumn(column.property),
+          visible: column.visible
         });
       }
     });
@@ -293,8 +300,16 @@ export class PoTableColumnManagerComponent implements OnChanges, OnDestroy {
     return columnsOptions;
   }
 
+  private disabledLastColumn(columns: Array<any>) {
+    return columns.map(column => ({
+      ...column,
+      disabled: column.type !== 'detail' && column.visible ? true : false
+    }));
+  }
+
   private onChangeColumns(columns: SimpleChange) {
     const { currentValue = [], previousValue = [] } = columns;
+    this.columnUpdate = columns.currentValue;
 
     // atualizara o defaultColumns, quando for a primeira vez ou quando o defaultColumns for diferente do currentValue
     if (!this.lastVisibleColumnsSelected && this.stringify(this.defaultColumns) !== this.stringify(currentValue)) {

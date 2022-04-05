@@ -96,6 +96,7 @@ export class PoTableComponent extends PoTableBaseComponent implements AfterViewI
   @ViewChild('tableWrapper', { read: ElementRef, static: false }) tableWrapperElement;
   @ViewChild('poTableTbody', { read: ElementRef, static: false }) poTableTbody;
   @ViewChild('poTableThead', { read: ElementRef, static: false }) poTableThead;
+  @ViewChild('poTableTbodyVirtual', { read: ElementRef, static: false }) poTableTbodyVirtual;
 
   @ViewChildren('actionsIconElement', { read: ElementRef }) actionsIconElement: QueryList<any>;
   @ViewChildren('actionsElement', { read: ElementRef }) actionsElement: QueryList<any>;
@@ -105,6 +106,7 @@ export class PoTableComponent extends PoTableBaseComponent implements AfterViewI
   popupTarget;
   tableOpacity: number = 0;
   tooltipText: string;
+  itemSize: number;
   lastVisibleColumnsSelected: Array<PoTableColumn>;
 
   private _columnManagerTarget: ElementRef;
@@ -121,7 +123,6 @@ export class PoTableComponent extends PoTableBaseComponent implements AfterViewI
 
   @ViewChild('columnManagerTarget') set columnManagerTarget(value: ElementRef) {
     this._columnManagerTarget = value;
-
     this.changeDetector.detectChanges();
   }
 
@@ -241,6 +242,7 @@ export class PoTableComponent extends PoTableBaseComponent implements AfterViewI
       this.checkInfiniteScroll();
       this.visibleElement = true;
     }
+    document.body.offsetWidth > 1366 ? (this.itemSize = 44) : (this.itemSize = 32);
   }
 
   ngOnDestroy() {
@@ -545,7 +547,7 @@ export class PoTableComponent extends PoTableBaseComponent implements AfterViewI
   }
 
   public syncronizeHorizontalScroll(): void {
-    this.poTableThead.nativeElement.scrollLeft = this.poTableTbody.nativeElement.scrollLeft;
+    this.poTableThead.nativeElement.scrollLeft = this.poTableTbodyVirtual.nativeElement.scrollLeft;
   }
 
   protected calculateHeightTableContainer(height) {
@@ -565,12 +567,13 @@ export class PoTableComponent extends PoTableBaseComponent implements AfterViewI
           }
         });
       }
+      this.changeDetector.detectChanges();
     });
   }
 
   protected checkInfiniteScroll(): void {
     if (this.hasInfiniteScroll()) {
-      if (this.poTableTbody.nativeElement.scrollHeight > this.height) {
+      if (this.poTableTbodyVirtual.nativeElement.scrollHeight >= this.height) {
         this.includeInfiniteScroll();
       } else {
         this.infiniteScroll = false;
@@ -627,13 +630,15 @@ export class PoTableComponent extends PoTableBaseComponent implements AfterViewI
       this.hasItems &&
       !this.subscriptionScrollEvent &&
       this.height &&
-      this.poTableTbody.nativeElement.scrollHeight
+      this.poTableTbodyVirtual.nativeElement.scrollHeight
     );
   }
 
   private includeInfiniteScroll(): void {
-    this.scrollEvent$ = this.defaultService.scrollListener(this.poTableTbody.nativeElement);
+    this.scrollEvent$ = this.defaultService.scrollListener(this.poTableTbodyVirtual.nativeElement);
     this.subscriptionScrollEvent = this.scrollEvent$.subscribe(event => this.showMoreInfiniteScroll(event));
+
+    this.changeDetector.detectChanges();
   }
 
   private mergeCustomIcons(rowIcons: Array<string>, customIcons: Array<any>) {
