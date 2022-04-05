@@ -219,6 +219,17 @@ export abstract class PoTableBaseComponent implements OnChanges, OnDestroy {
    * @optional
    *
    * @description
+   * Ativa ou desativa a funcionalidade de VirtualScroll.
+   * > Obs: Deve ser utilizado com a propriedade `p-height`.
+   *
+   * @default `false`
+   */
+  @Input('p-virtual-scroll') @InputBoolean() virtualScroll?: boolean = false;
+
+  /**
+   * @optional
+   *
+   * @description
    * Evento executado quando todas as linhas são selecionadas por meio do *checkbox* que seleciona todas as linhas.
    */
   @Output('p-all-selected') allSelected: EventEmitter<any> = new EventEmitter<any>();

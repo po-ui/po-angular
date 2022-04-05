@@ -2,6 +2,7 @@ import { CommonModule, DecimalPipe } from '@angular/common';
 import { FormsModule } from '@angular/forms';
 import { NgModule } from '@angular/core';
 import { RouterModule } from '@angular/router';
+import { ScrollingModule } from '@angular/cdk/scrolling';
 
 import { PoButtonModule } from './../po-button/po-button.module';
 import { PoCheckboxGroupModule } from '../po-field/po-checkbox-group/po-checkbox-group.module';
@@ -36,6 +37,7 @@ import { PoTableColumnTemplateDirective } from './po-table-column-template/po-ta
   imports: [
     CommonModule,
     FormsModule,
+    ScrollingModule,
     RouterModule,
     PoButtonModule,
     PoCheckboxGroupModule,
