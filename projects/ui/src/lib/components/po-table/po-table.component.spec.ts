@@ -38,6 +38,7 @@ describe('PoTableComponent:', () => {
   let component: PoTableComponent;
   let fixture: ComponentFixture<PoTableComponent>;
   let nativeElement;
+  let tableHeaderElement;
   let tableElement;
   let tableFooterElement;
   let poTableService: PoTableService;
@@ -218,8 +219,9 @@ describe('PoTableComponent:', () => {
 
     nativeElement = fixture.debugElement.nativeElement;
 
-    component.poTableTbody = fixture.debugElement;
+    component.poTableTbodyVirtual = fixture.debugElement;
 
+    tableHeaderElement = nativeElement.querySelector('.po-table-header');
     tableElement = nativeElement.querySelector('.po-table-wrapper');
     tableFooterElement = nativeElement.querySelector('.po-table-footer');
 
@@ -656,7 +658,7 @@ describe('PoTableComponent:', () => {
     component.height = 150;
 
     fixture.detectChanges();
-    expect(tableElement.offsetHeight + tableFooterElement.offsetHeight).toBe(150);
+    expect(tableElement.offsetHeight + tableFooterElement.offsetHeight + tableHeaderElement.offsetHeight).toBe(174);
   });
 
   it('should call calculateWidthHeaders and setTableOpacity in debounceResize', fakeAsync(() => {
@@ -800,6 +802,20 @@ describe('PoTableComponent:', () => {
     spyOn(fakeThisDoCheck, 'debounceResize');
     component.ngDoCheck.call(fakeThisDoCheck);
     expect(fakeThisDoCheck.debounceResize).not.toHaveBeenCalled();
+  });
+
+  it('should set 32 in itemSize if offsetWidth is less than 1366', () => {
+    spyOnProperty(document.body, 'offsetWidth').and.returnValue(1300);
+    component.ngDoCheck();
+
+    expect(component.itemSize).toBe(32);
+  });
+
+  it('should set 44 in itemSize if offsetWidth is greater than 1366', () => {
+    spyOnProperty(document.body, 'offsetWidth').and.returnValue(1500);
+    component.ngDoCheck();
+
+    expect(component.itemSize).toBe(44);
   });
 
   it('should not call debounceResize in ngDoCheck when initialized is false', () => {
@@ -2967,7 +2983,7 @@ describe('PoTableComponent:', () => {
 
   it('syncronizeHorizontalScroll, should syncronize two separated tables during horizontal scroll', () => {
     const fakeThis = {
-      poTableTbody: {
+      poTableTbodyVirtual: {
         nativeElement: {
           scrollLeft: 100
         }
@@ -2988,7 +3004,7 @@ describe('PoTableComponent:', () => {
 
   it('hasInfiniteScroll: should return false if infiniteScroll is false', () => {
     component.infiniteScroll = false;
-    component.poTableTbody = {
+    component.poTableTbodyVirtual = {
       nativeElement: { offsetHeight: 100, scrollTop: 100, scrollHeight: 100 }
     };
 

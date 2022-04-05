@@ -103,7 +103,7 @@ export class SamplePoTableLabsComponent implements OnInit {
   }
 
   addItem() {
-    this.items.push(this.samplePoTableLabsService.generateNewItem(this.items.length + 1));
+    this.items = [...this.items, this.samplePoTableLabsService.generateNewItem(this.items.length + 1)];
   }
 
   changeActionOptions() {

@@ -428,6 +428,8 @@ export abstract class PoTableBaseComponent implements OnChanges, OnDestroy {
    * @description
    *
    * Define a altura da tabela em *pixels* e fixa o cabeçalho.
+   *
+   * Ao utilizar essa propriedade será inserido o `virtual-scroll` na tabela melhorando a performance.
    */
   @Input('p-height') set height(height: number) {
     this._height = height;
@@ -928,9 +930,11 @@ export abstract class PoTableBaseComponent implements OnChanges, OnDestroy {
   }
 
   private sortArray(column: PoTableColumn, ascending: boolean) {
-    this.items.sort((leftSide, rightSide): number =>
+    const itemsList = [...this.items];
+    itemsList.sort((leftSide, rightSide): number =>
       sortValues(leftSide[column.property], rightSide[column.property], ascending)
     );
+    this.items = itemsList;
   }
 
   private unselectOtherRows(rows: Array<any>, row) {

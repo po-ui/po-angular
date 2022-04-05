@@ -171,6 +171,34 @@ describe('PoTableColumnManagerComponent:', () => {
         expect(component['emitChangesToSelectedColumns']).toHaveBeenCalledWith(fakeEvent);
       });
 
+      it('should call `disabledLastColumn` and `mapTableColumnsToCheckboxOptions` if columns length is 1', () => {
+        spyOn(component, <any>'mapTableColumnsToCheckboxOptions');
+        spyOn(component, <any>'disabledLastColumn');
+
+        const fakeEvent = ['test1'];
+
+        component['verifyToEmitChange'](fakeEvent);
+
+        expect(component['mapTableColumnsToCheckboxOptions']).toHaveBeenCalled();
+        expect(component['disabledLastColumn']).toHaveBeenCalled();
+      });
+
+      it('disabledLastColumn: should disable column that is visible ', () => {
+        const tableColumns = [
+          { property: 'test1', label: 'Code', visible: true },
+          { property: 'test2', label: 'initial', visible: false }
+        ];
+
+        const tableColumnsExpected = [
+          { property: 'test1', label: 'Code', visible: true, disabled: true },
+          { property: 'test2', label: 'initial', visible: false, disabled: false }
+        ];
+
+        const newColumns = component['disabledLastColumn'](tableColumns);
+
+        expect(newColumns).toEqual(tableColumnsExpected);
+      });
+
       it('shouldn`t call `emitChangesToSelectedColumns` if allowsChangeVisibleColumns is false', () => {
         spyOn(component, <any>'allowsChangeVisibleColumns').and.returnValue(false);
         spyOn(component, <any>'emitChangesToSelectedColumns');
@@ -917,20 +945,20 @@ describe('PoTableColumnManagerComponent:', () => {
     describe('mapTableColumnsToCheckboxOptions:', () => {
       it(`mapTableColumnsToCheckboxOptions: should convert table columns to checkbox options and return it without detail columns`, () => {
         const tableColumns = [
-          { property: 'id', label: 'Code', type: 'number' },
-          { property: 'initial', label: 'initial', type: 'detail' },
-          { property: 'name', label: 'Name' },
-          { property: 'total', label: 'Total', type: 'currency', format: 'BRL' },
-          { property: 'atualization', label: 'Atualization', type: 'date' }
+          { property: 'id', label: 'Code', type: 'number', visible: true },
+          { property: 'initial', label: 'initial', type: 'detail', visible: true },
+          { property: 'name', label: 'Name', visible: true },
+          { property: 'total', label: 'Total', type: 'currency', format: 'BRL', visible: true },
+          { property: 'atualization', label: 'Atualization', type: 'date', visible: true }
         ];
 
         spyOn(component, <any>'isDisableColumn').and.returnValues(false, true, true, true);
 
         const checkboxOptions = [
-          { value: 'id', label: 'Code', disabled: false },
-          { value: 'name', label: 'Name', disabled: true },
-          { value: 'total', label: 'Total', disabled: true },
-          { value: 'atualization', label: 'Atualization', disabled: true }
+          { value: 'id', label: 'Code', disabled: false, visible: true },
+          { value: 'name', label: 'Name', disabled: true, visible: true },
+          { value: 'total', label: 'Total', disabled: true, visible: true },
+          { value: 'atualization', label: 'Atualization', disabled: true, visible: true }
         ];
 
         const result = component['mapTableColumnsToCheckboxOptions'](tableColumns);
