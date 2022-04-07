@@ -3,6 +3,8 @@ import { Directive, ElementRef, HostListener, OnInit, Renderer2 } from '@angular
 import { PoTooltipBaseDirective } from './po-tooltip-base.directive';
 import { PoTooltipControlPositionService } from './po-tooltip-control-position.service';
 
+const nativeElements = ['input', 'button'];
+
 /**
  * @docsExtends PoTooltipBaseDirective
  *
@@ -59,6 +61,18 @@ export class PoTooltipDirective extends PoTooltipBaseDirective implements OnInit
     }
   }
 
+  @HostListener('focusout') onFocusOut() {
+    if (!this.displayTooltip) {
+      this.removeTooltipAction();
+    }
+  }
+
+  @HostListener('focusin') onFocusIn() {
+    if (!this.displayTooltip) {
+      this.addTooltipAction();
+    }
+  }
+
   ngOnInit() {
     this.initScrollEventListenerFunction();
   }
@@ -105,6 +119,8 @@ export class PoTooltipDirective extends PoTooltipBaseDirective implements OnInit
   private createTooltip() {
     this.tooltipContent = this.renderer.createElement('div');
     this.renderer.addClass(this.tooltipContent, 'po-tooltip');
+
+    this.insertAriaLabelTooltip();
 
     this.divArrow = this.renderer.createElement('div');
     this.renderer.addClass(this.divArrow, 'po-tooltip-arrow');
@@ -168,6 +184,25 @@ export class PoTooltipDirective extends PoTooltipBaseDirective implements OnInit
       this.renderer.removeChild(this.divContent, this.textContent);
       this.textContent = this.renderer.createText(this.tooltip);
       this.renderer.appendChild(this.divContent, this.textContent);
+    }
+  }
+
+  private insertAriaLabelTooltip() {
+    const nativeTextContent = this.elementRef.nativeElement.textContent;
+    let targetElement = '';
+
+    nativeElements.forEach(el => {
+      if (this.elementRef.nativeElement.getElementsByTagName(el)[0] !== undefined) {
+        targetElement = el;
+      }
+    });
+
+    if (this.elementRef.nativeElement.getElementsByTagName(targetElement)[0] && this.tooltip) {
+      this.renderer.setAttribute(
+        this.elementRef.nativeElement.getElementsByTagName(targetElement)[0],
+        'aria-label',
+        nativeTextContent + ' ' + this.tooltip
+      );
     }
   }
 }
