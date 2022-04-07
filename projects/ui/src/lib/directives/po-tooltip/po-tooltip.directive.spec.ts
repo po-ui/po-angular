@@ -59,6 +59,46 @@ describe('PoTooltipDirective', () => {
 
       expect(spyRemoveTooltipAction).not.toHaveBeenCalled();
     });
+
+    it('focusout: shouldn`t call removeTooltipAction if `displayTooltip` is true', () => {
+      directive.displayTooltip = true;
+
+      const spyRemoveTooltipAction = spyOn(directive, <any>'removeTooltipAction');
+
+      directive.onFocusOut();
+
+      expect(spyRemoveTooltipAction).not.toHaveBeenCalled();
+    });
+
+    it('focusout: should call removeTooltipAction if `displayTooltip` is false', () => {
+      directive.displayTooltip = false;
+
+      const spyRemoveTooltipAction = spyOn(directive, <any>'removeTooltipAction');
+
+      directive.onFocusOut();
+
+      expect(spyRemoveTooltipAction).toHaveBeenCalled();
+    });
+
+    it('onFocusIn: should call addTooltipAction if `displayTooltip` is false', () => {
+      directive.displayTooltip = false;
+
+      const spyaddTooltipAction = spyOn(directive, <any>'addTooltipAction');
+
+      directive.onFocusIn();
+
+      expect(spyaddTooltipAction).toHaveBeenCalled();
+    });
+
+    it('onFocusIn: shouldn`t call addTooltipAction if `displayTooltip` is true', () => {
+      directive.displayTooltip = true;
+
+      const spyaddTooltipAction = spyOn(directive, <any>'addTooltipAction');
+
+      directive.onFocusIn();
+
+      expect(spyaddTooltipAction).not.toHaveBeenCalled();
+    });
   });
 
   it('should call initScrollEventListenerFunction in ngOnInit', () => {

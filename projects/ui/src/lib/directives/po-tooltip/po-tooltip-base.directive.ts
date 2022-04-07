@@ -10,7 +10,7 @@ const PO_TOOLTIP_POSITION_DEFAULT = 'bottom';
  * @description
  *
  * A diretiva po-tooltip deve ser utilizada para oferecer informações adicionais quando os usuários
- * passam o mouse sobre o elemento alvo ao qual ela está atribuída.
+ * passam o mouse ou realizam o foco sobre o elemento alvo ao qual ela está atribuída.
  *
  * O conteúdo é formado por um pequeno texto que deve contribuir para uma tomada de decisão ou
  * orientação do usuário. A ativação dele pode estar em qualquer componente ou tag HTML.
