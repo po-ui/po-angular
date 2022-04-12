@@ -1,4 +1,4 @@
-import { Component, ViewChild } from '@angular/core';
+import { AfterViewInit, Component, ViewChild } from '@angular/core';
 
 import {
   PoDialogService,
@@ -16,7 +16,7 @@ import { SamplePoTableAirfareService } from './sample-po-table-airfare.service';
   templateUrl: './sample-po-table-airfare.component.html',
   providers: [SamplePoTableAirfareService, PoDialogService]
 })
-export class SamplePoTableAirfareComponent {
+export class SamplePoTableAirfareComponent implements AfterViewInit {
   @ViewChild(PoModalComponent, { static: true }) poModal: PoModalComponent;
   @ViewChild(PoTableComponent, { static: true }) poTable: PoTableComponent;
 
@@ -41,6 +41,19 @@ export class SamplePoTableAirfareComponent {
     private poNotification: PoNotificationService,
     private poDialog: PoDialogService
   ) {}
+
+  ngAfterViewInit(): void {
+    if (localStorage.getItem('initial-columns')) {
+      const initialColumns = localStorage.getItem('initial-columns').split(',');
+
+      const result = this.columns.map(el => ({
+        ...el,
+        visible: initialColumns.includes(el.property)
+      }));
+
+      this.columns = result;
+    }
+  }
 
   addToCart() {
     const selectedItems = this.poTable.getSelectedRows();
@@ -129,6 +142,18 @@ export class SamplePoTableAirfareComponent {
     if (row.value) {
       this.total += row.value;
     }
+  }
+
+  restoreColumn(event) {
+    const result = this.columns.map(el => ({
+      ...el,
+      visible: event.includes(el.property)
+    }));
+    this.columns = result;
+  }
+
+  changeColumnVisible(event) {
+    localStorage.setItem('initial-columns', event);
   }
 
   private getDescription(item: any) {

@@ -1659,6 +1659,15 @@ describe('PoTableComponent:', () => {
       expect(component.changeVisibleColumns.emit).toHaveBeenCalledWith(fakeColumns);
     });
 
+    it('onColumnRestoreManager: should call `columnRestoreManager.emit`', () => {
+      spyOn(component.columnRestoreManager, 'emit');
+      const fakeColumns = ['name', 'age'];
+
+      component.onColumnRestoreManager(fakeColumns);
+
+      expect(component.columnRestoreManager.emit).toHaveBeenCalledWith(fakeColumns);
+    });
+
     describe('applyFilters', () => {
       it('should be called when `p-service-api` is used', () => {
         spyOn(component, 'getFilteredItems').and.returnValue(of({ items: [], hasNext: false }));
