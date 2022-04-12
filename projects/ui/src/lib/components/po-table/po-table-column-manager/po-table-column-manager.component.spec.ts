@@ -624,11 +624,13 @@ describe('PoTableColumnManagerComponent:', () => {
 
       spyOn(component, <any>'getVisibleColumns').and.returnValue(fakeDefaultVisibleColumns);
       spyOn(component, <any>'checkChanges');
+      spyOn(component.initialColumns, 'emit');
 
       component['restore']();
 
       expect(component['getVisibleColumns']).toHaveBeenCalled();
       expect(component['checkChanges']).toHaveBeenCalledWith(fakeDefaultVisibleColumns, true);
+      expect(component.initialColumns.emit).toHaveBeenCalled();
     });
 
     describe('disableColumnsOptions:', () => {

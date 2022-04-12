@@ -51,6 +51,8 @@ export class PoTableColumnManagerComponent implements OnChanges, OnDestroy {
 
   @Input('p-target') target: ElementRef;
 
+  @Input('p-columns-default') colunsDefault: Array<PoTableColumn>;
+
   @Input('p-last-visible-columns-selected') lastVisibleColumnsSelected: Array<PoTableColumn> = [];
 
   @Output('p-visible-columns-change') visibleColumnsChange = new EventEmitter<Array<PoTableColumn>>();
@@ -58,6 +60,8 @@ export class PoTableColumnManagerComponent implements OnChanges, OnDestroy {
   // Evento disparado ao fechar o popover do gerenciador de colunas após alterar as colunas visíveis.
   // O po-table envia como parâmetro um array de string com as colunas visíveis atualizadas. Por exemplo: ["idCard", "name", "hireStatus", "age"].
   @Output('p-change-visible-columns') changeVisibleColumns = new EventEmitter<Array<string>>();
+
+  @Output('p-initial-columns') initialColumns = new EventEmitter<Array<String>>();
 
   literals;
   columnsOptions: Array<PoCheckboxGroupOption> = [];
@@ -119,7 +123,7 @@ export class PoTableColumnManagerComponent implements OnChanges, OnDestroy {
   restore() {
     this.restoreDefaultEvent = true;
     const defaultColumns = this.getVisibleColumns(this.defaultColumns);
-
+    this.initialColumns.emit(this.getVisibleColumns(this.colunsDefault));
     this.checkChanges(defaultColumns, this.restoreDefaultEvent);
   }
 

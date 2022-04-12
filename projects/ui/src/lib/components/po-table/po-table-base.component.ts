@@ -310,6 +310,17 @@ export abstract class PoTableBaseComponent implements OnChanges, OnDestroy {
    */
   @Output('p-change-visible-columns') changeVisibleColumns = new EventEmitter<Array<string>>();
 
+  /**
+   * @optional
+   *
+   * @description
+   * Evento disparado ao clicar no botão de restaurar padrão no gerenciador de colunas.
+   *
+   * O componente envia como parâmetro um array de string com as colunas configuradas inicialmente.
+   * Por exemplo: ["idCard", "name", "hireStatus", "age"].
+   */
+  @Output('p-restore-column-manager') columnRestoreManager = new EventEmitter<Array<String>>();
+
   allColumnsWidthPixels: boolean;
   columnMasterDetail: PoTableColumn;
   hasMainColumns: boolean = false;
@@ -320,7 +331,7 @@ export abstract class PoTableBaseComponent implements OnChanges, OnDestroy {
   page = 1;
   pageSize = 10;
   hasService?: boolean = false;
-
+  initialColumns: Array<PoTableColumn>;
   private _actions?: Array<PoTableAction> = [];
   private _columns: Array<PoTableColumn> = [];
   private _container?: string;
@@ -372,6 +383,10 @@ export abstract class PoTableBaseComponent implements OnChanges, OnDestroy {
    *
    */
   @Input('p-columns') set columns(columns: Array<PoTableColumn>) {
+    if (this.initialColumns === undefined) {
+      this.initialColumns = columns;
+    }
+
     this._columns = columns || [];
 
     if (this._columns.length) {
