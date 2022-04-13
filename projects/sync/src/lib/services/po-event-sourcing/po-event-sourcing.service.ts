@@ -1,7 +1,7 @@
 import { HttpResponse, HttpErrorResponse } from '@angular/common/http';
 import { Injectable } from '@angular/core';
 
-import * as HttpStatus from 'http-status-codes';
+import { StatusCodes } from 'http-status-codes';
 import { Observable, of, Subject } from 'rxjs';
 import { expand, map, reduce } from 'rxjs/operators';
 
@@ -30,14 +30,14 @@ export class PoEventSourcingService {
   static readonly event_sourcing_name: string = 'EventSourcing';
 
   private static readonly VALID_HTTP_STATUS_CODES = [
-    HttpStatus.OK, // 200
-    HttpStatus.CREATED, // 201
-    HttpStatus.ACCEPTED, // 202
-    HttpStatus.NON_AUTHORITATIVE_INFORMATION, // 203
-    HttpStatus.NO_CONTENT, // 204
-    HttpStatus.RESET_CONTENT, // 205
-    HttpStatus.PARTIAL_CONTENT, // 206
-    HttpStatus.MULTI_STATUS // 207
+    StatusCodes.OK, // 200
+    StatusCodes.CREATED, // 201
+    StatusCodes.ACCEPTED, // 202
+    StatusCodes.NON_AUTHORITATIVE_INFORMATION, // 203
+    StatusCodes.NO_CONTENT, // 204
+    StatusCodes.RESET_CONTENT, // 205
+    StatusCodes.PARTIAL_CONTENT, // 206
+    StatusCodes.MULTI_STATUS // 207
   ];
 
   config: PoSyncConfig;
