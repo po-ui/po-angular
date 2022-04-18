@@ -2,6 +2,17 @@
 
 All notable changes to this project will be documented in this file. See [standard-version](https://github.com/conventional-changelog/standard-version) for commit guidelines.
 
+# [6.9.0](https://github.com/po-ui/po-angular/compare/v6.8.0...v6.9.0) (2022-04-18)
+
+
+### Features
+
+* **combo:** adiciona paginação com `infinity-scroll` ([27ccb1e](https://github.com/po-ui/po-angular/commit/27ccb1ef8d419d159b0c5d04f119e5e305a40470))
+* **table:** cria evento para restaurar padrão ([5964ba5](https://github.com/po-ui/po-angular/commit/5964ba5841b44f55c1c0919d69fd0183073a47bd))
+* **table:** fixa scroll vertical ([ba79ab7](https://github.com/po-ui/po-angular/commit/ba79ab7fcfa996eacba29f9cc79ced4de3c8d209))
+* **tooltip:** abre o tooltip no foco do componente ([2aea800](https://github.com/po-ui/po-angular/commit/2aea800ea97332155eda8e9aa6b420a1610045d5))
+
+
 # [6.8.0](https://github.com/po-ui/po-angular/compare/v6.7.0...v6.8.0) (2022-04-04)
 
 
