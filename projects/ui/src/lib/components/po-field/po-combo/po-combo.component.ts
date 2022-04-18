@@ -477,7 +477,6 @@ export class PoComboComponent extends PoComboBaseComponent implements AfterViewI
   }
 
   onOptionClick(option: PoComboOption | PoComboGroup, event?: any) {
-    console.log({ option });
     const inputValue = this.getInputValue();
     const isUpdateModel =
       option.value !== this.selectedValue || !!(this.selectedView && inputValue !== this.selectedView.label);
@@ -617,10 +616,7 @@ export class PoComboComponent extends PoComboBaseComponent implements AfterViewI
     if (this.defaultService.hasNext) {
       this.infiniteLoading = true;
     }
-    // console.log('showMoreInfiniteScroll', { target });
     const scrollPosition = target.offsetHeight + target.scrollTop;
-    // console.log({ scrollPosition });
-    // console.log('if', scrollPosition >= target.scrollHeight * (this.infiniteScrollDistance / 110));
     if (scrollPosition >= target.scrollHeight * (this.infiniteScrollDistance / 110)) {
       this.page++;
       this.applyFilter('', true);
@@ -672,7 +668,6 @@ export class PoComboComponent extends PoComboBaseComponent implements AfterViewI
   }
 
   private initializeListeners() {
-    // console.log('initializeListeners', this.infiniteScroll);
     this.removeListeners();
 
     if (this.infiniteScroll) {
@@ -708,7 +703,6 @@ export class PoComboComponent extends PoComboBaseComponent implements AfterViewI
   };
 
   private open(reset: boolean) {
-    console.log(reset);
     this.comboOpen = true;
     if (!reset && this.infiniteScroll) {
       if (!this.getInputValue()) {
@@ -732,7 +726,6 @@ export class PoComboComponent extends PoComboBaseComponent implements AfterViewI
   }
 
   private removeListeners() {
-    // console.log('removeListeners', this.subscriptionScrollEvent);
     if (this.clickoutListener) {
       this.clickoutListener();
     }
