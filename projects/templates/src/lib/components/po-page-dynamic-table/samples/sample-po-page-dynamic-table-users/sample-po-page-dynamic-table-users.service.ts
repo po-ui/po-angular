@@ -5,8 +5,8 @@ import { HttpClient } from '@angular/common/http';
 export class SamplePoPageDynamicTableUsersService {
   constructor(public http: HttpClient) {}
 
-  downloadCsv(endpoint) {
-    this.http.get(endpoint).subscribe(data => {
+  downloadCsv(endpoint: any) {
+    this.http.get(endpoint).subscribe((data: any) => {
       const csvStr = this.parseJsonToCsv(data['items']);
       const dataUri = 'data:text/csv;charset=utf-8,' + csvStr;
 
