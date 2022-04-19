@@ -460,6 +460,7 @@ export abstract class PoComboBaseComponent implements ControlValueAccessor, OnIn
    * - A lista deve seguir as definições descritas nas respectivas interfaces, caso contrário não exibirá a(as) opção(ões) fora dos padrões.
    * - O componente interpretará o formato da lista de acordo com a interface utilizada e só exibirá as opções correspondentes à ela.
    * - Um agrupamento só será exibido se houver pelo menos uma opção válida.
+   * - Aconselha-se utilizar valores distintos no `label` e `value` dos itens.
    */
   @Input('p-options') set options(options: Array<PoComboOption | PoComboOptionGroup>) {
     this._options = Array.isArray(options) ? options : [];
@@ -863,10 +864,11 @@ export abstract class PoComboBaseComponent implements ControlValueAccessor, OnIn
     currentOption: string,
     accumulatedGroupOptions?: Array<PoComboGroup>
   ) {
-    return (
-      options.some(option => option.label === currentOption) ||
-      (accumulatedGroupOptions && accumulatedGroupOptions.some(option => option.label === currentOption))
-    );
+    if (accumulatedGroupOptions) {
+      return accumulatedGroupOptions.some(option => option.label === currentOption);
+    } else {
+      return options.some(option => option.value === currentOption);
+    }
   }
 
   private listingComboOptions(comboOptions: Array<PoComboOption | PoComboOptionGroup>) {
@@ -908,7 +910,11 @@ export abstract class PoComboBaseComponent implements ControlValueAccessor, OnIn
     return comboOptions.reduce((accumulatedOptions, currentOption) => {
       if (
         !this.verifyIfHasLabel(currentOption) ||
-        this.hasDuplicatedOption(accumulatedOptions, currentOption.label, accumulatedGroupOptions) ||
+        this.hasDuplicatedOption(
+          accumulatedOptions,
+          currentOption['value'] || currentOption['label'],
+          accumulatedGroupOptions
+        ) ||
         !this.validateValue(currentOption, verifyingOptionsGroup)
       ) {
         return accumulatedOptions;

@@ -1111,7 +1111,7 @@ describe('PoComboBaseComponent:', () => {
       });
     });
 
-    it('hasDuplicatedOption: should return true if contains a duplicated option label', () => {
+    it('hasDuplicatedOption: should return false if contains a duplicated option label', () => {
       const comboOptions = [
         { label: 'labelA', value: 'valueA' },
         { label: 'labelB', value: 'valueB' }
@@ -1119,7 +1119,7 @@ describe('PoComboBaseComponent:', () => {
 
       const expectedValue = component['hasDuplicatedOption'](comboOptions, 'labelA');
 
-      expect(expectedValue).toBeTruthy();
+      expect(expectedValue).toBeFalsy();
     });
 
     it('hasDuplicatedOption: should return false if contains a duplicated option label', () => {
@@ -1205,6 +1205,29 @@ describe('PoComboBaseComponent:', () => {
       expect(spyVerifyIfHasLabel).toHaveBeenCalled();
       expect(spyhasDuplicatedOption).toHaveBeenCalled();
       expect(spyvalidateValue).toHaveBeenCalled();
+    });
+
+    it('verifyComboOptions: Should allow items with the same label`', () => {
+      component.options = [
+        {
+          label: 'Teste',
+          options: [
+            { label: 'Teste1', value: 'Teste1' },
+            { label: 'Teste1.2', value: 'Teste1.2' }
+          ]
+        },
+        {
+          label: 'Teste2',
+          options: [
+            { label: 'Teste1', value: 'value1' },
+            { label: 'Teste2.2', value: 'value2' }
+          ]
+        }
+      ];
+
+      const expectedValue = component['verifyComboOptions'](component.options);
+
+      expect(expectedValue).toEqual(component.options);
     });
 
     it('verifyComboOptions: should verify each option and return a properly options list`', () => {
