@@ -16,14 +16,14 @@ import { SamplePoPageDynamicTableUsersService } from './sample-po-page-dynamic-t
   providers: [SamplePoPageDynamicTableUsersService]
 })
 export class SamplePoPageDynamicTableUsersComponent {
-  @ViewChild('userDetailModal') userDetailModal: PoModalComponent;
-  @ViewChild('dependentsModal') dependentsModal: PoModalComponent;
+  @ViewChild('userDetailModal') userDetailModal!: PoModalComponent;
+  @ViewChild('dependentsModal') dependentsModal!: PoModalComponent;
 
   readonly serviceApi = 'https://po-sample-api.herokuapp.com/v1/people';
 
   actionsRight = false;
-  detailedUser;
-  dependents;
+  detailedUser: any;
+  dependents: any;
   quickSearchWidth: number = 3;
 
   readonly actions: PoPageDynamicTableActions = {
@@ -130,11 +130,11 @@ export class SamplePoPageDynamicTableUsersComponent {
     };
   }
 
-  isUserInactive(person) {
+  isUserInactive(person: any) {
     return person.status === 'inactive';
   }
 
-  hasDependents(person) {
+  hasDependents(person: any) {
     return person.dependents.length !== 0;
   }
 
@@ -142,19 +142,19 @@ export class SamplePoPageDynamicTableUsersComponent {
     window.print();
   }
 
-  private onClickUserDetail(user) {
+  private onClickUserDetail(user: any) {
     this.detailedUser = user;
 
     this.userDetailModal.open();
   }
 
-  private onClickDependents(user) {
+  private onClickDependents(user: any) {
     this.dependents = user.dependents;
 
     this.dependentsModal.open();
   }
 
-  private onClickActionsSide(value) {
+  private onClickActionsSide(value: any) {
     this.actionsRight = !this.actionsRight;
   }
 
