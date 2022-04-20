@@ -12,7 +12,7 @@ import {
 import { AbstractControl, NG_VALUE_ACCESSOR, NG_VALIDATORS } from '@angular/forms';
 import { PoLanguageService } from '../../../services/po-language/po-language.service';
 
-import { minFailed, maxFailed } from '../validators';
+import { minFailed, maxFailed, maxlengpoailed } from '../validators';
 
 import { convertToInt } from '../../../utils/util';
 import { PoInputBaseComponent } from '../po-input/po-input-base.component';
@@ -266,10 +266,13 @@ export class PoDecimalComponent extends PoInputBaseComponent implements AfterVie
   }
 
   extraValidation(abstractControl: AbstractControl): { [key: string]: any } {
+    const value = abstractControl.value;
+    const thousandValue = Math.trunc(value);
+
     // Verifica se já possui algum error pattern padrão.
     this.errorPattern = this.errorPattern !== 'Valor Inválido' ? this.errorPattern : '';
 
-    if (minFailed(this.min, abstractControl.value)) {
+    if (minFailed(this.min, value)) {
       return {
         min: {
           valid: false
@@ -277,7 +280,19 @@ export class PoDecimalComponent extends PoInputBaseComponent implements AfterVie
       };
     }
 
-    if (maxFailed(this.max, abstractControl.value)) {
+    if (maxFailed(this.max, value)) {
+      return {
+        max: {
+          valid: false
+        }
+      };
+    }
+
+    if (
+      (maxlengpoailed(this.thousandMaxlength, thousandValue) &&
+        this.thousandMaxlength < poDecimalDefaultThousandMaxlength) ||
+      maxlengpoailed(poDecimalTotalLengthLimit, value)
+    ) {
       return {
         max: {
           valid: false

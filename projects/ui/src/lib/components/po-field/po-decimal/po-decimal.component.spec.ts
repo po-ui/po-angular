@@ -375,6 +375,20 @@ describe('PoDecimalComponent:', () => {
     expect(component.extraValidation(new FormControl(null))).toBeNull();
   });
 
+  it(`Shouldn't return null in extraValidation if value has separator`, () => {
+    const value = new FormControl(12345678901234.56);
+
+    expect(component.extraValidation(value)).not.toBeNull();
+  });
+
+  it(`Shouldn't return null in extraValidation if thousandMaxlength has value`, () => {
+    component.thousandMaxlength = 5;
+
+    const value = new FormControl(123456);
+
+    expect(component.extraValidation(value)).not.toBeNull();
+  });
+
   it('should have a call getScreenValue method', () => {
     const fakeThis = {
       inputEl: undefined
