@@ -155,7 +155,7 @@ describe('PoListViewComponent:', () => {
 
       spyOn(UtilsFunctions, 'isTypeof').and.returnValue(false);
 
-      expect(component.returnBooleanValue(listViewAction, item)).toBe(listViewAction.disabled);
+      expect(component.returnBooleanValue(listViewAction, item, 'disabled')).toBe(listViewAction.disabled);
       expect(UtilsFunctions.isTypeof).toHaveBeenCalled();
     });
 
@@ -165,7 +165,7 @@ describe('PoListViewComponent:', () => {
       spyOn(listViewAction, 'disabled').and.returnValue(true);
       spyOn(UtilsFunctions, 'isTypeof').and.returnValue(true);
 
-      expect(component.returnBooleanValue(listViewAction, item)).toBe(true);
+      expect(component.returnBooleanValue(listViewAction, item, 'disabled')).toBe(true);
       expect(listViewAction.disabled).toHaveBeenCalled();
       expect(UtilsFunctions.isTypeof).toHaveBeenCalled();
     });
