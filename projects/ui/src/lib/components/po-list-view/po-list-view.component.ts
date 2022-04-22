@@ -91,7 +91,10 @@ export class PoListViewComponent extends PoListViewBaseComponent implements Afte
   }
 
   get visibleActions() {
-    return this.actions && this.actions.filter(action => action.visible !== false);
+    return (
+      this.actions &&
+      this.actions.filter(action => this.returnBooleanValue(action, action.visible, 'visible') !== false)
+    );
   }
 
   ngAfterContentInit(): void {
@@ -120,10 +123,10 @@ export class PoListViewComponent extends PoListViewBaseComponent implements Afte
     return this.items && this.items.length > 0;
   }
 
-  returnBooleanValue(listViewAction: PoListViewAction, item: any) {
-    return isTypeof(listViewAction.disabled, 'function')
-      ? (<any>listViewAction).disabled(item)
-      : listViewAction.disabled;
+  returnBooleanValue(listViewAction: PoListViewAction, item: any, property: string) {
+    return isTypeof(listViewAction[property], 'function')
+      ? (<any>listViewAction)[property](item)
+      : listViewAction[property];
   }
 
   trackBy(index) {
