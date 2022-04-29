@@ -545,7 +545,7 @@ export class PoTableComponent extends PoTableBaseComponent implements AfterViewI
   }
 
   public syncronizeHorizontalScroll(): void {
-    this.poTableThead.nativeElement.scrollLeft = this.poTableTbody.nativeElement.scrollLeft;
+    this.poTableThead.nativeElement.scrollLeft = this.poTableTbody.nativeElement.firstElementChild.scrollLeft;
   }
 
   protected calculateHeightTableContainer(height) {

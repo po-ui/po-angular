@@ -38,6 +38,7 @@ describe('PoTableComponent:', () => {
   let component: PoTableComponent;
   let fixture: ComponentFixture<PoTableComponent>;
   let nativeElement;
+  let tableHeaderElement;
   let tableElement;
   let tableFooterElement;
   let poTableService: PoTableService;
@@ -220,6 +221,7 @@ describe('PoTableComponent:', () => {
 
     component.poTableTbody = fixture.debugElement;
 
+    tableHeaderElement = nativeElement.querySelector('.po-table-header');
     tableElement = nativeElement.querySelector('.po-table-wrapper');
     tableFooterElement = nativeElement.querySelector('.po-table-footer');
 
@@ -656,7 +658,7 @@ describe('PoTableComponent:', () => {
     component.height = 150;
 
     fixture.detectChanges();
-    expect(tableElement.offsetHeight + tableFooterElement.offsetHeight).toBe(150);
+    expect(tableElement.offsetHeight + tableFooterElement.offsetHeight + tableHeaderElement.offsetHeight).toBe(174);
   });
 
   it('should call calculateWidthHeaders and setTableOpacity in debounceResize', fakeAsync(() => {
@@ -2969,7 +2971,9 @@ describe('PoTableComponent:', () => {
     const fakeThis = {
       poTableTbody: {
         nativeElement: {
-          scrollLeft: 100
+          firstElementChild: {
+            scrollLeft: 100
+          }
         }
       },
       poTableThead: {
