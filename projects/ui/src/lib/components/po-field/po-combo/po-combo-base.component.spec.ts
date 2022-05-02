@@ -1393,18 +1393,20 @@ describe('PoComboBaseComponent:', () => {
       expect(spyListingComboOptions).not.toHaveBeenCalled();
     });
 
-    it('clear: should call `callModelChange` and `updateSelectedValue` and `updateComboList`', () => {
+    it('clear: should call `callModelChange` and `updateSelectedValue` and `updateComboList` and `initInputObservable`', () => {
       component.clean = true;
 
       spyOn(component, 'callModelChange');
       spyOn(component, 'updateSelectedValue');
       spyOn(component, 'updateComboList');
+      spyOn(component, 'initInputObservable');
 
       component.clear('');
 
       expect(component.callModelChange).toHaveBeenCalled();
       expect(component.updateSelectedValue).toHaveBeenCalled();
       expect(component.updateComboList).toHaveBeenCalled();
+      expect(component.initInputObservable).toHaveBeenCalled();
       expect(component.selectedValue).toEqual(undefined);
     });
   });

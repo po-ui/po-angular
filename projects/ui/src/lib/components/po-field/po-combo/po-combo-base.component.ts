@@ -817,6 +817,7 @@ export abstract class PoComboBaseComponent implements ControlValueAccessor, OnIn
     this.callModelChange(value);
     this.updateSelectedValue(null);
     this.updateComboList();
+    this.initInputObservable();
   }
 
   protected configAfterSetFilterService(service: PoComboFilter | string) {
