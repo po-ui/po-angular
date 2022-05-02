@@ -2,6 +2,23 @@
 
 All notable changes to this project will be documented in this file. See [standard-version](https://github.com/conventional-changelog/standard-version) for commit guidelines.
 
+# [6.10.0](https://github.com/po-ui/po-angular/compare/v6.9.0...v6.10.0) (2022-05-02)
+
+
+### Bug Fixes
+
+* **combo:** permite labels com o mesmo valor ([d736ea0](https://github.com/po-ui/po-angular/commit/d736ea08d3db1ff26fbe4242b26bd1b97f8ce317))
+* **decimal:** atualiza as validações do campo ([e8b9c5b](https://github.com/po-ui/po-angular/commit/e8b9c5be61265277023438baf0edd1bcbeea846c))
+
+
+### Features
+
+* **button:** aplica nova definição de estilo ([1ee4769](https://github.com/po-ui/po-angular/commit/1ee4769dedea74795864031e6ee47470e5311643))
+* **page-dynamic-table:** adiciona p-infinite-scroll e p-height ([2373683](https://github.com/po-ui/po-angular/commit/2373683a3dbd5dea17463515e3779be75f0b9321)), closes [#1092](https://github.com/po-ui/po-angular/issues/1092)
+* **rich-text:** aplica nova definição de estilo ([3ef530d](https://github.com/po-ui/po-angular/commit/3ef530dc3d4713b8d1d6e32435815a291ccc03b3))
+
+
+
 # [6.9.0](https://github.com/po-ui/po-angular/compare/v6.8.0...v6.9.0) (2022-04-18)
 
 
