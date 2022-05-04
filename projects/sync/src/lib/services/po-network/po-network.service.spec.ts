@@ -1,4 +1,4 @@
-import { Network } from '@ionic-native/network/ngx';
+import { Network } from '@awesome-cordova-plugins/network/ngx';
 
 import { fromEvent, Observable, of, Subject } from 'rxjs';
 import * as rxjs from 'rxjs';

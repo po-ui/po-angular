@@ -19,8 +19,8 @@
     ]
   },
   "dependencies": {
-    "@ionic-native/core": "5.33.0",
-    "@ionic-native/network": "5.33.0",
+    "@awesome-cordova-plugins/core": "^5.41.0",
+    "@awesome-cordova-plugins/network": "^5.41.0",
     "@po-ui/ng-storage": "0.0.0-PLACEHOLDER",
     "http-status-codes": "^2.1.4",
     "@po-ui/ng-schematics": "0.0.0-PLACEHOLDER",
@@ -28,8 +28,8 @@
   },
   "peerDependencies": {
     "@angular/core": "^13.0.2",
-    "@ionic-native/core": "5.33.0",
-    "@ionic-native/network": "5.33.0",
+    "@awesome-cordova-plugins/core": "^5.41.0",
+    "@awesome-cordova-plugins/network": "^5.41.0",
     "@po-ui/ng-storage": "0.0.0-PLACEHOLDER",
     "http-status-codes": "^2.1.4",
     "rxjs": "~7.4.0",

@@ -6,8 +6,8 @@
   },
   "allowedNonPeerDependencies": [
     "@po-ui/ng-storage",
-    "@ionic-native/core",
-    "@ionic-native/network",
+    "@awesome-cordova-plugins/core",
+    "@awesome-cordova-plugins/network",
     "http-status-codes",
     "@po-ui/ng-schematics"
   ]
