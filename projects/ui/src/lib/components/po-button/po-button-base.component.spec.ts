@@ -32,14 +32,14 @@ describe('PoButtonBaseComponent', () => {
   });
 
   it('should update property `p-type` with valid values', () => {
-    const validValues = ['default', 'primary', 'danger', 'link'];
+    const validValues = ['primary', 'secondary', 'tertiary', 'danger'];
 
     expectPropertiesValues(component, 'type', validValues, validValues);
   });
 
-  it('should update property `p-type` with `default` when invalid values', () => {
+  it('should update property `p-type` with `secondary` when invalid values', () => {
     const invalidValues = [undefined, null, '', true, false, 0, 1, 'aa', [], {}];
 
-    expectPropertiesValues(component, 'type', invalidValues, 'default');
+    expectPropertiesValues(component, 'type', invalidValues, 'secondary');
   });
 });
