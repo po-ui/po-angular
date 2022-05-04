@@ -3,6 +3,9 @@ import { By } from '@angular/platform-browser';
 
 import { configureTestSuite } from './../../../util-test/util-expect.spec';
 
+import { PoButtonModule } from '../../../components/po-button';
+import { PoIconModule } from '../../../components/po-icon';
+
 import { PoToaster } from './po-toaster.interface';
 import { PoToasterType } from './po-toaster-type.enum';
 import { PoToasterOrientation } from './po-toaster-orientation.enum';
@@ -80,6 +83,7 @@ describe('PoToasterComponent', () => {
 
   configureTestSuite(() => {
     TestBed.configureTestingModule({
+      imports: [PoButtonModule, PoIconModule],
       declarations: [PoToasterComponent]
     });
   });
