@@ -1,8 +1,6 @@
 [comment]: # (@label Primeiros passos)
 [comment]: # (@link guides/getting-started)
 
-> Instale a versão 6 do NPM antes de iniciar: ```npm i -g npm@6```
-
 ### Pré-requisitos
 
 Para começar a utilizar o **PO UI** é pré-requisito ter o `Node.js` instalado (versão 12.13.0 ou acima) e o seu gerenciador de pacote favorito na versão mais atual. Caso você ainda não tenha instalado o pacote `@angular/cli`, instale-o via `npm` ou `yarn`.
@@ -63,8 +61,6 @@ Instalando com npm:
 ```
 npm install
 ```
-
-> Caso utilizar a versão 7 do npm pode ocorrer erro de versão das dependências, neste caso utilize `npm install --legacy-peer-deps`
 
 Caso prefira instalar com o yarn:
 ```
