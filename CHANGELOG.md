@@ -2,6 +2,15 @@
 
 All notable changes to this project will be documented in this file. See [standard-version](https://github.com/conventional-changelog/standard-version) for commit guidelines.
 
+## [6.10.1](https://github.com/po-ui/po-angular/compare/v6.10.0...v6.10.1) (2022-05-09)
+
+
+### Bug Fixes
+
+* **combo:** ajusta limpeza de campo com p-clean ([0a9fa31](https://github.com/po-ui/po-angular/commit/0a9fa310b93c6d8f7084d7f2871d26bdede8f39b))
+
+
+
 # [6.10.0](https://github.com/po-ui/po-angular/compare/v6.9.0...v6.10.0) (2022-05-02)
 
 
