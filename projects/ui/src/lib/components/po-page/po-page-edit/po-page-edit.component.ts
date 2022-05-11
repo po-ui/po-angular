@@ -43,7 +43,7 @@ export class PoPageEditComponent extends PoPageEditBaseComponent {
     const isCancelPrimaryAction = type === 'cancel' && this.isPrimaryAction('cancel');
     const isSaveNewPrimaryAction = type === 'saveNew' && this.isPrimaryAction('saveNew');
 
-    return isCancelPrimaryAction || isSaveNewPrimaryAction ? 'primary' : 'default';
+    return isCancelPrimaryAction || isSaveNewPrimaryAction ? 'primary' : 'secondary';
   }
 
   hasAnyAction(): boolean {
