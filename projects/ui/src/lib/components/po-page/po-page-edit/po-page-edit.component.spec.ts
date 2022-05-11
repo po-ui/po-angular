@@ -113,20 +113,20 @@ describe('PoPageEditComponent', () => {
       expect(component.getType('saveNew')).toBe('primary');
     });
 
-    it('getType: should return "default" if type isn`t "saveNew" or "cancel"', () => {
-      expect(component.getType('test')).toBe('default');
+    it('getType: should return "secondary" if type isn`t "saveNew" or "cancel"', () => {
+      expect(component.getType('test')).toBe('secondary');
     });
 
-    it('getType: should return "default" if type is "saveNew" and isn`t primary action', () => {
+    it('getType: should return "secondary" if type is "saveNew" and isn`t primary action', () => {
       spyOn(component, <any>'isPrimaryAction').and.returnValue(false);
 
-      expect(component.getType('saveNew')).toBe('default');
+      expect(component.getType('saveNew')).toBe('secondary');
     });
 
-    it('getType: should return "default" if type is "cancel" and isn`t primary action', () => {
+    it('getType: should return "secondary" if type is "cancel" and isn`t primary action', () => {
       spyOn(component, <any>'isPrimaryAction').and.returnValue(false);
 
-      expect(component.getType('cancel')).toBe('default');
+      expect(component.getType('cancel')).toBe('secondary');
     });
 
     it('hasPageHeader: should return true if has breadcrumb', () => {
