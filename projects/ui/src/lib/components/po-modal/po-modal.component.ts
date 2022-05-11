@@ -71,7 +71,7 @@ export class PoModalComponent extends PoModalBaseComponent {
   }
 
   getSecondaryActionButtonType() {
-    return this.secondaryAction && this.secondaryAction.danger && !this.primaryAction.danger ? 'danger' : 'default';
+    return this.secondaryAction && this.secondaryAction.danger && !this.primaryAction.danger ? 'danger' : 'secondary';
   }
 
   onClickOut(event) {

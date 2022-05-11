@@ -469,20 +469,20 @@ describe('PoModalComponent:', () => {
       expect(component.getSecondaryActionButtonType()).toBe('danger');
     });
 
-    it(`getSecondaryActionButtonType: should return 'default' if 'primaryAction.danger' is 'true'
+    it(`getSecondaryActionButtonType: should return 'secondary' if 'primaryAction.danger' is 'true'
     and 'secondaryAction.danger' is 'false'`, () => {
       component.primaryAction.danger = true;
       component.secondaryAction = { action: () => {}, label: 'primaryLabel', danger: false };
 
-      expect(component.getSecondaryActionButtonType()).toBe('default');
+      expect(component.getSecondaryActionButtonType()).toBe('secondary');
     });
 
-    it(`getSecondaryActionButtonType: should return 'default' if 'primaryAction.danger' is 'true'
+    it(`getSecondaryActionButtonType: should return 'secondary' if 'primaryAction.danger' is 'true'
     and 'secondaryAction.danger' is 'true'`, () => {
       component.primaryAction.danger = true;
       component.secondaryAction = { action: () => {}, label: 'primaryLabel', danger: true };
 
-      expect(component.getSecondaryActionButtonType()).toBe('default');
+      expect(component.getSecondaryActionButtonType()).toBe('secondary');
     });
 
     it(`removeEventListeners: should call 'removeEventListener' with 'focus', 'focusFunction' and 'true' params.`, () => {
