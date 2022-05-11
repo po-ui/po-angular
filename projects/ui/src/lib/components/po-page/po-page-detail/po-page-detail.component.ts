@@ -35,7 +35,7 @@ export class PoPageDetailComponent extends PoPageDetailBaseComponent {
     if (property === 'icon') {
       return this.hasEvent('edit') ? '' : 'po-icon-delete';
     } else if (property === 'type') {
-      return this.hasEvent('edit') ? 'default' : 'primary';
+      return this.hasEvent('edit') ? 'secondary' : 'primary';
     } else {
       return '';
     }
@@ -45,7 +45,7 @@ export class PoPageDetailComponent extends PoPageDetailBaseComponent {
     if (property === 'icon') {
       return this.hasEvent('edit') || this.hasEvent('remove') ? '' : 'po-icon-arrow-left';
     } else if (property === 'type') {
-      return this.hasEvent('edit') || this.hasEvent('remove') ? 'default' : 'primary';
+      return this.hasEvent('edit') || this.hasEvent('remove') ? 'secondary' : 'primary';
     } else {
       return '';
     }

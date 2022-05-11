@@ -98,10 +98,10 @@ describe('PoPageDetailComponent:', () => {
       expect(component.hasEditFn('icon')).toBe('po-icon-delete');
     });
 
-    it(`hasEditFn: should return 'default' if have a edit action and property is 'type'`, () => {
+    it(`hasEditFn: should return 'secondary' if have a edit action and property is 'type'`, () => {
       component.edit.observers.push(<any>of({}));
 
-      expect(component.hasEditFn('type')).toBe('default');
+      expect(component.hasEditFn('type')).toBe('secondary');
     });
 
     it(`hasEditFn: should return 'primary' if does't have a edit action and property is 'type'`, () => {
@@ -144,20 +144,20 @@ describe('PoPageDetailComponent:', () => {
       expect(component.hasEditOrRemoveFn('icon')).toBe('po-icon-arrow-left');
     });
 
-    it(`hasEditOrRemoveFn: should return 'default' if have a edit action, doesn't have remove action
+    it(`hasEditOrRemoveFn: should return 'secondary' if have a edit action, doesn't have remove action
     and property is 'type'`, () => {
       component.edit.observers.push(<any>of({}));
       component.remove.observers.length = 0;
 
-      expect(component.hasEditOrRemoveFn('type')).toBe('default');
+      expect(component.hasEditOrRemoveFn('type')).toBe('secondary');
     });
 
-    it(`hasEditOrRemoveFn: should return 'default' if doesn't have a edit action, have remove action
+    it(`hasEditOrRemoveFn: should return 'secondary' if doesn't have a edit action, have remove action
     and property is 'type'`, () => {
       component.remove.observers.push(<any>of({}));
       component.edit.observers.length = 0;
 
-      expect(component.hasEditOrRemoveFn('type')).toBe('default');
+      expect(component.hasEditOrRemoveFn('type')).toBe('secondary');
     });
 
     it(`hasEditOrRemoveFn: should return 'primary' if doesn't have a edit action and remove action
