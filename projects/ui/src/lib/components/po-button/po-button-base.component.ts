@@ -117,9 +117,12 @@ export class PoButtonBaseComponent {
   }
 
   /**
+   * @deprecated 15.x.x
+   *
    * @optional
    *
    * @description
+   * **Deprecated 15.x.x**. Utilizar `p-kind` no lugar.
    *
    * Define o estilo do `po-button`.
    *
