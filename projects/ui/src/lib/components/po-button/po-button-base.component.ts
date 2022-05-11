@@ -124,12 +124,14 @@ export class PoButtonBaseComponent {
    * Define o estilo do `po-button`.
    *
    * Valore válidos:
-   *  - `default`: estilo padrão do `po-button`.
+   *  - `default`: **Deprecated 15.x.x**. Utilizar `secondary`.
    *  - `primary`: deixa o `po-button` com destaque, deve ser usado para ações primárias.
+   *  - `secondary`: estilo padrão do `po-button`.
    *  - `danger`: deve ser usado para ações que o usuário precisa ter cuidado ao executa-lá.
-   *  - `link`: o `po-button` recebe o estilo de um link.
+   *  - `link`: **Deprecated 15.x.x**. Utilizar `tertiary`.
+   *  - `tertiary`: o `po-button` é exibido sem cor do fundo, recebendo menos destaque entre as ações.
    *
-   * @default `default`
+   * @default `secondary`
    */
   @Input('p-type') set type(value: string) {
     this._type = PoButtonType[value] ? PoButtonType[value] : PoButtonType.secondary;
