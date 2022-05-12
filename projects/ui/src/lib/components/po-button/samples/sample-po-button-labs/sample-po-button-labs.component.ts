@@ -8,7 +8,7 @@ import { PoCheckboxGroupOption, PoRadioGroupOption, PoDialogService } from '@po-
 })
 export class SamplePoButtonLabsComponent implements OnInit {
   label: string;
-  type: string;
+  kind: string;
   icon: string;
   properties: Array<string>;
 
@@ -25,7 +25,7 @@ export class SamplePoButtonLabsComponent implements OnInit {
     { label: 'fa fa-podcast', value: 'fa fa-podcast' }
   ];
 
-  typesOptions: Array<PoRadioGroupOption> = [
+  kindsOptions: Array<PoRadioGroupOption> = [
     { label: 'primary', value: 'primary' },
     { label: 'secondary', value: 'secondary' },
     { label: 'tertiary', value: 'tertiary' },
@@ -44,7 +44,7 @@ export class SamplePoButtonLabsComponent implements OnInit {
 
   restore() {
     this.label = undefined;
-    this.type = undefined;
+    this.kind = undefined;
     this.icon = undefined;
     this.properties = [];
   }

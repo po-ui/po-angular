@@ -47,19 +47,19 @@ export class SamplePoButtonLabsComponentPO {
   }
 
   get poRadioDefault() {
-    return this.getPoButtonType('default');
+    return this.getPoButtonKind('default');
   }
 
   get poRadioDanger() {
-    return this.getPoButtonType('danger');
+    return this.getPoButtonKind('danger');
   }
 
   get poRadioPrimary() {
-    return this.getPoButtonType('primary');
+    return this.getPoButtonKind('primary');
   }
 
   get poRadioLink() {
-    return this.getPoButtonType('link');
+    return this.getPoButtonKind('link');
   }
 
   get poInputClean() {
@@ -90,10 +90,10 @@ export class SamplePoButtonLabsComponentPO {
     );
   }
 
-  private getPoButtonType(type) {
+  private getPoButtonKind(kind) {
     return element(
       by.css(
-        `${this.sampleName} po-radio-group[name="type"] .po-radio-group-input[value="${type}"]+${this.poRadioGroupLabel}`
+        `${this.sampleName} po-radio-group[name="kind"] .po-radio-group-input[value="${kind}"]+${this.poRadioGroupLabel}`
       )
     );
   }
