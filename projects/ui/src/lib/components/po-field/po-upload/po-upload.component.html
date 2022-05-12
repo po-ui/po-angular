@@ -72,7 +72,7 @@
       *ngIf="displaySendButton"
       class="po-upload-send-button"
       [class.po-mt-3]="hasMoreThanFourItems"
-      p-type="primary"
+      p-kind="primary"
       [p-disabled]="hasAnyFileUploading(currentFiles)"
       [p-label]="literals.startSending"
       (p-click)="uploadFiles(currentFiles)"
