@@ -1,4 +1,4 @@
-export enum PoButtonType {
+export enum PoButtonKind {
   primary = 'primary',
   default = 'secondary',
   secondary = 'secondary',

@@ -31,13 +31,13 @@ describe('PoButtonBaseComponent', () => {
     expectPropertiesValues(component, 'small', booleanInvalidValues, false);
   });
 
-  it('should update property `p-type` with valid values', () => {
+  it('should update property `p-kind` with valid values', () => {
     const validValues = ['primary', 'secondary', 'tertiary', 'danger'];
 
     expectPropertiesValues(component, 'type', validValues, validValues);
   });
 
-  it('should update property `p-type` with `secondary` when invalid values', () => {
+  it('should update property `p-kind` with `secondary` when invalid values', () => {
     const invalidValues = [undefined, null, '', true, false, 0, 1, 'aa', [], {}];
 
     expectPropertiesValues(component, 'type', invalidValues, 'secondary');
