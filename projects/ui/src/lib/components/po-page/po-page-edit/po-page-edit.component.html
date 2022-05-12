@@ -7,7 +7,7 @@
         *ngIf="hasEvent('cancel')"
         [p-icon]="getIcon('cancel')"
         [p-label]="literals.cancel"
-        [p-type]="getType('cancel')"
+        [p-kind]="getType('cancel')"
         (p-click)="cancel.emit()"
       >
       </po-button>
@@ -17,7 +17,7 @@
         [p-disabled]="disableSubmit"
         [p-icon]="getIcon('saveNew')"
         [p-label]="literals.saveNew"
-        [p-type]="getType('saveNew')"
+        [p-kind]="getType('saveNew')"
         (p-click)="saveNew.emit()"
       >
       </po-button>
@@ -25,7 +25,7 @@
       <po-button
         *ngIf="hasEvent('save')"
         p-icon="po-icon-ok"
-        p-type="primary"
+        p-kind="primary"
         [p-disabled]="disableSubmit"
         [p-label]="literals.save"
         (p-click)="save.emit()"
