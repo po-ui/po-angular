@@ -1,0 +1,58 @@
+po-button {
+  --border-radius: 0px;
+}
+
+po-button[p-type='primary'] {
+  /* --color: blue;
+  --border-color: blue;
+  --background-color: rgb(167, 167, 204); */
+  --border-radius: 50%;
+}
+
+po-button[p-type='primary']:hover {
+  --color-hover: blue;
+  --background-color-hover: rgb(122, 127, 196);
+  --border-color-hover: rgb(122, 127, 196);
+}
+
+po-button[p-type='default'] {
+  --color: green;
+  --border-color: green;
+  --background-color: rgb(130, 219, 157);
+}
+
+po-button[p-type='default'][p-disabled='true'] {
+  --color-disabled: rgb(231, 10, 213);
+  --border-color-disabled: rgb(231, 10, 213);
+  --background-color-disabled: rgb(233, 176, 228);
+}
+
+po-button[p-type='default']:hover {
+  --color-hover: red;
+  --border-color-hover: red;
+  --background-color-hover: rgb(230, 136, 136);
+}
+
+po-button[p-type='link'] {
+  /* --color: yellow;
+  --border-color: yellow;
+  --background-color: rgb(233, 235, 168); */
+}
+
+po-button[p-type='link']:hover {
+  --color-hover: rgb(231, 10, 213);
+  --border-color-hover: rgb(215, 149, 221);
+  --background-color-hover: rgb(215, 149, 221);
+}
+
+po-button[p-type='danger'] {
+  /* --color: red;
+  --border-color: red;
+  --background-color: rgb(238, 137, 137); */
+}
+
+po-button[p-type='danger']:hover {
+  --color-hover: orange;
+  --border-color-hover: orange;
+  --background-color-hover: rgb(230, 184, 163);
+}
