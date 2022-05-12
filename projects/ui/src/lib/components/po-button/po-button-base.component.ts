@@ -3,7 +3,7 @@ import { EventEmitter, Input, Output, Directive, TemplateRef } from '@angular/co
 import { convertToBoolean } from '../../utils/util';
 import { InputBoolean } from '../../decorators';
 
-import { PoButtonType } from './po-button-type.enum';
+import { PoButtonKind } from './po-button-type.enum';
 
 /**
  * @description
@@ -79,7 +79,7 @@ export class PoButtonBaseComponent {
   private _disabled?: boolean = false;
   private _loading?: boolean = false;
   private _small?: boolean = false;
-  private _type?: string = PoButtonType.secondary;
+  private _kind?: string = PoButtonKind.secondary;
 
   /**
    * @optional
@@ -127,20 +127,42 @@ export class PoButtonBaseComponent {
    * Define o estilo do `po-button`.
    *
    * Valore válidos:
-   *  - `default`: **Deprecated 15.x.x**. Utilizar `secondary`.
+   *  - `default`: **Deprecated 15.x.x**. Utilizar `p-kind="secondary"`.
    *  - `primary`: deixa o `po-button` com destaque, deve ser usado para ações primárias.
-   *  - `secondary`: estilo padrão do `po-button`.
    *  - `danger`: deve ser usado para ações que o usuário precisa ter cuidado ao executa-lá.
-   *  - `link`: **Deprecated 15.x.x**. Utilizar `tertiary`.
-   *  - `tertiary`: o `po-button` é exibido sem cor do fundo, recebendo menos destaque entre as ações.
+   *  - `link`: **Deprecated 15.x.x**. Utilizar `p-kind="tertiary"`.
    *
    * @default `secondary`
    */
   @Input('p-type') set type(value: string) {
-    this._type = PoButtonType[value] ? PoButtonType[value] : PoButtonType.secondary;
+    this.kind = value;
   }
   get type(): string {
-    return this._type;
+    return this.kind;
+  }
+
+  /**
+   *
+   * @optional
+   *
+   * @description
+   *
+   * Define o estilo do `po-button`.
+   *
+   * Valore válidos:
+   *  - `primary`: deixa o `po-button` com destaque, deve ser usado para ações primárias.
+   *  - `secondary`: estilo padrão do `po-button`.
+   *  - `danger`: deve ser usado para ações que o usuário precisa ter cuidado ao executa-lá.
+   *  - `tertiary`: o `po-button` é exibido sem cor do fundo, recebendo menos destaque entre as ações.
+   *
+   * @default `secondary`
+   */
+  @Input('p-kind') set kind(value: string) {
+    this._kind = PoButtonKind[value] ? PoButtonKind[value] : PoButtonKind.secondary;
+  }
+
+  get kind(): string {
+    return this._kind;
   }
 
   /**

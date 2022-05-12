@@ -2,12 +2,12 @@
   #button
   class="po-button po-text-ellipsis"
   type="button"
-  [class.po-button-default]="type === 'secondary'"
-  [class.po-button-danger]="type === 'danger'"
-  [class.po-button-link]="type === 'tertiary'"
-  [class.po-button-primary]="type === 'primary'"
+  [class.po-button-default]="kind === 'secondary'"
+  [class.po-button-danger]="kind === 'danger'"
+  [class.po-button-link]="kind === 'tertiary'"
+  [class.po-button-primary]="kind === 'primary'"
   [class.po-button-sm]="small"
-  [class.po-clickable]="type === 'link'"
+  [class.po-clickable]="kind === 'link'"
   [disabled]="disabled || loading"
   (click)="onClick()"
 >
