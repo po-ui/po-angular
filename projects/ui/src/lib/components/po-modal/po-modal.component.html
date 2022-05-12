@@ -28,7 +28,7 @@
                 [p-disabled]="secondaryAction.disabled"
                 [p-label]="secondaryAction.label"
                 [p-loading]="secondaryAction.loading"
-                [p-type]="getSecondaryActionButtonType()"
+                [p-kind]="getSecondaryActionButtonType()"
                 (p-click)="secondaryAction.action()"
               >
               </po-button>
@@ -38,7 +38,7 @@
                 [p-disabled]="primaryAction.disabled"
                 [p-label]="primaryAction.label"
                 [p-loading]="primaryAction.loading"
-                [p-type]="getPrimaryActionButtonType()"
+                [p-kind]="getPrimaryActionButtonType()"
                 (p-click)="primaryAction.action()"
               >
               </po-button>
