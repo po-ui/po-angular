@@ -7,7 +7,7 @@
         *ngIf="hasEvent('back')"
         [p-icon]="hasEditOrRemoveFn('icon')"
         [p-label]="literals.back"
-        [p-type]="hasEditOrRemoveFn('type')"
+        [p-kind]="hasEditOrRemoveFn('type')"
         (p-click)="back.emit()"
       >
       </po-button>
@@ -16,7 +16,7 @@
         *ngIf="hasEvent('remove')"
         [p-icon]="hasEditFn('icon')"
         [p-label]="literals.remove"
-        [p-type]="hasEditFn('type')"
+        [p-kind]="hasEditFn('type')"
         (p-click)="remove.emit()"
       >
       </po-button>
@@ -24,7 +24,7 @@
       <po-button
         *ngIf="hasEvent('edit')"
         p-icon="po-icon-edit"
-        p-type="primary"
+        p-kind="primary"
         [p-label]="literals.edit"
         (p-click)="edit.emit()"
       >
