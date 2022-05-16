@@ -2,6 +2,19 @@
 
 All notable changes to this project will be documented in this file. See [standard-version](https://github.com/conventional-changelog/standard-version) for commit guidelines.
 
+# [6.11.0](https://github.com/po-ui/po-angular/compare/v6.10.1...v6.11.0) (2022-05-16)
+
+
+### Features
+
+* **button:** adiciona type `secondary` e `tertiary` ([38f2d55](https://github.com/po-ui/po-angular/commit/38f2d55de6917a2b398fd4a69dfca9255ad39692))
+* **button:** cria propriedade `p-kind` ([fa66726](https://github.com/po-ui/po-angular/commit/fa6672616435844f37a670547cc923f8fe328e04))
+* **button:** deprecia button `default` e `link` ([521999b](https://github.com/po-ui/po-angular/commit/521999b066090a75b912125f1a5c7f2ef2b34363))
+* **button:** deprecia propriedade `p-type` ([fe4814f](https://github.com/po-ui/po-angular/commit/fe4814f840e7c031fda58cdee8f42c55357a5155))
+* **page-dynamic-edit:** adiciona atributo offset ([97c0d20](https://github.com/po-ui/po-angular/commit/97c0d20f97dd023102c4cdafa64e29bdf77806a6)), closes [#1141](https://github.com/po-ui/po-angular/issues/1141)
+
+
+
 ## [6.10.1](https://github.com/po-ui/po-angular/compare/v6.10.0...v6.10.1) (2022-05-09)
 
 
