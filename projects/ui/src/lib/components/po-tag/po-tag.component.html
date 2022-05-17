@@ -9,6 +9,7 @@
       [class.po-clickable]="isClickable"
       [class.po-tag-inverse]="inverse"
       [ngClass]="tagColor"
+      [ngStyle]="tagColor ? '' : { 'background-color': corcustomizada }"
       tabindex="0"
       (click)="onClick()"
       (keydown.enter)="onKeyPressed($event)"
@@ -21,3 +22,5 @@
     </div>
   </div>
 </div>
+{{ tagColor }}
+{{ corcustomizada }}

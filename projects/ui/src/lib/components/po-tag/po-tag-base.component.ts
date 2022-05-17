@@ -45,7 +45,7 @@ export class PoTagBaseComponent {
   @Output('p-click') click: EventEmitter<any> = new EventEmitter<PoTagItem>();
 
   public readonly poTagOrientation = PoTagOrientation;
-
+  public corcustomizada;
   private _color?: string;
   private _icon?: boolean | string | TemplateRef<void>;
   private _inverse?: boolean;
@@ -76,7 +76,12 @@ export class PoTagBaseComponent {
    * > **Atenção:** A propriedade `p-type` sobrepõe esta definição.
    */
   @Input('p-color') set color(value: string) {
+    console.log(value);
+
     this._color = poTagColors.includes(value) ? value : undefined;
+    if (this._color === undefined) {
+      this.corcustomizada = value;
+    }
   }
 
   get color(): string {
