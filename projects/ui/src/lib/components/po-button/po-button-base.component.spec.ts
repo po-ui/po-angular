@@ -22,6 +22,11 @@ describe('PoButtonBaseComponent', () => {
     expectPropertiesValues(component, 'disabled', booleanInvalidValues, false);
   });
 
+  it('should set `p-danger` with `value`', () => {
+    component.danger = true;
+    expect(component.danger).toBe(true);
+  });
+
   it('should update property `p-small` with valid values', () => {
     expectPropertiesValues(component, 'small', booleanValidTrueValues, true);
     expectPropertiesValues(component, 'small', booleanValidFalseValues, false);
@@ -32,6 +37,7 @@ describe('PoButtonBaseComponent', () => {
   });
 
   it('should update property `p-kind` with valid values', () => {
+    component.danger = false;
     const validValues = ['primary', 'secondary', 'tertiary', 'danger'];
 
     expectPropertiesValues(component, 'type', validValues, validValues);
@@ -41,5 +47,10 @@ describe('PoButtonBaseComponent', () => {
     const invalidValues = [undefined, null, '', true, false, 0, 1, 'aa', [], {}];
 
     expectPropertiesValues(component, 'type', invalidValues, 'secondary');
+  });
+
+  it('should update property `p-kind` with `secondary` when property `p-danger` is true', () => {
+    component.danger = true;
+    expect(component.kind).toBe('secondary');
   });
 });

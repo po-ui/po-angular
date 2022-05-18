@@ -7,6 +7,7 @@
     [p-label]="label"
     [p-loading]="properties.includes('loading')"
     [p-small]="properties.includes('small')"
+    [p-danger]="properties.includes('danger')"
     [p-kind]="kind"
     (p-click)="buttonClick()"
   >
@@ -28,6 +29,7 @@
       [(ngModel)]="properties"
       p-label="Properties"
       [p-options]="propertiesOptions"
+      (p-change)="propertiesChange($event)"
     >
     </po-checkbox-group>
   </div>

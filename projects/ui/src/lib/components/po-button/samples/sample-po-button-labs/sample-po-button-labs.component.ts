@@ -15,7 +15,8 @@ export class SamplePoButtonLabsComponent implements OnInit {
   propertiesOptions: Array<PoCheckboxGroupOption> = [
     { value: 'disabled', label: 'Disabled' },
     { value: 'loading', label: 'Loading' },
-    { value: 'small', label: 'Small' }
+    { value: 'small', label: 'Small' },
+    { value: 'danger', label: 'Danger' }
   ];
 
   iconsOptions: Array<PoRadioGroupOption> = [
@@ -28,8 +29,7 @@ export class SamplePoButtonLabsComponent implements OnInit {
   kindsOptions: Array<PoRadioGroupOption> = [
     { label: 'primary', value: 'primary' },
     { label: 'secondary', value: 'secondary' },
-    { label: 'tertiary', value: 'tertiary' },
-    { label: 'danger', value: 'danger' }
+    { label: 'tertiary', value: 'tertiary' }
   ];
 
   constructor(private poDialog: PoDialogService) {}
@@ -42,10 +42,27 @@ export class SamplePoButtonLabsComponent implements OnInit {
     this.poDialog.alert({ title: 'PO Button', message: 'Hello PO World!!!' });
   }
 
+  propertiesChange(event) {
+    this.kindsOptions[0] = { ...this.kindsOptions[0], disabled: false };
+    this.kindsOptions[2] = { ...this.kindsOptions[2], disabled: false };
+
+    if (event) {
+      event.forEach(property => {
+        if (property === 'danger' && this.properties.includes('danger')) {
+          this.kindsOptions[0] = { ...this.kindsOptions[0], disabled: true };
+          this.kindsOptions[2] = { ...this.kindsOptions[2], disabled: true };
+          this.kind = 'secondary';
+        }
+      });
+    }
+  }
+
   restore() {
     this.label = undefined;
     this.kind = undefined;
     this.icon = undefined;
     this.properties = [];
+    this.kindsOptions[0] = { ...this.kindsOptions[0], disabled: false };
+    this.kindsOptions[2] = { ...this.kindsOptions[2], disabled: false };
   }
 }
