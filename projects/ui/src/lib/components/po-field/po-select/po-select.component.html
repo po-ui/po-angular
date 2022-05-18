@@ -10,8 +10,13 @@
     (blur)="onBlur()"
   >
     <option *ngIf="isMobile" disabled hidden selected></option>
-    <option *ngFor="let option of options" [disabled]="readonly" [value]="option.value" (click)="onOptionClick(option)">
-      {{ option?.label }}
+    <option
+      *ngFor="let option of options"
+      [disabled]="readonly"
+      [value]="option[this.fieldValue]"
+      (click)="onOptionClick(option)"
+    >
+      {{ option?.[this.fieldLabel] }}
     </option>
   </select>
 
@@ -36,15 +41,15 @@
     <ul #contentList class="po-select-content" [ngClass]="{ 'po-invisible': isMobile }">
       <li
         *ngFor="let option of options"
-        [class.po-select-item-selected]="selectedValue === option.value"
-        [value]="option.value"
+        [class.po-select-item-selected]="selectedValue === option[this.fieldLabel]"
+        [value]="option[this.fieldValue]"
         (click)="onOptionClick(option)"
       >
         <div class="po-select-item">
           <ng-container *ngIf="selectOptionTemplate; then optionTemplate; else defaultOptionTemplate"></ng-container>
 
           <ng-template #defaultOptionTemplate>
-            <span>{{ option?.label }}</span>
+            <span>{{ option?.[this.fieldLabel] }}</span>
           </ng-template>
 
           <ng-template
