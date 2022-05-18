@@ -16,6 +16,7 @@ import { PoButtonKind } from './po-button-type.enum';
  *
  * - Evite `labels` extensos que quebram o layout do `po-button`, use `labels` diretos, curtos e intuitivos.
  * - Utilize apenas um `po-button` configurado como `primary` por página.
+ * - Para ações irreversíveis use sempre a propriedade `p-danger`.
  */
 @Directive()
 export class PoButtonBaseComponent {
@@ -74,6 +75,7 @@ export class PoButtonBaseComponent {
   /** Ação que será executada quando o usuário clicar sobre o `po-button`. */
   @Output('p-click') click = new EventEmitter<null>();
 
+  private _danger?: boolean = false;
   private _disabled?: boolean = false;
   private _loading?: boolean = false;
   private _small?: boolean = false;
@@ -128,7 +130,7 @@ export class PoButtonBaseComponent {
    * Valore válidos:
    *  - `default`: **Deprecated 15.x.x**. Utilizar `p-kind="secondary"`.
    *  - `primary`: deixa o `po-button` com destaque, deve ser usado para ações primárias.
-   *  - `danger`: deve ser usado para ações que o usuário precisa ter cuidado ao executa-lá.
+   *  - `danger`: **Deprecated 15.x.x**. Utilizar `p-danger`.
    *  - `link`: **Deprecated 15.x.x**. Utilizar `p-kind="tertiary"`.
    *
    * @default `secondary`
@@ -138,6 +140,28 @@ export class PoButtonBaseComponent {
   }
   get type(): string {
     return this.kind;
+  }
+
+  /**
+   * @optional
+   *
+   * @description
+   *
+   * Deve ser usado em ações irreversíveis que o usuário precisa ter cuidado ao executá-la, como a exclusão de um registro.
+   *
+   * > Ao utilizar esta propriedade será atribuído `p-kind="secondary"`.
+   */
+
+  @Input('p-danger') @InputBoolean() set danger(value: boolean) {
+    this._danger = value;
+
+    if (this._danger) {
+      this.kind = PoButtonKind.secondary;
+    }
+  }
+
+  get danger(): boolean {
+    return this._danger;
   }
 
   /**
@@ -155,7 +179,7 @@ export class PoButtonBaseComponent {
    * @default `secondary`
    */
   @Input('p-kind') set kind(value: string) {
-    this._kind = PoButtonKind[value] ? PoButtonKind[value] : PoButtonKind.secondary;
+    this._kind = PoButtonKind[value] && !this.danger ? PoButtonKind[value] : PoButtonKind.secondary;
   }
 
   get kind(): string {
