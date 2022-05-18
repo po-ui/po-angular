@@ -10,14 +10,12 @@ import { PoButtonKind } from './po-button-type.enum';
  *
  * O `po-button` permite que o usuário execute ações predefinidas pelo desenvolvedor.
  *
- * Através dos tipos, é possível identificar a importância de cada ação, sendo ela primária (`primary`) ou até mesmo uma
- * ação irreversível (`danger`), como a exclusão de um registro.
+ * Através dos tipos, é possível identificar a importância de cada ação.
  *
  * #### Boas práticas
  *
  * - Evite `labels` extensos que quebram o layout do `po-button`, use `labels` diretos, curtos e intuitivos.
  * - Utilize apenas um `po-button` configurado como `primary` por página.
- * - Para ações irreversíveis use sempre o tipo `danger`.
  */
 @Directive()
 export class PoButtonBaseComponent {
@@ -122,6 +120,7 @@ export class PoButtonBaseComponent {
    * @optional
    *
    * @description
+   *
    * **Deprecated 15.x.x**. Utilizar `p-kind` no lugar.
    *
    * Define o estilo do `po-button`.
@@ -142,7 +141,6 @@ export class PoButtonBaseComponent {
   }
 
   /**
-   *
    * @optional
    *
    * @description
@@ -152,7 +150,6 @@ export class PoButtonBaseComponent {
    * Valore válidos:
    *  - `primary`: deixa o `po-button` com destaque, deve ser usado para ações primárias.
    *  - `secondary`: estilo padrão do `po-button`.
-   *  - `danger`: deve ser usado para ações que o usuário precisa ter cuidado ao executa-lá.
    *  - `tertiary`: o `po-button` é exibido sem cor do fundo, recebendo menos destaque entre as ações.
    *
    * @default `secondary`
