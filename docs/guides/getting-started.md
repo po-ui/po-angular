@@ -36,14 +36,14 @@ Veja abaixo a lista de dependências e as versões compatíveis, elas devem ser 
 
 ```
   "dependencies": {
-    "@angular/animations": "^13.0.2",
-    "@angular/common": "^13.0.2",
-    "@angular/compiler": "^13.0.2",
-    "@angular/core": "^13.0.2",
-    "@angular/forms": "^13.0.2",
-    "@angular/platform-browser": "^13.0.2",
-    "@angular/platform-browser-dynamic": "^13.0.2",
-    "@angular/router": "^13.0.2",
+    "@angular/animations": "~13.3.0",
+    "@angular/common": "~13.3.0",
+    "@angular/compiler": "~13.3.0",
+    "@angular/core": "~13.3.0",
+    "@angular/forms": "~13.3.0",
+    "@angular/platform-browser": "~13.3.0",
+    "@angular/platform-browser-dynamic": "~13.3.0",
+    "@angular/router": "~13.3.0",
     "rxjs": "~7.4.0",
     "tslib": "^2.3.0",
     "zone.js": "~0.11.4"
@@ -51,7 +51,7 @@ Veja abaixo a lista de dependências e as versões compatíveis, elas devem ser 
   },
   "devDependencies": {
     ...
-    "typescript": "~4.5.2"
+    "typescript": "~4.6.2"
   }
 ```
 
