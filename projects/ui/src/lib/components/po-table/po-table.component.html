@@ -60,15 +60,13 @@
       <tr [class.po-table-header]="!height">
         <th *ngIf="hasSelectableColumn" class="po-table-column-selectable">
           <div [class.po-table-header-fixed-inner]="height">
-            <input
+            <po-checkbox
+              name="selectAll"
               *ngIf="!hideSelectAll"
-              type="checkbox"
-              class="po-table-checkbox"
-              [class.po-table-checkbox-checked]="selectAll"
-              [class.po-table-checkbox-indeterminate]="selectAll === null"
-            />
-            <label *ngIf="!hideSelectAll" class="po-table-checkbox-label po-clickable" (click)="selectAllRows()">
-            </label>
+              (click)="selectAllRows()"
+              (p-change)="selectAllRows()"
+              [(ngModel)]="selectAll"
+            ></po-checkbox>
           </div>
         </th>
 
@@ -346,15 +344,13 @@
       <tr [class.po-table-header]="!height">
         <th *ngIf="hasSelectableColumn" class="po-table-column-selectable">
           <div [class.po-table-header-fixed-inner]="height">
-            <input
+            <po-checkbox
+              name="selectAll"
               *ngIf="!hideSelectAll"
-              type="checkbox"
-              class="po-table-checkbox"
-              [class.po-table-checkbox-checked]="selectAll"
-              [class.po-table-checkbox-indeterminate]="selectAll === null"
-            />
-            <label *ngIf="!hideSelectAll" class="po-table-checkbox-label po-clickable" (click)="selectAllRows()">
-            </label>
+              (click)="selectAllRows()"
+              (p-change)="selectAllRows()"
+              [(ngModel)]="selectAll"
+            ></po-checkbox>
           </div>
         </th>
 
@@ -639,8 +635,12 @@
 </ng-template>
 
 <ng-template #inputCheckbox let-row>
-  <input type="checkbox" class="po-table-checkbox" [class.po-table-checkbox-checked]="row.$selected" />
-  <label class="po-table-checkbox-label po-clickable" (click)="selectable ? selectRow(row) : 'javascript:;'"></label>
+  <po-checkbox
+    name="checkbox"
+    (p-change)="selectable ? selectRow(row) : 'javascript:;'"
+    [(ngModel)]="row.$selected"
+    (click)="selectable ? selectRow(row) : 'javascript:;'"
+  ></po-checkbox>
 </ng-template>
 
 <ng-template #contentHeaderTemplate let-column>
