@@ -13,6 +13,7 @@ import { PoPopupModule } from './../po-popup/po-popup.module';
 import { PoTimeModule } from '../../pipes/po-time/index';
 import { PoTooltipModule } from '../../directives/po-tooltip/index';
 import { PoIconModule } from './../po-icon/po-icon.module';
+import { PoCheckboxModule } from './../po-field/po-checkbox/po-checkbox.module';
 
 import { PoTableColumnIconComponent } from './po-table-column-icon/po-table-column-icon.component';
 import { PoTableColumnLabelComponent } from './po-table-column-label/po-table-column-label.component';
@@ -46,7 +47,8 @@ import { PoTableColumnTemplateDirective } from './po-table-column-template/po-ta
     PoPopupModule,
     PoTimeModule,
     PoTooltipModule,
-    PoIconModule
+    PoIconModule,
+    PoCheckboxModule
   ],
   declarations: [
     PoTableComponent,

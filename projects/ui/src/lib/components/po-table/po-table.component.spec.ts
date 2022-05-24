@@ -322,49 +322,6 @@ describe('PoTableComponent:', () => {
     expect(selectableHeader).toBeFalsy();
   });
 
-  it('should allow multiple row selection', () => {
-    component.selectable = true;
-    component.singleSelect = false;
-    component.selectRow(component.items[0]);
-    component.selectRow(component.items[1]);
-
-    fixture.detectChanges();
-
-    const checkedColumns = tableElement.querySelectorAll('.po-table-checkbox-checked');
-    expect(checkedColumns.length).toBe(2);
-  });
-
-  it('should show indeterminate selectable', () => {
-    component.selectable = true;
-    fixture.detectChanges();
-
-    let selectableHeader = tableElement.querySelector('th.po-table-column-selectable .po-table-checkbox-indeterminate');
-    expect(selectableHeader).toBeFalsy();
-
-    component.selectRow(component.items[0]);
-    component.selectRow(component.items[1]);
-    fixture.detectChanges();
-
-    selectableHeader = tableElement.querySelector('th.po-table-column-selectable .po-table-checkbox-indeterminate');
-    expect(selectableHeader).toBeTruthy();
-  });
-
-  it('should select one row', () => {
-    const itemSelected = component.items[0];
-    component.selectable = true;
-    component.hideDetail = true;
-    component.columns = columnsWithDetail;
-    component.selectRow(itemSelected);
-
-    fixture.detectChanges();
-
-    const rowSelected = tableElement.querySelectorAll('.po-table-row-active');
-
-    expect(rowSelected).toBeTruthy();
-    expect(rowSelected[0].querySelector('.po-table-checkbox-checked')).toBeTruthy();
-    expect(rowSelected[0].innerHTML).toContain(itemSelected.id);
-  });
-
   it('should select all rows', () => {
     component.selectable = true;
     component.selectAllRows();
@@ -385,16 +342,6 @@ describe('PoTableComponent:', () => {
 
     const selectableColumnHeader = tableElement.querySelector('th.po-table-column-selectable .po-table-checkbox');
     expect(selectableColumnHeader).toBeFalsy();
-  });
-
-  it('should show the option to select all', () => {
-    component.selectable = true;
-    component.hideSelectAll = false;
-
-    fixture.detectChanges();
-
-    const selectableColumnHeader = tableElement.querySelector('th.po-table-column-selectable .po-table-checkbox');
-    expect(selectableColumnHeader).toBeTruthy();
   });
 
   it('shouldn`t show more button', () => {
