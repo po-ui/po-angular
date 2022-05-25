@@ -18,11 +18,29 @@ import { PoLanguageService } from '../../services/po-language/po-language.servic
 import { poLocaleDefault } from '../../services/po-language/po-language.constant';
 
 export const poMenuLiteralsDefault = {
-  en: { itemNotFound: 'Item not found.', emptyLabelError: 'Attribute PoMenuItem.label can not be empty.' },
-  es: { itemNotFound: 'Elemento no encontrado.', emptyLabelError: 'El atributo PoMenuItem.label no puede ser vacío.' },
-  pt: { itemNotFound: 'Item não encontrado.', emptyLabelError: 'O atributo PoMenuItem.label não pode ser vazio.' },
-  ru: { itemNotFound: 'Предмет не найден.', emptyLabelError: 'Атрибут PoMenuItem.label не может быть пустым.' }
+  en: {
+    itemNotFound: 'Item not found.',
+    emptyLabelError: 'Attribute PoMenuItem.label can not be empty.',
+    logomarcaHome: 'Home logo'
+  },
+  es: {
+    itemNotFound: 'Elemento no encontrado.',
+    emptyLabelError: 'El atributo PoMenuItem.label no puede ser vacío.',
+    logomarcaHome: 'Logomarca inicio'
+  },
+  pt: {
+    itemNotFound: 'Item não encontrado.',
+    emptyLabelError: 'O atributo PoMenuItem.label não pode ser vazio.',
+    logomarcaHome: 'Logomarca home'
+  },
+  ru: {
+    itemNotFound: 'Предмет не найден.',
+    emptyLabelError: 'Атрибут PoMenuItem.label не может быть пустым.',
+    logomarcaHome: 'Дом Логомарка'
+  }
 };
+
+export const MAX_LENGHT: number = 125;
 
 /**
  * @description
@@ -49,6 +67,7 @@ export abstract class PoMenuBaseComponent {
   private _filter = false;
   private _level;
   private _logo: string;
+  private _logoAlt: string = this.literals.logomarcaHome;
   private _maxLevel = 4;
   private _menus = [];
   private _params: any;
@@ -214,6 +233,24 @@ export abstract class PoMenuBaseComponent {
    *
    * @description
    *
+   * Texto alternativo para o logo.
+   *
+   * > Caso esta propriedade seja indefinida ou inválida o texto padrão será "Logomarca home".
+   */
+  @Input('p-logo-alt') set logoAlt(value: string) {
+    const alt = isTypeof(value, 'string') && value.trim() ? this.maxLength(value) : undefined;
+    this._logoAlt = alt ?? this._logoAlt;
+  }
+
+  get logoAlt() {
+    return this._logoAlt;
+  }
+
+  /**
+   * @optional
+   *
+   * @description
+   *
    * Caminho para a logomarca, que será exibida quando o componente estiver colapsado, localizada na parte superior.
    *
    * > **Importante:**
@@ -343,6 +380,10 @@ export abstract class PoMenuBaseComponent {
         this.validateMenu(subItem);
       });
     }
+  }
+
+  private maxLength(value: string) {
+    return value.length > MAX_LENGHT ? value.toString().substring(0, MAX_LENGHT) : value;
   }
 
   protected abstract checkActiveMenuByUrl(urlRouter);

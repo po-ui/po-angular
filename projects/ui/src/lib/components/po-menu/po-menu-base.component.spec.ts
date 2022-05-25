@@ -398,6 +398,24 @@ describe('PoMenuBaseComponent:', () => {
 
       expect(result).toEqual(parentExpected);
     });
+
+    it('maxLenght: should set value according to max allowed', () => {
+      const largeValue =
+        'Lorem ipsum dolor sit amet consectetur adipisicing elit. Sit incidunt aliquam asperiores maxime, nulla fugit exercitationem. Abratione, quisquam.';
+      const maxLenght = component['maxLength'](largeValue);
+      const expectedValue =
+        'Lorem ipsum dolor sit amet consectetur adipisicing elit. Sit incidunt aliquam asperiores maxime, nulla fugit exercitationem. ';
+
+      expect(maxLenght).toBe(expectedValue);
+    });
+
+    it('maxLenght: should set exact value if value is less than max allowed', () => {
+      const smallValue =
+        'Lorem ipsum dolor sit amet consectetur adipisicing elit. Sit incidunt aliquam asperiores maxime, nulla fugit exercitationem.';
+      const maxLenght = component['maxLength'](smallValue);
+
+      expect(maxLenght).toBe(smallValue);
+    });
   });
 
   describe('Properties:', () => {
@@ -446,6 +464,19 @@ describe('PoMenuBaseComponent:', () => {
       const validValues = ['https://po-ui.io/logo', 'https://other.com/images/logo'];
 
       expectPropertiesValues(component, 'logo', validValues, validValues);
+    });
+
+    it('logoAlt: should set property with `default value` if invalid value', () => {
+      const invalidValues = ['', ' ', null, undefined, 0, false, true];
+      const expectedValue = 'Logomarca home';
+
+      expectPropertiesValues(component, 'logoAlt', invalidValues, expectedValue);
+    });
+
+    it('logoAlt: should set property with valid value', () => {
+      const validValues = ['Po-UI Logo', 'Other image logo'];
+
+      expectPropertiesValues(component, 'logoAlt', validValues, validValues);
     });
 
     it('shortLogo: should set property with `undefined` if invalid values', () => {
