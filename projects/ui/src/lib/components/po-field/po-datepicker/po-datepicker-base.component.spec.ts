@@ -128,8 +128,26 @@ describe('PoDatepickerBaseComponent:', () => {
   });
 
   it('should be update property date', () => {
-    const expectedValue = convertIsoToDate('2021/08/20', false, false);
+    const expectedValue = UtilsFunctions.convertIsoToDateNoTimezone('2021/08/20');
     expectPropertiesValues(component, 'date', '2021/08/20', expectedValue);
+  });
+
+  it('should call `convertIsoToDate` when isExtendedISO is true', () => {
+    spyOn(UtilsFunctions, 'convertIsoToDate');
+    component['isExtendedISO'] = true;
+
+    component.date = '2022-06-07';
+
+    expect(UtilsFunctions.convertIsoToDate).toHaveBeenCalled();
+  });
+
+  it('shouldnt call `convertIsoToDateNoTimezone` when isExtendedISO is false', () => {
+    spyOn(UtilsFunctions, 'convertIsoToDateNoTimezone');
+    component['isExtendedISO'] = false;
+
+    component.date = '2022-06-07';
+
+    expect(UtilsFunctions.convertIsoToDateNoTimezone).toHaveBeenCalled();
   });
 
   it('should transform a String to Date', () => {
