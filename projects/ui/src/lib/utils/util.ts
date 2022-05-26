@@ -147,6 +147,16 @@ export function convertIsoToDate(value: string, start: boolean, end: boolean) {
   }
 }
 
+export function convertIsoToDateNoTimezone(value: string) {
+  if (value) {
+    const day = parseInt(value.substring(8, 10), 10);
+    const month = parseInt(value.substring(5, 7), 10);
+    const year = parseInt(value.substring(0, 4), 10);
+
+    return new Date(year, month - 1, day);
+  }
+}
+
 export function convertDateToISODate(date: Date) {
   if (date) {
     const getMonth = date.getMonth() + 1;
