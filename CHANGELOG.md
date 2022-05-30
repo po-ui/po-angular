@@ -2,6 +2,32 @@
 
 All notable changes to this project will be documented in this file. See [standard-version](https://github.com/conventional-changelog/standard-version) for commit guidelines.
 
+# [6.12.0](https://github.com/po-ui/po-angular/compare/v6.11.0...v6.12.0) (2022-05-30)
+
+
+### Bug Fixes
+
+* **build:** corrige erro do npm v7+ ([5dc9bdd](https://github.com/po-ui/po-angular/commit/5dc9bdd3d8a3f75e00888b0c6f7dcefd98326b9c))
+
+
+### Features
+
+* **button:** adiciona propriedade `p-danger` ([b3e65aa](https://github.com/po-ui/po-angular/commit/b3e65aaaf5f8308c0c3c8290cd28fc4d0b902572))
+
+* **button:** deprecia type `danger` ([54724bf](https://github.com/po-ui/po-angular/commit/54724bff1cf8256c3219fa35ece3802361dcb352))
+
+* **button:** remove classe `po-text-ellipsis` ([4071e3e](https://github.com/po-ui/po-angular/commit/4071e3e585fbe32bcc38fdc9a8f252d4b5d124fb))
+
+* **menu:** inclui propriedade `p-logo-alt` ([bf11729](https://github.com/po-ui/po-angular/commit/bf11729bd35936cb8209934c26657146e029612a))
+
+* **table:** adiciona `po-checkbox` no componente `po-table` ([9d7bc94](https://github.com/po-ui/po-angular/commit/9d7bc947c4685c1d6993314c52a8c9abcb3cb46d))
+
+* **table:** implementa virtual scroll ([842ae5c](https://github.com/po-ui/po-angular/commit/842ae5cec8585c5a152d5495985790f442fc69d5))
+
+* **toaster:** aplica estilo e acesssibilidade definidos pelo AnimaliaDS ([a736712](https://github.com/po-ui/po-angular/commit/a73671223ee50152b26c2da5bd20cceecc10c152))
+
+
+
 # [6.11.0](https://github.com/po-ui/po-angular/compare/v6.10.1...v6.11.0) (2022-05-16)
 
 
