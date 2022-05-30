@@ -48,12 +48,6 @@ export class AppComponent implements OnInit {
 
   private showVersionNamingChangeNotification() {
     this.notification.information({
-      message: 'Responda nossa pesquisa de review, deixe seu like no GitHub e concorra a brindes',
-      action: this.openExternalLink.bind(this, 'https://github.com/po-ui/po-angular/issues/1269'),
-      actionLabel: 'Responda'
-    });
-
-    this.notification.information({
       message: 'Mudança de nomenclatura das versões a partir da v7.x.x',
       action: this.openExternalLink.bind(this, 'https://github.com/po-ui/po-angular/issues/1184'),
       actionLabel: 'Mais informações'
