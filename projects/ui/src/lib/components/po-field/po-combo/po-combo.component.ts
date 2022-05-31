@@ -304,6 +304,7 @@ export class PoComboComponent extends PoComboBaseComponent implements AfterViewI
           this.shouldMarkLetters = true;
           this.isFiltering = true;
           this.searchForLabel(inputValue, this.comboOptionsList, this.filterMode);
+          this.inputChange.emit(inputValue);
         }
       } else {
         // quando apagar rapido o campo e conter serviço, valor, não disparava o keyup observable

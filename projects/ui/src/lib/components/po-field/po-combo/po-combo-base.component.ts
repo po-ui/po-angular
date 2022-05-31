@@ -230,6 +230,16 @@ export abstract class PoComboBaseComponent implements ControlValueAccessor, OnIn
    */
   @Output('ngModelChange') ngModelChange: EventEmitter<any> = new EventEmitter<any>();
 
+  /**
+   * @optional
+   *
+   * @description
+   *
+   * Deve ser informada uma função que será disparada quando houver alterações no Search input. A função receberá como argumento o input modificado.
+   *
+   */
+  @Output('p-input-change') inputChange: EventEmitter<string> = new EventEmitter<string>();
+
   cacheOptions: Array<PoComboOption | PoComboGroup> = [];
   defaultService: PoComboFilterService;
   firstInWriteValue: boolean = true;
