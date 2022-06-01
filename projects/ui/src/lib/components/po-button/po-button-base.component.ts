@@ -149,15 +149,11 @@ export class PoButtonBaseComponent {
    *
    * Deve ser usado em ações irreversíveis que o usuário precisa ter cuidado ao executá-la, como a exclusão de um registro.
    *
-   * > Ao utilizar esta propriedade será atribuído `p-kind="secondary"`.
+   * > A propriedade `p-kind="tertiary"` será inativada ao utilizar esta propriedade.
    */
 
   @Input('p-danger') @InputBoolean() set danger(value: boolean) {
-    this._danger = value;
-
-    if (this._danger) {
-      this.kind = PoButtonKind.secondary;
-    }
+    this._danger = this.kind !== PoButtonKind.tertiary ? value : false;
   }
 
   get danger(): boolean {
@@ -179,7 +175,7 @@ export class PoButtonBaseComponent {
    * @default `secondary`
    */
   @Input('p-kind') set kind(value: string) {
-    this._kind = PoButtonKind[value] && !this.danger ? PoButtonKind[value] : PoButtonKind.secondary;
+    this._kind = PoButtonKind[value] ? PoButtonKind[value] : PoButtonKind.secondary;
   }
 
   get kind(): string {

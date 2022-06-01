@@ -43,17 +43,25 @@ export class SamplePoButtonLabsComponent implements OnInit {
   }
 
   propertiesChange(event) {
-    this.kindsOptions[0] = { ...this.kindsOptions[0], disabled: false };
     this.kindsOptions[2] = { ...this.kindsOptions[2], disabled: false };
 
     if (event) {
       event.forEach(property => {
         if (property === 'danger' && this.properties.includes('danger')) {
-          this.kindsOptions[0] = { ...this.kindsOptions[0], disabled: true };
           this.kindsOptions[2] = { ...this.kindsOptions[2], disabled: true };
-          this.kind = 'secondary';
         }
       });
+    }
+  }
+
+  verifyDisabled(event) {
+    const value = [...this.propertiesOptions];
+    if (event === 'tertiary') {
+      value[3] = { value: 'danger', label: 'Danger', disabled: true };
+      this.propertiesOptions = value;
+    } else {
+      value[3] = { value: 'danger', label: 'Danger', disabled: false };
+      this.propertiesOptions = value;
     }
   }
 
