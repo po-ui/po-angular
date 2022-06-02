@@ -300,7 +300,7 @@ describe('PoTableColumnManagerComponent:', () => {
     });
 
     describe('verifyRestoreValues:', () => {
-      it('should call `getVisibleColumns` and `emitChangeOnRestore` if `allowsChangeSelectedColumns` is true', () => {
+      it('should emit `visibleColumnsChange` if `allowsChangeSelectedColumns` is true', () => {
         component['defaultColumns'] = [
           { property: 'test1', label: 'Code' },
           { property: 'test2', label: 'initial' }
@@ -310,17 +310,17 @@ describe('PoTableColumnManagerComponent:', () => {
 
         spyOn(component, <any>'getVisibleColumns').and.returnValue(fakeVisible);
         spyOn(component, <any>'allowsChangeSelectedColumns').and.returnValue(true);
-        spyOn(component, <any>'emitChangeOnRestore');
+        spyOn(component.visibleColumnsChange, 'emit');
 
         component['verifyRestoreValues']();
 
         expect(component['getVisibleColumns']).toHaveBeenCalled();
         expect(component['allowsChangeSelectedColumns']).toHaveBeenCalled();
-        expect(component['emitChangeOnRestore']).toHaveBeenCalledWith(fakeVisible);
+        expect(component.visibleColumnsChange.emit).toHaveBeenCalledWith(component['defaultColumns']);
         expect(component['restoreDefaultEvent']).toBeFalse();
       });
 
-      it('shouldn`t call `emitChangeOnRestore` if `allowsChangeSelectedColumns` is false', () => {
+      it('shouldn`t emit `visibleColumnsChange` if `allowsChangeSelectedColumns` is false', () => {
         component['defaultColumns'] = [
           { property: 'test1', label: 'Code' },
           { property: 'test2', label: 'initial' }
@@ -330,32 +330,15 @@ describe('PoTableColumnManagerComponent:', () => {
 
         spyOn(component, <any>'getVisibleColumns').and.returnValue(fakeVisible);
         spyOn(component, <any>'allowsChangeSelectedColumns').and.returnValue(false);
-        spyOn(component, <any>'emitChangeOnRestore');
+        spyOn(component.visibleColumnsChange, 'emit');
 
         component['verifyRestoreValues']();
 
         expect(component['getVisibleColumns']).toHaveBeenCalled();
         expect(component['allowsChangeSelectedColumns']).toHaveBeenCalled();
-        expect(component['emitChangeOnRestore']).not.toHaveBeenCalledWith(fakeVisible);
+        expect(component.visibleColumnsChange.emit).not.toHaveBeenCalledWith(component['defaultColumns']);
         expect(component['restoreDefaultEvent']).toBeFalse();
       });
-    });
-
-    it('emitChangeOnRestore: should update `visibleColumns` and call `getVisibleTableColumns` and `visibleColumnsChange.emit`', () => {
-      const fakeDefaultVisibleColumns = ['test1', 'test2'];
-      const fakeVisibleTableColumns = [
-        { property: 'test1', label: 'Code' },
-        { property: 'test2', label: 'initial' }
-      ];
-
-      spyOn(component, <any>'getVisibleTableColumns').and.returnValue(fakeVisibleTableColumns);
-      spyOn(component.visibleColumnsChange, 'emit');
-
-      component['emitChangeOnRestore'](fakeDefaultVisibleColumns);
-
-      expect(component.visibleColumns).toEqual(fakeDefaultVisibleColumns);
-      expect(component['getVisibleTableColumns']).toHaveBeenCalledWith(fakeDefaultVisibleColumns);
-      expect(component.visibleColumnsChange.emit).toHaveBeenCalledWith(fakeVisibleTableColumns);
     });
 
     describe('allowsChangeSelectedColumns:', () => {
@@ -429,6 +412,69 @@ describe('PoTableColumnManagerComponent:', () => {
 
       expect(component['lastEmittedValue']).toEqual(fakeVisible);
       expect(component.changeVisibleColumns.emit).toHaveBeenCalledWith(fakeVisible);
+    });
+
+    it(`changePosition: Should change the column position up'`, () => {
+      component.columns = [
+        { property: 'id', label: 'Code' },
+        { property: 'initial', label: 'initial' },
+        { property: 'name', label: 'Name' }
+      ];
+
+      component.changePosition({ value: 'initial', label: 'initial' }, 'up');
+
+      expect(component.columns[0]).toEqual({ property: 'initial', label: 'initial' });
+    });
+
+    it(`changePosition: Should change the column position down'`, () => {
+      component.columns = [
+        { property: 'id', label: 'Code' },
+        { property: 'initial', label: 'initial' },
+        { property: 'name', label: 'Name' }
+      ];
+
+      component.changePosition({ value: 'initial', label: 'initial' }, 'down');
+
+      expect(component.columns[component.columns.length - 1]).toEqual({ property: 'initial', label: 'initial' });
+    });
+
+    it(`verifyArrowDisabled: Should return true if it is the up arrow of the first column`, () => {
+      component.columns = [
+        { property: 'id', label: 'Code' },
+        { property: 'initial', label: 'initial' },
+        { property: 'name', label: 'Name' }
+      ];
+
+      const arrowDisabled = component.verifyArrowDisabled({ property: 'id', label: 'Code', value: 'id' }, 'up');
+
+      expect(arrowDisabled).toEqual(true);
+    });
+
+    it(`verifyArrowDisabled: Should return true if it is the down arrow of the last column`, () => {
+      component.columns = [
+        { property: 'id', label: 'Code' },
+        { property: 'initial', label: 'initial' },
+        { property: 'name', label: 'Name' }
+      ];
+
+      const arrowDisabled = component.verifyArrowDisabled({ property: 'name', label: 'Name', value: 'name' }, 'down');
+
+      expect(arrowDisabled).toEqual(true);
+    });
+
+    it(`verifyArrowDisabled: Should return false if not last column down arrow or first column up arrow`, () => {
+      component.columns = [
+        { property: 'id', label: 'Code' },
+        { property: 'initial', label: 'initial' },
+        { property: 'name', label: 'Name' }
+      ];
+
+      const arrowDisabled = component.verifyArrowDisabled(
+        { property: 'initial', label: 'initial', value: 'initial' },
+        'up'
+      );
+
+      expect(arrowDisabled).toEqual(false);
     });
 
     describe('allowsEmission:', () => {
@@ -628,13 +674,13 @@ describe('PoTableColumnManagerComponent:', () => {
         expect(result).toBeFalse();
       });
 
-      it(`should return true if arrays are equals but they are in different order`, () => {
+      it(`should return false if arrays are equals but they are in different order`, () => {
         const first = ['test1', 'test2'];
         const second = ['test2', 'test1'];
 
         const result = component['isEqualArrays'](first, second);
 
-        expect(result).toBeTrue();
+        expect(result).toBeFalse();
       });
 
       it(`should return true if arrays are undefined`, () => {

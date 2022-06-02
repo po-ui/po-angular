@@ -24,21 +24,31 @@ const PoTableColumnManagerMaxColumnsDefault = 99999;
 export const poTableColumnManagerLiteralsDefault = {
   en: {
     columnsManager: 'Columns manager',
-    restoreDefault: 'Restore default'
+    restoreDefault: 'Restore default',
+    up: 'up',
+    down: 'down'
   },
   es: {
     columnsManager: 'Gerente de columna',
-    restoreDefault: 'Restaurar por defecto'
+    restoreDefault: 'Restaurar por defecto',
+    up: 'arriba',
+    down: 'abajo'
   },
   pt: {
     columnsManager: 'Gerenciador de colunas',
-    restoreDefault: 'Restaurar padrão'
+    restoreDefault: 'Restaurar padrão',
+    up: 'acima',
+    down: 'abaixo'
   },
   ru: {
     columnsManager: 'менеджер колонок',
-    restoreDefault: 'сброс настроек'
+    restoreDefault: 'сброс настроек',
+    up: 'вверх',
+    down: 'вниз'
   }
 };
+
+type Direction = 'up' | 'down';
 
 @Component({
   selector: 'po-table-column-manager',
@@ -129,6 +139,47 @@ export class PoTableColumnManagerComponent implements OnChanges, OnDestroy {
     this.checkChanges(defaultColumns, this.restoreDefaultEvent);
   }
 
+  changePosition(option, direction: Direction) {
+    const indexColumn = this.columns.findIndex(el => el.property === option.value);
+    const newColumn = [...this.columns];
+
+    const hasDisabled: boolean = this.verifyArrowDisabled(option, direction);
+
+    this.changePositionColumn(newColumn, indexColumn, direction, hasDisabled);
+    this.columns = newColumn;
+    this.visibleColumnsChange.emit(this.columns);
+  }
+
+  verifyArrowDisabled(option, direction: Direction) {
+    const index = this.columns.findIndex(el => el.property === option.value);
+    const existsDetail = this.columns.some(function (el) {
+      return el.property === 'detail';
+    });
+    const valueSubtraction = existsDetail ? 2 : 1;
+
+    if (index === 0 && direction === 'up') {
+      return true;
+    }
+
+    if (index === this.columns.length - valueSubtraction && direction === 'down') {
+      return true;
+    }
+
+    return false;
+  }
+
+  private changePositionColumn(array: Array<PoTableColumn>, index: number, direction: Direction, hasDisabled: boolean) {
+    if (!hasDisabled) {
+      if (direction === 'up') {
+        array.splice(index, 0, array.splice(index - 1, 1)[0]);
+      }
+
+      if (direction === 'down') {
+        array.splice(index, 0, array.splice(index + 1, 1)[0]);
+      }
+    }
+  }
+
   private verifyToEmitChange(event: Array<string>) {
     const newColumns = [...event];
     if (newColumns.length >= 1 && this.allowsChangeVisibleColumns()) {
@@ -170,17 +221,10 @@ export class PoTableColumnManagerComponent implements OnChanges, OnDestroy {
     const defaultVisibleColumns = this.getVisibleColumns(defaultColumns);
 
     if (this.allowsChangeSelectedColumns(defaultVisibleColumns)) {
-      this.emitChangeOnRestore(defaultVisibleColumns);
+      this.visibleColumnsChange.emit(this.defaultColumns);
     }
 
     this.restoreDefaultEvent = false;
-  }
-
-  private emitChangeOnRestore(defaultVisibleColumns: Array<string>) {
-    this.visibleColumns = [...defaultVisibleColumns];
-    const visibleTableColumns = this.getVisibleTableColumns(this.visibleColumns);
-
-    this.visibleColumnsChange.emit(visibleTableColumns);
   }
 
   private allowsChangeSelectedColumns(defaultVisibleColumns: Array<string>) {
@@ -223,8 +267,8 @@ export class PoTableColumnManagerComponent implements OnChanges, OnDestroy {
   private isEqualArrays(first: Array<string>, second: Array<string>): boolean {
     const one = first ? [...first] : [];
     const two = second ? [...second] : [];
-    const firstSort = one.slice().sort();
-    const secondSort = two.slice().sort();
+    const firstSort = one.slice();
+    const secondSort = two.slice();
     const firstString = JSON.stringify(firstSort);
     const secondString = JSON.stringify(secondSort);
 

@@ -19,6 +19,33 @@
       (p-change)="checkChanges($event, false)"
     >
     </po-checkbox-group>
+
+    <div class="po-container-arrows-columns-manager">
+      <div *ngFor="let option of columnsOptions">
+        <div class="po-container-icons-arrows-columns-manager">
+          <po-button
+            [p-tooltip]="literals.up"
+            p-tooltip-position="left"
+            [p-disabled]="verifyArrowDisabled(option, 'up')"
+            (click)="changePosition(option, 'up'); $event.stopPropagation()"
+            p-kind="tertiary"
+            p-icon="po-icon po-icon-arrow-up"
+            p-small
+          >
+          </po-button>
+          <po-button
+            [p-tooltip]="literals.down"
+            p-tooltip-position="top"
+            [p-disabled]="verifyArrowDisabled(option, 'down')"
+            (click)="changePosition(option, 'down'); $event.stopPropagation()"
+            p-kind="tertiary"
+            p-icon="po-icon po-icon-arrow-down"
+            p-small
+          >
+          </po-button>
+        </div>
+      </div>
+    </div>
   </div>
 
   <div class="po-table-column-manager-footer">
