@@ -31,10 +31,12 @@ export class SamplePoTableAirfareComponent implements AfterViewInit {
     { action: this.remove.bind(this), icon: 'po-icon po-icon-delete', label: 'Remove' }
   ];
   columns: Array<PoTableColumn> = this.sampleAirfare.getColumns();
+  columnsDefault: Array<PoTableColumn>;
   detail: any;
   items: Array<any> = this.sampleAirfare.getItems();
   total: number = 0;
   totalExpanded = 0;
+  initialColumns: Array<any>;
 
   constructor(
     private sampleAirfare: SamplePoTableAirfareService,
@@ -43,15 +45,35 @@ export class SamplePoTableAirfareComponent implements AfterViewInit {
   ) {}
 
   ngAfterViewInit(): void {
+    this.columnsDefault = this.columns;
     if (localStorage.getItem('initial-columns')) {
-      const initialColumns = localStorage.getItem('initial-columns').split(',');
+      this.initialColumns = localStorage.getItem('initial-columns').split(',');
 
       const result = this.columns.map(el => ({
         ...el,
-        visible: initialColumns.includes(el.property)
+        visible: this.initialColumns.includes(el.property)
       }));
 
-      this.columns = result;
+      const newColumn = [...result];
+      newColumn.sort(this.sortFunction);
+      this.columns = newColumn;
+    }
+  }
+
+  sortFunction(a, b) {
+    const teste = localStorage.getItem('initial-columns').split(',');
+    const indexA = teste.indexOf(a['property']);
+    const indexB = teste.indexOf(b['property']);
+    if (indexA === -1) {
+      return 1;
+    }
+    if (indexB === -1) {
+      return -1;
+    }
+    if (indexA < indexB) {
+      return -1;
+    } else if (indexA > indexB) {
+      return 1;
     }
   }
 
@@ -144,12 +166,8 @@ export class SamplePoTableAirfareComponent implements AfterViewInit {
     }
   }
 
-  restoreColumn(event) {
-    const result = this.columns.map(el => ({
-      ...el,
-      visible: event.includes(el.property)
-    }));
-    this.columns = result;
+  restoreColumn() {
+    this.columns = this.columnsDefault;
   }
 
   changeColumnVisible(event) {
