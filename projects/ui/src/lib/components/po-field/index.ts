@@ -45,6 +45,7 @@ export * from './po-upload/interfaces/po-upload-file-restriction.interface';
 export * from './po-upload/interfaces/po-upload-literals.interface';
 export * from './po-upload/po-upload.component';
 export * from './po-url/po-url.component';
+export * from './po-radio/po-radio.component';
 
 export * from './po-checkbox-group/po-checkbox-group.module';
 export * from './po-datepicker/po-datepicker.module';
