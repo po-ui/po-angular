@@ -55,6 +55,7 @@ import { PoUploadDragDropAreaComponent } from './po-upload/po-upload-drag-drop/p
 import { PoUploadFileRestrictionsComponent } from './po-upload/po-upload-file-restrictions/po-upload-file-restrictions.component';
 import { PoUrlComponent } from './po-url/po-url.component';
 import { PoCheckboxModule } from './po-checkbox/po-checkbox.module';
+import { PoRadioComponent } from './po-radio/po-radio.component';
 
 /**
  * @description
@@ -115,6 +116,7 @@ import { PoCheckboxModule } from './po-checkbox/po-checkbox.module';
     PoTextareaComponent,
     PoUploadComponent,
     PoUrlComponent,
+    PoRadioComponent,
     PoCheckboxModule
   ],
   declarations: [
@@ -149,7 +151,8 @@ import { PoCheckboxModule } from './po-checkbox/po-checkbox.module';
     PoUploadDragDropAreaOverlayComponent,
     PoUploadDragDropAreaComponent,
     PoUploadFileRestrictionsComponent,
-    PoUrlComponent
+    PoUrlComponent,
+    PoRadioComponent
   ],
   providers: []
 })
