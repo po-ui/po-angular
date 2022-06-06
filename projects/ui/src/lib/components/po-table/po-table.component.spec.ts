@@ -2949,6 +2949,62 @@ describe('PoTableComponent:', () => {
     expect(fakeThis.poTableThead.nativeElement.scrollLeft).toEqual(100);
   });
 
+  it('getWidthColumnManager, should return width of column manager', () => {
+    const fakeThis = {
+      columnManager: {
+        nativeElement: {
+          offsetWidth: 120
+        }
+      }
+    };
+
+    fixture.detectChanges();
+
+    component['getWidthColumnManager'].call(fakeThis);
+
+    expect(fakeThis.columnManager.nativeElement.offsetWidth).toEqual(120);
+  });
+
+  it('getWidthColumnManager, should return undefined if not contain column manager', () => {
+    const fakeThis = {
+      columnManager: undefined
+    };
+
+    fixture.detectChanges();
+
+    const valueWidth = component['getWidthColumnManager'].call(fakeThis);
+
+    expect(valueWidth).toEqual(undefined);
+  });
+
+  it('columnActionLeft, should return width of column when action is on the left', () => {
+    const fakeThis = {
+      columnActionLeft: {
+        nativeElement: {
+          offsetWidth: 120
+        }
+      }
+    };
+
+    fixture.detectChanges();
+
+    component['getColumnWidthActionsLeft'].call(fakeThis);
+
+    expect(fakeThis.columnActionLeft.nativeElement.offsetWidth).toEqual(120);
+  });
+
+  it('columnActionLeft, should return undefined if not contain actions on the left', () => {
+    const fakeThis = {
+      columnActionLeft: undefined
+    };
+
+    fixture.detectChanges();
+
+    const valueWidth = component['getColumnWidthActionsLeft'].call(fakeThis);
+
+    expect(valueWidth).toEqual(undefined);
+  });
+
   it('hasInfiniteScroll: should return false if infiniteScroll is false', () => {
     component.infiniteScroll = false;
     component.poTableTbodyVirtual = {

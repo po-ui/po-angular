@@ -78,6 +78,7 @@
 
         <!-- Coluna criada para caso as ações fiquem no lado esquerdo -->
         <th
+          #columnActionLeft
           *ngIf="!actionRight && (visibleActions.length > 1 || isSingleAction)"
           [class.po-table-header-master-detail]="!isSingleAction"
           [class.po-table-header-single-action]="isSingleAction"
@@ -115,7 +116,7 @@
 
         <th
           *ngIf="hasVisibleActions && hideColumnsManager && actionRight"
-          [class.po-table-header-single-action]="isSingleAction"
+          [class.po-table-header-single-action]="isSingleAction && !hideColumnsManager"
           [class.po-table-header-actions]="!isSingleAction"
         ></th>
 
@@ -691,7 +692,13 @@
 
 <!-- Template de ações -->
 <ng-template #ActionsColumnTemplate let-row="row" let-rowIndex="rowIndex">
-  <td *ngIf="isSingleAction" class="po-table-column po-table-column-single-action">
+  <td
+    *ngIf="isSingleAction"
+    class="po-table-column po-table-column-single-action"
+    [style.width.px]="height && actionRight ? getWidthColumnManager() : ''"
+    [style.max-width.px]="height && !actionRight ? getColumnWidthActionsLeft() : ''"
+    [style.width.px]="height && !actionRight ? getColumnWidthActionsLeft() : ''"
+  >
     <div
       *ngIf="firstAction.visible !== false"
       class="po-table-single-action po-clickable"
