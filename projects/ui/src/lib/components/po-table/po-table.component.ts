@@ -97,6 +97,8 @@ export class PoTableComponent extends PoTableBaseComponent implements AfterViewI
   @ViewChild('poTableTbody', { read: ElementRef, static: false }) poTableTbody;
   @ViewChild('poTableThead', { read: ElementRef, static: false }) poTableThead;
   @ViewChild('poTableTbodyVirtual', { read: ElementRef, static: false }) poTableTbodyVirtual;
+  @ViewChild('columnManager', { read: ElementRef, static: false }) columnManager;
+  @ViewChild('columnActionLeft', { read: ElementRef, static: false }) columnActionLeft;
 
   @ViewChildren('actionsIconElement', { read: ElementRef }) actionsIconElement: QueryList<any>;
   @ViewChildren('actionsElement', { read: ElementRef }) actionsElement: QueryList<any>;
@@ -548,6 +550,14 @@ export class PoTableComponent extends PoTableBaseComponent implements AfterViewI
 
   public syncronizeHorizontalScroll(): void {
     this.poTableThead.nativeElement.scrollLeft = this.poTableTbodyVirtual.nativeElement.scrollLeft;
+  }
+
+  public getWidthColumnManager() {
+    return this.columnManager?.nativeElement.offsetWidth;
+  }
+
+  public getColumnWidthActionsLeft() {
+    return this.columnActionLeft?.nativeElement.offsetWidth;
   }
 
   protected calculateHeightTableContainer(height) {
