@@ -21,12 +21,14 @@
     ]
   },
   "dependencies": {
+    "@angular/cdk": "^13.3.1",
     "@po-ui/style": "0.0.0-PLACEHOLDER",
     "@po-ui/ng-schematics": "0.0.0-PLACEHOLDER",
     "tslib": "^2.3.0"
   },
   "peerDependencies": {
     "@angular/animations": "^13.0.2",
+    "@angular/cdk": "^13.3.1",
     "@angular/common": "^13.0.2",
     "@angular/compiler": "^13.0.2",
     "@angular/core": "^13.0.2",
