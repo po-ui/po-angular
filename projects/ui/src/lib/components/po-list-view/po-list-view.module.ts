@@ -1,9 +1,11 @@
 import { CommonModule } from '@angular/common';
+import { FormsModule } from '@angular/forms';
 import { NgModule } from '@angular/core';
 import { RouterModule } from '@angular/router';
 
 import { PoButtonModule } from '../po-button/po-button.module';
 import { PoPopupModule } from '../po-popup/po-popup.module';
+import { PoCheckboxModule } from './../po-field/po-checkbox/po-checkbox.module';
 
 import { PoListViewComponent } from './po-list-view.component';
 import { PoListViewContentTemplateDirective } from './po-list-view-content-template/po-list-view-content-template.directive';
@@ -41,7 +43,7 @@ import { PoListViewDetailTemplateDirective } from './po-list-view-detail-templat
  * ```
  */
 @NgModule({
-  imports: [CommonModule, RouterModule, PoButtonModule, PoPopupModule],
+  imports: [CommonModule, FormsModule, RouterModule, PoButtonModule, PoPopupModule, PoCheckboxModule],
   declarations: [PoListViewComponent, PoListViewContentTemplateDirective, PoListViewDetailTemplateDirective],
   exports: [PoListViewComponent, PoListViewContentTemplateDirective, PoListViewDetailTemplateDirective],
   providers: [],

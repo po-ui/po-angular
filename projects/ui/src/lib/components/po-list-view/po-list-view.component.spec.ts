@@ -574,42 +574,6 @@ describe('PoListViewComponent:', () => {
       expect(debugElement.querySelector('.po-list-view-select')).toBeNull();
     });
 
-    it('should apply `po-checkbox-group-input-checked` if `showHeader` and `selectAll` are `true`.', () => {
-      component.showHeader = true;
-      component.selectAll = true;
-
-      fixture.detectChanges();
-
-      expect(debugElement.querySelector('.po-checkbox-group-input-checked')).toBeTruthy();
-    });
-
-    it('should apply `po-checkbox-group-input-indeterminate` if `showHeader` is true and `selectAll` is `null`.', () => {
-      component.showHeader = true;
-      component.selectAll = null;
-
-      fixture.detectChanges();
-
-      expect(debugElement.querySelector('.po-checkbox-group-input-indeterminate')).toBeTruthy();
-    });
-
-    it('shouldn`t apply `po-checkbox-group-input-checked` if showHeader is false.', () => {
-      component.showHeader = false;
-      component.selectAll = true;
-
-      fixture.detectChanges();
-
-      expect(debugElement.querySelector('.po-checkbox-group-input-checked')).toBeNull();
-    });
-
-    it('shouldn`t apply `po-checkbox-group-input-indeterminate` if showHeader is false.', () => {
-      component.showHeader = false;
-      component.selectAll = null;
-
-      fixture.detectChanges();
-
-      expect(debugElement.querySelector('.po-checkbox-group-input-indeterminate')).toBeNull();
-    });
-
     it('should contain the attributes `href` and `target` if title is an external link and call getItemTitle with lisItem', () => {
       spyOn(component, 'getItemTitle');
       spyOn(component, 'checkTitleType').and.returnValue('externalLink');
