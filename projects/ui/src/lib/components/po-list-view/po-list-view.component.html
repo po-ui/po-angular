@@ -6,18 +6,13 @@
   <div *ngIf="showHeader" class="po-list-view-main-header">
     <div class="po-checkbox-group-item">
       <div class="po-list-view-main-select">
-        <input
-          class="po-input po-checkbox-group-input"
-          type="checkbox"
-          [class.po-checkbox-group-input-checked]="selectAll"
-          [class.po-checkbox-group-input-indeterminate]="selectAll === null"
-        />
-        <label
-          class="po-checkbox-group-label po-list-view-selectable-label po-clickable"
+        <po-checkbox
+          name="selectAll"
+          [(ngModel)]="selectAll"
+          [p-label]="literals.selectAll"
+          (p-change)="selectAllListItems()"
           (click)="selectAllListItems()"
-        >
-          {{ literals.selectAll }}
-        </label>
+        ></po-checkbox>
       </div>
     </div>
   </div>
@@ -35,15 +30,12 @@
           <div class="po-list-view-header">
             <div class="po-list-view-title" [ngSwitch]="checkTitleType(item)">
               <div *ngIf="select" class="po-list-view-select">
-                <input
-                  class="po-input po-checkbox-group-input"
-                  type="checkbox"
-                  [class.po-checkbox-group-input-checked]="item.$selected"
-                />
-                <label
-                  class="po-checkbox-group-label po-list-view-selectable-label po-clickable"
+                <po-checkbox
+                  [(ngModel)]="item.$selected"
+                  name="checkbox"
+                  (p-change)="selectListItem(item)"
                   (click)="selectListItem(item)"
-                ></label>
+                ></po-checkbox>
               </div>
               <a
                 *ngSwitchCase="'externalLink'"
