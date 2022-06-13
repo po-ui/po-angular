@@ -2,6 +2,25 @@
 
 All notable changes to this project will be documented in this file. See [standard-version](https://github.com/conventional-changelog/standard-version) for commit guidelines.
 
+# [6.13.0](https://github.com/po-ui/po-angular/compare/v6.12.1...v6.13.0) (2022-06-13)
+
+
+### Bug Fixes
+
+* **datepicker:** corrige data independente do fuso com `PoDatepickerIsoFormat.Basic` ([9688e3d](https://github.com/po-ui/po-angular/commit/9688e3d0d24ec09c85ca4652ca5638f57e55ae17))
+* **table:** alinha colunas do header com altura e somente uma ação definida ([2b4ef13](https://github.com/po-ui/po-angular/commit/2b4ef13afa1108da7660eb7a12d2c17e2db007c0))
+
+
+### Features
+
+* **button:** permite `kind primary` com `p-danger` habilitado ([9f1845b](https://github.com/po-ui/po-angular/commit/9f1845b75fb4bb08293bc7fef5e4234ddab2cb5e))
+* **list-view:** adiciona `po-checkbox` no `po-list-view` ([9aab165](https://github.com/po-ui/po-angular/commit/9aab1650d47b681c0f1a96f018626efbc505f394))
+* **radio:** cria novo componente interno `po-radio` ([c4ecdb5](https://github.com/po-ui/po-angular/commit/c4ecdb5c8dc5bba92f86a6ea03c5507861212e86))
+* **table:** inclui acessibilidade no gerenciador de colunas ([5c9037b](https://github.com/po-ui/po-angular/commit/5c9037b8aa817446cb9dfff6c5ec0eb1f04fbf01))
+* **table:** permite ordernar colunas ([b2604b9](https://github.com/po-ui/po-angular/commit/b2604b989b7a0b248438d33aff5619d57469c201))
+
+
+
 ## [6.12.1](https://github.com/po-ui/po-angular/compare/v6.12.0...v6.12.1) (2022-06-06)
 
 
