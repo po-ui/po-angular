@@ -96,5 +96,5 @@ export abstract class PoRadioBaseComponent implements ControlValueAccessor {
     }
   }
 
-  protected abstract changeModelValue(value: boolean | null);
+  protected abstract changeModelValue(value: boolean | string);
 }
