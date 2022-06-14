@@ -71,6 +71,7 @@ export class PoRadioComponent extends PoRadioBaseComponent {
       event.preventDefault();
     }
   }
+
   protected changeModelValue(value: boolean | string) {
     this.radioValue = typeof value === 'boolean' ? value : false;
     this.changeDetector.detectChanges();
