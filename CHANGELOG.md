@@ -2,6 +2,14 @@
 
 All notable changes to this project will be documented in this file. See [standard-version](https://github.com/conventional-changelog/standard-version) for commit guidelines.
 
+## [6.13.1](https://github.com/po-ui/po-angular/compare/v6.13.0...v6.13.1) (2022-06-14)
+
+
+### Bug Fixes
+
+* **radio:** corrige tipos de dados no componente interno `po-radio` ([800060d](https://github.com/po-ui/po-angular/commit/800060d5200cb65c17a9fb70672851e2abb80f03))
+
+
 # [6.13.0](https://github.com/po-ui/po-angular/compare/v6.12.1...v6.13.0) (2022-06-13)
 
 
