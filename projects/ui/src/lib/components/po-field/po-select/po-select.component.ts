@@ -22,7 +22,6 @@ import { PoControlPositionService } from './../../../services/po-control-positio
 import { PoKeyCodeEnum } from './../../../enums/po-key-code.enum';
 
 import { PoSelectOption } from './po-select-option.interface';
-import { PoSelectOptionTemplateDirective } from './po-select-option-template/po-select-option-template.directive';
 import { PoFieldValidateModel } from '../po-field-validate.model';
 import { InputBoolean } from '../../../decorators';
 
@@ -85,9 +84,6 @@ const poSelectContentPositionDefault = 'bottom';
   ]
 })
 export class PoSelectComponent extends PoFieldValidateModel<any> implements DoCheck {
-  @ContentChild(PoSelectOptionTemplateDirective, { static: true })
-  selectOptionTemplate: PoSelectOptionTemplateDirective;
-
   @ViewChild('contentList', { read: ElementRef, static: true }) contentList: ElementRef;
   @ViewChild('icon', { read: ElementRef, static: true }) iconElement: ElementRef;
   @ViewChild('select', { read: ElementRef, static: true }) selectElement: ElementRef;
@@ -129,6 +125,7 @@ export class PoSelectComponent extends PoFieldValidateModel<any> implements DoCh
   onModelChange: any;
   open: boolean = false;
   selectedValue: any;
+  selectOptionTemplate: any;
   selectIcon: string = 'po-icon-arrow-down';
   scrollPosition: number;
 
