@@ -53,26 +53,6 @@ describe('PoSwitchComponent', () => {
   });
 
   describe('Methods:', () => {
-    it('ngAfterViewInit: should call `focus` if `autoFocus` is true.', () => {
-      component.autoFocus = true;
-
-      const spyFocus = spyOn(component, 'focus');
-
-      component.ngAfterViewInit();
-
-      expect(spyFocus).toHaveBeenCalled();
-    });
-
-    it('ngAfterViewInit: shouldn`t call `focus` if `autoFocus` is false.', () => {
-      component.autoFocus = false;
-
-      const spyFocus = spyOn(component, 'focus');
-
-      component.ngAfterViewInit();
-
-      expect(spyFocus).not.toHaveBeenCalled();
-    });
-
     it('focus: should call `focus` of switch', () => {
       component.switchContainer = {
         nativeElement: {
