@@ -44,7 +44,6 @@ import { PoNumberComponent } from './po-number/po-number.component';
 import { PoPasswordComponent } from './po-password/po-password.component';
 import { PoRadioGroupComponent } from './po-radio-group/po-radio-group.component';
 import { PoSelectComponent } from './po-select/po-select.component';
-import { PoSelectOptionTemplateDirective } from './po-select/po-select-option-template/po-select-option-template.directive';
 import { PoSwitchComponent } from './po-switch/po-switch.component';
 import { PoTextareaComponent } from './po-textarea/po-textarea.component';
 import { PoUploadComponent } from './po-upload/po-upload.component';
@@ -111,7 +110,6 @@ import { PoRadioComponent } from './po-radio/po-radio.component';
     PoRadioGroupComponent,
     PoRichTextComponent,
     PoSelectComponent,
-    PoSelectOptionTemplateDirective,
     PoSwitchComponent,
     PoTextareaComponent,
     PoUploadComponent,
@@ -142,7 +140,6 @@ import { PoRadioComponent } from './po-radio/po-radio.component';
     PoRichTextLinkModalComponent,
     PoRichTextToolbarComponent,
     PoSelectComponent,
-    PoSelectOptionTemplateDirective,
     PoSwitchComponent,
     PoTextareaComponent,
     PoUploadComponent,
