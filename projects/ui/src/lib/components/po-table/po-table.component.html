@@ -15,7 +15,7 @@
         [class.po-table-header-fixed-columns-pixels]="allColumnsWidthPixels"
         [style.opacity]="tableOpacity"
       >
-        <div *ngIf="height" class="po-table-container">
+        <div *ngIf="height" class="po-table-container" [style.height.px]="heightTableContainer">
           <div #poTableThead class="po-table-header-fixed po-table-header">
             <ng-container *ngTemplateOutlet="tableHeaderTemplate"></ng-container>
           </div>
@@ -152,7 +152,7 @@
   <cdk-virtual-scroll-viewport
     #poTableTbodyVirtual
     [itemSize]="itemSize"
-    [style.height.px]="heightTableContainer"
+    [style.height.px]="heightTableVirtual"
     [minBufferPx]="height < 100 ? 100 : height"
     [maxBufferPx]="height < 200 ? 200 : height"
     (scroll)="syncronizeHorizontalScroll()"

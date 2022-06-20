@@ -605,7 +605,7 @@ describe('PoTableComponent:', () => {
     component.height = 150;
 
     fixture.detectChanges();
-    expect(tableElement.offsetHeight + tableFooterElement.offsetHeight + tableHeaderElement.offsetHeight).toBe(174);
+    expect(tableElement.offsetHeight + tableFooterElement.offsetHeight + tableHeaderElement.offsetHeight).toBe(150);
   });
 
   it('should call calculateWidthHeaders and setTableOpacity in debounceResize', fakeAsync(() => {
@@ -622,6 +622,7 @@ describe('PoTableComponent:', () => {
   it('should calculate when height is a number in function calculateHeightTableContainer', () => {
     const fakeThis = {
       getHeightTableFooter: () => 0,
+      getHeightTableHeader: () => 0,
       heightTableContainer: 0,
       setTableOpacity: () => {},
       changeDetector: {
@@ -826,6 +827,24 @@ describe('PoTableComponent:', () => {
       tableFooterElement: undefined
     };
     expect(component['getHeightTableFooter'].call(fakeThis)).toBe(0);
+  });
+
+  it('should return height table header', () => {
+    const fakeThis = {
+      poTableThead: {
+        nativeElement: {
+          offsetHeight: 100
+        }
+      }
+    };
+    expect(component['getHeightTableHeader'].call(fakeThis)).toBe(100);
+  });
+
+  it('should return the header table height equal to 0', () => {
+    const fakeThis = {
+      poTableThead: undefined
+    };
+    expect(component['getHeightTableHeader'].call(fakeThis)).toBe(0);
   });
 
   it('should set tableOpacity property with method setTableOpacity', () => {
@@ -1379,7 +1398,8 @@ describe('PoTableComponent:', () => {
         changeDetector: {
           detectChanges: () => {}
         },
-        getHeightTableFooter: () => {}
+        getHeightTableFooter: () => {},
+        getHeightTableHeader: () => {}
       };
 
       spyOn(fakeThis.changeDetector, 'detectChanges');

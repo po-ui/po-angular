@@ -105,6 +105,7 @@ export class PoTableComponent extends PoTableBaseComponent implements AfterViewI
   @ViewChildren('headersTable') headersTable: QueryList<any>;
 
   heightTableContainer: number;
+  heightTableVirtual: number;
   popupTarget;
   tableOpacity: number = 0;
   tooltipText: string;
@@ -563,6 +564,9 @@ export class PoTableComponent extends PoTableBaseComponent implements AfterViewI
   protected calculateHeightTableContainer(height) {
     const value = parseFloat(height);
     this.heightTableContainer = value ? value - this.getHeightTableFooter() : undefined;
+    this.heightTableVirtual = this.heightTableContainer
+      ? this.heightTableContainer - this.getHeightTableHeader()
+      : undefined;
     this.setTableOpacity(1);
     this.changeDetector.detectChanges();
   }
@@ -632,6 +636,10 @@ export class PoTableComponent extends PoTableBaseComponent implements AfterViewI
 
   private getHeightTableFooter() {
     return this.tableFooterElement ? this.tableFooterElement.nativeElement.offsetHeight : 0;
+  }
+
+  private getHeightTableHeader() {
+    return this.poTableThead ? this.poTableThead.nativeElement.offsetHeight : 0;
   }
 
   private hasInfiniteScroll(): boolean {
