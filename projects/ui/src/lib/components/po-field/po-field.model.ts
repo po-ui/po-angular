@@ -15,23 +15,6 @@ export abstract class PoFieldModel<T> implements ControlValueAccessor {
   @Input('p-help') help: string;
 
   /**
-   * @deprecated 14.x.x
-   *
-   * @optional
-   *
-   * @description
-   *
-   * **Deprecated 14.x.x**.
-   *
-   * Aplica o foco no elemento ao ser iniciado.
-   *  > Caso mais de um elemento seja configurado com essa propriedade,
-   * o último elemento declarado com ela terá o foco.
-   *
-   * @default `false`
-   */
-  @Input('p-auto-focus') @InputBoolean() autoFocus: boolean = false;
-
-  /**
    * @optional
    *
    * @description

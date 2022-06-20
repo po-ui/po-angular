@@ -66,7 +66,7 @@ import { PoSwitchLabelPosition } from './po-switch-label-position.enum';
     }
   ]
 })
-export class PoSwitchComponent extends PoFieldModel<boolean> implements AfterViewInit {
+export class PoSwitchComponent extends PoFieldModel<boolean> {
   @ViewChild('switchContainer', { static: true }) switchContainer: ElementRef;
 
   value = false;
@@ -120,12 +120,6 @@ export class PoSwitchComponent extends PoFieldModel<boolean> implements AfterVie
 
   constructor(private changeDetector: ChangeDetectorRef) {
     super();
-  }
-
-  ngAfterViewInit() {
-    if (this.autoFocus) {
-      this.focus();
-    }
   }
 
   /**

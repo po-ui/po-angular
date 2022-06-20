@@ -84,7 +84,7 @@ const poSelectContentPositionDefault = 'bottom';
     PoControlPositionService
   ]
 })
-export class PoSelectComponent extends PoFieldValidateModel<any> implements AfterViewInit, DoCheck {
+export class PoSelectComponent extends PoFieldValidateModel<any> implements DoCheck {
   @ContentChild(PoSelectOptionTemplateDirective, { static: true })
   selectOptionTemplate: PoSelectOptionTemplateDirective;
 
@@ -209,12 +209,6 @@ export class PoSelectComponent extends PoFieldValidateModel<any> implements Afte
     if (this.open && charCode === PoKeyCodeEnum.tab) {
       $event.preventDefault();
       this.toggleButton();
-    }
-  }
-
-  ngAfterViewInit() {
-    if (this.autoFocus) {
-      this.focus();
     }
   }
 
