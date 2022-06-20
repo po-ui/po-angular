@@ -27,10 +27,10 @@ const replaceBrackets = str =>
 
 const markdownToHtml = markdown =>
   replaceBrackets(
-    marked(markdown, {
+    marked.parse(markdown, {
       highlight: (code, language) => {
         if (language) {
-          return hljs.highlight(language.toLowerCase() === 'ts' ? 'typescript' : language, code).value;
+          return hljs.highlight(code, { language: language.toLowerCase() === 'ts' ? 'typescript' : language }).value;
         }
         return code;
       }

@@ -1,14 +1,14 @@
 import { Component, OnInit } from '@angular/core';
-import { FormBuilder, FormGroup, Validators } from '@angular/forms';
+import { UntypedFormBuilder, UntypedFormGroup, Validators } from '@angular/forms';
 
 @Component({
   selector: 'sample-po-decimal-hourly-wage-reactive-form',
   templateUrl: './sample-po-decimal-hourly-wage-reactive-form.component.html'
 })
 export class SamplePoDecimalHourlyWageReactiveFormComponent implements OnInit {
-  formCalculateHourlyWage: FormGroup;
+  formCalculateHourlyWage: UntypedFormGroup;
 
-  constructor(private formBuilder: FormBuilder) {}
+  constructor(private formBuilder: UntypedFormBuilder) {}
 
   ngOnInit() {
     this.formCalculateHourlyWage = this.formBuilder.group({

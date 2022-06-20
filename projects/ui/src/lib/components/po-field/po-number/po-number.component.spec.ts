@@ -1,5 +1,5 @@
 import { ComponentFixture, TestBed } from '@angular/core/testing';
-import { FormControl } from '@angular/forms';
+import { UntypedFormControl } from '@angular/forms';
 
 import { expectSettersMethod, configureTestSuite } from '../../../util-test/util-expect.spec';
 
@@ -59,13 +59,13 @@ describe('PoNumberComponent:', () => {
   it('should call minFailed', () => {
     component.min = 4;
 
-    expect(component.validate(new FormControl('2'))).not.toBeNull();
+    expect(component.validate(new UntypedFormControl('2'))).not.toBeNull();
   });
 
   it('should call maxFailed', () => {
     component.max = 5;
 
-    expect(component.validate(new FormControl('10'))).not.toBeNull();
+    expect(component.validate(new UntypedFormControl('10'))).not.toBeNull();
   });
 
   describe('Methods: ', () => {
@@ -74,7 +74,7 @@ describe('PoNumberComponent:', () => {
       component.errorPattern = 'errorPattern';
 
       const expectedReturn = { number: { valid: false } };
-      const result = component.validate(new FormControl('2e'));
+      const result = component.validate(new UntypedFormControl('2e'));
 
       expect(result).toEqual(expectedReturn);
       expect(component.errorPattern).toBe('errorPattern');
@@ -85,7 +85,7 @@ describe('PoNumberComponent:', () => {
       component.errorPattern = 'Valor Inválido';
 
       const expectedReturn = { number: { valid: false } };
-      const result = component.validate(new FormControl('2e'));
+      const result = component.validate(new UntypedFormControl('2e'));
 
       expect(result).toEqual(expectedReturn);
       expect(component.errorPattern).toBe('Valor Inválido');
@@ -96,19 +96,19 @@ describe('PoNumberComponent:', () => {
       component.max = 0;
       component['invalidInputValueOnBlur'] = false;
 
-      expect(component.extraValidation(new FormControl(null))).toBeNull();
+      expect(component.extraValidation(new UntypedFormControl(null))).toBeNull();
     });
 
     it('should return null stating that there is no validation error in the value between max and min in format decimal', () => {
       component.min = 0.6;
       component.max = 0.9;
-      expect(component.validate(new FormControl(0.7))).toBeNull();
+      expect(component.validate(new UntypedFormControl(0.7))).toBeNull();
     });
 
     it('should not return null stating that there is a validation error in the value between max and min in decimal format', () => {
       component.min = 1.6;
       component.max = 3.9;
-      expect(component.validate(new FormControl(5))).not.toBeNull();
+      expect(component.validate(new UntypedFormControl(5))).not.toBeNull();
     });
 
     describe('getErrorPatternMessage: ', () => {

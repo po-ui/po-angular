@@ -1,5 +1,5 @@
 import { Component, OnInit, ViewChild } from '@angular/core';
-import { FormControl } from '@angular/forms';
+import { UntypedFormControl } from '@angular/forms';
 
 import { PoNotificationService } from '@po-ui/ng-components';
 
@@ -8,7 +8,7 @@ import { PoNotificationService } from '@po-ui/ng-components';
   templateUrl: './sample-po-tooltip-new-user.component.html'
 })
 export class SamplePoTooltipNewUserComponent implements OnInit {
-  @ViewChild('formNewUser', { static: true }) formNewUser: FormControl;
+  @ViewChild('formNewUser', { static: true }) formNewUser: UntypedFormControl;
 
   birthDate: Date;
   confirmPassword: string;

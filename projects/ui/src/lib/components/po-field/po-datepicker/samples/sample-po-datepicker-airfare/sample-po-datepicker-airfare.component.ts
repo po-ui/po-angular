@@ -1,5 +1,5 @@
 import { Component, ViewChild } from '@angular/core';
-import { FormControl } from '@angular/forms';
+import { UntypedFormControl } from '@angular/forms';
 
 import { PoDialogService, PoNotificationService, PoSelectOption } from '@po-ui/ng-components';
 
@@ -8,7 +8,7 @@ import { PoDialogService, PoNotificationService, PoSelectOption } from '@po-ui/n
   templateUrl: './sample-po-datepicker-airfare.component.html'
 })
 export class SamplePoDatepickerAirfareComponent {
-  @ViewChild('formAirfare', { static: true }) formAirfare: FormControl;
+  @ViewChild('formAirfare', { static: true }) formAirfare: UntypedFormControl;
 
   accompany: number = 0;
   destination: string;

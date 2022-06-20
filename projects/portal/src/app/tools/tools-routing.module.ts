@@ -5,7 +5,7 @@ import { ToolsDynamicViewComponent } from './tools-dynamic-view/tools-dynamic-vi
 import { ToolsDynamicFormComponent } from './tools-dynamic-form/tools-dynamic-form.component';
 
 export const toolsRoutes: Routes = [
-  { path: '', redirectTo: 'dynamic-form' },
+  { path: '', pathMatch: 'full', redirectTo: 'dynamic-form' },
   { path: 'dynamic-form', component: ToolsDynamicFormComponent },
   { path: 'dynamic-view', component: ToolsDynamicViewComponent }
 ];

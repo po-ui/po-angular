@@ -12,7 +12,7 @@ import {
   Output,
   SimpleChanges
 } from '@angular/core';
-import { AbstractControl, ControlValueAccessor, FormControl, NgControl, Validator } from '@angular/forms';
+import { AbstractControl, ControlValueAccessor, UntypedFormControl, NgControl, Validator } from '@angular/forms';
 import { Subscription } from 'rxjs';
 import { finalize } from 'rxjs/operators';
 
@@ -635,7 +635,7 @@ export abstract class PoLookupBaseComponent
     const ngControl: NgControl = this.injector.get(NgControl, null, InjectFlags.Self);
 
     if (ngControl) {
-      this.control = ngControl.control as FormControl;
+      this.control = ngControl.control as UntypedFormControl;
     }
   }
 

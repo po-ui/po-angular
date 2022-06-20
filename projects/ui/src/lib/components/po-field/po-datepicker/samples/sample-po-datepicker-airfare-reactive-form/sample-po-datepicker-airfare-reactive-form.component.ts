@@ -1,5 +1,5 @@
 import { Component, OnInit } from '@angular/core';
-import { FormBuilder, FormGroup, Validators } from '@angular/forms';
+import { UntypedFormBuilder, UntypedFormGroup, Validators } from '@angular/forms';
 
 import { PoDialogService, PoNotificationService, PoSelectOption } from '@po-ui/ng-components';
 
@@ -8,7 +8,7 @@ import { PoDialogService, PoNotificationService, PoSelectOption } from '@po-ui/n
   templateUrl: './sample-po-datepicker-airfare-reactive-form.component.html'
 })
 export class SamplePoDatepickerAirfareReactiveFormComponent implements OnInit {
-  formAirfare: FormGroup;
+  formAirfare: UntypedFormGroup;
 
   readonly accompanyNumber: Array<PoSelectOption> = [
     { value: 0, label: '0' },
@@ -30,7 +30,7 @@ export class SamplePoDatepickerAirfareReactiveFormComponent implements OnInit {
   ];
 
   constructor(
-    private formBuilder: FormBuilder,
+    private formBuilder: UntypedFormBuilder,
     private poDialog: PoDialogService,
     private poNotification: PoNotificationService
   ) {}
@@ -46,7 +46,7 @@ export class SamplePoDatepickerAirfareReactiveFormComponent implements OnInit {
     });
   }
 
-  apply(formAirfare: FormGroup) {
+  apply(formAirfare: UntypedFormGroup) {
     const { accompany, destination, endDate, origin, ticketClass, startDate } = formAirfare.value;
 
     const message = `Would you like to confirm the ticket from ${origin} to ${destination} with departure date at

@@ -1,5 +1,5 @@
 import { ComponentFixture, fakeAsync, flush, TestBed, tick } from '@angular/core/testing';
-import { FormControl } from '@angular/forms';
+import { UntypedFormControl } from '@angular/forms';
 
 import { configureTestSuite } from './../../../util-test/util-expect.spec';
 
@@ -161,20 +161,20 @@ describe('PoEmailComponent:', () => {
 
   describe('Integration:', () => {
     it(`should return null on validate if email is valid`, () => {
-      expect(component.validate(new FormControl('JOHN@EMAIL.COM'))).toBe(null);
-      expect(component.validate(new FormControl('JOHN@email.com'))).toBe(null);
-      expect(component.validate(new FormControl('JOHN@EMAIL.EMAILEXTENSION'))).toBe(null);
+      expect(component.validate(new UntypedFormControl('JOHN@EMAIL.COM'))).toBe(null);
+      expect(component.validate(new UntypedFormControl('JOHN@email.com'))).toBe(null);
+      expect(component.validate(new UntypedFormControl('JOHN@EMAIL.EMAILEXTENSION'))).toBe(null);
     });
 
     it(`should return '{ pattern: { valid: false } }' on validate if email is invalid`, () => {
       const patternError = { pattern: { valid: false } };
 
-      expect(component.validate(new FormControl('JOHN@'))).toEqual(patternError);
-      expect(component.validate(new FormControl('JOHN@EMAIL.'))).toEqual(patternError);
-      expect(component.validate(new FormControl('JOHN'))).toEqual(patternError);
+      expect(component.validate(new UntypedFormControl('JOHN@'))).toEqual(patternError);
+      expect(component.validate(new UntypedFormControl('JOHN@EMAIL.'))).toEqual(patternError);
+      expect(component.validate(new UntypedFormControl('JOHN'))).toEqual(patternError);
       expect(
         component.validate(
-          new FormControl('JOHN@EMAIL.EMAILEXTENSIONWITHMORETHANSIXTYSIXCHARACTERSBECAUSEWENEEDANERRORCONDITION')
+          new UntypedFormControl('JOHN@EMAIL.EMAILEXTENSIONWITHMORETHANSIXTYSIXCHARACTERSBECAUSEWENEEDANERRORCONDITION')
         )
       ).toEqual(patternError);
     });

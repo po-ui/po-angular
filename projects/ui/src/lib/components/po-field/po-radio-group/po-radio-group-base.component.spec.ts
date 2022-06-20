@@ -1,5 +1,5 @@
 import { Directive } from '@angular/core';
-import { FormControl } from '@angular/forms';
+import { UntypedFormControl } from '@angular/forms';
 
 import * as UtilsFunction from '../../../utils/util';
 import * as ValidatorsFunctions from '../validators';
@@ -142,7 +142,7 @@ describe('PoRadioGroupBase: ', () => {
     });
 
     it('validate: should return required obj if `requiredFailed` is true', () => {
-      const formControl = new FormControl(undefined);
+      const formControl = new UntypedFormControl(undefined);
       const validObj = {
         required: {
           valid: false
@@ -151,12 +151,12 @@ describe('PoRadioGroupBase: ', () => {
 
       spyOn(ValidatorsFunctions, 'requiredFailed').and.returnValue(true);
 
-      expect(component.validate(new FormControl(formControl))).toEqual(validObj);
+      expect(component.validate(new UntypedFormControl(formControl))).toEqual(validObj);
       expect(ValidatorsFunctions.requiredFailed).toHaveBeenCalled();
     });
 
     it('validate: should return undefined if `requiredFailed` is false', () => {
-      const formControl = new FormControl('1');
+      const formControl = new UntypedFormControl('1');
 
       spyOn(ValidatorsFunctions, 'requiredFailed').and.returnValue(false);
 

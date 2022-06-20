@@ -1,5 +1,5 @@
 import { ComponentFixture, fakeAsync, TestBed, tick, waitForAsync } from '@angular/core/testing';
-import { FormControl } from '@angular/forms';
+import { UntypedFormControl } from '@angular/forms';
 
 import { expectPropertiesValues } from '../../../util-test/util-expect.spec';
 
@@ -128,7 +128,7 @@ describe('PoDecimalComponent:', () => {
     it('p-min: should call min failed', () => {
       component.min = 4;
 
-      expect(component.validate(new FormControl('2'))).not.toBeNull();
+      expect(component.validate(new UntypedFormControl('2'))).not.toBeNull();
     });
 
     it('p-max: should update property with valid values', () => {
@@ -148,7 +148,7 @@ describe('PoDecimalComponent:', () => {
     it('p-max: should call max failed', () => {
       component.max = 5;
 
-      expect(component.validate(new FormControl('10'))).not.toBeNull();
+      expect(component.validate(new UntypedFormControl('10'))).not.toBeNull();
     });
   });
 
@@ -372,11 +372,11 @@ describe('PoDecimalComponent:', () => {
     component.min = 0;
     component.max = 0;
 
-    expect(component.extraValidation(new FormControl(null))).toBeNull();
+    expect(component.extraValidation(new UntypedFormControl(null))).toBeNull();
   });
 
   it(`Shouldn't return null in extraValidation if value has separator`, () => {
-    const value = new FormControl(12345678901234.56);
+    const value = new UntypedFormControl(12345678901234.56);
 
     expect(component.extraValidation(value)).not.toBeNull();
   });
@@ -384,7 +384,7 @@ describe('PoDecimalComponent:', () => {
   it(`Shouldn't return null in extraValidation if thousandMaxlength has value`, () => {
     component.thousandMaxlength = 5;
 
-    const value = new FormControl(123456);
+    const value = new UntypedFormControl(123456);
 
     expect(component.extraValidation(value)).not.toBeNull();
   });
