@@ -21,23 +21,6 @@ import { PoButtonKind } from './po-button-type.enum';
 @Directive()
 export class PoButtonBaseComponent {
   /**
-   * @deprecated 14.x.x
-   *
-   * @optional
-   *
-   * @description
-   *
-   * **Deprecated 14.x.x**.
-   *
-   * Aplica foco no elemento ao ser iniciado.
-   * > Caso mais de um elemento seja configurado com essa propriedade,
-   * o último elemento declarado com ela terá o foco.
-   *
-   * @default `false`
-   */
-  @Input('p-auto-focus') @InputBoolean() autoFocus: boolean = false;
-
-  /**
    * @optional
    *
    * @description
