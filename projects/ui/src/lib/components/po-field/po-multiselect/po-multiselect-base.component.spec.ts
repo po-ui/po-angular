@@ -1,5 +1,5 @@
 import { Directive } from '@angular/core';
-import { FormControl } from '@angular/forms';
+import { UntypedFormControl } from '@angular/forms';
 import { fakeAsync, tick } from '@angular/core/testing';
 
 import { Observable, of } from 'rxjs';
@@ -397,14 +397,14 @@ describe('PoMultiselectBaseComponent:', () => {
 
   it('should return null in validate', () => {
     component.required = false;
-    expect(component.validate(new FormControl())).toBeNull();
+    expect(component.validate(new UntypedFormControl())).toBeNull();
   });
 
   it('shouldn`t return null in validate', () => {
     component.required = true;
     component.disabled = false;
 
-    expect(component.validate(new FormControl())).not.toBeNull();
+    expect(component.validate(new UntypedFormControl())).not.toBeNull();
   });
 
   it('should set selectedOptions and call updateVisibleItems', () => {

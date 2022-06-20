@@ -1,5 +1,5 @@
 import { Component, OnDestroy, OnInit, ViewChild } from '@angular/core';
-import { FormControl } from '@angular/forms';
+import { UntypedFormControl } from '@angular/forms';
 
 import { Subscription } from 'rxjs';
 
@@ -10,7 +10,7 @@ import { PoDialogService, PoNotificationService, PoPageAction, PoRadioGroupOptio
   templateUrl: './sample-po-dialog-cancel-credit-card.component.html'
 })
 export class SamplePoDialogCancelCreditCardComponent implements OnDestroy, OnInit {
-  @ViewChild('form', { static: true }) form: FormControl;
+  @ViewChild('form', { static: true }) form: UntypedFormControl;
 
   action: Array<PoPageAction>;
   address: string;

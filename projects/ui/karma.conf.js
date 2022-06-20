@@ -36,7 +36,17 @@ module.exports = function (config) {
           branches: 99,
           statements: 99,
           lines: 99,
-          functions: 99
+          functions: 99,
+          overrides: {
+            'src/lib/components/po-field/po-upload/po-upload-base.service.ts': {
+              statements: 93,
+              branches: 83,
+              lines: 92
+            },
+            'src/lib/components/po-field/po-lookup/po-lookup.component.ts': {
+              functions: 96
+            }
+          }
         }
       }
     },

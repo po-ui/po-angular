@@ -1,6 +1,6 @@
 import { Directive, Injector, SimpleChanges } from '@angular/core';
 import { fakeAsync, inject, TestBed, tick } from '@angular/core/testing';
-import { FormControl, NgControl } from '@angular/forms';
+import { UntypedFormControl, NgControl } from '@angular/forms';
 import { Observable, of, throwError } from 'rxjs';
 import { configureTestSuite, expectPropertiesValues, expectSettersMethod } from '../../../util-test/util-expect.spec';
 import * as ValidatorsFunctions from '../validators';
@@ -332,14 +332,14 @@ describe('PoLookupBaseComponent:', () => {
     component.required = true;
     component.disabled = false;
 
-    expect(component.validate(new FormControl())).not.toBeNull();
+    expect(component.validate(new UntypedFormControl())).not.toBeNull();
   });
 
   it('should call not return requiredFailed', () => {
     component.required = false;
     component.disabled = false;
 
-    expect(component.validate(new FormControl())).toBeUndefined();
+    expect(component.validate(new UntypedFormControl())).toBeUndefined();
   });
 
   describe('Methods:', () => {
@@ -380,7 +380,7 @@ describe('PoLookupBaseComponent:', () => {
         const searchValue = 'po';
         const filterParams = { code: '' };
 
-        component['control'] = { markAsPending: () => {}, updateValueAndValidity: () => {} } as FormControl;
+        component['control'] = { markAsPending: () => {}, updateValueAndValidity: () => {} } as UntypedFormControl;
         component.filterParams = filterParams;
         component.service = lookupFilterService;
 
@@ -451,7 +451,7 @@ describe('PoLookupBaseComponent:', () => {
         const searchValue = 'po';
         const filterParams = { code: '' };
 
-        component['control'] = { markAsPending: () => {}, updateValueAndValidity: () => {} } as FormControl;
+        component['control'] = { markAsPending: () => {}, updateValueAndValidity: () => {} } as UntypedFormControl;
         component.filterParams = filterParams;
         component.service = lookupFilterService;
         component.multiple = true;
@@ -484,7 +484,7 @@ describe('PoLookupBaseComponent:', () => {
         const searchValue = 'po';
         const filterParams = { code: '' };
 
-        component['control'] = { markAsPending: () => {}, updateValueAndValidity: () => {} } as FormControl;
+        component['control'] = { markAsPending: () => {}, updateValueAndValidity: () => {} } as UntypedFormControl;
         component.filterParams = filterParams;
         component.service = lookupFilterService;
         component.multiple = true;
@@ -509,7 +509,7 @@ describe('PoLookupBaseComponent:', () => {
         const searchValue = 'po';
         const filterParams = { code: '' };
 
-        component['control'] = { markAsPending: () => {}, updateValueAndValidity: () => {} } as FormControl;
+        component['control'] = { markAsPending: () => {}, updateValueAndValidity: () => {} } as UntypedFormControl;
         component.filterParams = filterParams;
         component.service = lookupFilterService;
         component.multiple = true;
@@ -535,7 +535,7 @@ describe('PoLookupBaseComponent:', () => {
         const searchValue = ['po'];
         const filterParams = { code: '' };
 
-        component['control'] = { markAsPending: () => {}, updateValueAndValidity: () => {} } as FormControl;
+        component['control'] = { markAsPending: () => {}, updateValueAndValidity: () => {} } as UntypedFormControl;
         component.filterParams = filterParams;
         component.service = lookupFilterService;
         component.multiple = true;
@@ -672,14 +672,14 @@ describe('PoLookupBaseComponent:', () => {
 
       spyOn(ValidatorsFunctions, 'requiredFailed').and.returnValue(true);
 
-      expect(component.validate(new FormControl([]))).toEqual(validObj);
+      expect(component.validate(new UntypedFormControl([]))).toEqual(validObj);
       expect(ValidatorsFunctions.requiredFailed).toHaveBeenCalled();
     });
 
     it('validate: should return undefined when `requiredFailed` is false', () => {
       spyOn(ValidatorsFunctions, 'requiredFailed').and.returnValue(false);
 
-      expect(component.validate(new FormControl(null))).toBeUndefined();
+      expect(component.validate(new UntypedFormControl(null))).toBeUndefined();
       expect(ValidatorsFunctions.requiredFailed).toHaveBeenCalled();
     });
 

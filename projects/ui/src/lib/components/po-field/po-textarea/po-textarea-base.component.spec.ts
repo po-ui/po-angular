@@ -1,5 +1,5 @@
 import { Directive } from '@angular/core';
-import { FormControl } from '@angular/forms';
+import { UntypedFormControl } from '@angular/forms';
 
 import * as ValidatorsFunctions from '../validators';
 import { expectPropertiesValues, expectSettersMethod } from '../../../util-test/util-expect.spec';
@@ -180,7 +180,7 @@ describe('PoTextareaBase:', () => {
 
         spyOn(ValidatorsFunctions, 'requiredFailed').and.returnValue(true);
 
-        expect(component.validate(new FormControl([]))).toEqual(validObj);
+        expect(component.validate(new UntypedFormControl([]))).toEqual(validObj);
         expect(ValidatorsFunctions.requiredFailed).toHaveBeenCalled();
       });
 
@@ -189,7 +189,7 @@ describe('PoTextareaBase:', () => {
         spyOn(ValidatorsFunctions, 'minlengpoailed').and.returnValue(false);
         spyOn(ValidatorsFunctions, 'maxlengpoailed').and.returnValue(false);
 
-        expect(component.validate(new FormControl(null))).toBeUndefined();
+        expect(component.validate(new UntypedFormControl(null))).toBeUndefined();
         expect(ValidatorsFunctions.requiredFailed).toHaveBeenCalled();
       });
 
@@ -213,7 +213,7 @@ describe('PoTextareaBase:', () => {
 
         spyOn(ValidatorsFunctions, 'minlengpoailed').and.returnValue(true);
 
-        expect(component.validate(new FormControl())).toEqual(invalidMinlenghtError);
+        expect(component.validate(new UntypedFormControl())).toEqual(invalidMinlenghtError);
         expect(ValidatorsFunctions.minlengpoailed).toHaveBeenCalled();
       });
 
@@ -222,7 +222,7 @@ describe('PoTextareaBase:', () => {
         spyOn(ValidatorsFunctions, 'minlengpoailed').and.returnValue(false);
         spyOn(ValidatorsFunctions, 'maxlengpoailed').and.returnValue(false);
 
-        expect(component.validate(new FormControl())).toBeUndefined();
+        expect(component.validate(new UntypedFormControl())).toBeUndefined();
         expect(ValidatorsFunctions.minlengpoailed).toHaveBeenCalled();
       });
 
@@ -235,7 +235,7 @@ describe('PoTextareaBase:', () => {
 
         spyOn(ValidatorsFunctions, 'maxlengpoailed').and.returnValue(true);
 
-        expect(component.validate(new FormControl())).toEqual(invalidMaxlenghtError);
+        expect(component.validate(new UntypedFormControl())).toEqual(invalidMaxlenghtError);
         expect(ValidatorsFunctions.maxlengpoailed).toHaveBeenCalled();
       });
 
@@ -244,7 +244,7 @@ describe('PoTextareaBase:', () => {
         spyOn(ValidatorsFunctions, 'minlengpoailed').and.returnValue(false);
         spyOn(ValidatorsFunctions, 'maxlengpoailed').and.returnValue(false);
 
-        expect(component.validate(new FormControl())).toBeUndefined();
+        expect(component.validate(new UntypedFormControl())).toBeUndefined();
         expect(ValidatorsFunctions.maxlengpoailed).toHaveBeenCalled();
       });
     });

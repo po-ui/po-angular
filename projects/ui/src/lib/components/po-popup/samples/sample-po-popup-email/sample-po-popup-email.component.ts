@@ -1,5 +1,5 @@
 import { Component, ElementRef, OnInit, ViewChild } from '@angular/core';
-import { FormControl } from '@angular/forms';
+import { UntypedFormControl } from '@angular/forms';
 
 import { PoModalAction, PoModalComponent, PoPopupAction } from '@po-ui/ng-components';
 
@@ -26,7 +26,7 @@ import { PoModalAction, PoModalComponent, PoPopupAction } from '@po-ui/ng-compon
   ]
 })
 export class SamplePoPopupEmailComponent implements OnInit {
-  @ViewChild('formEmail', { static: true }) formEmail: FormControl;
+  @ViewChild('formEmail', { static: true }) formEmail: UntypedFormControl;
 
   @ViewChild('target', { read: ElementRef, static: true }) targetRef: ElementRef;
 

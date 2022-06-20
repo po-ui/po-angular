@@ -1,6 +1,6 @@
 import { Directive } from '@angular/core';
 import { fakeAsync, tick } from '@angular/core/testing';
-import { AbstractControl, FormControl } from '@angular/forms';
+import { AbstractControl, UntypedFormControl } from '@angular/forms';
 
 import { expectPropertiesValues, expectSettersMethod } from '../../../util-test/util-expect.spec';
 
@@ -109,7 +109,7 @@ describe('PoInputBase:', () => {
     component.pattern = '';
 
     spyOn(component, 'extraValidation');
-    component.validate(new FormControl());
+    component.validate(new UntypedFormControl());
     expect(component.extraValidation).toHaveBeenCalled();
   });
 
@@ -147,7 +147,7 @@ describe('PoInputBase:', () => {
     component.pattern = '[0-1]';
 
     spyOn(component, 'extraValidation');
-    expect(component.validate(new FormControl('2'))).not.toBeNull();
+    expect(component.validate(new UntypedFormControl('2'))).not.toBeNull();
     expect(component.extraValidation).not.toHaveBeenCalled();
   });
 
@@ -299,7 +299,7 @@ describe('PoInputBase:', () => {
       component.getScreenValue = () => '2';
 
       spyOn(component, <any>'validatePatternOnWriteValue');
-      expect(component.validate(new FormControl('2'))).not.toBeNull();
+      expect(component.validate(new UntypedFormControl('2'))).not.toBeNull();
       expect(component['validatePatternOnWriteValue']).toHaveBeenCalled();
     });
 
@@ -307,7 +307,7 @@ describe('PoInputBase:', () => {
       component.minlength = 10;
       component.getScreenValue = () => '2';
 
-      expect(component.validate(new FormControl('2'))).toEqual({
+      expect(component.validate(new UntypedFormControl('2'))).toEqual({
         minlength: {
           valid: false
         }

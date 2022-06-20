@@ -1,5 +1,5 @@
 import { fakeAsync, TestBed, tick } from '@angular/core/testing';
-import { FormControl } from '@angular/forms';
+import { UntypedFormControl } from '@angular/forms';
 import { HttpClientTestingModule } from '@angular/common/http/testing';
 
 import { throwError } from 'rxjs';
@@ -114,7 +114,7 @@ describe('PoPageJobSchedulerBaseComponent:', () => {
     }));
 
     it(`markAsDirtyInvalidControls: should not call 'markAsDirty()' if 'control.invalid' is 'false'.`, () => {
-      const value = { login: new FormControl(null) };
+      const value = { login: new UntypedFormControl(null) };
 
       spyOn(value.login, 'markAsDirty');
 
@@ -125,7 +125,7 @@ describe('PoPageJobSchedulerBaseComponent:', () => {
 
     it(`markAsDirtyInvalidControls: should call 'hasOwnProperty()' with key value 'login' and not call
       'markAsDirty()' if 'control.invalid' is 'false'.`, () => {
-      const value = { login: new FormControl(null) };
+      const value = { login: new UntypedFormControl(null) };
 
       spyOn(value, <any>'hasOwnProperty');
       spyOn(value.login, 'markAsDirty');
@@ -137,7 +137,7 @@ describe('PoPageJobSchedulerBaseComponent:', () => {
     });
 
     it('markAsDirtyInvalidControls: should call `markAsDirty()` if `control.invalid` is `true`.', () => {
-      const value = { login: new FormControl(null) };
+      const value = { login: new UntypedFormControl(null) };
       value.login.setErrors({ invalid: true });
 
       spyOn(value.login, 'markAsDirty');

@@ -3,8 +3,6 @@
 
 Este guia contém informações sobre a migração do seu projeto para a versão mais atualizada do PO UI.
 
-> Instale a versão 6 do NPM antes de iniciar a migração: ```npm i -g npm@6```
-
 > Caso você não estiver utilizando a versão anterior da mais atualizada, é importante realizar a migração para a mesma.
 
 > Se seu projeto estiver na v1, veja este Guia de Migração do PO UI para [**V2**](guides/migration-poui-v2).
@@ -24,7 +22,7 @@ ng update @angular/cli@<version> @angular/core@<version> --force
 Por exemplo:
 
 ```
-ng update @angular/cli@13 @angular/core@13 --force
+ng update @angular/cli@14 @angular/core@14 --force
 ```
 
 > Para realizar a migração completa e avaliar se não precisa fazer alguma alteração veja o [**Guia de Upgrade do Angular**](https://update.angular.io/).
@@ -54,7 +52,7 @@ ng update @po-ui/ng-components@<version> --allow-dirty
 Por exemplo:
 
 ```
-ng update @po-ui/ng-components@6 --allow-dirty
+ng update @po-ui/ng-components@14.0.0-next.0 --allow-dirty
 ```
 
 O `ng update` ajudará nas alterações necessárias para seu projeto seguir atualizado, que são elas:
@@ -84,7 +82,7 @@ ng update @po-ui/ng-sync@<version> --allow-dirty --force
 Por exemplo:
 
 ```
-ng update @po-ui/ng-sync@6 --allow-dirty --force
+ng update @po-ui/ng-sync@14.0.0-next.0 --allow-dirty --force
 ```
 
 O `ng update` ajudará nas alterações necessárias para seu projeto, que será atualizar as versões dos pacotes:

@@ -1,5 +1,5 @@
 import { Component, OnInit, ViewChild } from '@angular/core';
-import { FormBuilder, FormGroup, Validators } from '@angular/forms';
+import { UntypedFormBuilder, UntypedFormGroup, Validators } from '@angular/forms';
 
 import { PoDatepickerRange, PoModalAction, PoModalComponent, PoNotificationService } from '@po-ui/ng-components';
 
@@ -11,7 +11,7 @@ export class SamplePoDatepickerRangeVacationsReactiveFormComponent implements On
   @ViewChild(PoModalComponent, { static: true }) poModal: PoModalComponent;
 
   datepickerRange: PoDatepickerRange;
-  formVacationSuggestion: FormGroup;
+  formVacationSuggestion: UntypedFormGroup;
   quantityOfDays: number;
   reason: string;
 
@@ -39,7 +39,7 @@ export class SamplePoDatepickerRangeVacationsReactiveFormComponent implements On
     );
   }
 
-  constructor(private poNotification: PoNotificationService, private formBuilder: FormBuilder) {}
+  constructor(private poNotification: PoNotificationService, private formBuilder: UntypedFormBuilder) {}
 
   ngOnInit() {
     this.formVacationSuggestion = this.formBuilder.group({

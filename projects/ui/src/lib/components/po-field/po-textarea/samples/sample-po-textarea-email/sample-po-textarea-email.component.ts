@@ -1,5 +1,5 @@
 import { Component, ViewChild } from '@angular/core';
-import { FormControl } from '@angular/forms';
+import { UntypedFormControl } from '@angular/forms';
 
 import { PoModalAction, PoModalComponent } from '@po-ui/ng-components';
 import { PoPageAction } from '@po-ui/ng-components';
@@ -9,7 +9,7 @@ import { PoPageAction } from '@po-ui/ng-components';
   templateUrl: './sample-po-textarea-email.component.html'
 })
 export class SamplePoTextareaEmailComponent {
-  @ViewChild('formEmail', { static: true }) formEmail: FormControl;
+  @ViewChild('formEmail', { static: true }) formEmail: UntypedFormControl;
   @ViewChild(PoModalComponent, { static: true }) poModal: PoModalComponent;
 
   cc: string = '';

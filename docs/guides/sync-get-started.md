@@ -9,9 +9,9 @@ Para maiores detalhes sobre os serviços e métodos utilizados neste tutorial, c
 ### Pré-requisitos
 
 - [Node.js e NPM](https://nodejs.org/en/)
-- [Angular CLI](https://cli.angular.io/) (^13.0.0):
+- [Angular CLI](https://cli.angular.io/) (^14.0.0):
   - ```shell
-    npm install -g @angular/cli@13
+    npm install -g @angular/cli@14
     ```
 - [Ionic](https://ionicframework.com/docs/cli/) (^6.0.0):
   - ```shell
@@ -49,32 +49,32 @@ Antes de executar a instalação, é necessário que todas as dependências do p
 ```typescript
   ...
   "dependencies": {
-    "@angular/animations": "~13.3.0",
-    "@angular/common": "~13.3.0",
-    "@angular/core": "~13.3.0",
-    "@angular/forms": "~13.3.0",
-    "@angular/platform-browser": "~13.3.0",
-    "@angular/platform-browser-dynamic": "~13.3.0",
-    "@angular/router": "~13.3.0",
-    "@angular/service-worker": "~13.3.0",
+    "@angular/animations": "~14.0.2",
+    "@angular/common": "~14.0.2",
+    "@angular/core": "~14.0.2",
+    "@angular/forms": "~14.0.2",
+    "@angular/platform-browser": "~14.0.2",
+    "@angular/platform-browser-dynamic": "~14.0.2",
+    "@angular/router": "~14.0.2",
+    "@angular/service-worker": "~14.0.2",
     "@ionic/angular": "^6.0.0",
-    "rxjs": "~7.4.0",
+    "rxjs": "~7.5.5",
     "tslib": "^2.3.0",
     "zone.js": "~0.11.4"
     ...
   },
   "devDependencies": {
-    "@angular-devkit/build-angular": "~13.3.0",
-    "@angular-eslint/builder": "~13.2.0",
-    "@angular-eslint/eslint-plugin": "~13.2.0",
-    "@angular-eslint/eslint-plugin-template": "~13.2.0",
-    "@angular-eslint/template-parser": "~13.2.0",
-    "@angular/cli": "~13.3.0",
-    "@angular/compiler": "~13.3.0",
-    "@angular/compiler-cli": "~13.3.0",
-    "@angular/language-service": "~13.3.0",
+    "@angular-devkit/build-angular": "~14.0.2",
+    "@angular-eslint/builder": "~14.0.0",
+    "@angular-eslint/eslint-plugin": "~14.0.0",
+    "@angular-eslint/eslint-plugin-template": "~14.0.0",
+    "@angular-eslint/template-parser": "~14.0.0",
+    "@angular/cli": "~14.0.2",
+    "@angular/compiler": "~14.0.2",
+    "@angular/compiler-cli": "~14.0.2",
+    "@angular/language-service": "~14.0.2",
     "@ionic/angular-toolkit": "^6.0.0",
-    "typescript": "~4.6.2"
+    "typescript": "~4.7.4"
   },
   ...
 ```

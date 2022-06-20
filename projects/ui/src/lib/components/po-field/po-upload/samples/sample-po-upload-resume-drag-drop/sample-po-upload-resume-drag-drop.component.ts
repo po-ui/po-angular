@@ -1,5 +1,5 @@
 import { Component, OnInit, ViewChild } from '@angular/core';
-import { FormControl } from '@angular/forms';
+import { UntypedFormControl } from '@angular/forms';
 
 import { PoNotificationService } from '@po-ui/ng-components';
 
@@ -8,7 +8,7 @@ import { PoNotificationService } from '@po-ui/ng-components';
   templateUrl: 'sample-po-upload-resume-drag-drop.component.html'
 })
 export class SamplePoUploadResumeDragDropComponent implements OnInit {
-  @ViewChild('formOpportunity', { static: true }) formOpportunity: FormControl;
+  @ViewChild('formOpportunity', { static: true }) formOpportunity: UntypedFormControl;
 
   biograph: string;
   linkedin: string;

@@ -1,5 +1,5 @@
 import { Component, ViewChild } from '@angular/core';
-import { FormBuilder, FormGroup, Validators } from '@angular/forms';
+import { UntypedFormBuilder, UntypedFormGroup, Validators } from '@angular/forms';
 
 import { PoModalAction, PoModalComponent } from '@po-ui/ng-components';
 
@@ -10,14 +10,14 @@ import { PoModalAction, PoModalComponent } from '@po-ui/ng-components';
 export class SamplePoInputReactiveFormComponent {
   @ViewChild('reactiveFormData', { static: true }) reactiveFormModal: PoModalComponent;
 
-  reactiveForm: FormGroup;
+  reactiveForm: UntypedFormGroup;
 
   public readonly modalPrimaryAction: PoModalAction = {
     action: () => this.reactiveFormModal.close(),
     label: 'Close'
   };
 
-  constructor(private fb: FormBuilder) {
+  constructor(private fb: UntypedFormBuilder) {
     this.createReactiveForm();
   }
 

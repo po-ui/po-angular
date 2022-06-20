@@ -1,5 +1,5 @@
 import { Directive } from '@angular/core';
-import { FormControl } from '@angular/forms';
+import { UntypedFormControl } from '@angular/forms';
 
 import { Observable, of } from 'rxjs';
 
@@ -787,14 +787,14 @@ describe('PoComboBaseComponent:', () => {
 
       spyOn(ValidatorsFunctions, 'requiredFailed').and.returnValue(true);
 
-      expect(component.validate(new FormControl([]))).toEqual(validObj);
+      expect(component.validate(new UntypedFormControl([]))).toEqual(validObj);
       expect(ValidatorsFunctions.requiredFailed).toHaveBeenCalled();
     });
 
     it('validate: should return undefined when `requiredFailed` is false', () => {
       spyOn(ValidatorsFunctions, 'requiredFailed').and.returnValue(false);
 
-      expect(component.validate(new FormControl(null))).toBeUndefined();
+      expect(component.validate(new UntypedFormControl(null))).toBeUndefined();
       expect(ValidatorsFunctions.requiredFailed).toHaveBeenCalled();
     });
 

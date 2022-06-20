@@ -14,7 +14,7 @@ export const guidesRoutes: Routes = [
       <% docItems.forEach(function(doc) {
         %>{ path: '<%- doc.path %>', component: Guide<%- doc.name %>Component },
       <%
-    });%>{ path: '', redirectTo: 'getting-started' }
+    });%>{ path: '', pathMatch: 'full', redirectTo: 'getting-started' }
     ]
   }
 ];

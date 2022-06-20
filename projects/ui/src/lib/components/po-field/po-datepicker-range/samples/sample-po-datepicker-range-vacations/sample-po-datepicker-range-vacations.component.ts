@@ -1,5 +1,5 @@
 import { Component, ViewChild } from '@angular/core';
-import { FormControl } from '@angular/forms';
+import { UntypedFormControl } from '@angular/forms';
 
 import { PoDatepickerRange, PoModalAction, PoModalComponent, PoNotificationService } from '@po-ui/ng-components';
 
@@ -8,7 +8,7 @@ import { PoDatepickerRange, PoModalAction, PoModalComponent, PoNotificationServi
   templateUrl: './sample-po-datepicker-range-vacations.component.html'
 })
 export class SamplePoDatepickerRangeVacationsComponent {
-  @ViewChild('formVacationSuggestion', { static: true }) formVacationSuggestion: FormControl;
+  @ViewChild('formVacationSuggestion', { static: true }) formVacationSuggestion: UntypedFormControl;
   @ViewChild(PoModalComponent, { static: true }) poModal: PoModalComponent;
 
   datepickerRange: PoDatepickerRange;
