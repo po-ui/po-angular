@@ -1,4 +1,17 @@
-import { PoComboFilter, PoLookupFilter } from '../../po-field';
+import { TemplateRef } from '@angular/core';
+import {
+  PoCheckboxGroupOption,
+  PoComboFilter,
+  PoComboLiterals,
+  PoDatepickerIsoFormat,
+  PoDatepickerRangeLiterals,
+  PoLookupFilter,
+  PoLookupLiterals,
+  PoMultiselectFilterMode,
+  PoMultiselectLiterals,
+  PoSwitchLabelPosition
+} from '../../po-field';
+import { PoLookupAdvancedFilter } from '../../po-field/po-lookup/interfaces/po-lookup-advanced-filter.interface';
 import { PoLookupColumn } from '../../po-field/po-lookup/interfaces/po-lookup-column.interface';
 import { PoMultiselectOption } from '../../po-field/po-multiselect/po-multiselect-option.interface';
 import { PoSelectOption } from '../../po-field/po-select/po-select-option.interface';
@@ -21,8 +34,10 @@ export interface PoDynamicFormField extends PoDynamicField {
    *
    * > Caso sejam informadas colunas, deve-se obrigatoriamente conter colunas definidas como *label* e *value* para valores
    * de tela e do model respectivamente.
+   *
+   * **Componentes compatíveis:** `po-radio-group`, `po-lookup`, `po-checkbox-group`.
    */
-  columns?: Array<PoLookupColumn>;
+  columns?: Array<PoLookupColumn> | number;
 
   /** Define a obrigatoriedade do campo. */
   required?: boolean;
@@ -36,8 +51,12 @@ export interface PoDynamicFormField extends PoDynamicField {
    */
   optional?: boolean;
 
-  /** Lista de opções que serão exibidos em um componente, podendo selecionar uma opção. */
-  options?: Array<string> | Array<PoSelectOption> | Array<PoMultiselectOption>;
+  /**
+   * Lista de opções que serão exibidos em um componente, podendo selecionar uma opção.
+   *
+   * **Componentes compatíveis:** `po-select`, `po-radio-group`, `po-checkbox-group`, `po-multiselect`.
+   * */
+  options?: Array<string> | Array<PoSelectOption> | Array<PoMultiselectOption> | Array<PoCheckboxGroupOption>;
 
   /**
    * Permite que o usuário faça múltipla seleção dentro da lista de opções.
@@ -63,22 +82,33 @@ export interface PoDynamicFormField extends PoDynamicField {
    */
   searchService?: string | PoLookupFilter;
 
-  /** Máscara para o campo. */
+  /**
+   * Máscara para o campo.
+   *
+   * **Componentes compatíveis:** `po-input`.
+   > também é atribuído ao utilizar a propriedade `type: time`.
+   */
   mask?: string;
 
-  /** Define que o valor do componente será conforme especificado na mascára. O valor padrão é `false`. */
+  /**
+   * Define que o valor do componente será conforme especificado na mascára. O valor padrão é `false`.
+   *
+   * **Componentes compatíveis:** `po-input`.
+   > também é atribuído ao utilizar a propriedade `type: time`.
+   * */
   maskFormatModel?: boolean;
 
   /** Define o ícone que será exibido no início do campo.
-   * > Esta propriedade o pode ser utilizado nos campos:
+   * > Esta propriedade só pode ser utilizado nos campos:
    * - Input;
    * - Number;
    * - Decimal;
    * - Combo;
+   * - Password;
    *
    * > Veja a disponibilidade de ícones em [biblioteca de ícones](guides/icons).
    */
-  icon?: string;
+  icon?: string | TemplateRef<void>;
 
   /**  Quantidade máxima de casas decimais.
    *
@@ -92,13 +122,25 @@ export interface PoDynamicFormField extends PoDynamicField {
    */
   thousandMaxlength?: number;
 
-  /** Regex para validação do campo. */
+  /**
+   * Regex para validação do campo.
+   *
+   * **Componentes compatíveis:** `po-input`, `po-password`.
+   * */
   pattern?: string;
 
-  /** Tamanho mínimo de caracteres. */
+  /**
+   * Tamanho mínimo de caracteres.
+   *
+   * **Componentes compatíveis:** `po-input`, `po-number`, `po-decimal`, `po-textarea`, `po-password`.
+   * */
   minLength?: number;
 
-  /** Tamanho máximo de caracteres. */
+  /**
+   * Tamanho máximo de caracteres.
+   *
+   * **Componentes compatíveis:** `po-input`, `po-number`, `po-decimal`, `po-textarea`, `po-password`.
+   */
   maxLength?: number;
 
   /** Desabilita o campo caso informar o valor *true*. */
@@ -113,10 +155,18 @@ export interface PoDynamicFormField extends PoDynamicField {
   /** Texto exibido quando o valor do componente for *false*. */
   booleanFalse?: string;
 
-  /** Valor máximo a ser informado no componente, podendo ser utilizado quando o tipo de dado por *number*, *date* ou *dateTime*. */
+  /**
+   * Valor máximo a ser informado no componente, podendo ser utilizado quando o tipo de dado por *number*, *date* ou *dateTime*.
+   *
+   * **Componentes compatíveis:** `po-datepicker`, `po-datepicker-range`, `po-number`, `po-decimal`
+   * */
   maxValue?: string | number;
 
-  /** Valor mínimo a ser informado no componente, podendo ser utilizado quando o tipo de dado por *number*, *date* ou *dateTime*. */
+  /**
+   * Valor mínimo a ser informado no componente, podendo ser utilizado quando o tipo de dado por *number*, *date* ou *dateTime*.
+   *
+   * **Componentes compatíveis:** `po-datepicker`, `po-datepicker-range`, `po-number`, `po-decimal`
+   */
   minValue?: string | number;
 
   /** Quantidade de linhas exibidas no `po-textarea`. */
@@ -135,15 +185,15 @@ export interface PoDynamicFormField extends PoDynamicField {
    * Ao ser executado, irá receber como parâmetro um objeto com o nome da propriedade
    * alterada e o novo valor, conforme a interface `PoDynamicFormFieldChanged`:
    *
-   * ```
+   * ``
    * { property: 'property name', value: 'new value' }
-   * ```
+   * ``
    *
    * O retorno desta função deve ser do tipo [PoDynamicFormFieldValidation](documentation/po-dynamic-form#po-dynamic-form-field-validation),
    * onde o usuário poderá determinar as novas propriedades do campo.
    * Por exemplo:
    *
-   * ```
+   * ``
    * onChangeField(changeValue): PoDynamicFormFieldValidation {
    *
    * if (changeValue.property === 'birthday' && !this.validate('birthday')) {
@@ -153,12 +203,12 @@ export interface PoDynamicFormField extends PoDynamicField {
    *     focus: true
    *   };
    * }
-   * ```
+   * ``
    *
    * Para referenciar a sua função utilize a propriedade `bind`, por exemplo:
-   * ```
+   * ``
    * { property: 'state', gridColumns: 6, validate: this.myFunction.bind(this) }
-   * ```
+   * ``
    */
   validate?: string | Function;
 
@@ -168,9 +218,9 @@ export interface PoDynamicFormField extends PoDynamicField {
    *
    * Por exemplo, para o parâmetro `{ age: 23 }` a URL da requisição ficaria:
    *
-   * ```
+   * ``
    * url + ?age=23&filter=Peter
-   * ```
+   * ``
    */
   params?: any;
 
@@ -183,6 +233,8 @@ export interface PoDynamicFormField extends PoDynamicField {
    *  - maxValue;
    *
    * > Esta mensagem não é apresentada quando o campo estiver vazio, mesmo que ele seja requerido.
+   *
+   * **Componentes compatíveis:** `po-datepicker`, `po-input`, `po-number`, `po-decimal`, `po-password`.
    */
   errorMessage?: string;
 
@@ -227,24 +279,24 @@ export interface PoDynamicFormField extends PoDynamicField {
    *
    * Exemplo de utilização:
    *
-   * ```
+   * ``
    * [
    *   { property: 'test 1', order: 2 },
    *   { property: 'test 2', order: 1 },
    *   { property: 'test 3' },
    *   { property: 'test 4', order: 3 }
    * ];
-   * ```
+   * ``
    *
    * Na exibição a ordem ficará dessa forma:
-   * ```
+   * ``
    * [
    *   { property: 'test 2', order: 1 },
    *   { property: 'test 1', order: 2 },
    *   { property: 'test 4', order: 3 },
    *   { property: 'test 3' }
    * ];
-   * ```
+   * ``
    *
    * Só serão aceitos valores com números inteiros maiores do que zero.
    *
@@ -262,12 +314,12 @@ export interface PoDynamicFormField extends PoDynamicField {
    * Por padrão o valor será configurado segundo a o módulo [`I18n`](documentation/po-i18n)
    *
    * Exemplo de utilização:
-   * ```
+   * ``
    * [
    *   { property: 'birthday', locale: 'en', type: 'date' },
    *   { property: 'wage', locale: 'ru', type: 'currency' }
    * ];
-   * ```
+   * ``
    *
    * > Para ver quais linguagens suportadas acesse [`I18n`](documentation/po-i18n)
    * > A propriedade será repassada para os componentes que suportam a mesma.
@@ -280,4 +332,161 @@ export interface PoDynamicFormField extends PoDynamicField {
    * > Atualmente essa propriedade está disponível apenas para o tipo 'date' e 'dateTime'.
    */
   range?: boolean;
+
+  /** Indica que o campo será somente leitura.
+   *
+   * **Componentes compatíveis:** `po-datepicker`, `po-datepicker-range`, `po-input`, `po-number`, `po-decimal`, `po-select`, `po-textarea`, `po-password`
+   */
+  readonly?: boolean;
+
+  /**
+   * Permite a seleção de múltiplos itens.
+   *
+   * **Componente compatível:** `po-lookup`
+   */
+  multiple?: boolean;
+
+  /** Se verdadeiro, o campo receberá um botão para ser limpo.
+   *
+   * **Componentes compatíveis:** `po-datepicker`, `po-datepicker-range`, `po-input`, `po-number`, `po-decimal`, `po-combo`, `po-lookup`, `po-password`
+   */
+  clean?: boolean;
+
+  /**
+   * Define a propriedade nativa `autocomplete` do campo como off.
+   *
+   * **Componentes compatíveis:** `po-datepicker`, `po-datepicker-range`, `po-input`, `po-number`, `po-decimal`, `po-lookup`, `po-password`
+   */
+  noAutocomplete?: boolean;
+
+  /**
+   * Posição de exibição do rótulo do PoSwich.
+   * > Por padrão exibe à direita.
+   */
+  labelPosition?: PoSwitchLabelPosition;
+
+  /**
+   * Permite esconder a função de espiar a senha digitada no `po-password`.
+   */
+  hidePasswordPeek?: boolean;
+
+  /**
+   * Padrão de formatação para saída do model, independentemente do formato de entrada.
+   *
+   * > Veja os valores válidos no `enumPoDatepickerIsoFormat`.
+   *
+   * **Componente compatível:** po-datepicker
+   */
+  isoFormat?: PoDatepickerIsoFormat;
+
+  /**
+   * Objeto com as literais usadas para os seguintes componentes: `po-lookup`, `po-multiselect`, `po-combo` e `po-datepicker-range`.
+   *
+   * > O objeto padrão de literais será traduzido de acordo com o idioma do PoI18nService ou do browser.
+   *
+   * **Componentes compatíveis:** `po-lookup`, `po-multiselect`, `po-combo`, `po-datepicker-range`
+   */
+  literals?: PoLookupLiterals | PoMultiselectLiterals | PoComboLiterals | PoDatepickerRangeLiterals;
+
+  /**
+   * Se verdadeiro ativa a funcionalidade de scroll infinito para o combo ou lookup, ao chegar ao fim da tabela executará nova busca dos dados conforme paginação.
+   *
+   * **Componentes compatíveis:** `po-combo`, `po-lookup`.
+   */
+  infiniteScroll?: boolean;
+
+  /**
+   * Define o percentual necessário para disparar o evento show-more, que é responsável por carregar mais dados no combo. Caso o valor seja maior que 100 ou menor que 0, o valor padrão será 100%.
+   * **Exemplos**
+   * `{ infiniteScrollDistance: 80 }`: Quando atingir 80% do scroll do combo, o show-more será disparado.
+   *
+   * **Componente compatível:** `po-combo`.
+   */
+  infiniteScrollDistance?: number;
+
+  /**
+   * Define que a altura do componente será auto ajustável, possuindo uma altura minima porém a altura máxima será de acordo com o número de itens selecionados e a extensão dos mesmos, mantendo-os sempre visíveis.
+   *
+   * **Componentes compatíveis:** `po-multiselect`, `po-lookup`.
+   */
+  autoHeight?: boolean;
+
+  /**
+   * Intervalo utilizado no `po-number`.
+   */
+  step?: number;
+
+  /**
+   * Define o modo de pesquisa utilizado no filtro da lista de seleção: `startsWith`, `contains` ou `endsWith`.
+   * > Quando utilizar a propriedade p-filter-service esta propriedade será ignorada.
+   *
+   * **Componentes compatíveis:** `po-multiselect`.
+   */
+  filterMode?: PoMultiselectFilterMode;
+
+  /**
+   * Valor mínimo de caracteres para realizar o filtro no serviço do `po-combo`.
+   */
+  filterMinlength?: number;
+
+  /**
+   * Desabilita o filtro inicial no serviço do `po-combo`, que é executado no primeiro clique no campo.
+   */
+  disabledInitFilter?: boolean;
+
+  /**
+   * Se verdadeiro, desabilitará a busca de um item via TAB no `po-combo`.
+   */
+  disabledTabFilter?: boolean;
+
+  /**
+   * Esta propriedade define em quanto tempo (em milissegundos), aguarda para acionar o evento de filtro após cada pressionamento de tecla. Será utilizada apenas quando houver serviço (`p-filter-service`).
+   *
+   * **Componentes compatíveis:** `po-combo`, `po-multiselect`.
+   */
+  debounceTime?: number;
+
+  /**
+   * Indica que o evento `p-change` só será disparado ao clicar ou pressionar a tecla "Enter" sobre uma opção selecionada no `po-combo`.
+   */
+  changeOnEnter?: boolean;
+
+  /**
+   * Indica que a lista definida na propriedade p-options será ordenada pela descrição.
+   *
+   * **Componentes compatíveis:** `po-combo`, po-multiselect
+   */
+  sort?: boolean;
+
+  /**
+   * Placeholder do campo de pesquisa do `po-multiselect`.
+   *
+   * > Caso o mesmo não seja informado, o valor padrão será traduzido com base no idioma do navegador (pt, es e en).
+   */
+  placeholderSearch?: string;
+
+  /**
+   * Esconde o campo de pesquisa existente dentro do dropdown do `po-multiselect`.
+   */
+  hideSearch?: boolean;
+
+  /**
+   * Indica se o campo "Selecionar todos" do `po-multiselect` será escondido.
+   */
+  hideSelectAll?: boolean;
+
+  /**
+   * Lista de objetos dos campos que serão criados na busca avançada.
+   *
+   * > Caso não seja passado um objeto ou então ele esteja em branco o link de busca avançada ficará escondido.
+   *
+   * Exemplo de URL com busca avançada:
+   *
+   * `url + ?page=1&pageSize=20&name=Tony%20Stark&nickname=Homem%20de%20Ferro`
+   *
+   * Caso algum parâmetro seja uma lista, a concatenação é feita utilizando vírgula. Exemplo:
+   *
+   * `url + ?page=1&pageSize=20&name=Tony%20Stark,Peter%20Parker,Gohan`
+   */
+  advancedFilters?: Array<PoLookupAdvancedFilter>;
 }
