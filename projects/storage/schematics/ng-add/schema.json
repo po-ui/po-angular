@@ -2,5 +2,15 @@
   "$schema": "http://json-schema.org/schema",
   "$id": "SchematicsNgAdd",
   "title": "Ng Add Options Schema",
-  "type": ["object"]
+  "type": ["object"],
+  "properties": {
+    "project": {
+      "type": "string",
+      "description": "Name of the project.",
+      "$default": {
+        "$source": "projectName"
+      }
+    }
+  },
+  "required": []
 }

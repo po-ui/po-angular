@@ -46,13 +46,13 @@ Para realizar a migração, devemos executar o comando `ng update`, conforme exe
 *flag* `--allow-dirty` em conjunto.
 
 ```
-ng update @po-ui/ng-components@<version> --allow-dirty
+ng update @po-ui/ng-components@<version> --allow-dirty --force
 ```
 
 Por exemplo:
 
 ```
-ng update @po-ui/ng-components@14.0.0-next.0 --allow-dirty
+ng update @po-ui/ng-components@14.0.0-next.0 --allow-dirty --force
 ```
 
 O `ng update` ajudará nas alterações necessárias para seu projeto seguir atualizado, que são elas:
