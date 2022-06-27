@@ -2,6 +2,20 @@
 
 All notable changes to this project will be documented in this file. See [standard-version](https://github.com/conventional-changelog/standard-version) for commit guidelines.
 
+# [6.14.0](https://github.com/po-ui/po-angular/compare/v6.13.1...v6.14.0) (2022-06-27)
+
+
+### Bug Fixes
+
+* **table:** ajusta o calculo de altura da tabela ([40bc351](https://github.com/po-ui/po-angular/commit/40bc35127ab961896bc9e0117b91fc25647ce701))
+
+
+### Features
+
+* **combo:** adiciona output para o input search do combo ([6c1a191](https://github.com/po-ui/po-angular/commit/6c1a191ed67f0158105902702d392d09be783db6))
+
+
+
 ## [6.13.1](https://github.com/po-ui/po-angular/compare/v6.13.0...v6.13.1) (2022-06-14)
 
 
