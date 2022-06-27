@@ -22,6 +22,9 @@
     [p-show-more-disabled]="!hasNext"
     (p-show-more)="showMore()"
     (p-sort-by)="onSort($event)"
+    (p-change-visible-columns)="onChangeVisibleColumns($event)"
+    (p-restore-column-manager)="onColumnRestoreManager($event)"
+    (p-sort-by)="onSortBy($event)"
   >
   </po-table>
 </po-page-dynamic-search>

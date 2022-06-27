@@ -1993,6 +1993,36 @@ describe('PoPageDynamicTableComponent:', () => {
       expect(component['sortedColumn']).toEqual(expectedValue);
     });
 
+    it('onChangeVisibleColumns: should call `changeVisibleColumns.emit`', () => {
+      spyOn(component.changeVisibleColumns, 'emit');
+      const fakeColumns = ['name', 'age'];
+
+      component.onChangeVisibleColumns(fakeColumns);
+
+      expect(component.changeVisibleColumns.emit).toHaveBeenCalledWith(fakeColumns);
+    });
+
+    it('onColumnRestoreManager: should call `columnRestoreManager.emit`', () => {
+      spyOn(component.columnRestoreManager, 'emit');
+      const fakeColumns = ['name', 'age'];
+
+      component.onColumnRestoreManager(fakeColumns);
+
+      expect(component.columnRestoreManager.emit).toHaveBeenCalledWith(fakeColumns);
+    });
+
+    it('onSortBy: should call `sortBy.emit`', () => {
+      spyOn(component.sortBy, 'emit');
+      const fakeColumns = {
+        column: { property: 'name' },
+        type: PoTableColumnSortType.Ascending
+      };
+
+      component.onSortBy(fakeColumns);
+
+      expect(component.sortBy.emit).toHaveBeenCalledWith(fakeColumns);
+    });
+
     it('onAdvancedSearch: should call `updateFilterValue` with filter if `keepFilters` is true', () => {
       const filter = 'filterValue';
       component.keepFilters = true;

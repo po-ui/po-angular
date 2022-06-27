@@ -440,6 +440,18 @@ export class PoPageDynamicTableComponent extends PoPageDynamicListBaseComponent 
     this.sortedColumn = sortedColumn;
   }
 
+  onChangeVisibleColumns(value) {
+    this.changeVisibleColumns.emit(value);
+  }
+
+  onColumnRestoreManager(value: Array<String>) {
+    this.columnRestoreManager.emit(value);
+  }
+
+  onSortBy(sortedColumn: PoTableColumnSort) {
+    this.sortBy.emit(sortedColumn);
+  }
+
   showMore() {
     this.subscriptions.add(this.loadData({ page: ++this.page, ...this.params }).subscribe());
   }
