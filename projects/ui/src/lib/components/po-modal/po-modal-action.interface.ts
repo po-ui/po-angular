@@ -10,9 +10,9 @@ export interface PoModalAction {
   action: Function;
 
   /**
-   * Define o tipo *danger* no botão.
+   * Define a propriedade `p-danger` do botão.
    *
-   * > Caso a propriedade esteja definida em ambos os botões, apenas o botão primário recebe o tipo *danger*.
+   * > Caso a propriedade esteja definida como `true` em ambos os botões, apenas o botão primário receberá o `p-danger` como `true`.
    */
   danger?: boolean;
 

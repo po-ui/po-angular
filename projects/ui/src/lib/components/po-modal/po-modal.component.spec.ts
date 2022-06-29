@@ -443,46 +443,28 @@ describe('PoModalComponent:', () => {
       });
     });
 
-    it('getPrimaryActionButtonType: should return `danger` if `primaryAction.danger` is `true`', () => {
-      component.primaryAction.danger = true;
-
-      expect(component.getPrimaryActionButtonType()).toBe('danger');
-    });
-
-    it('getPrimaryActionButtonType: should return `primary` if `primaryAction.danger` is `false`', () => {
-      component.primaryAction.danger = false;
-
-      expect(component.getPrimaryActionButtonType()).toBe('primary');
-    });
-
-    it('getPrimaryActionButtonType: should return `primary` if `primaryAction.danger` is `undefined`', () => {
-      component.primaryAction.danger = undefined;
-
-      expect(component.getPrimaryActionButtonType()).toBe('primary');
-    });
-
-    it(`getSecondaryActionButtonType: should return 'danger' if 'primaryAction.danger' is 'false'
+    it(`getSecondaryActionButtonDanger: should return 'true' if 'primaryAction.danger' is 'false'
     and 'secondaryAction.danger' is 'true'`, () => {
       component.primaryAction.danger = false;
       component.secondaryAction = { action: () => {}, label: 'primaryLabel', danger: true };
 
-      expect(component.getSecondaryActionButtonType()).toBe('danger');
+      expect(component.getSecondaryActionButtonDanger()).toBe('true');
     });
 
-    it(`getSecondaryActionButtonType: should return 'secondary' if 'primaryAction.danger' is 'true'
+    it(`getSecondaryActionButtonDanger: should return 'false' if 'primaryAction.danger' is 'true'
     and 'secondaryAction.danger' is 'false'`, () => {
       component.primaryAction.danger = true;
       component.secondaryAction = { action: () => {}, label: 'primaryLabel', danger: false };
 
-      expect(component.getSecondaryActionButtonType()).toBe('secondary');
+      expect(component.getSecondaryActionButtonDanger()).toBe('false');
     });
 
-    it(`getSecondaryActionButtonType: should return 'secondary' if 'primaryAction.danger' is 'true'
+    it(`getSecondaryActionButtonDanger: should return 'false' if 'primaryAction.danger' is 'true'
     and 'secondaryAction.danger' is 'true'`, () => {
       component.primaryAction.danger = true;
       component.secondaryAction = { action: () => {}, label: 'primaryLabel', danger: true };
 
-      expect(component.getSecondaryActionButtonType()).toBe('secondary');
+      expect(component.getSecondaryActionButtonDanger()).toBe('false');
     });
 
     it(`removeEventListeners: should call 'removeEventListener' with 'focus', 'focusFunction' and 'true' params.`, () => {
@@ -507,6 +489,12 @@ describe('PoModalComponent:', () => {
   });
 
   describe('Templates:', () => {
+    function getModalActionDanger() {
+      return element.nativeElement.querySelector(
+        '.po-modal .po-modal-footer .po-button-modal-first-action .po-button-danger'
+      );
+    }
+
     function getModalActionDisabled() {
       return element.nativeElement.querySelector(
         '.po-modal .po-modal-footer .po-button-modal-first-action button:disabled'
@@ -535,6 +523,14 @@ describe('PoModalComponent:', () => {
       expect(fixture.debugElement.query(By.css('.po-modal')).nativeElement.innerHTML).toContain(
         'po-modal-header-close-button'
       );
+    });
+
+    it('action danger: should set primary action as danger if `primaryAction.danger` is `true`.', () => {
+      component.primaryAction = { action: () => {}, label: 'primaryLabel', danger: true };
+      component.open();
+      fixture.detectChanges();
+
+      expect(getModalActionDanger()).toBeTruthy();
     });
 
     it('action disabled: should disabled primary action if `primaryAction.disabled` is `true`.', () => {
