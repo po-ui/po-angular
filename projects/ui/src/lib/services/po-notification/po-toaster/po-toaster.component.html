@@ -3,22 +3,23 @@
     <po-icon [p-icon]="getIcon()"></po-icon>
   </div>
 
-  <div class="po-toaster-message">{{ message }}</div>
-
   <div class="po-toaster-actions">
-    <po-button
-      *ngIf="action && actionLabel"
-      class="po-toaster-action"
-      (p-click)="poToasterAction($event)"
-      [p-label]="actionLabel"
-      p-type="tertiary"
-    ></po-button>
+    <div class="po-toaster-message">{{ message }}</div>
+    <div class="po-toaster-action">
+      <po-button
+        *ngIf="action && actionLabel"
+        (p-click)="poToasterAction($event)"
+        [p-label]="actionLabel"
+        p-type="tertiary"
+      ></po-button>
+    </div>
+  </div>
 
+  <div class="po-toaster-close">
     <div class="po-toaster-divider"></div>
-
     <po-button
       #buttonClose
-      class="po-toaster-close"
+      class="po-toaster-button-close"
       (p-click)="onButtonClose($event)"
       p-icon="po-icon-close"
       p-type="tertiary"

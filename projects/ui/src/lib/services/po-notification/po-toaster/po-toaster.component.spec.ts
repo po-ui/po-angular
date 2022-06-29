@@ -124,7 +124,7 @@ describe('PoToasterComponent', () => {
 
     expect(fixture.debugElement.query(By.css('.po-toaster-error'))).not.toBeNull();
     expect(fixture.debugElement.query(By.css('.po-icon-warning'))).not.toBeNull();
-    expect(fixture.debugElement.query(By.css('.po-toaster-action'))).toBeNull();
+    expect(fixture.debugElement.query(By.css('.po-toaster-action po-button'))).toBeNull();
     expect(fixture.debugElement.query(By.css('.po-toaster-close'))).toBeTruthy();
   });
 
@@ -135,7 +135,9 @@ describe('PoToasterComponent', () => {
 
     expect(fixture.debugElement.query(By.css('.po-toaster-info'))).not.toBeNull();
     expect(fixture.debugElement.query(By.css('.po-icon-info'))).not.toBeNull();
-    expect(fixture.debugElement.query(By.css('.po-toaster-action')).nativeElement.innerHTML).toContain('Texto Botão');
+    expect(fixture.debugElement.query(By.css('.po-toaster-action po-button')).nativeElement.innerHTML).toContain(
+      'Texto Botão'
+    );
   });
 
   it('should be load `component` with all `PoToasterType` with PoToasterType.Success and with action correctly', () => {
@@ -145,7 +147,7 @@ describe('PoToasterComponent', () => {
 
     expect(fixture.debugElement.query(By.css('.po-toaster-success'))).not.toBeNull();
     expect(fixture.debugElement.query(By.css('.po-icon-ok'))).not.toBeNull();
-    expect(fixture.debugElement.query(By.css('.po-toaster-action'))).toBeNull();
+    expect(fixture.debugElement.query(By.css('.po-toaster-action po-button'))).toBeNull();
     expect(fixture.debugElement.query(By.css('.po-toaster-close'))).toBeTruthy();
   });
 
@@ -156,32 +158,32 @@ describe('PoToasterComponent', () => {
 
     expect(fixture.debugElement.query(By.css('.po-toaster-warning'))).not.toBeNull();
     expect(fixture.debugElement.query(By.css('.po-icon-warning'))).not.toBeNull();
-    expect(fixture.debugElement.query(By.css('.po-toaster-action'))).toBeNull();
+    expect(fixture.debugElement.query(By.css('.po-toaster-action po-button'))).toBeNull();
     expect(fixture.debugElement.query(By.css('.po-toaster-close'))).toBeTruthy();
   });
 
   it('should be load `component` with all `PoToasterType` with PoToasterType.Error and without action correctly', () => {
     component.configToaster(toasterErrorWithoutAction);
     fixture.detectChanges();
-    expect(fixture.debugElement.query(By.css('.po-toaster-action'))).toBeNull();
+    expect(fixture.debugElement.query(By.css('.po-toaster-action po-button'))).toBeNull();
   });
 
   it('should be load `component` with all `PoToasterType` with PoToasterType.Info and without action correctly', () => {
     component.configToaster(toasterInfoWithoutAction);
     fixture.detectChanges();
-    expect(fixture.debugElement.query(By.css('.po-toaster-action'))).toBeNull();
+    expect(fixture.debugElement.query(By.css('.po-toaster-action po-button'))).toBeNull();
   });
 
   it('should be load `component` with all `PoToasterType` with PoToasterType.Success and without action correctly', () => {
     component.configToaster(toasterSuccessWithoutAction);
     fixture.detectChanges();
-    expect(fixture.debugElement.query(By.css('.po-toaster-action'))).toBeNull();
+    expect(fixture.debugElement.query(By.css('.po-toaster-action po-button'))).toBeNull();
   });
 
   it('should be load `component` with all `PoToasterType` with PoToasterType.Warning and without action correctly', () => {
     component.configToaster(toasterWarningWithoutAction);
     fixture.detectChanges();
-    expect(fixture.debugElement.query(By.css('.po-toaster-action'))).toBeNull();
+    expect(fixture.debugElement.query(By.css('.po-toaster-action po-button'))).toBeNull();
   });
 
   it('should be call the `component.action` method how must call a function correctly', () => {

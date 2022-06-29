@@ -23,6 +23,7 @@ import { PoButtonComponent } from '../../../components/po-button/po-button.compo
 
 const SPACE_BETWEEN_TOASTERS = 8;
 const TOASTER_HEIGHT_DEFAULT = 62;
+const TOASTER_HEIGHT_ACTION = 88;
 
 /**
  * @docsPrivate
@@ -76,7 +77,8 @@ export class PoToasterComponent extends PoToasterBaseComponent implements AfterV
 
   /* Muda a posição do Toaster na tela*/
   changePosition(position: number): void {
-    this.margin = SPACE_BETWEEN_TOASTERS + TOASTER_HEIGHT_DEFAULT * position + position * SPACE_BETWEEN_TOASTERS;
+    const toasterSize = document.body.offsetWidth < 961 && this.action ? TOASTER_HEIGHT_ACTION : TOASTER_HEIGHT_DEFAULT;
+    this.margin = SPACE_BETWEEN_TOASTERS + toasterSize * position + position * SPACE_BETWEEN_TOASTERS;
 
     if (this.orientation === PoToasterOrientation.Top) {
       this.toaster.nativeElement.style.top = this.margin + 'px';
