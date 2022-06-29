@@ -66,12 +66,8 @@ export class PoModalComponent extends PoModalBaseComponent {
     }
   }
 
-  getPrimaryActionButtonType() {
-    return this.primaryAction.danger ? 'danger' : 'primary';
-  }
-
-  getSecondaryActionButtonType() {
-    return this.secondaryAction && this.secondaryAction.danger && !this.primaryAction.danger ? 'danger' : 'secondary';
+  getSecondaryActionButtonDanger() {
+    return this.secondaryAction && this.secondaryAction.danger && !this.primaryAction.danger ? 'true' : 'false';
   }
 
   onClickOut(event) {
