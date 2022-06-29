@@ -122,6 +122,11 @@ type UrlOrPoCustomizationFunction = string | (() => PoPageDynamicTableOptions);
  *  <file name="sample-po-page-dynamic-table-users/sample-po-page-dynamic-table-users.component.ts"> </file>
  *  <file name="sample-po-page-dynamic-table-users/sample-po-page-dynamic-table-users.service.ts"> </file>
  * </example>
+ *
+ * <example name="po-page-dynamic-table-hotels" title="PO Page Dynamic Table - Hotels">
+ *  <file name="sample-po-page-dynamic-table-hotels/sample-po-page-dynamic-table-hotels.component.html"> </file>
+ *  <file name="sample-po-page-dynamic-table-hotels/sample-po-page-dynamic-table-hotels.component.ts"> </file>
+ * </example>
  */
 @Component({
   selector: 'po-page-dynamic-table',
@@ -217,6 +222,21 @@ export class PoPageDynamicTableComponent extends PoPageDynamicListBaseComponent 
    *
    * @description
    *
+   * Oculta o botão para remover todos os *disclaimers* do grupo.
+   *
+   * > Por padrão, o mesmo é exibido à partir de dois ou mais *disclaimers* com a opção `hideClose` habilitada.
+   *
+   * @default `false`
+   */
+  @InputBoolean()
+  @Input('p-hide-remove-all-disclaimer')
+  hideRemoveAllDisclaimer?: boolean = false;
+
+  /**
+   * @optional
+   *
+   * @description
+   *
    * Se verdadeiro, ativa a funcionalidade de scroll infinito para a tabela e o botão "Carregar Mais" deixará de ser exibido. Ao chegar no fim da tabela
    * executará a função `p-show-more`.
    *
@@ -253,6 +273,7 @@ export class PoPageDynamicTableComponent extends PoPageDynamicListBaseComponent 
   private _customTableActions: Array<PoTableAction> = [];
   private _defaultPageActions: Array<PoPageAction> = [];
   private _defaultTableActions: Array<PoTableAction> = [];
+  private _hideCloseDisclaimers: Array<string> = [];
 
   private set defaultPageActions(value: Array<PoPageAction>) {
     this._defaultPageActions = value;
@@ -380,6 +401,27 @@ export class PoPageDynamicTableComponent extends PoPageDynamicListBaseComponent 
 
   get height(): number {
     return this._height;
+  }
+
+  /**
+   * @optional
+   *
+   * @description
+   *
+   * Lista de filtros que terão a opção de fechar ocultada
+   * em seu respectivo disclaimer. Utilizar o atributo `property` do campo.
+   *
+   * Exemplo de utilização:
+   * ```
+   * ['city','name'];
+   * ```
+   */
+  @Input('p-hide-close-disclaimers') set hideCloseDisclaimers(value: Array<string>) {
+    this._hideCloseDisclaimers = Array.isArray(value) ? value : [];
+  }
+
+  get hideCloseDisclaimers(): Array<string> {
+    return this._hideCloseDisclaimers;
   }
 
   constructor(
@@ -600,6 +642,8 @@ export class PoPageDynamicTableComponent extends PoPageDynamicListBaseComponent 
           this.tableCustomActions = response.tableCustomActions || this.tableCustomActions;
           this.keepFilters = response.keepFilters || this.keepFilters;
           this.concatFilters = response.concatFilters || this.concatFilters;
+          this.hideRemoveAllDisclaimer = response.hideRemoveAllDisclaimer || this.hideRemoveAllDisclaimer;
+          this.hideCloseDisclaimers = response.hideCloseDisclaimers || this.hideCloseDisclaimers;
           this.quickSearchWidth = response.quickSearchWidth || this.quickSearchWidth;
         }),
         switchMap(() => this.loadOptionsOnInitialize(onLoad))
@@ -1098,6 +1142,8 @@ export class PoPageDynamicTableComponent extends PoPageDynamicListBaseComponent 
       title: this.title,
       keepFilters: this.keepFilters,
       concatFilters: this.concatFilters,
+      hideRemoveAllDisclaimer: this.hideRemoveAllDisclaimer,
+      hideCloseDisclaimers: this.hideCloseDisclaimers,
       pageCustomActions: this.pageCustomActions,
       tableCustomActions: this.tableCustomActions,
       quickSearchWidth: this.quickSearchWidth
@@ -1128,6 +1174,12 @@ export class PoPageDynamicTableComponent extends PoPageDynamicListBaseComponent 
         },
         {
           nameProp: 'concatFilters'
+        },
+        {
+          nameProp: 'hideRemoveAllDisclaimer'
+        },
+        {
+          nameProp: 'hideCloseDisclaimers'
         },
         {
           nameProp: 'pageCustomActions',

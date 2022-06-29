@@ -1,0 +1,21 @@
+<po-page-dynamic-table
+  [p-auto-router]="true"
+  [p-concat-filters]="true"
+  [p-keep-filters]="true"
+  p-title="Hotels"
+  [p-actions]="actions"
+  [p-actions-right]="actionsRight"
+  [p-page-custom-actions]="pageCustomActions"
+  [p-table-custom-actions]="tableCustomActions"
+  [p-breadcrumb]="breadcrumb"
+  [p-fields]="fields"
+  [p-service-api]="serviceApi"
+  [p-quick-search-width]="quickSearchWidth"
+  [p-hide-remove-all-disclaimer]="hideRemoveAllDisclaimer"
+  [p-hide-close-disclaimers]="hideCloseDisclaimers"
+>
+</po-page-dynamic-table>
+
+<po-modal #hotelDetailModal p-title="Hotel Detail">
+  <po-dynamic-view [p-fields]="detailFields" [p-value]="detailedHotel"> </po-dynamic-view>
+</po-modal>

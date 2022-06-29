@@ -47,6 +47,30 @@ describe('PoPageDynamicSearchBaseComponent:', () => {
       expectPropertiesValues(component, 'filters', validValues, validValues);
     });
 
+    it('hideRemoveAllDisclaimer: should set property `p-hide-remove-all-disclaimer` to `false` if invalid value', () => {
+      const booleanInvalidValues = [undefined, null, NaN, 2, 'string'];
+
+      expectPropertiesValues(component, 'hideRemoveAllDisclaimer', booleanInvalidValues, false);
+    });
+
+    it('hideRemoveAllDisclaimer: should update property `p-hide-remove-all-disclaimer` to `true` with valid values', () => {
+      const booleanValidTrueValues = [true, 'true', 1, ''];
+
+      expectPropertiesValues(component, 'hideRemoveAllDisclaimer', booleanValidTrueValues, true);
+    });
+
+    it('hideCloseDisclaimers: should set property `p-hide-close-disclaimers` to `[]` if not Array value', () => {
+      const invalidValues = [undefined, null, '', true, false, 0, 1, 'string', {}];
+
+      expectPropertiesValues(component, 'hideCloseDisclaimers', invalidValues, []);
+    });
+
+    it('hideCloseDisclaimers: should update property `p-hide-close-disclaimers` with valid values', () => {
+      const validValues = [['Teste 1'], ['Teste 2', 'Teste 3']];
+
+      expectPropertiesValues(component, 'hideCloseDisclaimers', validValues, validValues);
+    });
+
     it('should return stringify value with filter without searchService', () => {
       const columns: Array<any> = [{ property: 'test' }, { searchService: 'service/test' }];
       const result = '[{"property":"test"},{}]';

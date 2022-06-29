@@ -57,6 +57,18 @@ describe('PoPageDynamicSearchComponent:', () => {
       expect(component.filterSettings.width).toBe(filterWidth);
     });
 
+    it('get disclaimerGroup: should apply `hideRemoveAll` value to false by default', () => {
+      const disclaimerGroup = component.disclaimerGroup;
+
+      expect(disclaimerGroup.hideRemoveAll).toBeFalse();
+    });
+    it('get disclaimerGroup: should apply `hideRemoveAll` value to true when property `hideRemoveAllDisclaimer` is true', () => {
+      component.hideRemoveAllDisclaimer = true;
+      const disclaimerGroup = component.disclaimerGroup;
+
+      expect(disclaimerGroup.hideRemoveAll).toBeTrue();
+    });
+
     describe('onAction:', () => {
       let fakethis;
 
@@ -74,7 +86,8 @@ describe('PoPageDynamicSearchComponent:', () => {
           },
           literals: {
             quickSearchLabel: 'Pesquisa rápida:'
-          }
+          },
+          hideCloseDisclaimers: []
         };
       });
 
@@ -96,9 +109,35 @@ describe('PoPageDynamicSearchComponent:', () => {
         expect(fakethis.quickSearch.emit).not.toHaveBeenCalled();
       });
 
-      it('should set `_dislaimerGroup.disclaimers` with property, label and value', () => {
-        const result = [{ property: 'search', label: 'Pesquisa rápida: quickFilter', value: 'quickFilter' }];
+      it('should set `_dislaimerGroup.disclaimers` with property, label, value and hideClose', () => {
+        const result = [
+          { property: 'search', label: 'Pesquisa rápida: quickFilter', value: 'quickFilter', hideClose: false }
+        ];
 
+        component.onAction.call(fakethis, 'quickFilter');
+
+        expect(fakethis._disclaimerGroup.disclaimers).toEqual(result);
+      });
+
+      it(`should set '_dislaimerGroup.disclaimers' with 'hideClose: true' when property is 
+      included on the 'hideCloseDisclaimers'`, () => {
+        const result = [
+          { property: 'search', label: 'Pesquisa rápida: quickFilter', value: 'quickFilter', hideClose: true }
+        ];
+
+        fakethis['hideCloseDisclaimers'] = ['search'];
+        component.onAction.call(fakethis, 'quickFilter');
+
+        expect(fakethis._disclaimerGroup.disclaimers).toEqual(result);
+      });
+
+      it(`should set '_dislaimerGroup.disclaimers' with 'hideClose: false' when property is not
+      included on the 'hideCloseDisclaimers'`, () => {
+        const result = [
+          { property: 'search', label: 'Pesquisa rápida: quickFilter', value: 'quickFilter', hideClose: false }
+        ];
+
+        fakethis['hideCloseDisclaimers'] = ['name'];
         component.onAction.call(fakethis, 'quickFilter');
 
         expect(fakethis._disclaimerGroup.disclaimers).toEqual(result);
@@ -276,9 +315,9 @@ describe('PoPageDynamicSearchComponent:', () => {
       const filters = { name: 'Roger', birthdate: '2018-12-12T00:00:01-00:00', genre: 'male' };
 
       const result = [
-        { label: 'Name: Roger', property: 'name', value: 'Roger' },
-        { label: 'Birthdate: 12/12/2018', property: 'birthdate', value: '2018-12-12T00:00:01-00:00' },
-        { label: 'Genre: male', property: 'genre', value: 'male' }
+        { label: 'Name: Roger', property: 'name', value: 'Roger', hideClose: false },
+        { label: 'Birthdate: 12/12/2018', property: 'birthdate', value: '2018-12-12T00:00:01-00:00', hideClose: false },
+        { label: 'Genre: male', property: 'genre', value: 'male', hideClose: false }
       ];
 
       spyOn(component, <any>'getFieldByProperty').and.callThrough();
@@ -299,8 +338,8 @@ describe('PoPageDynamicSearchComponent:', () => {
       const filters = { name: 'Name1', genre: 'male' };
 
       const result = [
-        { label: 'Name: Name1', property: 'name', value: 'Name1' },
-        { label: 'Genre: male', property: 'genre', value: 'male' }
+        { label: 'Name: Name1', property: 'name', value: 'Name1', hideClose: false },
+        { label: 'Genre: male', property: 'genre', value: 'male', hideClose: false }
       ];
 
       spyOn(component, <any>'getFieldByProperty').and.callThrough();
@@ -318,8 +357,8 @@ describe('PoPageDynamicSearchComponent:', () => {
       const filters = { name: 'Name1', genre: 'male' };
 
       const result = [
-        { label: 'Name: Name1', property: 'name', value: 'Name1' },
-        { label: 'Genre: male', property: 'genre', value: 'male' }
+        { label: 'Name: Name1', property: 'name', value: 'Name1', hideClose: false },
+        { label: 'Genre: male', property: 'genre', value: 'male', hideClose: false }
       ];
 
       expect(component['setDisclaimers'](filters)).toEqual(result);
@@ -334,7 +373,47 @@ describe('PoPageDynamicSearchComponent:', () => {
 
       const filters = { name: 'Name1', genre: 'male' };
 
-      const result = [{ label: 'Name: Name1', property: 'name', value: 'Name1' }];
+      const result = [{ label: 'Name: Name1', property: 'name', value: 'Name1', hideClose: false }];
+
+      expect(component['setDisclaimers'](filters)).toEqual(result);
+    });
+
+    it(`setDisclaimers: should return disclaimers based on the 'filters' with the 'hideClose: true' to filters included on the 'hideCloseDisclaimers'`, () => {
+      component.filters = [
+        { property: 'name', label: 'Name' },
+        { property: 'birthdate', label: 'Birthdate', type: 'date' },
+        { property: 'genre', label: 'Genre' }
+      ];
+
+      component.hideCloseDisclaimers = ['name', 'birthdate'];
+
+      const filters = { name: 'Roger', birthdate: '2018-12-12T00:00:01-00:00', genre: 'male' };
+
+      const result = [
+        { label: 'Name: Roger', property: 'name', value: 'Roger', hideClose: true },
+        { label: 'Birthdate: 12/12/2018', property: 'birthdate', value: '2018-12-12T00:00:01-00:00', hideClose: true },
+        { label: 'Genre: male', property: 'genre', value: 'male', hideClose: false }
+      ];
+
+      expect(component['setDisclaimers'](filters)).toEqual(result);
+    });
+
+    it(`setDisclaimers: should return disclaimers based on the 'filters' with the 'hideClose: false' to filters not included on the 'hideCloseDisclaimers'`, () => {
+      component.filters = [
+        { property: 'name', label: 'Name' },
+        { property: 'birthdate', label: 'Birthdate', type: 'date' },
+        { property: 'genre', label: 'Genre' }
+      ];
+
+      component.hideCloseDisclaimers = ['test'];
+
+      const filters = { name: 'Roger', birthdate: '2018-12-12T00:00:01-00:00', genre: 'male' };
+
+      const result = [
+        { label: 'Name: Roger', property: 'name', value: 'Roger', hideClose: false },
+        { label: 'Birthdate: 12/12/2018', property: 'birthdate', value: '2018-12-12T00:00:01-00:00', hideClose: false },
+        { label: 'Genre: male', property: 'genre', value: 'male', hideClose: false }
+      ];
 
       expect(component['setDisclaimers'](filters)).toEqual(result);
     });
@@ -551,6 +630,7 @@ describe('PoPageDynamicSearchComponent:', () => {
         component.filters = [{ property: 'filter1' }, { property: 'filter2' }];
         component.title = 'Original Title';
         component.quickSearchWidth = 3;
+        component.hideCloseDisclaimers = ['filter1'];
 
         component.onLoad = () => ({
           title: 'New Title',
@@ -563,7 +643,9 @@ describe('PoPageDynamicSearchComponent:', () => {
           ],
           filters: [{ property: 'filter1' }, { property: 'filter3' }],
           keepFilters: true,
-          quickSearchWidth: 6
+          quickSearchWidth: 6,
+          hideRemoveAllDisclaimer: true,
+          hideCloseDisclaimers: ['filter3']
         });
 
         component.ngOnInit();
@@ -580,6 +662,8 @@ describe('PoPageDynamicSearchComponent:', () => {
         });
         expect(component.keepFilters).toBeTrue();
         expect(component.quickSearchWidth).toBe(6);
+        expect(component.hideRemoveAllDisclaimer).toBeTrue();
+        expect(component.hideCloseDisclaimers).toEqual(['filter3']);
       }));
     });
   });
@@ -605,8 +689,8 @@ describe('PoPageDynamicSearchComponent:', () => {
       component.onAction('Chicago');
 
       const currentDisclaimers = [
-        { label: 'City: Ontario', value: 'Ontario', property: 'city' },
-        { property: 'search', label: `Search Chicago`, value: 'Chicago' }
+        { label: 'City: Ontario', value: 'Ontario', property: 'city', hideClose: false },
+        { property: 'search', label: `Search Chicago`, value: 'Chicago', hideClose: false }
       ];
 
       expect(component.disclaimerGroup.disclaimers).toEqual(currentDisclaimers);
@@ -623,8 +707,8 @@ describe('PoPageDynamicSearchComponent:', () => {
       component.onAction('Test');
 
       const currentDisclaimers = [
-        { label: 'City: Ontario', value: 'Ontario', property: 'city' },
-        { property: 'search', label: `Search Test`, value: 'Test' }
+        { label: 'City: Ontario', value: 'Ontario', property: 'city', hideClose: false },
+        { property: 'search', label: `Search Test`, value: 'Test', hideClose: false }
       ];
 
       expect(component.disclaimerGroup.disclaimers).toEqual(currentDisclaimers);
@@ -635,11 +719,15 @@ describe('PoPageDynamicSearchComponent:', () => {
 
       component.literals.quickSearchLabel = 'Search';
       component.onAction('Chicago');
-      const disclaimersWithQuickFilter = [{ property: 'search', label: `Search Chicago`, value: 'Chicago' }];
+      const disclaimersWithQuickFilter = [
+        { property: 'search', label: `Search Chicago`, value: 'Chicago', hideClose: false }
+      ];
 
       expect(component.disclaimerGroup.disclaimers).toEqual(disclaimersWithQuickFilter);
 
-      const disclaimersWithAdvancedSearch = [{ label: 'City: Ontario', value: 'Ontario', property: 'city' }];
+      const disclaimersWithAdvancedSearch = [
+        { label: 'City: Ontario', value: 'Ontario', property: 'city', hideClose: false }
+      ];
 
       component.filters = [{ property: 'city', initValue: 'Ontario' }];
 
@@ -651,11 +739,15 @@ describe('PoPageDynamicSearchComponent:', () => {
 
       component.literals.quickSearchLabel = 'Search';
       component.onAction('Chicago');
-      const disclaimersWithQuickFilter = [{ property: 'search', label: `Search Chicago`, value: 'Chicago' }];
+      const disclaimersWithQuickFilter = [
+        { property: 'search', label: `Search Chicago`, value: 'Chicago', hideClose: false }
+      ];
 
       expect(component.disclaimerGroup.disclaimers).toEqual(disclaimersWithQuickFilter);
 
-      const disclaimersWithAdvancedSearch = [{ label: 'City: Ontario', value: 'Ontario', property: 'city' }];
+      const disclaimersWithAdvancedSearch = [
+        { label: 'City: Ontario', value: 'Ontario', property: 'city', hideClose: false }
+      ];
 
       component.filters = [{ property: 'city', initValue: 'Ontario' }];
 
