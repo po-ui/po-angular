@@ -23,10 +23,36 @@ export class SamplePoPageDynamicSearchHiringProcessesComponent implements OnInit
   hiringProcesses: Array<object>;
   hiringProcessesColumns: Array<PoTableColumn>;
   quickSearchWidth: number = 6;
+  hideRemoveAllDisclaimer = false;
+  hideCloseDisclaimers: Array<string> = ['city'];
 
   public readonly actions: Array<PoPageAction> = [
     { label: 'Hire', action: this.hireCandidate.bind(this), disabled: this.disableHireButton.bind(this) },
-    { label: 'Find on Google', action: this.findOnGoogle.bind(this), disabled: true }
+    { label: 'Find on Google', action: this.findOnGoogle.bind(this), disabled: true },
+    {
+      label: 'Hide Remove All Disclaimer',
+      action: this.onClickRemoveAllDisclaimer.bind(this),
+      visible: this.isVisibleRemoveAllDisclaimer.bind(this),
+      icon: 'po-icon-eye-off'
+    },
+    {
+      label: 'Show Remove All Disclaimer',
+      action: this.onClickRemoveAllDisclaimer.bind(this),
+      visible: this.isHideRemoveAllDisclaimer.bind(this),
+      icon: 'po-icon-eye-on'
+    },
+    {
+      label: 'Hide Close City Disclaimer',
+      action: this.onClickCloseCityDisclaimer.bind(this),
+      visible: this.isVisibleCloseCityDisclaimer.bind(this),
+      icon: 'po-icon-eye-off'
+    },
+    {
+      label: 'Show Close City Disclaimer',
+      action: this.onClickCloseCityDisclaimer.bind(this),
+      visible: this.isHideCloseCityDisclaimer.bind(this),
+      icon: 'po-icon-eye-on'
+    }
   ];
 
   public readonly breadcrumb: PoBreadcrumb = {
@@ -141,5 +167,33 @@ export class SamplePoPageDynamicSearchHiringProcessesComponent implements OnInit
     const selectedItem = this.hiringProcesses.find(item => item['$selected']);
     const jobDescription = selectedItem ? selectedItem['jobDescription'] : '';
     window.open(`http://google.com/search?q=${jobDescription}`, '_blank');
+  }
+
+  private onClickRemoveAllDisclaimer() {
+    this.hideRemoveAllDisclaimer = !this.hideRemoveAllDisclaimer;
+  }
+
+  private isVisibleRemoveAllDisclaimer() {
+    return !this.hideRemoveAllDisclaimer;
+  }
+
+  private isHideRemoveAllDisclaimer() {
+    return this.hideRemoveAllDisclaimer;
+  }
+
+  private onClickCloseCityDisclaimer() {
+    if (this.hideCloseDisclaimers.length > 0) {
+      this.hideCloseDisclaimers = [];
+    } else {
+      this.hideCloseDisclaimers = ['city'];
+    }
+  }
+
+  private isVisibleCloseCityDisclaimer() {
+    return this.hideCloseDisclaimers.length <= 0;
+  }
+
+  private isHideCloseCityDisclaimer() {
+    return this.hideCloseDisclaimers.length > 0;
   }
 }

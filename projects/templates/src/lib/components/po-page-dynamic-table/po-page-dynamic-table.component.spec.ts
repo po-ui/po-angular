@@ -109,6 +109,26 @@ describe('PoPageDynamicTableComponent:', () => {
       component.height = 10;
       expectPropertiesValues(component, 'infiniteScroll', booleanValidTrueValues, true);
     });
+
+    it('hideRemoveAllDisclaimer: should set property `p-hide-remove-all-disclaimer` to `false` if invalid value', () => {
+      expectPropertiesValues(component, 'hideRemoveAllDisclaimer', booleanInvalidValues, false);
+    });
+
+    it('hideRemoveAllDisclaimer: should update property `p-hide-remove-all-disclaimer` to `true` with valid values', () => {
+      expectPropertiesValues(component, 'hideRemoveAllDisclaimer', booleanValidTrueValues, true);
+    });
+
+    it('hideCloseDisclaimers: should set property `p-hide-close-disclaimers` to `[]` if not Array value', () => {
+      const invalidValues = [undefined, null, '', true, false, 0, 1, 'string', {}];
+
+      expectPropertiesValues(component, 'hideCloseDisclaimers', invalidValues, []);
+    });
+
+    it('hideCloseDisclaimers: should update property `p-hide-close-disclaimers` with valid values', () => {
+      const validValues = [['Teste 1'], ['Teste 2', 'Teste 3']];
+
+      expectPropertiesValues(component, 'hideCloseDisclaimers', validValues, validValues);
+    });
   });
 
   describe('Methods:', () => {
@@ -227,6 +247,7 @@ describe('PoPageDynamicTableComponent:', () => {
         component.fields = [];
         component.title = '';
         component.quickSearchWidth = undefined;
+        component.hideCloseDisclaimers = ['name'];
 
         const activatedRoute: any = {
           snapshot: {
@@ -248,7 +269,9 @@ describe('PoPageDynamicTableComponent:', () => {
           pageCustomActions: [{ label: 'Custom Action', action: 'endpoint/' }],
           tableCustomActions: [{ label: 'Details', action: 'endpoint/' }],
           keepFilters: true,
-          concatFilters: true
+          concatFilters: true,
+          hideRemoveAllDisclaimer: true,
+          hideCloseDisclaimers: ['birthdate', 'city']
         };
 
         const custom = { title: 'New Title' };
@@ -273,6 +296,8 @@ describe('PoPageDynamicTableComponent:', () => {
         expect(component.keepFilters).toBe(true);
         expect(component.concatFilters).toBe(true);
         expect(component.quickSearchWidth).toBe(6);
+        expect(component.hideRemoveAllDisclaimer).toBe(true);
+        expect(component.hideCloseDisclaimers).toEqual(['birthdate', 'city']);
       }));
     });
 
