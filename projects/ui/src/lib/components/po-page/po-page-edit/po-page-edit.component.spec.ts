@@ -210,54 +210,6 @@ describe('PoPageEditComponent', () => {
   });
 
   describe('Templates:', () => {
-    it('should apply `p-primary` only in Save button', () => {
-      const saveLabel = poPageEditLiteralsDefault[poLocaleDefault].save;
-
-      component.literals = poPageEditLiteralsDefault[poLocaleDefault];
-
-      component.save.observers.push(<any>of({}));
-      component.saveNew.observers.push(<any>of({}));
-      component.cancel.observers.push(<any>of({}));
-
-      fixture.detectChanges();
-
-      const primaryButtonLabel = debugElement.querySelector('po-button > button.po-button-primary > span');
-
-      expect(primaryButtonLabel).toBeTruthy();
-      expect(primaryButtonLabel.innerHTML).toBe(saveLabel);
-    });
-
-    it('should apply `p-primary` only in SaveNew button if save function is undefined', () => {
-      const saveNewLabel = poPageEditLiteralsDefault[poLocaleDefault].saveNew;
-
-      component.literals = poPageEditLiteralsDefault[poLocaleDefault];
-
-      component.cancel.observers.push(<any>of({}));
-      component.saveNew.observers.push(<any>of({}));
-
-      fixture.detectChanges();
-
-      const primaryButtonLabel = debugElement.querySelector('po-button > button.po-button-primary > span');
-
-      expect(primaryButtonLabel).toBeTruthy();
-      expect(primaryButtonLabel.innerHTML).toBe(saveNewLabel);
-    });
-
-    it('should apply `p-primary` only in Cancel button if save and saveNew functions are undefined', () => {
-      const cancelLabel = poPageEditLiteralsDefault[poLocaleDefault].cancel;
-
-      component.literals = poPageEditLiteralsDefault[poLocaleDefault];
-
-      component.cancel.observers.push(<any>of({}));
-
-      fixture.detectChanges();
-
-      const primaryButtonLabel = debugElement.querySelector('po-button > button.po-button-primary > span');
-
-      expect(primaryButtonLabel).toBeTruthy();
-      expect(primaryButtonLabel.innerHTML).toBe(cancelLabel);
-    });
-
     it('should show page header if `hasPageHeader` return true', () => {
       spyOn(component, 'hasPageHeader').and.returnValue(true);
       fixture.detectChanges();

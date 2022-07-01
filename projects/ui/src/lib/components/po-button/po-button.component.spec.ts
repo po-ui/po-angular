@@ -59,33 +59,6 @@ describe('PoButtonComponent: ', () => {
     expect(nativeElement.querySelector('.po-button-sm')).toBeTruthy();
   });
 
-  it('should add the class `po-button-primary` when `p-kind` is `primary` and remove `po-button-danger` and `po-button-link`', () => {
-    component.kind = 'primary';
-    fixture.detectChanges();
-
-    expect(nativeElement.querySelector('.po-button-primary')).toBeTruthy();
-    expect(nativeElement.querySelector('.po-button-danger')).toBeFalsy();
-    expect(nativeElement.querySelector('.po-button-link')).toBeFalsy();
-  });
-
-  it('should add the class `po-button-danger` when `p-kind` is `danger` and remove `po-button-primary` and `po-button-link`', () => {
-    component.kind = 'danger';
-    fixture.detectChanges();
-
-    expect(nativeElement.querySelector('.po-button-danger')).toBeTruthy();
-    expect(nativeElement.querySelector('.po-button-primary')).toBeFalsy();
-    expect(nativeElement.querySelector('.po-button-link')).toBeFalsy();
-  });
-
-  it('should add the class `po-button-link` when `p-kind` is `link` and remove `po-button-primary` and `po-button-danger`', () => {
-    component.kind = 'link';
-    fixture.detectChanges();
-
-    expect(nativeElement.querySelector('.po-button-link')).toBeTruthy();
-    expect(nativeElement.querySelector('.po-button-primary')).toBeFalsy();
-    expect(nativeElement.querySelector('.po-button-danger')).toBeFalsy();
-  });
-
   it('should add i with an icon when `p-icon` is defined', () => {
     component.icon = 'po-icon-news';
     fixture.detectChanges();

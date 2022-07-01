@@ -489,12 +489,6 @@ describe('PoModalComponent:', () => {
   });
 
   describe('Templates:', () => {
-    function getModalActionDanger() {
-      return element.nativeElement.querySelector(
-        '.po-modal .po-modal-footer .po-button-modal-first-action .po-button-danger'
-      );
-    }
-
     function getModalActionDisabled() {
       return element.nativeElement.querySelector(
         '.po-modal .po-modal-footer .po-button-modal-first-action button:disabled'
@@ -523,14 +517,6 @@ describe('PoModalComponent:', () => {
       expect(fixture.debugElement.query(By.css('.po-modal')).nativeElement.innerHTML).toContain(
         'po-modal-header-close-button'
       );
-    });
-
-    it('action danger: should set primary action as danger if `primaryAction.danger` is `true`.', () => {
-      component.primaryAction = { action: () => {}, label: 'primaryLabel', danger: true };
-      component.open();
-      fixture.detectChanges();
-
-      expect(getModalActionDanger()).toBeTruthy();
     });
 
     it('action disabled: should disabled primary action if `primaryAction.disabled` is `true`.', () => {
