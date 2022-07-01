@@ -2,12 +2,9 @@
   #button
   class="po-button"
   type="button"
-  [class.po-button-default]="kind === 'secondary'"
-  [class.po-button-danger]="kind === 'danger' || danger"
-  [class.po-button-link]="kind === 'tertiary'"
-  [class.po-button-primary]="kind === 'primary'"
+  [attr.p-kind]="kind"
+  [attr.p-danger]="danger"
   [class.po-button-sm]="small"
-  [class.po-clickable]="kind === 'link'"
   [disabled]="disabled || loading"
   (click)="onClick()"
 >

@@ -1,4 +1,4 @@
-import { EventEmitter, Input, Output, Directive, TemplateRef } from '@angular/core';
+import { EventEmitter, Input, Output, Directive, TemplateRef, HostBinding } from '@angular/core';
 
 import { convertToBoolean } from '../../utils/util';
 import { InputBoolean } from '../../decorators';
@@ -135,7 +135,10 @@ export class PoButtonBaseComponent {
    * > A propriedade `p-kind="tertiary"` será inativada ao utilizar esta propriedade.
    */
 
-  @Input('p-danger') @InputBoolean() set danger(value: boolean) {
+  @HostBinding('attr.p-danger')
+  @Input('p-danger')
+  @InputBoolean()
+  set danger(value: boolean) {
     this._danger = this.kind !== PoButtonKind.tertiary ? value : false;
   }
 
@@ -157,7 +160,10 @@ export class PoButtonBaseComponent {
    *
    * @default `secondary`
    */
-  @Input('p-kind') set kind(value: string) {
+
+  @HostBinding('attr.p-kind')
+  @Input('p-kind')
+  set kind(value: string) {
     this._kind = PoButtonKind[value] ? PoButtonKind[value] : PoButtonKind.secondary;
   }
 
