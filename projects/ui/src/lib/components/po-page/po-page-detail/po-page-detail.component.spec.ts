@@ -212,54 +212,6 @@ describe('PoPageDetailComponent:', () => {
   });
 
   describe('Templates:', () => {
-    it('should have only one primary action and `Edit` button with `primary` applyed.', () => {
-      const editLabel = poPageDetailLiteralsDefault[poLocaleDefault].edit;
-
-      component.literals = poPageDetailLiteralsDefault[poLocaleDefault];
-
-      component.back.observers.push(<any>of({}));
-      component.remove.observers.push(<any>of({}));
-      component.edit.observers.push(<any>of({}));
-
-      fixture.detectChanges();
-
-      const primaryButtonLabel = debugElement.querySelector('po-button > button.po-button-primary > span');
-
-      expect(primaryButtonLabel).toBeTruthy();
-      expect(primaryButtonLabel.innerHTML).toBe(editLabel);
-    });
-
-    it('should have only one primary action and `Remove` button with `primary` applyed.', () => {
-      const removeLabel = poPageDetailLiteralsDefault[poLocaleDefault].remove;
-
-      component.literals = poPageDetailLiteralsDefault[poLocaleDefault];
-
-      component.back.observers.push(<any>of({}));
-      component.remove.observers.push(<any>of({}));
-
-      fixture.detectChanges();
-
-      const primaryButtonLabel = debugElement.querySelector('po-button > button.po-button-primary > span');
-
-      expect(primaryButtonLabel).toBeTruthy();
-      expect(primaryButtonLabel.innerHTML).toBe(removeLabel);
-    });
-
-    it('should have only one primary action and `Back` button with `p-primary` applyed.', () => {
-      const backLabel = poPageDetailLiteralsDefault[poLocaleDefault].back;
-
-      component.literals = poPageDetailLiteralsDefault[poLocaleDefault];
-
-      component.back.observers.push(<any>of({}));
-
-      fixture.detectChanges();
-
-      const primaryButtonLabel = debugElement.querySelector('po-button > button.po-button-primary > span');
-
-      expect(primaryButtonLabel).toBeTruthy();
-      expect(primaryButtonLabel.innerHTML).toBe(backLabel);
-    });
-
     it('should show page header if `hasPageHeader` return true', () => {
       spyOn(component, 'hasPageHeader').and.returnValue(true);
       fixture.detectChanges();

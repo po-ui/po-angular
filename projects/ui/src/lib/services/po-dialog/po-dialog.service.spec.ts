@@ -81,7 +81,6 @@ describe('PoDialogService', () => {
     const modalContainer = document.body.querySelector('po-modal');
     expect(modalContainer.querySelector('.po-modal-title').innerHTML).toContain(confirmOptions.title);
     expect(modalContainer.querySelector('.po-modal-body').innerHTML).toContain(confirmOptions.message);
-    expect(modalContainer.querySelector('.po-button-primary').innerHTML).toContain('Confirmar');
     expect(modalContainer.querySelector('.po-button').innerHTML).toContain('Cancelar');
     modalContainer.remove();
   }));
