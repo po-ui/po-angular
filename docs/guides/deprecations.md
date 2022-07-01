@@ -243,6 +243,42 @@ Depois:
         </tr>
       </thead>
       <tbody>
+      <tr class="po-table-row">
+          <th class="po-table-column"><a href="documentation/po-input">PoDynamicFormFields</a></th>
+          <td class="po-table-column">p-auto-focus</td>
+          <td class="po-table-column">-</td>
+          <td class="po-table-column" style="text-align: center;">v14</td>
+        </tr>
+        <tr class="po-table-row">
+          <th class="po-table-column"><a href="documentation/po-select">PoSelect</a></th>
+          <td class="po-table-column">p-auto-focus</td>
+          <td class="po-table-column">-</td>
+          <td class="po-table-column" style="text-align: center;">v14</td>
+        </tr>
+        <tr class="po-table-row">
+          <th class="po-table-column"><a href="documentation/po-switch">PoSwitch</a></th>
+          <td class="po-table-column">p-auto-focus</td>
+          <td class="po-table-column">-</td>
+          <td class="po-table-column" style="text-align: center;">v14</td>
+        </tr>
+         <tr class="po-table-row">
+          <th class="po-table-column"><a href="documentation/po-button">PoButton</a></th>
+          <td class="po-table-column">p-auto-focus</td>
+          <td class="po-table-column">-</td>
+          <td class="po-table-column" style="text-align: center;">v14</td>
+        </tr>
+         <tr class="po-table-row">
+          <th class="po-table-column"><a href="documentation/po-input">PoSelectOptionTemplate</a></th>
+          <td class="po-table-column">-</td>
+          <td class="po-table-column">PoComboOptionTemplate</td>
+          <td class="po-table-column" style="text-align: center;">v14</td>
+        </tr>
+        <tr class="po-table-row">
+          <th class="po-table-column"><a href="documentation">Components</a></th>
+          <td class="po-table-column">diminuição da altura em pequenas resoluções. <a href="https://animaliads.notion.site/Bot-o-fb3a921e8ba54bd38b39758c24613368">Ver mais</a></td>
+          <td class="po-table-column">-</td>
+          <td class="po-table-column" style="text-align: center;">v14</td>
+        </tr>
         <tr class="po-table-row">
           <th class="po-table-column"><a href="documentation/po-chart">PoChart</a></th>
           <td class="po-table-column">PoPieChartSeries</td>
