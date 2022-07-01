@@ -934,27 +934,6 @@ describe('PoPageLoginComponent: ', () => {
       component.literals = poPageLoginLiteralsDefault.en;
     });
 
-    it('Loading: should disabled button when property is `true`.', () => {
-      switchLoading(true);
-      const button = fixture.debugElement.nativeElement.querySelector('.po-button-primary');
-
-      expect(button.getAttribute('disabled')).not.toBeNull();
-    });
-
-    it('Label: should have label equal Enter on loading when `p-loading` is `false`.', () => {
-      switchLoading(false);
-      const button = fixture.debugElement.nativeElement.querySelector('.po-button-primary');
-
-      expect(button.innerHTML).toContain(poPageLoginLiteralsDefault.en.submitLabel);
-    });
-
-    it('Label: should set alternative label on loading when `p-loading` is `true`.', () => {
-      switchLoading(true);
-      const button = fixture.debugElement.nativeElement.querySelector('.po-button-primary');
-
-      expect(button.innerHTML).toContain(poPageLoginLiteralsDefault.en.submittedLabel);
-    });
-
     it('should contain productName and welcome if productName and welcome are defined', () => {
       const productName = 'custom product name';
       const welcome = 'custom welcome';

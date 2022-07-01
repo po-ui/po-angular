@@ -17,6 +17,13 @@ import { PoButtonKind } from './po-button-type.enum';
  * - Evite `labels` extensos que quebram o layout do `po-button`, use `labels` diretos, curtos e intuitivos.
  * - Utilize apenas um `po-button` configurado como `primary` por página.
  * - Para ações irreversíveis use sempre a propriedade `p-danger`.
+ *
+ * #### Acessibilidade tratada no componente
+ *
+ * Algumas diretrizes de acessibilidade já são tratadas no componente, internamente, e não podem ser alteradas pelo proprietário do conteúdo. São elas:
+ *
+ * - Quando em foco, o botão é ativado usando as teclas de Espaço e Enter do teclado. [W3C WAI-ARIA 3.5 Button - Keyboard Interaction](https://www.w3.org/WAI/ARIA/apg/#keyboard-interaction-3)
+ * - A área do foco precisar ter uma espessura de pelo menos 2 pixels CSS e o foco não pode ficar escondido por outros elementos da tela. [WCAG 2.4.12: Focus Appearance](https://www.w3.org/WAI/WCAG22/Understanding/focus-appearance-enhanced)
  */
 @Directive()
 export class PoButtonBaseComponent {
