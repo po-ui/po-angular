@@ -2,6 +2,77 @@
 
 All notable changes to this project will be documented in this file. See [standard-version](https://github.com/conventional-changelog/standard-version) for commit guidelines.
 
+# [14.0.0-next.0](https://github.com/po-ui/po-angular/compare/v6.14.0...v14.0.0-next.0) (2022-07-04)
+
+
+### Bug Fixes
+
+* **modal:** corrige o uso do `PoButton` ([a4582c3](https://github.com/po-ui/po-angular/commit/a4582c3ca23be4b6bd49b3a6007a4ad578ee3731))
+
+
+### Build System
+
+* atualização para o angular 14 ([1c148c3](https://github.com/po-ui/po-angular/commit/1c148c32902a45b094ddc0dabba6bdcf1686cd25))
+
+
+### Code Refactoring
+
+
+* **button:** remove a propriedade `p-auto-focus` ([7f3ce94](https://github.com/po-ui/po-angular/commit/7f3ce94fb58fc9ecde62150007585c13bfae4fc9))
+* **components:** remove redimensionamentos ([Ver mais](https://animaliads.notion.site/Bot-o-fb3a921e8ba54bd38b39758c24613368)) ([0ef347c](https://github.com/po-ui/po-angular/commit/0ef347cb5e6c71587cf642930914fbcc81cdd4a4))
+* **field:** remove a propriedade `p-auto-focus` ([f2f298a](https://github.com/po-ui/po-angular/commit/f2f298aaad36fa6daffdbb226c0e3a1b28c2455f))
+* **selectoptiontemplate:** remove o componente `PoSelectOptionTemplate` ([c0a2852](https://github.com/po-ui/po-angular/commit/c0a2852fb1cf6d1a597fc4cd2eeab87f16437efc))
+
+
+### Features
+
+* **dynamic-table:** repassa métodos para utilizar na table ([ce769bc](https://github.com/po-ui/po-angular/commit/ce769bc41f6190cefb0cb1ecd580078ebf01d131))
+* **schematics:** migração para v.14 ([2ac5e1f](https://github.com/po-ui/po-angular/commit/2ac5e1fc19273aa450a424517b3c2bd869be3dd3))
+* **toaster:** implementa para pequenas resoluções ([d6e0571](https://github.com/po-ui/po-angular/commit/d6e05717d496c91270e086163b07952ce68c5aa7))
+
+
+### BREAKING CHANGES
+
+* **angular:** deve ser utilizado o Angular v14
+
+* **components:** removida a função @media screen nos componentes:
+* Button
+* Combo
+* Checkbox-group
+* DatePicker-range
+* RadioGroup
+* TextArea
+* Info
+* Decimal
+* DropDown
+* Email
+* Input
+* Login
+* Lookup
+* MultiSelect
+* Number
+* PassWord
+* Select
+* Switch
+* Upload
+* URL
+
+Foi removida a função @media screen por questões de acessibilidade. ([Ver mais](https://animaliads.notion.site/Bot-o-fb3a921e8ba54bd38b39758c24613368))
+
+* **selectoptiontemplate:** removido o componente `PoSelectOptionTemplateDirective`
+
+Foi removido o componente devido o mesmo ser descontinuado, indicamos o uso do `PoCombo` em conjunto com o `PoComboOptionTemplate`.
+
+* **field:** removida propriedade `p-auto-focus`
+
+Foi removida a propriedade `p-auto-focus` do `po-field` por questões de acessibilidade.
+
+* **button:** removida propriedade `p-auto-focus`
+
+Foi removida a propriedade `p-auto-focus` do `po-button` por questões de acessibilidade.
+
+
+
 # [6.14.0](https://github.com/po-ui/po-angular/compare/v6.13.1...v6.14.0) (2022-06-27)
 
 
