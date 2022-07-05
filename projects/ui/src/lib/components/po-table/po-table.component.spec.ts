@@ -608,14 +608,12 @@ describe('PoTableComponent:', () => {
     expect(tableElement.offsetHeight + tableFooterElement.offsetHeight + tableHeaderElement.offsetHeight).toBe(150);
   });
 
-  it('should call calculateWidthHeaders and setTableOpacity in debounceResize', fakeAsync(() => {
-    spyOn(component, <any>'calculateWidthHeaders');
+  it('should call setTableOpacity in debounceResize', fakeAsync(() => {
     spyOn(component, <any>'setTableOpacity');
 
     component['debounceResize']();
     tick(500);
 
-    expect(component['calculateWidthHeaders']).toHaveBeenCalled();
     expect(component['setTableOpacity']).toHaveBeenCalled();
   }));
 
@@ -686,6 +684,34 @@ describe('PoTableComponent:', () => {
 
     expect(component['calculateHeightTableContainer']).toHaveBeenCalled();
     expect(component['footerHeight']).toBe(10);
+  });
+
+  it('should return true in verifyChangeHeightInHeader', () => {
+    component['headerHeight'] = 1;
+    spyOn(component, <any>'getHeightTableHeader').and.returnValue(10);
+
+    expect(component['verifyChangeHeightInHeader']()).toBeTruthy();
+  });
+
+  it('should return false in verifyChangeHeightInHeader', () => {
+    component['headerHeight'] = 10;
+    spyOn(component, <any>'getHeightTableHeader').and.returnValue(10);
+
+    expect(component['verifyChangeHeightInHeader']()).toBeFalsy();
+  });
+
+  it('should calculate height when change the header height', () => {
+    component['_height'] = 100;
+    component['headerHeight'] = 100;
+
+    spyOn(component, <any>'verifyChangeHeightInHeader').and.returnValue(true);
+    spyOn(component, <any>'getHeightTableHeader').and.returnValue(10);
+    spyOn(component, <any>'calculateHeightTableContainer');
+
+    component['verifyCalculateHeightTableContainer']();
+
+    expect(component['calculateHeightTableContainer']).toHaveBeenCalled();
+    expect(component['headerHeight']).toBe(10);
   });
 
   it('shouldn`t calculate height when not change the footer height', () => {
@@ -838,13 +864,6 @@ describe('PoTableComponent:', () => {
       }
     };
     expect(component['getHeightTableHeader'].call(fakeThis)).toBe(100);
-  });
-
-  it('should return the header table height equal to 0', () => {
-    const fakeThis = {
-      poTableThead: undefined
-    };
-    expect(component['getHeightTableHeader'].call(fakeThis)).toBe(0);
   });
 
   it('should set tableOpacity property with method setTableOpacity', () => {

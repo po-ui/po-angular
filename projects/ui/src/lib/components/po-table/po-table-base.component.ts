@@ -391,7 +391,6 @@ export abstract class PoTableBaseComponent implements OnChanges, OnDestroy {
 
     if (this._columns.length) {
       this.setColumnLink();
-      this.calculateWidthHeaders();
     } else if (this.hasItems) {
       this._columns = this.getDefaultColumns(this.items[0]);
     }
@@ -433,7 +432,6 @@ export abstract class PoTableBaseComponent implements OnChanges, OnDestroy {
    */
   @Input('p-height') set height(height: number) {
     this._height = height;
-    this.calculateWidthHeaders();
   }
 
   get height() {
@@ -451,7 +449,6 @@ export abstract class PoTableBaseComponent implements OnChanges, OnDestroy {
    */
   @Input('p-hide-detail') set hideDetail(hideDetail: boolean) {
     this._hideDetail = hideDetail != null && hideDetail.toString() === '' ? true : convertToBoolean(hideDetail);
-    this.calculateWidthHeaders();
   }
 
   get hideDetail() {
@@ -523,7 +520,6 @@ export abstract class PoTableBaseComponent implements OnChanges, OnDestroy {
    */
   @Input('p-loading') set loading(loading: boolean) {
     this._loading = convertToBoolean(loading);
-    this.calculateWidthHeaders();
   }
 
   get loading() {
@@ -546,7 +542,6 @@ export abstract class PoTableBaseComponent implements OnChanges, OnDestroy {
    */
   @Input('p-actions') set actions(actions: Array<PoTableAction>) {
     this._actions = actions;
-    this.calculateWidthHeaders();
   }
 
   get actions() {
@@ -570,7 +565,6 @@ export abstract class PoTableBaseComponent implements OnChanges, OnDestroy {
    */
   @Input('p-selectable') set selectable(value: boolean) {
     this._selectable = <any>value === '' ? true : convertToBoolean(value);
-    this.calculateWidthHeaders();
   }
 
   get selectable() {
@@ -985,8 +979,6 @@ export abstract class PoTableBaseComponent implements OnChanges, OnDestroy {
   }
 
   protected abstract calculateHeightTableContainer(height);
-
-  protected abstract calculateWidthHeaders();
 
   protected abstract checkInfiniteScroll();
 }

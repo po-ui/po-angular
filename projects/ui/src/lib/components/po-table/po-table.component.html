@@ -58,7 +58,7 @@
 <ng-template #tableHeaderTemplate>
   <table class="po-table" [class.po-table-striped]="striped" [class.po-table-layout-fixed]="hideTextOverflow">
     <thead>
-      <tr [class.po-table-header]="!height">
+      <tr [class.po-table-header]="height">
         <th *ngIf="hasSelectableColumn" class="po-table-column-selectable">
           <div [class.po-table-header-fixed-inner]="height">
             <po-checkbox
@@ -94,7 +94,7 @@
           class="po-table-header-ellipsis"
           [style.width]="column.width"
           [style.max-width]="column.width"
-          [style.min-width]="column.width"
+          [style.min-width]="column.width || '50px'"
           [class.po-clickable]="(sort && column.sortable !== false) || hasService"
           [class.po-table-header-subtitle]="column.type === 'subtitle'"
           (click)="sortColumn(column)"
@@ -134,6 +134,7 @@
           >
             <button
               #columnManagerTarget
+              type="button"
               [attr.aria-label]="literals.columnsManager"
               class="po-table-header-column-manager-button po-icon po-icon-settings po-clickable"
               p-tooltip-position="left"
@@ -153,8 +154,8 @@
     #poTableTbodyVirtual
     [itemSize]="itemSize"
     [style.height.px]="heightTableVirtual"
-    [minBufferPx]="height < 100 ? 100 : height"
-    [maxBufferPx]="height < 200 ? 200 : height"
+    [minBufferPx]="heightTableVirtual < 100 ? 100 : heightTableVirtual"
+    [maxBufferPx]="heightTableVirtual < 200 ? 200 : heightTableVirtual"
     (scroll)="syncronizeHorizontalScroll()"
   >
     <table class="po-table" [class.po-table-striped]="striped" [class.po-table-layout-fixed]="hideTextOverflow">
@@ -380,6 +381,7 @@
 
         <!-- Coluna criada para caso as ações fiquem no lado esquerdo -->
         <th
+          #columnActionLeft
           *ngIf="!actionRight && (visibleActions.length > 1 || isSingleAction)"
           [class.po-table-header-master-detail]="!isSingleAction"
           [class.po-table-header-single-action]="isSingleAction"
@@ -435,6 +437,7 @@
           >
             <button
               #columnManagerTarget
+              type="button"
               [attr.aria-label]="literals.columnsManager"
               class="po-table-header-column-manager-button po-icon po-icon-settings po-clickable"
               p-tooltip-position="left"

@@ -102,19 +102,19 @@ export class PoTableComponent extends PoTableBaseComponent implements AfterViewI
 
   @ViewChildren('actionsIconElement', { read: ElementRef }) actionsIconElement: QueryList<any>;
   @ViewChildren('actionsElement', { read: ElementRef }) actionsElement: QueryList<any>;
-  @ViewChildren('headersTable') headersTable: QueryList<any>;
 
   heightTableContainer: number;
   heightTableVirtual: number;
   popupTarget;
   tableOpacity: number = 0;
   tooltipText: string;
-  itemSize: number;
+  itemSize: number = 32;
   lastVisibleColumnsSelected: Array<PoTableColumn>;
 
   private _columnManagerTarget: ElementRef;
   private differ;
   private footerHeight;
+  private headerHeight;
   private initialized = false;
   private timeoutResize;
   private visibleElement = false;
@@ -245,7 +245,8 @@ export class PoTableComponent extends PoTableBaseComponent implements AfterViewI
       this.checkInfiniteScroll();
       this.visibleElement = true;
     }
-    document.body.offsetWidth > 1366 ? (this.itemSize = 44) : (this.itemSize = 32);
+
+    this.itemSize = document.body.offsetWidth > 1366 ? 44 : 32;
   }
 
   ngOnDestroy() {
@@ -571,20 +572,6 @@ export class PoTableComponent extends PoTableBaseComponent implements AfterViewI
     this.changeDetector.detectChanges();
   }
 
-  protected calculateWidthHeaders() {
-    setTimeout(() => {
-      if (this.height) {
-        this.headersTable.forEach(header => {
-          const divHeader = header.nativeElement.querySelector('.po-table-header-fixed-inner');
-          if (divHeader) {
-            divHeader.style.width = `${header.nativeElement.offsetWidth}px`;
-          }
-        });
-      }
-      this.changeDetector.detectChanges();
-    });
-  }
-
   protected checkInfiniteScroll(): void {
     if (this.hasInfiniteScroll()) {
       if (this.poTableTbodyVirtual.nativeElement.scrollHeight >= this.height) {
@@ -622,8 +609,6 @@ export class PoTableComponent extends PoTableBaseComponent implements AfterViewI
   private debounceResize() {
     clearTimeout(this.timeoutResize);
     this.timeoutResize = setTimeout(() => {
-      this.calculateWidthHeaders();
-
       // show the table
       this.setTableOpacity(1);
     });
@@ -639,7 +624,9 @@ export class PoTableComponent extends PoTableBaseComponent implements AfterViewI
   }
 
   private getHeightTableHeader() {
-    return this.poTableThead ? this.poTableThead.nativeElement.offsetHeight : 0;
+    return this.poTableThead?.nativeElement?.offsetHeight
+      ? this.poTableThead.nativeElement.offsetHeight
+      : this.itemSize;
   }
 
   private hasInfiniteScroll(): boolean {
@@ -694,9 +681,18 @@ export class PoTableComponent extends PoTableBaseComponent implements AfterViewI
     return this.footerHeight !== this.getHeightTableFooter();
   }
 
-  private verifyCalculateHeightTableContainer() {
+  private verifyChangeHeightInHeader() {
+    return this.headerHeight !== this.getHeightTableHeader();
+  }
+
+  protected verifyCalculateHeightTableContainer() {
     if (this.height && this.verifyChangeHeightInFooter()) {
       this.footerHeight = this.getHeightTableFooter();
+
+      if (this.verifyChangeHeightInHeader()) {
+        this.headerHeight = this.getHeightTableHeader();
+      }
+
       this.calculateHeightTableContainer(this.height);
     }
   }
