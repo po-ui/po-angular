@@ -148,6 +148,12 @@ export class PoDynamicFormFieldsBaseComponent {
   private getComponentControl(field: PoDynamicFormField = <any>{}) {
     const type = field && field.type ? field.type.toLocaleLowerCase() : 'string';
 
+    const forceOptionComponent = this.verifyforceOptionComponent(field);
+    if (forceOptionComponent) {
+      const { forceOptionsComponentType } = field;
+      return forceOptionsComponentType;
+    }
+
     if (this.isNumberType(field, type)) {
       return 'number';
     } else if (this.isCurrencyType(field, type)) {
@@ -239,6 +245,15 @@ export class PoDynamicFormFieldsBaseComponent {
     const { optionsMulti, options } = field;
 
     return !optionsMulti && !!options && options.length <= 3;
+  }
+
+  private verifyforceOptionComponent(field: PoDynamicFormField) {
+    const { optionsMulti, optionsService, forceOptionsComponentType } = field;
+
+    if (forceOptionsComponentType && !optionsMulti && !optionsService) {
+      return true;
+    }
+    return false;
   }
 
   private isSelect(field: PoDynamicFormField) {
