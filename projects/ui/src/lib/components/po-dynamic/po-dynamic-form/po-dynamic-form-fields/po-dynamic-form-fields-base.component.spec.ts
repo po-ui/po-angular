@@ -7,6 +7,7 @@ import * as PoDynamicUtil from '../../po-dynamic.util';
 import { PoDynamicFieldType } from '../../po-dynamic-field-type.enum';
 import { PoDynamicFormFieldsBaseComponent } from './po-dynamic-form-fields-base.component';
 import { PoDynamicFormField } from '../po-dynamic-form-field.interface';
+import { ForceOptionComponentEnum } from '../../po-dynamic-field-force-component.enum';
 
 describe('PoDynamicFormFieldsBaseComponent:', () => {
   let component: PoDynamicFormFieldsBaseComponent;
@@ -606,6 +607,65 @@ describe('PoDynamicFormFieldsBaseComponent:', () => {
         const field = { property: 'code' };
 
         expect(component['getComponentControl'](field)).toBe(expectedValue);
+      });
+
+      it('should return select if `forceOptionsComponentType` is select', () => {
+        const expectedValue = ForceOptionComponentEnum.select;
+        const field: PoDynamicFormField = {
+          property: 'test',
+          forceOptionsComponentType: ForceOptionComponentEnum.select,
+          options: [
+            {
+              label: 'Brasil',
+              value: 'brasil'
+            },
+            {
+              label: 'Chile',
+              value: 'chile'
+            },
+            {
+              label: 'Argentina',
+              value: 'argentina'
+            }
+          ]
+        };
+
+        spyOn(component, <any>'verifyforceOptionComponent').and.callThrough();
+
+        expect(component['getComponentControl'](field)).toBe(expectedValue);
+        expect(component['verifyforceOptionComponent']).toHaveBeenCalled();
+      });
+
+      it('shouldn`t return select if `forceOptionsComponentType` is select but optionsMulti is true', () => {
+        const expectedValue = 'multiselect';
+        const field: PoDynamicFormField = {
+          property: 'test',
+          forceOptionsComponentType: ForceOptionComponentEnum.select,
+          optionsMulti: true,
+          options: [
+            {
+              label: 'Brasil',
+              value: 'brasil'
+            },
+            {
+              label: 'Chile',
+              value: 'chile'
+            },
+            {
+              label: 'Argentina',
+              value: 'argentina'
+            },
+            {
+              label: 'Paraguai',
+              value: 'paraguai'
+            }
+          ]
+        };
+
+        spyOn(component, <any>'verifyforceOptionComponent').and.callThrough();
+
+        expect(component['getComponentControl'](field)).toBe(expectedValue);
+        expect(component['verifyforceOptionComponent']).toHaveBeenCalled();
       });
     });
 
