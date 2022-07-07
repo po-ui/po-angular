@@ -71,6 +71,7 @@
       [p-pattern]="field.pattern"
       [p-required]="field.required"
       (p-change)="onChangeField(field)"
+      (p-change-model)="onChangeFieldModel(field)"
       [p-icon]="field.icon"
       [p-placeholder]="field.placeholder"
       [p-readonly]="field.readonly"
@@ -99,6 +100,7 @@
       [p-readonly]="field.readonly"
       [p-required]="field.required"
       (p-change)="onChangeField(field)"
+      (p-change-model)="onChangeFieldModel(field)"
       [p-icon]="field.icon"
       [p-placeholder]="field.placeholder"
     >
@@ -129,6 +131,7 @@
       [p-readonly]="field.readonly"
       [p-required]="field.required"
       (p-change)="onChangeField(field)"
+      (p-change-model)="onChangeFieldModel(field)"
       [p-placeholder]="field.placeholder"
     >
     </po-decimal>
@@ -316,6 +319,7 @@
       [p-required]="field.required"
       [p-rows]="field.rows"
       (p-change)="onChangeField(field)"
+      (p-change-model)="onChangeFieldModel(field)"
       [p-placeholder]="field.placeholder"
     >
     </po-textarea>
@@ -342,6 +346,7 @@
       [p-readonly]="field.readonly"
       [p-required]="field.required"
       (p-change)="onChangeField(field)"
+      (p-change-model)="onChangeFieldModel(field)"
       [p-placeholder]="field.placeholder"
     >
     </po-password>

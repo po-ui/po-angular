@@ -25,6 +25,8 @@ export class PoDynamicFormFieldsBaseComponent {
   // Evento disparado se existir optionsService em visibleField. Necessário resgatar referência do objeto selecionado para quando se tratar de recebimento de opções via serviço.
   @Output('p-object-value') objectValue = new EventEmitter<any>();
 
+  @Input('p-validate-on-input') validateOnInput: boolean;
+
   visibleFields: Array<PoDynamicFormFieldInternal> = [];
 
   private _fields: Array<PoDynamicFormField>;

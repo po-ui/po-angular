@@ -1,6 +1,6 @@
 import { EventEmitter, Input, Output, Directive } from '@angular/core';
 import { NgForm } from '@angular/forms';
-
+import { InputBoolean } from '../../../decorators';
 import { convertToBoolean } from '../../../utils/util';
 
 import { PoDynamicFormField } from './po-dynamic-form-field.interface';
@@ -230,4 +230,24 @@ export class PoDynamicFormBaseComponent {
   get groupForm(): boolean {
     return this._groupForm;
   }
+
+  /**
+   * @optional
+   *
+   * @description
+   *
+   * Ao informar esta propriedade, o componente passará a emitir o valor a cada caractere digitado.
+   *
+   * Pode ser aplicado nos seguintes componentes:
+   * - po-input
+   * - po-number
+   * - po-decimal
+   * - po-textarea
+   * - po-password
+   *
+   * Deve informar os campos que deseja receber as emissões na propriedade `p-validate-fields`.
+   *
+   *
+   */
+  @Input('p-validate-on-input') @InputBoolean() validateOnInput: boolean = false;
 }
