@@ -74,6 +74,15 @@ export class PoDynamicFormFieldsComponent extends PoDynamicFormFieldsBaseCompone
     this.updatePreviousValue();
   }
 
+  //emite o valor a cada caractere digitado no input
+  onChangeFieldModel(visibleField: PoDynamicFormField) {
+    if (this.validateOnInput) {
+      const { property } = visibleField;
+      const { changedFieldIndex } = this.getField(property);
+      this.triggerValidationOnForm(changedFieldIndex);
+    }
+  }
+
   updatePreviousValue() {
     this.previousValue = JSON.parse(JSON.stringify(this.value));
   }

@@ -314,6 +314,34 @@ describe('PoDynamicFormFieldsComponent: ', () => {
       });
     });
 
+    describe('onChangeFieldModel', () => {
+      it('should call `triggerValidationOnForm` if validateOnInput is true', () => {
+        const fakeVisibleField = { property: 'test1' };
+        const field = { changedField: { property: 'test1' }, changedFieldIndex: 0 };
+
+        component.validateOnInput = true;
+
+        spyOn(component, <any>'getField').and.returnValue(field);
+        spyOn(component, <any>'triggerValidationOnForm');
+
+        component.onChangeFieldModel(fakeVisibleField);
+
+        expect(component['triggerValidationOnForm']).toHaveBeenCalled();
+      });
+
+      it('shouldn`t call `triggerValidationOnForm` if validateOnInput is false', () => {
+        const fakeVisibleField = { property: 'test1' };
+
+        component.validateOnInput = false;
+
+        spyOn(component, <any>'triggerValidationOnForm');
+
+        component.onChangeFieldModel(fakeVisibleField);
+
+        expect(component['triggerValidationOnForm']).not.toHaveBeenCalled();
+      });
+    });
+
     it('applyFieldValidation: should merge fields and validatedFields and apply new value to `fields` and `value``', () => {
       const index = 1;
       const validatedField = { field: { property: 'test2', required: false, visible: true }, value: 'expected value' };
