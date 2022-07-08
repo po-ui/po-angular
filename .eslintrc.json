@@ -115,8 +115,64 @@
         "@typescript-eslint/semi": ["off", null],
         "@typescript-eslint/type-annotation-spacing": "off",
         "camelcase": "off",
-        "@typescript-eslint/naming-convention": "off",
-        "@typescript-eslint/member-ordering": "off",
+        "@typescript-eslint/naming-convention": [
+          "error",
+          {
+            "selector": "default",
+            "format": ["camelCase"]
+          },
+          {
+            "selector": "variable",
+            "format": ["camelCase", "UPPER_CASE", "snake_case", "PascalCase"],
+            "leadingUnderscore": "allow"
+          },
+          {
+            "selector": "classProperty",
+            "format": ["camelCase", "UPPER_CASE", "snake_case", "PascalCase"],
+            "leadingUnderscore": "allow"
+          },
+          {
+            "selector": "parameter",
+            "format": ["camelCase"],
+            "leadingUnderscore": "allow"
+          },
+          {
+            "selector": "memberLike",
+            "modifiers": ["private"],
+            "format": ["camelCase"],
+            "leadingUnderscore": "allow"
+          },
+          {
+            "selector": "typeLike",
+            "format": ["PascalCase", "camelCase"]
+          },
+          {
+            "selector": "enumMember",
+            "format": ["UPPER_CASE", "camelCase", "PascalCase"],
+            "leadingUnderscore": "allow"
+          },
+          {
+            "selector": ["objectLiteralMethod"],
+            "format": ["PascalCase", "camelCase", "snake_case", "UPPER_CASE"],
+            "leadingUnderscore": "allow"
+          },
+          {
+            "selector": ["objectLiteralProperty"],
+            "format": null,
+            "leadingUnderscore": "allow"
+          },
+          {
+            "selector": "function",
+            "format": ["PascalCase", "camelCase"],
+            "leadingUnderscore": "allow"
+          }
+        ],
+        "@typescript-eslint/member-ordering": [
+          "error",
+          {
+            "default": ["signature", "field", "constructor", "method"]
+          }
+        ],
         "arrow-parens": ["off", "always"],
         "arrow-body-style": ["error", "as-needed"],
         "brace-style": ["off", "off"],
@@ -153,7 +209,12 @@
         "no-shadow": "off",
         "no-trailing-spaces": "off",
         "no-underscore-dangle": "off",
-        "no-unused-expressions": ["error", { "allowTernary": true }],
+        "no-unused-expressions": [
+          "error",
+          {
+            "allowTernary": true
+          }
+        ],
         "no-use-before-define": "off",
         "object-shorthand": "off",
         "padded-blocks": [
