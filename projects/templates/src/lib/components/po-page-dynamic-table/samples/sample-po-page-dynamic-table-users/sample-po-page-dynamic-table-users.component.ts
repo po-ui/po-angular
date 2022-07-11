@@ -1,6 +1,7 @@
 import { Component, ViewChild } from '@angular/core';
 
 import { PoBreadcrumb, PoDynamicViewField, PoModalComponent } from '@po-ui/ng-components';
+
 import {
   PoPageDynamicTableActions,
   PoPageDynamicTableCustomAction,
@@ -25,6 +26,7 @@ export class SamplePoPageDynamicTableUsersComponent {
   detailedUser: any;
   dependents: any;
   quickSearchWidth: number = 3;
+  fixedFilter = false;
 
   readonly actions: PoPageDynamicTableActions = {
     new: '/documentation/po-page-dynamic-edit',
@@ -45,7 +47,7 @@ export class SamplePoPageDynamicTableUsersComponent {
     { value: 'Osasco', label: 'Osasco' }
   ];
 
-  readonly fields: Array<any> = [
+  fields: Array<any> = [
     { property: 'id', key: true, visible: false, filter: true },
     { property: 'name', label: 'Name', filter: true, gridColumns: 6 },
     { property: 'genre', label: 'Genre', filter: true, gridColumns: 6, duplicate: true, sortable: false },
@@ -85,6 +87,18 @@ export class SamplePoPageDynamicTableUsersComponent {
       action: this.onClickActionsSide.bind(this),
       visible: this.isVisibleActionsLeft.bind(this),
       icon: 'po-icon-arrow-left'
+    },
+    {
+      label: 'Fixed Filter',
+      action: this.onClickFixedFilter.bind(this),
+      visible: this.isVisibleFixedFilter.bind(this),
+      icon: 'po-icon-lock'
+    },
+    {
+      label: 'Not Fixed Filter',
+      action: this.onClickFixedFilter.bind(this),
+      visible: this.isVisibleNotFixedFilter.bind(this),
+      icon: 'po-icon-lock-off'
     },
     { label: 'Print', action: this.printPage.bind(this), icon: 'po-icon-print' },
     {
@@ -161,7 +175,42 @@ export class SamplePoPageDynamicTableUsersComponent {
   private isVisibleActionsRight() {
     return !this.actionsRight;
   }
+
   private isVisibleActionsLeft() {
     return this.actionsRight;
+  }
+
+  private onClickFixedFilter() {
+    this.fixedFilter = !this.fixedFilter;
+    const fieldsDefault = [...this.fields];
+
+    if (this.fixedFilter) {
+      fieldsDefault
+        .filter(field => field.property === 'search')
+        .map(field => {
+          field.initValue = 'Joinville';
+          field.filter = true;
+          field.fixed = true;
+        });
+
+      this.fields = fieldsDefault;
+    } else {
+      fieldsDefault
+        .filter(field => field.property === 'search')
+        .map(field => {
+          field.initValue = 'São Paulo';
+          field.fixed = false;
+        });
+
+      this.fields = fieldsDefault;
+    }
+  }
+
+  private isVisibleFixedFilter() {
+    return !this.fixedFilter;
+  }
+
+  private isVisibleNotFixedFilter() {
+    return this.fixedFilter;
   }
 }
