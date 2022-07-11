@@ -2,7 +2,7 @@
 
 All notable changes to this project will be documented in this file. See [standard-version](https://github.com/conventional-changelog/standard-version) for commit guidelines.
 
-# [14.0.0-next.0](https://github.com/po-ui/po-angular/compare/v6.14.0...v14.0.0-next.0) (2022-07-04)
+# [14.0.0-rc.0](https://github.com/po-ui/po-angular/compare/v14.0.0-next.0...v14.0.0-rc.0) (2022-07-11)
 
 
 ### Bug Fixes
@@ -26,7 +26,36 @@ All notable changes to this project will be documented in this file. See [standa
 
 ### Features
 
-* **dynamic-table:** repassa métodos para utilizar na table ([ce769bc](https://github.com/po-ui/po-angular/commit/ce769bc41f6190cefb0cb1ecd580078ebf01d131))
+* **dynamic-form:** repassa propriedades para componentes ([3cdfad3](https://github.com/po-ui/po-angular/commit/3cdfad3bf433a17865a82abdd69675099e090a4a))
+ - columns, compatível com PoCheckBoxGroup e com PoRadioGroup
+ - icon, permite utilizar outras bibliotecas de ícones
+ - minLenght e maxLenght, compatível com PoDecimal
+ - minValue e maxValue, compatível com PoDecimal e PoDatePickerRange
+ - errorMessage, compatível com PoDecimal
+ - readOnly, compatível com PoDatePicker, PoDatePickerRange, PoInput, PoNumber, PoDecimal, PoSelect, PoTextArea e PoPassword
+  - multiple, compatível com PoLookup
+  - clean, compatível com PoDatePicker, PoDatePickerRange, PoInput, PoNumber, PoDecimal, PoCombo, PoLookup e PoPassword
+  - noAutoComplete, compatível com PoInput, PoNumber, PoDecimal, PoLookup e PoPassword
+  - labelPosition, compatível com PoSwitch
+  - hidePasswordPeek, compatível com PoPassword
+  - isoFormat, compatível com PoDatePicker
+  - literals, compatível com PoLookup, PoMultiselect, PoCombo, PoDatePickerRange
+  - infiniteScroll, compatível com PoCombo e PoLookup
+  - infiniteScrollDistance, compatível com PoCombo
+  - autoHeight, compatível com PoMultiselect e PoLookup
+  - step, compatível com PoNumber
+  - filterMode, compatível com PoMultiselect
+  - filterMinlenght, compatível com PoCombo
+  - disabledInitFilter, compatível com PoCombo
+  - disabledTabFilter, compatível com PoCombo
+  - debounceTime, compatível com PoCombo e PoMultiselect
+  - chageOnEnter, compatível com PoCombo
+  - sort, compatível com PoCombo e PoMultiselect
+  - placeholderSearch, compatível com PoMultiselect
+  - hideSearch, compatível com PoMultiselect
+  - hideSelectAll, compatível com PoMultiselect
+  - advancedFilters, compatível com PoLookup
+  * **dynamic-table:** repassa métodos para utilizar na table ([ce769bc](https://github.com/po-ui/po-angular/commit/ce769bc41f6190cefb0cb1ecd580078ebf01d131))
 * **schematics:** migração para v.14 ([2ac5e1f](https://github.com/po-ui/po-angular/commit/2ac5e1fc19273aa450a424517b3c2bd869be3dd3))
 * **toaster:** implementa para pequenas resoluções ([d6e0571](https://github.com/po-ui/po-angular/commit/d6e05717d496c91270e086163b07952ce68c5aa7))
 
