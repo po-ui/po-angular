@@ -78,7 +78,9 @@ export class PoPageDynamicSearchComponent extends PoPageDynamicSearchBaseCompone
   }
 
   get filterSettings() {
-    this._filterSettings.advancedAction = this.filters.length === 0 ? undefined : this.onAdvancedAction.bind(this);
+    const thereAreValidFilters =
+      this.filters.length > 0 && this.filters.some(filter => filter.visible === true || filter.visible === undefined);
+    this._filterSettings.advancedAction = thereAreValidFilters ? this.onAdvancedAction.bind(this) : undefined;
 
     return Object.assign({}, this._filterSettings, {
       placeholder: this.literals.searchPlaceholder,

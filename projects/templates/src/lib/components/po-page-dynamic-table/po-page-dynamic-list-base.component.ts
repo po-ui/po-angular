@@ -209,9 +209,13 @@ export class PoPageDynamicListBaseComponent {
   }
 
   private setFieldsProperties(fields: Array<any>) {
+    let visibleFilter: boolean;
     this.filters = fields
       .filter(field => field.filter === true)
-      .map(filterField => ({ ...filterField, visible: true }));
+      .map(filterField => {
+        visibleFilter = !(filterField.initValue && filterField.fixed);
+        return { ...filterField, visible: visibleFilter };
+      });
     this.columns = fields.filter(
       field => field.visible === undefined || field.visible === true || field.allowColumnsManager === true
     );

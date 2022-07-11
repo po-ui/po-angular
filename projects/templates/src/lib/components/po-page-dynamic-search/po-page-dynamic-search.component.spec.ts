@@ -50,6 +50,26 @@ describe('PoPageDynamicSearchComponent:', () => {
       expect(typeof component.filterSettings.advancedAction).toBe('function');
     });
 
+    it('get filterSettings: should return `filterSettings` with `advancedAction` equal to `onAdvancedAction` if at least one filter is visible', () => {
+      const filters: Array<any> = [
+        { property: 'name', visible: true },
+        { property: 'birthdate', visible: false },
+        { property: 'genre', visible: false }
+      ];
+      component.filters = filters;
+      expect(typeof component.filterSettings.advancedAction).toBe('function');
+    });
+
+    it('get filterSettings: should return `filterSettings` with `advancedAction` equal to `undefined` if filters are not visible', () => {
+      const filters: Array<any> = [
+        { property: 'name', visible: false },
+        { property: 'birthdate', visible: false },
+        { property: 'genre', visible: false }
+      ];
+      component.filters = filters;
+      expect(typeof component.filterSettings.advancedAction).toBe('undefined');
+    });
+
     it('get filterSettings: should apply `quickSearchWidth` value to `filterSettings.width`', () => {
       const filterWidth = 3;
       component.quickSearchWidth = filterWidth;
