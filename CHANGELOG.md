@@ -2,67 +2,16 @@
 
 All notable changes to this project will be documented in this file. See [standard-version](https://github.com/conventional-changelog/standard-version) for commit guidelines.
 
-# [14.0.0-rc.0](https://github.com/po-ui/po-angular/compare/v14.0.0-next.0...v14.0.0-rc.0) (2022-07-11)
-
-
-### Bug Fixes
-
-* **modal:** corrige o uso do `PoButton` ([a4582c3](https://github.com/po-ui/po-angular/commit/a4582c3ca23be4b6bd49b3a6007a4ad578ee3731))
-
-
-### Build System
-
-* atualização para o angular 14 ([1c148c3](https://github.com/po-ui/po-angular/commit/1c148c32902a45b094ddc0dabba6bdcf1686cd25))
-
-
-### Code Refactoring
-
-
-* **button:** remove a propriedade `p-auto-focus` ([7f3ce94](https://github.com/po-ui/po-angular/commit/7f3ce94fb58fc9ecde62150007585c13bfae4fc9))
-* **components:** remove redimensionamentos ([Ver mais](https://animaliads.notion.site/Bot-o-fb3a921e8ba54bd38b39758c24613368)) ([0ef347c](https://github.com/po-ui/po-angular/commit/0ef347cb5e6c71587cf642930914fbcc81cdd4a4))
-* **field:** remove a propriedade `p-auto-focus` ([f2f298a](https://github.com/po-ui/po-angular/commit/f2f298aaad36fa6daffdbb226c0e3a1b28c2455f))
-* **selectoptiontemplate:** remove o componente `PoSelectOptionTemplate` ([c0a2852](https://github.com/po-ui/po-angular/commit/c0a2852fb1cf6d1a597fc4cd2eeab87f16437efc))
-
-
-### Features
-
-* **dynamic-form:** repassa propriedades para componentes ([3cdfad3](https://github.com/po-ui/po-angular/commit/3cdfad3bf433a17865a82abdd69675099e090a4a))
- - columns, compatível com PoCheckBoxGroup e com PoRadioGroup
- - icon, permite utilizar outras bibliotecas de ícones
- - minLenght e maxLenght, compatível com PoDecimal
- - minValue e maxValue, compatível com PoDecimal e PoDatePickerRange
- - errorMessage, compatível com PoDecimal
- - readOnly, compatível com PoDatePicker, PoDatePickerRange, PoInput, PoNumber, PoDecimal, PoSelect, PoTextArea e PoPassword
-  - multiple, compatível com PoLookup
-  - clean, compatível com PoDatePicker, PoDatePickerRange, PoInput, PoNumber, PoDecimal, PoCombo, PoLookup e PoPassword
-  - noAutoComplete, compatível com PoInput, PoNumber, PoDecimal, PoLookup e PoPassword
-  - labelPosition, compatível com PoSwitch
-  - hidePasswordPeek, compatível com PoPassword
-  - isoFormat, compatível com PoDatePicker
-  - literals, compatível com PoLookup, PoMultiselect, PoCombo, PoDatePickerRange
-  - infiniteScroll, compatível com PoCombo e PoLookup
-  - infiniteScrollDistance, compatível com PoCombo
-  - autoHeight, compatível com PoMultiselect e PoLookup
-  - step, compatível com PoNumber
-  - filterMode, compatível com PoMultiselect
-  - filterMinlenght, compatível com PoCombo
-  - disabledInitFilter, compatível com PoCombo
-  - disabledTabFilter, compatível com PoCombo
-  - debounceTime, compatível com PoCombo e PoMultiselect
-  - chageOnEnter, compatível com PoCombo
-  - sort, compatível com PoCombo e PoMultiselect
-  - placeholderSearch, compatível com PoMultiselect
-  - hideSearch, compatível com PoMultiselect
-  - hideSelectAll, compatível com PoMultiselect
-  - advancedFilters, compatível com PoLookup
-  * **dynamic-table:** repassa métodos para utilizar na table ([ce769bc](https://github.com/po-ui/po-angular/commit/ce769bc41f6190cefb0cb1ecd580078ebf01d131))
-* **schematics:** migração para v.14 ([2ac5e1f](https://github.com/po-ui/po-angular/commit/2ac5e1fc19273aa450a424517b3c2bd869be3dd3))
-* **toaster:** implementa para pequenas resoluções ([d6e0571](https://github.com/po-ui/po-angular/commit/d6e05717d496c91270e086163b07952ce68c5aa7))
+# [14.0.0](https://github.com/po-ui/po-angular/compare/v6.14.0...v14.0.0) (2022-07-18)
 
 
 ### BREAKING CHANGES
 
 * **angular:** deve ser utilizado o Angular v14
+
+Atualize seu projeto para utilizar a versão 14 do Angular, acesse a documentação [Guia de Atualização do Angular](https://update.angular.io/) para fazer a migração completa.
+
+Veja nossa [**documentação para fazer a migração**](https://po-ui.io/guides/migration-poui) para a versão 14.
 
 * **components:** removida a função @media screen nos componentes:
 * Button
@@ -100,6 +49,67 @@ Foi removida a propriedade `p-auto-focus` do `po-field` por questões de acessib
 
 Foi removida a propriedade `p-auto-focus` do `po-button` por questões de acessibilidade.
 
+
+### Bug Fixes
+
+* **table:** corrige quebra de colunas ([9f146e0](https://github.com/po-ui/po-angular/commit/9f146e094529512413535c5ecb7eb2f4162d3daf))
+
+* **modal:** corrige o uso do `PoButton` ([a4582c3](https://github.com/po-ui/po-angular/commit/a4582c3ca23be4b6bd49b3a6007a4ad578ee3731))
+
+
+### Build System
+
+* atualização para o angular 14 ([1c148c3](https://github.com/po-ui/po-angular/commit/1c148c32902a45b094ddc0dabba6bdcf1686cd25))
+
+
+### Code Refactoring
+
+
+* **button:** remove a propriedade `p-auto-focus` ([7f3ce94](https://github.com/po-ui/po-angular/commit/7f3ce94fb58fc9ecde62150007585c13bfae4fc9))
+* **components:** remove redimensionamentos ([Ver mais](https://animaliads.notion.site/Bot-o-fb3a921e8ba54bd38b39758c24613368)) ([0ef347c](https://github.com/po-ui/po-angular/commit/0ef347cb5e6c71587cf642930914fbcc81cdd4a4))
+* **field:** remove a propriedade `p-auto-focus` ([f2f298a](https://github.com/po-ui/po-angular/commit/f2f298aaad36fa6daffdbb226c0e3a1b28c2455f))
+* **selectoptiontemplate:** remove o componente `PoSelectOptionTemplate` ([c0a2852](https://github.com/po-ui/po-angular/commit/c0a2852fb1cf6d1a597fc4cd2eeab87f16437efc))
+
+
+### Features
+
+* **button:** inclui global e brand tokens ([e83ce44](https://github.com/po-ui/po-angular/commit/e83ce444c230315a0e3706edc848da0b0c3dcff1))
+* **dynamic-form:** cria a propriedade `p-validate-on-input` ([6fad1a1](https://github.com/po-ui/po-angular/commit/6fad1a1f8c09e13e04a6053d2439db59c3726c4a))
+* **dynamic-form:** permite escolher componente a ser renderizado ([d7f5293](https://github.com/po-ui/po-angular/commit/d7f529394e6c3227f09c7cefab2d0cbdc580ead3))
+* **page-dynamic-table:** permite definir a não remoção dos disclaimers ([cd019ef](https://github.com/po-ui/po-angular/commit/cd019ef614056e578700ab92344778bbec0d5304)), closes [#1306](https://github.com/po-ui/po-angular/issues/1306)
+* **page-dynamic-search:** permite definir a não remoção dos disclaimers ([cd019ef](https://github.com/po-ui/po-angular/commit/cd019ef614056e578700ab92344778bbec0d5304)), closes [#1306](https://github.com/po-ui/po-angular/issues/1306)
+* **dynamic-form:** repassa propriedades para componentes ([3cdfad3](https://github.com/po-ui/po-angular/commit/3cdfad3bf433a17865a82abdd69675099e090a4a))
+ - columns, compatível com PoCheckBoxGroup e com PoRadioGroup
+ - icon, permite utilizar outras bibliotecas de ícones
+ - minLenght e maxLenght, compatível com PoDecimal
+ - minValue e maxValue, compatível com PoDecimal e PoDatePickerRange
+ - errorMessage, compatível com PoDecimal
+ - readOnly, compatível com PoDatePicker, PoDatePickerRange, PoInput, PoNumber, PoDecimal, PoSelect, PoTextArea e PoPassword
+  - multiple, compatível com PoLookup
+  - clean, compatível com PoDatePicker, PoDatePickerRange, PoInput, PoNumber, PoDecimal, PoCombo, PoLookup e PoPassword
+  - noAutoComplete, compatível com PoInput, PoNumber, PoDecimal, PoLookup e PoPassword
+  - labelPosition, compatível com PoSwitch
+  - hidePasswordPeek, compatível com PoPassword
+  - isoFormat, compatível com PoDatePicker
+  - literals, compatível com PoLookup, PoMultiselect, PoCombo, PoDatePickerRange
+  - infiniteScroll, compatível com PoCombo e PoLookup
+  - infiniteScrollDistance, compatível com PoCombo
+  - autoHeight, compatível com PoMultiselect e PoLookup
+  - step, compatível com PoNumber
+  - filterMode, compatível com PoMultiselect
+  - filterMinlenght, compatível com PoCombo
+  - disabledInitFilter, compatível com PoCombo
+  - disabledTabFilter, compatível com PoCombo
+  - debounceTime, compatível com PoCombo e PoMultiselect
+  - chageOnEnter, compatível com PoCombo
+  - sort, compatível com PoCombo e PoMultiselect
+  - placeholderSearch, compatível com PoMultiselect
+  - hideSearch, compatível com PoMultiselect
+  - hideSelectAll, compatível com PoMultiselect
+  - advancedFilters, compatível com PoLookup
+* **dynamic-table:** repassa métodos para utilizar na table ([ce769bc](https://github.com/po-ui/po-angular/commit/ce769bc41f6190cefb0cb1ecd580078ebf01d131))
+* **schematics:** migração para v.14 ([2ac5e1f](https://github.com/po-ui/po-angular/commit/2ac5e1fc19273aa450a424517b3c2bd869be3dd3))
+* **toaster:** implementa para pequenas resoluções ([d6e0571](https://github.com/po-ui/po-angular/commit/d6e05717d496c91270e086163b07952ce68c5aa7))
 
 
 # [6.14.0](https://github.com/po-ui/po-angular/compare/v6.13.1...v6.14.0) (2022-06-27)
