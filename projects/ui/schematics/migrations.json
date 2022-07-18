@@ -27,7 +27,7 @@
       "factory": "./ng-update/v6/index"
     },
     "migration-v14": {
-      "version": "0.0.0-PLACEHOLDER",
+      "version": "14",
       "description": "Atualiza @po-ui/ng-components para v14",
       "factory": "./ng-update/v14/index"
     }
