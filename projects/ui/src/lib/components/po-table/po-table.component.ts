@@ -97,7 +97,8 @@ export class PoTableComponent extends PoTableBaseComponent implements AfterViewI
   @ViewChild('poTableTbody', { read: ElementRef, static: false }) poTableTbody;
   @ViewChild('poTableThead', { read: ElementRef, static: false }) poTableThead;
   @ViewChild('poTableTbodyVirtual', { read: ElementRef, static: false }) poTableTbodyVirtual;
-  @ViewChild('columnManager', { read: ElementRef, static: false }) columnManager;
+  @ViewChild('columnManagerLeft', { read: ElementRef, static: false }) columnManagerLeft;
+  @ViewChild('columnManagerRight', { read: ElementRef, static: false }) columnManagerRight;
   @ViewChild('columnActionLeft', { read: ElementRef, static: false }) columnActionLeft;
 
   @ViewChildren('actionsIconElement', { read: ElementRef }) actionsIconElement: QueryList<any>;
@@ -111,7 +112,8 @@ export class PoTableComponent extends PoTableBaseComponent implements AfterViewI
   itemSize: number = 32;
   lastVisibleColumnsSelected: Array<PoTableColumn>;
 
-  private _columnManagerTarget: ElementRef;
+  private _columnManagerTargetLeft: ElementRef;
+  private _columnManagerTargetRight: ElementRef;
   private differ;
   private footerHeight;
   private headerHeight;
@@ -124,13 +126,22 @@ export class PoTableComponent extends PoTableBaseComponent implements AfterViewI
   private clickListener: () => void;
   private resizeListener: () => void;
 
-  @ViewChild('columnManagerTarget') set columnManagerTarget(value: ElementRef) {
-    this._columnManagerTarget = value;
+  @ViewChild('columnManagerTargetLeft') set columnManagerTargetLeft(value: ElementRef) {
+    this._columnManagerTargetLeft = value;
     this.changeDetector.detectChanges();
   }
 
-  get columnManagerTarget() {
-    return this._columnManagerTarget;
+  get columnManagerTargetLeft() {
+    return this._columnManagerTargetLeft;
+  }
+
+  @ViewChild('columnManagerTargetRight') set columnManagerTargetRight(value: ElementRef) {
+    this._columnManagerTargetRight = value;
+    this.changeDetector.detectChanges();
+  }
+
+  get columnManagerTargetRight() {
+    return this._columnManagerTargetRight;
   }
 
   constructor(
@@ -554,8 +565,8 @@ export class PoTableComponent extends PoTableBaseComponent implements AfterViewI
     this.poTableThead.nativeElement.scrollLeft = this.poTableTbodyVirtual.nativeElement.scrollLeft;
   }
 
-  public getWidthColumnManager() {
-    return this.columnManager?.nativeElement.offsetWidth;
+  public getWidthColumnManagerRight() {
+    return this.columnManagerRight?.nativeElement.offsetWidth;
   }
 
   public getColumnWidthActionsLeft() {

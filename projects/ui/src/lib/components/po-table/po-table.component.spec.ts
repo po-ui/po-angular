@@ -438,6 +438,7 @@ describe('PoTableComponent:', () => {
   });
 
   it('should toggle column sortable as false', () => {
+    component.actionRight = true;
     component.sort = true;
 
     fixture.detectChanges();
@@ -755,6 +756,7 @@ describe('PoTableComponent:', () => {
   });
 
   it('should contain more than 1 "header-master-detail" if actionRight is false and "isSingleAction" is false', () => {
+    component.hideColumnsManager = true;
     component.selectable = true;
     component.actions = [
       { label: 'PO1', visible: true },
@@ -2343,11 +2345,12 @@ describe('PoTableComponent:', () => {
       expect(nativeElement.querySelector(`th.po-table-header-master-detail`)).toBe(null);
     });
 
-    it(`should contains 3 td if has 2 columns, column manager and haven't actions`, () => {
+    it(`should contains 4 td if has 2 columns, column manager and haven't actions`, () => {
       component.items = [{ name: 'John', age: 24 }];
       component.columns = [{ property: 'name' }, { property: 'age' }];
       component.actions = [];
       component.hideColumnsManager = false;
+      component.actionRight = false;
 
       component.tableRowTemplate = {
         ...mockTableDetailDiretive,
@@ -2357,7 +2360,8 @@ describe('PoTableComponent:', () => {
       fixture.detectChanges();
 
       const columnsManagerTd = 1;
-      const expectedValue = component.columns.length + columnsManagerTd;
+      const masterDetailTd = 1;
+      const expectedValue = component.columns.length + columnsManagerTd + masterDetailTd;
 
       expect(nativeElement.querySelectorAll('td').length).toBe(expectedValue);
     });
@@ -2459,13 +2463,22 @@ describe('PoTableComponent:', () => {
       expect(component.firstAction).toEqual(firstAction);
     });
 
-    it('columnManagerTarget: should set property and call `detectChanges`', () => {
+    it('columnManagerTargetLeft: should set property and call `detectChanges`', () => {
       const spyDetectChanges = spyOn(component['changeDetector'], 'detectChanges');
 
-      component.columnManagerTarget = new ElementRef('<th></th>');
+      component.columnManagerTargetLeft = new ElementRef('<th></th>');
 
       expect(spyDetectChanges).toHaveBeenCalled();
-      expect(component.columnManagerTarget).toBeTruthy();
+      expect(component.columnManagerTargetLeft).toBeTruthy();
+    });
+
+    it('columnManagerTargetRight: should set property and call `detectChanges`', () => {
+      const spyDetectChanges = spyOn(component['changeDetector'], 'detectChanges');
+
+      component.columnManagerTargetRight = new ElementRef('<th></th>');
+
+      expect(spyDetectChanges).toHaveBeenCalled();
+      expect(component.columnManagerTargetRight).toBeTruthy();
     });
 
     describe(`hasSelectableColumn`, () => {
@@ -2988,7 +3001,7 @@ describe('PoTableComponent:', () => {
     expect(fakeThis.poTableThead.nativeElement.scrollLeft).toEqual(100);
   });
 
-  it('getWidthColumnManager, should return width of column manager', () => {
+  it('getWidthColumnManagerRight, should return width of column manager', () => {
     const fakeThis = {
       columnManager: {
         nativeElement: {
@@ -2999,19 +3012,19 @@ describe('PoTableComponent:', () => {
 
     fixture.detectChanges();
 
-    component['getWidthColumnManager'].call(fakeThis);
+    component['getWidthColumnManagerRight'].call(fakeThis);
 
     expect(fakeThis.columnManager.nativeElement.offsetWidth).toEqual(120);
   });
 
-  it('getWidthColumnManager, should return undefined if not contain column manager', () => {
+  it('getWidthColumnManagerRight, should return undefined if not contain column manager', () => {
     const fakeThis = {
       columnManager: undefined
     };
 
     fixture.detectChanges();
 
-    const valueWidth = component['getWidthColumnManager'].call(fakeThis);
+    const valueWidth = component['getWidthColumnManagerRight'].call(fakeThis);
 
     expect(valueWidth).toEqual(undefined);
   });
