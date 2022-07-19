@@ -91,6 +91,7 @@ export class PoTableComponent extends PoTableBaseComponent implements AfterViewI
   @ContentChildren(PoTableColumnTemplateDirective) tableColumnTemplates: QueryList<PoTableColumnTemplateDirective>;
 
   @ViewChild('noColumnsHeader', { read: ElementRef }) noColumnsHeader;
+  @ViewChild('noColumnsHeaderFixed', { read: ElementRef }) noColumnsHeaderFixed;
   @ViewChild('popup') poPopupComponent: PoPopupComponent;
   @ViewChild('tableFooter', { read: ElementRef, static: false }) tableFooterElement;
   @ViewChild('tableWrapper', { read: ElementRef, static: false }) tableWrapperElement;
@@ -98,7 +99,9 @@ export class PoTableComponent extends PoTableBaseComponent implements AfterViewI
   @ViewChild('poTableThead', { read: ElementRef, static: false }) poTableThead;
   @ViewChild('poTableTbodyVirtual', { read: ElementRef, static: false }) poTableTbodyVirtual;
   @ViewChild('columnManager', { read: ElementRef, static: false }) columnManager;
+  @ViewChild('columnManagerFixed', { read: ElementRef, static: false }) columnManagerFixed;
   @ViewChild('columnActionLeft', { read: ElementRef, static: false }) columnActionLeft;
+  @ViewChild('columnActionLeftFixed', { read: ElementRef, static: false }) columnActionLeftFixed;
 
   @ViewChildren('actionsIconElement', { read: ElementRef }) actionsIconElement: QueryList<any>;
   @ViewChildren('actionsElement', { read: ElementRef }) actionsElement: QueryList<any>;
@@ -112,6 +115,7 @@ export class PoTableComponent extends PoTableBaseComponent implements AfterViewI
   lastVisibleColumnsSelected: Array<PoTableColumn>;
 
   private _columnManagerTarget: ElementRef;
+  private _columnManagerTargetFixed: ElementRef;
   private differ;
   private footerHeight;
   private headerHeight;
@@ -131,6 +135,15 @@ export class PoTableComponent extends PoTableBaseComponent implements AfterViewI
 
   get columnManagerTarget() {
     return this._columnManagerTarget;
+  }
+
+  @ViewChild('columnManagerTargetFixed') set columnManagerTargetFixed(value: ElementRef) {
+    this._columnManagerTargetFixed = value;
+    this.changeDetector.detectChanges();
+  }
+
+  get columnManagerTargetFixed() {
+    return this._columnManagerTargetFixed;
   }
 
   constructor(
@@ -555,11 +568,15 @@ export class PoTableComponent extends PoTableBaseComponent implements AfterViewI
   }
 
   public getWidthColumnManager() {
-    return this.columnManager?.nativeElement.offsetWidth;
+    return this.height
+      ? this.columnManagerFixed?.nativeElement.offsetWidth
+      : this.columnManager?.nativeElement.offsetWidth;
   }
 
   public getColumnWidthActionsLeft() {
-    return this.columnActionLeft?.nativeElement.offsetWidth;
+    return this.height
+      ? this.columnActionLeftFixed?.nativeElement.offsetWidth
+      : this.columnActionLeft?.nativeElement.offsetWidth;
   }
 
   protected calculateHeightTableContainer(height) {
