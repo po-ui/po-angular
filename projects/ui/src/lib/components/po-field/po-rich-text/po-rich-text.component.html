@@ -18,6 +18,7 @@
     <po-rich-text-toolbar
       #richTextToolbar
       [p-readonly]="readonly"
+      [p-disabled-text-align]="disabledTextAlign"
       (p-link-editing)="richTextBody.linkEditing($event)"
       (p-command)="richTextBody.executeCommand($event)"
     >

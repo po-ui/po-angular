@@ -31,6 +31,17 @@ export abstract class PoRichTextBaseComponent implements ControlValueAccessor, V
   @Input('p-auto-focus') @InputBoolean() autoFocus: boolean = false;
 
   /**
+   * @optional
+   *
+   * @description
+   *
+   * Define se o alinhamento de texto será desabilitado.
+   *
+   * @default `false`
+   */
+  @Input('p-disabled-text-align') @InputBoolean() disabledTextAlign: boolean = false;
+
+  /**
    * @description
    *
    * Mensagem que será apresentada quando a propriedade required estiver habilitada e o campo for limpo após algo ser digitado.
