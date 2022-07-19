@@ -3016,6 +3016,23 @@ describe('PoTableComponent:', () => {
     expect(valueWidth).toEqual(undefined);
   });
 
+  it('getWidthColumnManagerFixed, should return width of column manager', () => {
+    const fakeThis = {
+      height: 300,
+      columnManagerFixed: {
+        nativeElement: {
+          offsetWidth: 120
+        }
+      }
+    };
+
+    fixture.detectChanges();
+
+    component['getWidthColumnManager'].call(fakeThis);
+
+    expect(fakeThis.columnManagerFixed.nativeElement.offsetWidth).toEqual(120);
+  });
+
   it('columnActionLeft, should return width of column when action is on the left', () => {
     const fakeThis = {
       columnActionLeft: {
@@ -3042,6 +3059,23 @@ describe('PoTableComponent:', () => {
     const valueWidth = component['getColumnWidthActionsLeft'].call(fakeThis);
 
     expect(valueWidth).toEqual(undefined);
+  });
+
+  it('columnActionLeftFixed, should return width of column when action is on the left', () => {
+    const fakeThis = {
+      height: 300,
+      columnActionLeftFixed: {
+        nativeElement: {
+          offsetWidth: 120
+        }
+      }
+    };
+
+    fixture.detectChanges();
+
+    component['getColumnWidthActionsLeft'].call(fakeThis);
+
+    expect(fakeThis.columnActionLeftFixed.nativeElement.offsetWidth).toEqual(120);
   });
 
   it('hasInfiniteScroll: should return false if infiniteScroll is false', () => {
