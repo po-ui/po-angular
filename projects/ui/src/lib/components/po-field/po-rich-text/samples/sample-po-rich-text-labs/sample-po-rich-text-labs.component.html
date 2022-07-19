@@ -1,6 +1,7 @@
 <po-rich-text
   name="richText"
   [(ngModel)]="richText"
+  [p-disabled-text-align]="properties.includes('disabledTextAlign')"
   [p-error-message]="errorMessage"
   [p-height]="height"
   [p-help]="help"

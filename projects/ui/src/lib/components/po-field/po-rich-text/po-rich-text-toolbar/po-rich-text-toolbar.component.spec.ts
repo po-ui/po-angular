@@ -34,6 +34,26 @@ describe('PoRichTextToolbarComponent:', () => {
   });
 
   describe('Properties:', () => {
+    it('disabledTextAlign: should remove a children element from po-rich-text', () => {
+      component.disabledTextAlign = true;
+
+      fixture.detectChanges();
+
+      const poRichTextToolbarButtonAlign = nativeElement.querySelector('[data-rich-text-toolbar="align"]');
+
+      expect(poRichTextToolbarButtonAlign).toBeNull();
+    });
+
+    it('disabledTextAlign: should keep all children elements inside component po-rich-text', () => {
+      component.disabledTextAlign = false;
+
+      fixture.detectChanges();
+
+      const poRichTextToolbarButtonAlign = nativeElement.querySelector('[data-rich-text-toolbar="align"]');
+
+      expect(poRichTextToolbarButtonAlign).toBeDefined();
+    });
+
     it('readonly: should call toggleDisableButtons', () => {
       spyOn(component, <any>'toggleDisableButtons');
 
