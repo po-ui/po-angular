@@ -5,7 +5,6 @@ import {
   convertDateToISODate,
   convertDateToISOExtended,
   convertIsoToDate,
-  convertIsoToDateNoTimezone,
   convertToBoolean,
   formatYear,
   isTypeof,
@@ -335,11 +334,7 @@ export abstract class PoDatepickerBaseComponent implements ControlValueAccessor,
   }
 
   set date(value: any) {
-    if (this.isExtendedISO) {
-      this._date = typeof value === 'string' ? convertIsoToDate(value, false, false) : value;
-    } else {
-      this._date = typeof value === 'string' ? convertIsoToDateNoTimezone(value) : value;
-    }
+    this._date = typeof value === 'string' ? convertIsoToDate(value, false, false) : value;
   }
 
   get date() {
