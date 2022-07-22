@@ -127,6 +127,7 @@ export function convertIsoToDate(value: string, start: boolean, end: boolean) {
     const day = parseInt(value.substring(8, 10), 10);
     const month = parseInt(value.substring(5, 7), 10);
     const year = parseInt(value.substring(0, 4), 10);
+
     if (start) {
       const date = new Date(year, month - 1, day, 0, 0, 0);
 
@@ -140,20 +141,8 @@ export function convertIsoToDate(value: string, start: boolean, end: boolean) {
 
       return date;
     } else {
-      const milliseconds = Date.parse(value);
-      const timezone = new Date().getTimezoneOffset() * 60000;
-      return new Date(milliseconds + timezone);
+      return new Date(year, month - 1, day);
     }
-  }
-}
-
-export function convertIsoToDateNoTimezone(value: string) {
-  if (value) {
-    const day = parseInt(value.substring(8, 10), 10);
-    const month = parseInt(value.substring(5, 7), 10);
-    const year = parseInt(value.substring(0, 4), 10);
-
-    return new Date(year, month - 1, day);
   }
 }
 
@@ -222,6 +211,7 @@ export function formatYear(year: number) {
     return `000${year}`;
   }
 }
+
 // Verifica se o navegador em que está sendo usado é Internet Explorer ou Edge
 export function isIEOrEdge() {
   const userAgent = window.navigator.userAgent;

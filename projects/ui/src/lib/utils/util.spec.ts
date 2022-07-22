@@ -347,17 +347,6 @@ describe('Function convertIsoToDate:', () => {
   });
 });
 
-describe('Function convertIsoToDateNoTimezone:', () => {
-  it('should be a no value', () => {
-    const date = '';
-    expect(typeof UtilFunctions.convertIsoToDateNoTimezone(date)).toBe('undefined');
-  });
-  it('should transform the value string into data', () => {
-    const date = new Date(2022, 4, 26).toISOString();
-    expect(typeof UtilFunctions.convertIsoToDateNoTimezone(date)).toBe('object');
-  });
-});
-
 describe('Function callFunction:', () => {
   const context = {
     getName: function () {
