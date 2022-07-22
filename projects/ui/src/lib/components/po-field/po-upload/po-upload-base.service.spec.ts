@@ -1,4 +1,4 @@
-import { EventEmitter } from '@angular/core';
+import { ChangeDetectorRef, EventEmitter } from '@angular/core';
 import { inject, TestBed } from '@angular/core/testing';
 import { HttpClientTestingModule } from '@angular/common/http/testing';
 import { HttpResponse } from '@angular/common/http';
@@ -87,8 +87,7 @@ describe('PoUploadBaseService:', () => {
     expect(service.sendFile).toHaveBeenCalled();
   }));
 
-  // TODO - comentado para a atualiazação do angular v14.
-  xit('should execute uploadCallback function', inject([PoUploadBaseService], (service: PoUploadBaseService) => {
+  it('should execute uploadCallback function', inject([PoUploadBaseService], (service: PoUploadBaseService) => {
     const methods = returnMethodsCallback();
     const fakeThis = {
       getRequest: (url: any, headers: any, formData: any) =>
@@ -114,7 +113,6 @@ describe('PoUploadBaseService:', () => {
 
     expect(methods.uploadCallback).toHaveBeenCalled();
   }));
-
   it('should execute successCallback function', inject([PoUploadBaseService], (service: PoUploadBaseService) => {
     const methods = returnMethodsCallback();
     const fakeThis = {
