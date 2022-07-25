@@ -2,6 +2,21 @@
 
 All notable changes to this project will be documented in this file. See [standard-version](https://github.com/conventional-changelog/standard-version) for commit guidelines.
 
+# [14.1.0](https://github.com/po-ui/po-angular/compare/v14.0.0...v14.1.0) (2022-07-25)
+
+
+### Bug Fixes
+
+* **dynamic-form:** exporta ForceOptionComponentEnum ([b1ac8fd](https://github.com/po-ui/po-angular/commit/b1ac8fd1c950476bd25b11efdfebdd82b2a952d5))
+* **rich-text:** corrige o alinhamento dos botões ([ffda8d4](https://github.com/po-ui/po-style/commit/ffda8d452f58291caee2e9aab174f5d436489334))
+
+
+### Features
+
+* **rich-text:** adiciona `p-disabled-text-align` ([a8a91e8](https://github.com/po-ui/po-angular/commit/a8a91e8cbafcb96f5bb7bdfc198e6f9e314eb56a))
+
+
+
 # [14.0.0](https://github.com/po-ui/po-angular/compare/v6.14.0...v14.0.0) (2022-07-18)
 
 

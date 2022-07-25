@@ -116,7 +116,7 @@ Essas instalações se fazem necessárias por que a instalação inicial do Ioni
 Para instalar o `po-sync` no aplicativo execute o seguinte comando:
 
 ```shell
-ng add @po-ui/ng-sync@next
+ng add @po-ui/ng-sync
 ```
 
 ### Passo 5 - Utilizando o po-sync
