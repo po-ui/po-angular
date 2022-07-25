@@ -52,7 +52,7 @@ ng update @po-ui/ng-components@<version> --allow-dirty --force
 Por exemplo:
 
 ```
-ng update @po-ui/ng-components@14.0.0-next.0 --allow-dirty --force
+ng update @po-ui/ng-components@14 --allow-dirty --force
 ```
 
 O `ng update` ajudará nas alterações necessárias para seu projeto seguir atualizado, que são elas:
@@ -82,7 +82,7 @@ ng update @po-ui/ng-sync@<version> --allow-dirty --force
 Por exemplo:
 
 ```
-ng update @po-ui/ng-sync@14.0.0-next.0 --allow-dirty --force
+ng update @po-ui/ng-sync@14 --allow-dirty --force
 ```
 
 O `ng update` ajudará nas alterações necessárias para seu projeto, que será atualizar as versões dos pacotes:
