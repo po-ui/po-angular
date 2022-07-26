@@ -38,14 +38,18 @@
         <strong *ngIf="typeHeaderInline"> {{ getColumnTitleLabel(detail) }}: </strong>
 
         <ng-container [ngSwitch]="detail.type">
-          <span *ngSwitchCase="'currency'">{{ item[detail.property] | currency: detail.format:'symbol':'1.2-2' }}</span>
-          <span *ngSwitchCase="'date'">{{ item[detail.property] | date: detail.format || 'dd/MM/yyyy' }}</span>
-          <span *ngSwitchCase="'time'">{{ item[detail.property] | po_time: detail.format || 'HH:mm:ss.ffffff' }}</span>
+          <span *ngSwitchCase="'currency'">{{
+            getDetailData(item, detail) | currency: detail.format:'symbol':'1.2-2'
+          }}</span>
+          <span *ngSwitchCase="'date'">{{ getDetailData(item, detail) | date: detail.format || 'dd/MM/yyyy' }}</span>
+          <span *ngSwitchCase="'time'">{{
+            getDetailData(item, detail) | po_time: detail.format || 'HH:mm:ss.ffffff'
+          }}</span>
           <span *ngSwitchCase="'dateTime'">
-            {{ item[detail.property] | date: detail.format || 'dd/MM/yyyy HH:mm:ss' }}
+            {{ getDetailData(item, detail) | date: detail.format || 'dd/MM/yyyy HH:mm:ss' }}
           </span>
-          <span *ngSwitchCase="'number'">{{ formatNumberDetail(item[detail.property], detail.format) }}</span>
-          <span *ngSwitchDefault>{{ item[detail.property] }}</span>
+          <span *ngSwitchCase="'number'">{{ formatNumberDetail(getDetailData(item, detail), detail.format) }}</span>
+          <span *ngSwitchDefault>{{ getDetailData(item, detail) }}</span>
         </ng-container>
       </td>
     </tr>
