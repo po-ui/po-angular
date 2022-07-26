@@ -968,6 +968,7 @@ export abstract class PoPageLoginBaseComponent implements OnDestroy {
     }
 
     if (this.authenticationUrl) {
+      this.loading = true;
       this.loginSubscription = this.loginService
         .onLogin(this.authenticationUrl, this.authenticationType, loginForm)
         .subscribe(
@@ -975,12 +976,14 @@ export abstract class PoPageLoginBaseComponent implements OnDestroy {
             this.setValuesToProperties();
             sessionStorage.setItem('PO_USER_LOGIN', JSON.stringify(data));
             this.openInternalLink('/');
+            this.loading = false;
           },
           error => {
             if (error.error.code === '400' || error.error.code === '401') {
               this.setValuesToProperties(error);
               this.redirectBlockedUrl(this.exceededAttemptsWarning, this.blockedUrl);
             }
+            this.loading = false;
           }
         );
     } else {
