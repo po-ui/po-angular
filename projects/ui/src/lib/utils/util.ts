@@ -326,9 +326,31 @@ export function removeDuplicatedOptions(list: Array<any>) {
   }
 }
 
+export function removeDuplicatedOptionsWithFieldValue(list: Array<any>, newValue) {
+  for (let i = 0; i < list.length; i++) {
+    if (i === 0) {
+      continue;
+    }
+
+    if (list.findIndex(op => op[newValue] === list[i][newValue]) !== i) {
+      list.splice(i, 1);
+      i--;
+    }
+  }
+}
+
 export function removeUndefinedAndNullOptions(list: Array<any>) {
   for (let i = 0; i < list.length; i++) {
     if (list[i].value === undefined || list[i].value === null) {
+      list.splice(i, 1);
+      i--;
+    }
+  }
+}
+
+export function removeUndefinedAndNullOptionsWithFieldValue(list: Array<any>, newValue) {
+  for (let i = 0; i < list.length; i++) {
+    if (list[i][newValue] === undefined || list[i][newValue] === null) {
       list.splice(i, 1);
       i--;
     }
