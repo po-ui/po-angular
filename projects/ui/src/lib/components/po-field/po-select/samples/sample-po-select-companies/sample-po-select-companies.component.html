@@ -1,0 +1,33 @@
+<po-select
+  name="select"
+  p-label="PO Select"
+  [(ngModel)]="select"
+  [p-field-value]="fieldValue"
+  [p-field-label]="fieldLabel"
+  [p-options]="empresas"
+>
+</po-select>
+
+<po-info p-label="Model" name="selectInfo" [(p-value)]="select"> </po-info>
+
+<div class="po-row">
+  <po-select
+    class="po-md-6"
+    name="fieldLabel"
+    p-label="p-field-label"
+    [p-options]="labels"
+    (p-change)="onChange($event)"
+    [(ngModel)]="fieldLabel"
+  >
+  </po-select>
+
+  <po-select
+    class="po-md-6"
+    name="selectValue"
+    p-label="p-field-value"
+    [p-options]="values"
+    (p-change)="onChange($event)"
+    [(ngModel)]="fieldValue"
+  >
+  </po-select>
+</div>
