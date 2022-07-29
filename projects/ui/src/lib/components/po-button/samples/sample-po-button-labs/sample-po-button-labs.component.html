@@ -6,6 +6,7 @@
     [p-icon]="icon"
     [p-label]="label"
     [p-loading]="properties.includes('loading')"
+    [p-size]="size"
     [p-small]="properties.includes('small')"
     [p-danger]="properties.includes('danger')"
     [p-kind]="kind"
@@ -44,6 +45,16 @@
       [(ngModel)]="kind"
       p-label="Kind"
       [p-options]="kindsOptions"
+      (p-change)="verifyDisabled($event)"
+    >
+    </po-radio-group>
+
+    <po-radio-group
+      class="po-lg-12"
+      name="size"
+      [(ngModel)]="size"
+      p-label="Size"
+      [p-options]="sizesOptions"
       (p-change)="verifyDisabled($event)"
     >
     </po-radio-group>
