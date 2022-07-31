@@ -55,6 +55,8 @@ Por exemplo:
 ng update @po-ui/ng-components@14 --allow-dirty --force
 ```
 
+> Caso ocorra um erro ao concluir o comando acima pode ser necessário fazer uma instalação limpa no projeto apagando a pasta `node_modules` e o arquivo `package-lock.json` e executando o comando `npm i --legacy-peer-deps` antes de realizar o `ng update`.
+
 O `ng update` ajudará nas alterações necessárias para seu projeto seguir atualizado, que são elas:
   - Caso houver *breaking changes*, serão realizados as alterações possíveis, mas fique atento ao
   [CHANGELOG](https://github.com/po-ui/po-angular/blob/master/CHANGELOG.md);
