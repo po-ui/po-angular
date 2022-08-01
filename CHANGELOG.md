@@ -2,6 +2,22 @@
 
 All notable changes to this project will be documented in this file. See [standard-version](https://github.com/conventional-changelog/standard-version) for commit guidelines.
 
+# [14.2.0](https://github.com/po-ui/po-angular/compare/v14.1.0...v14.2.0) (2022-08-01)
+
+
+### Bug Fixes
+
+* **datepicker:** corrige funcionamento com fuso ([b49fcb0](https://github.com/po-ui/po-angular/commit/b49fcb0f4e936425beb210e20101778f29b38138))
+
+
+### Features
+
+* **page-dynamic-table:** adiciona propriedade para fixar filtros ([de99100](https://github.com/po-ui/po-angular/commit/de991007cf0a4f39c6e524540bf8b11abf7ffe7e)), closes [#1287](https://github.com/po-ui/po-angular/issues/1287)
+
+* **page-login:** adiciona loading automático com p-authentication-url ([2f3b3dc](https://github.com/po-ui/po-angular/commit/2f3b3dcea9838c8e7076a483f2bb2f97fdf43aea)), closes [#1350](https://github.com/po-ui/po-angular/issues/1350)
+
+
+
 # [14.1.0](https://github.com/po-ui/po-angular/compare/v14.0.0...v14.1.0) (2022-07-25)
 
 
