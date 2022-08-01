@@ -1024,7 +1024,7 @@ describe('PoTableColumnManagerComponent:', () => {
     describe(`onChangeColumns`, () => {
       it(`should set 'defaultColumns' with 'columns.currentValue' if 'defaultColumns' and ' currentValue' are different`, () => {
         component['defaultColumns'] = <any>['column 1'];
-        component['lastVisibleColumnsSelected'] = undefined;
+        component['isFirstUpdate'] = true;
 
         const columns = {
           firstChange: false,
@@ -1038,9 +1038,9 @@ describe('PoTableColumnManagerComponent:', () => {
         expect(component['defaultColumns']).toEqual(<any>columns.currentValue);
       });
 
-      it(`should set 'defaultColumns' with 'columns.currentValue' if 'lastVisibleColumnsSelected' is true and 'currentValue' not is empty`, () => {
+      it(`should set 'defaultColumns' with 'columns.currentValue' if 'isFirstUpdate' is true and 'currentValue' not is empty`, () => {
         component['defaultColumns'] = <any>[];
-        component['lastVisibleColumnsSelected'] = undefined;
+        component['isFirstUpdate'] = true;
         const columns = {
           firstChange: true,
           currentValue: ['column 1']

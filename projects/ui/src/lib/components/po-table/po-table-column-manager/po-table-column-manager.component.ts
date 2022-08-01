@@ -84,6 +84,7 @@ export class PoTableColumnManagerComponent implements OnChanges, OnDestroy {
   private restoreDefaultEvent: boolean;
   private lastEmittedValue: Array<string>;
   private minColumns: number = 1;
+  private isFirstUpdate = true;
 
   @Input('p-max-columns') set maxColumns(value: number) {
     this._maxColumns = convertToInt(value, PoTableColumnManagerMaxColumnsDefault);
@@ -356,7 +357,8 @@ export class PoTableColumnManagerComponent implements OnChanges, OnDestroy {
     this.columnUpdate = columns.currentValue;
 
     // atualizara o defaultColumns, quando for a primeira vez ou quando o defaultColumns for diferente do currentValue
-    if (!this.lastVisibleColumnsSelected && this.stringify(this.defaultColumns) !== this.stringify(currentValue)) {
+    if (this.isFirstUpdate && this.stringify(this.defaultColumns) !== this.stringify(currentValue)) {
+      this.isFirstUpdate = false;
       this.defaultColumns = [...currentValue];
     }
 
