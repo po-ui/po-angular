@@ -13,11 +13,11 @@ export class AppComponent {
       label: 'TOTVS SA'
     },
     {
-      value: 6,
+      value: 2,
       label: 'INSTITUTO TOTVS DE ENSINO SA'
     },
     {
-      value: 7,
+      value: 3,
       label: 'INSTITUTO TOTVS DE ENSINO SUPERIOR SA'
     }
   ];
