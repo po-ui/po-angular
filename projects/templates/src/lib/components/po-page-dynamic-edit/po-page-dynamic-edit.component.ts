@@ -27,6 +27,7 @@ import { PoPageDynamicEditMetadata } from './interfaces/po-page-dynamic-edit-met
 import { PoPageDynamicOptionsSchema } from '../../services/po-page-customization/po-page-dynamic-options.interface';
 import { PoPageDynamicEditActionsService } from './po-page-dynamic-edit-actions.service';
 import { PoPageDynamicEditBeforeCancel } from './interfaces/po-page-dynamic-edit-before-cancel.interface';
+import { PoPageDynamicEditActionsLabels } from './interfaces/po-page-dynamic-edit-actions-labels.interface';
 
 type UrlOrPoCustomizationFunction = string | (() => PoPageDynamicEditOptions);
 type SaveAction = PoPageDynamicEditActions['save'] | PoPageDynamicEditActions['saveNew'];
@@ -291,6 +292,7 @@ export class PoPageDynamicEditComponent implements OnInit, OnDestroy {
 
   private subscriptions: Array<Subscription> = [];
   private _actions: PoPageDynamicEditActions = {};
+  private _actionsLabels: PoPageDynamicEditActionsLabels = {};
   private _autoRouter: boolean = false;
   private _controlFields: Array<any> = [];
   private _detailFields: Array<any> = [];
@@ -314,6 +316,23 @@ export class PoPageDynamicEditComponent implements OnInit, OnDestroy {
 
   get actions() {
     return { ...this._actions };
+  }
+
+  /**
+   * @optional
+   *
+   * @description
+   *
+   * Informar os rótulos customizados para as ações da página.
+   */
+  @Input('p-actions-labels') set actionsLabels(value: PoPageDynamicEditActionsLabels) {
+    this._actionsLabels = this.isObject(value) ? value : {};
+
+    this._pageActions = this.getPageActions(this._actions);
+  }
+
+  get actionsLabels() {
+    return { ...this._actionsLabels };
   }
 
   /**
@@ -690,18 +709,20 @@ export class PoPageDynamicEditComponent implements OnInit, OnDestroy {
   }
 
   private getPageActions(actions: PoPageDynamicEditActions = {}): Array<PoPageAction> {
-    const pageActions = [{ label: this.literals.pageActionSave, action: this.save.bind(this, actions.save) }];
+    const pageActions = [
+      { label: this.actionsLabels['save'] || this.literals.pageActionSave, action: this.save.bind(this, actions.save) }
+    ];
 
     if (actions.saveNew) {
       pageActions.push({
-        label: this.literals.pageActionSaveNew,
+        label: this.actionsLabels['saveNew'] || this.literals.pageActionSaveNew,
         action: this.save.bind(this, actions.saveNew, 'beforeSaveNew')
       });
     }
 
     if (actions.cancel === undefined || actions.cancel) {
       pageActions.push({
-        label: this.literals.pageActionCancel,
+        label: this.actionsLabels['cancel'] || this.literals.pageActionCancel,
         action: this.cancel.bind(this, actions.cancel, this.actions.beforeCancel)
       });
     }
