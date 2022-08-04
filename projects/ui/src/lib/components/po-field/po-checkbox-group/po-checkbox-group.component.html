@@ -1,36 +1,23 @@
 <po-field-container [p-help]="help" [p-label]="label" [p-optional]="!required && optional">
-  <div class="po-field-container-content po-checkbox-group-content">
-    <div class="po-row po-pt-1 po-pb-1">
-      <div
+  <div role="group" [attr.aria-label]="label" class="po-field-container-content po-checkbox-group-content">
+    <ul class="po-row po-pt-2 po-pb-1">
+      <li
         *ngFor="let option of checkboxGroupOptionsView; trackBy: trackByFn"
         class="po-checkbox-group-item po-md-{{ mdColumns }} po-lg-{{ columns }}"
         [class.po-checkbox-group-item-disabled]="option.disabled || disabled"
       >
-        <input
-          class="po-input po-checkbox-group-input"
-          type="checkbox"
-          [class.po-checkbox-group-input-checked]="checkedOptions[option.value]"
-          [class.po-checkbox-group-input-indeterminate]="checkedOptions[option.value] === null"
-          [checked]="option.value"
-          [disabled]="option.disabled || disabled"
-          [id]="option.id"
-          [required]="required"
-          [value]="option.value"
-        />
-
-        <label
+        <po-checkbox
           #checkboxLabel
-          class="po-checkbox-group-label"
-          [class.po-clickable]="!option.disabled && !disabled"
-          [for]="option.id"
-          [tabindex]="option.disabled || disabled ? -1 : 0"
+          [p-label]="option.label"
+          [p-disabled]="option.disabled || disabled"
           (click)="checkOption(option)"
           (keydown)="onKeyDown($event, option)"
+          [p-checkboxValue]="checkedOptions[option.value] === null ? 'mixed' : checkedOptions[option.value]"
+          [p-required]="required"
         >
-          {{ option.label }}
-        </label>
-      </div>
-    </div>
+        </po-checkbox>
+      </li>
+    </ul>
   </div>
 
   <po-field-container-bottom></po-field-container-bottom>

@@ -64,42 +64,13 @@ describe('PoCheckboxGroupComponent:', () => {
   });
 
   it('should create 2 checkbox options', () => {
-    expect(nativeElement.querySelectorAll('.po-checkbox-group-input').length).toBe(2);
-  });
-
-  it('should disable checkbox option value 2', () => {
-    expect(nativeElement.querySelector('input[type="checkbox"]:disabled+label').innerHTML).toContain('2');
+    expect(nativeElement.querySelectorAll('po-checkbox').length).toBe(2);
   });
 
   it('should call setValidators on ngAfterViewChecked', () => {
     spyOn(fakeInstance.changeDetector, 'detectChanges');
     component.ngAfterViewChecked.call(fakeInstance);
     expect(fakeInstance.changeDetector.detectChanges).toHaveBeenCalled();
-  });
-
-  it('should toggle checkbox option value 1', () => {
-    component.checkOption(component.options[0]);
-    changeDetector.detectChanges();
-
-    expect(nativeElement.querySelector('.po-checkbox-group-input-checked+label').innerHTML).toContain('1');
-    expect(component.checkedOptions).toEqual({ 1: true });
-    expect(component.checkedOptionsList).toEqual(['1']);
-
-    component.checkOption(component.options[0]);
-    changeDetector.detectChanges();
-
-    expect(nativeElement.querySelector('.po-checkbox-group-input-checked')).toBeFalsy();
-    expect(component.checkedOptions).toEqual({ 1: false });
-    expect(component.checkedOptionsList).not.toContain('1');
-  });
-
-  it('should create indeterminate checkbox option value 1', () => {
-    component.checkedOptions = { 1: null };
-    component.indeterminate = true;
-
-    changeDetector.detectChanges();
-
-    expect(nativeElement.querySelector('.po-checkbox-group-input-indeterminate+label').innerHTML).toContain('1');
   });
 
   describe('Methods:', () => {
@@ -251,47 +222,6 @@ describe('PoCheckboxGroupComponent:', () => {
     });
 
     describe('Templates:', () => {
-      it('should set tabindex to -1 when checkbox-group is disabled', () => {
-        component.disabled = true;
-        changeDetector.detectChanges();
-
-        expect(nativeElement.querySelector('label.po-checkbox-group-label[tabindex="-1"]')).toBeTruthy();
-      });
-
-      it('should set tabindex to 0 when checkbox-group disabled is false', () => {
-        component.disabled = false;
-        changeDetector.detectChanges();
-
-        expect(nativeElement.querySelector('label.po-checkbox-group-label[tabindex="0"]')).toBeTruthy();
-      });
-
-      it('should set tabindex to -1 when option disabled is true', () => {
-        component.options = [{ label: 'teste', value: 'teste', disabled: true }];
-        changeDetector.detectChanges();
-
-        expect(nativeElement.querySelector('label.po-checkbox-group-label[tabindex="-1"]')).toBeTruthy();
-      });
-
-      it('should set tabindex to 0 when option disabled not exists', () => {
-        component.options = [{ label: 'teste', value: 'teste' }];
-        changeDetector.detectChanges();
-
-        expect(nativeElement.querySelector('label.po-checkbox-group-label[tabindex="0"]')).toBeTruthy();
-      });
-
-      it('should set `po-clickable` class if `disabled` and `options.disabled` are false.', () => {
-        component.options = [
-          { value: '1', label: '1' },
-          { value: '2', label: '2', disabled: true }
-        ];
-        component.disabled = false;
-
-        changeDetector.detectChanges();
-
-        expect(nativeElement.querySelectorAll('label.po-checkbox-group-label.po-clickable')[0]).toBeTruthy();
-        expect(nativeElement.querySelectorAll('label.po-checkbox-group-label.po-clickable')[1]).toBeFalsy();
-      });
-
       it('shouldn`t set `po-clickable` class if `disabled` is true.', () => {
         component.options = [
           { value: '1', label: '1' },
