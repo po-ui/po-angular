@@ -30,7 +30,6 @@
             (click)="changePosition(option, 'up'); $event.stopPropagation()"
             p-kind="tertiary"
             p-icon="po-icon po-icon-arrow-up"
-            p-small
           >
           </po-button>
           <po-button
@@ -40,7 +39,6 @@
             (click)="changePosition(option, 'down'); $event.stopPropagation()"
             p-kind="tertiary"
             p-icon="po-icon po-icon-arrow-down"
-            p-small
           >
           </po-button>
         </div>
@@ -51,7 +49,6 @@
   <div class="po-table-column-manager-footer">
     <po-button
       class="po-table-column-manager-footer-restore"
-      p-small
       p-kind="tertiary"
       [p-label]="literals.restoreDefault"
       (p-click)="restore()"

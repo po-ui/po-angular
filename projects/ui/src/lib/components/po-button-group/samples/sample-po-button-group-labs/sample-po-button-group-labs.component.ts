@@ -15,7 +15,6 @@ import {
 export class SamplePoButtonGroupLabsComponent implements OnInit {
   button: any;
   buttons: Array<PoButtonGroupItem>;
-  small: boolean;
   toggle: PoButtonGroupToggle;
 
   iconsOptions: Array<PoRadioGroupOption> = [

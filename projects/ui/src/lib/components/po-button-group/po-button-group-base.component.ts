@@ -34,9 +34,16 @@ export class PoButtonGroupBaseComponent {
   private _toggle?: string = PO_TOGGLE_TYPE_DEFAULT;
 
   /**
+   * @deprecated 16.x.x
+   *
    * @optional
    *
    * @description
+   *
+   * **Deprecated 16.x.x**.
+   *
+   * > Por regras de acessibilidade o botão não terá mais um tamanho menor do que 44px e por isso a propriedade será depreciada.
+   * > [Saiba mais](https://animaliads.notion.site/Bot-o-fb3a921e8ba54bd38b39758c24613368)
    *
    * Torna o grupo de botões com tamanho minificado.
    *
