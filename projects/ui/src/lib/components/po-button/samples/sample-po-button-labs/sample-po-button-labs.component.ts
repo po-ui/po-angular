@@ -16,7 +16,6 @@ export class SamplePoButtonLabsComponent implements OnInit {
   propertiesOptions: Array<PoCheckboxGroupOption> = [
     { value: 'disabled', label: 'Disabled' },
     { value: 'loading', label: 'Loading' },
-    { value: 'small', label: 'Small' },
     { value: 'danger', label: 'Danger' }
   ];
 
@@ -66,10 +65,10 @@ export class SamplePoButtonLabsComponent implements OnInit {
     const value = [...this.propertiesOptions];
 
     if (event === 'tertiary') {
-      value[3] = { value: 'danger', label: 'Danger', disabled: true };
+      value[2] = { value: 'danger', label: 'Danger', disabled: true };
       this.propertiesOptions = value;
     } else {
-      value[3] = { value: 'danger', label: 'Danger', disabled: false };
+      value[2] = { value: 'danger', label: 'Danger', disabled: false };
       this.propertiesOptions = value;
     }
   }
