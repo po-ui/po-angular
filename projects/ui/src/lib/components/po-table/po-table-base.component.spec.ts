@@ -602,6 +602,28 @@ describe('PoTableBaseComponent:', () => {
       expect(otherRow.$selected).toBeFalsy();
     });
 
+    describe('hasSelectableRow:', () => {
+      it('should return false when selectable is false', () => {
+        component.selectable = false;
+
+        expect(component['hasSelectableRow']()).toBeFalsy();
+      });
+
+      it('should return true when selectable and selectableEntireLine is true', () => {
+        component.selectable = true;
+        component.selectableEntireLine = true;
+
+        expect(component['hasSelectableRow']()).toBeTruthy();
+      });
+
+      it('should return false when selectable is true and selectableEntireLine is false', () => {
+        component.selectable = true;
+        component.selectableEntireLine = false;
+
+        expect(component['hasSelectableRow']()).toBeFalsy();
+      });
+    });
+
     it('selectRow: should set $selected `true` at row and call `configAfterSelectRow` and `emitSelectEvents`', () => {
       const row = { id: 1, $selected: false };
 
