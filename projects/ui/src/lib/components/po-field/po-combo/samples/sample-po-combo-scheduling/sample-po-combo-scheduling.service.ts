@@ -34,15 +34,15 @@ export class SamplePoComboSchedulingService {
 
   getMedicalSpecialty() {
     return [
-      { label: 'Allergist', value: 'allergist' },
-      { label: 'Cardiologist', value: 'cardiologist' },
-      { label: 'General practitioner', value: 'generalPractitioner' },
-      { label: 'Dermatologist', value: 'dermatologist' },
-      { label: 'Gynecologist', value: 'gynecologist' },
-      { label: 'Nutritionist', value: 'nutritionist' },
-      { label: 'Pediatrist', value: 'pediatrist' },
-      { label: 'Psychiatrist', value: 'psychiatrist' },
-      { label: 'Orthopaedist', value: 'orthopaedist' }
+      { specialty: 'Allergist', specialtyValue: 'allergist' },
+      { specialty: 'Cardiologist', specialtyValue: 'cardiologist' },
+      { specialty: 'General practitioner', specialtyValue: 'generalPractitioner' },
+      { specialty: 'Dermatologist', specialtyValue: 'dermatologist' },
+      { specialty: 'Gynecologist', specialtyValue: 'gynecologist' },
+      { specialty: 'Nutritionist', specialtyValue: 'nutritionist' },
+      { specialty: 'Pediatrist', specialtyValue: 'pediatrist' },
+      { specialty: 'Psychiatrist', specialtyValue: 'psychiatrist' },
+      { specialty: 'Orthopaedist', specialtyValue: 'orthopaedist' }
     ];
   }
 }

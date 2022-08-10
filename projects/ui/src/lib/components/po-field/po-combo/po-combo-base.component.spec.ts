@@ -968,6 +968,27 @@ describe('PoComboBaseComponent:', () => {
       expect(spyUpdateModel).not.toHaveBeenCalled();
     });
 
+    describe('VisibleOptions:', () => {
+      beforeEach(() => {
+        component = new PoComboTest();
+
+        component.filterService = null;
+        component.defaultService = null;
+      });
+
+      it(`should set 'visibleOptions' with 'options' with 'value' and 'label' dynamic`, () => {
+        component.fieldLabel = 'labelDynamic';
+        component.fieldValue = 'valueDynamic';
+        component.options = [
+          { labelDynamic: '1', valueDynamic: '1' },
+          { labelDynamic: '2', valueDynamic: '2' }
+        ];
+
+        component.updateComboList();
+        expect(component.visibleOptions).toEqual(component.options);
+      });
+    });
+
     describe('updateComboList:', () => {
       it(`should set 'visibleOptions' with 'component.comboOptionsList' if 'options param' and 'selectedValue' are falsy`, () => {
         component.options = [{ label: '1', value: '1' }];
@@ -1066,11 +1087,17 @@ describe('PoComboBaseComponent:', () => {
     });
 
     it('compareOptions: should compare received param options', () => {
-      expect(component['compareOptions']({ label: 'a' }, { label: 'b' })).toBe(-1);
-      expect(component['compareOptions']({ label: 'c' }, { label: 'b' })).toBe(1);
-      expect(component['compareOptions']({ label: 'c' }, { label: 'c' })).toBe(0);
-      expect(component['compareOptions']({ label: 'A' }, { label: 'b' })).toBe(-1);
-      expect(component['compareOptions']({ label: 'a' }, { label: 'C' })).toBe(-1);
+      const arrayA = [{ label: 'a' }, { label: 'b' }].sort(component['compareOptions']('label'));
+      const arrayB = [{ label: 'c' }, { label: 'b' }].sort(component['compareOptions']('label'));
+      const arrayC = [{ label: 'c' }, { label: 'c' }].sort(component['compareOptions']('label'));
+      const arrayD = [{ label: 'A' }, { label: 'b' }].sort(component['compareOptions']('label'));
+      const arrayE = [{ label: 'a' }, { label: 'C' }].sort(component['compareOptions']('label'));
+
+      expect(arrayA).toEqual([{ label: 'a' }, { label: 'b' }]);
+      expect(arrayB).toEqual([{ label: 'b' }, { label: 'c' }]);
+      expect(arrayC).toEqual([{ label: 'c' }, { label: 'c' }]);
+      expect(arrayD).toEqual([{ label: 'A' }, { label: 'b' }]);
+      expect(arrayE).toEqual([{ label: 'a' }, { label: 'C' }]);
     });
 
     describe('ValidateValue', () => {
@@ -1408,6 +1435,46 @@ describe('PoComboBaseComponent:', () => {
       expect(component.updateComboList).toHaveBeenCalled();
       expect(component.initInputObservable).toHaveBeenCalled();
       expect(component.selectedValue).toEqual(undefined);
+    });
+
+    it(`checkIfService: should return 'label' if contain service and param is 'label'`, () => {
+      const urlService = 'https://po-ui.io/sample/api/new/heros';
+      component.setService(urlService);
+      component.fieldLabel = 'labelTest';
+
+      const expectLabel = component['checkIfService']('label');
+
+      expect(expectLabel).toEqual('label');
+    });
+
+    it(`checkIfService: should return 'fieldLabel' if not contain service and param is 'label'`, () => {
+      component.setService(undefined);
+      component.filterService = undefined;
+      component.fieldLabel = 'labelTest';
+
+      const expectLabel = component['checkIfService']('label');
+
+      expect(expectLabel).toEqual('labelTest');
+    });
+
+    it(`checkIfService: should return 'value' if contain service and param is 'value'`, () => {
+      const urlService = 'https://po-ui.io/sample/api/new/heros';
+      component.setService(urlService);
+      component.fieldValue = 'valueTest';
+
+      const expectLabel = component['checkIfService']('value');
+
+      expect(expectLabel).toEqual('value');
+    });
+
+    it(`checkIfService: should return 'fieldValue' if not contain service and param is 'value'`, () => {
+      component.setService(undefined);
+      component.filterService = undefined;
+      component.fieldValue = 'valueTest';
+
+      const expectLabel = component['checkIfService']('value');
+
+      expect(expectLabel).toEqual('valueTest');
     });
   });
 });

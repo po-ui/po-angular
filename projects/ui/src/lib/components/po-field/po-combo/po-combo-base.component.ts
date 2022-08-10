@@ -240,7 +240,7 @@ export abstract class PoComboBaseComponent implements ControlValueAccessor, OnIn
    */
   @Output('p-input-change') inputChange: EventEmitter<string> = new EventEmitter<string>();
 
-  cacheOptions: Array<PoComboOption | PoComboGroup> = [];
+  cacheOptions: Array<any> = [];
   defaultService: PoComboFilterService;
   firstInWriteValue: boolean = true;
   isFirstFilter: boolean = true;
@@ -248,17 +248,19 @@ export abstract class PoComboBaseComponent implements ControlValueAccessor, OnIn
   keyupSubscribe: any;
   onModelChange: any;
   previousSearchValue: string = '';
-  selectedOption: PoComboOption | PoComboGroup;
+  selectedOption: any;
   selectedValue: any;
   selectedView: any;
   service: PoComboFilterService;
-  visibleOptions: Array<PoComboOption | PoComboGroup> = [];
+  visibleOptions: Array<any> = [];
   page: number = 1;
   pageSize: number = 10;
   loading: boolean = false;
+  dynamicLabel: string = 'label';
+  dynamicValue: string = 'value';
 
-  protected cacheStaticOptions: Array<PoComboOption | PoComboGroup> = [];
-  protected comboOptionsList: Array<PoComboOption | PoComboGroup> = [];
+  protected cacheStaticOptions: Array<any> = [];
+  protected comboOptionsList: Array<any> = [];
   protected onModelTouched: any = null;
 
   private _changeOnEnter?: boolean = false;
@@ -271,7 +273,7 @@ export abstract class PoComboBaseComponent implements ControlValueAccessor, OnIn
   private _filterMode?: PoComboFilterMode = PoComboFilterMode.startsWith;
   private _filterParams?: any;
   private _literals?: PoComboLiterals;
-  private _options: Array<PoComboOption | PoComboOptionGroup> = [];
+  private _options: Array<PoComboOption | PoComboOptionGroup | any> = [];
   private _placeholder: string = '';
   private _required?: boolean = false;
   private _sort?: boolean = false;
@@ -344,6 +346,10 @@ export abstract class PoComboBaseComponent implements ControlValueAccessor, OnIn
    * @default `value`
    */
   @Input('p-field-value') set fieldValue(value: string) {
+    if (!this.service && !this.filterService) {
+      this.dynamicValue = value;
+    }
+
     this._fieldValue = value || PO_COMBO_FIELD_VALUE_DEFAULT;
 
     if (isTypeof(this.filterService, 'string') && this.service) {
@@ -368,6 +374,10 @@ export abstract class PoComboBaseComponent implements ControlValueAccessor, OnIn
    * @default `label`
    */
   @Input('p-field-label') set fieldLabel(value: string) {
+    if (!this.service && !this.filterService) {
+      this.dynamicLabel = value;
+    }
+
     this._fieldLabel = value || PO_COMBO_FIELD_LABEL_DEFAULT;
 
     if (isTypeof(this.filterService, 'string') && this.service) {
@@ -462,23 +472,25 @@ export abstract class PoComboBaseComponent implements ControlValueAccessor, OnIn
   /**
    * Nesta propriedade define a lista de opções do `po-combo`.
    *
-   * > A lista pode ser definida em dois formatos, simples ou com agrupamentos.
-   * - Utilize `PoComboOption` para lista de opções simples.
-   * - Utilize `PoComboOptionGroup` para lista de opções com agrupamento.
+   * > A lista pode ser definida utilizando um array com o valor representando o `value` e o `label` das seguintes formas:
    *
-   * **Importante:**
-   * - A lista deve seguir as definições descritas nas respectivas interfaces, caso contrário não exibirá a(as) opção(ões) fora dos padrões.
-   * - O componente interpretará o formato da lista de acordo com a interface utilizada e só exibirá as opções correspondentes à ela.
-   * - Um agrupamento só será exibido se houver pelo menos uma opção válida.
+   * ```
+   * <po-combo name="combo" p-label="PO Combo" [p-options]="[{value: 1, label: 'One'}, {value: 2, label: 'two'}]"> </po-combo>
+   * ```
+   *
+   * ```
+   * <po-combo name="combo" p-label="PO Combo" [p-options]="[{name: 'Roger', age: 28}, {name: 'Anne', age: 35}]" p-field-label="name" p-field-value="age"> </po-combo>
+   * ```
+   *
    * - Aconselha-se utilizar valores distintos no `label` e `value` dos itens.
    */
-  @Input('p-options') set options(options: Array<PoComboOption | PoComboOptionGroup>) {
+  @Input('p-options') set options(options: Array<PoComboOption | PoComboOptionGroup | any>) {
     this._options = Array.isArray(options) ? options : [];
 
     this.comboListDefinitions();
   }
 
-  get options() {
+  get options(): Array<PoComboOption | PoComboOptionGroup | any> {
     return this._options;
   }
 
@@ -580,6 +592,9 @@ export abstract class PoComboBaseComponent implements ControlValueAccessor, OnIn
   }
 
   ngOnInit() {
+    this.dynamicValue = this.checkIfService('value');
+    this.dynamicLabel = this.checkIfService('label');
+
     this.updateComboList();
   }
 
@@ -612,32 +627,34 @@ export abstract class PoComboBaseComponent implements ControlValueAccessor, OnIn
     }
   }
 
-  startsWith(search: string, option: PoComboOption | PoComboGroup) {
-    return option.label.toLowerCase().startsWith(search.toLowerCase());
+  startsWith(search: string, option: any) {
+    return option[this.dynamicLabel].toLowerCase().startsWith(search.toLowerCase());
   }
 
-  contains(search: string, option: PoComboOption | PoComboGroup) {
-    return option.label.toLowerCase().indexOf(search.toLowerCase()) > -1;
+  contains(search: string, option: any) {
+    return option[this.dynamicLabel].toLowerCase().indexOf(search.toLowerCase()) > -1;
   }
 
-  endsWith(search: string, option: PoComboOption | PoComboGroup) {
-    return option.label.toLowerCase().endsWith(search.toLowerCase());
+  endsWith(search: string, option: any) {
+    return option[this.dynamicLabel].toLowerCase().endsWith(search.toLowerCase());
   }
 
   getOptionFromValue(value: any, options: any) {
-    return options ? options.find((option: any) => this.isEqual(option.value, value)) : null;
+    return options ? options.find((option: any) => this.isEqual(option[this.dynamicValue], value)) : null;
   }
 
   getOptionFromLabel(label: any, options: any) {
     if (options) {
-      return options.find((option: any) => option.label.toString().toLowerCase() === label.toString().toLowerCase());
+      return options.find(
+        (option: any) => option[this.dynamicLabel].toString().toLowerCase() === label.toString().toLowerCase()
+      );
     } else {
       return null;
     }
   }
 
-  updateSelectedValue(option: PoComboOption | PoComboGroup, isUpdateModel: boolean = true) {
-    const optionLabel = (option && option.label) || '';
+  updateSelectedValue(option: any, isUpdateModel: boolean = true) {
+    const optionLabel = (option && option[this.dynamicLabel]) || '';
 
     this.updateInternalVariables(option);
 
@@ -649,7 +666,7 @@ export abstract class PoComboBaseComponent implements ControlValueAccessor, OnIn
     }
 
     if (isUpdateModel) {
-      const optionValue = option?.value !== undefined ? option.value : undefined;
+      const optionValue = option?.[this.dynamicValue] !== undefined ? option[this.dynamicValue] : undefined;
 
       this.updateModel(optionValue);
     }
@@ -672,9 +689,9 @@ export abstract class PoComboBaseComponent implements ControlValueAccessor, OnIn
     return value === inputValue;
   }
 
-  searchForLabel(search: string, options: Array<PoComboOption | PoComboGroup>, filterMode: PoComboFilterMode) {
+  searchForLabel(search: string, options: Array<any>, filterMode: PoComboFilterMode) {
     if (search && options && options.length) {
-      const newOptions: Array<PoComboOption | PoComboGroup> = [];
+      const newOptions: Array<any> = [];
       let addedOptionsGroupTitle: boolean = false;
       let optionsGroupTitle: PoComboGroup;
 
@@ -684,7 +701,7 @@ export abstract class PoComboBaseComponent implements ControlValueAccessor, OnIn
           return (optionsGroupTitle = option);
         }
 
-        if (option.label && (this.compareMethod(search, option, filterMode) || this.service)) {
+        if (option[this.dynamicLabel] && (this.compareMethod(search, option, filterMode) || this.service)) {
           if (this.isOptionGroupList && !addedOptionsGroupTitle) {
             newOptions.push(optionsGroupTitle);
             addedOptionsGroupTitle = true;
@@ -701,7 +718,7 @@ export abstract class PoComboBaseComponent implements ControlValueAccessor, OnIn
     }
   }
 
-  updateComboList(options?: Array<PoComboOption | PoComboGroup>) {
+  updateComboList(options?: Array<any>) {
     const copyOptions = options || [...this.comboOptionsList];
 
     const newOptions =
@@ -710,23 +727,23 @@ export abstract class PoComboBaseComponent implements ControlValueAccessor, OnIn
     this.visibleOptions = newOptions;
 
     if (!this.selectedView && this.visibleOptions.length) {
-      this.selectedView = copyOptions.find(option => option.value !== undefined);
+      this.selectedView = copyOptions.find(option => option[this.dynamicValue] !== undefined);
     }
   }
 
-  getNextOption(value: any, options: Array<PoComboOption | PoComboGroup>, reverse: boolean = false) {
+  getNextOption(value: any, options: Array<any>, reverse: boolean = false) {
     const optionsList = reverse ? options.slice(0).reverse() : options.slice(0);
     let optionFound = null;
     let found = false;
 
     for (const option of optionsList) {
-      if (option.value && !optionFound) {
+      if (option[this.dynamicValue] && !optionFound) {
         optionFound = option;
       }
-      if (option.value && found) {
+      if (option[this.dynamicValue] && found) {
         return option;
       }
-      if (this.isEqual(option.value, value)) {
+      if (this.isEqual(option[this.dynamicValue], value)) {
         found = true;
       }
     }
@@ -756,17 +773,19 @@ export abstract class PoComboBaseComponent implements ControlValueAccessor, OnIn
       this.updateComboList([...this.cacheStaticOptions]);
     }
 
-    if (optionFound && optionFound.value !== this.selectedValue) {
+    if (optionFound && optionFound[this.dynamicValue] !== this.selectedValue) {
       this.updateSelectedValue(optionFound);
 
-      this.previousSearchValue = optionFound.label;
-    } else if (this.selectedValue && this.selectedOption && this.selectedOption.label !== inputValue) {
+      this.previousSearchValue = optionFound[this.dynamicLabel];
+    } else if (this.selectedValue && this.selectedOption && this.selectedOption[this.dynamicLabel] !== inputValue) {
       this.updateSelectedValueWithOldOption();
 
-      this.previousSearchValue = this.selectedOption.label;
+      this.previousSearchValue = this.selectedOption[this.dynamicLabel];
       return;
     } else if (inputValue && !optionFound) {
-      const isInputValueDiffSelectedLabel = !!(this.selectedOption && this.selectedOption.label !== inputValue);
+      const isInputValueDiffSelectedLabel = !!(
+        this.selectedOption && this.selectedOption[this.dynamicLabel] !== inputValue
+      );
 
       this.updateSelectedValue(null, isInputValueDiffSelectedLabel || this.changeOnEnter);
 
@@ -863,26 +882,41 @@ export abstract class PoComboBaseComponent implements ControlValueAccessor, OnIn
     this.updateComboList();
   }
 
-  private compareOptions(optionA: any, optionB: any) {
-    const labelA = optionA.label.toString().toLowerCase();
-    const labelB = optionB.label.toString().toLowerCase();
+  private checkIfService(dynamicValue: string) {
+    if ((this.service || this.filterService) && dynamicValue === 'label') {
+      return PO_COMBO_FIELD_LABEL_DEFAULT;
+    }
+    if ((this.service || this.filterService) && dynamicValue === 'value') {
+      return PO_COMBO_FIELD_VALUE_DEFAULT;
+    }
 
-    return labelA < labelB ? -1 : labelA > labelB ? 1 : 0;
-  }
+    if (!this.service && dynamicValue === 'label') {
+      return this.fieldLabel;
+    }
 
-  private hasDuplicatedOption(
-    options: Array<PoComboOption | PoComboGroup>,
-    currentOption: string,
-    accumulatedGroupOptions?: Array<PoComboGroup>
-  ) {
-    if (accumulatedGroupOptions) {
-      return accumulatedGroupOptions.some(option => option.label === currentOption);
-    } else {
-      return options.some(option => option.value === currentOption);
+    if (!this.service && dynamicValue === 'value') {
+      return this.fieldValue;
     }
   }
 
-  private listingComboOptions(comboOptions: Array<PoComboOption | PoComboOptionGroup>) {
+  private compareOptions(dynamicLabel: string) {
+    return function (optionA: any, optionB: any) {
+      const labelA = optionA[dynamicLabel].toString().toLowerCase();
+      const labelB = optionB[dynamicLabel].toString().toLowerCase();
+
+      return labelA < labelB ? -1 : labelA > labelB ? 1 : 0;
+    };
+  }
+
+  private hasDuplicatedOption(options: Array<any>, currentOption: string, accumulatedGroupOptions?: Array<any>) {
+    if (accumulatedGroupOptions) {
+      return accumulatedGroupOptions.some(option => option[this.dynamicLabel] === currentOption);
+    } else {
+      return options.some(option => option[this.dynamicValue] === currentOption);
+    }
+  }
+
+  private listingComboOptions(comboOptions: Array<any>) {
     const comboOptionsList = comboOptions.concat();
     const verifiedComboOptionsList = this.verifyComboOptions(comboOptionsList);
 
@@ -895,35 +929,36 @@ export abstract class PoComboBaseComponent implements ControlValueAccessor, OnIn
     return verifiedComboOptionsList;
   }
 
-  private sortOptions(comboOptionsList: Array<PoComboGroup>) {
+  private sortOptions(comboOptionsList: Array<any>) {
     if (comboOptionsList.length > 0 && this.sort) {
-      return comboOptionsList.sort(this.compareOptions);
+      return comboOptionsList.sort(this.compareOptions(this.dynamicLabel));
     }
   }
 
-  private validateValue(currentOption: PoComboGroup, verifyingOptionsGroup: boolean = false) {
-    const { label, options, value } = currentOption;
+  private validateValue(currentOption: any, verifyingOptionsGroup: boolean = false) {
+    const { options } = currentOption;
 
     if (this.isOptionGroupList) {
       return (
-        (validValue(label) && options && options.length > 0) || (verifyingOptionsGroup === true && validValue(value))
+        (validValue(currentOption[this.dynamicLabel]) && options && options.length > 0) ||
+        (verifyingOptionsGroup === true && validValue(currentOption[this.dynamicValue]))
       );
     }
 
-    return validValue(value) && !options;
+    return validValue(currentOption[this.dynamicValue]) && !options;
   }
 
   private verifyComboOptions(
-    comboOptions: Array<PoComboOption | PoComboOptionGroup>,
+    comboOptions: Array<any>,
     verifyingOptionsGroup: boolean = false,
-    accumulatedGroupOptions?: Array<PoComboGroup>
+    accumulatedGroupOptions?: Array<any>
   ) {
     return comboOptions.reduce((accumulatedOptions, currentOption) => {
       if (
         !this.verifyIfHasLabel(currentOption) ||
         this.hasDuplicatedOption(
           accumulatedOptions,
-          currentOption['value'] || currentOption['label'],
+          currentOption[this.dynamicValue] || currentOption[this.dynamicLabel],
           accumulatedGroupOptions
         ) ||
         !this.validateValue(currentOption, verifyingOptionsGroup)
@@ -936,15 +971,18 @@ export abstract class PoComboBaseComponent implements ControlValueAccessor, OnIn
     }, []);
   }
 
-  private verifyComboOptionsGroup(comboOptionsList: Array<PoComboOptionGroup>) {
+  private verifyComboOptionsGroup(comboOptionsList: Array<any>) {
     return comboOptionsList.reduce((accumulatedGroupOptions, currentOption) => {
-      const { options, label } = currentOption;
+      const { options } = currentOption;
       const verifiedComboOptionsGroupList = this.verifyComboOptions(options, true, accumulatedGroupOptions);
 
       if (verifiedComboOptionsGroupList.length > 0) {
         this.sortOptions(verifiedComboOptionsGroupList);
 
-        accumulatedGroupOptions.push({ label: label, options: true }, ...verifiedComboOptionsGroupList);
+        accumulatedGroupOptions.push(
+          { label: currentOption[this.dynamicLabel], options: true },
+          ...verifiedComboOptionsGroupList
+        );
       }
 
       return accumulatedGroupOptions;
@@ -952,21 +990,25 @@ export abstract class PoComboBaseComponent implements ControlValueAccessor, OnIn
   }
 
   private verifyIfHasLabel(currentOption: PoComboGroup = {}) {
-    const { label, options, value } = currentOption;
+    const { options } = currentOption;
 
-    if ((this.isOptionGroupList && options && !label) || (!label && !value) || (!this.isOptionGroupList && options)) {
+    if (
+      (this.isOptionGroupList && options && !currentOption[this.dynamicLabel]) ||
+      (!currentOption[this.dynamicLabel] && !currentOption[this.dynamicValue]) ||
+      (!this.isOptionGroupList && options)
+    ) {
       return false;
     }
 
-    if (!currentOption.label) {
-      currentOption.label = currentOption.value.toString();
+    if (!currentOption[this.dynamicLabel]) {
+      currentOption[this.dynamicLabel] = currentOption[this.dynamicValue].toString();
       return true;
     }
 
     return true;
   }
 
-  private updateInternalVariables(option: PoComboOption | PoComboGroup) {
+  private updateInternalVariables(option: any) {
     if (option) {
       this.selectedView = option;
       this.selectedOption = option;
@@ -992,7 +1034,7 @@ export abstract class PoComboBaseComponent implements ControlValueAccessor, OnIn
   private updateSelectedValueWithOldOption() {
     const oldOption = this.getOptionFromValue(this.selectedValue, this.comboOptionsList);
 
-    if (oldOption && oldOption.label) {
+    if (oldOption && oldOption[this.dynamicLabel]) {
       return this.updateSelectedValue(oldOption);
     }
   }
