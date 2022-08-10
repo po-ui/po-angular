@@ -1,6 +1,6 @@
 import { Input, Output, EventEmitter, Directive } from '@angular/core';
 
-import { convertToBoolean, isTypeof } from '../../utils/util';
+import { convertToBoolean, isTypeof, uuid } from '../../utils/util';
 
 /**
  *
@@ -73,6 +73,7 @@ export abstract class PoWidgetBaseComponent {
   @Output('p-title-action') titleAction: EventEmitter<any> = new EventEmitter<any>();
 
   containerHeight?: string = 'auto';
+  id = uuid();
 
   private _background?: string;
   private _disabled?: boolean = false;
