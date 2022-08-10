@@ -15,13 +15,14 @@
 
     <div *ngIf="setting.observers[0] || help" class="po-pull-right">
       <span
-        id="settingAction"
+        id="settingAction-{{ id }}"
         *ngIf="setting.observers[0]"
         class="po-clickable po-icon po-icon-settings"
         (click)="settingOutput($event)"
       >
       </span>
-      <span id="helpLink" *ngIf="help" class="po-clickable po-icon po-icon-help" (click)="openHelp($event)"> </span>
+      <span id="helpLink-{{ id }}" *ngIf="help" class="po-clickable po-icon po-icon-help" (click)="openHelp($event)">
+      </span>
     </div>
   </div>
 
@@ -33,14 +34,16 @@
 
   <div *ngIf="primaryLabel" class="po-widget-footer">
     <div class="po-widget-xl" *ngIf="!secondaryLabel">
-      <a class="po-widget-action" id="primaryAct" (click)="runPrimaryAction($event)">{{ primaryLabel }}</a>
+      <a class="po-widget-action" id="primaryAct-{{ id }}" (click)="runPrimaryAction($event)">{{ primaryLabel }}</a>
     </div>
 
     <div class="po-widget-md" *ngIf="secondaryLabel">
-      <a class="po-widget-action" id="primaryAct" (click)="runPrimaryAction($event)">{{ primaryLabel }}</a>
+      <a class="po-widget-action" id="primaryAct-{{ id }}" (click)="runPrimaryAction($event)">{{ primaryLabel }}</a>
     </div>
     <div class="po-widget-md" *ngIf="secondaryLabel">
-      <a class="po-widget-action" id="secondaryAct" (click)="runSecondaryAction($event)">{{ secondaryLabel }}</a>
+      <a class="po-widget-action" id="secondaryAct-{{ id }}" (click)="runSecondaryAction($event)">{{
+        secondaryLabel
+      }}</a>
     </div>
   </div>
 </div>
