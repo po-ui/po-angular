@@ -222,98 +222,56 @@ describe('PoSwitchComponent', () => {
       component.disabled = true;
       fixture.detectChanges();
 
-      expect(nativeElement.querySelector('div.po-switch-container.po-clickable[tabindex="-1"]')).toBeTruthy();
+      expect(nativeElement.querySelector('[tabindex="-1"]')).toBeTruthy();
     });
 
     it('should set tabindex to 0 when switch disabled is false', () => {
       component.disabled = false;
       fixture.detectChanges();
 
-      expect(nativeElement.querySelector('div.po-switch-container.po-clickable[tabindex="0"]')).toBeTruthy();
+      expect(nativeElement.querySelector('[tabindex="0"]')).toBeTruthy();
     });
 
-    it('should have .po-switch-container-on', () => {
+    it('should set attribute `aria-checked` with `true`', () => {
       component.value = true;
       fixture.detectChanges();
 
-      expect(nativeElement.querySelector('.po-switch-container-on')).toBeTruthy();
-      expect(nativeElement.querySelector('.po-switch-container-off')).toBeFalsy();
-      expect(nativeElement.querySelector('.po-switch-container-disabled')).toBeFalsy();
+      expect(nativeElement.querySelector('[aria-checked="true"]')).toBeTruthy();
     });
 
-    it('should have .po-switch-container-off', () => {
+    it('should set attribute `aria-checked` with `false`', () => {
       component.value = false;
       fixture.detectChanges();
 
-      expect(nativeElement.querySelector('.po-switch-container-off')).toBeTruthy();
-      expect(nativeElement.querySelector('.po-switch-container-on')).toBeFalsy();
-      expect(nativeElement.querySelector('.po-switch-container-disabled')).toBeFalsy();
+      expect(nativeElement.querySelector('[aria-checked="false"]')).toBeTruthy();
     });
 
-    it('should have .po-switch-container-disabled', () => {
-      component.value = false;
+    it('should set attribute `aria-disabled` with `true`', () => {
       component.disabled = true;
       fixture.detectChanges();
 
-      expect(nativeElement.querySelector('.po-switch-container-disabled')).toBeTruthy();
-      expect(nativeElement.querySelector('.po-switch-container-on')).toBeFalsy();
-      expect(nativeElement.querySelector('.po-switch-container-off')).toBeFalsy();
-    });
-
-    it('should have .po-switch-button-on', () => {
-      component.value = true;
-      fixture.detectChanges();
-
-      expect(nativeElement.querySelector('.po-icon-ok')).toBeTruthy();
-
-      expect(nativeElement.querySelector('.po-switch-button-on')).toBeTruthy();
-      expect(nativeElement.querySelector('.po-switch-button-off')).toBeFalsy();
-      expect(nativeElement.querySelector('.po-switch-button-disabled')).toBeFalsy();
-    });
-
-    it('should have .po-switch-button-off', () => {
-      component.value = false;
-      fixture.detectChanges();
-
-      expect(nativeElement.querySelector('.po-icon-close')).toBeTruthy();
-
-      expect(nativeElement.querySelector('.po-switch-button-off')).toBeTruthy();
-      expect(nativeElement.querySelector('.po-switch-button-on')).toBeFalsy();
-      expect(nativeElement.querySelector('.po-switch-button-disabled')).toBeFalsy();
-    });
-
-    it('should have .po-switch-button-disabled', () => {
-      component.value = true;
-      component.disabled = true;
-      fixture.detectChanges();
-
-      expect(nativeElement.querySelector('.po-switch-button-disabled')).toBeTruthy();
-      expect(nativeElement.querySelector('.po-switch-button-on')).toBeTruthy();
-      expect(nativeElement.querySelector('.po-switch-button-off')).toBeFalsy();
+      expect(nativeElement.querySelector('[aria-disabled="true"]')).toBeTruthy();
     });
 
     it('should have p-label-position = default', () => {
       component['_labelPosition'] = undefined;
       fixture.detectChanges();
 
-      expect(nativeElement.querySelector('.po-switch-label-right')).toBeTruthy();
-      expect(nativeElement.querySelector('.po-switch-container-right')).toBeFalsy();
+      expect(nativeElement.querySelector('[data-label-position="right"]')).toBeTruthy();
     });
 
-    it('should have p-label-position = left', () => {
+    it('should set attribute `data-label-position` with `left`', () => {
       component.labelPosition = PoSwitchLabelPosition.Left;
       fixture.detectChanges();
 
-      expect(nativeElement.querySelector('.po-switch-label-left')).toBeTruthy();
-      expect(nativeElement.querySelector('.po-switch-container-right')).toBeTruthy();
+      expect(nativeElement.querySelector('[data-label-position="left"]')).toBeTruthy();
     });
 
-    it('should have p-label-position = right', () => {
+    it('should set attribute `data-label-position` with `right`', () => {
       component.labelPosition = PoSwitchLabelPosition.Right;
       fixture.detectChanges();
 
-      expect(nativeElement.querySelector('.po-switch-label-right')).toBeTruthy();
-      expect(nativeElement.querySelector('.po-switch-container-right')).toBeFalsy();
+      expect(nativeElement.querySelector('[data-label-position="right"]')).toBeTruthy();
     });
   });
 });
