@@ -1,30 +1,29 @@
 <po-field-container [p-label]="label" [p-help]="help">
-  <div class="po-field-container-content po-switch-content" [attr.name]="name">
-    <div
-      class="po-switch-container po-clickable"
-      #switchContainer
-      [class.po-switch-container-disabled]="disabled"
-      [class.po-switch-container-off]="value === false && !disabled"
-      [class.po-switch-container-on]="value === true && !disabled"
-      [class.po-switch-container-right]="getSwitchPosition() === 'right'"
-      [tabindex]="disabled ? -1 : 0"
-      (click)="eventClick()"
-      (keydown)="onKeyDown($event)"
-      (blur)="onBlur()"
-    >
+  <div class="po-field-container-content" [attr.name]="name">
+    <div class="po-switch" [attr.data-label-position]="getLabelPosition()">
       <div
-        class="po-switch-button"
-        [class.po-switch-button-on]="value === true"
-        [class.po-switch-button-off]="value === false"
-        [class.po-switch-button-disabled]="disabled"
+        #switchContainer
+        class="po-switch-container"
+        role="switch"
+        [attr.aria-checked]="value"
+        [attr.aria-disabled]="disabled"
+        [attr.aria-label]="value === true ? labelOn : labelOff"
+        [tabindex]="disabled ? -1 : 0"
+        (blur)="onBlur()"
+        (click)="eventClick()"
+        (keydown)="onKeyDown($event)"
       >
-        <span class="po-icon po-icon-{{ value === true ? 'ok' : 'close' }}"></span>
+        <div class="po-switch-track">
+          <div class="po-switch-toggle">
+            <po-icon *ngIf="value === true" class="po-switch-icon" p-icon="po-icon-ok"></po-icon>
+          </div>
+        </div>
       </div>
-    </div>
 
-    <span class="po-switch-label po-clickable po-switch-label-{{ getLabelPosition() }}" (click)="eventClick()">
-      {{ value === true ? labelOn : labelOff }}
-    </span>
+      <span class="po-switch-label" (click)="eventClick()">
+        {{ value === true ? labelOn : labelOff }}
+      </span>
+    </div>
   </div>
 
   <po-field-container-bottom></po-field-container-bottom>
