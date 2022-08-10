@@ -18,7 +18,7 @@ export class SamplePoComboSchedulingComponent implements OnInit {
   email: string;
   informations: string;
   medicalSpecialty: string;
-  medicalSpecialtyOptions: Array<PoComboOption>;
+  medicalSpecialtyOptions: Array<any>;
   name: string;
   phone: string;
   typeScheduling: string;

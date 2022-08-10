@@ -355,7 +355,7 @@ export class PoComboComponent extends PoComboBaseComponent implements AfterViewI
   }
 
   controlApplyFilter(value) {
-    if (!this.isProcessingValueByTab && (!this.selectedOption || value !== this.selectedOption.label)) {
+    if (!this.isProcessingValueByTab && (!this.selectedOption || value !== this.selectedOption[this.dynamicLabel])) {
       this.defaultService.hasNext = true;
       this.page = this.setPage();
       this.options = [];
@@ -400,7 +400,7 @@ export class PoComboComponent extends PoComboBaseComponent implements AfterViewI
   }
 
   getObjectByValue(value) {
-    if (this.selectedValue !== value && this.selectedOption?.label !== value) {
+    if (this.selectedValue !== value && this.selectedOption?.[this.dynamicLabel] !== value) {
       this.isProcessingValueByTab = true;
 
       this.getSubscription = this.service.getObjectByValue(value, this.filterParams).subscribe(
@@ -424,32 +424,44 @@ export class PoComboComponent extends PoComboBaseComponent implements AfterViewI
   }
 
   selectPreviousOption() {
-    const currentViewValue = this.selectedView && this.selectedView.value;
+    const currentViewValue = this.selectedView && this.selectedView[this.dynamicValue];
 
     if (currentViewValue) {
       const nextOption = this.getNextOption(currentViewValue, this.visibleOptions, true);
 
-      this.updateSelectedValue(nextOption, nextOption && nextOption.value !== currentViewValue && !this.changeOnEnter);
+      this.updateSelectedValue(
+        nextOption,
+        nextOption && nextOption[this.dynamicValue] !== currentViewValue && !this.changeOnEnter
+      );
     } else if (this.visibleOptions.length) {
       const visibleOption = this.visibleOptions[this.visibleOptions.length - 1];
 
-      this.updateSelectedValue(visibleOption, visibleOption.value !== currentViewValue && !this.changeOnEnter);
+      this.updateSelectedValue(
+        visibleOption,
+        visibleOption[this.dynamicValue] !== currentViewValue && !this.changeOnEnter
+      );
     }
   }
 
   selectNextOption() {
-    const currentViewValue = this.selectedView && this.selectedView.value;
+    const currentViewValue = this.selectedView && this.selectedView[this.dynamicValue];
 
     if (currentViewValue) {
       const nextOption = this.getNextOption(currentViewValue, this.visibleOptions);
 
-      this.updateSelectedValue(nextOption, nextOption && nextOption.value !== currentViewValue && !this.changeOnEnter);
+      this.updateSelectedValue(
+        nextOption,
+        nextOption && nextOption[this.dynamicValue] !== currentViewValue && !this.changeOnEnter
+      );
     } else if (this.visibleOptions.length) {
       const index = this.changeOnEnter ? 1 : 0;
 
       const visibleOption = this.visibleOptions[index];
 
-      this.updateSelectedValue(visibleOption, visibleOption.value !== currentViewValue && !this.changeOnEnter);
+      this.updateSelectedValue(
+        visibleOption,
+        visibleOption[this.dynamicValue] !== currentViewValue && !this.changeOnEnter
+      );
     }
   }
 
@@ -480,7 +492,8 @@ export class PoComboComponent extends PoComboBaseComponent implements AfterViewI
   onOptionClick(option: PoComboOption | PoComboGroup, event?: any) {
     const inputValue = this.getInputValue();
     const isUpdateModel =
-      option.value !== this.selectedValue || !!(this.selectedView && inputValue !== this.selectedView.label);
+      option[this.dynamicValue] !== this.selectedValue ||
+      !!(this.selectedView && inputValue !== this.selectedView[this.dynamicLabel]);
 
     if (event) {
       event.stopPropagation();
@@ -492,7 +505,7 @@ export class PoComboComponent extends PoComboBaseComponent implements AfterViewI
       this.updateComboList([...this.cacheStaticOptions]);
     }
 
-    this.previousSearchValue = this.selectedView.label;
+    this.previousSearchValue = this.selectedView[this.dynamicLabel];
   }
 
   scrollTo(index) {
