@@ -198,7 +198,9 @@ export class PoLookupComponent extends PoLookupBaseComponent implements AfterVie
         infiniteScroll,
         multiple,
         fieldLabel,
-        fieldValue
+        fieldValue,
+        changeVisibleColumns,
+        columnRestoreManager
       } = this;
 
       const selectedItems = this.checkSelectedItems();
@@ -214,7 +216,9 @@ export class PoLookupComponent extends PoLookupBaseComponent implements AfterVie
         multiple,
         selectedItems,
         fieldLabel,
-        fieldValue
+        fieldValue,
+        changeVisibleColumns,
+        columnRestoreManager
       });
 
       if (!this.modalSubscription) {

@@ -1,4 +1,4 @@
-import { ComponentRef, NO_ERRORS_SCHEMA } from '@angular/core';
+import { ComponentRef, EventEmitter, NO_ERRORS_SCHEMA } from '@angular/core';
 import { RouterTestingModule } from '@angular/router/testing';
 import { Routes } from '@angular/router';
 import { TestBed } from '@angular/core/testing';
@@ -43,7 +43,9 @@ describe('PoLookupModalService:', () => {
     multiple: false,
     selectedItems: null,
     fieldValue: 'value',
-    fieldLabel: 'label'
+    fieldLabel: 'label',
+    changeVisibleColumns: new EventEmitter(),
+    columnRestoreManager: new EventEmitter()
   };
 
   beforeEach(() => {

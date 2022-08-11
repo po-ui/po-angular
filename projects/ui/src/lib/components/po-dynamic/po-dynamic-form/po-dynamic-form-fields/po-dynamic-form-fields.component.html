@@ -252,6 +252,8 @@
       (p-change)="onChangeField(field)"
       [p-placeholder]="field.placeholder"
       [p-advanced-filters]="field.advancedFilters"
+      (p-change-visible-columns)="field.changeVisibleColumns($event)"
+      (p-restore-column-manager)="field.columnRestoreManager($event)"
     >
     </po-lookup>
 

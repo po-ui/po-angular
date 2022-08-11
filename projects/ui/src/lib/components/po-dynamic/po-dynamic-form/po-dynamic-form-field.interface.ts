@@ -500,4 +500,24 @@ export interface PoDynamicFormField extends PoDynamicField {
    * >Essa propriedade será ignorada caso seja utilizada em conjunto com a propriedade `optionsMulti` e `optionsService`.
    */
   forceOptionsComponentType?: ForceOptionComponentEnum;
+
+  /**
+   * Evento disparado ao fechar o popover do gerenciador de colunas após alterar as colunas visíveis.
+   *
+   * O componente envia como parâmetro um array de string com as colunas visíveis atualizadas.
+   * Por exemplo: ["idCard", "name", "hireStatus", "age"].
+   *
+   * **Componentes compatíveis**: `po-lookup`
+   */
+  changeVisibleColumns?: Function;
+
+  /**
+   * Evento disparado ao clicar no botão de restaurar padrão no gerenciador de colunas.
+   *
+   * O componente envia como parâmetro um array de string com as colunas configuradas inicialmente.
+   * Por exemplo: ["idCard", "name", "hireStatus", "age"].
+   *
+   * **Componentes compatíveis**: `po-lookup`
+   */
+  columnRestoreManager?: Function;
 }

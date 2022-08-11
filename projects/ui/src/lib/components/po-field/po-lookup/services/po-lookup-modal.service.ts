@@ -32,6 +32,8 @@ export class PoLookupModalService {
    * @param selectedItems {any} Valor que está selecionado que será repassado para o modal para apresentar na tabela.
    * @param fieldLabel {string} Valor que será utilizado como descrição do campo.
    * @param fieldValue {string} Valor que será utilizado como valor do campo.
+   * @param changeVisibleColumns {function} Função que será executada quando for alterada a visibilidade das colunas.
+   * @param columnRestoreManager {function} Função que será executada quando for restaurar as colunas padrão.
    */
   openModal(params: {
     advancedFilters: Array<PoDynamicFormField>;
@@ -45,6 +47,8 @@ export class PoLookupModalService {
     selectedItems: Array<any>;
     fieldLabel: string;
     fieldValue: string;
+    changeVisibleColumns: Function;
+    columnRestoreManager: Function;
   }): void {
     const {
       advancedFilters,
@@ -57,7 +61,9 @@ export class PoLookupModalService {
       multiple,
       selectedItems,
       fieldLabel,
-      fieldValue
+      fieldValue,
+      changeVisibleColumns,
+      columnRestoreManager
     } = params;
 
     this.componentRef = this.poComponentInjector.createComponentInApplication(PoLookupModalComponent);
@@ -75,6 +81,8 @@ export class PoLookupModalService {
     this.componentRef.instance.selectedItems = selectedItems;
     this.componentRef.instance.fieldLabel = fieldLabel;
     this.componentRef.instance.fieldValue = fieldValue;
+    this.componentRef.instance.changeVisibleColumns = changeVisibleColumns;
+    this.componentRef.instance.columnRestoreManager = columnRestoreManager;
     this.componentRef.changeDetectorRef.detectChanges();
     this.componentRef.instance.openModal();
   }
