@@ -1,4 +1,4 @@
-import { ComponentRef, Injector } from '@angular/core';
+import { ComponentRef, EventEmitter, Injector } from '@angular/core';
 import { ComponentFixture, inject, TestBed, fakeAsync, tick, flush } from '@angular/core/testing';
 import { Routes } from '@angular/router';
 import { RouterTestingModule } from '@angular/router/testing';
@@ -960,6 +960,8 @@ describe('PoLookupComponent:', () => {
         component.multiple = false;
         component.fieldLabel = 'label';
         component.fieldValue = 'value';
+        component.changeVisibleColumns = new EventEmitter();
+        component.columnRestoreManager = new EventEmitter();
 
         const {
           advancedFilters,
@@ -970,7 +972,9 @@ describe('PoLookupComponent:', () => {
           infiniteScroll,
           multiple,
           fieldLabel,
-          fieldValue
+          fieldValue,
+          changeVisibleColumns,
+          columnRestoreManager
         } = component;
 
         const selectedItems = undefined;
@@ -986,7 +990,9 @@ describe('PoLookupComponent:', () => {
           multiple,
           selectedItems,
           fieldLabel,
-          fieldValue
+          fieldValue,
+          changeVisibleColumns,
+          columnRestoreManager
         };
 
         spyOn(component['poLookupModalService'], 'openModal');
