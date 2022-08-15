@@ -373,7 +373,7 @@ export class PoComboComponent extends PoComboBaseComponent implements AfterViewI
         ? { property: this.fieldLabel, value, page: this.page, pageSize: this.pageSize }
         : { property: this.fieldLabel, value };
 
-      this.filterSubscription = this.service.getFilteredData(param, this.filterParams).subscribe(
+      this.filterSubscription = this.service?.getFilteredData(param, this.filterParams).subscribe(
         items => this.setOptionsByApplyFilter(value, items, reset),
         error => this.onErrorFilteredData()
       );
