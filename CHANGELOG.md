@@ -2,6 +2,17 @@
 
 All notable changes to this project will be documented in this file. See [standard-version](https://github.com/conventional-changelog/standard-version) for commit guidelines.
 
+## [14.2.1](https://github.com/po-ui/po-angular/compare/v14.2.0...v14.2.1) (2022-08-15)
+
+
+### Bug Fixes
+
+* **combo:** ajusta erros intermitentes no PoCombo ([b51c0f5](https://github.com/po-ui/po-angular/commit/b51c0f55fd408c08af7fe6e07cde81886bd1df1e))
+* **multiselect:** corrige requisição no componente ([169ae05](https://github.com/po-ui/po-angular/commit/169ae0547570eaeb8184b8fbf3404289af4a3435))
+* **table:** corrige o gerenciador de colunas ([15e137f](https://github.com/po-ui/po-angular/commit/15e137f89f0d099dd4380baf3666f3ccd7fc90f7))
+
+
+
 # [14.2.0](https://github.com/po-ui/po-angular/compare/v14.1.0...v14.2.0) (2022-08-01)
 
 
