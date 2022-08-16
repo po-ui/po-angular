@@ -153,6 +153,16 @@ export abstract class PoRadioGroupBaseComponent implements ControlValueAccessor,
     return this._options;
   }
 
+  /**
+   * @optional
+   *
+   * @description
+   *
+   * Define o tamanho do *radio*
+   * @default `medium`
+   */
+  @Input('p-size') size: string;
+
   // Função que controla quando deve ser emitido onChange e atualiza o Model
   changeValue(changedValue: any) {
     if (this.onChangePropagate) {
