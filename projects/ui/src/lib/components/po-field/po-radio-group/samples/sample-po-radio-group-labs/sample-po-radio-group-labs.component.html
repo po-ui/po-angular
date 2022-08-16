@@ -8,6 +8,7 @@
   [p-optional]="properties.includes('optional')"
   [p-options]="options"
   [p-required]="properties.includes('required')"
+  [p-size]="size"
   (p-change)="changeEvent('p-change')"
 >
 </po-radio-group>
@@ -74,6 +75,9 @@
       [p-options]="propertiesOptions"
     >
     </po-checkbox-group>
+
+    <po-radio-group class="po-lg-6 po-md-12" name="size" [(ngModel)]="size" p-label="Size" [p-options]="sizesOptions">
+    </po-radio-group>
   </div>
 
   <div class="po-row">

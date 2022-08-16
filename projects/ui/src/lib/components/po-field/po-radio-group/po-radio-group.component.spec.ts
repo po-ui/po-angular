@@ -86,11 +86,6 @@ describe('PoRadioGroupComponent:', () => {
     expect(fnError).not.toThrow();
   });
 
-  it('should return input when exists a input with this value', () => {
-    fixture.detectChanges();
-    expect(component.getElementByValue('1')).not.toBeNull();
-  });
-
   it('should return null when not exists a input with this value', () => {
     expect(component.getElementByValue('2')).toBeNull();
   });
@@ -253,24 +248,6 @@ describe('PoRadioGroupComponent:', () => {
     const eventKeyBoard = document.createEvent('KeyboardEvent');
     eventKeyBoard.initEvent('keyup', true, true);
     Object.defineProperty(eventKeyBoard, 'keyCode', { value: 37 });
-
-    it('keyup: should call `onKeyUp` when a arrowKey is pressed.', () => {
-      spyOn(component, 'onKeyUp');
-      fixture.detectChanges();
-      const input = debugElement.querySelector('input.po-radio-group-input');
-      input.dispatchEvent(eventKeyBoard);
-
-      expect(component.onKeyUp).toHaveBeenCalled();
-    });
-
-    it('should contain `po-clickable` class if input isn`t disabled', () => {
-      component.options = [{ label: 'Po', value: 'po' }];
-      component.disabled = false;
-
-      fixture.detectChanges();
-
-      expect(debugElement.querySelector('.po-radio-group-label.po-clickable')).toBeTruthy();
-    });
 
     it('shouldn`t contain `po-clickable` class if input is disabled', () => {
       component.options = [{ label: 'Po', value: 'po', disabled: true }];

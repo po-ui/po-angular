@@ -15,6 +15,7 @@ export class SamplePoRadioGroupLabsComponent implements OnInit {
   options: Array<PoRadioGroupOption>;
   properties: Array<string>;
   radioGroup: string;
+  size: string;
 
   readonly columnOptions: Array<PoRadioGroupOption> = [
     { label: '1 column', value: 1 },
@@ -27,6 +28,11 @@ export class SamplePoRadioGroupLabsComponent implements OnInit {
     { value: 'disabled', label: 'Disabled' },
     { value: 'optional', label: 'Optional' },
     { value: 'required', label: 'Required' }
+  ];
+
+  readonly sizesOptions: Array<PoRadioGroupOption> = [
+    { label: 'Medium', value: 'medium' },
+    { label: 'Large', value: 'large' }
   ];
 
   ngOnInit() {
