@@ -1,6 +1,6 @@
 import { Directive } from '@angular/core';
 import { fakeAsync, tick } from '@angular/core/testing';
-import { FormControl } from '@angular/forms';
+import { UntypedFormControl } from '@angular/forms';
 
 import * as UtilsFunctions from '../../../utils/util';
 import * as ValidatorsFunctions from './../validators';
@@ -355,7 +355,7 @@ describe('PoDatepickerBaseComponent:', () => {
         when has an errorPattern value and date is invalid`, () => {
         component.errorPattern = 'errorPattern';
 
-        expect(component.validate(new FormControl([]))).toEqual(invalidDateError);
+        expect(component.validate(new UntypedFormControl([]))).toEqual(invalidDateError);
         expect(component.errorPattern).toBe('errorPattern');
       });
 
@@ -363,7 +363,7 @@ describe('PoDatepickerBaseComponent:', () => {
         doesn't have an errorPattern value and date is invalid`, () => {
         component.errorPattern = '';
 
-        expect(component.validate(new FormControl([]))).toEqual(invalidDateError);
+        expect(component.validate(new UntypedFormControl([]))).toEqual(invalidDateError);
         expect(component.errorPattern).toBe('Data inválida');
       });
 
@@ -371,7 +371,7 @@ describe('PoDatepickerBaseComponent:', () => {
         errorPattern is equal to 'Data fora do período' and date is invalid`, () => {
         component.errorPattern = 'Data fora do período';
 
-        expect(component.validate(new FormControl([]))).toEqual(invalidDateError);
+        expect(component.validate(new UntypedFormControl([]))).toEqual(invalidDateError);
         expect(component.errorPattern).toBe('Data inválida');
       });
 
@@ -383,7 +383,7 @@ describe('PoDatepickerBaseComponent:', () => {
         };
         spyOn(ValidatorsFunctions, 'requiredFailed').and.returnValue(true);
 
-        expect(component.validate(new FormControl(undefined))).toEqual(invalidRequiredError);
+        expect(component.validate(new UntypedFormControl(undefined))).toEqual(invalidRequiredError);
         expect(component.errorPattern).toBe('');
       });
 
@@ -392,7 +392,7 @@ describe('PoDatepickerBaseComponent:', () => {
 
         component['date'] = new Date(2018, 5, 5);
 
-        expect(component.validate(new FormControl('Tue Jun 05 2018 00:00:00'))).toEqual(invalidDateError);
+        expect(component.validate(new UntypedFormControl('Tue Jun 05 2018 00:00:00'))).toEqual(invalidDateError);
         expect(component.errorPattern).toBe('Data fora do período');
       });
 
@@ -403,21 +403,21 @@ describe('PoDatepickerBaseComponent:', () => {
         component.errorPattern = 'Data inválida';
         component['date'] = new Date(2018, 5, 5);
 
-        expect(component.validate(new FormControl('Tue Jun 05 2018 00:00:00'))).toEqual(invalidDateError);
+        expect(component.validate(new UntypedFormControl('Tue Jun 05 2018 00:00:00'))).toEqual(invalidDateError);
         expect(component.errorPattern).toBe('Data fora do período');
       });
 
       it(`shouldn't invalidate form and set errorPattern '' when set a valid date and errorPattern is 'Data inválida'`, () => {
         component.errorPattern = 'Data inválida';
 
-        expect(component.validate(new FormControl('Tue Jun 05 2018 00:00:00'))).toEqual(null);
+        expect(component.validate(new UntypedFormControl('Tue Jun 05 2018 00:00:00'))).toEqual(null);
         expect(component.errorPattern).toBe('');
       });
 
       it(`shouldn't invalidate form and set errorPattern '' when set a valid date and errorPattern is 'Data fora do período'`, () => {
         component.errorPattern = 'Data fora do período';
 
-        expect(component.validate(new FormControl('Tue Jun 05 2018 00:00:00'))).toEqual(null);
+        expect(component.validate(new UntypedFormControl('Tue Jun 05 2018 00:00:00'))).toEqual(null);
         expect(component.errorPattern).toBe('');
       });
     });

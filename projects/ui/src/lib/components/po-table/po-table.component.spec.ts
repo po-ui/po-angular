@@ -38,6 +38,7 @@ describe('PoTableComponent:', () => {
   let component: PoTableComponent;
   let fixture: ComponentFixture<PoTableComponent>;
   let nativeElement;
+  let tableHeaderElement;
   let tableElement;
   let tableFooterElement;
   let poTableService: PoTableService;
@@ -218,8 +219,9 @@ describe('PoTableComponent:', () => {
 
     nativeElement = fixture.debugElement.nativeElement;
 
-    component.poTableTbody = fixture.debugElement;
+    component.poTableTbodyVirtual = fixture.debugElement;
 
+    tableHeaderElement = nativeElement.querySelector('.po-table-header');
     tableElement = nativeElement.querySelector('.po-table-wrapper');
     tableFooterElement = nativeElement.querySelector('.po-table-footer');
 
@@ -322,49 +324,6 @@ describe('PoTableComponent:', () => {
     expect(selectableHeader).toBeFalsy();
   });
 
-  it('should allow multiple row selection', () => {
-    component.selectable = true;
-    component.singleSelect = false;
-    component.selectRow(component.items[0]);
-    component.selectRow(component.items[1]);
-
-    fixture.detectChanges();
-
-    const checkedColumns = tableElement.querySelectorAll('.po-table-checkbox-checked');
-    expect(checkedColumns.length).toBe(2);
-  });
-
-  it('should show indeterminate selectable', () => {
-    component.selectable = true;
-    fixture.detectChanges();
-
-    let selectableHeader = tableElement.querySelector('th.po-table-column-selectable .po-table-checkbox-indeterminate');
-    expect(selectableHeader).toBeFalsy();
-
-    component.selectRow(component.items[0]);
-    component.selectRow(component.items[1]);
-    fixture.detectChanges();
-
-    selectableHeader = tableElement.querySelector('th.po-table-column-selectable .po-table-checkbox-indeterminate');
-    expect(selectableHeader).toBeTruthy();
-  });
-
-  it('should select one row', () => {
-    const itemSelected = component.items[0];
-    component.selectable = true;
-    component.hideDetail = true;
-    component.columns = columnsWithDetail;
-    component.selectRow(itemSelected);
-
-    fixture.detectChanges();
-
-    const rowSelected = tableElement.querySelectorAll('.po-table-row-active');
-
-    expect(rowSelected).toBeTruthy();
-    expect(rowSelected[0].querySelector('.po-table-checkbox-checked')).toBeTruthy();
-    expect(rowSelected[0].innerHTML).toContain(itemSelected.id);
-  });
-
   it('should select all rows', () => {
     component.selectable = true;
     component.selectAllRows();
@@ -385,16 +344,6 @@ describe('PoTableComponent:', () => {
 
     const selectableColumnHeader = tableElement.querySelector('th.po-table-column-selectable .po-table-checkbox');
     expect(selectableColumnHeader).toBeFalsy();
-  });
-
-  it('should show the option to select all', () => {
-    component.selectable = true;
-    component.hideSelectAll = false;
-
-    fixture.detectChanges();
-
-    const selectableColumnHeader = tableElement.querySelector('th.po-table-column-selectable .po-table-checkbox');
-    expect(selectableColumnHeader).toBeTruthy();
   });
 
   it('shouldn`t show more button', () => {
@@ -656,23 +605,22 @@ describe('PoTableComponent:', () => {
     component.height = 150;
 
     fixture.detectChanges();
-    expect(tableElement.offsetHeight + tableFooterElement.offsetHeight).toBe(150);
+    expect(tableElement.offsetHeight + tableFooterElement.offsetHeight + tableHeaderElement.offsetHeight).toBe(150);
   });
 
-  it('should call calculateWidthHeaders and setTableOpacity in debounceResize', fakeAsync(() => {
-    spyOn(component, <any>'calculateWidthHeaders');
+  it('should call setTableOpacity in debounceResize', fakeAsync(() => {
     spyOn(component, <any>'setTableOpacity');
 
     component['debounceResize']();
     tick(500);
 
-    expect(component['calculateWidthHeaders']).toHaveBeenCalled();
     expect(component['setTableOpacity']).toHaveBeenCalled();
   }));
 
   it('should calculate when height is a number in function calculateHeightTableContainer', () => {
     const fakeThis = {
       getHeightTableFooter: () => 0,
+      getHeightTableHeader: () => 0,
       heightTableContainer: 0,
       setTableOpacity: () => {},
       changeDetector: {
@@ -736,6 +684,34 @@ describe('PoTableComponent:', () => {
 
     expect(component['calculateHeightTableContainer']).toHaveBeenCalled();
     expect(component['footerHeight']).toBe(10);
+  });
+
+  it('should return true in verifyChangeHeightInHeader', () => {
+    component['headerHeight'] = 1;
+    spyOn(component, <any>'getHeightTableHeader').and.returnValue(10);
+
+    expect(component['verifyChangeHeightInHeader']()).toBeTruthy();
+  });
+
+  it('should return false in verifyChangeHeightInHeader', () => {
+    component['headerHeight'] = 10;
+    spyOn(component, <any>'getHeightTableHeader').and.returnValue(10);
+
+    expect(component['verifyChangeHeightInHeader']()).toBeFalsy();
+  });
+
+  it('should calculate height when change the header height', () => {
+    component['_height'] = 100;
+    component['headerHeight'] = 100;
+
+    spyOn(component, <any>'verifyChangeHeightInHeader').and.returnValue(true);
+    spyOn(component, <any>'getHeightTableHeader').and.returnValue(10);
+    spyOn(component, <any>'calculateHeightTableContainer');
+
+    component['verifyCalculateHeightTableContainer']();
+
+    expect(component['calculateHeightTableContainer']).toHaveBeenCalled();
+    expect(component['headerHeight']).toBe(10);
   });
 
   it('shouldn`t calculate height when not change the footer height', () => {
@@ -802,6 +778,20 @@ describe('PoTableComponent:', () => {
     expect(fakeThisDoCheck.debounceResize).not.toHaveBeenCalled();
   });
 
+  it('should set 32 in itemSize if offsetWidth is less than 1366', () => {
+    spyOnProperty(document.body, 'offsetWidth').and.returnValue(1300);
+    component.ngDoCheck();
+
+    expect(component.itemSize).toBe(32);
+  });
+
+  it('should set 44 in itemSize if offsetWidth is greater than 1366', () => {
+    spyOnProperty(document.body, 'offsetWidth').and.returnValue(1500);
+    component.ngDoCheck();
+
+    expect(component.itemSize).toBe(44);
+  });
+
   it('should not call debounceResize in ngDoCheck when initialized is false', () => {
     fakeThisDoCheck.initialized = false;
     fakeThisDoCheck.visibleElement = false;
@@ -863,6 +853,17 @@ describe('PoTableComponent:', () => {
       tableFooterElement: undefined
     };
     expect(component['getHeightTableFooter'].call(fakeThis)).toBe(0);
+  });
+
+  it('should return height table header', () => {
+    const fakeThis = {
+      poTableThead: {
+        nativeElement: {
+          offsetHeight: 100
+        }
+      }
+    };
+    expect(component['getHeightTableHeader'].call(fakeThis)).toBe(100);
   });
 
   it('should set tableOpacity property with method setTableOpacity', () => {
@@ -1416,7 +1417,8 @@ describe('PoTableComponent:', () => {
         changeDetector: {
           detectChanges: () => {}
         },
-        getHeightTableFooter: () => {}
+        getHeightTableFooter: () => {},
+        getHeightTableHeader: () => {}
       };
 
       spyOn(fakeThis.changeDetector, 'detectChanges');
@@ -1657,6 +1659,15 @@ describe('PoTableComponent:', () => {
       component.onChangeVisibleColumns(fakeColumns);
 
       expect(component.changeVisibleColumns.emit).toHaveBeenCalledWith(fakeColumns);
+    });
+
+    it('onColumnRestoreManager: should call `columnRestoreManager.emit`', () => {
+      spyOn(component.columnRestoreManager, 'emit');
+      const fakeColumns = ['name', 'age'];
+
+      component.onColumnRestoreManager(fakeColumns);
+
+      expect(component.columnRestoreManager.emit).toHaveBeenCalledWith(fakeColumns);
     });
 
     describe('applyFilters', () => {
@@ -2956,9 +2967,120 @@ describe('PoTableComponent:', () => {
     expect(spyIncludeInfiniteScroll).not.toHaveBeenCalled();
   });
 
+  it('syncronizeHorizontalScroll, should syncronize two separated tables during horizontal scroll', () => {
+    const fakeThis = {
+      poTableTbodyVirtual: {
+        nativeElement: {
+          scrollLeft: 100
+        }
+      },
+      poTableThead: {
+        nativeElement: {
+          scrollLeft: 10
+        }
+      }
+    };
+
+    fixture.detectChanges();
+
+    component['syncronizeHorizontalScroll'].call(fakeThis);
+
+    expect(fakeThis.poTableThead.nativeElement.scrollLeft).toEqual(100);
+  });
+
+  it('getWidthColumnManager, should return width of column manager', () => {
+    const fakeThis = {
+      columnManager: {
+        nativeElement: {
+          offsetWidth: 120
+        }
+      }
+    };
+
+    fixture.detectChanges();
+
+    component['getWidthColumnManager'].call(fakeThis);
+
+    expect(fakeThis.columnManager.nativeElement.offsetWidth).toEqual(120);
+  });
+
+  it('getWidthColumnManager, should return undefined if not contain column manager', () => {
+    const fakeThis = {
+      columnManager: undefined
+    };
+
+    fixture.detectChanges();
+
+    const valueWidth = component['getWidthColumnManager'].call(fakeThis);
+
+    expect(valueWidth).toEqual(undefined);
+  });
+
+  it('getWidthColumnManagerFixed, should return width of column manager', () => {
+    const fakeThis = {
+      height: 300,
+      columnManagerFixed: {
+        nativeElement: {
+          offsetWidth: 120
+        }
+      }
+    };
+
+    fixture.detectChanges();
+
+    component['getWidthColumnManager'].call(fakeThis);
+
+    expect(fakeThis.columnManagerFixed.nativeElement.offsetWidth).toEqual(120);
+  });
+
+  it('columnActionLeft, should return width of column when action is on the left', () => {
+    const fakeThis = {
+      columnActionLeft: {
+        nativeElement: {
+          offsetWidth: 120
+        }
+      }
+    };
+
+    fixture.detectChanges();
+
+    component['getColumnWidthActionsLeft'].call(fakeThis);
+
+    expect(fakeThis.columnActionLeft.nativeElement.offsetWidth).toEqual(120);
+  });
+
+  it('columnActionLeft, should return undefined if not contain actions on the left', () => {
+    const fakeThis = {
+      columnActionLeft: undefined
+    };
+
+    fixture.detectChanges();
+
+    const valueWidth = component['getColumnWidthActionsLeft'].call(fakeThis);
+
+    expect(valueWidth).toEqual(undefined);
+  });
+
+  it('columnActionLeftFixed, should return width of column when action is on the left', () => {
+    const fakeThis = {
+      height: 300,
+      columnActionLeftFixed: {
+        nativeElement: {
+          offsetWidth: 120
+        }
+      }
+    };
+
+    fixture.detectChanges();
+
+    component['getColumnWidthActionsLeft'].call(fakeThis);
+
+    expect(fakeThis.columnActionLeftFixed.nativeElement.offsetWidth).toEqual(120);
+  });
+
   it('hasInfiniteScroll: should return false if infiniteScroll is false', () => {
     component.infiniteScroll = false;
-    component.poTableTbody = {
+    component.poTableTbodyVirtual = {
       nativeElement: { offsetHeight: 100, scrollTop: 100, scrollHeight: 100 }
     };
 

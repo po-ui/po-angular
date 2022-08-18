@@ -310,6 +310,17 @@ export abstract class PoTableBaseComponent implements OnChanges, OnDestroy {
    */
   @Output('p-change-visible-columns') changeVisibleColumns = new EventEmitter<Array<string>>();
 
+  /**
+   * @optional
+   *
+   * @description
+   * Evento disparado ao clicar no botão de restaurar padrão no gerenciador de colunas.
+   *
+   * O componente envia como parâmetro um array de string com as colunas configuradas inicialmente.
+   * Por exemplo: ["idCard", "name", "hireStatus", "age"].
+   */
+  @Output('p-restore-column-manager') columnRestoreManager = new EventEmitter<Array<String>>();
+
   allColumnsWidthPixels: boolean;
   columnMasterDetail: PoTableColumn;
   hasMainColumns: boolean = false;
@@ -320,7 +331,7 @@ export abstract class PoTableBaseComponent implements OnChanges, OnDestroy {
   page = 1;
   pageSize = 10;
   hasService?: boolean = false;
-
+  initialColumns: Array<PoTableColumn>;
   private _actions?: Array<PoTableAction> = [];
   private _columns: Array<PoTableColumn> = [];
   private _container?: string;
@@ -372,11 +383,14 @@ export abstract class PoTableBaseComponent implements OnChanges, OnDestroy {
    *
    */
   @Input('p-columns') set columns(columns: Array<PoTableColumn>) {
+    if (this.initialColumns === undefined) {
+      this.initialColumns = columns;
+    }
+
     this._columns = columns || [];
 
     if (this._columns.length) {
       this.setColumnLink();
-      this.calculateWidthHeaders();
     } else if (this.hasItems) {
       this._columns = this.getDefaultColumns(this.items[0]);
     }
@@ -413,10 +427,11 @@ export abstract class PoTableBaseComponent implements OnChanges, OnDestroy {
    * @description
    *
    * Define a altura da tabela em *pixels* e fixa o cabeçalho.
+   *
+   * Ao utilizar essa propriedade será inserido o `virtual-scroll` na tabela melhorando a performance.
    */
   @Input('p-height') set height(height: number) {
     this._height = height;
-    this.calculateWidthHeaders();
   }
 
   get height() {
@@ -434,7 +449,6 @@ export abstract class PoTableBaseComponent implements OnChanges, OnDestroy {
    */
   @Input('p-hide-detail') set hideDetail(hideDetail: boolean) {
     this._hideDetail = hideDetail != null && hideDetail.toString() === '' ? true : convertToBoolean(hideDetail);
-    this.calculateWidthHeaders();
   }
 
   get hideDetail() {
@@ -506,7 +520,6 @@ export abstract class PoTableBaseComponent implements OnChanges, OnDestroy {
    */
   @Input('p-loading') set loading(loading: boolean) {
     this._loading = convertToBoolean(loading);
-    this.calculateWidthHeaders();
   }
 
   get loading() {
@@ -529,7 +542,6 @@ export abstract class PoTableBaseComponent implements OnChanges, OnDestroy {
    */
   @Input('p-actions') set actions(actions: Array<PoTableAction>) {
     this._actions = actions;
-    this.calculateWidthHeaders();
   }
 
   get actions() {
@@ -553,7 +565,6 @@ export abstract class PoTableBaseComponent implements OnChanges, OnDestroy {
    */
   @Input('p-selectable') set selectable(value: boolean) {
     this._selectable = <any>value === '' ? true : convertToBoolean(value);
-    this.calculateWidthHeaders();
   }
 
   get selectable() {
@@ -913,9 +924,11 @@ export abstract class PoTableBaseComponent implements OnChanges, OnDestroy {
   }
 
   private sortArray(column: PoTableColumn, ascending: boolean) {
-    this.items.sort((leftSide, rightSide): number =>
+    const itemsList = [...this.items];
+    itemsList.sort((leftSide, rightSide): number =>
       sortValues(leftSide[column.property], rightSide[column.property], ascending)
     );
+    this.items = itemsList;
   }
 
   private unselectOtherRows(rows: Array<any>, row) {
@@ -966,8 +979,6 @@ export abstract class PoTableBaseComponent implements OnChanges, OnDestroy {
   }
 
   protected abstract calculateHeightTableContainer(height);
-
-  protected abstract calculateWidthHeaders();
 
   protected abstract checkInfiniteScroll();
 }

@@ -1,15 +1,28 @@
-<div #toaster class="po-toaster {{ getToasterType() }} {{ getToasterPosition() }} po-clickable" (click)="close()">
+<div #toaster class="po-toaster {{ getToasterType() }} {{ getToasterPosition() }}">
   <div class="po-toaster-icon">
-    <span class="po-icon {{ getIcon() }}"></span>
+    <po-icon [p-icon]="getIcon()"></po-icon>
   </div>
 
-  <div class="po-toaster-message">{{ message }}</div>
-
-  <div *ngIf="action && actionLabel" (click)="poToasterAction($event)" class="po-toaster-action">
-    {{ actionLabel }}
+  <div class="po-toaster-actions">
+    <div class="po-toaster-message">{{ message }}</div>
+    <div class="po-toaster-action">
+      <po-button
+        *ngIf="action && actionLabel"
+        (p-click)="poToasterAction($event)"
+        [p-label]="actionLabel"
+        p-type="tertiary"
+      ></po-button>
+    </div>
   </div>
 
-  <button class="po-toaster-close" (click)="onButtonClose($event)">
-    <span class="po-icon po-icon-close"></span>
-  </button>
+  <div class="po-toaster-close">
+    <div class="po-toaster-divider"></div>
+    <po-button
+      #buttonClose
+      class="po-toaster-button-close"
+      (p-click)="onButtonClose($event)"
+      p-icon="po-icon-close"
+      p-type="tertiary"
+    ></po-button>
+  </div>
 </div>

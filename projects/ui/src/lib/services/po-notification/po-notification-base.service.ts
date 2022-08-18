@@ -18,8 +18,10 @@ import { PoToasterType } from './po-toaster/po-toaster-type.enum';
  * Cada um destes métodos recebe como parâmetro o objeto `PoNotification` que contém os dados da mensagem e o
  * objeto ViewContainerRef que é a representação do container do componente onde será criada a notificação.
  *
- * Estas notificações serão exibidas durante 10 segundos por padrão, podendo ser alterada conforme necessidade.
+ * Estas notificações serão exibidas durante 9 segundos por padrão, podendo ser alterada conforme necessidade.
  * Após este tempo a mesma é removida automaticamente.
+ *
+ * Notificações com ação ou notificações de `erro` permanecerão em tela até o usuário fecha-lá ou clicar na ação.
  *
  * O serviço possui um limite de até 5 notificações por vez, a partir do sexto a primeira notificação será removida dando lugar a nova.
  *
@@ -32,7 +34,7 @@ export abstract class PoNotificationBaseService {
   stackBottom: Array<ComponentRef<any>> = [];
 
   // Duração da notificação ativa.
-  private defaultDuration = 10000;
+  private defaultDuration = 9000;
 
   /**
    * Emite uma notificação de sucesso.
@@ -73,7 +75,7 @@ export abstract class PoNotificationBaseService {
   /**
    * Define em milissegundos a duração padrão para as notificações.
    *
-   * > Padrão 10 segundos.
+   * > Padrão 9 segundos.
    *
    * @param {number} defaultDuration Duração em milisegundos
    */

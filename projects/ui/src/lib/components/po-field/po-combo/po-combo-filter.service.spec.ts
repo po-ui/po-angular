@@ -253,5 +253,29 @@ describe('PoComboFilterService ', () => {
 
       httpMock.expectOne((req: HttpRequest<any>) => req.urlWithParams === urlWithParams).flush({});
     });
+
+    it('prepareData: should be called', () => {
+      const param = { value: 'Peter' };
+      const expectedParams = { filter: 'Peter' };
+
+      const params = comboService['prepareParams'](param);
+      expect(params).toEqual(expectedParams);
+    });
+
+    it('prepareData: should be called when infinite scroll is active', () => {
+      const param = { value: 'Peter', page: 1, pageSize: 10 };
+      const expectedParams = { filter: 'Peter', page: 1, pageSize: 10 };
+
+      const params = comboService['prepareParams'](param);
+      expect(params).toEqual(expectedParams);
+    });
+
+    it('scrollListener: should call scrollListener on scroll', () => {
+      const dummyElement = document.createElement('div');
+
+      comboService.scrollListener(dummyElement).subscribe(response => {
+        expect(response).toBeDefined();
+      });
+    });
   });
 });

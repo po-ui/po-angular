@@ -122,7 +122,7 @@ export class PoMultiselectComponent
   }
 
   ngOnChanges(changes: SimpleChanges) {
-    if (changes.filterService || changes.fieldValue || changes.fieldLabel) {
+    if (this.filterService && (changes.filterService || changes.fieldValue || changes.fieldLabel)) {
       this.setService(this.filterService);
     }
   }

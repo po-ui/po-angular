@@ -28,7 +28,9 @@ import {
   validateDateRange,
   validateObjectType,
   validValue,
-  valuesFromObject
+  valuesFromObject,
+  removeDuplicatedOptionsWithFieldValue,
+  removeUndefinedAndNullOptionsWithFieldValue
 } from './util';
 
 import * as UtilFunctions from './util';
@@ -507,6 +509,20 @@ describe('Function removeDuplicatedOptions:', () => {
   });
 });
 
+describe('Function removeDuplicatedOptionsWithFieldValue:', () => {
+  it('should return items not duplicated ', () => {
+    const options = [
+      { value: 1, label: 1 },
+      { value: 2, label: 2 },
+      { value: 2, label: 2 },
+      { value: 1, label: 1 },
+      { value: 3, label: 3 }
+    ];
+    removeDuplicatedOptionsWithFieldValue(options, 'value');
+    expect(options.length).toBe(3);
+  });
+});
+
 describe('Function removeUndefinedAndNullOptions:', () => {
   it('should return items not undefined and null ', () => {
     const options = [
@@ -517,6 +533,20 @@ describe('Function removeUndefinedAndNullOptions:', () => {
       { value: 3, label: 3 }
     ];
     removeUndefinedAndNullOptions(options);
+    expect(options.length).toBe(3);
+  });
+});
+
+describe('Function removeUndefinedAndNullOptionsWithFielValue:', () => {
+  it('should return items not undefined and null ', () => {
+    const options = [
+      { value: 1, label: 1 },
+      { value: 2, label: 2 },
+      { value: <any>undefined, label: 'teste' },
+      { value: null, label: 'teste2' },
+      { value: 3, label: 3 }
+    ];
+    removeUndefinedAndNullOptionsWithFieldValue(options, 'value');
     expect(options.length).toBe(3);
   });
 });

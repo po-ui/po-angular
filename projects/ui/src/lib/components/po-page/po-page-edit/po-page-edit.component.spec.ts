@@ -113,20 +113,20 @@ describe('PoPageEditComponent', () => {
       expect(component.getType('saveNew')).toBe('primary');
     });
 
-    it('getType: should return "default" if type isn`t "saveNew" or "cancel"', () => {
-      expect(component.getType('test')).toBe('default');
+    it('getType: should return "secondary" if type isn`t "saveNew" or "cancel"', () => {
+      expect(component.getType('test')).toBe('secondary');
     });
 
-    it('getType: should return "default" if type is "saveNew" and isn`t primary action', () => {
+    it('getType: should return "secondary" if type is "saveNew" and isn`t primary action', () => {
       spyOn(component, <any>'isPrimaryAction').and.returnValue(false);
 
-      expect(component.getType('saveNew')).toBe('default');
+      expect(component.getType('saveNew')).toBe('secondary');
     });
 
-    it('getType: should return "default" if type is "cancel" and isn`t primary action', () => {
+    it('getType: should return "secondary" if type is "cancel" and isn`t primary action', () => {
       spyOn(component, <any>'isPrimaryAction').and.returnValue(false);
 
-      expect(component.getType('cancel')).toBe('default');
+      expect(component.getType('cancel')).toBe('secondary');
     });
 
     it('hasPageHeader: should return true if has breadcrumb', () => {
@@ -210,54 +210,6 @@ describe('PoPageEditComponent', () => {
   });
 
   describe('Templates:', () => {
-    it('should apply `p-primary` only in Save button', () => {
-      const saveLabel = poPageEditLiteralsDefault[poLocaleDefault].save;
-
-      component.literals = poPageEditLiteralsDefault[poLocaleDefault];
-
-      component.save.observers.push(<any>of({}));
-      component.saveNew.observers.push(<any>of({}));
-      component.cancel.observers.push(<any>of({}));
-
-      fixture.detectChanges();
-
-      const primaryButtonLabel = debugElement.querySelector('po-button > button.po-button-primary > span');
-
-      expect(primaryButtonLabel).toBeTruthy();
-      expect(primaryButtonLabel.innerHTML).toBe(saveLabel);
-    });
-
-    it('should apply `p-primary` only in SaveNew button if save function is undefined', () => {
-      const saveNewLabel = poPageEditLiteralsDefault[poLocaleDefault].saveNew;
-
-      component.literals = poPageEditLiteralsDefault[poLocaleDefault];
-
-      component.cancel.observers.push(<any>of({}));
-      component.saveNew.observers.push(<any>of({}));
-
-      fixture.detectChanges();
-
-      const primaryButtonLabel = debugElement.querySelector('po-button > button.po-button-primary > span');
-
-      expect(primaryButtonLabel).toBeTruthy();
-      expect(primaryButtonLabel.innerHTML).toBe(saveNewLabel);
-    });
-
-    it('should apply `p-primary` only in Cancel button if save and saveNew functions are undefined', () => {
-      const cancelLabel = poPageEditLiteralsDefault[poLocaleDefault].cancel;
-
-      component.literals = poPageEditLiteralsDefault[poLocaleDefault];
-
-      component.cancel.observers.push(<any>of({}));
-
-      fixture.detectChanges();
-
-      const primaryButtonLabel = debugElement.querySelector('po-button > button.po-button-primary > span');
-
-      expect(primaryButtonLabel).toBeTruthy();
-      expect(primaryButtonLabel.innerHTML).toBe(cancelLabel);
-    });
-
     it('should show page header if `hasPageHeader` return true', () => {
       spyOn(component, 'hasPageHeader').and.returnValue(true);
       fixture.detectChanges();

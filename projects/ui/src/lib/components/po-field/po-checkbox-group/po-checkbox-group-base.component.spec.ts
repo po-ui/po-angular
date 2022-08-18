@@ -1,4 +1,4 @@
-import { FormControl } from '@angular/forms';
+import { UntypedFormControl } from '@angular/forms';
 
 import * as UtilsFunction from '../../../utils/util';
 import * as ValidatorsFunctions from '../validators';
@@ -263,7 +263,7 @@ describe('PoCheckboxGroupBaseComponent: ', () => {
 
       spyOn(ValidatorsFunctions, 'requiredFailed').and.returnValue(true);
 
-      expect(component.validate(new FormControl([]))).toEqual(validObj);
+      expect(component.validate(new UntypedFormControl([]))).toEqual(validObj);
       expect(ValidatorsFunctions.requiredFailed).toHaveBeenCalled();
     });
 
@@ -278,7 +278,7 @@ describe('PoCheckboxGroupBaseComponent: ', () => {
       spyOn(ValidatorsFunctions, 'requiredFailed').and.returnValue(false);
       spyOn(component, isInvalidIndeterminate).and.returnValue(true);
 
-      expect(component.validate(new FormControl([]))).toEqual(validObj);
+      expect(component.validate(new UntypedFormControl([]))).toEqual(validObj);
       expect(component[isInvalidIndeterminate]).toHaveBeenCalled();
       expect(ValidatorsFunctions.requiredFailed).toHaveBeenCalled();
     });
@@ -287,7 +287,7 @@ describe('PoCheckboxGroupBaseComponent: ', () => {
       spyOn(ValidatorsFunctions, 'requiredFailed').and.returnValue(false);
       spyOn(component, <any>'isInvalidIndeterminate').and.returnValue(false);
 
-      expect(component.validate(new FormControl(null))).toBeUndefined();
+      expect(component.validate(new UntypedFormControl(null))).toBeUndefined();
       expect(ValidatorsFunctions.requiredFailed).toHaveBeenCalled();
     });
 

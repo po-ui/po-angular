@@ -105,6 +105,41 @@ export abstract class PoComboBaseComponent implements ControlValueAccessor, OnIn
    *
    * @description
    *
+   * Se verdadeiro ativa a funcionalidade de scroll infinito para o combo, Ao chegar ao fim da tabela executará nova busca dos dados conforme paginação.
+   *
+   * @default `false`
+   */
+  @Input('p-infinite-scroll') set infiniteScroll(value: boolean) {
+    this._infiniteScroll = convertToBoolean(value);
+  }
+
+  get infiniteScroll() {
+    return this._infiniteScroll;
+  }
+
+  /**
+   * @optional
+   *
+   * @description
+   *
+   * Define o percentual necessário para disparar o evento `show-more`, que é responsável por carregar mais dados no combo. Caso o valor seja maior que 100 ou menor que 0, o valor padrão será 100%.
+   *
+   * **Exemplos**
+   * - p-infinite-scroll-distance = 80: Quando atingir 80% do scroll do combo, o `show-more` será disparado.
+   */
+  @Input('p-infinite-scroll-distance') set infiniteScrollDistance(value: number) {
+    this._infiniteScrollDistance = value > 100 || value < 0 ? 100 : value;
+  }
+
+  get infiniteScrollDistance() {
+    return this._infiniteScrollDistance;
+  }
+
+  /**
+   * @optional
+   *
+   * @description
+   *
    * Define o ícone que será exibido no início do campo.
    *
    * É possível usar qualquer um dos ícones da [Biblioteca de ícones](/guides/icons). conforme exemplo abaixo:
@@ -195,6 +230,16 @@ export abstract class PoComboBaseComponent implements ControlValueAccessor, OnIn
    */
   @Output('ngModelChange') ngModelChange: EventEmitter<any> = new EventEmitter<any>();
 
+  /**
+   * @optional
+   *
+   * @description
+   *
+   * Deve ser informada uma função que será disparada quando houver alterações no Search input. A função receberá como argumento o input modificado.
+   *
+   */
+  @Output('p-input-change') inputChange: EventEmitter<string> = new EventEmitter<string>();
+
   cacheOptions: Array<PoComboOption | PoComboGroup> = [];
   defaultService: PoComboFilterService;
   firstInWriteValue: boolean = true;
@@ -208,6 +253,9 @@ export abstract class PoComboBaseComponent implements ControlValueAccessor, OnIn
   selectedView: any;
   service: PoComboFilterService;
   visibleOptions: Array<PoComboOption | PoComboGroup> = [];
+  page: number = 1;
+  pageSize: number = 10;
+  loading: boolean = false;
 
   protected cacheStaticOptions: Array<PoComboOption | PoComboGroup> = [];
   protected comboOptionsList: Array<PoComboOption | PoComboGroup> = [];
@@ -228,6 +276,9 @@ export abstract class PoComboBaseComponent implements ControlValueAccessor, OnIn
   private _required?: boolean = false;
   private _sort?: boolean = false;
   private language: string;
+  private _infiniteScrollDistance?: number = 100;
+  private _infiniteScroll?: boolean = false;
+  private _height?: number;
 
   // utilizado para fazer o controle de atualizar o model.
   // não deve forçar a atualização se o gatilho for o writeValue para não deixar o campo dirty.
@@ -419,6 +470,7 @@ export abstract class PoComboBaseComponent implements ControlValueAccessor, OnIn
    * - A lista deve seguir as definições descritas nas respectivas interfaces, caso contrário não exibirá a(as) opção(ões) fora dos padrões.
    * - O componente interpretará o formato da lista de acordo com a interface utilizada e só exibirá as opções correspondentes à ela.
    * - Um agrupamento só será exibido se houver pelo menos uma opção válida.
+   * - Aconselha-se utilizar valores distintos no `label` e `value` dos itens.
    */
   @Input('p-options') set options(options: Array<PoComboOption | PoComboOptionGroup>) {
     this._options = Array.isArray(options) ? options : [];
@@ -652,7 +704,8 @@ export abstract class PoComboBaseComponent implements ControlValueAccessor, OnIn
   updateComboList(options?: Array<PoComboOption | PoComboGroup>) {
     const copyOptions = options || [...this.comboOptionsList];
 
-    const newOptions = !options && this.selectedValue ? [{ ...this.selectedOption }] : copyOptions;
+    const newOptions =
+      !options && !this.infiniteScroll && this.selectedValue ? [{ ...this.selectedOption }] : copyOptions;
 
     this.visibleOptions = newOptions;
 
@@ -774,6 +827,7 @@ export abstract class PoComboBaseComponent implements ControlValueAccessor, OnIn
     this.callModelChange(value);
     this.updateSelectedValue(null);
     this.updateComboList();
+    this.initInputObservable();
   }
 
   protected configAfterSetFilterService(service: PoComboFilter | string) {
@@ -821,10 +875,11 @@ export abstract class PoComboBaseComponent implements ControlValueAccessor, OnIn
     currentOption: string,
     accumulatedGroupOptions?: Array<PoComboGroup>
   ) {
-    return (
-      options.some(option => option.label === currentOption) ||
-      (accumulatedGroupOptions && accumulatedGroupOptions.some(option => option.label === currentOption))
-    );
+    if (accumulatedGroupOptions) {
+      return accumulatedGroupOptions.some(option => option.label === currentOption);
+    } else {
+      return options.some(option => option.value === currentOption);
+    }
   }
 
   private listingComboOptions(comboOptions: Array<PoComboOption | PoComboOptionGroup>) {
@@ -866,7 +921,11 @@ export abstract class PoComboBaseComponent implements ControlValueAccessor, OnIn
     return comboOptions.reduce((accumulatedOptions, currentOption) => {
       if (
         !this.verifyIfHasLabel(currentOption) ||
-        this.hasDuplicatedOption(accumulatedOptions, currentOption.label, accumulatedGroupOptions) ||
+        this.hasDuplicatedOption(
+          accumulatedOptions,
+          currentOption['value'] || currentOption['label'],
+          accumulatedGroupOptions
+        ) ||
         !this.validateValue(currentOption, verifyingOptionsGroup)
       ) {
         return accumulatedOptions;

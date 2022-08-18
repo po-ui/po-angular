@@ -11,7 +11,7 @@ import { Component, Input } from '@angular/core';
  *  <po-modal-footer>
  *    <po-button p-label="Close" (p-click)="modal.close()"> </po-button>
  *    <po-button p-label="Clean" (p-click)="clean()"> </po-button>
- *    <po-button p-label="Confirm" p-type="primary" (p-click)="confirm()"> </po-button>
+ *    <po-button p-label="Confirm" p-kind="primary" (p-click)="confirm()"> </po-button>
  *  </po-modal-footer>
  * </po-modal>
  * ```

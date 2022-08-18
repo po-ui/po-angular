@@ -127,6 +127,7 @@ export function convertIsoToDate(value: string, start: boolean, end: boolean) {
     const day = parseInt(value.substring(8, 10), 10);
     const month = parseInt(value.substring(5, 7), 10);
     const year = parseInt(value.substring(0, 4), 10);
+
     if (start) {
       const date = new Date(year, month - 1, day, 0, 0, 0);
 
@@ -140,9 +141,7 @@ export function convertIsoToDate(value: string, start: boolean, end: boolean) {
 
       return date;
     } else {
-      const milliseconds = Date.parse(value);
-      const timezone = new Date().getTimezoneOffset() * 60000;
-      return new Date(milliseconds + timezone);
+      return new Date(year, month - 1, day);
     }
   }
 }
@@ -212,6 +211,7 @@ export function formatYear(year: number) {
     return `000${year}`;
   }
 }
+
 // Verifica se o navegador em que está sendo usado é Internet Explorer ou Edge
 export function isIEOrEdge() {
   const userAgent = window.navigator.userAgent;
@@ -326,9 +326,31 @@ export function removeDuplicatedOptions(list: Array<any>) {
   }
 }
 
+export function removeDuplicatedOptionsWithFieldValue(list: Array<any>, newValue) {
+  for (let i = 0; i < list.length; i++) {
+    if (i === 0) {
+      continue;
+    }
+
+    if (list.findIndex(op => op[newValue] === list[i][newValue]) !== i) {
+      list.splice(i, 1);
+      i--;
+    }
+  }
+}
+
 export function removeUndefinedAndNullOptions(list: Array<any>) {
   for (let i = 0; i < list.length; i++) {
     if (list[i].value === undefined || list[i].value === null) {
+      list.splice(i, 1);
+      i--;
+    }
+  }
+}
+
+export function removeUndefinedAndNullOptionsWithFieldValue(list: Array<any>, newValue) {
+  for (let i = 0; i < list.length; i++) {
+    if (list[i][newValue] === undefined || list[i][newValue] === null) {
       list.splice(i, 1);
       i--;
     }

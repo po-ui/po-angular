@@ -993,14 +993,6 @@ describe('PoUploadComponent:', () => {
       expect(fixture.debugElement.nativeElement.querySelector('.po-upload-button')).toBeFalsy();
     });
 
-    it('should show send files button if displaySendButton` returns true', () => {
-      spyOnProperty(component, 'displaySendButton').and.returnValue(true);
-
-      fixture.detectChanges();
-
-      expect(fixture.debugElement.nativeElement.querySelector('.po-button-primary')).toBeTruthy();
-    });
-
     it('shouldn´t show send files button if `displaySendButton` returns false', () => {
       spyOnProperty(component, 'displaySendButton').and.returnValue(false);
 

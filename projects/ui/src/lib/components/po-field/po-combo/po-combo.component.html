@@ -36,24 +36,25 @@
   </div>
 
   <div #containerElement class="po-combo-container" [hidden]="!comboOpen && !isServerSearching">
-    <ng-container *ngIf="isServerSearching; then loadingTemplate; else optionsTemplate"> </ng-container>
+    <ng-container *ngIf="visibleOptions.length; then visibleOptionsTemplate; else noDataTemplate"> </ng-container>
+    <div *ngIf="isServerSearching">
+      <ng-container *ngIf="infiniteLoading; then infiniteLoadingTemplate; else normalLoadingTemplate"></ng-container>
+    </div>
   </div>
 
   <po-field-container-bottom></po-field-container-bottom>
 </po-field-container>
 
-<ng-template #loadingTemplate>
-  <div class="po-combo-container-loading">
-    <po-loading></po-loading>
-  </div>
+<ng-template #normalLoadingTemplate>
+  <po-loading class="po-combo-container-loading"> </po-loading>
 </ng-template>
 
-<ng-template #optionsTemplate>
-  <ng-container *ngIf="visibleOptions.length; then visibleOptionsTemplate; else noDataTemplate"> </ng-container>
+<ng-template #infiniteLoadingTemplate>
+  <po-loading-overlay class="po-combo-container-loading"> </po-loading-overlay>
 </ng-template>
 
 <ng-template #visibleOptionsTemplate>
-  <ul #contentElement class="po-combo-container-content">
+  <ul #contentElement #poComboBody class="po-combo-container-content">
     <li
       *ngFor="let option of visibleOptions"
       [class.po-combo-item-selected]="compareObjects(selectedView, option)"
@@ -98,7 +99,7 @@
 <ng-template #noDataTemplate>
   <div class="po-combo-container-no-data">
     <div class="po-combo-no-data po-text-center">
-      <span>
+      <span *ngIf="!isServerSearching">
         {{ literals.noData }}
       </span>
     </div>

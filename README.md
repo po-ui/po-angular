@@ -20,16 +20,16 @@ Biblioteca de componentes de UI para Angular.
 
 ### Pré-requisitos
 
-Para começar a utilizar o **PO UI** é pré-requisito ter o `Node.js` instalado (versão 12.x ou acima) e o seu gerenciador de pacote favorito na versão mais atual. Caso você ainda não tenha instalado o pacote `@angular/cli`, instale-o via `npm` ou `yarn`.
+Para começar a utilizar o **PO UI** é pré-requisito ter o `Node.js` instalado (versão 14.x ou acima) e o seu gerenciador de pacote favorito na versão mais atual. Caso você ainda não tenha instalado o pacote `@angular/cli`, instale-o via `npm` ou `yarn`.
 
 Instalando com npm:
 ```
-npm i -g @angular/cli@^13
+npm i -g @angular/cli@^14
 ```
 
 Caso prefira instalar com o yarn:
 ```
-yarn global add @angular/cli@^13
+yarn global add @angular/cli@^14
 ```
 
 ### Passo 1 - Crie o seu primeiro projeto
@@ -53,22 +53,22 @@ Veja abaixo a lista de dependências e as versões compatíveis, elas devem ser 
 
 ```
  "dependencies": {
-    "@angular/animations": "^13.0.3",
-    "@angular/common": "^13.0.3",
-    "@angular/compiler": "^13.0.3",
-    "@angular/core": "^13.0.3",
-    "@angular/forms": "^13.0.3",
-    "@angular/platform-browser": "^13.0.3",
-    "@angular/platform-browser-dynamic": "^13.0.3",
-    "@angular/router": "^13.0.3",
-    "rxjs": "~7.4.0",
+    "@angular/animations": "^14.0.2",
+    "@angular/common": "^14.0.2",
+    "@angular/compiler": "^14.0.2",
+    "@angular/core": "^14.0.2",
+    "@angular/forms": "^14.0.2",
+    "@angular/platform-browser": "^14.0.2",
+    "@angular/platform-browser-dynamic": "^14.0.2",
+    "@angular/router": "^14.0.2",
+    "rxjs": "~7.5.5",
     "tslib": "^2.3.0",
     "zone.js": "~0.11.4"
     ...
   },
   "devDependencies": {
     ...
-    "typescript": "~4.4.4"
+    "typescript": "~4.7.4"
   }
 ```
 

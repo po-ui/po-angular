@@ -101,6 +101,21 @@ export abstract class PoPageDynamicSearchBaseComponent {
   concatFilters: boolean = false;
 
   /**
+   * @optional
+   *
+   * @description
+   *
+   * Oculta o botão para remover todos os *disclaimers* do grupo.
+   *
+   * > Por padrão, o mesmo é exibido à partir de dois ou mais *disclaimers* com a opção `hideClose` habilitada.
+   *
+   * @default `false`
+   */
+  @InputBoolean()
+  @Input('p-hide-remove-all-disclaimer')
+  hideRemoveAllDisclaimer?: boolean = false;
+
+  /**
    * Função ou serviço que será executado na inicialização do componente.
    *
    * A propriedade aceita os seguintes tipos:
@@ -167,6 +182,7 @@ export abstract class PoPageDynamicSearchBaseComponent {
   advancedFilterLiterals: PoAdvancedFilterLiterals;
 
   private _filters: Array<PoDynamicFormField> = [];
+  private _hideCloseDisclaimers: Array<string> = [];
   private _literals: PoPageDynamicSearchLiterals;
   private _quickSearchWidth: number;
 
@@ -265,6 +281,27 @@ export abstract class PoPageDynamicSearchBaseComponent {
 
   get quickSearchWidth(): number {
     return this._quickSearchWidth;
+  }
+
+  /**
+   * @optional
+   *
+   * @description
+   *
+   * Lista de filtros que terão a opção de fechar ocultada
+   * em seu respectivo disclaimer. Utilizar o atributo `property` do filtro.
+   *
+   * Exemplo de utilização:
+   * ```
+   * ['city','name'];
+   * ```
+   */
+  @Input('p-hide-close-disclaimers') set hideCloseDisclaimers(value: Array<string>) {
+    this._hideCloseDisclaimers = Array.isArray(value) ? value : [];
+  }
+
+  get hideCloseDisclaimers(): Array<string> {
+    return this._hideCloseDisclaimers;
   }
 
   constructor(languageService: PoLanguageService) {

@@ -91,24 +91,34 @@ export class PoTableComponent extends PoTableBaseComponent implements AfterViewI
   @ContentChildren(PoTableColumnTemplateDirective) tableColumnTemplates: QueryList<PoTableColumnTemplateDirective>;
 
   @ViewChild('noColumnsHeader', { read: ElementRef }) noColumnsHeader;
+  @ViewChild('noColumnsHeaderFixed', { read: ElementRef }) noColumnsHeaderFixed;
   @ViewChild('popup') poPopupComponent: PoPopupComponent;
   @ViewChild('tableFooter', { read: ElementRef, static: false }) tableFooterElement;
   @ViewChild('tableWrapper', { read: ElementRef, static: false }) tableWrapperElement;
   @ViewChild('poTableTbody', { read: ElementRef, static: false }) poTableTbody;
+  @ViewChild('poTableThead', { read: ElementRef, static: false }) poTableThead;
+  @ViewChild('poTableTbodyVirtual', { read: ElementRef, static: false }) poTableTbodyVirtual;
+  @ViewChild('columnManager', { read: ElementRef, static: false }) columnManager;
+  @ViewChild('columnManagerFixed', { read: ElementRef, static: false }) columnManagerFixed;
+  @ViewChild('columnActionLeft', { read: ElementRef, static: false }) columnActionLeft;
+  @ViewChild('columnActionLeftFixed', { read: ElementRef, static: false }) columnActionLeftFixed;
 
   @ViewChildren('actionsIconElement', { read: ElementRef }) actionsIconElement: QueryList<any>;
   @ViewChildren('actionsElement', { read: ElementRef }) actionsElement: QueryList<any>;
-  @ViewChildren('headersTable') headersTable: QueryList<any>;
 
   heightTableContainer: number;
+  heightTableVirtual: number;
   popupTarget;
   tableOpacity: number = 0;
   tooltipText: string;
+  itemSize: number = 32;
   lastVisibleColumnsSelected: Array<PoTableColumn>;
 
   private _columnManagerTarget: ElementRef;
+  private _columnManagerTargetFixed: ElementRef;
   private differ;
   private footerHeight;
+  private headerHeight;
   private initialized = false;
   private timeoutResize;
   private visibleElement = false;
@@ -120,12 +130,20 @@ export class PoTableComponent extends PoTableBaseComponent implements AfterViewI
 
   @ViewChild('columnManagerTarget') set columnManagerTarget(value: ElementRef) {
     this._columnManagerTarget = value;
-
     this.changeDetector.detectChanges();
   }
 
   get columnManagerTarget() {
     return this._columnManagerTarget;
+  }
+
+  @ViewChild('columnManagerTargetFixed') set columnManagerTargetFixed(value: ElementRef) {
+    this._columnManagerTargetFixed = value;
+    this.changeDetector.detectChanges();
+  }
+
+  get columnManagerTargetFixed() {
+    return this._columnManagerTargetFixed;
   }
 
   constructor(
@@ -240,6 +258,8 @@ export class PoTableComponent extends PoTableBaseComponent implements AfterViewI
       this.checkInfiniteScroll();
       this.visibleElement = true;
     }
+
+    this.itemSize = document.body.offsetWidth > 1366 ? 44 : 32;
   }
 
   ngOnDestroy() {
@@ -450,6 +470,10 @@ export class PoTableComponent extends PoTableBaseComponent implements AfterViewI
     this.changeVisibleColumns.emit(columns);
   }
 
+  onColumnRestoreManager(value: Array<String>) {
+    this.columnRestoreManager.emit(value);
+  }
+
   onVisibleColumnsChange(columns: Array<PoTableColumn>) {
     this.columns = columns;
 
@@ -539,29 +563,35 @@ export class PoTableComponent extends PoTableBaseComponent implements AfterViewI
     return template.templateRef;
   }
 
+  public syncronizeHorizontalScroll(): void {
+    this.poTableThead.nativeElement.scrollLeft = this.poTableTbodyVirtual.nativeElement.scrollLeft;
+  }
+
+  public getWidthColumnManager() {
+    return this.height
+      ? this.columnManagerFixed?.nativeElement.offsetWidth
+      : this.columnManager?.nativeElement.offsetWidth;
+  }
+
+  public getColumnWidthActionsLeft() {
+    return this.height
+      ? this.columnActionLeftFixed?.nativeElement.offsetWidth
+      : this.columnActionLeft?.nativeElement.offsetWidth;
+  }
+
   protected calculateHeightTableContainer(height) {
     const value = parseFloat(height);
     this.heightTableContainer = value ? value - this.getHeightTableFooter() : undefined;
+    this.heightTableVirtual = this.heightTableContainer
+      ? this.heightTableContainer - this.getHeightTableHeader()
+      : undefined;
     this.setTableOpacity(1);
     this.changeDetector.detectChanges();
   }
 
-  protected calculateWidthHeaders() {
-    setTimeout(() => {
-      if (this.height) {
-        this.headersTable.forEach(header => {
-          const divHeader = header.nativeElement.querySelector('.po-table-header-fixed-inner');
-          if (divHeader) {
-            divHeader.style.width = `${header.nativeElement.offsetWidth}px`;
-          }
-        });
-      }
-    });
-  }
-
   protected checkInfiniteScroll(): void {
     if (this.hasInfiniteScroll()) {
-      if (this.poTableTbody.nativeElement.scrollHeight > this.height) {
+      if (this.poTableTbodyVirtual.nativeElement.scrollHeight >= this.height) {
         this.includeInfiniteScroll();
       } else {
         this.infiniteScroll = false;
@@ -596,8 +626,6 @@ export class PoTableComponent extends PoTableBaseComponent implements AfterViewI
   private debounceResize() {
     clearTimeout(this.timeoutResize);
     this.timeoutResize = setTimeout(() => {
-      this.calculateWidthHeaders();
-
       // show the table
       this.setTableOpacity(1);
     });
@@ -612,19 +640,27 @@ export class PoTableComponent extends PoTableBaseComponent implements AfterViewI
     return this.tableFooterElement ? this.tableFooterElement.nativeElement.offsetHeight : 0;
   }
 
+  private getHeightTableHeader() {
+    return this.poTableThead?.nativeElement?.offsetHeight
+      ? this.poTableThead.nativeElement.offsetHeight
+      : this.itemSize;
+  }
+
   private hasInfiniteScroll(): boolean {
     return (
       this.infiniteScroll &&
       this.hasItems &&
       !this.subscriptionScrollEvent &&
       this.height &&
-      this.poTableTbody.nativeElement.scrollHeight
+      this.poTableTbodyVirtual.nativeElement.scrollHeight
     );
   }
 
   private includeInfiniteScroll(): void {
-    this.scrollEvent$ = this.defaultService.scrollListener(this.poTableTbody.nativeElement);
+    this.scrollEvent$ = this.defaultService.scrollListener(this.poTableTbodyVirtual.nativeElement);
     this.subscriptionScrollEvent = this.scrollEvent$.subscribe(event => this.showMoreInfiniteScroll(event));
+
+    this.changeDetector.detectChanges();
   }
 
   private mergeCustomIcons(rowIcons: Array<string>, customIcons: Array<any>) {
@@ -662,9 +698,18 @@ export class PoTableComponent extends PoTableBaseComponent implements AfterViewI
     return this.footerHeight !== this.getHeightTableFooter();
   }
 
-  private verifyCalculateHeightTableContainer() {
+  private verifyChangeHeightInHeader() {
+    return this.headerHeight !== this.getHeightTableHeader();
+  }
+
+  protected verifyCalculateHeightTableContainer() {
     if (this.height && this.verifyChangeHeightInFooter()) {
       this.footerHeight = this.getHeightTableFooter();
+
+      if (this.verifyChangeHeightInHeader()) {
+        this.headerHeight = this.getHeightTableHeader();
+      }
+
       this.calculateHeightTableContainer(this.height);
     }
   }

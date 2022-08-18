@@ -1,44 +1,32 @@
-import { EventEmitter, Input, Output, Directive, TemplateRef } from '@angular/core';
+import { EventEmitter, Input, Output, Directive, TemplateRef, HostBinding } from '@angular/core';
 
 import { convertToBoolean } from '../../utils/util';
 import { InputBoolean } from '../../decorators';
 
-const PO_BUTTON_TYPES = ['default', 'primary', 'danger', 'link'];
-const PO_BUTTON_TYPE_DEFAULT = 'default';
+import { PoButtonKind } from './po-button-type.enum';
 
 /**
  * @description
  *
  * O `po-button` permite que o usuário execute ações predefinidas pelo desenvolvedor.
  *
- * Através dos tipos, é possível identificar a importância de cada ação, sendo ela primária (`primary`) ou até mesmo uma
- * ação irreversível (`danger`), como a exclusão de um registro.
+ * Através dos tipos, é possível identificar a importância de cada ação.
  *
  * #### Boas práticas
  *
  * - Evite `labels` extensos que quebram o layout do `po-button`, use `labels` diretos, curtos e intuitivos.
  * - Utilize apenas um `po-button` configurado como `primary` por página.
- * - Para ações irreversíveis use sempre o tipo `danger`.
+ * - Para ações irreversíveis use sempre a propriedade `p-danger`.
+ *
+ * #### Acessibilidade tratada no componente
+ *
+ * Algumas diretrizes de acessibilidade já são tratadas no componente, internamente, e não podem ser alteradas pelo proprietário do conteúdo. São elas:
+ *
+ * - Quando em foco, o botão é ativado usando as teclas de Espaço e Enter do teclado. [W3C WAI-ARIA 3.5 Button - Keyboard Interaction](https://www.w3.org/WAI/ARIA/apg/#keyboard-interaction-3)
+ * - A área do foco precisar ter uma espessura de pelo menos 2 pixels CSS e o foco não pode ficar escondido por outros elementos da tela. [WCAG 2.4.12: Focus Appearance](https://www.w3.org/WAI/WCAG22/Understanding/focus-appearance-enhanced)
  */
 @Directive()
 export class PoButtonBaseComponent {
-  /**
-   * @deprecated 14.x.x
-   *
-   * @optional
-   *
-   * @description
-   *
-   * **Deprecated 14.x.x**.
-   *
-   * Aplica foco no elemento ao ser iniciado.
-   * > Caso mais de um elemento seja configurado com essa propriedade,
-   * o último elemento declarado com ela terá o foco.
-   *
-   * @default `false`
-   */
-  @Input('p-auto-focus') @InputBoolean() autoFocus: boolean = false;
-
   /**
    * @optional
    *
@@ -77,10 +65,11 @@ export class PoButtonBaseComponent {
   /** Ação que será executada quando o usuário clicar sobre o `po-button`. */
   @Output('p-click') click = new EventEmitter<null>();
 
+  private _danger?: boolean = false;
   private _disabled?: boolean = false;
   private _loading?: boolean = false;
   private _small?: boolean = false;
-  private _type?: string = 'default';
+  private _kind?: string = PoButtonKind.secondary;
 
   /**
    * @optional
@@ -118,6 +107,53 @@ export class PoButtonBaseComponent {
   }
 
   /**
+   * @deprecated 15.x.x
+   *
+   * @optional
+   *
+   * @description
+   *
+   * **Deprecated 15.x.x**. Utilizar `p-kind` no lugar.
+   *
+   * Define o estilo do `po-button`.
+   *
+   * Valore válidos:
+   *  - `default`: **Deprecated 15.x.x**. Utilizar `p-kind="secondary"`.
+   *  - `primary`: deixa o `po-button` com destaque, deve ser usado para ações primárias.
+   *  - `danger`: **Deprecated 15.x.x**. Utilizar `p-danger`.
+   *  - `link`: **Deprecated 15.x.x**. Utilizar `p-kind="tertiary"`.
+   *
+   * @default `secondary`
+   */
+  @Input('p-type') set type(value: string) {
+    this.kind = value;
+  }
+  get type(): string {
+    return this.kind;
+  }
+
+  /**
+   * @optional
+   *
+   * @description
+   *
+   * Deve ser usado em ações irreversíveis que o usuário precisa ter cuidado ao executá-la, como a exclusão de um registro.
+   *
+   * > A propriedade `p-kind="tertiary"` será inativada ao utilizar esta propriedade.
+   */
+
+  @HostBinding('attr.p-danger')
+  @Input('p-danger')
+  @InputBoolean()
+  set danger(value: boolean) {
+    this._danger = this.kind !== PoButtonKind.tertiary ? value : false;
+  }
+
+  get danger(): boolean {
+    return this._danger;
+  }
+
+  /**
    * @optional
    *
    * @description
@@ -125,18 +161,21 @@ export class PoButtonBaseComponent {
    * Define o estilo do `po-button`.
    *
    * Valore válidos:
-   *  - `default`: estilo padrão do `po-button`.
    *  - `primary`: deixa o `po-button` com destaque, deve ser usado para ações primárias.
-   *  - `danger`: deve ser usado para ações que o usuário precisa ter cuidado ao executa-lá.
-   *  - `link`: o `po-button` recebe o estilo de um link.
+   *  - `secondary`: estilo padrão do `po-button`.
+   *  - `tertiary`: o `po-button` é exibido sem cor do fundo, recebendo menos destaque entre as ações.
    *
-   * @default `default`
+   * @default `secondary`
    */
-  @Input('p-type') set type(value: string) {
-    this._type = PO_BUTTON_TYPES.includes(value) ? value : PO_BUTTON_TYPE_DEFAULT;
+
+  @HostBinding('attr.p-kind')
+  @Input('p-kind')
+  set kind(value: string) {
+    this._kind = PoButtonKind[value] ? PoButtonKind[value] : PoButtonKind.secondary;
   }
-  get type(): string {
-    return this._type;
+
+  get kind(): string {
+    return this._kind;
   }
 
   /**

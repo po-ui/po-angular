@@ -401,9 +401,29 @@ describe('PoMultiselectComponent:', () => {
       expect(fnDestroy).not.toThrow();
     });
 
-    it('Should call `setService` if a change occurs', () => {
+    it('Should call `setService` if a change occurs in `filterService` and contain `filterService`', () => {
       const changes = { filterService: 'filterServiceURL' };
+      component.filterService = 'http://localhost:4200/test';
+      spyOn(component, <any>'setService');
 
+      component.ngOnChanges(<any>changes);
+
+      expect(component['setService']).toHaveBeenCalledWith(component.filterService);
+    });
+
+    it('Should call `setService` if a change occurs in `fieldValue` and contain `filterService`', () => {
+      const changes = { fieldValue: 'valueTest' };
+      component.filterService = 'http://localhost:4200/test';
+      spyOn(component, <any>'setService');
+
+      component.ngOnChanges(<any>changes);
+
+      expect(component['setService']).toHaveBeenCalledWith(component.filterService);
+    });
+
+    it('Should call `setService` if a change occurs in `fieldLabel` and contain `filterService`', () => {
+      const changes = { fieldLabel: 'labelTest' };
+      component.filterService = 'http://localhost:4200/test';
       spyOn(component, <any>'setService');
 
       component.ngOnChanges(<any>changes);

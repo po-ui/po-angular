@@ -109,8 +109,17 @@ export class PoRichTextToolbarComponent implements AfterViewInit {
     }
   ];
 
+  private _disabledTextAlign: boolean;
   private _readonly: boolean;
   private selectedLinkElement;
+
+  @Input('p-disabled-text-align') set disabledTextAlign(value: boolean) {
+    this._disabledTextAlign = value;
+  }
+
+  get disabledTextAlign() {
+    return this._disabledTextAlign;
+  }
 
   @Input('p-readonly') set readonly(value: boolean) {
     this._readonly = value;

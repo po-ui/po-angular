@@ -31,14 +31,8 @@ import { PoButtonBaseComponent } from './po-button-base.component';
   templateUrl: './po-button.component.html',
   changeDetection: ChangeDetectionStrategy.OnPush
 })
-export class PoButtonComponent extends PoButtonBaseComponent implements AfterViewInit {
+export class PoButtonComponent extends PoButtonBaseComponent {
   @ViewChild('button', { static: true }) buttonElement: ElementRef;
-
-  ngAfterViewInit() {
-    if (this.autoFocus) {
-      this.focus();
-    }
-  }
 
   /**
    * Função que atribui foco ao componente.

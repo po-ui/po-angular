@@ -17,7 +17,6 @@ import { HttpClientTestingModule } from '@angular/common/http/testing';
 
 @Directive()
 class PoTableComponent extends PoTableBaseComponent {
-  calculateWidthHeaders() {}
   checkInfiniteScroll() {}
   calculateHeightTableContainer(height) {}
 }
@@ -106,22 +105,18 @@ describe('PoTableBaseComponent:', () => {
     expectPropertiesValues(component, 'items', [], []);
   });
 
-  it('should set selectable and call calculateWidthHeaders', () => {
-    spyOn(component, 'calculateWidthHeaders');
+  it('should set selectable', () => {
     const validValues = ['', true, 1];
     const invalidValues = [undefined, null, false, 0];
 
     expectPropertiesValues(component, 'selectable', validValues, true);
     expectPropertiesValues(component, 'selectable', invalidValues, false);
-    expect(component.calculateWidthHeaders).toHaveBeenCalled();
   });
 
-  it('should set hideDetail and call calculateWidthHeaders', () => {
-    spyOn(component, 'calculateWidthHeaders');
+  it('should set hideDetail', () => {
     expectSettersMethod(component, 'hideDetail', '', 'hideDetail', true);
     expectSettersMethod(component, 'hideDetail', 'true', 'hideDetail', true);
     expectSettersMethod(component, 'hideDetail', 'false', 'hideDetail', false);
-    expect(component.calculateWidthHeaders).toHaveBeenCalled();
   });
 
   it('should call setColumnLink when set columns', () => {
@@ -164,19 +159,14 @@ describe('PoTableBaseComponent:', () => {
     });
   });
 
-  it('should set height and call calculateWidthHeaders', () => {
-    spyOn(component, 'calculateWidthHeaders');
-
+  it('should set height', () => {
     expectSettersMethod(component, 'height', 100, 'height', 100);
-    expect(component.calculateWidthHeaders).toHaveBeenCalled();
   });
 
-  it('should set columns and call calculateWidthHeaders', () => {
-    spyOn(component, 'calculateWidthHeaders');
+  it('should set columns', () => {
     component.columns = [{ property: 'teste', label: 'label' }];
 
     expect(component.columns).toEqual([{ property: 'teste', label: 'label' }]);
-    expect(component.calculateWidthHeaders).toHaveBeenCalled();
   });
 
   it('should set hideSelectAll to true if singleSelect', () => {
@@ -1348,22 +1338,16 @@ describe('PoTableBaseComponent:', () => {
       expectPropertiesValues(component, 'loading', booleanInvalidValues, false);
     });
 
-    it('p-loading: should update property `p-loading` with valid values and call `calculateWidthHeaders`', () => {
-      spyOn(component, 'calculateWidthHeaders');
-
+    it('p-loading: should update property `p-loading` with valid values', () => {
       expectPropertiesValues(component, 'loading', booleanValidTrueValues, true);
-
-      expect(component.calculateWidthHeaders).toHaveBeenCalled();
     });
 
-    it('p-columns: should call `setColumnLink` and `calculateWidthHeaders` if has values', () => {
+    it('p-columns: should call `setColumnLink` if has values', () => {
       spyOn(component, <any>'setColumnLink');
-      spyOn(component, 'calculateWidthHeaders');
 
       component.columns = [{ label: 'table', property: 'table' }];
 
       expect(component['setColumnLink']).toHaveBeenCalled();
-      expect(component.calculateWidthHeaders).toHaveBeenCalled();
     });
 
     it('p-columns, p-items: should call `getDefaultColumns` with item if doesn`t have columns but has items to set default column', () => {

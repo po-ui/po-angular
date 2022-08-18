@@ -152,14 +152,25 @@
             "leadingUnderscore": "allow"
           },
           {
-            "selector": ["objectLiteralProperty", "objectLiteralMethod"],
-            "format": ["PascalCase", "camelCase", "snake_case"],
+            "selector": ["objectLiteralMethod"],
+            "format": ["PascalCase", "camelCase", "snake_case", "UPPER_CASE"],
+            "leadingUnderscore": "allow"
+          },
+          {
+            "selector": ["objectLiteralProperty"],
+            "format": null,
             "leadingUnderscore": "allow"
           },
           {
             "selector": "function",
             "format": ["PascalCase", "camelCase"],
             "leadingUnderscore": "allow"
+          }
+        ],
+        "@typescript-eslint/member-ordering": [
+          "error",
+          {
+            "default": ["signature", "field", "constructor", "method"]
           }
         ],
         "arrow-parens": ["off", "always"],
@@ -198,7 +209,12 @@
         "no-shadow": "off",
         "no-trailing-spaces": "off",
         "no-underscore-dangle": "off",
-        "no-unused-expressions": ["error", { "allowTernary": true }],
+        "no-unused-expressions": [
+          "error",
+          {
+            "allowTernary": true
+          }
+        ],
         "no-use-before-define": "off",
         "object-shorthand": "off",
         "padded-blocks": [

@@ -58,6 +58,22 @@ export interface PoPageDynamicSearchOptions {
   concatFilters?: boolean;
 
   /**
+   * Oculta o botão para remover todos os *disclaimers*.
+   */
+  hideRemoveAllDisclaimer?: boolean;
+
+  /**
+   * Lista de filtros que terão a opção de fechar ocultada
+   * em seu respectivo disclaimer. Utilizar o atributo `property` do filtro.
+   *
+   * Exemplo de utilização:
+   * ```
+   * ['city','name'];
+   * ```
+   */
+  hideCloseDisclaimers?: Array<string>;
+
+  /**
    * Largura do campo de busca, utilizando o *Grid System*,
    * e limitado ao máximo de 6 colunas. O tamanho mínimo é controlado
    * conforme resolução de tela para manter a consistência do layout.

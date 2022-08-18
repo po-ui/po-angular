@@ -65,6 +65,22 @@ export interface PoPageDynamicTableOptions {
   concatFilters?: boolean;
 
   /**
+   * Oculta o botão para remover todos os *disclaimers*.
+   */
+  hideRemoveAllDisclaimer?: boolean;
+
+  /**
+   * Lista de filtros que terão a opção de fechar ocultada
+   * em seu respectivo disclaimer. Utilizar o atributo `property` do campo.
+   *
+   * Exemplo de utilização:
+   * ```
+   * ['city','name'];
+   * ```
+   */
+  hideCloseDisclaimers?: Array<string>;
+
+  /**
    * Lista de ações customizadas da página que serão incorporadas às ações informadas através da propriedade `actions`
    *
    * Essas ações ficam localizadas na parte superior da página em botões com ações.

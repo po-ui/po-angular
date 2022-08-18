@@ -1,6 +1,6 @@
 import { ComponentFixture, TestBed } from '@angular/core/testing';
 import { Component } from '@angular/core';
-import { FormControl, FormsModule } from '@angular/forms';
+import { UntypedFormControl, FormsModule } from '@angular/forms';
 import { HttpClient, HttpHandler } from '@angular/common/http';
 
 import { expectPropertiesValues, configureTestSuite } from '../../../util-test/util-expect.spec';
@@ -125,14 +125,14 @@ describe('PoUploadBaseComponent:', () => {
 
       spyOn(ValidatorsFunctions, 'requiredFailed').and.returnValue(true);
 
-      expect(component.validate(new FormControl([]))).toEqual(validObj);
+      expect(component.validate(new UntypedFormControl([]))).toEqual(validObj);
       expect(ValidatorsFunctions.requiredFailed).toHaveBeenCalled();
     });
 
     it('validate: should return undefined when `requiredFailed` is false', () => {
       spyOn(ValidatorsFunctions, 'requiredFailed').and.returnValue(false);
 
-      expect(component.validate(new FormControl(null))).toBeUndefined();
+      expect(component.validate(new UntypedFormControl(null))).toBeUndefined();
       expect(ValidatorsFunctions.requiredFailed).toHaveBeenCalled();
     });
 

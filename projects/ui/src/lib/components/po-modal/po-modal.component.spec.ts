@@ -443,46 +443,28 @@ describe('PoModalComponent:', () => {
       });
     });
 
-    it('getPrimaryActionButtonType: should return `danger` if `primaryAction.danger` is `true`', () => {
-      component.primaryAction.danger = true;
-
-      expect(component.getPrimaryActionButtonType()).toBe('danger');
-    });
-
-    it('getPrimaryActionButtonType: should return `primary` if `primaryAction.danger` is `false`', () => {
-      component.primaryAction.danger = false;
-
-      expect(component.getPrimaryActionButtonType()).toBe('primary');
-    });
-
-    it('getPrimaryActionButtonType: should return `primary` if `primaryAction.danger` is `undefined`', () => {
-      component.primaryAction.danger = undefined;
-
-      expect(component.getPrimaryActionButtonType()).toBe('primary');
-    });
-
-    it(`getSecondaryActionButtonType: should return 'danger' if 'primaryAction.danger' is 'false'
+    it(`getSecondaryActionButtonDanger: should return 'true' if 'primaryAction.danger' is 'false'
     and 'secondaryAction.danger' is 'true'`, () => {
       component.primaryAction.danger = false;
       component.secondaryAction = { action: () => {}, label: 'primaryLabel', danger: true };
 
-      expect(component.getSecondaryActionButtonType()).toBe('danger');
+      expect(component.getSecondaryActionButtonDanger()).toBe('true');
     });
 
-    it(`getSecondaryActionButtonType: should return 'default' if 'primaryAction.danger' is 'true'
+    it(`getSecondaryActionButtonDanger: should return 'false' if 'primaryAction.danger' is 'true'
     and 'secondaryAction.danger' is 'false'`, () => {
       component.primaryAction.danger = true;
       component.secondaryAction = { action: () => {}, label: 'primaryLabel', danger: false };
 
-      expect(component.getSecondaryActionButtonType()).toBe('default');
+      expect(component.getSecondaryActionButtonDanger()).toBe('false');
     });
 
-    it(`getSecondaryActionButtonType: should return 'default' if 'primaryAction.danger' is 'true'
+    it(`getSecondaryActionButtonDanger: should return 'false' if 'primaryAction.danger' is 'true'
     and 'secondaryAction.danger' is 'true'`, () => {
       component.primaryAction.danger = true;
       component.secondaryAction = { action: () => {}, label: 'primaryLabel', danger: true };
 
-      expect(component.getSecondaryActionButtonType()).toBe('default');
+      expect(component.getSecondaryActionButtonDanger()).toBe('false');
     });
 
     it(`removeEventListeners: should call 'removeEventListener' with 'focus', 'focusFunction' and 'true' params.`, () => {

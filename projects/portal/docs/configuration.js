@@ -33,11 +33,6 @@ module.exports = {
       url: urlProject('po-style'),
       version: portalVersion
     },
-    {
-      name: 'po-tslint',
-      url: urlProject('po-tslint'),
-      version: portalVersion
-    }
   ],
 
   /** Folder that contains api templates */

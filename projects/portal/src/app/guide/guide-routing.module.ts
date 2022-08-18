@@ -37,7 +37,7 @@ export const guidesRoutes: Routes = [
       { path: 'schematics', component: GuideSchematicsComponent },
       { path: 'sync-fundamentals', component: GuideSyncFundamentalsComponent },
       { path: 'sync-get-started', component: GuideSyncGetStartedComponent },
-      { path: '', redirectTo: 'getting-started' }
+      { path: '', pathMatch: 'full', redirectTo: 'getting-started' }
     ]
   }
 ];

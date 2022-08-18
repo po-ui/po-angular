@@ -25,20 +25,22 @@
             <po-modal-footer>
               <po-button
                 *ngIf="secondaryAction"
+                [p-danger]="getSecondaryActionButtonDanger()"
                 [p-disabled]="secondaryAction.disabled"
                 [p-label]="secondaryAction.label"
                 [p-loading]="secondaryAction.loading"
-                [p-type]="getSecondaryActionButtonType()"
+                p-kind="secondary"
                 (p-click)="secondaryAction.action()"
               >
               </po-button>
 
               <po-button
                 class="po-button-modal-first-action"
+                [p-danger]="primaryAction.danger"
                 [p-disabled]="primaryAction.disabled"
                 [p-label]="primaryAction.label"
                 [p-loading]="primaryAction.loading"
-                [p-type]="getPrimaryActionButtonType()"
+                p-kind="primary"
                 (p-click)="primaryAction.action()"
               >
               </po-button>

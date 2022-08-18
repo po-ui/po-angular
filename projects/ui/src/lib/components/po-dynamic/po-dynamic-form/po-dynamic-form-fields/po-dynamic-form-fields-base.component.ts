@@ -25,6 +25,8 @@ export class PoDynamicFormFieldsBaseComponent {
   // Evento disparado se existir optionsService em visibleField. Necessário resgatar referência do objeto selecionado para quando se tratar de recebimento de opções via serviço.
   @Output('p-object-value') objectValue = new EventEmitter<any>();
 
+  @Input('p-validate-on-input') validateOnInput: boolean;
+
   visibleFields: Array<PoDynamicFormFieldInternal> = [];
 
   private _fields: Array<PoDynamicFormField>;
@@ -107,11 +109,20 @@ export class PoDynamicFormFieldsBaseComponent {
     const type = field && field.type ? field.type.toLocaleLowerCase() : 'string';
 
     const componentClass = getGridColumnsClasses(
-      field.gridSmColumns,
-      field.gridMdColumns,
-      field.gridLgColumns,
-      field.gridXlColumns,
       field.gridColumns,
+      field.offsetColumns,
+      {
+        smGrid: field.gridSmColumns,
+        mdGrid: field.gridMdColumns,
+        lgGrid: field.gridLgColumns,
+        xlGrid: field.gridXlColumns
+      },
+      {
+        smOffset: field.offsetSmColumns,
+        mdOffset: field.offsetMdColumns,
+        lgOffset: field.offsetLgColumns,
+        xlOffset: field.offsetXlColumns
+      },
       {
         smPull: field.gridSmPull,
         mdPull: field.gridMdPull,
@@ -138,6 +149,12 @@ export class PoDynamicFormFieldsBaseComponent {
   // recupera o componente de acordo com algumas regras do field.
   private getComponentControl(field: PoDynamicFormField = <any>{}) {
     const type = field && field.type ? field.type.toLocaleLowerCase() : 'string';
+
+    const forceOptionComponent = this.verifyforceOptionComponent(field);
+    if (forceOptionComponent) {
+      const { forceOptionsComponentType } = field;
+      return forceOptionsComponentType;
+    }
 
     if (this.isNumberType(field, type)) {
       return 'number';
@@ -230,6 +247,15 @@ export class PoDynamicFormFieldsBaseComponent {
     const { optionsMulti, options } = field;
 
     return !optionsMulti && !!options && options.length <= 3;
+  }
+
+  private verifyforceOptionComponent(field: PoDynamicFormField) {
+    const { optionsMulti, optionsService, forceOptionsComponentType } = field;
+
+    if (forceOptionsComponentType && !optionsMulti && !optionsService) {
+      return true;
+    }
+    return false;
   }
 
   private isSelect(field: PoDynamicFormField) {

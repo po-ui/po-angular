@@ -1,5 +1,5 @@
 import { Directive } from '@angular/core';
-import { FormControl } from '@angular/forms';
+import { UntypedFormControl } from '@angular/forms';
 
 import { expectPropertiesValues } from '../../../util-test/util-expect.spec';
 import * as UtilsFunctions from '../../../utils/util';
@@ -321,7 +321,7 @@ describe('PoDatepickerRangeBaseComponent:', () => {
         spyOn(component, <any>'dateRangeFormatFailed');
         spyOn(component, <any>'dateRangeFailed');
 
-        const validate = component.validate(new FormControl([]));
+        const validate = component.validate(new UntypedFormControl([]));
 
         expect(component['requiredDateRangeFailed']).toHaveBeenCalled();
         expect(component.errorMessage).toEqual('');
@@ -344,7 +344,7 @@ describe('PoDatepickerRangeBaseComponent:', () => {
         spyOn(component, <any>'requiredDateRangeFailed');
         spyOn(component, <any>'dateRangeFailed');
 
-        const validate = component.validate(new FormControl([]));
+        const validate = component.validate(new UntypedFormControl([]));
 
         expect(component['dateRangeFormatFailed']).toHaveBeenCalled();
         expect(component.errorMessage).toEqual(component.literals.invalidFormat);
@@ -361,7 +361,7 @@ describe('PoDatepickerRangeBaseComponent:', () => {
         spyOn(component, <any>'requiredDateRangeFailed');
         spyOn(component, <any>'dateRangeFailed');
 
-        const validate = component.validate(new FormControl([]));
+        const validate = component.validate(new UntypedFormControl([]));
 
         expect(component['dateRangeObjectFailed']).toHaveBeenCalled();
         expect(component.errorMessage).toEqual(component.literals.invalidFormat);
@@ -378,7 +378,7 @@ describe('PoDatepickerRangeBaseComponent:', () => {
         spyOn(component, <any>'requiredDateRangeFailed');
         spyOn(component, <any>'dateRangeFormatFailed');
 
-        const validate = component.validate(new FormControl([]));
+        const validate = component.validate(new UntypedFormControl([]));
 
         expect(component['dateRangeFailed']).toHaveBeenCalled();
         expect(component.errorMessage).toEqual(component.literals.startDateGreaterThanEndDate);
@@ -395,7 +395,7 @@ describe('PoDatepickerRangeBaseComponent:', () => {
         spyOn(component, <any>'dateRangeFormatFailed').and.returnValue(spyOnReturns);
         spyOn(component, <any>'dateRangeFailed').and.returnValue(spyOnReturns);
 
-        const validate = component.validate(new FormControl(undefined));
+        const validate = component.validate(new UntypedFormControl(undefined));
 
         expect(component['requiredDateRangeFailed']).toHaveBeenCalled();
         expect(component['dateRangeFormatFailed']).toHaveBeenCalled();

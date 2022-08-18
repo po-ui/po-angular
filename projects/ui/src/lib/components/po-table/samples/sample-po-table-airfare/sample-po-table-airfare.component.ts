@@ -1,4 +1,4 @@
-import { Component, ViewChild } from '@angular/core';
+import { AfterViewInit, Component, ViewChild } from '@angular/core';
 
 import {
   PoDialogService,
@@ -16,7 +16,7 @@ import { SamplePoTableAirfareService } from './sample-po-table-airfare.service';
   templateUrl: './sample-po-table-airfare.component.html',
   providers: [SamplePoTableAirfareService, PoDialogService]
 })
-export class SamplePoTableAirfareComponent {
+export class SamplePoTableAirfareComponent implements AfterViewInit {
   @ViewChild(PoModalComponent, { static: true }) poModal: PoModalComponent;
   @ViewChild(PoTableComponent, { static: true }) poTable: PoTableComponent;
 
@@ -31,16 +31,51 @@ export class SamplePoTableAirfareComponent {
     { action: this.remove.bind(this), icon: 'po-icon po-icon-delete', label: 'Remove' }
   ];
   columns: Array<PoTableColumn> = this.sampleAirfare.getColumns();
+  columnsDefault: Array<PoTableColumn>;
   detail: any;
   items: Array<any> = this.sampleAirfare.getItems();
   total: number = 0;
   totalExpanded = 0;
+  initialColumns: Array<any>;
 
   constructor(
     private sampleAirfare: SamplePoTableAirfareService,
     private poNotification: PoNotificationService,
     private poDialog: PoDialogService
   ) {}
+
+  ngAfterViewInit(): void {
+    this.columnsDefault = this.columns;
+    if (localStorage.getItem('initial-columns')) {
+      this.initialColumns = localStorage.getItem('initial-columns').split(',');
+
+      const result = this.columns.map(el => ({
+        ...el,
+        visible: this.initialColumns.includes(el.property)
+      }));
+
+      const newColumn = [...result];
+      newColumn.sort(this.sortFunction);
+      this.columns = newColumn;
+    }
+  }
+
+  sortFunction(a, b) {
+    const teste = localStorage.getItem('initial-columns').split(',');
+    const indexA = teste.indexOf(a['property']);
+    const indexB = teste.indexOf(b['property']);
+    if (indexA === -1) {
+      return 1;
+    }
+    if (indexB === -1) {
+      return -1;
+    }
+    if (indexA < indexB) {
+      return -1;
+    } else if (indexA > indexB) {
+      return 1;
+    }
+  }
 
   addToCart() {
     const selectedItems = this.poTable.getSelectedRows();
@@ -129,6 +164,14 @@ export class SamplePoTableAirfareComponent {
     if (row.value) {
       this.total += row.value;
     }
+  }
+
+  restoreColumn() {
+    this.columns = this.columnsDefault;
+  }
+
+  changeColumnVisible(event) {
+    localStorage.setItem('initial-columns', event);
   }
 
   private getDescription(item: any) {

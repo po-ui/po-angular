@@ -115,6 +115,51 @@ describe('PoPageDynamicListBaseComponent:', () => {
         expect(component.filters).toEqual(filtersResult);
       });
 
+      it('should set `filters` with visible equal false to items that have the `fixed` and `initValue` properties', () => {
+        fields = [
+          { property: 'id', key: true },
+          { property: 'name', label: 'Name', filter: true, visible: true, gridColumns: 6 },
+          { property: 'genre', label: 'Genre', filter: true, gridColumns: 6, duplicate: true, fixed: true },
+          { property: 'birthdate', label: 'Birthdate', type: 'date', gridColumns: 6 },
+          {
+            property: 'city',
+            label: 'City',
+            filter: true,
+            duplicate: true,
+            gridColumns: 12,
+            fixed: true,
+            initValue: 'Joinville'
+          }
+        ];
+
+        const filtersResult = [
+          { property: 'name', label: 'Name', filter: true, visible: true, gridColumns: 6 },
+          {
+            property: 'genre',
+            label: 'Genre',
+            filter: true,
+            gridColumns: 6,
+            visible: true,
+            duplicate: true,
+            fixed: true
+          },
+          {
+            property: 'city',
+            label: 'City',
+            filter: true,
+            duplicate: true,
+            visible: false,
+            gridColumns: 12,
+            fixed: true,
+            initValue: 'Joinville'
+          }
+        ];
+
+        component['setFieldsProperties'](fields);
+
+        expect(component.filters).toEqual(filtersResult);
+      });
+
       it('should set `filters` with [] if no item has the `filter` property', () => {
         const fieldsWithoutFilter = [
           { property: 'id', key: true },

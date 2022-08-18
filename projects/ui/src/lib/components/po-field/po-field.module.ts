@@ -21,7 +21,6 @@ import { PoTableModule } from '../po-table/po-table.module';
 import { PoTooltipModule } from './../../directives/po-tooltip/po-tooltip.module';
 import { PoIconModule } from '../po-icon/po-icon.module';
 
-import { PoCheckboxComponent } from './po-checkbox/po-checkbox.component';
 import { PoComboComponent } from './po-combo/po-combo.component';
 import { PoComboOptionTemplateDirective } from './po-combo/po-combo-option-template/po-combo-option-template.directive';
 import { PoDatepickerComponent } from './po-datepicker/po-datepicker.component';
@@ -45,7 +44,6 @@ import { PoNumberComponent } from './po-number/po-number.component';
 import { PoPasswordComponent } from './po-password/po-password.component';
 import { PoRadioGroupComponent } from './po-radio-group/po-radio-group.component';
 import { PoSelectComponent } from './po-select/po-select.component';
-import { PoSelectOptionTemplateDirective } from './po-select/po-select-option-template/po-select-option-template.directive';
 import { PoSwitchComponent } from './po-switch/po-switch.component';
 import { PoTextareaComponent } from './po-textarea/po-textarea.component';
 import { PoUploadComponent } from './po-upload/po-upload.component';
@@ -55,6 +53,8 @@ import { PoUploadDragDropAreaOverlayComponent } from './po-upload/po-upload-drag
 import { PoUploadDragDropAreaComponent } from './po-upload/po-upload-drag-drop/po-upload-drag-drop-area/po-upload-drag-drop-area.component';
 import { PoUploadFileRestrictionsComponent } from './po-upload/po-upload-file-restrictions/po-upload-file-restrictions.component';
 import { PoUrlComponent } from './po-url/po-url.component';
+import { PoCheckboxModule } from './po-checkbox/po-checkbox.module';
+import { PoRadioComponent } from './po-radio/po-radio.component';
 
 /**
  * @description
@@ -87,13 +87,13 @@ import { PoUrlComponent } from './po-url/po-url.component';
     PoServicesModule,
     PoTableModule,
     PoTooltipModule,
-    PoIconModule
+    PoIconModule,
+    PoCheckboxModule
   ],
   exports: [
     PoCheckboxGroupModule,
     PoCleanModule,
     PoDatepickerModule,
-    PoCheckboxComponent,
     PoComboComponent,
     PoComboOptionTemplateDirective,
     PoDecimalComponent,
@@ -110,14 +110,14 @@ import { PoUrlComponent } from './po-url/po-url.component';
     PoRadioGroupComponent,
     PoRichTextComponent,
     PoSelectComponent,
-    PoSelectOptionTemplateDirective,
     PoSwitchComponent,
     PoTextareaComponent,
     PoUploadComponent,
-    PoUrlComponent
+    PoUrlComponent,
+    PoRadioComponent,
+    PoCheckboxModule
   ],
   declarations: [
-    PoCheckboxComponent,
     PoComboComponent,
     PoComboOptionTemplateDirective,
     PoDecimalComponent,
@@ -140,7 +140,6 @@ import { PoUrlComponent } from './po-url/po-url.component';
     PoRichTextLinkModalComponent,
     PoRichTextToolbarComponent,
     PoSelectComponent,
-    PoSelectOptionTemplateDirective,
     PoSwitchComponent,
     PoTextareaComponent,
     PoUploadComponent,
@@ -149,7 +148,8 @@ import { PoUrlComponent } from './po-url/po-url.component';
     PoUploadDragDropAreaOverlayComponent,
     PoUploadDragDropAreaComponent,
     PoUploadFileRestrictionsComponent,
-    PoUrlComponent
+    PoUrlComponent,
+    PoRadioComponent
   ],
   providers: []
 })

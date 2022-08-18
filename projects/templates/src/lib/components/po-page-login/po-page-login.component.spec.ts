@@ -72,7 +72,7 @@ describe('PoPageLoginComponent: ', () => {
     expect(nativeElement.querySelector('po-login')).toBeTruthy();
     expect(nativeElement.querySelector('po-password')).toBeTruthy();
     expect(nativeElement.querySelector('po-switch')).toBeTruthy();
-    expect(nativeElement.querySelector('po-button[p-type="primary"]')).toBeTruthy();
+    expect(nativeElement.querySelector('po-button[p-kind="primary"]')).toBeTruthy();
 
     expect(nativeElement.querySelector('div.po-page-login-password-link')).toBeFalsy();
 
@@ -93,7 +93,7 @@ describe('PoPageLoginComponent: ', () => {
 
     expect(nativeElement.querySelector('po-switch').innerHTML).toContain(component.literals.rememberUser);
 
-    expect(nativeElement.querySelector('po-button[p-type="primary"]').innerHTML).toContain(
+    expect(nativeElement.querySelector('po-button[p-kind="primary"]').innerHTML).toContain(
       component.literals.submitLabel
     );
 
@@ -123,7 +123,7 @@ describe('PoPageLoginComponent: ', () => {
     expect(nativeElement.querySelector('po-password').innerHTML).toContain(customLiterals.passwordPlaceholder);
 
     expect(nativeElement.querySelector('po-switch').innerHTML).toContain(customLiterals.rememberUser);
-    expect(nativeElement.querySelector('po-button[p-type="primary"]').innerHTML).toContain(customLiterals.submitLabel);
+    expect(nativeElement.querySelector('po-button[p-kind="primary"]').innerHTML).toContain(customLiterals.submitLabel);
     expect(nativeElement.querySelector('.po-page-login-recovery-link').innerHTML).toContain(
       customLiterals.forgotPassword
     );
@@ -932,27 +932,6 @@ describe('PoPageLoginComponent: ', () => {
     beforeEach(() => {
       // Garante que as literais sejam sempre as mesmas nos testes, independente do idioma do browser de teste
       component.literals = poPageLoginLiteralsDefault.en;
-    });
-
-    it('Loading: should disabled button when property is `true`.', () => {
-      switchLoading(true);
-      const button = fixture.debugElement.nativeElement.querySelector('.po-button-primary');
-
-      expect(button.getAttribute('disabled')).not.toBeNull();
-    });
-
-    it('Label: should have label equal Enter on loading when `p-loading` is `false`.', () => {
-      switchLoading(false);
-      const button = fixture.debugElement.nativeElement.querySelector('.po-button-primary');
-
-      expect(button.innerHTML).toContain(poPageLoginLiteralsDefault.en.submitLabel);
-    });
-
-    it('Label: should set alternative label on loading when `p-loading` is `true`.', () => {
-      switchLoading(true);
-      const button = fixture.debugElement.nativeElement.querySelector('.po-button-primary');
-
-      expect(button.innerHTML).toContain(poPageLoginLiteralsDefault.en.submittedLabel);
     });
 
     it('should contain productName and welcome if productName and welcome are defined', () => {

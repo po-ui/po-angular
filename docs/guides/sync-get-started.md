@@ -1,9 +1,7 @@
 [comment]: # (@label Começando com o PO Sync)
 [comment]: # (@link guides/sync-get-started)
 
-> Instale a versão 6 do NPM antes de iniciar: ```npm i -g npm@6```
-
-Esse guia servirá para criar e configurar uma aplicação em [Ionic 5](https://beta.ionicframework.com/docs/) com o uso do PO Sync.
+Esse guia servirá para criar e configurar uma aplicação em [Ionic 6](https://ionicframework.com/docs) com o uso do PO Sync.
 
 Para maiores detalhes sobre os serviços e métodos utilizados neste tutorial, consulte a documentação de
 [Fundamentos do PO Sync](/guides/sync-fundamentals) e a documentação de referência de [API do PO Sync](/documentation/po-sync).
@@ -11,17 +9,13 @@ Para maiores detalhes sobre os serviços e métodos utilizados neste tutorial, c
 ### Pré-requisitos
 
 - [Node.js e NPM](https://nodejs.org/en/)
-- [Angular CLI](https://cli.angular.io/) (^13.0.0):
+- [Angular CLI](https://cli.angular.io/) (^14.0.0):
   - ```shell
-    npm install -g @angular/cli@13
+    npm install -g @angular/cli@14
     ```
 - [Ionic](https://ionicframework.com/docs/cli/) (^6.0.0):
   - ```shell
     npm install -g @ionic/cli@6
-    ```
-- [Cordova](https://cordova.apache.org/docs/en/latest/) (10.0.0):
-  - ```shell
-    npm i -g cordova
     ```
 
 
@@ -41,6 +35,8 @@ Caso surja a questão relacionada ao framework desejado, opte por `Angular`.
 
 ### Passo 2 - Instalando as dependências
 
+> É importante verificar se no passo anterior foram criados o arquivo `package-lock.json` e a pasta `node_modules`, caso tenham sido criados vai ser necessário apagar ambos antes de prosseguir.
+
 É necessário realizar alguns ajustes de compatibilidade do PO para o projeto criado.
 
 Navegue até a pasta do aplicativo:
@@ -53,31 +49,32 @@ Antes de executar a instalação, é necessário que todas as dependências do p
 ```typescript
   ...
   "dependencies": {
-    "@angular/animations": "^13.0.2",
-    "@angular/common": "^13.0.2",
-    "@angular/core": "^13.0.2",
-    "@angular/forms": "^13.0.2",
-    "@angular/platform-browser": "^13.0.2",
-    "@angular/platform-browser-dynamic": "^13.0.2",
-    "@angular/router": "^13.0.2",
-    "@angular/service-worker": "^13.0.2",
-    "@ionic-native/core": "^5.0.0",
-    "@ionic-native/splash-screen": "^5.0.0",
-    "@ionic-native/status-bar": "^5.0.0",
-    "@ionic/angular": "^5.5.2",
-    "rxjs": "~7.4.0",
+    "@angular/animations": "~14.0.2",
+    "@angular/common": "~14.0.2",
+    "@angular/core": "~14.0.2",
+    "@angular/forms": "~14.0.2",
+    "@angular/platform-browser": "~14.0.2",
+    "@angular/platform-browser-dynamic": "~14.0.2",
+    "@angular/router": "~14.0.2",
+    "@angular/service-worker": "~14.0.2",
+    "@ionic/angular": "^6.0.0",
+    "rxjs": "~7.5.5",
     "tslib": "^2.3.0",
     "zone.js": "~0.11.4"
     ...
   },
   "devDependencies": {
-    "@angular-devkit/build-angular": "^13.0.2",
-    "@angular/cli": "^13.0.2",
-    "@angular/compiler": "^13.0.2",
-    "@angular/compiler-cli": "^13.0.2",
-    "@angular/language-service": "^13.0.2",
-    "@ionic/angular-toolkit": "^4.0.0",
-    "typescript": "~4.4.4"
+    "@angular-devkit/build-angular": "~14.0.2",
+    "@angular-eslint/builder": "~14.0.0",
+    "@angular-eslint/eslint-plugin": "~14.0.0",
+    "@angular-eslint/eslint-plugin-template": "~14.0.0",
+    "@angular-eslint/template-parser": "~14.0.0",
+    "@angular/cli": "~14.0.2",
+    "@angular/compiler": "~14.0.2",
+    "@angular/compiler-cli": "~14.0.2",
+    "@angular/language-service": "~14.0.2",
+    "@ionic/angular-toolkit": "^6.0.0",
+    "typescript": "~4.7.4"
   },
   ...
 ```
@@ -90,7 +87,31 @@ Execute o seguinte comando para instalar as dependências:
 npm install
 ```
 
-### Passo 3 - Instalando o po-sync
+### Passo 3 - Instalando pré-requisitos para uso do po-sync
+
+Antes da instalação do `po-sync`, é necessário instalar os plugins abaixo para que a aplicação realize as sincronizações com sucesso:
+- [cordova-plugin-network-information](https://github.com/apache/cordova-plugin-network-information), utilizado pelo [@awesome-cordova-plugins/network](https://ionicframework.com/docs/native/network/)
+  - ```shell
+  npm install cordova-plugin-network-information @awesome-cordova-plugins/network
+  ```
+- [cordova-plugin-statusbar](https://github.com/apache/cordova-plugin-statusbar), utilizado pelo [@awesome-cordova-plugins/status-bar](https://ionicframework.com/docs/native/status-bar/)
+  - ```shell
+  npm install cordova-plugin-statusbar @awesome-cordova-plugins/status-bar
+  ```
+- [cordova-plugin-splashscreen](https://github.com/apache/cordova-plugin-splashscreen), utilizado pelo [@awesome-cordova-plugins/splash-screen](https://ionicframework.com/docs/native/splash-screen/)
+  - ```shell
+  npm install cordova-plugin-splashscreen @awesome-cordova-plugins/splash-screen
+  ```
+
+Após realizar as instalações, execute o seguinte comando:
+
+```shell
+ionic cap sync
+```
+
+Essas instalações se fazem necessárias por que a instalação inicial do Ionic 6 está usando o [runtime Capacitor no lugar do Cordova](https://ionicframework.com/blog/ionic-isnt-cordova-anymore/), e o PoSync depende desses pacotes atualmente, que está sendo [mantido pela comunidade](https://ionicframework.com/blog/a-new-chapter-for-ionic-native/).
+
+### Passo 4 - Instalando o po-sync
 
 Para instalar o `po-sync` no aplicativo execute o seguinte comando:
 
@@ -98,19 +119,9 @@ Para instalar o `po-sync` no aplicativo execute o seguinte comando:
 ng add @po-ui/ng-sync
 ```
 
-Após a instalação do `po-sync`, é necessário instalar o plugin
-[cordova-plugin-network-information](https://github.com/apache/cordova-plugin-network-information) utilizado pelo [@ionic-native/network](https://ionicframework.com/docs/native/network/), para que a
-aplicação realize as sincronizações com sucesso.
+### Passo 5 - Utilizando o po-sync
 
-Para realizar essa instalação, execute o seguinte comando:
-
-```shell
-ionic cordova plugin add cordova-plugin-network-information
-```
-
-### Passo 4 - Utilizando o po-sync
-
-#### Passo 4.1 - Importando o `po-sync` e o `po-storage`
+#### Passo 5.1 - Importando o `po-sync` e o `po-storage`
 No arquivo `src/app/app.module.ts`, adicione a importação dos módulos do `po-storage` e do `po-sync`: 
 
 > Caso você utilize o comando `ng add`, esse passo será feito automaticamente.
@@ -121,8 +132,8 @@ import { BrowserModule } from '@angular/platform-browser';
 import { RouteReuseStrategy } from '@angular/router';
 
 import { IonicModule, IonicRouteStrategy } from '@ionic/angular';
-import { SplashScreen } from '@ionic-native/splash-screen/ngx';
-import { StatusBar } from '@ionic-native/status-bar/ngx';
+import { SplashScreen } from '@awesome-cordova-plugins/splash-screen/ngx';
+import { StatusBar } from '@awesome-cordova-plugins/status-bar/ngx';
 
 /* Imports adicionados */
 import { PoStorageModule } from '@po-ui/ng-storage';
@@ -150,7 +161,7 @@ import { AppRoutingModule } from './app-routing.module';
 export class AppModule {}
 ```
 
-#### Passo 4.2 - Mapeando seu primeiro *schema*
+#### Passo 5.2 - Mapeando seu primeiro *schema*
 
 O `po-sync` utiliza a definição de `schemas`, onde cada `schema` representa um modelo de dados armazenado no dispositivo.
 
@@ -170,11 +181,11 @@ export const conferenceSchema: PoSyncSchema = {
 };
 ```
 
-### Passo 5 - Configurando o método prepare
+### Passo 6 - Configurando o método prepare
 
 Após ter o seu primeiro *schema* criado, configure o seu aplicativo utilizando o `po-sync` através do método `PoSyncService.prepare()`.
 
-#### Passo 5.1 - Alterando o `src/app/app.component.ts`
+#### Passo 6.1 - Alterando o `src/app/app.component.ts`
 
 Substitua o conteúdo do arquivo pelo conteúdo abaixo:
 
@@ -182,8 +193,8 @@ Substitua o conteúdo do arquivo pelo conteúdo abaixo:
 import { Component } from '@angular/core';
 
 import { Platform } from '@ionic/angular';
-import { SplashScreen } from '@ionic-native/splash-screen/ngx';
-import { StatusBar } from '@ionic-native/status-bar/ngx';
+import { SplashScreen } from '@awesome-cordova-plugins/splash-screen/ngx';
+import { StatusBar } from '@awesome-cordova-plugins/status-bar/ngx';
 import { PoSyncConfig, PoNetworkType, PoSyncService } from '@po-ui/ng-sync';
 
 import { conferenceSchema } from './home/conference-schema.constants';
@@ -228,7 +239,7 @@ export class AppComponent {
 
 Após utilizar o método `PoSyncService.prepare()`, a aplicação estará pronta para sincronizar os dados através do método `PoSyncService.sync()`.
 
-### Passo 6 - Acessando os dados
+### Passo 7 - Acessando os dados
 
 Localize o arquivo `src/app/home/home.page.ts` e faça as seguintes alterações:
 
@@ -263,7 +274,7 @@ export class HomePage {
 
 No construtor, foi realizado uma inscrição no método `PoSyncService.onSync()`, para quando ocorrer uma sincronização, o método `loadHomePage()` busque um registro do *schema* "Conference".
 
-### Passo 7 - Exibindo os dados em tela
+### Passo 8 - Exibindo os dados em tela
 
 No arquivo `src/app/home/home.page.html` crie a seguinte estrutura:
 ```html
@@ -283,13 +294,13 @@ No arquivo `src/app/home/home.page.html` crie a seguinte estrutura:
 </ion-content>
 ```
 
-### Passo 8 - Executando o aplicativo
+### Passo 9 - Executando o aplicativo
 
 Execute o comando `ionic serve` e verifique o funcionamento do aplicativo Ionic com `po-sync`.
 
 > Pode ocorrer o seguinte erro `TS2320: Interface 'HTMLIonIconElement' cannot simultaneously extend types 'IonIcon' and 'HTMLStencilElement'` por conta da versão do TypeScript (4.4.x) conforme esta [issue](https://github.com/ionic-team/ionicons/issues/1011), neste caso adicione no arquivo **tsconfig.json** `"skipLibCheck": true`.
 
-#### Passo 8.1 - Entendendo o funcionamento do `po-sync`
+#### Passo 9.1 - Entendendo o funcionamento do `po-sync`
 
 - O aplicativo sincroniza os dados que estão no servidor através do método `PoSyncService.sync()`;
 

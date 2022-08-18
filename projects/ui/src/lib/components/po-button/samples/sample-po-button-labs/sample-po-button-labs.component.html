@@ -7,7 +7,8 @@
     [p-label]="label"
     [p-loading]="properties.includes('loading')"
     [p-small]="properties.includes('small')"
-    [p-type]="type"
+    [p-danger]="properties.includes('danger')"
+    [p-kind]="kind"
     (p-click)="buttonClick()"
   >
   </po-button>
@@ -28,6 +29,7 @@
       [(ngModel)]="properties"
       p-label="Properties"
       [p-options]="propertiesOptions"
+      (p-change)="propertiesChange($event)"
     >
     </po-checkbox-group>
   </div>
@@ -36,7 +38,14 @@
     <po-radio-group class="po-lg-12" name="icon" [(ngModel)]="icon" p-label="Icon" [p-options]="iconsOptions">
     </po-radio-group>
 
-    <po-radio-group class="po-lg-12" name="type" [(ngModel)]="type" p-label="Type" [p-options]="typesOptions">
+    <po-radio-group
+      class="po-lg-12"
+      name="kind"
+      [(ngModel)]="kind"
+      p-label="Kind"
+      [p-options]="kindsOptions"
+      (p-change)="verifyDisabled($event)"
+    >
     </po-radio-group>
   </div>
 

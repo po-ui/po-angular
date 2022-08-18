@@ -1,0 +1,28 @@
+<div
+  class="po-radio-container"
+  [attr.checked]="radioValue"
+  (click)="checkOption(radioValue)"
+  (keydown)="onKeyDown($event, radioValue)"
+>
+  <input
+    type="radio"
+    [ngClass]="{ 'po-radio-large': size === 'large' }"
+    [attr.aria-checked]="radioValue"
+    [attr.aria-label]="label"
+    [id]="id"
+    class="po-radio"
+    role="radio"
+    [attr.aria-disabled]="disabled"
+    [tabindex]="disabled ? -1 : 0"
+    [disabled]="disabled"
+  />
+  <label
+    #radioLabel
+    [for]="id"
+    class="po-radio-label"
+    [ngClass]="{ 'po-radio-label-disabled': disabled }"
+    tabindex="-1"
+  >
+    {{ label }}
+  </label>
+</div>

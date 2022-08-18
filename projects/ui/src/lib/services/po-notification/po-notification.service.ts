@@ -4,6 +4,7 @@ import { PoComponentInjectorService } from './../po-component-injector/po-compon
 import { PoNotificationBaseService } from './po-notification-base.service';
 import { PoToaster } from './po-toaster/po-toaster.interface';
 import { PoToasterOrientation } from './po-toaster/po-toaster-orientation.enum';
+import { PoToasterType } from './po-toaster/po-toaster-type.enum';
 import { PoToasterComponent } from './po-toaster/po-toaster.component';
 import { timer } from 'rxjs';
 import { takeWhile } from 'rxjs/operators';
@@ -54,7 +55,7 @@ export class PoNotificationService extends PoNotificationBaseService {
 
     this.observableOnClose(componentRef);
 
-    if (!(toaster.action && toaster.actionLabel)) {
+    if (!((toaster.action && toaster.actionLabel) || toaster.type === PoToasterType.Error)) {
       timer(toaster.duration)
         .pipe(takeWhile(() => componentRef.instance.alive))
         .subscribe(() => {

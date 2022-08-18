@@ -1,12 +1,12 @@
 <div class="po-rich-text-toolbar" #toolbarElement>
-  <div class="po-rich-text-toolbar-button-align">
-    <po-button-group p-toggle="multiple" [p-buttons]="formatButtons"> </po-button-group>
+  <div class="po-rich-text-toolbar-button-align" data-rich-text-toolbar="format">
+    <po-button-group p-toggle="multiple" [p-small]="true" [p-buttons]="formatButtons"> </po-button-group>
   </div>
 
-  <div *ngIf="!isInternetExplorer" class="po-rich-text-toolbar-button-align">
+  <div *ngIf="!isInternetExplorer" class="po-rich-text-toolbar-button-align" data-rich-text-toolbar="color">
     <div class="po-rich-text-toolbar-color-picker-container">
       <button
-        class="po-button po-text-ellipsis po-rich-text-toolbar-color-picker-button"
+        class="po-button po-button-default po-button-sm po-text-ellipsis po-rich-text-toolbar-color-picker-button"
         [disabled]="readonly"
         [p-tooltip]="literals.textColor"
         [attr.aria-label]="literals.textColor"
@@ -23,20 +23,20 @@
     </div>
   </div>
 
-  <div class="po-rich-text-toolbar-button-align">
-    <po-button-group p-toggle="single" [p-buttons]="alignButtons"> </po-button-group>
+  <div *ngIf="!disabledTextAlign" class="po-rich-text-toolbar-button-align" data-rich-text-toolbar="align">
+    <po-button-group p-toggle="single" [p-small]="true" [p-buttons]="alignButtons"> </po-button-group>
   </div>
 
-  <div class="po-rich-text-toolbar-button-align">
-    <po-button-group p-toggle="single" [p-buttons]="listButtons"> </po-button-group>
+  <div class="po-rich-text-toolbar-button-align" data-rich-text-toolbar="list">
+    <po-button-group p-toggle="single" [p-small]="true" [p-buttons]="listButtons"> </po-button-group>
   </div>
 
-  <div class="po-rich-text-toolbar-button-align">
-    <po-button-group [p-buttons]="linkButtons"> </po-button-group>
+  <div class="po-rich-text-toolbar-button-align" data-rich-text-toolbar="link">
+    <po-button-group [p-small]="true" [p-buttons]="linkButtons"> </po-button-group>
   </div>
 
-  <div class="po-rich-text-toolbar-button-align">
-    <po-button-group [p-buttons]="mediaButtons"> </po-button-group>
+  <div class="po-rich-text-toolbar-button-align" data-rich-text-toolbar="media">
+    <po-button-group [p-small]="true" [p-buttons]="mediaButtons"> </po-button-group>
   </div>
 </div>
 

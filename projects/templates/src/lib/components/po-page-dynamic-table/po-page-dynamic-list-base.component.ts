@@ -1,6 +1,6 @@
-import { Input, Directive } from '@angular/core';
+import { Input, Directive, Output, EventEmitter } from '@angular/core';
 
-import { PoBreadcrumb } from '@po-ui/ng-components';
+import { PoBreadcrumb, PoTableColumnSort } from '@po-ui/ng-components';
 
 import { convertToBoolean } from '../../utils/util';
 
@@ -92,6 +92,42 @@ export class PoPageDynamicListBaseComponent {
   /** Título da página. */
   @Input('p-title') title: string;
 
+  /**
+   * @optional
+   *
+   * @description
+   * Evento disparado ao fechar o popover do gerenciador de colunas após alterar as colunas visíveis.
+   *
+   * O componente envia como parâmetro um array de string com as colunas visíveis atualizadas.
+   * Por exemplo: ["idCard", "name", "hireStatus", "age"].
+   */
+  @Output('p-change-visible-columns') changeVisibleColumns = new EventEmitter<Array<string>>();
+
+  /**
+   * @optional
+   *
+   * @description
+   * Evento disparado ao clicar no botão de restaurar padrão no gerenciador de colunas.
+   *
+   * O componente envia como parâmetro um array de string com as colunas configuradas inicialmente.
+   * Por exemplo: ["idCard", "name", "hireStatus", "age"].
+   */
+  @Output('p-restore-column-manager') columnRestoreManager = new EventEmitter<Array<String>>();
+
+  /**
+   * @optional
+   *
+   * @description
+   *
+   * Evento executado ao ordenar colunas da tabela.
+   *
+   * Recebe um objeto `{ column, type }` onde:
+   *
+   * - column (`PoTableColumn`): objeto da coluna que foi clicada/ordenada.
+   * - type (`PoTableColumnSortType`): tipo da ordenação.
+   */
+  @Output('p-sort-by') sortBy: EventEmitter<PoTableColumnSort> = new EventEmitter<PoTableColumnSort>();
+
   private _autoRouter: boolean = false;
   private _columns: Array<any> = [];
   private _duplicates: Array<string> = [];
@@ -173,9 +209,13 @@ export class PoPageDynamicListBaseComponent {
   }
 
   private setFieldsProperties(fields: Array<any>) {
+    let visibleFilter: boolean;
     this.filters = fields
       .filter(field => field.filter === true)
-      .map(filterField => ({ ...filterField, visible: true }));
+      .map(filterField => {
+        visibleFilter = !(filterField.initValue && filterField.fixed);
+        return { ...filterField, visible: visibleFilter };
+      });
     this.columns = fields.filter(
       field => field.visible === undefined || field.visible === true || field.allowColumnsManager === true
     );

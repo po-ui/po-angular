@@ -28,7 +28,8 @@ class PoNotificationService extends PoNotificationBaseService {
       changeDetectorRef: undefined,
       componentType: undefined,
       destroy: function () {},
-      onDestroy: function () {}
+      onDestroy: function () {},
+      setInput: function () {}
     };
     if (toaster.orientation === PoToasterOrientation.Bottom) {
       this.stackBottom.push(componentReference);
@@ -159,11 +160,11 @@ describe('PoNotificationService ', () => {
   });
 
   describe('Methods: ', () => {
-    it('should be duration 10000 when not informed', () => {
+    it('should be duration 9000 when not informed', () => {
       spyOn(service, 'createToaster');
       service.success({ message: 'teste' });
 
-      expect(service.createToaster).toHaveBeenCalledWith(mockToaster({ type: PoToasterType.Success, duration: 10000 }));
+      expect(service.createToaster).toHaveBeenCalledWith(mockToaster({ type: PoToasterType.Success, duration: 9000 }));
     });
 
     it('should be duration equals 5 seconds', () => {
@@ -192,7 +193,7 @@ function mockToaster(obj: any) {
     action: undefined,
     actionLabel: undefined,
     position: 0,
-    duration: 10000
+    duration: 9000
   };
 
   for (const prop in obj) {

@@ -8,9 +8,13 @@ export class SamplePoPageDynamicSearchHiringProcessesService {
     let filteredItems = [...this.getItems()];
 
     Object.keys(filters).forEach(filter => {
-      filteredItems = filteredItems.filter(register =>
-        register[filter].toLocaleLowerCase().includes(filters[filter].toLocaleLowerCase())
-      );
+      filteredItems = filteredItems.filter(register => {
+        if (typeof register[filter] === 'string') {
+          return register[filter].toLocaleLowerCase().includes(filters[filter].toLocaleLowerCase());
+        } else {
+          return register[filter] === filters[filter];
+        }
+      });
     });
 
     return filteredItems;
@@ -142,6 +146,8 @@ export class SamplePoPageDynamicSearchHiringProcessesService {
       actions: [{ label: 'Find on Google', disabled: false }],
       filters: [
         { property: 'idCard', gridColumns: 6 },
+        { property: 'hireStatus', initValue: '1' },
+        { property: 'age', initValue: 24, type: 'number' },
         { property: 'city', initValue: 'Ontario' }
       ],
       keepFilters: true

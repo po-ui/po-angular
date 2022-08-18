@@ -7,7 +7,6 @@ import {
   convertIsoToDate,
   convertToBoolean,
   formatYear,
-  getShortBrowserLanguage,
   isTypeof,
   setYearFrom0To100,
   validateDateRange

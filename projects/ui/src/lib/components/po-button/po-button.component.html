@@ -1,12 +1,10 @@
 <button
   #button
-  class="po-button po-text-ellipsis"
+  class="po-button"
   type="button"
-  [class.po-button-danger]="type === 'danger'"
-  [class.po-button-link]="type === 'link'"
-  [class.po-button-primary]="type === 'primary'"
+  [attr.p-kind]="kind"
+  [attr.p-danger]="danger"
   [class.po-button-sm]="small"
-  [class.po-clickable]="type === 'link'"
   [disabled]="disabled || loading"
   (click)="onClick()"
 >

@@ -16,7 +16,7 @@ import {
 import { DomSanitizer, SafeHtml } from '@angular/platform-browser';
 import { NG_VALIDATORS, NG_VALUE_ACCESSOR } from '@angular/forms';
 
-import { fromEvent, Subscription } from 'rxjs';
+import { fromEvent, Observable, Subscription } from 'rxjs';
 import { debounceTime, distinctUntilChanged, filter, map, tap } from 'rxjs/operators';
 
 import { PoControlPositionService } from '../../../services/po-control-position/po-control-position.service';
@@ -74,6 +74,11 @@ const poComboContainerPositionDefault = 'bottom';
  *   <file name="sample-po-combo-heroes-reactive-form/sample-po-combo-heroes-reactive-form.component.ts"> </file>
  * </example>
  *
+ * <example name="po-combo-infinity-scroll" title="PO Combo - Inifity Scroll">
+ *   <file name="sample-po-combo-infinity-scroll/sample-po-combo-infinity-scroll.component.html"> </file>
+ *   <file name="sample-po-combo-infinity-scroll/sample-po-combo-infinity-scroll.component.ts"> </file>
+ * </example>
+ *
  * <example name="po-combo-hotels" title="PO Combo - Booking Hotel">
  *   <file name="sample-po-combo-hotels/sample-po-combo-hotels.component.html"> </file>
  *   <file name="sample-po-combo-hotels/sample-po-combo-hotels.component.ts"> </file>
@@ -105,6 +110,7 @@ export class PoComboComponent extends PoComboBaseComponent implements AfterViewI
   @ViewChild('contentElement', { read: ElementRef }) contentElement: ElementRef;
   @ViewChild('iconArrow', { read: ElementRef, static: true }) iconElement: ElementRef;
   @ViewChild('inp', { read: ElementRef, static: true }) inputEl: ElementRef;
+  @ViewChild('poComboBody', { read: ElementRef }) poComboBody: ElementRef;
 
   comboIcon: string = 'po-icon-arrow-down';
   comboOpen: boolean = false;
@@ -113,6 +119,7 @@ export class PoComboComponent extends PoComboBaseComponent implements AfterViewI
   scrollTop = 0;
   service: PoComboFilterService;
   shouldMarkLetters: boolean = true;
+  infiniteLoading: boolean = false;
 
   private _isServerSearching: boolean = false;
 
@@ -121,6 +128,9 @@ export class PoComboComponent extends PoComboBaseComponent implements AfterViewI
 
   private filterSubscription: Subscription;
   private getSubscription: Subscription;
+
+  private scrollEvent$: Observable<any>;
+  private subscriptionScrollEvent: Subscription;
 
   constructor(
     public element: ElementRef,
@@ -158,6 +168,9 @@ export class PoComboComponent extends PoComboBaseComponent implements AfterViewI
     if (this.autoFocus) {
       this.focus();
     }
+    if (this.infiniteScroll) {
+      this.checkInfiniteScroll();
+    }
   }
 
   ngOnChanges(changes: SimpleChanges) {
@@ -180,6 +193,10 @@ export class PoComboComponent extends PoComboBaseComponent implements AfterViewI
 
     if (this.getSubscription) {
       this.getSubscription.unsubscribe();
+    }
+
+    if (this.infiniteScroll) {
+      this.subscriptionScrollEvent?.unsubscribe();
     }
   }
 
@@ -287,6 +304,7 @@ export class PoComboComponent extends PoComboBaseComponent implements AfterViewI
           this.shouldMarkLetters = true;
           this.isFiltering = true;
           this.searchForLabel(inputValue, this.comboOptionsList, this.filterMode);
+          this.inputChange.emit(inputValue);
         }
       } else {
         // quando apagar rapido o campo e conter serviço, valor, não disparava o keyup observable
@@ -338,33 +356,41 @@ export class PoComboComponent extends PoComboBaseComponent implements AfterViewI
 
   controlApplyFilter(value) {
     if (!this.isProcessingValueByTab && (!this.selectedOption || value !== this.selectedOption.label)) {
-      this.applyFilter(value);
+      this.defaultService.hasNext = true;
+      this.page = this.setPage();
+      this.options = [];
+      this.applyFilter(value, true);
     }
     this.isProcessingValueByTab = false;
   }
 
-  applyFilter(value: string) {
-    this.controlComboVisibility(false);
-    this.isServerSearching = true;
+  applyFilter(value: string, reset: boolean = false) {
+    if (this.defaultService.hasNext) {
+      this.controlComboVisibility(false, reset);
+      this.isServerSearching = true;
 
-    const param = { property: this.fieldLabel, value };
+      const param = this.infiniteScroll
+        ? { property: this.fieldLabel, value, page: this.page, pageSize: this.pageSize }
+        : { property: this.fieldLabel, value };
 
-    this.filterSubscription = this.service.getFilteredData(param, this.filterParams).subscribe(
-      items => this.setOptionsByApplyFilter(value, items),
-      error => this.onErrorFilteredData()
-    );
+      this.filterSubscription = this.service?.getFilteredData(param, this.filterParams).subscribe(
+        items => this.setOptionsByApplyFilter(value, items, reset),
+        error => this.onErrorFilteredData()
+      );
+    }
   }
 
-  setOptionsByApplyFilter(value, items) {
+  setOptionsByApplyFilter(value, items, reset: boolean = false) {
     this.shouldMarkLetters = true;
     this.isServerSearching = false;
-    this.options = items;
+    this.infiniteLoading = false;
+    this.options = this.prepareOptions(items);
 
     this.searchForLabel(value, items, this.filterMode);
 
     this.changeDetector.detectChanges();
 
-    this.controlComboVisibility(true);
+    this.controlComboVisibility(true, reset);
 
     if (this.isFirstFilter) {
       this.isFirstFilter = !this.isFirstFilter;
@@ -441,12 +467,14 @@ export class PoComboComponent extends PoComboBaseComponent implements AfterViewI
 
   applyFilterInFirstClick() {
     if (this.isFirstFilter && !this.selectedValue) {
-      this.applyFilter('');
+      this.options = [];
+      const scrollingControl = this.setScrollingControl();
+      this.applyFilter('', scrollingControl);
     }
   }
 
-  controlComboVisibility(toOpen: boolean) {
-    toOpen ? this.open() : this.close();
+  controlComboVisibility(toOpen: boolean, reset: boolean = false) {
+    toOpen ? this.open(reset) : this.close(reset);
   }
 
   onOptionClick(option: PoComboOption | PoComboGroup, event?: any) {
@@ -471,7 +499,9 @@ export class PoComboComponent extends PoComboBaseComponent implements AfterViewI
     const selectedItem = this.element.nativeElement.querySelectorAll('.po-combo-item-selected');
     const scrollTop = !selectedItem.length || index <= 1 ? 0 : selectedItem[0].offsetTop - 88;
 
-    this.setScrollTop(scrollTop);
+    if (!this.infiniteScroll) {
+      this.setScrollTop(scrollTop);
+    }
   }
 
   getInputValue() {
@@ -498,7 +528,8 @@ export class PoComboComponent extends PoComboBaseComponent implements AfterViewI
       this.selectedView = this.changeOnEnter && !this.selectedValue ? undefined : this.selectedView;
     } else {
       if (this.service && !this.getInputValue() && !this.isFirstFilter) {
-        this.applyFilter('');
+        const scrollingControl = this.setScrollingControl();
+        this.applyFilter('', scrollingControl);
       }
     }
   }
@@ -582,12 +613,51 @@ export class PoComboComponent extends PoComboBaseComponent implements AfterViewI
     }
   }
 
+  showMoreInfiniteScroll({ target }): void {
+    if (this.defaultService.hasNext) {
+      this.infiniteLoading = true;
+    }
+    const scrollPosition = target.offsetHeight + target.scrollTop;
+    if (scrollPosition >= target.scrollHeight * (this.infiniteScrollDistance / 110)) {
+      this.page++;
+      this.applyFilter('', true);
+    }
+  }
+
+  protected checkInfiniteScroll(): void {
+    if (this.hasInfiniteScroll() && this.poComboBody?.nativeElement.scrollHeight >= 175) {
+      this.includeInfiniteScroll();
+    }
+  }
+
+  private hasInfiniteScroll(): boolean {
+    return this.infiniteScroll && this.poComboBody?.nativeElement.scrollHeight && this.defaultService.hasNext;
+  }
+
+  private includeInfiniteScroll(): void {
+    this.subscriptionScrollEvent?.unsubscribe();
+    this.scrollEvent$ = this.defaultService.scrollListener(this.poComboBody.nativeElement);
+    this.subscriptionScrollEvent = this.scrollEvent$.subscribe(event => {
+      this.showMoreInfiniteScroll(event);
+    });
+  }
+
   private adjustContainerPosition() {
     this.controlPosition.adjustPosition(poComboContainerPositionDefault);
   }
 
-  private close() {
+  private close(reset: boolean) {
     this.comboOpen = false;
+
+    if (!reset) {
+      if (!this.getInputValue()) {
+        this.page = this.setPage();
+        this.defaultService.hasNext = true;
+      }
+      if (this.infiniteScroll) {
+        this.options = this.setOptions();
+      }
+    }
 
     this.changeDetector.detectChanges();
 
@@ -600,6 +670,10 @@ export class PoComboComponent extends PoComboBaseComponent implements AfterViewI
 
   private initializeListeners() {
     this.removeListeners();
+
+    if (this.infiniteScroll) {
+      this.checkInfiniteScroll();
+    }
 
     this.clickoutListener = this.renderer.listen('document', 'click', (event: MouseEvent) => {
       this.wasClickedOnToggle(event);
@@ -629,8 +703,15 @@ export class PoComboComponent extends PoComboBaseComponent implements AfterViewI
     this.adjustContainerPosition();
   };
 
-  private open() {
+  private open(reset: boolean) {
     this.comboOpen = true;
+    if (!reset && this.infiniteScroll) {
+      if (!this.getInputValue()) {
+        this.page = 1;
+      }
+      this.options = this.setOptions();
+      this.scrollTo(0);
+    }
 
     this.changeDetector.detectChanges();
 
@@ -639,8 +720,9 @@ export class PoComboComponent extends PoComboBaseComponent implements AfterViewI
     this.initializeListeners();
 
     this.inputEl.nativeElement.focus();
-    this.scrollTo(this.getIndexSelectedView());
-
+    if (!this.infiniteScroll) {
+      this.scrollTo(this.getIndexSelectedView());
+    }
     this.setContainerPosition();
   }
 
@@ -653,6 +735,9 @@ export class PoComboComponent extends PoComboBaseComponent implements AfterViewI
       this.eventResizeListener();
     }
 
+    if (this.infiniteScroll && !this.defaultService.hasNext) {
+      this.subscriptionScrollEvent?.unsubscribe();
+    }
     window.removeEventListener('scroll', this.onScroll, true);
   }
 
@@ -672,9 +757,25 @@ export class PoComboComponent extends PoComboBaseComponent implements AfterViewI
     this.adjustContainerPosition();
   }
 
+  private setOptions() {
+    return this.getInputValue() ? this.options : [];
+  }
+
   private setScrollTop(scrollTop: number) {
     if (this.contentElement) {
       this.contentElement.nativeElement.scrollTop = scrollTop;
     }
+  }
+
+  private prepareOptions(items) {
+    return this.infiniteScroll ? [...this.options, ...items] : items;
+  }
+
+  private setPage() {
+    return this.infiniteScroll ? 1 : undefined;
+  }
+
+  private setScrollingControl() {
+    return this.infiniteScroll ? true : false;
   }
 }

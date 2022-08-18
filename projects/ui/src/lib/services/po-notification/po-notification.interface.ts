@@ -33,6 +33,10 @@ export interface PoNotification {
    */
   orientation?: PoToasterOrientation;
 
-  /** Define em milissegundos o tempo de duração que a notificação ficará disponível em tela. O padrão é 10000 milissegundos. */
+  /**
+   * Define em milissegundos o tempo de duração que a notificação ficará disponível em tela. O padrão é 9000 milissegundos.
+   *
+   * > Caso a notificação tenha uma ação ou seja uma notificação de `erro`, a propriedade será ignorada.
+   */
   duration?: number;
 }

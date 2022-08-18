@@ -1,5 +1,5 @@
 import { AbstractControl } from '@angular/forms';
-import { FormControl } from '@angular/forms';
+import { UntypedFormControl } from '@angular/forms';
 
 import { PoFieldValidateModel } from './po-field-validate.model';
 import * as ValidatorsFunctions from './validators';
@@ -28,12 +28,12 @@ describe('PoFieldValidateModel', () => {
 
   it('should return null in validate', () => {
     component.required = true;
-    expect(component.validate(new FormControl(''))).not.toBeNull();
+    expect(component.validate(new UntypedFormControl(''))).not.toBeNull();
   });
 
   it('should return object invalid in validate', () => {
     component.required = true;
-    expect(component.validate(new FormControl('test'))).toBeNull();
+    expect(component.validate(new UntypedFormControl('test'))).toBeNull();
   });
 
   it('validateModel: should call `onValidatorChange` when it is true.', () => {
@@ -62,14 +62,14 @@ describe('PoFieldValidateModel', () => {
 
     spyOn(ValidatorsFunctions, 'requiredFailed').and.returnValue(true);
 
-    expect(component.validate(new FormControl([]))).toEqual(validObj);
+    expect(component.validate(new UntypedFormControl([]))).toEqual(validObj);
     expect(ValidatorsFunctions.requiredFailed).toHaveBeenCalled();
   });
 
   it('validate: should return undefined when `requiredFailed` is false', () => {
     spyOn(ValidatorsFunctions, 'requiredFailed').and.returnValue(false);
 
-    expect(component.validate(new FormControl(null))).toBeNull();
+    expect(component.validate(new UntypedFormControl(null))).toBeNull();
     expect(ValidatorsFunctions.requiredFailed).toHaveBeenCalled();
   });
 });

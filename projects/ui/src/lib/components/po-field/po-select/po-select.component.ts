@@ -1,33 +1,39 @@
 import {
-  AfterViewInit,
   ChangeDetectionStrategy,
   ChangeDetectorRef,
-  ContentChild,
   Component,
   DoCheck,
   ElementRef,
+  EventEmitter,
   forwardRef,
   HostListener,
-  IterableDiffers,
-  Renderer2,
-  ViewChild,
   Input,
+  IterableDiffers,
   Output,
-  EventEmitter
+  Renderer2,
+  ViewChild
 } from '@angular/core';
-import { NG_VALUE_ACCESSOR, NG_VALIDATORS, AbstractControl } from '@angular/forms';
+import { AbstractControl, NG_VALIDATORS, NG_VALUE_ACCESSOR } from '@angular/forms';
 
-import { isMobile, removeDuplicatedOptions, removeUndefinedAndNullOptions, validValue } from '../../../utils/util';
-import { PoControlPositionService } from './../../../services/po-control-position/po-control-position.service';
+import {
+  isMobile,
+  removeDuplicatedOptions,
+  removeDuplicatedOptionsWithFieldValue,
+  removeUndefinedAndNullOptions,
+  removeUndefinedAndNullOptionsWithFieldValue,
+  validValue
+} from '../../../utils/util';
 import { PoKeyCodeEnum } from './../../../enums/po-key-code.enum';
+import { PoControlPositionService } from './../../../services/po-control-position/po-control-position.service';
 
-import { PoSelectOption } from './po-select-option.interface';
-import { PoSelectOptionTemplateDirective } from './po-select-option-template/po-select-option-template.directive';
-import { PoFieldValidateModel } from '../po-field-validate.model';
 import { InputBoolean } from '../../../decorators';
+import { PoFieldValidateModel } from '../po-field-validate.model';
+import { PoSelectOption } from './po-select-option.interface';
 
 const poSelectContentOffset = 8;
 const poSelectContentPositionDefault = 'bottom';
+const PO_SELECT_FIELD_LABEL_DEFAULT = 'label';
+const PO_SELECT_FIELD_VALUE_DEFAULT = 'value';
 
 /**
  * @docsExtends PoFieldValidateModel
@@ -50,6 +56,11 @@ const poSelectContentPositionDefault = 'bottom';
  *   <file name="sample-po-select-customer-registration/sample-po-select-customer-registration.service.ts"> </file>
  *   <file name='sample-po-select-customer-registration/sample-po-select-customer-registration.component.e2e-spec.ts'> </file>
  *   <file name='sample-po-select-customer-registration/sample-po-select-customer-registration.component.po.ts'> </file>
+ * </example>
+ *
+ * <example name="po-select-companies" title="PO Select Companies">
+ *   <file name="sample-po-select-companies/sample-po-select-companies.component.html"> </file>
+ *   <file name="sample-po-select-companies/sample-po-select-companies.component.ts"> </file>
  * </example>
  *
  * @description
@@ -84,10 +95,7 @@ const poSelectContentPositionDefault = 'bottom';
     PoControlPositionService
   ]
 })
-export class PoSelectComponent extends PoFieldValidateModel<any> implements AfterViewInit, DoCheck {
-  @ContentChild(PoSelectOptionTemplateDirective, { static: true })
-  selectOptionTemplate: PoSelectOptionTemplateDirective;
-
+export class PoSelectComponent extends PoFieldValidateModel<any> implements DoCheck {
   @ViewChild('contentList', { read: ElementRef, static: true }) contentList: ElementRef;
   @ViewChild('icon', { read: ElementRef, static: true }) iconElement: ElementRef;
   @ViewChild('select', { read: ElementRef, static: true }) selectElement: ElementRef;
@@ -129,6 +137,7 @@ export class PoSelectComponent extends PoFieldValidateModel<any> implements Afte
   onModelChange: any;
   open: boolean = false;
   selectedValue: any;
+  selectOptionTemplate: any;
   selectIcon: string = 'po-icon-arrow-down';
   scrollPosition: number;
 
@@ -138,7 +147,9 @@ export class PoSelectComponent extends PoFieldValidateModel<any> implements Afte
   onModelTouched: any;
   protected clickoutListener: () => void;
   private differ: any;
-  private _options: Array<PoSelectOption>;
+  private _fieldLabel?: string = PO_SELECT_FIELD_LABEL_DEFAULT;
+  private _fieldValue?: string = PO_SELECT_FIELD_VALUE_DEFAULT;
+  private _options: Array<PoSelectOption> | Array<any>;
 
   /**
    * Nesta propriedade deve ser definido uma coleção de objetos que implementam a interface `PoSelectOption`.
@@ -156,16 +167,63 @@ export class PoSelectComponent extends PoFieldValidateModel<any> implements Afte
    * this.options.push({ value: 'x', label: 'Nova opção' });
    * ```
    */
-  @Input('p-options') set options(options: Array<PoSelectOption>) {
-    this._options = options;
-    removeDuplicatedOptions(this._options);
-    removeUndefinedAndNullOptions(this._options);
+  @Input('p-options') set options(options: Array<any>) {
+    if (this.fieldLabel && this.fieldValue) {
+      options.map(option => {
+        option.label = option[this.fieldLabel];
+        option.value = option[this.fieldValue];
+      });
+    }
+
+    this.validateOptions([...options]);
     this.onUpdateOptions();
+    this._options = [...options];
   }
 
   get options() {
     return this._options;
   }
+
+  /**
+   * @optional
+   *
+   * @description
+   * Deve ser informado o nome da propriedade do objeto que será utilizado para a conversão dos itens apresentados na lista do componente
+   * (`p-options`), esta propriedade será responsável pelo texto de apresentação de cada item da lista.
+   *
+   * @default `label`
+   */
+  @Input('p-field-label') set fieldLabel(value: string) {
+    this._fieldLabel = value || PO_SELECT_FIELD_LABEL_DEFAULT;
+    if (this.options && this.options.length > 0) {
+      this.options = [...this.options];
+    }
+  }
+
+  get fieldLabel() {
+    return this._fieldLabel;
+  }
+
+  /**
+   * @optional
+   *
+   * @description
+   * Deve ser informado o nome da propriedade do objeto que será utilizado para a conversão dos itens apresentados na lista do componente
+   * (`p-options`), esta propriedade será responsável pelo valor de cada item da lista.
+   *
+   * @default `value`
+   */
+  @Input('p-field-value') set fieldValue(value: string) {
+    this._fieldValue = value || PO_SELECT_FIELD_VALUE_DEFAULT;
+    if (this.options && this.options.length > 0) {
+      this.options = [...this.options];
+    }
+  }
+
+  get fieldValue() {
+    return this._fieldValue;
+  }
+
   /* istanbul ignore next */
   constructor(
     private element: ElementRef,
@@ -212,17 +270,13 @@ export class PoSelectComponent extends PoFieldValidateModel<any> implements Afte
     }
   }
 
-  ngAfterViewInit() {
-    if (this.autoFocus) {
-      this.focus();
-    }
-  }
-
   ngDoCheck() {
     const change = this.differ.diff(this.options);
     if (change) {
       removeDuplicatedOptions(this.options);
       removeUndefinedAndNullOptions(this.options);
+      removeDuplicatedOptionsWithFieldValue(this.options, this.fieldValue);
+      removeUndefinedAndNullOptionsWithFieldValue(this.options, this.fieldValue);
     }
   }
 
@@ -264,7 +318,7 @@ export class PoSelectComponent extends PoFieldValidateModel<any> implements Afte
     this.onModelTouched?.();
   }
 
-  onOptionClick(option: PoSelectOption) {
+  onOptionClick(option: any) {
     this.updateValues(option);
     this.toggleButton();
   }
@@ -272,7 +326,7 @@ export class PoSelectComponent extends PoFieldValidateModel<any> implements Afte
   // Altera o valor ao selecionar um item.
   onSelectChange(value: any) {
     if (value && this.options && this.options.length) {
-      const optionFound: PoSelectOption = this.findOptionValue(value);
+      const optionFound: any = this.findOptionValue(value);
 
       if (optionFound) {
         this.updateValues(optionFound);
@@ -302,13 +356,13 @@ export class PoSelectComponent extends PoFieldValidateModel<any> implements Afte
   }
 
   // Atualiza valores
-  updateValues(option: PoSelectOption): void {
-    if (this.selectedValue !== option.value) {
-      this.selectedValue = option.value;
-      this.selectElement.nativeElement.value = option.value;
-      this.updateModel(option.value);
-      this.displayValue = option.label;
-      this.emitChange(option.value);
+  updateValues(option: any): void {
+    if (this.selectedValue !== option[this.fieldValue]) {
+      this.selectedValue = option[this.fieldValue];
+      this.selectElement.nativeElement.value = option[this.fieldValue];
+      this.updateModel(option[this.fieldValue]);
+      this.displayValue = option[this.fieldLabel];
+      this.emitChange(option[this.fieldValue]);
     }
   }
 
@@ -324,13 +378,13 @@ export class PoSelectComponent extends PoFieldValidateModel<any> implements Afte
 
   // Recebe as alterações do model
   onWriteValue(value: any) {
-    const optionFound: PoSelectOption = this.findOptionValue(value);
+    const optionFound: any = this.findOptionValue(value);
 
     if (optionFound) {
       this.selectElement.nativeElement.value = optionFound.value;
-      this.selectedValue = optionFound.value;
-      this.displayValue = optionFound.label;
-      this.setScrollPosition(optionFound.value);
+      this.selectedValue = optionFound[this.fieldValue];
+      this.displayValue = optionFound[this.fieldLabel];
+      this.setScrollPosition(optionFound[this.fieldValue]);
     } else if (validValue(this.selectedValue)) {
       this.selectElement.nativeElement.value = undefined;
       this.updateModel(undefined);
@@ -420,7 +474,7 @@ export class PoSelectComponent extends PoFieldValidateModel<any> implements Afte
     const ulDropdpwn = this.element.nativeElement.querySelector('ul.po-select-content');
 
     if (value && this.options && this.options.length) {
-      const optionFound: PoSelectOption = this.findOptionValue(value);
+      const optionFound: any = this.findOptionValue(value);
 
       if (optionFound) {
         const index = this.options.indexOf(optionFound);
@@ -443,5 +497,12 @@ export class PoSelectComponent extends PoFieldValidateModel<any> implements Afte
         this.setScrollPosition(this.selectedValue);
       }
     }
+  }
+
+  private validateOptions(options: Array<any>) {
+    removeDuplicatedOptions(options);
+    removeUndefinedAndNullOptions(options);
+    removeDuplicatedOptionsWithFieldValue(options, this.fieldValue);
+    removeUndefinedAndNullOptionsWithFieldValue(options, this.fieldValue);
   }
 }

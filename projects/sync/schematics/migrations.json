@@ -25,6 +25,11 @@
       "version": "6",
       "description": "Atualiza @po-ui/ng-sync para v6",
       "factory": "./ng-update/v6/index"
+    },
+    "migration-v14": {
+      "version": "14",
+      "description": "Atualiza @po-ui/ng-sync para v14",
+      "factory": "./ng-update/v14/index"
     }
   }
 }

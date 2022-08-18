@@ -3,5 +3,14 @@
   "$id": "SchematicsNgAdd",
   "title": "Ng Add Options Schema",
   "type": "object",
+  "properties": {
+    "project": {
+      "type": "string",
+      "description": "Name of the project.",
+      "$default": {
+        "$source": "projectName"
+      }
+    }
+  },
   "required": []
 }

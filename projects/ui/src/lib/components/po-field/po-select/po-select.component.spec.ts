@@ -2,7 +2,7 @@ import { ComponentFixture, fakeAsync, TestBed, tick } from '@angular/core/testin
 import { EventEmitter } from '@angular/core';
 import { FormsModule } from '@angular/forms';
 
-import { configureTestSuite, expectPropertiesValues } from './../../../util-test/util-expect.spec';
+import { configureTestSuite, expectPropertiesValues, expectSettersMethod } from './../../../util-test/util-expect.spec';
 import * as UtilsFunctions from '../../../utils/util';
 
 import { PoFieldContainerBottomComponent } from './../po-field-container/po-field-container-bottom/po-field-container-bottom.component';
@@ -116,24 +116,6 @@ describe('PoSelectComponent:', () => {
   });
 
   describe('Properties:', () => {
-    it('ngAfterViewInit: should call `focus` if `autoFocus` is true.', () => {
-      component.autoFocus = true;
-
-      const spyFocus = spyOn(component, 'focus');
-      component.ngAfterViewInit();
-
-      expect(spyFocus).toHaveBeenCalled();
-    });
-
-    it('ngAfterViewInit: shouldn´t call `focus` if `autoFocus` is false.', () => {
-      component.autoFocus = false;
-
-      const spyFocus = spyOn(component, 'focus');
-      component.ngAfterViewInit();
-
-      expect(spyFocus).not.toHaveBeenCalled();
-    });
-
     it('isInvisibleSelectNative: should return `true` if `isMobile` and `readonly` are `true`', () => {
       component.isMobile = true;
       component.readonly = true;
@@ -487,7 +469,7 @@ describe('PoSelectComponent:', () => {
     });
 
     it('updateValues: should execute updateValues and call onChange', () => {
-      const option = { value: '1', label: '' };
+      const option = { value: undefined, label: '' };
       const fakeThis = {
         selectElement: component.selectElement,
         selectedValue: '',
@@ -500,24 +482,7 @@ describe('PoSelectComponent:', () => {
       component['updateValues'].call(fakeThis, option);
 
       expect(fakeThis.emitChange).toHaveBeenCalledWith(option.value);
-      expect(fakeThis.selectedValue).toBe('1');
-    });
-
-    it('updateValues: shouldn`t execute methods if `selectedValue` is equal `option.value`.', () => {
-      const option = { value: '1', label: 'tst' };
-      const fakeThis = {
-        selectElement: component.selectElement,
-        selectedValue: '1',
-        displayValue: label => {},
-        updateModel: value => {},
-        emitChange: value => {}
-      };
-
-      spyOn(fakeThis, 'emitChange');
-      component['updateValues'].call(fakeThis, option);
-
-      expect(fakeThis.emitChange).not.toHaveBeenCalled();
-      expect(fakeThis.selectedValue).toBe('1');
+      expect(fakeThis.selectedValue).toBe(undefined);
     });
 
     it('onUpdateOptions: should call `onSelectChange` if model is truthy.', () => {
@@ -975,6 +940,18 @@ describe('PoSelectComponent:', () => {
 
       optionsElementOpen = nativeElement.querySelector('.po-select-show');
       expect(optionsElementOpen).toBeTruthy();
+    });
+
+    it('should set p-field-value with `defaultValue` if param is empty', () => {
+      const defaultValue = 'value';
+      expectSettersMethod(component, 'fieldValue', '', 'fieldValue', defaultValue);
+      expect(component.fieldValue).toEqual(defaultValue);
+    });
+
+    it('should set p-field-label with `defaultValue` if param is empty', () => {
+      const defaultLabel = 'label';
+      expectSettersMethod(component, 'fieldLabel', '', 'fieldLabel', defaultLabel);
+      expect(component.fieldLabel).toEqual(defaultLabel);
     });
   });
 });

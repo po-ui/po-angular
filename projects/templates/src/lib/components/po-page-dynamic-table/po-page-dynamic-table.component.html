@@ -1,9 +1,11 @@
 <po-page-dynamic-search
   [p-actions]="pageActions"
   [p-breadcrumb]="breadcrumb"
+  [p-hide-close-disclaimers]="hideCloseDisclaimers"
   [p-filters]="filters"
   [p-keep-filters]="keepFilters"
   [p-concat-filters]="concatFilters"
+  [p-hide-remove-all-disclaimer]="hideRemoveAllDisclaimer"
   [p-quick-search-width]="quickSearchWidth"
   [p-title]="title"
   (p-advanced-search)="onAdvancedSearch($event)"
@@ -17,9 +19,14 @@
     [p-selectable]="enableSelectionTable"
     [p-columns]="columns"
     [p-items]="items"
+    [p-height]="height"
+    [p-infinite-scroll]="infiniteScroll"
     [p-show-more-disabled]="!hasNext"
     (p-show-more)="showMore()"
     (p-sort-by)="onSort($event)"
+    (p-change-visible-columns)="onChangeVisibleColumns($event)"
+    (p-restore-column-manager)="onColumnRestoreManager($event)"
+    (p-sort-by)="onSortBy($event)"
   >
   </po-table>
 </po-page-dynamic-search>

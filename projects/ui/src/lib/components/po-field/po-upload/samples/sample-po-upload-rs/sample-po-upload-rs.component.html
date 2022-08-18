@@ -16,7 +16,7 @@
         </div>
 
         <div class="tht-row">
-          <po-button class="po-sm-12 po-mt-2" p-label="Yes!" p-type="primary" (p-click)="stepper.next()"> </po-button>
+          <po-button class="po-sm-12 po-mt-2" p-label="Yes!" p-kind="primary" (p-click)="stepper.next()"> </po-button>
         </div>
       </po-widget>
     </po-step>
@@ -114,7 +114,7 @@
 
           <po-info class="po-md-4" p-label="Description" [p-value]="description || 'N/D'"> </po-info>
 
-          <po-button class="po-sm-12 po-mt-2" p-label="Confirm" (p-click)="confirmSubmit()"> </po-button>
+          <po-button class="po-sm-12 po-mt-2 po-mb-2" p-label="Confirm" (p-click)="confirmSubmit()"> </po-button>
         </div>
       </po-widget>
     </po-step>

@@ -51,7 +51,8 @@ export class PoPageDynamicSearchComponent extends PoPageDynamicSearchBaseCompone
     remove: this.onRemoveDisclaimer.bind(this),
     removeAll: this.onRemoveAllDisclaimers.bind(this),
     disclaimers: [],
-    title: this.literals.disclaimerGroupTitle
+    title: this.literals.disclaimerGroupTitle,
+    hideRemoveAll: this.hideRemoveAllDisclaimer
   };
 
   private readonly _filterSettings: PoPageFilter = {
@@ -70,11 +71,16 @@ export class PoPageDynamicSearchComponent extends PoPageDynamicSearchBaseCompone
   }
 
   get disclaimerGroup() {
-    return Object.assign({}, this._disclaimerGroup, { title: this.literals.disclaimerGroupTitle });
+    return Object.assign({}, this._disclaimerGroup, {
+      title: this.literals.disclaimerGroupTitle,
+      hideRemoveAll: this.hideRemoveAllDisclaimer
+    });
   }
 
   get filterSettings() {
-    this._filterSettings.advancedAction = this.filters.length === 0 ? undefined : this.onAdvancedAction.bind(this);
+    const thereAreValidFilters =
+      this.filters.length > 0 && this.filters.some(filter => filter.visible === true || filter.visible === undefined);
+    this._filterSettings.advancedAction = thereAreValidFilters ? this.onAdvancedAction.bind(this) : undefined;
 
     return Object.assign({}, this._filterSettings, {
       placeholder: this.literals.searchPlaceholder,
@@ -109,7 +115,8 @@ export class PoPageDynamicSearchComponent extends PoPageDynamicSearchBaseCompone
     const disclaimerQuickSearchUpdated = {
       property: 'search',
       label: `${this.literals.quickSearchLabel} ${quickFilter}`,
-      value: quickFilter
+      value: quickFilter,
+      hideClose: this.hideCloseDisclaimers.some(hideCloseDisclaimer => hideCloseDisclaimer === 'search') || false
     };
 
     const getDisclaimersWithConcatFilters = () => [
@@ -257,6 +264,8 @@ export class PoPageDynamicSearchComponent extends PoPageDynamicSearchBaseCompone
       const field = this.getFieldByProperty(this.filters, property);
       const label = field.label || capitalizeFirstLetter(field.property);
       const value = filters[property];
+      const hideClose =
+        this.hideCloseDisclaimers.some(hideCloseDisclaimer => hideCloseDisclaimer === property) || false;
 
       const valueDisplayedOnTheDisclaimerLabel = this.getFilterValueToDisclaimer(field, value, optionsServiceObjects);
 
@@ -264,7 +273,8 @@ export class PoPageDynamicSearchComponent extends PoPageDynamicSearchBaseCompone
         disclaimers.push({
           label: `${label}: ${valueDisplayedOnTheDisclaimerLabel}`,
           property,
-          value
+          value,
+          hideClose
         });
       }
     });
@@ -286,6 +296,8 @@ export class PoPageDynamicSearchComponent extends PoPageDynamicSearchBaseCompone
       filters: this.filters,
       keepFilters: this.keepFilters,
       concatFilters: this.concatFilters,
+      hideRemoveAllDisclaimer: this.hideRemoveAllDisclaimer,
+      hideCloseDisclaimers: this.hideCloseDisclaimers,
       quickSearchWidth: this.quickSearchWidth
     };
 
@@ -312,6 +324,12 @@ export class PoPageDynamicSearchComponent extends PoPageDynamicSearchBaseCompone
         },
         {
           nameProp: 'concatFilters'
+        },
+        {
+          nameProp: 'hideRemoveAllDisclaimer'
+        },
+        {
+          nameProp: 'hideCloseDisclaimers'
         },
         {
           nameProp: 'quickSearchWidth'

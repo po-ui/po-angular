@@ -1,5 +1,5 @@
 import { Component, OnInit } from '@angular/core';
-import { FormBuilder, FormGroup, Validators } from '@angular/forms';
+import { UntypedFormBuilder, UntypedFormGroup, Validators } from '@angular/forms';
 import { HttpClient } from '@angular/common/http';
 
 import { Observable } from 'rxjs';
@@ -9,10 +9,10 @@ import { Observable } from 'rxjs';
   templateUrl: './sample-po-combo-heroes-reactive-form.component.html'
 })
 export class SamplePoComboHeroesReactiveFormComponent implements OnInit {
-  form: FormGroup;
+  form: UntypedFormGroup;
   hero$: Observable<any>;
 
-  constructor(private http: HttpClient, private formBuilder: FormBuilder) {}
+  constructor(private http: HttpClient, private formBuilder: UntypedFormBuilder) {}
 
   ngOnInit() {
     this.form = this.formBuilder.group({
