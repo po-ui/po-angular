@@ -1,4 +1,5 @@
-import { Component, Input, TemplateRef, ViewChild } from '@angular/core';
+import { Component, EventEmitter, Input, OnDestroy, Output, TemplateRef, ViewChild } from '@angular/core';
+import { filter, Subscription } from 'rxjs';
 
 import { PoAccordionService } from '../services/po-accordion.service';
 
@@ -37,15 +38,43 @@ import { PoAccordionService } from '../services/po-accordion.service';
   selector: 'po-accordion-item',
   templateUrl: 'po-accordion-item.component.html'
 })
-export class PoAccordionItemComponent {
+export class PoAccordionItemComponent implements OnDestroy {
   /** Título do item. */
   @Input('p-label') label: string;
+
+  /** Evento disparado ao expandir o item, seja manualmente ou programaticamente. */
+  @Output('p-expand') expandEvent = new EventEmitter<void>();
+
+  /** Evento disparado ao retrair o item, seja manualmente ou programaticamente. */
+  @Output('p-collapse') collapseEvent = new EventEmitter<void>();
 
   @ViewChild(TemplateRef, { static: true }) templateRef: TemplateRef<any>;
 
   expanded: boolean;
 
-  constructor(private accordionService: PoAccordionService) {}
+  private expandSubscription: Subscription;
+  private collapseSubscription: Subscription;
+
+  constructor(private accordionService: PoAccordionService) {
+    this.expandSubscription = this.accordionService
+      .receiveFromChildAccordionClicked()
+      .pipe(filter(poAccordionItem => poAccordionItem === this && poAccordionItem.expanded))
+      .subscribe(() => {
+        this.expandEvent.next();
+      });
+
+    this.collapseSubscription = this.accordionService
+      .receiveFromChildAccordionClicked()
+      .pipe(filter(poAccordionItem => poAccordionItem === this && !poAccordionItem.expanded))
+      .subscribe(() => {
+        this.collapseEvent.next();
+      });
+  }
+
+  ngOnDestroy(): void {
+    this.expandSubscription.unsubscribe();
+    this.collapseSubscription.unsubscribe();
+  }
 
   /**
    * Método para colapsar o `po-accordion-item`.
