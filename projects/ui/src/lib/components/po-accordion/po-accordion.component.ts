@@ -51,7 +51,7 @@ export class PoAccordionComponent extends PoAccordionBaseComponent implements On
   headerToggle(event: boolean, poAccordionItem: PoAccordionItemComponent) {
     poAccordionItem.expanded = event;
 
-    this.toggle(poAccordionItem);
+    this.accordionService.sendToParentAccordionItemClicked(poAccordionItem);
   }
 
   private receiveFromChildAccordionSubscription() {
