@@ -4,7 +4,7 @@ import { convertToBoolean } from '../../utils/util';
 import { InputBoolean } from '../../decorators';
 
 import { PoButtonKind } from './po-button-type.enum';
-
+import { PoButtonSize } from './po-button-size.enum';
 /**
  * @description
  *
@@ -68,8 +68,11 @@ export class PoButtonBaseComponent {
   private _danger?: boolean = false;
   private _disabled?: boolean = false;
   private _loading?: boolean = false;
-  private _small?: boolean = false;
   private _kind?: string = PoButtonKind.secondary;
+  private _size?: string = PoButtonSize.medium;
+  private _small?: boolean = false;
+
+  protected hasSize?: boolean = false;
 
   /**
    * @optional
@@ -91,17 +94,31 @@ export class PoButtonBaseComponent {
   }
 
   /**
+   * @deprecated 16.x.x
+   *
    * @optional
    *
    * @description
    *
-   * Deixa o botão menor.
+   * **Deprecated 16.x.x**.
+   *
+   * > Por regras de acessibilidade o botão não terá mais um tamanho menor do que 44px e por isso a propriedade será depreciada.
+   * > [Saiba mais](https://animaliads.notion.site/Bot-o-fb3a921e8ba54bd38b39758c24613368)
+   *
+   * Deixa o botão menor, com 32px de altura.
    *
    * @default `false`
    */
-  @Input('p-small') set small(value: boolean) {
-    this._small = <any>value === '' ? true : convertToBoolean(value);
+  @Input('p-small')
+  @InputBoolean()
+  set small(value: boolean) {
+    this._small = !this.hasSize ? value : false;
+
+    if (this._small) {
+      this._size = 'small';
+    }
   }
+
   get small(): boolean {
     return this._small;
   }
@@ -128,6 +145,7 @@ export class PoButtonBaseComponent {
   @Input('p-type') set type(value: string) {
     this.kind = value;
   }
+
   get type(): string {
     return this.kind;
   }
@@ -158,9 +176,41 @@ export class PoButtonBaseComponent {
    *
    * @description
    *
+   * Define o tamanho do `po-button`.
+   *
+   * Valores válidos:
+   * - `medium`: o `po-button` fica do tamanho padrão, com 44px de altura.;
+   * - `large`: o `po-button` fica maior, com 56px de altura.;
+   *
+   * @default `medium`
+   *
+   */
+  @HostBinding('attr.p-size')
+  @Input('p-size')
+  set size(value: string) {
+    const size = this.small ? 'small' : value;
+
+    if (size === 'small') {
+      this._size = 'small';
+      this._small = true;
+    } else {
+      this._size = PoButtonSize[size] ? PoButtonSize[size] : PoButtonSize.medium;
+      this.hasSize = true;
+    }
+  }
+
+  get size(): string {
+    return this._size;
+  }
+
+  /**
+   * @optional
+   *
+   * @description
+   *
    * Define o estilo do `po-button`.
    *
-   * Valore válidos:
+   * Valores válidos:
    *  - `primary`: deixa o `po-button` com destaque, deve ser usado para ações primárias.
    *  - `secondary`: estilo padrão do `po-button`.
    *  - `tertiary`: o `po-button` é exibido sem cor do fundo, recebendo menos destaque entre as ações.

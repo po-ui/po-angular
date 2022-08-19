@@ -10,12 +10,12 @@ export class SamplePoButtonLabsComponent implements OnInit {
   label: string;
   kind: string;
   icon: string;
+  size: string;
   properties: Array<string>;
 
   propertiesOptions: Array<PoCheckboxGroupOption> = [
     { value: 'disabled', label: 'Disabled' },
     { value: 'loading', label: 'Loading' },
-    { value: 'small', label: 'Small' },
     { value: 'danger', label: 'Danger' }
   ];
 
@@ -32,6 +32,11 @@ export class SamplePoButtonLabsComponent implements OnInit {
     { label: 'tertiary', value: 'tertiary' }
   ];
 
+  sizesOptions: Array<PoRadioGroupOption> = [
+    { label: 'medium', value: 'medium' },
+    { label: 'large', value: 'large' }
+  ];
+
   constructor(private poDialog: PoDialogService) {}
 
   ngOnInit() {
@@ -44,6 +49,8 @@ export class SamplePoButtonLabsComponent implements OnInit {
 
   propertiesChange(event) {
     this.kindsOptions[2] = { ...this.kindsOptions[2], disabled: false };
+    this.sizesOptions[0] = { ...this.sizesOptions[0], disabled: false };
+    this.sizesOptions[1] = { ...this.sizesOptions[1], disabled: false };
 
     if (event) {
       event.forEach(property => {
@@ -56,21 +63,24 @@ export class SamplePoButtonLabsComponent implements OnInit {
 
   verifyDisabled(event) {
     const value = [...this.propertiesOptions];
+
     if (event === 'tertiary') {
-      value[3] = { value: 'danger', label: 'Danger', disabled: true };
+      value[2] = { value: 'danger', label: 'Danger', disabled: true };
       this.propertiesOptions = value;
     } else {
-      value[3] = { value: 'danger', label: 'Danger', disabled: false };
+      value[2] = { value: 'danger', label: 'Danger', disabled: false };
       this.propertiesOptions = value;
     }
   }
 
   restore() {
     this.label = undefined;
-    this.kind = undefined;
+    this.kind = 'secondary';
+    this.size = 'medium';
     this.icon = undefined;
     this.properties = [];
-    this.kindsOptions[0] = { ...this.kindsOptions[0], disabled: false };
     this.kindsOptions[2] = { ...this.kindsOptions[2], disabled: false };
+    this.sizesOptions[0] = { ...this.sizesOptions[0], disabled: false };
+    this.sizesOptions[1] = { ...this.sizesOptions[1], disabled: false };
   }
 }

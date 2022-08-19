@@ -2,6 +2,7 @@ import { PoButtonBaseComponent } from './po-button-base.component';
 
 import { expectPropertiesValues } from '../../util-test/util-expect.spec';
 import { PoButtonKind } from './po-button-type.enum';
+import { PoButtonSize } from './po-button-size.enum';
 import { ComponentFixture, TestBed } from '@angular/core/testing';
 
 describe('PoButtonBaseComponent', () => {
@@ -28,13 +29,10 @@ describe('PoButtonBaseComponent', () => {
     expectPropertiesValues(component, 'disabled', booleanInvalidValues, false);
   });
 
-  it('should update property `p-small` with valid values', () => {
-    expectPropertiesValues(component, 'small', booleanValidTrueValues, true);
-    expectPropertiesValues(component, 'small', booleanValidFalseValues, false);
-  });
+  it('should set property `p-small` with true if p-size is equal `small`', () => {
+    component.size = 'small';
 
-  it('should update property `p-small` with `false` when invalid values', () => {
-    expectPropertiesValues(component, 'small', booleanInvalidValues, false);
+    expect(component.small).toBeTrue();
   });
 
   it('should update property `p-kind` with valid values', () => {
@@ -60,5 +58,31 @@ describe('PoButtonBaseComponent', () => {
     component.kind = PoButtonKind.primary;
     component.danger = true;
     expect(component.danger).toBe(true);
+  });
+
+  it('should update property `p-size` with valid values', () => {
+    const validValues = ['medium', 'large'];
+
+    expectPropertiesValues(component, 'size', validValues, validValues);
+  });
+
+  it('should update property `p-size` with `medium` when invalid values', () => {
+    const invalidValues = ['extraSmall', 'extraLarge'];
+
+    expectPropertiesValues(component, 'size', invalidValues, 'medium');
+  });
+
+  it('should update property `p-size` with `small` if `p-small` was declared in first', () => {
+    component.small = true;
+    component.size = PoButtonSize.large;
+
+    expect(component.size).toBe('small');
+  });
+
+  it('should ignore property `p-small` if `p-size` was declared in first with value different of `small`', () => {
+    component.size = PoButtonSize.large;
+    component.small = true;
+
+    expect(component.size).toBe('large');
   });
 });

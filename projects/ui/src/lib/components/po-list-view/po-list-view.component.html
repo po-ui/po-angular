@@ -67,7 +67,6 @@
             <div *ngIf="showButtonsActions" class="po-list-view-actions">
               <po-button
                 *ngFor="let action of visibleActions"
-                p-small="true"
                 [p-disabled]="returnBooleanValue(action, item)"
                 [p-icon]="action.icon"
                 [p-label]="action.label"
