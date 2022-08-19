@@ -10,7 +10,7 @@ import { PoJobSchedulerInternal } from './interfaces/po-job-scheduler-internal.i
 import { PoPageJobSchedulerComponent } from './po-page-job-scheduler.component';
 import { PoPageJobSchedulerModule } from './po-page-job-scheduler.module';
 
-xdescribe('PoPageJobSchedulerComponent:', () => {
+describe('PoPageJobSchedulerComponent:', () => {
   let component: PoPageJobSchedulerComponent;
   let fixture: ComponentFixture<PoPageJobSchedulerComponent>;
 

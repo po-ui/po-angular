@@ -72,7 +72,8 @@ export class PoUploadBaseService {
     successCallback: (file: PoUploadFile, event: any) => void,
     errorCallback: (file: PoUploadFile, event: any) => void
   ) {
-    const request = this.getRequest(url, headers, formData).subscribe(
+    let request: Subscription = new Subscription();
+    request = this.getRequest(url, headers, formData).subscribe(
       event => {
         if (event.type === HttpEventType.UploadProgress) {
           this.addRequest(file, request);
