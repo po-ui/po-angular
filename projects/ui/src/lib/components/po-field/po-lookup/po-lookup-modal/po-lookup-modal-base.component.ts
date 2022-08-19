@@ -149,6 +149,28 @@ export abstract class PoLookupModalBaseComponent implements OnDestroy, OnInit {
    */
   @Input('p-field-value') fieldValue: string;
 
+  /**
+   * @optional
+   *
+   * @description
+   * Evento disparado ao fechar o popover do gerenciador de colunas após alterar as colunas visíveis.
+   *
+   * O componente envia como parâmetro um array de string com as colunas visíveis atualizadas.
+   * Por exemplo: ["idCard", "name", "hireStatus", "age"].
+   */
+  @Output('p-change-visible-columns') changeVisibleColumns = new EventEmitter<Array<string>>();
+
+  /**
+   * @optional
+   *
+   * @description
+   * Evento disparado ao clicar no botão de restaurar padrão no gerenciador de colunas.
+   *
+   * O componente envia como parâmetro um array de string com as colunas configuradas inicialmente.
+   * Por exemplo: ["idCard", "name", "hireStatus", "age"].
+   */
+  @Output('p-restore-column-manager') columnRestoreManager = new EventEmitter<Array<String>>();
+
   hasNext = true;
   isLoading = false;
   page = 1;

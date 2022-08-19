@@ -67,6 +67,8 @@
         (p-all-unselected)="onAllUnselected($event)"
         (p-show-more)="showMoreEvent()"
         (p-sort-by)="sortBy($event)"
+        (p-change-visible-columns)="changeVisibleColumns.emit($event)"
+        (p-restore-column-manager)="columnRestoreManager.emit($event)"
       >
       </po-table>
     </div>

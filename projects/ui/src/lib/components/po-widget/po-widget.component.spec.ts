@@ -412,10 +412,11 @@ describe('PoWidgetComponent with title and actions', () => {
 
     it('should have been clicked in primary action', () => {
       spyOn(component.primaryAction, 'emit');
+      component.id = '1';
 
       fixture.detectChanges();
 
-      const link = nativeElement.querySelector('#primaryAct');
+      const link = document.getElementById('primaryAct-1') as HTMLAnchorElement;
 
       spyOn(eventClick, 'stopPropagation');
 
@@ -428,8 +429,11 @@ describe('PoWidgetComponent with title and actions', () => {
     it('should have been clicked in secondary action', () => {
       spyOn(component.secondaryAction, 'emit');
       spyOn(eventClick, 'stopPropagation');
+      component.id = '1';
 
-      const link = nativeElement.querySelector('#secondaryAct');
+      fixture.detectChanges();
+
+      const link = document.getElementById('secondaryAct-1') as HTMLAnchorElement;
 
       link.dispatchEvent(eventClick);
 
@@ -440,10 +444,11 @@ describe('PoWidgetComponent with title and actions', () => {
     it('should have been clicked in setting', () => {
       spyOn(component.setting, 'emit');
       component.setting.subscribe();
+      component.id = '1';
 
       fixture.detectChanges();
 
-      const test = nativeElement.querySelector('#settingAction');
+      const test = document.getElementById('settingAction-1') as HTMLAnchorElement;
 
       spyOn(eventClick, 'stopPropagation');
 
@@ -454,14 +459,21 @@ describe('PoWidgetComponent with title and actions', () => {
     });
 
     it('should be created the help button', () => {
-      expect(nativeElement.querySelector('#helpLink') !== null).toBe(true);
+      component.id = '1';
+      expect(nativeElement.querySelector('helpLink-1') !== null).toBe(false);
     });
 
     it('should have been clicked in help', () => {
-      const help = nativeElement.querySelector('#helpLink');
-
       spyOn(eventClick, 'stopPropagation');
       spyOn(window, 'open');
+
+      component.id = '1';
+
+      fixture.detectChanges();
+
+      const help = document.getElementById('helpLink-1') as HTMLAnchorElement;
+
+      fixture.detectChanges();
 
       help.dispatchEvent(eventClick);
 

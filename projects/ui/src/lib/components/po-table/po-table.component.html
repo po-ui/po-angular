@@ -220,7 +220,7 @@
               [class.po-table-column-center]="column.type === 'subtitle'"
               [class.po-table-column-icons]="column.type === 'icon'"
               [ngClass]="getClassColor(row, column)"
-              (click)="selectable ? selectRow(row) : 'javascript:;'"
+              (click)="hasSelectableRow() ? selectRow(row) : 'javascript:;'"
             >
               <div
                 class="po-table-column-cell notranslate"
@@ -507,7 +507,7 @@
             [class.po-table-column-center]="column.type === 'subtitle'"
             [class.po-table-column-icons]="column.type === 'icon'"
             [ngClass]="getClassColor(row, column)"
-            (click)="selectable ? selectRow(row) : 'javascript:;'"
+            (click)="hasSelectableRow() ? selectRow(row) : 'javascript:;'"
           >
             <div
               class="po-table-column-cell notranslate"

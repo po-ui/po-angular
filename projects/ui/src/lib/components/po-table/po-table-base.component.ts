@@ -192,6 +192,17 @@ export abstract class PoTableBaseComponent implements OnChanges, OnDestroy {
   @Input('p-single-select') @InputBoolean() singleSelect?: boolean = false;
 
   /**
+   * @description
+   *
+   * Permite selecionar um item da tabela clicando na linha.
+   *
+   * > Caso haja necessidade de selecionar o item apenas via radio ou checkbox, deve-se definir esta propriedade como `false`.
+   *
+   * @default `true`
+   */
+  @Input('p-selectable-entire-line') @InputBoolean() selectableEntireLine?: boolean = true;
+
+  /**
    * @optional
    *
    * @description
@@ -725,6 +736,10 @@ export abstract class PoTableBaseComponent implements OnChanges, OnDestroy {
     this.emitSelectEvents(row);
 
     this.configAfterSelectRow(this.items, row);
+  }
+
+  hasSelectableRow(): boolean {
+    return this.selectable && this.selectableEntireLine;
   }
 
   selectDetailRow(row: any) {
