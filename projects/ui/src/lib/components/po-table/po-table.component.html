@@ -676,9 +676,13 @@
   </span>
   <span
     *ngIf="sort && column.sortable !== false"
-    [class.po-table-header-icon-unselected]="sortedColumn?.property !== column"
-    [class.po-table-header-icon-descending]="sortedColumn?.property === column && sortedColumn.ascending"
-    [class.po-table-header-icon-ascending]="sortedColumn?.property === column && !sortedColumn.ascending"
+    [class.po-table-header-icon-unselected]="JSON.stringify(sortedColumn?.property) !== JSON.stringify(column)"
+    [class.po-table-header-icon-descending]="
+      JSON.stringify(sortedColumn?.property) === JSON.stringify(column) && sortedColumn.ascending
+    "
+    [class.po-table-header-icon-ascending]="
+      JSON.stringify(sortedColumn?.property) === JSON.stringify(column) && !sortedColumn.ascending
+    "
   >
   </span>
 </ng-template>
