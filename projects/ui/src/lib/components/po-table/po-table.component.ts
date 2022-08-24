@@ -127,6 +127,7 @@ export class PoTableComponent extends PoTableBaseComponent implements AfterViewI
 
   private clickListener: () => void;
   private resizeListener: () => void;
+  JSON: JSON;
 
   @ViewChild('columnManagerTarget') set columnManagerTarget(value: ElementRef) {
     this._columnManagerTarget = value;
@@ -157,7 +158,7 @@ export class PoTableComponent extends PoTableBaseComponent implements AfterViewI
     private defaultService: PoTableService
   ) {
     super(poDate, poLanguageService, defaultService);
-
+    this.JSON = JSON;
     this.differ = differs.find([]).create(null);
 
     // TODO: #5550 ao remover este listener, no portal, quando as colunas forem fixas não sofrem
