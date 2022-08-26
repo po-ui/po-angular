@@ -66,8 +66,8 @@ export const poTableLiteralsDefault = {
     noColumns: 'Нет определения столбца',
     noData: 'Данные не найдены',
     noVisibleColumn: 'нет видимых столбцов',
-    loadingData: 'погрузка',
-    loadMoreData: 'загрузка',
+    loadingData: 'Загрузка',
+    loadMoreData: 'Загрузка',
     seeCompleteSubtitle: 'Посмотреть полный субтитр',
     completeSubtitle: 'Полный заголовок',
     columnsManager: 'менеджер колонок'
