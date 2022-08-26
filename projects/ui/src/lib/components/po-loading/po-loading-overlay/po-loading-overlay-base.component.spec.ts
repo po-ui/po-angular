@@ -75,14 +75,14 @@ describe('PoLoadingOverlayBaseComponent:', () => {
       expect(component['getTextDefault'].call(fakeThis)).toBe('Cargando');
     });
 
-    it('getTextDefault: should return `погрузка` if `getShortLanguage` returns `ru`', () => {
+    it('getTextDefault: should return `Загрузка` if `getShortLanguage` returns `ru`', () => {
       const fakeThis = {
         languageService: {
           getShortLanguage: () => 'ru'
         }
       };
 
-      expect(component['getTextDefault'].call(fakeThis)).toBe('погрузка');
+      expect(component['getTextDefault'].call(fakeThis)).toBe('Загрузка');
     });
   });
 });
