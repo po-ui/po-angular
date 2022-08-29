@@ -28,8 +28,8 @@ class PoNotificationService extends PoNotificationBaseService {
       changeDetectorRef: undefined,
       componentType: undefined,
       destroy: function () {},
-      onDestroy: function () {},
-      setInput: function () {}
+      onDestroy: function () {}
+      // setInput: function () {} // @TODO verificar nas versões posteriores
     };
     if (toaster.orientation === PoToasterOrientation.Bottom) {
       this.stackBottom.push(componentReference);

@@ -2,6 +2,15 @@
 
 All notable changes to this project will be documented in this file. See [standard-version](https://github.com/conventional-changelog/standard-version) for commit guidelines.
 
+## [14.3.1](https://github.com/po-ui/po-angular/compare/v14.3.0...v14.3.1) (2022-08-29)
+
+
+### Bug Fixes
+
+* **table:** corrige ícone de ordenação ([d3f938c](https://github.com/po-ui/po-angular/commit/d3f938c87bf9900729302e96d7fabb8f7407de12))
+
+
+
 # [14.3.0](https://github.com/po-ui/po-angular/compare/v14.2.1...v14.3.0) (2022-08-22)
 
 
