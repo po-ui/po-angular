@@ -16,7 +16,7 @@ export interface PoMultiselectFilter {
    *
    * @param {{ property: string, value: string }} params Objeto contendo a propriedade e o valor responsável por realizar o filtro.
    */
-  getFilteredData(params: { property: string; value: string }): Observable<Array<PoMultiselectOption>>;
+  getFilteredData(params: { property: string; value: string }): Observable<Array<PoMultiselectOption | any>>;
 
   /**
    * Método que será chamado ao iniciar o componente com valor, deve retornar um Observable que contém apenas os objetos filtrados que
@@ -24,5 +24,5 @@ export interface PoMultiselectFilter {
    *
    * @param {Array<string | number>} values Array com os valores a serem buscados.
    */
-  getObjectsByValues(values: Array<string | number>): Observable<Array<PoMultiselectOption>>;
+  getObjectsByValues(values: Array<string | number>): Observable<Array<PoMultiselectOption | any>>;
 }

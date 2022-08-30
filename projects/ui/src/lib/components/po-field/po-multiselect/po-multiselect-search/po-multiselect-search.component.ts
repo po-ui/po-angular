@@ -31,6 +31,8 @@ export class PoMultiselectSearchComponent {
   /** Propriedade que recebe as literais definidas no `po-multiselect`. */
   @Input('p-literals') literals?: PoMultiselectLiterals;
 
+  @Input('p-field-value') fieldValue: string;
+
   /** Evento que será disparado a cada tecla digitada no campo de busca. */
   @Output('p-change') change = new EventEmitter();
 
@@ -62,7 +64,7 @@ export class PoMultiselectSearchComponent {
   }
 
   onChange(event) {
-    this.change.emit({ event: event, value: this.inputElement.nativeElement.value });
+    this.change.emit({ event: event, [this.fieldValue]: this.inputElement.nativeElement.value });
   }
 
   setFocus() {

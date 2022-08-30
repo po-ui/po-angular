@@ -111,7 +111,9 @@ describe('PoMultiselectComponent:', () => {
       },
       visibleDisclaimers: [],
       selectedOptions: selectedOptions,
-      isCalculateVisibleItems: true
+      isCalculateVisibleItems: true,
+      fieldValue: 'value',
+      fieldLabel: 'label'
     };
 
     component.calculateVisibleItems.call(fakeThis);
@@ -546,7 +548,9 @@ describe('PoMultiselectComponent:', () => {
         },
         visibleDisclaimers: [],
         selectedOptions: selectedOptions,
-        isCalculateVisibleItems: true
+        isCalculateVisibleItems: true,
+        fieldLabel: 'label',
+        fieldValue: 'value'
       };
 
       component.calculateVisibleItems.call(fakeThis);

@@ -5,7 +5,11 @@ import { fakeAsync, tick } from '@angular/core/testing';
 import { Observable, of } from 'rxjs';
 
 import { expectPropertiesValues, expectSettersMethod } from '../../../util-test/util-expect.spec';
-import { removeDuplicatedOptions, removeUndefinedAndNullOptions, sortOptionsByProperty } from '../../../utils/util';
+import {
+  removeDuplicatedOptionsWithFieldValue,
+  removeUndefinedAndNullOptionsWithFieldValue,
+  sortOptionsByProperty
+} from '../../../utils/util';
 import * as UtilsFunctions from '../../../utils/util';
 
 import { PoLanguageService } from '../../../services/po-language/po-language.service';
@@ -125,10 +129,8 @@ describe('PoMultiselectBaseComponent:', () => {
   });
 
   it('should set options', () => {
-    spyOn(component, 'validAndSortOptions');
     component.options = [{ label: '1', value: '1' }];
     expect(component.options.length).toBe(1);
-    expect(component.validAndSortOptions).toHaveBeenCalled();
   });
 
   it('should set p-sort', () => {
@@ -205,13 +207,13 @@ describe('PoMultiselectBaseComponent:', () => {
     component.options = [{ label: '1', value: 1 }];
     component.sort = true;
 
-    spyOn(UtilsFunctions, 'removeUndefinedAndNullOptions');
-    spyOn(UtilsFunctions, 'removeDuplicatedOptions');
+    spyOn(UtilsFunctions, 'removeUndefinedAndNullOptionsWithFieldValue');
+    spyOn(UtilsFunctions, 'removeDuplicatedOptionsWithFieldValue');
     spyOn(component, 'setUndefinedLabels');
     spyOn(UtilsFunctions, 'sortOptionsByProperty');
     component.validAndSortOptions();
-    expect(removeUndefinedAndNullOptions).toHaveBeenCalled();
-    expect(removeDuplicatedOptions).toHaveBeenCalled();
+    expect(removeUndefinedAndNullOptionsWithFieldValue).toHaveBeenCalled();
+    expect(removeDuplicatedOptionsWithFieldValue).toHaveBeenCalled();
     expect(component.setUndefinedLabels).toHaveBeenCalled();
     expect(sortOptionsByProperty).toHaveBeenCalled();
   });
@@ -220,13 +222,13 @@ describe('PoMultiselectBaseComponent:', () => {
     component.options = [{ label: '1', value: 1 }];
     component.sort = false;
 
-    spyOn(UtilsFunctions, 'removeUndefinedAndNullOptions');
-    spyOn(UtilsFunctions, 'removeDuplicatedOptions');
+    spyOn(UtilsFunctions, 'removeUndefinedAndNullOptionsWithFieldValue');
+    spyOn(UtilsFunctions, 'removeDuplicatedOptionsWithFieldValue');
     spyOn(component, 'setUndefinedLabels');
     spyOn(UtilsFunctions, 'sortOptionsByProperty');
     component.validAndSortOptions();
-    expect(removeUndefinedAndNullOptions).toHaveBeenCalled();
-    expect(removeDuplicatedOptions).toHaveBeenCalled();
+    expect(removeUndefinedAndNullOptionsWithFieldValue).toHaveBeenCalled();
+    expect(removeDuplicatedOptionsWithFieldValue).toHaveBeenCalled();
     expect(component.setUndefinedLabels).toHaveBeenCalled();
     expect(sortOptionsByProperty).not.toHaveBeenCalled();
   });
@@ -235,13 +237,13 @@ describe('PoMultiselectBaseComponent:', () => {
     component.options = [];
     component.sort = false;
 
-    spyOn(UtilsFunctions, 'removeUndefinedAndNullOptions');
-    spyOn(UtilsFunctions, 'removeDuplicatedOptions');
+    spyOn(UtilsFunctions, 'removeUndefinedAndNullOptionsWithFieldValue');
+    spyOn(UtilsFunctions, 'removeDuplicatedOptionsWithFieldValue');
     spyOn(component, 'setUndefinedLabels');
     spyOn(UtilsFunctions, 'sortOptionsByProperty');
     component.validAndSortOptions();
-    expect(removeUndefinedAndNullOptions).not.toHaveBeenCalled();
-    expect(removeDuplicatedOptions).not.toHaveBeenCalled();
+    expect(removeUndefinedAndNullOptionsWithFieldValue).not.toHaveBeenCalled();
+    expect(removeDuplicatedOptionsWithFieldValue).not.toHaveBeenCalled();
     expect(component.setUndefinedLabels).not.toHaveBeenCalled();
     expect(sortOptionsByProperty).not.toHaveBeenCalled();
   });
