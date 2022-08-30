@@ -20,7 +20,7 @@ export class PoMultiselectFilterService implements PoMultiselectFilter {
 
   constructor(private http: HttpClient) {}
 
-  getFilteredData({ value }: any): Observable<Array<PoMultiselectOption>> {
+  getFilteredData({ value }: any): Observable<Array<PoMultiselectOption | any>> {
     const params = value ? { filter: value } : {};
     return this.http
       .get(this.url, {
@@ -29,7 +29,7 @@ export class PoMultiselectFilterService implements PoMultiselectFilter {
       .pipe(map(response => this.parseToArrayMultiselectOptions(response['items'])));
   }
 
-  getObjectsByValues(value: Array<string | number>): Observable<Array<PoMultiselectOption>> {
+  getObjectsByValues(value: Array<string | number>): Observable<Array<PoMultiselectOption | any>> {
     return this.http
       .get(`${this.url}?${this.fieldValue}=${value.toString()}`)
       .pipe(map(response => this.parseToArrayMultiselectOptions(response['items'])));
@@ -41,7 +41,7 @@ export class PoMultiselectFilterService implements PoMultiselectFilter {
     this.fieldValue = fieldValue;
   }
 
-  private parseToArrayMultiselectOptions(items: Array<any>): Array<PoMultiselectOption> {
+  private parseToArrayMultiselectOptions(items: Array<any>): Array<PoMultiselectOption | any> {
     if (items && items.length > 0) {
       return items.map(item => this.parseToMultiselectOption(item));
     }
@@ -49,10 +49,10 @@ export class PoMultiselectFilterService implements PoMultiselectFilter {
     return [];
   }
 
-  private parseToMultiselectOption(item: any): PoMultiselectOption {
+  private parseToMultiselectOption(item: any): PoMultiselectOption | any {
     const label = item[this.fieldLabel];
     const value = item[this.fieldValue];
 
-    return { label, value };
+    return { [this.fieldLabel]: label, [this.fieldValue]: value };
   }
 }

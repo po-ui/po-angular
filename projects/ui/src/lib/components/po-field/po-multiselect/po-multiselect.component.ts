@@ -77,6 +77,12 @@ const providers = [
  *   <file name="sample-po-multiselect-heroes/sample-po-multiselect-heroes.component.ts"> </file>
  *   <file name="sample-po-multiselect-heroes/sample-po-multiselect-heroes.service.ts"> </file>
  * </example>
+ *
+ * <example name="po-multiselect-any-array" title="PO Multiselect - Array Any">
+ *   <file name="sample-po-multiselect-any-array/sample-po-multiselect-any-array.component.html"> </file>
+ *   <file name="sample-po-multiselect-any-array/sample-po-multiselect-any-array.component.ts"> </file>
+ * </example>
+ *
  */
 @Component({
   selector: 'po-multiselect',
@@ -101,7 +107,7 @@ export class PoMultiselectComponent
   visibleElement = false;
 
   private isCalculateVisibleItems: boolean = true;
-  private cacheOptions: Array<PoMultiselectOption>;
+  private cacheOptions: Array<PoMultiselectOption | any>;
 
   constructor(
     private renderer: Renderer2,
@@ -206,11 +212,11 @@ export class PoMultiselectComponent
         if (sum + extraDisclaimerSize > inputWidth) {
           this.visibleDisclaimers.splice(-2, 2);
           const label = '+' + (this.selectedOptions.length + 1 - i).toString();
-          this.visibleDisclaimers.push({ value: '', label: label });
+          this.visibleDisclaimers.push({ [this.fieldValue]: '', [this.fieldLabel]: label });
         } else {
           this.visibleDisclaimers.splice(-1, 1);
           const label = '+' + (this.selectedOptions.length - i).toString();
-          this.visibleDisclaimers.push({ value: '', label: label });
+          this.visibleDisclaimers.push({ [this.fieldValue]: '', [this.fieldLabel]: label });
         }
       }
     }
@@ -290,7 +296,9 @@ export class PoMultiselectComponent
 
   scrollToSelectedOptions() {
     if (this.selectedOptions && this.selectedOptions.length) {
-      const index = this.options.findIndex(option => option.value === this.selectedOptions[0].value);
+      const index = this.options.findIndex(
+        option => option[this.fieldValue] === this.selectedOptions[0][this.fieldValue]
+      );
       this.dropdown.scrollTo(index);
     }
   }
@@ -301,11 +309,11 @@ export class PoMultiselectComponent
   }
 
   changeSearch(event) {
-    if (event && event.value !== undefined) {
+    if (event && event[this.fieldValue] !== undefined) {
       if (this.filterService) {
-        this.filterSubject.next(event.value);
+        this.filterSubject.next(event[this.fieldValue]);
       } else {
-        this.searchByLabel(event.value, this.options, this.filterMode);
+        this.searchByLabel(event[this.fieldValue], this.options, this.filterMode);
       }
     } else {
       this.setVisibleOptionsDropdown(this.options);
@@ -316,7 +324,7 @@ export class PoMultiselectComponent
   }
 
   closeDisclaimer(value) {
-    const index = this.selectedOptions.findIndex(option => option.value === value);
+    const index = this.selectedOptions.findIndex(option => option[this.fieldValue] === value);
     this.selectedOptions.splice(index, 1);
 
     this.updateVisibleItems();
@@ -334,14 +342,14 @@ export class PoMultiselectComponent
     }
   }
 
-  applyFilter(value: string = ''): Observable<Array<PoMultiselectOption>> {
-    const param = { property: 'label', value: value };
+  applyFilter(value: string = ''): Observable<Array<PoMultiselectOption | any>> {
+    const param = { property: this.fieldLabel, value: value };
     return this.service.getFilteredData(param).pipe(
       catchError(err => {
         this.isServerSearching = false;
         return of([]);
       }),
-      tap((options: Array<PoMultiselectOption>) => {
+      tap((options: Array<PoMultiselectOption | any>) => {
         this.setOptionsByApplyFilter(options);
       })
     );
@@ -360,7 +368,7 @@ export class PoMultiselectComponent
     }
   }
 
-  private setOptionsByApplyFilter(items: Array<PoMultiselectOption>) {
+  private setOptionsByApplyFilter(items: Array<PoMultiselectOption | any>) {
     if (this.isFirstFilter) {
       this.cacheOptions = [...items];
       this.isFirstFilter = false;
