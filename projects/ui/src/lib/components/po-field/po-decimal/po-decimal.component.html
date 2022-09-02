@@ -1,7 +1,7 @@
 <po-field-container [p-label]="label" [p-help]="help" [p-optional]="!required && optional">
   <div class="po-field-container-content">
     <div *ngIf="icon" class="po-field-icon-container-left">
-      <po-icon class="po-field-icon" [class.po-field-icon-disabled]="disabled" [p-icon]="icon"></po-icon>
+      <po-icon class="po-field-icon po-icon-input" [class.po-field-icon-disabled]="disabled" [p-icon]="icon"></po-icon>
     </div>
 
     <input
@@ -10,11 +10,12 @@
       [attr.max]="max"
       [attr.min]="min"
       [attr.name]="name"
+      [attr.aria-label]="label"
       [autocomplete]="autocomplete"
       [class.po-input-icon-left]="icon"
       [class.po-input-icon-right]="clean"
       [disabled]="disabled"
-      [placeholder]="placeholder"
+      [placeholder]="disabled ? '' : placeholder"
       [readonly]="readonly"
       [required]="required"
       inputmode="decimal"
@@ -26,7 +27,12 @@
     />
 
     <div class="po-field-icon-container-right">
-      <po-clean *ngIf="clean && !disabled && !readonly" [p-element-ref]="inputEl" (p-change-event)="clear($event)">
+      <po-clean
+        class="po-icon-input"
+        *ngIf="clean && !disabled && !readonly"
+        [p-element-ref]="inputEl"
+        (p-change-event)="clear($event)"
+      >
       </po-clean>
     </div>
   </div>

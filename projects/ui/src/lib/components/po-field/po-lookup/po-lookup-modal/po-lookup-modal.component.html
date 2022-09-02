@@ -10,7 +10,7 @@
     <po-field-container class="po-lookup-header po-pull-right" [p-optional]="false">
       <div class="po-lookup-filter-content">
         <div class="po-field-icon-container-right">
-          <span #iconLookup class="po-icon po-field-icon po-icon-search" (click)="search()"> </span>
+          <span #iconLookup class="po-icon po-field-icon po-icon-search po-icon-input" (click)="search()"> </span>
         </div>
 
         <input
@@ -25,7 +25,7 @@
 
       <div *ngIf="advancedFilters && advancedFilters.length > 0" class="po-lookup-advanced-search">
         <span
-          class="po-lookup-advanced-search-link"
+          class="po-lookup-advanced-search-link po-icon-input"
           tabindex="0"
           (click)="onAdvancedFilter()"
           (keydown.enter)="onAdvancedFilter()"
