@@ -3,6 +3,8 @@
     <div
       #inputElement
       [tabindex]="disabled ? -1 : 0"
+      [attr.disabled]="disabled"
+      [attr.aria-label]="label"
       class="po-input po-input-icon-right po-multiselect-input po-clickable"
       [class.po-multiselect-input-auto]="autoHeight"
       [class.po-multiselect-input-static]="!autoHeight"
@@ -12,7 +14,7 @@
       (click)="toggleDropdownVisibility()"
       (blur)="onBlur()"
     >
-      <span *ngIf="placeholder && !visibleDisclaimers?.length" class="po-multiselect-input-placeholder">
+      <span *ngIf="placeholder && !disabled && !visibleDisclaimers?.length" class="po-multiselect-input-placeholder">
         {{ placeholder }}
       </span>
 
@@ -31,7 +33,7 @@
       <div class="po-field-icon-container-right">
         <span
           #iconElement
-          class="po-icon po-field-icon {{ dropdownIcon }}"
+          class="po-icon po-field-icon {{ dropdownIcon }} {{ disabled ? 'po-icon-input-disabled' : 'po-icon-input' }}"
           [ngClass]="disabled ? 'po-field-icon-disabled' : ''"
         >
         </span>

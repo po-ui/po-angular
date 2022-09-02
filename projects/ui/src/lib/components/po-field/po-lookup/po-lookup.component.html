@@ -4,20 +4,27 @@
       #inp
       class="po-input"
       type="text"
+      [attr.aria-label]="label"
       [ngClass]="clean && inp.value ? 'po-input-double-icon-right' : 'po-input-icon-right'"
       [autocomplete]="autocomplete"
       [disabled]="disabled"
-      [placeholder]="placeholder"
+      [placeholder]="disabled ? '' : placeholder"
       [required]="required"
       (blur)="searchEvent()"
     />
 
     <div class="po-field-icon-container-right">
-      <po-clean *ngIf="clean && !disabled" [p-element-ref]="inputEl" (p-change-event)="cleanModel()"> </po-clean>
+      <po-clean
+        class="po-icon-input"
+        *ngIf="clean && !disabled"
+        [p-element-ref]="inputEl"
+        (p-change-event)="cleanModel()"
+      >
+      </po-clean>
 
       <span
         #iconLookup
-        class="po-icon po-field-icon po-icon-search"
+        class="po-icon po-field-icon po-icon-search po-icon-input"
         tabindex="-1"
         [class.po-field-icon]="!disabled"
         [class.po-field-icon-disabled]="disabled"
@@ -35,7 +42,7 @@
     <div
       #inp
       [tabindex]="disabled ? -1 : 0"
-      class="po-input po-input-icon-right po-lookup-input"
+      class="po-input po-input-icon-right po-lookup-input po-icon-input"
       [class.po-lookup-input-auto]="autoHeight"
       [class.po-lookup-input-static]="!autoHeight"
       [class.po-lookup-input-disabled]="disabled"
@@ -59,7 +66,7 @@
     <div class="po-field-icon-container-right">
       <span
         #iconLookup
-        class="po-icon po-field-icon po-icon-search"
+        class="po-icon po-field-icon po-icon-search po-icon-input"
         tabindex="-1"
         [class.po-field-icon]="!disabled"
         [class.po-field-icon-disabled]="disabled"

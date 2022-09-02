@@ -1,11 +1,22 @@
-<po-field-container [p-help]="help" [p-label]="label" [p-optional]="!required && optional">
-  <div #dateRangeField class="po-datepicker-range-field po-input" [class.po-datepicker-range-field-disabled]="disabled">
+<po-field-container
+  [class.po-date-picker-container-disabled]="disabled"
+  [p-help]="help"
+  [p-label]="label"
+  [p-optional]="!required && optional"
+>
+  <div
+    #dateRangeField
+    class="po-datepicker-range-field po-input"
+    [class.po-datepicker-range-field-disabled]="disabled"
+    [attr.disabled]="disabled"
+  >
     <div class="po-datepicker-range-start-date">
       <input
         #startDateInput
         class="po-datepicker-range-input"
         maxlength="10"
         type="text"
+        [attr.aria-label]="label"
         [autocomplete]="autocomplete"
         [disabled]="disabled"
         [name]="startDateInputName"
@@ -39,13 +50,13 @@
     </div>
 
     <div class="po-datepicker-range-icon">
-      <po-clean *ngIf="enableCleaner" (p-change-event)="clear()"></po-clean>
+      <po-clean class="po-icon-input" *ngIf="enableCleaner" (p-change-event)="clear()"></po-clean>
     </div>
 
     <div class="po-datepicker-range-icon">
       <span
         #iconCalendar
-        class="po-icon po-field-icon po-icon-calendar"
+        class="po-icon po-field-icon po-icon-calendar {{ disabled ? 'po-icon-input-disabled' : 'po-icon-input' }}"
         [class.po-clickable]="!disabled && !readonly"
         [class.po-field-icon-disabled]="disabled || readonly"
         (click)="toggleCalendar()"
