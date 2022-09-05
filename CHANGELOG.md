@@ -2,6 +2,22 @@
 
 All notable changes to this project will be documented in this file. See [standard-version](https://github.com/conventional-changelog/standard-version) for commit guidelines.
 
+# [14.4.0](https://github.com/po-ui/po-angular/compare/v14.3.1...v14.4.0) (2022-09-05)
+
+
+### Bug Fixes
+
+* **button-group:** ajusta `selected` para ocorrer antes de `action` ([22f6cf7](https://github.com/po-ui/po-angular/commit/22f6cf730d3af2184b41f21c411ccef0ca82912d)), closes [#1234](https://github.com/po-ui/po-angular/issues/1234)
+* **translation:** corrected translation russian ([9c5cee9](https://github.com/po-ui/po-angular/commit/9c5cee96e12fb8dc5e5f603cebd2c3274b443d26))
+
+
+### Features
+
+* **accordion-item:** adiciona outputs ao expandir ou colapsar ([9c2bcc2](https://github.com/po-ui/po-angular/commit/9c2bcc27d46574e5f4d7652c702c0263e19123fe)), closes [#DTHFUI-6432](https://github.com/po-ui/po-angular/issues/DTHFUI-6432)
+* **switch:** aplica estilo definido pelo DS ([652fb96](https://github.com/po-ui/po-angular/commit/652fb969ffe36fffde97dd7bf0d604d6f3b7e902))
+
+
+
 ## [14.3.1](https://github.com/po-ui/po-angular/compare/v14.3.0...v14.3.1) (2022-08-29)
 
 
