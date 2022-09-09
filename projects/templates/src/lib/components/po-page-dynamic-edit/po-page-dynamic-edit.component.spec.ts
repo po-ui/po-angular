@@ -13,6 +13,7 @@ import { expectPropertiesValues } from './../../util-test/util-expect.spec';
 
 import { PoPageDynamicEditComponent } from './po-page-dynamic-edit.component';
 import { PoPageDynamicEditActions } from './interfaces/po-page-dynamic-edit-actions.interface';
+import { PoPageDynamicEditActionsLabels } from './interfaces/po-page-dynamic-edit-actions-labels.interface';
 import { PoDynamicFormStubComponent } from './test/po-dynamic-form-stub-component';
 import { PoPageDynamicEditBeforeSave } from './interfaces/po-page-dynamic-edit-before-save.interface';
 import { PoPageDynamicEditBeforeSaveNew } from './interfaces/po-page-dynamic-edit-before-save-new.interface';
@@ -78,6 +79,33 @@ describe('PoPageDynamicEditComponent: ', () => {
 
       component.actions = invalidActions[3];
       expect(component['_actions']).toEqual({});
+    });
+
+    it('p-actions-labels: should set property with valid value', () => {
+      const actionsLabels = {
+        cancel: 'Descatar',
+        saveNew: 'Gravar e novo',
+        save: 'Gravar'
+      };
+
+      component.actionsLabels = actionsLabels;
+      expect(component['_actionsLabels']).toEqual(actionsLabels);
+    });
+
+    it('p-actions-labels: should set property to {} if invalid values', () => {
+      const invalidActionsLabels: any = [[], [{}], null, 'test'];
+
+      component.actionsLabels = invalidActionsLabels[0];
+      expect(component['_actionsLabels']).toEqual({});
+
+      component.actionsLabels = invalidActionsLabels[1];
+      expect(component['_actionsLabels']).toEqual({});
+
+      component.actionsLabels = invalidActionsLabels[2];
+      expect(component['_actionsLabels']).toEqual({});
+
+      component.actionsLabels = invalidActionsLabels[3];
+      expect(component['_actionsLabels']).toEqual({});
     });
 
     it('p-fields: should call `getKeysByFields` and `getDuplicatesByFields` and set property with valid values', () => {

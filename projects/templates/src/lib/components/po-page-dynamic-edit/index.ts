@@ -1,5 +1,6 @@
 export * from './po-page-dynamic-edit.component';
 export * from './interfaces/po-page-dynamic-edit-actions.interface';
+export * from './interfaces/po-page-dynamic-edit-actions-labels.interface';
 export * from './interfaces/po-page-dynamic-edit-field.interface';
 export * from './interfaces/po-page-dynamic-edit-before-cancel.interface';
 export * from './interfaces/po-page-dynamic-edit-before-save.interface';
