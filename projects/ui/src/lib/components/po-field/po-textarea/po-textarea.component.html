@@ -7,13 +7,13 @@
       (focus)="eventOnFocus()"
       (input)="eventOnInput($event)"
       [attr.name]="name"
+      [attr.aria-label]="label"
       [disabled]="disabled"
-      [placeholder]="placeholder"
+      [placeholder]="disabled ? '' : placeholder"
       [readonly]="readonly"
       [required]="required"
       [rows]="rows"
-    >
-    </textarea>
+    ></textarea>
   </div>
 
   <po-field-container-bottom></po-field-container-bottom>
