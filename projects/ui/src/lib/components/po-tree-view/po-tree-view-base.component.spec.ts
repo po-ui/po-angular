@@ -183,7 +183,7 @@ describe('PoTreeViewBaseComponent:', () => {
       expect(spyExpandParentItem).not.toHaveBeenCalled();
     });
 
-    it('addItem: should add parentItem in items and call expandParentItem, addChildItemInParent and selectItemBySubItems', () => {
+    it('addItem: should add parentItem in items and call addChildItemInParent and selectItemBySubItems', () => {
       const childItem = { label: 'Nível 02', value: 2 };
       const parentItem = { label: 'Nível 01', value: 1 };
       const items = [];
@@ -195,6 +195,26 @@ describe('PoTreeViewBaseComponent:', () => {
       const spySelectItemBySubItems = spyOn(component, <any>'selectItemBySubItems');
 
       component['addItem'](items, childItem, parentItem);
+
+      expect(items.length).toBe(1);
+      expect(items).toEqual(expectedValue);
+      expect(spySelectItemBySubItems).toHaveBeenCalledWith(parentItem);
+      expect(spyAddChildItemInParent).toHaveBeenCalledWith(childItem, parentItem);
+      expect(spyExpandParentItem).not.toHaveBeenCalledWith(childItem, parentItem);
+    });
+
+    it('addItem: should add parentItem in items and call expandParentItem, addChildItemInParent and selectItemBySubItems', () => {
+      const childItem = { label: 'Nível 02', value: 2 };
+      const parentItem = { label: 'Nível 01', value: 1 };
+      const items = [];
+
+      const expectedValue = [parentItem];
+
+      const spyExpandParentItem = spyOn(component, <any>'expandParentItem');
+      const spyAddChildItemInParent = spyOn(component, <any>'addChildItemInParent');
+      const spySelectItemBySubItems = spyOn(component, <any>'selectItemBySubItems');
+
+      component['addItem'](items, childItem, parentItem, true);
 
       expect(items.length).toBe(1);
       expect(items).toEqual(expectedValue);
