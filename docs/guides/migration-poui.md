@@ -61,7 +61,7 @@ O `ng update` ajudará nas alterações necessárias para seu projeto seguir atu
   - Caso houver *breaking changes*, serão realizados as alterações possíveis, mas fique atento ao
   [CHANGELOG](https://github.com/po-ui/po-angular/blob/master/CHANGELOG.md);
   - Atualizar as versões dos pacotes:
-    - `@po-ui/ng-componentes`;
+    - `@po-ui/ng-components`;
     - `@po-ui/ng-templates`;
     - `@po-ui/ng-code-editor`;
     - `@po-ui/ng-storage`;
