@@ -53,7 +53,12 @@ export abstract class PoCheckboxBaseComponent implements ControlValueAccessor {
    */
   @Output('p-change') change: EventEmitter<any> = new EventEmitter<any>();
 
-  checkboxValue: boolean | null | string;
+  //propriedade interna recebida do checkbox-group para verificar se o checkbox está ativo, inativo ou indeterminate
+  @Input('p-checkboxValue') checkboxValue: boolean | null | string;
+
+  //propriedade interna recebida do checkbox-group para verificar se o checkbox é required
+  @Input('p-required') @InputBoolean() checkBoxRequired: boolean;
+
   id = uuid();
   propagateChange: any;
   onTouched;

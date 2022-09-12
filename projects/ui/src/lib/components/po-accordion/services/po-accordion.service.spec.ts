@@ -22,9 +22,9 @@ describe('PoAccordionService:', () => {
   describe('Methods:', () => {
     it('should call subjectChild.next with accordionItem in sendToParentAccordionItemClicked', () => {
       spyOn(accordionService['subjectChild'], 'next');
-      accordionService.sendToParentAccordionItemClicked(accordionItem);
+      accordionService.sendToParentAccordionItemClicked(accordionItem as any);
 
-      expect(accordionService['subjectChild'].next).toHaveBeenCalledWith(accordionItem);
+      expect(accordionService['subjectChild'].next).toHaveBeenCalledWith(accordionItem as any);
     });
 
     it('should call subjectChild.asObservable in receiveFromChildAccordionClicked', () => {

@@ -2,6 +2,55 @@
 
 All notable changes to this project will be documented in this file. See [standard-version](https://github.com/conventional-changelog/standard-version) for commit guidelines.
 
+# [14.4.0](https://github.com/po-ui/po-angular/compare/v14.3.1...v14.4.0) (2022-09-05)
+
+
+### Bug Fixes
+
+* **button-group:** ajusta `selected` para ocorrer antes de `action` ([22f6cf7](https://github.com/po-ui/po-angular/commit/22f6cf730d3af2184b41f21c411ccef0ca82912d)), closes [#1234](https://github.com/po-ui/po-angular/issues/1234)
+* **translation:** corrected translation russian ([9c5cee9](https://github.com/po-ui/po-angular/commit/9c5cee96e12fb8dc5e5f603cebd2c3274b443d26))
+
+
+### Features
+
+* **accordion-item:** adiciona outputs ao expandir ou colapsar ([9c2bcc2](https://github.com/po-ui/po-angular/commit/9c2bcc27d46574e5f4d7652c702c0263e19123fe)), closes [#DTHFUI-6432](https://github.com/po-ui/po-angular/issues/DTHFUI-6432)
+* **switch:** aplica estilo definido pelo DS ([652fb96](https://github.com/po-ui/po-angular/commit/652fb969ffe36fffde97dd7bf0d604d6f3b7e902))
+
+
+
+## [14.3.1](https://github.com/po-ui/po-angular/compare/v14.3.0...v14.3.1) (2022-08-29)
+
+
+### Bug Fixes
+
+* **table:** corrige ícone de ordenação ([d3f938c](https://github.com/po-ui/po-angular/commit/d3f938c87bf9900729302e96d7fabb8f7407de12))
+
+
+
+# [14.3.0](https://github.com/po-ui/po-angular/compare/v14.2.1...v14.3.0) (2022-08-22)
+
+
+### Bug Fixes
+
+* **breadcrumb:** ajusta execução de action ([0f71423](https://github.com/po-ui/po-angular/commit/0f714235e30a906aaf13c734d5d835d4a26ab413)), closes [#1325](https://github.com/po-ui/po-angular/issues/1325)
+
+
+### Features
+
+* **button:** adiciona a propriedade `p-size` ([d7633df](https://github.com/po-ui/po-angular/commit/d7633df2bca36b2cbc691aa1a79f4a65a9fab82a))
+* **button:** deprecia a propriedade `p-small` ([e79b7e1](https://github.com/po-ui/po-angular/commit/e79b7e1acfb1c3eaaab7f264a23696eb0946a67c))
+* **checkbox-group:** reutiliza `po-checkbox` interno ([c6da1b8](https://github.com/po-ui/po-angular/commit/c6da1b87c3b537f268ac43af7e7f7f251ceb27fc))
+* **combo:** permite usar o `p-options` com `any` ([4055562](https://github.com/po-ui/po-angular/commit/40555623c38e3a21f97bbd3ed709c58137de4af8))
+* **datepicker-range:** adiciona a propriedade `locale` ([e2acc38](https://github.com/po-ui/po-angular/commit/e2acc38cc6c8a55e945849c72da083b21d21cd0e)), closes [#1041](https://github.com/po-ui/po-angular/issues/1041)
+* **datepicker:** emite `onTouchedModel` quando data é selecionada ([97f1bf3](https://github.com/po-ui/po-angular/commit/97f1bf32ee725f939cfd3d03547c614a90434b7a)), closes [#1207](https://github.com/po-ui/po-angular/issues/1207)
+* **lookup:** repassa eventos do po-table ([851a033](https://github.com/po-ui/po-angular/commit/851a033652cf3afc9af47609c04f25ba4bc1cf63))
+* **select:** adiciona ` p-field-value` e `p-field-label` ([2b3bd2e](https://github.com/po-ui/po-angular/commit/2b3bd2e5ed6f68c2aebe619e67ab818e462b34e8))
+* **table:** adiciona ` p-selectable-entire-line` ([00e5983](https://github.com/po-ui/po-angular/commit/00e59833cf0b3fddc43da43d8b91d1a0cc49c89d))
+* **table:** altera posicionamento do checkbox-group ([4b22d24](https://github.com/po-ui/po-angular/commit/4b22d24d0c396788d21602874c856dea1970373a))
+* **widget:** adiciona UUID ([95f314b](https://github.com/po-ui/po-angular/commit/95f314b41d78eea152b01c4af4c9f6013a2a9f6c))
+
+
+
 ## [14.2.1](https://github.com/po-ui/po-angular/compare/v14.2.0...v14.2.1) (2022-08-15)
 
 

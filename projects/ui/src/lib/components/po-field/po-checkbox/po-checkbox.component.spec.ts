@@ -1,4 +1,4 @@
-import { ChangeDetectorRef } from '@angular/core';
+import { ChangeDetectorRef, ElementRef } from '@angular/core';
 import { ComponentFixture, TestBed } from '@angular/core/testing';
 
 import { configureTestSuite } from './../../../util-test/util-expect.spec';
@@ -32,6 +32,8 @@ describe('PoCheckboxComponent:', () => {
 
   describe('Methods:', () => {
     it('focus: should call `focus` of checkbox.', () => {
+      component.checkboxLabel = new ElementRef({ focus() {}, label: 'test' });
+
       const spyOnFocus = spyOn(component.checkboxLabel.nativeElement, 'focus');
       changeDetector.detectChanges();
       component.focus();
@@ -39,6 +41,7 @@ describe('PoCheckboxComponent:', () => {
     });
 
     it('focus: should`t call `focus` of checkbox if option is `disabled`.', () => {
+      component.checkboxLabel = new ElementRef({ focus() {}, label: 'test' });
       component.disabled = true;
       changeDetector.detectChanges();
 
@@ -167,6 +170,7 @@ describe('PoCheckboxComponent:', () => {
     });
 
     it('should set tabindex to -1 when checkbox is disabled.', () => {
+      component.label = 'Test';
       changeDetector.detectChanges();
       expect(nativeElement.querySelector('.po-checkbox-label[tabindex="-1"]')).toBeTruthy();
     });

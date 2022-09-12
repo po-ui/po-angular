@@ -63,10 +63,12 @@
       <ng-container *ngIf="comboOptionTemplate; then optionTemplate; else defaultOptionTemplate"></ng-container>
 
       <ng-template #defaultOptionTemplate>
-        <label *ngIf="option?.options; else optionLink" class="po-combo-item-title">{{ option.label }}</label>
+        <label *ngIf="option?.options; else optionLink" class="po-combo-item-title">{{
+          option[this.dynamicLabel]
+        }}</label>
         <ng-template #optionLink>
           <a class="po-combo-item">
-            <span style="pointer-events: none" [innerHTML]="getLabelFormatted(option?.label)"></span>
+            <span style="pointer-events: none" [innerHTML]="getLabelFormatted(option?.[this.dynamicLabel])"></span>
           </a>
         </ng-template>
       </ng-template>

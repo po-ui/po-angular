@@ -195,6 +195,7 @@ export class PoDatepickerComponent extends PoDatepickerBaseComponent implements 
   }
 
   dateSelected() {
+    this.onTouchedModel?.();
     if (!this.verifyMobile()) {
       this.inputEl.nativeElement.focus();
     }

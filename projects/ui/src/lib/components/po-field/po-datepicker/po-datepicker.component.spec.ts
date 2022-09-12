@@ -680,11 +680,14 @@ describe('PoDatepickerComponent:', () => {
     describe('dateSelected:', () => {
       it('should set `calendar.visible` to false', () => {
         component.visible = true;
+        component['onTouchedModel'] = () => {};
 
+        spyOn(component, <any>'onTouchedModel');
         spyOn(component, <any>'closeCalendar');
 
         component.dateSelected();
 
+        expect(component['onTouchedModel']).toHaveBeenCalled();
         expect(component['closeCalendar']).toHaveBeenCalled();
       });
 

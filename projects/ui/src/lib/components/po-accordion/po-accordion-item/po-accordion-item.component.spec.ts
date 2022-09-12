@@ -29,22 +29,22 @@ describe('PoAccordionItemComponent:', () => {
   });
 
   describe('Methods:', () => {
-    it('collapse: should set `expanded` to `false` and call `accordionService.sendToParentAccordionItemClicked`', () => {
-      spyOn(component['accordionService'], 'sendToParentAccordionItemClicked');
+    it('collapse: should set `expanded` to `false` and emits `p-collapse` event', () => {
+      spyOn(component.collapseEvent, 'emit');
 
       component.collapse();
 
       expect(component.expanded).toBe(false);
-      expect(component['accordionService'].sendToParentAccordionItemClicked).toHaveBeenCalled();
+      expect(component.collapseEvent.emit).toHaveBeenCalled();
     });
 
-    it('expand: should set `expanded` to `true` and call `accordionService.sendToParentAccordionItemClicked`', () => {
-      spyOn(component['accordionService'], 'sendToParentAccordionItemClicked');
+    it('expand: should set `expanded` to `true` and emits `p-expand` event', () => {
+      spyOn(component.expandEvent, 'emit');
 
       component.expand();
 
       expect(component.expanded).toBe(true);
-      expect(component['accordionService'].sendToParentAccordionItemClicked).toHaveBeenCalled();
+      expect(component.expandEvent.emit).toHaveBeenCalled();
     });
   });
 });
