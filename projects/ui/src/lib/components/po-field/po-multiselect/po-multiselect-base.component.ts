@@ -625,7 +625,7 @@ export abstract class PoMultiselectBaseComponent implements ControlValueAccessor
     this.selectedOptions = [];
 
     if (newOptions.length === 0) {
-      this.lastLengthModel = 0;
+      this.lastLengthModel = undefined;
     }
 
     if (this.filterService) {

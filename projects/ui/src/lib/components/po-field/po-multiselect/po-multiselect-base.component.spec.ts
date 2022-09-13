@@ -569,14 +569,14 @@ describe('PoMultiselectBaseComponent:', () => {
       expect(component.updateVisibleItems).toHaveBeenCalled();
     });
 
-    it('updateSelectedOptions: should set `0` for `lastLengthModel` if `newOptions.lenght` is `0`', () => {
+    it('updateSelectedOptions: should set `undefined` for `lastLengthModel` if `newOptions.lenght` is `0`', () => {
       spyOn(component, 'updateVisibleItems');
       const params = [];
       const options = [];
       component.filterService = poMultiselectFilterServiceStub;
       component['updateSelectedOptions'](params, options);
       expect(component.selectedOptions).toEqual([]);
-      expect(component.lastLengthModel).toBe(0);
+      expect(component.lastLengthModel).toBeUndefined();
       expect(component.updateVisibleItems).toHaveBeenCalled();
     });
 
