@@ -1,12 +1,11 @@
-import { ChangeDetectorRef } from '@angular/core';
 import { ComponentFixture, TestBed } from '@angular/core/testing';
 import { NG_VALUE_ACCESSOR } from '@angular/forms';
 
-import { configureTestSuite } from './../../../util-test/util-expect.spec';
+import { configureTestSuite, expectPropertiesValues, expectSettersMethod } from './../../../util-test/util-expect.spec';
+
 import { PoRadioComponent } from './po-radio.component';
 
 describe('PoRadioComponent', () => {
-  let changeDetector: any;
   let component: PoRadioComponent;
   let fixture: ComponentFixture<PoRadioComponent>;
   let nativeElement: any;
@@ -20,90 +19,69 @@ describe('PoRadioComponent', () => {
   beforeEach(() => {
     fixture = TestBed.createComponent(PoRadioComponent);
     component = fixture.componentInstance;
-    nativeElement = fixture.debugElement.nativeElement;
 
-    changeDetector = fixture.componentRef.injector.get(ChangeDetectorRef);
+    nativeElement = fixture.debugElement.nativeElement;
     fixture.debugElement.injector.get(NG_VALUE_ACCESSOR);
+
     fixture.detectChanges();
   });
 
-  it('should create', () => {
+  it('should be created', () => {
     expect(component).toBeTruthy();
   });
 
+  describe('Properties:', () => {
+    it('should update property `p-size` with valid values', () => {
+      const validValues = ['medium', 'large'];
+
+      expectPropertiesValues(component, 'size', validValues, validValues);
+    });
+
+    it('should update property `p-size` with `medium` when invalid values', () => {
+      const invalidValues = ['small', 'extraLarge'];
+
+      expectPropertiesValues(component, 'size', invalidValues, 'medium');
+    });
+  });
+
   describe('Methods:', () => {
-    it('focus: should call `focus` of radio.', () => {
-      const spyOnFocus = spyOn(component.radioLabel.nativeElement, 'focus');
+    it('focus: should call `focus` of radio', () => {
+      component.radioLabel = {
+        nativeElement: {
+          focus: () => {}
+        }
+      };
+
+      spyOn(component.radioLabel.nativeElement, 'focus');
+
       component.focus();
 
-      expect(spyOnFocus).toHaveBeenCalled();
+      expect(component.radioLabel.nativeElement.focus).toHaveBeenCalled();
     });
 
-    it('focus: should`t call `focus` of radio if options is `disabled`.', () => {
+    it('focus: should`t call `focus` of radio if `disabled`', () => {
+      component.radioLabel = {
+        nativeElement: {
+          focus: () => {}
+        }
+      };
       component.disabled = true;
-      const spyOnFocus = spyOn(component.radioLabel.nativeElement, 'focus');
+
+      spyOn(component.radioLabel.nativeElement, 'focus');
+
       component.focus();
 
-      expect(spyOnFocus).not.toHaveBeenCalled();
-    });
-
-    describe('onKeyDown:', () => {
-      let fakeEvent: any;
-
-      beforeEach(() => {
-        fakeEvent = {
-          which: 32,
-          keyCode: 32,
-          preventDefault: () => {}
-        };
-      });
-
-      it('should call `checkOption` and `preventDefault` if event `which` from spacebar', () => {
-        const spyOnCheckOption = spyOn(component, 'checkOption');
-        const spyOnPreventDefault = spyOn(fakeEvent, 'preventDefault');
-
-        component.onKeyDown(fakeEvent, component.radioValue);
-
-        expect(spyOnCheckOption).toHaveBeenCalledWith(component.radioValue);
-        expect(spyOnPreventDefault).toHaveBeenCalled();
-      });
-
-      it('shouldn`t call `checkOption` and `preventDefault` if event `which` or `keyCode` from tab.', () => {
-        fakeEvent.which = 9;
-        fakeEvent.keyCode = 9;
-
-        const spyOnCheckOption = spyOn(component, 'checkOption');
-        const spyOnPreventDefault = spyOn(fakeEvent, 'preventDefault');
-
-        component.onKeyDown(fakeEvent, component.radioValue);
-
-        expect(spyOnCheckOption).not.toHaveBeenCalled();
-        expect(spyOnPreventDefault).not.toHaveBeenCalled();
-      });
-    });
-
-    it('changeModelValue: should update `changeModelValue` with property values', () => {
-      const items = [
-        { value: true, expectedValue: true },
-        { value: false, expectedValue: false },
-        { value: 'false', expectedValue: false },
-        { value: 'true', expectedValue: false },
-        { value: 'anotherValue', expectedValue: false }
-      ];
-
-      items.forEach(item => {
-        component['changeModelValue'](item.value);
-        expect(component.radioValue).toEqual(item.expectedValue);
-      });
+      expect(component.radioLabel.nativeElement.focus).not.toHaveBeenCalled();
     });
 
     it('onBlur: should call `onTouched` on blur', () => {
-      component.onTouched = value => {};
+      component['onTouched'] = value => {};
 
-      spyOn(component, 'onTouched');
+      spyOn(component, <any>'onTouched');
+
       component.onBlur();
 
-      expect(component.onTouched).toHaveBeenCalledWith();
+      expect(component['onTouched']).toHaveBeenCalledWith();
     });
 
     it('onBlur: shouldn´t throw error if onTouched is falsy', () => {
@@ -113,44 +91,128 @@ describe('PoRadioComponent', () => {
 
       expect(fnError).not.toThrow();
     });
-  });
 
-  describe('Templates:', () => {
-    it('should have label.', () => {
-      const newLabel = 'PO';
-      component.label = newLabel;
+    it('changeValue: shouldn`t call `change.emit` and `updateModel` if radio value is false', () => {
+      component.value = true;
 
-      changeDetector.detectChanges();
-      expect(nativeElement.querySelector('.po-radio-label')).toBeTruthy();
+      spyOn(component.change, 'emit');
+      spyOn(component, <any>'updateModel');
+
+      component.changeValue(false);
+      expect(component['updateModel']).not.toHaveBeenCalled();
+      expect(component.change.emit).not.toHaveBeenCalled();
     });
 
-    it('should set tabindex to -1 when radio is disabled.', () => {
-      changeDetector.detectChanges();
-      expect(nativeElement.querySelector('.po-radio-label[tabindex="-1"]')).toBeTruthy();
+    it('changeValue: should call `change.emit` and `updateModel` if radio value is true', () => {
+      component.value = false;
+
+      spyOn(component.change, 'emit');
+      spyOn(component, <any>'updateModel');
+
+      component.changeValue(true);
+      expect(component['updateModel']).toHaveBeenCalledWith(true);
+      expect(component.change.emit).toHaveBeenCalledWith(true);
     });
 
-    it('aria-checked should be true if radio is true', () => {
-      component.radioValue = true;
-      changeDetector.detectChanges();
-      const spanRadio = nativeElement.querySelector('.po-radio');
+    it('onWriteValue: should updated value and call `markForCheck`', () => {
+      const expectedValue = false;
 
-      expect(spanRadio.getAttribute('aria-checked')).toBe('true');
+      component.value = true;
+
+      component['changeDetector'] = <any>{ markForCheck: () => {} };
+      spyOn(component['changeDetector'], 'markForCheck');
+
+      component.onWriteValue(expectedValue);
+
+      expect(component['changeDetector'].markForCheck).toHaveBeenCalled();
+      expect(component.value).toBe(expectedValue);
     });
 
-    it('aria-checked should be null if radio is null', () => {
-      component.radioValue = null;
-      changeDetector.detectChanges();
-      const spanRadio = nativeElement.querySelector('.po-radio');
+    it('onWriteValue: shouldn`t updated value if new value equals old value', () => {
+      const expectedValue = true;
 
-      expect(spanRadio.getAttribute('aria-checked')).toBeNull();
+      component.value = expectedValue;
+
+      component['changeDetector'] = <any>{ markForCheck: () => {} };
+
+      spyOn(component['changeDetector'], 'markForCheck');
+
+      component.onWriteValue(expectedValue);
+
+      expect(component['changeDetector'].markForCheck).not.toHaveBeenCalled();
+      expect(component.value).toBe(expectedValue);
     });
 
-    it('aria-checked should be false if radio is false', () => {
-      component.radioValue = false;
-      changeDetector.detectChanges();
-      const spanRadio = nativeElement.querySelector('.po-radio');
+    it('eventClick: shouldn`t call changeValue if disabled is true', () => {
+      component.disabled = true;
 
-      expect(spanRadio.getAttribute('aria-checked')).toBe('false');
+      spyOn(component, 'changeValue');
+
+      component.eventClick();
+
+      expect(component.changeValue).not.toHaveBeenCalled();
+    });
+
+    it('eventClick: should call changeValue', () => {
+      component.disabled = false;
+
+      spyOn(component, 'changeValue');
+
+      component.eventClick();
+
+      expect(component.changeValue).toHaveBeenCalled();
+    });
+
+    it('focusIn: should set attribute focus in label element', () => {
+      component.focusIn();
+
+      expect(component.radioLabel.nativeElement.hasAttribute('focus')).toBeTrue();
+    });
+
+    it('focusOut: should remove attibute focus from label element', () => {
+      component.radioLabel.nativeElement.setAttribute('focus', '');
+
+      component.focusOut();
+
+      expect(component.radioLabel.nativeElement.hasAttribute('focus')).toBeFalse();
+    });
+
+    describe('onKeyDown:', () => {
+      let fakeEvent;
+
+      beforeEach(() => {
+        fakeEvent = {
+          keyCode: 32,
+          which: 32
+        };
+      });
+
+      it('should call preventDefault and eventClick when keycode and which equal to 32', () => {
+        spyOn(component, 'eventClick');
+
+        component.onKeyDown(fakeEvent);
+
+        expect(component.eventClick).toHaveBeenCalled();
+      });
+
+      it('should call preventDefault and eventClick when keycode equal to 32', () => {
+        fakeEvent.which = 12;
+        spyOn(component, 'eventClick');
+
+        component.onKeyDown(fakeEvent);
+
+        expect(component.eventClick).toHaveBeenCalled();
+      });
+
+      it('should not call preventDefault and eventClick when keycode and which not equal to 32', () => {
+        fakeEvent.which = 12;
+        fakeEvent.keyCode = 12;
+        spyOn(component, 'eventClick');
+
+        component.onKeyDown(fakeEvent);
+
+        expect(component.eventClick).not.toHaveBeenCalled();
+      });
     });
   });
 });
