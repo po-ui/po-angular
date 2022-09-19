@@ -3,6 +3,7 @@ import { Directive } from '@angular/core';
 import { expectPropertiesValues } from '../../../util-test/util-expect.spec';
 
 import { PoCheckboxBaseComponent } from './po-checkbox-base.component';
+import { PoCheckboxSize } from './po-checkbox-size.enum';
 
 @Directive()
 class PoCheckboxComponent extends PoCheckboxBaseComponent {
@@ -34,6 +35,18 @@ describe('PoCheckboxBaseComponent:', () => {
       const booleanInvalidValues = [undefined, null, 2, 'string', 0, NaN, false];
 
       expectPropertiesValues(component, 'disabled', booleanInvalidValues, false);
+    });
+
+    it('size: should update with valid values', () => {
+      const validValues = ['medium', 'large', PoCheckboxSize.medium, PoCheckboxSize.large];
+      const expectedValidValues = ['medium', 'large', 'medium', 'large'];
+
+      expectPropertiesValues(component, 'size', validValues, expectedValidValues);
+    });
+    it('size: should update with `medium` when invalid values', () => {
+      const invalidValues = [true, false, 'sm', 'lg'];
+
+      expectPropertiesValues(component, 'size', invalidValues, 'medium');
     });
   });
 
