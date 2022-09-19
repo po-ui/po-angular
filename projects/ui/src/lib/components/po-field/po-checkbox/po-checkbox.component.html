@@ -4,7 +4,13 @@
   (click)="checkOption(checkboxValue)"
   (keydown)="onKeyDown($event, checkboxValue)"
 >
-  <div role="checkbox" class="po-checkbox-outline" [tabindex]="disabled ? -1 : 0" [attr.aria-checked]="checkboxValue">
+  <div
+    role="checkbox"
+    class="po-checkbox-outline"
+    [attr.p-size]="size"
+    [tabindex]="disabled ? -1 : 0"
+    [attr.aria-checked]="checkboxValue"
+  >
     <span
       [attr.aria-checked]="checkboxValue"
       aria-label=" "

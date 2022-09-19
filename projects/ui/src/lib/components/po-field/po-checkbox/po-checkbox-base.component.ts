@@ -3,6 +3,7 @@ import { EventEmitter, Input, Output, Directive } from '@angular/core';
 
 import { convertToBoolean, uuid } from './../../../utils/util';
 import { InputBoolean } from '../../../decorators';
+import { PoCheckboxSize } from './po-checkbox-size.enum';
 
 /**
  * @description
@@ -80,6 +81,30 @@ export abstract class PoCheckboxBaseComponent implements ControlValueAccessor {
 
   get disabled(): boolean {
     return this._disabled;
+  }
+
+  private _size?: string = PoCheckboxSize.medium;
+
+  /**
+   * @optional
+   *
+   * @description
+   *
+   * Define o tamanho do *checkbox*
+   *
+   * Valores válidos:
+   * - `medium`: o `po-checkbox` fica do tamanho padrão, com 24px de altura.;
+   * - `large`: o `po-checkbox` fica maior, com 32px de altura.;
+   *
+   * @default `medium`
+   *
+   */
+  @Input('p-size') set size(value: string) {
+    this._size = PoCheckboxSize[value] ? PoCheckboxSize[value] : PoCheckboxSize.medium;
+  }
+
+  get size(): string {
+    return this._size;
   }
 
   changeValue() {
