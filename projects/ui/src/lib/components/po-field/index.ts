@@ -1,4 +1,5 @@
 export * from './po-checkbox/po-checkbox.component';
+export * from './po-checkbox/po-checkbox-size.enum';
 export * from './po-checkbox-group/interfaces/po-checkbox-group-option.interface';
 export * from './po-checkbox-group/po-checkbox-group.component';
 export * from './po-clean/po-clean.component';

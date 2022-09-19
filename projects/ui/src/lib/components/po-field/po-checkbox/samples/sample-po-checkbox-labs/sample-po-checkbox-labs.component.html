@@ -3,6 +3,7 @@
   [(ngModel)]="checkbox"
   [p-disabled]="disabled"
   [p-label]="label"
+  [p-size]="size ? 'large' : 'medium'"
   (p-change)="changeEvent('p-change')"
 >
 </po-checkbox>
@@ -21,7 +22,10 @@
   <div class="po-row">
     <po-input class="po-sm-6" name="label" [(ngModel)]="label" p-label="Label"> </po-input>
 
-    <po-switch class="po-sm-6" name="disabled" [(ngModel)]="disabled" p-label="Disabled"> </po-switch>
+    <po-switch class="po-sm-3" name="disabled" [(ngModel)]="disabled" p-label="Disabled"> </po-switch>
+
+    <po-switch class="po-sm-3" name="size" [(ngModel)]="size" p-label="Size" p-label-off="medium" p-label-on="large">
+    </po-switch>
   </div>
 
   <div class="po-row">
