@@ -64,7 +64,7 @@ export class PoButtonGroupBaseComponent {
    *
    * Define o modo de seleção de botões.
    *
-   * > Veja os valores válidos no *enum* `PoMultiselectFilterMode`.
+   * > Veja os valores válidos no *enum* `PoButtonGroupToggle`.
    *
    * @default `none`
    */
