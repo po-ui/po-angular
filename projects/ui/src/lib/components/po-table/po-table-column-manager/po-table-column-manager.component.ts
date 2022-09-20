@@ -24,27 +24,19 @@ const PoTableColumnManagerMaxColumnsDefault = 99999;
 export const poTableColumnManagerLiteralsDefault = {
   en: {
     columnsManager: 'Columns manager',
-    restoreDefault: 'Restore default',
-    up: 'up',
-    down: 'down'
+    restoreDefault: 'Restore default'
   },
   es: {
     columnsManager: 'Gerente de columna',
-    restoreDefault: 'Restaurar por defecto',
-    up: 'arriba',
-    down: 'abajo'
+    restoreDefault: 'Restaurar por defecto'
   },
   pt: {
     columnsManager: 'Gerenciador de colunas',
-    restoreDefault: 'Restaurar padrão',
-    up: 'acima',
-    down: 'abaixo'
+    restoreDefault: 'Restaurar padrão'
   },
   ru: {
     columnsManager: 'менеджер колонок',
-    restoreDefault: 'сброс настроек',
-    up: 'вверх',
-    down: 'вниз'
+    restoreDefault: 'сброс настроек'
   }
 };
 
@@ -139,44 +131,22 @@ export class PoTableColumnManagerComponent implements OnChanges, OnDestroy {
     this.checkChanges(defaultColumns, this.restoreDefaultEvent);
   }
 
-  changePosition(option, direction: Direction) {
+  changePosition({ option, direction }) {
     const indexColumn = this.columns.findIndex(el => el.property === option.value);
     const newColumn = [...this.columns];
 
-    const hasDisabled: boolean = this.verifyArrowDisabled(option, direction);
-
-    this.changePositionColumn(newColumn, indexColumn, direction, hasDisabled);
+    this.changePositionColumn(newColumn, indexColumn, direction);
     this.columns = newColumn;
     this.visibleColumnsChange.emit(this.columns);
   }
 
-  verifyArrowDisabled(option, direction: Direction) {
-    const index = this.columns.findIndex(el => el.property === option.value);
-    const existsDetail = this.columns.some(function (el) {
-      return el.property === 'detail';
-    });
-    const valueSubtraction = existsDetail ? 2 : 1;
-
-    if (index === 0 && direction === 'up') {
-      return true;
+  private changePositionColumn(array: Array<PoTableColumn>, index: number, direction: Direction) {
+    if (direction === 'up') {
+      array.splice(index, 0, array.splice(index - 1, 1)[0]);
     }
 
-    if (index === this.columns.length - valueSubtraction && direction === 'down') {
-      return true;
-    }
-
-    return false;
-  }
-
-  private changePositionColumn(array: Array<PoTableColumn>, index: number, direction: Direction, hasDisabled: boolean) {
-    if (!hasDisabled) {
-      if (direction === 'up') {
-        array.splice(index, 0, array.splice(index - 1, 1)[0]);
-      }
-
-      if (direction === 'down') {
-        array.splice(index, 0, array.splice(index + 1, 1)[0]);
-      }
+    if (direction === 'down') {
+      array.splice(index, 0, array.splice(index + 1, 1)[0]);
     }
   }
 

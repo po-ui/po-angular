@@ -6,6 +6,7 @@ import { configureTestSuite } from './../../../util-test/util-expect.spec';
 import { PoCheckboxGroupComponent } from './po-checkbox-group.component';
 import { PoFieldContainerBottomComponent } from './../po-field-container/po-field-container-bottom/po-field-container-bottom.component';
 import { PoFieldContainerComponent } from '../po-field-container/po-field-container.component';
+import { NG_VALIDATORS, NG_VALUE_ACCESSOR } from '@angular/forms';
 
 describe('PoCheckboxGroupComponent:', () => {
   let changeDetector: any;
@@ -40,6 +41,9 @@ describe('PoCheckboxGroupComponent:', () => {
     ];
 
     changeDetector = fixture.componentRef.injector.get(ChangeDetectorRef);
+    fixture.debugElement.injector.get(NG_VALUE_ACCESSOR);
+    fixture.debugElement.injector.get(NG_VALIDATORS);
+
     changeDetector.detectChanges();
 
     nativeElement = fixture.debugElement.nativeElement;
