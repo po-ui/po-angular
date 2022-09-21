@@ -24,6 +24,7 @@ import { PoLookupColumn } from './interfaces/po-lookup-column.interface';
 import { PoLookupFilter } from './interfaces/po-lookup-filter.interface';
 import { PoLookupLiterals } from './interfaces/po-lookup-literals.interface';
 import { PoLookupFilterService } from './services/po-lookup-filter.service';
+import { PoLookupModalService } from './services/po-lookup-modal.service';
 
 /**
  * @description
@@ -461,7 +462,11 @@ export abstract class PoLookupBaseComponent
     return this._disabled;
   }
 
-  constructor(private defaultService: PoLookupFilterService, @Inject(Injector) private injector: Injector) {}
+  constructor(
+    private defaultService: PoLookupFilterService,
+    @Inject(Injector) private injector: Injector,
+    public poLookupModalService: PoLookupModalService
+  ) {}
 
   ngOnDestroy() {
     if (this.getSubscription) {
@@ -483,6 +488,11 @@ export abstract class PoLookupBaseComponent
   }
 
   ngOnChanges(changes: SimpleChanges) {
+    if (changes.columns?.currentValue) {
+      this.columns = changes.columns.currentValue;
+      this.poLookupModalService?.setChangeColumns(this.columns);
+    }
+
     if (changes.multiple && isTypeof(this.filterService, 'string')) {
       this.service.setConfig(this.filterService, this.fieldValue, this.multiple);
     }
