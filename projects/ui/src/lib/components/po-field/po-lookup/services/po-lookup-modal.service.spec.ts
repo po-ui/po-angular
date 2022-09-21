@@ -104,4 +104,25 @@ describe('PoLookupModalService:', () => {
 
     expect(poLookupModalService.selectValue).toHaveBeenCalled();
   });
+
+  it('should call a setChangeColumns function', () => {
+    const columns = [{ label: 'apelido', property: 'nickname' }];
+
+    spyOn(poLookupModalService, 'setChangeColumns');
+
+    poLookupModalService.setChangeColumns(columns);
+
+    expect(poLookupModalService.setChangeColumns).toHaveBeenCalled();
+  });
+
+  it('should change the columns when componentRef is not null', () => {
+    const columns = [{ 'label': 'apelido', 'property': 'nickname' }];
+    params.service = lookupFilterService;
+
+    poLookupModalService.openModal(params);
+    poLookupModalService.setChangeColumns(columns);
+    poLookupModalService['componentRef'].changeDetectorRef.detectChanges();
+
+    expect(poLookupModalService['componentRef'].instance.columns).toEqual(columns);
+  });
 });

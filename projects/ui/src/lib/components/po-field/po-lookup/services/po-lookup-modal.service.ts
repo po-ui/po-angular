@@ -87,6 +87,13 @@ export class PoLookupModalService {
     this.componentRef.instance.openModal();
   }
 
+  setChangeColumns(columns) {
+    if (this.componentRef !== null) {
+      this.componentRef.instance.columns = columns;
+      this.componentRef.changeDetectorRef.detectChanges();
+    }
+  }
+
   // Este metodo é chamado quando é selecionado um item na lookup modal.
   selectValue(value) {
     if (value) {
