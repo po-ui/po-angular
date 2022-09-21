@@ -43,6 +43,11 @@ import { PoUploadStatus } from './po-upload-status.enum';
  *   <file name="sample-po-upload-resume/sample-po-upload-resume.component.ts"> </file>
  * </example>
  *
+ * <example name="po-upload-resume-drag-drop" title="PO Upload - Resume - Drag & Drop">
+ *   <file name="sample-po-upload-resume-drag-drop/sample-po-upload-resume-drag-drop.component.html"> </file>
+ *   <file name="sample-po-upload-resume-drag-drop/sample-po-upload-resume-drag-drop.component.ts"> </file>
+ * </example>
+ *
  * <example name="po-upload-rs" title="PO Upload - Realize & Show">
  *   <file name="sample-po-upload-rs/sample-po-upload-rs.component.html"> </file>
  *   <file name="sample-po-upload-rs/sample-po-upload-rs.component.ts"> </file>

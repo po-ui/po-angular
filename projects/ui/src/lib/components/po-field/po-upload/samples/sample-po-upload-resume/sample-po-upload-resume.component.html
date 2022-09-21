@@ -4,7 +4,8 @@
   </div>
 
   <div class="po-row">
-    <po-textarea class="po-md-12" name="biograph" [(ngModel)]="biograph" p-label="Biograph" p-required> </po-textarea>
+    <po-textarea class="po-md-12" name="biograph" [(ngModel)]="biograph" p-label="Biograph" [p-required]="true">
+    </po-textarea>
   </div>
 
   <div class="po-row">
@@ -15,20 +16,21 @@
     <po-upload
       class="po-md-12"
       name="resume"
-      [(ngModel)]="resume"
+      [ngModel]="resume"
+      (ngModelChange)="resume = $event"
       p-label="Resume"
-      p-required
+      [p-required]="true"
       p-url="https://po-sample-api.herokuapp.com/v1/uploads/addFile"
-      [p-restrictions]="{ maxFileSize: '204800' }"
-      (p-error)="resumeUploadError()"
-      (p-success)="resumeUploadSuccess()"
+      [p-restrictions]="{ maxFileSize: 204800 }"
+      (p-error)="resumeUploadError($event)"
+      (p-success)="resumeUploadSuccess($event)"
     >
     </po-upload>
   </div>
 
   <div class="po-row">
     <po-button
-      class="po-md-4"
+      class="po-md-4 po-mt-2"
       p-label="Apply"
       [p-disabled]="formOpportunity.invalid || !uploadedResume"
       (p-click)="apply()"
