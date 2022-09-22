@@ -43,13 +43,17 @@ export class PoMultiselectDropdownComponent {
   @Input('p-selected-options') selectedOptions: Array<any> = [];
 
   /** Propriedade que recebe a lista com todas as opções. */
-  @Input('p-options') options: Array<PoMultiselectOption> = [];
+  @Input('p-options') options: Array<PoMultiselectOption | any> = [];
 
   /** Propriedade que recebe a lista de opções que deverão ser criadas no dropdown. */
-  @Input('p-visible-options') visibleOptions: Array<PoMultiselectOption> = [];
+  @Input('p-visible-options') visibleOptions: Array<PoMultiselectOption | any> = [];
 
   /** Propriedade que indica se o campo "Selecionar todos" deverá ser escondido. */
   @Input('p-hide-select-all') hideSelectAll?: boolean = false;
+
+  @Input('p-field-value') fieldValue: string;
+
+  @Input('p-field-label') fieldLabel: string;
 
   /** Evento disparado a cada tecla digitada na pesquisa. */
   @Output('p-change-search') changeSearch = new EventEmitter();
@@ -90,7 +94,7 @@ export class PoMultiselectDropdownComponent {
   }
 
   isSelectedItem(option: PoMultiselectOption) {
-    return this.selectedOptions.some(selectedItem => selectedItem.value === option.value);
+    return this.selectedOptions.some(selectedItem => selectedItem[this.fieldValue] === option[this.fieldValue]);
   }
 
   clickItem(check, option) {
@@ -102,7 +106,7 @@ export class PoMultiselectDropdownComponent {
   }
 
   onClickSelectAll() {
-    const selectedValues = this.selectedOptions.map(({ value }) => value);
+    const selectedValues = this.selectedOptions.map(({ [this.fieldValue]: value }) => value);
 
     if (this.everyVisibleOptionsSelected(selectedValues)) {
       this.selectedOptions = [];
@@ -116,21 +120,23 @@ export class PoMultiselectDropdownComponent {
     if (checked) {
       this.selectedOptions.push(option);
     } else {
-      this.selectedOptions = this.selectedOptions.filter(selectedOption => selectedOption.value !== option.value);
+      this.selectedOptions = this.selectedOptions.filter(
+        selectedOption => selectedOption[this.fieldValue] !== option[this.fieldValue]
+      );
     }
     this.change.emit(this.selectedOptions);
   }
 
   everyVisibleOptionsSelected(selectedValues) {
-    return this.visibleOptions.every(visibleOption => selectedValues.includes(visibleOption.value));
+    return this.visibleOptions.every(visibleOption => selectedValues.includes(visibleOption[this.fieldValue]));
   }
 
   someVisibleOptionsSelected(selectedValues) {
-    return this.visibleOptions.some(visibleOption => selectedValues.includes(visibleOption.value));
+    return this.visibleOptions.some(visibleOption => selectedValues.includes(visibleOption[this.fieldValue]));
   }
 
   getStateSelectAll() {
-    const selectedValues = this.selectedOptions.map(({ value }) => value);
+    const selectedValues = this.selectedOptions.map(({ [this.fieldValue]: value }) => value);
 
     if (this.everyVisibleOptionsSelected(selectedValues)) {
       return true;
@@ -161,7 +167,7 @@ export class PoMultiselectDropdownComponent {
     const newSelectedOptions = [...this.selectedOptions];
 
     for (const visibleOption of this.visibleOptions) {
-      if (!selectedValues.includes(visibleOption.value)) {
+      if (!selectedValues.includes(visibleOption[this.fieldValue])) {
         newSelectedOptions.push(visibleOption);
       }
     }

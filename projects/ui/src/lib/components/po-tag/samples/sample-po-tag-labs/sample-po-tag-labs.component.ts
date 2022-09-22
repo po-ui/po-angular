@@ -28,21 +28,6 @@ export class SamplePoTagLabsComponent implements OnInit {
   type: PoTagType;
   value: string;
 
-  public readonly colorList: Array<PoSelectOption> = [
-    { label: 'color-01', value: 'color-01' },
-    { label: 'color-02', value: 'color-02' },
-    { label: 'color-03', value: 'color-03' },
-    { label: 'color-04', value: 'color-04' },
-    { label: 'color-05', value: 'color-05' },
-    { label: 'color-06', value: 'color-06' },
-    { label: 'color-07', value: 'color-07' },
-    { label: 'color-08', value: 'color-08' },
-    { label: 'color-09', value: 'color-09' },
-    { label: 'color-10', value: 'color-10' },
-    { label: 'color-11', value: 'color-11' },
-    { label: 'color-12', value: 'color-12' }
-  ];
-
   public readonly iconList: Array<PoSelectOption> = [
     { label: 'po-icon-bluetooth', value: 'po-icon-bluetooth' },
     { label: 'po-icon-like', value: 'po-icon-like' },

@@ -28,6 +28,9 @@ describe('PoMultiselectDropdownComponent:', () => {
       { label: 'label1', value: 'value1' },
       { label: 'label2', value: 'value2' }
     ];
+
+    component.fieldLabel = 'label';
+    component.fieldValue = 'value';
   });
 
   it('should be created', () => {

@@ -26,16 +26,24 @@
   </div>
 
   <div class="po-row">
-    <po-select class="po-md-6" name="color" [(ngModel)]="color" p-label="Color" [p-options]="colorList">
-      <ng-template p-select-option-template let-option>
-        <div>
-          <span class="sample-tag-color-circle po-{{ option.value }}"></span>
-          <span class="sample-menu-vertical-middle"> {{ option.label }} </span>
-        </div>
-      </ng-template>
-    </po-select>
+    <po-input
+      class="po-md-6"
+      name="color"
+      [(ngModel)]="color"
+      p-clean
+      p-label="Color"
+      p-help="color-01, red, rgb(201, 53, 125), #753399"
+    >
+    </po-input>
 
-    <po-select *ngIf="!type" class="po-md-6" name="icon" [(ngModel)]="icon" p-label="Icon" [p-options]="iconList">
+    <po-select
+      *ngIf="!type"
+      class="po-md-6 po-mt-2"
+      name="icon"
+      [(ngModel)]="icon"
+      p-label="Icon"
+      [p-options]="iconList"
+    >
     </po-select>
 
     <po-switch *ngIf="type" class="po-md-6" name="icon" [(ngModel)]="icon" p-label="Icon"> </po-switch>
