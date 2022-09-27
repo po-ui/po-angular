@@ -191,7 +191,7 @@ describe('PoRichTextToolbarComponent:', () => {
 
       component['emitAlignCommand']('justifyleft');
 
-      expect(component.alignButtons[0].selected).toBeFalsy();
+      expect(component.alignButtons[0].selected).toBeTruthy();
     });
 
     it('emitAlignCommand: shouldn`t apply false to alignButtons[index].selected if it`s already false', () => {
