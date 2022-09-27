@@ -64,9 +64,8 @@
             <po-checkbox
               name="selectAll"
               *ngIf="!hideSelectAll"
-              (click)="selectAllRows()"
               (p-change)="selectAllRows()"
-              [(ngModel)]="selectAll"
+              [p-checkboxValue]="selectAll === null ? 'mixed' : selectAll"
             ></po-checkbox>
           </div>
         </th>
@@ -366,9 +365,8 @@
             <po-checkbox
               name="selectAll"
               *ngIf="!hideSelectAll"
-              (click)="selectAllRows()"
               (p-change)="selectAllRows()"
-              [(ngModel)]="selectAll"
+              [p-checkboxValue]="selectAll === null ? 'mixed' : selectAll"
             ></po-checkbox>
           </div>
         </th>
@@ -659,8 +657,7 @@
   <po-checkbox
     name="checkbox"
     (p-change)="selectable ? selectRow(row) : 'javascript:;'"
-    [(ngModel)]="row.$selected"
-    (click)="selectable ? selectRow(row) : 'javascript:;'"
+    [p-checkboxValue]="row.$selected"
   ></po-checkbox>
 </ng-template>
 
