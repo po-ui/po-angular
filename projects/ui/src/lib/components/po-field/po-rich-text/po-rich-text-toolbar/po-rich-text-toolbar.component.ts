@@ -176,7 +176,7 @@ export class PoRichTextToolbarComponent implements AfterViewInit {
   private emitAlignCommand(command: string) {
     const index = this.alignButtons.findIndex(btn => btn.command === command);
 
-    if (this.alignButtons[index].selected) {
+    if (!this.alignButtons[index].selected) {
       this.alignButtons[index].selected = false;
     }
 
