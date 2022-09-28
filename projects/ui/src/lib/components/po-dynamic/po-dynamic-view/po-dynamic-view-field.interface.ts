@@ -18,9 +18,12 @@ export interface PoDynamicViewField extends PoDynamicField {
   tag?: boolean;
 
   /**
-   * Define uma cor para o campo do tipo *tag*.
-   *
-   * Valores válidos:
+   * Determina a cor da tag. As maneiras de customizar as cores são:
+   * - Hexadeximal, por exemplo `#c64840`;
+   * - RGB, como `rgb(0, 0, 165)`;
+   * - O nome da cor, por exemplo `blue`;
+   * - Usando uma das cores do tema do PO:
+   * - Valores válidos:
    *  - <span class="dot po-color-01"></span> `color-01`
    *  - <span class="dot po-color-02"></span> `color-02`
    *  - <span class="dot po-color-03"></span> `color-03`

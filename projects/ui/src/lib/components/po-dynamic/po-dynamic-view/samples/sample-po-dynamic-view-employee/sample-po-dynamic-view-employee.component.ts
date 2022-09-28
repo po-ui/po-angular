@@ -19,7 +19,7 @@ export class SamplePoDynamicViewEmployeeComponent {
     { property: 'admissionDate', label: 'Admission date', type: 'date' },
     { property: 'hoursPerDay', label: 'Hours per day', type: 'time' },
     { property: 'wage', label: 'Wage', type: 'currency' },
-    { property: 'availability', tag: true, color: 'color-11', icon: 'po-icon-ok' },
+    { property: 'availability', tag: true, color: '#4B0082', icon: 'po-icon-ok' },
     { property: 'city', label: 'City', divider: 'Address' },
     { property: 'addressStreet', label: 'Street' },
     { property: 'addressNumber', label: 'Number' },
