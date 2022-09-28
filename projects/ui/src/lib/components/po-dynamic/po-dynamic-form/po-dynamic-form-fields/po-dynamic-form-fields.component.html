@@ -142,6 +142,8 @@
       [name]="field.property"
       [(ngModel)]="value[field.property]"
       [ngClass]="field.componentClass"
+      [p-field-label]="field.fieldLabel"
+      [p-field-value]="field.fieldValue"
       [p-disabled]="isDisabled(field)"
       [p-help]="field.help"
       [p-label]="field.label"
