@@ -1,5 +1,5 @@
 import { ActivatedRoute, Router } from '@angular/router';
-import { Component, OnInit, ViewChild, ViewEncapsulation } from '@angular/core';
+import { Component, ContentChild, OnInit, ViewChild, ViewEncapsulation } from '@angular/core';
 import { NgForm } from '@angular/forms';
 
 import { Observable } from 'rxjs';
@@ -21,6 +21,7 @@ import { PoPageJobSchedulerBaseComponent } from './po-page-job-scheduler-base.co
 import { poPageJobSchedulerLiteralsDefault } from './po-page-job-scheduler-literals';
 import { PoPageJobSchedulerLookupService } from './po-page-job-scheduler-lookup.service';
 import { PoPageJobSchedulerService } from './po-page-job-scheduler.service';
+import { PoJobSchedulerParametersTemplateDirective } from './po-page-job-scheduler-parameters';
 
 /**
  * @docsExtends PoPageJobSchedulerBaseComponent
@@ -48,6 +49,8 @@ import { PoPageJobSchedulerService } from './po-page-job-scheduler.service';
 export class PoPageJobSchedulerComponent extends PoPageJobSchedulerBaseComponent implements OnInit {
   @ViewChild('schedulerExecution', { static: true }) schedulerExecution: { form: NgForm };
   @ViewChild('schedulerParameters') schedulerParameters: { form: NgForm };
+  @ContentChild(PoJobSchedulerParametersTemplateDirective)
+  parametersTemplate: PoJobSchedulerParametersTemplateDirective;
 
   isEdit = false;
   literals = {
@@ -58,6 +61,8 @@ export class PoPageJobSchedulerComponent extends PoPageJobSchedulerBaseComponent
   saveOperation: Observable<any>;
   step: number = 1;
   parametersEmpty: boolean = true;
+
+  stepParametersInitialized = false;
 
   readonly steps: Array<PoStepperItem> = [];
 
@@ -158,7 +163,17 @@ export class PoPageJobSchedulerComponent extends PoPageJobSchedulerBaseComponent
       this.markAsDirtyInvalidControls(this.schedulerParameters.form.controls);
       return;
     }
+
+    if (stepNumber > 2 && this.templateHasDisable()) {
+      return;
+    }
+
     this.setModelRecurrent();
+
+    // Busca os parâmetros do template
+    if (stepNumber > 2 && this.parametersTemplate?.templateRef && this.parametersTemplate?.executionParameter) {
+      this.setPropertiesFromTemplate();
+    }
 
     const model = JSON.parse(JSON.stringify(this.model));
 
@@ -171,13 +186,17 @@ export class PoPageJobSchedulerComponent extends PoPageJobSchedulerBaseComponent
     const steps = this.steps[this.step - 1];
     this.step = stepNumber;
 
+    // Caso já tenha iniciado a etapa de parametrização,
+    // guarda essa informação para não precisar renderizar novamente
+    this.stepParametersInitialized = this.stepParametersInitialized || stepNumber === 2;
+
     if (steps) {
       steps.status = PoStepperStatus.Done;
     }
   }
 
   onChangeProcess(process: { processId: string; existAPI: boolean }) {
-    if (process.existAPI && process.processId && this.parametersEmpty) {
+    if (process.existAPI && process.processId && this.parametersEmpty && !this.parametersTemplate?.templateRef) {
       this.getParametersByProcess(process.processId);
       if (!this.isEdit) {
         this.model.executionParameter = {};
@@ -223,13 +242,20 @@ export class PoPageJobSchedulerComponent extends PoPageJobSchedulerBaseComponent
     return model;
   }
 
+  private templateHasDisable(test?): boolean {
+    return !!this.parametersTemplate?.templateRef && this.parametersTemplate?.disabledAdvance;
+  }
+
   private isDisabledAdvance(): boolean {
     const componentByStep = {
       1: this.schedulerExecution,
       2: this.schedulerParameters
     };
 
-    return componentByStep[this.step]?.form?.invalid || false;
+    const templateDisable = this.step === 2 ? this.templateHasDisable() : false;
+    const shouldDisable = templateDisable || componentByStep[this.step]?.form?.invalid;
+
+    return shouldDisable || false;
   }
 
   private isDisabledBack(): boolean {
@@ -281,5 +307,12 @@ export class PoPageJobSchedulerComponent extends PoPageJobSchedulerBaseComponent
 
   private setModelRecurrent() {
     this.model.recurrent = this.model.periodicity === 'single' ? false : this.model.recurrent;
+  }
+
+  private setPropertiesFromTemplate() {
+    this.model = {
+      ...this.model,
+      executionParameter: { ...this.model.executionParameter, ...this.parametersTemplate.executionParameter }
+    };
   }
 }
