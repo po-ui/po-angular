@@ -15,6 +15,7 @@
         <div class="po-row">
           <po-page-job-scheduler-execution
             [p-no-parameters]="parametersEmpty"
+            [p-no-custom-params-component]="!parametersTemplate?.templateRef"
             [hidden]="step !== 1"
             #schedulerExecution
             class="po-md-12"
@@ -26,12 +27,14 @@
           </po-page-job-scheduler-execution>
 
           <po-page-job-scheduler-parameters
-            *ngIf="step === 2"
+            *ngIf="stepParametersInitialized"
+            [hidden]="step !== 2"
             #schedulerParameters
             class="po-md-12"
             [p-literals]="literals"
             [p-parameters]="parameters || []"
             [(p-value)]="model.executionParameter"
+            [p-template]="parametersTemplate"
           >
           </po-page-job-scheduler-parameters>
 

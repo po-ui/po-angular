@@ -2,6 +2,7 @@ import { AfterViewInit, Component, EventEmitter, Input, Output, ViewChild } from
 import { NgForm } from '@angular/forms';
 
 import { PoDynamicFormField } from '@po-ui/ng-components';
+import { PoJobSchedulerParametersTemplateDirective } from './po-job-scheduler-parameters-template';
 
 @Component({
   selector: 'po-page-job-scheduler-parameters',
@@ -13,6 +14,8 @@ export class PoPageJobSchedulerParametersComponent implements AfterViewInit {
   @Input('p-literals') literals = <any>{};
 
   @Input('p-parameters') parameters: Array<PoDynamicFormField> = [];
+
+  @Input('p-template') parametersTemplate: PoJobSchedulerParametersTemplateDirective;
 
   @Input('p-value') value;
 

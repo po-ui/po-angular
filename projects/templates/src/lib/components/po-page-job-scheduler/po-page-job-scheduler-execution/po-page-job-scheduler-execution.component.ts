@@ -25,6 +25,7 @@ export class PoPageJobSchedulerExecutionComponent implements OnInit, AfterViewIn
   @Input('p-literals') literals = <any>{};
 
   @Input('p-no-parameters') noParameters: Boolean = true;
+  @Input('p-no-custom-params-component') noCustomParamsComponent: Boolean = true;
 
   @Output('p-change-process') changeProcess: EventEmitter<any> = new EventEmitter<any>();
 
@@ -89,7 +90,7 @@ export class PoPageJobSchedulerExecutionComponent implements OnInit, AfterViewIn
       weekly: this.weeklyTempalte
     };
 
-    if (this.noParameters) {
+    if (this.noParameters && this.noCustomParamsComponent) {
       this.checkExistsProcessesAPI();
     }
 
