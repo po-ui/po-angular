@@ -324,13 +324,27 @@ describe('PoPageDynamicTableComponent:', () => {
 
     it('updateDataTable: should be called with the current parameters', () => {
       const expectValue = { page: 1, search: 'test' };
+      component['quickSearchParam'] = null || undefined;
       component['currentPage'] = 1;
+      component['params'] = { [component.quickSearchParam]: 'test' };
+
+      spyOn(component, <any>'loadData').and.returnValue(EMPTY);
+
+      component.updateDataTable();
+
+      expect(component['loadData']).toHaveBeenCalledWith(expectValue);
+    });
+
+    it(`updateDataTable: 'currentPage' should be 1 if it value is undefined`, () => {
+      const expectValue = { page: 1, search: 'test' };
+      component['currentPage'] = undefined;
       component['params'] = { search: 'test' };
 
       spyOn(component, <any>'loadData').and.returnValue(EMPTY);
 
       component.updateDataTable();
 
+      expect(component['currentPage']).toEqual(1);
       expect(component['loadData']).toHaveBeenCalledWith(expectValue);
     });
 
@@ -376,8 +390,8 @@ describe('PoPageDynamicTableComponent:', () => {
 
       component.onQuickSearch(filter);
 
-      expect(component['loadData']).toHaveBeenCalledWith({ page: 1, search: filter });
-      expect(component['params']).toEqual({ search: filter });
+      expect(component['loadData']).toHaveBeenCalledWith({ page: 1, [component.quickSearchParam]: filter });
+      expect(component['params']).toEqual({ [component.quickSearchParam]: filter });
     });
 
     it('onQuickSearch: should call `loadData` with merged filter and quickSearch if concatFilters is true', () => {
@@ -391,7 +405,7 @@ describe('PoPageDynamicTableComponent:', () => {
 
       const expectedParams = {
         ...advancedFiltersParams,
-        search: termTypedInQuickSearch
+        [component.quickSearchParam]: termTypedInQuickSearch
       };
       spyOn(component, <any>'loadData').and.returnValue(EMPTY);
 
@@ -407,6 +421,7 @@ describe('PoPageDynamicTableComponent:', () => {
     });
 
     it('onQuickSearch: should call `loadData` only with quickSearch if concatFilters is false', () => {
+      component.quickSearchParam = 'filter';
       component.concatFilters = false;
       const termTypedInQuickSearch = 'filterValue';
 
@@ -415,7 +430,7 @@ describe('PoPageDynamicTableComponent:', () => {
         name: 'Test'
       };
 
-      const quickSearchParams = { search: termTypedInQuickSearch };
+      const quickSearchParams = { [component.quickSearchParam]: termTypedInQuickSearch };
 
       spyOn(component, <any>'loadData').and.returnValue(EMPTY);
 
@@ -439,6 +454,17 @@ describe('PoPageDynamicTableComponent:', () => {
 
       expect(component['loadData']).toHaveBeenCalledWith(undefined);
       expect(component['params']).toEqual({});
+    });
+
+    it('onQuickSearch: should remove `oldQuickSearchParam` value from object properties if `quickSearchParam` is different.', () => {
+      component.concatFilters = true;
+      component.quickSearchParam = 'search';
+      component.onQuickSearch('search');
+
+      component.quickSearchParam = 'filter';
+
+      component.onQuickSearch('filter');
+      expect(component['params']['search']).not.toBeDefined();
     });
 
     it('showMore: should call `loadData` with next page and `params`', () => {
