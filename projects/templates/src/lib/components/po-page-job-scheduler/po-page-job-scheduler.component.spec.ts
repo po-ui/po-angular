@@ -10,6 +10,7 @@ import { PoJobSchedulerInternal } from './interfaces/po-job-scheduler-internal.i
 import { PoPageJobSchedulerComponent } from './po-page-job-scheduler.component';
 import { PoPageJobSchedulerModule } from './po-page-job-scheduler.module';
 import { PoStepperOrientation } from '@po-ui/ng-components';
+import { HttpClientTestingModule } from '@angular/common/http/testing';
 
 describe('PoPageJobSchedulerComponent:', () => {
   let component: PoPageJobSchedulerComponent;
@@ -18,7 +19,7 @@ describe('PoPageJobSchedulerComponent:', () => {
   beforeEach(
     waitForAsync(() => {
       TestBed.configureTestingModule({
-        imports: [RouterTestingModule.withRoutes([]), PoPageJobSchedulerModule]
+        imports: [RouterTestingModule.withRoutes([]), PoPageJobSchedulerModule, HttpClientTestingModule]
       }).compileComponents();
     })
   );

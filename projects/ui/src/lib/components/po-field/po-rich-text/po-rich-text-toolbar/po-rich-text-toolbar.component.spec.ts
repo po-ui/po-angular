@@ -8,6 +8,7 @@ import { PoFieldModule } from '../../po-field.module';
 import { PoModalModule } from '../../../po-modal/po-modal.module';
 import { PoRichTextToolbarComponent } from './po-rich-text-toolbar.component';
 import { PoTooltipModule } from './../../../../directives/po-tooltip/po-tooltip.module';
+import { HttpClientTestingModule } from '@angular/common/http/testing';
 
 describe('PoRichTextToolbarComponent:', () => {
   let component: PoRichTextToolbarComponent;
@@ -16,7 +17,14 @@ describe('PoRichTextToolbarComponent:', () => {
 
   beforeEach(async () => {
     await TestBed.configureTestingModule({
-      imports: [FormsModule, PoButtonGroupModule, PoModalModule, PoTooltipModule, PoFieldModule],
+      imports: [
+        FormsModule,
+        PoButtonGroupModule,
+        PoModalModule,
+        PoTooltipModule,
+        PoFieldModule,
+        HttpClientTestingModule
+      ],
       declarations: []
     }).compileComponents();
 
