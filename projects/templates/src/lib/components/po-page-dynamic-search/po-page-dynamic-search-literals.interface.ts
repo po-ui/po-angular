@@ -1,9 +1,9 @@
 /**
- * @usedBy PoPageDynamicSearchComponent
+ * @usedBy PoPageDynamicSearchComponent, PoPageDynamicTableComponent
  *
  * @description
  *
- * Interface para definição das literais usadas no `po-page-dynamic-search`.
+ * Interface para definição das literais usadas no `po-page-dynamic-search` e no `po-page-dynamic-table`.
  */
 export interface PoPageDynamicSearchLiterals {
   /** Título do grupo de *disclaimers* que será exibido após realizar alguma busca. */
