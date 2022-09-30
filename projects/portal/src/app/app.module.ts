@@ -7,9 +7,10 @@ import { SharedModule } from './shared/shared.module';
 import { AppComponent } from './app.component';
 import { AppRoutingModule } from './app-routing.module';
 import { MenuService } from './menu.service';
+import { HttpClientModule } from '@angular/common/http';
 
 @NgModule({
-  imports: [BrowserModule, BrowserAnimationsModule, SharedModule, AppRoutingModule],
+  imports: [BrowserModule, BrowserAnimationsModule, SharedModule, AppRoutingModule, HttpClientModule],
   declarations: [AppComponent],
   exports: [],
   providers: [MenuService],

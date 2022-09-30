@@ -4,8 +4,6 @@
 
 // import { NgModule } from '@angular/core';
 
-// import { HttpClientModule } from '@angular/common/http';
-
 // import { PoModule } from '@po-ui/ng-components/po.module';
 // import { PoI18nConfig, PoI18nModule } from '@po-ui/ng-components/services/po-i18n';
 
@@ -57,8 +55,6 @@
 
 // @NgModule({
 //   imports: [
-//     HttpClientModule,
-
 //     PoModule,
 //     PoI18nModule.config(poI18nConfig)
 //   ],

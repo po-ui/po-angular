@@ -8,6 +8,7 @@ import { getObservable } from '../../../util-test/util-expect.spec';
 
 import { PoPageJobSchedulerExecutionComponent } from './po-page-job-scheduler-execution.component';
 import { PoPageJobSchedulerModule } from '../po-page-job-scheduler.module';
+import { HttpClientTestingModule } from '@angular/common/http/testing';
 
 describe('PoPageJobSchedulerExecutionComponent:', () => {
   let component: PoPageJobSchedulerExecutionComponent;
@@ -18,7 +19,7 @@ describe('PoPageJobSchedulerExecutionComponent:', () => {
   beforeEach(
     waitForAsync(() => {
       TestBed.configureTestingModule({
-        imports: [RouterTestingModule.withRoutes([]), PoPageJobSchedulerModule]
+        imports: [RouterTestingModule.withRoutes([]), PoPageJobSchedulerModule, HttpClientTestingModule]
       }).compileComponents();
     })
   );
