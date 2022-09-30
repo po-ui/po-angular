@@ -39,6 +39,7 @@ import { PoPageDynamicTableBeforeRemoveAll } from './interfaces/po-page-dynamic-
 import { PoPageDynamicTableCustomAction } from './interfaces/po-page-dynamic-table-custom-action.interface';
 import { PoPageDynamicTableCustomTableAction } from './interfaces/po-page-dynamic-table-custom-table-action.interface';
 import { isExternalLink, openExternalLink, removeDuplicateItems } from '../../utils/util';
+import { PoPageDynamicSearchLiterals } from '../po-page-dynamic-search/po-page-dynamic-search-literals.interface';
 
 const PAGE_SIZE_DEFAULT = 10;
 
@@ -258,6 +259,8 @@ export class PoPageDynamicTableComponent extends PoPageDynamicListBaseComponent 
   private _actions: PoPageDynamicTableActions = {};
   private _pageCustomActions: Array<PoPageDynamicTableCustomAction> = [];
   private _height: number;
+  private _oldQuickSearchParam: string;
+  private _quickSearchParam: string;
   private _quickSearchWidth: number;
   private _tableCustomActions: Array<PoPageDynamicTableCustomTableAction> = [];
 
@@ -424,6 +427,63 @@ export class PoPageDynamicTableComponent extends PoPageDynamicListBaseComponent 
     return this._hideCloseDisclaimers;
   }
 
+  /**
+   * @optional
+   *
+   * @description
+   *
+   * Identificador do parâmetro enviado ao serviço ao realizar uma busca rápida.
+   *
+   * @default 'search'
+   */
+  @Input('p-quick-search-param') set quickSearchParam(value: string) {
+    this._quickSearchParam = value ?? 'search';
+  }
+
+  get quickSearchParam(): string {
+    return this._quickSearchParam;
+  }
+
+  /**
+   * @optional
+   *
+   * @description
+   *
+   * Objeto com as literais usadas no `po-page-dynamic-table`.
+   *
+   * Existem duas maneiras de customizar o componente, passando um objeto com todas as literais disponíveis:
+   *
+   * ```
+   *  const customLiterals: PoPageDynamicSearchLiterals = {
+   *    disclaimerGroupTitle: 'Filtros aplicados:',
+   *    filterTitle: 'Filtro avançado',
+   *    filterCancelLabel: 'Fechar',
+   *    filterConfirmLabel: 'Aplicar',
+   *    quickSearchLabel: 'Valor pesquisado:',
+   *    searchPlaceholder: 'Pesquise aqui'
+   *  };
+   * ```
+   *
+   * Ou passando apenas as literais que deseja customizar:
+   *
+   * ```
+   *  const customLiterals: PoPageDynamicSearchLiterals = {
+   *    filterTitle: 'Filtro avançado'
+   *  };
+   * ```
+   *
+   * E para carregar as literais customizadas, basta apenas passar o objeto para o componente.
+   *
+   * ```
+   * <po-page-dynamic-table
+   *   [p-literals]="customLiterals">
+   * </po-page-dynamic-table>
+   * ```
+   *
+   * > O valor padrão será traduzido de acordo com o idioma configurado no [`PoI18nService`](/documentation/po-i18n) ou *browser*.
+   */
+  @Input('p-literals') searchLiterals: PoPageDynamicSearchLiterals;
+
   constructor(
     private router: Router,
     private activatedRoute: ActivatedRoute,
@@ -472,9 +532,14 @@ export class PoPageDynamicTableComponent extends PoPageDynamicListBaseComponent 
   }
 
   onQuickSearch(termTypedInQuickSearch) {
-    const quickSearchParam = termTypedInQuickSearch ? { search: termTypedInQuickSearch } : {};
+    const quickSearchParam = termTypedInQuickSearch ? { [this.quickSearchParam]: termTypedInQuickSearch } : {};
     this.params = this.concatFilters ? { ...this.params, ...quickSearchParam } : { ...quickSearchParam };
 
+    if (this._oldQuickSearchParam in this.params && this._oldQuickSearchParam !== this.quickSearchParam) {
+      delete this.params[this._oldQuickSearchParam];
+    }
+
+    this._oldQuickSearchParam = this.quickSearchParam;
     this.subscriptions.add(this.loadData(termTypedInQuickSearch ? { page: 1, ...this.params } : undefined).subscribe());
   }
 
@@ -606,7 +671,8 @@ export class PoPageDynamicTableComponent extends PoPageDynamicListBaseComponent 
   }
 
   private loadData(params: { page?: number; search?: string } = {}) {
-    const key = this.keys ? this.keys[0] : 'id';
+    const key = this.keys[0] ?? 'id';
+
     if (!this.serviceApi) {
       this.poNotification.error(this.literals.loadDataErrorNotification);
       return EMPTY;
