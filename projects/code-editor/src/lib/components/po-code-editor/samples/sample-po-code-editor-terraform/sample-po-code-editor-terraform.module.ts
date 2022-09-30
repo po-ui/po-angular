@@ -3,14 +3,11 @@
  */
 
 // import { NgModule } from '@angular/core';
-// import { HttpClientModule } from '@angular/common/http';
-//
 // import { PoCodeEditorModule } from '@po-ui/ng-code-editor';
 //
 //
 // @NgModule({
 //   imports: [
-//     HttpClientModule,
 //     PoModule,
 //     PoCodeEditorModule.forRegister(customRegister)
 //   ],

@@ -1,4 +1,3 @@
-import { HttpClientModule } from '@angular/common/http';
 import { NgModule } from '@angular/core';
 
 import { Network } from '@awesome-cordova-plugins/network/ngx';
@@ -25,6 +24,6 @@ import { PoSyncService } from './services/po-sync/po-sync.service';
     PoHttpClientService,
     Network
   ],
-  imports: [HttpClientModule]
+  imports: []
 })
 export class PoSyncModule {}
