@@ -2,6 +2,19 @@
 
 All notable changes to this project will be documented in this file. See [standard-version](https://github.com/conventional-changelog/standard-version) for commit guidelines.
 
+## [14.6.0](https://github.com/po-ui/po-angular/compare/v14.5.0...v14.6.0) (2022-10-03)
+
+
+### Bug Fixes
+
+* **table:** ajusta eventos sendo executados simultaneamente ([5b1f6f4](https://github.com/po-ui/po-angular/commit/5b1f6f44ee5f8bb37d83a334e3ff7cb249e5a531))
+
+
+### Features
+
+* **button-group:** aplica estilo definido pelo AnimaliaDS ([a6706a0](https://github.com/po-ui/po-style/commit/a6706a03b5af4d390bb87d628b36a48041a1d31d))
+
+
 # [14.5.0](https://github.com/po-ui/po-angular/compare/v14.4.0...v14.5.0) (2022-09-26)
 
 
