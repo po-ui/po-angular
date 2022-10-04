@@ -1,4 +1,11 @@
+/**
+ * @usedBy PoRadioComponent
+ *
+ * @description
+ *
+ * Enum para definir o tamanho do po-radio.
+ */
 export enum PoRadioSize {
-  medium = 'medium',
-  large = 'large'
+  Medium = 'medium',
+  Large = 'large'
 }

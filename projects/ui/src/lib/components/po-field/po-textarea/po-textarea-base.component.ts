@@ -22,6 +22,16 @@ import { InputBoolean } from '../../../decorators';
  *   [ngModelOptions]="{standalone: true}">
  * </po-textarea>
  * ```
+ *
+ * #### Acessibilidade tratada no componente
+ * Algumas diretrizes de acessibilidade já são tratadas no componente, internamente, e não podem ser alteradas. São elas:
+ *
+ * - O Text area foi desenvolvido com uso de controles padrões HTML, o que permite a identificação do mesmo na interface por tecnologias
+ * assistivas. [WCAG 4.1.2: Name, Role, Value](https://www.w3.org/WAI/WCAG21/Understanding/name-role-value)
+ * - O foco é visível e possui uma espessura superior a 2 pixels CSS, não ficando escondido por outros
+ * elementos da tela. [WCAG 2.4.12: Focus Appearance)](https://www.w3.org/WAI/WCAG22/Understanding/focus-appearance-enhanced)
+ * - A identificação do erro acontece também através da mudança de cor do campo, mas também de um ícone
+ * junto da mensagem. [WGAG 1.4.1: Use of Color, 3.2.4: Consistent Identification](https://www.w3.org/WAI/WCAG21/Understanding/use-of-color)
  */
 @Directive()
 export abstract class PoTextareaBaseComponent implements ControlValueAccessor, Validator {

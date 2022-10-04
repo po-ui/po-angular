@@ -2,6 +2,41 @@
 
 All notable changes to this project will be documented in this file. See [standard-version](https://github.com/conventional-changelog/standard-version) for commit guidelines.
 
+## [14.6.0](https://github.com/po-ui/po-angular/compare/v14.5.0...v14.6.0) (2022-10-03)
+
+
+### Bug Fixes
+
+* **table:** ajusta eventos sendo executados simultaneamente ([5b1f6f4](https://github.com/po-ui/po-angular/commit/5b1f6f44ee5f8bb37d83a334e3ff7cb249e5a531))
+
+
+### Features
+
+* **button-group:** aplica estilo definido pelo AnimaliaDS ([a6706a0](https://github.com/po-ui/po-style/commit/a6706a03b5af4d390bb87d628b36a48041a1d31d))
+
+
+# [14.5.0](https://github.com/po-ui/po-angular/compare/v14.4.0...v14.5.0) (2022-09-26)
+
+
+### Bug Fixes
+
+* **multiselect:** corrige emissão de evento pela listagem ([f7e1a8c](https://github.com/po-ui/po-angular/commit/f7e1a8cb424935ea4e778fc0d0b4b7ebb8619e8e))
+* **table:** corrige posicionamento do gerenciador ([29ec035](https://github.com/po-ui/po-angular/commit/29ec0350860462e2ba8ddb4df6ef28dc080d9f25))
+* **tree-view:** corrige funcionamento inadequado ([deeda5a](https://github.com/po-ui/po-angular/commit/deeda5aaa3b80d958101f1bdda43359974e460ed))
+
+
+### Features
+
+* **fields:** inclui definições do AnimaliaDS ([b7d5afd](https://github.com/po-ui/po-angular/commit/b7d5afd5f23ffb126d9eabed52a6ef75f9f18fe7))
+* **multiselect:** permite usar o `p-options` com `any` ([90b7f74](https://github.com/po-ui/po-angular/commit/90b7f74da5a0a670ecd86414d5412eedd0a324f1))
+* **radiogroup:** aplica estilo e acessibilidade definidos pelo DS ([97af9fc](https://github.com/po-ui/po-angular/commit/97af9fc7a227c42cf9f7ea244fc298a724dc5ca0))
+* **select:** aplica estilo e acessibilidade definidos pelo DS ([3261e00](https://github.com/po-ui/po-angular/commit/3261e007ec997bbeac67b37f36ce34606c55c96c))
+* **table:** exibe coluna tipo `array` em linha tipo `detail` ([92aeb06](https://github.com/po-ui/po-angular/commit/92aeb065e9b4ebe885c0a4e2afda47eba05d31a6)), closes [#1328](https://github.com/po-ui/po-angular/issues/1328)
+* **tag:** possibilita customização de cores ([018ba14](https://github.com/po-ui/po-angular/commit/018ba1429ea6e4efa27ba3039a035525c227e39f))
+* **textarea:** aplica estilo e acessibilidade definidos pelo DS ([baf5a7a](https://github.com/po-ui/po-angular/commit/baf5a7a9f1a88787a2f10c2f0950960e24cb547a))
+
+
+
 # [14.4.0](https://github.com/po-ui/po-angular/compare/v14.3.1...v14.4.0) (2022-09-05)
 
 

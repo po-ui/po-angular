@@ -115,6 +115,64 @@ describe('PoTableDetailComponent', () => {
       expect(utilsFunctions.capitalizeFirstLetter).toHaveBeenCalledWith(propertyValue);
     });
 
+    describe('getDetailData:', () => {
+      it('should return the last string in arrayProperty', () => {
+        const detail: any = {
+          property: 'address.street',
+          label: 'Rua'
+        };
+        const item: any = {
+          name: 'teste',
+          address: {
+            street: 'Rua dos Alfeneiros, nº 4'
+          }
+        };
+        const result = component.getDetailData(item, detail);
+        expect(result).toEqual(item.address.street);
+      });
+
+      it('should return property if property is only item in array', () => {
+        const detail: any = {
+          property: 'address',
+          label: 'Rua'
+        };
+        const item: any = {
+          name: 'teste',
+          address: 'Rua dos Alfeneiros, nº 4'
+        };
+        const result = component.getDetailData(item, detail);
+        expect(result).toEqual(item.address);
+      });
+
+      it('should return a empty string when property is `undefined`', () => {
+        const detail: any = {
+          property: 'address.street',
+          label: 'Rua'
+        };
+        const item: any = {
+          name: 'teste',
+          address: {}
+        };
+        const expectedResult = '';
+        const result = component.getDetailData(item, detail);
+        expect(result).toEqual(expectedResult);
+      });
+
+      it('should return property if property value is equal 0', () => {
+        const detail: any = {
+          property: 'status',
+          label: 'Status'
+        };
+        const item: any = {
+          name: 'teste',
+          status: 0
+        };
+        const expectedResult = 0;
+        const result = component.getDetailData(item, detail);
+        expect(result).toEqual(expectedResult);
+      });
+    });
+
     it('onSelectRow: should set `$selected` property of row item to `true` and call `selectRow.emit`', () => {
       const row = { title: 'teste', $selected: false };
       spyOn(component.selectRow, 'emit');

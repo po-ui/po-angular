@@ -21,7 +21,19 @@ const poRadioGroupColumnsTotalLength: number = 12;
  * [**po-checkbox-group**](/documentation/po-checkbox-group).
  *
  * > Ao passar um valor para o *model* que não esteja na lista de opções, o mesmo será definido como `undefined`.
+ *
+ * #### Acessibilidade tratada no componente interno `po-radio`:
+ *
+ * Algumas diretrizes de acessibilidade já são tratadas no componente, internamente, e não podem ser alteradas pelo proprietário do conteúdo. São elas:
+ *
+ * - O componente foi desenvolvido utilizando controles padrões HTML para permitir a identificação do mesmo na interface por tecnologias assistivas. [WCAG 4.1.2: Name, Role, Value](https://www.w3.org/WAI/WCAG21/Understanding/name-role-value)
+ * - A cor não deve ser o único meio para diferenciar o radio button normal do selecionado, por isso deve-se manter uma diferença visual entre os estados. [WGAG 1.4.1: Use of Color, 3.2.4: Consistent Identification](https://www.w3.org/WAI/WCAG21/Understanding/use-of-color)
+ * - Quando em foco, o componente é ativado usando as teclas de Espaço e Enter do teclado. [W3C WAI-ARIA 3.5 Button - Keyboard Interaction](https://www.w3.org/TR/wai-aria-practices-1.1/#keyboard-interaction-3)
+ * - A área do foco precisar ter uma espessura de pelo menos 2 pixels CSS e o foco não pode ficar escondido por outros elementos da tela. [(WCAG 2.4.12: Focus Appearance](https://www.w3.org/WAI/WCAG22/Understanding/focus-appearance-enhanced)
+ *
+ * Conforme documentação em: https://doc.animaliads.io/docs/components/radio
  */
+
 @Directive()
 export abstract class PoRadioGroupBaseComponent implements ControlValueAccessor, Validator {
   /**
@@ -152,6 +164,16 @@ export abstract class PoRadioGroupBaseComponent implements ControlValueAccessor,
   get options() {
     return this._options;
   }
+
+  /**
+   * @optional
+   *
+   * @description
+   *
+   * Define o tamanho do *radio*
+   * @default `medium`
+   */
+  @Input('p-size') size: string;
 
   // Função que controla quando deve ser emitido onChange e atualiza o Model
   changeValue(changedValue: any) {

@@ -1,26 +1,21 @@
 <po-field-container [p-help]="help" [p-label]="label" [p-optional]="!required && optional">
-  <div class="po-row po-pt-1 po-pb-1" #inp>
-    <div *ngFor="let option of options" class="po-radio-group-item po-md-{{ mdColumns }} po-lg-{{ columns }}">
-      <input
-        #inputRadio
-        class="po-radio-group-input"
-        type="radio"
-        [attr.name]="name"
-        [checked]="value === option.value"
-        [class.po-radio-group-input-checked]="value === option.value"
-        [disabled]="option.disabled === true || disabled"
-        [required]="required"
-        [value]="option.value"
-        (keyup)="onKeyUp($event, option.value)"
-      />
-      <label
-        class="po-radio-group-label"
-        [class.po-clickable]="!inputRadio.disabled"
-        [for]="name"
-        (click)="eventClick(option.value, option.disabled === true || disabled)"
-      >
-        {{ option.label }}
-      </label>
+  <div class="po-field-container-content" [attr.name]="name">
+    <div #inp class="po-radio-group" role="radiogroup" [attr.aria-label]="label" [attr.data-options]="options.length">
+      <div *ngFor="let option of options" class="po-radio-group-item po-md-{{ mdColumns }} po-lg-{{ columns }}">
+        <po-radio
+          #inputRadio
+          [name]="name"
+          [p-checked]="value === option.value"
+          [p-disabled]="option.disabled === true || disabled"
+          [p-label]="option.label"
+          [p-required]="required"
+          [p-size]="size"
+          [p-value]="option.value"
+          (keyup)="onKeyUp($event, option.value)"
+          (click)="eventClick(option.value, option.disabled === true || disabled)"
+        >
+        </po-radio>
+      </div>
     </div>
   </div>
   <po-field-container-bottom></po-field-container-bottom>

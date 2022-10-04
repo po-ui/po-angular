@@ -1,7 +1,7 @@
 <po-field-container [p-label]="label" [p-help]="help" [p-optional]="!required && optional">
   <div class="po-field-container-content">
     <div *ngIf="icon" class="po-field-icon-container-left">
-      <po-icon class="po-field-icon" [class.po-field-icon-disabled]="disabled" [p-icon]="icon"></po-icon>
+      <po-icon class="po-field-icon po-icon-input" [class.po-field-icon-disabled]="disabled" [p-icon]="icon"></po-icon>
     </div>
 
     <input
@@ -12,8 +12,9 @@
       autocomplete="off"
       type="text"
       [attr.name]="name"
+      [attr.aria-label]="label"
       [disabled]="disabled"
-      [placeholder]="placeholder"
+      [placeholder]="disabled ? '' : placeholder"
       [required]="required"
       (click)="toggleComboVisibility()"
       (keyup)="onKeyUp($event)"
@@ -23,10 +24,16 @@
     />
 
     <div class="po-field-icon-container-right">
-      <po-clean *ngIf="clean && !disabled" (p-change-event)="clear($event)" [p-element-ref]="inputEl"> </po-clean>
+      <po-clean
+        class="po-icon-input"
+        *ngIf="clean && !disabled"
+        (p-change-event)="clear($event)"
+        [p-element-ref]="inputEl"
+      >
+      </po-clean>
       <span
         #iconArrow
-        class="po-icon po-field-icon {{ comboIcon }}"
+        class="po-icon po-field-icon {{ comboIcon }} po-icon-input"
         [class.po-field-icon-disabled]="disabled"
         [class.po-field-icon]="!disabled"
         (click)="toggleComboVisibility()"

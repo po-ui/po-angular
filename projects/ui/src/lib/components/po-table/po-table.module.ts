@@ -29,6 +29,7 @@ import { PoTableSubtitleCircleComponent } from './po-table-subtitle-circle/po-ta
 import { PoTableSubtitleFooterComponent } from './po-table-subtitle-footer/po-table-subtitle-footer.component';
 import { PoTableCellTemplateDirective } from './po-table-cell-template/po-table-cell-template.directive';
 import { PoTableColumnTemplateDirective } from './po-table-column-template/po-table-column-template.directive';
+import { PoTableListManagerComponent } from './po-table-list-manager/po-table-list-manager.component';
 
 /**
  * @description
@@ -58,6 +59,7 @@ import { PoTableColumnTemplateDirective } from './po-table-column-template/po-ta
     PoTableColumnLabelComponent,
     PoTableColumnLinkComponent,
     PoTableColumnManagerComponent,
+    PoTableListManagerComponent,
     PoTableDetailComponent,
     PoTableIconComponent,
     PoTableRowTemplateDirective,

@@ -76,6 +76,20 @@ export class PoTableDetailComponent {
     return detail.label || capitalizeFirstLetter(detail.property);
   }
 
+  getDetailData(item: any, detail: PoTableDetailColumn) {
+    const arrayProperty = detail.property.split('.');
+    if (arrayProperty.length > 1) {
+      const nestedProperties = arrayProperty;
+      let value: any = item;
+      for (const property of nestedProperties) {
+        value = value[property] || value[property] === 0 ? value[property] : '';
+      }
+      return value;
+    } else {
+      return item[detail.property];
+    }
+  }
+
   onSelectRow(item) {
     item.$selected = !item.$selected;
     this.selectRow.emit(item);
