@@ -20,7 +20,7 @@ export interface PoLookupColumn {
   /**
    * Formato de exibição do valor da coluna:
    * - Formato para moeda (currency). Exemplos: 'BRL', 'USD'.
-   * - Formato para data (date): aceita apenas os caracteres de dia(dd), mês(MM ou mm) e ano (yyyy ou yy),
+   * - Formato para data (date): aceita apenas os caracteres de dia(dd), mês(MM) e ano (yyyy ou yy),
    * valor padrão é 'dd/MM/yyyy'. Exemplos: 'dd/MM/yyyy', 'dd-MM-yy', 'mm/dd/yyyy'.
    */
   format?: string;
