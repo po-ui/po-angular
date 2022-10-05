@@ -10,6 +10,8 @@ import { PoJobSchedulerInternal } from './interfaces/po-job-scheduler-internal.i
 import { PoPageJobSchedulerBaseComponent } from './po-page-job-scheduler-base.component';
 import { PoPageJobSchedulerInternal } from './po-page-job-scheduler-internal';
 import { PoPageJobSchedulerService } from './po-page-job-scheduler.service';
+import { PoStepperOrientation } from '@po-ui/ng-components';
+import { expectPropertiesValues } from './../../util-test/util-expect.spec';
 
 describe('PoPageJobSchedulerBaseComponent:', () => {
   let serviceJobScheduler: PoPageJobSchedulerService;
@@ -49,6 +51,18 @@ describe('PoPageJobSchedulerBaseComponent:', () => {
 
       expect(component.model).toEqual(returnValue);
     }));
+
+    it('p-orientation: should update property with `undefined` when invalid values', () => {
+      const invalidValues = [undefined, null, '', true, false, 0, 1, 'string', [], {}];
+
+      expectPropertiesValues(component, 'stepperDefaultOrientation', invalidValues, undefined);
+    });
+
+    it('p-orientation: should update property with valid values', () => {
+      const validValues = (<any>Object).values(PoStepperOrientation);
+
+      expectPropertiesValues(component, 'stepperDefaultOrientation', validValues, validValues);
+    });
   });
 
   describe('Methods:', () => {

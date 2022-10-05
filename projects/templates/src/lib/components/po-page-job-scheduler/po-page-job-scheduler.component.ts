@@ -114,7 +114,9 @@ export class PoPageJobSchedulerComponent extends PoPageJobSchedulerBaseComponent
   }
 
   get stepperOrientation(): 'horizontal' | 'vertical' {
-    return window.innerWidth > 481 && window.innerWidth < 960 ? 'horizontal' : 'vertical';
+    return (
+      this.stepperDefaultOrientation || (window.innerWidth > 481 && window.innerWidth < 960 ? 'horizontal' : 'vertical')
+    );
   }
 
   ngOnInit() {
