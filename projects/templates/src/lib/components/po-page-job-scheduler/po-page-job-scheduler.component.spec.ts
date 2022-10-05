@@ -9,6 +9,7 @@ import { getObservable } from '../../util-test/util-expect.spec';
 import { PoJobSchedulerInternal } from './interfaces/po-job-scheduler-internal.interface';
 import { PoPageJobSchedulerComponent } from './po-page-job-scheduler.component';
 import { PoPageJobSchedulerModule } from './po-page-job-scheduler.module';
+import { PoStepperOrientation } from '@po-ui/ng-components';
 import { HttpClientTestingModule } from '@angular/common/http/testing';
 
 describe('PoPageJobSchedulerComponent:', () => {
@@ -57,6 +58,24 @@ describe('PoPageJobSchedulerComponent:', () => {
         fixture.detectChanges();
 
         expect(component.stepperOrientation).toBe('vertical');
+      });
+
+      it(`should return 'vertical' if 'p-orientation' is 'vertical'`, () => {
+        component.stepperDefaultOrientation = PoStepperOrientation.Vertical;
+        changeBrowserInnerWidth(480);
+
+        fixture.detectChanges();
+
+        expect(component.stepperOrientation).toBe(PoStepperOrientation.Vertical);
+      });
+
+      it(`should return 'horizontal' if 'p-orientation' is 'horizontal'`, () => {
+        component.stepperDefaultOrientation = PoStepperOrientation.Horizontal;
+        changeBrowserInnerWidth(1080);
+
+        fixture.detectChanges();
+
+        expect(component.stepperOrientation).toBe(PoStepperOrientation.Horizontal);
       });
     });
   });

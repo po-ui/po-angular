@@ -1,7 +1,7 @@
 import { AbstractControl } from '@angular/forms';
 import { Input, Directive, OnDestroy } from '@angular/core';
 
-import { PoBreadcrumb, PoDynamicFormField } from '@po-ui/ng-components';
+import { PoBreadcrumb, PoDynamicFormField, PoStepperOrientation } from '@po-ui/ng-components';
 
 import { PoJobSchedulerInternal } from './interfaces/po-job-scheduler-internal.interface';
 import { PoPageJobSchedulerInternal } from './po-page-job-scheduler-internal';
@@ -174,9 +174,31 @@ export class PoPageJobSchedulerBaseComponent implements OnDestroy {
     this.model = this.poPageJobSchedulerService.convertToJobSchedulerInternal(value);
   }
 
+  /**
+   * @optional
+   *
+   * @description
+   *
+   * Define a orientação de exibição do `po-stepper`.
+   *
+   * > Quando não utilizada, segue o comportamento com base nas dimensões da tela.
+   *
+   * > Veja os valores válidos no *enum* [PoStepperOrientation](documentation/po-stepper#stepperOrientation).
+   *
+   */
+
+  @Input('p-orientation') set stepperDefaultOrientation(value: PoStepperOrientation) {
+    this._orientation = (<any>Object).values(PoStepperOrientation).includes(value) ? value : undefined;
+  }
+
+  get stepperDefaultOrientation(): PoStepperOrientation {
+    return this._orientation;
+  }
+
   model: PoJobSchedulerInternal = new PoPageJobSchedulerInternal();
 
   private _subscription = new Subscription();
+  private _orientation;
 
   constructor(protected poPageJobSchedulerService: PoPageJobSchedulerService) {}
 
