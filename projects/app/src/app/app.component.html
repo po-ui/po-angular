@@ -1,0 +1,17 @@
+<po-page-default p-title="PO UI">
+  <form [formGroup]="form">
+    <po-select class="po-md-6" formControlName="currency" name="currency" p-label="Moeda" [p-options]="currency">
+    </po-select>
+    {{ form.controls.currency.value }}
+  </form>
+
+  <po-select
+    p-field-label="nomeFantasia"
+    p-field-value="codigo"
+    [p-options]="empresas2"
+    [(ngModel)]="empresaSemPadrao"
+  ></po-select>
+  {{ empresaSemPadrao }}
+
+  <po-select p-placeholder="testeee" [p-options]="empresas1"></po-select>
+</po-page-default>

@@ -20,6 +20,10 @@
       >
         {{ placeholder }}
       </option>
+      <!-- necessário manter essa option para uso do select com ReactiveForms -->
+      <option [hidden]="true">
+        {{ displayValue }}
+      </option>
       <option *ngFor="let option of options" [disabled]="readonly" [value]="option?.[this.fieldValue]">
         {{ option?.[this.fieldLabel] }}
       </option>
