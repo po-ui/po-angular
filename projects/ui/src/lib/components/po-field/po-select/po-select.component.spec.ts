@@ -235,6 +235,14 @@ describe('PoSelectComponent:', () => {
 
       expect(expectedValue).toEqual(component.options[0]);
     });
+
+    it('registerOnTouched: should set `onModelTouched` with value of the `fnTouched`', () => {
+      const fnTouched = () => {};
+
+      component.registerOnTouched(fnTouched);
+
+      expect(component['onModelTouched']).toBe(fnTouched);
+    });
   });
 
   describe('Templates:', () => {
