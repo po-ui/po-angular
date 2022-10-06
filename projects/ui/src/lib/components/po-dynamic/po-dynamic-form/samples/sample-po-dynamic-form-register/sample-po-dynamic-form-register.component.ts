@@ -60,6 +60,13 @@ export class SamplePoDynamicFormRegisterComponent implements OnInit {
       errorMessage: 'At least 5 alphabetic and 3 numeric characters are required.',
       placeholder: 'Type your password'
     },
+    {
+      property: 'rememberSecretKey',
+      label: 'Remember Secret Key',
+      gridColumns: 6,
+      type: 'boolean',
+      formatModel: true
+    },
     { property: 'email', divider: 'CONTACTS', gridColumns: 6, icon: 'po-icon-mail' },
     { property: 'phone', mask: '(99) 99999-9999', gridColumns: 6 },
     { property: 'address', gridColumns: 6 },

@@ -37,6 +37,11 @@ export class PoDynamicFormFieldsComponent extends PoDynamicFormFieldsBaseCompone
   ngOnChanges(changes: SimpleChanges) {
     if (changes.fields) {
       this.visibleFields = this.getVisibleFields();
+      this.visibleFields.forEach(field => {
+        if (field.control === 'switch' && this.value[field.property] === undefined) {
+          this.value[field.property] = field.formatModel;
+        }
+      });
     }
   }
 
