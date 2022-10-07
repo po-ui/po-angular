@@ -57,7 +57,12 @@ export interface PoDynamicFormField extends PoDynamicField {
    *
    * **Componentes compatíveis:** `po-select`, `po-radio-group`, `po-checkbox-group`, `po-multiselect`.
    * */
-  options?: Array<string> | Array<PoSelectOption> | Array<PoMultiselectOption> | Array<PoCheckboxGroupOption>;
+  options?:
+    | Array<string>
+    | Array<PoSelectOption>
+    | Array<PoMultiselectOption>
+    | Array<PoCheckboxGroupOption>
+    | Array<any>;
 
   /**
    * Permite que o usuário faça múltipla seleção dentro da lista de opções.
@@ -262,7 +267,7 @@ export interface PoDynamicFormField extends PoDynamicField {
    *
    * O valor padrão é: `label`.
    *
-   * > Esta propriedade pode ser utilizada em conjunto com: `optionsService` e `searchService`.
+   * > Esta propriedade pode ser utilizada em conjunto com: `options`, `optionsService` e `searchService`.
    */
   fieldLabel?: string;
 
@@ -271,7 +276,7 @@ export interface PoDynamicFormField extends PoDynamicField {
    *
    * O valor padrão é: `value`.
    *
-   * > Esta propriedade pode ser utilizada em conjunto com: `optionsService` e `searchService`.
+   * > Esta propriedade pode ser utilizada em conjunto com: `options`, `optionsService` e `searchService`.
    */
   fieldValue?: string;
 

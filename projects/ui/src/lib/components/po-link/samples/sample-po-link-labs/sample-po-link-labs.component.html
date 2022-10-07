@@ -1,0 +1,13 @@
+<po-link [p-label]="label" [p-url]="url" [p-open-new-tab]="openNewTab"></po-link>
+
+<hr />
+<form #f="ngForm">
+  <div class="po-row">
+    <po-input class="po-md-5" name="label" [(ngModel)]="label" p-clean p-label="Label"></po-input>
+    <po-input class="po-md-5" name="url" [(ngModel)]="url" p-clean p-label="URL"></po-input>
+    <po-switch class="po-md-2" name="openNewTab" [(ngModel)]="openNewTab" p-label="Open new tab"></po-switch>
+  </div>
+  <div class="po-row">
+    <po-button class="po-md-3" p-label="Sample Restore" (p-click)="restore()"></po-button>
+  </div>
+</form>

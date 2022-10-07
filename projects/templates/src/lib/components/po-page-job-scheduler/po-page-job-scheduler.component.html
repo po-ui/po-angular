@@ -1,7 +1,7 @@
 <po-page-default [p-actions]="jobSchedulerActions" [p-breadcrumb]="breadcrumb" [p-title]="title">
   <div class="po-row">
     <po-stepper
-      class="po-lg-3 po-xl-2"
+      [ngClass]="stepperDefaultOrientation === 'horizontal' ? 'po-lg-12 po-xl-12' : 'po-lg-3 po-xl-2'"
       p-sequential="true"
       [p-orientation]="stepperOrientation"
       [p-step]="step"
@@ -10,7 +10,7 @@
     >
     </po-stepper>
 
-    <po-container class="po-lg-8 po-xl-6">
+    <po-container [ngClass]="stepperDefaultOrientation === 'horizontal' ? 'po-lg-12 po-xl-12' : 'po-lg-8 po-xl-6'">
       <form #formScheduler="ngForm">
         <div class="po-row">
           <po-page-job-scheduler-execution
