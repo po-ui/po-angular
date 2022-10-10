@@ -2,6 +2,26 @@
 
 All notable changes to this project will be documented in this file. See [standard-version](https://github.com/conventional-changelog/standard-version) for commit guidelines.
 
+# [14.7.0](https://github.com/po-ui/po-angular/compare/v14.6.0...v14.7.0) (2022-10-10)
+
+
+### Bug Fixes
+
+* **language:** adiciona limpeza das variáveis do `localStorage` ([96c2a9a](https://github.com/po-ui/po-angular/commit/96c2a9a1d50886c39feeb56866ed2208a4e9177d)), closes [#1331](https://github.com/po-ui/po-angular/issues/1331)
+* **rich-text:** ajustes na toolbar ([a7897f6](https://github.com/po-ui/po-angular/commit/a7897f6301cacc933da6e94e0dcd9643c297d32f))
+* **select:** ajusta o `OnTouched` do campo ([d1cbe50](https://github.com/po-ui/po-angular/commit/d1cbe50f291fae6a8449eb73468e5c2ad70e1eb2)), closes [#1378](https://github.com/po-ui/po-angular/issues/1378)
+
+
+### Features
+
+* **checkbox:** adiciona propriedade `p-size` ([827620d](https://github.com/po-ui/po-angular/commit/827620debbf59dea7df643d462e8d0da7c6fac33))
+* **dynamic-form:** repassa propriedades e uso de Array<any> no options ([67c38c0](https://github.com/po-ui/po-angular/commit/67c38c0a1ec7e91cdffbe7bfc0a7140635f066ef))
+* **dynamic-table:** altera filtro de pesquisa ([2e6ab2d](https://github.com/po-ui/po-angular/commit/2e6ab2dbdd8fa2bff70f1209d8e030c36720b5cc)), closes [#1105](https://github.com/po-ui/po-angular/issues/1105)
+* **link:** cria novo componente po-link ([0c43b1c](https://github.com/po-ui/po-angular/commit/0c43b1ce07d81fe3929cbcdf099e920f67d5611b))
+* **page-job-scheduler:** adiciona a propriedade p-orientation ([58488cd](https://github.com/po-ui/po-angular/commit/58488cd8ded17e36f2a3a76b64e9f1c93b84c55f)), closes [#1418](https://github.com/po-ui/po-angular/issues/1418)
+
+
+
 ## [14.6.0](https://github.com/po-ui/po-angular/compare/v14.5.0...v14.6.0) (2022-10-03)
 
 
