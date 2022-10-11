@@ -9,7 +9,7 @@ import { PoPageDynamicEditActions } from '@po-ui/ng-templates';
   templateUrl: './sample-po-page-dynamic-edit-user.component.html'
 })
 export class SamplePoPageDynamicEditUserComponent {
-  public readonly serviceApi = 'https://po-sample-api.herokuapp.com/v1/people';
+  public readonly serviceApi = 'https://po-sample-api.fly.dev/v1/people';
 
   public readonly actions: PoPageDynamicEditActions = {
     save: '/documentation/po-page-dynamic-detail',
@@ -57,7 +57,7 @@ export class SamplePoPageDynamicEditUserComponent {
     },
     {
       property: 'city',
-      optionsService: 'https://po-sample-api.herokuapp.com/v1/cities?transform=true',
+      optionsService: 'https://po-sample-api.fly.dev/v1/cities?transform=true',
       offsetColumns: 4,
       gridColumns: 4
     }

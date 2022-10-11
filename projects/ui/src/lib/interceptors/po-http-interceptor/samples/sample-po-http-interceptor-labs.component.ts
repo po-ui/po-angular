@@ -90,7 +90,7 @@ export class SamplePoHttpInterceptorLabsComponent implements OnDestroy, OnInit {
     const params = { status: this.status || '' };
 
     this.apiSubscription = this.http
-      .post(`https://po-sample-api.herokuapp.com/v1/messages`, body, { headers, params })
+      .post(`https://po-sample-api.fly.dev/v1/messages`, body, { headers, params })
       .subscribe();
   }
 
