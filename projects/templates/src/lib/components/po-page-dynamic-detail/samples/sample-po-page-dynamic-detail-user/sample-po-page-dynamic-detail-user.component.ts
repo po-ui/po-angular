@@ -8,7 +8,7 @@ import { PoPageDynamicDetailActions, PoPageDynamicDetailField } from '@po-ui/ng-
   templateUrl: './sample-po-page-dynamic-detail-user.component.html'
 })
 export class SamplePoPageDynamicDetailUserComponent {
-  public readonly serviceApi = 'https://po-sample-api.herokuapp.com/v1/people';
+  public readonly serviceApi = 'https://po-sample-api.fly.dev/v1/people';
 
   public readonly actions: PoPageDynamicDetailActions = {
     back: '/documentation/po-page-dynamic-table'
