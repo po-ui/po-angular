@@ -11,7 +11,6 @@ import { NG_VALUE_ACCESSOR } from '@angular/forms';
 
 import { PoFieldModel } from '../po-field.model';
 import { PoKeyCodeEnum } from './../../../enums/po-key-code.enum';
-
 import { PoSwitchLabelPosition } from './po-switch-label-position.enum';
 
 /**
@@ -90,7 +89,7 @@ export class PoSwitchComponent extends PoFieldModel<boolean> {
    *
    * @description
    *
-   * Posição de exibição do rótulo.
+   * Posição de exibição do rótulo que fica ao lado do switch.
    *
    * > Por padrão exibe à direita.
    */
