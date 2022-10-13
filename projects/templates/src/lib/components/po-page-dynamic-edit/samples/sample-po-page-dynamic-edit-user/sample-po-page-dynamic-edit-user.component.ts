@@ -9,7 +9,7 @@ import { PoPageDynamicEditActions, PoPageDynamicEditLiterals } from '@po-ui/ng-t
   templateUrl: './sample-po-page-dynamic-edit-user.component.html'
 })
 export class SamplePoPageDynamicEditUserComponent {
-  public readonly serviceApi = 'https://po-sample-api.herokuapp.com/v1/people';
+  public readonly serviceApi = 'https://po-sample-api.fly.dev/v1/people';
 
   public readonly actions: PoPageDynamicEditActions = {
     save: '/documentation/po-page-dynamic-detail',
