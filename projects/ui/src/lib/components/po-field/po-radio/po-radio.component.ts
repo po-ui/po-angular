@@ -6,6 +6,7 @@ import {
   forwardRef,
   HostListener,
   Input,
+  Renderer2,
   ViewChild
 } from '@angular/core';
 import { NG_VALUE_ACCESSOR } from '@angular/forms';
@@ -29,7 +30,8 @@ import { PoRadioSize } from './po-radio-size.enum';
   ]
 })
 export class PoRadioComponent extends PoFieldModel<boolean> {
-  @ViewChild('radioLabel', { static: true }) radioLabel: ElementRef;
+  @ViewChild('radio', { static: true }) radio: ElementRef;
+  @ViewChild('radioInput', { static: true }) radioInput: ElementRef;
 
   value = false;
 
@@ -59,7 +61,7 @@ export class PoRadioComponent extends PoFieldModel<boolean> {
   /** Define o status do *radio* */
   @Input('p-checked') checked: boolean = false;
 
-  constructor(private changeDetector: ChangeDetectorRef) {
+  constructor(private changeDetector: ChangeDetectorRef, private renderer: Renderer2) {
     super();
   }
 
@@ -84,7 +86,7 @@ export class PoRadioComponent extends PoFieldModel<boolean> {
    */
   focus(): void {
     if (!this.disabled) {
-      this.radioLabel.nativeElement.focus();
+      this.radioInput.nativeElement.focus();
     }
   }
 
@@ -121,13 +123,18 @@ export class PoRadioComponent extends PoFieldModel<boolean> {
     }
   }
 
-  @HostListener('focusin', ['$event.target'])
-  focusIn(): void {
-    this.radioLabel.nativeElement.setAttribute('focus', '');
-  }
-
   @HostListener('focusout', ['$event.target'])
   focusOut(): void {
-    this.radioLabel.nativeElement.removeAttribute('focus');
+    this.renderer.removeClass(this.radio.nativeElement, 'po-radio-focus');
+  }
+
+  @HostListener('keyup', ['$event.target'])
+  onKeyup(): void {
+    this.renderer.addClass(this.radio.nativeElement, 'po-radio-focus');
+  }
+
+  @HostListener('keydown', ['$event.target'])
+  onKeydown(): void {
+    this.renderer.addClass(this.radio.nativeElement, 'po-radio-focus');
   }
 }
