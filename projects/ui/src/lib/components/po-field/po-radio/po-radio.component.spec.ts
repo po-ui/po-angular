@@ -46,32 +46,32 @@ describe('PoRadioComponent', () => {
 
   describe('Methods:', () => {
     it('focus: should call `focus` of radio', () => {
-      component.radioLabel = {
+      component.radioInput = {
         nativeElement: {
           focus: () => {}
         }
       };
 
-      spyOn(component.radioLabel.nativeElement, 'focus');
+      spyOn(component.radioInput.nativeElement, 'focus');
 
       component.focus();
 
-      expect(component.radioLabel.nativeElement.focus).toHaveBeenCalled();
+      expect(component.radioInput.nativeElement.focus).toHaveBeenCalled();
     });
 
     it('focus: should`t call `focus` of radio if `disabled`', () => {
-      component.radioLabel = {
+      component.radioInput = {
         nativeElement: {
           focus: () => {}
         }
       };
       component.disabled = true;
 
-      spyOn(component.radioLabel.nativeElement, 'focus');
+      spyOn(component.radioInput.nativeElement, 'focus');
 
       component.focus();
 
-      expect(component.radioLabel.nativeElement.focus).not.toHaveBeenCalled();
+      expect(component.radioInput.nativeElement.focus).not.toHaveBeenCalled();
     });
 
     it('onBlur: should call `onTouched` on blur', () => {
@@ -163,18 +163,28 @@ describe('PoRadioComponent', () => {
       expect(component.changeValue).toHaveBeenCalled();
     });
 
-    it('focusIn: should set attribute focus in label element', () => {
-      component.focusIn();
-
-      expect(component.radioLabel.nativeElement.hasAttribute('focus')).toBeTrue();
-    });
-
     it('focusOut: should remove attibute focus from label element', () => {
-      component.radioLabel.nativeElement.setAttribute('focus', '');
+      component.radio.nativeElement.setAttribute('focus', '');
 
       component.focusOut();
 
-      expect(component.radioLabel.nativeElement.hasAttribute('focus')).toBeFalse();
+      expect(component.radio.nativeElement.hasAttribute('focus')).toBeTrue();
+    });
+
+    it('onKeydown: should remove attibute focus from label element', () => {
+      component.radio.nativeElement.setAttribute('focus', '');
+
+      component.onKeydown();
+
+      expect(component.radio.nativeElement.hasAttribute('focus')).toBeTrue();
+    });
+
+    it('onKeyup: should remove attibute focus from label element', () => {
+      component.radio.nativeElement.setAttribute('focus', '');
+
+      component.onKeyup();
+
+      expect(component.radio.nativeElement.hasAttribute('focus')).toBeTrue();
     });
 
     describe('onKeyDown:', () => {
