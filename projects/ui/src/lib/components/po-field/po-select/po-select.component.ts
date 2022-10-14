@@ -124,7 +124,7 @@ export class PoSelectComponent extends PoFieldValidateModel<any> implements DoCh
   displayValue;
   modelValue: any;
   selectedValue: any;
-  onModelTouched: any;
+  protected onModelTouched: any;
 
   private differ: any;
   private _fieldLabel?: string = PO_SELECT_FIELD_LABEL_DEFAULT;
@@ -247,6 +247,7 @@ export class PoSelectComponent extends PoFieldValidateModel<any> implements DoCh
 
   // Altera o valor ao selecionar um item.
   onSelectChange(value: any) {
+    this.onModelTouched?.();
     if (value && this.options && this.options.length) {
       const optionFound: any = this.findOptionValue(value);
 
@@ -294,6 +295,10 @@ export class PoSelectComponent extends PoFieldValidateModel<any> implements DoCh
 
   extraValidation(c: AbstractControl): { [key: string]: any } {
     return null;
+  }
+
+  registerOnTouched(fn: any): void {
+    this.onModelTouched = fn;
   }
 
   private isEqual(value: any, inputValue: any): boolean {
