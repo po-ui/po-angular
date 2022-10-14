@@ -38,6 +38,7 @@ import { PoWidgetModule } from './po-widget/po-widget.module';
 import { PoIconModule } from './po-icon/po-icon.module';
 import { PoLinkModule } from './po-link/po-link.module';
 import { PoLabelModule } from './po-label/po-label.module';
+import { PoImageModule } from './po-image/po-image.module';
 
 @NgModule({
   imports: [
@@ -78,7 +79,8 @@ import { PoLabelModule } from './po-label/po-label.module';
     PoTreeViewModule,
     PoWidgetModule,
     PoLinkModule,
-    PoLabelModule
+    PoLabelModule,
+    PoImageModule
   ],
   exports: [
     PoAccordionModule,
@@ -118,7 +120,8 @@ import { PoLabelModule } from './po-label/po-label.module';
     PoTreeViewModule,
     PoWidgetModule,
     PoLinkModule,
-    PoLabelModule
+    PoLabelModule,
+    PoImageModule
   ],
   providers: [],
   bootstrap: []
