@@ -37,3 +37,4 @@ export * from './po-toolbar/index';
 export * from './po-tree-view/index';
 export * from './po-widget/index';
 export * from './po-link/index';
+export * from './po-label/index';
