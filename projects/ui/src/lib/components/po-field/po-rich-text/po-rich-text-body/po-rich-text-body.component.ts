@@ -27,6 +27,8 @@ export class PoRichTextBodyComponent implements OnInit, OnDestroy {
 
   @Input('p-height') height?: string;
 
+  @Input('p-label') label: string;
+
   @Input('p-model-value') modelValue?: string;
 
   @Input('p-placeholder') placeholder?: string;

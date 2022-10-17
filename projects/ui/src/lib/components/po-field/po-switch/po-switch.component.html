@@ -1,4 +1,4 @@
-<po-field-container [p-label]="label" [p-help]="help">
+<po-field-container [p-disabled]="disabled" [p-help]="help" [p-id]="id" [p-label]="label">
   <div class="po-field-container-content" [attr.name]="name">
     <div class="po-switch" [attr.data-label-position]="getLabelPosition()">
       <div
@@ -7,14 +7,14 @@
         role="switch"
         [attr.aria-checked]="value"
         [attr.aria-disabled]="disabled"
-        [attr.aria-label]="value === true ? labelOn : labelOff"
+        [id]="id"
         [tabindex]="disabled ? -1 : 0"
         (blur)="onBlur()"
         (click)="eventClick()"
         (keydown)="onKeyDown($event)"
       >
         <div class="po-switch-track">
-          <div class="po-switch-toggle">
+          <div class="po-switch-toggle" [attr.aria-label]="value === true ? labelOn : labelOff">
             <po-icon *ngIf="value === true" class="po-switch-icon" p-icon="po-icon-ok"></po-icon>
           </div>
         </div>

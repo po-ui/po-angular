@@ -1,4 +1,12 @@
-<po-field-container [p-label]="label" [p-help]="help" [p-optional]="!required && optional">
+<po-field-container
+  [p-disabled]="disabled"
+  [p-help]="help"
+  [p-id]="id"
+  [p-label]="label"
+  [p-optional]="optional"
+  [p-required]="required"
+  [p-show-required]="showRequired"
+>
   <div class="po-field-container-content">
     <div class="po-field-icon-container-left">
       <span
@@ -11,10 +19,10 @@
       #inp
       class="po-input po-input-icon-left"
       [attr.name]="name"
-      [attr.aria-label]="label"
       [autocomplete]="autocomplete"
       [class.po-input-icon-right]="clean"
       [disabled]="disabled"
+      [id]="id"
       [placeholder]="disabled ? '' : placeholder"
       [readonly]="readonly"
       [required]="required"

@@ -30,11 +30,19 @@ export abstract class PoFieldValidateModel<T> extends PoFieldModel<T> implements
    *
    * @description
    *
-   * Indica que o campo será obrigatório.
+   * Define que o campo será obrigatório.
    *
    * @default `false`
    */
   @Input('p-required') @InputBoolean() required: boolean = false;
+
+  /**
+   *  Define se a indicação de campo obrigatório será exibida.
+   *
+   * > Não será exibida a indicação se:
+   * - Não possuir `p-help` e/ou `p-label`.
+   */
+  @Input('p-show-required') showRequired: boolean = false;
 
   private onValidatorChange;
 

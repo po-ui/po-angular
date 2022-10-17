@@ -170,9 +170,8 @@ export abstract class PoTextareaBaseComponent implements ControlValueAccessor, V
    *
    * @description
    *
-   * Indica que o campo será obrigatório.
-   *
-   * > Esta propriedade é desconsiderada quando o _input_ está desabilitado `(p-disabled)`.
+   * Define que o campo será obrigatório.
+   * > Esta propriedade é desconsiderada quando o input está desabilitado `(p-disabled)`.
    *
    * @default `false`
    */
@@ -185,6 +184,14 @@ export abstract class PoTextareaBaseComponent implements ControlValueAccessor, V
   get required(): boolean {
     return this._required;
   }
+
+  /**
+   * Define se a indicação de campo obrigatório será exibida.
+   *
+   * > Não será exibida a indicação se:
+   * - Não possuir `p-help` e/ou `p-label`.
+   */
+  @Input('p-show-required') showRequired: boolean = false;
 
   /**
    * @optional

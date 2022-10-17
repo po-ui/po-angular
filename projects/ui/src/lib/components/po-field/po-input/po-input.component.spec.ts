@@ -39,11 +39,6 @@ describe('PoInputComponent: ', () => {
     expect(nativeElement.querySelector('po-clean')).not.toBeNull();
   });
 
-  it('should have a Label', () => {
-    fixture.detectChanges();
-    expect(fixture.debugElement.nativeElement.innerHTML).toContain('Label de teste');
-  });
-
   it('should have a Help', () => {
     fixture.detectChanges();
     expect(fixture.debugElement.nativeElement.innerHTML).toContain('Help de teste');
@@ -101,36 +96,6 @@ describe('PoInputComponent: ', () => {
       fixture.detectChanges();
 
       expect(nativeElement.querySelector('.po-field-icon-disabled')).toBeFalsy();
-    });
-
-    it(`should show optional if the field isn't 'required', has 'label' and 'p-optional' is true.`, () => {
-      component.required = false;
-      component.optional = true;
-      component.label = 'label';
-
-      fixture.detectChanges();
-
-      expect(fixture.debugElement.nativeElement.querySelector('.po-field-optional')).toBeTruthy();
-    });
-
-    it(`shouldn't show optional if the field is 'required', has 'label' and 'p-optional' is true.`, () => {
-      component.required = true;
-      component.optional = true;
-      component.label = 'label';
-
-      fixture.detectChanges();
-
-      expect(fixture.debugElement.nativeElement.querySelector('.po-field-optional')).toBeNull();
-    });
-
-    it(`shouldn't show optional if the field isn't 'required', has 'label' but 'p-optional' is false.`, () => {
-      component.required = true;
-      component.optional = false;
-      component.label = 'label';
-
-      fixture.detectChanges();
-
-      expect(fixture.debugElement.nativeElement.querySelector('.po-field-optional')).toBeNull();
     });
 
     it('should show po-clean if `clean` is true and `disabled` and `readonly` are false', () => {
