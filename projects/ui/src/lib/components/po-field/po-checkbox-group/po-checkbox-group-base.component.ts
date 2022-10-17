@@ -220,6 +220,14 @@ export class PoCheckboxGroupBaseComponent implements ControlValueAccessor, Valid
     return this._required;
   }
 
+  /**
+   * Define se a indicação de campo obrigatório será exibida.
+   *
+   * > Não será exibida a indicação se:
+   * - Não possuir `p-help` e/ou `p-label`.
+   */
+  @Input('p-show-required') showRequired: boolean = false;
+
   changeValue() {
     const value = this.checkIndeterminate();
 

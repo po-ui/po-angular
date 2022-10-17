@@ -206,10 +206,11 @@ export abstract class PoInputBaseComponent implements ControlValueAccessor, Vali
   }
 
   /**
+   * @optional
+   *
    * @description
    *
-   * Indica que o campo será obrigatório.
-   *
+   * Define que o campo será obrigatório.
    * > Esta propriedade é desconsiderada quando o input está desabilitado `(p-disabled)`.
    *
    * @default `false`
@@ -221,6 +222,14 @@ export abstract class PoInputBaseComponent implements ControlValueAccessor, Vali
 
     this.validateModel();
   }
+
+  /**
+   * Define se a indicação de campo obrigatório será exibida.
+   *
+   * > Não será exibida a indicação se:
+   * - Não possuir `p-help` e/ou `p-label`.
+   */
+  @Input('p-show-required') showRequired: boolean = false;
 
   /** Se verdadeiro, o campo receberá um botão para ser limpo. */
   // eslint-disable-next-line @typescript-eslint/member-ordering

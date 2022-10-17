@@ -1,10 +1,18 @@
-<po-field-container [p-label]="label" [p-help]="help" [p-optional]="!required && optional">
+<po-field-container
+  [p-disabled]="disabled"
+  [p-help]="help"
+  [p-id]="id"
+  [p-label]="label"
+  [p-optional]="optional"
+  [p-required]="required"
+  [p-show-required]="showRequired"
+>
   <div class="po-field-container-content" *ngIf="!disclaimers.length; else disclaimersTemplate">
     <input
       #inp
       class="po-input"
+      [id]="id"
       type="text"
-      [attr.aria-label]="label"
       [ngClass]="clean && inp.value ? 'po-input-double-icon-right' : 'po-input-icon-right'"
       [autocomplete]="autocomplete"
       [disabled]="disabled"

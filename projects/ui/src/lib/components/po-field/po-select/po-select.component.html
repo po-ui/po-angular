@@ -1,12 +1,20 @@
-<po-field-container [p-label]="label" [p-help]="help" [p-optional]="!required && optional">
+<po-field-container
+  [p-disabled]="disabled"
+  [p-help]="help"
+  [p-id]="id"
+  [p-label]="label"
+  [p-optional]="optional"
+  [p-required]="required"
+  [p-show-required]="showRequired"
+>
   <div class="po-field-container-content">
     <select
       #select
       class="po-select"
-      [attr.aria-label]="label"
       [attr.name]="name"
       [class.po-select-placeholder]="!selectedValue && !!placeholder"
       [disabled]="disabled"
+      [id]="id"
       [required]="required"
       (blur)="onBlur()"
       (change)="onSelectChange($event.target.value)"
