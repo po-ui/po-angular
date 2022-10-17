@@ -2,6 +2,15 @@
 
 All notable changes to this project will be documented in this file. See [standard-version](https://github.com/conventional-changelog/standard-version) for commit guidelines.
 
+## [14.7.1](https://github.com/po-ui/po-angular/compare/v14.7.0...v14.7.1) (2022-10-17)
+
+
+### Bug Fixes
+
+* **table:** corrige posicionamento da tooltip ([77988c9](https://github.com/po-ui/po-angular/commit/77988c98614164316eaebb850ba39ddbd9cac15d))
+
+
+
 # [14.7.0](https://github.com/po-ui/po-angular/compare/v14.6.0...v14.7.0) (2022-10-10)
 
 
