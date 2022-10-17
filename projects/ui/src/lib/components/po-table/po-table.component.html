@@ -226,6 +226,7 @@
                 [class.po-table-body-ellipsis]="hideTextOverflow"
                 [ngSwitch]="column.type"
                 [p-tooltip]="tooltipText"
+                [p-append-in-body]="true"
                 [style.width.px]="noColumnsHeaderFixed?.nativeElement.parentElement?.offsetWidth"
                 (mouseenter)="tooltipMouseEnter($event, column, row)"
                 (mouseleave)="tooltipMouseLeave()"
@@ -512,6 +513,7 @@
               [class.po-table-body-ellipsis]="hideTextOverflow"
               [ngSwitch]="column.type"
               [p-tooltip]="tooltipText"
+              [p-append-in-body]="true"
               (mouseenter)="tooltipMouseEnter($event, column, row)"
               (mouseleave)="tooltipMouseLeave()"
             >
