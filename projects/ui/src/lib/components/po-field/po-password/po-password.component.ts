@@ -1,7 +1,7 @@
 import { AbstractControl, NG_VALIDATORS, NG_VALUE_ACCESSOR } from '@angular/forms';
 import { ChangeDetectionStrategy, ChangeDetectorRef, Component, ElementRef, forwardRef, Input } from '@angular/core';
 
-import { convertToBoolean } from '../../../utils/util';
+import { convertToBoolean, uuid } from '../../../utils/util';
 import { PoInputGeneric } from '../po-input-generic/po-input-generic';
 
 /**
@@ -45,6 +45,7 @@ import { PoInputGeneric } from '../po-input-generic/po-input-generic';
   ]
 })
 export class PoPasswordComponent extends PoInputGeneric {
+  id = `po-password[${uuid()}]`;
   type = 'password';
   visiblePassword = false;
 

@@ -987,36 +987,6 @@ describe('PoMultiselectComponent:', () => {
   });
 
   describe('Templates:', () => {
-    it(`should show optional if the field isn't 'required', has 'label' and 'p-optional' is true.`, () => {
-      component.required = false;
-      component.optional = true;
-      component.label = 'label';
-
-      fixture.detectChanges();
-
-      expect(fixture.debugElement.nativeElement.querySelector('.po-field-optional')).toBeTruthy();
-    });
-
-    it(`shouldn't show optional if the field is 'required', has 'label' and 'p-optional' is true.`, () => {
-      component.required = true;
-      component.optional = true;
-      component.label = 'label';
-
-      fixture.detectChanges();
-
-      expect(fixture.debugElement.nativeElement.querySelector('.po-field-optional')).toBeNull();
-    });
-
-    it(`shouldn't show optional if the field isn't 'required', has 'label' but 'p-optional' is false.`, () => {
-      component.required = true;
-      component.optional = false;
-      component.label = 'label';
-
-      fixture.detectChanges();
-
-      expect(fixture.debugElement.nativeElement.querySelector('.po-field-optional')).toBeNull();
-    });
-
     it(`should show placeholder element if contains 'placeholder' and not contains 'visibleDisclaimers'`, () => {
       component.placeholder = 'Placeholder';
       component.visibleDisclaimers = [];

@@ -1,8 +1,11 @@
 <po-field-container
   [class.po-date-picker-container-disabled]="disabled"
+  [p-disabled]="disabled"
   [p-help]="help"
   [p-label]="label"
-  [p-optional]="!required && optional"
+  [p-optional]="optional"
+  [p-required]="required"
+  [p-show-required]="showRequired"
 >
   <div
     #dateRangeField

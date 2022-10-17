@@ -41,45 +41,6 @@ describe('PoNumberComponent:', () => {
     expect(component.type === 'password').toBeTruthy();
   });
 
-  it('should show optional property if is not `required` and have `help`, `label` and `optional` properties.', () => {
-    component.optional = true;
-    component.required = false;
-    component.help = 'help';
-    component.label = 'label';
-
-    fixture.detectChanges();
-
-    expect(fixture.debugElement.nativeElement.querySelector('.po-field-optional')).not.toBeNull();
-  });
-
-  it('should not show optional property when required property is true', () => {
-    component.required = true;
-
-    fixture.detectChanges();
-
-    expect(fixture.debugElement.nativeElement.querySelector('.po-field-optional')).toBeNull();
-  });
-
-  it('should not show optional property when required property is true and have label and help', () => {
-    component.required = true;
-    component.help = 'help';
-    component.label = 'label';
-
-    fixture.detectChanges();
-
-    expect(fixture.debugElement.nativeElement.querySelector('.po-field-optional')).toBeNull();
-  });
-
-  it('should not show optional property when not have label and help properties', () => {
-    component.required = false;
-    component.help = undefined;
-    component.label = undefined;
-
-    fixture.detectChanges();
-
-    expect(fixture.debugElement.nativeElement.querySelector('.po-field-optional')).toBeNull();
-  });
-
   describe('Properties:', () => {
     it('p-hide-password-peek: should update property with valid values.', () => {
       const validValues = [false, true, '', 'false', 'true'];
@@ -288,36 +249,6 @@ describe('PoNumberComponent:', () => {
       expect(component.visiblePassword).toBeFalsy();
       expect(nativeElement.querySelector('.po-icon-eye')).toBeNull();
       expect(nativeElement.querySelector('.po-icon-eye-off')).toBeNull();
-    });
-
-    it(`should show optional if the field isn't 'required', has 'label' and 'p-optional' is true.`, () => {
-      component.required = false;
-      component.optional = true;
-      component.label = 'label';
-
-      fixture.detectChanges();
-
-      expect(fixture.debugElement.nativeElement.querySelector('.po-field-optional')).toBeTruthy();
-    });
-
-    it(`shouldn't show optional if the field is 'required', has 'label' and 'p-optional' is true.`, () => {
-      component.required = true;
-      component.optional = true;
-      component.label = 'label';
-
-      fixture.detectChanges();
-
-      expect(fixture.debugElement.nativeElement.querySelector('.po-field-optional')).toBeNull();
-    });
-
-    it(`shouldn't show optional if the field isn't 'required', has 'label' but 'p-optional' is false.`, () => {
-      component.required = true;
-      component.optional = false;
-      component.label = 'label';
-
-      fixture.detectChanges();
-
-      expect(fixture.debugElement.nativeElement.querySelector('.po-field-optional')).toBeNull();
     });
 
     it('should show po-clean if `clean` is true and `disabled` and `readonly` are false', () => {

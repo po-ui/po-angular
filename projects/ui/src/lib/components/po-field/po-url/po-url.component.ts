@@ -8,6 +8,7 @@ import {
   OnDestroy
 } from '@angular/core';
 import { AbstractControl, NG_VALUE_ACCESSOR, NG_VALIDATORS } from '@angular/forms';
+import { uuid } from '../../../utils/util';
 
 import { PoInputGeneric } from '../po-input-generic/po-input-generic';
 
@@ -54,6 +55,7 @@ import { PoInputGeneric } from '../po-input-generic/po-input-generic';
   ]
 })
 export class PoUrlComponent extends PoInputGeneric implements AfterViewInit, OnDestroy {
+  id = `po-url[${uuid()}]`;
   icon = 'po-icon-world';
 
   type = 'url';

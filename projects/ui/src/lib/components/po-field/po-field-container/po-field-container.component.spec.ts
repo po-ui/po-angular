@@ -5,12 +5,15 @@ import { configureTestSuite, expectPropertiesValues } from './../../../util-test
 import { PoFieldContainerComponent } from './po-field-container.component';
 import { poFieldContainerLiterals } from './po-field-container-literals';
 
+import { PoLabelModule } from '../../po-label/po-label.module';
+
 describe('PoFieldContainerComponent:', () => {
   let component: PoFieldContainerComponent;
   let fixture: ComponentFixture<PoFieldContainerComponent>;
 
   configureTestSuite(() => {
     TestBed.configureTestingModule({
+      imports: [PoLabelModule],
       declarations: [PoFieldContainerComponent]
     });
   });
@@ -36,6 +39,30 @@ describe('PoFieldContainerComponent:', () => {
       const invalidValues = ['false', false, 'abc', undefined, null];
 
       expectPropertiesValues(component, 'optional', invalidValues, false);
+    });
+
+    it('p-required: should update property with `true` if valid values', () => {
+      const validValues = ['', true, 'true'];
+
+      expectPropertiesValues(component, 'required', validValues, true);
+    });
+
+    it('p-required: should update propert with `false` if invalid values', () => {
+      const invalidValues = ['false', false, 'abc', undefined, null];
+
+      expectPropertiesValues(component, 'required', invalidValues, false);
+    });
+
+    it('p-show-required: should update property with `true` if valid values', () => {
+      const validValues = ['', true, 'true'];
+
+      expectPropertiesValues(component, 'required', validValues, true);
+    });
+
+    it('p-show-required: should update propert with `false` if invalid values', () => {
+      const invalidValues = ['false', false, 'abc', undefined, null];
+
+      expectPropertiesValues(component, 'required', invalidValues, false);
     });
   });
 
@@ -76,7 +103,7 @@ describe('PoFieldContainerComponent:', () => {
 
       fixture.detectChanges();
 
-      expect(fixture.debugElement.nativeElement.querySelector('.po-field-optional')).not.toBeNull();
+      expect(fixture.debugElement.nativeElement.querySelector('.po-label-requirement')).not.toBeNull();
     });
 
     it('should show optional property when have optional and have label property', () => {
@@ -85,7 +112,7 @@ describe('PoFieldContainerComponent:', () => {
 
       fixture.detectChanges();
 
-      expect(fixture.debugElement.nativeElement.querySelector('.po-field-optional')).not.toBeNull();
+      expect(fixture.debugElement.nativeElement.querySelector('.po-label-requirement')).not.toBeNull();
     });
 
     it('should show optional property when have optional and have label and help property', () => {
@@ -95,7 +122,7 @@ describe('PoFieldContainerComponent:', () => {
 
       fixture.detectChanges();
 
-      expect(fixture.debugElement.nativeElement.querySelector('.po-field-optional')).not.toBeNull();
+      expect(fixture.debugElement.nativeElement.querySelector('.po-label-requirement')).not.toBeNull();
     });
 
     it('should not show optional property when optional is true and not have label and not have help property', () => {
@@ -105,7 +132,7 @@ describe('PoFieldContainerComponent:', () => {
 
       fixture.detectChanges();
 
-      expect(fixture.debugElement.nativeElement.querySelector('.po-field-optional')).toBeNull();
+      expect(fixture.debugElement.nativeElement.querySelector('.po-label-requirement')).toBeNull();
     });
 
     it('should show optional and verify literal.optional', () => {
@@ -114,10 +141,33 @@ describe('PoFieldContainerComponent:', () => {
 
       fixture.detectChanges();
 
-      const fieldOptionalHtml = fixture.debugElement.nativeElement.querySelector('.po-field-optional');
+      const requirement = fixture.debugElement.nativeElement.querySelector('.po-label-requirement');
 
-      expect(fieldOptionalHtml).toBeTruthy();
-      expect(fieldOptionalHtml.innerHTML).toBe(component.literals.optional);
+      expect(requirement).toBeTruthy();
+      expect(requirement.innerHTML).toBe(component.literals['optional']);
+    });
+
+    it('should show required property when required and showRequired property are "true"', () => {
+      component.required = true;
+      component.showRequired = true;
+      component.label = 'label';
+
+      fixture.detectChanges();
+
+      expect(fixture.debugElement.nativeElement.querySelector('.po-label-requirement')).not.toBeNull();
+    });
+
+    it('should show required and verify literal.required', () => {
+      component.required = true;
+      component.showRequired = true;
+      component.label = 'label';
+
+      fixture.detectChanges();
+
+      const requirement = fixture.debugElement.nativeElement.querySelector('.po-label-requirement');
+
+      expect(requirement).toBeTruthy();
+      expect(requirement.innerHTML).toBe(component.literals['required']);
     });
   });
 });

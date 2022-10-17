@@ -9,6 +9,8 @@ import {
 } from '@angular/core';
 import { NG_VALUE_ACCESSOR } from '@angular/forms';
 
+import { uuid } from '../../../utils/util';
+
 import { PoFieldModel } from '../po-field.model';
 import { PoKeyCodeEnum } from './../../../enums/po-key-code.enum';
 
@@ -79,6 +81,7 @@ import { PoSwitchLabelPosition } from './po-switch-label-position.enum';
 export class PoSwitchComponent extends PoFieldModel<boolean> {
   @ViewChild('switchContainer', { static: true }) switchContainer: ElementRef;
 
+  id = `po-switch[${uuid()}]`;
   value = false;
 
   private _labelOff: string = 'false';

@@ -53,18 +53,8 @@ describe('PoCheckboxGroupComponent:', () => {
     expect(component).toBeTruthy();
   });
 
-  it('should have label', () => {
-    expect(nativeElement.querySelector('.po-field-title').innerHTML).toContain('Label');
-  });
-
   it('should have help', () => {
     expect(nativeElement.querySelector('.po-field-help').innerHTML).toContain('Help');
-  });
-
-  it('should be required', () => {
-    component.required = true;
-    changeDetector.detectChanges();
-    expect(nativeElement.querySelector('.po-field-optional')).toBeFalsy();
   });
 
   it('should create 2 checkbox options', () => {
@@ -237,36 +227,6 @@ describe('PoCheckboxGroupComponent:', () => {
 
         expect(nativeElement.querySelectorAll('label.po-checkbox-group-label.po-clickable')[0]).toBeFalsy();
         expect(nativeElement.querySelectorAll('label.po-checkbox-group-label.po-clickable')[1]).toBeFalsy();
-      });
-
-      it(`should show optional if the field isn't 'required', has 'label' and 'p-optional' is true.`, () => {
-        component.required = false;
-        component.optional = true;
-        component.label = 'label';
-
-        changeDetector.detectChanges();
-
-        expect(fixture.debugElement.nativeElement.querySelector('.po-field-optional')).toBeTruthy();
-      });
-
-      it(`shouldn't show optional if the field is 'required', has 'label' and 'p-optional' is true.`, () => {
-        component.required = true;
-        component.optional = true;
-        component.label = 'label';
-
-        changeDetector.detectChanges();
-
-        expect(fixture.debugElement.nativeElement.querySelector('.po-field-optional')).toBeNull();
-      });
-
-      it(`shouldn't show optional if the field isn't 'required', has 'label' but 'p-optional' is false.`, () => {
-        component.required = true;
-        component.optional = false;
-        component.label = 'label';
-
-        changeDetector.detectChanges();
-
-        expect(fixture.debugElement.nativeElement.querySelector('.po-field-optional')).toBeNull();
       });
     });
   });

@@ -14,7 +14,7 @@ import { PoLanguageService } from '../../../services/po-language/po-language.ser
 
 import { minFailed, maxFailed, maxlengpoailed } from '../validators';
 
-import { convertToInt } from '../../../utils/util';
+import { convertToInt, uuid } from '../../../utils/util';
 import { PoInputBaseComponent } from '../po-input/po-input-base.component';
 
 const poDecimalDefaultDecimalsLength = 2;
@@ -81,6 +81,8 @@ const poDecimalTotalLengthLimit = 16;
 })
 export class PoDecimalComponent extends PoInputBaseComponent implements AfterViewInit, OnInit {
   @ViewChild('inp', { read: ElementRef, static: true }) inputEl: ElementRef;
+
+  id = `po-decimal[${uuid()}]`;
 
   private _decimalsLength?: number = poDecimalDefaultDecimalsLength;
   private _thousandMaxlength?: number = poDecimalDefaultThousandMaxlength;
