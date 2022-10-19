@@ -1,6 +1,7 @@
 import { Component, OnInit, ViewContainerRef } from '@angular/core';
 
 import { PoWidgetBaseComponent } from './po-widget-base.component';
+import { PoKeyCodeEnum } from './../../enums/po-key-code.enum';
 
 /**
  * @docsExtends PoWidgetBaseComponent
@@ -52,6 +53,14 @@ export class PoWidgetComponent extends PoWidgetBaseComponent implements OnInit {
   onClick(event: MouseEvent) {
     if (!this.disabled) {
       this.click.emit(event);
+    }
+  }
+
+  onKeyDown(event: KeyboardEvent) {
+    if (!this.disabled && (event.which === PoKeyCodeEnum.space || event.keyCode === PoKeyCodeEnum.space)) {
+      this.click.emit(event);
+
+      event.preventDefault();
     }
   }
 
