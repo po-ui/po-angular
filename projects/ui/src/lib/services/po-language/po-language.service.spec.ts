@@ -138,6 +138,14 @@ describe('PoLanguageService:', () => {
       expect(service.languageDefault).toBeNull();
     });
 
+    it(`languageDefault: should call 'localStorage.removeItem'`, () => {
+      spyOn(localStorage, 'removeItem');
+
+      service.clearLanguageLocaleConfig();
+
+      expect(localStorage.removeItem).toHaveBeenCalled();
+    });
+
     describe('getNumberSeparators:', () => {
       it(`should return language separators if language param is undefined.`, () => {
         spyOn(service, 'getShortLanguage').and.returnValue('pt');

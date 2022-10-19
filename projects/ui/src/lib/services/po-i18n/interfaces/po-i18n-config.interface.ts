@@ -77,4 +77,14 @@ export interface PoI18nConfig {
    * > Caso a constante contenha alguma literal que o serviço não possua será utilizado a literal da constante.
    */
   contexts: object;
+
+  /**
+   *
+   * Habilita a limpeza das variáveis de localização e linguagem padrão do localStorage ao recarregar a aplicação
+   *
+   * > Ao utilizar o método `setLanguage` com o parâmetro `reload` a limpeza não é feita
+   *
+   * @default false
+   */
+  resetAfterReload?: boolean;
 }

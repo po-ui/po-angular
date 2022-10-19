@@ -9,6 +9,8 @@ import * as utils from '../../utils/util';
 import { PoI18nModule, PoI18nService } from '../po-i18n';
 import { PoLanguageModule } from '../po-language';
 
+const poRefreshLanguage = 'PO_REFRESH_FROM_LANGUAGE';
+
 describe('PoI18nService:', () => {
   describe('without Service:', () => {
     let service: PoI18nService;
@@ -199,6 +201,78 @@ describe('PoI18nService:', () => {
       });
 
       describe('setConfig:', () => {
+        it(`should call 'refreshFromLanguage' if 'config.resetAfterReload' is defined.`, () => {
+          const configMock = {
+            default: {
+              language: 'en'
+            },
+            resetAfterReload: true
+          };
+          const spyRefreshFromLanguage = spyOn(service, <any>'refreshFromLanguage');
+
+          service['setConfig'](<any>configMock);
+
+          expect(spyRefreshFromLanguage).toHaveBeenCalled();
+        });
+
+        it(`should call 'languageService.clearLanguageLocaleConfig' if 'config.resetAfterReload' is defined and locaStorage not have refresh flag.`, () => {
+          const configMock = {
+            default: {
+              language: 'en'
+            },
+            resetAfterReload: true
+          };
+          spyOn(localStorage, 'getItem').and.returnValue('false');
+          const languageServiceSpy = spyOn(service['languageService'], 'clearLanguageLocaleConfig');
+
+          service['setConfig'](<any>configMock);
+
+          expect(languageServiceSpy).toHaveBeenCalled();
+        });
+
+        it(`should call 'removeRefreshFromLanguage' if 'config.resetAfterReload' is defined and refreshFromLanguage have a flag from localStorage.`, () => {
+          const configMock = {
+            default: {
+              language: 'en'
+            },
+            resetAfterReload: true
+          };
+
+          service['setConfig'](<any>configMock);
+          spyOn(localStorage, 'getItem').and.returnValue('true');
+          const spyRemoveRefreshFromLanguage = spyOn(service, <any>'removeRefreshFromLanguage');
+          service['setConfig'](<any>configMock);
+
+          expect(spyRemoveRefreshFromLanguage).toHaveBeenCalled();
+        });
+
+        it(`shouldn't call 'languageService.clearLanguageLocaleConfig' if 'config.resetAfterReload' is defined but locaStorage have a refresh flag from 'setLanguage' reload.`, () => {
+          const valueParam = 'es';
+          const reload = true;
+          const configMock = {
+            default: {
+              language: 'en'
+            },
+            resetAfterReload: true
+          };
+
+          spyOn(utils, 'isLanguage').and.returnValue(true);
+          spyOn(utils, 'reloadCurrentPage');
+
+          const spySetRefreshFromLanguage = spyOn(service, <any>'setRefreshFromLanguage');
+
+          // chamando setConfig para setar as propriedades
+          service['setConfig'](<any>configMock);
+          service.setLanguage(valueParam, reload);
+
+          expect(spySetRefreshFromLanguage).toHaveBeenCalled();
+
+          service['setConfig'](<any>configMock);
+          const languageServiceSpy = spyOn(service['languageService'], 'clearLanguageLocaleConfig');
+
+          expect(languageServiceSpy).not.toHaveBeenCalled();
+        });
+
         it(`should call 'languageService.setLanguageDefault' with 'config.default.language' if 'config.default' is defined.`, () => {
           const configMock = {
             default: {
@@ -541,6 +615,42 @@ describe('PoI18nService:', () => {
         expect(mergedObject).toEqual({ ...obj2, ...obj1 });
         expect(mergedObject.people).toBe(expectedPeopleTranslation);
         expect(Object.keys(mergedObject).length).toBe(2);
+      });
+
+      it('setRefreshFromLanguage: should set refresh info on storage', () => {
+        spyOn(localStorage, 'setItem');
+        service['setRefreshFromLanguage']();
+        expect(localStorage.setItem).toHaveBeenCalledWith(poRefreshLanguage, 'true');
+      });
+
+      it('removeRefreshFromLanguage: should remove refresh info from storage', () => {
+        spyOn(localStorage, 'removeItem');
+        service['removeRefreshFromLanguage']();
+        expect(localStorage.removeItem).toHaveBeenCalledWith(poRefreshLanguage);
+      });
+
+      it(`refreshFromLanguage: should return 'true' if token for refreh is defined as 'true'`, () => {
+        spyOn(localStorage, 'getItem').and.returnValue('true');
+        const returnValue = service['refreshFromLanguage']();
+
+        expect(localStorage.getItem).toHaveBeenCalledWith(poRefreshLanguage);
+        expect(returnValue).toBe(true);
+      });
+
+      it(`refreshFromLanguage: should return 'false' if token for refreh is defined as 'false'`, () => {
+        spyOn(localStorage, 'getItem').and.returnValue('false');
+        const returnValue = service['refreshFromLanguage']();
+
+        expect(localStorage.getItem).toHaveBeenCalledWith(poRefreshLanguage);
+        expect(returnValue).toBe(false);
+      });
+
+      it(`refreshFromLanguage: should return 'false' if token for refresh have incorrect value`, () => {
+        spyOn(localStorage, 'getItem').and.returnValue('/8b{*');
+        const returnValue = service['refreshFromLanguage']();
+
+        expect(localStorage.getItem).toHaveBeenCalledWith(poRefreshLanguage);
+        expect(returnValue).toBe(false);
       });
     });
   });

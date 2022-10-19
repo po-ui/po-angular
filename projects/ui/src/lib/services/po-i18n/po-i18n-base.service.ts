@@ -10,6 +10,8 @@ import { I18N_CONFIG } from './po-i18n-config-injection-token';
 import { PoI18nConfig } from './interfaces/po-i18n-config.interface';
 import { PoI18nLiterals } from './interfaces/po-i18n-literals.interface';
 
+const poRefreshLanguage = 'PO_REFRESH_FROM_LANGUAGE';
+
 /**
  * @description
  *
@@ -156,6 +158,8 @@ export class PoI18nBaseService {
 
   private servicesContext: any = {};
 
+  private resetAfterReload: boolean = false;
+
   constructor(
     @Inject(I18N_CONFIG) private config?: PoI18nConfig,
     @Inject(HttpClient) private http?: HttpClient,
@@ -240,11 +244,27 @@ export class PoI18nBaseService {
     this.languageService.setLanguage(language);
 
     if (reload) {
+      if (this.resetAfterReload) {
+        this.setRefreshFromLanguage();
+      }
       reloadCurrentPage();
     }
   }
 
   private setConfig(config: PoI18nConfig) {
+    // Se a configuração de `resetAfterReload` estiver ativa realiza a limpeza das variáveis
+    // do localStorage caso a flag definida para reload `poRefreshLanguage` não exista
+    if (config['resetAfterReload']) {
+      this.resetAfterReload = config['resetAfterReload'];
+      const refreshFromLanguage = this.refreshFromLanguage();
+
+      if (!refreshFromLanguage) {
+        this.languageService.clearLanguageLocaleConfig();
+      } else {
+        this.removeRefreshFromLanguage();
+      }
+    }
+
     // Seta as configurações padrões definidas no importação do módulo
     if (config['default']) {
       this.languageService.setLanguageDefault(config['default']['language']);
@@ -500,5 +520,20 @@ export class PoI18nBaseService {
   // Faz o merge dos objetos, sempre dando preferência para o primeiro objeto de parâmetro
   private mergeObject(objPermanent: any, obj: any) {
     return { ...obj, ...objPermanent };
+  }
+
+  // Salva no storage a informação de que o refresh partiu da ação do método setLanguage
+  private setRefreshFromLanguage() {
+    localStorage.setItem(poRefreshLanguage, 'true');
+  }
+
+  // Remove a informação de refresh do storage
+  private removeRefreshFromLanguage() {
+    localStorage.removeItem(poRefreshLanguage);
+  }
+
+  // Retorna true quando houver informação no storage sobre reload do método setLanguage
+  private refreshFromLanguage(): boolean {
+    return localStorage.getItem(poRefreshLanguage) === 'true';
   }
 }

@@ -8,9 +8,6 @@ import {
   poLocaleThousandSeparatorList
 } from './po-language.constant';
 
-localStorage.removeItem('PO_DEFAULT_LANGUAGE');
-localStorage.removeItem('PO_USER_LOCALE');
-
 const poDefaultLanguage = 'PO_DEFAULT_LANGUAGE';
 const poLocaleKey = 'PO_USER_LOCALE';
 
@@ -147,5 +144,16 @@ export class PoLanguageService {
     const thousandSeparator = thousand.separator ?? '.';
 
     return { decimalSeparator, thousandSeparator };
+  }
+
+  /**
+   * @description
+   *
+   * Apaga as configurações de locale e language do localStorage
+   *
+   */
+  clearLanguageLocaleConfig() {
+    localStorage.removeItem(poDefaultLanguage);
+    localStorage.removeItem(poLocaleKey);
   }
 }
