@@ -240,6 +240,7 @@ export class PoI18nBaseService {
     this.languageService.setLanguage(language);
 
     if (reload) {
+      this.languageService.setKeepLanguage();
       reloadCurrentPage();
     }
   }

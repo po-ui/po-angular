@@ -8,10 +8,8 @@ import {
   poLocaleThousandSeparatorList
 } from './po-language.constant';
 
-localStorage.removeItem('PO_DEFAULT_LANGUAGE');
-localStorage.removeItem('PO_USER_LOCALE');
-
 const poDefaultLanguage = 'PO_DEFAULT_LANGUAGE';
+const poKeepLanguage = 'PO_KEEP_LANGUAGE';
 const poLocaleKey = 'PO_USER_LOCALE';
 
 /**
@@ -25,7 +23,14 @@ const poLocaleKey = 'PO_USER_LOCALE';
   providedIn: 'root'
 })
 export class PoLanguageService {
-  constructor() {}
+  constructor() {
+    const keepLanguage = localStorage.getItem(poKeepLanguage) === 'true';
+    if (!keepLanguage) {
+      localStorage.removeItem(poDefaultLanguage);
+      localStorage.removeItem(poLocaleKey);
+    }
+    localStorage.removeItem(poKeepLanguage);
+  }
 
   set languageDefault(language: string) {
     if (language && isLanguage(language)) {
@@ -86,6 +91,18 @@ export class PoLanguageService {
     const shortLanguage = getShortLanguage(language);
 
     return poLocales.includes(shortLanguage) ? shortLanguage : poLocaleDefault;
+  }
+
+  /**
+   * @description
+   *
+   * Método para preservar o idioma salvo no *storage*, durante o reinicio da aplicação
+   *
+   * @default `true`
+   *
+   */
+  setKeepLanguage(value: boolean = true) {
+    localStorage.setItem(poKeepLanguage, String(value));
   }
 
   /**
