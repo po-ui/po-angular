@@ -96,6 +96,30 @@ describe('PoWidgetComponent with title and actions', () => {
     expect(component.click.emit).toHaveBeenCalled();
   });
 
+  it('should simulate widget selected with keyboard (key which mode)', () => {
+    const fakeEvent: any = {
+      which: 32,
+      preventDefault: () => {}
+    };
+    spyOn(component.click, 'emit');
+
+    component.onKeyDown(fakeEvent);
+
+    expect(component.click.emit).toHaveBeenCalled();
+  });
+
+  it('should simulate widget selected with keyboard (key code mode)', () => {
+    const fakeEvent: any = {
+      keyCode: 32,
+      preventDefault: () => {}
+    };
+    spyOn(component.click, 'emit');
+
+    component.onKeyDown(fakeEvent);
+
+    expect(component.click.emit).toHaveBeenCalled();
+  });
+
   describe('Properties:', () => {
     it('showTitleAction: should return false if titleAction.observers[0] is undefined', () => {
       component.titleAction.observers[0] = undefined;
