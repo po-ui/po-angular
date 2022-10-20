@@ -13,13 +13,14 @@ import { PoDatepickerModule } from './po-datepicker/po-datepicker.module';
 import { PoDisclaimerGroupModule } from './../po-disclaimer-group/po-disclaimer-group.module';
 import { PoDisclaimerModule } from './../po-disclaimer/po-disclaimer.module';
 import { PoFieldContainerModule } from './po-field-container/po-field-container.module';
+import { PoIconModule } from '../po-icon/po-icon.module';
 import { PoLoadingModule } from '../po-loading/index';
+import { PoListBoxModule } from '../po-listbox/po-listbox.module';
 import { PoModalModule } from '../po-modal/po-modal.module';
 import { PoProgressModule } from './../po-progress/po-progress.module';
 import { PoServicesModule } from '../../services/services.module';
 import { PoTableModule } from '../po-table/po-table.module';
 import { PoTooltipModule } from './../../directives/po-tooltip/po-tooltip.module';
-import { PoIconModule } from '../po-icon/po-icon.module';
 
 import { PoComboComponent } from './po-combo/po-combo.component';
 import { PoComboOptionTemplateDirective } from './po-combo/po-combo-option-template/po-combo-option-template.directive';
@@ -88,7 +89,8 @@ import { PoRadioComponent } from './po-radio/po-radio.component';
     PoTableModule,
     PoTooltipModule,
     PoIconModule,
-    PoCheckboxModule
+    PoCheckboxModule,
+    PoListBoxModule
   ],
   exports: [
     PoCheckboxGroupModule,

@@ -17,6 +17,7 @@ import { PoFieldModule } from './po-field/po-field.module';
 import { PoGaugeModule } from './po-gauge/po-gauge.module';
 import { PoGridModule } from './po-grid/po-grid.module';
 import { PoInfoModule } from './po-info/po-info.module';
+import { PoListBoxModule } from './po-listbox/po-listbox.module';
 import { PoListViewModule } from './po-list-view/po-list-view.module';
 import { PoLoadingModule } from './po-loading/po-loading.module';
 import { PoMenuModule } from './po-menu/po-menu.module';
@@ -60,6 +61,7 @@ import { PoImageModule } from './po-image/po-image.module';
     PoGridModule,
     PoIconModule,
     PoInfoModule,
+    PoListBoxModule,
     PoListViewModule,
     PoLoadingModule,
     PoMenuModule,
@@ -101,6 +103,8 @@ import { PoImageModule } from './po-image/po-image.module';
     PoGridModule,
     PoIconModule,
     PoInfoModule,
+    PoLinkModule,
+    PoListBoxModule,
     PoListViewModule,
     PoLoadingModule,
     PoMenuModule,
@@ -119,7 +123,6 @@ import { PoImageModule } from './po-image/po-image.module';
     PoToolbarModule,
     PoTreeViewModule,
     PoWidgetModule,
-    PoLinkModule,
     PoLabelModule,
     PoImageModule
   ],
