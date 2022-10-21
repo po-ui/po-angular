@@ -124,7 +124,7 @@ export class SamplePoDynamicFormRegisterComponent implements OnInit {
       gridSmColumns: 12,
       label: 'Favorite hero',
       optional: true,
-      searchService: 'https://po-sample-api.herokuapp.com/v1/heroes',
+      searchService: 'https://po-sample-api.fly.dev/v1/heroes',
       columns: [
         { property: 'nickname', label: 'Hero' },
         { property: 'label', label: 'Name' }
@@ -137,7 +137,7 @@ export class SamplePoDynamicFormRegisterComponent implements OnInit {
       property: 'partner',
       gridColumns: 6,
       gridSmColumns: 12,
-      optionsService: 'https://po-sample-api.herokuapp.com/v1/people',
+      optionsService: 'https://po-sample-api.fly.dev/v1/people',
       fieldLabel: 'name',
       fieldValue: 'id',
       optional: true

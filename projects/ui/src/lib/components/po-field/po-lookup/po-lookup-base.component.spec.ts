@@ -7,6 +7,7 @@ import * as ValidatorsFunctions from '../validators';
 import { PoLookupFilter } from './interfaces/po-lookup-filter.interface';
 import { PoLookupBaseComponent } from './po-lookup-base.component';
 import { PoLookupFilterService } from './services/po-lookup-filter.service';
+import { PoLookupModalService } from './services/po-lookup-modal.service';
 
 class LookupFilterService implements PoLookupFilter {
   getObjectByValue(id: string): Observable<any> {
@@ -33,20 +34,22 @@ describe('PoLookupBaseComponent:', () => {
   let component: PoLookupComponent;
   let defaultService: PoLookupFilterService;
   let injector: Injector;
+  let poLookupModalService: PoLookupModalService;
 
   const fakeSubscription = <any>{ unsubscribe: () => {} };
 
   configureTestSuite(() => {
     TestBed.configureTestingModule({
       declarations: [],
-      providers: [LookupFilterService, Injector, NgControl]
+      providers: [LookupFilterService, Injector, NgControl, PoLookupModalService]
     });
   });
 
   beforeEach(() => {
     defaultService = new PoLookupFilterService(undefined);
     injector = TestBed.inject(Injector);
-    component = new PoLookupComponent(defaultService, injector);
+    poLookupModalService = TestBed.inject(PoLookupModalService);
+    component = new PoLookupComponent(defaultService, injector, poLookupModalService);
     component['keysDescription'] = ['label'];
   });
 
@@ -273,11 +276,18 @@ describe('PoLookupBaseComponent:', () => {
     component.multiple = true;
     component.fieldValue = 'value';
     component.filterService = 'http://url.com';
+    const column = [{ label: 'apelido', property: 'nickname' }];
 
     const changes: SimpleChanges = {
       multiple: {
         previousValue: false,
         currentValue: true,
+        firstChange: true,
+        isFirstChange: () => false
+      },
+      columns: {
+        previousValue: false,
+        currentValue: column,
         firstChange: true,
         isFirstChange: () => false
       }
@@ -292,11 +302,18 @@ describe('PoLookupBaseComponent:', () => {
     component.multiple = false;
     component.fieldValue = 'value';
     component.filterService = <any>{};
+    const column = [{ label: 'apelido', property: 'nickname' }];
 
     const changes: SimpleChanges = {
       multiple: {
         previousValue: false,
         currentValue: false,
+        firstChange: true,
+        isFirstChange: () => false
+      },
+      columns: {
+        previousValue: false,
+        currentValue: column,
         firstChange: true,
         isFirstChange: () => false
       }

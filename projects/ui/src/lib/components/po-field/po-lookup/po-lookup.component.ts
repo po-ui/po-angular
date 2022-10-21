@@ -125,11 +125,11 @@ export class PoLookupComponent extends PoLookupBaseComponent implements AfterVie
   constructor(
     private renderer: Renderer2,
     poLookupFilterService: PoLookupFilterService,
-    private poLookupModalService: PoLookupModalService,
+    poLookupModalService: PoLookupModalService,
     private cd: ChangeDetectorRef,
     injector: Injector
   ) {
-    super(poLookupFilterService, injector);
+    super(poLookupFilterService, injector, poLookupModalService);
   }
 
   ngAfterViewInit() {
