@@ -41,6 +41,7 @@ export class PoUploadBaseService {
     const filesLength = files.length;
     const uploadEvent: any = {
       data: {},
+      extractParams: {},
       file: null
     };
 
@@ -55,6 +56,10 @@ export class PoUploadBaseService {
       if (tOnUpload) {
         uploadEvent['file'] = file;
         tOnUpload.emit(uploadEvent);
+
+        Object.keys(uploadEvent.extractParams).forEach(key => {
+          formData.append(key, uploadEvent.extractParams[key]);
+        });
 
         formData.append('data', JSON.stringify(uploadEvent.data));
       }
