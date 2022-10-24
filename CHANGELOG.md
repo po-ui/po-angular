@@ -2,6 +2,23 @@
 
 All notable changes to this project will be documented in this file. See [standard-version](https://github.com/conventional-changelog/standard-version) for commit guidelines.
 
+# [14.8.0](https://github.com/po-ui/po-angular/compare/v14.7.1...v14.8.0) (2022-10-24)
+
+
+### Bug Fixes
+
+* **lookup:** corrige gerenciador de colunas lookup ([c65b2fe](https://github.com/po-ui/po-angular/commit/c65b2feb66e1b51692c6f8cd578427972081b948))
+
+
+### Features
+
+* **label:** novo componente po-label ([28a2452](https://github.com/po-ui/po-angular/commit/28a2452308431f92e63d9c47bb1b042536a3f424))
+* **page-dynamic-edit:** adiciona parâmetro `p-literals` ([43665ec](https://github.com/po-ui/po-angular/commit/43665ec26bf6e848b87c3fca9cd95af359aeca6d)), closes [#1321](https://github.com/po-ui/po-angular/issues/1321)
+* **radio-group:** remove propriedade outline ([ea68d53](https://github.com/po-ui/po-angular/commit/ea68d538d1c4c54dfafb5daaa53ba0ed07fe0152))
+* **widget:** implementa definições do AnimaliaDS ([6c4ac96](https://github.com/po-ui/po-angular/commit/6c4ac9646470f4d20ac09113823d7b16813ed48f))
+
+
+
 ## [14.7.1](https://github.com/po-ui/po-angular/compare/v14.7.0...v14.7.1) (2022-10-17)
 
 
