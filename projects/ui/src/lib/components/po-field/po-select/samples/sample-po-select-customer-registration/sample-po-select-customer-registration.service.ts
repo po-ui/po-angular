@@ -3,7 +3,7 @@ import { Injectable } from '@angular/core';
 
 @Injectable()
 export class SamplePoSelectCustomerRegistrationService {
-  private url: string = 'https://po-sample-api.herokuapp.com/v1/sampleSelect';
+  private url: string = 'https://po-sample-api.fly.dev/v1/sampleSelect';
 
   constructor(private http: HttpClient) {}
 
