@@ -329,20 +329,24 @@ export class PoPageDynamicEditComponent implements OnInit, OnDestroy {
    * ou passando apenas as literais que deseja customizar
    *
    * ```
-   *  const customLiterals: PoPageDynamicSearchLiterals = {
+   *  const customLiterals: PoPageDynamicEditLiterals = {
    *    detailActionNew: 'Incluir',
    *    pageActionCancel: 'Descartar',
    *    pageActionSave: 'Gravar',
    *    pageActionSaveNew: 'Gravar e incluir',
+   *    registerNotFound: 'Nenhum registro encontrado.',
+   *    saveNotificationSuccessSave: 'Item salvo com sucesso.',
+   *    saveNotificationSuccessUpdate: 'Item atualizado com sucesso.',
+   *    saveNotificationWarning: 'Necessário preencher o formulário corretamente.'
    *  };
    * ```
    *
    * E para carregar as literais customizadas, basta apenas passar o objeto para o componente.
    *
    * ```
-   * <po-page-dynamic-search
+   * <po-page-dynamic-edit
    *   [p-literals]="customLiterals">
-   * </po-page-dynamic-search>
+   * </po-page-dynamic-edit>
    * ```
    *
    * > O valor padrão será traduzido de acordo com o idioma configurado no [`PoI18nService`](/documentation/po-i18n) ou *browser*.
