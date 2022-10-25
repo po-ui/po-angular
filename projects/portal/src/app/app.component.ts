@@ -48,12 +48,6 @@ export class AppComponent implements OnInit {
 
   private showNotifications() {
     this.notification.information({
-      message: 'NPS PO UI 2022, participe e concorra!',
-      action: this.openExternalLink.bind(this, 'https://bit.ly/forms-nps-poui-2-2022'),
-      actionLabel: 'Responder'
-    });
-
-    this.notification.information({
       message: 'PO UI + Hacktoberfest 2022! Participe!',
       action: this.openExternalLink.bind(this, 'https://github.com/po-ui/po-angular/issues/1413'),
       actionLabel: 'Saber mais'
