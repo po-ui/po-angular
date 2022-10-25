@@ -8,8 +8,10 @@ import {
   forwardRef,
   Input,
   IterableDiffers,
+  OnChanges,
   Output,
   Renderer2,
+  SimpleChanges,
   ViewChild
 } from '@angular/core';
 import { AbstractControl, NG_VALIDATORS, NG_VALUE_ACCESSOR } from '@angular/forms';
@@ -89,7 +91,7 @@ const PO_SELECT_FIELD_VALUE_DEFAULT = 'value';
     }
   ]
 })
-export class PoSelectComponent extends PoFieldValidateModel<any> implements DoCheck {
+export class PoSelectComponent extends PoFieldValidateModel<any> implements DoCheck, OnChanges {
   @ViewChild('select', { read: ElementRef, static: true }) selectElement: ElementRef;
 
   /**
@@ -150,16 +152,18 @@ export class PoSelectComponent extends PoFieldValidateModel<any> implements DoCh
    * ```
    */
   @Input('p-options') set options(options: Array<any>) {
-    if (this.fieldLabel && this.fieldValue) {
+    if (this.fieldLabel && this.fieldValue && options) {
       options.map(option => {
         option.label = option[this.fieldLabel];
         option.value = option[this.fieldValue];
       });
     }
 
-    this.validateOptions([...options]);
-    this.onUpdateOptions();
-    this._options = [...options];
+    if (options) {
+      this.validateOptions([...options]);
+      this.onUpdateOptions();
+      this._options = [...options];
+    }
   }
 
   get options() {
@@ -217,6 +221,12 @@ export class PoSelectComponent extends PoFieldValidateModel<any> implements DoCh
 
     if (change) {
       this.validateOptions(this.options);
+    }
+  }
+
+  ngOnChanges(changes: SimpleChanges): void {
+    if (changes.options?.currentValue) {
+      this.options = changes.options.currentValue;
     }
   }
 
@@ -316,7 +326,9 @@ export class PoSelectComponent extends PoFieldValidateModel<any> implements DoCh
   }
 
   private findOptionValue(value: any) {
-    return this.options.find(option => this.isEqual(option.value, value));
+    if (this.options) {
+      return this.options.find(option => this.isEqual(option.value, value));
+    }
   }
 
   private validateOptions(options: Array<any>) {
