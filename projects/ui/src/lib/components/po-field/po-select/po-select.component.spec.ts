@@ -243,6 +243,18 @@ describe('PoSelectComponent:', () => {
 
       expect(component['onModelTouched']).toBe(fnTouched);
     });
+
+    it('ngOnChanges: should set `currentValue` in options', () => {
+      const changes: any = {
+        options: {
+          currentValue: [{ label: 'test', value: 'test' }]
+        }
+      };
+
+      component.ngOnChanges(changes);
+
+      expect(component.options).toEqual([{ label: 'test', value: 'test' }]);
+    });
   });
 
   describe('Templates:', () => {
