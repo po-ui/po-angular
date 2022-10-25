@@ -411,7 +411,7 @@ export abstract class PoComboBaseComponent implements ControlValueAccessor, OnIn
    * @optional
    *
    * @description
-   * Indica que o campo será obrigatório.
+   * Define que o campo será obrigatório.
    *
    * @default `false`
    */
@@ -424,6 +424,14 @@ export abstract class PoComboBaseComponent implements ControlValueAccessor, OnIn
   get required() {
     return this._required;
   }
+
+  /**
+   * Define se a indicação de campo obrigatório será exibida.
+   *
+   * > Não será exibida a indicação se:
+   * - Não possuir `p-help` e/ou `p-label`.
+   */
+  @Input('p-show-required') showRequired: boolean = false;
 
   /**
    * @optional

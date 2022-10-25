@@ -1,6 +1,8 @@
 import { ChangeDetectionStrategy, ChangeDetectorRef, Component, ElementRef, forwardRef } from '@angular/core';
 import { AbstractControl, NG_VALUE_ACCESSOR, NG_VALIDATORS } from '@angular/forms';
 
+import { uuid } from '../../../utils/util';
+
 import { PoInputGeneric } from '../po-input-generic/po-input-generic';
 
 /* istanbul ignore next */
@@ -50,6 +52,7 @@ const providers = [
   providers
 })
 export class PoLoginComponent extends PoInputGeneric {
+  id = `po-login[${uuid()}]`;
   type = 'text';
 
   /* istanbul ignore next */

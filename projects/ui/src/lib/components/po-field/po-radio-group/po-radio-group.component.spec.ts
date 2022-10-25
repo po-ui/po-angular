@@ -38,11 +38,6 @@ describe('PoRadioGroupComponent:', () => {
     expect(component instanceof PoRadioGroupBaseComponent).toBeTruthy();
   });
 
-  it('should have label', () => {
-    fixture.detectChanges();
-    expect(debugElement.innerHTML).toContain('Label de teste');
-  });
-
   it('should have help', () => {
     fixture.detectChanges();
     expect(debugElement.innerHTML).toContain('Help de teste');
@@ -256,36 +251,6 @@ describe('PoRadioGroupComponent:', () => {
       fixture.detectChanges();
 
       expect(debugElement.querySelector('.po-radio-group-label.po-clickable')).toBeNull();
-    });
-
-    it(`should show optional if the field isn't 'required', has 'label' and 'p-optional' is true.`, () => {
-      component.required = false;
-      component.optional = true;
-      component.label = 'label';
-
-      fixture.detectChanges();
-
-      expect(fixture.debugElement.nativeElement.querySelector('.po-field-optional')).toBeTruthy();
-    });
-
-    it(`shouldn't show optional if the field is 'required', has 'label' and 'p-optional' is true.`, () => {
-      component.required = true;
-      component.optional = true;
-      component.label = 'label';
-
-      fixture.detectChanges();
-
-      expect(fixture.debugElement.nativeElement.querySelector('.po-field-optional')).toBeNull();
-    });
-
-    it(`shouldn't show optional if the field isn't 'required', has 'label' but 'p-optional' is false.`, () => {
-      component.required = true;
-      component.optional = false;
-      component.label = 'label';
-
-      fixture.detectChanges();
-
-      expect(fixture.debugElement.nativeElement.querySelector('.po-field-optional')).toBeNull();
     });
   });
 });

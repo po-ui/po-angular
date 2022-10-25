@@ -11,7 +11,9 @@ import { PoDialogModule } from '@po-ui/ng-components';
 import * as util from './../../utils/util';
 import { expectPropertiesValues } from './../../util-test/util-expect.spec';
 
-import { PoPageDynamicEditComponent } from './po-page-dynamic-edit.component';
+import { poLocaleDefault } from './../../../../../ui/src/lib/services/po-language/po-language.constant';
+
+import { PoPageDynamicEditComponent, poPageDynamicEditLiteralsDefault } from './po-page-dynamic-edit.component';
 import { PoPageDynamicEditActions } from './interfaces/po-page-dynamic-edit-actions.interface';
 import { PoDynamicFormStubComponent } from './test/po-dynamic-form-stub-component';
 import { PoPageDynamicEditBeforeSave } from './interfaces/po-page-dynamic-edit-before-save.interface';
@@ -107,6 +109,75 @@ describe('PoPageDynamicEditComponent: ', () => {
       const invalidValues = ['teste', undefined, null, NaN, 0, 'false', false];
 
       expectPropertiesValues(component, 'autoRouter', invalidValues, false);
+    });
+
+    describe('p-literals:', () => {
+      it('should be in portuguese if browser is setted with an unsupported language', () => {
+        component['language'] = 'zw';
+
+        component.literals = {};
+
+        expect(component.literals).toEqual(poPageDynamicEditLiteralsDefault[poLocaleDefault]);
+      });
+
+      it('should be in portuguese if browser is setted with `pt`', () => {
+        component['language'] = 'pt';
+
+        component.literals = {};
+
+        expect(component.literals).toEqual(poPageDynamicEditLiteralsDefault.pt);
+      });
+
+      it('should be in english if browser is setted with `en`', () => {
+        component['language'] = 'en';
+
+        component.literals = {};
+
+        expect(component.literals).toEqual(poPageDynamicEditLiteralsDefault.en);
+      });
+
+      it('should be in spanish if browser is setted with `es`', () => {
+        component['language'] = 'es';
+
+        component.literals = {};
+
+        expect(component.literals).toEqual(poPageDynamicEditLiteralsDefault.es);
+      });
+
+      it('should be in russian if browser is setted with `ru`', () => {
+        component['language'] = 'ru';
+
+        component.literals = {};
+
+        expect(component.literals).toEqual(poPageDynamicEditLiteralsDefault.ru);
+      });
+
+      it('should accept custom literals', () => {
+        component['language'] = poLocaleDefault;
+
+        const customLiterals = Object.assign({}, poPageDynamicEditLiteralsDefault[poLocaleDefault]);
+
+        customLiterals.pageActionSave = 'Salvar';
+        customLiterals.pageActionSaveNew = 'Salvar e novo';
+
+        component.literals = customLiterals;
+
+        expect(component.literals).toEqual(customLiterals);
+      });
+
+      it('should update property with default literals if is setted with invalid values', () => {
+        const invalidValues = [null, undefined, false, true, '', 'literals', 0, 10, [], [1, 2], () => {}];
+
+        component['language'] = poLocaleDefault;
+
+        expectPropertiesValues(component, 'literals', invalidValues, poPageDynamicEditLiteralsDefault[poLocaleDefault]);
+      });
+
+      it('should get literals directly from poPageDynamicEditLiteralsDefault if it not initialized', () => {
+        component['language'] = 'pt';
+
+        expect(component.literals).toEqual(poPageDynamicEditLiteralsDefault['pt']);
+      });
     });
 
     it('duplicates: get duplicates', () => {
@@ -1069,7 +1140,7 @@ describe('PoPageDynamicEditComponent: ', () => {
     it('executeSaveNew: should call `saveOperation`, `poNotification.success` and reset dynamicForm ', fakeAsync(() => {
       const saveNewRedirectPath = 'people';
 
-      const message = component.literals.saveNotificationSuccess;
+      const message = component.literals.saveNotificationSuccessSave;
       const activatedRoute: any = {
         snapshot: {
           params: { id: undefined }
@@ -1085,7 +1156,9 @@ describe('PoPageDynamicEditComponent: ', () => {
       spyOn(component, <any>'navigateTo');
 
       component['executeSaveNew'](saveNewRedirectPath).subscribe(() => {
-        expect(component['poNotification'].success).toHaveBeenCalledWith(component.literals.saveNotificationSuccess);
+        expect(component['poNotification'].success).toHaveBeenCalledWith(
+          component.literals.saveNotificationSuccessSave
+        );
         expect(component.model).toEqual({});
         expect(component.dynamicForm.form.reset).toHaveBeenCalled();
 

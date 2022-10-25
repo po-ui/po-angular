@@ -2,7 +2,7 @@ import { Component } from '@angular/core';
 
 import { PoBreadcrumb, PoDynamicFormField } from '@po-ui/ng-components';
 
-import { PoPageDynamicEditActions } from '@po-ui/ng-templates';
+import { PoPageDynamicEditActions, PoPageDynamicEditLiterals } from '@po-ui/ng-templates';
 
 @Component({
   selector: 'sample-po-page-dynamic-edit-user',
@@ -14,6 +14,12 @@ export class SamplePoPageDynamicEditUserComponent {
   public readonly actions: PoPageDynamicEditActions = {
     save: '/documentation/po-page-dynamic-detail',
     saveNew: '/documentation/po-page-dynamic-edit'
+  };
+
+  public readonly literals: PoPageDynamicEditLiterals = {
+    pageActionCancel: 'Descartar',
+    pageActionSave: 'Gravar',
+    pageActionSaveNew: 'Gravar e novo'
   };
 
   public readonly breadcrumb: PoBreadcrumb = {

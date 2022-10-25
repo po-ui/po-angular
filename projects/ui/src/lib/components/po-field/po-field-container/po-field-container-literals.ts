@@ -1,14 +1,18 @@
 export const poFieldContainerLiterals = {
   en: {
-    optional: '(Optional)'
+    optional: 'Optional',
+    required: 'Required'
   },
   es: {
-    optional: '(Opcional)'
+    optional: 'Opcional',
+    required: 'Obligatorio'
   },
   pt: {
-    optional: '(Opcional)'
+    optional: 'Opcional',
+    required: 'Obrigatório'
   },
   ru: {
-    optional: '(Пожеланию)'
+    optional: 'Пожеланию',
+    required: 'Обязательный'
   }
 };

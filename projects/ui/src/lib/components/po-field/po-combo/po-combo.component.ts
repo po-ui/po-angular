@@ -29,6 +29,7 @@ import { PoComboFilterService } from './po-combo-filter.service';
 import { PoComboGroup } from './interfaces/po-combo-group.interface';
 import { PoComboOption } from './interfaces/po-combo-option.interface';
 import { PoComboOptionTemplateDirective } from './po-combo-option-template/po-combo-option-template.directive';
+import { uuid } from '../../../utils/util';
 
 const poComboContainerOffset = 8;
 const poComboContainerPositionDefault = 'bottom';
@@ -115,6 +116,7 @@ export class PoComboComponent extends PoComboBaseComponent implements AfterViewI
   comboIcon: string = 'po-icon-arrow-down';
   comboOpen: boolean = false;
   differ: any;
+  id = `po-combo[${uuid()}]`;
   isProcessingValueByTab: boolean = false;
   scrollTop = 0;
   service: PoComboFilterService;

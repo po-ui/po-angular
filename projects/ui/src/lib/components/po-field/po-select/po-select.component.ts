@@ -19,6 +19,7 @@ import {
   removeDuplicatedOptionsWithFieldValue,
   removeUndefinedAndNullOptions,
   removeUndefinedAndNullOptionsWithFieldValue,
+  uuid,
   validValue
 } from '../../../utils/util';
 
@@ -122,6 +123,7 @@ export class PoSelectComponent extends PoFieldValidateModel<any> implements DoCh
   @Input('p-placeholder') placeholder?: string;
 
   displayValue;
+  id = `po-select[${uuid()}]`;
   modelValue: any;
   selectedValue: any;
   protected onModelTouched: any;

@@ -6,6 +6,8 @@
   [class.po-widget-no-shadow]="noShadow"
   [style.background-image]="background ? 'url(' + background + ')' : undefined"
   (click)="onClick($event)"
+  (keydown)="onKeyDown($event)"
+  [tabindex]="disabled || !click.observers.length ? -1 : 0"
 >
   <div *ngIf="hasTitleHelpOrSetting()" class="po-widget-header">
     <span *ngIf="showTitleAction; else noTitleAction" class="po-widget-title-action" (click)="runTitleAction($event)">

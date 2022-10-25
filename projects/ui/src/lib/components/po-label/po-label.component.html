@@ -1,0 +1,9 @@
+<label
+  *ngIf="label"
+  class="po-label"
+  [attr.for]="field && for ? for : undefined"
+  [attr.p-field]="field"
+  [class.po-label-disabled]="disabled"
+  >{{ label }}</label
+>
+<span *ngIf="field && requirement" class="po-label-requirement">{{ requirement }}</span>
