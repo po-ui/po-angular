@@ -92,7 +92,7 @@ export interface PoDynamicFormField extends PoDynamicField {
    * Máscara para o campo.
    *
    * **Componentes compatíveis:** `po-input`.
-   > também é atribuído ao utilizar a propriedade `type: time`.
+   * > também é atribuído ao utilizar a propriedade `type: time`.
    */
   mask?: string;
 
@@ -100,7 +100,7 @@ export interface PoDynamicFormField extends PoDynamicField {
    * Define que o valor do componente será conforme especificado na mascára. O valor padrão é `false`.
    *
    * **Componentes compatíveis:** `po-input`.
-   > também é atribuído ao utilizar a propriedade `type: time`.
+   * > também é atribuído ao utilizar a propriedade `type: time`.
    * */
   maskFormatModel?: boolean;
 
