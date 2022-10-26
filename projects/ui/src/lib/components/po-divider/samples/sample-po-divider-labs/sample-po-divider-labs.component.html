@@ -1,8 +1,16 @@
-<po-divider [p-label]="label"></po-divider>
+<po-divider [p-label]="label" [p-border-width]="borderWidth"></po-divider>
 
 <form #f="ngForm">
   <div class="po-row">
     <po-input class="po-md-6" name="label" [(ngModel)]="label" p-clean p-label="Label"> </po-input>
+    <po-select
+      class="po-md-6"
+      name="borderWidth"
+      [(ngModel)]="borderWidth"
+      p-label="Border width"
+      [p-options]="borderWidthList"
+    >
+    </po-select>
   </div>
 
   <div class="po-row">
