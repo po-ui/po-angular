@@ -159,6 +159,15 @@ export class SamplePoDynamicFormRegisterComponent implements OnInit {
         { console: 'Xbox Series S|X', code: 'XSSX' }
       ],
       optionsMulti: true
+    },
+    {
+      property: 'image',
+      type: 'upload',
+      gridColumns: 12,
+      gridSmColumns: 12,
+      label: 'Upload your background',
+      optional: true,
+      url: 'https://po-sample-api.fly.dev/v1/uploads/addFile'
     }
   ];
 
