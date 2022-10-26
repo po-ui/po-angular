@@ -65,7 +65,7 @@ export class PoDynamicFormFieldsBaseComponent {
     return value === compareTo;
   }
 
-  // retorna um array com os objetos configurados e visiveis.
+  // retorna um array com os objetos configurados e visíveis.
   protected getVisibleFields() {
     const visibleFields = [];
 
