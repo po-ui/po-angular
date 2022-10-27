@@ -49,18 +49,5 @@ describe('PoContainerBaseComponent:', () => {
 
       expectPropertiesValues(component, 'noPadding', invalidValues, false);
     });
-
-    it('p-no-shadow: should update property with valid values.', () => {
-      const validValues = [false, true, '', 'false', 'true'];
-      const expectedValues = [false, true, true, false, true];
-
-      expectPropertiesValues(component, 'noShadow', validValues, expectedValues);
-    });
-
-    it('p-no-shadow: should update property with `false` if values are invalid.', () => {
-      const invalidValues = [0, null, undefined, 'undefined', 'null'];
-
-      expectPropertiesValues(component, 'noShadow', invalidValues, false);
-    });
   });
 });
