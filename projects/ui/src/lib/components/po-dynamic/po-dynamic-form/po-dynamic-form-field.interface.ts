@@ -17,7 +17,7 @@ import { PoLookupAdvancedFilter } from '../../po-field/po-lookup/interfaces/po-l
 import { PoLookupColumn } from '../../po-field/po-lookup/interfaces/po-lookup-column.interface';
 import { PoMultiselectOption } from '../../po-field/po-multiselect/po-multiselect-option.interface';
 import { PoSelectOption } from '../../po-field/po-select/po-select-option.interface';
-import { ForceOptionComponentEnum } from '../po-dynamic-field-force-component.enum';
+import { ForceBooleanComponentEnum, ForceOptionComponentEnum } from '../po-dynamic-field-force-component.enum';
 
 import { PoDynamicField } from '../po-dynamic-field.interface';
 
@@ -507,6 +507,15 @@ export interface PoDynamicFormField extends PoDynamicField {
    * `url + ?page=1&pageSize=20&name=Tony%20Stark,Peter%20Parker,Gohan`
    */
   advancedFilters?: Array<PoLookupAdvancedFilter>;
+
+  /**
+   * Valores aceitos:
+   * - ForceBooleanComponentEnum.switch
+   * - ForceBooleanComponentEnum.checkbox
+   *
+   */
+  forceBooleanComponentType?: ForceBooleanComponentEnum;
+
   /**
    * pode ser utilizada em conjunto com a propriedade `options` forçando o componente a renderizar um `po-select` ou `po-radio-group`.
    *

@@ -7,7 +7,7 @@ import * as PoDynamicUtil from '../../po-dynamic.util';
 import { PoDynamicFieldType } from '../../po-dynamic-field-type.enum';
 import { PoDynamicFormFieldsBaseComponent } from './po-dynamic-form-fields-base.component';
 import { PoDynamicFormField } from '../po-dynamic-form-field.interface';
-import { ForceOptionComponentEnum } from '../../po-dynamic-field-force-component.enum';
+import { ForceBooleanComponentEnum, ForceOptionComponentEnum } from '../../po-dynamic-field-force-component.enum';
 
 describe('PoDynamicFormFieldsBaseComponent:', () => {
   let component: PoDynamicFormFieldsBaseComponent;
@@ -629,6 +629,16 @@ describe('PoDynamicFormFieldsBaseComponent:', () => {
         expect(component['getComponentControl'](field)).toBe(expectedValue);
       });
 
+      it('should return checkbox if `forceBooleanComponentType` is checkbox', () => {
+        const expectedValue = ForceBooleanComponentEnum.checkbox;
+        const field: PoDynamicFormField = {
+          property: 'test',
+          forceBooleanComponentType: ForceBooleanComponentEnum.checkbox
+        };
+
+        expect(component['getComponentControl'](field)).toBe(expectedValue);
+      });
+
       it('should return select if `forceOptionsComponentType` is select', () => {
         const expectedValue = ForceOptionComponentEnum.select;
         const field: PoDynamicFormField = {
@@ -650,10 +660,10 @@ describe('PoDynamicFormFieldsBaseComponent:', () => {
           ]
         };
 
-        spyOn(component, <any>'verifyforceOptionComponent').and.callThrough();
+        spyOn(component, <any>'verifyForceOptionComponent').and.callThrough();
 
         expect(component['getComponentControl'](field)).toBe(expectedValue);
-        expect(component['verifyforceOptionComponent']).toHaveBeenCalled();
+        expect(component['verifyForceOptionComponent']).toHaveBeenCalled();
       });
 
       it('shouldn`t return select if `forceOptionsComponentType` is select but optionsMulti is true', () => {
@@ -682,10 +692,10 @@ describe('PoDynamicFormFieldsBaseComponent:', () => {
           ]
         };
 
-        spyOn(component, <any>'verifyforceOptionComponent').and.callThrough();
+        spyOn(component, <any>'verifyForceOptionComponent').and.callThrough();
 
         expect(component['getComponentControl'](field)).toBe(expectedValue);
-        expect(component['verifyforceOptionComponent']).toHaveBeenCalled();
+        expect(component['verifyForceOptionComponent']).toHaveBeenCalled();
       });
 
       it('should return `upload` if type is `upload` and has a `url`', () => {

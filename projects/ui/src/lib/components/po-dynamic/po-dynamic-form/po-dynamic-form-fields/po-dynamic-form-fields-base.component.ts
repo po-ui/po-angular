@@ -150,7 +150,13 @@ export class PoDynamicFormFieldsBaseComponent {
   private getComponentControl(field: PoDynamicFormField = <any>{}) {
     const type = field && field.type ? field.type.toLocaleLowerCase() : 'string';
 
-    const forceOptionComponent = this.verifyforceOptionComponent(field);
+    const { forceBooleanComponentType } = field;
+    const forceOptionComponent = this.verifyForceOptionComponent(field);
+
+    if (forceBooleanComponentType) {
+      return forceBooleanComponentType;
+    }
+
     if (forceOptionComponent) {
       const { forceOptionsComponentType } = field;
       return forceOptionsComponentType;
@@ -257,7 +263,7 @@ export class PoDynamicFormFieldsBaseComponent {
     return url && type === 'upload';
   }
 
-  private verifyforceOptionComponent(field: PoDynamicFormField) {
+  private verifyForceOptionComponent(field: PoDynamicFormField) {
     const { optionsMulti, optionsService, forceOptionsComponentType } = field;
 
     if (forceOptionsComponentType && !optionsMulti && !optionsService) {
