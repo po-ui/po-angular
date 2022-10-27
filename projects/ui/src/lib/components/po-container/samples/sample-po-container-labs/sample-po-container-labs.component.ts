@@ -13,7 +13,6 @@ export class SamplePoContainerLabsComponent implements OnInit {
 
   public readonly propertiesOptions: Array<PoCheckboxGroupOption> = [
     { value: 'noBorder', label: 'No Border' },
-    { value: 'noShadow', label: 'No Shadow' },
     { value: 'noPadding', label: 'No Padding' }
   ];
 

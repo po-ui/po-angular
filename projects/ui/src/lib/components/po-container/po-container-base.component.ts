@@ -68,21 +68,4 @@ export class PoContainerBaseComponent {
   get noPadding(): boolean {
     return this._noPadding;
   }
-
-  /**
-   * @optional
-   *
-   * @description
-   *
-   * Desabilita o sombreamento em torno do `po-container`.
-   *
-   * @default `false`
-   */
-  @Input('p-no-shadow') set noShadow(value: boolean) {
-    this._noShadow = convertToBoolean(value);
-  }
-
-  get noShadow(): boolean {
-    return this._noShadow;
-  }
 }
