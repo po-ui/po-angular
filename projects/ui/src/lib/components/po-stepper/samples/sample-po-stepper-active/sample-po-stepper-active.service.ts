@@ -5,7 +5,7 @@ import { HttpClient } from '@angular/common/http';
   providedIn: 'root'
 })
 export class SamplePoStepperActiveService {
-  private url: string = 'https://po-sample-api.herokuapp.com/v1/sampleSelect';
+  private url: string = 'https://po-sample-api.fly.dev/v1/sampleSelect';
 
   constructor(private http: HttpClient) {}
 
