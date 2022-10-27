@@ -20,7 +20,7 @@ export class SamplePoPageDynamicTableUsersComponent {
   @ViewChild('userDetailModal') userDetailModal!: PoModalComponent;
   @ViewChild('dependentsModal') dependentsModal!: PoModalComponent;
 
-  readonly serviceApi = 'https://po-sample-api.herokuapp.com/v1/people';
+  readonly serviceApi = 'https://po-sample-api.fly.dev/v1/people';
 
   actionsRight = false;
   detailedUser: any;
