@@ -190,6 +190,20 @@
     >
     </po-switch>
 
+    <po-checkbox
+      #component
+      *ngIf="compareTo(field.control, 'checkbox')"
+      [name]="field.property"
+      [(ngModel)]="value[field.property]"
+      [ngClass]="field.componentClass"
+      [p-auto-focus]="field.focus"
+      [p-disabled]="isDisabled(field)"
+      [p-label]="field.label"
+      [p-size]="field.size"
+      (p-change)="onChangeField(field)"
+    >
+    </po-checkbox>
+
     <po-combo
       #component
       *ngIf="compareTo(field.control, 'combo')"

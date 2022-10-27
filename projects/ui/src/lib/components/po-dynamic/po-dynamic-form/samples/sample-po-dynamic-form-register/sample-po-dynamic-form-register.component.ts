@@ -4,7 +4,8 @@ import {
   PoDynamicFormField,
   PoDynamicFormFieldChanged,
   PoDynamicFormValidation,
-  PoNotificationService
+  PoNotificationService,
+  ForceBooleanComponentEnum
 } from '@po-ui/ng-components';
 import { PoDynamicFormRegisterService } from './sample-po-dynamic-form-register.service';
 
@@ -159,6 +160,13 @@ export class SamplePoDynamicFormRegisterComponent implements OnInit {
         { console: 'Xbox Series S|X', code: 'XSSX' }
       ],
       optionsMulti: true
+    },
+    {
+      property: 'agree',
+      gridColumns: 12,
+      label: 'Do you agree?',
+      type: 'boolean',
+      forceBooleanComponentType: ForceBooleanComponentEnum.checkbox
     },
     {
       property: 'image',
