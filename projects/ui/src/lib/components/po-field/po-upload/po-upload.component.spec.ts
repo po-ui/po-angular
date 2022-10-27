@@ -353,6 +353,7 @@ describe('PoUploadComponent:', () => {
       component.currentFiles = fileMock;
       spyOn(component, <any>'updateModel');
       spyOn(component, <any>'cleanInputValue');
+      spyOn(component['cd'], 'detectChanges');
 
       component.clear();
 
@@ -692,6 +693,7 @@ describe('PoUploadComponent:', () => {
     });
 
     it('cleanInputValue: should set input value to whitespace and set `calledByCleanInputValue` to true', () => {
+      spyOn(component['cd'], <any>'detectChanges');
       const calledByCleanInputValue = 'calledByCleanInputValue';
 
       component[calledByCleanInputValue] = false;
@@ -699,6 +701,7 @@ describe('PoUploadComponent:', () => {
 
       expect(component['inputFile'].nativeElement.value).toBe('');
       expect(component[calledByCleanInputValue]).toBeTruthy();
+      expect(component['cd'].detectChanges).toHaveBeenCalled();
     });
 
     it('updateFiles: should call `parseFiles` with `files` and `updateModel` with `currentFiles`', () => {

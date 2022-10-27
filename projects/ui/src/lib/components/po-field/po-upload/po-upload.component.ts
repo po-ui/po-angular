@@ -335,6 +335,7 @@ export class PoUploadComponent extends PoUploadBaseComponent implements AfterVie
   private cleanInputValue() {
     this.calledByCleanInputValue = true;
     this.inputFile.nativeElement.value = '';
+    this.cd.detectChanges();
   }
 
   // função disparada na resposta do sucesso ou error
