@@ -38,19 +38,9 @@ export class AppComponent implements OnInit {
       { icon: 'po-icon-social-twitter', link: 'https://twitter.com/@pouidev', label: 'Twitter' },
       { icon: 'po-icon-social-instagram', link: 'https://www.instagram.com/pouidev/', label: 'Instagram' }
     ];
-
-    setTimeout(this.showNotifications.bind(this), 1000);
   }
 
   openExternalLink(url) {
     window.open(url, '_blank');
-  }
-
-  private showNotifications() {
-    this.notification.information({
-      message: 'PO UI + Hacktoberfest 2022! Participe!',
-      action: this.openExternalLink.bind(this, 'https://github.com/po-ui/po-angular/issues/1413'),
-      actionLabel: 'Saber mais'
-    });
   }
 }
