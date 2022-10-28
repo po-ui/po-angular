@@ -41,5 +41,5 @@ export interface PoTableColumnLabel {
   tooltip?: string;
 
   /** Valor que será usado como referência para exibição do conteúdo na coluna. */
-  value: string | number;
+  value: string | number | boolean;
 }
