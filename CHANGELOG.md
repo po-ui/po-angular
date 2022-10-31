@@ -2,6 +2,16 @@
 
 All notable changes to this project will be documented in this file. See [standard-version](https://github.com/conventional-changelog/standard-version) for commit guidelines.
 
+## [14.8.1](https://github.com/po-ui/po-angular/compare/v14.8.0...v14.8.1) (2022-10-31)
+
+
+### Bug Fixes
+
+* **select:** corrige renderização de conteúdo ([ee920b8](https://github.com/po-ui/po-angular/commit/ee920b8e326ed93c03844899e81104fee1d7ab0d))
+* **upload:** ajusta funcionamento do método clear ([560e94c](https://github.com/po-ui/po-angular/commit/560e94ceccedbebbf69772ac23301e158ae2e7d8))
+
+
+
 # [14.8.0](https://github.com/po-ui/po-angular/compare/v14.7.1...v14.8.0) (2022-10-24)
 
 
