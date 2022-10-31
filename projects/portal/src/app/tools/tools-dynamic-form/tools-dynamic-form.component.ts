@@ -99,7 +99,7 @@ export class ToolsDynamicFormComponent {
   readonly serviceFields: Array<PoDynamicFormField> = [
     {
       property: 'searchService',
-      help: 'https://po-sample-api.herokuapp.com/v1/heroes',
+      help: 'https://po-sample-api.fly.dev/v1/heroes',
       label: 'SearchService',
       gridColumns: 12,
       gridLgColumns: 6,
@@ -107,7 +107,7 @@ export class ToolsDynamicFormComponent {
     },
     {
       property: 'optionsService',
-      help: 'https://po-sample-api.herokuapp.com/v1/heroes',
+      help: 'https://po-sample-api.fly.dev/v1/heroes',
       label: 'OptionsService',
       gridColumns: 12,
       gridLgColumns: 6,
