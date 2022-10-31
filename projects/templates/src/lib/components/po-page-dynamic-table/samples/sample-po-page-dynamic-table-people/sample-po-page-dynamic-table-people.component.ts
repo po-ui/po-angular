@@ -5,7 +5,7 @@ import { Component } from '@angular/core';
   templateUrl: './sample-po-page-dynamic-table-people.component.html'
 })
 export class SamplePoPageDynamicTablePeopleComponent {
-  readonly serviceApi = 'https://po-sample-api.herokuapp.com/v1/people';
+  readonly serviceApi = 'https://po-sample-api.fly.dev/v1/people';
 
   readonly fields: Array<any> = [
     { property: 'id', key: true, visible: false },
