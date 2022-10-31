@@ -19,7 +19,7 @@ describe('PoTableService', () => {
   });
 
   it('setUrl: should be called and set api url', () => {
-    const url = 'https://po-sample-api.herokuapp.com/v1/heroes';
+    const url = 'https://po-sample-api.fly.dev/v1/heroes';
 
     service.setUrl(url);
 
@@ -47,7 +47,7 @@ describe('PoTableService', () => {
   });
 
   it('getFilteredItems: to have been called and call backend', () => {
-    service['url'] = 'https://po-sample-api.herokuapp.com/v1/heroes';
+    service['url'] = 'https://po-sample-api.fly.dev/v1/heroes';
 
     const filteredParams = {
       order: '-name',
