@@ -8,6 +8,7 @@ import {
   ViewChild
 } from '@angular/core';
 import { NG_VALUE_ACCESSOR } from '@angular/forms';
+import { InputBoolean } from '../../../decorators';
 
 import { uuid } from '../../../utils/util';
 
@@ -81,11 +82,33 @@ export class PoSwitchComponent extends PoFieldModel<boolean> {
   @ViewChild('switchContainer', { static: true }) switchContainer: ElementRef;
 
   id = `po-switch[${uuid()}]`;
-  value = false;
-
+  private _formatModel: boolean = false;
   private _labelOff: string = 'false';
   private _labelOn: string = 'true';
   private _labelPosition: PoSwitchLabelPosition = PoSwitchLabelPosition.Right;
+
+  value = this.formatModel;
+
+  /**
+   * @optional
+   *
+   * @description
+   *
+   * Propriedade para atrubuir um valor (true/false) para o componente
+   *
+   * > Por padrão será atribuído `false`.
+   * @default `false`
+   */
+  @Input('p-format-model')
+  @InputBoolean()
+  set formatModel(format: boolean) {
+    this._formatModel = format || false;
+    this.value = this.formatModel;
+  }
+
+  get formatModel() {
+    return this._formatModel;
+  }
 
   /**
    * @optional
