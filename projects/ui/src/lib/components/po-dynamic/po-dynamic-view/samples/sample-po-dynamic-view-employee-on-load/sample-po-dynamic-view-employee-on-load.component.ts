@@ -37,7 +37,7 @@ export class SamplePoDynamicViewEmployeeOnLoadComponent {
     { property: 'rg', label: 'RG', gridColumns: 4 },
     { property: 'graduation', label: 'Graduation', gridColumns: 4 },
     { property: 'company', label: 'Company', divider: 'Work Data' },
-    { property: 'job', tag: true, inverse: true, color: 'color-03', icon: 'po-icon-copy' },
+    { property: 'job', tag: true, color: 'color-03', icon: 'po-icon-copy' },
     { property: 'admissionDate', label: 'Admission date', type: 'date' },
     { property: 'hoursPerDay', label: 'Hours per day', type: 'time' },
     { property: 'wage', label: 'Wage', type: 'currency' },
@@ -57,9 +57,9 @@ export class SamplePoDynamicViewEmployeeOnLoadComponent {
       },
       fields: [
         { property: 'name', divider: 'Personal data by load customization', order: 1 },
-        { property: 'cpf', tag: true, inverse: true, color: 'color-07', order: 2 },
-        { property: 'rg', tag: true, inverse: true, color: 'color-07', order: 3 },
-        { property: 'wage', type: 'string', tag: true, inverse: true, color: 'color-07' },
+        { property: 'cpf', tag: true, color: 'color-07', order: 2 },
+        { property: 'rg', tag: true, color: 'color-07', order: 3 },
+        { property: 'wage', type: 'string', tag: true, color: 'color-07' },
         { property: 'genre', visible: false },
         { property: 'job', tag: false }
       ]
