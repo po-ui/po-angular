@@ -7,6 +7,7 @@ import { Observable } from 'rxjs';
 import { configureTestSuite } from './../../util-test/util-expect.spec';
 
 import { PoIconModule } from '../po-icon/po-icon.module';
+import { PoTooltipModule } from '../../directives/po-tooltip/index';
 
 import { PoTagBaseComponent } from './po-tag-base.component';
 import { PoTagComponent } from './po-tag.component';
@@ -34,7 +35,7 @@ describe('PoTagComponent:', () => {
   configureTestSuite(() => {
     TestBed.configureTestingModule({
       declarations: [PoTagComponent, PoTagClickableComponent],
-      imports: [PoIconModule]
+      imports: [PoIconModule, PoTooltipModule]
     });
   });
 
@@ -350,6 +351,32 @@ describe('PoTagComponent:', () => {
 
       fixture.detectChanges();
       expect(nativeElement.querySelector('.po-tag-inverse')).toBeFalsy();
+    });
+
+    it('styleTag : should change the background if there is no inverse', () => {
+      component.color = 'red';
+      component.customColor = 'red';
+
+      const result = component.styleTag();
+      expect(result).toEqual({ 'background-color': 'red' });
+    });
+
+    it('styleTag : should change the border if there is inverse and customColor', () => {
+      component.customTextColor = null;
+      component.color = 'red';
+      component.inverse = true;
+
+      const result = component.styleTag();
+      expect(result).toEqual({ 'border': '1px solid red' });
+    });
+
+    it('styleTag : should change the border if there is inverse and customColor', () => {
+      component.customTextColor = 'blue';
+      component.color = 'red';
+      component.inverse = true;
+
+      const result = component.styleTag();
+      expect(result).toEqual({ 'border': '1px solid blue', 'background-color': 'red' });
     });
   });
 });

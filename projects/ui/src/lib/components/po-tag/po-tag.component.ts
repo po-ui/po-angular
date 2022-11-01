@@ -1,4 +1,4 @@
-import { ChangeDetectionStrategy, Component, OnInit } from '@angular/core';
+import { ChangeDetectionStrategy, Component, ElementRef, OnInit, ViewChild } from '@angular/core';
 
 import { PoTagBaseComponent } from './po-tag-base.component';
 import { PoTagIcon } from './enums/po-tag-icon.enum';
@@ -33,6 +33,8 @@ const poTagTypeDefault = 'po-tag-' + PoTagType.Info;
   changeDetection: ChangeDetectionStrategy.OnPush
 })
 export class PoTagComponent extends PoTagBaseComponent implements OnInit {
+  @ViewChild('tagContainer', { static: true }) tagContainer: ElementRef;
+
   isClickable: boolean;
 
   ngOnInit() {
@@ -82,5 +84,21 @@ export class PoTagComponent extends PoTagBaseComponent implements OnInit {
     event.preventDefault();
     event.stopPropagation();
     this.onClick();
+  }
+
+  styleTag() {
+    if (!this.tagColor && !this.inverse) {
+      return { 'background-color': this.customColor };
+    } else if (!this.tagColor && this.inverse && !this.customTextColor) {
+      return { 'border': '1px solid ' + this.customColor };
+    } else if (!this.tagColor && this.inverse && this.customTextColor) {
+      return { 'border': '1px solid ' + this.customTextColor, 'background-color': this.customColor };
+    } else {
+      return {};
+    }
+  }
+
+  getWidthTag() {
+    return this.tagContainer.nativeElement.offsetWidth > 155;
   }
 }
