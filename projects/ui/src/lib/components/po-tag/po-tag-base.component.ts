@@ -36,9 +36,16 @@ export class PoTagBaseComponent {
   @Input('p-value') value: string;
 
   /**
+   * @deprecated 16.x.x
+   *
    * @optional
    *
    * @description
+   *
+   * **Deprecated 16.x.x**.
+   *
+   * > Por regras de acessibilidade a tag não terá mais evento de click. Indicamos o uso do `Po-button` ou `Po-link`
+   * caso deseje esse comportamento.
    *
    * Ação que será executada ao clicar sobre o `po-tag` e que receberá como parâmetro um objeto contendo o seu valor e tipo.
    */
@@ -178,9 +185,13 @@ export class PoTagBaseComponent {
   }
 
   /**
+   * @deprecated 16.x.x
+   *
    * @optional
    *
    * @description
+   *
+   * > Por regras de acessibilidade e usabilidade a tag não terá a inversão de cores no componente.
    *
    * Ativa a inversão de cores configuradas no componente, possibilitando uma visualização de status ativo e inativo.
    *
