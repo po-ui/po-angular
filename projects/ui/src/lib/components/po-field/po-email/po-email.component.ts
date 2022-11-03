@@ -8,6 +8,7 @@ import {
   OnDestroy
 } from '@angular/core';
 import { AbstractControl, NG_VALUE_ACCESSOR, NG_VALIDATORS } from '@angular/forms';
+import { uuid } from '../../../utils/util';
 
 import { PoInputGeneric } from '../po-input-generic/po-input-generic';
 
@@ -60,6 +61,7 @@ const providers = [
   providers
 })
 export class PoEmailComponent extends PoInputGeneric implements AfterViewInit, OnDestroy {
+  id = `po-email[${uuid()}]`;
   icon = 'po-icon-mail';
 
   type = 'email';

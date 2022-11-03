@@ -27,12 +27,13 @@ import { PoPageDynamicEditMetadata } from './interfaces/po-page-dynamic-edit-met
 import { PoPageDynamicOptionsSchema } from '../../services/po-page-customization/po-page-dynamic-options.interface';
 import { PoPageDynamicEditActionsService } from './po-page-dynamic-edit-actions.service';
 import { PoPageDynamicEditBeforeCancel } from './interfaces/po-page-dynamic-edit-before-cancel.interface';
+import { PoPageDynamicEditLiterals } from './interfaces/po-page-dynamic-edit-literals.interface';
 
 type UrlOrPoCustomizationFunction = string | (() => PoPageDynamicEditOptions);
 type SaveAction = PoPageDynamicEditActions['save'] | PoPageDynamicEditActions['saveNew'];
 
 export const poPageDynamicEditLiteralsDefault = {
-  en: {
+  en: <PoPageDynamicEditLiterals>{
     cancelConfirmMessage: 'Are you sure you want to cancel this operation?',
     detailActionNew: 'New',
     pageActionCancel: 'Cancel',
@@ -43,7 +44,7 @@ export const poPageDynamicEditLiteralsDefault = {
     saveNotificationSuccessUpdate: 'Resource successfully updated.',
     saveNotificationWarning: 'Form must be filled out correctly.'
   },
-  es: {
+  es: <PoPageDynamicEditLiterals>{
     cancelConfirmMessage: 'Está seguro de que desea cancelar esta operación?',
     detailActionNew: 'Nuevo',
     pageActionCancel: 'Cancelar',
@@ -54,7 +55,7 @@ export const poPageDynamicEditLiteralsDefault = {
     saveNotificationSuccessUpdate: 'Recurso actualizado con éxito.',
     saveNotificationWarning: 'El formulario debe llenarse correctamente.'
   },
-  pt: {
+  pt: <PoPageDynamicEditLiterals>{
     cancelConfirmMessage: 'Tem certeza que deseja cancelar esta operação?',
     detailActionNew: 'Novo',
     pageActionCancel: 'Cancelar',
@@ -65,7 +66,7 @@ export const poPageDynamicEditLiteralsDefault = {
     saveNotificationSuccessUpdate: 'Recurso atualizado com sucesso.',
     saveNotificationWarning: 'Formulário precisa ser preenchido corretamente.'
   },
-  ru: {
+  ru: <PoPageDynamicEditLiterals>{
     cancelConfirmMessage: 'Вы уверены, что хотите отменить эту операцию?',
     detailActionNew: 'Новый',
     pageActionCancel: 'Отменить',
@@ -279,7 +280,6 @@ export class PoPageDynamicEditComponent implements OnInit, OnDestroy {
    */
   @Input('p-load') onLoad: string | (() => PoPageDynamicEditOptions);
 
-  literals;
   model: any = {};
 
   // beforeSave: return boolean
@@ -289,8 +289,10 @@ export class PoPageDynamicEditComponent implements OnInit, OnDestroy {
   // beforeInsert: : return boolean
   readonly detailActions: PoGridRowActions = {};
 
+  private language: string;
   private subscriptions: Array<Subscription> = [];
   private _actions: PoPageDynamicEditActions = {};
+  private _literals: PoPageDynamicEditLiterals;
   private _autoRouter: boolean = false;
   private _controlFields: Array<any> = [];
   private _detailFields: Array<any> = [];
@@ -314,6 +316,57 @@ export class PoPageDynamicEditComponent implements OnInit, OnDestroy {
 
   get actions() {
     return { ...this._actions };
+  }
+
+  /**
+   * @optional
+   *
+   * @description
+   *
+   * Objeto com as literais usadas no `po-page-dynamic-edit`.
+   *
+   * É possivel customizar passando um objeto com todas as literais disponíveis
+   * ou passando apenas as literais que deseja customizar
+   *
+   * ```
+   *  const customLiterals: PoPageDynamicEditLiterals = {
+   *    detailActionNew: 'Incluir',
+   *    pageActionCancel: 'Descartar',
+   *    pageActionSave: 'Gravar',
+   *    pageActionSaveNew: 'Gravar e incluir',
+   *    registerNotFound: 'Nenhum registro encontrado.',
+   *    saveNotificationSuccessSave: 'Item salvo com sucesso.',
+   *    saveNotificationSuccessUpdate: 'Item atualizado com sucesso.',
+   *    saveNotificationWarning: 'Necessário preencher o formulário corretamente.'
+   *  };
+   * ```
+   *
+   * E para carregar as literais customizadas, basta apenas passar o objeto para o componente.
+   *
+   * ```
+   * <po-page-dynamic-edit
+   *   [p-literals]="customLiterals">
+   * </po-page-dynamic-edit>
+   * ```
+   *
+   * > O valor padrão será traduzido de acordo com o idioma configurado no [`PoI18nService`](/documentation/po-i18n) ou *browser*.
+   */
+  @Input('p-literals') set literals(value: PoPageDynamicEditLiterals) {
+    if (value instanceof Object && !(value instanceof Array)) {
+      this._literals = {
+        ...poPageDynamicEditLiteralsDefault[poLocaleDefault],
+        ...poPageDynamicEditLiteralsDefault[this.language],
+        ...value
+      };
+    } else {
+      this._literals = poPageDynamicEditLiteralsDefault[this.language];
+    }
+
+    this._pageActions = this.getPageActions(this._actions);
+  }
+
+  get literals() {
+    return this._literals || poPageDynamicEditLiteralsDefault[this.language];
   }
 
   /**
@@ -363,12 +416,7 @@ export class PoPageDynamicEditComponent implements OnInit, OnDestroy {
     private poPageDynamicEditActionsService: PoPageDynamicEditActionsService,
     languageService: PoLanguageService
   ) {
-    const language = languageService.getShortLanguage();
-
-    this.literals = {
-      ...poPageDynamicEditLiteralsDefault[poLocaleDefault],
-      ...poPageDynamicEditLiteralsDefault[language]
-    };
+    this.language = languageService.getShortLanguage();
   }
 
   ngOnInit(): void {

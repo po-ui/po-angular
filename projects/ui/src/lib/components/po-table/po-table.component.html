@@ -64,9 +64,8 @@
             <po-checkbox
               name="selectAll"
               *ngIf="!hideSelectAll"
-              (click)="selectAllRows()"
               (p-change)="selectAllRows()"
-              [(ngModel)]="selectAll"
+              [p-checkboxValue]="selectAll === null ? 'mixed' : selectAll"
             ></po-checkbox>
           </div>
         </th>
@@ -227,6 +226,7 @@
                 [class.po-table-body-ellipsis]="hideTextOverflow"
                 [ngSwitch]="column.type"
                 [p-tooltip]="tooltipText"
+                [p-append-in-body]="true"
                 [style.width.px]="noColumnsHeaderFixed?.nativeElement.parentElement?.offsetWidth"
                 (mouseenter)="tooltipMouseEnter($event, column, row)"
                 (mouseleave)="tooltipMouseLeave()"
@@ -366,9 +366,8 @@
             <po-checkbox
               name="selectAll"
               *ngIf="!hideSelectAll"
-              (click)="selectAllRows()"
               (p-change)="selectAllRows()"
-              [(ngModel)]="selectAll"
+              [p-checkboxValue]="selectAll === null ? 'mixed' : selectAll"
             ></po-checkbox>
           </div>
         </th>
@@ -514,6 +513,7 @@
               [class.po-table-body-ellipsis]="hideTextOverflow"
               [ngSwitch]="column.type"
               [p-tooltip]="tooltipText"
+              [p-append-in-body]="true"
               (mouseenter)="tooltipMouseEnter($event, column, row)"
               (mouseleave)="tooltipMouseLeave()"
             >
@@ -659,8 +659,7 @@
   <po-checkbox
     name="checkbox"
     (p-change)="selectable ? selectRow(row) : 'javascript:;'"
-    [(ngModel)]="row.$selected"
-    (click)="selectable ? selectRow(row) : 'javascript:;'"
+    [p-checkboxValue]="row.$selected"
   ></po-checkbox>
 </ng-template>
 

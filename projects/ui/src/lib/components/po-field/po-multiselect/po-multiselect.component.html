@@ -1,8 +1,17 @@
-<po-field-container [p-label]="label" [p-help]="help" [p-optional]="!required && optional">
+<po-field-container
+  [p-disabled]="disabled"
+  [p-help]="help"
+  [p-label]="label"
+  [p-optional]="optional"
+  [p-required]="required"
+  [p-show-required]="showRequired"
+>
   <div class="po-field-container-content" [class.po-multiselect-show]="dropdownOpen">
     <div
       #inputElement
       [tabindex]="disabled ? -1 : 0"
+      [attr.disabled]="disabled"
+      [attr.aria-label]="label"
       class="po-input po-input-icon-right po-multiselect-input po-clickable"
       [class.po-multiselect-input-auto]="autoHeight"
       [class.po-multiselect-input-static]="!autoHeight"
@@ -12,26 +21,26 @@
       (click)="toggleDropdownVisibility()"
       (blur)="onBlur()"
     >
-      <span *ngIf="placeholder && !visibleDisclaimers?.length" class="po-multiselect-input-placeholder">
+      <span *ngIf="placeholder && !disabled && !visibleDisclaimers?.length" class="po-multiselect-input-placeholder">
         {{ placeholder }}
       </span>
 
       <po-disclaimer
         *ngFor="let disclaimer of visibleDisclaimers"
         class="po-multiselect-input-disclaimer"
-        [p-label]="disclaimer.label"
-        [p-value]="disclaimer.value"
-        [p-hide-close]="disclaimer.value === '' || disabled"
-        [class.po-clickable]="disclaimer.value === '' && !disabled"
-        (click)="openDropdown(disclaimer.value === '')"
-        (p-close-action)="closeDisclaimer(disclaimer.value)"
+        [p-label]="disclaimer[fieldLabel]"
+        [p-value]="disclaimer[fieldValue]"
+        [p-hide-close]="disclaimer[fieldValue] === '' || disabled"
+        [class.po-clickable]="disclaimer[fieldValue] === '' && !disabled"
+        (click)="openDropdown(disclaimer[fieldValue] === '')"
+        (p-close-action)="closeDisclaimer(disclaimer[fieldValue])"
       >
       </po-disclaimer>
 
       <div class="po-field-icon-container-right">
         <span
           #iconElement
-          class="po-icon po-field-icon {{ dropdownIcon }}"
+          class="po-icon po-field-icon {{ dropdownIcon }} {{ disabled ? 'po-icon-input-disabled' : 'po-icon-input' }}"
           [ngClass]="disabled ? 'po-field-icon-disabled' : ''"
         >
         </span>
@@ -49,6 +58,8 @@
     [p-visible-options]="visibleOptionsDropdown"
     [p-selected-options]="selectedOptions"
     [p-placeholder-search]="placeholderSearch"
+    [p-field-value]="fieldValue"
+    [p-field-label]="fieldLabel"
     (p-change)="changeItems($event)"
     (p-change-search)="changeSearch($event)"
     (p-close-dropdown)="controlDropdownVisibility(false)"

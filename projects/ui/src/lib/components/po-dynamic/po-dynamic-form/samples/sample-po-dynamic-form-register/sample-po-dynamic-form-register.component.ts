@@ -75,13 +75,15 @@ export class SamplePoDynamicFormRegisterComponent implements OnInit {
       property: 'state',
       gridColumns: 6,
       options: [
-        { label: 'Santa Catarina', value: 1 },
-        { label: 'São Paulo', value: 2 },
-        { label: 'Rio de Janeiro', value: 3 },
-        { label: 'Minas Gerais', value: 4 }
-      ]
+        { state: 'Santa Catarina', code: 1 },
+        { state: 'São Paulo', code: 2 },
+        { state: 'Rio de Janeiro', code: 3 },
+        { state: 'Minas Gerais', code: 4 }
+      ],
+      fieldLabel: 'state',
+      fieldValue: 'code'
     },
-    { property: 'city', disabled: true, gridColumns: 6 },
+    { property: 'city', disabled: true, gridColumns: 6, fieldValue: 'code', fieldLabel: 'city' },
     {
       property: 'vacation',
       type: 'date',
@@ -122,7 +124,7 @@ export class SamplePoDynamicFormRegisterComponent implements OnInit {
       gridSmColumns: 12,
       label: 'Favorite hero',
       optional: true,
-      searchService: 'https://po-sample-api.herokuapp.com/v1/heroes',
+      searchService: 'https://po-sample-api.fly.dev/v1/heroes',
       columns: [
         { property: 'nickname', label: 'Hero' },
         { property: 'label', label: 'Name' }
@@ -130,6 +132,33 @@ export class SamplePoDynamicFormRegisterComponent implements OnInit {
       format: ['id', 'nickname'],
       fieldLabel: 'nickname',
       fieldValue: 'email'
+    },
+    {
+      property: 'partner',
+      gridColumns: 6,
+      gridSmColumns: 12,
+      optionsService: 'https://po-sample-api.fly.dev/v1/people',
+      fieldLabel: 'name',
+      fieldValue: 'id',
+      optional: true
+    },
+    {
+      property: 'videogame',
+      gridColumns: 6,
+      gridSmColumns: 12,
+      label: 'Video game console',
+      optional: true,
+      fieldValue: 'code',
+      fieldLabel: 'console',
+      options: [
+        { console: 'Nintendo Wii U', code: 'NWU' },
+        { console: 'Playstation 4', code: 'PS4' },
+        { console: 'Xbox One', code: 'XONE' },
+        { console: 'Nintendo Switch', code: 'NSW' },
+        { console: 'Playstation 5', code: 'PS5' },
+        { console: 'Xbox Series S|X', code: 'XSSX' }
+      ],
+      optionsMulti: true
     }
   ];
 
@@ -139,7 +168,8 @@ export class SamplePoDynamicFormRegisterComponent implements OnInit {
     this.person = {
       name: 'Tony Stark',
       birthday: '1970-05-29',
-      isJuridicPerson: false
+      isJuridicPerson: false,
+      videogame: ['PS4', 'NSW', 'XSSX']
     };
   }
 

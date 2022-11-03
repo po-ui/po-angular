@@ -1,4 +1,12 @@
-<po-field-container [p-help]="help" [p-label]="label" [p-optional]="!required && optional">
+<po-field-container
+  [p-disabled]="disabled"
+  [p-help]="help"
+  [p-id]="id"
+  [p-label]="label"
+  [p-optional]="optional"
+  [p-required]="required"
+  [p-show-required]="showRequired"
+>
   <div class="po-field-container-content">
     <textarea
       #inp
@@ -8,12 +16,12 @@
       (input)="eventOnInput($event)"
       [attr.name]="name"
       [disabled]="disabled"
-      [placeholder]="placeholder"
+      [id]="id"
+      [placeholder]="disabled ? '' : placeholder"
       [readonly]="readonly"
       [required]="required"
       [rows]="rows"
-    >
-    </textarea>
+    ></textarea>
   </div>
 
   <po-field-container-bottom></po-field-container-bottom>

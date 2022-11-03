@@ -98,7 +98,7 @@ export interface PoTableColumn {
   /**
    * Formato de exibição do valor da coluna:
    * - Formato para moeda (currency). Exemplos: 'BRL', 'USD'.
-   * - Formato para data (date): aceita apenas os caracteres de dia(dd), mês(MM ou mm) e ano (yyyy ou yy),
+   * - Formato para data (date): aceita apenas os caracteres de dia(dd), mês(MM) e ano (yyyy ou yy),
    * caso não seja informado um formato o mesmo será 'dd/MM/yyyy'. Exemplos: 'dd/MM/yyyy', 'dd-MM-yy', 'mm/dd/yyyy'.
    * - Formato para horário (time): aceita apenas os caracteres de hora(HH), minutos(mm), segundos(ss) e
    *  milisegundos(f-ffffff), os milisegundos são opcionais, caso não seja informado um formato o mesmo será

@@ -15,6 +15,8 @@ import {
 import { NgControl, NG_VALIDATORS, NG_VALUE_ACCESSOR } from '@angular/forms';
 import { Subscription } from 'rxjs';
 
+import { uuid } from '../../../utils/util';
+
 import { PoLookupBaseComponent } from './po-lookup-base.component';
 import { PoLookupFilterService } from './services/po-lookup-filter.service';
 import { PoLookupModalService } from './services/po-lookup-modal.service';
@@ -115,6 +117,8 @@ export class PoLookupComponent extends PoLookupBaseComponent implements AfterVie
   disclaimers = [];
   visibleDisclaimers = [];
 
+  id = `po-lookup[${uuid()}]`;
+
   private modalSubscription: Subscription;
   private isCalculateVisibleItems: boolean = true;
 
@@ -125,11 +129,11 @@ export class PoLookupComponent extends PoLookupBaseComponent implements AfterVie
   constructor(
     private renderer: Renderer2,
     poLookupFilterService: PoLookupFilterService,
-    private poLookupModalService: PoLookupModalService,
+    poLookupModalService: PoLookupModalService,
     private cd: ChangeDetectorRef,
     injector: Injector
   ) {
-    super(poLookupFilterService, injector);
+    super(poLookupFilterService, injector, poLookupModalService);
   }
 
   ngAfterViewInit() {

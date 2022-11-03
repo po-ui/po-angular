@@ -421,7 +421,7 @@ describe('PoTableColumnManagerComponent:', () => {
         { property: 'name', label: 'Name' }
       ];
 
-      component.changePosition({ value: 'initial', label: 'initial' }, 'up');
+      component.changePosition({ option: { value: 'initial', label: 'initial' }, direction: 'up' });
 
       expect(component.columns[0]).toEqual({ property: 'initial', label: 'initial' });
     });
@@ -433,48 +433,9 @@ describe('PoTableColumnManagerComponent:', () => {
         { property: 'name', label: 'Name' }
       ];
 
-      component.changePosition({ value: 'initial', label: 'initial' }, 'down');
+      component.changePosition({ option: { value: 'initial', label: 'initial' }, direction: 'down' });
 
       expect(component.columns[component.columns.length - 1]).toEqual({ property: 'initial', label: 'initial' });
-    });
-
-    it(`verifyArrowDisabled: Should return true if it is the up arrow of the first column`, () => {
-      component.columns = [
-        { property: 'id', label: 'Code' },
-        { property: 'initial', label: 'initial' },
-        { property: 'name', label: 'Name' }
-      ];
-
-      const arrowDisabled = component.verifyArrowDisabled({ property: 'id', label: 'Code', value: 'id' }, 'up');
-
-      expect(arrowDisabled).toEqual(true);
-    });
-
-    it(`verifyArrowDisabled: Should return true if it is the down arrow of the last column`, () => {
-      component.columns = [
-        { property: 'id', label: 'Code' },
-        { property: 'initial', label: 'initial' },
-        { property: 'name', label: 'Name' }
-      ];
-
-      const arrowDisabled = component.verifyArrowDisabled({ property: 'name', label: 'Name', value: 'name' }, 'down');
-
-      expect(arrowDisabled).toEqual(true);
-    });
-
-    it(`verifyArrowDisabled: Should return false if not last column down arrow or first column up arrow`, () => {
-      component.columns = [
-        { property: 'id', label: 'Code' },
-        { property: 'initial', label: 'initial' },
-        { property: 'name', label: 'Name' }
-      ];
-
-      const arrowDisabled = component.verifyArrowDisabled(
-        { property: 'initial', label: 'initial', value: 'initial' },
-        'up'
-      );
-
-      expect(arrowDisabled).toEqual(false);
     });
 
     describe('allowsEmission:', () => {

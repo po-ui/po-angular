@@ -2,6 +2,113 @@
 
 All notable changes to this project will be documented in this file. See [standard-version](https://github.com/conventional-changelog/standard-version) for commit guidelines.
 
+## [14.8.1](https://github.com/po-ui/po-angular/compare/v14.8.0...v14.8.1) (2022-10-31)
+
+
+### Bug Fixes
+
+* **select:** corrige renderização de conteúdo ([ee920b8](https://github.com/po-ui/po-angular/commit/ee920b8e326ed93c03844899e81104fee1d7ab0d))
+* **upload:** ajusta funcionamento do método clear ([560e94c](https://github.com/po-ui/po-angular/commit/560e94ceccedbebbf69772ac23301e158ae2e7d8))
+
+
+
+# [14.8.0](https://github.com/po-ui/po-angular/compare/v14.7.1...v14.8.0) (2022-10-24)
+
+
+### Bug Fixes
+
+* **lookup:** corrige gerenciador de colunas lookup ([c65b2fe](https://github.com/po-ui/po-angular/commit/c65b2feb66e1b51692c6f8cd578427972081b948))
+
+
+### Features
+
+* **label:** novo componente po-label ([28a2452](https://github.com/po-ui/po-angular/commit/28a2452308431f92e63d9c47bb1b042536a3f424))
+* **page-dynamic-edit:** adiciona parâmetro `p-literals` ([43665ec](https://github.com/po-ui/po-angular/commit/43665ec26bf6e848b87c3fca9cd95af359aeca6d)), closes [#1321](https://github.com/po-ui/po-angular/issues/1321)
+* **radio-group:** remove propriedade outline ([ea68d53](https://github.com/po-ui/po-angular/commit/ea68d538d1c4c54dfafb5daaa53ba0ed07fe0152))
+* **widget:** implementa definições do AnimaliaDS ([6c4ac96](https://github.com/po-ui/po-angular/commit/6c4ac9646470f4d20ac09113823d7b16813ed48f))
+
+
+
+## [14.7.1](https://github.com/po-ui/po-angular/compare/v14.7.0...v14.7.1) (2022-10-17)
+
+
+### Bug Fixes
+
+* **table:** corrige posicionamento da tooltip ([77988c9](https://github.com/po-ui/po-angular/commit/77988c98614164316eaebb850ba39ddbd9cac15d))
+
+
+
+# [14.7.0](https://github.com/po-ui/po-angular/compare/v14.6.0...v14.7.0) (2022-10-10)
+
+
+### Bug Fixes
+
+* **language:** adiciona limpeza das variáveis do `localStorage` ([96c2a9a](https://github.com/po-ui/po-angular/commit/96c2a9a1d50886c39feeb56866ed2208a4e9177d)), closes [#1331](https://github.com/po-ui/po-angular/issues/1331)
+* **rich-text:** ajustes na toolbar ([a7897f6](https://github.com/po-ui/po-angular/commit/a7897f6301cacc933da6e94e0dcd9643c297d32f))
+* **select:** ajusta o `OnTouched` do campo ([d1cbe50](https://github.com/po-ui/po-angular/commit/d1cbe50f291fae6a8449eb73468e5c2ad70e1eb2)), closes [#1378](https://github.com/po-ui/po-angular/issues/1378)
+
+
+### Features
+
+* **checkbox:** adiciona propriedade `p-size` ([827620d](https://github.com/po-ui/po-angular/commit/827620debbf59dea7df643d462e8d0da7c6fac33))
+* **dynamic-form:** repassa propriedades e uso de Array<any> no options ([67c38c0](https://github.com/po-ui/po-angular/commit/67c38c0a1ec7e91cdffbe7bfc0a7140635f066ef))
+* **dynamic-table:** altera filtro de pesquisa ([2e6ab2d](https://github.com/po-ui/po-angular/commit/2e6ab2dbdd8fa2bff70f1209d8e030c36720b5cc)), closes [#1105](https://github.com/po-ui/po-angular/issues/1105)
+* **link:** cria novo componente po-link ([0c43b1c](https://github.com/po-ui/po-angular/commit/0c43b1ce07d81fe3929cbcdf099e920f67d5611b))
+* **page-job-scheduler:** adiciona a propriedade p-orientation ([58488cd](https://github.com/po-ui/po-angular/commit/58488cd8ded17e36f2a3a76b64e9f1c93b84c55f)), closes [#1418](https://github.com/po-ui/po-angular/issues/1418)
+
+
+
+## [14.6.0](https://github.com/po-ui/po-angular/compare/v14.5.0...v14.6.0) (2022-10-03)
+
+
+### Bug Fixes
+
+* **table:** ajusta eventos sendo executados simultaneamente ([5b1f6f4](https://github.com/po-ui/po-angular/commit/5b1f6f44ee5f8bb37d83a334e3ff7cb249e5a531))
+
+
+### Features
+
+* **button-group:** aplica estilo definido pelo AnimaliaDS ([a6706a0](https://github.com/po-ui/po-style/commit/a6706a03b5af4d390bb87d628b36a48041a1d31d))
+
+
+# [14.5.0](https://github.com/po-ui/po-angular/compare/v14.4.0...v14.5.0) (2022-09-26)
+
+
+### Bug Fixes
+
+* **multiselect:** corrige emissão de evento pela listagem ([f7e1a8c](https://github.com/po-ui/po-angular/commit/f7e1a8cb424935ea4e778fc0d0b4b7ebb8619e8e))
+* **table:** corrige posicionamento do gerenciador ([29ec035](https://github.com/po-ui/po-angular/commit/29ec0350860462e2ba8ddb4df6ef28dc080d9f25))
+* **tree-view:** corrige funcionamento inadequado ([deeda5a](https://github.com/po-ui/po-angular/commit/deeda5aaa3b80d958101f1bdda43359974e460ed))
+
+
+### Features
+
+* **fields:** inclui definições do AnimaliaDS ([b7d5afd](https://github.com/po-ui/po-angular/commit/b7d5afd5f23ffb126d9eabed52a6ef75f9f18fe7))
+* **multiselect:** permite usar o `p-options` com `any` ([90b7f74](https://github.com/po-ui/po-angular/commit/90b7f74da5a0a670ecd86414d5412eedd0a324f1))
+* **radiogroup:** aplica estilo e acessibilidade definidos pelo DS ([97af9fc](https://github.com/po-ui/po-angular/commit/97af9fc7a227c42cf9f7ea244fc298a724dc5ca0))
+* **select:** aplica estilo e acessibilidade definidos pelo DS ([3261e00](https://github.com/po-ui/po-angular/commit/3261e007ec997bbeac67b37f36ce34606c55c96c))
+* **table:** exibe coluna tipo `array` em linha tipo `detail` ([92aeb06](https://github.com/po-ui/po-angular/commit/92aeb065e9b4ebe885c0a4e2afda47eba05d31a6)), closes [#1328](https://github.com/po-ui/po-angular/issues/1328)
+* **tag:** possibilita customização de cores ([018ba14](https://github.com/po-ui/po-angular/commit/018ba1429ea6e4efa27ba3039a035525c227e39f))
+* **textarea:** aplica estilo e acessibilidade definidos pelo DS ([baf5a7a](https://github.com/po-ui/po-angular/commit/baf5a7a9f1a88787a2f10c2f0950960e24cb547a))
+
+
+
+# [14.4.0](https://github.com/po-ui/po-angular/compare/v14.3.1...v14.4.0) (2022-09-05)
+
+
+### Bug Fixes
+
+* **button-group:** ajusta `selected` para ocorrer antes de `action` ([22f6cf7](https://github.com/po-ui/po-angular/commit/22f6cf730d3af2184b41f21c411ccef0ca82912d)), closes [#1234](https://github.com/po-ui/po-angular/issues/1234)
+* **translation:** corrected translation russian ([9c5cee9](https://github.com/po-ui/po-angular/commit/9c5cee96e12fb8dc5e5f603cebd2c3274b443d26))
+
+
+### Features
+
+* **accordion-item:** adiciona outputs ao expandir ou colapsar ([9c2bcc2](https://github.com/po-ui/po-angular/commit/9c2bcc27d46574e5f4d7652c702c0263e19123fe)), closes [#DTHFUI-6432](https://github.com/po-ui/po-angular/issues/DTHFUI-6432)
+* **switch:** aplica estilo definido pelo DS ([652fb96](https://github.com/po-ui/po-angular/commit/652fb969ffe36fffde97dd7bf0d604d6f3b7e902))
+
+
+
 ## [14.3.1](https://github.com/po-ui/po-angular/compare/v14.3.0...v14.3.1) (2022-08-29)
 
 

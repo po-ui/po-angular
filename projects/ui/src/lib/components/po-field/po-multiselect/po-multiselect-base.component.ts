@@ -7,8 +7,8 @@ import { debounceTime, distinctUntilChanged, switchMap, tap } from 'rxjs/operato
 import {
   convertToBoolean,
   isTypeof,
-  removeDuplicatedOptions,
-  removeUndefinedAndNullOptions,
+  removeDuplicatedOptionsWithFieldValue,
+  removeUndefinedAndNullOptionsWithFieldValue,
   sortOptionsByProperty
 } from '../../../utils/util';
 import { requiredFailed } from './../validators';
@@ -136,8 +136,8 @@ export abstract class PoMultiselectBaseComponent implements ControlValueAccessor
    */
   @Output('p-change') change: EventEmitter<any> = new EventEmitter<any>();
 
-  selectedOptions: Array<PoMultiselectOption> = [];
-  visibleOptionsDropdown: Array<PoMultiselectOption> = [];
+  selectedOptions: Array<PoMultiselectOption | any> = [];
+  visibleOptionsDropdown: Array<PoMultiselectOption | any> = [];
   visibleDisclaimers = [];
   isServerSearching = false;
   isFirstFilter: boolean = true;
@@ -158,7 +158,7 @@ export abstract class PoMultiselectBaseComponent implements ControlValueAccessor
   private _filterMode?: PoMultiselectFilterMode = PoMultiselectFilterMode.startsWith;
   private _hideSearch?: boolean = false;
   private _literals: PoMultiselectLiterals;
-  private _options: Array<PoMultiselectOption>;
+  private _options: Array<PoMultiselectOption | any>;
   private _required?: boolean = false;
   private _sort?: boolean = false;
   private _autoHeight: boolean = false;
@@ -306,7 +306,9 @@ export abstract class PoMultiselectBaseComponent implements ControlValueAccessor
    *
    * @description
    *
-   * Indica que o campo será obrigatório. Esta propriedade é desconsiderada quando o campo está desabilitado (p-disabled).
+   * Define que o campo será obrigatório.
+   *
+   * > Esta propriedade é desconsiderada quando o input está desabilitado `(p-disabled)`.
    *
    * @default `false`
    */
@@ -318,6 +320,14 @@ export abstract class PoMultiselectBaseComponent implements ControlValueAccessor
   get required() {
     return this._required;
   }
+
+  /**
+   * Define se a indicação de campo obrigatório será exibida.
+   *
+   * > Não será exibida a indicação se:
+   * - Não possuir `p-help` e/ou `p-label`.
+   */
+  @Input('p-show-required') showRequired: boolean = false;
 
   /**
    * @optional
@@ -359,7 +369,7 @@ export abstract class PoMultiselectBaseComponent implements ControlValueAccessor
   /**
    * @description
    *
-   * Nesta propriedade deve ser definida uma lista de objetos que implementam a interface PoMultiselectOption.
+   * Nesta propriedade deve ser definida uma lista de objetos que será exibida no multiselect.
    * Esta lista deve conter os valores e os labels que serão apresentados na tela.
    *
    * > Essa propriedade é imutável, ou seja, sempre que quiser atualizar a lista de opções disponíveis
@@ -372,14 +382,23 @@ export abstract class PoMultiselectBaseComponent implements ControlValueAccessor
    * // evite, pois não atualiza a referência do objeto podendo gerar atrasos na atualização do template
    * this.options.push({ value: 'x', label: 'Nova opção' });
    * ```
+   * > A lista pode ser definida utilizando um array com o valor representando `value` e `label` das seguintes formas:
+   *
+   * ```
+   * <po-multiselect name="multiselect" p-label="PO Multiselect" [p-options]="[{value: 1, label: 'One'}, {value: 2, label: 'two'}]"> </po-multiselect>
+   * ```
+   *
+   * ```
+   * <po-multiselect name="multiselect" p-label="PO Multiselect" [p-options]="[{name: 'Roger', age: 28}, {name: 'Anne', age: 35}]" p-field-label="name" p-field-value="age"> </po-multiselect>
+   * ```
+   *
+   * - Aconselha-se utilizar valores distintos no `label` e `value` dos itens.
    */
-  @Input('p-options') set options(options: Array<PoMultiselectOption>) {
+  @Input('p-options') set options(options: Array<PoMultiselectOption | any>) {
     this._options = options;
-
-    this.validAndSortOptions();
   }
 
-  get options() {
+  get options(): Array<PoMultiselectOption | any> {
     return this._options;
   }
 
@@ -445,7 +464,7 @@ export abstract class PoMultiselectBaseComponent implements ControlValueAccessor
    * @default `label`
    */
   @Input('p-field-label') set fieldLabel(value: string) {
-    this._fieldLabel = value || PO_MULTISELECT_FIELD_LABEL_DEFAULT;
+    this._fieldLabel = value ? value : PO_MULTISELECT_FIELD_LABEL_DEFAULT;
 
     if (isTypeof(this.filterService, 'string') && this.service) {
       this.service.fieldLabel = this._fieldLabel;
@@ -469,7 +488,7 @@ export abstract class PoMultiselectBaseComponent implements ControlValueAccessor
    * @default `value`
    */
   @Input('p-field-value') set fieldValue(value: string) {
-    this._fieldValue = value || PO_MULTISELECT_FIELD_VALUE_DEFAULT;
+    this._fieldValue = value ? value : PO_MULTISELECT_FIELD_VALUE_DEFAULT;
 
     if (isTypeof(this.filterService, 'string') && this.service) {
       this.service.fieldValue = this._fieldValue;
@@ -499,6 +518,7 @@ export abstract class PoMultiselectBaseComponent implements ControlValueAccessor
       )
       .subscribe();
 
+    this.validAndSortOptions();
     this.updateList(this.options);
   }
 
@@ -515,31 +535,31 @@ export abstract class PoMultiselectBaseComponent implements ControlValueAccessor
 
   validAndSortOptions() {
     if (this.options && this.options.length) {
-      removeUndefinedAndNullOptions(this.options);
-      removeDuplicatedOptions(this.options);
+      removeUndefinedAndNullOptionsWithFieldValue(this.options, this.fieldValue);
+      removeDuplicatedOptionsWithFieldValue(this.options, this.fieldValue);
       this.setUndefinedLabels(this.options);
 
       if (this.sort) {
-        sortOptionsByProperty(this.options, 'label');
+        sortOptionsByProperty(this.options, this.fieldLabel);
       }
     }
   }
 
   setUndefinedLabels(options) {
     options.forEach(option => {
-      if (!option['label']) {
-        option.label = option.value;
+      if (!option[this.fieldLabel]) {
+        option[this.fieldLabel] = option[this.fieldValue];
       }
     });
   }
 
-  updateList(options: Array<PoMultiselectOption>) {
+  updateList(options: Array<PoMultiselectOption | any>) {
     if (options) {
       this.visibleOptionsDropdown = options;
     }
   }
 
-  callOnChange(selectedOptions: Array<PoMultiselectOption>) {
+  callOnChange(selectedOptions: Array<PoMultiselectOption | any>) {
     if (this.onModelChange) {
       this.onModelChange(this.getValuesFromOptions(selectedOptions));
       this.eventChange(selectedOptions);
@@ -553,20 +573,20 @@ export abstract class PoMultiselectBaseComponent implements ControlValueAccessor
     this.lastLengthModel = selectedOptions ? selectedOptions.length : null;
   }
 
-  getValuesFromOptions(selectedOptions: Array<PoMultiselectOption>) {
-    return selectedOptions && selectedOptions.length ? selectedOptions.map(option => option.value) : [];
+  getValuesFromOptions(selectedOptions: Array<PoMultiselectOption | any>) {
+    return selectedOptions && selectedOptions.length ? selectedOptions.map(option => option[this.fieldValue]) : [];
   }
 
   getLabelByValue(value) {
-    const index = this.options.findIndex(option => option.value === value);
+    const index = this.options.findIndex(option => option[this.fieldValue] === value);
     return this.options[index].label;
   }
 
-  searchByLabel(search: string, options: Array<PoMultiselectOption>, filterMode: PoMultiselectFilterMode) {
+  searchByLabel(search: string, options: Array<PoMultiselectOption | any>, filterMode: PoMultiselectFilterMode) {
     if (search && options && options.length) {
-      const newOptions: Array<PoMultiselectOption> = [];
+      const newOptions: Array<PoMultiselectOption | any> = [];
       options.forEach(option => {
-        if (option.label && this.compareMethod(search, option, filterMode)) {
+        if (option[this.fieldLabel] && this.compareMethod(search, option, filterMode)) {
           newOptions.push(option);
         }
       });
@@ -588,15 +608,15 @@ export abstract class PoMultiselectBaseComponent implements ControlValueAccessor
   }
 
   startsWith(search: string, option: PoMultiselectOption) {
-    return option.label.toLowerCase().startsWith(search.toLowerCase());
+    return option[this.fieldLabel].toLowerCase().startsWith(search.toLowerCase());
   }
 
   contains(search: string, option: PoMultiselectOption) {
-    return option.label.toLowerCase().indexOf(search.toLowerCase()) > -1;
+    return option[this.fieldLabel].toLowerCase().indexOf(search.toLowerCase()) > -1;
   }
 
   endsWith(search: string, option: PoMultiselectOption) {
-    return option.label.toLowerCase().endsWith(search.toLowerCase());
+    return option[this.fieldLabel].toLowerCase().endsWith(search.toLowerCase());
   }
 
   validate(c: AbstractControl): { [key: string]: any } {
@@ -615,7 +635,7 @@ export abstract class PoMultiselectBaseComponent implements ControlValueAccessor
     this.selectedOptions = [];
 
     if (newOptions.length === 0) {
-      this.lastLengthModel = 0;
+      this.lastLengthModel = undefined;
     }
 
     if (this.filterService) {
@@ -623,7 +643,7 @@ export abstract class PoMultiselectBaseComponent implements ControlValueAccessor
     } else {
       newOptions.forEach(newOption => {
         options.forEach(option => {
-          if (option.value === newOption.value) {
+          if (option[this.fieldValue] === newOption[this.fieldValue]) {
             this.selectedOptions.push(option);
           }
         });
@@ -643,7 +663,7 @@ export abstract class PoMultiselectBaseComponent implements ControlValueAccessor
       });
     } else {
       // Validar se todos os items existem entre os options, senão atualizar o model
-      this.updateSelectedOptions(values.map(value => ({ value })));
+      this.updateSelectedOptions(values.map(value => ({ [this.fieldValue]: value })));
 
       if (this.selectedOptions && this.selectedOptions.length < values.length) {
         this.callOnChange(this.selectedOptions);
@@ -675,6 +695,6 @@ export abstract class PoMultiselectBaseComponent implements ControlValueAccessor
     }
   }
 
-  abstract applyFilter(value?: string): Observable<Array<PoMultiselectOption>>;
+  abstract applyFilter(value?: string): Observable<Array<PoMultiselectOption | any>>;
   abstract updateVisibleItems(): void;
 }

@@ -353,6 +353,7 @@ describe('PoUploadComponent:', () => {
       component.currentFiles = fileMock;
       spyOn(component, <any>'updateModel');
       spyOn(component, <any>'cleanInputValue');
+      spyOn(component['cd'], 'detectChanges');
 
       component.clear();
 
@@ -692,6 +693,7 @@ describe('PoUploadComponent:', () => {
     });
 
     it('cleanInputValue: should set input value to whitespace and set `calledByCleanInputValue` to true', () => {
+      spyOn(component['cd'], <any>'detectChanges');
       const calledByCleanInputValue = 'calledByCleanInputValue';
 
       component[calledByCleanInputValue] = false;
@@ -699,6 +701,7 @@ describe('PoUploadComponent:', () => {
 
       expect(component['inputFile'].nativeElement.value).toBe('');
       expect(component[calledByCleanInputValue]).toBeTruthy();
+      expect(component['cd'].detectChanges).toHaveBeenCalled();
     });
 
     it('updateFiles: should call `parseFiles` with `files` and `updateModel` with `currentFiles`', () => {
@@ -947,36 +950,6 @@ describe('PoUploadComponent:', () => {
   });
 
   describe('Templates:', () => {
-    it(`should show optional if the field isn't 'required', has 'label' and 'p-optional' is true.`, () => {
-      component.required = false;
-      component.optional = true;
-      component.label = 'label';
-
-      fixture.detectChanges();
-
-      expect(fixture.debugElement.nativeElement.querySelector('.po-field-optional')).toBeTruthy();
-    });
-
-    it(`shouldn't show optional if the field is 'required', has 'label' and 'p-optional' is true.`, () => {
-      component.required = true;
-      component.optional = true;
-      component.label = 'label';
-
-      fixture.detectChanges();
-
-      expect(fixture.debugElement.nativeElement.querySelector('.po-field-optional')).toBeNull();
-    });
-
-    it(`shouldn't show optional if the field isn't 'required', has 'label' but 'p-optional' is false.`, () => {
-      component.required = true;
-      component.optional = false;
-      component.label = 'label';
-
-      fixture.detectChanges();
-
-      expect(fixture.debugElement.nativeElement.querySelector('.po-field-optional')).toBeNull();
-    });
-
     it('should show select files button if `p-hide-select-button` is false', () => {
       component.hideSelectButton = false;
 

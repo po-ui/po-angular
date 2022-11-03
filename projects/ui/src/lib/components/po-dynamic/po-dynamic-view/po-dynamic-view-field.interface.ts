@@ -18,9 +18,12 @@ export interface PoDynamicViewField extends PoDynamicField {
   tag?: boolean;
 
   /**
-   * Define uma cor para o campo do tipo *tag*.
-   *
-   * Valores válidos:
+   * Determina a cor da tag. As maneiras de customizar as cores são:
+   * - Hexadeximal, por exemplo `#c64840`;
+   * - RGB, como `rgb(0, 0, 165)`;
+   * - O nome da cor, por exemplo `blue`;
+   * - Usando uma das cores do tema do PO:
+   * - Valores válidos:
    *  - <span class="dot po-color-01"></span> `color-01`
    *  - <span class="dot po-color-02"></span> `color-02`
    *  - <span class="dot po-color-03"></span> `color-03`
@@ -64,7 +67,7 @@ export interface PoDynamicViewField extends PoDynamicField {
    *  [**CurrencyPipe**](https://angular.io/api/common/CurrencyPipe)
    * + Exemplos: 'BRL', 'USD'.
    * - `date`: Aceita valores definidos para a propriedade `format` do [**DatePipe**](https://angular.io/api/common/DatePipe)
-   * e também aceita os caracteres de dia(dd), mês(MM ou mm) e ano (yyyy ou yy),
+   * e também aceita os caracteres de dia(dd), mês(MM) e ano (yyyy ou yy),
    * caso não seja informado um formato o mesmo será 'dd/MM/yyyy'. Exemplos: 'dd/MM/yyyy', 'dd-MM-yy', 'mm/dd/yyyy'.
    * - `time`: Aceita apenas os caracteres de hora(HH), minutos(mm), segundos(ss) e
    *  milisegundos(f-ffffff), os milisegundos são opcionais, caso não seja informado um formato o mesmo será

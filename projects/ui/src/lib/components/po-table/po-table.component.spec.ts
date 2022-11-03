@@ -2045,15 +2045,8 @@ describe('PoTableComponent:', () => {
 
       tick(100);
 
-      const poTooltip = nativeElement.querySelector('.po-tooltip');
+      const poTooltip = document.querySelector('.po-tooltip');
       expect(poTooltip).toBeTruthy();
-
-      columnLink.triggerEventHandler('mouseleave', null);
-      fixture.detectChanges();
-
-      tick(100);
-
-      expect(nativeElement.querySelector('.po-tooltip.po-invisible')).toBeTruthy();
     }));
 
     it('shouldn`t contain `po-tooltip` class if link is disabled', fakeAsync(() => {

@@ -9,15 +9,28 @@
       [class.po-clickable]="isClickable"
       [class.po-tag-inverse]="inverse"
       [ngClass]="tagColor"
+      [ngStyle]="
+        !tagColor && !inverse
+          ? { 'background-color': customColor }
+          : !tagColor && inverse
+          ? { 'border': '1px solid ' + customColor }
+          : ''
+      "
       tabindex="0"
       (click)="onClick()"
       (keydown.enter)="onKeyPressed($event)"
       (keydown.space)="$event.preventDefault()"
       (keyup.space)="onKeyPressed($event)"
     >
-      <po-icon *ngIf="icon" class="po-tag-icon" [p-icon]="!type ? icon : iconFromType"> </po-icon>
+      <po-icon
+        *ngIf="icon"
+        class="po-tag-icon"
+        [p-icon]="!type ? icon : iconFromType"
+        [ngStyle]="!tagColor && inverse ? { 'color': customColor } : ''"
+      >
+      </po-icon>
 
-      <span class="po-tag-value">{{ value }}</span>
+      <span class="po-tag-value" [ngStyle]="!tagColor && inverse ? { 'color': customColor } : ''">{{ value }}</span>
     </div>
   </div>
 </div>

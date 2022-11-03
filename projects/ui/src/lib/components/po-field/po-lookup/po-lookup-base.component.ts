@@ -24,6 +24,7 @@ import { PoLookupColumn } from './interfaces/po-lookup-column.interface';
 import { PoLookupFilter } from './interfaces/po-lookup-filter.interface';
 import { PoLookupLiterals } from './interfaces/po-lookup-literals.interface';
 import { PoLookupFilterService } from './services/po-lookup-filter.service';
+import { PoLookupModalService } from './services/po-lookup-modal.service';
 
 /**
  * @description
@@ -429,9 +430,11 @@ export abstract class PoLookupBaseComponent
 
   /**
    * @optional
+   *
    * @description
    *
-   * Indica que o campo será obrigatório. Esta propriedade é desconsiderada quando o campo está desabilitado (p-disabled).
+   * Define que o campo será obrigatório.
+   * > Esta propriedade é desconsiderada quando o input está desabilitado `(p-disabled)`.
    *
    * @default `false`
    */
@@ -444,6 +447,14 @@ export abstract class PoLookupBaseComponent
   get required(): boolean {
     return this._required;
   }
+
+  /**
+   * Define se a indicação de campo obrigatório seré exibida.
+   *
+   * > Não será exibida a indicação se:
+   * - Não possuir `p-help` e/ou `p-label`.
+   */
+  @Input('p-show-required') showRequired: boolean = false;
 
   /**
    * @description
@@ -461,7 +472,11 @@ export abstract class PoLookupBaseComponent
     return this._disabled;
   }
 
-  constructor(private defaultService: PoLookupFilterService, @Inject(Injector) private injector: Injector) {}
+  constructor(
+    private defaultService: PoLookupFilterService,
+    @Inject(Injector) private injector: Injector,
+    public poLookupModalService: PoLookupModalService
+  ) {}
 
   ngOnDestroy() {
     if (this.getSubscription) {
@@ -483,6 +498,11 @@ export abstract class PoLookupBaseComponent
   }
 
   ngOnChanges(changes: SimpleChanges) {
+    if (changes.columns?.currentValue) {
+      this.columns = changes.columns.currentValue;
+      this.poLookupModalService?.setChangeColumns(this.columns);
+    }
+
     if (changes.multiple && isTypeof(this.filterService, 'string')) {
       this.service.setConfig(this.filterService, this.fieldValue, this.multiple);
     }

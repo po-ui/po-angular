@@ -1,0 +1,61 @@
+<div class="po-text-center">
+  <div class="po-font-title">Choosing a trip</div>
+</div>
+
+<div class="po-row">
+  <div class="po-md-3">
+    <po-image [p-src]="destinations" p-height="150"> </po-image>
+  </div>
+
+  <div class="po-md-9">
+    <form #bookingForm="ngForm">
+      <div class="po-row">
+        <po-select
+          class="po-md-4"
+          name="destinations"
+          [(ngModel)]="destinations"
+          p-label="Destinos"
+          [p-options]="travelOptions"
+        >
+        </po-select>
+
+        <po-select
+          class="po-md-4"
+          name="children"
+          [(ngModel)]="children"
+          p-label="Children"
+          [p-options]="childrenOptions"
+        >
+        </po-select>
+
+        <po-select class="po-md-4" name="adults" [(ngModel)]="adults" p-label="Adults" [p-options]="adultsOptions">
+        </po-select>
+      </div>
+
+      <div class="po-row">
+        <po-datepicker
+          #datepicker
+          class="po-md-4"
+          name="checkin"
+          [(ngModel)]="checkin"
+          p-label="Check In"
+          p-placeholder="dd/mm/yyyy"
+          p-required
+          [p-max-date]="checkout"
+        >
+        </po-datepicker>
+
+        <po-datepicker
+          class="po-md-4"
+          name="checkout"
+          [(ngModel)]="checkout"
+          p-label="Check Out"
+          p-placeholder="dd/mm/yyyy"
+          p-required
+          [p-min-date]="checkin"
+        >
+        </po-datepicker>
+      </div>
+    </form>
+  </div>
+</div>

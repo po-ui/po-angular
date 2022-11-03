@@ -1,0 +1,28 @@
+<po-image [p-src]="src" [p-alt]="alt" [p-height]="height"> </po-image>
+
+<hr />
+<form #f="ngForm">
+  <div class="po-row">
+    <po-input
+      class="po-md-6"
+      name="src"
+      [(ngModel)]="src"
+      p-clean
+      p-label="Source"
+      p-help="Enter a url or path of the image that will be displayed"
+    ></po-input>
+    <po-input
+      class="po-md-6"
+      name="alt"
+      [(ngModel)]="alt"
+      p-clean
+      p-label="Alternate"
+      p-help="Alternative text for image description. Ex.: Po Ui logo"
+    ></po-input>
+    <po-input class="po-md-6" name="height" [(ngModel)]="height" p-clean p-label="Height"></po-input>
+  </div>
+  <hr />
+  <div class="po-row">
+    <po-button class="po-md-3" p-label="Sample Restore" (p-click)="restore()"></po-button>
+  </div>
+</form>

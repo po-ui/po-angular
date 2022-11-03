@@ -11,40 +11,16 @@
   </div>
 
   <div class="po-table-column-manager-body">
-    <po-checkbox-group
-      class="po-checkbox-group-column-manager"
+    <po-table-list-manager
       name="visibleColumns"
       [(ngModel)]="visibleColumns"
       p-columns="1"
       [p-options]="columnsOptions"
       (p-change)="checkChanges($event, false)"
+      (p-change-position)="changePosition($event)"
+      [p-columns-manager]="columns"
     >
-    </po-checkbox-group>
-
-    <div class="po-container-arrows-columns-manager">
-      <div *ngFor="let option of columnsOptions">
-        <div class="po-container-icons-arrows-columns-manager">
-          <po-button
-            [p-tooltip]="literals.up"
-            p-tooltip-position="left"
-            [p-disabled]="verifyArrowDisabled(option, 'up')"
-            (click)="changePosition(option, 'up'); $event.stopPropagation()"
-            p-kind="tertiary"
-            p-icon="po-icon po-icon-arrow-up"
-          >
-          </po-button>
-          <po-button
-            [p-tooltip]="literals.down"
-            p-tooltip-position="top"
-            [p-disabled]="verifyArrowDisabled(option, 'down')"
-            (click)="changePosition(option, 'down'); $event.stopPropagation()"
-            p-kind="tertiary"
-            p-icon="po-icon po-icon-arrow-down"
-          >
-          </po-button>
-        </div>
-      </div>
-    </div>
+    </po-table-list-manager>
   </div>
 
   <div class="po-table-column-manager-footer">

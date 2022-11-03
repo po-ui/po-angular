@@ -1,5 +1,6 @@
 import { CommonModule } from '@angular/common';
 import { NgModule } from '@angular/core';
+import { PoLabelModule } from '../../po-label';
 
 import { PoFieldContainerBottomComponent } from './po-field-container-bottom/po-field-container-bottom.component';
 import { PoFieldContainerComponent } from './po-field-container.component';
@@ -10,7 +11,7 @@ import { PoFieldContainerComponent } from './po-field-container.component';
  * Módulo do componente `po-field-container`.
  */
 @NgModule({
-  imports: [CommonModule],
+  imports: [CommonModule, PoLabelModule],
   exports: [PoFieldContainerBottomComponent, PoFieldContainerComponent],
   declarations: [PoFieldContainerBottomComponent, PoFieldContainerComponent]
 })

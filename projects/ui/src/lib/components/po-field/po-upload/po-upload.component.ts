@@ -10,7 +10,7 @@ import {
 } from '@angular/core';
 import { NG_VALIDATORS, NG_VALUE_ACCESSOR } from '@angular/forms';
 
-import { formatBytes, isMobile } from '../../../utils/util';
+import { formatBytes, isMobile, uuid } from '../../../utils/util';
 import { PoButtonComponent } from './../../po-button/po-button.component';
 import { PoI18nPipe } from '../../../services/po-i18n/po-i18n.pipe';
 import { PoNotificationService } from '../../../services/po-notification/po-notification.service';
@@ -71,6 +71,8 @@ export class PoUploadComponent extends PoUploadBaseComponent implements AfterVie
   @ViewChild('inputFile', { read: ElementRef, static: true }) private inputFile: ElementRef;
   @ViewChild(PoUploadDragDropComponent) private poUploadDragDropComponent: PoUploadDragDropComponent;
   @ViewChild('uploadButton') private uploadButton: PoButtonComponent;
+
+  id = `po-upload[${uuid()}]`;
 
   infoByUploadStatus: { [key: string]: { text: (percent?: number) => string; icon?: string } } = {
     [PoUploadStatus.Uploaded]: {
@@ -333,6 +335,7 @@ export class PoUploadComponent extends PoUploadBaseComponent implements AfterVie
   private cleanInputValue() {
     this.calledByCleanInputValue = true;
     this.inputFile.nativeElement.value = '';
+    this.cd.detectChanges();
   }
 
   // função disparada na resposta do sucesso ou error

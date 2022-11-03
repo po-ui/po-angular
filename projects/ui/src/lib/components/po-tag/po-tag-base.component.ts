@@ -45,7 +45,7 @@ export class PoTagBaseComponent {
   @Output('p-click') click: EventEmitter<any> = new EventEmitter<PoTagItem>();
 
   public readonly poTagOrientation = PoTagOrientation;
-
+  public customColor;
   private _color?: string;
   private _icon?: boolean | string | TemplateRef<void>;
   private _inverse?: boolean;
@@ -57,8 +57,11 @@ export class PoTagBaseComponent {
    *
    * @description
    *
-   * Define uma cor para a *tag*.
-   *
+   * Determina a cor da tag. As maneiras de customizar as cores são:
+   * - Hexadeximal, por exemplo `#c64840`;
+   * - RGB, como `rgb(0, 0, 165)`;
+   * - O nome da cor, por exemplo `blue`;
+   * - Usando uma das cores do tema do PO:
    * Valores válidos:
    *  - <span class="dot po-color-01"></span> `color-01`
    *  - <span class="dot po-color-02"></span> `color-02`
@@ -73,10 +76,15 @@ export class PoTagBaseComponent {
    *  - <span class="dot po-color-11"></span> `color-11`
    *  - <span class="dot po-color-12"></span> `color-12`
    *
+   * - Para uma melhor acessibilidade no uso do componente é recomendável utilizar cores com um melhor contraste em relação ao background.
+   *
    * > **Atenção:** A propriedade `p-type` sobrepõe esta definição.
    */
   @Input('p-color') set color(value: string) {
     this._color = poTagColors.includes(value) ? value : undefined;
+    if (this._color === undefined) {
+      CSS.supports('color', value) ? (this.customColor = value) : (this.customColor = undefined);
+    }
   }
 
   get color(): string {

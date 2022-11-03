@@ -6,32 +6,29 @@ import {
   ElementRef,
   EventEmitter,
   forwardRef,
-  HostListener,
   Input,
   IterableDiffers,
+  OnChanges,
   Output,
   Renderer2,
+  SimpleChanges,
   ViewChild
 } from '@angular/core';
 import { AbstractControl, NG_VALIDATORS, NG_VALUE_ACCESSOR } from '@angular/forms';
 
 import {
-  isMobile,
   removeDuplicatedOptions,
   removeDuplicatedOptionsWithFieldValue,
   removeUndefinedAndNullOptions,
   removeUndefinedAndNullOptionsWithFieldValue,
+  uuid,
   validValue
 } from '../../../utils/util';
-import { PoKeyCodeEnum } from './../../../enums/po-key-code.enum';
-import { PoControlPositionService } from './../../../services/po-control-position/po-control-position.service';
 
 import { InputBoolean } from '../../../decorators';
 import { PoFieldValidateModel } from '../po-field-validate.model';
 import { PoSelectOption } from './po-select-option.interface';
 
-const poSelectContentOffset = 8;
-const poSelectContentPositionDefault = 'bottom';
 const PO_SELECT_FIELD_LABEL_DEFAULT = 'label';
 const PO_SELECT_FIELD_VALUE_DEFAULT = 'value';
 
@@ -91,15 +88,11 @@ const PO_SELECT_FIELD_VALUE_DEFAULT = 'value';
       provide: NG_VALIDATORS,
       useExisting: forwardRef(() => PoSelectComponent),
       multi: true
-    },
-    PoControlPositionService
+    }
   ]
 })
-export class PoSelectComponent extends PoFieldValidateModel<any> implements DoCheck {
-  @ViewChild('contentList', { read: ElementRef, static: true }) contentList: ElementRef;
-  @ViewChild('icon', { read: ElementRef, static: true }) iconElement: ElementRef;
+export class PoSelectComponent extends PoFieldValidateModel<any> implements DoCheck, OnChanges {
   @ViewChild('select', { read: ElementRef, static: true }) selectElement: ElementRef;
-  @ViewChild('selectButton', { read: ElementRef, static: true }) selectButtonElement: ElementRef;
 
   /**
    * @optional
@@ -132,20 +125,11 @@ export class PoSelectComponent extends PoFieldValidateModel<any> implements DoCh
   @Input('p-placeholder') placeholder?: string;
 
   displayValue;
-  isMobile: any = isMobile();
+  id = `po-select[${uuid()}]`;
   modelValue: any;
-  onModelChange: any;
-  open: boolean = false;
   selectedValue: any;
-  selectOptionTemplate: any;
-  selectIcon: string = 'po-icon-arrow-down';
-  scrollPosition: number;
+  protected onModelTouched: any;
 
-  eventListenerFunction: () => void;
-  eventResizeListener: () => void;
-
-  onModelTouched: any;
-  protected clickoutListener: () => void;
   private differ: any;
   private _fieldLabel?: string = PO_SELECT_FIELD_LABEL_DEFAULT;
   private _fieldValue?: string = PO_SELECT_FIELD_VALUE_DEFAULT;
@@ -168,16 +152,18 @@ export class PoSelectComponent extends PoFieldValidateModel<any> implements DoCh
    * ```
    */
   @Input('p-options') set options(options: Array<any>) {
-    if (this.fieldLabel && this.fieldValue) {
+    if (this.fieldLabel && this.fieldValue && options) {
       options.map(option => {
         option.label = option[this.fieldLabel];
         option.value = option[this.fieldValue];
       });
     }
 
-    this.validateOptions([...options]);
-    this.onUpdateOptions();
-    this._options = [...options];
+    if (options) {
+      this.validateOptions([...options]);
+      this.onUpdateOptions();
+      this._options = [...options];
+    }
   }
 
   get options() {
@@ -225,58 +211,22 @@ export class PoSelectComponent extends PoFieldValidateModel<any> implements DoCh
   }
 
   /* istanbul ignore next */
-  constructor(
-    private element: ElementRef,
-    private changeDetector: ChangeDetectorRef,
-    differs: IterableDiffers,
-    public renderer: Renderer2,
-    private controlPosition: PoControlPositionService
-  ) {
+  constructor(private changeDetector: ChangeDetectorRef, differs: IterableDiffers, public renderer: Renderer2) {
     super();
     this.differ = differs.find([]).create(null);
   }
 
-  get isInvisibleSelectNative() {
-    return this.readonly && this.isMobile;
-  }
-
-  @HostListener('keydown', ['$event']) onKeydown($event?: any) {
-    const charCode = $event.which || $event.keyCode;
-
-    // Tratamentos para quando o readonly for ativado.
-    if (this.readonly) {
-      // deve matar o evento do teclado devido a alterar o valor do model mesmo com os options fechados
-      if (charCode !== PoKeyCodeEnum.tab) {
-        this.disableDefaultEventAndToggleButton();
-        $event.preventDefault();
-      }
-      return;
-    }
-
-    // Seleciona os itens com as teclas "up" e "down"
-    if ((!this.open || $event.altKey) && (charCode === PoKeyCodeEnum.arrowDown || charCode === PoKeyCodeEnum.arrowUp)) {
-      this.disableDefaultEventAndToggleButton();
-    }
-
-    // Abre o po-select com as teclas "enter" e "espaço"
-    if (charCode === PoKeyCodeEnum.enter || charCode === PoKeyCodeEnum.space) {
-      this.disableDefaultEventAndToggleButton();
-    }
-
-    // Fecha o po-select com a tecla "tab"
-    if (this.open && charCode === PoKeyCodeEnum.tab) {
-      $event.preventDefault();
-      this.toggleButton();
-    }
-  }
-
   ngDoCheck() {
     const change = this.differ.diff(this.options);
+
     if (change) {
-      removeDuplicatedOptions(this.options);
-      removeUndefinedAndNullOptions(this.options);
-      removeDuplicatedOptionsWithFieldValue(this.options, this.fieldValue);
-      removeUndefinedAndNullOptionsWithFieldValue(this.options, this.fieldValue);
+      this.validateOptions(this.options);
+    }
+  }
+
+  ngOnChanges(changes: SimpleChanges): void {
+    if (changes.options?.currentValue) {
+      this.options = changes.options.currentValue;
     }
   }
 
@@ -303,34 +253,18 @@ export class PoSelectComponent extends PoFieldValidateModel<any> implements DoCh
     }
   }
 
-  hideDropDown() {
-    this.selectIcon = 'po-icon-arrow-down';
-    this.selector('.po-select-container').classList.remove('po-select-show');
-    this.open = false;
-
-    this.changeDetector.markForCheck();
-    this.selectElement.nativeElement.focus();
-
-    this.removeListeners();
-  }
-
   onBlur() {
     this.onModelTouched?.();
   }
 
-  onOptionClick(option: any) {
-    this.updateValues(option);
-    this.toggleButton();
-  }
-
   // Altera o valor ao selecionar um item.
   onSelectChange(value: any) {
+    this.onModelTouched?.();
     if (value && this.options && this.options.length) {
       const optionFound: any = this.findOptionValue(value);
 
       if (optionFound) {
         this.updateValues(optionFound);
-        this.setScrollPosition(optionFound.value);
       }
     }
   }
@@ -339,20 +273,6 @@ export class PoSelectComponent extends PoFieldValidateModel<any> implements DoCh
     if (this.modelValue) {
       this.onSelectChange(this.modelValue);
     }
-  }
-
-  scrollValue(index, clientHeight) {
-    const heightScrollValue: number = index * this.getSelectItemHeight();
-
-    return (this.scrollPosition = heightScrollValue > clientHeight ? heightScrollValue : 0);
-  }
-
-  selector(query: string): Element {
-    return this.element.nativeElement.querySelector(query);
-  }
-
-  toggleButton(): void {
-    this.open ? this.hideDropDown() : this.showDropdown();
   }
 
   // Atualiza valores
@@ -366,16 +286,6 @@ export class PoSelectComponent extends PoFieldValidateModel<any> implements DoCh
     }
   }
 
-  // Esconde Content do Select quando for clicado fora
-  wasClickedOnToggle(event: MouseEvent): void {
-    if (
-      !this.selectButtonElement.nativeElement.contains(event.target) &&
-      !this.iconElement.nativeElement.contains(event.target)
-    ) {
-      this.hideDropDown();
-    }
-  }
-
   // Recebe as alterações do model
   onWriteValue(value: any) {
     const optionFound: any = this.findOptionValue(value);
@@ -384,7 +294,6 @@ export class PoSelectComponent extends PoFieldValidateModel<any> implements DoCh
       this.selectElement.nativeElement.value = optionFound.value;
       this.selectedValue = optionFound[this.fieldValue];
       this.displayValue = optionFound[this.fieldLabel];
-      this.setScrollPosition(optionFound[this.fieldValue]);
     } else if (validValue(this.selectedValue)) {
       this.selectElement.nativeElement.value = undefined;
       this.updateModel(undefined);
@@ -400,6 +309,10 @@ export class PoSelectComponent extends PoFieldValidateModel<any> implements DoCh
     return null;
   }
 
+  registerOnTouched(fn: any): void {
+    this.onModelTouched = fn;
+  }
+
   private isEqual(value: any, inputValue: any): boolean {
     if ((value || value === 0) && inputValue) {
       return value.toString() === inputValue.toString();
@@ -412,90 +325,9 @@ export class PoSelectComponent extends PoFieldValidateModel<any> implements DoCh
     return value === inputValue;
   }
 
-  // Método necessário para bloquear o evento default do select nativo.
-  // Ao utilizar event.preventDefault(), nos navegadores Firefox e IE o mesmo não cancela o evento.
-  private disableDefaultEventAndToggleButton() {
-    this.selectElement.nativeElement.style.display = 'none';
-
-    setTimeout(() => {
-      this.selectElement.nativeElement.style.display = 'block';
-      this.toggleButton();
-    });
-  }
-
   private findOptionValue(value: any) {
-    return this.options.find(option => this.isEqual(option.value, value));
-  }
-
-  private getSelectItemHeight() {
-    const selectItem = this.selector('div.po-select-item');
-
-    return selectItem && selectItem.clientHeight;
-  }
-
-  private initializeListeners() {
-    this.clickoutListener = this.renderer.listen('document', 'click', (event: MouseEvent) => {
-      this.wasClickedOnToggle(event);
-    });
-
-    this.eventResizeListener = this.renderer.listen('window', 'resize', () => {
-      this.hideDropDown();
-    });
-
-    window.addEventListener('scroll', this.onScroll, true);
-  }
-
-  private onScroll = (): void => {
-    this.controlPosition.adjustPosition(poSelectContentPositionDefault);
-  };
-
-  private removeListeners() {
-    if (this.clickoutListener) {
-      this.clickoutListener();
-    }
-
-    this.eventResizeListener();
-    window.removeEventListener('scroll', this.onScroll, true);
-  }
-
-  private setPositionDropdown() {
-    this.controlPosition.setElements(
-      this.contentList.nativeElement,
-      poSelectContentOffset,
-      this.selectButtonElement,
-      ['top', 'bottom'],
-      true
-    );
-
-    this.controlPosition.adjustPosition(poSelectContentPositionDefault);
-  }
-
-  private setScrollPosition(value: any) {
-    const ulDropdpwn = this.element.nativeElement.querySelector('ul.po-select-content');
-
-    if (value && this.options && this.options.length) {
-      const optionFound: any = this.findOptionValue(value);
-
-      if (optionFound) {
-        const index = this.options.indexOf(optionFound);
-        ulDropdpwn.scrollTop = this.scrollValue(index, ulDropdpwn.clientHeight);
-      }
-    }
-  }
-
-  private showDropdown() {
-    if (!this.readonly) {
-      this.selectElement.nativeElement.focus();
-      this.selectIcon = 'po-icon-arrow-up';
-      this.selector('.po-select-container').classList.add('po-select-show');
-      this.open = true;
-      this.changeDetector.markForCheck();
-      this.setPositionDropdown();
-      this.initializeListeners();
-
-      if (this.options && this.options.length) {
-        this.setScrollPosition(this.selectedValue);
-      }
+    if (this.options) {
+      return this.options.find(option => this.isEqual(option.value, value));
     }
   }
 

@@ -1,4 +1,12 @@
-<po-field-container [p-help]="help" [p-label]="label" [p-optional]="!required && optional">
+<po-field-container
+  [p-disabled]="disabled"
+  [p-id]="id"
+  [p-help]="help"
+  [p-label]="label"
+  [p-optional]="optional"
+  [p-required]="required"
+  [p-show-required]="showRequired"
+>
   <div class="po-field-container-content">
     <input
       #inp
@@ -8,7 +16,8 @@
       [attr.name]="name"
       [autocomplete]="autocomplete"
       [disabled]="disabled"
-      [placeholder]="placeholder"
+      [id]="id"
+      [placeholder]="disabled ? '' : placeholder"
       [readonly]="readonly"
       [required]="required"
       (blur)="eventOnBlur($event)"
@@ -16,12 +25,17 @@
     />
 
     <div class="po-field-icon-container-right">
-      <po-clean *ngIf="clean && !disabled && !readonly" [p-element-ref]="inputEl" (p-change-event)="clear()">
+      <po-clean
+        class="po-icon-input"
+        *ngIf="clean && !disabled && !readonly"
+        [p-element-ref]="inputEl"
+        (p-change-event)="clear()"
+      >
       </po-clean>
 
       <span
         #iconDatepicker
-        class="po-icon po-field-icon po-icon-calendar"
+        class="po-icon po-field-icon po-icon-calendar po-icon-input"
         [class.po-field-icon]="!disabled && !readonly"
         [class.po-field-icon-disabled]="disabled || readonly"
         (click)="togglePicker()"

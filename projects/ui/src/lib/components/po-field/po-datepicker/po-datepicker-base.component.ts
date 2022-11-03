@@ -187,7 +187,15 @@ export abstract class PoDatepickerBaseComponent implements ControlValueAccessor,
     this.readonly = readonly === '' ? true : convertToBoolean(readonly);
   }
 
-  /** Faz com que o campo seja obrigatório. */
+  /**
+   * @optional
+   *
+   * @description
+   *
+   * Define que o campo será obrigatório.
+   *
+   * @default `false`
+   */
   // eslint-disable-next-line @typescript-eslint/member-ordering
   required?: boolean = false;
   @Input('p-required') set setRequired(required: string) {
@@ -195,6 +203,14 @@ export abstract class PoDatepickerBaseComponent implements ControlValueAccessor,
 
     this.validateModel(convertDateToISOExtended(this.date, this.hour));
   }
+
+  /**
+   * Define se a indicação de campo obrigatório será exibida.
+   *
+   * > Não será exibida a indicação se:
+   * - Não possuir `p-help` e/ou `p-label`.
+   */
+  @Input('p-show-required') showRequired: boolean = false;
 
   /** Habilita ação para limpar o campo. */
   // eslint-disable-next-line @typescript-eslint/member-ordering

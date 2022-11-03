@@ -5,6 +5,8 @@ import { minFailed, maxFailed } from '../validators';
 
 import { PoNumberBaseComponent } from './po-number-base.component';
 
+import { uuid } from '../../../utils/util';
+
 /**
  * @docsExtends PoInputBaseComponent
  *
@@ -79,6 +81,8 @@ export class PoNumberComponent extends PoNumberBaseComponent {
     this.max = !isNaN(max) ? max : undefined;
     this.validateModel();
   }
+
+  id = `po-number[${uuid()}]`;
 
   /* istanbul ignore next */
   constructor(el: ElementRef, cd: ChangeDetectorRef) {

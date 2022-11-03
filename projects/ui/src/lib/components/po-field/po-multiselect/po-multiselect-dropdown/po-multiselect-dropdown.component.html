@@ -3,6 +3,7 @@
     #searchElement
     *ngIf="!hideSearch"
     [p-literals]="literals"
+    [p-field-value]="fieldValue"
     [p-placeholder]="placeholderSearch"
     (p-change)="callChangeSearch($event)"
   >
@@ -28,7 +29,7 @@
 
       <po-multiselect-item
         *ngFor="let option of visibleOptions"
-        [p-label]="option.label"
+        [p-label]="option[fieldLabel]"
         [p-selected]="isSelectedItem(option)"
         (p-change)="clickItem($event, option)"
       >

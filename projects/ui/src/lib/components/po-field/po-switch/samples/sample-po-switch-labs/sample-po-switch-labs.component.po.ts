@@ -31,7 +31,7 @@ export class PoSwitchPage {
   }
 
   get poFieldTitle() {
-    return element(by.css(`${this.sampleSwitch} .po-field-title`));
+    return element(by.css(`${this.sampleSwitch} .po-label`));
   }
 
   get poSwitchLabel() {
@@ -39,7 +39,7 @@ export class PoSwitchPage {
   }
 
   get poFieldOptional() {
-    return element(by.css(`${this.sampleSwitch} po-switch .po-field-optional`));
+    return element(by.css(`${this.sampleSwitch} po-switch .po-label-requirement`));
   }
 
   navigateTo() {

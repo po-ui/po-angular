@@ -1,5 +1,4 @@
 import {
-  AfterViewInit,
   ChangeDetectionStrategy,
   ChangeDetectorRef,
   Component,
@@ -10,9 +9,10 @@ import {
 } from '@angular/core';
 import { NG_VALUE_ACCESSOR } from '@angular/forms';
 
+import { uuid } from '../../../utils/util';
+
 import { PoFieldModel } from '../po-field.model';
 import { PoKeyCodeEnum } from './../../../enums/po-key-code.enum';
-
 import { PoSwitchLabelPosition } from './po-switch-label-position.enum';
 
 /**
@@ -23,12 +23,23 @@ import { PoSwitchLabelPosition } from './po-switch-label-position.enum';
  * O componente `po-switch` é um [checkbox](/documentation/po-checkbox-group) mais intuitivo, pois faz analogia a um interruptor.
  * Deve ser usado quando deseja-se transmitir a ideia de ligar / desligar uma funcionalidade específica.
  *
- * Pode-se ligar ou deligar o botão utilizando a tecla de espaço ou o clique do mouse.
+ * Pode-se ligar ou desligar o switch utilizando a tecla de espaço ou o clique do mouse.
  *
  * O texto exibido pode ser alterado de acordo com o valor setado aumentando as possibilidades de uso do componente,
  * portanto, recomenda-se informar textos que contextualizem seu uso para que facilite a compreensão do usuário.
  *
  * > O componente não altera o valor incial informado no *model*, portanto indica-se inicializa-lo caso ter necessidade.
+ *
+ * #### Boas práticas
+ *
+ * - Evite `labels` extensos que quebram o layout do `po-switch`, use `labels` diretos, curtos e intuitivos.
+ *
+ * #### Acessibilidade tratada no componente
+ *
+ * Algumas diretrizes de acessibilidade já são tratadas no componente, internamente, e não podem ser alteradas pelo proprietário do conteúdo. São elas:
+ *
+ * - Quando em foco, o switch é ativado usando a tecla de Espaço. [W3C WAI-ARIA 3.5 Switch - Keyboard Interaction](https://www.w3.org/WAI/ARIA/apg/patterns/switch/#keyboard-interaction-19)
+ * - A área do foco precisar ter uma espessura de pelo menos 2 pixels CSS e o foco não pode ficar escondido por outros elementos da tela. [WCAG 2.4.12: Focus Appearance](https://www.w3.org/WAI/WCAG22/Understanding/focus-appearance-enhanced)
  *
  * @example
  *
@@ -69,6 +80,7 @@ import { PoSwitchLabelPosition } from './po-switch-label-position.enum';
 export class PoSwitchComponent extends PoFieldModel<boolean> {
   @ViewChild('switchContainer', { static: true }) switchContainer: ElementRef;
 
+  id = `po-switch[${uuid()}]`;
   value = false;
 
   private _labelOff: string = 'false';
@@ -80,7 +92,7 @@ export class PoSwitchComponent extends PoFieldModel<boolean> {
    *
    * @description
    *
-   * Posição de exibição do rótulo.
+   * Posição de exibição do rótulo que fica ao lado do switch.
    *
    * > Por padrão exibe à direita.
    */
@@ -157,17 +169,6 @@ export class PoSwitchComponent extends PoFieldModel<boolean> {
         return 'right';
       default:
         return 'right';
-    }
-  }
-
-  getSwitchPosition() {
-    switch (this.labelPosition) {
-      case PoSwitchLabelPosition.Left:
-        return 'right';
-      case PoSwitchLabelPosition.Right:
-        return 'left';
-      default:
-        return 'left';
     }
   }
 

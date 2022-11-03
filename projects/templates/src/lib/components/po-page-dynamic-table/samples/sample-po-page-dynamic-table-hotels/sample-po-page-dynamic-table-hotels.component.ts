@@ -14,7 +14,7 @@ import {
 export class SamplePoPageDynamicTableHotelsComponent {
   @ViewChild('hotelDetailModal') hotelDetailModal!: PoModalComponent;
 
-  readonly serviceApi = 'https://po-sample-api.herokuapp.com/v1/hotels';
+  readonly serviceApi = 'https://po-sample-api.fly.dev/v1/hotels';
 
   actionsRight = true;
   detailedHotel: any;

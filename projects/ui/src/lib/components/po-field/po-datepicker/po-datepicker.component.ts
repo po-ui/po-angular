@@ -12,7 +12,7 @@ import {
 } from '@angular/core';
 import { NG_VALIDATORS, NG_VALUE_ACCESSOR } from '@angular/forms';
 
-import { formatYear, isMobile, setYearFrom0To100 } from '../../../utils/util';
+import { formatYear, isMobile, setYearFrom0To100, uuid } from '../../../utils/util';
 import { PoControlPositionService } from './../../../services/po-control-position/po-control-position.service';
 
 import { PoCalendarComponent } from '../../po-calendar/po-calendar.component';
@@ -81,6 +81,7 @@ export class PoDatepickerComponent extends PoDatepickerBaseComponent implements 
 
   el: ElementRef;
   hour: string;
+  id = `po-datepicker[${uuid()}]`;
   visible: boolean = false;
 
   eventListenerFunction: () => void;

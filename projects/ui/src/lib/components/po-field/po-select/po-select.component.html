@@ -1,66 +1,41 @@
-<po-field-container [p-label]="label" [p-help]="help" [p-optional]="!required && optional">
-  <select
-    #select
-    class="po-select"
-    [attr.name]="name"
-    [disabled]="disabled"
-    [ngClass]="{ 'po-select-mobile': isMobile, 'po-invisible': isInvisibleSelectNative }"
-    [required]="required"
-    (change)="onSelectChange($event.target.value)"
-    (blur)="onBlur()"
-  >
-    <option *ngIf="isMobile" disabled hidden selected></option>
-    <option
-      *ngFor="let option of options"
-      [disabled]="readonly"
-      [value]="option?.[this.fieldValue]"
-      (click)="onOptionClick(option)"
+<po-field-container
+  [p-disabled]="disabled"
+  [p-help]="help"
+  [p-id]="id"
+  [p-label]="label"
+  [p-optional]="optional"
+  [p-required]="required"
+  [p-show-required]="showRequired"
+>
+  <div class="po-field-container-content">
+    <select
+      #select
+      class="po-select"
+      [attr.name]="name"
+      [class.po-select-placeholder]="!selectedValue && !!placeholder"
+      [disabled]="disabled"
+      [id]="id"
+      [required]="required"
+      (blur)="onBlur()"
+      (change)="onSelectChange($event.target.value)"
     >
-      {{ option?.[this.fieldLabel] }}
-    </option>
-  </select>
-
-  <div class="po-select-container">
-    <div
-      #selectButton
-      class="po-select-button"
-      [ngClass]="{ 'po-select-button-disabled': disabled, 'po-select-button-readonly': readonly }"
-      (click)="toggleButton()"
-    >
-      <span>{{ displayValue || placeholder }}</span>
-
-      <div class="po-field-icon-container-right">
-        <span
-          #icon
-          class="po-icon {{ selectIcon }} po-field-icon"
-          [ngClass]="{ 'po-field-icon-disabled': disabled, 'po-field-icon-readonly': readonly }"
-        ></span>
-      </div>
-    </div>
-
-    <ul #contentList class="po-select-content" [ngClass]="{ 'po-invisible': isMobile }">
-      <li
-        *ngFor="let option of options"
-        [class.po-select-item-selected]="selectedValue === option?.[this.fieldLabel]"
-        [value]="option?.[this.fieldValue]"
-        (click)="onOptionClick(option)"
+      <option
+        *ngIf="!selectedValue || !!placeholder"
+        [disabled]="!!placeholder"
+        [hidden]="!selectedValue && !placeholder"
+        [selected]="!selectedValue"
+        [value]="placeholder ?? ''"
       >
-        <div class="po-select-item">
-          <ng-container *ngIf="selectOptionTemplate; then optionTemplate; else defaultOptionTemplate"></ng-container>
-
-          <ng-template #defaultOptionTemplate>
-            <span>{{ option?.[this.fieldLabel] }}</span>
-          </ng-template>
-
-          <ng-template
-            #optionTemplate
-            [ngTemplateOutlet]="selectOptionTemplate?.templateRef"
-            [ngTemplateOutletContext]="{ $implicit: option }"
-          >
-          </ng-template>
-        </div>
-      </li>
-    </ul>
+        {{ placeholder }}
+      </option>
+      <!-- necessário manter essa option para uso do select com ReactiveForms -->
+      <option [hidden]="true">
+        {{ displayValue }}
+      </option>
+      <option *ngFor="let option of options" [disabled]="readonly" [value]="option?.[this.fieldValue]">
+        {{ option?.[this.fieldLabel] }}
+      </option>
+    </select>
   </div>
 
   <po-field-container-bottom></po-field-container-bottom>

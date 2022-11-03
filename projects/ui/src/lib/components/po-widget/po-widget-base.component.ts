@@ -14,6 +14,14 @@ import { convertToBoolean, isTypeof, uuid } from '../../utils/util';
  *
  * Para controlar sua largura, é possível utilizar o [Grid System](/guides/grid-system) para um maior
  * controle de seu redimensionamento, assim possibilitando o tratamento para diferentes resoluções.
+ *
+ * #### Acessibilidade tratada no componente
+ *
+ * Algumas diretrizes de acessibilidade já são tratadas no componente, internamente, e não podem ser alteradas. São elas:
+ * - Utiliza medidas relativas, para se adequar às preferências e necessidades de quem for utilizar o sistema.
+ * - Desenvolvido com uso de controles padrões HTML, o que permite a identificação na interface por tecnologias assistivas. (WCAG [4.1.2: Name, Role, Value](https://www.w3.org/WAI/WCAG21/Understanding/name-role-value))
+ * - O foco é visível e possui uma espessura superior a 2 pixels CSS, não ficando escondido por outros elementos da tela. (WCAG [2.4.12: Focus Appearance](https://www.w3.org/WAI/WCAG22/Understanding/focus-appearance-enhanced))
+ * - Quando selecionável, prevê interação por teclado, podendo ser selecionado através da tecla space (WCAG [2.4.1 - Keyboard](https://www.w3.org/WAI/WCAG21/Understanding/keyboard))
  */
 @Directive()
 export abstract class PoWidgetBaseComponent {
@@ -27,7 +35,7 @@ export abstract class PoWidgetBaseComponent {
    *
    * Ação que será executada quando o usuário clicar sobre a área total do `po-widget`.
    */
-  @Output('p-click') click: EventEmitter<MouseEvent> = new EventEmitter<MouseEvent>();
+  @Output('p-click') click: EventEmitter<MouseEvent | KeyboardEvent> = new EventEmitter<MouseEvent | KeyboardEvent>();
 
   /**
    * @optional
@@ -157,11 +165,12 @@ export abstract class PoWidgetBaseComponent {
   }
 
   /**
+   *
    * @optional
    *
    * @description
    *
-   * Desabilita a sombra do `po-widget`.
+   * Desabilita a sombra do `po-widget` quando o mesmo for clicável.
    *
    * @default `true`
    */

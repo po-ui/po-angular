@@ -3,6 +3,7 @@
   [ngClass]="{ 'po-clickable': clickable, 'po-table-icon-disabled': disabled }"
   [p-icon]="icon"
   [p-tooltip]="tooltip"
+  [p-append-in-body]="true"
   (click)="onClick($event)"
   (mouseenter)="tooltipMouseEnter()"
   (mouseleave)="tooltipMouseLeave()"

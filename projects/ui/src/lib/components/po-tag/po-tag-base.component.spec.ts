@@ -79,5 +79,25 @@ describe('PoTagBaseComponent:', () => {
 
       expectPropertiesValues(component, 'type', invalidValues, undefined);
     });
+
+    it('customColor: should change the value with a color name', () => {
+      component.color = 'red';
+      expect(component.customColor).toBe('red');
+    });
+
+    it('customColor: should change the value with a hex color', () => {
+      component.color = '#fff';
+      expect(component.customColor).toBe('#fff');
+    });
+
+    it('customColor: should change the value with a rgb', () => {
+      component.color = 'rgb(35, 233, 215)';
+      expect(component.customColor).toBe('rgb(35, 233, 215)');
+    });
+
+    it('color: should change color to default value if value is invalid', () => {
+      component.color = 'deep red';
+      expect(component.color).toBe(undefined);
+    });
   });
 });

@@ -1,28 +1,14 @@
-<div
-  class="po-radio-container"
-  [attr.checked]="radioValue"
-  (click)="checkOption(radioValue)"
-  (keydown)="onKeyDown($event, radioValue)"
->
-  <input
-    type="radio"
-    [ngClass]="{ 'po-radio-large': size === 'large' }"
-    [attr.aria-checked]="radioValue"
-    [attr.aria-label]="label"
-    [id]="id"
-    class="po-radio"
-    role="radio"
-    [attr.aria-disabled]="disabled"
-    [tabindex]="disabled ? -1 : 0"
-    [disabled]="disabled"
-  />
-  <label
-    #radioLabel
-    [for]="id"
-    class="po-radio-label"
-    [ngClass]="{ 'po-radio-label-disabled': disabled }"
-    tabindex="-1"
-  >
-    {{ label }}
+<div #radio class="po-radio">
+  <label #radioLabel (click)="eventClick()" (keydown)="onKeyDown($event)">
+    <input
+      type="radio"
+      [attr.p-size]="size"
+      [checked]="checked"
+      [disabled]="disabled"
+      [name]="name ?? 'po-input-radio'"
+      [required]="required"
+      [value]="radioValue ?? ''"
+    />
+    <span *ngIf="label">{{ label }}</span>
   </label>
 </div>

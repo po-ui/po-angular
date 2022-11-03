@@ -123,9 +123,11 @@ export class PoTreeViewBaseComponent {
   //  - adiciona o childItem no parentItem;
   //  - marca o parentItem caso conter subItems marcodos ou nulos;
   // Se não conter parentItem, adiciona o childItem no items.
-  private addItem(items: Array<PoTreeViewItem>, childItem: PoTreeViewItem, parentItem?: PoTreeViewItem) {
+  private addItem(items: Array<PoTreeViewItem>, childItem: PoTreeViewItem, parentItem?: PoTreeViewItem, isNewItem?) {
     if (parentItem) {
-      this.expandParentItem(childItem, parentItem);
+      if (isNewItem) {
+        this.expandParentItem(childItem, parentItem);
+      }
       this.addChildItemInParent(childItem, parentItem);
       this.selectItemBySubItems(parentItem);
 
@@ -201,7 +203,7 @@ export class PoTreeViewBaseComponent {
         --level;
       }
 
-      this.addItem(newItems, currentItem, parentItem);
+      this.addItem(newItems, currentItem, parentItem, true);
     });
 
     return newItems;
