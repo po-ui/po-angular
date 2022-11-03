@@ -5,7 +5,8 @@ import {
   poLocaleDecimalSeparatorList,
   poLocaleDefault,
   poLocales,
-  poLocaleThousandSeparatorList
+  poLocaleThousandSeparatorList,
+  poLocaleDateSeparatorList
 } from './po-language.constant';
 
 const poDefaultLanguage = 'PO_DEFAULT_LANGUAGE';
@@ -144,5 +145,22 @@ export class PoLanguageService {
     const thousandSeparator = thousand.separator ?? '.';
 
     return { decimalSeparator, thousandSeparator };
+  }
+
+  /**
+   * @description
+   *
+   * Método que retorna o separador de datas
+   *
+   * @param language sigla do idioma.
+   *
+   * Esta sigla deve ser composta por duas letras representando o idioma
+   *
+   * > Caso seja informado um valor diferente deste padrão, o mesmo será ignorado.
+   */
+  getDateSeparator(language?: string) {
+    language = language || this.getShortLanguage();
+    const separatorChar = poLocaleDateSeparatorList.find(separator => separator.locale === language) ?? {};
+    return separatorChar.separator ?? '/';
   }
 }

@@ -281,7 +281,7 @@ export class PoDatepickerComponent extends PoDatepickerBaseComponent implements 
       return undefined;
     }
 
-    let dateFormatted = this.format;
+    let dateFormatted = this.replaceFormatSeparator();
 
     dateFormatted = dateFormatted.replace('dd', ('0' + value.getDate()).slice(-2));
     dateFormatted = dateFormatted.replace('mm', ('0' + (value.getMonth() + 1)).slice(-2));
