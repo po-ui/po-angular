@@ -6,7 +6,7 @@ describe('PoLanguageService:', () => {
   let service: PoLanguageService;
   const poLocaleKey = 'PO_USER_LOCALE';
   const poDefaultLanguage = 'PO_DEFAULT_LANGUAGE';
-  const languages = { pt: 'pt', ptBr: 'pt-BR', en: 'en', enUs: 'en-US', es: 'es', esEs: 'es-ES' };
+  const languages = { pt: 'pt', ptBr: 'pt-BR', en: 'en', enUs: 'en-US', es: 'es', esEs: 'es-ES', ru: 'ru-RU' };
 
   beforeEach(() => {
     service = new PoLanguageService();
@@ -90,7 +90,7 @@ describe('PoLanguageService:', () => {
       expect(service.getShortLanguage()).toBe(languages.pt);
     });
 
-    it('getShortLanguage: should return default language `pt` if language is different of `pt`, `en` or `es`.', () => {
+    it('getShortLanguage: should return default language `pt` if language is different of `pt`, `en`, `ru` or `es`.', () => {
       spyOn(service, 'getLanguage').and.returnValue('de');
 
       expect(service.getShortLanguage()).toBe(languages.pt);
@@ -174,6 +174,23 @@ describe('PoLanguageService:', () => {
         const { decimalSeparator, thousandSeparator } = service.getNumberSeparators('error');
         expect(decimalSeparator).toBe(',');
         expect(thousandSeparator).toBe('.');
+      });
+    });
+    describe('getDateSeparator:', () => {
+      it(`should return language date separator '/' if language param is 'pt'.`, () => {
+        spyOn(service, 'getShortLanguage').and.returnValue('pt');
+        const dateSeparator = service.getDateSeparator();
+        expect(dateSeparator).toBe('/');
+      });
+      it(`should return language date separator '/' if language param is not one of the valids'.`, () => {
+        spyOn(service, 'getShortLanguage').and.returnValue('de');
+        const dateSeparator = service.getDateSeparator();
+        expect(dateSeparator).toBe('/');
+      });
+      it(`should return language date separator '.' if language param is 'ru'.`, () => {
+        spyOn(service, 'getShortLanguage').and.returnValue('ru');
+        const dateSeparator = service.getDateSeparator();
+        expect(dateSeparator).toBe('.');
       });
     });
   });

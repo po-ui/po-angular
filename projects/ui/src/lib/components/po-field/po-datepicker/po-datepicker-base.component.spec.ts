@@ -16,6 +16,7 @@ import { PoLanguageService } from '../../../services/po-language/po-language.ser
 class PoDatepickerComponent extends PoDatepickerBaseComponent {
   writeValue(value: any): void {}
   refreshValue(value: Date): void {}
+  replaceFormatSeparator(): any {}
 }
 
 describe('PoDatepickerBaseComponent:', () => {
@@ -23,7 +24,7 @@ describe('PoDatepickerBaseComponent:', () => {
   const languageService: PoLanguageService = new PoLanguageService();
 
   beforeEach(() => {
-    component = new PoDatepickerComponent(languageService);
+    component = new PoDatepickerComponent();
     component['shortLanguage'] = 'pt';
   });
 
