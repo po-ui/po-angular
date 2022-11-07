@@ -1,4 +1,4 @@
-import { PoLanguage, PoNumberSeparator } from './po-language.interface';
+import { PoLanguage, PoNumberSeparator, PoDateSeparator } from './po-language.interface';
 
 /**
  * @description
@@ -75,4 +75,21 @@ export const poLocaleThousandSeparatorList: Array<PoNumberSeparator> = [
   { separator: '.', language: 'es' },
   { separator: '.', language: 'pt' },
   { separator: ' ', language: 'ru' }
+];
+
+/**
+ * @description
+ *
+ * <a id="poLocaleDateSeparatorList"></a>
+ *
+ *
+ * A constante poLocaleDateSeparatorList possui o separadore de data por locale de suporte padrão do Po-UI
+ *
+ * @usedBy PoI18nModule
+ */
+export const poLocaleDateSeparatorList: Array<PoDateSeparator> = [
+  { separator: '/', locale: 'en' },
+  { separator: '/', locale: 'es' },
+  { separator: '/', locale: 'pt' },
+  { separator: '.', locale: 'ru' }
 ];
