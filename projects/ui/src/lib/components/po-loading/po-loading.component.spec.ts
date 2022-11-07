@@ -54,5 +54,12 @@ describe('PoLoadingComponent', () => {
 
       expect(nativeElement.querySelector('.po-loading-label')).toBeTruthy();
     });
+    it('po-loading-label: should show default label when text is not defined.', () => {
+      component.text = undefined;
+
+      fixture.detectChanges();
+
+      expect(nativeElement.querySelector('.po-loading-label')).toBeDefined();
+    });
   });
 });
