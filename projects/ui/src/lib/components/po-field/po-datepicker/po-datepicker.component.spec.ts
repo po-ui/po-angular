@@ -722,18 +722,17 @@ describe('PoDatepickerComponent:', () => {
 
       expect(formatYear).toHaveBeenCalledWith(date.getFullYear());
     });
-
+    
     it('formatToDate: shouldn`t call `formatYear` with date year', () => {
-      const fakeThis = { format: 'dd/mm/yyyy' };
-      const newDate = {
-        getDate: () => 28,
-        getMonth: () => 1,
-        getFullYear: () => 2019
-      };
-      const formatedDate: any = '28/02/2019';
-      spyOn(UtilsFunctions, 'formatYear').and.returnValue('2019');
+      component.format = 'dd/mm/yyyy';
+      const newDate: Date = new Date(2019, 2, 28);
+      const expectedData: any = '28/02/2019';
 
-      expect(component.formatToDate.call(fakeThis, newDate)).toBe(formatedDate);
+      spyOn(UtilsFunctions, 'formatYear').and.returnValue('2019');
+      spyOn(component, <any>'replaceFormatSeparator').and.returnValue('28/02/2019');
+
+      const formattedDate = component.formatToDate(newDate);
+      expect(formattedDate).toBe(expectedData);
     });
 
     it('formatToDate: should return `undefined` if `value` is undefined', () => {
