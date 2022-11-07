@@ -1,4 +1,20 @@
 import { Input, Directive } from '@angular/core';
+import { PoLanguageService } from '../../services/po-language/po-language.service';
+import { PoLoadingLiterals } from './interfaces/po-loading-literals.interface';
+export const poLoadingLiteralsDefault = {
+  en: <PoLoadingLiterals>{
+    loading: 'Loading'
+  },
+  es: <PoLoadingLiterals>{
+    loading: 'Cargando'
+  },
+  pt: <PoLoadingLiterals>{
+    loading: 'Carregando'
+  },
+  ru: <PoLoadingLiterals>{
+    loading: 'Загрузка'
+  }
+};
 
 /**
  * @docsPrivate
@@ -10,8 +26,25 @@ import { Input, Directive } from '@angular/core';
  */
 @Directive()
 export class PoLoadingBaseComponent {
+  private _text?: string;
+
   /**
    * Texto a ser exibido no componente.
    */
-  @Input('p-text') text?: string = 'Carregando';
+  @Input('p-text') set text(value: string) {
+    this._text = value || (value === '' ? '' : this.getTextDefault());
+  }
+
+  get text(): string {
+    return this._text;
+  }
+  constructor(private languageService: PoLanguageService) {
+    this.text = this.getTextDefault();
+  }
+
+  private getTextDefault(): string {
+    const language = this.languageService.getShortLanguage();
+
+    return poLoadingLiteralsDefault[language].loading;
+  }
 }
