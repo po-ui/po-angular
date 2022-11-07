@@ -111,11 +111,12 @@ export class PoDatepickerComponent extends PoDatepickerBaseComponent implements 
 
   constructor(
     private controlPosition: PoControlPositionService,
-    languageService: PoLanguageService,
+    private languageService: PoLanguageService,
     private renderer: Renderer2,
     el: ElementRef
   ) {
-    super(languageService);
+    super();
+    this.shortLanguage = this.languageService.getShortLanguage();
     this.el = el;
     const language = languageService.getShortLanguage();
     this.literals = {
@@ -295,7 +296,7 @@ export class PoDatepickerComponent extends PoDatepickerBaseComponent implements 
       return undefined;
     }
 
-    let dateFormatted = this.format;
+    let dateFormatted = this.replaceFormatSeparator();
 
     dateFormatted = dateFormatted.replace('dd', ('0' + value.getDate()).slice(-2));
     dateFormatted = dateFormatted.replace('mm', ('0' + (value.getMonth() + 1)).slice(-2));
@@ -367,6 +368,16 @@ export class PoDatepickerComponent extends PoDatepickerBaseComponent implements 
   /* istanbul ignore next */
   verifyMobile() {
     return isMobile();
+  }
+
+  // Retorna o formato de acordo com o locale.
+  protected replaceFormatSeparator() {
+    let newFormat = this.format;
+    const newDateSeparator = this.languageService.getDateSeparator(this.locale);
+    if (newDateSeparator !== '/') {
+      newFormat = newFormat.replace(/\//g, newDateSeparator);
+    }
+    return newFormat;
   }
 
   private closeCalendar() {
