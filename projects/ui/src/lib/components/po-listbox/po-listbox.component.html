@@ -1,3 +1,7 @@
-<div class="po-listbox" [hidden]="visible" [attr.p-type]="type">
-  <ng-content></ng-content>
+<div class="po-listbox" [attr.p-type]="type" [hidden]="visible">
+  <ul class="po-listbox-list">
+    <li *ngFor="let option of options" class="po-listbox-item">
+      <po-item-list [p-label]="option.label" [p-type]="type" (selectedOption)="setOptionValue($event)"></po-item-list>
+    </li>
+  </ul>
 </div>

@@ -1,1 +1,13 @@
-<div class="po-list-item"></div>
+<div
+  class="po-item-list"
+  [class.po-item-list__action]="type === 'action'"
+  [class.po-item-list__check]="type === 'check'"
+  [class.po-item-list__check-selected]=""
+  [class.po-item-list__option]="type === 'option'"
+  [class.po-item-list__option-selected]=""
+  (click)="setOptionValue({label})"
+>
+  <label>{{ label }}</label>
+</div>
+
+<ng-template #itemListTemplate> </ng-template>

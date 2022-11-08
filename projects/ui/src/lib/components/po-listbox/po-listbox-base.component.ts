@@ -1,37 +1,25 @@
-import { Directive, Input } from '@angular/core';
+import { Directive, EventEmitter, Input, Output } from '@angular/core';
 
 import { PoItemListOption } from './po-item-list/interfaces/po-item-list-option.interface';
 import { PoItemListOptionGroup } from './po-item-list/interfaces/po-item-list-option-group.interface';
 
-import { convertToBoolean } from '../../utils/util';
-
-type PoListBoxType = 'action' | 'option' | 'check';
-
-/**
- * @description
- */
+import { InputBoolean } from '../../decorators';
+import { PoItemListType } from './enums/po-item-list-type.enum';
 
 @Directive()
 export class PoListboxBaseComponent {
-  visibleOptions: Array<any> = [];
+  protected comboOptionsList: Array<any> = [];
 
   private _options: Array<PoItemListOption | PoItemListOptionGroup | any> = [];
-  private _type?: PoListBoxType = 'action';
-  private _visible: boolean = false;
+  private _type!: PoItemListType;
 
-  @Input('p-visible') set visible(value: boolean) {
-    this._visible = convertToBoolean(value);
+  @Input('p-visible') @InputBoolean() visible: boolean = false;
+
+  @Input('p-type') set type(value: PoItemListType) {
+    this._type = PoItemListType[value];
   }
 
-  get visible(): boolean {
-    return this._visible;
-  }
-
-  @Input('p-type') set type(value: PoListBoxType) {
-    this._type = value;
-  }
-
-  get type(): PoListBoxType {
+  get type(): PoItemListType {
     return this._type;
   }
 
@@ -41,5 +29,13 @@ export class PoListboxBaseComponent {
 
   get options(): Array<PoItemListOption | PoItemListOptionGroup | any> {
     return this._options;
+  }
+
+  @Output() selectedOption = new EventEmitter<PoItemListOption>();
+
+  setOptionValue(value: PoItemListOption): void {
+    console.log('setOptionValue in PoListbox', value);
+
+    this.selectedOption.emit(value);
   }
 }
