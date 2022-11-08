@@ -260,7 +260,7 @@ export class PoPageDynamicTableComponent extends PoPageDynamicListBaseComponent 
   private _pageCustomActions: Array<PoPageDynamicTableCustomAction> = [];
   private _height: number;
   private _oldQuickSearchParam: string;
-  private _quickSearchParam: string;
+  private _quickSearchParam: string = 'search';
   private _quickSearchWidth: number;
   private _tableCustomActions: Array<PoPageDynamicTableCustomTableAction> = [];
 
