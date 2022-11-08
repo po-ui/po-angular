@@ -1,0 +1,15 @@
+.po-listbox {
+  border-radius: var(--border-radius);
+  border-width: var(--border-width);
+  border-color: var(--border-color);
+  background-color: var(--background);
+  box-shadow: var(--shadow);
+
+  border-style: solid;
+  position: fixed;
+  z-index: 1000;
+}
+
+.po-listbox-list {
+  list-style: none;
+}
