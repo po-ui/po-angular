@@ -462,28 +462,6 @@ describe('PoDatepickerComponent:', () => {
       }
     };
 
-    it('ngAfterViewInit: should call `setDialogPickerStyleDisplay` and call `focus` if autoFocus is true.', () => {
-      const setDialogPickerStyleDisplay = spyOn(component, <any>'setDialogPickerStyleDisplay');
-      const inputFocus = spyOn(component, 'focus');
-      component.autoFocus = true;
-
-      component.ngAfterViewInit();
-
-      expect(setDialogPickerStyleDisplay).toHaveBeenCalled();
-      expect(inputFocus).toHaveBeenCalled();
-    });
-
-    it('ngAfterViewInit: should call `setDialogPickerStyleDisplay` and not call `focus` if autoFocus is false.', () => {
-      const setDialogPickerStyleDisplay = spyOn(component, <any>'setDialogPickerStyleDisplay');
-      const inputFocus = spyOn(component, 'focus');
-      component.autoFocus = false;
-
-      component.ngAfterViewInit();
-
-      expect(setDialogPickerStyleDisplay).toHaveBeenCalled();
-      expect(inputFocus).not.toHaveBeenCalled();
-    });
-
     it('ngOnDestroy: should call `removeListeners`.', () => {
       const removeListener = spyOn(component, <any>'removeListeners');
       component.ngOnDestroy();
@@ -772,8 +750,10 @@ describe('PoDatepickerComponent:', () => {
             }
           },
           iconDatepicker: {
-            nativeElement: {
-              contains: () => iconDatepickerContains
+            buttonElement: {
+              nativeElement: {
+                contains: () => iconDatepickerContains
+              }
             }
           },
           hasOverlayClass: () => hasOverlayClass,
@@ -1049,6 +1029,75 @@ describe('PoDatepickerComponent:', () => {
       spyOn(fakeThis, 'controlModel');
       component.onKeyup.call(fakeThis, {});
       expect(fakeThis.controlModel).toHaveBeenCalled();
+    });
+
+    it(`onKeyPress: should call 'isKeyCodeEnter' and check if typed key is enter.`, () => {
+      const eventEnterKey = { keyCode: 13 };
+
+      spyOn(component, 'togglePicker');
+
+      component.onKeyPress(eventEnterKey);
+
+      expect(component.togglePicker).toHaveBeenCalled();
+    });
+
+    it(`onKeyPress: should call 'isKeyCodeSpace' and check if typed key is space.`, () => {
+      const eventEnterKey = { keyCode: 32 };
+
+      spyOn(component, 'togglePicker');
+
+      component.onKeyPress(eventEnterKey);
+
+      expect(component.togglePicker).toHaveBeenCalled();
+    });
+
+    it('togglePicker: should not call initializeListeners if component.disabled is true', () => {
+      component.disabled = true;
+
+      spyOn(component, <any>'removeListeners');
+      spyOn(component, <any>'initializeListeners');
+
+      component['togglePicker']();
+
+      expect(component['removeListeners']).not.toHaveBeenCalled();
+      expect(component['initializeListeners']).not.toHaveBeenCalled();
+    });
+
+    it('togglePicker: should not call initializeListeners if component.readonly is true', () => {
+      component.readonly = true;
+
+      spyOn(component, <any>'removeListeners');
+      spyOn(component, <any>'initializeListeners');
+
+      component['togglePicker']();
+
+      expect(component['removeListeners']).not.toHaveBeenCalled();
+      expect(component['initializeListeners']).not.toHaveBeenCalled();
+    });
+
+    it('togglePicker: should call initializeListeners and setCalendarPosition if component.visible is falsy', () => {
+      component.readonly = false;
+      component.disabled = false;
+
+      spyOn(component, <any>'setCalendarPosition');
+      spyOn(component, <any>'initializeListeners');
+
+      component['togglePicker']();
+
+      expect(component['setCalendarPosition']).toHaveBeenCalled();
+      expect(component['initializeListeners']).toHaveBeenCalled();
+    });
+
+    it('togglePicker: should call removeListeners if component.visible is truthy', () => {
+      component.visible = true;
+      component.readonly = false;
+      component.disabled = false;
+
+      spyOn(component, <any>'removeListeners');
+
+      component['togglePicker']();
+
+      expect(component['removeListeners']).toHaveBeenCalled();
     });
   });
 
