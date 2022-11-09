@@ -248,6 +248,10 @@ export function isKeyCodeEnter(event: any): boolean {
   return event.keyCode === 13 || event.which === 13;
 }
 
+export function isKeyCodeSpace(event: any): boolean {
+  return event.keyCode === 32 || event.which === 32;
+}
+
 /**
  * Caso o ano original da data seja entre 0 e 100 atribui esse valor ao ano, pois o `new Date` do javascript transforma o ano para 190X.
  *
