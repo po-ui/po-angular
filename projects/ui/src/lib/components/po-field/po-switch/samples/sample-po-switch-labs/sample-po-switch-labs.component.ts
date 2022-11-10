@@ -21,7 +21,10 @@ export class SamplePoSwitchLabsComponent implements OnInit {
     { label: 'Right', value: PoSwitchLabelPosition.Right }
   ];
 
-  public readonly propertiesOptions: Array<PoCheckboxGroupOption> = [{ value: 'disabled', label: 'Disabled' }];
+  public readonly propertiesOptions: Array<PoCheckboxGroupOption> = [
+    { value: 'disabled', label: 'Disabled' },
+    { value: 'formatModel', label: 'Format Model' }
+  ];
 
   ngOnInit() {
     this.restore();
