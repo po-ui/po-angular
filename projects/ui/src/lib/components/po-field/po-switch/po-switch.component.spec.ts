@@ -167,6 +167,22 @@ describe('PoSwitchComponent', () => {
       expect(component.change.emit).toHaveBeenCalledWith(false);
     });
 
+    it('changeValue: should call `updateModel` and `change.emit` if switch value is changed with p-model-format is `true`', () => {
+      component.value = true;
+      component.formatModel = true;
+
+      spyOn(component.change, 'emit');
+      spyOn(component, <any>'updateModel');
+
+      component.changeValue(false);
+      expect(component['updateModel']).toHaveBeenCalledWith('false');
+      expect(component.change.emit).toHaveBeenCalledWith(false);
+
+      component.changeValue(true);
+      expect(component['updateModel']).toHaveBeenCalledWith('true');
+      expect(component.change.emit).toHaveBeenCalledWith(true);
+    });
+
     it('onWriteValue: should updated value and call `markForCheck`', () => {
       const expectedValue = false;
 
@@ -176,6 +192,36 @@ describe('PoSwitchComponent', () => {
       spyOn(component['changeDetector'], 'markForCheck');
 
       component.onWriteValue(expectedValue);
+
+      expect(component['changeDetector'].markForCheck).toHaveBeenCalled();
+      expect(component.value).toBe(expectedValue);
+    });
+
+    it('onWriteValue: should updated value on first time and call `markForCheck` with p-model-format is `true`', () => {
+      const expectedValue = false;
+
+      component.value = false;
+      component.formatModel = true;
+
+      component['changeDetector'] = <any>{ markForCheck: () => {} };
+      spyOn(component['changeDetector'], 'markForCheck');
+
+      component.onWriteValue(null);
+
+      expect(component['changeDetector'].markForCheck).toHaveBeenCalled();
+      expect(component.value).toBe(expectedValue);
+    });
+
+    it('onWriteValue: should updated value and call `markForCheck` with p-model-format is `true`', () => {
+      const expectedValue = true;
+
+      component.value = false;
+      component.formatModel = true;
+
+      component['changeDetector'] = <any>{ markForCheck: () => {} };
+      spyOn(component['changeDetector'], 'markForCheck');
+
+      component.onWriteValue('true');
 
       expect(component['changeDetector'].markForCheck).toHaveBeenCalled();
       expect(component.value).toBe(expectedValue);
