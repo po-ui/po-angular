@@ -8,7 +8,7 @@
         <div class="po-md-7 po-lg-8">
           <div class="po-mb-2">
             <po-info p-label="Name" [p-value]="userData.name"> </po-info>
-            <po-tag p-value="Premium Account" (p-click)="openModal()"> </po-tag>
+            <po-tag p-value="Premium Account"> </po-tag>
           </div>
           <div class="po-mb-2">
             <po-info class="po-mt-5" p-label="Email" [p-value]="userData.email"> </po-info>
@@ -22,7 +22,6 @@
         <po-tag
           *ngFor="let investiment of investiments"
           class="po-md-6 po-lg-3"
-          p-inverse
           [p-label]="investiment.label"
           [p-type]="investiment.type"
           [p-value]="investiment.value"
@@ -58,26 +57,3 @@
     </po-tabs>
   </po-widget>
 </po-page-default>
-
-<po-modal #modal p-title="Exclusive Premium features">
-  <po-divider p-label="Check your advantages"></po-divider>
-  <div class="po-mb-5">
-    <p *ngFor="let item of advantages" class="po-font-text po-pb-1">
-      <span class="po-icon po-icon-ok po-pr-2"></span>
-      <span class="po-font-text-bold">{{ item.title }}</span>
-      {{ item.description }}
-    </p>
-  </div>
-  <po-divider p-label="Contact infos"></po-divider>
-  <div class="po-row">
-    <div class="po-text-center po-md-6">
-      <p class="po-font-text-bold">Contact your assessor by phone...</p>
-      <h2 class="po-font-subtitle">0800-999-9999</h2>
-    </div>
-    <div class="po-text-center po-md-6">
-      <p class="po-font-text-bold">...or by email.</p>
-      <h2 class="po-font-subtitle">support@company.com</h2>
-    </div>
-    <small class="po-font-text-small po-text-center po-mt-2 po-md-12">*Support 24x7</small>
-  </div>
-</po-modal>
