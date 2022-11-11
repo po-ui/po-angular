@@ -43,23 +43,19 @@ describe('PoContainerComponent:', () => {
       expect(nativeElement.querySelector('.po-container-no-border')).toBeFalsy();
     });
 
-    it('should have shadow and padding.', () => {
-      component.noShadow = false;
+    it('should have padding.', () => {
       component.noPadding = false;
 
       fixture.detectChanges();
 
-      expect(nativeElement.querySelector('.po-container-no-shadow')).toBeNull();
       expect(nativeElement.querySelector('.po-container-no-padding')).toBeNull();
     });
 
-    it('shouldn`t have shadow and padding.', () => {
-      component.noShadow = true;
+    it('shouldn`t have padding.', () => {
       component.noPadding = true;
 
       fixture.detectChanges();
 
-      expect(nativeElement.querySelector('.po-container-no-shadow')).toBeTruthy();
       expect(nativeElement.querySelector('.po-container-no-padding')).toBeTruthy();
     });
 

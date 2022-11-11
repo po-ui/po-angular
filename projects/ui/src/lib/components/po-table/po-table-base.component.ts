@@ -366,7 +366,7 @@ export abstract class PoTableBaseComponent implements OnChanges, OnDestroy {
    * > Se falso, será inicializado como um *array* vazio.
    */
   @Input('p-items') set items(items: Array<any>) {
-    this._items = Array.isArray(items) ? items : [];
+    this._items = Array.isArray(items) ? [...items] : [];
 
     // when haven't items, selectAll should be unchecked.
     if (!this.hasItems) {

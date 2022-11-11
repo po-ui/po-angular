@@ -15,7 +15,7 @@ export class SamplePoDynamicViewEmployeeComponent {
     { property: 'rg', label: 'RG', gridColumns: 4, order: 3 },
     { property: 'graduation', label: 'Graduation', gridColumns: 4 },
     { property: 'company', label: 'Company', divider: 'Work Data' },
-    { property: 'job', tag: true, inverse: true, color: 'color-03', icon: 'po-icon-copy' },
+    { property: 'job', tag: true, color: 'color-03', icon: 'po-icon-copy' },
     { property: 'admissionDate', label: 'Admission date', type: 'date' },
     { property: 'hoursPerDay', label: 'Hours per day', type: 'time' },
     { property: 'wage', label: 'Wage', type: 'currency' },

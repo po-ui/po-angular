@@ -667,6 +667,26 @@ describe('PoDynamicFormFieldsBaseComponent:', () => {
         expect(component['getComponentControl'](field)).toBe(expectedValue);
         expect(component['verifyforceOptionComponent']).toHaveBeenCalled();
       });
+
+      it('should return `upload` if type is `upload` and has a `url`', () => {
+        const expectedValue = 'upload';
+        const field = { type: 'upload', property: 'upload', url: 'http://fakeurl.com' };
+
+        spyOn(component, <any>'isUpload').and.callThrough();
+
+        expect(component['getComponentControl'](field)).toBe(expectedValue);
+        expect(component['isUpload']).toHaveBeenCalled();
+      });
+
+      it("should return `input` if type is `upload` and hasn't a `url`", () => {
+        const expectedValue = 'input';
+        const field = { type: 'upload', property: 'upload' };
+
+        spyOn(component, <any>'isUpload').and.callThrough();
+
+        expect(component['getComponentControl'](field)).toBe(expectedValue);
+        expect(component['isUpload']).toHaveBeenCalled();
+      });
     });
 
     it('isCombo: should return `true` if `optionsService` is defined string', () => {

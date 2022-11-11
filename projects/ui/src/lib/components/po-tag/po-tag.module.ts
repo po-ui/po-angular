@@ -2,6 +2,7 @@ import { CommonModule } from '@angular/common';
 import { NgModule } from '@angular/core';
 
 import { PoIconModule } from '../po-icon/po-icon.module';
+import { PoTooltipModule } from '../../directives/po-tooltip/index';
 
 import { PoTagComponent } from './po-tag.component';
 
@@ -11,7 +12,7 @@ import { PoTagComponent } from './po-tag.component';
  * Módulo do componente `po-tag`.
  */
 @NgModule({
-  imports: [CommonModule, PoIconModule],
+  imports: [CommonModule, PoIconModule, PoTooltipModule],
   declarations: [PoTagComponent],
   exports: [PoTagComponent],
   providers: [],
