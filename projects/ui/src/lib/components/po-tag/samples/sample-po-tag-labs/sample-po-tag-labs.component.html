@@ -1,7 +1,7 @@
 <po-tag
   [p-color]="color"
   [p-icon]="icon"
-  [p-inverse]="inverse"
+  [p-text-color]="textColor"
   [p-label]="label"
   [p-orientation]="orientation"
   [p-type]="type"
@@ -32,6 +32,16 @@
       [(ngModel)]="color"
       p-clean
       p-label="Color"
+      p-help="color-01, red, rgb(201, 53, 125), #753399"
+    >
+    </po-input>
+
+    <po-input
+      class="po-md-6"
+      name="textColor"
+      [(ngModel)]="textColor"
+      p-clean
+      p-label="Text color"
       p-help="color-01, red, rgb(201, 53, 125), #753399"
     >
     </po-input>
@@ -69,8 +79,6 @@
       [p-options]="typeOptions"
     >
     </po-radio-group>
-
-    <po-switch class="po-md-2" name="inverse" [(ngModel)]="inverse" p-label="Inverse"> </po-switch>
   </div>
 
   <div class="po-row">

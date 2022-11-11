@@ -99,5 +99,37 @@ describe('PoTagBaseComponent:', () => {
       component.color = 'deep red';
       expect(component.color).toBe(undefined);
     });
+
+    it('textColor: should update to true value.', () => {
+      const colorsValidTrueValues = poTagColors;
+
+      expectPropertiesValues(component, 'textColor', colorsValidTrueValues, colorsValidTrueValues);
+    });
+
+    it('textColor: shouldn´t update to false value.', () => {
+      const colorsInalidTrueValues = [undefined, null, 2, 'string', 0, NaN];
+
+      expectPropertiesValues(component, 'textColor', colorsInalidTrueValues, undefined);
+    });
+
+    it('customTextColor : should change the value with a color name', () => {
+      component.textColor = 'red';
+      expect(component.customTextColor).toBe('red');
+    });
+
+    it('customTextColor : should change the value with a hex color', () => {
+      component.textColor = '#fff';
+      expect(component.customTextColor).toBe('#fff');
+    });
+
+    it('customTextColor : should change the value with a rgb', () => {
+      component.textColor = 'rgb(35, 233, 215)';
+      expect(component.customTextColor).toBe('rgb(35, 233, 215)');
+    });
+
+    it('customTextColor : should change color to default value if value is invalid', () => {
+      component.textColor = 'deep red';
+      expect(component.customTextColor).toBe(undefined);
+    });
   });
 });

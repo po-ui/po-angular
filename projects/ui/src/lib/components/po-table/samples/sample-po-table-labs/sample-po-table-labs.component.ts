@@ -72,11 +72,6 @@ export class SamplePoTableLabsComponent implements OnInit {
     { value: 'boolean', label: 'Boolean' }
   ];
 
-  public readonly containerOptions: Array<PoRadioGroupOption> = [
-    { label: 'Border', value: 'border' },
-    { label: 'Shadow', value: 'shadow' }
-  ];
-
   public readonly propertiesOptions: Array<PoCheckboxGroupOption> = [
     { label: 'Hide text overflow', value: 'hideTextOverflow' },
     { label: 'Sort', value: 'sort' },

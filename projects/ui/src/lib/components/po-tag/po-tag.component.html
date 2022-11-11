@@ -1,4 +1,10 @@
-<div class="po-tag-container" [class.po-tag-container-horizontal]="tagOrientation">
+<div
+  #tagContainer
+  class="po-tag-container"
+  [class.po-tag-container-horizontal]="tagOrientation"
+  [p-tooltip]="getWidthTag() ? value : ''"
+  p-tooltip-position="top"
+>
   <div *ngIf="label" class="po-tag-title po-text-nowrap">
     <span class="po-tag-label">{{ tagOrientation ? label + ':' : label }}</span>
   </div>
@@ -6,16 +12,11 @@
   <div class="po-tag-sub-container">
     <div
       class="po-tag"
+      [attr.role]="isClickable ? 'button' : ''"
       [class.po-clickable]="isClickable"
-      [class.po-tag-inverse]="inverse"
+      [class.po-tag-inverse]="inverse && !type && !customTextColor"
       [ngClass]="tagColor"
-      [ngStyle]="
-        !tagColor && !inverse
-          ? { 'background-color': customColor }
-          : !tagColor && inverse
-          ? { 'border': '1px solid ' + customColor }
-          : ''
-      "
+      [ngStyle]="styleTag()"
       tabindex="0"
       (click)="onClick()"
       (keydown.enter)="onKeyPressed($event)"
@@ -26,11 +27,27 @@
         *ngIf="icon"
         class="po-tag-icon"
         [p-icon]="!type ? icon : iconFromType"
-        [ngStyle]="!tagColor && inverse ? { 'color': customColor } : ''"
+        [ngStyle]="
+          !tagColor && inverse && !customTextColor
+            ? { 'color': customColor }
+            : !type && customTextColor
+            ? { 'color': customTextColor }
+            : ''
+        "
       >
       </po-icon>
 
-      <span class="po-tag-value" [ngStyle]="!tagColor && inverse ? { 'color': customColor } : ''">{{ value }}</span>
+      <span
+        class="po-tag-value"
+        [ngStyle]="
+          !tagColor && inverse && !customTextColor
+            ? { 'color': customColor }
+            : !type && customTextColor
+            ? { 'color': customTextColor }
+            : ''
+        "
+        >{{ value }}</span
+      >
     </div>
   </div>
 </div>

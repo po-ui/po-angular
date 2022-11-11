@@ -21,9 +21,12 @@ export enum PoDynamicFieldType {
   /** Utilizado para informar/exibir hora. */
   Time = 'time',
 
-  /** Valor númerico. */
+  /** Valor numérico. */
   Number = 'number',
 
   /** Texto. */
-  String = 'string'
+  String = 'string',
+
+  /** Utilizado para fazer uploads de arquivos. */
+  Upload = 'upload'
 }

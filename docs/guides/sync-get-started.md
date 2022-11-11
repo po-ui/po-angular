@@ -171,8 +171,8 @@ Crie o arquivo `src/app/home/conference-schema.constants.ts` e adicione o conte√
 import { PoSyncSchema } from '@po-ui/ng-sync';
 
 export const conferenceSchema: PoSyncSchema = {
-  getUrlApi: 'https://po-sample-conference.herokuapp.com/conferences',
-  diffUrlApi: 'https://po-sample-conference.herokuapp.com/conferences/diff',
+  getUrlApi: 'https://po-sample-conference.fly.dev/conferences',
+  diffUrlApi: 'https://po-sample-conference.fly.dev/conferences/diff',
   deletedField: 'deleted',
   fields: [ 'id', 'title', 'location', 'description' ],
   idField: 'id',

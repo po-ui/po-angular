@@ -30,7 +30,7 @@ export class SamplePoMultiselectHeroesComponent {
   }
 
   changeOptions(event): void {
-    this.heroes = event;
+    this.heroes = [...event];
   }
 
   openLink(value) {
