@@ -614,6 +614,38 @@ describe('PoPageDynamicTableComponent:', () => {
         expect(component.quickSearchWidth).toEqual(response.quickSearchWidth);
       }));
 
+      it('should call loadData with quickSearchValue', fakeAsync(() => {
+        const activatedRoute: any = {
+          snapshot: {
+            data: {
+              serviceApi: 'localhost:4300/api/people',
+              serviceMetadataApi: 'localhost:4300/api/people/metadata'
+            },
+            params: { id: 1 }
+          }
+        };
+
+        const response = {
+          autoRouter: false,
+          actions: undefined,
+          breadcrumb: undefined,
+          fields: [],
+          title: 'Title',
+          quickSearchWidth: 4
+        };
+
+        component.quickSearchParam = 'search';
+        component.quickSearchValue = 'Jhon';
+
+        spyOn(component['poPageDynamicService'], 'getMetadata').and.returnValue(of(response));
+        spyOn(component, <any>'loadData').and.returnValue(EMPTY);
+        spyOn(component, <any>'loadOptionsOnInitialize').and.returnValue(EMPTY);
+        component['activatedRoute'] = activatedRoute;
+        component['loadDataFromAPI']();
+
+        expect(component['loadData']).toHaveBeenCalledWith({ search: 'Jhon' });
+      }));
+
       it('should call `getMetadata` and set properties', fakeAsync(() => {
         const activatedRoute: any = {
           snapshot: {
