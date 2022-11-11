@@ -692,6 +692,15 @@ describe('PoPageDynamicSearchComponent:', () => {
         expect(component.hideRemoveAllDisclaimer).toBeTrue();
         expect(component.hideCloseDisclaimers).toEqual(['filter3']);
       }));
+
+      it('should call onAction with `quickSearchValue`', () => {
+        component.quickSearchValue = 'jhon';
+        spyOn(component, <any>'onAction');
+
+        component.ngOnInit();
+
+        expect(component['onAction']).toHaveBeenCalledWith('jhon', true);
+      });
     });
   });
 
