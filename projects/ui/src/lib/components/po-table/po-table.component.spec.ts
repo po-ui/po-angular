@@ -2230,7 +2230,6 @@ describe('PoTableComponent:', () => {
       tick();
 
       expect(nativeElement.querySelector('.po-container')).toBeTruthy();
-      expect(nativeElement.querySelector('.po-container-no-shadow')).toBeTruthy();
     }));
 
     it('should display `po-container` and `po-container-no-shadow` class if container is `shadow`.', fakeAsync(() => {
@@ -2239,7 +2238,6 @@ describe('PoTableComponent:', () => {
 
       tick();
       expect(nativeElement.querySelector('.po-container')).toBeTruthy();
-      expect(nativeElement.querySelector('.po-container-no-shadow')).toBeFalsy();
     }));
 
     it('should find .po-table-header-column-manager if has columns and actions is undefined', () => {

@@ -2,6 +2,18 @@
 
 All notable changes to this project will be documented in this file. See [standard-version](https://github.com/conventional-changelog/standard-version) for commit guidelines.
 
+# [14.9.0](https://github.com/po-ui/po-angular/compare/v14.8.1...v14.9.0) (2022-11-07)
+
+
+### Features
+
+* **container:** implementa definições do AnimaliaDS ([2eebfae](https://github.com/po-ui/po-angular/commit/2eebfae3f12192674f11763b108fd844d2277f78))
+* **divider:** aplica estilo definido pelo DS ([aa4fdf6](https://github.com/po-ui/po-angular/commit/aa4fdf6e1c37533a7d7c9aa913b79793e290d532))
+* **dynamic-form:** adiciona `po-upload` ([295695c](https://github.com/po-ui/po-angular/commit/295695c47b6d08e4efebbf158498dfa89973a26e))
+* **image:** novo componente po-image ([02d92de](https://github.com/po-ui/po-angular/commit/02d92defe7774159cfb0c92c2dd9fbb9eca7738a))
+* **tag:** aplica estilo definido pelo DS ([f18e71e](https://github.com/po-ui/po-angular/commit/f18e71e3467f531e94944915be41a9492ace2018))
+* **tag:** deprecia a propriedade p-inverse e p-click ([ba1c71f](https://github.com/po-ui/po-angular/commit/ba1c71fdb3f30612459f0360c762164b97cd49df))
+
 ## [14.8.1](https://github.com/po-ui/po-angular/compare/v14.8.0...v14.8.1) (2022-10-31)
 
 

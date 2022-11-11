@@ -9,7 +9,9 @@ import {
   PoLookupLiterals,
   PoMultiselectFilterMode,
   PoMultiselectLiterals,
-  PoSwitchLabelPosition
+  PoSwitchLabelPosition,
+  PoUploadLiterals,
+  PoUploadFileRestrictions
 } from '../../po-field';
 import { PoLookupAdvancedFilter } from '../../po-field/po-lookup/interfaces/po-lookup-advanced-filter.interface';
 import { PoLookupColumn } from '../../po-field/po-lookup/interfaces/po-lookup-column.interface';
@@ -92,7 +94,7 @@ export interface PoDynamicFormField extends PoDynamicField {
    * Máscara para o campo.
    *
    * **Componentes compatíveis:** `po-input`.
-   > também é atribuído ao utilizar a propriedade `type: time`.
+   * > também é atribuído ao utilizar a propriedade `type: time`.
    */
   mask?: string;
 
@@ -100,7 +102,7 @@ export interface PoDynamicFormField extends PoDynamicField {
    * Define que o valor do componente será conforme especificado na mascára. O valor padrão é `false`.
    *
    * **Componentes compatíveis:** `po-input`.
-   > também é atribuído ao utilizar a propriedade `type: time`.
+   * > também é atribuído ao utilizar a propriedade `type: time`.
    * */
   maskFormatModel?: boolean;
 
@@ -348,7 +350,7 @@ export interface PoDynamicFormField extends PoDynamicField {
   /**
    * Permite a seleção de múltiplos itens.
    *
-   * **Componente compatível:** `po-lookup`
+   * **Componente compatível:** `po-lookup`, `po-upload`
    */
   multiple?: boolean;
 
@@ -366,7 +368,7 @@ export interface PoDynamicFormField extends PoDynamicField {
   noAutocomplete?: boolean;
 
   /**
-   * Posição de exibição do rótulo do PoSwich.
+   * Posição de exibição do rótulo do PoSwitch.
    * > Por padrão exibe à direita.
    */
   labelPosition?: PoSwitchLabelPosition;
@@ -392,7 +394,7 @@ export interface PoDynamicFormField extends PoDynamicField {
    *
    * **Componentes compatíveis:** `po-lookup`, `po-multiselect`, `po-combo`, `po-datepicker-range`
    */
-  literals?: PoLookupLiterals | PoMultiselectLiterals | PoComboLiterals | PoDatepickerRangeLiterals;
+  literals?: PoLookupLiterals | PoMultiselectLiterals | PoComboLiterals | PoDatepickerRangeLiterals | PoUploadLiterals;
 
   /**
    * Se verdadeiro ativa a funcionalidade de scroll infinito para o combo ou lookup, ao chegar ao fim da tabela executará nova busca dos dados conforme paginação.
@@ -525,4 +527,128 @@ export interface PoDynamicFormField extends PoDynamicField {
    * **Componentes compatíveis**: `po-lookup`
    */
   columnRestoreManager?: Function;
+
+  /**
+   * URL que deve ser feita a requisição com os arquivos selecionados.
+   *
+   * **Componente compatível**: `po-upload`
+   */
+  url?: string;
+
+  /**
+   * Define se o envio do arquivo será automático ao selecionar o mesmo.
+   *
+   * **Componente compatível**: `po-upload`
+   */
+  autoUpload?: boolean;
+
+  /**
+   * Permite a seleção de diretórios contendo um ou mais arquivos para envio.
+   *
+   * > A habilitação desta propriedade se restringe apenas à seleção de diretórios.
+   *
+   * > Definição não suportada pelo browser **Internet Explorer**, todavia será possível a seleção de arquivos padrão.
+   *
+   * **Componente compatível**: `po-upload`
+   */
+  directory?: boolean;
+
+  /**
+   * Exibe a área onde é possível arrastar e selecionar os arquivos. Quando estiver definida, omite o botão para seleção de arquivos
+   * automaticamente.
+   *
+   * > Recomendamos utilizar apenas um `po-upload` com esta funcionalidade por tela.
+   *
+   * **Componente compatível**: `po-upload`
+   */
+  dragDrop?: boolean;
+
+  /**
+   * Define em *pixels* a altura da área onde podem ser arrastados os arquivos. A altura mínima aceita é `160px`.
+   *
+   * > Esta propriedade funciona somente se a propriedade `p-drag-drop` estiver habilitada.
+   *
+   * **Componente compatível**: `po-upload`
+   */
+  dragDropHeight?: number;
+
+  /**
+   * Objeto que segue a definição da interface `PoUploadFileRestrictions`,
+   * que possibilita definir tamanho máximo/mínimo e extensão dos arquivos permitidos.
+   *
+   * **Componente compatível**: `po-upload`
+   */
+  restrictions?: PoUploadFileRestrictions;
+
+  /**
+   * Objeto que contém os cabeçalhos que será enviado na requisição dos arquivos.
+   *
+   * **Componente compatível**: `po-upload`
+   */
+  headers?: { [name: string]: string | Array<string> };
+
+  /**
+   * Oculta visualmente as informações de restrições para o upload.
+   *
+   * **Componente compatível**: `po-upload`
+   */
+  hideRestrictionsInfo?: boolean;
+
+  /**
+   * Omite o botão de seleção de arquivos.
+   *
+   * > Caso o valor definido seja `true`, caberá ao desenvolvedor a responsabilidade
+   * pela chamada do método `selectFiles()` para seleção de arquivos.
+   *
+   * **Componente compatível**: `po-upload`
+   */
+  hideSelectButton?: boolean;
+
+  /**
+   * Omite o botão de envio de arquivos.
+   *
+   * > Caso o valor definido seja `true`, caberá ao desenvolvedor a responsabilidade
+   * pela chamada do método `sendFiles()` para envio do(s) arquivo(s) selecionado(s).
+   *
+   * **Componente compatível**: `po-upload`
+   */
+  hideSendButton?: boolean;
+
+  /**
+   * Define se a indicação de campo obrigatório será exibida.
+   *
+   * > Não será exibida a indicação se:
+   * - Não possuir `p-help` e/ou `p-label`.
+   */
+  showRequired?: boolean;
+
+  /**
+   * Evento será disparado quando ocorrer algum erro no envio do arquivo.
+   * > Por parâmetro será passado o objeto do retorno que é do tipo `HttpErrorResponse`.
+   *
+   * **Componente compatível**: `po-upload`
+   */
+  onError?: Function;
+
+  /**
+   * Evento será disparado quando o envio do arquivo for realizado com sucesso.
+   * > Por parâmetro será passado o objeto do retorno que é do tipo `HttpResponse`.
+   *
+   * **Componente compatível**: `po-upload`
+   */
+  onSuccess?: Function;
+
+  /**
+   * Função que será executada no momento de realizar o envio do arquivo,
+   * onde será possível adicionar informações ao parâmetro que será enviado na requisição.
+   * É passado por parâmetro um objeto com o arquivo e a propriedade data nesta propriedade pode ser informado algum dado,
+   * que será enviado em conjunto com o arquivo na requisição, por exemplo:
+   *
+   * ```
+   *   event.data = {id: 'id do usuário'};
+   * ```
+   *
+   * **Componente compatível**: `po-upload`
+   */
+  onUpload?: Function;
 }
