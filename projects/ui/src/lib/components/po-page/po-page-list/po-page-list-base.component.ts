@@ -58,6 +58,16 @@ export abstract class PoPageListBaseComponent {
    */
   @Input('p-filter') filter: PoPageFilter;
 
+  /**
+   * @optional
+   *
+   * @description
+   *
+   * Valor padrão na busca rápida ao inicializar o componente
+   *
+   */
+  @Input('p-quick-search-value') quickSearchValue: string;
+
   visibleActions: Array<PoPageAction> = [];
 
   protected language: string;

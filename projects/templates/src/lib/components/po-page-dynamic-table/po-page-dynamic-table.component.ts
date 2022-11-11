@@ -261,6 +261,7 @@ export class PoPageDynamicTableComponent extends PoPageDynamicListBaseComponent 
   private _height: number;
   private _oldQuickSearchParam: string;
   private _quickSearchParam: string = 'search';
+  private _quickSearchValue: string;
   private _quickSearchWidth: number;
   private _tableCustomActions: Array<PoPageDynamicTableCustomTableAction> = [];
 
@@ -442,6 +443,22 @@ export class PoPageDynamicTableComponent extends PoPageDynamicListBaseComponent 
 
   get quickSearchParam(): string {
     return this._quickSearchParam;
+  }
+
+  /**
+   * @optional
+   *
+   * @description
+   *
+   * Valor padrão na busca rápida ao inicializar o componente
+   *
+   */
+  @Input('p-quick-search-value') set quickSearchValue(value: string) {
+    this._quickSearchValue = value;
+  }
+
+  get quickSearchValue(): string {
+    return this._quickSearchValue;
   }
 
   /**
@@ -1154,7 +1171,13 @@ export class PoPageDynamicTableComponent extends PoPageDynamicListBaseComponent 
     this.poPageDynamicService.configServiceApi({ endpoint: this.serviceApi, metadata: serviceMetadataApi });
 
     const metadata$ = this.getMetadata(serviceApiFromRoute, onLoad);
-    const data$ = this.loadData();
+    let data$;
+    if (this.quickSearchValue) {
+      const paramsQuickSearchValue = { [this.quickSearchParam]: this.quickSearchValue };
+      data$ = this.loadData(paramsQuickSearchValue);
+    } else {
+      data$ = this.loadData();
+    }
 
     this.subscriptions.add(
       metadata$
