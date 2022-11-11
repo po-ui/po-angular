@@ -480,7 +480,7 @@ export abstract class PoDatepickerBaseComponent implements ControlValueAccessor,
     mask = mask.replace(/DD/g, '99');
     mask = mask.replace(/MM/g, '99');
     mask = mask.replace(/YYYY/g, '9999');
-    //
+
     return new PoMask(mask, true);
   }
 

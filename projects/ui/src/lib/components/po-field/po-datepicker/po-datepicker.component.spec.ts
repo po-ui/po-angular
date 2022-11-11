@@ -724,18 +724,10 @@ describe('PoDatepickerComponent:', () => {
     });
 
     it('formatToDate: shouldn`t call `formatYear` with date year', () => {
-      // const fakeThis = {
-      //   format: 'dd/mm/yyyy',
-      //   replaceFormatSeparator: () => {}
-      // };
       component.format = 'dd/mm/yyyy';
-      // const newDate = {
-      //   getDate: () => 28,
-      //   getMonth: () => 1,
-      //   getFullYear: () => 2019
-      // };
       const newDate: Date = new Date(2019, 2, 28);
       const expectedData: any = '28/02/2019';
+
       spyOn(UtilsFunctions, 'formatYear').and.returnValue('2019');
       spyOn(component, <any>'replaceFormatSeparator').and.returnValue('28/02/2019');
 

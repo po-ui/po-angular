@@ -83,7 +83,7 @@ export const poLocaleThousandSeparatorList: Array<PoNumberSeparator> = [
  * <a id="poLocaleDateSeparatorList"></a>
  *
  *
- * A constante poLocaleDateSeparatorList possui o separadore de data por locale de suporte padrão do Po-UI
+ * A constante poLocaleDateSeparatorList possui o separador de data por locale de suporte padrão do Po-UI
  *
  * @usedBy PoI18nModule
  */
