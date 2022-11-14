@@ -2,6 +2,17 @@
 
 All notable changes to this project will be documented in this file. See [standard-version](https://github.com/conventional-changelog/standard-version) for commit guidelines.
 
+## [14.9.1](https://github.com/po-ui/po-angular/compare/v14.9.0...v14.9.1) (2022-11-14)
+
+
+### Bug Fixes
+
+* **dynamic-form:** corrige erro no console ([fdf0f8f](https://github.com/po-ui/po-angular/commit/fdf0f8f101e7362fa705b9b3b2ed226e98dfed35))
+* **dynamic-table:** corrige valor `undefined` na requisicao ([cb86b99](https://github.com/po-ui/po-angular/commit/cb86b99fe262031b23e4956978b5c8346b497f1d))
+* **table:** ajusta exibição de itens sem refresh ([afb9b5c](https://github.com/po-ui/po-angular/commit/afb9b5c32e0b42400a79c1877de24984dd693f53))
+
+
+
 # [14.9.0](https://github.com/po-ui/po-angular/compare/v14.8.1...v14.9.0) (2022-11-07)
 
 
