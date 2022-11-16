@@ -406,6 +406,31 @@ describe('PoPageJobSchedulerComponent:', () => {
         expect(component['save']).toHaveBeenCalled();
         expect(paramConfirm.message).toBe(component.literals.confirmUpdateMessage);
       });
+
+      it(`should call 'poDialogservice.confirm' and change model with 'beforeSendAction' data`, () => {
+        component['activatedRoute'].snapshot.params['id'] = 'param';
+        let paramConfirm;
+        let modelCustom: any;
+        const customParams = {
+          customParam: 'customValue',
+          processId: 'processIdValue'
+        };
+        component.beforeSendAction = model => ({ ...model, ...customParams });
+
+        spyOn(component['poDialogService'], 'confirm').and.callFake(param => (paramConfirm = param));
+
+        spyOn(component, <any>'save');
+        spyOn(component, <any>'beforeSendAction').and.callFake(model => {
+          modelCustom = { ...model, ...customParams };
+          return modelCustom;
+        });
+
+        component['confirmJobScheduler']();
+        paramConfirm.confirm();
+
+        expect(component['beforeSendAction']).toHaveBeenCalled();
+        expect(component['save']).toHaveBeenCalledWith(modelCustom, 'param');
+      });
     });
 
     it(`emitSuccessMessage: should call 'poNotification.success' with message and call 'resetJobSchedulerForm'`, async () => {

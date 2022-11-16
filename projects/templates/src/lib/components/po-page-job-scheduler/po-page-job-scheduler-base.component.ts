@@ -195,6 +195,30 @@ export class PoPageJobSchedulerBaseComponent implements OnDestroy {
     return this._orientation;
   }
 
+  /**
+   * @optional
+   *
+   * @description
+   *
+   * Função chamada após realizar a confirmação da execução no PoPageJobScheduler.
+   * Permite alterar os valores do model do PoPageJobScheduler antes de realizar o envio para a Api.
+   *
+   * > Deve retornar um objeto do tipo `PoPageJobScheduler` para ser adicionado ao model do PoPageJobScheduler.
+   *
+   * > Ao ser disparada, a mesma receberá por parâmetro o model do PoPageJobScheduler de interface `PoJobSchedulerInternal`.
+   *
+   * O contexto da função que será chamada, será o mesmo que o do `PoPageJobScheduler`, então para poder alterar
+   * para o contexto do componente que o está utilizando, pode ser utilizado a propriedade `bind` do Javascript.
+   * Por exemplo, para a função `beforeSend`:
+   *
+   * ```
+   * <po-page-job-scheduler [p-service-api]="serviceApi" [p-parameters]="params" [p-before-send]="beforeSend.bind(this)">
+   * ...
+   * </po-page-job-scheduler>
+   * ```
+   */
+  @Input('p-before-send') beforeSendAction: (model: PoJobSchedulerInternal) => PoJobSchedulerInternal;
+
   model: PoJobSchedulerInternal = new PoPageJobSchedulerInternal();
 
   private _subscription = new Subscription();
