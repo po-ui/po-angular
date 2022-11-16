@@ -1224,7 +1224,7 @@ describe('PoTableBaseComponent:', () => {
 
         component.setTableResponseProperties(data);
 
-        expect(component.items).toBe(items);
+        expect(component.items).toEqual(items);
         expect(component.showMoreDisabled).toBeFalsy();
         expect(component.loading).toBeFalsy();
       });
@@ -1237,7 +1237,7 @@ describe('PoTableBaseComponent:', () => {
 
         component.setTableResponseProperties(data);
 
-        expect(component.items).toBe(items);
+        expect(component.items).toEqual(items);
         expect(component.showMoreDisabled).toBeTruthy();
         expect(component.loading).toBeFalsy();
       });

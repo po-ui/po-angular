@@ -445,6 +445,20 @@ describe('PoPageDynamicTableComponent:', () => {
       expect(component['params']).toEqual(quickSearchParams);
     });
 
+    it('onQuickSearch: should call `loadData` as default value of `search` if no value is sent in `quickSearchParam`', () => {
+      component.concatFilters = false;
+      const termTypedInQuickSearch = 'filterValue';
+
+      const quickSearchParams = { 'search': termTypedInQuickSearch };
+
+      spyOn(component, <any>'loadData').and.returnValue(EMPTY);
+
+      component.onQuickSearch(termTypedInQuickSearch);
+
+      expect(component['loadData']).toHaveBeenCalledWith({ page: 1, ...quickSearchParams });
+      expect(component['params']).toEqual(quickSearchParams);
+    });
+
     it('onQuickSearch: should call `loadData` with `undefined` and set `params` with `{}` if haven`t `filter`', () => {
       const filter = undefined;
 
