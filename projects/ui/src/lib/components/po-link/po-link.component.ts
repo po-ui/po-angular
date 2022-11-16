@@ -1,4 +1,4 @@
-import { Component } from '@angular/core';
+import { Component, OnInit } from '@angular/core';
 
 import { PoLinkBaseComponent } from './po-link-base.component';
 
@@ -26,4 +26,18 @@ import { PoLinkBaseComponent } from './po-link-base.component';
   selector: 'po-link',
   templateUrl: './po-link.component.html'
 })
-export class PoLinkComponent extends PoLinkBaseComponent {}
+export class PoLinkComponent extends PoLinkBaseComponent implements OnInit {
+  protected isActionUsed = false;
+
+  ngOnInit(): void {
+    this.isActionUsed = this.action.observed;
+  }
+
+  onClick() {
+    if (this.url) {
+      return;
+    } else {
+      this.action.emit(null);
+    }
+  }
+}
