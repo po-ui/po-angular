@@ -98,6 +98,14 @@ export abstract class PoInputBaseComponent implements ControlValueAccessor, Vali
   @Input('p-optional') optional: boolean;
 
   /**
+   * @description
+   *
+   * Converte o conteúdo do campo em maiúsulo automaticamente.
+   *
+   */
+  @Input('p-upper-case') @InputBoolean() upperCase: boolean = false;
+
+  /**
    * @optional
    *
    * @description
