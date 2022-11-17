@@ -1,7 +1,9 @@
 import { ComponentFixture, TestBed } from '@angular/core/testing';
+import { NO_ERRORS_SCHEMA } from '@angular/core';
 
 import * as UtilsFunction from '../../utils/util';
 import { configureTestSuite } from './../../util-test/util-expect.spec';
+import { PoTooltipModule } from '../../directives/po-tooltip/index';
 
 import { PoDisclaimerComponent } from './po-disclaimer.component';
 
@@ -12,7 +14,9 @@ describe('PoDisclaimerComponent:', () => {
 
   configureTestSuite(() => {
     TestBed.configureTestingModule({
-      declarations: [PoDisclaimerComponent]
+      declarations: [PoDisclaimerComponent],
+      imports: [PoTooltipModule],
+      schemas: [NO_ERRORS_SCHEMA]
     });
   });
 
@@ -30,20 +34,20 @@ describe('PoDisclaimerComponent:', () => {
   it('should have label', () => {
     component.label = 'Label';
     fixture.detectChanges();
-    expect(nativeElement.querySelector('.po-disclaimer-label').innerHTML).toContain('Label');
+    expect(nativeElement.querySelector('.label').innerHTML).toContain('Label');
   });
 
   it('should set type default', () => {
     component.type = 'default';
     fixture.detectChanges();
     expect(nativeElement.querySelector('.po-disclaimer')).toBeTruthy();
-    expect(nativeElement.querySelector('.po-disclaimer-label-danger')).toBeFalsy();
+    expect(nativeElement.querySelector('.po-disclaimer-danger')).toBeFalsy();
   });
 
   it('should set type danger', () => {
     component.type = 'danger';
     fixture.detectChanges();
-    expect(nativeElement.querySelector('.po-disclaimer-label-danger')).toBeTruthy();
+    expect(nativeElement.querySelector('.po-disclaimer-danger')).toBeTruthy();
   });
 
   it('should set hideClose false', () => {
@@ -91,6 +95,17 @@ describe('PoDisclaimerComponent:', () => {
 
       expect(component['close']).not.toHaveBeenCalled();
       expect(UtilsFunction['isKeyCodeEnter']).toHaveBeenCalled();
+    });
+
+    it('getWidthDisclaimer: should return `true` when disclaimer-label offsetWidth > 201', () => {
+      spyOnProperty(component.disclaimerContainer.nativeElement, 'offsetWidth').and.returnValue(250);
+      const expectedValue = component.getWidthDisclaimer();
+      expect(expectedValue).toBeTruthy();
+    });
+    it('getWidthDisclaimer: should return `false` when disclaimer-label offsetWidth < 201', () => {
+      spyOnProperty(component.disclaimerContainer.nativeElement, 'offsetWidth').and.returnValue(50);
+      const expectedValue = component.getWidthDisclaimer();
+      expect(expectedValue).toBeFalsy();
     });
   });
 

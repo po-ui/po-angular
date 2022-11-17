@@ -1,4 +1,4 @@
-import { DoCheck, EventEmitter, Input, IterableDiffers, Output, Directive } from '@angular/core';
+import { DoCheck, EventEmitter, Input, IterableDiffers, Output, Directive, ChangeDetectorRef } from '@angular/core';
 
 import { convertToBoolean, isKeyCodeEnter, uuid } from '../../utils/util';
 import { PoLanguageService } from '../../services/po-language/po-language.service';
@@ -121,7 +121,11 @@ export class PoDisclaimerGroupBaseComponent implements DoCheck {
     return this._hideRemoveAll;
   }
 
-  constructor(differs: IterableDiffers, languageService: PoLanguageService) {
+  constructor(
+    differs: IterableDiffers,
+    languageService: PoLanguageService,
+    protected changeDetector: ChangeDetectorRef
+  ) {
     const language = languageService.getShortLanguage();
 
     this.differ = differs.find([]).create(null);
@@ -183,6 +187,8 @@ export class PoDisclaimerGroupBaseComponent implements DoCheck {
       if (changes && this.disclaimersAreChanged(this.disclaimers)) {
         this.emitChangeDisclaimers();
       }
+    } else {
+      this.changeDetector?.detectChanges();
     }
   }
 
@@ -224,5 +230,6 @@ export class PoDisclaimerGroupBaseComponent implements DoCheck {
       this.change.emit(this.disclaimers);
     });
     this.previousDisclaimers = [...this._disclaimers];
+    this.changeDetector?.detectChanges();
   }
 }
