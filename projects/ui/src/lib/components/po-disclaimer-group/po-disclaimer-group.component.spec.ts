@@ -1,4 +1,5 @@
-import { ComponentFixture, TestBed } from '@angular/core/testing';
+import { ComponentFixture, fakeAsync, TestBed, tick } from '@angular/core/testing';
+import { NO_ERRORS_SCHEMA } from '@angular/core';
 
 import { configureTestSuite } from './../../util-test/util-expect.spec';
 
@@ -6,6 +7,8 @@ import { PoDisclaimer } from '../po-disclaimer/po-disclaimer.interface';
 import { PoDisclaimerComponent } from '../po-disclaimer/po-disclaimer.component';
 import { PoDisclaimerGroupComponent } from './po-disclaimer-group.component';
 import { PoDisclaimerRemoveComponent } from './po-disclaimer-remove/po-disclaimer-remove.component';
+import { PoTagModule } from '../po-tag/po-tag.module';
+import { PoDisclaimerModule } from '../po-disclaimer/po-disclaimer.module';
 
 describe('PoDisclaimerGroupComponent:', () => {
   let component: PoDisclaimerGroupComponent;
@@ -20,7 +23,9 @@ describe('PoDisclaimerGroupComponent:', () => {
 
   configureTestSuite(() => {
     TestBed.configureTestingModule({
-      declarations: [PoDisclaimerComponent, PoDisclaimerRemoveComponent, PoDisclaimerGroupComponent]
+      declarations: [PoDisclaimerComponent, PoDisclaimerRemoveComponent, PoDisclaimerGroupComponent],
+      imports: [PoTagModule, PoDisclaimerModule],
+      schemas: [NO_ERRORS_SCHEMA]
     });
   });
 
@@ -38,21 +43,24 @@ describe('PoDisclaimerGroupComponent:', () => {
   });
 
   it('should be created with title', () => {
-    component.title = 'Filtros';
-    fixture.detectChanges();
-    expect(nativeElement.querySelector('.po-disclaimer-group-title').innerHTML).toContain('Filtros');
+    fakeAsync(() => {
+      component.title = 'Filtros';
+      fixture.detectChanges();
+      tick();
+      expect(nativeElement.querySelector('div.po-disclaimer-group-title').innerHTML).toContain('Filtros');
+    });
   });
 
   it('should be created with 3 disclaimers and default removeAll', () => {
-    expect(nativeElement.querySelectorAll('po-disclaimer').length).toBe(4);
-    expect(nativeElement.querySelector('.po-disclaimer-label-danger')).toBeTruthy();
+    expect(nativeElement.querySelectorAll('po-disclaimer').length).toBe(3);
+    expect(nativeElement.querySelectorAll('po-tag').length).toBe(1);
   });
 
   it('should be created with 3 disclaimers and without removeAll disclaimer', () => {
     component.hideRemoveAll = true;
     fixture.detectChanges();
     expect(nativeElement.querySelectorAll('po-disclaimer').length).toBe(3);
-    expect(nativeElement.querySelector('.po-disclaimer-label-danger')).toBeFalsy();
+    expect(nativeElement.querySelector('.po-disclaimer-danger')).toBeFalsy();
   });
 
   it('should hide disclaimer-group if there are no disclaimers', () => {
@@ -65,7 +73,7 @@ describe('PoDisclaimerGroupComponent:', () => {
     component.hideRemoveAll = false;
     component.disclaimers = [disclaimers[1]];
     fixture.detectChanges();
-    expect(nativeElement.querySelector('.po-disclaimer-label-danger')).toBeFalsy();
+    expect(nativeElement.querySelector('.po-disclaimer-danger')).toBeFalsy();
   });
 
   it('should remove/close one disclaimers', () => {
@@ -98,7 +106,7 @@ describe('PoDisclaimerGroupComponent:', () => {
 
       fixture.detectChanges();
 
-      expect(nativeElement.querySelector('.po-disclaimer-remove[tabindex="0"]')).toBeNull();
+      expect(nativeElement.querySelector('po-tag[tabindex="0"]')).toBeNull();
     });
 
     it(`shouldn't set tabindex if doesn't have disclaimer.`, () => {
@@ -114,9 +122,7 @@ describe('PoDisclaimerGroupComponent:', () => {
 
       fixture.detectChanges();
 
-      expect(nativeElement.querySelector('.po-disclaimer-label-danger').innerHTML.trim()).toBe(
-        component.literals.removeAll
-      );
+      expect(nativeElement.querySelector('.po-tag-value').innerHTML).toBe(component.literals.removeAll);
     });
   });
 });
