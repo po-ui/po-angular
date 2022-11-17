@@ -1,6 +1,8 @@
 import { NgModule } from '@angular/core';
 import { CommonModule } from '@angular/common';
 
+import { PoTooltipModule } from '../../directives/po-tooltip/index';
+
 import { PoDisclaimerComponent } from './po-disclaimer.component';
 
 /**
@@ -8,7 +10,7 @@ import { PoDisclaimerComponent } from './po-disclaimer.component';
  * Módulo do componente po-disclaimer.
  */
 @NgModule({
-  imports: [CommonModule],
+  imports: [CommonModule, PoTooltipModule],
   declarations: [PoDisclaimerComponent],
   exports: [PoDisclaimerComponent]
 })

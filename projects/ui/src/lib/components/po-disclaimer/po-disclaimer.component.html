@@ -1,15 +1,29 @@
-<div *ngIf="showDisclaimer === true" class="po-disclaimer">
-  <span class="po-disclaimer-label" [class.po-disclaimer-label-danger]="type === 'danger'">
-    {{ getLabel() }}
-  </span>
-
-  <span
-    *ngIf="hideClose === false"
-    class="po-disclaimer-remove po-icon po-icon-close po-clickable"
-    tabindex="0"
-    [class.po-disclaimer-remove-danger]="type === 'danger'"
-    (click)="close()"
-    (keydown)="onKeyPress($event)"
+<div #disclaimerContainer class="disclaimer-container">
+  <div
+    *ngIf="showDisclaimer === true"
+    class="po-disclaimer"
+    [class.po-disclaimer-remove-all]="hideClose"
+    [class.po-disclaimer-danger]="type === 'danger'"
+    [p-tooltip]="getWidthDisclaimer() ? getLabel() : ''"
+    p-tooltip-position="bottom"
+    [tabindex]="hideClose ? '0' : '-1'"
   >
-  </span>
+    <div class="po-disclaimer-label" [class.show-close]="!hideClose">
+      <span class="label">
+        {{ getLabel() }}
+      </span>
+    </div>
+
+    <span
+      *ngIf="hideClose === false"
+      [attr.role]="!hideClose ? 'button' : ''"
+      [attr.aria-label]="getLabel()"
+      class="po-disclaimer-remove po-icon po-icon-close po-clickable"
+      tabindex="0"
+      [class.po-disclaimer-remove-danger]="type === 'danger'"
+      (click)="close()"
+      (keydown)="onKeyPress($event)"
+    >
+    </span>
+  </div>
 </div>
