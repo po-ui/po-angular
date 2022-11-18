@@ -2,7 +2,13 @@
   <ng-template ngFor let-field [ngForOf]="visibleFields">
     <po-divider *ngIf="field?.divider?.trim()" class="po-sm-12" [p-label]="field.divider"> </po-divider>
 
-    <ng-container *ngTemplateOutlet="!field.tag ? poInfo : poTag; context: { $implicit: field }"> </ng-container>
+    <ng-container
+      *ngTemplateOutlet="
+        !field.tag && !field.image ? poInfo : !field.image ? poTag : poImage;
+        context: { $implicit: field }
+      "
+    >
+    </ng-container>
   </ng-template>
 </div>
 
@@ -20,4 +26,8 @@
     [p-value]="field.value"
   >
   </po-tag>
+</ng-template>
+
+<ng-template #poImage let-field>
+  <po-image [p-alt]="field.alt" [p-height]="field.height" [p-src]="field.value"> </po-image>
 </ng-template>
