@@ -2,13 +2,34 @@
 
 All notable changes to this project will be documented in this file. See [standard-version](https://github.com/conventional-changelog/standard-version) for commit guidelines.
 
+# [14.10.0](https://github.com/po-ui/po-angular/compare/v14.9.1...v14.10.0) (2022-11-21)
+
+
+### Bug Fixes
+
+* **list-view:** ajusta atributo `visible` da propriedade `p-actions` ([8df5e10](https://github.com/po-ui/po-angular/commit/8df5e103c0ecf46b252dd7f91efa0d10db3c13bd)), closes [#1265](https://github.com/po-ui/po-angular/issues/1265)
+* **po-loading:** added translations ([8b93c79](https://github.com/po-ui/po-angular/commit/8b93c794a6f28fb98afcf64c780985a595caaa4f))
+
+
+### Features
+
+* **datepicker:** implementa definições AnimaliaDS ([f492f42](https://github.com/po-ui/po-angular/commit/f492f4202900e0abdf95d8f80e0bfa4f0cffb1b7))
+* **dynamic-table:** inclui nova propriedade `p-quick-search-value` para atribuir valor inicial ao busca rápida ([c25f4a9](https://github.com/po-ui/po-angular/commit/c25f4a909ede65f201db458126ab76fbb9d7a241))
+* **dynamic-search:** inclui nova propriedade `p-quick-search-value` para atribuir valor inicial ao busca rápida ([c25f4a9](https://github.com/po-ui/po-angular/commit/c25f4a909ede65f201db458126ab76fbb9d7a241))
+* **page-list:** inclui nova propriedade `p-quick-search-value` para atribuir valor inicial ao busca rápida ([c25f4a9](https://github.com/po-ui/po-angular/commit/c25f4a909ede65f201db458126ab76fbb9d7a241))
+* **dynamic-view:** adiciona componente po-image ([7718b70](https://github.com/po-ui/po-angular/commit/7718b7054cacec4a091a059dd3399b79e4114b9d))
+* **link:** adiciona action no componente ([70e4727](https://github.com/po-ui/po-angular/commit/70e4727766a705871cd2fc64679ecb23075ae7dc))
+* **page-job-scheduler:** Permite definir um componente para ser renderizado na etapa de parametrização através de template. ([082ce35](https://github.com/po-ui/po-angular/commit/082ce352c98de5169bf8b662b04d659ec2708358)), closes [#1491](https://github.com/po-ui/po-angular/issues/1491)
+
+
+
 ## [14.9.1](https://github.com/po-ui/po-angular/compare/v14.9.0...v14.9.1) (2022-11-14)
 
 
 ### Bug Fixes
 
-* **dynamic-form:** corrige erro no console ([fdf0f8f](https://github.com/po-ui/po-angular/commit/fdf0f8f101e7362fa705b9b3b2ed226e98dfed35))
-* **dynamic-table:** corrige valor `undefined` na requisicao ([cb86b99](https://github.com/po-ui/po-angular/commit/cb86b99fe262031b23e4956978b5c8346b497f1d))
+* **dynamic-form:** corrige erro no console ao utilizar lookup ([fdf0f8f](https://github.com/po-ui/po-angular/commit/fdf0f8f101e7362fa705b9b3b2ed226e98dfed35))
+* **dynamic-table:** corrige valor `undefined` na requisição ([cb86b99](https://github.com/po-ui/po-angular/commit/cb86b99fe262031b23e4956978b5c8346b497f1d))
 * **table:** ajusta exibição de itens sem refresh ([afb9b5c](https://github.com/po-ui/po-angular/commit/afb9b5c32e0b42400a79c1877de24984dd693f53))
 
 
