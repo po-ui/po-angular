@@ -1,1 +1,9 @@
-<a class="po-link" [attr.href]="url" [attr.target]="openNewTab ? '_blank' : undefined">{{ label }}</a>
+<a
+  (click)="onClick()"
+  [attr.role]="isActionUsed && !url ? 'button' : null"
+  tabindex="0"
+  class="po-link"
+  [attr.href]="url"
+  [attr.target]="openNewTab ? '_blank' : undefined"
+  >{{ label }}</a
+>

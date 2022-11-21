@@ -110,4 +110,49 @@ export interface PoDynamicViewField extends PoDynamicField {
    * array.
    */
   order?: number;
+
+  /**
+   * Defini o texto alternativo descrevendo a imagem.
+   *
+   * Exemplo de utilização:
+   *
+   * ```
+   * [
+   *   { property: 'imagem 1', image:'string', alt:'string', height:'300'},
+   * ];
+   * ```
+   * **Componentes compatíveis:** `po-image`.
+   *
+   */
+  alt?: string;
+
+  /**
+   * Defini o texto alternativo descrevendo a imagem.
+   *
+   * Exemplo de utilização:
+   *
+   * ```
+   * [
+   *   { property: 'imagem 1', image:'string', alt:'string', height:'number'},
+   * ];
+   * ```
+   * **Componentes compatíveis:** `po-image`.
+   *
+   */
+  height?: string;
+  /**
+   * Possibilita a utilização de imagem.
+   *
+   * Exemplo de utilização:
+   *
+   * ```
+   * [
+   *   { property: 'imagem 1', image:'string', alt:'string', height:'300'},
+   * ];
+   * ```
+   *  * @default `false`
+   *
+   *  **Componentes compatíveis:** `po-image`.
+   */
+  image?: boolean;
 }

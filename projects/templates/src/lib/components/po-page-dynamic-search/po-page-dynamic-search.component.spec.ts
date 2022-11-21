@@ -139,7 +139,7 @@ describe('PoPageDynamicSearchComponent:', () => {
         expect(fakethis._disclaimerGroup.disclaimers).toEqual(result);
       });
 
-      it(`should set '_dislaimerGroup.disclaimers' with 'hideClose: true' when property is 
+      it(`should set '_dislaimerGroup.disclaimers' with 'hideClose: true' when property is
       included on the 'hideCloseDisclaimers'`, () => {
         const result = [
           { property: 'search', label: 'Pesquisa rápida: quickFilter', value: 'quickFilter', hideClose: true }
@@ -685,6 +685,15 @@ describe('PoPageDynamicSearchComponent:', () => {
         expect(component.hideRemoveAllDisclaimer).toBeTrue();
         expect(component.hideCloseDisclaimers).toEqual(['filter3']);
       }));
+
+      it('should call onAction with `quickSearchValue`', () => {
+        component.quickSearchValue = 'jhon';
+        spyOn(component, <any>'onAction');
+
+        component.ngOnInit();
+
+        expect(component['onAction']).toHaveBeenCalledWith('jhon', true);
+      });
     });
   });
 

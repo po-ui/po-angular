@@ -218,7 +218,8 @@ describe('PoPageJobSchedulerComponent:', () => {
           markAsDirtyInvalidControls: () => {},
           changePageActionsBySteps: () => {},
           setModelRecurrent: () => {},
-          hidesSecretValues: () => {}
+          hidesSecretValues: () => {},
+          templateHasDisable: () => false
         };
       });
 
@@ -485,7 +486,8 @@ describe('PoPageJobSchedulerComponent:', () => {
             form: {
               invalid: true
             }
-          }
+          },
+          templateHasDisable: () => false
         };
 
         expect(component['isDisabledAdvance'].call(fakeThis)).toBe(true);
@@ -494,7 +496,8 @@ describe('PoPageJobSchedulerComponent:', () => {
       it(`should return 'false' if 'step' is 2 and 'schedulerParameters' is undefined`, () => {
         const fakeThis = {
           step: 2,
-          schedulerParameters: undefined
+          schedulerParameters: undefined,
+          templateHasDisable: () => false
         };
 
         expect(component['isDisabledAdvance'].call(fakeThis)).toBe(false);
@@ -507,7 +510,8 @@ describe('PoPageJobSchedulerComponent:', () => {
             form: {
               invalid: true
             }
-          }
+          },
+          templateHasDisable: () => false
         };
 
         expect(component['isDisabledAdvance'].call(fakeThis)).toBe(true);
@@ -516,7 +520,8 @@ describe('PoPageJobSchedulerComponent:', () => {
       it(`should return 'false' if 'step' is 1 and 'schedulerExecution' is undefined`, () => {
         const fakeThis = {
           step: 1,
-          schedulerExecution: undefined
+          schedulerExecution: undefined,
+          templateHasDisable: () => false
         };
 
         expect(component['isDisabledAdvance'].call(fakeThis)).toBe(false);
@@ -526,10 +531,21 @@ describe('PoPageJobSchedulerComponent:', () => {
         const fakeThis = {
           step: undefined,
           schedulerExecution: undefined,
-          schedulerParameters: undefined
+          schedulerParameters: undefined,
+          templateHasDisable: () => false
         };
 
         expect(component['isDisabledAdvance'].call(fakeThis)).toBe(false);
+      });
+
+      it(`should return 'true' if 'step' is 2 and 'templateHasDisable' return true`, () => {
+        const fakeThis = {
+          step: 2,
+          schedulerParameters: undefined,
+          templateHasDisable: () => true
+        };
+
+        expect(component['isDisabledAdvance'].call(fakeThis)).toBe(true);
       });
     });
 
@@ -705,6 +721,62 @@ describe('PoPageJobSchedulerComponent:', () => {
         component['save'](model, paramId);
 
         expect(component['emitSuccessMessage']).toHaveBeenCalledWith(saveNotificationSuccessSave, saveOperation);
+      });
+    });
+
+    describe('templateHasDisable:', () => {
+      it(`should return 'true' if has 'parametersTemplate.templateRef' and 'parametersTemplate.disabledAdvance' is true`, () => {
+        const fakeThis = {
+          step: 2,
+          parametersTemplate: {
+            templateRef: {},
+            disabledAdvance: true
+          }
+        };
+        expect(component['templateHasDisable'].call(fakeThis)).toBe(true);
+      });
+
+      it(`should return 'false' if has no 'parametersTemplate.templateRef'`, () => {
+        const fakeThis = {
+          step: 2,
+          parametersTemplate: {
+            templateRef: undefined,
+            disabledAdvance: true
+          }
+        };
+        expect(component['templateHasDisable'].call(fakeThis)).toBe(false);
+      });
+
+      it(`should return 'false' if 'parametersTemplate.disabledAdvance' is false`, () => {
+        const fakeThis = {
+          step: 2,
+          parametersTemplate: {
+            templateRef: {},
+            disabledAdvance: false
+          }
+        };
+        expect(component['templateHasDisable'].call(fakeThis)).toBe(false);
+      });
+    });
+
+    describe('setPropertiesFromTemplate:', () => {
+      it(`should set' model.executionParameter' with 'parametersTemplate.executionParameter' template data`, () => {
+        const fakeThis = {
+          parametersTemplate: {
+            templateRef: {},
+            executionParameter: {
+              user: 'test'
+            }
+          },
+          model: {
+            recurrent: true,
+            periodicity: '',
+            executionParameter: {}
+          }
+        };
+        const expected = { user: 'test' };
+        component['setPropertiesFromTemplate'].call(fakeThis);
+        expect(fakeThis.model.executionParameter).toEqual(expected);
       });
     });
   });

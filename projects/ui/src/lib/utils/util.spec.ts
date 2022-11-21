@@ -15,6 +15,7 @@ import {
   getFormattedLink,
   isEquals,
   isKeyCodeEnter,
+  isKeyCodeSpace,
   isExternalLink,
   isTypeof,
   mapArrayByProperties,
@@ -670,6 +671,19 @@ describe('Function isKeyCodeEnter:', () => {
 
   it(`isEnterKey: should return false if event keyCode is not enter.`, () => {
     expect(isKeyCodeEnter(eventDeleteKey)).toBe(false);
+  });
+});
+
+describe('Function isKeyCodeSpace:', () => {
+  const eventSpaceKey = { keyCode: 32, which: 32 };
+  const eventDeleteKey = { keyCode: 46, which: 46 };
+
+  it(`isKeyCodeSpace: should return true if event keyCode is space.`, () => {
+    expect(isKeyCodeSpace(eventSpaceKey)).toBe(true);
+  });
+
+  it(`isKeyCodeSpace: should return false if event keyCode is not space.`, () => {
+    expect(isKeyCodeSpace(eventDeleteKey)).toBe(false);
   });
 });
 

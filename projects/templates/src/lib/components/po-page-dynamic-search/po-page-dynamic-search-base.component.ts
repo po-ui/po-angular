@@ -155,6 +155,16 @@ export abstract class PoPageDynamicSearchBaseComponent {
    *
    * @description
    *
+   * Valor padrão na busca rápida ao inicializar o componente
+   *
+   */
+  @Input('p-quick-search-value') quickSearchValue: string;
+
+  /**
+   * @optional
+   *
+   * @description
+   *
    * Evento disparado ao executar a pesquisa avançada, o mesmo irá repassar um objeto com os valores preenchidos no modal de pesquisa.
    *
    * > Campos não preenchidos não irão aparecer no objeto passado por parâmetro.

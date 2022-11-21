@@ -12,6 +12,7 @@
   (p-advanced-search)="onAdvancedSearch($event)"
   (p-change-disclaimers)="onChangeDisclaimers($event)"
   (p-quick-search)="onQuickSearch($event)"
+  [p-quick-search-value]="quickSearchValue || ''"
 >
   <po-table
     [p-sort]="true"
