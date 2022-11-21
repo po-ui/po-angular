@@ -8,9 +8,6 @@ import {
   poLocaleThousandSeparatorList
 } from './po-language.constant';
 
-localStorage.removeItem('PO_DEFAULT_LANGUAGE');
-localStorage.removeItem('PO_USER_LOCALE');
-
 const poDefaultLanguage = 'PO_DEFAULT_LANGUAGE';
 const poLocaleKey = 'PO_USER_LOCALE';
 
