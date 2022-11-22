@@ -125,7 +125,9 @@ export abstract class PoNumberBaseComponent extends PoInputGeneric {
       'Up',
       'Down',
       'Tab',
-      'Delete'
+      'Delete',
+      'Home',
+      'End'
     ];
 
     return controlKeys.indexOf(event.key) !== -1;
