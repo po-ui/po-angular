@@ -51,13 +51,17 @@ export class PoWidgetComponent extends PoWidgetBaseComponent implements OnInit {
   }
 
   onClick(event: MouseEvent) {
-    if (!this.disabled) {
+    if (this.click.observed && !this.disabled) {
       this.click.emit(event);
     }
   }
 
   onKeyDown(event: KeyboardEvent) {
-    if (!this.disabled && (event.which === PoKeyCodeEnum.space || event.keyCode === PoKeyCodeEnum.space)) {
+    if (
+      this.click.observed &&
+      !this.disabled &&
+      (event.which === PoKeyCodeEnum.space || event.keyCode === PoKeyCodeEnum.space)
+    ) {
       this.click.emit(event);
 
       event.preventDefault();

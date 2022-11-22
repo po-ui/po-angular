@@ -89,6 +89,7 @@ describe('PoWidgetComponent with title and actions', () => {
   });
 
   it('should simulate widget click.', () => {
+    component.click.subscribe(() => {});
     spyOn(component.click, 'emit');
 
     component.onClick(eventClick);
@@ -96,7 +97,17 @@ describe('PoWidgetComponent with title and actions', () => {
     expect(component.click.emit).toHaveBeenCalled();
   });
 
+  it('should`t emit click if widget is not clickable', () => {
+    component.click.unsubscribe();
+    spyOn(component.click, 'emit');
+
+    component.onClick(eventClick);
+
+    expect(component.click.emit).not.toHaveBeenCalled();
+  });
+
   it('should simulate widget selected with keyboard (key which mode)', () => {
+    component.click.subscribe(() => {});
     const fakeEvent: any = {
       which: 32,
       preventDefault: () => {}
@@ -109,6 +120,7 @@ describe('PoWidgetComponent with title and actions', () => {
   });
 
   it('should simulate widget selected with keyboard (key code mode)', () => {
+    component.click.subscribe(() => {});
     const fakeEvent: any = {
       keyCode: 32,
       preventDefault: () => {}
@@ -118,6 +130,20 @@ describe('PoWidgetComponent with title and actions', () => {
     component.onKeyDown(fakeEvent);
 
     expect(component.click.emit).toHaveBeenCalled();
+  });
+
+  it('should`t emit click with keyboard if widget is not clickable', () => {
+    component.click.unsubscribe();
+    const fakeEvent: any = {
+      keyCode: 32,
+      preventDefault: () => {}
+    };
+
+    spyOn(component.click, 'emit');
+
+    component.onKeyDown(fakeEvent);
+
+    expect(component.click.emit).not.toHaveBeenCalled();
   });
 
   describe('Properties:', () => {
@@ -158,6 +184,7 @@ describe('PoWidgetComponent with title and actions', () => {
     });
 
     it('onClick: should call click.emit if disabled is false', () => {
+      component.click.subscribe(() => {});
       const mouseEvent: MouseEvent = new MouseEvent('click');
 
       component.disabled = false;
@@ -416,6 +443,7 @@ describe('PoWidgetComponent with title and actions', () => {
     });
 
     it('should be called the click event when clicked on the `po-widget` area.', () => {
+      component.click.subscribe(() => {});
       const test = nativeElement.querySelector('.po-widget');
 
       spyOn(component.click, 'emit');
