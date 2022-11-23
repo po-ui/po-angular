@@ -10,6 +10,7 @@ describe('PoCheckboxComponent:', () => {
   let component: PoCheckboxComponent;
   let fixture: ComponentFixture<PoCheckboxComponent>;
   let nativeElement: any;
+  let labelField: any;
 
   configureTestSuite(() => {
     TestBed.configureTestingModule({
@@ -24,10 +25,16 @@ describe('PoCheckboxComponent:', () => {
 
     changeDetector = fixture.componentRef.injector.get(ChangeDetectorRef);
     changeDetector.detectChanges();
+
+    labelField = document.getElementsByClassName('po-checkbox-label');
   });
 
   it('should be created.', () => {
     expect(component).toBeTruthy();
+  });
+
+  it('should create a po-label for po-checkbox', () => {
+    expect(labelField).toBeTruthy();
   });
 
   describe('Methods:', () => {
