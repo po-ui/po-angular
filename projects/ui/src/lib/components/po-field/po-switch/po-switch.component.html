@@ -20,9 +20,8 @@
         </div>
       </div>
 
-      <span class="po-switch-label" (click)="eventClick()">
-        {{ value === true ? labelOn : labelOff }}
-      </span>
+      <po-label [p-disabled]="disabled" [p-label]="value === true ? labelOn : labelOff" (click)="eventClick()">
+      </po-label>
     </div>
   </div>
 
