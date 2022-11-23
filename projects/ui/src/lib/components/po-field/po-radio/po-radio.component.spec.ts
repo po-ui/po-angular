@@ -9,6 +9,7 @@ describe('PoRadioComponent', () => {
   let component: PoRadioComponent;
   let fixture: ComponentFixture<PoRadioComponent>;
   let nativeElement: any;
+  let labelField: any;
 
   configureTestSuite(() => {
     TestBed.configureTestingModule({
@@ -24,10 +25,15 @@ describe('PoRadioComponent', () => {
     fixture.debugElement.injector.get(NG_VALUE_ACCESSOR);
 
     fixture.detectChanges();
+    labelField = document.getElementsByClassName('po-label');
   });
 
   it('should be created', () => {
     expect(component).toBeTruthy();
+  });
+
+  it('should create a po-label for po-radio', () => {
+    expect(labelField).toBeTruthy();
   });
 
   describe('Properties:', () => {
