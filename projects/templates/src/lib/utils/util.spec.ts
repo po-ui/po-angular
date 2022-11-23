@@ -26,7 +26,8 @@ import {
   validateDateRange,
   validValue,
   valuesFromObject,
-  removeDuplicateItems
+  removeDuplicateItems,
+  removeDuplicateItemsWithArrayKey
 } from './util';
 import { changeChromeProperties } from '../util-test/util-expect.spec';
 
@@ -379,6 +380,93 @@ describe('Function removeDuplicateItems:', () => {
     const key = 'country';
     removeDuplicateItems(item, item2, key);
     expect(item2).toEqual([{ country: 'chile' }, { country: 'canada' }]);
+  });
+});
+
+describe('Function removeDuplicateItemsWithArrayKey:', () => {
+  it('should remove duplicate items with `id` property by sending an empty array', () => {
+    const item = [
+      { country: 'brasil', id: '1' },
+      { country: 'china', id: '2' },
+      { country: 'japao', id: '3' }
+    ];
+
+    const item2 = [
+      { country: 'brasil', id: '1' },
+      { country: 'chile', id: '4' },
+      { country: 'canada', id: '5' }
+    ];
+
+    const key = [];
+    removeDuplicateItemsWithArrayKey(item, item2, key);
+    expect(item2).toEqual([
+      { country: 'chile', id: '4' },
+      { country: 'canada', id: '5' }
+    ]);
+  });
+
+  it('should remove duplicate items by sending a property', () => {
+    const item = [
+      { country: 'brasil', id: '1' },
+      { country: 'china', id: '2' },
+      { country: 'japao', id: '3' }
+    ];
+
+    const item2 = [
+      { country: 'brasil', id: '1' },
+      { country: 'chile', id: '4' },
+      { country: 'canada', id: '5' }
+    ];
+
+    const key = ['country'];
+    removeDuplicateItemsWithArrayKey(item, item2, key);
+    expect(item2).toEqual([
+      { country: 'chile', id: '4' },
+      { country: 'canada', id: '5' }
+    ]);
+  });
+
+  it('should remove duplicate items by sending more than one comparison property', () => {
+    const item = [
+      { country: 'brasil', id: '1' },
+      { country: 'china', id: '2' },
+      { country: 'japao', id: '3' }
+    ];
+
+    const item2 = [
+      { country: 'brasil', id: '1' },
+      { country: 'chile', id: '4' },
+      { country: 'canada', id: '5' }
+    ];
+
+    const key = ['country', 'id'];
+    removeDuplicateItemsWithArrayKey(item, item2, key);
+    expect(item2).toEqual([
+      { country: 'chile', id: '4' },
+      { country: 'canada', id: '5' }
+    ]);
+  });
+
+  it('should`t remove items with same property value but different object', () => {
+    const item = [
+      { country: 'brasil', capital: '1' },
+      { country: 'china', capital: '1' },
+      { country: 'japao', capital: '1' }
+    ];
+
+    const item2 = [
+      { country: 'argentina', capital: '1' },
+      { country: 'chile', capital: '1' },
+      { country: 'canada', capital: '1' }
+    ];
+
+    const key = ['capital', 'country'];
+    removeDuplicateItemsWithArrayKey(item, item2, key);
+    expect(item2).toEqual([
+      { country: 'argentina', capital: '1' },
+      { country: 'chile', capital: '1' },
+      { country: 'canada', capital: '1' }
+    ]);
   });
 });
 
