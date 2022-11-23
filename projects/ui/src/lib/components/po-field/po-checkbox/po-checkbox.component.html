@@ -21,8 +21,15 @@
     >
     </span>
 
-    <label *ngIf="label" #checkboxLabel [for]="id" class="po-checkbox-label" tabindex="-1">
-      {{ label }}
-    </label>
+    <po-label
+      #checkboxLabel
+      *ngIf="label"
+      class="po-checkbox-label"
+      tabindex="-1"
+      [p-disabled]="disabled"
+      [p-for]="id"
+      [p-label]="label"
+    >
+    </po-label>
   </div>
 </div>
