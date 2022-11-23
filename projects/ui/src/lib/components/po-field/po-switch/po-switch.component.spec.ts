@@ -11,6 +11,7 @@ describe('PoSwitchComponent', () => {
   let component: PoSwitchComponent;
   let fixture: ComponentFixture<PoSwitchComponent>;
   let nativeElement: any;
+  let labelField: any;
 
   configureTestSuite(() => {
     TestBed.configureTestingModule({
@@ -21,12 +22,16 @@ describe('PoSwitchComponent', () => {
   beforeEach(() => {
     fixture = TestBed.createComponent(PoSwitchComponent);
     component = fixture.componentInstance;
-
+    labelField = document.getElementsByClassName('po-label');
     nativeElement = fixture.debugElement.nativeElement;
   });
 
   it('should be created', () => {
     expect(component).toBeTruthy();
+  });
+
+  it('should create a po-label for po-switch', () => {
+    expect(labelField).toBeTruthy();
   });
 
   describe('Properties:', () => {
