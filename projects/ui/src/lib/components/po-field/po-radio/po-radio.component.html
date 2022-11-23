@@ -9,6 +9,6 @@
       [required]="required"
       [value]="radioValue ?? ''"
     />
-    <span *ngIf="label">{{ label }}</span>
+    <po-label *ngIf="label" [p-label]="label"></po-label>
   </label>
 </div>

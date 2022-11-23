@@ -55,6 +55,7 @@ import { PoUploadFileRestrictionsComponent } from './po-upload/po-upload-file-re
 import { PoUrlComponent } from './po-url/po-url.component';
 import { PoCheckboxModule } from './po-checkbox/po-checkbox.module';
 import { PoRadioComponent } from './po-radio/po-radio.component';
+import { PoLabelModule } from '../po-label';
 
 /**
  * @description
@@ -88,7 +89,8 @@ import { PoRadioComponent } from './po-radio/po-radio.component';
     PoTableModule,
     PoTooltipModule,
     PoIconModule,
-    PoCheckboxModule
+    PoCheckboxModule,
+    PoLabelModule
   ],
   exports: [
     PoCheckboxGroupModule,
@@ -115,7 +117,8 @@ import { PoRadioComponent } from './po-radio/po-radio.component';
     PoUploadComponent,
     PoUrlComponent,
     PoRadioComponent,
-    PoCheckboxModule
+    PoCheckboxModule,
+    PoLabelModule
   ],
   declarations: [
     PoComboComponent,
