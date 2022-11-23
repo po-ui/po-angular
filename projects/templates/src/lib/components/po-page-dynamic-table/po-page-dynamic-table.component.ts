@@ -38,7 +38,7 @@ import { PoPageDynamicTableBeforeDuplicate } from './interfaces/po-page-dynamic-
 import { PoPageDynamicTableBeforeRemoveAll } from './interfaces/po-page-dynamic-table-before-remove-all.interface';
 import { PoPageDynamicTableCustomAction } from './interfaces/po-page-dynamic-table-custom-action.interface';
 import { PoPageDynamicTableCustomTableAction } from './interfaces/po-page-dynamic-table-custom-table-action.interface';
-import { isExternalLink, openExternalLink, removeDuplicateItems } from '../../utils/util';
+import { isExternalLink, openExternalLink, removeDuplicateItemsWithArrayKey } from '../../utils/util';
 import { PoPageDynamicSearchLiterals } from '../po-page-dynamic-search/po-page-dynamic-search-literals.interface';
 
 const PAGE_SIZE_DEFAULT = 10;
@@ -688,8 +688,6 @@ export class PoPageDynamicTableComponent extends PoPageDynamicListBaseComponent 
   }
 
   private loadData(params: { page?: number; search?: string } = {}) {
-    const key = this.keys[0] ?? 'id';
-
     if (!this.serviceApi) {
       this.poNotification.error(this.literals.loadDataErrorNotification);
       return EMPTY;
@@ -701,7 +699,7 @@ export class PoPageDynamicTableComponent extends PoPageDynamicListBaseComponent 
 
     return this.poPageDynamicService.getResources(fullParams).pipe(
       tap(response => {
-        removeDuplicateItems(response.items, this.items, key);
+        removeDuplicateItemsWithArrayKey(response.items, this.items, this.keys);
         this.items = fullParams.page === 1 ? response.items : [...this.items, ...response.items];
         this.page = fullParams.page;
         this.hasNext = response.hasNext;

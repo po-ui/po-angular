@@ -414,3 +414,46 @@ export function removeDuplicateItems(item, item2, key) {
     }
   }
 }
+
+/**
+ * Remove objetos duplicados passando um array de propriedades.
+ *
+ * Exemplo:
+ *
+ * ```
+ * item: [{country: 'japao'}, {country: 'brasil'} , {country: 'china'}]
+ * item2: [{country: 'chile'}, {country: 'brasil'}, {country: 'canada'}]
+ * key: '[country]'
+ * Resultado:
+ *    item2 = [{country: 'chile'}, {country: 'canada'} ]
+ * ```
+ *
+ *
+ * @param item lista comparada.
+ * @param item2 lista para remover items duplicados.
+ * @param key um array de propriedades que vão ser utilizadas para a comparação.
+ */
+export function removeDuplicateItemsWithArrayKey(item, item2, key) {
+  if (!key.length) {
+    removeDuplicateItems(item, item2, 'id');
+  } else if (key.length === 1) {
+    removeDuplicateItems(item, item2, key[0]);
+  } else {
+    let myKey;
+    let newArray;
+    let result;
+
+    const allEqual = arr => arr.every(val => val === arr[0]);
+
+    for (let i = 0; i < key.length; i++) {
+      newArray = [...item].map(entry => entry[key[i]]).concat([...item2].map(entry => entry[key[i]]));
+      result = allEqual(newArray);
+      if (!result) {
+        myKey = key[i];
+        break;
+      }
+    }
+
+    removeDuplicateItems(item, item2, myKey);
+  }
+}
