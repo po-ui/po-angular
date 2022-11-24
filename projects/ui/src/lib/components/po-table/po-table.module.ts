@@ -11,6 +11,7 @@ import { PoLoadingModule } from '../po-loading/po-loading.module';
 import { PoModalModule } from '../po-modal/po-modal.module';
 import { PoPopoverModule } from '../po-popover/po-popover.module';
 import { PoPopupModule } from './../po-popup/po-popup.module';
+import { PoTagModule } from '../po-tag/po-tag.module';
 import { PoTimeModule } from '../../pipes/po-time/index';
 import { PoTooltipModule } from '../../directives/po-tooltip/index';
 import { PoIconModule } from './../po-icon/po-icon.module';
@@ -48,6 +49,7 @@ import { PoTableListManagerComponent } from './po-table-list-manager/po-table-li
     PoModalModule,
     PoPopoverModule,
     PoPopupModule,
+    PoTagModule,
     PoTimeModule,
     PoTooltipModule,
     PoIconModule,
