@@ -27,7 +27,6 @@ import { PoPopupComponent } from '../po-popup/po-popup.component';
 import { PoTableAction } from './interfaces/po-table-action.interface';
 import { PoTableBaseComponent, QueryParamsType } from './po-table-base.component';
 import { PoTableColumn } from './interfaces/po-table-column.interface';
-import { PoTableColumnLabel } from './po-table-column-label/po-table-column-label.interface';
 import { PoTableRowTemplateDirective } from './po-table-row-template/po-table-row-template.directive';
 import { PoTableSubtitleColumn } from './po-table-subtitle-footer/po-table-subtitle-column.interface';
 import { PoTableCellTemplateDirective } from './po-table-cell-template/po-table-cell-template.directive';
@@ -119,6 +118,7 @@ export class PoTableComponent extends PoTableBaseComponent implements AfterViewI
   tooltipText: string;
   itemSize: number = 32;
   lastVisibleColumnsSelected: Array<PoTableColumn>;
+  tagColor: string;
 
   private _columnManagerTarget: ElementRef;
   private _columnManagerTargetFixed: ElementRef;
@@ -441,7 +441,15 @@ export class PoTableComponent extends PoTableBaseComponent implements AfterViewI
     return rowIcons;
   }
 
-  getColumnLabel(row: any, columnLabel: PoTableColumn): PoTableColumnLabel {
+  getTagColor(row: any, columnLabel: PoTableColumn) {
+    return columnLabel.labels.find(labelItem => this.getCellData(row, columnLabel) === labelItem.value)?.color;
+  }
+
+  getTagValue(row: any, columnLabel: PoTableColumn) {
+    return columnLabel.labels.find(labelItem => this.getCellData(row, columnLabel) === labelItem.value)?.value;
+  }
+
+  getColumnLabel(row: any, columnLabel: PoTableColumn) {
     return columnLabel.labels.find(labelItem => this.getCellData(row, columnLabel) === labelItem.value);
   }
 
