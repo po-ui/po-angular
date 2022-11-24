@@ -1,17 +1,23 @@
 import { Component, OnInit, ViewChild } from '@angular/core';
 import { NgForm } from '@angular/forms';
 
-import { PoModalAction, PoModalComponent, PoStepperComponent, PoUploadComponent } from '@po-ui/ng-components';
+import {
+  PoModalAction,
+  PoModalComponent,
+  PoStepperComponent,
+  PoStepperOrientation,
+  PoUploadComponent
+} from '@po-ui/ng-components';
 
 @Component({
   selector: 'sample-po-upload-rs',
   templateUrl: 'sample-po-upload-rs.component.html'
 })
 export class SamplePoUploadRsComponent implements OnInit {
-  @ViewChild('upload', { static: true }) upload: PoUploadComponent;
-  @ViewChild('stepper', { static: true }) stepper: PoStepperComponent;
-  @ViewChild('submitForm', { static: true }) submitForm: NgForm;
-  @ViewChild('sucessData', { static: true }) sucessData: PoModalComponent;
+  @ViewChild('upload', { static: true }) upload!: PoUploadComponent;
+  @ViewChild('stepper', { static: true }) stepper!: PoStepperComponent;
+  @ViewChild('submitForm', { static: true }) submitForm!: NgForm;
+  @ViewChild('sucessData', { static: true }) sucessData!: PoModalComponent;
 
   confirm: PoModalAction = {
     action: () => {
@@ -20,17 +26,20 @@ export class SamplePoUploadRsComponent implements OnInit {
     label: 'Return'
   };
 
-  description: string;
+  description!: any;
+  orientation = PoStepperOrientation.Vertical;
   project: Array<any> = [];
   restrictions = { allowedExtensions: ['.zip', '.7z', '.tar', '.wim'] };
-  title: string;
+  title!: any;
+
+  constructor() {}
 
   ngOnInit() {
     this.newSubmit();
   }
 
   canSubmitProject() {
-    return !!(this.project && this.project.length) && this.title && this.description;
+    return !!(this.project && this.project.length) && !!this.title && !!this.description;
   }
 
   confirmSubmit() {
@@ -41,11 +50,15 @@ export class SamplePoUploadRsComponent implements OnInit {
 
   submitProject() {
     this.upload.sendFiles();
+  }
+
+  eventSuccess(event: any) {
     this.stepper.next();
   }
 
   private newSubmit() {
     this.project = [];
+    this.upload.clear();
     this.title = undefined;
     this.description = undefined;
   }

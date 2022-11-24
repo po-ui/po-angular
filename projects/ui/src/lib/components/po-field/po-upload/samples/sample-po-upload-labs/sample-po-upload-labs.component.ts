@@ -7,23 +7,24 @@ import { PoCheckboxGroupOption, PoUploadFileRestrictions, PoUploadLiterals } fro
   templateUrl: './sample-po-upload-labs.component.html'
 })
 export class SamplePoUploadLabsComponent implements OnInit {
-  allowedExtensions: string;
-  customLiterals: PoUploadLiterals;
-  dragDropHeight: number;
-  event: string;
-  formField: string;
-  help: string;
-  label: string;
-  literals: string;
-  maxFiles: number;
-  maxSize: number;
-  minSize: number;
-  properties: Array<string>;
-  restrictions: PoUploadFileRestrictions;
-  upload: Array<any>;
-  url: string;
-  headers: { [name: string]: string | Array<string> };
-  headersLabs: string;
+  allowedExtensions!: string;
+  customLiterals!: PoUploadLiterals;
+  dragDropHeight!: number | undefined;
+  event!: string;
+  formField!: string;
+  help!: string;
+  label!: string;
+  literals!: string;
+  maxFiles!: number | undefined;
+  maxSize!: number | undefined;
+  minSize!: number | undefined;
+  properties!: Array<string>;
+  restrictions!: PoUploadFileRestrictions;
+  upload!: Array<any> | undefined;
+  url!: string;
+  headers!: { [name: string]: string | Array<string> };
+  headersLabs!: string;
+
   public readonly propertiesOptions: Array<PoCheckboxGroupOption> = [
     { value: 'autoupload', label: 'Automatic upload' },
     { value: 'directory', label: 'Directory' },
@@ -36,6 +37,8 @@ export class SamplePoUploadLabsComponent implements OnInit {
     { value: 'selectButton', label: 'Hide Select Files Button' },
     { value: 'sendButton', label: 'Hide Send Files Button' }
   ];
+
+  constructor() {}
 
   ngOnInit() {
     this.restore();
@@ -78,13 +81,13 @@ export class SamplePoUploadLabsComponent implements OnInit {
   }
 
   restore() {
-    this.allowedExtensions = undefined;
-    this.customLiterals = undefined;
+    this.allowedExtensions = '';
+    this.customLiterals = {};
     this.dragDropHeight = undefined;
-    this.event = undefined;
-    this.formField = undefined;
-    this.label = undefined;
-    this.help = undefined;
+    this.event = '';
+    this.formField = '';
+    this.label = '';
+    this.help = '';
     this.literals = '';
     this.maxFiles = undefined;
     this.maxSize = undefined;
@@ -93,8 +96,8 @@ export class SamplePoUploadLabsComponent implements OnInit {
     this.restrictions = {};
     this.upload = undefined;
     this.url = 'https://po-sample-api.herokuapp.com/v1/uploads/addFile';
-    this.headers = undefined;
-    this.headersLabs = undefined;
+    this.headers = {};
+    this.headersLabs = '';
   }
 
   private getValueInBytes(value: number) {

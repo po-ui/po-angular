@@ -1,6 +1,7 @@
 <po-upload
   name="upload"
-  [(ngModel)]="upload"
+  [ngModel]="upload"
+  (ngModelChange)="upload = $event"
   [p-auto-upload]="properties.includes('autoupload')"
   [p-directory]="properties.includes('directory')"
   [p-disabled]="properties.includes('disabled')"
@@ -68,7 +69,7 @@
       p-clean
       p-help="Height of drag drop area"
       p-label="Drag Drop Height"
-      p-min="160"
+      [p-min]="160"
     >
     </po-number>
 
@@ -135,8 +136,9 @@
     <po-checkbox-group
       class="po-md-12"
       name="properties"
-      [(ngModel)]="properties"
-      p-columns="4"
+      [ngModel]="properties"
+      (ngModelChange)="properties = $event"
+      [p-columns]="4"
       p-help="Select any options"
       p-label="Properties"
       [p-options]="propertiesOptions"

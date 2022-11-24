@@ -8,13 +8,13 @@ import { PoNotificationService } from '@po-ui/ng-components';
   templateUrl: 'sample-po-upload-resume.component.html'
 })
 export class SamplePoUploadResumeComponent implements OnInit {
-  @ViewChild('formOpportunity', { static: true }) formOpportunity: UntypedFormControl;
+  @ViewChild('formOpportunity', { static: true }) formOpportunity!: UntypedFormControl;
 
-  biograph: string;
-  linkedin: string;
-  name: string;
-  resume: string;
-  uploadedResume: boolean;
+  biograph!: string;
+  linkedin!: string;
+  name!: string;
+  resume!: string;
+  uploadedResume!: boolean;
 
   constructor(private poNotification: PoNotificationService) {}
 
@@ -29,11 +29,11 @@ export class SamplePoUploadResumeComponent implements OnInit {
     this.poNotification.success('You were applied successfully');
   }
 
-  resumeUploadError() {
+  resumeUploadError(event: any) {
     this.uploadedResume = false;
   }
 
-  resumeUploadSuccess() {
+  resumeUploadSuccess(event: any) {
     this.uploadedResume = true;
   }
 }

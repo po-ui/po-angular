@@ -255,7 +255,7 @@ export abstract class PoUploadBaseComponent implements ControlValueAccessor, Val
    * two-way binding no componente deve se utilizar da seguinte forma:
    *
    * ```
-   * <po-upload ... [ngModel]="UploadModel" (ngModelChange)="uploadModel = $event"> </po-upload>
+   * <po-upload ... [ngModel]="uploadModel" (ngModelChange)="uploadModel = $event"> </po-upload>
    * ```
    *
    */

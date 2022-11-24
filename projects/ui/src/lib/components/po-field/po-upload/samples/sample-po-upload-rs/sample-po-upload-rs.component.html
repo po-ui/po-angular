@@ -2,20 +2,20 @@
   <po-stepper
     #stepper
     class="po-lg-10 po-offset-lg-2 po-offset-xl-2"
-    p-orientation="vertical"
-    p-step-icons
-    p-step-size="42"
+    [p-orientation]="orientation"
+    [p-step-icons]="true"
+    [p-step-size]="42"
   >
     <po-step p-label="Welcome">
       <po-widget class="po-lg-8 po-mt-2" p-title="Realize & Show">
-        <div class="tht-row">
+        <div class="po-row">
           <div class="po-sm-12">
             <h1 class="po-font-title">Welcome, TOTVER!</h1>
             <p class="po-font-text-large">Let's submit your project?</p>
           </div>
         </div>
 
-        <div class="tht-row">
+        <div class="po-row">
           <po-button class="po-sm-12 po-mt-2" p-label="Yes!" p-kind="primary" (p-click)="stepper.next()"> </po-button>
         </div>
       </po-widget>
@@ -51,12 +51,14 @@
               #upload
               class="po-sm-12"
               name="project"
-              [(ngModel)]="project"
-              p-hide-select-button
-              p-hide-send-button
-              p-required
+              [ngModel]="project"
+              (ngModelChange)="project = $event"
+              [p-hide-select-button]="true"
+              [p-hide-send-button]="true"
+              [p-required]="true"
               p-url="https://po-sample-api.herokuapp.com/v1/uploads/addFile"
               [p-restrictions]="restrictions"
+              (p-success)="eventSuccess($event)"
             >
             </po-upload>
           </div>
@@ -69,7 +71,7 @@
               p-label="Title"
               p-placeholder="Be creative"
               p-required
-              [p-disabled]="project.length < 1"
+              p-disabled="{{ project.length < 1 }}"
             >
             </po-input>
           </div>
@@ -80,19 +82,19 @@
               name="description"
               [(ngModel)]="description"
               p-label="Description"
-              p-maxlength="140"
+              [p-maxlength]="140"
               p-placeholder="Resume on few words"
-              p-required
+              [p-required]="true"
               [p-disabled]="project.length < 1"
             >
             </po-textarea>
           </div>
 
-          <div class="tht-row">
+          <div class="po-row">
             <po-button
               class="po-sm-12 po-mt-2"
               p-label="Done"
-              [p-disabled]="canSubmitProject()"
+              [p-disabled]="!canSubmitProject()"
               (p-click)="submitProject()"
             >
             </po-button>
@@ -103,7 +105,7 @@
 
     <po-step p-label="Confirm">
       <po-widget class="po-lg-8 po-mt-2" p-title="Realize & Show">
-        <div class="tht-row" *ngIf="canSubmitProject()">
+        <div class="po-row" *ngIf="canSubmitProject()">
           <div class="po-sm-12">
             <p class="po-font-text-large">Confirm informations</p>
           </div>
