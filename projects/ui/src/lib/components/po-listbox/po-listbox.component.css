@@ -1,5 +1,5 @@
 .po-listbox {
-  border-radius: var(--border-radius);
+  border-radius: var(--cst-border-radius, var(--border-radius));
   border-width: var(--border-width);
   border-color: var(--border-color);
   background-color: var(--background);
@@ -8,6 +8,8 @@
   border-style: solid;
   position: fixed;
   z-index: 1000;
+
+  overflow-y: auto;
 }
 
 .po-listbox-list {

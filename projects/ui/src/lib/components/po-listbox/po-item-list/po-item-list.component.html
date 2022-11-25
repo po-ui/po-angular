@@ -1,13 +1,28 @@
-<div
+<!-- <div
+  #itemList
   class="po-item-list"
   [class.po-item-list__action]="type === 'action'"
   [class.po-item-list__check]="type === 'check'"
-  [class.po-item-list__check-selected]=""
   [class.po-item-list__option]="type === 'option'"
-  [class.po-item-list__option-selected]=""
-  (click)="setOptionValue({label})"
+  (click)="onSelectItem({ label })"
 >
-  <label>{{ label }}</label>
-</div>
+  <span>{{ label }}</span>
+</div> -->
 
-<ng-template #itemListTemplate> </ng-template>
+<ng-container *ngIf="type === 'action'; else templateSelectItems">
+  <div #itemList class="po-item-list po-item-list__action" (click)="onClickItem(option)">
+    <span>{{ label }}</span>
+  </div>
+</ng-container>
+
+<ng-template #templateSelectItems>
+  <div
+    #itemList
+    class="po-item-list"
+    [class.po-item-list__check]="type === 'check'"
+    [class.po-item-list__option]="type === 'option'"
+    (click)="onSelectItem({label})"
+  >
+    <span>{{ label }}</span>
+  </div>
+</ng-template>

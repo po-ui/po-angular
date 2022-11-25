@@ -1,9 +1,9 @@
-import { PoListboxBaseComponent } from './po-listbox-base-component';
+import { PoListboxBaseComponent } from './po-listbox-base.component';
 
 describe('PoListboxBaseComponent', () => {
-  const component = new PoListBoxBaseComponent();
+  const component = new PoListboxBaseComponent();
 
   it('should be created', () => {
-    expect(component instanceof PoListBoxBaseComponent).toBeTruthy();
+    expect(component instanceof PoListboxBaseComponent).toBeTruthy();
   });
 });

@@ -1,45 +1,74 @@
-import { Component, EventEmitter, HostBinding, Input, Output } from '@angular/core';
+import { Component, ElementRef, EventEmitter, HostBinding, Input, Output, ViewChild } from '@angular/core';
+import { Router } from '@angular/router';
+import { isExternalLink, isTypeof, openExternalLink } from '../../../utils/util';
 import { PoItemListType } from '../enums/po-item-list-type.enum';
+import { PoItemListAction } from './interfaces/po-item-list-action.interface';
+import { PoItemListOptionGroup } from './interfaces/po-item-list-option-group.interface';
 import { PoItemListOption } from './interfaces/po-item-list-option.interface';
+import { PoItemListBaseComponent } from './po-item-list-base.component';
 
 @Component({
   selector: 'po-item-list',
   templateUrl: './po-item-list.component.html',
   styleUrls: ['./po-item-list.component.css']
 })
-export class PoItemListComponent {
-  private _label: string;
-  private _type!: PoItemListType;
+export class PoItemListComponent extends PoItemListBaseComponent {
+  @ViewChild('itemList', { static: true }) itemList: ElementRef;
 
-  @Input('p-label') set label(value: string) {
-    this._label = value;
+  selectedView: PoItemListOption;
+
+  protected param;
+  protected clickoutListener: () => void;
+
+  constructor(private router: Router) {
+    super();
+    console.log(this.items);
   }
 
-  get label(): string {
-    return this._label;
+  /**
+   * Método para o evento de clique ao interagir com o item da lista do tipo `Action`.
+   *
+   * @param itemListAction
+   * @returns
+   */
+  onClickItem(itemListAction: PoItemListAction) {
+    console.group('onClickItem');
+    console.log('value in PoItemList', itemListAction);
+
+    const actionNoDisabled = itemListAction && !this.returnBooleanValue(itemListAction, 'disabled');
+
+    if (itemListAction && itemListAction.action && actionNoDisabled) {
+      itemListAction.action(this.param || itemListAction);
+    }
+
+    if (itemListAction && itemListAction.url && actionNoDisabled) {
+      return this.openUrl(itemListAction.url);
+    }
+
+    console.groupEnd();
   }
 
-  @HostBinding('attr.p-type')
-  @Input('p-type')
-  set type(value: PoItemListType) {
-    this._type = value;
+  onSelectItem(itemListOption: PoItemListOption | PoItemListOptionGroup | any): void {
+    console.group('onSelectItem');
+    console.log('itemListOption in PoItemList', itemListOption);
+    this.selectedView = itemListOption;
+    this.selectItem.emit(itemListOption);
+    console.groupEnd();
   }
 
-  get type(): PoItemListType {
-    return this._type;
+  returnBooleanValue(itemListAction: any, property: string) {
+    return isTypeof(itemListAction[property], 'function')
+      ? itemListAction[property](this.param || itemListAction)
+      : itemListAction[property];
   }
 
-  @Output() selectedOption = new EventEmitter<any>();
+  private openUrl(url: string) {
+    if (isExternalLink(url)) {
+      return openExternalLink(url);
+    }
 
-  setOptionValue(value: string): void {
-    console.log('setOptionValue in PoItemList', value);
-
-    this.selectedOption.emit(value);
-  }
-
-  cliquei(event) {
-    console.log('to no item-list');
-    console.log(event);
-    this.selectedOption.emit(event);
+    if (url) {
+      return this.router.navigate([url]);
+    }
   }
 }

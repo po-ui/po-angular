@@ -1,7 +1,30 @@
-<div class="po-listbox" [attr.p-type]="type" [hidden]="visible">
+<div #listbox class="po-listbox" [attr.p-type]="type" [hidden]="visible">
+  <!-- <ng-container *ngIf="items.length; else noItemsTemplate"> -->
   <ul class="po-listbox-list">
-    <li *ngFor="let option of options" class="po-listbox-item">
-      <po-item-list [p-label]="option.label" [p-type]="type" (selectedOption)="setOptionValue($event)"></po-item-list>
+    <li *ngFor="let item of items" class="po-listbox-item">
+      <!-- <po-item-list
+          [p-label]="option.label"
+          [p-type]="type"
+          (selectedItem)="onClickItem(item, $event)"
+        ></po-item-list> -->
+      <po-item-list
+        [attr.data-item-list]="item | json"
+        [p-label]="item.label"
+        [p-value]="item.value"
+        [p-type]="type"
+        (p-select-item)="onSelectItem(item, $event)"
+      ></po-item-list>
     </li>
   </ul>
+  <!-- </ng-container> -->
 </div>
+
+<ng-template #noItemsTemplate>
+  <div class="po-listbox-no-items">
+    <div class="po-text-center">
+      <span *ngIf="!isServerSearching">
+        {{ literals.noItems }}
+      </span>
+    </div>
+  </div>
+</ng-template>
