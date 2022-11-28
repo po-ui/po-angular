@@ -8,7 +8,7 @@ import { PoMenuFilter, PoMenuItemFiltered } from '@po-ui/ng-components';
 
 @Injectable()
 export class SamplePoMenuHumanResourcesService implements PoMenuFilter {
-  private url: string = 'https://po-sample-api.herokuapp.com/v1/menus';
+  private url: string = 'https://po-sample-api.fly.io/v1/menus';
 
   constructor(private http: HttpClient) {}
 

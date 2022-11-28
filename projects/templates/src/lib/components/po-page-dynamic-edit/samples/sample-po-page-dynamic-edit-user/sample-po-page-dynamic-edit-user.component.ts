@@ -63,7 +63,7 @@ export class SamplePoPageDynamicEditUserComponent {
     },
     {
       property: 'city',
-      optionsService: 'https://po-sample-api.herokuapp.com/v1/cities?transform=true',
+      optionsService: 'https://po-sample-api.fly.dev/v1/cities?transform=true',
       offsetColumns: 4,
       gridColumns: 4
     }
