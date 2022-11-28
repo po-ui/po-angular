@@ -2,6 +2,22 @@
 
 All notable changes to this project will be documented in this file. See [standard-version](https://github.com/conventional-changelog/standard-version) for commit guidelines.
 
+# [14.11.0](https://github.com/po-ui/po-angular/compare/v14.10.0...v14.11.0) (2022-11-28)
+
+
+### Bug Fixes
+
+* **datepicker:** ajuste estrutural ([9cb0555](https://github.com/po-ui/po-angular/commit/9cb0555e1604141058be2cdb81ab3e50fa97d600)), closes [#1551](https://github.com/po-ui/po-angular/issues/1551)
+* **language:** ajusta configuração de linguagem ([70b63c0](https://github.com/po-ui/po-angular/commit/70b63c04437a365a7c97a76331798dd3ded0e73a))
+* **widget:** corrige comportamento indevido no componente ([d6db6e5](https://github.com/po-ui/po-angular/commit/d6db6e5b725f7227993246c587f15b33c318eb48))
+
+
+### Features
+
+* **datepicker:** suporte locale russo ([79b1a8b](https://github.com/po-ui/po-angular/commit/79b1a8b3fc547ab0462e83ecb4a428a5f0f2170b))
+
+
+
 # [14.10.0](https://github.com/po-ui/po-angular/compare/v14.9.1...v14.10.0) (2022-11-21)
 
 
