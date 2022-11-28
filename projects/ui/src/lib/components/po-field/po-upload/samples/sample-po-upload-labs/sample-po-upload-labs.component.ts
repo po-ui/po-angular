@@ -92,7 +92,7 @@ export class SamplePoUploadLabsComponent implements OnInit {
     this.properties = [];
     this.restrictions = {};
     this.upload = undefined;
-    this.url = 'https://po-sample-api.herokuapp.com/v1/uploads/addFile';
+    this.url = 'https://po-sample-api.fly.dev/v1/uploads/addFile';
     this.headers = undefined;
     this.headersLabs = undefined;
   }
