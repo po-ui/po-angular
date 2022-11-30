@@ -36,6 +36,7 @@ export class SamplePoMultiselectLabsComponent implements OnInit {
 
   public readonly propertiesOptions: Array<PoCheckboxGroupOption> = [
     { value: 'required', label: 'Required' },
+    { value: 'showRequired', label: 'Show Required' },
     { value: 'disabled', label: 'Disabled' },
     { value: 'optional', label: 'Optional' },
     { value: 'hideSearch', label: 'Hide Search' },

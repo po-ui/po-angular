@@ -27,7 +27,8 @@ export class SamplePoRadioGroupLabsComponent implements OnInit {
   readonly propertiesOptions: Array<PoCheckboxGroupOption> = [
     { value: 'disabled', label: 'Disabled' },
     { value: 'optional', label: 'Optional' },
-    { value: 'required', label: 'Required' }
+    { value: 'required', label: 'Required' },
+    { value: 'showRequired', label: 'Show Required' }
   ];
 
   readonly sizesOptions: Array<PoRadioGroupOption> = [

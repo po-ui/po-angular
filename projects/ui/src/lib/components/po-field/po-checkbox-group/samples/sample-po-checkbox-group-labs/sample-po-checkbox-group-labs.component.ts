@@ -29,7 +29,8 @@ export class SamplePoCheckboxGroupLabsComponent implements OnInit {
     { value: 'disabled', label: 'Disabled' },
     { value: 'indeterminate', label: 'Indeterminate' },
     { value: 'optional', label: 'Optional' },
-    { value: 'required', label: 'Required' }
+    { value: 'required', label: 'Required' },
+    { value: 'showRequired', label: 'Show Required' }
   ];
 
   ngOnInit() {
