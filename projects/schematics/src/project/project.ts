@@ -1,6 +1,7 @@
 import { parse } from 'jsonc-parser';
 import { SchematicsException, Tree } from '@angular-devkit/schematics';
 import { WorkspaceProject, WorkspaceSchema } from '@schematics/angular/utility/workspace-models';
+import { Path } from '@angular-devkit/core';
 
 /** Name of the default Angular CLI workspace configuration files. */
 const defaultWorkspaceConfigPaths = ['/angular.json', '/.angular.json'];
@@ -33,19 +34,17 @@ export function getProjectFromWorkspace(workspace: WorkspaceSchema, projectName?
 }
 
 /** Resolves the architect options for the build target of the given project. */
-export function getProjectTargetOptions(project: WorkspaceProject, buildTarget: string) {
-  if (project.targets && project.targets[buildTarget] && project.targets[buildTarget].options) {
-    return project.targets[buildTarget].options;
+export function getProjectTargetOptions(project: any, buildTarget: string) {
+
+  const options = project.targets?.get(buildTarget)?.options;
+
+  if (!options) {
+    throw new SchematicsException(
+      `Cannot determine project target configuration for: ${buildTarget}.`,
+    );
   }
 
-  // TODO(devversion): consider removing this architect check if the CLI completely switched
-  // over to `targets`, and the `architect` support has been removed.
-  // See: https://github.com/angular/angular-cli/commit/307160806cb48c95ecb8982854f452303801ac9f
-  if (project.architect && project.architect[buildTarget] && project.architect[buildTarget].options) {
-    return project.architect[buildTarget].options;
-  }
-
-  return console.warn(`Cannot determine project target configuration for: ${buildTarget}.`);
+  return options;
 }
 
 /** Looks for the main TypeScript file in the given project and returns its path. */
@@ -58,7 +57,7 @@ export function getProjectMainFile(project: WorkspaceProject): string {
     );
   }
 
-  return buildOptions.main;
+  return buildOptions.main as Path;
 }
 
 // Return default path of application or library
