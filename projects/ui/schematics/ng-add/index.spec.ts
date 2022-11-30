@@ -2,16 +2,16 @@ import { Tree } from '@angular-devkit/schematics';
 import { SchematicTestRunner, UnitTestTree } from '@angular-devkit/schematics/testing';
 import {
   getProjectFromWorkspace,
-  getProjectTargetOptions,
-  getWorkspaceConfigGracefully
+  getProjectTargetOptions
 } from '@po-ui/ng-schematics/project';
-import { WorkspaceProject, WorkspaceSchema } from '@schematics/angular/utility/workspace-models';
+import {getWorkspace} from '@schematics/angular/utility/workspace';
+import { WorkspaceProject } from '@schematics/angular/utility/workspace-models';
 import { Schema as WorkspaceOptions } from '@schematics/angular/workspace/schema';
 import * as path from 'path';
 
 const collectionPath = path.join(__dirname, '../collection.json');
 
-xdescribe('Schematic: ng-add', () => {
+describe('Schematic: ng-add', () => {
   const runner = new SchematicTestRunner('schematics', collectionPath);
 
   const workspaceOptions: WorkspaceOptions = {
@@ -21,7 +21,7 @@ xdescribe('Schematic: ng-add', () => {
   };
 
   const componentOptions: any = {
-    name: 'po',
+    project: 'po',
     style: 'css',
     skipTests: false
   };
@@ -36,7 +36,7 @@ xdescribe('Schematic: ng-add', () => {
   });
 
   describe('Dependencies:', () => {
-    it('should update package.json with @po-ui/ng-components dependency and run nodePackageInstall', async () => {
+    xit('should update package.json with @po-ui/ng-components dependency and run nodePackageInstall', async () => {
       const tree = await runner.runSchematicAsync('ng-add', componentOptions, appTree).toPromise();
 
       const packageJson = JSON.parse(getFileContent(tree, '/package.json'));
@@ -53,7 +53,7 @@ xdescribe('Schematic: ng-add', () => {
       const poModuleName = 'PoModule';
 
       const tree = await runner.runSchematicAsync('ng-add-setup-project', componentOptions, appTree).toPromise();
-      const fileContent = getFileContent(tree, `projects/${componentOptions.name}/src/app/app.module.ts`);
+      const fileContent = getFileContent(tree, `projects/po/src/app/app.module.ts`);
 
       expect(fileContent).toContain(poModuleName);
     });
@@ -62,25 +62,25 @@ xdescribe('Schematic: ng-add', () => {
   describe('Theme configuration:', () => {
     const defaultThemePath = './node_modules/@po-ui/style/css/po-theme-default.min.css';
 
-    it('should add default theme in styles of build project', async () => {
+   xit('should add default theme in styles of build project', async () => {
       const tree = await runner.runSchematicAsync('ng-add-setup-project', componentOptions, appTree).toPromise();
 
-      const workspace = getWorkspaceConfigGracefully(tree) ?? ({} as WorkspaceSchema);
-      const project = getProjectFromWorkspace(workspace);
+      const workspace = await getWorkspace(tree);
+      const project = getProjectFromWorkspace(workspace as any, componentOptions.project);
 
       expectProjectStyleFile(project, defaultThemePath);
     });
 
-    it('shouldn`t add a theme file in styles of build project multiple times', async () => {
+   xit('shouldn`t add a theme file in styles of build project multiple times', async () => {
       writeStyleFileToWorkspace(appTree, defaultThemePath);
 
       const tree = await runner.runSchematicAsync('ng-add-setup-project', componentOptions, appTree).toPromise();
 
-      const workspace = getWorkspaceConfigGracefully(tree) ?? ({} as WorkspaceSchema);
-      const project = getProjectFromWorkspace(workspace);
+      const workspace = await getWorkspace(tree);
+      const project = getProjectFromWorkspace(workspace as any, componentOptions.project);
       const styles = getProjectTargetOptions(project, 'build').styles;
 
-      expect(styles).toEqual([`projects/${componentOptions.name}/src/styles.css`, defaultThemePath]);
+      expect(styles).toEqual([`projects/po/src/styles.css`, defaultThemePath]);
     });
   });
 });
@@ -105,9 +105,15 @@ function getFileContent(tree: Tree, filePath: string): string {
 }
 
 /** Writes a specific style file to the workspace in the given tree */
-function writeStyleFileToWorkspace(tree: Tree, stylePath: string) {
-  const workspace = getWorkspaceConfigGracefully(tree) ?? ({} as WorkspaceSchema);
-  const project = getProjectFromWorkspace(workspace);
+async function writeStyleFileToWorkspace(tree: Tree, stylePath: string) {
+
+  const componentOptions: any = {
+    project: 'po',
+    style: 'css',
+    skipTests: false
+  };
+  const workspace = await getWorkspace(tree);
+  const project = getProjectFromWorkspace(workspace as any, componentOptions.project);
   const buildOptions = getProjectTargetOptions(project, 'build');
 
   if (!buildOptions.styles) {

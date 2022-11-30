@@ -1,11 +1,9 @@
-import { chain, Rule, schematic, Tree, noop } from '@angular-devkit/schematics';
-import { WorkspaceProject, WorkspaceSchema } from '@schematics/angular/utility/workspace-models';
+import { chain, schematic, Tree, noop, SchematicContext } from '@angular-devkit/schematics';
+import {getWorkspace} from '@schematics/angular/utility/workspace';
 
-import { addModuleImportToRootModule } from '@po-ui/ng-schematics/module';
+import { addModuleImportToRootModule, getProjectFromWorkspace } from '@angular/cdk/schematics';
 import {
-  getProjectFromWorkspace,
-  getProjectTargetOptions,
-  getWorkspaceConfigGracefully
+  getProjectTargetOptions
 } from '@po-ui/ng-schematics/project';
 
 /** PO Module name that will insert in app root module */
@@ -18,18 +16,24 @@ const poModuleSourcePath = '@po-ui/ng-components';
  *  - Adds themes to styles
  *  - Run sidemenu schematic
  */
-export default function (options: any): Rule {
-  return chain([
-    addModuleImportToRootModule(options, poModuleName, poModuleSourcePath),
-    addThemeToAppStyles(options),
-    configureSideMenu(options)
-  ]);
+export default function (options: any) {
+  return async (host: Tree, context: SchematicContext) => {
+    const workspace = await getWorkspace(host);
+    const project = getProjectFromWorkspace(workspace, options.project);
+    if (project) {
+      return chain([
+        addModuleImportToRootModule(host, poModuleName, poModuleSourcePath, project) as any,
+        addThemeToAppStyles(options),
+        configureSideMenu(options)
+      ]);
+    }
+  }
 }
 
 /** Add PO theme to project styles */
-function addThemeToAppStyles(options: any): (tree: Tree) => Tree {
-  return function (tree: Tree): Tree {
-    const workspace = getWorkspaceConfigGracefully(tree) ?? ({} as WorkspaceSchema);
+function addThemeToAppStyles(options: any): (tree: Tree) => any {
+  return async (tree: Tree) => {
+    const workspace = await getWorkspace(tree);
     const project = getProjectFromWorkspace(workspace, options.project);
 
     // Path needs to be always relative to the `package.json` or workspace root.
@@ -44,11 +48,11 @@ function addThemeToAppStyles(options: any): (tree: Tree) => Tree {
 
 /** Adds a theming style entry to the given project target options. */
 function addThemeStyleToTarget(
-  project: WorkspaceProject,
+  project: any,
   targetName: 'test' | 'build',
   host: Tree,
   assetPath: string,
-  workspace: WorkspaceSchema
+  workspace: any
 ) {
   const targetOptions = getProjectTargetOptions(project, targetName);
 
