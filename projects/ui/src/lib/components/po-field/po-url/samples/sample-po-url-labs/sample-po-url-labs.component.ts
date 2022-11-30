@@ -23,6 +23,7 @@ export class SamplePoUrlLabsComponent implements OnInit {
     { value: 'noAutocomplete', label: 'No Autocomplete' },
     { value: 'optional', label: 'Optional' },
     { value: 'readonly', label: 'Read Only' },
+    { value: 'showRequired', label: 'Show Required' },
     { value: 'required', label: 'Required' }
   ];
 

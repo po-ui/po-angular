@@ -20,6 +20,7 @@ export class SamplePoSelectLabsComponent implements OnInit {
     { value: 'disabled', label: 'Disabled' },
     { value: 'optional', label: 'Optional' },
     { value: 'required', label: 'Required' },
+    { value: 'showRequired', label: 'Show Required' },
     { value: 'readonly', label: 'Read Only' }
   ];
 

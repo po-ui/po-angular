@@ -21,7 +21,8 @@ export class SamplePoTextareaLabsComponent implements OnInit {
     { value: 'disabled', label: 'Disabled' },
     { value: 'optional', label: 'Optional' },
     { value: 'readonly', label: 'Read Only' },
-    { value: 'required', label: 'Required' }
+    { value: 'required', label: 'Required' },
+    { value: 'showRequired', label: 'Show Required' }
   ];
 
   ngOnInit() {
