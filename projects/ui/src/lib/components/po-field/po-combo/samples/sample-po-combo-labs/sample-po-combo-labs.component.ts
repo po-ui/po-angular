@@ -57,6 +57,7 @@ export class SamplePoComboLabsComponent implements OnInit {
     { value: 'optional', label: 'Optional' },
     { value: 'disabledInitFilter', label: 'Disabled Init Filter' },
     { value: 'required', label: 'Required' },
+    { value: 'showRequired', label: 'Show Required' },
     { value: 'sort', label: 'Sort' },
     { value: 'clean', label: 'Clean' },
     { value: 'disabledTabFilter', label: 'Disabled Tab Filter' }

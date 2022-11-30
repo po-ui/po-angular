@@ -32,6 +32,7 @@ export class SamplePoUploadLabsComponent implements OnInit {
     { value: 'multiple', label: 'Multiple upload' },
     { value: 'optional', label: 'Optional' },
     { value: 'required', label: 'Required' },
+    { value: 'showRequired', label: 'Show Required' },
     { value: 'restrictionsInfo', label: 'Hide Restrictions Info' },
     { value: 'selectButton', label: 'Hide Select Files Button' },
     { value: 'sendButton', label: 'Hide Send Files Button' }
