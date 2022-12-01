@@ -1,6 +1,5 @@
 <po-field-container
   [p-disabled]="disabled"
-  [p-help]="help"
   [p-id]="id"
   [p-label]="label"
   [p-optional]="optional"
@@ -44,5 +43,6 @@
     </div>
   </div>
 
-  <po-field-container-bottom [p-error-pattern]="getErrorPattern()"> </po-field-container-bottom>
+  <po-field-container-bottom [p-help]="help" [p-disabled]="disabled" [p-error-pattern]="getErrorPattern()">
+  </po-field-container-bottom>
 </po-field-container>

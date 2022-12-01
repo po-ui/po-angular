@@ -1,10 +1,4 @@
-<po-field-container
-  [p-help]="help"
-  [p-label]="label"
-  [p-optional]="optional"
-  [p-required]="required"
-  [p-show-required]="showRequired"
->
+<po-field-container [p-label]="label" [p-optional]="optional" [p-required]="required" [p-show-required]="showRequired">
   <div class="po-field-container-content">
     <po-rich-text-body
       #richTextBody
@@ -32,5 +26,5 @@
     </po-rich-text-toolbar>
   </div>
 
-  <po-field-container-bottom [p-error-pattern]="errorMsg"></po-field-container-bottom>
+  <po-field-container-bottom [p-help]="help" [p-error-pattern]="errorMsg"></po-field-container-bottom>
 </po-field-container>
