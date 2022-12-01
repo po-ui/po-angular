@@ -43,6 +43,9 @@ export class PoChartTooltipDirective {
     this.renderer.addClass(this.tooltipElement, 'po-chart-tooltip');
     this.renderer.addClass(this.tooltipElement, 'po-tooltip');
 
+    this.renderer.setStyle(this.tooltipElement, 'transition', 'visibility .3s, opacity .3s linear');
+    this.renderer.setStyle(this.tooltipElement, 'opacity', 0.9);
+
     const divArrow = this.renderer.createElement('div');
     this.renderer.addClass(divArrow, 'po-tooltip-arrow');
     this.renderer.addClass(divArrow, 'po-arrow-bottom');
@@ -60,11 +63,13 @@ export class PoChartTooltipDirective {
   }
 
   private hideTooltip() {
-    this.renderer.addClass(this.tooltipElement, 'po-invisible');
+    this.renderer.setStyle(this.tooltipElement, 'opacity', 0);
+    this.renderer.setStyle(this.tooltipElement, 'visibility', 'hidden');
   }
 
   private showTooltip() {
-    this.renderer.removeClass(this.tooltipElement, 'po-invisible');
+    this.renderer.setStyle(this.tooltipElement, 'opacity', 0.9);
+    this.renderer.setStyle(this.tooltipElement, 'visibility', 'visible');
     this.updatetooltipTextContent();
   }
 
