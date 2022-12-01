@@ -1,7 +1,6 @@
 <po-field-container
   [class.po-date-picker-container-disabled]="disabled"
   [p-disabled]="disabled"
-  [p-help]="help"
   [p-label]="label"
   [p-optional]="optional"
   [p-required]="required"
@@ -68,7 +67,11 @@
     </div>
   </div>
 
-  <po-field-container-bottom [p-error-pattern]="getErrorMessage"></po-field-container-bottom>
+  <po-field-container-bottom
+    [p-help]="help"
+    [p-disabled]="disabled"
+    [p-error-pattern]="getErrorMessage"
+  ></po-field-container-bottom>
 </po-field-container>
 
 <ng-container *ngIf="isCalendarVisible">
