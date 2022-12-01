@@ -216,6 +216,30 @@ describe('PoTooltipDirective', () => {
     expect(directive.lastTooltipText).toBe(directive.tooltip);
   }));
 
+  it('onKeydown: should remove tooltip if emit code `Escape`', () => {
+    const newEvent = {
+      code: 'Escape'
+    };
+
+    spyOn(directive, 'removeTooltipAction');
+
+    directive.onKeyDown(newEvent);
+
+    expect(directive.removeTooltipAction).toHaveBeenCalled();
+  });
+
+  it('onKeydown: should remove tooltip if emit keyCode `27`', () => {
+    const newEvent = {
+      keyCode: 27
+    };
+
+    spyOn(directive, 'removeTooltipAction');
+
+    directive.onKeyDown(newEvent);
+
+    expect(directive.removeTooltipAction).toHaveBeenCalled();
+  });
+
   it('should add arrow class in addArrow', () => {
     directive.addArrow('test');
     expect(document.body.querySelectorAll('.po-arrow-test').length).toBeTruthy();
@@ -279,12 +303,21 @@ describe('PoTooltipDirective', () => {
     expect(directive.divContent.outerHTML.indexOf('abc') === -1).toBeTruthy();
   });
 
+  it('should`t concat the same text value', () => {
+    directive.lastTooltipText = 'Teste';
+    directive.tooltip = 'Teste\nTeste';
+
+    directive.updateTextContent();
+
+    expect(directive.divContent.textContent).toEqual('Teste');
+  });
+
   it('should hide tooltip when have tooltipContent', () => {
     spyOn(directive, <any>'removeScrollEventListener');
 
     directive.hideTooltip();
 
-    expect(directive.tooltipContent.classList.contains('po-invisible')).toBeTruthy();
+    expect(getComputedStyle(directive.tooltipContent).getPropertyValue('visibility')).toEqual('hidden');
     expect(directive['removeScrollEventListener']).toHaveBeenCalled();
   });
 

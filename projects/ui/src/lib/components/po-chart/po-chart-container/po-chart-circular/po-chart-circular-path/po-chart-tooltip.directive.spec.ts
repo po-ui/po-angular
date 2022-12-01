@@ -127,29 +127,25 @@ describe('PoChartTooltipDirective', () => {
       expect(directive.tooltipElement.classList.contains('po-tooltip')).toBeTruthy();
     });
 
-    it('hideTooltip: should add class `po-invisible`', () => {
+    it('hideTooltip: should set `hidden` in `visibility`', () => {
       directive.tooltip = 'TEXT';
-
-      spyOn(directive.renderer, <any>'addClass');
 
       directive['hideTooltip']();
 
       fixture.detectChanges();
 
-      expect(directive.renderer.addClass).toHaveBeenCalled();
+      expect(getComputedStyle(directive.tooltipElement).getPropertyValue('visibility')).toEqual('hidden');
     });
 
-    it('showTooltip: should add class `po-invisible`', () => {
+    it('showTooltip: should set `visible` in visibility', () => {
       directive.tooltip = 'TEXT';
 
-      spyOn(directive.renderer, <any>'removeClass');
       spyOn(directive, <any>'updatetooltipTextContent');
 
       directive['showTooltip']();
 
-      expect(directive.renderer.removeClass).toHaveBeenCalled();
       expect(directive['updatetooltipTextContent']).toHaveBeenCalled();
-      expect(directive.tooltipElement.classList.contains('po-invisible')).toBeFalsy();
+      expect(getComputedStyle(directive.tooltipElement).getPropertyValue('visibility')).toEqual('visible');
     });
 
     it('tooltipPosition: should add class `po-invisible`', () => {
