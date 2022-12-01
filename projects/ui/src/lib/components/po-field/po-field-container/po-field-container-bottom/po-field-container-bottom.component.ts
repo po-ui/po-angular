@@ -19,4 +19,8 @@ export class PoFieldContainerBottomComponent {
    * Obs: Esta mensagem não é apresentada quando o campo estiver vazio, mesmo que ele seja requerido.
    */
   @Input('p-error-pattern') errorPattern?: string = '';
+
+  @Input('p-disabled') disabled: boolean = false;
+
+  @Input('p-help') help?: string;
 }
