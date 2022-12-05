@@ -2,6 +2,13 @@
 
 All notable changes to this project will be documented in this file. See [standard-version](https://github.com/conventional-changelog/standard-version) for commit guidelines.
 
+## [14.12.1](https://github.com/po-ui/po-angular/compare/v14.12.0...v14.12.1) (2022-12-05)
+
+### Bug Fixes
+
+* **fields:** ajusta posicionamento do rich-text ([5127fcd](https://github.com/po-ui/po-style/commit/5127fcd8286930e03d3e1d19109a5d759794aab1))
+
+
 # [14.12.0](https://github.com/po-ui/po-angular/compare/v14.11.0...v14.12.0) (2022-12-05)
 
 
