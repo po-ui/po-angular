@@ -1,0 +1,27 @@
+<div #listbox class="po-listbox" [attr.p-type]="type" [hidden]="visible">
+  <ul class="po-listbox-list" *ngIf="items.length; else noItemsTemplate">
+    <li *ngFor="let item of items" class="po-listbox-item">
+      <po-item-list
+        [attr.data-item-list]="item | json"
+        [p-label]="item.label"
+        [p-value]="item.value"
+        [p-disabled]="item.disabled"
+        [p-selected]="item.selected"
+        [p-separator]="item.separator"
+        [p-danger]="item.danger"
+        [p-icon]="item.icon"
+        [p-type]="type"
+        [p-item]="item"
+        (p-select-item)="onSelectItem(item)"
+      ></po-item-list>
+    </li>
+  </ul>
+</div>
+
+<ng-template #noItemsTemplate>
+  <div class="po-listbox-no-items">
+    <div class="po-text-center">
+      <span>{{ literals.noItems }}</span>
+    </div>
+  </div>
+</ng-template>
