@@ -61,6 +61,12 @@ export class PoTooltipDirective extends PoTooltipBaseDirective implements OnInit
     }
   }
 
+  @HostListener('click') onMouseClick() {
+    if (!this.displayTooltip) {
+      this.removeTooltipAction();
+    }
+  }
+
   @HostListener('focusout') onFocusOut() {
     if (!this.displayTooltip) {
       this.removeTooltipAction();

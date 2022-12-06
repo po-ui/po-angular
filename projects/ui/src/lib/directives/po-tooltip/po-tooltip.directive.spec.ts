@@ -60,6 +60,26 @@ describe('PoTooltipDirective', () => {
       expect(spyRemoveTooltipAction).not.toHaveBeenCalled();
     });
 
+    it('mouseClick: shouldn`t call removeTooltipAction if `displayTooltip` is true', () => {
+      directive.displayTooltip = true;
+
+      const spyRemoveTooltipAction = spyOn(directive, <any>'removeTooltipAction');
+
+      directive.onMouseClick();
+
+      expect(spyRemoveTooltipAction).not.toHaveBeenCalled();
+    });
+
+    it('mouseClick: should call removeTooltipAction if `displayTooltip` is false', () => {
+      directive.displayTooltip = false;
+
+      const spyRemoveTooltipAction = spyOn(directive, <any>'removeTooltipAction');
+
+      directive.onMouseClick();
+
+      expect(spyRemoveTooltipAction).toHaveBeenCalled();
+    });
+
     it('focusout: shouldn`t call removeTooltipAction if `displayTooltip` is true', () => {
       directive.displayTooltip = true;
 
@@ -277,6 +297,33 @@ describe('PoTooltipDirective', () => {
 
     directive.onMouseEnter();
     directive.onMouseLeave();
+
+    tick(100);
+
+    expect(directive.hideTooltip).not.toHaveBeenCalled();
+    expect(directive.renderer.removeChild).toHaveBeenCalled();
+    expect(directive.tooltipContent).toBe(undefined);
+  }));
+  it('should call hideTooltip in mouse click', fakeAsync(() => {
+    spyOn(directive, 'hideTooltip');
+    directive.appendInBody = undefined;
+
+    directive.onMouseClick();
+
+    tick(100);
+
+    expect(directive.hideTooltip).toHaveBeenCalled();
+  }));
+
+  it('shouldn`t call hideTooltip in mouse click if `appendInBody` is true', fakeAsync(() => {
+    spyOn(directive, 'hideTooltip');
+    spyOn(directive.renderer, 'removeChild');
+    directive.appendInBody = true;
+    directive.tooltip = 'TEXT';
+    directive.tooltipContent = false;
+
+    directive.onMouseEnter();
+    directive.onMouseClick();
 
     tick(100);
 
