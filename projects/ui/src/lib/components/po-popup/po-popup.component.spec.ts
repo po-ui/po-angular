@@ -327,6 +327,26 @@ describe('PoPopupComponent:', () => {
       expect(component['removeListeners']).toHaveBeenCalled();
     });
 
+    it('checkAllActionIsInvisible: should return true is all itens are invisible', () => {
+      component.actions = [
+        { 'label': 'PO Popup', 'visible': false },
+        { 'label': 'PO Popup2', 'visible': false }
+      ];
+      const allInvisible = component['checkAllActionIsInvisible']();
+
+      expect(allInvisible).toBeTruthy();
+    });
+
+    it('checkAllActionIsInvisible: should return true is one item are visible', () => {
+      component.actions = [
+        { 'label': 'PO Popup', 'visible': false },
+        { 'label': 'PO Popup2', 'visible': true }
+      ];
+      const allInvisible = component['checkAllActionIsInvisible']();
+
+      expect(allInvisible).toBeFalsy();
+    });
+
     it(`closePopupOnClickout: should call 'close' if clickedOutDisabledItem, clickedOutTarget and
       clickedOutHeaderTemplate return true`, () => {
       spyOn(component, <any>'clickedOutDisabledItem').and.returnValue(true);
@@ -455,6 +475,11 @@ describe('PoPopupComponent:', () => {
         popupRef: {
           nativeElement: undefined
         },
+        listbox: {
+          nativeElement: {
+            querySelector: () => true
+          }
+        },
         target: undefined,
         position: undefined
       };
@@ -508,39 +533,6 @@ describe('PoPopupComponent:', () => {
       expect(nativeElement.querySelector('.po-popup')).toBeNull();
     });
 
-    it('should set class to default if type is different to danger', () => {
-      component.showPopup = true;
-
-      fixture.detectChanges();
-
-      expect(nativeElement.querySelectorAll('.po-popup-item-default').length).toBe(2);
-    });
-
-    it('should set class to danger if type is danger', () => {
-      component.showPopup = true;
-
-      fixture.detectChanges();
-
-      expect(nativeElement.querySelectorAll('.po-popup-item-danger').length).toBe(1);
-    });
-
-    it('should set class to separator if separator is true', () => {
-      component.showPopup = true;
-
-      fixture.detectChanges();
-
-      expect(nativeElement.querySelectorAll('.po-popup-item-separator').length).toBe(2);
-    });
-
-    it('should add `po-popup-item-selected` class if PopupAction.selected is true', () => {
-      component.actions = [{ label: 'PopupAction ', selected: true }];
-      component.showPopup = true;
-
-      fixture.detectChanges();
-
-      expect(nativeElement.querySelector('.po-popup-item-selected')).toBeTruthy();
-    });
-
     it('should not add `po-popup-item-selected` class if PopupAction.selected is false', () => {
       component.actions = [{ label: 'PopupAction ', selected: false }];
       component.showPopup = true;
@@ -548,15 +540,6 @@ describe('PoPopupComponent:', () => {
       fixture.detectChanges();
 
       expect(nativeElement.querySelector('.po-popup-item-selected')).toBeFalsy();
-    });
-
-    it('should display arrow.', () => {
-      component.hideArrow = false;
-      component.showPopup = true;
-
-      fixture.detectChanges();
-
-      expect(nativeElement.querySelector('.po-popup-arrow')).toBeTruthy();
     });
 
     it('shouldn´t display arrow.', () => {

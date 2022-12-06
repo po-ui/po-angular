@@ -19,6 +19,7 @@ import { PoServicesModule } from '../../services/services.module';
 import { PoTableModule } from '../po-table/po-table.module';
 import { PoTooltipModule } from './../../directives/po-tooltip/po-tooltip.module';
 import { PoIconModule } from '../po-icon/po-icon.module';
+import { PoListBoxModule } from '../po-listbox/po-listbox.module';
 
 import { PoComboComponent } from './po-combo/po-combo.component';
 import { PoComboOptionTemplateDirective } from './po-combo/po-combo-option-template/po-combo-option-template.directive';
@@ -91,7 +92,8 @@ import { PoLabelModule } from '../po-label';
     PoTooltipModule,
     PoIconModule,
     PoCheckboxModule,
-    PoLabelModule
+    PoLabelModule,
+    PoListBoxModule
   ],
   exports: [
     PoCheckboxGroupModule,

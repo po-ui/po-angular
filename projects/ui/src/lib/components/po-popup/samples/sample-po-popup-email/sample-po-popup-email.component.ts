@@ -14,10 +14,9 @@ import { PoModalAction, PoModalComponent, PoPopupAction } from '@po-ui/ng-compon
       }
 
       .sample-popup-header-template {
-        background-color: #0c9abe;
         border-top-left-radius: 3px;
         border-top-right-radius: 3px;
-        color: #ffffff;
+        color: #0c9abe;
         padding-bottom: 5%;
         padding-left: 25%;
         padding-top: 5%;

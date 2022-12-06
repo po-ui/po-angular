@@ -1,16 +1,6 @@
 import { TemplateRef } from '@angular/core';
 
-/**
- * @usedBy PoPopupComponent
- *
- * @description
- *
- * Interface para lista de ações do componente.
- */
-export interface PoPopupAction {
-  /** Rótulo da ação. */
-  label: string;
-
+export interface PoItemListAction {
   /**
    * Ação que será executada, sendo possível passar o nome ou a referência da função.
    *
@@ -19,6 +9,13 @@ export interface PoPopupAction {
    * Exemplo: `action: this.myFunction.bind(this)`
    */
   action?: Function;
+
+  /**
+   * Função que deve retornar um booleano para habilitar ou desabilitar a ação para o registro selecionado.
+   *
+   * Também é possível informar diretamente um valor booleano que vai habilitar ou desabilitar a ação para todos os registros.
+   */
+  disabled?: boolean | Function;
 
   /**
    * @description
@@ -62,32 +59,26 @@ export interface PoPopupAction {
    */
   icon?: string | TemplateRef<void>;
 
-  /** Atribui uma linha separadora acima do item. */
-  separator?: boolean;
-
-  /**
-   * Função que deve retornar um booleano para habilitar ou desabilitar a ação para o registro selecionado.
-   *
-   * Também é possível informar diretamente um valor booleano que vai habilitar ou desabilitar a ação para todos os registros.
-   */
-  disabled?: boolean | Function;
-
-  /**
-   * @description
-   *
-   * Define a cor do item, sendo `default` o padrão.
-   *
-   * Valores válidos:
-   *  - `default`
-   *  - `danger` - indicado para ações exclusivas (excluir, sair).
-   */
-  type?: string;
+  /** Rótulo da ação. */
+  label: string;
 
   /** URL utilizada no redirecionamento das páginas. */
   url?: string;
-
-  /** Define se a ação está selecionada. */
   selected?: boolean;
+
+  /** Atribui uma linha separadora acima do item. */
+  separator?: boolean;
+  /**
+   * @description
+   *
+   * Define a cor do item, sendo `action` o padrão.
+   *
+   * Valores válidos:
+   *  - `action`
+   *  - `check`
+   *  - `option`
+   */
+  type?: string;
 
   /**
    * @description
@@ -104,4 +95,12 @@ export interface PoPopupAction {
    *
    */
   visible?: boolean | Function;
+  /**
+   * @description
+   *
+   * Define se o item vai ter o estilo danger ou não.
+   *
+   * Deve ser usado para mostrar uma ação de exclusão ou de saída.
+   */
+  danger?: boolean;
 }
