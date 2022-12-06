@@ -39,6 +39,7 @@ import { PoIconModule } from './po-icon/po-icon.module';
 import { PoLinkModule } from './po-link/po-link.module';
 import { PoLabelModule } from './po-label/po-label.module';
 import { PoImageModule } from './po-image/po-image.module';
+import { PoListBoxModule } from './po-listbox/po-listbox.module';
 
 @NgModule({
   imports: [
@@ -61,6 +62,7 @@ import { PoImageModule } from './po-image/po-image.module';
     PoIconModule,
     PoInfoModule,
     PoListViewModule,
+    PoListBoxModule,
     PoLoadingModule,
     PoMenuModule,
     PoMenuPanelModule,
@@ -102,6 +104,7 @@ import { PoImageModule } from './po-image/po-image.module';
     PoIconModule,
     PoInfoModule,
     PoListViewModule,
+    PoListBoxModule,
     PoLoadingModule,
     PoMenuModule,
     PoMenuPanelModule,
