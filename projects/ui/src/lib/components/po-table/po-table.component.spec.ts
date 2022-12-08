@@ -8,7 +8,6 @@ import { HttpClientTestingModule } from '@angular/common/http/testing';
 
 import { of } from 'rxjs';
 import * as utilsFunctions from '../../utils/util';
-import { configureTestSuite, expectSettersMethod } from './../../util-test/util-expect.spec';
 import { PoColorPaletteService } from './../../services/po-color-palette/po-color-palette.service';
 import { PoControlPositionService } from '../../services/po-control-position/po-control-position.service';
 import { PoDateService } from '../../services/po-date/po-date.service';
@@ -193,15 +192,13 @@ describe('PoTableComponent:', () => {
     };
   }
 
-  configureTestSuite(() => {
-    TestBed.configureTestingModule({
+  beforeEach(async () => {
+    await TestBed.configureTestingModule({
       imports: [RouterTestingModule.withRoutes(routes), PoTableModule, HttpClientTestingModule],
       declarations: [TestMenuComponent, SearchComponent],
       providers: [PoControlPositionService, PoDateService, DecimalPipe, PoColorPaletteService, PoTableService]
-    });
-  });
+    }).compileComponents();
 
-  beforeEach(() => {
     initializeMocks();
 
     fixture = TestBed.createComponent(PoTableComponent);
@@ -3007,6 +3004,38 @@ describe('PoTableComponent:', () => {
     expect(valueWidth).toEqual(undefined);
   });
 
+  it('getWidthColumnManager, should return undefined if not contain column manager fixed', () => {
+    const fakeThis = {
+      height: 100,
+      columnManagerFixed: undefined
+    };
+
+    fixture.detectChanges();
+
+    const valueWidth = component['getWidthColumnManager'].call(fakeThis);
+
+    expect(valueWidth).toEqual(undefined);
+  });
+
+  it('getWidthColumnManager, should return value if contain column manager fixed', () => {
+    component.height = 100;
+
+    const fakeThis = {
+      height: 100,
+      columnManagerFixed: {
+        nativeElement: {
+          offsetWidth: 200
+        }
+      }
+    };
+
+    fixture.detectChanges();
+
+    const valueWidth = component['getWidthColumnManager'].call(fakeThis);
+
+    expect(valueWidth).toEqual(200);
+  });
+
   it('getWidthColumnManagerFixed, should return width of column manager', () => {
     const fakeThis = {
       height: 300,
@@ -3038,6 +3067,19 @@ describe('PoTableComponent:', () => {
     component['getColumnWidthActionsLeft'].call(fakeThis);
 
     expect(fakeThis.columnActionLeft.nativeElement.offsetWidth).toEqual(120);
+  });
+
+  it('columnActionLeft, should return undefined if not contain `columnActionLeftFixed`', () => {
+    const fakeThis = {
+      height: 120,
+      columnActionLeftFixed: undefined
+    };
+
+    fixture.detectChanges();
+
+    const valueExpect = component['getColumnWidthActionsLeft'].call(fakeThis);
+
+    expect(valueExpect).toEqual(undefined);
   });
 
   it('columnActionLeft, should return undefined if not contain actions on the left', () => {

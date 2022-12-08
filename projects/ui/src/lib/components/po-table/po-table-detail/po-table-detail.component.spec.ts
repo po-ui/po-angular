@@ -1,6 +1,6 @@
 import { ComponentFixture, TestBed } from '@angular/core/testing';
 
-import { expectPropertiesValues, configureTestSuite } from '../../../util-test/util-expect.spec';
+import { expectPropertiesValues } from '../../../util-test/util-expect.spec';
 
 import * as utilsFunctions from '../../../utils/util';
 
@@ -14,13 +14,11 @@ describe('PoTableDetailComponent', () => {
   let fixture: ComponentFixture<PoTableDetailComponent>;
   let nativeElement;
 
-  configureTestSuite(() => {
-    TestBed.configureTestingModule({
+  beforeEach(async () => {
+    await TestBed.configureTestingModule({
       imports: [PoTableModule]
-    });
-  });
+    }).compileComponents();
 
-  beforeEach(() => {
     fixture = TestBed.createComponent(PoTableDetailComponent);
     component = fixture.componentInstance;
 

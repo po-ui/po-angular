@@ -1,11 +1,9 @@
-import { ComponentRef, EventEmitter, Injector } from '@angular/core';
+import { ComponentRef, EventEmitter, Injectable, Injector } from '@angular/core';
 import { ComponentFixture, inject, TestBed, fakeAsync, tick, flush } from '@angular/core/testing';
 import { Routes } from '@angular/router';
 import { RouterTestingModule } from '@angular/router/testing';
 
 import { Observable, of } from 'rxjs';
-
-import { configureTestSuite } from './../../../util-test/util-expect.spec';
 
 import { PoComponentInjectorService } from '../../../services/po-component-injector/po-component-injector.service';
 import { PoControlPositionService } from '../../../services/po-control-position/po-control-position.service';
@@ -38,14 +36,12 @@ describe('PoLookupComponent:', () => {
   let fixture: ComponentFixture<PoLookupComponent>;
   const fakeSubscription = <any>{ unsubscribe: () => {} };
 
-  configureTestSuite(() => {
-    TestBed.configureTestingModule({
+  beforeEach(async () => {
+    await TestBed.configureTestingModule({
       imports: [RouterTestingModule.withRoutes(routes), PoFieldModule],
       providers: [LookupFilterService, PoComponentInjectorService, PoControlPositionService, Injector, NgControl]
-    });
-  });
+    }).compileComponents();
 
-  beforeEach(() => {
     fixture = TestBed.createComponent(PoLookupComponent);
     component = fixture.componentInstance;
     component.service = TestBed.inject(LookupFilterService);

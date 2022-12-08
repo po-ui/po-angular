@@ -1,6 +1,5 @@
 import { ComponentFixture, TestBed } from '@angular/core/testing';
 
-import { configureTestSuite } from './../../../util-test/util-expect.spec';
 import { PoColorPaletteEnum } from '../../../enums/po-color-palette.enum';
 import { PoColorPaletteService } from './../../../services/po-color-palette/po-color-palette.service';
 
@@ -13,14 +12,12 @@ describe('PoTableColumnLabelComponent:', () => {
   let component: PoTableColumnLabelComponent;
   let fixture: ComponentFixture<PoTableColumnLabelComponent>;
 
-  configureTestSuite(() => {
-    TestBed.configureTestingModule({
+  beforeEach(async () => {
+    await TestBed.configureTestingModule({
       imports: [PoTableModule],
       providers: [PoColorPaletteService]
-    });
-  });
+    }).compileComponents();
 
-  beforeEach(() => {
     fixture = TestBed.createComponent(PoTableColumnLabelComponent);
     component = fixture.componentInstance;
 

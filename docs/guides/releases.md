@@ -38,6 +38,11 @@ Consulte abaixo nossos guias de migração de versão para obter mais informaç�
         </tr>
       </thead>
       <tbody>
+      <tr class="po-table-row">
+          <td class="po-table-column">15.0.0-next.0</td>
+          <td class="po-table-column">15.0.0-next.0</td>
+          <td class="po-table-column"><a href="guides/migration-poui">Migração do PO UI</a></td>
+        </tr>
         <tr class="po-table-row">
           <td class="po-table-column">14.0.0</td>
           <td class="po-table-column">14.0.0</td>
@@ -78,12 +83,12 @@ Consulte abaixo nossos guias de migração de versão para obter mais informaç�
   </div>
 </div>
 
-> Conforme agenda de publicação de novas versões estáveis do Angular, nós atualizaremos nossas versões como de costume e aproveitaremos para fazer uma mudança na nomenclatura das nossas versões. A próxima `v7.x.x` será lançada como **`v14.x.x`**, assim `a versão 14.x.x do PO UI terá compatibilidade com a v14 do Angular` e assim por diante. [Mais informações](https://github.com/po-ui/po-angular/issues/1184).
+> Conforme agenda de publicação de novas versões estáveis do Angular, nós atualizamos nossas versões como de costume e aproveitaremos para fazer uma mudança na nomenclatura das nossas versões. A versão `v7.x.x` foi lançada como **`v14.x.x`**, assim `a versão 14.x.x do PO UI tem compatibilidade com a v14 do Angular` e assim por diante. [Mais informações](https://github.com/po-ui/po-angular/issues/1184).
 
 ## Versões prévias
 
 Permitimos que você visualize o que está por vir, fornecendo pré-lançamentos `next` ou Release Candidates (`rc`) para cada versão principal:
-- **Next**: a versão que está em desenvolvimento, com testes ativos e com breaking changes a resolver. O próximo lançamento é indicado por uma tag de lançamento anexada ao identificador `-next`, como `14.0.0-next.1`.
-- **Release Candidate**: um lançamento com recurso concluído, teste finalizado e sem breaking changes a resolver. Um candidato a lançamento é indicado por uma tag de lançamento anexada ao identificador `-rc`, como versão `14.0.0-rc.1`.
+- **Next**: a versão que está em desenvolvimento, com testes ativos e com breaking changes a resolver. O próximo lançamento é indicado por uma tag de lançamento anexada ao identificador `-next`, como `15.0.0-next.1`.
+- **Release Candidate**: um lançamento com recurso concluído, teste finalizado e sem breaking changes a resolver. Um candidato a lançamento é indicado por uma tag de lançamento anexada ao identificador `-rc`, como versão `15.0.0-rc.1`.
 
 A versão mais recente `next` ou de pré-lançamento `rc` fica disponível no [npm do projeto](https://www.npmjs.com/package/@po-ui/ng-components?activeTab=versions).

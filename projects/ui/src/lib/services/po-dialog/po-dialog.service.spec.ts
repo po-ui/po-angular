@@ -2,8 +2,6 @@ import { Component, NgModule } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { ComponentFixture, inject, TestBed } from '@angular/core/testing';
 
-import { configureTestSuite } from './../../util-test/util-expect.spec';
-
 import { PoComponentInjectorService } from './../po-component-injector/po-component-injector.service';
 import { PoDialogComponent } from './po-dialog.component';
 import { PoDialogService } from './po-dialog.service';
@@ -28,15 +26,13 @@ class TestComponent {
 describe('PoDialogService', () => {
   let fixture: ComponentFixture<TestComponent>;
 
-  configureTestSuite(() => {
-    TestBed.configureTestingModule({
+  beforeEach(async () => {
+    await TestBed.configureTestingModule({
       imports: [TestModule],
       providers: [PoDialogService],
       declarations: [TestComponent]
-    });
-  });
+    }).compileComponents();
 
-  beforeEach(() => {
     fixture = TestBed.createComponent(TestComponent);
 
     const modalContainer = document.body.querySelectorAll('po-modal');

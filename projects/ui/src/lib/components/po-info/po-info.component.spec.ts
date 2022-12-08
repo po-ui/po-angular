@@ -2,7 +2,6 @@ import { ComponentFixture, TestBed } from '@angular/core/testing';
 import { RouterModule } from '@angular/router';
 
 import * as UtilsFunctions from './../../utils/util';
-import { configureTestSuite } from './../../util-test/util-expect.spec';
 
 import { PoInfoBaseComponent } from './po-info-base.component';
 import { PoInfoComponent } from './po-info.component';
@@ -14,14 +13,12 @@ describe('PoInfoComponent', () => {
 
   let nativeElement: any;
 
-  configureTestSuite(() => {
-    TestBed.configureTestingModule({
-      imports: [RouterModule.forRoot([], { relativeLinkResolution: 'legacy' })],
+  beforeEach(async () => {
+    await TestBed.configureTestingModule({
+      imports: [RouterModule.forRoot([], {})],
       declarations: [PoInfoComponent]
-    });
-  });
+    }).compileComponents();
 
-  beforeEach(() => {
     fixture = TestBed.createComponent(PoInfoComponent);
     component = fixture.componentInstance;
 

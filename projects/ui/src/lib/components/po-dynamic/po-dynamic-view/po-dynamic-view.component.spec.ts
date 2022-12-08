@@ -4,8 +4,6 @@ import { SimpleChange } from '@angular/core';
 
 import { of } from 'rxjs';
 
-import { configureTestSuite } from './../../../util-test/util-expect.spec';
-
 import { PoDynamicModule } from '../po-dynamic.module';
 import { PoDynamicViewComponent } from './po-dynamic-view.component';
 import { PoDynamicViewService } from './po-dynamic-view.service';
@@ -15,14 +13,12 @@ describe('PoDynamicViewComponent:', () => {
   let fixture: ComponentFixture<PoDynamicViewComponent>;
   let nativeElement: any;
 
-  configureTestSuite(() => {
-    TestBed.configureTestingModule({
+  beforeEach(async () => {
+    await TestBed.configureTestingModule({
       imports: [PoDynamicModule],
       providers: [HttpClient, HttpHandler, PoDynamicViewService]
-    });
-  });
+    }).compileComponents();
 
-  beforeEach(() => {
     fixture = TestBed.createComponent(PoDynamicViewComponent);
     component = fixture.componentInstance;
     fixture.detectChanges();

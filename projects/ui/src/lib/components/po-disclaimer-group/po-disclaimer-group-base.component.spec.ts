@@ -96,14 +96,37 @@ describe('PoDisclaimerGroupBaseComponent:', () => {
         disclaimers: [{ value: 'house', label: 'House', property: 'house' }],
         previousDisclaimers: [{}],
         disclaimersAreChanged: () => true,
-        emitChangeDisclaimers: () => {}
+        emitChangeDisclaimers: () => {},
+        changeDetector: {
+          detectChanges: () => {}
+        }
       };
 
       spyOn(fakeThis, 'emitChangeDisclaimers');
+      spyOn(fakeThis.changeDetector, 'detectChanges');
 
       component['checkChanges'].call(fakeThis);
 
       expect(fakeThis.emitChangeDisclaimers).not.toHaveBeenCalled();
+      expect(fakeThis.changeDetector.detectChanges).not.toHaveBeenCalled();
+    });
+
+    it('checkChanges: shouldn`t call `detectChanges` if `diff` is undefined', () => {
+      const fakeThis = {
+        differ: undefined,
+        disclaimers: [{ value: 'house', label: 'House', property: 'house' }],
+        previousDisclaimers: [{}],
+        disclaimersAreChanged: () => true,
+        emitChangeDisclaimers: () => {},
+        changeDetector: {
+          detectChanges: () => {}
+        }
+      };
+      spyOn(fakeThis.changeDetector, 'detectChanges');
+
+      component['checkChanges'].call(fakeThis);
+
+      expect(fakeThis.changeDetector.detectChanges).toHaveBeenCalled();
     });
 
     it('checkChanges: shouldn`t call `emitChangeDisclaimers` if `disclaimersAreChanged` return `false`.', () => {

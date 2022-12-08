@@ -1,8 +1,6 @@
 import { ChangeDetectorRef } from '@angular/core';
 import { ComponentFixture, TestBed } from '@angular/core/testing';
 
-import { configureTestSuite } from './../../../util-test/util-expect.spec';
-
 import { PoCheckboxGroupComponent } from './po-checkbox-group.component';
 import { PoFieldContainerBottomComponent } from './../po-field-container/po-field-container-bottom/po-field-container-bottom.component';
 import { PoFieldContainerComponent } from '../po-field-container/po-field-container.component';
@@ -22,13 +20,11 @@ describe('PoCheckboxGroupComponent:', () => {
     }
   };
 
-  configureTestSuite(() => {
-    TestBed.configureTestingModule({
+  beforeEach(async () => {
+    await TestBed.configureTestingModule({
       declarations: [PoCheckboxGroupComponent, PoFieldContainerComponent, PoFieldContainerBottomComponent]
-    });
-  });
+    }).compileComponents();
 
-  beforeEach(() => {
     fixture = TestBed.createComponent(PoCheckboxGroupComponent);
 
     component = fixture.componentInstance;

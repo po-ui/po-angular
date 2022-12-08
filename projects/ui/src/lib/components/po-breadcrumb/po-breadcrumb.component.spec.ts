@@ -4,8 +4,6 @@ import { HttpClient, HttpHandler } from '@angular/common/http';
 import { Routes } from '@angular/router';
 import { RouterTestingModule } from '@angular/router/testing';
 
-import { configureTestSuite } from './../../util-test/util-expect.spec';
-
 import { PoBreadcrumbComponent } from './po-breadcrumb.component';
 import { PoBreadcrumbDropdownComponent } from './po-breadcrumb-dropdown/po-breadcrumb-dropdown.component';
 import { PoBreadcrumbFavoriteComponent } from './po-breadcrumb-favorite/po-breadcrumb-favorite.component';
@@ -47,8 +45,8 @@ describe('PoBreadcrumbComponent:', () => {
   const enableBreadcrumbResponsive = 'enableBreadcrumbResponsive';
   const wasClickedonDropdown = 'wasClickedonDropdown';
 
-  configureTestSuite(() => {
-    TestBed.configureTestingModule({
+  beforeEach(async () => {
+    await TestBed.configureTestingModule({
       imports: [RouterTestingModule.withRoutes(routes)],
       declarations: [
         PoBreadcrumbComponent,
@@ -59,10 +57,8 @@ describe('PoBreadcrumbComponent:', () => {
         GuidesComponent
       ],
       providers: [HttpClient, HttpHandler]
-    });
-  });
+    }).compileComponents();
 
-  beforeEach(() => {
     fixture = TestBed.createComponent(PoBreadcrumbComponent);
     component = fixture.componentInstance;
     component.items = items;

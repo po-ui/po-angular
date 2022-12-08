@@ -1,8 +1,6 @@
 import { ComponentFixture, fakeAsync, TestBed, tick } from '@angular/core/testing';
 import { Component } from '@angular/core';
 
-import { configureTestSuite } from './../../../util-test/util-expect.spec';
-
 import * as UtilsFunctions from '../../../utils/util';
 import { formatYear, setYearFrom0To100 } from '../../../utils/util';
 
@@ -26,14 +24,12 @@ describe('PoDatepickerComponent:', () => {
   let component: PoDatepickerComponent;
   let fixture: ComponentFixture<PoDatepickerComponent>;
 
-  configureTestSuite(() => {
-    TestBed.configureTestingModule({
+  beforeEach(async () => {
+    await TestBed.configureTestingModule({
       imports: [PoDatepickerModule, PoCalendarModule],
       providers: [PoCalendarService, PoCalendarLangService]
-    });
-  });
+    }).compileComponents();
 
-  beforeEach(() => {
     fixture = TestBed.createComponent(PoDatepickerComponent);
     component = fixture.componentInstance;
     component.label = 'Label de teste';
@@ -223,15 +219,13 @@ describe('PoDatepicker mocked with form', () => {
   let component: ContentProjectionComponent;
   let fixture: ComponentFixture<ContentProjectionComponent>;
 
-  configureTestSuite(() => {
-    TestBed.configureTestingModule({
+  beforeEach(async () => {
+    await TestBed.configureTestingModule({
       imports: [PoDatepickerModule],
       declarations: [ContentProjectionComponent],
       providers: [PoCalendarService, PoCalendarLangService]
-    });
-  });
+    }).compileComponents();
 
-  beforeEach(() => {
     fixture = TestBed.createComponent(ContentProjectionComponent);
     component = fixture.componentInstance;
   });
@@ -251,14 +245,12 @@ describe('PoDatepickerComponent:', () => {
   let component: PoDatepickerComponent;
   let fixture: ComponentFixture<PoDatepickerComponent>;
 
-  configureTestSuite(() => {
-    TestBed.configureTestingModule({
+  beforeEach(async () => {
+    await TestBed.configureTestingModule({
       imports: [PoDatepickerModule],
       providers: [PoCalendarService, PoCalendarLangService]
-    });
-  });
+    }).compileComponents();
 
-  beforeEach(() => {
     fixture = TestBed.createComponent(PoDatepickerComponent);
     component = fixture.componentInstance;
     component.label = 'Label de teste';

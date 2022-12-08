@@ -1,8 +1,6 @@
 import { ComponentFixture, TestBed } from '@angular/core/testing';
 import { RouterTestingModule } from '@angular/router/testing';
 
-import { configureTestSuite } from './../../../util-test/util-expect.spec';
-
 import { DocumentationComponent, GuidesComponent, routes } from './../po-breadcrumb.component.spec';
 import { PoBreadcrumbDropdownComponent } from './po-breadcrumb-dropdown.component';
 import { PoBreadcrumbItem } from './../po-breadcrumb-item.interface';
@@ -19,14 +17,12 @@ describe('PoBreadcrumbDropdownComponent:', () => {
     { label: 'Teste nível 4', link: '/test/nivel/4' }
   ];
 
-  configureTestSuite(() => {
-    TestBed.configureTestingModule({
+  beforeEach(async () => {
+    await TestBed.configureTestingModule({
       imports: [RouterTestingModule.withRoutes(routes)],
       declarations: [PoBreadcrumbDropdownComponent, DocumentationComponent, GuidesComponent]
-    });
-  });
+    }).compileComponents();
 
-  beforeEach(() => {
     fixture = TestBed.createComponent(PoBreadcrumbDropdownComponent);
     component = fixture.componentInstance;
     component.items = items;

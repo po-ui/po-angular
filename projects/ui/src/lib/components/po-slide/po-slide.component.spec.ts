@@ -3,8 +3,6 @@ import { BrowserAnimationsModule } from '@angular/platform-browser/animations';
 import { ComponentFixture, fakeAsync, TestBed, tick } from '@angular/core/testing';
 import { RouterTestingModule } from '@angular/router/testing';
 
-import { configureTestSuite } from '../../util-test/util-expect.spec';
-
 import { PoSlideCirclesComponent } from './po-slide-circles/po-slide-circles.component';
 import { PoSlideComponent } from './po-slide.component';
 import { PoSlideItemComponent } from './po-slide-item/po-slide-item.component';
@@ -16,14 +14,12 @@ describe('PoSlideComponent:', () => {
 
   let nativeElement: any;
 
-  configureTestSuite(() => {
-    TestBed.configureTestingModule({
+  beforeEach(async () => {
+    await TestBed.configureTestingModule({
       imports: [RouterTestingModule.withRoutes([]), BrowserAnimationsModule],
       declarations: [PoSlideCirclesComponent, PoSlideComponent, PoSlideControlComponent, PoSlideItemComponent]
-    });
-  });
+    }).compileComponents();
 
-  beforeEach(() => {
     fixture = TestBed.createComponent(PoSlideComponent);
     component = fixture.componentInstance;
 

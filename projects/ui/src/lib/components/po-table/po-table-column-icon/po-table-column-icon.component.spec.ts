@@ -1,7 +1,5 @@
 import { ComponentFixture, TestBed } from '@angular/core/testing';
 
-import { configureTestSuite } from './../../../util-test/util-expect.spec';
-
 import { PoTableColumnIcon } from './po-table-column-icon.interface';
 import { PoTableColumnIconComponent } from './po-table-column-icon.component';
 import { PoTableModule } from '../po-table.module';
@@ -12,13 +10,11 @@ describe('PoTableColumnIconComponent:', () => {
   let fixture: ComponentFixture<PoTableColumnIconComponent>;
   let nativeElement;
 
-  configureTestSuite(() => {
-    TestBed.configureTestingModule({
+  beforeEach(async () => {
+    await TestBed.configureTestingModule({
       imports: [PoTableModule, PoTooltipModule]
-    });
-  });
+    }).compileComponents();
 
-  beforeEach(() => {
     fixture = TestBed.createComponent(PoTableColumnIconComponent);
     component = fixture.componentInstance;
 

@@ -3,8 +3,6 @@ import { RouterTestingModule } from '@angular/router/testing';
 
 import { Observable } from 'rxjs';
 
-import { configureTestSuite } from './../../../util-test/util-expect.spec';
-
 import { PoMenuPanelItemComponent } from './po-menu-panel-item.component';
 import { PoMenuPanelItemsService } from '../services/po-menu-panel-items.service';
 import { PoTooltipModule } from '../../../directives/po-tooltip';
@@ -19,15 +17,13 @@ describe('PoMenuPanelItemComponent', () => {
 
   const menuItemInternal = { icon: 'user', label: 'Menu item test', type: 'internalLink', id: '11' };
 
-  configureTestSuite(() => {
-    TestBed.configureTestingModule({
+  beforeEach(async () => {
+    await TestBed.configureTestingModule({
       imports: [RouterTestingModule.withRoutes([]), PoTooltipModule],
       declarations: [PoMenuPanelItemComponent],
       providers: [PoMenuPanelItemsService]
-    });
-  });
+    }).compileComponents();
 
-  beforeEach(() => {
     fixture = TestBed.createComponent(PoMenuPanelItemComponent);
     component = fixture.componentInstance;
     nativeElement = fixture.debugElement.nativeElement;

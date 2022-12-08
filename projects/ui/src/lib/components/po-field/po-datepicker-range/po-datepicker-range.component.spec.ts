@@ -142,29 +142,29 @@ describe('PoDatepickerRangeComponent:', () => {
 
     it(`isDateRangeInputUncompleted: should return true if length of 'endDateInputValue' and 'startDateInputValue' is
       less than  10`, () => {
-      spyOnProperty(component, 'endDateInputValue').and.returnValue({ length: 5 });
-      spyOnProperty(component, 'startDateInputValue').and.returnValue({ length: 2 });
+      spyOnProperty(component, 'endDateInputValue').and.returnValue('01/12');
+      spyOnProperty(component, 'startDateInputValue').and.returnValue('01');
 
       expect(component.isDateRangeInputUncompleted).toBeTruthy();
     });
 
     it(`isDateRangeInputUncompleted: should return false if length of 'endDateInputValue' is 10`, () => {
-      spyOnProperty(component, 'endDateInputValue').and.returnValue({ length: 10 });
-      spyOnProperty(component, 'startDateInputValue').and.returnValue({ length: 2 });
+      spyOnProperty(component, 'endDateInputValue').and.returnValue('01/12/2023');
+      spyOnProperty(component, 'startDateInputValue').and.returnValue('01');
 
       expect(component.isDateRangeInputUncompleted).toBeFalsy();
     });
 
     it(`isDateRangeInputUncompleted: should return false if length of 'startDateInputValue' is 10`, () => {
-      spyOnProperty(component, 'endDateInputValue').and.returnValue({ length: 5 });
-      spyOnProperty(component, 'startDateInputValue').and.returnValue({ length: 10 });
+      spyOnProperty(component, 'endDateInputValue').and.returnValue('02/12');
+      spyOnProperty(component, 'startDateInputValue').and.returnValue('01/12/2023');
 
       expect(component.isDateRangeInputUncompleted).toBeFalsy();
     });
 
     it(`isDirtyDateRangeInput: should return false if length of 'endDateInputValue' and 'startDateInputValue' are 0`, () => {
-      spyOnProperty(component, 'endDateInputValue').and.returnValue({ length: 0 });
-      spyOnProperty(component, 'startDateInputValue').and.returnValue({ length: 0 });
+      spyOnProperty(component, 'endDateInputValue').and.returnValue('');
+      spyOnProperty(component, 'startDateInputValue').and.returnValue('');
 
       expect(component.isDirtyDateRangeInput).toBeFalsy();
     });
