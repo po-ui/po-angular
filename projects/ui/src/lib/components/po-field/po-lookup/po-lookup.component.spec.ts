@@ -15,6 +15,7 @@ import { PoLookupBaseComponent } from './po-lookup-base.component';
 import { PoLookupComponent } from './po-lookup.component';
 import { PoLookupFilter } from './interfaces/po-lookup-filter.interface';
 import { NgControl } from '@angular/forms';
+import { HttpClientTestingModule } from '@angular/common/http/testing';
 class LookupFilterService implements PoLookupFilter {
   getFilteredItems(params: any): Observable<any> {
     return of({ items: [{ value: 123, label: 'teste' }] });
@@ -40,7 +41,7 @@ describe('PoLookupComponent:', () => {
 
   configureTestSuite(() => {
     TestBed.configureTestingModule({
-      imports: [RouterTestingModule.withRoutes(routes), PoFieldModule],
+      imports: [RouterTestingModule.withRoutes(routes), PoFieldModule, HttpClientTestingModule],
       providers: [LookupFilterService, PoComponentInjectorService, PoControlPositionService, Injector, NgControl]
     });
   });

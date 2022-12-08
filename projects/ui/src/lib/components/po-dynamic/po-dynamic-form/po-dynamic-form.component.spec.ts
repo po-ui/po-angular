@@ -7,6 +7,7 @@ import { Observable, of, throwError } from 'rxjs';
 import { PoDynamicFormBaseComponent } from './po-dynamic-form-base.component';
 import { PoDynamicFormComponent } from './po-dynamic-form.component';
 import { PoDynamicModule } from '../po-dynamic.module';
+import { HttpClientTestingModule } from '@angular/common/http/testing';
 
 describe('PoDynamicFormComponent:', () => {
   let component: PoDynamicFormComponent;
@@ -16,7 +17,7 @@ describe('PoDynamicFormComponent:', () => {
 
   configureTestSuite(() => {
     TestBed.configureTestingModule({
-      imports: [PoDynamicModule],
+      imports: [PoDynamicModule, HttpClientTestingModule],
       providers: [NgForm]
     });
   });

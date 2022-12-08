@@ -7,6 +7,7 @@ import { PoFieldModule } from '../../po-field.module';
 import { PoButtonGroupModule } from '../../../po-button-group';
 import { PoModalModule } from '../../../po-modal/po-modal.module';
 import { PoRichTextImageModalComponent } from './po-rich-text-image-modal.component';
+import { HttpClientTestingModule } from '@angular/common/http/testing';
 
 describe('PoRichTextImageModalComponent', () => {
   let component: PoRichTextImageModalComponent;
@@ -15,7 +16,7 @@ describe('PoRichTextImageModalComponent', () => {
 
   configureTestSuite(() => {
     TestBed.configureTestingModule({
-      imports: [PoButtonGroupModule, PoModalModule, PoFieldModule],
+      imports: [PoButtonGroupModule, PoModalModule, PoFieldModule, HttpClientTestingModule],
       declarations: []
     });
   });
