@@ -57,6 +57,15 @@ xdescribe('Schematic: ng-add', () => {
 
       expect(fileContent).toContain(poModuleName);
     });
+
+    it('should add the httpClientModule to the project module', async () => {
+      const httpClientModuleName = 'HttpClientModule';
+
+      const tree = await runner.runSchematicAsync('ng-add-setup-project', componentOptions, appTree).toPromise();
+      const fileContent = getFileContent(tree, `projects/${componentOptions.name}/src/app/app.module.ts`);
+
+      expect(fileContent).toContain(httpClientModuleName);
+    });
   });
 
   describe('Theme configuration:', () => {
