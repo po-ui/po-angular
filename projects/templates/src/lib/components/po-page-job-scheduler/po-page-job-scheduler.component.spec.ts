@@ -9,6 +9,7 @@ import { getObservable } from '../../util-test/util-expect.spec';
 import { PoJobSchedulerInternal } from './interfaces/po-job-scheduler-internal.interface';
 import { PoPageJobSchedulerComponent } from './po-page-job-scheduler.component';
 import { PoPageJobSchedulerModule } from './po-page-job-scheduler.module';
+import { HttpClientTestingModule } from '@angular/common/http/testing';
 import { PoStepperOrientation } from '@po-ui/ng-components';
 import { HttpClientTestingModule } from '@angular/common/http/testing';
 
