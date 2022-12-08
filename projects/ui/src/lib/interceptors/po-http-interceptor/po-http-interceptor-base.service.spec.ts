@@ -10,8 +10,6 @@ import { HttpClientTestingModule, HttpTestingController } from '@angular/common/
 import { inject, TestBed } from '@angular/core/testing';
 import { NO_ERRORS_SCHEMA } from '@angular/core';
 
-import { configureTestSuite } from './../../util-test/util-expect.spec';
-
 import { PoComponentInjectorService } from '../../services/po-component-injector/po-component-injector.service';
 
 import { PoHttpInterceptorDetail } from './po-http-interceptor-detail/po-http-interceptor-detail.interface';
@@ -38,8 +36,8 @@ describe('PoHttpInterceptorBaseService', () => {
   let messages;
   let service;
 
-  configureTestSuite(() => {
-    TestBed.configureTestingModule({
+  beforeEach(async () => {
+    await TestBed.configureTestingModule({
       imports: [HttpClientTestingModule, PoHttpInterceptorModule],
       schemas: [NO_ERRORS_SCHEMA],
       providers: [
@@ -50,10 +48,8 @@ describe('PoHttpInterceptorBaseService', () => {
           multi: true
         }
       ]
-    });
-  });
+    }).compileComponents();
 
-  beforeEach(() => {
     mockErrorResponse = { status: 404, statusText: 'Bad Request' };
     mockWarningResponse = { status: 102, statusText: 'Processing', type: 'warning' };
     mockInfoResponse = { status: 102, statusText: 'Processing', type: 'info' };

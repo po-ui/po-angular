@@ -3,7 +3,6 @@ import { ComponentFixture, TestBed, fakeAsync, tick } from '@angular/core/testin
 import { of } from 'rxjs';
 
 import * as UtilsFunction from '../../../../utils/util';
-import { configureTestSuite } from './../../../../util-test/util-expect.spec';
 
 import { PoRichTextBodyComponent } from './po-rich-text-body.component';
 import { PoRichTextService } from '../po-rich-text.service';
@@ -13,14 +12,12 @@ describe('PoRichTextBodyComponent:', () => {
   let fixture: ComponentFixture<PoRichTextBodyComponent>;
   let nativeElement: any;
 
-  configureTestSuite(() => {
-    TestBed.configureTestingModule({
+  beforeEach(async () => {
+    await TestBed.configureTestingModule({
       declarations: [PoRichTextBodyComponent],
       providers: [PoRichTextService]
-    });
-  });
+    }).compileComponents();
 
-  beforeEach(() => {
     fixture = TestBed.createComponent(PoRichTextBodyComponent);
     component = fixture.componentInstance;
     fixture.detectChanges();

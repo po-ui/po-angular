@@ -9,7 +9,7 @@ import { AppComponent } from './app.component';
 
 @NgModule({
   declarations: [AppComponent],
-  imports: [BrowserModule, FormsModule, RouterModule.forRoot([], { relativeLinkResolution: 'legacy' }), PoModule],
+  imports: [BrowserModule, FormsModule, RouterModule.forRoot([], {}), PoModule],
   bootstrap: [AppComponent]
 })
 export class AppModule {}

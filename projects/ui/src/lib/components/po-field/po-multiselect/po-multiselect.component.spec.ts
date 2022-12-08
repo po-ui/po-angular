@@ -4,7 +4,6 @@ import { HttpClientTestingModule, HttpTestingController } from '@angular/common/
 import { Observable, of, throwError } from 'rxjs';
 
 import * as UtilsFunction from '../../../utils/util';
-import { configureTestSuite } from './../../../util-test/util-expect.spec';
 
 import { PoDisclaimerComponent } from './../../po-disclaimer/po-disclaimer.component';
 import { PoFieldContainerBottomComponent } from './../po-field-container/po-field-container-bottom/po-field-container-bottom.component';
@@ -37,8 +36,8 @@ describe('PoMultiselectComponent:', () => {
 
   const mockURL = 'rest/tecnologies';
 
-  configureTestSuite(() => {
-    TestBed.configureTestingModule({
+  beforeEach(async () => {
+    await TestBed.configureTestingModule({
       imports: [HttpClientTestingModule],
       declarations: [
         PoDisclaimerComponent,
@@ -50,10 +49,8 @@ describe('PoMultiselectComponent:', () => {
         PoFieldContainerBottomComponent
       ],
       providers: [HttpClient, HttpHandler, PoMultiselectFilterService]
-    });
-  });
+    }).compileComponents();
 
-  beforeEach(() => {
     fixture = TestBed.createComponent(PoMultiselectComponent);
     component = fixture.componentInstance;
     fnAdjustContainerPosition = component['adjustContainerPosition'];

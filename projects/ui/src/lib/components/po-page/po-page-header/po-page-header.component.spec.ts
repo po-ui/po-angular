@@ -4,8 +4,6 @@ import { HttpClient, HttpHandler } from '@angular/common/http';
 import { Routes } from '@angular/router';
 import { RouterTestingModule } from '@angular/router/testing';
 
-import { configureTestSuite } from './../../../util-test/util-expect.spec';
-
 import { PoBreadcrumbModule } from '../../po-breadcrumb/po-breadcrumb.module';
 import { PoPageHeaderComponent } from './po-page-header.component';
 
@@ -19,15 +17,13 @@ describe('PoPageHeaderComponent:', () => {
   let fixture: ComponentFixture<PoPageHeaderComponent>;
   let nativeElement;
 
-  configureTestSuite(() => {
-    TestBed.configureTestingModule({
+  beforeEach(async () => {
+    await TestBed.configureTestingModule({
       imports: [PoBreadcrumbModule, RouterTestingModule.withRoutes(routes)],
       declarations: [PoPageHeaderComponent, GuidesComponent],
       providers: [HttpClient, HttpHandler]
-    });
-  });
+    }).compileComponents();
 
-  beforeEach(() => {
     fixture = TestBed.createComponent(PoPageHeaderComponent);
     component = fixture.componentInstance;
 

@@ -3,8 +3,6 @@ import { RouterModule } from '@angular/router';
 
 import { of, EMPTY } from 'rxjs';
 
-import { configureTestSuite } from 'projects/ui/src/lib/util-test/util-expect.spec';
-
 import { PoNavbarActionsModule } from './po-navbar-actions/po-navbar-actions.module';
 import { PoNavbarItemsModule } from './po-navbar-items/po-navbar-items.module';
 import { PoNavbarItemNavigationModule } from './po-navbar-item-navigation/po-navbar-item-navigation.module';
@@ -19,8 +17,8 @@ describe('PoNavbarComponent:', () => {
   let component: PoNavbarComponent;
   let fixture: ComponentFixture<PoNavbarComponent>;
 
-  configureTestSuite(() => {
-    TestBed.configureTestingModule({
+  beforeEach(async () => {
+    await TestBed.configureTestingModule({
       declarations: [PoNavbarComponent, PoNavbarLogoComponent],
       imports: [
         BrowserAnimationsModule,
@@ -28,13 +26,11 @@ describe('PoNavbarComponent:', () => {
         PoNavbarItemsModule,
         PoNavbarItemNavigationModule,
         PoMenuModule,
-        RouterModule.forRoot([], { relativeLinkResolution: 'legacy' }),
+        RouterModule.forRoot([], {}),
         HttpClientTestingModule
       ]
-    });
-  });
+    }).compileComponents();
 
-  beforeEach(() => {
     fixture = TestBed.createComponent(PoNavbarComponent);
     component = fixture.componentInstance;
 

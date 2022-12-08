@@ -1,7 +1,6 @@
 import { ComponentFixture, TestBed } from '@angular/core/testing';
 
 import * as UtilsFunction from '../../../../utils/util';
-import { configureTestSuite } from '../../../../util-test/util-expect.spec';
 
 import { PoFieldModule } from '../../po-field.module';
 import { PoButtonGroupModule } from '../../../po-button-group';
@@ -14,14 +13,12 @@ describe('PoRichTextImageModalComponent', () => {
   let fixture: ComponentFixture<PoRichTextImageModalComponent>;
   let nativeElement;
 
-  configureTestSuite(() => {
-    TestBed.configureTestingModule({
+  beforeEach(async () => {
+    await TestBed.configureTestingModule({
       imports: [PoButtonGroupModule, PoModalModule, PoFieldModule, HttpClientTestingModule],
       declarations: []
-    });
-  });
+    }).compileComponents();
 
-  beforeEach(() => {
     fixture = TestBed.createComponent(PoRichTextImageModalComponent);
     component = fixture.componentInstance;
     nativeElement = fixture.debugElement.nativeElement;

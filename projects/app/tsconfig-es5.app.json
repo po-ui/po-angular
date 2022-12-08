@@ -1,7 +1,5 @@
 {
   "extends": "./tsconfig.app.json",
-  "compilerOptions": {
-    "target": "es2020"
-  },
+  "compilerOptions": {},
   "include": ["projects/app/src/**/*.d.ts"]
 }

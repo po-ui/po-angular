@@ -3,7 +3,7 @@ import { ComponentFixture, TestBed } from '@angular/core/testing';
 import { RouterTestingModule } from '@angular/router/testing';
 import { Router } from '@angular/router';
 
-import { changeBrowserInnerWidth, configureTestSuite } from '../../../util-test/util-expect.spec';
+import { changeBrowserInnerWidth } from '../../../util-test/util-expect.spec';
 
 import * as UtilsFunction from '../../../utils/util';
 
@@ -54,8 +54,8 @@ describe('PoPageDefaultComponent mobile', () => {
     navigate: jasmine.createSpy('navigate')
   };
 
-  configureTestSuite(() => {
-    TestBed.configureTestingModule({
+  beforeEach(async () => {
+    await TestBed.configureTestingModule({
       imports: [RouterTestingModule.withRoutes([]), PoBreadcrumbModule, PoButtonModule, PoDropdownModule],
       declarations: [
         MobileComponent,
@@ -65,10 +65,8 @@ describe('PoPageDefaultComponent mobile', () => {
         PoPageHeaderComponent
       ],
       providers: [{ provide: Router, useValue: routerStub }]
-    });
-  });
+    }).compileComponents();
 
-  beforeEach(() => {
     fixture = TestBed.createComponent(PoPageDefaultComponent);
     component = fixture.componentInstance;
 
@@ -153,8 +151,8 @@ describe('PoPageDefaultComponent desktop', () => {
   let fixture: ComponentFixture<PoPageDefaultComponent>;
   let desktopFixture: ComponentFixture<DesktopComponent>;
 
-  configureTestSuite(() => {
-    TestBed.configureTestingModule({
+  beforeEach(async () => {
+    await TestBed.configureTestingModule({
       imports: [RouterTestingModule.withRoutes([]), PoBreadcrumbModule, PoButtonModule, PoDropdownModule],
       declarations: [
         DesktopComponent,
@@ -163,10 +161,8 @@ describe('PoPageDefaultComponent desktop', () => {
         PoPageContentComponent,
         PoPageHeaderComponent
       ]
-    });
-  });
+    }).compileComponents();
 
-  beforeEach(() => {
     fixture = TestBed.createComponent(PoPageDefaultComponent);
     component = fixture.componentInstance;
 

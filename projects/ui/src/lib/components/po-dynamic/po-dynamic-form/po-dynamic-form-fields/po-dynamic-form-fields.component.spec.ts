@@ -4,8 +4,6 @@ import { SimpleChange } from '@angular/core';
 
 import { of } from 'rxjs';
 
-import { configureTestSuite } from './../../../../util-test/util-expect.spec';
-
 import { PoDynamicFormFieldsBaseComponent } from './po-dynamic-form-fields-base.component';
 import { PoDynamicFormFieldsComponent } from './po-dynamic-form-fields.component';
 import { PoDynamicModule } from '../../po-dynamic.module';
@@ -17,14 +15,12 @@ describe('PoDynamicFormFieldsComponent: ', () => {
 
   let nativeElement: any;
 
-  configureTestSuite(() => {
-    TestBed.configureTestingModule({
+  beforeEach(async () => {
+    await TestBed.configureTestingModule({
       imports: [FormsModule, ReactiveFormsModule, PoDynamicModule, HttpClientTestingModule],
       providers: [{ provide: NgForm, useValue: new NgForm(null, null) }]
-    });
-  });
+    }).compileComponents();
 
-  beforeEach(() => {
     fixture = TestBed.createComponent(PoDynamicFormFieldsComponent);
     component = fixture.componentInstance;
     component['form'] = <any>{ touched: true };

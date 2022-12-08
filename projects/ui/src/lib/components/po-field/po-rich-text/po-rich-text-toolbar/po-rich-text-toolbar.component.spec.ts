@@ -2,7 +2,6 @@ import { ComponentFixture, TestBed } from '@angular/core/testing';
 import { FormsModule } from '@angular/forms';
 
 import * as UtilsFunction from '../../../../utils/util';
-import { configureTestSuite } from '../../../../util-test/util-expect.spec';
 
 import { PoButtonGroupModule } from '../../../po-button-group';
 import { PoFieldModule } from '../../po-field.module';
@@ -16,14 +15,12 @@ describe('PoRichTextToolbarComponent:', () => {
   let fixture: ComponentFixture<PoRichTextToolbarComponent>;
   let nativeElement;
 
-  configureTestSuite(() => {
-    TestBed.configureTestingModule({
+  beforeEach(async () => {
+    await TestBed.configureTestingModule({
       imports: [FormsModule, PoButtonGroupModule, PoModalModule, PoTooltipModule, PoFieldModule, HttpClientModule],
       declarations: []
-    });
-  });
+    }).compileComponents();
 
-  beforeEach(() => {
     fixture = TestBed.createComponent(PoRichTextToolbarComponent);
     component = fixture.componentInstance;
     fixture.detectChanges();

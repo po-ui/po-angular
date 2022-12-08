@@ -1,6 +1,6 @@
 import { ComponentFixture, TestBed } from '@angular/core/testing';
 
-import { configureTestSuite, expectPropertiesValues } from './../../../util-test/util-expect.spec';
+import { expectPropertiesValues } from './../../../util-test/util-expect.spec';
 
 import { PoStepperModule } from '../po-stepper.module';
 import { PoStepperOrientation } from '../enums/po-stepper-orientation.enum';
@@ -13,13 +13,11 @@ describe('PoStepperStepComponent:', () => {
 
   let nativeElement: any;
 
-  configureTestSuite(() => {
-    TestBed.configureTestingModule({
+  beforeEach(async () => {
+    await TestBed.configureTestingModule({
       imports: [PoStepperModule]
-    });
-  });
+    }).compileComponents();
 
-  beforeEach(() => {
     fixture = TestBed.createComponent(PoStepperStepComponent);
     component = fixture.componentInstance;
 

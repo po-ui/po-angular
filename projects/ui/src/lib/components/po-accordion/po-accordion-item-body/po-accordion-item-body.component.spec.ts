@@ -2,8 +2,6 @@ import { BrowserAnimationsModule } from '@angular/platform-browser/animations';
 
 import { ComponentFixture, TestBed } from '@angular/core/testing';
 
-import { configureTestSuite } from './../../../util-test/util-expect.spec';
-
 import { PoAccordionItemBodyComponent } from './po-accordion-item-body.component';
 
 describe('PoAccordionItemBodyComponent:', () => {
@@ -12,14 +10,12 @@ describe('PoAccordionItemBodyComponent:', () => {
 
   let nativeElement: any;
 
-  configureTestSuite(() => {
-    TestBed.configureTestingModule({
+  beforeEach(async () => {
+    await TestBed.configureTestingModule({
       declarations: [PoAccordionItemBodyComponent],
       imports: [BrowserAnimationsModule]
-    });
-  });
+    }).compileComponents();
 
-  beforeEach(() => {
     fixture = TestBed.createComponent(PoAccordionItemBodyComponent);
     component = fixture.componentInstance;
 

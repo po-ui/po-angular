@@ -2,7 +2,7 @@ import { Directive, Injector, SimpleChanges } from '@angular/core';
 import { fakeAsync, inject, TestBed, tick } from '@angular/core/testing';
 import { UntypedFormControl, NgControl } from '@angular/forms';
 import { Observable, of, throwError } from 'rxjs';
-import { configureTestSuite, expectPropertiesValues, expectSettersMethod } from '../../../util-test/util-expect.spec';
+import { expectPropertiesValues, expectSettersMethod } from '../../../util-test/util-expect.spec';
 import * as ValidatorsFunctions from '../validators';
 import { PoLookupFilter } from './interfaces/po-lookup-filter.interface';
 import { PoLookupBaseComponent } from './po-lookup-base.component';
@@ -38,14 +38,12 @@ describe('PoLookupBaseComponent:', () => {
 
   const fakeSubscription = <any>{ unsubscribe: () => {} };
 
-  configureTestSuite(() => {
-    TestBed.configureTestingModule({
+  beforeEach(async () => {
+    await TestBed.configureTestingModule({
       declarations: [],
       providers: [LookupFilterService, Injector, NgControl, PoLookupModalService]
-    });
-  });
+    }).compileComponents();
 
-  beforeEach(() => {
     defaultService = new PoLookupFilterService(undefined);
     injector = TestBed.inject(Injector);
     poLookupModalService = TestBed.inject(PoLookupModalService);
@@ -303,6 +301,57 @@ describe('PoLookupBaseComponent:', () => {
     component.fieldValue = 'value';
     component.filterService = <any>{};
     const column = [{ label: 'apelido', property: 'nickname' }];
+
+    const changes: SimpleChanges = {
+      multiple: {
+        previousValue: false,
+        currentValue: false,
+        firstChange: true,
+        isFirstChange: () => false
+      },
+      columns: {
+        previousValue: false,
+        currentValue: column,
+        firstChange: true,
+        isFirstChange: () => false
+      }
+    };
+
+    spyOn(component['defaultService'], 'setConfig');
+
+    component.ngOnChanges(changes);
+
+    expect(component['defaultService'].setConfig).not.toHaveBeenCalled();
+  });
+
+  it(`ngOnChanges: shouldn't call poLookupModalService.setChangeColumns if is not change in columns`, () => {
+    component.multiple = false;
+    component.fieldValue = 'value';
+    component.filterService = <any>{};
+
+    const changes: SimpleChanges = {
+      multiple: {
+        previousValue: false,
+        currentValue: false,
+        firstChange: true,
+        isFirstChange: () => false
+      },
+      columns: undefined
+    };
+
+    spyOn(component.poLookupModalService, 'setChangeColumns');
+
+    component.ngOnChanges(changes);
+
+    expect(component.poLookupModalService.setChangeColumns).not.toHaveBeenCalled();
+  });
+
+  it(`ngOnChanges: shouldn't call defaultService if is not contain poLookupModalService`, () => {
+    component.multiple = false;
+    component.fieldValue = 'value';
+    component.filterService = <any>{};
+    const column = [{ label: 'apelido', property: 'nickname' }];
+    component.poLookupModalService = null;
 
     const changes: SimpleChanges = {
       multiple: {

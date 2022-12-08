@@ -4,7 +4,6 @@
     "baseUrl": ".",
     "outDir": "./dist/",
     "declarationMap": true,
-    "target": "es2020",
     "declaration": true,
     "inlineSources": true,
     "types": [],
