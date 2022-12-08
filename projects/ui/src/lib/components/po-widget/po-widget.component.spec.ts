@@ -2,8 +2,6 @@ import { ComponentFixture, TestBed } from '@angular/core/testing';
 
 import { Subject } from 'rxjs';
 
-import { configureTestSuite } from './../../util-test/util-expect.spec';
-
 import { PoContainerComponent } from '../po-container';
 import { PoWidgetComponent } from './po-widget.component';
 
@@ -11,13 +9,11 @@ describe('PoWidgetComponent with only body', () => {
   let component: PoWidgetComponent;
   let fixture: ComponentFixture<PoWidgetComponent>;
 
-  configureTestSuite(() => {
-    TestBed.configureTestingModule({
+  beforeEach(async () => {
+    await TestBed.configureTestingModule({
       declarations: [PoWidgetComponent, PoContainerComponent]
-    });
-  });
+    }).compileComponents();
 
-  beforeEach(() => {
     fixture = TestBed.createComponent(PoWidgetComponent);
     component = fixture.componentInstance;
     component.height = 200;
@@ -65,13 +61,11 @@ describe('PoWidgetComponent with title and actions', () => {
   const eventClick = document.createEvent('MouseEvent');
   eventClick.initEvent('click', false, true);
 
-  configureTestSuite(() => {
-    TestBed.configureTestingModule({
+  beforeEach(async () => {
+    await TestBed.configureTestingModule({
       declarations: [PoWidgetComponent, PoContainerComponent]
-    });
-  });
+    }).compileComponents();
 
-  beforeEach(() => {
     fixture = TestBed.createComponent(PoWidgetComponent);
     component = fixture.componentInstance;
     nativeElement = fixture.nativeElement;
@@ -668,13 +662,11 @@ describe('PoWidgetComponent with actions', () => {
   let component: PoWidgetComponent;
   let fixture: ComponentFixture<PoWidgetComponent>;
 
-  configureTestSuite(() => {
-    TestBed.configureTestingModule({
+  beforeEach(async () => {
+    await TestBed.configureTestingModule({
       declarations: [PoWidgetComponent, PoContainerComponent]
-    });
-  });
+    }).compileComponents();
 
-  beforeEach(() => {
     fixture = TestBed.createComponent(PoWidgetComponent);
     component = fixture.componentInstance;
     component.primaryAction = null;
@@ -698,13 +690,11 @@ describe('PoWidgetComponent with background and actions', () => {
 
   const image: string = 'http://lorempixel.com/400/400/';
 
-  configureTestSuite(() => {
-    TestBed.configureTestingModule({
+  beforeEach(async () => {
+    await TestBed.configureTestingModule({
       declarations: [PoWidgetComponent, PoContainerComponent]
-    });
-  });
+    }).compileComponents();
 
-  beforeEach(() => {
     fixture = TestBed.createComponent(PoWidgetComponent);
     component = fixture.componentInstance;
     component.primaryAction = null;

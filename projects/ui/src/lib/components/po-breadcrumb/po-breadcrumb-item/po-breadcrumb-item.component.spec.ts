@@ -1,8 +1,6 @@
 import { ComponentFixture, TestBed } from '@angular/core/testing';
 import { RouterTestingModule } from '@angular/router/testing';
 
-import { configureTestSuite } from './../../../util-test/util-expect.spec';
-
 import { DocumentationComponent, GuidesComponent, routes } from './../po-breadcrumb.component.spec';
 import { PoBreadcrumbItemComponent } from './po-breadcrumb-item.component';
 
@@ -13,14 +11,12 @@ describe('PoBreadcrumbItemComponent:', () => {
 
   const label = 'Documentation';
 
-  configureTestSuite(() => {
-    TestBed.configureTestingModule({
+  beforeEach(async () => {
+    await TestBed.configureTestingModule({
       imports: [RouterTestingModule.withRoutes(routes)],
       declarations: [PoBreadcrumbItemComponent, DocumentationComponent, GuidesComponent]
-    });
-  });
+    }).compileComponents();
 
-  beforeEach(() => {
     fixture = TestBed.createComponent(PoBreadcrumbItemComponent);
     component = fixture.componentInstance;
     component.label = label;

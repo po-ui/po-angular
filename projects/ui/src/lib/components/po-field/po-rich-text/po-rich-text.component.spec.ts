@@ -3,8 +3,6 @@ import { ComponentFixture, fakeAsync, TestBed, tick } from '@angular/core/testin
 import { FormsModule } from '@angular/forms';
 import { NO_ERRORS_SCHEMA } from '@angular/core';
 
-import { configureTestSuite } from './../../../util-test/util-expect.spec';
-
 import { PoFieldContainerBottomComponent } from '../po-field-container/po-field-container-bottom/po-field-container-bottom.component';
 import { PoFieldContainerComponent } from '../po-field-container/po-field-container.component';
 import { PoRichTextBodyComponent } from './po-rich-text-body/po-rich-text-body.component';
@@ -16,8 +14,8 @@ describe('PoRichTextComponent:', () => {
   let fixture: ComponentFixture<PoRichTextComponent>;
   let nativeElement;
 
-  configureTestSuite(() => {
-    TestBed.configureTestingModule({
+  beforeEach(async () => {
+    await TestBed.configureTestingModule({
       declarations: [
         PoFieldContainerBottomComponent,
         PoFieldContainerComponent,
@@ -27,10 +25,8 @@ describe('PoRichTextComponent:', () => {
       ],
       schemas: [NO_ERRORS_SCHEMA],
       imports: [BrowserAnimationsModule, FormsModule]
-    });
-  });
+    }).compileComponents();
 
-  beforeEach(() => {
     fixture = TestBed.createComponent(PoRichTextComponent);
     component = fixture.componentInstance;
     nativeElement = fixture.debugElement.nativeElement;

@@ -1,7 +1,6 @@
 import { ComponentFixture, fakeAsync, TestBed, tick } from '@angular/core/testing';
 
 import * as utilsFunctions from '../../../utils/util';
-import { configureTestSuite } from '../../../util-test/util-expect.spec';
 
 import { PoCheckboxGroupModule } from '../../po-field/po-checkbox-group/po-checkbox-group.module';
 import { PoFieldContainerModule } from '../../po-field/po-field-container/po-field-container.module';
@@ -15,14 +14,12 @@ describe('PoTableColumnManagerComponent:', () => {
   let component: PoTableColumnManagerComponent;
   let fixture: ComponentFixture<PoTableColumnManagerComponent>;
 
-  configureTestSuite(() => {
-    TestBed.configureTestingModule({
+  beforeEach(async () => {
+    await TestBed.configureTestingModule({
       declarations: [],
       imports: [PoCheckboxGroupModule, PoFieldContainerModule, PoPopoverModule, PoTableModule]
     }).compileComponents();
-  });
 
-  beforeEach(() => {
     fixture = TestBed.createComponent(PoTableColumnManagerComponent);
     component = fixture.componentInstance;
 

@@ -1,8 +1,6 @@
 import { ComponentFixture, TestBed } from '@angular/core/testing';
 import { RouterModule } from '@angular/router';
 
-import { configureTestSuite } from 'projects/ui/src/lib/util-test/util-expect.spec';
-
 import { PoNavbarActionPopupComponent } from './po-navbar-action-popup.component';
 import { PoPopupModule } from '../../../po-popup';
 
@@ -11,14 +9,12 @@ describe('PoNavbarActionPopupComponent:', () => {
   let fixture: ComponentFixture<PoNavbarActionPopupComponent>;
   let nativeElement: any;
 
-  configureTestSuite(() => {
-    TestBed.configureTestingModule({
+  beforeEach(async () => {
+    await TestBed.configureTestingModule({
       declarations: [PoNavbarActionPopupComponent],
-      imports: [PoPopupModule, RouterModule.forRoot([], { relativeLinkResolution: 'legacy' })]
-    });
-  });
+      imports: [PoPopupModule, RouterModule.forRoot([], {})]
+    }).compileComponents();
 
-  beforeEach(() => {
     fixture = TestBed.createComponent(PoNavbarActionPopupComponent);
     component = fixture.componentInstance;
     nativeElement = fixture.debugElement.nativeElement;

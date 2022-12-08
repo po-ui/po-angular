@@ -3,7 +3,6 @@ import { EventEmitter } from '@angular/core';
 import { HttpClient, HttpHandler } from '@angular/common/http';
 
 import * as utilsFunctions from '../../../utils/util';
-import { configureTestSuite } from './../../../util-test/util-expect.spec';
 import { PoButtonModule } from '../../po-button/po-button.module';
 import { PoContainerModule } from '../../po-container/po-container.module';
 import { PoProgressModule } from '../../po-progress/po-progress.module';
@@ -36,8 +35,8 @@ describe('PoUploadComponent:', () => {
   };
   let file: PoUploadFile;
 
-  configureTestSuite(() => {
-    TestBed.configureTestingModule({
+  beforeEach(async () => {
+    await TestBed.configureTestingModule({
       imports: [PoButtonModule, PoContainerModule, PoProgressModule, PoServicesModule],
       declarations: [
         PoUploadComponent,
@@ -50,10 +49,8 @@ describe('PoUploadComponent:', () => {
         PoUploadFileRestrictionsComponent
       ],
       providers: [HttpClient, HttpHandler, PoNotificationService, PoUploadService, PoLanguageService]
-    });
-  });
+    }).compileComponents();
 
-  beforeEach(() => {
     file = new PoUploadFile(fileMock);
 
     fixture = TestBed.createComponent(PoUploadComponent);

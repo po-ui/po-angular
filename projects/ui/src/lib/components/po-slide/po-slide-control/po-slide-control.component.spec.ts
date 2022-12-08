@@ -1,7 +1,5 @@
 import { ComponentFixture, TestBed } from '@angular/core/testing';
 
-import { configureTestSuite } from './../../../util-test/util-expect.spec';
-
 import { PoSlideControlComponent } from './po-slide-control.component';
 
 describe('PoSlideControlComponent:', () => {
@@ -9,13 +7,11 @@ describe('PoSlideControlComponent:', () => {
   let fixture: ComponentFixture<PoSlideControlComponent>;
   let nativeElement;
 
-  configureTestSuite(() => {
-    TestBed.configureTestingModule({
+  beforeEach(async () => {
+    await TestBed.configureTestingModule({
       declarations: [PoSlideControlComponent]
-    });
-  });
+    }).compileComponents();
 
-  beforeEach(() => {
     fixture = TestBed.createComponent(PoSlideControlComponent);
     component = fixture.componentInstance;
 

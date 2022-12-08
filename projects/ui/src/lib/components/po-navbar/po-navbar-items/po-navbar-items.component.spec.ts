@@ -15,7 +15,7 @@ describe('PoNavbarItemsComponent:', () => {
     waitForAsync(() => {
       TestBed.configureTestingModule({
         declarations: [PoNavbarItemsComponent, PoNavbarItemComponent],
-        imports: [RouterModule.forRoot([], { relativeLinkResolution: 'legacy' })]
+        imports: [RouterModule.forRoot([], {})]
       }).compileComponents();
     })
   );

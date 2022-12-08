@@ -1,8 +1,6 @@
 import { ComponentFixture, TestBed } from '@angular/core/testing';
 import { RouterTestingModule } from '@angular/router/testing';
 
-import { configureTestSuite } from '../../../util-test/util-expect.spec';
-
 import { PoTableColumnLinkComponent } from './po-table-column-link.component';
 import { PoTableModule } from '../po-table.module';
 import { PoTooltipModule } from '../../../directives/po-tooltip';
@@ -12,13 +10,11 @@ describe('PoTableColumnLinkComponent:', () => {
   let fixture: ComponentFixture<PoTableColumnLinkComponent>;
   let nativeElement;
 
-  configureTestSuite(() => {
-    TestBed.configureTestingModule({
+  beforeEach(async () => {
+    await TestBed.configureTestingModule({
       imports: [RouterTestingModule.withRoutes([]), PoTableModule, PoTooltipModule]
-    });
-  });
+    }).compileComponents();
 
-  beforeEach(() => {
     fixture = TestBed.createComponent(PoTableColumnLinkComponent);
     component = fixture.componentInstance;
 

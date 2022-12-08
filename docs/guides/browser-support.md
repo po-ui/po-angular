@@ -35,7 +35,7 @@ Atualmente o PO está homologado para os seguintes navegadores:
       </tr>
       <tr class="po-table-row">
         <th class="po-table-column">Android</th>
-        <td class="po-table-column">	Q (10.0), Pie (9.0), Oreo (8.0), Nougat (7.0)</td>
+        <td class="po-table-column">2 últimas versões principais</td>
       </tr>
     </tbody>
     </table>

@@ -1,7 +1,6 @@
 {
   "extends": "../../tsconfig.base.json",
   "compilerOptions": {
-    "target": "es2020",
     "module": "commonjs",
     "outDir": "../../out-tsc/spec",
     "types": ["jasmine", "node"]

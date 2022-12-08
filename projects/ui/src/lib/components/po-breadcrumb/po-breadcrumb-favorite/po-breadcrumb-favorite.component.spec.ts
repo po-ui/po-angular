@@ -3,8 +3,6 @@ import { HttpClientTestingModule } from '@angular/common/http/testing';
 
 import { Observable } from 'rxjs';
 
-import { configureTestSuite } from './../../../util-test/util-expect.spec';
-
 import { PoBreadcrumbFavoriteComponent } from './po-breadcrumb-favorite.component';
 import { PoBreadcrumbFavoriteService } from './po-breadcrumb-favorite.service';
 
@@ -20,14 +18,12 @@ describe('PoBreadcrumbFavoriteComponent', () => {
   const eventClick = document.createEvent('MouseEvents');
   eventClick.initEvent('click', false, true);
 
-  configureTestSuite(() => {
-    TestBed.configureTestingModule({
+  beforeEach(async () => {
+    await TestBed.configureTestingModule({
       imports: [HttpClientTestingModule],
       declarations: [PoBreadcrumbFavoriteComponent]
-    });
-  });
+    }).compileComponents();
 
-  beforeEach(() => {
     fixture = TestBed.createComponent(PoBreadcrumbFavoriteComponent);
     component = fixture.componentInstance;
     nativeElement = fixture.debugElement.nativeElement;

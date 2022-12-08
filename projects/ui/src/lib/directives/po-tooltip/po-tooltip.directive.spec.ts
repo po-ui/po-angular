@@ -2,8 +2,6 @@ import { Component } from '@angular/core';
 import { ComponentFixture, fakeAsync, TestBed, tick } from '@angular/core/testing';
 import { By } from '@angular/platform-browser';
 
-import { configureTestSuite } from './../../util-test/util-expect.spec';
-
 import { PoButtonModule } from '../../components/po-button/po-button.module';
 
 import { PoTooltipDirective } from './po-tooltip.directive';
@@ -25,14 +23,12 @@ describe('PoTooltipDirective', () => {
 
   let event;
 
-  configureTestSuite(() => {
-    TestBed.configureTestingModule({
+  beforeEach(async () => {
+    await TestBed.configureTestingModule({
       imports: [PoButtonModule],
       declarations: [PoTooltipDirective, TestComponent]
-    });
-  });
+    }).compileComponents();
 
-  beforeEach(() => {
     fixture = TestBed.createComponent(TestComponent);
 
     directiveElement = fixture.debugElement.query(By.directive(PoTooltipDirective));

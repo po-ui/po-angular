@@ -4,7 +4,7 @@ import { FormsModule, ReactiveFormsModule } from '@angular/forms';
 import { Router } from '@angular/router';
 import { RouterTestingModule } from '@angular/router/testing';
 
-import { changeBrowserInnerWidth, configureTestSuite } from '../../../util-test/util-expect.spec';
+import { changeBrowserInnerWidth } from '../../../util-test/util-expect.spec';
 
 import * as UtilsFunction from '../../../utils/util';
 
@@ -62,8 +62,8 @@ describe('PoPageListComponent - Mobile:', () => {
   let fixture: ComponentFixture<PoPageListComponent>;
   let mobileFixture: ComponentFixture<MobileComponent>;
 
-  configureTestSuite(() => {
-    TestBed.configureTestingModule({
+  beforeEach(async () => {
+    await TestBed.configureTestingModule({
       imports: [
         FormsModule,
         RouterTestingModule.withRoutes([]),
@@ -80,10 +80,8 @@ describe('PoPageListComponent - Mobile:', () => {
         PoPageContentComponent
       ],
       providers: [{ provide: Router, useValue: routerStub }]
-    });
-  });
+    }).compileComponents();
 
-  beforeEach(() => {
     fixture = TestBed.createComponent(PoPageListComponent);
     component = fixture.componentInstance;
 
@@ -151,8 +149,8 @@ describe('PoPageListComponent - Desktop:', () => {
   let desktopFixture: ComponentFixture<DesktopComponent>;
   let nativeElement: any;
 
-  configureTestSuite(() => {
-    TestBed.configureTestingModule({
+  beforeEach(async () => {
+    await TestBed.configureTestingModule({
       imports: [
         FormsModule,
         ReactiveFormsModule,
@@ -170,10 +168,8 @@ describe('PoPageListComponent - Desktop:', () => {
         PoPageContentComponent
       ],
       providers: [{ provide: Router, useValue: routerStub }]
-    });
-  });
+    }).compileComponents();
 
-  beforeEach(() => {
     fixture = TestBed.createComponent(PoPageListComponent);
     component = fixture.componentInstance;
 
