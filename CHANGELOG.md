@@ -2,6 +2,15 @@
 
 All notable changes to this project will be documented in this file. See [standard-version](https://github.com/conventional-changelog/standard-version) for commit guidelines.
 
+## [14.12.2](https://github.com/po-ui/po-angular/compare/v14.12.1...v14.12.2) (2022-12-12)
+
+
+### Bug Fixes
+
+* **tooltip:** corrige remoção da tooltip ([b2b2cc2](https://github.com/po-ui/po-angular/commit/b2b2cc2396f1e6e03dcbabc9ed76c5870247549d))
+
+
+
 ## [14.12.1](https://github.com/po-ui/po-angular/compare/v14.12.0...v14.12.1) (2022-12-05)
 
 ### Bug Fixes
