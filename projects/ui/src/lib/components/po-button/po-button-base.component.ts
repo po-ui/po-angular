@@ -124,33 +124,6 @@ export class PoButtonBaseComponent {
   }
 
   /**
-   * @deprecated 15.x.x
-   *
-   * @optional
-   *
-   * @description
-   *
-   * **Deprecated 15.x.x**. Utilizar `p-kind` no lugar.
-   *
-   * Define o estilo do `po-button`.
-   *
-   * Valore válidos:
-   *  - `default`: **Deprecated 15.x.x**. Utilizar `p-kind="secondary"`.
-   *  - `primary`: deixa o `po-button` com destaque, deve ser usado para ações primárias.
-   *  - `danger`: **Deprecated 15.x.x**. Utilizar `p-danger`.
-   *  - `link`: **Deprecated 15.x.x**. Utilizar `p-kind="tertiary"`.
-   *
-   * @default `secondary`
-   */
-  @Input('p-type') set type(value: string) {
-    this.kind = value;
-  }
-
-  get type(): string {
-    return this.kind;
-  }
-
-  /**
    * @optional
    *
    * @description
