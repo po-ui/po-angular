@@ -1,13 +1,12 @@
 <po-field-container
   [p-disabled]="disabled"
   [p-id]="id"
-  [p-help]="help"
   [p-label]="label"
   [p-optional]="optional"
   [p-required]="required"
   [p-show-required]="showRequired"
 >
-  <div class="po-field-container-content">
+  <div class="po-field-container-content po-field-container-content-datepicker">
     <div class="po-field-container-input">
       <input
         #inp
@@ -60,5 +59,9 @@
     </po-calendar>
   </div>
 
-  <po-field-container-bottom [p-error-pattern]="getErrorPattern()"></po-field-container-bottom>
+  <po-field-container-bottom
+    [p-help]="help"
+    [p-disabled]="disabled"
+    [p-error-pattern]="getErrorPattern()"
+  ></po-field-container-bottom>
 </po-field-container>

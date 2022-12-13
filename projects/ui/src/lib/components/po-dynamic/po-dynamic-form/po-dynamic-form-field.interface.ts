@@ -164,6 +164,16 @@ export interface PoDynamicFormField extends PoDynamicField {
   booleanFalse?: string;
 
   /**
+   * Indica se o `model` receberá o valor formatado pelas propriedades `p-label-on` e `p-label-off` ou
+   * apenas o valor puro (sem formatação).
+   *
+   * O valor padrão é: `false`.
+   *
+   * > Esta propriedade está disponivel  apenas para o `swicth`.
+   */
+  formatModel?: boolean;
+
+  /**
    * Valor máximo a ser informado no componente, podendo ser utilizado quando o tipo de dado por *number*, *date* ou *dateTime*.
    *
    * **Componentes compatíveis:** `po-datepicker`, `po-datepicker-range`, `po-number`, `po-decimal`

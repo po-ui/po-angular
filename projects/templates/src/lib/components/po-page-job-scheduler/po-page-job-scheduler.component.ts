@@ -213,7 +213,9 @@ export class PoPageJobSchedulerComponent extends PoPageJobSchedulerBaseComponent
       title: this.literals.confirmation,
       message: confirmMessage,
       confirm: () => {
-        const model = { ...this.model };
+        const beforeSendModel = this.beforeSendAction ? this.beforeSendAction(this.model) : undefined;
+
+        const model = { ...(beforeSendModel || this.model) };
 
         this.save(model, paramId);
       }

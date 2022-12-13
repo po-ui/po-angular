@@ -1,4 +1,4 @@
-import { Component, IterableDiffers } from '@angular/core';
+import { Component, IterableDiffers, ChangeDetectionStrategy, ChangeDetectorRef } from '@angular/core';
 
 import { PoLanguageService } from '../../services/po-language/po-language.service';
 
@@ -28,10 +28,15 @@ import { PoDisclaimerGroupBaseComponent } from './po-disclaimer-group-base.compo
  */
 @Component({
   selector: 'po-disclaimer-group',
-  templateUrl: './po-disclaimer-group.component.html'
+  templateUrl: './po-disclaimer-group.component.html',
+  changeDetection: ChangeDetectionStrategy.OnPush
 })
 export class PoDisclaimerGroupComponent extends PoDisclaimerGroupBaseComponent {
-  constructor(differs: IterableDiffers, languageService: PoLanguageService) {
-    super(differs, languageService);
+  constructor(
+    differs: IterableDiffers,
+    languageService: PoLanguageService,
+    protected changeDetector: ChangeDetectorRef
+  ) {
+    super(differs, languageService, changeDetector);
   }
 }

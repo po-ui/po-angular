@@ -2,6 +2,62 @@
 
 All notable changes to this project will be documented in this file. See [standard-version](https://github.com/conventional-changelog/standard-version) for commit guidelines.
 
+## [14.12.2](https://github.com/po-ui/po-angular/compare/v14.12.1...v14.12.2) (2022-12-12)
+
+
+### Bug Fixes
+
+* **tooltip:** corrige remoção da tooltip ([b2b2cc2](https://github.com/po-ui/po-angular/commit/b2b2cc2396f1e6e03dcbabc9ed76c5870247549d))
+
+
+
+## [14.12.1](https://github.com/po-ui/po-angular/compare/v14.12.0...v14.12.1) (2022-12-05)
+
+### Bug Fixes
+
+* **fields:** ajusta posicionamento do rich-text ([5127fcd](https://github.com/po-ui/po-style/commit/5127fcd8286930e03d3e1d19109a5d759794aab1))
+
+
+# [14.12.0](https://github.com/po-ui/po-angular/compare/v14.11.0...v14.12.0) (2022-12-05)
+
+
+### Bug Fixes
+
+* **dynamic-table:** corrige a paginação do componente com chave composta ([79df19c](https://github.com/po-ui/po-angular/commit/79df19cdc7db5f3939d461fd4260dbdd673f0573))
+
+
+### Features
+
+* **checkbox:** reutiliza componente `po-label` ([57d1cd0](https://github.com/po-ui/po-angular/commit/57d1cd0efbd499a955f0c37169e0a76cf2863c8c))
+* **disclaimer:** implementa definições do AnimaliaDS ([0804593](https://github.com/po-ui/po-angular/commit/08045932c81eefb325de287f951a96dc5f084b57))
+* **dynamic-form:** estende propriedade `p-format-model` do `po-switch` ([45b1316](https://github.com/po-ui/po-angular/commit/45b13168c97bf0c4702e7450956ef3fa8db47257)), closes [#1423](https://github.com/po-ui/po-angular/issues/1423)
+* **dynamic-form:** permite a utilização da propriedade `showRequired` ([08f0bf5](https://github.com/po-ui/po-angular/commit/08f0bf51e49696509b958e2adbb37ee1c6b187b5))
+* **fields:** implementa definições do AnimaliaDS ([64e3090](https://github.com/po-ui/po-angular/commit/64e30900c6221b95270c4e7649e7557c24629b79))
+* **page-job-scheduler:** adiciona a propriedade `p-before-send` ([90813c8](https://github.com/po-ui/po-angular/commit/90813c8b79c4c71e7a15654db0cdd0baa9262df7)), closes [#1468](https://github.com/po-ui/po-angular/issues/1468)
+* **radio:** reutiliza componente `po-label` ([f6f4f1d](https://github.com/po-ui/po-angular/commit/f6f4f1d9a29f6ac63f135a7134997852393bf846))
+* **switch:** adiciona propriedade `p-format-model` ([906ccff](https://github.com/po-ui/po-angular/commit/906ccff6e0ffd1c17806b797ae5153cc19751040)), closes [#1423](https://github.com/po-ui/po-angular/issues/1423)
+* **switch:** reutiliza componente `po-label` ([a2644d4](https://github.com/po-ui/po-angular/commit/a2644d4293ddb0502b2b28bb93110f0f33877c55))
+* **tooltip:** implementa definições do AnimaliaDS ([882024f](https://github.com/po-ui/po-angular/commit/882024f05ee368f5334ecc5fc796d0c61fd23618))
+
+
+
+# [14.11.0](https://github.com/po-ui/po-angular/compare/v14.10.0...v14.11.0) (2022-11-28)
+
+
+### Bug Fixes
+
+* **datepicker:** ajuste estrutural ([9cb0555](https://github.com/po-ui/po-angular/commit/9cb0555e1604141058be2cdb81ab3e50fa97d600)), closes [#1551](https://github.com/po-ui/po-angular/issues/1551)
+* **http-request:** remove headers customizados ([dd620d7](https://github.com/po-ui/po-angular/commit/dd620d794c71ee78e2d7b8a895f81738714dd025))
+* **language:** ajusta configuração de linguagem ([70b63c0](https://github.com/po-ui/po-angular/commit/70b63c04437a365a7c97a76331798dd3ded0e73a))
+* **widget:** corrige comportamento indevido no componente ([d6db6e5](https://github.com/po-ui/po-angular/commit/d6db6e5b725f7227993246c587f15b33c318eb48))
+
+
+### Features
+
+* **datepicker:** suporte locale russo ([79b1a8b](https://github.com/po-ui/po-angular/commit/79b1a8b3fc547ab0462e83ecb4a428a5f0f2170b))
+
+
+
 # [14.10.0](https://github.com/po-ui/po-angular/compare/v14.9.1...v14.10.0) (2022-11-21)
 
 

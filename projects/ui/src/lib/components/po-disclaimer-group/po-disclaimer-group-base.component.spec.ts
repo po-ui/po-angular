@@ -1,3 +1,4 @@
+import { ChangeDetectorRef } from '@angular/core';
 import { expectSettersMethod } from './../../util-test/util-expect.spec';
 
 import * as UtilsFunction from '../../utils/util';
@@ -13,9 +14,11 @@ describe('PoDisclaimerGroupBaseComponent:', () => {
     find: () => ({ create: () => {} })
   };
 
+  let changeDetector: ChangeDetectorRef;
+
   const languageService = new PoLanguageService();
 
-  const component = new PoDisclaimerGroupBaseComponent(<any>differ, languageService);
+  const component = new PoDisclaimerGroupBaseComponent(<any>differ, languageService, changeDetector);
 
   it('should be created', () => {
     expect(component instanceof PoDisclaimerGroupBaseComponent).toBeTruthy();

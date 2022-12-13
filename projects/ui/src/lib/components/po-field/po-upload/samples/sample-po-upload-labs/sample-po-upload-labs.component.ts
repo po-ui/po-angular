@@ -32,6 +32,7 @@ export class SamplePoUploadLabsComponent implements OnInit {
     { value: 'multiple', label: 'Multiple upload' },
     { value: 'optional', label: 'Optional' },
     { value: 'required', label: 'Required' },
+    { value: 'showRequired', label: 'Show Required' },
     { value: 'restrictionsInfo', label: 'Hide Restrictions Info' },
     { value: 'selectButton', label: 'Hide Select Files Button' },
     { value: 'sendButton', label: 'Hide Send Files Button' }
@@ -92,7 +93,7 @@ export class SamplePoUploadLabsComponent implements OnInit {
     this.properties = [];
     this.restrictions = {};
     this.upload = undefined;
-    this.url = 'https://po-sample-api.herokuapp.com/v1/uploads/addFile';
+    this.url = 'https://po-sample-api.fly.dev/v1/uploads/addFile';
     this.headers = undefined;
     this.headersLabs = undefined;
   }
