@@ -35,7 +35,7 @@ xdescribe('Schematic: ng-add', () => {
       }
     });
   });
-
+  //ajustar
   describe('Dependencies:', () => {
     it('should update package.json with @po-ui/ng-sync dependencies and run nodePackageInstall', async () => {
       const tree = await runner.runSchematicAsync('ng-add', componentOptions, appTree).toPromise();

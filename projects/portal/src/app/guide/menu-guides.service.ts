@@ -21,7 +21,13 @@ export class MenuGuidesService {
       { label: 'Releases', link: 'guides/releases' },
       { label: 'Schematics', link: 'guides/schematics' },
       { label: 'Fundamentos do PO Sync', link: 'guides/sync-fundamentals' },
-      { label: 'Começando com o PO Sync', link: 'guides/sync-get-started' }
+      { label: 'Começando com o PO Sync', link: 'guides/sync-get-started' },
+      { label: 'Customizando cores do tema padrão', link: 'guides/colors-customization' },
+      { label: 'Criando um tema para o PO UI', link: 'guides/create-theme-customization' },
+      { label: 'Grid System', link: 'guides/grid-system' },
+      { label: 'Biblioteca de ícones', link: 'guides/icons' },
+      { label: 'Espaçamento', link: 'guides/spacing' },
+      { label: 'Tipografia', link: 'guides/typography' }
     );
   }
 }

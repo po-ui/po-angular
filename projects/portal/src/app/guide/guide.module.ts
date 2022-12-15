@@ -19,6 +19,12 @@ import { GuideReleasesComponent } from './guides/guide-releases/guide-releases.c
 import { GuideSchematicsComponent } from './guides/guide-schematics/guide-schematics.component';
 import { GuideSyncFundamentalsComponent } from './guides/guide-sync-fundamentals/guide-sync-fundamentals.component';
 import { GuideSyncGetStartedComponent } from './guides/guide-sync-get-started/guide-sync-get-started.component';
+import { GuideColorsCustomizationComponent } from './guides/guide-colors-customization/guide-colors-customization.component';
+import { GuideCreateThemeCustomizationComponent } from './guides/guide-create-theme-customization/guide-create-theme-customization.component';
+import { GuideGridSystemComponent } from './guides/guide-grid-system/guide-grid-system.component';
+import { GuideIconsComponent } from './guides/guide-icons/guide-icons.component';
+import { GuideSpacingComponent } from './guides/guide-spacing/guide-spacing.component';
+import { GuideTypographyComponent } from './guides/guide-typography/guide-typography.component';
 
 @NgModule({
   imports: [SharedModule, GuideRoutingModule],
@@ -37,7 +43,13 @@ import { GuideSyncGetStartedComponent } from './guides/guide-sync-get-started/gu
     GuideReleasesComponent,
     GuideSchematicsComponent,
     GuideSyncFundamentalsComponent,
-    GuideSyncGetStartedComponent
+    GuideSyncGetStartedComponent,
+    GuideColorsCustomizationComponent,
+    GuideCreateThemeCustomizationComponent,
+    GuideGridSystemComponent,
+    GuideIconsComponent,
+    GuideSpacingComponent,
+    GuideTypographyComponent
   ]
 })
 export class GuideModule {}

@@ -3,7 +3,7 @@ import { Injectable } from '@angular/core';
 import { fromEvent, merge, Observable, Subject } from 'rxjs';
 import { mapTo } from 'rxjs/operators';
 
-import { Network } from '@awesome-cordova-plugins/network/ngx';
+import { ConnectionStatus } from '@capacitor/network';
 
 import { PoNetworkStatus } from './../../models';
 
@@ -19,7 +19,7 @@ export class PoNetworkService {
   private networkTypeNow: Subject<{ status: boolean; type: string }>;
   private poNetworkStatus: PoNetworkStatus;
 
-  constructor(network: Network) {
+  constructor(network: ConnectionStatus) {
     this.initNetwork(network);
   }
 
@@ -54,15 +54,15 @@ export class PoNetworkService {
     );
   }
 
-  private initNetwork(network: Network) {
+  private initNetwork(network: ConnectionStatus) {
     this.networkTypeNow = new Subject();
     this.initSubscriber(network);
   }
 
-  private initSubscriber(network: Network) {
+  private initSubscriber(network: ConnectionStatus) {
     if (network) {
       this.getNavigatorStatus().subscribe(status => {
-        this.networkType = network.type;
+        this.networkType = network.connectionType;
         this.networkTypeNow.next({ status: status, type: this.networkType });
       });
     }

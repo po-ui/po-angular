@@ -1,8 +1,6 @@
 import { HttpClientModule } from '@angular/common/http';
 import { NgModule } from '@angular/core';
 
-import { Network } from '@awesome-cordova-plugins/network/ngx';
-
 import { PoEventSourcingService } from './services/po-event-sourcing/po-event-sourcing.service';
 import { PoHttpClientService } from './services/po-http-client/po-http-client.service';
 import { PoNetworkService } from './services/po-network/po-network.service';
@@ -22,8 +20,7 @@ import { PoSyncService } from './services/po-sync/po-sync.service';
     PoSchemaDefinitionService,
     PoSchemaService,
     PoSyncService,
-    PoHttpClientService,
-    Network
+    PoHttpClientService
   ],
   imports: [HttpClientModule]
 })

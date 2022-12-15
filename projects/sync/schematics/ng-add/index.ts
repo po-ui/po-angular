@@ -29,6 +29,7 @@ function addPoPackageAndInstall(): Rule {
     // install packages
     context.addTask(new NodePackageInstallTask());
     // Log de processamento
+    // ajustar
     context.logger.info(
       'Sync added successfully, please execute the commands `npm install cordova-plugin-network-information @awesome-cordova-plugins/network` and `ionic cap sync`'
     );
