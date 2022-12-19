@@ -2,7 +2,7 @@
 
 All notable changes to this project will be documented in this file. See [standard-version](https://github.com/conventional-changelog/standard-version) for commit guidelines.
 
-# [15.0.0-next.0](https://github.com/po-ui/po-angular/compare/v14.12.2...v15.0.0-next.0) (2022-12-19)
+# [15.0.0-next.1](https://github.com/po-ui/po-angular/compare/v14.12.2...v15.0.0-next.1) (2022-12-19)
 
 
 ### Build System
@@ -30,13 +30,11 @@ Remove as importações do `HttpClientModule` do projeto.
 Necessário agora, importar o `HttpClientModule` no módulo raíz
 da aplicação para o correto funcionamento da biblioteca.
 
-Fixes DTHFUI-6620
 * **button:** removida propriedade p-type
 
 Foi removida a propriedade p-type do po-button pois a mesma foi depreciada na versão 15.x.x. Utilizar p-kind no lugar.
 * deve ser utilizado o Angular v15
 
-Fixes DTHFUI-6883
 
 
 
