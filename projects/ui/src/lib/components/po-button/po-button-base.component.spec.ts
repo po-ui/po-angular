@@ -1,7 +1,7 @@
 import { PoButtonBaseComponent } from './po-button-base.component';
 
 import { expectPropertiesValues } from '../../util-test/util-expect.spec';
-import { PoButtonKind } from './po-button-type.enum';
+import { PoButtonKind } from './po-button-kind.enum';
 import { PoButtonSize } from './po-button-size.enum';
 import { ComponentFixture, TestBed } from '@angular/core/testing';
 

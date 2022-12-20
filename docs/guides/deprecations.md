@@ -26,29 +26,14 @@ A tabela a seguir lista todos os recursos depreciados, organizados pelo release 
       </thead>
       <tbody>
         <tr class="po-table-row">
-          <th class="po-table-column"><a href="documentation/po-chart">PoChart</a></th>
-          <td class="po-table-column">PoChartType.Gauge</td>
-          <td class="po-table-column" style="text-align: center;">v6</td>
+          <th class="po-table-column"><a href="documentation/po-button">PoButton</a></th>
+          <td class="po-table-column">p-type</td>
+          <td class="po-table-column" style="text-align: center;">v15</td>
         </tr>
         <tr class="po-table-row">
-          <th class="po-table-column"><a href="documentation/po-chart">PoChart</a></th>
-          <td class="po-table-column">PoChartSerie.value</td>
-          <td class="po-table-column" style="text-align: center;">v6</td>
-        </tr>
-        <tr class="po-table-row">
-          <th class="po-table-column"><a href="documentation/po-chart">PoChart</a></th>
-          <td class="po-table-column">PoChartSerie.category</td>
-          <td class="po-table-column" style="text-align: center;">v6</td>
-        </tr>
-        <tr class="po-table-row">
-          <th class="po-table-column"><a href="documentation/po-chart">PoChart</a></th>
-          <td class="po-table-column">PoChartGaugeSerie</td>
-          <td class="po-table-column" style="text-align: center;">v6</td>
-        </tr>
-        <tr class="po-table-row">
-          <th class="po-table-column"><a href="documentation/po-navbar">PoNavbar</a></th>
-          <td class="po-table-column">p-menu</td>
-          <td class="po-table-column" style="text-align: center;">v6</td>
+          <th class="po-table-column">Build</th>
+          <td class="po-table-column">HttpClientModule</td>
+          <td class="po-table-column" style="text-align: center;">v15</td>
         </tr>
       </tbody>
     </table>
@@ -61,130 +46,7 @@ A tabela a seguir lista todos os recursos depreciados, organizados pelo release 
 
 Esta seção contém uma lista completa de todos os recursos obsoletos com detalhes para ajudá-lo a planejar sua migração.
 
-
-### PoChart
-
-<div class="po-row">
-  <div class="po-xl-6 po-lg-8 po-md-10 po-sm-12">
-    <table class="po-table">
-      <thead>
-        <tr class="po-table-header">
-          <th class="po-table-header-ellipsis">Recurso</th>
-          <th class="po-table-header-ellipsis">Substituição</th>
-          <th class="po-table-header-ellipsis">Anúncio da Depreciação</th>
-          <th class="po-table-header-ellipsis">Removido em</th>
-        </tr>
-      </thead>
-      <tbody>
-        <tr class="po-table-row">
-          <th class="po-table-column">PoChartType.Gauge</th>
-          <td class="po-table-column"><a href="documentation/po-gauge">PoGauge</a></td>
-          <td class="po-table-column" style="text-align: center;">v4</td>
-          <td class="po-table-column" style="text-align: center;">v6</td>
-        </tr>
-        <tr class="po-table-row">
-          <th class="po-table-column">PoChartSerie.value</th>
-          <td class="po-table-column">PoChartSerie.data</td>
-          <td class="po-table-column" style="text-align: center;">v4</td>
-          <td class="po-table-column" style="text-align: center;">v6</td>
-        </tr>
-        <tr class="po-table-row">
-          <th class="po-table-column">PoChartSerie.category</th>
-          <td class="po-table-column">PoChartSerie.label</td>
-          <td class="po-table-column" style="text-align: center;">v4</td>
-          <td class="po-table-column" style="text-align: center;">v6</td>
-        </tr>
-        <tr class="po-table-row">
-          <th class="po-table-column">PoChartGaugeSerie</th>
-          <td class="po-table-column"><a href="documentation/po-gauge">PoGauge</a></td>
-          <td class="po-table-column" style="text-align: center;">v4</td>
-          <td class="po-table-column" style="text-align: center;">v6</td>
-        </tr>
-      </tbody>
-    </table>
-  </div>
-</div>
-
-#### Deprecia PoChartType.Gauge
-
-Indicamos o uso do novo componente `po-gauge`.
-
-Antes:
-```
-// html
-<po-chart [p-type]="type" ...></po-chart>
-
-//ts
-import { PoChartType } from '@po-ui/ng-components';
-...
-
-type: PoChartType = PoChartType.Gauge;
-```
-
-Depois:
-```
-// html
-<po-gauge ...></po-gauge>
-```
-
-#### Deprecia PoChartSerie.value
-
-Deve ser utilizada a propriedade `PoChartSerie.data`.
-
-Antes:
-```
-// html
-<po-chart [p-series]="[ { label: 'Angular', value: 100 }, ... ]"></po-chart>
-```
-
-Depois:
-```
-// html
-<po-chart [p-series]="[ { label: 'Angular', data: 100 }, ... ]"></po-chart>
-```
-
-#### Deprecia PoChartSerie.category
-
-Deve ser utilizada a propriedade `PoChartSerie.label`.
-
-Antes:
-```
-// html
-<po-chart [p-series]="[ { category: 'Angular', data: 100 }, ... ]"></po-chart>
-```
-
-Depois:
-```
-// html
-<po-chart [p-series]="[ { label: 'Angular', data: 100 }, ... ]"></po-chart>
-```
-
-#### Deprecia PoChartGaugeSerie
-
-Indicamos o uso do novo componente `po-gauge`.
-
-Antes:
-```
-// html
-<po-chart [p-series]="series" ...></po-chart>
-
-//ts
-import { PoChartGaugeSerie } from '@po-ui/ng-components';
-...
-
-series: PoChartGaugeSerie = {
-  value: 33,
-  description: 'description'
-};
-```
-
-Depois:
-```
-// html
-<po-gauge [p-value]="33" p-description="description"></po-gauge>
-```
-
-### PoNavbar
+### PoButton
 
 <div class="po-row">
   <div class="po-xl-6 po-lg-8 po-md-10 po-sm-12">
@@ -198,38 +60,114 @@ Depois:
         </tr>
       </thead>
       <tbody>
-        <tr class="po-table-row">
-          <th class="po-table-column">p-menu</th>
-          <td class="po-table-column" style="text-align: center;">Não se aplica.</td>
-          <td class="po-table-column" style="text-align: center;">v4</td>
+      <tr class="po-table-row">
+          <th class="po-table-column">p-type</th>
+          <td class="po-table-column"><a href="documentation/po-button">p-kind</a></td>
           <td class="po-table-column" style="text-align: center;">v6</td>
+          <td class="po-table-column" style="text-align: center;">v15</td>
         </tr>
       </tbody>
     </table>
   </div>
 </div>
 
-#### Deprecia p-menu
-
-O próprio componente faz o uso do menu corrente da aplicação para exibir seus itens quando estiver em resolução pequena.
+#### Deprecia p-type default
+Indicamos o uso da propriedade `p-kind` secondary
 
 Antes:
 ```
 // html
-<po-navbar [p-menu]="userMenu" ...></po-navbar>
-<div class="po-wrapper">
-  <po-menu #userMenu [p-menus]="[{ label: 'Item 1', link: '/' }]"></po-menu>
-</div>
+<po-button [p-type]="default" ...></po-button>
+
 ```
 
 Depois:
 ```
 // html
-<po-navbar ...></po-navbar>
+<po-button p-kind="secondary" ...></po-button>
+```
+
+#### Deprecia p-type primary
+Indicamos o uso da propriedade `p-kind` primary
+
+Antes:
+```
+// html
+<po-button [p-type]="primary" ...></po-button>
+
+```
+
+Depois:
+```
+// html
+<po-button p-kind="primary" ...></po-button>
+```
+
+#### Deprecia p-type link
+Indicamos o uso da propriedade `p-kind` tertiary
+
+Antes:
+```
+// html
+<po-button [p-type]="link" ...></po-button>
+
+```
+
+Depois:
+```
+// html
+<po-button p-kind="tertiary" ...></po-button>
+```
+
+#### Deprecia p-type danger
+Indicamos o uso da propriedade `p-danger` true
+
+Antes:
+```
+// html
+<po-button [p-type]="danger" ...></po-button>
+
+```
+
+Depois:
+```
+// html
+<po-button [p-danger]="true" ...></po-button>
+```
+
+### HttpClientModule
+> O módulo HttpClientModule foi removido do projeto não sendo mais importado diretamente nos componentes que o utilizavam e por motivos de boas práticas é necessário importar o HttpClientModule apenas no módulo principal da aplicação.
+
+Exemplo:
+```
+// app.module.ts
+...
+import { HttpClientModule } from '@angular/common/http';
+...
+
+@NgModule({
+  declarations: [
+    ...
+    AppComponent
+    ...
+  ],
+  imports: [
+    ...
+    HttpClientModule,
+    ...
+  ],
+  providers: [],
+  bootstrap: [
+    ...
+    AppComponent
+    ...
+    ]
+})
+export class AppModule { }
+
 ```
 
 ## Breaking Changes
-
 
 <div class="po-row">
   <div class="po-xl-6 po-lg-8 po-md-10 po-sm-12">
@@ -278,6 +216,36 @@ Depois:
           <td class="po-table-column">diminuição da altura em pequenas resoluções. <a href="https://animaliads.notion.site/Bot-o-fb3a921e8ba54bd38b39758c24613368">Ver mais</a></td>
           <td class="po-table-column">-</td>
           <td class="po-table-column" style="text-align: center;">v14</td>
+        </tr>
+        <tr class="po-table-row">
+          <th class="po-table-column"><a href="documentation/po-chart">PoChart</a></th>
+          <td class="po-table-column">PoChartGaugeSerie</td>
+          <td class="po-table-column"><a href="documentation/po-gauge">PoGauge</a></td>
+          <td class="po-table-column" style="text-align: center;">v6</td>
+        </tr>
+        <tr class="po-table-row">
+          <th class="po-table-column"><a href="documentation/po-chart">PoChart</a></th>
+          <td class="po-table-column">PoChartSerie.category</td>
+          <td class="po-table-column">PoChartSerie.label</td>
+          <td class="po-table-column" style="text-align: center;">v6</td>
+        </tr>
+        <tr class="po-table-row">
+          <th class="po-table-column"><a href="documentation/po-chart">PoChart</a></th>
+          <td class="po-table-column">PoChartSerie.value</td>
+          <td class="po-table-column">PoChartSerie.data</td>
+          <td class="po-table-column" style="text-align: center;">v6</td>
+        </tr>
+        <tr class="po-table-row">
+          <th class="po-table-column"><a href="documentation/po-chart">PoChart</a></th>
+          <td class="po-table-column">PoChartType.Gauge</td>
+          <td class="po-table-column"><a href="documentation/po-gauge">PoGauge</a></td>
+          <td class="po-table-column" style="text-align: center;">v6</td>
+        </tr>
+        <tr class="po-table-row">
+          <th class="po-table-column"><a href="documentation/po-navbar">PoNavBar</a></th>
+          <td class="po-table-column">p-menu</td>
+          <td class="po-table-column">-</td>
+          <td class="po-table-column" style="text-align: center;">v6</td>
         </tr>
         <tr class="po-table-row">
           <th class="po-table-column"><a href="documentation/po-chart">PoChart</a></th>

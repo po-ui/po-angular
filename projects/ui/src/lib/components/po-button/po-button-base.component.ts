@@ -3,7 +3,7 @@ import { EventEmitter, Input, Output, Directive, TemplateRef, HostBinding } from
 import { convertToBoolean } from '../../utils/util';
 import { InputBoolean } from '../../decorators';
 
-import { PoButtonKind } from './po-button-type.enum';
+import { PoButtonKind } from './po-button-kind.enum';
 import { PoButtonSize } from './po-button-size.enum';
 /**
  * @description
