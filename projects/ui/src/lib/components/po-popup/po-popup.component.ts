@@ -36,6 +36,7 @@ import { PoPopupBaseComponent } from './po-popup-base.component';
 })
 export class PoPopupComponent extends PoPopupBaseComponent {
   @ViewChild('popupRef', { read: ElementRef }) popupRef: ElementRef;
+  @ViewChild('listbox', { read: ElementRef }) listbox: ElementRef;
 
   constructor(
     viewContainerRef: ViewContainerRef,
@@ -130,7 +131,7 @@ export class PoPopupComponent extends PoPopupBaseComponent {
   }
 
   private hasContentToShow() {
-    return !!(this.popupRef.nativeElement && this.popupRef.nativeElement.clientHeight);
+    return !!(this.popupRef.nativeElement && this.listbox.nativeElement);
   }
 
   private initializeListeners() {
@@ -175,7 +176,7 @@ export class PoPopupComponent extends PoPopupBaseComponent {
 
   private setPosition() {
     this.poControlPosition.setElements(
-      this.popupRef.nativeElement,
+      this.listbox.nativeElement.querySelector('.po-listbox'),
       8,
       this.target,
       this.customPositions,
