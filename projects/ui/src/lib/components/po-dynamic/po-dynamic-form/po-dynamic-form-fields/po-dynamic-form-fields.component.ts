@@ -25,6 +25,8 @@ export class PoDynamicFormFieldsComponent extends PoDynamicFormFieldsBaseCompone
 
   private previousValue = {};
 
+  isLoadingValidate = true;
+
   constructor(
     titleCasePipe: TitleCasePipe,
     private validationService: PoDynamicFormValidationService,
@@ -65,10 +67,17 @@ export class PoDynamicFormFieldsComponent extends PoDynamicFormFieldsBaseCompone
       const { changedField, changedFieldIndex } = this.getField(property);
 
       if (changedField.validate) {
+        this.focus(changedField.property);
         await this.validateField(changedField, changedFieldIndex, visibleField);
       }
 
       this.triggerValidationOnForm(changedFieldIndex);
+      if (this.invalidField) {
+        this.form.controls[changedField.property].setErrors({ 'incorrect': true });
+        this.invalidField = false;
+        this.isLoadingValidate = true;
+        this.focus(changedField.property);
+      }
     }
 
     this.updatePreviousValue();
@@ -100,6 +109,8 @@ export class PoDynamicFormFieldsComponent extends PoDynamicFormFieldsBaseCompone
     if (validatedField.hasOwnProperty('value')) {
       this.value[field.property] = validatedField.value;
     }
+
+    this.invalidField = validatedField.invalid;
 
     this.changes.detectChanges();
 
@@ -144,6 +155,7 @@ export class PoDynamicFormFieldsComponent extends PoDynamicFormFieldsBaseCompone
     this.changes.detectChanges();
 
     try {
+      this.isLoadingValidate = false;
       const validatedField = await this.validationService.sendFieldChange(field, value).toPromise();
       this.applyFieldValidation(fieldIndex, validatedField);
     } catch {

@@ -1,7 +1,7 @@
+<po-loading-overlay [hidden]="isLoadingValidate" [p-screen-lock]="true"></po-loading-overlay>
 <div class="po-row" *ngIf="visibleFields && visibleFields.length > 0">
   <ng-container *ngFor="let field of visibleFields; trackBy: trackBy">
     <po-divider *ngIf="field?.divider?.trim()" class="po-sm-12" [p-label]="field.divider"> </po-divider>
-
     <po-datepicker
       #component
       *ngIf="compareTo(field.control, 'datepicker')"

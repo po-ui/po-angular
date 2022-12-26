@@ -28,6 +28,7 @@ export class PoDynamicFormFieldsBaseComponent {
   @Input('p-validate-on-input') validateOnInput: boolean;
 
   visibleFields: Array<PoDynamicFormFieldInternal> = [];
+  invalidField: boolean = false;
 
   private _fields: Array<PoDynamicFormField>;
   private _validateFields: Array<string>;

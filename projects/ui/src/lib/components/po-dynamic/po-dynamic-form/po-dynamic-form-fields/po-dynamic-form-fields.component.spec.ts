@@ -372,6 +372,16 @@ describe('PoDynamicFormFieldsComponent: ', () => {
       expect(component.value).toEqual(value);
     });
 
+    it('applyFieldValidation: should change invalidField variable value to true', () => {
+      const index = 0;
+      const validatedField = { field: { property: 'test2', required: false, visible: true }, invalid: true };
+
+      component.fields = [{ property: 'test1', required: true, visible: true }];
+
+      component['applyFieldValidation'](index, validatedField);
+      expect(component.invalidField).toEqual(true);
+    });
+
     it('applyFieldValidation: should call `detectChanges`', () => {
       const index = 1;
       const validatedField = { field: { property: 'test2', required: false, visible: true }, value: 'expected value' };
@@ -854,6 +864,21 @@ describe('PoDynamicFormFieldsComponent: ', () => {
         await component.onChangeField(component.visibleFields[0]);
 
         expect(component.visibleFields[0].disabled).toBe(true);
+      });
+
+      it('should marks the field as invalid', async () => {
+        const validate = () => ({
+          field: { disabled: true },
+          invalid: true
+        });
+
+        component.fields[0].validate = validate;
+
+        component.invalidField = true;
+        component['form'] = <any>{ touched: true, controls: { name: { setErrors: () => {} } } };
+
+        await component.onChangeField(component.visibleFields[0]);
+        expect(component.invalidField).toBe(false);
       });
 
       it('should update field of visibleFields with help', async () => {
