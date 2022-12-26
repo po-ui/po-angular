@@ -30,20 +30,20 @@ describe('PoPageContentComponent:', () => {
   let component: PoPageContentComponent;
   let fixture: ComponentFixture<PoPageContentComponent>;
 
-  // let fixtureDiv: ComponentFixture<ContentDivComponent>;
+  let fixtureDiv: ComponentFixture<ContentDivComponent>;
 
   const eventResize = document.createEvent('Event');
   eventResize.initEvent('resize', false, true);
 
   configureTestSuite(() => {
     TestBed.configureTestingModule({
-      declarations: [/*ContentDivComponent,*/ PoPageContentComponent]
+      declarations: [ContentDivComponent, PoPageContentComponent]
     });
   });
 
   beforeEach(() => {
-    // fixtureDiv = TestBed.createComponent(ContentDivComponent);
-    // fixtureDiv.detectChanges();
+    fixtureDiv = TestBed.createComponent(ContentDivComponent);
+    fixtureDiv.detectChanges();
 
     fixture = TestBed.createComponent(PoPageContentComponent);
     component = fixture.componentInstance;
@@ -90,15 +90,15 @@ describe('PoPageContentComponent:', () => {
       expect(component.height).toBe(`${valueExpected}px`);
     });
 
-    // xit('setHeightContent: should calculate height with bottom actions', () => {
-    //   const pageHeaderElement = fixtureDiv.debugElement.nativeElement.querySelector('.po-page-header') as HTMLElement;
-    //   const pageHeaderHeight = pageHeaderElement.offsetTop + pageHeaderElement.offsetHeight;
-    //   const bodyHeight = document.body.clientHeight;
-    //   const valueExpected = bodyHeight - pageHeaderHeight;
+    it('setHeightContent: should calculate height with bottom actions', () => {
+      const pageHeaderElement = fixtureDiv.debugElement.nativeElement.querySelector('.po-page-header') as HTMLElement;
+      const pageHeaderHeight = pageHeaderElement.offsetTop + pageHeaderElement.offsetHeight;
+      const bodyHeight = document.body.clientHeight;
+      const valueExpected = bodyHeight - pageHeaderHeight;
 
-    //   component.setHeightContent(pageHeaderElement);
+      component.setHeightContent(pageHeaderElement);
 
-    //   expect(component.height).toBe(`${valueExpected}px`);
-    // });
+      expect(component.height).toBe(`${valueExpected}px`);
+    });
   });
 });

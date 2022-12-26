@@ -1,7 +1,5 @@
 import { ComponentFixture, TestBed } from '@angular/core/testing';
 
-import { configureTestSuite } from './../../../util-test/util-expect.spec';
-
 import * as UtilsFunctions from '../../../utils/util';
 import { removeDuplicatedOptions } from '../../../utils/util';
 
@@ -16,14 +14,12 @@ describe('PoRadioGroupComponent:', () => {
 
   let debugElement;
 
-  configureTestSuite(() => {
-    TestBed.configureTestingModule({
+  beforeEach(async () => {
+    await TestBed.configureTestingModule({
       declarations: [PoRadioGroupComponent, PoFieldContainerComponent, PoFieldContainerBottomComponent],
       providers: []
-    });
-  });
+    }).compileComponents();
 
-  beforeEach(() => {
     fixture = TestBed.createComponent(PoRadioGroupComponent);
     component = fixture.componentInstance;
     component.label = 'Label de teste';

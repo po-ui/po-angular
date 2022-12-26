@@ -22,7 +22,7 @@ ng update @angular/cli@<version> @angular/core@<version> --force
 Por exemplo:
 
 ```
-ng update @angular/cli@14 @angular/core@14 --force
+ng update @angular/cli@15 @angular/core@15 --force
 ```
 
 > Para realizar a migração completa e avaliar se não precisa fazer alguma alteração veja o [**Guia de Upgrade do Angular**](https://update.angular.io/).
@@ -45,6 +45,8 @@ Para facilitar a migração do seu projeto para o PO UI mais recente, implementa
 Para realizar a migração, devemos executar o comando `ng update`, conforme exemplo abaixo. Mas antes verifique se comitou os arquivos alterados pela migração do Angular, se preferir você pode utilizar a
 *flag* `--allow-dirty` em conjunto.
 
+> O schematics de ng-update da versão 15.0.0-next.0 ainda está em desenvolvimento.
+
 ```
 ng update @po-ui/ng-components@<version> --allow-dirty --force
 ```
@@ -52,7 +54,7 @@ ng update @po-ui/ng-components@<version> --allow-dirty --force
 Por exemplo:
 
 ```
-ng update @po-ui/ng-components@14 --allow-dirty --force
+ng update @po-ui/ng-components@15.0.0-next.0 --allow-dirty --force
 ```
 
 > Caso ocorra um erro ao concluir o comando acima pode ser necessário fazer uma instalação limpa no projeto apagando a pasta `node_modules` e o arquivo `package-lock.json` e executando o comando `npm i --legacy-peer-deps` antes de realizar o `ng update`.
@@ -84,7 +86,7 @@ ng update @po-ui/ng-sync@<version> --allow-dirty --force
 Por exemplo:
 
 ```
-ng update @po-ui/ng-sync@14 --allow-dirty --force
+ng update @po-ui/ng-sync@15.0.0-next.0 --allow-dirty --force
 ```
 
 O `ng update` ajudará nas alterações necessárias para seu projeto, que será atualizar as versões dos pacotes:

@@ -1,7 +1,6 @@
 import { ComponentFixture, TestBed } from '@angular/core/testing';
 import { RouterModule } from '@angular/router';
 
-import { configureTestSuite } from 'projects/ui/src/lib/util-test/util-expect.spec';
 import * as utils from '../../../../utils/util';
 
 import { PoNavbarActionComponent } from './po-navbar-action.component';
@@ -11,14 +10,12 @@ describe('PoNavbarActionComponent:', () => {
   let component: PoNavbarActionComponent;
   let fixture: ComponentFixture<PoNavbarActionComponent>;
 
-  configureTestSuite(() => {
-    TestBed.configureTestingModule({
+  beforeEach(async () => {
+    await TestBed.configureTestingModule({
       declarations: [PoNavbarActionComponent],
-      imports: [PoTooltipModule, RouterModule.forRoot([], { relativeLinkResolution: 'legacy' })]
-    });
-  });
+      imports: [PoTooltipModule, RouterModule.forRoot([], {})]
+    }).compileComponents();
 
-  beforeEach(() => {
     fixture = TestBed.createComponent(PoNavbarActionComponent);
     component = fixture.componentInstance;
 

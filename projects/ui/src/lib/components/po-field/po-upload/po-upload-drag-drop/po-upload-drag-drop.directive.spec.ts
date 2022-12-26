@@ -2,8 +2,6 @@ import { By } from '@angular/platform-browser';
 import { Component } from '@angular/core';
 import { ComponentFixture, fakeAsync, TestBed, tick } from '@angular/core/testing';
 
-import { configureTestSuite } from './../../../../util-test/util-expect.spec';
-
 import { PoUploadDragDropDirective } from './po-upload-drag-drop.directive';
 
 @Component({
@@ -19,13 +17,11 @@ describe('PoUploadDragDropDirective:', () => {
 
   let event;
 
-  configureTestSuite(() => {
-    TestBed.configureTestingModule({
+  beforeEach(async () => {
+    await TestBed.configureTestingModule({
       declarations: [PoUploadDragDropDirective, TestComponent]
-    });
-  });
+    }).compileComponents();
 
-  beforeEach(() => {
     fixture = TestBed.createComponent(TestComponent);
 
     directiveElement = fixture.debugElement.query(By.directive(PoUploadDragDropDirective));
@@ -212,8 +208,6 @@ describe('PoUploadDragDropDirective:', () => {
       expect(directive['sendFeedback']).not.toHaveBeenCalled();
       expect(directive['getOnlyDirectories']).not.toHaveBeenCalled();
     });
-
-    describe('getFilesFromEntry:', () => {});
 
     it('should call `readFile` if `entry.isFile`', () => {
       const entry = {

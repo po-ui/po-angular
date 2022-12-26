@@ -12,6 +12,10 @@ import {
 const poModuleName = 'PoModule';
 const poModuleSourcePath = '@po-ui/ng-components';
 
+/** HttpClient Module name that will insert in app root module */
+const httpClientModuleName = 'HttpClientModule';
+const httpClientModuleSourcePath = '@angular/common/http';
+
 /**
  * Scaffolds the basics of a Angular Material application, this includes:
  *  - Add PO Module to app root module
@@ -21,6 +25,7 @@ const poModuleSourcePath = '@po-ui/ng-components';
 export default function (options: any): Rule {
   return chain([
     addModuleImportToRootModule(options, poModuleName, poModuleSourcePath),
+    addModuleImportToRootModule(options, httpClientModuleName, httpClientModuleSourcePath),
     addThemeToAppStyles(options),
     configureSideMenu(options)
   ]);

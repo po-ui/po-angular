@@ -1,4 +1,3 @@
-import { HttpClientModule } from '@angular/common/http';
 import { CommonModule } from '@angular/common';
 import { NgModule } from '@angular/core';
 
@@ -9,7 +8,7 @@ import { PoPageDynamicService } from './po-page-dynamic.service';
  * Módulo do serviço do po-page-dynamic-service.
  */
 @NgModule({
-  imports: [CommonModule, HttpClientModule],
+  imports: [CommonModule],
   providers: [PoPageDynamicService]
 })
 export class PoPageDynamicModule {}

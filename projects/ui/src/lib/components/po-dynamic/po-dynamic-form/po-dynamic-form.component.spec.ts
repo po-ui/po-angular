@@ -1,12 +1,12 @@
 import { ComponentFixture, fakeAsync, TestBed, tick } from '@angular/core/testing';
 import { NgForm } from '@angular/forms';
 
-import { configureTestSuite } from './../../../util-test/util-expect.spec';
 import { Observable, of, throwError } from 'rxjs';
 
 import { PoDynamicFormBaseComponent } from './po-dynamic-form-base.component';
 import { PoDynamicFormComponent } from './po-dynamic-form.component';
 import { PoDynamicModule } from '../po-dynamic.module';
+import { HttpClientTestingModule } from '@angular/common/http/testing';
 
 describe('PoDynamicFormComponent:', () => {
   let component: PoDynamicFormComponent;
@@ -14,14 +14,12 @@ describe('PoDynamicFormComponent:', () => {
 
   let nativeElement: any;
 
-  configureTestSuite(() => {
-    TestBed.configureTestingModule({
-      imports: [PoDynamicModule],
+  beforeEach(async () => {
+    await TestBed.configureTestingModule({
+      imports: [PoDynamicModule, HttpClientTestingModule],
       providers: [NgForm]
-    });
-  });
+    }).compileComponents();
 
-  beforeEach(() => {
     fixture = TestBed.createComponent(PoDynamicFormComponent);
     component = fixture.componentInstance;
 

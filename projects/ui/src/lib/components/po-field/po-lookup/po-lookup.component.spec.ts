@@ -1,11 +1,9 @@
-import { ComponentRef, EventEmitter, Injector } from '@angular/core';
+import { ComponentRef, EventEmitter, Injectable, Injector } from '@angular/core';
 import { ComponentFixture, inject, TestBed, fakeAsync, tick, flush } from '@angular/core/testing';
 import { Routes } from '@angular/router';
 import { RouterTestingModule } from '@angular/router/testing';
 
 import { Observable, of } from 'rxjs';
-
-import { configureTestSuite } from './../../../util-test/util-expect.spec';
 
 import { PoComponentInjectorService } from '../../../services/po-component-injector/po-component-injector.service';
 import { PoControlPositionService } from '../../../services/po-control-position/po-control-position.service';
@@ -15,6 +13,7 @@ import { PoLookupBaseComponent } from './po-lookup-base.component';
 import { PoLookupComponent } from './po-lookup.component';
 import { PoLookupFilter } from './interfaces/po-lookup-filter.interface';
 import { NgControl } from '@angular/forms';
+import { HttpClientTestingModule } from '@angular/common/http/testing';
 class LookupFilterService implements PoLookupFilter {
   getFilteredItems(params: any): Observable<any> {
     return of({ items: [{ value: 123, label: 'teste' }] });
@@ -38,14 +37,12 @@ describe('PoLookupComponent:', () => {
   let fixture: ComponentFixture<PoLookupComponent>;
   const fakeSubscription = <any>{ unsubscribe: () => {} };
 
-  configureTestSuite(() => {
-    TestBed.configureTestingModule({
-      imports: [RouterTestingModule.withRoutes(routes), PoFieldModule],
+  beforeEach(async () => {
+    await TestBed.configureTestingModule({
+      imports: [RouterTestingModule.withRoutes(routes), PoFieldModule, HttpClientTestingModule],
       providers: [LookupFilterService, PoComponentInjectorService, PoControlPositionService, Injector, NgControl]
-    });
-  });
+    }).compileComponents();
 
-  beforeEach(() => {
     fixture = TestBed.createComponent(PoLookupComponent);
     component = fixture.componentInstance;
     component.service = TestBed.inject(LookupFilterService);

@@ -3,7 +3,7 @@ import {
   Directive,
   EventEmitter,
   Inject,
-  InjectFlags,
+  InjectOptions,
   Injector,
   Input,
   OnChanges,
@@ -346,6 +346,10 @@ export abstract class PoLookupBaseComponent
 
   private control!: AbstractControl;
 
+  private injectOptions: InjectOptions = {
+    self: true
+  };
+
   /**
    * Serviço responsável por buscar os dados da tabela na janela. Pode ser informado um serviço que implemente a interface
    * `PoLookupFilter` ou uma URL.
@@ -674,7 +678,7 @@ export abstract class PoLookupBaseComponent
   }
 
   private setControl() {
-    const ngControl: NgControl = this.injector.get(NgControl, null, InjectFlags.Self);
+    const ngControl: NgControl = this.injector.get(NgControl, null, this.injectOptions);
 
     if (ngControl) {
       this.control = ngControl.control as UntypedFormControl;

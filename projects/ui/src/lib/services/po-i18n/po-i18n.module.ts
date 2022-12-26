@@ -1,4 +1,3 @@
-import { HttpClient, HttpClientModule } from '@angular/common/http';
 import { APP_INITIALIZER, ModuleWithProviders, NgModule } from '@angular/core';
 
 import { PoLanguageService } from './../po-language/po-language.service';
@@ -153,7 +152,7 @@ import { PoLanguageModule } from '../po-language/po-language.module';
  */
 
 @NgModule({
-  imports: [HttpClientModule, PoLanguageModule]
+  imports: [PoLanguageModule]
 })
 export class PoI18nModule {
   static config(config: PoI18nConfig): ModuleWithProviders<PoI18nModule> {
@@ -173,7 +172,7 @@ export class PoI18nModule {
         {
           provide: PoI18nService,
           useFactory: returnPoI18nService,
-          deps: [I18N_CONFIG, HttpClient, PoLanguageService]
+          deps: [I18N_CONFIG, PoLanguageService]
         }
       ]
     };

@@ -3,8 +3,6 @@ import { RouterModule } from '@angular/router';
 
 import { of, EMPTY } from 'rxjs';
 
-import { configureTestSuite } from 'projects/ui/src/lib/util-test/util-expect.spec';
-
 import { PoNavbarActionsModule } from './po-navbar-actions/po-navbar-actions.module';
 import { PoNavbarItemsModule } from './po-navbar-items/po-navbar-items.module';
 import { PoNavbarItemNavigationModule } from './po-navbar-item-navigation/po-navbar-item-navigation.module';
@@ -13,13 +11,14 @@ import { PoNavbarLogoComponent } from './po-navbar-logo/po-navbar-logo.component
 import { PoNavbarComponent } from './po-navbar.component';
 import { BrowserAnimationsModule } from '@angular/platform-browser/animations';
 import { changeBrowserInnerWidth } from 'projects/templates/src/lib/util-test/util-expect.spec';
+import { HttpClientTestingModule } from '@angular/common/http/testing';
 
 describe('PoNavbarComponent:', () => {
   let component: PoNavbarComponent;
   let fixture: ComponentFixture<PoNavbarComponent>;
 
-  configureTestSuite(() => {
-    TestBed.configureTestingModule({
+  beforeEach(async () => {
+    await TestBed.configureTestingModule({
       declarations: [PoNavbarComponent, PoNavbarLogoComponent],
       imports: [
         BrowserAnimationsModule,
@@ -27,12 +26,11 @@ describe('PoNavbarComponent:', () => {
         PoNavbarItemsModule,
         PoNavbarItemNavigationModule,
         PoMenuModule,
-        RouterModule.forRoot([], { relativeLinkResolution: 'legacy' })
+        RouterModule.forRoot([], {}),
+        HttpClientTestingModule
       ]
-    });
-  });
+    }).compileComponents();
 
-  beforeEach(() => {
     fixture = TestBed.createComponent(PoNavbarComponent);
     component = fixture.componentInstance;
 

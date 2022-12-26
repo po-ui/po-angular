@@ -3,7 +3,7 @@ import { Component } from '@angular/core';
 import { UntypedFormControl, FormsModule } from '@angular/forms';
 import { HttpClient, HttpHandler } from '@angular/common/http';
 
-import { expectPropertiesValues, configureTestSuite } from '../../../util-test/util-expect.spec';
+import { expectPropertiesValues } from '../../../util-test/util-expect.spec';
 
 import * as utilsFunctions from '../../../utils/util';
 import * as ValidatorsFunctions from '../validators';
@@ -40,15 +40,13 @@ describe('PoUploadBaseComponent:', () => {
     webkitRelativePath: ''
   };
 
-  configureTestSuite(() => {
-    TestBed.configureTestingModule({
+  beforeEach(async () => {
+    await TestBed.configureTestingModule({
       declarations: [PoUploadComponent],
       providers: [HttpClient, HttpHandler, PoUploadService, PoLanguageService],
       imports: [FormsModule]
-    });
-  });
+    }).compileComponents();
 
-  beforeEach(() => {
     fixture = TestBed.createComponent(PoUploadComponent);
     component = fixture.componentInstance;
 

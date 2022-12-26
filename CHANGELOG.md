@@ -2,6 +2,42 @@
 
 All notable changes to this project will be documented in this file. See [standard-version](https://github.com/conventional-changelog/standard-version) for commit guidelines.
 
+# [15.0.0-next.1](https://github.com/po-ui/po-angular/compare/v14.12.2...v15.0.0-next.1) (2022-12-19)
+
+
+### Build System
+
+* atualização para o angular 15 ([6339a2b](https://github.com/po-ui/po-angular/commit/6339a2be6de33d6a3367562d663f893d59efa683))
+* remove HttpClientModule ([e76556c](https://github.com/po-ui/po-angular/commit/e76556cbbe28d8c84a4c35eed91db63d21077892))
+
+
+### Code Refactoring
+
+* **button:** remove a propriedade p-type ([a227cb6](https://github.com/po-ui/po-angular/commit/a227cb6150f6a3bb9259a076cd3370ebc3ca9edc))
+
+
+### Features
+
+* **schematics:** adiciona módulo HttpClientModule ([e61551d](https://github.com/po-ui/po-angular/commit/e61551dc1c8aaa52825443650bf1ad73e5c3f81f))
+
+
+### BREAKING CHANGES
+
+* Remove `HttpClientModule`.
+
+Remove as importações do `HttpClientModule` do projeto.
+
+Necessário agora, importar o `HttpClientModule` no módulo raíz
+da aplicação para o correto funcionamento da biblioteca.
+
+* **button:** removida propriedade p-type
+
+Foi removida a propriedade p-type do po-button pois a mesma foi depreciada na versão 15.x.x. Utilizar p-kind no lugar.
+* deve ser utilizado o Angular v15
+
+
+
+
 ## [14.12.2](https://github.com/po-ui/po-angular/compare/v14.12.1...v14.12.2) (2022-12-12)
 
 
