@@ -36,9 +36,16 @@ export class PoTagBaseComponent {
   @Input('p-value') value: string;
 
   /**
+   * @deprecated 16.x.x
+   *
    * @optional
    *
    * @description
+   *
+   * **Deprecated 16.x.x**.
+   *
+   * > Por regras de acessibilidade a tag não terá mais evento de click. Indicamos o uso do `Po-button` ou `Po-link`
+   * caso deseje esse comportamento.
    *
    * Ação que será executada ao clicar sobre o `po-tag` e que receberá como parâmetro um objeto contendo o seu valor e tipo.
    */
@@ -46,7 +53,9 @@ export class PoTagBaseComponent {
 
   public readonly poTagOrientation = PoTagOrientation;
   public customColor;
+  public customTextColor;
   private _color?: string;
+  private _textColor?: string;
   private _icon?: boolean | string | TemplateRef<void>;
   private _inverse?: boolean;
   private _orientation?: PoTagOrientation = poTagOrientationDefault;
@@ -96,6 +105,45 @@ export class PoTagBaseComponent {
    *
    * @description
    *
+   * Determina a cor do texto da tag. As maneiras de customizar as cores são:
+   * - Hexadeximal, por exemplo `#c64840`;
+   * - RGB, como `rgb(0, 0, 165)`;
+   * - O nome da cor, por exemplo `blue`;
+   * - Usando uma das cores do tema do PO:
+   * Valores válidos:
+   *  - <span class="dot po-color-01"></span> `color-01`
+   *  - <span class="dot po-color-02"></span> `color-02`
+   *  - <span class="dot po-color-03"></span> `color-03`
+   *  - <span class="dot po-color-04"></span> `color-04`
+   *  - <span class="dot po-color-05"></span> `color-05`
+   *  - <span class="dot po-color-06"></span> `color-06`
+   *  - <span class="dot po-color-07"></span> `color-07`
+   *  - <span class="dot po-color-08"></span> `color-08`
+   *  - <span class="dot po-color-09"></span> `color-09`
+   *  - <span class="dot po-color-10"></span> `color-10`
+   *  - <span class="dot po-color-11"></span> `color-11`
+   *  - <span class="dot po-color-12"></span> `color-12`
+   *
+   * - Para uma melhor acessibilidade no uso do componente é recomendável utilizar cores com um melhor contraste em relação ao background.
+   *
+   * > **Atenção:** A propriedade `p-type` sobrepõe esta definição.
+   */
+  @Input('p-text-color') set textColor(value: string) {
+    this._textColor = poTagColors.includes(value) ? value : undefined;
+    if (this._textColor === undefined) {
+      CSS.supports('color', value) ? (this.customTextColor = value) : (this.customTextColor = undefined);
+    }
+  }
+
+  get textColor(): string {
+    return this._textColor;
+  }
+
+  /**
+   * @optional
+   *
+   * @description
+   *
    * Define ou ativa um ícone que será exibido ao lado do valor da *tag*.
    *
    * Quando `p-type` estiver definida, basta informar um valor igual a `true` para que o ícone seja exibido conforme descrições abaixo:
@@ -137,9 +185,13 @@ export class PoTagBaseComponent {
   }
 
   /**
+   * @deprecated 16.x.x
+   *
    * @optional
    *
    * @description
+   *
+   * > Por regras de acessibilidade e usabilidade a tag não terá a inversão de cores no componente.
    *
    * Ativa a inversão de cores configuradas no componente, possibilitando uma visualização de status ativo e inativo.
    *

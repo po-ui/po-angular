@@ -60,6 +60,24 @@ export class SamplePoDynamicFormRegisterComponent implements OnInit {
       errorMessage: 'At least 5 alphabetic and 3 numeric characters are required.',
       placeholder: 'Type your password'
     },
+    {
+      property: 'rememberSecretKey',
+      label: 'Remember Secret Key',
+      gridColumns: 3,
+      type: 'boolean',
+      booleanTrue: 'yes',
+      booleanFalse: 'no',
+      formatModel: true
+    },
+    {
+      property: 'status',
+      label: 'Status',
+      gridColumns: 3,
+      type: 'boolean',
+      booleanTrue: 'Active',
+      booleanFalse: 'Inactive',
+      formatModel: true
+    },
     { property: 'email', divider: 'CONTACTS', gridColumns: 6, icon: 'po-icon-mail' },
     { property: 'phone', mask: '(99) 99999-9999', gridColumns: 6 },
     { property: 'address', gridColumns: 6 },
@@ -159,6 +177,15 @@ export class SamplePoDynamicFormRegisterComponent implements OnInit {
         { console: 'Xbox Series S|X', code: 'XSSX' }
       ],
       optionsMulti: true
+    },
+    {
+      property: 'image',
+      type: 'upload',
+      gridColumns: 12,
+      gridSmColumns: 12,
+      label: 'Upload your background',
+      optional: true,
+      url: 'https://po-sample-api.fly.dev/v1/uploads/addFile'
     }
   ];
 
@@ -169,7 +196,9 @@ export class SamplePoDynamicFormRegisterComponent implements OnInit {
       name: 'Tony Stark',
       birthday: '1970-05-29',
       isJuridicPerson: false,
-      videogame: ['PS4', 'NSW', 'XSSX']
+      videogame: ['PS4', 'NSW', 'XSSX'],
+      rememberSecretKey: 'no',
+      status: 'active'
     };
   }
 

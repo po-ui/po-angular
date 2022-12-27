@@ -1,6 +1,5 @@
 import { NgModule } from '@angular/core';
 import { CommonModule } from '@angular/common';
-import { HttpClientModule } from '@angular/common/http';
 import { FormsModule, ReactiveFormsModule } from '@angular/forms';
 
 import { PoModule, PoI18nModule } from '@po-ui/ng-components';
@@ -13,7 +12,6 @@ import { HighlightCodeDirective } from './../documentation/documentation-code.di
 @NgModule({
   imports: [
     CommonModule,
-    HttpClientModule,
     FormsModule,
     ReactiveFormsModule,
 
@@ -68,7 +66,6 @@ import { HighlightCodeDirective } from './../documentation/documentation-code.di
   declarations: [HighlightCodeDirective],
   exports: [
     CommonModule,
-    HttpClientModule,
     FormsModule,
     ReactiveFormsModule,
     HighlightCodeDirective,

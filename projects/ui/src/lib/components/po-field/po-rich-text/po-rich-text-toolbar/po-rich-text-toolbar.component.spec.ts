@@ -2,27 +2,32 @@ import { ComponentFixture, TestBed } from '@angular/core/testing';
 import { FormsModule } from '@angular/forms';
 
 import * as UtilsFunction from '../../../../utils/util';
-import { configureTestSuite } from '../../../../util-test/util-expect.spec';
 
 import { PoButtonGroupModule } from '../../../po-button-group';
 import { PoFieldModule } from '../../po-field.module';
 import { PoModalModule } from '../../../po-modal/po-modal.module';
 import { PoRichTextToolbarComponent } from './po-rich-text-toolbar.component';
 import { PoTooltipModule } from './../../../../directives/po-tooltip/po-tooltip.module';
+import { HttpClientTestingModule } from '@angular/common/http/testing';
 
 describe('PoRichTextToolbarComponent:', () => {
   let component: PoRichTextToolbarComponent;
   let fixture: ComponentFixture<PoRichTextToolbarComponent>;
   let nativeElement;
 
-  configureTestSuite(() => {
-    TestBed.configureTestingModule({
-      imports: [FormsModule, PoButtonGroupModule, PoModalModule, PoTooltipModule, PoFieldModule],
+  beforeEach(async () => {
+    await TestBed.configureTestingModule({
+      imports: [
+        FormsModule,
+        PoButtonGroupModule,
+        PoModalModule,
+        PoTooltipModule,
+        PoFieldModule,
+        HttpClientTestingModule
+      ],
       declarations: []
-    });
-  });
+    }).compileComponents();
 
-  beforeEach(() => {
     fixture = TestBed.createComponent(PoRichTextToolbarComponent);
     component = fixture.componentInstance;
     fixture.detectChanges();

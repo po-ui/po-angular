@@ -148,7 +148,7 @@ export class PoHttpRequestInterceptorService implements HttpInterceptor {
 
     headersParams.forEach(headerParam => {
       if (request.headers.has(headerParam)) {
-        request.headers.delete(headerParam);
+        request = request.clone({ headers: request.headers.delete(headerParam) });
         isRequestClone = true;
       }
     });

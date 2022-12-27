@@ -1,20 +1,16 @@
 import { ComponentFixture, TestBed } from '@angular/core/testing';
 
-import { configureTestSuite } from '../../../util-test/util-expect.spec';
-
 import { PoNavbarLogoComponent } from './po-navbar-logo.component';
 
 describe('PoNavbarLogoComponent:', () => {
   let component: PoNavbarLogoComponent;
   let fixture: ComponentFixture<PoNavbarLogoComponent>;
 
-  configureTestSuite(() => {
-    TestBed.configureTestingModule({
+  beforeEach(async () => {
+    await TestBed.configureTestingModule({
       declarations: [PoNavbarLogoComponent]
-    });
-  });
+    }).compileComponents();
 
-  beforeEach(() => {
     fixture = TestBed.createComponent(PoNavbarLogoComponent);
     component = fixture.componentInstance;
 

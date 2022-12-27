@@ -21,4 +21,19 @@ describe('PoLinkComponent', () => {
   it('should create', () => {
     expect(component).toBeTruthy();
   });
+
+  it('should emit action', () => {
+    spyOn(component.action, 'emit');
+
+    component.onClick();
+    expect(component.action.emit).toHaveBeenCalled();
+  });
+
+  it('should`t emit action if exists `url`', () => {
+    component.url = 'https://po-ui.io/';
+    spyOn(component.action, 'emit');
+
+    component.onClick();
+    expect(component.action.emit).not.toHaveBeenCalled();
+  });
 });

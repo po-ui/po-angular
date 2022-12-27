@@ -5,7 +5,7 @@ import { RouterTestingModule } from '@angular/router/testing';
 
 import { Observable } from 'rxjs';
 
-import { configureTestSuite, expectPropertiesValues } from './../../../util-test/util-expect.spec';
+import { expectPropertiesValues } from './../../../util-test/util-expect.spec';
 
 import { PoBadgeComponent } from '../../po-badge';
 import { PoMenuItemsService } from '../services/po-menu-items.service';
@@ -29,15 +29,13 @@ describe('PoMenuItemComponent:', () => {
   let fixture: ComponentFixture<PoMenuItemComponent>;
   let nativeElement: any;
 
-  configureTestSuite(() => {
-    TestBed.configureTestingModule({
+  beforeEach(async () => {
+    await TestBed.configureTestingModule({
       imports: [RouterTestingModule.withRoutes(routes), PoIconModule],
       declarations: [SearchComponent, HomeComponent, PoMenuItemComponent, PoBadgeComponent],
       providers: [PoMenuItemsService]
-    });
-  });
+    }).compileComponents();
 
-  beforeEach(() => {
     fixture = TestBed.createComponent(PoMenuItemComponent);
     component = fixture.componentInstance;
     nativeElement = fixture.debugElement.nativeElement;

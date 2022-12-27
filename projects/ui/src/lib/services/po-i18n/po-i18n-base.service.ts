@@ -1,5 +1,5 @@
 import { HttpClient } from '@angular/common/http';
-import { Inject } from '@angular/core';
+import { Directive, Inject, Injectable } from '@angular/core';
 
 import { Observable } from 'rxjs';
 
@@ -147,6 +147,7 @@ import { PoI18nLiterals } from './interfaces/po-i18n-literals.interface';
  * ```
  */
 
+@Directive()
 export class PoI18nBaseService {
   private varI18n: any = {};
 

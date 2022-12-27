@@ -1,6 +1,5 @@
 <po-field-container
   [p-disabled]="isDisabled"
-  [p-help]="help"
   [p-id]="id"
   [p-label]="label"
   [p-optional]="optional"
@@ -57,7 +56,6 @@
 
       <div *ngIf="currentFiles && currentFiles.length" class="po-upload-progress-container">
         <po-container
-          p-no-shadow
           [p-height]="hasMoreThanFourItems ? 280 : 'auto'"
           [p-no-border]="!hasMoreThanFourItems"
           [p-no-padding]="!hasMoreThanFourItems"
@@ -90,4 +88,5 @@
       </po-button>
     </div>
   </div>
+  <po-field-container-bottom [p-help]="help" [p-disabled]="disabled"></po-field-container-bottom>
 </po-field-container>

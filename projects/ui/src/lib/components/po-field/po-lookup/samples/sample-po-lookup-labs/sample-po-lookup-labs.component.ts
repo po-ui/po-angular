@@ -57,6 +57,7 @@ export class SamplePoLookupLabsComponent implements OnInit {
     { value: 'noAutocomplete', label: 'No Autocomplete' },
     { value: 'optional', label: 'Optional' },
     { value: 'required', label: 'Required' },
+    { value: 'showRequired', label: 'Show Required' },
     { value: 'infiniteScroll', label: 'Infinite Scroll' },
     { value: 'multiple', label: 'Multiple' },
     { value: 'autoHeight', label: 'Auto Height' }

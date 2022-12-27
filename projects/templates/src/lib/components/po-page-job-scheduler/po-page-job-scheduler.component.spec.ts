@@ -10,6 +10,7 @@ import { PoJobSchedulerInternal } from './interfaces/po-job-scheduler-internal.i
 import { PoPageJobSchedulerComponent } from './po-page-job-scheduler.component';
 import { PoPageJobSchedulerModule } from './po-page-job-scheduler.module';
 import { PoStepperOrientation } from '@po-ui/ng-components';
+import { HttpClientTestingModule } from '@angular/common/http/testing';
 
 describe('PoPageJobSchedulerComponent:', () => {
   let component: PoPageJobSchedulerComponent;
@@ -18,7 +19,7 @@ describe('PoPageJobSchedulerComponent:', () => {
   beforeEach(
     waitForAsync(() => {
       TestBed.configureTestingModule({
-        imports: [RouterTestingModule.withRoutes([]), PoPageJobSchedulerModule]
+        imports: [RouterTestingModule.withRoutes([]), PoPageJobSchedulerModule, HttpClientTestingModule]
       }).compileComponents();
     })
   );
@@ -218,7 +219,8 @@ describe('PoPageJobSchedulerComponent:', () => {
           markAsDirtyInvalidControls: () => {},
           changePageActionsBySteps: () => {},
           setModelRecurrent: () => {},
-          hidesSecretValues: () => {}
+          hidesSecretValues: () => {},
+          templateHasDisable: () => false
         };
       });
 
@@ -404,6 +406,31 @@ describe('PoPageJobSchedulerComponent:', () => {
         expect(component['save']).toHaveBeenCalled();
         expect(paramConfirm.message).toBe(component.literals.confirmUpdateMessage);
       });
+
+      it(`should call 'poDialogservice.confirm' and change model with 'beforeSendAction' data`, () => {
+        component['activatedRoute'].snapshot.params['id'] = 'param';
+        let paramConfirm;
+        let modelCustom: any;
+        const customParams = {
+          customParam: 'customValue',
+          processId: 'processIdValue'
+        };
+        component.beforeSendAction = model => ({ ...model, ...customParams });
+
+        spyOn(component['poDialogService'], 'confirm').and.callFake(param => (paramConfirm = param));
+
+        spyOn(component, <any>'save');
+        spyOn(component, <any>'beforeSendAction').and.callFake(model => {
+          modelCustom = { ...model, ...customParams };
+          return modelCustom;
+        });
+
+        component['confirmJobScheduler']();
+        paramConfirm.confirm();
+
+        expect(component['beforeSendAction']).toHaveBeenCalled();
+        expect(component['save']).toHaveBeenCalledWith(modelCustom, 'param');
+      });
     });
 
     it(`emitSuccessMessage: should call 'poNotification.success' with message and call 'resetJobSchedulerForm'`, async () => {
@@ -485,7 +512,8 @@ describe('PoPageJobSchedulerComponent:', () => {
             form: {
               invalid: true
             }
-          }
+          },
+          templateHasDisable: () => false
         };
 
         expect(component['isDisabledAdvance'].call(fakeThis)).toBe(true);
@@ -494,7 +522,8 @@ describe('PoPageJobSchedulerComponent:', () => {
       it(`should return 'false' if 'step' is 2 and 'schedulerParameters' is undefined`, () => {
         const fakeThis = {
           step: 2,
-          schedulerParameters: undefined
+          schedulerParameters: undefined,
+          templateHasDisable: () => false
         };
 
         expect(component['isDisabledAdvance'].call(fakeThis)).toBe(false);
@@ -507,7 +536,8 @@ describe('PoPageJobSchedulerComponent:', () => {
             form: {
               invalid: true
             }
-          }
+          },
+          templateHasDisable: () => false
         };
 
         expect(component['isDisabledAdvance'].call(fakeThis)).toBe(true);
@@ -516,7 +546,8 @@ describe('PoPageJobSchedulerComponent:', () => {
       it(`should return 'false' if 'step' is 1 and 'schedulerExecution' is undefined`, () => {
         const fakeThis = {
           step: 1,
-          schedulerExecution: undefined
+          schedulerExecution: undefined,
+          templateHasDisable: () => false
         };
 
         expect(component['isDisabledAdvance'].call(fakeThis)).toBe(false);
@@ -526,10 +557,21 @@ describe('PoPageJobSchedulerComponent:', () => {
         const fakeThis = {
           step: undefined,
           schedulerExecution: undefined,
-          schedulerParameters: undefined
+          schedulerParameters: undefined,
+          templateHasDisable: () => false
         };
 
         expect(component['isDisabledAdvance'].call(fakeThis)).toBe(false);
+      });
+
+      it(`should return 'true' if 'step' is 2 and 'templateHasDisable' return true`, () => {
+        const fakeThis = {
+          step: 2,
+          schedulerParameters: undefined,
+          templateHasDisable: () => true
+        };
+
+        expect(component['isDisabledAdvance'].call(fakeThis)).toBe(true);
       });
     });
 
@@ -705,6 +747,62 @@ describe('PoPageJobSchedulerComponent:', () => {
         component['save'](model, paramId);
 
         expect(component['emitSuccessMessage']).toHaveBeenCalledWith(saveNotificationSuccessSave, saveOperation);
+      });
+    });
+
+    describe('templateHasDisable:', () => {
+      it(`should return 'true' if has 'parametersTemplate.templateRef' and 'parametersTemplate.disabledAdvance' is true`, () => {
+        const fakeThis = {
+          step: 2,
+          parametersTemplate: {
+            templateRef: {},
+            disabledAdvance: true
+          }
+        };
+        expect(component['templateHasDisable'].call(fakeThis)).toBe(true);
+      });
+
+      it(`should return 'false' if has no 'parametersTemplate.templateRef'`, () => {
+        const fakeThis = {
+          step: 2,
+          parametersTemplate: {
+            templateRef: undefined,
+            disabledAdvance: true
+          }
+        };
+        expect(component['templateHasDisable'].call(fakeThis)).toBe(false);
+      });
+
+      it(`should return 'false' if 'parametersTemplate.disabledAdvance' is false`, () => {
+        const fakeThis = {
+          step: 2,
+          parametersTemplate: {
+            templateRef: {},
+            disabledAdvance: false
+          }
+        };
+        expect(component['templateHasDisable'].call(fakeThis)).toBe(false);
+      });
+    });
+
+    describe('setPropertiesFromTemplate:', () => {
+      it(`should set' model.executionParameter' with 'parametersTemplate.executionParameter' template data`, () => {
+        const fakeThis = {
+          parametersTemplate: {
+            templateRef: {},
+            executionParameter: {
+              user: 'test'
+            }
+          },
+          model: {
+            recurrent: true,
+            periodicity: '',
+            executionParameter: {}
+          }
+        };
+        const expected = { user: 'test' };
+        component['setPropertiesFromTemplate'].call(fakeThis);
+        expect(fakeThis.model.executionParameter).toEqual(expected);
       });
     });
   });

@@ -61,6 +61,12 @@ export class PoTooltipDirective extends PoTooltipBaseDirective implements OnInit
     }
   }
 
+  @HostListener('click') onMouseClick() {
+    if (!this.displayTooltip) {
+      this.removeTooltipAction();
+    }
+  }
+
   @HostListener('focusout') onFocusOut() {
     if (!this.displayTooltip) {
       this.removeTooltipAction();
@@ -70,6 +76,12 @@ export class PoTooltipDirective extends PoTooltipBaseDirective implements OnInit
   @HostListener('focusin') onFocusIn() {
     if (!this.displayTooltip) {
       this.addTooltipAction();
+    }
+  }
+
+  @HostListener('keydown', ['$event']) onKeyDown(event) {
+    if (!this.displayTooltip && (event.code === 'Escape' || event.keyCode === 27)) {
+      this.removeTooltipAction();
     }
   }
 
@@ -120,6 +132,9 @@ export class PoTooltipDirective extends PoTooltipBaseDirective implements OnInit
     this.tooltipContent = this.renderer.createElement('div');
     this.renderer.addClass(this.tooltipContent, 'po-tooltip');
 
+    this.renderer.setStyle(this.tooltipContent, 'transition', 'visibility .3s, opacity .3s linear');
+    this.renderer.setStyle(this.tooltipContent, 'opacity', 0.9);
+
     this.insertAriaLabelTooltip();
 
     this.divArrow = this.renderer.createElement('div');
@@ -154,7 +169,9 @@ export class PoTooltipDirective extends PoTooltipBaseDirective implements OnInit
 
   private hideTooltip() {
     if (this.tooltipContent) {
-      this.renderer.addClass(this.tooltipContent, 'po-invisible');
+      this.renderer.setStyle(this.tooltipContent, 'opacity', 0);
+      this.renderer.setStyle(this.tooltipContent, 'visibility', 'hidden');
+
       this.isHidden = true;
 
       this.removeScrollEventListener();
@@ -172,7 +189,8 @@ export class PoTooltipDirective extends PoTooltipBaseDirective implements OnInit
   }
 
   private showTooltip() {
-    this.renderer.removeClass(this.tooltipContent, 'po-invisible');
+    this.renderer.setStyle(this.tooltipContent, 'opacity', 0.9);
+    this.renderer.setStyle(this.tooltipContent, 'visibility', 'visible');
     this.updateTextContent();
     this.isHidden = false;
 
@@ -180,7 +198,9 @@ export class PoTooltipDirective extends PoTooltipBaseDirective implements OnInit
   }
 
   private updateTextContent() {
-    if (this.lastTooltipText !== this.tooltip) {
+    const checkRepeatedText = this.tooltip.split('\n');
+
+    if (this.lastTooltipText !== this.tooltip && checkRepeatedText[0] !== this.lastTooltipText) {
       this.renderer.removeChild(this.divContent, this.textContent);
       this.textContent = this.renderer.createText(this.tooltip);
       this.renderer.appendChild(this.divContent, this.textContent);

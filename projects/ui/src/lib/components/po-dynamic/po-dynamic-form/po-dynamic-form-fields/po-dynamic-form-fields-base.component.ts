@@ -66,7 +66,7 @@ export class PoDynamicFormFieldsBaseComponent {
     return value === compareTo;
   }
 
-  // retorna um array com os objetos configurados e visiveis.
+  // retorna um array com os objetos configurados e visíveis.
   protected getVisibleFields() {
     const visibleFields = [];
 
@@ -185,6 +185,8 @@ export class PoDynamicFormFieldsBaseComponent {
       return 'textarea';
     } else if (this.isPassword(field)) {
       return 'password';
+    } else if (this.isUpload(field)) {
+      return 'upload';
     }
 
     return 'input';
@@ -248,6 +250,12 @@ export class PoDynamicFormFieldsBaseComponent {
     const { optionsMulti, options } = field;
 
     return !optionsMulti && !!options && options.length <= 3;
+  }
+
+  private isUpload(field: PoDynamicFormField) {
+    const { url, type } = field;
+
+    return url && type === 'upload';
   }
 
   private verifyforceOptionComponent(field: PoDynamicFormField) {

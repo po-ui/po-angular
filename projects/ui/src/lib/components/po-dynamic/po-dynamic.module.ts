@@ -16,6 +16,7 @@ import { PoDynamicFormValidationService } from './po-dynamic-form/po-dynamic-for
 import { PoDynamicViewComponent } from './po-dynamic-view/po-dynamic-view.component';
 import { PoDynamicViewService } from './po-dynamic-view/po-dynamic-view.service';
 import { PoLoadingModule } from '../po-loading';
+import { PoImageModule } from '../po-image';
 
 @NgModule({
   imports: [
@@ -27,6 +28,7 @@ import { PoLoadingModule } from '../po-loading';
     PoTagModule,
     PoTimeModule,
     PoLoadingModule
+    PoImageModule
   ],
   declarations: [PoDynamicFormComponent, PoDynamicFormFieldsComponent, PoDynamicViewComponent],
   exports: [PoDynamicFormComponent, PoDynamicViewComponent],

@@ -1,7 +1,7 @@
 import { Directive } from '@angular/core';
 
 import * as utilsFunctions from '../../utils/util';
-import { configureTestSuite, expectPropertiesValues, expectSettersMethod } from '../../util-test/util-expect.spec';
+import { expectPropertiesValues, expectSettersMethod } from '../../util-test/util-expect.spec';
 import { PoDateService } from '../../services/po-date/po-date.service';
 import { PoLanguageService } from '../../services/po-language/po-language.service';
 import { poLocaleDefault } from '../../services/po-language/po-language.constant';
@@ -30,13 +30,12 @@ describe('PoTableBaseComponent:', () => {
   let columns: Array<PoTableColumn>;
   let items;
 
-  configureTestSuite(() => {
-    TestBed.configureTestingModule({
+  beforeEach(async () => {
+    await TestBed.configureTestingModule({
       providers: [PoTableService, PoLanguageService, PoDateService],
       imports: [HttpClientTestingModule]
-    });
-  });
-  beforeEach(() => {
+    }).compileComponents();
+
     dateService = new PoDateService();
     languageService = new PoLanguageService();
     tableService = TestBed.inject(PoTableService);
@@ -1224,7 +1223,7 @@ describe('PoTableBaseComponent:', () => {
 
         component.setTableResponseProperties(data);
 
-        expect(component.items).toBe(items);
+        expect(component.items).toEqual(items);
         expect(component.showMoreDisabled).toBeFalsy();
         expect(component.loading).toBeFalsy();
       });
@@ -1237,7 +1236,7 @@ describe('PoTableBaseComponent:', () => {
 
         component.setTableResponseProperties(data);
 
-        expect(component.items).toBe(items);
+        expect(component.items).toEqual(items);
         expect(component.showMoreDisabled).toBeTruthy();
         expect(component.loading).toBeFalsy();
       });

@@ -11,6 +11,7 @@ import { PoPageDynamicSearchComponent } from './po-page-dynamic-search.component
 import { PoAdvancedFilterComponent } from './po-advanced-filter/po-advanced-filter.component';
 import { PoPageCustomizationModule } from '../../services/po-page-customization/po-page-customization.module';
 import { expectBrowserLanguageMethod } from './../../util-test/util-expect.spec';
+import { HttpClientTestingModule } from '@angular/common/http/testing';
 
 export const routes: Routes = [];
 
@@ -21,7 +22,13 @@ describe('PoPageDynamicSearchComponent:', () => {
   beforeEach(
     waitForAsync(() => {
       TestBed.configureTestingModule({
-        imports: [FormsModule, RouterTestingModule.withRoutes(routes), PoPageCustomizationModule, PoDynamicModule],
+        imports: [
+          FormsModule,
+          RouterTestingModule.withRoutes(routes),
+          PoPageCustomizationModule,
+          PoDynamicModule,
+          HttpClientTestingModule
+        ],
         declarations: [PoPageDynamicSearchComponent, PoAdvancedFilterComponent],
         providers: [TitleCasePipe],
         schemas: [NO_ERRORS_SCHEMA]
@@ -139,7 +146,7 @@ describe('PoPageDynamicSearchComponent:', () => {
         expect(fakethis._disclaimerGroup.disclaimers).toEqual(result);
       });
 
-      it(`should set '_dislaimerGroup.disclaimers' with 'hideClose: true' when property is 
+      it(`should set '_dislaimerGroup.disclaimers' with 'hideClose: true' when property is
       included on the 'hideCloseDisclaimers'`, () => {
         const result = [
           { property: 'search', label: 'Pesquisa rápida: quickFilter', value: 'quickFilter', hideClose: true }
@@ -685,6 +692,15 @@ describe('PoPageDynamicSearchComponent:', () => {
         expect(component.hideRemoveAllDisclaimer).toBeTrue();
         expect(component.hideCloseDisclaimers).toEqual(['filter3']);
       }));
+
+      it('should call onAction with `quickSearchValue`', () => {
+        component.quickSearchValue = 'jhon';
+        spyOn(component, <any>'onAction');
+
+        component.ngOnInit();
+
+        expect(component['onAction']).toHaveBeenCalledWith('jhon', true);
+      });
     });
   });
 

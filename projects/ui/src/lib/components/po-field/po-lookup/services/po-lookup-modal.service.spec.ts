@@ -10,6 +10,7 @@ import { PoControlPositionService } from './../../../../services/po-control-posi
 import { PoFieldModule } from '../../../../components/po-field/po-field.module';
 import { PoLookupFilter } from '../../../../components/po-field/po-lookup/interfaces/po-lookup-filter.interface';
 import { PoLookupModalService } from '../../../../components/po-field/po-lookup/services/po-lookup-modal.service';
+import { HttpClientTestingModule } from '@angular/common/http/testing';
 
 class LookupFilterService implements PoLookupFilter {
   getObjectByValue(id: string): Observable<any> {
@@ -50,7 +51,7 @@ describe('PoLookupModalService:', () => {
 
   beforeEach(() => {
     TestBed.configureTestingModule({
-      imports: [RouterTestingModule.withRoutes(routes), PoFieldModule],
+      imports: [RouterTestingModule.withRoutes(routes), PoFieldModule, HttpClientTestingModule],
       providers: [LookupFilterService, PoComponentInjectorService, PoControlPositionService, PoLookupModalService],
       schemas: [NO_ERRORS_SCHEMA]
     });

@@ -4,8 +4,6 @@ import { SimpleChange } from '@angular/core';
 
 import { of } from 'rxjs';
 
-import { configureTestSuite } from './../../../util-test/util-expect.spec';
-
 import { PoDynamicModule } from '../po-dynamic.module';
 import { PoDynamicViewComponent } from './po-dynamic-view.component';
 import { PoDynamicViewService } from './po-dynamic-view.service';
@@ -15,14 +13,12 @@ describe('PoDynamicViewComponent:', () => {
   let fixture: ComponentFixture<PoDynamicViewComponent>;
   let nativeElement: any;
 
-  configureTestSuite(() => {
-    TestBed.configureTestingModule({
+  beforeEach(async () => {
+    await TestBed.configureTestingModule({
       imports: [PoDynamicModule],
       providers: [HttpClient, HttpHandler, PoDynamicViewService]
-    });
-  });
+    }).compileComponents();
 
-  beforeEach(() => {
     fixture = TestBed.createComponent(PoDynamicViewComponent);
     component = fixture.componentInstance;
     fixture.detectChanges();
@@ -253,6 +249,18 @@ describe('PoDynamicViewComponent:', () => {
       expect(nativeElement.querySelector('po-tag')).toBeTruthy();
     });
 
+    it(`should create 'po-image' if have a 'image' property`, () => {
+      component.fields = [{ property: 'cpf', label: 'CPF', image: true }];
+
+      component.ngOnChanges({
+        fields: new SimpleChange(null, component.fields, true)
+      });
+
+      fixture.detectChanges();
+
+      expect(nativeElement.querySelector('po-image')).toBeTruthy();
+    });
+
     it(`should create 'po-info' if haven't a 'tag' property`, () => {
       component.fields = [{ property: 'cpf', label: 'CPF' }];
 
@@ -265,13 +273,14 @@ describe('PoDynamicViewComponent:', () => {
       expect(nativeElement.querySelector('po-info')).toBeTruthy();
     });
 
-    it(`should create 'po-info' and 'po-tag' if have a one or more items with 'tag' property and one or more items
+    it(`should create 'po-info', 'po-tag' and 'po-image if have a one or more items with 'tag' property and one or more items
     without 'tag' property`, () => {
       component.fields = [
         { property: 'cpf', label: 'CPF' },
         { property: 'name', label: 'NAME', tag: true },
         { property: 'rg', label: 'RG' },
-        { property: 'address', label: 'ADDRESS', tag: true }
+        { property: 'address', label: 'ADDRESS', tag: true },
+        { property: 'image', label: 'IMAGE', image: true }
       ];
 
       component.ngOnChanges({
@@ -282,6 +291,7 @@ describe('PoDynamicViewComponent:', () => {
 
       expect(nativeElement.querySelector('po-info')).toBeTruthy();
       expect(nativeElement.querySelector('po-tag')).toBeTruthy();
+      expect(nativeElement.querySelector('po-image')).toBeTruthy();
     });
 
     it(`should create 'po-info' and 'po-divider' if haven't tag property and have a 'divider' property`, () => {
@@ -335,7 +345,14 @@ describe('PoDynamicViewComponent:', () => {
         { property: 'address', divider: 'Address data' }
       ];
 
-      component.fields = [...fieldsDivider, ...fieldsTag, ...fieldsInfo];
+      const fieldsImage = [
+        { property: 'image1', label: 'IMAGE1', image: true },
+        { property: 'image2', label: 'IMAGE2', image: true },
+        { property: 'image3', label: 'IMAGE3', image: true },
+        { property: 'image4', label: 'IMAGE4', image: true }
+      ];
+
+      component.fields = [...fieldsDivider, ...fieldsTag, ...fieldsInfo, ...fieldsImage];
 
       component.ngOnChanges({
         fields: new SimpleChange(null, component.fields, true)
@@ -346,10 +363,12 @@ describe('PoDynamicViewComponent:', () => {
       const infoElement = nativeElement.querySelectorAll('po-info');
       const tagElement = nativeElement.querySelectorAll('po-tag');
       const dividerElement = nativeElement.querySelectorAll('po-divider');
+      const imageElement = nativeElement.querySelectorAll('po-image');
 
       expect(infoElement.length).toBe(fieldsInfo.length + fieldsDivider.length);
       expect(dividerElement.length).toBe(fieldsDivider.length);
       expect(tagElement.length).toBe(fieldsTag.length);
+      expect(imageElement.length).toBe(fieldsImage.length);
     });
 
     it(`should create 'po-tag' with icon if properties 'tag' and 'icon' contain values.`, () => {

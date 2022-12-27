@@ -445,6 +445,20 @@ describe('PoPageDynamicTableComponent:', () => {
       expect(component['params']).toEqual(quickSearchParams);
     });
 
+    it('onQuickSearch: should call `loadData` as default value of `search` if no value is sent in `quickSearchParam`', () => {
+      component.concatFilters = false;
+      const termTypedInQuickSearch = 'filterValue';
+
+      const quickSearchParams = { 'search': termTypedInQuickSearch };
+
+      spyOn(component, <any>'loadData').and.returnValue(EMPTY);
+
+      component.onQuickSearch(termTypedInQuickSearch);
+
+      expect(component['loadData']).toHaveBeenCalledWith({ page: 1, ...quickSearchParams });
+      expect(component['params']).toEqual(quickSearchParams);
+    });
+
     it('onQuickSearch: should call `loadData` with `undefined` and set `params` with `{}` if haven`t `filter`', () => {
       const filter = undefined;
 
@@ -598,6 +612,92 @@ describe('PoPageDynamicTableComponent:', () => {
         expect(component.fields).toEqual(response.fields);
         expect(component.title).toEqual(response.title);
         expect(component.quickSearchWidth).toEqual(response.quickSearchWidth);
+      }));
+
+      it('should add item and change pagination to next page', fakeAsync(() => {
+        component['page'] = 1;
+
+        const response = {
+          items: [{ name: 'Steve', id: 1 }],
+          hasNext: true,
+          page: 2
+        };
+
+        component.serviceApi = 'localHost';
+        component.items = [{ name: 'Anne', id: 2 }];
+
+        spyOn(component['poPageDynamicService'], 'getResources').and.returnValue(of(response));
+
+        component['loadData']({ page: 2 }).subscribe();
+
+        tick(100);
+
+        expect(component.items).toEqual([
+          { name: 'Anne', id: 2 },
+          { name: 'Steve', id: 1 }
+        ]);
+        expect(component['page']).toEqual(2);
+      }));
+
+      it('should add item and change pagination to next page with more than one key', fakeAsync(() => {
+        component['page'] = 1;
+        component.fields = [
+          { property: 'seqItem', key: true },
+          { property: 'id', key: true, visible: false }
+        ];
+
+        const response = {
+          items: [{ name: 'Steve', id: 1, seqItem: 9 }],
+          hasNext: true,
+          page: 2
+        };
+
+        component.serviceApi = 'localHost';
+        component.items = [{ name: 'Anne', id: 2, seqItem: 9 }];
+
+        spyOn(component['poPageDynamicService'], 'getResources').and.returnValue(of(response));
+
+        component['loadData']({ page: 2 }).subscribe();
+
+        tick(100);
+
+        expect(component.items).toEqual([
+          { name: 'Anne', id: 2, seqItem: 9 },
+          { name: 'Steve', id: 1, seqItem: 9 }
+        ]);
+        expect(component['page']).toEqual(2);
+      }));
+
+      it('should call loadData with quickSearchValue', fakeAsync(() => {
+        const activatedRoute: any = {
+          snapshot: {
+            data: {
+              serviceApi: 'localhost:4300/api/people',
+              serviceMetadataApi: 'localhost:4300/api/people/metadata'
+            },
+            params: { id: 1 }
+          }
+        };
+
+        const response = {
+          autoRouter: false,
+          actions: undefined,
+          breadcrumb: undefined,
+          fields: [],
+          title: 'Title',
+          quickSearchWidth: 4
+        };
+
+        component.quickSearchParam = 'search';
+        component.quickSearchValue = 'Jhon';
+
+        spyOn(component['poPageDynamicService'], 'getMetadata').and.returnValue(of(response));
+        spyOn(component, <any>'loadData').and.returnValue(EMPTY);
+        spyOn(component, <any>'loadOptionsOnInitialize').and.returnValue(EMPTY);
+        component['activatedRoute'] = activatedRoute;
+        component['loadDataFromAPI']();
+
+        expect(component['loadData']).toHaveBeenCalledWith({ search: 'Jhon' });
       }));
 
       it('should call `getMetadata` and set properties', fakeAsync(() => {

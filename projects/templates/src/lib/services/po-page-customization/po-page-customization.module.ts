@@ -1,4 +1,3 @@
-import { HttpClientModule } from '@angular/common/http';
 import { CommonModule } from '@angular/common';
 import { NgModule } from '@angular/core';
 
@@ -10,7 +9,7 @@ import { PoPageCustomizationService } from './po-page-customization.service';
  * Módulo do serviço do po-page-customization-service.
  */
 @NgModule({
-  imports: [CommonModule, HttpClientModule],
+  imports: [CommonModule],
   providers: [PoPageCustomizationService]
 })
 export class PoPageCustomizationModule {}

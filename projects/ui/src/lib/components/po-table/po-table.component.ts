@@ -78,6 +78,12 @@ import { PoTableService } from './services/po-table.service';
  *  <file name="sample-po-table-components/sample-po-table-components.component.css"> </file>
  * </example>
  *
+ * <example name="po-table-heroes" title="PO Table - Heroes">
+ *  <file name="sample-po-table-heroes/sample-po-table-heroes.component.ts"> </file>
+ *  <file name="sample-po-table-heroes/sample-po-table-heroes.component.html"> </file>
+ *  <file name="sample-po-table-heroes/sample-po-table-heroes.service.ts"> </file>
+ * </example>
+ *
  */
 @Component({
   selector: 'po-table',
@@ -235,7 +241,9 @@ export class PoTableComponent extends PoTableBaseComponent implements AfterViewI
   }
 
   get visibleActions() {
-    return this.actions && this.actions.filter(action => action && action.visible !== false);
+    return (
+      this.actions !== undefined && this.actions && this.actions.filter(action => action && action.visible !== false)
+    );
   }
 
   ngAfterViewInit() {

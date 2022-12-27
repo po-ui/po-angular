@@ -71,6 +71,7 @@
             type="text"
             [placeholder]="filter.placeholder || ''"
             (keypress)="onkeypress($event.keyCode)"
+            [value]="quickSearchValue || ''"
           />
         </div>
 

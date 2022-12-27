@@ -93,6 +93,10 @@ export class PoPageDynamicSearchComponent extends PoPageDynamicSearchBaseCompone
     if (this.onLoad) {
       this.loadOptionsOnInitialize(this.onLoad);
     }
+    //coloca o disclaimer inicial caso envie p-quick-search-value
+    if (this.quickSearchValue) {
+      this.onAction(this.quickSearchValue, true);
+    }
   }
 
   ngOnDestroy() {
@@ -111,7 +115,7 @@ export class PoPageDynamicSearchComponent extends PoPageDynamicSearchBaseCompone
     }
   }
 
-  onAction(quickFilter: string) {
+  onAction(quickFilter: string, quickSearchValue?: boolean) {
     const disclaimerQuickSearchUpdated = {
       property: 'search',
       label: `${this.literals.quickSearchLabel} ${quickFilter}`,
@@ -128,7 +132,7 @@ export class PoPageDynamicSearchComponent extends PoPageDynamicSearchBaseCompone
       ? getDisclaimersWithConcatFilters()
       : [disclaimerQuickSearchUpdated];
 
-    if (this.quickSearch.observers && this.quickSearch.observers.length > 0) {
+    if (this.quickSearch.observers && this.quickSearch.observers.length > 0 && !quickSearchValue) {
       this.quickSearch.emit(quickFilter);
     }
 

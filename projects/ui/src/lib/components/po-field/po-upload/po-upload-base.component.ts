@@ -205,7 +205,7 @@ export abstract class PoUploadBaseComponent implements ControlValueAccessor, Val
    */
   @Input('p-optional') optional: boolean;
 
-  /** Objeto que contém os cabeçalhos que será enviado na requisição dos arquvios. */
+  /** Objeto que contém os cabeçalhos que será enviado na requisição dos arquivos. */
   @Input('p-headers') headers: { [name: string]: string | Array<string> };
 
   /**
@@ -215,11 +215,11 @@ export abstract class PoUploadBaseComponent implements ControlValueAccessor, Val
    *
    * Função que será executada no momento de realizar o envio do arquivo,
    * onde será possível adicionar informações ao parâmetro que será enviado na requisição.
-   * É passado por parâmetro um objeto com o arquivo e a propiedade data nesta propriedade pode ser informado algum dado,
+   * É passado por parâmetro um objeto com o arquivo e a propriedade data nesta propriedade pode ser informado algum dado,
    * que será enviado em conjunto com o arquivo na requisição, por exemplo:
    *
    * ```
-   *   event.data = {id: 'id do usuario'};
+   *   event.data = {id: 'id do usuário'};
    * ```
    */
   @Output('p-upload') onUpload: EventEmitter<any> = new EventEmitter<any>();

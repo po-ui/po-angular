@@ -5,21 +5,18 @@ import { PoCheckboxGroupModule } from '../../po-field/po-checkbox-group/po-check
 import { PoFieldContainerModule } from '../../po-field/po-field-container/po-field-container.module';
 import { PoPopoverModule } from '../../po-popover/po-popover.module';
 import { PoTableModule } from '../po-table.module';
-import { configureTestSuite } from '../../../util-test/util-expect.spec';
 import { NG_VALUE_ACCESSOR } from '@angular/forms';
 
 describe('PoTableListManagerComponent:', () => {
   let component: PoTableListManagerComponent;
   let fixture: ComponentFixture<PoTableListManagerComponent>;
 
-  configureTestSuite(() => {
-    TestBed.configureTestingModule({
+  beforeEach(async () => {
+    await TestBed.configureTestingModule({
       declarations: [],
       imports: [PoCheckboxGroupModule, PoFieldContainerModule, PoPopoverModule, PoTableModule]
     }).compileComponents();
-  });
 
-  beforeEach(() => {
     fixture = TestBed.createComponent(PoTableListManagerComponent);
     component = fixture.componentInstance;
     fixture.debugElement.injector.get(NG_VALUE_ACCESSOR);

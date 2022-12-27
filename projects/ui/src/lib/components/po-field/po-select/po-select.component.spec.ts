@@ -177,10 +177,14 @@ describe('PoSelectComponent:', () => {
     });
 
     it('onSelectChange: should call `updateValues` if value is valid', () => {
+      component['onModelTouched'] = () => {};
+
       spyOn(component, 'updateValues');
+      spyOn(component, <any>'onModelTouched');
 
       component.onSelectChange(component.options[0].value);
       expect(component.updateValues).toHaveBeenCalledWith(component.options[0]);
+      expect(component['onModelTouched']).toHaveBeenCalled();
     });
 
     it('onSelectChange: shouldn`t call `updateValues` if value is invalid', () => {
@@ -249,6 +253,17 @@ describe('PoSelectComponent:', () => {
         options: {
           currentValue: [{ label: 'test', value: 'test' }]
         }
+      };
+
+      component.ngOnChanges(changes);
+
+      expect(component.options).toEqual([{ label: 'test', value: 'test' }]);
+    });
+
+    it('ngOnChanges: shouldn´t set `currentValue` in options if options is undefined', () => {
+      component.options = [{ label: 'test', value: 'test' }];
+      const changes: any = {
+        options: undefined
       };
 
       component.ngOnChanges(changes);

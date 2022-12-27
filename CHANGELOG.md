@@ -2,6 +2,142 @@
 
 All notable changes to this project will be documented in this file. See [standard-version](https://github.com/conventional-changelog/standard-version) for commit guidelines.
 
+# [15.0.0-next.1](https://github.com/po-ui/po-angular/compare/v14.12.2...v15.0.0-next.1) (2022-12-19)
+
+
+### Build System
+
+* atualização para o angular 15 ([6339a2b](https://github.com/po-ui/po-angular/commit/6339a2be6de33d6a3367562d663f893d59efa683))
+* remove HttpClientModule ([e76556c](https://github.com/po-ui/po-angular/commit/e76556cbbe28d8c84a4c35eed91db63d21077892))
+
+
+### Code Refactoring
+
+* **button:** remove a propriedade p-type ([a227cb6](https://github.com/po-ui/po-angular/commit/a227cb6150f6a3bb9259a076cd3370ebc3ca9edc))
+
+
+### Features
+
+* **schematics:** adiciona módulo HttpClientModule ([e61551d](https://github.com/po-ui/po-angular/commit/e61551dc1c8aaa52825443650bf1ad73e5c3f81f))
+
+
+### BREAKING CHANGES
+
+* Remove `HttpClientModule`.
+
+Remove as importações do `HttpClientModule` do projeto.
+
+Necessário agora, importar o `HttpClientModule` no módulo raíz
+da aplicação para o correto funcionamento da biblioteca.
+
+* **button:** removida propriedade p-type
+
+Foi removida a propriedade p-type do po-button pois a mesma foi depreciada na versão 15.x.x. Utilizar p-kind no lugar.
+* deve ser utilizado o Angular v15
+
+
+
+
+## [14.12.2](https://github.com/po-ui/po-angular/compare/v14.12.1...v14.12.2) (2022-12-12)
+
+
+### Bug Fixes
+
+* **tooltip:** corrige remoção da tooltip ([b2b2cc2](https://github.com/po-ui/po-angular/commit/b2b2cc2396f1e6e03dcbabc9ed76c5870247549d))
+
+
+
+## [14.12.1](https://github.com/po-ui/po-angular/compare/v14.12.0...v14.12.1) (2022-12-05)
+
+### Bug Fixes
+
+* **fields:** ajusta posicionamento do rich-text ([5127fcd](https://github.com/po-ui/po-style/commit/5127fcd8286930e03d3e1d19109a5d759794aab1))
+
+
+# [14.12.0](https://github.com/po-ui/po-angular/compare/v14.11.0...v14.12.0) (2022-12-05)
+
+
+### Bug Fixes
+
+* **dynamic-table:** corrige a paginação do componente com chave composta ([79df19c](https://github.com/po-ui/po-angular/commit/79df19cdc7db5f3939d461fd4260dbdd673f0573))
+
+
+### Features
+
+* **checkbox:** reutiliza componente `po-label` ([57d1cd0](https://github.com/po-ui/po-angular/commit/57d1cd0efbd499a955f0c37169e0a76cf2863c8c))
+* **disclaimer:** implementa definições do AnimaliaDS ([0804593](https://github.com/po-ui/po-angular/commit/08045932c81eefb325de287f951a96dc5f084b57))
+* **dynamic-form:** estende propriedade `p-format-model` do `po-switch` ([45b1316](https://github.com/po-ui/po-angular/commit/45b13168c97bf0c4702e7450956ef3fa8db47257)), closes [#1423](https://github.com/po-ui/po-angular/issues/1423)
+* **dynamic-form:** permite a utilização da propriedade `showRequired` ([08f0bf5](https://github.com/po-ui/po-angular/commit/08f0bf51e49696509b958e2adbb37ee1c6b187b5))
+* **fields:** implementa definições do AnimaliaDS ([64e3090](https://github.com/po-ui/po-angular/commit/64e30900c6221b95270c4e7649e7557c24629b79))
+* **page-job-scheduler:** adiciona a propriedade `p-before-send` ([90813c8](https://github.com/po-ui/po-angular/commit/90813c8b79c4c71e7a15654db0cdd0baa9262df7)), closes [#1468](https://github.com/po-ui/po-angular/issues/1468)
+* **radio:** reutiliza componente `po-label` ([f6f4f1d](https://github.com/po-ui/po-angular/commit/f6f4f1d9a29f6ac63f135a7134997852393bf846))
+* **switch:** adiciona propriedade `p-format-model` ([906ccff](https://github.com/po-ui/po-angular/commit/906ccff6e0ffd1c17806b797ae5153cc19751040)), closes [#1423](https://github.com/po-ui/po-angular/issues/1423)
+* **switch:** reutiliza componente `po-label` ([a2644d4](https://github.com/po-ui/po-angular/commit/a2644d4293ddb0502b2b28bb93110f0f33877c55))
+* **tooltip:** implementa definições do AnimaliaDS ([882024f](https://github.com/po-ui/po-angular/commit/882024f05ee368f5334ecc5fc796d0c61fd23618))
+
+
+
+# [14.11.0](https://github.com/po-ui/po-angular/compare/v14.10.0...v14.11.0) (2022-11-28)
+
+
+### Bug Fixes
+
+* **datepicker:** ajuste estrutural ([9cb0555](https://github.com/po-ui/po-angular/commit/9cb0555e1604141058be2cdb81ab3e50fa97d600)), closes [#1551](https://github.com/po-ui/po-angular/issues/1551)
+* **http-request:** remove headers customizados ([dd620d7](https://github.com/po-ui/po-angular/commit/dd620d794c71ee78e2d7b8a895f81738714dd025))
+* **language:** ajusta configuração de linguagem ([70b63c0](https://github.com/po-ui/po-angular/commit/70b63c04437a365a7c97a76331798dd3ded0e73a))
+* **widget:** corrige comportamento indevido no componente ([d6db6e5](https://github.com/po-ui/po-angular/commit/d6db6e5b725f7227993246c587f15b33c318eb48))
+
+
+### Features
+
+* **datepicker:** suporte locale russo ([79b1a8b](https://github.com/po-ui/po-angular/commit/79b1a8b3fc547ab0462e83ecb4a428a5f0f2170b))
+
+
+
+# [14.10.0](https://github.com/po-ui/po-angular/compare/v14.9.1...v14.10.0) (2022-11-21)
+
+
+### Bug Fixes
+
+* **list-view:** ajusta atributo `visible` da propriedade `p-actions` ([8df5e10](https://github.com/po-ui/po-angular/commit/8df5e103c0ecf46b252dd7f91efa0d10db3c13bd)), closes [#1265](https://github.com/po-ui/po-angular/issues/1265)
+* **po-loading:** added translations ([8b93c79](https://github.com/po-ui/po-angular/commit/8b93c794a6f28fb98afcf64c780985a595caaa4f))
+
+
+### Features
+
+* **datepicker:** implementa definições AnimaliaDS ([f492f42](https://github.com/po-ui/po-angular/commit/f492f4202900e0abdf95d8f80e0bfa4f0cffb1b7))
+* **dynamic-table:** inclui nova propriedade `p-quick-search-value` para atribuir valor inicial ao busca rápida ([c25f4a9](https://github.com/po-ui/po-angular/commit/c25f4a909ede65f201db458126ab76fbb9d7a241))
+* **dynamic-search:** inclui nova propriedade `p-quick-search-value` para atribuir valor inicial ao busca rápida ([c25f4a9](https://github.com/po-ui/po-angular/commit/c25f4a909ede65f201db458126ab76fbb9d7a241))
+* **page-list:** inclui nova propriedade `p-quick-search-value` para atribuir valor inicial ao busca rápida ([c25f4a9](https://github.com/po-ui/po-angular/commit/c25f4a909ede65f201db458126ab76fbb9d7a241))
+* **dynamic-view:** adiciona componente po-image ([7718b70](https://github.com/po-ui/po-angular/commit/7718b7054cacec4a091a059dd3399b79e4114b9d))
+* **link:** adiciona action no componente ([70e4727](https://github.com/po-ui/po-angular/commit/70e4727766a705871cd2fc64679ecb23075ae7dc))
+* **page-job-scheduler:** Permite definir um componente para ser renderizado na etapa de parametrização através de template. ([082ce35](https://github.com/po-ui/po-angular/commit/082ce352c98de5169bf8b662b04d659ec2708358)), closes [#1491](https://github.com/po-ui/po-angular/issues/1491)
+
+
+
+## [14.9.1](https://github.com/po-ui/po-angular/compare/v14.9.0...v14.9.1) (2022-11-14)
+
+
+### Bug Fixes
+
+* **dynamic-form:** corrige erro no console ao utilizar lookup ([fdf0f8f](https://github.com/po-ui/po-angular/commit/fdf0f8f101e7362fa705b9b3b2ed226e98dfed35))
+* **dynamic-table:** corrige valor `undefined` na requisição ([cb86b99](https://github.com/po-ui/po-angular/commit/cb86b99fe262031b23e4956978b5c8346b497f1d))
+* **table:** ajusta exibição de itens sem refresh ([afb9b5c](https://github.com/po-ui/po-angular/commit/afb9b5c32e0b42400a79c1877de24984dd693f53))
+
+
+
+# [14.9.0](https://github.com/po-ui/po-angular/compare/v14.8.1...v14.9.0) (2022-11-07)
+
+
+### Features
+
+* **container:** implementa definições do AnimaliaDS ([2eebfae](https://github.com/po-ui/po-angular/commit/2eebfae3f12192674f11763b108fd844d2277f78))
+* **divider:** aplica estilo definido pelo DS ([aa4fdf6](https://github.com/po-ui/po-angular/commit/aa4fdf6e1c37533a7d7c9aa913b79793e290d532))
+* **dynamic-form:** adiciona `po-upload` ([295695c](https://github.com/po-ui/po-angular/commit/295695c47b6d08e4efebbf158498dfa89973a26e))
+* **image:** novo componente po-image ([02d92de](https://github.com/po-ui/po-angular/commit/02d92defe7774159cfb0c92c2dd9fbb9eca7738a))
+* **tag:** aplica estilo definido pelo DS ([f18e71e](https://github.com/po-ui/po-angular/commit/f18e71e3467f531e94944915be41a9492ace2018))
+* **tag:** deprecia a propriedade p-inverse e p-click ([ba1c71f](https://github.com/po-ui/po-angular/commit/ba1c71fdb3f30612459f0360c762164b97cd49df))
+
 ## [14.8.1](https://github.com/po-ui/po-angular/compare/v14.8.0...v14.8.1) (2022-10-31)
 
 

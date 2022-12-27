@@ -2,8 +2,6 @@ import { Component } from '@angular/core';
 import { ComponentFixture, fakeAsync, TestBed, tick } from '@angular/core/testing';
 import { By } from '@angular/platform-browser';
 
-import { configureTestSuite } from './../../util-test/util-expect.spec';
-
 import { PoButtonModule } from '../../components/po-button/po-button.module';
 
 import { PoTooltipDirective } from './po-tooltip.directive';
@@ -25,14 +23,12 @@ describe('PoTooltipDirective', () => {
 
   let event;
 
-  configureTestSuite(() => {
-    TestBed.configureTestingModule({
+  beforeEach(async () => {
+    await TestBed.configureTestingModule({
       imports: [PoButtonModule],
       declarations: [PoTooltipDirective, TestComponent]
-    });
-  });
+    }).compileComponents();
 
-  beforeEach(() => {
     fixture = TestBed.createComponent(TestComponent);
 
     directiveElement = fixture.debugElement.query(By.directive(PoTooltipDirective));
@@ -58,6 +54,26 @@ describe('PoTooltipDirective', () => {
       directive.onMouseLeave();
 
       expect(spyRemoveTooltipAction).not.toHaveBeenCalled();
+    });
+
+    it('mouseClick: shouldn`t call removeTooltipAction if `displayTooltip` is true', () => {
+      directive.displayTooltip = true;
+
+      const spyRemoveTooltipAction = spyOn(directive, <any>'removeTooltipAction');
+
+      directive.onMouseClick();
+
+      expect(spyRemoveTooltipAction).not.toHaveBeenCalled();
+    });
+
+    it('mouseClick: should call removeTooltipAction if `displayTooltip` is false', () => {
+      directive.displayTooltip = false;
+
+      const spyRemoveTooltipAction = spyOn(directive, <any>'removeTooltipAction');
+
+      directive.onMouseClick();
+
+      expect(spyRemoveTooltipAction).toHaveBeenCalled();
     });
 
     it('focusout: shouldn`t call removeTooltipAction if `displayTooltip` is true', () => {
@@ -216,6 +232,30 @@ describe('PoTooltipDirective', () => {
     expect(directive.lastTooltipText).toBe(directive.tooltip);
   }));
 
+  it('onKeydown: should remove tooltip if emit code `Escape`', () => {
+    const newEvent = {
+      code: 'Escape'
+    };
+
+    spyOn(directive, 'removeTooltipAction');
+
+    directive.onKeyDown(newEvent);
+
+    expect(directive.removeTooltipAction).toHaveBeenCalled();
+  });
+
+  it('onKeydown: should remove tooltip if emit keyCode `27`', () => {
+    const newEvent = {
+      keyCode: 27
+    };
+
+    spyOn(directive, 'removeTooltipAction');
+
+    directive.onKeyDown(newEvent);
+
+    expect(directive.removeTooltipAction).toHaveBeenCalled();
+  });
+
   it('should add arrow class in addArrow', () => {
     directive.addArrow('test');
     expect(document.body.querySelectorAll('.po-arrow-test').length).toBeTruthy();
@@ -260,6 +300,33 @@ describe('PoTooltipDirective', () => {
     expect(directive.renderer.removeChild).toHaveBeenCalled();
     expect(directive.tooltipContent).toBe(undefined);
   }));
+  it('should call hideTooltip in mouse click', fakeAsync(() => {
+    spyOn(directive, 'hideTooltip');
+    directive.appendInBody = undefined;
+
+    directive.onMouseClick();
+
+    tick(100);
+
+    expect(directive.hideTooltip).toHaveBeenCalled();
+  }));
+
+  it('shouldn`t call hideTooltip in mouse click if `appendInBody` is true', fakeAsync(() => {
+    spyOn(directive, 'hideTooltip');
+    spyOn(directive.renderer, 'removeChild');
+    directive.appendInBody = true;
+    directive.tooltip = 'TEXT';
+    directive.tooltipContent = false;
+
+    directive.onMouseEnter();
+    directive.onMouseClick();
+
+    tick(100);
+
+    expect(directive.hideTooltip).not.toHaveBeenCalled();
+    expect(directive.renderer.removeChild).toHaveBeenCalled();
+    expect(directive.tooltipContent).toBe(undefined);
+  }));
 
   it('should call update Text', () => {
     directive.lastTooltipText = 'abc';
@@ -279,12 +346,21 @@ describe('PoTooltipDirective', () => {
     expect(directive.divContent.outerHTML.indexOf('abc') === -1).toBeTruthy();
   });
 
+  it('should`t concat the same text value', () => {
+    directive.lastTooltipText = 'Teste';
+    directive.tooltip = 'Teste\nTeste';
+
+    directive.updateTextContent();
+
+    expect(directive.divContent.textContent).toEqual('Teste');
+  });
+
   it('should hide tooltip when have tooltipContent', () => {
     spyOn(directive, <any>'removeScrollEventListener');
 
     directive.hideTooltip();
 
-    expect(directive.tooltipContent.classList.contains('po-invisible')).toBeTruthy();
+    expect(getComputedStyle(directive.tooltipContent).getPropertyValue('visibility')).toEqual('hidden');
     expect(directive['removeScrollEventListener']).toHaveBeenCalled();
   });
 

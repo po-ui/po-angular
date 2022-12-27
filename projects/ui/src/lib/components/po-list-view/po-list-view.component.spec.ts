@@ -4,8 +4,6 @@ import { RouterTestingModule } from '@angular/router/testing';
 
 import { Observable } from 'rxjs';
 
-import { configureTestSuite } from './../../util-test/util-expect.spec';
-
 import * as UtilsFunctions from '../../utils/util';
 import { PoButtonModule } from '../po-button';
 import { PoPopupModule } from '../po-popup';
@@ -20,14 +18,12 @@ describe('PoListViewComponent:', () => {
 
   const item = { id: 1, name: 'register' };
 
-  configureTestSuite(() => {
-    TestBed.configureTestingModule({
+  beforeEach(async () => {
+    await TestBed.configureTestingModule({
       declarations: [PoListViewComponent],
       imports: [BrowserAnimationsModule, RouterTestingModule.withRoutes([]), PoButtonModule, PoPopupModule]
-    });
-  });
+    }).compileComponents();
 
-  beforeEach(() => {
     fixture = TestBed.createComponent(PoListViewComponent);
 
     component = fixture.componentInstance;
@@ -155,7 +151,7 @@ describe('PoListViewComponent:', () => {
 
       spyOn(UtilsFunctions, 'isTypeof').and.returnValue(false);
 
-      expect(component.returnBooleanValue(listViewAction, item)).toBe(listViewAction.disabled);
+      expect(component.returnBooleanValue(listViewAction, item, 'disabled')).toBe(listViewAction.disabled);
       expect(UtilsFunctions.isTypeof).toHaveBeenCalled();
     });
 
@@ -165,7 +161,7 @@ describe('PoListViewComponent:', () => {
       spyOn(listViewAction, 'disabled').and.returnValue(true);
       spyOn(UtilsFunctions, 'isTypeof').and.returnValue(true);
 
-      expect(component.returnBooleanValue(listViewAction, item)).toBe(true);
+      expect(component.returnBooleanValue(listViewAction, item, 'disabled')).toBe(true);
       expect(listViewAction.disabled).toHaveBeenCalled();
       expect(UtilsFunctions.isTypeof).toHaveBeenCalled();
     });

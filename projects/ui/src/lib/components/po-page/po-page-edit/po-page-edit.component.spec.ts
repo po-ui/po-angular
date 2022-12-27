@@ -3,8 +3,6 @@ import { ComponentFixture, TestBed } from '@angular/core/testing';
 
 import { of } from 'rxjs';
 
-import { configureTestSuite } from './../../../util-test/util-expect.spec';
-
 import { PoBreadcrumbModule } from '../../po-breadcrumb/po-breadcrumb.module';
 import { PoButtonModule } from '../../po-button';
 
@@ -42,8 +40,8 @@ describe('PoPageEditComponent', () => {
   const event = document.createEvent('Event');
   event.initEvent('p-click', false, true);
 
-  configureTestSuite(() => {
-    TestBed.configureTestingModule({
+  beforeEach(async () => {
+    await TestBed.configureTestingModule({
       imports: [PoBreadcrumbModule, PoButtonModule],
       declarations: [
         ContainerComponent,
@@ -52,10 +50,8 @@ describe('PoPageEditComponent', () => {
         PoPageContentComponent,
         PoPageHeaderComponent
       ]
-    });
-  });
+    }).compileComponents();
 
-  beforeEach(() => {
     fixture = TestBed.createComponent(PoPageEditComponent);
     component = fixture.componentInstance;
 

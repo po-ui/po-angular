@@ -1,8 +1,6 @@
 import { ComponentFixture, fakeAsync, TestBed, tick } from '@angular/core/testing';
 import { Component } from '@angular/core';
 
-import { configureTestSuite } from './../../../util-test/util-expect.spec';
-
 import * as UtilsFunctions from '../../../utils/util';
 import { formatYear, setYearFrom0To100 } from '../../../utils/util';
 
@@ -26,14 +24,12 @@ describe('PoDatepickerComponent:', () => {
   let component: PoDatepickerComponent;
   let fixture: ComponentFixture<PoDatepickerComponent>;
 
-  configureTestSuite(() => {
-    TestBed.configureTestingModule({
+  beforeEach(async () => {
+    await TestBed.configureTestingModule({
       imports: [PoDatepickerModule, PoCalendarModule],
       providers: [PoCalendarService, PoCalendarLangService]
-    });
-  });
+    }).compileComponents();
 
-  beforeEach(() => {
     fixture = TestBed.createComponent(PoDatepickerComponent);
     component = fixture.componentInstance;
     component.label = 'Label de teste';
@@ -223,15 +219,13 @@ describe('PoDatepicker mocked with form', () => {
   let component: ContentProjectionComponent;
   let fixture: ComponentFixture<ContentProjectionComponent>;
 
-  configureTestSuite(() => {
-    TestBed.configureTestingModule({
+  beforeEach(async () => {
+    await TestBed.configureTestingModule({
       imports: [PoDatepickerModule],
       declarations: [ContentProjectionComponent],
       providers: [PoCalendarService, PoCalendarLangService]
-    });
-  });
+    }).compileComponents();
 
-  beforeEach(() => {
     fixture = TestBed.createComponent(ContentProjectionComponent);
     component = fixture.componentInstance;
   });
@@ -251,14 +245,12 @@ describe('PoDatepickerComponent:', () => {
   let component: PoDatepickerComponent;
   let fixture: ComponentFixture<PoDatepickerComponent>;
 
-  configureTestSuite(() => {
-    TestBed.configureTestingModule({
+  beforeEach(async () => {
+    await TestBed.configureTestingModule({
       imports: [PoDatepickerModule],
       providers: [PoCalendarService, PoCalendarLangService]
-    });
-  });
+    }).compileComponents();
 
-  beforeEach(() => {
     fixture = TestBed.createComponent(PoDatepickerComponent);
     component = fixture.componentInstance;
     component.label = 'Label de teste';
@@ -461,28 +453,6 @@ describe('PoDatepickerComponent:', () => {
         value: undefined
       }
     };
-
-    it('ngAfterViewInit: should call `setDialogPickerStyleDisplay` and call `focus` if autoFocus is true.', () => {
-      const setDialogPickerStyleDisplay = spyOn(component, <any>'setDialogPickerStyleDisplay');
-      const inputFocus = spyOn(component, 'focus');
-      component.autoFocus = true;
-
-      component.ngAfterViewInit();
-
-      expect(setDialogPickerStyleDisplay).toHaveBeenCalled();
-      expect(inputFocus).toHaveBeenCalled();
-    });
-
-    it('ngAfterViewInit: should call `setDialogPickerStyleDisplay` and not call `focus` if autoFocus is false.', () => {
-      const setDialogPickerStyleDisplay = spyOn(component, <any>'setDialogPickerStyleDisplay');
-      const inputFocus = spyOn(component, 'focus');
-      component.autoFocus = false;
-
-      component.ngAfterViewInit();
-
-      expect(setDialogPickerStyleDisplay).toHaveBeenCalled();
-      expect(inputFocus).not.toHaveBeenCalled();
-    });
 
     it('ngOnDestroy: should call `removeListeners`.', () => {
       const removeListener = spyOn(component, <any>'removeListeners');
@@ -724,16 +694,15 @@ describe('PoDatepickerComponent:', () => {
     });
 
     it('formatToDate: shouldn`t call `formatYear` with date year', () => {
-      const fakeThis = { format: 'dd/mm/yyyy' };
-      const newDate = {
-        getDate: () => 28,
-        getMonth: () => 1,
-        getFullYear: () => 2019
-      };
-      const formatedDate: any = '28/02/2019';
-      spyOn(UtilsFunctions, 'formatYear').and.returnValue('2019');
+      component.format = 'dd/mm/yyyy';
+      const newDate: Date = new Date(2019, 2, 28);
+      const expectedData: any = '28/02/2019';
 
-      expect(component.formatToDate.call(fakeThis, newDate)).toBe(formatedDate);
+      spyOn(UtilsFunctions, 'formatYear').and.returnValue('2019');
+      spyOn(component, <any>'replaceFormatSeparator').and.returnValue('28/02/2019');
+
+      const formattedDate = component.formatToDate(newDate);
+      expect(formattedDate).toBe(expectedData);
     });
 
     it('formatToDate: should return `undefined` if `value` is undefined', () => {
@@ -772,8 +741,10 @@ describe('PoDatepickerComponent:', () => {
             }
           },
           iconDatepicker: {
-            nativeElement: {
-              contains: () => iconDatepickerContains
+            buttonElement: {
+              nativeElement: {
+                contains: () => iconDatepickerContains
+              }
             }
           },
           hasOverlayClass: () => hasOverlayClass,
@@ -1050,6 +1021,74 @@ describe('PoDatepickerComponent:', () => {
       component.onKeyup.call(fakeThis, {});
       expect(fakeThis.controlModel).toHaveBeenCalled();
     });
+    it(`onKeyPress: should call 'isKeyCodeEnter' and check if typed key is enter.`, () => {
+      const eventEnterKey = { keyCode: 13 };
+
+      spyOn(component, 'togglePicker');
+
+      component.onKeyPress(eventEnterKey);
+
+      expect(component.togglePicker).toHaveBeenCalled();
+    });
+
+    it(`onKeyPress: should call 'isKeyCodeSpace' and check if typed key is space.`, () => {
+      const eventEnterKey = { keyCode: 32 };
+
+      spyOn(component, 'togglePicker');
+
+      component.onKeyPress(eventEnterKey);
+
+      expect(component.togglePicker).toHaveBeenCalled();
+    });
+
+    it('togglePicker: should not call initializeListeners if component.disabled is true', () => {
+      component.disabled = true;
+
+      spyOn(component, <any>'removeListeners');
+      spyOn(component, <any>'initializeListeners');
+
+      component['togglePicker']();
+
+      expect(component['removeListeners']).not.toHaveBeenCalled();
+      expect(component['initializeListeners']).not.toHaveBeenCalled();
+    });
+
+    it('togglePicker: should not call initializeListeners if component.readonly is true', () => {
+      component.readonly = true;
+
+      spyOn(component, <any>'removeListeners');
+      spyOn(component, <any>'initializeListeners');
+
+      component['togglePicker']();
+
+      expect(component['removeListeners']).not.toHaveBeenCalled();
+      expect(component['initializeListeners']).not.toHaveBeenCalled();
+    });
+
+    it('togglePicker: should call initializeListeners and setCalendarPosition if component.visible is falsy', () => {
+      component.readonly = false;
+      component.disabled = false;
+
+      spyOn(component, <any>'setCalendarPosition');
+      spyOn(component, <any>'initializeListeners');
+
+      component['togglePicker']();
+
+      expect(component['setCalendarPosition']).toHaveBeenCalled();
+      expect(component['initializeListeners']).toHaveBeenCalled();
+    });
+
+    it('togglePicker: should call removeListeners if component.visible is truthy', () => {
+      component.visible = true;
+      component.readonly = false;
+      component.disabled = false;
+
+      spyOn(component, <any>'removeListeners');
+
+      component['togglePicker']();
+
+      expect(component['removeListeners']).toHaveBeenCalled();
+    });
   });
 
   describe('Templates:', () => {
@@ -1105,6 +1144,36 @@ describe('PoDatepickerComponent:', () => {
 
       fixture.detectChanges();
       expect(fixture.debugElement.nativeElement.querySelector('po-clean')).toBe(null);
+    });
+  });
+  describe('replaceFormatSeparator: ', () => {
+    it('should show date separator as . according to russian locale selected', () => {
+      component.locale = 'ru';
+      component.format = 'dd/mm/yyyy';
+      const expectedFormat = 'dd.mm.yyyy';
+      const newFormat = component['replaceFormatSeparator']();
+      expect(newFormat).toBe(expectedFormat);
+    });
+    it('should show date separator as / according to portuguese locale selected', () => {
+      component.locale = 'pt';
+      component.format = 'dd/mm/yyyy';
+      const expectedFormat = 'dd/mm/yyyy';
+      const newFormat = component['replaceFormatSeparator']();
+      expect(newFormat).toBe(expectedFormat);
+    });
+    it('should show date separator as / according to english locale selected', () => {
+      component.locale = 'en';
+      component.format = 'dd/mm/yyyy';
+      const expectedFormat = 'dd/mm/yyyy';
+      const newFormat = component['replaceFormatSeparator']();
+      expect(newFormat).toBe(expectedFormat);
+    });
+    it('should show date separator as / according to spanish locale selected', () => {
+      component.locale = 'es';
+      component.format = 'dd/mm/yyyy';
+      const expectedFormat = 'dd/mm/yyyy';
+      const newFormat = component['replaceFormatSeparator']();
+      expect(newFormat).toBe(expectedFormat);
     });
   });
 });

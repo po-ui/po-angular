@@ -1,6 +1,5 @@
 import { ComponentFixture, TestBed } from '@angular/core/testing';
 
-import { configureTestSuite } from './../../../util-test/util-expect.spec';
 import { PoColorPaletteService } from './../../../services/po-color-palette/po-color-palette.service';
 
 import { PoTableModule } from '../po-table.module';
@@ -11,14 +10,12 @@ describe('PoTableShowSubtitleComponent:', () => {
   let fixture: ComponentFixture<PoTableShowSubtitleComponent>;
   let nativeElement;
 
-  configureTestSuite(() => {
-    TestBed.configureTestingModule({
+  beforeEach(async () => {
+    await TestBed.configureTestingModule({
       imports: [PoTableModule],
       providers: [PoColorPaletteService]
-    });
-  });
+    }).compileComponents();
 
-  beforeEach(() => {
     fixture = TestBed.createComponent(PoTableShowSubtitleComponent);
     component = fixture.componentInstance;
 

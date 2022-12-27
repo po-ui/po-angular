@@ -67,7 +67,7 @@
             <div *ngIf="showButtonsActions" class="po-list-view-actions">
               <po-button
                 *ngFor="let action of visibleActions"
-                [p-disabled]="returnBooleanValue(action, item)"
+                [p-disabled]="returnBooleanValue(action, item, 'disabled')"
                 [p-icon]="action.icon"
                 [p-label]="action.label"
                 [p-kind]="action.type"

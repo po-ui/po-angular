@@ -98,7 +98,7 @@
 
   <ng-template #lookupProcessesID>
     <po-lookup
-      *ngIf="noParameters"
+      *ngIf="noParameters && noCustomParamsComponent"
       class="po-md-12"
       name="processID"
       [(ngModel)]="value.processID"

@@ -2,8 +2,6 @@ import { ComponentFixture, TestBed } from '@angular/core/testing';
 
 import { Subject } from 'rxjs';
 
-import { configureTestSuite } from './../../util-test/util-expect.spec';
-
 import { PoContainerComponent } from '../po-container';
 import { PoWidgetComponent } from './po-widget.component';
 
@@ -11,13 +9,11 @@ describe('PoWidgetComponent with only body', () => {
   let component: PoWidgetComponent;
   let fixture: ComponentFixture<PoWidgetComponent>;
 
-  configureTestSuite(() => {
-    TestBed.configureTestingModule({
+  beforeEach(async () => {
+    await TestBed.configureTestingModule({
       declarations: [PoWidgetComponent, PoContainerComponent]
-    });
-  });
+    }).compileComponents();
 
-  beforeEach(() => {
     fixture = TestBed.createComponent(PoWidgetComponent);
     component = fixture.componentInstance;
     component.height = 200;
@@ -65,13 +61,11 @@ describe('PoWidgetComponent with title and actions', () => {
   const eventClick = document.createEvent('MouseEvent');
   eventClick.initEvent('click', false, true);
 
-  configureTestSuite(() => {
-    TestBed.configureTestingModule({
+  beforeEach(async () => {
+    await TestBed.configureTestingModule({
       declarations: [PoWidgetComponent, PoContainerComponent]
-    });
-  });
+    }).compileComponents();
 
-  beforeEach(() => {
     fixture = TestBed.createComponent(PoWidgetComponent);
     component = fixture.componentInstance;
     nativeElement = fixture.nativeElement;
@@ -89,6 +83,7 @@ describe('PoWidgetComponent with title and actions', () => {
   });
 
   it('should simulate widget click.', () => {
+    component.click.subscribe(() => {});
     spyOn(component.click, 'emit');
 
     component.onClick(eventClick);
@@ -96,7 +91,17 @@ describe('PoWidgetComponent with title and actions', () => {
     expect(component.click.emit).toHaveBeenCalled();
   });
 
+  it('should`t emit click if widget is not clickable', () => {
+    component.click.unsubscribe();
+    spyOn(component.click, 'emit');
+
+    component.onClick(eventClick);
+
+    expect(component.click.emit).not.toHaveBeenCalled();
+  });
+
   it('should simulate widget selected with keyboard (key which mode)', () => {
+    component.click.subscribe(() => {});
     const fakeEvent: any = {
       which: 32,
       preventDefault: () => {}
@@ -109,6 +114,7 @@ describe('PoWidgetComponent with title and actions', () => {
   });
 
   it('should simulate widget selected with keyboard (key code mode)', () => {
+    component.click.subscribe(() => {});
     const fakeEvent: any = {
       keyCode: 32,
       preventDefault: () => {}
@@ -118,6 +124,20 @@ describe('PoWidgetComponent with title and actions', () => {
     component.onKeyDown(fakeEvent);
 
     expect(component.click.emit).toHaveBeenCalled();
+  });
+
+  it('should`t emit click with keyboard if widget is not clickable', () => {
+    component.click.unsubscribe();
+    const fakeEvent: any = {
+      keyCode: 32,
+      preventDefault: () => {}
+    };
+
+    spyOn(component.click, 'emit');
+
+    component.onKeyDown(fakeEvent);
+
+    expect(component.click.emit).not.toHaveBeenCalled();
   });
 
   describe('Properties:', () => {
@@ -158,6 +178,7 @@ describe('PoWidgetComponent with title and actions', () => {
     });
 
     it('onClick: should call click.emit if disabled is false', () => {
+      component.click.subscribe(() => {});
       const mouseEvent: MouseEvent = new MouseEvent('click');
 
       component.disabled = false;
@@ -416,6 +437,7 @@ describe('PoWidgetComponent with title and actions', () => {
     });
 
     it('should be called the click event when clicked on the `po-widget` area.', () => {
+      component.click.subscribe(() => {});
       const test = nativeElement.querySelector('.po-widget');
 
       spyOn(component.click, 'emit');
@@ -640,13 +662,11 @@ describe('PoWidgetComponent with actions', () => {
   let component: PoWidgetComponent;
   let fixture: ComponentFixture<PoWidgetComponent>;
 
-  configureTestSuite(() => {
-    TestBed.configureTestingModule({
+  beforeEach(async () => {
+    await TestBed.configureTestingModule({
       declarations: [PoWidgetComponent, PoContainerComponent]
-    });
-  });
+    }).compileComponents();
 
-  beforeEach(() => {
     fixture = TestBed.createComponent(PoWidgetComponent);
     component = fixture.componentInstance;
     component.primaryAction = null;
@@ -670,13 +690,11 @@ describe('PoWidgetComponent with background and actions', () => {
 
   const image: string = 'http://lorempixel.com/400/400/';
 
-  configureTestSuite(() => {
-    TestBed.configureTestingModule({
+  beforeEach(async () => {
+    await TestBed.configureTestingModule({
       declarations: [PoWidgetComponent, PoContainerComponent]
-    });
-  });
+    }).compileComponents();
 
-  beforeEach(() => {
     fixture = TestBed.createComponent(PoWidgetComponent);
     component = fixture.componentInstance;
     component.primaryAction = null;

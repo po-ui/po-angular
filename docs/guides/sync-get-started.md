@@ -9,9 +9,9 @@ Para maiores detalhes sobre os serviços e métodos utilizados neste tutorial, c
 ### Pré-requisitos
 
 - [Node.js e NPM](https://nodejs.org/en/)
-- [Angular CLI](https://cli.angular.io/) (^14.0.0):
+- [Angular CLI](https://cli.angular.io/) (^15.0.0):
   - ```shell
-    npm install -g @angular/cli@14
+    npm install -g @angular/cli@15
     ```
 - [Ionic](https://ionicframework.com/docs/cli/) (^6.0.0):
   - ```shell
@@ -49,32 +49,32 @@ Antes de executar a instalação, é necessário que todas as dependências do p
 ```typescript
   ...
   "dependencies": {
-    "@angular/animations": "~14.0.2",
-    "@angular/common": "~14.0.2",
-    "@angular/core": "~14.0.2",
-    "@angular/forms": "~14.0.2",
-    "@angular/platform-browser": "~14.0.2",
-    "@angular/platform-browser-dynamic": "~14.0.2",
-    "@angular/router": "~14.0.2",
-    "@angular/service-worker": "~14.0.2",
+    "@angular/animations": "~15.0.3",
+    "@angular/common": "~15.0.3",
+    "@angular/core": "~15.0.3",
+    "@angular/forms": "~15.0.3",
+    "@angular/platform-browser": "~15.0.3",
+    "@angular/platform-browser-dynamic": "~15.0.3",
+    "@angular/router": "~15.0.3",
+    "@angular/service-worker": "~15.0.3",
     "@ionic/angular": "^6.0.0",
     "rxjs": "~7.5.5",
     "tslib": "^2.3.0",
-    "zone.js": "~0.11.4"
+    "zone.js": "~0.12.0"
     ...
   },
   "devDependencies": {
-    "@angular-devkit/build-angular": "~14.0.2",
-    "@angular-eslint/builder": "~14.0.0",
-    "@angular-eslint/eslint-plugin": "~14.0.0",
-    "@angular-eslint/eslint-plugin-template": "~14.0.0",
-    "@angular-eslint/template-parser": "~14.0.0",
-    "@angular/cli": "~14.0.2",
-    "@angular/compiler": "~14.0.2",
-    "@angular/compiler-cli": "~14.0.2",
-    "@angular/language-service": "~14.0.2",
+    "@angular-devkit/build-angular": "~15.0.3",
+    "@angular-eslint/builder": "~15.1.0",
+    "@angular-eslint/eslint-plugin": "~15.1.0",
+    "@angular-eslint/eslint-plugin-template": "~15.1.0",
+    "@angular-eslint/template-parser": "~15.1.0",
+    "@angular/cli": "~15.0.3",
+    "@angular/compiler": "~15.0.3",
+    "@angular/compiler-cli": "~15.0.3",
+    "@angular/language-service": "~15.0.3",
     "@ionic/angular-toolkit": "^6.0.0",
-    "typescript": "~4.7.4"
+    "typescript": "~4.8.4"
   },
   ...
 ```
@@ -116,7 +116,7 @@ Essas instalações se fazem necessárias por que a instalação inicial do Ioni
 Para instalar o `po-sync` no aplicativo execute o seguinte comando:
 
 ```shell
-ng add @po-ui/ng-sync
+ng add @po-ui/ng-sync@next
 ```
 
 ### Passo 5 - Utilizando o po-sync
@@ -171,8 +171,8 @@ Crie o arquivo `src/app/home/conference-schema.constants.ts` e adicione o conte�
 import { PoSyncSchema } from '@po-ui/ng-sync';
 
 export const conferenceSchema: PoSyncSchema = {
-  getUrlApi: 'https://po-sample-conference.herokuapp.com/conferences',
-  diffUrlApi: 'https://po-sample-conference.herokuapp.com/conferences/diff',
+  getUrlApi: 'https://po-sample-conference.fly.dev/conferences',
+  diffUrlApi: 'https://po-sample-conference.fly.dev/conferences/diff',
   deletedField: 'deleted',
   fields: [ 'id', 'title', 'location', 'description' ],
   idField: 'id',

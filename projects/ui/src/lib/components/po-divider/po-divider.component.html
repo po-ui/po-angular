@@ -1,3 +1,6 @@
-<div class="po-divider">
+<div class="po-divider" [attr.p-size]="borderWidth">
   <div *ngIf="label" class="po-divider-label">{{ label }}</div>
+  <svg xmlns="http://www.w3.org/2000/svg">
+    <line [attr.x1]="coordinateX1" y1="50%" [attr.x2]="coordinateX2" y2="50%" />
+  </svg>
 </div>

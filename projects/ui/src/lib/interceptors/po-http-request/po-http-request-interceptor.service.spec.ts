@@ -42,6 +42,27 @@ describe('PoHttpRequestInterceptorService: ', () => {
     expect(httpRequestInterceptor).toBeTruthy();
   });
 
+  it('should remove `X-PO-Screen-Lock` from request', inject(
+    [HttpClient, HttpTestingController],
+    (http: HttpClient, httpMock: HttpTestingController) => {
+      const headers = new HttpHeaders().set('X-PO-Screen-Lock', 'true');
+      http.get('/data', { headers }).subscribe();
+      const req = httpMock.match('/data');
+
+      expect(req[0].request.headers.has('X-PO-Screen-Lock')).toEqual(false);
+    }
+  ));
+  it('should remove `X-PO-No-Count-Pending-Requests` from request', inject(
+    [HttpClient, HttpTestingController],
+    (http: HttpClient, httpMock: HttpTestingController) => {
+      const headers = new HttpHeaders().set('X-PO-No-Count-Pending-Requests', 'true');
+      http.get('/data', { headers }).subscribe();
+      const req = httpMock.match('/data');
+
+      expect(req[0].request.headers.has('X-PO-No-Count-Pending-Requests')).toEqual(false);
+    }
+  ));
+
   describe('Methods: ', () => {
     it('getCountPendingRequests: should return observable when call `getCountPendingRequests` method.', () => {
       const observable = httpRequestInterceptor.getCountPendingRequests();

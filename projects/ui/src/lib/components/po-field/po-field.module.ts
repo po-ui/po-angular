@@ -1,7 +1,6 @@
 import { NgModule } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { FormsModule } from '@angular/forms';
-import { HttpClientModule } from '@angular/common/http';
 
 import { PoButtonGroupModule } from '../po-button-group/index';
 import { PoButtonModule } from '../po-button/index';
@@ -55,6 +54,7 @@ import { PoUploadFileRestrictionsComponent } from './po-upload/po-upload-file-re
 import { PoUrlComponent } from './po-url/po-url.component';
 import { PoCheckboxModule } from './po-checkbox/po-checkbox.module';
 import { PoRadioComponent } from './po-radio/po-radio.component';
+import { PoLabelModule } from '../po-label';
 
 /**
  * @description
@@ -70,7 +70,6 @@ import { PoRadioComponent } from './po-radio/po-radio.component';
   imports: [
     CommonModule,
     FormsModule,
-    HttpClientModule,
     PoButtonGroupModule,
     PoButtonModule,
     PoCleanModule,
@@ -88,7 +87,8 @@ import { PoRadioComponent } from './po-radio/po-radio.component';
     PoTableModule,
     PoTooltipModule,
     PoIconModule,
-    PoCheckboxModule
+    PoCheckboxModule,
+    PoLabelModule
   ],
   exports: [
     PoCheckboxGroupModule,
@@ -115,7 +115,8 @@ import { PoRadioComponent } from './po-radio/po-radio.component';
     PoUploadComponent,
     PoUrlComponent,
     PoRadioComponent,
-    PoCheckboxModule
+    PoCheckboxModule,
+    PoLabelModule
   ],
   declarations: [
     PoComboComponent,

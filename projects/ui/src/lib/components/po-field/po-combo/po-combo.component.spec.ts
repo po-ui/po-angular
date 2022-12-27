@@ -5,7 +5,7 @@ import { HttpClientTestingModule, HttpTestingController } from '@angular/common/
 
 import { Observable, of, throwError } from 'rxjs';
 
-import { changeBrowserInnerWidth, configureTestSuite } from './../../../util-test/util-expect.spec';
+import { changeBrowserInnerWidth } from './../../../util-test/util-expect.spec';
 
 import { PoLoadingModule } from '../../po-loading/po-loading.module';
 
@@ -32,15 +32,13 @@ describe('PoComboComponent:', () => {
   let fixture: ComponentFixture<PoComboComponent>;
   let nativeElement: any;
 
-  configureTestSuite(() => {
-    TestBed.configureTestingModule({
+  beforeEach(async () => {
+    await TestBed.configureTestingModule({
       imports: [PoLoadingModule, PoIconModule],
       declarations: [PoComboComponent, PoFieldContainerComponent, PoFieldContainerBottomComponent, PoCleanComponent],
       providers: [HttpClient, HttpHandler]
-    });
-  });
+    }).compileComponents();
 
-  beforeEach(() => {
     fixture = TestBed.createComponent(PoComboComponent);
     component = fixture.componentInstance;
     component.label = 'Label de teste';
@@ -1821,15 +1819,13 @@ describe('PoComboComponent - with service:', () => {
 
   const mockURL = 'rest/tecnologies';
 
-  configureTestSuite(() => {
-    TestBed.configureTestingModule({
+  beforeEach(async () => {
+    await TestBed.configureTestingModule({
       imports: [HttpClientTestingModule, PoLoadingModule],
       declarations: [PoComboComponent, PoFieldContainerComponent, PoFieldContainerBottomComponent],
       providers: [HttpClient, HttpHandler, PoComboFilterService]
-    });
-  });
+    }).compileComponents();
 
-  beforeEach(() => {
     fixture = TestBed.createComponent(PoComboComponent);
     component = fixture.componentInstance;
     component.label = 'Label de teste';

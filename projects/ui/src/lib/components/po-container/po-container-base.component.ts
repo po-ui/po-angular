@@ -16,7 +16,6 @@ export class PoContainerBaseComponent {
   private _height?: number;
   private _noBorder?: boolean = false;
   private _noPadding?: boolean = false;
-  private _noShadow?: boolean = false;
 
   /**
    * @optional
@@ -70,19 +69,17 @@ export class PoContainerBaseComponent {
   }
 
   /**
+   * @deprecated 16.x.x
+   *
    * @optional
    *
    * @description
    *
-   * Desabilita o sombreamento em torno do `po-container`.
+   * **Deprecated 16.x.x**.
+   *
+   * Desabilita o sombreamento em torno do `po-container`. Não é mais possível definir shadow para o `po-container` por questões de acessibilidade e usabilidade, por isso não indicamos mais o uso desta propriedade.
    *
    * @default `false`
    */
-  @Input('p-no-shadow') set noShadow(value: boolean) {
-    this._noShadow = convertToBoolean(value);
-  }
-
-  get noShadow(): boolean {
-    return this._noShadow;
-  }
+  @Input('p-no-shadow') noShadow: boolean = false;
 }
