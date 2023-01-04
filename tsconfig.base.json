@@ -12,6 +12,10 @@
     "target": "es2015",
     "typeRoots": ["node_modules/@types"],
     "lib": ["es2018", "dom"],
+    "strict": true,
+    "forceConsistentCasingInFileNames": true,
+    "noImplicitReturns": true,
+    "noFallthroughCasesInSwitch": true,
     "paths": {
       "@po-ui/ng-components": ["./dist/ng-components"],
       "@po-ui/ng-components/*": ["./dist/ng-components/*"],
@@ -24,5 +28,10 @@
       "@po-ui/ng-code-editor": ["./dist/ng-code-editor"],
       "@po-ui/ng-schematics/*": ["./dist/ng-schematics/*"]
     }
+  },
+  "angularCompilerOptions": {
+    "strictInjectionParameters": true,
+    "strictTemplates": true,
+    "strictInputAccessModifiers": true
   }
 }

@@ -39,7 +39,11 @@
     },
     "app": {
       "projectType": "application",
-      "schematics": {},
+      "schematics": {
+        "@schematics/angular:application": {
+          "strict": true
+        }
+      },
       "root": "projects/app",
       "sourceRoot": "projects/app/src",
       "prefix": "app",
@@ -98,7 +102,8 @@
                 },
                 {
                   "type": "anyComponentStyle",
-                  "maximumWarning": "6kb"
+                  "maximumWarning": "6kb",
+                  "maximumError": "4kb"
                 }
               ]
             },
@@ -282,7 +287,11 @@
     },
     "portal": {
       "projectType": "application",
-      "schematics": {},
+      "schematics": {
+        "@schematics/angular:application": {
+          "strict": true
+        }
+      },
       "root": "projects/portal",
       "sourceRoot": "projects/portal/src",
       "prefix": "app",
