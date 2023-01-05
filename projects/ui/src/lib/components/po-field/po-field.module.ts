@@ -70,6 +70,9 @@ import { PoLabelModule } from '../po-label';
   imports: [
     CommonModule,
     FormsModule,
+    FormsModule.withConfig({
+      callSetDisabledState: 'whenDisabledForLegacyCode'
+    }),
     PoButtonGroupModule,
     PoButtonModule,
     PoCleanModule,
