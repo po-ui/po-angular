@@ -1,4 +1,4 @@
-import { Input, EventEmitter, Directive } from '@angular/core';
+import { Input, EventEmitter, Directive, Output } from '@angular/core';
 
 import { convertToBoolean } from './../../utils/util';
 import { PoModalAction } from './po-modal-action.interface';
@@ -26,6 +26,9 @@ import { poModalLiterals } from './po-modal.literals';
 export class PoModalBaseComponent {
   /** Título da modal. */
   @Input('p-title') title: string;
+
+  /** Evento disparado ao fechar o modal. */
+  @Output('p-close') closeModal: EventEmitter<any> = new EventEmitter();
 
   /**
    * Deve ser definido um objeto que implementa a interface `PoModalAction` contendo a label e a função da primeira ação.
@@ -112,6 +115,8 @@ export class PoModalBaseComponent {
 
   /** Função para fechar a modal. */
   close(xClosed = false): void {
+    this.closeModal.emit();
+
     this.isHidden = true;
     if (xClosed) {
       this.onXClosed.emit(xClosed);
