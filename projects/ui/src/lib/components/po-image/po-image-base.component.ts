@@ -1,4 +1,5 @@
 import { Directive, Input } from '@angular/core';
+import { InputBoolean } from '../../decorators';
 
 /**
  * @description
@@ -57,4 +58,24 @@ export class PoImageBaseComponent {
    * ou um servidor externo (`https://po-ui.io/assets/images/logo-black-small.png`).
    */
   @Input('p-src') source: string;
+
+  /**
+   * @optional
+   *
+   * @description
+   *
+   * Defini o priority.
+   */
+  @InputBoolean()
+  @Input('p-priority')
+  priority: boolean = false;
+
+  /**
+   * @optional
+   *
+   * @description
+   *
+   *
+   */
+  @Input('p-loading') loading: 'lazy' | 'eager' | 'auto';
 }

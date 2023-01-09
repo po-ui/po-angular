@@ -1,3 +1,3 @@
-<po-container *ngIf="source">
-  <img class="po-image" [attr.alt]="alternate" [attr.height]="height" [attr.src]="source" />
+<po-container class="po-container-image" *ngIf="source" [p-height]="height">
+  <img class="po-image" [attr.alt]="alternate" [priority]="priority" [loading]="eager" [fill]="true" [ngSrc]="source" />
 </po-container>
