@@ -88,7 +88,7 @@ export class PoTagComponent extends PoTagBaseComponent implements OnInit {
 
   styleTag() {
     if (!this.tagColor && !this.inverse) {
-      return { 'background-color': this.customColor };
+      return { 'background-color': this.customColor, 'color': 'white' };
     } else if (!this.tagColor && this.inverse && !this.customTextColor) {
       return { 'border': '1px solid ' + this.customColor };
     } else if (!this.tagColor && this.inverse && this.customTextColor) {
