@@ -207,7 +207,7 @@ describe('PoMenuComponent:', () => {
     spyOn(component.menus[3], <any>'action');
 
     component['clickMenuItem'](component.menus[3]);
-    // expect(component.activeMenuItem).toBe(undefined);
+    expect(component.activeMenuItem).toBeDefined();
     expect(component.mobileOpened).toBeFalsy();
     expect(component.menus[3].action).toHaveBeenCalled();
   });
@@ -246,7 +246,7 @@ describe('PoMenuComponent:', () => {
 
   it('should open sub menu external link', () => {
     component['clickMenuItem'](component.menus[1].subItems[1]);
-    // expect(component.activeMenuItem).toBe(undefined);
+    expect(component.activeMenuItem).toBeDefined();
     expect(component.mobileOpened).toBe(false);
   });
 

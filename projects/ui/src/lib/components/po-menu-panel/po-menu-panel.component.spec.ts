@@ -106,7 +106,7 @@ describe('PoMenuPanelComponent: ', () => {
 
       component['clickMenuItem'](<any>component.menus[3]);
 
-      // expect(component.activeMenuItem).toBe(undefined);
+      expect(component.activeMenuItem).toBeDefined();
       expect(component.menus[3].action).toHaveBeenCalled();
     });
 
