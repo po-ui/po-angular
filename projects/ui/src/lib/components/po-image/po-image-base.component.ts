@@ -68,7 +68,7 @@ export class PoImageBaseComponent {
    */
   @InputBoolean()
   @Input('p-priority')
-  priority: boolean = false;
+  priority: boolean = false; //?added here
 
   /**
    * @optional

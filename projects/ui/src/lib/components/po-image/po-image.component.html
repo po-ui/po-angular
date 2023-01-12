@@ -1,3 +1,11 @@
 <po-container class="po-container-image" *ngIf="source" [p-height]="height">
   <img class="po-image" [attr.alt]="alternate" [priority]="priority" [loading]="eager" [fill]="true" [ngSrc]="source" />
 </po-container>
+
+<!--necessário criar uma classe no po-container com position relative
+
+.po-container-image {
+  position: relative;
+}
+
+-->

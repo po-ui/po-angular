@@ -10,7 +10,7 @@ import { PoContainerModule } from '../po-container';
  */
 @NgModule({
   declarations: [PoImageComponent],
-  imports: [CommonModule, PoContainerModule, NgOptimizedImage],
+  imports: [CommonModule, PoContainerModule, NgOptimizedImage], //? added here NgOptimizedImage
   exports: [PoImageComponent]
 })
 export class PoImageModule {}
