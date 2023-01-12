@@ -12,10 +12,10 @@
     "target": "es2015",
     "typeRoots": ["node_modules/@types"],
     "lib": ["es2018", "dom"],
-    "strict": true,
-    "forceConsistentCasingInFileNames": true,
-    "noImplicitReturns": true,
-    "noFallthroughCasesInSwitch": true,
+    "strict": true, // ? added here
+    "forceConsistentCasingInFileNames": true, //? added here
+    "noImplicitReturns": true, //? added here
+    "noFallthroughCasesInSwitch": true, //? added here
     "paths": {
       "@po-ui/ng-components": ["./dist/ng-components"],
       "@po-ui/ng-components/*": ["./dist/ng-components/*"],
@@ -30,8 +30,8 @@
     }
   },
   "angularCompilerOptions": {
-    "strictInjectionParameters": true,
-    "strictTemplates": true,
-    "strictInputAccessModifiers": true
+    "strictInjectionParameters": true, //? added here
+    "strictTemplates": true, //? added here
+    "strictInputAccessModifiers": true //? added here
   }
 }
