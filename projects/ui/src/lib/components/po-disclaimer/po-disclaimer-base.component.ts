@@ -1,6 +1,8 @@
+import { PoLanguageService } from './../../services/po-language/po-language.service';
 import { EventEmitter, Input, Output, Directive } from '@angular/core';
 
 import { convertToBoolean } from '../../utils/util';
+import { PoDisclaimerLiterals } from './po-disclaimer.literals';
 
 const PO_DISCLAIMER_TYPES = ['default', 'danger'];
 const PO_DISCLAIMER_DEFAULT_TYPE = 'default';
@@ -39,6 +41,7 @@ export class PoDisclaimerBaseComponent {
    */
   @Output('p-close-action') closeAction: EventEmitter<any> = new EventEmitter<any>();
 
+  literals: any;
   showDisclaimer = true;
 
   private _type: string = 'default';
@@ -76,6 +79,13 @@ export class PoDisclaimerBaseComponent {
     return this._type;
   }
 
+  constructor(private languageService: PoLanguageService) {
+    const language = this.languageService.getShortLanguage();
+    this.literals = {
+      ...PoDisclaimerLiterals[language]
+    };
+  }
+
   close(): void {
     this.showDisclaimer = false;
     this.closeAction.emit({ value: this.value, label: this.label, property: this.property });
@@ -83,5 +93,9 @@ export class PoDisclaimerBaseComponent {
 
   getLabel() {
     return this.label ? this.label : this.value;
+  }
+
+  setAriaLabel() {
+    return this.label ? this.label + ' ' + this.literals.remove : this.value + ' ' + this.literals.remove;
   }
 }
