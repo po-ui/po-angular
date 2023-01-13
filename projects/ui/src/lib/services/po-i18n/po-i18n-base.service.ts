@@ -1,14 +1,14 @@
 import { HttpClient } from '@angular/common/http';
-import { Directive, Inject, Injectable } from '@angular/core';
+import { Directive, Inject } from '@angular/core';
 
 import { Observable } from 'rxjs';
 
 import { isLanguage, reloadCurrentPage } from '../../utils/util';
 import { PoLanguageService } from '../po-language/po-language.service';
 
-import { I18N_CONFIG } from './po-i18n-config-injection-token';
 import { PoI18nConfig } from './interfaces/po-i18n-config.interface';
 import { PoI18nLiterals } from './interfaces/po-i18n-literals.interface';
+import { I18N_CONFIG } from './po-i18n-config-injection-token';
 
 /**
  * @description
@@ -183,7 +183,7 @@ export class PoI18nBaseService {
    * @returns {string} sigla do idioma padrão.
    */
   getLanguage(): string {
-    return this.languageService.getLanguage();
+    return this.languageService?.getLanguage();
   }
 
   getLiterals(options: PoI18nLiterals = {}): Observable<object> {
@@ -211,7 +211,7 @@ export class PoI18nBaseService {
    * @returns {string} sigla do idioma padrão.
    */
   getShortLanguage(): string {
-    return this.languageService.getShortLanguage();
+    return this.languageService?.getShortLanguage();
   }
 
   /**
@@ -238,7 +238,7 @@ export class PoI18nBaseService {
       return;
     }
 
-    this.languageService.setLanguage(language);
+    this.languageService?.setLanguage(language);
 
     if (reload) {
       reloadCurrentPage();
@@ -248,7 +248,7 @@ export class PoI18nBaseService {
   private setConfig(config: PoI18nConfig) {
     // Seta as configurações padrões definidas no importação do módulo
     if (config['default']) {
-      this.languageService.setLanguageDefault(config['default']['language']);
+      this.languageService?.setLanguageDefault(config['default']['language']);
 
       this.contextDefault = config['default']['context'] ? config['default']['context'] : '';
       this.useCache = config['default']['cache'] ? config['default']['cache'] : false;
