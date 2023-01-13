@@ -1,7 +1,18 @@
-<po-navbar p-logo="./assets/graphics/po.png" p-shadow [p-icon-actions]="iconActions" [p-items]="items"> </po-navbar>
+<po-navbar
+  [class.theme-dark]="theme === 'dark'"
+  p-logo="./assets/graphics/po.png"
+  p-shadow
+  [p-icon-actions]="iconActions"
+  [p-items]="items"
+>
+</po-navbar>
+
+<ng-template #iconTemplate>
+  <i class="fa-solid fa-sun"></i>
+</ng-template>
 
 <!-- <po-menu #userMenu [p-menus]="menus" p-filter></po-menu> -->
 
-<div class="po-wrapper">
+<div class="po-wrapper" [class.theme-dark]="theme === 'dark'">
   <router-outlet></router-outlet>
 </div>

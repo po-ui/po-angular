@@ -1,4 +1,4 @@
-import { Component, OnInit } from '@angular/core';
+import { Component, OnInit, TemplateRef, ViewChild } from '@angular/core';
 
 import { PoMenuItem, PoNavbarItem, PoNavbarIconAction, PoNotificationService } from '@po-ui/ng-components';
 
@@ -11,15 +11,21 @@ const KEY_STORAGE_REVIEW_SURVEY = 'review_survey_po_ui';
   templateUrl: './app.component.html'
 })
 export class AppComponent implements OnInit {
+  @ViewChild('iconTemplate', { static: true }) iconTemplate: TemplateRef<void>;
+
   menus: Array<PoMenuItem> = [];
   items: Array<PoNavbarItem> = [];
   iconActions: Array<PoNavbarIconAction> = [];
+  theme = 'light';
 
   private location;
 
   constructor(private versionService: VersionService, private notification: PoNotificationService) {}
 
   async ngOnInit() {
+    if (localStorage.getItem('po-ui-theme')) {
+      this.theme = localStorage.getItem('po-ui-theme');
+    }
     const version = await this.versionService.getCurrentVersion().toPromise();
 
     this.items = [
@@ -36,7 +42,28 @@ export class AppComponent implements OnInit {
     this.iconActions = [
       { icon: 'po-icon-social-github', link: 'https://github.com/po-ui', label: 'Github' },
       { icon: 'po-icon-social-twitter', link: 'https://twitter.com/@pouidev', label: 'Twitter' },
-      { icon: 'po-icon-social-instagram', link: 'https://www.instagram.com/pouidev/', label: 'Instagram' }
+      { icon: 'po-icon-social-instagram', link: 'https://www.instagram.com/pouidev/', label: 'Instagram' },
+      {
+        icon: `${this.theme === 'dark' ? 'far fa-sun' : 'far fa-moon'}`,
+        label: 'tema',
+        action: this.changeTheme.bind(this)
+      }
+    ];
+  }
+
+  changeTheme() {
+    this.theme = this.theme === 'light' ? 'dark' : 'light';
+    localStorage.setItem('po-ui-theme', this.theme);
+
+    this.iconActions = [
+      { icon: 'po-icon-social-github', link: 'https://github.com/po-ui', label: 'Github' },
+      { icon: 'po-icon-social-twitter', link: 'https://twitter.com/@pouidev', label: 'Twitter' },
+      { icon: 'po-icon-social-instagram', link: 'https://www.instagram.com/pouidev/', label: 'Instagram' },
+      {
+        icon: `${this.theme === 'dark' ? 'far fa-sun' : 'far fa-moon'}`,
+        label: 'tema',
+        action: this.changeTheme.bind(this)
+      }
     ];
   }
 

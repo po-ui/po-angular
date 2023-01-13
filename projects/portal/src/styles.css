@@ -1,17 +1,174 @@
 :root {
   --color-portal-highlight: #c9357d;
-  --color-portal-background-color-highlight: #e6f1f5;
+  --color-portal-background-color: #fff;
+  --color-portal-background-secondary-color: #fff;
   --color-portal-titles: #425357;
 
   --font-family-po-ui: Roboto;
   --font-family-po-ui-light: Roboto-Condensed-Light;
   --font-family-po-ui-bold: Roboto-Bold;
+
+  --color-text-portal-theme-deep: #000000;
+  --color-text-portal-theme-semi-deep: #1d2426;
+  --color-text-portal-theme-small-deep: #4a5c60;
+}
+
+:root .theme-dark {
+  --color-portal-highlight: #bd94d1;
+  --color-portal-background-color: #0b0e0e;
+  --color-portal-background-secondary-color: #1d2226;
+
+  --color-portal-titles: #fff;
+
+  --color-text-portal-theme-deep: #fff;
+  --color-text-portal-theme-semi-deep: rgba(255, 255, 255, 0.885);
+  --color-text-portal-theme-small-deep: rgba(255, 255, 255, 0.786);
+
+  --color-font-code-home: #000;
+}
+
+.po-page-content {
+  background-color: var(--color-portal-background-color);
+}
+
+/* ----- TELA HOME ----- */
+
+/* navbar home */
+po-navbar.theme-dark header {
+  background-color: var(--color-portal-background-secondary-color);
+}
+
+.theme-dark .po-navbar-item-link {
+  color: var(--color-portal-highlight);
+}
+
+.theme-dark .po-navbar-action .po-icon,
+.theme-dark .po-navbar-action po-icon,
+.theme-dark .po-navbar-item-navigation-icon span {
+  color: var(--color-portal-highlight);
+}
+
+/* widget página inicial */
+.theme-dark po-widget.only-docs {
+  --background: var(--color-portal-background-color);
+}
+
+/* widget tela home */
+.theme-dark po-widget.only-docs h4,
+.theme-dark po-widget.only-docs p {
+  color: #fff;
+}
+
+.theme-dark po-widget.only-docs .po-widget .po-widget-action {
+  color: var(--color-portal-highlight);
+}
+
+section.ux-friendly h4 {
+  color: var(--color-text-portal-theme-deep);
+}
+
+section.ux-friendly p {
+  color: var(--color-text-portal-theme-small-deep);
+}
+
+section.section-open-source p {
+  color: var(--color-text-portal-theme-small-deep);
+}
+
+section.section-quem-utiliza h4 {
+  color: var(--color-text-portal-theme-deep);
 }
 
 body {
-  background-color: #fafbfb;
+  background-color: var(--color-portal-background-color);
   color: #333;
 }
+
+/* ----------------- */
+
+/* -----DOCUMENTAÇÃO DE UM COMPONENTE ----- */
+
+.theme-dark div.docs-api p {
+  color: var(--color-text-portal-theme-small-deep);
+}
+
+.theme-dark div.docs-api li {
+  color: #fff;
+}
+
+.theme-dark .docs-api-property-description strong {
+  color: rgb(154, 194, 239);
+}
+
+.theme-dark .po-page-header {
+  background-color: var(--color-portal-background-color);
+}
+
+.theme-dark .po-page-header .po-page-header-title {
+  color: var(--color-text-portal-theme-semi-deep);
+}
+
+.theme-dark .po-menu-filter-container {
+  background-color: var(--color-portal-background-color);
+  border-right: 1px solid var(--color-portal-background-secondary-color);
+}
+
+.theme-dark label.doc-label-path {
+  color: #fff;
+}
+/* ----------------- */
+
+/* ----- MENU LATERAL  ----- */
+.theme-dark po-menu.only-docs div.po-menu-inner {
+  background-color: var(--color-portal-background-color);
+}
+
+.theme-dark po-menu.only-docs div.po-menu-mobile {
+  background-color: var(--color-portal-background-secondary-color);
+  color: var(--color-portal-highlight);
+}
+
+.theme-dark po-menu.only-docs div.po-menu-item {
+  background-color: var(--color-portal-background-color);
+  border-right: 1px solid var(--color-portal-background-secondary-color);
+}
+
+/* .theme-dark po-menu.only-docs div.po-menu-item div:not(div.po-menu-item-level-two div){
+  color:var(--color-portal-highlight);
+} */
+
+.theme-dark po-menu.only-docs div.po-menu-item:not(div.po-menu-sub-item-selected) {
+  color: var(--color-portal-highlight);
+}
+
+.theme-dark po-menu.only-docs div.po-menu-sub-item-selected {
+  background-color: var(--color-portal-highlight) !important;
+  color: #0b0e0e;
+}
+
+.theme-dark po-menu.only-docs div.po-menu-item span {
+  color: var(--color-portal-highlight);
+}
+
+/* ----------------- */
+
+/* -----ABA COMPONENTES ----- */
+.theme-dark po-list-view.only-docs .po-list-view-container {
+  background-color: var(--color-portal-background-secondary-color);
+}
+
+.theme-dark po-list-view.only-docs .po-list-view {
+  border: 1px solid var(--color-portal-background-secondary-color);
+}
+
+.theme-dark po-list-view.only-docs .po-list-view-container span.po-list-view-title-no-link {
+  color: var(--color-portal-highlight);
+}
+
+.theme-dark po-list-view.only-docs .po-list-view-container p {
+  color: var(--color-text-portal-theme-small-deep);
+}
+/* ----------------- */
 
 .dot {
   border-radius: 50%;
@@ -237,7 +394,7 @@ pre code {
 }
 
 .docs-sample-container {
-  background: #fff;
+  background: var(--color-portal-background-secondary-color);
   box-shadow: 0 10px 6px -6px rgba(0, 0, 0, 0.2);
   -moz-box-shadow: 0 10px 6px -6px rgba(0, 0, 0, 0.2);
   -webkit-box-shadow: 0 10px 6px -6px rgba(0, 0, 0, 0.2);
@@ -246,6 +403,23 @@ pre code {
   min-height: 100px;
   padding: 15px;
   position: relative;
+}
+
+.theme-dark .docs-sample-container {
+  border-radius: 0.8rem;
+}
+
+.theme-dark .docs-sample-container label,
+.docs-sample-container span.po-info-value {
+  color: #fff;
+}
+
+.theme-dark .docs-sample-container span.po-info-label {
+  color: var(--color-portal-highlight);
+}
+
+.theme-dark .docs-sample-container .po-field-container-bottom-help-text {
+  color: var(--color-text-portal-theme-semi-deep);
 }
 
 .docs-sample-container .po-wrapper {

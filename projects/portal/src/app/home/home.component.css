@@ -50,6 +50,7 @@
 .font-code {
   background-color: #bdffd9;
   font-family: var(--font-family-po-ui-bold);
+  color: var(--color-font-code-home);
 }
 
 .home-link {
