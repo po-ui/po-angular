@@ -94,6 +94,7 @@ export class PoDatepickerRangeComponent
   private eventResizeListener;
   private poDatepickerRangeElement: ElementRef<any>;
   private poMaskObject: PoMask;
+  private format: any = 'dd/mm/yyyy';
 
   get autocomplete() {
     return this.noAutocomplete ? 'off' : 'on';
@@ -139,11 +140,12 @@ export class PoDatepickerRangeComponent
     private controlPosition: PoControlPositionService,
     private renderer: Renderer2,
     private cd: ChangeDetectorRef,
+    poLanguageService: PoLanguageService,
     poDateService: PoDateService,
-    poDatepickerRangeElement: ElementRef,
-    poLanguageService: PoLanguageService
+    poDatepickerRangeElement: ElementRef
   ) {
     super(poDateService, poLanguageService);
+
     this.poDatepickerRangeElement = poDatepickerRangeElement;
   }
 
@@ -170,7 +172,7 @@ export class PoDatepickerRangeComponent
 
   ngOnInit() {
     // Classe de máscara
-    this.poMaskObject = this.buildMask();
+    this.poMaskObject = this.buildMask(this.replaceFormatSeparator());
   }
 
   ngOnChanges(changes: SimpleChanges): void {
@@ -310,7 +312,7 @@ export class PoDatepickerRangeComponent
   }
 
   // Retorna um objeto do tipo PoMask com a mascara configurada.
-  private buildMask(): PoMask {
+  private buildMask(format: string = this.format): PoMask {
     let mask = this.format.toUpperCase();
 
     mask = mask.replace(/DD/g, '99');
@@ -321,7 +323,7 @@ export class PoDatepickerRangeComponent
   }
 
   private formatDate(format: string, day: string = '', month: string = '', year: string = ''): string {
-    let dateFormatted = format;
+    let dateFormatted = this.replaceFormatSeparator();
 
     day = day && day.includes('T') ? day.slice(0, 2) : day;
 
@@ -580,5 +582,14 @@ export class PoDatepickerRangeComponent
       this.isCalendarVisible = false;
     }
     this.cd.markForCheck();
+  }
+
+  protected replaceFormatSeparator() {
+    let newFormat = this.format;
+    const newDateSeparator = this.poLanguageService.getDateSeparator(this.locale);
+    if (newDateSeparator !== '/') {
+      newFormat = newFormat.replace(/\//g, newDateSeparator);
+    }
+    return newFormat;
   }
 }

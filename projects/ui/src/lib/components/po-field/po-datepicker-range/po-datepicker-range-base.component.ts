@@ -111,7 +111,6 @@ export abstract class PoDatepickerRangeBaseComponent implements ControlValueAcce
   errorMessage: string = '';
   dateRange: PoDatepickerRange = { start: '', end: '' };
 
-  protected format: any = 'dd/mm/yyyy';
   protected isDateRangeInputFormatValid: boolean = true;
   protected isStartDateRangeInputValid: boolean = true;
   protected onTouchedModel: any;
@@ -393,8 +392,8 @@ export abstract class PoDatepickerRangeBaseComponent implements ControlValueAcce
     return this._locale || this.language;
   }
 
-  constructor(protected poDateService: PoDateService, languageService: PoLanguageService) {
-    this.language = languageService.getShortLanguage();
+  constructor(protected poDateService: PoDateService, protected poLanguageService: PoLanguageService) {
+    this.language = poLanguageService.getShortLanguage();
   }
 
   // Função implementada do ControlValueAccessor
@@ -594,4 +593,6 @@ export abstract class PoDatepickerRangeBaseComponent implements ControlValueAcce
   protected abstract resetDateRangeInputValidation(): void;
 
   protected abstract updateScreenByModel(dateRange: PoDatepickerRange);
+
+  protected abstract replaceFormatSeparator(): any;
 }

@@ -16,6 +16,7 @@ describe('PoDatepickerRangeBaseComponent:', () => {
   class PoDatepickerRangeComponent extends PoDatepickerRangeBaseComponent {
     updateScreenByModel(dateRange: PoDatepickerRange) {}
     resetDateRangeInputValidation() {}
+    replaceFormatSeparator(): any {}
   }
 
   const mockedService: any = {

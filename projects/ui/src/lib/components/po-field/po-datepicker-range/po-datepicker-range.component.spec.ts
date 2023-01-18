@@ -2210,4 +2210,35 @@ describe('PoDatepickerRangeComponent:', () => {
       expect(poDatepickerField.classList).not.toContain('po-datepicker-range-field-focused');
     });
   });
+
+  describe('replaceFormatSeparator: ', () => {
+    it('should show date separator as . according to russian locale selected', () => {
+      component.locale = 'ru';
+      component.format = 'dd/mm/yyyy';
+      const expectedFormat = 'dd.mm.yyyy';
+      const newFormat = component['replaceFormatSeparator']();
+      expect(newFormat).toBe(expectedFormat);
+    });
+    it('should show date separator as / according to portuguese locale selected', () => {
+      component.locale = 'pt';
+      component.format = 'dd/mm/yyyy';
+      const expectedFormat = 'dd/mm/yyyy';
+      const newFormat = component['replaceFormatSeparator']();
+      expect(newFormat).toBe(expectedFormat);
+    });
+    it('should show date separator as / according to english locale selected', () => {
+      component.locale = 'en';
+      component.format = 'dd/mm/yyyy';
+      const expectedFormat = 'dd/mm/yyyy';
+      const newFormat = component['replaceFormatSeparator']();
+      expect(newFormat).toBe(expectedFormat);
+    });
+    it('should show date separator as / according to spanish locale selected', () => {
+      component.locale = 'es';
+      component.format = 'dd/mm/yyyy';
+      const expectedFormat = 'dd/mm/yyyy';
+      const newFormat = component['replaceFormatSeparator']();
+      expect(newFormat).toBe(expectedFormat);
+    });
+  });
 });
