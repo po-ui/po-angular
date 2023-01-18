@@ -9,6 +9,6 @@ export const poModalLiterals = {
     close: 'Fechar'
   },
   ru: {
-    close: 'близко'
+    close: 'Закрыть'
   }
 };

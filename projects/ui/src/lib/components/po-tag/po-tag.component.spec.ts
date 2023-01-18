@@ -354,7 +354,15 @@ describe('PoTagComponent:', () => {
       component.customColor = 'red';
 
       const result = component.styleTag();
-      expect(result).toEqual({ 'background-color': 'red' });
+      expect(result).toEqual({ 'background-color': 'red', 'color': 'white' });
+    });
+
+    it('styleTag : should change customTextColor to white if it is not defined and customColor is defined ', () => {
+      component.customTextColor = '';
+      component.customColor = 'red';
+
+      const result = component.styleTag();
+      expect(result).toEqual({ 'background-color': 'red', 'color': 'white' });
     });
 
     it('styleTag : should change the border if there is inverse and customColor', () => {
