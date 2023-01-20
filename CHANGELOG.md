@@ -2,13 +2,16 @@
 
 All notable changes to this project will be documented in this file. See [standard-version](https://github.com/conventional-changelog/standard-version) for commit guidelines.
 
-# [15.0.0-rc.0](https://github.com/po-ui/po-angular/compare/v14.12.2...v15.0.0-rc.0) (2023-01-16)
+# [15.0.0](https://github.com/po-ui/po-angular/compare/v14.12.2...v15.0.0) (2023-01-20)
+
 
 ### BREAKING CHANGES
 
 * **angular:** deve ser utilizado o Angular v15
 
 Atualize seu projeto para utilizar a versão 15 do Angular, acesse a documentação [Guia de Atualização do Angular](https://update.angular.io/) para fazer a migração completa.
+
+Veja nossa [**documentação para fazer a migração**](https://po-ui.io/guides/migration-poui) para a versão 15
 
 * Remove `HttpClientModule`.
 
@@ -33,22 +36,21 @@ Foi removida a propriedade p-type do po-button pois a mesma foi depreciada na ve
 
 * atualização para o angular 15 ([6339a2b](https://github.com/po-ui/po-angular/commit/6339a2be6de33d6a3367562d663f893d59efa683))
 * remove HttpClientModule ([e76556c](https://github.com/po-ui/po-angular/commit/e76556cbbe28d8c84a4c35eed91db63d21077892))
+
 ### Code Refactoring
 
 * **button:** remove a propriedade p-type ([a227cb6](https://github.com/po-ui/po-angular/commit/a227cb6150f6a3bb9259a076cd3370ebc3ca9edc))
-
 
 
 ### Features
 
 * **modal:** adiciona evento `p-close` ([04784de](https://github.com/po-ui/po-angular/commit/04784dee10bef56635d2beee5c26564a9175c135)), closes [#1217](https://github.com/po-ui/po-angular/issues/1217)
 
+* **schematics:** implementa ng update ([c4eb46b](https://github.com/po-ui/po-angular/commit/c4eb46b82eb2f08f42aff40b6b732437954353c3))
+
 * **schematics:** adiciona módulo HttpClientModule ([e61551d](https://github.com/po-ui/po-angular/commit/e61551dc1c8aaa52825443650bf1ad73e5c3f81f))
 
-
-
-
-
+* **disclaimer:** adiciona `literals` para o botão de remover ([523a110](https://github.com/po-ui/po-angular/commit/523a110fcdcfc47e87d0b38cda69514efc309c81))
 
 
 ## [14.12.2](https://github.com/po-ui/po-angular/compare/v14.12.1...v14.12.2) (2022-12-12)
