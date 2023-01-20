@@ -52,7 +52,7 @@ ng update @po-ui/ng-components@<version> --allow-dirty --force
 Por exemplo:
 
 ```
-ng update @po-ui/ng-components@next --allow-dirty --force
+ng update @po-ui/ng-components@15 --allow-dirty --force
 ```
 
 > Caso ocorra um erro ao concluir o comando acima pode ser necessário fazer uma instalação limpa no projeto apagando a pasta `node_modules` e o arquivo `package-lock.json` e executando o comando `npm i --legacy-peer-deps` antes de realizar o `ng update`.
@@ -84,7 +84,7 @@ ng update @po-ui/ng-sync@<version> --allow-dirty --force
 Por exemplo:
 
 ```
-ng update @po-ui/ng-sync@next --allow-dirty --force
+ng update @po-ui/ng-sync@15 --allow-dirty --force
 ```
 
 O `ng update` ajudará nas alterações necessárias para seu projeto, que será atualizar as versões dos pacotes:
