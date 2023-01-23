@@ -405,14 +405,8 @@ export function removeKeysProperties(keys: Array<any>, newItemValue: any) {
  * @param key propriedade que será utilizada para realizar a comparação.
  */
 export function removeDuplicateItems(item, item2, key) {
-  for (let i = 0, len = item.length; i < len; i++) {
-    for (let j = 0, len2 = item2.length; j < len2; j++) {
-      if (item[i][key] === item2[j][key]) {
-        item2.splice(j, 1);
-        len2 = item2.length;
-      }
-    }
-  }
+  const uniqueValues = new Set(item.map(entry => entry[key]));
+  item2.splice(0, item2.length, ...item2.filter(entry => !uniqueValues.has(entry[key])));
 }
 
 /**
