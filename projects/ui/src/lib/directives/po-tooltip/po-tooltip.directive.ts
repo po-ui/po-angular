@@ -1,4 +1,4 @@
-import { Directive, ElementRef, HostListener, OnInit, Renderer2 } from '@angular/core';
+import { Directive, ElementRef, HostListener, OnInit, Renderer2, OnDestroy } from '@angular/core';
 
 import { PoTooltipBaseDirective } from './po-tooltip-base.directive';
 import { PoTooltipControlPositionService } from './po-tooltip-control-position.service';
@@ -30,7 +30,7 @@ const nativeElements = ['input', 'button'];
   selector: '[p-tooltip]',
   providers: [PoTooltipControlPositionService]
 })
-export class PoTooltipDirective extends PoTooltipBaseDirective implements OnInit {
+export class PoTooltipDirective extends PoTooltipBaseDirective implements OnInit, OnDestroy {
   private arrowDirection: string;
   private divArrow;
   private divContent;
@@ -47,6 +47,14 @@ export class PoTooltipDirective extends PoTooltipBaseDirective implements OnInit
     private poControlPosition: PoTooltipControlPositionService
   ) {
     super();
+  }
+
+  ngOnDestroy(): void {
+    this.hideTooltip();
+  }
+
+  ngOnInit() {
+    this.initScrollEventListenerFunction();
   }
 
   @HostListener('mouseenter') onMouseEnter() {
@@ -83,10 +91,6 @@ export class PoTooltipDirective extends PoTooltipBaseDirective implements OnInit
     if (!this.displayTooltip && (event.code === 'Escape' || event.keyCode === 27)) {
       this.removeTooltipAction();
     }
-  }
-
-  ngOnInit() {
-    this.initScrollEventListenerFunction();
   }
 
   protected addTooltipAction() {

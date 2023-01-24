@@ -117,6 +117,14 @@ describe('PoTooltipDirective', () => {
     });
   });
 
+  it('should call hideTooltip in ngOnDestroy', () => {
+    spyOn(directive, 'hideTooltip');
+
+    directive.ngOnDestroy();
+
+    expect(directive.hideTooltip).toHaveBeenCalled();
+  });
+
   it('should call initScrollEventListenerFunction in ngOnInit', () => {
     spyOn(directive, 'initScrollEventListenerFunction');
 
@@ -300,6 +308,7 @@ describe('PoTooltipDirective', () => {
     expect(directive.renderer.removeChild).toHaveBeenCalled();
     expect(directive.tooltipContent).toBe(undefined);
   }));
+
   it('should call hideTooltip in mouse click', fakeAsync(() => {
     spyOn(directive, 'hideTooltip');
     directive.appendInBody = undefined;
@@ -346,15 +355,6 @@ describe('PoTooltipDirective', () => {
     expect(directive.divContent.outerHTML.indexOf('abc') === -1).toBeTruthy();
   });
 
-  it('should`t concat the same text value', () => {
-    directive.lastTooltipText = 'Teste';
-    directive.tooltip = 'Teste\nTeste';
-
-    directive.updateTextContent();
-
-    expect(directive.divContent.textContent).toEqual('Teste');
-  });
-
   it('should hide tooltip when have tooltipContent', () => {
     spyOn(directive, <any>'removeScrollEventListener');
 
@@ -362,6 +362,15 @@ describe('PoTooltipDirective', () => {
 
     expect(getComputedStyle(directive.tooltipContent).getPropertyValue('visibility')).toEqual('hidden');
     expect(directive['removeScrollEventListener']).toHaveBeenCalled();
+  });
+
+  it('should`t concat the same text value', () => {
+    directive.lastTooltipText = 'Teste';
+    directive.tooltip = 'Teste\nTeste';
+
+    directive.updateTextContent();
+
+    expect(directive.divContent.textContent).toEqual('Teste');
   });
 
   it('removeScrollEventListener: shoult call window.removeEventListener', () => {
