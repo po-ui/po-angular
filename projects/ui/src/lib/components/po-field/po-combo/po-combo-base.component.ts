@@ -819,6 +819,7 @@ export abstract class PoComboBaseComponent implements ControlValueAccessor, OnIn
     } else {
       this.updateSelectedValue(null);
       this.updateComboList();
+      this.updateHasNext();
     }
   }
 
@@ -855,6 +856,7 @@ export abstract class PoComboBaseComponent implements ControlValueAccessor, OnIn
     this.updateSelectedValue(null);
     this.updateComboList();
     this.initInputObservable();
+    this.updateHasNext();
   }
 
   protected configAfterSetFilterService(service: PoComboFilter | string) {
@@ -1044,6 +1046,12 @@ export abstract class PoComboBaseComponent implements ControlValueAccessor, OnIn
 
     if (oldOption && oldOption[this.dynamicLabel]) {
       return this.updateSelectedValue(oldOption);
+    }
+  }
+
+  private updateHasNext() {
+    if (this.service && this.infiniteScroll) {
+      this.defaultService.hasNext = true;
     }
   }
 
