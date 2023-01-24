@@ -492,13 +492,14 @@ describe('PoComboBaseComponent:', () => {
       spyOn(component, 'getObjectByValue');
       spyOn(component, 'updateSelectedValue');
       spyOn(component, 'updateComboList');
+      spyOn(component, <any>'updateHasNext');
 
       component.writeValue(null);
 
       expect(component.getOptionFromValue).not.toHaveBeenCalled();
       expect(component.getObjectByValue).not.toHaveBeenCalled();
       expect(component.updateSelectedValue).toHaveBeenCalledWith(null);
-      expect(component.updateComboList).toHaveBeenCalled();
+      expect(component['updateHasNext']).toHaveBeenCalled();
     });
 
     it('should call `updateSelectedValue` when contains `options` and param is a `validValue`', () => {
@@ -1435,6 +1436,16 @@ describe('PoComboBaseComponent:', () => {
       expect(component.updateComboList).toHaveBeenCalled();
       expect(component.initInputObservable).toHaveBeenCalled();
       expect(component.selectedValue).toEqual(undefined);
+    });
+
+    it('clear: should set hasNext to true if `infiniteScrool` is true', () => {
+      component['defaultService'].hasNext = false;
+      component.infiniteScroll = true;
+      component.service = defaultService;
+
+      component.clear('');
+
+      expect(component['defaultService'].hasNext).toEqual(true);
     });
 
     it(`checkIfService: should return 'label' if contain service and param is 'label'`, () => {
