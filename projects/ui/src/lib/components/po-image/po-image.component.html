@@ -1,3 +1,15 @@
-<po-container *ngIf="source">
-  <img class="po-image" [attr.alt]="alternate" [attr.height]="height" [attr.src]="source" />
+<po-container class="po-container-image" *ngIf="source" [p-height]="height">
+  <img
+    *ngIf="!isBase64; else imageBase64"
+    class="po-image"
+    [attr.alt]="alternate"
+    [priority]="priority"
+    [loading]="loading"
+    [fill]="true"
+    [ngSrc]="source"
+  />
 </po-container>
+
+<ng-template #imageBase64>
+  <img class="po-image" [attr.alt]="alternate" [loading]="loading" [src]="source" />
+</ng-template>
