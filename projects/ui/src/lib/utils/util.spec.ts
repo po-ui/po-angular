@@ -31,7 +31,8 @@ import {
   validValue,
   valuesFromObject,
   removeDuplicatedOptionsWithFieldValue,
-  removeUndefinedAndNullOptionsWithFieldValue
+  removeUndefinedAndNullOptionsWithFieldValue,
+  isValidImageBase64
 } from './util';
 
 import * as UtilFunctions from './util';
@@ -1600,20 +1601,31 @@ describe('sortFields:', () => {
     expect(result).toEqual(expectedFields);
   });
 
-  describe('replaceFormatSeparator: ', () => {
-    it('should show date separator as . according to russian locale selected', () => {
-      const separator = '.';
-      const format = 'dd/mm/yyyy';
-      const expectedFormat = 'dd.mm.yyyy';
-      const newFormat = UtilFunctions.replaceFormatSeparator(format, separator);
-      expect(newFormat).toBe(expectedFormat);
-    });
-    it('should show date separator as / according to portuguese locale selected', () => {
-      const separator = '/';
-      const format = 'dd/mm/yyyy';
-      const expectedFormat = 'dd/mm/yyyy';
-      const newFormat = UtilFunctions.replaceFormatSeparator(format, separator);
-      expect(newFormat).toBe(expectedFormat);
-    });
+  it('returns true for valid image base64 string', () => {
+    const validBase64 = 'data:image/jpeg;base64,/9j/4AAQSkZJRgABAQAAAQABAAD';
+    expect(isValidImageBase64(validBase64)).toBe(true);
+  });
+
+  it('returns false for invalid image base64 string', () => {
+    const invalidBase64 = 'not a valid base64 string';
+    expect(isValidImageBase64(invalidBase64)).toBe(false);
+  });
+});
+
+describe('replaceFormatSeparator: ', () => {
+  it('should show date separator as . according to russian locale selected', () => {
+    const separator = '.';
+    const format = 'dd/mm/yyyy';
+    const expectedFormat = 'dd.mm.yyyy';
+    const newFormat = UtilFunctions.replaceFormatSeparator(format, separator);
+    expect(newFormat).toBe(expectedFormat);
+  });
+
+  it('should show date separator as / according to portuguese locale selected', () => {
+    const separator = '/';
+    const format = 'dd/mm/yyyy';
+    const expectedFormat = 'dd/mm/yyyy';
+    const newFormat = UtilFunctions.replaceFormatSeparator(format, separator);
+    expect(newFormat).toBe(expectedFormat);
   });
 });

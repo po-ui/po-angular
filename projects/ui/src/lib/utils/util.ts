@@ -548,6 +548,18 @@ export function convertImageToBase64(file: File): Promise<any> {
 }
 
 /**
+ * Valida se a imagem é do tipo base64 valida
+ *
+ */
+export function isValidImageBase64(value: string): boolean {
+  try {
+    return !!value.match(/^data:image\/([a-zA-Z]*);base64,([^\"]*)$/);
+  } catch (err) {
+    return false;
+  }
+}
+
+/**
  * Converte um número em decimal baseado na quantidade de casas decimais.
  *
  * Caso o valor seja inválido, será retornado o valor `undefined`.
