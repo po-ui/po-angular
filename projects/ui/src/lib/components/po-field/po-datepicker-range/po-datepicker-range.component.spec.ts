@@ -256,6 +256,33 @@ describe('PoDatepickerRangeComponent:', () => {
       expect(spy).not.toHaveBeenCalled();
     });
 
+    it(`ngOnChanges: shouldn't call 'updateScreenByModel' if 'changes' contain locale`, () => {
+      const changes: any = {
+        locale: 'pt'
+      };
+
+      const spy = spyOn(component, <any>'buildMask');
+
+      component.ngOnChanges(changes);
+
+      expect(spy).toHaveBeenCalled();
+    });
+
+    it(`ngOnChanges: shouldn't call 'updateScreenByModel' if 'changes' contain locale and contain 'dateRange'`, () => {
+      const changes: any = {
+        locale: 'pt'
+      };
+      component.dateRange = { start: '2023-01-25', end: '2023-02-21' };
+
+      const spyBuildMask = spyOn(component, <any>'buildMask');
+      const spyUpdateScreenByModel = spyOn(component, <any>'updateScreenByModel');
+
+      component.ngOnChanges(changes);
+
+      expect(spyBuildMask).toHaveBeenCalled();
+      expect(spyUpdateScreenByModel).toHaveBeenCalled();
+    });
+
     it('clear: should call `updateScreenByModel`, `resetDateRangeInputValidation` and `updateModel`', () => {
       spyOn(component, 'updateScreenByModel');
       spyOn(component, <any>'resetDateRangeInputValidation');
@@ -602,6 +629,13 @@ describe('PoDatepickerRangeComponent:', () => {
       const date = [undefined, '3', '2018'];
 
       expect(component['formatDate'](format, ...date)).toBe('2018-03-0');
+    });
+
+    it('formatDate: should convert date to `yyyy-mm-` with default format value', () => {
+      component['format'] = 'yyyy-mm-dd';
+      const date = [undefined, '3', '2018'];
+
+      expect(component['formatDate'](undefined, ...date)).toBe('2018-03-0');
     });
 
     it('formatScreenToModel: should return empty string if value is undefined', () => {

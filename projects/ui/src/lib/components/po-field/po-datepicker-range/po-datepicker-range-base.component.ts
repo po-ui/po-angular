@@ -5,10 +5,17 @@ import { poLocaleDefault } from '../../../services/po-language/po-language.const
 import { PoLanguageService } from '../../../services/po-language/po-language.service';
 import { requiredFailed } from '../validators';
 import { PoDateService } from './../../../services/po-date/po-date.service';
-import { convertIsoToDate, convertToBoolean, setYearFrom0To100, validateDateRange } from './../../../utils/util';
+import {
+  convertIsoToDate,
+  convertToBoolean,
+  setYearFrom0To100,
+  validateDateRange,
+  replaceFormatSeparator
+} from './../../../utils/util';
 import { PoDatepickerRangeLiterals } from './interfaces/po-datepicker-range-literals.interface';
 import { PoDatepickerRange } from './interfaces/po-datepicker-range.interface';
 import { poDatepickerRangeLiteralsDefault } from './po-datepicker-range.literals';
+import { PoMask } from '../po-input/po-mask';
 
 /**
  * @description
@@ -115,6 +122,7 @@ export abstract class PoDatepickerRangeBaseComponent implements ControlValueAcce
   protected isDateRangeInputFormatValid: boolean = true;
   protected isStartDateRangeInputValid: boolean = true;
   protected onTouchedModel: any;
+  protected poMaskObject: PoMask;
 
   private _clean?: boolean = false;
   private _disabled?;
@@ -384,8 +392,14 @@ export abstract class PoDatepickerRangeBaseComponent implements ControlValueAcce
   @Input('p-locale') set locale(value: string) {
     if (value) {
       this._locale = value.length >= 2 ? value : poLocaleDefault;
+      this.poMaskObject = this.buildMask(
+        replaceFormatSeparator(this.format, this.languageService.getDateSeparator(this.locale))
+      );
     } else {
       this._locale = this.language;
+      this.poMaskObject = this.buildMask(
+        replaceFormatSeparator(this.format, this.languageService.getDateSeparator(this.locale))
+      );
     }
   }
 
@@ -393,7 +407,7 @@ export abstract class PoDatepickerRangeBaseComponent implements ControlValueAcce
     return this._locale || this.language;
   }
 
-  constructor(protected poDateService: PoDateService, languageService: PoLanguageService) {
+  constructor(protected poDateService: PoDateService, private languageService: PoLanguageService) {
     this.language = languageService.getShortLanguage();
   }
 
@@ -505,6 +519,17 @@ export abstract class PoDatepickerRangeBaseComponent implements ControlValueAcce
     }
 
     this.updateScreenByModel(this.dateRange);
+  }
+
+  // Retorna um objeto do tipo PoMask com a mascara configurada.
+  protected buildMask(format: string = this.format): PoMask {
+    let mask = format.toUpperCase();
+
+    mask = mask.replace(/DD/g, '99');
+    mask = mask.replace(/MM/g, '99');
+    mask = mask.replace(/YYYY/g, '9999');
+
+    return new PoMask(mask, true);
   }
 
   protected dateFormatFailed(value: string): boolean {

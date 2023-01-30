@@ -1599,4 +1599,21 @@ describe('sortFields:', () => {
 
     expect(result).toEqual(expectedFields);
   });
+
+  describe('replaceFormatSeparator: ', () => {
+    it('should show date separator as . according to russian locale selected', () => {
+      const separator = '.';
+      const format = 'dd/mm/yyyy';
+      const expectedFormat = 'dd.mm.yyyy';
+      const newFormat = UtilFunctions.replaceFormatSeparator(format, separator);
+      expect(newFormat).toBe(expectedFormat);
+    });
+    it('should show date separator as / according to portuguese locale selected', () => {
+      const separator = '/';
+      const format = 'dd/mm/yyyy';
+      const expectedFormat = 'dd/mm/yyyy';
+      const newFormat = UtilFunctions.replaceFormatSeparator(format, separator);
+      expect(newFormat).toBe(expectedFormat);
+    });
+  });
 });

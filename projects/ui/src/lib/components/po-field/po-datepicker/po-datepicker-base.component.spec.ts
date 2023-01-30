@@ -24,7 +24,7 @@ describe('PoDatepickerBaseComponent:', () => {
   const languageService: PoLanguageService = new PoLanguageService();
 
   beforeEach(() => {
-    component = new PoDatepickerComponent();
+    component = new PoDatepickerComponent(languageService);
     component['shortLanguage'] = 'pt';
   });
 

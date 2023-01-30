@@ -603,3 +603,12 @@ export function getFocusableElements(parentElement: Element): NodeListOf<Element
   const focusableElements = 'button:not([disabled]), [href], input, select, textarea, [tabindex]:not([tabindex="-1"]';
   return parentElement.querySelectorAll(focusableElements);
 }
+
+// Retorna o formato de acordo com o locale.
+export function replaceFormatSeparator(format: string, separator: string) {
+  let newFormat = format;
+  if (separator !== '/') {
+    newFormat = newFormat.replace(/\//g, separator);
+  }
+  return newFormat;
+}
