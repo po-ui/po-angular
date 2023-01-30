@@ -2,6 +2,16 @@
 
 All notable changes to this project will be documented in this file. See [standard-version](https://github.com/conventional-changelog/standard-version) for commit guidelines.
 
+## [15.0.1](https://github.com/po-ui/po-angular/compare/v15.0.0...v15.0.1) (2023-01-30)
+
+
+### Bug Fixes
+
+* **combo:** corrige carregamento da lista após limpar campo ([829c488](https://github.com/po-ui/po-angular/commit/829c488486739c979b1a0b93236bc58790aafd04))
+* **widget:** corrige borda sendo apagada com `p-no-shadow` ([7ab3e6d](https://github.com/po-ui/po-angular/commit/7ab3e6d66b8506293160f06ec0b77d710fc10e09))
+
+
+
 # [15.0.0](https://github.com/po-ui/po-angular/compare/v14.12.2...v15.0.0) (2023-01-20)
 
 
