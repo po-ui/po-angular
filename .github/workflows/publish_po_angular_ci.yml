@@ -21,25 +21,25 @@ jobs:
     steps:
 
     - name: Check out po-angular
-      uses: actions/checkout@v3
+      uses: actions/checkout@v2
       with:
         path: po-angular
 
     - name: Check out style
-      uses: actions/checkout@v3
+      uses: actions/checkout@v2
       with:
         repository: po-ui/po-style
         path: po-style
 
     - name: Check out lint
-      uses: actions/checkout@v3
+      uses: actions/checkout@v2
       with:
         repository: po-ui/po-tslint
         path: po-tslint
 
-    - uses: actions/setup-node@v3
+    - uses: actions/setup-node@v1
       with:
-        node-version: 16
+        node-version: '16.x'
         registry-url: 'https://registry.npmjs.org'
 
     - name: Install and Build
