@@ -19,8 +19,8 @@ import { PoControlPositionService } from './../../../services/po-control-positio
 import { PoDatepickerRange } from './interfaces/po-datepicker-range.interface';
 import { PoDatepickerRangeBaseComponent } from './po-datepicker-range-base.component';
 import { PoDateService } from './../../../services/po-date/po-date.service';
-import { PoMask } from '../po-input/po-mask';
 import { PoLanguageService } from '../../../services/po-language/po-language.service';
+import { replaceFormatSeparator } from './../../../utils/util';
 
 const arrowLeftKey = 37;
 const arrowRightKey = 39;
@@ -93,7 +93,6 @@ export class PoDatepickerRangeComponent
   private clickListener;
   private eventResizeListener;
   private poDatepickerRangeElement: ElementRef<any>;
-  private poMaskObject: PoMask;
 
   get autocomplete() {
     return this.noAutocomplete ? 'off' : 'on';
@@ -139,9 +138,9 @@ export class PoDatepickerRangeComponent
     private controlPosition: PoControlPositionService,
     private renderer: Renderer2,
     private cd: ChangeDetectorRef,
+    private poLanguageService: PoLanguageService,
     poDateService: PoDateService,
-    poDatepickerRangeElement: ElementRef,
-    poLanguageService: PoLanguageService
+    poDatepickerRangeElement: ElementRef
   ) {
     super(poDateService, poLanguageService);
     this.poDatepickerRangeElement = poDatepickerRangeElement;
@@ -170,12 +169,22 @@ export class PoDatepickerRangeComponent
 
   ngOnInit() {
     // Classe de máscara
-    this.poMaskObject = this.buildMask();
+    this.poMaskObject = this.buildMask(
+      replaceFormatSeparator(this.format, this.poLanguageService.getDateSeparator(this.locale))
+    );
   }
 
   ngOnChanges(changes: SimpleChanges): void {
     if (changes.minDate || changes.maxDate) {
       this.validateModel(this.dateRange);
+    }
+    if (changes.locale) {
+      if (this.dateRange) {
+        this.updateScreenByModel(this.dateRange);
+      }
+      this.poMaskObject = this.buildMask(
+        replaceFormatSeparator(this.format, this.poLanguageService.getDateSeparator(this.locale))
+      );
     }
   }
 
@@ -309,19 +318,11 @@ export class PoDatepickerRangeComponent
     this.dateRangeField.nativeElement.classList.add('po-datepicker-range-field-focused');
   }
 
-  // Retorna um objeto do tipo PoMask com a mascara configurada.
-  private buildMask(): PoMask {
-    let mask = this.format.toUpperCase();
-
-    mask = mask.replace(/DD/g, '99');
-    mask = mask.replace(/MM/g, '99');
-    mask = mask.replace(/YYYY/g, '9999');
-
-    return new PoMask(mask, true);
-  }
-
   private formatDate(format: string, day: string = '', month: string = '', year: string = ''): string {
-    let dateFormatted = format;
+    let dateFormatted = replaceFormatSeparator(
+      format || this.format,
+      this.poLanguageService.getDateSeparator(this.locale)
+    );
 
     day = day && day.includes('T') ? day.slice(0, 2) : day;
 
@@ -333,7 +334,7 @@ export class PoDatepickerRangeComponent
   }
 
   private formatScreenToModel(value: string = ''): string {
-    const [day, month, year] = value.split('/');
+    const [day, month, year] = value.split(this.poLanguageService.getDateSeparator(this.locale));
 
     return value ? this.formatDate('yyyy-mm-dd', day, month, year) : '';
   }
