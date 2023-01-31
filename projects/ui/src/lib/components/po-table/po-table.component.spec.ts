@@ -515,7 +515,7 @@ describe('PoTableComponent:', () => {
     component.columns.push(labels);
     fixture.detectChanges();
 
-    const labelColumn = tableElement.querySelector('.po-table-column-label');
+    const labelColumn = tableElement.querySelector('.po-tag');
 
     expect(labelColumn).toBeTruthy();
   });
