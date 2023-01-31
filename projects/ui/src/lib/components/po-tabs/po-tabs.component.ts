@@ -1,10 +1,27 @@
 import { ChangeDetectorRef, Component, ContentChildren, QueryList, ViewChild } from '@angular/core';
 
+import { PoLanguageService } from '../../services/po-language/po-language.service';
+
 import { isMobile } from './../../utils/util';
 
 import { PoTabComponent } from './po-tab/po-tab.component';
 import { PoTabDropdownComponent } from './po-tab-dropdown/po-tab-dropdown.component';
 import { PoTabsBaseComponent } from './po-tabs-base.component';
+
+export const poTabsLiterals: Object = {
+  en: <any>{
+    moreTabs: 'More'
+  },
+  es: <any>{
+    moreTabs: 'Más'
+  },
+  pt: <any>{
+    moreTabs: 'Mais'
+  },
+  ru: <any>{
+    moreTabs: 'Ещё'
+  }
+};
 
 const poTabsMaxNumberOfTabs = 5;
 
@@ -44,11 +61,17 @@ export class PoTabsComponent extends PoTabsBaseComponent {
   @ViewChild('tabDropdown', { static: true }) tabDropdown: PoTabDropdownComponent;
 
   maxNumberOfTabs = poTabsMaxNumberOfTabs;
+  literals;
 
   private previousActiveTab: PoTabComponent;
 
-  constructor(private changeDetector: ChangeDetectorRef) {
+  constructor(private changeDetector: ChangeDetectorRef, private languageService: PoLanguageService) {
     super();
+    const language = languageService.getShortLanguage();
+
+    this.literals = {
+      ...poTabsLiterals[language]
+    };
   }
 
   get isMobileDevice() {
