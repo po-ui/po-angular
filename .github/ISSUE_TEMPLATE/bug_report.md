@@ -39,3 +39,9 @@ Passos para reproduzir:
   - [ ] macOS
   - [ ] Ubuntu
   - [ ] Outros
+
+#### Observações
+
+Tempo de Resposta PO UI --> Em até 7 dias úteis.
+Tempo de Retorno Solicitante --> 35 dias corridos
+Issues sem retorno do solicitante por mais de 35 dias corridos serão encerradas.
