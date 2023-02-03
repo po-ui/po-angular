@@ -67,6 +67,9 @@ Veja abaixo a lista de dependências e as versões compatíveis, elas devem ser 
     ...
   },
   "devDependencies": {
+    "@angular-devkit/build-angular": "~15.0.3",
+    "@angular/cli": "~15.0.3",
+    "@angular/compiler-cli": "~15.0.3",
     ...
     "typescript": "~4.8.4"
   }
