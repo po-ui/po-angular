@@ -2,6 +2,23 @@
 
 All notable changes to this project will be documented in this file. See [standard-version](https://github.com/conventional-changelog/standard-version) for commit guidelines.
 
+# [15.1.0](https://github.com/po-ui/po-angular/compare/v15.0.1...v15.1.0) (2023-02-06)
+
+
+### Bug Fixes
+
+* **tooltip:** corrige remoção de tooltip em coluna do tipo link ([e350185](https://github.com/po-ui/po-angular/commit/e3501856338023679ef19fe3e8559a9870c037a9))
+
+
+### Features
+
+* **datepicker-range:** suporte locale russo ([c2cd165](https://github.com/po-ui/po-angular/commit/c2cd1656415f94a857498c07c093fba43b14a77f))
+* **image:** implementa diretiva NgOptimizedImage ([b5a94a6](https://github.com/po-ui/po-angular/commit/b5a94a6594021f0dc095f3323611fde92b8b18f5))
+* **table:** utiliza po-tag para exibir o label ([63771fc](https://github.com/po-ui/po-angular/commit/63771fcdd3c6b196ba452d642eda8b6a5f2f414d)), closes [#1421](https://github.com/po-ui/po-angular/issues/1421)
+* **theme-builder:** cria pagina de theme builder ([cab054b](https://github.com/po-ui/po-angular/commit/cab054bbb098060f8d68470dd8cd3cd9d3d00167))
+
+
+
 ## [15.0.1](https://github.com/po-ui/po-angular/compare/v15.0.0...v15.0.1) (2023-01-30)
 
 
