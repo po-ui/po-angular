@@ -11,7 +11,7 @@
       <input
         #inp
         class="po-input po-datepicker"
-        [ngClass]="clean && inp.value ? 'po-input-double-icon-right' : 'po-input-icon-right'"
+        [class.po-input-icon-right]="clean && inp.value"
         type="text"
         [attr.name]="name"
         [autocomplete]="autocomplete"
