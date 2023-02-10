@@ -255,7 +255,7 @@ import { PoSyncService } from '@po-ui/ng-sync';
 })
 export class HomePage {
 
-  conference;
+  conference: any;
 
   constructor(private poSync: PoSyncService) {
     this.poSync.onSync().subscribe(() => this.loadHomePage());
