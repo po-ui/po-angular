@@ -160,6 +160,44 @@ describe('PoCalendarBaseComponent:', () => {
       expect(component.activateDate.getMonth()).toBe(9);
     });
 
+    it('setActivateDate: should keep the initial month and the following month when selecting the last day of the month', () => {
+      const date = '2023-03-31';
+
+      spyOnProperty(component, 'isRange').and.returnValue(true);
+
+      component['setActivateDate'](date);
+
+      const { start, end } = component.activateDate;
+
+      expect(start instanceof Date).toBe(true);
+      expect(end instanceof Date).toBe(true);
+
+      expect(start.getMonth()).toBe(2);
+      expect(start.getFullYear()).toBe(2023);
+
+      expect(end.getMonth()).toBe(3);
+      expect(end.getFullYear()).toBe(2023);
+    });
+
+    it('setActivateDate: should keep the start month and the after month when selecting the first day of the month', () => {
+      const date = '2023-03-01';
+
+      spyOnProperty(component, 'isRange').and.returnValue(true);
+
+      component['setActivateDate'](date);
+
+      const { start, end } = component.activateDate;
+
+      expect(start instanceof Date).toBe(true);
+      expect(end instanceof Date).toBe(true);
+
+      expect(start.getMonth()).toBe(2);
+      expect(start.getFullYear()).toBe(2023);
+
+      expect(end.getMonth()).toBe(3);
+      expect(end.getFullYear()).toBe(2023);
+    });
+
     it('verifyActivateDate: `activateDate` should receive `minDate` if the minimum date is later than today', () => {
       const today = new Date();
       component.minDate = new Date(new Date(today).setMonth(today.getMonth() + 1));

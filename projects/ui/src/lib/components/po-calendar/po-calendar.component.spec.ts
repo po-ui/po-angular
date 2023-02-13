@@ -442,6 +442,82 @@ describe('PoCalendarComponent:', () => {
       expect(component.activateDate.end.getFullYear()).toEqual(2010);
     });
 
+    it(`onHeaderChange: change the header correctly when the selected date is in the middle of the month`, () => {
+      const start = new Date('Wed Mar 15 2023 00:00:00');
+      const end = new Date('Sat Apr 01 2023 00:00:00');
+
+      component.activateDate = { start, end };
+
+      const nextMonth = 1;
+
+      spyOnProperty(component, <any>'isRange').and.returnValue(true);
+
+      component.onHeaderChange({ month: nextMonth, year: 2023 }, 'start');
+
+      expect(component.activateDate.start.getMonth()).toEqual(nextMonth);
+      expect(component.activateDate.start.getFullYear()).toEqual(2023);
+
+      expect(component.activateDate.end.getMonth()).toEqual(nextMonth + 1);
+      expect(component.activateDate.end.getFullYear()).toEqual(2023);
+    });
+
+    it(`onHeaderChange: change the header correctly when the selected date is on the last day of the month`, () => {
+      const start = new Date('Thu Mar 31 2023 00:00:00');
+      const end = new Date('Sat Apr 01 2023 00:00:00');
+
+      component.activateDate = { start, end };
+
+      const nextMonth = 1;
+
+      spyOnProperty(component, <any>'isRange').and.returnValue(true);
+
+      component.onHeaderChange({ month: nextMonth, year: 2023 }, 'start');
+
+      expect(component.activateDate.start.getMonth()).toEqual(nextMonth);
+      expect(component.activateDate.start.getFullYear()).toEqual(2023);
+
+      expect(component.activateDate.end.getMonth()).toEqual(nextMonth + 1);
+      expect(component.activateDate.end.getFullYear()).toEqual(2023);
+    });
+
+    it(`onHeaderChange: change the header correctly when the previous month is in another year`, () => {
+      const start = new Date('Tue Jan 03 2023 00:00:00');
+      const end = new Date('Wed Feb 01 2023 00:00:00');
+
+      component.activateDate = { start, end };
+
+      const nextMonth = 11;
+
+      spyOnProperty(component, <any>'isRange').and.returnValue(true);
+
+      component.onHeaderChange({ month: nextMonth, year: 2022 }, 'start');
+
+      expect(component.activateDate.start.getMonth()).toEqual(nextMonth);
+      expect(component.activateDate.start.getFullYear()).toEqual(2022);
+
+      expect(component.activateDate.end.getMonth()).toEqual(0);
+      expect(component.activateDate.end.getFullYear()).toEqual(2023);
+    });
+
+    it(`onHeaderChange: change header correctly when next month is in later year`, () => {
+      const start = new Date('Fri Nov 03 2023 00:00:00 ');
+      const end = new Date('Fri Dec 01 2023 00:00:00');
+
+      component.activateDate = { start, end };
+
+      const nextMonth = 0;
+
+      spyOnProperty(component, <any>'isRange').and.returnValue(true);
+
+      component.onHeaderChange({ month: nextMonth, year: 2024 }, 'end');
+
+      expect(component.activateDate.start.getMonth()).toEqual(11);
+      expect(component.activateDate.start.getFullYear()).toEqual(2023);
+
+      expect(component.activateDate.end.getMonth()).toEqual(nextMonth);
+      expect(component.activateDate.end.getFullYear()).toEqual(2024);
+    });
+
     it(`onHeaderChange: `, () => {
       const start = new Date(2011, 0, 10);
       const end = new Date(2011, 1, 10);

@@ -158,12 +158,33 @@ export class PoCalendarBaseComponent {
   }
 
   protected setActivateDate(date?: Date | string) {
+    let newData;
+    if (typeof date !== 'string') {
+      const temporaryDate = new Date(date);
+      const year = temporaryDate.getFullYear();
+      const month = ('0' + (temporaryDate.getMonth() + 1)).slice(-2);
+      const day = ('0' + temporaryDate.getDate()).slice(-2);
+      const formattedDate = `${year}-${month}-${day}`;
+      newData = formattedDate + 'T00:00:00';
+    } else {
+      newData = date + 'T00:00:00';
+    }
     const activateDate = date ? date : this.verifyActivateDate();
 
+    let checkedStart;
+    let checkedEnd;
+
     if (this.isRange) {
-      const checkedStart =
-        typeof activateDate === 'string' ? this.poDate.convertIsoToDate(activateDate) : new Date(activateDate);
-      const checkedEnd = new Date(new Date(checkedStart).setMonth(checkedStart.getMonth() + 1));
+      if (new Date(newData).getDate() > 28) {
+        checkedStart = new Date(activateDate);
+        checkedEnd = new Date(checkedStart.getFullYear(), checkedStart.getMonth() + 1, 0, 23, 59, 59, 999);
+        checkedEnd.setMilliseconds(checkedEnd.getMilliseconds() + 1);
+      } else {
+        checkedStart =
+          typeof activateDate === 'string' ? this.poDate.convertIsoToDate(activateDate) : new Date(activateDate);
+        checkedEnd = new Date(new Date(checkedStart).setMonth(checkedStart.getMonth() + 1));
+      }
+
       this.activateDate = { start: checkedStart, end: checkedEnd };
     } else {
       this.activateDate = new Date(activateDate);

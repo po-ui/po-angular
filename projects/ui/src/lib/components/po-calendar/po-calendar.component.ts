@@ -127,14 +127,26 @@ export class PoCalendarComponent extends PoCalendarBaseComponent implements OnIn
 
       if (partType === 'end') {
         const newYear = month === 0 ? year - 1 : year;
+        const daysInMonth = new Date(newYear, month, 0).getDate();
 
-        newStart = new Date(new Date(start.setMonth(month - 1)).setFullYear(newYear));
-        newEnd = new Date(new Date(end.setMonth(month)).setFullYear(year));
+        if (year !== newYear) {
+          newStart = new Date(year, month - 1, Math.min(start.getDate(), daysInMonth));
+          newEnd = new Date(year, month, Math.min(end.getDate(), daysInMonth));
+        } else {
+          newStart = new Date(newYear, month - 1, Math.min(start.getDate(), daysInMonth));
+          newEnd = new Date(newYear, month, Math.min(end.getDate(), daysInMonth));
+        }
       } else {
         const newYear = month === 11 ? year + 1 : year;
+        const daysInMonth = new Date(newYear, month + 1, 0).getDate();
 
-        newEnd = new Date(new Date(end.setMonth(month + 1)).setFullYear(newYear));
-        newStart = new Date(new Date(start.setMonth(month)).setFullYear(year));
+        if (year !== newYear) {
+          newEnd = new Date(year, month + 1, Math.min(end.getDate(), daysInMonth));
+          newStart = new Date(year, month, Math.min(start.getDate(), daysInMonth));
+        } else {
+          newEnd = new Date(newYear, month + 1, Math.min(end.getDate(), daysInMonth));
+          newStart = new Date(newYear, month, Math.min(start.getDate(), daysInMonth));
+        }
       }
 
       this.activateDate = { start: newStart, end: newEnd };
