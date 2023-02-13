@@ -2,6 +2,17 @@
 
 All notable changes to this project will be documented in this file. See [standard-version](https://github.com/conventional-changelog/standard-version) for commit guidelines.
 
+## [15.1.1](https://github.com/po-ui/po-angular/compare/v15.1.0...v15.1.1) (2023-02-13)
+
+
+### Bug Fixes
+
+* **page-dynamic-table:** corrige ordenação após paginação ([39d3fd3](https://github.com/po-ui/po-angular/commit/39d3fd3975556a7c200d243723ca021e973b67a1))
+* **select:** ajusta a exibição da opção quando o `value` igual a zero ([a86c685](https://github.com/po-ui/po-angular/commit/a86c68598e429601a65ad3f61c9c11d1cb34af6d)), closes [#1473](https://github.com/po-ui/po-angular/issues/1473)
+* **combo:** corrige texto sobrepondo o `clean` ([f2ff575](https://github.com/po-ui/po-style/commit/f2ff575748dce30a50fafba2c7656bf88582dc1e))
+
+
+
 # [15.1.0](https://github.com/po-ui/po-angular/compare/v15.0.1...v15.1.0) (2023-02-06)
 
 
