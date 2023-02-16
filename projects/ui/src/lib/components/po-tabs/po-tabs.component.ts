@@ -5,6 +5,8 @@ import { isMobile } from './../../utils/util';
 import { PoTabComponent } from './po-tab/po-tab.component';
 import { PoTabDropdownComponent } from './po-tab-dropdown/po-tab-dropdown.component';
 import { PoTabsBaseComponent } from './po-tabs-base.component';
+import { PoLanguageService } from '../../services/po-language/po-language.service';
+import { poLocaleDefault } from '../../services/po-language/po-language.constant';
 
 const poTabsMaxNumberOfTabs = 5;
 
@@ -45,10 +47,30 @@ export class PoTabsComponent extends PoTabsBaseComponent {
 
   maxNumberOfTabs = poTabsMaxNumberOfTabs;
 
+  poTabsLiterals = {
+    en: {
+      moreTabs: 'More'
+    },
+    pt: {
+      moreTabs: 'Mais'
+    },
+    es: {
+      moreTabs: 'Más'
+    },
+    rus: {
+      moreTabs: 'Ещё'
+    }
+  };
+
+  literals: {
+    moreTabs: string;
+  };
+
   private previousActiveTab: PoTabComponent;
 
-  constructor(private changeDetector: ChangeDetectorRef) {
+  constructor(private changeDetector: ChangeDetectorRef, private languageService: PoLanguageService) {
     super();
+    this.setLanguage();
   }
 
   get isMobileDevice() {
@@ -66,6 +88,13 @@ export class PoTabsComponent extends PoTabsBaseComponent {
 
   get visibleTabs() {
     return this.tabs.filter(tab => !tab.hide);
+  }
+
+  setLanguage(): void {
+    this.literals = {
+      ...this.poTabsLiterals[poLocaleDefault],
+      ...this.poTabsLiterals[this.languageService.getShortLanguage()]
+    };
   }
 
   closePopover(): void {

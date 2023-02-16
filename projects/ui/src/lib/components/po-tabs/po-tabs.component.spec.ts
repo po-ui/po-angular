@@ -6,11 +6,13 @@ import * as UtilsFunction from './../../utils/util';
 
 import { PoTabsComponent } from './po-tabs.component';
 import { PoTabsModule } from './po-tabs.module';
+import { PoLanguageService } from '../../services/po-language/po-language.service';
 
 describe('PoTabsComponent:', () => {
   let component: PoTabsComponent;
   let fixture: ComponentFixture<PoTabsComponent>;
   let nativeElement: any;
+  let poLanguageService: PoLanguageService;
 
   let defaultTab;
   let activeTab;
@@ -19,12 +21,15 @@ describe('PoTabsComponent:', () => {
 
   configureTestSuite(() => {
     TestBed.configureTestingModule({
-      imports: [PoTabsModule]
+      imports: [PoTabsModule],
+      providers: [PoLanguageService]
     });
   });
 
   beforeEach(() => {
     fixture = TestBed.createComponent(PoTabsComponent);
+    poLanguageService = TestBed.inject(PoLanguageService);
+
     component = fixture.componentInstance;
 
     defaultTab = { id: '1', active: false, label: 'Tab 1' };
@@ -243,6 +248,38 @@ describe('PoTabsComponent:', () => {
       component['activeDistinctTab']();
 
       expect(component['activeFirstTab']).toHaveBeenCalled();
+    });
+
+    it('should display small tabs', () => {
+      component.tabs = <any>[{ id: '0' }, { id: '1' }, { id: '2' }, { id: '3' }, { id: '4' }, { id: '5' }];
+      component.small = true;
+      fixture.detectChanges();
+
+      const small = nativeElement.querySelector('.po-tab-button');
+
+      expect(small.getAttribute('ng-reflect-small')).toBeTruthy();
+    });
+
+    it('shouldn`t display small tabs', () => {
+      component.tabs = <any>[{ id: '0' }, { id: '1' }, { id: '2' }, { id: '3' }, { id: '4' }, { id: '5' }];
+      component.small = false;
+      fixture.detectChanges();
+
+      const small = nativeElement.querySelector('.po-tab-button');
+
+      expect(small.getAttribute('ng-reflect-small')).toBe('false');
+    });
+
+    it('should return correct language', () => {
+      spyOn(poLanguageService, 'getShortLanguage').and.returnValue('en');
+      component.setLanguage();
+      expect(component.literals.moreTabs).toEqual('More');
+    });
+
+    it('should return default language', () => {
+      spyOn(poLanguageService, 'getShortLanguage').and.returnValue('xx');
+      component.setLanguage();
+      expect(component.literals.moreTabs).toEqual('Mais');
     });
   });
 
