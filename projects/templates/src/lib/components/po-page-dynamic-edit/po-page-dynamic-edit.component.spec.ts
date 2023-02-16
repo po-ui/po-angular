@@ -4,7 +4,7 @@ import { FormsModule, NgForm } from '@angular/forms';
 import { HttpClientTestingModule } from '@angular/common/http/testing';
 import { RouterTestingModule } from '@angular/router/testing';
 
-import { throwError, of, EMPTY } from 'rxjs';
+import { throwError, of } from 'rxjs';
 
 import { PoDialogModule } from '@po-ui/ng-components';
 
@@ -745,6 +745,25 @@ describe('PoPageDynamicEditComponent: ', () => {
 
         tick();
       }));
+
+      it('should call `onLoadData` and set `model` with the custom data', fakeAsync(() => {
+        const id = '1';
+        const responseExpected = { name: 'angular' };
+        const customModelValue = { newValue: 'custom' };
+
+        const expectedModel = { ...responseExpected, ...customModelValue };
+
+        component.model = undefined;
+        component.onLoadData = model => ({ ...model, ...customModelValue });
+
+        spyOn(component['poPageDynamicService'], 'getResource').and.returnValue(of(responseExpected));
+
+        component['loadData'](id).subscribe(response => {
+          expect(component.model).toEqual(expectedModel);
+        });
+
+        tick();
+      }));
     });
 
     describe('saveOperation:', () => {
@@ -1318,6 +1337,71 @@ describe('PoPageDynamicEditComponent: ', () => {
 
         expect(component['formatUniqueKey']).not.toHaveBeenCalled();
         expect(expectedResult).toBe(undefined);
+      });
+    });
+
+    describe('beforeSetModel:', () => {
+      it('should call `onLoadData` and pass the model data', () => {
+        const responseParam = { name: 'angular' };
+        const customModelValue = { newValue: 'custom' };
+
+        component.model = undefined;
+        component.onLoadData = model => ({ ...model, ...customModelValue });
+
+        spyOn(component, 'onLoadData');
+
+        component['beforeSetModel'](responseParam);
+
+        expect(component['onLoadData']).toHaveBeenCalledWith(responseParam);
+      });
+
+      it('should set custom data to `model` when has param `onLoadData` as function', () => {
+        const responseParam = { name: 'angular' };
+        const customModelValue = { newValue: 'custom' };
+
+        const expectedModel = { ...responseParam, ...customModelValue };
+
+        component.model = undefined;
+        component.onLoadData = model => ({ ...model, ...customModelValue });
+        component['beforeSetModel'](responseParam);
+
+        expect(component.model).toEqual(expectedModel);
+      });
+
+      it('should set custom data to `model` when has param `onLoadData` as Observable', () => {
+        const responseParam = { name: 'angular' };
+        const customModelValue = { newValue: 'custom' };
+
+        const expectedModel = { ...responseParam, ...customModelValue };
+
+        component.model = undefined;
+        component.onLoadData = model => of({ ...model, ...customModelValue });
+        component['beforeSetModel'](responseParam);
+
+        expect(component.model).toEqual(expectedModel);
+      });
+
+      it('should set response to `model` if has no `onLoadData`', () => {
+        const expectedModel = { name: 'angular' };
+
+        component.model = undefined;
+        component.onLoadData = undefined;
+        component['beforeSetModel'](expectedModel);
+
+        expect(component.model).toEqual(expectedModel);
+      });
+
+      it('should set response to `model` if `onLoadData` return error', () => {
+        const expectedModel = { name: 'angular' };
+
+        component.model = undefined;
+        component.onLoadData = model => {
+          const err = new Error('test');
+          return throwError(() => err);
+        };
+        component['beforeSetModel'](expectedModel);
+
+        expect(component.model).toEqual(expectedModel);
       });
     });
   });
