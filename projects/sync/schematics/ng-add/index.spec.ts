@@ -41,14 +41,11 @@ xdescribe('Schematic: ng-add', () => {
       const tree = await runner.runSchematicAsync('ng-add', componentOptions, appTree).toPromise();
       const packageJson = JSON.parse(getFileContent(tree, '/package.json'));
       const dependencies = packageJson.dependencies;
-      const info =
-        'Sync added successfully, please execute the commands `npm install cordova-plugin-network-information @awesome-cordova-plugins/network` and `ionic cap sync`';
 
       expect(dependencies['@po-ui/ng-sync']).toBeDefined();
       expect(Object.keys(dependencies)).toEqual(Object.keys(dependencies).sort());
       expect(runner.tasks.some(task => task.name === 'node-package')).toBe(true);
       expect(infoOutput.length).toBe(1);
-      expect(infoOutput[0]).toMatch(new RegExp(`${info}`));
     });
   });
 

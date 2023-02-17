@@ -58,6 +58,8 @@ Antes de executar a instalação, é necessário que todas as dependências do p
     "@angular/router": "~15.0.3",
     "@angular/service-worker": "~15.0.3",
     "@ionic/angular": "^6.0.0",
+    "@capacitor/network": "^4.1.0",
+    "@capacitor/splash-screen": "^4.1.4",
     "rxjs": "~7.5.5",
     "tslib": "^2.3.0",
     "zone.js": "~0.12.0"
@@ -87,31 +89,13 @@ Execute o seguinte comando para instalar as dependências:
 npm install
 ```
 
-### Passo 3 - Instalando pré-requisitos para uso do po-sync
-
-Antes da instalação do `po-sync`, é necessário instalar os plugins abaixo para que a aplicação realize as sincronizações com sucesso:
-- [cordova-plugin-network-information](https://github.com/apache/cordova-plugin-network-information), utilizado pelo [@awesome-cordova-plugins/network](https://ionicframework.com/docs/native/network/)
-  - ```shell
-  npm install cordova-plugin-network-information @awesome-cordova-plugins/network
-  ```
-- [cordova-plugin-statusbar](https://github.com/apache/cordova-plugin-statusbar), utilizado pelo [@awesome-cordova-plugins/status-bar](https://ionicframework.com/docs/native/status-bar/)
-  - ```shell
-  npm install cordova-plugin-statusbar @awesome-cordova-plugins/status-bar
-  ```
-- [cordova-plugin-splashscreen](https://github.com/apache/cordova-plugin-splashscreen), utilizado pelo [@awesome-cordova-plugins/splash-screen](https://ionicframework.com/docs/native/splash-screen/)
-  - ```shell
-  npm install cordova-plugin-splashscreen @awesome-cordova-plugins/splash-screen
-  ```
-
-Após realizar as instalações, execute o seguinte comando:
+Após realizar a instalação, execute o seguinte comando:
 
 ```shell
 ionic cap sync
 ```
 
-Essas instalações se fazem necessárias por que a instalação inicial do Ionic 6 está usando o [runtime Capacitor no lugar do Cordova](https://ionicframework.com/blog/ionic-isnt-cordova-anymore/), e o PoSync depende desses pacotes atualmente, que está sendo [mantido pela comunidade](https://ionicframework.com/blog/a-new-chapter-for-ionic-native/).
-
-### Passo 4 - Instalando o po-sync
+### Passo 3 - Instalando o po-sync
 
 Para instalar o `po-sync` no aplicativo execute o seguinte comando:
 
@@ -119,9 +103,9 @@ Para instalar o `po-sync` no aplicativo execute o seguinte comando:
 ng add @po-ui/ng-sync
 ```
 
-### Passo 5 - Utilizando o po-sync
+### Passo 4 - Utilizando o po-sync
 
-#### Passo 5.1 - Importando o `po-sync` e o `po-storage`
+#### Passo 4.1 - Importando o `po-sync` e o `po-storage`
 No arquivo `src/app/app.module.ts`, adicione a importação dos módulos do `po-storage` e do `po-sync`: 
 
 > Caso você utilize o comando `ng add`, esse passo será feito automaticamente.
@@ -130,17 +114,15 @@ No arquivo `src/app/app.module.ts`, adicione a importação dos módulos do `po-
 import { NgModule } from '@angular/core';
 import { BrowserModule } from '@angular/platform-browser';
 import { RouteReuseStrategy } from '@angular/router';
+import { HttpClientModule } from '@angular/common/http';
 
 import { IonicModule, IonicRouteStrategy } from '@ionic/angular';
-import { SplashScreen } from '@awesome-cordova-plugins/splash-screen/ngx';
-import { StatusBar } from '@awesome-cordova-plugins/status-bar/ngx';
 
-/* Imports adicionados */
 import { PoStorageModule } from '@po-ui/ng-storage';
 import { PoSyncModule } from '@po-ui/ng-sync';
 
-import { AppComponent } from './app.component';
 import { AppRoutingModule } from './app-routing.module';
+import { AppComponent } from './app.component';
 
 @NgModule({
   declarations: [AppComponent],
@@ -148,20 +130,18 @@ import { AppRoutingModule } from './app-routing.module';
     BrowserModule,
     IonicModule.forRoot(),
     AppRoutingModule,
-    PoStorageModule.forRoot(), // import do módulo Po Storage
-    PoSyncModule, // import do módulo Po Sync
+    PoStorageModule.forRoot(),
+    HttpClientModule,
+    PoSyncModule
   ],
   providers: [
-    StatusBar,
-    SplashScreen,
-    { provide: RouteReuseStrategy, useClass: IonicRouteStrategy }
-  ],
+    { provide: RouteReuseStrategy, useClass: IonicRouteStrategy }],
   bootstrap: [AppComponent]
 })
 export class AppModule {}
 ```
 
-#### Passo 5.2 - Mapeando seu primeiro *schema*
+#### Passo 4.2 - Mapeando seu primeiro *schema*
 
 O `po-sync` utiliza a definição de `schemas`, onde cada `schema` representa um modelo de dados armazenado no dispositivo.
 
@@ -181,55 +161,48 @@ export const conferenceSchema: PoSyncSchema = {
 };
 ```
 
-### Passo 6 - Configurando o método prepare
+### Passo 5 - Configurando o método prepare
 
 Após ter o seu primeiro *schema* criado, configure o seu aplicativo utilizando o `po-sync` através do método `PoSyncService.prepare()`.
 
-#### Passo 6.1 - Alterando o `src/app/app.component.ts`
+#### Passo 5.1 - Alterando o `src/app/app.component.ts`
 
 Substitua o conteúdo do arquivo pelo conteúdo abaixo:
 
 ```typescript
 import { Component } from '@angular/core';
-
+import { Capacitor } from '@capacitor/core';
 import { Platform } from '@ionic/angular';
-import { SplashScreen } from '@awesome-cordova-plugins/splash-screen/ngx';
-import { StatusBar } from '@awesome-cordova-plugins/status-bar/ngx';
-import { PoSyncConfig, PoNetworkType, PoSyncService } from '@po-ui/ng-sync';
-
+import { SplashScreen } from '@capacitor/splash-screen';
+import { StatusBar } from '@capacitor/status-bar';
+import { PoNetworkType, PoSyncConfig, PoSyncService } from '@po-ui/ng-sync';
 import { conferenceSchema } from './home/conference-schema.constants';
 
 @Component({
   selector: 'app-root',
   templateUrl: 'app.component.html',
-  styleUrls: ['app.component.scss']
+  styleUrls: ['app.component.scss'],
 })
 export class AppComponent {
-  constructor(
-    private platform: Platform,
-    private splashScreen: SplashScreen,
-    private statusBar: StatusBar,
-    private poSync: PoSyncService
-  ) {
+  constructor(private platform: Platform, private poSync: PoSyncService) {
     this.initializeApp();
   }
 
-  initializeApp() {
-    this.platform.ready().then(() => {
-      this.statusBar.styleDefault();
-      this.splashScreen.hide();
+  async initializeApp() {
+    await this.platform.ready();
+    if (Capacitor.isNativePlatform()) {
+      StatusBar.setOverlaysWebView({ overlay: true });
+    }
+    await SplashScreen.hide();
 
-      this.initSync();
-
-    });
+    this.initSync();
   }
 
   initSync() {
     const config: PoSyncConfig = {
-      type: PoNetworkType.ethernet
+      type: PoNetworkType.wifi,
     };
     const schemas = [conferenceSchema];
-
     this.poSync.prepare(schemas, config).then(() => {
       this.poSync.sync();
     });
@@ -239,7 +212,7 @@ export class AppComponent {
 
 Após utilizar o método `PoSyncService.prepare()`, a aplicação estará pronta para sincronizar os dados através do método `PoSyncService.sync()`.
 
-### Passo 7 - Acessando os dados
+### Passo 6 - Acessando os dados
 
 Localize o arquivo `src/app/home/home.page.ts` e faça as seguintes alterações:
 
@@ -274,7 +247,7 @@ export class HomePage {
 
 No construtor, foi realizado uma inscrição no método `PoSyncService.onSync()`, para quando ocorrer uma sincronização, o método `loadHomePage()` busque um registro do *schema* "Conference".
 
-### Passo 8 - Exibindo os dados em tela
+### Passo 7 - Exibindo os dados em tela
 
 No arquivo `src/app/home/home.page.html` crie a seguinte estrutura:
 ```html
@@ -294,13 +267,13 @@ No arquivo `src/app/home/home.page.html` crie a seguinte estrutura:
 </ion-content>
 ```
 
-### Passo 9 - Executando o aplicativo
+### Passo 8 - Executando o aplicativo
 
 Execute o comando `ionic serve` e verifique o funcionamento do aplicativo Ionic com `po-sync`.
 
 > Pode ocorrer o seguinte erro `TS2320: Interface 'HTMLIonIconElement' cannot simultaneously extend types 'IonIcon' and 'HTMLStencilElement'` por conta da versão do TypeScript (4.4.x) conforme esta [issue](https://github.com/ionic-team/ionicons/issues/1011), neste caso adicione no arquivo **tsconfig.json** `"skipLibCheck": true`.
 
-#### Passo 9.1 - Entendendo o funcionamento do `po-sync`
+#### Passo 8.1 - Entendendo o funcionamento do `po-sync`
 
 - O aplicativo sincroniza os dados que estão no servidor através do método `PoSyncService.sync()`;
 

@@ -3,7 +3,7 @@ import { Injectable } from '@angular/core';
 import { fromEvent, merge, Observable, Subject } from 'rxjs';
 import { mapTo } from 'rxjs/operators';
 
-import { Network } from '@awesome-cordova-plugins/network/ngx';
+import { Network } from '@capacitor/network';
 
 import { PoNetworkStatus } from './../../models';
 
@@ -19,8 +19,8 @@ export class PoNetworkService {
   private networkTypeNow: Subject<{ status: boolean; type: string }>;
   private poNetworkStatus: PoNetworkStatus;
 
-  constructor(network: Network) {
-    this.initNetwork(network);
+  constructor() {
+    this.initNetwork();
   }
 
   /**
@@ -43,28 +43,24 @@ export class PoNetworkService {
     return this.networkTypeNow.asObservable();
   }
 
-  private getNavigatorStatus(): Observable<any> {
-    return merge(
-      fromEvent(window, 'offline').pipe(mapTo(false)),
-      fromEvent(window, 'online').pipe(mapTo(true)),
-      Observable.create(sub => {
-        sub.next(navigator.onLine);
-        sub.complete();
-      })
-    );
-  }
-
-  private initNetwork(network: Network) {
+  private initNetwork() {
     this.networkTypeNow = new Subject();
-    this.initSubscriber(network);
+    this.initSubscriber();
   }
 
-  private initSubscriber(network: Network) {
-    if (network) {
-      this.getNavigatorStatus().subscribe(status => {
-        this.networkType = network.type;
-        this.networkTypeNow.next({ status: status, type: this.networkType });
-      });
-    }
+  private async getStatus() {
+    return await Network.getStatus();
+  }
+
+  private async initSubscriber() {
+    const networkStatus = await this.getStatus();
+    this.networkType = networkStatus.connected ? networkStatus.connectionType : 'none';
+    this.networkTypeNow.next({ status: networkStatus.connected, type: this.networkType });
+
+    /* istanbul ignore next */
+    Network.addListener('networkStatusChange', status => {
+      this.networkType = status.connected ? status.connectionType : 'none';
+      this.networkTypeNow.next({ status: status.connected, type: this.networkType });
+    });
   }
 }

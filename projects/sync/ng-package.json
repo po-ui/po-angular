@@ -6,8 +6,8 @@
   },
   "allowedNonPeerDependencies": [
     "@po-ui/ng-storage",
-    "@awesome-cordova-plugins/core",
-    "@awesome-cordova-plugins/network",
+    "@capacitor/core",
+    "@capacitor/network",
     "http-status-codes",
     "@po-ui/ng-schematics"
   ]
