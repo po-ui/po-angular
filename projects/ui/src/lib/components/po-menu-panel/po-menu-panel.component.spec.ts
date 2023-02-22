@@ -5,10 +5,10 @@ import { RouterTestingModule } from '@angular/router/testing';
 
 import { Observable } from 'rxjs';
 
-import { PoMenuPanelComponent } from './po-menu-panel.component';
-import { PoMenuPanelItemComponent } from './po-menu-panel-item/po-menu-panel-item.component';
-import { PoMenuPanelItemsService } from './services/po-menu-panel-items.service';
 import { PoTooltipModule } from '../../directives/po-tooltip';
+import { PoMenuPanelItemComponent } from './po-menu-panel-item/po-menu-panel-item.component';
+import { PoMenuPanelComponent } from './po-menu-panel.component';
+import { PoMenuPanelItemsService } from './services/po-menu-panel-items.service';
 
 @Component({ template: 'Search' })
 export class SearchComponent {}
