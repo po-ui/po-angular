@@ -1,0 +1,7 @@
+<a *ngIf="link; else noLink" href="/">
+  <img [alt]="logoAlt" [class]="className" [src]="logo" [title]="logoAlt" />
+</a>
+
+<ng-template #noLink>
+  <img [alt]="logoAlt" [class]="className" [src]="logo" [title]="logoAlt" />
+</ng-template>
