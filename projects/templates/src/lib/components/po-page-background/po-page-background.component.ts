@@ -1,8 +1,8 @@
 import { Component, EventEmitter, Input, OnInit, Output } from '@angular/core';
 
-import { PoSelectOption, PoLanguageService, PoLanguage, poLanguageDefault } from '@po-ui/ng-components';
+import { PoLanguage, poLanguageDefault, PoLanguageService, PoSelectOption } from '@po-ui/ng-components';
 
-import { convertToBoolean, isTypeof } from './../../utils/util';
+import { convertToBoolean } from './../../utils/util';
 
 @Component({
   selector: 'po-page-background',
@@ -42,8 +42,6 @@ export class PoPageBackgroundComponent implements OnInit {
 
   selectedLanguageOption: string;
 
-  private _logo?: string;
-  private _secondaryLogo?: string;
   private _showSelectLanguage?: boolean = false;
   private _languagesList: Array<PoLanguage>;
   private _selectLanguageOptions: Array<PoSelectOption>;
@@ -62,13 +60,10 @@ export class PoPageBackgroundComponent implements OnInit {
   }
 
   /** Caminho para a logomarca localizada na parte superior. */
-  @Input('p-logo') set logo(value: any) {
-    this._logo = isTypeof(value, 'string') && value.trim() ? value : undefined;
-  }
+  @Input('p-logo') logo?: string;
 
-  get logo() {
-    return this._logo;
-  }
+  /** Texto alternativo para a logomarca. */
+  @Input('p-logo-alt') logoAlt?: string;
 
   /**
    * @optional
@@ -77,13 +72,7 @@ export class PoPageBackgroundComponent implements OnInit {
    *
    * Caminho para a logomarca localizada no rodapé.
    */
-  @Input('p-secondary-logo') set secondaryLogo(value: any) {
-    this._secondaryLogo = isTypeof(value, 'string') && value.trim() ? value : undefined;
-  }
-
-  get secondaryLogo() {
-    return this._secondaryLogo;
-  }
+  @Input('p-secondary-logo') secondaryLogo: string;
 
   /** Define se o seletor de idiomas deve ser exibido. */
   @Input('p-show-select-language') set showSelectLanguage(showSelectLanguage: boolean) {
