@@ -1,9 +1,9 @@
-import { Input, Directive } from '@angular/core';
+import { Directive, Input } from '@angular/core';
 
 import { isExternalLink, uuid } from '../../utils/util';
 
-import { PoMenuPanelItem } from './po-menu-panel-item/po-menu-panel-item.interface';
 import { PoMenuPanelItemInternal } from './po-menu-panel-item/po-menu-panel-item-internal.interface';
+import { PoMenuPanelItem } from './po-menu-panel-item/po-menu-panel-item.interface';
 
 const poDefaultLogo = 'https://po-ui.io/assets/po-logos/po_black.svg';
 
@@ -49,6 +49,8 @@ export class PoMenuPanelBaseComponent {
   get logo() {
     return this._logo;
   }
+
+  @Input('p-logo-alt') logoAlt?: string;
 
   private setMenuExtraProperties(menus: Array<PoMenuPanelItem>) {
     menus.forEach(menuItem => this.setMenuItemProperties(<PoMenuPanelItemInternal>menuItem));

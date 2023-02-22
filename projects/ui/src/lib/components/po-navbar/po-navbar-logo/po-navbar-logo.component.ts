@@ -6,4 +6,6 @@ import { Component, Input } from '@angular/core';
 })
 export class PoNavbarLogoComponent {
   @Input('p-logo') logo?: string;
+
+  @Input('p-logo-alt') logoAlt?: string;
 }

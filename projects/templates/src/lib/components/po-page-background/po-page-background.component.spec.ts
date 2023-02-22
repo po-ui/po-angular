@@ -1,11 +1,10 @@
-import { ComponentFixture, TestBed, waitForAsync } from '@angular/core/testing';
 import { NO_ERRORS_SCHEMA } from '@angular/core';
+import { ComponentFixture, TestBed, waitForAsync } from '@angular/core/testing';
 
-import * as utilFunctions from './../../utils/util';
 import { expectPropertiesValues } from './../../util-test/util-expect.spec';
 
-import { PoPageBackgroundComponent } from './po-page-background.component';
 import { PoLanguage, poLanguageDefault, PoLanguageService } from '@po-ui/ng-components';
+import { PoPageBackgroundComponent } from './po-page-background.component';
 
 describe('PoPageBackgroundComponent:', () => {
   let component: PoPageBackgroundComponent;
@@ -44,13 +43,6 @@ describe('PoPageBackgroundComponent:', () => {
       expect(component.logo).toBeUndefined();
     });
 
-    it('p-logo: should set property with `undefined` if invalid values.', () => {
-      const invalidValues = ['', ' ', null, undefined, 0, false, true];
-      const expectedValue = undefined;
-
-      expectPropertiesValues(component, 'logo', invalidValues, expectedValue);
-    });
-
     it('p-logo: should set property with valid values.', () => {
       const validValues = ['https://po-ui.io/logo', 'https://other.com/images/logo'];
 
@@ -59,13 +51,6 @@ describe('PoPageBackgroundComponent:', () => {
 
     it('p-secondary-logo: shoud be undefined.', () => {
       expect(component.secondaryLogo).toBeUndefined();
-    });
-
-    it('p-secondary-logo: should set property with `undefined` if invalid values.', () => {
-      const invalidValues = ['', ' ', null, undefined, 0, false, true];
-      const expectedValue = undefined;
-
-      expectPropertiesValues(component, 'secondaryLogo', invalidValues, expectedValue);
     });
 
     it('p-secondary-logo: should set property with valid values.', () => {
@@ -120,36 +105,36 @@ describe('PoPageBackgroundComponent:', () => {
   });
 
   describe('Templates:', () => {
-    it('should contain `po-page-background-main-logo` class if have `logo`.', () => {
+    it('should contain `po-logo` component if have `logo`.', () => {
       component.logo = 'logo-path';
 
       fixture.detectChanges();
 
-      expect(debugElement.querySelector('.po-page-background-main-logo')).toBeTruthy();
+      expect(debugElement.querySelector('po-logo')).toBeTruthy();
     });
 
-    it('shouldn`t contain `po-page-background-main-logo` class if not have `logo`.', () => {
+    it('shouldn`t contain `po-logo` component if not have `logo`.', () => {
       component.logo = undefined;
 
       fixture.detectChanges();
 
-      expect(debugElement.querySelector('.po-page-background-main-logo')).toBeNull();
+      expect(debugElement.querySelector('po-logo')).toBeNull();
     });
 
-    it('should contain `po-page-background-secondary-logo-image` class if have `secondaryLogo`.', () => {
+    it('should contain `po-logo` class if have `secondaryLogo`.', () => {
       component.secondaryLogo = 'logo-path';
 
       fixture.detectChanges();
 
-      expect(debugElement.querySelector('.po-page-background-secondary-logo-image')).toBeTruthy();
+      expect(debugElement.querySelector('po-logo')).toBeTruthy();
     });
 
-    it('shouldn`t contain `po-page-background-secondary-logo-image` class if not have `secondaryLogo`.', () => {
+    it('shouldn`t contain `po-logo` component if not have `secondaryLogo`.', () => {
       component.secondaryLogo = undefined;
 
       fixture.detectChanges();
 
-      expect(debugElement.querySelector('.po-page-background-secondary-logo-image')).toBeNull();
+      expect(debugElement.querySelector('po-logo')).toBeNull();
     });
 
     it('should contain `po-page-background-hide-logo` class if `hideLogo` is true and have `logo`.', () => {
@@ -161,13 +146,13 @@ describe('PoPageBackgroundComponent:', () => {
       expect(debugElement.querySelector('.po-page-background-hide-logo')).toBeTruthy();
     });
 
-    it('shouldn`t contain `po-page-background-hide-logo` class if `hideLogo` is true and not have `logo`.', () => {
+    it('should contain `po-page-background-hide-logo` class if `hideLogo` is true and not have `logo`.', () => {
       component.logo = undefined;
       component.hideLogo = true;
 
       fixture.detectChanges();
 
-      expect(debugElement.querySelector('.po-page-background-hide-logo')).toBeNull();
+      expect(debugElement.querySelector('.po-page-background-hide-logo')).toBeTruthy();
     });
 
     it('shouldn`t contain `po-page-background-hide-logo` class if `!hideLogo`', () => {

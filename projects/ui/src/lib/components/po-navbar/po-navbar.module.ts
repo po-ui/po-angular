@@ -1,13 +1,14 @@
-import { NgModule } from '@angular/core';
 import { CommonModule } from '@angular/common';
+import { NgModule } from '@angular/core';
 
 import { PoMenuModule } from '../po-menu/po-menu.module';
+import { PoIconModule } from './../po-icon/po-icon.module';
+import { PoLogoModule } from './../po-logo/po-logo.module';
 import { PoNavbarActionsModule } from './po-navbar-actions/po-navbar-actions.module';
-import { PoNavbarComponent } from './po-navbar.component';
+import { PoNavbarItemNavigationModule } from './po-navbar-item-navigation/po-navbar-item-navigation.module';
 import { PoNavbarItemsModule } from './po-navbar-items/po-navbar-items.module';
 import { PoNavbarLogoComponent } from './po-navbar-logo/po-navbar-logo.component';
-import { PoNavbarItemNavigationModule } from './po-navbar-item-navigation/po-navbar-item-navigation.module';
-import { PoIconModule } from './../po-icon/po-icon.module';
+import { PoNavbarComponent } from './po-navbar.component';
 
 /**
  * @description
@@ -43,11 +44,12 @@ import { PoIconModule } from './../po-icon/po-icon.module';
 @NgModule({
   imports: [
     CommonModule,
-    PoNavbarActionsModule,
-    PoNavbarItemsModule,
-    PoNavbarItemNavigationModule,
+    PoIconModule,
+    PoLogoModule,
     PoMenuModule,
-    PoIconModule
+    PoNavbarActionsModule,
+    PoNavbarItemNavigationModule,
+    PoNavbarItemsModule
   ],
   declarations: [PoNavbarComponent, PoNavbarLogoComponent],
   exports: [PoNavbarComponent]

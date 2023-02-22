@@ -7,21 +7,22 @@
   <div class="po-menu" [ngClass]="{ 'po-menu-animation': mobileOpened }">
     <div class="po-menu-header">
       <div *ngIf="logo || (shortLogo && enableCollapse)" class="po-menu-header-container-logo">
-        <a href="./">
-          <img
-            [ngClass]="enableCollapse ? 'po-menu-short-logo' : 'po-menu-logo'"
-            [src]="enableCollapse ? shortLogo || logo : logo"
-            [alt]="logoAlt"
-          />
-        </a>
+        <po-logo
+          [p-class]="enableCollapse ? 'po-menu-short-logo' : 'po-menu-logo'"
+          [p-logo]="enableCollapse ? shortLogo || logo : logo"
+          [p-logo-alt]="logoAlt"
+        ></po-logo>
       </div>
 
       <div *ngIf="!enableCollapse && menuHeaderTemplate" class="po-menu-header-template">
         <ng-container *ngTemplateOutlet="menuHeaderTemplate.templateRef"></ng-container>
       </div>
 
-      <po-menu-filter *ngIf="filter && !enableCollapse" [p-loading]="filterLoading" (p-filter)="debounceFilter($event)">
-      </po-menu-filter>
+      <po-menu-filter
+        *ngIf="filter && !enableCollapse"
+        [p-loading]="filterLoading"
+        (p-filter)="debounceFilter($event)"
+      ></po-menu-filter>
     </div>
 
     <div class="po-menu-body">
@@ -53,8 +54,7 @@
               [p-short-label]="menu.shortLabel"
               [p-sub-items]="menu.subItems"
               [p-type]="menu.type"
-            >
-            </po-menu-item>
+            ></po-menu-item>
           </div>
         </div>
       </div>

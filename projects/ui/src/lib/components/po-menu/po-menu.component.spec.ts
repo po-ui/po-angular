@@ -1,7 +1,7 @@
+import { Location } from '@angular/common';
+import { HttpClientTestingModule } from '@angular/common/http/testing';
 import { Component } from '@angular/core';
 import { ComponentFixture, fakeAsync, TestBed, tick } from '@angular/core/testing';
-import { HttpClientTestingModule } from '@angular/common/http/testing';
-import { Location } from '@angular/common';
 import { Router, Routes } from '@angular/router';
 import { RouterTestingModule } from '@angular/router/testing';
 
@@ -10,21 +10,21 @@ import { Observable, of } from 'rxjs';
 import * as utilsFunctions from '../../utils/util';
 import { PoCleanComponent } from './../po-field/po-clean/po-clean.component';
 
-import { PoLoadingModule } from '../po-loading/po-loading.module';
 import { PoIconModule } from '../po-icon/po-icon.module';
+import { PoLoadingModule } from '../po-loading/po-loading.module';
 
 import { PoBadgeComponent } from '../po-badge';
-import { PoMenuComponent } from './po-menu.component';
 import { PoMenuFilterComponent } from './po-menu-filter/po-menu-filter.component';
 import { PoMenuItemComponent } from './po-menu-item/po-menu-item.component';
+import { PoMenuComponent } from './po-menu.component';
 import { PoMenuItemsService } from './services/po-menu-items.service';
 import { PoMenuService } from './services/po-menu.service';
 
 @Component({ template: 'Search' })
-export class SearchComponent {}
+export class SearchComponent { }
 
 @Component({ template: 'Home' })
-export class HomeComponent {}
+export class HomeComponent { }
 
 export const routes: Routes = [
   { path: '', redirectTo: 'home', pathMatch: 'full' },
@@ -73,12 +73,12 @@ describe('PoMenuComponent:', () => {
         subItems: [
           { label: 'Search', link: '/search' },
           { label: 'Fake Url', link: 'http://fakeUrlPo.com.br' },
-          { label: 'Just Action', action: () => {} }
+          { label: 'Just Action', action: () => { } }
         ]
       },
       { label: 'Fake Url', icon: 'star', link: 'http://fakeUrlPo.com.br' },
-      { label: 'Commom Function', icon: 'share', action: () => {} },
-      { label: 'Function as string', icon: 'company', action: () => {} },
+      { label: 'Commom Function', icon: 'share', action: () => { } },
+      { label: 'Function as string', icon: 'company', action: () => { } },
       {
         label: 'Level 1.1',
         icon: 'chat',
@@ -517,7 +517,7 @@ describe('PoMenuComponent:', () => {
   });
 
   it('itemSubscription: should `unsubscribe` `itemSubscription` on destroy.', () => {
-    component['itemSubscription'] = <any>{ unsubscribe: () => {} };
+    component['itemSubscription'] = <any>{ unsubscribe: () => { } };
 
     spyOn(component['itemSubscription'], <any>'unsubscribe');
 
@@ -527,7 +527,7 @@ describe('PoMenuComponent:', () => {
   });
 
   it('routeSubscription: should `unsubscribe` `routeSubscription` on destroy.', () => {
-    component['routeSubscription'] = <any>{ unsubscribe: () => {} };
+    component['routeSubscription'] = <any>{ unsubscribe: () => { } };
 
     spyOn(component['routeSubscription'], <any>'unsubscribe');
 
@@ -572,7 +572,7 @@ describe('PoMenuComponent:', () => {
   }));
 
   it('should find items and subItems that have action or link', fakeAsync(() => {
-    const action = () => {};
+    const action = () => { };
 
     const items = [
       { label: 'Test AA', link: 'test/' },
@@ -661,7 +661,7 @@ describe('PoMenuComponent:', () => {
 
     it('should show `po-menu-footer` if `collapsed` is `true` and `menus` are valid', () => {
       component.collapsed = true;
-      component.menus = [{ label: '1', icon: 'po-icon-user', shortLabel: '123', action: () => {} }];
+      component.menus = [{ label: '1', icon: 'po-icon-user', shortLabel: '123', action: () => { } }];
 
       fixture.detectChanges();
       const footer = fixture.debugElement.nativeElement.querySelector('.po-menu-footer');
@@ -671,7 +671,7 @@ describe('PoMenuComponent:', () => {
 
     it('should not show `po-menu-footer` if `collapsed` is `true` and `menus` are invalid', () => {
       component.collapsed = true;
-      component.menus = [{ label: '1', icon: 'po-icon-user', action: () => {} }];
+      component.menus = [{ label: '1', icon: 'po-icon-user', action: () => { } }];
 
       fixture.detectChanges();
       const footer = fixture.debugElement.nativeElement.querySelector('.po-menu-footer');
@@ -745,74 +745,29 @@ describe('PoMenuComponent:', () => {
       expect(showNoData).toBeFalsy();
     });
 
-    it('should display `po-menu-logo` if have `logo`.', () => {
+    it('should display `po-logo` component if have `logo`.', () => {
       component.logo = 'https://po-ui.io/assets/graphics/po-logo-grey.svg';
 
       fixture.detectChanges();
 
-      expect(nativeElement.querySelector('img.po-menu-logo')).toBeTruthy();
-      expect(nativeElement.querySelector('img.po-menu-short-logo')).toBeNull();
+      expect(nativeElement.querySelector('po-logo')).toBeTruthy();
     });
 
-    it('should display `po-menu-short-logo` if have `shortLogo` and `enableCollapse` is true.', () => {
+    it('shouldn`t display `po-logo` component if not have `logo`.', () => {
+      expect(nativeElement.querySelector('po-logo')).toBeNull();
+    });
+
+    it('should display `po-logo` component if have `shortLogo` and `enableCollapse` is true.', () => {
       component.shortLogo = 'https://po-ui.io/assets/graphics/po-logo-grey.svg';
       spyOnProperty(component, 'enableCollapse').and.returnValue(true);
 
       fixture.detectChanges();
 
-      expect(nativeElement.querySelector('img.po-menu-short-logo')).toBeTruthy();
-      expect(nativeElement.querySelector('img.po-menu-logo')).toBeNull();
+      expect(nativeElement.querySelector('po-logo')).toBeTruthy();
     });
 
-    it('shouldn`t display `po-menu-short-logo` if have `shortLogo` but `enableCollapse` is false.', () => {
-      component.shortLogo = 'https://po-ui.io/assets/graphics/po-logo-grey.svg';
-      spyOnProperty(component, 'enableCollapse').and.returnValue(false);
-
-      fixture.detectChanges();
-
-      expect(nativeElement.querySelector('img.po-menu-short-logo')).toBeNull();
-    });
-
-    it('shouldn`t display `po-menu-short-logo` if `enableCollapse` is true but not have `shortLogo`.', () => {
-      component.shortLogo = undefined;
-      spyOnProperty(component, 'enableCollapse').and.returnValue(false);
-
-      fixture.detectChanges();
-
-      expect(nativeElement.querySelector('img.po-menu-short-logo')).toBeNull();
-    });
-
-    it('shouldn`t display `po-menu-logo` or `po-menu-short-logo` if not have `logo`, `shortLogo` and `enableCollapse` is true.', () => {
-      component.logo = undefined;
-      component.shortLogo = undefined;
-      spyOnProperty(component, 'enableCollapse').and.returnValue(true);
-
-      fixture.detectChanges();
-
-      expect(nativeElement.querySelector('img.po-menu-logo')).toBeNull();
-      expect(nativeElement.querySelector('img.po-menu-short-logo')).toBeNull();
-    });
-
-    it('shouldn`t display `po-menu-logo` or `po-menu-short-logo` if not have `logo`, `shortLogo` and `enableCollapse` is false.', () => {
-      component.logo = undefined;
-      component.shortLogo = undefined;
-      spyOnProperty(component, 'enableCollapse').and.returnValue(false);
-
-      fixture.detectChanges();
-
-      expect(nativeElement.querySelector('img.po-menu-logo')).toBeNull();
-      expect(nativeElement.querySelector('img.po-menu-short-logo')).toBeNull();
-    });
-
-    it('shouldn`t display `po-menu-logo` or `po-menu-short-logo` if the logos are defined with empty string.', () => {
-      component.logo = ' ';
-      component.shortLogo = ' ';
-      spyOnProperty(component, 'enableCollapse').and.returnValue(true);
-
-      fixture.detectChanges();
-
-      expect(nativeElement.querySelector('img.po-menu-logo')).toBeNull();
-      expect(nativeElement.querySelector('img.po-menu-short-logo')).toBeNull();
+    it('shouldn`t display `po-logo` component if not have `shortLogo`.', () => {
+      expect(nativeElement.querySelector('po-logo')).toBeNull();
     });
 
     it('should contain `po-menu-header-template` if `enableCollapse` is false and `menuHeaderTemplate` is defined', () => {
@@ -929,16 +884,16 @@ describe('PoMenuComponent:', () => {
     it('toggleMenuCollapse: should set `collapsed`', () => {
       const fakeThis = {
         collapsed: true,
-        validateCollapseClass: () => {},
+        validateCollapseClass: () => { },
         groupedMenuItem: undefined,
-        getActiveMenuParent: () => {},
-        toggleGroupedMenuItem: () => {},
+        getActiveMenuParent: () => { },
+        toggleGroupedMenuItem: () => { },
         activeMenuItem: undefined,
-        activateCollapseSubMenuItem: () => {},
+        activateCollapseSubMenuItem: () => { },
         menuItemsService: {
-          sendToChildMenuClicked: () => {}
+          sendToChildMenuClicked: () => { }
         },
-        updateMenu: () => {}
+        updateMenu: () => { }
       };
 
       component['toggleMenuCollapse'].call(fakeThis, false);
@@ -948,16 +903,16 @@ describe('PoMenuComponent:', () => {
     it('toggleMenuCollapse: should call `updateMenu`', () => {
       const fakeThis = {
         collapsed: true,
-        validateCollapseClass: () => {},
+        validateCollapseClass: () => { },
         groupedMenuItem: undefined,
-        getActiveMenuParent: () => {},
-        toggleGroupedMenuItem: () => {},
+        getActiveMenuParent: () => { },
+        toggleGroupedMenuItem: () => { },
         activeMenuItem: undefined,
-        activateCollapseSubMenuItem: () => {},
+        activateCollapseSubMenuItem: () => { },
         menuItemsService: {
-          sendToChildMenuClicked: () => {}
+          sendToChildMenuClicked: () => { }
         },
-        updateMenu: () => {}
+        updateMenu: () => { }
       };
 
       spyOn(fakeThis, 'updateMenu');
@@ -971,16 +926,16 @@ describe('PoMenuComponent:', () => {
       and 'activeMenuItem' are defined`, () => {
       const fakeThis = {
         collapsed: true,
-        validateCollapseClass: () => {},
+        validateCollapseClass: () => { },
         groupedMenuItem: { label: 'menu' },
-        getActiveMenuParent: () => {},
-        toggleGroupedMenuItem: () => {},
+        getActiveMenuParent: () => { },
+        toggleGroupedMenuItem: () => { },
         activeMenuItem: { label: 'active menu' },
-        activateCollapseSubMenuItem: () => {},
+        activateCollapseSubMenuItem: () => { },
         menuItemsService: {
-          sendToChildMenuClicked: () => {}
+          sendToChildMenuClicked: () => { }
         },
-        updateMenu: () => {}
+        updateMenu: () => { }
       };
 
       spyOn(fakeThis, 'toggleGroupedMenuItem');
@@ -996,16 +951,16 @@ describe('PoMenuComponent:', () => {
       is undefined`, () => {
       const fakeThis = {
         collapsed: true,
-        validateCollapseClass: () => {},
+        validateCollapseClass: () => { },
         groupedMenuItem: undefined,
-        getActiveMenuParent: () => {},
-        toggleGroupedMenuItem: () => {},
+        getActiveMenuParent: () => { },
+        toggleGroupedMenuItem: () => { },
         activeMenuItem: { label: 'active menu' },
-        activateCollapseSubMenuItem: () => {},
+        activateCollapseSubMenuItem: () => { },
         menuItemsService: {
-          sendToChildMenuClicked: () => {}
+          sendToChildMenuClicked: () => { }
         },
-        updateMenu: () => {}
+        updateMenu: () => { }
       };
 
       spyOn(fakeThis, 'toggleGroupedMenuItem');
@@ -1021,12 +976,12 @@ describe('PoMenuComponent:', () => {
       is undefined`, () => {
       const fakeThis = {
         collapsed: true,
-        validateCollapseClass: () => {},
+        validateCollapseClass: () => { },
         groupedMenuItem: { label: 'menu' },
-        getActiveMenuParent: () => {},
-        toggleGroupedMenuItem: () => {},
+        getActiveMenuParent: () => { },
+        toggleGroupedMenuItem: () => { },
         activeMenuItem: undefined,
-        updateMenu: () => {}
+        updateMenu: () => { }
       };
 
       spyOn(fakeThis, 'toggleGroupedMenuItem');
@@ -1042,12 +997,12 @@ describe('PoMenuComponent:', () => {
       and 'groupedMenuItem' are undefined`, () => {
       const fakeThis = {
         collapsed: true,
-        validateCollapseClass: () => {},
+        validateCollapseClass: () => { },
         groupedMenuItem: undefined,
-        getActiveMenuParent: () => {},
-        toggleGroupedMenuItem: () => {},
+        getActiveMenuParent: () => { },
+        toggleGroupedMenuItem: () => { },
         activeMenuItem: undefined,
-        updateMenu: () => {}
+        updateMenu: () => { }
       };
 
       spyOn(fakeThis, 'toggleGroupedMenuItem');
@@ -1062,14 +1017,14 @@ describe('PoMenuComponent:', () => {
     it('toggleMenuCollapse: should call `activateCollapseSubMenuItem` and `sendToChildMenuClicked` if has `activeMenuItem`', () => {
       const fakeThis = {
         collapsed: true,
-        validateCollapseClass: () => {},
+        validateCollapseClass: () => { },
         groupedMenuItem: undefined,
         activeMenuItem: { label: 'active menu' },
-        activateCollapseSubMenuItem: () => {},
+        activateCollapseSubMenuItem: () => { },
         menuItemsService: {
-          sendToChildMenuClicked: arg => {}
+          sendToChildMenuClicked: arg => { }
         },
-        updateMenu: () => {}
+        updateMenu: () => { }
       };
 
       spyOn(fakeThis, 'activateCollapseSubMenuItem');
@@ -1089,14 +1044,14 @@ describe('PoMenuComponent:', () => {
       'activeMenuItem' is undefined`, () => {
       const fakeThis = {
         collapsed: true,
-        validateCollapseClass: () => {},
+        validateCollapseClass: () => { },
         groupedMenuItem: undefined,
         activeMenuItem: undefined,
-        activateCollapseSubMenuItem: () => {},
+        activateCollapseSubMenuItem: () => { },
         menuItemsService: {
-          sendToChildMenuClicked: () => {}
+          sendToChildMenuClicked: () => { }
         },
-        updateMenu: () => {}
+        updateMenu: () => { }
       };
 
       spyOn(fakeThis, 'activateCollapseSubMenuItem');
@@ -1651,7 +1606,7 @@ describe('PoMenuComponent:', () => {
     it(`filterProcess: should set 'filterLoading' to true when 'filterProcess' is called`, () => {
       component.filterLoading = false;
 
-      spyOn(component, <any>'filterItems').and.callFake(() => ({ then: () => ({ catch: () => {} }) }));
+      spyOn(component, <any>'filterItems').and.callFake(() => ({ then: () => ({ catch: () => { } }) }));
 
       component['filterProcess']('filter');
 
@@ -1744,6 +1699,6 @@ function fakeMenuService(item) {
 
   return {
     receiveFromChildMenuClicked: () => observer,
-    sendToChildMenuClicked: param => {}
+    sendToChildMenuClicked: param => { }
   };
 }
