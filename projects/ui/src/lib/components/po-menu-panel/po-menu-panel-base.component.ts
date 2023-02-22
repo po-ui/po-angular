@@ -50,6 +50,10 @@ export class PoMenuPanelBaseComponent {
     return this._logo;
   }
 
+  get logo() {
+    return this._logo;
+  }
+
   private setMenuExtraProperties(menus: Array<PoMenuPanelItem>) {
     menus.forEach(menuItem => this.setMenuItemProperties(<PoMenuPanelItemInternal>menuItem));
   }
