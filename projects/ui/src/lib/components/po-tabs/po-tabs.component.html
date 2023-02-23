@@ -23,7 +23,7 @@
       #tabDropdown
       *ngIf="isShowTabDropdown"
       class="po-tab-button po-tab-dropdown"
-      p-label="Mais"
+      [p-label]="literals.moreTabs"
       [p-small]="small"
       [p-tabs]="overflowedTabs"
       (p-activated)="onTabActive($event)"
