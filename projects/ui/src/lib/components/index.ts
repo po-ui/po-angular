@@ -40,3 +40,4 @@ export * from './po-widget/index';
 export * from './po-link/index';
 export * from './po-label/index';
 export * from './po-image/index';
+export * from './po-logo/index';
