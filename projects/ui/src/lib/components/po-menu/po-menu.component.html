@@ -10,8 +10,8 @@
         <po-logo
           [p-class]="enableCollapse ? 'po-menu-short-logo' : 'po-menu-logo'"
           [p-logo]="enableCollapse ? shortLogo || logo : logo"
-          [p-logo-alt]="logoAlt"
-        ></po-logo>
+          [p-logo-alt]="logoAlt">
+        </po-logo>
       </div>
 
       <div *ngIf="!enableCollapse && menuHeaderTemplate" class="po-menu-header-template">
@@ -21,8 +21,8 @@
       <po-menu-filter
         *ngIf="filter && !enableCollapse"
         [p-loading]="filterLoading"
-        (p-filter)="debounceFilter($event)"
-      ></po-menu-filter>
+        (p-filter)="debounceFilter($event)">
+      </po-menu-filter>
     </div>
 
     <div class="po-menu-body">
@@ -53,8 +53,8 @@
               [p-link]="menu.link"
               [p-short-label]="menu.shortLabel"
               [p-sub-items]="menu.subItems"
-              [p-type]="menu.type"
-            ></po-menu-item>
+              [p-type]="menu.type">
+            </po-menu-item>
           </div>
         </div>
       </div>
