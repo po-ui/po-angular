@@ -7,6 +7,7 @@ import { PoMenuPanelComponent } from './po-menu-panel.component';
 import { PoMenuPanelItemComponent } from './po-menu-panel-item/po-menu-panel-item.component';
 import { PoMenuPanelItemsService } from './services/po-menu-panel-items.service';
 import { PoTooltipModule } from '../../directives/po-tooltip/index';
+import { PoLogoModule } from '../po-logo/po-logo.module';
 
 /**
  * @description
@@ -14,7 +15,7 @@ import { PoTooltipModule } from '../../directives/po-tooltip/index';
  * Módulo do componente po-menu-panel.
  */
 @NgModule({
-  imports: [CommonModule, RouterModule, PoFieldModule, PoTooltipModule],
+  imports: [CommonModule, RouterModule, PoFieldModule, PoTooltipModule, PoLogoModule],
   declarations: [PoMenuPanelComponent, PoMenuPanelItemComponent],
   exports: [PoMenuPanelComponent],
   providers: [PoMenuPanelItemsService]
