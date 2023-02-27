@@ -2,6 +2,29 @@
 
 All notable changes to this project will be documented in this file. See [standard-version](https://github.com/conventional-changelog/standard-version) for commit guidelines.
 
+# [15.2.0](https://github.com/po-ui/po-angular/compare/v15.1.1...v15.2.0) (2023-02-27)
+
+
+### Bug Fixes
+
+* **tabs:** adiciona tradução para a palavra "Mais" ([270b8a7](https://github.com/po-ui/po-angular/commit/270b8a7d201c453ee6feb18cf29040a22e4d8918)), closes [#1577](https://github.com/po-ui/po-angular/issues/1577)
+
+
+### Features
+
+* **input:** adiciona a propriedade `p-upper-case` ([8e5f683](https://github.com/po-ui/po-angular/commit/8e5f6834884d7370e962267c417761f078bf4300)), closes [#1520](https://github.com/po-ui/po-angular/issues/1520)
+* **popup:** implementa novo componente interno `po-listbox` ([0cd58b8](https://github.com/po-ui/po-angular/commit/0cd58b884f1240430183728dad16a75a4bfd733b))
+* **schematics:** implementa ng update do po-sync ([d59ab50](https://github.com/po-ui/po-angular/commit/d59ab50f033a74671075cbad0c788893bcc91044))
+* **sync:** altera dependência do cordova para o capacitor ([fdd5a2c](https://github.com/po-ui/po-angular/commit/fdd5a2c7c4811f4cee90de5d9bb036e90f3d60c2))
+* **logo:** novo componente interno `po-logo`, implementado nos seguintes componentes:  ([3e0ccd6](https://github.com/po-ui/po-angular/commit/3e0ccd631b7fd7bf68531d9f07fb990778e10a52))
+
+- po-menu 
+- po-menu-panel
+- po-navbar
+- po-page-background
+
+
+
 ## [15.1.1](https://github.com/po-ui/po-angular/compare/v15.1.0...v15.1.1) (2023-02-13)
 
 
