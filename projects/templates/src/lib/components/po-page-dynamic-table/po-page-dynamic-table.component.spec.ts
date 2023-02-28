@@ -668,6 +668,58 @@ describe('PoPageDynamicTableComponent:', () => {
         expect(component['page']).toEqual(2);
       }));
 
+      it('should keep the first item found that is equal to the response items', fakeAsync(() => {
+        component['page'] = 1;
+        component.fields = [
+          { property: 'seqItem', key: true },
+          { property: 'id', key: false, visible: false }
+        ];
+
+        const response = {
+          items: [{ name: 'Steve', id: 1, seqItem: 9 }],
+          hasNext: true,
+          page: 2
+        };
+
+        component.serviceApi = 'localHost';
+        component.items = [{ name: 'Anne', id: 2, seqItem: 9 }];
+
+        spyOn(component['poPageDynamicService'], 'getResources').and.returnValue(of(response));
+
+        component['loadData']({ page: 2 }).subscribe();
+
+        tick(100);
+
+        expect(component.items).toEqual([{ name: 'Anne', id: 2, seqItem: 9 }]);
+        expect(component['page']).toEqual(2);
+      }));
+
+      it('should keep the initial item if the response is empty', fakeAsync(() => {
+        component['page'] = 1;
+        component.fields = [
+          { property: 'seqItem', key: true },
+          { property: 'id', key: true, visible: false }
+        ];
+
+        const response = {
+          items: [],
+          hasNext: true,
+          page: 2
+        };
+
+        component.serviceApi = 'localHost';
+        component.items = [{ name: 'Anne', id: 2, seqItem: 9 }];
+
+        spyOn(component['poPageDynamicService'], 'getResources').and.returnValue(of(response));
+        spyOn(utilsFunctions, 'removeDuplicateItemsWithArrayKey');
+
+        component['loadData']({ page: 2 }).subscribe();
+
+        tick(100);
+
+        expect(component.items).toEqual([{ name: 'Anne', id: 2, seqItem: 9 }]);
+      }));
+
       it('should call loadData with quickSearchValue', fakeAsync(() => {
         const activatedRoute: any = {
           snapshot: {

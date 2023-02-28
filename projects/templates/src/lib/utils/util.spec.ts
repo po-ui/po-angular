@@ -398,8 +398,14 @@ describe('Function removeDuplicateItemsWithArrayKey:', () => {
     ];
 
     const key = [];
+
+    const resultExpected = removeDuplicateItemsWithArrayKey(item, item2, key);
+
     removeDuplicateItemsWithArrayKey(item, item2, key);
-    expect(item2).toEqual([
+    expect(resultExpected).toEqual([
+      { country: 'brasil', id: '1' },
+      { country: 'china', id: '2' },
+      { country: 'japao', id: '3' },
       { country: 'chile', id: '4' },
       { country: 'canada', id: '5' }
     ]);
@@ -419,8 +425,13 @@ describe('Function removeDuplicateItemsWithArrayKey:', () => {
     ];
 
     const key = ['country'];
+    const resultExpected = removeDuplicateItemsWithArrayKey(item, item2, key);
+
     removeDuplicateItemsWithArrayKey(item, item2, key);
-    expect(item2).toEqual([
+    expect(resultExpected).toEqual([
+      { country: 'brasil', id: '1' },
+      { country: 'china', id: '2' },
+      { country: 'japao', id: '3' },
       { country: 'chile', id: '4' },
       { country: 'canada', id: '5' }
     ]);
@@ -440,8 +451,12 @@ describe('Function removeDuplicateItemsWithArrayKey:', () => {
     ];
 
     const key = ['country', 'id'];
-    removeDuplicateItemsWithArrayKey(item, item2, key);
-    expect(item2).toEqual([
+    const resultExpected = removeDuplicateItemsWithArrayKey(item, item2, key);
+
+    expect(resultExpected).toEqual([
+      { country: 'brasil', id: '1' },
+      { country: 'china', id: '2' },
+      { country: 'japao', id: '3' },
       { country: 'chile', id: '4' },
       { country: 'canada', id: '5' }
     ]);
