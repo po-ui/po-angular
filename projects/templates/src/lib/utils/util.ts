@@ -410,7 +410,7 @@ export function removeDuplicateItems(item, item2, key) {
 }
 
 /**
- * Remove objetos duplicados passando um array de propriedades.
+ * Recebe dois arrays de objetos e remove os itens duplicados utilizando uma propriedade(key) para comparação.
  *
  * Exemplo:
  *
@@ -418,36 +418,20 @@ export function removeDuplicateItems(item, item2, key) {
  * item: [{country: 'japao'}, {country: 'brasil'} , {country: 'china'}]
  * item2: [{country: 'chile'}, {country: 'brasil'}, {country: 'canada'}]
  * key: '[country]'
- * Resultado:
- *    item2 = [{country: 'chile'}, {country: 'canada'} ]
+ * Resultado do retorno:
+ *    [{country: 'chile'}, {country: 'canada'}, {country: 'japao'}, {country: 'china'}]
  * ```
  *
  *
- * @param item lista comparada.
- * @param item2 lista para remover items duplicados.
- * @param key um array de propriedades que vão ser utilizadas para a comparação.
+ * @param item : primeira lista de itens.
+ * @param item2 : segunda lista de itens.
+ * @param key : um array de propriedades que vão ser utilizadas para a comparação.
  */
-export function removeDuplicateItemsWithArrayKey(item, item2, key) {
-  if (!key.length) {
-    removeDuplicateItems(item, item2, 'id');
-  } else if (key.length === 1) {
-    removeDuplicateItems(item, item2, key[0]);
-  } else {
-    let myKey;
-    let newArray;
-    let result;
+export function removeDuplicateItemsWithArrayKey(item, item2, keys) {
+  const newKey = keys.length ? keys : ['id'];
 
-    const allEqual = arr => arr.every(val => val === arr[0]);
-
-    for (let i = 0; i < key.length; i++) {
-      newArray = [...item].map(entry => entry[key[i]]).concat([...item2].map(entry => entry[key[i]]));
-      result = allEqual(newArray);
-      if (!result) {
-        myKey = key[i];
-        break;
-      }
-    }
-
-    removeDuplicateItems(item, item2, myKey);
-  }
+  const combinedArray = item.concat(item2);
+  return combinedArray.filter(
+    (obj, index) => index === combinedArray.findIndex(innerObj => newKey.every(key => innerObj[key] === obj[key]))
+  );
 }
