@@ -23,7 +23,22 @@ export class SamplePoDynamicViewEmployeeComponent {
     { property: 'city', label: 'City', divider: 'Address' },
     { property: 'addressStreet', label: 'Street' },
     { property: 'addressNumber', label: 'Number' },
-    { property: 'zipCode', label: 'Zip Code' }
+    { property: 'zipCode', label: 'Zip Code' },
+    {
+      property: 'marriedStatus',
+      options: [{ label: 'MARRIED', value: '1' }],
+      label: 'Marital status',
+      divider: 'ADDITIONAL DATA',
+      tag: true,
+      color: '#C596E7'
+    },
+    {
+      property: 'children',
+      options: [
+        { label: 'yes ', value: '1' },
+        { label: 'no', value: '2' }
+      ]
+    }
   ];
 
   employee = {
@@ -44,6 +59,8 @@ export class SamplePoDynamicViewEmployeeComponent {
     wage: 8000.5,
     availability: 'Available',
     admissionDate: '2014-10-14T13:45:00-00:00',
-    hoursPerDay: '08:30:00'
+    hoursPerDay: '08:30:00',
+    marriedStatus: '1',
+    children: '1'
   };
 }

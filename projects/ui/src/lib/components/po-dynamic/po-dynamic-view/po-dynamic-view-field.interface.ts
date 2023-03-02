@@ -155,4 +155,30 @@ export interface PoDynamicViewField extends PoDynamicField {
    *  **Componentes compatíveis:** `po-image`.
    */
   image?: boolean;
+
+  /**
+   * Lista de opções que podem ser vinculadas à propriedade p-value.
+   * Quando uma opção de valor é passada, sua propriedade label será atribuída à propriedade p-value.
+   *
+   * Exemplo de utilização:
+   *
+   * ```
+   * fields = [
+   *     {
+   *       property: 'name', options: [
+   *         {label: 'Anna', value: '1'},
+   *         {label: 'Jhon', value: '2'},
+   *         {label: 'Mark', value: '3'}
+   *       ]
+   *     }
+   *   ];
+   * ```
+   *
+   * ```
+   * <!-- Passando o valor 2 referente ao Jhon -->
+   * <po-dynamic-view [p-fields]="fields" [p-value]="{ name: '2' }"> </po-dynamic-view>
+   * ```
+   *
+   */
+  options?: Array<{ label: string; value: string | number }>;
 }
