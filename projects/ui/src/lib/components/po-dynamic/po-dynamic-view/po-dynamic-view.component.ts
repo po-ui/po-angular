@@ -55,6 +55,15 @@ export class PoDynamicViewComponent extends PoDynamicViewBaseComponent implement
     }
   }
 
+  setFieldValue(field) {
+    if (field.options) {
+      const selectedOption = field.options.find(option => option.value === field.value);
+      return selectedOption ? selectedOption.label : field.value;
+    } else {
+      return field.value;
+    }
+  }
+
   private async getValuesAndFieldsFromLoad(): Promise<{ value?: any; fields?: Array<PoDynamicViewField> }> {
     let valueAndFieldsFromLoad;
 

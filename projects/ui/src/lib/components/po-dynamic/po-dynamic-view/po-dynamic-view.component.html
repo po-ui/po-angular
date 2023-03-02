@@ -13,7 +13,7 @@
 </div>
 
 <ng-template #poInfo let-field>
-  <po-info [ngClass]="field.cssClass" [p-label]="field.label" [p-value]="field.value"> </po-info>
+  <po-info [ngClass]="field.cssClass" [p-label]="field.label" [p-value]="setFieldValue(field)"> </po-info>
 </ng-template>
 
 <ng-template #poTag let-field>
@@ -23,7 +23,7 @@
     [p-icon]="field.icon"
     [p-inverse]="field.inverse"
     [p-label]="field.label"
-    [p-value]="field.value"
+    [p-value]="setFieldValue(field)"
   >
   </po-tag>
 </ng-template>
