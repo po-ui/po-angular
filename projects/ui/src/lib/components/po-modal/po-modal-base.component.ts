@@ -1,4 +1,4 @@
-import { Input, EventEmitter, Directive, Output } from '@angular/core';
+import { Input, EventEmitter, Directive, Output, TemplateRef } from '@angular/core';
 
 import { convertToBoolean } from './../../utils/util';
 import { PoModalAction } from './po-modal-action.interface';
@@ -104,6 +104,31 @@ export class PoModalBaseComponent {
   get hideClose() {
     return this._hideClose;
   }
+
+  /**
+   * @optional
+   *
+   * @description
+   * Ícone exibido ao lado esquerdo do label do titúlo da modal.
+   *
+   * É possível usar qualquer um dos ícones da [Biblioteca de ícones](/guides/icons). conforme exemplo abaixo:
+   * ```
+   * <po-modal p-icon="po-icon-user" p-title="PO Modal"></po-modal>
+   * ```
+   * Também é possível utilizar outras fontes de ícones, por exemplo a biblioteca *Font Awesome*, da seguinte forma:
+   * ```
+   * <po-modal p-icon="fa fa-podcast" p-title="PO Modal"></po-modal>
+   * ```
+   * Outra opção seria a customização do ícone através do `TemplateRef`, conforme exemplo abaixo:
+   * ```
+   * <po-modal [p-icon]="template" p-title="PO Modal"></po-modal>
+   *
+   * <ng-template #template>
+   *  <ion-icon style="font-size: inherit" name="heart"></ion-icon>
+   * </ng-template>
+   * ```
+   */
+  @Input('p-icon') icon?: string | TemplateRef<void>;
 
   constructor(poLanguageService: PoLanguageService) {
     this.language = poLanguageService.getShortLanguage();
