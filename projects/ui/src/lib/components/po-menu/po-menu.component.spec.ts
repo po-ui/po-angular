@@ -2,7 +2,7 @@ import { Location } from '@angular/common';
 import { HttpClientTestingModule } from '@angular/common/http/testing';
 import { Component } from '@angular/core';
 import { ComponentFixture, fakeAsync, TestBed, tick } from '@angular/core/testing';
-import { Router, Routes } from '@angular/router';
+import { Router, Routes, UrlSegment, UrlSegmentGroup, UrlTree } from '@angular/router';
 import { RouterTestingModule } from '@angular/router/testing';
 
 import { Observable, of } from 'rxjs';
@@ -172,14 +172,75 @@ describe('PoMenuComponent:', () => {
     expect(nativeElement.querySelectorAll('.po-menu-item-selected').length).toBe(1);
   });
 
-  xit('should open sub menu', () => {
-    component['clickMenuItem'](component.menus[1]);
-    expect(component.activeMenuItem).toBeFalsy();
-    expect(component.groupedMenuItem).toBe(component.menus[1]);
+  it('should set activeMenuItem.link to `redirectTo` if link is empty', () => {
+    spyOn(component, <any>'activateMenuItem');
+    const menuItem = {
+      link: '/',
+      id: '123',
+      icon: null,
+      label: 'PO UI - Angular Framework',
+      level: 1,
+      isSelected: false,
+      type: 'internalLink'
+    };
 
-    fixture.detectChanges();
-    expect(nativeElement.querySelectorAll('.po-menu-item-selected').length).toBe(0);
-    expect(nativeElement.querySelector('.po-menu-sub-items').style.maxHeight).toBe('294px');
+    component['clickMenuItem'](menuItem);
+    console.log(component.activeMenuItem);
+    expect(component.activeMenuItem.link).toEqual('./home');
+  });
+
+  it('should call openExternalLink if link is external', () => {
+    spyOn(utilsFunctions, <any>'openExternalLink');
+
+    const menuItem = {
+      link: 'https://www.google.com',
+      id: '123',
+      icon: null,
+      label: 'PO UI - Angular Framework',
+      level: 1,
+      isSelected: false,
+      type: 'externalLink'
+    };
+
+    component['clickMenuItem'](menuItem);
+    expect(utilsFunctions.openExternalLink).toHaveBeenCalledWith('https://www.google.com');
+    expect(component['mobileOpened']).toBeFalse();
+  });
+
+  it('should call groupMenuItem if link contain subItems', () => {
+    spyOn(component, <any>'groupMenuItem');
+
+    const menuItem = {
+      link: '/test',
+      id: '123',
+      icon: null,
+      label: 'PO UI - Angular Framework',
+      level: 1,
+      isSelected: false,
+      type: 'subItems'
+    };
+
+    component['clickMenuItem'](menuItem);
+    expect(component['groupMenuItem']).toHaveBeenCalled();
+  });
+
+  it('should call groupMenuItem if link contain subItems and set filteringItems to false is filteringItems is true', () => {
+    spyOn(component, <any>'groupMenuItem');
+    component['filteringItems'] = true;
+
+    const menuItem = {
+      link: '/test',
+      id: '123',
+      icon: null,
+      label: 'PO UI - Angular Framework',
+      level: 1,
+      isSelected: false,
+      type: 'subItems'
+    };
+
+    component['clickMenuItem'](menuItem);
+    expect(component['groupMenuItem']).toHaveBeenCalled();
+    expect(component['filteringItems']).toBeFalse();
   });
 
   it('should activate sub menu', () => {
@@ -207,7 +268,6 @@ describe('PoMenuComponent:', () => {
     spyOn(component.menus[3], <any>'action');
 
     component['clickMenuItem'](component.menus[3]);
-    // expect(component.activeMenuItem).toBe(undefined);
     expect(component.mobileOpened).toBeFalsy();
     expect(component.menus[3].action).toHaveBeenCalled();
   });
@@ -385,13 +445,35 @@ describe('PoMenuComponent:', () => {
     });
   });
 
-  xit('should navigate to test and not activate menu item and group parent', done => {
+  it('should navigate to /test and not activate menu item and group parent', done => {
+    component.activeMenuItem = undefined;
+    component.groupedMenuItem = undefined;
     fixture.ngZone.run(() => {
-      router.navigate(['test']).then(() => {
+      router.navigate(['/test']).then(() => {
         expect(location.path()).toBe('/test');
         expect(component.activeMenuItem).toBe(undefined);
         expect(component.groupedMenuItem).toBe(undefined);
 
+        done();
+      });
+    });
+  });
+
+  it('should navigate to redirectroute and set activeMenuItem', done => {
+    component.activeMenuItem = undefined;
+    const result = {
+      label: 'Home',
+      link: './home',
+      icon: 'home',
+      id: '123',
+      level: 1,
+      type: 'internalLink'
+    };
+    fixture.ngZone.run(() => {
+      router.navigate(['/']).then(() => {
+        expect(location.path()).toBe('/home');
+        expect(component.activeMenuItem.link).toEqual(result.link);
+        expect(component.groupedMenuItem).toBeFalsy();
         done();
       });
     });
@@ -1403,10 +1485,25 @@ describe('PoMenuComponent:', () => {
       });
     });
 
-    // TODO Ng V9
-    xit('checkingRouterChildrenFragments: should return undefined if router doens`t have a `.children[`primary`]` value', () => {
-      const routerFragment = component['checkingRouterChildrenFragments']();
-      expect(routerFragment).toEqual('');
+    it('checkingRouterChildrenFragments: should return empty string if router doens`t have a `.children[`primary`]` value', () => {
+      const mockUrlTree = new UrlTree(
+        new UrlSegmentGroup([], {
+          primary: new UrlSegmentGroup([new UrlSegment('mock-segment', {})], {})
+        }),
+        { mockQueryParam: 'value' },
+        'mock-fragment'
+      );
+      mockUrlTree.root.children = {};
+
+      spyOn(component['router'], 'parseUrl').and.returnValue(mockUrlTree);
+
+      const result = component['checkingRouterChildrenFragments']();
+      expect(result).toEqual('');
+    });
+
+    it('checkingRouterChildrenFragments: should return the route that is in the value of redirectTo', () => {
+      const result = component['checkingRouterChildrenFragments']();
+      expect(result).toEqual('/home');
     });
 
     it('activateMenuByUrl: should call `activateMenuItem` and `getFormattedLink` if urlPath and menu.link have same value', done => {

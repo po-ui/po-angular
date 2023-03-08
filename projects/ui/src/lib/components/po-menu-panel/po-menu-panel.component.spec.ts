@@ -101,13 +101,32 @@ describe('PoMenuPanelComponent: ', () => {
       expect(component['clickMenuItem']).toHaveBeenCalled();
     });
 
-    it('clickMenuItem: should call action', () => {
-      spyOn(component.menus[3], <any>'action');
+    it('should call `menu.action` when menu has a defined action', () => {
+      const spyAction = jasmine.createSpy('action');
+      const menuWithAction = component.menus[3];
+      menuWithAction.action = spyAction;
 
-      component['clickMenuItem'](<any>component.menus[3]);
+      component['clickMenuItem'](<any>menuWithAction);
 
-      // expect(component.activeMenuItem).toBe(undefined);
-      expect(component.menus[3].action).toHaveBeenCalled();
+      expect(spyAction).toHaveBeenCalled();
+    });
+
+    it('should open link when menu has a link and it is an external link', () => {
+      spyOn(window, 'open');
+
+      const menuWithExternalLink = component.menus[2];
+      component['clickMenuItem'](<any>menuWithExternalLink);
+
+      expect(window.open).toHaveBeenCalledWith(menuWithExternalLink.link, '_blank');
+    });
+
+    it('should call `activateMenuItem` when menu has a link and it is an internal link', () => {
+      const spyActivateMenuItem = spyOn(component, <any>'activateMenuItem');
+
+      const menuWithInternalLink = component.menus[1];
+      component['clickMenuItem'](<any>menuWithInternalLink);
+
+      expect(spyActivateMenuItem).toHaveBeenCalledWith(<any>menuWithInternalLink);
     });
 
     it('activeMenuItem: should activate menu item', () => {
