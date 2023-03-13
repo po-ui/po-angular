@@ -2,6 +2,23 @@
 
 All notable changes to this project will be documented in this file. See [standard-version](https://github.com/conventional-changelog/standard-version) for commit guidelines.
 
+# [15.3.0](https://github.com/po-ui/po-angular/compare/v15.2.0...v15.3.0) (2023-03-13)
+
+
+### Bug Fixes
+
+* **calendar:** corrige seleção de data e sequência de meses ([41e6ab3](https://github.com/po-ui/po-angular/commit/41e6ab35ab9ae51af31162e667b57f2f4607685e))
+* **dynamic-table:** corrige paginação dos itens ([5f723f1](https://github.com/po-ui/po-angular/commit/5f723f16aa8fdc417516b4265495e7e86c0b4746))
+* **number:** ajusta o comportamento das teclas `Home` e `End` ([3c87484](https://github.com/po-ui/po-angular/commit/3c87484011c3a7f4206de0e5c4c8dfe7a5d31887)), closes [#1233](https://github.com/po-ui/po-angular/issues/1233)
+
+
+### Features
+
+* **dynamic-view:** permitir passar `options` e atribuir `label` ([ddba431](https://github.com/po-ui/po-angular/commit/ddba4314a25ead7640ac83de284835a959fa90d7))
+* **modal:** implementa definições do AnimaliaDS ([465df73](https://github.com/po-ui/po-angular/commit/465df734c0bf0843726e497045d6c7db2039a7f1))
+
+
+
 # [15.2.0](https://github.com/po-ui/po-angular/compare/v15.1.1...v15.2.0) (2023-02-27)
 
 
