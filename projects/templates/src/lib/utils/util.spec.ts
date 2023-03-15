@@ -27,7 +27,8 @@ import {
   validValue,
   valuesFromObject,
   removeDuplicateItems,
-  removeDuplicateItemsWithArrayKey
+  removeDuplicateItemsWithArrayKey,
+  sortArrayOfObjects
 } from './util';
 import { changeChromeProperties } from '../util-test/util-expect.spec';
 
@@ -1156,5 +1157,51 @@ describe('Function removeKeysProperties:', () => {
     const keys = ['id'];
 
     expect(removeKeysProperties(keys, newItemValue)).toEqual(expectedResult);
+  });
+});
+
+describe('Function sortArrayOfObjects:', () => {
+  it('should sort the array of objects in ascending order based on the country key', () => {
+    const items = [{ country: 'japao' }, { country: 'brasil' }, { country: 'china' }];
+    const sortedItems = sortArrayOfObjects(items, 'country', true);
+
+    expect(sortedItems).toEqual([{ country: 'brasil' }, { country: 'china' }, { country: 'japao' }]);
+  });
+
+  it('should sort the array of objects in descending order based on the country key', () => {
+    const items = [{ country: 'japao' }, { country: 'brasil' }, { country: 'china' }];
+    const sortedItems = sortArrayOfObjects(items, 'country', false);
+
+    expect(sortedItems).toEqual([{ country: 'japao' }, { country: 'china' }, { country: 'brasil' }]);
+  });
+
+  it('should sort the array of objects in ascending order based on the country id', () => {
+    const items = [
+      { country: 'japao', id: 1 },
+      { country: 'brasil', id: 3 },
+      { country: 'china', id: 2 }
+    ];
+    const sortedItems = sortArrayOfObjects(items, 'id', true);
+
+    expect(sortedItems).toEqual([
+      { country: 'japao', id: 1 },
+      { country: 'china', id: 2 },
+      { country: 'brasil', id: 3 }
+    ]);
+  });
+
+  it('should sort the array of objects in descending order based on the country id', () => {
+    const items = [
+      { country: 'japao', id: 1 },
+      { country: 'brasil', id: 3 },
+      { country: 'china', id: 2 }
+    ];
+    const sortedItems = sortArrayOfObjects(items, 'id', false);
+
+    expect(sortedItems).toEqual([
+      { country: 'brasil', id: 3 },
+      { country: 'china', id: 2 },
+      { country: 'japao', id: 1 }
+    ]);
   });
 });

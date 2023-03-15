@@ -435,3 +435,36 @@ export function removeDuplicateItemsWithArrayKey(item, item2, keys) {
     (obj, index) => index === combinedArray.findIndex(innerObj => newKey.every(key => innerObj[key] === obj[key]))
   );
 }
+
+/**
+ * Recebe um array de objetos para ordenação utilizando chave como comparativo e
+ * se a order é crescente(true) ou descrescente(false)
+ *
+ * Exemplo:
+ *
+ * ```
+ * items: [{country: 'japao'}, {country: 'brasil'} , {country: 'china'}]
+ * key: 'country'
+ * isAscendingOrder: true
+ * Resultado do retorno:
+ *    [{country: 'brasil'}, {country: 'china'} , {country: 'japao'}]
+ * ```
+ *
+ *
+ * @param items : lista de itens.
+ * @param key : propriedade utilizada na comparação.
+ * @param isAscendingOrder : ordenação crescente ou descrescente.
+ */
+export function sortArrayOfObjects(items, key, isAscendingOrder) {
+  return items.sort((a, b) => {
+    const valueA = a[key];
+    const valueB = b[key];
+
+    if (typeof valueA === 'number' && typeof valueB === 'number') {
+      return isAscendingOrder ? valueA - valueB : valueB - valueA;
+    } else {
+      const compareResult = valueA.toString().localeCompare(valueB.toString());
+      return isAscendingOrder ? compareResult : -compareResult;
+    }
+  });
+}
