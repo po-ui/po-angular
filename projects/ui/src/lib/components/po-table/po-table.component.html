@@ -292,7 +292,7 @@
                   <po-table-subtitle-circle [p-subtitle]="getSubtitleColumn(row, column)"></po-table-subtitle-circle>
                 </span>
                 <span *ngSwitchCase="'label'">
-                  <po-tag [p-color]="getTagColor(row, column)" [p-value]="getTagValue(row, column)"> </po-tag>
+                  <po-table-column-label [p-value]="getColumnLabel(row, column)"> </po-table-column-label>
                 </span>
                 <span *ngSwitchDefault>{{ getCellData(row, column) }}</span>
               </div>
@@ -574,7 +574,7 @@
                 <po-table-subtitle-circle [p-subtitle]="getSubtitleColumn(row, column)"></po-table-subtitle-circle>
               </span>
               <span *ngSwitchCase="'label'">
-                <po-tag [p-color]="getTagColor(row, column)" [p-value]="getTagValue(row, column)"> </po-tag>
+                <po-table-column-label [p-value]="getColumnLabel(row, column)"> </po-table-column-label>
               </span>
               <span *ngSwitchDefault>{{ getCellData(row, column) }}</span>
             </div>

@@ -32,26 +32,6 @@ describe('PoTableColumnLabelComponent:', () => {
     expect(component instanceof PoTableColumnLabelComponent).toBeTruthy();
   });
 
-  describe('Properties:', () => {
-    it('value: should call `poColorPaletteService.getColor` with value if value is defined', () => {
-      const value = { color: 'danger', label: 'Danger', value: 1 };
-
-      spyOn(component['poColorPaletteService'], 'getColor');
-
-      component.value = value;
-
-      expect(component['poColorPaletteService'].getColor).toHaveBeenCalledWith(value);
-    });
-
-    it('value: shouldn`t call `poColorPaletteService.getColor` if value is undefined', () => {
-      spyOn(component['poColorPaletteService'], 'getColor');
-
-      component.value = undefined;
-
-      expect(component['poColorPaletteService'].getColor).not.toHaveBeenCalled();
-    });
-  });
-
   describe('Templates:', () => {
     it('should show "Warning" text', () => {
       component.value = labels[1];

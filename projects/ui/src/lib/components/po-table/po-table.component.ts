@@ -18,7 +18,7 @@ import {
 } from '@angular/core';
 import { DecimalPipe } from '@angular/common';
 import { Router } from '@angular/router';
-
+import { PoTableColumnLabel } from './po-table-column-label/po-table-column-label.interface';
 import { convertToBoolean } from '../../utils/util';
 import { PoDateService } from '../../services/po-date/po-date.service';
 import { PoLanguageService } from '../../services/po-language/po-language.service';
@@ -443,15 +443,7 @@ export class PoTableComponent extends PoTableBaseComponent implements AfterViewI
     return rowIcons;
   }
 
-  getTagColor(row: any, columnLabel: PoTableColumn) {
-    return columnLabel.labels.find(labelItem => this.getCellData(row, columnLabel) === labelItem.value)?.color;
-  }
-
-  getTagValue(row: any, columnLabel: PoTableColumn) {
-    return columnLabel.labels.find(labelItem => this.getCellData(row, columnLabel) === labelItem.value)?.label;
-  }
-
-  getColumnLabel(row: any, columnLabel: PoTableColumn) {
+  getColumnLabel(row: any, columnLabel: PoTableColumn): PoTableColumnLabel {
     return columnLabel.labels.find(labelItem => this.getCellData(row, columnLabel) === labelItem.value);
   }
 

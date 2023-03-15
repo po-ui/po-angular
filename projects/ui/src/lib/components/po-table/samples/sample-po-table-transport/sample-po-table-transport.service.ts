@@ -1,6 +1,6 @@
 import { Injectable } from '@angular/core';
 
-import { PoTableColumn } from '@po-ui/ng-components';
+import { PoTableColumn, PoTagType } from '@po-ui/ng-components';
 
 @Injectable()
 export class SamplePoTableTransportService {
@@ -18,9 +18,10 @@ export class SamplePoTableTransportService {
         type: 'label',
         width: '8%',
         labels: [
-          { value: 'delivered', color: 'color-11', label: 'Delivered' },
-          { value: 'transport', color: 'color-08', label: 'Transport' },
-          { value: 'production', color: 'color-01', label: 'Production' }
+          { value: 'delivered', color: 'blue', label: 'Delivered' },
+          { value: 'transport', label: 'Transport', type: PoTagType.Success },
+          { value: 'production', color: ' #745678', label: 'Production' },
+          { value: 'stock', color: 'rgb(201, 53, 125)', label: 'Stock', icon: 'po-icon-stock' }
         ]
       }
     ];
@@ -92,6 +93,19 @@ export class SamplePoTableTransportService {
         license_plate: 'XXI2312',
         batch_product: 18041825,
         driver: 'Antonio Lima'
+      },
+      {
+        code: 1551,
+        product: 'Cream cheese',
+        customer: 'Barbosa',
+        quantity: 15,
+        icms: 1119,
+        exit_forecast: this.generateRandomDate(),
+        time_since_purchase: this.generateRandomTime(),
+        status: 'stock',
+        license_plate: 'XXI2359',
+        batch_product: 18041888,
+        driver: 'Vitoria Felix'
       }
     ];
   }
