@@ -18,6 +18,7 @@ import { PoLookupModalBaseComponent } from '../po-lookup-modal/po-lookup-modal-b
 import { PoLanguageService } from './../../../../services/po-language/po-language.service';
 import { PoDynamicFormComponent } from './../../../po-dynamic/po-dynamic-form/po-dynamic-form.component';
 import { PoTableComponent } from './../../../po-table/po-table.component';
+import { sortArrayOfObjects } from '../../../../utils/util';
 
 /**
  * @docsPrivate
@@ -104,6 +105,9 @@ export class PoLookupModalComponent extends PoLookupModalBaseComponent implement
   }
 
   sortBy(sort: PoTableColumnSort) {
+    const order = sort.type === 'ascending' ? true : false;
+    sortArrayOfObjects(this.items, sort.column.property, order);
+
     this.sort = sort;
   }
 

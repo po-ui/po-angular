@@ -449,5 +449,51 @@ describe('PoLookupModalComponent', () => {
 
       expect(component.selecteds).toEqual(expectedSelecteds);
     });
+
+    it('sortBy: should sort list of items in ascending order', () => {
+      component.items = [
+        { label: 'ghi', id: 3 },
+        { label: 'abc', id: 2 },
+        { label: 'def', id: 1 }
+      ];
+
+      component.sortBy({
+        column: {
+          label: 'Label',
+          property: 'label',
+          visible: true
+        },
+        type: PoTableColumnSortType.Ascending
+      });
+
+      expect(component.items).toEqual([
+        { label: 'abc', id: 2 },
+        { label: 'def', id: 1 },
+        { label: 'ghi', id: 3 }
+      ]);
+    });
+
+    it('sortBy: should sort list of items in descending  order', () => {
+      component.items = [
+        { label: 'ghi', id: 3 },
+        { label: 'abc', id: 2 },
+        { label: 'def', id: 1 }
+      ];
+
+      component.sortBy({
+        column: {
+          label: 'Label',
+          property: 'label',
+          visible: true
+        },
+        type: PoTableColumnSortType.Descending
+      });
+
+      expect(component.items).toEqual([
+        { label: 'ghi', id: 3 },
+        { label: 'def', id: 1 },
+        { label: 'abc', id: 2 }
+      ]);
+    });
   });
 });
