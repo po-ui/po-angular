@@ -32,7 +32,8 @@ import {
   valuesFromObject,
   removeDuplicatedOptionsWithFieldValue,
   removeUndefinedAndNullOptionsWithFieldValue,
-  isValidImageBase64
+  isValidImageBase64,
+  sortArrayOfObjects
 } from './util';
 
 import * as UtilFunctions from './util';
@@ -1627,5 +1628,49 @@ describe('replaceFormatSeparator: ', () => {
     const expectedFormat = 'dd/mm/yyyy';
     const newFormat = UtilFunctions.replaceFormatSeparator(format, separator);
     expect(newFormat).toBe(expectedFormat);
+  });
+
+  it('should sort the array of objects in ascending order based on the country key', () => {
+    const items = [{ country: 'japao' }, { country: 'brasil' }, { country: 'china' }];
+    const sortedItems = UtilFunctions.sortArrayOfObjects(items, 'country', true);
+
+    expect(sortedItems).toEqual([{ country: 'brasil' }, { country: 'china' }, { country: 'japao' }]);
+  });
+
+  it('should sort the array of objects in descending order based on the country key', () => {
+    const items = [{ country: 'japao' }, { country: 'brasil' }, { country: 'china' }];
+    const sortedItems = UtilFunctions.sortArrayOfObjects(items, 'country', false);
+
+    expect(sortedItems).toEqual([{ country: 'japao' }, { country: 'china' }, { country: 'brasil' }]);
+  });
+
+  it('should sort the array of objects in ascending order based on the country id', () => {
+    const items = [
+      { country: 'japao', id: 1 },
+      { country: 'brasil', id: 3 },
+      { country: 'china', id: 2 }
+    ];
+    const sortedItems = UtilFunctions.sortArrayOfObjects(items, 'id', true);
+
+    expect(sortedItems).toEqual([
+      { country: 'japao', id: 1 },
+      { country: 'china', id: 2 },
+      { country: 'brasil', id: 3 }
+    ]);
+  });
+
+  it('should sort the array of objects in descending order based on the country id', () => {
+    const items = [
+      { country: 'japao', id: 1 },
+      { country: 'brasil', id: 3 },
+      { country: 'china', id: 2 }
+    ];
+    const sortedItems = UtilFunctions.sortArrayOfObjects(items, 'id', false);
+
+    expect(sortedItems).toEqual([
+      { country: 'brasil', id: 3 },
+      { country: 'china', id: 2 },
+      { country: 'japao', id: 1 }
+    ]);
   });
 });
