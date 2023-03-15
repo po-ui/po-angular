@@ -2721,5 +2721,53 @@ describe('PoPageDynamicTableComponent:', () => {
       expect(tableActions.length).toEqual(1);
       expect(tableActions[0].label).toEqual('Details');
     });
+
+    it('onSort: should sort list of items in ascending order', () => {
+      component.height = 400;
+      component.items = [
+        { label: 'ghi', id: 3 },
+        { label: 'abc', id: 2 },
+        { label: 'def', id: 1 }
+      ];
+
+      component.onSort({
+        column: {
+          label: 'Label',
+          property: 'label',
+          visible: true
+        },
+        type: PoTableColumnSortType.Ascending
+      });
+
+      expect(component.items).toEqual([
+        { label: 'abc', id: 2 },
+        { label: 'def', id: 1 },
+        { label: 'ghi', id: 3 }
+      ]);
+    });
+
+    it('onSort: should sort list of items in descending  order', () => {
+      component.height = 400;
+      component.items = [
+        { label: 'ghi', id: 3 },
+        { label: 'abc', id: 2 },
+        { label: 'def', id: 1 }
+      ];
+
+      component.onSort({
+        column: {
+          label: 'Label',
+          property: 'label',
+          visible: true
+        },
+        type: PoTableColumnSortType.Descending
+      });
+
+      expect(component.items).toEqual([
+        { label: 'ghi', id: 3 },
+        { label: 'def', id: 1 },
+        { label: 'abc', id: 2 }
+      ]);
+    });
   });
 });

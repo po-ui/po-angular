@@ -561,6 +561,10 @@ export class PoPageDynamicTableComponent extends PoPageDynamicListBaseComponent 
   }
 
   onSort(sortedColumn: PoTableColumnSort) {
+    if (this.height) {
+      const order = sortedColumn.type === 'ascending' ? true : false;
+      util.sortArrayOfObjects(this.items, sortedColumn.column.property, order);
+    }
     this.sortedColumn = sortedColumn;
   }
 
