@@ -366,11 +366,7 @@ export abstract class PoTableBaseComponent implements OnChanges, OnDestroy {
    * > Se falso, será inicializado como um *array* vazio.
    */
   @Input('p-items') set items(items: Array<any>) {
-    if (this.height) {
-      this.sortArrayWithHeight(items);
-    } else {
-      this._items = Array.isArray(items) ? items : [];
-    }
+    this._items = Array.isArray(items) ? [...items] : [];
 
     // when haven't items, selectAll should be unchecked.
     if (!this.hasItems) {
@@ -997,27 +993,6 @@ export abstract class PoTableBaseComponent implements OnChanges, OnDestroy {
     }
 
     return `${column.property}`;
-  }
-
-  private sortArrayWithHeight(items: Array<any>) {
-    if (this.items && this.items.length > 0) {
-      const object = this.items[0];
-      const key = Object.keys(object)[0];
-      const arrayKeys = new Set(this.items.map(d => d[key]));
-      const merged = [...items.filter(d => !arrayKeys.has(d[key]))];
-      let temporaryArray;
-
-      if (merged.length < 1) {
-        temporaryArray = [...items];
-      } else {
-        temporaryArray = [...this.items];
-      }
-      const newArray = [...temporaryArray, ...merged];
-
-      this._items = [...newArray];
-    } else {
-      this._items = Array.isArray(items) ? [...items] : [];
-    }
   }
 
   protected abstract calculateHeightTableContainer(height);

@@ -388,34 +388,6 @@ describe('PoTableBaseComponent:', () => {
 
     expect(component.items).toEqual(sortedItemsAsc);
   });
-
-  it('should set items with newItem and items', () => {
-    component.items = [{ 'label': 'test2' }];
-
-    component.height = 300;
-    component['sortArrayWithHeight']([{ 'label': 'test3' }]);
-
-    expect(component.items).toEqual([{ 'label': 'test2' }, { 'label': 'test3' }]);
-  });
-
-  it('should set new items if there are no items ', () => {
-    component.items = [];
-
-    component.height = 300;
-    component['sortArrayWithHeight']([{ 'label': 'test' }]);
-
-    expect(component.items).toEqual([{ 'label': 'test' }]);
-  });
-
-  it('should set empty array if there are no items', () => {
-    component.items = [];
-
-    component.height = 300;
-    component['sortArrayWithHeight'](null);
-
-    expect(component.items).toEqual([]);
-  });
-
   it(`should has service and sort set 'sortStore'`, () => {
     const column = component.columns[1];
     component.serviceApi = 'https://po-ui.io';
