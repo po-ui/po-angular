@@ -15,6 +15,8 @@ describe('PoListViewComponent:', () => {
   let component: PoListViewComponent;
   let fixture: ComponentFixture<PoListViewComponent>;
   let debugElement;
+  let event: AnimationEvent;
+  let detail: any;
 
   const item = { id: 1, name: 'register' };
 
@@ -23,6 +25,9 @@ describe('PoListViewComponent:', () => {
       declarations: [PoListViewComponent],
       imports: [BrowserAnimationsModule, RouterTestingModule.withRoutes([]), PoButtonModule, PoPopupModule]
     }).compileComponents();
+
+    detail = { test: 'test' };
+    event = new AnimationEvent('animationstart', { animationName: 'test', elapsedTime: 100 });
 
     fixture = TestBed.createComponent(PoListViewComponent);
 
@@ -179,6 +184,14 @@ describe('PoListViewComponent:', () => {
       expect(component['changeDetector'].detectChanges).toHaveBeenCalled();
       expect(component.poPopupComponent.toggle).toHaveBeenCalledWith(item);
       expect(component.popupTarget).toEqual(targetRef);
+    });
+
+    it(`onAnimationEvent: should emit detail on showDetail`, () => {
+      spyOn(component.showDetail, 'emit');
+
+      component.onAnimationEvent(event, detail);
+
+      expect(component.showDetail.emit).toHaveBeenCalledWith(detail);
     });
 
     it('trackBy: should return `index`', () => {

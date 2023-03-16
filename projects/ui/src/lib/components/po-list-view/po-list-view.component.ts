@@ -140,6 +140,10 @@ export class PoListViewComponent extends PoListViewBaseComponent implements Afte
     this.poPopupComponent.toggle(item);
   }
 
+  onAnimationEvent(event: AnimationEvent, detail) {
+    this.showDetail.emit(detail);
+  }
+
   private checkItemsChange() {
     const changesItems = this.differ.diff(this.items);
 

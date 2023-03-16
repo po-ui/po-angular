@@ -94,7 +94,12 @@
             </ng-template>
           </div>
 
-          <div @showHideDetail *ngIf="hasDetailTemplate && item.$showDetail" class="po-list-view-detail">
+          <div
+            @showHideDetail
+            (@showHideDetail.start)="item.$showDetail ? onAnimationEvent($event, item) : 'undefined'"
+            *ngIf="hasDetailTemplate && item.$showDetail"
+            class="po-list-view-detail"
+          >
             <ng-template
               [ngTemplateOutlet]="listViewDetailTemplate.templateRef"
               [ngTemplateOutletContext]="{ $implicit: item, index: index }"
