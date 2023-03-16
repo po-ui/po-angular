@@ -78,6 +78,17 @@ export class PoListViewBaseComponent {
    */
   @Output('p-title-action') titleAction: EventEmitter<any> = new EventEmitter<any>();
 
+  /**
+   * @optional
+   *
+   * @description
+   *
+   * Ação que será executada ao clicar no botão exibir detalhes.
+   *
+   * Ao ser disparado, o método passa como parâmetros os detalhes que serão exibidos.
+   */
+  @Output('p-show-detail') showDetail: EventEmitter<any> = new EventEmitter<any>();
+
   popupTarget: any;
   selectAll: boolean = false;
   showHeader: boolean = false;
