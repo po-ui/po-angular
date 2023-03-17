@@ -560,6 +560,67 @@
         </div>
       </po-accordion-item>
     </po-accordion>
+
+    <po-accordion *ngIf="dropdownView">
+      <po-accordion-item [class.hide]="!dropdownView" p-label="Dropdown">
+        <div class="container-space-between po-mb-1">
+          <label for="fontSizeDropdown" class="po-mr-2 po-ml-1">Tamanho da fonte: </label>
+          <input type="range" id="fontSizeDropdown" min="10" max="40" [formControl]="dropdownForm.get('fontSize')" />
+        </div>
+
+        <div class="container-space-between po-mb-1">
+          <label for="borderRadiusDropdown" class="po-mr-2 po-ml-1">Border radius: </label>
+          <input
+            type="range"
+            id="borderRadiusDropdown"
+            min="0"
+            max="40"
+            [formControl]="dropdownForm.get('borderRadius')"
+          />
+        </div>
+
+        <div class="container-space-between po-mb-1">
+          <label for="borderWidthDropdown" class="po-mr-2 po-ml-1">Espessura da borda: </label>
+          <input
+            type="range"
+            id="borderWidthDropdown"
+            min="1"
+            max="15"
+            [formControl]="dropdownForm.get('borderWidth')"
+          />
+        </div>
+
+        <div class="container-space-between po-mb-1">
+          <label for="paddingDropdown" class="po-mr-2 po-ml-1">Padding: </label>
+          <input type="range" id="paddingDropdown" min="10" max="40" [formControl]="dropdownForm.get('padding')" />
+        </div>
+
+        <div class="container-space-between po-mb-1">
+          <label for="colorDropdown" class="po-mr-2 po-ml-1">Cor principal: </label>
+          <input type="color" id="colorDropdown" class="style-inputColor" [formControl]="dropdownForm.get('color')" />
+        </div>
+
+        <div class="container-space-between po-mb-1">
+          <label for="colorHoverDropdown" class="po-mr-2 po-ml-1">Cor principal Hover: </label>
+          <input
+            type="color"
+            id="colorHoverDropdown"
+            class="style-inputColor"
+            [formControl]="dropdownForm.get('colorHover')"
+          />
+        </div>
+
+        <div class="container-space-between po-mb-1">
+          <label for="backgroundHoverDropdown" class="po-mr-2 po-ml-1">Cor do background Hover: </label>
+          <input
+            type="color"
+            id="backgroundHoverDropdown"
+            class="style-inputColor"
+            [formControl]="dropdownForm.get('backgroundColorHover')"
+          />
+        </div>
+      </po-accordion-item>
+    </po-accordion>
   </div>
 
   <po-widget
@@ -665,9 +726,22 @@
     >
     </po-textarea>
 
+    <hr [class.hide]="!dropdownView" />
+
+    <div class="container-component">
+      <po-dropdown
+        #dropdown
+        [class.hide]="!dropdownView"
+        p-label="PO Dropdown"
+        [p-actions]="[{ label: 'Item po-dropdown' }]"
+      >
+      </po-dropdown>
+    </div>
+
     <po-divider
       [class.hide]="
         (!textareaView ||
+          !dropdownView ||
           !selectView ||
           !inputView ||
           !radioView ||
@@ -719,6 +793,7 @@
       !inputView &&
       !selectView &&
       !textareaView &&
+      !dropdownView &&
       !disclaimerView &&
       !acordionView &&
       !calendarView &&
@@ -754,6 +829,7 @@
         <pre [ngClass]="resultInput?.innerText.length ? '' : 'pre-none'" class="teste" #resultInput></pre>
         <pre [ngClass]="resultSelect?.innerText.length ? '' : 'pre-none'" class="teste" #resultSelect></pre>
         <pre [ngClass]="resultTextarea?.innerText.length ? '' : 'pre-none'" class="teste" #resultTextarea></pre>
+        <pre [ngClass]="resultDropdown?.innerText.length ? '' : 'pre-none'" class="teste" #resultDropdown></pre>
       </div>
     </div>
 
@@ -847,6 +923,16 @@
         class="po-sm-6"
         p-label-off="Escondido"
         p-label-on="Visível"
+        p-label="Dropdown"
+        name="Dropdown"
+        [(ngModel)]="dropdownView"
+        (p-change)="switchIndividual()"
+      ></po-switch>
+
+      <po-switch
+        class="po-sm-6"
+        p-label-off="Escondido"
+        p-label-on="Visível"
         p-label="Radio"
         name="Radio"
         [(ngModel)]="radioView"
@@ -892,20 +978,19 @@
         [(ngModel)]="stepperView"
         (p-change)="switchIndividual()"
       ></po-switch>
+    </div>
 
-      <div>
-        <po-divider></po-divider>
-        <po-switch
-          class="po-sm-6"
-          p-label-off="Escondido"
-          p-label-on="Visível"
-          p-label="Mostrar todos"
-          name="allComponents"
-          [(ngModel)]="switchAllComponentes"
-          (p-change)="switchAllEmit($event)"
-        ></po-switch>
-      </div>
+    <div class="po-mt-2">
       <po-divider></po-divider>
+      <po-switch
+        class="po-sm-6"
+        p-label-off="Escondido"
+        p-label-on="Visível"
+        p-label="Mostrar todos"
+        name="allComponents"
+        [(ngModel)]="switchAllComponentes"
+        (p-change)="switchAllEmit($event)"
+      ></po-switch>
     </div>
   </po-page-slide>
 </po-page-default>

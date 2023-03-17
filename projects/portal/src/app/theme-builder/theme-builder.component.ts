@@ -9,7 +9,8 @@ import {
   PoDisclaimerComponent,
   PoInputComponent,
   PoSelectComponent,
-  PoTextareaComponent
+  PoTextareaComponent,
+  PoDropdownComponent
 } from '@po-ui/ng-components';
 
 @Component({
@@ -29,6 +30,7 @@ export class ThemeBuilderComponent implements AfterViewInit {
   @ViewChild('input') inputComponent: PoInputComponent;
   @ViewChild('select') selectComponent: PoSelectComponent;
   @ViewChild('textarea') textareaComponent: PoTextareaComponent;
+  @ViewChild('dropdown') dropdownComponent: PoDropdownComponent;
   @ViewChild('resultButtonD') resultButtonD: HTMLElement;
   @ViewChild('resultButtonP') resultButtonP: HTMLElement;
   @ViewChild('resultButtonL') resultButtonL: HTMLElement;
@@ -38,6 +40,7 @@ export class ThemeBuilderComponent implements AfterViewInit {
   @ViewChild('resultInput') resultInput: HTMLElement;
   @ViewChild('resultSelect') resultSelect: HTMLElement;
   @ViewChild('resultTextarea') resultTextarea: HTMLElement;
+  @ViewChild('resultDropdown') resultDropdown: HTMLElement;
 
   botaoDefaultView = true;
   botaoPrimaryView = true;
@@ -48,6 +51,7 @@ export class ThemeBuilderComponent implements AfterViewInit {
   inputView = true;
   selectView = true;
   textareaView = true;
+  dropdownView = true;
   acordionView = true;
   calendarView = true;
   stepperView = true;
@@ -161,6 +165,16 @@ export class ThemeBuilderComponent implements AfterViewInit {
     fontSize: [null]
   });
 
+  dropdownForm = this.formBuilder.group({
+    fontSize: [null],
+    borderRadius: [null],
+    borderWidth: [null],
+    padding: [null],
+    color: [null],
+    colorHover: [null],
+    backgroundColorHover: [null]
+  });
+
   private readonly formPropertyP = {
     colorAction: '--color-primary'
   };
@@ -255,6 +269,16 @@ export class ThemeBuilderComponent implements AfterViewInit {
     fontSize: '--font-size'
   };
 
+  private readonly formPropertyDictDropdown = {
+    fontSize: '--font-size',
+    borderRadius: '--border-radius',
+    borderWidth: '--border-width',
+    padding: '--padding',
+    color: '--color',
+    colorHover: '--color-hover',
+    backgroundColorHover: '--background-hover'
+  };
+
   constructor(private formBuilder: FormBuilder) {}
 
   openGetcss() {
@@ -326,6 +350,14 @@ export class ThemeBuilderComponent implements AfterViewInit {
     Object.keys(this.formPropertyDictTextarea).forEach((fieldName: string) => {
       this.textareaComponent.inputEl.nativeElement.style.setProperty(this.formPropertyDictTextarea[fieldName], null);
     });
+
+    this.dropdownForm.reset();
+    Object.keys(this.formPropertyDictDropdown).forEach((fieldName: string) => {
+      this.dropdownComponent.dropdownRef.nativeElement.style.setProperty(
+        this.formPropertyDictDropdown[fieldName],
+        null
+      );
+    });
   }
 
   copyToClipboard() {
@@ -355,6 +387,7 @@ export class ThemeBuilderComponent implements AfterViewInit {
     this.inputForm.valueChanges.subscribe(changes => this.checkChangesInput(changes));
     this.selectForm.valueChanges.subscribe(changes => this.checkChangesSelect(changes));
     this.textareaForm.valueChanges.subscribe(changes => this.checkChangesTextarea(changes));
+    this.dropdownForm.valueChanges.subscribe(changes => this.checkChangesDropdown(changes));
   }
 
   switchIndividual() {
@@ -378,6 +411,7 @@ export class ThemeBuilderComponent implements AfterViewInit {
       this.inputView = true;
       this.selectView = true;
       this.textareaView = true;
+      this.dropdownView = true;
       this.acordionView = true;
       this.calendarView = true;
       this.stepperView = true;
@@ -391,6 +425,7 @@ export class ThemeBuilderComponent implements AfterViewInit {
       this.inputView = false;
       this.selectView = false;
       this.textareaView = false;
+      this.dropdownView = false;
       this.acordionView = false;
       this.calendarView = false;
       this.stepperView = false;
@@ -655,6 +690,35 @@ export class ThemeBuilderComponent implements AfterViewInit {
     }
   }
 
+  private checkChangesDropdown(changes: { [key: string]: string }): void {
+    if (!this.isEmpty(changes)) {
+      this.resultDropdown['nativeElement'].innerHTML = 'po-dropdown {<br>';
+
+      Object.keys(changes).forEach((fieldName: string) => {
+        let value;
+        if (typeof changes[fieldName] === 'number') {
+          value = `${changes[fieldName]}px`;
+        } else {
+          value = /color/i.test(fieldName) ? changes[fieldName] : `var(--${changes[fieldName]})`;
+        }
+        if (changes[fieldName]) {
+          this.dropdownComponent.dropdownRef.nativeElement.style.setProperty(
+            this.formPropertyDictDropdown[fieldName],
+            value
+          );
+
+          this.resultDropdown[
+            'nativeElement'
+          ].innerHTML += `${this.formPropertyDictDropdown[fieldName]}: ${value};<br>`;
+        }
+      });
+
+      this.resultDropdown['nativeElement'].innerHTML += '}';
+    } else {
+      this.resultDropdown['nativeElement'].innerHTML = '';
+    }
+  }
+
   private checkChanges() {
     return (
       !!this.resultButtonD?.['nativeElement']?.innerHTML ||
@@ -665,6 +729,7 @@ export class ThemeBuilderComponent implements AfterViewInit {
       !!this.resultSwitch?.['nativeElement']?.innerHTML ||
       !!this.resultSelect?.['nativeElement']?.innerHTML ||
       !!this.resultTextarea?.['nativeElement']?.innerHTML ||
+      !!this.resultDropdown?.['nativeElement']?.innerHTML ||
       !!this.resultInput?.['nativeElement']?.innerHTML
     );
   }
@@ -680,6 +745,7 @@ export class ThemeBuilderComponent implements AfterViewInit {
       !this.inputView ||
       !this.selectView ||
       !this.textareaView ||
+      !this.dropdownView ||
       !this.acordionView ||
       !this.calendarView ||
       !this.stepperView
@@ -697,6 +763,7 @@ export class ThemeBuilderComponent implements AfterViewInit {
       this.inputView &&
       this.selectView &&
       this.textareaView &&
+      this.dropdownView &&
       this.acordionView &&
       this.calendarView &&
       this.stepperView
