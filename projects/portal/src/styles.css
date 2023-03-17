@@ -466,8 +466,8 @@ a,
 
 .docs-api p,
 .app-portal p,
-.app-portal ul,
-.app-portal li {
+.app-portal ul:not(.po-listbox-list),
+.app-portal li:not(.po-listbox-item) {
   margin-bottom: 10px;
 }
 
