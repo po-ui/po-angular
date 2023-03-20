@@ -2,6 +2,22 @@
 
 All notable changes to this project will be documented in this file. See [standard-version](https://github.com/conventional-changelog/standard-version) for commit guidelines.
 
+# [15.4.0](https://github.com/po-ui/po-angular/compare/v15.3.0...v15.4.0) (2023-03-20)
+
+
+### Bug Fixes
+
+* **dynamic-table:** arruma acúmulo de registro ([8b680ca](https://github.com/po-ui/po-angular/commit/8b680ca0386dd53b74e38a2682f7fe826e39c8fe))
+* **lookup:** arruma acúmulo de registro ([31eed3c](https://github.com/po-ui/po-angular/commit/31eed3c279c1969ce3d743dbca233617ade2e183))
+* **table:** arruma acúmulo de registro ([9cefeb1](https://github.com/po-ui/po-angular/commit/9cefeb1d2f68f05ff8863bd02e23f02e7be3a249))
+
+
+### Features
+
+* **table:** repassa propriedades do `po-tag` ([9efbbd1](https://github.com/po-ui/po-angular/commit/9efbbd197e186c02b663aaeaf041b1b22e216d28))
+
+
+
 # [15.3.0](https://github.com/po-ui/po-angular/compare/v15.2.0...v15.3.0) (2023-03-13)
 
 
