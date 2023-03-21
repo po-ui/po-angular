@@ -651,8 +651,7 @@
 </ng-template>
 
 <ng-template #inputRadio let-row>
-  <input type="radio" class="po-table-radio" [class.po-table-radio-checked]="row.$selected" />
-  <label class="po-table-radio-label po-clickable" (click)="selectable ? selectRow(row) : 'javascript:;'"></label>
+  <po-radio [p-checked]="row.$selected" (p-change-selected)="selectRow(row)" [name]="idRadio"></po-radio>
 </ng-template>
 
 <ng-template #inputCheckbox let-row>

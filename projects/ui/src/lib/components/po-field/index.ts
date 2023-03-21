@@ -50,6 +50,8 @@ export * from './po-radio/po-radio.component';
 export * from './po-checkbox-group/po-checkbox-group.module';
 export * from './po-datepicker/po-datepicker.module';
 export * from './po-checkbox/po-checkbox.module';
+export * from './po-radio-group/po-radio-group.module';
+export * from './po-radio/po-radio.module';
 
 export * from './po-field.module';
 

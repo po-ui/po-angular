@@ -14,7 +14,8 @@ import {
   ViewChildren,
   ViewContainerRef,
   ContentChildren,
-  TemplateRef
+  TemplateRef,
+  OnInit
 } from '@angular/core';
 import { DecimalPipe } from '@angular/common';
 import { Router } from '@angular/router';
@@ -33,6 +34,7 @@ import { PoTableCellTemplateDirective } from './po-table-cell-template/po-table-
 import { PoTableColumnTemplateDirective } from './po-table-column-template/po-table-column-template.directive';
 import { PoTableRowTemplateArrowDirection } from './enums/po-table-row-template-arrow-direction.enum';
 import { PoTableService } from './services/po-table.service';
+import { uuid } from '../../utils/util';
 
 /**
  * @docsExtends PoTableBaseComponent
@@ -89,7 +91,7 @@ import { PoTableService } from './services/po-table.service';
   templateUrl: './po-table.component.html',
   providers: [PoDateService]
 })
-export class PoTableComponent extends PoTableBaseComponent implements AfterViewInit, DoCheck, OnDestroy {
+export class PoTableComponent extends PoTableBaseComponent implements AfterViewInit, DoCheck, OnDestroy, OnInit {
   @ContentChild(PoTableRowTemplateDirective, { static: true }) tableRowTemplate: PoTableRowTemplateDirective;
   @ContentChild(PoTableCellTemplateDirective) tableCellTemplate: PoTableCellTemplateDirective;
 
@@ -119,6 +121,7 @@ export class PoTableComponent extends PoTableBaseComponent implements AfterViewI
   itemSize: number = 32;
   lastVisibleColumnsSelected: Array<PoTableColumn>;
   tagColor: string;
+  idRadio: string;
 
   private _columnManagerTarget: ElementRef;
   private _columnManagerTargetFixed: ElementRef;
@@ -244,6 +247,10 @@ export class PoTableComponent extends PoTableBaseComponent implements AfterViewI
     return (
       this.actions !== undefined && this.actions && this.actions.filter(action => action && action.visible !== false)
     );
+  }
+
+  ngOnInit() {
+    this.idRadio = `po-radio-${uuid()}`;
   }
 
   ngAfterViewInit() {

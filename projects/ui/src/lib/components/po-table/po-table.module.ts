@@ -16,6 +16,7 @@ import { PoTimeModule } from '../../pipes/po-time/index';
 import { PoTooltipModule } from '../../directives/po-tooltip/index';
 import { PoIconModule } from './../po-icon/po-icon.module';
 import { PoCheckboxModule } from './../po-field/po-checkbox/po-checkbox.module';
+import { PoRadioModule } from './../po-field/po-radio/po-radio.module';
 
 import { PoTableColumnIconComponent } from './po-table-column-icon/po-table-column-icon.component';
 import { PoTableColumnLabelComponent } from './po-table-column-label/po-table-column-label.component';
@@ -53,7 +54,8 @@ import { PoTableListManagerComponent } from './po-table-list-manager/po-table-li
     PoTimeModule,
     PoTooltipModule,
     PoIconModule,
-    PoCheckboxModule
+    PoCheckboxModule,
+    PoRadioModule
   ],
   declarations: [
     PoTableComponent,
