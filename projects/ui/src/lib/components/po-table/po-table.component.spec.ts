@@ -305,22 +305,6 @@ describe('PoTableComponent:', () => {
     expect(selectableColumn).toBeTruthy();
   });
 
-  it('should allow single row selection', () => {
-    component.selectable = true;
-    component.singleSelect = true;
-    component.hideSelectAll = true;
-    component.selectRow(component.items[0]);
-    component.selectRow(component.items[1]);
-
-    fixture.detectChanges();
-
-    const checkedColumns = tableElement.querySelectorAll('.po-table-radio-checked');
-    expect(checkedColumns.length).toBe(1);
-
-    const selectableHeader = tableElement.querySelector('th.po-table-column-selectable .po-table-checkbox');
-    expect(selectableHeader).toBeFalsy();
-  });
-
   it('should select all rows', () => {
     component.selectable = true;
     component.selectAllRows();

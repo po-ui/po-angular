@@ -169,6 +169,16 @@ describe('PoRadioComponent', () => {
       expect(component.changeValue).toHaveBeenCalled();
     });
 
+    it('eventClick: should emit changeSelected', () => {
+      component.disabled = false;
+
+      spyOn(component.changeSelected, 'emit');
+
+      component.eventClick();
+
+      expect(component.changeSelected.emit).toHaveBeenCalled();
+    });
+
     it('focusOut: should remove attibute focus from label element', () => {
       component.radio.nativeElement.setAttribute('focus', '');
 
