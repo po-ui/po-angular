@@ -99,7 +99,20 @@ describe('PoTableBaseComponent:', () => {
     expectPropertiesValues(component, 'items', invalidValues, []);
   });
 
+  it('should set items with value default when invalid values if contain height', () => {
+    component.height = 400;
+    const invalidValues = [undefined, null, false, 0, 'a'];
+
+    expectPropertiesValues(component, 'items', invalidValues, []);
+  });
+
   it('should set items with values received when valid values', () => {
+    expectPropertiesValues(component, 'items', [items], [items]);
+    expectPropertiesValues(component, 'items', [], []);
+  });
+
+  it('should set items with values received when valid values if contain height', () => {
+    component.height = 400;
     expectPropertiesValues(component, 'items', [items], [items]);
     expectPropertiesValues(component, 'items', [], []);
   });
