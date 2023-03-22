@@ -1,4 +1,4 @@
-import { Directive, ElementRef, HostListener, OnInit, Renderer2, OnDestroy } from '@angular/core';
+import { Directive, ElementRef, HostListener, OnInit, Renderer2, OnDestroy, ViewChild } from '@angular/core';
 
 import { PoTooltipBaseDirective } from './po-tooltip-base.directive';
 import { PoTooltipControlPositionService } from './po-tooltip-control-position.service';
@@ -31,6 +31,7 @@ const nativeElements = ['input', 'button'];
   providers: [PoTooltipControlPositionService]
 })
 export class PoTooltipDirective extends PoTooltipBaseDirective implements OnInit, OnDestroy {
+  @ViewChild('inp', { read: ElementRef, static: true }) inputEl: ElementRef;
   private arrowDirection: string;
   private divArrow;
   private divContent;

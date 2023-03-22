@@ -1,4 +1,4 @@
-import { Component, OnInit } from '@angular/core';
+import { Component, ElementRef, OnInit, ViewChild } from '@angular/core';
 
 import { PoLinkBaseComponent } from './po-link-base.component';
 
@@ -27,6 +27,7 @@ import { PoLinkBaseComponent } from './po-link-base.component';
   templateUrl: './po-link.component.html'
 })
 export class PoLinkComponent extends PoLinkBaseComponent implements OnInit {
+  @ViewChild('inputEl', { read: ElementRef, static: true }) inputEl: ElementRef;
   protected isActionUsed = false;
 
   ngOnInit(): void {

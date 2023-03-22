@@ -1,15 +1,18 @@
-import { Component, ViewChild, AfterViewInit } from '@angular/core';
+import { Component, ViewChild, AfterViewInit, Renderer2, ElementRef } from '@angular/core';
 import { FormBuilder } from '@angular/forms';
 
 import {
-  PoModalComponent,
   PoButtonComponent,
   PoSwitchComponent,
   PoRadioComponent,
   PoDisclaimerComponent,
   PoInputComponent,
   PoSelectComponent,
-  PoTextareaComponent
+  PoTextareaComponent,
+  PoDatepickerComponent,
+  PoModalComponent,
+  PoPopupComponent,
+  PoLinkComponent
 } from '@po-ui/ng-components';
 
 @Component({
@@ -20,6 +23,9 @@ import {
 export class ThemeBuilderComponent implements AfterViewInit {
   @ViewChild('viewCSSModal') viewCSSModal: PoModalComponent;
 
+  @ViewChild('target', { read: ElementRef, static: true }) target: ElementRef;
+  @ViewChild('popup') popup: PoPopupComponent;
+
   @ViewChild('buttonP') buttonP: PoButtonComponent;
   @ViewChild('buttonD') buttonD: PoButtonComponent;
   @ViewChild('buttonL') buttonL: PoButtonComponent;
@@ -29,6 +35,12 @@ export class ThemeBuilderComponent implements AfterViewInit {
   @ViewChild('input') inputComponent: PoInputComponent;
   @ViewChild('select') selectComponent: PoSelectComponent;
   @ViewChild('textarea') textareaComponent: PoTextareaComponent;
+  @ViewChild('datepicker') datepickerComponent: PoDatepickerComponent;
+  @ViewChild('datepickerButton') datepickerComponentButton: PoDatepickerComponent;
+  @ViewChild('modal') modalComponent: PoModalComponent;
+  @ViewChild('popup') popupComponent: PoPopupComponent;
+  @ViewChild('link') linkComponent: PoLinkComponent;
+  @ViewChild('tooltip') tooltip: PoButtonComponent;
   @ViewChild('resultButtonD') resultButtonD: HTMLElement;
   @ViewChild('resultButtonP') resultButtonP: HTMLElement;
   @ViewChild('resultButtonL') resultButtonL: HTMLElement;
@@ -38,6 +50,12 @@ export class ThemeBuilderComponent implements AfterViewInit {
   @ViewChild('resultInput') resultInput: HTMLElement;
   @ViewChild('resultSelect') resultSelect: HTMLElement;
   @ViewChild('resultTextarea') resultTextarea: HTMLElement;
+  @ViewChild('resultDatepicker') resultDatepicker: HTMLElement;
+  @ViewChild('resultDatepickerButton') resultDatepickerButton: HTMLElement;
+  @ViewChild('resultModal') resultModal: HTMLElement;
+  @ViewChild('resultPopup') resultPopup: HTMLElement;
+  @ViewChild('resultLink') resultLink: HTMLElement;
+  @ViewChild('resultTooltip') resultTooltip: HTMLElement;
 
   botaoDefaultView = true;
   botaoPrimaryView = true;
@@ -48,6 +66,11 @@ export class ThemeBuilderComponent implements AfterViewInit {
   inputView = true;
   selectView = true;
   textareaView = true;
+  datepickerView = true;
+  modalView = true;
+  popupView = true;
+  linkView = true;
+  tooltipView = true;
   acordionView = true;
   calendarView = true;
   stepperView = true;
@@ -161,6 +184,46 @@ export class ThemeBuilderComponent implements AfterViewInit {
     fontSize: [null]
   });
 
+  //datepicker
+  datepickerForm = this.formBuilder.group({
+    padding: [null],
+    fontSize: [null],
+    color: [null],
+    colorHover: [null],
+    backgroundColor: [null],
+    backgroundColorHover: [null]
+  });
+
+  //button do datepicker
+  datepickerButtonForm = this.formBuilder.group({
+    padding: [null],
+    color: [null],
+    backgroundColorHover: [null],
+    borderColorHover: [null]
+  });
+
+  //modal
+  modalForm = this.formBuilder.group({
+    backgroundColor: [null]
+  });
+
+  //popup
+  popupForm = this.formBuilder.group({
+    color: [null]
+  });
+
+  //link
+  linkForm = this.formBuilder.group({
+    color: [null]
+  });
+
+  //tooltip
+  tooltipForm = this.formBuilder.group({
+    color: [null],
+    borderRadius: [null],
+    textColor: [null]
+  });
+
   private readonly formPropertyP = {
     colorAction: '--color-primary'
   };
@@ -255,7 +318,41 @@ export class ThemeBuilderComponent implements AfterViewInit {
     fontSize: '--font-size'
   };
 
-  constructor(private formBuilder: FormBuilder) {}
+  private readonly formPropertyDictDatepicker = {
+    padding: '--padding',
+    fontSize: '--font-size',
+    color: '--color',
+    backgroundColor: '--background',
+    backgroundColorHover: '--background-hover',
+    colorHover: '--color-hover'
+  };
+
+  private readonly formPropertyDictDatepickerButton = {
+    padding: '--padding',
+    color: '--color',
+    backgroundColorHover: '--background-hover',
+    borderColorHover: '--border-color-hover'
+  };
+
+  private readonly formPropertyDictModal = {
+    backgroundColor: '--background'
+  };
+
+  private readonly formPropertyDictPopup = {
+    color: '--color'
+  };
+
+  private readonly formPropertyDictLink = {
+    color: '--text-color'
+  };
+
+  private readonly formPropertyDictTooltip = {
+    color: '--color',
+    borderRadius: '--border-radius',
+    textColor: '--text-color'
+  };
+
+  constructor(private formBuilder: FormBuilder, private renderer: Renderer2) {}
 
   openGetcss() {
     this.viewCSSModal.open();
@@ -326,6 +423,41 @@ export class ThemeBuilderComponent implements AfterViewInit {
     Object.keys(this.formPropertyDictTextarea).forEach((fieldName: string) => {
       this.textareaComponent.inputEl.nativeElement.style.setProperty(this.formPropertyDictTextarea[fieldName], null);
     });
+
+    this.datepickerForm.reset();
+    Object.keys(this.formPropertyDictDatepicker).forEach((fieldName: string) => {
+      this.datepickerComponent.inputEl.nativeElement.style.setProperty(
+        this.formPropertyDictDatepicker[fieldName],
+        null
+      );
+    });
+
+    this.datepickerButtonForm.reset();
+    Object.keys(this.formPropertyDictDatepickerButton).forEach((fieldName: string) => {
+      this.datepickerComponent.iconDatepicker.buttonElement.nativeElement.style.setProperty(
+        this.formPropertyDictDatepickerButton[fieldName],
+        null
+      );
+    });
+
+    this.modalForm.reset();
+    Object.keys(this.formPropertyDictModal).forEach((fieldName: string) => {
+      this.modalComponent.modalContent.nativeElement.style.setProperty(this.formPropertyDictModal[fieldName], null);
+    });
+
+    this.popupForm.reset();
+    Object.keys(this.formPropertyDictPopup).forEach((fieldName: string) => {
+      this.popupComponent.listbox.nativeElement.style.setProperty(this.formPropertyDictPopup[fieldName], null);
+    });
+
+    this.linkForm.reset();
+    Object.keys(this.formPropertyDictLink).forEach((fieldName: string) => {
+      this.linkComponent.inputEl.nativeElement.style.setProperty(this.formPropertyDictLink[fieldName], null);
+    });
+    this.tooltipForm.reset();
+    Object.keys(this.formPropertyDictTooltip).forEach((fieldName: string) => {
+      this.tooltip.buttonElement.nativeElement.style.setProperty(this.formPropertyDictTooltip[fieldName], null);
+    });
   }
 
   copyToClipboard() {
@@ -342,6 +474,10 @@ export class ThemeBuilderComponent implements AfterViewInit {
   }
 
   ngAfterViewInit(): void {
+    //foco no botão da tooltip para criar a div que possibilita a customização
+    this.tooltip.focus();
+    this.buttonP.focus();
+
     this.brandFormP.valueChanges.subscribe(changes => this.checkChangesBrandP(changes));
     this.brandFormS.valueChanges.subscribe(changes => this.checkChangesBrandS(changes));
     this.brandFormT.valueChanges.subscribe(changes => this.checkChangesBrandT(changes));
@@ -355,6 +491,12 @@ export class ThemeBuilderComponent implements AfterViewInit {
     this.inputForm.valueChanges.subscribe(changes => this.checkChangesInput(changes));
     this.selectForm.valueChanges.subscribe(changes => this.checkChangesSelect(changes));
     this.textareaForm.valueChanges.subscribe(changes => this.checkChangesTextarea(changes));
+    this.datepickerForm.valueChanges.subscribe(changes => this.checkChangesDatepicker(changes));
+    this.datepickerButtonForm.valueChanges.subscribe(changes => this.checkChangesDatepickerButton(changes));
+    this.modalForm.valueChanges.subscribe(changes => this.checkChangesModal(changes));
+    this.popupForm.valueChanges.subscribe(changes => this.checkChangesPopup(changes));
+    this.linkForm.valueChanges.subscribe(changes => this.checkChangesLink(changes));
+    this.tooltipForm.valueChanges.subscribe(changes => this.checkChangesTooltip(changes));
   }
 
   switchIndividual() {
@@ -378,6 +520,11 @@ export class ThemeBuilderComponent implements AfterViewInit {
       this.inputView = true;
       this.selectView = true;
       this.textareaView = true;
+      this.datepickerView = true;
+      this.modalView = true;
+      this.popupView = true;
+      this.linkView = true;
+      this.tooltipView = true;
       this.acordionView = true;
       this.calendarView = true;
       this.stepperView = true;
@@ -391,6 +538,11 @@ export class ThemeBuilderComponent implements AfterViewInit {
       this.inputView = false;
       this.selectView = false;
       this.textareaView = false;
+      this.datepickerView = false;
+      this.modalView = false;
+      this.popupView = false;
+      this.linkView = false;
+      this.tooltipView = false;
       this.acordionView = false;
       this.calendarView = false;
       this.stepperView = false;
@@ -655,6 +807,168 @@ export class ThemeBuilderComponent implements AfterViewInit {
     }
   }
 
+  private checkChangesDatepicker(changes: { [key: string]: string }): void {
+    if (!this.isEmpty(changes)) {
+      this.resultDatepicker['nativeElement'].innerHTML = 'input.po-datepicker {<br>';
+
+      Object.keys(changes).forEach((fieldName: string) => {
+        let value;
+        if (typeof changes[fieldName] === 'number') {
+          value = `${changes[fieldName]}px`;
+        } else {
+          value = /color/i.test(fieldName) ? changes[fieldName] : `var(--${changes[fieldName]})`;
+        }
+        if (changes[fieldName]) {
+          this.datepickerComponent.inputEl.nativeElement.style.setProperty(
+            this.formPropertyDictDatepicker[fieldName],
+            value
+          );
+
+          this.resultDatepicker[
+            'nativeElement'
+          ].innerHTML += `${this.formPropertyDictDatepicker[fieldName]}: ${value};<br>`;
+        }
+      });
+
+      this.resultDatepicker['nativeElement'].innerHTML += '}';
+    } else {
+      this.resultDatepicker['nativeElement'].innerHTML = '';
+    }
+  }
+
+  private checkChangesDatepickerButton(changes: { [key: string]: string }): void {
+    if (!this.isEmpty(changes)) {
+      this.resultDatepickerButton['nativeElement'].innerHTML = 'po-datepicker po-button[p-kind="tertiary"] {<br>';
+
+      Object.keys(changes).forEach((fieldName: string) => {
+        let value;
+        if (typeof changes[fieldName] === 'number') {
+          value = `${changes[fieldName]}px`;
+        } else {
+          value = /color/i.test(fieldName) ? changes[fieldName] : `var(--${changes[fieldName]})`;
+        }
+        if (changes[fieldName]) {
+          this.datepickerComponent.iconDatepicker.buttonElement.nativeElement.style.setProperty(
+            this.formPropertyDictDatepickerButton[fieldName],
+            value
+          );
+
+          this.resultDatepickerButton[
+            'nativeElement'
+          ].innerHTML += `${this.formPropertyDictDatepickerButton[fieldName]}: ${value};<br>`;
+        }
+      });
+
+      this.resultDatepickerButton['nativeElement'].innerHTML += '}';
+    } else {
+      this.resultDatepickerButton['nativeElement'].innerHTML = '';
+    }
+  }
+
+  private checkChangesModal(changes: { [key: string]: string }): void {
+    if (!this.isEmpty(changes)) {
+      this.resultModal['nativeElement'].innerHTML = 'po-modal {<br>';
+
+      Object.keys(changes).forEach((fieldName: string) => {
+        let value;
+        if (typeof changes[fieldName] === 'number') {
+          value = `${changes[fieldName]}px`;
+        } else {
+          value = /color/i.test(fieldName) ? changes[fieldName] : `var(--${changes[fieldName]})`;
+        }
+        if (changes[fieldName]) {
+          this.modalComponent.modalContent.nativeElement.style.setProperty(
+            this.formPropertyDictModal[fieldName],
+            value
+          );
+
+          this.resultModal['nativeElement'].innerHTML += `${this.formPropertyDictModal[fieldName]}: ${value};<br>`;
+        }
+      });
+
+      this.resultModal['nativeElement'].innerHTML += '}';
+    } else {
+      this.resultModal['nativeElement'].innerHTML = '';
+    }
+  }
+
+  private checkChangesPopup(changes: { [key: string]: string }): void {
+    if (!this.isEmpty(changes)) {
+      this.resultPopup['nativeElement'].innerHTML = 'po-popup po-item-list {<br>';
+
+      Object.keys(changes).forEach((fieldName: string) => {
+        let value;
+        if (typeof changes[fieldName] === 'number') {
+          value = `${changes[fieldName]}px`;
+        } else {
+          value = /color/i.test(fieldName) ? changes[fieldName] : `var(--${changes[fieldName]})`;
+        }
+        if (changes[fieldName]) {
+          this.popupComponent.popupRef.nativeElement.style.setProperty(this.formPropertyDictPopup[fieldName], value);
+
+          this.resultPopup['nativeElement'].innerHTML += `${this.formPropertyDictPopup[fieldName]}: ${value};<br>`;
+        }
+      });
+
+      this.resultPopup['nativeElement'].innerHTML += '}';
+    } else {
+      this.resultPopup['nativeElement'].innerHTML = '';
+    }
+  }
+
+  private checkChangesLink(changes: { [key: string]: string }): void {
+    if (!this.isEmpty(changes)) {
+      this.resultLink['nativeElement'].innerHTML = 'po-link {<br>';
+
+      Object.keys(changes).forEach((fieldName: string) => {
+        let value;
+        if (typeof changes[fieldName] === 'number') {
+          value = `${changes[fieldName]}px`;
+        } else {
+          value = /color/i.test(fieldName) ? changes[fieldName] : `var(--${changes[fieldName]})`;
+        }
+        if (changes[fieldName]) {
+          this.linkComponent.inputEl.nativeElement.style.setProperty(this.formPropertyDictLink[fieldName], value);
+
+          this.resultLink['nativeElement'].innerHTML += `${this.formPropertyDictLink[fieldName]}: ${value};<br>`;
+        }
+      });
+
+      this.resultLink['nativeElement'].innerHTML += '}';
+    } else {
+      this.resultLink['nativeElement'].innerHTML = '';
+    }
+  }
+
+  private checkChangesTooltip(changes: { [key: string]: string }): void {
+    const tooltipElement = this.renderer.selectRootElement('.po-tooltip', true);
+    if (tooltipElement) {
+      if (!this.isEmpty(changes)) {
+        this.resultTooltip['nativeElement'].innerHTML = '.po-tooltip {<br>';
+
+        Object.keys(changes).forEach((fieldName: string) => {
+          let value;
+          if (typeof changes[fieldName] === 'number') {
+            value = `${changes[fieldName]}px`;
+          } else {
+            value = /color/i.test(fieldName) ? changes[fieldName] : `var(--${changes[fieldName]})`;
+          }
+          if (changes[fieldName]) {
+            tooltipElement.style.setProperty(this.formPropertyDictTooltip[fieldName], value);
+
+            this.resultTooltip[
+              'nativeElement'
+            ].innerHTML += `${this.formPropertyDictTooltip[fieldName]}: ${value};<br>`;
+          }
+        });
+
+        this.resultTooltip['nativeElement'].innerHTML += '}';
+      } else {
+        this.resultTooltip['nativeElement'].innerHTML = '';
+      }
+    }
+  }
+
   private checkChanges() {
     return (
       !!this.resultButtonD?.['nativeElement']?.innerHTML ||
@@ -665,6 +979,12 @@ export class ThemeBuilderComponent implements AfterViewInit {
       !!this.resultSwitch?.['nativeElement']?.innerHTML ||
       !!this.resultSelect?.['nativeElement']?.innerHTML ||
       !!this.resultTextarea?.['nativeElement']?.innerHTML ||
+      !!this.resultDatepicker?.['nativeElement']?.innerHTML ||
+      !!this.resultPopup?.['nativeElement']?.innerHTML ||
+      !!this.resultDatepickerButton?.['nativeElement']?.innerHTML ||
+      !!this.resultModal?.['nativeElement']?.innerHTML ||
+      !!this.resultLink?.['nativeElement']?.innerHTML ||
+      !!this.resultTooltip?.['nativeElement']?.innerHTML ||
       !!this.resultInput?.['nativeElement']?.innerHTML
     );
   }
@@ -680,6 +1000,11 @@ export class ThemeBuilderComponent implements AfterViewInit {
       !this.inputView ||
       !this.selectView ||
       !this.textareaView ||
+      !this.datepickerView ||
+      !this.modalView ||
+      !this.popupView ||
+      !this.linkView ||
+      !this.tooltipView ||
       !this.acordionView ||
       !this.calendarView ||
       !this.stepperView
@@ -688,18 +1013,23 @@ export class ThemeBuilderComponent implements AfterViewInit {
 
   private verifyIfAllIsVisibility() {
     return (
-      this.botaoDefaultView &&
-      this.botaoPrimaryView &&
-      this.botaoLinkView &&
-      this.switchView &&
-      this.radioView &&
-      this.disclaimerView &&
-      this.inputView &&
-      this.selectView &&
-      this.textareaView &&
-      this.acordionView &&
-      this.calendarView &&
-      this.stepperView
+      (this.botaoDefaultView &&
+        this.botaoPrimaryView &&
+        this.botaoLinkView &&
+        this.switchView &&
+        this.radioView &&
+        this.disclaimerView &&
+        this.inputView &&
+        this.selectView &&
+        this.textareaView &&
+        this.datepickerView &&
+        this.modalView) ||
+      (this.popupView &&
+        this.linkView &&
+        this.tooltipView &&
+        this.acordionView &&
+        this.calendarView &&
+        this.stepperView)
     );
   }
 
