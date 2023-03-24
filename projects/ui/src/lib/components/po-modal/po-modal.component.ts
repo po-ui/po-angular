@@ -34,6 +34,7 @@ import { PoLanguageService } from '../../services/po-language/po-language.servic
 })
 export class PoModalComponent extends PoModalBaseComponent {
   @ViewChild('modalContent', { read: ElementRef }) modalContent: ElementRef;
+  @ViewChild('modalContainer', { read: ElementRef }) modalContainer: ElementRef;
   @ContentChild(PoModalFooterComponent) modalFooter: PoModalFooterComponent;
 
   private firstElement;

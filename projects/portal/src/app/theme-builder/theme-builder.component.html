@@ -621,6 +621,264 @@
         </div>
       </po-accordion-item>
     </po-accordion>
+
+    <po-accordion *ngIf="datepickerView">
+      <po-accordion-item [class.hide]="!datepickerView" p-label="Datepicker">
+        <div class="container-space-between po-mb-1">
+          <label for="paddingDatepicker" class="po-mr-2 po-ml-1">Padding: </label>
+          <input type="range" id="paddingDatepicker" min="0" max="22" [formControl]="datepickerForm.get('padding')" />
+        </div>
+
+        <div class="container-space-between po-mb-1">
+          <label for="fontSizeDatepicker" class="po-mr-2 po-ml-1">Tamanho da fonte: </label>
+          <input
+            type="range"
+            id="fontSizeDatepicker"
+            min="10"
+            max="32"
+            [formControl]="datepickerForm.get('fontSize')"
+          />
+        </div>
+
+        <div class="container-space-between po-mb-1">
+          <label for="paddingDatepickerButton" class="po-mr-2 po-ml-1">Padding do botão </label>
+          <input
+            type="range"
+            id="paddingDatepickerButton"
+            min="1"
+            max="22"
+            [formControl]="datepickerButtonForm.get('padding')"
+          />
+        </div>
+
+        <div class="container-space-between po-mb-1">
+          <label for="colorDatepicker" class="po-mr-2 po-ml-1">Cor da borda: </label>
+          <input
+            type="color"
+            id="colorDatepicker"
+            class="style-inputColor"
+            [formControl]="datepickerForm.get('color')"
+          />
+        </div>
+
+        <div class="container-space-between po-mb-1">
+          <label for="colorbackgroundDatepicker" class="po-mr-2 po-ml-1">Cor do background:</label>
+          <input
+            type="color"
+            id="colorbackgroundDatepicker"
+            class="style-inputColor"
+            [formControl]="datepickerForm.get('backgroundColor')"
+          />
+        </div>
+
+        <div class="container-space-between po-mb-1">
+          <label for="colorbackgroundHoverDatepicker" class="po-mr-2 po-ml-1">Cor da borda Hover:</label>
+          <input
+            type="color"
+            id="colorbackgroundHoverDatepicker"
+            class="style-inputColor"
+            [formControl]="datepickerForm.get('colorHover')"
+          />
+        </div>
+
+        <div class="container-space-between po-mb-1">
+          <label for="colorDatepickerButton" class="po-mr-2 po-ml-1">Cor do botão: </label>
+          <input
+            type="color"
+            id="colorDatepickerButton"
+            class="style-inputColor"
+            [formControl]="datepickerButtonForm.get('color')"
+          />
+        </div>
+
+        <div class="container-space-between po-mb-1">
+          <label for="colorbackgroundHoverDatepickerButton" class="po-mr-2 po-ml-1"
+            >Cor do background Hover do botão:</label
+          >
+          <input
+            type="color"
+            id="colorbackgroundHoverDatepickerButton"
+            class="style-inputColor"
+            [formControl]="datepickerButtonForm.get('backgroundColorHover')"
+          />
+        </div>
+
+        <div class="container-space-between po-mb-1">
+          <label for="colorHoverDatepickerButton" class="po-mr-2 po-ml-1">Cor do botão hover :</label>
+          <input
+            type="color"
+            id="colorHoverDatepickerButton"
+            class="style-inputColor"
+            [formControl]="datepickerButtonForm.get('borderColorHover')"
+          />
+        </div>
+      </po-accordion-item>
+    </po-accordion>
+
+    <!-- link -->
+    <po-accordion *ngIf="linkView">
+      <po-accordion-item [class.hide]="!linkView" p-label="Link">
+        <div class="container-space-between po-mb-1">
+          <label for="colorLink" class="po-mr-2 po-ml-1">Cor do link não visitado: </label>
+          <input type="color" id="colorLink" class="style-inputColor" [formControl]="linkForm.get('color')" />
+        </div>
+
+        <div class="container-space-between po-mb-1">
+          <label for="colorLinkVisited" class="po-mr-2 po-ml-1">Cor do link visitado: </label>
+          <input
+            type="color"
+            id="colorLinkVisited"
+            class="style-inputColor"
+            [formControl]="linkForm.get('colorVisited')"
+          />
+        </div>
+
+        <div class="container-space-between po-mb-1">
+          <label for="colorOutlineLink" class="po-mr-2 po-ml-1">Cor do outline: </label>
+          <input
+            type="color"
+            id="colorOutlineLink"
+            class="style-inputColor"
+            [formControl]="linkForm.get('colorOutline')"
+          />
+        </div>
+      </po-accordion-item>
+    </po-accordion>
+
+    <po-accordion *ngIf="tooltipView">
+      <po-accordion-item [class.hide]="!tooltipView" p-label="Tooltip">
+        <div class="container-space-between po-mb-1">
+          <label for="colorTooltip" class="po-mr-2 po-ml-1">Cor : </label>
+          <input type="color" id="colorTooltip" class="style-inputColor" [formControl]="tooltipForm.get('color')" />
+        </div>
+
+        <div class="container-space-between po-mb-1">
+          <label for="colorTextTooltip" class="po-mr-2 po-ml-1">Cor do texto:</label>
+          <input
+            type="color"
+            id="colorTextTooltip"
+            class="style-inputColor"
+            [formControl]="tooltipForm.get('textColor')"
+          />
+        </div>
+
+        <div class="container-space-between po-mb-1">
+          <label for="borderRadiusTooltip" class="po-mr-2 po-ml-1">Border radius: </label>
+          <input
+            type="range"
+            id="borderRadiusTooltip"
+            min="1"
+            max="32"
+            [formControl]="tooltipForm.get('borderRadius')"
+          />
+        </div>
+      </po-accordion-item>
+    </po-accordion>
+
+    <po-accordion *ngIf="modalView">
+      <po-accordion-item [class.hide]="!modalView" p-label="Modal">
+        <div class="container-space-between po-mb-1">
+          <label for="borderRadiusModal" class="po-mr-2 po-ml-1">Border radius: </label>
+          <input type="range" id="borderRadiusModal" min="1" max="32" [formControl]="modalForm.get('borderRadius')" />
+        </div>
+
+        <div class="container-space-between po-mb-1">
+          <label for="borderWidthModal" class="po-mr-2 po-ml-1">Espessura da borda: </label>
+          <input type="range" id="borderWidthModal" min="1" max="10" [formControl]="modalForm.get('borderWidth')" />
+        </div>
+
+        <div class="container-space-between po-mb-1">
+          <label for="overlayValueModal" class="po-mr-2 po-ml-1">Opacidade do overlay: </label>
+          <input
+            type="range"
+            id="overlayValueModal"
+            min="0"
+            max="1"
+            step="0.1"
+            [formControl]="modalForm.get('opacityValue')"
+          />
+        </div>
+
+        <div class="container-space-between po-mb-1">
+          <label for="colorModal" class="po-mr-2 po-ml-1">Cor do background: </label>
+          <input
+            type="color"
+            id="colorModal"
+            class="style-inputColor"
+            [formControl]="modalForm.get('backgroundColor')"
+          />
+        </div>
+
+        <div class="container-space-between po-mb-1">
+          <label for="borderColorModal" class="po-mr-2 po-ml-1">Cor da borda: </label>
+          <input
+            type="color"
+            id="borderColorModal"
+            class="style-inputColor"
+            [formControl]="modalForm.get('borderColor')"
+          />
+        </div>
+
+        <div class="container-space-between po-mb-1">
+          <label for="overlayColorModal" class="po-mr-2 po-ml-1">Cor do overlay: </label>
+          <input
+            type="color"
+            id="overlayColorModal"
+            class="style-inputColor"
+            [formControl]="modalForm.get('overlayColor')"
+          />
+        </div>
+
+        <div class="container-space-between po-mb-1">
+          <label for="separatorColorModal" class="po-mr-2 po-ml-1">Cor do separador: </label>
+          <input
+            type="color"
+            id="separatorColorModal"
+            class="style-inputColor"
+            [formControl]="modalForm.get('dividerColor')"
+          />
+        </div>
+      </po-accordion-item>
+    </po-accordion>
+
+    <po-accordion *ngIf="popupView">
+      <po-accordion-item [class.hide]="!popupView" p-label="Popup">
+        <div class="container-space-between po-mb-1">
+          <label for="backgroundContainerPopup" class="po-mr-2 po-ml-1">Cor do background: </label>
+          <input
+            type="color"
+            id="backgroundContainerPopup"
+            class="style-inputColor"
+            [formControl]="popupContainerForm.get('colorBackground')"
+          />
+        </div>
+
+        <div class="container-space-between po-mb-1">
+          <label for="colorPopup" class="po-mr-2 po-ml-1">Cor do texto: </label>
+          <input type="color" id="colorPopup" class="style-inputColor" [formControl]="popupForm.get('color')" />
+        </div>
+
+        <div class="container-space-between po-mb-1">
+          <label for="colorHoverPopup" class="po-mr-2 po-ml-1">Cor do texto hover: </label>
+          <input
+            type="color"
+            id="colorHoverPopup"
+            class="style-inputColor"
+            [formControl]="popupForm.get('colorHover')"
+          />
+        </div>
+
+        <div class="container-space-between po-mb-1">
+          <label for="backgroundHoverPopup" class="po-mr-2 po-ml-1">Background hover: </label>
+          <input
+            type="color"
+            id="backgroundHoverPopup"
+            class="style-inputColor"
+            [formControl]="popupForm.get('colorBackgroundHover')"
+          />
+        </div>
+      </po-accordion-item>
+    </po-accordion>
   </div>
 
   <po-widget
@@ -633,7 +891,12 @@
       !disclaimerView &&
       !inputView &&
       !selectView &&
-      !textareaView
+      !textareaView &&
+      !datepickerView &&
+      !modalView &&
+      !linkView &&
+      !popupView &&
+      !tooltipView
     "
     class="po-lg-9 po-p-2"
     [class.hide]="
@@ -645,6 +908,11 @@
       !selectView &&
       !textareaView &&
       !disclaimerView &&
+      !datepickerView &&
+      !modalView &&
+      !linkView &&
+      !tooltipView &&
+      !popupView &&
       !acordionView &&
       !calendarView &&
       !stepperView &&
@@ -659,6 +927,11 @@
         !switchView &&
         !radioView &&
         !disclaimerView &&
+        !datepickerView &&
+        !modalView &&
+        !linkView &&
+        !tooltipView &&
+        !popupView &&
         !inputView &&
         !selectView &&
         !textareaView
@@ -738,6 +1011,55 @@
       </po-dropdown>
     </div>
 
+    <hr [class.hide]="!datepickerView" />
+
+    <po-datepicker
+      p-placeholder="Customize seu po-datepicker"
+      #datepicker
+      [class.hide]="!datepickerView"
+      name="datepicker"
+      p-label="PO Datepicker"
+    >
+    </po-datepicker>
+
+    <hr [class.hide]="!linkView" />
+
+    <div class="container-component">
+      <po-link #link [class.hide]="!linkView" name="link" p-label="PO Link"> </po-link>
+    </div>
+
+    <hr [class.hide]="!tooltipView" />
+
+    <div class="container-component">
+      <po-button
+        #tooltip
+        p-label="Open Tooltip"
+        [class.hide]="!tooltipView"
+        class="button-tooltip-theme-builder"
+        p-tooltip="po-tooltip"
+      >
+      </po-button>
+    </div>
+
+    <hr [class.hide]="!modalView" />
+
+    <div [class.hide]="!modalView" class="container-component">
+      <po-button [class.hide]="!modalView" p-label="Open modal" (p-click)="modalBuilder.open()"> </po-button>
+    </div>
+
+    <po-modal #modalBuilder id="modal-theme" [p-click-out]="true" p-title="PO Modal">
+      Customize seu po-modal!!!</po-modal
+    >
+
+    <hr [class.hide]="!popupView" />
+
+    <div class="container-component">
+      <span #target [class.hide]="!popupView" class="po-clickable po-icon po-icon-help" (click)="popupBuilder.toggle()">
+      </span>
+
+      <po-popup #popupBuilder [p-actions]="[{ label: 'PO Popup' }]" [p-target]="target"> </po-popup>
+    </div>
+
     <po-divider
       [class.hide]="
         (!textareaView ||
@@ -748,6 +1070,11 @@
           !switchView ||
           !botaoDefaultView ||
           !botaoPrimaryView ||
+          !datepickerView ||
+          !modalView ||
+          !linkView ||
+          !tooltipView ||
+          !popupView ||
           !botaoLinkView) &&
         !acordionView &&
         !calendarView &&
@@ -786,19 +1113,18 @@
   <po-widget
     class="po-lg-12 po-p-2"
     *ngIf="
-      !botaoDefaultView &&
-      !botaoPrimaryView &&
-      !botaoLinkView &&
-      !switchView &&
-      !inputView &&
-      !selectView &&
-      !textareaView &&
-      !dropdownView &&
-      !disclaimerView &&
-      !acordionView &&
-      !calendarView &&
-      !stepperView &&
-      !radioView
+      (!botaoDefaultView &&
+        !botaoPrimaryView &&
+        !botaoLinkView &&
+        !switchView &&
+        !inputView &&
+        !selectView &&
+        !textareaView &&
+        !popupView &&
+        !dropdownView &&
+        !datepickerView &&
+        !modalView) ||
+      (!linkView && !tooltipView && !disclaimerView && !acordionView && !calendarView && !stepperView && !radioView)
     "
   >
     <div class="container" style="justify-content: center">
@@ -830,6 +1156,21 @@
         <pre [ngClass]="resultSelect?.innerText.length ? '' : 'pre-none'" class="teste" #resultSelect></pre>
         <pre [ngClass]="resultTextarea?.innerText.length ? '' : 'pre-none'" class="teste" #resultTextarea></pre>
         <pre [ngClass]="resultDropdown?.innerText.length ? '' : 'pre-none'" class="teste" #resultDropdown></pre>
+        <pre [ngClass]="resultDatepicker?.innerText.length ? '' : 'pre-none'" class="teste" #resultDatepicker></pre>
+        <pre
+          [ngClass]="resultDatepickerButton?.innerText.length ? '' : 'pre-none'"
+          class="teste"
+          #resultDatepickerButton
+        ></pre>
+        <pre [ngClass]="resultLink?.innerText.length ? '' : 'pre-none'" class="teste" #resultLink></pre>
+        <pre [ngClass]="resultTooltip?.innerText.length ? '' : 'pre-none'" class="teste" #resultTooltip></pre>
+        <pre [ngClass]="resultModal?.innerText.length ? '' : 'pre-none'" class="teste" #resultModal></pre>
+        <pre [ngClass]="resultPopup?.innerText.length ? '' : 'pre-none'" class="teste" #resultPopup></pre>
+        <pre
+          [ngClass]="resultPopupContainer?.innerText.length ? '' : 'pre-none'"
+          class="teste"
+          #resultPopupContainer
+        ></pre>
       </div>
     </div>
 
@@ -926,6 +1267,56 @@
         p-label="Dropdown"
         name="Dropdown"
         [(ngModel)]="dropdownView"
+        (p-change)="switchIndividual()"
+      ></po-switch>
+
+      <po-switch
+        class="po-sm-6"
+        p-label-off="Escondido"
+        p-label-on="Visível"
+        p-label="Datepicker"
+        name="Datepicker"
+        [(ngModel)]="datepickerView"
+        (p-change)="switchIndividual()"
+      ></po-switch>
+
+      <po-switch
+        class="po-sm-6"
+        p-label-off="Escondido"
+        p-label-on="Visível"
+        p-label="Modal"
+        name="Modal"
+        [(ngModel)]="modalView"
+        (p-change)="switchIndividual()"
+      ></po-switch>
+
+      <po-switch
+        class="po-sm-6"
+        p-label-off="Escondido"
+        p-label-on="Visível"
+        p-label="Popup"
+        name="Popup"
+        [(ngModel)]="popupView"
+        (p-change)="switchIndividual()"
+      ></po-switch>
+
+      <po-switch
+        class="po-sm-6"
+        p-label-off="Escondido"
+        p-label-on="Visível"
+        p-label="Link"
+        name="Link"
+        [(ngModel)]="linkView"
+        (p-change)="switchIndividual()"
+      ></po-switch>
+
+      <po-switch
+        class="po-sm-6"
+        p-label-off="Escondido"
+        p-label-on="Visível"
+        p-label="Tooltip"
+        name="Tooltip"
+        [(ngModel)]="tooltipView"
         (p-change)="switchIndividual()"
       ></po-switch>
 

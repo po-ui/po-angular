@@ -6,6 +6,7 @@ import { PoControlPositionService } from '../../services/po-control-position/po-
 
 import { PoPopupAction } from './po-popup-action.interface';
 import { PoPopupBaseComponent } from './po-popup-base.component';
+import { PoListBoxComponent } from '../po-listbox';
 
 /**
  *
@@ -37,6 +38,9 @@ import { PoPopupBaseComponent } from './po-popup-base.component';
 export class PoPopupComponent extends PoPopupBaseComponent {
   @ViewChild('popupRef', { read: ElementRef }) popupRef: ElementRef;
   @ViewChild('listbox', { read: ElementRef }) listbox: ElementRef;
+
+  //utilizado apenas no theme builder
+  @ViewChild('poListBoxRef') poListBoxRef: PoListBoxComponent;
 
   constructor(
     viewContainerRef: ViewContainerRef,
