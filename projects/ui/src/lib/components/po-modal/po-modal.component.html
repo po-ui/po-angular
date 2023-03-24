@@ -1,4 +1,4 @@
-<div *ngIf="!isHidden" class="po-modal" tabindex="0" (keydown.esc)="closeModalOnEscapeKey($event)">
+<div #modalContainer *ngIf="!isHidden" class="po-modal" tabindex="0" (keydown.esc)="closeModalOnEscapeKey($event)">
   <div class="po-modal-overlay" (mousedown)="onClickOut($event)"></div>
   <div class="po-modal-container po-pb-2 po-pt-2">
     <div class="po-modal-vertical-align">

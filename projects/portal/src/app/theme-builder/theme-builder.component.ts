@@ -10,9 +10,8 @@ import {
   PoSelectComponent,
   PoTextareaComponent,
   PoDatepickerComponent,
-  PoModalComponent,
-  PoPopupComponent,
-  PoLinkComponent
+  PoLinkComponent,
+  PoModalComponent
 } from '@po-ui/ng-components';
 
 @Component({
@@ -24,7 +23,6 @@ export class ThemeBuilderComponent implements AfterViewInit {
   @ViewChild('viewCSSModal') viewCSSModal: PoModalComponent;
 
   @ViewChild('target', { read: ElementRef, static: true }) target: ElementRef;
-  @ViewChild('popup') popup: PoPopupComponent;
 
   @ViewChild('buttonP') buttonP: PoButtonComponent;
   @ViewChild('buttonD') buttonD: PoButtonComponent;
@@ -35,10 +33,10 @@ export class ThemeBuilderComponent implements AfterViewInit {
   @ViewChild('input') inputComponent: PoInputComponent;
   @ViewChild('select') selectComponent: PoSelectComponent;
   @ViewChild('textarea') textareaComponent: PoTextareaComponent;
+  @ViewChild('modalBuilder', { read: ElementRef }) modalBuilder: ElementRef;
   @ViewChild('datepicker') datepickerComponent: PoDatepickerComponent;
   @ViewChild('datepickerButton') datepickerComponentButton: PoDatepickerComponent;
   @ViewChild('modal') modalComponent: PoModalComponent;
-  @ViewChild('popup') popupComponent: PoPopupComponent;
   @ViewChild('link') linkComponent: PoLinkComponent;
   @ViewChild('tooltip') tooltip: PoButtonComponent;
   @ViewChild('resultButtonD') resultButtonD: HTMLElement;
@@ -53,7 +51,6 @@ export class ThemeBuilderComponent implements AfterViewInit {
   @ViewChild('resultDatepicker') resultDatepicker: HTMLElement;
   @ViewChild('resultDatepickerButton') resultDatepickerButton: HTMLElement;
   @ViewChild('resultModal') resultModal: HTMLElement;
-  @ViewChild('resultPopup') resultPopup: HTMLElement;
   @ViewChild('resultLink') resultLink: HTMLElement;
   @ViewChild('resultTooltip') resultTooltip: HTMLElement;
 
@@ -68,7 +65,6 @@ export class ThemeBuilderComponent implements AfterViewInit {
   textareaView = true;
   datepickerView = true;
   modalView = true;
-  popupView = true;
   linkView = true;
   tooltipView = true;
   acordionView = true;
@@ -204,17 +200,20 @@ export class ThemeBuilderComponent implements AfterViewInit {
 
   //modal
   modalForm = this.formBuilder.group({
-    backgroundColor: [null]
-  });
-
-  //popup
-  popupForm = this.formBuilder.group({
-    color: [null]
+    borderRadius: [null],
+    borderWidth: [null],
+    opacityValue: [null],
+    backgroundColor: [null],
+    borderColor: [null],
+    overlayColor: [null],
+    dividerColor: [null]
   });
 
   //link
   linkForm = this.formBuilder.group({
-    color: [null]
+    color: [null],
+    colorOutline: [null],
+    colorHover: [null]
   });
 
   //tooltip
@@ -335,15 +334,18 @@ export class ThemeBuilderComponent implements AfterViewInit {
   };
 
   private readonly formPropertyDictModal = {
-    backgroundColor: '--background'
-  };
-
-  private readonly formPropertyDictPopup = {
-    color: '--color'
+    borderRadius: '--border-radius',
+    borderWidth: '--border-width',
+    opacityValue: '--opacity-overlay',
+    backgroundColor: '--background',
+    borderColor: '--border-color',
+    overlayColor: '--color-overlay',
+    dividerColor: '--color-divider'
   };
 
   private readonly formPropertyDictLink = {
-    color: '--text-color'
+    color: '--text-color',
+    colorOutline: '--outline-color-focused'
   };
 
   private readonly formPropertyDictTooltip = {
@@ -442,18 +444,14 @@ export class ThemeBuilderComponent implements AfterViewInit {
 
     this.modalForm.reset();
     Object.keys(this.formPropertyDictModal).forEach((fieldName: string) => {
-      this.modalComponent.modalContent.nativeElement.style.setProperty(this.formPropertyDictModal[fieldName], null);
-    });
-
-    this.popupForm.reset();
-    Object.keys(this.formPropertyDictPopup).forEach((fieldName: string) => {
-      this.popupComponent.listbox.nativeElement.style.setProperty(this.formPropertyDictPopup[fieldName], null);
+      this.modalBuilder.nativeElement.style.setProperty(this.formPropertyDictModal[fieldName], null);
     });
 
     this.linkForm.reset();
     Object.keys(this.formPropertyDictLink).forEach((fieldName: string) => {
       this.linkComponent.inputEl.nativeElement.style.setProperty(this.formPropertyDictLink[fieldName], null);
     });
+
     this.tooltipForm.reset();
     Object.keys(this.formPropertyDictTooltip).forEach((fieldName: string) => {
       this.tooltip.buttonElement.nativeElement.style.setProperty(this.formPropertyDictTooltip[fieldName], null);
@@ -476,6 +474,7 @@ export class ThemeBuilderComponent implements AfterViewInit {
   ngAfterViewInit(): void {
     //foco no botão da tooltip para criar a div que possibilita a customização
     this.tooltip.focus();
+
     this.buttonP.focus();
 
     this.brandFormP.valueChanges.subscribe(changes => this.checkChangesBrandP(changes));
@@ -494,7 +493,6 @@ export class ThemeBuilderComponent implements AfterViewInit {
     this.datepickerForm.valueChanges.subscribe(changes => this.checkChangesDatepicker(changes));
     this.datepickerButtonForm.valueChanges.subscribe(changes => this.checkChangesDatepickerButton(changes));
     this.modalForm.valueChanges.subscribe(changes => this.checkChangesModal(changes));
-    this.popupForm.valueChanges.subscribe(changes => this.checkChangesPopup(changes));
     this.linkForm.valueChanges.subscribe(changes => this.checkChangesLink(changes));
     this.tooltipForm.valueChanges.subscribe(changes => this.checkChangesTooltip(changes));
   }
@@ -522,7 +520,7 @@ export class ThemeBuilderComponent implements AfterViewInit {
       this.textareaView = true;
       this.datepickerView = true;
       this.modalView = true;
-      this.popupView = true;
+
       this.linkView = true;
       this.tooltipView = true;
       this.acordionView = true;
@@ -540,7 +538,7 @@ export class ThemeBuilderComponent implements AfterViewInit {
       this.textareaView = false;
       this.datepickerView = false;
       this.modalView = false;
-      this.popupView = false;
+
       this.linkView = false;
       this.tooltipView = false;
       this.acordionView = false;
@@ -872,15 +870,16 @@ export class ThemeBuilderComponent implements AfterViewInit {
       Object.keys(changes).forEach((fieldName: string) => {
         let value;
         if (typeof changes[fieldName] === 'number') {
-          value = `${changes[fieldName]}px`;
+          if (fieldName === 'opacityValue') {
+            value = `${changes[fieldName]}`;
+          } else {
+            value = `${changes[fieldName]}px`;
+          }
         } else {
           value = /color/i.test(fieldName) ? changes[fieldName] : `var(--${changes[fieldName]})`;
         }
         if (changes[fieldName]) {
-          this.modalComponent.modalContent.nativeElement.style.setProperty(
-            this.formPropertyDictModal[fieldName],
-            value
-          );
+          this.modalBuilder.nativeElement.style.setProperty(this.formPropertyDictModal[fieldName], value);
 
           this.resultModal['nativeElement'].innerHTML += `${this.formPropertyDictModal[fieldName]}: ${value};<br>`;
         }
@@ -889,30 +888,6 @@ export class ThemeBuilderComponent implements AfterViewInit {
       this.resultModal['nativeElement'].innerHTML += '}';
     } else {
       this.resultModal['nativeElement'].innerHTML = '';
-    }
-  }
-
-  private checkChangesPopup(changes: { [key: string]: string }): void {
-    if (!this.isEmpty(changes)) {
-      this.resultPopup['nativeElement'].innerHTML = 'po-popup po-item-list {<br>';
-
-      Object.keys(changes).forEach((fieldName: string) => {
-        let value;
-        if (typeof changes[fieldName] === 'number') {
-          value = `${changes[fieldName]}px`;
-        } else {
-          value = /color/i.test(fieldName) ? changes[fieldName] : `var(--${changes[fieldName]})`;
-        }
-        if (changes[fieldName]) {
-          this.popupComponent.popupRef.nativeElement.style.setProperty(this.formPropertyDictPopup[fieldName], value);
-
-          this.resultPopup['nativeElement'].innerHTML += `${this.formPropertyDictPopup[fieldName]}: ${value};<br>`;
-        }
-      });
-
-      this.resultPopup['nativeElement'].innerHTML += '}';
-    } else {
-      this.resultPopup['nativeElement'].innerHTML = '';
     }
   }
 
@@ -980,7 +955,6 @@ export class ThemeBuilderComponent implements AfterViewInit {
       !!this.resultSelect?.['nativeElement']?.innerHTML ||
       !!this.resultTextarea?.['nativeElement']?.innerHTML ||
       !!this.resultDatepicker?.['nativeElement']?.innerHTML ||
-      !!this.resultPopup?.['nativeElement']?.innerHTML ||
       !!this.resultDatepickerButton?.['nativeElement']?.innerHTML ||
       !!this.resultModal?.['nativeElement']?.innerHTML ||
       !!this.resultLink?.['nativeElement']?.innerHTML ||
@@ -1002,7 +976,6 @@ export class ThemeBuilderComponent implements AfterViewInit {
       !this.textareaView ||
       !this.datepickerView ||
       !this.modalView ||
-      !this.popupView ||
       !this.linkView ||
       !this.tooltipView ||
       !this.acordionView ||
@@ -1024,12 +997,7 @@ export class ThemeBuilderComponent implements AfterViewInit {
         this.textareaView &&
         this.datepickerView &&
         this.modalView) ||
-      (this.popupView &&
-        this.linkView &&
-        this.tooltipView &&
-        this.acordionView &&
-        this.calendarView &&
-        this.stepperView)
+      (this.linkView && this.tooltipView && this.acordionView && this.calendarView && this.stepperView)
     );
   }
 

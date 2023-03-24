@@ -654,35 +654,22 @@
       </po-accordion-item>
     </po-accordion>
 
-    <po-accordion *ngIf="modalView">
-      <po-accordion-item [class.hide]="!modalView" p-label="Modal">
-        <div class="container-space-between po-mb-1">
-          <label for="colorbackgroundModal" class="po-mr-2 po-ml-1">Cor do background:</label>
-          <input
-            type="color"
-            id="colorbackgroundModal"
-            class="style-inputColor"
-            [formControl]="modalForm.get('backgroundColor')"
-          />
-        </div>
-      </po-accordion-item>
-    </po-accordion>
-
-    <po-accordion *ngIf="popupView">
-      <po-accordion-item [class.hide]="!popupView" p-label="Popup">
-        <div class="container-space-between po-mb-1">
-          <label for="colorPopup" class="po-mr-2 po-ml-1">Cor do botão: </label>
-          <input type="color" id="colorPopup" class="style-inputColor" [formControl]="popupForm.get('color')" />
-        </div>
-      </po-accordion-item>
-    </po-accordion>
-
     <!-- link -->
     <po-accordion *ngIf="linkView">
       <po-accordion-item [class.hide]="!linkView" p-label="Link">
         <div class="container-space-between po-mb-1">
           <label for="colorLink" class="po-mr-2 po-ml-1">Cor: </label>
           <input type="color" id="colorLink" class="style-inputColor" [formControl]="linkForm.get('color')" />
+        </div>
+
+        <div class="container-space-between po-mb-1">
+          <label for="colorOutlineLink" class="po-mr-2 po-ml-1">Cor do outline: </label>
+          <input
+            type="color"
+            id="colorOutlineLink"
+            class="style-inputColor"
+            [formControl]="linkForm.get('colorOutline')"
+          />
         </div>
       </po-accordion-item>
     </po-accordion>
@@ -716,6 +703,72 @@
         </div>
       </po-accordion-item>
     </po-accordion>
+
+    <po-accordion *ngIf="modalView">
+      <po-accordion-item [class.hide]="!modalView" p-label="Modal">
+        <div class="container-space-between po-mb-1">
+          <label for="borderRadiusModal" class="po-mr-2 po-ml-1">Border radius: </label>
+          <input type="range" id="borderRadiusModal" min="1" max="32" [formControl]="modalForm.get('borderRadius')" />
+        </div>
+
+        <div class="container-space-between po-mb-1">
+          <label for="borderWidthModal" class="po-mr-2 po-ml-1">Espessura da borda: </label>
+          <input type="range" id="borderWidthModal" min="1" max="10" [formControl]="modalForm.get('borderWidth')" />
+        </div>
+
+        <div class="container-space-between po-mb-1">
+          <label for="overlayValueModal" class="po-mr-2 po-ml-1">Opacidade do overlay: </label>
+          <input
+            type="range"
+            id="overlayValueModal"
+            min="0"
+            max="1"
+            step="0.1"
+            [formControl]="modalForm.get('opacityValue')"
+          />
+        </div>
+
+        <div class="container-space-between po-mb-1">
+          <label for="colorModal" class="po-mr-2 po-ml-1">Cor do background: </label>
+          <input
+            type="color"
+            id="colorModal"
+            class="style-inputColor"
+            [formControl]="modalForm.get('backgroundColor')"
+          />
+        </div>
+
+        <div class="container-space-between po-mb-1">
+          <label for="borderColorModal" class="po-mr-2 po-ml-1">Cor da borda: </label>
+          <input
+            type="color"
+            id="borderColorModal"
+            class="style-inputColor"
+            [formControl]="modalForm.get('borderColor')"
+          />
+        </div>
+
+        <div class="container-space-between po-mb-1">
+          <label for="overlayColorModal" class="po-mr-2 po-ml-1">Cor do overlay: </label>
+          <input
+            type="color"
+            id="overlayColorModal"
+            class="style-inputColor"
+            [formControl]="modalForm.get('overlayColor')"
+          />
+        </div>
+
+        <div class="container-space-between po-mb-1">
+          <label for="separatorColorModal" class="po-mr-2 po-ml-1">Cor do separador: </label>
+          <input
+            type="color"
+            id="separatorColorModal"
+            class="style-inputColor"
+            [formControl]="modalForm.get('dividerColor')"
+          />
+        </div>
+      </po-accordion-item>
+    </po-accordion>
   </div>
 
   <po-widget
@@ -730,7 +783,6 @@
       !selectView &&
       !datepickerView &&
       !modalView &&
-      !popupView &&
       !linkView &&
       !tooltipView &&
       !textareaView
@@ -746,7 +798,6 @@
       !textareaView &&
       !datepickerView &&
       !modalView &&
-      !popupView &&
       !linkView &&
       !tooltipView &&
       !disclaimerView &&
@@ -768,7 +819,6 @@
         !selectView &&
         !datepickerView &&
         !modalView &&
-        !popupView &&
         !linkView &&
         !tooltipView &&
         !textareaView
@@ -866,21 +916,23 @@
       </po-button>
     </div>
 
-    <hr [class.hide]="!popupView" />
+    <!-- <hr [class.hide]="!popupView" />
 
     <div class="container-component">
-      <span #target class="po-clickable po-icon po-icon-help" (click)="popup.toggle()"> </span>
+    <span #target [class.hide]="!popupView"  class="po-clickable po-icon po-icon-help" (click)="popupBuilder.toggle()"> </span>
 
-      <po-popup #popup [p-actions]="[{ label: 'PO Popup' }]" p-position="left" [p-target]="target"> </po-popup>
-    </div>
+    <po-popup #popupBuilder [class.hide]="!popupView" [p-actions]="[{ label: 'PO Popup' }]" [p-target]="target"> </po-popup>
+    </div> -->
 
     <hr [class.hide]="!modalView" />
 
-    <div class="container-component">
-      <po-modal #modal p-title="PO Modal"> We are TOTVERS!!! </po-modal>
-
-      <po-button p-label="Open modal" (p-click)="modal.open()"> </po-button>
+    <div [class.hide]="!modalView" class="container-component">
+      <po-button p-label="Open modal" (p-click)="modalBuilder.open()"> </po-button>
     </div>
+
+    <po-modal #modalBuilder id="modal-theme" [p-click-out]="true" p-title="PO Modal">
+      Customize seu po-modal!!!</po-modal
+    >
 
     <po-divider
       [class.hide]="
@@ -981,7 +1033,6 @@
         ></pre>
         <pre [ngClass]="resultLink?.innerText.length ? '' : 'pre-none'" class="teste" #resultLink></pre>
         <pre [ngClass]="resultTooltip?.innerText.length ? '' : 'pre-none'" class="teste" #resultTooltip></pre>
-        <pre [ngClass]="resultPopup?.innerText.length ? '' : 'pre-none'" class="teste" #resultPopup></pre>
         <pre [ngClass]="resultModal?.innerText.length ? '' : 'pre-none'" class="teste" #resultModal></pre>
       </div>
     </div>
