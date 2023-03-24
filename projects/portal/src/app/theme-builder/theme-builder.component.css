@@ -114,8 +114,8 @@
   align-items: center;
   justify-content: center;
   position: relative;
-  padding-left: 1.5rem;
-  padding-right: 0.5rem;
+  padding-left: 0.75rem;
+  padding-right: 1rem;
   min-width: 75px;
 }
 
@@ -125,9 +125,8 @@
   font-weight: 900;
   font-size: 2em;
   font-family: PoIcon !important;
-  position: absolute;
-  left: 0;
-  top: 25%;
+  position: relative;
+  bottom: 2px;
 }
 
 .text-back {
@@ -218,7 +217,7 @@ po-disclaimer {
   overflow: scroll;
   overflow-x: hidden;
   overflow-y: scroll;
-  height: 90vh !important;
+  height: 200vh !important;
   padding-top: 6px;
 }
 

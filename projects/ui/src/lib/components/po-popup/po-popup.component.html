@@ -2,7 +2,7 @@
   <div *ngIf="!hideArrow" class="po-popup-arrow po-arrow-{{ arrowDirection }}"></div>
 
   <div class="po-popup-container">
-    <po-listbox #listbox p-type="action" [p-items]="actions" [p-param]="param" (p-close)="close()">
+    <po-listbox #listbox #poListBoxRef p-type="action" [p-items]="actions" [p-param]="param" (p-close)="close()">
       <div p-popup-header-template>
         <ng-content select="[p-popup-header-template]"></ng-content>
       </div>
