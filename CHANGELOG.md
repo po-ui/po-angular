@@ -2,6 +2,23 @@
 
 All notable changes to this project will be documented in this file. See [standard-version](https://github.com/conventional-changelog/standard-version) for commit guidelines.
 
+# [15.5.0](https://github.com/po-ui/po-angular/compare/v15.4.0...v15.5.0) (2023-03-27)
+
+
+### Bug Fixes
+
+* **table:** mantém ordenação em tabela sem altura ([a2ac572](https://github.com/po-ui/po-angular/commit/a2ac57230fe8b1298c07ffaf96be7b432e45f77d))
+
+
+### Features
+
+* **dropdown:** implementa definições do AnimaliaDS ([dafe217](https://github.com/po-ui/po-angular/commit/dafe217f882a0f281757fedeb2dfdde290f6df82))
+* **list-view:** adiciona evento no botão de mostrar detalhes ([30df1ea](https://github.com/po-ui/po-angular/commit/30df1ea78bc4f7d665f2926985428e007132bc1c))
+* **table:** reutiliza o componente `po-radio` ([81eef51](https://github.com/po-ui/po-angular/commit/81eef511b325235e9308f68e6aa2b127244d3bb6))
+* **theme-builder:** inclui componentes ([bd76205](https://github.com/po-ui/po-angular/commit/bd7620511abf375b6fdd06b468ca08d87620dea9))
+
+
+
 # [15.4.0](https://github.com/po-ui/po-angular/compare/v15.3.0...v15.4.0) (2023-03-20)
 
 
