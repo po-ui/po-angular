@@ -32,15 +32,20 @@ export class PoListBoxComponent extends PoListBoxBaseComponent implements AfterV
   }
 
   onSelectItem(itemListAction: PoItemListOption | PoItemListOptionGroup | any) {
+    const isDisabled =
+      itemListAction.hasOwnProperty('disabled') && itemListAction.disabled !== null
+        ? this.returnBooleanValue(itemListAction, 'disabled')
+        : false;
     const isVisible =
-      itemListAction.visible === undefined || itemListAction.visible === null || itemListAction.visible === true;
-    const actionNoDisabled = itemListAction && !this.returnBooleanValue(itemListAction, 'disabled') && isVisible;
+      itemListAction.hasOwnProperty('visible') && itemListAction.visible !== null
+        ? this.returnBooleanValue(itemListAction, 'visible')
+        : true;
 
-    if (itemListAction && itemListAction.action && actionNoDisabled) {
+    if (itemListAction && itemListAction.action && !isDisabled && isVisible) {
       itemListAction.action(this.param || itemListAction);
     }
 
-    if (itemListAction && itemListAction.url && actionNoDisabled) {
+    if (itemListAction && itemListAction.url && !isDisabled && isVisible) {
       return this.openUrl(itemListAction.url);
     }
   }

@@ -39,9 +39,7 @@ export class PoItemListBaseComponent {
    */
   @Input('p-visible')
   set visible(value: any) {
-    if (typeof value === 'function') {
-      this._visible = this.checkFunctionVisible(value());
-    } else if (value === true || value === null || value === undefined) {
+    if (value === true || value === null || value === undefined) {
       this._visible = true;
     } else {
       this._visible = false;
@@ -73,9 +71,7 @@ export class PoItemListBaseComponent {
    */
   @Input('p-disabled')
   set disabled(value: any) {
-    if (typeof value === 'function') {
-      this._disabled = this.checkFunctionDisabled(value());
-    } else if (value === false || value === null || value === undefined) {
+    if (value === false || value === null || value === undefined) {
       this._disabled = false;
     } else {
       this._disabled = true;
@@ -136,18 +132,4 @@ export class PoItemListBaseComponent {
   @Output('p-select-item') selectItem = new EventEmitter<PoItemListOption | PoItemListOptionGroup | any>();
 
   constructor() {}
-
-  private checkFunctionVisible(value: any) {
-    if (value === null || value === undefined || value === true) {
-      return true;
-    }
-    return false;
-  }
-
-  private checkFunctionDisabled(value: any) {
-    if (value === null || value === undefined || value === false) {
-      return false;
-    }
-    return true;
-  }
 }

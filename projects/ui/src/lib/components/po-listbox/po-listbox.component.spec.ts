@@ -99,6 +99,28 @@ describe('PoListBoxComponent', () => {
           expect(component['openUrl']).not.toHaveBeenCalled();
         });
 
+        it('should`n called action if disabled is a function that returns true', () => {
+          const fnTrue = () => true;
+          const item = { label: 'a', action: () => {}, value: 'a', disabled: fnTrue };
+          spyOn(component, <any>'openUrl');
+          spyOn<any>(item, 'action');
+
+          component.onSelectItem(item);
+
+          expect(item.action).not.toHaveBeenCalled();
+          expect(component['openUrl']).not.toHaveBeenCalled();
+        });
+
+        it('should called action if disabled is a function that returns false', () => {
+          const fnFalse = () => false;
+          const item = { label: 'a', action: () => {}, value: 'a', disabled: fnFalse };
+          spyOn<any>(item, 'action');
+
+          component.onSelectItem(item);
+
+          expect(item.action).toHaveBeenCalled();
+        });
+
         it('should be called with action', () => {
           const item = { label: 'a', action: () => {}, value: 'a' };
           spyOn(component, <any>'openUrl');
@@ -128,6 +150,28 @@ describe('PoListBoxComponent', () => {
           component.onSelectItem(item);
 
           expect(component['openUrl']).not.toHaveBeenCalledWith(url);
+        });
+
+        it('should`n called openUrl if visible is a function that returns false ', () => {
+          const fnFalse = () => false;
+          const item = { label: 'a', url: 'http://fakeurl.com', value: 'a', visible: fnFalse };
+          const url = 'http://fakeurl.com';
+          spyOn(component, <any>'openUrl');
+
+          component.onSelectItem(item);
+
+          expect(component['openUrl']).not.toHaveBeenCalledWith(url);
+        });
+
+        it('should called openUrl if visible is a function that return true and not disabled', () => {
+          const fnTrue = () => true;
+          const item = { label: 'a', url: 'http://fakeurl.com', value: 'a', visible: fnTrue };
+          const url = 'http://fakeurl.com';
+          spyOn(component, <any>'openUrl');
+
+          component.onSelectItem(item);
+
+          expect(component['openUrl']).toHaveBeenCalledWith(url);
         });
 
         it('should`n called openUrl if visible is true and not disabled', () => {
