@@ -7,7 +7,8 @@ import {
   HostListener,
   Input,
   Output,
-  ViewChild
+  ViewChild,
+  TemplateRef
 } from '@angular/core';
 
 import { PoMultiselectLiterals } from '../../index';
@@ -54,6 +55,8 @@ export class PoMultiselectDropdownComponent {
   @Input('p-field-value') fieldValue: string;
 
   @Input('p-field-label') fieldLabel: string;
+
+  @Input('p-multiselect-template') multiselectTemplate: TemplateRef<any> | any;
 
   /** Evento disparado a cada tecla digitada na pesquisa. */
   @Output('p-change-search') changeSearch = new EventEmitter();

@@ -108,6 +108,7 @@
         ],
         "@typescript-eslint/semi": ["off", null],
         "@typescript-eslint/type-annotation-spacing": "off",
+        "jsdoc/newline-after-description": "off",
         "arrow-parens": ["off", "always"],
         "brace-style": ["off", "off"],
         "default-case-last": "error",

@@ -26,6 +26,7 @@ export * from './po-lookup/interfaces/po-lookup-literals.interface';
 export * from './po-lookup/interfaces/po-lookup-response-api.interface';
 export * from './po-lookup/po-lookup-modal/po-lookup-modal.component';
 export * from './po-lookup/po-lookup.component';
+export * from './po-multiselect/po-multiselect-option-template/po-multiselect-option-template.directive';
 export * from './po-multiselect/po-multiselect-filter-mode.enum';
 export * from './po-multiselect/po-multiselect-literals.interface';
 export * from './po-multiselect/po-multiselect-option.interface';

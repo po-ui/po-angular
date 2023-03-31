@@ -25,6 +25,7 @@ import { PoListBoxModule } from '../po-listbox/po-listbox.module';
 
 import { PoComboComponent } from './po-combo/po-combo.component';
 import { PoComboOptionTemplateDirective } from './po-combo/po-combo-option-template/po-combo-option-template.directive';
+import { PoMultiselectOptionTemplateDirective } from './po-multiselect/po-multiselect-option-template/po-multiselect-option-template.directive';
 import { PoDatepickerComponent } from './po-datepicker/po-datepicker.component';
 import { PoDatepickerRangeComponent } from './po-datepicker-range/po-datepicker-range.component';
 import { PoDecimalComponent } from './po-decimal/po-decimal.component';
@@ -104,6 +105,7 @@ import { PoLabelModule } from '../po-label';
     PoDatepickerModule,
     PoComboComponent,
     PoComboOptionTemplateDirective,
+    PoMultiselectOptionTemplateDirective,
     PoDecimalComponent,
     PoDatepickerRangeComponent,
     PoEmailComponent,
@@ -128,6 +130,7 @@ import { PoLabelModule } from '../po-label';
   declarations: [
     PoComboComponent,
     PoComboOptionTemplateDirective,
+    PoMultiselectOptionTemplateDirective,
     PoDecimalComponent,
     PoDatepickerRangeComponent,
     PoEmailComponent,
