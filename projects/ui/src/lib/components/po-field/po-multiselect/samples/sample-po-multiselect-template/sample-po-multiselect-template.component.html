@@ -1,0 +1,42 @@
+<div class="po-row">
+  <po-select class="po-md-5" name="employee" p-label="Employee" [p-options]="employees" [(ngModel)]="employee">
+  </po-select>
+
+  <po-select
+    class="po-md-6"
+    name="typeOfAccess"
+    p-label="Type of access"
+    [p-options]="typeAccessValue"
+    [(ngModel)]="typeAccess"
+  >
+  </po-select>
+
+  <div class="po-md-1 containerButton">
+    <po-button p-label="Alterar acesso" [p-disabled]="!employee || !typeAccess" (p-click)="changeAccess()"> </po-button>
+  </div>
+
+  <po-multiselect
+    class="po-md-12"
+    name="multiselect"
+    p-label="PO Multiselect"
+    [p-options]="options"
+    [p-hide-select-all]="true"
+  >
+    <ng-template p-multiselect-option-template let-option>
+      <div class="po-row">
+        <div class="po-md-2 containerFlex">
+          <div class="po-font-text-large-bold">{{ option.label }}</div>
+        </div>
+
+        <div class="po-md-10">
+          <div class="containerFlexTag">
+            <po-tag *ngIf="option.admin" p-value="Admin" p-type="success" [p-icon]="true"> </po-tag>
+            <po-tag *ngIf="option.access" p-value="Normal" p-type="info" [p-icon]="true"> </po-tag>
+            <po-tag *ngIf="!option.admin && !option.access" p-value="Sem acesso" p-type="danger" [p-icon]="true">
+            </po-tag>
+          </div>
+        </div>
+      </div>
+    </ng-template>
+  </po-multiselect>
+</div>
