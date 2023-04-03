@@ -357,7 +357,10 @@ export class PoComboComponent extends PoComboBaseComponent implements AfterViewI
   }
 
   controlApplyFilter(value) {
-    if (!this.isProcessingValueByTab && (!this.selectedOption || value !== this.selectedOption[this.dynamicLabel])) {
+    if (
+      (!this.isProcessingValueByTab && (!this.selectedOption || value !== this.selectedOption[this.dynamicLabel])) ||
+      !this.cache
+    ) {
       this.defaultService.hasNext = true;
       this.page = this.setPage();
       this.options = [];
@@ -636,6 +639,14 @@ export class PoComboComponent extends PoComboBaseComponent implements AfterViewI
     if (scrollPosition >= target.scrollHeight * (this.infiniteScrollDistance / 110)) {
       this.page++;
       this.applyFilter('', true);
+    }
+  }
+
+  checkTemplate() {
+    if (this.cache || this.infiniteScroll) {
+      return this.visibleOptions.length;
+    } else {
+      return !this.isServerSearching && this.visibleOptions.length;
     }
   }
 

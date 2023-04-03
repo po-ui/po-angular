@@ -122,6 +122,14 @@ describe('PoComboComponent:', () => {
     expect(component.applyFilter).not.toHaveBeenCalled();
   });
 
+  it('should call apply filter when cache is false', () => {
+    component.isProcessingValueByTab = true;
+    component.cache = false;
+    spyOn(component, 'applyFilter');
+    component.controlApplyFilter('valor');
+    expect(component.applyFilter).toHaveBeenCalled();
+  });
+
   it('should apply filter and call searchForLabel', () => {
     const fakeService: any = getFakeService(null);
     component.service = fakeService;
@@ -1807,6 +1815,42 @@ describe('PoComboComponent:', () => {
 
       expect(component.visibleOptions).toEqual(optionFound);
       expect(fixture.debugElement.query(By.css('.po-combo-container-no-data'))).toBeNull();
+    });
+
+    it('checkTemplate: should return truthy if visibleOptions has items', () => {
+      component.visibleOptions = [{ label: '1', value: '1' }];
+
+      expect(component.checkTemplate()).toBeTruthy();
+    });
+
+    it('checkTemplate: should return false if visibleOptions is empty', () => {
+      component.visibleOptions = [];
+
+      expect(component.checkTemplate()).toBeFalsy();
+    });
+
+    it('checkTemplate: should return false if cache is false and isServerSearching is true', () => {
+      component.cache = false;
+      component.isServerSearching = true;
+      component.visibleOptions = [{ label: '1', value: '1' }];
+
+      expect(component.checkTemplate()).toBeFalsy();
+    });
+
+    it('checkTemplate: should return truthy if cache is false and isServerSearching is false', () => {
+      component.cache = false;
+      component.isServerSearching = false;
+      component.visibleOptions = [{ label: '1', value: '1' }];
+
+      expect(component.checkTemplate()).toBeTruthy();
+    });
+
+    it('checkTemplate: should return falsy if cache is false and isServerSearching is false but visibleOptions is empty', () => {
+      component.cache = false;
+      component.isServerSearching = false;
+      component.visibleOptions = [];
+
+      expect(component.checkTemplate()).toBeFalsy();
     });
   });
 });
