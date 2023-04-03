@@ -50,7 +50,7 @@
   </div>
 
   <div #containerElement class="po-combo-container" [hidden]="!comboOpen && !isServerSearching">
-    <ng-container *ngIf="visibleOptions.length; then visibleOptionsTemplate; else noDataTemplate"> </ng-container>
+    <ng-container *ngIf="checkTemplate(); then visibleOptionsTemplate; else noDataTemplate"> </ng-container>
     <div *ngIf="isServerSearching">
       <ng-container *ngIf="infiniteLoading; then infiniteLoadingTemplate; else normalLoadingTemplate"></ng-container>
     </div>

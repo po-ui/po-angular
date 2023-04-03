@@ -591,6 +591,19 @@ export abstract class PoComboBaseComponent implements ControlValueAccessor, OnIn
     return this._literals || poComboLiteralsDefault[this.language];
   }
 
+  /**
+   * @optional
+   *
+   * @description
+   *
+   * Define se o componente irá guardar o valor do model para evitar requisições repetidas.
+   *
+   * > Caso o valor seja `false`, o componente fará uma nova requisição mesmo que o valor procurado seja o mesmo do model.
+   *
+   * @default `true`
+   */
+  @Input('p-cache') @InputBoolean() cache?: boolean = true;
+
   constructor(languageService: PoLanguageService) {
     this.language = languageService.getShortLanguage();
   }
