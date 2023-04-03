@@ -2,6 +2,15 @@
 
 All notable changes to this project will be documented in this file. See [standard-version](https://github.com/conventional-changelog/standard-version) for commit guidelines.
 
+## [15.5.1](https://github.com/po-ui/po-angular/compare/v15.5.0...v15.5.1) (2023-04-03)
+
+
+### Bug Fixes
+
+* **popup:** corrige emissão de evento ([2b758d0](https://github.com/po-ui/po-angular/commit/2b758d0b44084f0d134110291dccc023fce5fdd8))
+
+
+
 # [15.5.0](https://github.com/po-ui/po-angular/compare/v15.4.0...v15.5.0) (2023-03-27)
 
 
