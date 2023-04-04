@@ -13,7 +13,8 @@ import {
   PoDatepickerComponent,
   PoLinkComponent,
   PoModalComponent,
-  PoPopupComponent
+  PoPopupComponent,
+  PoCheckboxComponent
 } from '@po-ui/ng-components';
 
 @Component({
@@ -42,6 +43,7 @@ export class ThemeBuilderComponent implements AfterViewInit {
   @ViewChild('tooltip') tooltip: PoButtonComponent;
   @ViewChild('dropdown') dropdownComponent: PoDropdownComponent;
   @ViewChild('popupBuilder') popupBuilder: PoPopupComponent;
+  @ViewChild('checkboxBuilder') checkboxBuilder: PoCheckboxComponent;
   @ViewChild('resultButtonD') resultButtonD: HTMLElement;
   @ViewChild('resultButtonP') resultButtonP: HTMLElement;
   @ViewChild('resultButtonL') resultButtonL: HTMLElement;
@@ -59,6 +61,7 @@ export class ThemeBuilderComponent implements AfterViewInit {
   @ViewChild('resultDropdown') resultDropdown: HTMLElement;
   @ViewChild('resultPopup') resultPopup: HTMLElement;
   @ViewChild('resultPopupContainer') resultPopupContainer: HTMLElement;
+  @ViewChild('resultCheckbox') resultCheckbox: HTMLElement;
 
   botaoDefaultView = true;
   botaoPrimaryView = true;
@@ -75,6 +78,7 @@ export class ThemeBuilderComponent implements AfterViewInit {
   tooltipView = true;
   dropdownView = true;
   popupView = true;
+  checkboxView = true;
   acordionView = true;
   calendarView = true;
   stepperView = true;
@@ -136,14 +140,6 @@ export class ThemeBuilderComponent implements AfterViewInit {
     colorDois: [null]
   });
 
-  // Radio
-  radioForm = this.formBuilder.group({
-    color: [null],
-    backgroundColor: [null],
-    colorHover: [null],
-    borderColor: [null]
-  });
-
   // disclaimer
   disclaimerForm = this.formBuilder.group({
     color: [null],
@@ -197,6 +193,7 @@ export class ThemeBuilderComponent implements AfterViewInit {
     backgroundColor: [null],
     backgroundColorHover: [null]
   });
+
   //button do datepicker
   datepickerButtonForm = this.formBuilder.group({
     padding: [null],
@@ -230,6 +227,7 @@ export class ThemeBuilderComponent implements AfterViewInit {
     textColor: [null]
   });
 
+  //dropdown
   dropdownForm = this.formBuilder.group({
     fontSize: [null],
     borderRadius: [null],
@@ -250,6 +248,22 @@ export class ThemeBuilderComponent implements AfterViewInit {
   //popup container
   popupContainerForm = this.formBuilder.group({
     colorBackground: [null]
+  });
+
+  // Radio
+  radioForm = this.formBuilder.group({
+    color: [null],
+    backgroundColor: [null],
+    colorHover: [null],
+    borderColor: [null]
+  });
+
+  //checkbox
+  checkboxForm = this.formBuilder.group({
+    color: [null],
+    backgroundColor: [null],
+    colorHover: [null],
+    borderColor: [null]
   });
 
   private readonly formPropertyP = {
@@ -296,13 +310,6 @@ export class ThemeBuilderComponent implements AfterViewInit {
     color: '--track-checked',
     colorDois: '--track-unchecked',
     colorIcon: '--color-unchecked',
-    borderColor: '--border-color'
-  };
-
-  private readonly formPropertyDictRadio = {
-    color: '--color-checked',
-    backgroundColor: '--color-unchecked',
-    colorHover: '--shadow-color-hover',
     borderColor: '--border-color'
   };
 
@@ -402,6 +409,20 @@ export class ThemeBuilderComponent implements AfterViewInit {
 
   private readonly formPropertyDictPopupContainer = {
     colorBackground: '--background'
+  };
+
+  private readonly formPropertyDictRadio = {
+    color: '--color-checked',
+    backgroundColor: '--color-unchecked',
+    colorHover: '--shadow-color-hover',
+    borderColor: '--border-color'
+  };
+
+  private readonly formPropertyDictCheckbox = {
+    color: '--color-checked',
+    backgroundColor: '--color-unchecked',
+    colorHover: '--shadow-color-hover',
+    borderColor: '--border-color'
   };
 
   constructor(private formBuilder: FormBuilder, private renderer: Renderer2) {}
@@ -510,10 +531,13 @@ export class ThemeBuilderComponent implements AfterViewInit {
       this.linkComponent.linkEl.nativeElement.style.setProperty(this.formPropertyDictLink[fieldName], null);
     });
 
-    this.tooltipForm.reset();
-    Object.keys(this.formPropertyDictTooltip).forEach((fieldName: string) => {
-      this.tooltip.buttonElement.nativeElement.style.setProperty(this.formPropertyDictTooltip[fieldName], null);
-    });
+    const tooltipElement = this.renderer.selectRootElement('.po-tooltip', true);
+    if (tooltipElement) {
+      this.tooltipForm.reset();
+      Object.keys(this.formPropertyDictTooltip).forEach((fieldName: string) => {
+        tooltipElement.style.setProperty(this.formPropertyDictTooltip[fieldName], null);
+      });
+    }
 
     this.popupForm.reset();
     Object.keys(this.formPropertyDictModal).forEach((fieldName: string) => {
@@ -528,6 +552,17 @@ export class ThemeBuilderComponent implements AfterViewInit {
       if (this?.popupBuilder?.listbox?.nativeElement?.listbox) {
         this.popupBuilder.listbox.nativeElement.listbox.nativeElement.style.setProperty(
           this.formPropertyDictModal[fieldName],
+          null
+        );
+      }
+    });
+
+    this.checkboxForm.reset();
+    Object.keys(this.formPropertyDictCheckbox).forEach((fieldName: string) => {
+      document.getElementById('myCheckbox').style.setProperty(this.formPropertyDictCheckbox[fieldName], null);
+      if (this.checkboxBuilder?.checkboxLabel?.nativeElement) {
+        this.checkboxBuilder.checkboxLabel.nativeElement.style.setProperty(
+          this.formPropertyDictCheckbox[fieldName],
           null
         );
       }
@@ -573,6 +608,7 @@ export class ThemeBuilderComponent implements AfterViewInit {
     this.tooltipForm.valueChanges.subscribe(changes => this.checkChangesTooltip(changes));
     this.popupForm.valueChanges.subscribe(changes => this.checkChangesPopup(changes));
     this.popupContainerForm.valueChanges.subscribe(changes => this.checkChangesPopupContainer(changes));
+    this.checkboxForm.valueChanges.subscribe(changes => this.checkChangesCheckbox(changes));
   }
 
   switchIndividual() {
@@ -602,6 +638,7 @@ export class ThemeBuilderComponent implements AfterViewInit {
       this.linkView = true;
       this.tooltipView = true;
       this.popupView = true;
+      this.checkboxView = true;
       this.acordionView = true;
       this.calendarView = true;
       this.stepperView = true;
@@ -621,6 +658,7 @@ export class ThemeBuilderComponent implements AfterViewInit {
       this.linkView = false;
       this.tooltipView = false;
       this.popupView = false;
+      this.checkboxView = false;
       this.acordionView = false;
       this.calendarView = false;
       this.stepperView = false;
@@ -1082,6 +1120,29 @@ export class ThemeBuilderComponent implements AfterViewInit {
     }
   }
 
+  private checkChangesCheckbox(changes: { [key: string]: string }): void {
+    if (!this.isEmpty(changes)) {
+      this.resultCheckbox['nativeElement'].innerHTML = 'po-checkbox {<br>';
+
+      this.checkDiffCheckbox(changes);
+
+      this.resultCheckbox['nativeElement'].innerHTML += '}';
+    } else {
+      this.resultCheckbox['nativeElement'].innerHTML = '';
+    }
+  }
+
+  private checkDiffCheckbox(changes: any): void {
+    Object.keys(changes).forEach((fieldName: string) => {
+      const value = /color/i.test(fieldName) ? changes[fieldName] : `var(--${changes[fieldName]})`;
+
+      if (changes[fieldName]) {
+        document.getElementById('myCheckbox').style.setProperty(this.formPropertyDictCheckbox[fieldName], value);
+        this.resultCheckbox['nativeElement'].innerHTML += `${this.formPropertyDictCheckbox[fieldName]}: ${value};<br>`;
+      }
+    });
+  }
+
   private checkChangesPopupContainer(changes: { [key: string]: string }): void {
     this.popupBuilder.open();
 
@@ -1131,6 +1192,7 @@ export class ThemeBuilderComponent implements AfterViewInit {
       !!this.resultTooltip?.['nativeElement']?.innerHTML ||
       !!this.resultPopup?.['nativeElement']?.innerHTML ||
       !!this.resultPopupContainer?.['nativeElement']?.innerHTML ||
+      !!this.resultCheckbox?.['nativeElement']?.innerHTML ||
       !!this.resultInput?.['nativeElement']?.innerHTML
     );
   }
@@ -1152,6 +1214,7 @@ export class ThemeBuilderComponent implements AfterViewInit {
       !this.linkView ||
       !this.tooltipView ||
       !this.popupView ||
+      !this.checkboxView ||
       !this.acordionView ||
       !this.calendarView ||
       !this.stepperView
@@ -1174,6 +1237,7 @@ export class ThemeBuilderComponent implements AfterViewInit {
         this.tooltipView &&
         this.dropdownView &&
         this.popupView &&
+        this.checkboxView &&
         this.modalView) ||
       (this.linkView && this.tooltipView && this.acordionView && this.calendarView && this.stepperView)
     );
