@@ -58,7 +58,14 @@
       !disclaimerView &&
       !inputView &&
       !selectView &&
-      !textareaView
+      !textareaView &&
+      !dropdownView &&
+      !datepickerView &&
+      !modalView &&
+      !popupView &&
+      !checkboxView &&
+      !linkView &&
+      !tooltipView
     "
     class="po-lg-3 po-mb-1 po-pb-2 po-pl-2 container-overflow"
   >
@@ -258,40 +265,6 @@
             class="style-inputColor"
             [formControl]="switchForm.get('borderColor')"
           />
-        </div>
-      </po-accordion-item>
-    </po-accordion>
-
-    <po-accordion *ngIf="radioView">
-      <po-accordion-item [class.hide]="!radioView" p-label="Radio">
-        <div class="container-space-between po-mb-1">
-          <label for="backgroundColorRadio" class="po-mr-2 po-ml-1">Cor Principal: </label>
-          <input
-            type="color"
-            id="backgroundColorRadio"
-            class="style-inputColor"
-            [formControl]="radioForm.get('color')"
-          />
-        </div>
-
-        <div class="container-space-between po-mb-1">
-          <label for="backgroundHoverRadio" class="po-mr-2 po-ml-1">Cor do background: </label>
-          <input
-            type="color"
-            id="backgroundHoverRadio"
-            class="style-inputColor"
-            [formControl]="radioForm.get('backgroundColor')"
-          />
-        </div>
-
-        <div class="container-space-between po-mb-1">
-          <label for="shadowRadio" class="po-mr-2 po-ml-1">Cor da sombra: </label>
-          <input type="color" id="shadowRadio" class="style-inputColor" [formControl]="radioForm.get('colorHover')" />
-        </div>
-
-        <div class="container-space-between po-mb-1">
-          <label for="shadowRadio" class="po-mr-2 po-ml-1">Cor da borda: </label>
-          <input type="color" id="shadowRadio" class="style-inputColor" [formControl]="radioForm.get('borderColor')" />
         </div>
       </po-accordion-item>
     </po-accordion>
@@ -715,7 +688,6 @@
       </po-accordion-item>
     </po-accordion>
 
-    <!-- link -->
     <po-accordion *ngIf="linkView">
       <po-accordion-item [class.hide]="!linkView" p-label="Link">
         <div class="container-space-between po-mb-1">
@@ -879,6 +851,84 @@
         </div>
       </po-accordion-item>
     </po-accordion>
+
+    <po-accordion *ngIf="radioView">
+      <po-accordion-item [class.hide]="!radioView" p-label="Radio">
+        <div class="container-space-between po-mb-1">
+          <label for="backgroundColorRadio" class="po-mr-2 po-ml-1">Cor Principal: </label>
+          <input
+            type="color"
+            id="backgroundColorRadio"
+            class="style-inputColor"
+            [formControl]="radioForm.get('color')"
+          />
+        </div>
+
+        <div class="container-space-between po-mb-1">
+          <label for="backgroundHoverRadio" class="po-mr-2 po-ml-1">Cor do background: </label>
+          <input
+            type="color"
+            id="backgroundHoverRadio"
+            class="style-inputColor"
+            [formControl]="radioForm.get('backgroundColor')"
+          />
+        </div>
+
+        <div class="container-space-between po-mb-1">
+          <label for="shadowRadio" class="po-mr-2 po-ml-1">Cor da sombra: </label>
+          <input type="color" id="shadowRadio" class="style-inputColor" [formControl]="radioForm.get('colorHover')" />
+        </div>
+
+        <div class="container-space-between po-mb-1">
+          <label for="shadowRadio" class="po-mr-2 po-ml-1">Cor da borda: </label>
+          <input type="color" id="shadowRadio" class="style-inputColor" [formControl]="radioForm.get('borderColor')" />
+        </div>
+      </po-accordion-item>
+    </po-accordion>
+
+    <po-accordion *ngIf="checkboxView">
+      <po-accordion-item [class.hide]="!checkboxView" p-label="Checkbox">
+        <div class="container-space-between po-mb-1">
+          <label for="backgroundColorCheckbox" class="po-mr-2 po-ml-1">Cor Principal: </label>
+          <input
+            type="color"
+            id="backgroundColorCheckbox"
+            class="style-inputColor"
+            [formControl]="checkboxForm.get('color')"
+          />
+        </div>
+
+        <div class="container-space-between po-mb-1">
+          <label for="backgroundHoverCheckbox" class="po-mr-2 po-ml-1">Cor do background: </label>
+          <input
+            type="color"
+            id="backgroundHoverCheckbox"
+            class="style-inputColor"
+            [formControl]="checkboxForm.get('backgroundColor')"
+          />
+        </div>
+
+        <div class="container-space-between po-mb-1">
+          <label for="shadowCheckbox" class="po-mr-2 po-ml-1">Cor da sombra: </label>
+          <input
+            type="color"
+            id="shadowCheckbox"
+            class="style-inputColor"
+            [formControl]="checkboxForm.get('colorHover')"
+          />
+        </div>
+
+        <div class="container-space-between po-mb-1">
+          <label for="shadowCheckbox" class="po-mr-2 po-ml-1">Cor da borda: </label>
+          <input
+            type="color"
+            id="shadowCheckbox"
+            class="style-inputColor"
+            [formControl]="checkboxForm.get('borderColor')"
+          />
+        </div>
+      </po-accordion-item>
+    </po-accordion>
   </div>
 
   <po-widget
@@ -896,6 +946,8 @@
       !modalView &&
       !linkView &&
       !popupView &&
+      !checkboxView &&
+      !dropdownView &&
       !tooltipView
     "
     class="po-lg-9 po-p-2"
@@ -913,6 +965,8 @@
       !linkView &&
       !tooltipView &&
       !popupView &&
+      !checkboxView &&
+      !dropdownView &&
       !acordionView &&
       !calendarView &&
       !stepperView &&
@@ -932,6 +986,8 @@
         !linkView &&
         !tooltipView &&
         !popupView &&
+        !checkboxView &&
+        !dropdownView &&
         !inputView &&
         !selectView &&
         !textareaView
@@ -1060,6 +1116,14 @@
       <po-popup #popupBuilder [p-actions]="[{ label: 'PO Popup' }]" [p-target]="target"> </po-popup>
     </div>
 
+    <hr [class.hide]="!checkboxView" />
+
+    <div class="container-component">
+      <form>
+        <po-checkbox id="myCheckbox" [class.hide]="!checkboxView" name="checkbox" p-label="PO Checkbox"> </po-checkbox>
+      </form>
+    </div>
+
     <po-divider
       [class.hide]="
         (!textareaView ||
@@ -1075,6 +1139,7 @@
           !linkView ||
           !tooltipView ||
           !popupView ||
+          !checkboxView ||
           !botaoLinkView) &&
         !acordionView &&
         !calendarView &&
@@ -1121,6 +1186,7 @@
         !selectView &&
         !textareaView &&
         !popupView &&
+        !checkboxView &&
         !dropdownView &&
         !datepickerView &&
         !modalView) ||
@@ -1171,6 +1237,7 @@
           class="teste"
           #resultPopupContainer
         ></pre>
+        <pre [ngClass]="resultCheckbox?.innerText.length ? '' : 'pre-none'" class="teste" #resultCheckbox></pre>
       </div>
     </div>
 
@@ -1254,9 +1321,9 @@
         class="po-sm-6"
         p-label-off="Escondido"
         p-label-on="Visível"
-        p-label="Textarea"
-        name="Textarea"
-        [(ngModel)]="textareaView"
+        p-label="Dropdown"
+        name="Dropdown"
+        [(ngModel)]="dropdownView"
         (p-change)="switchIndividual()"
       ></po-switch>
 
@@ -1264,9 +1331,9 @@
         class="po-sm-6"
         p-label-off="Escondido"
         p-label-on="Visível"
-        p-label="Dropdown"
-        name="Dropdown"
-        [(ngModel)]="dropdownView"
+        p-label="Textarea"
+        name="Textarea"
+        [(ngModel)]="textareaView"
         (p-change)="switchIndividual()"
       ></po-switch>
 
@@ -1297,6 +1364,16 @@
         p-label="Popup"
         name="Popup"
         [(ngModel)]="popupView"
+        (p-change)="switchIndividual()"
+      ></po-switch>
+
+      <po-switch
+        class="po-sm-6"
+        p-label-off="Escondido"
+        p-label-on="Visível"
+        p-label="Checkbox"
+        name="Checkbox"
+        [(ngModel)]="checkboxView"
         (p-change)="switchIndividual()"
       ></po-switch>
 
