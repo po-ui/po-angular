@@ -18,14 +18,14 @@
   </div>
 
   <div class="po-list-view-main-content">
-    <div class="po-list-view" *ngIf="!hasItems()">
+    <po-container [p-no-padding]="true" *ngIf="!hasItems()">
       <div class="po-list-view-container-no-data po-text-center">
         <span> {{ literals.noData }} </span>
       </div>
-    </div>
+    </po-container>
 
     <ng-container *ngFor="let item of items; let index = index; trackBy: trackBy">
-      <div class="po-list-view">
+      <po-container [p-no-padding]="true">
         <div class="po-list-view-container">
           <div class="po-list-view-header">
             <div class="po-list-view-title" [ngSwitch]="checkTitleType(item)">
@@ -113,7 +113,7 @@
             {{ item.$showDetail ? literals.hideDetails : literals.showDetails }}
           </span>
         </div>
-      </div>
+      </po-container>
     </ng-container>
   </div>
 </div>
