@@ -10,6 +10,7 @@ import { PoCheckboxModule } from './../po-field/po-checkbox/po-checkbox.module';
 import { PoListViewComponent } from './po-list-view.component';
 import { PoListViewContentTemplateDirective } from './po-list-view-content-template/po-list-view-content-template.directive';
 import { PoListViewDetailTemplateDirective } from './po-list-view-detail-template/po-list-view-detail-template.directive';
+import { PoContainerModule } from '../po-container/po-container.module';
 
 /**
  * @description
@@ -43,7 +44,15 @@ import { PoListViewDetailTemplateDirective } from './po-list-view-detail-templat
  * ```
  */
 @NgModule({
-  imports: [CommonModule, FormsModule, RouterModule, PoButtonModule, PoPopupModule, PoCheckboxModule],
+  imports: [
+    CommonModule,
+    FormsModule,
+    RouterModule,
+    PoButtonModule,
+    PoPopupModule,
+    PoCheckboxModule,
+    PoContainerModule
+  ],
   declarations: [PoListViewComponent, PoListViewContentTemplateDirective, PoListViewDetailTemplateDirective],
   exports: [PoListViewComponent, PoListViewContentTemplateDirective, PoListViewDetailTemplateDirective],
   providers: [],
