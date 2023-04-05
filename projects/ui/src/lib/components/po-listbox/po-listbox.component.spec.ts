@@ -121,6 +121,16 @@ describe('PoListBoxComponent', () => {
           expect(item.action).toHaveBeenCalled();
         });
 
+        it('should called action if disabled is a function that returns false and visible is undefined', () => {
+          const fnFalse = () => false;
+          const item = { label: 'a', action: () => {}, value: 'a', disabled: fnFalse, visible: undefined };
+          spyOn<any>(item, 'action');
+
+          component.onSelectItem(item);
+
+          expect(item.action).toHaveBeenCalled();
+        });
+
         it('should be called with action', () => {
           const item = { label: 'a', action: () => {}, value: 'a' };
           spyOn(component, <any>'openUrl');
@@ -166,6 +176,17 @@ describe('PoListBoxComponent', () => {
         it('should called openUrl if visible is a function that return true and not disabled', () => {
           const fnTrue = () => true;
           const item = { label: 'a', url: 'http://fakeurl.com', value: 'a', visible: fnTrue };
+          const url = 'http://fakeurl.com';
+          spyOn(component, <any>'openUrl');
+
+          component.onSelectItem(item);
+
+          expect(component['openUrl']).toHaveBeenCalledWith(url);
+        });
+
+        it('should called openUrl if visible is a function that return true and disable is undefined', () => {
+          const fnTrue = () => true;
+          const item = { label: 'a', url: 'http://fakeurl.com', value: 'a', visible: fnTrue, disable: undefined };
           const url = 'http://fakeurl.com';
           spyOn(component, <any>'openUrl');
 
