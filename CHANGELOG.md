@@ -2,6 +2,23 @@
 
 All notable changes to this project will be documented in this file. See [standard-version](https://github.com/conventional-changelog/standard-version) for commit guidelines.
 
+# [15.6.0](https://github.com/po-ui/po-angular/compare/v15.5.1...v15.6.0) (2023-04-06)
+
+
+### Bug Fixes
+
+* **popup:** corrige emissão de evento quando os valores não são definidos ([2236e26](https://github.com/po-ui/po-angular/commit/2236e267098feb4b931893b09b81b3f11257f03f)), closes [#1677](https://github.com/po-ui/po-angular/issues/1677)
+
+
+### Features
+
+* **checkbox:** implementa definições do AnimaliaDS ([9e944db](https://github.com/po-ui/po-angular/commit/9e944dbba5d05bb0b51d3876c86f5ed24765afe5))
+* **combo:** adiciona opção que desativa o armazenamento do último valor ([c065bff](https://github.com/po-ui/po-angular/commit/c065bff70d5e76a7c35878f40e077ddb22d549a2)), closes [#1656](https://github.com/po-ui/po-angular/issues/1656)
+* **list-view:** melhora contraste do componente ([abd74e4](https://github.com/po-ui/po-angular/commit/abd74e44c8ebece01606304c04330aac36109ef6)), closes [#1594](https://github.com/po-ui/po-angular/issues/1594)
+* **page-dynamic-edit:** adiciona p-load-data ([3557103](https://github.com/po-ui/po-angular/commit/3557103c34718e02efd0337f1ae839fff9b84d64)), closes [#1633](https://github.com/po-ui/po-angular/issues/1633)
+
+
+
 ## [15.5.1](https://github.com/po-ui/po-angular/compare/v15.5.0...v15.5.1) (2023-04-03)
 
 
