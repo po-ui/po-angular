@@ -1,5 +1,13 @@
 import { AbstractControl, NG_VALUE_ACCESSOR, NG_VALIDATORS } from '@angular/forms';
-import { ChangeDetectorRef, ChangeDetectionStrategy, Component, ElementRef, forwardRef, Input } from '@angular/core';
+import {
+  ChangeDetectorRef,
+  ChangeDetectionStrategy,
+  Component,
+  ElementRef,
+  forwardRef,
+  Input,
+  HostListener
+} from '@angular/core';
 
 import { minFailed, maxFailed } from '../validators';
 
@@ -87,6 +95,11 @@ export class PoNumberComponent extends PoNumberBaseComponent {
   /* istanbul ignore next */
   constructor(el: ElementRef, cd: ChangeDetectorRef) {
     super(el, cd);
+  }
+
+  @HostListener('wheel', ['$event'])
+  onWheel(event: Event) {
+    event.preventDefault();
   }
 
   extraValidation(abstractControl: AbstractControl): { [key: string]: any } {
