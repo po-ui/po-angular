@@ -29,6 +29,7 @@ export class SamplePoUploadLabsComponent implements OnInit {
     { value: 'directory', label: 'Directory' },
     { value: 'disabled', label: 'Disabled' },
     { value: 'dragDrop', label: 'Drag Drop' },
+    { value: 'requiredUrl', label: 'required Url' },
     { value: 'multiple', label: 'Multiple upload' },
     { value: 'optional', label: 'Optional' },
     { value: 'required', label: 'Required' },
