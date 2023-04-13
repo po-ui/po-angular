@@ -1,27 +1,27 @@
 import {
-  Component,
-  ElementRef,
-  forwardRef,
-  Renderer2,
-  ViewChild,
   AfterViewInit,
   ChangeDetectionStrategy,
-  ChangeDetectorRef
+  ChangeDetectorRef,
+  Component,
+  ElementRef,
+  Renderer2,
+  ViewChild,
+  forwardRef
 } from '@angular/core';
 import { NG_VALIDATORS, NG_VALUE_ACCESSOR } from '@angular/forms';
 
-import { formatBytes, isMobile, uuid } from '../../../utils/util';
-import { PoButtonComponent } from './../../po-button/po-button.component';
 import { PoI18nPipe } from '../../../services/po-i18n/po-i18n.pipe';
-import { PoNotificationService } from '../../../services/po-notification/po-notification.service';
-import { PoProgressStatus } from '../../po-progress/enums/po-progress-status.enum';
 import { PoLanguageService } from '../../../services/po-language/po-language.service';
+import { PoNotificationService } from '../../../services/po-notification/po-notification.service';
+import { formatBytes, isMobile, uuid } from '../../../utils/util';
+import { PoProgressStatus } from '../../po-progress/enums/po-progress-status.enum';
+import { PoButtonComponent } from './../../po-button/po-button.component';
 
 import { PoUploadBaseComponent } from './po-upload-base.component';
 import { PoUploadDragDropComponent } from './po-upload-drag-drop/po-upload-drag-drop.component';
 import { PoUploadFile } from './po-upload-file';
-import { PoUploadService } from './po-upload.service';
 import { PoUploadStatus } from './po-upload-status.enum';
+import { PoUploadService } from './po-upload.service';
 
 /**
  * @docsExtends PoUploadBaseComponent
@@ -111,7 +111,9 @@ export class PoUploadComponent extends PoUploadBaseComponent implements AfterVie
 
   get displaySendButton(): boolean {
     const currentFiles = this.currentFiles || [];
-    return !this.hideSendButton && !this.autoUpload && currentFiles.length > 0 && this.hasFileNotUploaded;
+    return (
+      !this.hideSendButton && !this.autoUpload && currentFiles.length > 0 && this.hasFileNotUploaded && this.requiredUrl
+    );
   }
 
   get selectFileButtonLabel() {
@@ -143,12 +145,19 @@ export class PoUploadComponent extends PoUploadBaseComponent implements AfterVie
   get isDisabled(): boolean {
     const currentFiles = this.currentFiles || [];
 
-    return !!(
-      this.hasAnyFileUploading(currentFiles) ||
-      !this.url ||
-      this.disabled ||
-      this.isExceededFileLimit(currentFiles.length)
-    );
+    return this.requiredUrl
+      ? !!(
+          this.hasAnyFileUploading(currentFiles) ||
+          !this.url ||
+          this.disabled ||
+          this.isExceededFileLimit(currentFiles.length)
+        )
+      : !!(
+          this.hasAnyFileUploading(currentFiles) ||
+          this.autoUpload ||
+          this.disabled ||
+          this.isExceededFileLimit(currentFiles.length)
+        );
   }
 
   get maxFiles(): number {
