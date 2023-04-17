@@ -2,6 +2,15 @@
 
 All notable changes to this project will be documented in this file. See [standard-version](https://github.com/conventional-changelog/standard-version) for commit guidelines.
 
+## [15.6.1](https://github.com/po-ui/po-angular/compare/v15.6.0...v15.6.1) (2023-04-17)
+
+
+### Bug Fixes
+
+* **number:** desativa ação de incremento e decremento ([4366581](https://github.com/po-ui/po-angular/commit/4366581de3fb1465f235db5f8c9dd37fb47fbe6f)), closes [#1650](https://github.com/po-ui/po-angular/issues/1650)
+
+
+
 # [15.6.0](https://github.com/po-ui/po-angular/compare/v15.5.1...v15.6.0) (2023-04-06)
 
 
