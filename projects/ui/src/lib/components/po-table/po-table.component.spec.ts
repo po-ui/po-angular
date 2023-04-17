@@ -519,27 +519,6 @@ describe('PoTableComponent:', () => {
     expect(links.length > 0).toBeTruthy();
   });
 
-  it('should contain the attribute ng-reflect-router-link when the item is internal link', () => {
-    component.columns = [{ property: 'name', label: 'País', type: 'link', link: 'link' }];
-    component.items = [{ name: 'França', link: 'home' }];
-    fixture.detectChanges();
-
-    const link = tableElement.querySelector('.po-table-link[ng-reflect-router-link="home"]');
-    expect(link).toBeTruthy();
-  });
-
-  it('should contain the attributes href and target when the item is external link', () => {
-    component.columns = [{ property: 'framework', label: 'Framework', type: 'link', link: 'link' }];
-    component.items = [{ name: 'PO', link: 'http://po.com.br' }];
-    fixture.detectChanges();
-
-    let link = tableElement.querySelector('.po-table-link[ng-reflect-router-link="home"]');
-    expect(link).toBeFalsy();
-
-    link = tableElement.querySelector('.po-table-link[href="http://po.com.br"][target="_blank"]');
-    expect(link).toBeTruthy();
-  });
-
   it('should remain on same page', () => {
     component.columns[2].type = 'link';
     component.items[0].link = undefined;

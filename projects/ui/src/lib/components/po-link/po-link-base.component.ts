@@ -1,6 +1,7 @@
 import { Input, Directive, Output, EventEmitter } from '@angular/core';
 
 import { InputBoolean } from '../../decorators';
+import { isExternalLink } from '../../utils/util';
 
 /**
  * @description
@@ -33,14 +34,21 @@ export class PoLinkBaseComponent {
   /** Valor do rótulo a ser exibido. */
   @Input('p-label') label: string;
 
+  /** Indica se o link deverá ser aberto em uma nova aba. Sempre que utilizar essa propriedade, é importante informar isso ao usuário através da label. */
+  @Input('p-open-new-tab') @InputBoolean() openNewTab?: boolean = false;
+
   /** Url que será aberta ao clicar no link. */
   @Input('p-url') url: string;
+
+  get type(): string {
+    if (!this.url && this.action.observed) {
+      return 'action';
+    }
+    return isExternalLink(this.url) ? 'externalLink' : 'internalLink';
+  }
 
   /** Ação que será executada quando o usuário clicar sobre o `po-link`.
    * > Ao utilizar junto da propriedade `p-url` a ação será ignorada.
    */
   @Output('p-action') action = new EventEmitter<null>();
-
-  /** Indica se o link deverá ser aberto em uma nova aba. Sempre que utilizar essa propriedade, é importante informar isso ao usuário através da label. */
-  @Input('p-open-new-tab') @InputBoolean() openNewTab?: boolean = false;
 }

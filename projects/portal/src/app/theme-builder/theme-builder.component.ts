@@ -528,7 +528,7 @@ export class ThemeBuilderComponent implements AfterViewInit {
 
     this.linkForm.reset();
     Object.keys(this.formPropertyDictLink).forEach((fieldName: string) => {
-      this.linkComponent.linkEl.nativeElement.style.setProperty(this.formPropertyDictLink[fieldName], null);
+      document.getElementById('myLink').style.setProperty(this.formPropertyDictLink[fieldName], null);
     });
 
     const tooltipElement = this.renderer.selectRootElement('.po-tooltip', true);
@@ -1037,29 +1037,32 @@ export class ThemeBuilderComponent implements AfterViewInit {
       this.resultModal['nativeElement'].innerHTML = '';
     }
   }
-
   private checkChangesLink(changes: { [key: string]: string }): void {
     if (!this.isEmpty(changes)) {
       this.resultLink['nativeElement'].innerHTML = 'po-link {<br>';
 
-      Object.keys(changes).forEach((fieldName: string) => {
-        let value;
-        if (typeof changes[fieldName] === 'number') {
-          value = `${changes[fieldName]}px`;
-        } else {
-          value = /color/i.test(fieldName) ? changes[fieldName] : `var(--${changes[fieldName]})`;
-        }
-        if (changes[fieldName]) {
-          this.linkComponent.linkEl.nativeElement.style.setProperty(this.formPropertyDictLink[fieldName], value);
-
-          this.resultLink['nativeElement'].innerHTML += `${this.formPropertyDictLink[fieldName]}: ${value};<br>`;
-        }
-      });
+      this.checkDiffLink(changes);
 
       this.resultLink['nativeElement'].innerHTML += '}';
     } else {
       this.resultLink['nativeElement'].innerHTML = '';
     }
+  }
+
+  private checkDiffLink(changes: any): void {
+    Object.keys(changes).forEach((fieldName: string) => {
+      let value;
+      if (typeof changes[fieldName] === 'number') {
+        value = `${changes[fieldName]}px`;
+      } else {
+        value = /color/i.test(fieldName) ? changes[fieldName] : `var(--${changes[fieldName]})`;
+      }
+
+      if (changes[fieldName]) {
+        document.getElementById('myLink').style.setProperty(this.formPropertyDictLink[fieldName], value);
+        this.resultLink['nativeElement'].innerHTML += `${this.formPropertyDictLink[fieldName]}: ${value};<br>`;
+      }
+    });
   }
 
   private checkChangesTooltip(changes: { [key: string]: string }): void {
