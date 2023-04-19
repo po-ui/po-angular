@@ -50,4 +50,39 @@ describe('PoTableColumnLinkComponent:', () => {
       expect(poTableLinkDisabled).toBeFalsy();
     });
   });
+
+  describe('Properties:', () => {
+    it('should set type with "action"', () => {
+      component.action = () => {};
+      component.disabled = false;
+      component.link = 'link';
+      component.value = 'link';
+
+      expect(component.type).toBe('action');
+    });
+
+    it('should set type with "externalLink"', () => {
+      component.disabled = false;
+      component.link = 'https://po-ui.io';
+      component.value = 'link';
+
+      expect(component.type).toBe('externalLink');
+    });
+
+    it('should set type with "internalLink"', () => {
+      component.disabled = false;
+      component.link = '/home';
+      component.value = 'link';
+
+      expect(component.type).toBe('internalLink');
+    });
+
+    it('should set type with "internalLink" if link is empty', () => {
+      component.disabled = false;
+      component.link = '';
+      component.value = 'link';
+
+      expect(component.type).toBe('internalLink');
+    });
+  });
 });

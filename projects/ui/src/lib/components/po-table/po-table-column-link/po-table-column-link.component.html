@@ -1,3 +1,12 @@
 <div class="po-table-link" [ngClass]="{ 'po-table-link-disabled': disabled }">
-  <po-link [p-label]="value" [p-open-new-tab]="openNewTab" [p-url]="link" (p-action)="action?.(value, row)"></po-link>
+  <ng-container [ngSwitch]="type">
+    <po-link
+      *ngSwitchCase="'action'"
+      [p-label]="value"
+      [p-open-new-tab]="openNewTab"
+      (p-action)="action?.(value, row)"
+    ></po-link>
+    <po-link *ngSwitchCase="'externalLink'" [p-label]="value" [p-open-new-tab]="openNewTab" [p-url]="link"></po-link>
+    <po-link *ngSwitchCase="'internalLink'" [p-label]="value" [p-open-new-tab]="openNewTab" [p-url]="link"></po-link>
+  </ng-container>
 </div>
