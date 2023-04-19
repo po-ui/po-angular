@@ -230,6 +230,7 @@
         "quote-props": "off",
         "jsdoc/no-types": "off",
         "react/jsx-curly-spacing": "off",
+        "jsdoc/newline-after-description": "off",
         "react/jsx-equals-spacing": "off",
         "react/jsx-tag-spacing": [
           "off",
