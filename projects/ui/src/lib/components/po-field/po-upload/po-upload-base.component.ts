@@ -1,10 +1,9 @@
-import { Directive, EventEmitter, Input, Output } from '@angular/core';
+import { Directive, EventEmitter, Input, Output, HostBinding } from '@angular/core';
 import { AbstractControl, ControlValueAccessor, Validator } from '@angular/forms';
 
 import { convertToBoolean, isEquals, isIE, isMobile } from '../../../utils/util';
 import { requiredFailed } from '../validators';
 
-import { HostBinding } from '@angular/core';
 import { InputBoolean } from '../../../decorators';
 import { poLocaleDefault } from '../../../services/po-language/po-language.constant';
 import { PoLanguageService } from '../../../services/po-language/po-language.service';
