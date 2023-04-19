@@ -26,4 +26,12 @@ export class PoTableColumnLinkComponent {
   @Input('p-row') row;
 
   @Input('p-value') value: string;
+
+  get type() {
+    if (this.action) {
+      return 'action';
+    }
+
+    return isExternalLink(this.link) ? 'externalLink' : 'internalLink';
+  }
 }

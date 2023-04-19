@@ -17,7 +17,7 @@ import { PoTooltipModule } from '../../directives/po-tooltip/index';
 import { PoIconModule } from './../po-icon/po-icon.module';
 import { PoCheckboxModule } from './../po-field/po-checkbox/po-checkbox.module';
 import { PoRadioModule } from './../po-field/po-radio/po-radio.module';
-import { PoLinkModule } from '../po-link';
+import { PoLinkModule } from '../po-link/po-link.module';
 
 import { PoTableColumnIconComponent } from './po-table-column-icon/po-table-column-icon.component';
 import { PoTableColumnLabelComponent } from './po-table-column-label/po-table-column-label.component';
