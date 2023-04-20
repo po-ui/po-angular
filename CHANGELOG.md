@@ -2,6 +2,17 @@
 
 All notable changes to this project will be documented in this file. See [standard-version](https://github.com/conventional-changelog/standard-version) for commit guidelines.
 
+# [15.7.0](https://github.com/po-ui/po-angular/compare/v15.6.1...v15.7.0) (2023-04-20)
+
+
+### Features
+
+* **multiselect:** permite utilizar template customizado([3ba4a7a](https://github.com/po-ui/po-angular/commit/3ba4a7ab2b49859f35d50ffa1c78743302086662))
+* **table:** reutiliza componente `link`([2f7a0c5](https://github.com/po-ui/po-angular/commit/2f7a0c5d31f6916c33888d225cfdbda9e72eddbd))
+* **upload:** adiciona propriedade `p-required-url` para habilitar o componente sem passar `p-url`([ba30e19](https://github.com/po-ui/po-angular/commit/ba30e190974f314db7cec552c6e85546dd9b4336))
+
+
+
 ## [15.6.1](https://github.com/po-ui/po-angular/compare/v15.6.0...v15.6.1) (2023-04-17)
 
 
