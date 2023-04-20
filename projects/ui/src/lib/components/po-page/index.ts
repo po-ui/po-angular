@@ -13,4 +13,5 @@ export * from './po-page.interface';
 export * from './po-page-action.interface';
 export * from './po-page-filter.interface';
 
+export * from './po-page-slide/po-page-slide.module';
 export * from './po-page.module';

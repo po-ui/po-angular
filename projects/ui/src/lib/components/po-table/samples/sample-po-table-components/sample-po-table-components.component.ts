@@ -1,10 +1,10 @@
 import { Component, ViewChild } from '@angular/core';
 import { Router } from '@angular/router';
 
-import { PoModalComponent, PoTableColumn, PoTableColumnSort, PoTableColumnLabel } from '@po-ui/ng-components';
+import { PoModalComponent, PoTableColumn, PoTableColumnLabel, PoTableColumnSort } from '@po-ui/ng-components';
 
-import { SamplePoTableComponentsService } from './sample-po-table-components.service';
 import { SamplePoTableComponentStatus } from './sample-po-table-components.enum';
+import { SamplePoTableComponentsService } from './sample-po-table-components.service';
 
 @Component({
   selector: 'sample-po-table-components',
@@ -32,18 +32,21 @@ export class SamplePoTableComponentsComponent {
           value: SamplePoTableComponentStatus.Stable,
           color: 'color-11',
           label: 'Stable',
+          textColor: 'white',
           tooltip: 'Published component'
         },
         {
           value: SamplePoTableComponentStatus.Experimental,
           color: 'color-08',
           label: 'Experimental',
+          textColor: 'white',
           tooltip: 'Component in homologation'
         },
         {
           value: SamplePoTableComponentStatus.RoadMap,
           color: 'color-07',
           label: 'Roadmap',
+          textColor: 'white',
           tooltip: 'Component in roadmap'
         }
       ]
@@ -58,6 +61,7 @@ export class SamplePoTableComponentsComponent {
     {
       property: 'component.extra',
       label: 'Extras',
+      width: '10px',
       type: 'link',
       tooltip: 'Additional details',
       action: (value, row) => {

@@ -29,7 +29,6 @@
           tabindex="0"
           (click)="onAdvancedFilter()"
           (keydown.enter)="onAdvancedFilter()"
-          tabindex="0"
         >
           {{ literals.modalAdvancedSearch }}
         </span>
@@ -46,7 +45,7 @@
     >
     </po-disclaimer-group>
 
-    <div class="po-row po-lookup-container-table" [style.height.px]="containerHeight">
+    <div class="po-row po-lookup-container-table" [attr.data-multiple]="multiple">
       <po-table
         #poTable
         class="po-md-12"

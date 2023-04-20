@@ -55,6 +55,7 @@ export * from './po-radio-group/po-radio-group.module';
 export * from './po-radio/po-radio.module';
 
 export * from './po-field.module';
+export * from './po-switch/index';
 
 export * from './po-field-container/index';
 export * from './po-clean/index';
