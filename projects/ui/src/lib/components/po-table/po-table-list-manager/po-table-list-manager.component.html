@@ -1,24 +1,38 @@
-<li
-  class="po-table-list-manager-container"
-  *ngFor="let option of checkboxGroupOptionsView; trackBy: trackByFn"
-  [class.po-checkbox-group-item-disabled]="option.disabled || disabled"
->
+<section class="po-table-list-manager-section">
+  <p class="po-table-list-manager-title-group-items">{{ literals.otherColumns }}</p>
+  <div
+    class="po-table-list-manager-container-items"
+    *ngFor="let option of checkboxGroupOptionsView; trackBy: trackByFn"
+    [class.po-checkbox-group-item-disabled]="option.disabled || disabled"
+  >
+    <ng-container *ngIf="!option.fixed">
+      <ng-container *ngTemplateOutlet="listItemsManagerDefault; context: { $implicit: option }"></ng-container>
+    </ng-container>
+  </div>
+</section>
+
+<ng-template #listItemsManagerDefault let-option>
   <div class="po-table-list-manager-item">
-    <po-checkbox
-      #checkboxLabel
-      [p-label]="option.label"
-      [p-disabled]="option.disabled || disabled"
-      (click)="checkOption(option)"
-      (keydown)="onKeyDown($event, option)"
-      [p-checkboxValue]="checkedOptions[option.value] === null ? 'mixed' : checkedOptions[option.value]"
-      [p-required]="required"
-    >
-    </po-checkbox>
-    <div class="po-container-icons-arrows-columns-manager">
+    <div class="po-table-list-manager-item-switch">
+      <po-switch
+        name="switch"
+        (click)="checkOption(option)"
+        (keydown)="onKeyDown($event, option)"
+        [p-disabled]="option.disabled || disabled"
+        [p-value]="checkedOptions[option.value]"
+        p-label-off=" "
+        p-label-on=" "
+      >
+      </po-switch>
+      <span class="po-table-list-manager-item-text">
+        {{ option.label }}
+      </span>
+    </div>
+
+    <div class="po-table-list-manager-item-buttons">
       <po-button
         [p-tooltip]="literals.up"
         p-tooltip-position="left"
-        p-kind="tertiary"
         p-icon="po-icon po-icon-arrow-up"
         [p-disabled]="verifyArrowDisabled(option, 'up')"
         (click)="emitChangePosition(option, 'up'); $event.stopPropagation()"
@@ -28,7 +42,6 @@
       <po-button
         [p-tooltip]="literals.down"
         p-tooltip-position="top"
-        p-kind="tertiary"
         p-icon="po-icon po-icon-arrow-down"
         [p-disabled]="verifyArrowDisabled(option, 'down')"
         (click)="emitChangePosition(option, 'down'); $event.stopPropagation()"
@@ -36,4 +49,4 @@
       </po-button>
     </div>
   </div>
-</li>
+</ng-template>

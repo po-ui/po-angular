@@ -21,6 +21,8 @@ describe('PoTableListManagerComponent:', () => {
     component = fixture.componentInstance;
     fixture.debugElement.injector.get(NG_VALUE_ACCESSOR);
     fixture.detectChanges();
+
+    component.columnsManager = [{ property: 'column1' }, { property: 'column2' }, { property: 'detail' }];
   });
 
   it('should create', () => {
@@ -64,6 +66,22 @@ describe('PoTableListManagerComponent:', () => {
     );
 
     expect(arrowDisabled).toEqual(false);
+  });
+
+  it('should return true when existsDetail is true', () => {
+    const option = { value: 'column2' };
+    const direction = 'down';
+    const result = component.verifyArrowDisabled(option, direction);
+    expect(result).toBe(true);
+  });
+
+  it('should return false when existsDetail is false', () => {
+    component.columnsManager = [{ property: 'column1' }, { property: 'column2' }];
+
+    const option = { value: 'column1' };
+    const direction = 'down';
+    const result = component.verifyArrowDisabled(option, direction);
+    expect(result).toBe(false);
   });
 
   it(`emitChangePosition: should 'emit' if item position is not first and direction is 'up'`, () => {

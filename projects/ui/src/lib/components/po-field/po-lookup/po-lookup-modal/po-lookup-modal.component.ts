@@ -37,7 +37,6 @@ export class PoLookupModalComponent extends PoLookupModalBaseComponent implement
 
   keyUpObservable: Observable<any> = null;
 
-  containerHeight: number = 375;
   tableHeight: number;
 
   componentRef: ComponentRef<PoDynamicFormComponent>;
@@ -124,22 +123,7 @@ export class PoLookupModalComponent extends PoLookupModalBaseComponent implement
   }
 
   private setTableHeight() {
-    if (this.multiple) {
-      if (this.selecteds?.length !== 0) {
-        this.tableHeight = 300;
-      } else {
-        this.tableHeight = 370;
-        this.containerHeight = 375;
-      }
-    }
-
-    // precisa ser 315 por as linhas terem altura de 32px (quando tela menor que 1366px).
-    // O retorno padrão é 10 itens fazendo com que gere scroll caso houver paginação, 370 não gerava.
-    this.tableHeight = this.infiniteScroll ? 315 : 370;
-    if (window.innerHeight < 615) {
-      this.tableHeight -= 50;
-      this.containerHeight -= 50;
-    }
+    this.tableHeight = this.infiniteScroll ? 515 : 615;
   }
 
   private validateEnterPressed(e: any) {

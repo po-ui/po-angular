@@ -9,19 +9,23 @@ import { PoCheckboxGroupComponent } from '../../po-field/po-checkbox-group/po-ch
 export const poTableListManagerLiterals = {
   en: {
     up: 'up',
-    down: 'down'
+    down: 'down',
+    otherColumns: 'Other columns'
   },
   es: {
     up: 'arriba',
-    down: 'abajo'
+    down: 'abajo',
+    otherColumns: 'Otras columnas'
   },
   pt: {
     up: 'acima',
-    down: 'abaixo'
+    down: 'abaixo',
+    otherColumns: 'Outras colunas'
   },
   ru: {
     up: 'вверх',
-    down: 'вниз'
+    down: 'вниз',
+    otherColumns: 'Другие столбцы'
   }
 };
 

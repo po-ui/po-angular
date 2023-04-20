@@ -20,7 +20,12 @@
         </div>
       </div>
 
-      <po-label [p-disabled]="disabled" [p-label]="value === true ? labelOn : labelOff" (click)="eventClick()">
+      <po-label
+        *ngIf="label"
+        [p-disabled]="disabled"
+        [p-label]="value === true ? labelOn : labelOff"
+        (click)="eventClick()"
+      >
       </po-label>
     </div>
   </div>
