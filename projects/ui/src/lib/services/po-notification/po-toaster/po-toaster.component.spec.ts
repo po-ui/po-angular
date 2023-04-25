@@ -345,6 +345,27 @@ describe('PoToasterComponent', () => {
 
       expect(spyAction).toBeTruthy();
     });
+
+    it('should set the margin correctly for one toaster', fakeAsync(() => {
+      component.action = () => {};
+      component.actionLabel = 'changePosition';
+      component.toaster.nativeElement.className = 'po-toaster-visible';
+      const position = 1;
+
+      spyOn<any>(component, 'returnHeightToaster').and.returnValue(62);
+
+      component.changePosition(position);
+      tick();
+      component.orientation = PoToasterOrientation.Top;
+
+      expect((component as any).margin).toBe(78);
+
+      component.changePosition(position);
+      tick();
+      component.orientation = PoToasterOrientation.Bottom;
+
+      expect((component as any).margin).toBe(78);
+    }));
   });
 
   describe('Properties', () => {

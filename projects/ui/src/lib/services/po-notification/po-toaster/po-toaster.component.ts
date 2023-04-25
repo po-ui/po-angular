@@ -10,8 +10,6 @@ import {
 
 import { Subject } from 'rxjs';
 
-import { poLocaleDefault } from '../../po-language/po-language.constant';
-
 import { PoLanguageService } from '../../po-language/po-language.service';
 import { poToasterLiterals } from './po-toaster.literals';
 
@@ -22,8 +20,6 @@ import { PoToasterOrientation } from './po-toaster-orientation.enum';
 import { PoButtonComponent } from '../../../components/po-button/po-button.component';
 
 const SPACE_BETWEEN_TOASTERS = 8;
-const TOASTER_HEIGHT_DEFAULT = 62;
-const TOASTER_HEIGHT_ACTION = 88;
 
 /**
  * @docsPrivate
@@ -57,7 +53,6 @@ export class PoToasterComponent extends PoToasterBaseComponent implements AfterV
   constructor(
     poLanguageService: PoLanguageService,
     public changeDetector: ChangeDetectorRef,
-    private elementeRef?: ElementRef,
     private renderer?: Renderer2
   ) {
     super();
@@ -77,14 +72,19 @@ export class PoToasterComponent extends PoToasterBaseComponent implements AfterV
 
   /* Muda a posição do Toaster na tela*/
   changePosition(position: number): void {
-    const toasterSize = document.body.offsetWidth < 961 && this.action ? TOASTER_HEIGHT_ACTION : TOASTER_HEIGHT_DEFAULT;
-    this.margin = SPACE_BETWEEN_TOASTERS + toasterSize * position + position * SPACE_BETWEEN_TOASTERS;
+    setTimeout(() => {
+      this.margin = SPACE_BETWEEN_TOASTERS;
 
-    if (this.orientation === PoToasterOrientation.Top) {
-      this.toaster.nativeElement.style.top = this.margin + 'px';
-    } else {
-      this.toaster.nativeElement.style.bottom = this.margin + 'px';
-    }
+      for (let i = 0; i < position; i++) {
+        this.margin += this.returnHeightToaster(i) + SPACE_BETWEEN_TOASTERS;
+      }
+
+      if (this.orientation === PoToasterOrientation.Top) {
+        this.toaster.nativeElement.style.top = this.margin + 'px';
+      } else {
+        this.toaster.nativeElement.style.bottom = this.margin + 'px';
+      }
+    });
   }
 
   /* Fecha o componente Toaster */
@@ -174,5 +174,12 @@ export class PoToasterComponent extends PoToasterBaseComponent implements AfterV
   /* Chama a função passada pelo atributo `action` */
   poToasterAction(event): void {
     this.action(this);
+  }
+
+  private returnHeightToaster(position) {
+    if (this.orientation === PoToasterOrientation.Top) {
+      return (document.querySelectorAll('.po-toaster-top')[position] as HTMLElement).offsetHeight;
+    }
+    return (document.querySelectorAll('.po-toaster-bottom')[position] as HTMLElement).offsetHeight;
   }
 }
