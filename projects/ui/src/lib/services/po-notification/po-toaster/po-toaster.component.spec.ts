@@ -345,6 +345,45 @@ describe('PoToasterComponent', () => {
 
       expect(spyAction).toBeTruthy();
     });
+
+    it('should set the margin correctly for one toaster', fakeAsync(() => {
+      component.action = () => {};
+      component.actionLabel = 'changePosition';
+      component.toaster.nativeElement.className = 'po-toaster-visible';
+      const position = 1;
+
+      spyOn<any>(component, 'returnHeightToaster').and.returnValue(62);
+
+      component.changePosition(position);
+      tick();
+      component.orientation = PoToasterOrientation.Top;
+
+      expect((component as any).margin).toBe(78);
+
+      component.changePosition(position);
+      tick();
+      component.orientation = PoToasterOrientation.Bottom;
+
+      expect((component as any).margin).toBe(78);
+    }));
+
+    it('changePosition: Margin should receive the default value plus the next toaster concatenated by the default margin value', fakeAsync(() => {
+      const expectResult = 8 + 80 + 8 + 150 + 8;
+      spyOn(component, <any>'returnHeightToaster').and.callFake((position: number) => {
+        if (position === 1) {
+          return 80;
+        } else {
+          return 150;
+        }
+      });
+
+      component.changePosition(1);
+      tick();
+      component.changePosition(2);
+      tick();
+
+      expect(component['margin']).toEqual(expectResult);
+    }));
   });
 
   describe('Properties', () => {
