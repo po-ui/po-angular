@@ -109,9 +109,12 @@
         </div>
 
         <div *ngIf="hasDetailTemplate" class="po-list-view-detail-button">
-          <span class="po-clickable" (click)="item.$showDetail = !item.$showDetail">
-            {{ item.$showDetail ? literals.hideDetails : literals.showDetails }}
-          </span>
+          <po-button
+            p-kind="tertiary"
+            [p-label]="item.$showDetail ? literals.hideDetails : literals.showDetails"
+            (p-click)="item.$showDetail = !item.$showDetail"
+          >
+          </po-button>
         </div>
       </po-container>
     </ng-container>
