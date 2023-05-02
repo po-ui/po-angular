@@ -465,6 +465,15 @@ describe('PoLookupBaseComponent:', () => {
       })
     ));
 
+    it('getSubscriptionFunction: should return the getSubscription', () => {
+      const mockSub: any = { unsubscribe: () => {} };
+      component['getSubscription'] = mockSub;
+
+      const subscription = component.getSubscriptionFunction();
+
+      expect(subscription).toEqual(mockSub);
+    });
+
     it('searchById: should call `cleanModel` when execute the method `searchById` with empty param.', () => {
       spyOn(component, <any>'cleanModel');
 
