@@ -2,6 +2,15 @@
 
 All notable changes to this project will be documented in this file. See [standard-version](https://github.com/conventional-changelog/standard-version) for commit guidelines.
 
+## [15.7.1](https://github.com/po-ui/po-angular/compare/v15.7.0...v15.7.1) (2023-05-08)
+
+
+### Bug Fixes
+
+* **toaster:** ajusta empilhamento das notificações ([4a5ae72](https://github.com/po-ui/po-angular/commit/4a5ae72b6b873bd746313c6b0bb1d7ad2e6d1c2c))
+
+
+
 # [15.7.0](https://github.com/po-ui/po-angular/compare/v15.6.1...v15.7.0) (2023-04-20)
 
 
