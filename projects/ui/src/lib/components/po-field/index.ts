@@ -44,6 +44,8 @@ export * from './po-switch/po-switch.component';
 export * from './po-textarea/po-textarea.component';
 export * from './po-upload/interfaces/po-upload-file-restriction.interface';
 export * from './po-upload/interfaces/po-upload-literals.interface';
+export * from './po-upload/po-upload-file';
+export * from './po-upload/po-upload-status.enum';
 export * from './po-upload/po-upload.component';
 export * from './po-url/po-url.component';
 export * from './po-radio/po-radio.component';
