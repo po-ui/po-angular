@@ -24,7 +24,9 @@ describe('PoTableColumnLabelComponent:', () => {
     labels = [
       { value: 'success', label: 'Success', color: 'color-11' },
       { value: 'warning', label: 'Warning', color: 'color-08' },
-      { value: 1, label: 'Danger', color: 'color-07' }
+      { value: 1, label: 'Danger', color: 'color-07' },
+      { value: true, label: 'Success', color: 'color-11' },
+      { value: false, label: 'Warning', color: 'color-08' }
     ];
   });
 
