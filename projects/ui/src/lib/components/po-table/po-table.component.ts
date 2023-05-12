@@ -17,6 +17,8 @@ import {
   TemplateRef,
   OnInit
 } from '@angular/core';
+import { CdkDragDrop, moveItemInArray } from '@angular/cdk/drag-drop';
+
 import { DecimalPipe } from '@angular/common';
 import { Router } from '@angular/router';
 import { PoTableColumnLabel } from './po-table-column-label/po-table-column-label.interface';
@@ -24,6 +26,7 @@ import { convertToBoolean } from '../../utils/util';
 import { PoDateService } from '../../services/po-date/po-date.service';
 import { PoLanguageService } from '../../services/po-language/po-language.service';
 import { PoPopupComponent } from '../po-popup/po-popup.component';
+import { PoPageSlideComponent } from '../po-page/po-page-slide/po-page-slide.component';
 
 import { PoTableAction } from './interfaces/po-table-action.interface';
 import { PoTableBaseComponent, QueryParamsType } from './po-table-base.component';
@@ -99,6 +102,9 @@ export class PoTableComponent extends PoTableBaseComponent implements AfterViewI
 
   @ViewChild('noColumnsHeader', { read: ElementRef }) noColumnsHeader;
   @ViewChild('noColumnsHeaderFixed', { read: ElementRef }) noColumnsHeaderFixed;
+  @ViewChild('pageSlideColumnsManager') pageSlideColumnsManager: PoPageSlideComponent;
+  @ViewChild('filterInput') filterInput: ElementRef;
+
   @ViewChild('popup') poPopupComponent: PoPopupComponent;
   @ViewChild('tableFooter', { read: ElementRef, static: false }) tableFooterElement;
   @ViewChild('tableWrapper', { read: ElementRef, static: false }) tableWrapperElement;
@@ -122,6 +128,7 @@ export class PoTableComponent extends PoTableBaseComponent implements AfterViewI
   lastVisibleColumnsSelected: Array<PoTableColumn>;
   tagColor: string;
   idRadio: string;
+  myValueInput = '';
 
   private _columnManagerTarget: ElementRef;
   private _columnManagerTargetFixed: ElementRef;
@@ -391,6 +398,7 @@ export class PoTableComponent extends PoTableBaseComponent implements AfterViewI
    * Seleciona uma linha do 'po-table'.
    */
   selectRowItem(itemfn: { [key: string]: any } | ((item) => boolean)) {
+    console.log('selectrow');
     this.toggleSelect(itemfn, true);
 
     if (this.items.every(item => item.$selected)) {
@@ -492,7 +500,6 @@ export class PoTableComponent extends PoTableBaseComponent implements AfterViewI
 
   onVisibleColumnsChange(columns: Array<PoTableColumn>) {
     this.columns = columns;
-
     this.changeDetector.detectChanges();
   }
 
@@ -533,6 +540,8 @@ export class PoTableComponent extends PoTableBaseComponent implements AfterViewI
 
   onOpenColumnManager() {
     this.lastVisibleColumnsSelected = [...this.columns];
+
+    this.pageSlideColumnsManager.open();
   }
 
   /**
@@ -563,6 +572,82 @@ export class PoTableComponent extends PoTableBaseComponent implements AfterViewI
     } else {
       const index = this.items.findIndex(indexItem => indexItem === item);
       this.items.splice(index, 1, updatedItem);
+    }
+  }
+
+  drop(event: CdkDragDrop<Array<string>>) {
+    console.log(this.mainColumns[event.previousIndex]);
+    console.log(this.mainColumns[event.currentIndex]);
+
+    if (!this.mainColumns[event.currentIndex].fixed) {
+      moveItemInArray(this.mainColumns, event.previousIndex, event.currentIndex);
+
+      this.columns = [...this.mainColumns, ...this.columns].filter(
+        (item, index, array) => array.findIndex(element => element.property === item.property) === index
+      );
+    }
+  }
+
+  onCellBlur(event: any, row: any, column: any) {
+    const newValue = event.target.innerText.trim(); // pega o novo valor editado e remove os espaços em branco extras
+
+    if (row[column.property].toString().trim() === newValue) {
+      console.log('valor igual não emite');
+    } else {
+      console.log({
+        actualRow: row,
+        columnModify: column,
+        ValueModify: newValue
+      });
+    }
+
+    // faça algo com o novo valor, por exemplo, atualize o valor na matriz de dados da tabela
+  }
+
+  deleteItems() {
+    const itensDeleted = this.items.filter(item => item.$selected);
+    const newItems = [...this.items];
+    const newItemsFiltered = [...newItems].filter(item => !item.$selected);
+    this.items = [...newItemsFiltered];
+    console.log(itensDeleted);
+  }
+
+  onkeypress(key) {
+    if (key === 13) {
+      if (this.hasService) {
+        console.log('tem service');
+        console.log(this.serviceApi);
+        const params = { filter: this.filterInput.nativeElement.value };
+        this.getFilteredItemsWithFilterParam(params).subscribe(data => {
+          console.log(data);
+          console.log(this.items);
+          this.items = [...data.items];
+          this.changeDetector.detectChanges();
+        });
+      } else {
+        // const newValue = this.filterArray(['customer'], this.filterInput.nativeElement.value);
+        // console.log(newValue)
+      }
+    }
+  }
+
+  itemsFiltered() {
+    if (this.hasService) {
+      return this.items;
+    } else {
+      return this.filterArray(['customer', 'name', 'id', 'destination'], this.myValueInput);
+    }
+  }
+
+  filterArray(filters, valueFilter) {
+    if (this.items) {
+      return this.items.filter(item =>
+        filters.some(filter => {
+          const value = String(item[filter]);
+          const valueFilterLower = String(valueFilter).toLowerCase().trim();
+          return value.toLowerCase().includes(valueFilterLower);
+        })
+      );
     }
   }
 

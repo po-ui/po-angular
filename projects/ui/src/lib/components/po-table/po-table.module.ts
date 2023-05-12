@@ -33,6 +33,14 @@ import { PoTableSubtitleFooterComponent } from './po-table-subtitle-footer/po-ta
 import { PoTableCellTemplateDirective } from './po-table-cell-template/po-table-cell-template.directive';
 import { PoTableColumnTemplateDirective } from './po-table-column-template/po-table-column-template.directive';
 import { PoTableListManagerComponent } from './po-table-list-manager/po-table-list-manager.component';
+import { PoPageSlideModule } from './../po-page/po-page-slide/po-page-slide.module';
+import { PoSwitchModule } from './../po-field/po-switch/po-switch.module';
+import { DragDropModule } from '@angular/cdk/drag-drop';
+
+// resize teste
+import { MyResizeDirective } from './my-resize.directive';
+import { ResizableComponent } from './resizable/resizable.component';
+import { FrozenColumnDirective } from './frozen.directive';
 
 /**
  * @description
@@ -57,7 +65,10 @@ import { PoTableListManagerComponent } from './po-table-list-manager/po-table-li
     PoIconModule,
     PoCheckboxModule,
     PoRadioModule,
-    PoLinkModule
+    PoLinkModule,
+    PoPageSlideModule,
+    DragDropModule,
+    PoSwitchModule
   ],
   declarations: [
     PoTableComponent,
@@ -73,7 +84,10 @@ import { PoTableListManagerComponent } from './po-table-list-manager/po-table-li
     PoTableSubtitleCircleComponent,
     PoTableSubtitleFooterComponent,
     PoTableCellTemplateDirective,
-    PoTableColumnTemplateDirective
+    PoTableColumnTemplateDirective,
+    MyResizeDirective,
+    ResizableComponent,
+    FrozenColumnDirective
   ],
   exports: [
     PoTableComponent,

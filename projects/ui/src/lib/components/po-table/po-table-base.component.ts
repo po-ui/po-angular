@@ -816,6 +816,10 @@ export abstract class PoTableBaseComponent implements OnChanges, OnDestroy {
     return this.poTableService.getFilteredItems(filteredParams);
   }
 
+  getFilteredItemsWithFilterParam(queryParams?: { [key: string]: QueryParamsType }): Observable<PoTableResponseApi> {
+    return this.poTableService.getFilteredItems(queryParams);
+  }
+
   setTableResponseProperties(data: PoTableResponseApi) {
     this.items = data.items || [];
     this.showMoreDisabled = !data.hasNext;

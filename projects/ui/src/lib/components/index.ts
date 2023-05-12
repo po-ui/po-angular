@@ -30,6 +30,7 @@ export * from './po-menu/index';
 export * from './po-modal/index';
 export * from './po-navbar/index';
 export * from './po-page/index';
+export * from './po-page/po-page-slide/index';
 export * from './po-popover/index';
 export * from './po-popup/index';
 export * from './po-progress/index';

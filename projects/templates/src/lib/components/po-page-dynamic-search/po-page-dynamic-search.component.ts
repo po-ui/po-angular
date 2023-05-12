@@ -116,6 +116,8 @@ export class PoPageDynamicSearchComponent extends PoPageDynamicSearchBaseCompone
   }
 
   onAction(quickFilter: string, quickSearchValue?: boolean) {
+    console.log(quickFilter);
+    console.log(quickSearchValue);
     const disclaimerQuickSearchUpdated = {
       property: 'search',
       label: `${this.literals.quickSearchLabel} ${quickFilter}`,
@@ -133,6 +135,7 @@ export class PoPageDynamicSearchComponent extends PoPageDynamicSearchBaseCompone
       : [disclaimerQuickSearchUpdated];
 
     if (this.quickSearch.observers && this.quickSearch.observers.length > 0 && !quickSearchValue) {
+      console.log(quickFilter);
       this.quickSearch.emit(quickFilter);
     }
 

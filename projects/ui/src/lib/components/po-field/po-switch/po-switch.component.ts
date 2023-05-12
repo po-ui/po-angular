@@ -82,6 +82,10 @@ export class PoSwitchComponent extends PoFieldModel<any> {
   @ViewChild('switchContainer', { static: true }) switchContainer: ElementRef;
 
   id = `po-switch[${uuid()}]`;
+
+  // input interno, não documentar
+  @Input('p-value')
+  @InputBoolean()
   value = false;
 
   private _labelOff: string = 'false';

@@ -84,6 +84,7 @@
     "gulp-run": "^1.7.1",
     "highlight.js": "^10.7.2",
     "http-status-codes": "^2.1.4",
+    "jspdf": "^2.5.1",
     "localforage": "1.9.0",
     "lokijs": "1.5.12",
     "monaco-editor": "0.24.0",

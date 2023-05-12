@@ -549,6 +549,7 @@ export class PoPageDynamicTableComponent extends PoPageDynamicListBaseComponent 
   }
 
   onQuickSearch(termTypedInQuickSearch) {
+    console.log(termTypedInQuickSearch);
     const quickSearchParam = termTypedInQuickSearch ? { [this.quickSearchParam]: termTypedInQuickSearch } : {};
     this.params = this.concatFilters ? { ...this.params, ...quickSearchParam } : { ...quickSearchParam };
 

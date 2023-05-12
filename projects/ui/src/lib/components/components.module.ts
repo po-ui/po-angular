@@ -30,6 +30,9 @@ import { PoMenuModule } from './po-menu/po-menu.module';
 import { PoModalModule } from './po-modal/po-modal.module';
 import { PoNavbarModule } from './po-navbar/po-navbar.module';
 import { PoPageModule } from './po-page/po-page.module';
+import { PoPageSlideModule } from './po-page/po-page-slide/po-page-slide.module';
+import { PoSwitchModule } from './po-field/po-switch/po-switch.module';
+// PoSwitchModule
 import { PoPopoverModule } from './po-popover/po-popover.module';
 import { PoPopupModule } from './po-popup/po-popup.module';
 import { PoProgressModule } from './po-progress/po-progress.module';
@@ -84,7 +87,9 @@ import { PoWidgetModule } from './po-widget/po-widget.module';
     PoWidgetModule,
     PoLinkModule,
     PoLabelModule,
-    PoImageModule
+    PoImageModule,
+    PoPageSlideModule,
+    PoSwitchModule
   ],
   exports: [
     PoAccordionModule,
@@ -127,7 +132,9 @@ import { PoWidgetModule } from './po-widget/po-widget.module';
     PoWidgetModule,
     PoLinkModule,
     PoLabelModule,
-    PoImageModule
+    PoImageModule,
+    PoPageSlideModule,
+    PoSwitchModule
   ],
   providers: [],
   bootstrap: []

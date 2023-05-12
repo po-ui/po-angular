@@ -20,7 +20,7 @@ export class PoTableService implements PoTableFilter {
 
   getFilteredItems(filteredParams?: PoTableFilteredItemsParams): Observable<any> {
     const params = this.validateParams(filteredParams);
-
+    console.log(params);
     return this.http.get(this.url, { headers: this.headers, params });
   }
 

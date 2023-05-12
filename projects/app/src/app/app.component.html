@@ -1,0 +1,308 @@
+<!-- <po-page-dynamic-table p-title="Po Page Dynamic Table" p-service-api="https://po-sample-api.fly.dev/v1/people">
+</po-page-dynamic-table> -->
+
+<style>
+  .cdk-drag-preview {
+    box-sizing: border-box;
+    border-radius: 4px;
+    box-shadow: 0 5px 5px -3px rgba(0, 0, 0, 0.2), 0 8px 10px 1px rgba(0, 0, 0, 0.14),
+      0 3px 14px 2px rgba(0, 0, 0, 0.12);
+  }
+
+  .cdk-drag-placeholder {
+    opacity: 0;
+  }
+
+  .cdk-drag-animating {
+    transition: transform 250ms cubic-bezier(0, 0, 0.2, 1);
+  }
+
+  .example-box.cdk-drop-list-dragging .example-box:not(.cdk-drag-placeholder) {
+    transition: transform 250ms cubic-bezier(0, 0, 0.2, 1);
+  }
+</style>
+
+<po-table [p-items]="items" [p-columns]="columns" [p-container]="true" [p-max-columns]="7" p-selectable> </po-table>
+
+<!-- [p-height]="500"  -->
+<!-- <po-table [p-items]="itensdoisMil" [p-height]="500" > </po-table> -->
+
+<br />
+<br />
+<br />
+<br />
+<br />
+<!-- <table class="table table-sm table-bordered table-striped text-center">
+  <thead>
+    <tr cdkDropList (cdkDropListDropped)="drop($event)">
+      <th *ngFor="let column of columns2" cdkDrag cdkDragLockAxis="x">{{column}}</th>
+    </tr>
+  </thead>
+  <tbody>
+    <tr *ngFor="let row of rows2">
+      <td *ngFor="let column of columns2">{{row[column]}}</td>
+    </tr>
+  </tbody>
+</table> -->
+
+<style>
+  table {
+    font-family: arial, sans-serif;
+    border-collapse: collapse;
+    width: 100%;
+  }
+
+  td,
+  th {
+    border: 1px solid #dddddd;
+    text-align: left;
+    padding: 8px;
+  }
+
+  tr:nth-child(even) {
+    background-color: #dddddd;
+  }
+
+  .example-list {
+    width: 1000px;
+    max-width: 100%;
+    border: solid 1px #ccc;
+    min-height: 60px;
+    display: flex;
+    flex-direction: row;
+    background: white;
+    border-radius: 4px;
+    overflow: hidden;
+  }
+
+  .example-box {
+    padding: 20px 10px;
+    border-right: solid 1px #ccc;
+    color: rgba(0, 0, 0, 0.87);
+    display: flex;
+    flex-direction: row;
+    align-items: center;
+    justify-content: space-between;
+    box-sizing: border-box;
+    cursor: move;
+    background: white;
+    font-size: 14px;
+    flex-grow: 1;
+    flex-basis: 0;
+  }
+
+  .cdk-drag-preview {
+    box-sizing: border-box;
+    border-radius: 4px;
+    box-shadow: 0 5px 5px -3px rgba(0, 0, 0, 0.2), 0 8px 10px 1px rgba(0, 0, 0, 0.14),
+      0 3px 14px 2px rgba(0, 0, 0, 0.12);
+  }
+
+  .cdk-drag-placeholder {
+    opacity: 0;
+  }
+
+  .cdk-drag-animating {
+    transition: transform 250ms cubic-bezier(0, 0, 0.2, 1);
+  }
+
+  .example-box:last-child {
+    border: none;
+  }
+
+  .example-list.cdk-drop-list-dragging .example-box:not(.cdk-drag-placeholder) {
+    transition: transform 250ms cubic-bezier(0, 0, 0.2, 1);
+  }
+
+  .table-content-class {
+    overflow-y: scroll;
+    overflow-x: hidden;
+  }
+</style>
+
+<table class="table table-sm table-bordered table-striped text-center">
+  <thead>
+    <tr>
+      <th>AAAAAAAAA</th>
+      <th>VVVVVV</th>
+      <th>CCCCCCCCCC</th>
+    </tr>
+  </thead>
+  <tbody>
+    <tr>
+      <td resizable>ana</td>
+      <td resizable>10</td>
+      <td resizable>sdasd@.com</td>
+    </tr>
+  </tbody>
+  <tbody>
+    <tr>
+      <td resizable>Ernst Handel</td>
+      <td resizable>80</td>
+      <td resizable>ssssssssssss</td>
+    </tr>
+  </tbody>
+  <tbody>
+    <tr>
+      <td resizable>jose</td>
+      <td resizable>28</td>
+      <td resizable>@@@@@@</td>
+    </tr>
+  </tbody>
+</table>
+
+<div cdkDropList cdkDropListOrientation="horizontal" class="example-list" (cdkDropListDropped)="drop($event)">
+  <div class="example-box" *ngFor="let timePeriod of timePeriods" cdkDrag>{{ timePeriod }}</div>
+</div>
+
+<br />
+<br />
+
+<style>
+  .thcustomizada {
+    display: flex;
+  }
+
+  .moove {
+    cursor: move;
+  }
+</style>
+
+<div class="col-md-8" id="htmlData">
+  <table class="table table-bordered">
+    <tr class="table-primary" cdkDropList cdkDropListOrientation="horizontal" (cdkDropListDropped)="drop($event)">
+      <th cdkDrag cdkDragLockAxis="x">
+        <div class="thcustomizada">
+          <p>Name</p>
+          <div>
+            <span cdkDragHandle class="po-icon po-icon-align-justify moove"></span>
+          </div>
+        </div>
+      </th>
+      <th cdkDrag cdkDragLockAxis="x">Email</th>
+      <th cdkDrag cdkDragLockAxis="x">Phone</th>
+    </tr>
+    <tr>
+      <th>James</th>
+      <td>Anne</td>
+      <td>Smith</td>
+      <td>Rob</td>
+    </tr>
+    <tr>
+      <th>James</th>
+      <td>Anne</td>
+      <td>Smith</td>
+      <td>Rob</td>
+    </tr>
+  </table>
+</div>
+
+<br />
+<br />
+
+<button (click)="jspdf()">Exportar para PDF</button>
+
+<style>
+  .sep {
+    position: sticky;
+    background: #fff;
+  }
+</style>
+
+<div class="table-header-class" style="height: 100px; overflow-x: auto; width: 230px">
+  <table>
+    <thead>
+      <tr>
+        <th class="p-element p-frozen-column" [pFrozenColumn]="true">Coluna fixa 1</th>
+        <th class="p-element p-frozen-column" [pFrozenColumn]="false">Coluna fixa 2</th>
+        <th class="p-element p-frozen-column">Coluna rolável</th>
+      </tr>
+    </thead>
+    <tbody>
+      <tr>
+        <td class="p-element p-frozen-column" [pFrozenColumn]="true">Conteúdo da coluna 1</td>
+        <td class="p-element p-frozen-column" [pFrozenColumn]="false">Conteúdo da coluna 2</td>
+        <td class="p-element p-frozen-column">Conteúdo da coluna 3</td>
+      </tr>
+      <tr>
+        <td class="p-element p-frozen-column">Conteúdo da coluna 1</td>
+        <td class="p-element p-frozen-column">Conteúdo da coluna 2</td>
+        <td class="p-element p-frozen-column">Conteúdo da coluna 3</td>
+      </tr>
+      <tr>
+        <td class="p-element p-frozen-column">Conteúdo da coluna 1</td>
+        <td class="p-element p-frozen-column">Conteúdo da coluna 2</td>
+        <td class="p-element p-frozen-column">Conteúdo da coluna 3</td>
+      </tr>
+    </tbody>
+  </table>
+</div>
+
+<po-table
+  class="po-mt-1 po-md-12"
+  #table
+  [p-columns]="columnsTableShowMore"
+  p-service-api="https://po-sample-api.fly.dev/v1/heroes"
+  [p-height]="300"
+>
+</po-table>
+
+<style>
+  .example-list {
+    width: 500px;
+    max-width: 100%;
+    border: solid 1px #ccc;
+    min-height: 60px;
+    display: block;
+    background: white;
+    border-radius: 4px;
+    overflow: hidden;
+  }
+
+  .example-box {
+    padding: 20px 10px;
+    border-bottom: solid 1px #ccc;
+    color: rgba(0, 0, 0, 0.87);
+    display: flex;
+    flex-direction: row;
+    align-items: center;
+    justify-content: space-between;
+    box-sizing: border-box;
+    cursor: move;
+    background: white;
+    font-size: 14px;
+  }
+
+  .example-box.cdk-drag-disabled {
+    background: #ccc;
+    cursor: default;
+  }
+
+  .cdk-drag-preview {
+    box-sizing: border-box;
+    border-radius: 4px;
+    box-shadow: 0 5px 5px -3px rgba(0, 0, 0, 0.2), 0 8px 10px 1px rgba(0, 0, 0, 0.14),
+      0 3px 14px 2px rgba(0, 0, 0, 0.12);
+  }
+
+  .cdk-drag-placeholder {
+    opacity: 0;
+  }
+
+  .cdk-drag-animating {
+    transition: transform 250ms cubic-bezier(0, 0, 0.2, 1);
+  }
+
+  .example-box:last-child {
+    border: none;
+  }
+
+  .example-list.cdk-drop-list-dragging .example-box:not(.cdk-drag-placeholder) {
+    transition: transform 250ms cubic-bezier(0, 0, 0.2, 1);
+  }
+</style>
+<div cdkDropList class="example-list" (cdkDropListDropped)="dropdois($event)">
+  <div class="example-box" *ngFor="let item of itemsdois" cdkDrag [cdkDragDisabled]="item.disabled">
+    {{ item.value }}
+  </div>
+</div>

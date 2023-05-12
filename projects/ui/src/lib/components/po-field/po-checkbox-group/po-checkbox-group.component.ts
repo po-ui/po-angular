@@ -54,7 +54,7 @@ import { PoCheckboxGroupOption } from './interfaces/po-checkbox-group-option.int
 export class PoCheckboxGroupComponent extends PoCheckboxGroupBaseComponent implements AfterViewChecked, AfterViewInit {
   @ViewChildren('checkboxLabel') checkboxLabels: QueryList<ElementRef>;
 
-  constructor(private changeDetector: ChangeDetectorRef) {
+  constructor(protected changeDetector: ChangeDetectorRef) {
     super();
   }
 

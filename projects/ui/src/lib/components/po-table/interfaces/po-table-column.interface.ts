@@ -261,4 +261,6 @@ export interface PoTableColumn {
    * > Exemplo: '100px' ou '20%'.
    */
   width?: string;
+
+  fixed?: boolean;
 }

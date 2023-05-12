@@ -1,16 +1,9 @@
-<po-popover #popover *ngIf="target" [p-target]="target" p-position="bottom-left" (p-close)="checkChanges([], true)">
+<div p-position="bottom-left">
   <div class="po-table-column-manager-header">
     <div class="po-table-column-manager-header-title">{{ literals.columnsManager }}</div>
-
-    <div class="po-table-column-manager-header-close">
-      <button
-        class="po-table-column-manager-header-close-button po-clickable po-icon po-icon-close"
-        (click)="popover.close()"
-      ></button>
-    </div>
   </div>
 
-  <div class="po-table-column-manager-body">
+  <div>
     <po-table-list-manager
       name="visibleColumns"
       [(ngModel)]="visibleColumns"
@@ -18,6 +11,7 @@
       [p-options]="columnsOptions"
       (p-change)="checkChanges($event, false)"
       (p-change-position)="changePosition($event)"
+      (p-change-fixed)="emitColumnFixed($event)"
       [p-columns-manager]="columns"
     >
     </po-table-list-manager>
@@ -32,4 +26,4 @@
     >
     </po-button>
   </div>
-</po-popover>
+</div>

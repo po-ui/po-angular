@@ -1,0 +1,39 @@
+<style>
+  :host:last-child .bar {
+    display: none;
+  }
+
+  .wrapper {
+    display: flex;
+    justify-content: flex-end;
+  }
+
+  .content {
+    flex: 1;
+  }
+
+  .bar {
+    width: 3px;
+    justify-self: flex-end;
+    background: blueviolet;
+    background-clip: content-box;
+    cursor: ew-resize;
+    opacity: 0;
+    transition: opacity 0.3s;
+  }
+
+  .resizing {
+    user-select: none;
+  }
+
+  .resizing .bar {
+    opacity: 1;
+  }
+</style>
+
+<div class="wrapper">
+  <div class="content">
+    <ng-content></ng-content>
+  </div>
+  <div class="bar" #resizer></div>
+</div>
