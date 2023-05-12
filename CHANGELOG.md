@@ -2,6 +2,17 @@
 
 All notable changes to this project will be documented in this file. See [standard-version](https://github.com/conventional-changelog/standard-version) for commit guidelines.
 
+# [15.8.0](https://github.com/po-ui/po-angular/compare/v15.7.1...v15.8.0) (2023-05-12)
+
+
+### Features
+
+* **list-view:** utiliza o `po-button` para exibir os detalhes da lista([625f35a](https://github.com/po-ui/po-angular/commit/625f35a58594a83929b5424eab1e10422f4e4595))
+* **lookup:** exposição de propriedade interna de Subscription do lookup([5ef4c5c](https://github.com/po-ui/po-angular/commit/5ef4c5cb702a97ebc7292631cc2916b91f04826a))
+* **upload:** exporta PoUploadFile e UploadStatusEnum ([a9c0637](https://github.com/po-ui/po-angular/commit/a9c0637f9bdbb4fd701b032d87490ef0f2076964))
+
+
+
 ## [15.7.1](https://github.com/po-ui/po-angular/compare/v15.7.0...v15.7.1) (2023-05-08)
 
 
