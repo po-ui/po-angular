@@ -1,5 +1,7 @@
 <po-tag
   [p-color]="color"
+  [p-disabled]="properties.includes('disabled')"
+  [p-removable]="properties.includes('removable')"
   [p-icon]="icon"
   [p-text-color]="textColor"
   [p-label]="label"
@@ -55,6 +57,16 @@
       [p-options]="iconList"
     >
     </po-select>
+
+    <po-checkbox-group
+      class="po-md-6 po-mt-2"
+      name="properties"
+      [(ngModel)]="properties"
+      p-label="Properties"
+      [p-options]="propertiesOptions"
+      (p-change)="propertiesChange($event)"
+    >
+    </po-checkbox-group>
 
     <po-switch *ngIf="type" class="po-md-6" name="icon" [(ngModel)]="icon" p-label="Icon"> </po-switch>
   </div>

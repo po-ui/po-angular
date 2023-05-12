@@ -184,6 +184,39 @@ describe('PoTagComponent:', () => {
 
       expect(spyOnClick).not.toHaveBeenCalled();
     });
+
+    it('onClose: Should have been called onClose', () => {
+      spyOn(component.click, <any>'emit');
+      spyOn(component, <any>'onRemove');
+
+      component.onClose();
+
+      expect(component.click.emit).toHaveBeenCalledWith(null);
+    });
+
+    it('onRemove: Should remove the element if not disabled', () => {
+      const mockElementRef = {
+        nativeElement: {
+          remove: jasmine.createSpy('remove')
+        }
+      };
+      component['el'] = mockElementRef;
+      component.disabled = false;
+
+      component['onRemove']();
+
+      expect(mockElementRef.nativeElement.remove).toHaveBeenCalled();
+    });
+
+    it('should set aria-label', () => {
+      component.label = 'Label';
+      expect(component.setAriaLabel()).toContain('Label Remove');
+    });
+
+    it('should set aria-label', () => {
+      component.value = 'Label';
+      expect(component.setAriaLabel()).toContain('Label Remove');
+    });
   });
 
   describe('Templates:', () => {
