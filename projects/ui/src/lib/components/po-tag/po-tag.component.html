@@ -12,19 +12,21 @@
   <div class="po-tag-sub-container">
     <div
       class="po-tag"
-      [attr.role]="isClickable ? 'button' : ''"
-      [class.po-clickable]="isClickable"
-      [class.po-tag-inverse]="inverse && !type && !customTextColor"
+      [attr.role]="isClickable && !disabled ? 'button' : ''"
+      [class.po-clickable]="isClickable && !disabled && !removable"
+      [class.po-tag-inverse]="inverse && !type && !customTextColor && !removable"
+      [class.po-tag-removable]="removable"
+      [class.po-tag-disabled]="disabled && removable"
       [ngClass]="tagColor"
       [ngStyle]="styleTag()"
-      tabindex="0"
+      [tabindex]="isClickable && !removable ? 0 : -1"
       (click)="onClick()"
       (keydown.enter)="onKeyPressed($event)"
       (keydown.space)="$event.preventDefault()"
       (keyup.space)="onKeyPressed($event)"
     >
       <po-icon
-        *ngIf="icon"
+        *ngIf="icon && !removable"
         class="po-tag-icon"
         [p-icon]="!type ? icon : iconFromType"
         [ngStyle]="
@@ -37,17 +39,30 @@
       >
       </po-icon>
 
+      <div class="po-tag-value">
+        <span
+          [ngStyle]="
+            !tagColor && inverse && !customTextColor
+              ? { 'color': customColor }
+              : !type && customTextColor && !removable
+              ? { 'color': customTextColor }
+              : ''
+          "
+          >{{ value }}</span
+        >
+      </div>
+
       <span
-        class="po-tag-value"
-        [ngStyle]="
-          !tagColor && inverse && !customTextColor
-            ? { 'color': customColor }
-            : !type && customTextColor
-            ? { 'color': customTextColor }
-            : ''
-        "
-        >{{ value }}</span
+        *ngIf="removable"
+        [attr.aria-label]="setAriaLabel()"
+        class="po-tag-remove po-icon po-icon-close"
+        [class.po-clickable]="!disabled"
+        [tabindex]="!disabled ? 0 : -1"
+        [attr.role]="!disabled ? 'button' : ''"
+        (click)="onClose()"
+        (keydown.enter)="onClose()"
       >
+      </span>
     </div>
   </div>
 </div>

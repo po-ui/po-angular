@@ -122,7 +122,7 @@ describe('PoDisclaimerGroupComponent:', () => {
 
       fixture.detectChanges();
 
-      expect(nativeElement.querySelector('.po-tag-value').innerHTML).toBe(component.literals.removeAll);
+      expect(nativeElement.querySelector('.po-tag-value span').innerHTML).toBe(component.literals.removeAll);
     });
   });
 });
