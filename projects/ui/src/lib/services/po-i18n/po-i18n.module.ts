@@ -1,4 +1,5 @@
 import { APP_INITIALIZER, ModuleWithProviders, NgModule } from '@angular/core';
+import { HttpClient } from '@angular/common/http';
 
 import { PoLanguageService } from './../po-language/po-language.service';
 
@@ -172,7 +173,7 @@ export class PoI18nModule {
         {
           provide: PoI18nService,
           useFactory: returnPoI18nService,
-          deps: [I18N_CONFIG, PoLanguageService]
+          deps: [I18N_CONFIG, HttpClient, PoLanguageService]
         }
       ]
     };

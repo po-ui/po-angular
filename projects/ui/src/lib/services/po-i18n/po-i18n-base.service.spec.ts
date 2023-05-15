@@ -190,6 +190,24 @@ xdescribe('PoI18nService:', () => {
         expect(utils.reloadCurrentPage).not.toHaveBeenCalled();
       });
 
+      it('setLanguage: should call `languageService.setLanguage` with value language param and set this value in instance', () => {
+        const oldLanguage = service.getLanguage();
+
+        let valueParam = 'en';
+
+        service.setLanguage(valueParam, false);
+        expect(service.getLanguage()).toEqual(valueParam);
+        expect(service.getShortLanguage()).toEqual(valueParam);
+
+        valueParam = 'pt-br';
+
+        service.setLanguage(valueParam, false);
+        expect(service.getLanguage()).toEqual(valueParam);
+        expect(service.getShortLanguage()).toEqual('pt');
+
+        service.setLanguage(oldLanguage);
+      });
+
       describe('setConfig:', () => {
         it(`should call 'languageService.setLanguageDefault' with 'config.default.language' if 'config.default' is defined.`, () => {
           const configMock = {
