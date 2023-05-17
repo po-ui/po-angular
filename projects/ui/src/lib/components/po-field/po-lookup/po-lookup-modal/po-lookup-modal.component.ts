@@ -97,6 +97,7 @@ export class PoLookupModalComponent extends PoLookupModalBaseComponent implement
 
     this.keyUpObservable.subscribe(() => {
       this.search();
+      this.changeDetector.detectChanges();
     });
   }
 
