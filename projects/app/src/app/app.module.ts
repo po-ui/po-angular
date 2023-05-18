@@ -11,6 +11,8 @@ import { NgModule } from '@angular/core';
 import { RouterModule } from '@angular/router';
 
 //import { PoModule } from '@po-ui/ng-components';
+import { PoTemplatesModule } from '../../../templates/src/lib';
+
 import { PoModule } from '../../../ui/src/lib';
 
 import { AppRoutingModule } from './app.routing.module';
@@ -30,6 +32,7 @@ import { TabelaTresComponent } from './tabela-tres/tabela-tres.component';
     HttpClientJsonpModule,
     AppRoutingModule,
     PoModule,
+    PoTemplatesModule,
     FormsModule,
     GridModule,
     ButtonsModule,

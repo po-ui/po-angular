@@ -20,6 +20,7 @@ export * from './po-icon/index';
 export * from './po-image/index';
 export * from './po-info/index';
 export * from './po-label/index';
+export * from './po-kendo/index';
 export * from './po-link/index';
 export * from './po-list-view/index';
 export * from './po-listbox/index';
