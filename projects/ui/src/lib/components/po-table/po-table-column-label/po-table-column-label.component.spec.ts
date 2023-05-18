@@ -24,7 +24,9 @@ describe('PoTableColumnLabelComponent:', () => {
     labels = [
       { value: 'success', label: 'Success', color: 'color-11' },
       { value: 'warning', label: 'Warning', color: 'color-08' },
-      { value: 1, label: 'Danger', color: 'color-07' }
+      { value: 1, label: 'Danger', color: 'color-07' },
+      { value: 2, label: undefined, color: 'color-07' },
+      { value: 5, label: ' ', color: 'color-07' }
     ];
   });
 
@@ -32,11 +34,30 @@ describe('PoTableColumnLabelComponent:', () => {
     expect(component instanceof PoTableColumnLabelComponent).toBeTruthy();
   });
 
+  describe('Methods: ', () => {
+    it('should return false if value property contains a label with only whitespace', () => {
+      component.value = labels[4];
+      component.checkValueHasLabel();
+      expect(component.hasLabel).toBeFalse();
+    });
+
+    it('should return true if value property contains a label', () => {
+      component.value = labels[1];
+      component.checkValueHasLabel();
+      expect(component.hasLabel).toBeTrue();
+    });
+
+    it('should returns false if value is undefined', () => {
+      component.value = undefined;
+      component.checkValueHasLabel();
+      expect(component.hasLabel).toBeFalse();
+    });
+  });
+
   describe('Templates:', () => {
     it('should show "Warning" text', () => {
       component.value = labels[1];
       fixture.detectChanges();
-
       const warningContent = fixture.debugElement.nativeElement.querySelector(`.po-${PoColorPaletteEnum.Color08}`);
       expect(warningContent.innerHTML).toContain('Warning');
     });
@@ -57,6 +78,12 @@ describe('PoTableColumnLabelComponent:', () => {
       component.value = labels[2];
       fixture.detectChanges();
       expect(fixture.debugElement.nativeElement.querySelector(`.po-${PoColorPaletteEnum.Color07}`)).toBeTruthy();
+    });
+
+    it('should not render a tag component if the value property has not a label', () => {
+      component.value = labels[3];
+      fixture.detectChanges();
+      expect(fixture.debugElement.nativeElement.querySelector(`.po-tag`)).toBeFalsy();
     });
   });
 });
