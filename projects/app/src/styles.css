@@ -1,1 +1,43 @@
 /* You can add global styles to this file, and also import other style files */
+.customer-photo {
+  display: inline-block;
+  width: 32px;
+  height: 32px;
+  border-radius: 50%;
+  background-size: 32px 35px;
+  background-position: center center;
+  vertical-align: middle;
+  line-height: 32px;
+  box-shadow: inset 0 0 1px #999, inset 0 0 10px rgba(0, 0, 0, 0.2);
+  margin-left: 5px;
+}
+
+.customer-name {
+  display: inline-block;
+  vertical-align: middle;
+  line-height: 32px;
+  padding-left: 10px;
+}
+
+.red {
+  color: #d9534f;
+}
+
+.text-bold {
+  font-weight: 600;
+}
+
+.k-columnmenu-item,
+.k-column-list,
+.k-actions,
+.k-filter-menu-container {
+  background: rgb(210, 208, 208);
+}
+
+.k-toolbar {
+  justify-content: flex-end;
+}
+
+.k-grid-md .k-table-th > .k-cell-inner > .k-link {
+  padding-block: 0px;
+}

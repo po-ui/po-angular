@@ -21,6 +21,8 @@
 /** IE9, IE10 and IE11 requires all of the following polyfills. */
 import 'core-js/es';
 
+import '@angular/localize/init';
+
 /**
  * By default, zone.js will patch all possible macroTask and DomEvents
  * user can disable parts of macroTask/DomEvents patch by setting following flags

@@ -66,7 +66,11 @@
                 "output": "/assets/monaco"
               }
             ],
-            "styles": ["./node_modules/@po-ui/style/css/po-theme-default.min.css", "projects/app/src/styles.css"],
+            "styles": [
+              "node_modules/@progress/kendo-theme-default/dist/all.css",
+              "node_modules/@totvs/thf-theme-kendo/css/thf-theme-kendo.min.css",
+              "projects/app/src/styles.css"
+            ],
             "scripts": [],
             "vendorChunk": true,
             "extractLicenses": false,
@@ -393,6 +397,9 @@
   },
   "cli": {
     "analytics": false,
-    "schematicCollections": ["@angular-eslint/schematics"]
+    "schematicCollections": ["@angular-eslint/schematics"],
+    "cache": {
+      "enabled": false
+    }
   }
 }

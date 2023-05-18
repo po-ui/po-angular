@@ -1,0 +1,84 @@
+<kendo-grid
+  (selectionChange)="onSelectionChange($event)"
+  [data]="gridData"
+  [kendoGridBinding]="gridView"
+  kendoGridSelectBy="id"
+  [sortable]="sortable"
+  [columnMenu]="{ filter: filterOption }"
+  [resizable]="resizable"
+  [groupable]="groupable"
+  [pageSize]="pageSize"
+  [height]="height"
+  [pageable]="pageable"
+  [reorderable]="reordable"
+>
+  <ng-template kendoGridToolbarTemplate>
+    <button *ngIf="actionDelete" (click)="delete()" [disabled]="selectedRows.length > 1 || selectedRows.length === 0">
+      DELETE
+    </button>
+    <button *ngIf="actionPDF" kendoGridPDFCommand icon="file-pdf">Export to PDF</button>
+    <input [style.width.px]="165" placeholder="Search in all columns..." kendoTextBox (input)="onFilter($event)" />
+  </ng-template>
+  <kendo-grid-checkbox-column
+    *ngIf="selectable"
+    [width]="45"
+    [headerClass]="{ 'text-center': true }"
+    [class]="{ 'text-center': true }"
+    [resizable]="false"
+    [columnMenu]="false"
+    [showSelectAll]="true"
+  ></kendo-grid-checkbox-column>
+  <kendo-grid-column
+    *ngFor="let column of columnsTable"
+    [field]="column"
+    [title]="column"
+    [width]="125"
+    [sticky]="columnsFixed.includes(column)"
+  >
+  </kendo-grid-column>
+
+  <!-- apenas para baixar o PDF -->
+  <kendo-grid-pdf fileName="Products.pdf" [allPages]="true" paperSize="A4" [repeatHeaders]="true" [landscape]="true">
+    <kendo-grid-pdf-margin top="2cm" left="1cm" right="1cm" bottom="2cm"></kendo-grid-pdf-margin>
+    <ng-template kendoGridPDFTemplate let-pageNum="pageNum" let-totalPages="totalPages">
+      <div class="page-template">
+        <div class="header">
+          <div style="float: right">Page {{ pageNum }} of {{ totalPages }}</div>
+          Multi-page grid with automatic page breaking
+        </div>
+        <div class="footer">Page {{ pageNum }} of {{ totalPages }}</div>
+      </div>
+    </ng-template>
+  </kendo-grid-pdf>
+</kendo-grid>
+
+<!-- {{ selectedRows | json }}
+{{ selectedRows.length }}
+{{ columnsTable }} -->
+
+<!-- <kendo-grid
+  [data]="gridData"
+  [kendoGridBinding]="gridView"
+  kendoGridSelectBy="ProductID"
+  [sortable]="sortable"
+  [columnMenu]="{ filter: filterOption }"
+  [resizable]="resizable"
+  [groupable]="groupable"
+>
+  <ng-template *ngIf="filterInput" kendoGridToolbarTemplate>
+    <input [style.width.px]="165" placeholder="Search in all columns..." kendoTextBox (input)="onFilter($event)" />
+    <kendo-grid-spacer></kendo-grid-spacer>
+  </ng-template>
+  <kendo-grid-checkbox-column
+    [width]="45"
+    [headerClass]="{ 'text-center': true }"
+    [class]="{ 'text-center': true }"
+    [resizable]="false"
+    [columnMenu]="false"
+    [showSelectAll]="true"
+  ></kendo-grid-checkbox-column>
+  <kendo-grid-column field="ProductID" title="ID"> </kendo-grid-column>
+  <kendo-grid-column field="ProductName" title="Name"> </kendo-grid-column>
+  <kendo-grid-column field="Category.CategoryName" title="Category"> </kendo-grid-column>
+  <kendo-grid-column field="UnitPrice" title="Price"> </kendo-grid-column>
+</kendo-grid> -->

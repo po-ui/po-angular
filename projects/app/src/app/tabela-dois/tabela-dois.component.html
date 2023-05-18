@@ -1,0 +1,18 @@
+<po-kendo
+  [p-filter-options]="true"
+  [p-resizable]="true"
+  [p-groupable]="true"
+  [p-filter-input]="true"
+  [p-filter-properties]="inputFilter"
+  [p-height]="500"
+  [p-reordable]="true"
+  [p-selectable]="true"
+  [p-action-delete]="true"
+  [p-action-pdf]="true"
+  [p-columns-fixed]="columnsFixed"
+  p-service-api="https://po-sample-api.fly.dev/v1/heroes"
+></po-kendo>
+<div style="margin-top: 45px">
+  <button [routerLink]="['/tabela']">voltar</button>
+  <button [routerLink]="['/tabelatres']">próxima</button>
+</div>
