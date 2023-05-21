@@ -4,7 +4,12 @@
       <th class="po-table-header po-table-column-selectable" *ngIf="isSelectable"></th>
       <th class="po-table-header po-table-header-column po-table-header-master-detail"></th>
       <th class="po-table-header po-table-header-ellipsis" *ngFor="let detail of detail.columns">
-        {{ getColumnTitleLabel(detail) }}
+        <div
+          class="po-table-header-flex"
+          [class.po-table-header-flex-right]="detail.type === 'currency' || detail.type === 'number'"
+        >
+          {{ getColumnTitleLabel(detail) }}
+        </div>
       </th>
     </tr>
   </thead>
@@ -34,6 +39,7 @@
         class="po-table-column-master-detail po-table-master-detail-label"
         (click)="isSelectable ? onSelectRow(item) : 'javascript:;'"
         *ngFor="let detail of detailColumns"
+        [class.po-table-column-right]="typeHeaderTop && (detail.type === 'currency' || detail.type === 'number')"
       >
         <strong *ngIf="typeHeaderInline"> {{ getColumnTitleLabel(detail) }}: </strong>
 
