@@ -9,7 +9,7 @@ import * as utils from '../../utils/util';
 import { PoI18nModule, PoI18nService } from '../po-i18n';
 import { PoLanguageModule } from '../po-language';
 
-xdescribe('PoI18nService:', () => {
+describe('PoI18nService:', () => {
   describe('without Service:', () => {
     let service: PoI18nService;
 
