@@ -2,6 +2,15 @@
 
 All notable changes to this project will be documented in this file. See [standard-version](https://github.com/conventional-changelog/standard-version) for commit guidelines.
 
+## [15.8.1](https://github.com/po-ui/po-angular/compare/v15.8.0...v15.8.1) (2023-05-22)
+
+
+### Bug Fixes
+
+* **i18n:** corrige importação de dependência no módulo do componente ([82707e1](https://github.com/po-ui/po-angular/commit/82707e108c4846823866651728e99d762a2bd4bc))
+* **lookup:** corrige efeito de loading no po-lookup-modal ([23e6d02](https://github.com/po-ui/po-angular/commit/23e6d023d1480e3c943650c0cbba0f80bc314fef)), closes [#1679](https://github.com/po-ui/po-angular/issues/1679)
+
+
 # [15.8.0](https://github.com/po-ui/po-angular/compare/v15.7.1...v15.8.0) (2023-05-12)
 
 
