@@ -2,6 +2,16 @@
 
 All notable changes to this project will be documented in this file. See [standard-version](https://github.com/conventional-changelog/standard-version) for commit guidelines.
 
+## [15.8.2](https://github.com/po-ui/po-angular/compare/v15.8.1...v15.8.2) (2023-05-24)
+
+
+### Bug Fixes
+
+* **table:** alinha colunas do tipo number e currency à direita ([d4bc670](https://github.com/po-ui/po-angular/commit/d4bc6706608813205abd562ab885af701fb3bef7)), closes [#1352](https://github.com/po-ui/po-angular/issues/1352)
+* **table:** corrige exibição de colunas do tipo label ([e66f74a](https://github.com/po-ui/po-angular/commit/e66f74ac6298c6015bb49bdfe8f0b452017ce430))
+
+
+
 ## [15.8.1](https://github.com/po-ui/po-angular/compare/v15.8.0...v15.8.1) (2023-05-22)
 
 
