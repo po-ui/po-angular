@@ -9,19 +9,27 @@ import { PoCheckboxGroupComponent } from '../../po-field/po-checkbox-group/po-ch
 export const poTableListManagerLiterals = {
   en: {
     up: 'up',
-    down: 'down'
+    down: 'down',
+    otherColumns: 'Other columns',
+    fixedColumns: 'Fixed'
   },
   es: {
     up: 'arriba',
-    down: 'abajo'
+    down: 'abajo',
+    otherColumns: 'Otras columnas',
+    fixedColumns: 'Fijado'
   },
   pt: {
     up: 'acima',
-    down: 'abaixo'
+    down: 'abaixo',
+    otherColumns: 'Outras colunas',
+    fixedColumns: 'Fixo'
   },
   ru: {
     up: 'вверх',
-    down: 'вниз'
+    down: 'вниз',
+    otherColumns: 'Другие столбцы',
+    fixedColumns: 'зафиксированный'
   }
 };
 
@@ -126,5 +134,9 @@ export class PoTableListManagerComponent extends PoCheckboxGroupComponent {
       console.log('não esta fixo');
     }
     this.checkOption(option);
+  }
+
+  existedFixedItem() {
+    return this.columnsManager.some(option => option['fixed'] === true);
   }
 }

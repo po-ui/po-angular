@@ -3,8 +3,8 @@ import { FormsModule } from '@angular/forms';
 import { NgModule } from '@angular/core';
 import { RouterModule } from '@angular/router';
 
-// import { PoTableModule } from '@po-ui/ng-components';
-import { PoTableModule } from '../../../../../ui/src/lib/components/po-table/po-table.module';
+import { PoTableModule } from '@po-ui/ng-components';
+// import { PoTableModule } from '../../../../../ui/src/lib/components/po-table/po-table.module';
 
 import { PoPageDynamicSearchModule } from '../po-page-dynamic-search/po-page-dynamic-search.module';
 

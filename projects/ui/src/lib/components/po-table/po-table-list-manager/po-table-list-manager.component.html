@@ -2,30 +2,77 @@
   .flex {
     display: flex;
     align-items: center;
+    gap: 2.5rem;
+  }
+
+  .bold {
+    font-weight: bold;
+  }
+
+  .po-table-column-manager-body {
+    /* remover padding */
+    padding: 0px !important;
+  }
+
+  .po-table-list-manager-item {
+    border: 1px solid #ececee;
+    padding: 8px;
+    border-radius: 8px;
+  }
+
+  .po-container-icons-arrows-columns-manager {
+    gap: 5px;
+  }
+
+  .po-table-list-manager-container + .po-table-list-manager-container {
+    margin-top: 10px;
+  }
+
+  .po-table-list-manager-title-group-items {
+    font-weight: 700;
+    line-height: 21px;
+    font-size: 14px;
+    color: #515162;
+    margin-bottom: 0.5rem;
+  }
+
+  .group-item {
+    margin-bottom: 3.5rem;
   }
 </style>
 
-<li
-  class="po-table-list-manager-container"
-  *ngFor="let option of checkboxGroupOptionsView; trackBy: trackByFn"
-  [class.po-checkbox-group-item-disabled]="option.disabled || disabled"
->
+<div *ngIf="existedFixedItem()" class="group-item">
+  <p class="po-table-list-manager-title-group-items">{{ literals.fixedColumns }}</p>
+  <li
+    class="po-table-list-manager-container"
+    *ngFor="let option of checkboxGroupOptionsView; trackBy: trackByFn"
+    [class.po-checkbox-group-item-disabled]="option.disabled || disabled"
+  >
+    <ng-container *ngIf="isFixed(option)">
+      <ng-container *ngTemplateOutlet="listItemsManagerDefault; context: { $implicit: option }"></ng-container>
+    </ng-container>
+  </li>
+</div>
+
+<div>
+  <p class="po-table-list-manager-title-group-items">{{ literals.otherColumns }}</p>
+  <li
+    class="po-table-list-manager-container"
+    *ngFor="let option of checkboxGroupOptionsView; trackBy: trackByFn"
+    [class.po-checkbox-group-item-disabled]="option.disabled || disabled"
+  >
+    <ng-container *ngIf="!isFixed(option)">
+      <ng-container *ngTemplateOutlet="listItemsManagerDefault; context: { $implicit: option }"></ng-container>
+    </ng-container>
+  </li>
+</div>
+
+<ng-template #listItemsManagerDefault let-option>
   <div class="po-table-list-manager-item">
-    <!-- <po-checkbox
-      #checkboxLabel
-      hidden
-      [p-label]="option.label"
-      [p-disabled]="option.disabled || disabled"
-      (click)="checkOption(option)"
-      (keydown)="onKeyDown($event, option)"
-      [p-checkboxValue]="checkedOptions[option.value] === null ? 'mixed' : checkedOptions[option.value]"
-      [p-required]="required"
-    >
-    </po-checkbox> -->
     <div class="flex">
       <po-switch
         name="switch"
-        (click)="eventClick(option)"
+        (click)="checkOption(option)"
         (keydown)="onKeyDown($event, option)"
         [p-disabled]="option.disabled || disabled"
         [p-value]="checkedOptions[option.value]"
@@ -33,9 +80,9 @@
         p-label-on=" "
       >
       </po-switch>
-      <div>
+      <p class="bold">
         {{ option.label }}
-      </div>
+      </p>
     </div>
 
     <div class="po-container-icons-arrows-columns-manager">
@@ -64,4 +111,4 @@
       </po-button>
     </div>
   </div>
-</li>
+</ng-template>

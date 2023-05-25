@@ -3,12 +3,12 @@ import { FormsModule } from '@angular/forms';
 import { NgModule } from '@angular/core';
 import { RouterModule } from '@angular/router';
 
-// import { PoDynamicModule, PoLanguageModule, PoModalModule, PoPageModule } from '@po-ui/ng-components';
+import { PoDynamicModule, PoLanguageModule, PoModalModule, PoPageModule } from '@po-ui/ng-components';
 
-import { PoDynamicModule } from '../../../../../ui/src/lib/components/po-dynamic/po-dynamic.module';
-import { PoLanguageModule } from '../../../../../ui/src/lib/services/po-language/po-language.module';
-import { PoModalModule } from '../../../../../ui/src/lib/components/po-modal/po-modal.module';
-import { PoPageModule } from '../../../../../ui/src/lib/components/po-page/po-page.module';
+// import { PoDynamicModule } from '../../../../../ui/src/lib/components/po-dynamic/po-dynamic.module';
+// import { PoLanguageModule } from '../../../../../ui/src/lib/services/po-language/po-language.module';
+// import { PoModalModule } from '../../../../../ui/src/lib/components/po-modal/po-modal.module';
+// import { PoPageModule } from '../../../../../ui/src/lib/components/po-page/po-page.module';
 
 import { PoPageCustomizationModule } from '../../services/po-page-customization/po-page-customization.module';
 
