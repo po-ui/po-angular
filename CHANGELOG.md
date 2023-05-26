@@ -2,6 +2,15 @@
 
 All notable changes to this project will be documented in this file. See [standard-version](https://github.com/conventional-changelog/standard-version) for commit guidelines.
 
+# [15.9.0](https://github.com/po-ui/po-angular/compare/v15.8.2...v15.9.0) (2023-05-26)
+
+
+### Features
+
+* **tag:** implementa novas propriedades ([9b6db42](https://github.com/po-ui/po-angular/commit/9b6db42a59262a28d8542ddec8900fd3b6291a3b))
+
+
+
 ## [15.8.2](https://github.com/po-ui/po-angular/compare/v15.8.1...v15.8.2) (2023-05-24)
 
 
