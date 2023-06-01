@@ -327,12 +327,16 @@ export class PoDecimalComponent extends PoInputBaseComponent implements AfterVie
     return value.match(/[a-zA-Z:;+=_´`^~"'?!@#$%¨&*()><{}çÇ\[\]/\\|]+/);
   }
 
+  hasNotSpace(value: string = '') {
+    return value.match(/^\S*$/);
+  }
+
   isValidNumber(event: any): boolean {
     // - event.key não existia em alguns browsers, como Samsung browser e Firefox.
     const keyValue = <any>String.fromCharCode(event.which);
     const validKey = event.which !== 8 && event.which !== 0;
 
-    return !this.hasLetters(keyValue) && validKey;
+    return !this.hasLetters(keyValue) && this.hasNotSpace(keyValue) && validKey;
   }
 
   // função responsável por adicionar os zeroes com as casa decimais ao sair do campo.
@@ -348,7 +352,12 @@ export class PoDecimalComponent extends PoInputBaseComponent implements AfterVie
       }
 
       const valueWithoutThousandSeparator = this.formatValueWithoutThousandSeparator(value);
-      this.setViewValue(this.formatToViewValue(valueWithoutThousandSeparator));
+      const formatedViewValue = this.formatToViewValue(valueWithoutThousandSeparator);
+      this.setViewValue(formatedViewValue);
+      if (!formatedViewValue) {
+        this.callOnChange(undefined);
+        return;
+      }
     }
 
     this.blur.emit();
@@ -427,16 +436,17 @@ export class PoDecimalComponent extends PoInputBaseComponent implements AfterVie
   }
 
   writeValueModel(value) {
+    let formatedViewValue;
     if (this.inputEl) {
       if (value || value === 0) {
-        const formatedViewValue = this.formatToViewValue(value);
+        formatedViewValue = this.formatToViewValue(value);
         this.setViewValue(formatedViewValue);
       } else {
         this.setViewValue('');
       }
     }
 
-    if (value) {
+    if (formatedViewValue) {
       this.change.emit(value);
     }
   }
@@ -506,6 +516,10 @@ export class PoDecimalComponent extends PoInputBaseComponent implements AfterVie
     const valueAfterDot = this.getValueAfterSeparator(numberValue, '.');
 
     const formatedNumber = this.formatMask(valueBeforeDot);
+
+    if (formatedNumber === 'NaN') {
+      return '';
+    }
 
     if (this.decimalsLength === 0) {
       return formatedNumber;
