@@ -69,7 +69,11 @@ export class PoGridCellComponent {
     }
 
     // A..Z - 0..9
-    if ((event.keyCode >= 65 && event.keyCode <= 90) || (event.keyCode >= 48 && event.keyCode <= 57)) {
+    if (
+      (event.keyCode >= 65 && event.keyCode <= 90) ||
+      (event.keyCode >= 48 && event.keyCode <= 57) ||
+      (event.keyCode >= 96 && event.keyCode <= 105)
+    ) {
       event.preventDefault();
       this.onEditCell(event.key);
     }
