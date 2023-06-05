@@ -2,6 +2,15 @@
 
 All notable changes to this project will be documented in this file. See [standard-version](https://github.com/conventional-changelog/standard-version) for commit guidelines.
 
+## [15.9.1](https://github.com/po-ui/po-angular/compare/v15.9.0...v15.9.1) (2023-06-05)
+
+
+### Bug Fixes
+
+* **decimal:** corrige o uso de hífens, pontos e espaços ([e203ca4](https://github.com/po-ui/po-angular/commit/e203ca4fd0389567b6a8076d6d855b9612907e18))
+
+
+
 # [15.9.0](https://github.com/po-ui/po-angular/compare/v15.8.2...v15.9.0) (2023-05-26)
 
 
