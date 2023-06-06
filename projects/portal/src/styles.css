@@ -269,7 +269,7 @@ pre code {
 }
 
 sample-po-menu-human-resources .po-page {
-  left: 256px;
+  left: 290px;
   position: absolute;
   top: 48px;
 }
@@ -283,7 +283,7 @@ sample-po-menu-human-resources .po-wrapper.po-collapsed-menu .po-toolbar {
 }
 
 .docs-sample-container po-menu ~ po-toolbar .po-toolbar {
-  left: 256px;
+  left: 290px;
   margin-left: 0;
   position: absolute;
 }
@@ -412,7 +412,7 @@ sample-po-menu-human-resources-view .docs-sample-container .po-menu {
   }
 
   .docs-sample-container .po-menu {
-    margin-left: -290px;
+    margin-left: -324px;
     margin-top: -40px;
     position: relative;
   }

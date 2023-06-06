@@ -23,6 +23,8 @@ export const poMenuFilterLiteralsDefault = {
 export class PoMenuFilterComponent {
   @Input('p-loading') loading: boolean;
 
+  @Input('p-enable-collapse') enableCollapse: boolean = false;
+
   // utilizado para repassar ao po-clean
   @ViewChild('inputFilter', { read: ElementRef, static: true }) inputFilterElement: ElementRef;
 
