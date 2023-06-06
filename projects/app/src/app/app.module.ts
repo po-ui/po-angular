@@ -20,9 +20,18 @@ import { AppComponent } from './app.component';
 import { TabelaComponent } from './tabela/tabela.component';
 import { TabelaDoisComponent } from './tabela-dois/tabela-dois.component';
 import { TabelaTresComponent } from './tabela-tres/tabela-tres.component';
+import { TabelaQuatroComponent } from './tabela-quatro/tabela-quatro.component';
+import { TabelaCincoComponent } from './tabela-cinco/tabela-cinco.component';
 
 @NgModule({
-  declarations: [AppComponent, TabelaComponent, TabelaDoisComponent, TabelaTresComponent],
+  declarations: [
+    AppComponent,
+    TabelaComponent,
+    TabelaDoisComponent,
+    TabelaTresComponent,
+    TabelaQuatroComponent,
+    TabelaCincoComponent
+  ],
   imports: [
     BrowserModule,
     BrowserAnimationsModule,

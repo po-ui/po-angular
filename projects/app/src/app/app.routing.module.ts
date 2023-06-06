@@ -4,6 +4,8 @@ import { AppComponent } from './app.component';
 import { TabelaComponent } from './tabela/tabela.component';
 import { TabelaDoisComponent } from './tabela-dois/tabela-dois.component';
 import { TabelaTresComponent } from './tabela-tres/tabela-tres.component';
+import { TabelaQuatroComponent } from './tabela-quatro/tabela-quatro.component';
+import { TabelaCincoComponent } from './tabela-cinco/tabela-cinco.component';
 
 const routes: Routes = [
   {
@@ -27,6 +29,16 @@ const routes: Routes = [
     path: 'tabelatres',
     pathMatch: 'full',
     component: TabelaTresComponent
+  },
+  {
+    path: 'tabelaquatro',
+    pathMatch: 'full',
+    component: TabelaQuatroComponent
+  },
+  {
+    path: 'tabelacinco',
+    pathMatch: 'full',
+    component: TabelaCincoComponent
   }
 ];
 

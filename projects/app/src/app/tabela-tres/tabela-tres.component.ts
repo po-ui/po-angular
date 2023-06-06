@@ -1,5 +1,4 @@
-import { Component, OnInit, ViewChild } from '@angular/core';
-import { process } from '@progress/kendo-data-query';
+import { Component } from '@angular/core';
 
 @Component({
   templateUrl: './tabela-tres.component.html'

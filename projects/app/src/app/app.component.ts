@@ -19,219 +19,113 @@ import { Observable, Subscription } from 'rxjs';
 
 import { EditService } from './edit.service';
 
-const createFormGroup = dataItem =>
+const formGroup = dataItem =>
   new FormGroup({
-    value: new FormControl(dataItem.value),
     label: new FormControl(dataItem.label),
+    nickname: new FormControl(dataItem.nickname, Validators.required),
     id: new FormControl(dataItem.id),
     name: new FormControl(dataItem.name),
-    nickname: new FormControl(dataItem.nickname),
-    email: new FormControl(dataItem.email)
+    value: new FormControl(dataItem.value, Validators.compose([Validators.required]))
   });
 
-const matches = (el, selector) => (el.matches || el.msMatchesSelector).call(el, selector);
+const hasClass = (el, className) => new RegExp(className).test(el.className);
+
+const isChildOf = (el, className) => {
+  while (el && el.parentElement) {
+    if (hasClass(el.parentElement, className)) {
+      return true;
+    }
+    el = el.parentElement;
+  }
+  return false;
+};
 
 @Component({
   selector: 'app-root',
   templateUrl: './app.component.html'
 })
 export class AppComponent implements OnInit {
-  @ViewChild(GridComponent)
-  private grid: GridComponent;
-
-  public view: unknown[];
+  value = '- q';
 
   public formGroup: FormGroup;
-
+  public view: unknown[];
+  @ViewChild(GridComponent) private grid: GridComponent;
   private editedRowIndex: number;
-  private docClickSubscription: Subscription = new Subscription();
-  private isNew: boolean;
+  private isNew = false;
 
-  constructor(private renderer: Renderer2, private editService: EditService) {}
+  public get isInEditingMode(): boolean {
+    return this.editedRowIndex !== undefined || this.isNew;
+  }
+
+  constructor(public service: EditService, private renderer: Renderer2) {}
 
   public ngOnInit(): void {
-    this.editService.listItems().subscribe({
-      next: items => {
-        this.view = items['items'];
-      },
-      error: (err: any) => {
-        console.log(err);
-      }
-    });
-
-    this.docClickSubscription.add(this.renderer.listen('document', 'click', this.onDocumentClick.bind(this)));
+    // this.service.listItems().subscribe({
+    //   next: items => {
+    //     this.view = items['items'];
+    //   },
+    //   error: (err: any) => {
+    //     console.log(err);
+    //     this.view =  [];
+    //   }
+    // });
+    // this.renderer.listen('document', 'click', ({ target }) => {
+    //   if (!isChildOf(target, 'k-grid')) {
+    //     this.saveCurrent();
+    //   }
+    // });
   }
+  public addHandler({ sender }: AddEvent): void {
+    this.closeEditor(sender);
 
-  public ngOnDestroy(): void {
-    this.docClickSubscription.unsubscribe();
-  }
-
-  public addHandler(): void {
-    this.closeEditor();
-
-    this.formGroup = createFormGroup({
-      value: '',
+    this.formGroup = formGroup({
       label: '',
-      id: '',
-      name: '',
       nickname: '',
-      email: ''
+      name: '',
+      UnitsInStock: ''
     });
+
     this.isNew = true;
-
-    this.grid.addRow(this.formGroup);
+    sender.addRow(this.formGroup);
   }
 
-  public saveRow(): void {
-    if (this.formGroup && this.formGroup.valid) {
-      this.saveCurrent();
-    }
-  }
+  public editHandler({ sender, columnIndex, rowIndex, dataItem }: CellClickEvent): void {
+    console.log('cliquei fora');
 
-  public cellClickHandler({ isEdited, dataItem, rowIndex }: CellClickEvent): void {
-    if (isEdited || (this.formGroup && !this.formGroup.valid)) {
+    if (this.formGroup && !this.formGroup.valid) {
       return;
     }
 
-    if (this.isNew) {
-      rowIndex += 1;
-    }
-
-    this.saveCurrent();
-
-    this.formGroup = createFormGroup(dataItem);
+    this.saveRow();
+    this.formGroup = formGroup(dataItem);
     this.editedRowIndex = rowIndex;
 
-    this.grid.editRow(rowIndex, this.formGroup);
+    sender.editRow(rowIndex, this.formGroup, { columnIndex });
   }
 
   public cancelHandler(): void {
-    this.closeEditor();
+    this.closeEditor(this.grid, this.editedRowIndex);
   }
 
-  private closeEditor(): void {
-    this.grid.closeRow(this.editedRowIndex);
+  public saveCurrent(): void {
+    if (this.formGroup && !this.formGroup.valid) {
+      return;
+    }
+    this.saveRow();
+  }
 
+  private closeEditor(grid: GridComponent, rowIndex: number = this.editedRowIndex): void {
     this.isNew = false;
+    grid.closeRow(rowIndex);
     this.editedRowIndex = undefined;
     this.formGroup = undefined;
   }
 
-  private onDocumentClick(e: Event): void {
-    // if (
-    //     this.formGroup &&
-    //     this.formGroup.valid &&
-    //     !matches(e.target, '#productsGrid tbody *, #productsGrid .k-grid-toolbar .k-button')
-    // ) {
-    //     this.saveCurrent();
-    // }
-  }
-
-  private saveCurrent(): void {
-    if (this.formGroup) {
-      // this.service.save(this.formGroup.value, this.isNew);
-      // this.closeEditor();
+  private saveRow(): void {
+    if (this.isInEditingMode) {
+      this.service.save(this.formGroup.value, this.isNew);
     }
-  }
 
-  private products() {
-    return [
-      {
-        'ProductID': 1,
-        'ProductName': 'Chai',
-        'SupplierID': 1,
-        'CategoryID': 1,
-        'QuantityPerUnit': '10 boxes x 20 bags',
-        'UnitPrice': 18.0,
-        'UnitsInStock': 39,
-        'UnitsOnOrder': 0,
-        'ReorderLevel': 10,
-        'Discontinued': false
-      },
-      {
-        'ProductID': 2,
-        'ProductName': 'Chang',
-        'SupplierID': 1,
-        'CategoryID': 1,
-        'QuantityPerUnit': '24 - 12 oz bottles',
-        'UnitPrice': 19.0,
-        'UnitsInStock': 17,
-        'UnitsOnOrder': 40,
-        'ReorderLevel': 25,
-        'Discontinued': false
-      },
-      {
-        'ProductID': 3,
-        'ProductName': 'Aniseed Syrup',
-        'SupplierID': 1,
-        'CategoryID': 2,
-        'QuantityPerUnit': '12 - 550 ml bottles',
-        'UnitPrice': 10.0,
-        'UnitsInStock': 13,
-        'UnitsOnOrder': 70,
-        'ReorderLevel': 25,
-        'Discontinued': false
-      },
-      {
-        'ProductID': 4,
-        'ProductName': "Chef Anton's Cajun Seasoning",
-        'SupplierID': 2,
-        'CategoryID': 2,
-        'QuantityPerUnit': '48 - 6 oz jars',
-        'UnitPrice': 22.0,
-        'UnitsInStock': 53,
-        'UnitsOnOrder': 0,
-        'ReorderLevel': 0,
-        'Discontinued': false
-      },
-      {
-        'ProductID': 5,
-        'ProductName': "Chef Anton's Gumbo Mix",
-        'SupplierID': 2,
-        'CategoryID': 2,
-        'QuantityPerUnit': '36 boxes',
-        'UnitPrice': 21.35,
-        'UnitsInStock': 0,
-        'UnitsOnOrder': 0,
-        'ReorderLevel': 0,
-        'Discontinued': true
-      },
-      {
-        'ProductID': 6,
-        'ProductName': "Grandma's Boysenberry Spread",
-        'SupplierID': 3,
-        'CategoryID': 2,
-        'QuantityPerUnit': '12 - 8 oz jars',
-        'UnitPrice': 25.0,
-        'UnitsInStock': 120,
-        'UnitsOnOrder': 0,
-        'ReorderLevel': 25,
-        'Discontinued': false
-      },
-      {
-        'ProductID': 7,
-        'ProductName': "Uncle Bob's Organic Dried Pears",
-        'SupplierID': 3,
-        'CategoryID': 7,
-        'QuantityPerUnit': '12 - 1 lb pkgs.',
-        'UnitPrice': 30.0,
-        'UnitsInStock': 15,
-        'UnitsOnOrder': 0,
-        'ReorderLevel': 10,
-        'Discontinued': false
-      },
-      {
-        'ProductID': 8,
-        'ProductName': 'Northwoods Cranberry Sauce',
-        'SupplierID': 3,
-        'CategoryID': 2,
-        'QuantityPerUnit': '12 - 12 oz jars',
-        'UnitPrice': 40.0,
-        'UnitsInStock': 6,
-        'UnitsOnOrder': 0,
-        'ReorderLevel': 0,
-        'Discontinued': false
-      }
-    ];
+    this.closeEditor(this.grid);
   }
 }

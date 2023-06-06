@@ -80,6 +80,7 @@
     "@progress/kendo-angular-dateinputs": "^12.0.1",
     "@progress/kendo-angular-dropdowns": "^12.0.1",
     "@progress/kendo-angular-excel-export": "^12.0.1",
+    "@progress/kendo-angular-filter": "^12.0.1",
     "@progress/kendo-angular-grid": "^12.0.1",
     "@progress/kendo-angular-icons": "^12.0.1",
     "@progress/kendo-angular-inputs": "^12.0.1",

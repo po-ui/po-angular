@@ -11,28 +11,28 @@ const REMOVE_ACTION = 'destroy';
 @Injectable({
   providedIn: 'root'
 })
-export class EditService {
+export class PoKendoEditService {
   private data: Array<any> = [];
 
   private counter: number = 0;
 
   constructor(private http: HttpClient) {
-    this.products();
+    // this.products();
   }
 
   public products(): any {
-    this.listItems().subscribe({
-      next: items => {
-        this.data = items['items'];
-        this.counter = this.data.length;
-        console.log(this.data);
-        return this.data;
-      },
-      error: (err: any) => {
-        console.log(err);
-        return [];
-      }
-    });
+    // this.listItems().subscribe({
+    //   next: items => {
+    //     this.data = items['items'];
+    //     this.counter = this.data.length;
+    //     console.log(this.data);
+    //     return this.data;
+    //   },
+    //   error: (err: any) => {
+    //     console.log(err);
+    //     return [];
+    //   }
+    // });
   }
 
   public remove(product: any): void {
@@ -41,7 +41,6 @@ export class EditService {
   }
 
   public save(product: any, isNew: boolean): void {
-    console.log(product);
     if (isNew) {
       product.id = this.counter++;
       this.data.splice(0, 0, product);
@@ -53,24 +52,15 @@ export class EditService {
     }
   }
 
+  public edit(url, id, form) {
+    return this.http.put(url + '/' + id, form);
+  }
+
   getData() {
     return this.data;
   }
 
-  listItems(): Observable<any> {
-    return this.http.get<Array<any>>('https://po-sample-api.fly.dev/v1/heroes');
+  setData(value) {
+    this.data = value;
   }
-}
-
-export interface Product {
-  ProductID: number;
-  ProductName: string;
-  SupplierID: number;
-  CategoryID: number;
-  QuantityPerUnit: string;
-  UnitPrice: number;
-  UnitsInStock: number;
-  UnitsOnOrder: number;
-  ReorderLevel: number;
-  Discontinued: boolean;
 }

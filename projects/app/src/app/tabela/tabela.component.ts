@@ -8,6 +8,24 @@ export class TabelaComponent implements OnInit {
   inputFilter = [
     {
       field: 'name',
+      title: 'name',
+      editor: 'string'
+    },
+    {
+      field: 'birthdate',
+      title: 'birthdate',
+      editor: 'date'
+    },
+    {
+      field: 'cityName',
+      title: 'cityName',
+      editor: 'string'
+    }
+  ];
+
+  inputFilterInput = [
+    {
+      field: 'name',
       operator: 'contains'
     },
     {

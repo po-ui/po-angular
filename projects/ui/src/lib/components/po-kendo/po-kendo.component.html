@@ -1,10 +1,29 @@
+<style>
+  .manager-flex {
+    display: flex;
+    justify-content: space-between;
+    margin-block: 0.5em;
+  }
+
+  .manager-flex-button {
+    display: flex;
+    justify-content: end;
+    margin: 10px;
+  }
+</style>
+
+<div class="manager-flex-button">
+  <po-button p-kind="tertiary" p-icon="po-icon po-icon-settings"> </po-button>
+</div>
+
 <kendo-grid
   (selectionChange)="onSelectionChange($event)"
+  (add)="addHandler($event)"
+  (cellClick)="editHandler($event)"
   [data]="gridData"
   [kendoGridBinding]="gridView"
   kendoGridSelectBy="id"
   [sortable]="sortable"
-  [columnMenu]="{ filter: filterOption }"
   [resizable]="resizable"
   [groupable]="groupable"
   [pageSize]="pageSize"
@@ -13,14 +32,35 @@
   [reorderable]="reordable"
 >
   <ng-template kendoGridToolbarTemplate>
-    <button *ngIf="actionDelete" (click)="delete()" [disabled]="selectedRows.length > 1 || selectedRows.length === 0">
-      DELETE
+    <po-button *ngIf="filterProperties" p-label="Filtrar dados" (p-click)="modal.open()"> </po-button>
+
+    <po-button
+      *ngIf="actionDelete"
+      p-label="DELETE"
+      [p-danger]="true"
+      p-icon="po-icon-delete"
+      (p-click)="delete()"
+      [p-disabled]="selectedRows.length > 1 || selectedRows.length === 0"
+    ></po-button>
+
+    <button *ngIf="actionPDF" class="po-button po-button-primary" kendoGridPDFCommand icon="file-pdf">
+      Export to PDF
     </button>
-    <button *ngIf="actionPDF" kendoGridPDFCommand icon="file-pdf">Export to PDF</button>
-    <input [style.width.px]="165" placeholder="Search in all columns..." kendoTextBox (input)="onFilter($event)" />
+
+    <po-input name="input" p-placeholder="Search in all columns..." kendoTextBox (input)="onFilter($event)"> </po-input>
+
+    <!-- edição -->
+    <button kendoGridAddCommand class="po-button po-button-primary" *ngIf="!isInEditingMode && formGroupConfig">
+      Add new
+    </button>
+    <div *ngIf="isInEditingMode && formGroupConfig" style="display: flex; gap: 8px">
+      <po-button p-label="Save" class="mr-2" [p-disabled]="!formGroup.valid" (p-click)="saveCurrent()"></po-button>
+      <po-button p-label="Cancel" [p-danger]="true" (p-click)="cancelHandler()"></po-button>
+    </div>
   </ng-template>
   <kendo-grid-checkbox-column
     *ngIf="selectable"
+    class="po-checkbox"
     [width]="45"
     [headerClass]="{ 'text-center': true }"
     [class]="{ 'text-center': true }"
@@ -52,33 +92,34 @@
   </kendo-grid-pdf>
 </kendo-grid>
 
-<!-- {{ selectedRows | json }}
-{{ selectedRows.length }}
-{{ columnsTable }} -->
+<!-- filtro -->
 
-<!-- <kendo-grid
-  [data]="gridData"
-  [kendoGridBinding]="gridView"
-  kendoGridSelectBy="ProductID"
-  [sortable]="sortable"
-  [columnMenu]="{ filter: filterOption }"
-  [resizable]="resizable"
-  [groupable]="groupable"
->
-  <ng-template *ngIf="filterInput" kendoGridToolbarTemplate>
-    <input [style.width.px]="165" placeholder="Search in all columns..." kendoTextBox (input)="onFilter($event)" />
-    <kendo-grid-spacer></kendo-grid-spacer>
-  </ng-template>
-  <kendo-grid-checkbox-column
-    [width]="45"
-    [headerClass]="{ 'text-center': true }"
-    [class]="{ 'text-center': true }"
-    [resizable]="false"
-    [columnMenu]="false"
-    [showSelectAll]="true"
-  ></kendo-grid-checkbox-column>
-  <kendo-grid-column field="ProductID" title="ID"> </kendo-grid-column>
-  <kendo-grid-column field="ProductName" title="Name"> </kendo-grid-column>
-  <kendo-grid-column field="Category.CategoryName" title="Category"> </kendo-grid-column>
-  <kendo-grid-column field="UnitPrice" title="Price"> </kendo-grid-column>
-</kendo-grid> -->
+<po-modal #modal p-title="PO Modal">
+  <div class="window-content" *ngIf="filterProperties">
+    <kendo-filter #filter [filters]="filterProperties" [value]="filterValue"> </kendo-filter>
+
+    <button kendoButton (click)="applyFilter(filter.value)">Apply filter</button>
+  </div>
+</po-modal>
+
+<!-- reordenar -->
+
+<po-modal #modaldois p-title="PO Modal"> </po-modal>
+
+<po-popover [p-target]="poButton">
+  <div *ngFor="let column of columnsTable" class="manager-flex">
+    {{ column }}
+    <div style="display: flex; gap: 0.5em">
+      <po-button
+        (p-click)="ordenar('cima', column)"
+        p-icon="po-icon po-icon-arrow-up"
+        [p-disabled]="verifyArrowDisabled('cima', column)"
+      ></po-button>
+      <po-button
+        (p-click)="ordenar('baixo', column)"
+        p-icon="po-icon po-icon-arrow-down"
+        [p-disabled]="verifyArrowDisabled('baixo', column)"
+      ></po-button>
+    </div>
+  </div>
+</po-popover>
