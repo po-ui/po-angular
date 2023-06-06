@@ -526,6 +526,99 @@ describe('PoLookupModalBaseComponent:', () => {
       expect(component.disclaimerGroup.disclaimers).toEqual(expectedValueDisclaimerGroup.disclaimers);
     });
 
+    it("addDisclaimer: should return formated currency in locale default if field type is 'currency'", () => {
+      component['language'] = 'pt';
+      component.advancedFilters = [{ property: 'value', type: 'currency' }];
+      const expectedValueDisclaimer = { property: 'value', value: 321, label: '321,00' };
+      const expectedValueDisclaimerGroup = {
+        title: 'titleTest',
+        disclaimers: [{ property: 'value', value: 321, label: '321,00' }]
+      };
+
+      component.addDisclaimer(321, 'value');
+
+      expect(component.disclaimer).toEqual(expectedValueDisclaimer);
+      expect(component.disclaimerGroup.disclaimers).toEqual(expectedValueDisclaimerGroup.disclaimers);
+    });
+
+    it("addDisclaimer: should return formated currency in locale 'En' if field type is 'currency' and locale is 'en'", () => {
+      component.advancedFilters = [{ property: 'value', type: 'currency', locale: 'en' }];
+      const expectedValueDisclaimer = { property: 'value', value: 321, label: '321.00' };
+      const expectedValueDisclaimerGroup = {
+        title: 'titleTest',
+        disclaimers: [{ property: 'value', value: 321, label: '321.00' }]
+      };
+
+      component.addDisclaimer(321, 'value');
+
+      expect(component.disclaimer).toEqual(expectedValueDisclaimer);
+      expect(component.disclaimerGroup.disclaimers).toEqual(expectedValueDisclaimerGroup.disclaimers);
+    });
+
+    it('addDisclaimer: should return label of option if options and label are defined', () => {
+      component.advancedFilters = [
+        {
+          property: 'company',
+          options: [
+            { label: 'Totvs', value: 1 },
+            { label: 'PO UI', value: 2 }
+          ]
+        }
+      ];
+      const expectedValueDisclaimer = { property: 'company', value: 1, label: 'Totvs' };
+      const expectedValueDisclaimerGroup = {
+        title: 'titleTest',
+        disclaimers: [{ property: 'company', value: 1, label: 'Totvs' }]
+      };
+
+      component.addDisclaimer(1, 'company');
+
+      expect(component.disclaimer).toEqual(expectedValueDisclaimer);
+      expect(component.disclaimerGroup.disclaimers).toEqual(expectedValueDisclaimerGroup.disclaimers);
+    });
+
+    it('addDisclaimer: should return value of option if options is defined and label is undefined', () => {
+      component.advancedFilters = [
+        {
+          property: 'company',
+          options: [{ value: 1 }, { value: 2 }]
+        }
+      ];
+      const expectedValueDisclaimer = { property: 'company', value: 1 };
+      const expectedValueDisclaimerGroup = {
+        title: 'titleTest',
+        disclaimers: [{ property: 'company', value: 1 }]
+      };
+
+      component.addDisclaimer(1, 'company');
+
+      expect(component.disclaimer).toEqual(expectedValueDisclaimer);
+      expect(component.disclaimerGroup.disclaimers).toEqual(expectedValueDisclaimerGroup.disclaimers);
+    });
+
+    it('addDisclaimer: should return option label if options and label are defined and optionsMulti is true', () => {
+      component.advancedFilters = [
+        {
+          property: 'company',
+          optionsMulti: true,
+          options: [
+            { label: 'Totvs', value: 1 },
+            { label: 'PO UI', value: 2 }
+          ]
+        }
+      ];
+      const expectedValueDisclaimer = { property: 'company', value: [1, 2], label: 'Totvs, PO UI' };
+      const expectedValueDisclaimerGroup = {
+        title: 'titleTest',
+        disclaimers: [{ property: 'company', value: [1, 2], label: 'Totvs, PO UI' }]
+      };
+
+      component.addDisclaimer([1, 2], 'company');
+
+      expect(component.disclaimer).toEqual(expectedValueDisclaimer);
+      expect(component.disclaimerGroup.disclaimers).toEqual(expectedValueDisclaimerGroup.disclaimers);
+    });
+
     it('p-infinite-scroll: should update property `p-infinite-scroll`', () => {
       const booleanValidTrueValues = [true, 'true', 1, ''];
       const booleanInvalidValues = [undefined, null, NaN, 2, 'string'];

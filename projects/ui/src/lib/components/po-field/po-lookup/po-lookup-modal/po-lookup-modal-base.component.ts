@@ -296,8 +296,17 @@ export abstract class PoLookupModalBaseComponent implements OnDestroy, OnInit {
   }
 
   addDisclaimer(value: any, property: string) {
+    const fieldFilter = this.advancedFilters?.find(filter => filter.property === property);
     this.disclaimer = <any>{ property: property };
     this.disclaimer.value = value;
+
+    if (fieldFilter?.type === 'currency' && value) {
+      this.formatValueToCurrency(fieldFilter, value);
+    }
+
+    if (fieldFilter?.options && value) {
+      this.applyDisclaimerLabelValue(fieldFilter, value);
+    }
 
     this.disclaimerGroup.disclaimers = [...this.disclaimerGroup.disclaimers, this.disclaimer];
   }
@@ -383,6 +392,25 @@ export abstract class PoLookupModalBaseComponent implements OnDestroy, OnInit {
     if (this.selectedItems && this.selectedItems.length) {
       this.selecteds = [...this.selectedItems];
     }
+  }
+
+  private applyDisclaimerLabelValue(field: PoLookupAdvancedFilter, filterValue: any) {
+    const values = Array.isArray(filterValue) ? filterValue : [filterValue];
+    const labels = values.map(optionValue => {
+      const findOption = field.options.find(option => option.value === optionValue);
+      return findOption.label;
+    });
+
+    if (labels.join()) {
+      this.disclaimer.label = labels.join(', ');
+    }
+  }
+
+  private formatValueToCurrency(field: PoLookupAdvancedFilter, filterValue: any) {
+    const currencyLabel = new Intl.NumberFormat(field.locale ? field.locale : this.language, {
+      minimumFractionDigits: 2
+    }).format(filterValue);
+    this.disclaimer.label = currencyLabel;
   }
 
   private setAdvancedFilterModalProperties() {
