@@ -148,7 +148,9 @@ export class PoPopupComponent extends PoPopupBaseComponent {
 
   private onScroll = ({ target }): void => {
     if (this.showPopup && target.className !== 'po-popup-container') {
-      this.close();
+      if (this.actions.length < 6) {
+        this.close();
+      }
     }
   };
 

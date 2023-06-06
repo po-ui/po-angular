@@ -19,21 +19,34 @@
     </div>
 
     <ng-container *ngIf="!isServerSearching">
-      <po-multiselect-item
-        *ngIf="!searchElement?.inputValue && visibleOptions.length && !hideSelectAll"
-        [p-label]="literals?.selectAll"
-        [p-selected]="getStateSelectAll()"
-        (p-change)="onClickSelectAll()"
-      >
-      </po-multiselect-item>
+      <!-- <po-multiselect-item
+          *ngIf="!searchElement?.inputValue && visibleOptions.length && !hideSelectAll"
+          [p-label]="literals?.selectAll"
+          [p-selected]="getStateSelectAll()"
+          (p-change)="onClickSelectAll()"
+        >
+        </po-multiselect-item>
 
-      <po-multiselect-item
-        *ngFor="let option of visibleOptions"
-        [p-label]="option[fieldLabel]"
-        [p-selected]="isSelectedItem(option)"
-        (p-change)="clickItem($event, option)"
+
+        <po-multiselect-item
+          *ngFor="let option of visibleOptions"
+          [p-label]="option[fieldLabel]"
+          [p-selected]="isSelectedItem(option)"
+          (p-change)="clickItem($event, option)"
+        >
+        </po-multiselect-item> -->
+
+      <po-listbox
+        p-type="check"
+        [p-items]="visibleOptions"
+        (p-change)="clickItem($event)"
+        [p-selected-options]="selectedOptions"
+        [p-checkboxAllValue]="getStateSelectAll()"
+        (p-change-all)="onClickSelectAll()"
+        [p-field-value]="fieldValue"
+        [p-field-label]="fieldLabel"
       >
-      </po-multiselect-item>
+      </po-listbox>
     </ng-container>
   </ul>
 </div>

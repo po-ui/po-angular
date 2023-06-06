@@ -69,6 +69,8 @@
 
 <ng-template #visibleOptionsTemplate>
   <ul #contentElement #poComboBody class="po-combo-container-content">
+    <!-- <po-listbox (p-checkboxValue)="onOptionClick($event)" [p-items]="visibleOptions" p-type="option"></po-listbox> -->
+
     <li
       *ngFor="let option of visibleOptions"
       [class.po-combo-item-selected]="compareObjects(selectedView, option)"

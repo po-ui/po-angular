@@ -23,41 +23,20 @@ export class PoItemListComponent extends PoItemListBaseComponent {
     super();
   }
 
-  /**
-   * Método para o evento click ao interagir com o item da lista do tipo ´Action´
-   *
-   * @param itemListAction
-   * @returns
-   */
-  onClickItem(itemListAction: PoItemListAction) {
-    const actionNoDisabled = itemListAction && !this.returnBooleanValue(itemListAction, 'disabled');
-
-    if (itemListAction && itemListAction.action && actionNoDisabled) {
-      itemListAction.action(this.param || itemListAction);
-    }
-
-    if (itemListAction && itemListAction.url && actionNoDisabled) {
-      return this.openUrl(itemListAction.url);
-    }
-  }
   onSelectItem(itemListOption: PoItemListOption | PoItemListOptionGroup | any): void {
     this.selectedView = itemListOption;
     this.selectItem.emit(itemListOption);
   }
 
-  returnBooleanValue(itemListAction: any, property: string) {
-    return isTypeof(itemListAction[property], 'function')
-      ? itemListAction[property](this.param || itemListAction)
-      : itemListAction[property];
+  onCheckboxItem() {
+    const option = { [this.fieldValue]: this.value, [this.fieldLabel]: this.label };
+    const selected = !this.checkboxValue;
+    this.checkboxItem.emit({ option, selected });
   }
 
-  private openUrl(url: string) {
-    if (isExternalLink(url)) {
-      return openExternalLink(url);
-    }
-
-    if (url) {
-      return this.router.navigate([url]);
+  onCheckboxItemEmit(event: KeyboardEvent) {
+    if ((event && event.code === 'Enter') || event.code === 'Space') {
+      this.onCheckboxItem();
     }
   }
 }

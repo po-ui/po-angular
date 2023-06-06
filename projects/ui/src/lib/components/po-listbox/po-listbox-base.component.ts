@@ -70,7 +70,26 @@ export class PoListBoxBaseComponent {
     return this._literals || poListBoxLiteralsDefault[this.language];
   }
 
-  @Output('p-select-item') selectItem = new EventEmitter<PoItemListOption | PoItemListOptionGroup | any>();
+  @Output('p-checkboxValue') checkboxValue = new EventEmitter<PoItemListOption | PoItemListOptionGroup | any>();
+
+  //output checkbox
+  @Output('p-change') change = new EventEmitter();
+
+  //output checkbox seleciona todos
+  @Output('p-change-all') changeAll = new EventEmitter();
+
+  //valor do checkbox de selecionar todos
+  @Input('p-checkvalue') checkvalue: any;
+
+  //valor do checkbox de selecionar todos
+  @Input('p-checkboxAllValue') checkboxAllValue: any;
+
+  /** Propriedade que recebe a lista de opções selecionadas. */
+  @Input('p-selected-options') selectedOptions: Array<any> = [];
+
+  @Input('p-field-value') fieldValue: string = 'value';
+
+  @Input('p-field-label') fieldLabel: string = 'label';
 
   constructor(languageService: PoLanguageService) {
     this.language = languageService.getShortLanguage();

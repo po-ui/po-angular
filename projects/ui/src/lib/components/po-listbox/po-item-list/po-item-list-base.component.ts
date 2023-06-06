@@ -99,5 +99,14 @@ export class PoItemListBaseComponent {
    */
   @Output('p-select-item') selectItem = new EventEmitter<PoItemListOption | PoItemListOptionGroup | any>();
 
+  //emissao de evento do checkbox
+  @Output('p-selectcheckbox-item') checkboxItem = new EventEmitter<any>();
+
+  //valor do checkbox de selecionar todos
+  @Input('p-checkboxValue') checkboxValue: any;
+
+  @Input('p-field-value') fieldValue: string = 'value';
+
+  @Input('p-field-label') fieldLabel: string = 'label';
   constructor() {}
 }

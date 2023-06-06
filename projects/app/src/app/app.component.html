@@ -1,0 +1,80 @@
+<style>
+  .center {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+  }
+
+  .abaixo {
+    position: absolute;
+    bottom: 0;
+    margin-top: 40px;
+  }
+</style>
+<po-checkbox name="checkbox" p-label="PO Checkbox"> </po-checkbox>
+
+<div class="center">
+  <span #target class="po-clickable po-icon po-icon-help" (click)="popup.toggle()"> </span>
+</div>
+
+<po-popup #popup [p-actions]="minhasActions" [p-target]="target"> </po-popup>
+
+<!-- <div class="po-row">
+  <div class="po-md-3">
+    <po-listbox [p-items]="items" p-type="check"></po-listbox>
+  </div>
+  <div class="po-md-3">
+    <po-listbox [p-items]="items"></po-listbox>
+  </div>
+  <div class="po-md-3">
+    <po-listbox [p-items]="items" p-type="option"></po-listbox>
+  </div>
+</div> -->
+
+{{ multiselect }}
+<po-multiselect [(ngModel)]="multiselect" name="multiselect" p-label="PO Multiselect" [p-options]="options">
+</po-multiselect>
+
+<po-combo name="combo" p-label="PO Combo" [p-options]="[{ value: 'Option 1' }, { value: 'Option 2' }]"> </po-combo>
+<!-- <div class="abaixo">
+
+{{multiselect}}
+<po-multiselect [(ngModel)]="multiselect"  name="multiselect" p-label="PO Multiselect" [p-options]="options"> </po-multiselect>
+
+{{optionscustommodel}}
+<po-multiselect
+        class="po-md-12"
+        name="multiselect"
+        p-label="Select your Company"
+        [p-options]="optionscustom"
+        p-field-value="nota"
+        p-field-label="aluno"
+        [(ngModel)]="optionscustommodel"
+      >
+      </po-multiselect>
+
+</div> -->
+<!-- <div class="example-listbox-container">
+  <label class="example-listbox-label" id="example-toppings-label"> Choose Toppings </label>
+  <ul
+    cdkListbox
+    [(ngModel)]="multiselect"
+    aria-labelledby="example-toppings-label"
+    class="example-listbox"
+  >
+    <li
+      *ngFor="let option of options"
+      [cdkOption]="option.value"
+      class="example-option"
+    >
+    <div tabindex="-1">
+      {{option.label}}
+    </div>
+    </li>
+  </ul>
+</div>
+<p>
+  Your order: <b>{{ multiselect | json }}</b
+  >&nbsp;
+  <button (click)="multiselect = []">Reset</button>
+</p> -->

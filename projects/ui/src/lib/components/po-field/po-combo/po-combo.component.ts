@@ -492,6 +492,7 @@ export class PoComboComponent extends PoComboBaseComponent implements AfterViewI
   }
 
   onOptionClick(option: PoComboOption | PoComboGroup, event?: any) {
+    console.log(option, event);
     const inputValue = this.getInputValue();
     const isUpdateModel =
       option[this.dynamicValue] !== this.selectedValue ||

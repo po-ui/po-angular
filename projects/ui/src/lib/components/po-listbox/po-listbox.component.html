@@ -1,10 +1,37 @@
-<div #listbox class="po-listbox" [attr.p-type]="type" [hidden]="visible">
-  <ul class="po-listbox-list" *ngIf="items.length; else noItemsTemplate">
-    <li *ngFor="let item of items" class="po-listbox-item">
+<div #listbox [class.po-listbox]="type === 'action'" [attr.p-type]="type" [hidden]="visible">
+  <ul
+    cdkListbox
+    [cdkListboxMultiple]="type === 'check'"
+    class="po-listbox-list"
+    *ngIf="items.length; else noItemsTemplate"
+  >
+    <li
+      class="po-li-listbox-item"
+      cdkOption="selectAll"
+      *ngIf="type === 'check'"
+      [attr.aria-checked]="checkboxAllValue === null ? 'mixed' : checkboxAllValue"
+      (click)="changeAll.emit()"
+      (keydown)="changeAllEmit($event)"
+    >
+      <po-item-list p-type="check" p-label="Selecione Todos" p-value="selectAll" [p-checkboxValue]="checkboxAllValue">
+      </po-item-list>
+    </li>
+    <li
+      class="po-li-listbox-item"
+      *ngFor="let item of items"
+      [cdkOption]="item[fieldValue]"
+      [cdkOptionDisabled]="item.disabled"
+      [attr.aria-selected]="isSelectedItem(item) || item.selected"
+      (click)="onSelectItem(item)"
+      (keydown)="onKeydown(item, $event)"
+    >
+      <!-- {{isSelectedItem(item) || item.selected}} -->
       <po-item-list
+        (p-selectcheckbox-item)="checkboxClicked($event)"
+        [p-checkboxValue]="isSelectedItem(item)"
         [attr.data-item-list]="item | json"
-        [p-label]="item.label"
-        [p-value]="item.value"
+        [p-label]="item[fieldLabel]"
+        [p-value]="item[fieldValue]"
         [p-disabled]="item.disabled"
         [p-selected]="item.selected"
         [p-separator]="item.separator"
@@ -12,7 +39,8 @@
         [p-icon]="item.icon"
         [p-type]="type"
         [p-item]="item"
-        (p-select-item)="onSelectItem(item)"
+        [p-field-value]="fieldValue"
+        [p-field-label]="fieldLabel"
       ></po-item-list>
     </li>
   </ul>

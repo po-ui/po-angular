@@ -1,1 +1,25 @@
 /* You can add global styles to this file, and also import other style files */
+
+/* .po-item-list__action:focus {
+  background-color: red;
+} */
+
+/* po-popup po-listbox {
+  --background: red;
+  --border-radius: 50px;
+  --border-color: orange;
+  --border-width: 40px;
+  --shadow: rgba(0, 0, 0, 0.3) 0px 19px 38px, rgba(0, 0, 0, 0.22) 0px 15px 12px;
+}
+
+po-popup po-item-list {
+  --font-family:Verdana, Geneva, Tahoma, sans-serif;
+  --font-size: 16px;
+  --line-height: 100px;
+  --font-weight-action: 100;
+  --color: red;
+  --color-hover: green;
+  --background-hover: blue;
+  --background-pressed: orangered;
+  --color-disabled: rgb(88, 236, 241);
+} */

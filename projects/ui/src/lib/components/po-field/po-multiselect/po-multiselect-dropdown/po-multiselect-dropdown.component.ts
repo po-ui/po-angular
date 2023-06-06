@@ -83,9 +83,9 @@ export class PoMultiselectDropdownComponent {
 
   @HostListener('keydown', ['$event'])
   onKeydown(event: any) {
-    if (event.keyCode === 9) {
-      this.closeDropdown.emit();
-    }
+    // if (event.keyCode === 9) {
+    //   this.closeDropdown.emit();
+    // }
   }
 
   scrollTo(index) {
@@ -97,11 +97,11 @@ export class PoMultiselectDropdownComponent {
     return this.selectedOptions.some(selectedItem => selectedItem[this.fieldValue] === option[this.fieldValue]);
   }
 
-  clickItem(check, option) {
-    this.updateSelectedValues(check, option);
+  clickItem({ selected, option }) {
+    this.updateSelectedValues(selected, option);
 
     if (!this.hideSearch) {
-      this.searchElement.setFocus();
+      // this.searchElement.setFocus();
     }
   }
 
