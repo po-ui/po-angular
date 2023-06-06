@@ -207,6 +207,20 @@ export abstract class PoComboBaseComponent implements ControlValueAccessor, OnIn
    *
    * @description
    *
+   * Define que o filtro no primeiro clique será removido.
+   *
+   * > Caso o combo tenha um valor padrão de inicialização, o primeiro clique
+   * no componente retornará todos os itens da lista e não apenas o item inicialiazado.
+   *
+   * @default `false`
+   */
+  @Input('p-remove-initial-filter') removeInitialFilter: boolean = false;
+
+  /**
+   * @optional
+   *
+   * @description
+   *
    * Deve ser informada uma função que será disparada quando houver alterações no ngModel. A função receberá como argumento o model modificado.
    *
    * > Pode-se optar pelo recebimento do objeto selecionado ao invés do model através da propriedade `p-emit-object-value`.
@@ -742,8 +756,12 @@ export abstract class PoComboBaseComponent implements ControlValueAccessor, OnIn
   updateComboList(options?: Array<any>) {
     const copyOptions = options || [...this.comboOptionsList];
 
-    const newOptions =
-      !options && !this.infiniteScroll && this.selectedValue ? [{ ...this.selectedOption }] : copyOptions;
+    let newOptions;
+    if (this.removeInitialFilter) {
+      newOptions = copyOptions;
+    } else {
+      newOptions = !options && !this.infiniteScroll && this.selectedValue ? [{ ...this.selectedOption }] : copyOptions;
+    }
 
     this.visibleOptions = newOptions;
 
@@ -823,6 +841,7 @@ export abstract class PoComboBaseComponent implements ControlValueAccessor, OnIn
       const option = this.getOptionFromValue(value, this.comboOptionsList);
       this.updateSelectedValue(option);
       this.updateComboList();
+      this.removeInitialFilter = false;
       return;
     }
 
