@@ -63,7 +63,7 @@ export class PoPageDynamicSearchComponent extends PoPageDynamicSearchBaseCompone
   };
 
   constructor(
-    languageService: PoLanguageService,
+    private languageService: PoLanguageService,
     private poPageCustomizationService: PoPageCustomizationService,
     private changeDetector: ChangeDetectorRef
   ) {
@@ -225,6 +225,13 @@ export class PoPageDynamicSearchComponent extends PoPageDynamicSearchBaseCompone
     return formattedObject;
   }
 
+  private formatValueToCurrency(field: any, value: any) {
+    const language = this.languageService.getLanguage();
+    return new Intl.NumberFormat(field.locale ? field.locale : language, {
+      minimumFractionDigits: 2
+    }).format(value);
+  }
+
   private getFieldByProperty(fields: Array<PoDynamicFormField>, fieldName: string) {
     return fields.find((field: PoDynamicFormField) => field.property === fieldName);
   }
@@ -232,6 +239,10 @@ export class PoPageDynamicSearchComponent extends PoPageDynamicSearchBaseCompone
   private getFilterValueToDisclaimer(field: any, value: any, optionsServiceObjectsList?: Array<PoComboOption>) {
     if (field.optionsService && optionsServiceObjectsList) {
       return this.optionsServiceDisclaimerLabel(value, optionsServiceObjectsList);
+    }
+
+    if (field.type === PoDynamicFieldType.Currency && value) {
+      return this.formatValueToCurrency(field, value);
     }
 
     if (field.type === PoDynamicFieldType.Date) {
