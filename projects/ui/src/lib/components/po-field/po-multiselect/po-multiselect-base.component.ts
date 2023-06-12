@@ -518,6 +518,7 @@ export abstract class PoMultiselectBaseComponent implements ControlValueAccessor
       )
       .subscribe();
 
+    this.setLabelsAndValuesOptions();
     this.validAndSortOptions();
     this.updateList(this.options);
   }
@@ -687,6 +688,15 @@ export abstract class PoMultiselectBaseComponent implements ControlValueAccessor
 
   registerOnValidatorChange(fn: () => void) {
     this.validatorChange = fn;
+  }
+
+  private setLabelsAndValuesOptions() {
+    if (this.fieldLabel && this.fieldValue && this.options) {
+      this.options.map(option => {
+        option.label = option[this.fieldLabel];
+        option.value = option[this.fieldValue];
+      });
+    }
   }
 
   private validateModel() {
