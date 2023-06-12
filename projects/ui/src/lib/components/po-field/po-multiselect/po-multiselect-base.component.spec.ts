@@ -549,6 +549,15 @@ describe('PoMultiselectBaseComponent:', () => {
       expect(component.applyFilter).toHaveBeenCalledWith(value);
     }));
 
+    it('setLabelsAndValuesOptions: should set options with fieldLabel and fieldValue', () => {
+      component.fieldLabel = 'games';
+      component.fieldValue = 'id';
+      component.options = [{ games: 'Fifa', id: '1' }];
+      component['setLabelsAndValuesOptions']();
+      expect(component.options.length).toBe(1);
+      expect(component.options).toEqual([{ games: 'Fifa', id: '1', label: 'Fifa', value: '1' }]);
+    });
+
     it('updateSelectedOptions: should call `updateVisibleItems` and set `selectedOptions`', () => {
       spyOn(component, 'updateVisibleItems');
       const params = [1, 2, 3];
