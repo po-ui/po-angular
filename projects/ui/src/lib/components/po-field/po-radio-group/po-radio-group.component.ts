@@ -16,6 +16,7 @@ import { NG_VALIDATORS, NG_VALUE_ACCESSOR } from '@angular/forms';
 
 import { removeDuplicatedOptions } from '../../../utils/util';
 
+import { PoRadioComponent } from '../po-radio/po-radio.component';
 import { PoRadioGroupBaseComponent } from './po-radio-group-base.component';
 
 /**
@@ -71,7 +72,7 @@ export class PoRadioGroupComponent extends PoRadioGroupBaseComponent implements 
   @Input('p-help') help?: string;
 
   @ViewChild('inp', { read: ElementRef, static: true }) inputEl: ElementRef;
-  @ViewChildren('inputRadio') radioLabels: QueryList<ElementRef>;
+  @ViewChildren('inputRadio') radioLabels: QueryList<PoRadioComponent>;
 
   differ: any;
 
@@ -123,7 +124,7 @@ export class PoRadioGroupComponent extends PoRadioGroupBaseComponent implements 
       const radioLabel = this.radioLabels.find((_, index) => !this.options[index].disabled);
 
       if (radioLabel) {
-        radioLabel.nativeElement.focus();
+        radioLabel.focus();
       }
     }
   }

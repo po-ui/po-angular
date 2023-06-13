@@ -92,6 +92,7 @@ export class PoRadioComponent extends PoFieldModel<boolean> {
   focus(): void {
     if (!this.disabled) {
       this.radioInput.nativeElement.focus();
+      this.onKeyup();
     }
   }
 
