@@ -1,7 +1,7 @@
 import { ComponentFixture, TestBed } from '@angular/core/testing';
 import { NG_VALUE_ACCESSOR } from '@angular/forms';
 
-import { configureTestSuite, expectPropertiesValues, expectSettersMethod } from './../../../util-test/util-expect.spec';
+import { configureTestSuite, expectPropertiesValues } from './../../../util-test/util-expect.spec';
 
 import { PoRadioComponent } from './po-radio.component';
 
@@ -62,7 +62,12 @@ describe('PoRadioComponent', () => {
 
       component.focus();
 
+      spyOn(component, 'onKeyup');
+
+      component.onKeyup();
+
       expect(component.radioInput.nativeElement.focus).toHaveBeenCalled();
+      expect(component.onKeyup).toHaveBeenCalled();
     });
 
     it('focus: should`t call `focus` of radio if `disabled`', () => {
