@@ -51,7 +51,7 @@ export class PoCalendarBaseComponent {
   protected today: Date = new Date();
 
   private shortLanguage: string;
-  private _locale: string = this.languageService.getShortLanguage();
+  private _locale: string = this.languageService?.getShortLanguage();
   private _maxDate: Date;
   private _minDate: Date;
   private _mode: PoCalendarMode;

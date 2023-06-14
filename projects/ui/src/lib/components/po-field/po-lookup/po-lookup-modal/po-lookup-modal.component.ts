@@ -31,7 +31,6 @@ import { sortArrayOfObjects } from '../../../../utils/util';
   changeDetection: ChangeDetectionStrategy.OnPush
 })
 export class PoLookupModalComponent extends PoLookupModalBaseComponent implements OnInit, AfterViewInit {
-  @ViewChild(PoTableComponent, { static: true }) poTable: PoTableComponent;
   @ViewChild('inpsearch') inputSearchEl: ElementRef;
   @ViewChild('container', { read: ViewContainerRef }) container: ViewContainerRef;
 

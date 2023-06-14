@@ -26,8 +26,8 @@ const MAX_LENGHT: number = 125;
 })
 export class PoLogoComponent {
   readonly literals = {
-    ...poLogoLiteralsDefault[this.poLanguageService.getLanguageDefault()],
-    ...poLogoLiteralsDefault[this.poLanguageService.getShortLanguage()]
+    ...poLogoLiteralsDefault[this.poLanguageService?.getLanguageDefault()],
+    ...poLogoLiteralsDefault[this.poLanguageService?.getShortLanguage()]
   };
 
   private _logo?: string;

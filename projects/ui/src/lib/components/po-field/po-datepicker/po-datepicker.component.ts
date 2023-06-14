@@ -90,7 +90,6 @@ export class PoDatepickerComponent extends PoDatepickerBaseComponent implements 
   @Input('p-help') help?: string;
 
   el: ElementRef;
-  hour: string;
   id = `po-datepicker[${uuid()}]`;
   visible: boolean = false;
   literals: any;

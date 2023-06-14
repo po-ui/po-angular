@@ -44,8 +44,8 @@ export abstract class PoMenuBaseComponent {
   filterService: PoMenuFilter;
 
   readonly literals = {
-    ...poMenuLiteralsDefault[this.languageService.getLanguageDefault()],
-    ...poMenuLiteralsDefault[this.languageService.getShortLanguage()]
+    ...poMenuLiteralsDefault[this.languageService?.getLanguageDefault()],
+    ...poMenuLiteralsDefault[this.languageService?.getShortLanguage()]
   };
 
   private _collapsed = false;

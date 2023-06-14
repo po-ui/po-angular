@@ -33,7 +33,7 @@ export class PoRichTextImageModalComponent {
   urlImage: string;
 
   readonly literals = {
-    ...poRichTextLiteralsDefault[this.languageService.getShortLanguage()]
+    ...poRichTextLiteralsDefault[this.languageService?.getShortLanguage()]
   };
 
   modalCancelAction: PoModalAction = {

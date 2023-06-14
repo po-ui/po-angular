@@ -31,7 +31,7 @@ export class PoRichTextToolbarComponent implements AfterViewInit {
   @Output('p-link-editing') linkEditing = new EventEmitter<any>();
 
   readonly literals = {
-    ...poRichTextLiteralsDefault[this.languageService.getShortLanguage()]
+    ...poRichTextLiteralsDefault[this.languageService?.getShortLanguage()]
   };
 
   alignButtons: Array<PoRichTextToolbarButtonGroupItem> = [

@@ -150,7 +150,7 @@ const NO_MESSAGE_HEADER_PARAM = 'X-PO-No-Message';
 export abstract class PoHttpInterceptorBaseService implements HttpInterceptor {
   notificationTypes = ['success', 'warning', 'error', 'information'];
 
-  literals = poHttpInterceptorLiterals[this.languageService.getShortLanguage()];
+  literals = poHttpInterceptorLiterals[this.languageService?.getShortLanguage()];
 
   private httpInterceptorDetailComponent: ComponentRef<PoHttpInterceptorDetailComponent> = undefined;
 
