@@ -123,7 +123,7 @@ export abstract class PoDatepickerBaseComponent implements ControlValueAccessor,
   @Output('p-change') onchange: EventEmitter<any> = new EventEmitter<any>();
 
   protected firstStart = true;
-  protected hour: string = 'T00:00:01-00:00';
+  protected hour: string = 'T00:00:00-00:00';
   protected isExtendedISO: boolean = false;
   protected objMask: any;
   protected onChangeModel: any = null;

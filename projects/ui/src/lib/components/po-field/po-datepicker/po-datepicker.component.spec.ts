@@ -1001,7 +1001,7 @@ describe('PoDatepickerComponent:', () => {
     it('writeValue: should keep `hour` with it`s default value if date isn`t an extended iso format', () => {
       component.writeValue('2019-11-21');
 
-      expect(component.hour).toBe('T00:00:01-00:00');
+      expect(component.hour).toBe('T00:00:00-00:00');
     });
 
     it('onKeyup: should change value of the mask when typing', () => {
