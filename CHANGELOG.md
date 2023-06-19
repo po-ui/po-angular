@@ -2,6 +2,24 @@
 
 All notable changes to this project will be documented in this file. See [standard-version](https://github.com/conventional-changelog/standard-version) for commit guidelines.
 
+# [15.9.2](https://github.com/po-ui/po-angular/compare/v15.9.1...v15.9.2) (2023-06-19)
+
+
+### Bug Fixes
+
+* **datepicker:** corrige exibição de horário em formatação extendida ([7dc3e46](https://github.com/po-ui/po-angular/commit/7dc3e46e8a74c1c28f498cfe26a3b8cf24dac679)), closes [#1725](https://github.com/po-ui/po-angular/issues/1725)
+* **dynamic-search:** corrige formatação de valores do filtro avançado ([4a6e2dc](https://github.com/po-ui/po-angular/commit/4a6e2dc8565c7dfa0b8273dda23eb55de1642ee0)), closes [#890](https://github.com/po-ui/po-angular/issues/890)
+* **lookup:** corrige formatação e exibição de valores do filtro avançado ([8e9aa43](https://github.com/po-ui/po-angular/commit/8e9aa43d5350ada1afdcc5b1f4fbd43d01f9872e)), closes [#890](https://github.com/po-ui/po-angular/issues/890)
+* **multiselect:** corrige retorno de opções sem label e value definidos ([a305a6f](https://github.com/po-ui/po-angular/commit/a305a6f2cd32df0d06e334aec44d274e785456cf)), closes [#890](https://github.com/po-ui/po-angular/issues/890)
+* **radio-group:** corrige método focus ([39e7ae4](https://github.com/po-ui/po-angular/commit/39e7ae4c7a8fe42612c49f95ef83f0c012ac47d2)), closes [#1717](https://github.com/po-ui/po-angular/issues/1717)
+
+
+### Features
+
+* **combo:** cria nova propriedade `p-remove-initial-filter` ([b2d8ea1](https://github.com/po-ui/po-angular/commit/b2d8ea1955b2270512855ce5af911a90dc164896))
+
+
+
 ## [15.9.1](https://github.com/po-ui/po-angular/compare/v15.9.0...v15.9.1) (2023-06-05)
 
 
