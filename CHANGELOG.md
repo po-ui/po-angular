@@ -2,6 +2,15 @@
 
 All notable changes to this project will be documented in this file. See [standard-version](https://github.com/conventional-changelog/standard-version) for commit guidelines.
 
+# [15.10.0](https://github.com/po-ui/po-angular/compare/v15.9.2...v15.10.0) (2023-06-27)
+
+
+### Features
+
+* **table:** implementa definições do AnimaliaDS ([328aaa0](https://github.com/po-ui/po-angular/commit/328aaa099e7d7fb84f77c2b03ad3563154da7cdd))
+
+
+
 # [15.9.2](https://github.com/po-ui/po-angular/compare/v15.9.1...v15.9.2) (2023-06-19)
 
 
