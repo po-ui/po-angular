@@ -12,16 +12,20 @@ import { PoListBoxLiterals } from './interfaces/po-listbox-literals.interface';
 
 export const poListBoxLiteralsDefault = {
   en: <PoListBoxLiterals>{
-    noItems: 'No items found'
+    noItems: 'No items found',
+    placeholderSearch: 'Search'
   },
   es: <PoListBoxLiterals>{
-    noItems: 'No se encontraron artículos'
+    noItems: 'No se encontraron artículos',
+    placeholderSearch: 'Busca'
   },
   pt: <PoListBoxLiterals>{
-    noItems: 'Nenhum item encontrado'
+    noItems: 'Nenhum item encontrado',
+    placeholderSearch: 'Buscar'
   },
   ru: <PoListBoxLiterals>{
-    noItems: 'ничего не найдено'
+    noItems: 'ничего не найдено',
+    placeholderSearch: 'искать'
   }
 };
 
@@ -70,12 +74,39 @@ export class PoListBoxBaseComponent {
     return this._literals || poListBoxLiteralsDefault[this.language];
   }
 
+  /** Propriedade que indica se o campo de pesquisa deverá ser escondido. */
+  @Input('p-hide-search') hideSearch?: boolean = false;
+
+  @Output('p-checkboxValue') checkboxValue = new EventEmitter<PoItemListOption | PoItemListOptionGroup | any>();
+
+  //output checkbox
+  @Output('p-change') change = new EventEmitter();
+
+  //output checkbox seleciona todos
+  @Output('p-change-all') changeAll = new EventEmitter();
+
+  //valor do checkbox de selecionar todos
+  @Input('p-checkvalue') checkvalue: any;
+
+  //valor do checkbox de selecionar todos
+  @Input('p-checkboxAllValue') checkboxAllValue: any;
+
+  /** Propriedade que recebe a lista de opções selecionadas. */
+  @Input('p-selected-options') selectedOptions: Array<any> = [];
+
+  @Input('p-field-value') fieldValue: string = 'value';
+
+  @Input('p-field-label') fieldLabel: string = 'label';
+
   // parâmetro que pode ser passado para o popup ao clicar em um item
   @Input('p-param') param?;
 
   @Output('p-select-item') selectItem = new EventEmitter<PoItemListOption | PoItemListOptionGroup | any>();
 
   @Output('p-close') closeEvent = new EventEmitter<any>();
+
+  /** Evento disparado a cada tecla digitada na pesquisa. */
+  @Output('p-change-search') changeSearch = new EventEmitter();
 
   constructor(languageService: PoLanguageService) {
     this.language = languageService.getShortLanguage();

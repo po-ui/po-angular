@@ -23,6 +23,18 @@ export class PoItemListComponent extends PoItemListBaseComponent {
     super();
   }
 
+  onCheckboxItem() {
+    const option = { [this.fieldValue]: this.value, [this.fieldLabel]: this.label };
+    const selected = !this.checkboxValue;
+    this.checkboxItem.emit({ option, selected });
+  }
+
+  onCheckboxItemEmit(event: KeyboardEvent) {
+    if ((event && event.code === 'Enter') || event.code === 'Space') {
+      this.onCheckboxItem();
+    }
+  }
+
   onSelectItem(itemListOption: PoItemListOption | PoItemListOptionGroup | any): void {
     this.selectedView = itemListOption;
     this.selectItem.emit(itemListOption);

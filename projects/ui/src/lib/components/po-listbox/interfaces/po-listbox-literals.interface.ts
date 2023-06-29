@@ -8,4 +8,7 @@
 export interface PoListBoxLiterals {
   /** Texto exibido quando não houver itens na lista */
   noItems?: string;
+
+  /** Texto do *placeholder* do campo de busca. */
+  placeholderSearch?: string;
 }

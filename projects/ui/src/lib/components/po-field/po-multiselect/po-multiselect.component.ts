@@ -326,11 +326,12 @@ export class PoMultiselectComponent
         this.searchByLabel(event[this.fieldValue], this.options, this.filterMode);
       }
     } else {
+      console.log(event);
       this.setVisibleOptionsDropdown(this.options);
     }
 
     // timeout necessário para reposicionar corretamente quando dropdown estiver pra cima do input e realizar busca no input
-    setTimeout(() => this.adjustContainerPosition());
+    // setTimeout(() => this.adjustContainerPosition());
   }
 
   closeDisclaimer(value) {

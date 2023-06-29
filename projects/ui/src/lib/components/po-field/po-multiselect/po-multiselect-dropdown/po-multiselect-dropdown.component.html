@@ -1,5 +1,5 @@
 <div #container class="po-multiselect-container" [hidden]="!show">
-  <po-multiselect-search
+  <!-- <po-multiselect-search
     #searchElement
     *ngIf="!hideSearch"
     [p-literals]="literals"
@@ -7,19 +7,33 @@
     [p-placeholder]="placeholderSearch"
     (p-change)="callChangeSearch($event)"
   >
-  </po-multiselect-search>
+  </po-multiselect-search> -->
 
-  <ul class="po-multiselect-items-container" [scrollTop]="scrollTop" #ulElement>
-    <div *ngIf="!visibleOptions.length && !isServerSearching" class="po-multiselect-container-no-data po-text-center">
-      <span> {{ literals.noData }}</span>
-    </div>
+  <!-- <ul class="po-multiselect-items-container" [scrollTop]="scrollTop" #ulElement> -->
+  <div *ngIf="!visibleOptions.length && !isServerSearching" class="po-multiselect-container-no-data po-text-center">
+    <span> {{ literals.noData }}</span>
+  </div>
 
-    <div *ngIf="isServerSearching" class="po-multiselect-container-loading po-text-center">
-      <po-loading></po-loading>
-    </div>
+  <div *ngIf="isServerSearching" class="po-multiselect-container-loading po-text-center">
+    <po-loading></po-loading>
+  </div>
 
-    <ng-container *ngIf="!isServerSearching">
-      <po-multiselect-item
+  <ng-container *ngIf="!isServerSearching">
+    <po-listbox
+      p-type="check"
+      [p-items]="visibleOptions"
+      (p-change)="clickItem($event)"
+      (mouseenter)="getStateSelectAll($event)"
+      (keyup.Space)="getStateSelectAll($event)"
+      [p-selected-options]="selectedOptions"
+      [p-checkboxAllValue]="getStateSelectAll()"
+      (p-change-all)="onClickSelectAll()"
+      [p-field-value]="fieldValue"
+      [p-field-label]="fieldLabel"
+      [p-change-search]="callChangeSearch($event)"
+    >
+    </po-listbox>
+    <!-- <po-multiselect-item
         *ngIf="!searchElement?.inputValue && visibleOptions.length && !hideSelectAll"
         [p-label]="literals?.selectAll"
         [p-selected]="getStateSelectAll()"
@@ -63,7 +77,7 @@
             </label>
           </a>
         </li>
-      </ng-template>
-    </ng-container>
-  </ul>
+      </ng-template> -->
+  </ng-container>
+  <!-- </ul> -->
 </div>
