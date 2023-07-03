@@ -59,7 +59,13 @@
           >
             <div class="home-widget-components-container">
               <div class="home-widget-components-content">
-                <po-table p-checkbox p-container p-no-shadow [p-items]="[{ Content: 'content', content: 'content' }]">
+                <po-table
+                  p-hide-columns-manager
+                  p-checkbox
+                  p-container
+                  p-no-shadow
+                  [p-items]="[{ Content: 'content', content: 'content' }]"
+                >
                 </po-table>
               </div>
             </div>
