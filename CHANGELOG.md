@@ -2,6 +2,21 @@
 
 All notable changes to this project will be documented in this file. See [standard-version](https://github.com/conventional-changelog/standard-version) for commit guidelines.
 
+# [15.11.0](https://github.com/po-ui/po-angular/compare/v15.10.0...v15.11.0) (2023-07-03)
+
+
+### Bug Fixes
+
+* **page-login:** centraliza propriedades p-environment e p-product-name ([93f9f6d](https://github.com/po-ui/po-angular/commit/93f9f6d978f9f2cd5901acf432c07c94f52dfdad)), closes [#1743](https://github.com/po-ui/po-angular/issues/1743)
+
+
+### Features
+
+* **number:** adiciona evento para tecla enter ([a91bd3f](https://github.com/po-ui/po-angular/commit/a91bd3f727a0fbacfaffcad6f5919ff66efc4c58))
+* **theme-builder:** implementa criação do novo construtor de temas ([a4b051c](https://github.com/po-ui/po-angular/commit/a4b051c34d24b1a0de90fe4b5b1a9fd02ed12670))
+
+
+
 # [15.10.0](https://github.com/po-ui/po-angular/compare/v15.9.2...v15.10.0) (2023-06-27)
 
 
