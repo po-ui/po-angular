@@ -55,4 +55,12 @@ describe('PoPageSlideBaseComponent', () => {
     component.close();
     expect(component.hidden).toBe(true);
   });
+
+  it('should emit `closeSlide` when close the slide', () => {
+    spyOn(component.closeSlide, 'emit');
+
+    component.close();
+
+    expect(component.closeSlide.emit).toHaveBeenCalled();
+  });
 });

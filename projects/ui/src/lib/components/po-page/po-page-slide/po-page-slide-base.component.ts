@@ -1,4 +1,4 @@
-import { Directive, Input } from '@angular/core';
+import { Directive, EventEmitter, Input, Output } from '@angular/core';
 
 import { InputBoolean } from '../../../decorators';
 
@@ -90,6 +90,15 @@ export class PoPageSlideBaseComponent {
   }
 
   /**
+   * @optional
+   *
+   * @description
+   *
+   * Evento disparado quando o usuário fechar a página.
+   */
+  @Output('p-close') closeSlide: EventEmitter<void> = new EventEmitter<void>();
+
+  /**
    * Ativa a visualização da página.
    *
    * Para utilizá-la é necessário ter a instância do componente no DOM, podendo
@@ -136,5 +145,6 @@ export class PoPageSlideBaseComponent {
    */
   public close(): void {
     this.hidden = true;
+    this.closeSlide.emit();
   }
 }

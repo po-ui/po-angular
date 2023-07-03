@@ -11,4 +11,8 @@ export class SamplePoPageSlideConfigurationComponent {
   public notification = true;
   public favorited = false;
   public localization = true;
+
+  public alert() {
+    alert('Test of p-close');
+  }
 }
