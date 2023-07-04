@@ -1,11 +1,35 @@
 <div class="po-table-actions">
-  <div #columnManager *ngIf="hasValidColumns && !hideColumnsManager" class="po-table-actions-column-manager flex-end">
+  <div
+    #columnBatchActions
+    *ngIf="hasValidColumns && itemsSelected.length > 0 && !hideBatchActions"
+    class="po-table-actions-batch-actions"
+  >
+    <div [ngPlural]="itemsSelected.length" class="po-table-actions-batch-actions__label">
+      <strong>
+        <ng-template ngPluralCase="=0">{{ literals.noItem }}</ng-template>
+        <ng-template ngPluralCase="=1">{{ literals.oneItem }}</ng-template>
+        <ng-template ngPluralCase="other">{{ itemsSelected.length }} {{ literals.multipleItems }}</ng-template>
+      </strong>
+    </div>
+
+    <div class="po-table-actions-batch-actions__buttons">
+      <po-button
+        p-icon="po-icon-delete"
+        [p-danger]="true"
+        [p-disabled]="itemsSelected.length > 1 && serviceDeleteApi !== undefined"
+        [p-label]="literals.delete"
+        (p-click)="modalDelete.open()"
+      ></po-button>
+    </div>
+  </div>
+
+  <div #columnManager *ngIf="hasValidColumns && !hideColumnsManager" class="po-table-actions-column-manager">
     <po-button
       #columnManagerTarget
       p-icon="po-icon-settings"
-      [p-aria-label]="literals.columnsManager"
       p-kind="tertiary"
       p-tooltip-position="left"
+      [p-aria-label]="literals.columnsManager"
       [p-tooltip]="literals.columnsManager"
       (p-click)="onOpenColumnManager()"
     ></po-button>
@@ -739,3 +763,13 @@
   (p-initial-columns)="onColumnRestoreManager($event)"
 >
 </po-table-column-manager>
+
+<po-modal
+  #modalDelete
+  [p-title]="literals.delete"
+  [p-primary-action]="confirm"
+  [p-secondary-action]="close"
+  [p-click-out]="true"
+>
+  <p class="po-font-text-large">{{ literals.bodyDelete }}</p>
+</po-modal>

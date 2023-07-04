@@ -36,6 +36,7 @@ export class SamplePoTableLabsComponent implements OnInit {
   event: string;
   height: number;
   items: Array<any>;
+  itemIndex = 0;
   literals: string;
   maxColumns: number;
   properties: Array<string>;
@@ -81,6 +82,7 @@ export class SamplePoTableLabsComponent implements OnInit {
     { label: 'Loading', value: 'loading' },
     { label: 'Auto collapse', value: 'autoCollapse' },
     { label: 'Hide columns manager', value: 'hideColumnsManager' },
+    { label: 'Hide batch actions', value: 'hideBatchActions' },
     { label: 'Actions Right', value: 'actionsRight' }
   ];
 
@@ -97,7 +99,8 @@ export class SamplePoTableLabsComponent implements OnInit {
   }
 
   addItem() {
-    this.items = [...this.items, this.samplePoTableLabsService.generateNewItem(this.items.length + 1)];
+    this.items = [...this.items, this.samplePoTableLabsService.generateNewItem(this.itemIndex)];
+    this.itemIndex++;
   }
 
   changeActionOptions() {
@@ -139,6 +142,12 @@ export class SamplePoTableLabsComponent implements OnInit {
     this.selectionOptions = [].concat(this.selectionOptions);
   }
 
+  deleteItems(items: Array<any>) {
+    if (this.height) {
+      this.items = items;
+    }
+  }
+
   disableAction() {
     return this.actionsDefinition.disableAction;
   }
@@ -157,6 +166,7 @@ export class SamplePoTableLabsComponent implements OnInit {
     this.customLiterals = undefined;
     this.height = undefined;
     this.items = [];
+    this.itemIndex = 0;
     this.literals = '';
     this.maxColumns = undefined;
     this.properties = [];

@@ -600,6 +600,48 @@ describe('PoTableBaseComponent:', () => {
       });
     });
 
+    describe('setSelectedList: ', () => {
+      const rows = [
+        {
+          id: 1,
+          name: 'John',
+          $selected: true
+        },
+        {
+          id: 2,
+          name: 'John'
+        },
+        {
+          id: 3,
+          name: 'John'
+        }
+      ];
+
+      it('should call itemsSelected with 1 item in Array', () => {
+        component.items = rows;
+
+        component.setSelectedList();
+
+        expect(component.itemsSelected).toEqual([rows[0]]);
+      });
+
+      it('should call items with 2 items and itemsSelected empty', () => {
+        component.items = [rows[1], rows[2]];
+
+        component.setSelectedList();
+
+        expect(component.itemsSelected).toEqual([]);
+      });
+
+      it('should call items and itemsSelected empty', () => {
+        component.items = [];
+
+        component.setSelectedList();
+
+        expect(component.itemsSelected).toEqual([]);
+      });
+    });
+
     it('unselectOtherRows: should unselect rows that are different from the current row and call selectAllDetails', () => {
       const rows: any = [
         {
@@ -1139,29 +1181,46 @@ describe('PoTableBaseComponent:', () => {
     });
 
     describe('setService', () => {
-      it('should be called with string url and set service url', () => {
+      it('should be called with string url and set service url and method is GET', () => {
         spyOn(component['poTableService'], 'setUrl');
         const url = 'https://po-ui.io';
 
-        component['setService'](url);
-        expect(component['poTableService'].setUrl).toHaveBeenCalledWith(url);
+        component['setService'](url, 'GET');
+        expect(component['poTableService'].setUrl).toHaveBeenCalledWith(url, 'GET');
       });
 
-      it("should be called with undefined and don't set url", () => {
+      it("should be called with undefined and don't set url and method is GET", () => {
         spyOn(component['poTableService'], 'setUrl');
         const url = undefined;
 
-        component['setService'](url);
+        component['setService'](url, 'GET');
 
         expect(component['poTableService'].setUrl).not.toHaveBeenCalled();
       });
 
-      it("should be called with empty string and don't set url", () => {
+      it("should be called with empty string and don't set url and method is GET", () => {
         spyOn(component['poTableService'], 'setUrl');
         const url = '';
 
-        component['setService'](url);
+        component['setService'](url, 'GET');
         expect(component.hasService).toBeFalsy();
+        expect(component['poTableService'].setUrl).not.toHaveBeenCalled();
+      });
+
+      it('should be called with string url and set service url and method is DELETE', () => {
+        spyOn(component['poTableService'], 'setUrl');
+        const url = 'https://po-ui.io';
+
+        component['setService'](url, 'DELETE');
+        expect(component['poTableService'].setUrl).toHaveBeenCalledWith(url, 'DELETE');
+      });
+
+      it("should be called with undefined and don't set url and method is DELETE", () => {
+        spyOn(component['poTableService'], 'setUrl');
+        const url = undefined;
+
+        component['setService'](url, 'DELETE');
+
         expect(component['poTableService'].setUrl).not.toHaveBeenCalled();
       });
     });
@@ -1422,6 +1481,28 @@ describe('PoTableBaseComponent:', () => {
       const invalidValues = [undefined, null, '', true, false, 0, 1, 'aa', [], {}];
 
       expectPropertiesValues(component, 'container', invalidValues, 'border');
+    });
+
+    it('p-param-delete-api: should update property with valid values', () => {
+      const validValue = 'value';
+
+      expectPropertiesValues(component, 'paramDeleteApi', validValue, validValue);
+    });
+
+    it('p-param-delete-api: should update property with `id` if values are invalid', () => {
+      const invalidValues = [undefined, null, true, false, 0, 1, [], {}];
+
+      expectPropertiesValues(component, 'paramDeleteApi', invalidValues, 'id');
+    });
+
+    it('p-param-delete-api: should update property with `id` if values are invalid', () => {
+      const invalidValues = [undefined, null, true, false, 0, 1, [], {}];
+
+      expectPropertiesValues(component, 'paramDeleteApi', invalidValues, 'id');
+    });
+
+    it('p-service-delete: should update property with valid values', () => {
+      expectPropertiesValues(component, 'serviceDeleteApi', 'https://po-ui.io', 'https://po-ui.io');
     });
 
     it('sortType: should return `ascending` if `sortedColumn.ascending` is `true`.', () => {

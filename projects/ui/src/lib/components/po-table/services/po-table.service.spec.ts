@@ -18,12 +18,20 @@ describe('PoTableService', () => {
     expect(service).toBeTruthy();
   });
 
-  it('setUrl: should be called and set api url', () => {
+  it('setUrl: should be called and set api url to method GET', () => {
     const url = 'https://po-sample-api.fly.dev/v1/heroes';
 
-    service.setUrl(url);
+    service.setUrl(url, 'GET');
 
     expect(service['url']).toBe(url);
+  });
+
+  it('setUrl: should be called and set api url to method DELETE', () => {
+    const url = 'https://po-sample-api.fly.dev/v1/heroes';
+
+    service.setUrl(url, 'DELETE');
+
+    expect(service['urlDelete']).toBe(url);
   });
 
   it('validateParams: should be called with string and return undefined', () => {
@@ -56,6 +64,17 @@ describe('PoTableService', () => {
     };
 
     service.getFilteredItems(filteredParams).subscribe(response => {
+      expect(response).toBeDefined();
+    });
+  });
+
+  it('deleteItem: to have been called and call backend', () => {
+    service['urlDelete'] = 'https://po-sample-api.fly.dev/v1/heroes';
+
+    const paramDelete = 'id';
+    const paramResponse = 12345;
+
+    service.deleteItem(paramDelete, paramResponse).subscribe(response => {
       expect(response).toBeDefined();
     });
   });

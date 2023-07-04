@@ -1,27 +1,27 @@
-import { By } from '@angular/platform-browser';
-import { Component, ElementRef, TemplateRef, ViewChild } from '@angular/core';
-import { ComponentFixture, fakeAsync, TestBed, tick } from '@angular/core/testing';
 import { DecimalPipe } from '@angular/common';
-import { RouterTestingModule } from '@angular/router/testing';
-import { Routes } from '@angular/router';
 import { HttpClientTestingModule } from '@angular/common/http/testing';
+import { Component, ElementRef, TemplateRef, ViewChild } from '@angular/core';
+import { ComponentFixture, TestBed, fakeAsync, tick } from '@angular/core/testing';
+import { By } from '@angular/platform-browser';
+import { Routes } from '@angular/router';
+import { RouterTestingModule } from '@angular/router/testing';
 
-import { of } from 'rxjs';
-import * as utilsFunctions from '../../utils/util';
-import { PoColorPaletteService } from './../../services/po-color-palette/po-color-palette.service';
+import { of, throwError } from 'rxjs';
 import { PoControlPositionService } from '../../services/po-control-position/po-control-position.service';
 import { PoDateService } from '../../services/po-date/po-date.service';
+import * as utilsFunctions from '../../utils/util';
+import { PoColorPaletteService } from './../../services/po-color-palette/po-color-palette.service';
 
+import { CdkVirtualScrollViewport } from '@angular/cdk/scrolling';
+import { NoopAnimationsModule } from '@angular/platform-browser/animations';
+import { PoTableRowTemplateArrowDirection } from './enums/po-table-row-template-arrow-direction.enum';
 import { PoTableAction } from './interfaces/po-table-action.interface';
-import { PoTableBaseComponent } from './po-table-base.component';
 import { PoTableColumn } from './interfaces/po-table-column.interface';
+import { PoTableBaseComponent } from './po-table-base.component';
+import { PoTableColumnTemplateDirective } from './po-table-column-template/po-table-column-template.directive';
 import { PoTableComponent } from './po-table.component';
 import { PoTableModule } from './po-table.module';
-import { PoTableColumnTemplateDirective } from './po-table-column-template/po-table-column-template.directive';
-import { PoTableRowTemplateArrowDirection } from './enums/po-table-row-template-arrow-direction.enum';
 import { PoTableService } from './services/po-table.service';
-import { NoopAnimationsModule } from '@angular/platform-browser/animations';
-import { CdkVirtualScrollViewport } from '@angular/cdk/scrolling';
 
 @Component({ template: 'Search' })
 export class SearchComponent {}
@@ -1914,6 +1914,106 @@ describe('PoTableComponent:', () => {
         expect(component.selectAll).toBeNull();
       });
 
+      it("deleteItems: should set false in 'selectAll' and remove item if selected is true and 'serviceDeleteApi' is undefined and height is defined", () => {
+        component.serviceDeleteApi = undefined;
+        component.height = 400;
+        component.items = [
+          { id: 1, name: 'teste', $selected: true },
+          { id: 2, name: 'teste2' }
+        ];
+        spyOn(component['eventDelete'], 'emit');
+
+        component.deleteItems();
+
+        expect(component.selectAll).toBeFalsy();
+        expect(component.items).toEqual([{ id: 2, name: 'teste2' }]);
+        expect(component.eventDelete.emit).toHaveBeenCalled();
+      });
+
+      it("deleteItems: should call function removeItem and remove item if selected is true and 'serviceDeleteApi' is undefined", () => {
+        component.serviceDeleteApi = undefined;
+        component.height = undefined;
+        component.items = [
+          { id: 1, name: 'teste', $selected: true },
+          { id: 2, name: 'teste2' }
+        ];
+        spyOn(component, 'removeItem');
+
+        component.deleteItems();
+
+        expect(component.selectAll).toBeFalsy();
+        expect(component.removeItem).toHaveBeenCalledWith(0);
+      });
+
+      it("deleteItems: should set false in 'selectAll' and should call 'setTableResponseProperties' if serviceDeleteApi is valid", () => {
+        component.serviceDeleteApi = 'https://po-sample-api.fly.dev/v1/heroes';
+        component.serviceApi = 'https://po-sample-api.fly.dev/v1/heroes';
+        component.paramDeleteApi = 'id';
+        component.items = [
+          { id: 1, name: 'teste', $selected: true },
+          { id: 2, name: 'teste2' }
+        ];
+        component.itemsSelected = [{ id: 1, name: 'teste', $selected: true }];
+
+        spyOn(component, 'setTableResponseProperties');
+        spyOn(component['defaultService'], <any>'deleteItem').and.returnValue(of({}));
+        spyOn(component['defaultService'], <any>'getFilteredItems').and.returnValue(
+          of({ items: [component.items[1]], hasNext: false })
+        );
+        component.deleteItems();
+
+        expect(component.selectAll).toBeFalsy();
+        expect(component.setTableResponseProperties).toHaveBeenCalled();
+      });
+
+      it('deleteItems: should set serviceDeleteApi but serviceApi is undefined', () => {
+        component.serviceDeleteApi = 'https://po-sample-api.fly.dev/v1/heroes';
+        component.serviceApi = undefined;
+        component.paramDeleteApi = 'id';
+        component.items = [
+          { id: 1, name: 'teste', $selected: true },
+          { id: 2, name: 'teste2' }
+        ];
+        component.itemsSelected = [{ id: 1, name: 'teste', $selected: true }];
+        spyOn(component['defaultService'], <any>'deleteItem').and.returnValue(of({}));
+
+        spyOn(component['eventDelete'], 'emit');
+        component.deleteItems();
+
+        expect(component.eventDelete.emit).toHaveBeenCalled();
+      });
+
+      it('deleteItemsService: should call error in service delete api', () => {
+        component.serviceDeleteApi = 'https://po-sample-api.fly.dev/v1/heroes';
+        component.serviceApi = undefined;
+        component.paramDeleteApi = 'id';
+        component.itemsSelected = [{ id: 1, name: 'teste', $selected: true }];
+        component.items = [
+          { id: 1, name: 'teste', $selected: true },
+          { id: 2, name: 'teste2' }
+        ];
+        spyOn(component['defaultService'], <any>'deleteItem').and.returnValue(
+          throwError(() => 'Internal Server Error')
+        );
+
+        spyOn(component['poNotification'], 'success');
+        spyOn(component['poNotification'], 'error');
+        component.deleteItems();
+
+        expect(component.poNotification.success).not.toHaveBeenCalled();
+        expect(component.poNotification.error).toHaveBeenCalled();
+      });
+
+      it('changesAfterDelete: should set false in "selectAll"', () => {
+        component.selectAll = true;
+        const newItems = [
+          { id: 1, name: 'teste', $selected: true },
+          { id: 2, name: 'teste2' }
+        ];
+        component['changesAfterDelete'](newItems);
+        expect(component.selectAll).toBeFalsy();
+      });
+
       it('toggleSelect: should add item as "selected"', () => {
         const newItem = {
           value: 1,
@@ -2330,6 +2430,20 @@ describe('PoTableComponent:', () => {
   });
 
   describe('Properties:', () => {
+    it('cancel: should call modal.close ', () => {
+      spyOn(component.modalDelete, <any>'close');
+      component.close.action();
+
+      expect(component.modalDelete.close).toHaveBeenCalled();
+    });
+
+    it('confirm: should call modal.confirm', () => {
+      spyOn(component, <any>'deleteItems');
+      component.confirm.action();
+
+      expect(component.deleteItems).toHaveBeenCalled();
+    });
+
     it('firstAction: should be `false` if not contains actions', () => {
       component.actions = undefined;
 
@@ -2764,6 +2878,28 @@ describe('PoTableComponent:', () => {
     component['removeListeners']();
 
     expect(component.infiniteScroll).toBeTrue();
+  });
+
+  it(`ngOnDestroy: should unsubscribe 'subscriptionService'`, () => {
+    const fakeSubscription = <any>{ unsubscribe: () => {} };
+    spyOn(fakeSubscription, <any>'unsubscribe');
+    component['subscriptionService'] = fakeSubscription;
+
+    component.ngOnDestroy();
+
+    expect(fakeSubscription.unsubscribe).toHaveBeenCalled();
+  });
+
+  it(`ngOnDestroy: should not unsubscribe if 'subscriptionService' is falsy.`, () => {
+    const fakeSubscription = <any>{ unsubscribe: () => {} };
+    component['subscriptionService'] = fakeSubscription;
+
+    spyOn(fakeSubscription, <any>'unsubscribe');
+
+    component['subscriptionService'] = undefined;
+    component.ngOnDestroy();
+
+    expect(fakeSubscription.unsubscribe).not.toHaveBeenCalled();
   });
 
   it('showMoreInfiniteScroll: should call `onShowMore` if showMoreDisabled is false ', () => {

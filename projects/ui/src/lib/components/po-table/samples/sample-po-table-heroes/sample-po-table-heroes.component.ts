@@ -48,4 +48,9 @@ export class SamplePoTableHeroesComponent implements OnInit {
       this.itemsSelected = [...this.poItemsSelected.items];
     }
   }
+
+  deleteItems(items: Array<any>) {
+    this.items = items;
+    this.itemsSelected = [];
+  }
 }

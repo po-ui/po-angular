@@ -20,47 +20,80 @@ export type QueryParamsType = string | number | boolean;
 
 export const poTableContainer = ['border', 'shadow'];
 export const poTableContainerDefault = 'border';
+export const poTableParamDeleteApi = 'id';
 
 export const poTableLiteralsDefault = {
   en: <PoTableLiterals>{
     noColumns: 'Columns are not defined',
     noData: 'No data found',
+    noItem: 'No selected item',
+    oneItem: '1 selected item',
+    multipleItems: 'selected items',
     noVisibleColumn: 'No visible column',
     loadingData: 'Loading',
     loadMoreData: 'Load more data',
     seeCompleteSubtitle: 'See complete subtitle',
     completeSubtitle: 'Complete subtitle',
-    columnsManager: 'Columns manager'
+    columnsManager: 'Columns manager',
+    bodyDelete: 'Do you really want to delete this item?',
+    cancel: 'Cancel',
+    delete: 'Delete',
+    deleteSuccessful: 'Items removed successfully',
+    deleteApiError: 'An unexpected error occurred, please try again later'
   },
   es: <PoTableLiterals>{
     noColumns: 'Columnas no definidas',
     noData: 'Datos no encontrados',
+    noItem: 'Ningún elemento seleccionado',
+    oneItem: '1 elemento seleccionado',
+    multipleItems: 'elementos seleccionados',
     noVisibleColumn: 'Sin columnas visibles',
     loadingData: 'Cargando datos',
     loadMoreData: 'Cargar más resultados',
     seeCompleteSubtitle: 'Ver subtitulo completo',
     completeSubtitle: 'Subtitulo completo',
-    columnsManager: 'Gerente de columna'
+    columnsManager: 'Gerente de columna',
+    bodyDelete: '¿Realmente desea eliminar este elemento?',
+    cancel: 'Cancelar',
+    delete: 'Borrar',
+    deleteSuccessful: 'Elementos eliminados con éxito',
+    deleteApiError: 'Ocurrió un error inesperado, inténtalo de nuevo más tarde'
   },
   pt: <PoTableLiterals>{
     noColumns: 'Nenhuma definição de colunas',
     noData: 'Nenhum dado encontrado',
     noVisibleColumn: 'Nenhuma coluna visível',
+    noItem: 'Nenhum item selecionado',
+    oneItem: '1 item selecionado',
+    multipleItems: 'itens selecionados',
     loadingData: 'Carregando',
     loadMoreData: 'Carregar mais resultados',
     seeCompleteSubtitle: 'Ver legenda completa',
     completeSubtitle: 'Legenda completa',
-    columnsManager: 'Gerenciador de colunas'
+    columnsManager: 'Gerenciador de colunas',
+    bodyDelete: 'Deseja realmente excluir esse item?',
+    cancel: 'Cancelar',
+    delete: 'Excluir',
+    deleteSuccessful: 'Itens removidos com sucesso',
+    deleteApiError: 'Ocorreu um erro inesperado, tente novamente mais tarde!'
   },
   ru: <PoTableLiterals>{
     noColumns: 'Нет определения столбца',
     noData: 'Данные не найдены',
+    noItem: 'Нет выбранного элемента',
+    oneItem: '1 элемент выбран',
+    multipleItems: 'выбранные элементы',
     noVisibleColumn: 'нет видимых столбцов',
     loadingData: 'Загрузка',
     loadMoreData: 'Загрузка',
     seeCompleteSubtitle: 'Посмотреть полный субтитр',
     completeSubtitle: 'Полный заголовок',
-    columnsManager: 'менеджер колонок'
+    columnsManager: 'менеджер колонок',
+    bodyDelete: 'Вы действительно хотите удалить этот элемент?',
+    cancel: 'Отмена',
+    delete: 'Удалить',
+    deleteSuccessful: 'Элементы успешно удалены',
+    deleteApiError: 'Произошла непредвиденная ошибка, повторите попытку позже'
   }
 };
 
@@ -114,6 +147,17 @@ export abstract class PoTableBaseComponent implements OnChanges, OnDestroy {
    * @default `false`
    */
   @Input('p-hide-columns-manager') @InputBoolean() hideColumnsManager?: boolean = false;
+
+  /**
+   * @optional
+   *
+   * @description
+   *
+   * Permite que as ações em lote, responsável por excluir e exibir a quantidade de itens, sejam escondidas.
+   *
+   * @default `false`
+   */
+  @Input('p-hide-batch-actions') @InputBoolean() hideBatchActions?: boolean = false;
 
   /**
    * @optional
@@ -266,6 +310,25 @@ export abstract class PoTableBaseComponent implements OnChanges, OnDestroy {
    *
    * @description
    *
+   * Evento executado após o método de exclusão ser finalizado.
+   *
+   * ```
+   *<po-table
+   *  (p-delete-items)="items = $event"
+   * >
+   *</po-table>
+   * ```
+   *
+   *
+   * > Como parâmetro o componente envia a lista atualizada, sem os itens excluídos.
+   */
+  @Output('p-delete-items') eventDelete: EventEmitter<any> = new EventEmitter<any>();
+
+  /**
+   * @optional
+   *
+   * @description
+   *
    * Evento executado ao selecionar uma linha do `po-table`.
    */
   @Output('p-selected') selected: EventEmitter<any> = new EventEmitter<any>();
@@ -340,9 +403,13 @@ export abstract class PoTableBaseComponent implements OnChanges, OnDestroy {
   pageSize = 10;
   hasService?: boolean = false;
   initialColumns: Array<PoTableColumn>;
+  showBatchActions: boolean = false;
+  itemsSelected: Array<any> = [];
+  paramsFilter: {};
   private _actions?: Array<PoTableAction> = [];
   private _columns: Array<PoTableColumn> = [];
   private _container?: string;
+  private _paramDelete: string = poTableParamDeleteApi;
   private _height?: number;
   private _hideDetail?: boolean = false;
   private _items: Array<PoTableColumn>;
@@ -351,6 +418,7 @@ export abstract class PoTableBaseComponent implements OnChanges, OnDestroy {
   private _selectable?: boolean;
   private language: string = poLocaleDefault;
   private _serviceApi: string;
+  private _serviceDeleteApi: string;
   private poTableServiceSubscription: Subscription;
   private sortStore: PoTableColumnSort;
   private _infiniteScrollDistance?: number = 100;
@@ -438,6 +506,25 @@ export abstract class PoTableBaseComponent implements OnChanges, OnDestroy {
    *
    * @description
    *
+   * Adiciona o parâmetro a ser enviado para a requisição de DELETE.
+   *
+   * É necessário a utilização da propriedade `p-service-delete` em conjunto.
+   *
+   * @default `id`
+   */
+  @Input('p-param-delete-api') set paramDeleteApi(value: string) {
+    this._paramDelete = value && typeof value === 'string' ? value : poTableParamDeleteApi;
+  }
+
+  get paramDeleteApi(): string {
+    return this._paramDelete;
+  }
+
+  /**
+   * @optional
+   *
+   * @description
+   *
    * Define a altura da tabela em *pixels* e fixa o cabeçalho.
    *
    * Ao utilizar essa propriedade será inserido o `virtual-scroll` na tabela melhorando a performance.
@@ -478,12 +565,22 @@ export abstract class PoTableBaseComponent implements OnChanges, OnDestroy {
    *
    * ```
    *  const customLiterals: PoTableLiterals = {
-   *    loadMoreData: 'Buscar mais dados',
-   *    loadingData: 'Processando',
-   *    noColumns: 'Sem colunas',
-   *    noData: 'Sem dados',
-   *    seeCompleteSubtitle: 'Mostrar legenda completa',
-   *    completeSubtitle: 'Todas legendas'
+   *    noColumns: 'Nenhuma definição de colunas',
+   *    noData: 'Nenhum dado encontrado',
+   *    noVisibleColumn: 'Nenhuma coluna visível',
+   *    noItem: 'Nenhum item selecionado',
+   *    oneItem: '1 item selecionado',
+   *    multipleItems: 'itens selecionados',
+   *    loadingData: 'Carregando',
+   *    loadMoreData: 'Carregar mais resultados',
+   *    seeCompleteSubtitle: 'Ver legenda completa',
+   *    completeSubtitle: 'Legenda completa',
+   *    columnsManager: 'Gerenciador de colunas',
+   *    bodyDelete: 'Deseja realmente excluir esse item?',
+   *    cancel: 'Cancelar',
+   *    delete: 'Excluir',
+   *    deleteSuccessful: 'Itens removidos com sucesso',
+   *    deleteApiError: 'Ocorreu um erro inesperado, tente novamente mais tarde!',
    *  };
    * ```
    *
@@ -650,7 +747,7 @@ export abstract class PoTableBaseComponent implements OnChanges, OnDestroy {
    */
   @Input('p-service-api') set serviceApi(service: string) {
     this._serviceApi = service;
-    this.setService(this.serviceApi);
+    this.setService(this.serviceApi, 'GET');
     this.hasService = !!service;
     this.showMoreDisabled = !this.hasService;
     this.page = 1;
@@ -659,6 +756,27 @@ export abstract class PoTableBaseComponent implements OnChanges, OnDestroy {
 
   get serviceApi() {
     return this._serviceApi;
+  }
+
+  /**
+   * @optional
+   *
+   * @description
+   *
+   * URL da API responsável por excluir os registros.
+   *
+   * Ao selecionar o botão de excluir itens, essa url será executada utilizando o parâmetro enviado na propriedade `p-param-delete-api`.
+   * Caso ela não seja utilizada, o parâmetro padrão a ser enviado será `id`.
+   *
+   * > Esta URL deve retornar e receber os dados no padrão de [API do PO UI](https://po-ui.io/guides/api).
+   */
+  @Input('p-service-delete') set serviceDeleteApi(service: string) {
+    this._serviceDeleteApi = service;
+    this.setService(this.serviceDeleteApi, 'DELETE');
+  }
+
+  get serviceDeleteApi() {
+    return this._serviceDeleteApi;
   }
 
   get hasColumns(): boolean {
@@ -728,6 +846,7 @@ export abstract class PoTableBaseComponent implements OnChanges, OnDestroy {
       });
 
       this.emitSelectAllEvents(this.selectAll, [...this.items]);
+      this.setSelectedList();
     }
   }
 
@@ -737,6 +856,7 @@ export abstract class PoTableBaseComponent implements OnChanges, OnDestroy {
     this.emitSelectEvents(row);
 
     this.configAfterSelectRow(this.items, row);
+    this.setSelectedList();
   }
 
   hasSelectableRow(): boolean {
@@ -745,6 +865,15 @@ export abstract class PoTableBaseComponent implements OnChanges, OnDestroy {
 
   selectDetailRow(row: any) {
     this.emitSelectEvents(row);
+  }
+
+  setSelectedList() {
+    this.itemsSelected = [];
+    this.items.forEach(item => {
+      if (item.$selected) {
+        this.itemsSelected.push(item);
+      }
+    });
   }
 
   getClassColor(row, column) {
@@ -822,6 +951,7 @@ export abstract class PoTableBaseComponent implements OnChanges, OnDestroy {
   initializeData(params?: { [key: string]: QueryParamsType }): void {
     if (this.hasService) {
       this.loading = true;
+      this.paramsFilter = params;
       this.getFilteredItems(params).subscribe(data => {
         this.setTableResponseProperties(data);
       });
@@ -961,9 +1091,9 @@ export abstract class PoTableBaseComponent implements OnChanges, OnDestroy {
     return this.hasMainColumns ? this.mainColumns.every(column => column.width && column.width.includes('px')) : false;
   }
 
-  private setService(service: string) {
+  private setService(service: string, method: 'GET' | 'DELETE') {
     if (service && isTypeof(service, 'string')) {
-      this.poTableService.setUrl(service);
+      this.poTableService.setUrl(service, method);
     }
   }
 
