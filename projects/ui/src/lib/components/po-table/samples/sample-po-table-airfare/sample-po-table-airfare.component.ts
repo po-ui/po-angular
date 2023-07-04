@@ -125,6 +125,10 @@ export class SamplePoTableAirfareComponent implements AfterViewInit {
     }
   }
 
+  deleteItems(items: Array<any>) {
+    this.items = items;
+  }
+
   details(item) {
     this.detail = item;
     this.poModal.open();

@@ -15,6 +15,7 @@ export class PoTableService implements PoTableFilter {
   });
 
   private url: string;
+  private urlDelete: string;
 
   constructor(private http: HttpClient) {}
 
@@ -24,8 +25,20 @@ export class PoTableService implements PoTableFilter {
     return this.http.get(this.url, { headers: this.headers, params });
   }
 
-  setUrl(url: string) {
-    this.url = url;
+  deleteItem(paramDelete: string, paramResponse: any): Observable<any> {
+    const params = {
+      [paramDelete]: paramResponse
+    };
+
+    return this.http.delete(this.urlDelete, { headers: this.headers, params });
+  }
+
+  setUrl(url: string, method: 'GET' | 'DELETE') {
+    if (method === 'GET') {
+      this.url = url;
+    } else {
+      this.urlDelete = url;
+    }
   }
 
   scrollListener(componentListner: HTMLElement): Observable<any> {

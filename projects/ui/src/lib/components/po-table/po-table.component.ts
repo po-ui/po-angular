@@ -15,14 +15,17 @@ import {
   Renderer2,
   TemplateRef,
   ViewChild,
-  ViewChildren
+  ViewChildren,
+  inject
 } from '@angular/core';
 import { Router } from '@angular/router';
 import { Observable, Subscription } from 'rxjs';
 
 import { PoDateService } from '../../services/po-date/po-date.service';
 import { PoLanguageService } from '../../services/po-language/po-language.service';
+import { PoNotificationService } from '../../services/po-notification/po-notification.service';
 import { convertToBoolean } from '../../utils/util';
+import { PoModalAction, PoModalComponent } from '../po-modal';
 import { PoPopupComponent } from '../po-popup/po-popup.component';
 import { PoTableColumnLabel } from './po-table-column-label/po-table-column-label.interface';
 
@@ -101,6 +104,7 @@ export class PoTableComponent extends PoTableBaseComponent implements AfterViewI
 
   @ViewChild('noColumnsHeader', { read: ElementRef }) noColumnsHeader;
   @ViewChild('popup') poPopupComponent: PoPopupComponent;
+  @ViewChild(PoModalComponent, { static: true }) modalDelete: PoModalComponent;
   @ViewChild('tableFooter', { read: ElementRef, static: false }) tableFooterElement;
   @ViewChild('tableWrapper', { read: ElementRef, static: false }) tableWrapperElement;
 
@@ -108,12 +112,15 @@ export class PoTableComponent extends PoTableBaseComponent implements AfterViewI
   @ViewChild('tableVirtualScroll', { read: ElementRef, static: false }) tableVirtualScroll;
 
   @ViewChild('columnManager', { read: ElementRef, static: false }) columnManager;
+  @ViewChild('columnBatchActions', { read: ElementRef, static: false }) columnBatchActions;
   @ViewChild('columnActionLeft', { read: ElementRef, static: false }) columnActionLeft;
 
   @ViewChildren('actionsIconElement', { read: ElementRef }) actionsIconElement: QueryList<any>;
   @ViewChildren('actionsElement', { read: ElementRef }) actionsElement: QueryList<any>;
 
   @ViewChild(CdkVirtualScrollViewport, { static: false }) public viewPort: CdkVirtualScrollViewport;
+
+  poNotification = inject(PoNotificationService);
 
   heightTableContainer: number;
   heightTableVirtual: number;
@@ -126,6 +133,21 @@ export class PoTableComponent extends PoTableBaseComponent implements AfterViewI
   idRadio: string;
   JSON: JSON;
 
+  close: PoModalAction = {
+    action: () => {
+      this.modalDelete.close();
+    },
+    label: this.literals.cancel,
+    danger: true
+  };
+
+  confirm: PoModalAction = {
+    action: () => {
+      this.deleteItems();
+    },
+    label: this.literals.delete
+  };
+
   private _columnManagerTarget: ElementRef;
   private _columnManagerTargetFixed: ElementRef;
   private differ;
@@ -136,6 +158,7 @@ export class PoTableComponent extends PoTableBaseComponent implements AfterViewI
   private visibleElement = false;
   private scrollEvent$: Observable<any>;
   private subscriptionScrollEvent: Subscription;
+  private subscriptionService: Subscription = new Subscription();
 
   private clickListener: () => void;
   private resizeListener: () => void;
@@ -292,6 +315,7 @@ export class PoTableComponent extends PoTableBaseComponent implements AfterViewI
 
   ngOnDestroy() {
     this.removeListeners();
+    this.subscriptionService?.unsubscribe();
   }
 
   /**
@@ -409,6 +433,33 @@ export class PoTableComponent extends PoTableBaseComponent implements AfterViewI
       this.selectAll = true;
     } else {
       this.selectAll = null;
+    }
+  }
+
+  /**
+   * Método responsável pela exclusão de itens em lote.
+   * Caso a tabela esteja executando a propriedade `p-service-delete`, será necessário excluir 1 item por vez.
+   *
+   * Ao utilizar `p-service-delete` mas sem a propriedade `p-service-api`, será responsabilidade do usuário o tratamento
+   * após a requisição DELETE ser executada.
+   *
+   * Caso a tabela utilize `p-height` e esteja sem serviço, é necessário a reatribuição dos itens utilizando o evento `(p-delete-items)`, por exemplo:
+   *
+   * ```
+   *<po-table
+   *  (p-delete-items)="items = $event"
+   * >
+   *</po-table>
+   * ```
+   */
+  deleteItems() {
+    const newItems = [...this.items];
+    const newItemsFiltered = [...newItems].filter(item => !item.$selected);
+
+    if (!this.serviceDeleteApi) {
+      this.deleteItemsLocal(newItems, newItemsFiltered);
+    } else {
+      this.deleteItemsService(newItemsFiltered);
     }
   }
 
@@ -626,6 +677,14 @@ export class PoTableComponent extends PoTableBaseComponent implements AfterViewI
     this.changeDetector.detectChanges();
   }
 
+  private changesAfterDelete(newItemsFiltered: Array<any>) {
+    this.selectAll = false;
+    this.setSelectedList();
+    this.modalDelete.close();
+    this.poNotification.success(this.literals.deleteSuccessful);
+    this.eventDelete.emit(newItemsFiltered);
+  }
+
   private checkChangesItems() {
     const changesItems = this.differ.diff(this.items);
 
@@ -655,6 +714,53 @@ export class PoTableComponent extends PoTableBaseComponent implements AfterViewI
       // show the table
       this.setTableOpacity(1);
     });
+  }
+
+  private deleteItemsLocal(newItems: Array<any>, newItemsFiltered: Array<any>) {
+    if (this.height) {
+      this.items = newItemsFiltered;
+    } else {
+      let index = this.items.length - 1;
+      newItems
+        .slice()
+        .reverse()
+        .forEach(item => {
+          if (item.$selected) {
+            this.removeItem(index);
+          }
+          index--;
+        });
+    }
+    this.changesAfterDelete(newItemsFiltered);
+  }
+
+  private deleteItemsService(newItemsFiltered: Array<any>) {
+    this.subscriptionService.add(
+      this.defaultService.deleteItem(this.paramDeleteApi, this.itemsSelected[0][this.paramDeleteApi]).subscribe({
+        next: value => {
+          if (this.hasService) {
+            const filteredParams = {
+              ...this.paramsFilter,
+              pageSize: newItemsFiltered.length + 1,
+              page: 1
+            };
+            this.loading = true;
+            this.subscriptionService.add(
+              this.defaultService.getFilteredItems(filteredParams).subscribe(items => {
+                this.setTableResponseProperties(items);
+              })
+            );
+          }
+          this.items = newItemsFiltered;
+          this.changesAfterDelete(newItemsFiltered);
+        },
+        error: error => {
+          this.poNotification.error(this.literals.deleteApiError);
+          this.modalDelete.close();
+          this.eventDelete.emit(this.items);
+        }
+      })
+    );
   }
 
   private findCustomIcon(rowIcons, column: PoTableColumn) {
