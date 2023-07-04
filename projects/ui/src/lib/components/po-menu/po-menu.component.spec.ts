@@ -1534,9 +1534,9 @@ describe('PoMenuComponent:', () => {
       });
     });
 
-    it('convertToMenuItemFiltered: should return only { link, label } if `menuItem` is an object with others properties', () => {
-      const expectedValue = { label: 'Menu 1', link: 'menu1' };
-      const menuItem = { icon: 'copy', label: 'Menu 1', link: 'menu1' };
+    it('convertToMenuItemFiltered: should return only { link, label, action } if `menuItem` is an object with others properties', () => {
+      const expectedValue = { label: 'Menu 1', link: 'menu1', action: jasmine.any(Function) };
+      const menuItem = { icon: 'copy', label: 'Menu 1', link: 'menu1', action: () => {} };
 
       const spySetMenuItemProperties = spyOn(component, <any>'setMenuItemProperties');
 
@@ -1546,15 +1546,18 @@ describe('PoMenuComponent:', () => {
       expect(spySetMenuItemProperties).toHaveBeenCalled();
     });
 
-    it('convertToMenuItemFiltered: should return { link: ``, label: `` } if `menuItem` is undefined', () => {
+    it('convertToMenuItemFiltered: should return { link: ``, label: ``, action } if `menuItem` is undefined', () => {
       const menuItem = undefined;
 
       const spySetMenuItemProperties = spyOn(component, <any>'setMenuItemProperties');
 
       const menuItemFiltered = component['convertToMenuItemFiltered'](menuItem);
 
-      expect(menuItemFiltered).toEqual(<any>{ label: '', link: '' });
+      expect(menuItemFiltered).toEqual(<any>{ label: '', link: '', action: jasmine.any(Function) });
       expect(spySetMenuItemProperties).toHaveBeenCalled();
+
+      expect(menuItemFiltered.action).toEqual(jasmine.any(Function));
+      expect(menuItemFiltered.action()).toBeUndefined();
     });
 
     it('filterLocalItems: should call `findItems` and return filtered items', () => {
@@ -1579,7 +1582,7 @@ describe('PoMenuComponent:', () => {
     });
 
     it('filterOnService: should call `getFilteredData` and return filtered menu itens from service', async () => {
-      const menuItems = [{ label: 'Menu', link: '/menu' }];
+      const menuItems = [{ label: 'Menu', link: '/menu', action: () => {} }];
       const search = 'menu';
 
       component.service = 'http://po.com.br/api';
