@@ -363,10 +363,10 @@ export class PoMenuComponent extends PoMenuBaseComponent implements AfterViewIni
     }
   }
 
-  private convertToMenuItemFiltered(menuItem: any = { label: '', link: '' }): PoMenuItemFiltered {
-    const { label, link } = menuItem;
+  private convertToMenuItemFiltered(menuItem: any = { label: '', link: '', action: () => {} }): PoMenuItemFiltered {
+    const { label, link, action } = menuItem;
 
-    const menuItemFiltered: PoMenuItemFiltered = { label, link };
+    const menuItemFiltered: PoMenuItemFiltered = { label, link, action };
 
     this.setMenuItemProperties(menuItemFiltered);
 
