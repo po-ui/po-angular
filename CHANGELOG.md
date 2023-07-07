@@ -2,6 +2,15 @@
 
 All notable changes to this project will be documented in this file. See [standard-version](https://github.com/conventional-changelog/standard-version) for commit guidelines.
 
+# [15.12.0](https://github.com/po-ui/po-angular/compare/v15.11.0...v15.12.0) (2023-07-07)
+
+
+### Features
+
+* **menu:** adiciona propriedade `action` a interface `PoMenuItemFiltered` ([b5d09fd](https://github.com/po-ui/po-angular/commit/b5d09fd8609300816cd8fcf4e35320e8353d74a3))
+
+
+
 # [15.11.0](https://github.com/po-ui/po-angular/compare/v15.10.0...v15.11.0) (2023-07-03)
 
 
