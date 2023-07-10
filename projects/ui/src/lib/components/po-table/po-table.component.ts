@@ -1,4 +1,6 @@
 import { CdkVirtualScrollViewport } from '@angular/cdk/scrolling';
+import { CdkDragDrop, moveItemInArray } from '@angular/cdk/drag-drop';
+
 import { DecimalPipe } from '@angular/common';
 import {
   AfterViewInit,
@@ -90,6 +92,10 @@ import { PoTableService } from './services/po-table.service';
  *  <file name="sample-po-table-heroes/sample-po-table-heroes.service.ts"> </file>
  * </example>
  *
+ * <example name="po-table-draggable" title="PO Table Drag and Drop">
+ *  <file name="sample-po-table-draggable/sample-po-table-draggable.component.html"> </file>
+ *  <file name="sample-po-table-draggable/sample-po-table-draggable.component.ts"> </file>
+ * </example>
  */
 @Component({
   selector: 'po-table',
@@ -132,6 +138,7 @@ export class PoTableComponent extends PoTableBaseComponent implements AfterViewI
   tagColor: string;
   idRadio: string;
   JSON: JSON;
+  newOrderColumns: Array<PoTableColumn>;
 
   close: PoModalAction = {
     action: () => {
@@ -272,6 +279,10 @@ export class PoTableComponent extends PoTableBaseComponent implements AfterViewI
     return (
       this.actions !== undefined && this.actions && this.actions.filter(action => action && action.visible !== false)
     );
+  }
+
+  get isDraggable(): boolean {
+    return this.draggable;
   }
 
   public get inverseOfTranslation(): string {
@@ -555,7 +566,6 @@ export class PoTableComponent extends PoTableBaseComponent implements AfterViewI
 
   onVisibleColumnsChange(columns: Array<PoTableColumn>) {
     this.columns = columns;
-
     this.changeDetector.detectChanges();
   }
 
@@ -626,6 +636,28 @@ export class PoTableComponent extends PoTableBaseComponent implements AfterViewI
     } else {
       const index = this.items.findIndex(indexItem => indexItem === item);
       this.items.splice(index, 1, updatedItem);
+    }
+  }
+
+  drop(event: CdkDragDrop<Array<string>>) {
+    moveItemInArray(this.mainColumns, event.previousIndex, event.currentIndex);
+
+    if (this.hideColumnsManager === false) {
+      this.newOrderColumns = this.mainColumns;
+      const detail = this.columns.filter(item => item.property === 'detail')[0];
+
+      if (detail !== undefined) {
+        this.newOrderColumns.push(detail);
+      }
+
+      this.columns.map((item, index) => {
+        if (!item.visible) {
+          this.newOrderColumns.splice(index, 0, item);
+        }
+      });
+      this.columns = this.newOrderColumns;
+
+      this.onVisibleColumnsChange(this.newOrderColumns);
     }
   }
 

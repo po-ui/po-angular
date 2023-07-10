@@ -101,7 +101,13 @@
     }"
   >
     <thead>
-      <tr [ngClass]="{ 'no-hover': hideSelectAll }" [class.po-table-header]="!height">
+      <tr
+        [ngClass]="{ 'no-hover': hideSelectAll, 'po-table-column-drag': this.isDraggable }"
+        [class.po-table-header]="!height"
+        cdkDropList
+        cdkDropListOrientation="horizontal"
+        (cdkDropListDropped)="drop($event)"
+      >
         <th
           *ngIf="hasSelectableColumn"
           [style.pointer-events]="hideSelectAll ? 'none' : 'auto'"
@@ -134,32 +140,83 @@
           <ng-container *ngIf="height; then noColumnsWithHeight; else noColumnsWithoutHeight"> </ng-container>
         </th>
 
-        <th
-          *ngFor="let column of mainColumns; let i = index; trackBy: trackBy"
-          class="po-table-header-ellipsis"
-          [style.width]="column.width"
-          [style.max-width]="column.width"
-          [style.min-width]="column.width"
-          [attr.data-po-table-column-name]="column.label || (column.property | titlecase) | lowercase"
-          [class.po-clickable]="(sort && column.sortable !== false) || hasService"
-          [ngClass]="{
-            'po-table-header-sorted':
-              sort &&
-              JSON.stringify(sortedColumn?.property) === JSON.stringify(column) &&
-              (sortedColumn.ascending || !sortedColumn.ascending)
-          }"
-          [class.po-table-header-subtitle]="column.type === 'subtitle'"
-          (click)="sortColumn(column)"
-        >
-          <div
-            class="po-table-header-flex"
-            [class.po-table-header-fixed-inner]="height"
-            [class.po-table-header-flex-right]="column.type === 'currency' || column.type === 'number'"
-            [class.po-table-header-flex-center]="column.type === 'subtitle'"
+        <ng-container *ngIf="this.isDraggable; then tableDefaultThDragDrop; else tableDefaultThDefault"> </ng-container>
+        <ng-template #tableDefaultThDragDrop>
+          <th
+            *ngFor="let column of mainColumns; let i = index; trackBy: trackBy"
+            class="po-table-header-ellipsis"
+            [style.width]="column.width"
+            [style.max-width]="column.width"
+            [style.min-width]="column.width"
+            [attr.data-po-table-column-name]="column.label || (column.property | titlecase) | lowercase"
+            [class.po-clickable]="(sort && column.sortable !== false) || hasService"
+            [ngClass]="{
+              'po-table-header-sorted':
+                sort &&
+                JSON.stringify(sortedColumn?.property) === JSON.stringify(column) &&
+                (sortedColumn.ascending || !sortedColumn.ascending)
+            }"
+            [class.po-table-header-subtitle]="column.type === 'subtitle'"
+            [class.po-table-column-drag-box]="this.isDraggable"
+            (click)="sortColumn(column)"
+            cdkDrag
+            cdkDragLockAxis="x"
           >
-            <ng-container *ngTemplateOutlet="contentHeaderTemplate; context: { $implicit: column }"> </ng-container>
-          </div>
-        </th>
+            <div
+              class="po-table-header-flex"
+              [class.po-table-header-fixed-inner]="height"
+              [class.po-table-header-flex-right]="column.type === 'currency' || column.type === 'number'"
+              [class.po-table-header-flex-center]="column.type === 'subtitle'"
+            >
+              <ng-container *ngIf="this.isDraggable">
+                <svg
+                  cdkDragHandle
+                  width="24"
+                  height="24"
+                  viewBox="0 0 24 24"
+                  fill="none"
+                  xmlns="http://www.w3.org/2000/svg"
+                >
+                  <circle cx="9" cy="6" r="2" fill="black" />
+                  <circle cx="15" cy="6" r="2" fill="black" />
+                  <circle cx="9" cy="12" r="2" fill="black" />
+                  <circle cx="15" cy="12" r="2" fill="black" />
+                  <circle cx="9" cy="18" r="2" fill="black" />
+                  <circle cx="15" cy="18" r="2" fill="black" />
+                </svg>
+              </ng-container>
+              <ng-container *ngTemplateOutlet="contentHeaderTemplate; context: { $implicit: column }"> </ng-container>
+            </div>
+          </th>
+        </ng-template>
+        <ng-template #tableDefaultThDefault>
+          <th
+            *ngFor="let column of mainColumns; let i = index; trackBy: trackBy"
+            class="po-table-header-ellipsis"
+            [style.width]="column.width"
+            [style.max-width]="column.width"
+            [style.min-width]="column.width"
+            [attr.data-po-table-column-name]="column.label || (column.property | titlecase) | lowercase"
+            [class.po-clickable]="(sort && column.sortable !== false) || hasService"
+            [ngClass]="{
+              'po-table-header-sorted':
+                sort &&
+                JSON.stringify(sortedColumn?.property) === JSON.stringify(column) &&
+                (sortedColumn.ascending || !sortedColumn.ascending)
+            }"
+            [class.po-table-header-subtitle]="column.type === 'subtitle'"
+            (click)="sortColumn(column)"
+          >
+            <div
+              class="po-table-header-flex"
+              [class.po-table-header-fixed-inner]="height"
+              [class.po-table-header-flex-right]="column.type === 'currency' || column.type === 'number'"
+              [class.po-table-header-flex-center]="column.type === 'subtitle'"
+            >
+              <ng-container *ngTemplateOutlet="contentHeaderTemplate; context: { $implicit: column }"> </ng-container>
+            </div>
+          </th>
+        </ng-template>
 
         <th
           *ngIf="hasRowTemplateWithArrowDirectionRight && (hasVisibleActions || hideColumnsManager)"
@@ -373,7 +430,12 @@
       [ngStyle]="{ 'table-layout': !hasItems ? 'fixed' : 'auto' }"
     >
       <thead class="po-table-header-sticky" [style.top]="inverseOfTranslation">
-        <tr [class.po-table-header]="!height">
+        <tr
+          [class.po-table-header]="!height"
+          cdkDropList
+          cdkDropListOrientation="horizontal"
+          (cdkDropListDropped)="drop($event)"
+        >
           <th
             *ngIf="hasSelectableColumn"
             [style.pointer-events]="hideSelectAll ? 'none' : 'auto'"
@@ -406,33 +468,87 @@
             <ng-container *ngIf="height; then noColumnsWithHeight; else noColumnsWithoutHeight"> </ng-container>
           </th>
 
-          <th
-            *ngFor="let column of mainColumns; let i = index; trackBy: trackBy"
-            class="po-table-header-ellipsis"
-            [style.width]="column.width"
-            [style.max-width]="column.width"
-            [style.min-width]="column.width"
-            [attr.data-po-table-column-name]="column.label || (column.property | titlecase) | lowercase"
-            [class.po-clickable]="(sort && column.sortable !== false) || hasService"
-            [ngClass]="{
-              'po-table-header-sorted':
-                sort &&
-                JSON.stringify(sortedColumn?.property) === JSON.stringify(column) &&
-                (sortedColumn.ascending || !sortedColumn.ascending)
-            }"
-            [ngStyle]="{ 'width': !hasItems ? '100%' : 'auto' }"
-            [class.po-table-header-subtitle]="column.type === 'subtitle'"
-            (click)="sortColumn(column)"
-          >
-            <div
-              class="po-table-header-flex"
-              [class.po-table-header-fixed-inner]="height"
-              [class.po-table-header-flex-right]="column.type === 'currency' || column.type === 'number'"
-              [class.po-table-header-flex-center]="column.type === 'subtitle'"
+          <ng-container *ngIf="this.isDraggable; then tableVirtualScrollThDragDrop; else tableVirtualScrollThDefault">
+          </ng-container>
+          <ng-template #tableVirtualScrollThDragDrop>
+            <th
+              *ngFor="let column of mainColumns; let i = index; trackBy: trackBy"
+              class="po-table-header-ellipsis"
+              [style.width]="column.width"
+              [style.max-width]="column.width"
+              [style.min-width]="column.width"
+              [attr.data-po-table-column-name]="column.label || (column.property | titlecase) | lowercase"
+              [class.po-clickable]="(sort && column.sortable !== false) || hasService"
+              [ngClass]="{
+                'po-table-header-sorted':
+                  sort &&
+                  JSON.stringify(sortedColumn?.property) === JSON.stringify(column) &&
+                  (sortedColumn.ascending || !sortedColumn.ascending)
+              }"
+              [ngStyle]="{ 'width': !hasItems ? '100%' : 'auto' }"
+              [class.po-table-header-subtitle]="column.type === 'subtitle'"
+              [class.po-table-column-drag-box]="this.isDraggable"
+              (click)="sortColumn(column)"
+              cdkDrag
+              cdkDragLockAxis="x"
             >
-              <ng-container *ngTemplateOutlet="contentHeaderTemplate; context: { $implicit: column }"> </ng-container>
-            </div>
-          </th>
+              <div
+                class="po-table-header-flex"
+                [class.po-table-header-fixed-inner]="height"
+                [class.po-table-header-flex-right]="column.type === 'currency' || column.type === 'number'"
+                [class.po-table-header-flex-center]="column.type === 'subtitle'"
+              >
+                <ng-container *ngIf="this.isDraggable">
+                  <svg
+                    cdkDragHandle
+                    width="24"
+                    height="24"
+                    viewBox="0 0 24 24"
+                    fill="none"
+                    xmlns="http://www.w3.org/2000/svg"
+                  >
+                    <circle cx="9" cy="6" r="2" fill="black" />
+                    <circle cx="15" cy="6" r="2" fill="black" />
+                    <circle cx="9" cy="12" r="2" fill="black" />
+                    <circle cx="15" cy="12" r="2" fill="black" />
+                    <circle cx="9" cy="18" r="2" fill="black" />
+                    <circle cx="15" cy="18" r="2" fill="black" />
+                  </svg>
+                </ng-container>
+
+                <ng-container *ngTemplateOutlet="contentHeaderTemplate; context: { $implicit: column }"> </ng-container>
+              </div>
+            </th>
+          </ng-template>
+          <ng-template #tableVirtualScrollThDefault>
+            <th
+              *ngFor="let column of mainColumns; let i = index; trackBy: trackBy"
+              class="po-table-header-ellipsis"
+              [style.width]="column.width"
+              [style.max-width]="column.width"
+              [style.min-width]="column.width"
+              [attr.data-po-table-column-name]="column.label || (column.property | titlecase) | lowercase"
+              [class.po-clickable]="(sort && column.sortable !== false) || hasService"
+              [ngClass]="{
+                'po-table-header-sorted':
+                  sort &&
+                  JSON.stringify(sortedColumn?.property) === JSON.stringify(column) &&
+                  (sortedColumn.ascending || !sortedColumn.ascending)
+              }"
+              [ngStyle]="{ 'width': !hasItems ? '100%' : 'auto' }"
+              [class.po-table-header-subtitle]="column.type === 'subtitle'"
+              (click)="sortColumn(column)"
+            >
+              <div
+                class="po-table-header-flex"
+                [class.po-table-header-fixed-inner]="height"
+                [class.po-table-header-flex-right]="column.type === 'currency' || column.type === 'number'"
+                [class.po-table-header-flex-center]="column.type === 'subtitle'"
+              >
+                <ng-container *ngTemplateOutlet="contentHeaderTemplate; context: { $implicit: column }"> </ng-container>
+              </div>
+            </th>
+          </ng-template>
 
           <th
             *ngIf="hasRowTemplateWithArrowDirectionRight && (hasVisibleActions || hideColumnsManager)"

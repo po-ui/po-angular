@@ -85,4 +85,8 @@ describe('Po-Table-Labs E2E', () => {
     table.poCheckboxShowActions.click();
     expect(table.poTableActions.isPresent()).toBeTruthy();
   });
+
+  it('Checks if checkbox ´Habilitar recurso de drag and drop (draggable)´ exist', () => {
+    expect(table.poCheckboxDraggableTable.isPresent()).toBeTruthy();
+  });
 });

@@ -3,6 +3,7 @@ import { FormsModule } from '@angular/forms';
 import { NgModule } from '@angular/core';
 import { RouterModule } from '@angular/router';
 import { ScrollingModule } from '@angular/cdk/scrolling';
+import { DragDropModule } from '@angular/cdk/drag-drop';
 
 import { PoButtonModule } from './../po-button/po-button.module';
 import { PoCheckboxGroupModule } from '../po-field/po-checkbox-group/po-checkbox-group.module';
@@ -45,6 +46,7 @@ import { PoSwitchModule } from './../po-field/po-switch/po-switch.module';
     CommonModule,
     FormsModule,
     ScrollingModule,
+    DragDropModule,
     RouterModule,
     PoButtonModule,
     PoCheckboxGroupModule,
