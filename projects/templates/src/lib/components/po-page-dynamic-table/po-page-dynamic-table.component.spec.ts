@@ -2770,4 +2770,9 @@ describe('PoPageDynamicTableComponent:', () => {
       ]);
     });
   });
+  it('draggable: should return false if draggable is false', () => {
+    component.draggable = false;
+
+    expect(component.draggable).toBeFalse();
+  });
 });

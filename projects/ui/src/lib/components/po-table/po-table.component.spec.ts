@@ -901,6 +901,46 @@ describe('PoTableComponent:', () => {
       });
     });
 
+    it('drop: should update columns and call onVisibleColumnsChange when `hideColumnsManager` is false', () => {
+      const previousIndex = 0;
+      const currentIndex = 1;
+      const event = {
+        previousIndex: previousIndex,
+        currentIndex: currentIndex
+      };
+
+      const mockColumns = [{ property: 'column1' }, { property: 'column2' }, { property: 'detail' }];
+
+      component.columns = mockColumns;
+      component.mainColumns = mockColumns;
+      spyOn(component, 'onVisibleColumnsChange');
+
+      component.drop(event as any);
+
+      expect(component.newOrderColumns[previousIndex]).toEqual(mockColumns[currentIndex]);
+      expect(component.newOrderColumns[currentIndex]).toEqual(mockColumns[previousIndex]);
+      expect(component.newOrderColumns[2]).toEqual(mockColumns[2]);
+      expect(component.onVisibleColumnsChange).toHaveBeenCalledWith(component.newOrderColumns);
+    });
+
+    it('drop: should update mainColumns when `hideColumnsManager` is true', () => {
+      const previousIndex = 0;
+      const currentIndex = 1;
+      const event = {
+        previousIndex: previousIndex,
+        currentIndex: currentIndex
+      };
+      const mockColumns = [{ property: 'column1' }, { property: 'column2' }, { property: 'detail' }];
+
+      component.hideColumnsManager = true;
+      component.mainColumns = [{ property: 'column1' }, { property: 'column2' }, { property: 'detail' }];
+      component.drop(event as any);
+
+      expect(component.mainColumns[currentIndex]).toEqual(mockColumns[previousIndex]);
+      expect(component.mainColumns[previousIndex]).toEqual(mockColumns[currentIndex]);
+      expect(component.mainColumns[2]).toEqual(mockColumns[2]);
+    });
+
     describe('getBooleanLabel:', () => {
       const simpleColumnBoolean: PoTableColumn = { property: 'boolean', label: 'Boolean', type: 'boolean' };
 
@@ -3133,5 +3173,11 @@ describe('PoTableComponent:', () => {
     component.height = 200;
 
     expect(component['hasInfiniteScroll']()).toBeFalse();
+  });
+
+  it('draggable: should return false if draggable is false', () => {
+    component.draggable = false;
+
+    expect(component['isDraggable']).toBeFalse();
   });
 });

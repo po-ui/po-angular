@@ -423,6 +423,7 @@ export abstract class PoTableBaseComponent implements OnChanges, OnDestroy {
   private sortStore: PoTableColumnSort;
   private _infiniteScrollDistance?: number = 100;
   private _infiniteScroll?: boolean = false;
+  private _draggable?: boolean = false;
 
   /**
    * @description
@@ -812,6 +813,23 @@ export abstract class PoTableBaseComponent implements OnChanges, OnDestroy {
 
   private get sortType(): PoTableColumnSortType {
     return this.sortedColumn.ascending ? PoTableColumnSortType.Ascending : PoTableColumnSortType.Descending;
+  }
+
+  /**
+   * @optional
+   *
+   * @description
+   *
+   * Habilita o modo drag and drop para as colunas da tabela.
+   *
+   * @default `false`
+   */
+  @Input('p-draggable') set draggable(draggable: boolean) {
+    this._draggable = draggable || false;
+  }
+
+  get draggable() {
+    return this._draggable;
   }
 
   constructor(

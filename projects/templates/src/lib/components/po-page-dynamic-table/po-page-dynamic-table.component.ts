@@ -128,6 +128,11 @@ type UrlOrPoCustomizationFunction = string | (() => PoPageDynamicTableOptions);
  *  <file name="sample-po-page-dynamic-table-hotels/sample-po-page-dynamic-table-hotels.component.html"> </file>
  *  <file name="sample-po-page-dynamic-table-hotels/sample-po-page-dynamic-table-hotels.component.ts"> </file>
  * </example>
+ *
+ * <example name="po-page-dynamic-table-drag-and-drop" title="PO Page Dynamic Table - Drag and Drop">
+ *  <file name="sample-po-page-dynamic-table-drag-and-drop/sample-po-page-dynamic-table-drag-and-drop.component.html"> </file>
+ *  <file name="sample-po-page-dynamic-table-drag-and-drop/sample-po-page-dynamic-table-drag-and-drop.component.ts"> </file>
+ * </example>
  */
 @Component({
   selector: 'po-page-dynamic-table',
@@ -278,6 +283,7 @@ export class PoPageDynamicTableComponent extends PoPageDynamicListBaseComponent 
   private _defaultPageActions: Array<PoPageAction> = [];
   private _defaultTableActions: Array<PoTableAction> = [];
   private _hideCloseDisclaimers: Array<string> = [];
+  private _draggable = false;
 
   private set defaultPageActions(value: Array<PoPageAction>) {
     this._defaultPageActions = value;
@@ -500,6 +506,22 @@ export class PoPageDynamicTableComponent extends PoPageDynamicListBaseComponent 
    * > O valor padrão será traduzido de acordo com o idioma configurado no [`PoI18nService`](/documentation/po-i18n) ou *browser*.
    */
   @Input('p-literals') searchLiterals: PoPageDynamicSearchLiterals;
+
+  /**
+   * @optional
+   *
+   * @description
+   *
+   * Habilita o modo drag and drop para as colunas da tabela.
+   *
+   */
+  @Input('p-draggable') set draggable(value: boolean) {
+    this._draggable = value;
+  }
+
+  get draggable(): boolean {
+    return this._draggable;
+  }
 
   constructor(
     private router: Router,
