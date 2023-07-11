@@ -1,4 +1,4 @@
-import { Directive, Input } from '@angular/core';
+import { Directive, EventEmitter, Input, Output } from '@angular/core';
 
 import { InputBoolean } from '../../../decorators';
 
@@ -56,6 +56,14 @@ export class PoPageSlideBaseComponent {
    * @default `false`
    */
   @Input('p-click-out') @InputBoolean() clickOut?: boolean = false;
+
+  /**
+   * @optional
+   *
+   * @description
+   * Evento executado ao fechar o page slide.
+   */
+  @Output('p-close') closePageSlide: EventEmitter<any> = new EventEmitter<any>();
 
   // Controla se a página está ou não oculta, por padrão é oculto.
   public hidden = true;
@@ -136,5 +144,6 @@ export class PoPageSlideBaseComponent {
    */
   public close(): void {
     this.hidden = true;
+    this.closePageSlide.emit();
   }
 }
