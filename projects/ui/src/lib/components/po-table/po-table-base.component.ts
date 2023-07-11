@@ -311,7 +311,7 @@ export abstract class PoTableBaseComponent implements OnChanges, OnDestroy {
    * @optional
    *
    * @description
-   * Evento disparado ao fechar o popover do gerenciador de colunas após alterar as colunas visíveis.
+   * Evento disparado ao fechar o page slide do gerenciador de colunas após alterar as colunas visíveis.
    *
    * O componente envia como parâmetro um array de string com as colunas visíveis atualizadas.
    * Por exemplo: ["idCard", "name", "hireStatus", "age"].

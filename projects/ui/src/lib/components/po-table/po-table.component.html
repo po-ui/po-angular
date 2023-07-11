@@ -727,17 +727,15 @@
   </td>
 </ng-template>
 
-<po-page-slide #pageSlideColumnsManager [p-title]="literals.columnsManager" [p-click-out]="true">
-  <po-table-column-manager
-    *ngIf="!hideColumnsManager"
-    [p-columns]="columns"
-    [p-max-columns]="maxColumns"
-    [p-target]="columnManagerTarget"
-    [p-last-visible-columns-selected]="lastVisibleColumnsSelected"
-    (p-visible-columns-change)="onVisibleColumnsChange($event)"
-    (p-change-visible-columns)="onChangeVisibleColumns($event)"
-    [p-columns-default]="initialColumns"
-    (p-initial-columns)="onColumnRestoreManager($event)"
-  >
-  </po-table-column-manager>
-</po-page-slide>
+<po-table-column-manager
+  *ngIf="!hideColumnsManager"
+  [p-columns]="columns"
+  [p-max-columns]="maxColumns"
+  [p-target]="columnManagerTarget"
+  [p-last-visible-columns-selected]="lastVisibleColumnsSelected"
+  (p-visible-columns-change)="onVisibleColumnsChange($event)"
+  (p-change-visible-columns)="onChangeVisibleColumns($event)"
+  [p-columns-default]="initialColumns"
+  (p-initial-columns)="onColumnRestoreManager($event)"
+>
+</po-table-column-manager>
