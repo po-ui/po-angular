@@ -9,7 +9,8 @@ import {
   formatYear,
   isTypeof,
   setYearFrom0To100,
-  validateDateRange
+  validateDateRange,
+  replaceFormatSeparator
 } from '../../../utils/util';
 import { dateFailed, requiredFailed } from './../validators';
 import { InputBoolean } from '../../../decorators';
@@ -122,7 +123,7 @@ export abstract class PoDatepickerBaseComponent implements ControlValueAccessor,
   @Output('p-change') onchange: EventEmitter<any> = new EventEmitter<any>();
 
   protected firstStart = true;
-  protected hour: string = 'T00:00:01-00:00';
+  protected hour: string = 'T00:00:00-00:00';
   protected isExtendedISO: boolean = false;
   protected objMask: any;
   protected onChangeModel: any = null;
@@ -290,13 +291,17 @@ export abstract class PoDatepickerBaseComponent implements ControlValueAccessor,
       value = value.toLowerCase();
       if (value.match(/dd/) && value.match(/mm/) && value.match(/yyyy/)) {
         this._format = value;
-        this.objMask = this.buildMask(this.replaceFormatSeparator());
+        this.objMask = this.buildMask(
+          replaceFormatSeparator(this.format, this.languageService.getDateSeparator(this.locale))
+        );
         this.refreshValue(this.date);
         return;
       }
     }
     this._format = poDatepickerFormatDefault;
-    this.objMask = this.buildMask(this.replaceFormatSeparator());
+    this.objMask = this.buildMask(
+      replaceFormatSeparator(this.format, this.languageService.getDateSeparator(this.locale))
+    );
   }
 
   get format() {
@@ -337,10 +342,14 @@ export abstract class PoDatepickerBaseComponent implements ControlValueAccessor,
   @Input('p-locale') set locale(value: string) {
     if (value) {
       this._locale = value.length >= 2 ? value : poLocaleDefault;
-      this.objMask = this.buildMask(this.replaceFormatSeparator());
+      this.objMask = this.buildMask(
+        replaceFormatSeparator(this.format, this.languageService.getDateSeparator(this.locale))
+      );
     } else {
       this._locale = this.shortLanguage;
-      this.objMask = this.buildMask(this.replaceFormatSeparator());
+      this.objMask = this.buildMask(
+        replaceFormatSeparator(this.format, this.languageService.getDateSeparator(this.locale))
+      );
     }
     this.refreshValue(this.date);
   }
@@ -348,7 +357,7 @@ export abstract class PoDatepickerBaseComponent implements ControlValueAccessor,
     return this._locale || this.shortLanguage;
   }
 
-  constructor() {}
+  constructor(protected languageService: PoLanguageService) {}
 
   set date(value: any) {
     this._date = typeof value === 'string' ? convertIsoToDate(value, false, false) : value;
@@ -360,7 +369,9 @@ export abstract class PoDatepickerBaseComponent implements ControlValueAccessor,
 
   ngOnInit() {
     // Classe de máscara
-    this.objMask = this.buildMask(this.replaceFormatSeparator());
+    this.objMask = this.buildMask(
+      replaceFormatSeparator(this.format, this.languageService.getDateSeparator(this.locale))
+    );
   }
 
   // Converte um objeto string em Date
@@ -483,8 +494,6 @@ export abstract class PoDatepickerBaseComponent implements ControlValueAccessor,
 
     return new PoMask(mask, true);
   }
-
-  protected abstract replaceFormatSeparator(): any;
 
   abstract writeValue(value: any): void;
 

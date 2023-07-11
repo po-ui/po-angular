@@ -3,7 +3,7 @@ import { EventEmitter, Input, Output, Directive, TemplateRef, HostBinding } from
 import { convertToBoolean } from '../../utils/util';
 import { InputBoolean } from '../../decorators';
 
-import { PoButtonKind } from './po-button-type.enum';
+import { PoButtonKind } from './po-button-kind.enum';
 import { PoButtonSize } from './po-button-size.enum';
 /**
  * @description
@@ -216,4 +216,17 @@ export class PoButtonBaseComponent {
   get disabled(): boolean {
     return this._disabled;
   }
+
+  /**
+   * @optional
+   *
+   * @description
+   *
+   * Define um `aria-label` para o `po-button`.
+   *
+   * Caso esta propriedade não seja informada será considerada a label do botão.
+   *
+   * > Em caso de botões com apenas ícone a atribuição de valor à esta propriedade é muito importante para acessibilidade.
+   */
+  @Input('p-aria-label') ariaLabel?: string;
 }

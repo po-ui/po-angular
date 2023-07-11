@@ -548,6 +548,18 @@ export function convertImageToBase64(file: File): Promise<any> {
 }
 
 /**
+ * Valida se a imagem é do tipo base64 valida
+ *
+ */
+export function isValidImageBase64(value: string): boolean {
+  try {
+    return !!value.match(/^data:image\/([a-zA-Z]*);base64,([^\"]*)$/);
+  } catch (err) {
+    return false;
+  }
+}
+
+/**
  * Converte um número em decimal baseado na quantidade de casas decimais.
  *
  * Caso o valor seja inválido, será retornado o valor `undefined`.
@@ -602,4 +614,48 @@ export function validateObjectType(value: any) {
 export function getFocusableElements(parentElement: Element): NodeListOf<Element> {
   const focusableElements = 'button:not([disabled]), [href], input, select, textarea, [tabindex]:not([tabindex="-1"]';
   return parentElement.querySelectorAll(focusableElements);
+}
+
+// Retorna o formato de acordo com o locale.
+export function replaceFormatSeparator(format: string, separator: string) {
+  let newFormat = format;
+  if (separator !== '/') {
+    newFormat = newFormat.replace(/\//g, separator);
+  }
+  return newFormat;
+}
+
+/**
+ * Recebe um array de objetos para ordenação utilizando chave como comparativo e
+ * se a order é crescente(true) ou descrescente(false)
+ *
+ * Exemplo:
+ *
+ * ```
+ * items: [{country: 'japao'}, {country: 'brasil'} , {country: 'china'}]
+ * key: 'country'
+ * isAscendingOrder: true
+ * Resultado do retorno:
+ *    [{country: 'brasil'}, {country: 'china'} , {country: 'japao'}]
+ * ```
+ *
+ *
+ * @param items : lista de itens.
+ * @param key : propriedade utilizada na comparação.
+ * @param isAscendingOrder : ordenação crescente ou descrescente.
+ */
+export function sortArrayOfObjects(items, key, isAscendingOrder) {
+  if (items) {
+    return items.sort((a, b) => {
+      const valueA = a[key];
+      const valueB = b[key];
+
+      if (typeof valueA === 'number' && typeof valueB === 'number') {
+        return isAscendingOrder ? valueA - valueB : valueB - valueA;
+      } else {
+        const compareResult = valueA.toString().localeCompare(valueB.toString());
+        return isAscendingOrder ? compareResult : -compareResult;
+      }
+    });
+  }
 }

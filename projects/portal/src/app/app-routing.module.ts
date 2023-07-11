@@ -9,6 +9,10 @@ const routes: Routes = [
   },
   { path: 'guides', loadChildren: () => import('./guide/guide.module').then(m => m.GuideModule) },
   { path: 'tools', loadChildren: () => import('./tools/tools.module').then(m => m.ToolsModule) },
+  {
+    path: 'construtor-de-temas',
+    loadChildren: () => import('./theme-builder/theme-builder.module').then(m => m.ThemeBuilderModule)
+  },
   { path: '', loadChildren: () => import('./home/home.module').then(m => m.HomeModule) },
   { path: '**', redirectTo: '/', pathMatch: 'full' }
 ];

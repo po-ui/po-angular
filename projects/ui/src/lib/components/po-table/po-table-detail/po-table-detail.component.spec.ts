@@ -368,5 +368,23 @@ describe('PoTableDetailComponent', () => {
       const number = detailElement.querySelector(elementDetail).innerText;
       expect(number).toEqual(expectedReturn);
     });
+
+    it('should find .po-table-header-flex-right if columns has number type', () => {
+      component.detail = { columns: [{ property: 'number', label: 'Number', type: 'number' }] };
+      component.detail['typeHeader'] = 'top';
+      component.items = [{ number: 333 }];
+
+      fixture.detectChanges();
+      expect(detailElement.querySelector('.po-table-header-flex-right')).toBeTruthy();
+    });
+
+    it('should find .po-table-column-right if columns has currency type', () => {
+      component.detail = { columns: [{ property: 'currency', label: 'Currency', type: 'currency' }] };
+      component.detail['typeHeader'] = 'top';
+      component.items = [{ currency: 2000 }];
+
+      fixture.detectChanges();
+      expect(detailElement.querySelector('.po-table-column-right')).toBeTruthy();
+    });
   });
 });

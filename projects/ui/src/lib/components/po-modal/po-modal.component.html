@@ -1,28 +1,36 @@
-<div *ngIf="!isHidden" class="po-modal" tabindex="0" (keydown.esc)="closeModalOnEscapeKey($event)">
-  <div class="po-modal-overlay">
-    <div class="po-modal-container po-pb-2 po-pt-2" (mousedown)="onClickOut($event)">
-      <div class="po-modal-vertical-align">
-        <div #modalContent class="po-modal-content po-modal-{{ size }}" tabindex="-1">
-          <div class="po-modal-header">
-            <div class="po-modal-title po-text-ellipsis">
+<div #modalContainer *ngIf="!isHidden" class="po-modal" tabindex="0" (keydown.esc)="closeModalOnEscapeKey($event)">
+  <div class="po-modal-overlay" (mousedown)="onClickOut($event)"></div>
+  <div class="po-modal-container po-pb-2 po-pt-2">
+    <div class="po-modal-vertical-align">
+      <div #modalContent class="po-modal-content po-modal-{{ size }}" tabindex="-1">
+        <div class="po-modal-header">
+          <div class="po-modal-title po-text-ellipsis">
+            <po-icon *ngIf="icon" [p-icon]="icon"></po-icon>
+            <div class="po-text-ellipsis">
               {{ title }}
             </div>
-
-            <a *ngIf="!hideClose" class="po-modal-header-close-button" tabindex="0" (click)="close(true)">
-              <span class="po-icon po-icon-close"></span>
-            </a>
           </div>
+          <po-button
+            *ngIf="!hideClose"
+            [p-aria-label]="literals.close"
+            p-icon="po-icon po-icon-close"
+            (p-click)="close(true)"
+            p-kind="tertiary"
+          >
+          </po-button>
+        </div>
 
-          <div class="po-modal-body">
-            <ng-content></ng-content>
-          </div>
+        <div class="po-modal-body">
+          <ng-content></ng-content>
+        </div>
 
-          <ng-container *ngIf="modalFooter; else defaultModalFooterTemplate">
-            <ng-content select="po-modal-footer"></ng-content>
-          </ng-container>
+        <ng-container *ngIf="modalFooter; else defaultModalFooterTemplate">
+          <ng-content select="po-modal-footer"></ng-content>
+        </ng-container>
 
-          <ng-template #defaultModalFooterTemplate>
-            <po-modal-footer>
+        <ng-template #defaultModalFooterTemplate>
+          <po-modal-footer>
+            <div class="po-modal-footer-basic">
               <po-button
                 *ngIf="secondaryAction"
                 [p-danger]="getSecondaryActionButtonDanger()"
@@ -44,9 +52,9 @@
                 (p-click)="primaryAction.action()"
               >
               </po-button>
-            </po-modal-footer>
-          </ng-template>
-        </div>
+            </div>
+          </po-modal-footer>
+        </ng-template>
       </div>
     </div>
   </div>

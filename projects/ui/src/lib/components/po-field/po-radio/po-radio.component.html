@@ -1,6 +1,7 @@
 <div #radio class="po-radio">
-  <label #radioLabel (click)="eventClick()" (keydown)="onKeyDown($event)">
+  <label (click)="eventClick()" (keydown)="onKeyDown($event)">
     <input
+      #radioInput
       type="radio"
       [attr.p-size]="size"
       [checked]="checked"

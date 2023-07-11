@@ -1,6 +1,12 @@
-<ng-container [ngSwitch]="type">
-  <p *ngSwitchCase="'disabled'" class="po-table-link-disabled">{{ value }}</p>
-  <a *ngSwitchCase="'action'" class="po-table-link" (click)="action(value, row)">{{ value }}</a>
-  <a *ngSwitchCase="'externalLink'" class="po-table-link" [href]="link" target="_blank">{{ value }}</a>
-  <a *ngSwitchCase="'internalLink'" class="po-table-link" [routerLink]="link">{{ value }}</a>
-</ng-container>
+<div class="po-table-link" [ngClass]="{ 'po-table-link-disabled': disabled }">
+  <ng-container [ngSwitch]="type">
+    <po-link
+      *ngSwitchCase="'action'"
+      [p-label]="value"
+      [p-open-new-tab]="openNewTab"
+      (p-action)="action?.(value, row)"
+    ></po-link>
+    <po-link *ngSwitchCase="'externalLink'" [p-label]="value" [p-open-new-tab]="openNewTab" [p-url]="link"></po-link>
+    <po-link *ngSwitchCase="'internalLink'" [p-label]="value" [p-open-new-tab]="openNewTab" [p-url]="link"></po-link>
+  </ng-container>
+</div>

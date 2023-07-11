@@ -219,9 +219,7 @@ describe('PoModalComponent:', () => {
   it('should be modal with close button', () => {
     component.open();
     fixture.detectChanges();
-    expect(fixture.debugElement.query(By.css('.po-modal')).nativeElement.innerHTML).toContain(
-      'po-modal-header-close-button'
-    );
+    expect(fixture.debugElement.query(By.css('.po-modal')).nativeElement.innerHTML).toContain('po-icon-close');
   });
 
   it('should be one button in modal', () => {
@@ -231,7 +229,7 @@ describe('PoModalComponent:', () => {
     fixture.detectChanges();
 
     expect(element.nativeElement.querySelector('.po-button-modal-first-action')).toBeTruthy();
-    expect(element.nativeElement.querySelectorAll('.po-button').length).toBe(1);
+    expect(element.nativeElement.querySelectorAll('.po-button:not([p-kind="tertiary"])').length).toBe(1);
   });
 
   it(`focusFunction: should call 'stopPropagation' if 'activeOverlay' is equal to id`, () => {
@@ -514,9 +512,7 @@ describe('PoModalComponent:', () => {
       component.hideClose = false;
       component.open();
       fixture.detectChanges();
-      expect(fixture.debugElement.query(By.css('.po-modal')).nativeElement.innerHTML).toContain(
-        'po-modal-header-close-button'
-      );
+      expect(fixture.debugElement.query(By.css('.po-modal')).nativeElement.innerHTML).toContain('po-icon-close');
     });
 
     it('action disabled: should disabled primary action if `primaryAction.disabled` is `true`.', () => {
@@ -540,7 +536,7 @@ describe('PoModalComponent:', () => {
       component.open();
       fixture.detectChanges();
 
-      const containerElement = fixture.debugElement.query(By.css('.po-modal-container')).nativeElement;
+      const containerElement = fixture.debugElement.query(By.css('.po-modal-overlay')).nativeElement;
 
       spyOn(component, 'onClickOut');
 
@@ -553,8 +549,7 @@ describe('PoModalComponent:', () => {
       component.modalFooter = <any>{};
       component.open();
       fixture.detectChanges();
-
-      expect(fixture.debugElement.query(By.css('.po-button'))).toBeNull();
+      expect(fixture.debugElement.query(By.css('.po-button:not([p-kind="tertiary"])'))).toBeNull();
     });
   });
 });

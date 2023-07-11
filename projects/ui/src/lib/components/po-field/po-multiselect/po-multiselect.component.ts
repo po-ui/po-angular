@@ -10,7 +10,8 @@ import {
   OnDestroy,
   Renderer2,
   SimpleChanges,
-  ViewChild
+  ViewChild,
+  ContentChild
 } from '@angular/core';
 import { NG_VALIDATORS, NG_VALUE_ACCESSOR } from '@angular/forms';
 
@@ -25,6 +26,7 @@ import { PoLanguageService } from '../../../services/po-language/po-language.ser
 import { PoMultiselectBaseComponent } from './po-multiselect-base.component';
 import { PoMultiselectOption } from './po-multiselect-option.interface';
 import { PoMultiselectFilterService } from './po-multiselect-filter.service';
+import { PoMultiselectOptionTemplateDirective } from './po-multiselect-option-template/po-multiselect-option-template.directive';
 
 const poMultiselectContainerOffset = 8;
 const poMultiselectContainerPositionDefault = 'bottom';
@@ -72,6 +74,11 @@ const providers = [
  *   <file name="sample-po-multiselect-vacation-reactive-form/sample-po-multiselect-vacation-reactive-form.component.ts"> </file>
  * </example>
  *
+ * <example name="po-multiselect-template" title="PO Multiselect - Template">
+ *   <file name="sample-po-multiselect-template/sample-po-multiselect-template.component.html"> </file>
+ *   <file name="sample-po-multiselect-template/sample-po-multiselect-template.component.ts"> </file>
+ * </example>
+ *
  * <example name="po-multiselect-heroes" title="PO Multiselect - Heroes - using API">
  *   <file name="sample-po-multiselect-heroes/sample-po-multiselect-heroes.component.html"> </file>
  *   <file name="sample-po-multiselect-heroes/sample-po-multiselect-heroes.component.ts"> </file>
@@ -93,6 +100,9 @@ const providers = [
 export class PoMultiselectComponent
   extends PoMultiselectBaseComponent
   implements AfterViewInit, DoCheck, OnDestroy, OnChanges {
+  @ContentChild(PoMultiselectOptionTemplateDirective, { static: true })
+  multiselectOptionTemplate: PoMultiselectOptionTemplateDirective;
+
   @ViewChild('dropdownElement', { read: ElementRef, static: true }) dropdownElement: ElementRef;
   @ViewChild('dropdownElement', { static: true }) dropdown;
   @ViewChild('iconElement', { read: ElementRef, static: true }) iconElement: ElementRef;

@@ -12,19 +12,19 @@ import {
 
 import { NavigationCancel, NavigationEnd, Router } from '@angular/router';
 
-import { map } from 'rxjs/operators';
 import { Subscription } from 'rxjs';
+import { map } from 'rxjs/operators';
 
 import { getFormattedLink, isMobile, openExternalLink, uuid } from '../../utils/util';
 
+import { PoLanguageService } from '../../services/po-language/po-language.service';
 import { PoMenuBaseComponent } from './po-menu-base.component';
 import { PoMenuHeaderTemplateDirective } from './po-menu-header-template/po-menu-header-template.directive';
 import { PoMenuItem } from './po-menu-item.interface';
 import { PoMenuItemFiltered } from './po-menu-item/po-menu-item-filtered.interface';
-import { PoMenuItemsService } from './services/po-menu-items.service';
 import { PoMenuGlobalService } from './services/po-menu-global.service';
+import { PoMenuItemsService } from './services/po-menu-items.service';
 import { PoMenuService } from './services/po-menu.service';
-import { PoLanguageService } from '../../services/po-language/po-language.service';
 
 const poMenuDebounceTime = 400;
 const poMenuMinLength = 3;
@@ -363,10 +363,10 @@ export class PoMenuComponent extends PoMenuBaseComponent implements AfterViewIni
     }
   }
 
-  private convertToMenuItemFiltered(menuItem: any = { label: '', link: '' }): PoMenuItemFiltered {
-    const { label, link } = menuItem;
+  private convertToMenuItemFiltered(menuItem: any = { label: '', link: '', action: () => {} }): PoMenuItemFiltered {
+    const { label, link, action } = menuItem;
 
-    const menuItemFiltered: PoMenuItemFiltered = { label, link };
+    const menuItemFiltered: PoMenuItemFiltered = { label, link, action };
 
     this.setMenuItemProperties(menuItemFiltered);
 

@@ -11,4 +11,7 @@ export interface PoMenuItemFiltered {
 
   /** *Link* para redirecionamento no clique do item do menu, podendo ser um *link* interno ou externo. */
   link: string;
+
+  /** Ação a ser executada quando o item de menu for clicado. */
+  action: () => void;
 }

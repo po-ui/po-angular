@@ -405,18 +405,12 @@ export function removeKeysProperties(keys: Array<any>, newItemValue: any) {
  * @param key propriedade que será utilizada para realizar a comparação.
  */
 export function removeDuplicateItems(item, item2, key) {
-  for (let i = 0, len = item.length; i < len; i++) {
-    for (let j = 0, len2 = item2.length; j < len2; j++) {
-      if (item[i][key] === item2[j][key]) {
-        item2.splice(j, 1);
-        len2 = item2.length;
-      }
-    }
-  }
+  const uniqueValues = new Set(item.map(entry => entry[key]));
+  item2.splice(0, item2.length, ...item2.filter(entry => !uniqueValues.has(entry[key])));
 }
 
 /**
- * Remove objetos duplicados passando um array de propriedades.
+ * Recebe dois arrays de objetos e remove os itens duplicados utilizando uma propriedade(key) para comparação.
  *
  * Exemplo:
  *
@@ -424,36 +418,53 @@ export function removeDuplicateItems(item, item2, key) {
  * item: [{country: 'japao'}, {country: 'brasil'} , {country: 'china'}]
  * item2: [{country: 'chile'}, {country: 'brasil'}, {country: 'canada'}]
  * key: '[country]'
- * Resultado:
- *    item2 = [{country: 'chile'}, {country: 'canada'} ]
+ * Resultado do retorno:
+ *    [{country: 'chile'}, {country: 'canada'}, {country: 'japao'}, {country: 'china'}]
  * ```
  *
  *
- * @param item lista comparada.
- * @param item2 lista para remover items duplicados.
- * @param key um array de propriedades que vão ser utilizadas para a comparação.
+ * @param item : primeira lista de itens.
+ * @param item2 : segunda lista de itens.
+ * @param key : um array de propriedades que vão ser utilizadas para a comparação.
  */
-export function removeDuplicateItemsWithArrayKey(item, item2, key) {
-  if (!key.length) {
-    removeDuplicateItems(item, item2, 'id');
-  } else if (key.length === 1) {
-    removeDuplicateItems(item, item2, key[0]);
-  } else {
-    let myKey;
-    let newArray;
-    let result;
+export function removeDuplicateItemsWithArrayKey(item, item2, keys) {
+  const newKey = keys.length ? keys : ['id'];
 
-    const allEqual = arr => arr.every(val => val === arr[0]);
+  const combinedArray = item.concat(item2);
+  return combinedArray.filter(
+    (obj, index) => index === combinedArray.findIndex(innerObj => newKey.every(key => innerObj[key] === obj[key]))
+  );
+}
 
-    for (let i = 0; i < key.length; i++) {
-      newArray = [...item].map(entry => entry[key[i]]).concat([...item2].map(entry => entry[key[i]]));
-      result = allEqual(newArray);
-      if (!result) {
-        myKey = key[i];
-        break;
-      }
+/**
+ * Recebe um array de objetos para ordenação utilizando chave como comparativo e
+ * se a order é crescente(true) ou descrescente(false)
+ *
+ * Exemplo:
+ *
+ * ```
+ * items: [{country: 'japao'}, {country: 'brasil'} , {country: 'china'}]
+ * key: 'country'
+ * isAscendingOrder: true
+ * Resultado do retorno:
+ *    [{country: 'brasil'}, {country: 'china'} , {country: 'japao'}]
+ * ```
+ *
+ *
+ * @param items : lista de itens.
+ * @param key : propriedade utilizada na comparação.
+ * @param isAscendingOrder : ordenação crescente ou descrescente.
+ */
+export function sortArrayOfObjects(items, key, isAscendingOrder) {
+  return items.sort((a, b) => {
+    const valueA = a[key];
+    const valueB = b[key];
+
+    if (typeof valueA === 'number' && typeof valueB === 'number') {
+      return isAscendingOrder ? valueA - valueB : valueB - valueA;
+    } else {
+      const compareResult = valueA.toString().localeCompare(valueB.toString());
+      return isAscendingOrder ? compareResult : -compareResult;
     }
-
-    removeDuplicateItems(item, item2, myKey);
-  }
+  });
 }

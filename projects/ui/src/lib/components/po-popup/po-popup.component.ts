@@ -6,6 +6,7 @@ import { PoControlPositionService } from '../../services/po-control-position/po-
 
 import { PoPopupAction } from './po-popup-action.interface';
 import { PoPopupBaseComponent } from './po-popup-base.component';
+import { PoListBoxComponent } from '../po-listbox';
 
 /**
  *
@@ -36,6 +37,10 @@ import { PoPopupBaseComponent } from './po-popup-base.component';
 })
 export class PoPopupComponent extends PoPopupBaseComponent {
   @ViewChild('popupRef', { read: ElementRef }) popupRef: ElementRef;
+  @ViewChild('listbox', { read: ElementRef }) listbox: ElementRef;
+
+  //utilizado apenas no theme builder
+  @ViewChild('poListBoxRef') poListBoxRef: PoListBoxComponent;
 
   constructor(
     viewContainerRef: ViewContainerRef,
@@ -102,6 +107,13 @@ export class PoPopupComponent extends PoPopupBaseComponent {
     this.showPopup && this.oldTarget === this.target ? this.close() : this.open(param);
   }
 
+  protected checkAllActionIsInvisible() {
+    if (this.actions.every(item => item.visible === false)) {
+      return true;
+    }
+    return false;
+  }
+
   private clickedOutDisabledItem(event) {
     const containsItemDisabled =
       this.elementContains(event.target, 'po-popup-item-disabled') ||
@@ -130,7 +142,7 @@ export class PoPopupComponent extends PoPopupBaseComponent {
   }
 
   private hasContentToShow() {
-    return !!(this.popupRef.nativeElement && this.popupRef.nativeElement.clientHeight);
+    return !!(this.popupRef?.nativeElement && this.listbox?.nativeElement);
   }
 
   private initializeListeners() {
@@ -146,7 +158,7 @@ export class PoPopupComponent extends PoPopupBaseComponent {
   }
 
   private onScroll = ({ target }): void => {
-    if (this.showPopup && target.className !== 'po-popup-container') {
+    if (this.showPopup && target.className !== 'po-popup-container' && this.actions.length < 6) {
       this.close();
     }
   };
@@ -174,16 +186,18 @@ export class PoPopupComponent extends PoPopupBaseComponent {
   }
 
   private setPosition() {
-    this.poControlPosition.setElements(
-      this.popupRef.nativeElement,
-      8,
-      this.target,
-      this.customPositions,
-      false,
-      this.isCornerAlign
-    );
-    this.poControlPosition.adjustPosition(this.position);
-    this.arrowDirection = this.poControlPosition.getArrowDirection();
+    if (this.listbox.nativeElement.querySelector('.po-listbox')) {
+      this.poControlPosition.setElements(
+        this.popupRef.nativeElement,
+        8,
+        this.target,
+        this.customPositions,
+        false,
+        this.isCornerAlign
+      );
+      this.poControlPosition.adjustPosition(this.position);
+      this.arrowDirection = this.poControlPosition.getArrowDirection();
+    }
   }
 
   private validateInitialContent() {

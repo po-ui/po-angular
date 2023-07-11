@@ -1,6 +1,7 @@
 import { NgModule } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { PoLinkComponent } from './po-link.component';
+import { RouterModule } from '@angular/router';
 
 /**
  * @description
@@ -9,7 +10,7 @@ import { PoLinkComponent } from './po-link.component';
  */
 @NgModule({
   declarations: [PoLinkComponent],
-  imports: [CommonModule],
+  imports: [CommonModule, RouterModule],
   exports: [PoLinkComponent]
 })
 export class PoLinkModule {}

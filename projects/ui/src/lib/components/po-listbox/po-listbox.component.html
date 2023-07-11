@@ -1,0 +1,30 @@
+<div #listbox class="po-listbox" [attr.p-type]="type" [hidden]="visible">
+  <ng-content select="[p-popup-header-template]"></ng-content>
+  <ul #listboxItemList cdkListbox class="po-listbox-list">
+    <li
+      class="po-listbox-item"
+      *ngFor="let item of items"
+      [cdkOption]="item.label"
+      [cdkOptionDisabled]="returnBooleanValue(item, 'disabled') || returnBooleanValue(item, 'visible') === false"
+      [attr.aria-selected]="item.selected"
+      (click)="onSelectItem(item)"
+      (keydown)="onKeyDown(item, $event)"
+    >
+      <po-item-list
+        *ngIf="returnBooleanValue(item, 'visible') !== false"
+        [attr.data-item-list]="item | json"
+        [p-label]="item.label"
+        [p-value]="item.value"
+        [p-disabled]="returnBooleanValue(item, 'disabled')"
+        [p-selected]="item.selected"
+        [p-separator]="item.separator"
+        [p-visible]="returnBooleanValue(item, 'visible')"
+        [p-danger]="item.type === 'danger'"
+        [p-icon]="item.icon"
+        [p-type]="type"
+        [p-item]="item"
+        (p-select-item)="onSelectItem(item)"
+      ></po-item-list>
+    </li>
+  </ul>
+</div>

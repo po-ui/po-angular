@@ -6,6 +6,7 @@ import { PoColorPaletteEnum } from '../../enums/po-color-palette.enum';
 import { PoTagItem } from './interfaces/po-tag-item.interface';
 import { PoTagOrientation } from './enums/po-tag-orientation.enum';
 import { PoTagType } from './enums/po-tag-type.enum';
+import { InputBoolean } from '../../decorators';
 
 const poTagColors = (<any>Object).values(PoColorPaletteEnum);
 const poTagOrientationDefault = PoTagOrientation.Vertical;
@@ -32,6 +33,29 @@ export class PoTagBaseComponent {
    */
   @Input('p-label') label?: string;
 
+  /**
+   * @optional
+   *
+   * @description
+   *
+   * Habilita a opção de remover a tag
+   *
+   * @default `false`
+   */
+  @Input('p-removable') @InputBoolean() removable: boolean = false;
+
+  /**
+   * @optional
+   *
+   * @description
+   *
+   * Desabilita o `po-tag` e não permite que o usuário interaja com o mesmo.
+   * > A propriedade `p-disabled` somente terá efeito caso a propriedade `p-removable` esteja definida como `true`.
+   *
+   * @default `false`
+   */
+  @Input('p-disabled') @InputBoolean() disabled: boolean = false;
+
   /** Texto da tag. */
   @Input('p-value') value: string;
 
@@ -50,6 +74,15 @@ export class PoTagBaseComponent {
    * Ação que será executada ao clicar sobre o `po-tag` e que receberá como parâmetro um objeto contendo o seu valor e tipo.
    */
   @Output('p-click') click: EventEmitter<any> = new EventEmitter<PoTagItem>();
+
+  /**
+   * @optional
+   *
+   * @description
+   *
+   * Ação que sera executada quando clicar sobre o ícone de remover no `po-tag`
+   */
+  @Output('p-close') remove: EventEmitter<null> = new EventEmitter<null>();
 
   public readonly poTagOrientation = PoTagOrientation;
   public customColor;
@@ -243,7 +276,9 @@ export class PoTagBaseComponent {
    * @default `info`
    */
   @Input('p-type') set type(value: PoTagType) {
-    this._type = (<any>Object).values(PoTagType).includes(value) ? value : undefined;
+    if (!this.removable) {
+      this._type = (<any>Object).values(PoTagType).includes(value) ? value : undefined;
+    }
   }
 
   get type(): PoTagType {

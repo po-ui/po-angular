@@ -229,6 +229,15 @@ describe('PoNumberBaseComponent', () => {
     expect(result).toBeTrue();
   });
 
+  it('isControlKeys: should return true if the key is Enter', () => {
+    const fakeKeyboardEvent = {
+      key: 'Enter'
+    };
+
+    const result = component['isControlKeys'](fakeKeyboardEvent);
+    expect(result).toBeTrue();
+  });
+
   it('isControlKeys: should return false if isn`t a control key', () => {
     const fakeKeyboardEvent = {
       key: 'e'

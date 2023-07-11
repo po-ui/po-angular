@@ -1,30 +1,20 @@
-import {
-  EventEmitter,
-  Input,
-  OnChanges,
-  Output,
-  Directive,
-  SimpleChanges,
-  OnDestroy,
-  ViewChild,
-  ElementRef
-} from '@angular/core';
+import { Directive, EventEmitter, Input, OnChanges, OnDestroy, Output, SimpleChanges } from '@angular/core';
 import { Observable, Subscription } from 'rxjs';
 
-import { capitalizeFirstLetter, convertToBoolean, isTypeof, sortValues } from '../../utils/util';
 import { PoDateService } from '../../services/po-date/po-date.service';
-import { PoLanguageService } from '../../services/po-language/po-language.service';
 import { poLocaleDefault } from '../../services/po-language/po-language.constant';
+import { PoLanguageService } from '../../services/po-language/po-language.service';
+import { capitalizeFirstLetter, convertToBoolean, isTypeof, sortValues } from '../../utils/util';
 
-import { PoTableAction } from './interfaces/po-table-action.interface';
-import { PoTableColumn } from './interfaces/po-table-column.interface';
-import { PoTableColumnSort } from './interfaces/po-table-column-sort.interface';
-import { PoTableColumnSortType } from './enums/po-table-column-sort-type.enum';
-import { PoTableLiterals } from './interfaces/po-table-literals.interface';
 import { InputBoolean } from '../../decorators';
-import { PoTableService } from './services/po-table.service';
-import { PoTableResponseApi } from './interfaces/po-table-response-api.interface';
+import { PoTableColumnSortType } from './enums/po-table-column-sort-type.enum';
+import { PoTableAction } from './interfaces/po-table-action.interface';
+import { PoTableColumnSort } from './interfaces/po-table-column-sort.interface';
+import { PoTableColumn } from './interfaces/po-table-column.interface';
 import { PoTableFilteredItemsParams } from './interfaces/po-table-filtered-items-params.interface';
+import { PoTableLiterals } from './interfaces/po-table-literals.interface';
+import { PoTableResponseApi } from './interfaces/po-table-response-api.interface';
+import { PoTableService } from './services/po-table.service';
 
 export type QueryParamsType = string | number | boolean;
 
@@ -97,9 +87,16 @@ export const poTableLiteralsDefault = {
 @Directive()
 export abstract class PoTableBaseComponent implements OnChanges, OnDestroy {
   /**
+   * @deprecated 16.x.x
+   *
    * @optional
    *
    * @description
+   *
+   * **Deprecated 16.x.x**.
+   *
+   * > Por regras de acessibilidade a célula da tabela apresentará reticências automáticamente
+   * quando não houver espaço para o seu contéudo e por isso a propriedade será depreciada.
    *
    * Se verdadeiro, habilita a quebra de texto ao transborda-lo dentro de qualquer coluna.
    * > Quando ocorrer a quebra de texto, ao passar o mouse no conteúdo da célula,
@@ -366,7 +363,11 @@ export abstract class PoTableBaseComponent implements OnChanges, OnDestroy {
    * > Se falso, será inicializado como um *array* vazio.
    */
   @Input('p-items') set items(items: Array<any>) {
-    this._items = Array.isArray(items) ? [...items] : [];
+    if (this.height) {
+      this._items = Array.isArray(items) ? [...items] : [];
+    } else {
+      this._items = Array.isArray(items) ? items : [];
+    }
 
     // when haven't items, selectAll should be unchecked.
     if (!this.hasItems) {
@@ -939,11 +940,13 @@ export abstract class PoTableBaseComponent implements OnChanges, OnDestroy {
   }
 
   private sortArray(column: PoTableColumn, ascending: boolean) {
-    const itemsList = [...this.items];
+    const itemsList = this.height ? [...this.items] : this.items;
     itemsList.sort((leftSide, rightSide): number =>
       sortValues(leftSide[column.property], rightSide[column.property], ascending)
     );
-    this.items = itemsList;
+    if (this.height) {
+      this.items = itemsList;
+    }
   }
 
   private unselectOtherRows(rows: Array<any>, row) {

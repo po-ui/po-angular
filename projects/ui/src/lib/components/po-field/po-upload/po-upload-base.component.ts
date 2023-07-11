@@ -1,17 +1,17 @@
+import { Directive, EventEmitter, Input, Output, HostBinding } from '@angular/core';
 import { AbstractControl, ControlValueAccessor, Validator } from '@angular/forms';
-import { EventEmitter, Input, Output, Directive } from '@angular/core';
 
 import { convertToBoolean, isEquals, isIE, isMobile } from '../../../utils/util';
 import { requiredFailed } from '../validators';
 
-import { PoUploadFile } from './po-upload-file';
+import { InputBoolean } from '../../../decorators';
+import { poLocaleDefault } from '../../../services/po-language/po-language.constant';
+import { PoLanguageService } from '../../../services/po-language/po-language.service';
 import { PoUploadFileRestrictions } from './interfaces/po-upload-file-restriction.interface';
 import { PoUploadLiterals } from './interfaces/po-upload-literals.interface';
-import { PoUploadService } from './po-upload.service';
+import { PoUploadFile } from './po-upload-file';
 import { PoUploadStatus } from './po-upload-status.enum';
-import { InputBoolean } from '../../../decorators';
-import { PoLanguageService } from '../../../services/po-language/po-language.service';
-import { poLocaleDefault } from '../../../services/po-language/po-language.constant';
+import { PoUploadService } from './po-upload.service';
 
 export const poUploadLiteralsDefault = {
   en: <PoUploadLiterals>{
@@ -186,6 +186,8 @@ export abstract class PoUploadBaseComponent implements ControlValueAccessor, Val
    *
    * Define se o envio do arquivo será automático ao selecionar o mesmo.
    *
+   * > Esta propriedade funciona somente se a propriedade `p-url` tiver um valor atribuído.
+   *
    * @default `false`
    */
   @Input('p-auto-upload') autoUpload?: boolean = false;
@@ -207,6 +209,26 @@ export abstract class PoUploadBaseComponent implements ControlValueAccessor, Val
 
   /** Objeto que contém os cabeçalhos que será enviado na requisição dos arquivos. */
   @Input('p-headers') headers: { [name: string]: string | Array<string> };
+
+  /**
+   * @optional
+   *
+   * @description
+   *
+   * Define se a propriedade `p-url` é obrigatória.
+   *
+   * Caso a propriedade seja definida como `false`:
+   * - o botão de "Selecionar arquivo" ficará habilitado mesmo sem a propriedade `p-url` definida.
+   * - o botão "Iniciar envio" ficará oculto até que a propriedade `p-url` seja definida.
+   *
+   * > Se utilizada com a propriedade `p-auto-upload` definida como `true` será necessário definir a propriedade `p-url`.
+   *
+   * @default `true`
+   */
+  @HostBinding('attr.p-required-url')
+  @Input('p-required-url')
+  @InputBoolean()
+  requiredUrl: boolean = true;
 
   /**
    * @optional

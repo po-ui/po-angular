@@ -3,7 +3,7 @@
   [class.po-widget]="!primary"
   [class.po-widget-disabled]="disabled"
   [class.po-widget-primary]="primary"
-  [class.po-widget-no-shadow]="noShadow"
+  [class.po-widget-no-shadow]="click.observers.length && noShadow"
   [style.background-image]="background ? 'url(' + background + ')' : undefined"
   (click)="onClick($event)"
   (keydown)="onKeyDown($event)"

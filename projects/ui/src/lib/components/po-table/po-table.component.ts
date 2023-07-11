@@ -1,38 +1,41 @@
-import { Observable, Subscriber, Subscription } from 'rxjs';
+import { CdkVirtualScrollViewport } from '@angular/cdk/scrolling';
+import { DecimalPipe } from '@angular/common';
 import {
   AfterViewInit,
   ChangeDetectorRef,
   Component,
   ContentChild,
+  ContentChildren,
   DoCheck,
   ElementRef,
   IterableDiffers,
   OnDestroy,
+  OnInit,
   QueryList,
   Renderer2,
+  TemplateRef,
   ViewChild,
-  ViewChildren,
-  ViewContainerRef,
-  ContentChildren,
-  TemplateRef
+  ViewChildren
 } from '@angular/core';
-import { DecimalPipe } from '@angular/common';
 import { Router } from '@angular/router';
+import { Observable, Subscription } from 'rxjs';
 
-import { convertToBoolean } from '../../utils/util';
 import { PoDateService } from '../../services/po-date/po-date.service';
 import { PoLanguageService } from '../../services/po-language/po-language.service';
+import { convertToBoolean } from '../../utils/util';
 import { PoPopupComponent } from '../po-popup/po-popup.component';
-
-import { PoTableAction } from './interfaces/po-table-action.interface';
-import { PoTableBaseComponent, QueryParamsType } from './po-table-base.component';
-import { PoTableColumn } from './interfaces/po-table-column.interface';
 import { PoTableColumnLabel } from './po-table-column-label/po-table-column-label.interface';
-import { PoTableRowTemplateDirective } from './po-table-row-template/po-table-row-template.directive';
-import { PoTableSubtitleColumn } from './po-table-subtitle-footer/po-table-subtitle-column.interface';
+
+import { uuid } from '../../utils/util';
+import { PoPageSlideComponent } from '../po-page';
+import { PoTableRowTemplateArrowDirection } from './enums/po-table-row-template-arrow-direction.enum';
+import { PoTableAction } from './interfaces/po-table-action.interface';
+import { PoTableColumn } from './interfaces/po-table-column.interface';
+import { PoTableBaseComponent, QueryParamsType } from './po-table-base.component';
 import { PoTableCellTemplateDirective } from './po-table-cell-template/po-table-cell-template.directive';
 import { PoTableColumnTemplateDirective } from './po-table-column-template/po-table-column-template.directive';
-import { PoTableRowTemplateArrowDirection } from './enums/po-table-row-template-arrow-direction.enum';
+import { PoTableRowTemplateDirective } from './po-table-row-template/po-table-row-template.directive';
+import { PoTableSubtitleColumn } from './po-table-subtitle-footer/po-table-subtitle-column.interface';
 import { PoTableService } from './services/po-table.service';
 
 /**
@@ -90,35 +93,39 @@ import { PoTableService } from './services/po-table.service';
   templateUrl: './po-table.component.html',
   providers: [PoDateService]
 })
-export class PoTableComponent extends PoTableBaseComponent implements AfterViewInit, DoCheck, OnDestroy {
+export class PoTableComponent extends PoTableBaseComponent implements AfterViewInit, DoCheck, OnDestroy, OnInit {
   @ContentChild(PoTableRowTemplateDirective, { static: true }) tableRowTemplate: PoTableRowTemplateDirective;
   @ContentChild(PoTableCellTemplateDirective) tableCellTemplate: PoTableCellTemplateDirective;
 
   @ContentChildren(PoTableColumnTemplateDirective) tableColumnTemplates: QueryList<PoTableColumnTemplateDirective>;
 
   @ViewChild('noColumnsHeader', { read: ElementRef }) noColumnsHeader;
-  @ViewChild('noColumnsHeaderFixed', { read: ElementRef }) noColumnsHeaderFixed;
   @ViewChild('popup') poPopupComponent: PoPopupComponent;
   @ViewChild('tableFooter', { read: ElementRef, static: false }) tableFooterElement;
   @ViewChild('tableWrapper', { read: ElementRef, static: false }) tableWrapperElement;
-  @ViewChild('poTableTbody', { read: ElementRef, static: false }) poTableTbody;
-  @ViewChild('poTableThead', { read: ElementRef, static: false }) poTableThead;
-  @ViewChild('poTableTbodyVirtual', { read: ElementRef, static: false }) poTableTbodyVirtual;
+
+  @ViewChild('tableTemplate', { read: ElementRef, static: false }) tableTemplate;
+  @ViewChild('tableVirtualScroll', { read: ElementRef, static: false }) tableVirtualScroll;
+
   @ViewChild('columnManager', { read: ElementRef, static: false }) columnManager;
-  @ViewChild('columnManagerFixed', { read: ElementRef, static: false }) columnManagerFixed;
   @ViewChild('columnActionLeft', { read: ElementRef, static: false }) columnActionLeft;
-  @ViewChild('columnActionLeftFixed', { read: ElementRef, static: false }) columnActionLeftFixed;
+  @ViewChild('pageSlideColumnsManager') pageSlideColumnsManager: PoPageSlideComponent;
 
   @ViewChildren('actionsIconElement', { read: ElementRef }) actionsIconElement: QueryList<any>;
   @ViewChildren('actionsElement', { read: ElementRef }) actionsElement: QueryList<any>;
+
+  @ViewChild(CdkVirtualScrollViewport, { static: false }) public viewPort: CdkVirtualScrollViewport;
 
   heightTableContainer: number;
   heightTableVirtual: number;
   popupTarget;
   tableOpacity: number = 0;
   tooltipText: string;
-  itemSize: number = 32;
+  itemSize: number = 48;
   lastVisibleColumnsSelected: Array<PoTableColumn>;
+  tagColor: string;
+  idRadio: string;
+  JSON: JSON;
 
   private _columnManagerTarget: ElementRef;
   private _columnManagerTargetFixed: ElementRef;
@@ -133,7 +140,6 @@ export class PoTableComponent extends PoTableBaseComponent implements AfterViewI
 
   private clickListener: () => void;
   private resizeListener: () => void;
-  JSON: JSON;
 
   @ViewChild('columnManagerTarget') set columnManagerTarget(value: ElementRef) {
     this._columnManagerTarget = value;
@@ -246,6 +252,20 @@ export class PoTableComponent extends PoTableBaseComponent implements AfterViewI
     );
   }
 
+  public get inverseOfTranslation(): string {
+    if (!this.viewPort || !this.viewPort['_renderedContentOffset']) {
+      return '-0px';
+    }
+
+    const offset = this.viewPort['_renderedContentOffset'];
+
+    return `-${offset}px`;
+  }
+
+  ngOnInit() {
+    this.idRadio = `po-radio-${uuid()}`;
+  }
+
   ngAfterViewInit() {
     this.initialized = true;
   }
@@ -268,7 +288,7 @@ export class PoTableComponent extends PoTableBaseComponent implements AfterViewI
       this.visibleElement = true;
     }
 
-    this.itemSize = document.body.offsetWidth > 1366 ? 44 : 32;
+    // this.itemSize = document.body.offsetWidth > 1366 ? 44 : 32;
   }
 
   ngOnDestroy() {
@@ -492,7 +512,7 @@ export class PoTableComponent extends PoTableBaseComponent implements AfterViewI
   tooltipMouseEnter(event: any, column?: PoTableColumn, row?: any) {
     this.tooltipText = undefined;
 
-    if (this.hideTextOverflow && event.target.offsetWidth < event.target.scrollWidth && event.target.innerText.trim()) {
+    if (event.target.offsetWidth < event.target.scrollWidth && event.target.innerText.trim()) {
       return (this.tooltipText = event.target.innerText);
     }
 
@@ -526,6 +546,7 @@ export class PoTableComponent extends PoTableBaseComponent implements AfterViewI
 
   onOpenColumnManager() {
     this.lastVisibleColumnsSelected = [...this.columns];
+    this.pageSlideColumnsManager.open();
   }
 
   /**
@@ -572,35 +593,33 @@ export class PoTableComponent extends PoTableBaseComponent implements AfterViewI
     return template.templateRef;
   }
 
-  public syncronizeHorizontalScroll(): void {
-    this.poTableThead.nativeElement.scrollLeft = this.poTableTbodyVirtual.nativeElement.scrollLeft;
-  }
-
   public getWidthColumnManager() {
-    return this.height
-      ? this.columnManagerFixed?.nativeElement.offsetWidth
-      : this.columnManager?.nativeElement.offsetWidth;
+    return this.columnManager?.nativeElement.offsetWidth;
   }
 
   public getColumnWidthActionsLeft() {
-    return this.height
-      ? this.columnActionLeftFixed?.nativeElement.offsetWidth
-      : this.columnActionLeft?.nativeElement.offsetWidth;
+    return this.columnActionLeft?.nativeElement.offsetWidth;
   }
 
   protected calculateHeightTableContainer(height) {
     const value = parseFloat(height);
     this.heightTableContainer = value ? value - this.getHeightTableFooter() : undefined;
-    this.heightTableVirtual = this.heightTableContainer
-      ? this.heightTableContainer - this.getHeightTableHeader()
-      : undefined;
+    this.heightTableVirtual = this.heightTableContainer ? this.heightTableContainer - this.itemSize : undefined;
     this.setTableOpacity(1);
     this.changeDetector.detectChanges();
   }
 
+  protected verifyCalculateHeightTableContainer() {
+    if (this.height && this.verifyChangeHeightInFooter()) {
+      this.footerHeight = this.getHeightTableFooter();
+
+      this.calculateHeightTableContainer(this.height);
+    }
+  }
+
   protected checkInfiniteScroll(): void {
     if (this.hasInfiniteScroll()) {
-      if (this.poTableTbodyVirtual.nativeElement.scrollHeight >= this.height) {
+      if (this.tableVirtualScroll.nativeElement.scrollHeight >= this.height) {
         this.includeInfiniteScroll();
       } else {
         this.infiniteScroll = false;
@@ -649,24 +668,18 @@ export class PoTableComponent extends PoTableBaseComponent implements AfterViewI
     return this.tableFooterElement ? this.tableFooterElement.nativeElement.offsetHeight : 0;
   }
 
-  private getHeightTableHeader() {
-    return this.poTableThead?.nativeElement?.offsetHeight
-      ? this.poTableThead.nativeElement.offsetHeight
-      : this.itemSize;
-  }
-
   private hasInfiniteScroll(): boolean {
     return (
       this.infiniteScroll &&
       this.hasItems &&
       !this.subscriptionScrollEvent &&
       this.height &&
-      this.poTableTbodyVirtual.nativeElement.scrollHeight
+      this.tableVirtualScroll.nativeElement.scrollHeight
     );
   }
 
   private includeInfiniteScroll(): void {
-    this.scrollEvent$ = this.defaultService.scrollListener(this.poTableTbodyVirtual.nativeElement);
+    this.scrollEvent$ = this.defaultService.scrollListener(this.tableVirtualScroll.nativeElement);
     this.subscriptionScrollEvent = this.scrollEvent$.subscribe(event => this.showMoreInfiniteScroll(event));
 
     this.changeDetector.detectChanges();
@@ -705,22 +718,6 @@ export class PoTableComponent extends PoTableBaseComponent implements AfterViewI
 
   private verifyChangeHeightInFooter() {
     return this.footerHeight !== this.getHeightTableFooter();
-  }
-
-  private verifyChangeHeightInHeader() {
-    return this.headerHeight !== this.getHeightTableHeader();
-  }
-
-  protected verifyCalculateHeightTableContainer() {
-    if (this.height && this.verifyChangeHeightInFooter()) {
-      this.footerHeight = this.getHeightTableFooter();
-
-      if (this.verifyChangeHeightInHeader()) {
-        this.headerHeight = this.getHeightTableHeader();
-      }
-
-      this.calculateHeightTableContainer(this.height);
-    }
   }
 
   private toggleSelect(compare, selectValue: boolean) {

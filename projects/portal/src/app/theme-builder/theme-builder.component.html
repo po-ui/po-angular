@@ -1,0 +1,2652 @@
+<po-page-default id="myPortal" class="app-portal app-portal-home">
+  <div class="home-colorful-content">
+    <div class="larger-boxes">
+      <div class="larger-box color-1"></div>
+      <div class="larger-box color-2"></div>
+      <div class="larger-box color-3"></div>
+      <div class="larger-box color-4"></div>
+      <div class="larger-box color-5"></div>
+      <div class="larger-box color-6"></div>
+      <div class="larger-box color-7"></div>
+      <div class="larger-box color-8"></div>
+      <div class="larger-box color-9"></div>
+      <div class="larger-box color-10"></div>
+      <div class="larger-box color-11"></div>
+      <div class="larger-box color-12"></div>
+      <div class="larger-box color-13"></div>
+      <div class="larger-box color-14"></div>
+      <div class="larger-box color-15"></div>
+      <div class="larger-box color-16"></div>
+    </div>
+    <div class="smaller-boxes">
+      <div class="smaller-box color-16"></div>
+      <div class="smaller-box color-15"></div>
+      <div class="smaller-box color-14"></div>
+      <div class="smaller-box color-13"></div>
+      <div class="smaller-box color-12"></div>
+      <div class="smaller-box color-11"></div>
+      <div class="smaller-box color-10"></div>
+      <div class="smaller-box color-9"></div>
+      <div class="smaller-box color-8"></div>
+      <div class="smaller-box color-7"></div>
+      <div class="smaller-box color-6"></div>
+      <div class="smaller-box color-5"></div>
+      <div class="smaller-box color-4"></div>
+      <div class="smaller-box color-3"></div>
+      <div class="smaller-box color-2"></div>
+      <div class="smaller-box color-17"></div>
+    </div>
+    <div class="po-mb-5"></div>
+  </div>
+  <div class="po-row">
+    <div class="po-offset-md-1 po-offset-lg-1 po-offset-xl-1 po-md-10 po-sm-12">
+      <div class="po-row po-mb-3">
+        <div class="po-md-6 po-sm-12 po-pr-0 po-pl-0">
+          <div class="container container-title">
+            <div class="container-item">
+              <p class="constructor-title">Construtor de Temas</p>
+            </div>
+          </div>
+        </div>
+        <div class="po-md-6 po-sm-12 po-pr-0 po-pl-0">
+          <div class="container container-widget">
+            <div class="container-item">
+              <button
+                type="button"
+                [ngClass]="!verifyCss() ? 'btn-disabled' : ''"
+                class="button-clone po-button po-button-secondary-theme"
+                (click)="openGetcss()"
+                [disabled]="!verifyCss()"
+              >
+                Ver css
+              </button>
+
+              <button
+                class="po-button po-button-secondary-theme padding-right"
+                (click)="pageSlide.open()"
+                #buttonConfig
+              >
+                Configuração
+              </button>
+            </div>
+          </div>
+        </div>
+      </div>
+      <div class="container">
+        <div class="container-item po-pb-2">
+          <p class="constructor-subtitle">Esse texto tem ser substituído com alguma instrução</p>
+        </div>
+      </div>
+      <po-list-view
+        class="list-container"
+        p-property-title="name"
+        [p-literals]="listViewLiterals"
+        [p-items]="[
+          { name: 'Painel de Controle' },
+        ]"
+        [p-actions]="listViewAction"
+      >
+        <ng-template p-list-view-content-template>
+          <div class="po-row">
+            <div class="container">
+              <div class="container-item po-pl-1">
+                <p><strong> Cores </strong></p>
+              </div>
+            </div>
+          </div>
+          <div class="po-row po-pl-1 po-mb-2">
+            <div class="container">
+              <div class="container-item">
+                <label for="color" class="po-mr-2">Marca principal </label>
+                <input
+                  class="style-inputColor"
+                  type="color"
+                  id="colorbrandS"
+                  [formControl]="brandFormS.get('colorAction')"
+                />
+
+                <label for="color" class="po-mr-2 po-ml-1">Marca secundária </label>
+                <input
+                  class="style-inputColor"
+                  type="color"
+                  id="colorbrandP"
+                  [formControl]="brandFormP.get('colorAction')"
+                />
+
+                <label for="color" class="po-mr-2 po-ml-1">Marca terciária </label>
+                <input
+                  class="style-inputColor"
+                  type="color"
+                  id="colorbrandT"
+                  [formControl]="brandFormT.get('colorAction')"
+                />
+              </div>
+            </div>
+          </div>
+        </ng-template>
+        <!-- <ng-template p-list-view-detail-template>
+          <div class="po-row po-mt-2">
+            <div class="container">
+              <div class="container-item po-pl-1">
+                <p><strong>Marca principal:</strong> Descrição da Marca</p>
+              </div>
+            </div>
+          </div>
+          <div class="po-row">
+            <div class="container">
+              <div class="container-item po-pl-1">
+                <p><strong>Marca secundária:</strong> Descrição da brand 2</p>
+              </div>
+            </div>
+          </div>
+          <div class="po-row">
+            <div class="container">
+              <div class="container-item po-pl-1">
+                <p><strong>Marca terciária:</strong> Descrição da brand 3</p>
+              </div>
+            </div>
+          </div>
+        </ng-template> -->
+      </po-list-view>
+
+      <!-- <div *ngIf="verifyIfItemVisibility()" class="po-row po-mt-5">
+        <div class="po-offset-md-9 po-offset-lg-9 po-offset-xl-9 po-md-3 po-pr-0">
+          <po-menu-filter class="menu-filter"></po-menu-filter>
+        </div>
+      </div> -->
+      <div class="po-row po-p-0 po-mt-2 po-mb-3">
+        <po-widget [class.hide]="!botaoPrimaryView" class="widget-items po-sm-12 po-md-6 po-lg-4 po-xl-3 po-pl-0">
+          <po-widget class="widget-menu">
+            <div class="po-row row-menu">
+              <div class="po-md-12 po-p-0 col-widget">
+                <section [class.hide]="kindButton !== 1">
+                  <po-tag
+                    [p-color]="ratioButton > 7 ? '#c3ffc3b3' : '#ffd3d3'"
+                    [p-icon]="ratioButton > 7 ? 'po-icon-ok' : 'po-icon-close'"
+                    [p-text-color]="ratioButton > 7 ? 'green' : 'red'"
+                    p-value="AAA"
+                    class="po-pr-1 po-pt-1 container-widget"
+                  ></po-tag>
+                  <po-tag
+                    [p-color]="ratioButton > 4.5 ? '#c3ffc3b3' : '#ffd3d3'"
+                    [p-icon]="ratioButton > 4.5 ? 'po-icon-ok' : 'po-icon-close'"
+                    [p-text-color]="ratioButton > 4.5 ? 'green' : 'red'"
+                    p-value="AA"
+                    class="po-pr-1 po-pt-1 container-widget"
+                  >
+                  </po-tag>
+                </section>
+              </div>
+              <div class="po-md-12 po-p-0">
+                <div class="menu-with-constrast">
+                  <po-button [class.hide]="kindButton !== 1" p-label="Button" p-kind="primary" #buttonP></po-button>
+                  <po-button [class.hide]="kindButton !== 2" p-label="Button" p-kind="secondary" #buttonD></po-button>
+                  <po-button [class.hide]="kindButton !== 3" p-label="Button" p-kind="tertiary" #buttonL></po-button>
+                </div>
+                <p class="po-pl-1"><strong>Live demo</strong></p>
+              </div>
+            </div>
+          </po-widget>
+          <div class="po-row">
+            <div class="po-md-12 description-widget">
+              <p><strong>Botão</strong></p>
+              <po-tag class="po-pl-2" p-color="#efefef" p-text-color="#000" p-value="AnimaliaDS"> </po-tag>
+            </div>
+            <div class="po-md-12 po-pt-1 description-widget">
+              <po-button
+                p-icon="po-icon-settings"
+                p-kind="tertiary"
+                p-label="Personalizar"
+                (click)="customizeComponent.open(); openPageSlide('Botão', 'button')"
+              ></po-button>
+            </div>
+          </div>
+        </po-widget>
+        <po-widget [class.hide]="!switchView" class="widget-items po-sm-12 po-md-6 po-lg-4 po-xl-3 po-pl-0">
+          <po-widget class="widget-menu">
+            <div class="po-row row-menu">
+              <div class="po-md-12 po-p-0">
+                <div class="menu-item">
+                  <po-switch class="po-pt-3" name="switch" #switch [(ngModel)]="switchSampleBuilder"> </po-switch>
+                </div>
+                <p class="po-pl-1"><strong>Live demo</strong></p>
+              </div>
+            </div>
+          </po-widget>
+          <div class="po-row">
+            <div class="po-md-12 description-widget">
+              <p><strong>Switch</strong></p>
+              <po-tag class="po-pl-2" p-color="#efefef" p-text-color="#000" p-value="AnimaliaDS"> </po-tag>
+            </div>
+            <div class="po-md-12 po-pt-1 description-widget">
+              <po-button
+                p-icon="po-icon-settings"
+                p-kind="tertiary"
+                p-label="Personalizar"
+                (click)="customizeComponent.open(); openPageSlide('Switch', 'switch')"
+              ></po-button>
+            </div>
+          </div>
+        </po-widget>
+        <po-widget [class.hide]="!disclaimerView" class="widget-items po-sm-12 po-md-6 po-lg-4 po-xl-3 po-pl-0">
+          <po-widget class="widget-menu">
+            <div class="po-row row-menu">
+              <div class="po-md-12 po-p-0 col-widget">
+                <po-tag
+                  [p-color]="ratioDisclaimer > 7 ? '#c3ffc3b3' : '#ffd3d3'"
+                  [p-icon]="ratioDisclaimer > 7 ? 'po-icon-ok' : 'po-icon-close'"
+                  [p-text-color]="ratioDisclaimer > 7 ? 'green' : 'red'"
+                  p-value="AAA"
+                  class="po-pr-1 po-pt-1 container-widget"
+                ></po-tag>
+                <po-tag
+                  [p-color]="ratioDisclaimer > 4.5 ? '#c3ffc3b3' : '#ffd3d3'"
+                  [p-icon]="ratioDisclaimer > 4.5 ? 'po-icon-ok' : 'po-icon-close'"
+                  [p-text-color]="ratioDisclaimer > 4.5 ? 'green' : 'red'"
+                  p-value="AA"
+                  class="po-pr-1 po-pt-1 container-widget"
+                >
+                </po-tag>
+              </div>
+              <div class="po-md-12 po-p-0">
+                <div class="menu-with-constrast">
+                  <po-disclaimer #disclaimer p-value="PO-UI - Disclaimer"></po-disclaimer>
+                </div>
+                <p class="po-pl-1"><strong>Live demo</strong></p>
+              </div>
+            </div>
+          </po-widget>
+          <div class="po-row">
+            <div class="po-md-12 description-widget">
+              <p><strong>Disclaimer</strong></p>
+              <po-tag class="po-pl-2" p-color="#efefef" p-text-color="#000" p-value="AnimaliaDS"> </po-tag>
+            </div>
+            <div class="po-md-12 po-pt-1 description-widget">
+              <po-button
+                p-icon="po-icon-settings"
+                p-kind="tertiary"
+                p-label="Personalizar"
+                (click)="customizeComponent.open(); openPageSlide('Disclaimer', 'disclaimer')"
+              ></po-button>
+            </div>
+          </div>
+        </po-widget>
+        <po-widget [class.hide]="!inputView" class="widget-items po-sm-12 po-md-6 po-lg-4 po-xl-3 po-pl-0">
+          <po-widget class="widget-menu">
+            <div class="po-row row-menu">
+              <div class="po-md-12 po-p-0 col-widget">
+                <po-tag
+                  [p-color]="ratioInput > 7 ? '#c3ffc3b3' : '#ffd3d3'"
+                  [p-icon]="ratioInput > 7 ? 'po-icon-ok' : 'po-icon-close'"
+                  [p-text-color]="ratioInput > 7 ? 'green' : 'red'"
+                  p-value="AAA"
+                  class="po-pr-1 po-pt-1 container-widget"
+                ></po-tag>
+                <po-tag
+                  [p-color]="ratioInput > 4.5 ? '#c3ffc3b3' : '#ffd3d3'"
+                  [p-icon]="ratioInput > 4.5 ? 'po-icon-ok' : 'po-icon-close'"
+                  [p-text-color]="ratioInput > 4.5 ? 'green' : 'red'"
+                  p-value="AA"
+                  class="po-pr-1 po-pt-1 container-widget"
+                >
+                </po-tag>
+              </div>
+              <div class="po-md-12 po-p-0">
+                <div class="menu-with-constrast">
+                  <po-input #input name="input" p-placeholder="Customize seu po-input"> </po-input>
+                </div>
+                <p class="po-pl-1"><strong>Live demo</strong></p>
+              </div>
+            </div>
+          </po-widget>
+          <div class="po-row">
+            <div class="po-md-12 description-widget">
+              <p><strong>Input</strong></p>
+              <po-tag class="po-pl-2" p-color="#efefef" p-text-color="#000" p-value="AnimaliaDS"> </po-tag>
+            </div>
+            <div class="po-md-12 po-pt-1 description-widget">
+              <po-button
+                p-icon="po-icon-settings"
+                p-kind="tertiary"
+                p-label="Personalizar"
+                (click)="customizeComponent.open(); openPageSlide('Input', 'input')"
+              ></po-button>
+            </div>
+          </div>
+        </po-widget>
+        <po-widget [class.hide]="!selectView" class="widget-items po-sm-12 po-md-6 po-lg-4 po-xl-3 po-pl-0">
+          <po-widget class="widget-menu">
+            <div class="po-row row-menu">
+              <div class="po-md-12 po-p-0 col-widget">
+                <po-tag
+                  [p-color]="ratioSelect > 7 ? '#c3ffc3b3' : '#ffd3d3'"
+                  [p-icon]="ratioSelect > 7 ? 'po-icon-ok' : 'po-icon-close'"
+                  [p-text-color]="ratioSelect > 7 ? 'green' : 'red'"
+                  p-value="AAA"
+                  class="po-pr-1 po-pt-1 container-widget"
+                ></po-tag>
+                <po-tag
+                  [p-color]="ratioSelect > 4.5 ? '#c3ffc3b3' : '#ffd3d3'"
+                  [p-icon]="ratioSelect > 4.5 ? 'po-icon-ok' : 'po-icon-close'"
+                  [p-text-color]="ratioSelect > 4.5 ? 'green' : 'red'"
+                  p-value="AA"
+                  class="po-pr-1 po-pt-1 container-widget"
+                >
+                </po-tag>
+              </div>
+              <div class="po-md-12 po-p-0">
+                <div class="menu-with-constrast">
+                  <po-select
+                    #select
+                    class="po-pr-1 po-pl-1"
+                    name="select"
+                    [p-options]="[
+                      { label: 'Option 1', value: '1' },
+                      { label: 'Option 2', value: '2' }
+                    ]"
+                    p-placeholder="Customize seu po-select"
+                  >
+                  </po-select>
+                </div>
+                <p class="po-pl-1"><strong>Live demo</strong></p>
+              </div>
+            </div>
+          </po-widget>
+          <div class="po-row">
+            <div class="po-md-12 description-widget">
+              <p><strong>Select</strong></p>
+              <po-tag class="po-pl-2" p-color="#efefef" p-text-color="#000" p-value="AnimaliaDS"> </po-tag>
+            </div>
+            <div class="po-md-12 po-pt-1 description-widget">
+              <po-button
+                p-icon="po-icon-settings"
+                p-kind="tertiary"
+                p-label="Personalizar"
+                (click)="customizeComponent.open(); openPageSlide('Select', 'select')"
+              ></po-button>
+            </div>
+          </div>
+        </po-widget>
+        <po-widget [class.hide]="!textareaView" class="widget-items po-sm-12 po-md-6 po-lg-4 po-xl-3 po-pl-0">
+          <po-widget class="widget-menu">
+            <div class="po-row row-menu">
+              <div class="po-md-12 po-p-0 col-widget">
+                <po-tag
+                  [p-color]="ratioTextarea > 7 ? '#c3ffc3b3' : '#ffd3d3'"
+                  [p-icon]="ratioTextarea > 7 ? 'po-icon-ok' : 'po-icon-close'"
+                  [p-text-color]="ratioTextarea > 7 ? 'green' : 'red'"
+                  p-value="AAA"
+                  class="po-pr-1 po-pt-1 container-widget"
+                ></po-tag>
+                <po-tag
+                  [p-color]="ratioTextarea > 4.5 ? '#c3ffc3b3' : '#ffd3d3'"
+                  [p-icon]="ratioTextarea > 4.5 ? 'po-icon-ok' : 'po-icon-close'"
+                  [p-text-color]="ratioTextarea > 4.5 ? 'green' : 'red'"
+                  p-value="AA"
+                  class="po-pr-1 po-pt-1 container-widget"
+                >
+                </po-tag>
+              </div>
+              <div class="po-md-12 po-p-0">
+                <div class="menu-with-constrast section-textarea">
+                  <po-textarea
+                    #textarea
+                    class="padding-textarea"
+                    name="textarea"
+                    p-placeholder="Customize seu po-textarea"
+                  ></po-textarea>
+                </div>
+                <p class="po-pl-1"><strong>Live demo</strong></p>
+              </div>
+            </div>
+          </po-widget>
+          <div class="po-row">
+            <div class="po-md-12 description-widget">
+              <p><strong>Textarea</strong></p>
+              <po-tag class="po-pl-2" p-color="#efefef" p-text-color="#000" p-value="AnimaliaDS"> </po-tag>
+            </div>
+            <div class="po-md-12 description-widget">
+              <po-button
+                p-icon="po-icon-settings"
+                p-kind="tertiary"
+                p-label="Personalizar"
+                (click)="customizeComponent.open(); openPageSlide('Textarea', 'textarea')"
+              ></po-button>
+            </div>
+          </div>
+        </po-widget>
+        <po-widget [class.hide]="!dropdownView" class="widget-items po-sm-12 po-md-6 po-lg-4 po-xl-3 po-pl-0">
+          <po-widget class="widget-menu">
+            <div class="po-row row-menu">
+              <div class="po-md-12 po-p-0">
+                <div class="menu-item">
+                  <po-dropdown
+                    class="po-pt-3"
+                    #dropdown
+                    p-label="PO Dropdown"
+                    [p-actions]="[{ label: 'Item po-dropdown' }]"
+                  >
+                  </po-dropdown>
+                </div>
+                <p class="po-pl-1"><strong>Live demo</strong></p>
+              </div>
+            </div>
+          </po-widget>
+          <div class="po-row">
+            <div class="po-md-12 description-widget">
+              <p><strong>Dropdown</strong></p>
+              <po-tag class="po-pl-2" p-color="#efefef" p-text-color="#000" p-value="AnimaliaDS"> </po-tag>
+            </div>
+            <div class="po-md-12 po-pt-1 description-widget">
+              <po-button
+                p-icon="po-icon-settings"
+                p-kind="tertiary"
+                p-label="Personalizar"
+                (click)="customizeComponent.open(); openPageSlide('Dropdown', 'dropdown')"
+              ></po-button>
+            </div>
+          </div>
+        </po-widget>
+        <po-widget [class.hide]="!datepickerView" class="widget-items po-sm-12 po-md-6 po-lg-4 po-xl-3 po-pl-0">
+          <po-widget class="widget-menu">
+            <div class="po-row row-menu">
+              <div class="po-md-12 po-p-0 col-widget">
+                <po-tag
+                  [p-color]="ratioDatepicker > 7 ? '#c3ffc3b3' : '#ffd3d3'"
+                  [p-icon]="ratioDatepicker > 7 ? 'po-icon-ok' : 'po-icon-close'"
+                  [p-text-color]="ratioDatepicker > 7 ? 'green' : 'red'"
+                  p-value="AAA"
+                  class="po-pr-1 po-pt-1 container-widget"
+                ></po-tag>
+                <po-tag
+                  [p-color]="ratioDatepicker > 4.5 ? '#c3ffc3b3' : '#ffd3d3'"
+                  [p-icon]="ratioDatepicker > 4.5 ? 'po-icon-ok' : 'po-icon-close'"
+                  [p-text-color]="ratioDatepicker > 4.5 ? 'green' : 'red'"
+                  p-value="AA"
+                  class="po-pr-1 po-pt-1 container-widget"
+                >
+                </po-tag>
+              </div>
+              <div class="po-md-12 po-p-0">
+                <div class="menu-with-constrast">
+                  <po-datepicker
+                    class="po-pl-1"
+                    p-placeholder="Customize seu po-datepicker"
+                    #datepicker
+                    name="datepicker"
+                  >
+                  </po-datepicker>
+                </div>
+                <p class="po-pl-1"><strong>Live demo</strong></p>
+              </div>
+            </div>
+          </po-widget>
+          <div class="po-row">
+            <div class="po-md-12 description-widget">
+              <p><strong>Datepicker</strong></p>
+              <po-tag class="po-pl-2" p-color="#efefef" p-text-color="#000" p-value="AnimaliaDS"> </po-tag>
+            </div>
+            <div class="po-md-12 po-pt-1 description-widget">
+              <po-button
+                p-icon="po-icon-settings"
+                p-kind="tertiary"
+                p-label="Personalizar"
+                (click)="customizeComponent.open(); openPageSlide('Datepicker', 'datepicker')"
+              ></po-button>
+            </div>
+          </div>
+        </po-widget>
+        <po-widget [class.hide]="!linkView" class="widget-items po-sm-12 po-md-6 po-lg-4 po-xl-3 po-pl-0">
+          <po-widget class="widget-menu">
+            <div class="po-row row-menu">
+              <div class="po-md-12 po-p-0">
+                <div class="menu-item">
+                  <po-link class="po-pt-3" id="myLink" name="link" p-label="PO Link"> </po-link>
+                </div>
+                <p class="po-pl-1"><strong>Live demo</strong></p>
+              </div>
+            </div>
+          </po-widget>
+          <div class="po-row">
+            <div class="po-md-12 description-widget">
+              <p><strong>Link</strong></p>
+              <po-tag class="po-pl-2" p-color="#efefef" p-text-color="#000" p-value="AnimaliaDS"> </po-tag>
+            </div>
+            <div class="po-md-12 po-pt-1 description-widget">
+              <po-button
+                p-icon="po-icon-settings"
+                p-kind="tertiary"
+                p-label="Personalizar"
+                (click)="customizeComponent.open(); openPageSlide('Link', 'link')"
+              ></po-button>
+            </div>
+          </div>
+        </po-widget>
+        <po-widget [class.hide]="!tooltipView" class="widget-items po-sm-12 po-md-6 po-lg-4 po-xl-3 po-pl-0">
+          <po-widget class="widget-menu">
+            <div class="po-row row-menu">
+              <div class="po-md-12 po-p-0 col-widget">
+                <po-tag
+                  [p-color]="ratioTooltip > 7 ? '#c3ffc3b3' : '#ffd3d3'"
+                  [p-icon]="ratioTooltip > 7 ? 'po-icon-ok' : 'po-icon-close'"
+                  [p-text-color]="ratioTooltip > 7 ? 'green' : 'red'"
+                  p-value="AAA"
+                  class="po-pr-1 po-pt-1 container-widget"
+                ></po-tag>
+                <po-tag
+                  [p-color]="ratioTooltip > 4.5 ? '#c3ffc3b3' : '#ffd3d3'"
+                  [p-icon]="ratioTooltip > 4.5 ? 'po-icon-ok' : 'po-icon-close'"
+                  [p-text-color]="ratioTooltip > 4.5 ? 'green' : 'red'"
+                  p-value="AA"
+                  class="po-pr-1 po-pt-1 container-widget"
+                >
+                </po-tag>
+              </div>
+              <div class="po-md-12 po-p-0">
+                <div class="menu-with-constrast">
+                  <po-button
+                    #tooltip
+                    p-label="Open Tooltip"
+                    class="button-tooltip-theme-builder"
+                    p-tooltip="po-tooltip"
+                  >
+                  </po-button>
+                </div>
+                <p class="po-pl-1"><strong>Live demo</strong></p>
+              </div>
+            </div>
+          </po-widget>
+          <div class="po-row">
+            <div class="po-md-12 description-widget">
+              <p><strong>Tooltip</strong></p>
+              <po-tag class="po-pl-2" p-color="#efefef" p-text-color="#000" p-value="AnimaliaDS"> </po-tag>
+            </div>
+            <div class="po-md-12 po-pt-1 description-widget">
+              <po-button
+                p-icon="po-icon-settings"
+                p-kind="tertiary"
+                p-label="Personalizar"
+                (click)="customizeComponent.open(); openPageSlide('Tooltip', 'tooltip')"
+              ></po-button>
+            </div>
+          </div>
+        </po-widget>
+        <po-widget [class.hide]="!modalView" class="widget-items po-sm-12 po-md-6 po-lg-4 po-xl-3 po-pl-0">
+          <po-widget class="widget-menu">
+            <div class="po-row row-menu">
+              <div class="po-md-12 po-p-0">
+                <div class="menu-item">
+                  <div [class.hide]="!modalView" class="container-component po-pt-3">
+                    <po-button p-label="Open modal" (p-click)="modalBuilder.open()"> </po-button>
+                  </div>
+
+                  <po-modal #modalBuilder id="modal-theme" [p-click-out]="true" p-title="PO Modal">
+                    Customize seu po-modal!!!</po-modal
+                  >
+                </div>
+                <p class="po-pl-1"><strong>Live demo</strong></p>
+              </div>
+            </div>
+          </po-widget>
+          <div class="po-row">
+            <div class="po-md-12 description-widget">
+              <p><strong>Modal</strong></p>
+              <po-tag class="po-pl-2" p-color="#efefef" p-text-color="#000" p-value="AnimaliaDS"> </po-tag>
+            </div>
+            <div class="po-md-12 po-pt-1 description-widget">
+              <po-button
+                p-icon="po-icon-settings"
+                p-kind="tertiary"
+                p-label="Personalizar"
+                (click)="customizeComponent.open(); openPageSlide('Modal', 'modal')"
+              ></po-button>
+            </div>
+          </div>
+        </po-widget>
+        <po-widget [class.hide]="!popupView" class="widget-items po-sm-12 po-md-6 po-lg-4 po-xl-3 po-pl-0">
+          <po-widget class="widget-menu">
+            <div class="po-row row-menu">
+              <div class="po-md-12 po-p-0 col-widget">
+                <po-tag
+                  [p-color]="ratioPopup > 7 ? '#c3ffc3b3' : '#ffd3d3'"
+                  [p-icon]="ratioPopup > 7 ? 'po-icon-ok' : 'po-icon-close'"
+                  [p-text-color]="ratioPopup > 7 ? 'green' : 'red'"
+                  p-value="AAA"
+                  class="po-pr-1 po-pt-1 container-widget"
+                ></po-tag>
+                <po-tag
+                  [p-color]="ratioPopup > 4.5 ? '#c3ffc3b3' : '#ffd3d3'"
+                  [p-icon]="ratioPopup > 4.5 ? 'po-icon-ok' : 'po-icon-close'"
+                  [p-text-color]="ratioPopup > 4.5 ? 'green' : 'red'"
+                  p-value="AA"
+                  class="po-pr-1 po-pt-1 container-widget"
+                >
+                </po-tag>
+              </div>
+              <div class="po-md-12 po-p-0">
+                <div class="menu-with-constrast">
+                  <span #target class="po-clickable po-icon po-icon-help item-align" (click)="popupBuilder.toggle()">
+                  </span>
+
+                  <po-popup #popupBuilder [p-actions]="[{ label: 'PO Popup' }]" [p-target]="target"> </po-popup>
+                </div>
+                <p class="po-pl-1"><strong>Live demo</strong></p>
+              </div>
+            </div>
+          </po-widget>
+          <div class="po-row">
+            <div class="po-md-12 description-widget">
+              <p><strong>Popup</strong></p>
+              <po-tag class="po-pl-2" p-color="#efefef" p-text-color="#000" p-value="AnimaliaDS"> </po-tag>
+            </div>
+            <div class="po-md-12 po-pt-1 description-widget">
+              <po-button
+                p-icon="po-icon-settings"
+                p-kind="tertiary"
+                p-label="Personalizar"
+                (click)="customizeComponent.open(); openPageSlide('Popup', 'popup')"
+              ></po-button>
+            </div>
+          </div>
+        </po-widget>
+        <po-widget [class.hide]="!radioView" class="widget-items po-sm-12 po-md-6 po-lg-4 po-xl-3 po-pl-0">
+          <po-widget class="widget-menu">
+            <div class="po-row row-menu">
+              <div class="po-md-12 po-p-0">
+                <div class="menu-item">
+                  <po-radio
+                    class="po-pt-3 po-mr-2"
+                    id="myRadio"
+                    #radio
+                    p-label="Option 1"
+                    [p-checked]="true"
+                  ></po-radio>
+                  <po-radio class="po-pt-3" id="myRadio2" #radio p-label="Option 2" [p-checked]="false"></po-radio>
+                </div>
+                <p class="po-pl-1"><strong>Live demo</strong></p>
+              </div>
+            </div>
+          </po-widget>
+          <div class="po-row">
+            <div class="po-md-12 description-widget">
+              <p><strong>Radio</strong></p>
+              <po-tag class="po-pl-2" p-color="#efefef" p-text-color="#000" p-value="AnimaliaDS"> </po-tag>
+            </div>
+            <div class="po-md-12 po-pt-1 description-widget">
+              <po-button
+                p-icon="po-icon-settings"
+                p-kind="tertiary"
+                p-label="Personalizar"
+                (click)="customizeComponent.open(); openPageSlide('Radio', 'radio')"
+              ></po-button>
+            </div>
+          </div>
+        </po-widget>
+        <po-widget [class.hide]="!checkboxView" class="widget-items po-sm-12 po-md-6 po-lg-4 po-xl-3 po-pl-0">
+          <po-widget class="widget-menu">
+            <div class="po-row row-menu">
+              <div class="po-md-12 po-p-0">
+                <div class="menu-item">
+                  <po-checkbox class="po-pt-3 po-pr-1 po-pl-1" id="myCheckbox" name="checkbox" p-label="PO Checkbox">
+                  </po-checkbox>
+                </div>
+                <p class="po-pl-1"><strong>Live demo</strong></p>
+              </div>
+            </div>
+          </po-widget>
+          <div class="po-row">
+            <div class="po-md-12 description-widget">
+              <p><strong>Checkbox</strong></p>
+              <po-tag class="po-pl-2" p-color="#efefef" p-text-color="#000" p-value="AnimaliaDS"> </po-tag>
+            </div>
+            <div class="po-md-12 po-pt-1 description-widget">
+              <po-button
+                p-icon="po-icon-settings"
+                p-kind="tertiary"
+                p-label="Personalizar"
+                (click)="customizeComponent.open(); openPageSlide('Checkbox', 'checkbox')"
+              ></po-button>
+            </div>
+          </div>
+        </po-widget>
+      </div>
+      <po-widget class="po-lg-12 po-pr-0 po-pl-0 po-pb-2" *ngIf="!verifyIfItemVisibility()">
+        <div class="container widget-align">
+          <span class="po-icon po-icon-info"></span>
+          <h2 class="po-ml-2">Nenhum componente selecionado</h2>
+        </div>
+      </po-widget>
+    </div>
+  </div>
+
+  <po-page-slide
+    class="page-slide-item"
+    p-size="lg"
+    [ngSwitch]="itemSelected"
+    #customizeComponent
+    [p-title]="nameItem"
+    [p-click-out]="true"
+  >
+    <ng-template [ngSwitchCase]="'button'">
+      <div class="container-item">
+        <p class="color-title-p"><strong>Estados</strong></p>
+      </div>
+      <po-widget class="widget-color">
+        <div class="container content-page-slide po-pl-2 po-pr-2">
+          <div class="container-item">
+            <p><strong>Live demo</strong></p>
+          </div>
+          <div class="container-item">
+            <po-select
+              name="select"
+              [p-options]="[
+                { label: 'Primário', value: 1 },
+                { label: 'Secundário', value: 2 },
+                { label: 'Terciário', value: 3 },
+              ]"
+              [ngModel]="kindButton"
+              (p-change)="changeKindButton($event)"
+              p-placeholder="Selecione seu botão"
+            >
+            </po-select>
+          </div>
+        </div>
+        <div class="po-row po-mt-2 widget-align">
+          <div class="po-md-4 po-lg-2 po-xl-2 item-align po-pb-2">
+            <po-button
+              [class.hide]="kindButton !== 1"
+              class="po-pb-1"
+              p-kind="primary"
+              p-label="Button"
+              #buttonPDefault
+            >
+            </po-button>
+            <po-button
+              [class.hide]="kindButton !== 2"
+              class="po-pb-1"
+              p-kind="secondary"
+              p-label="Button"
+              #buttonDDefault
+            >
+            </po-button>
+            <po-button
+              [class.hide]="kindButton !== 3"
+              #buttonLDefault
+              class="po-pb-1"
+              p-kind="tertiary"
+              p-label="Button"
+            >
+            </po-button>
+            <po-tag p-color="#efefef" p-text-color="#000" p-value="Padrão"> </po-tag>
+          </div>
+          <div class="po-md-4 po-lg-2 po-xl-2 item-align po-pb-2">
+            <po-button
+              [class.hide]="kindButton !== 1"
+              class="po-pb-1 button-p-hover"
+              p-kind="primary"
+              p-label="Button"
+              #buttonPHover
+            >
+            </po-button>
+            <po-button
+              [class.hide]="kindButton !== 2"
+              class="po-pb-1 button-s-hover"
+              p-kind="secondary"
+              p-label="Button"
+              #buttonDHover
+            >
+            </po-button>
+            <po-button
+              [class.hide]="kindButton !== 3"
+              #buttonLHover
+              class="po-pb-1 button-t-hover"
+              p-kind="tertiary"
+              p-label="Button"
+            >
+            </po-button>
+            <po-tag p-color="#efefef" p-text-color="#000" p-value="Hover"> </po-tag>
+          </div>
+          <div class="po-md-4 po-lg-2 po-xl-2 item-align po-pb-2">
+            <po-button
+              [class.hide]="kindButton !== 1"
+              class="po-pb-1 button-focus"
+              p-kind="primary"
+              p-label="Button"
+              #buttonPFocus
+            >
+            </po-button>
+            <po-button
+              [class.hide]="kindButton !== 2"
+              class="po-pb-1 button-focus"
+              p-kind="secondary"
+              p-label="Button"
+              #buttonDFocus
+            >
+            </po-button>
+            <po-button
+              [class.hide]="kindButton !== 3"
+              #buttonLFocus
+              class="po-pb-1 button-focus"
+              p-kind="tertiary"
+              p-label="Button"
+            >
+            </po-button>
+            <po-tag p-color="#efefef" p-text-color="#000" p-value="Focus"> </po-tag>
+          </div>
+          <div class="po-md-4 po-lg-2 po-xl-2 item-align po-pb-2">
+            <po-button
+              [class.hide]="kindButton !== 1"
+              class="po-pb-1 button-p-pressed"
+              p-kind="primary"
+              p-label="Button"
+              #buttonPPressed
+            >
+            </po-button>
+            <po-button
+              [class.hide]="kindButton !== 2"
+              class="po-pb-1 button-s-pressed"
+              p-kind="secondary"
+              p-label="Button"
+              #buttonDPressed
+            >
+            </po-button>
+            <po-button
+              [class.hide]="kindButton !== 3"
+              #buttonLPressed
+              class="po-pb-1 button-t-pressed"
+              p-kind="tertiary"
+              p-label="Button"
+            >
+            </po-button>
+            <po-tag p-color="#efefef" p-text-color="#000" p-value="Pressed"> </po-tag>
+          </div>
+          <div class="po-md-4 po-lg-2 po-xl-2 item-align po-pb-2">
+            <po-button
+              [class.hide]="kindButton !== 1"
+              #buttonPDisabled
+              class="po-pb-1"
+              [p-disabled]="true"
+              p-kind="primary"
+              p-label="Button"
+            >
+            </po-button>
+            <po-button
+              [class.hide]="kindButton !== 2"
+              #buttonDDisabled
+              class="po-pb-1"
+              [p-disabled]="true"
+              p-kind="secondary"
+              p-label="Button"
+            >
+            </po-button>
+            <po-button
+              [class.hide]="kindButton !== 3"
+              #buttonLDisabled
+              class="po-pb-1"
+              [p-disabled]="true"
+              p-kind="tertiary"
+              p-label="Button"
+            >
+            </po-button>
+            <po-tag p-color="#efefef" p-text-color="#000" p-value="Disabled"> </po-tag>
+          </div>
+        </div>
+      </po-widget>
+      <div class="container-item po-mt-2 po-mb-2">
+        <p class="color-title-p"><strong>Acessibilidade</strong></p>
+      </div>
+      <section *ngIf="kindButton === 1">
+        <ng-container *ngTemplateOutlet="acessibility"></ng-container>
+      </section>
+      <section *ngIf="kindButton === 2 || kindButton === 3">
+        <div class="container widget-align">
+          <p><strong>É necessário cor do background e cor do texto para funcionamento da acessibilidade</strong></p>
+        </div>
+      </section>
+      <div class="container-item po-mt-2 po-mb-2">
+        <p class="color-title-p"><strong>Personalizar</strong></p>
+      </div>
+
+      <section *ngIf="kindButton === 1">
+        <div class="po-row">
+          <div class="po-md-12 po-lg-6 customize-item po-mb-1 po-pl-0">
+            <label for="borderRadiusButtonD"><strong>Border radius: </strong></label>
+            <input
+              type="range"
+              id="borderRadiusButtonD"
+              min="1"
+              max="40"
+              [formControl]="buttonFormPrimary.get('borderRadius')"
+            />
+          </div>
+          <div class="po-md-12 po-lg-6 customize-item po-mb-1 po-pl-0">
+            <label for="paddingButtonD"><strong>Padding: </strong></label>
+            <input type="range" id="paddingButtonD" min="1" max="30" [formControl]="buttonFormPrimary.get('padding')" />
+          </div>
+          <div class="po-md-12 po-lg-6 customize-item po-mb-1 po-pl-0">
+            <label for="colorP"><strong>Cor principal: </strong></label>
+            <input type="color" id="colorP" class="style-inputColor" [formControl]="buttonFormPrimary.get('color')" />
+          </div>
+          <div class="po-md-12 po-lg-6 customize-item po-mb-1 po-pl-0">
+            <label for="colorHoverP"><strong>Cor principal Hover: </strong></label>
+            <input
+              type="color"
+              id="colorHoverP"
+              class="style-inputColor"
+              [formControl]="buttonFormPrimary.get('colorHover')"
+            />
+          </div>
+          <div class="po-md-12 po-lg-6 customize-item po-mb-1 po-pl-0">
+            <label for="borderColorP"><strong>Cor da borda: </strong></label>
+            <input
+              type="color"
+              id="borderColorP"
+              class="style-inputColor"
+              [formControl]="buttonFormPrimary.get('borderColor')"
+            />
+          </div>
+          <div class="po-md-12 po-lg-6 customize-item po-mb-1 po-pl-0">
+            <label for="textColorP"><strong>Cor do texto: </strong></label>
+            <input
+              type="color"
+              id="textColorP"
+              class="style-inputColor"
+              [formControl]="buttonFormPrimary.get('textColor')"
+            />
+          </div>
+          <div class="po-md-12 po-lg-6 customize-item po-mb-1 po-pl-0">
+            <label for="colorPressedP"><strong>Cor principal Pressed: </strong></label>
+            <input
+              type="color"
+              id="colorPressedP"
+              class="style-inputColor"
+              [formControl]="buttonFormPrimary.get('colorPressed')"
+            />
+          </div>
+        </div>
+      </section>
+      <section *ngIf="kindButton === 2">
+        <div class="po-row">
+          <div class="po-md-12 po-lg-6 customize-item po-mb-1 po-pl-0">
+            <label for="borderRadiusBotaoD"><strong>Border radius: </strong></label>
+            <input
+              type="range"
+              id="borderRadiusBotaoD"
+              min="1"
+              max="40"
+              [formControl]="buttonFormDefault.get('borderRadius')"
+            />
+          </div>
+          <div class="po-md-12 po-lg-6 customize-item po-mb-1 po-pl-0">
+            <label for="paddingBotaoD"><strong>Padding: </strong></label>
+            <input type="range" id="paddingBotaoD" min="1" max="30" [formControl]="buttonFormDefault.get('padding')" />
+          </div>
+          <div class="po-md-12 po-lg-6 customize-item po-mb-1 po-pl-0">
+            <label for="borderWidthBotaoD"><strong> Espessura da borda: </strong></label>
+            <input
+              type="range"
+              id="borderWidthBotaoD"
+              min="1"
+              max="10"
+              [formControl]="buttonFormDefault.get('borderWidth')"
+            />
+          </div>
+          <div class="po-md-12 po-lg-6 customize-item po-mb-1 po-pl-0">
+            <label for="colorD"><strong>Cor principal: </strong></label>
+            <input type="color" id="colorD" class="style-inputColor" [formControl]="buttonFormDefault.get('color')" />
+          </div>
+          <div class="po-md-12 po-lg-6 customize-item po-mb-1 po-pl-0">
+            <label for="colorHoverD"><strong>Cor Principal Hover: </strong></label>
+            <input
+              type="color"
+              id="colorHoverD"
+              class="style-inputColor"
+              [formControl]="buttonFormDefault.get('colorHover')"
+            />
+          </div>
+          <div class="po-md-12 po-lg-6 customize-item po-mb-1 po-pl-0">
+            <label for="colorBackgroundHover"><strong>Cor do background Hover: </strong></label>
+            <input
+              type="color"
+              id="colorBackgroundHover"
+              class="style-inputColor"
+              [formControl]="buttonFormDefault.get('colorBackgroundHover')"
+            />
+          </div>
+          <div class="po-md-12 po-lg-6 customize-item po-mb-1 po-pl-0">
+            <label for="colorPressedD"><strong>Cor do background Pressed: </strong></label>
+            <input
+              type="color"
+              id="colorPressedD"
+              class="style-inputColor"
+              [formControl]="buttonFormDefault.get('colorPressed')"
+            />
+          </div>
+        </div>
+      </section>
+      <section *ngIf="kindButton === 3">
+        <div class="po-row">
+          <div class="po-md-12 po-lg-6 customize-item po-mb-1 po-pl-0">
+            <label for="borderRadiusBotaoL"><strong>Border radius: </strong></label>
+            <input
+              type="range"
+              id="borderRadiusBotaoL"
+              min="1"
+              max="40"
+              [formControl]="buttonFormLink.get('borderRadius')"
+            />
+          </div>
+          <div class="po-md-12 po-lg-6 customize-item po-mb-1 po-pl-0">
+            <label for="paddingBotaoL"><strong>Padding: </strong></label>
+            <input type="range" id="paddingBotaoL" min="1" max="30" [formControl]="buttonFormLink.get('padding')" />
+          </div>
+          <div class="po-md-12 po-lg-6 customize-item po-mb-1 po-pl-0">
+            <label for="colorL"><strong>Cor principal: </strong></label>
+            <input type="color" id="colorL" class="style-inputColor" [formControl]="buttonFormLink.get('color')" />
+          </div>
+          <div class="po-md-12 po-lg-6 customize-item po-mb-1 po-pl-0">
+            <label for="colorHoverL"><strong>Cor principal Hover: </strong></label>
+            <input
+              type="color"
+              id="colorHoverL"
+              class="style-inputColor"
+              [formControl]="buttonFormLink.get('colorHover')"
+            />
+          </div>
+          <div class="po-md-12 po-lg-6 customize-item po-mb-1 po-pl-0">
+            <label for="colorBackgroundHoverL"><strong>Cor do background Hover: </strong></label>
+            <input
+              type="color"
+              id="colorBackgroundHoverL"
+              class="style-inputColor"
+              [formControl]="buttonFormLink.get('colorBackgroundHover')"
+            />
+          </div>
+          <div class="po-md-12 po-lg-6 customize-item po-mb-1 po-pl-0">
+            <label for="colorPressedL"><strong>Cor do background Pressed: </strong></label>
+            <input
+              type="color"
+              id="colorPressedL"
+              class="style-inputColor"
+              [formControl]="buttonFormLink.get('colorPressed')"
+            />
+          </div>
+        </div>
+      </section>
+    </ng-template>
+    <ng-template [ngSwitchCase]="'switch'">
+      <div class="container-item">
+        <p class="color-title-p"><strong>Estados</strong></p>
+      </div>
+      <po-widget class="widget-color">
+        <div class="container content-page-slide po-pl-2 po-pr-2 po-pt-1">
+          <div class="container-item">
+            <p><strong>Live demo</strong></p>
+          </div>
+        </div>
+        <div class="po-row po-mt-2 widget-align">
+          <div class="po-md-4 po-lg-2 po-xl-2 item-align po-pb-2">
+            <po-switch class="po-pb-1" name="switch" [(ngModel)]="switchSampleBuilder" #switchDefault> </po-switch>
+
+            <po-tag p-color="#efefef" p-text-color="#000" p-value="Padrão"> </po-tag>
+          </div>
+          <div class="po-md-4 po-lg-2 po-xl-2 item-align po-pb-2">
+            <po-switch class="po-pb-1 switch-checked" name="switch" [ngModel]="switchSampleBuilder" #switchChecked>
+            </po-switch>
+            <po-tag p-color="#efefef" p-text-color="#000" p-value="true"> </po-tag>
+          </div>
+          <div class="po-md-4 po-lg-2 po-xl-2 item-align po-pb-2">
+            <po-switch class="po-pb-1 switch-unchecked" name="switch" [ngModel]="false" #switchUnchecked> </po-switch>
+            <po-tag p-color="#efefef" p-text-color="#000" p-value="false"> </po-tag>
+          </div>
+          <div class="po-md-4 po-lg-2 po-xl-2 item-align po-pb-2">
+            <po-switch class="po-pb-1" name="switch" [p-disabled]="true" [ngModel]="true"> </po-switch>
+            <po-tag p-color="#efefef" p-text-color="#000" p-value="Disabled"> </po-tag>
+          </div>
+        </div>
+      </po-widget>
+      <div class="container-item po-mt-2 po-mb-2">
+        <p class="color-title-p"><strong>Acessibilidade</strong></p>
+      </div>
+      <div class="container widget-align">
+        <p><strong>É necessário cor do background e cor do texto para funcionamento da acessibilidade</strong></p>
+      </div>
+
+      <section>
+        <div class="container-item po-mt-2 po-mb-2">
+          <p class="color-title-p"><strong>Personalizar</strong></p>
+        </div>
+
+        <div class="po-row">
+          <div class="po-md-12 po-lg-6 customize-item po-mb-1 po-pl-0">
+            <label for="colorSwitch"><strong>Cor principal: </strong></label>
+            <input
+              type="color"
+              id="colorSwitch"
+              class="style-inputColor"
+              [formControl]="switchForm.get('backgroundColor')"
+            />
+          </div>
+          <div class="po-md-12 po-lg-6 customize-item po-mb-1 po-pl-0">
+            <label for="colorTrackSwitch"><strong>Cor do track ativado: </strong></label>
+            <input
+              type="color"
+              id="colorTrackSwitch"
+              class="style-inputColor"
+              [formControl]="switchForm.get('color')"
+            />
+          </div>
+          <div class="po-md-12 po-lg-6 customize-item po-mb-1 po-pl-0">
+            <label for="colorTrackUncheckedSwitch"><strong>Cor do track desativado: </strong></label>
+            <input
+              type="color"
+              id="colorTrackUncheckedSwitch"
+              class="style-inputColor"
+              [formControl]="switchForm.get('colorDois')"
+            />
+          </div>
+          <div class="po-md-12 po-lg-6 customize-item po-mb-1 po-pl-0">
+            <label for="colorIcon"><strong>Cor do icone: </strong></label>
+            <input type="color" id="colorIcon" class="style-inputColor" [formControl]="switchForm.get('colorIcon')" />
+          </div>
+
+          <div class="po-md-12 po-lg-6 customize-item po-mb-1 po-pl-0">
+            <label for="borderColorSwitch"><strong>Cor da borda: </strong></label>
+            <input
+              type="color"
+              id="borderColorSwitch"
+              class="style-inputColor"
+              [formControl]="switchForm.get('borderColor')"
+            />
+          </div>
+        </div>
+      </section>
+    </ng-template>
+    <ng-template [ngSwitchCase]="'disclaimer'">
+      <div class="container-item">
+        <p class="color-title-p"><strong>Estados</strong></p>
+      </div>
+      <po-widget class="widget-color">
+        <div class="container content-page-slide po-pl-2 po-pr-2 po-pt-1">
+          <div class="container-item">
+            <p><strong>Live demo</strong></p>
+          </div>
+        </div>
+        <div class="po-row po-mt-2 widget-align">
+          <div class="po-md-6 po-lg-6 po-xl-4 item-align po-pb-2">
+            <po-disclaimer class="po-pb-1" #disclaimerDefault p-value="PO-UI - Disclaimer"></po-disclaimer>
+            <po-tag p-color="#efefef" p-text-color="#000" p-value="Padrão"> </po-tag>
+          </div>
+          <div class="po-md-6 po-lg-6 po-xl-4 item-align po-pb-2">
+            <po-disclaimer
+              class="po-pb-1 disclaimer-hover"
+              #disclaimerHover
+              p-value="PO-UI - Disclaimer"
+            ></po-disclaimer>
+            <po-tag p-color="#efefef" p-text-color="#000" p-value="Hover"> </po-tag>
+          </div>
+        </div>
+      </po-widget>
+      <div class="container-item po-mt-2 po-mb-2">
+        <p class="color-title-p"><strong>Acessibilidade</strong></p>
+      </div>
+      <ng-container *ngTemplateOutlet="acessibility"></ng-container>
+
+      <section>
+        <div class="container-item po-mt-2 po-mb-2">
+          <p class="color-title-p"><strong>Personalizar</strong></p>
+        </div>
+        <div class="po-row">
+          <div class="po-md-12 po-lg-6 customize-item po-mb-1 po-pl-0">
+            <label for="fontSizeDisclaimer"><strong>Tamanho da fonte: </strong></label>
+            <input
+              type="range"
+              id="fontSizeDisclaimer"
+              min="10"
+              max="40"
+              [formControl]="disclaimerForm.get('fontSize')"
+            />
+          </div>
+          <div class="po-md-12 po-lg-6 customize-item po-mb-1 po-pl-0">
+            <label for="borderRadiusDisclaimer"><strong>Border radius: </strong></label>
+            <input
+              type="range"
+              id="borderRadiusDisclaimer"
+              min="1"
+              max="32"
+              [formControl]="disclaimerForm.get('borderRadius')"
+            />
+          </div>
+          <div class="po-md-12 po-lg-6 customize-item po-mb-1 po-pl-0">
+            <label for="colorDisclaimer"><strong>Cor do background: </strong></label>
+            <input
+              type="color"
+              id="colorDisclaimer"
+              class="style-inputColor"
+              [formControl]="disclaimerForm.get('color')"
+            />
+          </div>
+          <div class="po-md-12 po-lg-6 customize-item po-mb-1 po-pl-0">
+            <label for="borderColorDisclaimer"><strong>Cor da borda: </strong></label>
+            <input
+              type="color"
+              id="borderColorDisclaimer"
+              class="style-inputColor"
+              [formControl]="disclaimerForm.get('borderColor')"
+            />
+          </div>
+          <div class="po-md-12 po-lg-6 customize-item po-mb-1 po-pl-0">
+            <label for="textColorDisclaimer"><strong>Cor do texto: </strong></label>
+            <input
+              type="color"
+              id="textColorDisclaimer"
+              class="style-inputColor"
+              [formControl]="disclaimerForm.get('textColor')"
+            />
+          </div>
+          <div class="po-md-12 po-lg-6 customize-item po-mb-1 po-pl-0">
+            <label for="iconColorDisclaimer"><strong>Cor do icone: </strong></label>
+            <input
+              type="color"
+              id="iconColorDisclaimer"
+              class="style-inputColor"
+              [formControl]="disclaimerForm.get('colorIcon')"
+            />
+          </div>
+          <div class="po-md-12 po-lg-6 customize-item po-mb-1 po-pl-0">
+            <label for="ColorHoverDisclaimer"><strong>Background hover para remover: </strong></label>
+            <input
+              type="color"
+              id="ColorHoverDisclaimer"
+              class="style-inputColor"
+              [formControl]="disclaimerForm.get('colorHover')"
+            />
+          </div>
+        </div>
+      </section>
+    </ng-template>
+    <ng-template [ngSwitchCase]="'input'">
+      <div class="container-item">
+        <p class="color-title-p"><strong>Estados</strong></p>
+      </div>
+      <po-widget class="widget-color">
+        <div class="container content-page-slide po-pl-2 po-pr-2 po-pt-1">
+          <div class="container-item">
+            <p><strong>Live demo</strong></p>
+          </div>
+        </div>
+        <div class="po-row po-mt-2 widget-align">
+          <div class="po-md-6 po-lg-6 po-xl-6 item-align po-pb-2">
+            <po-input class="po-pb-1" #inputDefault name="input" p-placeholder="Po-input"> </po-input>
+            <po-tag p-color="#efefef" p-text-color="#000" p-value="Padrão"> </po-tag>
+          </div>
+          <div class="po-md-6 po-lg-6 po-xl-6 item-align po-pb-2">
+            <po-input class="po-pb-1 input-hover" #inputHover name="input" p-placeholder="Po-input"> </po-input>
+            <po-tag p-color="#efefef" p-text-color="#000" p-value="Hover"> </po-tag>
+          </div>
+          <div class="po-md-6 po-lg-6 po-xl-6 item-align po-pb-2">
+            <po-input class="po-pb-1 input-focus" #inputFocus name="input" p-placeholder="Po-input"> </po-input>
+            <po-tag p-color="#efefef" p-text-color="#000" p-value="Focus"> </po-tag>
+          </div>
+          <div class="po-md-6 po-lg-6 po-xl-6 item-align po-pb-2">
+            <po-input
+              class="po-pb-1"
+              #inputDisabled
+              ngModel="label"
+              name="input"
+              [p-disabled]="true"
+              p-placeholder="Po-input"
+            >
+            </po-input>
+            <po-tag p-color="#efefef" p-text-color="#000" p-value="Disabled"> </po-tag>
+          </div>
+        </div>
+      </po-widget>
+      <div class="container-item po-mt-2 po-mb-2">
+        <p class="color-title-p"><strong>Acessibilidade</strong></p>
+      </div>
+      <ng-container *ngTemplateOutlet="acessibility"></ng-container>
+
+      <section>
+        <div class="container-item po-mt-2 po-mb-2">
+          <p class="color-title-p"><strong>Personalizar</strong></p>
+        </div>
+        <div class="po-row">
+          <div class="po-md-12 po-lg-6 customize-item po-mb-1 po-pl-0">
+            <label for="fontSizeInput"><strong>Tamanho da fonte: </strong></label>
+            <input type="range" id="fontSizeInput" min="10" max="32" [formControl]="inputForm.get('fontSize')" />
+          </div>
+          <div class="po-md-12 po-lg-6 customize-item po-mb-1 po-pl-0">
+            <label for="paddingInput"><strong>Padding: </strong></label>
+            <input type="range" id="paddingInput" min="0" max="22" [formControl]="inputForm.get('padding')" />
+          </div>
+          <div class="po-md-12 po-lg-6 customize-item po-mb-1 po-pl-0">
+            <label for="colorInput"><strong>Cor da borda: </strong></label>
+            <input type="color" id="colorInput" class="style-inputColor" [formControl]="inputForm.get('borderColor')" />
+          </div>
+          <div class="po-md-12 po-lg-6 customize-item po-mb-1 po-pl-0">
+            <label for="colorHoverInput"><strong>Cor da borda Hover: </strong></label>
+            <input
+              type="color"
+              id="colorHoverInput"
+              class="style-inputColor"
+              [formControl]="inputForm.get('borderColorHover')"
+            />
+          </div>
+          <div class="po-md-12 po-lg-6 customize-item po-mb-1 po-pl-0">
+            <label for="colorBackgroundInput"><strong>Cor do background: </strong></label>
+            <input
+              type="color"
+              id="colorBackgroundInput"
+              class="style-inputColor"
+              [formControl]="inputForm.get('backgroundColor')"
+            />
+          </div>
+          <div class="po-md-12 po-lg-6 customize-item po-mb-1 po-pl-0">
+            <label for="colorBackgroundHoverInput"><strong>Cor do background Hover: </strong></label>
+            <input
+              type="color"
+              id="colorBackgroundHoverInput"
+              class="style-inputColor"
+              [formControl]="inputForm.get('backgroundColorHover')"
+            />
+          </div>
+          <div class="po-md-12 po-lg-6 customize-item po-mb-1 po-pl-0">
+            <label for="colorTextInput"><strong>Cor do texto: </strong></label>
+            <input
+              type="color"
+              id="colorTextInput"
+              class="style-inputColor"
+              [formControl]="inputForm.get('textColor')"
+            />
+          </div>
+        </div>
+      </section>
+    </ng-template>
+    <ng-template [ngSwitchCase]="'select'">
+      <div class="container-item">
+        <p class="color-title-p"><strong>Estados</strong></p>
+      </div>
+      <po-widget class="widget-color">
+        <div class="container content-page-slide po-pl-2 po-pr-2 po-pt-1">
+          <div class="container-item">
+            <p><strong>Live demo</strong></p>
+          </div>
+        </div>
+        <div class="po-row po-mt-2 widget-align">
+          <div class="po-md-6 po-lg-6 po-xl-6 item-align po-pb-2">
+            <po-select
+              class="po-pb-1"
+              #selectDefault
+              name="select"
+              [p-options]="[
+                { label: 'Option 1', value: '1' },
+                { label: 'Option 2', value: '2' }
+              ]"
+              p-placeholder="Customize seu po-select"
+            ></po-select>
+            <po-tag p-color="#efefef" p-text-color="#000" p-value="Padrão"> </po-tag>
+          </div>
+          <div class="po-md-6 po-lg-6 po-xl-6 item-align po-pb-2">
+            <po-select
+              class="po-pb-1 select-hover"
+              #selectHover
+              name="select"
+              [p-options]="[
+                { label: 'Option 1', value: '1' },
+                { label: 'Option 2', value: '2' }
+              ]"
+              p-placeholder="Customize seu po-select"
+            ></po-select>
+            <po-tag p-color="#efefef" p-text-color="#000" p-value="Hover"> </po-tag>
+          </div>
+          <div class="po-md-6 po-lg-6 po-xl-6 item-align po-pb-2">
+            <po-select
+              class="po-pb-1 select-focus"
+              #selectFocus
+              name="select"
+              [p-options]="[
+                { label: 'Option 1', value: '1' },
+                { label: 'Option 2', value: '2' }
+              ]"
+              p-placeholder="Customize seu po-select"
+            ></po-select>
+            <po-tag p-color="#efefef" p-text-color="#000" p-value="Focus"> </po-tag>
+          </div>
+          <div class="po-md-6 po-lg-6 po-xl-6 item-align po-pb-2">
+            <po-select
+              class="po-pb-1"
+              #selectDisabled
+              [p-disabled]="true"
+              [ngModel]="1"
+              name="select"
+              [p-options]="[
+                { label: 'Option 1', value: 1 },
+                { label: 'Option 2', value: 2 }
+              ]"
+              p-placeholder="Customize seu po-select"
+            ></po-select>
+            <po-tag p-color="#efefef" p-text-color="#000" p-value="Disabled"> </po-tag>
+          </div>
+        </div>
+      </po-widget>
+      <div class="container-item po-mt-2 po-mb-2">
+        <p class="color-title-p"><strong>Acessibilidade</strong></p>
+      </div>
+      <ng-container *ngTemplateOutlet="acessibility"></ng-container>
+      <section>
+        <div class="container-item po-mt-2 po-mb-2">
+          <p class="color-title-p"><strong>Personalizar</strong></p>
+        </div>
+
+        <div class="po-row">
+          <div class="po-md-12 po-lg-6 customize-item po-mb-1 po-pl-0">
+            <label for="fontSizeSelect"><strong>Tamanho da fonte: </strong></label>
+            <input type="range" id="fontSizeSelect" min="10" max="32" [formControl]="selectForm.get('fontSize')" />
+          </div>
+          <div class="po-md-12 po-lg-6 customize-item po-mb-1 po-pl-0">
+            <label for="paddingHorizontalSelect"><strong>Padding horizontal: </strong></label>
+            <input
+              type="range"
+              id="paddingHorizontalSelect"
+              min="0"
+              max="50"
+              [formControl]="selectForm.get('paddingHorizontal')"
+            />
+          </div>
+          <div class="po-md-12 po-lg-6 customize-item po-mb-1 po-pl-0">
+            <label for="paddingVerticalSelect"><strong>Padding vertical: </strong></label>
+            <input
+              type="range"
+              id="paddingVerticalSelect"
+              min="0"
+              max="50"
+              [formControl]="selectForm.get('paddingVertical')"
+            />
+          </div>
+          <div class="po-md-12 po-lg-6 customize-item po-mb-1 po-pl-0">
+            <label for="colorSelect"><strong>Cor da borda: </strong></label>
+            <input
+              type="color"
+              id="colorSelect"
+              class="style-inputColor"
+              [formControl]="selectForm.get('borderColor')"
+            />
+          </div>
+          <div class="po-md-12 po-lg-6 customize-item po-mb-1 po-pl-0">
+            <label for="colorHoverSelect"><strong>Cor da borda Hover: </strong></label>
+            <input
+              type="color"
+              id="colorHoverSelect"
+              class="style-inputColor"
+              [formControl]="selectForm.get('borderColorHover')"
+            />
+          </div>
+          <div class="po-md-12 po-lg-6 customize-item po-mb-1 po-pl-0">
+            <label for="colorBackgroundSelect"><strong>Cor do background: </strong></label>
+            <input
+              type="color"
+              id="colorBackgroundSelect"
+              class="style-inputColor"
+              [formControl]="selectForm.get('colorBackground')"
+            />
+          </div>
+          <div class="po-md-12 po-lg-6 customize-item po-mb-1 po-pl-0">
+            <label for="colorBackgroundHoverSelect"><strong>Cor do background Hover: </strong></label>
+            <input
+              type="color"
+              id="colorBackgroundHoverSelect"
+              class="style-inputColor"
+              [formControl]="selectForm.get('colorBackgroundHover')"
+            />
+          </div>
+          <div class="po-md-12 po-lg-6 customize-item po-mb-1 po-pl-0">
+            <label for="colorTextSelect"><strong>Cor do texto: </strong></label>
+            <input
+              type="color"
+              id="colorTextSelect"
+              class="style-inputColor"
+              [formControl]="selectForm.get('textColor')"
+            />
+          </div>
+        </div>
+      </section>
+    </ng-template>
+    <ng-template [ngSwitchCase]="'textarea'">
+      <div class="container-item">
+        <p class="color-title-p"><strong>Estados</strong></p>
+      </div>
+      <po-widget class="widget-color">
+        <div class="container content-page-slide po-pl-2 po-pr-2 po-pt-1">
+          <div class="container-item">
+            <p><strong>Live demo</strong></p>
+          </div>
+        </div>
+        <div class="po-row po-mt-2 widget-align">
+          <div class="po-md-6 po-lg-6 po-xl-6 item-align po-pb-2">
+            <po-textarea
+              class="po-pb-1"
+              #textareaDefault
+              name="textarea"
+              p-placeholder="Customize seu po-textarea"
+            ></po-textarea>
+            <po-tag p-color="#efefef" p-text-color="#000" p-value="Padrão"> </po-tag>
+          </div>
+          <div class="po-md-6 po-lg-6 po-xl-6 item-align po-pb-2">
+            <po-textarea
+              class="po-pb-1 textarea-hover"
+              #textareaHover
+              name="textarea"
+              p-placeholder="Customize seu po-textarea"
+            ></po-textarea>
+            <po-tag p-color="#efefef" p-text-color="#000" p-value="Hover"> </po-tag>
+          </div>
+          <div class="po-md-6 po-lg-6 po-xl-6 item-align po-pb-2">
+            <po-textarea
+              class="po-pb-1 textarea-focus"
+              #textareaFocus
+              name="textarea textarea-focus"
+              p-placeholder="Customize seu po-textarea"
+            ></po-textarea>
+            <po-tag p-color="#efefef" p-text-color="#000" p-value="Focus"> </po-tag>
+          </div>
+          <div class="po-md-6 po-lg-6 po-xl-6 item-align po-pb-2">
+            <po-textarea
+              class="po-pb-1"
+              #textareaDisabled
+              [p-disabled]="true"
+              ngModel="Label textarea"
+              name="textarea"
+              p-placeholder="Customize seu po-textarea"
+            ></po-textarea>
+            <po-tag p-color="#efefef" p-text-color="#000" p-value="Disabled"> </po-tag>
+          </div>
+        </div>
+      </po-widget>
+      <div class="container-item po-mt-2 po-mb-2">
+        <p class="color-title-p"><strong>Acessibilidade</strong></p>
+      </div>
+      <ng-container *ngTemplateOutlet="acessibility"></ng-container>
+
+      <section>
+        <div class="container-item po-mt-2 po-mb-2">
+          <p class="color-title-p"><strong>Personalizar</strong></p>
+        </div>
+        <div class="po-row">
+          <div class="po-md-12 po-lg-6 customize-item po-mb-1 po-pl-0">
+            <label for="fontSizeTextarea"><strong>Tamanho da fonte: </strong></label>
+            <input type="range" id="fontSizeTextarea" min="10" max="32" [formControl]="textareaForm.get('fontSize')" />
+          </div>
+          <div class="po-md-12 po-lg-6 customize-item po-mb-1 po-pl-0">
+            <label for="colorTextarea"><strong>Cor da borda: </strong></label>
+            <input
+              type="color"
+              id="colorTextarea"
+              class="style-inputColor"
+              [formControl]="textareaForm.get('borderColor')"
+            />
+          </div>
+          <div class="po-md-12 po-lg-6 customize-item po-mb-1 po-pl-0">
+            <label for="colorHoverTextarea"><strong>Cor da borda Hover: </strong></label>
+            <input
+              type="color"
+              id="colorHoverTextarea"
+              class="style-inputColor"
+              [formControl]="textareaForm.get('borderColorHover')"
+            />
+          </div>
+          <div class="po-md-12 po-lg-6 customize-item po-mb-1 po-pl-0">
+            <label for="colorbackgroundTextarea"><strong>Cor do background: </strong></label>
+            <input
+              type="color"
+              id="colorbackgroundTextarea"
+              class="style-inputColor"
+              [formControl]="textareaForm.get('backgroundColor')"
+            />
+          </div>
+          <div class="po-md-12 po-lg-6 customize-item po-mb-1 po-pl-0">
+            <label for="colorbackgroundHoverTextarea"><strong>Cor do background Hover: </strong></label>
+            <input
+              type="color"
+              id="colorbackgroundHoverTextarea"
+              class="style-inputColor"
+              [formControl]="textareaForm.get('backgroundColorHover')"
+            />
+          </div>
+          <div class="po-md-12 po-lg-6 customize-item po-mb-1 po-pl-0">
+            <label for="colorTextTextarea"><strong>Cor do texto: </strong></label>
+            <input
+              type="color"
+              id="colorTextTextarea"
+              class="style-inputColor"
+              [formControl]="textareaForm.get('textColor')"
+            />
+          </div>
+        </div>
+      </section>
+    </ng-template>
+    <ng-template [ngSwitchCase]="'dropdown'">
+      <div class="container-item">
+        <p class="color-title-p"><strong>Estados</strong></p>
+      </div>
+      <po-widget class="widget-color">
+        <div class="container content-page-slide po-pl-2 po-pr-2 po-pt-1">
+          <div class="container-item">
+            <p><strong>Live demo</strong></p>
+          </div>
+        </div>
+        <div class="po-row po-mt-2 widget-align">
+          <div class="po-md-12 po-lg-6 po-xl-6 item-align po-pb-2">
+            <po-dropdown
+              class="po-pb-1"
+              #dropdownDefault
+              p-label="PO Dropdown"
+              [p-actions]="[{ label: 'Item po-dropdown' }]"
+            >
+            </po-dropdown>
+            <po-tag p-color="#efefef" p-text-color="#000" p-value="Padrão"> </po-tag>
+          </div>
+          <div class="po-md-12 po-lg-6 po-xl-6 item-align po-pb-2">
+            <po-dropdown
+              class="po-pb-1 dropdown-hover"
+              #dropdownHover
+              p-label="PO Dropdown"
+              [p-actions]="[{ label: 'Item po-dropdown' }]"
+            >
+            </po-dropdown>
+            <po-tag p-color="#efefef" p-text-color="#000" p-value="Hover"> </po-tag>
+          </div>
+          <div class="po-md-12 po-lg-6 po-xl-6 item-align po-pb-2">
+            <po-dropdown
+              class="po-pb-1 dropdown-focus"
+              #dropdownFocus
+              p-label="PO Dropdown"
+              [p-actions]="[{ label: 'Item po-dropdown' }]"
+            >
+            </po-dropdown>
+            <po-tag p-color="#efefef" p-text-color="#000" p-value="Focus"> </po-tag>
+          </div>
+          <div class="po-md-12 po-lg-6 po-xl-6 item-align po-pb-2">
+            <po-dropdown
+              class="po-pb-1"
+              #dropdownDisabled
+              [p-disabled]="true"
+              p-label="PO Dropdown"
+              [p-actions]="[{ label: 'Item po-dropdown' }]"
+            >
+            </po-dropdown>
+            <po-tag p-color="#efefef" p-text-color="#000" p-value="Disabled"> </po-tag>
+          </div>
+        </div>
+      </po-widget>
+      <div class="container-item po-mt-2 po-mb-2">
+        <p class="color-title-p"><strong>Acessibilidade</strong></p>
+      </div>
+      <div class="container widget-align">
+        <p><strong>É necessário cor do background e cor do texto para funcionamento da acessibilidade</strong></p>
+      </div>
+      <div class="container-item po-mt-2 po-mb-2">
+        <p class="color-title-p"><strong>Personalizar</strong></p>
+      </div>
+
+      <section>
+        <div class="po-row">
+          <div class="po-md-12 po-lg-6 customize-item po-mb-1 po-pl-0">
+            <label for="fontSizeDropdown"><strong>Tamanho da fonte: </strong></label>
+            <input type="range" id="fontSizeDropdown" min="10" max="40" [formControl]="dropdownForm.get('fontSize')" />
+          </div>
+          <div class="po-md-12 po-lg-6 customize-item po-mb-1 po-pl-0">
+            <label for="borderRadiusDropdown"><strong>Border radius: </strong></label>
+            <input
+              type="range"
+              id="borderRadiusDropdown"
+              min="0"
+              max="40"
+              [formControl]="dropdownForm.get('borderRadius')"
+            />
+          </div>
+          <div class="po-md-12 po-lg-6 customize-item po-mb-1 po-pl-0">
+            <label for="borderWidthDropdown"><strong>Espessura da borda: </strong></label>
+            <input
+              type="range"
+              id="borderWidthDropdown"
+              min="1"
+              max="15"
+              [formControl]="dropdownForm.get('borderWidth')"
+            />
+          </div>
+          <div class="po-md-12 po-lg-6 customize-item po-mb-1 po-pl-0">
+            <label for="paddingDropdown"><strong>Padding: </strong></label>
+            <input type="range" id="paddingDropdown" min="10" max="40" [formControl]="dropdownForm.get('padding')" />
+          </div>
+          <div class="po-md-12 po-lg-6 customize-item po-mb-1 po-pl-0">
+            <label for="colorDropdown"><strong>Cor principal: </strong></label>
+            <input type="color" id="colorDropdown" class="style-inputColor" [formControl]="dropdownForm.get('color')" />
+          </div>
+          <div class="po-md-12 po-lg-6 customize-item po-mb-1 po-pl-0">
+            <label for="colorHoverDropdown"><strong>Cor principal Hover: </strong></label>
+            <input
+              type="color"
+              id="colorHoverDropdown"
+              class="style-inputColor"
+              [formControl]="dropdownForm.get('colorHover')"
+            />
+          </div>
+          <div class="po-md-12 po-lg-6 customize-item po-mb-1 po-pl-0">
+            <label for="backgroundHoverDropdown"><strong>Cor do background Hover: </strong></label>
+            <input
+              type="color"
+              id="backgroundHoverDropdown"
+              class="style-inputColor"
+              [formControl]="dropdownForm.get('backgroundColorHover')"
+            />
+          </div>
+        </div>
+      </section>
+    </ng-template>
+    <ng-template [ngSwitchCase]="'datepicker'">
+      <div class="container-item">
+        <p class="color-title-p"><strong>Estados</strong></p>
+      </div>
+      <po-widget class="widget-color">
+        <div class="container content-page-slide po-pl-2 po-pr-2 po-pt-1">
+          <div class="container-item">
+            <p><strong>Live demo</strong></p>
+          </div>
+        </div>
+        <div class="po-row po-mt-2 widget-align">
+          <div class="po-md-12 po-lg-6 po-xl-6 item-align po-pb-2">
+            <po-datepicker
+              class="po-pb-1"
+              p-placeholder="Customize seu po-datepicker"
+              #datepickerDefault
+              name="datepicker"
+            >
+            </po-datepicker>
+            <po-tag p-color="#efefef" p-text-color="#000" p-value="Padrão"> </po-tag>
+          </div>
+          <div class="po-md-12 po-lg-6 po-xl-6 item-align po-pb-2">
+            <po-datepicker
+              class="po-pb-1 datepicker-hover"
+              p-placeholder="Customize seu po-datepicker"
+              #datepickerHover
+              name="datepicker"
+            >
+            </po-datepicker>
+            <po-tag p-color="#efefef" p-text-color="#000" p-value="Hover"> </po-tag>
+          </div>
+          <!-- <div class="po-md-12 po-lg-6 po-xl-6 item-align po-pb-2">
+            <po-datepicker
+              class="po-pb-1 datepicker-focus"
+              p-placeholder="Customize seu po-datepicker"
+              #datepickerFocus
+              name="datepicker"
+            >
+            </po-datepicker>
+            <po-tag p-color="#efefef" p-text-color="#000" p-value="Focus"> </po-tag>
+          </div> -->
+          <div class="po-md-12 po-lg-12 po-xl-12 item-align po-pb-2">
+            <po-datepicker
+              class="po-pb-1"
+              [p-disabled]="true"
+              p-placeholder="Customize seu po-datepicker"
+              #datepickerDisabled
+              name="datepicker"
+            >
+            </po-datepicker>
+            <po-tag p-color="#efefef" p-text-color="#000" p-value="Disabled"> </po-tag>
+          </div>
+        </div>
+      </po-widget>
+      <div class="container-item po-mt-2 po-mb-2">
+        <p class="color-title-p"><strong>Acessibilidade</strong></p>
+      </div>
+      <ng-container *ngTemplateOutlet="acessibility"></ng-container>
+      <div class="container-item po-mt-2 po-mb-2">
+        <p class="color-title-p"><strong>Personalizar</strong></p>
+      </div>
+
+      <section>
+        <div class="po-row">
+          <div class="po-md-12 po-lg-6 customize-item po-mb-1 po-pl-0">
+            <label for="paddingDatepicker"><strong>Padding: </strong></label>
+            <input type="range" id="paddingDatepicker" min="0" max="22" [formControl]="datepickerForm.get('padding')" />
+          </div>
+          <div class="po-md-12 po-lg-6 customize-item po-mb-1 po-pl-0">
+            <label for="fontSizeDatepicker"><strong>Tamanho da fonte: </strong></label>
+            <input
+              type="range"
+              id="fontSizeDatepicker"
+              min="10"
+              max="32"
+              [formControl]="datepickerForm.get('fontSize')"
+            />
+          </div>
+          <div class="po-md-12 po-lg-6 customize-item po-mb-1 po-pl-0">
+            <label for="paddingDatepickerButton"><strong>Padding do botão: </strong></label>
+            <input
+              type="range"
+              id="paddingDatepickerButton"
+              min="1"
+              max="22"
+              [formControl]="datepickerButtonForm.get('padding')"
+            />
+          </div>
+          <div class="po-md-12 po-lg-6 customize-item po-mb-1 po-pl-0">
+            <label for="colorDatepicker"><strong>Cor da borda: </strong></label>
+            <input
+              type="color"
+              id="colorDatepicker"
+              class="style-inputColor"
+              [formControl]="datepickerForm.get('color')"
+            />
+          </div>
+          <div class="po-md-12 po-lg-6 customize-item po-mb-1 po-pl-0">
+            <label for="colorbackgroundDatepicker"><strong>Cor do background: </strong></label>
+            <input
+              type="color"
+              id="colorbackgroundDatepicker"
+              class="style-inputColor"
+              [formControl]="datepickerForm.get('backgroundColor')"
+            />
+          </div>
+          <div class="po-md-12 po-lg-6 customize-item po-mb-1 po-pl-0">
+            <label for="colorTextDatepicker"><strong>Cor do texto: </strong></label>
+            <input
+              type="color"
+              id="colorTextDatepicker"
+              class="style-inputColor"
+              [formControl]="datepickerForm.get('textColor')"
+            />
+          </div>
+          <div class="po-md-12 po-lg-6 customize-item po-mb-1 po-pl-0">
+            <label for="colorbackgroundHoverDatepicker"><strong>Cor da borda Hover: </strong></label>
+            <input
+              type="color"
+              id="colorbackgroundHoverDatepicker"
+              class="style-inputColor"
+              [formControl]="datepickerForm.get('colorHover')"
+            />
+          </div>
+          <div class="po-md-12 po-lg-6 customize-item po-mb-1 po-pl-0">
+            <label for="colorDatepickerButton"><strong>Cor do botão: </strong></label>
+            <input
+              type="color"
+              id="colorDatepickerButton"
+              class="style-inputColor"
+              [formControl]="datepickerButtonForm.get('color')"
+            />
+          </div>
+          <div class="po-md-12 po-lg-6 customize-item po-mb-1 po-pl-0">
+            <label for="colorbackgroundHoverDatepickerButton"
+              ><strong>Cor do background Hover do botão: </strong></label
+            >
+            <input
+              type="color"
+              id="colorbackgroundHoverDatepickerButton"
+              class="style-inputColor"
+              [formControl]="datepickerButtonForm.get('backgroundColorHover')"
+            />
+          </div>
+          <div class="po-md-12 po-lg-6 customize-item po-mb-1 po-pl-0">
+            <label for="colorHoverDatepickerButton"><strong>Cor do botão hover: </strong></label>
+            <input
+              type="color"
+              id="colorHoverDatepickerButton"
+              class="style-inputColor"
+              [formControl]="datepickerButtonForm.get('borderColorHover')"
+            />
+          </div>
+        </div>
+      </section>
+    </ng-template>
+    <ng-template [ngSwitchCase]="'link'">
+      <div class="container-item">
+        <p class="color-title-p"><strong>Estados</strong></p>
+      </div>
+      <po-widget class="widget-color">
+        <div class="container content-page-slide po-pl-2 po-pr-2 po-pt-1">
+          <div class="container-item">
+            <p><strong>Live demo</strong></p>
+          </div>
+        </div>
+        <div class="po-row po-mt-2 widget-align">
+          <div class="po-md-6 po-lg-4 po-xl-4 item-align po-pb-2">
+            <po-link class="po-pb-1" #linkDefault name="link" p-label="PO Link"> </po-link>
+            <po-tag p-color="#efefef" p-text-color="#000" p-value="Padrão"> </po-tag>
+          </div>
+          <div class="po-md-6 po-lg-4 po-xl-4 item-align po-pb-2">
+            <po-link class="po-pb-1 link-visited" #linkVisited name="link" p-label="PO Link"> </po-link>
+            <po-tag p-color="#efefef" p-text-color="#000" p-value="Visitado"> </po-tag>
+          </div>
+          <div class="po-md-12 po-lg-4 po-xl-4 item-align po-pb-2">
+            <po-link class="po-pb-1" #linkUnvisited name="link" p-label="PO Link"> </po-link>
+            <po-tag p-color="#efefef" p-text-color="#000" p-value="Não visitado"> </po-tag>
+          </div>
+        </div>
+      </po-widget>
+      <div class="container-item po-mt-2 po-mb-2">
+        <p class="color-title-p"><strong>Acessibilidade</strong></p>
+      </div>
+      <div class="container widget-align">
+        <p><strong>É necessário cor do background e cor do texto para funcionamento da acessibilidade</strong></p>
+      </div>
+
+      <section>
+        <div class="container-item po-mt-2 po-mb-2">
+          <p class="color-title-p"><strong>Personalizar</strong></p>
+        </div>
+        <div class="po-row">
+          <div class="po-md-12 po-lg-6 customize-item po-mb-1 po-pl-0">
+            <label for="colorLink"><strong>Cor do link não visitado: </strong></label>
+            <input type="color" id="colorLink" class="style-inputColor" [formControl]="linkForm.get('color')" />
+          </div>
+          <div class="po-md-12 po-lg-6 customize-item po-mb-1 po-pl-0">
+            <label for="colorLinkVisited"><strong>Cor do link visitado: </strong></label>
+            <input
+              type="color"
+              id="colorLinkVisited"
+              class="style-inputColor"
+              [formControl]="linkForm.get('colorVisited')"
+            />
+          </div>
+          <div class="po-md-12 po-lg-6 customize-item po-mb-1 po-pl-0">
+            <label for="paddingDatepickerButton"><strong>Cor do outline: </strong></label>
+            <input
+              type="color"
+              id="colorOutlineLink"
+              class="style-inputColor"
+              [formControl]="linkForm.get('colorOutline')"
+            />
+          </div>
+        </div>
+      </section>
+    </ng-template>
+    <ng-template [ngSwitchCase]="'tooltip'">
+      <div class="container-item">
+        <p class="color-title-p"><strong>Estados</strong></p>
+      </div>
+      <po-widget class="widget-color">
+        <div class="container content-page-slide po-pl-2 po-pr-2 po-pt-1">
+          <div class="container-item">
+            <p><strong>Live demo</strong></p>
+          </div>
+        </div>
+        <div class="po-row po-mt-2 widget-align">
+          <div class="po-md-12 po-lg-12 po-xl-12 item-align po-pb-2">
+            <po-button
+              #tooltipDefault
+              class="po-pb-1"
+              p-label="Open Tooltip"
+              class="button-tooltip-theme-builder"
+              p-tooltip="po-tooltip"
+            >
+            </po-button>
+            <po-tag class="po-pt-2" p-color="#efefef" p-text-color="#000" p-value="Padrão"> </po-tag>
+          </div>
+        </div>
+      </po-widget>
+      <div class="container-item po-mt-2 po-mb-2">
+        <p class="color-title-p"><strong>Acessibilidade</strong></p>
+      </div>
+      <ng-container *ngTemplateOutlet="acessibility"></ng-container>
+
+      <section>
+        <div class="container-item po-mt-2 po-mb-2">
+          <p class="color-title-p"><strong>Personalizar</strong></p>
+        </div>
+
+        <div class="po-row">
+          <div class="po-md-12 po-lg-6 customize-item po-mb-1 po-pl-0">
+            <label for="colorTooltip"><strong>Cor: </strong></label>
+            <input type="color" id="colorTooltip" class="style-inputColor" [formControl]="tooltipForm.get('color')" />
+          </div>
+          <div class="po-md-12 po-lg-6 customize-item po-mb-1 po-pl-0">
+            <label for="colorTextTooltip"><strong>Cor do texto: </strong></label>
+            <input
+              type="color"
+              id="colorTextTooltip"
+              class="style-inputColor"
+              [formControl]="tooltipForm.get('textColor')"
+            />
+          </div>
+          <div class="po-md-12 po-lg-6 customize-item po-mb-1 po-pl-0">
+            <label for="borderRadiusTooltip"><strong>Border radius: </strong></label>
+            <input
+              type="range"
+              id="borderRadiusTooltip"
+              min="1"
+              max="32"
+              [formControl]="tooltipForm.get('borderRadius')"
+            />
+          </div>
+        </div>
+      </section>
+    </ng-template>
+    <ng-template [ngSwitchCase]="'modal'">
+      <div class="container-item">
+        <p class="color-title-p"><strong>Estados</strong></p>
+      </div>
+      <po-widget class="widget-color">
+        <div class="container content-page-slide po-pl-2 po-pr-2 po-pt-1">
+          <div class="container-item">
+            <p><strong>Live demo</strong></p>
+          </div>
+        </div>
+        <div class="po-row po-mt-2 widget-align">
+          <div class="po-md-12 po-lg-12 po-xl-12 item-align po-pb-2">
+            <po-button class="po-pb-1" p-label="Open modal" (p-click)="modalDefault.open()"> </po-button>
+
+            <po-modal #modalDefault p-title="PO Modal"> Customize seu po-modal!!!</po-modal>
+            <po-tag class="po-pt-1" p-color="#efefef" p-text-color="#000" p-value="Padrão"> </po-tag>
+          </div>
+        </div>
+      </po-widget>
+      <div class="container-item po-mt-2 po-mb-2">
+        <p class="color-title-p"><strong>Acessibilidade</strong></p>
+      </div>
+      <div class="container widget-align">
+        <p><strong>É necessário cor do background e cor do texto para funcionamento da acessibilidade</strong></p>
+      </div>
+      <section>
+        <div class="container-item po-mt-2 po-mb-2">
+          <p class="color-title-p"><strong>Personalizar</strong></p>
+        </div>
+
+        <div class="po-row">
+          <div class="po-md-12 po-lg-6 customize-item po-mb-1 po-pl-0">
+            <label for="borderRadiusModal"><strong>Border radius: </strong></label>
+            <input type="range" id="borderRadiusModal" min="1" max="32" [formControl]="modalForm.get('borderRadius')" />
+          </div>
+          <div class="po-md-12 po-lg-6 customize-item po-mb-1 po-pl-0">
+            <label for="borderWidthModal"><strong>Espessura da borda: </strong></label>
+            <input type="range" id="borderWidthModal" min="1" max="10" [formControl]="modalForm.get('borderWidth')" />
+          </div>
+          <div class="po-md-12 po-lg-6 customize-item po-mb-1 po-pl-0">
+            <label for="overlayValueModal"><strong>Opacidade do overlay: </strong></label>
+            <input
+              type="range"
+              id="overlayValueModal"
+              min="0"
+              max="1"
+              step="0.1"
+              [formControl]="modalForm.get('opacityValue')"
+            />
+          </div>
+          <div class="po-md-12 po-lg-6 customize-item po-mb-1 po-pl-0">
+            <label for="colorModal"><strong>Cor do background: </strong></label>
+            <input
+              type="color"
+              id="colorModal"
+              class="style-inputColor"
+              [formControl]="modalForm.get('backgroundColor')"
+            />
+          </div>
+          <div class="po-md-12 po-lg-6 customize-item po-mb-1 po-pl-0">
+            <label for="borderColorModal"><strong>Cor da borda: </strong></label>
+            <input
+              type="color"
+              id="borderColorModal"
+              class="style-inputColor"
+              [formControl]="modalForm.get('borderColor')"
+            />
+          </div>
+          <div class="po-md-12 po-lg-6 customize-item po-mb-1 po-pl-0">
+            <label for="overlayColorModal"><strong>Cor do overlay: </strong></label>
+            <input
+              type="color"
+              id="overlayColorModal"
+              class="style-inputColor"
+              [formControl]="modalForm.get('overlayColor')"
+            />
+          </div>
+          <div class="po-md-12 po-lg-6 customize-item po-mb-1 po-pl-0">
+            <label for="separatorColorModal"><strong>Cor do separador: </strong></label>
+            <input
+              type="color"
+              id="separatorColorModal"
+              class="style-inputColor"
+              [formControl]="modalForm.get('dividerColor')"
+            />
+          </div>
+        </div>
+      </section>
+    </ng-template>
+    <ng-template [ngSwitchCase]="'popup'">
+      <div class="container-item">
+        <p class="color-title-p"><strong>Estados</strong></p>
+      </div>
+      <po-widget class="widget-color">
+        <div class="container content-page-slide po-pl-2 po-pr-2 po-pt-1">
+          <div class="container-item">
+            <p><strong>Live demo</strong></p>
+          </div>
+        </div>
+        <div class="po-row po-mt-2 widget-align">
+          <div class="po-md-6 po-lg-6 po-xl-6 item-align po-pb-2">
+            <span
+              #targeDefault
+              class="po-clickable po-icon po-icon-help item-align po-pb-1"
+              (click)="popupDefault.toggle()"
+            >
+            </span>
+
+            <po-popup #popupDefault [p-actions]="[{ label: 'PO Popup' }]" [p-target]="targeDefault"> </po-popup>
+            <po-tag class="po-pt-1" p-color="#efefef" p-text-color="#000" p-value="Padrão"> </po-tag>
+          </div>
+          <div class="po-md-6 po-lg-6 po-xl-6 item-align po-pb-2">
+            <span
+              #targetHover
+              class="po-clickable po-icon po-icon-help item-align po-pb-1"
+              (click)="popupHover.toggle()"
+            >
+            </span>
+
+            <po-popup class="popup-hover" #popupHover [p-actions]="[{ label: 'PO Popup' }]" [p-target]="targetHover">
+            </po-popup>
+            <po-tag class="po-pt-1" p-color="#efefef" p-text-color="#000" p-value="Hover"> </po-tag>
+          </div>
+        </div>
+      </po-widget>
+      <div class="container-item po-mt-2 po-mb-2">
+        <p class="color-title-p"><strong>Acessibilidade</strong></p>
+      </div>
+      <ng-container *ngTemplateOutlet="acessibility"></ng-container>
+      <section>
+        <div class="container-item po-mt-2 po-mb-2">
+          <p class="color-title-p"><strong>Personalizar</strong></p>
+        </div>
+
+        <div class="po-row">
+          <div class="po-md-12 po-lg-6 customize-item po-mb-1 po-pl-0">
+            <label for="backgroundContainerPopup"><strong>Cor do background: </strong></label>
+            <input
+              type="color"
+              id="backgroundContainerPopup"
+              class="style-inputColor"
+              [formControl]="popupContainerForm.get('colorBackground')"
+            />
+          </div>
+          <div class="po-md-12 po-lg-6 customize-item po-mb-1 po-pl-0">
+            <label for="colorPopup"><strong>Cor do texto: </strong></label>
+            <input type="color" id="colorPopup" class="style-inputColor" [formControl]="popupForm.get('textColor')" />
+          </div>
+          <div class="po-md-12 po-lg-6 customize-item po-mb-1 po-pl-0">
+            <label for="colorHoverPopup"><strong>Cor do texto hover: </strong></label>
+            <input
+              type="color"
+              id="colorHoverPopup"
+              class="style-inputColor"
+              [formControl]="popupForm.get('colorHover')"
+            />
+          </div>
+          <div class="po-md-12 po-lg-6 customize-item po-mb-1 po-pl-0">
+            <label for="backgroundHoverPopup"><strong>Background hover: </strong></label>
+            <input
+              type="color"
+              id="backgroundHoverPopup"
+              class="style-inputColor"
+              [formControl]="popupForm.get('colorBackgroundHover')"
+            />
+          </div>
+        </div>
+      </section>
+    </ng-template>
+    <ng-template [ngSwitchCase]="'radio'">
+      <div class="container-item">
+        <p class="color-title-p"><strong>Estados</strong></p>
+      </div>
+      <po-widget class="widget-color">
+        <div class="container content-page-slide po-pl-2 po-pr-2 po-pt-1">
+          <div class="container-item">
+            <p><strong>Live demo</strong></p>
+          </div>
+        </div>
+        <div class="po-row po-mt-2 widget-align">
+          <div class="po-md-12 po-lg-6 po-xl-6 item-align po-pb-2">
+            <form>
+              <po-radio class="po-pr-2" #radioDefault p-label="Option 1" [p-checked]="true"></po-radio>
+              <po-radio #radioDefault2 p-label="Option 2" [p-checked]="false"></po-radio>
+            </form>
+            <po-tag class="po-pt-1" p-color="#efefef" p-text-color="#000" p-value="Padrão"> </po-tag>
+          </div>
+          <div class="po-md-12 po-lg-6 po-xl-6 item-align po-pb-2">
+            <form>
+              <po-radio
+                class="po-pr-2 radio-hover"
+                id="myRadioHover"
+                #radioHover
+                p-label="Option 1"
+                [p-checked]="true"
+              ></po-radio>
+              <po-radio
+                class="radio-hover"
+                id="myRadioHover2"
+                #radioHover2
+                p-label="Option 2"
+                [p-checked]="false"
+              ></po-radio>
+            </form>
+            <po-tag class="po-pt-1" p-color="#efefef" p-text-color="#000" p-value="Hover"> </po-tag>
+          </div>
+          <div class="po-md-12 po-lg-12 po-xl-6 item-align po-pb-2">
+            <form>
+              <po-radio
+                class="po-pr-2 radio-hover"
+                p-label="Option 1"
+                [p-checked]="true"
+                [p-disabled]="true"
+              ></po-radio>
+              <po-radio class="radio-hover" p-label="Option 2" [p-checked]="false" [p-disabled]="true"></po-radio>
+            </form>
+            <po-tag class="po-pt-1" p-color="#efefef" p-text-color="#000" p-value="Disabled"> </po-tag>
+          </div>
+        </div>
+      </po-widget>
+      <div class="container-item po-mt-2 po-mb-2">
+        <p class="color-title-p"><strong>Acessibilidade</strong></p>
+      </div>
+      <div class="container widget-align">
+        <p><strong>É necessário cor do background e cor do texto para funcionamento da acessibilidade</strong></p>
+      </div>
+      <section>
+        <div class="container-item po-mt-2 po-mb-2">
+          <p class="color-title-p"><strong>Personalizar</strong></p>
+        </div>
+
+        <div class="po-row">
+          <div class="po-md-12 po-lg-6 customize-item po-mb-1 po-pl-0">
+            <label for="backgroundColorRadio"><strong>Cor Principal:</strong></label>
+            <input
+              type="color"
+              id="backgroundColorRadio"
+              class="style-inputColor"
+              [formControl]="radioForm.get('color')"
+            />
+          </div>
+          <div class="po-md-12 po-lg-6 customize-item po-mb-1 po-pl-0">
+            <label for="backgroundHoverRadio"><strong>Cor do background: </strong></label>
+            <input
+              type="color"
+              id="backgroundHoverRadio"
+              class="style-inputColor"
+              [formControl]="radioForm.get('backgroundColor')"
+            />
+          </div>
+          <div class="po-md-12 po-lg-6 customize-item po-mb-1 po-pl-0">
+            <label for="shadowRadio"><strong>Cor da sombra: </strong></label>
+            <input type="color" id="shadowRadio" class="style-inputColor" [formControl]="radioForm.get('colorHover')" />
+          </div>
+          <div class="po-md-12 po-lg-6 customize-item po-mb-1 po-pl-0">
+            <label for="shadowRadio"><strong>Cor da borda: </strong></label>
+            <input
+              type="color"
+              id="shadowRadio"
+              class="style-inputColor"
+              [formControl]="radioForm.get('borderColor')"
+            />
+          </div>
+        </div>
+      </section>
+    </ng-template>
+    <ng-template [ngSwitchCase]="'checkbox'">
+      <div class="container-item">
+        <p class="color-title-p"><strong>Estados</strong></p>
+      </div>
+      <po-widget class="widget-color">
+        <div class="container content-page-slide po-pl-2 po-pr-2 po-pt-1">
+          <div class="container-item">
+            <p><strong>Live demo</strong></p>
+          </div>
+        </div>
+        <div class="po-row po-mt-2 widget-align">
+          <div class="po-md-6 po-lg-4 po-xl-4 item-align po-pb-2">
+            <po-checkbox #checkboxDefault name="checkbox" p-label="PO Checkbox"> </po-checkbox>
+            <po-tag class="po-pt-1" p-color="#efefef" p-text-color="#000" p-value="Padrão"> </po-tag>
+          </div>
+          <div class="po-md-6 po-lg-4 po-xl-4 item-align po-pb-2">
+            <po-checkbox #checkboxChecked class="checkbox-checked" name="checkbox" p-label="PO Checkbox"> </po-checkbox>
+            <po-tag class="po-pt-1" p-color="#efefef" p-text-color="#000" p-value="Checked"> </po-tag>
+          </div>
+          <div class="po-md-6 po-lg-4 po-xl-4 item-align po-pb-2">
+            <po-checkbox #checkboxUnchecked class="checkbox-unchecked" name="checkbox" p-label="PO Checkbox">
+            </po-checkbox>
+            <po-tag class="po-pt-1" p-color="#efefef" p-text-color="#000" p-value="Unchecked"> </po-tag>
+          </div>
+          <div class="po-md-6 po-lg-6 po-xl-4 item-align po-pb-2">
+            <po-checkbox #checkboxHover class="checkbox-hover" name="checkbox" p-label="PO Checkbox"> </po-checkbox>
+            <po-tag class="po-pt-1" p-color="#efefef" p-text-color="#000" p-value="Hover"> </po-tag>
+          </div>
+          <div class="po-md-6 po-lg-6 po-xl-4 item-align po-pb-2">
+            <po-checkbox name="checkbox" [p-disabled]="true" p-label="PO Checkbox"> </po-checkbox>
+            <po-tag class="po-pt-1" p-color="#efefef" p-text-color="#000" p-value="Disabled"> </po-tag>
+          </div>
+        </div>
+      </po-widget>
+      <div class="container-item po-mt-2 po-mb-2">
+        <p class="color-title-p"><strong>Acessibilidade</strong></p>
+      </div>
+      <div class="container widget-align">
+        <p><strong>É necessário cor do background e cor do texto para funcionamento da acessibilidade</strong></p>
+      </div>
+      <section>
+        <div class="container-item po-mt-2 po-mb-2">
+          <p class="color-title-p"><strong>Personalizar</strong></p>
+        </div>
+
+        <div class="po-row">
+          <div class="po-md-12 po-lg-6 customize-item po-mb-1 po-pl-0">
+            <label for="backgroundColorCheckbox"><strong>Cor Principal:</strong></label>
+            <input
+              type="color"
+              id="backgroundColorCheckbox"
+              class="style-inputColor"
+              [formControl]="checkboxForm.get('color')"
+            />
+          </div>
+          <div class="po-md-12 po-lg-6 customize-item po-mb-1 po-pl-0">
+            <label for="backgroundHoverCheckbox"><strong>Cor do background: </strong></label>
+            <input
+              type="color"
+              id="backgroundHoverCheckbox"
+              class="style-inputColor"
+              [formControl]="checkboxForm.get('backgroundColor')"
+            />
+          </div>
+          <div class="po-md-12 po-lg-6 customize-item po-mb-1 po-pl-0">
+            <label for="shadowCheckbox"><strong>Cor da sombra: </strong></label>
+            <input
+              type="color"
+              id="shadowCheckbox"
+              class="style-inputColor"
+              [formControl]="checkboxForm.get('colorHover')"
+            />
+          </div>
+          <div class="po-md-12 po-lg-6 customize-item po-mb-1 po-pl-0">
+            <label for="shadowCheckbox"><strong>Cor da borda: </strong></label>
+            <input
+              type="color"
+              id="shadowCheckbox"
+              class="style-inputColor"
+              [formControl]="checkboxForm.get('borderColor')"
+            />
+          </div>
+        </div>
+      </section>
+    </ng-template>
+  </po-page-slide>
+
+  <ng-template #acessibility>
+    <div class="container">
+      <div class="container-item po-pb-1">
+        <p class="p-contrast"><strong>Nível de Contraste</strong></p>
+        <po-tag p-color="#efefef" p-text-color="#000" [p-value]="ratio + ':1'"> </po-tag>
+      </div>
+    </div>
+    <div class="container">
+      <div class="container-item po-pb-1">
+        <p class="p-contrast"><strong>Texto normal</strong></p>
+        <po-tag
+          [p-color]="ratio > 4.5 ? '#c3ffc3b3' : '#ffd3d3'"
+          [p-icon]="ratio > 4.5 ? 'po-icon-ok' : 'po-icon-close'"
+          [p-text-color]="ratio > 4.5 ? 'green' : 'red'"
+          class="po-pr-1"
+          p-value="AA"
+        >
+        </po-tag>
+        <po-tag
+          [p-color]="ratio > 7 ? '#c3ffc3b3' : '#ffd3d3'"
+          [p-icon]="ratio > 7 ? 'po-icon-ok' : 'po-icon-close'"
+          [p-text-color]="ratio > 7 ? 'green' : 'red'"
+          p-value="AAA"
+        >
+        </po-tag>
+      </div>
+    </div>
+    <div class="container">
+      <div class="container-item po-pb-1">
+        <p class="p-contrast"><strong>Texto grande</strong></p>
+        <po-tag
+          [p-color]="ratio > 3 ? '#c3ffc3b3' : '#ffd3d3'"
+          [p-icon]="ratio > 3 ? 'po-icon-ok' : 'po-icon-close'"
+          [p-text-color]="ratio > 3 ? 'green' : 'red'"
+          class="po-pr-1"
+          p-value="AA"
+        >
+        </po-tag>
+        <po-tag
+          [p-color]="ratio > 4.5 ? '#c3ffc3b3' : '#ffd3d3'"
+          [p-icon]="ratio > 4.5 ? 'po-icon-ok' : 'po-icon-close'"
+          [p-text-color]="ratio > 4.5 ? 'green' : 'red'"
+          p-value="AAA"
+        >
+        </po-tag>
+      </div>
+    </div>
+    <div class="container">
+      <div class="container-item po-pb-1">
+        <p class="p-contrast"><strong>Gráficos</strong></p>
+        <po-tag
+          [p-color]="ratio > 4.5 ? '#c3ffc3b3' : '#ffd3d3'"
+          [p-icon]="ratio > 4.5 ? 'po-icon-ok' : 'po-icon-close'"
+          [p-text-color]="ratio > 4.5 ? 'green' : 'red'"
+          p-value="AA"
+        >
+        </po-tag>
+      </div>
+    </div>
+  </ng-template>
+
+  <po-modal #viewCSSModal p-title="CSS">
+    <div class="po-row">
+      <po-button
+        class="po-sm-4 po-pr-1 po-pl-1 po-pt-1 po-mb-1"
+        p-icon="po-icon-copy"
+        p-label="Copy"
+        (p-click)="copyToClipboard()"
+      >
+      </po-button>
+    </div>
+
+    <div class="tools-jumbotron">
+      <div id="fieldsCSS">
+        <pre [ngClass]="resultButtonD?.innerText.length ? '' : 'pre-none'" #resultButtonD></pre>
+        <pre [ngClass]="resultButtonP?.innerText.length ? '' : 'pre-none'" #resultButtonP></pre>
+        <pre [ngClass]="resultButtonL?.innerText.length ? '' : 'pre-none'" class="teste" #resultButtonL></pre>
+        <pre [ngClass]="resultSwitch?.innerText.length ? '' : 'pre-none'" class="teste" #resultSwitch></pre>
+        <pre [ngClass]="resultRadio?.innerText.length ? '' : 'pre-none'" class="teste" #resultRadio></pre>
+        <pre [ngClass]="resultDisclaimer?.innerText.length ? '' : 'pre-none'" class="teste" #resultDisclaimer></pre>
+        <pre [ngClass]="resultInput?.innerText.length ? '' : 'pre-none'" class="teste" #resultInput></pre>
+        <pre [ngClass]="resultSelect?.innerText.length ? '' : 'pre-none'" class="teste" #resultSelect></pre>
+        <pre [ngClass]="resultTextarea?.innerText.length ? '' : 'pre-none'" class="teste" #resultTextarea></pre>
+        <pre [ngClass]="resultDropdown?.innerText.length ? '' : 'pre-none'" class="teste" #resultDropdown></pre>
+        <pre [ngClass]="resultDatepicker?.innerText.length ? '' : 'pre-none'" class="teste" #resultDatepicker></pre>
+        <pre
+          [ngClass]="resultDatepickerButton?.innerText.length ? '' : 'pre-none'"
+          class="teste"
+          #resultDatepickerButton
+        ></pre>
+        <pre [ngClass]="resultLink?.innerText.length ? '' : 'pre-none'" class="teste" #resultLink></pre>
+        <pre [ngClass]="resultTooltip?.innerText.length ? '' : 'pre-none'" class="teste" #resultTooltip></pre>
+        <pre [ngClass]="resultModal?.innerText.length ? '' : 'pre-none'" class="teste" #resultModal></pre>
+        <pre [ngClass]="resultPopup?.innerText.length ? '' : 'pre-none'" class="teste" #resultPopup></pre>
+        <pre
+          [ngClass]="resultPopupContainer?.innerText.length ? '' : 'pre-none'"
+          class="teste"
+          #resultPopupContainer
+        ></pre>
+        <pre [ngClass]="resultCheckbox?.innerText.length ? '' : 'pre-none'" class="teste" #resultCheckbox></pre>
+      </div>
+    </div>
+
+    <h3>
+      <a href="https://po-ui.io/guides/colors-customization" target="_blank">Customizando cores do tema padrão</a>
+    </h3>
+
+    <hr />
+
+    <h3>
+      Dúvidas sobre as possíveis customizações? Entre em contato com o time
+      <a href="https://github.com/po-ui/po-angular/discussions/new?category=tire-suas-d%C3%BAvidas" target="_blank"
+        >PO-UI pelo GitHub</a
+      >
+    </h3>
+  </po-modal>
+
+  <po-page-slide #pageSlide p-title="Configuração" [p-click-out]="true">
+    <div class="po-row po-mb-2">
+      <po-switch
+        class="po-sm-6"
+        p-label-off="Escondido"
+        p-label-on="Visível"
+        p-label="Botões"
+        name="Botões"
+        [(ngModel)]="botaoPrimaryView"
+        (p-change)="switchIndividual()"
+      ></po-switch>
+
+      <po-switch
+        class="po-sm-6"
+        p-label-off="Escondido"
+        p-label-on="Visível"
+        p-label="Switch"
+        name="Switch"
+        [(ngModel)]="switchView"
+        (p-change)="switchIndividual()"
+      ></po-switch>
+
+      <po-switch
+        class="po-sm-6"
+        p-label-off="Escondido"
+        p-label-on="Visível"
+        p-label="Input"
+        name="Input"
+        [(ngModel)]="inputView"
+        (p-change)="switchIndividual()"
+      ></po-switch>
+
+      <po-switch
+        class="po-sm-6"
+        p-label-off="Escondido"
+        p-label-on="Visível"
+        p-label="Select"
+        name="Select"
+        [(ngModel)]="selectView"
+        (p-change)="switchIndividual()"
+      ></po-switch>
+
+      <po-switch
+        class="po-sm-6"
+        p-label-off="Escondido"
+        p-label-on="Visível"
+        p-label="Dropdown"
+        name="Dropdown"
+        [(ngModel)]="dropdownView"
+        (p-change)="switchIndividual()"
+      ></po-switch>
+
+      <po-switch
+        class="po-sm-6"
+        p-label-off="Escondido"
+        p-label-on="Visível"
+        p-label="Textarea"
+        name="Textarea"
+        [(ngModel)]="textareaView"
+        (p-change)="switchIndividual()"
+      ></po-switch>
+
+      <po-switch
+        class="po-sm-6"
+        p-label-off="Escondido"
+        p-label-on="Visível"
+        p-label="Datepicker"
+        name="Datepicker"
+        [(ngModel)]="datepickerView"
+        (p-change)="switchIndividual()"
+      ></po-switch>
+
+      <po-switch
+        class="po-sm-6"
+        p-label-off="Escondido"
+        p-label-on="Visível"
+        p-label="Modal"
+        name="Modal"
+        [(ngModel)]="modalView"
+        (p-change)="switchIndividual()"
+      ></po-switch>
+
+      <po-switch
+        class="po-sm-6"
+        p-label-off="Escondido"
+        p-label-on="Visível"
+        p-label="Popup"
+        name="Popup"
+        [(ngModel)]="popupView"
+        (p-change)="switchIndividual()"
+      ></po-switch>
+
+      <po-switch
+        class="po-sm-6"
+        p-label-off="Escondido"
+        p-label-on="Visível"
+        p-label="Checkbox"
+        name="Checkbox"
+        [(ngModel)]="checkboxView"
+        (p-change)="switchIndividual()"
+      ></po-switch>
+
+      <po-switch
+        class="po-sm-6"
+        p-label-off="Escondido"
+        p-label-on="Visível"
+        p-label="Link"
+        name="Link"
+        [(ngModel)]="linkView"
+        (p-change)="switchIndividual()"
+      ></po-switch>
+
+      <po-switch
+        class="po-sm-6"
+        p-label-off="Escondido"
+        p-label-on="Visível"
+        p-label="Tooltip"
+        name="Tooltip"
+        [(ngModel)]="tooltipView"
+        (p-change)="switchIndividual()"
+      ></po-switch>
+
+      <po-switch
+        class="po-sm-6"
+        p-label-off="Escondido"
+        p-label-on="Visível"
+        p-label="Radio"
+        name="Radio"
+        [(ngModel)]="radioView"
+        (p-change)="switchIndividual()"
+      ></po-switch>
+
+      <po-switch
+        class="po-sm-6"
+        p-label-off="Escondido"
+        p-label-on="Visível"
+        p-label="Disclaimer"
+        name="Disclaimer"
+        [(ngModel)]="disclaimerView"
+        (p-change)="switchIndividual()"
+      ></po-switch>
+    </div>
+
+    <div class="po-mt-2">
+      <po-divider></po-divider>
+      <po-switch
+        class="po-sm-6"
+        p-label-off="Escondido"
+        p-label-on="Visível"
+        p-label="Mostrar todos"
+        name="allComponents"
+        [(ngModel)]="switchAllComponentes"
+        (p-change)="switchAllEmit($event)"
+      ></po-switch>
+    </div>
+  </po-page-slide>
+</po-page-default>

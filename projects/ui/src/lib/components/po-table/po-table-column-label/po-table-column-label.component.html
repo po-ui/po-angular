@@ -1,3 +1,9 @@
-<span [class]="'po-table-column-label po-' + value?.color">
-  {{ value?.label }}
-</span>
+<po-tag
+  *ngIf="hasLabel"
+  [p-color]="value?.color"
+  [p-value]="value?.label"
+  [p-text-color]="value?.textColor"
+  [p-icon]="value?.icon"
+  [p-type]="value?.type"
+>
+</po-tag>

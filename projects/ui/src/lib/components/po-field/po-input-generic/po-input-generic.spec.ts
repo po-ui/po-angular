@@ -224,6 +224,36 @@ describe('PoInputGeneric:', () => {
     expect(fakeThis.inputEl.nativeElement.value).toBe('12345');
   });
 
+  it('should call "callOnChange" on eventInput without uppercase', () => {
+    const fakeThis = {
+      upperCase: false,
+      callOnChange: (v: any) => {},
+      validMaxLength: component.validMaxLength,
+      inputEl: component.inputEl
+    };
+    fakeEvent.target.value = 'teste';
+
+    spyOn(fakeThis, 'callOnChange');
+    component.eventOnInput.call(fakeThis, fakeEvent);
+    expect(fakeThis.callOnChange).toHaveBeenCalledWith('teste');
+    expect(fakeThis.inputEl.nativeElement.value).toBe('teste');
+  });
+
+  it('should call "callOnChange" on eventInput with uppercase', () => {
+    const fakeThis = {
+      upperCase: true,
+      callOnChange: (v: any) => {},
+      validMaxLength: component.validMaxLength,
+      inputEl: component.inputEl
+    };
+    fakeEvent.target.value = 'teste';
+
+    spyOn(fakeThis, 'callOnChange');
+    component.eventOnInput.call(fakeThis, fakeEvent);
+    expect(fakeThis.callOnChange).toHaveBeenCalledWith('TESTE');
+    expect(fakeThis.inputEl.nativeElement.value).toBe('TESTE');
+  });
+
   it('should call mask.blur on eventInput with mask', () => {
     const fakeThis = {
       mask: true,

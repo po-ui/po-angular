@@ -1,8 +1,8 @@
+import { Location } from '@angular/common';
+import { HttpClientTestingModule } from '@angular/common/http/testing';
 import { Component } from '@angular/core';
 import { ComponentFixture, fakeAsync, TestBed, tick } from '@angular/core/testing';
-import { HttpClientTestingModule } from '@angular/common/http/testing';
-import { Location } from '@angular/common';
-import { Router, Routes } from '@angular/router';
+import { Router, Routes, UrlSegment, UrlSegmentGroup, UrlTree } from '@angular/router';
 import { RouterTestingModule } from '@angular/router/testing';
 
 import { Observable, of } from 'rxjs';
@@ -10,13 +10,13 @@ import { Observable, of } from 'rxjs';
 import * as utilsFunctions from '../../utils/util';
 import { PoCleanComponent } from './../po-field/po-clean/po-clean.component';
 
-import { PoLoadingModule } from '../po-loading/po-loading.module';
 import { PoIconModule } from '../po-icon/po-icon.module';
+import { PoLoadingModule } from '../po-loading/po-loading.module';
 
 import { PoBadgeComponent } from '../po-badge';
-import { PoMenuComponent } from './po-menu.component';
 import { PoMenuFilterComponent } from './po-menu-filter/po-menu-filter.component';
 import { PoMenuItemComponent } from './po-menu-item/po-menu-item.component';
+import { PoMenuComponent } from './po-menu.component';
 import { PoMenuItemsService } from './services/po-menu-items.service';
 import { PoMenuService } from './services/po-menu.service';
 
@@ -172,14 +172,75 @@ describe('PoMenuComponent:', () => {
     expect(nativeElement.querySelectorAll('.po-menu-item-selected').length).toBe(1);
   });
 
-  xit('should open sub menu', () => {
-    component['clickMenuItem'](component.menus[1]);
-    expect(component.activeMenuItem).toBeFalsy();
-    expect(component.groupedMenuItem).toBe(component.menus[1]);
+  it('should set activeMenuItem.link to `redirectTo` if link is empty', () => {
+    spyOn(component, <any>'activateMenuItem');
+    const menuItem = {
+      link: '/',
+      id: '123',
+      icon: null,
+      label: 'PO UI - Angular Framework',
+      level: 1,
+      isSelected: false,
+      type: 'internalLink'
+    };
 
-    fixture.detectChanges();
-    expect(nativeElement.querySelectorAll('.po-menu-item-selected').length).toBe(0);
-    expect(nativeElement.querySelector('.po-menu-sub-items').style.maxHeight).toBe('294px');
+    component['clickMenuItem'](menuItem);
+    console.log(component.activeMenuItem);
+    expect(component.activeMenuItem.link).toEqual('./home');
+  });
+
+  it('should call openExternalLink if link is external', () => {
+    spyOn(utilsFunctions, <any>'openExternalLink');
+
+    const menuItem = {
+      link: 'https://www.google.com',
+      id: '123',
+      icon: null,
+      label: 'PO UI - Angular Framework',
+      level: 1,
+      isSelected: false,
+      type: 'externalLink'
+    };
+
+    component['clickMenuItem'](menuItem);
+    expect(utilsFunctions.openExternalLink).toHaveBeenCalledWith('https://www.google.com');
+    expect(component['mobileOpened']).toBeFalse();
+  });
+
+  it('should call groupMenuItem if link contain subItems', () => {
+    spyOn(component, <any>'groupMenuItem');
+
+    const menuItem = {
+      link: '/test',
+      id: '123',
+      icon: null,
+      label: 'PO UI - Angular Framework',
+      level: 1,
+      isSelected: false,
+      type: 'subItems'
+    };
+
+    component['clickMenuItem'](menuItem);
+    expect(component['groupMenuItem']).toHaveBeenCalled();
+  });
+
+  it('should call groupMenuItem if link contain subItems and set filteringItems to false is filteringItems is true', () => {
+    spyOn(component, <any>'groupMenuItem');
+    component['filteringItems'] = true;
+
+    const menuItem = {
+      link: '/test',
+      id: '123',
+      icon: null,
+      label: 'PO UI - Angular Framework',
+      level: 1,
+      isSelected: false,
+      type: 'subItems'
+    };
+
+    component['clickMenuItem'](menuItem);
+    expect(component['groupMenuItem']).toHaveBeenCalled();
+    expect(component['filteringItems']).toBeFalse();
   });
 
   it('should activate sub menu', () => {
@@ -207,7 +268,6 @@ describe('PoMenuComponent:', () => {
     spyOn(component.menus[3], <any>'action');
 
     component['clickMenuItem'](component.menus[3]);
-    // expect(component.activeMenuItem).toBe(undefined);
     expect(component.mobileOpened).toBeFalsy();
     expect(component.menus[3].action).toHaveBeenCalled();
   });
@@ -385,13 +445,35 @@ describe('PoMenuComponent:', () => {
     });
   });
 
-  xit('should navigate to test and not activate menu item and group parent', done => {
+  it('should navigate to /test and not activate menu item and group parent', done => {
+    component.activeMenuItem = undefined;
+    component.groupedMenuItem = undefined;
     fixture.ngZone.run(() => {
-      router.navigate(['test']).then(() => {
+      router.navigate(['/test']).then(() => {
         expect(location.path()).toBe('/test');
         expect(component.activeMenuItem).toBe(undefined);
         expect(component.groupedMenuItem).toBe(undefined);
 
+        done();
+      });
+    });
+  });
+
+  it('should navigate to redirectroute and set activeMenuItem', done => {
+    component.activeMenuItem = undefined;
+    const result = {
+      label: 'Home',
+      link: './home',
+      icon: 'home',
+      id: '123',
+      level: 1,
+      type: 'internalLink'
+    };
+    fixture.ngZone.run(() => {
+      router.navigate(['/']).then(() => {
+        expect(location.path()).toBe('/home');
+        expect(component.activeMenuItem.link).toEqual(result.link);
+        expect(component.groupedMenuItem).toBeFalsy();
         done();
       });
     });
@@ -745,74 +827,29 @@ describe('PoMenuComponent:', () => {
       expect(showNoData).toBeFalsy();
     });
 
-    it('should display `po-menu-logo` if have `logo`.', () => {
+    it('should display `po-logo` component if have `logo`.', () => {
       component.logo = 'https://po-ui.io/assets/graphics/po-logo-grey.svg';
 
       fixture.detectChanges();
 
-      expect(nativeElement.querySelector('img.po-menu-logo')).toBeTruthy();
-      expect(nativeElement.querySelector('img.po-menu-short-logo')).toBeNull();
+      expect(nativeElement.querySelector('po-logo')).toBeTruthy();
     });
 
-    it('should display `po-menu-short-logo` if have `shortLogo` and `enableCollapse` is true.', () => {
+    it('shouldn`t display `po-logo` component if not have `logo`.', () => {
+      expect(nativeElement.querySelector('po-logo')).toBeNull();
+    });
+
+    it('should display `po-logo` component if have `shortLogo` and `enableCollapse` is true.', () => {
       component.shortLogo = 'https://po-ui.io/assets/graphics/po-logo-grey.svg';
       spyOnProperty(component, 'enableCollapse').and.returnValue(true);
 
       fixture.detectChanges();
 
-      expect(nativeElement.querySelector('img.po-menu-short-logo')).toBeTruthy();
-      expect(nativeElement.querySelector('img.po-menu-logo')).toBeNull();
+      expect(nativeElement.querySelector('po-logo')).toBeTruthy();
     });
 
-    it('shouldn`t display `po-menu-short-logo` if have `shortLogo` but `enableCollapse` is false.', () => {
-      component.shortLogo = 'https://po-ui.io/assets/graphics/po-logo-grey.svg';
-      spyOnProperty(component, 'enableCollapse').and.returnValue(false);
-
-      fixture.detectChanges();
-
-      expect(nativeElement.querySelector('img.po-menu-short-logo')).toBeNull();
-    });
-
-    it('shouldn`t display `po-menu-short-logo` if `enableCollapse` is true but not have `shortLogo`.', () => {
-      component.shortLogo = undefined;
-      spyOnProperty(component, 'enableCollapse').and.returnValue(false);
-
-      fixture.detectChanges();
-
-      expect(nativeElement.querySelector('img.po-menu-short-logo')).toBeNull();
-    });
-
-    it('shouldn`t display `po-menu-logo` or `po-menu-short-logo` if not have `logo`, `shortLogo` and `enableCollapse` is true.', () => {
-      component.logo = undefined;
-      component.shortLogo = undefined;
-      spyOnProperty(component, 'enableCollapse').and.returnValue(true);
-
-      fixture.detectChanges();
-
-      expect(nativeElement.querySelector('img.po-menu-logo')).toBeNull();
-      expect(nativeElement.querySelector('img.po-menu-short-logo')).toBeNull();
-    });
-
-    it('shouldn`t display `po-menu-logo` or `po-menu-short-logo` if not have `logo`, `shortLogo` and `enableCollapse` is false.', () => {
-      component.logo = undefined;
-      component.shortLogo = undefined;
-      spyOnProperty(component, 'enableCollapse').and.returnValue(false);
-
-      fixture.detectChanges();
-
-      expect(nativeElement.querySelector('img.po-menu-logo')).toBeNull();
-      expect(nativeElement.querySelector('img.po-menu-short-logo')).toBeNull();
-    });
-
-    it('shouldn`t display `po-menu-logo` or `po-menu-short-logo` if the logos are defined with empty string.', () => {
-      component.logo = ' ';
-      component.shortLogo = ' ';
-      spyOnProperty(component, 'enableCollapse').and.returnValue(true);
-
-      fixture.detectChanges();
-
-      expect(nativeElement.querySelector('img.po-menu-logo')).toBeNull();
-      expect(nativeElement.querySelector('img.po-menu-short-logo')).toBeNull();
+    it('shouldn`t display `po-logo` component if not have `shortLogo`.', () => {
+      expect(nativeElement.querySelector('po-logo')).toBeNull();
     });
 
     it('should contain `po-menu-header-template` if `enableCollapse` is false and `menuHeaderTemplate` is defined', () => {
@@ -1448,10 +1485,25 @@ describe('PoMenuComponent:', () => {
       });
     });
 
-    // TODO Ng V9
-    xit('checkingRouterChildrenFragments: should return undefined if router doens`t have a `.children[`primary`]` value', () => {
-      const routerFragment = component['checkingRouterChildrenFragments']();
-      expect(routerFragment).toEqual('');
+    it('checkingRouterChildrenFragments: should return empty string if router doens`t have a `.children[`primary`]` value', () => {
+      const mockUrlTree = new UrlTree(
+        new UrlSegmentGroup([], {
+          primary: new UrlSegmentGroup([new UrlSegment('mock-segment', {})], {})
+        }),
+        { mockQueryParam: 'value' },
+        'mock-fragment'
+      );
+      mockUrlTree.root.children = {};
+
+      spyOn(component['router'], 'parseUrl').and.returnValue(mockUrlTree);
+
+      const result = component['checkingRouterChildrenFragments']();
+      expect(result).toEqual('');
+    });
+
+    it('checkingRouterChildrenFragments: should return the route that is in the value of redirectTo', () => {
+      const result = component['checkingRouterChildrenFragments']();
+      expect(result).toEqual('/home');
     });
 
     it('activateMenuByUrl: should call `activateMenuItem` and `getFormattedLink` if urlPath and menu.link have same value', done => {
@@ -1482,9 +1534,9 @@ describe('PoMenuComponent:', () => {
       });
     });
 
-    it('convertToMenuItemFiltered: should return only { link, label } if `menuItem` is an object with others properties', () => {
-      const expectedValue = { label: 'Menu 1', link: 'menu1' };
-      const menuItem = { icon: 'copy', label: 'Menu 1', link: 'menu1' };
+    it('convertToMenuItemFiltered: should return only { link, label, action } if `menuItem` is an object with others properties', () => {
+      const expectedValue = { label: 'Menu 1', link: 'menu1', action: jasmine.any(Function) };
+      const menuItem = { icon: 'copy', label: 'Menu 1', link: 'menu1', action: () => {} };
 
       const spySetMenuItemProperties = spyOn(component, <any>'setMenuItemProperties');
 
@@ -1494,15 +1546,18 @@ describe('PoMenuComponent:', () => {
       expect(spySetMenuItemProperties).toHaveBeenCalled();
     });
 
-    it('convertToMenuItemFiltered: should return { link: ``, label: `` } if `menuItem` is undefined', () => {
+    it('convertToMenuItemFiltered: should return { link: ``, label: ``, action } if `menuItem` is undefined', () => {
       const menuItem = undefined;
 
       const spySetMenuItemProperties = spyOn(component, <any>'setMenuItemProperties');
 
       const menuItemFiltered = component['convertToMenuItemFiltered'](menuItem);
 
-      expect(menuItemFiltered).toEqual(<any>{ label: '', link: '' });
+      expect(menuItemFiltered).toEqual(<any>{ label: '', link: '', action: jasmine.any(Function) });
       expect(spySetMenuItemProperties).toHaveBeenCalled();
+
+      expect(menuItemFiltered.action).toEqual(jasmine.any(Function));
+      expect(menuItemFiltered.action()).toBeUndefined();
     });
 
     it('filterLocalItems: should call `findItems` and return filtered items', () => {
@@ -1527,7 +1582,7 @@ describe('PoMenuComponent:', () => {
     });
 
     it('filterOnService: should call `getFilteredData` and return filtered menu itens from service', async () => {
-      const menuItems = [{ label: 'Menu', link: '/menu' }];
+      const menuItems = [{ label: 'Menu', link: '/menu', action: () => {} }];
       const search = 'menu';
 
       component.service = 'http://po.com.br/api';

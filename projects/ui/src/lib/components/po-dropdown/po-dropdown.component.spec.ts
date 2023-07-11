@@ -161,6 +161,7 @@ describe('PoDropdownComponent: ', () => {
     it('onScroll: should call `hideDropdown` if `open` is `true`', () => {
       component['open'] = true;
       spyOn(component, <any>'hideDropdown');
+      component.actions = [{ label: 'action1', action: () => {} }];
 
       component['onScroll']({ target: {} });
 

@@ -99,7 +99,20 @@ describe('PoTableBaseComponent:', () => {
     expectPropertiesValues(component, 'items', invalidValues, []);
   });
 
+  it('should set items with value default when invalid values if contain height', () => {
+    component.height = 400;
+    const invalidValues = [undefined, null, false, 0, 'a'];
+
+    expectPropertiesValues(component, 'items', invalidValues, []);
+  });
+
   it('should set items with values received when valid values', () => {
+    expectPropertiesValues(component, 'items', [items], [items]);
+    expectPropertiesValues(component, 'items', [], []);
+  });
+
+  it('should set items with values received when valid values if contain height', () => {
+    component.height = 400;
     expectPropertiesValues(component, 'items', [items], [items]);
     expectPropertiesValues(component, 'items', [], []);
   });
@@ -380,6 +393,14 @@ describe('PoTableBaseComponent:', () => {
     expect(component.items).toEqual(sortedItemsAsc);
   });
 
+  it('should sort values if has `p-height`', () => {
+    const column = component.columns[1];
+    const sortedItemsAsc = items.slice().sort((a, b) => a.numberData - b.numberData);
+    component.height = 300;
+    component['sortArray'](column, true);
+
+    expect(component.items).toEqual(sortedItemsAsc);
+  });
   it(`should has service and sort set 'sortStore'`, () => {
     const column = component.columns[1];
     component.serviceApi = 'https://po-ui.io';

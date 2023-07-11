@@ -19,7 +19,6 @@ export class SamplePoWidgetLabsComponent implements OnInit {
 
   public readonly propertiesOptions: Array<PoCheckboxGroupOption> = [
     { value: 'disabled', label: 'Disabled' },
-    { value: 'noShadow', label: 'No Shadow' },
     { value: 'primaryWidget', label: 'Primary Widget' }
   ];
 

@@ -18,14 +18,14 @@
   </div>
 
   <div class="po-list-view-main-content">
-    <div class="po-list-view" *ngIf="!hasItems()">
+    <po-container [p-no-padding]="true" *ngIf="!hasItems()">
       <div class="po-list-view-container-no-data po-text-center">
         <span> {{ literals.noData }} </span>
       </div>
-    </div>
+    </po-container>
 
     <ng-container *ngFor="let item of items; let index = index; trackBy: trackBy">
-      <div class="po-list-view">
+      <po-container [p-no-padding]="true">
         <div class="po-list-view-container">
           <div class="po-list-view-header">
             <div class="po-list-view-title" [ngSwitch]="checkTitleType(item)">
@@ -94,7 +94,12 @@
             </ng-template>
           </div>
 
-          <div @showHideDetail *ngIf="hasDetailTemplate && item.$showDetail" class="po-list-view-detail">
+          <div
+            @showHideDetail
+            (@showHideDetail.start)="item.$showDetail ? onAnimationEvent($event, item) : 'undefined'"
+            *ngIf="hasDetailTemplate && item.$showDetail"
+            class="po-list-view-detail"
+          >
             <ng-template
               [ngTemplateOutlet]="listViewDetailTemplate.templateRef"
               [ngTemplateOutletContext]="{ $implicit: item, index: index }"
@@ -104,11 +109,14 @@
         </div>
 
         <div *ngIf="hasDetailTemplate" class="po-list-view-detail-button">
-          <span class="po-clickable" (click)="item.$showDetail = !item.$showDetail">
-            {{ item.$showDetail ? literals.hideDetails : literals.showDetails }}
-          </span>
+          <po-button
+            p-kind="tertiary"
+            [p-label]="item.$showDetail ? literals.hideDetails : literals.showDetails"
+            (p-click)="item.$showDetail = !item.$showDetail"
+          >
+          </po-button>
         </div>
-      </div>
+      </po-container>
     </ng-container>
   </div>
 </div>

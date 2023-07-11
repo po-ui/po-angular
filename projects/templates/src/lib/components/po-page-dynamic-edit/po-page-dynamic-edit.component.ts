@@ -280,6 +280,34 @@ export class PoPageDynamicEditComponent implements OnInit, OnDestroy {
    */
   @Input('p-load') onLoad: string | (() => PoPageDynamicEditOptions);
 
+  /**
+   * @optional
+   *
+   * @description
+   *
+   * Função que será executada após ser realizada a busca dos dados.
+   *
+   * A propriedade aceita os seguintes tipos:
+   * - `function`: Método que será executado.
+   *
+   * Esta função passa por parâmetro o model e deve recebê-lo de volta com as alterações.
+   * Também aceita o retorno de um Observable com o novo model.
+   *
+   * Por exemplo:
+   *
+   * ```
+   * onLoadCustom(model) {
+   *  return { ...model, customField: 'newValue' };
+   * }
+   *
+   * ```
+   * Para referenciar a sua função utilize a propriedade `bind`, por exemplo:
+   * ```
+   *  [p-load-data]="onLoadCustom.bind(this)"
+   * ```
+   */
+  @Input('p-load-data') onLoadData: ((model: any) => any) | ((model: any) => Observable<any>);
+
   model: any = {};
 
   // beforeSave: return boolean
@@ -537,7 +565,9 @@ export class PoPageDynamicEditComponent implements OnInit, OnDestroy {
     }
 
     return this.poPageDynamicService.getResource(id).pipe(
-      tap(response => (this.model = response)),
+      tap(response => {
+        this.beforeSetModel(response);
+      }),
       catchError(error => {
         this.model = undefined;
         this.actions = undefined;
@@ -545,6 +575,25 @@ export class PoPageDynamicEditComponent implements OnInit, OnDestroy {
         return throwError(error);
       })
     );
+  }
+
+  private beforeSetModel(response: any) {
+    if (!this.onLoadData) {
+      this.model = response;
+      return;
+    }
+
+    const onLoadDataExecution = this.onLoadData(response);
+    const onLoadData$ = onLoadDataExecution instanceof Observable ? onLoadDataExecution : of(onLoadDataExecution);
+
+    onLoadData$.subscribe({
+      next: customModel => {
+        this.model = customModel;
+      },
+      error: () => {
+        this.model = response;
+      }
+    });
   }
 
   private loadOptionsOnInitialize(onLoad: UrlOrPoCustomizationFunction) {

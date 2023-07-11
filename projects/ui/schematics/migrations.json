@@ -30,6 +30,11 @@
       "version": "14",
       "description": "Atualiza @po-ui/ng-components para v14",
       "factory": "./ng-update/v14/index"
+    },
+    "migration-v15": {
+      "version": "15",
+      "description": "Atualiza @po-ui/ng-components para v15",
+      "factory": "./ng-update/v15/index"
     }
   }
 }

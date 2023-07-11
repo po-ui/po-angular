@@ -5,6 +5,7 @@
   [p-secondary-action]="secondaryActionLabel ? secondaryAction : null"
   [p-size]="size"
   [p-title]="title"
+  [p-icon]="icon"
 >
   {{ content }}
 </po-modal>
@@ -66,8 +67,10 @@
   </div>
 
   <div class="po-row">
-    <po-radio-group class="po-md-6" name="Size" [(ngModel)]="size" p-label="Size" [p-options]="sizeOptions">
+    <po-radio-group class="po-lg-6" name="Size" [(ngModel)]="size" p-label="Size" [p-options]="sizeOptions">
     </po-radio-group>
+
+    <po-select class="po-lg-6" name="icon" [(ngModel)]="icon" p-label="Icon" [p-options]="iconOptions"></po-select>
 
     <po-checkbox-group
       class="po-md-6"

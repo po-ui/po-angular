@@ -11,10 +11,14 @@ import { PoLoadingModule } from '../po-loading/po-loading.module';
 import { PoModalModule } from '../po-modal/po-modal.module';
 import { PoPopoverModule } from '../po-popover/po-popover.module';
 import { PoPopupModule } from './../po-popup/po-popup.module';
+import { PoTagModule } from '../po-tag/po-tag.module';
 import { PoTimeModule } from '../../pipes/po-time/index';
 import { PoTooltipModule } from '../../directives/po-tooltip/index';
 import { PoIconModule } from './../po-icon/po-icon.module';
 import { PoCheckboxModule } from './../po-field/po-checkbox/po-checkbox.module';
+import { PoRadioModule } from './../po-field/po-radio/po-radio.module';
+import { PoLinkModule } from '../po-link/po-link.module';
+import { PoPageSlideModule } from './../po-page/po-page-slide/po-page-slide.module';
 
 import { PoTableColumnIconComponent } from './po-table-column-icon/po-table-column-icon.component';
 import { PoTableColumnLabelComponent } from './po-table-column-label/po-table-column-label.component';
@@ -30,6 +34,7 @@ import { PoTableSubtitleFooterComponent } from './po-table-subtitle-footer/po-ta
 import { PoTableCellTemplateDirective } from './po-table-cell-template/po-table-cell-template.directive';
 import { PoTableColumnTemplateDirective } from './po-table-column-template/po-table-column-template.directive';
 import { PoTableListManagerComponent } from './po-table-list-manager/po-table-list-manager.component';
+import { PoSwitchModule } from './../po-field/po-switch/po-switch.module';
 
 /**
  * @description
@@ -48,10 +53,15 @@ import { PoTableListManagerComponent } from './po-table-list-manager/po-table-li
     PoModalModule,
     PoPopoverModule,
     PoPopupModule,
+    PoTagModule,
     PoTimeModule,
     PoTooltipModule,
     PoIconModule,
-    PoCheckboxModule
+    PoCheckboxModule,
+    PoRadioModule,
+    PoLinkModule,
+    PoPageSlideModule,
+    PoSwitchModule
   ],
   declarations: [
     PoTableComponent,

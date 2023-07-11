@@ -1,0 +1,41 @@
+<ng-container [ngSwitch]="type">
+  <div
+    *ngSwitchDefault
+    #itemList
+    [class.po-item-list__separator]="separator"
+    [class.po-item-list__disabled]="disabled || !visible"
+    [class.po-item-list__selected]="selected && !disabled"
+    [attr.aria-disabled]="disabled || !visible"
+    [attr.aria-label]="label"
+    [class.po-item-list__danger]="danger"
+    class="po-item-list po-item-list__action"
+  >
+    <po-icon *ngIf="icon" class="po-popup-icon-item po-icon" [p-icon]="icon"></po-icon>
+    <span class="po-item-list-label">{{ label }}</span>
+  </div>
+  <div
+    *ngSwitchCase="'option'"
+    #itemList
+    [class.po-item-list__separator]="separator"
+    [class.po-item-list__selected]="selected && !disabled"
+    [class.po-item-list__disabled]="disabled"
+    [attr.aria-disabled]="disabled"
+    [attr.aria-label]="label"
+    class="po-item-list po-item-list__option"
+    (click)="onSelectItem({label})"
+  >
+    <span class="po-item-list-label">{{ label }}</span>
+  </div>
+
+  <div
+    *ngSwitchCase="'check'"
+    [class.po-item-list__separator]="separator"
+    [class.po-item-list__selected]="selected && !disabled"
+    [class.po-item-list__disabled]="disabled"
+    [attr.aria-disabled]="disabled"
+    [attr.aria-label]="label"
+    class="po-item-list po-item-list__check"
+  >
+    <po-checkbox [p-label]="label" (p-change)="onSelectItem({label})" [p-disabled]="disabled"></po-checkbox>
+  </div>
+</ng-container>

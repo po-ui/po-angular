@@ -1,8 +1,10 @@
+import { PoLanguageService } from './../../services/po-language/po-language.service';
 import { PoDisclaimerBaseComponent } from './po-disclaimer-base.component';
+
 import { expectSettersMethod } from './../../util-test/util-expect.spec';
 
 describe('PoDisclaimerBaseComponent', () => {
-  const component = new PoDisclaimerBaseComponent();
+  const component = new PoDisclaimerBaseComponent(new PoLanguageService());
 
   it('should be created', () => {
     expect(component instanceof PoDisclaimerBaseComponent).toBeTruthy();
@@ -65,6 +67,11 @@ describe('PoDisclaimerBaseComponent', () => {
     component.value = 'Valor';
 
     expect(component.getLabel()).toBe('Label');
+  });
+
+  it('should set aria-label', () => {
+    component.label = 'Label';
+    expect(component.setAriaLabel()).toContain('Label Remove');
   });
 
   it('should get label as value', () => {

@@ -1,12 +1,14 @@
 <div class="po-page-login-container">
   <div class="po-page-login-panel">
-    <img
-      *ngIf="logo"
-      class="po-page-background-main-logo"
-      [class.po-page-background-hide-logo]="hideLogo"
-      alt="main-logo"
-      [src]="logo"
-    />
+    <div class="po-page-background-main-logo" [class.po-page-background-hide-logo]="hideLogo">
+      <po-logo
+        *ngIf="logo"
+        p-class="po-page-background-main-logo-image"
+        [p-link]="false"
+        [p-logo]="logo"
+        [p-logo-alt]="logoAlt"
+      ></po-logo>
+    </div>
 
     <div class="po-page-login-body">
       <div class="po-page-login-panel-content">
@@ -23,8 +25,7 @@
             [(ngModel)]="selectedLanguageOption"
             [p-options]="selectLanguageOptions"
             (p-change)="onChangeLanguage()"
-          >
-          </po-select>
+          ></po-select>
         </div>
 
         <div
@@ -35,12 +36,13 @@
               : 'po-page-background-secondary-logo-centered'
           "
         >
-          <img
+          <po-logo
             *ngIf="secondaryLogo"
-            class="po-page-background-secondary-logo-image"
-            alt="secondary-logo"
-            [src]="secondaryLogo"
-          />
+            p-class="po-page-background-secondary-logo-image"
+            [p-link]="false"
+            [p-logo]="secondaryLogo"
+            p-logo-alt="secondary-logomarca"
+          ></po-logo>
         </div>
       </div>
     </div>

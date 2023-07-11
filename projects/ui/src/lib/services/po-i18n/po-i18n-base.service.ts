@@ -1,14 +1,14 @@
 import { HttpClient } from '@angular/common/http';
-import { Directive, Inject, Injectable } from '@angular/core';
+import { Directive, Inject } from '@angular/core';
 
 import { Observable } from 'rxjs';
 
 import { isLanguage, reloadCurrentPage } from '../../utils/util';
 import { PoLanguageService } from '../po-language/po-language.service';
 
-import { I18N_CONFIG } from './po-i18n-config-injection-token';
 import { PoI18nConfig } from './interfaces/po-i18n-config.interface';
 import { PoI18nLiterals } from './interfaces/po-i18n-literals.interface';
+import { I18N_CONFIG } from './po-i18n-config-injection-token';
 
 /**
  * @description

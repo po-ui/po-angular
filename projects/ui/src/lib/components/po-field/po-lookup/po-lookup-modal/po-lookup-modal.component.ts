@@ -18,6 +18,7 @@ import { PoLookupModalBaseComponent } from '../po-lookup-modal/po-lookup-modal-b
 import { PoLanguageService } from './../../../../services/po-language/po-language.service';
 import { PoDynamicFormComponent } from './../../../po-dynamic/po-dynamic-form/po-dynamic-form.component';
 import { PoTableComponent } from './../../../po-table/po-table.component';
+import { sortArrayOfObjects } from '../../../../utils/util';
 
 /**
  * @docsPrivate
@@ -36,7 +37,6 @@ export class PoLookupModalComponent extends PoLookupModalBaseComponent implement
 
   keyUpObservable: Observable<any> = null;
 
-  containerHeight: number = 375;
   tableHeight: number;
 
   componentRef: ComponentRef<PoDynamicFormComponent>;
@@ -96,6 +96,7 @@ export class PoLookupModalComponent extends PoLookupModalBaseComponent implement
 
     this.keyUpObservable.subscribe(() => {
       this.search();
+      this.changeDetector.detectChanges();
     });
   }
 
@@ -104,6 +105,9 @@ export class PoLookupModalComponent extends PoLookupModalBaseComponent implement
   }
 
   sortBy(sort: PoTableColumnSort) {
+    const order = sort.type === 'ascending' ? true : false;
+    sortArrayOfObjects(this.items, sort.column.property, order);
+
     this.sort = sort;
   }
 
@@ -119,22 +123,7 @@ export class PoLookupModalComponent extends PoLookupModalBaseComponent implement
   }
 
   private setTableHeight() {
-    if (this.multiple) {
-      if (this.selecteds?.length !== 0) {
-        this.tableHeight = 300;
-      } else {
-        this.tableHeight = 370;
-        this.containerHeight = 375;
-      }
-    }
-
-    // precisa ser 315 por as linhas terem altura de 32px (quando tela menor que 1366px).
-    // O retorno padrão é 10 itens fazendo com que gere scroll caso houver paginação, 370 não gerava.
-    this.tableHeight = this.infiniteScroll ? 315 : 370;
-    if (window.innerHeight < 615) {
-      this.tableHeight -= 50;
-      this.containerHeight -= 50;
-    }
+    this.tableHeight = this.infiniteScroll ? 515 : 615;
   }
 
   private validateEnterPressed(e: any) {

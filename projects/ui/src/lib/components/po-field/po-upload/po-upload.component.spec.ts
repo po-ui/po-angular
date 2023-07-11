@@ -169,6 +169,68 @@ describe('PoUploadComponent:', () => {
       expect(component.isDisabled).toBeTruthy();
     });
 
+    it(`isDisabled: should return true if 'url' is undefined and autoUpload is true`, () => {
+      component.autoUpload = true;
+      component['url'] = undefined;
+      expect(component.isDisabled).toBe(true);
+    });
+
+    it(`isDisabled: should return true if 'requiredUrl' is true and 'url' is undefined`, () => {
+      spyOn(component, <any>'hasAnyFileUploading').and.returnValue(false);
+      spyOn(component, <any>'isExceededFileLimit').and.returnValue(false);
+
+      component.disabled = false;
+      component.requiredUrl = true;
+      component['url'] = undefined;
+
+      expect(component.isDisabled).toBeTruthy();
+    });
+
+    it(`isDisabled: should return false if 'requiredUrl' is true and 'url' is defined`, () => {
+      spyOn(component, <any>'hasAnyFileUploading').and.returnValue(false);
+      spyOn(component, <any>'isExceededFileLimit').and.returnValue(false);
+
+      component.disabled = false;
+      component.requiredUrl = true;
+      component['url'] = 'url.com';
+
+      expect(component.isDisabled).toBeFalsy();
+    });
+
+    it(`isDisabled: should return true if 'requiredUrl' is false and 'autoUpload' is true`, () => {
+      spyOn(component, <any>'hasAnyFileUploading').and.returnValue(false);
+      spyOn(component, <any>'isExceededFileLimit').and.returnValue(false);
+
+      component.disabled = false;
+      component.requiredUrl = false;
+      component.autoUpload = true;
+      component['url'] = undefined;
+
+      expect(component.isDisabled).toBeTruthy();
+    });
+
+    it(`isDisabled: should return true if 'disabled' is true`, () => {
+      spyOn(component, <any>'hasAnyFileUploading').and.returnValue(false);
+      spyOn(component, <any>'isExceededFileLimit').and.returnValue(false);
+
+      component.disabled = true;
+      component['url'] = 'url.com';
+      component.requiredUrl = false;
+
+      expect(component.isDisabled).toBeTruthy();
+    });
+
+    it(`isDisabled: should return true if 'isExceededFileLimit' is true`, () => {
+      spyOn(component, <any>'hasAnyFileUploading').and.returnValue(false);
+      spyOn(component, <any>'isExceededFileLimit').and.returnValue(true);
+
+      component.disabled = false;
+      component['url'] = 'url.com';
+      component.requiredUrl = false;
+
+      expect(component.isDisabled).toBeTruthy();
+    });
+
     it('maxFiles: should return false if `isMultiple` is false', () => {
       component.isMultiple = false;
 
@@ -243,6 +305,15 @@ describe('PoUploadComponent:', () => {
       spyOn(component, <any>'hasFileNotUploaded').and.returnValue(false);
 
       expect(component.displaySendButton).toBeFalsy();
+    });
+
+    it(`displaySendButton: should display the button when 'displaySendButton' is true and 'url' is truthy`, () => {
+      spyOnProperty(component, 'displaySendButton').and.returnValue(true);
+      component.url = 'http://example.com';
+      fixture.detectChanges();
+
+      const buttonElement = fixture.nativeElement.querySelector('.po-upload-send-button');
+      expect(buttonElement).toBeTruthy();
     });
 
     it('infoByUploadStatus: should return info by uploaded status', () => {

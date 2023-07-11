@@ -79,7 +79,7 @@ export interface PoPopupAction {
    *
    * Valores válidos:
    *  - `default`
-   *  - `danger`
+   *  - `danger` - indicado para ações exclusivas (excluir, sair).
    */
   type?: string;
 

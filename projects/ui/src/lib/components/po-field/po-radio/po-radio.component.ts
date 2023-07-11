@@ -3,9 +3,11 @@ import {
   ChangeDetectorRef,
   Component,
   ElementRef,
+  EventEmitter,
   forwardRef,
   HostListener,
   Input,
+  Output,
   Renderer2,
   ViewChild
 } from '@angular/core';
@@ -61,6 +63,9 @@ export class PoRadioComponent extends PoFieldModel<boolean> {
   /** Define o status do *radio* */
   @Input('p-checked') checked: boolean = false;
 
+  /** Emite evento para a tabela ao selecionar ou desselecionar */
+  @Output('p-change-selected') changeSelected: EventEmitter<any> = new EventEmitter<any>();
+
   constructor(private changeDetector: ChangeDetectorRef, private renderer: Renderer2) {
     super();
   }
@@ -87,6 +92,7 @@ export class PoRadioComponent extends PoFieldModel<boolean> {
   focus(): void {
     if (!this.disabled) {
       this.radioInput.nativeElement.focus();
+      this.onKeyup();
     }
   }
 
@@ -112,6 +118,7 @@ export class PoRadioComponent extends PoFieldModel<boolean> {
     if (!this.disabled) {
       this.changeValue(!this.value);
       this.changeDetector.detectChanges();
+      this.changeSelected.emit(null);
     }
   }
 

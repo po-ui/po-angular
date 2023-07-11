@@ -87,6 +87,10 @@ export abstract class PoInputGeneric extends PoInputBaseComponent implements Aft
       this.inputEl.nativeElement.value = this.objMask.valueToInput;
       value = this.objMask.valueToModel;
     }
+    this.inputEl.nativeElement.value = this.upperCase
+      ? String(this.inputEl.nativeElement.value).toUpperCase()
+      : this.inputEl.nativeElement.value;
+    value = this.upperCase ? value.toUpperCase() : value;
     this.callOnChange(value);
   }
 

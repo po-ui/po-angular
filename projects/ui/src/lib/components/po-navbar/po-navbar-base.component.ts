@@ -1,8 +1,8 @@
-import { Input, Directive } from '@angular/core';
+import { Directive, Input } from '@angular/core';
 
-import { convertToBoolean } from '../../utils/util';
-import { PoLanguageService } from '../../services/po-language/po-language.service';
 import { poLocaleDefault } from '../../services/po-language/po-language.constant';
+import { PoLanguageService } from '../../services/po-language/po-language.service';
+import { convertToBoolean } from '../../utils/util';
 import { PoMenuComponent } from '../po-menu';
 
 import { PoNavbarIconAction } from './interfaces/po-navbar-icon-action.interface';
@@ -135,6 +135,20 @@ export abstract class PoNavbarBaseComponent {
   get logo() {
     return this._logo;
   }
+
+  /**
+   * @optional
+   *
+   * @description
+   *
+   * Define o texto alternativo para a logomarca.
+   *
+   * > **Importante**
+   * > Caso esta propriedade não seja definida o texto padrão será "Logomarca início".
+   *
+   * @default `Logomarca início`
+   */
+  @Input('p-logo-alt') logoAlt?: string;
 
   /**
    * @optional

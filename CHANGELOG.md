@@ -2,26 +2,281 @@
 
 All notable changes to this project will be documented in this file. See [standard-version](https://github.com/conventional-changelog/standard-version) for commit guidelines.
 
-# [15.0.0-next.1](https://github.com/po-ui/po-angular/compare/v14.12.2...v15.0.0-next.1) (2022-12-19)
-
-
-### Build System
-
-* atualização para o angular 15 ([6339a2b](https://github.com/po-ui/po-angular/commit/6339a2be6de33d6a3367562d663f893d59efa683))
-* remove HttpClientModule ([e76556c](https://github.com/po-ui/po-angular/commit/e76556cbbe28d8c84a4c35eed91db63d21077892))
-
-
-### Code Refactoring
-
-* **button:** remove a propriedade p-type ([a227cb6](https://github.com/po-ui/po-angular/commit/a227cb6150f6a3bb9259a076cd3370ebc3ca9edc))
+# [15.12.0](https://github.com/po-ui/po-angular/compare/v15.11.0...v15.12.0) (2023-07-07)
 
 
 ### Features
 
-* **schematics:** adiciona módulo HttpClientModule ([e61551d](https://github.com/po-ui/po-angular/commit/e61551dc1c8aaa52825443650bf1ad73e5c3f81f))
+* **menu:** adiciona propriedade `action` a interface `PoMenuItemFiltered` ([b5d09fd](https://github.com/po-ui/po-angular/commit/b5d09fd8609300816cd8fcf4e35320e8353d74a3))
+
+
+
+# [15.11.0](https://github.com/po-ui/po-angular/compare/v15.10.0...v15.11.0) (2023-07-03)
+
+
+### Bug Fixes
+
+* **page-login:** centraliza propriedades p-environment e p-product-name ([93f9f6d](https://github.com/po-ui/po-angular/commit/93f9f6d978f9f2cd5901acf432c07c94f52dfdad)), closes [#1743](https://github.com/po-ui/po-angular/issues/1743)
+
+
+### Features
+
+* **number:** adiciona evento para tecla enter ([a91bd3f](https://github.com/po-ui/po-angular/commit/a91bd3f727a0fbacfaffcad6f5919ff66efc4c58))
+* **theme-builder:** implementa criação do novo construtor de temas ([a4b051c](https://github.com/po-ui/po-angular/commit/a4b051c34d24b1a0de90fe4b5b1a9fd02ed12670))
+
+
+
+# [15.10.0](https://github.com/po-ui/po-angular/compare/v15.9.2...v15.10.0) (2023-06-27)
+
+
+### Features
+
+* **table:** implementa definições do AnimaliaDS ([328aaa0](https://github.com/po-ui/po-angular/commit/328aaa099e7d7fb84f77c2b03ad3563154da7cdd))
+
+
+
+# [15.9.2](https://github.com/po-ui/po-angular/compare/v15.9.1...v15.9.2) (2023-06-19)
+
+
+### Bug Fixes
+
+* **datepicker:** corrige exibição de horário em formatação extendida ([7dc3e46](https://github.com/po-ui/po-angular/commit/7dc3e46e8a74c1c28f498cfe26a3b8cf24dac679)), closes [#1725](https://github.com/po-ui/po-angular/issues/1725)
+* **dynamic-search:** corrige formatação de valores do filtro avançado ([4a6e2dc](https://github.com/po-ui/po-angular/commit/4a6e2dc8565c7dfa0b8273dda23eb55de1642ee0)), closes [#890](https://github.com/po-ui/po-angular/issues/890)
+* **lookup:** corrige formatação e exibição de valores do filtro avançado ([8e9aa43](https://github.com/po-ui/po-angular/commit/8e9aa43d5350ada1afdcc5b1f4fbd43d01f9872e)), closes [#890](https://github.com/po-ui/po-angular/issues/890)
+* **multiselect:** corrige retorno de opções sem label e value definidos ([a305a6f](https://github.com/po-ui/po-angular/commit/a305a6f2cd32df0d06e334aec44d274e785456cf)), closes [#890](https://github.com/po-ui/po-angular/issues/890)
+* **radio-group:** corrige método focus ([39e7ae4](https://github.com/po-ui/po-angular/commit/39e7ae4c7a8fe42612c49f95ef83f0c012ac47d2)), closes [#1717](https://github.com/po-ui/po-angular/issues/1717)
+
+
+### Features
+
+* **combo:** cria nova propriedade `p-remove-initial-filter` ([b2d8ea1](https://github.com/po-ui/po-angular/commit/b2d8ea1955b2270512855ce5af911a90dc164896))
+
+
+
+## [15.9.1](https://github.com/po-ui/po-angular/compare/v15.9.0...v15.9.1) (2023-06-05)
+
+
+### Bug Fixes
+
+* **decimal:** corrige o uso de hífens, pontos e espaços ([e203ca4](https://github.com/po-ui/po-angular/commit/e203ca4fd0389567b6a8076d6d855b9612907e18))
+
+
+
+# [15.9.0](https://github.com/po-ui/po-angular/compare/v15.8.2...v15.9.0) (2023-05-26)
+
+
+### Features
+
+* **tag:** implementa novas propriedades ([9b6db42](https://github.com/po-ui/po-angular/commit/9b6db42a59262a28d8542ddec8900fd3b6291a3b))
+
+
+
+## [15.8.2](https://github.com/po-ui/po-angular/compare/v15.8.1...v15.8.2) (2023-05-24)
+
+
+### Bug Fixes
+
+* **table:** alinha colunas do tipo number e currency à direita ([d4bc670](https://github.com/po-ui/po-angular/commit/d4bc6706608813205abd562ab885af701fb3bef7)), closes [#1352](https://github.com/po-ui/po-angular/issues/1352)
+* **table:** corrige exibição de colunas do tipo label ([e66f74a](https://github.com/po-ui/po-angular/commit/e66f74ac6298c6015bb49bdfe8f0b452017ce430))
+
+
+
+## [15.8.1](https://github.com/po-ui/po-angular/compare/v15.8.0...v15.8.1) (2023-05-22)
+
+
+### Bug Fixes
+
+* **i18n:** corrige importação de dependência no módulo do componente ([82707e1](https://github.com/po-ui/po-angular/commit/82707e108c4846823866651728e99d762a2bd4bc))
+* **lookup:** corrige efeito de loading no po-lookup-modal ([23e6d02](https://github.com/po-ui/po-angular/commit/23e6d023d1480e3c943650c0cbba0f80bc314fef)), closes [#1679](https://github.com/po-ui/po-angular/issues/1679)
+
+
+# [15.8.0](https://github.com/po-ui/po-angular/compare/v15.7.1...v15.8.0) (2023-05-12)
+
+
+### Features
+
+* **list-view:** utiliza o `po-button` para exibir os detalhes da lista([625f35a](https://github.com/po-ui/po-angular/commit/625f35a58594a83929b5424eab1e10422f4e4595))
+* **lookup:** exposição de propriedade interna de Subscription do lookup([5ef4c5c](https://github.com/po-ui/po-angular/commit/5ef4c5cb702a97ebc7292631cc2916b91f04826a))
+* **upload:** exporta PoUploadFile e UploadStatusEnum ([a9c0637](https://github.com/po-ui/po-angular/commit/a9c0637f9bdbb4fd701b032d87490ef0f2076964))
+
+
+
+## [15.7.1](https://github.com/po-ui/po-angular/compare/v15.7.0...v15.7.1) (2023-05-08)
+
+
+### Bug Fixes
+
+* **toaster:** ajusta empilhamento das notificações ([4a5ae72](https://github.com/po-ui/po-angular/commit/4a5ae72b6b873bd746313c6b0bb1d7ad2e6d1c2c))
+
+
+
+# [15.7.0](https://github.com/po-ui/po-angular/compare/v15.6.1...v15.7.0) (2023-04-20)
+
+
+### Features
+
+* **multiselect:** permite utilizar template customizado([3ba4a7a](https://github.com/po-ui/po-angular/commit/3ba4a7ab2b49859f35d50ffa1c78743302086662))
+* **table:** reutiliza componente `link`([2f7a0c5](https://github.com/po-ui/po-angular/commit/2f7a0c5d31f6916c33888d225cfdbda9e72eddbd))
+* **upload:** adiciona propriedade `p-required-url` para habilitar o componente sem passar `p-url`([ba30e19](https://github.com/po-ui/po-angular/commit/ba30e190974f314db7cec552c6e85546dd9b4336))
+
+
+
+## [15.6.1](https://github.com/po-ui/po-angular/compare/v15.6.0...v15.6.1) (2023-04-17)
+
+
+### Bug Fixes
+
+* **number:** desativa ação de incremento e decremento ([4366581](https://github.com/po-ui/po-angular/commit/4366581de3fb1465f235db5f8c9dd37fb47fbe6f)), closes [#1650](https://github.com/po-ui/po-angular/issues/1650)
+
+
+
+# [15.6.0](https://github.com/po-ui/po-angular/compare/v15.5.1...v15.6.0) (2023-04-06)
+
+
+### Bug Fixes
+
+* **popup:** corrige emissão de evento quando os valores não são definidos ([2236e26](https://github.com/po-ui/po-angular/commit/2236e267098feb4b931893b09b81b3f11257f03f)), closes [#1677](https://github.com/po-ui/po-angular/issues/1677)
+
+
+### Features
+
+* **checkbox:** implementa definições do AnimaliaDS ([9e944db](https://github.com/po-ui/po-angular/commit/9e944dbba5d05bb0b51d3876c86f5ed24765afe5))
+* **combo:** adiciona opção que desativa o armazenamento do último valor ([c065bff](https://github.com/po-ui/po-angular/commit/c065bff70d5e76a7c35878f40e077ddb22d549a2)), closes [#1656](https://github.com/po-ui/po-angular/issues/1656)
+* **list-view:** melhora contraste do componente ([abd74e4](https://github.com/po-ui/po-angular/commit/abd74e44c8ebece01606304c04330aac36109ef6)), closes [#1594](https://github.com/po-ui/po-angular/issues/1594)
+* **page-dynamic-edit:** adiciona p-load-data ([3557103](https://github.com/po-ui/po-angular/commit/3557103c34718e02efd0337f1ae839fff9b84d64)), closes [#1633](https://github.com/po-ui/po-angular/issues/1633)
+
+
+
+## [15.5.1](https://github.com/po-ui/po-angular/compare/v15.5.0...v15.5.1) (2023-04-03)
+
+
+### Bug Fixes
+
+* **popup:** corrige emissão de evento ([2b758d0](https://github.com/po-ui/po-angular/commit/2b758d0b44084f0d134110291dccc023fce5fdd8))
+
+
+
+# [15.5.0](https://github.com/po-ui/po-angular/compare/v15.4.0...v15.5.0) (2023-03-27)
+
+
+### Bug Fixes
+
+* **table:** mantém ordenação em tabela sem altura ([a2ac572](https://github.com/po-ui/po-angular/commit/a2ac57230fe8b1298c07ffaf96be7b432e45f77d))
+
+
+### Features
+
+* **dropdown:** implementa definições do AnimaliaDS ([dafe217](https://github.com/po-ui/po-angular/commit/dafe217f882a0f281757fedeb2dfdde290f6df82))
+* **list-view:** adiciona evento no botão de mostrar detalhes ([30df1ea](https://github.com/po-ui/po-angular/commit/30df1ea78bc4f7d665f2926985428e007132bc1c))
+* **table:** reutiliza o componente `po-radio` ([81eef51](https://github.com/po-ui/po-angular/commit/81eef511b325235e9308f68e6aa2b127244d3bb6))
+* **theme-builder:** inclui componentes ([bd76205](https://github.com/po-ui/po-angular/commit/bd7620511abf375b6fdd06b468ca08d87620dea9))
+
+
+
+# [15.4.0](https://github.com/po-ui/po-angular/compare/v15.3.0...v15.4.0) (2023-03-20)
+
+
+### Bug Fixes
+
+* **dynamic-table:** arruma acúmulo de registro ([8b680ca](https://github.com/po-ui/po-angular/commit/8b680ca0386dd53b74e38a2682f7fe826e39c8fe))
+* **lookup:** arruma acúmulo de registro ([31eed3c](https://github.com/po-ui/po-angular/commit/31eed3c279c1969ce3d743dbca233617ade2e183))
+* **table:** arruma acúmulo de registro ([9cefeb1](https://github.com/po-ui/po-angular/commit/9cefeb1d2f68f05ff8863bd02e23f02e7be3a249))
+
+
+### Features
+
+* **table:** repassa propriedades do `po-tag` ([9efbbd1](https://github.com/po-ui/po-angular/commit/9efbbd197e186c02b663aaeaf041b1b22e216d28))
+
+
+
+# [15.3.0](https://github.com/po-ui/po-angular/compare/v15.2.0...v15.3.0) (2023-03-13)
+
+
+### Bug Fixes
+
+* **calendar:** corrige seleção de data e sequência de meses ([41e6ab3](https://github.com/po-ui/po-angular/commit/41e6ab35ab9ae51af31162e667b57f2f4607685e))
+* **dynamic-table:** corrige paginação dos itens ([5f723f1](https://github.com/po-ui/po-angular/commit/5f723f16aa8fdc417516b4265495e7e86c0b4746))
+* **number:** ajusta o comportamento das teclas `Home` e `End` ([3c87484](https://github.com/po-ui/po-angular/commit/3c87484011c3a7f4206de0e5c4c8dfe7a5d31887)), closes [#1233](https://github.com/po-ui/po-angular/issues/1233)
+
+
+### Features
+
+* **dynamic-view:** permitir passar `options` e atribuir `label` ([ddba431](https://github.com/po-ui/po-angular/commit/ddba4314a25ead7640ac83de284835a959fa90d7))
+* **modal:** implementa definições do AnimaliaDS ([465df73](https://github.com/po-ui/po-angular/commit/465df734c0bf0843726e497045d6c7db2039a7f1))
+
+
+
+# [15.2.0](https://github.com/po-ui/po-angular/compare/v15.1.1...v15.2.0) (2023-02-27)
+
+
+### Bug Fixes
+
+* **tabs:** adiciona tradução para a palavra "Mais" ([270b8a7](https://github.com/po-ui/po-angular/commit/270b8a7d201c453ee6feb18cf29040a22e4d8918)), closes [#1577](https://github.com/po-ui/po-angular/issues/1577)
+
+
+### Features
+
+* **input:** adiciona a propriedade `p-upper-case` ([8e5f683](https://github.com/po-ui/po-angular/commit/8e5f6834884d7370e962267c417761f078bf4300)), closes [#1520](https://github.com/po-ui/po-angular/issues/1520)
+* **popup:** implementa novo componente interno `po-listbox` ([0cd58b8](https://github.com/po-ui/po-angular/commit/0cd58b884f1240430183728dad16a75a4bfd733b))
+* **schematics:** implementa ng update do po-sync ([d59ab50](https://github.com/po-ui/po-angular/commit/d59ab50f033a74671075cbad0c788893bcc91044))
+* **sync:** altera dependência do cordova para o capacitor ([fdd5a2c](https://github.com/po-ui/po-angular/commit/fdd5a2c7c4811f4cee90de5d9bb036e90f3d60c2))
+* **logo:** novo componente interno `po-logo`, implementado nos seguintes componentes:  ([3e0ccd6](https://github.com/po-ui/po-angular/commit/3e0ccd631b7fd7bf68531d9f07fb990778e10a52))
+
+- po-menu 
+- po-menu-panel
+- po-navbar
+- po-page-background
+
+
+
+## [15.1.1](https://github.com/po-ui/po-angular/compare/v15.1.0...v15.1.1) (2023-02-13)
+
+
+### Bug Fixes
+
+* **page-dynamic-table:** corrige ordenação após paginação ([39d3fd3](https://github.com/po-ui/po-angular/commit/39d3fd3975556a7c200d243723ca021e973b67a1))
+* **select:** ajusta a exibição da opção quando o `value` igual a zero ([a86c685](https://github.com/po-ui/po-angular/commit/a86c68598e429601a65ad3f61c9c11d1cb34af6d)), closes [#1473](https://github.com/po-ui/po-angular/issues/1473)
+* **combo:** corrige texto sobrepondo o `clean` ([f2ff575](https://github.com/po-ui/po-style/commit/f2ff575748dce30a50fafba2c7656bf88582dc1e))
+
+
+
+# [15.1.0](https://github.com/po-ui/po-angular/compare/v15.0.1...v15.1.0) (2023-02-06)
+
+
+### Bug Fixes
+
+* **tooltip:** corrige remoção de tooltip em coluna do tipo link ([e350185](https://github.com/po-ui/po-angular/commit/e3501856338023679ef19fe3e8559a9870c037a9))
+
+
+### Features
+
+* **datepicker-range:** suporte locale russo ([c2cd165](https://github.com/po-ui/po-angular/commit/c2cd1656415f94a857498c07c093fba43b14a77f))
+* **image:** implementa diretiva NgOptimizedImage ([b5a94a6](https://github.com/po-ui/po-angular/commit/b5a94a6594021f0dc095f3323611fde92b8b18f5))
+* **table:** utiliza po-tag para exibir o label ([63771fc](https://github.com/po-ui/po-angular/commit/63771fcdd3c6b196ba452d642eda8b6a5f2f414d)), closes [#1421](https://github.com/po-ui/po-angular/issues/1421)
+* **theme-builder:** cria pagina de theme builder ([cab054b](https://github.com/po-ui/po-angular/commit/cab054bbb098060f8d68470dd8cd3cd9d3d00167))
+
+
+
+## [15.0.1](https://github.com/po-ui/po-angular/compare/v15.0.0...v15.0.1) (2023-01-30)
+
+
+### Bug Fixes
+
+* **combo:** corrige carregamento da lista após limpar campo ([829c488](https://github.com/po-ui/po-angular/commit/829c488486739c979b1a0b93236bc58790aafd04))
+* **widget:** corrige borda sendo apagada com `p-no-shadow` ([7ab3e6d](https://github.com/po-ui/po-angular/commit/7ab3e6d66b8506293160f06ec0b77d710fc10e09))
+
+
+
+# [15.0.0](https://github.com/po-ui/po-angular/compare/v14.12.2...v15.0.0) (2023-01-20)
 
 
 ### BREAKING CHANGES
+
+* **angular:** deve ser utilizado o Angular v15
+
+Atualize seu projeto para utilizar a versão 15 do Angular, acesse a documentação [Guia de Atualização do Angular](https://update.angular.io/) para fazer a migração completa.
+
+Veja nossa [**documentação para fazer a migração**](https://po-ui.io/guides/migration-poui) para a versão 15
 
 * Remove `HttpClientModule`.
 
@@ -33,9 +288,34 @@ da aplicação para o correto funcionamento da biblioteca.
 * **button:** removida propriedade p-type
 
 Foi removida a propriedade p-type do po-button pois a mesma foi depreciada na versão 15.x.x. Utilizar p-kind no lugar.
-* deve ser utilizado o Angular v15
 
 
+### Bug Fixes
+
+* **fields:** adiciona configuração no field module ([9a48e5c](https://github.com/po-ui/po-angular/commit/9a48e5c8e952519e10ce1c557eee49802854f4d5))
+* **i18n:** corrige erro no console ([7cb685f](https://github.com/po-ui/po-angular/commit/7cb685fe3f11bb1610c5ed1bf58b94d403bf0af2))
+* **modal:** corrige string em russo [#1568](https://github.com/po-ui/po-angular/issues/1568) ([2efc30f](https://github.com/po-ui/po-angular/commit/2efc30f3a1803e0bd8a9bf214442513ea38a2aa3))
+* **tag:** altera cor do texto ([3754acd](https://github.com/po-ui/po-angular/commit/3754acdec9f080e035178a1452ab6691599d805c))
+
+### Build System
+
+* atualização para o angular 15 ([6339a2b](https://github.com/po-ui/po-angular/commit/6339a2be6de33d6a3367562d663f893d59efa683))
+* remove HttpClientModule ([e76556c](https://github.com/po-ui/po-angular/commit/e76556cbbe28d8c84a4c35eed91db63d21077892))
+
+### Code Refactoring
+
+* **button:** remove a propriedade p-type ([a227cb6](https://github.com/po-ui/po-angular/commit/a227cb6150f6a3bb9259a076cd3370ebc3ca9edc))
+
+
+### Features
+
+* **modal:** adiciona evento `p-close` ([04784de](https://github.com/po-ui/po-angular/commit/04784dee10bef56635d2beee5c26564a9175c135)), closes [#1217](https://github.com/po-ui/po-angular/issues/1217)
+
+* **schematics:** implementa ng update ([c4eb46b](https://github.com/po-ui/po-angular/commit/c4eb46b82eb2f08f42aff40b6b732437954353c3))
+
+* **schematics:** adiciona módulo HttpClientModule ([e61551d](https://github.com/po-ui/po-angular/commit/e61551dc1c8aaa52825443650bf1ad73e5c3f81f))
+
+* **disclaimer:** adiciona `literals` para o botão de remover ([523a110](https://github.com/po-ui/po-angular/commit/523a110fcdcfc47e87d0b38cda69514efc309c81))
 
 
 ## [14.12.2](https://github.com/po-ui/po-angular/compare/v14.12.1...v14.12.2) (2022-12-12)

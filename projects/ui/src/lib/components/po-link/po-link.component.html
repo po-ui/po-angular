@@ -1,9 +1,11 @@
-<a
-  (click)="onClick()"
-  [attr.role]="isActionUsed && !url ? 'button' : null"
-  tabindex="0"
-  class="po-link"
-  [attr.href]="url"
-  [attr.target]="openNewTab ? '_blank' : undefined"
-  >{{ label }}</a
->
+<ng-container [ngSwitch]="type">
+  <button *ngSwitchCase="'action'" class="po-link" type="button" (click)="onClick()">{{ label }}</button>
+
+  <a *ngSwitchCase="'externalLink'" class="po-link" [href]="url" [target]="openNewTab ? '_blank' : '_self'">{{
+    label
+  }}</a>
+
+  <a *ngSwitchCase="'internalLink'" class="po-link" [routerLink]="url">{{ label }}</a>
+
+  <a *ngSwitchDefault class="po-link" [href]="url">{{ label }}</a>
+</ng-container>

@@ -1,4 +1,7 @@
 import { Directive, Input } from '@angular/core';
+import { isValidImageBase64 } from '../../utils/util';
+
+type PoImageLoading = 'lazy' | 'eager' | 'auto';
 
 /**
  * @description
@@ -29,6 +32,9 @@ import { Directive, Input } from '@angular/core';
  */
 @Directive()
 export class PoImageBaseComponent {
+  isBase64: boolean = false;
+  private _source: string;
+
   /**
    * @optional
    *
@@ -56,5 +62,46 @@ export class PoImageBaseComponent {
    * Fonte da imagem que pode ser um caminho local (`./assets/images/logo-black-small.png`)
    * ou um servidor externo (`https://po-ui.io/assets/images/logo-black-small.png`).
    */
-  @Input('p-src') source: string;
+  @Input('p-src') set source(value: string) {
+    if (isValidImageBase64(value)) {
+      this.isBase64 = true;
+    }
+    this._source = value;
+  }
+
+  get source(): string {
+    return this._source;
+  }
+
+  /**
+   * @optional
+   *
+   * @description
+   *
+   * Defini a prioridade de carregamento da imagem.
+   * > Para as imagens com carregamento prioritátio ativo é necessário incluir
+   * > uma tag link no head do arquivo index.html da sua aplicação.
+   *
+   * ```
+   * <link rel="preconnect" href="<url_base_da_imagem>">
+   * ```
+   *
+   * @default `false`
+   */
+  @Input('p-priority') priority: boolean = false;
+
+  /**
+   * @optional
+   *
+   * @description
+   *
+   * Defini o carregamento que pode ser dos tipo:
+   *
+   * — lazy
+   * — eager
+   * — auto
+   *
+   * > Não é permitido definir esta propriedade em conjunto com a propriedade `p-priority`.
+   */
+  @Input('p-loading') loading?: PoImageLoading;
 }

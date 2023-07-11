@@ -1,46 +1,31 @@
-import { Input, Directive } from '@angular/core';
+import { Directive, Input } from '@angular/core';
 
-import {
-  browserLanguage,
-  convertToBoolean,
-  convertToInt,
-  isExternalLink,
-  isTypeof,
-  validValue,
-  uuid
-} from '../../utils/util';
+import { convertToBoolean, convertToInt, isExternalLink, isTypeof, uuid, validValue } from '../../utils/util';
 
+import { PoLanguageService } from '../../services/po-language/po-language.service';
 import { PoMenuFilter } from './po-menu-filter/po-menu-filter.interface';
 import { PoMenuItem } from './po-menu-item.interface';
-import { PoMenuService } from './services/po-menu.service';
 import { PoMenuGlobalService } from './services/po-menu-global.service';
-import { PoLanguageService } from '../../services/po-language/po-language.service';
-import { poLocaleDefault } from '../../services/po-language/po-language.constant';
+import { PoMenuService } from './services/po-menu.service';
 
 export const poMenuLiteralsDefault = {
   en: {
     itemNotFound: 'Item not found.',
-    emptyLabelError: 'Attribute PoMenuItem.label can not be empty.',
-    logomarcaHome: 'Home logo'
+    emptyLabelError: 'Attribute PoMenuItem.label can not be empty.'
   },
   es: {
     itemNotFound: 'Elemento no encontrado.',
-    emptyLabelError: 'El atributo PoMenuItem.label no puede ser vacío.',
-    logomarcaHome: 'Logomarca inicio'
+    emptyLabelError: 'El atributo PoMenuItem.label no puede ser vacío.'
   },
   pt: {
     itemNotFound: 'Item não encontrado.',
-    emptyLabelError: 'O atributo PoMenuItem.label não pode ser vazio.',
-    logomarcaHome: 'Logomarca home'
+    emptyLabelError: 'O atributo PoMenuItem.label não pode ser vazio.'
   },
   ru: {
     itemNotFound: 'Предмет не найден.',
-    emptyLabelError: 'Атрибут PoMenuItem.label не может быть пустым.',
-    logomarcaHome: 'Дом Логомарка'
+    emptyLabelError: 'Атрибут PoMenuItem.label не может быть пустым.'
   }
 };
-
-export const MAX_LENGHT: number = 125;
 
 /**
  * @description
@@ -66,13 +51,10 @@ export abstract class PoMenuBaseComponent {
   private _collapsed = false;
   private _filter = false;
   private _level;
-  private _logo: string;
-  private _logoAlt: string = this.literals.logomarcaHome;
   private _maxLevel = 4;
   private _menus = [];
   private _params: any;
   private _service: string | PoMenuFilter;
-  private _shortLogo: string;
 
   /**
    * @optional
@@ -220,31 +202,21 @@ export abstract class PoMenuBaseComponent {
    * - Como boa prática, indica-se utilizar imagens com até `24px` de altura e `224px` de largura,
    * caso ultrapassar esses valores a imagem será readequada no espaço disponível.
    */
-  @Input('p-logo') set logo(value: any) {
-    this._logo = isTypeof(value, 'string') && value.trim() ? value : undefined;
-  }
-
-  get logo() {
-    return this._logo;
-  }
+  @Input('p-logo') logo?: string;
 
   /**
    * @optional
    *
    * @description
    *
-   * Texto alternativo para o logo.
+   * Define o texto alternativo para a logomarca.
    *
-   * > Caso esta propriedade seja indefinida ou inválida o texto padrão será "Logomarca home".
+   * > **Importante**
+   * > Caso esta propriedade não seja definida o texto padrão será "Logomarca início".
+   *
+   * @default `Logomarca início`
    */
-  @Input('p-logo-alt') set logoAlt(value: string) {
-    const alt = isTypeof(value, 'string') && value.trim() ? this.maxLength(value) : undefined;
-    this._logoAlt = alt ?? this._logoAlt;
-  }
-
-  get logoAlt() {
-    return this._logoAlt;
-  }
+  @Input('p-logo-alt') logoAlt?: string;
 
   /**
    * @optional
@@ -260,13 +232,7 @@ export abstract class PoMenuBaseComponent {
    * caso ultrapassar esses valores a imagem será readequada no espaço disponível.
    * - Caso não informar um valor, esta propriedade passa a assumir o valor informado na propriedade `p-logo`.
    */
-  @Input('p-short-logo') set shortLogo(value: any) {
-    this._shortLogo = isTypeof(value, 'string') && value.trim() ? value : undefined;
-  }
-
-  get shortLogo() {
-    return this._shortLogo;
-  }
+  @Input('p-short-logo') shortLogo: string;
 
   constructor(
     public menuGlobalService: PoMenuGlobalService,
@@ -380,10 +346,6 @@ export abstract class PoMenuBaseComponent {
         this.validateMenu(subItem);
       });
     }
-  }
-
-  private maxLength(value: string) {
-    return value.length > MAX_LENGHT ? value.toString().substring(0, MAX_LENGHT) : value;
   }
 
   protected abstract checkActiveMenuByUrl(urlRouter);

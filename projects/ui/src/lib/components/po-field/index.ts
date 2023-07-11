@@ -26,6 +26,7 @@ export * from './po-lookup/interfaces/po-lookup-literals.interface';
 export * from './po-lookup/interfaces/po-lookup-response-api.interface';
 export * from './po-lookup/po-lookup-modal/po-lookup-modal.component';
 export * from './po-lookup/po-lookup.component';
+export * from './po-multiselect/po-multiselect-option-template/po-multiselect-option-template.directive';
 export * from './po-multiselect/po-multiselect-filter-mode.enum';
 export * from './po-multiselect/po-multiselect-literals.interface';
 export * from './po-multiselect/po-multiselect-option.interface';
@@ -43,6 +44,8 @@ export * from './po-switch/po-switch.component';
 export * from './po-textarea/po-textarea.component';
 export * from './po-upload/interfaces/po-upload-file-restriction.interface';
 export * from './po-upload/interfaces/po-upload-literals.interface';
+export * from './po-upload/po-upload-file';
+export * from './po-upload/po-upload-status.enum';
 export * from './po-upload/po-upload.component';
 export * from './po-url/po-url.component';
 export * from './po-radio/po-radio.component';
@@ -50,8 +53,11 @@ export * from './po-radio/po-radio.component';
 export * from './po-checkbox-group/po-checkbox-group.module';
 export * from './po-datepicker/po-datepicker.module';
 export * from './po-checkbox/po-checkbox.module';
+export * from './po-radio-group/po-radio-group.module';
+export * from './po-radio/po-radio.module';
 
 export * from './po-field.module';
+export * from './po-switch/index';
 
 export * from './po-field-container/index';
 export * from './po-clean/index';

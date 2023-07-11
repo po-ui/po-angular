@@ -5,6 +5,8 @@ import { FormsModule } from '@angular/forms';
 import { PoButtonGroupModule } from '../po-button-group/index';
 import { PoButtonModule } from '../po-button/index';
 import { PoCheckboxGroupModule } from './po-checkbox-group/po-checkbox-group.module';
+import { PoRadioGroupModule } from './po-radio-group/po-radio-group.module';
+import { PoRadioModule } from './po-radio/po-radio.module';
 import { PoContainerModule } from '../po-container/index';
 import { PoCalendarModule } from '../po-calendar/po-calendar.module';
 import { PoCleanModule } from './po-clean/po-clean.module';
@@ -19,9 +21,11 @@ import { PoServicesModule } from '../../services/services.module';
 import { PoTableModule } from '../po-table/po-table.module';
 import { PoTooltipModule } from './../../directives/po-tooltip/po-tooltip.module';
 import { PoIconModule } from '../po-icon/po-icon.module';
+import { PoListBoxModule } from '../po-listbox/po-listbox.module';
 
 import { PoComboComponent } from './po-combo/po-combo.component';
 import { PoComboOptionTemplateDirective } from './po-combo/po-combo-option-template/po-combo-option-template.directive';
+import { PoMultiselectOptionTemplateDirective } from './po-multiselect/po-multiselect-option-template/po-multiselect-option-template.directive';
 import { PoDatepickerComponent } from './po-datepicker/po-datepicker.component';
 import { PoDatepickerRangeComponent } from './po-datepicker-range/po-datepicker-range.component';
 import { PoDecimalComponent } from './po-decimal/po-decimal.component';
@@ -41,9 +45,7 @@ import { PoRichTextToolbarComponent } from './po-rich-text/po-rich-text-toolbar/
 import { PoInputComponent } from './po-input/po-input.component';
 import { PoNumberComponent } from './po-number/po-number.component';
 import { PoPasswordComponent } from './po-password/po-password.component';
-import { PoRadioGroupComponent } from './po-radio-group/po-radio-group.component';
 import { PoSelectComponent } from './po-select/po-select.component';
-import { PoSwitchComponent } from './po-switch/po-switch.component';
 import { PoTextareaComponent } from './po-textarea/po-textarea.component';
 import { PoUploadComponent } from './po-upload/po-upload.component';
 import { PoUploadDragDropComponent } from './po-upload/po-upload-drag-drop/po-upload-drag-drop.component';
@@ -53,7 +55,7 @@ import { PoUploadDragDropAreaComponent } from './po-upload/po-upload-drag-drop/p
 import { PoUploadFileRestrictionsComponent } from './po-upload/po-upload-file-restrictions/po-upload-file-restrictions.component';
 import { PoUrlComponent } from './po-url/po-url.component';
 import { PoCheckboxModule } from './po-checkbox/po-checkbox.module';
-import { PoRadioComponent } from './po-radio/po-radio.component';
+import { PoSwitchModule } from './po-switch/po-switch.module';
 import { PoLabelModule } from '../po-label';
 
 /**
@@ -70,11 +72,15 @@ import { PoLabelModule } from '../po-label';
   imports: [
     CommonModule,
     FormsModule,
+    FormsModule.withConfig({
+      callSetDisabledState: 'whenDisabledForLegacyCode'
+    }),
     PoButtonGroupModule,
     PoButtonModule,
     PoCleanModule,
     PoCalendarModule,
     PoCheckboxGroupModule,
+    PoRadioGroupModule,
     PoContainerModule,
     PoDatepickerModule,
     PoDisclaimerGroupModule,
@@ -88,14 +94,19 @@ import { PoLabelModule } from '../po-label';
     PoTooltipModule,
     PoIconModule,
     PoCheckboxModule,
-    PoLabelModule
+    PoRadioModule,
+    PoLabelModule,
+    PoListBoxModule,
+    PoSwitchModule
   ],
   exports: [
     PoCheckboxGroupModule,
+    PoRadioGroupModule,
     PoCleanModule,
     PoDatepickerModule,
     PoComboComponent,
     PoComboOptionTemplateDirective,
+    PoMultiselectOptionTemplateDirective,
     PoDecimalComponent,
     PoDatepickerRangeComponent,
     PoEmailComponent,
@@ -107,20 +118,20 @@ import { PoLabelModule } from '../po-label';
     PoMultiselectComponent,
     PoNumberComponent,
     PoPasswordComponent,
-    PoRadioGroupComponent,
     PoRichTextComponent,
     PoSelectComponent,
-    PoSwitchComponent,
     PoTextareaComponent,
     PoUploadComponent,
     PoUrlComponent,
-    PoRadioComponent,
     PoCheckboxModule,
-    PoLabelModule
+    PoRadioModule,
+    PoLabelModule,
+    PoSwitchModule
   ],
   declarations: [
     PoComboComponent,
     PoComboOptionTemplateDirective,
+    PoMultiselectOptionTemplateDirective,
     PoDecimalComponent,
     PoDatepickerRangeComponent,
     PoEmailComponent,
@@ -134,14 +145,12 @@ import { PoLabelModule } from '../po-label';
     PoMultiselectSearchComponent,
     PoNumberComponent,
     PoPasswordComponent,
-    PoRadioGroupComponent,
     PoRichTextBodyComponent,
     PoRichTextComponent,
     PoRichTextImageModalComponent,
     PoRichTextLinkModalComponent,
     PoRichTextToolbarComponent,
     PoSelectComponent,
-    PoSwitchComponent,
     PoTextareaComponent,
     PoUploadComponent,
     PoUploadDragDropComponent,
@@ -149,8 +158,7 @@ import { PoLabelModule } from '../po-label';
     PoUploadDragDropAreaOverlayComponent,
     PoUploadDragDropAreaComponent,
     PoUploadFileRestrictionsComponent,
-    PoUrlComponent,
-    PoRadioComponent
+    PoUrlComponent
   ],
   providers: []
 })

@@ -630,6 +630,12 @@ export abstract class PoLookupBaseComponent
     }
   }
 
+  // Retorna o Subscriber da propriedade getSubscription que ocorre
+  // no evento de blur que executa o método searchEvent().
+  getSubscriptionFunction(): Subscription {
+    return this.getSubscription;
+  }
+
   protected cleanViewValue() {
     this.setDisclaimers([]);
     this.setViewValue('', {});

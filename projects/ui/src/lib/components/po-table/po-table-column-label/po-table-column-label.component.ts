@@ -1,6 +1,5 @@
-import { ChangeDetectionStrategy, Component, Input } from '@angular/core';
+import { ChangeDetectionStrategy, Component, Input, OnInit } from '@angular/core';
 
-import { PoColorPaletteService } from './../../../services/po-color-palette/po-color-palette.service';
 import { PoTableColumnLabel } from './po-table-column-label.interface';
 
 /**
@@ -16,20 +15,16 @@ import { PoTableColumnLabel } from './po-table-column-label.interface';
   templateUrl: './po-table-column-label.component.html',
   changeDetection: ChangeDetectionStrategy.OnPush
 })
-export class PoTableColumnLabelComponent {
-  private _value: PoTableColumnLabel;
+export class PoTableColumnLabelComponent implements OnInit {
+  hasLabel: boolean = false;
 
-  /** Objeto com os dados do label */
-  @Input('p-value') set value(value: PoTableColumnLabel) {
-    if (value) {
-      value.color = this.poColorPaletteService.getColor(value);
-    }
+  @Input('p-value') value: PoTableColumnLabel;
 
-    this._value = value;
-  }
-  get value(): PoTableColumnLabel {
-    return this._value;
+  ngOnInit(): void {
+    this.checkValueHasLabel();
   }
 
-  constructor(private poColorPaletteService: PoColorPaletteService) {}
+  checkValueHasLabel(): void {
+    this.hasLabel = this.value?.label?.trim() ? true : false;
+  }
 }

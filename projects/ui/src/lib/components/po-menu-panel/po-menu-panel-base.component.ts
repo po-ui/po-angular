@@ -1,9 +1,9 @@
-import { Input, Directive } from '@angular/core';
+import { Directive, Input } from '@angular/core';
 
 import { isExternalLink, uuid } from '../../utils/util';
 
-import { PoMenuPanelItem } from './po-menu-panel-item/po-menu-panel-item.interface';
 import { PoMenuPanelItemInternal } from './po-menu-panel-item/po-menu-panel-item-internal.interface';
+import { PoMenuPanelItem } from './po-menu-panel-item/po-menu-panel-item.interface';
 
 const poDefaultLogo = 'https://po-ui.io/assets/po-logos/po_black.svg';
 
@@ -40,6 +40,7 @@ export class PoMenuPanelBaseComponent {
    *
    * Caminho para a logomarca localizada na parte superior do menu.
    *
+   * > **Importante**
    * > Caso seja indefinida será aplicada a imagem default do PO UI.
    */
   @Input('p-logo') set logo(src: string) {
@@ -49,6 +50,16 @@ export class PoMenuPanelBaseComponent {
   get logo() {
     return this._logo;
   }
+
+  /**
+   * Define o texto alternativo para a logomarca.
+   *
+   * > **Importante**
+   * > Caso esta propriedade não seja definida o texto padrão será "Logomarca início".
+   *
+   * @default `Logomarca início`
+   */
+  @Input('p-logo-alt') logoAlt?: string;
 
   private setMenuExtraProperties(menus: Array<PoMenuPanelItem>) {
     menus.forEach(menuItem => this.setMenuItemProperties(<PoMenuPanelItemInternal>menuItem));

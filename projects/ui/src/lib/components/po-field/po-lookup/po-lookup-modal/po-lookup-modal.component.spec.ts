@@ -25,8 +25,6 @@ describe('PoLookupModalComponent', () => {
   let component: PoLookupModalComponent;
   let fixture: ComponentFixture<PoLookupModalComponent>;
 
-  const defaultTableHeight = 370;
-  const defaultContainerHeight = 375;
   const advancedFilters = [{ property: 'name', gridColumns: 6, gridSmColumns: 12, order: 1, required: true }];
 
   beforeEach(
@@ -147,127 +145,18 @@ describe('PoLookupModalComponent', () => {
     expect(isEnterKeyPressed).toBeFalsy();
   });
 
-  it('should set tableHeight and containerHeight when window.innerHeight < 615 pixels', () => {
-    changeBrowserInnerHeight(610);
-
-    component.tableHeight = 370;
-    component.containerHeight = 375;
-
-    component['setTableHeight']();
-
-    expect(component.tableHeight).toBe(defaultTableHeight - 50);
-    expect(component.containerHeight).toBe(defaultContainerHeight - 50);
-  });
-
-  it('should set tableHeight and containerHeight when window.innerHeight < 615 pixels and multiple is true and has selecteds array', () => {
-    changeBrowserInnerHeight(610);
-    component.multiple = true;
-    component.selecteds = [{ value: 1, label: 'John' }];
-
-    component.tableHeight = 370;
-    component.containerHeight = 375;
-
-    component['setTableHeight']();
-
-    expect(component.tableHeight).toBe(defaultTableHeight - 50);
-    expect(component.containerHeight).toBe(defaultContainerHeight - 50);
-  });
-  it('should set tableHeight and containerHeight when window.innerHeight < 615 pixels and multiple is true and has selecteds is empty', () => {
-    changeBrowserInnerHeight(610);
-    component.multiple = true;
-    component.selecteds = [];
-
-    component.tableHeight = 370;
-    component.containerHeight = 375;
-
-    component['setTableHeight']();
-
-    expect(component.tableHeight).toBe(defaultTableHeight - 50);
-    expect(component.containerHeight).toBe(defaultContainerHeight - 50);
-  });
-  it('should set tableHeight and containerHeight when window.innerHeight < 615 pixels and multiple is true and has selecteds is undefined', () => {
-    changeBrowserInnerHeight(610);
-    component.multiple = true;
-    component.selecteds = undefined;
-
-    component.tableHeight = 370;
-    component.containerHeight = 375;
-
-    component['setTableHeight']();
-
-    expect(component.tableHeight).toBe(defaultTableHeight - 50);
-    expect(component.containerHeight).toBe(defaultContainerHeight - 50);
-  });
-
-  it('shouldn`t set tableHeight and containerHeight when window.innerHeight > 615 pixels', () => {
-    changeBrowserInnerHeight(650);
-
-    component.tableHeight = defaultTableHeight;
-    component.containerHeight = defaultContainerHeight;
-
-    component['setTableHeight']();
-
-    expect(component.tableHeight).toBe(defaultTableHeight);
-    expect(component.containerHeight).toBe(defaultContainerHeight);
-  });
-  it('shouldn`t set tableHeight and containerHeight when window.innerHeight > 615 pixels and multiple is true and has selecteds array', () => {
-    changeBrowserInnerHeight(650);
-    component.multiple = true;
-    component.selecteds = [{ value: 1, label: 'John' }];
-
-    component.tableHeight = defaultTableHeight;
-    component.containerHeight = defaultContainerHeight;
-
-    component['setTableHeight']();
-
-    expect(component.tableHeight).toBe(defaultTableHeight);
-    expect(component.containerHeight).toBe(defaultContainerHeight);
-  });
-  it('shouldn`t set tableHeight and containerHeight when window.innerHeight > 615 pixels and multiple is true and has selecteds is empty', () => {
-    changeBrowserInnerHeight(650);
-    component.multiple = true;
-    component.selecteds = [];
-
-    component.tableHeight = 370;
-    component.containerHeight = 375;
-
-    component['setTableHeight']();
-
-    expect(component.tableHeight).toBe(defaultTableHeight);
-    expect(component.containerHeight).toBe(defaultContainerHeight);
-  });
-  it('shouldn`t set tableHeight and containerHeight when window.innerHeight > 615 pixels and multiple is true and has selecteds is undefined', () => {
-    changeBrowserInnerHeight(650);
-    component.multiple = true;
-    component.selecteds = undefined;
-
-    component.tableHeight = 370;
-    component.containerHeight = 375;
-
-    component['setTableHeight']();
-
-    expect(component.tableHeight).toBe(defaultTableHeight);
-    expect(component.containerHeight).toBe(defaultContainerHeight);
-  });
-
   it('shouldn`t set tableHeight with Infinite Scroll enabled', () => {
-    changeBrowserInnerHeight(650);
-
-    component.tableHeight = defaultTableHeight;
     component.infiniteScroll = true;
     component['setTableHeight']();
 
-    expect(component.tableHeight).toBe(315);
+    expect(component.tableHeight).toBe(515);
   });
 
   it('shouldn`t set tableHeight with Infinite Scroll disabled', () => {
-    changeBrowserInnerHeight(650);
-
-    component.tableHeight = defaultTableHeight;
     component.infiniteScroll = false;
     component['setTableHeight']();
 
-    expect(component.tableHeight).toBe(defaultTableHeight);
+    expect(component.tableHeight).toBe(615);
   });
 
   describe('AdvancedSearch: ', () => {
@@ -448,6 +337,52 @@ describe('PoLookupModalComponent', () => {
       component.onAllSelected(items);
 
       expect(component.selecteds).toEqual(expectedSelecteds);
+    });
+
+    it('sortBy: should sort list of items in ascending order', () => {
+      component.items = [
+        { label: 'ghi', id: 3 },
+        { label: 'abc', id: 2 },
+        { label: 'def', id: 1 }
+      ];
+
+      component.sortBy({
+        column: {
+          label: 'Label',
+          property: 'label',
+          visible: true
+        },
+        type: PoTableColumnSortType.Ascending
+      });
+
+      expect(component.items).toEqual([
+        { label: 'abc', id: 2 },
+        { label: 'def', id: 1 },
+        { label: 'ghi', id: 3 }
+      ]);
+    });
+
+    it('sortBy: should sort list of items in descending  order', () => {
+      component.items = [
+        { label: 'ghi', id: 3 },
+        { label: 'abc', id: 2 },
+        { label: 'def', id: 1 }
+      ];
+
+      component.sortBy({
+        column: {
+          label: 'Label',
+          property: 'label',
+          visible: true
+        },
+        type: PoTableColumnSortType.Descending
+      });
+
+      expect(component.items).toEqual([
+        { label: 'ghi', id: 3 },
+        { label: 'def', id: 1 },
+        { label: 'abc', id: 2 }
+      ]);
     });
   });
 });

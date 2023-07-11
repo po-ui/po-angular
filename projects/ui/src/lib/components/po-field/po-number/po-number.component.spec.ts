@@ -199,5 +199,11 @@ describe('PoNumberComponent:', () => {
       fixture.detectChanges();
       expect(fixture.debugElement.nativeElement.querySelector('po-clean')).toBe(null);
     });
+
+    it('should avoid pattern on scroll event', () => {
+      const event = new WheelEvent('wheel', { cancelable: true });
+      component.onWheel(event);
+      expect(event.defaultPrevented).toBeTruthy();
+    });
   });
 });

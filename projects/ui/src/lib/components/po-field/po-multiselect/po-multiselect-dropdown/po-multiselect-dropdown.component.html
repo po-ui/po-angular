@@ -27,13 +27,43 @@
       >
       </po-multiselect-item>
 
-      <po-multiselect-item
-        *ngFor="let option of visibleOptions"
-        [p-label]="option[fieldLabel]"
-        [p-selected]="isSelectedItem(option)"
-        (p-change)="clickItem($event, option)"
-      >
-      </po-multiselect-item>
+      <ng-container *ngIf="multiselectTemplate?.templateRef; then multiselectItemTemplate; else multiselectItemDefault">
+      </ng-container>
+
+      <ng-template #multiselectItemDefault>
+        <po-multiselect-item
+          *ngFor="let option of visibleOptions"
+          [p-label]="option[fieldLabel]"
+          [p-selected]="isSelectedItem(option)"
+          (p-change)="clickItem($event, option)"
+        >
+        </po-multiselect-item>
+      </ng-template>
+
+      <ng-template #multiselectItemTemplate>
+        <li
+          *ngFor="let option of visibleOptions"
+          [class.po-multiselect-item-selected]="isSelectedItem(option)"
+          (click)="clickItem(!isSelectedItem(option), option)"
+        >
+          <a class="po-multiselect-item">
+            <input
+              [checked]="isSelectedItem(option)"
+              class="po-multiselect-checkbox-input"
+              [class.po-multiselect-checkbox-input-indeterminate]="isSelectedItem(option) === null"
+              [class.po-multiselect-checkbox-input-checked]="isSelectedItem(option)"
+              type="checkbox"
+            />
+            <label class="po-multiselect-checkbox-label po-clickable">
+              <ng-template
+                [ngTemplateOutlet]="multiselectTemplate?.templateRef"
+                [ngTemplateOutletContext]="{ $implicit: option }"
+              >
+              </ng-template>
+            </label>
+          </a>
+        </li>
+      </ng-template>
     </ng-container>
   </ul>
 </div>

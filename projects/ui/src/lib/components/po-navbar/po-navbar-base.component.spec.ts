@@ -2,9 +2,8 @@ import { Directive } from '@angular/core';
 
 import { expectPropertiesValues } from '../../util-test/util-expect.spec';
 
-import * as utilsFunctions from '../../utils/util';
-import { PoLanguageService } from '../../services/po-language/po-language.service';
 import { poLocaleDefault } from '../../services/po-language/po-language.constant';
+import { PoLanguageService } from '../../services/po-language/po-language.service';
 
 import { PoNavbarBaseComponent, poNavbarLiteralsDefault } from './po-navbar-base.component';
 

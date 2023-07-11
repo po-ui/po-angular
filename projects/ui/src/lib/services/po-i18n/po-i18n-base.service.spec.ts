@@ -9,7 +9,7 @@ import * as utils from '../../utils/util';
 import { PoI18nModule, PoI18nService } from '../po-i18n';
 import { PoLanguageModule } from '../po-language';
 
-xdescribe('PoI18nService:', () => {
+describe('PoI18nService:', () => {
   describe('without Service:', () => {
     let service: PoI18nService;
 
@@ -188,6 +188,24 @@ xdescribe('PoI18nService:', () => {
 
         service.setLanguage(valueParam, reload);
         expect(utils.reloadCurrentPage).not.toHaveBeenCalled();
+      });
+
+      it('setLanguage: should call `languageService.setLanguage` with value language param and set this value in instance', () => {
+        const oldLanguage = service.getLanguage();
+
+        let valueParam = 'en';
+
+        service.setLanguage(valueParam, false);
+        expect(service.getLanguage()).toEqual(valueParam);
+        expect(service.getShortLanguage()).toEqual(valueParam);
+
+        valueParam = 'pt-br';
+
+        service.setLanguage(valueParam, false);
+        expect(service.getLanguage()).toEqual(valueParam);
+        expect(service.getShortLanguage()).toEqual('pt');
+
+        service.setLanguage(oldLanguage);
       });
 
       describe('setConfig:', () => {

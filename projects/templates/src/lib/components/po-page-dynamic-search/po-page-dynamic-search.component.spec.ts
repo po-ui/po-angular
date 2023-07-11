@@ -456,6 +456,23 @@ describe('PoPageDynamicSearchComponent:', () => {
       expect(result).toBe('12/08/2020');
     });
 
+    it('getFilterValueToDisclaimer: should return formated currency in locale default if field type is PoDynamicFieldType.Currency', () => {
+      component['languageService'].setLanguage('pt');
+      const field = { type: PoDynamicFieldType.Currency, property: '1', label: 'currency' };
+      const value = 322;
+
+      const result = component['getFilterValueToDisclaimer'](field, value);
+      expect(result).toBe('322,00');
+    });
+
+    it("getFilterValueToDisclaimer: should return formated currency in locale 'En' if field type is PoDynamicFieldType.Currency and locale is 'en'", () => {
+      const field = { type: PoDynamicFieldType.Currency, property: '1', label: 'currency', locale: 'en' };
+      const value = 322;
+
+      const result = component['getFilterValueToDisclaimer'](field, value);
+      expect(result).toBe('322.00');
+    });
+
     it('getFilterValueToDisclaimer: should return formated date if field type is PoDynamicFieldType.Date with range', () => {
       const field = { type: PoDynamicFieldType.Date, property: '1', label: 'date', range: true };
       const originalValue = { start: '2020-08-12', end: '2020-08-12' };

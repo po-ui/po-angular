@@ -20,14 +20,17 @@ describe('PoMenuBaseComponent:', () => {
   const menuGlobalService: any = {
     sendMenus: menus => {}
   };
+
   const languageService: any = {
     getShortLanguage: () => 'pt',
     getLanguageDefault: () => 'pt'
   };
+
   const menuService: any = {
     configProperties: () => {},
     getFilteredData: () => {}
   };
+
   beforeEach(() => {
     component = new PoMenuComponent(menuGlobalService, menuService, languageService);
     component.menus = [
@@ -211,7 +214,7 @@ describe('PoMenuBaseComponent:', () => {
     it(`configService: shouldn't call 'menuService.configProperties' and should set 'filterService' if service parameter
       is a custom service`, () => {
       const service: PoMenuFilter = {
-        getFilteredData: (search, params) => of([{ label: 'Menu', link: '/' }])
+        getFilteredData: (search, params) => of([{ label: 'Menu', link: '/', action: () => {} }])
       };
 
       const spyConfigPropeties = spyOn(component.menuService, <any>'configProperties');
@@ -398,24 +401,6 @@ describe('PoMenuBaseComponent:', () => {
 
       expect(result).toEqual(parentExpected);
     });
-
-    it('maxLenght: should set value according to max allowed', () => {
-      const largeValue =
-        'Lorem ipsum dolor sit amet consectetur adipisicing elit. Sit incidunt aliquam asperiores maxime, nulla fugit exercitationem. Abratione, quisquam.';
-      const maxLenght = component['maxLength'](largeValue);
-      const expectedValue =
-        'Lorem ipsum dolor sit amet consectetur adipisicing elit. Sit incidunt aliquam asperiores maxime, nulla fugit exercitationem. ';
-
-      expect(maxLenght).toBe(expectedValue);
-    });
-
-    it('maxLenght: should set exact value if value is less than max allowed', () => {
-      const smallValue =
-        'Lorem ipsum dolor sit amet consectetur adipisicing elit. Sit incidunt aliquam asperiores maxime, nulla fugit exercitationem.';
-      const maxLenght = component['maxLength'](smallValue);
-
-      expect(maxLenght).toBe(smallValue);
-    });
   });
 
   describe('Properties:', () => {
@@ -451,45 +436,6 @@ describe('PoMenuBaseComponent:', () => {
       const validValues = [{}, { id: '1' }];
 
       expectPropertiesValues(component, 'params', validValues, validValues);
-    });
-
-    it('logo: should set property with `undefined` if invalid values', () => {
-      const invalidValues = ['', ' ', null, undefined, 0, false, true];
-      const expectedValue = undefined;
-
-      expectPropertiesValues(component, 'logo', invalidValues, expectedValue);
-    });
-
-    it('logo: should set property with valid values', () => {
-      const validValues = ['https://po-ui.io/logo', 'https://other.com/images/logo'];
-
-      expectPropertiesValues(component, 'logo', validValues, validValues);
-    });
-
-    it('logoAlt: should set property with `default value` if invalid value', () => {
-      const invalidValues = ['', ' ', null, undefined, 0, false, true];
-      const expectedValue = 'Logomarca home';
-
-      expectPropertiesValues(component, 'logoAlt', invalidValues, expectedValue);
-    });
-
-    it('logoAlt: should set property with valid value', () => {
-      const validValues = ['Po-UI Logo', 'Other image logo'];
-
-      expectPropertiesValues(component, 'logoAlt', validValues, validValues);
-    });
-
-    it('shortLogo: should set property with `undefined` if invalid values', () => {
-      const invalidValues = ['', ' ', null, undefined, 0, false, true];
-      const expectedValue = undefined;
-
-      expectPropertiesValues(component, 'shortLogo', invalidValues, expectedValue);
-    });
-
-    it('shortLogo: should set property with valid values', () => {
-      const validValues = ['https://po-ui.io/logo', 'https://other.com/images/logo'];
-
-      expectPropertiesValues(component, 'shortLogo', validValues, validValues);
     });
 
     it('collapsed: should update property with valid values.', () => {
