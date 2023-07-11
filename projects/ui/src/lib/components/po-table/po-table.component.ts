@@ -109,7 +109,6 @@ export class PoTableComponent extends PoTableBaseComponent implements AfterViewI
 
   @ViewChild('columnManager', { read: ElementRef, static: false }) columnManager;
   @ViewChild('columnActionLeft', { read: ElementRef, static: false }) columnActionLeft;
-  @ViewChild('pageSlideColumnsManager') pageSlideColumnsManager: PoPageSlideComponent;
 
   @ViewChildren('actionsIconElement', { read: ElementRef }) actionsIconElement: QueryList<any>;
   @ViewChildren('actionsElement', { read: ElementRef }) actionsElement: QueryList<any>;
@@ -546,7 +545,6 @@ export class PoTableComponent extends PoTableBaseComponent implements AfterViewI
 
   onOpenColumnManager() {
     this.lastVisibleColumnsSelected = [...this.columns];
-    this.pageSlideColumnsManager.open();
   }
 
   /**

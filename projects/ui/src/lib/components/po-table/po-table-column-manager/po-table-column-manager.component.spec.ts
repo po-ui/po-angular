@@ -98,6 +98,16 @@ describe('PoTableColumnManagerComponent:', () => {
         expect(component['updateValues']).toHaveBeenCalledWith(component.columns);
       });
 
+      it(`ngOnChanges: should open page slide if 'lastVisibleColumnsSelected.currentValue' is defined`, () => {
+        const changes = { lastVisibleColumnsSelected: { currentValue: ['table'] } };
+
+        spyOn(component.pageSlideColumnsManager, 'open');
+
+        component.ngOnChanges(<any>changes);
+
+        expect(component.pageSlideColumnsManager.open).toHaveBeenCalled();
+      });
+
       it(`ngOnChanges: shouldn't call 'updateValues' if 'maxColumns' is undefined`, () => {
         const changes = { maxColumns: undefined };
 
@@ -116,6 +126,16 @@ describe('PoTableColumnManagerComponent:', () => {
         component.ngOnChanges(<any>changes);
 
         expect(component['onChangeColumns']).not.toHaveBeenCalled();
+      });
+
+      it(`ngOnChanges: shouldn't call page slide if 'lastVisibleColumnsSelected.current' is undefined`, () => {
+        const changes = { lastVisibleColumnsSelected: { currentValue: undefined } };
+
+        spyOn(component.pageSlideColumnsManager, 'open');
+
+        component.ngOnChanges(<any>changes);
+
+        expect(component.pageSlideColumnsManager.open).not.toHaveBeenCalled();
       });
     });
 

@@ -18,6 +18,7 @@ import { PoPopoverComponent } from '../../po-popover/po-popover.component';
 import { PoLanguageService } from '../../../services/po-language/po-language.service';
 import { poLocaleDefault } from '../../../services/po-language/po-language.constant';
 import { PoTableColumn } from '../interfaces/po-table-column.interface';
+import { PoPageSlideComponent } from '../../po-page';
 
 const PoTableColumnManagerMaxColumnsDefault = 99999;
 
@@ -48,6 +49,7 @@ type Direction = 'up' | 'down';
 })
 export class PoTableColumnManagerComponent implements OnChanges, OnDestroy {
   @ViewChild(PoPopoverComponent) popover: PoPopoverComponent;
+  @ViewChild('pageSlideColumnsManager') pageSlideColumnsManager: PoPageSlideComponent;
 
   @Input('p-columns') columns: Array<PoTableColumn> = [];
 
@@ -95,7 +97,7 @@ export class PoTableColumnManagerComponent implements OnChanges, OnDestroy {
   }
 
   ngOnChanges(changes: SimpleChanges) {
-    const { columns, maxColumns, target } = changes;
+    const { columns, maxColumns, target, lastVisibleColumnsSelected } = changes;
 
     if (target && target.firstChange) {
       this.initializeListeners();
@@ -107,6 +109,10 @@ export class PoTableColumnManagerComponent implements OnChanges, OnDestroy {
 
     if (maxColumns) {
       this.updateValues(this.columns);
+    }
+
+    if (lastVisibleColumnsSelected?.currentValue) {
+      this.pageSlideColumnsManager.open();
     }
   }
 
