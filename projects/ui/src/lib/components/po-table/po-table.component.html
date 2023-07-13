@@ -34,8 +34,17 @@
       (p-click)="onOpenColumnManager()"
     ></po-button>
   </div>
-</div>
 
+  <div *ngIf="!hideTableSearch && hasValidColumns" class="po-table-search">
+    <po-search
+      [p-items]="items"
+      [p-filter-keys]="filteredColumns"
+      [p-filter-type]="filterType"
+      (p-filtered-items-change)="onFilteredItemsChange($event)"
+    >
+    </po-search>
+  </div>
+</div>
 <po-container *ngIf="container; else tableContainerTemplate" p-no-padding>
   <ng-container *ngTemplateOutlet="tableContainerTemplate"></ng-container>
 </po-container>
@@ -247,7 +256,7 @@
     </tbody>
 
     <ng-container *ngIf="hasMainColumns">
-      <tbody class="po-table-group-row" *ngFor="let row of items; let rowIndex = index; trackBy: trackBy">
+      <tbody class="po-table-group-row" *ngFor="let row of filteredItems; let rowIndex = index; trackBy: trackBy">
         <tr class="po-table-row" [class.po-table-row-active]="row.$selected || (row.$selected === null && selectable)">
           <td *ngIf="selectable" class="po-table-column-selectable">
             <ng-container *ngTemplateOutlet="singleSelect ? inputRadio : inputCheckbox; context: { $implicit: row }">
@@ -590,7 +599,10 @@
       </tbody>
 
       <ng-container *ngIf="hasMainColumns">
-        <tbody class="po-table-group-row" *cdkVirtualFor="let row of items; let rowIndex = index; trackBy: trackBy">
+        <tbody
+          class="po-table-group-row"
+          *cdkVirtualFor="let row of filteredItems; let rowIndex = index; trackBy: trackBy"
+        >
           <tr
             class="po-table-row"
             [class.po-table-row-active]="row.$selected || (row.$selected === null && selectable)"

@@ -78,6 +78,7 @@ describe('PoTableComponent:', () => {
   let mockTableDetailDiretive;
   let singleAction: Array<PoTableAction>;
   let mockViewPort: jasmine.SpyObj<CdkVirtualScrollViewport>;
+  let changeDetector: any;
 
   function initializeMocks() {
     mockTableDetailDiretive = {
@@ -218,6 +219,7 @@ describe('PoTableComponent:', () => {
       _renderedContentOffset: 100
     });
 
+    changeDetector = jasmine.createSpyObj('ChangeDetectorRef', ['detectChanges']);
     await TestBed.configureTestingModule({
       imports: [RouterTestingModule.withRoutes(routes), PoTableModule, NoopAnimationsModule, HttpClientTestingModule],
       declarations: [TestMenuComponent, SearchComponent],
@@ -227,7 +229,8 @@ describe('PoTableComponent:', () => {
         DecimalPipe,
         PoColorPaletteService,
         PoTableService,
-        { provide: CdkVirtualScrollViewport, useValue: mockViewPort }
+        { provide: CdkVirtualScrollViewport, useValue: mockViewPort },
+        { provide: changeDetector, useValue: changeDetector }
       ]
     }).compileComponents();
 
@@ -2076,6 +2079,17 @@ describe('PoTableComponent:', () => {
         const resultado2 = component.inverseOfTranslation;
         expect(resultado2).toEqual('-0px');
       });
+
+      it('should update filteredItems on onFilteredItemsChange call', () => {
+        component.items = [
+          { id: 1, name: 'item1' },
+          { id: 2, name: 'item2' }
+        ];
+
+        component.onFilteredItemsChange(items);
+
+        expect(component.filteredItems).toBe(items);
+      });
     });
   });
 
@@ -3071,25 +3085,6 @@ describe('PoTableComponent:', () => {
 
     expect(valueWidth).toEqual(undefined);
   });
-
-  // it('getWidthColumnManager, should return value if contain column manager fixed', () => {
-  //   component.height = 100;
-
-  //   const fakeThis = {
-  //     height: 100,
-  //     columnManagerFixed: {
-  //       nativeElement: {
-  //         offsetWidth: 200
-  //       }
-  //     }
-  //   };
-
-  //   fixture.detectChanges();
-
-  //   const valueWidth = component['getWidthColumnManager'].call(fakeThis);
-
-  //   expect(valueWidth).toEqual(200);
-  // });
 
   it('getWidthColumnManagerFixed, should return width of column manager', () => {
     const fakeThis = {

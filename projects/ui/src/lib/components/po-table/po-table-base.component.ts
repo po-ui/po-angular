@@ -1,5 +1,5 @@
 import { Directive, EventEmitter, Input, OnChanges, OnDestroy, Output, SimpleChanges } from '@angular/core';
-import { Observable, Subscription } from 'rxjs';
+import { Observable, Subscription, filter } from 'rxjs';
 
 import { PoDateService } from '../../services/po-date/po-date.service';
 import { poLocaleDefault } from '../../services/po-language/po-language.constant';
@@ -16,6 +16,7 @@ import { PoTableFilteredItemsParams } from './interfaces/po-table-filtered-items
 import { PoTableLiterals } from './interfaces/po-table-literals.interface';
 import { PoTableResponseApi } from './interfaces/po-table-response-api.interface';
 import { PoTableService } from './services/po-table.service';
+import { PoFilterMode } from '../po-search/po-search-filter-mode.enum';
 
 export type QueryParamsType = string | number | boolean;
 
@@ -185,6 +186,17 @@ export abstract class PoTableBaseComponent implements OnChanges, OnDestroy {
    *
    * @description
    *
+   * Permite que o campo de pesquisa seja escondido.
+   *
+   * @default `false`
+   */
+  @Input('p-hide-table-search') @InputBoolean() hideTableSearch?: boolean = false;
+
+  /**
+   * @optional
+   *
+   * @description
+   *
    * Permite fechar um detalhe ou row template automaticamente, ao abrir outro item.
    *
    * @default `false`
@@ -287,6 +299,20 @@ export abstract class PoTableBaseComponent implements OnChanges, OnDestroy {
    * serão ignoradas por ordem de posição.
    */
   @Input('p-max-columns') maxColumns?: number;
+
+  /**
+   * @optional
+   *
+   * @description
+   *
+   * Define o modo de pesquisa utilizado no campo de busca, quando habilitado.
+   * Valores definidos no enum: PoSearchFilterMode
+   * > Obs: A pesquisa é realizada exclusivamente nos dados locais, ou seja, aqueles que foram
+   * > renderizados na tabela.
+   *
+   * @default `startsWith`
+   */
+  @Input('p-filter-type') filterType: PoFilterMode = PoFilterMode.startsWith;
 
   /**
    * @optional
@@ -427,8 +453,10 @@ export abstract class PoTableBaseComponent implements OnChanges, OnDestroy {
   showBatchActions: boolean = false;
   itemsSelected: Array<any> = [];
   paramsFilter: {};
+  filteredItems: Array<any> = [];
   private initialVisibleColumns: boolean = false;
   private _spacing: PoTableColumnSpacing = PoTableColumnSpacing.Medium;
+  private _filteredColumns: Array<string>;
   private _actions?: Array<PoTableAction> = [];
   private _columns: Array<PoTableColumn> = [];
   private _container?: string;
@@ -449,6 +477,14 @@ export abstract class PoTableBaseComponent implements OnChanges, OnDestroy {
   private _draggable?: boolean = false;
   private _hideActionFixedColumns?: boolean = false;
 
+  constructor(
+    private poDate: PoDateService,
+    languageService: PoLanguageService,
+    private poTableService: PoTableService
+  ) {
+    this.language = languageService.getShortLanguage();
+  }
+
   /**
    * @description
    *
@@ -468,7 +504,7 @@ export abstract class PoTableBaseComponent implements OnChanges, OnDestroy {
     } else if (!this.hasColumns) {
       this.columns = this.getDefaultColumns(items[0]);
     }
-
+    this.filteredItems = [...this.items];
     // timeout necessario para os itens serem refletidos na tabela
     setTimeout(() => this.checkInfiniteScroll());
   }
@@ -835,6 +871,23 @@ export abstract class PoTableBaseComponent implements OnChanges, OnDestroy {
     return this._spacing;
   }
 
+  /**
+   * @optional
+   *
+   * @description
+   *
+   * Define as colunas que serão filtradas no campo de pesquisa.
+   * Aceita um array de strings, representando as colunas específicas que serão consideradas na filtragem.
+   *
+   */
+  @Input('p-filtered-columns') set filteredColumns(values: Array<string>) {
+    this._filteredColumns = values;
+  }
+
+  get filteredColumns(): Array<string> {
+    return this._filteredColumns;
+  }
+
   get hasColumns(): boolean {
     return this.columns && this.columns.length > 0;
   }
@@ -872,6 +925,12 @@ export abstract class PoTableBaseComponent implements OnChanges, OnDestroy {
     );
   }
 
+  private getFilteredColumns(): void {
+    this.filteredColumns = this.columns
+      .filter(column => column.visible !== false)
+      .map(column => column.property || column.label);
+  }
+
   private get sortType(): PoTableColumnSortType {
     return this.sortedColumn.ascending ? PoTableColumnSortType.Ascending : PoTableColumnSortType.Descending;
   }
@@ -891,14 +950,6 @@ export abstract class PoTableBaseComponent implements OnChanges, OnDestroy {
 
   get draggable() {
     return this._draggable;
-  }
-
-  constructor(
-    private poDate: PoDateService,
-    languageService: PoLanguageService,
-    private poTableService: PoTableService
-  ) {
-    this.language = languageService.getShortLanguage();
   }
 
   ngOnDestroy() {
@@ -1122,6 +1173,7 @@ export abstract class PoTableBaseComponent implements OnChanges, OnDestroy {
     this.setMainColumns();
     this.setColumnMasterDetail();
     this.setSubtitleColumns();
+    this.getFilteredColumns();
   }
 
   private setColumnLink() {
