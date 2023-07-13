@@ -43,6 +43,7 @@ import { PoTagModule } from './po-tag/po-tag.module';
 import { PoToolbarModule } from './po-toolbar/po-toolbar.module';
 import { PoTreeViewModule } from './po-tree-view/po-tree-view.module';
 import { PoWidgetModule } from './po-widget/po-widget.module';
+import { PoSearchModule } from './po-search';
 
 @NgModule({
   imports: [
@@ -88,7 +89,8 @@ import { PoWidgetModule } from './po-widget/po-widget.module';
     PoLabelModule,
     PoImageModule,
     PoPageSlideModule,
-    PoSwitchModule
+    PoSwitchModule,
+    PoSearchModule
   ],
   exports: [
     PoAccordionModule,
@@ -133,9 +135,11 @@ import { PoWidgetModule } from './po-widget/po-widget.module';
     PoLabelModule,
     PoImageModule,
     PoPageSlideModule,
-    PoSwitchModule
+    PoSwitchModule,
+    PoSearchModule
   ],
   providers: [],
-  bootstrap: []
+  bootstrap: [],
+  declarations: []
 })
 export class PoComponentsModule {}

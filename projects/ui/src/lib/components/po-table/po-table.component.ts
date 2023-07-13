@@ -123,7 +123,8 @@ export class PoTableComponent extends PoTableBaseComponent implements AfterViewI
 
   @ViewChildren('actionsIconElement', { read: ElementRef }) actionsIconElement: QueryList<any>;
   @ViewChildren('actionsElement', { read: ElementRef }) actionsElement: QueryList<any>;
-
+  @ViewChild('filterInput') filterInput: ElementRef;
+  @ViewChild('poSearchInput', { read: ElementRef, static: true }) poSearchInput: ElementRef;
   @ViewChild(CdkVirtualScrollViewport, { static: false }) public viewPort: CdkVirtualScrollViewport;
 
   poNotification = inject(PoNotificationService);
@@ -137,6 +138,7 @@ export class PoTableComponent extends PoTableBaseComponent implements AfterViewI
   lastVisibleColumnsSelected: Array<PoTableColumn>;
   tagColor: string;
   idRadio: string;
+  inputFieldValue = '';
   JSON: JSON;
   newOrderColumns: Array<PoTableColumn>;
 
@@ -314,8 +316,6 @@ export class PoTableComponent extends PoTableBaseComponent implements AfterViewI
       this.checkInfiniteScroll();
       this.visibleElement = true;
     }
-
-    // this.itemSize = document.body.offsetWidth > 1366 ? 44 : 32;
   }
 
   ngOnDestroy() {
@@ -602,6 +602,10 @@ export class PoTableComponent extends PoTableBaseComponent implements AfterViewI
     this.lastVisibleColumnsSelected = [...this.columns];
   }
 
+  onFilteredItemsChange(items: Array<any>): void {
+    this.filteredItems = items;
+  }
+
   /**
    * Método que remove um item da tabela.
    *
@@ -764,6 +768,7 @@ export class PoTableComponent extends PoTableBaseComponent implements AfterViewI
         });
     }
     this.changesAfterDelete(newItemsFiltered);
+    this.onFilteredItemsChange(newItemsFiltered);
   }
 
   private deleteItemsService(newItemsFiltered: Array<any>) {

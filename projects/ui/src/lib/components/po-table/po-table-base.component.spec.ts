@@ -1414,6 +1414,19 @@ describe('PoTableBaseComponent:', () => {
         expect(fakeSubscription.unsubscribe).not.toHaveBeenCalled();
       });
     });
+
+    it('getFilteredColumns: should filter and map columns correctly', () => {
+      component.columns = [
+        { label: 'Currency', visible: true },
+        { label: 'Números', property: 'numberData', visible: true },
+        { label: 'Datas', property: 'dateData', visible: true },
+        { label: 'Textos', property: 'textData', visible: false }
+      ];
+
+      component['getFilteredColumns']();
+
+      expect(component.filteredColumns).toEqual(['Currency', 'numberData', 'dateData']);
+    });
   });
 
   describe('Properties:', () => {
