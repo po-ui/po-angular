@@ -2,6 +2,16 @@
 
 All notable changes to this project will be documented in this file. See [standard-version](https://github.com/conventional-changelog/standard-version) for commit guidelines.
 
+## [15.12.1](https://github.com/po-ui/po-angular/compare/v15.12.0...v15.12.1) (2023-07-17)
+
+
+### Bug Fixes
+
+* **page-slide:** cria evento p-close ([fadca67](https://github.com/po-ui/po-angular/commit/fadca6768b12297f5fc45595269533e4440659b4))
+* **table:** ajusta funcionamento da propriedade p-change-visible-columns ([21f3e30](https://github.com/po-ui/po-angular/commit/21f3e30067266b7657ebc295f03b1ab103ecc57e))
+
+
+
 # [15.12.0](https://github.com/po-ui/po-angular/compare/v15.11.0...v15.12.0) (2023-07-07)
 
 
