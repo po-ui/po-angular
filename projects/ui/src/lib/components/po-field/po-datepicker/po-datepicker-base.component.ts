@@ -122,6 +122,7 @@ export abstract class PoDatepickerBaseComponent implements ControlValueAccessor,
    */
   @Output('p-change') onchange: EventEmitter<any> = new EventEmitter<any>();
 
+  offset: number;
   protected firstStart = true;
   protected hour: string = 'T00:00:00-00:00';
   protected isExtendedISO: boolean = false;
@@ -357,7 +358,10 @@ export abstract class PoDatepickerBaseComponent implements ControlValueAccessor,
     return this._locale || this.shortLanguage;
   }
 
-  constructor(protected languageService: PoLanguageService) {}
+  constructor(protected languageService: PoLanguageService) {
+    this.offset = new Date().getTimezoneOffset();
+    this.formatTimezoneAndHour(this.offset);
+  }
 
   set date(value: any) {
     this._date = typeof value === 'string' ? convertIsoToDate(value, false, false) : value;
@@ -493,6 +497,16 @@ export abstract class PoDatepickerBaseComponent implements ControlValueAccessor,
     mask = mask.replace(/YYYY/g, '9999');
 
     return new PoMask(mask, true);
+  }
+
+  formatTimezoneAndHour(offset: number) {
+    const offsetAbsolute = Math.abs(offset);
+    const timezone =
+      (offset < 0 ? '+' : '-') +
+      ('00' + Math.floor(offsetAbsolute / 60)).slice(-2) +
+      ':' +
+      ('00' + (offsetAbsolute % 60)).slice(-2);
+    this.hour = 'T00:00:00' + timezone;
   }
 
   abstract writeValue(value: any): void;

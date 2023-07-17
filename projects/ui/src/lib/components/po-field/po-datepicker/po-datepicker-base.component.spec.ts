@@ -505,6 +505,16 @@ describe('PoDatepickerBaseComponent:', () => {
       expect(component['onChangeModel']).toBe(undefined);
       expect(spyCallOnChange).toHaveBeenCalledTimes(1);
     }));
+
+    it('formatTimeAndHour: should call `formatTimeAndHour` with timezone negative', () => {
+      component.formatTimezoneAndHour(180);
+      expect(component['hour']).toBe('T00:00:00-03:00');
+    });
+
+    it('formatTimeAndHour: should call `formatTimeAndHour` with timezone positive', () => {
+      component.formatTimezoneAndHour(-180);
+      expect(component['hour']).toBe('T00:00:00+03:00');
+    });
   });
 
   describe('Properties:', () => {
