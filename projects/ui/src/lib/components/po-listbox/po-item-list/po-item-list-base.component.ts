@@ -131,5 +131,20 @@ export class PoItemListBaseComponent {
    */
   @Output('p-select-item') selectItem = new EventEmitter<PoItemListOption | PoItemListOptionGroup | any>();
 
+  // MULTISELECT PROPERTIES
+  //emissao de evento do checkbox
+  @Output('p-selectcheckbox-item') checkboxItem = new EventEmitter<any>();
+
+  //valor do checkbox de selecionar todos
+  @Input('p-checkbox-value') checkboxValue: any;
+
+  @Input('p-field-value') fieldValue: string = 'value';
+
+  @Input('p-field-label') fieldLabel: string = 'label';
+
+  @Input('p-multiselect-template') multiselectTemplate: TemplateRef<any> | any;
+
+  @Input('p-template-context') templateContext: any;
+
   constructor() {}
 }

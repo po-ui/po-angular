@@ -11,7 +11,6 @@ import { PoFieldContainerComponent } from '../po-field-container/po-field-contai
 import { PoMultiselectBaseComponent } from '../po-multiselect/po-multiselect-base.component';
 import { PoMultiselectComponent } from './po-multiselect.component';
 import { PoMultiselectDropdownComponent } from './po-multiselect-dropdown/po-multiselect-dropdown.component';
-import { PoMultiselectItemComponent } from './po-multiselect-item/po-multiselect-item.component';
 import { PoMultiselectSearchComponent } from './po-multiselect-search/po-multiselect-search.component';
 import { PoMultiselectFilter } from './po-multiselect-filter.interface';
 import { PoMultiselectOption } from './po-multiselect-option.interface';
@@ -44,7 +43,6 @@ describe('PoMultiselectComponent:', () => {
         PoFieldContainerComponent,
         PoMultiselectComponent,
         PoMultiselectDropdownComponent,
-        PoMultiselectItemComponent,
         PoMultiselectSearchComponent,
         PoFieldContainerBottomComponent
       ],

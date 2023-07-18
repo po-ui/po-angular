@@ -60,6 +60,9 @@ export abstract class PoCheckboxBaseComponent implements ControlValueAccessor {
   //propriedade interna recebida do checkbox-group para verificar se o checkbox é required
   @Input('p-required') @InputBoolean() checkBoxRequired: boolean;
 
+  //propriedade interna recebida para desabilitar o tabindex do checkbox na utilização dentro de um list-box
+  @Input('p-disabled-tabindex') @InputBoolean() disabladTabindex: boolean = false;
+
   id = uuid();
   propagateChange: any;
   onTouched;

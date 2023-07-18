@@ -1,4 +1,4 @@
-<ng-container [ngSwitch]="type">
+<ng-container [ngSwitch]="type" (keydown)="onCheckboxItemEmit($event)">
   <div
     *ngSwitchDefault
     #itemList
@@ -29,13 +29,29 @@
 
   <div
     *ngSwitchCase="'check'"
+    class="po-item-list po-item-list__check"
     [class.po-item-list__separator]="separator"
     [class.po-item-list__selected]="selected && !disabled"
     [class.po-item-list__disabled]="disabled"
     [attr.aria-disabled]="disabled"
     [attr.aria-label]="label"
-    class="po-item-list po-item-list__check"
+    (click)="onCheckboxItem()"
+    (keydown)="onCheckboxItemEmit($event)"
+    (keyup)="onCheckboxItemEmit($event)"
   >
-    <po-checkbox [p-label]="label" (p-change)="onSelectItem({label})" [p-disabled]="disabled"></po-checkbox>
+    <po-checkbox
+      [p-disabled-tabindex]="true"
+      [p-checkboxValue]="checkboxValue === null ? 'mixed' : checkboxValue"
+      [p-disabled]="disabled"
+      (p-change)="onSelectItem({label})"
+    ></po-checkbox>
+
+    <span class="po-item-list__label" *ngIf="!multiselectTemplate">{{ label }}</span>
+
+    <ng-template
+      [ngTemplateOutlet]="multiselectTemplate?.templateRef"
+      [ngTemplateOutletContext]="{ $implicit: templateContext }"
+    >
+    </ng-template>
   </div>
 </ng-container>

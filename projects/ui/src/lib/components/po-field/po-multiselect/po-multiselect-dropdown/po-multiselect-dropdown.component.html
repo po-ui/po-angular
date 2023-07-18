@@ -1,69 +1,27 @@
 <div #container class="po-multiselect-container" [hidden]="!show">
-  <po-multiselect-search
-    #searchElement
-    *ngIf="!hideSearch"
-    [p-literals]="literals"
-    [p-field-value]="fieldValue"
-    [p-placeholder]="placeholderSearch"
-    (p-change)="callChangeSearch($event)"
-  >
-  </po-multiselect-search>
-
-  <ul class="po-multiselect-items-container" [scrollTop]="scrollTop" #ulElement>
-    <div *ngIf="!visibleOptions.length && !isServerSearching" class="po-multiselect-container-no-data po-text-center">
-      <span> {{ literals.noData }}</span>
-    </div>
-
-    <div *ngIf="isServerSearching" class="po-multiselect-container-loading po-text-center">
-      <po-loading></po-loading>
-    </div>
-
-    <ng-container *ngIf="!isServerSearching">
-      <po-multiselect-item
-        *ngIf="!searchElement?.inputValue && visibleOptions.length && !hideSelectAll"
-        [p-label]="literals?.selectAll"
-        [p-selected]="getStateSelectAll()"
-        (p-change)="onClickSelectAll()"
+  <div [scrollTop]="scrollTop" #divElement>
+    <ng-container>
+      <po-listbox
+        #listbox
+        p-type="check"
+        [p-items]="visibleOptions"
+        [p-selected-options]="selectedOptions"
+        [p-checkboxAllValue]="getStateSelectAll()"
+        [p-field-value]="fieldValue"
+        [p-field-value-search]="fieldValue"
+        [p-field-label]="fieldLabel"
+        [p-literal-search]="literals"
+        [p-literals]="literals"
+        [p-is-searching]="isServerSearching"
+        [p-hide-search]="hideSearch"
+        [p-hide-select-all]="hideSelectAll"
+        [p-multiselect-template]="multiselectTemplate"
+        [p-placeholder-search]="placeholderSearch"
+        (p-change)="clickItem($event)"
+        (p-change-all)="onClickSelectAll()"
+        (p-change-search)="callChangeSearch($event)"
       >
-      </po-multiselect-item>
-
-      <ng-container *ngIf="multiselectTemplate?.templateRef; then multiselectItemTemplate; else multiselectItemDefault">
-      </ng-container>
-
-      <ng-template #multiselectItemDefault>
-        <po-multiselect-item
-          *ngFor="let option of visibleOptions"
-          [p-label]="option[fieldLabel]"
-          [p-selected]="isSelectedItem(option)"
-          (p-change)="clickItem($event, option)"
-        >
-        </po-multiselect-item>
-      </ng-template>
-
-      <ng-template #multiselectItemTemplate>
-        <li
-          *ngFor="let option of visibleOptions"
-          [class.po-multiselect-item-selected]="isSelectedItem(option)"
-          (click)="clickItem(!isSelectedItem(option), option)"
-        >
-          <a class="po-multiselect-item">
-            <input
-              [checked]="isSelectedItem(option)"
-              class="po-multiselect-checkbox-input"
-              [class.po-multiselect-checkbox-input-indeterminate]="isSelectedItem(option) === null"
-              [class.po-multiselect-checkbox-input-checked]="isSelectedItem(option)"
-              type="checkbox"
-            />
-            <label class="po-multiselect-checkbox-label po-clickable">
-              <ng-template
-                [ngTemplateOutlet]="multiselectTemplate?.templateRef"
-                [ngTemplateOutletContext]="{ $implicit: option }"
-              >
-              </ng-template>
-            </label>
-          </a>
-        </li>
-      </ng-template>
+      </po-listbox>
     </ng-container>
-  </ul>
+  </div>
 </div>

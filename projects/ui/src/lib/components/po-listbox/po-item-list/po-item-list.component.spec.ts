@@ -42,6 +42,45 @@ describe('PoItemListComponent', () => {
         expect(component.selectItem.emit).toHaveBeenCalled();
       });
     });
+
+    describe('onCheckboxItemEmit:', () => {
+      it('should call `onCheckboxItem` if event is `Enter`', () => {
+        const eventEnterKey = new KeyboardEvent('keydown', { 'code': 'Enter' });
+        spyOn(component, 'onCheckboxItem');
+
+        component.onCheckboxItemEmit(eventEnterKey);
+
+        expect(component.onCheckboxItem).toHaveBeenCalled();
+      });
+
+      it('should call `onCheckboxItem` if event is `Space`', () => {
+        const eventSpaceKey = new KeyboardEvent('keydown', { 'code': 'Space' });
+        spyOn(component, 'onCheckboxItem');
+
+        component.onCheckboxItemEmit(eventSpaceKey);
+
+        expect(component.onCheckboxItem).toHaveBeenCalled();
+      });
+    });
+
+    describe('onCheckboxItem:', () => {
+      it('should emit `checkboxItem` and set selected', () => {
+        component.value = 'testValue';
+        component.label = 'testLabel';
+        component.checkboxValue = true;
+        spyOn(component.checkboxItem, 'emit');
+
+        component.onCheckboxItem();
+
+        expect(component.checkboxItem.emit).toHaveBeenCalledWith({
+          option: {
+            value: 'testValue',
+            label: 'testLabel'
+          },
+          selected: false
+        });
+      });
+    });
   });
 
   describe('Templates:', () => {

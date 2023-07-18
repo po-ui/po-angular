@@ -50,6 +50,16 @@ describe('PoListBoxComponent', () => {
         expect(component.listboxItemList.nativeElement.focus).toHaveBeenCalled();
       });
 
+      it('should not call focus', () => {
+        component.items = [{ label: 'Item 1', value: 1 }];
+        fixture.detectChanges();
+        component.listboxItemList = undefined;
+
+        component.ngAfterViewInit();
+
+        expect(component.listboxItemList?.nativeElement).toBeUndefined();
+      });
+
       describe('openUrl:', () => {
         beforeEach(() => {
           component.items = [{ label: 'a', value: 'a', url: 'http://google.com.br' }];
@@ -275,6 +285,11 @@ describe('PoListBoxComponent', () => {
         component['setListBoxMaxHeight']();
 
         expect(component['renderer'].setStyle).toHaveBeenCalled();
+
+        component.type = 'check';
+        component.hideSearch = false;
+        component['setListBoxMaxHeight']();
+        expect(component['renderer'].setStyle).toHaveBeenCalled();
       });
 
       it(`should'n be call 'renderer.setStyle' when has less then 6 items`, () => {
@@ -291,6 +306,80 @@ describe('PoListBoxComponent', () => {
       });
     });
 
+    describe('checkboxClicked:', () => {
+      it('should emit change ', () => {
+        spyOn(component.change, 'emit');
+        component.type = 'check';
+        component.checkboxClicked({ option: [{ value: 'test', label: 'test' }], selected: true });
+
+        expect(component.change.emit).toHaveBeenCalled();
+      });
+    });
+
+    describe('onSelectCheckBoxItem:', () => {
+      it('should call `checkboxClicked`', () => {
+        spyOn(component, 'checkboxClicked');
+        component.type = 'check';
+        component.onSelectCheckBoxItem({ option: [{ value: 'test', label: 'test' }], selected: true });
+
+        expect(component.checkboxClicked).toHaveBeenCalled();
+      });
+    });
+
+    describe('changeAllEmit:', () => {
+      it('should emit changeAll if event is Enter', () => {
+        const eventEnterKey = new KeyboardEvent('keydown', { 'code': 'Enter' });
+        spyOn(component.changeAll, 'emit');
+
+        component.changeAllEmit(eventEnterKey);
+
+        expect(component.changeAll.emit).toHaveBeenCalled();
+      });
+
+      it('should emit changeAll if event is Space', () => {
+        const eventSpaceKey = new KeyboardEvent('keydown', { 'code': 'Space' });
+        spyOn(component.changeAll, 'emit');
+
+        component.changeAllEmit(eventSpaceKey);
+
+        expect(component.changeAll.emit).toHaveBeenCalled();
+      });
+    });
+
+    describe('callChangeSearch:', () => {
+      it('should emit changeSearch', () => {
+        spyOn(component.changeSearch, 'emit');
+
+        component.callChangeSearch('test');
+
+        expect(component.changeSearch.emit).toHaveBeenCalled();
+      });
+    });
+
+    describe('isSelectedItem:', () => {
+      it('should return false if option is not selected', () => {
+        const selectedOptions = [
+          { label: 'Option 1', value: 'value1' },
+          { label: 'Option 2', value: 'value2' }
+        ];
+        component.selectedOptions = selectedOptions;
+        const option = { label: 'Option 3', value: 'value3' };
+        const result = component.isSelectedItem(option);
+        expect(result).toBeFalsy();
+      });
+
+      it('should return true if option is selected', () => {
+        const selectedOptions = [
+          { label: 'Option 1', value: 'value1' },
+          { label: 'Option 2', value: 'value2' }
+        ];
+        component.selectedOptions = selectedOptions;
+        const option = { label: 'Option 2', value: 'value2' };
+        const result = component.isSelectedItem(option);
+        expect(result).toBeTruthy();
+      });
+    });
+
     describe('onKeydown:', () => {
       it('should call onSelectItem if event is `enter`', () => {
         const item = { label: 'a', value: 'a' };
@@ -301,6 +390,17 @@ describe('PoListBoxComponent', () => {
         component.onKeyDown(item, eventEnterKey);
 
         expect(component.onSelectItem).toHaveBeenCalled();
+      });
+
+      it('should call onSelectCheckBoxItem if event is `enter` and type is `check`', () => {
+        const item = { label: 'a', value: 'a' };
+        const eventEnterKey = new KeyboardEvent('keydown', { 'code': 'Enter' });
+        component.type = 'check';
+        spyOn(component, 'onSelectCheckBoxItem');
+
+        component.onKeyDown(item, eventEnterKey);
+
+        expect(component.onSelectCheckBoxItem).toHaveBeenCalled();
       });
 
       it('should call onSelectItem if event is `space`', () => {
