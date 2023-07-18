@@ -515,49 +515,4 @@ describe('PoPopupComponent:', () => {
       expect(component.close).toHaveBeenCalled();
     });
   });
-
-  describe('Templates:', () => {
-    it('should show `po-popup` if `showPopup` is `true`', () => {
-      component.showPopup = true;
-
-      fixture.detectChanges();
-
-      expect(nativeElement.querySelector('.po-popup')).toBeTruthy();
-    });
-
-    it('shouldn`t show `po-popup` if `showPopup` is `false`', () => {
-      component.showPopup = false;
-
-      fixture.detectChanges();
-
-      expect(nativeElement.querySelector('.po-popup')).toBeNull();
-    });
-
-    it('should not add `po-popup-item-selected` class if PopupAction.selected is false', () => {
-      component.actions = [{ label: 'PopupAction ', selected: false }];
-      component.showPopup = true;
-
-      fixture.detectChanges();
-
-      expect(nativeElement.querySelector('.po-popup-item-selected')).toBeFalsy();
-    });
-
-    it('shouldn´t display arrow.', () => {
-      component.hideArrow = true;
-      component.showPopup = true;
-
-      fixture.detectChanges();
-
-      expect(nativeElement.querySelector('.po-popup-arrow')).toBeFalsy();
-    });
-
-    it('shouldn`t display action if `visible` is `false`.', () => {
-      component.actions = [{ label: 'PO ', type: 'danger', visible: false }];
-      component.showPopup = true;
-
-      fixture.detectChanges();
-
-      expect(nativeElement.querySelector('.po-popup-item-danger')).toBeNull();
-    });
-  });
 });

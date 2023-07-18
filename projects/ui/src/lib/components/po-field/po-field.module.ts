@@ -35,7 +35,6 @@ import { PoLookupComponent } from './po-lookup/po-lookup.component';
 import { PoLookupModalComponent } from './po-lookup/po-lookup-modal/po-lookup-modal.component';
 import { PoMultiselectDropdownComponent } from './po-multiselect/po-multiselect-dropdown/po-multiselect-dropdown.component';
 import { PoMultiselectComponent } from './po-multiselect/po-multiselect.component';
-import { PoMultiselectItemComponent } from './po-multiselect/po-multiselect-item/po-multiselect-item.component';
 import { PoMultiselectSearchComponent } from './po-multiselect/po-multiselect-search/po-multiselect-search.component';
 import { PoRichTextBodyComponent } from './po-rich-text/po-rich-text-body/po-rich-text-body.component';
 import { PoRichTextComponent } from './po-rich-text/po-rich-text.component';
@@ -141,7 +140,6 @@ import { PoLabelModule } from '../po-label';
     PoLookupModalComponent,
     PoMultiselectComponent,
     PoMultiselectDropdownComponent,
-    PoMultiselectItemComponent,
     PoMultiselectSearchComponent,
     PoNumberComponent,
     PoPasswordComponent,
