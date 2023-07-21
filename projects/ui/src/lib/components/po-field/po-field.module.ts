@@ -45,7 +45,6 @@ import { PoRichTextToolbarComponent } from './po-rich-text/po-rich-text-toolbar/
 import { PoInputComponent } from './po-input/po-input.component';
 import { PoNumberComponent } from './po-number/po-number.component';
 import { PoPasswordComponent } from './po-password/po-password.component';
-import { PoSelectComponent } from './po-select/po-select.component';
 import { PoTextareaComponent } from './po-textarea/po-textarea.component';
 import { PoUploadComponent } from './po-upload/po-upload.component';
 import { PoUploadDragDropComponent } from './po-upload/po-upload-drag-drop/po-upload-drag-drop.component';
@@ -57,6 +56,7 @@ import { PoUrlComponent } from './po-url/po-url.component';
 import { PoCheckboxModule } from './po-checkbox/po-checkbox.module';
 import { PoSwitchModule } from './po-switch/po-switch.module';
 import { PoLabelModule } from '../po-label';
+import { PoSelectModule } from './po-select/po-select.module';
 
 /**
  * @description
@@ -97,7 +97,8 @@ import { PoLabelModule } from '../po-label';
     PoRadioModule,
     PoLabelModule,
     PoListBoxModule,
-    PoSwitchModule
+    PoSwitchModule,
+    PoSelectModule
   ],
   exports: [
     PoCheckboxGroupModule,
@@ -119,14 +120,14 @@ import { PoLabelModule } from '../po-label';
     PoNumberComponent,
     PoPasswordComponent,
     PoRichTextComponent,
-    PoSelectComponent,
     PoTextareaComponent,
     PoUploadComponent,
     PoUrlComponent,
     PoCheckboxModule,
     PoRadioModule,
     PoLabelModule,
-    PoSwitchModule
+    PoSwitchModule,
+    PoSelectModule
   ],
   declarations: [
     PoComboComponent,
@@ -150,7 +151,6 @@ import { PoLabelModule } from '../po-label';
     PoRichTextImageModalComponent,
     PoRichTextLinkModalComponent,
     PoRichTextToolbarComponent,
-    PoSelectComponent,
     PoTextareaComponent,
     PoUploadComponent,
     PoUploadDragDropComponent,

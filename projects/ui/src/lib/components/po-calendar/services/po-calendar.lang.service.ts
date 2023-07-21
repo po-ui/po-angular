@@ -149,6 +149,17 @@ export class PoCalendarLangService {
     ru: 'Сегодня'
   };
 
+  private clearLabel = {
+    pt: 'Limpar',
+    en: 'Clear',
+    es: 'Limpiar',
+    ru: 'Чистое'
+  };
+
+  getClearLabel() {
+    return this.clearLabel[this.language];
+  }
+
   getMonth(month: number) {
     return this.months[month][this.language];
   }

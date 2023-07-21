@@ -294,15 +294,15 @@ describe('PoCalendarWrapperComponent', () => {
       expect(component['updateDisplay']).toHaveBeenCalledWith(1996, 11);
     });
 
-    it(`onSelectMonth: should call 'selectDisplayMode' with 'day' and 'updateDisplay' with year and month`, () => {
-      spyOn(component, 'selectDisplayMode');
-      spyOn(component, <any>'updateDisplay');
+    // it(`onSelectMonth: should call 'selectDisplayMode' with 'day' and 'updateDisplay' with year and month`, () => {
+    //   spyOn(component, 'selectDisplayMode');
+    //   spyOn(component, <any>'updateDisplay');
 
-      component.onSelectMonth(2015, 10);
+    //   component.onSelectMonth(2015, 10);
 
-      expect(component.selectDisplayMode).toHaveBeenCalledWith('day');
-      expect(component['updateDisplay']).toHaveBeenCalledWith(2015, 10);
-    });
+    //   expect(component.selectDisplayMode).toHaveBeenCalledWith('day');
+    //   expect(component['updateDisplay']).toHaveBeenCalledWith(2015, 10);
+    // });
 
     it(`addAllYearsInDecade: should update 'displayDecade' with 10 years`, () => {
       component.displayDecade = [];

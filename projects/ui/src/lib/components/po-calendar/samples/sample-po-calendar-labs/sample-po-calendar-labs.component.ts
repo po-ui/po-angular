@@ -1,6 +1,6 @@
 import { Component, OnInit } from '@angular/core';
 
-import { PoRadioGroupOption, PoCalendarMode } from '@po-ui/ng-components';
+import { PoRadioGroupOption, PoCalendarMode } from '../../../';
 
 @Component({
   selector: 'sample-po-calendar-labs',

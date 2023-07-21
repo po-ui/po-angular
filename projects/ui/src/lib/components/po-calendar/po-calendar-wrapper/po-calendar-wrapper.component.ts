@@ -166,11 +166,14 @@ export class PoCalendarWrapperComponent implements OnInit, OnChanges {
   }
 
   // Ao selecionar um mês
-  onSelectMonth(year: number, month: number) {
-    this.selectDisplayMode('day');
-    this.updateDisplay(year, month);
+  // onSelectMonth(year: number, month: number) {
+  onSelectMonth(event: any) {
+    console.log('onSelectMonth', event);
+    // this.selectDisplayMode('day');
+    this.updateDisplay(event.year, event.month);
 
-    this.headerChange.emit({ month, year });
+    // this.headerChange.emit({ month, year });
+    this.headerChange.emit(event);
   }
 
   // Ao selecionar um ano
@@ -191,6 +194,14 @@ export class PoCalendarWrapperComponent implements OnInit, OnChanges {
 
   updateYear(value: number) {
     this.updateDisplay(this.displayYear + value, this.displayMonthNumber);
+  }
+
+  getMonthArray(): any[] {
+    return this.poCalendarLangService.getMonthsArray();
+  }
+
+  getClearLabel(): any[] {
+    return this.poCalendarLangService.getClearLabel();
   }
 
   private addAllYearsInDecade(year: number) {
@@ -271,6 +282,7 @@ export class PoCalendarWrapperComponent implements OnInit, OnChanges {
     this.updateDate(this.activateDate);
     this.initializeLanguage();
     this.selectDisplayMode('day');
+    this.getMonthArray();
   }
 
   private initializeLanguage() {

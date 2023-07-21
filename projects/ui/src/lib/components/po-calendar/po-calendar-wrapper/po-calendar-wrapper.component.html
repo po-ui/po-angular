@@ -5,9 +5,11 @@
       [p-hide-next]="isStartPart && !responsive"
       (p-previous)="onPreviousMonth()"
       (p-next)="onNextMonth()"
+      (p-mouth)="onSelectMonth($event)"
+      [p-mouths]="getMonthArray()"
     >
-      <span class="po-clickable po-mr-1" (click)="selectDisplayMode('month')">{{ displayMonth }}</span>
-      <span class="po-clickable" (click)="selectDisplayMode('year')">{{ displayYear }}</span>
+      <!-- <span class="po-clickable po-mr-1" (click)="selectDisplayMode('month')">{{ displayMonth }}</span>
+      <span class="po-clickable" (click)="selectDisplayMode('year')">{{ displayYear }}</span> -->
     </po-calendar-header>
 
     <div class="po-calendar-content">
@@ -35,7 +37,7 @@
     </div>
   </ng-container>
 
-  <ng-container *ngIf="isMonthVisible">
+  <!-- <ng-container *ngIf="isMonthVisible">
     <po-calendar-header (p-previous)="updateYear(-1)" (p-next)="updateYear(1)">
       <span class="po-clickable" (click)="selectDisplayMode('year')">
         {{ displayYear }}
@@ -49,22 +51,17 @@
         </div>
       </div>
       <div class="po-calendar-content-list-month">
-        <div
-          *ngFor="let month of displayMonths; let i = index"
-          class="po-calendar-month"
-          [ngClass]="getBackgroundColor(i, displayMonthNumber)"
-          (click)="onSelectMonth(displayYear, i)"
-          attr-calendar
-        >
+        <div *ngFor="let month of displayMonths; let i = index" class="po-calendar-month"
+          [ngClass]="getBackgroundColor(i, displayMonthNumber)" (click)="onSelectMonth(displayYear, i)" attr-calendar>
           <span [ngClass]="getForegroundColor(i, displayMonthNumber)">
             {{ month }}
           </span>
         </div>
       </div>
     </div>
-  </ng-container>
+  </ng-container> -->
 
-  <ng-container *ngIf="isYearVisible">
+  <!-- <ng-container *ngIf="isYearVisible">
     <po-calendar-header (p-previous)="updateYear(-10)" (p-next)="updateYear(10)">
       {{ displayStartDecade }} - {{ displayFinalDecade }}
     </po-calendar-header>
@@ -77,33 +74,47 @@
       </div>
 
       <div class="po-calendar-content-list-year">
-        <div
-          *ngFor="let year of displayDecade; let i = index"
-          class="po-calendar-year"
-          [ngClass]="getBackgroundColor(year, currentYear)"
-          (click)="onSelectYear(year, displayMonthNumber)"
-          attr-calendar
-        >
+        <div *ngFor="let year of displayDecade; let i = index" class="po-calendar-year"
+          [ngClass]="getBackgroundColor(year, currentYear)" (click)="onSelectYear(year, displayMonthNumber)"
+          attr-calendar>
           <span [ngClass]="getForegroundColor(year, currentYear)">
             {{ year }}
           </span>
         </div>
       </div>
     </div>
-  </ng-container>
+  </ng-container> -->
 
   <ng-container *ngIf="!range">
     <div class="po-calendar-footer">
-      <div class="po-calendar-footer-today">
-        <button
-          type="button"
-          class="po-calendar-footer-today-button"
-          (click)="onSelectDate(today)"
-          [disabled]="isTodayUnavailable()"
-        >
+      <!-- <div class="po-calendar-footer-today"> -->
+      <!-- <div class="po-row"> -->
+
+      <po-button
+        class="po-xl-4 po-lg-4 po-md-6 po-sm-12"
+        p-kind="tertiary"
+        [p-label]="getClearLabel()"
+        [p-disabled]="isTodayUnavailable()"
+        (p-click)="onSelectDate(today)"
+      ></po-button>
+      <po-button
+        class="po-offset-lg-4 po-offset-xl-4 po-xl-4 po-lg-4 po-md-6 po-sm-12"
+        p-kind="tertiary"
+        [p-label]="displayToday"
+        [p-disabled]="isTodayUnavailable()"
+        (p-click)="onSelectDate(today)"
+      ></po-button>
+
+      <!-- <button type="button" class="po-calendar-footer-today-button" (click)="onSelectDate(today)"
+          [disabled]="isTodayUnavailable()">
           {{ displayToday }}
         </button>
-      </div>
+
+        <button type="button" class="po-calendar-footer-today-button" (click)="onSelectDate(today)"
+          [disabled]="isTodayUnavailable()">
+          {{ displayToday }}
+        </button> -->
+      <!-- </div> -->
     </div>
   </ng-container>
 </div>

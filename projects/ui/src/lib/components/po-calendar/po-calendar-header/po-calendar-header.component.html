@@ -1,19 +1,32 @@
 <div class="po-calendar-header">
-  <span
-    *ngIf="previous?.observers && !hidePrevious"
-    class="po-calendar-header-left po-icon po-icon-arrow-left"
-    (click)="previous.emit()"
-  >
-  </span>
+  <!-- <span *ngIf="previous?.observers && !hidePrevious" class="po-calendar-header-left po-icon po-icon-arrow-left"
+    (click)="previous.emit()">
+  </span> -->
 
-  <div class="po-calendar-header-title" attr-calendar>
+  <!-- <div class="po-calendar-header-title" attr-calendar>
     <ng-content></ng-content>
+  </div> -->
+
+  <div class="po-calendar-header-select">
+    <po-select name="monthSelected" [p-options]="mouths" class="po-sm-6"></po-select>
+    <po-select [p-options]="years" class="po-sm-6"></po-select>
   </div>
 
-  <span
-    *ngIf="next?.observers.length && !hideNext"
-    class="po-calendar-header-right po-icon po-icon-arrow-right"
-    (click)="next.emit()"
-  >
-  </span>
+  <div class="po-calendar-header-button" style="padding-top: 6px">
+    <po-button
+      (p-click)="previous.emit()"
+      *ngIf="previous?.observers && !hidePrevious"
+      p-kind="tertiary"
+      p-icon="po-icon-arrow-left"
+    ></po-button>
+    <po-button
+      (p-click)="next.emit()"
+      *ngIf="next?.observers.length && !hideNext"
+      p-kind="tertiary"
+      p-icon="po-icon-arrow-right"
+    ></po-button>
+  </div>
+  <!-- <span *ngIf="next?.observers.length && !hideNext" class="po-calendar-header-right po-icon po-icon-arrow-right"
+    (click)="next.emit()">
+  </span> -->
 </div>

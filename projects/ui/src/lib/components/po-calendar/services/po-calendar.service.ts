@@ -20,15 +20,33 @@ export class PoCalendarService {
 
     date = this.weekStartDate(date);
 
+    // do {
+    //   for (i = 0; i < 7; i++) {
+    //     week.push(dayFormatter ? dayFormatter(date) : date);
+    //     date = new Date(date.getTime());
+    //     date.setDate(date.getDate() + 1);
+    //   }
+    //   weeks.push(weekFormatter ? weekFormatter(week) : week);
+    //   week = [];
+    // } while (date.getMonth() <= month && date.getFullYear() === year);
+    // console.log(weeks)
+    // return weeks;
+
     do {
       for (i = 0; i < 7; i++) {
-        week.push(dayFormatter ? dayFormatter(date) : date);
-        date = new Date(date.getTime());
+        week.push(date.getDate());
         date.setDate(date.getDate() + 1);
       }
       weeks.push(weekFormatter ? weekFormatter(week) : week);
       week = [];
     } while (date.getMonth() <= month && date.getFullYear() === year);
+
+    if (dayFormatter) {
+      for (let i = 0; i < weeks.length; i++) {
+        weeks[i] = weeks[i].map(day => dayFormatter(new Date(year, month, day)));
+      }
+    }
+
     return weeks;
   }
 
