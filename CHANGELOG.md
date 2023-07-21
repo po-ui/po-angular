@@ -2,6 +2,19 @@
 
 All notable changes to this project will be documented in this file. See [standard-version](https://github.com/conventional-changelog/standard-version) for commit guidelines.
 
+# [15.13.0](https://github.com/po-ui/po-angular/compare/v15.12.1...v15.13.0) (2023-07-21)
+
+
+### Features
+
+* **datepicker:** implementa timezone na data extendida ([c8659d3](https://github.com/po-ui/po-angular/commit/c8659d3397a69045f1254e95e50aed8dec30a220))
+* **menu:** implementa definições do AnimaliaDS ([431efdc](https://github.com/po-ui/po-angular/commit/431efdcea18dcdced6a58a51d2f89e5cb9731655))
+* **multiselect:** implementa definições do AnimaliaDS ([b9f1c7c](https://github.com/po-ui/po-angular/commit/b9f1c7c9dac829d115081ea8988f809cb4ed1361))
+* **table:** implementa funcionalidade de ações em lote ([383e37b](https://github.com/po-ui/po-angular/commit/383e37bb916f650de2313f17f1d8ae3762d37fb9))
+* **table:** implementa recurso `drag and drop` nas colunas da tabela ([c4e4602](https://github.com/po-ui/po-angular/commit/c4e46024bf82aaeb8e3836ab0ac33532e922ec6b))
+
+
+
 ## [15.12.1](https://github.com/po-ui/po-angular/compare/v15.12.0...v15.12.1) (2023-07-17)
 
 
