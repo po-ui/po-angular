@@ -143,7 +143,45 @@ export class PoTableColumnManagerComponent implements OnChanges, OnDestroy {
 
     this.changePositionColumn(newColumn, indexColumn, direction);
     this.columns = newColumn;
+
+    const newColumndois = [...this.columnsOptions];
+
+    newColumndois.forEach(item => {
+      if (item['value'] === option.value) {
+        item.fixed = option.fixed;
+      }
+    });
+
+    this.columnsOptions = [...newColumndois];
     this.visibleColumnsChange.emit(this.columns);
+  }
+
+  emitColumnFixed(option) {
+    console.log(option);
+    const newColumn = [...this.columns];
+    if (option) {
+      newColumn.forEach(item => {
+        if (item.property === option.value) {
+          item.fixed = option.fixed;
+        }
+      });
+
+      if (option.fixed) {
+        const quantidade = newColumn.filter(item => item.fixed === true).length;
+        const indexColumn = newColumn.findIndex(el => el.property === option.value);
+        console.log(newColumn);
+        const item = newColumn.splice(indexColumn, 1)[0];
+        newColumn.splice(quantidade - 1, 0, item);
+        console.log(item);
+        console.log(quantidade);
+        console.log(indexColumn);
+        console.log(newColumn);
+      }
+
+      this.columns = [...newColumn];
+      console.log(this.columns);
+    }
+    this.visibleColumnsChange.emit(newColumn);
   }
 
   private changePositionColumn(array: Array<PoTableColumn>, index: number, direction: Direction) {

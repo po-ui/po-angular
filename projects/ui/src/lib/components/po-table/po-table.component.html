@@ -161,6 +161,7 @@
             (click)="sortColumn(column)"
             cdkDrag
             cdkDragLockAxis="x"
+            [cdkDragDisabled]="column.fixed"
           >
             <div
               class="po-table-header-flex"
@@ -491,6 +492,7 @@
               (click)="sortColumn(column)"
               cdkDrag
               cdkDragLockAxis="x"
+              [cdkDragDisabled]="column.fixed"
             >
               <div
                 class="po-table-header-flex"

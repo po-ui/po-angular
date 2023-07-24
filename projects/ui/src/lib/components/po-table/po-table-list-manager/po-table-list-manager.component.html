@@ -1,15 +1,71 @@
-<section class="po-table-list-manager-section">
-  <p class="po-table-list-manager-title-group-items">{{ literals.otherColumns }}</p>
-  <div
-    class="po-table-list-manager-container-items"
+<style>
+  .flex {
+    display: flex;
+    align-items: center;
+    gap: 2.5rem;
+  }
+
+  .bold {
+    font-weight: bold;
+  }
+
+  .po-table-column-manager-body {
+    /* remover padding */
+    padding: 0px !important;
+  }
+
+  .po-table-list-manager-item {
+    border: 1px solid #ececee;
+    padding: 8px;
+    border-radius: 8px;
+  }
+
+  .po-container-icons-arrows-columns-manager {
+    gap: 5px;
+  }
+
+  .po-table-list-manager-container + .po-table-list-manager-container {
+    margin-top: 10px;
+  }
+
+  .po-table-list-manager-title-group-items {
+    font-weight: 700;
+    line-height: 21px;
+    font-size: 14px;
+    color: #515162;
+    margin-bottom: 0.5rem;
+  }
+
+  .group-item {
+    margin-bottom: 3.5rem;
+  }
+</style>
+
+<div *ngIf="existedFixedItem()" class="group-item">
+  <p class="po-table-list-manager-title-group-items">{{ literals.fixedColumns }}</p>
+  <li
+    class="po-table-list-manager-container"
     *ngFor="let option of checkboxGroupOptionsView; trackBy: trackByFn"
     [class.po-checkbox-group-item-disabled]="option.disabled || disabled"
   >
-    <ng-container *ngIf="!option.fixed">
+    <ng-container *ngIf="isFixed(option)">
       <ng-container *ngTemplateOutlet="listItemsManagerDefault; context: { $implicit: option }"></ng-container>
     </ng-container>
-  </div>
-</section>
+  </li>
+</div>
+
+<div>
+  <p class="po-table-list-manager-title-group-items">{{ literals.otherColumns }}</p>
+  <li
+    class="po-table-list-manager-container"
+    *ngFor="let option of checkboxGroupOptionsView; trackBy: trackByFn"
+    [class.po-checkbox-group-item-disabled]="option.disabled || disabled"
+  >
+    <ng-container *ngIf="!isFixed(option)">
+      <ng-container *ngTemplateOutlet="listItemsManagerDefault; context: { $implicit: option }"></ng-container>
+    </ng-container>
+  </li>
+</div>
 
 <ng-template #listItemsManagerDefault let-option>
   <div class="po-table-list-manager-item">
@@ -31,19 +87,28 @@
 
     <div class="po-table-list-manager-item-buttons">
       <po-button
+        [p-kind]="isFixed(option) ? 'primary' : 'tertiary'"
+        p-icon="po-icon po-icon-lock"
+        (click)="emitFixed(option)"
+        [p-disabled]="!option.visible"
+      >
+      </po-button>
+      <po-button
         [p-tooltip]="literals.up"
         p-tooltip-position="left"
+        p-kind="tertiary"
         p-icon="po-icon po-icon-arrow-up"
-        [p-disabled]="verifyArrowDisabled(option, 'up')"
+        [p-disabled]="verifyArrowDisabled(option, 'up') || isFixed(option)"
         (click)="emitChangePosition(option, 'up'); $event.stopPropagation()"
       >
       </po-button>
 
       <po-button
+        p-kind="tertiary"
         [p-tooltip]="literals.down"
         p-tooltip-position="top"
         p-icon="po-icon po-icon-arrow-down"
-        [p-disabled]="verifyArrowDisabled(option, 'down')"
+        [p-disabled]="verifyArrowDisabled(option, 'down') || isFixed(option)"
         (click)="emitChangePosition(option, 'down'); $event.stopPropagation()"
       >
       </po-button>

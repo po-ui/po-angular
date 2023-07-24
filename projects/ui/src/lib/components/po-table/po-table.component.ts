@@ -640,24 +640,27 @@ export class PoTableComponent extends PoTableBaseComponent implements AfterViewI
   }
 
   drop(event: CdkDragDrop<Array<string>>) {
-    moveItemInArray(this.mainColumns, event.previousIndex, event.currentIndex);
+    //console.log('colum:', this.columns[event.previousIndex], 'fixed:', this.columns[event.previousIndex].fixed);
+    if (this.columns[event.previousIndex].fixed && this.columns[event.currentIndex].fixed) {
+      moveItemInArray(this.mainColumns, event.previousIndex, event.currentIndex);
 
-    if (this.hideColumnsManager === false) {
-      this.newOrderColumns = this.mainColumns;
-      const detail = this.columns.filter(item => item.property === 'detail')[0];
+      if (this.hideColumnsManager === false) {
+        this.newOrderColumns = this.mainColumns;
+        const detail = this.columns.filter(item => item.property === 'detail')[0];
 
-      if (detail !== undefined) {
-        this.newOrderColumns.push(detail);
-      }
-
-      this.columns.map((item, index) => {
-        if (!item.visible) {
-          this.newOrderColumns.splice(index, 0, item);
+        if (detail !== undefined) {
+          this.newOrderColumns.push(detail);
         }
-      });
-      this.columns = this.newOrderColumns;
 
-      this.onVisibleColumnsChange(this.newOrderColumns);
+        this.columns.map((item, index) => {
+          if (!item.visible) {
+            this.newOrderColumns.splice(index, 0, item);
+          }
+        });
+        this.columns = this.newOrderColumns;
+
+        this.onVisibleColumnsChange(this.newOrderColumns);
+      }
     }
   }
 

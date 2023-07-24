@@ -23,4 +23,6 @@ export interface PoCheckboxGroupOption {
    * usuário alterar a condição do checkbox.
    */
   disabled?: boolean;
+
+  fixed?: boolean;
 }

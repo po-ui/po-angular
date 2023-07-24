@@ -261,4 +261,15 @@ export interface PoTableColumn {
    * > Exemplo: '100px' ou '20%'.
    */
   width?: string;
+
+  /**
+   * @optional
+   *
+   * @description
+   *
+   * Define se a coluna será fixa ou se poderá ter a sua posição alterada, tanto pelo gerenciador de colunas como pelo recurso de drag'n drop.   *
+   *
+   * @default `false`
+   */
+  fixed?: boolean;
 }
