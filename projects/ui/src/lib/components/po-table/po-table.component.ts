@@ -641,7 +641,7 @@ export class PoTableComponent extends PoTableBaseComponent implements AfterViewI
 
   drop(event: CdkDragDrop<Array<string>>) {
     //console.log('colum:', this.columns[event.previousIndex], 'fixed:', this.columns[event.previousIndex].fixed);
-    if (this.columns[event.previousIndex].fixed && this.columns[event.currentIndex].fixed) {
+    if (!this.columns[event.previousIndex].fixed && !this.columns[event.currentIndex].fixed) {
       moveItemInArray(this.mainColumns, event.previousIndex, event.currentIndex);
 
       if (this.hideColumnsManager === false) {
