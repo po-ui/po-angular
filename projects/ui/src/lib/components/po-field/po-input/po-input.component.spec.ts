@@ -51,9 +51,11 @@ describe('PoInputComponent: ', () => {
   describe('Methods:', () => {
     describe('ngAfterViewInit:', () => {
       let inputFocus: jasmine.Spy;
+      let inputkeyup: jasmine.Spy;
 
       beforeEach(() => {
         inputFocus = spyOn(component, 'focus');
+        inputkeyup = spyOn(component.enterClick, 'emit');
       });
 
       it('should call `focus` if autoFocus is true.', () => {
@@ -66,6 +68,13 @@ describe('PoInputComponent: ', () => {
         component.autoFocus = false;
         component.ngAfterViewInit();
         expect(inputFocus).not.toHaveBeenCalled();
+      });
+
+      it('should emit "keyup.enter" event when an Enter key is pressed', () => {
+        const enterEvent = new KeyboardEvent('keyup', { key: 'Enter' });
+        component.enterClick.emit(enterEvent);
+        component.ngAfterViewInit();
+        expect(inputkeyup).toHaveBeenCalled();
       });
     });
   });
