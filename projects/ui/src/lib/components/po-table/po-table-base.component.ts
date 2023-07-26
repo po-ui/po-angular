@@ -8,6 +8,7 @@ import { capitalizeFirstLetter, convertToBoolean, isTypeof, sortValues } from '.
 
 import { InputBoolean } from '../../decorators';
 import { PoTableColumnSortType } from './enums/po-table-column-sort-type.enum';
+import { PoTableColumnSpacing } from './enums/po-table-spacing.enum';
 import { PoTableAction } from './interfaces/po-table-action.interface';
 import { PoTableColumnSort } from './interfaces/po-table-column-sort.interface';
 import { PoTableColumn } from './interfaces/po-table-column.interface';
@@ -406,6 +407,8 @@ export abstract class PoTableBaseComponent implements OnChanges, OnDestroy {
   showBatchActions: boolean = false;
   itemsSelected: Array<any> = [];
   paramsFilter: {};
+  private initialVisibleColumns: boolean = false;
+  private _spacing: PoTableColumnSpacing = PoTableColumnSpacing.Medium;
   private _actions?: Array<PoTableAction> = [];
   private _columns: Array<PoTableColumn> = [];
   private _container?: string;
@@ -464,11 +467,17 @@ export abstract class PoTableBaseComponent implements OnChanges, OnDestroy {
    *
    */
   @Input('p-columns') set columns(columns: Array<PoTableColumn>) {
+    const hasColumnsWithVisible = columns?.find(column => column.visible === true);
     if (this.initialColumns === undefined) {
       this.initialColumns = columns;
     }
 
     this._columns = columns || [];
+
+    if (hasColumnsWithVisible && !this.initialVisibleColumns) {
+      this.initialVisibleColumns = true;
+      this.verifyInteractiveColumns();
+    }
 
     if (this._columns.length) {
       this.setColumnLink();
@@ -780,6 +789,31 @@ export abstract class PoTableBaseComponent implements OnChanges, OnDestroy {
     return this._serviceDeleteApi;
   }
 
+  /**
+   * @optional
+   *
+   * @description
+   *
+   * Responsável por aplicar espaçamento nas colunas.
+   *
+   * Deve receber um dos valores do enum `PoTableColumnSpacing`.
+   *
+   * Valor `small` só funciona em tabelas não interativas. Caso seja setado com `small` e a tabela seja interativa, o valor será retornado para `medium`.
+   *
+   * @default `medium`
+   */
+  @Input('p-spacing') set spacing(value: PoTableColumnSpacing) {
+    if (value === 'small' || value === 'medium' || value === 'large') {
+      this._spacing = value;
+    } else {
+      this._spacing = PoTableColumnSpacing.Medium;
+    }
+  }
+
+  get spacing() {
+    return this._spacing;
+  }
+
   get hasColumns(): boolean {
     return this.columns && this.columns.length > 0;
   }
@@ -809,6 +843,12 @@ export abstract class PoTableBaseComponent implements OnChanges, OnDestroy {
       'columnTemplate'
     ];
     return this.columns.filter(col => !col.type || typesValid.includes(col.type));
+  }
+
+  get visibleActions() {
+    return (
+      this.actions !== undefined && this.actions && this.actions.filter(action => action && action.visible !== false)
+    );
   }
 
   private get sortType(): PoTableColumnSortType {
@@ -1103,6 +1143,13 @@ export abstract class PoTableBaseComponent implements OnChanges, OnDestroy {
         item.$selected = false;
       }
     });
+  }
+
+  private verifyInteractiveColumns() {
+    const hasLinkOrDetail = this.columns.find(column => column.type === 'link' || column.type === 'detail');
+    if (this.spacing === 'small' && (this.selectable || hasLinkOrDetail || this.visibleActions.length > 0)) {
+      this.spacing = PoTableColumnSpacing.Medium;
+    }
   }
 
   private verifyWidthColumnsPixels() {
