@@ -15,6 +15,7 @@ import { PoColorPaletteService } from './../../services/po-color-palette/po-colo
 import { CdkVirtualScrollViewport } from '@angular/cdk/scrolling';
 import { NoopAnimationsModule } from '@angular/platform-browser/animations';
 import { PoTableRowTemplateArrowDirection } from './enums/po-table-row-template-arrow-direction.enum';
+import { PoTableColumnSpacing } from './enums/po-table-spacing.enum';
 import { PoTableAction } from './interfaces/po-table-action.interface';
 import { PoTableColumn } from './interfaces/po-table-column.interface';
 import { PoTableBaseComponent } from './po-table-base.component';
@@ -1410,33 +1411,6 @@ describe('PoTableComponent:', () => {
       expect(component.hasRowTemplate).toBeTruthy();
     });
 
-    it('visibleActions: should be `false` if doesn`t have action.', () => {
-      component.actions = undefined;
-
-      expect(component.visibleActions).toBeFalsy();
-    });
-
-    it('visibleActions: shouldn`t return action if visible is `false`.', () => {
-      component.actions = [
-        { label: 'PO1', visible: false },
-        { label: 'PO2', visible: true }
-      ];
-
-      expect(component.visibleActions).toEqual([{ label: 'PO2', visible: true }]);
-    });
-
-    it('visibleActions: should return only valid values', () => {
-      component.actions = [{ label: 'PO1' }, undefined, null];
-
-      expect(component.visibleActions).toEqual([{ label: 'PO1' }]);
-    });
-
-    it('visibleActions: should be `true` if has action.', () => {
-      component.actions = actions;
-
-      expect(component.visibleActions).toBeTruthy();
-    });
-
     it('detailHideSelect: should return `false` if doesn`t have MasterDetail', () => {
       component.columns = columns;
 
@@ -2338,6 +2312,35 @@ describe('PoTableComponent:', () => {
       fixture.detectChanges();
 
       expect(nativeElement.querySelector(`po-table-column-manager`)).toBe(null);
+    });
+
+    it('should call attr-p-spacing `medium` if p-spacing not set', () => {
+      component.columns = [...columnsWithDetail];
+
+      fixture.detectChanges();
+
+      expect(nativeElement.querySelector('[p-spacing="medium"]')).toBeTruthy();
+    });
+
+    it('should call attr-p-spacing `small` if p-spacing is `small` and row is not interactive', () => {
+      component.columns = [{ property: 'name' }, { property: 'age' }];
+      component.spacing = PoTableColumnSpacing.Small;
+      fixture.detectChanges();
+
+      expect(nativeElement.querySelector('[p-spacing="small"]')).toBeTruthy();
+    });
+
+    it('should call attr-p-spacing `medium` if p-spacing is `small` and row is interactive', () => {
+      component.spacing = PoTableColumnSpacing.Small;
+      component['initialVisibleColumns'] = false;
+      component.columns = [
+        { property: 'name', type: 'link', visible: true },
+        { property: 'age', visible: true }
+      ];
+      fixture.detectChanges();
+
+      expect(nativeElement.querySelector('[p-spacing="small"]')).toBeNull();
+      expect(nativeElement.querySelector('[p-spacing="medium"]')).toBeTruthy();
     });
 
     it('should display .po-table-header-master-detail if columns contains detail and rowTemplate is undefined', () => {

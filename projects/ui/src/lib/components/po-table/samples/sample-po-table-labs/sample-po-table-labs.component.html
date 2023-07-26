@@ -13,6 +13,7 @@
   [p-loading]="properties.includes('loading')"
   [p-max-columns]="maxColumns"
   [p-selectable]="selection.includes('selectable')"
+  [p-spacing]="spacing"
   [p-loading-show-more]="properties.includes('loadingShowMore')"
   [p-show-more-disabled]="properties.includes('showMoreDisabled')"
   [p-single-select]="selection.includes('singleSelect')"
@@ -127,6 +128,11 @@
       (p-change)="changeActionOptions()"
     >
     </po-checkbox-group>
+  </div>
+
+  <div class="po-row">
+    <po-radio-group class="po-lg-6" name="spacing" [(ngModel)]="spacing" p-label="Spacing" [p-options]="typeSpacing">
+    </po-radio-group>
   </div>
 
   <div class="po-row">

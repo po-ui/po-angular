@@ -1,11 +1,12 @@
-import { Component, ViewChild, OnInit } from '@angular/core';
+import { Component, OnInit, ViewChild } from '@angular/core';
 
 import {
   PoCheckboxGroupOption,
-  PoRadioGroupOption,
   PoModalComponent,
+  PoRadioGroupOption,
   PoTableAction,
   PoTableColumn,
+  PoTableColumnSpacing,
   PoTableLiterals
 } from '@po-ui/ng-components';
 
@@ -41,6 +42,7 @@ export class SamplePoTableLabsComponent implements OnInit {
   maxColumns: number;
   properties: Array<string>;
   selection: Array<string>;
+  spacing: PoTableColumnSpacing = PoTableColumnSpacing.Medium;
 
   actionsDefinitionOptions: Array<PoCheckboxGroupOption> = [
     { label: 'Actions', value: 'actions' },
@@ -94,6 +96,12 @@ export class SamplePoTableLabsComponent implements OnInit {
     { label: 'Top', value: 'top' }
   ];
 
+  public readonly typeSpacing: Array<PoRadioGroupOption> = [
+    { label: 'Small', value: 'small', disabled: false },
+    { label: 'Medium', value: 'medium' },
+    { label: 'Large', value: 'large' }
+  ];
+
   constructor(private samplePoTableLabsService: SamplePoTableLabsService) {}
 
   ngOnInit() {
@@ -120,6 +128,7 @@ export class SamplePoTableLabsComponent implements OnInit {
         : [this.actionTableFirst, this.actionTableSecond]
       : [];
     this.actionTableFirst.visible = this.actionsDefinition.visibleAction;
+    this.spacingSelectOrAction();
   }
 
   changeEvent(event: string) {
@@ -142,6 +151,7 @@ export class SamplePoTableLabsComponent implements OnInit {
     this.selectionOptions[2].disabled = !selectable;
 
     this.selectionOptions = [].concat(this.selectionOptions);
+    this.spacingSelectOrAction();
   }
 
   deleteItems(items: Array<any>) {
@@ -173,6 +183,7 @@ export class SamplePoTableLabsComponent implements OnInit {
     this.maxColumns = undefined;
     this.properties = [];
     this.selection = [];
+    this.spacing = PoTableColumnSpacing.Medium;
 
     this.updateColumns();
     this.changeActionOptions();
@@ -184,6 +195,30 @@ export class SamplePoTableLabsComponent implements OnInit {
 
   updateColumns() {
     this.columns = [];
-    this.columnsName.forEach(column => this.columns.push(this.columnsDefinition[column]));
+    this.typeSpacing[0].disabled = false;
+    this.columnsName.forEach(column => {
+      this.columns.push(this.columnsDefinition[column]);
+      this.verifySpacing(column);
+    });
+  }
+
+  private spacingSelectOrAction() {
+    if (this.columnsName.length > 0) {
+      this.updateColumns();
+    } else {
+      this.verifySpacing();
+      if (this.actions.length === 0 && this.selection[0] !== 'selectable') {
+        this.typeSpacing[0].disabled = false;
+      }
+    }
+  }
+
+  private verifySpacing(column?: string) {
+    if (column === 'link' || column === 'detail' || this.selection[0] === 'selectable' || this.actions.length > 0) {
+      this.typeSpacing[0].disabled = true;
+      if (this.spacing === 'small') {
+        this.spacing = PoTableColumnSpacing.Medium;
+      }
+    }
   }
 }

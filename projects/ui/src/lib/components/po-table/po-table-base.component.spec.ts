@@ -1,19 +1,20 @@
 import { Directive } from '@angular/core';
 
-import * as utilsFunctions from '../../utils/util';
-import { expectPropertiesValues, expectSettersMethod } from '../../util-test/util-expect.spec';
 import { PoDateService } from '../../services/po-date/po-date.service';
-import { PoLanguageService } from '../../services/po-language/po-language.service';
 import { poLocaleDefault } from '../../services/po-language/po-language.constant';
+import { PoLanguageService } from '../../services/po-language/po-language.service';
+import { expectPropertiesValues, expectSettersMethod } from '../../util-test/util-expect.spec';
+import * as utilsFunctions from '../../utils/util';
 
-import { PoTableAction } from './interfaces/po-table-action.interface';
-import { PoTableBaseComponent, poTableLiteralsDefault } from './po-table-base.component';
-import { PoTableColumn } from './interfaces/po-table-column.interface';
-import { PoTableColumnSortType } from './enums/po-table-column-sort-type.enum';
-import { PoTableService } from './services/po-table.service';
+import { HttpClientTestingModule } from '@angular/common/http/testing';
 import { TestBed } from '@angular/core/testing';
 import { Observable, of } from 'rxjs';
-import { HttpClientTestingModule } from '@angular/common/http/testing';
+import { PoTableColumnSortType } from './enums/po-table-column-sort-type.enum';
+import { PoTableColumnSpacing } from './enums/po-table-spacing.enum';
+import { PoTableAction } from './interfaces/po-table-action.interface';
+import { PoTableColumn } from './interfaces/po-table-column.interface';
+import { PoTableBaseComponent, poTableLiteralsDefault } from './po-table-base.component';
+import { PoTableService } from './services/po-table.service';
 
 @Directive()
 class PoTableComponent extends PoTableBaseComponent {
@@ -597,6 +598,47 @@ describe('PoTableBaseComponent:', () => {
 
         expect(component['unselectOtherRows']).not.toHaveBeenCalled();
         expect(component['isEverySelected']).not.toHaveBeenCalled();
+      });
+    });
+
+    describe('verifyInteractiveColumns: ', () => {
+      it('should call spacing `large`', () => {
+        component.columns = [
+          { label: 'Table', property: 'table', visible: true },
+          { label: 'Angular', property: 'angular', visible: true }
+        ];
+        component.spacing = PoTableColumnSpacing.Large;
+
+        component['verifyInteractiveColumns']();
+
+        expect(component.spacing).toBe('large');
+      });
+
+      it('should call spacing `small` when row is not interactive', () => {
+        component.columns = [
+          { label: 'Table', property: 'table', visible: true },
+          { label: 'Angular', property: 'angular', visible: true }
+        ];
+        component.selectable = false;
+        component.actions = [];
+        component.spacing = PoTableColumnSpacing.Small;
+
+        component['verifyInteractiveColumns']();
+
+        expect(component.spacing).toBe('small');
+      });
+
+      it('should call spacing `medium` when row is interactive and set spacing `small`', () => {
+        component.columns = [
+          { label: 'Table', property: 'table', visible: true },
+          { label: 'Angular', property: 'angular', visible: true, type: 'link' }
+        ];
+        component.selectable = true;
+        component.spacing = PoTableColumnSpacing.Small;
+
+        component['verifyInteractiveColumns']();
+
+        expect(component.spacing).toBe('medium');
       });
     });
 
@@ -1486,6 +1528,19 @@ describe('PoTableBaseComponent:', () => {
       expect(component['getDefaultColumns']).not.toHaveBeenCalled();
     });
 
+    it('p-columns: should call `verifyInteractiveColumns` if have a column if visible propertie', () => {
+      spyOn(component, <any>'verifyInteractiveColumns');
+
+      component['initialVisibleColumns'] = false;
+      component.columns = [
+        { label: 'Table', property: 'table', visible: true },
+        { label: 'Angular', property: 'angular', visible: true }
+      ];
+
+      expect(component['initialVisibleColumns']).toBe(true);
+      expect(component['verifyInteractiveColumns']).toHaveBeenCalled();
+    });
+
     it('p-container: should update property with valid values', () => {
       const validValues = ['border', 'shadow'];
 
@@ -1518,6 +1573,42 @@ describe('PoTableBaseComponent:', () => {
 
     it('p-service-delete: should update property with valid values', () => {
       expectPropertiesValues(component, 'serviceDeleteApi', 'https://po-ui.io', 'https://po-ui.io');
+    });
+
+    it('p-spacing: should update property with valid values', () => {
+      expectPropertiesValues(component, 'spacing', 'small', 'small');
+    });
+
+    it('p-spacing: should update property with `Medium` if values are invalid', () => {
+      const invalidValues = [undefined, null, true, false, 'qdqdsa', [], {}];
+      expectPropertiesValues(component, 'spacing', invalidValues, 'medium');
+    });
+
+    it('visibleActions: should be `false` if doesn`t have action.', () => {
+      component.actions = undefined;
+
+      expect(component.visibleActions).toBeFalsy();
+    });
+
+    it('visibleActions: shouldn`t return action if visible is `false`.', () => {
+      component.actions = [
+        { label: 'PO1', visible: false },
+        { label: 'PO2', visible: true }
+      ];
+
+      expect(component.visibleActions).toEqual([{ label: 'PO2', visible: true }]);
+    });
+
+    it('visibleActions: should return only valid values', () => {
+      component.actions = [{ label: 'PO1' }, undefined, null];
+
+      expect(component.visibleActions).toEqual([{ label: 'PO1' }]);
+    });
+
+    it('visibleActions: should be `true` if has action.', () => {
+      component.actions = actions;
+
+      expect(component.visibleActions).toBeTruthy();
     });
 
     it('sortType: should return `ascending` if `sortedColumn.ascending` is `true`.', () => {

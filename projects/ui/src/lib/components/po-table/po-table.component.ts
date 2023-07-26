@@ -275,12 +275,6 @@ export class PoTableComponent extends PoTableBaseComponent implements AfterViewI
     return this.visibleActions.length === 1;
   }
 
-  get visibleActions() {
-    return (
-      this.actions !== undefined && this.actions && this.actions.filter(action => action && action.visible !== false)
-    );
-  }
-
   get isDraggable(): boolean {
     return this.draggable;
   }

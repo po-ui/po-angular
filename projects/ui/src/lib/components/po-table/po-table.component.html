@@ -99,6 +99,7 @@
       'po-table-selectable': selectable,
       'po-table-striped': striped
     }"
+    [attr.p-spacing]="spacing"
   >
     <thead>
       <tr
@@ -436,6 +437,7 @@
         'po-table-striped': striped
       }"
       [ngStyle]="{ 'table-layout': !hasItems ? 'fixed' : 'auto' }"
+      [attr.p-spacing]="spacing"
     >
       <thead class="po-table-header-sticky" [style.top]="inverseOfTranslation">
         <tr
