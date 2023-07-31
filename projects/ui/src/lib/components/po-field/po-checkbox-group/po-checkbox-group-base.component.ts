@@ -245,7 +245,7 @@ export class PoCheckboxGroupBaseComponent implements ControlValueAccessor, Valid
   }
 
   checkOption(value: PoCheckboxGroupOption) {
-    if (!this._disabled && !value.disabled) {
+    if (!this._disabled && !value.disabled && !value.fixed) {
       this.checkOptionModel(value);
       this.changeValue();
     }

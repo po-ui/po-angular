@@ -164,6 +164,26 @@ export abstract class PoTableBaseComponent implements OnChanges, OnDestroy {
    *
    * @description
    *
+   * Permite que as ações para fixar uma coluna da tabela sejam escondidas.
+   *
+   * @default `false`
+   */
+  @Input('p-hide-action-fixed-columns') set hideActionFixedColumns(hide: boolean) {
+    if (hide) {
+      this.columns = this.removePropertyFixed(this.columns);
+    }
+    this._hideActionFixedColumns = hide;
+  }
+
+  get hideActionFixedColumns() {
+    return this._hideActionFixedColumns;
+  }
+
+  /**
+   * @optional
+   *
+   * @description
+   *
    * Permite fechar um detalhe ou row template automaticamente, ao abrir outro item.
    *
    * @default `false`
@@ -424,6 +444,7 @@ export abstract class PoTableBaseComponent implements OnChanges, OnDestroy {
   private _infiniteScrollDistance?: number = 100;
   private _infiniteScroll?: boolean = false;
   private _draggable?: boolean = false;
+  private _hideActionFixedColumns?: boolean = false;
 
   /**
    * @description
@@ -1142,6 +1163,15 @@ export abstract class PoTableBaseComponent implements OnChanges, OnDestroy {
     }
 
     return `${column.property}`;
+  }
+
+  private removePropertyFixed(arr: Array<any>) {
+    return arr.map(obj => {
+      if (obj.hasOwnProperty('fixed')) {
+        obj.fixed = false;
+      }
+      return obj;
+    });
   }
 
   protected abstract calculateHeightTableContainer(height);

@@ -2284,7 +2284,7 @@ describe('PoTableComponent:', () => {
       component.container = 'border';
       fixture.detectChanges();
 
-      tick();
+      tick(1200);
 
       expect(nativeElement.querySelector('.po-container')).toBeTruthy();
     }));
@@ -2293,7 +2293,8 @@ describe('PoTableComponent:', () => {
       component.container = 'shadow';
       fixture.detectChanges();
 
-      tick();
+      tick(1200);
+
       expect(nativeElement.querySelector('.po-container')).toBeTruthy();
     }));
 

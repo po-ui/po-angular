@@ -20,9 +20,9 @@ describe('PoTableListManagerComponent:', () => {
     fixture = TestBed.createComponent(PoTableListManagerComponent);
     component = fixture.componentInstance;
     fixture.debugElement.injector.get(NG_VALUE_ACCESSOR);
-    fixture.detectChanges();
 
     component.columnsManager = [{ property: 'column1' }, { property: 'column2' }, { property: 'detail' }];
+    fixture.detectChanges();
   });
 
   it('should create', () => {
@@ -49,6 +49,21 @@ describe('PoTableListManagerComponent:', () => {
     ];
 
     const arrowDisabled = component.verifyArrowDisabled({ property: 'name', label: 'Name', value: 'name' }, 'down');
+
+    expect(arrowDisabled).toEqual(true);
+  });
+
+  it(`verifyArrowDisabled: Should return true if it is the up arrow of the first column`, () => {
+    component.columnsManager = [
+      { property: 'id', label: 'Code', fixed: true },
+      { property: 'initial', label: 'initial' },
+      { property: 'name', label: 'Name' }
+    ];
+
+    const arrowDisabled = component.verifyArrowDisabled(
+      { property: 'initial', label: 'initial', value: 'initial' },
+      'up'
+    );
 
     expect(arrowDisabled).toEqual(true);
   });
@@ -136,5 +151,103 @@ describe('PoTableListManagerComponent:', () => {
     component.emitChangePosition({ property: 'name', label: 'name', value: 'name' }, 'down');
 
     expect(component['changePosition'].emit).not.toHaveBeenCalled();
+  });
+
+  it(`isFixed: should return true if option is fixed`, () => {
+    component.columnsManager = [
+      { property: 'id', label: 'Code', fixed: true },
+      { property: 'initial', label: 'initial' },
+      { property: 'name', label: 'Name' }
+    ];
+
+    const resultIsfixed = component.isFixed({ property: 'id', value: 'id' });
+
+    expect(resultIsfixed).toBeTrue();
+  });
+
+  it(`isFixed: should return false if option is not fixed`, () => {
+    component.columnsManager = [
+      { property: 'id', label: 'Code' },
+      { property: 'initial', label: 'initial' },
+      { property: 'name', label: 'Name' }
+    ];
+
+    const resultIsfixed = component.isFixed({ property: 'id', value: 'id' });
+
+    expect(resultIsfixed).toBeFalse();
+  });
+
+  it(`emitFixed: should emit option with fixed true`, () => {
+    component.columnsManager = [
+      { property: 'id', label: 'Id', fixed: false },
+      { property: 'initial', label: 'initial' },
+      { property: 'name', label: 'Name' }
+    ];
+    spyOn(component['changeColumnFixed'], 'emit');
+
+    component.emitFixed({ property: 'id', value: 'id', visible: true });
+
+    expect(component['changeColumnFixed'].emit).toHaveBeenCalledWith({
+      property: 'id',
+      value: 'id',
+      visible: true,
+      fixed: true
+    });
+  });
+
+  it(`emitFixed: should emit option with fixed false`, () => {
+    component.columnsManager = [
+      { property: 'id', label: 'Id', fixed: true },
+      { property: 'initial', label: 'initial' },
+      { property: 'name', label: 'Name' }
+    ];
+    spyOn(component['changeColumnFixed'], 'emit');
+
+    component.emitFixed({ property: 'id', value: 'id', visible: true });
+
+    expect(component['changeColumnFixed'].emit).toHaveBeenCalledWith({
+      property: 'id',
+      value: 'id',
+      visible: true,
+      fixed: false
+    });
+  });
+
+  it(`clickSwitch: should call checkOption`, () => {
+    spyOn(component, 'checkOption');
+
+    component.clickSwitch({ property: 'id', label: 'Id', fixed: true });
+
+    expect(component.checkOption).toHaveBeenCalled();
+  });
+
+  it(`checksIfHasFiveFixed: should return true if has more than 5 fixed and item is not fixed`, () => {
+    component.columnsManager = [
+      { property: 'id', label: 'Id', fixed: true },
+      { property: 'initial', label: 'initial', fixed: true },
+      { property: 'name', label: 'Name', fixed: true },
+      { property: 'city', label: 'City', fixed: true },
+      { property: 'lastName', label: 'LastName', fixed: true },
+      { property: 'test', label: 'Teste', fixed: false }
+    ];
+
+    const result = component.checksIfHasFiveFixed({ property: 'test', label: 'Teste', value: 'test', fixed: false });
+
+    expect(result).toBeTrue();
+  });
+
+  it(`checksIfHasFiveFixed: should return true if has less than 5 fixed and item is not fixed`, () => {
+    component.columnsManager = [
+      { property: 'id', label: 'Id', fixed: true },
+      { property: 'initial', label: 'initial', fixed: true },
+      { property: 'name', label: 'Name', fixed: true },
+      { property: 'city', label: 'City', fixed: true },
+      { property: 'lastName', label: 'LastName', fixed: false },
+      { property: 'test', label: 'Teste', fixed: false }
+    ];
+
+    const result = component.checksIfHasFiveFixed({ property: 'test', label: 'Teste', value: 'test', fixed: false });
+
+    expect(result).toBeFalse();
   });
 });

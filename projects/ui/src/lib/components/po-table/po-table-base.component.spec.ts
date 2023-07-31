@@ -1257,6 +1257,21 @@ describe('PoTableBaseComponent:', () => {
       });
     });
 
+    describe('hideActionFixedColumns:', () => {
+      it('should set hide Fixed', () => {
+        expectSettersMethod(component, 'hideActionFixedColumns', true, 'hideActionFixedColumns', true);
+        expectSettersMethod(component, 'hideActionFixedColumns', false, 'hideActionFixedColumns', false);
+      });
+    });
+
+    describe('removePropertyFixed:', () => {
+      it('should return change fixed to false', () => {
+        const result = component['removePropertyFixed']([{ value: 'test', fixed: true }]);
+
+        expect(result).toEqual([{ value: 'test', fixed: false }]);
+      });
+    });
+
     describe('getFilteredItems:', () => {
       beforeEach(() => {
         items = [

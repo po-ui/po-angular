@@ -12,8 +12,10 @@
         [(ngModel)]="visibleColumns"
         p-columns="1"
         [p-options]="columnsOptions"
+        [p-hide-action-fixed-columns]="hideActionFixedColumns"
         (p-change)="checkChanges($event, false)"
         (p-change-position)="changePosition($event)"
+        (p-change-fixed)="emitColumnFixed($event)"
         [p-columns-manager]="columns"
       >
       </po-table-list-manager>

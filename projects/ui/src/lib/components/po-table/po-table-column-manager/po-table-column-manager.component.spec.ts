@@ -226,6 +226,12 @@ describe('PoTableColumnManagerComponent:', () => {
 
         expect(component['emitChangesToSelectedColumns']).not.toHaveBeenCalledWith(fakeEvent);
       });
+
+      it('should return change fixed to false', () => {
+        const result = component['removePropertyFixed']([{ value: 'test', fixed: true }]);
+
+        expect(result).toEqual([{ value: 'test', fixed: false }]);
+      });
     });
 
     it('emitChangesToSelectedColumns: should update `visibleColumns` and call `getVisibleTableColumns` and `visibleColumnsChange.emit`', () => {
@@ -1143,6 +1149,91 @@ describe('PoTableColumnManagerComponent:', () => {
       component['removeListeners']();
 
       expect(component['resizeListener']).toHaveBeenCalled();
+    });
+
+    describe('emitColumnFixed', () => {
+      it(`should emit visibleColumnsChange with new column and add fixed to option`, () => {
+        component.columns = [
+          {
+            property: 'Name',
+            visible: true
+          },
+          {
+            property: 'City',
+            visible: true
+          }
+        ];
+        spyOn(component.visibleColumnsChange, 'emit');
+
+        component.emitColumnFixed({
+          property: 'City',
+          value: 'City',
+          visible: true,
+          fixed: true
+        });
+
+        expect(component.columns).toEqual([
+          {
+            property: 'City',
+            visible: true,
+            fixed: true
+          },
+          {
+            property: 'Name',
+            visible: true
+          }
+        ]);
+
+        expect(component.visibleColumnsChange.emit).toHaveBeenCalled();
+      });
+
+      it(`should emit visibleColumnsChange with new column and remove fixed option`, () => {
+        component.columns = [
+          {
+            property: 'Name',
+            visible: true,
+            fixed: true
+          },
+          {
+            property: 'Age',
+            visible: true,
+            fixed: true
+          },
+          {
+            property: 'City',
+            visible: true,
+            fixed: true
+          }
+        ];
+        spyOn(component.visibleColumnsChange, 'emit');
+
+        component.emitColumnFixed({
+          property: 'Age',
+          value: 'Age',
+          visible: true,
+          fixed: false
+        });
+
+        expect(component.columns).toEqual([
+          {
+            property: 'Name',
+            visible: true,
+            fixed: true
+          },
+          {
+            property: 'City',
+            visible: true,
+            fixed: true
+          },
+          {
+            property: 'Age',
+            visible: true,
+            fixed: false
+          }
+        ]);
+
+        expect(component.visibleColumnsChange.emit).toHaveBeenCalled();
+      });
     });
 
     describe('stringify', () => {

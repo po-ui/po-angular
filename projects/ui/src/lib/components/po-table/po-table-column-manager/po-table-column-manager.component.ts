@@ -13,6 +13,7 @@ import {
 } from '@angular/core';
 
 import { capitalizeFirstLetter, convertToInt } from '../../../utils/util';
+import { InputBoolean } from '../../../decorators';
 import { PoCheckboxGroupOption } from '../../po-field/po-checkbox-group/interfaces/po-checkbox-group-option.interface';
 import { PoPopoverComponent } from '../../po-popover/po-popover.component';
 import { PoLanguageService } from '../../../services/po-language/po-language.service';
@@ -66,6 +67,8 @@ export class PoTableColumnManagerComponent implements OnChanges, OnDestroy {
   @Output('p-change-visible-columns') changeVisibleColumns = new EventEmitter<Array<string>>();
 
   @Output('p-initial-columns') initialColumns = new EventEmitter<Array<String>>();
+
+  @Input('p-hide-action-fixed-columns') @InputBoolean() hideActionFixedColumns?: boolean = false;
 
   literals;
   columnsOptions: Array<PoCheckboxGroupOption> = [];
@@ -132,6 +135,7 @@ export class PoTableColumnManagerComponent implements OnChanges, OnDestroy {
 
   restore() {
     this.restoreDefaultEvent = true;
+    this.defaultColumns = this.removePropertyFixed(this.defaultColumns);
     const defaultColumns = this.getVisibleColumns(this.defaultColumns);
     this.initialColumns.emit(this.getVisibleColumns(this.colunsDefault));
     this.checkChanges(defaultColumns, this.restoreDefaultEvent);
@@ -144,6 +148,33 @@ export class PoTableColumnManagerComponent implements OnChanges, OnDestroy {
     this.changePositionColumn(newColumn, indexColumn, direction);
     this.columns = newColumn;
     this.visibleColumnsChange.emit(this.columns);
+  }
+
+  emitColumnFixed(option) {
+    const newColumn = [...this.columns];
+    if (option) {
+      newColumn.forEach(itemColumn => {
+        if (itemColumn.property === option.value) {
+          itemColumn.fixed = option.fixed;
+        }
+      });
+
+      const amountOfFixed = newColumn.filter(itemFixed => itemFixed.fixed === true).length;
+      const indexColumn = newColumn.findIndex(el => el.property === option.value);
+      const item = newColumn.splice(indexColumn, 1)[0];
+
+      if (option.fixed) {
+        newColumn.splice(amountOfFixed - 1, 0, item);
+      }
+
+      if (option.fixed === false) {
+        newColumn.splice(amountOfFixed, 0, item);
+      }
+
+      this.columns = [...newColumn];
+    }
+
+    this.visibleColumnsChange.emit(newColumn);
   }
 
   private changePositionColumn(array: Array<PoTableColumn>, index: number, direction: Direction) {
@@ -364,6 +395,15 @@ export class PoTableColumnManagerComponent implements OnChanges, OnDestroy {
       if (key !== 'icon' && key !== 'searchService') {
         return value;
       }
+    });
+  }
+
+  private removePropertyFixed(arr: Array<any>) {
+    return arr.map(obj => {
+      if (obj.hasOwnProperty('fixed')) {
+        obj.fixed = false;
+      }
+      return obj;
     });
   }
 }
