@@ -268,19 +268,22 @@ describe('PoEventSourcingService:', () => {
         method: PoHttpRequestType.GET,
         body: file
       };
-      const newRequestData: PoHttpRequestData = {
-        url: 'url-request',
-        method: PoHttpRequestType.GET,
-        body: 'data:',
-        mimeType: 'text/html',
-        bodyType: 'File',
-        fileName: 'filename'
-      };
 
       const result = await eventSourcingService['serializeBody'](httpOperationDataMock);
 
       expect(typeof result.body).toBe('string');
-      expect(result).toEqual(newRequestData);
+
+      expect(result.body.startsWith('data:text/html;base64,')).toBe(true);
+
+      expect(result).toEqual(
+        jasmine.objectContaining({
+          url: 'url-request',
+          method: PoHttpRequestType.GET,
+          mimeType: 'text/html',
+          bodyType: 'File',
+          fileName: 'filename'
+        })
+      );
     });
 
     it('serializeBody: shouldn`t return a string base64 if body isn`t an instance of File', async () => {
