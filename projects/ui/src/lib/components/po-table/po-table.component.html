@@ -140,11 +140,14 @@
           <ng-container *ngIf="height; then noColumnsWithHeight; else noColumnsWithoutHeight"> </ng-container>
         </th>
 
-        <ng-container *ngIf="this.isDraggable; then tableDefaultThDragDrop; else tableDefaultThDefault"> </ng-container>
+        <ng-container
+          *ngIf="this.isDraggable || hasSomeFixed(); then tableDefaultThDragDrop; else tableDefaultThDefault"
+        >
+        </ng-container>
         <ng-template #tableDefaultThDragDrop>
           <th
             *ngFor="let column of mainColumns; let i = index; trackBy: trackBy"
-            class="po-table-header-ellipsis"
+            class="po-table-header-ellipsis p-element po-frozen-column"
             [style.width]="column.width"
             [style.max-width]="column.width"
             [style.min-width]="column.width"
@@ -161,6 +164,8 @@
             (click)="sortColumn(column)"
             cdkDrag
             cdkDragLockAxis="x"
+            [cdkDragDisabled]="column.fixed ? 'true' : 'false'"
+            [pFrozenColumn]="column.fixed"
           >
             <div
               class="po-table-header-flex"
@@ -168,7 +173,7 @@
               [class.po-table-header-flex-right]="column.type === 'currency' || column.type === 'number'"
               [class.po-table-header-flex-center]="column.type === 'subtitle'"
             >
-              <ng-container *ngIf="this.isDraggable">
+              <ng-container *ngIf="this.isDraggable && !column.fixed">
                 <svg
                   cdkDragHandle
                   width="24"
@@ -192,7 +197,7 @@
         <ng-template #tableDefaultThDefault>
           <th
             *ngFor="let column of mainColumns; let i = index; trackBy: trackBy"
-            class="po-table-header-ellipsis"
+            class="po-table-header-ellipsis p-element po-frozen-column"
             [style.width]="column.width"
             [style.max-width]="column.width"
             [style.min-width]="column.width"
@@ -206,6 +211,7 @@
             }"
             [class.po-table-header-subtitle]="column.type === 'subtitle'"
             (click)="sortColumn(column)"
+            [pFrozenColumn]="column.fixed"
           >
             <div
               class="po-table-header-flex"
@@ -290,6 +296,8 @@
             [class.po-table-column-right]="column.type === 'currency' || column.type === 'number'"
             [class.po-table-column-center]="column.type === 'subtitle'"
             [class.po-table-column-icons]="column.type === 'icon'"
+            [pFrozenColumn]="column.fixed"
+            class="p-element po-frozen-column"
             [ngClass]="getClassColor(row, column)"
             (click)="hasSelectableRow() ? selectRow(row) : 'javascript:;'"
           >
@@ -468,12 +476,18 @@
             <ng-container *ngIf="height; then noColumnsWithHeight; else noColumnsWithoutHeight"> </ng-container>
           </th>
 
-          <ng-container *ngIf="this.isDraggable; then tableVirtualScrollThDragDrop; else tableVirtualScrollThDefault">
+          <ng-container
+            *ngIf="
+              this.isDraggable || hasSomeFixed();
+              then tableVirtualScrollThDragDrop;
+              else tableVirtualScrollThDefault
+            "
+          >
           </ng-container>
           <ng-template #tableVirtualScrollThDragDrop>
             <th
               *ngFor="let column of mainColumns; let i = index; trackBy: trackBy"
-              class="po-table-header-ellipsis"
+              class="po-table-header-ellipsis p-element po-frozen-column"
               [style.width]="column.width"
               [style.max-width]="column.width"
               [style.min-width]="column.width"
@@ -491,6 +505,8 @@
               (click)="sortColumn(column)"
               cdkDrag
               cdkDragLockAxis="x"
+              [cdkDragDisabled]="column.fixed ? 'true' : 'false'"
+              [pFrozenColumn]="column.fixed"
             >
               <div
                 class="po-table-header-flex"
@@ -498,7 +514,7 @@
                 [class.po-table-header-flex-right]="column.type === 'currency' || column.type === 'number'"
                 [class.po-table-header-flex-center]="column.type === 'subtitle'"
               >
-                <ng-container *ngIf="this.isDraggable">
+                <ng-container *ngIf="this.isDraggable && !column.fixed">
                   <svg
                     cdkDragHandle
                     width="24"
@@ -515,7 +531,6 @@
                     <circle cx="15" cy="18" r="2" fill="black" />
                   </svg>
                 </ng-container>
-
                 <ng-container *ngTemplateOutlet="contentHeaderTemplate; context: { $implicit: column }"> </ng-container>
               </div>
             </th>
@@ -523,7 +538,7 @@
           <ng-template #tableVirtualScrollThDefault>
             <th
               *ngFor="let column of mainColumns; let i = index; trackBy: trackBy"
-              class="po-table-header-ellipsis"
+              class="po-table-header-ellipsis p-element po-frozen-column example-box"
               [style.width]="column.width"
               [style.max-width]="column.width"
               [style.min-width]="column.width"
@@ -538,6 +553,7 @@
               [ngStyle]="{ 'width': !hasItems ? '100%' : 'auto' }"
               [class.po-table-header-subtitle]="column.type === 'subtitle'"
               (click)="sortColumn(column)"
+              [pFrozenColumn]="column.fixed"
             >
               <div
                 class="po-table-header-flex"
@@ -626,6 +642,8 @@
               [class.po-table-column-center]="column.type === 'subtitle'"
               [class.po-table-column-icons]="column.type === 'icon'"
               [ngClass]="getClassColor(row, column)"
+              [pFrozenColumn]="column.fixed"
+              class="p-element po-frozen-column"
               (click)="hasSelectableRow() ? selectRow(row) : 'javascript:;'"
             >
               <div
@@ -873,6 +891,7 @@
   [p-max-columns]="maxColumns"
   [p-target]="columnManagerTarget"
   [p-last-visible-columns-selected]="lastVisibleColumnsSelected"
+  [p-hide-action-fixed-columns]="hideActionFixedColumns"
   (p-visible-columns-change)="onVisibleColumnsChange($event)"
   (p-change-visible-columns)="onChangeVisibleColumns($event)"
   [p-columns-default]="initialColumns"

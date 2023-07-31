@@ -36,6 +36,7 @@ import { PoTableCellTemplateDirective } from './po-table-cell-template/po-table-
 import { PoTableColumnTemplateDirective } from './po-table-column-template/po-table-column-template.directive';
 import { PoTableListManagerComponent } from './po-table-list-manager/po-table-list-manager.component';
 import { PoSwitchModule } from './../po-field/po-switch/po-switch.module';
+import { PoTableColumnFrozenDirective } from './po-table-column-frozen/po-table-column-frozen.directive';
 
 /**
  * @description
@@ -79,7 +80,8 @@ import { PoSwitchModule } from './../po-field/po-switch/po-switch.module';
     PoTableSubtitleCircleComponent,
     PoTableSubtitleFooterComponent,
     PoTableCellTemplateDirective,
-    PoTableColumnTemplateDirective
+    PoTableColumnTemplateDirective,
+    PoTableColumnFrozenDirective
   ],
   exports: [
     PoTableComponent,

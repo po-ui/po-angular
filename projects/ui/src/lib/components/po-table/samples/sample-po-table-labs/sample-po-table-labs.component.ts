@@ -84,7 +84,8 @@ export class SamplePoTableLabsComponent implements OnInit {
     { label: 'Hide columns manager', value: 'hideColumnsManager' },
     { label: 'Hide batch actions', value: 'hideBatchActions' },
     { label: 'Actions Right', value: 'actionsRight' },
-    { label: 'Draggable', value: 'draggable' }
+    { label: 'Draggable', value: 'draggable' },
+    { label: 'Hide action fixed columns', value: 'fixed' }
   ];
 
   public readonly typeHeaderOptions: Array<PoRadioGroupOption> = [
