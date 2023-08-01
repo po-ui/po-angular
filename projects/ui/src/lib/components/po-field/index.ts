@@ -38,6 +38,7 @@ export * from './po-radio-group/po-radio-group-option.interface';
 export * from './po-radio-group/po-radio-group.component';
 export * from './po-rich-text/po-rich-text.component';
 export * from './po-select/po-select-option.interface';
+export * from './po-select/po-select-option-group.interface';
 export * from './po-select/po-select.component';
 export * from './po-switch/po-switch-label-position.enum';
 export * from './po-switch/po-switch.component';

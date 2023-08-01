@@ -1,6 +1,6 @@
 import { Component } from '@angular/core';
 
-import { PoSelectOption } from '@po-ui/ng-components';
+import { PoSelectOption, PoSelectOptionGroup } from '@po-ui/ng-components';
 
 @Component({
   selector: 'sample-po-select-companies',
@@ -50,11 +50,19 @@ export class SamplePoSelectCompaniesComponent {
     }
   ];
 
-  readonly labels: Array<PoSelectOption> = [
-    { label: 'nomeFantasia', value: 'nomeFantasia' },
-    { label: 'razaoSocial', value: 'razaoSocial' },
-    { label: 'email', value: 'email' },
-    { label: 'origem', value: 'origem' }
+  readonly labels: Array<PoSelectOptionGroup> = [
+    {
+      label: 'Dados',
+      options: [
+        { label: 'nomeFantasia', value: 'nomeFantasia' },
+        { label: 'razaoSocial', value: 'razaoSocial' },
+        { label: 'email', value: 'email' }
+      ]
+    },
+    {
+      label: 'Cidade',
+      options: [{ label: 'origem', value: 'origem' }]
+    }
   ];
 
   readonly values: Array<PoSelectOption> = [

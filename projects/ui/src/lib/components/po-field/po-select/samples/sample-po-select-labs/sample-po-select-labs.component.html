@@ -29,6 +29,41 @@
 <hr />
 
 <form #fOption="ngForm">
+  <po-divider p-label="Po select options group"></po-divider>
+
+  <div class="po-row">
+    <po-switch
+      class="po-md-2"
+      name="selectOptionGroupSwitch"
+      (p-change)="restoreSwitch($event)"
+      [(ngModel)]="selectOptionGroupSwitch"
+      p-label="Select options group"
+    >
+    </po-switch>
+
+    <po-select
+      class="po-md-5"
+      name="selectedsOptionsGroup"
+      [(ngModel)]="selectedOptionsGroup"
+      p-label="Options group list"
+      [p-disabled]="!selectOptionGroupSwitch"
+      [p-options]="optionsGroupList"
+      (p-change)="optionsGroupSelection()"
+    >
+    </po-select>
+
+    <po-input
+      class="po-md-5"
+      name="optionsGroup"
+      [(ngModel)]="optionsGroup"
+      p-label="New Options Group"
+      [p-disabled]="!selectOptionGroupSwitch"
+      p-required
+    >
+    </po-input>
+  </div>
+
+  <po-divider p-label="Po select options"></po-divider>
   <div class="po-row">
     <po-input class="po-md-6" name="optionLabel" [(ngModel)]="option.label" p-label="Option Label" p-required>
     </po-input>
