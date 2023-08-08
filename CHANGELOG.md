@@ -2,6 +2,17 @@
 
 All notable changes to this project will be documented in this file. See [standard-version](https://github.com/conventional-changelog/standard-version) for commit guidelines.
 
+# [15.14.0](https://github.com/po-ui/po-angular/compare/v15.13.1...v15.14.0) (2023-08-08)
+
+
+### Features
+
+* **select:** possibilita o uso de sub itens ([e4afe06](https://github.com/po-ui/po-angular/commit/e4afe066701f2333cf248f571c13298a9ebc9eee))
+* **table:** cria propriedade p-spacing para a tabela ([b76b32c](https://github.com/po-ui/po-angular/commit/b76b32c3753b8464dca77923169e69a9642edae5))
+* **table:** implementa fixador de colunas ([7c49350](https://github.com/po-ui/po-angular/commit/7c49350e0a5fd082a6a81fddb19a96b3493af8b2))
+
+
+
 ## [15.13.1](https://github.com/po-ui/po-angular/compare/v15.13.0...v15.13.1) (2023-07-31)
 
 **build:** atualiza a versão do pacote de estilos `po-theme-totvs`.
