@@ -5,6 +5,7 @@ import { of } from 'rxjs';
 import { PoTreeViewComponent } from './po-tree-view.component';
 import { PoTreeViewItem } from './po-tree-view-item/po-tree-view-item.interface';
 import { PoTreeViewModule } from './po-tree-view.module';
+import { SimpleChanges } from '@angular/core';
 
 describe('PoTreeViewComponent:', () => {
   let component: PoTreeViewComponent;
@@ -73,6 +74,23 @@ describe('PoTreeViewComponent:', () => {
 
     it('trackByFunction: should return index param', () => {
       expect(component.trackByFunction(1)).toBe(1);
+    });
+
+    it('ngOnChanges: should update items when inputedItems changes', () => {
+      const changes: SimpleChanges = {
+        inputedItems: {
+          currentValue: [{ label: 'example', value: 1 }],
+          firstChange: true,
+          isFirstChange: () => true,
+          previousValue: undefined
+        }
+      };
+
+      component.items = undefined;
+
+      component.ngOnChanges(changes);
+
+      expect(component.items).toBeDefined();
     });
   });
 });
