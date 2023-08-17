@@ -109,4 +109,22 @@ describe('PoListboxBaseComponent', () => {
       });
     });
   });
+
+  describe('Methods: ', () => {
+    it('should return true when items length is greater than 0 and first item has "options"', () => {
+      component.items = [{ options: ['option1', 'option2'] }];
+
+      const result = component.isItemListGroup;
+
+      expect(result).toBeTrue();
+    });
+
+    it('should return false when first item does not have "options"', () => {
+      component.items = [{ someProperty: 'value' }];
+
+      const result = component.isItemListGroup;
+
+      expect(result).toBeFalse();
+    });
+  });
 });

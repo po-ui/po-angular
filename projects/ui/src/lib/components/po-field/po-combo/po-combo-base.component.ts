@@ -14,25 +14,11 @@ import { PoComboGroup } from './interfaces/po-combo-group.interface';
 import { PoComboLiterals } from './interfaces/po-combo-literals.interface';
 import { PoComboOption } from './interfaces/po-combo-option.interface';
 import { PoComboOptionGroup } from './interfaces/po-combo-option-group.interface';
+import { poComboLiteralsDefault } from './interfaces/po-combo-literals-default.interface';
 
 const PO_COMBO_DEBOUNCE_TIME_DEFAULT = 400;
 const PO_COMBO_FIELD_LABEL_DEFAULT = 'label';
 const PO_COMBO_FIELD_VALUE_DEFAULT = 'value';
-
-export const poComboLiteralsDefault = {
-  en: <PoComboLiterals>{
-    noData: 'No data found'
-  },
-  es: <PoComboLiterals>{
-    noData: 'Datos no encontrados'
-  },
-  pt: <PoComboLiterals>{
-    noData: 'Nenhum dado encontrado'
-  },
-  ru: <PoComboLiterals>{
-    noData: 'Данные не найдены'
-  }
-};
 
 /**
  * @description
@@ -294,7 +280,6 @@ export abstract class PoComboBaseComponent implements ControlValueAccessor, OnIn
   private language: string;
   private _infiniteScrollDistance?: number = 100;
   private _infiniteScroll?: boolean = false;
-  private _height?: number;
 
   // utilizado para fazer o controle de atualizar o model.
   // não deve forçar a atualização se o gatilho for o writeValue para não deixar o campo dirty.
@@ -304,7 +289,7 @@ export abstract class PoComboBaseComponent implements ControlValueAccessor, OnIn
 
   /** Mensagem apresentada enquanto o campo estiver vazio. */
   @Input('p-placeholder') set placeholder(value: string) {
-    this._placeholder = value || '';
+    this._placeholder = value || this.literals.chooseOption;
   }
 
   get placeholder() {

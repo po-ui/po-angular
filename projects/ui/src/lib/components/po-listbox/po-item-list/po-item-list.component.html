@@ -16,15 +16,17 @@
   <div
     *ngSwitchCase="'option'"
     #itemList
+    class="po-item-list po-item-list__option"
     [class.po-item-list__separator]="separator"
     [class.po-item-list__selected]="selected && !disabled"
-    [class.po-item-list__disabled]="disabled"
     [attr.aria-disabled]="disabled"
     [attr.aria-label]="label"
-    class="po-item-list po-item-list__option"
-    (click)="onSelectItem({label})"
+    (click)="onComboItem(item, $event)"
   >
-    <span class="po-item-list-label">{{ label }}</span>
+    <span *ngIf="!template" class="po-item-list-label" [innerHTML]="getLabelFormatted(label)"></span>
+
+    <ng-template [ngTemplateOutlet]="template?.templateRef" [ngTemplateOutletContext]="{ $implicit: templateContext }">
+    </ng-template>
   </div>
 
   <div
@@ -46,12 +48,9 @@
       (p-change)="onSelectItem({label})"
     ></po-checkbox>
 
-    <span class="po-item-list__label" *ngIf="!multiselectTemplate">{{ label }}</span>
+    <span class="po-item-list__label" *ngIf="!template">{{ label }}</span>
 
-    <ng-template
-      [ngTemplateOutlet]="multiselectTemplate?.templateRef"
-      [ngTemplateOutletContext]="{ $implicit: templateContext }"
-    >
+    <ng-template [ngTemplateOutlet]="template?.templateRef" [ngTemplateOutletContext]="{ $implicit: templateContext }">
     </ng-template>
   </div>
 </ng-container>
