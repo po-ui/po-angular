@@ -10,10 +10,11 @@ import { expectPropertiesValues, expectSettersMethod } from '../../../util-test/
 import { PoLanguageService } from '../../../services/po-language/po-language.service';
 import { poLocaleDefault } from '../../../services/po-language/po-language.constant';
 
-import { PoComboBaseComponent, poComboLiteralsDefault } from './po-combo-base.component';
+import { PoComboBaseComponent } from './po-combo-base.component';
 import { PoComboFilter } from './interfaces/po-combo-filter.interface';
 import { PoComboFilterMode } from './po-combo-filter-mode.enum';
 import { PoComboOption } from './interfaces/po-combo-option.interface';
+import { poComboLiteralsDefault } from './interfaces/po-combo-literals-default.interface';
 
 @Directive()
 class PoComboTest extends PoComboBaseComponent {
@@ -223,8 +224,9 @@ describe('PoComboBaseComponent:', () => {
     });
 
     it('p-placeholder: should update property p-placeholder with empty value if set with invalid values.', () => {
+      component['language'] = 'pt';
       const invalidValues = [null, undefined, '', 0, false];
-      expectPropertiesValues(component, 'placeholder', invalidValues, '');
+      expectPropertiesValues(component, 'placeholder', invalidValues, 'Escolha uma opção');
     });
   });
 

@@ -1,4 +1,10 @@
-<div #listbox class="po-listbox" [class.po-listbox-check]="type === 'check'" [attr.data-type]="type" [hidden]="visible">
+<div
+  #listbox
+  class="po-listbox"
+  [class.po-listbox-check]="type === 'check' || type === 'option'"
+  [attr.data-type]="type"
+  [hidden]="visible"
+>
   <ng-content select="[p-popup-header-template]"></ng-content>
 
   <po-search-list
@@ -10,69 +16,88 @@
     [p-placeholder]="placeholderSearch"
   ></po-search-list>
 
-  <ul
-    #listboxItemList
-    cdkListbox
-    [cdkListboxMultiple]="type === 'check'"
-    class="po-listbox-list"
-    *ngIf="!isServerSearching"
-  >
-    <li
-      cdkOption="selectAll"
-      *ngIf="type === 'check' && items.length && !searchElement?.inputValue && !hideSelectAll"
-      [attr.aria-checked]="checkboxAllValue === null ? 'mixed' : checkboxAllValue"
-      (click)="changeAll.emit()"
-      (keydown)="changeAllEmit($event)"
-    >
-      <po-item-list
-        [p-selected]="checkboxAllValue"
-        p-type="check"
-        [p-label]="literals.selectAll"
-        p-value="selectAll"
-        [p-checkbox-value]="checkboxAllValue"
+  <ng-container *ngIf="checkTemplate(); else noDataTemplate">
+    <ul #listboxItemList cdkListbox [cdkListboxMultiple]="type === 'check'" class="po-listbox-list">
+      <li
+        cdkOption="selectAll"
+        *ngIf="type === 'check' && items.length && !searchElement?.inputValue && !hideSelectAll"
+        [attr.aria-checked]="checkboxAllValue === null ? 'mixed' : checkboxAllValue"
+        (click)="changeAll.emit()"
+        (keydown)="changeAllEmit($event)"
       >
-      </po-item-list>
-    </li>
-    <li
-      class="po-listbox-item"
-      *ngFor="let item of items"
-      [cdkOption]="item[fieldValue]"
-      [cdkOptionDisabled]="returnBooleanValue(item, 'disabled') || returnBooleanValue(item, 'visible') === false"
-      [attr.aria-selected]="isSelectedItem(item) || item.selected"
-      (click)="onSelectItem(item)"
-      (keydown)="onKeyDown(item, $event)"
+        <po-item-list
+          [p-selected]="checkboxAllValue"
+          p-type="check"
+          [p-label]="literals.selectAll"
+          p-value="selectAll"
+          [p-checkbox-value]="checkboxAllValue"
+        >
+        </po-item-list>
+      </li>
+      <li
+        class="po-listbox-item"
+        *ngFor="let item of items"
+        [cdkOption]="item[fieldLabel]"
+        [cdkOptionDisabled]="
+          returnBooleanValue(item, 'disabled') || returnBooleanValue(item, 'visible') === false || item.options
+        "
+        [attr.aria-selected]="isSelectedItem(item) || item.selected"
+        (click)="onSelectItem(item)"
+        (keydown)="onKeyDown(item, $event)"
+      >
+        <label *ngIf="item.options" class="po-combo-item-title">
+          {{ item.label }}
+        </label>
+        <po-item-list
+          *ngIf="returnBooleanValue(item, 'visible') !== false && !item.options"
+          [p-disabled]="returnBooleanValue(item, 'disabled')"
+          [p-visible]="returnBooleanValue(item, 'visible')"
+          [p-checkbox-value]="isSelectedItem(item)"
+          [attr.data-item-list]="item | json"
+          [p-label]="item[fieldLabel]"
+          [p-value]="item[fieldValue]"
+          [p-selected]="isSelectedItem(item) || item.selected"
+          [p-separator]="item.separator"
+          [p-danger]="item.danger || item.type === 'danger'"
+          [p-icon]="item.icon"
+          [p-type]="type"
+          [p-item]="item"
+          [p-field-value]="fieldValue"
+          [p-field-label]="fieldLabel"
+          [p-template]="template"
+          [p-template-context]="item"
+          (p-selectcheckbox-item)="checkboxClicked($event)"
+          (p-selectcombo-item)="optionClicked($event)"
+          (p-select-item)="onSelectCheckBoxItem(item)"
+          [p-search-value]="searchValue"
+          [p-filter-mode]="filterMode"
+          [p-filtering]="isFiltering"
+          [p-should-mark-letter]="shouldMarkLetters"
+          [p-compare-cache]="compareCache"
+          [p-combo-service]="comboService"
+        ></po-item-list>
+      </li>
+    </ul>
+  </ng-container>
+
+  <div *ngIf="isServerSearching && type !== 'action'" class="po-text-center">
+    <ng-container *ngIf="infiniteLoading; then scrollLoadingTemplate; else defaultLoadingTemplate"></ng-container>
+  </div>
+
+  <ng-template #scrollLoadingTemplate>
+    <po-loading-overlay class="po-listbox-container-loading-scroll"></po-loading-overlay>
+  </ng-template>
+
+  <ng-template #defaultLoadingTemplate>
+    <po-loading class="po-listbox-container-loading-default"></po-loading>
+  </ng-template>
+
+  <ng-template #noDataTemplate>
+    <div
+      *ngIf="!items.length && !isServerSearching && type !== 'action'"
+      class="po-listbox-container-no-data po-text-center"
     >
-      <po-item-list
-        *ngIf="returnBooleanValue(item, 'visible') !== false"
-        [p-disabled]="returnBooleanValue(item, 'disabled')"
-        [p-visible]="returnBooleanValue(item, 'visible')"
-        [p-checkbox-value]="isSelectedItem(item)"
-        [attr.data-item-list]="item | json"
-        [p-label]="item[fieldLabel]"
-        [p-value]="item[fieldValue]"
-        [p-selected]="isSelectedItem(item) || item.selected"
-        [p-separator]="item.separator"
-        [p-danger]="item.danger || item.type === 'danger'"
-        [p-icon]="item.icon"
-        [p-type]="type"
-        [p-item]="item"
-        [p-field-value]="fieldValue"
-        [p-field-label]="fieldLabel"
-        [p-multiselect-template]="multiselectTemplate"
-        [p-template-context]="item"
-        (p-selectcheckbox-item)="checkboxClicked($event)"
-      ></po-item-list>
-    </li>
-  </ul>
-
-  <div
-    *ngIf="!items.length && !isServerSearching && type === 'check'"
-    class="po-multiselect-container-no-data po-text-center"
-  >
-    <span> {{ literals.noItems }}</span>
-  </div>
-
-  <div *ngIf="isServerSearching && type === 'check'" class="po-multiselect-container-loading po-text-center">
-    <po-loading></po-loading>
-  </div>
+      <span> {{ literals.noItems }}</span>
+    </div>
+  </ng-template>
 </div>
