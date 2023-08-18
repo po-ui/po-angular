@@ -21,16 +21,18 @@ export class PoSearchComponent extends PoSearchBaseComponent implements OnInit {
 
   filteredItems: Array<any> = [];
 
-  public literals = {
-    ...poSearchLiteralsDefault[this.languageService.getLanguageDefault()],
-    ...poSearchLiteralsDefault[this.languageService.getShortLanguage()]
-  };
+  public literals?: any;
 
   constructor(public languageService: PoLanguageService, private renderer: Renderer2) {
     super();
   }
 
   ngOnInit(): void {
+    this.literals = {
+      ...poSearchLiteralsDefault[this.languageService?.getLanguageDefault()],
+      ...poSearchLiteralsDefault[this.languageService?.getShortLanguage()]
+    };
+
     this.filteredItems = this.items;
   }
 

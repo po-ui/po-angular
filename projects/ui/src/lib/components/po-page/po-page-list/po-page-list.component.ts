@@ -20,7 +20,6 @@ import { PoPageAction } from '../po-page-action.interface';
 import { PoDisclaimer } from '../../po-disclaimer/po-disclaimer.interface';
 import { PoDisclaimerGroupRemoveAction } from '../../po-disclaimer-group/po-disclaimer-group-remove-action.interface';
 
-import { PoPageContentComponent } from '../po-page-content/po-page-content.component';
 import { PoPageListBaseComponent } from './po-page-list-base.component';
 
 /**
@@ -52,7 +51,6 @@ export class PoPageListComponent
   extends PoPageListBaseComponent
   implements AfterContentInit, OnChanges, OnDestroy, OnInit {
   @ViewChild('filterInput') filterInput: ElementRef;
-  @ViewChild(PoPageContentComponent, { static: true }) poPageContent: PoPageContentComponent;
 
   advancedSearch: string;
   dropdownActions: Array<PoPageAction>;

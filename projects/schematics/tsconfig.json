@@ -1,7 +1,7 @@
 {
   "compilerOptions": {
     "baseUrl": ".",
-    "lib": ["es2017", "dom"],
+    "lib": ["es2022", "dom"],
     "declaration": true,
     "module": "commonjs",
     "moduleResolution": "node",
@@ -17,7 +17,7 @@
     "skipLibCheck": true,
     "sourceMap": true,
     "strictNullChecks": true,
-    "target": "es2015",
+    "target": "es2022",
     "types": ["jasmine", "node"]
   },
   "include": ["src/**/*"],

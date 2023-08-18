@@ -30,12 +30,14 @@ export class PoMenuFilterComponent {
 
   @Output('p-filter') filter = new EventEmitter();
 
-  public literals = {
-    ...poMenuFilterLiteralsDefault[this.languageService.getLanguageDefault()],
-    ...poMenuFilterLiteralsDefault[this.languageService.getShortLanguage()]
-  };
+  public literals: any;
 
-  constructor(public languageService: PoLanguageService) {}
+  constructor(public languageService: PoLanguageService) {
+    this.literals = {
+      ...poMenuFilterLiteralsDefault[this.languageService?.getLanguageDefault()],
+      ...poMenuFilterLiteralsDefault[this.languageService?.getShortLanguage()]
+    };
+  }
   filterItems(search: string) {
     this.filter.emit(search);
   }

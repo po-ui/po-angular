@@ -80,7 +80,7 @@ export class PoDisclaimerBaseComponent {
   }
 
   constructor(private languageService: PoLanguageService) {
-    const language = this.languageService.getShortLanguage();
+    const language = this.languageService?.getShortLanguage();
     this.literals = {
       ...PoDisclaimerLiterals[language]
     };

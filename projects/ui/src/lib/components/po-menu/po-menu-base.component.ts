@@ -52,10 +52,7 @@ export abstract class PoMenuBaseComponent {
   filteredItems;
   filterService: PoMenuFilter;
 
-  readonly literals = {
-    ...poMenuLiteralsDefault[this.languageService.getLanguageDefault()],
-    ...poMenuLiteralsDefault[this.languageService.getShortLanguage()]
-  };
+  readonly literals: any;
 
   private _collapsed = false;
   private _filter = false;
@@ -248,7 +245,12 @@ export abstract class PoMenuBaseComponent {
     public menuGlobalService: PoMenuGlobalService,
     public menuService: PoMenuService,
     public languageService: PoLanguageService
-  ) {}
+  ) {
+    this.literals = {
+      ...poMenuLiteralsDefault[this.languageService?.getLanguageDefault()],
+      ...poMenuLiteralsDefault[this.languageService?.getShortLanguage()]
+    };
+  }
 
   protected setMenuExtraProperties() {
     this.allowIcons = !!this.menus.length;

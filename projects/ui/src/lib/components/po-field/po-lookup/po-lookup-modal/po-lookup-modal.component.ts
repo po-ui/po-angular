@@ -17,7 +17,6 @@ import { PoTableColumnSort } from '../../../po-table/interfaces/po-table-column-
 import { PoLookupModalBaseComponent } from '../po-lookup-modal/po-lookup-modal-base.component';
 import { PoLanguageService } from './../../../../services/po-language/po-language.service';
 import { PoDynamicFormComponent } from './../../../po-dynamic/po-dynamic-form/po-dynamic-form.component';
-import { PoTableComponent } from './../../../po-table/po-table.component';
 import { sortArrayOfObjects } from '../../../../utils/util';
 
 /**
@@ -31,7 +30,6 @@ import { sortArrayOfObjects } from '../../../../utils/util';
   changeDetection: ChangeDetectionStrategy.OnPush
 })
 export class PoLookupModalComponent extends PoLookupModalBaseComponent implements OnInit, AfterViewInit {
-  @ViewChild(PoTableComponent, { static: true }) poTable: PoTableComponent;
   @ViewChild('inpsearch') inputSearchEl: ElementRef;
   @ViewChild('container', { read: ViewContainerRef }) container: ViewContainerRef;
 

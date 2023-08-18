@@ -1,4 +1,4 @@
-import { Component, ViewChild } from '@angular/core';
+import { Component, ViewChild, OnInit } from '@angular/core';
 
 import { PoBreadcrumb, PoDynamicViewField, PoModalComponent } from '@po-ui/ng-components';
 
@@ -16,7 +16,7 @@ import { SamplePoPageDynamicTableUsersService } from './sample-po-page-dynamic-t
   templateUrl: './sample-po-page-dynamic-table-users.component.html',
   providers: [SamplePoPageDynamicTableUsersService]
 })
-export class SamplePoPageDynamicTableUsersComponent {
+export class SamplePoPageDynamicTableUsersComponent implements OnInit {
   @ViewChild('userDetailModal') userDetailModal!: PoModalComponent;
   @ViewChild('dependentsModal') dependentsModal!: PoModalComponent;
 
@@ -100,12 +100,7 @@ export class SamplePoPageDynamicTableUsersComponent {
       visible: this.isVisibleNotFixedFilter.bind(this),
       icon: 'po-icon-lock-off'
     },
-    { label: 'Print', action: this.printPage.bind(this), icon: 'po-icon-print' },
-    {
-      label: 'Download .csv',
-      action: this.usersService.downloadCsv.bind(this.usersService, this.serviceApi),
-      icon: 'po-icon-download'
-    }
+    { label: 'Print', action: this.printPage.bind(this), icon: 'po-icon-print' }
   ];
 
   tableCustomActions: Array<PoPageDynamicTableCustomTableAction> = [
@@ -124,6 +119,17 @@ export class SamplePoPageDynamicTableUsersComponent {
   ];
 
   constructor(private usersService: SamplePoPageDynamicTableUsersService) {}
+
+  ngOnInit(): void {
+    this.pageCustomActions = [
+      ...this.pageCustomActions,
+      {
+        label: 'Download .csv',
+        action: this.usersService.downloadCsv.bind(this.usersService, this.serviceApi),
+        icon: 'po-icon-download'
+      }
+    ];
+  }
 
   onLoad(): PoPageDynamicTableOptions {
     return {
