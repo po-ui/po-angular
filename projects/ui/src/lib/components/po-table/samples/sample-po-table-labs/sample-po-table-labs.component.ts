@@ -31,6 +31,7 @@ export class SamplePoTableLabsComponent implements OnInit {
   actionTableSecond: PoTableAction = { action: this.openModal.bind(this), label: 'Second Action' };
 
   columns: Array<PoTableColumn>;
+  columnsDefinition: any;
   columnsName: Array<string>;
   container: string;
   currentItem: string;
@@ -65,8 +66,6 @@ export class SamplePoTableLabsComponent implements OnInit {
     { label: 'Contains', value: PoFilterMode.contains },
     { label: 'Ends With', value: PoFilterMode.endsWith }
   ];
-
-  public readonly columnsDefinition = this.samplePoTableLabsService.getColumns();
 
   public readonly columnsOptions: Array<PoCheckboxGroupOption> = [
     { value: 'text', label: 'Text' },
@@ -112,7 +111,9 @@ export class SamplePoTableLabsComponent implements OnInit {
     { label: 'Large', value: 'large' }
   ];
 
-  constructor(private samplePoTableLabsService: SamplePoTableLabsService) {}
+  constructor(private samplePoTableLabsService: SamplePoTableLabsService) {
+    this.columnsDefinition = this.samplePoTableLabsService?.getColumns();
+  }
 
   ngOnInit() {
     this.restore();
@@ -186,6 +187,7 @@ export class SamplePoTableLabsComponent implements OnInit {
   restore() {
     this.actionsDefinition = { visibleAction: null };
     this.actions = [];
+    //this.columnsDefinition = this.samplePoTableLabsService.getColumns();
     this.columnsDefinition.detail.detail.typeHeader = undefined;
     this.columnsName = [];
     this.container = '';

@@ -1,4 +1,4 @@
-import { Component, ViewChild } from '@angular/core';
+import { Component, ViewChild, OnInit } from '@angular/core';
 import { NgForm } from '@angular/forms';
 
 import { PoBreadcrumb } from '@po-ui/ng-components';
@@ -24,14 +24,14 @@ import { SampleDashboardService } from './sample-po-page-default-dashboard.servi
   ],
   providers: [SampleDashboardService]
 })
-export class SamplePoPageDefaultDashboardComponent {
+export class SamplePoPageDefaultDashboardComponent implements OnInit {
   @ViewChild('formShare', { static: true }) formShare: NgForm;
   @ViewChild(PoModalComponent, { static: true }) poModal: PoModalComponent;
 
-  columns: Array<PoTableColumn> = this.sampleDashboardService.getColumns();
+  columns: Array<PoTableColumn>;
   email: string = undefined;
   isSubscribed: boolean = false;
-  items: Array<object> = this.sampleDashboardService.getItems();
+  items: Array<object>;
 
   public readonly actions: Array<PoPageAction> = [
     { label: 'Share', action: this.modalOpen.bind(this), icon: 'po-icon-share' },
@@ -59,6 +59,11 @@ export class SamplePoPageDefaultDashboardComponent {
   };
 
   constructor(private poNotification: PoNotificationService, private sampleDashboardService: SampleDashboardService) {}
+
+  ngOnInit(): void {
+    this.columns = this.sampleDashboardService.getColumns();
+    this.items = this.sampleDashboardService.getItems();
+  }
 
   modalClose() {
     this.poModal.close();

@@ -1,4 +1,4 @@
-import { Component, EventEmitter, ViewChild } from '@angular/core';
+import { Component, EventEmitter, OnInit, ViewChild } from '@angular/core';
 
 import { PoModalAction } from '../../../components/po-modal/po-modal-action.interface';
 import { PoModalComponent } from '../../../components/po-modal/po-modal.component';
@@ -20,23 +20,30 @@ export const colors = { success: 'color-11', error: 'color-07', warning: 'color-
   selector: 'po-http-interceptor-detail',
   templateUrl: './po-http-interceptor-detail.component.html'
 })
-export class PoHttpInterceptorDetailComponent {
+export class PoHttpInterceptorDetailComponent implements OnInit {
   @ViewChild(PoModalComponent, { static: true }) modal: PoModalComponent;
 
   closed = new EventEmitter<any>();
   details: Array<PoHttpInterceptorDetail> = [];
   title: string;
 
-  private language = this.languageService.getShortLanguage();
-  private literals = poHttpInterceptorDetailLiteralsDefault[this.language];
+  private language: any;
+  private literals: any;
 
   // eslint-disable-next-line @typescript-eslint/member-ordering
-  primaryAction: PoModalAction = {
-    action: () => this.close(),
-    label: this.literals.closeButton
-  };
+  primaryAction: PoModalAction;
 
-  constructor(private languageService: PoLanguageService) {}
+  constructor(private languageService: PoLanguageService) {
+    this.language = this.languageService?.getShortLanguage();
+    this.literals = poHttpInterceptorDetailLiteralsDefault[this.language];
+  }
+
+  ngOnInit(): void {
+    this.primaryAction = {
+      action: () => this.close(),
+      label: this.literals.closeButton
+    };
+  }
 
   set detail(details: Array<PoHttpInterceptorDetail>) {
     if (details && details.length) {

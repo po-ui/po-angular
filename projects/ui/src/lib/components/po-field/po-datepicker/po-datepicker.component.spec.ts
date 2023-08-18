@@ -1022,6 +1022,7 @@ describe('PoDatepickerComponent:', () => {
       component.onKeyup.call(fakeThis, {});
       expect(fakeThis.controlModel).toHaveBeenCalled();
     });
+
     it(`onKeyPress: should call 'isKeyCodeEnter' and check if typed key is enter.`, () => {
       const eventEnterKey = { keyCode: 13 };
 

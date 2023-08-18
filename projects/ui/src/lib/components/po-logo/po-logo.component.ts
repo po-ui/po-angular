@@ -25,13 +25,10 @@ const MAX_LENGHT: number = 125;
   templateUrl: './po-logo.component.html'
 })
 export class PoLogoComponent {
-  readonly literals = {
-    ...poLogoLiteralsDefault[this.poLanguageService.getLanguageDefault()],
-    ...poLogoLiteralsDefault[this.poLanguageService.getShortLanguage()]
-  };
+  readonly literals: any;
 
   private _logo?: string;
-  private _logoAlt: string = this.literals.logomarcaHome;
+  private _logoAlt: string;
 
   /**
    * Define uma classe para o elemento `img` do componente.
@@ -77,7 +74,13 @@ export class PoLogoComponent {
     return this._logoAlt;
   }
 
-  constructor(public poLanguageService: PoLanguageService) {}
+  constructor(public poLanguageService: PoLanguageService) {
+    this.literals = {
+      ...poLogoLiteralsDefault[this.poLanguageService?.getLanguageDefault()],
+      ...poLogoLiteralsDefault[this.poLanguageService?.getShortLanguage()]
+    };
+    this._logoAlt = this.literals.logomarcaHome;
+  }
 
   private maxLength(value: string) {
     return value.length > MAX_LENGHT ? value.toString().substring(0, MAX_LENGHT) : value;

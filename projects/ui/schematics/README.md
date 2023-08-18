@@ -13,7 +13,7 @@ Para desenvolver novos schematics ou alterá-los é necessário executar o coman
 Após executar o comando será criado a pasta `dist/ng-schematics` e você estará apto a utilizar a biblioteca
 em modo de desenvolvimento para implementar novas melhorias/correções e etc.
 
-## ng update @po-ui/ng-components
+## ng update @po-ui/ng-components@16.0.0.next-0
 
 Esse *schematic* é executado através do Angular CLI para oferecer suporte à atualização automática do PO UI em um projeto Angular.
 
