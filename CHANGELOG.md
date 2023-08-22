@@ -2,6 +2,15 @@
 
 All notable changes to this project will be documented in this file. See [standard-version](https://github.com/conventional-changelog/standard-version) for commit guidelines.
 
+# [15.15.0](https://github.com/po-ui/po-angular/compare/v15.14.0...v15.15.0) (2023-08-22)
+
+
+### Features
+
+* **search:** implementa busca na tabela ([060d9fb](https://github.com/po-ui/po-angular/commit/060d9fb59ddea9445af206ecf029199fcd3cd8f5))
+
+
+
 # [15.14.0](https://github.com/po-ui/po-angular/compare/v15.13.1...v15.14.0) (2023-08-08)
 
 
