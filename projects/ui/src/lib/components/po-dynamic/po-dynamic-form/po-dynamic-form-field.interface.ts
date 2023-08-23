@@ -120,13 +120,13 @@ export interface PoDynamicFormField extends PoDynamicField {
 
   /**  Quantidade máxima de casas decimais.
    *
-   * > Esta propriedade só pode ser utilizada quando o `type` for *currency*.
+   * > Esta propriedade só pode ser utilizada quando o `type` for *currency* ou *decimal*.
    */
   decimalsLength?: number;
 
   /** Quantidade máxima de dígitos antes do separador decimal. O valor máximo permitido é 13
    *
-   * > Esta propriedade só pode ser utilizada quando o `type` for *currency*.
+   * > Esta propriedade só pode ser utilizada quando o `type` for *currency* ou *decimal*.
    */
   thousandMaxlength?: number;
 

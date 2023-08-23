@@ -177,6 +177,7 @@ export interface PoDynamicField {
    *
    * - `boolean`: Valores *booleanos*.
    * - `currency`: Valores monetários.
+   * - `decimal`: Valores decimais.
    * - `date`: Valores de datas.
    *  + Aceita os tipos **string** e **Date** padrão do Javascript,
    *  por exemplo: `'2017-11-28'` ou `new Date(2017, 10, 28)`.

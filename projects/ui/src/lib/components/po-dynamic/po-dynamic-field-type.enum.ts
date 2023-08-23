@@ -12,6 +12,9 @@ export enum PoDynamicFieldType {
   /** Valor numérico que contém casas decimais e milhar. */
   Currency = 'currency',
 
+  /** Valor numérico que contém casas decimais e milhar. */
+  Decimal = 'decimal',
+
   /** Valor para data. */
   Date = 'date',
 
