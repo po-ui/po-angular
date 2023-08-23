@@ -391,8 +391,28 @@ describe('PoDynamicFormFieldsBaseComponent:', () => {
         expect(component['isCurrencyType']).toHaveBeenCalled();
       });
 
-      it('should return `input` if type is `decimal` and have a mask', () => {
+      it('should return `input` if type is `currency` and have a mask', () => {
         const expectedValue = 'input';
+        const field = { type: 'currency', property: 'code', mask: '99:99:99' };
+
+        spyOn(component, <any>'isCurrencyType').and.callThrough();
+
+        expect(component['getComponentControl'](field)).toBe(expectedValue);
+        expect(component['isCurrencyType']).toHaveBeenCalled();
+      });
+
+      it('should return `decimal` if type is `decimal` and have a pattern', () => {
+        const expectedValue = 'decimal';
+        const field = { type: 'decimal', property: 'code', pattern: '99:99:99' };
+
+        spyOn(component, <any>'isCurrencyType').and.callThrough();
+
+        expect(component['getComponentControl'](field)).toBe(expectedValue);
+        expect(component['isCurrencyType']).toHaveBeenCalled();
+      });
+
+      it('should return `decimal` if type is `decimal` and have a mask', () => {
+        const expectedValue = 'decimal';
         const field = { type: 'decimal', property: 'code', mask: '99:99:99' };
 
         spyOn(component, <any>'isCurrencyType').and.callThrough();
@@ -401,9 +421,9 @@ describe('PoDynamicFormFieldsBaseComponent:', () => {
         expect(component['isCurrencyType']).toHaveBeenCalled();
       });
 
-      it('should return `input` if type is `decimal` and have a pattern', () => {
+      it('should return `input` if type is `currency` and have a pattern', () => {
         const expectedValue = 'input';
-        const field = { type: 'decimal', property: 'code', pattern: '99:99:99' };
+        const field = { type: 'currency', property: 'code', pattern: '99:99:99' };
 
         spyOn(component, <any>'isCurrencyType').and.callThrough();
 
