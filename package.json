@@ -74,7 +74,7 @@
     "@angular/router": "~16.2.0",
     "@capacitor/core": "4.6.3",
     "@capacitor/network": "^4.1.0",
-    "@po-ui/style": "15.15.0",
+    "@po-ui/style": "16.0.0-next.0",
     "capitalize": "^2.0.3",
     "colors": "1.4.0",
     "core-js": "3.13.0",

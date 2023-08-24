@@ -19,7 +19,7 @@ import { PoSelectOption } from '@po-ui/ng-components';
 
       .containerButton {
         display: flex;
-        align-items: end;
+        align-items: flex-end;
         padding: 8px;
       }
     `
