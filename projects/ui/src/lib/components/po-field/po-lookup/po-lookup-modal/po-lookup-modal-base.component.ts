@@ -5,7 +5,7 @@ import { catchError } from 'rxjs/operators';
 
 import { InputBoolean } from '../../../../decorators';
 
-import { isTypeof } from '../../../../utils/util';
+import { capitalizeFirstLetter, isTypeof } from '../../../../utils/util';
 import { poLocaleDefault } from '../../../../services/po-language/po-language.constant';
 import { PoModalAction } from '../../../../components/po-modal';
 import { PoModalComponent } from '../../../../components/po-modal/po-modal.component';
@@ -193,6 +193,7 @@ export abstract class PoLookupModalBaseComponent implements OnDestroy, OnInit {
   private filterSubscription: Subscription;
   private searchSubscription: Subscription;
   private showMoreSubscription: Subscription;
+  private disclaimerLabel: string;
 
   private _literals: PoLookupLiterals;
   private _title: string;
@@ -296,18 +297,29 @@ export abstract class PoLookupModalBaseComponent implements OnDestroy, OnInit {
   }
 
   addDisclaimer(value: any, property: string) {
-    const fieldFilter = this.advancedFilters?.find(filter => filter.property === property);
+    this.disclaimerLabel = '';
+    const fieldFilter = this.advancedFilters.find(filter => filter.property === property);
     this.disclaimer = <any>{ property: property };
     this.disclaimer.value = value;
+    const labelProperty = fieldFilter.label || capitalizeFirstLetter(fieldFilter.property);
 
-    if (fieldFilter?.type === 'currency' && value) {
+    if (fieldFilter.type === 'currency' && value) {
       this.formatValueToCurrency(fieldFilter, value);
     }
 
-    if (fieldFilter?.options && value) {
+    if (fieldFilter.type === 'boolean' && (value === true || value === false)) {
+      this.formatValueToBoolean(fieldFilter, value);
+    }
+
+    if (fieldFilter.options && value) {
       this.applyDisclaimerLabelValue(fieldFilter, value);
     }
 
+    if (!this.disclaimerLabel) {
+      this.disclaimerLabel = this.disclaimer.value;
+    }
+
+    this.disclaimer.label = `${labelProperty}: ${this.disclaimerLabel}`;
     this.disclaimerGroup.disclaimers = [...this.disclaimerGroup.disclaimers, this.disclaimer];
   }
 
@@ -402,7 +414,7 @@ export abstract class PoLookupModalBaseComponent implements OnDestroy, OnInit {
     });
 
     if (labels.join()) {
-      this.disclaimer.label = labels.join(', ');
+      this.disclaimerLabel = labels.join(', ');
     }
   }
 
@@ -410,7 +422,18 @@ export abstract class PoLookupModalBaseComponent implements OnDestroy, OnInit {
     const currencyLabel = new Intl.NumberFormat(field.locale ? field.locale : this.language, {
       minimumFractionDigits: 2
     }).format(filterValue);
-    this.disclaimer.label = currencyLabel;
+    this.disclaimerLabel = currencyLabel;
+  }
+
+  private formatValueToBoolean(field: PoLookupAdvancedFilter, filterValue: any) {
+    let labelBoolean: string;
+
+    if (filterValue) {
+      labelBoolean = field.booleanTrue ? field.booleanTrue : filterValue;
+    } else {
+      labelBoolean = field.booleanFalse ? field.booleanFalse : filterValue;
+    }
+    this.disclaimerLabel = `${labelBoolean}`;
   }
 
   private setAdvancedFilterModalProperties() {
