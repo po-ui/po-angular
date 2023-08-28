@@ -35,6 +35,11 @@
       "version": "0.0.0-PLACEHOLDER",
       "description": "Atualiza @po-ui/ng-sync para v15",
       "factory": "./ng-update/v15/index"
+    },
+    "migration-v16": {
+      "version": "0.0.0-PLACEHOLDER",
+      "description": "Atualiza @po-ui/ng-sync para v16",
+      "factory": "./ng-update/v16/index"
     }
   }
 }

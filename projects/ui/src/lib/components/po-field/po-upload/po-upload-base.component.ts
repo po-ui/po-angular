@@ -1,10 +1,9 @@
-import { Directive, EventEmitter, Input, Output, HostBinding } from '@angular/core';
+import { Directive, EventEmitter, HostBinding, Input, Output } from '@angular/core';
 import { AbstractControl, ControlValueAccessor, Validator } from '@angular/forms';
 
 import { convertToBoolean, isEquals, isIE, isMobile } from '../../../utils/util';
 import { requiredFailed } from '../validators';
 
-import { InputBoolean } from '../../../decorators';
 import { poLocaleDefault } from '../../../services/po-language/po-language.constant';
 import { PoLanguageService } from '../../../services/po-language/po-language.service';
 import { PoUploadFileRestrictions } from './interfaces/po-upload-file-restriction.interface';
@@ -152,7 +151,7 @@ export abstract class PoUploadBaseComponent implements ControlValueAccessor, Val
    *
    * @default `false`
    */
-  @Input('p-auto-focus') @InputBoolean() autoFocus: boolean = false;
+  @Input({ alias: 'p-auto-focus', transform: convertToBoolean }) autoFocus: boolean = false;
 
   /**
    * @optional
@@ -226,8 +225,7 @@ export abstract class PoUploadBaseComponent implements ControlValueAccessor, Val
    * @default `true`
    */
   @HostBinding('attr.p-required-url')
-  @Input('p-required-url')
-  @InputBoolean()
+  @Input({ alias: 'p-required-url', transform: convertToBoolean })
   requiredUrl: boolean = true;
 
   /**

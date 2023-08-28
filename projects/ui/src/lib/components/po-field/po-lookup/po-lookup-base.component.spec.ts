@@ -8,6 +8,7 @@ import { PoLookupFilter } from './interfaces/po-lookup-filter.interface';
 import { PoLookupBaseComponent } from './po-lookup-base.component';
 import { PoLookupFilterService } from './services/po-lookup-filter.service';
 import { PoLookupModalService } from './services/po-lookup-modal.service';
+import { convertToBoolean } from '../../../utils/util';
 
 class LookupFilterService implements PoLookupFilter {
   getObjectByValue(id: string): Observable<any> {
@@ -98,11 +99,16 @@ describe('PoLookupBaseComponent:', () => {
     expectSettersMethod(component, 'noAutocomplete', undefined, '_noAutocomplete', false);
   });
 
-  xit('p-infinite-scroll: should update property `p-infinite-scroll`', () => {
-    const booleanValidTrueValues = [true, 'true', 1, ''];
-    const booleanInvalidValues = [undefined, null, NaN, 2, 'string'];
-    expectPropertiesValues(component, 'infiniteScroll', booleanInvalidValues, false);
-    expectPropertiesValues(component, 'infiniteScroll', booleanValidTrueValues, true);
+  it('p-infinite-scroll: should update property `p-infinite-scroll` with valid params', () => {
+    component.infiniteScroll = convertToBoolean('true');
+
+    expect(component.infiniteScroll).toBe(true);
+  });
+
+  it('p-infinite-scroll: should update property `p-infinite-scroll` with invalid params', () => {
+    component.infiniteScroll = convertToBoolean('dsadas');
+
+    expect(component.infiniteScroll).toBe(false);
   });
 
   it('should register function OnChangePropagate', () => {

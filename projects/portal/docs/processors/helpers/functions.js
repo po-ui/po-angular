@@ -229,7 +229,14 @@ module.exports = {
   },
 
   getDirectiveInputAlias: function (doc) {
-    return this.isDirectiveInput(doc) ? doc.decorators.find(d => d.name == 'Input').arguments[0] : '';
+    if (this.isDirectiveInput(doc)) {
+      if (typeof doc.decorators.find(d => d?.name == 'Input').argumentInfo[0] === 'object') {
+        return doc.decorators.find(d => d?.name == 'Input').argumentInfo[0].alias
+      } else {
+        return doc.decorators.find(d => d?.name == 'Input').arguments[0]
+      }
+    }
+    return '';
   },
 
   getDirectiveOutputAlias: function (doc) {

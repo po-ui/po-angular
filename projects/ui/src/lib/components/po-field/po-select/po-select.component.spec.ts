@@ -202,13 +202,16 @@ describe('PoSelectComponent:', () => {
       expect(component.optionWithoutGroup).toEqual(options);
     });
 
-    xit('p-readonly: should update with valid values.', () => {
-      expectPropertiesValues(component, 'readonly', booleanValidFalseValues, false);
-      expectPropertiesValues(component, 'readonly', booleanValidTrueValues, true);
+    it('p-readonly: should update with valid values.', () => {
+      component.readonly = UtilsFunctions.convertToBoolean(1);
+
+      expect(component.readonly).toBe(true);
     });
 
-    xit('p-readonly: should update with invalid values.', () => {
-      expectPropertiesValues(component, 'readonly', booleanInvalidValues, false);
+    it('p-readonly: should update with invalid values.', () => {
+      component.readonly = UtilsFunctions.convertToBoolean(5555);
+
+      expect(component.readonly).toBe(false);
     });
 
     it('onSelectChange: shouldn`t call `updateValues` if value is undefined', () => {

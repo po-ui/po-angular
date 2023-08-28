@@ -1,20 +1,19 @@
+import { Directive, EventEmitter, Input, OnInit, Output, TemplateRef } from '@angular/core';
 import { AbstractControl, ControlValueAccessor, Validator } from '@angular/forms';
-import { EventEmitter, Input, OnInit, Output, Directive, TemplateRef } from '@angular/core';
 
-import { convertToBoolean, isTypeof, validValue } from '../../../utils/util';
-import { PoLanguageService } from '../../../services/po-language/po-language.service';
 import { poLocaleDefault } from '../../../services/po-language/po-language.constant';
-import { InputBoolean } from '../../../decorators';
+import { PoLanguageService } from '../../../services/po-language/po-language.service';
+import { convertToBoolean, isTypeof, validValue } from '../../../utils/util';
 import { requiredFailed } from '../validators';
 
 import { PoComboFilter } from './interfaces/po-combo-filter.interface';
+import { PoComboGroup } from './interfaces/po-combo-group.interface';
+import { poComboLiteralsDefault } from './interfaces/po-combo-literals-default.interface';
+import { PoComboLiterals } from './interfaces/po-combo-literals.interface';
+import { PoComboOptionGroup } from './interfaces/po-combo-option-group.interface';
+import { PoComboOption } from './interfaces/po-combo-option.interface';
 import { PoComboFilterMode } from './po-combo-filter-mode.enum';
 import { PoComboFilterService } from './po-combo-filter.service';
-import { PoComboGroup } from './interfaces/po-combo-group.interface';
-import { PoComboLiterals } from './interfaces/po-combo-literals.interface';
-import { PoComboOption } from './interfaces/po-combo-option.interface';
-import { PoComboOptionGroup } from './interfaces/po-combo-option-group.interface';
-import { poComboLiteralsDefault } from './interfaces/po-combo-literals-default.interface';
 
 const PO_COMBO_DEBOUNCE_TIME_DEFAULT = 400;
 const PO_COMBO_FIELD_LABEL_DEFAULT = 'label';
@@ -50,7 +49,7 @@ export abstract class PoComboBaseComponent implements ControlValueAccessor, OnIn
    *
    * @default `false`
    */
-  @Input('p-auto-focus') @InputBoolean() autoFocus: boolean = false;
+  @Input({ alias: 'p-auto-focus', transform: convertToBoolean }) autoFocus: boolean = false;
 
   /** Label no componente. */
   @Input('p-label') label?: string;
@@ -164,7 +163,7 @@ export abstract class PoComboBaseComponent implements ControlValueAccessor, OnIn
   @Input('p-optional') optional: boolean;
 
   /** Se verdadeiro, o campo receberá um botão para ser limpo. */
-  @Input('p-clean') @InputBoolean() clean?: boolean;
+  @Input({ alias: 'p-clean', transform: convertToBoolean }) clean?: boolean;
 
   /**
    * @optional
@@ -175,7 +174,7 @@ export abstract class PoComboBaseComponent implements ControlValueAccessor, OnIn
    *
    * @default `false`
    */
-  @Input('p-emit-object-value') @InputBoolean() emitObjectValue?: boolean = false;
+  @Input({ alias: 'p-emit-object-value', transform: convertToBoolean }) emitObjectValue: boolean = false;
 
   /**
    * @optional
@@ -186,7 +185,7 @@ export abstract class PoComboBaseComponent implements ControlValueAccessor, OnIn
    *
    * @default `false`
    */
-  @Input('p-disabled-tab-filter') @InputBoolean() disabledTabFilter?: boolean = false;
+  @Input({ alias: 'p-disabled-tab-filter', transform: convertToBoolean }) disabledTabFilter: boolean = false;
 
   /**
    * @optional
@@ -601,7 +600,7 @@ export abstract class PoComboBaseComponent implements ControlValueAccessor, OnIn
    *
    * @default `true`
    */
-  @Input('p-cache') @InputBoolean() cache?: boolean = true;
+  @Input({ alias: 'p-cache', transform: convertToBoolean }) cache: boolean = true;
 
   constructor(languageService: PoLanguageService) {
     this.language = languageService.getShortLanguage();

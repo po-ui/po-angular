@@ -1,9 +1,8 @@
+import { ChangeDetectorRef, Directive, EventEmitter, Input, Output } from '@angular/core';
 import { AbstractControl, ControlValueAccessor, Validator } from '@angular/forms';
-import { EventEmitter, Input, Output, Directive, ChangeDetectorRef } from '@angular/core';
 
 import { convertToBoolean, convertToInt } from '../../../utils/util';
 import { maxlengpoailed, minlengpoailed, requiredFailed } from '../validators';
-import { InputBoolean } from '../../../decorators';
 
 /**
  * @description
@@ -46,7 +45,7 @@ export abstract class PoTextareaBaseComponent implements ControlValueAccessor, V
    *
    * @default `false`
    */
-  @Input('p-auto-focus') @InputBoolean() autoFocus: boolean = false;
+  @Input({ alias: 'p-auto-focus', transform: convertToBoolean }) autoFocus: boolean = false;
 
   /** Label do campo. */
   @Input('p-label') label?: string;

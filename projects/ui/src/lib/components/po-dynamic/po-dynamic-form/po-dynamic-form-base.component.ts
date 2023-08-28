@@ -1,6 +1,5 @@
-import { EventEmitter, Input, Output, Directive } from '@angular/core';
+import { Directive, EventEmitter, Input, Output } from '@angular/core';
 import { NgForm } from '@angular/forms';
-import { InputBoolean } from '../../../decorators';
 import { convertToBoolean } from '../../../utils/util';
 
 import { PoDynamicFormField } from './po-dynamic-form-field.interface';
@@ -249,5 +248,5 @@ export class PoDynamicFormBaseComponent {
    *
    *
    */
-  @Input('p-validate-on-input') @InputBoolean() validateOnInput: boolean = false;
+  @Input({ alias: 'p-validate-on-input', transform: convertToBoolean }) validateOnInput: boolean = false;
 }

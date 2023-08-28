@@ -1,9 +1,8 @@
 import { Component, ElementRef, EventEmitter, Input, Output, Renderer2 } from '@angular/core';
-import { from, Observable, timer } from 'rxjs';
+import { Observable, from, timer } from 'rxjs';
 import { concatMap, mapTo, scan, tap } from 'rxjs/operators';
 
-import { isIE } from '../../../../../utils/util';
-import { InputBoolean } from '../../../../../decorators';
+import { convertToBoolean, isIE } from '../../../../../utils/util';
 
 import { PoChartPointsCoordinates } from '../../../interfaces/po-chart-points-coordinates.interface';
 
@@ -18,9 +17,9 @@ const ANIMATION_DURATION_TIME = 700;
 export class PoChartSeriesPointComponent {
   @Input('p-animate') animate: boolean;
 
-  @Input('p-is-active') @InputBoolean() isActive: boolean;
+  @Input({ alias: 'p-is-active', transform: convertToBoolean }) isActive?: boolean;
 
-  @Input('p-chart-line') @InputBoolean() chartLine: boolean = false;
+  @Input({ alias: 'p-chart-line', transform: convertToBoolean }) chartLine: boolean = false;
 
   // Referência para o svgPathGroup ao qual pertence o ponto. Necessário para reordenação dos svgElements no DOM para tratamento onHover
   @Input('p-relative-to') relativeTo: string;

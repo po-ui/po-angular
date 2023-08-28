@@ -1,11 +1,10 @@
+import { Component, Input, OnDestroy, OnInit } from '@angular/core';
 import { ActivatedRoute, Route, Router } from '@angular/router';
-import { Component, Input, OnInit, OnDestroy } from '@angular/core';
 
-import { Subscription, Observable, EMPTY, concat, of } from 'rxjs';
-import { tap, switchMap, map } from 'rxjs/operators';
+import { EMPTY, Observable, Subscription, of } from 'rxjs';
+import { map, switchMap, tap } from 'rxjs/operators';
 
 import {
-  InputBoolean,
   PoDialogConfirmOptions,
   PoDialogService,
   PoLanguageService,
@@ -18,28 +17,29 @@ import {
 } from '@po-ui/ng-components';
 
 import * as util from '../../utils/util';
+import { convertToBoolean } from '../../utils/util';
 
 import { PoPageDynamicDetailComponent } from '../po-page-dynamic-detail/po-page-dynamic-detail.component';
 
-import { poPageDynamicTableLiteralsDefault } from './po-page-dynamic-table-literals';
-import { PoPageDynamicListBaseComponent } from './po-page-dynamic-list-base.component';
 import { PoPageDynamicService } from '../../services/po-page-dynamic/po-page-dynamic.service';
-import { PoPageDynamicTableActions } from './interfaces/po-page-dynamic-table-actions.interface';
-import { PoPageDynamicTableOptions } from './interfaces/po-page-dynamic-table-options.interface';
-import { PoPageCustomizationService } from './../../services/po-page-customization/po-page-customization.service';
-import { PoPageDynamicOptionsSchema } from './../../services/po-page-customization/po-page-dynamic-options.interface';
-import { PoPageDynamicTableMetaData } from './interfaces/po-page-dynamic-table-metadata.interface';
-import { PoPageDynamicTableActionsService } from './po-page-dynamic-table-actions.service';
-import { PoPageDynamicTableBeforeEdit } from './interfaces/po-page-dynamic-table-before-edit.interface';
-import { PoPageDynamicTableBeforeNew } from './interfaces/po-page-dynamic-table-before-new.interface';
-import { PoPageDynamicTableBeforeRemove } from './interfaces/po-page-dynamic-table-before-remove.interface';
-import { PoPageDynamicTableBeforeDetail } from './interfaces/po-page-dynamic-table-before-detail.interface';
-import { PoPageDynamicTableBeforeDuplicate } from './interfaces/po-page-dynamic-table-before-duplicate.interface';
-import { PoPageDynamicTableBeforeRemoveAll } from './interfaces/po-page-dynamic-table-before-remove-all.interface';
-import { PoPageDynamicTableCustomAction } from './interfaces/po-page-dynamic-table-custom-action.interface';
-import { PoPageDynamicTableCustomTableAction } from './interfaces/po-page-dynamic-table-custom-table-action.interface';
 import { isExternalLink, openExternalLink, removeDuplicateItemsWithArrayKey } from '../../utils/util';
 import { PoPageDynamicSearchLiterals } from '../po-page-dynamic-search/po-page-dynamic-search-literals.interface';
+import { PoPageCustomizationService } from './../../services/po-page-customization/po-page-customization.service';
+import { PoPageDynamicOptionsSchema } from './../../services/po-page-customization/po-page-dynamic-options.interface';
+import { PoPageDynamicTableActions } from './interfaces/po-page-dynamic-table-actions.interface';
+import { PoPageDynamicTableBeforeDetail } from './interfaces/po-page-dynamic-table-before-detail.interface';
+import { PoPageDynamicTableBeforeDuplicate } from './interfaces/po-page-dynamic-table-before-duplicate.interface';
+import { PoPageDynamicTableBeforeEdit } from './interfaces/po-page-dynamic-table-before-edit.interface';
+import { PoPageDynamicTableBeforeNew } from './interfaces/po-page-dynamic-table-before-new.interface';
+import { PoPageDynamicTableBeforeRemoveAll } from './interfaces/po-page-dynamic-table-before-remove-all.interface';
+import { PoPageDynamicTableBeforeRemove } from './interfaces/po-page-dynamic-table-before-remove.interface';
+import { PoPageDynamicTableCustomAction } from './interfaces/po-page-dynamic-table-custom-action.interface';
+import { PoPageDynamicTableCustomTableAction } from './interfaces/po-page-dynamic-table-custom-table-action.interface';
+import { PoPageDynamicTableMetaData } from './interfaces/po-page-dynamic-table-metadata.interface';
+import { PoPageDynamicTableOptions } from './interfaces/po-page-dynamic-table-options.interface';
+import { PoPageDynamicListBaseComponent } from './po-page-dynamic-list-base.component';
+import { PoPageDynamicTableActionsService } from './po-page-dynamic-table-actions.service';
+import { poPageDynamicTableLiteralsDefault } from './po-page-dynamic-table-literals';
 
 const PAGE_SIZE_DEFAULT = 10;
 
@@ -180,9 +180,7 @@ export class PoPageDynamicTableComponent extends PoPageDynamicListBaseComponent 
    *
    * @default `false`
    */
-  @InputBoolean()
-  @Input('p-keep-filters')
-  keepFilters: boolean = false;
+  @Input({ alias: 'p-keep-filters', transform: convertToBoolean }) keepFilters: boolean = false;
 
   /**
    * @optional
@@ -193,9 +191,7 @@ export class PoPageDynamicTableComponent extends PoPageDynamicListBaseComponent 
    *
    * @default `false`
    */
-  @InputBoolean()
-  @Input('p-actions-right')
-  actionRight?: boolean = false;
+  @Input({ alias: 'p-actions-right', transform: convertToBoolean }) actionRight: boolean = false;
 
   /**
    * @optional
@@ -219,9 +215,7 @@ export class PoPageDynamicTableComponent extends PoPageDynamicListBaseComponent 
    *
    * @default `false`
    */
-  @InputBoolean()
-  @Input('p-concat-filters')
-  concatFilters: boolean = false;
+  @Input({ alias: 'p-concat-filters', transform: convertToBoolean }) concatFilters: boolean = false;
 
   /**
    * @optional
@@ -234,9 +228,8 @@ export class PoPageDynamicTableComponent extends PoPageDynamicListBaseComponent 
    *
    * @default `false`
    */
-  @InputBoolean()
-  @Input('p-hide-remove-all-disclaimer')
-  hideRemoveAllDisclaimer?: boolean = false;
+  @Input({ alias: 'p-hide-remove-all-disclaimer', transform: convertToBoolean })
+  hideRemoveAllDisclaimer: boolean = false;
 
   /**
    * @optional
@@ -251,9 +244,7 @@ export class PoPageDynamicTableComponent extends PoPageDynamicListBaseComponent 
    *
    * @default `false`
    */
-  @InputBoolean()
-  @Input('p-infinite-scroll')
-  infiniteScroll?: boolean = false;
+  @Input({ alias: 'p-infinite-scroll', transform: convertToBoolean }) infiniteScroll: boolean = false;
 
   hasNext = false;
   items = [];

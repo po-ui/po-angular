@@ -1,9 +1,8 @@
-import { EventEmitter, Input, Output, Directive, TemplateRef, ChangeDetectorRef } from '@angular/core';
+import { ChangeDetectorRef, Directive, EventEmitter, Input, Output, TemplateRef } from '@angular/core';
 import { AbstractControl, ControlValueAccessor, Validator } from '@angular/forms';
 
 import { convertToBoolean } from '../../../utils/util';
-import { requiredFailed, maxlengpoailed, minlengpoailed, patternFailed } from './../validators';
-import { InputBoolean } from '../../../decorators';
+import { maxlengpoailed, minlengpoailed, patternFailed, requiredFailed } from './../validators';
 import { PoMask } from './po-mask';
 
 /**
@@ -35,7 +34,7 @@ export abstract class PoInputBaseComponent implements ControlValueAccessor, Vali
    *
    * @default `false`
    */
-  @Input('p-auto-focus') @InputBoolean() autoFocus: boolean = false;
+  @Input({ alias: 'p-auto-focus', transform: convertToBoolean }) autoFocus: boolean = false;
 
   /**
    * @optional
@@ -103,7 +102,7 @@ export abstract class PoInputBaseComponent implements ControlValueAccessor, Vali
    * Converte o conteúdo do campo em maiúsulo automaticamente.
    *
    */
-  @Input('p-upper-case') @InputBoolean() upperCase: boolean = false;
+  @Input({ alias: 'p-upper-case', transform: convertToBoolean }) upperCase: boolean = false;
 
   /**
    * @optional

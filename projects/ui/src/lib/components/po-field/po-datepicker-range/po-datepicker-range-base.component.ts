@@ -1,21 +1,20 @@
-import { ChangeDetectorRef, Directive, EventEmitter, Input, Output } from '@angular/core';
+import { Directive, EventEmitter, Input, Output } from '@angular/core';
 import { AbstractControl, ControlValueAccessor, ValidationErrors, Validator } from '@angular/forms';
-import { InputBoolean } from '../../../decorators';
 import { poLocaleDefault } from '../../../services/po-language/po-language.constant';
 import { PoLanguageService } from '../../../services/po-language/po-language.service';
+import { PoMask } from '../po-input/po-mask';
 import { requiredFailed } from '../validators';
 import { PoDateService } from './../../../services/po-date/po-date.service';
 import {
   convertIsoToDate,
   convertToBoolean,
+  replaceFormatSeparator,
   setYearFrom0To100,
-  validateDateRange,
-  replaceFormatSeparator
+  validateDateRange
 } from './../../../utils/util';
 import { PoDatepickerRangeLiterals } from './interfaces/po-datepicker-range-literals.interface';
 import { PoDatepickerRange } from './interfaces/po-datepicker-range.interface';
 import { poDatepickerRangeLiteralsDefault } from './po-datepicker-range.literals';
-import { PoMask } from '../po-input/po-mask';
 
 /**
  * @description
@@ -71,7 +70,7 @@ export abstract class PoDatepickerRangeBaseComponent implements ControlValueAcce
    *
    * @default `false`
    */
-  @Input('p-auto-focus') @InputBoolean() autoFocus: boolean = false;
+  @Input({ alias: 'p-auto-focus', transform: convertToBoolean }) autoFocus: boolean = false;
 
   /**
    * @optional
