@@ -1,11 +1,11 @@
 import { PoFilterMode } from './po-search-filter-mode.enum';
 
 import { Directive, EventEmitter, Input, Output } from '@angular/core';
-import { InputBoolean } from '../../decorators';
+import { convertToBoolean } from '../../utils/util';
 
 @Directive()
 export class PoSearchBaseComponent {
-  @Input('p-disabled') @InputBoolean() disabled: boolean;
+  @Input({ alias: 'p-disabled', transform: convertToBoolean }) disabled?: boolean;
 
   @Input('p-loading') loading: boolean;
 

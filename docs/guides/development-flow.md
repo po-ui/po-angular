@@ -82,13 +82,13 @@ Este guia tem por objetivo definir as regras para criação de *Issues* relacion
           <blockquote>Para seguir o guia é fundamental o conhecimento da <a href="https://git-scm.com/book/en/v2">ferramenta Git.</a>
           </blockquote>
         <ul>
-          <li>Para utilizar o PO UI, é pré-requisito ter o <code>Node.js</code> instalado (versão 10.13.0 ou acima) e o seu gerenciador de pacote favorito na versão mais atual.</li>
+          <li>Para utilizar o PO UI, é pré-requisito ter o <code>Node.js</code> instalado (versão 16.14.0 ou acima) e o seu gerenciador de pacote favorito na versão mais atual.</li>
           <li>
             <p>É importante que tenha a versão equivalente do Angular instalada. Instale-o via <code>npm</code> ou <code>yarn</code>:</p>
             <p>Instalando com npm:</p>
-            <pre><code>npm i -g @angular/cli@^10</code></pre>
+            <pre><code>npm i -g @angular/cli</code></pre>
             <p>Caso opte pelo yarn:</p>
-            <pre><code>yarn global add @angular/cli@^10.0.2</code></pre>
+            <pre><code>yarn global add @angular/cli</code></pre>
           </li>
           <li>Faça um <a href="https://github.com/po-ui/po-angular"><em>fork</em> do repositório PO UI</a>.
             <blockquote>Membros do <em>Core Team</em> devem gerar uma nova <em>branch</em> ao invés do <em>fork</em>.</blockquote>

@@ -1,5 +1,6 @@
 import { Directive, EventEmitter, HostBinding, Input, Output, TemplateRef } from '@angular/core';
 import { InputBoolean } from '../../../decorators';
+import { convertToBoolean } from '../../../utils/util';
 import { PoItemListType } from '../enums/po-item-list-type.enum';
 import { PoItemListAction } from './interfaces/po-item-list-action.interface';
 import { PoItemListOptionGroup } from './interfaces/po-item-list-option-group.interface';
@@ -59,7 +60,7 @@ export class PoItemListBaseComponent {
   /** Valor do item. */
   @Input('p-value') value: string;
 
-  @Input('p-danger') @InputBoolean() danger: boolean = false;
+  @Input({ alias: 'p-danger', transform: convertToBoolean }) danger: boolean = false;
 
   /**
    * @optional
@@ -92,7 +93,7 @@ export class PoItemListBaseComponent {
    *
    * @default `false`
    */
-  @Input('p-selected') @InputBoolean() selected: boolean = false;
+  @Input({ alias: 'p-selected', transform: convertToBoolean }) selected: boolean = false;
 
   /**
    * @optional
@@ -103,7 +104,7 @@ export class PoItemListBaseComponent {
    *
    * @default `false`
    */
-  @Input('p-separator') @InputBoolean() separator: boolean = false;
+  @Input({ alias: 'p-separator', transform: convertToBoolean }) separator: boolean = false;
 
   /**
    * @optional

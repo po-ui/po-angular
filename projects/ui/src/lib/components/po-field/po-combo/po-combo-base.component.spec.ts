@@ -125,7 +125,7 @@ describe('PoComboBaseComponent:', () => {
       expect(spycomboListDefinitions).toHaveBeenCalled();
     });
 
-    xit('p-infinite-scroll: should update property `p-infinite-scroll` with false.', () => {
+    it('p-infinite-scroll: should update property `p-infinite-scroll` with false.', () => {
       expectPropertiesValues(component, 'infiniteScroll', falseValues, false);
     });
 

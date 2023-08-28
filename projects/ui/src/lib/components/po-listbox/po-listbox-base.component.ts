@@ -2,14 +2,14 @@ import { Directive, EventEmitter, Input, Output, TemplateRef } from '@angular/co
 
 import { poLocaleDefault } from '../../services/po-language/po-language.constant';
 import { PoLanguageService } from '../../services/po-language/po-language.service';
-import { InputBoolean } from '../../decorators';
 import { PoItemListType } from './enums/po-item-list-type.enum';
 import { PoItemListAction } from './po-item-list/interfaces/po-item-list-action.interface';
 
+import { convertToBoolean } from '../../utils/util';
+import { PoItemListFilterMode } from './enums/po-item-list-filter-mode.enum';
+import { PoListBoxLiterals } from './interfaces/po-listbox-literals.interface';
 import { PoItemListOptionGroup } from './po-item-list/interfaces/po-item-list-option-group.interface';
 import { PoItemListOption } from './po-item-list/interfaces/po-item-list-option.interface';
-import { PoListBoxLiterals } from './interfaces/po-listbox-literals.interface';
-import { PoItemListFilterMode } from './enums/po-item-list-filter-mode.enum';
 
 export const poListBoxLiteralsDefault = {
   en: <PoListBoxLiterals>{
@@ -37,7 +37,7 @@ export class PoListBoxBaseComponent {
   private _literals: PoListBoxLiterals;
   private language: string = poLocaleDefault;
 
-  @Input('p-visible') @InputBoolean() visible: boolean = false;
+  @Input({ alias: 'p-visible', transform: convertToBoolean }) visible: boolean = false;
 
   @Input('p-type') set type(value: string) {
     this._type = PoItemListType[value] ?? 'action';
@@ -131,13 +131,13 @@ export class PoListBoxBaseComponent {
 
   @Input('p-search-value') searchValue: string;
 
-  @Input('p-is-searching') @InputBoolean() isServerSearching: boolean = false;
+  @Input({ alias: 'p-is-searching', transform: convertToBoolean }) isServerSearching: boolean = false;
 
-  @Input('p-infinite-loading') @InputBoolean() infiniteLoading: boolean = false;
+  @Input({ alias: 'p-infinite-loading', transform: convertToBoolean }) infiniteLoading: boolean = false;
 
-  @Input('p-infinite-scroll') @InputBoolean() infiniteScroll: boolean = false;
+  @Input({ alias: 'p-infinite-scroll', transform: convertToBoolean }) infiniteScroll: boolean = false;
 
-  @Input('p-cache') @InputBoolean() cache: boolean = false;
+  @Input({ alias: 'p-cache', transform: convertToBoolean }) cache: boolean = false;
 
   @Input('p-infinite-scroll-distance') infiniteScrollDistance: number = 100;
 

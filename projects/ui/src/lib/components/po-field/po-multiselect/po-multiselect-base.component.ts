@@ -1,9 +1,11 @@
-import { EventEmitter, Input, OnInit, Output, Directive } from '@angular/core';
+import { Directive, EventEmitter, Input, OnInit, Output } from '@angular/core';
 import { AbstractControl, ControlValueAccessor, Validator } from '@angular/forms';
 
 import { Observable, Subject, Subscription } from 'rxjs';
 import { debounceTime, distinctUntilChanged, switchMap, tap } from 'rxjs/operators';
 
+import { poLocaleDefault } from '../../../services/po-language/po-language.constant';
+import { PoLanguageService } from '../../../services/po-language/po-language.service';
 import {
   convertToBoolean,
   isTypeof,
@@ -12,15 +14,12 @@ import {
   sortOptionsByProperty
 } from '../../../utils/util';
 import { requiredFailed } from './../validators';
-import { PoLanguageService } from '../../../services/po-language/po-language.service';
-import { poLocaleDefault } from '../../../services/po-language/po-language.constant';
 
 import { PoMultiselectFilterMode } from './po-multiselect-filter-mode.enum';
-import { PoMultiselectLiterals } from './po-multiselect-literals.interface';
-import { PoMultiselectOption } from './po-multiselect-option.interface';
-import { InputBoolean } from '../../../decorators';
 import { PoMultiselectFilter } from './po-multiselect-filter.interface';
 import { PoMultiselectFilterService } from './po-multiselect-filter.service';
+import { PoMultiselectLiterals } from './po-multiselect-literals.interface';
+import { PoMultiselectOption } from './po-multiselect-option.interface';
 
 const PO_MULTISELECT_DEBOUNCE_TIME_DEFAULT = 400;
 const PO_MULTISELECT_FIELD_LABEL_DEFAULT = 'label';
@@ -76,7 +75,7 @@ export abstract class PoMultiselectBaseComponent implements ControlValueAccessor
    *
    * @default `false`
    */
-  @Input('p-auto-focus') @InputBoolean() autoFocus: boolean = false;
+  @Input({ alias: 'p-auto-focus', transform: convertToBoolean }) autoFocus: boolean = false;
 
   /** Label no componente. */
   @Input('p-label') label?: string;
@@ -125,7 +124,7 @@ export abstract class PoMultiselectBaseComponent implements ControlValueAccessor
    *
    * @default `false`
    */
-  @Input('p-hide-select-all') @InputBoolean() hideSelectAll: boolean;
+  @Input({ alias: 'p-hide-select-all', transform: convertToBoolean }) hideSelectAll?: boolean;
 
   /**
    * @optional
@@ -222,7 +221,7 @@ export abstract class PoMultiselectBaseComponent implements ControlValueAccessor
    *
    * @default `false`
    */
-  @Input('p-auto-height') @InputBoolean() set autoHeight(value: boolean) {
+  @Input({ alias: 'p-auto-height', transform: convertToBoolean }) set autoHeight(value: boolean) {
     this._autoHeight = value;
     this.autoHeightInitialValue = value;
   }

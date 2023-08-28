@@ -13,10 +13,10 @@ import {
 } from '@angular/core';
 import { NG_VALUE_ACCESSOR } from '@angular/forms';
 
-import { InputBoolean } from '../../../decorators';
 import { PoFieldModel } from '../po-field.model';
 import { PoKeyCodeEnum } from './../../../enums/po-key-code.enum';
 
+import { convertToBoolean } from '../../../utils/util';
 import { PoRadioSize } from './po-radio-size.enum';
 
 @Component({
@@ -58,7 +58,7 @@ export class PoRadioComponent extends PoFieldModel<boolean> {
     return this._size;
   }
 
-  @Input('p-required') @InputBoolean() required: boolean;
+  @Input({ alias: 'p-required', transform: convertToBoolean }) required?: boolean;
 
   /** Define o status do *radio* */
   @Input('p-checked') checked: boolean = false;

@@ -1,12 +1,11 @@
-import { EventEmitter, Input, Output, Directive, TemplateRef } from '@angular/core';
+import { Directive, EventEmitter, Input, Output, TemplateRef } from '@angular/core';
 
-import { convertToBoolean } from '../../utils/util';
 import { PoColorPaletteEnum } from '../../enums/po-color-palette.enum';
+import { convertToBoolean } from '../../utils/util';
 
-import { PoTagItem } from './interfaces/po-tag-item.interface';
 import { PoTagOrientation } from './enums/po-tag-orientation.enum';
 import { PoTagType } from './enums/po-tag-type.enum';
-import { InputBoolean } from '../../decorators';
+import { PoTagItem } from './interfaces/po-tag-item.interface';
 
 const poTagColors = (<any>Object).values(PoColorPaletteEnum);
 const poTagOrientationDefault = PoTagOrientation.Vertical;
@@ -42,7 +41,7 @@ export class PoTagBaseComponent {
    *
    * @default `false`
    */
-  @Input('p-removable') @InputBoolean() removable: boolean = false;
+  @Input({ alias: 'p-removable', transform: convertToBoolean }) removable: boolean = false;
 
   /**
    * @optional
@@ -54,7 +53,7 @@ export class PoTagBaseComponent {
    *
    * @default `false`
    */
-  @Input('p-disabled') @InputBoolean() disabled: boolean = false;
+  @Input({ alias: 'p-disabled', transform: convertToBoolean }) disabled: boolean = false;
 
   /** Texto da tag. */
   @Input('p-value') value: string;

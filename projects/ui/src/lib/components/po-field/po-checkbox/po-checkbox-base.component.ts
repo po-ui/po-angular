@@ -1,8 +1,7 @@
+import { Directive, EventEmitter, Input, Output } from '@angular/core';
 import { ControlValueAccessor } from '@angular/forms';
-import { EventEmitter, Input, Output, Directive } from '@angular/core';
 
 import { convertToBoolean, uuid } from './../../../utils/util';
-import { InputBoolean } from '../../../decorators';
 import { PoCheckboxSize } from './po-checkbox-size.enum';
 
 /**
@@ -40,7 +39,7 @@ export abstract class PoCheckboxBaseComponent implements ControlValueAccessor {
    *
    * @default `false`
    */
-  @Input('p-auto-focus') @InputBoolean() autoFocus: boolean = false;
+  @Input({ alias: 'p-auto-focus', transform: convertToBoolean }) autoFocus: boolean = false;
 
   /** Texto de exibição do *checkbox*. */
   @Input('p-label') label?: string;
@@ -58,10 +57,10 @@ export abstract class PoCheckboxBaseComponent implements ControlValueAccessor {
   @Input('p-checkboxValue') checkboxValue: boolean | null | string;
 
   //propriedade interna recebida do checkbox-group para verificar se o checkbox é required
-  @Input('p-required') @InputBoolean() checkBoxRequired: boolean;
+  @Input({ alias: 'p-required', transform: convertToBoolean }) checkBoxRequired: boolean;
 
   //propriedade interna recebida para desabilitar o tabindex do checkbox na utilização dentro de um list-box
-  @Input('p-disabled-tabindex') @InputBoolean() disabladTabindex: boolean = false;
+  @Input({ alias: 'p-disabled-tabindex', transform: convertToBoolean }) disabladTabindex: boolean = false;
 
   id = uuid();
   propagateChange: any;

@@ -14,9 +14,14 @@ import {
 } from '@angular/core';
 import { AbstractControl, NG_VALIDATORS, NG_VALUE_ACCESSOR } from '@angular/forms';
 
-import { removeDuplicatedOptions, removeUndefinedAndNullOptions, uuid, validValue } from '../../../utils/util';
+import {
+  convertToBoolean,
+  removeDuplicatedOptions,
+  removeUndefinedAndNullOptions,
+  uuid,
+  validValue
+} from '../../../utils/util';
 
-import { InputBoolean } from '../../../decorators';
 import { PoFieldValidateModel } from '../po-field-validate.model';
 import { PoSelectOptionGroup } from './po-select-option-group.interface';
 import { PoSelectOption } from './po-select-option.interface';
@@ -111,7 +116,7 @@ export class PoSelectComponent extends PoFieldValidateModel<any> implements OnCh
    *
    * @default `false`
    */
-  @Input('p-readonly') @InputBoolean() readonly: boolean = false;
+  @Input({ alias: 'p-readonly', transform: convertToBoolean }) readonly: boolean = false;
 
   /** Mensagem que aparecerá enquanto nenhuma opção estiver selecionada. */
   @Input('p-placeholder') placeholder?: string;
