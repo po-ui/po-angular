@@ -1,4 +1,13 @@
-import { AfterViewInit, ChangeDetectorRef, Component, ElementRef, Renderer2, ViewChild, OnInit } from '@angular/core';
+import {
+  AfterViewInit,
+  ChangeDetectorRef,
+  Component,
+  ElementRef,
+  Renderer2,
+  ViewChild,
+  OnInit,
+  ViewEncapsulation
+} from '@angular/core';
 import { FormBuilder, FormGroup } from '@angular/forms';
 
 import {
@@ -20,7 +29,8 @@ import {
 @Component({
   selector: 'app-theme-builder',
   templateUrl: './theme-builder.component.html',
-  styleUrls: ['theme-builder.component.css']
+  styleUrls: ['theme-builder.component.css'],
+  encapsulation: ViewEncapsulation.None
 })
 export class ThemeBuilderComponent implements AfterViewInit, OnInit {
   @ViewChild('viewCSSModal') viewCSSModal: PoModalComponent;
@@ -796,20 +806,6 @@ export class ThemeBuilderComponent implements AfterViewInit, OnInit {
       }
     });
 
-    const tooltipElement = this.renderer.selectRootElement('.po-tooltip', true);
-    if (tooltipElement) {
-      this.tooltipForm.reset();
-      Object.keys(this.formPropertyDictTooltip).forEach((fieldName: string) => {
-        tooltipElement.style.setProperty(this.formPropertyDictTooltip[fieldName], null);
-      });
-      if (this.itemSelected === 'tooltip') {
-        const tooltipDefault = this.tooltipDefault.buttonElement.nativeElement.nextElementSibling;
-        Object.keys(this.formPropertyDictTooltip).forEach((fieldName: string) => {
-          tooltipDefault.style.setProperty(this.formPropertyDictTooltip[fieldName], null);
-        });
-      }
-    }
-
     this.popupForm.reset();
     Object.keys(this.formPropertyDictModal).forEach((fieldName: string) => {
       this.popupBuilder.poListBoxRef.listboxItemList.nativeElement.children[0].children[0].style.setProperty(
@@ -858,6 +854,27 @@ export class ThemeBuilderComponent implements AfterViewInit, OnInit {
         this.checkboxHover.nativeElement.style.setProperty(this.formPropertyDictCheckbox[fieldName], null);
       }
     });
+
+    const tooltipElement = document.querySelector('.po-tooltip');
+    if (tooltipElement) {
+      this.tooltipForm.reset();
+      Object.keys(this.formPropertyDictTooltip).forEach((fieldName: string) => {
+        this.tooltip.buttonElement.nativeElement.nextElementSibling.style.setProperty(
+          this.formPropertyDictTooltip[fieldName],
+          null
+        );
+      });
+      if (this.itemSelected === 'tooltip') {
+        const tooltipDefault = this.tooltipDefault.buttonElement.nativeElement.nextElementSibling;
+        Object.keys(this.formPropertyDictTooltip).forEach((fieldName: string) => {
+          tooltipDefault.style.setProperty(this.formPropertyDictTooltip[fieldName], null);
+        });
+      }
+    }
+
+    this.setRatioDefault();
+    this.changedColorButton = false;
+    this.changedColorPopup = false;
   }
 
   changeKindButton(kindValue: number): void {
@@ -904,19 +921,7 @@ export class ThemeBuilderComponent implements AfterViewInit, OnInit {
     this.popupContainerForm.valueChanges.subscribe(changes => this.checkChangesPopupContainer(changes));
     this.checkboxForm.valueChanges.subscribe(changes => this.checkChangesCheckbox(changes));
 
-    const backButton = getComputedStyle(document.querySelector('po-page-default')).getPropertyValue(
-      '--color-secondary'
-    );
-    this.ratioButton = this.setRatioComponent(this.changedColorButton, backButton);
-    this.ratioDisclaimer = this.setRatioComponent(false, '#f2eaf6', '#2c3739');
-    this.ratioDatepicker = this.ratioTextarea = this.ratioInput = this.ratioSelect = this.setRatioComponent(
-      false,
-      '#fbfbfb',
-      '#1d2426'
-    );
-    this.ratioTooltip = this.setRatioComponent(false, '#2c3739', '#ffffff');
-    this.ratioPopup = this.setRatioComponent(this.changedColorPopup, '#ffffff', '#753399');
-    this.cdr.detectChanges();
+    this.setRatioDefault();
   }
 
   openPageSlide(itemLabel: string, item: string) {
@@ -1650,7 +1655,7 @@ export class ThemeBuilderComponent implements AfterViewInit, OnInit {
   }
 
   private checkChangesTooltip(changes: { [key: string]: string }): void {
-    const tooltipElement = this.renderer.selectRootElement('.po-tooltip', true);
+    const tooltipElement = document.querySelector('.po-tooltip');
     if (tooltipElement) {
       if (!this.isEmpty(changes)) {
         this.resultTooltip['nativeElement'].innerHTML = '.po-tooltip {<br>';
@@ -1664,7 +1669,10 @@ export class ThemeBuilderComponent implements AfterViewInit, OnInit {
           }
           if (changes[fieldName]) {
             const tooltipDefault = this.tooltipDefault.buttonElement.nativeElement.nextElementSibling;
-            tooltipElement.style.setProperty(this.formPropertyDictTooltip[fieldName], value);
+            this.tooltip.buttonElement.nativeElement.nextElementSibling.style.setProperty(
+              this.formPropertyDictTooltip[fieldName],
+              value
+            );
             tooltipDefault.style.setProperty(this.formPropertyDictTooltip[fieldName], value);
 
             this.resultTooltip[
@@ -1838,6 +1846,19 @@ export class ThemeBuilderComponent implements AfterViewInit, OnInit {
       this.colorText = colorText ? colorText : this.colorText;
       return this.calculateRatio(this.colorBack, this.colorText);
     }
+  }
+
+  private setRatioDefault() {
+    this.ratioButton = this.setRatioComponent(false, '#2c3739', '#ffffff');
+    this.ratioDisclaimer = this.setRatioComponent(false, '#f2eaf6', '#2c3739');
+    this.ratioDatepicker = this.ratioTextarea = this.ratioInput = this.ratioSelect = this.setRatioComponent(
+      false,
+      '#fbfbfb',
+      '#1d2426'
+    );
+    this.ratioTooltip = this.setRatioComponent(false, '#2c3739', '#ffffff');
+    this.ratioPopup = this.setRatioComponent(false, '#ffffff', '#753399');
+    this.cdr.detectChanges();
   }
 
   private verifyIfAllNotVisibility() {
