@@ -2,13 +2,24 @@
 
 All notable changes to this project will be documented in this file. See [standard-version](https://github.com/conventional-changelog/standard-version) for commit guidelines.
 
-# [16.0.0-next.1](https://github.com/po-ui/po-angular/compare/v15.15.0...16.0.0-next.1) (2023-08-25)
+# [16.0.0-next.2](https://github.com/po-ui/po-angular/compare/v15.15.0...v16.0.0-next.2) (2023-08-29)
 
  **angular:** deve ser utilizado o Angular v16
 
 Atualize seu projeto para utilizar a versão 16 do Angular, acesse a documentação [Guia de Atualização do Angular](https://update.angular.io/) para fazer a migração completa.
 
 Veja nossa [**documentação para fazer a migração**](https://po-ui.io/guides/migration-poui) para a versão 16
+
+### Bug Fixes
+
+* **lookup:** resolve disclaimer do lookup para o filtro booleano ([17e83c3](https://github.com/po-ui/po-angular/commit/17e83c3262dda0e08eb1f4b36963598fab4056f4))
+* **theme-builder:** ajusta estilização para o angular 16 ([c155b0d](https://github.com/po-ui/po-angular/commit/c155b0d3f8d95842d78db4cbb3f40e7d2ffbb177)), closes [#DTHFUI-7601](https://github.com/po-ui/po-angular/issues/DTHFUI-7601)
+
+
+### Features
+
+* **dynamicform:** adiciona tipo `decimal` ([8df2611](https://github.com/po-ui/po-angular/commit/8df2611dd18bcb258857c39a7c589cb95400220b))
+
 
 # [15.15.0](https://github.com/po-ui/po-angular/compare/v15.14.0...v15.15.0) (2023-08-22)
 
