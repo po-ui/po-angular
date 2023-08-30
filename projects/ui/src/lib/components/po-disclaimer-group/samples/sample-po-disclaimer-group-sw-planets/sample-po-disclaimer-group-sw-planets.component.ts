@@ -11,15 +11,15 @@ import { SamplePoDisclaimerGroupSwPlanetsService } from './sample-po-disclaimer-
 })
 export class SamplePoDisclaimerGroupSwPlanetsComponent implements OnInit {
   climate: string;
-  columns: Array<PoTableColumn> = this.disclaimerGroupSwPlanetsService.getColumns();
+  columns: Array<PoTableColumn>;
   filteredItems: Array<any> = [];
   filters: Array<PoDisclaimer> = [];
   items: Array<any>;
   name: string;
   terrain: string;
 
-  public readonly climates: Array<PoComboOption> = this.disclaimerGroupSwPlanetsService.getClimates();
-  public readonly terrains: Array<PoComboOption> = this.disclaimerGroupSwPlanetsService.getTerrains();
+  public climates: Array<PoComboOption>;
+  public terrains: Array<PoComboOption>;
 
   constructor(public disclaimerGroupSwPlanetsService: SamplePoDisclaimerGroupSwPlanetsService) {}
 
@@ -28,6 +28,9 @@ export class SamplePoDisclaimerGroupSwPlanetsComponent implements OnInit {
       this.items = items;
       this.filteredItems = [...this.items];
     });
+    this.columns = this.disclaimerGroupSwPlanetsService.getColumns();
+    this.climates = this.disclaimerGroupSwPlanetsService.getClimates();
+    this.terrains = this.disclaimerGroupSwPlanetsService.getTerrains();
   }
 
   addFilter(value: any, property: string) {

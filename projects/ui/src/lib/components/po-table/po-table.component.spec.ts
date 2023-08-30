@@ -1,27 +1,28 @@
-import { By } from '@angular/platform-browser';
-import { Component, ElementRef, TemplateRef, ViewChild } from '@angular/core';
-import { ComponentFixture, fakeAsync, TestBed, tick } from '@angular/core/testing';
 import { DecimalPipe } from '@angular/common';
-import { RouterTestingModule } from '@angular/router/testing';
-import { Routes } from '@angular/router';
 import { HttpClientTestingModule } from '@angular/common/http/testing';
+import { Component, ElementRef, TemplateRef, ViewChild } from '@angular/core';
+import { ComponentFixture, TestBed, fakeAsync, tick } from '@angular/core/testing';
+import { By } from '@angular/platform-browser';
+import { Routes } from '@angular/router';
+import { RouterTestingModule } from '@angular/router/testing';
 
-import { of } from 'rxjs';
-import * as utilsFunctions from '../../utils/util';
-import { PoColorPaletteService } from './../../services/po-color-palette/po-color-palette.service';
+import { of, throwError } from 'rxjs';
 import { PoControlPositionService } from '../../services/po-control-position/po-control-position.service';
 import { PoDateService } from '../../services/po-date/po-date.service';
+import * as utilsFunctions from '../../utils/util';
+import { PoColorPaletteService } from './../../services/po-color-palette/po-color-palette.service';
 
+import { CdkVirtualScrollViewport } from '@angular/cdk/scrolling';
+import { NoopAnimationsModule } from '@angular/platform-browser/animations';
+import { PoTableRowTemplateArrowDirection } from './enums/po-table-row-template-arrow-direction.enum';
+import { PoTableColumnSpacing } from './enums/po-table-spacing.enum';
 import { PoTableAction } from './interfaces/po-table-action.interface';
-import { PoTableBaseComponent } from './po-table-base.component';
 import { PoTableColumn } from './interfaces/po-table-column.interface';
+import { PoTableBaseComponent } from './po-table-base.component';
+import { PoTableColumnTemplateDirective } from './po-table-column-template/po-table-column-template.directive';
 import { PoTableComponent } from './po-table.component';
 import { PoTableModule } from './po-table.module';
-import { PoTableColumnTemplateDirective } from './po-table-column-template/po-table-column-template.directive';
-import { PoTableRowTemplateArrowDirection } from './enums/po-table-row-template-arrow-direction.enum';
 import { PoTableService } from './services/po-table.service';
-import { NoopAnimationsModule } from '@angular/platform-browser/animations';
-import { CdkVirtualScrollViewport } from '@angular/cdk/scrolling';
 
 @Component({ template: 'Search' })
 export class SearchComponent {}
@@ -77,6 +78,7 @@ describe('PoTableComponent:', () => {
   let mockTableDetailDiretive;
   let singleAction: Array<PoTableAction>;
   let mockViewPort: jasmine.SpyObj<CdkVirtualScrollViewport>;
+  let changeDetector: any;
 
   function initializeMocks() {
     mockTableDetailDiretive = {
@@ -217,6 +219,7 @@ describe('PoTableComponent:', () => {
       _renderedContentOffset: 100
     });
 
+    changeDetector = jasmine.createSpyObj('ChangeDetectorRef', ['detectChanges']);
     await TestBed.configureTestingModule({
       imports: [RouterTestingModule.withRoutes(routes), PoTableModule, NoopAnimationsModule, HttpClientTestingModule],
       declarations: [TestMenuComponent, SearchComponent],
@@ -226,7 +229,8 @@ describe('PoTableComponent:', () => {
         DecimalPipe,
         PoColorPaletteService,
         PoTableService,
-        { provide: CdkVirtualScrollViewport, useValue: mockViewPort }
+        { provide: CdkVirtualScrollViewport, useValue: mockViewPort },
+        { provide: changeDetector, useValue: changeDetector }
       ]
     }).compileComponents();
 
@@ -901,6 +905,46 @@ describe('PoTableComponent:', () => {
       });
     });
 
+    it('drop: should update columns and call onVisibleColumnsChange when `hideColumnsManager` is false', () => {
+      const previousIndex = 0;
+      const currentIndex = 1;
+      const event = {
+        previousIndex: previousIndex,
+        currentIndex: currentIndex
+      };
+
+      const mockColumns = [{ property: 'column1' }, { property: 'column2' }, { property: 'detail' }];
+
+      component.columns = mockColumns;
+      component.mainColumns = mockColumns;
+      spyOn(component, 'onVisibleColumnsChange');
+
+      component.drop(event as any);
+
+      expect(component.newOrderColumns[previousIndex]).toEqual(mockColumns[currentIndex]);
+      expect(component.newOrderColumns[currentIndex]).toEqual(mockColumns[previousIndex]);
+      expect(component.newOrderColumns[2]).toEqual(mockColumns[2]);
+      expect(component.onVisibleColumnsChange).toHaveBeenCalledWith(component.newOrderColumns);
+    });
+
+    it('drop: should update mainColumns when `hideColumnsManager` is true', () => {
+      const previousIndex = 0;
+      const currentIndex = 1;
+      const event = {
+        previousIndex: previousIndex,
+        currentIndex: currentIndex
+      };
+      const mockColumns = [{ property: 'column1' }, { property: 'column2' }, { property: 'detail' }];
+
+      component.hideColumnsManager = true;
+      component.mainColumns = [{ property: 'column1' }, { property: 'column2' }, { property: 'detail' }];
+      component.drop(event as any);
+
+      expect(component.mainColumns[currentIndex]).toEqual(mockColumns[previousIndex]);
+      expect(component.mainColumns[previousIndex]).toEqual(mockColumns[currentIndex]);
+      expect(component.mainColumns[2]).toEqual(mockColumns[2]);
+    });
+
     describe('getBooleanLabel:', () => {
       const simpleColumnBoolean: PoTableColumn = { property: 'boolean', label: 'Boolean', type: 'boolean' };
 
@@ -1368,33 +1412,6 @@ describe('PoTableComponent:', () => {
       component.tableRowTemplate = mockTableDetailDiretive;
 
       expect(component.hasRowTemplate).toBeTruthy();
-    });
-
-    it('visibleActions: should be `false` if doesn`t have action.', () => {
-      component.actions = undefined;
-
-      expect(component.visibleActions).toBeFalsy();
-    });
-
-    it('visibleActions: shouldn`t return action if visible is `false`.', () => {
-      component.actions = [
-        { label: 'PO1', visible: false },
-        { label: 'PO2', visible: true }
-      ];
-
-      expect(component.visibleActions).toEqual([{ label: 'PO2', visible: true }]);
-    });
-
-    it('visibleActions: should return only valid values', () => {
-      component.actions = [{ label: 'PO1' }, undefined, null];
-
-      expect(component.visibleActions).toEqual([{ label: 'PO1' }]);
-    });
-
-    it('visibleActions: should be `true` if has action.', () => {
-      component.actions = actions;
-
-      expect(component.visibleActions).toBeTruthy();
     });
 
     it('detailHideSelect: should return `false` if doesn`t have MasterDetail', () => {
@@ -1914,6 +1931,106 @@ describe('PoTableComponent:', () => {
         expect(component.selectAll).toBeNull();
       });
 
+      it("deleteItems: should set false in 'selectAll' and remove item if selected is true and 'serviceDeleteApi' is undefined and height is defined", () => {
+        component.serviceDeleteApi = undefined;
+        component.height = 400;
+        component.items = [
+          { id: 1, name: 'teste', $selected: true },
+          { id: 2, name: 'teste2' }
+        ];
+        spyOn(component['eventDelete'], 'emit');
+
+        component.deleteItems();
+
+        expect(component.selectAll).toBeFalsy();
+        expect(component.items).toEqual([{ id: 2, name: 'teste2' }]);
+        expect(component.eventDelete.emit).toHaveBeenCalled();
+      });
+
+      it("deleteItems: should call function removeItem and remove item if selected is true and 'serviceDeleteApi' is undefined", () => {
+        component.serviceDeleteApi = undefined;
+        component.height = undefined;
+        component.items = [
+          { id: 1, name: 'teste', $selected: true },
+          { id: 2, name: 'teste2' }
+        ];
+        spyOn(component, 'removeItem');
+
+        component.deleteItems();
+
+        expect(component.selectAll).toBeFalsy();
+        expect(component.removeItem).toHaveBeenCalledWith(0);
+      });
+
+      it("deleteItems: should set false in 'selectAll' and should call 'setTableResponseProperties' if serviceDeleteApi is valid", () => {
+        component.serviceDeleteApi = 'https://po-sample-api.fly.dev/v1/heroes';
+        component.serviceApi = 'https://po-sample-api.fly.dev/v1/heroes';
+        component.paramDeleteApi = 'id';
+        component.items = [
+          { id: 1, name: 'teste', $selected: true },
+          { id: 2, name: 'teste2' }
+        ];
+        component.itemsSelected = [{ id: 1, name: 'teste', $selected: true }];
+
+        spyOn(component, 'setTableResponseProperties');
+        spyOn(component['defaultService'], <any>'deleteItem').and.returnValue(of({}));
+        spyOn(component['defaultService'], <any>'getFilteredItems').and.returnValue(
+          of({ items: [component.items[1]], hasNext: false })
+        );
+        component.deleteItems();
+
+        expect(component.selectAll).toBeFalsy();
+        expect(component.setTableResponseProperties).toHaveBeenCalled();
+      });
+
+      it('deleteItems: should set serviceDeleteApi but serviceApi is undefined', () => {
+        component.serviceDeleteApi = 'https://po-sample-api.fly.dev/v1/heroes';
+        component.serviceApi = undefined;
+        component.paramDeleteApi = 'id';
+        component.items = [
+          { id: 1, name: 'teste', $selected: true },
+          { id: 2, name: 'teste2' }
+        ];
+        component.itemsSelected = [{ id: 1, name: 'teste', $selected: true }];
+        spyOn(component['defaultService'], <any>'deleteItem').and.returnValue(of({}));
+
+        spyOn(component['eventDelete'], 'emit');
+        component.deleteItems();
+
+        expect(component.eventDelete.emit).toHaveBeenCalled();
+      });
+
+      it('deleteItemsService: should call error in service delete api', () => {
+        component.serviceDeleteApi = 'https://po-sample-api.fly.dev/v1/heroes';
+        component.serviceApi = undefined;
+        component.paramDeleteApi = 'id';
+        component.itemsSelected = [{ id: 1, name: 'teste', $selected: true }];
+        component.items = [
+          { id: 1, name: 'teste', $selected: true },
+          { id: 2, name: 'teste2' }
+        ];
+        spyOn(component['defaultService'], <any>'deleteItem').and.returnValue(
+          throwError(() => 'Internal Server Error')
+        );
+
+        spyOn(component['poNotification'], 'success');
+        spyOn(component['poNotification'], 'error');
+        component.deleteItems();
+
+        expect(component.poNotification.success).not.toHaveBeenCalled();
+        expect(component.poNotification.error).toHaveBeenCalled();
+      });
+
+      it('changesAfterDelete: should set false in "selectAll"', () => {
+        component.selectAll = true;
+        const newItems = [
+          { id: 1, name: 'teste', $selected: true },
+          { id: 2, name: 'teste2' }
+        ];
+        component['changesAfterDelete'](newItems);
+        expect(component.selectAll).toBeFalsy();
+      });
+
       it('toggleSelect: should add item as "selected"', () => {
         const newItem = {
           value: 1,
@@ -1961,6 +2078,17 @@ describe('PoTableComponent:', () => {
 
         const resultado2 = component.inverseOfTranslation;
         expect(resultado2).toEqual('-0px');
+      });
+
+      it('should update filteredItems on onFilteredItemsChange call', () => {
+        component.items = [
+          { id: 1, name: 'item1' },
+          { id: 2, name: 'item2' }
+        ];
+
+        component.onFilteredItemsChange(items);
+
+        expect(component.filteredItems).toBe(items);
       });
     });
   });
@@ -2144,7 +2272,7 @@ describe('PoTableComponent:', () => {
       component.container = 'border';
       fixture.detectChanges();
 
-      tick();
+      tick(1200);
 
       expect(nativeElement.querySelector('.po-container')).toBeTruthy();
     }));
@@ -2153,7 +2281,8 @@ describe('PoTableComponent:', () => {
       component.container = 'shadow';
       fixture.detectChanges();
 
-      tick();
+      tick(1200);
+
       expect(nativeElement.querySelector('.po-container')).toBeTruthy();
     }));
 
@@ -2197,6 +2326,35 @@ describe('PoTableComponent:', () => {
       fixture.detectChanges();
 
       expect(nativeElement.querySelector(`po-table-column-manager`)).toBe(null);
+    });
+
+    it('should call attr-p-spacing `medium` if p-spacing not set', () => {
+      component.columns = [...columnsWithDetail];
+
+      fixture.detectChanges();
+
+      expect(nativeElement.querySelector('[p-spacing="medium"]')).toBeTruthy();
+    });
+
+    it('should call attr-p-spacing `small` if p-spacing is `small` and row is not interactive', () => {
+      component.columns = [{ property: 'name' }, { property: 'age' }];
+      component.spacing = PoTableColumnSpacing.Small;
+      fixture.detectChanges();
+
+      expect(nativeElement.querySelector('[p-spacing="small"]')).toBeTruthy();
+    });
+
+    it('should call attr-p-spacing `medium` if p-spacing is `small` and row is interactive', () => {
+      component.spacing = PoTableColumnSpacing.Small;
+      component['initialVisibleColumns'] = false;
+      component.columns = [
+        { property: 'name', type: 'link', visible: true },
+        { property: 'age', visible: true }
+      ];
+      fixture.detectChanges();
+
+      expect(nativeElement.querySelector('[p-spacing="small"]')).toBeNull();
+      expect(nativeElement.querySelector('[p-spacing="medium"]')).toBeTruthy();
     });
 
     it('should display .po-table-header-master-detail if columns contains detail and rowTemplate is undefined', () => {
@@ -2330,6 +2488,20 @@ describe('PoTableComponent:', () => {
   });
 
   describe('Properties:', () => {
+    it('cancel: should call modal.close ', () => {
+      spyOn(component.modalDelete, <any>'close');
+      component.close.action();
+
+      expect(component.modalDelete.close).toHaveBeenCalled();
+    });
+
+    it('confirm: should call modal.confirm', () => {
+      spyOn(component, <any>'deleteItems');
+      component.confirm.action();
+
+      expect(component.deleteItems).toHaveBeenCalled();
+    });
+
     it('firstAction: should be `false` if not contains actions', () => {
       component.actions = undefined;
 
@@ -2766,6 +2938,28 @@ describe('PoTableComponent:', () => {
     expect(component.infiniteScroll).toBeTrue();
   });
 
+  it(`ngOnDestroy: should unsubscribe 'subscriptionService'`, () => {
+    const fakeSubscription = <any>{ unsubscribe: () => {} };
+    spyOn(fakeSubscription, <any>'unsubscribe');
+    component['subscriptionService'] = fakeSubscription;
+
+    component.ngOnDestroy();
+
+    expect(fakeSubscription.unsubscribe).toHaveBeenCalled();
+  });
+
+  it(`ngOnDestroy: should not unsubscribe if 'subscriptionService' is falsy.`, () => {
+    const fakeSubscription = <any>{ unsubscribe: () => {} };
+    component['subscriptionService'] = fakeSubscription;
+
+    spyOn(fakeSubscription, <any>'unsubscribe');
+
+    component['subscriptionService'] = undefined;
+    component.ngOnDestroy();
+
+    expect(fakeSubscription.unsubscribe).not.toHaveBeenCalled();
+  });
+
   it('showMoreInfiniteScroll: should call `onShowMore` if showMoreDisabled is false ', () => {
     const event = { target: { offsetHeight: 100, scrollTop: 100, scrollHeight: 1 } };
     const spyOnShowMore = spyOn(component, 'onShowMore');
@@ -2892,25 +3086,6 @@ describe('PoTableComponent:', () => {
     expect(valueWidth).toEqual(undefined);
   });
 
-  // it('getWidthColumnManager, should return value if contain column manager fixed', () => {
-  //   component.height = 100;
-
-  //   const fakeThis = {
-  //     height: 100,
-  //     columnManagerFixed: {
-  //       nativeElement: {
-  //         offsetWidth: 200
-  //       }
-  //     }
-  //   };
-
-  //   fixture.detectChanges();
-
-  //   const valueWidth = component['getWidthColumnManager'].call(fakeThis);
-
-  //   expect(valueWidth).toEqual(200);
-  // });
-
   it('getWidthColumnManagerFixed, should return width of column manager', () => {
     const fakeThis = {
       height: 300,
@@ -2997,5 +3172,11 @@ describe('PoTableComponent:', () => {
     component.height = 200;
 
     expect(component['hasInfiniteScroll']()).toBeFalse();
+  });
+
+  it('draggable: should return false if draggable is false', () => {
+    component.draggable = false;
+
+    expect(component['isDraggable']).toBeFalse();
   });
 });

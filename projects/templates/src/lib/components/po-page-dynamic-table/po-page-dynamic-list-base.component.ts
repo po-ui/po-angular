@@ -1,6 +1,6 @@
 import { Input, Directive, Output, EventEmitter } from '@angular/core';
 
-import { PoBreadcrumb, PoTableColumnSort } from '@po-ui/ng-components';
+import { InputBoolean, PoBreadcrumb, PoTableColumnSort } from '@po-ui/ng-components';
 
 import { convertToBoolean } from '../../utils/util';
 

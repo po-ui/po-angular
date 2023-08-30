@@ -9,9 +9,9 @@ Para maiores detalhes sobre os serviços e métodos utilizados neste tutorial, c
 ### Pré-requisitos
 
 - [Node.js e NPM](https://nodejs.org/en/)
-- [Angular CLI](https://cli.angular.io/) (^15.0.0):
+- [Angular CLI](https://cli.angular.io/) (~16.2.0):
   - ```shell
-    npm install -g @angular/cli@15
+    npm install -g @angular/cli@16
     ```
 - [Ionic](https://ionicframework.com/docs/cli/) (^6.0.0):
   - ```shell
@@ -49,34 +49,34 @@ Antes de executar a instalação, é necessário que todas as dependências do p
 ```typescript
   ...
   "dependencies": {
-    "@angular/animations": "~15.0.3",
-    "@angular/common": "~15.0.3",
-    "@angular/core": "~15.0.3",
-    "@angular/forms": "~15.0.3",
-    "@angular/platform-browser": "~15.0.3",
-    "@angular/platform-browser-dynamic": "~15.0.3",
-    "@angular/router": "~15.0.3",
-    "@angular/service-worker": "~15.0.3",
+    "@angular/animations": "~16.2.0",
+    "@angular/common": "~16.2.0",
+    "@angular/core": "~16.2.0",
+    "@angular/forms": "~16.2.0",
+    "@angular/platform-browser": "~16.2.0",
+    "@angular/platform-browser-dynamic": "~16.2.0",
+    "@angular/router": "~16.2.0",
+    "@angular/service-worker": "~16.2.0",
     "@ionic/angular": "^6.0.0",
     "@capacitor/network": "^4.1.0",
     "@capacitor/splash-screen": "^4.1.4",
     "rxjs": "~7.5.5",
     "tslib": "^2.3.0",
-    "zone.js": "~0.12.0"
+    "zone.js": "~0.13.1"
     ...
   },
   "devDependencies": {
-    "@angular-devkit/build-angular": "~15.0.3",
+    "@angular-devkit/build-angular": "~16.2.0",
     "@angular-eslint/builder": "~15.1.0",
     "@angular-eslint/eslint-plugin": "~15.1.0",
     "@angular-eslint/eslint-plugin-template": "~15.1.0",
     "@angular-eslint/template-parser": "~15.1.0",
-    "@angular/cli": "~15.0.3",
-    "@angular/compiler": "~15.0.3",
-    "@angular/compiler-cli": "~15.0.3",
-    "@angular/language-service": "~15.0.3",
+    "@angular/cli": "~16.2.0",
+    "@angular/compiler": "~16.2.0",
+    "@angular/compiler-cli": "~16.2.0",
+    "@angular/language-service": "~16.2.0",
     "@ionic/angular-toolkit": "^6.0.0",
-    "typescript": "~4.8.4"
+    "typescript": "~5.1.6"
   },
   ...
 ```

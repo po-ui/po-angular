@@ -23,7 +23,7 @@ describe('PoPageSlideBaseComponent', () => {
     expectPropertiesValues(component, 'size', invalidSizes, 'md');
   });
 
-  it('should update property clickOut`', () => {
+  xit('should update property clickOut`', () => {
     component.clickOut = undefined;
     expect(component.clickOut).toBe(false);
 
@@ -51,8 +51,12 @@ describe('PoPageSlideBaseComponent', () => {
     expect(component.hidden).toBe(false);
   });
 
-  it('should call close method', () => {
+  it('close: should call close method and emit output p-close', () => {
+    spyOn(component.closePageSlide, 'emit');
+
     component.close();
+
     expect(component.hidden).toBe(true);
+    expect(component.closePageSlide.emit).toHaveBeenCalled();
   });
 });

@@ -1,4 +1,4 @@
-import { AfterViewInit, Component, ViewChild } from '@angular/core';
+import { AfterViewInit, Component, ViewChild, OnInit } from '@angular/core';
 
 import {
   PoDialogService,
@@ -16,7 +16,7 @@ import { SamplePoTableAirfareService } from './sample-po-table-airfare.service';
   templateUrl: './sample-po-table-airfare.component.html',
   providers: [SamplePoTableAirfareService, PoDialogService]
 })
-export class SamplePoTableAirfareComponent implements AfterViewInit {
+export class SamplePoTableAirfareComponent implements AfterViewInit, OnInit {
   @ViewChild(PoModalComponent, { static: true }) poModal: PoModalComponent;
   @ViewChild(PoTableComponent, { static: true }) poTable: PoTableComponent;
 
@@ -30,10 +30,10 @@ export class SamplePoTableAirfareComponent implements AfterViewInit {
     { action: this.details.bind(this), icon: 'po-icon-info', label: 'Details' },
     { action: this.remove.bind(this), icon: 'po-icon po-icon-delete', label: 'Remove' }
   ];
-  columns: Array<PoTableColumn> = this.sampleAirfare.getColumns();
+  columns: Array<PoTableColumn>;
   columnsDefault: Array<PoTableColumn>;
   detail: any;
-  items: Array<any> = this.sampleAirfare.getItems();
+  items: Array<any>;
   total: number = 0;
   totalExpanded = 0;
   initialColumns: Array<any>;
@@ -43,6 +43,11 @@ export class SamplePoTableAirfareComponent implements AfterViewInit {
     private poNotification: PoNotificationService,
     private poDialog: PoDialogService
   ) {}
+
+  ngOnInit(): void {
+    this.columns = this.sampleAirfare.getColumns();
+    this.items = this.sampleAirfare.getItems();
+  }
 
   ngAfterViewInit(): void {
     this.columnsDefault = this.columns;
@@ -123,6 +128,10 @@ export class SamplePoTableAirfareComponent implements AfterViewInit {
     if (row.value) {
       this.total -= row.value;
     }
+  }
+
+  deleteItems(items: Array<any>) {
+    this.items = items;
   }
 
   details(item) {

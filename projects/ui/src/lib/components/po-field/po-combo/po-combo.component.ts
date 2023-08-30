@@ -119,7 +119,6 @@ export class PoComboComponent extends PoComboBaseComponent implements AfterViewI
   id = `po-combo[${uuid()}]`;
   isProcessingValueByTab: boolean = false;
   scrollTop = 0;
-  service: PoComboFilterService;
   shouldMarkLetters: boolean = true;
   infiniteLoading: boolean = false;
 

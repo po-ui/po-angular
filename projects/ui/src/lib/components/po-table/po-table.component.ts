@@ -1,4 +1,6 @@
 import { CdkVirtualScrollViewport } from '@angular/cdk/scrolling';
+import { CdkDragDrop, moveItemInArray } from '@angular/cdk/drag-drop';
+
 import { DecimalPipe } from '@angular/common';
 import {
   AfterViewInit,
@@ -15,14 +17,17 @@ import {
   Renderer2,
   TemplateRef,
   ViewChild,
-  ViewChildren
+  ViewChildren,
+  inject
 } from '@angular/core';
 import { Router } from '@angular/router';
 import { Observable, Subscription } from 'rxjs';
 
 import { PoDateService } from '../../services/po-date/po-date.service';
 import { PoLanguageService } from '../../services/po-language/po-language.service';
+import { PoNotificationService } from '../../services/po-notification/po-notification.service';
 import { convertToBoolean } from '../../utils/util';
+import { PoModalAction, PoModalComponent } from '../po-modal';
 import { PoPopupComponent } from '../po-popup/po-popup.component';
 import { PoTableColumnLabel } from './po-table-column-label/po-table-column-label.interface';
 
@@ -87,6 +92,10 @@ import { PoTableService } from './services/po-table.service';
  *  <file name="sample-po-table-heroes/sample-po-table-heroes.service.ts"> </file>
  * </example>
  *
+ * <example name="po-table-draggable" title="PO Table Drag and Drop">
+ *  <file name="sample-po-table-draggable/sample-po-table-draggable.component.html"> </file>
+ *  <file name="sample-po-table-draggable/sample-po-table-draggable.component.ts"> </file>
+ * </example>
  */
 @Component({
   selector: 'po-table',
@@ -101,6 +110,7 @@ export class PoTableComponent extends PoTableBaseComponent implements AfterViewI
 
   @ViewChild('noColumnsHeader', { read: ElementRef }) noColumnsHeader;
   @ViewChild('popup') poPopupComponent: PoPopupComponent;
+  @ViewChild(PoModalComponent, { static: true }) modalDelete: PoModalComponent;
   @ViewChild('tableFooter', { read: ElementRef, static: false }) tableFooterElement;
   @ViewChild('tableWrapper', { read: ElementRef, static: false }) tableWrapperElement;
 
@@ -108,13 +118,16 @@ export class PoTableComponent extends PoTableBaseComponent implements AfterViewI
   @ViewChild('tableVirtualScroll', { read: ElementRef, static: false }) tableVirtualScroll;
 
   @ViewChild('columnManager', { read: ElementRef, static: false }) columnManager;
+  @ViewChild('columnBatchActions', { read: ElementRef, static: false }) columnBatchActions;
   @ViewChild('columnActionLeft', { read: ElementRef, static: false }) columnActionLeft;
-  @ViewChild('pageSlideColumnsManager') pageSlideColumnsManager: PoPageSlideComponent;
 
   @ViewChildren('actionsIconElement', { read: ElementRef }) actionsIconElement: QueryList<any>;
   @ViewChildren('actionsElement', { read: ElementRef }) actionsElement: QueryList<any>;
-
+  @ViewChild('filterInput') filterInput: ElementRef;
+  @ViewChild('poSearchInput', { read: ElementRef, static: true }) poSearchInput: ElementRef;
   @ViewChild(CdkVirtualScrollViewport, { static: false }) public viewPort: CdkVirtualScrollViewport;
+
+  poNotification = inject(PoNotificationService);
 
   heightTableContainer: number;
   heightTableVirtual: number;
@@ -125,7 +138,24 @@ export class PoTableComponent extends PoTableBaseComponent implements AfterViewI
   lastVisibleColumnsSelected: Array<PoTableColumn>;
   tagColor: string;
   idRadio: string;
+  inputFieldValue = '';
   JSON: JSON;
+  newOrderColumns: Array<PoTableColumn>;
+
+  close: PoModalAction = {
+    action: () => {
+      this.modalDelete.close();
+    },
+    label: this.literals.cancel,
+    danger: true
+  };
+
+  confirm: PoModalAction = {
+    action: () => {
+      this.deleteItems();
+    },
+    label: this.literals.delete
+  };
 
   private _columnManagerTarget: ElementRef;
   private _columnManagerTargetFixed: ElementRef;
@@ -137,6 +167,7 @@ export class PoTableComponent extends PoTableBaseComponent implements AfterViewI
   private visibleElement = false;
   private scrollEvent$: Observable<any>;
   private subscriptionScrollEvent: Subscription;
+  private subscriptionService: Subscription = new Subscription();
 
   private clickListener: () => void;
   private resizeListener: () => void;
@@ -246,10 +277,8 @@ export class PoTableComponent extends PoTableBaseComponent implements AfterViewI
     return this.visibleActions.length === 1;
   }
 
-  get visibleActions() {
-    return (
-      this.actions !== undefined && this.actions && this.actions.filter(action => action && action.visible !== false)
-    );
+  get isDraggable(): boolean {
+    return this.draggable;
   }
 
   public get inverseOfTranslation(): string {
@@ -287,12 +316,11 @@ export class PoTableComponent extends PoTableBaseComponent implements AfterViewI
       this.checkInfiniteScroll();
       this.visibleElement = true;
     }
-
-    // this.itemSize = document.body.offsetWidth > 1366 ? 44 : 32;
   }
 
   ngOnDestroy() {
     this.removeListeners();
+    this.subscriptionService?.unsubscribe();
   }
 
   /**
@@ -413,6 +441,33 @@ export class PoTableComponent extends PoTableBaseComponent implements AfterViewI
     }
   }
 
+  /**
+   * Método responsável pela exclusão de itens em lote.
+   * Caso a tabela esteja executando a propriedade `p-service-delete`, será necessário excluir 1 item por vez.
+   *
+   * Ao utilizar `p-service-delete` mas sem a propriedade `p-service-api`, será responsabilidade do usuário o tratamento
+   * após a requisição DELETE ser executada.
+   *
+   * Caso a tabela utilize `p-height` e esteja sem serviço, é necessário a reatribuição dos itens utilizando o evento `(p-delete-items)`, por exemplo:
+   *
+   * ```
+   *<po-table
+   *  (p-delete-items)="items = $event"
+   * >
+   *</po-table>
+   * ```
+   */
+  deleteItems() {
+    const newItems = [...this.items];
+    const newItemsFiltered = [...newItems].filter(item => !item.$selected);
+
+    if (!this.serviceDeleteApi) {
+      this.deleteItemsLocal(newItems, newItemsFiltered);
+    } else {
+      this.deleteItemsService(newItemsFiltered);
+    }
+  }
+
   formatNumber(value: any, format: string) {
     if (!format) {
       return value;
@@ -505,7 +560,6 @@ export class PoTableComponent extends PoTableBaseComponent implements AfterViewI
 
   onVisibleColumnsChange(columns: Array<PoTableColumn>) {
     this.columns = columns;
-
     this.changeDetector.detectChanges();
   }
 
@@ -546,7 +600,10 @@ export class PoTableComponent extends PoTableBaseComponent implements AfterViewI
 
   onOpenColumnManager() {
     this.lastVisibleColumnsSelected = [...this.columns];
-    this.pageSlideColumnsManager.open();
+  }
+
+  onFilteredItemsChange(items: Array<any>): void {
+    this.filteredItems = items;
   }
 
   /**
@@ -580,6 +637,30 @@ export class PoTableComponent extends PoTableBaseComponent implements AfterViewI
     }
   }
 
+  drop(event: CdkDragDrop<Array<string>>) {
+    if (!this.mainColumns[event.currentIndex].fixed) {
+      moveItemInArray(this.mainColumns, event.previousIndex, event.currentIndex);
+
+      if (this.hideColumnsManager === false) {
+        this.newOrderColumns = this.mainColumns;
+        const detail = this.columns.filter(item => item.property === 'detail')[0];
+
+        if (detail !== undefined) {
+          this.newOrderColumns.push(detail);
+        }
+
+        this.columns.map((item, index) => {
+          if (!item.visible) {
+            this.newOrderColumns.splice(index, 0, item);
+          }
+        });
+        this.columns = this.newOrderColumns;
+
+        this.onVisibleColumnsChange(this.newOrderColumns);
+      }
+    }
+  }
+
   public getTemplate(column: PoTableColumn): TemplateRef<any> {
     const template: PoTableColumnTemplateDirective = this.tableColumnTemplates.find(
       tableColumnTemplate => tableColumnTemplate.targetProperty === column.property
@@ -599,6 +680,10 @@ export class PoTableComponent extends PoTableBaseComponent implements AfterViewI
 
   public getColumnWidthActionsLeft() {
     return this.columnActionLeft?.nativeElement.offsetWidth;
+  }
+
+  public hasSomeFixed() {
+    return this.columns.some(item => item.fixed === true);
   }
 
   protected calculateHeightTableContainer(height) {
@@ -626,6 +711,14 @@ export class PoTableComponent extends PoTableBaseComponent implements AfterViewI
       }
     }
     this.changeDetector.detectChanges();
+  }
+
+  private changesAfterDelete(newItemsFiltered: Array<any>) {
+    this.selectAll = false;
+    this.setSelectedList();
+    this.modalDelete.close();
+    this.poNotification.success(this.literals.deleteSuccessful);
+    this.eventDelete.emit(newItemsFiltered);
   }
 
   private checkChangesItems() {
@@ -657,6 +750,54 @@ export class PoTableComponent extends PoTableBaseComponent implements AfterViewI
       // show the table
       this.setTableOpacity(1);
     });
+  }
+
+  private deleteItemsLocal(newItems: Array<any>, newItemsFiltered: Array<any>) {
+    if (this.height) {
+      this.items = newItemsFiltered;
+    } else {
+      let index = this.items.length - 1;
+      newItems
+        .slice()
+        .reverse()
+        .forEach(item => {
+          if (item.$selected) {
+            this.removeItem(index);
+          }
+          index--;
+        });
+    }
+    this.changesAfterDelete(newItemsFiltered);
+    this.onFilteredItemsChange(newItemsFiltered);
+  }
+
+  private deleteItemsService(newItemsFiltered: Array<any>) {
+    this.subscriptionService.add(
+      this.defaultService.deleteItem(this.paramDeleteApi, this.itemsSelected[0][this.paramDeleteApi]).subscribe({
+        next: value => {
+          if (this.hasService) {
+            const filteredParams = {
+              ...this.paramsFilter,
+              pageSize: newItemsFiltered.length + 1,
+              page: 1
+            };
+            this.loading = true;
+            this.subscriptionService.add(
+              this.defaultService.getFilteredItems(filteredParams).subscribe(items => {
+                this.setTableResponseProperties(items);
+              })
+            );
+          }
+          this.items = newItemsFiltered;
+          this.changesAfterDelete(newItemsFiltered);
+        },
+        error: error => {
+          this.poNotification.error(this.literals.deleteApiError);
+          this.modalDelete.close();
+          this.eventDelete.emit(this.items);
+        }
+      })
+    );
   }
 
   private findCustomIcon(rowIcons, column: PoTableColumn) {

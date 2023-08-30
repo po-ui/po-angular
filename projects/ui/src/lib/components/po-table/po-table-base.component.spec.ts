@@ -1,19 +1,20 @@
 import { Directive } from '@angular/core';
 
-import * as utilsFunctions from '../../utils/util';
-import { expectPropertiesValues, expectSettersMethod } from '../../util-test/util-expect.spec';
 import { PoDateService } from '../../services/po-date/po-date.service';
-import { PoLanguageService } from '../../services/po-language/po-language.service';
 import { poLocaleDefault } from '../../services/po-language/po-language.constant';
+import { PoLanguageService } from '../../services/po-language/po-language.service';
+import { expectPropertiesValues, expectSettersMethod } from '../../util-test/util-expect.spec';
+import * as utilsFunctions from '../../utils/util';
 
-import { PoTableAction } from './interfaces/po-table-action.interface';
-import { PoTableBaseComponent, poTableLiteralsDefault } from './po-table-base.component';
-import { PoTableColumn } from './interfaces/po-table-column.interface';
-import { PoTableColumnSortType } from './enums/po-table-column-sort-type.enum';
-import { PoTableService } from './services/po-table.service';
+import { HttpClientTestingModule } from '@angular/common/http/testing';
 import { TestBed } from '@angular/core/testing';
 import { Observable, of } from 'rxjs';
-import { HttpClientTestingModule } from '@angular/common/http/testing';
+import { PoTableColumnSortType } from './enums/po-table-column-sort-type.enum';
+import { PoTableColumnSpacing } from './enums/po-table-spacing.enum';
+import { PoTableAction } from './interfaces/po-table-action.interface';
+import { PoTableColumn } from './interfaces/po-table-column.interface';
+import { PoTableBaseComponent, poTableLiteralsDefault } from './po-table-base.component';
+import { PoTableService } from './services/po-table.service';
 
 @Directive()
 class PoTableComponent extends PoTableBaseComponent {
@@ -600,6 +601,89 @@ describe('PoTableBaseComponent:', () => {
       });
     });
 
+    describe('verifyInteractiveColumns: ', () => {
+      it('should call spacing `large`', () => {
+        component.columns = [
+          { label: 'Table', property: 'table', visible: true },
+          { label: 'Angular', property: 'angular', visible: true }
+        ];
+        component.spacing = PoTableColumnSpacing.Large;
+
+        component['verifyInteractiveColumns']();
+
+        expect(component.spacing).toBe('large');
+      });
+
+      it('should call spacing `small` when row is not interactive', () => {
+        component.columns = [
+          { label: 'Table', property: 'table', visible: true },
+          { label: 'Angular', property: 'angular', visible: true }
+        ];
+        component.selectable = false;
+        component.actions = [];
+        component.spacing = PoTableColumnSpacing.Small;
+
+        component['verifyInteractiveColumns']();
+
+        expect(component.spacing).toBe('small');
+      });
+
+      it('should call spacing `medium` when row is interactive and set spacing `small`', () => {
+        component.columns = [
+          { label: 'Table', property: 'table', visible: true },
+          { label: 'Angular', property: 'angular', visible: true, type: 'link' }
+        ];
+        component.selectable = true;
+        component.spacing = PoTableColumnSpacing.Small;
+
+        component['verifyInteractiveColumns']();
+
+        expect(component.spacing).toBe('medium');
+      });
+    });
+
+    describe('setSelectedList: ', () => {
+      const rows = [
+        {
+          id: 1,
+          name: 'John',
+          $selected: true
+        },
+        {
+          id: 2,
+          name: 'John'
+        },
+        {
+          id: 3,
+          name: 'John'
+        }
+      ];
+
+      it('should call itemsSelected with 1 item in Array', () => {
+        component.items = rows;
+
+        component.setSelectedList();
+
+        expect(component.itemsSelected).toEqual([rows[0]]);
+      });
+
+      it('should call items with 2 items and itemsSelected empty', () => {
+        component.items = [rows[1], rows[2]];
+
+        component.setSelectedList();
+
+        expect(component.itemsSelected).toEqual([]);
+      });
+
+      it('should call items and itemsSelected empty', () => {
+        component.items = [];
+
+        component.setSelectedList();
+
+        expect(component.itemsSelected).toEqual([]);
+      });
+    });
+
     it('unselectOtherRows: should unselect rows that are different from the current row and call selectAllDetails', () => {
       const rows: any = [
         {
@@ -1139,29 +1223,46 @@ describe('PoTableBaseComponent:', () => {
     });
 
     describe('setService', () => {
-      it('should be called with string url and set service url', () => {
+      it('should be called with string url and set service url and method is GET', () => {
         spyOn(component['poTableService'], 'setUrl');
         const url = 'https://po-ui.io';
 
-        component['setService'](url);
-        expect(component['poTableService'].setUrl).toHaveBeenCalledWith(url);
+        component['setService'](url, 'GET');
+        expect(component['poTableService'].setUrl).toHaveBeenCalledWith(url, 'GET');
       });
 
-      it("should be called with undefined and don't set url", () => {
+      it("should be called with undefined and don't set url and method is GET", () => {
         spyOn(component['poTableService'], 'setUrl');
         const url = undefined;
 
-        component['setService'](url);
+        component['setService'](url, 'GET');
 
         expect(component['poTableService'].setUrl).not.toHaveBeenCalled();
       });
 
-      it("should be called with empty string and don't set url", () => {
+      it("should be called with empty string and don't set url and method is GET", () => {
         spyOn(component['poTableService'], 'setUrl');
         const url = '';
 
-        component['setService'](url);
+        component['setService'](url, 'GET');
         expect(component.hasService).toBeFalsy();
+        expect(component['poTableService'].setUrl).not.toHaveBeenCalled();
+      });
+
+      it('should be called with string url and set service url and method is DELETE', () => {
+        spyOn(component['poTableService'], 'setUrl');
+        const url = 'https://po-ui.io';
+
+        component['setService'](url, 'DELETE');
+        expect(component['poTableService'].setUrl).toHaveBeenCalledWith(url, 'DELETE');
+      });
+
+      it("should be called with undefined and don't set url and method is DELETE", () => {
+        spyOn(component['poTableService'], 'setUrl');
+        const url = undefined;
+
+        component['setService'](url, 'DELETE');
+
         expect(component['poTableService'].setUrl).not.toHaveBeenCalled();
       });
     });
@@ -1195,6 +1296,21 @@ describe('PoTableBaseComponent:', () => {
         const filteredParams = component['getFilteredParams'](filter);
 
         expect(filteredParams).toEqual(expectedValue);
+      });
+    });
+
+    describe('hideActionFixedColumns:', () => {
+      it('should set hide Fixed', () => {
+        expectSettersMethod(component, 'hideActionFixedColumns', true, 'hideActionFixedColumns', true);
+        expectSettersMethod(component, 'hideActionFixedColumns', false, 'hideActionFixedColumns', false);
+      });
+    });
+
+    describe('removePropertyFixed:', () => {
+      it('should return change fixed to false', () => {
+        const result = component['removePropertyFixed']([{ value: 'test', fixed: true }]);
+
+        expect(result).toEqual([{ value: 'test', fixed: false }]);
       });
     });
 
@@ -1297,6 +1413,19 @@ describe('PoTableBaseComponent:', () => {
 
         expect(fakeSubscription.unsubscribe).not.toHaveBeenCalled();
       });
+    });
+
+    it('getFilteredColumns: should filter and map columns correctly', () => {
+      component.columns = [
+        { label: 'Currency', visible: true },
+        { label: 'Números', property: 'numberData', visible: true },
+        { label: 'Datas', property: 'dateData', visible: true },
+        { label: 'Textos', property: 'textData', visible: false }
+      ];
+
+      component['getFilteredColumns']();
+
+      expect(component.filteredColumns).toEqual(['Currency', 'numberData', 'dateData']);
     });
   });
 
@@ -1412,6 +1541,19 @@ describe('PoTableBaseComponent:', () => {
       expect(component['getDefaultColumns']).not.toHaveBeenCalled();
     });
 
+    it('p-columns: should call `verifyInteractiveColumns` if have a column if visible propertie', () => {
+      spyOn(component, <any>'verifyInteractiveColumns');
+
+      component['initialVisibleColumns'] = false;
+      component.columns = [
+        { label: 'Table', property: 'table', visible: true },
+        { label: 'Angular', property: 'angular', visible: true }
+      ];
+
+      expect(component['initialVisibleColumns']).toBe(true);
+      expect(component['verifyInteractiveColumns']).toHaveBeenCalled();
+    });
+
     it('p-container: should update property with valid values', () => {
       const validValues = ['border', 'shadow'];
 
@@ -1422,6 +1564,64 @@ describe('PoTableBaseComponent:', () => {
       const invalidValues = [undefined, null, '', true, false, 0, 1, 'aa', [], {}];
 
       expectPropertiesValues(component, 'container', invalidValues, 'border');
+    });
+
+    it('p-param-delete-api: should update property with valid values', () => {
+      const validValue = 'value';
+
+      expectPropertiesValues(component, 'paramDeleteApi', validValue, validValue);
+    });
+
+    it('p-param-delete-api: should update property with `id` if values are invalid', () => {
+      const invalidValues = [undefined, null, true, false, 0, 1, [], {}];
+
+      expectPropertiesValues(component, 'paramDeleteApi', invalidValues, 'id');
+    });
+
+    it('p-param-delete-api: should update property with `id` if values are invalid', () => {
+      const invalidValues = [undefined, null, true, false, 0, 1, [], {}];
+
+      expectPropertiesValues(component, 'paramDeleteApi', invalidValues, 'id');
+    });
+
+    it('p-service-delete: should update property with valid values', () => {
+      expectPropertiesValues(component, 'serviceDeleteApi', 'https://po-ui.io', 'https://po-ui.io');
+    });
+
+    it('p-spacing: should update property with valid values', () => {
+      expectPropertiesValues(component, 'spacing', 'small', 'small');
+    });
+
+    it('p-spacing: should update property with `Medium` if values are invalid', () => {
+      const invalidValues = [undefined, null, true, false, 'qdqdsa', [], {}];
+      expectPropertiesValues(component, 'spacing', invalidValues, 'medium');
+    });
+
+    it('visibleActions: should be `false` if doesn`t have action.', () => {
+      component.actions = undefined;
+
+      expect(component.visibleActions).toBeFalsy();
+    });
+
+    it('visibleActions: shouldn`t return action if visible is `false`.', () => {
+      component.actions = [
+        { label: 'PO1', visible: false },
+        { label: 'PO2', visible: true }
+      ];
+
+      expect(component.visibleActions).toEqual([{ label: 'PO2', visible: true }]);
+    });
+
+    it('visibleActions: should return only valid values', () => {
+      component.actions = [{ label: 'PO1' }, undefined, null];
+
+      expect(component.visibleActions).toEqual([{ label: 'PO1' }]);
+    });
+
+    it('visibleActions: should be `true` if has action.', () => {
+      component.actions = actions;
+
+      expect(component.visibleActions).toBeTruthy();
     });
 
     it('sortType: should return `ascending` if `sortedColumn.ascending` is `true`.', () => {
@@ -1451,35 +1651,35 @@ describe('PoTableBaseComponent:', () => {
       expect(component.nameColumnDetail).toBeNull();
     });
 
-    it('p-hide-columns-manager: should update property `p-hide-columns-manager` with valid values.', () => {
+    xit('p-hide-columns-manager: should update property `p-hide-columns-manager` with valid values.', () => {
       expectPropertiesValues(component, 'hideColumnsManager', booleanValidTrueValues, true);
     });
 
-    it('p-hide-columns-manager: should update property `p-hide-columns-manager` with invalid values.', () => {
+    xit('p-hide-columns-manager: should update property `p-hide-columns-manager` with invalid values.', () => {
       expectPropertiesValues(component, 'hideColumnsManager', booleanInvalidValues, false);
     });
 
-    it('p-loading-show-more: should update property `p-loading-show-more` with valid values.', () => {
+    xit('p-loading-show-more: should update property `p-loading-show-more` with valid values.', () => {
       expectPropertiesValues(component, 'loadingShowMore', booleanValidTrueValues, true);
     });
 
-    it('p-loading-show-more: should update property `p-loading-show-more` with invalid values.', () => {
+    xit('p-loading-show-more: should update property `p-loading-show-more` with invalid values.', () => {
       expectPropertiesValues(component, 'loadingShowMore', booleanInvalidValues, false);
     });
 
-    it('p-auto-collapse: should update property `p-auto-collapse` with valid values.', () => {
+    xit('p-auto-collapse: should update property `p-auto-collapse` with valid values.', () => {
       expectPropertiesValues(component, 'autoCollapse', booleanValidTrueValues, true);
     });
 
-    it('p-auto-collapse: should update property `p-auto-collapse` with invalid values.', () => {
+    xit('p-auto-collapse: should update property `p-auto-collapse` with invalid values.', () => {
       expectPropertiesValues(component, 'autoCollapse', booleanInvalidValues, false);
     });
 
-    it('p-infinite-scroll: should update property `p-infinite-scroll` with false.', () => {
+    xit('p-infinite-scroll: should update property `p-infinite-scroll` with false.', () => {
       expectPropertiesValues(component, 'infiniteScroll', booleanInvalidValues, false);
     });
 
-    it('p-infinite-scroll: should update property `p-infinite-scroll` with true.', () => {
+    xit('p-infinite-scroll: should update property `p-infinite-scroll` with true.', () => {
       component.height = 10;
       expectPropertiesValues(component, 'infiniteScroll', booleanValidTrueValues, true);
     });

@@ -297,6 +297,19 @@ export class PoMenuComponent extends PoMenuBaseComponent implements AfterViewIni
     }
   }
 
+  onMouseEnter(): void {
+    if (this.collapsed) {
+      this.collapsed = false;
+      this.allowCollapseHover = true;
+    }
+  }
+
+  onMouseLeave(): void {
+    if (!this.collapsed && this.allowCollapseHover) {
+      this.collapsed = true;
+    }
+  }
+
   protected checkingRouterChildrenFragments() {
     const childrenPrimary = this.router.parseUrl(this.router.url).root.children['primary'];
 
@@ -319,11 +332,13 @@ export class PoMenuComponent extends PoMenuBaseComponent implements AfterViewIni
   private activateMenuItem(menu: PoMenuItem): void {
     this.activeMenuItem = menu;
     this.linkActive = menu.link;
+
     if (this.activeMenuItem['level'] > poMenuRootLevel) {
       this.openParentMenu(this.activeMenuItem);
     } else {
       this.groupedMenuItem = null;
     }
+
     this.menuItemsService.sendToChildMenuClicked({
       active: this.activeMenuItem,
       grouped: this.groupedMenuItem,

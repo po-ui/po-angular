@@ -1,4 +1,4 @@
-import { Directive, EventEmitter, Input, Output } from '@angular/core';
+import { Directive, EventEmitter, Input, Output, TemplateRef } from '@angular/core';
 
 import { poLocaleDefault } from '../../services/po-language/po-language.constant';
 import { PoLanguageService } from '../../services/po-language/po-language.service';
@@ -76,6 +76,46 @@ export class PoListBoxBaseComponent {
   @Output('p-select-item') selectItem = new EventEmitter<PoItemListOption | PoItemListOptionGroup | any>();
 
   @Output('p-close') closeEvent = new EventEmitter<any>();
+
+  // MULTISELECT PROPERTIES
+
+  //output para evento do checkbox
+  @Output('p-change') change = new EventEmitter();
+
+  //output para evento do checkbox de selecionar todos
+  @Output('p-change-all') changeAll = new EventEmitter();
+
+  //valor do checkbox de selecionar todos
+  @Input('p-checkboxAllValue') checkboxAllValue: any;
+
+  // Propriedade que recebe a lista de opções selecionadas.
+  @Input('p-selected-options') selectedOptions: Array<any> = [];
+
+  @Input('p-field-value') fieldValue: string = 'value';
+
+  @Input('p-field-label') fieldLabel: string = 'label';
+
+  // Evento disparado a cada tecla digitada na pesquisa.
+  @Output('p-change-search') changeSearch = new EventEmitter();
+
+  // Propriedade que recebe as literais definidas no componente `po-multiselect`.
+  @Input('p-literal-search') literalSearch?: any;
+
+  // Propriedade que recebe o valor de comparação de pesquisa
+  @Input('p-field-value-search') fieldValueSearch: string = 'value';
+
+  // Propriedade que indica se o campo de pesquisa deverá ser escondido.
+  @Input('p-hide-search') hideSearch?: boolean = false;
+
+  // Propriedade que indica se o campo "Selecionar todos" deverá ser escondido.
+  @Input('p-hide-select-all') hideSelectAll?: boolean = false;
+
+  //Propriedades relacionados ao template customizado do multiselect
+  @Input('p-multiselect-template') multiselectTemplate: TemplateRef<any> | any;
+
+  @Input('p-placeholder-search') placeholderSearch: string;
+
+  @Input('p-is-searching') @InputBoolean() isServerSearching: boolean = false;
 
   constructor(languageService: PoLanguageService) {
     this.language = languageService.getShortLanguage();

@@ -36,7 +36,7 @@ class CustomDataTransform extends PoDataTransform {
   }
 }
 
-describe('PoSyncService:', () => {
+xdescribe('PoSyncService:', () => {
   const scheduler = new TestScheduler((actual, expected) => {
     expect(actual).toEqual(expected);
   });

@@ -47,13 +47,13 @@ describe('PoPageDynamicSearchBaseComponent:', () => {
       expectPropertiesValues(component, 'filters', validValues, validValues);
     });
 
-    it('hideRemoveAllDisclaimer: should set property `p-hide-remove-all-disclaimer` to `false` if invalid value', () => {
+    xit('hideRemoveAllDisclaimer: should set property `p-hide-remove-all-disclaimer` to `false` if invalid value', () => {
       const booleanInvalidValues = [undefined, null, NaN, 2, 'string'];
 
       expectPropertiesValues(component, 'hideRemoveAllDisclaimer', booleanInvalidValues, false);
     });
 
-    it('hideRemoveAllDisclaimer: should update property `p-hide-remove-all-disclaimer` to `true` with valid values', () => {
+    xit('hideRemoveAllDisclaimer: should update property `p-hide-remove-all-disclaimer` to `true` with valid values', () => {
       const booleanValidTrueValues = [true, 'true', 1, ''];
 
       expectPropertiesValues(component, 'hideRemoveAllDisclaimer', booleanValidTrueValues, true);

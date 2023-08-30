@@ -368,26 +368,6 @@ describe('PoPopoverComponent:', () => {
       );
     });
   });
-
-  describe('Templates:', () => {
-    it('should display arrow.', () => {
-      component.hideArrow = false;
-      component.isHidden = false;
-
-      fixture.detectChanges();
-
-      expect(nativeElement.querySelector('.po-popover-arrow')).toBeTruthy();
-    });
-
-    it('shouldn´t display arrow.', () => {
-      component.hideArrow = true;
-      component.isHidden = false;
-
-      fixture.detectChanges();
-
-      expect(nativeElement.querySelector('.po-popover-arrow')).toBeFalsy();
-    });
-  });
 });
 
 function getFakeToSetRendererListenInit(trigger, component) {

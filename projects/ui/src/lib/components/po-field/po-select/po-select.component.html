@@ -15,7 +15,6 @@
       [disabled]="disabled"
       [id]="id"
       [required]="required"
-      (blur)="onBlur()"
       (change)="onSelectChange($event.target.value)"
     >
       <option
@@ -31,9 +30,20 @@
       <option [hidden]="true">
         {{ displayValue }}
       </option>
-      <option *ngFor="let option of options" [disabled]="readonly" [value]="option?.[this.fieldValue]">
-        {{ option?.[this.fieldLabel] }}
-      </option>
+      <ng-container *ngIf="optionWithoutGroup.length > 0">
+        <option *ngFor="let item of optionWithoutGroup" [disabled]="readonly" [value]="item?.[this.fieldValue]">
+          {{ item?.[this.fieldLabel] }}
+        </option>
+      </ng-container>
+      <ng-container *ngIf="listGroupOptions.length > 0">
+        <ng-container *ngFor="let item of listGroupOptions">
+          <optgroup *ngIf="item?.options.length > 0" label="{{ item?.label }}" [disabled]="readonly">
+            <option *ngFor="let subItem of item.options" [value]="subItem?.[this.fieldValue]" [disabled]="readonly">
+              {{ subItem?.[this.fieldLabel]  }}
+            </option>
+          </optgroup>
+        </ng-container>
+      </ng-container>
     </select>
   </div>
 

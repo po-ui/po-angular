@@ -1,4 +1,4 @@
-import { AfterContentChecked, Component, ViewChild } from '@angular/core';
+import { AfterContentChecked, Component, ViewChild, OnInit } from '@angular/core';
 import { NgForm } from '@angular/forms';
 
 import { SampleDashboardService } from './sample-po-container-dashboard.service';
@@ -30,10 +30,10 @@ export class SamplePoContainerDashboardComponent implements AfterContentChecked 
   @ViewChild('formShare', { static: true }) formShare: NgForm;
   @ViewChild(PoModalComponent) poModal: PoModalComponent;
 
-  columns: Array<PoTableColumn> = this.sampleDashboardService.getColumns();
+  columns: Array<PoTableColumn>;
   email: string = undefined;
   isSubscribed: boolean = false;
-  items: Array<object> = this.sampleDashboardService.getItems();
+  items: Array<object>;
 
   public readonly actions: Array<PoPageAction> = [
     { label: 'Share', action: this.modalOpen.bind(this), icon: 'po-icon-share' },
@@ -64,6 +64,11 @@ export class SamplePoContainerDashboardComponent implements AfterContentChecked 
   };
 
   constructor(private poNotification: PoNotificationService, private sampleDashboardService: SampleDashboardService) {}
+
+  ngOnInit() {
+    this.columns = this.sampleDashboardService.getColumns();
+    this.items = this.sampleDashboardService.getItems();
+  }
 
   ngAfterContentChecked() {
     this.shareAction.danger = this.formShare.invalid;

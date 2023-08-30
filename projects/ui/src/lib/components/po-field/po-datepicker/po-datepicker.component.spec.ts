@@ -998,10 +998,11 @@ describe('PoDatepickerComponent:', () => {
       expect(component.hour).toBe('T00:00:00-03:00');
     });
 
-    it('writeValue: should keep `hour` with it`s default value if date isn`t an extended iso format', () => {
+    it('writeValue: should keep `hour` with it`s default value if date isn`t an extended iso format and set other timezone', () => {
+      component.formatTimezoneAndHour(-180);
       component.writeValue('2019-11-21');
 
-      expect(component.hour).toBe('T00:00:00-00:00');
+      expect(component.hour).toBe('T00:00:00+03:00');
     });
 
     it('onKeyup: should change value of the mask when typing', () => {
@@ -1021,6 +1022,7 @@ describe('PoDatepickerComponent:', () => {
       component.onKeyup.call(fakeThis, {});
       expect(fakeThis.controlModel).toHaveBeenCalled();
     });
+
     it(`onKeyPress: should call 'isKeyCodeEnter' and check if typed key is enter.`, () => {
       const eventEnterKey = { keyCode: 13 };
 

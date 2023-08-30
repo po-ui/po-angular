@@ -4,7 +4,6 @@ import { ComponentFixture, fakeAsync, TestBed, tick } from '@angular/core/testin
 import { configureTestSuite } from './../../../../util-test/util-expect.spec';
 
 import { PoMultiselectDropdownComponent } from './po-multiselect-dropdown.component';
-import { PoMultiselectItemComponent } from './../po-multiselect-item/po-multiselect-item.component';
 import { poMultiselectLiteralsDefault } from '../po-multiselect-base.component';
 import { PoMultiselectSearchComponent } from './../po-multiselect-search/po-multiselect-search.component';
 
@@ -14,7 +13,7 @@ describe('PoMultiselectDropdownComponent:', () => {
 
   configureTestSuite(() => {
     TestBed.configureTestingModule({
-      declarations: [PoMultiselectDropdownComponent, PoMultiselectItemComponent, PoMultiselectSearchComponent]
+      declarations: [PoMultiselectDropdownComponent, PoMultiselectSearchComponent]
     });
   });
 
@@ -61,24 +60,26 @@ describe('PoMultiselectDropdownComponent:', () => {
     expect(selected).toBeFalsy();
   });
 
-  it('should call updateSelectedValues and setFocus', () => {
+  it('should call updateSelectedValues', () => {
     fixture.detectChanges();
     component.hideSearch = false;
     spyOn(component, 'updateSelectedValues');
-    spyOn(component.searchElement, 'setFocus');
-    component.clickItem(null, null);
+    spyOn(component.listbox.searchElement, 'setFocus');
+    component.clickItem({ option: { label: 'label1', value: 1 }, selected: true });
     expect(component.updateSelectedValues).toHaveBeenCalled();
-    expect(component.searchElement.setFocus).toHaveBeenCalled();
   });
 
-  it('shouldn`t call setFocus in searchElement', () => {
-    fixture.detectChanges();
-    component.hideSearch = true;
-    spyOn(component, 'updateSelectedValues');
-    spyOn(component.searchElement, 'setFocus');
-    component.clickItem(null, null);
-    expect(component.updateSelectedValues).toHaveBeenCalled();
-    expect(component.searchElement.setFocus).not.toHaveBeenCalled();
+  it('clickItem: should call `updateSelectedValues` with `option` and `check`', () => {
+    const spyUpdateSelectedValues = spyOn(component, 'updateSelectedValues');
+    component.clickItem(true, { label: 'label1', value: 1 });
+    expect(spyUpdateSelectedValues).toHaveBeenCalled();
+  });
+
+  it('clickItem: should call `updateSelectedValues` with `option`', () => {
+    const properties = { option: { label: 'label1', value: 1 }, selected: true };
+    const spyUpdateSelectedValues = spyOn(component, 'updateSelectedValues');
+    component.clickItem(properties);
+    expect(spyUpdateSelectedValues).toHaveBeenCalledWith(true, { label: 'label1', value: 1 });
   });
 
   it('should add value to selectedOptions and emit change', () => {
@@ -177,31 +178,32 @@ describe('PoMultiselectDropdownComponent:', () => {
     expect(component.changeSearch.emit).toHaveBeenCalled();
   });
 
-  it('should emit closeDropdown', () => {
-    spyOn(component.closeDropdown, 'emit');
-    component.onKeydown({ keyCode: 9 });
-    expect(component.closeDropdown.emit).toHaveBeenCalled();
-  });
-
-  it('shouldn`t emit closeDropdown', () => {
-    spyOn(component.closeDropdown, 'emit');
-    component.onKeydown({ keyCode: 1 });
-    expect(component.closeDropdown.emit).not.toHaveBeenCalled();
-  });
-
   it('should call setFocus and clean from searchElement', fakeAsync(() => {
     component.hideSearch = false;
     component.show = false;
     fixture.detectChanges();
-    spyOn(component.searchElement, 'setFocus');
-    spyOn(component.searchElement, 'clean');
+    spyOn(component.listbox.searchElement, 'setFocus');
+    spyOn(component.listbox.searchElement, 'clean');
 
     component.controlVisibility(true);
 
     tick(400);
 
-    expect(component.searchElement.setFocus).toHaveBeenCalled();
-    expect(component.searchElement.clean).toHaveBeenCalled();
+    expect(component.listbox.searchElement.setFocus).toHaveBeenCalled();
+    expect(component.listbox.searchElement.clean).toHaveBeenCalled();
+    expect(component.show).toBeTruthy();
+  }));
+
+  it('should not call setFocus and clean from searchElement if `listbox` is undefined', fakeAsync(() => {
+    component.hideSearch = false;
+    component.show = false;
+    fixture.detectChanges();
+    component.listbox = undefined;
+
+    component.controlVisibility(true);
+
+    tick(400);
+
     expect(component.show).toBeTruthy();
   }));
 
@@ -210,14 +212,14 @@ describe('PoMultiselectDropdownComponent:', () => {
     component.hideSearch = true;
     component.show = false;
 
-    spyOn(component.searchElement, 'setFocus');
-    spyOn(component.searchElement, 'clean');
+    spyOn(component.listbox.searchElement, 'setFocus');
+    spyOn(component.listbox.searchElement, 'clean');
     component.controlVisibility(true);
 
     tick(200);
 
-    expect(component.searchElement.setFocus).not.toHaveBeenCalled();
-    expect(component.searchElement.clean).not.toHaveBeenCalled();
+    expect(component.listbox.searchElement.setFocus).not.toHaveBeenCalled();
+    expect(component.listbox.searchElement.clean).not.toHaveBeenCalled();
     expect(component.show).toBeTruthy();
   }));
 
@@ -227,14 +229,14 @@ describe('PoMultiselectDropdownComponent:', () => {
 
     fixture.detectChanges();
 
-    spyOn(component.searchElement, 'setFocus');
-    spyOn(component.searchElement, 'clean');
+    spyOn(component.listbox.searchElement, 'setFocus');
+    spyOn(component.listbox.searchElement, 'clean');
     component.controlVisibility(false);
 
     tick(200);
 
-    expect(component.searchElement.setFocus).not.toHaveBeenCalled();
-    expect(component.searchElement.clean).not.toHaveBeenCalled();
+    expect(component.listbox.searchElement.setFocus).not.toHaveBeenCalled();
+    expect(component.listbox.searchElement.clean).not.toHaveBeenCalled();
     expect(component.show).toBeFalsy();
   }));
 
@@ -289,28 +291,6 @@ describe('PoMultiselectDropdownComponent:', () => {
       fixture.detectChanges();
 
       expect(fixture.nativeElement.querySelector('.po-multiselect-container-no-data')).toBeNull();
-    });
-
-    it('should show `po-multiselect-search` if have options and hideSearch is false', () => {
-      component.options = [{ value: '1', label: 'Option 1' }];
-      component.hideSearch = false;
-      component.visibleOptions = [{ value: '1', label: 'Option 1' }];
-
-      fixture.detectChanges();
-
-      expect(fixture.debugElement.query(By.css('po-multiselect-search'))).toBeTruthy();
-      expect(fixture.nativeElement.querySelector('.po-multiselect-container-no-data')).toBeNull();
-    });
-
-    it('should show `po-multiselect-search` and `Nenhum dado encontrado` if have options, hideSearch is false and visibleOptions is empty', () => {
-      component.options = [{ value: '1', label: 'Option 1' }];
-      component.hideSearch = false;
-      component.visibleOptions = [];
-
-      fixture.detectChanges();
-
-      expect(fixture.debugElement.query(By.css('po-multiselect-search'))).toBeTruthy();
-      expect(fixture.nativeElement.querySelector('.po-multiselect-container-no-data')).toBeTruthy();
     });
 
     it('shouldn`t show `po-multiselect-search` if `hideSearch` is `true`', () => {

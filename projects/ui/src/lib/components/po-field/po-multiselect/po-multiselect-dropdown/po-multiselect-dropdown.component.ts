@@ -14,6 +14,7 @@ import {
 import { PoMultiselectLiterals } from '../../index';
 import { PoMultiselectOption } from '../po-multiselect-option.interface';
 import { PoMultiselectSearchComponent } from './../po-multiselect-search/po-multiselect-search.component';
+import { PoListBoxComponent } from './../../../po-listbox/po-listbox.component';
 
 /**
  * @docsPrivate
@@ -72,8 +73,8 @@ export class PoMultiselectDropdownComponent {
   @Output('p-close-dropdown') closeDropdown = new EventEmitter();
 
   @ViewChild('container', { read: ElementRef, static: true }) container: ElementRef;
-  @ViewChild('ulElement', { read: ElementRef, static: true }) ulElement: ElementRef;
-  @ViewChild('searchElement') searchElement: PoMultiselectSearchComponent;
+  @ViewChild('divElement', { read: ElementRef, static: true }) divElement: ElementRef;
+  @ViewChild('listbox') listbox: PoListBoxComponent;
 
   scrollTop = 0;
   show: boolean = false;
@@ -82,13 +83,6 @@ export class PoMultiselectDropdownComponent {
 
   get hasOptions() {
     return !!this.options?.length;
-  }
-
-  @HostListener('keydown', ['$event'])
-  onKeydown(event: any) {
-    if (event.keyCode === 9) {
-      this.closeDropdown.emit();
-    }
   }
 
   scrollTo(index) {
@@ -100,11 +94,12 @@ export class PoMultiselectDropdownComponent {
     return this.selectedOptions.some(selectedItem => selectedItem[this.fieldValue] === option[this.fieldValue]);
   }
 
-  clickItem(check, option) {
-    this.updateSelectedValues(check, option);
-
-    if (!this.hideSearch) {
-      this.searchElement.setFocus();
+  clickItem(check, options?) {
+    if (options) {
+      this.updateSelectedValues(check, options);
+    } else {
+      const { selected, option } = check;
+      this.updateSelectedValues(selected, option);
     }
   }
 
@@ -158,9 +153,9 @@ export class PoMultiselectDropdownComponent {
     this.show = toOpen;
 
     setTimeout(() => {
-      if (toOpen && this.searchElement && !this.hideSearch) {
-        this.searchElement.setFocus();
-        this.searchElement.clean();
+      if (toOpen && this.listbox?.searchElement && !this.hideSearch) {
+        this.listbox.searchElement.setFocus();
+        this.listbox.searchElement.clean();
       }
     });
     this.cd.markForCheck();

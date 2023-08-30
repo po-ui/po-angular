@@ -1,4 +1,4 @@
-import { Component, ElementRef, EventEmitter, OnInit, Output, ViewChild } from '@angular/core';
+import { Component, ElementRef, EventEmitter, Output, ViewChild, OnInit } from '@angular/core';
 import { AbstractControl, NgForm } from '@angular/forms';
 
 import { isExternalLink, isIE } from '../../../../utils/util';
@@ -11,7 +11,7 @@ import { poRichTextLiteralsDefault } from '../po-rich-text-literals';
   selector: 'po-rich-text-link-modal',
   templateUrl: './po-rich-text-link-modal.component.html'
 })
-export class PoRichTextLinkModalComponent {
+export class PoRichTextLinkModalComponent implements OnInit {
   @ViewChild('modal', { static: true }) modal: PoModalComponent;
 
   @ViewChild('modalLinkForm') modalLinkForm: NgForm;
@@ -25,32 +25,26 @@ export class PoRichTextLinkModalComponent {
   urlLink: string;
   urlLinkText: string;
 
-  readonly literals = {
-    ...poRichTextLiteralsDefault[this.languageService.getShortLanguage()]
-  };
+  readonly literals: any;
 
-  modalCancelAction: PoModalAction = {
-    label: this.literals.cancel,
-    action: () => {
-      this.modal.close();
-      this.command.emit();
-      this.retrieveCursorPosition();
-      this.cleanUpFields();
-    }
-  };
-
-  modalConfirmAction = {
-    label: this.linkConfirmAction(),
-    disabled: true,
-    action: () => (this.isLinkEditing ? this.toEditLink() : this.toInsertLink(this.urlLink, this.urlLinkText))
-  };
+  modalCancelAction: PoModalAction;
+  modalConfirmAction: PoModalAction;
 
   private isLinkEditing: boolean;
   private isSelectedLink: boolean;
   private linkElement: any;
   private savedSelection: Range | null;
 
-  constructor(private languageService: PoLanguageService) {}
+  constructor(private languageService: PoLanguageService) {
+    this.literals = {
+      ...poRichTextLiteralsDefault[this.languageService?.getShortLanguage()]
+    };
+  }
+
+  ngOnInit(): void {
+    this.setModalCancelAction();
+    this.setModalConfirmAction();
+  }
 
   linkConfirmAction(): string {
     return this.isLinkEditing ? this.literals.editLink : this.literals.insertLink;
@@ -143,6 +137,26 @@ export class PoRichTextLinkModalComponent {
   private setLinkEditableForModal() {
     this.urlLinkText = this.linkElement.innerText;
     this.urlLink = this.linkElement.getAttribute('href');
+  }
+
+  private setModalCancelAction() {
+    this.modalCancelAction = {
+      label: this.literals.cancel,
+      action: () => {
+        this.modal.close();
+        this.command.emit();
+        this.retrieveCursorPosition();
+        this.cleanUpFields();
+      }
+    };
+  }
+
+  private setModalConfirmAction() {
+    this.modalConfirmAction = {
+      label: this.linkConfirmAction(),
+      disabled: true,
+      action: () => (this.isLinkEditing ? this.toEditLink() : this.toInsertLink(this.urlLink, this.urlLinkText))
+    };
   }
 
   private toEditLink() {

@@ -3,6 +3,7 @@ import { FormsModule } from '@angular/forms';
 import { NgModule } from '@angular/core';
 import { RouterModule } from '@angular/router';
 import { ScrollingModule } from '@angular/cdk/scrolling';
+import { DragDropModule } from '@angular/cdk/drag-drop';
 
 import { PoButtonModule } from './../po-button/po-button.module';
 import { PoCheckboxGroupModule } from '../po-field/po-checkbox-group/po-checkbox-group.module';
@@ -35,6 +36,8 @@ import { PoTableCellTemplateDirective } from './po-table-cell-template/po-table-
 import { PoTableColumnTemplateDirective } from './po-table-column-template/po-table-column-template.directive';
 import { PoTableListManagerComponent } from './po-table-list-manager/po-table-list-manager.component';
 import { PoSwitchModule } from './../po-field/po-switch/po-switch.module';
+import { PoTableColumnFrozenDirective } from './po-table-column-frozen/po-table-column-frozen.directive';
+import { PoSearchModule } from '../po-search/po-search.module';
 
 /**
  * @description
@@ -45,6 +48,7 @@ import { PoSwitchModule } from './../po-field/po-switch/po-switch.module';
     CommonModule,
     FormsModule,
     ScrollingModule,
+    DragDropModule,
     RouterModule,
     PoButtonModule,
     PoCheckboxGroupModule,
@@ -61,7 +65,8 @@ import { PoSwitchModule } from './../po-field/po-switch/po-switch.module';
     PoRadioModule,
     PoLinkModule,
     PoPageSlideModule,
-    PoSwitchModule
+    PoSwitchModule,
+    PoSearchModule
   ],
   declarations: [
     PoTableComponent,
@@ -77,7 +82,8 @@ import { PoSwitchModule } from './../po-field/po-switch/po-switch.module';
     PoTableSubtitleCircleComponent,
     PoTableSubtitleFooterComponent,
     PoTableCellTemplateDirective,
-    PoTableColumnTemplateDirective
+    PoTableColumnTemplateDirective,
+    PoTableColumnFrozenDirective
   ],
   exports: [
     PoTableComponent,

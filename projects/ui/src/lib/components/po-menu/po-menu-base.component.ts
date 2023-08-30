@@ -10,20 +10,28 @@ import { PoMenuService } from './services/po-menu.service';
 
 export const poMenuLiteralsDefault = {
   en: {
-    itemNotFound: 'Item not found.',
-    emptyLabelError: 'Attribute PoMenuItem.label can not be empty.'
+    itemNotFound: 'Item not found',
+    emptyLabelError: 'Attribute PoMenuItem.label can not be empty',
+    close: 'Close menu',
+    open: 'Open menu'
   },
   es: {
-    itemNotFound: 'Elemento no encontrado.',
-    emptyLabelError: 'El atributo PoMenuItem.label no puede ser vacío.'
+    itemNotFound: 'Elemento no encontrado',
+    emptyLabelError: 'El atributo PoMenuItem.label no puede ser vacío',
+    close: 'Cerrar menú',
+    open: 'Abrir menú'
   },
   pt: {
-    itemNotFound: 'Item não encontrado.',
-    emptyLabelError: 'O atributo PoMenuItem.label não pode ser vazio.'
+    itemNotFound: 'Item não encontrado',
+    emptyLabelError: 'O atributo PoMenuItem.label não pode ser vazio',
+    close: 'Fechar menu',
+    open: 'Abrir menu'
   },
   ru: {
-    itemNotFound: 'Предмет не найден.',
-    emptyLabelError: 'Атрибут PoMenuItem.label не может быть пустым.'
+    itemNotFound: 'Предмет не найден',
+    emptyLabelError: 'Атрибут PoMenuItem.label не может быть пустым',
+    close: 'Закрыть меню',
+    open: 'Открыть меню'
   }
 };
 
@@ -39,14 +47,12 @@ export const poMenuLiteralsDefault = {
 export abstract class PoMenuBaseComponent {
   allowIcons: boolean;
   allowCollapseMenu: boolean;
+  allowCollapseHover: boolean;
 
   filteredItems;
   filterService: PoMenuFilter;
 
-  readonly literals = {
-    ...poMenuLiteralsDefault[this.languageService.getLanguageDefault()],
-    ...poMenuLiteralsDefault[this.languageService.getShortLanguage()]
-  };
+  readonly literals: any;
 
   private _collapsed = false;
   private _filter = false;
@@ -77,6 +83,7 @@ export abstract class PoMenuBaseComponent {
   @Input('p-collapsed') set collapsed(collapsed: boolean) {
     this._collapsed = convertToBoolean(collapsed);
 
+    this.allowCollapseHover = this._collapsed;
     this.validateCollapseClass();
   }
 
@@ -238,7 +245,12 @@ export abstract class PoMenuBaseComponent {
     public menuGlobalService: PoMenuGlobalService,
     public menuService: PoMenuService,
     public languageService: PoLanguageService
-  ) {}
+  ) {
+    this.literals = {
+      ...poMenuLiteralsDefault[this.languageService?.getLanguageDefault()],
+      ...poMenuLiteralsDefault[this.languageService?.getShortLanguage()]
+    };
+  }
 
   protected setMenuExtraProperties() {
     this.allowIcons = !!this.menus.length;

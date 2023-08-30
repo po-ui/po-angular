@@ -1,0 +1,13 @@
+<div class="po-field-container-content po-listbox-container-search">
+  <div class="po-field-icon-container-left">
+    <span class="po-icon po-icon-search po-field-icon po-icon-input"></span>
+  </div>
+
+  <input
+    #inputElement
+    class="po-input po-input-icon-left po-listbox-search-input"
+    type="text"
+    [placeholder]="placeholder"
+    (keyup)="onChange($event)"
+  />
+</div>

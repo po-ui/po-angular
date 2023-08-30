@@ -8,9 +8,9 @@ import { Observable } from 'rxjs';
 import { expectPropertiesValues } from './../../../util-test/util-expect.spec';
 
 import { PoBadgeComponent } from '../../po-badge';
+import { PoIconModule } from '../../po-icon/po-icon.module';
 import { PoMenuItemsService } from '../services/po-menu-items.service';
 import { PoMenuItemComponent } from './po-menu-item.component';
-import { PoIconModule } from '../../po-icon/po-icon.module';
 
 @Component({ template: 'Search' })
 export class SearchComponent {}
@@ -605,6 +605,7 @@ describe('PoMenuItemComponent:', () => {
 
     it('should show `po-menu-sub-item` if menu isn`t collapsed', () => {
       component.type = 'subItems';
+      component.isOpened = true;
       component.collapsedMenu = false;
       fixture.detectChanges();
 
@@ -625,29 +626,6 @@ describe('PoMenuItemComponent:', () => {
       fixture.detectChanges();
 
       expect(nativeElement.querySelector('.po-menu-group-icon')).toBeFalsy();
-    });
-
-    it('should show short label is menu is collapsed', () => {
-      component.collapsedMenu = true;
-      fixture.detectChanges();
-
-      expect(nativeElement.querySelector('.po-menu-short-label')).toBeTruthy();
-    });
-
-    it('should hide short label is menu is open', () => {
-      component.collapsedMenu = false;
-      fixture.detectChanges();
-
-      expect(nativeElement.querySelector('.po-menu-short-label')).toBeFalsy();
-    });
-
-    it('should add short lavel if menu is collapsed', () => {
-      const value = 'Value';
-      component.collapsedMenu = true;
-      component.shortLabel = value;
-      fixture.detectChanges();
-
-      expect(nativeElement.querySelector('.po-menu-short-label').innerHTML).toBe('Value');
     });
 
     it('should show `po-badge` if `canShowBadge` is `true`', () => {

@@ -24,7 +24,7 @@ export class PoPageCustomizationService {
     );
   }
 
-  changeOriginalOptionsToNewOptions<T, K>(objectToChange: T, newOptions: K) {
+  changeOriginalOptionsToNewOptions<T extends object, K>(objectToChange: T, newOptions: K) {
     Object.keys(newOptions).forEach(key => {
       const value = newOptions[key];
       if (key in objectToChange) {

@@ -1,5 +1,14 @@
-import { AfterViewInit, ChangeDetectorRef, Component, ElementRef, Renderer2, ViewChild } from '@angular/core';
-import { FormBuilder } from '@angular/forms';
+import {
+  AfterViewInit,
+  ChangeDetectorRef,
+  Component,
+  ElementRef,
+  Renderer2,
+  ViewChild,
+  OnInit,
+  ViewEncapsulation
+} from '@angular/core';
+import { FormBuilder, FormGroup } from '@angular/forms';
 
 import {
   PoButtonComponent,
@@ -20,9 +29,10 @@ import {
 @Component({
   selector: 'app-theme-builder',
   templateUrl: './theme-builder.component.html',
-  styleUrls: ['theme-builder.component.css']
+  styleUrls: ['theme-builder.component.css'],
+  encapsulation: ViewEncapsulation.None
 })
-export class ThemeBuilderComponent implements AfterViewInit {
+export class ThemeBuilderComponent implements AfterViewInit, OnInit {
   @ViewChild('viewCSSModal') viewCSSModal: PoModalComponent;
   @ViewChild(PoPageSlideComponent, { static: true }) pageSlide: PoPageSlideComponent;
 
@@ -153,188 +163,67 @@ export class ThemeBuilderComponent implements AfterViewInit {
   ratioPopup!: number;
 
   // Cor primária
-  brandFormP = this.formBuilder.group({
-    colorAction: ['#c9357d'] as any
-  });
+  brandFormP: FormGroup;
 
   // Cor secundária
-  brandFormS = this.formBuilder.group({
-    colorAction: ['#753399'] as any
-  });
+  brandFormS: FormGroup;
 
   // Cor terciária
-  brandFormT = this.formBuilder.group({
-    colorAction: ['#ffd464'] as any
-  });
+  brandFormT: FormGroup;
 
   // Botão Primário
-  buttonFormPrimary = this.formBuilder.group({
-    color: [null],
-    colorHover: [null],
-    colorPressed: [null],
-    borderColor: [null],
-    textColor: [null],
-    colorAction: [null],
-    borderRadius: [null],
-    padding: [null]
-  });
+  buttonFormPrimary: FormGroup;
 
   // Botão Default
-  buttonFormDefault = this.formBuilder.group({
-    color: [null],
-    colorHover: [null],
-    colorBackgroundHover: [null],
-    colorPressed: [null],
-    borderRadius: [null],
-    padding: [null],
-    borderWidth: [null]
-  });
+  buttonFormDefault: FormGroup;
 
   // Botão Link
-  buttonFormLink = this.formBuilder.group({
-    color: [null],
-    colorHover: [null],
-    colorBackgroundHover: [null],
-    colorPressed: [null],
-    borderRadius: [null],
-    padding: [null]
-  });
+  buttonFormLink: FormGroup;
 
   // Switch
-  switchForm = this.formBuilder.group({
-    backgroundColor: [null],
-    color: [null],
-    colorIcon: [null],
-    borderColor: [null],
-    colorDois: [null]
-  });
+  switchForm: FormGroup;
 
   // disclaimer
-  disclaimerForm = this.formBuilder.group({
-    color: [null],
-    borderColor: [null],
-    colorIcon: [null],
-    textColor: [null],
-    colorHover: [null],
-    borderRadius: [null],
-    fontSize: [null]
-  });
+  disclaimerForm: FormGroup;
 
   //input
-  inputForm = this.formBuilder.group({
-    borderColor: [null],
-    borderColorHover: [null],
-    textColor: [null],
-    backgroundColor: [null],
-    backgroundColorHover: [null],
-    fontSize: [null],
-    padding: [null]
-  });
+  inputForm: FormGroup;
 
   //select
-  selectForm = this.formBuilder.group({
-    borderColor: [null],
-    borderColorHover: [null],
-    colorBackground: [null],
-    colorBackgroundHover: [null],
-    textColor: [null],
-    fontSize: [null],
-    paddingHorizontal: [null],
-    paddingVertical: [null]
-  });
+  selectForm: FormGroup;
 
   //textarea
-  textareaForm = this.formBuilder.group({
-    borderColor: [null],
-    borderColorHover: [null],
-    textColor: [null],
-    backgroundColor: [null],
-    backgroundColorHover: [null],
-    fontSize: [null]
-  });
+  textareaForm: FormGroup;
 
   //datepicker
-  datepickerForm = this.formBuilder.group({
-    padding: [null],
-    fontSize: [null],
-    color: [null],
-    textColor: [null],
-    colorHover: [null],
-    backgroundColor: [null],
-    backgroundColorHover: [null]
-  });
+  datepickerForm: FormGroup;
 
   //button do datepicker
-  datepickerButtonForm = this.formBuilder.group({
-    padding: [null],
-    color: [null],
-    backgroundColorHover: [null],
-    borderColorHover: [null]
-  });
+  datepickerButtonForm: FormGroup;
 
   //modal
-  modalForm = this.formBuilder.group({
-    borderRadius: [null],
-    borderWidth: [null],
-    opacityValue: [null],
-    backgroundColor: [null],
-    borderColor: [null],
-    overlayColor: [null],
-    dividerColor: [null]
-  });
+  modalForm: FormGroup;
 
   //link
-  linkForm = this.formBuilder.group({
-    colorVisited: [null],
-    color: [null],
-    colorOutline: [null]
-  });
+  linkForm: FormGroup;
 
   //tooltip
-  tooltipForm = this.formBuilder.group({
-    color: [null],
-    borderRadius: [null],
-    textColor: [null]
-  });
+  tooltipForm: FormGroup;
 
   //dropdown
-  dropdownForm = this.formBuilder.group({
-    fontSize: [null],
-    borderRadius: [null],
-    borderWidth: [null],
-    padding: [null],
-    color: [null],
-    colorHover: [null],
-    backgroundColorHover: [null]
-  });
+  dropdownForm: FormGroup;
 
   //popup item
-  popupForm = this.formBuilder.group({
-    textColor: [null],
-    colorHover: [null],
-    colorBackgroundHover: [null]
-  });
+  popupForm: FormGroup;
 
   //popup container
-  popupContainerForm = this.formBuilder.group({
-    colorBackground: [null]
-  });
+  popupContainerForm: FormGroup;
 
   // Radio
-  radioForm = this.formBuilder.group({
-    color: [null],
-    backgroundColor: [null],
-    colorHover: [null],
-    borderColor: [null]
-  });
+  radioForm: FormGroup;
 
   //checkbox
-  checkboxForm = this.formBuilder.group({
-    color: [null],
-    backgroundColor: [null],
-    colorHover: [null],
-    borderColor: [null]
-  });
+  checkboxForm: FormGroup;
 
   private readonly formPropertyP = {
     colorAction: '--color-primary'
@@ -513,6 +402,171 @@ export class ThemeBuilderComponent implements AfterViewInit {
   ];
 
   constructor(private formBuilder: FormBuilder, private renderer: Renderer2, private cdr: ChangeDetectorRef) {}
+
+  ngOnInit(): void {
+    this.brandFormP = this.formBuilder.group({
+      colorAction: ['#c9357d'] as any
+    });
+
+    this.brandFormS = this.formBuilder.group({
+      colorAction: ['#753399'] as any
+    });
+
+    this.brandFormT = this.formBuilder.group({
+      colorAction: ['#ffd464'] as any
+    });
+
+    this.buttonFormPrimary = this.formBuilder.group({
+      color: [null],
+      colorHover: [null],
+      colorPressed: [null],
+      borderColor: [null],
+      textColor: [null],
+      colorAction: [null],
+      borderRadius: [null],
+      padding: [null]
+    });
+
+    this.buttonFormDefault = this.formBuilder.group({
+      color: [null],
+      colorHover: [null],
+      colorBackgroundHover: [null],
+      colorPressed: [null],
+      borderRadius: [null],
+      padding: [null],
+      borderWidth: [null]
+    });
+
+    this.buttonFormLink = this.formBuilder.group({
+      color: [null],
+      colorHover: [null],
+      colorBackgroundHover: [null],
+      colorPressed: [null],
+      borderRadius: [null],
+      padding: [null]
+    });
+
+    this.switchForm = this.formBuilder.group({
+      backgroundColor: [null],
+      color: [null],
+      colorIcon: [null],
+      borderColor: [null],
+      colorDois: [null]
+    });
+
+    this.disclaimerForm = this.formBuilder.group({
+      color: [null],
+      borderColor: [null],
+      colorIcon: [null],
+      textColor: [null],
+      colorHover: [null],
+      borderRadius: [null],
+      fontSize: [null]
+    });
+
+    this.inputForm = this.formBuilder.group({
+      borderColor: [null],
+      borderColorHover: [null],
+      textColor: [null],
+      backgroundColor: [null],
+      backgroundColorHover: [null],
+      fontSize: [null],
+      padding: [null]
+    });
+
+    this.selectForm = this.formBuilder.group({
+      borderColor: [null],
+      borderColorHover: [null],
+      colorBackground: [null],
+      colorBackgroundHover: [null],
+      textColor: [null],
+      fontSize: [null],
+      paddingHorizontal: [null],
+      paddingVertical: [null]
+    });
+
+    this.textareaForm = this.formBuilder.group({
+      borderColor: [null],
+      borderColorHover: [null],
+      textColor: [null],
+      backgroundColor: [null],
+      backgroundColorHover: [null],
+      fontSize: [null]
+    });
+
+    this.datepickerForm = this.formBuilder.group({
+      padding: [null],
+      fontSize: [null],
+      color: [null],
+      textColor: [null],
+      colorHover: [null],
+      backgroundColor: [null],
+      backgroundColorHover: [null]
+    });
+
+    this.datepickerButtonForm = this.formBuilder.group({
+      padding: [null],
+      color: [null],
+      backgroundColorHover: [null],
+      borderColorHover: [null]
+    });
+
+    this.modalForm = this.formBuilder.group({
+      borderRadius: [null],
+      borderWidth: [null],
+      opacityValue: [null],
+      backgroundColor: [null],
+      borderColor: [null],
+      overlayColor: [null],
+      dividerColor: [null]
+    });
+
+    this.linkForm = this.formBuilder.group({
+      colorVisited: [null],
+      color: [null],
+      colorOutline: [null]
+    });
+
+    this.tooltipForm = this.formBuilder.group({
+      color: [null],
+      borderRadius: [null],
+      textColor: [null]
+    });
+
+    this.dropdownForm = this.formBuilder.group({
+      fontSize: [null],
+      borderRadius: [null],
+      borderWidth: [null],
+      padding: [null],
+      color: [null],
+      colorHover: [null],
+      backgroundColorHover: [null]
+    });
+
+    this.popupForm = this.formBuilder.group({
+      textColor: [null],
+      colorHover: [null],
+      colorBackgroundHover: [null]
+    });
+
+    this.popupContainerForm = this.formBuilder.group({
+      colorBackground: [null]
+    });
+
+    this.radioForm = this.formBuilder.group({
+      color: [null],
+      backgroundColor: [null],
+      colorHover: [null],
+      borderColor: [null]
+    });
+
+    this.checkboxForm = this.formBuilder.group({
+      color: [null],
+      backgroundColor: [null],
+      colorHover: [null],
+      borderColor: [null]
+    });
+  }
 
   openGetcss() {
     this.viewCSSModal.open();
@@ -752,20 +806,6 @@ export class ThemeBuilderComponent implements AfterViewInit {
       }
     });
 
-    const tooltipElement = this.renderer.selectRootElement('.po-tooltip', true);
-    if (tooltipElement) {
-      this.tooltipForm.reset();
-      Object.keys(this.formPropertyDictTooltip).forEach((fieldName: string) => {
-        tooltipElement.style.setProperty(this.formPropertyDictTooltip[fieldName], null);
-      });
-      if (this.itemSelected === 'tooltip') {
-        const tooltipDefault = this.tooltipDefault.buttonElement.nativeElement.nextElementSibling;
-        Object.keys(this.formPropertyDictTooltip).forEach((fieldName: string) => {
-          tooltipDefault.style.setProperty(this.formPropertyDictTooltip[fieldName], null);
-        });
-      }
-    }
-
     this.popupForm.reset();
     Object.keys(this.formPropertyDictModal).forEach((fieldName: string) => {
       this.popupBuilder.poListBoxRef.listboxItemList.nativeElement.children[0].children[0].style.setProperty(
@@ -814,6 +854,27 @@ export class ThemeBuilderComponent implements AfterViewInit {
         this.checkboxHover.nativeElement.style.setProperty(this.formPropertyDictCheckbox[fieldName], null);
       }
     });
+
+    const tooltipElement = document.querySelector('.po-tooltip');
+    if (tooltipElement) {
+      this.tooltipForm.reset();
+      Object.keys(this.formPropertyDictTooltip).forEach((fieldName: string) => {
+        this.tooltip.buttonElement.nativeElement.nextElementSibling.style.setProperty(
+          this.formPropertyDictTooltip[fieldName],
+          null
+        );
+      });
+      if (this.itemSelected === 'tooltip') {
+        const tooltipDefault = this.tooltipDefault.buttonElement.nativeElement.nextElementSibling;
+        Object.keys(this.formPropertyDictTooltip).forEach((fieldName: string) => {
+          tooltipDefault.style.setProperty(this.formPropertyDictTooltip[fieldName], null);
+        });
+      }
+    }
+
+    this.setRatioDefault();
+    this.changedColorButton = false;
+    this.changedColorPopup = false;
   }
 
   changeKindButton(kindValue: number): void {
@@ -860,19 +921,7 @@ export class ThemeBuilderComponent implements AfterViewInit {
     this.popupContainerForm.valueChanges.subscribe(changes => this.checkChangesPopupContainer(changes));
     this.checkboxForm.valueChanges.subscribe(changes => this.checkChangesCheckbox(changes));
 
-    const backButton = getComputedStyle(document.querySelector('po-page-default')).getPropertyValue(
-      '--color-secondary'
-    );
-    this.ratioButton = this.setRatioComponent(this.changedColorButton, backButton);
-    this.ratioDisclaimer = this.setRatioComponent(false, '#f2eaf6', '#2c3739');
-    this.ratioDatepicker = this.ratioTextarea = this.ratioInput = this.ratioSelect = this.setRatioComponent(
-      false,
-      '#fbfbfb',
-      '#1d2426'
-    );
-    this.ratioTooltip = this.setRatioComponent(false, '#2c3739', '#ffffff');
-    this.ratioPopup = this.setRatioComponent(this.changedColorPopup, '#ffffff', '#753399');
-    this.cdr.detectChanges();
+    this.setRatioDefault();
   }
 
   openPageSlide(itemLabel: string, item: string) {
@@ -1606,7 +1655,7 @@ export class ThemeBuilderComponent implements AfterViewInit {
   }
 
   private checkChangesTooltip(changes: { [key: string]: string }): void {
-    const tooltipElement = this.renderer.selectRootElement('.po-tooltip', true);
+    const tooltipElement = document.querySelector('.po-tooltip');
     if (tooltipElement) {
       if (!this.isEmpty(changes)) {
         this.resultTooltip['nativeElement'].innerHTML = '.po-tooltip {<br>';
@@ -1620,7 +1669,10 @@ export class ThemeBuilderComponent implements AfterViewInit {
           }
           if (changes[fieldName]) {
             const tooltipDefault = this.tooltipDefault.buttonElement.nativeElement.nextElementSibling;
-            tooltipElement.style.setProperty(this.formPropertyDictTooltip[fieldName], value);
+            this.tooltip.buttonElement.nativeElement.nextElementSibling.style.setProperty(
+              this.formPropertyDictTooltip[fieldName],
+              value
+            );
             tooltipDefault.style.setProperty(this.formPropertyDictTooltip[fieldName], value);
 
             this.resultTooltip[
@@ -1794,6 +1846,19 @@ export class ThemeBuilderComponent implements AfterViewInit {
       this.colorText = colorText ? colorText : this.colorText;
       return this.calculateRatio(this.colorBack, this.colorText);
     }
+  }
+
+  private setRatioDefault() {
+    this.ratioButton = this.setRatioComponent(false, '#2c3739', '#ffffff');
+    this.ratioDisclaimer = this.setRatioComponent(false, '#f2eaf6', '#2c3739');
+    this.ratioDatepicker = this.ratioTextarea = this.ratioInput = this.ratioSelect = this.setRatioComponent(
+      false,
+      '#fbfbfb',
+      '#1d2426'
+    );
+    this.ratioTooltip = this.setRatioComponent(false, '#2c3739', '#ffffff');
+    this.ratioPopup = this.setRatioComponent(false, '#ffffff', '#753399');
+    this.cdr.detectChanges();
   }
 
   private verifyIfAllNotVisibility() {

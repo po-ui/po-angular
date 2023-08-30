@@ -8,12 +8,12 @@ Caso você queira utilizar nossos componentes de templates, como o **[po-page-lo
 
 Instalando com npm:
 ```
-npm i @po-ui/ng-templates
+npm i @po-ui/ng-templates@16.0.0-next.0
 ```
 
 Caso prefira instalar com o yarn:
 ```
-yarn add @po-ui/ng-templates
+yarn add @po-ui/ng-templates@16.0.0-next.0
 ```
 
 Para informações complementares sobre instalação, acesse **[primeiros passos com PO UI](https://po-ui.io/guides/getting-started)**.

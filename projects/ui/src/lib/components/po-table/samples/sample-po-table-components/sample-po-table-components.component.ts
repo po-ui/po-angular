@@ -1,4 +1,4 @@
-import { Component, ViewChild } from '@angular/core';
+import { Component, ViewChild, OnInit } from '@angular/core';
 import { Router } from '@angular/router';
 
 import { PoModalComponent, PoTableColumn, PoTableColumnLabel, PoTableColumnSort } from '@po-ui/ng-components';
@@ -12,11 +12,11 @@ import { SamplePoTableComponentsService } from './sample-po-table-components.ser
   styleUrls: ['./sample-po-table-components.component.css'],
   providers: [SamplePoTableComponentsService]
 })
-export class SamplePoTableComponentsComponent {
+export class SamplePoTableComponentsComponent implements OnInit {
   @ViewChild(PoModalComponent, { static: true }) poModal: PoModalComponent;
 
   extraInformation: any;
-  items: Array<any> = this.sampleComponents.getItems();
+  items: Array<any>;
   showMoreDisabled: boolean = false;
   title: any;
   isLoading: boolean = false;
@@ -94,6 +94,10 @@ export class SamplePoTableComponentsComponent {
   ];
 
   constructor(public sampleComponents: SamplePoTableComponentsService, private router: Router) {}
+
+  ngOnInit(): void {
+    this.items = this.sampleComponents.getItems();
+  }
 
   experimentalColor(row) {
     return row?.component?.status === SamplePoTableComponentStatus.Experimental ? 'color-08' : 'color-11';

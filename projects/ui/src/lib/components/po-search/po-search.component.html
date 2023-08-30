@@ -1,0 +1,20 @@
+<div class="po-search">
+  <div class="po-search-icon">
+    <po-icon *ngIf="!loading" p-icon="po-icon-search"></po-icon>
+    <po-loading-icon *ngIf="loading"></po-loading-icon>
+  </div>
+
+  <input
+    #poSearchInput
+    type="text"
+    [disabled]="disabled"
+    [placeholder]="literals.search"
+    (blur)="onBlur()"
+    (focus)="onFocus()"
+    (input)="onSearchChange($event.target.value)"
+  />
+
+  <div *ngIf="!!poSearchInput.value && !disabled" class="po-search-clean" [tabindex]="!disabled ? 0 : -1">
+    <po-clean [p-element-ref]="poSearchInput" (p-change-event)="clearSearch()"></po-clean>
+  </div>
+</div>

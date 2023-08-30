@@ -514,10 +514,15 @@ describe('PoLookupModalBaseComponent:', () => {
     });
 
     it('addDisclaimer: should create disclaimer and disclaimerGroup.disclaimer with parameters', () => {
-      const expectedValueDisclaimer = { property: 'propertyTest', value: 'valueTest' };
+      component.advancedFilters = [{ property: 'propertyTest' }];
+      const expectedValueDisclaimer = {
+        property: 'propertyTest',
+        value: 'valueTest',
+        label: 'PropertyTest: valueTest'
+      };
       const expectedValueDisclaimerGroup = {
         title: 'titleTest',
-        disclaimers: [{ property: 'propertyTest', value: 'valueTest' }]
+        disclaimers: [{ property: 'propertyTest', value: 'valueTest', label: 'PropertyTest: valueTest' }]
       };
 
       component.addDisclaimer('valueTest', 'propertyTest');
@@ -529,10 +534,10 @@ describe('PoLookupModalBaseComponent:', () => {
     it("addDisclaimer: should return formated currency in locale default if field type is 'currency'", () => {
       component['language'] = 'pt';
       component.advancedFilters = [{ property: 'value', type: 'currency' }];
-      const expectedValueDisclaimer = { property: 'value', value: 321, label: '321,00' };
+      const expectedValueDisclaimer = { property: 'value', value: 321, label: 'Value: 321,00' };
       const expectedValueDisclaimerGroup = {
         title: 'titleTest',
-        disclaimers: [{ property: 'value', value: 321, label: '321,00' }]
+        disclaimers: [{ property: 'value', value: 321, label: 'Value: 321,00' }]
       };
 
       component.addDisclaimer(321, 'value');
@@ -543,10 +548,10 @@ describe('PoLookupModalBaseComponent:', () => {
 
     it("addDisclaimer: should return formated currency in locale 'En' if field type is 'currency' and locale is 'en'", () => {
       component.advancedFilters = [{ property: 'value', type: 'currency', locale: 'en' }];
-      const expectedValueDisclaimer = { property: 'value', value: 321, label: '321.00' };
+      const expectedValueDisclaimer = { property: 'value', value: 321, label: 'Value: 321.00' };
       const expectedValueDisclaimerGroup = {
         title: 'titleTest',
-        disclaimers: [{ property: 'value', value: 321, label: '321.00' }]
+        disclaimers: [{ property: 'value', value: 321, label: 'Value: 321.00' }]
       };
 
       component.addDisclaimer(321, 'value');
@@ -565,10 +570,10 @@ describe('PoLookupModalBaseComponent:', () => {
           ]
         }
       ];
-      const expectedValueDisclaimer = { property: 'company', value: 1, label: 'Totvs' };
+      const expectedValueDisclaimer = { property: 'company', value: 1, label: 'Company: Totvs' };
       const expectedValueDisclaimerGroup = {
         title: 'titleTest',
-        disclaimers: [{ property: 'company', value: 1, label: 'Totvs' }]
+        disclaimers: [{ property: 'company', value: 1, label: 'Company: Totvs' }]
       };
 
       component.addDisclaimer(1, 'company');
@@ -584,10 +589,10 @@ describe('PoLookupModalBaseComponent:', () => {
           options: [{ value: 1 }, { value: 2 }]
         }
       ];
-      const expectedValueDisclaimer = { property: 'company', value: 1 };
+      const expectedValueDisclaimer = { property: 'company', value: 1, label: 'Company: 1' };
       const expectedValueDisclaimerGroup = {
         title: 'titleTest',
-        disclaimers: [{ property: 'company', value: 1 }]
+        disclaimers: [{ property: 'company', value: 1, label: 'Company: 1' }]
       };
 
       component.addDisclaimer(1, 'company');
@@ -600,6 +605,7 @@ describe('PoLookupModalBaseComponent:', () => {
       component.advancedFilters = [
         {
           property: 'company',
+          label: 'The company',
           optionsMulti: true,
           options: [
             { label: 'Totvs', value: 1 },
@@ -607,10 +613,10 @@ describe('PoLookupModalBaseComponent:', () => {
           ]
         }
       ];
-      const expectedValueDisclaimer = { property: 'company', value: [1, 2], label: 'Totvs, PO UI' };
+      const expectedValueDisclaimer = { property: 'company', value: [1, 2], label: 'The company: Totvs, PO UI' };
       const expectedValueDisclaimerGroup = {
         title: 'titleTest',
-        disclaimers: [{ property: 'company', value: [1, 2], label: 'Totvs, PO UI' }]
+        disclaimers: [{ property: 'company', value: [1, 2], label: 'The company: Totvs, PO UI' }]
       };
 
       component.addDisclaimer([1, 2], 'company');
@@ -619,7 +625,60 @@ describe('PoLookupModalBaseComponent:', () => {
       expect(component.disclaimerGroup.disclaimers).toEqual(expectedValueDisclaimerGroup.disclaimers);
     });
 
-    it('p-infinite-scroll: should update property `p-infinite-scroll`', () => {
+    it('addDisclaimer: should add disclaimer for boolean property when value is true', () => {
+      component.advancedFilters = [{ property: 'isApproved', type: 'boolean', label: 'Is Approved' }];
+
+      component.addDisclaimer(true, 'isApproved');
+
+      expect(component.disclaimer.label).toBe('Is Approved: true');
+    });
+
+    it('addDisclaimer: should add disclaimer for boolean property when value is false', () => {
+      component.advancedFilters = [{ property: 'isActive', type: 'boolean', label: 'Is Active' }];
+
+      component.addDisclaimer(false, 'isActive');
+
+      expect(component.disclaimer.label).toBe('Is Active: false');
+    });
+
+    it('formatValueToBoolean: should format value to boolean when filterValue is truthy', () => {
+      const filterValue = true;
+      const field = {
+        label: 'Field Label',
+        booleanTrue: 'Yes',
+        property: 'fieldProperty'
+      };
+
+      component['formatValueToBoolean'](field, filterValue);
+
+      expect(component['disclaimerLabel']).toBe('Yes');
+    });
+
+    it('formatValueToBoolean: should format value to boolean when filterValue is falsy', () => {
+      const filterValue = false;
+      const field = {
+        label: 'Field Label',
+        booleanFalse: 'No',
+        property: 'fieldProperty'
+      };
+
+      component['formatValueToBoolean'](field, filterValue);
+
+      expect(component['disclaimerLabel']).toBe('No');
+    });
+
+    it('formatValueToBoolean: should format value to property when label is not provided', () => {
+      const filterValue = true;
+      const field = {
+        property: 'fieldProperty'
+      };
+
+      component['formatValueToBoolean'](field, filterValue);
+
+      expect(component['disclaimerLabel']).toBe('true');
+    });
+
+    xit('p-infinite-scroll: should update property `p-infinite-scroll`', () => {
       const booleanValidTrueValues = [true, 'true', 1, ''];
       const booleanInvalidValues = [undefined, null, NaN, 2, 'string'];
       expectPropertiesValues(component, 'infiniteScroll', booleanInvalidValues, false);

@@ -12,6 +12,8 @@
       (p-unselected)="changeOptions($event, 'change')"
       p-height="300"
       [p-items]="items"
+      (p-delete-items)="deleteItems($event)"
+      [p-hide-action-fixed-columns]="true"
     >
     </po-table>
   </div>
@@ -24,6 +26,7 @@
       [p-infinite-scroll]="true"
       p-height="300"
       [p-items]="itemsSelected"
+      [p-hide-action-fixed-columns]="true"
     >
     </po-table>
   </div>

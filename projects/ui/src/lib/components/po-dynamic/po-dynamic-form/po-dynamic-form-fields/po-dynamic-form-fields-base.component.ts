@@ -158,7 +158,7 @@ export class PoDynamicFormFieldsBaseComponent {
 
     if (this.isNumberType(field, type)) {
       return 'number';
-    } else if (this.isCurrencyType(field, type)) {
+    } else if (this.isCurrencyType(field, type) || type === PoDynamicFieldType.Decimal) {
       return 'decimal';
     } else if (this.isSelect(field)) {
       return 'select';
