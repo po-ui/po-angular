@@ -12,6 +12,7 @@ import { PoTagComponent } from './po-tag.component';
 import { PoTagIcon } from './enums/po-tag-icon.enum';
 import { PoTagOrientation } from './enums/po-tag-orientation.enum';
 import { PoTagType } from './enums/po-tag-type.enum';
+import { PoTagLiterals } from './po-tag.literals';
 
 @Component({
   template: ` <po-tag p-label="Mock" (p-click)="onClick()"></po-tag> `
@@ -209,11 +210,17 @@ describe('PoTagComponent:', () => {
     });
 
     it('should set aria-label', () => {
+      component.literals = {
+        ...PoTagLiterals['pt']
+      };
       component.label = 'Label';
       expect(component.setAriaLabel()).toContain('Label Remove');
     });
 
     it('should set aria-label', () => {
+      component.literals = {
+        ...PoTagLiterals['pt']
+      };
       component.value = 'Label';
       expect(component.setAriaLabel()).toContain('Label Remove');
     });
