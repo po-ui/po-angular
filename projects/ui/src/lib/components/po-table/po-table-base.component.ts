@@ -502,8 +502,9 @@ export abstract class PoTableBaseComponent implements OnChanges, OnDestroy {
     } else if (!this.hasColumns) {
       this.columns = this.getDefaultColumns(items[0]);
     }
-    this.filteredItems = [...this.items];
-    // timeout necessario para os itens serem refletidos na tabela
+    this.filteredItems = this.height ? [...this.items] : this.items;
+
+    // timeout necessário para os itens serem refletidos na tabela
     setTimeout(() => this.checkInfiniteScroll());
   }
 
