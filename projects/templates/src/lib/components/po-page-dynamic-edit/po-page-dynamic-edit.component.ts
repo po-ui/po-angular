@@ -317,6 +317,7 @@ export class PoPageDynamicEditComponent implements OnInit, OnDestroy {
   // beforeInsert: : return boolean
   readonly detailActions: PoGridRowActions = {};
 
+  private indexFocus = 0;
   private language: string;
   private subscriptions: Array<Subscription> = [];
   private _actions: PoPageDynamicEditActions = {};
@@ -608,6 +609,45 @@ export class PoPageDynamicEditComponent implements OnInit, OnDestroy {
     return EMPTY;
   }
 
+  private focusCheckboxInput(control: string): void {
+    const checkboxGroup = document.querySelector(`po-checkbox-group[ng-reflect-name=${control}]`);
+    if (checkboxGroup) {
+      const checkBoxComponent = checkboxGroup.querySelector('po-checkbox[ng-reflect-disabled=false]');
+      const labelInput: HTMLInputElement = checkBoxComponent?.querySelector('.po-checkbox-outline');
+      if (labelInput) {
+        labelInput.focus();
+      } else {
+        this.indexFocus--;
+      }
+    }
+  }
+
+  private focusControl(control: string): void {
+    const inputElement: HTMLInputElement = document.querySelector(`[name=${control}]`);
+    if (inputElement) {
+      if (inputElement.tagName === 'INPUT') {
+        inputElement.focus();
+      } else {
+        this.focusRadioInput(inputElement, control);
+      }
+    } else {
+      this.focusCheckboxInput(control);
+    }
+  }
+
+  private focusRadioInput(inputElement: Element, control: string): void {
+    const radioComponent = inputElement.querySelector(
+      `po-radio[ng-reflect-name=${control}][ng-reflect-disabled=false]`
+    );
+    if (radioComponent) {
+      const radioInput = radioComponent.querySelector('input');
+      radioInput.focus();
+      radioInput.parentElement.parentElement.classList.add('po-radio-focus');
+    } else {
+      this.indexFocus--;
+    }
+  }
+
   private getPoDynamicPageOptions(onLoad: UrlOrPoCustomizationFunction): Observable<PoPageDynamicEditOptions> {
     const originalOption: PoPageDynamicEditOptions = {
       fields: this.fields,
@@ -658,6 +698,19 @@ export class PoPageDynamicEditComponent implements OnInit, OnDestroy {
     return this.loadOptionsOnInitialize(onLoad);
   }
 
+  private markControlsAsDirtyAndFocusFirstInvalid(): void {
+    this.indexFocus = 0;
+    const controls = Object.keys(this.dynamicForm.form.controls);
+
+    controls.forEach(control => {
+      this.dynamicForm.form.controls[control].markAsDirty();
+      if (this.dynamicForm.form.controls[control].hasError('required') && this.indexFocus === 0) {
+        this.focusControl(control);
+        this.indexFocus++;
+      }
+    });
+  }
+
   private navigateTo(path: string) {
     if (path) {
       const url = this.resolveUrl(this.model, path);
@@ -701,6 +754,7 @@ export class PoPageDynamicEditComponent implements OnInit, OnDestroy {
 
   private saveOperation() {
     if (this.dynamicForm.form.invalid) {
+      this.markControlsAsDirtyAndFocusFirstInvalid();
       this.poNotification.warning(this.literals.saveNotificationWarning);
       return EMPTY;
     }
