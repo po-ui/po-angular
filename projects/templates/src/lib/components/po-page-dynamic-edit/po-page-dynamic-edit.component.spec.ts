@@ -1,6 +1,6 @@
 import { ComponentFixture, fakeAsync, TestBed, tick, waitForAsync } from '@angular/core/testing';
 import { NO_ERRORS_SCHEMA } from '@angular/core';
-import { FormsModule, NgForm } from '@angular/forms';
+import { FormControl, FormsModule, NgForm, Validators } from '@angular/forms';
 import { HttpClientTestingModule } from '@angular/common/http/testing';
 import { RouterTestingModule } from '@angular/router/testing';
 
@@ -197,9 +197,15 @@ describe('PoPageDynamicEditComponent: ', () => {
       }
     };
 
+    const fakeFormControl = {
+      control1: new FormControl('', Validators.required),
+      control2: new FormControl('', Validators.required)
+    };
+
     const dynamicFormInvalid: any = {
       form: {
-        invalid: true
+        invalid: true,
+        controls: fakeFormControl
       }
     };
 
@@ -847,6 +853,96 @@ describe('PoPageDynamicEditComponent: ', () => {
 
         tick();
       }));
+
+      it('should mark controls as dirty with a Input Element control', () => {
+        component.dynamicForm = dynamicFormInvalid;
+        const fakeInputElement = document.createElement('input');
+        fakeInputElement.setAttribute('name', 'control1');
+
+        spyOn(document, 'querySelector').and.returnValue(fakeInputElement);
+
+        component['saveOperation']();
+
+        expect(component.dynamicForm.form.controls.control1.dirty).toBeTrue();
+        expect(component.dynamicForm.form.controls.control2.dirty).toBeTrue();
+        expect(document.querySelector).toHaveBeenCalledWith('[name=control1]');
+      });
+
+      it('should focus radio input', () => {
+        component.dynamicForm = dynamicFormInvalid;
+        const fakeRadioComponent = document.createElement('po-radio');
+        fakeRadioComponent.setAttribute('ng-reflect-name', 'control1');
+        fakeRadioComponent.setAttribute('ng-reflect-disabled', 'false');
+
+        const fakeParentElement = document.createElement('span');
+        fakeParentElement.setAttribute('name', 'control1');
+
+        const fakeInput = document.createElement('input');
+        fakeParentElement.appendChild(fakeRadioComponent).appendChild(fakeInput);
+
+        spyOn(document, 'querySelector').and.returnValue(fakeParentElement);
+        component['saveOperation']();
+
+        expect(document.querySelector).toHaveBeenCalledWith('[name=control1]');
+      });
+
+      it('should focus radio input but radios are all disabled', () => {
+        component.dynamicForm = dynamicFormInvalid;
+        const fakeRadioComponent = document.createElement('po-radio');
+        fakeRadioComponent.setAttribute('ng-reflect-name', 'control1');
+        fakeRadioComponent.setAttribute('ng-reflect-disabled', 'true');
+
+        const fakeParentElement = document.createElement('span');
+        fakeParentElement.setAttribute('name', 'control1');
+
+        fakeParentElement.appendChild(fakeRadioComponent);
+
+        spyOn(document, 'querySelector').and.returnValue(fakeParentElement);
+        component['saveOperation']();
+
+        expect(document.querySelector).toHaveBeenCalledWith('[name=control1]');
+        expect(component['indexFocus']).toBe(0);
+      });
+
+      it('should focus checkbox input', () => {
+        component.dynamicForm = dynamicFormInvalid;
+        const fakeCheckboxInputElement = document.createElement('po-checkbox-group');
+        fakeCheckboxInputElement.setAttribute('ng-reflect-name', 'control1');
+
+        const fakeCheckboxComponent = document.createElement('po-checkbox');
+        fakeCheckboxComponent.setAttribute('ng-reflect-name', 'control1');
+        fakeCheckboxComponent.setAttribute('ng-reflect-disabled', 'false');
+
+        const fakeOutline = document.createElement('div');
+        fakeOutline.classList.add('po-checkbox-outline');
+        fakeCheckboxInputElement.appendChild(fakeCheckboxComponent).appendChild(fakeOutline);
+
+        spyOn(document, 'querySelector').and.returnValue(fakeCheckboxInputElement);
+
+        component['focusCheckboxInput']('control1');
+
+        expect(document.querySelector).toHaveBeenCalledWith('po-checkbox-group[ng-reflect-name=control1]');
+      });
+
+      it('should focus checkbox input but checkboxes are all disabled', () => {
+        component.dynamicForm = dynamicFormInvalid;
+        const fakeCheckboxInputElement = document.createElement('po-checkbox-group');
+        fakeCheckboxInputElement.setAttribute('ng-reflect-name', 'control1');
+
+        const fakeCheckboxComponent = document.createElement('po-checkbox');
+        fakeCheckboxComponent.setAttribute('ng-reflect-name', 'control1');
+        fakeCheckboxComponent.setAttribute('ng-reflect-disabled', 'true');
+
+        fakeCheckboxInputElement.appendChild(fakeCheckboxComponent);
+
+        spyOn(document, 'querySelector').and.returnValue(fakeCheckboxInputElement);
+
+        component['indexFocus'] = 1;
+        component['focusCheckboxInput']('control1');
+
+        expect(document.querySelector).toHaveBeenCalledWith('po-checkbox-group[ng-reflect-name=control1]');
+        expect(component['indexFocus']).toBe(0);
+      });
     });
 
     describe('save:', () => {
