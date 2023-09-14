@@ -15,10 +15,12 @@ export class SamplePoTreeViewLabsComponent implements OnInit {
   selectable: boolean;
   treeViewItem: PoTreeViewItem;
   maxLevel: number = 4;
+  singleSelect: boolean = false;
 
   readonly itemPropertiesOptions: Array<PoCheckboxGroupOption> = [
     { value: 'selected', label: 'Selected' },
-    { value: 'expanded', label: 'Expanded' }
+    { value: 'expanded', label: 'Expanded' },
+    { value: 'disable-selection', label: 'Disable Selection' }
   ];
 
   ngOnInit() {
@@ -28,6 +30,7 @@ export class SamplePoTreeViewLabsComponent implements OnInit {
   add(treeViewItem: PoTreeViewItem) {
     treeViewItem.selected = this.itemProperties.includes('selected');
     treeViewItem.expanded = this.itemProperties.includes('expanded');
+    treeViewItem.isSelectable = !this.itemProperties.includes('disable-selection');
 
     const treeViewItemClone = { ...treeViewItem };
 

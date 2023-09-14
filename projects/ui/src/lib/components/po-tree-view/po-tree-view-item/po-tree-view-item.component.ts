@@ -37,6 +37,10 @@ export class PoTreeViewItemComponent {
 
   @Input('p-selectable') selectable: boolean;
 
+  @Input('p-single-select') singleSelect: boolean;
+
+  @Input('p-selected-value') selectedValue: string | number;
+
   get hasSubItems() {
     return !!(this.item.subItems && this.item.subItems.length);
   }
