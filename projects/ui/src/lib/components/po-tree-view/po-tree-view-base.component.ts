@@ -68,6 +68,10 @@ export class PoTreeViewBaseComponent {
   private _items: Array<PoTreeViewItem> = [];
   private _selectable: boolean = false;
   private _maxLevel = poTreeViewMaxLevel;
+  private _singleSelect: boolean = false;
+
+  // armazena o value do item selecionado
+  selectedValue: string | number;
 
   /**
    * Lista de itens do tipo `PoTreeViewItem` que será renderizada pelo componente.
@@ -104,6 +108,23 @@ export class PoTreeViewBaseComponent {
    *
    * @description
    *
+   * Habilita a seleção para item único atráves de po-radio.
+   *
+   * @default false
+   */
+  @Input('p-single-select') set singleSelect(value: boolean) {
+    this._singleSelect = convertToBoolean(value);
+  }
+
+  get singleSelect() {
+    return this._singleSelect;
+  }
+
+  /**
+   * @optional
+   *
+   * @description
+   *
    * Define o máximo de níveis para o tree-view.
    *
    * > O valor padrão é 4
@@ -127,9 +148,15 @@ export class PoTreeViewBaseComponent {
   protected emitSelected(treeViewItem: PoTreeViewItem) {
     const event = treeViewItem.selected ? 'selected' : 'unselected';
 
-    this.updateItemsOnSelect(treeViewItem);
+    this.selectedValue = treeViewItem.value;
 
-    this[event].emit({ ...treeViewItem });
+    // Não emitir subItems quando for singleSelect
+    const { subItems, ...rest } = treeViewItem;
+    const treeViewToEmit = this.singleSelect ? { ...rest } : treeViewItem;
+
+    this.updateItemsOnSelect(treeViewToEmit);
+
+    this[event].emit({ ...treeViewToEmit });
   }
 
   private addChildItemInParent(childItem: PoTreeViewItem, parentItem: PoTreeViewItem) {
@@ -150,8 +177,12 @@ export class PoTreeViewBaseComponent {
       if (isNewItem) {
         this.expandParentItem(childItem, parentItem);
       }
+
       this.addChildItemInParent(childItem, parentItem);
-      this.selectItemBySubItems(parentItem);
+
+      if (!this.singleSelect) {
+        this.selectItemBySubItems(parentItem);
+      }
 
       items.push(parentItem);
     } else {
@@ -165,7 +196,7 @@ export class PoTreeViewBaseComponent {
         this.selectAllItems(item.subItems, isSelected);
       }
 
-      item.selected = isSelected;
+      item.selected = item.isSelectable !== false ? isSelected : false;
     });
   }
 
@@ -225,6 +256,10 @@ export class PoTreeViewBaseComponent {
         --level;
       }
 
+      if (item.selected) {
+        this.selectedValue = currentItem.value;
+      }
+
       this.addItem(newItems, currentItem, parentItem, true);
     });
 
@@ -246,7 +281,7 @@ export class PoTreeViewBaseComponent {
   }
 
   private updateItemsOnSelect(selectedItem: PoTreeViewItem) {
-    if (selectedItem.subItems) {
+    if (selectedItem.subItems && !this.singleSelect) {
       this.selectAllItems(selectedItem.subItems, selectedItem.selected);
     }
 
