@@ -343,7 +343,9 @@ export abstract class PoInputBaseComponent implements ControlValueAccessor, Vali
     }
   }
 
-  constructor(private cd?: ChangeDetectorRef) {}
+  constructor(private cd?: ChangeDetectorRef) {
+    this.objMask = new PoMask(this.mask, this.maskFormatModel);
+  }
 
   callOnChange(value: any) {
     this.updateModel(value);
