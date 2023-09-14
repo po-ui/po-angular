@@ -4,15 +4,15 @@ import {
   ChangeDetectionStrategy,
   ChangeDetectorRef,
   Component,
-  ElementRef,
   forwardRef,
   QueryList,
   ViewChildren
 } from '@angular/core';
 import { NG_VALIDATORS, NG_VALUE_ACCESSOR } from '@angular/forms';
 
-import { PoCheckboxGroupBaseComponent } from './po-checkbox-group-base.component';
+import { PoCheckboxComponent } from '../po-checkbox/po-checkbox.component';
 import { PoCheckboxGroupOption } from './interfaces/po-checkbox-group-option.interface';
+import { PoCheckboxGroupBaseComponent } from './po-checkbox-group-base.component';
 
 /**
  * @docsExtends PoCheckboxGroupBaseComponent
@@ -52,7 +52,7 @@ import { PoCheckboxGroupOption } from './interfaces/po-checkbox-group-option.int
   ]
 })
 export class PoCheckboxGroupComponent extends PoCheckboxGroupBaseComponent implements AfterViewChecked, AfterViewInit {
-  @ViewChildren('checkboxLabel') checkboxLabels: QueryList<ElementRef>;
+  @ViewChildren('checkboxLabel') checkboxLabels: QueryList<PoCheckboxComponent>;
 
   constructor(private changeDetector: ChangeDetectorRef) {
     super();
@@ -90,7 +90,7 @@ export class PoCheckboxGroupComponent extends PoCheckboxGroupBaseComponent imple
       const checkboxLabel = this.checkboxLabels.find((_, index) => !this.options[index].disabled);
 
       if (checkboxLabel) {
-        checkboxLabel.nativeElement.focus();
+        checkboxLabel.checkboxLabel.nativeElement.focus();
       }
     }
   }
