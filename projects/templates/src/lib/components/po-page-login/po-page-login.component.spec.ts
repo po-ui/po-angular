@@ -27,6 +27,7 @@ import { PoPageLoginComponent } from './po-page-login.component';
 import { PoPageLoginCustomField } from './interfaces/po-page-login-custom-field.interface';
 import { PoPageLoginLiterals } from './interfaces/po-page-login-literals.interface';
 import { PoPageLoginService } from './po-page-login.service';
+import { OverlayModule } from '@angular/cdk/overlay';
 
 describe('PoPageLoginComponent: ', () => {
   let component: PoPageLoginComponent;
@@ -37,7 +38,7 @@ describe('PoPageLoginComponent: ', () => {
   beforeEach(
     waitForAsync(() => {
       TestBed.configureTestingModule({
-        imports: [FormsModule, RouterTestingModule.withRoutes([])],
+        imports: [FormsModule, OverlayModule, RouterTestingModule.withRoutes([])],
         declarations: [
           PoButtonComponent,
           PoComboComponent,

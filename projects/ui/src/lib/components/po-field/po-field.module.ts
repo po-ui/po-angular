@@ -1,6 +1,7 @@
 import { NgModule } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { FormsModule } from '@angular/forms';
+import { OverlayModule } from '@angular/cdk/overlay';
 
 import { PoButtonGroupModule } from '../po-button-group/index';
 import { PoButtonModule } from '../po-button/index';
@@ -74,6 +75,7 @@ import { PoLabelModule } from '../po-label';
     FormsModule.withConfig({
       callSetDisabledState: 'whenDisabledForLegacyCode'
     }),
+    OverlayModule,
     PoButtonGroupModule,
     PoButtonModule,
     PoCleanModule,

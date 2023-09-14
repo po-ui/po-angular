@@ -17,6 +17,7 @@ import { PoComboComponent } from './po-combo.component';
 import { PoComboFilterService } from './po-combo-filter.service';
 import { PoComboOption } from './interfaces/po-combo-option.interface';
 import { PoCleanComponent } from '../po-clean/po-clean.component';
+import { OverlayModule } from '@angular/cdk/overlay';
 
 const eventKeyBoard = document.createEvent('KeyboardEvent');
 eventKeyBoard.initEvent('keyup', true, true);
@@ -32,7 +33,7 @@ describe('PoComboComponent:', () => {
 
   beforeEach(async () => {
     await TestBed.configureTestingModule({
-      imports: [PoLoadingModule, PoIconModule],
+      imports: [PoLoadingModule, PoIconModule, OverlayModule],
       declarations: [PoComboComponent, PoFieldContainerComponent, PoFieldContainerBottomComponent, PoCleanComponent],
       providers: [HttpClient, HttpHandler]
     }).compileComponents();
@@ -1202,7 +1203,7 @@ describe('PoComboComponent - with service:', () => {
 
   beforeEach(async () => {
     await TestBed.configureTestingModule({
-      imports: [HttpClientTestingModule, PoLoadingModule],
+      imports: [HttpClientTestingModule, PoLoadingModule, OverlayModule],
       declarations: [PoComboComponent, PoFieldContainerComponent, PoFieldContainerBottomComponent],
       providers: [HttpClient, HttpHandler, PoComboFilterService]
     }).compileComponents();
