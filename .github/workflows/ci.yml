@@ -34,7 +34,11 @@ jobs:
     # Executa um comando do projeto na máquina virtual
     - run: npm i
     - run: npm run format:check
-    - run: npm run lint
+    - run: npm run lint:storage
+    - run: npm run lint:sync
+    - run: npm run lint:ui
+    - run: npm run lint:templates
+    - run: npm run lint:code-editor
 
   build:
     name: Build packages
