@@ -5,6 +5,7 @@
   (keydown)="onKeyDown($event, checkboxValue)"
 >
   <div
+    #checkboxLabel
     role="checkbox"
     class="po-checkbox-outline"
     [attr.p-size]="size"
@@ -22,7 +23,6 @@
     </span>
 
     <po-label
-      #checkboxLabel
       *ngIf="label"
       class="po-checkbox-label"
       tabindex="-1"
