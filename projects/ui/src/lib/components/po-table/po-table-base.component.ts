@@ -1200,12 +1200,12 @@ export abstract class PoTableBaseComponent implements OnChanges, OnDestroy {
   }
 
   private sortArray(column: PoTableColumn, ascending: boolean) {
-    const itemsList = this.height ? [...this.items] : this.items;
+    const itemsList = this.height ? [...this.filteredItems] : this.filteredItems;
     itemsList.sort((leftSide, rightSide): number =>
       sortValues(leftSide[column.property], rightSide[column.property], ascending)
     );
     if (this.height) {
-      this.items = itemsList;
+      this.filteredItems = itemsList;
     }
   }
 
