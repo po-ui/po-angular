@@ -69,9 +69,9 @@ export const poLookupLiteralsDefault = {
     modalDisclaimerGroupTitle: 'Apresentando resultados filtrados por:'
   },
   ru: <PoLookupLiterals>{
-    modalPrimaryActionLabel: 'выбирать',
-    modalSecondaryActionLabel: 'отменить',
-    modalPlaceholder: 'поиск',
+    modalPrimaryActionLabel: 'Выбрать',
+    modalSecondaryActionLabel: 'Отменить',
+    modalPlaceholder: 'Поиск',
     modalTitle: 'Выберите запись',
     modalTableNoColumns: poTableLiteralsDefault.ru.noColumns,
     modalTableNoData: poTableLiteralsDefault.ru.noData,
@@ -80,8 +80,8 @@ export const poLookupLiteralsDefault = {
     modalAdvancedSearch: 'Расширенный поиск',
     modalAdvancedSearchTitle: 'Расширенный поиск',
     modalAdvancedSearchPrimaryActionLabel: 'Фильтр',
-    modalAdvancedSearchSecondaryActionLabel: 'Вернись',
-    modalDisclaimerGroupTitle: 'Представление результатов отфильтровано по:'
+    modalAdvancedSearchSecondaryActionLabel: 'Назад',
+    modalDisclaimerGroupTitle: 'Представленные результаты отфильтрованы по:'
   }
 };
 
