@@ -400,7 +400,7 @@ describe('PoTableBaseComponent:', () => {
     component.height = 300;
     component['sortArray'](column, true);
 
-    expect(component.items).toEqual(sortedItemsAsc);
+    expect(component.filteredItems).toEqual(sortedItemsAsc);
   });
   it(`should has service and sort set 'sortStore'`, () => {
     const column = component.columns[1];
