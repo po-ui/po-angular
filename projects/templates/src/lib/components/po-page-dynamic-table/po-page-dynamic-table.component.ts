@@ -222,6 +222,18 @@ export class PoPageDynamicTableComponent extends PoPageDynamicListBaseComponent 
    *
    * @description
    *
+   * Permite que o gerenciador de colunas, responsável pela definição de quais colunas serão exibidas, seja escondido.
+   *
+   * @default `false`
+   */
+  @Input({ alias: 'p-hide-columns-manager', transform: convertToBoolean })
+  hideColumnsManager: boolean = false;
+
+  /**
+   * @optional
+   *
+   * @description
+   *
    * Oculta o botão para remover todos os *disclaimers* do grupo.
    *
    * > Por padrão, o mesmo é exibido à partir de dois ou mais *disclaimers* com a opção `hideClose` habilitada.

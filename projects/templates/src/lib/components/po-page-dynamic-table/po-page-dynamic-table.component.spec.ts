@@ -125,9 +125,9 @@ describe('PoPageDynamicTableComponent:', () => {
     });
 
     it('hideRemoveAllDisclaimer: should update property `p-hide-remove-all-disclaimer` to `true` with valid values', () => {
-      component.hideRemoveAllDisclaimer = utilsFunctions.convertToBoolean(3);
+      component.hideRemoveAllDisclaimer = utilsFunctions.convertToBoolean(1);
 
-      expect(component.hideRemoveAllDisclaimer).toBe(false);
+      expect(component.hideRemoveAllDisclaimer).toBe(true);
     });
 
     it('hideCloseDisclaimers: should set property `p-hide-close-disclaimers` to `[]` if not Array value', () => {
@@ -140,6 +140,18 @@ describe('PoPageDynamicTableComponent:', () => {
       const validValues = [['Teste 1'], ['Teste 2', 'Teste 3']];
 
       expectPropertiesValues(component, 'hideCloseDisclaimers', validValues, validValues);
+    });
+
+    it('hideColumnsManager: should set property `p-hide-columns-manager` to `false` if invalid value', () => {
+      component.hideColumnsManager = utilsFunctions.convertToBoolean(3);
+
+      expect(component.hideColumnsManager).toBe(false);
+    });
+
+    it('hideColumnsManager: should update property `p-hide-columns-manager` to `true` with valid values', () => {
+      component.hideColumnsManager = utilsFunctions.convertToBoolean('true');
+
+      expect(component.hideColumnsManager).toBe(true);
     });
   });
 
