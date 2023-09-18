@@ -238,6 +238,18 @@ export abstract class PoLookupBaseComponent
    *
    * @description
    *
+   * Permite que o gerenciador de colunas, responsável pela definição de quais colunas serão exibidas, seja escondido.
+   *
+   * @default `false`
+   */
+  @Input({ alias: 'p-hide-columns-manager', transform: convertToBoolean })
+  hideColumnsManager: boolean = false;
+
+  /**
+   * @optional
+   *
+   * @description
+   *
    * Ativa a funcionalidade de scroll infinito para a tabela exibida no retorno da consulta.
    *
    * @default `false`

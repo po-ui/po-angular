@@ -954,6 +954,7 @@ describe('PoLookupComponent:', () => {
         component.label = 'Estabelecimento';
         component.literals = undefined;
         component.infiniteScroll = false;
+        component.hideColumnsManager = false;
         component.multiple = false;
         component.fieldLabel = 'label';
         component.fieldValue = 'value';
@@ -966,6 +967,7 @@ describe('PoLookupComponent:', () => {
           columns,
           filterParams,
           literals,
+          hideColumnsManager,
           infiniteScroll,
           multiple,
           fieldLabel,
@@ -983,6 +985,7 @@ describe('PoLookupComponent:', () => {
           filterParams,
           title: component.label,
           literals,
+          hideColumnsManager,
           infiniteScroll,
           multiple,
           selectedItems,

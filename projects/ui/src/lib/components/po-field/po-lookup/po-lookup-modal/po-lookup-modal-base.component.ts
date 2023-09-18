@@ -123,6 +123,10 @@ export abstract class PoLookupModalBaseComponent implements OnDestroy, OnInit {
   /** Classe de serviço com a implementação do cliente. */
   @Input('p-filter-params') filterParams: any;
 
+  /** Se verdadeiro, esconde o gerenciador de tarefas, responsável pela definição de quais colunas serão exibidas. */
+  @Input({ alias: 'p-hide-columns-manager', transform: convertToBoolean })
+  hideColumnsManager: boolean = false;
+
   /** Se verdadeiro, ativa a funcionalidade de scroll infinito para a tabela exibida no retorno da consulta. */
   @Input({ alias: 'p-infinite-scroll', transform: convertToBoolean }) infiniteScroll: boolean = false;
 
