@@ -40,6 +40,7 @@ describe('PoLookupModalService:', () => {
     filterParams: undefined,
     title: 'Teste',
     literals: undefined,
+    hideColumnsManager: false,
     infiniteScroll: false,
     multiple: false,
     selectedItems: null,

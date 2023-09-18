@@ -40,6 +40,7 @@ export class PoLookupModalService {
     service: PoLookupFilter;
     columns: Array<PoLookupColumn>;
     filterParams: any;
+    hideColumnsManager: boolean;
     title: string;
     literals: PoLookupLiterals;
     infiniteScroll: boolean;
@@ -55,6 +56,7 @@ export class PoLookupModalService {
       service,
       columns,
       filterParams,
+      hideColumnsManager,
       title,
       literals,
       infiniteScroll,
@@ -83,6 +85,7 @@ export class PoLookupModalService {
     this.componentRef.instance.fieldValue = fieldValue;
     this.componentRef.instance.changeVisibleColumns = changeVisibleColumns;
     this.componentRef.instance.columnRestoreManager = columnRestoreManager;
+    this.componentRef.instance.hideColumnsManager = hideColumnsManager;
     this.componentRef.changeDetectorRef.detectChanges();
     this.componentRef.instance.openModal();
   }
