@@ -2,6 +2,21 @@
 
 All notable changes to this project will be documented in this file. See [standard-version](https://github.com/conventional-changelog/standard-version) for commit guidelines.
 
+# [16.1.0](https://github.com/po-ui/po-angular/compare/v16.0.0...v16.1.0) (2023-09-18)
+
+
+### Bug Fixes
+
+* **combo:** corrige posicionamento ([73efeaa](https://github.com/po-ui/po-angular/commit/73efeaa279b12dfc8ba0cd68d64ad5d49374445a))
+* **table:** corrige ordenação ([d61b7f1](https://github.com/po-ui/po-angular/commit/d61b7f1a9bc06cd2e86644166fc47028cb803f74)), closes [#1793](https://github.com/po-ui/po-angular/issues/1793)
+
+
+### Features
+
+* **tree-view:** adiciona propriedade p-max-level ([323dff2](https://github.com/po-ui/po-angular/commit/323dff244727fd35fa840f6b8d228915fc6b6534))
+
+
+
 # [16.0.0](https://github.com/po-ui/po-angular/compare/v15.15.0...v16.0.0) (2023-09-05)
 
 ### BREAKING CHANGES
