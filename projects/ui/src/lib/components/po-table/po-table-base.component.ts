@@ -239,9 +239,9 @@ export abstract class PoTableBaseComponent implements OnChanges, OnDestroy {
    * Habilita ou desabilita o estilo listrado da tabela (`striped`).
    * > Recomendado para tabelas com maior número de dados, facilitando a sua visualização na tabela.
    *
-   * @default `false`
+   * @default `true`
    */
-  @Input({ alias: 'p-striped', transform: convertToBoolean }) striped: boolean = false;
+  @Input({ alias: 'p-striped', transform: convertToBoolean }) striped: boolean = true;
 
   /**
    * @description
