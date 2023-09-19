@@ -1,1 +1,65 @@
 /* You can add global styles to this file, and also import other style files */
+.sample-menu-header-text-color {
+  color: #9da7a9;
+}
+
+.sample-container {
+  position: relative;
+  height: 300px;
+}
+
+.container_components {
+  padding-block: 0.5em;
+  padding-inline: 4px;
+}
+
+.container-flex {
+  display: flex;
+  flex-direction: row;
+}
+
+.margin-top-100 {
+  margin-top: 100px;
+}
+
+.margin-bottom-100 {
+  margin-bottom: 100px;
+}
+
+.margin-top-50 {
+  margin-top: 50px;
+}
+
+.margin-bottom-50 {
+  margin-bottom: 50px;
+}
+
+#customers td,
+#customers th {
+  border: 1px solid #ddd;
+  padding: 8px;
+}
+
+#customers tr:nth-child(even) {
+  background-color: #f2f2f2;
+}
+
+#customers tr:hover {
+  background-color: #ddd;
+}
+
+#customers th {
+  padding-top: 12px;
+  padding-bottom: 12px;
+  text-align: left;
+  background-color: #045b8f;
+  color: white;
+}
+
+.color-box {
+  width: 20px;
+  height: 20px;
+  border: 1px solid #ccc;
+  margin-right: 20px;
+  padding-right: 20px;
+}

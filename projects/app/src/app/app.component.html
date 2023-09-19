@@ -1,0 +1,378 @@
+<div class="po-wrapper">
+  <po-menu p-filter [p-menus]="menus" [p-service]="samplePoMenuHumanResourcesService">
+    <div *p-menu-header-template class="po-p-2 po-font-title sample-menu-header-text-color">
+      <p>Welcome,</p>
+      <p>
+        <b> John Doe </b>
+      </p>
+    </div>
+  </po-menu>
+
+  <po-toolbar p-title="PO - COMPONENTES" [p-show-notification]="false"></po-toolbar>
+
+  <po-page-default>
+    <h1 class="margin-bottom-100">Componentes do PO-UI utilizando o tema TOTVS</h1>
+    <h2>PO-button</h2>
+    <!-- button -->
+
+    <div class="po-row margin-bottom-100">
+      <div class="po-md-6" style="display: flex; gap: 8px; flex-wrap: wrap">
+        <po-button p-label="primary" p-kind="primary"> </po-button>
+        <po-button p-label="icon" p-kind="primary" p-icon="po-icon-user"> </po-button>
+        <po-button p-label="secondary"> </po-button>
+        <po-button p-label="tertiary" p-kind="tertiary"> </po-button>
+        <po-button p-label="primary danger" p-kind="primary" p-danger> </po-button>
+        <po-button p-label="secondary danger" p-danger> </po-button>
+      </div>
+      <div class="po-md-6" style="display: flex; gap: 8px; flex-wrap: wrap">
+        <po-button p-label="primary disabled" p-kind="primary" p-disabled> </po-button>
+        <po-button p-label="secondary disabled" p-disabled> </po-button>
+        <po-button p-label="tertiary disabled" p-kind="tertiary" p-disabled> </po-button>
+        <po-button p-label="Loading" p-kind="primary" p-loading> </po-button>
+        <po-button p-label="S Loading" p-loading> </po-button>
+        <po-button p-label="T Loading" p-kind="tertiary" p-loading> </po-button>
+      </div>
+    </div>
+
+    <h2>PO-button-group</h2>
+    <!-- button group-->
+
+    <div class="margin-bottom-100">
+      <div class="po-row">
+        <div class="po-md-12">
+          <po-button-group [p-buttons]="buttons"> </po-button-group>
+        </div>
+      </div>
+      <div class="po-row po-mt-1">
+        <div class="po-md-12">
+          <po-button-group [p-buttons]="buttons2" p-toggle="single"> </po-button-group>
+        </div>
+      </div>
+    </div>
+
+    <div class="margin-top-100 margin-bottom-100">
+      <h2>Accordion</h2>
+      <!-- accordion -->
+      <po-accordion>
+        <po-accordion-item p-label="PO Accordion 1">
+          Lorem ipsum dolor sit amet, consectetur adipiscing elit.
+        </po-accordion-item>
+        <po-accordion-item p-label="PO Accordion 2">
+          In rhoncus condimentum elit, egestas efficitur orci tincidunt a. Etiam ut neque
+        </po-accordion-item>
+      </po-accordion>
+
+      <div class="margin-top-100 margin-bottom-100">
+        <h2>Avatar</h2>
+        <!-- avatar -->
+        <po-avatar p-src="https://po-ui.io/assets/graphics/logo-po.png"> </po-avatar>
+      </div>
+
+      <!-- breadcrumb -->
+      <div class="margin-top-100 margin-bottom-100">
+        <h2>Breadcrumb</h2>
+        <po-breadcrumb
+          [p-items]="[
+            { label: 'Po Portal', link: 'portal' },
+            { label: 'Po Breadcrumb', link: 'breadcrumb' }
+          ]"
+        >
+        </po-breadcrumb>
+      </div>
+
+      <!-- calendar -->
+      <div class="margin-top-100 margin-bottom-100">
+        <h2 class="po-mt-1">Calendar</h2>
+        <po-calendar></po-calendar>
+      </div>
+
+      <!-- disclaimer -->
+      <div class="margin-top-100 margin-bottom-100">
+        <h2 class="po-mt-1">Disclaimer</h2>
+        <po-disclaimer-group [p-disclaimers]="[{ value: 'disclaimer' }]"></po-disclaimer-group>
+      </div>
+      <!-- link -->
+      <div class="margin-top-100 margin-bottom-100">
+        <h2 class="po-mt-1">Link</h2>
+        <po-link p-label="PO Link" p-url="https://po-ui.io"></po-link>
+      </div>
+      <!-- tag -->
+      <div class="margin-top-100 margin-bottom-100">
+        <h2>Tag</h2>
+        <div class="po-mt-1">
+          <div>
+            <po-tag p-value="Info" p-type="info"> </po-tag>
+            <po-tag p-value="Success" p-type="success"> </po-tag>
+            <po-tag p-value="Warning" p-type="warning"> </po-tag>
+            <po-tag p-value="Danger" p-type="danger"> </po-tag>
+          </div>
+          <div class="po-mt-1">
+            <po-tag p-value="Info" p-type="info" p-icon> </po-tag>
+            <po-tag p-value="Success" p-type="success" p-icon> </po-tag>
+            <po-tag p-value="Warning" p-type="warning" p-icon> </po-tag>
+            <po-tag p-value="Danger" p-type="danger" p-icon> </po-tag>
+          </div>
+
+          <div class="po-mt-1">
+            <po-tag p-value="Info" p-type="info" p-icon p-disabled> </po-tag>
+            <po-tag p-value="Success" p-type="success" p-icon p-disabled> </po-tag>
+            <po-tag p-value="Warning" p-type="warning" p-icon p-disabled> </po-tag>
+            <po-tag p-value="Danger" p-type="danger" p-icon p-disabled> </po-tag>
+          </div>
+
+          <div class="po-mt-1">
+            <po-tag p-value="Info" p-type="info" p-icon [p-removable]="true"> </po-tag>
+            <po-tag p-value="Success" p-type="success" p-icon [p-removable]="true"> </po-tag>
+            <po-tag p-value="Warning" p-type="warning" p-icon [p-removable]="true"> </po-tag>
+            <po-tag p-value="Danger" p-type="danger" p-icon [p-removable]="true"> </po-tag>
+          </div>
+        </div>
+      </div>
+      <!-- list view -->
+      <div class="margin-top-100 margin-bottom-100">
+        <h2 class="po-mt-1">List View</h2>
+        <po-list-view
+          p-property-title="name"
+          [p-items]="[
+          { name: 'Registro 1', email: 'register@po-ui.com' },
+        ]"
+        >
+          <ng-template p-list-view-content-template let-item>
+            <div class="po-row">
+              <po-info class="po-md-12" p-label="Email" [p-value]="item.email"></po-info>
+            </div>
+          </ng-template>
+        </po-list-view>
+      </div>
+      <!-- loading -->
+      <div class="margin-top-100 margin-bottom-100">
+        <h2 class="po-mt-1">Loading</h2>
+        <div class="sample-container">
+          <po-loading-overlay></po-loading-overlay>
+        </div>
+      </div>
+      <!-- progress -->
+      <div class="margin-top-100 margin-bottom-100">
+        <h2 class="po-mt-1">Progress</h2>
+        <div>
+          <po-progress [p-value]="25"></po-progress>
+          <po-progress [p-value]="25" p-indeterminate></po-progress>
+        </div>
+      </div>
+
+      <div class="margin-top-100 margin-bottom-100">
+        <h2 class="po-mt-1">Po-stepper</h2>
+        <!-- stepper -->
+        <po-stepper>
+          <po-step p-label="Step 1"></po-step>
+          <po-step p-label="Step 2"></po-step>
+          <po-step p-label="Step 3"></po-step>
+        </po-stepper>
+      </div>
+
+      <!-- tabs -->
+      <div class="margin-top-100 margin-bottom-100">
+        <h2 class="po-mt-1">Po-tabs</h2>
+        <po-tabs>
+          <po-tab [p-active]="true" p-label="PO Tabs 1"></po-tab>
+          <po-tab p-label="PO Tabs 2"></po-tab>
+        </po-tabs>
+      </div>
+      <!-- tree view -->
+      <div class="margin-top-100 margin-bottom-100">
+        <h2 class="po-mt-1 po-mb-2">Po-tree-view</h2>
+        <po-tree-view
+          [p-items]="[{ label: 'Gerenciador de usuários', value: 1, subItems: [{ label: 'Adicionar', value: 1.1 }] }]"
+        >
+        </po-tree-view>
+      </div>
+
+      <h2 class="po-mt-1">Po-Modal</h2>
+      <!-- modal -->
+      <div class="po-mb-2">
+        <po-modal #modal [p-click-out]="true" p-title="PO Modal"> We are TOTVERS!!! </po-modal>
+        <po-button p-label="Open modal" (p-click)="modal.open()"> </po-button>
+      </div>
+      <!-- popover -->
+      <div class="po-mt-2 po-mb-2">
+        <h2 class="po-mt-1">Po-popover</h2>
+        <po-button #target p-label="PopUp" (p-click)="popup.toggle()"> </po-button>
+        <po-popover [p-target]="targetRef"> PO Popover </po-popover>
+      </div>
+      <!-- popup -->
+      <div class="po-mt-2 po-mb-2">
+        <h2 class="po-mt-1">Po-popup</h2>
+        <po-button #targetdois p-label="PopUp" (p-click)="popup.toggle()"> </po-button>
+        <po-popup #popup [p-actions]="[{ label: 'PO Popup' }]" [p-target]="targetRefDois"> </po-popup>
+      </div>
+      <!-- page slide -->
+      <div class="po-mt-2 po-mb-2">
+        <h2 class="po-mt-1">Po-page-slide</h2>
+        <po-page-slide #pageSlide [p-click-out]="true" p-title="Po Page Slide Title"> Hello World! </po-page-slide>
+
+        <div>
+          <po-button p-label="View Page Slide" (p-click)="pageSlide.open()"></po-button>
+        </div>
+      </div>
+    </div>
+
+    <!-- <div class="po-mt-2">
+      <h2>Componentes Formulário</h2>
+      <div class="margin-top-50 margin-bottom-50">
+        <po-checkbox-group
+          name="checkboxGroup"
+          p-label="PO Checkbox Group"
+          [(ngModel)]="modelCheckbox"
+          [p-options]="[
+            { value: '1', label: 'Option 1' },
+            { value: '2', label: 'Option 2' }
+          ]"
+        >
+        </po-checkbox-group>
+      </div>
+      <div class="margin-top-50 margin-bottom-50">
+        <po-radio-group
+          name="radioGroupBasic"
+          p-label="PO Radio Group"
+          [(ngModel)]="modelRadio"
+          [p-options]="[
+            { label: 'Option 1', value: '1' },
+            { label: 'Option 2', value: '2' }
+          ]"
+        >
+        </po-radio-group>
+      </div>
+      <div class="margin-top-50 margin-bottom-50">
+        <po-switch name="switch" p-label="PO Switch"> </po-switch>
+        <po-switch [(ngModel)]="modelSwitch"> </po-switch>
+      </div>
+    </div> -->
+
+    <h2 class="margin-top-50">Componentes de formulário</h2>
+    <div style="display: flex; flex-direction: row; gap: 20px">
+      <div style="width: 100%">
+        <!-- combo -->
+        <po-combo name="combo" p-label="PO Combo" [p-options]="[{ value: 'Option 1' }, { value: 'Option 2' }]">
+        </po-combo>
+
+        <!-- datepicker -->
+        <po-datepicker name="datepicker" p-label="PO Datepicker"> </po-datepicker>
+
+        <!-- input -->
+        <po-input name="input" p-label="PO Input" p-clean> </po-input>
+        <po-input name="input" p-label="PO Input icon" p-icon="po-icon-user"> </po-input>
+        <po-input name="input" p-label="PO Input disabled" p-disabled> </po-input>
+        <po-input name="input" p-label="PO Input readonly" p-readonly> </po-input>
+
+        <div class="margin-bottom-50">
+          <po-checkbox-group
+            name="checkboxGroup"
+            p-label="PO Checkbox Group"
+            [(ngModel)]="modelCheckbox"
+            [p-options]="[
+              { value: '1', label: 'Option 1' },
+              { value: '2', label: 'Option 2' }
+            ]"
+          >
+          </po-checkbox-group>
+        </div>
+        <!-- radio -->
+        <div class="margin-top-50 margin-bottom-50">
+          <po-radio-group
+            name="radioGroupBasic"
+            p-label="PO Radio Group"
+            [(ngModel)]="modelRadio"
+            [p-options]="[
+              { label: 'Option 1', value: '1' },
+              { label: 'Option 2', value: '2' }
+            ]"
+          >
+          </po-radio-group>
+        </div>
+        <!-- switch -->
+        <div class="margin-top-50 margin-bottom-50">
+          <po-switch name="switch" p-label="PO Switch"> </po-switch>
+          <po-switch name="switch2" p-label=" " [(ngModel)]="modelSwitch"> </po-switch>
+        </div>
+      </div>
+      <div style="width: 100%">
+        <!-- textArea -->
+        <po-textarea name="textarea" p-label="PO Textarea"> </po-textarea>
+        <po-textarea name="textarea" p-label="PO Textarea" p-disabled> </po-textarea>
+
+        <!-- ricktext -->
+        <po-rich-text p-label="PO rich-text"></po-rich-text>
+        <po-rich-text p-label="PO rich-text" p-readonly></po-rich-text>
+
+        <!-- multiselect -->
+        <po-multiselect
+          name="multiselect"
+          p-label="PO Multiselect"
+          [p-options]="optionsMultiselect"
+          [(ngModel)]="modelMulti"
+        >
+        </po-multiselect>
+
+        <!-- select -->
+        <po-select
+          name="select"
+          p-label="PO Select"
+          [p-options]="[
+            { label: 'Option 1', value: '1' },
+            { label: 'Option 2', value: '2' }
+          ]"
+        >
+        </po-select>
+
+        <po-lookup
+          name="lookup"
+          p-field-label="label"
+          p-field-value="value"
+          p-filter-service="https://po-sample-api.fly.dev/v1/heroes"
+          p-label="PO Lookup"
+        >
+        </po-lookup>
+      </div>
+    </div>
+
+    <!-- table -->
+    <div class="margin-top-100 margin-bottom-100">
+      <h2>Po-Table</h2>
+      <po-table
+        p-service-api="https://po-sample-api.fly.dev/v1/heroes"
+        p-selectable
+        [p-sort]="true"
+        [p-draggable]="true"
+      >
+      </po-table>
+    </div>
+
+    <div class="margin-top-100 margin-bottom-50">
+      <table id="customers">
+        <thead>
+          <tr>
+            <th>Tokens Utilizados</th>
+            <th>Valores</th>
+          </tr>
+        </thead>
+        <tbody>
+          <tr *ngFor="let token of tokenList; let i = index">
+            <td>{{ token }}</td>
+            <td>
+              <div style="display: flex">
+                <div
+                  *ngIf="isValidHexColor(tokenValores[i])"
+                  [style.background-color]="tokenValores[i]"
+                  class="color-box"
+                ></div>
+                <div>
+                  <p>{{ tokenValores[i] }}</p>
+                </div>
+              </div>
+            </td>
+          </tr>
+        </tbody>
+      </table>
+    </div>
+  </po-page-default>
+</div>
