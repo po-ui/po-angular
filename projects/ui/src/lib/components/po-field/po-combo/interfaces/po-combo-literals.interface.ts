@@ -8,4 +8,7 @@
 export interface PoComboLiterals {
   /** Texto exibido quando não houver itens na lista ou se, a pesquisa do filtro não retornar nenhum item. */
   noData?: string;
+
+  /** Texto exibido quando o combo estiver vazio. */
+  chooseOption?: string;
 }

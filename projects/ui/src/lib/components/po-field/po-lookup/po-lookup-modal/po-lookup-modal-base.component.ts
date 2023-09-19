@@ -1,27 +1,25 @@
-import { EventEmitter, Input, OnDestroy, OnInit, Output, ViewChild, Directive, ChangeDetectorRef } from '@angular/core';
+import { ChangeDetectorRef, Directive, EventEmitter, Input, OnDestroy, OnInit, Output, ViewChild } from '@angular/core';
 
 import { Observable, Subscription, throwError } from 'rxjs';
 import { catchError } from 'rxjs/operators';
 
-import { InputBoolean } from '../../../../decorators';
-
-import { capitalizeFirstLetter, isTypeof } from '../../../../utils/util';
-import { poLocaleDefault } from '../../../../services/po-language/po-language.constant';
 import { PoModalAction } from '../../../../components/po-modal';
 import { PoModalComponent } from '../../../../components/po-modal/po-modal.component';
-import { PoTableColumnSort } from '../../../po-table/interfaces/po-table-column-sort.interface';
-import { PoTableColumnSortType } from '../../../po-table';
-import { poTableLiteralsDefault } from '../../../po-table/po-table-base.component';
+import { poLocaleDefault } from '../../../../services/po-language/po-language.constant';
 import { PoLanguageService } from '../../../../services/po-language/po-language.service';
+import { capitalizeFirstLetter, convertToBoolean, isTypeof } from '../../../../utils/util';
+import { PoTableColumnSortType } from '../../../po-table';
+import { PoTableColumnSort } from '../../../po-table/interfaces/po-table-column-sort.interface';
+import { poTableLiteralsDefault } from '../../../po-table/po-table-base.component';
 
+import { PoLookupAdvancedFilter } from '../interfaces/po-lookup-advanced-filter.interface';
 import { PoLookupColumn } from '../interfaces/po-lookup-column.interface';
 import { PoLookupFilter } from '../interfaces/po-lookup-filter.interface';
 import { PoLookupFilteredItemsParams } from '../interfaces/po-lookup-filtered-items-params.interface';
 import { PoLookupLiterals } from '../interfaces/po-lookup-literals.interface';
 import { PoLookupResponseApi } from '../interfaces/po-lookup-response-api.interface';
-import { PoDisclaimer } from './../../../po-disclaimer/po-disclaimer.interface';
 import { PoDisclaimerGroup } from './../../../po-disclaimer-group/po-disclaimer-group.interface';
-import { PoLookupAdvancedFilter } from '../interfaces/po-lookup-advanced-filter.interface';
+import { PoDisclaimer } from './../../../po-disclaimer/po-disclaimer.interface';
 import { PoTableComponent } from './../../../po-table/po-table.component';
 
 export const poLookupLiteralsDefault = {
@@ -126,10 +124,10 @@ export abstract class PoLookupModalBaseComponent implements OnDestroy, OnInit {
   @Input('p-filter-params') filterParams: any;
 
   /** Se verdadeiro, ativa a funcionalidade de scroll infinito para a tabela exibida no retorno da consulta. */
-  @Input('p-infinite-scroll') @InputBoolean() infiniteScroll: boolean = false;
+  @Input({ alias: 'p-infinite-scroll', transform: convertToBoolean }) infiniteScroll: boolean = false;
 
   /** Se verdadeiro, ativa a funcionalidade de multipla seleção. */
-  @Input('p-multiple') @InputBoolean() multiple: boolean = false;
+  @Input({ alias: 'p-multiple', transform: convertToBoolean }) multiple: boolean = false;
 
   /** Evento utilizado ao selecionar um registro da tabela. */
   @Output('p-change-model') model: EventEmitter<any> = new EventEmitter<any>();

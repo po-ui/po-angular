@@ -1,4 +1,5 @@
 import { expectPropertiesValues } from '../../../util-test/util-expect.spec';
+import { convertToBoolean } from '../../../utils/util';
 import { PoPageSlideBaseComponent } from './po-page-slide-base.component';
 
 describe('PoPageSlideBaseComponent', () => {
@@ -23,23 +24,23 @@ describe('PoPageSlideBaseComponent', () => {
     expectPropertiesValues(component, 'size', invalidSizes, 'md');
   });
 
-  xit('should update property clickOut`', () => {
-    component.clickOut = undefined;
+  it('should update property clickOut`', () => {
+    component.clickOut = convertToBoolean(555);
     expect(component.clickOut).toBe(false);
 
-    component.clickOut = ('false' as unknown) as boolean;
+    component.clickOut = convertToBoolean('false');
     expect(component.clickOut).toBe(false);
 
-    component.clickOut = (0 as unknown) as boolean;
+    component.clickOut = convertToBoolean(0);
     expect(component.clickOut).toBe(false);
 
     component.clickOut = false;
     expect(component.clickOut).toBe(false);
 
-    component.clickOut = (1 as unknown) as boolean;
+    component.clickOut = convertToBoolean(1);
     expect(component.clickOut).toBe(true);
 
-    component.clickOut = ('true' as unknown) as boolean;
+    component.clickOut = convertToBoolean('true');
     expect(component.clickOut).toBe(true);
 
     component.clickOut = true;

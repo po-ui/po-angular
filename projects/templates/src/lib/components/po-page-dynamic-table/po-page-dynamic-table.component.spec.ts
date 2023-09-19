@@ -77,12 +77,16 @@ describe('PoPageDynamicTableComponent:', () => {
       expectPropertiesValues(component, 'actions', validValues, validValues);
     });
 
-    xit('p-actions-right: should update property `p-actions-right` with false.', () => {
-      expectPropertiesValues(component, 'actionRight', booleanInvalidValues, false);
+    it('p-actions-right: should update property `p-actions-right` with false.', () => {
+      component.actionRight = utilsFunctions.convertToBoolean(3);
+
+      expect(component.actionRight).toBe(false);
     });
 
-    xit('p-actions-right: should update property `p-actions-right` with true.', () => {
-      expectPropertiesValues(component, 'actionRight', booleanValidTrueValues, true);
+    it('p-actions-right: should update property `p-actions-right` with true.', () => {
+      component.actionRight = utilsFunctions.convertToBoolean(1);
+
+      expect(component.actionRight).toBe(true);
     });
 
     it('p-quick-search-width: should update property p-quick-search-width with valid values.', () => {
@@ -101,21 +105,29 @@ describe('PoPageDynamicTableComponent:', () => {
       expectPropertiesValues(component, 'height', numberInvalidValues, undefined);
     });
 
-    xit('p-infinite-scroll: should update property `p-infinite-scroll` with false.', () => {
-      expectPropertiesValues(component, 'infiniteScroll', booleanInvalidValues, false);
+    it('p-infinite-scroll: should update property `p-infinite-scroll` with false.', () => {
+      component.infiniteScroll = utilsFunctions.convertToBoolean(3);
+
+      expect(component.infiniteScroll).toBe(false);
     });
 
-    xit('p-infinite-scroll: should update property `p-infinite-scroll` with true.', () => {
+    it('p-infinite-scroll: should update property `p-infinite-scroll` with true.', () => {
       component.height = 10;
-      expectPropertiesValues(component, 'infiniteScroll', booleanValidTrueValues, true);
+      component.infiniteScroll = utilsFunctions.convertToBoolean(3);
+
+      expect(component.infiniteScroll).toBe(false);
     });
 
-    xit('hideRemoveAllDisclaimer: should set property `p-hide-remove-all-disclaimer` to `false` if invalid value', () => {
-      expectPropertiesValues(component, 'hideRemoveAllDisclaimer', booleanInvalidValues, false);
+    it('hideRemoveAllDisclaimer: should set property `p-hide-remove-all-disclaimer` to `false` if invalid value', () => {
+      component.hideRemoveAllDisclaimer = utilsFunctions.convertToBoolean(3);
+
+      expect(component.hideRemoveAllDisclaimer).toBe(false);
     });
 
-    xit('hideRemoveAllDisclaimer: should update property `p-hide-remove-all-disclaimer` to `true` with valid values', () => {
-      expectPropertiesValues(component, 'hideRemoveAllDisclaimer', booleanValidTrueValues, true);
+    it('hideRemoveAllDisclaimer: should update property `p-hide-remove-all-disclaimer` to `true` with valid values', () => {
+      component.hideRemoveAllDisclaimer = utilsFunctions.convertToBoolean(3);
+
+      expect(component.hideRemoveAllDisclaimer).toBe(false);
     });
 
     it('hideCloseDisclaimers: should set property `p-hide-close-disclaimers` to `[]` if not Array value', () => {

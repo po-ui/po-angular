@@ -1,9 +1,9 @@
+import { Directive, EventEmitter, Input, Output } from '@angular/core';
 import { AbstractControl, ControlValueAccessor, Validator } from '@angular/forms';
-import { EventEmitter, Input, Output, Directive } from '@angular/core';
 
+import { InputBoolean } from '../../../decorators';
 import { convertToBoolean } from '../../../utils/util';
 import { requiredFailed } from '../validators';
-import { InputBoolean } from '../../../decorators';
 import { PoRichTextService } from './po-rich-text.service';
 
 /**
@@ -28,7 +28,7 @@ export abstract class PoRichTextBaseComponent implements ControlValueAccessor, V
    *
    * @default `false`
    */
-  @Input('p-auto-focus') @InputBoolean() autoFocus: boolean = false;
+  @Input({ alias: 'p-auto-focus', transform: convertToBoolean }) autoFocus: boolean = false;
 
   /**
    * @optional
@@ -39,7 +39,7 @@ export abstract class PoRichTextBaseComponent implements ControlValueAccessor, V
    *
    * @default `false`
    */
-  @Input('p-disabled-text-align') @InputBoolean() disabledTextAlign: boolean = false;
+  @Input({ alias: 'p-disabled-text-align', transform: convertToBoolean }) disabledTextAlign: boolean = false;
 
   /**
    * @description

@@ -1,6 +1,6 @@
 import { EventEmitter, Input, Output, Directive } from '@angular/core';
 
-import { convertToBoolean } from '../../utils/util';
+import { convertToBoolean, convertToInt } from '../../utils/util';
 
 import { PoTreeViewItem } from './po-tree-view-item/po-tree-view-item.interface';
 
@@ -67,11 +67,14 @@ export class PoTreeViewBaseComponent {
 
   private _items: Array<PoTreeViewItem> = [];
   private _selectable: boolean = false;
+  private _maxLevel = poTreeViewMaxLevel;
 
   /**
    * Lista de itens do tipo `PoTreeViewItem` que será renderizada pelo componente.
    */
-  @Input('p-items') set items(value: Array<PoTreeViewItem>) {
+  @Input('p-items') inputedItems: Array<PoTreeViewItem>;
+
+  set items(value: Array<PoTreeViewItem>) {
     this._items = Array.isArray(value) ? this.getItemsByMaxLevel(value) : [];
   }
 
@@ -94,6 +97,25 @@ export class PoTreeViewBaseComponent {
 
   get selectable() {
     return this._selectable;
+  }
+
+  /**
+   * @optional
+   *
+   * @description
+   *
+   * Define o máximo de níveis para o tree-view.
+   *
+   * > O valor padrão é 4
+   *
+   * @default 4
+   */
+  @Input('p-max-level') set maxLevel(value: number) {
+    this._maxLevel = convertToInt(value, poTreeViewMaxLevel);
+  }
+
+  get maxLevel() {
+    return this._maxLevel;
   }
 
   protected emitExpanded(treeViewItem: PoTreeViewItem) {
@@ -189,7 +211,7 @@ export class PoTreeViewBaseComponent {
     items.forEach(item => {
       const { subItems, ...currentItem } = item;
 
-      if (level === poTreeViewMaxLevel) {
+      if (level === this.maxLevel) {
         return;
       }
 

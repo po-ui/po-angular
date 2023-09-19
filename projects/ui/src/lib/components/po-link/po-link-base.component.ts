@@ -1,7 +1,7 @@
 import { Input, Directive, Output, EventEmitter } from '@angular/core';
 
 import { InputBoolean } from '../../decorators';
-import { isExternalLink } from '../../utils/util';
+import { convertToBoolean, isExternalLink } from '../../utils/util';
 
 /**
  * @description
@@ -35,7 +35,7 @@ export class PoLinkBaseComponent {
   @Input('p-label') label: string;
 
   /** Indica se o link deverá ser aberto em uma nova aba. Sempre que utilizar essa propriedade, é importante informar isso ao usuário através da label. */
-  @Input('p-open-new-tab') @InputBoolean() openNewTab?: boolean = false;
+  @Input({ alias: 'p-open-new-tab', transform: convertToBoolean }) openNewTab: boolean = false;
 
   /** Url que será aberta ao clicar no link. */
   @Input('p-url') url: string;

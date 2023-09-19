@@ -6,7 +6,7 @@
   [p-required]="required"
   [p-show-required]="showRequired"
 >
-  <div class="po-field-container-content">
+  <div cdkOverlayOrigin #trigger="cdkOverlayOrigin" class="po-field-container-content">
     <div *ngIf="icon" class="po-field-icon-container-left">
       <po-icon class="po-field-icon po-icon-input" [class.po-field-icon-disabled]="disabled" [p-icon]="icon"></po-icon>
     </div>
@@ -49,75 +49,33 @@
     </div>
   </div>
 
-  <div #containerElement class="po-combo-container" [hidden]="!comboOpen && !isServerSearching">
-    <ng-container *ngIf="checkTemplate(); then visibleOptionsTemplate; else noDataTemplate"> </ng-container>
-    <div *ngIf="isServerSearching">
-      <ng-container *ngIf="infiniteLoading; then infiniteLoadingTemplate; else normalLoadingTemplate"></ng-container>
+  <ng-template cdkConnectedOverlay [cdkConnectedOverlayOrigin]="trigger" [cdkConnectedOverlayOpen]="true">
+    <div #containerElement class="po-combo-container" [hidden]="!comboOpen && !isServerSearching">
+      <po-listbox
+        #poListbox
+        #contentElement
+        p-type="option"
+        [p-items]="visibleOptions"
+        [p-field-value]="dynamicValue"
+        [p-field-label]="dynamicLabel"
+        [p-template]="comboOptionTemplate"
+        [p-search-value]="getInputValue()"
+        [p-infinite-loading]="infiniteLoading"
+        [p-infinite-scroll]="infiniteScroll"
+        [p-filtering]="isFiltering"
+        [p-cache]="cache"
+        (p-selectcombo-item)="onOptionClick($event, $event.event)"
+        [p-filter-mode]="filterMode"
+        [p-visible]="comboOpen"
+        [p-is-searching]="isServerSearching"
+        [p-should-mark-letter]="shouldMarkLetters"
+        [p-compare-cache]="compareObjects(cacheOptions, visibleOptions)"
+        [p-combo-service]="service"
+        [p-infinite-scroll-distance]="infiniteScrollDistance"
+        (p-update-infinite-scroll)="showMoreInfiniteScroll()"
+        (p-close)="onCloseCombo()"
+      ></po-listbox>
     </div>
-  </div>
-
+  </ng-template>
   <po-field-container-bottom [p-help]="help" [p-disabled]="disabled"></po-field-container-bottom>
 </po-field-container>
-
-<ng-template #normalLoadingTemplate>
-  <po-loading class="po-combo-container-loading"> </po-loading>
-</ng-template>
-
-<ng-template #infiniteLoadingTemplate>
-  <po-loading-overlay class="po-combo-container-loading"> </po-loading-overlay>
-</ng-template>
-
-<ng-template #visibleOptionsTemplate>
-  <ul #contentElement #poComboBody class="po-combo-container-content">
-    <li
-      *ngFor="let option of visibleOptions"
-      [class.po-combo-item-selected]="compareObjects(selectedView, option)"
-      (click)="option?.options ? undefined : onOptionClick(option, $event)"
-    >
-      <ng-container *ngIf="comboOptionTemplate; then optionTemplate; else defaultOptionTemplate"></ng-container>
-
-      <ng-template #defaultOptionTemplate>
-        <label *ngIf="option?.options; else optionLink" class="po-combo-item-title">{{
-          option[this.dynamicLabel]
-        }}</label>
-        <ng-template #optionLink>
-          <a class="po-combo-item">
-            <span style="pointer-events: none" [innerHTML]="getLabelFormatted(option?.[this.dynamicLabel])"></span>
-          </a>
-        </ng-template>
-      </ng-template>
-
-      <ng-template #optionTemplate>
-        <ng-container *ngIf="isOptionGroupList; then optionsGroupTemplate; else defaultOptionsTemplate"></ng-container>
-
-        <ng-template #optionsGroupTemplate>
-          <ng-template
-            [ngTemplateOutlet]="comboOptionTemplate?.templateRef"
-            [ngTemplateOutletContext]="{ $implicit: option, selected: compareObjects(selectedView, option) }"
-          >
-          </ng-template>
-        </ng-template>
-
-        <ng-template #defaultOptionsTemplate>
-          <a class="po-combo-item">
-            <ng-template
-              [ngTemplateOutlet]="comboOptionTemplate?.templateRef"
-              [ngTemplateOutletContext]="{ $implicit: option }"
-            >
-            </ng-template>
-          </a>
-        </ng-template>
-      </ng-template>
-    </li>
-  </ul>
-</ng-template>
-
-<ng-template #noDataTemplate>
-  <div class="po-combo-container-no-data">
-    <div class="po-combo-no-data po-text-center">
-      <span *ngIf="!isServerSearching">
-        {{ literals.noData }}
-      </span>
-    </div>
-  </div>
-</ng-template>

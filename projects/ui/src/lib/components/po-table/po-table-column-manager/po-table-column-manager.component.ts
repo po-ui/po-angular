@@ -6,20 +6,19 @@ import {
   OnChanges,
   OnDestroy,
   Output,
+  Renderer2,
   SimpleChange,
   SimpleChanges,
-  Renderer2,
   ViewChild
 } from '@angular/core';
 
-import { capitalizeFirstLetter, convertToInt } from '../../../utils/util';
-import { InputBoolean } from '../../../decorators';
-import { PoCheckboxGroupOption } from '../../po-field/po-checkbox-group/interfaces/po-checkbox-group-option.interface';
-import { PoPopoverComponent } from '../../po-popover/po-popover.component';
-import { PoLanguageService } from '../../../services/po-language/po-language.service';
 import { poLocaleDefault } from '../../../services/po-language/po-language.constant';
-import { PoTableColumn } from '../interfaces/po-table-column.interface';
+import { PoLanguageService } from '../../../services/po-language/po-language.service';
+import { capitalizeFirstLetter, convertToBoolean, convertToInt } from '../../../utils/util';
+import { PoCheckboxGroupOption } from '../../po-field/po-checkbox-group/interfaces/po-checkbox-group-option.interface';
 import { PoPageSlideComponent } from '../../po-page';
+import { PoPopoverComponent } from '../../po-popover/po-popover.component';
+import { PoTableColumn } from '../interfaces/po-table-column.interface';
 
 const PoTableColumnManagerMaxColumnsDefault = 99999;
 
@@ -68,7 +67,7 @@ export class PoTableColumnManagerComponent implements OnChanges, OnDestroy {
 
   @Output('p-initial-columns') initialColumns = new EventEmitter<Array<String>>();
 
-  @Input('p-hide-action-fixed-columns') @InputBoolean() hideActionFixedColumns?: boolean = false;
+  @Input({ alias: 'p-hide-action-fixed-columns', transform: convertToBoolean }) hideActionFixedColumns: boolean = false;
 
   literals;
   columnsOptions: Array<PoCheckboxGroupOption> = [];

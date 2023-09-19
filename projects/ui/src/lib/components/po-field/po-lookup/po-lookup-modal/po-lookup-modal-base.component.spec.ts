@@ -9,6 +9,7 @@ import { PoTableColumnSortType } from '../../../po-table/enums/po-table-column-s
 import { PoTableColumnSort } from '../../../po-table/interfaces/po-table-column-sort.interface';
 import { PoLookupResponseApi } from '../interfaces/po-lookup-response-api.interface';
 import { poLookupLiteralsDefault, PoLookupModalBaseComponent } from './po-lookup-modal-base.component';
+import { convertToBoolean } from 'projects/ui/src/lib/utils/util';
 
 @Directive()
 class PoLookupModalComponent extends PoLookupModalBaseComponent {
@@ -678,11 +679,16 @@ describe('PoLookupModalBaseComponent:', () => {
       expect(component['disclaimerLabel']).toBe('true');
     });
 
-    xit('p-infinite-scroll: should update property `p-infinite-scroll`', () => {
-      const booleanValidTrueValues = [true, 'true', 1, ''];
-      const booleanInvalidValues = [undefined, null, NaN, 2, 'string'];
-      expectPropertiesValues(component, 'infiniteScroll', booleanInvalidValues, false);
-      expectPropertiesValues(component, 'infiniteScroll', booleanValidTrueValues, true);
+    it('p-infinite-scroll: should update property `p-infinite-scroll` with valid value', () => {
+      component.infiniteScroll = convertToBoolean(1);
+
+      expect(component.infiniteScroll).toBe(true);
+    });
+
+    it('p-infinite-scroll: should update property `p-infinite-scroll` with invalid value', () => {
+      component.infiniteScroll = convertToBoolean(21211);
+
+      expect(component.infiniteScroll).toBe(false);
     });
 
     it('setDisclaimersItems: should set selecteds with component.selectedItems if component.selectedItems is array', () => {

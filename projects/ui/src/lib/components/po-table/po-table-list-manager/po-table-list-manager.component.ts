@@ -1,11 +1,11 @@
-import { Component, forwardRef, Output, EventEmitter, Input, ChangeDetectorRef } from '@angular/core';
+import { ChangeDetectorRef, Component, EventEmitter, Input, Output, forwardRef } from '@angular/core';
 import { NG_VALUE_ACCESSOR } from '@angular/forms';
 
-import { InputBoolean } from '../../../decorators';
-import { PoTableColumn } from '../interfaces/po-table-column.interface';
-import { PoLanguageService } from '../../../services/po-language/po-language.service';
 import { poLocaleDefault } from '../../../services/po-language/po-language.constant';
+import { PoLanguageService } from '../../../services/po-language/po-language.service';
+import { convertToBoolean } from '../../../utils/util';
 import { PoCheckboxGroupComponent } from '../../po-field/po-checkbox-group/po-checkbox-group.component';
+import { PoTableColumn } from '../interfaces/po-table-column.interface';
 
 export const poTableListManagerLiterals = {
   en: {
@@ -56,7 +56,7 @@ export class PoTableListManagerComponent extends PoCheckboxGroupComponent {
 
   @Input('p-columns-manager') columnsManager: Array<PoTableColumn>;
 
-  @Input('p-hide-action-fixed-columns') @InputBoolean() hideActionFixedColumns?: boolean = false;
+  @Input({ alias: 'p-hide-action-fixed-columns', transform: convertToBoolean }) hideActionFixedColumns: boolean = false;
 
   literals;
 

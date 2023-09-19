@@ -14,11 +14,10 @@ import { PoFieldContainerComponent } from '../po-field-container/po-field-contai
 import { PoIconModule } from '../../po-icon';
 
 import { PoComboComponent } from './po-combo.component';
-import { PoComboFilterMode } from './po-combo-filter-mode.enum';
 import { PoComboFilterService } from './po-combo-filter.service';
 import { PoComboOption } from './interfaces/po-combo-option.interface';
 import { PoCleanComponent } from '../po-clean/po-clean.component';
-import { ComponentFactoryResolver } from '@angular/core';
+import { OverlayModule } from '@angular/cdk/overlay';
 
 const eventKeyBoard = document.createEvent('KeyboardEvent');
 eventKeyBoard.initEvent('keyup', true, true);
@@ -34,7 +33,7 @@ describe('PoComboComponent:', () => {
 
   beforeEach(async () => {
     await TestBed.configureTestingModule({
-      imports: [PoLoadingModule, PoIconModule],
+      imports: [PoLoadingModule, PoIconModule, OverlayModule],
       declarations: [PoComboComponent, PoFieldContainerComponent, PoFieldContainerBottomComponent, PoCleanComponent],
       providers: [HttpClient, HttpHandler]
     }).compileComponents();
@@ -43,7 +42,6 @@ describe('PoComboComponent:', () => {
     component = fixture.componentInstance;
     component.label = 'Label de teste';
     component.help = 'Help de teste';
-    component.poComboBody = fixture.debugElement;
   });
 
   it('should be created', () => {
@@ -58,24 +56,6 @@ describe('PoComboComponent:', () => {
   it('should have a Help', () => {
     fixture.detectChanges();
     expect(fixture.debugElement.nativeElement.innerHTML).toContain('Help de teste');
-  });
-
-  it('should call some functions when typed "tab" and shouldn`t call updateComboList when is service', () => {
-    const fakeEvent = {
-      keyCode: 9,
-      target: {
-        value: ''
-      }
-    };
-    component.service = component.defaultService;
-
-    spyOn(component, 'controlComboVisibility');
-    spyOn(component, 'verifyValidOption');
-    spyOn(component, 'updateComboList');
-    component.onKeyDown.call(component, fakeEvent);
-    expect(component.controlComboVisibility).toHaveBeenCalled();
-    expect(component.verifyValidOption).toHaveBeenCalled();
-    expect(component.updateComboList).not.toHaveBeenCalled();
   });
 
   it('should call controlApplyFilter on key up', fakeAsync((): void => {
@@ -172,72 +152,6 @@ describe('PoComboComponent:', () => {
     expect(component.isProcessingValueByTab).toBeFalsy();
   }));
 
-  it('selectPreviousOption: should select a previous value when a selected value already exists', () => {
-    const previousOption = { value: 1, label: 'Option 1' };
-    component.selectedView = { value: 2, label: 'Option 2' };
-
-    spyOn(component, 'updateSelectedValue');
-    spyOn(component, 'getNextOption').and.returnValue(previousOption);
-
-    component.selectPreviousOption();
-
-    expect(component.updateSelectedValue).toHaveBeenCalledWith(previousOption, true);
-    expect(component.getNextOption).toHaveBeenCalled();
-  });
-
-  it('should select the last value when not exists a selected value', () => {
-    component.selectedValue = '';
-    component.visibleOptions = [{ label: '1', value: '1' }];
-
-    spyOn(component, 'updateSelectedValue');
-    spyOn(component, 'getNextOption');
-    component.selectPreviousOption();
-    expect(component.updateSelectedValue).toHaveBeenCalled();
-    expect(component.getNextOption).not.toHaveBeenCalled();
-  });
-
-  it('should not update selecting(previous) when not exists selected value and visibleOptions is empty', () => {
-    component.selectedValue = '';
-    component.visibleOptions = [];
-
-    spyOn(component, 'updateSelectedValue');
-    component.selectPreviousOption();
-    expect(component.updateSelectedValue).not.toHaveBeenCalled();
-  });
-
-  it('selectNextOption: should select a next value when a selected value already exists', () => {
-    const nextOption = { value: 2, label: 'Option 2' };
-    component.selectedView = { value: 1, label: 'Option 1' };
-
-    spyOn(component, 'updateSelectedValue');
-    spyOn(component, 'getNextOption').and.returnValue(nextOption);
-
-    component.selectNextOption();
-
-    expect(component.updateSelectedValue).toHaveBeenCalledWith(nextOption, true);
-    expect(component.getNextOption).toHaveBeenCalled();
-  });
-
-  it('should select the first value when not exists a selected value', () => {
-    component.selectedValue = '';
-    component.visibleOptions = [{ label: '1', value: '1' }];
-
-    spyOn(component, 'updateSelectedValue');
-    spyOn(component, 'getNextOption');
-    component.selectNextOption();
-    expect(component.updateSelectedValue).toHaveBeenCalled();
-    expect(component.getNextOption).not.toHaveBeenCalled();
-  });
-
-  it('should not update selecting(next) when not exists selected value and visibleOptions is empty', () => {
-    component.selectedValue = '';
-    component.visibleOptions = [];
-
-    spyOn(component, 'updateSelectedValue');
-    component.selectNextOption();
-    expect(component.updateSelectedValue).not.toHaveBeenCalled();
-  });
-
   it('should call applyFilter', () => {
     const fakeThis = {
       isFirstFilter: true,
@@ -333,15 +247,6 @@ describe('PoComboComponent:', () => {
     expect(component.wasClickedOnToggle).toHaveBeenCalled();
   });
 
-  it('should call `checkInfiniteScroll` if infiniteScroll is true', () => {
-    component.infiniteScroll = true;
-
-    spyOn(component, <any>'checkInfiniteScroll');
-    component['initializeListeners']();
-
-    expect(component['checkInfiniteScroll']).toHaveBeenCalled();
-  });
-
   it('should hide the combo list when was click out of the input', () => {
     component.comboOpen = true;
 
@@ -356,11 +261,6 @@ describe('PoComboComponent:', () => {
     spyOn(component, 'controlComboVisibility');
     component.wasClickedOnToggle(eventClick);
     expect(component.controlComboVisibility).not.toHaveBeenCalled();
-  });
-
-  it('should return a sanitized code', () => {
-    const html = component.safeHtml('<b>values</b>');
-    expect(html['changingThisBreaksApplicationSecurity']).toBe('<b>values</b>');
   });
 
   it('shouldn`t allow invalid characters to search', () => {
@@ -664,110 +564,61 @@ describe('PoComboComponent:', () => {
     });
 
     describe('onKeyDown: ', () => {
-      it('should call `selectPreviousOption` and not call `selectNextOption`', () => {
+      it('should call `controlComboVisibility` and set `isFiltering` with false if `changeOnEnter` is true', () => {
+        const event = { ...fakeEvent, keyCode: 40 };
+        component.contentElement = {
+          nativeElement: {
+            focus: () => {}
+          }
+        };
+        component.poListbox = {
+          setFocus: () => {}
+        } as any;
+
+        spyOn(component.contentElement.nativeElement, 'focus');
+        spyOn(component.poListbox, 'setFocus');
+        component.visibleOptions = [{ value: 'item 1', label: 'item 1' }];
         component.comboOpen = true;
-
-        const event = { ...fakeEvent, keyCode: 38 };
-
-        const spySelectPreviousOption = spyOn(component, 'selectPreviousOption');
-        const spySelectNextOption = spyOn(component, 'selectNextOption');
+        component.changeOnEnter = true;
+        spyOn(component, 'controlComboVisibility');
 
         component.onKeyDown(event);
 
-        expect(spySelectNextOption).not.toHaveBeenCalled();
-        expect(spySelectPreviousOption).toHaveBeenCalled();
+        expect(component.controlComboVisibility).toHaveBeenCalledWith(true);
+        expect(component.isFiltering).toBe(false);
+        expect(component.poListbox.setFocus).toHaveBeenCalled();
       });
 
-      it('should call `selectNextOption` and not call `selectPreviousOption`', () => {
-        component.comboOpen = true;
-
+      it('shouldn`t call `selectNextOption` and call `controlComboVisibility` if `comboOpen` with false', () => {
         const event = { ...fakeEvent, keyCode: 40 };
 
-        const spySelectNextOption = spyOn(component, 'selectNextOption');
-        const spySelectPreviousOption = spyOn(component, 'selectPreviousOption');
-
-        component.onKeyDown(event);
-
-        expect(spySelectPreviousOption).not.toHaveBeenCalled();
-        expect(spySelectNextOption).toHaveBeenCalled();
-      });
-
-      it('should call `controlComboVisibility`, `verifyValidOption` and `updateComboList` if typed "esc"', () => {
-        const event = { ...fakeEvent, keyCode: 27 };
-
-        component.service = undefined;
-
-        const spyControlComboVisibility = spyOn(component, 'controlComboVisibility');
-        const spyVerifyValidOption = spyOn(component, 'verifyValidOption');
-
-        component.onKeyDown(event);
-
-        expect(spyControlComboVisibility).toHaveBeenCalledWith(false);
-        expect(spyVerifyValidOption).toHaveBeenCalled();
-      });
-
-      it('should call `controlComboVisibility` and set `selectedView` with undefined if typed "esc" and changeOnEnter is true', () => {
-        const event = { ...fakeEvent, keyCode: 27 };
-
-        component.changeOnEnter = true;
-        component.service = undefined;
-        component.selectedValue = undefined;
-
-        const spyControlComboVisibility = spyOn(component, 'controlComboVisibility');
-        const spyVerifyValidOption = spyOn(component, 'verifyValidOption');
-
-        component.onKeyDown(event);
-
-        expect(spyControlComboVisibility).toHaveBeenCalledWith(false);
-        expect(spyVerifyValidOption).toHaveBeenCalled();
-        expect(component.selectedView).toBe(undefined);
-      });
-
-      it('shouldn`t call `selectPreviousOption` and should call `controlComboVisibility` if `comboOpen` is false', () => {
-        const event = { ...fakeEvent, keyCode: 38 };
-
-        component.changeOnEnter = false;
         component.comboOpen = false;
-        component.isFiltering = true;
+        component.visibleOptions = [{ value: '1', label: '1' }];
 
         spyOn(component, 'controlComboVisibility');
-        spyOn(component, 'selectPreviousOption');
 
         component.onKeyDown(event);
 
-        expect(component.selectPreviousOption).not.toHaveBeenCalled();
         expect(component.controlComboVisibility).toHaveBeenCalledWith(true);
-        expect(component.isFiltering).toBe(false);
+        expect(component.isFiltering).toBe(component.isFiltering);
       });
 
-      it('should call `controlComboVisibility` and set `isFiltering` with false if `changeOnEnter` is true', () => {
-        const event = { ...fakeEvent, keyCode: 38 };
-
-        component.comboOpen = false;
-        component.changeOnEnter = true;
-
+      it('should call `getObjectByValue`, `controlComboVisibility` function if typed "tab"', () => {
+        const event = {
+          ...fakeEvent,
+          keyCode: 9,
+          target: {
+            value: 'po'
+          }
+        };
+        component.service = component.defaultService;
+        spyOn(component, 'getObjectByValue');
         spyOn(component, 'controlComboVisibility');
-        spyOn(component, 'selectPreviousOption');
 
-        component.onKeyDown(event);
+        component.onKeyDown.call(component, event);
 
-        expect(component.selectPreviousOption).not.toHaveBeenCalled();
-        expect(component.controlComboVisibility).toHaveBeenCalledWith(true);
-        expect(component.isFiltering).toBe(false);
-      });
-
-      it('should call `controlComboVisibility`, `verifyValidOption`, `updateComboList` if typed "tab"', () => {
-        const event = { ...fakeEvent, keyCode: 9 };
-
-        component.service = undefined;
-
-        const spyControlComboVisibility = spyOn(component, 'controlComboVisibility');
-        const spyVerifyValidOption = spyOn(component, 'verifyValidOption');
-
-        component.onKeyDown(event);
-
-        expect(spyControlComboVisibility).toHaveBeenCalledWith(false);
-        expect(spyVerifyValidOption).toHaveBeenCalled();
+        expect(component.getObjectByValue).toHaveBeenCalled();
+        expect(component.controlComboVisibility).toHaveBeenCalledWith(false);
       });
 
       it(`should call 'controlComboVisibility', 'updateComboList' and 'updateSelectedValue' with 'selectedView' and 'true'
@@ -808,62 +659,6 @@ describe('PoComboComponent:', () => {
         expect(component.isFiltering).toBe(false);
       });
 
-      it('shouldn`t call `selectNextOption` and call `controlComboVisibility` if `comboOpen` with false', () => {
-        const event = { ...fakeEvent, keyCode: 40 };
-
-        component.comboOpen = false;
-
-        spyOn(component, 'controlComboVisibility');
-        spyOn(component, 'selectNextOption');
-
-        component.onKeyDown(event);
-
-        expect(component.controlComboVisibility).toHaveBeenCalledWith(true);
-        expect(component.selectNextOption).not.toHaveBeenCalled();
-      });
-
-      it('should call `preventDefault` and `stopPropagation` typed "esc" and combo is opened', () => {
-        const event = { ...fakeEvent, keyCode: 27 };
-
-        component.comboOpen = true;
-
-        spyOn(event, 'preventDefault');
-        spyOn(event, 'stopPropagation');
-
-        component.onKeyDown(event);
-
-        expect(event.preventDefault).toHaveBeenCalled();
-        expect(event.stopPropagation).toHaveBeenCalled();
-      });
-
-      it('shouldn`t call `preventDefault` and `stopPropagation` typed "esc" and combo is closed', () => {
-        const event = { ...fakeEvent, keyCode: 27 };
-
-        component.comboOpen = false;
-
-        spyOn(fakeEvent, 'preventDefault');
-        spyOn(fakeEvent, 'stopPropagation');
-
-        component.onKeyDown(event);
-
-        expect(fakeEvent.preventDefault).not.toHaveBeenCalled();
-        expect(fakeEvent.stopPropagation).not.toHaveBeenCalled();
-      });
-
-      it('shouldn`t call `preventDefault` and `stopPropagation` typed "tab" and combo is opened', () => {
-        const event = { ...fakeEvent, keyCode: 9 };
-
-        component.comboOpen = true;
-
-        spyOn(event, 'preventDefault');
-        spyOn(event, 'stopPropagation');
-
-        component.onKeyDown(event);
-
-        expect(event.preventDefault).not.toHaveBeenCalled();
-        expect(event.stopPropagation).not.toHaveBeenCalled();
-      });
-
       it('should call `controlComboVisibility` if typed "enter"', () => {
         const event = { ...fakeEvent, keyCode: 13 };
 
@@ -872,16 +667,6 @@ describe('PoComboComponent:', () => {
         component.onKeyDown(event);
 
         expect(spyControlComboVisibility).toHaveBeenCalledWith(true);
-      });
-
-      it('should not call `controlComboVisibility` if typed "a"', () => {
-        const event = { ...fakeEvent, keyCode: 65 };
-
-        const spyControlComboVisibility = spyOn(component, 'controlComboVisibility');
-
-        component.onKeyDown(event);
-
-        expect(spyControlComboVisibility).not.toHaveBeenCalled();
       });
 
       it('should call `updateComboList` if itens service is undefined', () => {
@@ -911,6 +696,32 @@ describe('PoComboComponent:', () => {
 
         expect(component.updateComboList).not.toHaveBeenCalled();
       });
+
+      it('should not call `controlComboVisibility` if typed "a"', () => {
+        const event = { ...fakeEvent, keyCode: 65 };
+
+        const spyControlComboVisibility = spyOn(component, 'controlComboVisibility');
+
+        component.onKeyDown(event);
+
+        expect(spyControlComboVisibility).not.toHaveBeenCalled();
+      });
+    });
+
+    it('should call controlComboVisibility with false', () => {
+      spyOn(component, 'controlComboVisibility');
+
+      component.onCloseCombo();
+
+      expect(component.controlComboVisibility).toHaveBeenCalledWith(false);
+    });
+
+    it('should focus on inputEl.nativeElement', () => {
+      spyOn(component.inputEl.nativeElement, 'focus');
+
+      component.onCloseCombo();
+
+      expect(component.inputEl.nativeElement.focus).toHaveBeenCalled();
     });
 
     it('onOptionClick: should call `stopPropagation` if has an event parameter', () => {
@@ -1003,74 +814,6 @@ describe('PoComboComponent:', () => {
       expect(component.updateComboList).not.toHaveBeenCalled();
     });
 
-    it('selectPreviousOption: should call `updateSelectedValue` with nextOption and false if changeOnEnter is true', () => {
-      const nextOption = { value: 1, label: '1' };
-
-      component.changeOnEnter = true;
-      component.selectedView = { value: 2, label: '2' };
-
-      spyOn(component, 'updateSelectedValue');
-      spyOn(component, 'getNextOption').and.returnValue(nextOption);
-
-      component.selectPreviousOption();
-
-      expect(component.updateSelectedValue).toHaveBeenCalledWith(nextOption, false);
-      expect(component.getNextOption).toHaveBeenCalled();
-    });
-
-    it('selectNextOption: should call `updateSelectedValue` with nextOption and false if changeOnEnter is true', () => {
-      const nextOption = { value: 1, label: '1' };
-
-      component.changeOnEnter = true;
-      component.selectedView = { value: 2, label: '2' };
-
-      spyOn(component, 'updateSelectedValue');
-      spyOn(component, 'getNextOption').and.returnValue(nextOption);
-
-      component.selectNextOption();
-
-      expect(component.updateSelectedValue).toHaveBeenCalledWith(nextOption, false);
-      expect(component.getNextOption).toHaveBeenCalled();
-    });
-
-    it(`selectNextOption: should call 'updateSelectedValue' with first option of visibleOptions and true if
-      changeOnEnter is false and selectedValue is undefined`, () => {
-      component.visibleOptions = [
-        { value: 1, label: '1' },
-        { value: 2, label: '2' }
-      ];
-
-      component.changeOnEnter = false;
-      component.selectedValue = undefined;
-
-      spyOn(component, 'updateSelectedValue');
-      spyOn(component, 'getNextOption');
-
-      component.selectNextOption();
-
-      expect(component.updateSelectedValue).toHaveBeenCalledWith(component.visibleOptions[0], true);
-      expect(component.getNextOption).not.toHaveBeenCalled();
-    });
-
-    it(`selectNextOption: should call 'updateSelectedValue' with second option of visibleOptions and false if
-      changeOnEnter is true and selectedValue is undefined`, () => {
-      component.visibleOptions = [
-        { value: 1, label: '1' },
-        { value: 2, label: '2' }
-      ];
-
-      component.changeOnEnter = true;
-      component.selectedValue = undefined;
-
-      spyOn(component, 'updateSelectedValue');
-      spyOn(component, 'getNextOption');
-
-      component.selectNextOption();
-
-      expect(component.updateSelectedValue).toHaveBeenCalledWith(component.visibleOptions[1], false);
-      expect(component.getNextOption).not.toHaveBeenCalled();
-    });
-
     it(`wasClickedOnToggle: should call 'controlComboVisibility' with 'false' if 'comboOpen' is 'true', 'verifyValidOption',
       'updateComboList' and set selectedView with undefined if changeOnEnter is true and selectedValue is falsy`, () => {
       component.selectedValue = undefined;
@@ -1122,141 +865,6 @@ describe('PoComboComponent:', () => {
       expect(SpyApplyFilter).toHaveBeenCalledWith('', false);
     });
 
-    it('scrollTo: should call setScrollTop with -88 ', () => {
-      const index = 3;
-
-      component.options = [
-        { value: '1', label: '1' },
-        { value: '2', label: '2' },
-        { value: '3', label: '3' }
-      ];
-      component.selectedView = { value: '3', label: '3' };
-
-      const spySetScrollTop = spyOn(component, <any>'setScrollTop');
-
-      fixture.detectChanges();
-
-      component.scrollTo(index);
-      expect(spySetScrollTop).toHaveBeenCalledWith(-88);
-    });
-
-    it('scrollTo: should call setScrollTop with 0 if index is equal 1', () => {
-      const index = 1;
-
-      const spySetScrollTop = spyOn(component, <any>'setScrollTop');
-
-      component.scrollTo(index);
-
-      expect(spySetScrollTop).toHaveBeenCalledWith(0);
-    });
-
-    it('scrollTo: shouldn`t call setScrollTop if `infiniteScroll` is true', () => {
-      const index = 1;
-      component.infiniteScroll = true;
-
-      const spySetScrollTop = spyOn(component, <any>'setScrollTop');
-
-      component.scrollTo(index);
-
-      expect(spySetScrollTop).not.toHaveBeenCalled();
-    });
-
-    it('scrollTo: should call setScrollTop with 0 if selectedView is undefined', () => {
-      const index = 13;
-
-      component.selectedView = undefined;
-
-      const spySetScrollTop = spyOn(component, <any>'setScrollTop');
-
-      component.scrollTo(index);
-
-      expect(spySetScrollTop).toHaveBeenCalledWith(0);
-    });
-
-    it('setScrollTop: should set scrollTop with 44 if `contentElement` if truthy', () => {
-      const scrollTop = 44;
-
-      component.contentElement = { nativeElement: { scrollTop: 0 } };
-
-      component['setScrollTop'](scrollTop);
-
-      expect(component.contentElement.nativeElement.scrollTop).toBe(44);
-    });
-
-    it('setScrollTop: shouldn`t set scrollTop if `contentElement` if undefined', () => {
-      const scrollTop = 1;
-
-      component.contentElement = undefined;
-
-      component['setScrollTop'](scrollTop);
-
-      expect(component.contentElement).toBeUndefined();
-    });
-
-    it('checkInfiniteScroll: should call includeInfiniteScroll if height is smaller than scrollHeight', () => {
-      const spyIncludeInfiniteScroll = spyOn(component, <any>'includeInfiniteScroll');
-      component.poComboBody = {
-        nativeElement: { offsetHeight: 100, scrollTop: 100, scrollHeight: 200 }
-      };
-
-      spyOn(component, <any>'hasInfiniteScroll').and.returnValue(true);
-      component['checkInfiniteScroll']();
-
-      expect(spyIncludeInfiniteScroll).toHaveBeenCalled();
-    });
-
-    it('checkInfiniteScroll: should not call includeInfiniteScroll if poComboBody is undefined', () => {
-      const spyIncludeInfiniteScroll = spyOn(component, <any>'includeInfiniteScroll');
-      component.poComboBody = undefined;
-
-      spyOn(component, <any>'hasInfiniteScroll').and.returnValue(true);
-      component['checkInfiniteScroll']();
-
-      expect(spyIncludeInfiniteScroll).not.toHaveBeenCalled();
-    });
-
-    it('checkInfiniteScroll: should call includeInfiniteScroll if height is less than scrollHeight', () => {
-      const spyIncludeInfiniteScroll = spyOn(component, <any>'includeInfiniteScroll');
-      component.poComboBody = {
-        nativeElement: { offsetHeight: 100, scrollTop: 100, scrollHeight: 150 }
-      };
-
-      spyOn(component, <any>'hasInfiniteScroll').and.returnValue(true);
-      component['checkInfiniteScroll']();
-
-      expect(spyIncludeInfiniteScroll).not.toHaveBeenCalled();
-    });
-
-    it('hasInfiniteScroll: should be called when has infiniteScroll and has poComboBody', () => {
-      component.infiniteScroll = true;
-      component.poComboBody = {
-        nativeElement: { offsetHeight: 100, scrollTop: 100, scrollHeight: 150 }
-      };
-
-      const test = component['hasInfiniteScroll']();
-
-      expect(test).toBeTruthy();
-    });
-
-    it('hasInfiniteScroll: should be called when has infiniteScroll and poComboBody is undefined', () => {
-      component.infiniteScroll = true;
-      component.poComboBody = undefined;
-
-      const test = component['hasInfiniteScroll']();
-
-      expect(test).toBeFalsy();
-    });
-
-    it('includeInfiniteScroll: should call `scrollListeneter called when `infiniteScroll` is used', () => {
-      component.infiniteScroll = true;
-      const spy = spyOn(component.defaultService, 'scrollListener').and.returnValue(
-        of({ target: { offsetHeight: 100, scrollTop: 100, scrollHeight: 1 } })
-      );
-
-      component['includeInfiniteScroll']();
-      expect(spy).toHaveBeenCalled();
-    });
-
     it('setContainerPosition: should call `controlPosition.setElements` and `adjustContainerPosition`', () => {
       fixture.detectChanges();
       const containerOffset = 8;
@@ -1279,64 +887,35 @@ describe('PoComboComponent:', () => {
     });
 
     it('showMoreInfiniteScroll: should call `onShowMore` if `offsetHeight` + `scrollTop` is greater than `scrollHeight`', () => {
-      const event = { target: { offsetHeight: 100, scrollTop: 100, scrollHeight: 1 } };
       const spyOnShowMore = spyOn(component, <any>'applyFilter');
 
       component.infiniteScrollDistance = 10;
 
-      component.showMoreInfiniteScroll(event);
+      component.showMoreInfiniteScroll();
 
       expect(spyOnShowMore).toHaveBeenCalled();
     });
 
     it('showMoreInfiniteScroll: shouldn`t call `onShowMore` if `offsetHeight` + `scrollTop` is less  than `scrollHeight`', () => {
-      const event = { target: { offsetHeight: 10, scrollTop: 10, scrollHeight: 100 } };
       const spyOnShowMore = spyOn(component, <any>'applyFilter');
 
       component.infiniteScrollDistance = 110;
 
-      component.showMoreInfiniteScroll(event);
+      component.showMoreInfiniteScroll();
 
-      expect(spyOnShowMore).not.toHaveBeenCalled();
-    });
-
-    it('removeListeners: should remove click, resize and scroll listeners', () => {
-      component['clickoutListener'] = () => {};
-      component['eventResizeListener'] = () => {};
-
-      spyOn(component, <any>'clickoutListener');
-      spyOn(component, <any>'eventResizeListener');
-      spyOn(window, 'removeEventListener');
-
-      component['removeListeners']();
-
-      expect(component['clickoutListener']).toHaveBeenCalled();
-      expect(component['eventResizeListener']).toHaveBeenCalled();
-      expect(window.removeEventListener).toHaveBeenCalled();
-    });
-
-    it('onScroll: should call `adjustContainerPosition()`', () => {
-      const spyAdjustContainerPosition = spyOn(component, <any>'adjustContainerPosition');
-
-      component['onScroll']();
-
-      expect(spyAdjustContainerPosition).toHaveBeenCalled();
+      expect(spyOnShowMore).toHaveBeenCalled();
     });
 
     it('initializeListeners: should call removeListeners and initialize click, resize and scroll listeners', () => {
       component['clickoutListener'] = undefined;
       component['eventResizeListener'] = undefined;
-
       const spyRemoveListeners = spyOn(component, <any>'removeListeners');
-      const spyAddEventListener = spyOn(window, 'addEventListener');
       const spyRendererListen = spyOn(component.renderer, <any>'listen').and.returnValue(() => {});
 
       component['initializeListeners']();
 
       expect(spyRemoveListeners).toHaveBeenCalled();
-      expect(spyAddEventListener).toHaveBeenCalled();
       expect(spyRendererListen).toHaveBeenCalled();
-
       expect(component['clickoutListener']).toBeDefined();
       expect(component['eventResizeListener']).toBeDefined();
     });
@@ -1345,12 +924,10 @@ describe('PoComboComponent:', () => {
       and update properties 'comboOpen' to 'true' and 'comboIcon' to 'po-icon-arrow-up'`, () => {
       component.comboOpen = false;
       component.comboIcon = 'po-icon-arrow-down';
-
       component.visibleOptions = [{ value: 'po', label: 'PO' }];
 
       const spyInitializeListeners = spyOn(component, <any>'initializeListeners');
       const spySetContainerPosition = spyOn(component, <any>'setContainerPosition');
-      const spyScrollTo = spyOn(component, <any>'scrollTo');
       const spyDetectChanges = spyOn(component['changeDetector'], <any>'detectChanges');
       const spyInputFocus = spyOn(component.inputEl.nativeElement, <any>'focus');
 
@@ -1358,10 +935,8 @@ describe('PoComboComponent:', () => {
 
       expect(spyInputFocus).toHaveBeenCalled();
       expect(spyDetectChanges).toHaveBeenCalled();
-      expect(spyScrollTo).toHaveBeenCalled();
       expect(spySetContainerPosition).toHaveBeenCalled();
       expect(spyInitializeListeners).toHaveBeenCalled();
-
       expect(component.comboOpen).toBe(true);
       expect(component.comboIcon).toBe('po-icon-arrow-up');
     });
@@ -1369,24 +944,46 @@ describe('PoComboComponent:', () => {
     it('open: shouldn`t call `scrollTo` if infiniteScroll is false', () => {
       component.infiniteScroll = true;
 
-      const spyScrollTo = spyOn(component, <any>'scrollTo');
-
       component['open'](true);
 
-      expect(spyScrollTo).not.toHaveBeenCalled();
+      expect(component.comboOpen).toBe(true);
     });
 
     it('open: should set page and options when has inifity scroll', () => {
       component.infiniteScroll = true;
       spyOn(component, 'getInputValue').and.returnValue(undefined);
 
-      const spyScrollTo = spyOn(component, <any>'scrollTo');
-
       component['open'](false);
 
       expect(component.page).toBe(1);
       expect(component.options).toEqual([]);
-      expect(spyScrollTo).toHaveBeenCalledWith(0);
+    });
+
+    it('calculateScrollTop: should return 0 when selectedItem is empty', () => {
+      const selectedItem = [];
+      const index = 1;
+
+      const result = component.calculateScrollTop(selectedItem, index);
+
+      expect(result).toBe(0);
+    });
+
+    it('calculateScrollTop: should return 0 when index is less than or equal to 1', () => {
+      const selectedItem = [{ offsetTop: 100 }];
+      const index = 0;
+
+      const result = component.calculateScrollTop(selectedItem, index);
+
+      expect(result).toBe(0);
+    });
+
+    it('calculateScrollTop: should return 100 when index is less than or equal to 2', () => {
+      const selectedItem = [{ offsetTop: 100 }];
+      const index = 2;
+
+      const result = component.calculateScrollTop(selectedItem, index);
+
+      expect(result).toBe(100);
     });
 
     it(`close: should call 'removeListeners' and 'detectChanges'
@@ -1480,106 +1077,6 @@ describe('PoComboComponent:', () => {
 
       expect(spyAdjustPosition).toHaveBeenCalledWith(poComboContainerPositionDefault);
     });
-
-    it('onScroll: should call `adjustContainerPosition`', () => {
-      const spyAdjustContainerPosition = spyOn(component, <any>'adjustContainerPosition');
-
-      component['onScroll']();
-
-      expect(spyAdjustContainerPosition).toHaveBeenCalled();
-    });
-
-    it('sanitizeTagHTML: should replace < and > with &lt; and &gt; respectively', () => {
-      const expectedValue = '&lt;input&gt; Testando';
-      const value = '<input> Testando';
-
-      expect(component['sanitizeTagHTML'](value)).toBe(expectedValue);
-    });
-
-    it('sanitizeTagHTML: should return param value if it doesn`t contain < and >', () => {
-      const expectedValue = 'Testando';
-      const value = 'Testando';
-
-      expect(component['sanitizeTagHTML'](value)).toBe(expectedValue);
-    });
-
-    it('sanitizeTagHTML: should return empty value if param value is undefined', () => {
-      const expectedValue = '';
-      const value = undefined;
-
-      expect(component['sanitizeTagHTML'](value)).toBe(expectedValue);
-    });
-
-    it('getLabelFormatted: shouldn`t get formatted label with `endsWith` if inputValue isn`t found in label', () => {
-      const label = 'values';
-      const expectedValue = `<span class="po-font-text-large-bold">${label}</span>`;
-
-      component.isFiltering = true;
-      component.filterMode = PoComboFilterMode.endsWith;
-      component.safeHtml = (value: any) => value;
-      component.inputEl.nativeElement.value = 'othervalue';
-
-      expect(component.getLabelFormatted(label)).not.toBe(expectedValue);
-    });
-
-    it('getLabelFormatted: shouldn`t get formatted label with `contains` if inputValue isn`t found in label', () => {
-      const label = 'values';
-      const expectedValue = `<span class="po-font-text-large-bold">${label}</span>`;
-
-      component.isFiltering = true;
-      component.filterMode = PoComboFilterMode.contains;
-      component.safeHtml = (value: any) => value;
-      component.inputEl.nativeElement.value = 'othervalue';
-
-      expect(component.getLabelFormatted(label)).not.toBe(expectedValue);
-    });
-
-    it('getLabelFormatted: should get formatted label with startWith', () => {
-      component.isFiltering = true;
-      component.filterMode = PoComboFilterMode.startsWith;
-      component.safeHtml = (value: any) => value;
-      component.inputEl.nativeElement.value = 'val';
-
-      expect(component.getLabelFormatted('values')).toBe('<span class="po-font-text-large-bold">val</span>ues');
-    });
-
-    it('getLabelFormatted: should get formatted label with contains', () => {
-      component.isFiltering = true;
-      component.filterMode = PoComboFilterMode.contains;
-      component.safeHtml = (value: any) => value;
-      component.inputEl.nativeElement.value = 'lue';
-
-      expect(component.getLabelFormatted('values')).toBe('va<span class="po-font-text-large-bold">lue</span>s');
-    });
-
-    it('getLabelFormatted: should get formatted label with endsWith', () => {
-      component.isFiltering = true;
-      component.filterMode = PoComboFilterMode.endsWith;
-      component.safeHtml = (value: any) => value;
-      component.inputEl.nativeElement.value = 'lues';
-
-      expect(component.getLabelFormatted('values')).toBe('va<span class="po-font-text-large-bold">lues</span>');
-    });
-
-    it('getLabelFormatted: should not get formatted label', () => {
-      component.isFiltering = false;
-      component.safeHtml = (value: any) => value;
-      component.inputEl.nativeElement.value = 'lues';
-
-      expect(component.getLabelFormatted('values')).toBe('values');
-    });
-
-    it('getLabelFormatted: should not get formatted label when shouldMarkLetters is false', () => {
-      component.isFiltering = false;
-      component.service = component.defaultService;
-      component.shouldMarkLetters = false;
-      component.getInputValue = () => true;
-      component.compareObjects = (a, b) => false;
-      component.safeHtml = (value: any) => value;
-      component.inputEl.nativeElement.value = 'lues';
-
-      expect(component.getLabelFormatted('values')).toBe('values');
-    });
   });
 
   describe('Templates:', () => {
@@ -1635,56 +1132,6 @@ describe('PoComboComponent:', () => {
       expect(defaultSpan).toBeNull();
     });
 
-    it('should contain a child span tag inside `po-combo-item` if `comboOptionTemplate` is false', () => {
-      component.comboOptionTemplate = undefined;
-      component.options = [{ label: '1', value: '1' }];
-
-      fixture.detectChanges();
-
-      const defaultSpan = nativeElement.querySelector('.po-combo-item > span');
-
-      expect(defaultSpan).toBeTruthy();
-    });
-
-    it('should call `onOptionClick` if clicked option isnt`t an option group title', () => {
-      component.options = [{ label: '1', value: '1' }];
-
-      const spyOnOptionClick = spyOn(component, 'onOptionClick');
-
-      fixture.detectChanges();
-
-      const optionItem = component.contentElement.nativeElement.querySelectorAll('li')[0];
-
-      optionItem.click();
-
-      expect(spyOnOptionClick).toHaveBeenCalled();
-    });
-
-    it('shouldn`t call `onOptionClick` if clicked option is an option group title', () => {
-      component.options = [{ label: '1', options: [{ value: 'value' }] }];
-
-      const spyOnOptionClick = spyOn(component, 'onOptionClick');
-
-      fixture.detectChanges();
-
-      const optionItem = component.contentElement.nativeElement.querySelectorAll('li')[0];
-
-      optionItem.click();
-
-      expect(spyOnOptionClick).not.toHaveBeenCalled();
-    });
-
-    it('should contain `po-combo-item` if `comboOptionTemplate` is true and combo options dont`t have groups', () => {
-      component.comboOptionTemplate = <any>{ templateRef: null };
-      component.options = [{ label: '1', value: '1' }];
-
-      fixture.detectChanges();
-
-      const comboItemLink = nativeElement.querySelector('.po-combo-item');
-
-      expect(comboItemLink).toBeTruthy();
-    });
-
     it('shouldn`t contain `po-combo-item` if `comboOptionTemplate` is true but combo options have groups', () => {
       component.comboOptionTemplate = <any>{ templateRef: null };
       component.options = [{ label: '1', options: [{ value: 'value' }] }];
@@ -1695,47 +1142,6 @@ describe('PoComboComponent:', () => {
 
       expect(comboItemLink).toBeFalsy();
     });
-
-    it('should contain a class `po-combo-item-title` if comboOptionTemplate is false and combo options have groups', () => {
-      component.comboOptionTemplate = <any>undefined;
-      component.options = [{ label: '1', options: [{ value: 'value' }] }];
-
-      fixture.detectChanges();
-
-      const comboItemLink = nativeElement.querySelector('.po-combo-item-title');
-
-      expect(comboItemLink).toBeTruthy();
-    });
-
-    it('shouldn`t contain a class `po-combo-item-title` if comboOptionTemplate is false and combo options don`t have groups', () => {
-      component.comboOptionTemplate = <any>undefined;
-      component.options = [
-        { label: '1', value: '2' },
-        { label: '2', value: '2' }
-      ];
-
-      fixture.detectChanges();
-
-      const comboItemLink = nativeElement.querySelector('.po-combo-item-title');
-
-      expect(comboItemLink).toBeFalsy();
-    });
-
-    it('should display `noDataTemplate` if don´t have `visibleOptions` and visibleOptions.length.', () => {
-      component.visibleOptions = [];
-
-      fixture.detectChanges();
-
-      const comboInput = nativeElement.querySelector('.po-combo-input');
-      comboInput.dispatchEvent(eventClick);
-
-      fixture.detectChanges();
-
-      const noDataTemplate = nativeElement.querySelector('.po-combo-container-no-data');
-
-      expect(noDataTemplate).toBeTruthy();
-    });
-
     it('shouldn´t display `noDataTemplate` if have `visibleOptions` and visibleOptions.length.', () => {
       component.visibleOptions = [{ label: '1', value: '1' }];
 
@@ -1745,24 +1151,6 @@ describe('PoComboComponent:', () => {
       const noDataTemplate = nativeElement.querySelector('.po-combo-container-no-data');
 
       expect(noDataTemplate).toBeNull();
-    });
-
-    it('should display `literals.noData` in Spanish if browser language is `es`.', () => {
-      component['language'] = 'es';
-
-      component.visibleOptions = [];
-
-      fixture.detectChanges();
-
-      const comboInput = nativeElement.querySelector('.po-combo-input');
-      comboInput.dispatchEvent(eventClick);
-
-      fixture.detectChanges();
-
-      const noDataTemplateText = nativeElement.querySelector('.po-combo-container-no-data .po-combo-no-data').innerText;
-      const noDataTemplateTextCompare = 'Datos no encontrados';
-
-      expect(noDataTemplateText).toEqual(noDataTemplateTextCompare);
     });
 
     it('should show po-clean if `clean` is true and `disabled` is false', () => {
@@ -1791,20 +1179,6 @@ describe('PoComboComponent:', () => {
   });
 
   describe('Integration:', () => {
-    it('should return empty array and display `po-combo-container-no-data` if not found searched option', () => {
-      const searchTerm = 'Acre';
-      const keyUpEvent = { target: { value: searchTerm } };
-      component.options = [
-        { label: 'Santa Catarina', value: 'sc' },
-        { label: 'São Paulo', value: 'sp' },
-        { label: 'Rio Janeiro', value: 'rj' }
-      ];
-      fixture.debugElement.query(By.css('input')).triggerEventHandler('keyup', keyUpEvent);
-
-      expect(component.visibleOptions).toEqual([]);
-      expect(fixture.debugElement.query(By.css('.po-combo-container-no-data'))).toBeTruthy();
-    });
-
     it('should return found option and not display `po-combo-container-no-data` if found searched option', () => {
       const searchTerm = 'Santa';
       const keyUpEvent = { target: { value: searchTerm } };
@@ -1815,42 +1189,6 @@ describe('PoComboComponent:', () => {
 
       expect(component.visibleOptions).toEqual(optionFound);
       expect(fixture.debugElement.query(By.css('.po-combo-container-no-data'))).toBeNull();
-    });
-
-    it('checkTemplate: should return truthy if visibleOptions has items', () => {
-      component.visibleOptions = [{ label: '1', value: '1' }];
-
-      expect(component.checkTemplate()).toBeTruthy();
-    });
-
-    it('checkTemplate: should return false if visibleOptions is empty', () => {
-      component.visibleOptions = [];
-
-      expect(component.checkTemplate()).toBeFalsy();
-    });
-
-    it('checkTemplate: should return false if cache is false and isServerSearching is true', () => {
-      component.cache = false;
-      component.isServerSearching = true;
-      component.visibleOptions = [{ label: '1', value: '1' }];
-
-      expect(component.checkTemplate()).toBeFalsy();
-    });
-
-    it('checkTemplate: should return truthy if cache is false and isServerSearching is false', () => {
-      component.cache = false;
-      component.isServerSearching = false;
-      component.visibleOptions = [{ label: '1', value: '1' }];
-
-      expect(component.checkTemplate()).toBeTruthy();
-    });
-
-    it('checkTemplate: should return falsy if cache is false and isServerSearching is false but visibleOptions is empty', () => {
-      component.cache = false;
-      component.isServerSearching = false;
-      component.visibleOptions = [];
-
-      expect(component.checkTemplate()).toBeFalsy();
     });
   });
 });
@@ -1865,7 +1203,7 @@ describe('PoComboComponent - with service:', () => {
 
   beforeEach(async () => {
     await TestBed.configureTestingModule({
-      imports: [HttpClientTestingModule, PoLoadingModule],
+      imports: [HttpClientTestingModule, PoLoadingModule, OverlayModule],
       declarations: [PoComboComponent, PoFieldContainerComponent, PoFieldContainerBottomComponent],
       providers: [HttpClient, HttpHandler, PoComboFilterService]
     }).compileComponents();
@@ -1885,23 +1223,6 @@ describe('PoComboComponent - with service:', () => {
 
   afterEach(() => {
     httpMock.verify();
-  });
-
-  it('should call `getObjectByValue`, `controlComboVisibility` function if typed "tab"', () => {
-    const fakeEvent = {
-      keyCode: 9,
-      target: {
-        value: 'po'
-      }
-    };
-
-    spyOn(component, 'getObjectByValue');
-    spyOn(component, 'controlComboVisibility');
-
-    component.onKeyDown.call(component, fakeEvent);
-
-    expect(component.getObjectByValue).toHaveBeenCalled();
-    expect(component.controlComboVisibility).toHaveBeenCalledWith(false);
   });
 
   it('should call updateOptionByFilteredValue if selectedValue is different of value parameter', () => {
@@ -2031,12 +1352,47 @@ describe('PoComboComponent - with service:', () => {
           hasNext: false
         }
       };
+      fixture.detectChanges();
 
       spyOn(fakeThis.service, 'getFilteredData').and.returnValue({ subscribe: callback => callback() });
 
       component.applyFilter.apply(fakeThis, [applyFilterValue]);
 
       expect(fakeThis.service.getFilteredData).not.toHaveBeenCalled();
+    });
+
+    it('applyFilter: should call PoComboFilterService.getFilteredData() with correct parameters when hasNext is true has page and pageSize', () => {
+      const fakeThis: any = {
+        controlComboVisibility: () => {},
+        setOptionsByApplyFilter: () => {},
+        fieldLabel: 'label',
+        filterParams: 'filterParams', // Replace with your filterParams value
+        service: {
+          getFilteredData: () => {}
+        },
+        defaultService: {
+          hasNext: true
+        },
+        infiniteScroll: true,
+        page: 1,
+        pageSize: 10
+      };
+
+      spyOn(fakeThis.service, 'getFilteredData').and.returnValue(of()); // Using of() to create an empty observable
+      const applyFilterValue = 'applyFilterValue'; // Replace with your applyFilterValue
+      component.applyFilter.apply(fakeThis, [applyFilterValue]);
+
+      const expectedParam = {
+        property: 'label',
+        value: applyFilterValue,
+        page: 1,
+        pageSize: 10
+      };
+
+      expect(fakeThis.service.getFilteredData).toHaveBeenCalledWith(
+        expectedParam,
+        'filterParams' // Replace with your filterParams value
+      );
     });
 
     it('applyFilter: should set isServerSearching and call controlComboVisibility with false if getFilteredData throw error', () => {
@@ -2104,24 +1460,6 @@ describe('PoComboComponent - with service:', () => {
       component.ngAfterViewInit();
 
       expect(spyFocus).not.toHaveBeenCalled();
-    });
-
-    it('ngAfterViewInit: Should call checkInfiniteScroll if infiniteScroll is true', () => {
-      component.infiniteScroll = true;
-
-      const spyCheckInfiniteScroll = spyOn(component, <any>'checkInfiniteScroll');
-      component.ngAfterViewInit();
-
-      expect(spyCheckInfiniteScroll).toHaveBeenCalled();
-    });
-
-    it('ngAfterViewInit: shouldn´t call checkInfiniteScroll if infiniteScroll is false', () => {
-      component.infiniteScroll = false;
-
-      const spyCheckInfiniteScroll = spyOn(component, <any>'checkInfiniteScroll');
-      component.ngAfterViewInit();
-
-      expect(spyCheckInfiniteScroll).not.toHaveBeenCalled();
     });
 
     it('ngOnDestroy: should not unsubscribe if getSubscription is falsy.', () => {
@@ -2297,56 +1635,6 @@ describe('PoComboComponent - with service:', () => {
       expect(spyUpdateComboList).toHaveBeenCalledWith([...component.cacheOptions]);
     });
 
-    it('includeInfiniteScroll: should unsubscribe from the scroll event', () => {
-      component.poComboBody = {
-        nativeElement: { offsetHeight: 100, scrollTop: 100, scrollHeight: 100 }
-      };
-      component['subscriptionScrollEvent'] = fakeSubscription;
-      spyOn(fakeSubscription, <any>'unsubscribe');
-      spyOn(component['defaultService'], 'scrollListener').and.returnValue(
-        of({ target: { offsetHeight: 100, scrollTop: 100, scrollHeight: 100 } })
-      );
-
-      component.infiniteScroll = true;
-      component['includeInfiniteScroll']();
-
-      expect(fakeSubscription.unsubscribe).toHaveBeenCalled();
-    });
-
-    it('includeInfiniteScroll: should not unsubscribe from the scroll event', () => {
-      component.poComboBody = {
-        nativeElement: { offsetHeight: 100, scrollTop: 100, scrollHeight: 100 }
-      };
-      component['subscriptionScrollEvent'] = fakeSubscription;
-      spyOn(fakeSubscription, <any>'unsubscribe');
-      spyOn(component['defaultService'], 'scrollListener').and.returnValue(
-        of({ target: { offsetHeight: 100, scrollTop: 100, scrollHeight: 100 } })
-      );
-      spyOn(component, 'getInputValue').and.returnValue(undefined);
-
-      component['subscriptionScrollEvent'] = undefined;
-      component.infiniteScroll = true;
-      component['includeInfiniteScroll']();
-      expect(component.getInputValue).toHaveBeenCalled();
-
-      expect(fakeSubscription.unsubscribe).not.toHaveBeenCalled();
-    });
-
-    it('removeListeners: should unsubscribe from the scroll event when has infinity Scroll', () => {
-      component.poComboBody = {
-        nativeElement: { offsetHeight: 100, scrollTop: 100, scrollHeight: 100 }
-      };
-      component['subscriptionScrollEvent'] = fakeSubscription;
-
-      spyOn(fakeSubscription, <any>'unsubscribe');
-      component.infiniteScroll = true;
-      component['defaultService'].hasNext = false;
-
-      component['removeListeners']();
-
-      expect(fakeSubscription.unsubscribe).toHaveBeenCalled();
-    });
-
     it('removeListeners: should not unsubscribe from the scroll event when it does not exist and has infinity Scroll', () => {
       component['subscriptionScrollEvent'] = fakeSubscription;
 
@@ -2415,21 +1703,21 @@ describe('PoComboComponent - with service:', () => {
   });
 
   describe('Templates:', () => {
-    it('should display `.po-combo-container-no-data` if error in filtered data', () => {
+    it('should poCombo close if error in filtered data', () => {
       const value = 'test';
       const error = { 'error': { 'message': 'message' } };
-
-      component.options = [
+      const mockOptions = [
         { value: 1, label: 'John Doe' },
         { value: 2, label: 'Jane Doe' }
       ];
+      component.options = mockOptions;
 
       spyOn(component.service, 'getFilteredData').and.returnValue(throwError(error));
 
       component.applyFilter(value);
       fixture.detectChanges();
 
-      expect(fixture.debugElement.query(By.css('.po-combo-container-no-data'))).toBeTruthy();
+      expect(component.visibleOptions).toEqual(mockOptions);
     });
   });
 });

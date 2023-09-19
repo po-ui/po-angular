@@ -2,13 +2,14 @@ import { Directive, EventEmitter, Input, Output, TemplateRef } from '@angular/co
 
 import { poLocaleDefault } from '../../services/po-language/po-language.constant';
 import { PoLanguageService } from '../../services/po-language/po-language.service';
-import { InputBoolean } from '../../decorators';
 import { PoItemListType } from './enums/po-item-list-type.enum';
 import { PoItemListAction } from './po-item-list/interfaces/po-item-list-action.interface';
 
+import { convertToBoolean } from '../../utils/util';
+import { PoItemListFilterMode } from './enums/po-item-list-filter-mode.enum';
+import { PoListBoxLiterals } from './interfaces/po-listbox-literals.interface';
 import { PoItemListOptionGroup } from './po-item-list/interfaces/po-item-list-option-group.interface';
 import { PoItemListOption } from './po-item-list/interfaces/po-item-list-option.interface';
-import { PoListBoxLiterals } from './interfaces/po-listbox-literals.interface';
 
 export const poListBoxLiteralsDefault = {
   en: <PoListBoxLiterals>{
@@ -36,7 +37,7 @@ export class PoListBoxBaseComponent {
   private _literals: PoListBoxLiterals;
   private language: string = poLocaleDefault;
 
-  @Input('p-visible') @InputBoolean() visible: boolean = false;
+  @Input({ alias: 'p-visible', transform: convertToBoolean }) visible: boolean = false;
 
   @Input('p-type') set type(value: string) {
     this._type = PoItemListType[value] ?? 'action';
@@ -70,26 +71,37 @@ export class PoListBoxBaseComponent {
     return this._literals || poListBoxLiteralsDefault[this.language];
   }
 
+  get isItemListGroup(): boolean {
+    return this.items.length && this.items[0].hasOwnProperty('options');
+  }
+
   // parâmetro que pode ser passado para o popup ao clicar em um item
   @Input('p-param') param?;
 
   @Output('p-select-item') selectItem = new EventEmitter<PoItemListOption | PoItemListOptionGroup | any>();
 
   @Output('p-close') closeEvent = new EventEmitter<any>();
-
   // MULTISELECT PROPERTIES
 
   //output para evento do checkbox
   @Output('p-change') change = new EventEmitter();
 
+  //output para evento do checkbox
+  @Output('p-selectcombo-item') selectCombo = new EventEmitter();
+
   //output para evento do checkbox de selecionar todos
   @Output('p-change-all') changeAll = new EventEmitter();
+
+  @Output('p-update-infinite-scroll') UpdateInfiniteScroll = new EventEmitter();
 
   //valor do checkbox de selecionar todos
   @Input('p-checkboxAllValue') checkboxAllValue: any;
 
   // Propriedade que recebe a lista de opções selecionadas.
   @Input('p-selected-options') selectedOptions: Array<any> = [];
+
+  // Propriedade que recebe um item selecionado.
+  @Input('p-selected-option') selectedOption?: any;
 
   @Input('p-field-value') fieldValue: string = 'value';
 
@@ -113,9 +125,31 @@ export class PoListBoxBaseComponent {
   //Propriedades relacionados ao template customizado do multiselect
   @Input('p-multiselect-template') multiselectTemplate: TemplateRef<any> | any;
 
+  @Input('p-template') template: TemplateRef<any> | any;
+
   @Input('p-placeholder-search') placeholderSearch: string;
 
-  @Input('p-is-searching') @InputBoolean() isServerSearching: boolean = false;
+  @Input('p-search-value') searchValue: string;
+
+  @Input({ alias: 'p-is-searching', transform: convertToBoolean }) isServerSearching: boolean = false;
+
+  @Input({ alias: 'p-infinite-loading', transform: convertToBoolean }) infiniteLoading: boolean = false;
+
+  @Input({ alias: 'p-infinite-scroll', transform: convertToBoolean }) infiniteScroll: boolean = false;
+
+  @Input({ alias: 'p-cache', transform: convertToBoolean }) cache: boolean = false;
+
+  @Input('p-infinite-scroll-distance') infiniteScrollDistance: number = 100;
+
+  @Input('p-filter-mode') filterMode: PoItemListFilterMode = PoItemListFilterMode.contains;
+
+  @Input('p-filtering') isFiltering: boolean = false;
+
+  @Input('p-should-mark-letter') shouldMarkLetters: boolean = true;
+
+  @Input('p-compare-cache') compareCache: boolean = false;
+
+  @Input('p-combo-service') comboService: any;
 
   constructor(languageService: PoLanguageService) {
     this.language = languageService.getShortLanguage();

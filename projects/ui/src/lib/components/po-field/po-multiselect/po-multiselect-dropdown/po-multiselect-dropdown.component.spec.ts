@@ -273,7 +273,7 @@ describe('PoMultiselectDropdownComponent:', () => {
 
       fixture.detectChanges();
 
-      expect(fixture.nativeElement.querySelector('.po-multiselect-container-no-data')).toBeTruthy();
+      expect(fixture.nativeElement.querySelector('.po-listbox-container-no-data')).toBeTruthy();
     });
 
     it('should show `Nenhum dado encontrado` if no have visibleOptions', () => {
@@ -282,7 +282,7 @@ describe('PoMultiselectDropdownComponent:', () => {
 
       fixture.detectChanges();
 
-      expect(fixture.nativeElement.querySelector('.po-multiselect-container-no-data')).toBeTruthy();
+      expect(fixture.nativeElement.querySelector('.po-listbox-container-no-data')).toBeTruthy();
     });
 
     it('shouldn`t show `Nenhum dado encontrado` if have visibleOptions', () => {
@@ -290,7 +290,7 @@ describe('PoMultiselectDropdownComponent:', () => {
       component.visibleOptions = [{ value: '1', label: 'Option 1' }];
       fixture.detectChanges();
 
-      expect(fixture.nativeElement.querySelector('.po-multiselect-container-no-data')).toBeNull();
+      expect(fixture.nativeElement.querySelector('.po-listbox-container-no-data')).toBeNull();
     });
 
     it('shouldn`t show `po-multiselect-search` if `hideSearch` is `true`', () => {

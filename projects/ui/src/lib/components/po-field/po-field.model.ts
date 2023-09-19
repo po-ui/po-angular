@@ -1,7 +1,7 @@
 import { Directive, EventEmitter, Input, Output } from '@angular/core';
 import { ControlValueAccessor } from '@angular/forms';
 
-import { InputBoolean } from '../../decorators';
+import { convertToBoolean } from '../../utils/util';
 
 @Directive()
 export abstract class PoFieldModel<T> implements ControlValueAccessor {
@@ -23,7 +23,7 @@ export abstract class PoFieldModel<T> implements ControlValueAccessor {
    *
    * @default `false`
    */
-  @Input('p-disabled') @InputBoolean() disabled: boolean = false;
+  @Input({ alias: 'p-disabled', transform: convertToBoolean }) disabled: boolean = false;
 
   /**
    * @optional

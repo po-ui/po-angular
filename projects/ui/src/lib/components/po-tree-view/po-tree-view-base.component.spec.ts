@@ -41,6 +41,18 @@ describe('PoTreeViewBaseComponent:', () => {
 
       expectPropertiesValues(component, 'selectable', invalidValues, false);
     });
+
+    it('p-max-level: should update property with value if valid', () => {
+      const validValues = [12, 10.6];
+
+      expectPropertiesValues(component, 'maxLevel', validValues, [12, 10]);
+    });
+
+    it('p-max-level: should update property with `4` if invalid values', () => {
+      const invalidValues = ['test', undefined];
+
+      expectPropertiesValues(component, 'maxLevel', invalidValues, 4);
+    });
   });
 
   describe('Methods: ', () => {
@@ -114,6 +126,7 @@ describe('PoTreeViewBaseComponent:', () => {
     });
 
     it('getItemsByMaxLevel: should return items up to 4 levels', () => {
+      component.maxLevel = 4;
       const unlimitedItems = [
         {
           label: 'Nivel 01',

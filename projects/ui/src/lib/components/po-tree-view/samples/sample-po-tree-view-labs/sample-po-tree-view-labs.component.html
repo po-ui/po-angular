@@ -5,6 +5,7 @@
   (p-expanded)="changeEvent('p-expanded', $event)"
   (p-selected)="changeEvent('p-selected', $event)"
   (p-unselected)="changeEvent('p-unselected', $event)"
+  [p-max-level]="maxLevel"
 >
 </po-tree-view>
 
@@ -16,6 +17,12 @@
 
 <div class="po-row">
   <po-switch class="po-md-2" name="selectable" [(ngModel)]="selectable" p-label="Selectable"> </po-switch>
+</div>
+
+<po-divider p-label="Po Tree View Config"></po-divider>
+
+<div class="po-row">
+  <po-input class="po-md-4" name="level" [(ngModel)]="maxLevel" p-label="Max Level"> </po-input>
 </div>
 
 <po-divider p-label="Po Tree View Item"></po-divider>

@@ -185,7 +185,6 @@ describe('PoMenuComponent:', () => {
     };
 
     component['clickMenuItem'](menuItem);
-    console.log(component.activeMenuItem);
     expect(component.activeMenuItem.link).toEqual('./home');
   });
 

@@ -1,5 +1,5 @@
 import { Directive, EventEmitter, Input, OnChanges, OnDestroy, Output, SimpleChanges } from '@angular/core';
-import { Observable, Subscription, filter } from 'rxjs';
+import { Observable, Subscription } from 'rxjs';
 
 import { PoDateService } from '../../services/po-date/po-date.service';
 import { poLocaleDefault } from '../../services/po-language/po-language.constant';
@@ -7,6 +7,7 @@ import { PoLanguageService } from '../../services/po-language/po-language.servic
 import { capitalizeFirstLetter, convertToBoolean, isTypeof, sortValues } from '../../utils/util';
 
 import { InputBoolean } from '../../decorators';
+import { PoFilterMode } from '../po-search/po-search-filter-mode.enum';
 import { PoTableColumnSortType } from './enums/po-table-column-sort-type.enum';
 import { PoTableColumnSpacing } from './enums/po-table-spacing.enum';
 import { PoTableAction } from './interfaces/po-table-action.interface';
@@ -16,7 +17,6 @@ import { PoTableFilteredItemsParams } from './interfaces/po-table-filtered-items
 import { PoTableLiterals } from './interfaces/po-table-literals.interface';
 import { PoTableResponseApi } from './interfaces/po-table-response-api.interface';
 import { PoTableService } from './services/po-table.service';
-import { PoFilterMode } from '../po-search/po-search-filter-mode.enum';
 
 export type QueryParamsType = string | number | boolean;
 
@@ -137,7 +137,7 @@ export abstract class PoTableBaseComponent implements OnChanges, OnDestroy {
    * > Quando ocorrer a quebra de texto, ao passar o mouse no conteúdo da célula,
    * o mesmo será exibido através do [`po-tooltip`](/documentation/po-tooltip).
    */
-  @Input('p-hide-text-overflow') @InputBoolean() hideTextOverflow: boolean = false;
+  @Input({ alias: 'p-hide-text-overflow', transform: convertToBoolean }) hideTextOverflow: boolean = false;
 
   /**
    * @optional
@@ -148,8 +148,7 @@ export abstract class PoTableBaseComponent implements OnChanges, OnDestroy {
    *
    * @default `false`
    */
-  @Input('p-hide-columns-manager') @InputBoolean() hideColumnsManager?: boolean = false;
-
+  @Input({ alias: 'p-hide-columns-manager', transform: convertToBoolean }) hideColumnsManager: boolean = false;
   /**
    * @optional
    *
@@ -159,7 +158,7 @@ export abstract class PoTableBaseComponent implements OnChanges, OnDestroy {
    *
    * @default `false`
    */
-  @Input('p-hide-batch-actions') @InputBoolean() hideBatchActions?: boolean = false;
+  @Input({ alias: 'p-hide-batch-actions', transform: convertToBoolean }) hideBatchActions: boolean = false;
 
   /**
    * @optional
@@ -190,7 +189,7 @@ export abstract class PoTableBaseComponent implements OnChanges, OnDestroy {
    *
    * @default `false`
    */
-  @Input('p-hide-table-search') @InputBoolean() hideTableSearch?: boolean = false;
+  @Input({ alias: 'p-hide-table-search', transform: convertToBoolean }) hideTableSearch: boolean = false;
 
   /**
    * @optional
@@ -201,7 +200,7 @@ export abstract class PoTableBaseComponent implements OnChanges, OnDestroy {
    *
    * @default `false`
    */
-  @Input('p-auto-collapse') @InputBoolean() autoCollapse?: boolean = false;
+  @Input({ alias: 'p-auto-collapse', transform: convertToBoolean }) autoCollapse: boolean = false;
 
   /**
    * @optional
@@ -212,8 +211,7 @@ export abstract class PoTableBaseComponent implements OnChanges, OnDestroy {
    *
    * @default `false`
    */
-  @Input('p-loading-show-more') @InputBoolean() loadingShowMore?: boolean = false;
-
+  @Input({ alias: 'p-loading-show-more', transform: convertToBoolean }) loadingShowMore: boolean = false;
   /**
    * @optional
    *
@@ -224,7 +222,7 @@ export abstract class PoTableBaseComponent implements OnChanges, OnDestroy {
    *
    * @default `false`
    */
-  @Input('p-sort') @InputBoolean() sort: boolean = false;
+  @Input({ alias: 'p-sort', transform: convertToBoolean }) sort: boolean = false;
 
   /**
    * @description
@@ -233,7 +231,7 @@ export abstract class PoTableBaseComponent implements OnChanges, OnDestroy {
    *
    * @default `false`
    */
-  @Input('p-show-more-disabled') @InputBoolean() showMoreDisabled?: boolean = false;
+  @Input({ alias: 'p-show-more-disabled', transform: convertToBoolean }) showMoreDisabled: boolean = false;
 
   /**
    * @description
@@ -243,7 +241,7 @@ export abstract class PoTableBaseComponent implements OnChanges, OnDestroy {
    *
    * @default `false`
    */
-  @Input('p-striped') @InputBoolean() striped?: boolean = false;
+  @Input({ alias: 'p-striped', transform: convertToBoolean }) striped: boolean = false;
 
   /**
    * @description
@@ -254,7 +252,7 @@ export abstract class PoTableBaseComponent implements OnChanges, OnDestroy {
    *
    * @default `false`
    */
-  @Input('p-hide-select-all') @InputBoolean() hideSelectAll: boolean = false;
+  @Input({ alias: 'p-hide-select-all', transform: convertToBoolean }) hideSelectAll: boolean = false;
 
   /**
    * @description
@@ -263,7 +261,7 @@ export abstract class PoTableBaseComponent implements OnChanges, OnDestroy {
    *
    * > Esta definição não se aplica aos itens filhos, os mesmos possuem comportamento independente do item pai.
    */
-  @Input('p-single-select') @InputBoolean() singleSelect?: boolean = false;
+  @Input({ alias: 'p-single-select', transform: convertToBoolean }) singleSelect: boolean = false;
 
   /**
    * @description
@@ -274,7 +272,7 @@ export abstract class PoTableBaseComponent implements OnChanges, OnDestroy {
    *
    * @default `true`
    */
-  @Input('p-selectable-entire-line') @InputBoolean() selectableEntireLine?: boolean = true;
+  @Input({ alias: 'p-selectable-entire-line', transform: convertToBoolean }) selectableEntireLine: boolean = true;
 
   /**
    * @optional
@@ -285,7 +283,7 @@ export abstract class PoTableBaseComponent implements OnChanges, OnDestroy {
    *
    * @default `false`
    */
-  @Input('p-actions-right') @InputBoolean() actionRight?: boolean = false;
+  @Input({ alias: 'p-actions-right', transform: convertToBoolean }) actionRight: boolean = false;
 
   /**
    * @optional
@@ -504,8 +502,9 @@ export abstract class PoTableBaseComponent implements OnChanges, OnDestroy {
     } else if (!this.hasColumns) {
       this.columns = this.getDefaultColumns(items[0]);
     }
-    this.filteredItems = [...this.items];
-    // timeout necessario para os itens serem refletidos na tabela
+    this.filteredItems = this.height ? [...this.items] : this.items;
+
+    // timeout necessário para os itens serem refletidos na tabela
     setTimeout(() => this.checkInfiniteScroll());
   }
 

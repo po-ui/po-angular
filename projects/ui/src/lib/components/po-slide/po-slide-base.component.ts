@@ -1,7 +1,6 @@
-import { Input, Directive } from '@angular/core';
+import { Directive, Input } from '@angular/core';
 
-import { InputBoolean } from '../../decorators';
-import { convertToInt } from './../../utils/util';
+import { convertToBoolean, convertToInt } from './../../utils/util';
 
 import { PoSlideItem } from './interfaces/po-slide-item.interface';
 
@@ -29,7 +28,7 @@ export abstract class PoSlideBaseComponent {
    *
    * @default `false`
    */
-  @Input('p-hide-arrows') @InputBoolean() hideArrows: boolean = false;
+  @Input({ alias: 'p-hide-arrows', transform: convertToBoolean }) hideArrows: boolean = false;
 
   private _interval: number = poSlideIntervalDefault;
   private _height?: number;

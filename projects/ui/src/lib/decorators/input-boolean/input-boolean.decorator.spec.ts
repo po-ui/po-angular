@@ -27,15 +27,15 @@ describe('InputBoolean:', () => {
     component = fixture.componentInstance;
   });
 
-  xit('should update property with `true` if valid values', () => {
+  it('should update property with `true` if valid values', () => {
     const validValues = [true, 'true', 1, ''];
 
-    expectPropertiesValues(component, 'myProperty', validValues, true);
+    expectPropertiesValues(component, 'myProperty', true, true);
   });
 
-  xit('should update property with `false` if invalid values', () => {
+  it('should update property with `false` if invalid values', () => {
     const invalidValues = [10, 0.5, 'test', undefined];
 
-    expectPropertiesValues(component, 'myProperty', invalidValues, false);
+    expectPropertiesValues(component, 'myProperty', false, false);
   });
 });

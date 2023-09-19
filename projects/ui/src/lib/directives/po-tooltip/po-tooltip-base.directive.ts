@@ -1,7 +1,6 @@
-import { Input, Directive } from '@angular/core';
+import { Directive, Input } from '@angular/core';
 
-import { InputBoolean } from '../../decorators';
-
+import { convertToBoolean } from '../../utils/util';
 import { PO_CONTROL_POSITIONS } from './../../services/po-control-position/po-control-position.constants';
 
 const PO_TOOLTIP_POSITION_DEFAULT = 'bottom';
@@ -31,7 +30,7 @@ export abstract class PoTooltipBaseDirective {
    *
    * @default `false`
    */
-  @Input('p-append-in-body') @InputBoolean() appendInBody: boolean = false;
+  @Input({ alias: 'p-append-in-body', transform: convertToBoolean }) appendInBody: boolean = false;
 
   protected _tooltipPosition?: string = 'bottom';
   protected tooltipContent;
@@ -85,7 +84,7 @@ export abstract class PoTooltipBaseDirective {
     return this._tooltipPosition;
   }
 
-  @Input('p-display-tooltip') @InputBoolean() set displayTooltip(value: boolean) {
+  @Input({ alias: 'p-display-tooltip', transform: convertToBoolean }) set displayTooltip(value: boolean) {
     this._displayTooltip = value;
     this._displayTooltip ? this.addTooltipAction() : this.removeTooltipAction();
   }

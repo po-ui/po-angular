@@ -31,8 +31,6 @@ describe('PoModalFooterComponent', () => {
 
     const poModalFooter = nativeElement.querySelector('.po-modal-footer-align-right');
 
-    console.log(poModalFooter);
-
     expect(poModalFooter).toBeFalsy();
   });
 
@@ -42,8 +40,6 @@ describe('PoModalFooterComponent', () => {
     fixture.detectChanges();
 
     const poModalFooter = nativeElement.querySelector('.po-modal-footer-align-right');
-
-    console.log(poModalFooter);
 
     expect(poModalFooter).toBeTruthy();
   });

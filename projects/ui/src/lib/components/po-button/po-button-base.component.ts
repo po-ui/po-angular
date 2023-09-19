@@ -1,7 +1,6 @@
-import { EventEmitter, Input, Output, Directive, TemplateRef, HostBinding } from '@angular/core';
+import { Directive, EventEmitter, HostBinding, Input, Output, TemplateRef } from '@angular/core';
 
 import { convertToBoolean } from '../../utils/util';
-import { InputBoolean } from '../../decorators';
 
 import { PoButtonKind } from './po-button-kind.enum';
 import { PoButtonSize } from './po-button-size.enum';
@@ -109,8 +108,7 @@ export class PoButtonBaseComponent {
    *
    * @default `false`
    */
-  @Input('p-small')
-  @InputBoolean()
+  @Input({ alias: 'p-small', transform: convertToBoolean })
   set small(value: boolean) {
     this._small = !this.hasSize ? value : false;
 
@@ -134,8 +132,7 @@ export class PoButtonBaseComponent {
    */
 
   @HostBinding('attr.p-danger')
-  @Input('p-danger')
-  @InputBoolean()
+  @Input({ alias: 'p-danger', transform: convertToBoolean })
   set danger(value: boolean) {
     this._danger = this.kind !== PoButtonKind.tertiary ? value : false;
   }

@@ -12,7 +12,7 @@ import {
   Output,
   SimpleChanges
 } from '@angular/core';
-import { AbstractControl, ControlValueAccessor, UntypedFormControl, NgControl, Validator } from '@angular/forms';
+import { AbstractControl, ControlValueAccessor, NgControl, UntypedFormControl, Validator } from '@angular/forms';
 import { Subscription } from 'rxjs';
 import { finalize } from 'rxjs/operators';
 
@@ -56,7 +56,7 @@ export abstract class PoLookupBaseComponent
    *
    * @default `false`
    */
-  @Input('p-auto-focus') @InputBoolean() autoFocus: boolean = false;
+  @Input({ alias: 'p-auto-focus', transform: convertToBoolean }) autoFocus: boolean = false;
 
   /**
    * Label do campo.
@@ -242,10 +242,10 @@ export abstract class PoLookupBaseComponent
    *
    * @default `false`
    */
-  @Input('p-infinite-scroll') @InputBoolean() infiniteScroll: boolean = false;
+  @Input({ alias: 'p-infinite-scroll', transform: convertToBoolean }) infiniteScroll: boolean = false;
 
   /** Exibe um ícone que permite limpar o campo. */
-  @Input('p-clean') @InputBoolean() clean: boolean = false;
+  @Input({ alias: 'p-clean', transform: convertToBoolean }) clean: boolean = false;
 
   /**
    * @optional
@@ -258,7 +258,7 @@ export abstract class PoLookupBaseComponent
    *
    * @default `false`
    */
-  @Input('p-multiple') @InputBoolean() multiple: boolean = false;
+  @Input({ alias: 'p-multiple', transform: convertToBoolean }) multiple: boolean = false;
 
   /**
    * @optional
@@ -270,7 +270,7 @@ export abstract class PoLookupBaseComponent
    *
    * @default `false`
    */
-  @Input('p-auto-height') @InputBoolean() autoHeight: boolean = false;
+  @Input({ alias: 'p-auto-height', transform: convertToBoolean }) autoHeight: boolean = false;
 
   /**
    * Evento será disparado quando ocorrer algum erro na requisição de busca do item.

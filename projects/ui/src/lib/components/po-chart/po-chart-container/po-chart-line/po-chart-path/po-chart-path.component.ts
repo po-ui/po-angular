@@ -1,8 +1,6 @@
 import { AfterViewInit, ChangeDetectorRef, Component, ElementRef, Input, ViewChild } from '@angular/core';
 
-import { InputBoolean } from '../../../../../decorators';
-
-import { isIE } from '../../../../../utils/util';
+import { convertToBoolean, isIE } from '../../../../../utils/util';
 
 const pathDashoffsetDefaultWidth = 0;
 
@@ -11,9 +9,9 @@ const pathDashoffsetDefaultWidth = 0;
   templateUrl: './po-chart-path.component.svg'
 })
 export class PoChartPathComponent implements AfterViewInit {
-  @Input('p-is-active') @InputBoolean() isActive: boolean = true;
+  @Input({ alias: 'p-is-active', transform: convertToBoolean }) isActive: boolean = true;
 
-  @Input('p-chart-line') @InputBoolean() chartLine: boolean = false;
+  @Input({ alias: 'p-chart-line', transform: convertToBoolean }) chartLine: boolean = false;
 
   @Input('p-coordinates') coordinates: string;
 

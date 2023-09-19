@@ -1,6 +1,6 @@
 import { Directive, EventEmitter, Input, Output } from '@angular/core';
 
-import { InputBoolean } from '../../../decorators';
+import { convertToBoolean } from '../../../utils/util';
 
 /**
  * @description
@@ -44,7 +44,7 @@ export class PoPageSlideBaseComponent {
    *
    * @default `false`
    */
-  @Input('p-hide-close') @InputBoolean() hideClose?: boolean = false;
+  @Input({ alias: 'p-hide-close', transform: convertToBoolean }) hideClose: boolean = false;
 
   /**
    * @optional
@@ -55,7 +55,7 @@ export class PoPageSlideBaseComponent {
    *
    * @default `false`
    */
-  @Input('p-click-out') @InputBoolean() clickOut?: boolean = false;
+  @Input({ alias: 'p-click-out', transform: convertToBoolean }) clickOut: boolean = false;
 
   /**
    * @optional
