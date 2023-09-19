@@ -313,6 +313,7 @@
           >
             <div
               class="po-table-column-cell po-table-body-ellipsis notranslate"
+              [style.width]="['currency', 'number', 'subtitle'].includes(column.type) ? '' : 'max-content'"
               [ngSwitch]="column.type"
               [p-tooltip]="tooltipText"
               [p-append-in-body]="true"
