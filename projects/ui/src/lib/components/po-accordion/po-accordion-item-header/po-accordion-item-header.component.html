@@ -1,6 +1,15 @@
-<header class="po-accordion-item-header">
-  <button class="po-accordion-item-header-button po-clickable" (click)="onClick()">
-    <div class="po-text-ellipsis po-accordion-item-header-title">{{ label }}</div>
-    <span #icon class="po-icon po-accordion-item-header-icon po-icon-arrow-down"> </span>
+<div class="po-accordion-item-header">
+  <button
+    [disabled]="disabledItem"
+    [attr.aria-label]="label"
+    [attr.aria-expanded]="expanded || false"
+    class="po-accordion-item-header-button po-clickable"
+    (click)="onClick()"
+  >
+    <div class="po-accordion-item-header-button-content">
+      <div class="po-text-ellipsis po-accordion-item-header-title">{{ label }}</div>
+      <po-tag *ngIf="labelTag" class="po-accordion-item-header-tag" [p-value]="labelTag" [p-type]="typeTag"> </po-tag>
+    </div>
+    <po-icon p-icon="po-icon-arrow-down" class="po-icon po-accordion-item-header-icon"></po-icon>
   </button>
-</header>
+</div>
