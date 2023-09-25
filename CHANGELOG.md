@@ -2,6 +2,18 @@
 
 All notable changes to this project will be documented in this file. See [standard-version](https://github.com/conventional-changelog/standard-version) for commit guidelines.
 
+## [16.2.0](https://github.com/po-ui/po-angular/compare/v16.1.0...v16.2.0) (2023-09-25)
+
+
+### Bug Fixes
+
+* **checkbox:** corrige foco no checkbox ([5feecee](https://github.com/po-ui/po-angular/commit/5feeceef28945335c3901725614d8b866d822bf0))
+* **lookup:** traducoes russo ([297f546](https://github.com/po-ui/po-angular/commit/297f546bc7e3d21ba78e39c04519f03cd25461e5))
+* **page-edit:** valida campos obrigatórios ([32ee81a](https://github.com/po-ui/po-angular/commit/32ee81a72c25647894579ae1ce09cf026d94c38d))
+* **table:** corrige ordenação após filtragem de itens ([2e3a5e1](https://github.com/po-ui/po-angular/commit/2e3a5e130f95b386ab57359142e0bdffe425f691))
+
+
+
 # [16.1.0](https://github.com/po-ui/po-angular/compare/v16.0.0...v16.1.0) (2023-09-18)
 
 
