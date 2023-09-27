@@ -92,6 +92,7 @@ export class PoBreadcrumbBaseComponent {
   @Input('p-params-service') paramsService?: object;
 
   itemsView: Array<PoBreadcrumbItem> = [];
+  itemsViewPopup: Array<any> = [];
 
   protected clickoutListener: () => void;
   protected resizeListener: () => void;
@@ -111,9 +112,33 @@ export class PoBreadcrumbBaseComponent {
   @Input('p-items') set items(items: Array<PoBreadcrumbItem>) {
     this._items = items;
     this.itemsView = [].concat(items);
+    if (this.itemsView.length >= 4) {
+      this.transformToArrayPopup(items);
+    }
   }
 
   get items() {
     return this._items;
+  }
+
+  private transformToArrayPopup(items: Array<PoBreadcrumbItem>) {
+    const itemsCopy = items.map(obj => ({ ...obj }));
+    itemsCopy.shift();
+    itemsCopy.splice(-2, 1);
+    itemsCopy.pop();
+    this.itemsViewPopup = this.transformArrayToActionPopUp(itemsCopy);
+  }
+
+  private transformArrayToActionPopUp(items: Array<PoBreadcrumbItem>) {
+    return items.map(obj => {
+      if (obj.hasOwnProperty('link')) {
+        obj['url'] = obj.link;
+        delete obj.link;
+        if (obj.hasOwnProperty('action')) {
+          delete obj.action;
+        }
+      }
+      return obj;
+    });
   }
 }
