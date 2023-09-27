@@ -1,4 +1,4 @@
-import { ElementRef, Input, Directive } from '@angular/core';
+import { ElementRef, Input, Directive, Output, EventEmitter } from '@angular/core';
 
 import { convertToBoolean } from '../../utils/util';
 import { PO_CONTROL_POSITIONS } from './../../services/po-control-position/po-control-position.constants';
@@ -196,4 +196,6 @@ export class PoPopupBaseComponent {
   get target() {
     return this._target;
   }
+
+  @Output('p-close') closeEvent: EventEmitter<any> = new EventEmitter();
 }

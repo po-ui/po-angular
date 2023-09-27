@@ -316,15 +316,17 @@ describe('PoPopupComponent:', () => {
       expect(component.close).not.toHaveBeenCalled();
     });
 
-    it('close: should set left style to 0 and showPopup to false', () => {
+    it('close: should set left style to 0, showPopup to false and emit close', () => {
       component.showPopup = true;
 
       spyOn(component, <any>'removeListeners');
+      spyOn(component.closeEvent, <any>'emit');
 
       component.close();
 
       expect(component.showPopup).toBeFalsy();
       expect(component['removeListeners']).toHaveBeenCalled();
+      expect(component.closeEvent.emit).toHaveBeenCalled();
     });
 
     it('checkAllActionIsInvisible: should return true is all itens are invisible', () => {
