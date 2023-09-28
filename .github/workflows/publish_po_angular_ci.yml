@@ -66,14 +66,14 @@ jobs:
       # Se a versão remota for igual à versão que será publicada então ele pula o publish deste pacote e tenta publicar os demais pacotes
       # if: (!contains(env.PACKAGE_VERSION, env.SCHEMATICS_LAST_PUBLISHED_VERSION))
       uses: actions/setup-node@v4
-        with:
-          node-version: 'latest'
-          registry-url: 'https://registry.npmjs.org'
+      with:
+        node-version: 'latest'
+        registry-url: 'https://registry.npmjs.org'
       run: npm publish dist/ng-schematics --ignore-scripts
-        working-directory: ${{env.WORKING_DIR}}
-        env:
-          NODE_AUTH_TOKEN: ${{ secrets.NPM_TOKEN }}
-          PACKAGE_VERSION: ${{ steps.package-version.outputs.current-version }}
+      working-directory: ${{env.WORKING_DIR}}
+      env:
+        NODE_AUTH_TOKEN: ${{ secrets.NPM_TOKEN }}
+        PACKAGE_VERSION: ${{ steps.package-version.outputs.current-version }}
       # run: npm publish dist/ng-schematics --ignore-scripts
       # working-directory: ${{env.WORKING_DIR}}
       # env:
