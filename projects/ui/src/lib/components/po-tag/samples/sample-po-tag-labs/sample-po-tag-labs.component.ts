@@ -61,7 +61,8 @@ export class SamplePoTagLabsComponent implements OnInit {
     { label: 'Info', value: PoTagType.Info },
     { label: 'Danger', value: PoTagType.Danger },
     { label: 'Success', value: PoTagType.Success },
-    { label: 'Warning', value: PoTagType.Warning }
+    { label: 'Warning', value: PoTagType.Warning },
+    { label: 'Neutral', value: PoTagType.Neutral }
   ];
 
   ngOnInit() {

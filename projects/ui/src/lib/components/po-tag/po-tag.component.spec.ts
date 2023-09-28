@@ -326,6 +326,14 @@ describe('PoTagComponent:', () => {
       expect(nativeElement.querySelector('.po-tag-warning')).toBeTruthy();
     });
 
+    it('should add `po-tag-neutral` if type is `PoTagType.Neutral`.', () => {
+      component.type = PoTagType.Neutral;
+
+      fixture.detectChanges();
+
+      expect(nativeElement.querySelector('.po-tag-neutral')).toBeTruthy();
+    });
+
     it('should add `PoTagIcon.Danger` if type is `PoTagType.Danger and `icon` is true`.', () => {
       component.type = PoTagType.Danger;
       component.icon = true;

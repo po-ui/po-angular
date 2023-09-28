@@ -12,9 +12,12 @@ export enum PoTagType {
   /** Informativo ou explicativo. */
   Info = 'info',
 
-  /** Confirmação, resultados positivos ou êxito */
+  /** Confirmação, resultados positivos ou êxito. */
   Success = 'success',
 
   /** Aviso ou advertência. */
-  Warning = 'warning'
+  Warning = 'warning',
+
+  /** De uso geral, quando os tipos Info, Warning, Success e Danger não atendem a necessidade. */
+  Neutral = 'neutral'
 }
