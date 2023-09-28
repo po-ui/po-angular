@@ -268,7 +268,8 @@ export class PoTagBaseComponent {
    *  - `success`: cor verde utilizada para simbolizar sucesso ou êxito.
    *  - `warning`: cor amarela que representa aviso ou advertência.
    *  - `danger`: cor vermelha para erro ou aviso crítico.
-   *  - `info`: cor cinza escuro que caracteriza conteúdo informativo.
+   *  - `info`: cor azul claro que caracteriza conteúdo informativo.
+   *  - `neutral`: cor cinza claro para uso geral.
    *
    * > Quando esta propriedade for definida, irá sobrepor a definição de `p-color` e `p-icon` somente será exibido caso seja `true`.
    *
