@@ -2,6 +2,15 @@
 
 All notable changes to this project will be documented in this file. See [standard-version](https://github.com/conventional-changelog/standard-version) for commit guidelines.
 
+## [16.2.1](https://github.com/po-ui/po-angular/compare/v16.2.0...v16.2.1) (2023-10-02)
+
+
+### Bug Fixes
+
+* **listview:** adiciona propriedade p-danger no botão de ação ([67cdedd](https://github.com/po-ui/po-angular/commit/67cdedd5a82fd39e756e0c9141ab8fc8791b0c3c))
+
+
+
 ## [16.2.0](https://github.com/po-ui/po-angular/compare/v16.1.0...v16.2.0) (2023-09-25)
 
 
