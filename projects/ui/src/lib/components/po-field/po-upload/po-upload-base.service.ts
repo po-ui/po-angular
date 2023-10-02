@@ -41,7 +41,8 @@ export class PoUploadBaseService {
     const filesLength = files.length;
     const uploadEvent: any = {
       data: {},
-      file: null
+      file: null,
+      url: url
     };
 
     for (let i = 0; i < filesLength; i++) {
@@ -57,6 +58,7 @@ export class PoUploadBaseService {
         tOnUpload.emit(uploadEvent);
 
         formData.append('data', JSON.stringify(uploadEvent.data));
+        url = uploadEvent.url;
       }
 
       this.sendFile(url, file, headers, formData, uploadCallback, successCallback, errorCallback);
