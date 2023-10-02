@@ -1,14 +1,28 @@
 import { CurrencyPipe, DatePipe, DecimalPipe, TitleCasePipe } from '@angular/common';
 import { HttpClient, HttpHandler } from '@angular/common/http';
-import { TestBed } from '@angular/core/testing';
+import { TestBed, fakeAsync, inject, tick } from '@angular/core/testing';
 
-import { expectPropertiesValues, expectArraysSameOrdering } from '../../../util-test/util-expect.spec';
 import { PoTimePipe } from '../../../pipes/po-time/po-time.pipe';
+import { expectArraysSameOrdering, expectPropertiesValues } from '../../../util-test/util-expect.spec';
 
+import { Observable, of } from 'rxjs';
 import * as PoDynamicUtil from '../po-dynamic.util';
+import { PoDynamicViewRequest } from './interfaces/po-dynamic-view-request.interface';
 import { PoDynamicViewBaseComponent } from './po-dynamic-view-base.component';
-import { PoDynamicViewService } from './po-dynamic-view.service';
 import { PoDynamicViewField } from './po-dynamic-view-field.interface';
+import { PoDynamicViewService } from './services/po-dynamic-view.service';
+
+class DynamicViewService implements PoDynamicViewRequest {
+  getObjectByValue(id: string): Observable<any> {
+    return of({ value: 123, label: 'teste' });
+  }
+}
+
+class TestService implements PoDynamicViewRequest {
+  getObjectByValue(id: string): Observable<any> {
+    return of({ value: 123, label: 'teste' });
+  }
+}
 
 describe('PoDynamicViewBaseComponent:', () => {
   let component: PoDynamicViewBaseComponent;
@@ -30,7 +44,8 @@ describe('PoDynamicViewBaseComponent:', () => {
         PoTimePipe,
         PoDynamicViewService,
         HttpClient,
-        HttpHandler
+        HttpHandler,
+        DynamicViewService
       ]
     });
 
@@ -189,7 +204,106 @@ describe('PoDynamicViewBaseComponent:', () => {
 
         expectArraysSameOrdering(newFields, expectedFields);
       });
+
+      it('should return ordering fields with property searchService', fakeAsync(
+        inject([DynamicViewService], (dynamicService: DynamicViewService) => {
+          component.service = dynamicService;
+          const fields: Array<PoDynamicViewField> = [
+            { property: 'test 1', order: 6 },
+            { property: 'test 0', order: 2, searchService: 'url.test.com', fieldLabel: 'name', fieldValue: 'id' },
+            { property: 'test 2', order: 3 },
+            { property: 'test 3', order: 1 },
+            { property: 'test 4', order: 5 },
+            { property: 'test 5', order: 4 }
+          ];
+          component.value[fields[1].property] = '123';
+          spyOn(component.service, 'getObjectByValue').and.returnValue(of([{ id: 1, name: 'po' }]));
+          spyOn(component, <any>'searchById').and.returnValue(of([{ id: 1, name: 'po' }]));
+
+          const expectedFields = [
+            { property: 'test 3' },
+            { property: 'test 0', value: 'po' },
+            { property: 'test 2' },
+            { property: 'test 5' },
+            { property: 'test 4' },
+            { property: 'test 1' }
+          ];
+
+          component.fields = [...fields];
+
+          const newFields = component['getConfiguredFields']();
+          tick(500);
+          console.log(newFields);
+
+          expectArraysSameOrdering(newFields, expectedFields);
+        })
+      ));
+
+      it('should return ordering fields with property searchService using service type', fakeAsync(
+        inject([DynamicViewService], (dynamicService: DynamicViewService) => {
+          component.service = dynamicService;
+          const fields: Array<PoDynamicViewField> = [
+            { property: 'test 1' },
+            { property: 'test 0', searchService: new TestService(), fieldLabel: 'name', fieldValue: 'id' },
+            { property: 'test 2', searchService: 'url.com' },
+            { property: 'test 3', searchService: 'url.com' },
+            { property: 'test 4' },
+            { property: 'test 5' }
+          ];
+          component.value[fields[1].property] = '123';
+          component.value[fields[2].property] = [{ test: 123 }];
+          component.value[fields[3].property] = { test: 123 };
+
+          spyOn(component.service, 'getObjectByValue').and.returnValue(of([{ id: 1, name: 'po' }]));
+
+          const expectedFields = [
+            { property: 'test 1', value: undefined },
+            { property: 'test 0', value: 'teste' },
+            { property: 'test 2', value: null },
+            { property: 'test 3', value: null },
+            { property: 'test 4' },
+            { property: 'test 5' }
+          ];
+
+          component.fields = [...fields];
+
+          const newFields = component['getConfiguredFields']();
+          tick(500);
+          console.log(newFields);
+
+          expectArraysSameOrdering(newFields, expectedFields);
+        })
+      ));
     });
+
+    it('searchById: should return null if value is empty', done => {
+      const value = '';
+      const field: any = { property: 'test' };
+
+      component['searchById'](value, field).subscribe(result => {
+        expect(result).toBeNull(); // Verifique se o resultado é nulo
+        done();
+      });
+    });
+
+    it('createFieldWithService: should call searchById and update newFields correctly', fakeAsync(() => {
+      const field = { property: 'test' };
+      const newFields = [];
+      const index = 0;
+
+      const valueToSearch = '123';
+      const expectedResult = 'transformedValue';
+
+      const mockSearchById = spyOn(component, <any>'searchById').and.returnValue(of(expectedResult));
+
+      component.value[field.property] = valueToSearch;
+      component['createFieldWithService'](field, newFields, index);
+
+      tick();
+
+      expect(mockSearchById).toHaveBeenCalledWith(valueToSearch, field);
+      expect(newFields[index].value).toBe(expectedResult);
+    }));
 
     it('getMergedFields: should return a merged array between configuredFields and valueFields', () => {
       const configuredFields = [{ property: 'name', value: 'po' }];
@@ -234,6 +348,78 @@ describe('PoDynamicViewBaseComponent:', () => {
       expect(newField.label).toBe(field.label);
 
       expect(component['transformValue']).toHaveBeenCalled();
+    });
+
+    it(`createField: should call 'transformArrayValue', return a
+    object and value is a label property`, () => {
+      const field = { property: 'name', label: 'Nome', isArrayOrObject: true };
+      component.value = { name: { label: 'Test1', value: 123 } };
+
+      const newField = component['createField'](field);
+
+      expect(newField.value).toBe('Test1');
+    });
+
+    it(`createField: should call 'transformArrayValue', return a
+    list and value is a title property`, () => {
+      const field = {
+        property: 'name',
+        label: 'Nome',
+        isArrayOrObject: true,
+        concatLabelValue: true,
+        fieldLabel: 'title',
+        fieldValue: 'id'
+      };
+      component.value = {
+        name: [
+          { title: 'Test1', id: 123 },
+          { title: 'Test2', id: 321 }
+        ]
+      };
+
+      const newField = component['createField'](field);
+
+      expect(newField.value).toBe('Test1 - 123, Test2 - 321');
+    });
+
+    it(`createField: should call 'transformArrayValue' and return a empty value if fieldLabel is a property invalid`, () => {
+      const field = { property: 'name', label: 'Nome', isArrayOrObject: true, fieldLabel: 'item', fieldValue: 'other' };
+      const listName = [
+        { title: 'Test1', id: 123 },
+        { title: 'Test2', id: 321 }
+      ];
+      component.value = {
+        name: listName
+      };
+
+      const newField = component['createField'](field);
+
+      expect(newField.value).toEqual(listName);
+    });
+
+    it(`createField: should call 'transformFieldLabel' and return a fieldLabel property`, () => {
+      const field = { property: 'name', label: 'Nome', fieldLabel: 'title', fieldValue: 'id' };
+      component.value = { name: 'Test Name', title: 'Title Test', id: 123 };
+
+      const newField = component['createField'](field);
+
+      expect(newField.value).toBe('Title Test');
+    });
+
+    it('createField: should call `transformFieldLabel`, return a `fieldLabel` and `fieldValue` property if `concatLabelValue` is true', () => {
+      const field = {
+        property: 'name',
+        label: 'Nome',
+        fieldLabel: 'title',
+        fieldValue: 'id',
+        concatLabelValue: true,
+        type: 'currency'
+      };
+      component.value = { name: 'Test Name', title: 'Test Title', id: 123 };
+
+      const newField = component['createField'](field);
+
+      expect(newField.value).toBe('Test Title - 123');
     });
 
     it('getValueFields: should return an array converting the value object', () => {

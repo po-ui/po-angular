@@ -1,12 +1,14 @@
-import { Component } from '@angular/core';
+import { Component, OnInit, inject } from '@angular/core';
 
 import { PoDynamicViewField } from '@po-ui/ng-components';
+import { SamplePoDynamicViewEmployeeOnLoadService } from './sample-po-dynamic-view-employee-on-load.service';
 
 @Component({
   selector: 'sample-po-dynamic-view-employee-on-load',
-  templateUrl: './sample-po-dynamic-view-employee-on-load.component.html'
+  templateUrl: './sample-po-dynamic-view-employee-on-load.component.html',
+  providers: [SamplePoDynamicViewEmployeeOnLoadService]
 })
-export class SamplePoDynamicViewEmployeeOnLoadComponent {
+export class SamplePoDynamicViewEmployeeOnLoadComponent implements OnInit {
   employee = {
     name: 'Jhon Doe',
     age: '20',
@@ -21,9 +23,23 @@ export class SamplePoDynamicViewEmployeeOnLoadComponent {
     addressStreet: 'Avenida Braz Leme',
     addressNumber: '1000',
     zipCode: '02511-000',
-    city: 'São Paulo',
+    city: 'A',
     wage: 8000.5,
     availability: 'Available',
+    cities: [
+      {
+        city: 'São Paulo',
+        id: 'SP'
+      },
+      {
+        city: 'Joinville',
+        id: 'SC'
+      },
+      {
+        city: 'Belo Horizonte',
+        id: 'MG'
+      }
+    ],
     admissionDate: '2014-10-14T13:45:00-00:00',
     hoursPerDay: '08:30:00',
     profile: 'admin',
@@ -43,12 +59,19 @@ export class SamplePoDynamicViewEmployeeOnLoadComponent {
     { property: 'hoursPerDay', label: 'Hours per day', type: 'time' },
     { property: 'wage', label: 'Wage', type: 'currency' },
     { property: 'availability', tag: true, color: '#C596E7', icon: 'po-icon-ok' },
+    { property: 'cities', isArrayOrObject: true, fieldLabel: 'city', fieldValue: 'id', concatLabelValue: true },
     { property: 'city', label: 'City', divider: 'Address' },
     { property: 'addressStreet', label: 'Street' },
     { property: 'addressNumber', label: 'Number' },
     { property: 'zipCode', label: 'Zip Code' },
     { property: 'image', divider: 'Image', image: true, alt: 'image', height: '250' }
   ];
+
+  private _newService = inject(SamplePoDynamicViewEmployeeOnLoadService);
+
+  ngOnInit(): void {
+    this._newService.setConfig('https://po-sample-api.fly.dev/v1/hotels', { id: 1485976673002 });
+  }
 
   customEmployeeData() {
     return {
@@ -63,7 +86,12 @@ export class SamplePoDynamicViewEmployeeOnLoadComponent {
         { property: 'rg', tag: true, color: 'color-07', order: 3 },
         { property: 'wage', type: 'string', tag: true, color: 'color-07' },
         { property: 'genre', visible: false },
-        { property: 'job', tag: false }
+        { property: 'job', tag: false },
+        {
+          searchService: this._newService,
+          fieldLabel: 'address_city',
+          property: 'city'
+        }
       ]
     };
   }

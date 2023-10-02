@@ -1,12 +1,13 @@
-import { Input, Directive } from '@angular/core';
 import { CurrencyPipe, DatePipe, DecimalPipe, TitleCasePipe } from '@angular/common';
+import { Directive, Input } from '@angular/core';
 
-import { convertToBoolean, isTypeof, sortFields } from '../../../utils/util';
 import { PoTimePipe } from '../../../pipes/po-time/po-time.pipe';
+import { convertToBoolean, isTypeof, sortFields } from '../../../utils/util';
 
+import { Observable, catchError, map, of } from 'rxjs';
 import { getGridColumnsClasses, isVisibleField } from '../po-dynamic.util';
 import { PoDynamicViewField } from './po-dynamic-view-field.interface';
-import { PoDynamicViewService } from './po-dynamic-view.service';
+import { PoDynamicViewService } from './services/po-dynamic-view.service';
 
 /**
  *
@@ -55,6 +56,7 @@ export class PoDynamicViewBaseComponent {
   @Input('p-load') load: string | Function;
 
   visibleFields = [];
+  service: any;
 
   private _fields: Array<PoDynamicViewField> = [];
   private _showAllValue: boolean = false;
@@ -132,16 +134,29 @@ export class PoDynamicViewBaseComponent {
     protected dynamicViewService: PoDynamicViewService
   ) {}
 
-  // retorna os fields com os valores recuperados do objeto value.
-  protected getConfiguredFields() {
+  protected getConfiguredFields(useSearchService = true) {
     const newFields = [];
 
-    this.fields.forEach(field => {
+    this.fields.forEach((field, index) => {
       if (isVisibleField(field)) {
-        newFields.push(this.createField(field));
+        if (!field.searchService) {
+          newFields.splice(index, 0, this.createField(field));
+        } else if (
+          this.value[field.property]?.length ||
+          (!Array.isArray(this.value[field.property]) && this.value[field.property] && useSearchService)
+        ) {
+          if (isTypeof(field.searchService, 'object')) {
+            this.service = <PoDynamicViewService>field.searchService;
+          }
+          if (field.searchService && isTypeof(field.searchService, 'string')) {
+            this.service = this.dynamicViewService;
+            this.service.setConfig(field.searchService as string);
+          }
+          const indexUpdated = field.order ? field.order : index;
+          this.createFieldWithService(field, newFields, indexUpdated);
+        }
       }
     });
-
     return sortFields(newFields);
   }
 
@@ -168,8 +183,33 @@ export class PoDynamicViewBaseComponent {
 
   private createField(field: PoDynamicViewField) {
     const property = field.property;
-    const value = this.transformValue(field.type, this.value[property], field.format);
+    let value;
+    if (field.isArrayOrObject && this.value[property]) {
+      value = this.transformArrayValue(this.value[property], field);
+    } else if (field.fieldLabel) {
+      value = this.transformFieldLabel(property, field);
+    }
 
+    if (!value) {
+      value = this.transformValue(field.type, this.value[property], field.format);
+    }
+
+    return this.returnValues(field, value);
+  }
+
+  private createFieldWithService(field: PoDynamicViewField, newFields?, index?) {
+    const property = field.property;
+
+    this.searchById(this.value[property], field).subscribe(response => {
+      const value = response;
+      const allValues = this.returnValues(field, value);
+      newFields.splice(index, 0, allValues);
+      sortFields(newFields);
+    });
+  }
+
+  private returnValues(field: PoDynamicViewField, value: any) {
+    const property = field.property;
     const classesGridColumns = getGridColumnsClasses(
       field.gridColumns,
       field.offsetColumns,
@@ -200,6 +240,59 @@ export class PoDynamicViewBaseComponent {
       cssClass: classesGridColumns,
       ...field
     };
+  }
+
+  private searchById(value: any, field: PoDynamicViewField): Observable<any> {
+    if (typeof value === 'string') {
+      value = value.trim();
+    }
+
+    if (value !== '') {
+      return this.service
+        .getObjectByValue(value)
+        .pipe(map(res => this.transformArrayValue(res, field)))
+        .pipe(catchError(() => of(null)));
+    } else {
+      return of(null);
+    }
+  }
+
+  private transformArrayValue(valueProperty: any, field: PoDynamicViewField) {
+    const valueArray = Array.isArray(valueProperty) ? valueProperty : [valueProperty];
+    const arrayWithLabel = valueArray.map(item => ({
+      value: item[field.fieldValue] || item.value,
+      label: item[field.fieldLabel] || item.label
+    }));
+
+    const labels = arrayWithLabel.map(optionValue => {
+      if (optionValue.label) {
+        const labelTranformed = this.transformValue(field.type, optionValue.label, field.format);
+        if (field.concatLabelValue && optionValue.value) {
+          return `${labelTranformed} - ${optionValue.value}`;
+        } else {
+          return labelTranformed;
+        }
+      }
+    });
+
+    if (labels[0] !== undefined && labels.join()) {
+      return labels.join(', ');
+    } else {
+      valueProperty = '';
+      return undefined;
+    }
+  }
+
+  private transformFieldLabel(property: string, field: PoDynamicViewField) {
+    if (field.concatLabelValue && field.fieldLabel && field.fieldValue && !field.isArrayOrObject) {
+      const transformedValue = this.transformValue(field.type, this.value[field.fieldLabel], field.format);
+      return `${transformedValue} - ${this.value[field.fieldValue]}`;
+    }
+
+    if (field.fieldLabel && !field.concatLabelValue && !field.isArrayOrObject) {
+      this.value[property] = this.value[field.fieldLabel];
+    }
+    return undefined;
   }
 
   private transformValue(type: string, value, format) {

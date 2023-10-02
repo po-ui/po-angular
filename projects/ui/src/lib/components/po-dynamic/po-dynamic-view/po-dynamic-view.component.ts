@@ -1,11 +1,11 @@
-import { Component, OnChanges, OnInit, SimpleChanges } from '@angular/core';
 import { CurrencyPipe, DatePipe, DecimalPipe, TitleCasePipe } from '@angular/common';
+import { Component, OnChanges, OnInit, SimpleChanges } from '@angular/core';
 
 import { PoTimePipe } from '../../../pipes/po-time/po-time.pipe';
 
 import { PoDynamicViewField } from './../po-dynamic-view/po-dynamic-view-field.interface';
 import { PoDynamicViewBaseComponent } from './po-dynamic-view-base.component';
-import { PoDynamicViewService } from './po-dynamic-view.service';
+import { PoDynamicViewService } from './services/po-dynamic-view.service';
 
 /**
  * @docsExtends PoDynamicViewBaseComponent
@@ -25,6 +25,7 @@ import { PoDynamicViewService } from './po-dynamic-view.service';
  * <example name="po-dynamic-view-employee-on-load" title="PO Dynamic View - Employee on load">
  *  <file name="sample-po-dynamic-view-employee-on-load/sample-po-dynamic-view-employee-on-load.component.html"> </file>
  *  <file name="sample-po-dynamic-view-employee-on-load/sample-po-dynamic-view-employee-on-load.component.ts"> </file>
+ *  <file name="sample-po-dynamic-view-employee-on-load/sample-po-dynamic-view-employee-on-load.service.ts"> </file>
  * </example>
  */
 @Component({
@@ -32,6 +33,7 @@ import { PoDynamicViewService } from './po-dynamic-view.service';
   templateUrl: './po-dynamic-view.component.html'
 })
 export class PoDynamicViewComponent extends PoDynamicViewBaseComponent implements OnChanges, OnInit {
+  initChanges;
   constructor(
     currencyPipe: CurrencyPipe,
     datePipe: DatePipe,
@@ -44,7 +46,12 @@ export class PoDynamicViewComponent extends PoDynamicViewBaseComponent implement
   }
 
   ngOnChanges(changes: SimpleChanges) {
-    if (changes.fields || changes.value || changes.showAllValue) {
+    if (this.load && !this.initChanges) {
+      this.initChanges = false;
+    } else {
+      this.initChanges = true;
+    }
+    if ((changes.fields || changes.value || changes.showAllValue) && this.initChanges) {
       this.visibleFields = this.getVisibleFields();
     }
   }
@@ -113,5 +120,6 @@ export class PoDynamicViewComponent extends PoDynamicViewBaseComponent implement
     this.setFieldsOnLoad(fields);
 
     this.visibleFields = this.getVisibleFields();
+    this.initChanges = true;
   }
 }
