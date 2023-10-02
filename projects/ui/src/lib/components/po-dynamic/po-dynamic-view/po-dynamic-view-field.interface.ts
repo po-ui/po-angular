@@ -1,4 +1,5 @@
 import { PoDynamicField } from '../po-dynamic-field.interface';
+import { PoDynamicViewRequest } from './interfaces/po-dynamic-view-request.interface';
 
 /**
  * @usedBy PoDynamicViewComponent
@@ -40,6 +41,32 @@ export interface PoDynamicViewField extends PoDynamicField {
   color?: string;
 
   /**
+   * Permite que seja exibido em tela, de forma concatenada as propriedades `fieldLabel` + `fieldValue`.
+   * A ordem sempre será `fieldLabel` e depois `fieldValue`, não sendo possível alterar.
+   *
+   * > Propriedade funciona corretamente caso as propriedades `fieldLabel` e `fielValue` sejam válidas.
+   *
+   * @default `false`
+   */
+  concatLabelValue?: boolean;
+
+  /**
+   * Nome da propriedade do objeto retornado que será utilizado como descrição do campo.
+   *
+   * O valor padrão é: `label`.
+   *
+   */
+  fieldLabel?: string;
+
+  /**
+   * Nome da propriedade do objeto retornado que será utilizado como valor do campo.
+   *
+   * O valor padrão é: `value`.
+   *
+   */
+  fieldValue?: string;
+
+  /**
    * Define um ícone que será exibido ao lado do valor para o campo do tipo *tag*.
    *
    * > Veja os valores válidos na [biblioteca de ícones](guides/icons).
@@ -56,6 +83,17 @@ export interface PoDynamicViewField extends PoDynamicField {
    * @default `false`
    */
   inverse?: boolean;
+
+  /**
+   * Define que a propriedade `property` é uma lista ou um objeto.
+   *
+   * > Por padrão, espera-se que a lista ou o objeto esteja com as propriedades `label` e `value`.
+   * Caso estejam com nomes diferentes, deve-se usar as propriedades `fieldLabel` e `fieldValue`.
+   * > É ignorada caso a propriedade `searchService` esteja sendo utilizada.
+   *
+   * @default `false`
+   */
+  isArrayOrObject?: boolean;
 
   /**
    * Formato de exibição do valor do campo.
@@ -181,4 +219,15 @@ export interface PoDynamicViewField extends PoDynamicField {
    *
    */
   options?: Array<{ label: string; value: string | number }>;
+
+  /**
+   * Serviço customizado para um campo em específico.
+   * Pode ser ser informada uma URL ou uma instancia do serviço baseado em PoDynamicViewRequest.
+   * **Importante:**
+   * > A propriedade `property` deve receber um valor válido independente de sua utilização para
+   * execução correta.
+   * > Para que funcione corretamente, é importante que o serviço siga o
+   * [guia de API do PO UI](https://po-ui.io/guides/api).
+   */
+  searchService?: string | PoDynamicViewRequest;
 }
