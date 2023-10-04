@@ -103,8 +103,8 @@ export class PoMultiselectComponent
   @ContentChild(PoMultiselectOptionTemplateDirective, { static: true })
   multiselectOptionTemplate: PoMultiselectOptionTemplateDirective;
 
-  @ViewChild('dropdownElement', { read: ElementRef, static: true }) dropdownElement: ElementRef;
-  @ViewChild('dropdownElement', { static: true }) dropdown;
+  @ViewChild('dropdownElement', { read: ElementRef }) dropdownElement: ElementRef;
+  @ViewChild('dropdownElement') dropdown;
   @ViewChild('iconElement', { read: ElementRef, static: true }) iconElement: ElementRef;
   @ViewChild('inputElement', { read: ElementRef, static: true }) inputElement: ElementRef;
 

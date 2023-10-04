@@ -135,6 +135,20 @@ export abstract class PoMultiselectBaseComponent implements ControlValueAccessor
    */
   @Output('p-change') change: EventEmitter<any> = new EventEmitter<any>();
 
+  /**
+   * @optional
+   *
+   * @description
+   *
+   * Define que o dropdown do multiselect será incluido no body da página e não suspenso com a caixa de texto do componente.
+   * Opção necessária para o caso de uso do componente em páginas que necessitam renderizar o multiselect fora do conteúdo principal.
+   *
+   * > Obs: O uso dessa propriedade pode acarretar na perda sequencial da tabulação da página
+   *
+   * @default `false`
+   */
+  @Input({ alias: 'p-append-in-body', transform: convertToBoolean }) appendBox?: boolean = false;
+
   selectedOptions: Array<PoMultiselectOption | any> = [];
   visibleOptionsDropdown: Array<PoMultiselectOption | any> = [];
   visibleDisclaimers = [];

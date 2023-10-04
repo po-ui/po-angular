@@ -2,6 +2,7 @@ import { ComponentFixture, fakeAsync, flush, TestBed } from '@angular/core/testi
 import { HttpClient, HttpHandler } from '@angular/common/http';
 import { HttpClientTestingModule, HttpTestingController } from '@angular/common/http/testing';
 import { Observable, of, throwError } from 'rxjs';
+import { OverlayModule } from '@angular/cdk/overlay';
 
 import * as UtilsFunction from '../../../utils/util';
 
@@ -37,7 +38,7 @@ describe('PoMultiselectComponent:', () => {
 
   beforeEach(async () => {
     await TestBed.configureTestingModule({
-      imports: [HttpClientTestingModule],
+      imports: [HttpClientTestingModule, OverlayModule],
       declarations: [
         PoDisclaimerComponent,
         PoFieldContainerComponent,
@@ -71,6 +72,7 @@ describe('PoMultiselectComponent:', () => {
   });
 
   it('should call function wasClickedOnToggle', () => {
+    fixture.detectChanges();
     component.openDropdown(true);
     const documentBody = document.body;
     const event = document.createEvent('MouseEvents');
@@ -232,7 +234,7 @@ describe('PoMultiselectComponent:', () => {
       { label: 'label2', value: 2 }
     ];
     component.selectedOptions = [{ label: 'label2', value: 2 }];
-
+    fixture.detectChanges();
     spyOn(component.dropdown, 'scrollTo');
     component.scrollToSelectedOptions();
     expect(component.dropdown.scrollTo).toHaveBeenCalledWith(1);
@@ -240,7 +242,7 @@ describe('PoMultiselectComponent:', () => {
 
   it('shouldn`t call dropdown.scrollTo', () => {
     component.selectedOptions = [];
-
+    fixture.detectChanges();
     spyOn(component.dropdown, 'scrollTo');
     component.scrollToSelectedOptions();
     expect(component.dropdown.scrollTo).not.toHaveBeenCalled();
@@ -268,7 +270,7 @@ describe('PoMultiselectComponent:', () => {
 
   it('should call controlDropdownVisibility in wasClickedOnToggle', () => {
     component.dropdownOpen = true;
-
+    fixture.detectChanges();
     const event = document.createEvent('MouseEvents');
     event.initEvent('click', false, true);
 
@@ -765,7 +767,7 @@ describe('PoMultiselectComponent:', () => {
       call 'dropdown.controlVisibility' with 'false', 'setVisibleOptionsDropdown' with 'options' and 'removeListeners'.`, () => {
       component.dropdownIcon = undefined;
       component.dropdownOpen = undefined;
-
+      fixture.detectChanges();
       const controlVisibilitySpy = spyOn(component.dropdown, 'controlVisibility');
       const setVisibleOptionsDropdownSpy = spyOn(component, 'setVisibleOptionsDropdown');
       const removeListenersSpy = spyOn(component, <any>'removeListeners');
@@ -834,7 +836,7 @@ describe('PoMultiselectComponent:', () => {
       'initializeListeners', 'scrollToSelectedOptions', 'changeDetector.detectChanges' and 'setPositionDropdown'.`, () => {
       component.dropdownIcon = undefined;
       component.dropdownOpen = undefined;
-
+      fixture.detectChanges();
       const controlVisibilitySpy = spyOn(component.dropdown, 'controlVisibility');
       const setVisibleOptionsDropdownSpy = spyOn(component, 'setVisibleOptionsDropdown');
       const initializeListenersSpy = spyOn(component, <any>'initializeListeners');
@@ -873,7 +875,7 @@ describe('PoMultiselectComponent:', () => {
       const customPositions = ['top', 'bottom'];
       const isSetElementWidth = true;
       const poMultiselectContainerOffset = 8;
-
+      fixture.detectChanges();
       const setElementsSpy = spyOn(component['controlPosition'], 'setElements');
       const adjustContainerPositionSpy = spyOn(component, <any>'adjustContainerPosition');
 
@@ -1025,7 +1027,7 @@ describe('PoMultiselectComponent:', () => {
       const wasClickedOnToggleSpy = spyOn(component, 'wasClickedOnToggle');
 
       clickOutEvent();
-
+      fixture.detectChanges();
       expect(wasClickedOnToggleSpy).not.toHaveBeenCalled();
 
       component['open']();
@@ -1052,6 +1054,7 @@ describe('PoMultiselectComponent:', () => {
     });
 
     it(`open: should call 'wasClickedOnToggle' if dropdown list is opened and click window.`, () => {
+      fixture.detectChanges();
       const wasClickedOnToggleSpy = spyOn(component, 'wasClickedOnToggle');
 
       component['open']();
@@ -1061,8 +1064,9 @@ describe('PoMultiselectComponent:', () => {
     });
 
     it(`open: should call 'updateVisibleItems' if dropdown list is opened and resize window.`, () => {
-      const updateVisibleItemsSpy = spyOn(component, 'updateVisibleItems');
+      fixture.detectChanges();
 
+      const updateVisibleItemsSpy = spyOn(component, 'updateVisibleItems');
       component['open']();
       newEvent('resize');
 
@@ -1070,6 +1074,7 @@ describe('PoMultiselectComponent:', () => {
     });
 
     it(`open: should call 'adjustContainerPosition' if dropdown list is opened and scroll window.`, () => {
+      fixture.detectChanges();
       const adjustContainerPositionSpy = spyOn(component, <any>'adjustContainerPosition');
 
       component['open']();

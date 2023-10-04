@@ -5,7 +5,12 @@
   [p-required]="required"
   [p-show-required]="showRequired"
 >
-  <div class="po-field-container-content" [class.po-multiselect-show]="dropdownOpen">
+  <div
+    cdkOverlayOrigin
+    #trigger="cdkOverlayOrigin"
+    class="po-field-container-content"
+    [class.po-multiselect-show]="dropdownOpen"
+  >
     <div
       #inputElement
       [tabindex]="disabled ? -1 : 0"
@@ -47,6 +52,22 @@
     </div>
   </div>
 
+  <ng-container *ngIf="appendBox; then dropdownCDK; else dropdownDefault"> </ng-container>
+
+  <ng-template #dropdownDefault>
+    <ng-container *ngTemplateOutlet="dropdownListbox"> </ng-container>
+  </ng-template>
+
+  <ng-template #dropdownCDK>
+    <ng-template cdkConnectedOverlay [cdkConnectedOverlayOrigin]="trigger" [cdkConnectedOverlayOpen]="true">
+      <ng-container *ngTemplateOutlet="dropdownListbox"></ng-container>
+    </ng-template>
+  </ng-template>
+
+  <po-field-container-bottom [p-help]="help" [p-disabled]="disabled"></po-field-container-bottom>
+</po-field-container>
+
+<ng-template #dropdownListbox>
   <po-multiselect-dropdown
     #dropdownElement
     [p-searching]="isServerSearching"
@@ -65,6 +86,4 @@
     (p-close-dropdown)="controlDropdownVisibility(false)"
   >
   </po-multiselect-dropdown>
-
-  <po-field-container-bottom [p-help]="help" [p-disabled]="disabled"></po-field-container-bottom>
-</po-field-container>
+</ng-template>
