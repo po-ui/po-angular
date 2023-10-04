@@ -141,6 +141,10 @@ describe('PoPageDynamicTableComponent:', () => {
 
       expectPropertiesValues(component, 'hideCloseDisclaimers', validValues, validValues);
     });
+
+    it('p-single-select: should update property `p-single-select` with false.', () => {
+      expectPropertiesValues(component, 'singleSelect', booleanInvalidValues, false);
+    });
   });
 
   describe('Methods:', () => {
