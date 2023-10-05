@@ -60,4 +60,8 @@ export class PoButtonComponent extends PoButtonBaseComponent {
   onClick() {
     this.click.emit(null);
   }
+
+  canShowLabel() {
+    return this.label && !this.hideLabel ? true : false;
+  }
 }

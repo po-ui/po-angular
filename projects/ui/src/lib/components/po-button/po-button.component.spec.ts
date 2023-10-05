@@ -85,7 +85,7 @@ describe('PoButtonComponent: ', () => {
       expectPropertiesValues(component, 'loading', booleanFalseValues, false);
     });
 
-    it('p-label: should add span with an label if `p-label` is defined', () => {
+    it('p-label: should add span with a label if `p-label` is defined', () => {
       component.label = 'Po Button';
       fixture.detectChanges();
 
@@ -97,6 +97,13 @@ describe('PoButtonComponent: ', () => {
       fixture.detectChanges();
 
       expect(nativeElement.querySelector('i.po-button-label')).toBeFalsy();
+    });
+
+    it('p-hide-label: should´t add span with a label if `p-hide-label` is defined', () => {
+      component.hideLabel = true;
+      fixture.detectChanges();
+
+      expect(nativeElement.querySelector('span.po-button-label')).toBeFalsy();
     });
   });
 
@@ -128,6 +135,29 @@ describe('PoButtonComponent: ', () => {
       component.focus();
 
       expect(component.buttonElement.nativeElement.focus).not.toHaveBeenCalled();
+    });
+
+    it('canShowLabel: should call canShowLabel and return true if `label` contains value and `hideLabel` is false', () => {
+      spyOn(component, 'canShowLabel').and.callThrough();
+
+      component.hideLabel = false;
+      component.label = 'PO Button';
+
+      const result = component.canShowLabel();
+
+      expect(component.canShowLabel).toHaveBeenCalled();
+      expect(result).toBe(true);
+    });
+
+    it('canShowLabel: should call canShowLabel and return false if `hideLabel` is true', () => {
+      spyOn(component, 'canShowLabel').and.callThrough();
+
+      component.hideLabel = true;
+
+      const result = component.canShowLabel();
+
+      expect(component.canShowLabel).toHaveBeenCalled();
+      expect(result).toBe(false);
     });
   });
 

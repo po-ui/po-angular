@@ -12,11 +12,13 @@ export class SamplePoButtonLabsComponent implements OnInit {
   icon: string;
   size: string;
   properties: Array<string>;
+  hideLabel: boolean;
 
   propertiesOptions: Array<PoCheckboxGroupOption> = [
     { value: 'disabled', label: 'Disabled' },
     { value: 'loading', label: 'Loading' },
-    { value: 'danger', label: 'Danger' }
+    { value: 'danger', label: 'Danger' },
+    { value: 'hideLabel', label: 'Hide Label', disabled: true }
   ];
 
   iconsOptions: Array<PoRadioGroupOption> = [
@@ -61,6 +63,18 @@ export class SamplePoButtonLabsComponent implements OnInit {
     }
   }
 
+  verifyHideLabel() {
+    const options = [...this.propertiesOptions];
+
+    if (this.label.length > 0) {
+      options[3] = { value: 'hideLabel', label: 'Hide Label', disabled: false };
+    } else {
+      options[3] = { value: 'hideLabel', label: 'Hide Label', disabled: true };
+    }
+
+    this.propertiesOptions = options;
+  }
+
   verifyDisabled(event) {
     const value = [...this.propertiesOptions];
 
@@ -78,6 +92,8 @@ export class SamplePoButtonLabsComponent implements OnInit {
     this.kind = 'secondary';
     this.size = 'medium';
     this.icon = undefined;
+    this.hideLabel = false;
+    this.propertiesOptions[3] = { ...this.propertiesOptions[3], disabled: true };
     this.properties = [];
     this.kindsOptions[2] = { ...this.kindsOptions[2], disabled: false };
     this.sizesOptions[0] = { ...this.sizesOptions[0], disabled: false };
