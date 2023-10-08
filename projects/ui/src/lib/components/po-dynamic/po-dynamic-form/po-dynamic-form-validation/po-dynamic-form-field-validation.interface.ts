@@ -21,4 +21,7 @@ export interface PoDynamicFormFieldValidation {
 
   /** Novo valor do campo */
   value?: any;
+
+  /** Informa se o novo valor é valido ou inválido */
+  invalid?: boolean;
 }

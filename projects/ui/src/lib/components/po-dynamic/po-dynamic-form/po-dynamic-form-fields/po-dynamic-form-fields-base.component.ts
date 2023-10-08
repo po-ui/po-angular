@@ -29,6 +29,8 @@ export class PoDynamicFormFieldsBaseComponent {
 
   visibleFields: Array<PoDynamicFormFieldInternal> = [];
 
+  invalidField: boolean = false;
+
   private _fields: Array<PoDynamicFormField>;
   private _validateFields: Array<string>;
   private _value?: any = {};

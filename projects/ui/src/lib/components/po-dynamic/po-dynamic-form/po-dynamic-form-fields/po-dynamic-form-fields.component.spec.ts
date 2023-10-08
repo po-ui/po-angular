@@ -23,7 +23,11 @@ describe('PoDynamicFormFieldsComponent: ', () => {
 
     fixture = TestBed.createComponent(PoDynamicFormFieldsComponent);
     component = fixture.componentInstance;
-    component['form'] = <any>{ touched: true };
+    component['form'] = <any>{
+      touched: true,
+      control: { disable: () => {}, enable: () => {} },
+      controls: { name: { setErrors: () => {} } }
+    };
 
     fixture.detectChanges();
 
@@ -367,6 +371,16 @@ describe('PoDynamicFormFieldsComponent: ', () => {
       component['applyFieldValidation'](index, validatedField);
 
       expect(component.value).toEqual(value);
+    });
+
+    it('applyFieldValidation: should change invalidField variable value to true', () => {
+      const index = 0;
+      const validatedField = { field: { property: 'test2', required: false, visible: true }, invalid: true };
+
+      component.fields = [{ property: 'test1', required: true, visible: true }];
+
+      component['applyFieldValidation'](index, validatedField);
+      expect(component.invalidField).toEqual(true);
     });
 
     it('applyFieldValidation: should call `detectChanges`', () => {
@@ -873,6 +887,23 @@ describe('PoDynamicFormFieldsComponent: ', () => {
         const validate = () => ({
           value: expectedValue,
           field: { help: 'new help' }
+        });
+
+        component.fields[0].validate = validate;
+
+        spyOn(component['validationService'], 'sendFieldChange').and.returnValue(of(validate()));
+        await component.onChangeField(component.visibleFields[0]);
+
+        expect(component.value.name).toBe(expectedValue);
+      });
+
+      it('should update field with invalid value', async () => {
+        const expectedValue = 'new value';
+
+        const validate = () => ({
+          value: expectedValue,
+          field: { help: 'new help' },
+          invalid: true
         });
 
         component.fields[0].validate = validate;
