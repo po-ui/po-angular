@@ -2,6 +2,25 @@
 
 All notable changes to this project will be documented in this file. See [standard-version](https://github.com/conventional-changelog/standard-version) for commit guidelines.
 
+# [16.3.0](https://github.com/po-ui/po-angular/compare/v16.2.1...v16.3.0) (2023-10-09)
+
+
+### Bug Fixes
+
+* **input:** adiciona indicação visual de campo inválido ([90e9362](https://github.com/po-ui/po-angular/commit/90e93629e5c6adfa014a6f6865f0c92e44581f5d))
+
+
+### Features
+
+* **accordion:** implementa definições do AnimaliaDS ([79d15f2](https://github.com/po-ui/po-angular/commit/79d15f291fb6952f7c27250da83edfebd619028a))
+* **breadcrumb:** implementa definições do AnimaliaDS ([c2772ce](https://github.com/po-ui/po-angular/commit/c2772ce3442eedcdd8c41d9c9ecc3f8491c185e7))
+* **dynamic-table:** implementa opção de esconder gerenciador de colunas ([1cd1ba9](https://github.com/po-ui/po-angular/commit/1cd1ba91d439d010686899b31f523f51aa4ccb20))
+* **lookup:** implementa opção de esconder gerenciador de colunas ([2bc70bd](https://github.com/po-ui/po-angular/commit/2bc70bd7ca978bffaabe83172dcb53f65dfbc9ea))
+* **tree-view:** seleção única e customizada ([7e9c9da](https://github.com/po-ui/po-angular/commit/7e9c9da049f1d575cb68aeeaffb1933f2700309e))
+* **upload:** inclui a propriedade `url` no evento `upload` ([6c8a9af](https://github.com/po-ui/po-angular/commit/6c8a9afe48043256391880e832050403cb76925e)), closes [#1825](https://github.com/po-ui/po-angular/issues/1825)
+
+
+
 ## [16.2.1](https://github.com/po-ui/po-angular/compare/v16.2.0...v16.2.1) (2023-10-02)
 
 
