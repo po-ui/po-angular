@@ -603,7 +603,11 @@ export class PoTableComponent extends PoTableBaseComponent implements AfterViewI
   }
 
   onFilteredItemsChange(items: Array<any>): void {
-    this.filteredItems = items;
+    if (this.sortedColumn.property) {
+      this.sortArray(this.sortedColumn.property, this.sortedColumn.ascending, items);
+    } else {
+      this.filteredItems = items;
+    }
   }
 
   /**

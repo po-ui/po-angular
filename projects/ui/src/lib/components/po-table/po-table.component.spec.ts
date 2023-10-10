@@ -2090,6 +2090,22 @@ describe('PoTableComponent:', () => {
 
         expect(component.filteredItems).toBe(items);
       });
+
+      it('onFilteredItemsChange should call `sortArray` if exist sortedColumn', () => {
+        component.sortedColumn = {
+          property: { property: 'name' },
+          ascending: true
+        };
+        component.items = [
+          { id: 2, name: 'item2' },
+          { id: 1, name: 'item1' }
+        ];
+
+        spyOn(component, 'sortArray');
+        component.onFilteredItemsChange(items);
+
+        expect(component.sortArray).toHaveBeenCalled();
+      });
     });
   });
 

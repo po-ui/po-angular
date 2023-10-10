@@ -385,6 +385,21 @@ describe('PoTableBaseComponent:', () => {
     expect(component.items).toEqual(sortedItemsDesc);
   });
 
+  it('should sort values descending with item as param', () => {
+    const column = component.columns[1];
+    const sortedItemsDesc = items.slice().sort((a, b) => b.numberData - a.numberData);
+    component['sortArray'](column, false, items);
+    expect(component.filteredItems).toEqual(sortedItemsDesc);
+  });
+
+  it('should sort values descending with item as param and height', () => {
+    const column = component.columns[1];
+    component.height = 600;
+    const sortedItemsDesc = items.slice().sort((a, b) => b.numberData - a.numberData);
+    component['sortArray'](column, false, items);
+    expect(component.filteredItems).toEqual(sortedItemsDesc);
+  });
+
   it('should sort values ascending', () => {
     const column = component.columns[1];
     const sortedItemsAsc = items.slice().sort((a, b) => a.numberData - b.numberData);
