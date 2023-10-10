@@ -6,7 +6,6 @@ import { poLocaleDefault } from '../../services/po-language/po-language.constant
 import { PoLanguageService } from '../../services/po-language/po-language.service';
 import { capitalizeFirstLetter, convertToBoolean, isTypeof, sortValues } from '../../utils/util';
 
-import { InputBoolean } from '../../decorators';
 import { PoFilterMode } from '../po-search/po-search-filter-mode.enum';
 import { PoTableColumnSortType } from './enums/po-table-column-sort-type.enum';
 import { PoTableColumnSpacing } from './enums/po-table-spacing.enum';
@@ -1087,6 +1086,19 @@ export abstract class PoTableBaseComponent implements OnChanges, OnDestroy {
     }
   }
 
+  sortArray(column: PoTableColumn, ascending: boolean, item?: Array<any>) {
+    let itemsList;
+    if (item) {
+      itemsList = this.height ? [...item] : item;
+    } else {
+      itemsList = this.height ? [...this.filteredItems] : this.filteredItems;
+    }
+    itemsList.sort((leftSide, rightSide): number =>
+      sortValues(leftSide[column.property], rightSide[column.property], ascending)
+    );
+    this.filteredItems = itemsList;
+  }
+
   protected getDefaultColumns(item: any) {
     const keys = Object.keys(item);
 
@@ -1197,16 +1209,6 @@ export abstract class PoTableBaseComponent implements OnChanges, OnDestroy {
 
   private setSubtitleColumns() {
     this.subtitleColumns = this.getSubtitleColumns();
-  }
-
-  private sortArray(column: PoTableColumn, ascending: boolean) {
-    const itemsList = this.height ? [...this.filteredItems] : this.filteredItems;
-    itemsList.sort((leftSide, rightSide): number =>
-      sortValues(leftSide[column.property], rightSide[column.property], ascending)
-    );
-    if (this.height) {
-      this.filteredItems = itemsList;
-    }
   }
 
   private unselectOtherRows(rows: Array<any>, row) {
