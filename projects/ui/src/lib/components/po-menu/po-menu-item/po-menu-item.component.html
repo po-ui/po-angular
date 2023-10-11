@@ -39,7 +39,7 @@
     [style.maxHeight.px]="maxHeight"
   >
     <ul class="po-menu-sub-items-list">
-      <li class="po-menu-subm-items-list-item" *ngFor="let subItem of subItems" [attr.aria-level]="subItem.level">
+      <li class="po-menu-sub-items-list-item" *ngFor="let subItem of subItems" [attr.aria-level]="subItem.level">
         <po-menu-item
           p-is-sub-item
           [p-action]="subItem.action"
