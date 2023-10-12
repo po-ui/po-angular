@@ -591,6 +591,15 @@ export interface PoDynamicFormField extends PoDynamicField {
   restrictions?: PoUploadFileRestrictions;
 
   /**
+   * Nome do campo de formulário que será enviado para o serviço informado na propriedade `url`.
+   *
+   * > O valor default é `files`
+   *
+   * **Componente compatível**: `po-upload`
+   */
+  formField?: string;
+
+  /**
    * Objeto que contém os cabeçalhos que será enviado na requisição dos arquivos.
    *
    * **Componente compatível**: `po-upload`
