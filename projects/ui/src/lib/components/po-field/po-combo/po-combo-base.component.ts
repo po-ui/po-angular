@@ -602,6 +602,20 @@ export abstract class PoComboBaseComponent implements ControlValueAccessor, OnIn
    */
   @Input({ alias: 'p-cache', transform: convertToBoolean }) cache: boolean = true;
 
+  /**
+   * @optional
+   *
+   * @description
+   *
+   * Define que o dropdown do combo será incluido no body da página e não suspenso com a caixa de texto do componente.
+   * Opção necessária para o caso de uso do componente em páginas que necessitam renderizar o combo fora do conteúdo principal.
+   *
+   * > Obs: O uso dessa propriedade pode acarretar na perda sequencial da tabulação da página
+   *
+   * @default `false`
+   */
+  @Input({ alias: 'p-append-in-body', transform: convertToBoolean }) appendBox?: boolean = false;
+
   constructor(languageService: PoLanguageService) {
     this.language = languageService.getShortLanguage();
   }
