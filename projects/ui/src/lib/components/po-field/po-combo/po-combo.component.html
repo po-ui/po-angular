@@ -49,33 +49,46 @@
     </div>
   </div>
 
-  <ng-template cdkConnectedOverlay [cdkConnectedOverlayOrigin]="trigger" [cdkConnectedOverlayOpen]="true">
-    <div #containerElement class="po-combo-container" [hidden]="!comboOpen && !isServerSearching">
-      <po-listbox
-        #poListbox
-        #contentElement
-        p-type="option"
-        [p-items]="visibleOptions"
-        [p-field-value]="dynamicValue"
-        [p-field-label]="dynamicLabel"
-        [p-template]="comboOptionTemplate"
-        [p-search-value]="getInputValue()"
-        [p-infinite-loading]="infiniteLoading"
-        [p-infinite-scroll]="infiniteScroll"
-        [p-filtering]="isFiltering"
-        [p-cache]="cache"
-        (p-selectcombo-item)="onOptionClick($event, $event.event)"
-        [p-filter-mode]="filterMode"
-        [p-visible]="comboOpen"
-        [p-is-searching]="isServerSearching"
-        [p-should-mark-letter]="shouldMarkLetters"
-        [p-compare-cache]="compareObjects(cacheOptions, visibleOptions)"
-        [p-combo-service]="service"
-        [p-infinite-scroll-distance]="infiniteScrollDistance"
-        (p-update-infinite-scroll)="showMoreInfiniteScroll()"
-        (p-close)="onCloseCombo()"
-      ></po-listbox>
-    </div>
+  <ng-container *ngIf="appendBox; then dropdownCDK; else dropdownDefault"> </ng-container>
+
+  <ng-template #dropdownDefault>
+    <ng-container *ngTemplateOutlet="dropdownListbox"> </ng-container>
   </ng-template>
+
+  <ng-template #dropdownCDK>
+    <ng-template cdkConnectedOverlay [cdkConnectedOverlayOrigin]="trigger" [cdkConnectedOverlayOpen]="true">
+      <ng-container *ngTemplateOutlet="dropdownListbox"></ng-container>
+    </ng-template>
+  </ng-template>
+
   <po-field-container-bottom [p-help]="help" [p-disabled]="disabled"></po-field-container-bottom>
 </po-field-container>
+
+<ng-template #dropdownListbox>
+  <div #containerElement class="po-combo-container" [hidden]="!comboOpen && !isServerSearching">
+    <po-listbox
+      #poListbox
+      #contentElement
+      p-type="option"
+      [p-items]="visibleOptions"
+      [p-field-value]="dynamicValue"
+      [p-field-label]="dynamicLabel"
+      [p-template]="comboOptionTemplate"
+      [p-search-value]="getInputValue()"
+      [p-infinite-loading]="infiniteLoading"
+      [p-infinite-scroll]="infiniteScroll"
+      [p-filtering]="isFiltering"
+      [p-cache]="cache"
+      (p-selectcombo-item)="onOptionClick($event, $event.event)"
+      [p-filter-mode]="filterMode"
+      [p-visible]="comboOpen"
+      [p-is-searching]="isServerSearching"
+      [p-should-mark-letter]="shouldMarkLetters"
+      [p-compare-cache]="compareObjects(cacheOptions, visibleOptions)"
+      [p-combo-service]="service"
+      [p-infinite-scroll-distance]="infiniteScrollDistance"
+      (p-update-infinite-scroll)="showMoreInfiniteScroll()"
+      (p-close)="onCloseCombo()"
+    ></po-listbox>
+  </div>
+</ng-template>
