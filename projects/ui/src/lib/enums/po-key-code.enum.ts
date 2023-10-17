@@ -34,5 +34,11 @@ export enum PoKeyCodeEnum {
   space = 32,
 
   /** Tab */
-  tab = 9
+  tab = 9,
+
+  /** Arrow Left */
+  left = 37,
+
+  /** Arrow Right */
+  right = 39
 }

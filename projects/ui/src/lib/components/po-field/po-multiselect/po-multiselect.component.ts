@@ -3,33 +3,51 @@ import {
   ChangeDetectionStrategy,
   ChangeDetectorRef,
   Component,
+  ContentChild,
   DoCheck,
   ElementRef,
-  forwardRef,
   OnChanges,
   OnDestroy,
   Renderer2,
   SimpleChanges,
   ViewChild,
-  ContentChild
+  forwardRef
 } from '@angular/core';
 import { NG_VALIDATORS, NG_VALUE_ACCESSOR } from '@angular/forms';
 
-import { Observable, of } from 'rxjs';
-import { tap, catchError } from 'rxjs/operators';
+import { Observable, Subscription, fromEvent, of } from 'rxjs';
+import { catchError, tap } from 'rxjs/operators';
 
-import { isMobile } from './../../../utils/util';
-import { PoControlPositionService } from './../../../services/po-control-position/po-control-position.service';
-import { PoKeyCodeEnum } from './../../../enums/po-key-code.enum';
 import { PoLanguageService } from '../../../services/po-language/po-language.service';
+import { PoKeyCodeEnum } from './../../../enums/po-key-code.enum';
+import { PoControlPositionService } from './../../../services/po-control-position/po-control-position.service';
+import { isMobile } from './../../../utils/util';
 
+import { poLocaleDefault } from '../../../services/po-language/po-language.constant';
 import { PoMultiselectBaseComponent } from './po-multiselect-base.component';
-import { PoMultiselectOption } from './po-multiselect-option.interface';
 import { PoMultiselectFilterService } from './po-multiselect-filter.service';
 import { PoMultiselectOptionTemplateDirective } from './po-multiselect-option-template/po-multiselect-option-template.directive';
+import { PoMultiselectOption } from './po-multiselect-option.interface';
 
 const poMultiselectContainerOffset = 8;
 const poMultiselectContainerPositionDefault = 'bottom';
+const poMultiselectInputPaddingRight = 52;
+const poMultiselectSpaceBetweenTags = 8;
+
+const literalsTagRemoveOthers = {
+  pt: {
+    remove: 'Remover todos os itens selecionados'
+  },
+  ru: {
+    remove: 'Удалить все выбранные элементы'
+  },
+  es: {
+    remove: 'Eliminar todos los elementos seleccionados'
+  },
+  en: {
+    remove: 'Clear all selected items'
+  }
+};
 
 /* istanbul ignore next */
 const providers = [
@@ -108,14 +126,16 @@ export class PoMultiselectComponent
   @ViewChild('iconElement', { read: ElementRef, static: true }) iconElement: ElementRef;
   @ViewChild('inputElement', { read: ElementRef, static: true }) inputElement: ElementRef;
 
-  disclaimerOffset = 0;
+  literalsTag;
   dropdownIcon: string = 'po-icon-arrow-down';
   dropdownOpen: boolean = false;
   initialized = false;
-  positionDisclaimerExtra;
+  hasMoreTag: boolean;
   timeoutResize;
   visibleElement = false;
-
+  private subscription: Subscription = new Subscription();
+  private enterCloseTag = false;
+  private initCalculateItems = true;
   private isCalculateVisibleItems: boolean = true;
   private cacheOptions: Array<PoMultiselectOption | any>;
 
@@ -128,6 +148,11 @@ export class PoMultiselectComponent
     languageService: PoLanguageService
   ) {
     super(languageService);
+    const language = languageService.getShortLanguage();
+    this.literalsTag = {
+      ...literalsTagRemoveOthers[poLocaleDefault],
+      ...literalsTagRemoveOthers[language]
+    };
   }
 
   ngAfterViewInit() {
@@ -145,7 +170,7 @@ export class PoMultiselectComponent
 
   ngDoCheck() {
     const inputWidth = this.inputElement.nativeElement.offsetWidth;
-    // Permite que os disclaimers sejam calculados na primeira vez que o componente torna-se visível,
+    // Permite que as tags sejam calculadas na primeira vez que o componente torna-se visível,
     // evitando com isso, problemas com Tabs ou Divs que iniciem escondidas.
     if ((inputWidth && !this.visibleElement && this.initialized) || (inputWidth && this.isCalculateVisibleItems)) {
       this.debounceResize();
@@ -157,6 +182,7 @@ export class PoMultiselectComponent
     this.removeListeners();
     this.getObjectsByValuesSubscription?.unsubscribe();
     this.filterSubject?.unsubscribe();
+    this.subscription.unsubscribe();
   }
 
   /**
@@ -183,52 +209,60 @@ export class PoMultiselectComponent
   }
 
   getInputWidth() {
-    return this.el.nativeElement.querySelector('.po-input').offsetWidth - 40;
+    return this.el.nativeElement.querySelector('.po-multiselect-input').offsetWidth - poMultiselectInputPaddingRight;
   }
 
-  getDisclaimersWidth() {
-    const disclaimers = this.el.nativeElement.querySelectorAll('po-disclaimer');
-    return Array.from(disclaimers).map(disclaimer => disclaimer['offsetWidth']);
+  getTagsWidth() {
+    const tags = this.el.nativeElement.querySelectorAll('po-tag');
+    return Array.from(tags).map(tag => tag['offsetWidth']);
   }
 
   calculateVisibleItems() {
-    const disclaimersWidth = this.getDisclaimersWidth();
+    this.hasMoreTag = false;
+    const tagsWidth = this.getTagsWidth();
     const inputWidth = this.getInputWidth();
-    const extraDisclaimerSize = 38;
-    const disclaimersVisible = disclaimersWidth[0];
+    const extraTagSize = 63;
+    const tagsVisible = tagsWidth[0];
 
-    this.visibleDisclaimers = [];
+    this.visibleTags = [];
 
     if (inputWidth > 0) {
       let sum = 0;
       let i = 0;
       for (i = 0; i < this.selectedOptions.length; i++) {
-        sum += disclaimersWidth[i];
-        this.visibleDisclaimers.push(this.selectedOptions[i]);
+        sum += tagsWidth[i] + poMultiselectSpaceBetweenTags;
+        this.visibleTags.push(this.selectedOptions[i]);
 
         if (sum > inputWidth) {
-          sum -= disclaimersWidth[i];
+          sum -= tagsWidth[i];
           this.isCalculateVisibleItems = false;
           break;
         }
       }
 
-      if (disclaimersVisible || !this.selectedOptions.length) {
+      if (tagsVisible || !this.selectedOptions.length) {
         if (i === this.selectedOptions.length) {
           this.isCalculateVisibleItems = false;
           return;
         }
 
-        if (sum + extraDisclaimerSize > inputWidth) {
-          this.visibleDisclaimers.splice(-2, 2);
+        this.hasMoreTag = true;
+        if (sum + extraTagSize > inputWidth) {
+          this.visibleTags.splice(-2, 2);
           const label = '+' + (this.selectedOptions.length + 1 - i).toString();
-          this.visibleDisclaimers.push({ [this.fieldValue]: '', [this.fieldLabel]: label });
+          this.visibleTags.push({ [this.fieldValue]: '', [this.fieldLabel]: label });
         } else {
-          this.visibleDisclaimers.splice(-1, 1);
+          this.visibleTags.splice(-1, 1);
           const label = '+' + (this.selectedOptions.length - i).toString();
-          this.visibleDisclaimers.push({ [this.fieldValue]: '', [this.fieldLabel]: label });
+          this.visibleTags.push({ [this.fieldValue]: '', [this.fieldLabel]: label });
         }
       }
+      if (this.initCalculateItems) {
+        setTimeout(() => {
+          this.handleKeyboardNavigationTag();
+        }, 300);
+      }
+      this.initCalculateItems = false;
     }
     this.changeDetector.markForCheck();
   }
@@ -241,11 +275,14 @@ export class PoMultiselectComponent
       this.changeDetector.detectChanges();
       this.adjustContainerPosition();
     }
+    setTimeout(() => {
+      this.handleKeyboardNavigationTag();
+    }, 300);
   }
 
   updateVisibleItems() {
     if (this.selectedOptions) {
-      this.visibleDisclaimers = [].concat(this.selectedOptions);
+      this.visibleTags = [].concat(this.selectedOptions);
     }
 
     this.debounceResize();
@@ -267,19 +304,53 @@ export class PoMultiselectComponent
   }
 
   onBlur() {
+    if (
+      typeof this.inputElement.nativeElement.getAttribute('aria-label') === 'string' &&
+      this.inputElement.nativeElement.getAttribute('aria-label').includes('Unselected')
+    ) {
+      this.inputElement.nativeElement.setAttribute('aria-label', this.label ? this.label : '');
+    }
     this.onModelTouched?.();
   }
 
   onKeyDown(event?: any) {
-    if (event.keyCode === PoKeyCodeEnum.arrowUp || event.keyCode === PoKeyCodeEnum.arrowDown) {
-      event.preventDefault();
-      this.controlDropdownVisibility(true);
+    if (
+      (event.keyCode === PoKeyCodeEnum.tab && this.visibleTags.length > 1) ||
+      (event.keyCode === PoKeyCodeEnum.tab && this.visibleTags.length < 1)
+    ) {
       return;
     }
 
-    if (event.keyCode === PoKeyCodeEnum.tab) {
+    if (event.keyCode === PoKeyCodeEnum.esc) {
+      event.preventDefault();
       this.controlDropdownVisibility(false);
+      return;
     }
+
+    if (event.keyCode === PoKeyCodeEnum.arrowDown && this.visibleTags.length > 0) {
+      event.preventDefault();
+      this.controlDropdownVisibility(true);
+      this.dropdown?.listbox?.setFocus();
+      return;
+    }
+
+    if (event.keyCode === PoKeyCodeEnum.enter && !this.enterCloseTag) {
+      if (this.visibleTags.length === 0) {
+        this.toggleDropdownVisibility();
+        this.focus();
+        return;
+      } else {
+        event.preventDefault();
+        this.toggleDropdownVisibility();
+        return;
+      }
+    }
+
+    if (event.keyCode === PoKeyCodeEnum.space) {
+      event.preventDefault();
+      this.toggleDropdownVisibility();
+    }
+    this.enterCloseTag = false;
   }
 
   toggleDropdownVisibility() {
@@ -292,6 +363,14 @@ export class PoMultiselectComponent
     }
 
     this.controlDropdownVisibility(!this.dropdownOpen);
+  }
+
+  onKeyDownDropdown(event: KeyboardEvent, index: number) {
+    if (event.key === 'Escape') {
+      event.preventDefault();
+      this.controlDropdownVisibility(false);
+      this.inputElement.nativeElement.focus();
+    }
   }
 
   openDropdown(toOpen) {
@@ -333,12 +412,29 @@ export class PoMultiselectComponent
     setTimeout(() => this.adjustContainerPosition());
   }
 
-  closeDisclaimer(value) {
-    const index = this.selectedOptions.findIndex(option => option[this.fieldValue] === value);
-    this.selectedOptions.splice(index, 1);
+  closeTag(value, event) {
+    let index;
+    this.enterCloseTag = true;
+    if (!value || (typeof value === 'string' && value.includes('+'))) {
+      index = null;
+      const itemsNotInVisibleTags = this.selectedOptions.filter(option => !this.visibleTags.includes(option));
+      for (const option of this.visibleTags) {
+        if (!this.selectedOptions.includes(option)) {
+          this.selectedOptions.splice(this.visibleTags.length - 1, itemsNotInVisibleTags.length);
+          this.updateVisibleItems();
+          this.callOnChange(this.selectedOptions);
+        }
+      }
+    } else {
+      index = this.selectedOptions.findIndex(option => option[this.fieldValue] === value);
+      this.selectedOptions.splice(index, 1);
+      this.updateVisibleItems();
+      this.callOnChange(this.selectedOptions);
+    }
 
-    this.updateVisibleItems();
-    this.callOnChange(this.selectedOptions);
+    setTimeout(() => {
+      this.focusOnNextTag(index, event);
+    }, 300);
   }
 
   wasClickedOnToggle(event: MouseEvent): void {
@@ -400,6 +496,92 @@ export class PoMultiselectComponent
     this.setVisibleOptionsDropdown(this.options);
 
     this.removeListeners();
+  }
+
+  private focusOnNextTag(indexClosed: number, clickOrEnter: string) {
+    if (clickOrEnter === 'enter') {
+      const tagRemoveElements: Array<any> = this.el.nativeElement.querySelectorAll('.po-tag-remove');
+      indexClosed = indexClosed || indexClosed === 0 ? indexClosed : tagRemoveElements.length;
+      if (tagRemoveElements.length === 0) {
+        this.inputElement.nativeElement.focus();
+        this.inputElement.nativeElement.setAttribute('aria-label', `Unselected items ${this.label}`);
+        this.controlDropdownVisibility(true);
+      }
+      this.focusOnRemoveTag(tagRemoveElements, indexClosed);
+    } else {
+      indexClosed = 0;
+    }
+    this.handleKeyboardNavigationTag(indexClosed);
+  }
+
+  private focusOnRemoveTag(tag: any, indexClosed: number) {
+    if (tag.length === indexClosed) {
+      tag[indexClosed - 1]?.focus();
+    } else {
+      tag[indexClosed]?.focus();
+    }
+  }
+
+  public handleKeyboardNavigationTag(initialIndex = 0) {
+    this.subscription.unsubscribe();
+    this.subscription = new Subscription();
+    const tagRemoveElements = this.el.nativeElement.querySelectorAll('.po-tag-remove');
+    this.initializeTagRemoveElements(tagRemoveElements, initialIndex);
+  }
+
+  private setTabIndex(element, tabIndex) {
+    element.setAttribute('tabindex', tabIndex);
+  }
+
+  private handleArrowLeft(tagRemoveElements, index) {
+    if (index > 0) {
+      this.setTabIndex(tagRemoveElements[index], -1);
+      tagRemoveElements[index - 1].focus();
+      this.setTabIndex(tagRemoveElements[index - 1], 0);
+    }
+  }
+
+  private handleArrowRight(tagRemoveElements, index) {
+    if (index < tagRemoveElements.length - 1) {
+      this.setTabIndex(tagRemoveElements[index], -1);
+      tagRemoveElements[index + 1].focus();
+      this.setTabIndex(tagRemoveElements[index + 1], 0);
+    }
+  }
+
+  private handleKeyDown(event: KeyboardEvent, tagRemoveElements, index) {
+    const KEY_SPACE = 'Space';
+    const KEY_ARROW_LEFT = 'ArrowLeft';
+    const KEY_ARROW_RIGHT = 'ArrowRight';
+
+    if (event.code === KEY_SPACE) {
+      event.preventDefault();
+      event.stopPropagation();
+    }
+
+    if (event.key === KEY_ARROW_LEFT) {
+      this.handleArrowLeft(tagRemoveElements, index);
+    } else if (event.key === KEY_ARROW_RIGHT) {
+      this.handleArrowRight(tagRemoveElements, index);
+    }
+  }
+
+  private initializeTagRemoveElements(tagRemoveElements, initialIndex) {
+    tagRemoveElements.forEach((tagRemoveElement, index) => {
+      if (index === initialIndex) {
+        this.setTabIndex(tagRemoveElements[initialIndex], 0);
+      } else if (tagRemoveElements.length === initialIndex) {
+        this.setTabIndex(tagRemoveElements[initialIndex - 1], 0);
+      } else {
+        this.setTabIndex(tagRemoveElement, -1);
+      }
+
+      this.subscription.add(
+        fromEvent(tagRemoveElement, 'keydown').subscribe((event: KeyboardEvent) => {
+          this.handleKeyDown(event, tagRemoveElements, index);
+        })
+      );
+    });
   }
 
   private initializeListeners(): void {

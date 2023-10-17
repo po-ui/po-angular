@@ -1,11 +1,10 @@
-import { PoLanguageService } from './../../services/po-language/po-language.service';
 import { ChangeDetectionStrategy, Component, ElementRef, OnInit, ViewChild } from '@angular/core';
+import { PoLanguageService } from './../../services/po-language/po-language.service';
 
-import { PoTagBaseComponent } from './po-tag-base.component';
 import { PoTagIcon } from './enums/po-tag-icon.enum';
-import { PoTagItem } from './interfaces/po-tag-item.interface';
 import { PoTagType } from './enums/po-tag-type.enum';
-import { PoTagLiterals } from './po-tag.literals';
+import { PoTagBaseComponent } from './po-tag-base.component';
+import { PoTagLiterals } from './interfaces/po-tag-literals.interface';
 
 const poTagTypeDefault = 'po-tag-' + PoTagType.Info;
 
@@ -36,16 +35,13 @@ const poTagTypeDefault = 'po-tag-' + PoTagType.Info;
 })
 export class PoTagComponent extends PoTagBaseComponent implements OnInit {
   @ViewChild('tagContainer', { static: true }) tagContainer: ElementRef;
+  @ViewChild('tagClose', { static: true }) tagClose: ElementRef;
+  @ViewChild('poTag', { static: true }) poTag: ElementRef;
 
   isClickable: boolean;
-  literals: any;
 
-  constructor(private el: ElementRef, private languageService: PoLanguageService) {
-    super();
-    const language = this.languageService.getShortLanguage();
-    this.literals = {
-      ...PoTagLiterals[language]
-    };
+  constructor(private el: ElementRef, languageService: PoLanguageService) {
+    super(languageService);
   }
 
   ngOnInit() {
@@ -86,24 +82,25 @@ export class PoTagComponent extends PoTagBaseComponent implements OnInit {
     return this.orientation === this.poTagOrientation.Horizontal;
   }
 
-  onClick() {
+  onClick(event = 'click') {
     if (!this.removable && !this.disabled) {
-      const submittedTagItem: PoTagItem = { value: this.value, type: this.type };
+      const submittedTagItem = { value: this.value, type: this.type, event: event };
       this.click.emit(submittedTagItem);
     }
   }
 
-  onClose() {
+  onClose(event = 'click') {
     if (!this.disabled) {
-      this.click.emit(null);
+      this.click.emit(event);
       this.onRemove();
+      this.remove.emit(event);
     }
   }
 
   onKeyPressed(event) {
     event.preventDefault();
     event.stopPropagation();
-    this.onClick();
+    this.onClick('enter');
   }
 
   styleTag() {

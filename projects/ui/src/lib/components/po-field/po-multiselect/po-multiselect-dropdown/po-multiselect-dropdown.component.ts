@@ -4,7 +4,6 @@ import {
   Component,
   ElementRef,
   EventEmitter,
-  HostListener,
   Input,
   Output,
   ViewChild,
@@ -13,7 +12,6 @@ import {
 
 import { PoMultiselectLiterals } from '../../index';
 import { PoMultiselectOption } from '../po-multiselect-option.interface';
-import { PoMultiselectSearchComponent } from './../po-multiselect-search/po-multiselect-search.component';
 import { PoListBoxComponent } from './../../../po-listbox/po-listbox.component';
 
 /**

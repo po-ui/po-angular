@@ -139,7 +139,11 @@ describe('PoTagComponent:', () => {
 
       component.onClick();
 
-      expect(component.click.emit).toHaveBeenCalledWith({ 'value': component.value, 'type': component.type });
+      expect(component.click.emit).toHaveBeenCalledWith({
+        'value': component.value,
+        'type': component.type,
+        'event': 'click'
+      });
     });
 
     it('onKeyPressed: should call `onClick` if the event `keydown` is used with `enter` key.', () => {
@@ -192,7 +196,7 @@ describe('PoTagComponent:', () => {
 
       component.onClose();
 
-      expect(component.click.emit).toHaveBeenCalledWith(null);
+      expect(component.click.emit).toHaveBeenCalledWith('click');
     });
 
     it('onRemove: Should remove the element if not disabled', () => {

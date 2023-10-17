@@ -14,4 +14,7 @@ export interface PoMultiselectLiterals {
 
   /** Texto exibido no botão de selecionar todos. */
   selectAll?: string;
+
+  /** Texto exibido na propriedade placeholder. */
+  selectItem?: string;
 }
