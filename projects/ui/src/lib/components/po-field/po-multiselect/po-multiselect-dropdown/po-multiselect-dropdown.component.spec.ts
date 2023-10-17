@@ -5,7 +5,6 @@ import { configureTestSuite } from './../../../../util-test/util-expect.spec';
 
 import { PoMultiselectDropdownComponent } from './po-multiselect-dropdown.component';
 import { poMultiselectLiteralsDefault } from '../po-multiselect-base.component';
-import { PoMultiselectSearchComponent } from './../po-multiselect-search/po-multiselect-search.component';
 
 describe('PoMultiselectDropdownComponent:', () => {
   let component: PoMultiselectDropdownComponent;
@@ -13,7 +12,7 @@ describe('PoMultiselectDropdownComponent:', () => {
 
   configureTestSuite(() => {
     TestBed.configureTestingModule({
-      declarations: [PoMultiselectDropdownComponent, PoMultiselectSearchComponent]
+      declarations: [PoMultiselectDropdownComponent]
     });
   });
 
@@ -291,14 +290,6 @@ describe('PoMultiselectDropdownComponent:', () => {
       fixture.detectChanges();
 
       expect(fixture.nativeElement.querySelector('.po-listbox-container-no-data')).toBeNull();
-    });
-
-    it('shouldn`t show `po-multiselect-search` if `hideSearch` is `true`', () => {
-      component.hideSearch = true;
-
-      fixture.detectChanges();
-
-      expect(fixture.debugElement.query(By.css('po-multiselect-search'))).toEqual(null);
     });
   });
 });

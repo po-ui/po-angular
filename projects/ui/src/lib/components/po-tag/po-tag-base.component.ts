@@ -3,12 +3,30 @@ import { Directive, EventEmitter, Input, Output, TemplateRef } from '@angular/co
 import { PoColorPaletteEnum } from '../../enums/po-color-palette.enum';
 import { convertToBoolean } from '../../utils/util';
 
+import { PoLanguageService } from './../../services/po-language/po-language.service';
+import { poLocaleDefault } from '../../services/po-language/po-language.constant';
 import { PoTagOrientation } from './enums/po-tag-orientation.enum';
 import { PoTagType } from './enums/po-tag-type.enum';
 import { PoTagItem } from './interfaces/po-tag-item.interface';
+import { PoTagLiterals } from './interfaces/po-tag-literals.interface';
 
 const poTagColors = (<any>Object).values(PoColorPaletteEnum);
 const poTagOrientationDefault = PoTagOrientation.Vertical;
+
+export const PoTagLiteralsDefault = {
+  en: {
+    remove: 'Clear'
+  },
+  es: {
+    remove: 'Eliminar'
+  },
+  pt: {
+    remove: 'Remover'
+  },
+  ru: {
+    remove: 'удалять'
+  }
+};
 
 /**
  * @description
@@ -81,7 +99,7 @@ export class PoTagBaseComponent {
    *
    * Ação que sera executada quando clicar sobre o ícone de remover no `po-tag`
    */
-  @Output('p-close') remove: EventEmitter<null> = new EventEmitter<null>();
+  @Output('p-close') remove: EventEmitter<any> = new EventEmitter<any>();
 
   public readonly poTagOrientation = PoTagOrientation;
   public customColor;
@@ -92,6 +110,8 @@ export class PoTagBaseComponent {
   private _inverse?: boolean;
   private _orientation?: PoTagOrientation = poTagOrientationDefault;
   private _type?: PoTagType;
+  private _literals: PoTagLiterals;
+  private language: string;
 
   /**
    * @optional
@@ -283,5 +303,52 @@ export class PoTagBaseComponent {
 
   get type(): PoTagType {
     return this._type;
+  }
+
+  /**
+   * @optional
+   *
+   * @description
+   *
+   * Objeto com as literais usadas no `po-tag`.
+   *
+   *
+   * Para utilizar, basta passar a literal customizada:
+   *
+   * ```
+   *  const customLiterals: PoTagLiterals = {
+   *    remove: 'Remover itens'
+   *  };
+   * ```
+   *
+   * E para carregar as literais customizadas, basta apenas passar o objeto para o componente:
+   *
+   * ```
+   * <po-tag
+   *   [p-literals]="customLiterals">
+   * </po-tag>
+   * ```
+   *
+   * > O objeto padrão de literais será traduzido de acordo com o idioma do
+   * [`PoI18nService`](/documentation/po-i18n) ou do browser.
+   */
+  @Input('p-literals') set literals(value: PoTagLiterals) {
+    if (value instanceof Object && !(value instanceof Array)) {
+      this._literals = {
+        ...PoTagLiteralsDefault[poLocaleDefault],
+        ...PoTagLiteralsDefault[this.language],
+        ...value
+      };
+    } else {
+      this._literals = PoTagLiteralsDefault[this.language];
+    }
+  }
+
+  get literals() {
+    return this._literals || PoTagLiteralsDefault[this.language];
+  }
+
+  constructor(languageService: PoLanguageService) {
+    this.language = languageService.getShortLanguage();
   }
 }
