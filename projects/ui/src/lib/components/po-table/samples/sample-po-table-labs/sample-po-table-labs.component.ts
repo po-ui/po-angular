@@ -42,7 +42,7 @@ export class SamplePoTableLabsComponent implements OnInit {
   itemIndex = 0;
   literals: string;
   maxColumns: number;
-  properties: Array<string>;
+  properties: Array<string> = ['hideBatchActions', 'hideTableSearch'];
   selection: Array<string>;
   spacing: PoTableColumnSpacing = PoTableColumnSpacing.Medium;
   filterType: PoFilterMode = PoFilterMode.startsWith;
@@ -197,7 +197,7 @@ export class SamplePoTableLabsComponent implements OnInit {
     this.itemIndex = 0;
     this.literals = '';
     this.maxColumns = undefined;
-    this.properties = [];
+    this.properties = ['hideBatchActions', 'hideTableSearch'];
     this.selection = [];
     this.spacing = PoTableColumnSpacing.Medium;
     this.filteredColumns = [];

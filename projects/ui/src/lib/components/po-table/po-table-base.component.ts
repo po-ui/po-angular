@@ -155,9 +155,9 @@ export abstract class PoTableBaseComponent implements OnChanges, OnDestroy {
    *
    * Permite que as ações em lote, responsável por excluir e exibir a quantidade de itens, sejam escondidas.
    *
-   * @default `false`
+   * @default `true`
    */
-  @Input({ alias: 'p-hide-batch-actions', transform: convertToBoolean }) hideBatchActions: boolean = false;
+  @Input({ alias: 'p-hide-batch-actions', transform: convertToBoolean }) hideBatchActions: boolean = true;
 
   /**
    * @optional
@@ -186,9 +186,9 @@ export abstract class PoTableBaseComponent implements OnChanges, OnDestroy {
    *
    * Permite que o campo de pesquisa seja escondido.
    *
-   * @default `false`
+   * @default `true`
    */
-  @Input({ alias: 'p-hide-table-search', transform: convertToBoolean }) hideTableSearch: boolean = false;
+  @Input({ alias: 'p-hide-table-search', transform: convertToBoolean }) hideTableSearch: boolean = true;
 
   /**
    * @optional
