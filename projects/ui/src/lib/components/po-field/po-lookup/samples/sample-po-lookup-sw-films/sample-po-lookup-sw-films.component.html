@@ -30,5 +30,12 @@
 </div>
 
 <div class="po-row" *ngIf="filmItemsFiltered && entity">
-  <po-table class="po-sm-12" [p-columns]="filmColumns" [p-items]="filmItemsFiltered" [p-sort]="true"> </po-table>
+  <po-table
+    class="po-sm-12"
+    [p-columns]="filmColumns"
+    [p-items]="filmItemsFiltered"
+    [p-sort]="true"
+    [p-hide-table-search]="false"
+  >
+  </po-table>
 </div>
