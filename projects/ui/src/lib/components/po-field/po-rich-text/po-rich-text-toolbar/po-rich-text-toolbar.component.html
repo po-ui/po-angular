@@ -6,6 +6,7 @@
   <div *ngIf="!isInternetExplorer" class="po-rich-text-toolbar-button-align" data-rich-text-toolbar="color">
     <div class="po-rich-text-toolbar-color-picker-container">
       <button
+        type="button"
         class="po-button po-button-default po-rich-text-toolbar-color-picker-button"
         [disabled]="readonly"
         [p-tooltip]="literals.textColor"
