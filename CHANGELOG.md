@@ -2,6 +2,11 @@
 
 All notable changes to this project will be documented in this file. See [standard-version](https://github.com/conventional-changelog/standard-version) for commit guidelines.
 
+## [16.4.1](https://github.com/po-ui/po-angular/compare/v16.4.0...v16.4.1) (2023-10-23)
+
+Compatibilidade com po-theme-totvs
+
+
 # [16.4.0](https://github.com/po-ui/po-angular/compare/v16.3.0...v16.4.0) (2023-10-20)
 
 
