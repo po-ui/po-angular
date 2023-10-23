@@ -2,6 +2,25 @@
 
 All notable changes to this project will be documented in this file. See [standard-version](https://github.com/conventional-changelog/standard-version) for commit guidelines.
 
+# [16.4.0](https://github.com/po-ui/po-angular/compare/v16.3.0...v16.4.0) (2023-10-20)
+
+
+### Bug Fixes
+
+* **menu:** ajusta a aparência do componente nos navegadores Safari e Firefox. ([3e60513](https://github.com/po-ui/po-angular/commit/3e605139b015ccc3ba99f3581780d0878e08f256))
+* **table:** corrige ordenação dos itens após uma pesquisa ([21e8adc](https://github.com/po-ui/po-angular/commit/21e8adcb6e7608f56dade25c3f9cbc9d789d38ad))
+
+
+### Features
+
+* **combo:** cria propriedade `p-append-in-body` para renderizar a listagem do componente fora do conteúdo principal ([d64b4a6](https://github.com/po-ui/po-angular/commit/d64b4a618e8b5c37923d5bc7211b8aaa9b7c3a1a))
+* **dynamic-form:** adiciona a propriedade `formField` para o  `upload` ([db37399](https://github.com/po-ui/po-angular/commit/db37399b76b1127be1741e996387015af9d97326)), closes [#1847](https://github.com/po-ui/po-angular/issues/1847)
+* **dynamic-view:** Inclui propriedade  `searchService`, `fieldLabel`, `fieldValue` e `concatLabelValue` ([6eb01fa](https://github.com/po-ui/po-angular/commit/6eb01fac6f1770c9d33822c0589c8713737edd2f))
+* **multiselect:** cria propriedade `p-append-in-body` para renderizar a listagem do componente fora do conteúdo principal ([5809027](https://github.com/po-ui/po-angular/commit/5809027979eebe6a1ebd4e935dbd8115e46dacd4))
+* **tag:** implementa variação de status neutral ([1c7fb8a](https://github.com/po-ui/po-angular/commit/1c7fb8a371f718bff94aa16a5fa4157cab25c93a))
+
+
+
 # [16.3.0](https://github.com/po-ui/po-angular/compare/v16.2.1...v16.3.0) (2023-10-09)
 
 
