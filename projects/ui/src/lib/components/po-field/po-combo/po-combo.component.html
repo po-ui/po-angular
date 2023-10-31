@@ -6,14 +6,14 @@
   [p-required]="required"
   [p-show-required]="showRequired"
 >
-  <div cdkOverlayOrigin #trigger="cdkOverlayOrigin" class="po-field-container-content">
+  <div cdkOverlayOrigin #trigger="cdkOverlayOrigin" class="po-field-container-content po-combo-container-content">
     <div *ngIf="icon" class="po-field-icon-container-left">
       <po-icon class="po-field-icon po-icon-input" [class.po-field-icon-disabled]="disabled" [p-icon]="icon"></po-icon>
     </div>
 
     <input
       #inp
-      class="po-input po-combo-input"
+      class="po-combo-input"
       [ngClass]="clean && inp.value ? 'po-input-double-icon-right' : 'po-input-icon-right'"
       [class.po-input-icon-left]="icon"
       autocomplete="off"
@@ -26,24 +26,35 @@
       (click)="toggleComboVisibility()"
       (keyup)="onKeyUp($event)"
       (blur)="onBlur()"
-      (keyup.enter)="searchOnEnter($event.target.value)"
+      (keyup)="searchOnEnterOrArrow($event, $event.target.value)"
       (keydown)="onKeyDown($event)"
     />
 
     <div class="po-field-icon-container-right">
-      <po-clean
-        class="po-icon-input"
-        *ngIf="clean && !disabled"
-        (p-change-event)="clear($event)"
-        [p-element-ref]="inputEl"
+      <div
+        tabindex="0"
+        role="button"
+        [attr.aria-label]="literals.clean"
+        *ngIf="clean && !disabled && inp.value"
+        class="po-combo-clean"
+        (click)="clear(null); $event.preventDefault()"
+        (keydown.enter)="clearAndFocus(); $event.preventDefault()"
       >
-      </po-clean>
+        <span
+          [class.po-border-focused]="!disabled && comboOpen"
+          class="po-icon po-field-icon po-icon-clear-content"
+        ></span>
+      </div>
       <span
         #iconArrow
-        class="po-icon po-field-icon {{ comboIcon }} po-icon-input"
+        class="po-icon po-field-icon po-icon-input"
         [class.po-field-icon-disabled]="disabled"
+        [class.po-icon-arrow-up]="comboOpen"
+        [class.po-icon-arrow-down]="!comboOpen"
         [class.po-field-icon]="!disabled"
-        (click)="toggleComboVisibility()"
+        [class.po-combo-default-border]="!disabled && inp.value"
+        [class.po-combo-background-arrow-up]="!disabled && comboOpen"
+        (click)="toggleComboVisibility(true)"
       >
       </span>
     </div>
