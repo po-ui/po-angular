@@ -2,6 +2,22 @@
 
 All notable changes to this project will be documented in this file. See [standard-version](https://github.com/conventional-changelog/standard-version) for commit guidelines.
 
+
+# [16.5.0](https://github.com/po-ui/po-angular/compare/v16.4.1...v16.5.0) (2023-10-31)
+
+
+### Bug Fixes
+
+* **table:** corrige valores padrão de propriedades ([f92633d](https://github.com/po-ui/po-angular/commit/f92633d9ddd3aaa9b7695495efd3d19179c56fa1))
+* **rich-text:** impede envio de dados ao escolher cor ([d7a7f24](https://github.com/po-ui/po-angular/commit/d7a7f24b10d1f691f56b244afcabe871e7138c35))
+
+
+### Features
+
+* **multiselect:** implementa as definições do AnimaliaDS ([f31c075](https://github.com/po-ui/po-angular/commit/f31c0750d6ba4eeb9f6726f274f863fb071ac4ac))
+
+
+
 ## [16.4.1](https://github.com/po-ui/po-angular/compare/v16.4.0...v16.4.1) (2023-10-23)
 
 Compatibilidade com po-theme-totvs
