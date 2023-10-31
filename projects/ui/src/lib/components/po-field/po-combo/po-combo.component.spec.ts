@@ -92,7 +92,7 @@ describe('PoComboComponent:', () => {
     component.isProcessingValueByTab = false;
     spyOn(component, 'applyFilter');
     component.controlApplyFilter('valor');
-    expect(component.applyFilter).toHaveBeenCalledWith('valor', true);
+    expect(component.applyFilter).toHaveBeenCalledWith('valor', true, undefined);
   });
 
   it('shouldn`t call apply filter when is processing "getObjectByValue"', () => {
@@ -208,9 +208,9 @@ describe('PoComboComponent:', () => {
     spyOn(component, 'controlComboVisibility');
     component.comboOpen = true;
     component.disabled = false;
-
-    component.toggleComboVisibility();
-    expect(component.controlComboVisibility).toHaveBeenCalledWith(false);
+    fixture.detectChanges();
+    component.toggleComboVisibility(false);
+    expect(component.controlComboVisibility).toHaveBeenCalledWith(false, false, false);
   });
 
   it('should call applyFilterInFirstClick', () => {
@@ -571,12 +571,8 @@ describe('PoComboComponent:', () => {
             focus: () => {}
           }
         };
-        component.poListbox = {
-          setFocus: () => {}
-        } as any;
 
         spyOn(component.contentElement.nativeElement, 'focus');
-        spyOn(component.poListbox, 'setFocus');
         component.visibleOptions = [{ value: 'item 1', label: 'item 1' }];
         component.comboOpen = true;
         component.changeOnEnter = true;
@@ -586,7 +582,6 @@ describe('PoComboComponent:', () => {
 
         expect(component.controlComboVisibility).toHaveBeenCalledWith(true);
         expect(component.isFiltering).toBe(false);
-        expect(component.poListbox.setFocus).toHaveBeenCalled();
       });
 
       it('shouldn`t call `selectNextOption` and call `controlComboVisibility` if `comboOpen` with false', () => {
@@ -594,7 +589,6 @@ describe('PoComboComponent:', () => {
 
         component.comboOpen = false;
         component.visibleOptions = [{ value: '1', label: '1' }];
-
         spyOn(component, 'controlComboVisibility');
 
         component.onKeyDown(event);
@@ -683,6 +677,36 @@ describe('PoComboComponent:', () => {
         expect(component.updateComboList).toHaveBeenCalled();
       });
 
+      it('should call `clear` if esc is double clicked', () => {
+        const event = { ...fakeEvent, keyCode: 27 };
+
+        component.service = undefined;
+        component.selectedValue = 'Test1';
+        component.comboOpen = true;
+        component['lastKey'] = 27;
+
+        spyOn(component, 'clearAndFocus');
+
+        component.onKeyDown(event);
+
+        expect(component.clearAndFocus).toHaveBeenCalled();
+      });
+
+      it('should call `onCloseCombo` if esc is clicked', () => {
+        const event = { ...fakeEvent, keyCode: 27 };
+
+        component.service = undefined;
+        component.selectedValue = 'Test1';
+        component.comboOpen = true;
+        component['lastKey'] = 20;
+
+        spyOn(component, 'onCloseCombo');
+
+        component.onKeyDown(event);
+
+        expect(component.onCloseCombo).toHaveBeenCalled();
+      });
+
       it('shouldn`t call `updateComboList` if itens service is not undefined', () => {
         const event = { ...fakeEvent, keyCode: 13 };
 
@@ -722,6 +746,16 @@ describe('PoComboComponent:', () => {
       component.onCloseCombo();
 
       expect(component.inputEl.nativeElement.focus).toHaveBeenCalled();
+    });
+
+    it('should call inputEl.nativeElement and clear', () => {
+      spyOn(component.inputEl.nativeElement, 'focus');
+      spyOn(component, 'clear');
+
+      component.clearAndFocus();
+
+      expect(component.inputEl.nativeElement.focus).toHaveBeenCalled();
+      expect(component.clear).toHaveBeenCalled();
     });
 
     it('onOptionClick: should call `stopPropagation` if has an event parameter', () => {
@@ -949,6 +983,22 @@ describe('PoComboComponent:', () => {
       expect(component.comboOpen).toBe(true);
     });
 
+    it('should open the input element', () => {
+      const focusSpy = spyOn(component.inputEl.nativeElement, 'focus');
+
+      component['open'](true);
+
+      expect(focusSpy).toHaveBeenCalled();
+    });
+
+    it('should add class to input element when isButton is true', () => {
+      const addClassSpy = spyOn(component.renderer, 'addClass');
+
+      component['open'](false, true);
+
+      expect(addClassSpy).toHaveBeenCalledWith(component.inputEl.nativeElement, 'po-combo-input-focus');
+    });
+
     it('open: should set page and options when has inifity scroll', () => {
       component.infiniteScroll = true;
       spyOn(component, 'getInputValue').and.returnValue(undefined);
@@ -1156,10 +1206,11 @@ describe('PoComboComponent:', () => {
     it('should show po-clean if `clean` is true and `disabled` is false', () => {
       component.clean = true;
       component.disabled = false;
+      component.inputEl.nativeElement.value = 'Test';
 
       fixture.detectChanges();
 
-      expect(nativeElement.querySelector('po-clean')).toBeTruthy();
+      expect(nativeElement.querySelector('.po-combo-clean')).toBeTruthy();
     });
 
     it('shouldn`t show po-clean if `clean` is true and `disabled` is true', () => {
@@ -1167,7 +1218,7 @@ describe('PoComboComponent:', () => {
       component.disabled = true;
 
       fixture.detectChanges();
-      expect(nativeElement.querySelector('po-clean')).toBe(null);
+      expect(nativeElement.querySelector('.po-combo-clean')).toBe(null);
     });
 
     it('shouldn`t show po-clean if `clean` is false', () => {
@@ -1316,11 +1367,14 @@ describe('PoComboComponent - with service:', () => {
     it('applyFilter: should call PoComboFilterService.getFilteredData() with param and filterParams', () => {
       const filterParams = 'filter';
       const applyFilterValue = 'value';
+      const isArrowDown = true;
       const param = { property: 'label', value: applyFilterValue };
       const fakeThis: any = {
         controlComboVisibility: () => {},
         setOptionsByApplyFilter: () => {},
+        focusItem: () => {},
         fieldLabel: 'label',
+        isArrowDown: true,
         filterParams: filterParams,
         service: {
           getFilteredData: () => {}
@@ -1332,9 +1386,21 @@ describe('PoComboComponent - with service:', () => {
 
       spyOn(fakeThis.service, 'getFilteredData').and.returnValue({ subscribe: callback => callback() });
 
-      component.applyFilter.apply(fakeThis, [applyFilterValue]);
+      component.applyFilter.apply(fakeThis, [applyFilterValue, isArrowDown]);
 
       expect(fakeThis.service.getFilteredData).toHaveBeenCalledWith(param, filterParams);
+    });
+
+    it('applyFilter: should call focusItem if param `isArrowDown` is true', () => {
+      spyOn(component.service, 'getFilteredData').and.returnValue(of([{ value: 'test' }]));
+      spyOn(component, 'setOptionsByApplyFilter');
+      spyOn(component, <any>'focusItem');
+
+      component.defaultService.hasNext = true;
+      component.applyFilter('test', false, true);
+
+      expect(component.setOptionsByApplyFilter).toHaveBeenCalled();
+      expect(component['focusItem']).toHaveBeenCalled();
     });
 
     it('applyFilter: shouldn´t call PoComboFilterService.getFilteredData() if hasNext is false', () => {
@@ -1539,49 +1605,60 @@ describe('PoComboComponent - with service:', () => {
       expect(component['initInputObservable']).not.toHaveBeenCalled();
     });
 
-    it(`searchOnEnter: should call 'controlApplyFilter' if has a service,
+    it(`searchOnEnterOrArrow: should call 'controlApplyFilter' if has a service,
       not has selectedView and value.length is greater than 'filterMinlength'`, () => {
       const value = 'newValue';
+      const event = {
+        key: 'Enter'
+      };
       component.selectedView = undefined;
       component.filterMinlength = 2;
 
       spyOn(component, 'controlApplyFilter');
 
-      component.searchOnEnter(value);
+      component.searchOnEnterOrArrow(event, value);
 
-      expect(component.controlApplyFilter).toHaveBeenCalledWith(value);
+      expect(component.controlApplyFilter).toHaveBeenCalledWith(value, false);
     });
 
-    it(`searchOnEnter: shouldn't call 'controlApplyFilter' if has a service and has selectedView`, () => {
+    it(`searchOnEnterOrArrow: shouldn't call 'controlApplyFilter' if has a service and has selectedView`, () => {
       const value = 'value';
       component.selectedView = { label: 'Option 1', value: '1' };
-
+      const event = {
+        key: 'Enter'
+      };
       spyOn(component, 'controlApplyFilter');
 
-      component.searchOnEnter(value);
+      component.searchOnEnterOrArrow(event, value);
 
       expect(component.controlApplyFilter).not.toHaveBeenCalled();
     });
 
-    it(`searchOnEnter: shouldn't call 'controlApplyFilter' if doesn't have a service`, () => {
+    it(`searchOnEnterOrArrow: shouldn't call 'controlApplyFilter' if doesn't have a service`, () => {
       const value = 'value';
       component.service = undefined;
+      const event = {
+        key: 'Enter'
+      };
 
       spyOn(component, 'controlApplyFilter');
 
-      component.searchOnEnter(value);
+      component.searchOnEnterOrArrow(event, value);
 
       expect(component.controlApplyFilter).not.toHaveBeenCalled();
     });
 
-    it(`searchOnEnter: shouldn't call 'controlApplyFilter' if value.length is less than 'filterMinlength'`, () => {
+    it(`searchOnEnterOrArrow: shouldn't call 'controlApplyFilter' if value.length is less than 'filterMinlength'`, () => {
       const value = 'value';
       component.selectedView = { label: 'Option 1', value: '1' };
       component.filterMinlength = 8;
+      const event = {
+        key: 'Enter'
+      };
 
       spyOn(component, 'controlApplyFilter');
 
-      component.searchOnEnter(value);
+      component.searchOnEnterOrArrow(event, value);
 
       expect(component.controlApplyFilter).not.toHaveBeenCalled();
     });
@@ -1719,6 +1796,19 @@ describe('PoComboComponent - with service:', () => {
 
       expect(component.visibleOptions).toEqual(mockOptions);
     });
+
+    it('should focus on the listbox item when selectedValue is true', fakeAsync(() => {
+      const listboxItem = document.createElement('div');
+      listboxItem.setAttribute('aria-selected', 'true');
+      spyOn(document, 'querySelector').and.returnValue(listboxItem);
+
+      const focusSpy = spyOn(listboxItem, 'focus');
+
+      component.selectedValue = true;
+      component['focusItem']();
+      tick(100);
+      expect(focusSpy).toHaveBeenCalled();
+    }));
   });
 });
 

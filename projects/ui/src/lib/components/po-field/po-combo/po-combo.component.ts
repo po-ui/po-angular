@@ -122,6 +122,7 @@ export class PoComboComponent extends PoComboBaseComponent implements AfterViewI
   infiniteLoading: boolean = false;
 
   private _isServerSearching: boolean = false;
+  private lastKey;
 
   private clickoutListener: () => void;
   private eventResizeListener: () => void;
@@ -234,8 +235,8 @@ export class PoComboComponent extends PoComboBaseComponent implements AfterViewI
 
     if (key === PoKeyCodeEnum.arrowDown) {
       event.preventDefault();
-      if (!this.service) {
-        this.poListbox?.setFocus();
+      if (this.visibleOptions.length) {
+        this.focusItem();
       }
 
       this.controlComboVisibility(true);
@@ -261,13 +262,32 @@ export class PoComboComponent extends PoComboBaseComponent implements AfterViewI
     if (key === PoKeyCodeEnum.enter) {
       this.controlComboVisibility(true);
     }
+
+    if (key === PoKeyCodeEnum.esc) {
+      if (key === this.lastKey) {
+        this.lastKey = '';
+        if (this.selectedValue) {
+          this.clearAndFocus();
+        }
+        return;
+      } else {
+        this.onCloseCombo();
+      }
+    }
+
+    this.lastKey = event.keyCode;
   }
 
   onKeyUp(event?: any) {
     const key = event.keyCode || event.which;
     const inputValue = event.target.value;
 
-    const isValidKey = key !== PoKeyCodeEnum.arrowUp && key !== PoKeyCodeEnum.arrowDown && key !== PoKeyCodeEnum.enter;
+    const isValidKey =
+      key !== PoKeyCodeEnum.arrowUp &&
+      key !== PoKeyCodeEnum.arrowDown &&
+      key !== PoKeyCodeEnum.enter &&
+      key !== PoKeyCodeEnum.esc &&
+      key !== PoKeyCodeEnum.tab;
 
     if (isValidKey) {
       if (inputValue) {
@@ -325,7 +345,7 @@ export class PoComboComponent extends PoComboBaseComponent implements AfterViewI
     }
   }
 
-  controlApplyFilter(value) {
+  controlApplyFilter(value, isArrowDown?: boolean) {
     if (
       (!this.isProcessingValueByTab && (!this.selectedOption || value !== this.selectedOption[this.dynamicLabel])) ||
       !this.cache
@@ -333,12 +353,12 @@ export class PoComboComponent extends PoComboBaseComponent implements AfterViewI
       this.defaultService.hasNext = true;
       this.page = this.setPage();
       this.options = [];
-      this.applyFilter(value, true);
+      this.applyFilter(value, true, isArrowDown);
     }
     this.isProcessingValueByTab = false;
   }
 
-  applyFilter(value: string, reset: boolean = false) {
+  applyFilter(value: string, reset: boolean = false, isArrowDown?: boolean) {
     if (this.defaultService.hasNext) {
       this.controlComboVisibility(false, reset);
       this.isServerSearching = true;
@@ -348,7 +368,12 @@ export class PoComboComponent extends PoComboBaseComponent implements AfterViewI
         : { property: this.fieldLabel, value };
 
       this.filterSubscription = this.service.getFilteredData(param, this.filterParams).subscribe(
-        items => this.setOptionsByApplyFilter(value, items, reset),
+        items => {
+          this.setOptionsByApplyFilter(value, items, reset);
+          if (isArrowDown) {
+            this.focusItem();
+          }
+        },
         error => this.onErrorFilteredData()
       );
     }
@@ -397,7 +422,7 @@ export class PoComboComponent extends PoComboBaseComponent implements AfterViewI
     }, this.debounceTime);
   }
 
-  toggleComboVisibility(): void {
+  toggleComboVisibility(isButton?: boolean): void {
     if (this.disabled) {
       return;
     }
@@ -406,7 +431,7 @@ export class PoComboComponent extends PoComboBaseComponent implements AfterViewI
       this.applyFilterInFirstClick();
     }
 
-    this.controlComboVisibility(!this.comboOpen);
+    this.controlComboVisibility(!this.comboOpen, false, isButton);
   }
 
   applyFilterInFirstClick() {
@@ -417,8 +442,8 @@ export class PoComboComponent extends PoComboBaseComponent implements AfterViewI
     }
   }
 
-  controlComboVisibility(toOpen: boolean, reset: boolean = false) {
-    toOpen ? this.open(reset) : this.close(reset);
+  controlComboVisibility(toOpen: boolean, reset: boolean = false, isButton?: boolean) {
+    toOpen ? this.open(reset, isButton) : this.close(reset);
   }
 
   onCloseCombo() {
@@ -443,6 +468,7 @@ export class PoComboComponent extends PoComboBaseComponent implements AfterViewI
     }
 
     this.previousSearchValue = this.selectedView[this.dynamicLabel];
+    this.inputEl.nativeElement.focus();
   }
 
   calculateScrollTop(selectedItem, index) {
@@ -500,9 +526,14 @@ export class PoComboComponent extends PoComboBaseComponent implements AfterViewI
     ); // windows menu
   }
 
-  searchOnEnter(value: string) {
-    if (this.service && !this.selectedView && value.length >= this.filterMinlength) {
-      this.controlApplyFilter(value);
+  searchOnEnterOrArrow(event, value: string) {
+    if (
+      (event.key === 'ArrowDown' || event.key === 'Enter') &&
+      this.service &&
+      !this.selectedView &&
+      value.length >= this.filterMinlength
+    ) {
+      this.controlApplyFilter(value, event.key === 'ArrowDown');
     }
   }
 
@@ -512,6 +543,11 @@ export class PoComboComponent extends PoComboBaseComponent implements AfterViewI
     }
     this.page++;
     this.applyFilter('', true);
+  }
+
+  clearAndFocus() {
+    this.clear(null);
+    this.inputEl.nativeElement.focus();
   }
 
   private adjustContainerPosition() {
@@ -538,6 +574,8 @@ export class PoComboComponent extends PoComboBaseComponent implements AfterViewI
     this.removeListeners();
 
     this.isFiltering = false;
+
+    this.renderer.removeClass(this.inputEl.nativeElement, 'po-combo-input-focus');
   }
 
   private initializeListeners() {
@@ -571,7 +609,7 @@ export class PoComboComponent extends PoComboBaseComponent implements AfterViewI
     this.controlComboVisibility(true);
   }
 
-  private open(reset: boolean) {
+  private open(reset: boolean, isButton?: boolean) {
     this.comboOpen = true;
     if (!reset && this.infiniteScroll) {
       if (!this.getInputValue()) {
@@ -586,7 +624,10 @@ export class PoComboComponent extends PoComboBaseComponent implements AfterViewI
 
     this.initializeListeners();
 
-    this.inputEl.nativeElement.focus();
+    isButton
+      ? this.renderer.addClass(this.inputEl.nativeElement, 'po-combo-input-focus')
+      : this.inputEl.nativeElement.focus();
+
     this.setContainerPosition();
   }
 
@@ -628,5 +669,20 @@ export class PoComboComponent extends PoComboBaseComponent implements AfterViewI
 
   private setScrollingControl() {
     return this.infiniteScroll ? true : false;
+  }
+
+  private focusItem() {
+    this.poListbox?.listboxItemList?.nativeElement.focus();
+    setTimeout(() => {
+      let item;
+      if (this.selectedValue) {
+        item = document.querySelector('.po-listbox-item[aria-selected="true"]');
+      } else {
+        item = document.querySelectorAll('.po-listbox-item')[0] as HTMLElement;
+      }
+      this.poListbox?.listboxItemList?.nativeElement.focus();
+
+      item?.focus();
+    });
   }
 }

@@ -35,7 +35,7 @@
         </po-item-list>
       </li>
       <li
-        class="po-listbox-item"
+        [class.po-listbox-item]="visible"
         *ngFor="let item of items"
         [cdkOption]="item[fieldLabel]"
         [cdkOptionDisabled]="

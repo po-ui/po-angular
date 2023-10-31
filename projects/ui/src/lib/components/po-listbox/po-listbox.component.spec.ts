@@ -676,7 +676,7 @@ describe('PoListBoxComponent', () => {
         { label: 'd', value: 'd' }
       ];
       component.items = items;
-
+      component.visible = true;
       fixture.detectChanges();
 
       expect(nativeElement.querySelector('.po-listbox-item')).toBeTruthy();
