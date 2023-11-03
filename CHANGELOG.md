@@ -2,6 +2,19 @@
 
 All notable changes to this project will be documented in this file. See [standard-version](https://github.com/conventional-changelog/standard-version) for commit guidelines.
 
+# [16.6.0](https://github.com/po-ui/po-angular/compare/v16.5.0...v16.6.0) (2023-11-03)
+
+
+### Bug Fixes
+
+* **combo:** corrige chamada repetida no componente ([f78548e](https://github.com/po-ui/po-angular/commit/f78548eb9f77197a2536ce7c262df059e31a765a))
+
+
+### Features
+
+* **combo:** implementa definições do AnimaliaDS ([c710527](https://github.com/po-ui/po-angular/commit/c71052743a315e72a50331ab01402ee1aef8e3cd))
+
+
 
 # [16.5.0](https://github.com/po-ui/po-angular/compare/v16.4.1...v16.5.0) (2023-10-31)
 
