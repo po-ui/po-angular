@@ -234,7 +234,7 @@ export class ThemeBuilderComponent implements AfterViewInit, OnInit {
   };
 
   private readonly formPropertyT = {
-    colorAction: '--color-tertiary'
+    colorAction: '--color-brand-03-base'
   };
 
   // Variáveis customizaveis
@@ -586,7 +586,7 @@ export class ThemeBuilderComponent implements AfterViewInit, OnInit {
     this.brandFormT.reset({
       colorAction: ['#ffd464']
     });
-    document.getElementById('myPortal').style.setProperty('--color-tertiary', null);
+    document.getElementById('myPortal').style.setProperty('--color-brand-03-base', null);
 
     this.buttonFormDefault.reset();
     Object.keys(this.formPropertyDictButtonD).forEach((fieldName: string) => {
