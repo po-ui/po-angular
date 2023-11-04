@@ -3,8 +3,8 @@
   --color-calendar-background-color-border-today: var(--color-primary);
   --color-calendar-color-box-foreground-today: var(--color-primary);
   --color-calendar-arrow: var(--color-primary);
-  --color-calendar-background-color-box-background-selected: var(--color-tertiary);
-  --color-calendar-background-color-box-background-active: var(--color-tertiary);
+  --color-calendar-background-color-box-background-selected: var(--color-brand-03-base);
+  --color-calendar-background-color-box-background-active: var(--color-brand-03-base);
 }
 
 p {
