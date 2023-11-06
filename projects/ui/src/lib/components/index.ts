@@ -46,3 +46,4 @@ export * from './po-tree-view/index';
 export * from './po-widget/index';
 export * from './po-search/index';
 export * from './po-toaster/index';
+export * from './po-message-hour/index';
