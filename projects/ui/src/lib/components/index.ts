@@ -52,4 +52,5 @@ export * from './po-search/index';
 export * from './po-skeleton/index';
 export * from './po-toaster/index';
 export * from './po-header/index';
+export * from './po-message-hour/index';
 export * from './po-timer/index';

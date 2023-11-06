@@ -31,6 +31,7 @@ import { PoLoadingModule } from './po-loading/po-loading.module';
 import { PoLogoModule } from './po-logo/po-logo.module';
 import { PoMenuPanelModule } from './po-menu-panel/po-menu-panel.module';
 import { PoMenuModule } from './po-menu/po-menu.module';
+import { PoMessageHourModule } from './po-message-hour';
 import { PoModalModule } from './po-modal/po-modal.module';
 import { PoNavbarModule } from './po-navbar/po-navbar.module';
 import { PoOverlayModule } from './po-overlay/po-overlay.module';
@@ -82,6 +83,7 @@ const PO_MODULES = [
   PoLogoModule,
   PoMenuModule,
   PoMenuPanelModule,
+  PoMessageHourModule,
   PoModalModule,
   PoNavbarModule,
   PoOverlayModule,
