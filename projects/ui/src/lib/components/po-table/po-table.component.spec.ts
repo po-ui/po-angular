@@ -1963,8 +1963,8 @@ describe('PoTableComponent:', () => {
       });
 
       it("deleteItems: should set false in 'selectAll' and should call 'setTableResponseProperties' if serviceDeleteApi is valid", () => {
-        component.serviceDeleteApi = 'https://po-sample-api.fly.dev/v1/heroes';
-        component.serviceApi = 'https://po-sample-api.fly.dev/v1/heroes';
+        component.serviceDeleteApi = 'https://po-sample-api.onrender.com/v1/heroes';
+        component.serviceApi = 'https://po-sample-api.onrender.com/v1/heroes';
         component.paramDeleteApi = 'id';
         component.items = [
           { id: 1, name: 'teste', $selected: true },
@@ -1984,7 +1984,7 @@ describe('PoTableComponent:', () => {
       });
 
       it('deleteItems: should set serviceDeleteApi but serviceApi is undefined', () => {
-        component.serviceDeleteApi = 'https://po-sample-api.fly.dev/v1/heroes';
+        component.serviceDeleteApi = 'https://po-sample-api.onrender.com/v1/heroes';
         component.serviceApi = undefined;
         component.paramDeleteApi = 'id';
         component.items = [
@@ -2001,7 +2001,7 @@ describe('PoTableComponent:', () => {
       });
 
       it('deleteItemsService: should call error in service delete api', () => {
-        component.serviceDeleteApi = 'https://po-sample-api.fly.dev/v1/heroes';
+        component.serviceDeleteApi = 'https://po-sample-api.onrender.com/v1/heroes';
         component.serviceApi = undefined;
         component.paramDeleteApi = 'id';
         component.itemsSelected = [{ id: 1, name: 'teste', $selected: true }];

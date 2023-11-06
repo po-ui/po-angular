@@ -17,6 +17,6 @@ export class SamplePoComboInfinityScrollComponent {
   }
 
   private getPeople(peopleId: string) {
-    return this.http.get(`https://po-sample-api.fly.dev/v1/people/${peopleId}`);
+    return this.http.get(`https://po-sample-api.onrender.com/v1/people/${peopleId}`);
   }
 }

@@ -7,7 +7,7 @@ import { PoLookupFilter, PoLookupFilteredItemsParams } from '@po-ui/ng-component
 
 @Injectable()
 export class SamplePoLookupService implements PoLookupFilter {
-  private url = 'https://po-sample-api.fly.dev/v1/heroes';
+  private url = 'https://po-sample-api.onrender.com/v1/heroes';
 
   constructor(private httpClient: HttpClient) {}
 

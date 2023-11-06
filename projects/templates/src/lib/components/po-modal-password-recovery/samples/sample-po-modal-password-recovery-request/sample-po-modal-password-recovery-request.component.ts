@@ -10,7 +10,7 @@ export class SamplePoModalPasswordRecoveryRequestComponent {
   @ViewChild(PoModalPasswordRecoveryComponent) poModalPasswordRecovery: PoModalPasswordRecoveryComponent;
 
   type: PoModalPasswordRecoveryType = PoModalPasswordRecoveryType.All;
-  urlRecovery: string = 'https://po-sample-api.fly.dev/v1/users';
+  urlRecovery: string = 'https://po-sample-api.onrender.com/v1/users';
 
   openPasswordRecoveryModal() {
     this.poModalPasswordRecovery.open();

@@ -1,5 +1,5 @@
-import { Component } from '@angular/core';
 import { HttpClient } from '@angular/common/http';
+import { Component } from '@angular/core';
 
 import { Observable } from 'rxjs';
 
@@ -26,6 +26,6 @@ export class SamplePoComboHeroesComponent {
   }
 
   private getHero(heroName: string) {
-    return this.http.get(`https://po-sample-api.fly.dev/v1/heroes/${heroName}`);
+    return this.http.get(`https://po-sample-api.onrender.com/v1/heroes/${heroName}`);
   }
 }
