@@ -1,6 +1,6 @@
+import { HttpClient } from '@angular/common/http';
 import { Component, OnInit } from '@angular/core';
 import { UntypedFormBuilder, UntypedFormGroup, Validators } from '@angular/forms';
-import { HttpClient } from '@angular/common/http';
 
 import { Observable } from 'rxjs';
 
@@ -35,6 +35,6 @@ export class SamplePoComboHeroesReactiveFormComponent implements OnInit {
   }
 
   private getHero(heroName: string) {
-    return this.http.get(`https://po-sample-api.fly.dev/v1/heroes/${heroName}`);
+    return this.http.get(`https://po-sample-api.onrender.com/v1/heroes/${heroName}`);
   }
 }

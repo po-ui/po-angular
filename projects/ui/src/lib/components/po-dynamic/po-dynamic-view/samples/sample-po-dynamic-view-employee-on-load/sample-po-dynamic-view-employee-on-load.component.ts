@@ -70,7 +70,7 @@ export class SamplePoDynamicViewEmployeeOnLoadComponent implements OnInit {
   private _newService = inject(SamplePoDynamicViewEmployeeOnLoadService);
 
   ngOnInit(): void {
-    this._newService.setConfig('https://po-sample-api.fly.dev/v1/hotels', { id: 1485976673002 });
+    this._newService.setConfig('https://po-sample-api.onrender.com/v1/hotels', { id: 1485976673002 });
   }
 
   customEmployeeData() {

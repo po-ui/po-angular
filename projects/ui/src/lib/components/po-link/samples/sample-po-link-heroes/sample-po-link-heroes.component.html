@@ -1,4 +1,8 @@
-<po-table p-service-api="https://po-sample-api.fly.dev/v1/heroes" [p-columns]="columns" [p-hide-table-search]="false">
+<po-table
+  p-service-api="https://po-sample-api.onrender.com/v1/heroes"
+  [p-columns]="columns"
+  [p-hide-table-search]="false"
+>
   <ng-template p-table-column-template [p-property]="'nickname'" let-value>
     <po-link [p-label]="value" (p-action)="selectedMyHero(value)" p-open-new-tab="true"></po-link>
   </ng-template>

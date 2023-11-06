@@ -5,7 +5,7 @@ import { Component } from '@angular/core';
   templateUrl: './sample-po-page-dynamic-table-drag-and-drop.component.html'
 })
 export class SamplePoPageDynamicTableDragAndDropComponent {
-  readonly serviceApi = 'https://po-sample-api.fly.dev/v1/people';
+  readonly serviceApi = 'https://po-sample-api.onrender.com/v1/people';
 
   readonly fields: Array<any> = [
     { property: 'id', key: true, visible: false },
