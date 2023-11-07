@@ -138,6 +138,7 @@ export class PoMultiselectComponent
   private initCalculateItems = true;
   private isCalculateVisibleItems: boolean = true;
   private cacheOptions: Array<PoMultiselectOption | any>;
+  private focusOnTag = false;
 
   constructor(
     private renderer: Renderer2,
@@ -314,10 +315,12 @@ export class PoMultiselectComponent
   }
 
   onKeyDown(event?: any) {
-    if (
-      (event.keyCode === PoKeyCodeEnum.tab && this.visibleTags.length > 1) ||
-      (event.keyCode === PoKeyCodeEnum.tab && this.visibleTags.length < 1)
-    ) {
+    if (event.shiftKey && event.keyCode === PoKeyCodeEnum.tab && !this.focusOnTag) {
+      this.controlDropdownVisibility(false);
+    }
+    this.focusOnTag = false;
+
+    if (event.keyCode === PoKeyCodeEnum.tab) {
       return;
     }
 
@@ -553,6 +556,7 @@ export class PoMultiselectComponent
     const KEY_SPACE = 'Space';
     const KEY_ARROW_LEFT = 'ArrowLeft';
     const KEY_ARROW_RIGHT = 'ArrowRight';
+    this.focusOnTag = true;
 
     if (event.code === KEY_SPACE) {
       event.preventDefault();

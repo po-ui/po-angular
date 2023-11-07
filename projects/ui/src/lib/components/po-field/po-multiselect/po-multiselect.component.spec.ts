@@ -241,7 +241,7 @@ describe('PoMultiselectComponent:', () => {
     expect(component.controlDropdownVisibility).not.toHaveBeenCalled();
   });
 
-  it('should return when event keyCode is PoKeyCodeEnum.tab and visibleTags.length > 1', () => {
+  it('should return when event keyCode is PoKeyCodeEnum.tab', () => {
     const event = new KeyboardEvent('keydown', { keyCode: PoKeyCodeEnum.tab });
     const tagRemovable = document.createElement('span');
     tagRemovable.setAttribute('class', 'po-tag-remove');
@@ -253,13 +253,13 @@ describe('PoMultiselectComponent:', () => {
     expect(component.visibleTags.length).toEqual(2);
   });
 
-  it('should return when event keyCode is PoKeyCodeEnum.tab and visibleTags.length < 1', () => {
-    const event = new KeyboardEvent('keydown', { keyCode: PoKeyCodeEnum.tab });
-    component.visibleTags = [];
+  it('should call controlDropdownVisibility(false) when keyCode tab is pressed and shiftKey is true', () => {
+    const event = { keyCode: PoKeyCodeEnum.tab, shiftKey: true };
+    spyOn(component, 'controlDropdownVisibility');
 
     component.onKeyDown(event);
 
-    expect(component.visibleTags.length).toEqual(0);
+    expect(component.controlDropdownVisibility).toHaveBeenCalledWith(false);
   });
 
   it('should call preventDefault and controlDropdownVisibility(true) when keyCode space is pressed', () => {
