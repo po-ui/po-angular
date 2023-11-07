@@ -1,12 +1,14 @@
-<div class="po-search">
+<div class="po-search" [class.po-search-disabled]="disabled">
   <div class="po-search-icon">
-    <po-icon *ngIf="!loading" p-icon="po-icon-search"></po-icon>
-    <po-loading-icon *ngIf="loading" p-size="sm"></po-loading-icon>
+    <po-icon [p-icon]="icon ? icon : 'po-icon-search'"></po-icon>
   </div>
 
   <input
     #poSearchInput
     type="text"
+    class="po-search-input"
+    [ariaLabel]="ariaLabel"
+    [class.po-search-icon-right]="!!poSearchInput.value && !disabled"
     [disabled]="disabled"
     [placeholder]="literals.search"
     (blur)="onBlur()"
@@ -14,7 +16,14 @@
     (input)="onSearchChange($event.target.value)"
   />
 
-  <div *ngIf="!!poSearchInput.value && !disabled" class="po-search-clean" [tabindex]="!disabled ? 0 : -1">
-    <po-clean [p-element-ref]="poSearchInput" (p-change-event)="clearSearch()"></po-clean>
+  <div *ngIf="!!poSearchInput.value && !disabled" class="po-search-container-clean">
+    <button
+      class="po-search-clean"
+      [ariaLabel]="literals.clean"
+      (click)="clearSearch()"
+      (keydown.enter)="clearSearch()"
+    >
+      <po-icon p-icon="po-icon-clear-content"></po-icon>
+    </button>
   </div>
 </div>

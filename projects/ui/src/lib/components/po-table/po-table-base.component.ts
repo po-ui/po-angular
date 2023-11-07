@@ -6,7 +6,7 @@ import { poLocaleDefault } from '../../services/po-language/po-language.constant
 import { PoLanguageService } from '../../services/po-language/po-language.service';
 import { capitalizeFirstLetter, convertToBoolean, isTypeof, sortValues } from '../../utils/util';
 
-import { PoFilterMode } from '../po-search/po-search-filter-mode.enum';
+import { PoSearchFilterMode } from '../po-search/enum/po-search-filter-mode.enum';
 import { PoTableColumnSortType } from './enums/po-table-column-sort-type.enum';
 import { PoTableColumnSpacing } from './enums/po-table-spacing.enum';
 import { PoTableAction } from './interfaces/po-table-action.interface';
@@ -309,7 +309,7 @@ export abstract class PoTableBaseComponent implements OnChanges, OnDestroy {
    *
    * @default `startsWith`
    */
-  @Input('p-filter-type') filterType: PoFilterMode = PoFilterMode.startsWith;
+  @Input('p-filter-type') filterType: PoSearchFilterMode = PoSearchFilterMode.startsWith;
 
   /**
    * @optional

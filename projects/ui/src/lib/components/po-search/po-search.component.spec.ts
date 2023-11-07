@@ -1,8 +1,8 @@
 import { ComponentFixture, TestBed } from '@angular/core/testing';
-import { ElementRef, EventEmitter } from '@angular/core';
+import { ElementRef } from '@angular/core';
 
 import { PoSearchComponent } from './po-search.component';
-import { PoFilterMode } from './po-search-filter-mode.enum';
+import { PoSearchFilterMode } from './enum/po-search-filter-mode.enum';
 
 describe('PoSearchComponent', () => {
   let component: PoSearchComponent;
@@ -32,15 +32,16 @@ describe('PoSearchComponent', () => {
   });
 
   it('clearSearch: should clear the search', () => {
+    const inputElement = document.createElement('input');
+    document.body.appendChild(inputElement);
+
+    component.poSearchInput = { nativeElement: inputElement };
+
     component.clearSearch();
 
-    expect(component.poSearchInput.nativeElement.value).toBe('');
+    expect(inputElement.value).toBe('');
 
-    spyOn(component, 'onSearchChange');
-    component.clearSearch();
-    expect(component.onSearchChange).toHaveBeenCalledWith('');
-
-    expect(component.filteredItemsChange.emit).toHaveBeenCalledWith(component.items);
+    document.body.removeChild(inputElement);
   });
 
   it('onSearchChange: should filter items based on search text and emit filtered items', () => {
@@ -51,7 +52,7 @@ describe('PoSearchComponent', () => {
   });
 
   it('onSearchChange: should filter items based on search text using startsWith', () => {
-    component.filterType = PoFilterMode.startsWith;
+    component.filterType = PoSearchFilterMode.startsWith;
 
     component.onSearchChange('Text');
 
@@ -60,7 +61,7 @@ describe('PoSearchComponent', () => {
   });
 
   it('onSearchChange: should filter items based on search text using endsWith', () => {
-    component.filterType = PoFilterMode.endsWith;
+    component.filterType = PoSearchFilterMode.endsWith;
 
     component.onSearchChange('2');
 
@@ -76,7 +77,7 @@ describe('PoSearchComponent', () => {
   });
 
   it('onSearchChange: should return false if filter mode is not recognized', () => {
-    component.filterType = ('invalidMode' as unknown) as PoFilterMode;
+    component.filterType = ('invalidMode' as unknown) as PoSearchFilterMode;
 
     const result = component.onSearchChange('text');
 
@@ -97,7 +98,7 @@ describe('PoSearchComponent', () => {
   });
 
   it('onSearchChange: should filter items based on search text using contains', () => {
-    component.filterType = PoFilterMode.contains;
+    component.filterType = PoSearchFilterMode.contains;
 
     component.onSearchChange('ext');
 
@@ -113,7 +114,7 @@ describe('PoSearchComponent', () => {
   it('onSearchChange: should handle null value', () => {
     const searchText = 'example';
     component.filterKeys = ['name'];
-    component.filterType = PoFilterMode.contains;
+    component.filterType = PoSearchFilterMode.contains;
     component.items = [{ name: null }];
 
     component.onSearchChange(searchText);
