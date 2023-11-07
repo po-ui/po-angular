@@ -1,0 +1,31 @@
+<div class="po-row">
+  <po-search
+    class="po-md-12"
+    name="Po Search"
+    [p-items]="items"
+    [p-filter-keys]="filterKeys"
+    (p-filtered-items-change)="filtered($event)"
+  ></po-search>
+</div>
+
+<hr />
+
+<div class="po-row" *ngFor="let people of peopleFiltered">
+  <po-info class="po-md-4" p-label="Name" [p-value]="people.name"> </po-info>
+
+  <po-info class="po-md-4" p-label="Nickname" [p-value]="people.nickname"> </po-info>
+
+  <po-info class="po-md-4" p-label="Email" [p-value]="people.email"> </po-info>
+</div>
+
+<hr />
+
+<po-list-view p-property-title="name" [p-items]="items">
+  <ng-template p-list-view-content-template let-item>
+    <li class="po-md-12">
+      Nickname: {{ item.nickname }}
+      <div *ngIf="compareObjects(item)"></div>
+    </li>
+    <li class="po-md-12">Email: {{ item.email }}</li>
+  </ng-template>
+</po-list-view>

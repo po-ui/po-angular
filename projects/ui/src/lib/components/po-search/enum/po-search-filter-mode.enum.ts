@@ -3,7 +3,7 @@
  *
  * @description
  *
- * Define o tipo de busca usado no po-multiselect.
+ * Define o tipo de busca usado no po-search.
  */
 export enum PoSearchFilterMode {
   /** Verifica se o texto *inicia* com o valor pesquisado. */
