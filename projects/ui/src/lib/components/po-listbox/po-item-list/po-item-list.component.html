@@ -46,6 +46,7 @@
       [p-disabled-tabindex]="true"
       [p-checkboxValue]="checkboxValue === null ? 'mixed' : checkboxValue"
       [p-disabled]="disabled"
+      (click)="onCheckboxItem()"
       (p-change)="onSelectItem({label})"
     ></po-checkbox>
 
