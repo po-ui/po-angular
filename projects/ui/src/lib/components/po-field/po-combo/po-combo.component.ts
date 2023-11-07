@@ -227,6 +227,11 @@ export class PoComboComponent extends PoComboBaseComponent implements AfterViewI
     const key = event.keyCode;
     const inputValue = event.target.value;
 
+    if (event.shiftKey && key === PoKeyCodeEnum.tab) {
+      this.controlComboVisibility(false);
+      return;
+    }
+
     // busca um registro quando acionar o tab
     if (this.service && key === PoKeyCodeEnum.tab && inputValue && !this.disabledTabFilter) {
       this.controlComboVisibility(false);
