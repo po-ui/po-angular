@@ -634,6 +634,15 @@ describe('PoComboComponent:', () => {
         expect(component.isFiltering).toBe(false);
       });
 
+      it('should call controlComboVisibility(false) when keyCode tab is pressed and shiftKey is true', () => {
+        const event = { ...fakeEvent, keyCode: 9, shiftKey: true };
+        spyOn(component, 'controlComboVisibility');
+
+        component.onKeyDown(event);
+
+        expect(component.controlComboVisibility).toHaveBeenCalledWith(false);
+      });
+
       it(`should call 'controlComboVisibility', 'updateComboList' and 'updateSelectedValue' with 'selectedView' and 'true'
         if selectedView.label is not equal inputValue, typed 'enter', 'selectedView' is truthy and 'comboOpen' is true `, () => {
         const event = { ...fakeEvent, keyCode: 13, target: { value: 'lab' } };
