@@ -1,10 +1,33 @@
-<div class="po-loading-icon" [class.po-loading-icon-neutral-color]="neutralColor">
-  <span class="po-loading-icon-bar po-loading-icon-bar-1"></span>
-  <span class="po-loading-icon-bar po-loading-icon-bar-2"></span>
-  <span class="po-loading-icon-bar po-loading-icon-bar-3"></span>
-  <span class="po-loading-icon-bar po-loading-icon-bar-4"></span>
-  <span class="po-loading-icon-bar po-loading-icon-bar-5"></span>
-  <span class="po-loading-icon-bar po-loading-icon-bar-6"></span>
-  <span class="po-loading-icon-bar po-loading-icon-bar-7"></span>
-  <span class="po-loading-icon-bar po-loading-icon-bar-8"></span>
+<div class="po-loading-icon-container po-loading-svg-{{ size }}">
+  <svg
+    [ngClass]="neutralColor ? 'po-loading-icon-neutral' : 'po-loading-icon'"
+    viewBox="0 0 200 200"
+    fill="none"
+    xmlns="http://www.w3.org/2000/svg"
+  >
+    <defs>
+      <linearGradient [id]="'first' + id">
+        <stop offset="0" stop-opacity="0" stop-color="currentColor" />
+        <stop offset="1" stop-opacity="0.5" stop-color="currentColor" />
+      </linearGradient>
+      <linearGradient [id]="'second' + id">
+        <stop offset="0" stop-opacity="1" stop-color="currentColor" />
+        <stop offset="1" stop-opacity="0.5" stop-color="currentColor" />
+      </linearGradient>
+    </defs>
+    <g stroke-width="24" transform="matrix(0.876218, 0, 0, 0.87855, 12.377892, 12.144993)">
+      <path [attr.stroke]="'url(#' + 'second' + id + ')'" d="M 4 100 A 96 96 0 0 1 196 100" />
+      <path [attr.stroke]="'url(#' + 'first' + id + ')'" d="M 196 100 A 96 96 0 0 1 4 100" />
+      <path stroke="currentColor" d="M 4 100 A 96 96 0 0 1 4 98" />
+    </g>
+
+    <animateTransform
+      from="0 0 0"
+      to="360 0 0"
+      attributeName="transform"
+      type="rotate"
+      repeatCount="indefinite"
+      dur="1200ms"
+    />
+  </svg>
 </div>
