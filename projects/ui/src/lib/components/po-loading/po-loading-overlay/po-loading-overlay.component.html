@@ -1,3 +1,3 @@
-<div [class.po-overlay-absolute]="!screenLock" [class.po-overlay-fixed]="screenLock">
-  <po-loading class="po-loading-overlay-content" [p-text]="text"></po-loading>
-</div>
+<po-overlay [p-screen-lock]="screenLock">
+  <po-loading [p-text]="text"></po-loading>
+</po-overlay>
