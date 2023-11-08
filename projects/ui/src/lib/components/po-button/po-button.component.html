@@ -11,9 +11,11 @@
   (click)="onClick()"
 >
   <div *ngIf="loading" class="po-button-loading-icon">
-    <po-loading-icon p-neutral-color></po-loading-icon>
+    <po-loading-icon p-neutral-color p-size="sm"></po-loading-icon>
   </div>
 
-  <po-icon *ngIf="icon" class="po-button-icon" [p-icon]="icon"></po-icon>
-  <span *ngIf="label" class="po-button-label">{{ label }}</span>
+  <div class="po-button-container">
+    <po-icon *ngIf="icon" class="po-button-icon" [p-icon]="icon"></po-icon>
+    <span *ngIf="label" class="po-button-label">{{ label }}</span>
+  </div>
 </button>

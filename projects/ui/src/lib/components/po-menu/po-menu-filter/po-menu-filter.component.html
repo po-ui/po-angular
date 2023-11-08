@@ -9,7 +9,7 @@
 
   <div class="po-menu-filter-search-icon-container">
     <span *ngIf="!loading" class="po-icon po-menu-filter-icon po-icon-search"></span>
-    <po-loading-icon *ngIf="loading"></po-loading-icon>
+    <po-loading-icon *ngIf="loading" p-size="sm"></po-loading-icon>
   </div>
   <div class="po-menu-filter-close-icon-container">
     <po-clean [p-element-ref]="inputFilterElement" (p-change-event)="filterItems(inputFilter.value)"></po-clean>
