@@ -29,6 +29,7 @@ export * from './po-menu-panel/index';
 export * from './po-menu/index';
 export * from './po-modal/index';
 export * from './po-navbar/index';
+export * from './po-overlay/index';
 export * from './po-page/index';
 export * from './po-page/po-page-slide/index';
 export * from './po-popover/index';
