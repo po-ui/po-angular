@@ -87,16 +87,14 @@ export const poPageDynamicEditLiteralsDefault = {
  *
  * ### Utilização via rota
  *
- * Ao utilizar as rotas para carregar o template, o `page-dynamic-edit` disponibiliza propriedades para
- * poder especificar o endpoint dos dados e dos metadados. Exemplo de utilização:
+ * Ao utilizar as rotas para inicializar o template, o `page-dynamic-edit` disponibiliza propriedades que devem ser fornecidas no arquivo de configuração de rotas da aplicação, para
+ * poder especificar o endpoint dos dados e dos metadados que serão carregados na inicialização.
  *
- * O componente primeiro irá carregar o metadado da rota definida na propriedade serviceMetadataApi
- * e depois irá buscar da rota definida na propriedade serviceLoadApi
+ * Exemplo de utilização:
  *
- * > Caso o servidor retornar um erro ao recuperar o metadados, será repassado o metadados salvo em cache,
- * se o cache não existe será disparado uma notificação.
- *
+ * Arquivo de configuração de rotas da aplicação: `app-routing.module.ts`
  * ```
+ * const routes: Routes = [
  * {
  *   path: 'people',
  *   component: PoPageDynamicEditComponent,
@@ -105,9 +103,22 @@ export const poPageDynamicEditLiteralsDefault = {
  *     serviceMetadataApi: 'http://localhost:3000/v1/metadata', // endpoint dos metadados utilizando o método HTTP Get
  *     serviceLoadApi: 'http://localhost:3000/load-metadata' // endpoint de customizações dos metadados utilizando o método HTTP Post
  *   }
- * }
+ *  },
+ *  {
+ *   path: 'home',
+ *   component: HomeExampleComponent
+ *  }
+ * ];
  *
  * ```
+ * O componente primeiro irá carregar o metadado da rota definida na propriedade serviceMetadataApi
+ * e depois irá buscar da rota definida na propriedade serviceLoadApi.
+ *
+ * A requisição dos metadados é feita na inicialização do template para buscar os metadados da página passando o
+ * tipo do metadado esperado e a versão cacheada pelo browser.
+ *
+ * > Caso o servidor retornar um erro ao recuperar os metadados, serão repassados os metadados salvos em cache,
+ * se o cache não existir será disparada uma notificação.
  *
  * Para carregar com um recurso já existente, deve-se ser incluído um parâmetro na rota chamado `id`:
  *
