@@ -3,6 +3,7 @@
   <po-button
     class="po-sm-12"
     [p-disabled]="properties.includes('disabled')"
+    [p-hide-label]="properties.includes('hideLabel')"
     [p-icon]="icon"
     [p-label]="label"
     [p-loading]="properties.includes('loading')"
@@ -19,7 +20,15 @@
 <!-- Properties -->
 <form #f="ngForm">
   <div class="po-row">
-    <po-input class="po-md-6" name="label" [(ngModel)]="label" p-clean p-label="Label"> </po-input>
+    <po-input
+      class="po-md-6"
+      name="label"
+      [(ngModel)]="label"
+      p-clean
+      p-label="Label"
+      (p-change-model)="verifyHideLabel()"
+    >
+    </po-input>
   </div>
 
   <div class="po-row">

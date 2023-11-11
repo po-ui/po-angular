@@ -226,4 +226,16 @@ export class PoButtonBaseComponent {
    * > Em caso de botões com apenas ícone a atribuição de valor à esta propriedade é muito importante para acessibilidade.
    */
   @Input('p-aria-label') ariaLabel?: string;
+
+  /**
+   * @optional
+   *
+   * @description
+   *
+   * Permite ao desenvolvedor definir se a label é exibida ou não.
+   *
+   * @default `false`
+   *
+   */
+  @Input({ alias: 'p-hide-label', transform: convertToBoolean }) hideLabel: boolean = false;
 }
