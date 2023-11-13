@@ -2,6 +2,17 @@
 
 All notable changes to this project will be documented in this file. See [standard-version](https://github.com/conventional-changelog/standard-version) for commit guidelines.
 
+## [16.6.1](https://github.com/po-ui/po-angular/compare/v16.6.0...v16.6.1) (2023-11-13)
+
+
+### Bug Fixes
+
+* **combo:** corrige fechamento do listbox após perda de foco ([a6cfa1a](https://github.com/po-ui/po-angular/commit/a6cfa1abaefb589453441742ca3e5ba78892ef8c))
+* **listbox:** corrige clique no checkbox ([d303af0](https://github.com/po-ui/po-angular/commit/d303af0aba21e956be81636ffc8a24d36ad1683f))
+* **multiselect:** corrige fechamento do listbox após perda de foco ([f4d9437](https://github.com/po-ui/po-angular/commit/f4d9437ed753aa2c4e0b5fe5c3b1200f3a868971))
+
+
+
 # [16.6.0](https://github.com/po-ui/po-angular/compare/v16.5.0...v16.6.0) (2023-11-03)
 
 
