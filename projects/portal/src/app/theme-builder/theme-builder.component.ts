@@ -3,15 +3,17 @@ import {
   ChangeDetectorRef,
   Component,
   ElementRef,
-  Renderer2,
-  ViewChild,
   OnInit,
+  ViewChild,
   ViewEncapsulation
 } from '@angular/core';
 import { FormBuilder, FormGroup } from '@angular/forms';
 
 import {
+  PoAccordionComponent,
+  PoBreadcrumbComponent,
   PoButtonComponent,
+  PoComboComponent,
   PoDatepickerComponent,
   PoDisclaimerComponent,
   PoDropdownComponent,
@@ -19,10 +21,12 @@ import {
   PoListViewAction,
   PoListViewLiterals,
   PoModalComponent,
+  PoMultiselectComponent,
   PoPageSlideComponent,
   PoPopupComponent,
   PoSelectComponent,
   PoSwitchComponent,
+  PoTagComponent,
   PoTextareaComponent
 } from '../../../../ui/src/lib';
 
@@ -108,6 +112,34 @@ export class ThemeBuilderComponent implements AfterViewInit, OnInit {
   @ViewChild('checkboxChecked', { read: ElementRef }) checkboxChecked: ElementRef;
   @ViewChild('checkboxUnchecked', { read: ElementRef }) checkboxUnchecked: ElementRef;
   @ViewChild('checkboxHover', { read: ElementRef }) checkboxHover: ElementRef;
+  @ViewChild('multiselect') multiselectComponent: PoMultiselectComponent;
+  @ViewChild('multiselectDefault', { read: ElementRef }) multiselectDefault: ElementRef;
+  @ViewChild('multiselectHover') multiselectHover: PoMultiselectComponent;
+  @ViewChild('multiselectFocus') multiselectFocus: PoMultiselectComponent;
+  @ViewChild('multiselectDisabled') multiselectDisabled: PoMultiselectComponent;
+  @ViewChild('combo') comboComponent: PoComboComponent;
+  @ViewChild('comboDefault', { read: ElementRef }) comboDefault: ElementRef;
+  @ViewChild('comboHover') comboHover: PoComboComponent;
+  @ViewChild('comboFocus') comboFocus: PoComboComponent;
+  @ViewChild('comboDisabled') comboDisabled: PoComboComponent;
+  @ViewChild('accordion') accordionComponent: PoAccordionComponent;
+  @ViewChild('accordionDefault', { read: ElementRef }) accordionDefault: ElementRef;
+  @ViewChild('accordionHover') accordionHover: PoAccordionComponent;
+  @ViewChild('accordionFocus') accordionFocus: PoAccordionComponent;
+  @ViewChild('accordionPressed') accordionPressed: PoAccordionComponent;
+  @ViewChild('accordionDisabled') accordionDisabled: PoAccordionComponent;
+  @ViewChild('breadcrumb') breadcrumbComponent: PoBreadcrumbComponent;
+  @ViewChild('breadcrumbDefault', { read: ElementRef }) breadcrumbDefault: ElementRef;
+  @ViewChild('tag') tagComponent: PoTagComponent;
+  @ViewChild('tagDefault', { read: ElementRef }) tagDefault: ElementRef;
+  @ViewChild('tagDanger', { read: ElementRef }) tagDanger: ElementRef;
+  @ViewChild('tagSuccess', { read: ElementRef }) tagSuccess: ElementRef;
+  @ViewChild('tagWarning', { read: ElementRef }) tagWarning: ElementRef;
+  @ViewChild('tagNeutral', { read: ElementRef }) tagNeutral: ElementRef;
+  @ViewChild('tagRemovable', { read: ElementRef }) tagRemovable: ElementRef;
+  @ViewChild('tagHover', { read: ElementRef }) tagHover: ElementRef;
+  @ViewChild('tagDisabled', { read: ElementRef }) tagDisabled: ElementRef;
+
   @ViewChild('resultButtonD') resultButtonD: HTMLElement;
   @ViewChild('resultButtonP') resultButtonP: HTMLElement;
   @ViewChild('resultButtonL') resultButtonL: HTMLElement;
@@ -126,6 +158,12 @@ export class ThemeBuilderComponent implements AfterViewInit, OnInit {
   @ViewChild('resultPopup') resultPopup: HTMLElement;
   @ViewChild('resultPopupContainer') resultPopupContainer: HTMLElement;
   @ViewChild('resultCheckbox') resultCheckbox: HTMLElement;
+  @ViewChild('resultMultiselect') resultMultiselect: HTMLElement;
+  @ViewChild('resultCombo') resultCombo: HTMLElement;
+  @ViewChild('resultAccordion') resultAccordion: HTMLElement;
+  @ViewChild('resultBreadcrumb') resultBreadcrumb: HTMLElement;
+  @ViewChild('resultTag') resultTag: HTMLElement;
+  @ViewChild('resultTagsGlobal') resultTagsGlobal: HTMLElement;
 
   botaoPrimaryView = true;
   switchView = true;
@@ -141,26 +179,52 @@ export class ThemeBuilderComponent implements AfterViewInit, OnInit {
   dropdownView = true;
   popupView = true;
   checkboxView = true;
+  multiselectView = true;
+  comboView = true;
+  accordionView = true;
+  breadcrumbView = true;
+  tagView = true;
   switchSampleBuilder = true;
+
+  resultTagI = '';
+  resultTagD = '';
+  resultTagS = '';
+  resultTagW = '';
+  resultTagN = '';
+  resultTagR = '';
 
   switchAllComponentes = true;
 
-  colorBack!: string;
   colorText = '#ffffff';
   changedColorButton = false;
   changedColorPopup = false;
-  itemSelected!: string;
+  changedColorAccordion = false;
   kindButton = 1;
+  tagSelected = 1;
+
+  colorBack!: string;
+  itemSelected!: string;
   nameItem!: string;
   ratio!: number;
   ratioButton!: number;
   ratioDisclaimer!: number;
   ratioInput!: number;
   ratioSelect!: number;
+  ratioMultiselect!: number;
+  ratioCombo!: number;
+  ratioAccordion!: number;
+  ratioTag!: number;
+  ratioTagDefault!: number;
+  ratioTagDanger!: number;
+  ratioTagSuccess!: number;
+  ratioTagWarning!: number;
+  ratioTagNeutral!: number;
+  ratioTagRemovable!: number;
   ratioTextarea!: number;
   ratioDatepicker!: number;
   ratioTooltip!: number;
   ratioPopup!: number;
+  tagActive;
 
   // Cor primária
   brandFormP: FormGroup;
@@ -224,6 +288,28 @@ export class ThemeBuilderComponent implements AfterViewInit, OnInit {
 
   //checkbox
   checkboxForm: FormGroup;
+
+  //multiselect
+  multiselectForm: FormGroup;
+
+  //combo
+  comboForm: FormGroup;
+
+  //accordion
+  accordionForm: FormGroup;
+
+  //breadcrumb
+  breadcrumbForm: FormGroup;
+
+  //tag
+  tagForm;
+  tagsFormGlobal: FormGroup;
+  tagFormI: FormGroup;
+  tagFormD: FormGroup;
+  tagFormS: FormGroup;
+  tagFormW: FormGroup;
+  tagFormN: FormGroup;
+  tagFormR: FormGroup;
 
   private readonly formPropertyP = {
     colorAction: '--color-primary'
@@ -388,6 +474,90 @@ export class ThemeBuilderComponent implements AfterViewInit, OnInit {
     borderColor: '--border-color'
   };
 
+  private readonly formPropertyDictMultiselect = {
+    borderColor: '--color',
+    borderColorHover: '--color-hover',
+    colorBackground: '--background',
+    colorBackgroundHover: '--background-hover',
+    textColor: '--text-color-placeholder',
+    fontSize: '--font-size',
+    colorFocus: '--color-focused',
+    colorDisabled: '--background-disabled'
+  };
+
+  private readonly formPropertyDictCombo = {
+    borderColor: '--color',
+    borderColorHover: '--color-hover',
+    colorBackground: '--background',
+    colorBackgroundHover: '--background-hover',
+    colorFocus: '--color-focused',
+    colorDisabled: '--background-disabled',
+    fontSize: '--font-size',
+    textColor: '--text-color',
+    textColorPlaceholder: '--text-color-placeholder'
+  };
+
+  private readonly formPropertyDictAccordion = {
+    colorBackground: '--background-color',
+    colorHover: '--background-hover',
+    colorPressed: '--background-pressed',
+    colorDisabled: '--background-disabled',
+    textColor: '--color',
+    textColorDisabled: '--color-disabled',
+    textColorHover: '--color-hover',
+    textColorPressed: '--color-pressed',
+    textColorFocus: '--color-focus',
+    fontSize: '--font-size'
+  };
+
+  private readonly formPropertyDictBreadcrumb = {
+    colorIcon: '--color-icon',
+    colorCurrentPage: '--color-current-page',
+    color: '--color'
+  };
+
+  private formPropertyDictTag;
+  private readonly formPropertyDictTagI = {
+    backgroundColor: '--color-info',
+    textColor: '--text-color-info'
+  };
+
+  private readonly formPropertyDictTagD = {
+    backgroundColor: '--color-negative',
+    textColor: '--text-color-negative'
+  };
+
+  private readonly formPropertyDictTagS = {
+    backgroundColor: '--color-positive',
+    textColor: '--text-color-positive'
+  };
+
+  private readonly formPropertyDictTagW = {
+    backgroundColor: '--color-tag-warning',
+    textColor: '--text-color-warning'
+  };
+
+  private readonly formPropertyDictTagN = {
+    backgroundColor: '--color-neutral',
+    textColor: '--text-color-neutral'
+  };
+
+  private readonly formPropertyDictTagR = {
+    backgroundColor: '--color',
+    textColor: '--text-color',
+    borderColor: '--border-color',
+    colorHover: '--color-hover',
+    colorDisabled: '--color-disabled',
+    textColorDisabled: '--text-color-disabled',
+    borderColorDisabled: '--border-color-disabled'
+  };
+
+  private readonly formPropertyDictTagsGlobal = {
+    borderRadius: '--border-radius',
+    fontSize: '--font-size',
+    lineHeight: '--line-height'
+  };
+
   listViewLiterals: PoListViewLiterals = {
     showDetails: 'Mais Detalhes',
     hideDetails: 'Menos Detalhes'
@@ -401,7 +571,7 @@ export class ThemeBuilderComponent implements AfterViewInit, OnInit {
     }
   ];
 
-  constructor(private formBuilder: FormBuilder, private renderer: Renderer2, private cdr: ChangeDetectorRef) {}
+  constructor(private formBuilder: FormBuilder, private cdr: ChangeDetectorRef) {}
 
   ngOnInit(): void {
     this.brandFormP = this.formBuilder.group({
@@ -566,6 +736,90 @@ export class ThemeBuilderComponent implements AfterViewInit, OnInit {
       colorHover: [null],
       borderColor: [null]
     });
+
+    this.multiselectForm = this.formBuilder.group({
+      borderColor: [null],
+      borderColorHover: [null],
+      colorBackground: [null],
+      colorBackgroundHover: [null],
+      textColor: [null],
+      fontSize: [null],
+      colorFocus: [null],
+      colorDisabled: [null]
+    });
+
+    this.comboForm = this.formBuilder.group({
+      borderColor: [null],
+      borderColorHover: [null],
+      colorBackground: [null],
+      colorBackgroundHover: [null],
+      textColor: [null],
+      textColorPlaceholder: [null],
+      fontSize: [null],
+      colorFocus: [null],
+      colorDisabled: [null]
+    });
+
+    this.accordionForm = this.formBuilder.group({
+      fontSize: [null],
+      colorBackground: [null],
+      colorHover: [null],
+      colorPressed: [null],
+      textColor: [null],
+      textColorHover: [null],
+      textColorPressed: [null],
+      textColorFocus: [null],
+      colorDisabled: [null],
+      textColorDisabled: [null]
+    });
+
+    this.breadcrumbForm = this.formBuilder.group({
+      colorIcon: [null],
+      colorCurrentPage: [null],
+      color: [null]
+    });
+
+    this.tagFormI = this.formBuilder.group({
+      backgroundColor: [null],
+      textColor: [null]
+    });
+
+    this.tagFormD = this.formBuilder.group({
+      backgroundColor: [null],
+      textColor: [null]
+    });
+
+    this.tagFormS = this.formBuilder.group({
+      backgroundColor: [null],
+      textColor: [null]
+    });
+
+    this.tagFormW = this.formBuilder.group({
+      backgroundColor: [null],
+      textColor: [null]
+    });
+
+    this.tagFormN = this.formBuilder.group({
+      backgroundColor: [null],
+      textColor: [null]
+    });
+
+    this.tagFormR = this.formBuilder.group({
+      backgroundColor: [null],
+      textColor: [null],
+      borderColor: [null],
+      colorHover: [null],
+      colorDisabled: [null],
+      textColorDisabled: [null],
+      borderColorDisabled: [null]
+    });
+
+    this.tagsFormGlobal = this.formBuilder.group({
+      borderRadius: [null],
+      fontSize: [null],
+      lineHeight: [null]
+    });
+    this.tagForm = this.tagFormI;
   }
 
   openGetcss() {
@@ -872,13 +1126,185 @@ export class ThemeBuilderComponent implements AfterViewInit, OnInit {
       }
     }
 
+    this.multiselectForm.reset();
+    Object.keys(this.formPropertyDictMultiselect).forEach((fieldName: string) => {
+      this.multiselectComponent.inputElement.nativeElement.style.setProperty(
+        this.formPropertyDictMultiselect[fieldName],
+        null
+      );
+      if (this.itemSelected === 'multiselect') {
+        this.multiselectDefault.nativeElement.style.setProperty(this.formPropertyDictMultiselect[fieldName], null);
+        this.multiselectHover.inputElement.nativeElement.style.setProperty(
+          this.formPropertyDictMultiselect[fieldName],
+          null
+        );
+        this.multiselectFocus.inputElement.nativeElement.style.setProperty(
+          this.formPropertyDictMultiselect[fieldName],
+          null
+        );
+        this.multiselectDisabled.inputElement.nativeElement.style.setProperty(
+          this.formPropertyDictMultiselect[fieldName],
+          null
+        );
+      }
+    });
+
+    this.comboForm.reset();
+    Object.keys(this.formPropertyDictCombo).forEach((fieldName: string) => {
+      this.comboComponent.inputEl.nativeElement.style.setProperty(this.formPropertyDictCombo[fieldName], null);
+      if (this.itemSelected === 'combo') {
+        this.comboDefault.nativeElement.style.setProperty(this.formPropertyDictCombo[fieldName], null);
+        this.comboHover.inputEl.nativeElement.style.setProperty(this.formPropertyDictCombo[fieldName], null);
+        this.comboFocus.inputEl.nativeElement.style.setProperty(this.formPropertyDictCombo[fieldName], null);
+        this.comboDisabled.inputEl.nativeElement.style.setProperty(this.formPropertyDictCombo[fieldName], null);
+        this.comboHover.iconElement.nativeElement.style.setProperty(this.formPropertyDictCombo[fieldName], null);
+        this.comboFocus.iconElement.nativeElement.style.setProperty(this.formPropertyDictCombo[fieldName], null);
+      }
+    });
+
+    this.accordionForm.reset();
+    Object.keys(this.formPropertyDictAccordion).forEach((fieldName: string) => {
+      const accordionList = this.accordionComponent.accordionsHeader.toArray();
+      accordionList[0].accordionElement.nativeElement.style.setProperty(
+        this.formPropertyDictAccordion[fieldName],
+        null
+      );
+      if (this.itemSelected === 'accordion') {
+        this.accordionDefault.nativeElement.style.setProperty(this.formPropertyDictAccordion[fieldName], null);
+        this.accordionHover.accordionsHeader
+          .toArray()[0]
+          .accordionElement.nativeElement.style.setProperty(this.formPropertyDictAccordion[fieldName], null);
+        this.accordionFocus.accordionsHeader
+          .toArray()[0]
+          .accordionElement.nativeElement.style.setProperty(this.formPropertyDictAccordion[fieldName], null);
+        this.accordionPressed.accordionsHeader
+          .toArray()[0]
+          .accordionElement.nativeElement.style.setProperty(this.formPropertyDictAccordion[fieldName], null);
+        this.accordionDisabled.accordionsHeader
+          .toArray()[0]
+          .accordionElement.nativeElement.style.setProperty(this.formPropertyDictAccordion[fieldName], null);
+      }
+    });
+
+    this.breadcrumbForm.reset();
+    Object.keys(this.formPropertyDictBreadcrumb).forEach((fieldName: string) => {
+      this.breadcrumbComponent.breadcrumbElement.nativeElement.style.setProperty(
+        this.formPropertyDictBreadcrumb[fieldName],
+        null
+      );
+      if (this.itemSelected === 'breadcrumb') {
+        this.breadcrumbDefault.nativeElement.style.setProperty(this.formPropertyDictBreadcrumb[fieldName], null);
+      }
+    });
+
+    this.tagsFormGlobal.reset();
+    this.tagFormI.reset();
+    Object.keys(this.formPropertyDictTagI).forEach((fieldName: string) => {
+      this.tagComponent.poTag.nativeElement.style.setProperty(this.formPropertyDictTagI[fieldName], null);
+      if (this.itemSelected === 'tag') {
+        this.tagDefault.nativeElement.style.setProperty(this.formPropertyDictTagI[fieldName], null);
+        this.tagDefault.nativeElement.style.setProperty(this.formPropertyDictTagsGlobal[fieldName], null);
+      }
+    });
+
+    this.tagFormD.reset();
+    Object.keys(this.formPropertyDictTagD).forEach((fieldName: string) => {
+      if (this.itemSelected === 'tag') {
+        this.tagDanger.nativeElement.style.setProperty(this.formPropertyDictTagD[fieldName], null);
+        this.tagDanger.nativeElement.style.setProperty(this.formPropertyDictTagsGlobal[fieldName], null);
+      }
+    });
+
+    this.tagFormS.reset();
+    Object.keys(this.formPropertyDictTagS).forEach((fieldName: string) => {
+      if (this.itemSelected === 'tag') {
+        this.tagSuccess.nativeElement.style.setProperty(this.formPropertyDictTagS[fieldName], null);
+        this.tagSuccess.nativeElement.style.setProperty(this.formPropertyDictTagsGlobal[fieldName], null);
+      }
+    });
+
+    this.tagFormW.reset();
+    Object.keys(this.formPropertyDictTagW).forEach((fieldName: string) => {
+      if (this.itemSelected === 'tag') {
+        this.tagWarning.nativeElement.style.setProperty(this.formPropertyDictTagW[fieldName], null);
+        this.tagWarning.nativeElement.style.setProperty(this.formPropertyDictTagsGlobal[fieldName], null);
+      }
+    });
+
+    this.tagFormN.reset();
+    Object.keys(this.formPropertyDictTagN).forEach((fieldName: string) => {
+      if (this.itemSelected === 'tag') {
+        this.tagNeutral.nativeElement.style.setProperty(this.formPropertyDictTagN[fieldName], null);
+        this.tagNeutral.nativeElement.style.setProperty(this.formPropertyDictTagsGlobal[fieldName], null);
+      }
+    });
+
+    this.tagFormR.reset();
+    Object.keys(this.formPropertyDictTagR).forEach((fieldName: string) => {
+      if (this.itemSelected === 'tag') {
+        this.tagRemovable.nativeElement.style.setProperty(this.formPropertyDictTagR[fieldName], null);
+        this.tagHover.nativeElement.style.setProperty(this.formPropertyDictTagR[fieldName], null);
+        this.tagDisabled.nativeElement.style.setProperty(this.formPropertyDictTagR[fieldName], null);
+        this.tagRemovable.nativeElement.style.setProperty(this.formPropertyDictTagsGlobal[fieldName], null);
+        this.tagHover.nativeElement.style.setProperty(this.formPropertyDictTagsGlobal[fieldName], null);
+        this.tagDisabled.nativeElement.style.setProperty(this.formPropertyDictTagsGlobal[fieldName], null);
+      }
+    });
+
     this.setRatioDefault();
     this.changedColorButton = false;
     this.changedColorPopup = false;
+    this.changedColorAccordion = false;
   }
 
   changeKindButton(kindValue: number): void {
     this.kindButton = kindValue;
+  }
+
+  changeTag(tagValue: number): void {
+    this.tagSelected = tagValue;
+    if (tagValue === 1) {
+      this.formPropertyDictTag = this.formPropertyDictTagI;
+      this.ratio = this.ratioTagDefault;
+      this.ratioTag = this.ratioTagDefault;
+      this.tagActive = this.tagDefault;
+      this.tagForm = this.tagFormI;
+    }
+    if (tagValue === 2) {
+      this.formPropertyDictTag = this.formPropertyDictTagD;
+      this.ratio = this.ratioTagDanger;
+      this.ratioTag = this.ratioTagDanger;
+      this.tagActive = this.tagDanger;
+      this.tagForm = this.tagFormD;
+    }
+    if (tagValue === 3) {
+      this.formPropertyDictTag = this.formPropertyDictTagS;
+      this.ratio = this.ratioTagSuccess;
+      this.ratioTag = this.ratioTagSuccess;
+      this.tagActive = this.tagSuccess;
+      this.tagForm = this.tagFormS;
+    }
+    if (tagValue === 4) {
+      this.formPropertyDictTag = this.formPropertyDictTagW;
+      this.ratio = this.ratioTagWarning;
+      this.ratioTag = this.ratioTagWarning;
+      this.tagActive = this.tagWarning;
+      this.tagForm = this.tagFormW;
+    }
+    if (tagValue === 5) {
+      this.formPropertyDictTag = this.formPropertyDictTagN;
+      this.ratio = this.ratioTagNeutral;
+      this.ratioTag = this.ratioTagNeutral;
+      this.tagActive = this.tagNeutral;
+      this.tagForm = this.tagFormN;
+    }
+    if (tagValue === 6) {
+      this.formPropertyDictTag = this.formPropertyDictTagR;
+      this.ratio = this.ratioTagRemovable;
+      this.ratioTag = this.ratioTagRemovable;
+      this.tagActive = this.tagRemovable;
+      this.tagForm = this.tagFormR;
+    }
   }
 
   copyToClipboard() {
@@ -920,6 +1346,35 @@ export class ThemeBuilderComponent implements AfterViewInit, OnInit {
     this.popupForm.valueChanges.subscribe(changes => this.checkChangesPopup(changes));
     this.popupContainerForm.valueChanges.subscribe(changes => this.checkChangesPopupContainer(changes));
     this.checkboxForm.valueChanges.subscribe(changes => this.checkChangesCheckbox(changes));
+    this.multiselectForm.valueChanges.subscribe(changes => this.checkChangesMultiselect(changes));
+    this.comboForm.valueChanges.subscribe(changes => this.checkChangesCombo(changes));
+    this.accordionForm.valueChanges.subscribe(changes => this.checkChangesAccordion(changes));
+    this.breadcrumbForm.valueChanges.subscribe(changes => this.checkChangesBreadcrumb(changes));
+    this.tagFormI.valueChanges.subscribe(changes => {
+      this.resultTagI = '';
+      this.checkChangesTag(changes);
+    });
+    this.tagFormD.valueChanges.subscribe(changes => {
+      this.resultTagD = '';
+      this.checkChangesTag(changes);
+    });
+    this.tagFormS.valueChanges.subscribe(changes => {
+      this.resultTagS = '';
+      this.checkChangesTag(changes);
+    });
+    this.tagFormW.valueChanges.subscribe(changes => {
+      this.resultTagW = '';
+      this.checkChangesTag(changes);
+    });
+    this.tagFormN.valueChanges.subscribe(changes => {
+      this.resultTagN = '';
+      this.checkChangesTag(changes);
+    });
+    this.tagFormR.valueChanges.subscribe(changes => {
+      this.resultTagR = '';
+      this.checkChangesTag(changes);
+    });
+    this.tagsFormGlobal.valueChanges.subscribe(changes => this.checkChangesTagsGlobal(changes));
 
     this.setRatioDefault();
   }
@@ -955,6 +1410,37 @@ export class ThemeBuilderComponent implements AfterViewInit, OnInit {
       const popup = this.popupBuilder.poListBoxRef.listboxItemList.nativeElement.children[0].children[0];
       this.setColorsBackAndText(popup, this.ratioPopup, '--background', '--color');
     }
+    if (item === 'multiselect') {
+      this.setColorsBackAndText(
+        this.multiselectDefault.nativeElement,
+        this.ratioMultiselect,
+        '--background',
+        '--text-color-placeholder'
+      );
+    }
+    if (item === 'combo') {
+      this.setColorsBackAndText(this.comboDefault.nativeElement, this.ratioCombo);
+    }
+    if (item === 'accordion') {
+      this.setColorsBackAndText(
+        this.accordionDefault.nativeElement,
+        this.ratioAccordion,
+        '--background-color',
+        '--color'
+      );
+    }
+    if (item === 'tag') {
+      this.tagSelected = 1;
+      this.tagActive = this.tagDefault;
+      this.formPropertyDictTag = this.formPropertyDictTagI;
+      this.tagForm = this.tagFormI;
+      this.setColorsBackAndText(
+        this.tagDefault.nativeElement,
+        this.ratioTagDefault,
+        '--color-info',
+        '--text-color-info'
+      );
+    }
   }
 
   switchIndividual() {
@@ -983,6 +1469,11 @@ export class ThemeBuilderComponent implements AfterViewInit, OnInit {
       this.tooltipView = true;
       this.popupView = true;
       this.checkboxView = true;
+      this.multiselectView = true;
+      this.accordionView = true;
+      this.breadcrumbView = true;
+      this.comboView = true;
+      this.tagView = true;
     } else {
       this.botaoPrimaryView = false;
       this.switchView = false;
@@ -998,6 +1489,11 @@ export class ThemeBuilderComponent implements AfterViewInit, OnInit {
       this.tooltipView = false;
       this.popupView = false;
       this.checkboxView = false;
+      this.multiselectView = false;
+      this.accordionView = false;
+      this.breadcrumbView = false;
+      this.comboView = false;
+      this.tagView = false;
     }
   }
 
@@ -1016,7 +1512,12 @@ export class ThemeBuilderComponent implements AfterViewInit, OnInit {
       this.linkView ||
       this.tooltipView ||
       this.popupView ||
-      this.checkboxView
+      this.checkboxView ||
+      this.multiselectView ||
+      this.comboView ||
+      this.accordionView ||
+      this.breadcrumbView ||
+      this.tagView
     );
   }
 
@@ -1092,6 +1593,9 @@ export class ThemeBuilderComponent implements AfterViewInit, OnInit {
         }
         if (!this.changedColorPopup) {
           this.ratioPopup = this.setRatioComponent(this.changedColorPopup, colorBack, '#ffffff');
+        }
+        if (!this.changedColorAccordion) {
+          this.ratioAccordion = this.setRatioComponent(this.changedColorAccordion, '#ffffff', colorBack);
         }
       }
     });
@@ -1806,6 +2310,252 @@ export class ThemeBuilderComponent implements AfterViewInit, OnInit {
     }
   }
 
+  private checkChangesMultiselect(changes: { [key: string]: string }): void {
+    if (!this.isEmpty(changes)) {
+      this.resultMultiselect['nativeElement'].innerHTML = 'po-multiselect {<br>';
+
+      Object.keys(changes).forEach((fieldName: string) => {
+        let value;
+        if (typeof changes[fieldName] === 'number') {
+          value = `${changes[fieldName]}px`;
+        } else {
+          value = /color/i.test(fieldName) ? changes[fieldName] : `var(--${changes[fieldName]})`;
+        }
+        if (changes[fieldName]) {
+          this.multiselectComponent.inputElement.nativeElement.style.setProperty(
+            this.formPropertyDictMultiselect[fieldName],
+            value
+          );
+          this.multiselectDefault.nativeElement.style.setProperty(this.formPropertyDictMultiselect[fieldName], value);
+          this.multiselectHover.inputElement.nativeElement.style.setProperty(
+            this.formPropertyDictMultiselect[fieldName],
+            value
+          );
+          this.multiselectFocus.inputElement.nativeElement.style.setProperty(
+            this.formPropertyDictMultiselect[fieldName],
+            value
+          );
+          this.multiselectDisabled.inputElement.nativeElement.style.setProperty(
+            this.formPropertyDictMultiselect[fieldName],
+            value
+          );
+
+          this.resultMultiselect[
+            'nativeElement'
+          ].innerHTML += `${this.formPropertyDictMultiselect[fieldName]}: ${value};<br>`;
+          this.ratio = this.ratioMultiselect = this.checkChangesContrast(
+            changes,
+            fieldName,
+            this.ratioMultiselect,
+            'colorBackground'
+          );
+        }
+      });
+
+      this.resultMultiselect['nativeElement'].innerHTML += '}';
+    } else {
+      this.resultMultiselect['nativeElement'].innerHTML = '';
+    }
+  }
+
+  private checkChangesCombo(changes: { [key: string]: string }): void {
+    if (!this.isEmpty(changes)) {
+      this.resultCombo['nativeElement'].innerHTML = 'po-combo {<br>';
+
+      Object.keys(changes).forEach((fieldName: string) => {
+        let value;
+        if (typeof changes[fieldName] === 'number') {
+          value = `${changes[fieldName]}px`;
+        } else {
+          value = /color/i.test(fieldName) ? changes[fieldName] : `var(--${changes[fieldName]})`;
+        }
+        if (changes[fieldName]) {
+          this.comboComponent.inputEl.nativeElement.style.setProperty(this.formPropertyDictCombo[fieldName], value);
+          this.comboDefault.nativeElement.style.setProperty(this.formPropertyDictCombo[fieldName], value);
+          this.comboHover.inputEl.nativeElement.style.setProperty(this.formPropertyDictCombo[fieldName], value);
+          this.comboHover.iconElement.nativeElement.style.setProperty(this.formPropertyDictCombo[fieldName], value);
+          this.comboFocus.inputEl.nativeElement.style.setProperty(this.formPropertyDictCombo[fieldName], value);
+          this.comboFocus.iconElement.nativeElement.style.setProperty(this.formPropertyDictCombo[fieldName], value);
+          this.comboDisabled.inputEl.nativeElement.style.setProperty(this.formPropertyDictCombo[fieldName], value);
+
+          this.resultCombo['nativeElement'].innerHTML += `${this.formPropertyDictCombo[fieldName]}: ${value};<br>`;
+          this.ratio = this.ratioCombo = this.checkChangesContrast(
+            changes,
+            fieldName,
+            this.ratioCombo,
+            'colorBackground'
+          );
+        }
+      });
+
+      this.resultCombo['nativeElement'].innerHTML += '}';
+    } else {
+      this.resultCombo['nativeElement'].innerHTML = '';
+    }
+  }
+
+  private checkChangesAccordion(changes: { [key: string]: string }): void {
+    if (!this.isEmpty(changes)) {
+      this.resultAccordion['nativeElement'].innerHTML = 'po-accordion {<br>';
+
+      Object.keys(changes).forEach((fieldName: string) => {
+        let value;
+        if (typeof changes[fieldName] === 'number') {
+          value = `${changes[fieldName]}px`;
+        } else {
+          value = /color/i.test(fieldName) ? changes[fieldName] : `var(--${changes[fieldName]})`;
+        }
+        if (changes[fieldName]) {
+          this.accordionComponent.accordionsHeader
+            .toArray()[0]
+            .accordionElement.nativeElement.style.setProperty(this.formPropertyDictAccordion[fieldName], value);
+          this.accordionDefault.nativeElement.style.setProperty(this.formPropertyDictAccordion[fieldName], value);
+          this.accordionHover.accordionsHeader
+            .toArray()[0]
+            .accordionElement.nativeElement.style.setProperty(this.formPropertyDictAccordion[fieldName], value);
+          this.accordionFocus.accordionsHeader
+            .toArray()[0]
+            .accordionElement.nativeElement.style.setProperty(this.formPropertyDictAccordion[fieldName], value);
+          this.accordionPressed.accordionsHeader
+            .toArray()[0]
+            .accordionElement.nativeElement.style.setProperty(this.formPropertyDictAccordion[fieldName], value);
+          this.accordionDisabled.accordionsHeader
+            .toArray()[0]
+            .accordionElement.nativeElement.style.setProperty(this.formPropertyDictAccordion[fieldName], value);
+
+          this.resultAccordion[
+            'nativeElement'
+          ].innerHTML += `${this.formPropertyDictAccordion[fieldName]}: ${value};<br>`;
+          this.ratio = this.ratioAccordion = this.checkChangesContrast(
+            changes,
+            fieldName,
+            this.ratioAccordion,
+            'colorBackground'
+          );
+          if (fieldName === 'textColor') {
+            this.changedColorAccordion = true;
+          }
+        }
+      });
+
+      this.resultAccordion['nativeElement'].innerHTML += '}';
+    } else {
+      this.resultAccordion['nativeElement'].innerHTML = '';
+    }
+  }
+
+  private checkChangesBreadcrumb(changes: { [key: string]: string }): void {
+    if (!this.isEmpty(changes)) {
+      this.resultBreadcrumb['nativeElement'].innerHTML = 'po-breadcrumb {<br>';
+
+      Object.keys(changes).forEach((fieldName: string) => {
+        let value;
+        if (typeof changes[fieldName] === 'number') {
+          value = `${changes[fieldName]}px`;
+        } else {
+          value = /color/i.test(fieldName) ? changes[fieldName] : `var(--${changes[fieldName]})`;
+        }
+        if (changes[fieldName]) {
+          this.breadcrumbComponent.breadcrumbElement.nativeElement.style.setProperty(
+            this.formPropertyDictBreadcrumb[fieldName],
+            value
+          );
+          this.breadcrumbDefault.nativeElement.style.setProperty(this.formPropertyDictBreadcrumb[fieldName], value);
+
+          this.resultBreadcrumb[
+            'nativeElement'
+          ].innerHTML += `${this.formPropertyDictBreadcrumb[fieldName]}: ${value};<br>`;
+        }
+      });
+
+      this.resultBreadcrumb['nativeElement'].innerHTML += '}';
+    } else {
+      this.resultBreadcrumb['nativeElement'].innerHTML = '';
+    }
+  }
+
+  private checkChangesTag(changes: { [key: string]: string }): void {
+    if (!this.isEmpty(changes)) {
+      this.resultTag['nativeElement'].innerHTML = 'po-tag {<br>';
+      Object.keys(changes).forEach((fieldName: string) => {
+        let value;
+        if (typeof changes[fieldName] === 'number') {
+          value = `${changes[fieldName]}px`;
+        } else {
+          value = /color/i.test(fieldName) ? changes[fieldName] : `var(--${changes[fieldName]})`;
+        }
+        if (changes[fieldName]) {
+          this.tagActive.nativeElement.style.setProperty(this.formPropertyDictTag[fieldName], value);
+
+          this.ratio = this.ratioTag = this.checkChangesContrast(changes, fieldName, this.ratioTag, 'backgroundColor');
+          if (this.tagSelected === 1) {
+            this.tagComponent.poTag.nativeElement.style.setProperty(this.formPropertyDictTag[fieldName], value);
+            this.ratioTagDefault = this.ratioTag;
+            this.resultTagI += `${this.formPropertyDictTag[fieldName]}: ${value};<br>`;
+          } else if (this.tagSelected === 2) {
+            this.ratioTagDanger = this.ratioTag;
+            this.resultTagD += `${this.formPropertyDictTag[fieldName]}: ${value};<br>`;
+          } else if (this.tagSelected === 3) {
+            this.ratioTagSuccess = this.ratioTag;
+            this.resultTagS += `${this.formPropertyDictTag[fieldName]}: ${value};<br>`;
+          } else if (this.tagSelected === 4) {
+            this.ratioTagWarning = this.ratioTag;
+            this.resultTagW += `${this.formPropertyDictTag[fieldName]}: ${value};<br>`;
+          } else if (this.tagSelected === 5) {
+            this.ratioTagNeutral = this.ratioTag;
+            this.resultTagN += `${this.formPropertyDictTag[fieldName]}: ${value};<br>`;
+          } else if (this.tagSelected === 6) {
+            this.ratioTagRemovable = this.ratioTag;
+            this.resultTagR += `${this.formPropertyDictTag[fieldName]}: ${value};<br>`;
+            this.tagHover.nativeElement.style.setProperty(this.formPropertyDictTag[fieldName], value);
+            this.tagDisabled.nativeElement.style.setProperty(this.formPropertyDictTag[fieldName], value);
+          }
+          this.resultTag['nativeElement'].innerHTML = `po-tag {<br>${this.resultTagI || ''}${this.resultTagD || ''}${
+            this.resultTagS || ''
+          }${this.resultTagW || ''}${this.resultTagN || ''}${this.resultTagR || ''}`;
+        }
+      });
+
+      this.resultTag['nativeElement'].innerHTML += '}';
+    } else {
+      this.resultTag['nativeElement'].innerHTML = '';
+    }
+  }
+
+  private checkChangesTagsGlobal(changes: { [key: string]: string }): void {
+    if (!this.isEmpty(changes)) {
+      this.resultTagsGlobal['nativeElement'].innerHTML = 'po-tag {<br>';
+
+      Object.keys(changes).forEach((fieldName: string) => {
+        let value;
+        if (typeof changes[fieldName] === 'number') {
+          value = `${changes[fieldName]}px`;
+        } else {
+          value = /color/i.test(fieldName) ? changes[fieldName] : `var(--${changes[fieldName]})`;
+        }
+        if (changes[fieldName]) {
+          this.tagComponent.poTag.nativeElement.style.setProperty(this.formPropertyDictTagsGlobal[fieldName], value);
+          this.tagDefault.nativeElement.style.setProperty(this.formPropertyDictTagsGlobal[fieldName], value);
+          this.tagSuccess.nativeElement.style.setProperty(this.formPropertyDictTagsGlobal[fieldName], value);
+          this.tagDanger.nativeElement.style.setProperty(this.formPropertyDictTagsGlobal[fieldName], value);
+          this.tagWarning.nativeElement.style.setProperty(this.formPropertyDictTagsGlobal[fieldName], value);
+          this.tagNeutral.nativeElement.style.setProperty(this.formPropertyDictTagsGlobal[fieldName], value);
+          this.tagRemovable.nativeElement.style.setProperty(this.formPropertyDictTagsGlobal[fieldName], value);
+          this.tagHover.nativeElement.style.setProperty(this.formPropertyDictTagsGlobal[fieldName], value);
+          this.tagDisabled.nativeElement.style.setProperty(this.formPropertyDictTagsGlobal[fieldName], value);
+
+          this.resultTagsGlobal[
+            'nativeElement'
+          ].innerHTML += `${this.formPropertyDictTagsGlobal[fieldName]}: ${value};<br>`;
+        }
+      });
+
+      this.resultTagsGlobal['nativeElement'].innerHTML += '}';
+    } else {
+      this.resultTagsGlobal['nativeElement'].innerHTML = '';
+    }
+  }
+
   private checkChanges() {
     return (
       !!this.resultButtonD?.['nativeElement']?.innerHTML ||
@@ -1815,6 +2565,11 @@ export class ThemeBuilderComponent implements AfterViewInit, OnInit {
       !!this.resultDisclaimer?.['nativeElement']?.innerHTML ||
       !!this.resultSwitch?.['nativeElement']?.innerHTML ||
       !!this.resultSelect?.['nativeElement']?.innerHTML ||
+      !!this.resultMultiselect?.['nativeElement']?.innerHTML ||
+      !!this.resultCombo?.['nativeElement']?.innerHTML ||
+      !!this.resultAccordion?.['nativeElement']?.innerHTML ||
+      !!this.resultTag?.['nativeElement']?.innerHTML ||
+      !!this.resultTagsGlobal?.['nativeElement']?.innerHTML ||
       !!this.resultTextarea?.['nativeElement']?.innerHTML ||
       !!this.resultDropdown?.['nativeElement']?.innerHTML ||
       !!this.resultDatepicker?.['nativeElement']?.innerHTML ||
@@ -1851,13 +2606,20 @@ export class ThemeBuilderComponent implements AfterViewInit, OnInit {
   private setRatioDefault() {
     this.ratioButton = this.setRatioComponent(false, '#2c3739', '#ffffff');
     this.ratioDisclaimer = this.setRatioComponent(false, '#f2eaf6', '#2c3739');
-    this.ratioDatepicker = this.ratioTextarea = this.ratioInput = this.ratioSelect = this.setRatioComponent(
+    this.ratioDatepicker = this.ratioTextarea = this.ratioInput = this.ratioSelect = this.ratioMultiselect = this.ratioCombo = this.setRatioComponent(
       false,
       '#fbfbfb',
       '#1d2426'
     );
     this.ratioTooltip = this.setRatioComponent(false, '#2c3739', '#ffffff');
     this.ratioPopup = this.setRatioComponent(false, '#ffffff', '#753399');
+    this.ratioAccordion = this.setRatioComponent(false, '#753399', '#ffffff');
+    this.ratioTagDefault = this.setRatioComponent(false, '#e3e9f7', '#173782');
+    this.ratioTagDanger = this.setRatioComponent(false, '#f6e6e5', '#72211d');
+    this.ratioTagSuccess = this.setRatioComponent(false, '#def7ed', '#0f5236');
+    this.ratioTagWarning = this.setRatioComponent(false, '#fcf6e3', '#473400');
+    this.ratioTagNeutral = this.setRatioComponent(false, '#eceeee', '#2c3739');
+    this.ratioTagRemovable = this.setRatioComponent(false, '#f2eaf6', '#2c3739');
     this.cdr.detectChanges();
   }
 
@@ -1876,7 +2638,12 @@ export class ThemeBuilderComponent implements AfterViewInit, OnInit {
       !this.linkView ||
       !this.tooltipView ||
       !this.popupView ||
-      !this.checkboxView
+      !this.checkboxView ||
+      !this.multiselectView ||
+      !this.comboView ||
+      !this.accordionView ||
+      !this.breadcrumbView ||
+      !this.tagView
     );
   }
 
@@ -1895,7 +2662,12 @@ export class ThemeBuilderComponent implements AfterViewInit, OnInit {
       this.linkView &&
       this.tooltipView &&
       this.popupView &&
-      this.checkboxView
+      this.checkboxView &&
+      this.multiselectView &&
+      this.comboView &&
+      this.accordionView &&
+      this.breadcrumbView &&
+      this.tagView
     );
   }
 

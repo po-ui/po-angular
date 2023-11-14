@@ -456,6 +456,89 @@ p {
   }
 }
 
+.multiselect-hover .po-multiselect-input {
+  border-color: var(--color-hover);
+  background-color: var(--background-hover);
+  cursor: pointer;
+}
+
+.multiselect-focus .po-multiselect-input {
+  outline-color: var(--outline-color-focused);
+  outline-width: var(--outline-width);
+  border: 1px solid var(--color-focused);
+  outline-style: solid;
+  outline-offset: 2px;
+}
+
+.multiselect-focus .po-multiselect-input .po-field-icon-container-right .po-icon-input {
+  color: var(--color-focused);
+}
+
+.combo-hover .po-combo-input {
+  border-color: var(--color-hover);
+  background-color: var(--background-hover);
+}
+
+.combo-hover .po-combo-container-content span.po-field-icon.po-icon.po-icon-arrow-down.po-icon-input {
+  border-color: var(--color-hover);
+  background: var(--background-hover);
+}
+
+.combo-focus .po-combo-input {
+  border-color: var(--color-focused);
+  outline-color: var(--outline-color-focused);
+  outline-width: var(--outline-width);
+  outline-style: solid;
+  outline-offset: 2px;
+}
+
+.combo-focus .po-combo-input ~ .po-field-icon-container-right .po-field-icon.po-icon.po-icon-arrow-down,
+.combo-focus .po-combo-input ~ .po-field-icon-container-right .po-field-icon.po-icon.po-icon-arrow-up {
+  border-color: var(--color-focused);
+}
+
+.accordion-hover .po-accordion-item-header-button {
+  color: var(--color-hover);
+  background-color: var(--background-hover);
+}
+
+.accordion-hover .po-accordion-item-header-button .po-accordion-item-header-icon {
+  color: var(--color-hover);
+}
+
+.accordion-focus .po-accordion-item-header-button {
+  color: var(--color-focus);
+  position: relative;
+  outline-color: var(--outline-color-focused);
+  outline-width: var(--outline-width);
+  outline-style: solid;
+  outline-offset: 2px;
+  z-index: 1;
+}
+
+.accordion-focus .po-accordion-item-header-button .po-accordion-item-header-icon {
+  color: var(--color-focus);
+}
+
+.accordion-pressed .po-accordion-item-header-button {
+  background-color: var(--background-pressed);
+  color: var(--color-pressed);
+  outline: none;
+}
+
+.accordion-pressed .po-accordion-item-header-button .po-accordion-item-header-icon {
+  color: var(--color-pressed);
+}
+
+.breadcrumb-default ul,
+.breadcrumb-default li {
+  margin-bottom: 0 !important;
+}
+
+.tag-hover .po-tag-remove {
+  background-color: var(--color-hover);
+}
+
 .menu-item {
   height: 80%;
   display: flex;
