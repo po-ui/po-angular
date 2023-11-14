@@ -1,30 +1,41 @@
 <div class="po-progress" [ngClass]="statusClass">
-  <label *ngIf="text" class="po-progress-description-mobile po-progress-description-text">
-    {{ text }}
-  </label>
-
-  <po-progress-bar class="po-progress-bar" [p-indeterminate]="indeterminate" [p-value]="value"> </po-progress-bar>
-
   <div *ngIf="text" class="po-progress-description">
-    <label class="po-progress-description-text">
-      {{ text }}
-    </label>
+    <po-label [p-label]="text"></po-label>
   </div>
 
-  <div *ngIf="isAllowProgressInfo" class="po-progress-info">
-    <span *ngIf="infoIcon" class="po-progress-info-icon po-icon {{ infoIcon }}"></span>
-    <span *ngIf="info" class="po-progress-info-text">{{ info }}</span>
+  <po-progress-bar
+    class="po-progress-bar po-progress-bar-{{ size }}"
+    [p-indeterminate]="indeterminate"
+    [p-value]="value"
+  >
+  </po-progress-bar>
 
-    <button
-      *ngIf="isAllowRetry"
-      class="po-progress-info-icon-action po-icon po-icon-refresh po-clickable"
-      (click)="emitRetry()"
-    ></button>
+  <div class="po-progress-info">
+    <div class="po-progress-info-left">
+      <po-icon *ngIf="infoIcon" [p-icon]="infoIcon" [class.po-progress-info-icon-error]="status === 'error'"></po-icon>
+      <po-icon *ngIf="isAllowInfoError" p-icon="po-icon-exclamation" class="po-progress-info-icon-error"></po-icon>
+      <span *ngIf="info" class="po-progress-info-text" [class.po-progress-info-text-error]="status === 'error'">{{
+        info
+      }}</span>
+    </div>
+    <div class="po-progress-info-right">
+      <span *ngIf="showPercentage && !indeterminate">{{ value }}%</span>
+      <po-button
+        *ngIf="isAllowRetry"
+        p-icon="po-icon-refresh"
+        (p-click)="emitRetry()"
+        [p-aria-label]="literals.retry"
+        p-kind="tertiary"
+      ></po-button>
 
-    <button
-      *ngIf="isAllowCancel"
-      class="po-progress-info-icon-action po-icon po-icon-close po-clickable"
-      (click)="emitCancellation()"
-    ></button>
+      <po-button
+        *ngIf="isAllowCancel"
+        p-icon="po-icon-close"
+        (p-click)="emitCancellation()"
+        p-kind="secondary"
+        [p-aria-label]="literals.cancel"
+        [p-danger]="true"
+      ></po-button>
+    </div>
   </div>
 </div>

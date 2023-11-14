@@ -137,9 +137,7 @@ describe('PoProgressComponent:', () => {
 
       fixture.detectChanges();
 
-      const text = nativeElement
-        .querySelector('.po-progress-description .po-progress-description-text')
-        .textContent.trim();
+      const text = nativeElement.querySelector('.po-progress-description').textContent.trim();
 
       expect(text).toBe(component.text);
     });
@@ -149,9 +147,9 @@ describe('PoProgressComponent:', () => {
 
       fixture.detectChanges();
 
-      const infoIcon = nativeElement.querySelector('.po-progress-info-icon');
+      const infoIcon = nativeElement.querySelector('.po-icon-agro-business');
 
-      expect(infoIcon.classList).toContain('po-icon-agro-business');
+      expect(infoIcon).toBeTruthy();
     });
 
     it('shouldn`t find `.po-progress-info-icon` if `infoIcon` is `undefined`', () => {
@@ -216,12 +214,12 @@ describe('PoProgressComponent:', () => {
       expect(nativeElement.querySelector('.po-progress-default')).toBeTruthy();
     });
 
-    it('should contain `po-progress-bar-indeterminate` if `indeterminate` is `true`', () => {
+    it('should contain `po-progress-bar-indeterminate-track` if `indeterminate` is `true`', () => {
       component.indeterminate = true;
 
       fixture.detectChanges();
 
-      expect(nativeElement.querySelector('.po-progress-bar-indeterminate')).toBeTruthy();
+      expect(nativeElement.querySelector('.po-progress-bar-indeterminate-track')).toBeTruthy();
     });
 
     it('shouldn`t contain `po-progress-bar-indeterminate` if `indeterminate` is `false`', () => {
@@ -299,7 +297,7 @@ describe('PoProgressComponent:', () => {
       expect(progressInfo).toBeTruthy();
     });
 
-    it('shouldn`t find `.po-progress-info` if `info`, `infoIcon`, `isAllowRetry` and `isAllowCancel` are falsy', () => {
+    it('shouldn`t find `.po-progress-info-text` if `info`, `infoIcon`, `isAllowRetry` and `isAllowCancel` are falsy', () => {
       component.info = undefined;
       component.infoIcon = undefined;
       component.retry.observers.length = 0;
@@ -307,7 +305,7 @@ describe('PoProgressComponent:', () => {
 
       fixture.detectChanges();
 
-      const progressInfo = nativeElement.querySelector('.po-progress-info');
+      const progressInfo = nativeElement.querySelector('.po-progress-info-text');
 
       expect(progressInfo).toBe(null);
     });
