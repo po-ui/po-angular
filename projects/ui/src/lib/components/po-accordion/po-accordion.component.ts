@@ -1,11 +1,12 @@
-import { Component, ContentChildren, QueryList, OnDestroy } from '@angular/core';
+import { Component, ContentChildren, OnDestroy, QueryList, ViewChildren } from '@angular/core';
 
 import { Subscription } from 'rxjs';
 
+import { PoLanguageService } from '../../services/po-language/po-language.service';
 import { PoAccordionBaseComponent } from './po-accordion-base.component';
+import { PoAccordionItemHeaderComponent } from './po-accordion-item-header/po-accordion-item-header.component';
 import { PoAccordionItemComponent } from './po-accordion-item/po-accordion-item.component';
 import { PoAccordionService } from './services/po-accordion.service';
-import { PoLanguageService } from '../../services/po-language/po-language.service';
 
 /**
  * @docsExtends PoAccordionBaseComponent
@@ -35,6 +36,7 @@ import { PoLanguageService } from '../../services/po-language/po-language.servic
   providers: [PoAccordionService]
 })
 export class PoAccordionComponent extends PoAccordionBaseComponent implements OnDestroy {
+  @ViewChildren(PoAccordionItemHeaderComponent) accordionsHeader: QueryList<PoAccordionItemHeaderComponent>;
   @ContentChildren(PoAccordionItemComponent) poAccordionItems: QueryList<PoAccordionItemComponent>;
 
   expandedAllItems = false;

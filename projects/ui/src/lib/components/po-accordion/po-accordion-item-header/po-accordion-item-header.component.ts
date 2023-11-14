@@ -1,4 +1,4 @@
-import { ChangeDetectionStrategy, Component, EventEmitter, Input, OnInit, Output } from '@angular/core';
+import { ChangeDetectionStrategy, Component, ElementRef, EventEmitter, Input, Output, ViewChild } from '@angular/core';
 import { PoLanguageService } from '../../../services/po-language';
 import { poLocaleDefault } from '../../../services/po-language/po-language.constant';
 
@@ -9,6 +9,8 @@ import { poLocaleDefault } from '../../../services/po-language/po-language.const
 })
 export class PoAccordionItemHeaderComponent {
   private language: string = poLocaleDefault;
+
+  @ViewChild('accordionElement', { read: ElementRef, static: true }) accordionElement: ElementRef;
 
   @Input('p-expanded') expanded: boolean = false;
 
