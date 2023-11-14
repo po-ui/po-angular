@@ -51,24 +51,24 @@ describe('PoProgressBarComponent:', () => {
   });
 
   describe('Templates:', () => {
-    it('should contain the value of 0.25 in style transform scale if value is 25', () => {
+    it('should contain the value of -75% in style left if value is 25', () => {
       component.value = 25;
 
       fixture.detectChanges();
 
-      const progressBar = nativeElement.querySelector('.po-progress-bar-primary');
+      const progressBar = nativeElement.querySelector('.po-progress-bar-secondary');
 
-      expect(progressBar.style.transform).toBe('scaleX(0.25)');
+      expect(progressBar.style.left).toBe('-75%');
     });
 
-    it('should contain the value of 0 in style transform scale if value is 0', () => {
+    it('should contain the value of -100% in style left if value is 0', () => {
       component.value = 0;
 
       fixture.detectChanges();
 
-      const progressBar = nativeElement.querySelector('.po-progress-bar-primary');
+      const progressBar = nativeElement.querySelector('.po-progress-bar-secondary');
 
-      expect(progressBar.style.transform).toBe('scaleX(0)');
+      expect(progressBar.style.left).toBe('-100%');
     });
   });
 });

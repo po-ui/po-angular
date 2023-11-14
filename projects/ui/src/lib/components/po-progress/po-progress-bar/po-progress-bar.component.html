@@ -1,4 +1,16 @@
-<div [class.po-progress-bar-indeterminate]="indeterminate">
-  <div class="po-progress-bar-element po-progress-bar-primary" [style.transform]="'scaleX(' + valueScale + ')'"></div>
-  <div class="po-progress-bar-element po-progress-bar-secondary"></div>
+<div
+  *ngIf="!indeterminate"
+  role="progressbar"
+  [attr.aria-valuenow]="value"
+  aria-valuemin="0"
+  aria-valuemax="100"
+  aria-live="polite"
+  class="po-progress-bar-default"
+>
+  <div class="po-progress-bar-element po-progress-bar-primary"></div>
+  <div class="po-progress-bar-element po-progress-bar-secondary" [style.left]="'-' + (100 - value) + '%'"></div>
+</div>
+
+<div *ngIf="indeterminate" class="po-progress-bar-indeterminate-track">
+  <div class="po-progress-bar-indeterminate-track-bar"></div>
 </div>

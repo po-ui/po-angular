@@ -1,6 +1,6 @@
 import { Component, OnInit } from '@angular/core';
 
-import { PoCheckboxGroupOption, PoProgressStatus, PoRadioGroupOption } from '@po-ui/ng-components';
+import { PoCheckboxGroupOption, PoProgressStatus, PoRadioGroupOption, PoProgressSize } from '@po-ui/ng-components';
 
 @Component({
   selector: 'sample-po-progress-labs',
@@ -12,6 +12,7 @@ export class SamplePoProgressLabsComponent implements OnInit {
   infoIcon: string;
   properties: Array<string>;
   status: PoProgressStatus;
+  size: PoProgressSize = PoProgressSize.large;
   text: string;
   value: number;
 
@@ -22,12 +23,20 @@ export class SamplePoProgressLabsComponent implements OnInit {
     { label: 'po-icon-no-signal', value: 'po-icon-no-signal' }
   ];
 
-  propertiesOptions: Array<PoCheckboxGroupOption> = [{ label: 'Indeterminate', value: 'indeterminate' }];
+  propertiesOptions: Array<PoCheckboxGroupOption> = [
+    { label: 'Indeterminate', value: 'indeterminate' },
+    { label: 'Show percentage', value: 'showPercentage' }
+  ];
 
   statusOptions: Array<PoRadioGroupOption> = [
     { label: 'Default', value: PoProgressStatus.Default },
     { label: 'Success', value: PoProgressStatus.Success },
     { label: 'Error', value: PoProgressStatus.Error }
+  ];
+
+  sizeOptions: Array<PoRadioGroupOption> = [
+    { label: 'Medium', value: PoProgressSize.medium },
+    { label: 'Large', value: PoProgressSize.large }
   ];
 
   ngOnInit() {
@@ -46,5 +55,6 @@ export class SamplePoProgressLabsComponent implements OnInit {
     this.status = undefined;
     this.text = undefined;
     this.value = undefined;
+    this.size = PoProgressSize.large;
   }
 }
