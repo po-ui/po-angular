@@ -5,6 +5,7 @@
   [p-primary-action]="isAdvancedFilter ? primaryActionAdvancedFilter : primaryAction"
   [p-secondary-action]="isAdvancedFilter ? secondaryActionAdvancedFilter : secondaryAction"
   [p-title]="isAdvancedFilter ? advancedFilterModalTitle : title"
+  (p-close)="unsubscribeAllSubscriptions()"
 >
   <div [hidden]="isAdvancedFilter">
     <po-field-container class="po-lookup-header po-pull-right" [p-optional]="false">
