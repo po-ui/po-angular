@@ -16,6 +16,7 @@ import { AbstractControl, NG_VALIDATORS, NG_VALUE_ACCESSOR } from '@angular/form
 
 import {
   convertToBoolean,
+  isSafari,
   removeDuplicatedOptions,
   removeUndefinedAndNullOptions,
   uuid,
@@ -128,6 +129,7 @@ export class PoSelectComponent extends PoFieldValidateModel<any> implements OnCh
   optionsDefault = [];
   listGroupOptions = [];
   optionWithoutGroup = [];
+  isSafari: boolean = isSafari();
 
   protected onModelTouched: any;
 

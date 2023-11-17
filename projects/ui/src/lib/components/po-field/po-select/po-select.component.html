@@ -17,19 +17,23 @@
       [required]="required"
       (change)="onSelectChange($event.target.value)"
     >
-      <option
-        *ngIf="!selectedValue?.toString() || !!placeholder"
-        [disabled]="!!placeholder"
-        [hidden]="!selectedValue?.toString() && !placeholder"
-        [selected]="!selectedValue?.toString()"
-        [value]="placeholder ?? ''"
-      >
-        {{ placeholder }}
-      </option>
-      <!-- necessário manter essa option para uso do select com ReactiveForms -->
-      <option [hidden]="true">
-        {{ displayValue }}
-      </option>
+      <ng-container *ngIf="!isSafari">
+        <option
+          *ngIf="!selectedValue?.toString() || !!placeholder"
+          [disabled]="!!placeholder"
+          [hidden]="!selectedValue?.toString() && !placeholder"
+          [selected]="!selectedValue?.toString()"
+          [value]="placeholder ?? ''"
+        >
+          {{ placeholder }}
+        </option>
+        <option [hidden]="true">{{ displayValue }}</option>
+      </ng-container>
+
+      <ng-container *ngIf="isSafari">
+        <option>{{ displayValue || placeholder }}</option>
+      </ng-container>
+
       <ng-container *ngIf="optionWithoutGroup.length > 0">
         <option *ngFor="let item of optionWithoutGroup" [disabled]="readonly" [value]="item?.[this.fieldValue]">
           {{ item?.[this.fieldLabel] }}

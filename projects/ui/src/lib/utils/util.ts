@@ -233,6 +233,13 @@ export function isFirefox() {
   return userAgent.toLowerCase().indexOf('firefox') > -1;
 }
 
+// Verifica se o navegador em que está sendo usado é Safari
+export function isSafari() {
+  const userAgent = window.navigator.userAgent;
+
+  return /^(?!.*chrome).*safari.*$/.test(userAgent.toLocaleLowerCase());
+}
+
 // Verifica qual o dispositivo que está sendo usado
 export function isMobile() {
   const userAgent = window.navigator.userAgent;
