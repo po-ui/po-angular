@@ -2,6 +2,20 @@
 
 All notable changes to this project will be documented in this file. See [standard-version](https://github.com/conventional-changelog/standard-version) for commit guidelines.
 
+# [16.7.0](https://github.com/po-ui/po-angular/compare/v16.6.1...v16.7.0) (2023-11-17)
+
+
+### Features
+
+* **accordion:** ajusta navegação do elemento através de viewChild ([cbb93e8](https://github.com/po-ui/po-angular/commit/cbb93e8091fb92a76527d02f7a08e296d3b832dc))
+* **dynamic-form:** adiciona escolha entre `po-switch` ou `po-checkbox` ([1b91e50](https://github.com/po-ui/po-angular/commit/1b91e50a90647aa7e8406ae906cf1a3f7a48158f)), closes [#1420](https://github.com/po-ui/po-angular/issues/1420)
+* **loading-icon:** implementa definições do AnimaliaDS ([d126499](https://github.com/po-ui/po-angular/commit/d12649995734f35b78c81efb84ebc359d213e907))
+* **loading-overlay:** implementações AnimaliaDS ([dee3db4](https://github.com/po-ui/po-angular/commit/dee3db49141d0b1adc9907d5ef191213686c0651))
+* **overlay:** novo componente de uso interno ([5698533](https://github.com/po-ui/po-angular/commit/5698533dfbfa547b49ce12bf7e99210ece7f2b03))
+* **theme-builder:** implementa novos componentes animalizados ([2f6b1a6](https://github.com/po-ui/po-angular/commit/2f6b1a6f130aab6e636ef6b821ec458b140cf1b3))
+
+
+
 ## [16.6.1](https://github.com/po-ui/po-angular/compare/v16.6.0...v16.6.1) (2023-11-13)
 
 
