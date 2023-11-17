@@ -265,7 +265,8 @@ export abstract class PoLookupModalBaseComponent implements OnDestroy, OnInit {
     this.language = languageService.getShortLanguage();
   }
 
-  ngOnDestroy() {
+  // Metodo responsavel por cancelar todas as requisiçoes pendentes
+  unsubscribeAllSubscriptions() {
     if (this.filterSubscription) {
       this.filterSubscription.unsubscribe();
     }
@@ -277,6 +278,10 @@ export abstract class PoLookupModalBaseComponent implements OnDestroy, OnInit {
     if (this.showMoreSubscription) {
       this.showMoreSubscription.unsubscribe();
     }
+  }
+
+  ngOnDestroy() {
+    this.unsubscribeAllSubscriptions();
   }
 
   ngOnInit() {
@@ -336,7 +341,7 @@ export abstract class PoLookupModalBaseComponent implements OnDestroy, OnInit {
 
   search(): void {
     this.page = 1;
-
+    this.unsubscribeAllSubscriptions();
     if (this.searchValue) {
       this.isLoading = true;
       this.disclaimerGroup.disclaimers = [];
@@ -348,6 +353,9 @@ export abstract class PoLookupModalBaseComponent implements OnDestroy, OnInit {
   }
 
   searchFilteredItems(): void {
+    if (this.isLoading) {
+      this.unsubscribeAllSubscriptions();
+    }
     this.searchSubscription = this.getFilteredItems(this.searchValue)
       .pipe(
         catchError(error => {
@@ -362,6 +370,10 @@ export abstract class PoLookupModalBaseComponent implements OnDestroy, OnInit {
   }
 
   showMoreEvent() {
+    if (this.isLoading) {
+      this.unsubscribeAllSubscriptions();
+    }
+
     this.page++;
     this.isLoading = true;
 
