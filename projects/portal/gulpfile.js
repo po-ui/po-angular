@@ -23,7 +23,8 @@ const replaceBrackets = str =>
     .replace(/\{\{/g, '<span ngNonBindable>{{</span>')
     .replace(/\}\}/g, '<span ngNonBindable>}}</span>')
     .replace(/\{/g, '&#123;')
-    .replace(/\}/g, '&#125;');
+    .replace(/\}/g, '&#125;')
+    .replace(/@/g, '&#64;');
 
 const markdownToHtml = markdown =>
   replaceBrackets(

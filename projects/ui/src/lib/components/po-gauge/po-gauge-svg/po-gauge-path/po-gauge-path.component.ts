@@ -1,4 +1,4 @@
-import { Component, Input, OnInit } from '@angular/core';
+import { Component, Input } from '@angular/core';
 
 import { PoGaugeCoordinates } from '../../interfaces/po-gauge-coordinates.interface';
 
@@ -6,14 +6,12 @@ import { PoGaugeCoordinates } from '../../interfaces/po-gauge-coordinates.interf
   selector: '[po-gauge-path]',
   templateUrl: './po-gauge-path.component.svg'
 })
-export class PoGaugePathComponent implements OnInit {
+export class PoGaugePathComponent {
   @Input('p-base-coordinates') baseCoordinates: PoGaugeCoordinates;
 
   @Input('p-ranges-coordinates') rangesCoordinates: Array<PoGaugeCoordinates>;
 
   constructor() {}
-
-  ngOnInit(): void {}
 
   trackBy(index) {
     return index;

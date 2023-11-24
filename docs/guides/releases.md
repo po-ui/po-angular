@@ -39,6 +39,11 @@ Consulte abaixo nossos guias de migração de versão para obter mais informaç�
       </thead>
       <tbody>
         <tr class="po-table-row">
+          <td class="po-table-column">17.0.0</td>
+          <td class="po-table-column">17.0.0</td>
+          <td class="po-table-column"><a href="guides/migration-poui">Migração do PO UI</a></td>
+        </tr>
+        <tr class="po-table-row">
           <td class="po-table-column">16.0.0</td>
           <td class="po-table-column">16.0.0</td>
           <td class="po-table-column"><a href="guides/migration-poui">Migração do PO UI</a></td>
@@ -93,7 +98,7 @@ Consulte abaixo nossos guias de migração de versão para obter mais informaç�
 ## Versões prévias
 
 Permitimos que você visualize o que está por vir, fornecendo pré-lançamentos `next` ou Release Candidates (`rc`) para cada versão principal:
-- **Next**: a versão que está em desenvolvimento, com testes ativos e com breaking changes a resolver. O próximo lançamento é indicado por uma tag de lançamento anexada ao identificador `-next`, como `16.0.0-next`.
-- **Release Candidate**: um lançamento com recurso concluído, teste finalizado e sem breaking changes a resolver. Um candidato a lançamento é indicado por uma tag de lançamento anexada ao identificador `-rc`, como versão `16.0.0-rc`.
+- **Next**: a versão que está em desenvolvimento, com testes ativos e com breaking changes a resolver. O próximo lançamento é indicado por uma tag de lançamento anexada ao identificador `-next`, como `17.0.0-next`.
+- **Release Candidate**: um lançamento com recurso concluído, teste finalizado e sem breaking changes a resolver. Um candidato a lançamento é indicado por uma tag de lançamento anexada ao identificador `-rc`, como versão `17.0.0-rc`.
 
 A versão mais recente `next` ou de pré-lançamento `rc` fica disponível no [npm do projeto](https://www.npmjs.com/package/@po-ui/ng-components?activeTab=versions).
