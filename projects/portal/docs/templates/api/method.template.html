@@ -15,7 +15,7 @@
   </tr>
   <tr class="docs-api-property-description">
     <td class="docs-api-property-description">
-      {$ method.description | marked | replace('{', '&#123;') | replace('}', '&#125;') | replace('|','&#124;') $}
+      {$ method.description | marked | replace('{', '&#123;') | replace('}', '&#125;') | replace('|','&#124;') | replace("@", "&#64;") $}
     </td>
   </tr>
 </table>
@@ -39,16 +39,16 @@
     <td class="docs-api-properties-type-cell">
       {%- if parameter.type.name -%}
       <code pan class="docs-api-property-type {$ type $}">
-        {$ parameter.type.name | escape | replace('{', '&#123;') | replace('}', '&#125;') $}
+        {$ parameter.type.name | escape | replace('{', '&#123;') | replace('}', '&#125;') | replace("@", "&#64;") $}
       </code>
       {%- else -%} {%- if parameter.typeExpression -%} {% for type in parameter.typeExpression.split('|') %}
       <code pan class="docs-api-property-type {$ type $}">
-        {$ type.trim() | escape | replace('{', '&#123;') | replace('}', '&#125;') $}
+        {$ type.trim() | escape | replace('{', '&#123;') | replace('}', '&#125;') | replace("@", "&#64;") $}
       </code>
       {% endfor %} {%- endif -%} {%- endif -%}
     </td>
     <td class="docs-api-property-description">
-      {$ parameter.description | marked | safe | replace("{", "{{ '{' }}") $}
+      {$ parameter.description | marked | safe |  replace("{", "&#123;;") | replace("@", "&#64;") | replace('}', "&#125;") $}
     </td>
   </tr>
   {% endfor %}
@@ -65,7 +65,7 @@
     <td class="docs-api-properties-type-cell">
       <code pan class="docs-api-property-type {$ type $}"
         >{$ method.returns.typeExpression | replace('<', '&#60;') | replace('>', '&#62;') | replace('{', '&#123;') |
-        replace('}', '&#125;') $}</code
+        replace('}', '&#125;') | replace("@", "&#64;") $}</code
       >
     </td>
     <td class="docs-api-property-description">

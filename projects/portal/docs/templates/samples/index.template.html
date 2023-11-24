@@ -10,14 +10,16 @@
       <div>
         {% for file in doc.files %}
         <label class="doc-label-path">{$ file.path $}</label>
-        <pre appCodeHighlight class="html">{$ file.fileContents | escape | replace("{", "{{ '{' }}") $}</pre> {% endfor %}
+        <pre appCodeHighlight class="html">{$ file.fileContents | escape | replace("{", "&#123;;") | replace("@", "&#64;") | replace('}', "&#125;") $}</pre> 
+        {% endfor %}
       </div>
     </po-tab>
     <po-tab p-label="TS">
       <div>
         {% for script in doc.scripts %}
         <label class="doc-label-path">{$ script.path $}</label>
-        <pre appCodeHighlight class="typescript">{$ script.fileContents | escape | replace("{", "{{ '{' }}") $}</pre> {% endfor %}
+        <pre appCodeHighlight class="typescript">{$ script.fileContents | escape | replace("{", "&#123;") | replace("@", "&#64;") | replace('}', "&#125;") $}</pre> 
+        {% endfor %}
       </div>
     </po-tab>
     {%- if doc.stylesheets.length > 0 -%}
@@ -25,7 +27,7 @@
       <div>
         {% for stylesheet in doc.stylesheets %}
         <label class="doc-label-path">{$ stylesheet.path $}</label>
-        <pre appCodeHighlight class="css">{$ stylesheet.fileContents | escape | replace("{", "{{ '{' }}")$}</pre> {% endfor %}
+        <pre appCodeHighlight class="css">{$ stylesheet.fileContents | escape | replace("{", "&#123;") | replace("@", "&#64;") | replace('}', "&#125;") $}</pre> {% endfor %}
       </div>
     </po-tab>
     {%- endif -%}
@@ -34,7 +36,7 @@
       <div>
         {% for test in doc.tests %}
         <label class="doc-label-path">{$ test.path $}</label>
-        <pre appCodeHighlight class="test">{$ test.fileContents | escape | replace("{", "{{ '{' }}")$}</pre> {% endfor %}
+        <pre appCodeHighlight class="test">{$ test.fileContents | escape | replace("{", "&#123;") | replace("@", "&#64;") | replace('}', "&#125;") $}</pre> {% endfor %}
       </div>
     </po-tab>
     {%- endif -%}

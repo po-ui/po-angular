@@ -2,7 +2,7 @@
   <code class="doc-code">{$ enum.name $}</code>
 </h4>
 <div class="docs-api-class-description">
-  {$ enum.description | marked | replace('{', '&#123;') | replace('}', '&#125;') $}
+  {$ enum.description | marked | replace('{', '&#123;') | replace('}', '&#125;') | replace("@", "&#64;") $}
 </div>
 {%- if enum.isDeprecated -%}
 <div class="docs-api-class-deprecated-marker">Deprecated</div>
