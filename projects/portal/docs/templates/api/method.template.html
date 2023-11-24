@@ -48,7 +48,7 @@
       {% endfor %} {%- endif -%} {%- endif -%}
     </td>
     <td class="docs-api-property-description">
-      {$ parameter.description | marked | safe |  replace("{", "&#123;;") | replace("@", "&#64;") | replace('}', "&#125;") $}
+      {$ parameter.description | marked | safe |  replace("{", "&#123;") | replace("@", "&#64;") | replace('}', "&#125;") $}
     </td>
   </tr>
   {% endfor %}

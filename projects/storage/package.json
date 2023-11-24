@@ -14,14 +14,14 @@
   "dependencies": {
     "@po-ui/ng-schematics": "0.0.0-PLACEHOLDER",
     "custom-idle-queue": "2.1.2",
-    "localforage": "1.9.0",
+    "localforage": "1.10.0",
     "lokijs": "1.5.12",
     "tslib": "^2.6.2"
   },
   "peerDependencies": {
     "@angular/core": "~17.0.4",
     "custom-idle-queue": "2.1.2",
-    "localforage": "1.9.0",
+    "localforage": "1.10.0",
     "lokijs": "1.5.12",
     "rxjs": "~7.8.1",
     "zone.js": "~0.14.2"

@@ -20,6 +20,6 @@
     "@schematics/angular": "~17.0.4"
   },
   "dependencies": {
-    "jsonc-parser": "^3.0.0"
+    "jsonc-parser": "^3.2.0"
   }
 }

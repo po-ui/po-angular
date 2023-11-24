@@ -10,7 +10,7 @@
       <div>
         {% for file in doc.files %}
         <label class="doc-label-path">{$ file.path $}</label>
-        <pre appCodeHighlight class="html">{$ file.fileContents | escape | replace("{", "&#123;;") | replace("@", "&#64;") | replace('}', "&#125;") $}</pre> 
+        <pre appCodeHighlight class="html">{$ file.fileContents | escape | replace("{", "&#123; ") | replace("@", "&#64;") | replace('}', "&#125;") $}</pre> 
         {% endfor %}
       </div>
     </po-tab>
