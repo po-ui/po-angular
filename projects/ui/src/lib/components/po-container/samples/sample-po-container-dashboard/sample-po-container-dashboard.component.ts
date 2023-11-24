@@ -26,7 +26,7 @@ import {
   ],
   providers: [SampleDashboardService]
 })
-export class SamplePoContainerDashboardComponent implements AfterContentChecked {
+export class SamplePoContainerDashboardComponent implements AfterContentChecked, OnInit {
   @ViewChild('formShare', { static: true }) formShare: NgForm;
   @ViewChild(PoModalComponent) poModal: PoModalComponent;
 
