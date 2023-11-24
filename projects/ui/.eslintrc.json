@@ -1,6 +1,6 @@
 {
   "extends": "../../.eslintrc.json",
-  "ignorePatterns": ["!**/*"],
+  "ignorePatterns": ["!**/*", "**/util-expect.spec.ts"],
   "overrides": [
     {
       "files": ["*.ts"],
@@ -9,6 +9,14 @@
         "createDefaultProgram": true
       },
       "plugins": ["sonarjs", "eslint-plugin-react"],
+      "excludedFiles": [
+        "test.ts",
+        "**/*.spec.ts",
+        "**/*.e2e-spec.ts",
+        "**/*.po.ts",
+        "./node_modules/",
+        "./projects/ui/src/lib/util-test/util-expect.spec.ts"
+      ],
       "rules": {
         "@angular-eslint/component-selector": [
           "error",
@@ -19,6 +27,8 @@
           }
         ],
         "@angular-eslint/directive-class-suffix": "off",
+        "@angular-eslint/no-host-metadata-property": "off",
+        "prefer-spread": "off",
         "@angular-eslint/directive-selector": [
           "error",
           {

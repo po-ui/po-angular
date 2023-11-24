@@ -3,16 +3,16 @@
 
 ### Pré-requisitos
 
-Para começar a utilizar o **PO UI** é pré-requisito ter o `Node.js` instalado (versão 16.14.x ou acima) e o seu gerenciador de pacote favorito na versão mais atual. Caso você ainda não tenha instalado o pacote `@angular/cli`, instale-o via `npm` ou `yarn`.
+Para começar a utilizar o **PO UI** é pré-requisito ter o `Node.js` instalado (versão 18.13.x ou acima) e o seu gerenciador de pacote favorito na versão mais atual. Caso você ainda não tenha instalado o pacote `@angular/cli`, instale-o via `npm` ou `yarn`.
 
 Instalando com npm:
 ```
-npm i -g @angular/cli@16
+npm i -g @angular/cli@17
 ```
 
 Caso prefira instalar com o yarn:
 ```
-yarn global add @angular/cli@16
+yarn global add @angular/cli@17
 ```
 
 ### Passo 1 - Crie o seu primeiro projeto
@@ -36,25 +36,25 @@ Veja abaixo a lista de dependências e as versões compatíveis, elas devem ser 
 
 ```
   "dependencies": {
-    "@angular/animations": "~16.2.0",
-    "@angular/common": "~16.2.0",
-    "@angular/compiler": "~16.2.0",
-    "@angular/core": "~16.2.0",
-    "@angular/forms": "~16.2.0",
-    "@angular/platform-browser": "~16.2.0",
-    "@angular/platform-browser-dynamic": "~16.2.0",
-    "@angular/router": "~16.2.0",
-    "rxjs": "~7.5.5",
-    "tslib": "^2.3.0",
-    "zone.js": "~0.13.1"
+    "@angular/animations": "~17.0.4",
+    "@angular/common": "~17.0.4",
+    "@angular/compiler": "~17.0.4",
+    "@angular/core": "~17.0.4",
+    "@angular/forms": "~17.0.4",
+    "@angular/platform-browser": "~17.0.4",
+    "@angular/platform-browser-dynamic": "~17.0.4",
+    "@angular/router": "~17.0.4",
+    "rxjs": "~7.8.1",
+    "tslib": "^2.6.2",
+    "zone.js": "~0.14.2"
     ...
   },
   "devDependencies": {
-    "@angular-devkit/build-angular": "~16.2.0",
-    "@angular/cli": "~16.2.0",
-    "@angular/compiler-cli": "~16.2.0",
+    "@angular-devkit/build-angular": "~17.0.3",
+    "@angular/cli": "~17.0.3",
+    "@angular/compiler-cli": "~17.0.4",
     ...
-    "typescript": "~5.1.6"
+    "typescript": "~5.2.2"
   }
 ```
 
@@ -77,7 +77,7 @@ Utilizando o comando `ng add` do [Angular CLI](https://cli.angular.io/), vamos a
 Execute o comando abaixo na pasta raiz do seu projeto:
 
 ```
-ng add @po-ui/ng-components
+ng add @po-ui/ng-components@next
 ```
 
 > Ao executar o comando acima, será perguntado se deseja incluir uma estrutura inicial em seu projeto com menu lateral, página e toolbar, utilizando componentes do **Po**, **caso desejar, apenas informe: `Y`**.
@@ -105,7 +105,7 @@ Agora é só abrir seu **editor / IDE** favorito e começar a trabalhar no seu p
 Caso você queira utilizar nossos componentes de templates, como o **[po-page-login](/documentation/po-page-login)**, **[po-modal-password-recovery](/documentation/po-modal-password-recovery)**, **[po-page-blocked-user](/documentation/po-page-blocked-user)**, **[po-page-dynamic-table](/documentation/po-page-dynamic-table)** entre outros, basta adicionar o pacote `@po-ui/ng-templates` executando o comando abaixo:
 
 ```
-ng add @po-ui/ng-templates
+ng add @po-ui/ng-templates@next
 ```
 > Ao executar este comando, será instalado o pacote `@po-ui/ng-templates` e configurado o `PoTemplatesModules` no `app.module`
 

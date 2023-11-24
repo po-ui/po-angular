@@ -9,12 +9,16 @@
         "createDefaultProgram": true
       },
       "extends": [
-        "plugin:@angular-eslint/ng-cli-compat",
-        "plugin:@angular-eslint/ng-cli-compat--formatting-add-on",
+        "plugin:@typescript-eslint/recommended",
+        "plugin:@angular-eslint/recommended",
         "plugin:@angular-eslint/template/process-inline-templates"
       ],
       "plugins": ["sonarjs", "eslint-plugin-react"],
       "rules": {
+        "@typescript-eslint/no-explicit-any": "off",
+        "@typescript-eslint/no-this-alias": "off",
+        "@typescript-eslint/no-unused-vars": "off",
+        "@typescript-eslint/no-array-constructor": "off",
         "@angular-eslint/component-selector": [
           "error",
           {
@@ -124,6 +128,11 @@
           {
             "selector": "variable",
             "format": ["camelCase", "UPPER_CASE", "snake_case", "PascalCase"],
+            "leadingUnderscore": "allow"
+          },
+          {
+            "selector": "import",
+            "format": ["camelCase", "PascalCase"],
             "leadingUnderscore": "allow"
           },
           {
