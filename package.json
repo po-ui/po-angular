@@ -89,7 +89,7 @@
     "monaco-editor": "0.24.0",
     "ngx-markdown": "~16.0.0",
     "run-sequence": "^2.2.1",
-    "rxjs": "~7.5.5",
+    "rxjs": "~7.8.1",
     "rxjs-compat": "~6.6.0",
     "tslib": "^2.6.2",
     "zone.js": "~0.14.2"
