@@ -3,7 +3,6 @@ import { RouterTestingModule } from '@angular/router/testing';
 
 import { PoPageLoginPopoverComponent } from './po-page-login-popover.component';
 
-import * as UtilFunctions from './../../../utils/util';
 import { PoI18nPipe } from './../../../../../../ui/src/lib/services/po-i18n/po-i18n.pipe';
 
 describe('ThPageLoginPopoverComponent: ', () => {

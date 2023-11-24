@@ -1,4 +1,4 @@
-import { ChangeDetectionStrategy, Component, inject } from '@angular/core';
+import { ChangeDetectionStrategy, Component, OnInit, inject } from '@angular/core';
 
 import { PoProgressBaseComponent } from './po-progress-base.component';
 import { PoProgressStatus } from './enums/po-progress-status.enum';
@@ -29,7 +29,7 @@ import { poProgressLiterals } from './literals/po-progress.literals';
   templateUrl: './po-progress.component.html',
   changeDetection: ChangeDetectionStrategy.OnPush
 })
-export class PoProgressComponent extends PoProgressBaseComponent {
+export class PoProgressComponent extends PoProgressBaseComponent implements OnInit {
   language;
   literals;
 

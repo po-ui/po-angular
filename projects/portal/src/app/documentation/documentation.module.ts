@@ -1,4 +1,4 @@
-import { NgModule } from '@angular/core';
+import { NgModule, SecurityContext } from '@angular/core';
 
 import { SharedModule } from './../shared/shared.module';
 
@@ -10,7 +10,7 @@ import { DocumentationService } from './documentation.service';
 import { DocumentationListComponent } from './documentation-list.component';
 
 @NgModule({
-  imports: [SharedModule, MarkdownModule.forRoot(), DocumentationRoutingModule],
+  imports: [SharedModule, MarkdownModule.forRoot({ sanitize: SecurityContext.NONE }), DocumentationRoutingModule],
   declarations: [DocumentationComponent, DocumentationListComponent],
   exports: [],
   providers: [DocumentationService]

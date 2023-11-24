@@ -10,13 +10,15 @@ import { WorkspaceSchema } from '@schematics/angular/utility/workspace-models';
 
 export function addModuleImportToRootModule(options: any, moduleName: string, modulePath: string) {
   return (host: Tree) => {
+    let appModulePath;
     const workspace = getWorkspaceConfigGracefully(host) ?? ({} as WorkspaceSchema);
-    const project = getProjectFromWorkspace(workspace, options.project);
-    const appModulePath = getAppModulePath(host, getProjectMainFile(project));
-
-    if (!hasNgModuleImport(host, appModulePath, moduleName)) {
-      // not add the module if the project already use
-      addModuleImportToModule(host, appModulePath, moduleName, modulePath);
+    const project: any = getProjectFromWorkspace(workspace, options.project);
+    if (Object.keys(project.schematics).length) {
+      appModulePath = getAppModulePath(host, getProjectMainFile(project));
+      if (!hasNgModuleImport(host, appModulePath, moduleName)) {
+        // not add the module if the project already use
+        addModuleImportToModule(host, appModulePath, moduleName, modulePath);
+      }
     }
 
     return host;

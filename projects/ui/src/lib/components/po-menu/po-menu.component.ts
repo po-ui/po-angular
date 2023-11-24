@@ -52,7 +52,7 @@ const poMenuRootLevel = 1;
  * Para o menu funcionar corretamente é necessário importar o `RouterModule` e `Routes` do módulo principal de
  *  sua aplicação:
  *
- * ````
+ * ```
  * import { RouterModule, Routes } from '@angular/router';
  *
  * ...
