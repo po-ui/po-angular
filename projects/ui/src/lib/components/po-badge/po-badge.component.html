@@ -1,3 +1,14 @@
-<div class="po-badge po-{{ color }}">
-  <span class="po-badge-value">{{ badgeValue }}</span>
+<div
+  class="{{ getChangeStyle() }} po-badge po-badge-{{ size ? size : 'medium' }}"
+  [class.po-badge-notification]="isNotification && !status"
+  [class.po-badge-border]="showBorder"
+  [attr.data-status]="status"
+  [ariaLabel]="notificationLabel"
+  [ngStyle]="customColor && !status ? { 'background-color': customColor } : {}"
+>
+  <po-icon
+    *ngIf="!isNotification && size !== 'small' && badgeIcon && status !== 'disabled'"
+    [p-icon]="badgeIcon"
+  ></po-icon>
+  <span *ngIf="value > 1" class="po-badge-value" aria-hidden="true">{{ badgeValue }}</span>
 </div>

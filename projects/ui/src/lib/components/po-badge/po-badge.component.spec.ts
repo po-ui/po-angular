@@ -25,85 +25,173 @@ describe('PoBadgeComponent:', () => {
     expect(component instanceof PoBadgeComponent).toBeTruthy();
   });
 
-  describe('Templates:', () => {
-    const badgeColorDefaultSelector = '.po-badge.po-color-07';
-    const badgeValueSelector = '.po-badge-value';
+  describe('Methods:', () => {
+    it('setStatus: should call setStatus when "status" changes', () => {
+      const changesFake = { status: 'status' };
+      spyOn(component, 'setStatus');
 
-    it('should create `po-badge` with value `55` if `value` is `55`', () => {
-      const result = '55';
-      component.value = 55;
+      component.ngOnChanges(<any>changesFake);
 
-      fixture.detectChanges();
-
-      const badgeValue = fixture.nativeElement.querySelector(badgeValueSelector);
-
-      expect(badgeValue.innerHTML).toBe(result);
+      expect(component.setStatus).toHaveBeenCalled();
     });
 
-    it('should create `po-badge` with value `0` if `value` is `0`', () => {
-      const result = '0';
-      component.value = 0;
+    it('getChangeStyle: should return `po-badge-default`', () => {
+      component.status = 'positive';
 
-      fixture.detectChanges();
+      const getChangeStyle = component.getChangeStyle();
 
-      const badgeValue = fixture.nativeElement.querySelector(badgeValueSelector);
-
-      expect(badgeValue.innerHTML).toBe(result);
+      expect(getChangeStyle).toEqual('po-badge-default');
     });
 
-    it('should create `po-badge` with value `99+` if `value` is greater than 99', () => {
-      const result = '99+';
-      component.value = 101;
-
-      fixture.detectChanges();
-
-      const badgeValue = fixture.nativeElement.querySelector(badgeValueSelector);
-
-      expect(badgeValue.innerHTML).toBe(result);
-    });
-
-    it('should create `po-badge` with value `99` if `value` is `99`', () => {
-      const result = '99';
-      component.value = 99;
-
-      fixture.detectChanges();
-
-      const badgeValue = fixture.nativeElement.querySelector(badgeValueSelector);
-
-      expect(badgeValue.innerHTML).toBe(result);
-    });
-
-    it('should create `po-badge` with `po-color-07` if `color` is `undefined`', () => {
-      component.value = 10;
-      component.color = undefined;
-
-      fixture.detectChanges();
-
-      const badge = fixture.nativeElement.querySelector(badgeColorDefaultSelector);
-
-      expect(badge).toBeTruthy();
-    });
-
-    it('should create `po-badge` with `po-color-07` if `color` is `invalid`', () => {
-      component.value = 10;
-      component.color = 'color-33';
-
-      fixture.detectChanges();
-
-      const badge = fixture.nativeElement.querySelector(badgeColorDefaultSelector);
-
-      expect(badge).toBeTruthy();
-    });
-
-    it('should create `po-badge` with `po-color-03` if `color` is `color-03`', () => {
-      component.value = 10;
+    it('getChangeStyle: should return `po-color-03`', () => {
+      component.status = undefined;
       component.color = 'color-03';
 
-      fixture.detectChanges();
+      const getChangeStyle = component.getChangeStyle();
 
-      const badge = fixture.nativeElement.querySelector('.po-badge.po-color-03');
+      expect(getChangeStyle).toEqual('po-color-03');
+    });
 
-      expect(badge).toBeTruthy();
+    it('setLiterals: should set notificationLabel when value > 1', () => {
+      const labelFake = 'Home';
+      const valueFake = 2;
+      component.value = valueFake;
+      component.ariaLabel = labelFake;
+      component.literals = { notifications: 'notifications', notification: 'notification' };
+
+      component.setLiterals();
+
+      expect(component.notificationLabel).toBe(`${labelFake} ${valueFake} notifications`);
+    });
+
+    it('setLiterals: should set notificationLabel when value < 1', () => {
+      const labelFake = 'Home';
+      const valueFake = 1;
+      component.value = valueFake;
+      component.ariaLabel = labelFake;
+      component.literals = { notifications: 'notifications', notification: 'notification' };
+
+      component.setLiterals();
+
+      expect(component.notificationLabel).toBe(`${labelFake} ${valueFake} notification`);
+    });
+
+    it('setLiterals: should set notificationLabel when value > 1 and ariaLabel is empty', () => {
+      const valueFake = 2;
+      component.value = valueFake;
+      component.literals = { notifications: 'notifications', notification: 'notification' };
+
+      component.setLiterals();
+
+      expect(component.notificationLabel).toBe(` ${valueFake} notifications`);
+    });
+
+    it('setLiterals: should set notificationLabel when value < 1 and ariaLabel is empty', () => {
+      const valueFake = 1;
+      component.value = valueFake;
+      component.literals = { notifications: 'notifications', notification: 'notification' };
+
+      component.setLiterals();
+
+      expect(component.notificationLabel).toBe(` ${valueFake} notification`);
+    });
+
+    it('setStatus: should called', () => {
+      component.badgeValue = null;
+
+      component.setStatus();
+
+      expect(component.isNotification).toBeFalsy();
+      expect(component.badgeValue).toEqual(null);
+    });
+
+    it('switchIconStatus: should apply all icon positive if status is posivite', () => {
+      component.status = 'positive';
+      component.icon = true;
+
+      component.switchIconStatus();
+
+      expect(component.badgeIcon).toBe('po-icon-ok');
+    });
+
+    it('switchIconStatus: should apply all icon negative if status is negative', () => {
+      component.status = 'negative';
+      component.icon = true;
+
+      component.switchIconStatus();
+
+      expect(component.badgeIcon).toBe('po-icon-minus');
+    });
+
+    it('switchIconStatus: should apply all icon warning if status is warning', () => {
+      component.status = 'warning';
+      component.icon = true;
+
+      component.switchIconStatus();
+
+      expect(component.badgeIcon).toBe('po-icon-warning');
+    });
+
+    it('switchIconStatus: should apply all icon disabled if status is disabled', () => {
+      component.status = 'disabled';
+      component.icon = true;
+
+      component.switchIconStatus();
+
+      expect(component.badgeIcon).toBe('');
+    });
+
+    it('setBadgeNotification: should return true and set isNotification true when not status', () => {
+      const setBadgeNotification = component['setBadgeNotification'](2);
+
+      expect(component.isNotification).toBeTrue();
+      expect(setBadgeNotification).toBeTrue();
+    });
+
+    it('setBadgeNotification: should return true and set isNotification true when status', () => {
+      component.status = 'positive';
+      component.badgeValue = null;
+
+      const setBadgeNotification = component['setBadgeNotification'](1);
+
+      expect(component.isNotification).toBeFalse();
+      expect(component.badgeValue).toBe(null);
+      expect(setBadgeNotification).toBeFalse();
+    });
+
+    it('setBadgeValue: should call checkBadgeValue', () => {
+      spyOn(component, <any>'checkBadgeValue');
+      component.value = 2;
+
+      component['setBadgeValue']();
+
+      expect(component['checkBadgeValue']).toHaveBeenCalledWith(component.value);
+    });
+
+    it('checkBadgeValue: should called with value is valid', () => {
+      component['checkBadgeValue'](2);
+
+      expect(component.isValidValue).toBeTrue();
+      expect(component.badgeValue).toBe('2');
+    });
+
+    it('checkBadgeValue: should called with value is invalid', () => {
+      component['checkBadgeValue'](-10);
+
+      expect(component.isValidValue).toBeFalse();
+      expect(component.badgeValue).toBe('');
+    });
+
+    it('formatBadgeValue: should called formatBadgeValue and return 9+', () => {
+      const formatBadgeValue = component['formatBadgeValue'](11);
+
+      expect(formatBadgeValue).toBe('9+');
+    });
+
+    it('formatBadgeValue: should called formatBadgeValue with 2 and return 2', () => {
+      const formatBadgeValue = component['formatBadgeValue'](2);
+
+      expect(formatBadgeValue).toBe('2');
     });
   });
 });
