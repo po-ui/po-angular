@@ -17,7 +17,7 @@
     "monaco-editor": "0.24.0",
     "core-js": "^3.13.0",
     "intl": "^1.2.5",
-    "tslib": "^2.3.0"
+    "tslib": "^2.6.2"
   },
   "peerDependencies": {
     "@angular/common": "~17.0.4",

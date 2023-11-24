@@ -14,7 +14,7 @@
   "dependencies": {
     "@po-ui/ng-components": "0.0.0-PLACEHOLDER",
     "@po-ui/ng-schematics": "0.0.0-PLACEHOLDER",
-    "tslib": "^2.3.0"
+    "tslib": "^2.6.2"
   },
   "peerDependencies": {
     "@angular/animations": "~17.0.4",
