@@ -1,0 +1,18 @@
+<div class="po-row po-mt-3">
+  <div>
+    <div class="po-mb-1" *ngFor="let user of users">
+      <po-container>
+        <div class="card">
+          <svg class="po-mr-1" [attr.kind]="user.status" stroke-linecap="round" stroke-linejoin="round">
+            <circle cx="12" cy="12" r="11" />
+            <path d="m8 13 2.165 2.165a1 1 0 0 0 1.521-.126L16 9" fill="none" />
+          </svg>
+          <p class="po-mr-1 card-name-user">
+            {{ user.nome }}
+            <po-badge class="po-badge-wrap" [p-status]="user.status === 'online' ? 'positive' : 'negative'"></po-badge>
+          </p>
+        </div>
+      </po-container>
+    </div>
+  </div>
+</div>

@@ -1,0 +1,29 @@
+.po-badge-wrap {
+  position: absolute;
+  top: -12px;
+  right: -12px;
+}
+
+svg {
+  width: 1.5rem;
+  height: 1.5rem;
+  flex: none;
+  stroke-width: 2;
+  stroke-linecap: round;
+}
+
+svg[kind='online'] {
+  stroke: #0ea5e9;
+  fill: #e0f2fe;
+}
+
+svg[kind='offline'] {
+  fill: white;
+  stroke: #dc2626;
+}
+
+.card {
+  display: flex;
+  align-items: center;
+  position: relative;
+}
