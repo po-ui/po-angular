@@ -1407,8 +1407,8 @@ describe('Function convertNumberToDecimals:', () => {
   it('should convert number to float', () => {
     expect(convertNumberToDecimal(12.567, 2)).toBe(12.57);
     expect(convertNumberToDecimal(12.56, 2)).toBe(12.56);
-    expect(convertNumberToDecimal(12.5649584958748574897, 2)).toBe(12.56);
-    expect(convertNumberToDecimal(12.5649584958748574897, 4)).toBe(12.565);
+    expect(convertNumberToDecimal(12.564958495874857, 2)).toBe(12.56);
+    expect(convertNumberToDecimal(12.564958495874857, 4)).toBe(12.565);
     expect(convertNumberToDecimal(12.56, 1)).toBe(12.6);
     expect(convertNumberToDecimal('12.56', 1)).toBe(12.6);
     expect(convertNumberToDecimal('12', 1)).toBe(12);
