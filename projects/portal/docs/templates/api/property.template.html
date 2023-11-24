@@ -25,20 +25,20 @@
   <td class="docs-api-properties-type-cell">
     {% for type in property.type.split('|') %}
     <code pan class="docs-api-property-type {$ type $}"
-      >{$ type | escape | replace('{', '&#123;') | replace('}', '&#125;') $}</code
+      >{$ type | escape | replace('{', '&#123;') | replace('}', '&#125;') | replace("@", "&#64;") $}</code
     >
     {% endfor %}
   </td>
   {%- endif -%} {%- if type != 'enum' and type != 'interface' -%}
   <td class="docs-api-property-default">
     {%- if property.default -%} {$ property.default | marked | replace("< ", "&lt; ") | replace('{', '&#123;') |
-    replace('}', '&#125;') $} {%- else -%} - {%- endif -%}
+    replace('}', '&#125;') | replace("@", "&#64;") $} {%- else -%} - {%- endif -%}
   </td>
   {%- endif -%}
   <td class="docs-api-property-description">
     {% if property.isOptional %}<em><strong>(opcional)</strong></em
     >{% endif %} {$ property.description | marked | replace("< ", "&lt; ") | replace('{', '&#123;') | replace('}',
-    '&#125;') $}
+    '&#125;') | replace("@", "&#64;") $}
   </td>
 </tr>
 {%- endif -%}

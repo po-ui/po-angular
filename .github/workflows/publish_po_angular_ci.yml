@@ -62,7 +62,7 @@ jobs:
       #if: (!contains(env.PACKAGE_VERSION, env.SCHEMATICS_LAST_PUBLISHED_VERSION))
       uses: actions/setup-node@v3
       with:
-        node-version: '16.x'
+        node-version: '18.x'
         registry-url: 'https://registry.npmjs.org'
     - run: npm publish ${{env.WORKING_DIR}}/dist/ng-schematics --ignore-scripts
       env:
@@ -82,7 +82,7 @@ jobs:
       if: (!contains(env.PACKAGE_VERSION, env.STORAGE_LAST_PUBLISHED_VERSION))
       uses: actions/setup-node@v3
       with:
-        node-version: '16.x'
+        node-version: '18.x'
         registry-url: 'https://registry.npmjs.org'
     - run: npm publish ${{env.WORKING_DIR}}/dist/ng-storage --ignore-scripts
       env:
@@ -102,7 +102,7 @@ jobs:
       if: (!contains(env.PACKAGE_VERSION, env.SYNC_LAST_PUBLISHED_VERSION))
       uses: actions/setup-node@v3
       with:
-        node-version: '16.x'
+        node-version: '18.x'
         registry-url: 'https://registry.npmjs.org'
     - run: npm publish ${{env.WORKING_DIR}}/dist/ng-sync --ignore-scripts
       env:
@@ -122,7 +122,7 @@ jobs:
       if: (!contains(env.PACKAGE_VERSION, env.COMPONENTS_LAST_PUBLISHED_VERSION))
       uses: actions/setup-node@v3
       with:
-        node-version: '16.x'
+        node-version: '18.x'
         registry-url: 'https://registry.npmjs.org'
     - run: npm publish ${{env.WORKING_DIR}}/dist/ng-components --ignore-scripts
       env:
@@ -142,7 +142,7 @@ jobs:
       if: (!contains(env.PACKAGE_VERSION, env.TEMPLATES_LAST_PUBLISHED_VERSION))
       uses: actions/setup-node@v3
       with:
-        node-version: '16.x'
+        node-version: '18.x'
         registry-url: 'https://registry.npmjs.org'
     - run: npm publish ${{env.WORKING_DIR}}/dist/ng-templates --ignore-scripts
       env:
@@ -162,7 +162,7 @@ jobs:
       if: (!contains(env.PACKAGE_VERSION, env.CODE_EDITOR_LAST_PUBLISHED_VERSION))
       uses: actions/setup-node@v3
       with:
-        node-version: '16.x'
+        node-version: '18.x'
         registry-url: 'https://registry.npmjs.org'
     - run: npm publish ${{env.WORKING_DIR}}/dist/ng-code-editor --ignore-scripts
       env:

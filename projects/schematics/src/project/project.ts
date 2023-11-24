@@ -16,14 +16,14 @@ export function getWorkspaceConfigGracefully(tree: Tree): null | WorkspaceSchema
   try {
     // Parse the workspace file as JSON5 which is also supported for CLI
     // workspace configurations.
-    return (parse(configBuffer.toString()) as unknown) as WorkspaceSchema;
+    return parse(configBuffer.toString()) as unknown as WorkspaceSchema;
   } catch (e) {
     return null;
   }
 }
 
 export function getProjectFromWorkspace(workspace: WorkspaceSchema, projectName?: string): WorkspaceProject {
-  const project = workspace.projects[projectName || workspace.defaultProject!];
+  const project = workspace.projects[projectName!];
 
   if (!project) {
     throw new SchematicsException(`Could not find project in workspace: ${projectName}`);
@@ -51,14 +51,13 @@ export function getProjectTargetOptions(project: WorkspaceProject, buildTarget: 
 /** Looks for the main TypeScript file in the given project and returns its path. */
 export function getProjectMainFile(project: WorkspaceProject): string {
   const buildOptions = getProjectTargetOptions(project, 'build');
-
-  if (!buildOptions.main) {
+  if (!buildOptions.browser) {
     throw new SchematicsException(
       `Could not find the project main file inside of the ` + `workspace config (${project.sourceRoot})`
     );
   }
 
-  return buildOptions.main;
+  return buildOptions.browser;
 }
 
 // Return default path of application or library

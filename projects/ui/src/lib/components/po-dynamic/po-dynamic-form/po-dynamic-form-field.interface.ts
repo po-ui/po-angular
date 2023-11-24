@@ -211,7 +211,7 @@ export interface PoDynamicFormField extends PoDynamicField {
    * onde o usuário poderá determinar as novas propriedades do campo.
    * Por exemplo:
    *
-   * ``
+   * ```
    * onChangeField(changeValue): PoDynamicFormFieldValidation {
    *
    * if (changeValue.property === 'birthday' && !this.validate('birthday')) {
@@ -221,7 +221,7 @@ export interface PoDynamicFormField extends PoDynamicField {
    *     focus: true
    *   };
    * }
-   * ``
+   * ```
    *
    * Para referenciar a sua função utilize a propriedade `bind`, por exemplo:
    * ``
