@@ -72,10 +72,9 @@ module.exports = {
 
   // Grava arquivos
   writeFile: function (path, contents, cb) {
-    mkdirp(getDirName(path), function (err) {
-      if (err) return cb(err);
-      fs.writeFile(path, contents, cb);
-    });
+    const dirName = getDirName(path);
+    mkdirp.sync(dirName);
+    fs.writeFile(path, contents, cb);
   },
 
   generateApiComponentFile: function (docName, component) {

@@ -21,5 +21,6 @@
     "target": "es6",
     "types": ["jasmine", "node"]
   },
-  "include": ["schematics/**/*"]
+  "include": ["schematics/**/*"],
+  "exclude": ["schematics/**/*/*.spec.ts"]
 }

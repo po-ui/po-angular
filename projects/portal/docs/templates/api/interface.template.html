@@ -2,7 +2,7 @@
   <code class="doc-code">{$ interface.name $}</code>
 </h4>
 <div class="docs-api-class-description">
-  {$ interface.description | marked | replace('{', '&#123;') | replace('}', '&#125;') $}
+  {$ interface.description | marked | replace('{', '&#123;') | replace('}', '&#125;') | replace("@", "&#64;") $}
 </div>
 {%- if interface.directiveSelectors -%}
 <div class="docs-api-directive-selectors">
@@ -10,7 +10,7 @@
   {% for selector in interface.directiveSelectors %}
   <pre #code>
     &lt;{$ selector $} {% for property in interface.properties %} {% if (property.returnType) and (property.description)  %}
-        {$ directiveProp(property, '="', '"') | replace('{', '&#123;') | replace('}', '&#125;') $}{%- endif %}{% endfor %}&gt;
+        {$ directiveProp(property, '="', '"') | replace('{', '&#123;') | replace('}', '&#125;') | replace("@", "&#64;") $}{%- endif %}{% endfor %}&gt;
     &lt;/{$ selector $}&gt;
 </pre
   >

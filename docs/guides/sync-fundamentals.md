@@ -75,7 +75,7 @@ Esta sincronização pode ser acionada (gatilho) das seguintes formas:
 - [Manualmente](guides/sync-fundamentals#sync): será acionada na chamada manual do método `PoSyncService.sync()`.
 
 > Antes de continuar os próximos passos, siga as instruções do [Começando com o PO Sync](guides/sync-get-started) para
-saber como criar um novo projeto com Ionic 5 utilizando o PO Sync.
+saber como criar um novo projeto com Ionic 7 utilizando o PO Sync.
 
 <a id="knowledge"></a>
 ## Conhecimentos necessários
