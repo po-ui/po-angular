@@ -16,14 +16,14 @@ export function getWorkspaceConfigGracefully(tree: Tree): null | WorkspaceSchema
   try {
     // Parse the workspace file as JSON5 which is also supported for CLI
     // workspace configurations.
-    return (parse(configBuffer.toString()) as unknown) as WorkspaceSchema;
+    return parse(configBuffer.toString()) as unknown as WorkspaceSchema;
   } catch (e) {
     return null;
   }
 }
 
 export function getProjectFromWorkspace(workspace: WorkspaceSchema, projectName?: string): WorkspaceProject {
-  const project = workspace.projects[projectName || workspace.defaultProject!];
+  const project = workspace.projects[projectName!];
 
   if (!project) {
     throw new SchematicsException(`Could not find project in workspace: ${projectName}`);
