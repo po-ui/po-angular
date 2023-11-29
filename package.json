@@ -59,8 +59,7 @@
     "publish:storage:local": "npm publish ./dist/ng-storage --registry http://localhost:4873 --ignore-scripts",
     "publish:code-editor:local": "npm publish ./dist/ng-code-editor --registry http://localhost:4873 --ignore-scripts",
     "publish:schematics:local": "npm publish ./dist/ng-schematics --registry http://localhost:4873 --ignore-scripts",
-    "publish:local": "npm run publish:schematics:local && npm run publish:ui:local && npm run publish:templates:local && npm run publish:code-editor:local && npm run publish:sync:local && npm run publish:storage:local",
-    "prepare": "husky install"
+    "publish:local": "npm run publish:schematics:local && npm run publish:ui:local && npm run publish:templates:local && npm run publish:code-editor:local && npm run publish:sync:local && npm run publish:storage:local"
   },
   "private": true,
   "dependencies": {
@@ -125,7 +124,7 @@
     "eslint-plugin-react": "latest",
     "gulp": "^4.0.2",
     "gulp-tap": "^2.0.0",
-    "husky": "^8.0.0",
+    "husky": "^8.0.3",
     "jasmine-core": "~5.1.1",
     "jasmine-spec-reporter": "~7.0.0",
     "karma": "~6.4.2",
