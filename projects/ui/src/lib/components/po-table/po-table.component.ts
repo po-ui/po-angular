@@ -141,6 +141,8 @@ export class PoTableComponent extends PoTableBaseComponent implements AfterViewI
   inputFieldValue = '';
   JSON: JSON;
   newOrderColumns: Array<PoTableColumn>;
+  sizeLoading: string = 'sm';
+  headerWidth: number;
 
   close: PoModalAction = {
     action: () => {
@@ -162,7 +164,6 @@ export class PoTableComponent extends PoTableBaseComponent implements AfterViewI
   private differ;
   private footerHeight;
   private headerHeight;
-  private initialized = false;
   private timeoutResize;
   private visibleElement = false;
   private scrollEvent$: Observable<any>;
@@ -295,8 +296,17 @@ export class PoTableComponent extends PoTableBaseComponent implements AfterViewI
     this.idRadio = `po-radio-${uuid()}`;
   }
 
+  changeHeaderWidth() {
+    if (this.noColumnsHeader) {
+      this.headerWidth = this.noColumnsHeader?.nativeElement.offsetWidth;
+    }
+    this.changeDetector.detectChanges();
+  }
+
   ngAfterViewInit() {
     this.initialized = true;
+    this.changeHeaderWidth();
+    this.changeSizeLoading();
   }
 
   showMoreInfiniteScroll({ target }): void {
@@ -309,6 +319,7 @@ export class PoTableComponent extends PoTableBaseComponent implements AfterViewI
   ngDoCheck() {
     this.checkChangesItems();
     this.verifyCalculateHeightTableContainer();
+
     // Permite que os cabeçalhos sejam calculados na primeira vez que o componente torna-se visível,
     // evitando com isso, problemas com Tabs ou Divs que iniciem escondidas.
     if (this.tableWrapperElement?.nativeElement.offsetWidth && !this.visibleElement && this.initialized) {
@@ -723,6 +734,18 @@ export class PoTableComponent extends PoTableBaseComponent implements AfterViewI
     this.modalDelete.close();
     this.poNotification.success(this.literals.deleteSuccessful);
     this.eventDelete.emit(newItemsFiltered);
+  }
+
+  protected changeSizeLoading() {
+    const tableHeight = this.tableWrapperElement?.nativeElement?.offsetHeight;
+
+    if (tableHeight <= 150) {
+      this.sizeLoading = 'sm';
+    } else if (tableHeight > 150 && tableHeight < 260) {
+      this.sizeLoading = 'md';
+    } else {
+      this.sizeLoading = 'lg';
+    }
   }
 
   private checkChangesItems() {
