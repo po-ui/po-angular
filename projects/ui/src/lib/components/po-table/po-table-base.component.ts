@@ -451,6 +451,7 @@ export abstract class PoTableBaseComponent implements OnChanges, OnDestroy {
   itemsSelected: Array<any> = [];
   paramsFilter: {};
   filteredItems: Array<any> = [];
+  initialized = false;
   private initialVisibleColumns: boolean = false;
   private _spacing: PoTableColumnSpacing = PoTableColumnSpacing.Medium;
   private _filteredColumns: Array<string>;
@@ -963,6 +964,11 @@ export abstract class PoTableBaseComponent implements OnChanges, OnDestroy {
     if (changes.height) {
       this.calculateHeightTableContainer(this.height);
     }
+
+    if ((changes.height || changes.items) && this.initialized) {
+      this.changeHeaderWidth();
+    }
+    this.changeSizeLoading();
   }
 
   selectAllRows() {
@@ -1277,4 +1283,8 @@ export abstract class PoTableBaseComponent implements OnChanges, OnDestroy {
   protected abstract calculateHeightTableContainer(height);
 
   protected abstract checkInfiniteScroll();
+
+  protected abstract changeSizeLoading();
+
+  protected abstract changeHeaderWidth();
 }

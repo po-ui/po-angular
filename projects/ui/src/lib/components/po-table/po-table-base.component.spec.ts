@@ -20,6 +20,8 @@ import { PoTableService } from './services/po-table.service';
 class PoTableComponent extends PoTableBaseComponent {
   checkInfiniteScroll() {}
   calculateHeightTableContainer(height) {}
+  changeSizeLoading() {}
+  changeHeaderWidth() {}
 }
 
 describe('PoTableBaseComponent:', () => {
@@ -530,6 +532,39 @@ describe('PoTableBaseComponent:', () => {
       component.ngOnChanges(changes);
 
       expect(component.calculateHeightTableContainer).not.toHaveBeenCalled();
+    });
+
+    it('ngOnChanges: should call `changeSizeLoading` if height is changed', () => {
+      spyOn(component, 'changeSizeLoading');
+      const height = 400;
+      const changes = <any>{ height };
+      component.height = height;
+
+      component.ngOnChanges(changes);
+
+      expect(component['changeSizeLoading']).toHaveBeenCalled();
+    });
+
+    it('ngOnChanges: should call `changeSizeLoading` if there is items', () => {
+      spyOn(component, 'changeSizeLoading');
+      items = component.items;
+      const changes = <any>{ items };
+      component.items = items;
+
+      component.ngOnChanges(changes);
+
+      expect(component['changeSizeLoading']).toHaveBeenCalled();
+    });
+
+    it('ngOnChanges: should´n call `changeSizeLoading` if there is no items', () => {
+      spyOn(component, 'changeSizeLoading');
+      items = null;
+      const changes = <any>{ items };
+      component.items = null;
+
+      component.ngOnChanges(changes);
+
+      expect(component['changeSizeLoading']).toHaveBeenCalled();
     });
 
     describe('isEverySelected:', () => {

@@ -50,11 +50,8 @@
 </po-container>
 
 <ng-template #tableContainerTemplate>
-  <div [class.po-table-container-relative]="loading">
-    <div *ngIf="loading" class="po-table-overlay">
-      <po-loading class="po-table-overlay-content" [p-text]="literals.loadingData"></po-loading>
-    </div>
-
+  <div [class.po-table-container-sticky]="loading">
+    <po-loading-overlay *ngIf="loading" [p-text]="literals.loadingData" [p-size]="sizeLoading"></po-loading-overlay>
     <div class="po-table-main-container">
       <div
         #tableWrapper
@@ -865,7 +862,7 @@
 </ng-template>
 
 <ng-template #noColumnsWithHeight>
-  <div class="po-table-header-fixed-inner" [style.width.px]="noColumnsHeader?.nativeElement.offsetWidth">
+  <div class="po-table-header-fixed-inner" [style.width.px]="headerWidth">
     {{ hasValidColumns ? literals.noVisibleColumn : literals.noColumns }}
   </div>
 </ng-template>
