@@ -1,11 +1,10 @@
-<div class="po-loading">
-  <po-loading-icon p-size="lg"></po-loading-icon>
-  <ng-template [ngIf]="text">
-    <span class="po-loading-label po-text-ellipsis"
-      >{{ text }}
-      <div class="po-loading-dot" aria-hidden="true">.</div>
-      <div class="po-loading-dot" aria-hidden="true">.</div>
-      <div class="po-loading-dot" aria-hidden="true">.</div>
-    </span>
-  </ng-template>
+<div class="po-loading po-loading-{{ size }}">
+  <po-loading-icon [p-size]="size"></po-loading-icon>
+
+  <span *ngIf="text" class="po-loading-label po-text-ellipsis"
+    >{{ text }}
+    <div class="po-loading-dot" aria-hidden="true">.</div>
+    <div class="po-loading-dot" aria-hidden="true">.</div>
+    <div class="po-loading-dot" aria-hidden="true">.</div>
+  </span>
 </div>
