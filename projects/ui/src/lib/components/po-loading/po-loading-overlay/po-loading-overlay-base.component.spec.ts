@@ -42,6 +42,30 @@ describe('PoLoadingOverlayBaseComponent:', () => {
       spyOn(component, <any>'getTextDefault');
       expectPropertiesValues(component, 'text', textValidValues, textValidValues);
     });
+
+    it('p-size: set size with `lg', () => {
+      component.size = null;
+
+      expect(component.size).toBe('lg');
+    });
+
+    it('p-size: set size with `sm', () => {
+      component.size = 'sm';
+
+      expect(component.size).toBe('sm');
+    });
+
+    it('p-size: set size with `xs', () => {
+      component.size = 'xs';
+
+      expect(component.size).toBe('xs');
+    });
+
+    it('p-size: set size with `md', () => {
+      component.size = 'md';
+
+      expect(component.size).toBe('md');
+    });
   });
 
   describe('Methods:', () => {

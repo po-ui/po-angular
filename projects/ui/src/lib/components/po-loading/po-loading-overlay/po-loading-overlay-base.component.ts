@@ -32,6 +32,7 @@ export const poLoadingOverlayLiteralsDefault = {
 export class PoLoadingOverlayBaseComponent {
   private _screenLock?: boolean = false;
   private _text?: string;
+  private _size?: string;
 
   /**
    * @optional
@@ -80,6 +81,23 @@ export class PoLoadingOverlayBaseComponent {
 
   get text(): string {
     return this._text;
+  }
+
+  /**
+   * @optional
+   *
+   * @description
+   *
+   * Define o tamnho do componente.
+   *
+   * @default `lg`
+   */
+  @Input('p-size') set size(value: string | null) {
+    this._size = value === '' || !value ? 'lg' : value;
+  }
+
+  get size(): string {
+    return this._size;
   }
 
   constructor(private languageService: PoLanguageService) {
