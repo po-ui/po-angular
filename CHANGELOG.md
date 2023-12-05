@@ -2,6 +2,16 @@
 
 All notable changes to this project will be documented in this file. See [standard-version](https://github.com/conventional-changelog/standard-version) for commit guidelines.
 
+# [16.8.0](https://github.com/po-ui/po-angular/compare/v16.7.0...v16.8.0) (2023-12-05)
+
+
+### Features
+
+* **progress:** implementa definições do AnimaliaDS ([ad59a5e](https://github.com/po-ui/po-angular/commit/ad59a5ee0f92e7fe14ef9cf83101188622017564))
+* **search:** implementa animaliaDS e externaliza para uso no portal ([0bdc067](https://github.com/po-ui/po-angular/commit/0bdc067478afdc80c6c018fc2ad00d5145b2b395))
+
+
+
 # [16.7.0](https://github.com/po-ui/po-angular/compare/v16.6.1...v16.7.0) (2023-11-17)
 
 
