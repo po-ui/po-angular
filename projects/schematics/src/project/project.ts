@@ -51,14 +51,13 @@ export function getProjectTargetOptions(project: WorkspaceProject, buildTarget: 
 /** Looks for the main TypeScript file in the given project and returns its path. */
 export function getProjectMainFile(project: WorkspaceProject): string {
   const buildOptions = getProjectTargetOptions(project, 'build');
-
-  if (!buildOptions.main) {
+  if (!buildOptions.browser) {
     throw new SchematicsException(
       `Could not find the project main file inside of the ` + `workspace config (${project.sourceRoot})`
     );
   }
 
-  return buildOptions.main;
+  return buildOptions.browser;
 }
 
 // Return default path of application or library
