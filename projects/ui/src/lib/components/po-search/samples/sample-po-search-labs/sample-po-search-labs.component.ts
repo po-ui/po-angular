@@ -13,14 +13,14 @@ import { HttpClient } from '@angular/common/http';
   templateUrl: './sample-po-search-labs.component.html',
   styles: [
     `
-      ul {
+      .sample-list-search {
         list-style: none;
         display: grid;
         grid-template-columns: repeat(2, 1fr);
         grid-gap: 1rem;
       }
 
-      ul strong {
+      .sample-list-search strong {
         text-transform: capitalize;
       }
     `
@@ -41,6 +41,7 @@ export class SamplePoSearchLabsComponent implements OnInit, OnChanges {
   tooltip: string;
   icon: string;
   filterMode: PoSearchFilterMode;
+  searchMode = 'action';
   fieldKey: any;
   itemsModel: any;
   filterModel: any;
@@ -56,6 +57,11 @@ export class SamplePoSearchLabsComponent implements OnInit, OnChanges {
     { label: 'Starts With', value: PoSearchFilterMode.startsWith },
     { label: 'Contains', value: PoSearchFilterMode.contains },
     { label: 'Ends With', value: PoSearchFilterMode.endsWith }
+  ];
+
+  public readonly searchModeOptions: Array<PoRadioGroupOption> = [
+    { label: 'Action', value: 'action' },
+    { label: 'Trigger', value: 'trigger' }
   ];
 
   constructor(private http: HttpClient) {}
@@ -144,9 +150,10 @@ export class SamplePoSearchLabsComponent implements OnInit, OnChanges {
     this.filteredItems = undefined;
     this.items = undefined;
     this.itemsModel = undefined;
-    this.filterModel = undefined;
+    this.filterModel = '["name"]';
     this.fieldKeys = undefined;
     this.filterMode = PoSearchFilterMode.startsWith;
+    this.searchMode = 'action';
     this.literals = undefined;
     this.cleanInput();
     this.onChangeService();

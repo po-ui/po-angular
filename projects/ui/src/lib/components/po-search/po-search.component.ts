@@ -45,49 +45,43 @@ export class PoSearchComponent extends PoSearchBaseComponent implements OnInit {
 
   clearSearch(): void {
     this.poSearchInput.nativeElement.value = '';
-    this.onSearchChange('');
+    this.onSearchChange('', true);
     this.filteredItemsChange.emit(this.items);
     this.poSearchInput.nativeElement.focus();
   }
 
-  onBlur(): void {
-    this.renderer.removeClass(this.poSearchInput.nativeElement.parentElement, 'po-search-focused');
-  }
+  onSearchChange(searchText: string, activated: boolean): void {
+    if (activated) {
+      searchText = searchText.toLowerCase();
 
-  onFocus(): void {
-    this.renderer.addClass(this.poSearchInput.nativeElement.parentElement, 'po-search-focused');
-  }
+      if (this.items && this.items.length > 0) {
+        this.filteredItems = this.items.filter(item =>
+          this.filterKeys.some(key => {
+            let value = item[key];
 
-  onSearchChange(searchText: string): void {
-    searchText = searchText.toLowerCase();
+            if (typeof value !== 'string') {
+              value = value != null ? value.toString() : null;
+            }
 
-    if (this.items && this.items.length > 0) {
-      this.filteredItems = this.items.filter(item =>
-        this.filterKeys.some(key => {
-          let value = item[key];
+            value = value != null ? value.toLowerCase() : null;
 
-          if (typeof value !== 'string') {
-            value = value != null ? value.toString() : null;
-          }
+            if (this.filterType === PoSearchFilterMode.startsWith) {
+              return value != null && value.startsWith(searchText);
+            } else if (this.filterType === PoSearchFilterMode.contains) {
+              return value != null && value.includes(searchText);
+            } else if (this.filterType === PoSearchFilterMode.endsWith) {
+              return value != null && value.endsWith(searchText);
+            }
 
-          value = value != null ? value.toLowerCase() : null;
-
-          if (this.filterType === PoSearchFilterMode.startsWith) {
-            return value != null && value.startsWith(searchText);
-          } else if (this.filterType === PoSearchFilterMode.contains) {
-            return value != null && value.includes(searchText);
-          } else if (this.filterType === PoSearchFilterMode.endsWith) {
-            return value != null && value.endsWith(searchText);
-          }
-
-          return false;
-        })
-      );
-      this.filteredItemsChange.emit(this.filteredItems);
-    } else {
-      this.filteredItems = [];
-      this.filteredItemsChange.emit(this.filteredItems);
+            return false;
+          })
+        );
+        this.filteredItemsChange.emit(this.filteredItems);
+      } else {
+        this.filteredItems = [];
+        this.filteredItemsChange.emit(this.filteredItems);
+      }
+      this.changeModel.emit(searchText);
     }
-    this.changeModel.emit(searchText);
   }
 }
