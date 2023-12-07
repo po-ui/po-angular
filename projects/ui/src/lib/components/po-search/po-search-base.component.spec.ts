@@ -17,12 +17,14 @@ describe('PoSearchBaseComponent', () => {
 
   describe('Properties:', () => {
     it('label: should set label when is setted', () => {
+      component['language'] = 'en';
       component.ariaLabel = 'Search';
 
       expect(component.ariaLabel).toBe('Search');
     });
 
     it('label: should concat label with literals', () => {
+      component['language'] = 'en';
       component.ariaLabel = 'label button';
       expect(component.ariaLabel).toBe('label button Search');
     });

@@ -7,6 +7,7 @@ import { PoSearchLiterals } from './literals/po-search-literals';
 import { poSearchLiteralsDefault } from './literals/po-search-literals-default';
 import { PoSearchFilterMode } from './enum/po-search-filter-mode.enum';
 
+export type searchMode = 'action' | 'trigger';
 /**
  * @description
  *
@@ -83,8 +84,6 @@ export class PoSearchBaseComponent {
   }
 
   /**
-   * @optional
-   *
    * @description
    *
    * Deve ser informado o nome da propriedade do objeto que será utilizado para a conversão dos itens apresentados na lista do componente (p-items), esta propriedade será responsável pelo texto de apresentação de cada item da lista.
@@ -99,6 +98,21 @@ export class PoSearchBaseComponent {
    * Deve ser informado o nome da propriedade do objeto que será utilizado para a conversão dos itens apresentados na lista do componente (p-items), esta propriedade será responsável pelo texto de apresentação de cada item da lista.
    */
   @Input('p-icon') icon: string | TemplateRef<void>;
+
+  /**
+   * @optional
+   *
+   * @description
+   *
+   * Determina a forma de realizar a pesquisa no componente
+   *
+   * Valores aceitos:
+   * - `action`: Realiza a busca a cada caractere digitado.
+   * - `trigger`: Realiza a busca ao pressionar `enter` ou clicar no ícone de busca.
+   *
+   * @default `action`
+   */
+  @Input('p-search-type') type: searchMode = 'action';
 
   /**
    * @optional
