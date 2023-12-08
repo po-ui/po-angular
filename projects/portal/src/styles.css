@@ -6,6 +6,9 @@
   --font-family-po-ui: Roboto;
   --font-family-po-ui-light: Roboto-Condensed-Light;
   --font-family-po-ui-bold: Roboto-Bold;
+
+  --custom-border-radius: 16px;
+  --custom-border-width: 8px;
 }
 
 body {

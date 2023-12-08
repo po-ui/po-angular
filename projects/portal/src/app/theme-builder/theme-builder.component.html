@@ -1,39 +1,10 @@
 <po-page-default id="myPortal" class="app-portal app-portal-home">
   <div class="home-colorful-content">
     <div class="larger-boxes">
-      <div class="larger-box color-1"></div>
-      <div class="larger-box color-2"></div>
-      <div class="larger-box color-3"></div>
-      <div class="larger-box color-4"></div>
-      <div class="larger-box color-5"></div>
-      <div class="larger-box color-6"></div>
-      <div class="larger-box color-7"></div>
-      <div class="larger-box color-8"></div>
-      <div class="larger-box color-9"></div>
-      <div class="larger-box color-10"></div>
-      <div class="larger-box color-11"></div>
-      <div class="larger-box color-12"></div>
-      <div class="larger-box color-13"></div>
-      <div class="larger-box color-14"></div>
-      <div class="larger-box color-15"></div>
-      <div class="larger-box color-16"></div>
+      <div *ngFor="let color of colorPaletteLarge" class="larger-box color-{{ color }}"></div>
     </div>
     <div class="smaller-boxes">
-      <div class="smaller-box color-16"></div>
-      <div class="smaller-box color-15"></div>
-      <div class="smaller-box color-14"></div>
-      <div class="smaller-box color-13"></div>
-      <div class="smaller-box color-12"></div>
-      <div class="smaller-box color-11"></div>
-      <div class="smaller-box color-10"></div>
-      <div class="smaller-box color-9"></div>
-      <div class="smaller-box color-8"></div>
-      <div class="smaller-box color-7"></div>
-      <div class="smaller-box color-6"></div>
-      <div class="smaller-box color-5"></div>
-      <div class="smaller-box color-4"></div>
-      <div class="smaller-box color-3"></div>
-      <div class="smaller-box color-2"></div>
+      <div *ngFor="let color of colorPaletteSmall" class="smaller-box color-{{ color }}"></div>
       <div class="smaller-box color-17"></div>
     </div>
     <div class="po-mb-5"></div>
@@ -44,7 +15,7 @@
         <div class="po-md-6 po-sm-12 po-pr-0 po-pl-0">
           <div class="container container-title">
             <div class="container-item">
-              <p class="constructor-title">Construtor de Temas</p>
+              <h1 class="constructor-title">Construtor de Temas</h1>
             </div>
           </div>
         </div>
@@ -97,56 +68,77 @@
           <div class="po-row po-pl-1 po-mb-2">
             <div class="container">
               <div class="container-item">
-                <label for="color" class="po-mr-2">Marca principal </label>
-                <input
-                  class="style-inputColor"
-                  type="color"
-                  id="colorbrandS"
-                  [formControl]="brandFormS.get('colorAction')"
-                />
-
-                <label for="color" class="po-mr-2 po-ml-1">Marca secundária </label>
                 <input
                   class="style-inputColor"
                   type="color"
                   id="colorbrandP"
-                  [formControl]="brandFormP.get('colorAction')"
+                  [formControl]="brandFormP.get('colorBrand')"
                 />
+                <label for="color" class="po-mr-2 po-ml-1">Principal </label>
 
-                <label for="color" class="po-mr-2 po-ml-1">Marca terciária </label>
+                <input
+                  class="style-inputColor"
+                  type="color"
+                  id="colorbrandS"
+                  [formControl]="brandFormS.get('colorBrand')"
+                />
+                <label for="color" class="po-mr-2 po-ml-1">Secundária </label>
+
                 <input
                   class="style-inputColor"
                   type="color"
                   id="colorbrandT"
-                  [formControl]="brandFormT.get('colorAction')"
+                  [formControl]="brandFormT.get('colorBrand')"
                 />
+                <label for="color" class="po-mr-2 po-ml-1">Terciária </label>
               </div>
             </div>
           </div>
         </ng-template>
-        <!-- <ng-template p-list-view-detail-template>
+        <ng-template p-list-view-detail-template>
           <div class="po-row po-mt-2">
-            <div class="container">
-              <div class="container-item po-pl-1">
-                <p><strong>Marca principal:</strong> Descrição da Marca</p>
-              </div>
+            <!-- <p><strong>Marca principal:</strong> Descrição da Marca</p> -->
+            <div class="color-variations po-lg-4">
+              <span
+                *ngFor="let color of colorPrimaryVariations"
+                class="color"
+                [ngStyle]="{ backgroundColor: color }"
+                [p-tooltip]="color"
+              ></span>
+            </div>
+
+            <!-- <p><strong>Marca secundária:</strong> Descrição da brand 2</p> -->
+            <div class="color-variations po-lg-4">
+              <span
+                *ngFor="let color of colorSecondaryVariations"
+                class="color"
+                [ngStyle]="{ backgroundColor: color }"
+                [p-tooltip]="color"
+              ></span>
+            </div>
+
+            <!-- <p><strong>Marca terciária:</strong> Descrição da brand 3</p> -->
+            <div class="color-variations po-lg-4">
+              <span
+                *ngFor="let color of colorTertiaryVariations"
+                class="color"
+                [ngStyle]="{ backgroundColor: color }"
+                [p-tooltip]="color"
+              ></span>
             </div>
           </div>
           <div class="po-row">
-            <div class="container">
-              <div class="container-item po-pl-1">
-                <p><strong>Marca secundária:</strong> Descrição da brand 2</p>
-              </div>
+            <div class="color-variations po-lg-4">
+              <span class="color" [ngStyle]="{ backgroundColor: 'var(--color-brand-01-lightest)' }"></span>
+              <span class="color" [ngStyle]="{ backgroundColor: 'var(--color-brand-01-lighter)' }"></span>
+              <span class="color" [ngStyle]="{ backgroundColor: 'var(--color-brand-01-light)' }"></span>
+              <span class="color" [ngStyle]="{ backgroundColor: 'var(--color-brand-01-base)' }"></span>
+              <span class="color" [ngStyle]="{ backgroundColor: 'var(--color-brand-01-dark)' }"></span>
+              <span class="color" [ngStyle]="{ backgroundColor: 'var(--color-brand-01-darker)' }"></span>
+              <span class="color" [ngStyle]="{ backgroundColor: 'var(--color-brand-01-darkest)' }"></span>
             </div>
           </div>
-          <div class="po-row">
-            <div class="container">
-              <div class="container-item po-pl-1">
-                <p><strong>Marca terciária:</strong> Descrição da brand 3</p>
-              </div>
-            </div>
-          </div>
-        </ng-template> -->
+        </ng-template>
       </po-list-view>
 
       <!-- <div *ngIf="verifyIfItemVisibility()" class="po-row po-mt-5">
@@ -154,6 +146,7 @@
           <po-menu-filter class="menu-filter"></po-menu-filter>
         </div>
       </div> -->
+
       <div class="po-row po-p-0 po-mt-2 po-mb-3">
         <po-widget [class.hide]="!botaoPrimaryView" class="widget-items po-sm-12 po-md-6 po-lg-4 po-xl-3 po-pl-0">
           <po-widget class="widget-menu">
@@ -161,18 +154,16 @@
               <div class="po-md-12 po-p-0 col-widget">
                 <section [class.hide]="kindButton !== 1">
                   <po-tag
-                    [p-color]="ratioButton > 7 ? '#c3ffc3b3' : '#ffd3d3'"
-                    [p-icon]="ratioButton > 7 ? 'po-icon-ok' : 'po-icon-close'"
-                    [p-text-color]="ratioButton > 7 ? 'green' : 'red'"
-                    p-value="AAA"
                     class="po-pr-1 po-pt-1 container-widget"
+                    p-icon="true"
+                    p-value="AAA"
+                    [p-type]="ratioButton > 7 ? 'success' : 'danger'"
                   ></po-tag>
                   <po-tag
-                    [p-color]="ratioButton > 4.5 ? '#c3ffc3b3' : '#ffd3d3'"
-                    [p-icon]="ratioButton > 4.5 ? 'po-icon-ok' : 'po-icon-close'"
-                    [p-text-color]="ratioButton > 4.5 ? 'green' : 'red'"
-                    p-value="AA"
                     class="po-pr-1 po-pt-1 container-widget"
+                    p-icon="true"
+                    p-value="AA"
+                    [p-type]="ratioButton > 4.5 ? 'success' : 'danger'"
                   >
                   </po-tag>
                 </section>
@@ -190,7 +181,7 @@
           <div class="po-row">
             <div class="po-md-12 description-widget">
               <p><strong>Botão</strong></p>
-              <po-tag class="po-pl-2" p-color="#efefef" p-text-color="#000" p-value="AnimaliaDS"> </po-tag>
+              <po-tag class="po-pl-2" p-type="neutral" p-value="AnimaliaDS"></po-tag>
             </div>
             <div class="po-md-12 po-pt-1 description-widget">
               <po-button
@@ -216,7 +207,7 @@
           <div class="po-row">
             <div class="po-md-12 description-widget">
               <p><strong>Switch</strong></p>
-              <po-tag class="po-pl-2" p-color="#efefef" p-text-color="#000" p-value="AnimaliaDS"> </po-tag>
+              <po-tag class="po-pl-2" p-type="neutral" p-value="AnimaliaDS"> </po-tag>
             </div>
             <div class="po-md-12 po-pt-1 description-widget">
               <po-button
@@ -259,7 +250,7 @@
           <div class="po-row">
             <div class="po-md-12 description-widget">
               <p><strong>Disclaimer</strong></p>
-              <po-tag class="po-pl-2" p-color="#efefef" p-text-color="#000" p-value="AnimaliaDS"> </po-tag>
+              <po-tag class="po-pl-2" p-type="neutral" p-value="AnimaliaDS"></po-tag>
             </div>
             <div class="po-md-12 po-pt-1 description-widget">
               <po-button
@@ -302,7 +293,7 @@
           <div class="po-row">
             <div class="po-md-12 description-widget">
               <p><strong>Input</strong></p>
-              <po-tag class="po-pl-2" p-color="#efefef" p-text-color="#000" p-value="AnimaliaDS"> </po-tag>
+              <po-tag class="po-pl-2" p-type="neutral" p-value="AnimaliaDS"></po-tag>
             </div>
             <div class="po-md-12 po-pt-1 description-widget">
               <po-button
@@ -355,7 +346,7 @@
           <div class="po-row">
             <div class="po-md-12 description-widget">
               <p><strong>Select</strong></p>
-              <po-tag class="po-pl-2" p-color="#efefef" p-text-color="#000" p-value="AnimaliaDS"> </po-tag>
+              <po-tag class="po-pl-2" p-type="neutral" p-value="AnimaliaDS"></po-tag>
             </div>
             <div class="po-md-12 po-pt-1 description-widget">
               <po-button
@@ -403,7 +394,7 @@
           <div class="po-row">
             <div class="po-md-12 description-widget">
               <p><strong>Textarea</strong></p>
-              <po-tag class="po-pl-2" p-color="#efefef" p-text-color="#000" p-value="AnimaliaDS"> </po-tag>
+              <po-tag class="po-pl-2" p-type="neutral" p-value="AnimaliaDS"></po-tag>
             </div>
             <div class="po-md-12 description-widget">
               <po-button
@@ -435,7 +426,7 @@
           <div class="po-row">
             <div class="po-md-12 description-widget">
               <p><strong>Dropdown</strong></p>
-              <po-tag class="po-pl-2" p-color="#efefef" p-text-color="#000" p-value="AnimaliaDS"> </po-tag>
+              <po-tag class="po-pl-2" p-type="neutral" p-value="AnimaliaDS"></po-tag>
             </div>
             <div class="po-md-12 po-pt-1 description-widget">
               <po-button
@@ -484,7 +475,7 @@
           <div class="po-row">
             <div class="po-md-12 description-widget">
               <p><strong>Datepicker</strong></p>
-              <po-tag class="po-pl-2" p-color="#efefef" p-text-color="#000" p-value="AnimaliaDS"> </po-tag>
+              <po-tag class="po-pl-2" p-type="neutral" p-value="AnimaliaDS"></po-tag>
             </div>
             <div class="po-md-12 po-pt-1 description-widget">
               <po-button
@@ -510,7 +501,7 @@
           <div class="po-row">
             <div class="po-md-12 description-widget">
               <p><strong>Link</strong></p>
-              <po-tag class="po-pl-2" p-color="#efefef" p-text-color="#000" p-value="AnimaliaDS"> </po-tag>
+              <po-tag class="po-pl-2" p-type="neutral" p-value="AnimaliaDS"></po-tag>
             </div>
             <div class="po-md-12 po-pt-1 description-widget">
               <po-button
@@ -559,7 +550,7 @@
           <div class="po-row">
             <div class="po-md-12 description-widget">
               <p><strong>Tooltip</strong></p>
-              <po-tag class="po-pl-2" p-color="#efefef" p-text-color="#000" p-value="AnimaliaDS"> </po-tag>
+              <po-tag class="po-pl-2" p-type="neutral" p-value="AnimaliaDS"></po-tag>
             </div>
             <div class="po-md-12 po-pt-1 description-widget">
               <po-button
@@ -591,7 +582,7 @@
           <div class="po-row">
             <div class="po-md-12 description-widget">
               <p><strong>Modal</strong></p>
-              <po-tag class="po-pl-2" p-color="#efefef" p-text-color="#000" p-value="AnimaliaDS"> </po-tag>
+              <po-tag class="po-pl-2" p-type="neutral" p-value="AnimaliaDS"></po-tag>
             </div>
             <div class="po-md-12 po-pt-1 description-widget">
               <po-button
@@ -637,7 +628,7 @@
           <div class="po-row">
             <div class="po-md-12 description-widget">
               <p><strong>Popup</strong></p>
-              <po-tag class="po-pl-2" p-color="#efefef" p-text-color="#000" p-value="AnimaliaDS"> </po-tag>
+              <po-tag class="po-pl-2" p-type="neutral" p-value="AnimaliaDS"></po-tag>
             </div>
             <div class="po-md-12 po-pt-1 description-widget">
               <po-button
@@ -670,7 +661,7 @@
           <div class="po-row">
             <div class="po-md-12 description-widget">
               <p><strong>Radio</strong></p>
-              <po-tag class="po-pl-2" p-color="#efefef" p-text-color="#000" p-value="AnimaliaDS"> </po-tag>
+              <po-tag class="po-pl-2" p-type="neutral" p-value="AnimaliaDS"></po-tag>
             </div>
             <div class="po-md-12 po-pt-1 description-widget">
               <po-button
@@ -697,7 +688,7 @@
           <div class="po-row">
             <div class="po-md-12 description-widget">
               <p><strong>Checkbox</strong></p>
-              <po-tag class="po-pl-2" p-color="#efefef" p-text-color="#000" p-value="AnimaliaDS"> </po-tag>
+              <po-tag class="po-pl-2" p-type="neutral" p-value="AnimaliaDS"></po-tag>
             </div>
             <div class="po-md-12 po-pt-1 description-widget">
               <po-button
@@ -749,7 +740,7 @@
           <div class="po-row">
             <div class="po-md-12 description-widget">
               <p><strong>Multiselect</strong></p>
-              <po-tag class="po-pl-2" p-color="#efefef" p-text-color="#000" p-value="AnimaliaDS"> </po-tag>
+              <po-tag class="po-pl-2" p-type="neutral" p-value="AnimaliaDS"></po-tag>
             </div>
             <div class="po-md-12 po-pt-1 description-widget">
               <po-button
@@ -801,7 +792,7 @@
           <div class="po-row">
             <div class="po-md-12 description-widget">
               <p><strong>Combo</strong></p>
-              <po-tag class="po-pl-2" p-color="#efefef" p-text-color="#000" p-value="AnimaliaDS"> </po-tag>
+              <po-tag class="po-pl-2" p-type="neutral" p-value="AnimaliaDS"></po-tag>
             </div>
             <div class="po-md-12 po-pt-1 description-widget">
               <po-button
@@ -848,7 +839,7 @@
           <div class="po-row">
             <div class="po-md-12 description-widget">
               <p><strong>Accordion</strong></p>
-              <po-tag class="po-pl-2" p-color="#efefef" p-text-color="#000" p-value="AnimaliaDS"> </po-tag>
+              <po-tag class="po-pl-2" p-type="neutral" p-value="AnimaliaDS"></po-tag>
             </div>
             <div class="po-md-12 po-pt-1 description-widget">
               <po-button
@@ -882,7 +873,7 @@
           <div class="po-row">
             <div class="po-md-12 description-widget">
               <p><strong>Breadcrumb</strong></p>
-              <po-tag class="po-pl-2" p-color="#efefef" p-text-color="#000" p-value="AnimaliaDS"> </po-tag>
+              <po-tag class="po-pl-2" p-type="neutral" p-value="AnimaliaDS"></po-tag>
             </div>
             <div class="po-md-12 po-pt-1 description-widget">
               <po-button
@@ -925,7 +916,7 @@
           <div class="po-row">
             <div class="po-md-12 description-widget">
               <p><strong>Tag</strong></p>
-              <po-tag class="po-pl-2" p-color="#efefef" p-text-color="#000" p-value="AnimaliaDS"> </po-tag>
+              <po-tag class="po-pl-2" p-type="neutral" p-value="AnimaliaDS"></po-tag>
             </div>
             <div class="po-md-12 po-pt-1 description-widget">
               <po-button

@@ -1,7 +1,7 @@
 import { Component, ElementRef, OnInit, Renderer2, ViewChild } from '@angular/core';
 import { PoLanguageService } from '../../services/po-language/po-language.service';
-import { PoSearchBaseComponent } from './po-search-base.component';
 import { PoSearchFilterMode } from './enum/po-search-filter-mode.enum';
+import { PoSearchBaseComponent } from './po-search-base.component';
 
 /**
  * @docsExtends PoSearchBaseComponent
@@ -50,13 +50,13 @@ export class PoSearchComponent extends PoSearchBaseComponent implements OnInit {
     this.poSearchInput.nativeElement.focus();
   }
 
-  onBlur(): void {
-    this.renderer.removeClass(this.poSearchInput.nativeElement.parentElement, 'po-search-focused');
-  }
+  // onBlur(): void {
+  //   this.renderer.removeClass(this.poSearchInput.nativeElement.parentElement, 'po-search-focused');
+  // }
 
-  onFocus(): void {
-    this.renderer.addClass(this.poSearchInput.nativeElement.parentElement, 'po-search-focused');
-  }
+  // onFocus(): void {
+  //   this.renderer.addClass(this.poSearchInput.nativeElement.parentElement, 'po-search-focused');
+  // }
 
   onSearchChange(searchText: string): void {
     searchText = searchText.toLowerCase();

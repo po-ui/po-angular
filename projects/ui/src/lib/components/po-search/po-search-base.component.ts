@@ -1,11 +1,13 @@
-import { PoLanguageService } from '../../services/po-language/po-language.service';
 import { poLocaleDefault } from '../../services/po-language/po-language.constant';
+import { PoLanguageService } from '../../services/po-language/po-language.service';
 
 import { Directive, EventEmitter, Input, Output, TemplateRef } from '@angular/core';
 import { convertToBoolean } from '../../utils/util';
+import { PoSearchFilterMode } from './enum/po-search-filter-mode.enum';
 import { PoSearchLiterals } from './literals/po-search-literals';
 import { poSearchLiteralsDefault } from './literals/po-search-literals-default';
-import { PoSearchFilterMode } from './enum/po-search-filter-mode.enum';
+
+export type PoSearchType = 'action' | 'trigger';
 
 /**
  * @description
@@ -37,8 +39,10 @@ import { PoSearchFilterMode } from './enum/po-search-filter-mode.enum';
  */
 @Directive()
 export class PoSearchBaseComponent {
-  private _literals?: PoSearchLiterals;
   private _ariaLabel?: string;
+  private _literals?: PoSearchLiterals;
+  private _type: PoSearchType = 'action';
+
   private language: string;
 
   /**
@@ -153,6 +157,14 @@ export class PoSearchBaseComponent {
    * @default `startsWith`
    */
   @Input('p-filter-type') filterType: PoSearchFilterMode = PoSearchFilterMode.startsWith;
+
+  @Input('p-type') set type(type: PoSearchType) {
+    this._type = type;
+  }
+
+  get type(): PoSearchType {
+    return this._type;
+  }
 
   /**
    * @optional

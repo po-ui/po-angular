@@ -1,12 +1,4 @@
-import {
-  AfterViewInit,
-  ChangeDetectorRef,
-  Component,
-  ElementRef,
-  OnInit,
-  ViewChild,
-  ViewEncapsulation
-} from '@angular/core';
+import { AfterViewInit, ChangeDetectorRef, Component, ElementRef, OnInit, ViewChild } from '@angular/core';
 import { FormBuilder, FormGroup } from '@angular/forms';
 
 import {
@@ -34,7 +26,7 @@ import {
   selector: 'app-theme-builder',
   templateUrl: './theme-builder.component.html',
   styleUrls: ['theme-builder.component.css'],
-  encapsulation: ViewEncapsulation.None
+  styles: [':host { }']
 })
 export class ThemeBuilderComponent implements AfterViewInit, OnInit {
   @ViewChild('viewCSSModal') viewCSSModal: PoModalComponent;
@@ -164,6 +156,17 @@ export class ThemeBuilderComponent implements AfterViewInit, OnInit {
   @ViewChild('resultBreadcrumb') resultBreadcrumb: HTMLElement;
   @ViewChild('resultTag') resultTag: HTMLElement;
   @ViewChild('resultTagsGlobal') resultTagsGlobal: HTMLElement;
+
+  colorPaletteLarge = [1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12, 13, 14, 15, 16];
+  colorPaletteSmall = [16, 15, 14, 13, 12, 11, 10, 9, 8, 7, 6, 5, 4, 3, 2];
+
+  // colorPrimaryVariations = this.generateColorVariations('#753399');
+  // colorSecondaryVariations = this.generateColorVariations('#b92f72');
+  // colorTertiaryVariations = this.generateColorVariations('#ffd464');
+
+  colorPrimaryVariations;
+  colorSecondaryVariations;
+  colorTertiaryVariations;
 
   botaoPrimaryView = true;
   switchView = true;
@@ -312,15 +315,16 @@ export class ThemeBuilderComponent implements AfterViewInit, OnInit {
   tagFormR: FormGroup;
 
   private readonly formPropertyP = {
-    colorAction: '--color-primary'
+    colorBrand: '--color-brand-01-base',
+    colorAction: '--color-action-default'
   };
 
   private readonly formPropertyS = {
-    colorAction: '--color-secondary'
+    colorBrand: '--color-brand-02-base'
   };
 
   private readonly formPropertyT = {
-    colorAction: '--color-brand-03-base'
+    colorBrand: '--color-brand-03-base'
   };
 
   // Variáveis customizaveis
@@ -571,19 +575,78 @@ export class ThemeBuilderComponent implements AfterViewInit, OnInit {
     }
   ];
 
-  constructor(private formBuilder: FormBuilder, private cdr: ChangeDetectorRef) {}
+  constructor(public el: ElementRef, private cdr: ChangeDetectorRef, private formBuilder: FormBuilder) {}
+
+  ngAfterViewInit(): void {
+    //foco no botão da tooltip para criar a div que possibilita a customização
+    this.tooltip.focus();
+    this.buttonConfig.nativeElement.focus();
+    this.brandFormP.valueChanges.subscribe(changes => this.checkChangesBrandP(changes));
+    this.brandFormS.valueChanges.subscribe(changes => this.checkChangesBrandS(changes));
+    this.brandFormT.valueChanges.subscribe(changes => this.checkChangesBrandT(changes));
+    this.buttonFormPrimary.valueChanges.subscribe(changes => this.checkChangesButtonP(changes));
+    this.buttonFormDefault.valueChanges.subscribe(changes => this.checkChangesButtonD(changes));
+    this.buttonFormLink.valueChanges.subscribe(changes => this.checkChangesButtonL(changes));
+
+    this.switchForm.valueChanges.subscribe(changes => this.checkChangesSwitch(changes));
+    this.radioForm.valueChanges.subscribe(changes => this.checkChangesRadio(changes));
+    this.disclaimerForm.valueChanges.subscribe(changes => this.checkChangesDisclaimer(changes));
+    this.inputForm.valueChanges.subscribe(changes => this.checkChangesInput(changes));
+    this.selectForm.valueChanges.subscribe(changes => this.checkChangesSelect(changes));
+    this.textareaForm.valueChanges.subscribe(changes => this.checkChangesTextarea(changes));
+    this.dropdownForm.valueChanges.subscribe(changes => this.checkChangesDropdown(changes));
+    this.datepickerForm.valueChanges.subscribe(changes => this.checkChangesDatepicker(changes));
+    this.datepickerButtonForm.valueChanges.subscribe(changes => this.checkChangesDatepickerButton(changes));
+    this.modalForm.valueChanges.subscribe(changes => this.checkChangesModal(changes));
+    this.linkForm.valueChanges.subscribe(changes => this.checkChangesLink(changes));
+    this.tooltipForm.valueChanges.subscribe(changes => this.checkChangesTooltip(changes));
+    this.popupForm.valueChanges.subscribe(changes => this.checkChangesPopup(changes));
+    this.popupContainerForm.valueChanges.subscribe(changes => this.checkChangesPopupContainer(changes));
+    this.checkboxForm.valueChanges.subscribe(changes => this.checkChangesCheckbox(changes));
+    this.multiselectForm.valueChanges.subscribe(changes => this.checkChangesMultiselect(changes));
+    this.comboForm.valueChanges.subscribe(changes => this.checkChangesCombo(changes));
+    this.accordionForm.valueChanges.subscribe(changes => this.checkChangesAccordion(changes));
+    this.breadcrumbForm.valueChanges.subscribe(changes => this.checkChangesBreadcrumb(changes));
+    this.tagFormI.valueChanges.subscribe(changes => {
+      this.resultTagI = '';
+      this.checkChangesTag(changes);
+    });
+    this.tagFormD.valueChanges.subscribe(changes => {
+      this.resultTagD = '';
+      this.checkChangesTag(changes);
+    });
+    this.tagFormS.valueChanges.subscribe(changes => {
+      this.resultTagS = '';
+      this.checkChangesTag(changes);
+    });
+    this.tagFormW.valueChanges.subscribe(changes => {
+      this.resultTagW = '';
+      this.checkChangesTag(changes);
+    });
+    this.tagFormN.valueChanges.subscribe(changes => {
+      this.resultTagN = '';
+      this.checkChangesTag(changes);
+    });
+    this.tagFormR.valueChanges.subscribe(changes => {
+      this.resultTagR = '';
+      this.checkChangesTag(changes);
+    });
+    this.tagsFormGlobal.valueChanges.subscribe(changes => this.checkChangesTagsGlobal(changes));
+
+    this.setRatioDefault();
+  }
 
   ngOnInit(): void {
     this.brandFormP = this.formBuilder.group({
-      colorAction: ['#c9357d'] as any
+      colorBrand: ['#753399'] as any
     });
 
     this.brandFormS = this.formBuilder.group({
-      colorAction: ['#753399'] as any
+      colorBrand: ['#b92f72'] as any
     });
 
     this.brandFormT = this.formBuilder.group({
-      colorAction: ['#ffd464'] as any
+      colorBrand: ['#ffd464'] as any
     });
 
     this.buttonFormPrimary = this.formBuilder.group({
@@ -819,6 +882,7 @@ export class ThemeBuilderComponent implements AfterViewInit, OnInit {
       fontSize: [null],
       lineHeight: [null]
     });
+
     this.tagForm = this.tagFormI;
   }
 
@@ -828,23 +892,25 @@ export class ThemeBuilderComponent implements AfterViewInit, OnInit {
 
   resetCss() {
     this.brandFormP.reset({
-      colorAction: ['#c9357d']
-    });
-    document.getElementById('myPortal').style.setProperty('--color-primary', null);
-
-    this.brandFormS.reset({
+      colorBrand: ['#753399'],
       colorAction: ['#753399']
     });
-    document.getElementById('myPortal').style.setProperty('--color-secondary', null);
+    document.getElementById('myPortal').style.setProperty('--color-brand-01-base', null);
+
+    this.brandFormS.reset({
+      colorBrand: ['#b92f72']
+    });
+    document.getElementById('myPortal').style.setProperty('--color-brand-02-base', null);
 
     this.brandFormT.reset({
-      colorAction: ['#ffd464']
+      colorBrand: ['#ffd464']
     });
     document.getElementById('myPortal').style.setProperty('--color-brand-03-base', null);
 
     this.buttonFormDefault.reset();
     Object.keys(this.formPropertyDictButtonD).forEach((fieldName: string) => {
       this.buttonD.buttonElement.nativeElement.style.setProperty(this.formPropertyDictButtonD[fieldName], null);
+
       if (this.itemSelected === 'button') {
         this.buttonDDefault.buttonElement.nativeElement.style.setProperty(
           this.formPropertyDictButtonD[fieldName],
@@ -1320,65 +1386,6 @@ export class ThemeBuilderComponent implements AfterViewInit, OnInit {
     return this.checkChanges();
   }
 
-  ngAfterViewInit(): void {
-    //foco no botão da tooltip para criar a div que possibilita a customização
-    this.tooltip.focus();
-    this.buttonConfig.nativeElement.focus();
-    this.brandFormP.valueChanges.subscribe(changes => this.checkChangesBrandP(changes));
-    this.brandFormS.valueChanges.subscribe(changes => this.checkChangesBrandS(changes));
-    this.brandFormT.valueChanges.subscribe(changes => this.checkChangesBrandT(changes));
-    this.buttonFormPrimary.valueChanges.subscribe(changes => this.checkChangesButtonP(changes));
-    this.buttonFormDefault.valueChanges.subscribe(changes => this.checkChangesButtonD(changes));
-    this.buttonFormLink.valueChanges.subscribe(changes => this.checkChangesButtonL(changes));
-
-    this.switchForm.valueChanges.subscribe(changes => this.checkChangesSwitch(changes));
-    this.radioForm.valueChanges.subscribe(changes => this.checkChangesRadio(changes));
-    this.disclaimerForm.valueChanges.subscribe(changes => this.checkChangesDisclaimer(changes));
-    this.inputForm.valueChanges.subscribe(changes => this.checkChangesInput(changes));
-    this.selectForm.valueChanges.subscribe(changes => this.checkChangesSelect(changes));
-    this.textareaForm.valueChanges.subscribe(changes => this.checkChangesTextarea(changes));
-    this.dropdownForm.valueChanges.subscribe(changes => this.checkChangesDropdown(changes));
-    this.datepickerForm.valueChanges.subscribe(changes => this.checkChangesDatepicker(changes));
-    this.datepickerButtonForm.valueChanges.subscribe(changes => this.checkChangesDatepickerButton(changes));
-    this.modalForm.valueChanges.subscribe(changes => this.checkChangesModal(changes));
-    this.linkForm.valueChanges.subscribe(changes => this.checkChangesLink(changes));
-    this.tooltipForm.valueChanges.subscribe(changes => this.checkChangesTooltip(changes));
-    this.popupForm.valueChanges.subscribe(changes => this.checkChangesPopup(changes));
-    this.popupContainerForm.valueChanges.subscribe(changes => this.checkChangesPopupContainer(changes));
-    this.checkboxForm.valueChanges.subscribe(changes => this.checkChangesCheckbox(changes));
-    this.multiselectForm.valueChanges.subscribe(changes => this.checkChangesMultiselect(changes));
-    this.comboForm.valueChanges.subscribe(changes => this.checkChangesCombo(changes));
-    this.accordionForm.valueChanges.subscribe(changes => this.checkChangesAccordion(changes));
-    this.breadcrumbForm.valueChanges.subscribe(changes => this.checkChangesBreadcrumb(changes));
-    this.tagFormI.valueChanges.subscribe(changes => {
-      this.resultTagI = '';
-      this.checkChangesTag(changes);
-    });
-    this.tagFormD.valueChanges.subscribe(changes => {
-      this.resultTagD = '';
-      this.checkChangesTag(changes);
-    });
-    this.tagFormS.valueChanges.subscribe(changes => {
-      this.resultTagS = '';
-      this.checkChangesTag(changes);
-    });
-    this.tagFormW.valueChanges.subscribe(changes => {
-      this.resultTagW = '';
-      this.checkChangesTag(changes);
-    });
-    this.tagFormN.valueChanges.subscribe(changes => {
-      this.resultTagN = '';
-      this.checkChangesTag(changes);
-    });
-    this.tagFormR.valueChanges.subscribe(changes => {
-      this.resultTagR = '';
-      this.checkChangesTag(changes);
-    });
-    this.tagsFormGlobal.valueChanges.subscribe(changes => this.checkChangesTagsGlobal(changes));
-
-    this.setRatioDefault();
-  }
-
   openPageSlide(itemLabel: string, item: string) {
     this.itemSelected = item;
     this.nameItem = `Personalizar ${itemLabel}`;
@@ -1521,6 +1528,30 @@ export class ThemeBuilderComponent implements AfterViewInit, OnInit {
     );
   }
 
+  verifyIfAllIsVisibility() {
+    return (
+      this.botaoPrimaryView &&
+      this.switchView &&
+      this.radioView &&
+      this.disclaimerView &&
+      this.inputView &&
+      this.selectView &&
+      this.textareaView &&
+      this.dropdownView &&
+      this.datepickerView &&
+      this.modalView &&
+      this.linkView &&
+      this.tooltipView &&
+      this.popupView &&
+      this.checkboxView &&
+      this.multiselectView &&
+      this.comboView &&
+      this.accordionView &&
+      this.breadcrumbView &&
+      this.tagView
+    );
+  }
+
   private calculateRatio(colorBack: any, colorText: any) {
     const color1rgb = this.calculatehexToRgb(colorBack);
     const color2rgb = this.calculatehexToRgb(colorText);
@@ -1565,16 +1596,20 @@ export class ThemeBuilderComponent implements AfterViewInit, OnInit {
 
       if (changes[fieldName]) {
         document.getElementById('myPortal').style.setProperty(this.formPropertyP[fieldName], value);
-      }
-    });
-  }
-
-  private checkChangesBrandT(changes: any): void {
-    Object.keys(changes).forEach((fieldName: string) => {
-      const value = /color/i.test(fieldName) ? changes[fieldName] : `var(--${changes[fieldName]})`;
-
-      if (changes[fieldName]) {
-        document.getElementById('myPortal').style.setProperty(this.formPropertyT[fieldName], value);
+        const colorBack = getComputedStyle(document.querySelector('po-page-default')).getPropertyValue(
+          '--color-brand-01-base'
+        );
+        if (!this.changedColorButton) {
+          this.ratioButton = this.setRatioComponent(this.changedColorButton, colorBack, '#ffffff');
+        }
+        if (!this.changedColorPopup) {
+          this.ratioPopup = this.setRatioComponent(this.changedColorPopup, colorBack, '#ffffff');
+        }
+        if (!this.changedColorAccordion) {
+          this.ratioAccordion = this.setRatioComponent(this.changedColorAccordion, '#ffffff', colorBack);
+        }
+        this.generateColorVariations(colorBack);
+        this.colorPrimaryVariations = this.generateColorVariations(colorBack);
       }
     });
   }
@@ -1586,17 +1621,26 @@ export class ThemeBuilderComponent implements AfterViewInit, OnInit {
       if (changes[fieldName]) {
         document.getElementById('myPortal').style.setProperty(this.formPropertyS[fieldName], value);
         const colorBack = getComputedStyle(document.querySelector('po-page-default')).getPropertyValue(
-          '--color-secondary'
+          '--color-brand-02-base'
         );
-        if (!this.changedColorButton) {
-          this.ratioButton = this.setRatioComponent(this.changedColorButton, colorBack, '#ffffff');
-        }
-        if (!this.changedColorPopup) {
-          this.ratioPopup = this.setRatioComponent(this.changedColorPopup, colorBack, '#ffffff');
-        }
-        if (!this.changedColorAccordion) {
-          this.ratioAccordion = this.setRatioComponent(this.changedColorAccordion, '#ffffff', colorBack);
-        }
+        this.generateColorVariations(colorBack);
+        this.colorSecondaryVariations = this.generateColorVariations(colorBack);
+      }
+    });
+  }
+
+  private checkChangesBrandT(changes: any): void {
+    Object.keys(changes).forEach((fieldName: string) => {
+      const value = /color/i.test(fieldName) ? changes[fieldName] : `var(--${changes[fieldName]})`;
+
+      if (changes[fieldName]) {
+        document.getElementById('myPortal').style.setProperty(this.formPropertyT[fieldName], value);
+        const colorBack = getComputedStyle(document.querySelector('po-page-default')).getPropertyValue(
+          '--color-brand-03-base'
+        );
+
+        this.generateColorVariations(colorBack);
+        this.colorTertiaryVariations = this.generateColorVariations(colorBack);
       }
     });
   }
@@ -2647,31 +2691,40 @@ export class ThemeBuilderComponent implements AfterViewInit, OnInit {
     );
   }
 
-  verifyIfAllIsVisibility() {
-    return (
-      this.botaoPrimaryView &&
-      this.switchView &&
-      this.radioView &&
-      this.disclaimerView &&
-      this.inputView &&
-      this.selectView &&
-      this.textareaView &&
-      this.dropdownView &&
-      this.datepickerView &&
-      this.modalView &&
-      this.linkView &&
-      this.tooltipView &&
-      this.popupView &&
-      this.checkboxView &&
-      this.multiselectView &&
-      this.comboView &&
-      this.accordionView &&
-      this.breadcrumbView &&
-      this.tagView
-    );
-  }
-
   private isEmpty(objectVerify) {
     return Object.values(objectVerify).every(x => x === null || x === '');
+  }
+
+  private generateColorVariations(baseColor: string): Array<string> {
+    // Validate the baseColor parameter (optional)
+    if (!/^#([0-9A-Fa-f]{3}){1,2}$/.test(baseColor)) {
+      throw new Error('Invalid color format. Please provide a valid hexadecimal color code.');
+    }
+
+    const lightest = this.adjustColor(baseColor, 0.1, true);
+    const lighter = this.adjustColor(baseColor, 0.3, true);
+    const light = this.adjustColor(baseColor, 0.5, true);
+    const base = this.adjustColor(baseColor, 1, false);
+    const dark = this.adjustColor(baseColor, 9, false);
+    const darker = this.adjustColor(baseColor, 1.45, false);
+    const darkest = this.adjustColor(baseColor, 1.1, false);
+
+    return [lightest, lighter, light, base, dark, darker, darkest];
+  }
+
+  private adjustColor(color: string, factor: number, luminance: boolean): string {
+    const hex = parseInt(color.slice(1), 16);
+    // eslint-disable-next-line no-bitwise
+    const r = luminance ? (hex >> 16) & 0xff : Math.min(255, Math.round((hex >> 16) * factor));
+    // eslint-disable-next-line no-bitwise
+    const g = luminance ? (hex >> 8) & 0xff : Math.min(255, Math.round(((hex >> 8) & 0xff) * factor));
+    // eslint-disable-next-line no-bitwise
+    const b = luminance ? hex & 0xff : Math.min(255, Math.round((hex & 0xff) * factor));
+    // eslint-disable-next-line no-bitwise
+    // const a = (hex & 0xFF) / 255;
+
+    // eslint-disable-next-line no-bitwise
+    return luminance ? `rgba(${r}, ${g}, ${b}, ${factor})` : `rgb(${r}, ${g}, ${b})`;
+    // return alpha !== undefined ? `rgba(${r}, ${g}, ${b}, ${alpha.toFixed(2)})` : `#${((r << 16 | g << 8 | b).toString(16).padStart(6, '0'))}`;
   }
 }
