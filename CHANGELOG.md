@@ -2,6 +2,22 @@
 
 All notable changes to this project will be documented in this file. See [standard-version](https://github.com/conventional-changelog/standard-version) for commit guidelines.
 
+# [16.9.0](https://github.com/po-ui/po-angular/compare/v16.8.0...v16.9.0) (2023-12-11)
+
+
+### Bug Fixes
+
+* **listbox:** ajusta redimensionamento do loading ([9d78856](https://github.com/po-ui/po-angular/commit/9d7885677c2ef5a4b612808b73f5bd8b9ed7953a))
+* **table:** ajusta redimensionamento do loading ([482cc97](https://github.com/po-ui/po-angular/commit/482cc97cee44ed33adb25dcda2bd184283c1ec6f))
+
+
+### Features
+
+* **loading-overlay:** inclui controle de tamanho ([0f72ba9](https://github.com/po-ui/po-angular/commit/0f72ba9b7612cc39aff1a99278f30468303d0071))
+* **loading:** torna o p-size dinâmico ([8365698](https://github.com/po-ui/po-angular/commit/8365698f21ec553046dda6af815acb5941eaa97e))
+
+
+
 # [16.8.0](https://github.com/po-ui/po-angular/compare/v16.7.0...v16.8.0) (2023-12-05)
 
 
