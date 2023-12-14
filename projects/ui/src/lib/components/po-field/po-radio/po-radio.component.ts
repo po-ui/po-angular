@@ -66,7 +66,10 @@ export class PoRadioComponent extends PoFieldModel<boolean> {
   /** Emite evento para a tabela ao selecionar ou desselecionar */
   @Output('p-change-selected') changeSelected: EventEmitter<any> = new EventEmitter<any>();
 
-  constructor(private changeDetector: ChangeDetectorRef, private renderer: Renderer2) {
+  constructor(
+    private changeDetector: ChangeDetectorRef,
+    private renderer: Renderer2
+  ) {
     super();
   }
 

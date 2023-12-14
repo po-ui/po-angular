@@ -2,7 +2,7 @@
   <div class="po-row">
     <po-accordion class="po-md-12 po-mt-1 po-mb-1" *ngIf="details.length > 1; else elseBlock">
       <po-accordion-item *ngFor="let detail of details" [p-label]="formatDetailItemTitle(detail)">
-        <ng-template [ngTemplateOutlet]="body" [ngTemplateOutletContext]="{detail}"></ng-template>
+        <ng-template [ngTemplateOutlet]="body" [ngTemplateOutletContext]="{ detail }"></ng-template>
       </po-accordion-item>
     </po-accordion>
   </div>

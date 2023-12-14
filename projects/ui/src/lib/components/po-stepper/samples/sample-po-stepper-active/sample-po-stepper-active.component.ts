@@ -27,7 +27,10 @@ export class SamplePoStepperActiveComponent implements OnInit, AfterViewInit, On
   private citiesSubscription: Subscription;
   private statesSubscription: Subscription;
 
-  constructor(public sampleService: SamplePoStepperActiveService, private changeDetector: ChangeDetectorRef) {}
+  constructor(
+    public sampleService: SamplePoStepperActiveService,
+    private changeDetector: ChangeDetectorRef
+  ) {}
 
   ngAfterViewInit(): void {
     setTimeout(() => this.activeStep());

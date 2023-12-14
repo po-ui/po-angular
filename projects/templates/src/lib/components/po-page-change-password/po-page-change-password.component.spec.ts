@@ -21,15 +21,13 @@ describe('PoPageChangePasswordComponent:', () => {
   let nativeElement: any;
   const fakeSubscription = <any>{ unsubscribe: () => {} };
 
-  beforeEach(
-    waitForAsync(() => {
-      TestBed.configureTestingModule({
-        imports: [FormsModule, RouterTestingModule.withRoutes([]), PoModule, PoPageBackgroundModule],
-        declarations: [PoPageChangePasswordComponent],
-        providers: [HttpClient, HttpHandler, PoPageChangePasswordService]
-      }).compileComponents();
-    })
-  );
+  beforeEach(waitForAsync(() => {
+    TestBed.configureTestingModule({
+      imports: [FormsModule, RouterTestingModule.withRoutes([]), PoModule, PoPageBackgroundModule],
+      declarations: [PoPageChangePasswordComponent],
+      providers: [HttpClient, HttpHandler, PoPageChangePasswordService]
+    }).compileComponents();
+  }));
 
   beforeEach(() => {
     fixture = TestBed.createComponent(PoPageChangePasswordComponent);

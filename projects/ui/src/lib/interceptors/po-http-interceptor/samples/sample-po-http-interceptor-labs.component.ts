@@ -80,8 +80,8 @@ export class SamplePoHttpInterceptorLabsComponent implements OnDestroy, OnInit {
     return this.headerParam === 'No-Message'
       ? { 'X-PO-No-Message': 'true' }
       : this.headerParam === 'No-Error'
-      ? { 'X-PO-No-Error': 'true' }
-      : {};
+        ? { 'X-PO-No-Error': 'true' }
+        : {};
   }
 
   processRequest() {

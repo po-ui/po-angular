@@ -39,7 +39,10 @@ export class SamplePoToolbarLoggedComponent {
 
   title: string = 'PO Toolbar Logged';
 
-  constructor(private poDialog: PoDialogService, private poNotification: PoNotificationService) {}
+  constructor(
+    private poDialog: PoDialogService,
+    private poNotification: PoNotificationService
+  ) {}
 
   getNotificationNumber() {
     return this.notificationActions.filter(not => not.type === 'danger').length;

@@ -112,9 +112,8 @@ describe('PoPageDynamicService:', () => {
 
         poPageDynamicService.configServiceApi({ endpoint: '/test' });
 
-        const { errorRenderPage, notPossibleLoadMetadataPage } = poPageDynamicLiterals[
-          poPageDynamicService['language']
-        ];
+        const { errorRenderPage, notPossibleLoadMetadataPage } =
+          poPageDynamicLiterals[poPageDynamicService['language']];
 
         const spyNotificationWarning = spyOn(poPageDynamicService['notification'], 'warning');
 

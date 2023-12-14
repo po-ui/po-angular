@@ -70,7 +70,10 @@ export class PoRichTextComponent extends PoRichTextBaseComponent implements Afte
     return this.errorMessage !== '' && !this.value && this.required && this.invalid ? this.errorMessage : '';
   }
 
-  constructor(private element: ElementRef, richTextService: PoRichTextService) {
+  constructor(
+    private element: ElementRef,
+    richTextService: PoRichTextService
+  ) {
     super(richTextService);
   }
 

@@ -65,7 +65,10 @@ export class PoTabsComponent extends PoTabsBaseComponent {
 
   private previousActiveTab: PoTabComponent;
 
-  constructor(private changeDetector: ChangeDetectorRef, private languageService: PoLanguageService) {
+  constructor(
+    private changeDetector: ChangeDetectorRef,
+    private languageService: PoLanguageService
+  ) {
     super();
     const language = languageService.getShortLanguage();
 

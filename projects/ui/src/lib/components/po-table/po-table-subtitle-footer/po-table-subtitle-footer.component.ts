@@ -27,7 +27,10 @@ export class PoTableSubtitleFooterComponent implements AfterViewInit, DoCheck, O
   private isVisible: boolean;
   private timeoutResize;
 
-  constructor(private element: ElementRef, public renderer: Renderer2) {}
+  constructor(
+    private element: ElementRef,
+    public renderer: Renderer2
+  ) {}
 
   ngAfterViewInit() {
     this.initializeResizeListener();

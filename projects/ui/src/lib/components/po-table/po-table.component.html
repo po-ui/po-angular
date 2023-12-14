@@ -332,7 +332,7 @@
               </span>
 
               <span *ngSwitchCase="'currency'">
-                {{ getCellData(row, column) | currency: column.format:'symbol':'1.2-2' }}
+                {{ getCellData(row, column) | currency: column.format : 'symbol' : '1.2-2' }}
               </span>
 
               <span *ngSwitchCase="'date'">
@@ -685,7 +685,7 @@
                 </span>
 
                 <span *ngSwitchCase="'currency'">
-                  {{ getCellData(row, column) | currency: column.format:'symbol':'1.2-2' }}
+                  {{ getCellData(row, column) | currency: column.format : 'symbol' : '1.2-2' }}
                 </span>
 
                 <span *ngSwitchCase="'date'">

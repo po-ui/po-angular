@@ -138,21 +138,18 @@ describe('PoButtonGroupComponent:', () => {
       expect(poTooltip).toBeTruthy();
     }));
 
-    it(
-      `shouldn't contain 'tooltip' in button if button is 'disabled' and contains 'tooltip' property.`,
-      waitForAsync(() => {
-        const buttons = containerButtons.querySelectorAll('.po-button-group');
-        const buttonDisabled = buttons[1];
+    it(`shouldn't contain 'tooltip' in button if button is 'disabled' and contains 'tooltip' property.`, waitForAsync(() => {
+      const buttons = containerButtons.querySelectorAll('.po-button-group');
+      const buttonDisabled = buttons[1];
 
-        mouseEnter(buttonDisabled);
+      mouseEnter(buttonDisabled);
 
-        fixture.detectChanges();
-        fixture.whenStable().then(() => {
-          const poTooltip = containerButtons.querySelector('.po-tooltip');
+      fixture.detectChanges();
+      fixture.whenStable().then(() => {
+        const poTooltip = containerButtons.querySelector('.po-tooltip');
 
-          expect(poTooltip).toBeNull();
-        });
-      })
-    );
+        expect(poTooltip).toBeNull();
+      });
+    }));
   });
 });

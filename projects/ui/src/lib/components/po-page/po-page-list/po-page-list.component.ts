@@ -49,7 +49,8 @@ import { PoPageListBaseComponent } from './po-page-list-base.component';
 })
 export class PoPageListComponent
   extends PoPageListBaseComponent
-  implements AfterContentInit, OnChanges, OnDestroy, OnInit {
+  implements AfterContentInit, OnChanges, OnDestroy, OnInit
+{
   @ViewChild('filterInput') filterInput: ElementRef;
 
   advancedSearch: string;

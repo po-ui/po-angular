@@ -25,14 +25,12 @@ describe('PoPageLoginBaseComponent: ', () => {
   let servicePageLogin: PoPageLoginService;
   let languageService: PoLanguageService;
 
-  beforeEach(
-    waitForAsync(() => {
-      TestBed.configureTestingModule({
-        declarations: [],
-        providers: [PoPageLoginService, PoLanguageService]
-      }).compileComponents();
-    })
-  );
+  beforeEach(waitForAsync(() => {
+    TestBed.configureTestingModule({
+      declarations: [],
+      providers: [PoPageLoginService, PoLanguageService]
+    }).compileComponents();
+  }));
 
   const booleanValidTrueValues = [true, 'true', 1, ''];
   const booleanValidFalseValues = [false, 'false', 0];

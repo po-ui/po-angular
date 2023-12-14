@@ -36,7 +36,10 @@ export class SamplePoDatepickerAirfareComponent {
     { value: 'First', label: 'First' }
   ];
 
-  constructor(private poDialog: PoDialogService, private poNotification: PoNotificationService) {}
+  constructor(
+    private poDialog: PoDialogService,
+    private poNotification: PoNotificationService
+  ) {}
 
   apply() {
     const message = `Would you like to confirm the ticket from ${this.origin} to ${

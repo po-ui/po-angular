@@ -18,7 +18,10 @@ export class PoNavbarActionComponent {
 
   @Input('p-tooltip-text') tooltip?: string;
 
-  constructor(viewContainerRef: ViewContainerRef, private router: Router) {}
+  constructor(
+    viewContainerRef: ViewContainerRef,
+    private router: Router
+  ) {}
 
   click() {
     if (this.action) {

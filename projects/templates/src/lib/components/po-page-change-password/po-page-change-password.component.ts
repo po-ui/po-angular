@@ -59,7 +59,8 @@ import { PoPageChangePasswordService } from './po-page-change-password.service';
 })
 export class PoPageChangePasswordComponent
   extends PoPageChangePasswordBaseComponent
-  implements AfterViewInit, OnDestroy, OnInit {
+  implements AfterViewInit, OnDestroy, OnInit
+{
   @ViewChild(PoModalComponent, { static: true }) modal: PoModalComponent;
   @ViewChild('pageChangePassword', { read: ViewContainerRef, static: true }) pageChangePassword: ViewContainerRef;
   @ViewChild('passwordForm', { read: NgForm, static: true }) passwordForm: NgForm;

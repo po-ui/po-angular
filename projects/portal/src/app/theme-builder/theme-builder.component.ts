@@ -571,7 +571,10 @@ export class ThemeBuilderComponent implements AfterViewInit, OnInit {
     }
   ];
 
-  constructor(private formBuilder: FormBuilder, private cdr: ChangeDetectorRef) {}
+  constructor(
+    private formBuilder: FormBuilder,
+    private cdr: ChangeDetectorRef
+  ) {}
 
   ngOnInit(): void {
     this.brandFormP = this.formBuilder.group({
@@ -1834,9 +1837,8 @@ export class ThemeBuilderComponent implements AfterViewInit, OnInit {
             value
           );
 
-          this.resultDisclaimer[
-            'nativeElement'
-          ].innerHTML += `${this.formPropertyDictDisclaimer[fieldName]}: ${value};<br>`;
+          this.resultDisclaimer['nativeElement'].innerHTML +=
+            `${this.formPropertyDictDisclaimer[fieldName]}: ${value};<br>`;
 
           this.ratio = this.ratioDisclaimer = this.checkChangesContrast(changes, fieldName, this.ratioDisclaimer);
         }
@@ -1947,9 +1949,8 @@ export class ThemeBuilderComponent implements AfterViewInit, OnInit {
             value
           );
 
-          this.resultTextarea[
-            'nativeElement'
-          ].innerHTML += `${this.formPropertyDictTextarea[fieldName]}: ${value};<br>`;
+          this.resultTextarea['nativeElement'].innerHTML +=
+            `${this.formPropertyDictTextarea[fieldName]}: ${value};<br>`;
 
           this.ratio = this.ratioTextarea = this.checkChangesContrast(
             changes,
@@ -1999,9 +2000,8 @@ export class ThemeBuilderComponent implements AfterViewInit, OnInit {
             value
           );
 
-          this.resultDropdown[
-            'nativeElement'
-          ].innerHTML += `${this.formPropertyDictDropdown[fieldName]}: ${value};<br>`;
+          this.resultDropdown['nativeElement'].innerHTML +=
+            `${this.formPropertyDictDropdown[fieldName]}: ${value};<br>`;
         }
       });
 
@@ -2040,9 +2040,8 @@ export class ThemeBuilderComponent implements AfterViewInit, OnInit {
             value
           );
 
-          this.resultDatepicker[
-            'nativeElement'
-          ].innerHTML += `${this.formPropertyDictDatepicker[fieldName]}: ${value};<br>`;
+          this.resultDatepicker['nativeElement'].innerHTML +=
+            `${this.formPropertyDictDatepicker[fieldName]}: ${value};<br>`;
           this.ratio = this.ratioDatepicker = this.checkChangesContrast(
             changes,
             fieldName,
@@ -2087,9 +2086,8 @@ export class ThemeBuilderComponent implements AfterViewInit, OnInit {
             value
           );
 
-          this.resultDatepickerButton[
-            'nativeElement'
-          ].innerHTML += `${this.formPropertyDictDatepickerButton[fieldName]}: ${value};<br>`;
+          this.resultDatepickerButton['nativeElement'].innerHTML +=
+            `${this.formPropertyDictDatepickerButton[fieldName]}: ${value};<br>`;
         }
       });
 
@@ -2179,9 +2177,8 @@ export class ThemeBuilderComponent implements AfterViewInit, OnInit {
             );
             tooltipDefault.style.setProperty(this.formPropertyDictTooltip[fieldName], value);
 
-            this.resultTooltip[
-              'nativeElement'
-            ].innerHTML += `${this.formPropertyDictTooltip[fieldName]}: ${value};<br>`;
+            this.resultTooltip['nativeElement'].innerHTML +=
+              `${this.formPropertyDictTooltip[fieldName]}: ${value};<br>`;
             this.ratio = this.ratioTooltip = this.checkChangesContrast(changes, fieldName, this.ratioTooltip);
           }
         });
@@ -2289,9 +2286,8 @@ export class ThemeBuilderComponent implements AfterViewInit, OnInit {
             value
           );
 
-          this.resultPopupContainer[
-            'nativeElement'
-          ].innerHTML += `${this.formPropertyDictPopupContainer[fieldName]}: ${value};<br>`;
+          this.resultPopupContainer['nativeElement'].innerHTML +=
+            `${this.formPropertyDictPopupContainer[fieldName]}: ${value};<br>`;
           this.ratio = this.ratioPopup = this.checkChangesContrast(
             changes,
             fieldName,
@@ -2340,9 +2336,8 @@ export class ThemeBuilderComponent implements AfterViewInit, OnInit {
             value
           );
 
-          this.resultMultiselect[
-            'nativeElement'
-          ].innerHTML += `${this.formPropertyDictMultiselect[fieldName]}: ${value};<br>`;
+          this.resultMultiselect['nativeElement'].innerHTML +=
+            `${this.formPropertyDictMultiselect[fieldName]}: ${value};<br>`;
           this.ratio = this.ratioMultiselect = this.checkChangesContrast(
             changes,
             fieldName,
@@ -2423,9 +2418,8 @@ export class ThemeBuilderComponent implements AfterViewInit, OnInit {
             .toArray()[0]
             .accordionElement.nativeElement.style.setProperty(this.formPropertyDictAccordion[fieldName], value);
 
-          this.resultAccordion[
-            'nativeElement'
-          ].innerHTML += `${this.formPropertyDictAccordion[fieldName]}: ${value};<br>`;
+          this.resultAccordion['nativeElement'].innerHTML +=
+            `${this.formPropertyDictAccordion[fieldName]}: ${value};<br>`;
           this.ratio = this.ratioAccordion = this.checkChangesContrast(
             changes,
             fieldName,
@@ -2462,9 +2456,8 @@ export class ThemeBuilderComponent implements AfterViewInit, OnInit {
           );
           this.breadcrumbDefault.nativeElement.style.setProperty(this.formPropertyDictBreadcrumb[fieldName], value);
 
-          this.resultBreadcrumb[
-            'nativeElement'
-          ].innerHTML += `${this.formPropertyDictBreadcrumb[fieldName]}: ${value};<br>`;
+          this.resultBreadcrumb['nativeElement'].innerHTML +=
+            `${this.formPropertyDictBreadcrumb[fieldName]}: ${value};<br>`;
         }
       });
 
@@ -2544,9 +2537,8 @@ export class ThemeBuilderComponent implements AfterViewInit, OnInit {
           this.tagHover.nativeElement.style.setProperty(this.formPropertyDictTagsGlobal[fieldName], value);
           this.tagDisabled.nativeElement.style.setProperty(this.formPropertyDictTagsGlobal[fieldName], value);
 
-          this.resultTagsGlobal[
-            'nativeElement'
-          ].innerHTML += `${this.formPropertyDictTagsGlobal[fieldName]}: ${value};<br>`;
+          this.resultTagsGlobal['nativeElement'].innerHTML +=
+            `${this.formPropertyDictTagsGlobal[fieldName]}: ${value};<br>`;
         }
       });
 
@@ -2606,11 +2598,13 @@ export class ThemeBuilderComponent implements AfterViewInit, OnInit {
   private setRatioDefault() {
     this.ratioButton = this.setRatioComponent(false, '#2c3739', '#ffffff');
     this.ratioDisclaimer = this.setRatioComponent(false, '#f2eaf6', '#2c3739');
-    this.ratioDatepicker = this.ratioTextarea = this.ratioInput = this.ratioSelect = this.ratioMultiselect = this.ratioCombo = this.setRatioComponent(
-      false,
-      '#fbfbfb',
-      '#1d2426'
-    );
+    this.ratioDatepicker =
+      this.ratioTextarea =
+      this.ratioInput =
+      this.ratioSelect =
+      this.ratioMultiselect =
+      this.ratioCombo =
+        this.setRatioComponent(false, '#fbfbfb', '#1d2426');
     this.ratioTooltip = this.setRatioComponent(false, '#2c3739', '#ffffff');
     this.ratioPopup = this.setRatioComponent(false, '#ffffff', '#753399');
     this.ratioAccordion = this.setRatioComponent(false, '#753399', '#ffffff');

@@ -36,14 +36,12 @@ describe('PoResizeObserverDirective', () => {
 
   let event;
 
-  beforeEach(
-    waitForAsync(() => {
-      TestBed.configureTestingModule({
-        imports: [PoChartModule],
-        declarations: [PoResizeObserverDirective, TestComponent]
-      });
-    })
-  );
+  beforeEach(waitForAsync(() => {
+    TestBed.configureTestingModule({
+      imports: [PoChartModule],
+      declarations: [PoResizeObserverDirective, TestComponent]
+    });
+  }));
 
   beforeEach(() => {
     fixture = TestBed.createComponent(TestComponent);

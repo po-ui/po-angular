@@ -23,21 +23,13 @@ describe('PoModalPasswordRecoveryComponent:', () => {
   let debugElement;
   const fakeSubscription = <any>{ unsubscribe: () => {} };
 
-  beforeEach(
-    waitForAsync(() => {
-      TestBed.configureTestingModule({
-        imports: [
-          FormsModule,
-          RouterTestingModule.withRoutes([]),
-          PoFieldModule,
-          PoModalModule,
-          HttpClientTestingModule
-        ],
-        declarations: [PoModalPasswordRecoveryErrorMessageComponent, PoModalPasswordRecoveryComponent],
-        providers: [PoI18nPipe, PoModalPasswordRecoveryService]
-      }).compileComponents();
-    })
-  );
+  beforeEach(waitForAsync(() => {
+    TestBed.configureTestingModule({
+      imports: [FormsModule, RouterTestingModule.withRoutes([]), PoFieldModule, PoModalModule, HttpClientTestingModule],
+      declarations: [PoModalPasswordRecoveryErrorMessageComponent, PoModalPasswordRecoveryComponent],
+      providers: [PoI18nPipe, PoModalPasswordRecoveryService]
+    }).compileComponents();
+  }));
 
   beforeEach(() => {
     fixture = TestBed.createComponent(PoModalPasswordRecoveryComponent);

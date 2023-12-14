@@ -11,20 +11,18 @@ describe('PoPageBlockedUserContactsComponent: ', () => {
   let fixture: ComponentFixture<PoPageBlockedUserContactsComponent>;
   let debugElement;
 
-  beforeEach(
-    waitForAsync(() => {
-      TestBed.configureTestingModule({
-        imports: [FormsModule, RouterTestingModule.withRoutes([])],
-        declarations: [PoPageBlockedUserContactsComponent],
-        providers: [HttpClient, HttpHandler],
-        schemas: [NO_ERRORS_SCHEMA]
-      }).compileComponents();
+  beforeEach(waitForAsync(() => {
+    TestBed.configureTestingModule({
+      imports: [FormsModule, RouterTestingModule.withRoutes([])],
+      declarations: [PoPageBlockedUserContactsComponent],
+      providers: [HttpClient, HttpHandler],
+      schemas: [NO_ERRORS_SCHEMA]
+    }).compileComponents();
 
-      TestBed.overrideComponent(PoPageBlockedUserContactsComponent, {
-        set: { changeDetection: ChangeDetectionStrategy.Default }
-      }).createComponent(PoPageBlockedUserContactsComponent);
-    })
-  );
+    TestBed.overrideComponent(PoPageBlockedUserContactsComponent, {
+      set: { changeDetection: ChangeDetectionStrategy.Default }
+    }).createComponent(PoPageBlockedUserContactsComponent);
+  }));
 
   beforeEach(() => {
     fixture = TestBed.createComponent(PoPageBlockedUserContactsComponent);
