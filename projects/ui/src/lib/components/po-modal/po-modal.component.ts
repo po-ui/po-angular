@@ -43,7 +43,10 @@ export class PoModalComponent extends PoModalBaseComponent {
   private id: string = uuid();
   private sourceElement;
 
-  constructor(private poActiveOverlayService: PoActiveOverlayService, poLanguageService: PoLanguageService) {
+  constructor(
+    private poActiveOverlayService: PoActiveOverlayService,
+    poLanguageService: PoLanguageService
+  ) {
     super(poLanguageService);
   }
 

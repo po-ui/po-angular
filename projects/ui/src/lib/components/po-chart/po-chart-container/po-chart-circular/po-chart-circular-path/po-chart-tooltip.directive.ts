@@ -11,7 +11,10 @@ export class PoChartTooltipDirective {
   private tooltipText;
   private tooltipTextContent;
 
-  constructor(private elementRef: ElementRef, private renderer: Renderer2) {}
+  constructor(
+    private elementRef: ElementRef,
+    private renderer: Renderer2
+  ) {}
 
   @HostListener('mouseenter', ['$event']) onMouseEnter(event: MouseEvent) {
     this.tooltipElement ? this.showTooltip() : this.createTooltip();

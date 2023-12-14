@@ -22,13 +22,11 @@ describe('PoChartCircular:', () => {
   let component: PoChartCircularComponent;
   let fixture: ComponentFixture<PoChartCircularComponent>;
 
-  beforeEach(
-    waitForAsync(() => {
-      TestBed.configureTestingModule({
-        declarations: [PoChartCircularComponent]
-      }).compileComponents();
-    })
-  );
+  beforeEach(waitForAsync(() => {
+    TestBed.configureTestingModule({
+      declarations: [PoChartCircularComponent]
+    }).compileComponents();
+  }));
 
   beforeEach(() => {
     fixture = TestBed.createComponent(PoChartCircularComponent);

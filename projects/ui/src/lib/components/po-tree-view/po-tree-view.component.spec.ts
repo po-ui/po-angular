@@ -11,13 +11,11 @@ describe('PoTreeViewComponent:', () => {
   let component: PoTreeViewComponent;
   let fixture: ComponentFixture<PoTreeViewComponent>;
 
-  beforeEach(
-    waitForAsync(() => {
-      TestBed.configureTestingModule({
-        imports: [PoTreeViewModule]
-      }).compileComponents();
-    })
-  );
+  beforeEach(waitForAsync(() => {
+    TestBed.configureTestingModule({
+      imports: [PoTreeViewModule]
+    }).compileComponents();
+  }));
 
   beforeEach(() => {
     fixture = TestBed.createComponent(PoTreeViewComponent);

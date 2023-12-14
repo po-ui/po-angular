@@ -57,7 +57,10 @@ export class PoBreadcrumbFavoriteComponent implements OnInit, OnDestroy {
   private getSubscription: Subscription;
   private setSubscription: Subscription;
 
-  constructor(private service: PoBreadcrumbFavoriteService, private languageService: PoLanguageService) {
+  constructor(
+    private service: PoBreadcrumbFavoriteService,
+    private languageService: PoLanguageService
+  ) {
     const language = languageService.getShortLanguage();
 
     this.literals = {

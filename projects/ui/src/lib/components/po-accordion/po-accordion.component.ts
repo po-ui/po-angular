@@ -44,7 +44,10 @@ export class PoAccordionComponent extends PoAccordionBaseComponent implements On
   private accordionServiceSubscription: Subscription;
   private expandedActiveAccordionItem: PoAccordionItemComponent;
 
-  constructor(private accordionService: PoAccordionService, languageService: PoLanguageService) {
+  constructor(
+    private accordionService: PoAccordionService,
+    languageService: PoLanguageService
+  ) {
     super(languageService);
     this.receiveFromChildAccordionSubscription();
   }

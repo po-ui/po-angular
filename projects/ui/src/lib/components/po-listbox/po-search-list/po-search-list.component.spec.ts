@@ -11,13 +11,11 @@ describe('PoMultiselectSearchComponent:', () => {
   let component: PoSearchListComponent;
   let fixture: ComponentFixture<PoSearchListComponent>;
 
-  beforeEach(
-    waitForAsync(() => {
-      TestBed.configureTestingModule({
-        declarations: [PoSearchListComponent]
-      }).compileComponents();
-    })
-  );
+  beforeEach(waitForAsync(() => {
+    TestBed.configureTestingModule({
+      declarations: [PoSearchListComponent]
+    }).compileComponents();
+  }));
 
   beforeEach(() => {
     fixture = TestBed.createComponent(PoSearchListComponent);

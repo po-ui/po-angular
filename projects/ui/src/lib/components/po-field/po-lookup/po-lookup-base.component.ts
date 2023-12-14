@@ -44,7 +44,8 @@ import { PoLookupModalService } from './services/po-lookup-modal.service';
  */
 @Directive()
 export abstract class PoLookupBaseComponent
-  implements ControlValueAccessor, OnDestroy, OnInit, Validator, AfterViewInit, OnChanges {
+  implements ControlValueAccessor, OnDestroy, OnInit, Validator, AfterViewInit, OnChanges
+{
   /**
    * @optional
    *
@@ -552,8 +553,8 @@ export abstract class PoLookupBaseComponent
     this.multiple
       ? this.callOnChange(this.valueToModel)
       : this.valueToModel
-      ? this.callOnChange(this.valueToModel[this.fieldValue])
-      : this.callOnChange(undefined);
+        ? this.callOnChange(this.valueToModel[this.fieldValue])
+        : this.callOnChange(undefined);
     this.selected.emit(valueSelected);
   }
 

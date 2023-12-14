@@ -406,7 +406,10 @@ export abstract class PoDatepickerRangeBaseComponent implements ControlValueAcce
     return this._locale || this.language;
   }
 
-  constructor(protected poDateService: PoDateService, private languageService: PoLanguageService) {
+  constructor(
+    protected poDateService: PoDateService,
+    private languageService: PoLanguageService
+  ) {
     this.language = languageService.getShortLanguage();
   }
 

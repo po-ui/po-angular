@@ -197,7 +197,10 @@ export class SamplePoDynamicFormRegisterComponent implements OnInit {
     }
   ];
 
-  constructor(public poNotification: PoNotificationService, private registerService: PoDynamicFormRegisterService) {}
+  constructor(
+    public poNotification: PoNotificationService,
+    private registerService: PoDynamicFormRegisterService
+  ) {}
 
   ngOnInit() {
     this.person = {

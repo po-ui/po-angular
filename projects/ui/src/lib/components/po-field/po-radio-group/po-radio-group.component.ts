@@ -76,7 +76,10 @@ export class PoRadioGroupComponent extends PoRadioGroupBaseComponent implements 
 
   differ: any;
 
-  constructor(differs: IterableDiffers, private cd: ChangeDetectorRef) {
+  constructor(
+    differs: IterableDiffers,
+    private cd: ChangeDetectorRef
+  ) {
     super();
     this.differ = differs.find([]).create(null);
   }

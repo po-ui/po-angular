@@ -33,7 +33,10 @@ export class SamplePoDialogCancelCreditCardComponent implements OnDestroy, OnIni
 
   private statusSubscription: Subscription;
 
-  constructor(private poDialog: PoDialogService, private poNotification: PoNotificationService) {}
+  constructor(
+    private poDialog: PoDialogService,
+    private poNotification: PoNotificationService
+  ) {}
 
   ngOnDestroy() {
     this.statusSubscription.unsubscribe();

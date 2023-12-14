@@ -31,15 +31,13 @@ describe('PoPageSlideComponent', () => {
   let debugElement: DebugElement;
   let element: any;
 
-  beforeEach(
-    waitForAsync(() => {
-      TestBed.configureTestingModule({
-        imports: [FormsModule, NoopAnimationsModule, PoFieldModule],
-        declarations: [PoPageSlideComponent, TestComponent],
-        providers: [PoActiveOverlayService]
-      }).compileComponents();
-    })
-  );
+  beforeEach(waitForAsync(() => {
+    TestBed.configureTestingModule({
+      imports: [FormsModule, NoopAnimationsModule, PoFieldModule],
+      declarations: [PoPageSlideComponent, TestComponent],
+      providers: [PoActiveOverlayService]
+    }).compileComponents();
+  }));
 
   beforeEach(() => {
     fixture = TestBed.createComponent(PoPageSlideComponent);
