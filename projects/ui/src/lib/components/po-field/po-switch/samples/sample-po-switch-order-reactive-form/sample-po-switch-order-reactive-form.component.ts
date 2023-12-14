@@ -31,7 +31,10 @@ export class SamplePoSwitchOrderReactiveFormComponent implements OnInit {
     { page: 'French Fries', value: '17' }
   ];
 
-  constructor(private poNotification: PoNotificationService, private formBuilder: UntypedFormBuilder) {}
+  constructor(
+    private poNotification: PoNotificationService,
+    private formBuilder: UntypedFormBuilder
+  ) {}
 
   ngOnInit() {
     this.formOrderSummary = this.formBuilder.group({ serviceFee: [false] });

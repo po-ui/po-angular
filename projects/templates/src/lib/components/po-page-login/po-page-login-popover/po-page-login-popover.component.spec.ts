@@ -10,14 +10,12 @@ describe('ThPageLoginPopoverComponent: ', () => {
   let fixture: ComponentFixture<PoPageLoginPopoverComponent>;
   let nativeElement: any;
 
-  beforeEach(
-    waitForAsync(() => {
-      TestBed.configureTestingModule({
-        imports: [RouterTestingModule.withRoutes([])],
-        declarations: [PoI18nPipe, PoPageLoginPopoverComponent]
-      }).compileComponents();
-    })
-  );
+  beforeEach(waitForAsync(() => {
+    TestBed.configureTestingModule({
+      imports: [RouterTestingModule.withRoutes([])],
+      declarations: [PoI18nPipe, PoPageLoginPopoverComponent]
+    }).compileComponents();
+  }));
 
   beforeEach(() => {
     fixture = TestBed.createComponent(PoPageLoginPopoverComponent);

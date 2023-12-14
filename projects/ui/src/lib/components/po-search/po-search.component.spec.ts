@@ -77,7 +77,7 @@ describe('PoSearchComponent', () => {
   });
 
   it('onSearchChange: should return false if filter mode is not recognized', () => {
-    component.filterType = ('invalidMode' as unknown) as PoSearchFilterMode;
+    component.filterType = 'invalidMode' as unknown as PoSearchFilterMode;
 
     const result = component.onSearchChange('text', true);
 

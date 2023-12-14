@@ -15,7 +15,10 @@ import { PoSyncSchema } from '../po-sync/interfaces/po-sync-schema.interface';
  */
 @Injectable()
 export class PoSchemaService {
-  constructor(private poSchemaDefinitionService: PoSchemaDefinitionService, private poStorage: PoStorageService) {}
+  constructor(
+    private poSchemaDefinitionService: PoSchemaDefinitionService,
+    private poStorage: PoStorageService
+  ) {}
 
   /**
    * Retorna o id a partir de uma chave de um *schema*.

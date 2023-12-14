@@ -21,14 +21,12 @@ describe('PoChartContainerComponent', () => {
     svgPlottingAreaHeight: 20
   };
 
-  beforeEach(
-    waitForAsync(() => {
-      TestBed.configureTestingModule({
-        imports: [PoChartModule],
-        declarations: [PoChartContainerComponent]
-      }).compileComponents();
-    })
-  );
+  beforeEach(waitForAsync(() => {
+    TestBed.configureTestingModule({
+      imports: [PoChartModule],
+      declarations: [PoChartContainerComponent]
+    }).compileComponents();
+  }));
 
   beforeEach(() => {
     fixture = TestBed.createComponent(PoChartContainerComponent);

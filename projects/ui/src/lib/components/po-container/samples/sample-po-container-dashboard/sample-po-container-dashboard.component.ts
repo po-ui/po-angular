@@ -63,7 +63,10 @@ export class SamplePoContainerDashboardComponent implements AfterContentChecked,
     label: 'Share'
   };
 
-  constructor(private poNotification: PoNotificationService, private sampleDashboardService: SampleDashboardService) {}
+  constructor(
+    private poNotification: PoNotificationService,
+    private sampleDashboardService: SampleDashboardService
+  ) {}
 
   ngOnInit() {
     this.columns = this.sampleDashboardService.getColumns();
