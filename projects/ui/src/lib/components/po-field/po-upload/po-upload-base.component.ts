@@ -547,7 +547,10 @@ export abstract class PoUploadBaseComponent implements ControlValueAccessor, Val
    */
   @Input('p-show-required') showRequired: boolean = false;
 
-  constructor(protected uploadService: PoUploadService, languageService: PoLanguageService) {
+  constructor(
+    protected uploadService: PoUploadService,
+    languageService: PoLanguageService
+  ) {
     this.language = languageService.getShortLanguage();
   }
 

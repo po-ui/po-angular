@@ -153,7 +153,10 @@ export class PoCalendarBaseComponent {
     return this.mode === PoCalendarMode.Range;
   }
 
-  constructor(public poDate: PoDateService, private languageService: PoLanguageService) {
+  constructor(
+    public poDate: PoDateService,
+    private languageService: PoLanguageService
+  ) {
     this.shortLanguage = languageService.getShortLanguage();
     this._locale = this.languageService.getShortLanguage();
   }

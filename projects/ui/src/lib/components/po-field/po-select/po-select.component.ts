@@ -243,7 +243,10 @@ export class PoSelectComponent extends PoFieldValidateModel<any> implements OnCh
   }
 
   /* istanbul ignore next */
-  constructor(private changeDetector: ChangeDetectorRef, public renderer: Renderer2) {
+  constructor(
+    private changeDetector: ChangeDetectorRef,
+    public renderer: Renderer2
+  ) {
     super();
   }
 

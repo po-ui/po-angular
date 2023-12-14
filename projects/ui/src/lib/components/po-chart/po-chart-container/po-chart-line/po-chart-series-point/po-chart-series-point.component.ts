@@ -56,7 +56,10 @@ export class PoChartSeriesPointComponent {
     return this._coordinates;
   }
 
-  constructor(private renderer: Renderer2, private elementRef: ElementRef) {}
+  constructor(
+    private renderer: Renderer2,
+    private elementRef: ElementRef
+  ) {}
 
   trackBy(index) {
     return index;

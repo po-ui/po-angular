@@ -238,7 +238,11 @@ export class PoDecimalComponent extends PoInputBaseComponent implements AfterVie
     return this._max;
   }
 
-  constructor(private el: ElementRef, private poLanguageService: PoLanguageService, cd: ChangeDetectorRef) {
+  constructor(
+    private el: ElementRef,
+    private poLanguageService: PoLanguageService,
+    cd: ChangeDetectorRef
+  ) {
     super(cd);
     this.isKeyboardAndroid = !!navigator.userAgent.match(/Android/i);
   }

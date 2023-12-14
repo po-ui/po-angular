@@ -39,7 +39,10 @@ export class PoQueryBuilder {
   private _pageSize: number;
   private _sort: string;
 
-  constructor(private poSchemaService: PoSchemaService, private schema: PoSyncSchema) {
+  constructor(
+    private poSchemaService: PoSchemaService,
+    private schema: PoSyncSchema
+  ) {
     this._page = 1;
     this.filters = {};
   }

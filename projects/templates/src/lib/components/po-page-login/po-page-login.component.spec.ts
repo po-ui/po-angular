@@ -35,25 +35,23 @@ describe('PoPageLoginComponent: ', () => {
 
   let nativeElement: any;
 
-  beforeEach(
-    waitForAsync(() => {
-      TestBed.configureTestingModule({
-        imports: [FormsModule, OverlayModule, RouterTestingModule.withRoutes([])],
-        declarations: [
-          PoButtonComponent,
-          PoComboComponent,
-          PoInputComponent,
-          PoLoginComponent,
-          PoPasswordComponent,
-          PoPageLoginComponent,
-          PoSelectComponent,
-          PoSwitchComponent
-        ],
-        providers: [HttpClient, HttpHandler, PoPageLoginService],
-        schemas: [NO_ERRORS_SCHEMA]
-      }).compileComponents();
-    })
-  );
+  beforeEach(waitForAsync(() => {
+    TestBed.configureTestingModule({
+      imports: [FormsModule, OverlayModule, RouterTestingModule.withRoutes([])],
+      declarations: [
+        PoButtonComponent,
+        PoComboComponent,
+        PoInputComponent,
+        PoLoginComponent,
+        PoPasswordComponent,
+        PoPageLoginComponent,
+        PoSelectComponent,
+        PoSwitchComponent
+      ],
+      providers: [HttpClient, HttpHandler, PoPageLoginService],
+      schemas: [NO_ERRORS_SCHEMA]
+    }).compileComponents();
+  }));
 
   beforeEach(() => {
     fixture = TestBed.createComponent(PoPageLoginComponent);

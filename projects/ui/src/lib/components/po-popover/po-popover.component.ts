@@ -46,7 +46,10 @@ export class PoPopoverComponent extends PoPopoverBaseComponent implements AfterV
   targetElement;
   eventListenerFunction: () => void;
 
-  constructor(private renderer: Renderer2, private poControlPosition: PoControlPositionService) {
+  constructor(
+    private renderer: Renderer2,
+    private poControlPosition: PoControlPositionService
+  ) {
     super();
   }
 

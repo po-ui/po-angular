@@ -93,7 +93,10 @@ export class SamplePoTableComponentsComponent implements OnInit {
     }
   ];
 
-  constructor(public sampleComponents: SamplePoTableComponentsService, private router: Router) {}
+  constructor(
+    public sampleComponents: SamplePoTableComponentsService,
+    private router: Router
+  ) {}
 
   ngOnInit(): void {
     this.items = this.sampleComponents.getItems();

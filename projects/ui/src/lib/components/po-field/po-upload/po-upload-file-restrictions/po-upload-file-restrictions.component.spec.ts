@@ -16,15 +16,13 @@ describe('PoUploadFileRestrictionsComponent:', () => {
   let fixture: ComponentFixture<PoUploadFileRestrictionsComponent>;
   let nativeElement: any;
 
-  beforeEach(
-    waitForAsync(() => {
-      TestBed.configureTestingModule({
-        declarations: [PoUploadFileRestrictionsComponent],
-        imports: [PoServicesModule],
-        providers: [PoLanguageService]
-      }).compileComponents();
-    })
-  );
+  beforeEach(waitForAsync(() => {
+    TestBed.configureTestingModule({
+      declarations: [PoUploadFileRestrictionsComponent],
+      imports: [PoServicesModule],
+      providers: [PoLanguageService]
+    }).compileComponents();
+  }));
 
   beforeEach(() => {
     fixture = TestBed.createComponent(PoUploadFileRestrictionsComponent);

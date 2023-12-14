@@ -37,14 +37,12 @@ describe('PoChartTooltipDirective', () => {
 
   let event;
 
-  beforeEach(
-    waitForAsync(() => {
-      TestBed.configureTestingModule({
-        imports: [PoChartModule],
-        declarations: [PoChartTooltipDirective, TestComponent]
-      });
-    })
-  );
+  beforeEach(waitForAsync(() => {
+    TestBed.configureTestingModule({
+      imports: [PoChartModule],
+      declarations: [PoChartTooltipDirective, TestComponent]
+    });
+  }));
 
   beforeEach(() => {
     fixture = TestBed.createComponent(TestComponent);

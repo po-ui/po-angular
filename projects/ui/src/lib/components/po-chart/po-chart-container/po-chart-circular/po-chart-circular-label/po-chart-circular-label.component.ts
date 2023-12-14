@@ -13,7 +13,10 @@ export class PoChartCircularLabelComponent {
 
   @ViewChild('svgLabel', { read: ElementRef }) svgLabel: ElementRef;
 
-  constructor(private changeDetection: ChangeDetectorRef, private renderer: Renderer2) {}
+  constructor(
+    private changeDetection: ChangeDetectorRef,
+    private renderer: Renderer2
+  ) {}
 
   applyCoordinates(coordinates: PoChartLabelCoordinates) {
     this.renderer.setAttribute(this.svgLabel.nativeElement, 'x', coordinates.xCoordinate.toString());

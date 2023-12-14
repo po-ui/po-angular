@@ -35,7 +35,10 @@ export class PoSearchComponent extends PoSearchBaseComponent implements OnInit {
 
   filteredItems: Array<any> = [];
 
-  constructor(public languageService: PoLanguageService, private renderer: Renderer2) {
+  constructor(
+    public languageService: PoLanguageService,
+    private renderer: Renderer2
+  ) {
     super(languageService);
   }
 

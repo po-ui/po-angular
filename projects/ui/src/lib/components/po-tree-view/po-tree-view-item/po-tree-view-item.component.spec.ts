@@ -12,15 +12,13 @@ describe('PoTreeviewItemComponent:', () => {
   let component: PoTreeViewItemComponent;
   let fixture: ComponentFixture<PoTreeViewItemComponent>;
 
-  beforeEach(
-    waitForAsync(() => {
-      TestBed.configureTestingModule({
-        imports: [BrowserAnimationsModule, FormsModule, PoFieldModule],
-        declarations: [PoTreeViewItemComponent, PoTreeViewItemHeaderComponent],
-        providers: [PoTreeViewService]
-      }).compileComponents();
-    })
-  );
+  beforeEach(waitForAsync(() => {
+    TestBed.configureTestingModule({
+      imports: [BrowserAnimationsModule, FormsModule, PoFieldModule],
+      declarations: [PoTreeViewItemComponent, PoTreeViewItemHeaderComponent],
+      providers: [PoTreeViewService]
+    }).compileComponents();
+  }));
 
   beforeEach(() => {
     fixture = TestBed.createComponent(PoTreeViewItemComponent);

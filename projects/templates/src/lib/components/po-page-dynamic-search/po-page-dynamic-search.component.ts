@@ -208,9 +208,9 @@ export class PoPageDynamicSearchComponent extends PoPageDynamicSearchBaseCompone
     return new Date(year, month - 1, day).toLocaleDateString(getBrowserLanguage());
   }
 
-  private formatArrayToObjectKeyValue(
-    filters: Array<{ property: string; value?: any; initValue?: any }>
-  ): { [key: string]: any } {
+  private formatArrayToObjectKeyValue(filters: Array<{ property: string; value?: any; initValue?: any }>): {
+    [key: string]: any;
+  } {
     const formattedObject = filters.reduce(
       (result, item) => Object.assign(result, { [item.property]: item.value || item.initValue }),
       {}

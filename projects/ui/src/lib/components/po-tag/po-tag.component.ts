@@ -40,7 +40,10 @@ export class PoTagComponent extends PoTagBaseComponent implements OnInit {
 
   isClickable: boolean;
 
-  constructor(private el: ElementRef, languageService: PoLanguageService) {
+  constructor(
+    private el: ElementRef,
+    languageService: PoLanguageService
+  ) {
     super(languageService);
   }
 

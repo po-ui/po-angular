@@ -90,7 +90,11 @@ export class PoGridComponent implements OnDestroy {
     return this._columns.filter(column => column.freeze !== true && column.action !== true);
   }
 
-  constructor(private changeDetectorRef: ChangeDetectorRef, private elRef: ElementRef, renderer: Renderer2) {
+  constructor(
+    private changeDetectorRef: ChangeDetectorRef,
+    private elRef: ElementRef,
+    renderer: Renderer2
+  ) {
     this.debounceResize();
 
     this.resizeListener = renderer.listen('window', 'resize', (event: any) => {

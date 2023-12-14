@@ -28,7 +28,10 @@ import { PoToolbarBaseComponent } from './po-toolbar-base.component';
   templateUrl: './po-toolbar.component.html'
 })
 export class PoToolbarComponent extends PoToolbarBaseComponent implements OnInit {
-  constructor(private titleService: Title, viewRef: ViewContainerRef) {
+  constructor(
+    private titleService: Title,
+    viewRef: ViewContainerRef
+  ) {
     super();
   }
 

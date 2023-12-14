@@ -24,7 +24,10 @@ export class DocumentationListComponent implements OnInit {
     { label: 'Exemplos', action: this.viewSample.bind(this), icon: 'po-icon-light' }
   ];
 
-  constructor(private docService: DocumentationService, private router: Router) {}
+  constructor(
+    private docService: DocumentationService,
+    private router: Router
+  ) {}
 
   ngOnInit() {
     this.docService.findDocs('api').subscribe(docs => {

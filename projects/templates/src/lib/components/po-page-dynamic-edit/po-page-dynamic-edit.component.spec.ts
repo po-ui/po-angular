@@ -23,16 +23,14 @@ describe('PoPageDynamicEditComponent: ', () => {
   let component: PoPageDynamicEditComponent;
   let fixture: ComponentFixture<PoPageDynamicEditComponent>;
 
-  beforeEach(
-    waitForAsync(() => {
-      TestBed.configureTestingModule({
-        imports: [FormsModule, HttpClientTestingModule, RouterTestingModule.withRoutes([]), PoDialogModule],
-        providers: [],
-        declarations: [PoPageDynamicEditComponent, PoDynamicFormStubComponent],
-        schemas: [NO_ERRORS_SCHEMA]
-      }).compileComponents();
-    })
-  );
+  beforeEach(waitForAsync(() => {
+    TestBed.configureTestingModule({
+      imports: [FormsModule, HttpClientTestingModule, RouterTestingModule.withRoutes([]), PoDialogModule],
+      providers: [],
+      declarations: [PoPageDynamicEditComponent, PoDynamicFormStubComponent],
+      schemas: [NO_ERRORS_SCHEMA]
+    }).compileComponents();
+  }));
 
   beforeEach(() => {
     fixture = TestBed.createComponent(PoPageDynamicEditComponent);

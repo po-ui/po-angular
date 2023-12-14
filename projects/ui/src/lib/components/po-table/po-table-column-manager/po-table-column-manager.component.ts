@@ -89,7 +89,10 @@ export class PoTableColumnManagerComponent implements OnChanges, OnDestroy {
     return this._maxColumns;
   }
 
-  constructor(private renderer: Renderer2, languageService: PoLanguageService) {
+  constructor(
+    private renderer: Renderer2,
+    languageService: PoLanguageService
+  ) {
     const language = languageService.getShortLanguage();
 
     this.literals = {

@@ -11,14 +11,12 @@ describe('PoNavbarItemsComponent:', () => {
   let fixture: ComponentFixture<PoNavbarItemsComponent>;
   let nativeElement: any;
 
-  beforeEach(
-    waitForAsync(() => {
-      TestBed.configureTestingModule({
-        declarations: [PoNavbarItemsComponent, PoNavbarItemComponent],
-        imports: [RouterModule.forRoot([], {})]
-      }).compileComponents();
-    })
-  );
+  beforeEach(waitForAsync(() => {
+    TestBed.configureTestingModule({
+      declarations: [PoNavbarItemsComponent, PoNavbarItemComponent],
+      imports: [RouterModule.forRoot([], {})]
+    }).compileComponents();
+  }));
 
   beforeEach(() => {
     fixture = TestBed.createComponent(PoNavbarItemsComponent);

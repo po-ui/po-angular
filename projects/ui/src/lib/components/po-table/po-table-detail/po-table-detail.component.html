@@ -45,7 +45,7 @@
 
         <ng-container [ngSwitch]="detail.type">
           <span *ngSwitchCase="'currency'">{{
-            getDetailData(item, detail) | currency: detail.format:'symbol':'1.2-2'
+            getDetailData(item, detail) | currency: detail.format : 'symbol' : '1.2-2'
           }}</span>
           <span *ngSwitchCase="'date'">{{ getDetailData(item, detail) | date: detail.format || 'dd/MM/yyyy' }}</span>
           <span *ngSwitchCase="'time'">{{

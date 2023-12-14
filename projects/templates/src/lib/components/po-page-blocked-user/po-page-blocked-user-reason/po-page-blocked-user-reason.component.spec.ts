@@ -39,14 +39,12 @@ describe('PoPageBlockedUserReasonContactsComponent: ', () => {
     }
   };
 
-  beforeEach(
-    waitForAsync(() => {
-      TestBed.configureTestingModule({
-        imports: [PoI18nModule.config(config)],
-        declarations: [PoI18nPipe, PoPageBlockedUserReasonComponent]
-      }).compileComponents();
-    })
-  );
+  beforeEach(waitForAsync(() => {
+    TestBed.configureTestingModule({
+      imports: [PoI18nModule.config(config)],
+      declarations: [PoI18nPipe, PoPageBlockedUserReasonComponent]
+    }).compileComponents();
+  }));
 
   beforeEach(() => {
     fixture = TestBed.createComponent(PoPageBlockedUserReasonComponent);
