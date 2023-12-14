@@ -20,7 +20,10 @@ export class PoPageBlockedUserReasonComponent implements OnChanges, OnInit {
 
   private language: string;
 
-  constructor(private changeDetector: ChangeDetectorRef, languageService: PoLanguageService) {
+  constructor(
+    private changeDetector: ChangeDetectorRef,
+    languageService: PoLanguageService
+  ) {
     this.language = languageService.getShortLanguage();
   }
 

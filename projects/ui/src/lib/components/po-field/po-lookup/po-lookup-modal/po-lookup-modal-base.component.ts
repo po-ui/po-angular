@@ -261,7 +261,10 @@ export abstract class PoLookupModalBaseComponent implements OnDestroy, OnInit {
     return this._title;
   }
 
-  constructor(languageService: PoLanguageService, protected changeDetector: ChangeDetectorRef) {
+  constructor(
+    languageService: PoLanguageService,
+    protected changeDetector: ChangeDetectorRef
+  ) {
     this.language = languageService.getShortLanguage();
   }
 

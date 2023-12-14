@@ -18,13 +18,11 @@ describe('PoStepperComponent:', () => {
 
   let poSteps = [];
 
-  beforeEach(
-    waitForAsync(() => {
-      TestBed.configureTestingModule({
-        imports: [PoStepperModule]
-      });
-    })
-  );
+  beforeEach(waitForAsync(() => {
+    TestBed.configureTestingModule({
+      imports: [PoStepperModule]
+    });
+  }));
 
   beforeEach(() => {
     fixture = TestBed.createComponent(PoStepperComponent);

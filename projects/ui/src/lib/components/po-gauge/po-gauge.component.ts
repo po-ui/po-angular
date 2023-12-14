@@ -39,7 +39,10 @@ export class PoGaugeComponent extends PoGaugeBaseComponent implements DoCheck {
 
   private isLoaded: boolean = false;
 
-  constructor(protected colorService: PoColorService, private changeDetector: ChangeDetectorRef) {
+  constructor(
+    protected colorService: PoColorService,
+    private changeDetector: ChangeDetectorRef
+  ) {
     super(colorService);
   }
 

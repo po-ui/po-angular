@@ -19,22 +19,20 @@ describe('PoPageDynamicSearchComponent:', () => {
   let component: PoPageDynamicSearchComponent;
   let fixture: ComponentFixture<PoPageDynamicSearchComponent>;
 
-  beforeEach(
-    waitForAsync(() => {
-      TestBed.configureTestingModule({
-        imports: [
-          FormsModule,
-          RouterTestingModule.withRoutes(routes),
-          PoPageCustomizationModule,
-          PoDynamicModule,
-          HttpClientTestingModule
-        ],
-        declarations: [PoPageDynamicSearchComponent, PoAdvancedFilterComponent],
-        providers: [TitleCasePipe],
-        schemas: [NO_ERRORS_SCHEMA]
-      }).compileComponents();
-    })
-  );
+  beforeEach(waitForAsync(() => {
+    TestBed.configureTestingModule({
+      imports: [
+        FormsModule,
+        RouterTestingModule.withRoutes(routes),
+        PoPageCustomizationModule,
+        PoDynamicModule,
+        HttpClientTestingModule
+      ],
+      declarations: [PoPageDynamicSearchComponent, PoAdvancedFilterComponent],
+      providers: [TitleCasePipe],
+      schemas: [NO_ERRORS_SCHEMA]
+    }).compileComponents();
+  }));
 
   beforeEach(() => {
     fixture = TestBed.createComponent(PoPageDynamicSearchComponent);

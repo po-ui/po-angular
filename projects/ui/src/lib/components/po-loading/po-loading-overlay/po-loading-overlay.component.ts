@@ -30,7 +30,10 @@ import { PoLoadingOverlayBaseComponent } from './po-loading-overlay-base.compone
   templateUrl: 'po-loading-overlay.component.html'
 })
 export class PoLoadingOverlayComponent extends PoLoadingOverlayBaseComponent {
-  constructor(public changeDetector: ChangeDetectorRef, languageService: PoLanguageService) {
+  constructor(
+    public changeDetector: ChangeDetectorRef,
+    languageService: PoLanguageService
+  ) {
     super(languageService);
   }
 }

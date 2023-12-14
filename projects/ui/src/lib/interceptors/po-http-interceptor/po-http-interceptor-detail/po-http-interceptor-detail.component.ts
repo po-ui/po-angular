@@ -62,8 +62,8 @@ export class PoHttpInterceptorDetailComponent implements OnInit {
     return detail.detailTitle
       ? detail.detailTitle
       : detail.code
-      ? `${detail.code} - ${detail.message}`
-      : detail.message;
+        ? `${detail.code} - ${detail.message}`
+        : detail.message;
   }
 
   open() {
@@ -96,7 +96,7 @@ export class PoHttpInterceptorDetailComponent implements OnInit {
     return details.length > 1
       ? `${this.literals.details} (${details.length})`
       : details.length === 1
-      ? this.formatDetailItemTitle(details[0])
-      : this.literals.detail;
+        ? this.formatDetailItemTitle(details[0])
+        : this.literals.detail;
   }
 }

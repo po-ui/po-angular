@@ -39,7 +39,10 @@ export class SamplePoDatepickerRangeVacationsReactiveFormComponent implements On
     );
   }
 
-  constructor(private poNotification: PoNotificationService, private formBuilder: UntypedFormBuilder) {}
+  constructor(
+    private poNotification: PoNotificationService,
+    private formBuilder: UntypedFormBuilder
+  ) {}
 
   ngOnInit() {
     this.formVacationSuggestion = this.formBuilder.group({

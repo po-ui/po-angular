@@ -19,16 +19,14 @@ describe('PoPageDynamicDetailComponent:', () => {
   let component: PoPageDynamicDetailComponent;
   let fixture: ComponentFixture<PoPageDynamicDetailComponent>;
 
-  beforeEach(
-    waitForAsync(() => {
-      TestBed.configureTestingModule({
-        imports: [FormsModule, HttpClientTestingModule, RouterTestingModule.withRoutes([])],
-        providers: [PoDialogService],
-        declarations: [PoPageDynamicDetailComponent],
-        schemas: [NO_ERRORS_SCHEMA]
-      }).compileComponents();
-    })
-  );
+  beforeEach(waitForAsync(() => {
+    TestBed.configureTestingModule({
+      imports: [FormsModule, HttpClientTestingModule, RouterTestingModule.withRoutes([])],
+      providers: [PoDialogService],
+      declarations: [PoPageDynamicDetailComponent],
+      schemas: [NO_ERRORS_SCHEMA]
+    }).compileComponents();
+  }));
 
   beforeEach(() => {
     fixture = TestBed.createComponent(PoPageDynamicDetailComponent);

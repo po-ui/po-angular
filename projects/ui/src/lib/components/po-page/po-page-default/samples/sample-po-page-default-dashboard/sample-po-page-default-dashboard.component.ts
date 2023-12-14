@@ -58,7 +58,10 @@ export class SamplePoPageDefaultDashboardComponent implements OnInit {
     label: 'Share'
   };
 
-  constructor(private poNotification: PoNotificationService, private sampleDashboardService: SampleDashboardService) {}
+  constructor(
+    private poNotification: PoNotificationService,
+    private sampleDashboardService: SampleDashboardService
+  ) {}
 
   ngOnInit(): void {
     this.columns = this.sampleDashboardService.getColumns();

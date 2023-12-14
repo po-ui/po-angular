@@ -13,15 +13,13 @@ describe('PoPageBackgroundComponent:', () => {
   let languageService: PoLanguageService;
   let spyService: jasmine.Spy;
 
-  beforeEach(
-    waitForAsync(() => {
-      TestBed.configureTestingModule({
-        declarations: [PoPageBackgroundComponent],
-        providers: [PoLanguageService],
-        schemas: [NO_ERRORS_SCHEMA]
-      }).compileComponents();
-    })
-  );
+  beforeEach(waitForAsync(() => {
+    TestBed.configureTestingModule({
+      declarations: [PoPageBackgroundComponent],
+      providers: [PoLanguageService],
+      schemas: [NO_ERRORS_SCHEMA]
+    }).compileComponents();
+  }));
 
   beforeEach(() => {
     languageService = TestBed.inject(PoLanguageService);

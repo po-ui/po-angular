@@ -37,7 +37,10 @@ export class SamplePoPageLoginHumanResourcesComponent implements OnDestroy, OnIn
 
   private i18nSubscription: Subscription;
 
-  constructor(private poI18nService: PoI18nService, private poDialog: PoDialogService) {}
+  constructor(
+    private poI18nService: PoI18nService,
+    private poDialog: PoDialogService
+  ) {}
 
   ngOnDestroy() {
     this.i18nSubscription.unsubscribe();

@@ -90,8 +90,8 @@ export class PoChartContainerComponent implements OnChanges {
       !options.axis?.minRange && domain.minValue > 0
         ? 0
         : options.axis?.minRange < domain.minValue
-        ? options.axis.minRange
-        : domain.minValue;
+          ? options.axis.minRange
+          : domain.minValue;
     const maxValue = options.axis?.maxRange > domain.maxValue ? options.axis.maxRange : domain.maxValue;
     const updatedDomainValues = { minValue, maxValue };
 

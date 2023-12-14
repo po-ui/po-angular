@@ -117,7 +117,8 @@ const providers = [
 })
 export class PoMultiselectComponent
   extends PoMultiselectBaseComponent
-  implements AfterViewInit, DoCheck, OnDestroy, OnChanges {
+  implements AfterViewInit, DoCheck, OnDestroy, OnChanges
+{
   @ContentChild(PoMultiselectOptionTemplateDirective, { static: true })
   multiselectOptionTemplate: PoMultiselectOptionTemplateDirective;
 
