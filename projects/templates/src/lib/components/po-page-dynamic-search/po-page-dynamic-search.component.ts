@@ -8,7 +8,8 @@ import {
   PoLanguageService,
   PoPageFilter,
   PoDisclaimerGroupRemoveAction,
-  PoComboOption
+  PoComboOption,
+  PoPageListComponent
 } from '@po-ui/ng-components';
 
 import { capitalizeFirstLetter, getBrowserLanguage } from '../../utils/util';
@@ -44,6 +45,7 @@ type UrlOrPoCustomizationFunction = string | (() => PoPageDynamicSearchOptions);
 })
 export class PoPageDynamicSearchComponent extends PoPageDynamicSearchBaseComponent implements OnInit, OnDestroy {
   @ViewChild(PoAdvancedFilterComponent, { static: true }) poAdvancedFilter: PoAdvancedFilterComponent;
+  @ViewChild(PoPageListComponent, { static: true }) poPageList: PoPageListComponent;
 
   private loadSubscription: Subscription;
 
@@ -147,7 +149,7 @@ export class PoPageDynamicSearchComponent extends PoPageDynamicSearchBaseCompone
     this.poAdvancedFilter.open();
   }
 
-  onAdvancedSearch(filteredItems) {
+  onAdvancedSearch(filteredItems, isAdvancedSearch?) {
     const { filter, optionsService } = filteredItems;
 
     this._disclaimerGroup.disclaimers = this.setDisclaimers(filter, optionsService);
@@ -155,6 +157,10 @@ export class PoPageDynamicSearchComponent extends PoPageDynamicSearchBaseCompone
     this.setFilters(filter);
 
     this.advancedSearch.emit(filter);
+
+    if (isAdvancedSearch) {
+      this.poPageList.clearInputSearch();
+    }
   }
 
   private getDisclaimersWithoutQuickSearch() {

@@ -246,6 +246,30 @@ describe('PoPageDynamicSearchComponent:', () => {
       expect(component['convertToFilters']).toHaveBeenCalledWith(filters);
     });
 
+    it(`onAdvancedSearch: should call 'clearInputSearch' if isAdvancedSearch is true`, () => {
+      const fakeThis = {
+        setDisclaimers: () => ['test'],
+        _disclaimerGroup: {
+          disclaimers: ['test']
+        },
+        setFilters: () => {},
+        advancedSearch: {
+          emit: () => {}
+        },
+        poPageList: {
+          clearInputSearch: () => {}
+        }
+      };
+      const filteredItems = { filter: 'fakeFilter', optionsService: 'fakeOptionsService' };
+      const isAdvancedSearch = true;
+
+      spyOn(fakeThis.poPageList, 'clearInputSearch');
+
+      component.onAdvancedSearch.call(fakeThis, filteredItems, isAdvancedSearch);
+
+      expect(fakeThis.poPageList.clearInputSearch).toHaveBeenCalled();
+    });
+
     it(`setFilters: should update filters value if the objects are compatible`, () => {
       const filterThatWillBeApplied = { city: 'Ontario' };
       const formattedFilters = [{ property: 'city', value: 'Ontario' }];
