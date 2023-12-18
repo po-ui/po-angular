@@ -936,6 +936,7 @@ describe('PoMenuComponent:', () => {
     it('should set "collapsed" to false and "allowCollapseHover" to true when onMouseEnter is called and the component is collapsed', () => {
       component.collapsed = true;
       component.allowCollapseHover = false;
+      component.automaticToggle = true;
 
       component.onMouseEnter();
 
@@ -946,6 +947,7 @@ describe('PoMenuComponent:', () => {
     it('should not modify the "collapsed" or "allowCollapseHover" state when onMouseEnter is called and the component is not collapsed', () => {
       component.collapsed = false;
       component.allowCollapseHover = true;
+      component.automaticToggle = true;
 
       component.onMouseEnter();
 
@@ -956,6 +958,7 @@ describe('PoMenuComponent:', () => {
     it('should set "collapsed" to true when onMouseLeave is called and the component is not collapsed and allowCollapseHover is true', () => {
       component.collapsed = false;
       component.allowCollapseHover = true;
+      component.automaticToggle = true;
 
       component.onMouseLeave();
 
@@ -965,6 +968,7 @@ describe('PoMenuComponent:', () => {
     it('should not modify the "collapsed" state when onMouseLeave is called and the component is already collapsed', () => {
       component.collapsed = true;
       component.allowCollapseHover = true;
+      component.automaticToggle = true;
 
       component.onMouseLeave();
 
@@ -974,6 +978,7 @@ describe('PoMenuComponent:', () => {
     it('should not modify the "collapsed" state when onMouseLeave is called and allowCollapseHover is false', () => {
       component.collapsed = false;
       component.allowCollapseHover = false;
+      component.automaticToggle = true;
 
       component.onMouseLeave();
 

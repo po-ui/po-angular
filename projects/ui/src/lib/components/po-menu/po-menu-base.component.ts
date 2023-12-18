@@ -67,6 +67,17 @@ export abstract class PoMenuBaseComponent {
    *
    * @description
    *
+   * Expande e Colapsa (retrai) o menu automaticamente.
+   *
+   * @default `false`
+   */
+  @Input({ alias: 'p-automatic-toggle', transform: convertToBoolean }) automaticToggle: boolean = false;
+
+  /**
+   * @optional
+   *
+   * @description
+   *
    * Colapsa (retrai) o menu e caso receba o valor `false` expande o menu.
    *
    * > Utilize esta propriedade para iniciar o menu colapsado.
