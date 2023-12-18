@@ -1,12 +1,6 @@
 import { ChangeDetectorRef, Component, OnInit, ViewChild } from '@angular/core';
 
-import {
-  PoButtonGroupItem,
-  PoMenuComponent,
-  PoMenuItem,
-  PoRadioGroupOption,
-  PoSelectOption
-} from '@po-ui/ng-components';
+import { PoButtonGroupItem, PoMenuComponent, PoMenuItem, PoSelectOption } from '@po-ui/ng-components';
 
 @Component({
   selector: 'sample-po-menu-labs',
