@@ -1,4 +1,5 @@
 <po-page-list
+  #poPageList
   [p-actions]="actions"
   [p-breadcrumb]="breadcrumb"
   [p-disclaimer-group]="disclaimerGroup"
@@ -10,7 +11,7 @@
     [p-filters]="filters"
     [p-keep-filters]="keepFilters"
     [p-literals]="advancedFilterLiterals"
-    (p-search-event)="onAdvancedSearch($event)"
+    (p-search-event)="onAdvancedSearch($event, true)"
   >
   </po-advanced-filter>
 
