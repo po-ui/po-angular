@@ -8,7 +8,7 @@ import {
   PoTableColumn,
   PoTableColumnSpacing,
   PoTableLiterals,
-  PoFilterMode
+  PoSearchFilterMode
 } from '@po-ui/ng-components';
 
 import { SamplePoTableLabsService } from './sample-po-table-labs.service';
@@ -42,10 +42,10 @@ export class SamplePoTableLabsComponent implements OnInit {
   itemIndex = 0;
   literals: string;
   maxColumns: number;
-  properties: Array<string>;
+  properties: Array<string> = ['hideBatchActions', 'hideTableSearch'];
   selection: Array<string>;
   spacing: PoTableColumnSpacing = PoTableColumnSpacing.Medium;
-  filterType: PoFilterMode = PoFilterMode.startsWith;
+  filterType: PoSearchFilterMode = PoSearchFilterMode.startsWith;
   filteredColumns: Array<string> = [];
 
   actionsDefinitionOptions: Array<PoCheckboxGroupOption> = [
@@ -62,9 +62,9 @@ export class SamplePoTableLabsComponent implements OnInit {
   ];
 
   public readonly filterModeOptions: Array<PoRadioGroupOption> = [
-    { label: 'Starts With', value: PoFilterMode.startsWith },
-    { label: 'Contains', value: PoFilterMode.contains },
-    { label: 'Ends With', value: PoFilterMode.endsWith }
+    { label: 'Starts With', value: PoSearchFilterMode.startsWith },
+    { label: 'Contains', value: PoSearchFilterMode.contains },
+    { label: 'Ends With', value: PoSearchFilterMode.endsWith }
   ];
 
   public readonly columnsOptions: Array<PoCheckboxGroupOption> = [
@@ -197,7 +197,7 @@ export class SamplePoTableLabsComponent implements OnInit {
     this.itemIndex = 0;
     this.literals = '';
     this.maxColumns = undefined;
-    this.properties = [];
+    this.properties = ['hideBatchActions', 'hideTableSearch'];
     this.selection = [];
     this.spacing = PoTableColumnSpacing.Medium;
     this.filteredColumns = [];

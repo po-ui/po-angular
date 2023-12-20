@@ -29,22 +29,26 @@ export const poMultiselectLiteralsDefault = {
   en: <PoMultiselectLiterals>{
     noData: 'No data found',
     placeholderSearch: 'Search',
-    selectAll: 'Select all'
+    selectAll: 'Select all',
+    selectItem: 'Select items'
   },
   es: <PoMultiselectLiterals>{
     noData: 'Datos no encontrados',
     placeholderSearch: 'Busca',
-    selectAll: 'Seleccionar todo'
+    selectAll: 'Seleccionar todo',
+    selectItem: 'Seleccionar items'
   },
   pt: <PoMultiselectLiterals>{
     noData: 'Nenhum dado encontrado',
     placeholderSearch: 'Buscar',
-    selectAll: 'Selecionar todos'
+    selectAll: 'Selecionar todos',
+    selectItem: 'Selecionar itens'
   },
   ru: <PoMultiselectLiterals>{
     noData: 'Данные не найдены',
     placeholderSearch: 'искать',
-    selectAll: 'Выбрать все'
+    selectAll: 'Выбрать все',
+    selectItem: 'Выбрать элементы'
   }
 };
 
@@ -61,6 +65,23 @@ export const poMultiselectLiteralsDefault = {
  * po-select, po-combo ou po-radio-group.
  *
  * Com ele também é possível definir uma lista à partir da requisição de um serviço definido em `p-filter-service`.
+ *
+ * #### Boas práticas
+ *
+ * - Caso a lista apresente menos de 5 itens, considere utilizar outro componente;
+ * - Não utilize o multiselect caso o usuário possa selecionar apenas uma opção. Para esse caso, opte por utilizar po-radio ou po-select;
+ * - Sempre que possível, agrupe as opções e use labels curtas para descrever o conteúdo. Exemplo: em uma combinação de alimentos,
+ * as opções podem ser agrupadas por Vegetais, Frutas, etc;
+ *
+ * #### Acessibilidade tratada no componente
+ *
+ * Algumas diretrizes de acessibilidade já são tratadas no componente internamente, e não podem ser alteradas pelo proprietário do conteúdo. São elas:
+ *
+ * - Quando em foco, o multiselect abre o listbox usando as teclas de Espaço ou Enter do teclado.
+ * - Utilize as teclas Arrow Up [seta para cima] ou Arrow Down [seta para baixo] do teclado para navegar entre os itens do listbox.
+ * - Utilize a tecla Esc do teclado para fechar o listbox.
+ * - Quando um item estiver em foco, utilize as teclas Arrow Right [seta para direita] ou Arrow Left [seta para esquerda] do teclado para navegar entre eles.
+ * - Quando em foco e havendo um item ou mais já selecionado, utilize a tecla Arrow Down [seta para baixo] do teclado para abrir o listbox.
  */
 @Directive()
 export abstract class PoMultiselectBaseComponent implements ControlValueAccessor, OnInit, Validator {
@@ -135,9 +156,23 @@ export abstract class PoMultiselectBaseComponent implements ControlValueAccessor
    */
   @Output('p-change') change: EventEmitter<any> = new EventEmitter<any>();
 
+  /**
+   * @optional
+   *
+   * @description
+   *
+   * Define que o dropdown do multiselect será incluido no body da página e não suspenso com a caixa de texto do componente.
+   * Opção necessária para o caso de uso do componente em páginas que necessitam renderizar o multiselect fora do conteúdo principal.
+   *
+   * > Obs: O uso dessa propriedade pode acarretar na perda sequencial da tabulação da página
+   *
+   * @default `false`
+   */
+  @Input({ alias: 'p-append-in-body', transform: convertToBoolean }) appendBox?: boolean = false;
+
   selectedOptions: Array<PoMultiselectOption | any> = [];
   visibleOptionsDropdown: Array<PoMultiselectOption | any> = [];
-  visibleDisclaimers = [];
+  visibleTags = [];
   isServerSearching = false;
   isFirstFilter: boolean = true;
   filterSubject = new Subject();
@@ -262,7 +297,9 @@ export abstract class PoMultiselectBaseComponent implements ControlValueAccessor
    * ```
    *  const customLiterals: PoMultiselectLiterals = {
    *    noData: 'Nenhum dado encontrado',
-   *    placeholderSearch: 'Buscar'
+   *    placeholderSearch: 'Buscar',
+   *    selectAll: 'Select all',
+   *    selectItem: 'Select items'
    *  };
    * ```
    *
@@ -296,6 +333,7 @@ export abstract class PoMultiselectBaseComponent implements ControlValueAccessor
       this._literals = poMultiselectLiteralsDefault[this.language];
     }
   }
+
   get literals() {
     return this._literals || poMultiselectLiteralsDefault[this.language];
   }

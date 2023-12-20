@@ -19,7 +19,7 @@ describe('PoTableService', () => {
   });
 
   it('setUrl: should be called and set api url to method GET', () => {
-    const url = 'https://po-sample-api.fly.dev/v1/heroes';
+    const url = 'https://po-sample-api.onrender.com/v1/heroes';
 
     service.setUrl(url, 'GET');
 
@@ -27,7 +27,7 @@ describe('PoTableService', () => {
   });
 
   it('setUrl: should be called and set api url to method DELETE', () => {
-    const url = 'https://po-sample-api.fly.dev/v1/heroes';
+    const url = 'https://po-sample-api.onrender.com/v1/heroes';
 
     service.setUrl(url, 'DELETE');
 
@@ -55,7 +55,7 @@ describe('PoTableService', () => {
   });
 
   it('getFilteredItems: to have been called and call backend', () => {
-    service['url'] = 'https://po-sample-api.fly.dev/v1/heroes';
+    service['url'] = 'https://po-sample-api.onrender.com/v1/heroes';
 
     const filteredParams = {
       order: '-name',
@@ -69,7 +69,7 @@ describe('PoTableService', () => {
   });
 
   it('deleteItem: to have been called and call backend', () => {
-    service['urlDelete'] = 'https://po-sample-api.fly.dev/v1/heroes';
+    service['urlDelete'] = 'https://po-sample-api.onrender.com/v1/heroes';
 
     const paramDelete = 'id';
     const paramResponse = 12345;

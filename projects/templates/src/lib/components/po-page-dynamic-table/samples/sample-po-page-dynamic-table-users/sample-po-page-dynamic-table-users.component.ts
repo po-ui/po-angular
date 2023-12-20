@@ -1,4 +1,4 @@
-import { Component, ViewChild, OnInit } from '@angular/core';
+import { Component, OnInit, ViewChild } from '@angular/core';
 
 import { PoBreadcrumb, PoDynamicViewField, PoModalComponent } from '@po-ui/ng-components';
 
@@ -20,7 +20,7 @@ export class SamplePoPageDynamicTableUsersComponent implements OnInit {
   @ViewChild('userDetailModal') userDetailModal!: PoModalComponent;
   @ViewChild('dependentsModal') dependentsModal!: PoModalComponent;
 
-  readonly serviceApi = 'https://po-sample-api.fly.dev/v1/people';
+  readonly serviceApi = 'https://po-sample-api.onrender.com/v1/people';
 
   actionsRight = false;
   detailedUser: any;

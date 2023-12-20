@@ -2,6 +2,150 @@
 
 All notable changes to this project will be documented in this file. See [standard-version](https://github.com/conventional-changelog/standard-version) for commit guidelines.
 
+# [16.9.0](https://github.com/po-ui/po-angular/compare/v16.8.0...v16.9.0) (2023-12-11)
+
+
+### Bug Fixes
+
+* **listbox:** ajusta redimensionamento do loading ([9d78856](https://github.com/po-ui/po-angular/commit/9d7885677c2ef5a4b612808b73f5bd8b9ed7953a))
+* **table:** ajusta redimensionamento do loading ([482cc97](https://github.com/po-ui/po-angular/commit/482cc97cee44ed33adb25dcda2bd184283c1ec6f))
+
+
+### Features
+
+* **loading-overlay:** inclui controle de tamanho ([0f72ba9](https://github.com/po-ui/po-angular/commit/0f72ba9b7612cc39aff1a99278f30468303d0071))
+* **loading:** torna o p-size dinâmico ([8365698](https://github.com/po-ui/po-angular/commit/8365698f21ec553046dda6af815acb5941eaa97e))
+
+
+
+# [16.8.0](https://github.com/po-ui/po-angular/compare/v16.7.0...v16.8.0) (2023-12-05)
+
+
+### Features
+
+* **progress:** implementa definições do AnimaliaDS ([ad59a5e](https://github.com/po-ui/po-angular/commit/ad59a5ee0f92e7fe14ef9cf83101188622017564))
+* **search:** implementa animaliaDS e externaliza para uso no portal ([0bdc067](https://github.com/po-ui/po-angular/commit/0bdc067478afdc80c6c018fc2ad00d5145b2b395))
+
+
+
+# [16.7.0](https://github.com/po-ui/po-angular/compare/v16.6.1...v16.7.0) (2023-11-17)
+
+
+### Features
+
+* **accordion:** ajusta navegação do elemento através de viewChild ([cbb93e8](https://github.com/po-ui/po-angular/commit/cbb93e8091fb92a76527d02f7a08e296d3b832dc))
+* **dynamic-form:** adiciona escolha entre `po-switch` ou `po-checkbox` ([1b91e50](https://github.com/po-ui/po-angular/commit/1b91e50a90647aa7e8406ae906cf1a3f7a48158f)), closes [#1420](https://github.com/po-ui/po-angular/issues/1420)
+* **loading-icon:** implementa definições do AnimaliaDS ([d126499](https://github.com/po-ui/po-angular/commit/d12649995734f35b78c81efb84ebc359d213e907))
+* **loading-overlay:** implementações AnimaliaDS ([dee3db4](https://github.com/po-ui/po-angular/commit/dee3db49141d0b1adc9907d5ef191213686c0651))
+* **overlay:** novo componente de uso interno ([5698533](https://github.com/po-ui/po-angular/commit/5698533dfbfa547b49ce12bf7e99210ece7f2b03))
+* **theme-builder:** implementa novos componentes animalizados ([2f6b1a6](https://github.com/po-ui/po-angular/commit/2f6b1a6f130aab6e636ef6b821ec458b140cf1b3))
+
+
+
+## [16.6.1](https://github.com/po-ui/po-angular/compare/v16.6.0...v16.6.1) (2023-11-13)
+
+
+### Bug Fixes
+
+* **combo:** corrige fechamento do listbox após perda de foco ([a6cfa1a](https://github.com/po-ui/po-angular/commit/a6cfa1abaefb589453441742ca3e5ba78892ef8c))
+* **listbox:** corrige clique no checkbox ([d303af0](https://github.com/po-ui/po-angular/commit/d303af0aba21e956be81636ffc8a24d36ad1683f))
+* **multiselect:** corrige fechamento do listbox após perda de foco ([f4d9437](https://github.com/po-ui/po-angular/commit/f4d9437ed753aa2c4e0b5fe5c3b1200f3a868971))
+
+
+
+# [16.6.0](https://github.com/po-ui/po-angular/compare/v16.5.0...v16.6.0) (2023-11-03)
+
+
+### Bug Fixes
+
+* **combo:** corrige chamada repetida no componente ([f78548e](https://github.com/po-ui/po-angular/commit/f78548eb9f77197a2536ce7c262df059e31a765a))
+
+
+### Features
+
+* **combo:** implementa definições do AnimaliaDS ([c710527](https://github.com/po-ui/po-angular/commit/c71052743a315e72a50331ab01402ee1aef8e3cd))
+
+
+
+# [16.5.0](https://github.com/po-ui/po-angular/compare/v16.4.1...v16.5.0) (2023-10-31)
+
+
+### Bug Fixes
+
+* **table:** corrige valores padrão de propriedades ([f92633d](https://github.com/po-ui/po-angular/commit/f92633d9ddd3aaa9b7695495efd3d19179c56fa1))
+* **rich-text:** impede envio de dados ao escolher cor ([d7a7f24](https://github.com/po-ui/po-angular/commit/d7a7f24b10d1f691f56b244afcabe871e7138c35))
+
+
+### Features
+
+* **multiselect:** implementa as definições do AnimaliaDS ([f31c075](https://github.com/po-ui/po-angular/commit/f31c0750d6ba4eeb9f6726f274f863fb071ac4ac))
+
+
+
+## [16.4.1](https://github.com/po-ui/po-angular/compare/v16.4.0...v16.4.1) (2023-10-23)
+
+Compatibilidade com po-theme-totvs
+
+
+# [16.4.0](https://github.com/po-ui/po-angular/compare/v16.3.0...v16.4.0) (2023-10-20)
+
+
+### Bug Fixes
+
+* **menu:** ajusta a aparência do componente nos navegadores Safari e Firefox. ([3e60513](https://github.com/po-ui/po-angular/commit/3e605139b015ccc3ba99f3581780d0878e08f256))
+* **table:** corrige ordenação dos itens após uma pesquisa ([21e8adc](https://github.com/po-ui/po-angular/commit/21e8adcb6e7608f56dade25c3f9cbc9d789d38ad))
+
+
+### Features
+
+* **combo:** cria propriedade `p-append-in-body` para renderizar a listagem do componente fora do conteúdo principal ([d64b4a6](https://github.com/po-ui/po-angular/commit/d64b4a618e8b5c37923d5bc7211b8aaa9b7c3a1a))
+* **dynamic-form:** adiciona a propriedade `formField` para o  `upload` ([db37399](https://github.com/po-ui/po-angular/commit/db37399b76b1127be1741e996387015af9d97326)), closes [#1847](https://github.com/po-ui/po-angular/issues/1847)
+* **dynamic-view:** Inclui propriedade  `searchService`, `fieldLabel`, `fieldValue` e `concatLabelValue` ([6eb01fa](https://github.com/po-ui/po-angular/commit/6eb01fac6f1770c9d33822c0589c8713737edd2f))
+* **multiselect:** cria propriedade `p-append-in-body` para renderizar a listagem do componente fora do conteúdo principal ([5809027](https://github.com/po-ui/po-angular/commit/5809027979eebe6a1ebd4e935dbd8115e46dacd4))
+* **tag:** implementa variação de status neutral ([1c7fb8a](https://github.com/po-ui/po-angular/commit/1c7fb8a371f718bff94aa16a5fa4157cab25c93a))
+
+
+
+# [16.3.0](https://github.com/po-ui/po-angular/compare/v16.2.1...v16.3.0) (2023-10-09)
+
+
+### Bug Fixes
+
+* **input:** adiciona indicação visual de campo inválido ([90e9362](https://github.com/po-ui/po-angular/commit/90e93629e5c6adfa014a6f6865f0c92e44581f5d))
+
+
+### Features
+
+* **accordion:** implementa definições do AnimaliaDS ([79d15f2](https://github.com/po-ui/po-angular/commit/79d15f291fb6952f7c27250da83edfebd619028a))
+* **breadcrumb:** implementa definições do AnimaliaDS ([c2772ce](https://github.com/po-ui/po-angular/commit/c2772ce3442eedcdd8c41d9c9ecc3f8491c185e7))
+* **dynamic-table:** implementa opção de esconder gerenciador de colunas ([1cd1ba9](https://github.com/po-ui/po-angular/commit/1cd1ba91d439d010686899b31f523f51aa4ccb20))
+* **lookup:** implementa opção de esconder gerenciador de colunas ([2bc70bd](https://github.com/po-ui/po-angular/commit/2bc70bd7ca978bffaabe83172dcb53f65dfbc9ea))
+* **tree-view:** seleção única e customizada ([7e9c9da](https://github.com/po-ui/po-angular/commit/7e9c9da049f1d575cb68aeeaffb1933f2700309e))
+* **upload:** inclui a propriedade `url` no evento `upload` ([6c8a9af](https://github.com/po-ui/po-angular/commit/6c8a9afe48043256391880e832050403cb76925e)), closes [#1825](https://github.com/po-ui/po-angular/issues/1825)
+
+
+
+## [16.2.1](https://github.com/po-ui/po-angular/compare/v16.2.0...v16.2.1) (2023-10-02)
+
+
+### Bug Fixes
+
+* **listview:** adiciona propriedade p-danger no botão de ação ([67cdedd](https://github.com/po-ui/po-angular/commit/67cdedd5a82fd39e756e0c9141ab8fc8791b0c3c))
+
+
+
+## [16.2.0](https://github.com/po-ui/po-angular/compare/v16.1.0...v16.2.0) (2023-09-25)
+
+
+### Bug Fixes
+
+* **checkbox:** corrige foco no checkbox ([5feecee](https://github.com/po-ui/po-angular/commit/5feeceef28945335c3901725614d8b866d822bf0))
+* **lookup:** traducoes russo ([297f546](https://github.com/po-ui/po-angular/commit/297f546bc7e3d21ba78e39c04519f03cd25461e5))
+* **page-edit:** valida campos obrigatórios ([32ee81a](https://github.com/po-ui/po-angular/commit/32ee81a72c25647894579ae1ce09cf026d94c38d))
+* **table:** corrige ordenação após filtragem de itens ([2e3a5e1](https://github.com/po-ui/po-angular/commit/2e3a5e130f95b386ab57359142e0bdffe425f691))
+
+
+
 # [16.1.0](https://github.com/po-ui/po-angular/compare/v16.0.0...v16.1.0) (2023-09-18)
 
 

@@ -139,7 +139,11 @@ describe('PoTagComponent:', () => {
 
       component.onClick();
 
-      expect(component.click.emit).toHaveBeenCalledWith({ 'value': component.value, 'type': component.type });
+      expect(component.click.emit).toHaveBeenCalledWith({
+        'value': component.value,
+        'type': component.type,
+        'event': 'click'
+      });
     });
 
     it('onKeyPressed: should call `onClick` if the event `keydown` is used with `enter` key.', () => {
@@ -192,7 +196,7 @@ describe('PoTagComponent:', () => {
 
       component.onClose();
 
-      expect(component.click.emit).toHaveBeenCalledWith(null);
+      expect(component.click.emit).toHaveBeenCalledWith('click');
     });
 
     it('onRemove: Should remove the element if not disabled', () => {
@@ -324,6 +328,14 @@ describe('PoTagComponent:', () => {
       fixture.detectChanges();
 
       expect(nativeElement.querySelector('.po-tag-warning')).toBeTruthy();
+    });
+
+    it('should add `po-tag-neutral` if type is `PoTagType.Neutral`.', () => {
+      component.type = PoTagType.Neutral;
+
+      fixture.detectChanges();
+
+      expect(nativeElement.querySelector('.po-tag-neutral')).toBeTruthy();
     });
 
     it('should add `PoTagIcon.Danger` if type is `PoTagType.Danger and `icon` is true`.', () => {

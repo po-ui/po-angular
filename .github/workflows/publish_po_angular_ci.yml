@@ -21,26 +21,21 @@ jobs:
     steps:
 
     - name: Check out po-angular
-      uses: actions/checkout@v3
+      uses: actions/checkout@v4
       with:
         path: po-angular
 
     - name: Check out style
-      uses: actions/checkout@v3
+      uses: actions/checkout@v4
       with:
         repository: po-ui/po-style
         path: po-style
 
     - name: Check out lint
-      uses: actions/checkout@v3
+      uses: actions/checkout@v4
       with:
         repository: po-ui/po-tslint
         path: po-tslint
-
-    - uses: actions/setup-node@v3
-      with:
-        node-version: 16
-        registry-url: 'https://registry.npmjs.org'
 
     - name: Install and Build
       run: npm install && npm run build
@@ -64,15 +59,17 @@ jobs:
     # PUBLISH NG-SCHEMATICS
     - name: ng-schematics - publish
       # Se a versão remota for igual à versão que será publicada então ele pula o publish deste pacote e tenta publicar os demais pacotes
-      if: (!contains(env.PACKAGE_VERSION, env.SCHEMATICS_LAST_PUBLISHED_VERSION))
-      run: npm publish dist/ng-schematics --ignore-scripts
-      working-directory: ${{env.WORKING_DIR}}
+      #if: (!contains(env.PACKAGE_VERSION, env.SCHEMATICS_LAST_PUBLISHED_VERSION))
+      uses: actions/setup-node@v3
+      with:
+        node-version: '16.x'
+        registry-url: 'https://registry.npmjs.org'
+    - run: npm publish ${{env.WORKING_DIR}}/dist/ng-schematics --ignore-scripts
       env:
         PACKAGE_VERSION: ${{ steps.package-version.outputs.current-version }}
-        NODE_AUTH_TOKEN: ${{ secrets.NPM_TOKEN }}
+        NODE_AUTH_TOKEN: ${{ secrets.NPM_TOKEN }}  
 
     - name: ng-schematics - add "latest" tag
-
       if: (!contains(env.PACKAGE_VERSION, env.SCHEMATICS_LAST_PUBLISHED_VERSION) && !contains(env.PACKAGE_VERSION, '-next') && !contains(env.PACKAGE_VERSION, '-rc'))
       run: npm dist-tags add @${{ env.SCHEMATICS_NPM_PATH }}@${{ env.PACKAGE_VERSION }}
       working-directory: ${{env.WORKING_DIR}}
@@ -83,8 +80,11 @@ jobs:
     # PUBLISH NG-STORAGE
     - name: ng-storage - publish
       if: (!contains(env.PACKAGE_VERSION, env.STORAGE_LAST_PUBLISHED_VERSION))
-      run: npm publish dist/ng-storage --ignore-scripts
-      working-directory: ${{env.WORKING_DIR}}
+      uses: actions/setup-node@v3
+      with:
+        node-version: '16.x'
+        registry-url: 'https://registry.npmjs.org'
+    - run: npm publish ${{env.WORKING_DIR}}/dist/ng-storage --ignore-scripts
       env:
         PACKAGE_VERSION: ${{ steps.package-version.outputs.current-version }}
         NODE_AUTH_TOKEN: ${{ secrets.NPM_TOKEN }}
@@ -100,8 +100,11 @@ jobs:
     # PUBLISH NG-SYNC
     - name: ng-sync - publish
       if: (!contains(env.PACKAGE_VERSION, env.SYNC_LAST_PUBLISHED_VERSION))
-      run: npm publish dist/ng-sync --ignore-scripts
-      working-directory: ${{env.WORKING_DIR}}
+      uses: actions/setup-node@v3
+      with:
+        node-version: '16.x'
+        registry-url: 'https://registry.npmjs.org'
+    - run: npm publish ${{env.WORKING_DIR}}/dist/ng-sync --ignore-scripts
       env:
         PACKAGE_VERSION: ${{ steps.package-version.outputs.current-version }}
         NODE_AUTH_TOKEN: ${{ secrets.NPM_TOKEN }}
@@ -117,8 +120,11 @@ jobs:
     # PUBLISH NG-COMPONENTS
     - name: ng-components - publish
       if: (!contains(env.PACKAGE_VERSION, env.COMPONENTS_LAST_PUBLISHED_VERSION))
-      run: npm publish dist/ng-components --ignore-scripts
-      working-directory: ${{env.WORKING_DIR}}
+      uses: actions/setup-node@v3
+      with:
+        node-version: '16.x'
+        registry-url: 'https://registry.npmjs.org'
+    - run: npm publish ${{env.WORKING_DIR}}/dist/ng-components --ignore-scripts
       env:
         PACKAGE_VERSION: ${{ steps.package-version.outputs.current-version }}
         NODE_AUTH_TOKEN: ${{ secrets.NPM_TOKEN }}
@@ -130,12 +136,15 @@ jobs:
       env:
         PACKAGE_VERSION: ${{ steps.package-version.outputs.current-version }}
         NODE_AUTH_TOKEN: ${{ secrets.NPM_TOKEN }}
-
+    
     # PUBLISH NG-TEMPLATES
     - name: ng-templates - publish
       if: (!contains(env.PACKAGE_VERSION, env.TEMPLATES_LAST_PUBLISHED_VERSION))
-      run: npm publish dist/ng-templates --ignore-scripts
-      working-directory: ${{env.WORKING_DIR}}
+      uses: actions/setup-node@v3
+      with:
+        node-version: '16.x'
+        registry-url: 'https://registry.npmjs.org'
+    - run: npm publish ${{env.WORKING_DIR}}/dist/ng-templates --ignore-scripts
       env:
         PACKAGE_VERSION: ${{ steps.package-version.outputs.current-version }}
         NODE_AUTH_TOKEN: ${{ secrets.NPM_TOKEN }}
@@ -147,17 +156,20 @@ jobs:
       env:
         PACKAGE_VERSION: ${{ steps.package-version.outputs.current-version }}
         NODE_AUTH_TOKEN: ${{ secrets.NPM_TOKEN }}
-
+    
     # PUBLISH NG-CODE-EDITOR
-    - name: ng-code-editor publish
+    - name: ng-code-editor - publish
       if: (!contains(env.PACKAGE_VERSION, env.CODE_EDITOR_LAST_PUBLISHED_VERSION))
-      run: npm publish dist/ng-code-editor --ignore-scripts
-      working-directory: ${{env.WORKING_DIR}}
+      uses: actions/setup-node@v3
+      with:
+        node-version: '16.x'
+        registry-url: 'https://registry.npmjs.org'
+    - run: npm publish ${{env.WORKING_DIR}}/dist/ng-code-editor --ignore-scripts
       env:
         PACKAGE_VERSION: ${{ steps.package-version.outputs.current-version }}
         NODE_AUTH_TOKEN: ${{ secrets.NPM_TOKEN }}
 
-    - name: ng-code-editor add "latest" tag
+    - name: ng-code-editor - add "latest" tag
       if: (!contains(env.PACKAGE_VERSION, env.CODE_EDITOR_LAST_PUBLISHED_VERSION) && !contains(env.PACKAGE_VERSION, '-next') && !contains(env.PACKAGE_VERSION, '-rc'))
       run: npm dist-tags add @${{ env.CODE_EDITOR_NPM_PATH }}@${{ env.PACKAGE_VERSION }}
       working-directory: ${{env.WORKING_DIR}}
@@ -176,4 +188,3 @@ jobs:
         app-name: ${{ env.AZURE_WEBAPP_NAME }}
         package: ${{ env.AZURE_WEBAPP_PACKAGE_PATH }}
         publish-profile: ${{ secrets.AZURE_TOKEN }}
-

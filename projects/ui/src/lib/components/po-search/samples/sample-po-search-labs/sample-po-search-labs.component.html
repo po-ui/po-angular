@@ -1,0 +1,128 @@
+<div class="po-row">
+  <po-search
+    #poSearch
+    class="po-md-12"
+    name="Po Search"
+    [p-icon]="icon"
+    [p-items]="items"
+    [p-disabled]="properties.includes('disabled')"
+    [p-filter-keys]="fieldKeys"
+    [p-literals]="customLiterals"
+    [p-filter-type]="filterMode"
+    [p-search-type]="searchMode"
+    (p-filtered-items-change)="filter($event)"
+    (p-change-model)="changeModel($event)"
+  ></po-search>
+</div>
+
+<hr />
+<div class="po-row">
+  <po-accordion class="po-md-12">
+    <po-accordion-item p-label="Itens encontrados: {{ filteredItems.length }}">
+      <po-widget class="po-md-12">
+        <ul class="sample-list-search po-md-12 row">
+          <li *ngFor="let item of filteredItems">
+            <ng-container *ngFor="let key of changeFilter(item)">
+              <div>
+                <strong>{{ key }}: </strong> {{ item[key] }} &nbsp;
+              </div>
+            </ng-container>
+          </li>
+        </ul>
+      </po-widget>
+    </po-accordion-item>
+  </po-accordion>
+</div>
+<hr />
+
+<div class="po-row">
+  <po-info class="po-md-6" p-label="Model" [p-value]="search"> </po-info>
+
+  <po-info class="po-md-6" p-label="Events" [p-value]="event"> </po-info>
+</div>
+
+<hr />
+
+<!-- Properties -->
+<form #f="ngForm">
+  <div class="po-row">
+    <po-checkbox-group
+      class="po-md-12"
+      name="properties"
+      [(ngModel)]="properties"
+      p-label="Properties"
+      [p-options]="propertiesOptions"
+      (p-change)="propertiesChange($event)"
+    >
+    </po-checkbox-group>
+  </div>
+  <div class="po-row">
+    <po-input
+      class="po-md-6"
+      name="items"
+      [(ngModel)]="itemsModel"
+      p-label="Items"
+      p-help='Ex.: [ { "cidade": "São Paulo", "pais": "Brasil" }, { "cidade": "Rio de Janeiro", "pais": "Brasil" }, { "cidade": "Tóquio", "pais": "Japão" }]'
+      (p-change-model)="changeItems($event)"
+    >
+    </po-input>
+  </div>
+
+  <div class="po-row">
+    <po-input
+      class="po-md-6"
+      name="Filter Keys"
+      [(ngModel)]="filterModel"
+      p-label="Filter Keys"
+      p-help='Ex.: ["cidade", "pais"]'
+      (p-change-model)="updateFilterKeys($event)"
+    >
+    </po-input>
+
+    <po-input
+      class="po-md-6"
+      name="literals"
+      [(ngModel)]="literals"
+      p-help='Ex.: {"search": "Search people"}'
+      p-label="Literals"
+      (p-change)="changeLiterals()"
+    >
+    </po-input>
+
+    <po-radio-group
+      class="po-md-6 po-lg-4"
+      name="icon"
+      [(ngModel)]="icon"
+      p-columns="1"
+      p-label="Icon"
+      [p-options]="iconsOptions"
+    >
+    </po-radio-group>
+
+    <po-radio-group
+      class="po-md-6 po-lg-4"
+      name="filterMode"
+      [(ngModel)]="filterMode"
+      p-columns="1"
+      p-label="Filter Mode"
+      [p-options]="filterModeOptions"
+    >
+    </po-radio-group>
+
+    <po-radio-group
+      class="po-md-6 po-lg-4"
+      name="searchMode"
+      [(ngModel)]="searchMode"
+      p-columns="1"
+      p-label="Search Mode"
+      [p-options]="searchModeOptions"
+    >
+    </po-radio-group>
+  </div>
+
+  <hr />
+
+  <div class="po-row">
+    <po-button class="po-md-3" p-label="Sample Restore" (p-click)="restore()"> </po-button>
+  </div>
+</form>

@@ -6,8 +6,7 @@ import { poLocaleDefault } from '../../services/po-language/po-language.constant
 import { PoLanguageService } from '../../services/po-language/po-language.service';
 import { capitalizeFirstLetter, convertToBoolean, isTypeof, sortValues } from '../../utils/util';
 
-import { InputBoolean } from '../../decorators';
-import { PoFilterMode } from '../po-search/po-search-filter-mode.enum';
+import { PoSearchFilterMode } from '../po-search/enum/po-search-filter-mode.enum';
 import { PoTableColumnSortType } from './enums/po-table-column-sort-type.enum';
 import { PoTableColumnSpacing } from './enums/po-table-spacing.enum';
 import { PoTableAction } from './interfaces/po-table-action.interface';
@@ -156,9 +155,9 @@ export abstract class PoTableBaseComponent implements OnChanges, OnDestroy {
    *
    * Permite que as ações em lote, responsável por excluir e exibir a quantidade de itens, sejam escondidas.
    *
-   * @default `false`
+   * @default `true`
    */
-  @Input({ alias: 'p-hide-batch-actions', transform: convertToBoolean }) hideBatchActions: boolean = false;
+  @Input({ alias: 'p-hide-batch-actions', transform: convertToBoolean }) hideBatchActions: boolean = true;
 
   /**
    * @optional
@@ -187,9 +186,9 @@ export abstract class PoTableBaseComponent implements OnChanges, OnDestroy {
    *
    * Permite que o campo de pesquisa seja escondido.
    *
-   * @default `false`
+   * @default `true`
    */
-  @Input({ alias: 'p-hide-table-search', transform: convertToBoolean }) hideTableSearch: boolean = false;
+  @Input({ alias: 'p-hide-table-search', transform: convertToBoolean }) hideTableSearch: boolean = true;
 
   /**
    * @optional
@@ -310,7 +309,7 @@ export abstract class PoTableBaseComponent implements OnChanges, OnDestroy {
    *
    * @default `startsWith`
    */
-  @Input('p-filter-type') filterType: PoFilterMode = PoFilterMode.startsWith;
+  @Input('p-filter-type') filterType: PoSearchFilterMode = PoSearchFilterMode.startsWith;
 
   /**
    * @optional
@@ -452,6 +451,7 @@ export abstract class PoTableBaseComponent implements OnChanges, OnDestroy {
   itemsSelected: Array<any> = [];
   paramsFilter: {};
   filteredItems: Array<any> = [];
+  initialized = false;
   private initialVisibleColumns: boolean = false;
   private _spacing: PoTableColumnSpacing = PoTableColumnSpacing.Medium;
   private _filteredColumns: Array<string>;
@@ -964,6 +964,11 @@ export abstract class PoTableBaseComponent implements OnChanges, OnDestroy {
     if (changes.height) {
       this.calculateHeightTableContainer(this.height);
     }
+
+    if ((changes.height || changes.items) && this.initialized) {
+      this.changeHeaderWidth();
+    }
+    this.changeSizeLoading();
   }
 
   selectAllRows() {
@@ -1087,6 +1092,19 @@ export abstract class PoTableBaseComponent implements OnChanges, OnDestroy {
     }
   }
 
+  sortArray(column: PoTableColumn, ascending: boolean, item?: Array<any>) {
+    let itemsList;
+    if (item) {
+      itemsList = this.height ? [...item] : item;
+    } else {
+      itemsList = this.height ? [...this.filteredItems] : this.filteredItems;
+    }
+    itemsList.sort((leftSide, rightSide): number =>
+      sortValues(leftSide[column.property], rightSide[column.property], ascending)
+    );
+    this.filteredItems = itemsList;
+  }
+
   protected getDefaultColumns(item: any) {
     const keys = Object.keys(item);
 
@@ -1199,16 +1217,6 @@ export abstract class PoTableBaseComponent implements OnChanges, OnDestroy {
     this.subtitleColumns = this.getSubtitleColumns();
   }
 
-  private sortArray(column: PoTableColumn, ascending: boolean) {
-    const itemsList = this.height ? [...this.items] : this.items;
-    itemsList.sort((leftSide, rightSide): number =>
-      sortValues(leftSide[column.property], rightSide[column.property], ascending)
-    );
-    if (this.height) {
-      this.items = itemsList;
-    }
-  }
-
   private unselectOtherRows(rows: Array<any>, row) {
     rows.forEach(item => {
       if (item !== row) {
@@ -1275,4 +1283,8 @@ export abstract class PoTableBaseComponent implements OnChanges, OnDestroy {
   protected abstract calculateHeightTableContainer(height);
 
   protected abstract checkInfiniteScroll();
+
+  protected abstract changeSizeLoading();
+
+  protected abstract changeHeaderWidth();
 }

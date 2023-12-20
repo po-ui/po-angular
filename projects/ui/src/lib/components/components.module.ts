@@ -29,6 +29,7 @@ import { PoMenuPanelModule } from './po-menu-panel/po-menu-panel.module';
 import { PoMenuModule } from './po-menu/po-menu.module';
 import { PoModalModule } from './po-modal/po-modal.module';
 import { PoNavbarModule } from './po-navbar/po-navbar.module';
+import { PoOverlayModule } from './po-overlay/po-overlay.module';
 import { PoPageModule } from './po-page/po-page.module';
 import { PoPageSlideModule } from './po-page/po-page-slide/po-page-slide.module';
 import { PoSwitchModule } from './po-field/po-switch/po-switch.module';
@@ -73,6 +74,7 @@ import { PoSearchModule } from './po-search';
     PoMenuPanelModule,
     PoModalModule,
     PoNavbarModule,
+    PoOverlayModule,
     PoPageModule,
     PoPopoverModule,
     PoPopupModule,
@@ -119,6 +121,7 @@ import { PoSearchModule } from './po-search';
     PoMenuPanelModule,
     PoModalModule,
     PoNavbarModule,
+    PoOverlayModule,
     PoPageModule,
     PoPopoverModule,
     PoPopupModule,

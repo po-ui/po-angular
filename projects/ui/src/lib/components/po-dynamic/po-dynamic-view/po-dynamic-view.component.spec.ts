@@ -6,7 +6,7 @@ import { of } from 'rxjs';
 
 import { PoDynamicModule } from '../po-dynamic.module';
 import { PoDynamicViewComponent } from './po-dynamic-view.component';
-import { PoDynamicViewService } from './po-dynamic-view.service';
+import { PoDynamicViewService } from './services/po-dynamic-view.service';
 
 describe('PoDynamicViewComponent:', () => {
   let component: PoDynamicViewComponent;
@@ -79,6 +79,18 @@ describe('PoDynamicViewComponent:', () => {
 
         expect(component['getVisibleFields']).toHaveBeenCalled();
         expect(component.visibleFields.length).toBe(returnedValue.length);
+      });
+
+      it(`should call not 'getVisibleFields' if 'load' is true and initChanges is false`, () => {
+        const changes = { showAllValue: <any>{} };
+        component.load = 'url.test.com';
+        component.visibleFields = [];
+
+        spyOn(component, <any>'getVisibleFields');
+
+        component.ngOnChanges(changes);
+
+        expect(component['getVisibleFields']).not.toHaveBeenCalled();
       });
     });
 

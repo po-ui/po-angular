@@ -1,11 +1,11 @@
-import { Injectable } from '@angular/core';
 import { HttpClient } from '@angular/common/http';
+import { Injectable } from '@angular/core';
 
 @Injectable({
   providedIn: 'root'
 })
 export class SamplePoStepperActiveService {
-  private url: string = 'https://po-sample-api.fly.dev/v1/sampleSelect';
+  private url: string = 'https://po-sample-api.onrender.com/v1/sampleSelect';
 
   constructor(private http: HttpClient) {}
 

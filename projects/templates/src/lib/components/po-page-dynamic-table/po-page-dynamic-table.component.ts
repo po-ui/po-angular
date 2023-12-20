@@ -55,16 +55,14 @@ type UrlOrPoCustomizationFunction = string | (() => PoPageDynamicTableOptions);
  *
  * ### Utilização via rota
  *
- * Ao utilizar as rotas para carregar o template, o `page-dynamic-table` disponibiliza propriedades para
- * poder especificar o endpoint dos dados e dos metadados. Exemplo de utilização:
+ * Ao utilizar as rotas para inicializar o template, o `page-dynamic-table` disponibiliza propriedades que devem ser fornecidas no arquivo de configuração de rotas da aplicação, para
+ * poder especificar o endpoint dos dados e dos metadados que serão carregados na inicialização.
  *
- * O componente primeiro irá carregar o metadado da rota definida na propriedade serviceMetadataApi
- * e depois irá buscar da rota definida na propriedade serviceLoadApi
+ * Exemplo de utilização:
  *
- * > Caso o servidor retornar um erro ao recuperar o metadados, será repassado o metadados salvo em cache,
- * se o cache não existe será disparado uma notificação.
- *
+ * Arquivo de configuração de rotas da aplicação: `app-routing.module.ts`
  * ```
+ * const routes: Routes = [
  * {
  *   path: 'people',
  *   component: PoPageDynamicTableComponent,
@@ -73,12 +71,22 @@ type UrlOrPoCustomizationFunction = string | (() => PoPageDynamicTableOptions);
  *     serviceMetadataApi: 'http://localhost:3000/v1/metadata', // endpoint dos metadados utilizando o método HTTP Get
  *     serviceLoadApi: 'http://localhost:3000/load-metadata' // endpoint de customizações dos metadados utilizando o método HTTP Post
  *   }
- * }
+ *  },
+ *  {
+ *   path: 'home',
+ *   component: HomeExampleComponent
+ *  }
+ * ];
  *
  * ```
+ * O componente primeiro irá carregar o metadado da rota definida na propriedade serviceMetadataApi
+ * e depois irá buscar da rota definida na propriedade serviceLoadApi.
  *
  * A requisição dos metadados é feita na inicialização do template para buscar os metadados da página passando o
  * tipo do metadado esperado e a versão cacheada pelo browser.
+ *
+ * > Caso o servidor retornar um erro ao recuperar os metadados, serão repassados os metadados salvos em cache,
+ * se o cache não existir será disparada uma notificação.
  *
  * O formato esperado na resposta da requisição está especificado na interface
  * [PoPageDynamicTableMetadata](/documentation/po-page-dynamic-table#po-page-dynamic-table-metadata). Por exemplo:
@@ -216,6 +224,18 @@ export class PoPageDynamicTableComponent extends PoPageDynamicListBaseComponent 
    * @default `false`
    */
   @Input({ alias: 'p-concat-filters', transform: convertToBoolean }) concatFilters: boolean = false;
+
+  /**
+   * @optional
+   *
+   * @description
+   *
+   * Permite que o gerenciador de colunas, responsável pela definição de quais colunas serão exibidas, seja escondido.
+   *
+   * @default `false`
+   */
+  @Input({ alias: 'p-hide-columns-manager', transform: convertToBoolean })
+  hideColumnsManager: boolean = false;
 
   /**
    * @optional

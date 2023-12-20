@@ -1963,8 +1963,8 @@ describe('PoTableComponent:', () => {
       });
 
       it("deleteItems: should set false in 'selectAll' and should call 'setTableResponseProperties' if serviceDeleteApi is valid", () => {
-        component.serviceDeleteApi = 'https://po-sample-api.fly.dev/v1/heroes';
-        component.serviceApi = 'https://po-sample-api.fly.dev/v1/heroes';
+        component.serviceDeleteApi = 'https://po-sample-api.onrender.com/v1/heroes';
+        component.serviceApi = 'https://po-sample-api.onrender.com/v1/heroes';
         component.paramDeleteApi = 'id';
         component.items = [
           { id: 1, name: 'teste', $selected: true },
@@ -1984,7 +1984,7 @@ describe('PoTableComponent:', () => {
       });
 
       it('deleteItems: should set serviceDeleteApi but serviceApi is undefined', () => {
-        component.serviceDeleteApi = 'https://po-sample-api.fly.dev/v1/heroes';
+        component.serviceDeleteApi = 'https://po-sample-api.onrender.com/v1/heroes';
         component.serviceApi = undefined;
         component.paramDeleteApi = 'id';
         component.items = [
@@ -2001,7 +2001,7 @@ describe('PoTableComponent:', () => {
       });
 
       it('deleteItemsService: should call error in service delete api', () => {
-        component.serviceDeleteApi = 'https://po-sample-api.fly.dev/v1/heroes';
+        component.serviceDeleteApi = 'https://po-sample-api.onrender.com/v1/heroes';
         component.serviceApi = undefined;
         component.paramDeleteApi = 'id';
         component.itemsSelected = [{ id: 1, name: 'teste', $selected: true }];
@@ -2090,6 +2090,22 @@ describe('PoTableComponent:', () => {
 
         expect(component.filteredItems).toBe(items);
       });
+
+      it('onFilteredItemsChange should call `sortArray` if exist sortedColumn', () => {
+        component.sortedColumn = {
+          property: { property: 'name' },
+          ascending: true
+        };
+        component.items = [
+          { id: 2, name: 'item2' },
+          { id: 1, name: 'item1' }
+        ];
+
+        spyOn(component, 'sortArray');
+        component.onFilteredItemsChange(items);
+
+        expect(component.sortArray).toHaveBeenCalled();
+      });
     });
   });
 
@@ -2140,9 +2156,8 @@ describe('PoTableComponent:', () => {
 
       fixture.detectChanges();
 
-      expect(nativeElement.querySelector('div.po-table-container-relative')).toBeTruthy();
-      expect(nativeElement.querySelector('div.po-table-overlay')).toBeTruthy();
-      expect(nativeElement.querySelector('po-loading.po-table-overlay-content')).toBeTruthy();
+      expect(nativeElement.querySelector('div.po-table-container-sticky')).toBeTruthy();
+      expect(nativeElement.querySelector('po-loading-overlay')).toBeTruthy();
     });
 
     it('shouldn`t show loading on table', () => {
@@ -2150,9 +2165,8 @@ describe('PoTableComponent:', () => {
 
       fixture.detectChanges();
 
-      expect(nativeElement.querySelector('div.po-table-container-relative')).toBeFalsy();
-      expect(nativeElement.querySelector('div.po-table-overlay')).toBeFalsy();
-      expect(nativeElement.querySelector('po-loading.po-table-overlay-content')).toBeFalsy();
+      expect(nativeElement.querySelector('div.po-table-container-sticky')).toBeFalsy();
+      expect(nativeElement.querySelector('po-loading-overlay')).toBeFalsy();
     });
 
     it('should show td with `po-table-column-actions` class if has more than 1 action', () => {
@@ -3178,5 +3192,83 @@ describe('PoTableComponent:', () => {
     component.draggable = false;
 
     expect(component['isDraggable']).toBeFalse();
+  });
+
+  it('changeSizeLoading: should set sm  if height of parent element is smaller or equal 150px', () => {
+    const fakeTable = {
+      sizeLoading: 'sm',
+      tableWrapperElement: {
+        nativeElement: {
+          offsetHeight: 150
+        }
+      }
+    };
+
+    component['changeSizeLoading'].call(fakeTable);
+
+    expect(fakeTable.sizeLoading).toBe('sm');
+  });
+
+  it('changeSizeLoading: should set lg if height of parent element is higher or equal 260px', () => {
+    const fakeTable = {
+      sizeLoading: 'sm',
+      tableWrapperElement: {
+        nativeElement: {
+          offsetHeight: 260
+        }
+      }
+    };
+
+    component['changeSizeLoading'].call(fakeTable);
+
+    expect(fakeTable.sizeLoading).toBe('lg');
+  });
+
+  it('changeSizeLoading: should set md  if height of parent element is between 150px and 260px', () => {
+    const fakeTable = {
+      sizeLoading: 'sm',
+      tableWrapperElement: {
+        nativeElement: {
+          offsetHeight: 200
+        }
+      }
+    };
+
+    component['changeSizeLoading'].call(fakeTable);
+
+    expect(fakeTable.sizeLoading).toBe('md');
+  });
+
+  it('changeSizeLoading: should set lg if there is no height in parentElement', () => {
+    const fakeTable = {
+      sizeLoading: 'sm',
+      tableTemplate: {
+        nativeElement: {
+          parentElement: {
+            anotherProperty: null
+          }
+        }
+      }
+    };
+
+    component['changeSizeLoading'].call(fakeTable);
+
+    expect(fakeTable.sizeLoading).toBe('lg');
+  });
+
+  it('changeHeaderWidth: should set width if noColumnsHeader ', () => {
+    const fakeTable = {
+      headerWidth: null,
+      noColumnsHeader: {
+        nativeElement: {
+          offsetWidth: 300
+        }
+      },
+      changeDetector: { detectChanges: () => {} }
+    };
+
+    component['changeHeaderWidth'].call(fakeTable);
+
+    expect(fakeTable.headerWidth).toBe(300);
   });
 });

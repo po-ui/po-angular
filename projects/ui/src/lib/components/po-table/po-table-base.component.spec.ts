@@ -20,6 +20,8 @@ import { PoTableService } from './services/po-table.service';
 class PoTableComponent extends PoTableBaseComponent {
   checkInfiniteScroll() {}
   calculateHeightTableContainer(height) {}
+  changeSizeLoading() {}
+  changeHeaderWidth() {}
 }
 
 describe('PoTableBaseComponent:', () => {
@@ -385,6 +387,21 @@ describe('PoTableBaseComponent:', () => {
     expect(component.items).toEqual(sortedItemsDesc);
   });
 
+  it('should sort values descending with item as param', () => {
+    const column = component.columns[1];
+    const sortedItemsDesc = items.slice().sort((a, b) => b.numberData - a.numberData);
+    component['sortArray'](column, false, items);
+    expect(component.filteredItems).toEqual(sortedItemsDesc);
+  });
+
+  it('should sort values descending with item as param and height', () => {
+    const column = component.columns[1];
+    component.height = 600;
+    const sortedItemsDesc = items.slice().sort((a, b) => b.numberData - a.numberData);
+    component['sortArray'](column, false, items);
+    expect(component.filteredItems).toEqual(sortedItemsDesc);
+  });
+
   it('should sort values ascending', () => {
     const column = component.columns[1];
     const sortedItemsAsc = items.slice().sort((a, b) => a.numberData - b.numberData);
@@ -400,7 +417,7 @@ describe('PoTableBaseComponent:', () => {
     component.height = 300;
     component['sortArray'](column, true);
 
-    expect(component.items).toEqual(sortedItemsAsc);
+    expect(component.filteredItems).toEqual(sortedItemsAsc);
   });
   it(`should has service and sort set 'sortStore'`, () => {
     const column = component.columns[1];
@@ -515,6 +532,39 @@ describe('PoTableBaseComponent:', () => {
       component.ngOnChanges(changes);
 
       expect(component.calculateHeightTableContainer).not.toHaveBeenCalled();
+    });
+
+    it('ngOnChanges: should call `changeSizeLoading` if height is changed', () => {
+      spyOn(component, 'changeSizeLoading');
+      const height = 400;
+      const changes = <any>{ height };
+      component.height = height;
+
+      component.ngOnChanges(changes);
+
+      expect(component['changeSizeLoading']).toHaveBeenCalled();
+    });
+
+    it('ngOnChanges: should call `changeSizeLoading` if there is items', () => {
+      spyOn(component, 'changeSizeLoading');
+      items = component.items;
+      const changes = <any>{ items };
+      component.items = items;
+
+      component.ngOnChanges(changes);
+
+      expect(component['changeSizeLoading']).toHaveBeenCalled();
+    });
+
+    it('ngOnChanges: should´n call `changeSizeLoading` if there is no items', () => {
+      spyOn(component, 'changeSizeLoading');
+      items = null;
+      const changes = <any>{ items };
+      component.items = null;
+
+      component.ngOnChanges(changes);
+
+      expect(component['changeSizeLoading']).toHaveBeenCalled();
     });
 
     describe('isEverySelected:', () => {

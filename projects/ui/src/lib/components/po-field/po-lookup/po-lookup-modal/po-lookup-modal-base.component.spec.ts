@@ -679,6 +679,18 @@ describe('PoLookupModalBaseComponent:', () => {
       expect(component['disclaimerLabel']).toBe('true');
     });
 
+    it('p-hide-columns-manager: should update property `p-hide-columns-manager` with valid value', () => {
+      component.hideColumnsManager = convertToBoolean(1);
+
+      expect(component.hideColumnsManager).toBe(true);
+    });
+
+    it('p-hide-columns-manager: should update property `p-hide-columns-manager` with invalid value', () => {
+      component.hideColumnsManager = convertToBoolean(21211);
+
+      expect(component.hideColumnsManager).toBe(false);
+    });
+
     it('p-infinite-scroll: should update property `p-infinite-scroll` with valid value', () => {
       component.infiniteScroll = convertToBoolean(1);
 

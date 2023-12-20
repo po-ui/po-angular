@@ -28,6 +28,9 @@ export abstract class PoInputGeneric extends PoInputBaseComponent implements Aft
     if (this.mask && !this.readonly && e.target.keyCode !== 229) {
       this.eventOnBlur(e);
       this.objMask.keydown(e);
+      if (this.passedWriteValue) {
+        this.validateClassesForMask(true);
+      }
     }
   }
 
@@ -166,6 +169,17 @@ export abstract class PoInputGeneric extends PoInputBaseComponent implements Aft
     }
   }
 
+  validateClassesForMask(keyDown: boolean = false) {
+    const element = this.el.nativeElement;
+    const elementValue = this.inputEl.nativeElement.value;
+
+    if (!keyDown && !elementValue) {
+      element.classList.add('ng-invalid-mask');
+    } else {
+      element.classList.remove('ng-invalid-mask');
+    }
+  }
+
   verifyPattern(pattern: string, value: any) {
     return new RegExp(pattern).test(value);
   }
@@ -197,6 +211,7 @@ export abstract class PoInputGeneric extends PoInputBaseComponent implements Aft
 
     // Emite evento quando o model é atualizado, inclusive a primeira vez
     if (value) {
+      this.validateInitMask();
       this.changeModel.emit(value);
     }
   }
@@ -209,6 +224,12 @@ export abstract class PoInputGeneric extends PoInputBaseComponent implements Aft
       return parsedValue || parsedValue === 0 ? parsedValue : null;
     } else {
       return screenValue;
+    }
+  }
+
+  validateInitMask() {
+    if (this.mask) {
+      this.validateClassesForMask();
     }
   }
 

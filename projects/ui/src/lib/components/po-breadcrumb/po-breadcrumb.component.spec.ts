@@ -5,10 +5,8 @@ import { Routes } from '@angular/router';
 import { RouterTestingModule } from '@angular/router/testing';
 
 import { PoBreadcrumbComponent } from './po-breadcrumb.component';
-import { PoBreadcrumbDropdownComponent } from './po-breadcrumb-dropdown/po-breadcrumb-dropdown.component';
 import { PoBreadcrumbFavoriteComponent } from './po-breadcrumb-favorite/po-breadcrumb-favorite.component';
 import { PoBreadcrumbItem } from './po-breadcrumb-item.interface';
-import { PoBreadcrumbItemComponent } from './po-breadcrumb-item/po-breadcrumb-item.component';
 
 @Component({ template: 'Documentation' })
 export class DocumentationComponent {}
@@ -42,20 +40,11 @@ describe('PoBreadcrumbComponent:', () => {
   const calcBreadcrumb = 'calcBreadcrumb';
   const debounceResize = 'debounceResize';
   const disableBreadcrumbResponsive = 'disableBreadcrumbResponsive';
-  const enableBreadcrumbResponsive = 'enableBreadcrumbResponsive';
-  const wasClickedonDropdown = 'wasClickedonDropdown';
 
   beforeEach(async () => {
     await TestBed.configureTestingModule({
       imports: [RouterTestingModule.withRoutes(routes)],
-      declarations: [
-        PoBreadcrumbComponent,
-        PoBreadcrumbDropdownComponent,
-        PoBreadcrumbFavoriteComponent,
-        PoBreadcrumbItemComponent,
-        DocumentationComponent,
-        GuidesComponent
-      ],
+      declarations: [PoBreadcrumbComponent, PoBreadcrumbFavoriteComponent, DocumentationComponent, GuidesComponent],
       providers: [HttpClient, HttpHandler]
     }).compileComponents();
 
@@ -109,10 +98,64 @@ describe('PoBreadcrumbComponent:', () => {
       expect(fakeThis.enableBreadcrumbResponsive).not.toHaveBeenCalled();
     });
 
-    it('toggleDropdown: should set `showDropdown` to `false` when called.', () => {
-      component.showDropdown = true;
-      component.toggleDropdown();
-      expect(component.showDropdown).toBeFalsy(false);
+    it('calcBreadcrumb: should set `hiddenLiteralFavorite` to true if tooltip is bigger than breadcrumb', () => {
+      const fakeThis = {
+        getBreadcrumbFavoriteWidth: () => 100,
+        getBreadcrumbWidth: () => 100,
+        _breadcrumbItemsLenght: 300,
+        breadcrumbTooltip: 300,
+        favoriteService: 'http://fakeUrlPo.com',
+        enableBreadcrumbResponsive: () => {},
+        disableBreadcrumbResponsive: () => {},
+        existsFavoritelabel: () => {},
+        getBreadcrumbTooltipWidth: () => 400,
+        hiddenLiteralFavorite: false
+      };
+
+      spyOn(fakeThis, 'getBreadcrumbTooltipWidth').and.returnValue(500);
+
+      component[calcBreadcrumb].call(fakeThis);
+
+      expect(fakeThis.hiddenLiteralFavorite).toBeTruthy();
+    });
+
+    it('emitAction: should emit item action.', () => {
+      const item = { label: 'teste', action: () => {}, link: '/test' };
+      spyOn(item, 'action');
+      component.emitAction(item);
+
+      expect(item.action).toHaveBeenCalled();
+    });
+
+    it('openPopup: should open popup if event is "Enter"', () => {
+      const fakeThis = { popupContainer: { open: () => {} } };
+      const fakeEvent = { code: 'Enter' };
+      spyOn(fakeThis.popupContainer, 'open');
+      component.openPopup.call(fakeThis, fakeEvent);
+      expect(fakeThis.popupContainer.open).toHaveBeenCalled();
+    });
+
+    it('openPopup: should open popup if event is "Space"', () => {
+      const fakeThis = { popupContainer: { open: () => {} } };
+      const fakeEvent = { code: 'Space' };
+      spyOn(fakeThis.popupContainer, 'open');
+      component.openPopup.call(fakeThis, fakeEvent);
+      expect(fakeThis.popupContainer.open).toHaveBeenCalled();
+    });
+
+    it(`openPopup: shouldn't open popup if event is not "Space" or "Enter"`, () => {
+      const fakeThis = { popupContainer: { open: () => {} } };
+      const fakeEvent = { code: 'Tab' };
+      spyOn(fakeThis.popupContainer, 'open');
+      component.openPopup.call(fakeThis, fakeEvent);
+      expect(fakeThis.popupContainer.open).not.toHaveBeenCalled();
+    });
+
+    it(`closePopUp: should focus in Svg More`, () => {
+      const fakeThis = { svgTarget: { nativeElement: { focus: () => {} } } };
+      spyOn(fakeThis.svgTarget.nativeElement, 'focus');
+      component.closePopUp.call(fakeThis);
+      expect(fakeThis.svgTarget.nativeElement.focus).toHaveBeenCalled();
     });
 
     describe('debounceResize:', () => {
@@ -207,6 +250,36 @@ describe('PoBreadcrumbComponent:', () => {
       expect(component['getBreadcrumbFavoriteWidth'].call(fakeThis)).toBe(0);
     });
 
+    it('getBreadcrumbTooltipWidth: should return 0 when don`t have tooltip.', () => {
+      const fakeThis = {
+        element: {
+          nativeElement: {
+            querySelector: function (selector) {
+              return { offsetWidth: 100 };
+            }
+          }
+        },
+        favoriteService: undefined
+      };
+
+      expect(component['getBreadcrumbTooltipWidth'].call(fakeThis)).toBe(0);
+    });
+
+    it('getBreadcrumbTooltipWidth: should return widht when have tooltip.', () => {
+      const fakeThis = {
+        element: {
+          nativeElement: {
+            querySelector: function (selector) {
+              return { offsetWidth: 100 };
+            }
+          }
+        },
+        favoriteService: true
+      };
+
+      expect(component['getBreadcrumbTooltipWidth'].call(fakeThis)).toBe(100);
+    });
+
     it('getBreadcrumbWidth: should return a truthy value when have breadcrumb and favorite service.', () => {
       const fakeThis = {
         element: {
@@ -222,7 +295,7 @@ describe('PoBreadcrumbComponent:', () => {
       expect(component['getBreadcrumbFavoriteWidth'].call(fakeThis)).toBe(120);
     });
 
-    it('getBreadcrumbWidth: should return value breadcrumb legth', () => {
+    it('getBreadcrumbWidth: should return value breadcrumb lenght', () => {
       const fakeThis = {
         element: {
           nativeElement: {
@@ -233,46 +306,7 @@ describe('PoBreadcrumbComponent:', () => {
         }
       };
 
-      expect(component['getBreadcrumbWidth'].call(fakeThis, 50)).toBe(150);
-    });
-
-    it('initializeClickoutListener: should call `renderer.listen` with params', () => {
-      spyOn(component.renderer, <any>'listen');
-
-      component['initializeClickoutListener']();
-
-      expect(component.renderer.listen).toHaveBeenCalledWith('document', 'click', component[wasClickedonDropdown]);
-    });
-
-    it('wasClickedonDropdown: should call `removeClickoutListener` if `checkClickOutElement` returned true', () => {
-      component.showDropdown = true;
-      const event: any = {
-        target: ''
-      };
-
-      spyOn(component, <any>'removeClickoutListener');
-      spyOn(component, <any>'checkClickOutElement').and.returnValue(true);
-
-      component[wasClickedonDropdown](event);
-
-      expect(component.showDropdown).toBe(false);
-      expect(component['checkClickOutElement']).toHaveBeenCalled();
-      expect(component['removeClickoutListener']).toHaveBeenCalled();
-    });
-
-    it('wasClickedonDropdown: should not call `removeClickoutListener` if `checkClickOutElement` returned false', () => {
-      component.showDropdown = true;
-      const event: any = {
-        target: ''
-      };
-
-      spyOn(component, <any>'removeClickoutListener');
-      spyOn(component, <any>'checkClickOutElement').and.returnValue(false);
-
-      component[wasClickedonDropdown](event);
-
-      expect(component.showDropdown).toBe(true);
-      expect(component['removeClickoutListener']).not.toHaveBeenCalled();
+      expect(component['getBreadcrumbWidth'].call(fakeThis, 50, true)).toBe(150);
     });
 
     describe('ngDoCheck:', () => {
@@ -389,48 +423,13 @@ describe('PoBreadcrumbComponent:', () => {
     });
   });
 
-  describe('Properties:', () => {
-    it('showDropdown: should set to `false` when click in breadcrumb item.', () => {
-      const breadcrumbitem = nativeElement.querySelector('po-breadcrumb-item');
-      component[enableBreadcrumbResponsive]();
-      component.showDropdown = true;
-      fixture.detectChanges();
-
-      breadcrumbitem.dispatchEvent(eventClick);
-
-      fixture.detectChanges();
-      component[wasClickedonDropdown](eventClick);
-
-      expect(component.showDropdown).toBeFalsy();
-    });
-
-    it('showDropdown: should set to `false` when click in dropdown.', () => {
-      spyOn(component, <any>'getBreadcrumbWidth').and.returnValue(300);
-
-      component['calcBreadcrumb']();
-
-      component.toggleDropdown();
-
-      fixture.detectChanges();
-
-      const dropdown = nativeElement.querySelector('po-breadcrumb-dropdown');
-      dropdown.click();
-
-      expect(component.showDropdown).toBe(false);
-      expect(component['getBreadcrumbWidth']).toHaveBeenCalled();
-    });
-  });
-
   describe('Templates:', () => {
     it('should enable breadcrumb responsive', () => {
       const itemsView = [
+        { label: 'Teste nível 1', link: '/test/nivel/1' },
+        { label: 'Teste nível 2', link: '/test/nivel/2' },
         { label: 'Teste nível 3', link: '/test/nivel/3' },
         { label: 'Teste nível 4', link: '/test/nivel/4' }
-      ];
-
-      const dropdownItems = [
-        { label: 'Teste nível 2', link: '/test/nivel/2' },
-        { label: 'Teste nível 1', link: '/test/nivel/1' }
       ];
 
       spyOn(component, <any>'getBreadcrumbWidth').and.returnValue(300);
@@ -440,10 +439,7 @@ describe('PoBreadcrumbComponent:', () => {
       fixture.detectChanges();
 
       expect(component.itemsView).toEqual(itemsView);
-      expect(component.dropdownItems).toEqual(dropdownItems);
       expect(component.showDropdownToggle).toBeTruthy();
-      expect(nativeElement.querySelector('.po-breadcrumb-icon-more')).toBeTruthy();
-      expect(component['getBreadcrumbWidth']).toHaveBeenCalled();
     });
 
     it('should disable breadcrumb responsive', () => {
@@ -452,8 +448,6 @@ describe('PoBreadcrumbComponent:', () => {
 
       expect(component.showDropdown).toBeFalsy();
       expect(component.showDropdownToggle).toBeFalsy();
-      expect(nativeElement.querySelector('po-breadcrumb-dropdown')).toBeFalsy();
-      expect(nativeElement.querySelector('.po-breadcrumb-icon-more')).toBeFalsy();
     });
   });
 });
@@ -465,6 +459,8 @@ function createFakeThis(breadWidth: number) {
     _breadcrumbItemsLenght: 300,
     favoriteService: 'http://fakeUrlPo.com',
     enableBreadcrumbResponsive: () => {},
-    disableBreadcrumbResponsive: () => {}
+    disableBreadcrumbResponsive: () => {},
+    existsFavoritelabel: () => {},
+    getBreadcrumbTooltipWidth: () => {}
   };
 }

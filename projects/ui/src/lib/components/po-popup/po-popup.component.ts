@@ -61,6 +61,7 @@ export class PoPopupComponent extends PoPopupBaseComponent {
     this.removeListeners();
 
     this.showPopup = false;
+    this.closeEvent.emit();
   }
 
   onActionClick(popupAction: PoPopupAction) {

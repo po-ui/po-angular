@@ -1,8 +1,9 @@
-import { EventEmitter, Input, Output, Directive } from '@angular/core';
+import { EventEmitter, Input, Output, Directive, TemplateRef } from '@angular/core';
 
 import { convertToBoolean, convertToInt } from '../../utils/util';
 
 import { PoProgressStatus } from './enums/po-progress-status.enum';
+import { PoProgressSize } from './enums/po-progress-size.enum';
 
 const poProgressMaxValue = 100;
 const poProgressMinValue = 0;
@@ -34,7 +35,7 @@ export class PoProgressBaseComponent {
    *
    * Exemplo: `po-icon-ok`.
    */
-  @Input('p-info-icon') infoIcon?: string;
+  @Input('p-info-icon') infoIcon?: string | TemplateRef<void>;
 
   /**
    * @optional
@@ -85,6 +86,7 @@ export class PoProgressBaseComponent {
 
   private _indeterminate?: boolean;
   private _value?: number = 0;
+  private _size: string = 'large';
 
   /**
    * @optional
@@ -128,6 +130,38 @@ export class PoProgressBaseComponent {
   get value() {
     return this._value;
   }
+
+  /**
+   * @optional
+   *
+   * @description
+   *
+   * Definição do tamanho da altura da barra de progresso.
+   *
+   * Valores válidos:
+   *  - `medium`: tamanho médio
+   *  - `large`: tamanho grande
+   *
+   * @default `large`
+   */
+  @Input('p-size') set size(value: string) {
+    this._size = PoProgressSize[value] ? PoProgressSize[value] : PoProgressSize.large;
+  }
+
+  get size(): string {
+    return this._size;
+  }
+
+  /**
+   * @optional
+   *
+   * @description
+   *
+   * Ativa a exibição da porcentagem atual da barra de progresso.
+   *
+   * @default `false`
+   */
+  @Input({ alias: 'p-show-percentage', transform: convertToBoolean }) showPercentage: boolean = false;
 
   private isProgressRangeValue(value: number): boolean {
     return value >= poProgressMinValue && value <= poProgressMaxValue;

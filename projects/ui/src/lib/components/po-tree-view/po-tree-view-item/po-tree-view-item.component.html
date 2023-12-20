@@ -2,6 +2,8 @@
   <po-tree-view-item-header
     [p-item]="item"
     [p-selectable]="selectable"
+    [p-single-select]="singleSelect"
+    [p-selected-value]="selectedValue"
     (p-expanded)="onClick($event)"
     (p-selected)="onSelect(item)"
   >
@@ -12,6 +14,8 @@
       *ngFor="let subItem of item.subItems; trackBy: trackByFunction"
       [p-item]="subItem"
       [p-selectable]="selectable"
+      [p-single-select]="singleSelect"
+      [p-selected-value]="selectedValue"
     >
     </po-tree-view-item>
   </ul>

@@ -48,6 +48,9 @@ export class PoBreadcrumbFavoriteComponent implements OnInit, OnDestroy {
   // Parâmetro que será enviado junto com o serviço de favoritar.
   @Input('p-params-service') paramsService: object;
 
+  // Esconde literal e mantém apenas icone
+  @Input('p-hidden-literal') hiddenLiteral: boolean = false;
+
   favorite: boolean = false;
   literals;
 

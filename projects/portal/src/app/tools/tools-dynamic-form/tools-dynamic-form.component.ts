@@ -1,16 +1,15 @@
 import { Component, ViewChild } from '@angular/core';
 import { NgForm } from '@angular/forms';
-import { trigger, state, style, transition, animate } from '@angular/animations';
 
 import {
   PoDynamicFormField,
-  PoTableColumn,
-  PoTableAction,
-  PoNotificationService,
-  PoToasterOrientation,
   PoModalAction,
   PoModalComponent,
-  PoPageAction
+  PoNotificationService,
+  PoPageAction,
+  PoTableAction,
+  PoTableColumn,
+  PoToasterOrientation
 } from '@po-ui/ng-components';
 
 @Component({
@@ -99,7 +98,7 @@ export class ToolsDynamicFormComponent {
   readonly serviceFields: Array<PoDynamicFormField> = [
     {
       property: 'searchService',
-      help: 'https://po-sample-api.fly.dev/v1/heroes',
+      help: 'https://po-sample-api.onrender.com/v1/heroes',
       label: 'SearchService',
       gridColumns: 12,
       gridLgColumns: 6,
@@ -107,7 +106,7 @@ export class ToolsDynamicFormComponent {
     },
     {
       property: 'optionsService',
-      help: 'https://po-sample-api.fly.dev/v1/heroes',
+      help: 'https://po-sample-api.onrender.com/v1/heroes',
       label: 'OptionsService',
       gridColumns: 12,
       gridLgColumns: 6,

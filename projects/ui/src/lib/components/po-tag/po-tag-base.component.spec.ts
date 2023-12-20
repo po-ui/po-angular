@@ -2,12 +2,14 @@ import { expectPropertiesValues } from '../../util-test/util-expect.spec';
 
 import { PoColorPaletteEnum } from '../../enums/po-color-palette.enum';
 
-import { PoTagBaseComponent } from './po-tag-base.component';
+import { poLocaleDefault } from './../../services/po-language/po-language.constant';
+import { PoLanguageService } from './../../services/po-language/po-language.service';
 import { PoTagOrientation } from './enums/po-tag-orientation.enum';
 import { PoTagType } from './enums/po-tag-type.enum';
+import { PoTagBaseComponent, PoTagLiteralsDefault } from './po-tag-base.component';
 
 describe('PoTagBaseComponent:', () => {
-  const component = new PoTagBaseComponent();
+  const component = new PoTagBaseComponent(new PoLanguageService());
   const poTagColors = (<any>Object).values(PoColorPaletteEnum);
 
   it('should be created', () => {
@@ -130,6 +132,74 @@ describe('PoTagBaseComponent:', () => {
     it('customTextColor : should change color to default value if value is invalid', () => {
       component.textColor = 'deep red';
       expect(component.customTextColor).toBe(undefined);
+    });
+
+    it('p-literals: should be in portuguese if browser is setted with an unsupported language', () => {
+      component['language'] = 'zw';
+
+      component.literals = {};
+
+      expect(component.literals).toEqual(PoTagLiteralsDefault[poLocaleDefault]);
+    });
+
+    it('p-literals: should be in portuguese if browser is setted with `pt`', () => {
+      component['language'] = 'pt';
+
+      component.literals = {};
+
+      expect(component.literals).toEqual(PoTagLiteralsDefault.pt);
+    });
+
+    it('p-literals: should be in english if browser is setted with `en`', () => {
+      component['language'] = 'en';
+
+      component.literals = {};
+
+      expect(component.literals).toEqual(PoTagLiteralsDefault.en);
+    });
+
+    it('p-literals: should be in spanish if browser is setted with `es`', () => {
+      component['language'] = 'es';
+
+      component.literals = {};
+
+      expect(component.literals).toEqual(PoTagLiteralsDefault.es);
+    });
+
+    it('p-literals: should be in russian if browser is setted with `ru`', () => {
+      component['language'] = 'ru';
+
+      component.literals = {};
+
+      expect(component.literals).toEqual(PoTagLiteralsDefault.ru);
+    });
+
+    it('p-literals: should accept custom literals', () => {
+      component['language'] = poLocaleDefault;
+
+      const customLiterals = Object.assign({}, PoTagLiteralsDefault[poLocaleDefault]);
+
+      customLiterals.remove = 'Remove custom';
+
+      component.literals = customLiterals;
+
+      expect(component.literals).toEqual(customLiterals);
+    });
+
+    it('p-literals: should update property with default literals if is setted with invalid values', () => {
+      const invalidValues = [null, undefined, false, true, '', 'literals', 0, 10, [], [1, 2], () => {}];
+
+      component['language'] = poLocaleDefault;
+
+      expectPropertiesValues(component, 'literals', invalidValues, PoTagLiteralsDefault[poLocaleDefault]);
+    });
+
+    it('p-literals: should update property with default literals if _literals is undefined', () => {
+      component['language'] = 'pt';
+
+      component['_literals'] = undefined;
+
+      expect(component.literals).toEqual(PoTagLiteralsDefault.pt);
     });
   });
 });

@@ -25,6 +25,11 @@ export interface PoTreeViewItem {
    */
   selected?: boolean | null;
 
+  /**
+   * Permite ativar/desativar a seleção do item
+   */
+  isSelectable?: boolean | null;
+
   /** Lista de itens do próximo nível, e assim consecutivamente até que se atinja o quarto nível. */
   subItems?: Array<PoTreeViewItem>;
 }

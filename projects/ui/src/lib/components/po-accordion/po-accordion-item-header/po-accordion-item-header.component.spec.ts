@@ -43,12 +43,13 @@ describe('PoAccordionItemHeaderComponent:', () => {
   describe('Templates:', () => {
     let header;
     let button;
-    let span;
+    let icon;
 
     beforeEach(() => {
-      header = nativeElement.querySelector('header');
+      component.disabledItem = false;
+      header = nativeElement.querySelector('div');
       button = header.querySelector('button');
-      span = button.querySelector('span');
+      icon = button.querySelector('po-icon');
     });
 
     it('should have a header with po-accordion-item-header class', () => {
@@ -68,22 +69,22 @@ describe('PoAccordionItemHeaderComponent:', () => {
       expect(button.classList.contains('po-clickable')).toBeTruthy();
     });
 
-    it('should have a button with span (icon)', () => {
-      expect(button.querySelector('span')).toBeTruthy();
+    it('should have a button with icon (icon)', () => {
+      expect(button.querySelector('po-icon')).toBeTruthy();
     });
 
-    it('should have a span with class po-icon', () => {
-      expect(span.classList.contains('po-icon')).toBeTruthy();
+    it('should have a icon with class po-icon', () => {
+      expect(icon.classList.contains('po-icon')).toBeTruthy();
     });
 
-    it('should have a span with class po-accordion-item-header-icon', () => {
-      expect(span.classList.contains('po-accordion-item-header-icon')).toBeTruthy();
+    it('should have a icon with class po-accordion-item-header-icon', () => {
+      expect(icon.classList.contains('po-accordion-item-header-icon')).toBeTruthy();
     });
 
-    it('should have a span with class po-icon-arrow-down by default', () => {
+    it('should have a icon with class po-accordion-item-header-icon by default', () => {
       fixture.detectChanges();
 
-      expect(span.classList.contains('po-icon-arrow-down')).toBeTruthy();
+      expect(icon.classList.contains('po-accordion-item-header-icon')).toBeTruthy();
     });
 
     it(`shouldn't have text in button if label is empty`, () => {

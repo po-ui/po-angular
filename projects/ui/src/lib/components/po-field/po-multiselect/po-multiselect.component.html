@@ -5,36 +5,39 @@
   [p-required]="required"
   [p-show-required]="showRequired"
 >
-  <div class="po-field-container-content" [class.po-multiselect-show]="dropdownOpen">
+  <div
+    cdkOverlayOrigin
+    #trigger="cdkOverlayOrigin"
+    class="po-field-container-content"
+    [class.po-multiselect-show]="dropdownOpen"
+  >
     <div
       #inputElement
       [tabindex]="disabled ? -1 : 0"
       [attr.disabled]="disabled"
       [attr.aria-label]="label"
-      class="po-input po-input-icon-right po-multiselect-input po-clickable"
+      class="po-input-icon-right po-multiselect-input"
       [class.po-multiselect-input-auto]="autoHeight"
       [class.po-multiselect-input-static]="!autoHeight"
       [class.po-multiselect-input-disabled]="disabled"
-      (keyup.enter)="toggleDropdownVisibility()"
+      [class.po-multiselect-input-font]="!disabled && !visibleTags?.length"
       (keydown)="onKeyDown($event)"
       (click)="toggleDropdownVisibility()"
       (blur)="onBlur()"
     >
-      <span *ngIf="placeholder && !disabled && !visibleDisclaimers?.length" class="po-multiselect-input-placeholder">
-        {{ placeholder }}
+      <span *ngIf="!disabled && !visibleTags?.length" class="po-multiselect-input-placeholder" aria-hidden="true">
+        {{ placeholder ? placeholder : literals.selectItem }}
       </span>
 
-      <po-disclaimer
-        *ngFor="let disclaimer of visibleDisclaimers"
-        class="po-multiselect-input-disclaimer"
-        [p-label]="disclaimer[fieldLabel]"
-        [p-value]="disclaimer[fieldValue]"
-        [p-hide-close]="disclaimer[fieldValue] === '' || disabled"
-        [class.po-clickable]="disclaimer[fieldValue] === '' && !disabled"
-        (click)="openDropdown(disclaimer[fieldValue] === '')"
-        (p-close-action)="closeDisclaimer(disclaimer[fieldValue])"
-      >
-      </po-disclaimer>
+      <po-tag
+        *ngFor="let tag of visibleTags; index as i"
+        [p-value]="tag[fieldLabel]"
+        [p-literals]="i + 1 === visibleTags.length && hasMoreTag ? literalsTag : undefined"
+        [p-removable]="true"
+        [class.po-clickable]="tag[fieldValue] === '' && !disabled"
+        [p-disabled]="disabled"
+        (p-close)="closeTag(tag[fieldValue], $event)"
+      ></po-tag>
 
       <div class="po-field-icon-container-right">
         <span
@@ -47,6 +50,22 @@
     </div>
   </div>
 
+  <ng-container *ngIf="appendBox; then dropdownCDK; else dropdownDefault"> </ng-container>
+
+  <ng-template #dropdownDefault>
+    <ng-container *ngTemplateOutlet="dropdownListbox"> </ng-container>
+  </ng-template>
+
+  <ng-template #dropdownCDK>
+    <ng-template cdkConnectedOverlay [cdkConnectedOverlayOrigin]="trigger" [cdkConnectedOverlayOpen]="true">
+      <ng-container *ngTemplateOutlet="dropdownListbox"></ng-container>
+    </ng-template>
+  </ng-template>
+
+  <po-field-container-bottom [p-help]="help" [p-disabled]="disabled"></po-field-container-bottom>
+</po-field-container>
+
+<ng-template #dropdownListbox>
   <po-multiselect-dropdown
     #dropdownElement
     [p-searching]="isServerSearching"
@@ -63,8 +82,7 @@
     (p-change)="changeItems($event)"
     (p-change-search)="changeSearch($event)"
     (p-close-dropdown)="controlDropdownVisibility(false)"
+    (keydown)="onKeyDownDropdown($event, 0)"
   >
   </po-multiselect-dropdown>
-
-  <po-field-container-bottom [p-help]="help" [p-disabled]="disabled"></po-field-container-bottom>
-</po-field-container>
+</ng-template>

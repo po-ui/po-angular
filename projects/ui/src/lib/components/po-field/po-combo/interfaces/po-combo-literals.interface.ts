@@ -11,4 +11,7 @@ export interface PoComboLiterals {
 
   /** Texto exibido quando o combo estiver vazio. */
   chooseOption?: string;
+
+  /** Texto do aria-label do botão de limpar */
+  clean?: string;
 }

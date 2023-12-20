@@ -1,8 +1,8 @@
 import { ComponentFixture, TestBed } from '@angular/core/testing';
-import { ElementRef, EventEmitter } from '@angular/core';
+import { ElementRef } from '@angular/core';
 
 import { PoSearchComponent } from './po-search.component';
-import { PoFilterMode } from './po-search-filter-mode.enum';
+import { PoSearchFilterMode } from './enum/po-search-filter-mode.enum';
 
 describe('PoSearchComponent', () => {
   let component: PoSearchComponent;
@@ -32,53 +32,54 @@ describe('PoSearchComponent', () => {
   });
 
   it('clearSearch: should clear the search', () => {
+    const inputElement = document.createElement('input');
+    document.body.appendChild(inputElement);
+
+    component.poSearchInput = { nativeElement: inputElement };
+
     component.clearSearch();
 
-    expect(component.poSearchInput.nativeElement.value).toBe('');
+    expect(inputElement.value).toBe('');
 
-    spyOn(component, 'onSearchChange');
-    component.clearSearch();
-    expect(component.onSearchChange).toHaveBeenCalledWith('');
-
-    expect(component.filteredItemsChange.emit).toHaveBeenCalledWith(component.items);
+    document.body.removeChild(inputElement);
   });
 
   it('onSearchChange: should filter items based on search text and emit filtered items', () => {
-    component.onSearchChange('text');
+    component.onSearchChange('text', true);
 
     expect(component.filteredItems).toEqual([{ text: 'Text 1' }, { text: 'Text 2' }]);
     expect(component.filteredItemsChange.emit).toHaveBeenCalledWith([{ text: 'Text 1' }, { text: 'Text 2' }]);
   });
 
   it('onSearchChange: should filter items based on search text using startsWith', () => {
-    component.filterType = PoFilterMode.startsWith;
+    component.filterType = PoSearchFilterMode.startsWith;
 
-    component.onSearchChange('Text');
+    component.onSearchChange('Text', true);
 
     expect(component.filteredItems).toEqual([{ text: 'Text 1' }, { text: 'Text 2' }]);
     expect(component.filteredItemsChange.emit).toHaveBeenCalledWith([{ text: 'Text 1' }, { text: 'Text 2' }]);
   });
 
   it('onSearchChange: should filter items based on search text using endsWith', () => {
-    component.filterType = PoFilterMode.endsWith;
+    component.filterType = PoSearchFilterMode.endsWith;
 
-    component.onSearchChange('2');
+    component.onSearchChange('2', true);
 
     expect(component.filteredItems).toEqual([{ text: 'Text 2' }]);
     expect(component.filteredItemsChange.emit).toHaveBeenCalledWith([{ text: 'Text 2' }]);
   });
 
   it('onSearchChange: should not filter items if search text is empty', () => {
-    component.onSearchChange('');
+    component.onSearchChange('', true);
 
     expect(component.filteredItems).toEqual([{ text: 'Text 1' }, { text: 'Text 2' }, { text: 'Other Text' }]);
     expect(component.filteredItemsChange.emit).toHaveBeenCalledWith(component.items);
   });
 
   it('onSearchChange: should return false if filter mode is not recognized', () => {
-    component.filterType = ('invalidMode' as unknown) as PoFilterMode;
+    component.filterType = ('invalidMode' as unknown) as PoSearchFilterMode;
 
-    const result = component.onSearchChange('text');
+    const result = component.onSearchChange('text', true);
 
     expect(result).toBeFalsy();
     expect(component.filteredItems).toEqual([]);
@@ -90,16 +91,16 @@ describe('PoSearchComponent', () => {
     component.items = [item];
     component.filterKeys = ['value'];
 
-    component.onSearchChange('42');
+    component.onSearchChange('42', true);
 
     expect(component.filteredItems).toEqual([item]);
     expect(component.filteredItemsChange.emit).toHaveBeenCalledWith([item]);
   });
 
   it('onSearchChange: should filter items based on search text using contains', () => {
-    component.filterType = PoFilterMode.contains;
+    component.filterType = PoSearchFilterMode.contains;
 
-    component.onSearchChange('ext');
+    component.onSearchChange('ext', true);
 
     expect(component.filteredItems).toEqual([{ text: 'Text 1' }, { text: 'Text 2' }, { text: 'Other Text' }]);
 
@@ -113,10 +114,10 @@ describe('PoSearchComponent', () => {
   it('onSearchChange: should handle null value', () => {
     const searchText = 'example';
     component.filterKeys = ['name'];
-    component.filterType = PoFilterMode.contains;
+    component.filterType = PoSearchFilterMode.contains;
     component.items = [{ name: null }];
 
-    component.onSearchChange(searchText);
+    component.onSearchChange(searchText, true);
 
     expect(component.filteredItems.length).toBe(0);
   });
@@ -124,38 +125,9 @@ describe('PoSearchComponent', () => {
   it('onSearchChange: should reset filteredItems and emit empty array', () => {
     component.items = [];
     component.filterKeys = ['name'];
-    component.onSearchChange('item');
+    component.onSearchChange('item', true);
 
     expect(component.filteredItems).toEqual([]);
     expect(component.filteredItemsChange.emit).toHaveBeenCalledWith([]);
-  });
-
-  it('should remove focused class on blur', () => {
-    const parentElement = document.createElement('div');
-    const nativeElement = document.createElement('input');
-
-    parentElement.appendChild(nativeElement);
-    parentElement.classList.add('po-search-focused');
-
-    component.poSearchInput = new ElementRef(nativeElement);
-    component.onBlur();
-
-    expect(parentElement.classList.contains('po-search-focused')).toBeFalsy();
-  });
-
-  it('should add focused class on focus', () => {
-    const parentElement = document.createElement('div');
-    const nativeElement = document.createElement('input');
-    parentElement.appendChild(nativeElement);
-
-    component.poSearchInput = {
-      nativeElement: {
-        parentElement: parentElement
-      }
-    } as ElementRef;
-
-    component.onFocus();
-
-    expect(parentElement.classList.contains('po-search-focused')).toBeTruthy();
   });
 });

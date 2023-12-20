@@ -27,7 +27,6 @@ import { PoListBoxModule } from '../po-listbox/po-listbox.module';
 import { PoComboComponent } from './po-combo/po-combo.component';
 import { PoComboOptionTemplateDirective } from './po-combo/po-combo-option-template/po-combo-option-template.directive';
 import { PoMultiselectOptionTemplateDirective } from './po-multiselect/po-multiselect-option-template/po-multiselect-option-template.directive';
-import { PoDatepickerComponent } from './po-datepicker/po-datepicker.component';
 import { PoDatepickerRangeComponent } from './po-datepicker-range/po-datepicker-range.component';
 import { PoDecimalComponent } from './po-decimal/po-decimal.component';
 import { PoEmailComponent } from './po-email/po-email.component';
@@ -36,7 +35,6 @@ import { PoLookupComponent } from './po-lookup/po-lookup.component';
 import { PoLookupModalComponent } from './po-lookup/po-lookup-modal/po-lookup-modal.component';
 import { PoMultiselectDropdownComponent } from './po-multiselect/po-multiselect-dropdown/po-multiselect-dropdown.component';
 import { PoMultiselectComponent } from './po-multiselect/po-multiselect.component';
-import { PoMultiselectSearchComponent } from './po-multiselect/po-multiselect-search/po-multiselect-search.component';
 import { PoRichTextBodyComponent } from './po-rich-text/po-rich-text-body/po-rich-text-body.component';
 import { PoRichTextComponent } from './po-rich-text/po-rich-text.component';
 import { PoRichTextImageModalComponent } from './po-rich-text/po-rich-text-image-modal/po-rich-text-image-modal.component';
@@ -57,6 +55,7 @@ import { PoUrlComponent } from './po-url/po-url.component';
 import { PoCheckboxModule } from './po-checkbox/po-checkbox.module';
 import { PoSwitchModule } from './po-switch/po-switch.module';
 import { PoLabelModule } from '../po-label';
+import { PoTagModule } from '../po-tag';
 
 /**
  * @description
@@ -98,7 +97,8 @@ import { PoLabelModule } from '../po-label';
     PoRadioModule,
     PoLabelModule,
     PoListBoxModule,
-    PoSwitchModule
+    PoSwitchModule,
+    PoTagModule
   ],
   exports: [
     PoCheckboxGroupModule,
@@ -127,7 +127,8 @@ import { PoLabelModule } from '../po-label';
     PoCheckboxModule,
     PoRadioModule,
     PoLabelModule,
-    PoSwitchModule
+    PoSwitchModule,
+    PoTagModule
   ],
   declarations: [
     PoComboComponent,
@@ -142,7 +143,6 @@ import { PoLabelModule } from '../po-label';
     PoLookupModalComponent,
     PoMultiselectComponent,
     PoMultiselectDropdownComponent,
-    PoMultiselectSearchComponent,
     PoNumberComponent,
     PoPasswordComponent,
     PoRichTextBodyComponent,
