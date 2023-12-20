@@ -222,10 +222,15 @@ export class PoPageJobSchedulerComponent extends PoPageJobSchedulerBaseComponent
     });
   }
 
-  private async emitSuccessMessage(msgSuccess: any, saveOperation: Observable<any>) {
-    await saveOperation.toPromise();
-    this.poNotification.success(msgSuccess);
-    this.resetJobSchedulerForm();
+  private emitSuccessMessage(msgSuccess: any, saveOperation: Observable<any>) {
+    saveOperation.subscribe({
+      next: () => {
+        this.success.emit();
+        this.poNotification.success(msgSuccess);
+        this.resetJobSchedulerForm();
+      },
+      error: e => this.error.emit(e)
+    });
   }
 
   private getParametersByProcess(process: any) {

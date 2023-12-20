@@ -1,5 +1,5 @@
 import { AbstractControl } from '@angular/forms';
-import { Input, Directive, OnDestroy } from '@angular/core';
+import { Input, Directive, OnDestroy, Output, EventEmitter } from '@angular/core';
 
 import { PoBreadcrumb, PoDynamicFormField, PoStepperOrientation } from '@po-ui/ng-components';
 
@@ -218,6 +218,25 @@ export class PoPageJobSchedulerBaseComponent implements OnDestroy {
    * ```
    */
   @Input('p-before-send') beforeSendAction: (model: PoJobSchedulerInternal) => PoJobSchedulerInternal;
+
+  /**
+   * @optional
+   *
+   * @description
+   *
+   * Evento disparado ao concluir o processo de agendamento com sucesso.
+   */
+  @Output('p-success') success = new EventEmitter<any>();
+
+  /**
+   * @optional
+   *
+   * @description
+   *
+   * Evento disparado ao ocorrer um erro impossibilitando a conclusão do agendamento.
+   * Para este evento será passado como parâmetro os detalhes do erro.
+   */
+  @Output('p-error') error = new EventEmitter<any>();
 
   model: PoJobSchedulerInternal = new PoPageJobSchedulerInternal();
 
