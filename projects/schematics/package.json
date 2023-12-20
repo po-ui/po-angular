@@ -1,6 +1,6 @@
 {
-  "name": "@po-ui/ng-schematics",
-  "version": "0.0.0-PLACEHOLDER",
+  "name": "@teste-poui-deploy/ng-schematics",
+  "version": "16.0.0",
   "tag": "next",
   "description": "PO UI - Schematics",
   "author": "PO UI",
