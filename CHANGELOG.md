@@ -2,6 +2,21 @@
 
 All notable changes to this project will be documented in this file. See [standard-version](https://github.com/conventional-changelog/standard-version) for commit guidelines.
 
+# [16.10.0](https://github.com/po-ui/po-angular/compare/v16.9.0...v16.10.0) (2023-12-21)
+
+
+### Bug Fixes
+
+* **select:** trata o placeholder do componente no browser Safari ([7fe25b5](https://github.com/po-ui/po-angular/commit/7fe25b590e538bdd8732cf2cc7030fec21b334ca))
+
+
+### Features
+
+* **job-scheduler:** cria evento de output de erro e sucesso ([809cee2](https://github.com/po-ui/po-angular/commit/809cee2c2f5e1c4df693a12b003407e696cccb34))
+* **search:** implementa modo trigger no componente ([196ba3e](https://github.com/po-ui/po-angular/commit/196ba3ef6d47d72715b796d9dc3012afeb96dae7))
+
+
+
 # [16.9.0](https://github.com/po-ui/po-angular/compare/v16.8.0...v16.9.0) (2023-12-11)
 
 
