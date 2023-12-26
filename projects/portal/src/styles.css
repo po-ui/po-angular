@@ -1,3 +1,8 @@
+po-checkbox {
+  --border-radius: 4px;
+  --border-width: 2px;
+}
+
 :root {
   --color-portal-highlight: #c9357d;
   --color-portal-background-color-highlight: #e6f1f5;
@@ -7,8 +12,12 @@
   --font-family-po-ui-light: Roboto-Condensed-Light;
   --font-family-po-ui-bold: Roboto-Bold;
 
-  --custom-border-radius: 16px;
-  --custom-border-width: 8px;
+  --custom-border-radius: 10px;
+  --custom-border-width: 16px;
+}
+
+po-combo {
+  --border-width-sm: 2px !important;
 }
 
 body {

@@ -1,0 +1,199 @@
+<style>
+  .sample-container {
+    position: relative;
+    height: 300px;
+  }
+
+  .tools-jumbotron pre {
+    background-color: #060402c7;
+    color: #f7f6f5;
+  }
+
+  .tools-jumbotron {
+    background-color: black;
+  }
+
+  .pad-8 {
+    padding-top: 8px;
+  }
+
+  .flex-bet {
+    display: flex;
+    justify-content: space-around;
+  }
+</style>
+
+<div class="flex-bet">
+  <input class="style-inputColor" type="color" id="colorCustom" [formControl]="colorCustom.get('colorBrand')" />
+
+  <div>
+    <p>border radius</p>
+    <input type="range" id="borderRadius" min="1" max="20" [formControl]="borderRadiousCustom.get('borderRadius')" />
+  </div>
+
+  <div>
+    <p>border-width</p>
+    <input type="range" id="borderWidth" min="0.5" max="10" [formControl]="borderWidthCustom.get('borderWidth')" />
+  </div>
+
+  <div>
+    <p>height</p>
+    <input type="range" id="height" min="12" max="54" [formControl]="heightCustom.get('height')" />
+  </div>
+
+  <div class="tools-jumbotron">
+    <pre #lightest></pre>
+    <pre #lighter></pre>
+    <pre #light></pre>
+    <pre #base></pre>
+    <pre #dark></pre>
+    <pre #darker></pre>
+    <pre #darkest></pre>
+    <pre #borderRadius></pre>
+    <pre #borderWidth></pre>
+    <pre #heightCustomHtml></pre>
+  </div>
+</div>
+<br />
+<br />
+<br />
+<div style="display: flex">
+  <po-button class="pad-8" p-label="PO Button"> </po-button>
+
+  <po-input name="input"> </po-input>
+</div>
+
+<po-divider></po-divider>
+
+<po-input name="input" p-label="PO Input"> </po-input>
+
+<br />
+<br />
+<po-search></po-search>
+<br />
+<br />
+<po-button-group class="po-md-12" [p-buttons]="[{ label: 'Button 1' }, { label: 'Button 2' }]"> </po-button-group>
+
+<br />
+<br />
+
+<po-multiselect name="multiselect" p-label="PO Multiselect" [p-options]="options"> </po-multiselect>
+
+<br />
+<br />
+
+<po-search></po-search>
+
+<br />
+<br />
+
+<po-combo name="combo" p-label="PO Combo" [p-options]="[{ value: 'Option 1' }, { value: 'Option 2' }]"> </po-combo>
+
+<br />
+<br />
+
+<po-datepicker name="datepicker" p-label="PO Datepicker"> </po-datepicker>
+
+<br />
+<br />
+
+<po-dropdown p-label="PO Dropdown" [p-actions]="[{ label: 'How to install PO', url: '/guides/how-install' }]">
+</po-dropdown>
+
+<br />
+<br />
+
+<po-list-view
+  p-property-title="name"
+  [p-items]="[
+    { name: 'Registro 1', email: 'register@po-ui.com' },
+    { name: 'Registro 2', email: 'register2@po-ui.com' }
+  ]"
+>
+  <ng-template p-list-view-content-template let-item>
+    <div class="po-row">
+      <po-info class="po-md-12" p-label="Email" [p-value]="item.email"></po-info>
+    </div>
+  </ng-template>
+</po-list-view>
+
+<br />
+<br />
+<br />
+
+<po-lookup
+  name="lookup"
+  p-field-label="label"
+  p-field-value="value"
+  p-filter-service="https://po-sample-api.onrender.com/v1/heroes"
+  p-label="PO Lookup"
+>
+</po-lookup>
+
+<br />
+<br />
+<br />
+
+<po-rich-text></po-rich-text>
+
+<br />
+<br />
+<po-table
+  [p-items]="[{ code: '001', table: 'PO Table', angular: 'PO-UI' }]"
+  [p-draggable]="true"
+  [p-hide-columns-manager]="true"
+  [p-hide-table-search]="false"
+>
+</po-table>
+
+<br />
+<br />
+<br />
+
+<po-accordion [p-show-manager-accordion]="true">
+  <po-accordion-item p-label="Who can donate?" #questionOne>
+    In principle, we can say that we can all apply for blood donation. However, our acceptance depends on compliance
+    with current legislation and a number of factors that take into account the risk that such a donation may pose to
+    the health of the candidate himself and to the health of the individual receiving the donated blood.
+  </po-accordion-item>
+
+  <po-accordion-item
+    p-label="How long does it take for the blood to be processed?"
+    p-label-tag="Important!"
+    p-type-tag="danger"
+  >
+    Blood is processed as soon as collected, preferably within 6 hours of donation.
+  </po-accordion-item>
+
+  <po-accordion-item p-label="How long does the body take to replenish donated blood?">
+    Red blood cells recover 2 to 3 weeks after donation. Iron stocks at 60 days in men and 60 to 90 days in women of
+    childbearing age.
+  </po-accordion-item>
+
+  <po-accordion-item p-label="Is donating blood safe?">
+    Yes, donating blood is safe. There is no risk of getting an infectious disease by donating blood. However, there is
+    a small risk that the donor may feel unwell during or shortly after the donation especially the first few times he
+    or she donates, but the services are concerned about this, watching and making sure the donors feel nothing or feel
+    feel so that they are well assisted until full recovery.
+  </po-accordion-item>
+</po-accordion>
+
+<br />
+<po-checkbox name="checkbox" p-label="PO Checkbox"> </po-checkbox>
+<br />
+<po-radio-group
+  name="radioGroupBasic"
+  p-label="PO Radio Group"
+  [p-options]="[
+    { label: 'Option 1', value: '1' },
+    { label: 'Option 2', value: '2' }
+  ]"
+>
+</po-radio-group>
+
+<br />
+<br />
+
+<div class="sample-container">
+  <po-loading-overlay></po-loading-overlay>
+</div>

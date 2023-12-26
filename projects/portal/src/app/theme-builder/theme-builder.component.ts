@@ -895,17 +895,17 @@ export class ThemeBuilderComponent implements AfterViewInit, OnInit {
       colorBrand: ['#753399'],
       colorAction: ['#753399']
     });
-    document.getElementById('myPortal').style.setProperty('--color-brand-01-base', null);
+    document.querySelector('html').style.setProperty('--color-brand-01-base', null);
 
     this.brandFormS.reset({
       colorBrand: ['#b92f72']
     });
-    document.getElementById('myPortal').style.setProperty('--color-brand-02-base', null);
+    document.querySelector('html').style.setProperty('--color-brand-02-base', null);
 
     this.brandFormT.reset({
       colorBrand: ['#ffd464']
     });
-    document.getElementById('myPortal').style.setProperty('--color-brand-03-base', null);
+    document.querySelector('html').style.setProperty('--color-brand-03-base', null);
 
     this.buttonFormDefault.reset();
     Object.keys(this.formPropertyDictButtonD).forEach((fieldName: string) => {
@@ -1595,7 +1595,7 @@ export class ThemeBuilderComponent implements AfterViewInit, OnInit {
       const value = /color/i.test(fieldName) ? changes[fieldName] : `var(--${changes[fieldName]})`;
 
       if (changes[fieldName]) {
-        document.getElementById('myPortal').style.setProperty(this.formPropertyP[fieldName], value);
+        document.querySelector('html').style.setProperty(this.formPropertyP[fieldName], value);
         const colorBack = getComputedStyle(document.querySelector('po-page-default')).getPropertyValue(
           '--color-brand-01-base'
         );
@@ -1619,7 +1619,7 @@ export class ThemeBuilderComponent implements AfterViewInit, OnInit {
       const value = /color/i.test(fieldName) ? changes[fieldName] : `var(--${changes[fieldName]})`;
 
       if (changes[fieldName]) {
-        document.getElementById('myPortal').style.setProperty(this.formPropertyS[fieldName], value);
+        document.querySelector('html').style.setProperty(this.formPropertyS[fieldName], value);
         const colorBack = getComputedStyle(document.querySelector('po-page-default')).getPropertyValue(
           '--color-brand-02-base'
         );
@@ -1634,7 +1634,7 @@ export class ThemeBuilderComponent implements AfterViewInit, OnInit {
       const value = /color/i.test(fieldName) ? changes[fieldName] : `var(--${changes[fieldName]})`;
 
       if (changes[fieldName]) {
-        document.getElementById('myPortal').style.setProperty(this.formPropertyT[fieldName], value);
+        document.querySelector('html').style.setProperty(this.formPropertyT[fieldName], value);
         const colorBack = getComputedStyle(document.querySelector('po-page-default')).getPropertyValue(
           '--color-brand-03-base'
         );
@@ -2700,26 +2700,42 @@ export class ThemeBuilderComponent implements AfterViewInit, OnInit {
     if (!/^#([0-9A-Fa-f]{3}){1,2}$/.test(baseColor)) {
       throw new Error('Invalid color format. Please provide a valid hexadecimal color code.');
     }
-
+    console.log(baseColor);
     const lightest = this.adjustColor(baseColor, 0.1, true);
     const lighter = this.adjustColor(baseColor, 0.3, true);
     const light = this.adjustColor(baseColor, 0.5, true);
     const base = this.adjustColor(baseColor, 1, false);
-    const dark = this.adjustColor(baseColor, 9, false);
-    const darker = this.adjustColor(baseColor, 1.45, false);
-    const darkest = this.adjustColor(baseColor, 1.1, false);
+    const dark = this.adjustColor(baseColor, 0.7, false);
+    const darker = this.adjustColor(baseColor, 0.45, false);
+    const darkest = this.adjustColor(baseColor, 0.2, false);
 
+    document.querySelector('html').style.setProperty('--color-brand-01-base', base);
+    document.querySelector('html').style.setProperty('--color-brand-01-light', light);
+    document.querySelector('html').style.setProperty('--color-brand-01-lighter', lighter);
+    document.querySelector('html').style.setProperty('--color-brand-01-dark', dark);
+    document.querySelector('html').style.setProperty('--color-brand-01-darker', darker);
+    document.querySelector('html').style.setProperty('--color-brand-01-darkest', darkest);
+
+    console.log({
+      lightest,
+      lighter,
+      light,
+      base,
+      dark,
+      darker,
+      darkest
+    });
     return [lightest, lighter, light, base, dark, darker, darkest];
   }
 
   private adjustColor(color: string, factor: number, luminance: boolean): string {
     const hex = parseInt(color.slice(1), 16);
     // eslint-disable-next-line no-bitwise
-    const r = luminance ? (hex >> 16) & 0xff : Math.min(255, Math.round((hex >> 16) * factor));
+    const r = luminance ? (hex >> 16) & 0xff : Math.max(0, Math.min(255, Math.round((hex >> 16) * factor)));
     // eslint-disable-next-line no-bitwise
-    const g = luminance ? (hex >> 8) & 0xff : Math.min(255, Math.round(((hex >> 8) & 0xff) * factor));
+    const g = luminance ? (hex >> 8) & 0xff : Math.max(0, Math.min(255, Math.round(((hex >> 8) & 0xff) * factor)));
     // eslint-disable-next-line no-bitwise
-    const b = luminance ? hex & 0xff : Math.min(255, Math.round((hex & 0xff) * factor));
+    const b = luminance ? hex & 0xff : Math.max(0, Math.min(255, Math.round((hex & 0xff) * factor)));
     // eslint-disable-next-line no-bitwise
     // const a = (hex & 0xFF) / 255;
 

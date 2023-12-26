@@ -66,6 +66,15 @@
             </div>
           </div>
           <div class="po-row po-pl-1 po-mb-2">
+            <div class="color-variations po-lg-4">
+              <span
+                *ngFor="let color of colorPrimaryVariations"
+                class="color"
+                [ngStyle]="{ backgroundColor: color }"
+                [p-tooltip]="color"
+              ></span>
+            </div>
+
             <div class="container">
               <div class="container-item">
                 <input
@@ -98,14 +107,6 @@
         <ng-template p-list-view-detail-template>
           <div class="po-row po-mt-2">
             <!-- <p><strong>Marca principal:</strong> Descrição da Marca</p> -->
-            <div class="color-variations po-lg-4">
-              <span
-                *ngFor="let color of colorPrimaryVariations"
-                class="color"
-                [ngStyle]="{ backgroundColor: color }"
-                [p-tooltip]="color"
-              ></span>
-            </div>
 
             <!-- <p><strong>Marca secundária:</strong> Descrição da brand 2</p> -->
             <div class="color-variations po-lg-4">

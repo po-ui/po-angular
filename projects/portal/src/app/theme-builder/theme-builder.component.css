@@ -9,6 +9,19 @@
   --color-calendar-background-color-box-background-active: var(--color-brand-03-base);
 } */
 
+:root {
+  /* --custom-border-radius: 100%;
+  --custom-border-width: 2px; */
+
+  /* --color-brand-01-lightest: rgb(199, 218, 199);
+  --color-brand-01-lighter: rgb(109, 145, 109);
+  --color-brand-01-light: rgb(45, 135, 45);
+  --color-brand-01-base: green;
+  --color-brand-01-dark: rgb(2, 101, 2);
+  --color-brand-01-darker: rgb(1, 49, 1);
+  --color-brand-01-darkest: rgb(0, 21, 0); */
+}
+
 p {
   margin: 0;
 }
