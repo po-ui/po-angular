@@ -66,6 +66,8 @@ export class PoDynamicViewComponent extends PoDynamicViewBaseComponent implement
     if (field.options) {
       const selectedOption = field.options.find(option => option.value === field.value);
       return selectedOption ? selectedOption.label : field.value;
+    } else if (field.type === 'boolean' && 'booleanTrue' in field && 'booleanFalse' in field) {
+      return field.value ? field.booleanTrue : field.booleanFalse;
     } else {
       return field.value;
     }
