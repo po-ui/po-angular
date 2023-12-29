@@ -247,32 +247,75 @@ describe('PoDynamicViewComponent:', () => {
       expect(component['getVisibleFields']).toHaveBeenCalled();
     });
 
-    it(`setFieldValue: should return the label of the selected option if options exist and a match is found`, () => {
-      const field = {
-        value: 'value1',
-        options: [
-          { value: 'value1', label: 'label1' },
-          { value: 'value2', label: 'label2' },
-          { value: 'value3', label: 'label3' }
-        ]
-      };
+    describe('setFieldValue:', () => {
+      it(`should return the label of the selected option if options exist and a match is found`, () => {
+        const field = {
+          value: 'value1',
+          options: [
+            { value: 'value1', label: 'label1' },
+            { value: 'value2', label: 'label2' },
+            { value: 'value3', label: 'label3' }
+          ]
+        };
 
-      field.value = 'value2';
-      expect(component.setFieldValue(field)).toEqual('label2');
-    });
+        field.value = 'value2';
+        expect(component.setFieldValue(field)).toEqual('label2');
+      });
 
-    it(`setFieldValue: should return the field value if options exist but no match is found'`, () => {
-      const field = {
-        value: 'value1',
-        options: [
-          { value: 'value1', label: 'label1' },
-          { value: 'value2', label: 'label2' },
-          { value: 'value3', label: 'label3' }
-        ]
-      };
+      it(`should return the field value if options exist but no match is found'`, () => {
+        const field = {
+          value: 'value1',
+          options: [
+            { value: 'value1', label: 'label1' },
+            { value: 'value2', label: 'label2' },
+            { value: 'value3', label: 'label3' }
+          ]
+        };
 
-      field.value = 'value4';
-      expect(component.setFieldValue(field)).toEqual('value4');
+        field.value = 'value4';
+        expect(component.setFieldValue(field)).toEqual('value4');
+      });
+      it('should return the value of booleanTrue when the field value is true', () => {
+        const field = {
+          property: 'active',
+          type: 'boolean',
+          value: true,
+          booleanTrue: 'Ativo',
+          booleanFalse: 'Inativo'
+        };
+        expect(component.setFieldValue(field)).toEqual('Ativo');
+      });
+
+      it('should return the value of booleanFalse when the field value is false', () => {
+        const field = {
+          property: 'active',
+          type: 'boolean',
+          value: false,
+          booleanTrue: 'Ativo',
+          booleanFalse: 'Inativo'
+        };
+        expect(component.setFieldValue(field)).toEqual('Inativo');
+      });
+
+      it('should return "True" when the field value is true and booleanTrue is undefined', () => {
+        const field = {
+          property: 'active',
+          type: 'boolean',
+          value: true,
+          booleanFalse: 'Inativo'
+        };
+        expect(component.setFieldValue(field)).toEqual(true);
+      });
+
+      it('should return "False" when the field value is false and booleanFalse is undefined', () => {
+        const field = {
+          property: 'active',
+          type: 'boolean',
+          value: false,
+          booleanTrue: 'Ativo'
+        };
+        expect(component.setFieldValue(field)).toEqual(false);
+      });
     });
   });
 

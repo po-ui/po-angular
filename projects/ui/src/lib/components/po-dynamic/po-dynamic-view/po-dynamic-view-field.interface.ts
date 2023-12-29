@@ -230,4 +230,10 @@ export interface PoDynamicViewField extends PoDynamicField {
    * [guia de API do PO UI](https://po-ui.io/guides/api).
    */
   searchService?: string | PoDynamicViewRequest;
+
+  /** Texto exibido quando o valor do componente for *true*. */
+  booleanTrue?: string;
+
+  /** Texto exibido quando o valor do componente for *false*. */
+  booleanFalse?: string;
 }
