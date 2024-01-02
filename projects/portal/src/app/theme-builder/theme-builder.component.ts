@@ -316,7 +316,7 @@ export class ThemeBuilderComponent implements AfterViewInit, OnInit {
   };
 
   private readonly formPropertyS = {
-    colorAction: '--color-secondary'
+    colorAction: '--color-action-default'
   };
 
   private readonly formPropertyT = {
@@ -835,7 +835,7 @@ export class ThemeBuilderComponent implements AfterViewInit, OnInit {
     this.brandFormS.reset({
       colorAction: ['#753399']
     });
-    document.getElementById('myPortal').style.setProperty('--color-secondary', null);
+    document.getElementById('myPortal').style.setProperty('--color-action-default', null);
 
     this.brandFormT.reset({
       colorAction: ['#ffd464']
@@ -1586,7 +1586,7 @@ export class ThemeBuilderComponent implements AfterViewInit, OnInit {
       if (changes[fieldName]) {
         document.getElementById('myPortal').style.setProperty(this.formPropertyS[fieldName], value);
         const colorBack = getComputedStyle(document.querySelector('po-page-default')).getPropertyValue(
-          '--color-secondary'
+          '--color-action-default'
         );
         if (!this.changedColorButton) {
           this.ratioButton = this.setRatioComponent(this.changedColorButton, colorBack, '#ffffff');

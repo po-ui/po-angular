@@ -10,66 +10,72 @@ describe('PoBadgeBaseComponent:', () => {
   });
 
   describe('Properties:', () => {
+    it('p-aria-label: set ariaLabel with empty when value equals undefined', () => {
+      component.ariaLabel = undefined;
+
+      expect(component.ariaLabel).toBe(undefined);
+    });
+
+    it('p-aria-label: set ariaLabel with value passed', () => {
+      component.ariaLabel = 'Notification';
+
+      expect(component.ariaLabel).toBe('Notification');
+    });
+
     it('p-color: should update with valid values', () => {
-      const validValues = ['color-01', 'color-02', 'color-03', 'color-04', 'color-12', 'color-08'];
+      component.color = 'color-09';
 
-      expectPropertiesValues(component, 'color', validValues, validValues);
+      expect(component['_color']).toBe('color-09');
     });
 
-    it('p-color: should update with invalid values', () => {
-      const invalidValues = [true, false, undefined, 'color-13', 'color-100', 'color-8', [], {}, null, 0];
+    it('p-color: should update with invalid values and set value default `color-07`', () => {
+      component.color = 'color-13';
 
-      expectPropertiesValues(component, 'color', invalidValues, 'color-07');
+      expect(component['_color']).toBe('color-07');
     });
 
-    it('p-value: should update with valid values and call `setBadgeValue`', () => {
+    it('customColor: should update with valid values', () => {
+      const validValues = ['#ffffff', 'red', 'rgb(201, 53, 125)'];
+
+      expectPropertiesValues(component, 'customColor', validValues, validValues);
+    });
+
+    it('customColor: should update with valid values and HEX', () => {
+      component.color = '#fff';
+
+      expect(component.customColor).toBe('#fff');
+    });
+
+    it('p-value: should update with valid values', () => {
       const validValues = [10, 200, 50, 0, 999];
 
-      spyOn(component, <any>'setBadgeValue');
-
       expectPropertiesValues(component, 'value', validValues, validValues);
-      expect(component['setBadgeValue']).toHaveBeenCalled();
     });
 
-    it('p-value: should update with invalid values and call `setBadgeValue`', () => {
-      const invalidValues = [true, false, undefined, 'string', [], {}, null];
+    it('p-value: should update with invalid values', () => {
+      const validValues = [-1, -20, -30];
 
-      spyOn(component, <any>'setBadgeValue');
-
-      expectPropertiesValues(component, 'value', invalidValues, undefined);
-      expect(component['setBadgeValue']).toHaveBeenCalled();
-    });
-  });
-
-  describe('Methods:', () => {
-    it(`setBadgeValue: should set 'badgeValue' with 'undefined' if value is 'undefined'`, () => {
-      component['setBadgeValue'](undefined);
-
-      expect(component.badgeValue).toBe(undefined);
+      expectPropertiesValues(component, 'value', validValues, 0);
     });
 
-    it(`setBadgeValue: should set 'badgeValue' with '99+' if value is greater than '99'`, () => {
-      component['setBadgeValue'](100);
-
-      expect(component.badgeValue).toBe('99+');
+    it('p-icon: should set icon when value if isnt null', () => {
+      const iconFake = 'po-icon-minus';
+      component.icon = iconFake;
+      expect(component.icon).toBe(iconFake);
     });
 
-    it(`setBadgeValue: should set 'badgeValue' with '55' if value is '55'`, () => {
-      component['setBadgeValue'](55);
-
-      expect(component.badgeValue).toBe('55');
+    it('p-icon: should set icon undefined when  value if null', () => {
+      const iconFake = undefined;
+      component.icon = iconFake;
+      expect(component.icon).toBe(undefined);
     });
 
-    it(`setBadgeValue: should set 'badgeValue' with '0' if value is '0'`, () => {
-      component['setBadgeValue'](0);
+    it(`setSize: should set 'size' with 'large' if value is 'large'`, () => {
+      const newSize = 'large';
 
-      expect(component.badgeValue).toBe('0');
-    });
+      component.size = newSize;
 
-    it(`setBadgeValue: should set 'badgeValue' with '99' if value is '99'`, () => {
-      component['setBadgeValue'](99);
-
-      expect(component.badgeValue).toBe('99');
+      expect(component['size']).toBe(newSize);
     });
   });
 });

@@ -45,6 +45,7 @@ import { PoToolbarModule } from './po-toolbar/po-toolbar.module';
 import { PoTreeViewModule } from './po-tree-view/po-tree-view.module';
 import { PoWidgetModule } from './po-widget/po-widget.module';
 import { PoSearchModule } from './po-search';
+import { PoBadgeModule } from './po-badge/po-badge.module';
 
 @NgModule({
   imports: [
@@ -92,7 +93,8 @@ import { PoSearchModule } from './po-search';
     PoImageModule,
     PoPageSlideModule,
     PoSwitchModule,
-    PoSearchModule
+    PoSearchModule,
+    PoBadgeModule
   ],
   exports: [
     PoAccordionModule,
@@ -139,7 +141,8 @@ import { PoSearchModule } from './po-search';
     PoImageModule,
     PoPageSlideModule,
     PoSwitchModule,
-    PoSearchModule
+    PoSearchModule,
+    PoBadgeModule
   ],
   providers: [],
   bootstrap: [],
