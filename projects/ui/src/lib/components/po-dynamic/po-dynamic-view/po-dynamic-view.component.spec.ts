@@ -248,7 +248,6 @@ describe('PoDynamicViewComponent:', () => {
     });
 
     describe('setFieldValue:', () => {
-  
       it(`should return the label of the selected option if options exist and a match is found`, () => {
         const field = {
           value: 'value1',
@@ -258,11 +257,11 @@ describe('PoDynamicViewComponent:', () => {
             { value: 'value3', label: 'label3' }
           ]
         };
-  
+
         field.value = 'value2';
         expect(component.setFieldValue(field)).toEqual('label2');
       });
-  
+
       it(`should return the field value if options exist but no match is found'`, () => {
         const field = {
           value: 'value1',
@@ -272,7 +271,7 @@ describe('PoDynamicViewComponent:', () => {
             { value: 'value3', label: 'label3' }
           ]
         };
-  
+
         field.value = 'value4';
         expect(component.setFieldValue(field)).toEqual('value4');
       });
@@ -286,7 +285,7 @@ describe('PoDynamicViewComponent:', () => {
         };
         expect(component.setFieldValue(field)).toEqual('Ativo');
       });
-  
+
       it('should return the value of booleanFalse when the field value is false', () => {
         const field = {
           property: 'active',
@@ -297,7 +296,7 @@ describe('PoDynamicViewComponent:', () => {
         };
         expect(component.setFieldValue(field)).toEqual('Inativo');
       });
-  
+
       it('should return "True" when the field value is true and booleanTrue is undefined', () => {
         const field = {
           property: 'active',
@@ -307,7 +306,7 @@ describe('PoDynamicViewComponent:', () => {
         };
         expect(component.setFieldValue(field)).toEqual(true);
       });
-  
+
       it('should return "False" when the field value is false and booleanFalse is undefined', () => {
         const field = {
           property: 'active',
@@ -318,7 +317,6 @@ describe('PoDynamicViewComponent:', () => {
         expect(component.setFieldValue(field)).toEqual(false);
       });
     });
-
   });
 
   describe('Templates:', () => {
