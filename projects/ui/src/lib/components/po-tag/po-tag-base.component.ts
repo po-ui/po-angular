@@ -77,18 +77,13 @@ export class PoTagBaseComponent {
   @Input('p-value') value: string;
 
   /**
-   * @deprecated 16.x.x
-   *
    * @optional
    *
    * @description
    *
-   * **Deprecated 16.x.x**.
-   *
-   * > Por regras de acessibilidade a tag não terá mais evento de click. Indicamos o uso do `Po-button` ou `Po-link`
-   * caso deseje esse comportamento.
-   *
    * Ação que será executada ao clicar sobre o `po-tag` e que receberá como parâmetro um objeto contendo o seu valor e tipo.
+   *
+   * O evento de click só funciona se a tag não for removível.
    */
   @Output('p-click') click: EventEmitter<any> = new EventEmitter<PoTagItem>();
 
