@@ -664,6 +664,15 @@ describe('PoListBoxComponent', () => {
 
         expect(component.closeEvent.emit).toHaveBeenCalled();
       });
+
+      it('should emit closeEvent on Tab keydown', () => {
+        const mockEvent = new KeyboardEvent('keydown', { code: 'Tab' });
+
+        spyOn(component.closeEvent, 'emit');
+
+        component.onSelectAllCheckboxKeyDown(mockEvent);
+        expect(component.closeEvent.emit).toHaveBeenCalled();
+      });
     });
   });
 

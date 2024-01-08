@@ -88,6 +88,12 @@ export class PoListBoxComponent extends PoListBoxBaseComponent implements AfterV
     }
   }
 
+  onSelectAllCheckboxKeyDown(event: KeyboardEvent) {
+    if (event.code === 'Tab') {
+      this.closeEvent.emit();
+    }
+  }
+
   onKeyDown(itemListAction: PoItemListOption | PoItemListOptionGroup | any, event?: KeyboardEvent) {
     event.preventDefault();
 

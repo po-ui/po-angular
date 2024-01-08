@@ -24,6 +24,7 @@
         [attr.aria-checked]="checkboxAllValue === null ? 'mixed' : checkboxAllValue"
         (click)="changeAll.emit()"
         (keydown)="changeAllEmit($event)"
+        (keydown)="onSelectAllCheckboxKeyDown($event)"
       >
         <po-item-list
           [p-selected]="checkboxAllValue"
