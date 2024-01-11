@@ -1,8 +1,8 @@
-import { DoCheck, EventEmitter, Input, IterableDiffers, Output, Directive, ChangeDetectorRef } from '@angular/core';
+import { ChangeDetectorRef, Directive, DoCheck, EventEmitter, Input, IterableDiffers, Output } from '@angular/core';
 
-import { convertToBoolean, isKeyCodeEnter, uuid } from '../../utils/util';
-import { PoLanguageService } from '../../services/po-language/po-language.service';
 import { poLocaleDefault } from '../../services/po-language/po-language.constant';
+import { PoLanguageService } from '../../services/po-language/po-language.service';
+import { convertToBoolean, isKeyCodeEnter, uuid } from '../../utils/util';
 
 import { PoDisclaimer } from '../po-disclaimer/po-disclaimer.interface';
 
@@ -140,16 +140,6 @@ export class PoDisclaimerGroupBaseComponent implements DoCheck {
     this.checkChanges();
   }
 
-  onCloseAction(disclaimer) {
-    this.removeDisclaimer(disclaimer);
-
-    this.emitChangeDisclaimers();
-    this.remove.emit({
-      removedDisclaimer: { ...disclaimer },
-      currentDisclaimers: [...this.disclaimers]
-    });
-  }
-
   isRemoveAll() {
     return !this.hideRemoveAll && this.disclaimers.filter(c => !c.hideClose).length > 1;
   }
@@ -175,9 +165,17 @@ export class PoDisclaimerGroupBaseComponent implements DoCheck {
     this.removeAll.emit([...removeItems]);
   }
 
-  private removeDisclaimer(disclaimer: any) {
+  protected removeDisclaimer(disclaimer: any) {
     const itemIndex = this.disclaimers.findIndex(d => d['$id'] === disclaimer['$id']);
     this.disclaimers.splice(itemIndex, 1);
+  }
+
+  protected emitChangeDisclaimers() {
+    setTimeout(() => {
+      this.change.emit(this.disclaimers);
+    });
+    this.previousDisclaimers = [...this._disclaimers];
+    this.changeDetector?.detectChanges();
   }
 
   private checkChanges() {
@@ -223,13 +221,5 @@ export class PoDisclaimerGroupBaseComponent implements DoCheck {
         disclaimer.value !== this.previousDisclaimers[index].value ||
         disclaimer.property !== this.previousDisclaimers[index].property
     );
-  }
-
-  private emitChangeDisclaimers() {
-    setTimeout(() => {
-      this.change.emit(this.disclaimers);
-    });
-    this.previousDisclaimers = [...this._disclaimers];
-    this.changeDetector?.detectChanges();
   }
 }
