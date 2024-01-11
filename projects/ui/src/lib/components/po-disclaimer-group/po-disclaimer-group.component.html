@@ -10,14 +10,12 @@
   >
   </po-disclaimer-remove>
 
-  <po-disclaimer
+  <po-tag
     *ngFor="let disclaimer of disclaimers"
     class="po-disclaimer-group-disclaimer-align"
-    [p-hide-close]="disclaimer.hideClose"
-    [p-label]="disclaimer.label"
-    [p-property]="disclaimer.property"
-    [p-value]="disclaimer.value"
-    (p-close-action)="onCloseAction(disclaimer)"
+    [p-value]="disclaimer.label || disclaimer.value"
+    [p-removable]="!disclaimer.hideClose"
+    (p-close)="onCloseAction(disclaimer, $event)"
   >
-  </po-disclaimer>
+  </po-tag>
 </div>
