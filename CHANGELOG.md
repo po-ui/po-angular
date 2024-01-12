@@ -2,6 +2,22 @@
 
 All notable changes to this project will be documented in this file. See [standard-version](https://github.com/conventional-changelog/standard-version) for commit guidelines.
 
+# [16.11.0](https://github.com/po-ui/po-angular/compare/v16.10.0...v16.11.0) (2024-01-12)
+
+
+### Bug Fixes
+
+* **dynamic-search:** limpa campo de busca rápida ([6ca2dbd](https://github.com/po-ui/po-angular/commit/6ca2dbd6c21ca1d335584e77f974a5aade4fc6c8))
+
+
+### Features
+
+* **badge:** novo componente ([43f3186](https://github.com/po-ui/po-angular/commit/43f318639d0069e56841d5a1cc8e4e3e149b0dde))
+* **menu:** permite habilitar o automatic toggle ([610f087](https://github.com/po-ui/po-angular/commit/610f087f19c88cf8bf5205e28e33379b0c3bc18e))
+* **po-dynamic-view:** aprimora exibição de booleans ([9ff2721](https://github.com/po-ui/po-angular/commit/9ff27212a0733c8bf7bdf2fdb3420bfccbaafc31))
+
+
+
 # [16.10.0](https://github.com/po-ui/po-angular/compare/v16.9.0...v16.10.0) (2023-12-21)
 
 
