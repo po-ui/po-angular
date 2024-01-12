@@ -298,14 +298,14 @@ export class PoMenuComponent extends PoMenuBaseComponent implements AfterViewIni
   }
 
   onMouseEnter(): void {
-    if (this.collapsed) {
+    if (this.collapsed && this.automaticToggle) {
       this.collapsed = false;
       this.allowCollapseHover = true;
     }
   }
 
   onMouseLeave(): void {
-    if (!this.collapsed && this.allowCollapseHover) {
+    if (!this.collapsed && this.allowCollapseHover && this.automaticToggle) {
       this.collapsed = true;
     }
   }
