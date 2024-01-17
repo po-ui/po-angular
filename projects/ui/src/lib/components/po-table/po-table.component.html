@@ -103,7 +103,8 @@
     [ngClass]="{
       'po-table-interactive': selectable || sort,
       'po-table-selectable': selectable,
-      'po-table-striped': striped
+      'po-table-striped': striped,
+      'po-table-data-fixed-columns': applyFixedColumns()
     }"
     [attr.p-spacing]="spacing"
   >
@@ -440,9 +441,9 @@
       [ngClass]="{
         'po-table-interactive': selectable || sort,
         'po-table-selectable': selectable,
-        'po-table-striped': striped
+        'po-table-striped': striped,
+        'po-table-data-fixed-columns': applyFixedColumns()
       }"
-      [ngStyle]="{ 'table-layout': !hasItems ? 'fixed' : 'auto' }"
       [attr.p-spacing]="spacing"
     >
       <thead class="po-table-header-sticky" [style.top]="inverseOfTranslation">
@@ -507,7 +508,7 @@
                   JSON.stringify(sortedColumn?.property) === JSON.stringify(column) &&
                   (sortedColumn.ascending || !sortedColumn.ascending)
               }"
-              [ngStyle]="{ 'width': !hasItems ? '100%' : 'auto' }"
+              [ngStyle]="{ 'width': !hasItems ? '100%' : applyFixedColumns() ? column.width : 'auto' }"
               [class.po-table-header-subtitle]="column.type === 'subtitle'"
               [class.po-table-column-drag-box]="this.isDraggable"
               (click)="sortColumn(column)"
@@ -558,7 +559,7 @@
                   JSON.stringify(sortedColumn?.property) === JSON.stringify(column) &&
                   (sortedColumn.ascending || !sortedColumn.ascending)
               }"
-              [ngStyle]="{ 'width': !hasItems ? '100%' : 'auto' }"
+              [ngStyle]="{ 'width': !hasItems ? '100%' : applyFixedColumns() ? column.width : 'auto' }"
               [class.po-table-header-subtitle]="column.type === 'subtitle'"
               (click)="sortColumn(column)"
               [pFrozenColumn]="column.fixed"

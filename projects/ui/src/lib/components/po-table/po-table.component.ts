@@ -230,9 +230,7 @@ export class PoTableComponent extends PoTableBaseComponent implements AfterViewI
 
   get columnCountForMasterDetail() {
     // caso tiver ações será utilizado a sua coluna para exibir o columnManager
-    const columnManager = this.actions.length ? 0 : 1;
-
-    return this.mainColumns.length + 1 + (this.actions.length > 0 ? 1 : 0) + (this.selectable ? 1 : 0) + columnManager;
+    return this.mainColumns.length + 1 + (this.actions.length > 0 ? 1 : 0) + (this.selectable ? 1 : 0);
   }
 
   get detailHideSelect() {
@@ -307,6 +305,7 @@ export class PoTableComponent extends PoTableBaseComponent implements AfterViewI
     this.initialized = true;
     this.changeHeaderWidth();
     this.changeSizeLoading();
+    this.applyFixedColumns();
   }
 
   showMoreInfiniteScroll({ target }): void {
@@ -317,6 +316,7 @@ export class PoTableComponent extends PoTableBaseComponent implements AfterViewI
   }
 
   ngDoCheck() {
+    this.applyFixedColumns();
     this.checkChangesItems();
     this.verifyCalculateHeightTableContainer();
 
@@ -354,6 +354,13 @@ export class PoTableComponent extends PoTableBaseComponent implements AfterViewI
   applyFilters(queryParams?: { [key: string]: QueryParamsType }) {
     this.page = 1;
     this.initializeData(queryParams);
+  }
+
+  /**
+   * Verifica se columns possuem a propriedade width.
+   */
+  applyFixedColumns(): boolean {
+    return !this.columns.some(column => !column.width);
   }
 
   /**
