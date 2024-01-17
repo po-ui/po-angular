@@ -1,4 +1,4 @@
-name: PO-UI Publish
+name: PO-UI Publish Latest
 
 # URL para os pacotes po-ui no npm
 env:
@@ -42,12 +42,12 @@ jobs:
       working-directory: ${{env.WORKING_DIR}}
 
     # Pega a última versão dos pacotes publicados no npm e armazena em variáveis
-    - run: echo "SCHEMATICS_LAST_PUBLISHED_VERSION=$(npm view @${{ env.SCHEMATICS_NPM_PATH }} dist-tags.next)" >> $GITHUB_ENV
-    - run: echo "STORAGE_LAST_PUBLISHED_VERSION=$(npm view @${{ env.STORAGE_NPM_PATH }} dist-tags.next)" >> $GITHUB_ENV
-    - run: echo "SYNC_LAST_PUBLISHED_VERSION=$(npm view @${{ env.SYNC_NPM_PATH }} dist-tags.next)" >> $GITHUB_ENV
-    - run: echo "COMPONENTS_LAST_PUBLISHED_VERSION=$(npm view @${{ env.COMPONENTS_NPM_PATH }} dist-tags.next)" >> $GITHUB_ENV
-    - run: echo "TEMPLATES_LAST_PUBLISHED_VERSION=$(npm view @${{ env.TEMPLATES_NPM_PATH }} dist-tags.next)" >> $GITHUB_ENV
-    - run: echo "CODE_EDITOR_LAST_PUBLISHED_VERSION=$(npm view @${{ env.CODE_EDITOR_NPM_PATH }} dist-tags.next)" >> $GITHUB_ENV
+    - run: echo "SCHEMATICS_LAST_PUBLISHED_VERSION=$(npm view @${{ env.SCHEMATICS_NPM_PATH }} dist-tags.latest)" >> $GITHUB_ENV
+    - run: echo "STORAGE_LAST_PUBLISHED_VERSION=$(npm view @${{ env.STORAGE_NPM_PATH }} dist-tags.latest)" >> $GITHUB_ENV
+    - run: echo "SYNC_LAST_PUBLISHED_VERSION=$(npm view @${{ env.SYNC_NPM_PATH }} dist-tags.latest)" >> $GITHUB_ENV
+    - run: echo "COMPONENTS_LAST_PUBLISHED_VERSION=$(npm view @${{ env.COMPONENTS_NPM_PATH }} dist-tags.latest)" >> $GITHUB_ENV
+    - run: echo "TEMPLATES_LAST_PUBLISHED_VERSION=$(npm view @${{ env.TEMPLATES_NPM_PATH }} dist-tags.latest)" >> $GITHUB_ENV
+    - run: echo "CODE_EDITOR_LAST_PUBLISHED_VERSION=$(npm view @${{ env.CODE_EDITOR_NPM_PATH }} dist-tags.latest)" >> $GITHUB_ENV
 
     # Pega a versão no package.json
     - name: Get package.json version.
@@ -59,20 +59,12 @@ jobs:
     # PUBLISH NG-SCHEMATICS
     - name: ng-schematics - publish
       # Se a versão remota for igual à versão que será publicada então ele pula o publish deste pacote e tenta publicar os demais pacotes
-      #if: (!contains(env.PACKAGE_VERSION, env.SCHEMATICS_LAST_PUBLISHED_VERSION))
+      if: (!contains(env.PACKAGE_VERSION, env.SCHEMATICS_LAST_PUBLISHED_VERSION))
       uses: actions/setup-node@v3
       with:
         node-version: '16.x'
         registry-url: 'https://registry.npmjs.org'
-    - run: npm publish ${{env.WORKING_DIR}}/dist/ng-schematics --ignore-scripts
-      env:
-        PACKAGE_VERSION: ${{ steps.package-version.outputs.current-version }}
-        NODE_AUTH_TOKEN: ${{ secrets.NPM_TOKEN }}  
-
-    - name: ng-schematics - add "latest" tag
-      if: (!contains(env.PACKAGE_VERSION, env.SCHEMATICS_LAST_PUBLISHED_VERSION) && !contains(env.PACKAGE_VERSION, '-next') && !contains(env.PACKAGE_VERSION, '-rc'))
-      run: npm dist-tags add @${{ env.SCHEMATICS_NPM_PATH }}@${{ env.PACKAGE_VERSION }}
-      working-directory: ${{env.WORKING_DIR}}
+    - run: npm publish ${{env.WORKING_DIR}}/dist/ng-schematics --tag latest --ignore-scripts
       env:
         PACKAGE_VERSION: ${{ steps.package-version.outputs.current-version }}
         NODE_AUTH_TOKEN: ${{ secrets.NPM_TOKEN }}
@@ -84,15 +76,7 @@ jobs:
       with:
         node-version: '16.x'
         registry-url: 'https://registry.npmjs.org'
-    - run: npm publish ${{env.WORKING_DIR}}/dist/ng-storage --ignore-scripts
-      env:
-        PACKAGE_VERSION: ${{ steps.package-version.outputs.current-version }}
-        NODE_AUTH_TOKEN: ${{ secrets.NPM_TOKEN }}
-
-    - name: ng-storage - add "latest" tag
-      if: (!contains(env.PACKAGE_VERSION, env.STORAGE_LAST_PUBLISHED_VERSION) && !contains(env.PACKAGE_VERSION, '-next') && !contains(env.PACKAGE_VERSION, '-rc'))
-      run: npm dist-tags add @${{ env.STORAGE_NPM_PATH }}@${{ env.PACKAGE_VERSION }}
-      working-directory: ${{env.WORKING_DIR}}
+    - run: npm publish ${{env.WORKING_DIR}}/dist/ng-storage --tag latest --ignore-scripts
       env:
         PACKAGE_VERSION: ${{ steps.package-version.outputs.current-version }}
         NODE_AUTH_TOKEN: ${{ secrets.NPM_TOKEN }}
@@ -104,15 +88,7 @@ jobs:
       with:
         node-version: '16.x'
         registry-url: 'https://registry.npmjs.org'
-    - run: npm publish ${{env.WORKING_DIR}}/dist/ng-sync --ignore-scripts
-      env:
-        PACKAGE_VERSION: ${{ steps.package-version.outputs.current-version }}
-        NODE_AUTH_TOKEN: ${{ secrets.NPM_TOKEN }}
-
-    - name: ng-sync - add "latest" tag
-      if: (!contains(env.PACKAGE_VERSION, env.SYNC_LAST_PUBLISHED_VERSION) && !contains(env.PACKAGE_VERSION, '-next') && !contains(env.PACKAGE_VERSION, '-rc'))
-      run: npm dist-tags add @${{ env.SYNC_NPM_PATH }}@${{ env.PACKAGE_VERSION }}
-      working-directory: ${{env.WORKING_DIR}}
+    - run: npm publish ${{env.WORKING_DIR}}/dist/ng-sync --tag latest --ignore-scripts
       env:
         PACKAGE_VERSION: ${{ steps.package-version.outputs.current-version }}
         NODE_AUTH_TOKEN: ${{ secrets.NPM_TOKEN }}
@@ -124,19 +100,11 @@ jobs:
       with:
         node-version: '16.x'
         registry-url: 'https://registry.npmjs.org'
-    - run: npm publish ${{env.WORKING_DIR}}/dist/ng-components --ignore-scripts
+    - run: npm publish ${{env.WORKING_DIR}}/dist/ng-components --tag latest --ignore-scripts
       env:
         PACKAGE_VERSION: ${{ steps.package-version.outputs.current-version }}
         NODE_AUTH_TOKEN: ${{ secrets.NPM_TOKEN }}
 
-    - name: ng-components - add "latest" tag
-      if: (!contains(env.PACKAGE_VERSION, env.COMPONENTS_LAST_PUBLISHED_VERSION) && !contains(env.PACKAGE_VERSION, '-next') && !contains(env.PACKAGE_VERSION, '-rc'))
-      run: npm dist-tags add @${{ env.COMPONENTS_NPM_PATH }}@${{ env.PACKAGE_VERSION }}
-      working-directory: ${{env.WORKING_DIR}}
-      env:
-        PACKAGE_VERSION: ${{ steps.package-version.outputs.current-version }}
-        NODE_AUTH_TOKEN: ${{ secrets.NPM_TOKEN }}
-    
     # PUBLISH NG-TEMPLATES
     - name: ng-templates - publish
       if: (!contains(env.PACKAGE_VERSION, env.TEMPLATES_LAST_PUBLISHED_VERSION))
@@ -144,19 +112,11 @@ jobs:
       with:
         node-version: '16.x'
         registry-url: 'https://registry.npmjs.org'
-    - run: npm publish ${{env.WORKING_DIR}}/dist/ng-templates --ignore-scripts
+    - run: npm publish ${{env.WORKING_DIR}}/dist/ng-templates --tag latest --ignore-scripts
       env:
         PACKAGE_VERSION: ${{ steps.package-version.outputs.current-version }}
         NODE_AUTH_TOKEN: ${{ secrets.NPM_TOKEN }}
 
-    - name: ng-templates - add "latest" tag
-      if: (!contains(env.PACKAGE_VERSION, env.TEMPLATES_LAST_PUBLISHED_VERSION) && !contains(env.PACKAGE_VERSION, '-next') && !contains(env.PACKAGE_VERSION, '-rc'))
-      run: npm dist-tags add @${{ env.TEMPLATES_NPM_PATH }}@${{ env.PACKAGE_VERSION }}
-      working-directory: ${{env.WORKING_DIR}}
-      env:
-        PACKAGE_VERSION: ${{ steps.package-version.outputs.current-version }}
-        NODE_AUTH_TOKEN: ${{ secrets.NPM_TOKEN }}
-    
     # PUBLISH NG-CODE-EDITOR
     - name: ng-code-editor - publish
       if: (!contains(env.PACKAGE_VERSION, env.CODE_EDITOR_LAST_PUBLISHED_VERSION))
@@ -164,15 +124,7 @@ jobs:
       with:
         node-version: '16.x'
         registry-url: 'https://registry.npmjs.org'
-    - run: npm publish ${{env.WORKING_DIR}}/dist/ng-code-editor --ignore-scripts
-      env:
-        PACKAGE_VERSION: ${{ steps.package-version.outputs.current-version }}
-        NODE_AUTH_TOKEN: ${{ secrets.NPM_TOKEN }}
-
-    - name: ng-code-editor - add "latest" tag
-      if: (!contains(env.PACKAGE_VERSION, env.CODE_EDITOR_LAST_PUBLISHED_VERSION) && !contains(env.PACKAGE_VERSION, '-next') && !contains(env.PACKAGE_VERSION, '-rc'))
-      run: npm dist-tags add @${{ env.CODE_EDITOR_NPM_PATH }}@${{ env.PACKAGE_VERSION }}
-      working-directory: ${{env.WORKING_DIR}}
+    - run: npm publish ${{env.WORKING_DIR}}/dist/ng-code-editor --tag latest --ignore-scripts
       env:
         PACKAGE_VERSION: ${{ steps.package-version.outputs.current-version }}
         NODE_AUTH_TOKEN: ${{ secrets.NPM_TOKEN }}
