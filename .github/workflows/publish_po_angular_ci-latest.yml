@@ -1,0 +1,57 @@
+name: PO-UI Publish
+
+# URL para os pacotes po-ui no npm
+env:
+  COMPONENTS_NPM_PATH: po-ui/ng-components
+  WORKING_DIR: /home/runner/work/anderson-gregorio-totvs/anderson-gregorio-totvs/po-angular
+
+on:
+  workflow_dispatch:
+
+jobs:
+  build-and-publish:
+    runs-on: ubuntu-latest
+    steps:
+
+    - name: Check out po-angular
+      uses: actions/checkout@v4
+      with:
+        path: po-angular
+
+    - name: Check out style
+      uses: actions/checkout@v4
+      with:
+        repository: po-ui/po-style
+        path: po-style
+
+    - name: Check out lint
+      uses: actions/checkout@v4
+      with:
+        repository: po-ui/po-tslint
+        path: po-tslint
+
+    - name: Install and Build
+      run: npm install && npm run build:ui
+      working-directory: ${{env.WORKING_DIR}}
+
+    # Pega a última versão dos pacotes publicados no npm e armazena em variáveis
+    - run: echo "COMPONENTS_LAST_PUBLISHED_VERSION=$(npm view @${{ env.COMPONENTS_NPM_PATH }} dist-tags.latest)" >> $GITHUB_ENV
+
+    # Pega a versão no package.json
+    - name: Get package.json version.
+      id: package-version
+      uses: martinbeentjes/npm-get-version-action@main
+      with:
+        path: po-angular
+
+    # PUBLISH NG-COMPONENTS
+    - name: ng-components - publish
+      if: (!contains(env.PACKAGE_VERSION, env.COMPONENTS_LAST_PUBLISHED_VERSION))
+      uses: actions/setup-node@v3
+      with:
+        node-version: '16.x'
+        registry-url: 'https://registry.npmjs.org'
+    - run: npm publish ${{env.WORKING_DIR}}/dist/ng-components --tag latest --ignore-scripts
+      env:
+        PACKAGE_VERSION: ${{ steps.package-version.outputs.current-version }}
+        NODE_AUTH_TOKEN: ${{ secrets.NPM_TOKEN }}
