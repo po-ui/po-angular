@@ -210,7 +210,8 @@ describe('PoTableComponent:', () => {
       verifyCalculateHeightTableContainer: () => {},
       checkChangesItems: () => {},
       debounceResize: () => true,
-      checkInfiniteScroll: () => {}
+      checkInfiniteScroll: () => {},
+      applyFixedColumns: () => {}
     };
   }
 
@@ -2803,18 +2804,18 @@ describe('PoTableComponent:', () => {
       expect(component.columnCountForMasterDetail).toBe(countColumns);
     });
 
-    it('columnCountForMasterDetail: should return 7 columnCount if actions is empty and has 5 columns', () => {
+    it('columnCountForMasterDetail: should return 6 columnCount if actions is empty and has 5 columns', () => {
       component.actions = [];
       component.columns = [...columns];
 
       const columnCountColumnManager = 1;
 
-      const countColumns = columns.length + 1 + columnCountColumnManager;
+      const countColumns = columns.length + columnCountColumnManager;
 
       expect(component.columnCountForMasterDetail).toBe(countColumns);
     });
 
-    it('columnCountForMasterDetail: should return 8 columnCount if actions is empty, has 5 columns and is selectable', () => {
+    it('columnCountForMasterDetail: should return 7 columnCount if actions is empty, has 5 columns and is selectable', () => {
       component.actions = [];
       component.columns = [...columns];
       component.selectable = true;
@@ -2822,7 +2823,7 @@ describe('PoTableComponent:', () => {
       const columnCountColumnManager = 1;
       const columnCountCheckbox = 1;
 
-      const countColumns = columns.length + 1 + columnCountColumnManager + columnCountCheckbox;
+      const countColumns = columns.length + columnCountColumnManager + columnCountCheckbox;
 
       expect(component.columnCountForMasterDetail).toBe(countColumns);
     });
