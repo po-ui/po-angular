@@ -259,21 +259,27 @@ export class PoDynamicViewBaseComponent {
 
   private transformArrayValue(valueProperty: any, field: PoDynamicViewField) {
     const valueArray = Array.isArray(valueProperty) ? valueProperty : [valueProperty];
-    const arrayWithLabel = valueArray.map(item => ({
-      value: item[field.fieldValue] || item.value,
-      label: item[field.fieldLabel] || item.label
-    }));
+    let labels: Array<string>;
 
-    const labels = arrayWithLabel.map(optionValue => {
-      if (optionValue.label) {
-        const labelTranformed = this.transformValue(field.type, optionValue.label, field.format);
-        if (field.concatLabelValue && optionValue.value) {
-          return `${labelTranformed} - ${optionValue.value}`;
-        } else {
-          return labelTranformed;
+    if (Array.isArray(field.format)) {
+      labels = valueArray.map(objectData => this.formatField(objectData, field.format));
+    } else {
+      const arrayWithLabel = valueArray.map(item => ({
+        value: item[field.fieldValue] || item.value,
+        label: item[field.fieldLabel] || item.label
+      }));
+
+      labels = arrayWithLabel.map(optionValue => {
+        if (optionValue.label) {
+          const labelTranformed = this.transformValue(field.type, optionValue.label, field.format);
+          if (field.concatLabelValue && optionValue.value) {
+            return `${labelTranformed} - ${optionValue.value}`;
+          } else {
+            return labelTranformed;
+          }
         }
-      }
-    });
+      });
+    }
 
     if (labels[0] !== undefined && labels.join()) {
       return labels.join(', ');
@@ -317,5 +323,21 @@ export class PoDynamicViewBaseComponent {
     }
 
     return transformedValue;
+  }
+
+  private formatField(objectSelected, properties) {
+    let formattedField;
+    if (Array.isArray(properties)) {
+      for (const property of properties) {
+        if (objectSelected && objectSelected[property]) {
+          if (!formattedField) {
+            formattedField = objectSelected[property];
+          } else {
+            formattedField += ' - ' + objectSelected[property];
+          }
+        }
+      }
+    }
+    return formattedField;
   }
 }
