@@ -96,26 +96,31 @@ export interface PoDynamicViewField extends PoDynamicField {
   isArrayOrObject?: boolean;
 
   /**
-   * Formato de exibição do valor do campo.
+   * Define o formato de exibição para o valor de um campo.
    *
-   * Aplicado para casos específicos de acordo com o tipo do campo.
+   * - Quando `format` é uma `string`, o formato aplicado depende da propriedade **type** segue como usar cada tipo:
+   *   - `currency`: Utiliza códigos de moeda definidos pelo [CurrencyPipe](https://angular.io/api/common/CurrencyPipe).
+   *     Exemplos: Use 'BRL' para Real Brasileiro e 'USD' para Dólar Americano.
+   *   - `date`: Adota formatos de data especificados pelo [DatePipe](https://angular.io/api/common/DatePipe).
+   *     Suporta formatos personalizados, como dia (dd), mês (MM) e ano (yyyy ou yy).
+   *     Formato padrão é 'dd/MM/yyyy'. Exemplos: 'dd/MM/yyyy', 'dd-MM-yy', 'mm/dd/yyyy'.
+   *   - `time`: Aceita formatos de tempo, incluindo hora (HH), minutos (mm), segundos (ss) e opcionalmente
+   *     milisegundos (f-ffffff). Formato padrão é 'HH:mm:ss'. Exemplos: 'HH:mm', 'HH:mm:ss.ffffff', 'HH:mm:ss.ff'.
+   *   - `number`: Usa especificações do [DecimalPipe](https://angular.io/api/common/DecimalPipe) para formatação numérica.
+   *     Na ausência de um formato específico, o número é exibido como fornecido.
+   *     Exemplo: Entrada `50`, formato `'1.2-5'`, resulta em `50.00`.
    *
-   * **types**:
-   * - `currency`: Aceita valores definidos para a propriedade `currencyCode` do
-   *  [**CurrencyPipe**](https://angular.io/api/common/CurrencyPipe)
-   * + Exemplos: 'BRL', 'USD'.
-   * - `date`: Aceita valores definidos para a propriedade `format` do [**DatePipe**](https://angular.io/api/common/DatePipe)
-   * e também aceita os caracteres de dia(dd), mês(MM) e ano (yyyy ou yy),
-   * caso não seja informado um formato o mesmo será 'dd/MM/yyyy'. Exemplos: 'dd/MM/yyyy', 'dd-MM-yy', 'mm/dd/yyyy'.
-   * - `time`: Aceita apenas os caracteres de hora(HH), minutos(mm), segundos(ss) e
-   *  milisegundos(f-ffffff), os milisegundos são opcionais, caso não seja informado um formato o mesmo será
-   * 'HH:mm:ss'. Exemplos: 'HH:mm', 'HH:mm:ss.ffffff', 'HH:mm:ss.ff', 'mm:ss.fff'.
-   * - `number`: Aceita valores definidos para a propriedade `digitsInfo` do [**DecimalPipe**](https://angular.io/api/common/DecimalPipe)
-   *  para formatação, e caso não seja informado, o número será exibido na sua forma original.
+   * - Quando `format` é um `Array<string>`:
+   *   - Cada elemento do array representa uma propriedade do objeto.
+   *   - Os valores dessas propriedades são concatenados, separados pelo padrão ' - '.
+   *   - Exemplo: Para `format: ["id", "name"]` e um objeto `{ id: 1, name: 'Carlos Diego' }`,
+   *     o resultado será `'1 - Carlos Diego'`.
    *
-   *  + Exemplo: com o valor de entrada: `50` e a valor para formatação: `'1.2-5'` o resultado será: `50.00`.
+   * @example Para formatar um campo de moeda, use format: "BRL".
+   *          Para um campo de data, use format: "dd/MM/yyyy".
+   *          Para combinar propriedades de um objeto em um campo, use format: ["id", "name"].
    */
-  format?: string;
+  format?: string | Array<string>;
 
   /**
    * Informa a ordem de exibição do campo.

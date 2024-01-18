@@ -397,6 +397,39 @@ describe('PoDynamicViewBaseComponent:', () => {
       expect(newField.value).toEqual(listName);
     });
 
+    it('transformArrayValue: should return a concatenated string of multiple properties from an array of objects', () => {
+      const inputArray = [
+        { id: 1, name: 'Company1', ssn: '261-81-7609' },
+        { id: 2, name: 'Company2', ssn: '527-84-6773' }
+      ];
+      const field = {
+        property: 'company',
+        label: 'Company',
+        fieldLabel: 'name',
+        fieldValue: 'id',
+        format: ['id', 'name', 'ssn']
+      };
+
+      const result = component['transformArrayValue'](inputArray, field);
+
+      expect(result).toBe('1 - Company1 - 261-81-7609, 2 - Company2 - 527-84-6773');
+    });
+
+    it('transformArrayValue: should return a concatenated string of properties from a single object', () => {
+      const inputArray = [{ id: 1, name: 'Company1', ssn: '261-81-7609' }];
+      const field = {
+        property: 'company',
+        label: 'Company',
+        fieldLabel: 'name',
+        fieldValue: 'id',
+        format: ['id', 'name', 'ssn']
+      };
+
+      const result = component['transformArrayValue'](inputArray, field);
+
+      expect(result).toBe('1 - Company1 - 261-81-7609');
+    });
+
     it(`createField: should call 'transformFieldLabel' and return a fieldLabel property`, () => {
       const field = { property: 'name', label: 'Nome', fieldLabel: 'title', fieldValue: 'id' };
       component.value = { name: 'Test Name', title: 'Title Test', id: 123 };
