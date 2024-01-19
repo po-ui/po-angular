@@ -16,6 +16,16 @@ const PO_TOOLTIP_POSITION_DEFAULT = 'bottom';
  *
  * Para textos maiores ou no caso de haver a necessidade de utilizar algum outro elemento como
  * conteúdo deve-se utilizar o [**po-popover**](https://po-ui.io/documentation/po-popover?view=doc).
+ *
+ * #### Propriedades customizáveis
+ *
+ * | Propriedade                                  | Descrição                                                        | Valor Padrão                                     |
+ * |----------------------------------------------|------------------------------------------------------------------|--------------------------------------------------|
+ * | **Default Values**                           |                                                                  |                                                  |
+ * | --border-radius &nbsp;                       | Arredondamento da borda &nbsp;                                   | var(--border-radius-md)                          |
+ * | --color                                      | Cor da tooltip                                                   | var(--color-neutral-dark-80)                     |
+ * | --font-family                                | Família tipográfica usada                                        | var(--font-family-theme)                         |
+ * | --text-color                                 | Cor do texto                                                     | var(--color-neutral-light-00)                    |
  */
 
 @Directive()

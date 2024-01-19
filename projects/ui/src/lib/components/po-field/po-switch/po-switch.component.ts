@@ -41,6 +41,32 @@ import { PoSwitchLabelPosition } from './po-switch-label-position.enum';
  * - Quando em foco, o switch é ativado usando a tecla de Espaço. [W3C WAI-ARIA 3.5 Switch - Keyboard Interaction](https://www.w3.org/WAI/ARIA/apg/patterns/switch/#keyboard-interaction-19)
  * - A área do foco precisar ter uma espessura de pelo menos 2 pixels CSS e o foco não pode ficar escondido por outros elementos da tela. [WCAG 2.4.12: Focus Appearance](https://www.w3.org/WAI/WCAG22/Understanding/focus-appearance-enhanced)
  *
+ * #### Propriedades customizáveis
+ *
+ * | Propriedade                            | Descrição                                             | Valor Padrão                                    |
+ * |----------------------------------------|-------------------------------------------------------|-------------------------------------------------|
+ * | **Unchecked**                          |                                                       |                                                 |
+ * | --color-unchecked                      | Cor quando desmarcado                                 | var(--color-neutral-light-00)                   |
+ * | --border-color                         | Cor da borda                                          | var(--color-neutral-dark-70)                    |
+ * | --track-unchecked                      | Cor da faixa desmarcado                               | var(--color-neutral-light-20)                   |
+ * | ---                                    | ---                                                   | ---                                             |
+ * | **Checked**                            |                                                       |                                                 |
+ * | --color-checked                        | Cor quando marcado                                    | var(--color-action-default)                     |
+ * | --track-checked                        | Cor da faixa marcado                                  | var(--color-brand-01-light)                     |
+ * | ---                                    | ---                                                   | ---                                             |
+ * | **Hover**                              |                                                       |                                                 |
+ * | --color-unchecked-hover                | Cor do hover quando desmarcado                        | var(--color-action-pressed)                     |
+ * | --color-checked-hover                  | Cor do hover quando marcado                           | var(--color-action-pressed)                     |
+ * | ---                                    | ---                                                   | ---                                             |
+ * | **Focused**                            |                                                       |                                                 |
+ * | --outline-color-focused                | Cor do outline do focus                               | var(--color-action-focus)                       |
+ * | ---                                    | ---                                                   | ---                                             |
+ * | **Disabled**                           |                                                       |                                                 |
+ * | --color-unchecked-disabled &nbsp;      | Cor do disabled quando desmarcado &nbsp;              | var(--color-neutral-light-20)                   |
+ * | --color-checked-disabled               | Cor do disabled quando marcado                        | var(--color-action-disabled)                    |
+ *
+ *
+ *
  * @example
  *
  * <example name="po-switch-basic" title="PO Switch Basic">

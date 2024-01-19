@@ -48,7 +48,8 @@ const providers = [
  * @docsExtends PoLookupBaseComponent
  *
  * @description
- *
+ * <br/>
+ * <br/>
  * Quando existe muitos dados o po-lookup por padrão traz apenas 10 itens na tabela e os demais são carregados por demanda através do
  * botão 'Carregar mais resultados'. Para que funcione corretamente, é importante que o serviço siga o
  * [Guia de implementação das APIs TOTVS](https://po-ui.io/guides/api).

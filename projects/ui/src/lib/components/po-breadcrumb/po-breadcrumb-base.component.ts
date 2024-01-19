@@ -16,6 +16,16 @@ import { PoBreadcrumbItem } from './po-breadcrumb-item.interface';
  *
  * Havendo necessidade de incluir parâmetros na requisição do serviço,
  * o componente dispõe da propriedade `p-params-service` que recebe um objeto contendo as informações.
+ *
+ * #### Propriedades customizáveis
+ *
+ * | Propriedade                            | Descrição                                             | Valor Padrão                                    |
+ * |----------------------------------------|-------------------------------------------------------|-------------------------------------------------|
+ * | **Default Values**                     |                                                       |                                                 |
+ * | --font-family                          | Família tipográfica usada &nbsp;                      | var(--font-family-theme)                        |
+ * | --color                                | Cor do icone de lista                                 | var(--color-action-default)                     |
+ * | --color-icon                           | Cor do icone ">"                                      | var(--color-neutral-mid-60)                     |
+ * | --color-current-page &nbsp;            | Cor do pagina atual                                   | var(--color-neutral-mid-60)                     |
  */
 @Directive()
 export class PoBreadcrumbBaseComponent {

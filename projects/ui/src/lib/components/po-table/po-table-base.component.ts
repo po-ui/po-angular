@@ -117,6 +117,38 @@ export const poTableLiteralsDefault = {
  *
  * Caso a largura de todas as colunas forem definidas e o total ultrapassar o tamanho tabela, será exibido um *scroll* na horizontal para a
  * completa visualização dos dados.
+ *
+ *  #### Propriedades customizáveis
+ *
+ * | Propriedade                            | Descrição                                             | Valor Padrão                                    |
+ * |----------------------------------------|-------------------------------------------------------|-------------------------------------------------|
+ * | **Default Values**                     |                                                       |                                                 |
+ * | --font-family                          | Família tipográfica usada                             | var(--font-family-theme)                        |
+ * | --background-color                     | Cor de background                                     | var(--color-neutral-light-00)                   |
+ * | --color                                | Cor do texto                                          | var(--color-neutral-dark-95)                    |
+ * | --background-striped-color             | Cor do background quando striped                      | var(--color-neutral-light-05)                   |
+ * | --color-line                           | Cor das linhas                                        | var(--color-neutral-mid-40)                     |
+ * | ---                                    | ---                                                   | ---                                             |
+ * | **Hover**                              |                                                       |                                                 |
+ * | --color-hover                          | Cor de hover                                          | var(--color-action-hover)                       |
+ * | --background-color-hover               | Cor de background de hover                            | var(--color-brand-01-lighter)                   |
+ * | ---                                    | ---                                                   | ---                                             |
+ * | **Focused**                            |                                                       |                                                 |
+ * | --outline-color-focused                | Cor do outline do focus                               | var(--color-action-focus)                       |
+ * | ---                                    | ---                                                   | ---                                             |
+ * | **Disabled**                           |                                                       |                                                 |
+ * | --color-disabled                       | Cor no estado disabled                                | var(--color-neutral-mid-40)                     |
+ * | ---                                    | ---                                                   | ---                                             |
+ * | **Headline**                           |                                                       |                                                 |
+ * | --background-color-headline &nbsp;     | Cor do cabeçalho                                      | var(--color-neutral-light-10)                   |
+ * | --font-weight-headline                 | Peso da fonte do cabeçalho                            | var(--font-weight-bold)                         |
+ * | ---                                    | ---                                                   | ---                                             |
+ * | **Selected**                           |                                                       |                                                 |
+ * | --background-color-selected &nbsp;     | Cor de background quando selecionado                  | var(--color-brand-01-lightest)                  |
+ * | ---                                    | ---                                                   | ---                                             |
+ * | **Actived**                            |                                                       |                                                 |
+ * | --color-actived                        | Cor do texto quando selecionado                       | var(--color-neutral-dark-90)                    |
+ * | --background-color-actived             | Cor de background quando selecionado &nbsp;           | var(--color-brand-01-light)                     |
  */
 @Directive()
 export abstract class PoTableBaseComponent implements OnChanges, OnDestroy {

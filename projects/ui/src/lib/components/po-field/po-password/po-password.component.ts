@@ -8,6 +8,8 @@ import { PoInputGeneric } from '../po-input-generic/po-input-generic';
  * @docsExtends PoInputBaseComponent
  *
  * @description
+ * <br/>
+ * <br/>
  * O po-password é um input específico para senhas. Já possui tipo, estilo e ícone predefinidos.
  *
  * @example
