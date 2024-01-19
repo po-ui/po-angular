@@ -37,6 +37,8 @@ const poComboContainerPositionDefault = 'bottom';
  * @docsExtends PoComboBaseComponent
  *
  * @description
+ * <br/>
+ * <br/>
  * Utilizando po-combo com serviço, é possivel digitar um valor no campo de entrada e pressionar a tecla 'tab' para que o componente
  * faça uma requisição à URL informada passando o valor digitado no campo. Se encontrado o valor, então o mesmo será selecionado, caso
  * não seja encontrado, então a lista de itens voltará para o estado inicial.

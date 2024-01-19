@@ -22,6 +22,26 @@ import { PoCheckboxSize } from './po-checkbox-size.enum';
  * - O componente foi desenvolvido utilizando controles padrões HTML para permitir a identificação do mesmo na interface por tecnologias assistivas. [WCAG 4.1.2: Name, Role, Value](https://www.w3.org/WAI/WCAG21/Understanding/name-role-value)
  * - A área do foco precisar ter uma espessura de pelo menos 2 pixels CSS e o foco não pode ficar escondido por outros elementos da tela. [WCAG 2.4.12: Focus Appearance](https://www.w3.org/WAI/WCAG22/Understanding/focus-appearance-enhanced)
  * - A cor não deve ser o único meio para diferenciar o componente do seu estado marcado e desmarcado. [WGAG 1.4.1: Use of Color, 3.2.4: Consistent Identification](https://www.w3.org/WAI/WCAG21/Understanding/use-of-color)
+ *
+ * #### Propriedades customizáveis
+ *
+ * | Propriedade                            | Descrição                                             | Valor Padrão                                    |
+ * |----------------------------------------|-------------------------------------------------------|-------------------------------------------------|
+ * | **Default Values**                     |                                                       |                                                 |
+ * | --border-color                         | Cor da borda                                          | var(--color-neutral-dark-70)                    |
+ * | --color-unchecked                      | Cor quando não selecionado                            | var(--color-neutral-light-00)                   |
+ * | --color-checked                        | Cor quando selecionado                                | var(--color-action-default)                     |
+ * | ---                                    | ---                                                   | ---                                             |
+ * | **Hover**                              |                                                       |                                                 |
+ * | --color-hover                          | Cor de hover                                          | var(--color-action-hover)                       |
+ * | --shadow-color-hover                   | Cor da sombra no estado hover                         | var(--color-brand-01-lighter)                   |
+ * | ---                                    | ---                                                   | ---                                             |
+ * | **Focused**                            |                                                       |                                                 |
+ * | --outline-color-focused                | Cor do outline do focus                               | var(--color-action-focus)                       |
+ * | ---                                    | ---                                                   | ---                                             |
+ * | **Disabled**                           |                                                       |                                                 |
+ * | --color-unchecked-disabled &nbsp;      | Cor do checkbox não selecionado no estado disabled &nbsp;    | var(--color-action-disabled)             |
+ * | --color-checked-disabled &nbsp;        | Cor do checkbox selecionado no estado disabled &nbsp;        | var(--color-neutral-dark-70)             |
  */
 @Directive()
 export abstract class PoCheckboxBaseComponent implements ControlValueAccessor {

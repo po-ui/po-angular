@@ -24,6 +24,23 @@ export const poLoadingLiteralsDefault = {
  *
  * Este componente tem o objetivo de mostrar visualmente aos usuários que a aplicação está processando
  * ou aguardando a resposta de alguma requisição.
+ *
+ * #### Propriedades customizáveis
+ *
+ * | Propriedade                            | Descrição                                             | Valor Padrão                                    |
+ * |----------------------------------------|-------------------------------------------------------|-------------------------------------------------|
+ * | **Default Values**                     |                                                       |                                                 |
+ * | --font-family                          | Família tipográfica usada                             | var(--font-family-theme)                        |
+ * | --font-weight                          | Peso da fonte                                         | var(--font-weight-normal)                       |
+ * | --text-color                           | Cor do texto                                          | var(--color-neutral-dark-70)                    |
+ * | --border-radius                        | Arredondamento da borda &nbsp;                        | var(--border-radius-md)                         |
+ * | --border-width                         | Espessura do border                                   | var(--border-width-sm)                          |
+ * | --border-color                         | Cor da borda                                          | var(--color-neutral-light-20)                   |
+ * | --background                           | Cor de background                                     | var(--color-neutral-light-00)                   |
+ * | --shadow                               | Sombra                                                | var(--shadow-md)                                |
+ * | ---                                    | ---                                                   | ---                                             |
+ * | **po-loading-icon**                    |                                                       |                                                 |
+ * | --color                                | Cor do spinner                                        | var(--color-action-default)                     |
  */
 @Directive()
 export class PoLoadingBaseComponent {

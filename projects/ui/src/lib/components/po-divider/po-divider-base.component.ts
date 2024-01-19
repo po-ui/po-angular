@@ -6,6 +6,14 @@ import { PoDividerSize } from './po-divider-size.enum';
  *
  * Este componente apresenta uma linha demarcadora de blocos e pode conter um *label*. Seu uso é indicado para definição
  * e organização de informações em uma tela e sua característica é semelhante à tag `<hr>`.
+ *
+ * #### Propriedades customizáveis
+ *
+ * | Propriedade                            | Descrição                                             | Valor Padrão                                    |
+ * |----------------------------------------|-------------------------------------------------------|-------------------------------------------------|
+ * | **Default Values**                     |                                                       |                                                 |
+ * | --color                                | Cor do divider                                        | var(--color-neutral-mid-40)                     |
+ * | --stroke-linecap &nbsp;                | Extremidade da linha &nbsp; &nbsp;                    | round                                           |
  */
 @Directive()
 export class PoDividerBaseComponent implements OnInit {

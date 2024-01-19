@@ -10,6 +10,17 @@ import { convertToBoolean, convertToInt } from '../../utils/util';
  * podem ser desabilitados. Ao remover sua borda a sombra também será removida. Além disso, sua altura acompanha a
  * quantidade do conteúdo, porém pode ser fixada. Para controlar sua largura, utilize o [Grid System](/guides/grid-system),
  * assim possibilitando o tratamento para diferentes resoluções.
+ *
+ * #### Propriedades customizáveis
+ *
+ * | Propriedade                                         | Descrição                                                        | Valor Padrão                                     |
+ * |-----------------------------------------------------|------------------------------------------------------------------|--------------------------------------------------|                                                                                                   | ---
+ * | **Default Values**                                  |                                                                  |                                                  |
+ * | --padding &nbsp;                                    | Preenchimento                                                    | 1rem                                             |
+ * | --border-radius &nbsp;                              | Arredondamento da borda &nbsp;                                   | var(--border-radius-md)                          |
+ * | --border-color &nbsp;                               | Cor da borda                                                     | var(--color-neutral-light-20)                    |
+ * | --background &nbsp;                                 | Cor de background                                                | var(--color-neutral-light-00)                    |
+ * | --border-width &nbsp;                               | Espessura do border                                              | var(--border-width-sm)                           |
  */
 @Directive()
 export class PoContainerBaseComponent {
