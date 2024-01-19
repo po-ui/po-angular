@@ -34,6 +34,33 @@ import { PoDropdownAction } from './po-dropdown-action.interface';
  * ```
  * > Para maiores dúvidas referente à configuração de rotas, acesse em nosso portal /Guias /Começando
  * [/Configurando as rotas do po-menu](/guides/getting-started).
+ *
+ * #### Propriedades customizáveis
+ *
+ * | Propriedade                            | Descrição                                             | Valor Padrão                                    |
+ * |----------------------------------------|-------------------------------------------------------|-------------------------------------------------|
+ * | **Default Values**                     |                                                       |                                                 |
+ * | --font-family                          | Família tipográfica usada                             | var(--font-family-theme)                        |
+ * | --font-size                            | Tamanho da fonte                                      | var(--font-size-default)                        |
+ * | --font-weight                          | Peso da fonte                                         | var(--font-weight-bold)                         |
+ * | --line-height                          | Tamanho da label                                      | var(--line-height-none)                         |
+ * | --color                                | Cor do dropdown                                       | var(--color-action-default)                     |
+ * | --border-radius                        | Arredondamento da borda                               | var(--border-radius-md)                         |
+ * | --border-width                         | Espessura do border                                   | var(--border-width-md)                          |
+ * | --padding                              | Preenchimento                                         | 0 1em                                           |
+ * | ---                                    | ---                                                   | ---                                             |
+ * | **Hover**                              |                                                       |                                                 |
+ * | --color-hover                          | Cor de hover                                          | var((--color-brand-01-darkest)                  |
+ * | --background-hover                     | Cor de background de hover                            | var(--color-brand-01-lighter)                   |
+ * | ---                                    | ---                                                   | ---                                             |
+ * | **Focused**                            |                                                       |                                                 |
+ * | --outline-color-focused &nbsp;         | Cor do outline do focus                               | var(--color-action-focus)                       |
+ * | ---                                    | ---                                                   | ---                                             |
+ * | **Pressed**                            |                                                       |                                                 |
+ * | --background-pressed &nbsp;            | Cor de background quando pressionado &nbsp; &nbsp;    | var(--color-brand-01-light)                     |
+ * | ---                                    | ---                                                   | ---                                             |
+ * | **Disabled**                           |                                                       |                                                 |
+ * | --color-disabled                       | Cor no estado disabled                                | var(--color-action-disabled)                    |
  */
 
 @Directive()

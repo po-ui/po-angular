@@ -25,6 +25,8 @@ const providers = [
  * @docsExtends PoInputBaseComponent
  *
  * @description
+ * <br/>
+ * <br/>
  * O po-login é um input específico para login. Já possui tipo, estilo e ícone predefinidos.
  *
  * @example

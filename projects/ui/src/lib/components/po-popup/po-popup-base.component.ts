@@ -30,6 +30,46 @@ const poPopupDefaultPosition = 'bottom-left';
  *   </div>
  * </po-popup >
  * ```
+ *
+ * #### Propriedades customizáveis
+ *
+ * | Propriedade                            | Descrição                                             | Valor Padrão                                    |
+ * |----------------------------------------|-------------------------------------------------------|-------------------------------------------------|
+ * | **Default Values**                     |                                                       |                                                 |
+ * | --border-radius                        | Arredondamento da borda                               | var(--border-radius-md)                         |
+ * | --border-width                         | Espessura do border                                   | var(--border-width-sm)                          |
+ * | --border-color                         | Cor da borda                                          | var(--color-neutral-light-20)                   |
+ * | --background                           | Cor do background                                     | var(--color-neutral-light-00)                   |
+ * | --shadow                               | Sombra                                                | var(--shadow-md)                                |
+ * | ---                                    | ---                                                   | ---                                             |
+ * | **po-popup po-item-list**              |                                                       |                                                 |
+ * | --font-family                          | Família tipográfica usada                             | var(--font-family-theme)                        |
+ * | --font-size                            | Tamanho da fonte                                      | var(-font-size-default)                         |
+ * | --line-height                          | Tamanho da label                                      | var(--line-height-md)                           |
+ * | ---                                    | ---                                                   | ---                                             |
+ * | **Action**                             |                                                       |                                                 |
+ * | --font-weight                          | Peso da fonte                                         | var(--font-weight-bold)                         |
+ * | --color                                | Cor do popup                                          | var(--color-action-default)                     |
+ * | ---                                    | ---                                                   | ---                                             |
+ * | **Hover**                              |                                                       |                                                 |
+ * | --color-hover                          | Cor de hover                                          | var(--color-brand-01-darkest)                   |
+ * | --background-hover                     | Cor de background de hover                            | var(--color-brand-01-lighter)                   |
+ * | ---                                    | ---                                                   | ---                                             |
+ * | **Focused**                            |                                                       |                                                 |
+ * | --outline-color-focused                | Cor do outline do focus                               | var(--color-action-focus)                       |
+ * | ---                                    | ---                                                   | ---                                             |
+ * | **Pressed**                            |                                                       |                                                 |
+ * | --background-pressed                   | Cor de background quando pressionado &nbsp;           | var(--color-brand-01-light)                     |
+ * | ---                                    | ---                                                   | ---                                             |
+ * | **Disabled**                           |                                                       |                                                 |
+ * | --color-disabled                       | Cor no estado disabled                                | var(--color-action-disabled)                    |
+ * | ---                                    | ---                                                   | ---                                             |
+ * | **Selected**                           |                                                       |                                                 |
+ * | --font-weight-selected                 | Peso da fonte quando selecionado                      | var(--font-weight-bold)                         |
+ * | --background-selected                  | Cor de background quando selecionado &nbsp;           | var(--color-brand-01-lightest)                  |
+ * | ---                                    | ---                                                   | ---                                             |
+ * | **Option e check**                     |                                                       |                                                 |
+ * | --color-option                         | Cor quando Option/check                               | var(--color-neutral-dark-90)                    |
  */
 @Directive()
 export class PoPopupBaseComponent {

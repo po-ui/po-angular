@@ -22,6 +22,30 @@ import { convertToBoolean, isTypeof, uuid } from '../../utils/util';
  * - Desenvolvido com uso de controles padrões HTML, o que permite a identificação na interface por tecnologias assistivas. (WCAG [4.1.2: Name, Role, Value](https://www.w3.org/WAI/WCAG21/Understanding/name-role-value))
  * - O foco é visível e possui uma espessura superior a 2 pixels CSS, não ficando escondido por outros elementos da tela. (WCAG [2.4.12: Focus Appearance](https://www.w3.org/WAI/WCAG22/Understanding/focus-appearance-enhanced))
  * - Quando selecionável, prevê interação por teclado, podendo ser selecionado através da tecla space (WCAG [2.4.1 - Keyboard](https://www.w3.org/WAI/WCAG21/Understanding/keyboard))
+ *
+ * #### Propriedades customizáveis
+ *
+ * | Propriedade                                  | Descrição                                                        | Valor Padrão                                     |
+ * |----------------------------------------------|------------------------------------------------------------------|--------------------------------------------------|
+ * | **Default Values**                           |                                                                  |                                                  |
+ * | --padding                                    | Preenchimento                                                    | 1rem                                             |
+ * | --border-radius                              | Arredondamento da borda                                          | var(--border-radius-md)                          |
+ * | --border-color                               | Cor da borda                                                     | var(--color-neutral-light-20)                    |
+ * | --background                                 | Cor de background                                                | var(--color-neutral-light-00)                    |
+ * | --border-width                               | Espessura do border                                              | var(--border-width-sm)                           |
+ * | --shadow                                     | Sombra                                                           | var(--shadow-md)                                 |
+ * | ---                                          | ---                                                              | ---                                              |
+ * | **Selected**                                 |                                                                  |                                                  |
+ * | --background-selected &nbsp;                 | Cor de background quando selecionado &nbsp;                      | var(--color-brand-01-lightest)                   |
+ * | --border-color-selected &nbsp;               | Cor da borda quando selecionado                                  | var(--color-action-default)                      |
+ * | ---                                          | ---                                                              | ---                                              |
+ * | **Hover**                                    |                                                                  |                                                  |
+ * | --border-color-hover                         | Cor da borda do widget no hover                                  | var(--color-brand-01-dark)                       |
+ * | --shadow-hover                               | Sombra do widget no hover                                        | var(--shadow-lg)                                 |
+ * | ---                                          | ---                                                              | ---                                              |
+ * | **Focused**                                  |                                                                  |                                                  |
+ * | --color-focused                              | Cor do widget em foco                                            | var(--color-action-default)                      |
+ * | --outline-color-focused &nbsp;               | Cor do outline do widget em foco                                 | var(--color-action-focus)                        |
  */
 @Directive()
 export abstract class PoWidgetBaseComponent {

@@ -25,6 +25,28 @@ export const poDisclaimerGroupLiteralsDefault = {
  * basta pressionar a tecla *enter*. Esta funcionalidade não se aplica caso a propriedade `hideClose` estiver habilitada.
  *
  * > Veja a integração destas funcionalidade no componente [po-page-list](/documentation/po-page-list).
+ *
+ * #### Propriedades customizáveis
+ *
+ * | Propriedade                            | Descrição                                             | Valor Padrão                                    |
+ * |----------------------------------------|-------------------------------------------------------|-------------------------------------------------|
+ * | **Default Values**                     |                                                       |                                                 |
+ * | --font-family                          | Família tipográfica usada                             | var(--font-family-theme)                        |
+ * | --font-size                            | Tamanho da fonte                                      | var(--font-size-sm)                             |
+ * | --line-height                          | Tamanho da label                                      | var(--line-height-sm)                           |
+ * | --color                                | Cor do disclaimer                                     | var(--color-brand-01-lightest)                  |
+ * | --border-radius                        | Arredondamento da borda &nbsp;                        | var(--border-radius-pill)                       |
+ * | --border-color                         | Cor da borda                                          | var(--color-brand-01-lighter)                   |
+ * | --text-color                           | Cor do texto                                          | var(--color-neutral-dark-80)                    |
+ * | ---                                    | ---                                                   | ---                                             |
+ * | **Icon**                               |                                                       |                                                 |
+ * | ---color-icon                          | Cor do icone                                          | var(--color-action-default)                     |
+ * | ---                                    | ---                                                   | ---                                             |
+ * | **Hover**                              |                                                       |                                                 |
+ * | --color-hover                          | Cor de hover                                          | var(--color-brand-01-lighter)                   |
+ * | ---                                    | ---                                                   | ---                                             |
+ * | **Focused**                            |                                                       |                                                 |
+ * | --outline-color-focused &nbsp;         | Cor do outline do focus                               | var(--color-brand-01-darkest)                   |
  */
 @Directive()
 export class PoDisclaimerGroupBaseComponent implements DoCheck {
