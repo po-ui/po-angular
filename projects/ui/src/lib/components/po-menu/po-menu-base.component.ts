@@ -42,6 +42,48 @@ export const poMenuLiteralsDefault = {
  *
  * O componente po-menu recebe uma lista de objetos do tipo `MenuItem` com as informações dos itens de menu como
  * textos, links para redirecionamento, ações, até 4 níveis de menu e ícones para o primeiro nível de menu.
+ *
+ * #### Propriedades customizáveis
+ *
+ * | Propriedade                            | Descrição                                             | Valor Padrão                                    |
+ * |----------------------------------------|-------------------------------------------------------|-------------------------------------------------|
+ * | **Default Values**                     |                                                       |                                                 |
+ * | --border-radius                        | Arredondamento da borda                               | var(--border-radius-md)                         |
+ * | --border-color                         | Cor da borda                                          | var(--color-neutral-light-20)                   |
+ * | --background-color                     | Cor de background                                     | Var(----color-neutral-light-05)                 |
+ * | ---                                    | ---                                                   | ---                                             |
+ * | **Menu Footer**                        |                                                       |                                            |
+ * | --color                                | Cor do menu footer                                    | var(--color-action-default)                     |
+ * | --font-size                            | Tamanho da fonte                                      | var(--font-size-default)                        |
+ * | --line-height                          | Tamanho da label                                      | var(--line-height-md)                           |
+ * | --outline-color-focused                | Cor do outline do focus                               | var(--color-action-focus)                       |
+ * | --font-weight-lvl0                     | Peso da fonte                                         | var(--font-weight-bold)                         |
+ * | ---                                    | ---                                                   | ---                                             |
+ * | **po-menu-item**                       |                                                       |                                                 |
+ * | --font-family                          | Família tipográfica usada                             | var(--font-family-theme)                        |
+ * | --font-size                            | Tamanho da fonte                                      | var(--font-size-default)                        |
+ * | --line-height                          | Tamanho da label                                      | var(--line-height-md)                           |
+ * | ---border-radius                       | Arredondamento da borda                               | var(--border-radius-md)                         |
+ * | --color                                | Cor do item                                           | var(--color-action-default)                     |
+ * | --background-color                     | Cor do background                                     | transparent                                     |
+ * | ---                                    | ---                                                   | ---                                             |
+ * | **Hover**                              |                                                       |                                                 |
+ * | --color-hover                          | Cor de hover                                          | var(--color-brand-01-darkest)                   |
+ * | --background-color-hover               | Cor de background de hover                            | var(--color-brand-01-lighter)                   |
+ * | ---                                    | ---                                                   | ---                                             |
+ * | **Focused**                            |                                                       |                                                 |
+ * | --outline-color-focused                | Cor do outline do focus                               | var(--color-action-focus)                       |
+ * | ---                                    | ---                                                   | ---                                             |
+ * | **Pressed**                            |                                                       |                                                 |
+ * | --background-color-pressed &nbsp;      | Cor do background quando pressionado &nbsp;           | var(--color-brand-01-light)                     |
+ * | ---                                    | ---                                                   | ---                                             |
+ * | **Actived**                            |                                                       |                                                 |
+ * | --background-color-actived             | Cor de background quando actived                      | var(--color-brand-01-darkest)                   |
+ * | --color-actived                        | Cor quando actived                                    | var(--color-brand-01-lighter)                   |
+ * | ---                                    | ---                                                   | ---                                             |
+ * | **Font**                               |                                                       |                                                 |
+ * | --font-weight-lvl0                     | Peso da fonte bold                                    | var(--font-weight-bold)                         |
+ * | --font-weight-lvl1                     | Peso da fonte                                         | var(--font-weight-normal)                       |
  */
 @Directive()
 export abstract class PoMenuBaseComponent {

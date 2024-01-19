@@ -31,6 +31,29 @@ const poRadioGroupColumnsTotalLength: number = 12;
  * - A área do foco precisar ter uma espessura de pelo menos 2 pixels CSS e o foco não pode ficar escondido por outros elementos da tela. [(WCAG 2.4.12: Focus Appearance](https://www.w3.org/WAI/WCAG22/Understanding/focus-appearance-enhanced)
  *
  * Conforme documentação em: https://doc.animaliads.io/docs/components/radio
+ *
+ *
+ * #### Propriedades customizáveis
+ *
+ * | Propriedade                            | Descrição                                             | Valor Padrão                                    |
+ * |----------------------------------------|-------------------------------------------------------|-------------------------------------------------|
+ * | **Default Values**                     |                                                       |                                                 |
+ * | --border-color                         | Cor da borda                                          | var(--color-neutral-dark-70)                    |
+ * | ---                                    | ---                                                   | ---                                             |
+ * | **Hover**                              |                                                       |                                                 |
+ * | --shadow-color-hover                   | Cor da sombra no hover                                | var(--color-brand-01-lighter)                   |
+ * | --color-hover                          | Cor de background no hover                            | var(--color-brand-01-dark)                      |
+ * | ---                                    | ---                                                   | ---                                             |
+ * | **Focused**                            |                                                       |                                                 |
+ * | --outline-color-focused                | Cor do outline do focus                               | var(--color-brand-01-darkest)                   |
+ * | ---                                    | ---                                                   | ---                                             |
+ * | **checked**                            |                                                       |                                                 |
+ * | --color-unchecked                      | Cor quando não selecionado                            | var(--color-neutral-light-00)                   |
+ * | --color-checked                        | Cor quando selecionado                                | var(--color-action-default)                     |
+ * | ---                                    | ---                                                   | ---                                             |
+ * | **Disabled**                           |                                                       |                                                 |
+ * | --color-unchecked-disabled &nbsp;      | Cor quando não selecionado no estado disabled &nbsp;  | var(--color-neutral-light-30)                   |
+ * | --color-checked-disabled               | Cor quando selecionado no estado disabled             | var(--color-neutral-dark-70)                    |
  */
 
 @Directive()

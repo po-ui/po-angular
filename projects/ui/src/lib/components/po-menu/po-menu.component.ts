@@ -34,7 +34,8 @@ const poMenuRootLevel = 1;
  * @docsExtends PoMenuBaseComponent
  *
  * @description
- *
+ * <br/>
+ * <br/>
  * Aparece completo em telas com largura maior que 1200px, caso contrário o menu é escondido e chamado por meio de um botão.
  *
  * O menu também pode ser colapsado. Essa opção é habilitada quando todos os itens de primeiro nível possuírem ícones e textos curtos.

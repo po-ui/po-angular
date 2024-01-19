@@ -32,7 +32,8 @@ const providers = [
  * @docsExtends PoInputBaseComponent
  *
  * @description
- *
+ * <br/>
+ * <br/>
  * po-email é um input específico para receber E-mail, com o pattern já configurado.
  *
  * @example

@@ -21,6 +21,20 @@ import { poModalLiterals } from './po-modal.literals';
  * o componente [`PoModalFooter`](/documentation/po-modal-footer).
  *
  * > É possível fechar a modal através da tecla *ESC*, quando a propriedade `p-hide-close` não estiver habilitada.
+ *
+ * #### Propriedades customizáveis
+ *
+ * | Propriedade                                         | Descrição                                                        | Valor Padrão                                     |
+ * |-----------------------------------------------------|------------------------------------------------------------------|--------------------------------------------------|                                                                                                   | ---
+ * | **Default Values**                                  |                                                                  |                                                  |
+ * | --border-radius &nbsp;                              | Arredondamento da borda &nbsp;                                   | var(--border-radius-md)                          |
+ * | --border-width &nbsp;                               | Espessura do border                                              | var(--border-width-sm)                           |
+ * | --border-color &nbsp;                               | Cor da borda                                                     | var(--color-neutral-light-20)                    |
+ * | --background &nbsp;                                 | Cor de background                                                | var(--color-neutral-light-00)                    |
+ * | --shadow &nbsp;                                     | Sombra                                                           | var(--shadow-md)                                 |
+ * | --color-overlay &nbsp;                              | Cor da camada visual temporária                                  | var(--color-neutral-dark-80)                     |
+ * | --opacity-overlay &nbsp;                            | Opacidade da camada visual temporária &nbsp;                     | 0.7                                              |
+ * | --color-divider &nbsp;                              | Cor das divisões do modal                                        | var(--color-neutral-light-20)                    |
  */
 @Directive()
 export class PoModalBaseComponent {

@@ -27,7 +27,7 @@ const poDecimalTotalLengthLimit = 16;
  * @docsExtends PoInputBaseComponent
  *
  * @description
- *
+ * <br>
  * <br>
  * - O `po-decimal` é um *input* específico para receber apenas números decimais, por isso recebe as seguintes características:
  *  + Aceita apenas números;

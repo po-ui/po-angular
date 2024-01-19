@@ -5,7 +5,6 @@ import { PoButtonGroupItem } from './po-button-group-item.interface';
 import { PoButtonGroupToggle } from './po-button-group-toggle.enum';
 
 const PO_TOGGLE_TYPE_DEFAULT = 'none';
-
 /**
  * @description
  *
@@ -13,7 +12,7 @@ const PO_TOGGLE_TYPE_DEFAULT = 'none';
  * Cada botão do grupo é tratado de forma individual, recebendo assim um rótulo, uma ação bem como se deverá estar habilitado ou não.
  *
  * Este componente além de servir como um agrupador de botões para ação, também permite que sejam utilizados
- * para seleções multiplas e únicas.
+ * para seleções múltiplas e únicas.
  *
  * O grupo de botões deve ser utilizado para organizar as ações de maneira uniforme e transmitir a ideia de que os botões fazem
  * parte de um mesmo contexto.
@@ -24,6 +23,40 @@ const PO_TOGGLE_TYPE_DEFAULT = 'none';
  * - Procure utilizar no máximo 3 ações para cada `po-button-group`.
  *
  * > As recomendações do `po-button` também valem para o `po-button-group`.
+ *
+ * #### Propriedades customizáveis
+ *
+ * | Propriedade                            | Descrição                                             | Valor Padrão                                    |
+ * |----------------------------------------|-------------------------------------------------------|-------------------------------------------------|
+ * | **Default Values**                     |                                                       |                                                 |
+ * | --font-family                          | Família tipográfica usada                             | var(--font-family-theme)                        |
+ * | --font-size                            | Tamanho da fonte                                      | var(--font-size-default)                        |
+ * | --font-weight                          | Peso da fonte                                         | var(--font-weight-bold)                         |
+ * | --line-height                          | Tamanho da label                                      | var(--line-height-none)                         |
+ * | --border-radius                        | Arredondamento da borda &nbsp;                        | var(--border-radius-md)                         |
+ * | --border-width                         | Espessura do border                                   | var(--border-width-md)                          |
+ * | --padding                              | Preenchimento                                         | 0 1em                                           |
+ * | ---                                    | ---                                                   | ---                                             |
+ * | --text-color                           | Cor do texto                                          | var(--color-neutral-light-00)                   |
+ * | --color                                | Cor do botão                                          | var(--color-action-default)                     |
+ * | --background-color                     | Cor de background                                     | var(--color-transparent)                        |
+ * | --shadow                               | Sombra                                                | var(--shadow-none)                              |
+ * | ---                                    | ---                                                   | ---                                             |
+ * | **Hover**                              |                                                       |                                                 |
+ * | --color-hover                          | Cor de hover                                          | var(--color-action-hover)                       |
+ * | --background-hover                     | Cor de background de hover                            | var(--color-brand-01-lighter)                   |
+ * | --border-color-hover                   | Cor da borda de hover                                 | var(--color-brand-01-darkest)                   |
+ * | ---                                    | ---                                                   | ---                                             |
+ * | **Focused**                            |                                                       |                                                 |
+ * | --outline-color-focused                | Cor do outline do focus                               | var(--color-action-focus)                       |
+ * | ---                                    | ---                                                   | ---                                             |
+ * | **Pressed**                            |                                                       |                                                 |
+ * | --color-pressed                        | Cor quando pressionado                                | var(--color-action-pressed)                     |
+ * | --background-pressed                   | Cor de background quando pressionada &nbsp;           | var(--color-brand-01-light)                     |
+ * | ---                                    | ---                                                   | ---                                             |
+ * | **Disabled**                           |                                                       |                                                 |
+ * | --color-disabled                       | Cor no estado disabled                                | var(--color-action-disabled)                    |
+ * | --background-color-disabled &nbsp;    | Cor de background no estado disabled                   | var(--color-transparent)                        |
  */
 @Directive()
 export class PoButtonGroupBaseComponent {
