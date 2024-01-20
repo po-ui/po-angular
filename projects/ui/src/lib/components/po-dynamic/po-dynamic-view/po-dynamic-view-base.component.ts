@@ -249,7 +249,7 @@ export class PoDynamicViewBaseComponent {
 
     if (value !== '') {
       return this.service
-        .getObjectByValue(value)
+        .getObjectByValue(value, field.params)
         .pipe(map(res => this.transformArrayValue(res, field)))
         .pipe(catchError(() => of(null)));
     } else {
