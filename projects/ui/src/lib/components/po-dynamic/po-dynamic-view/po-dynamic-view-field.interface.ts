@@ -241,4 +241,16 @@ export interface PoDynamicViewField extends PoDynamicField {
 
   /** Texto exibido quando o valor do componente for *false*. */
   booleanFalse?: string;
+
+  /**
+   * Objeto que será enviado como parâmetro nas requisições de busca `searchService`
+   * utilizadas pelos campos que dependem de serviços para carregar seus dados.
+   *
+   * Por exemplo, para o parâmetro `{ age: 23 }` a URL da requisição ficaria:
+   *
+   * ``
+   * url + /1?age=23
+   * ``
+   */
+  params?: any;
 }
