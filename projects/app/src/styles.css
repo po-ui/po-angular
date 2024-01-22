@@ -1,5 +1,24 @@
 /* You can add global styles to this file, and also import other style files */
+ /* po-switch {
+  --color-checked: #78e232;
+  --track-checked: #2e9aff;
+  --border-color: #ff0000;
+  --track-unchecked: #ea8f8f;
+} */
+/*
+po-radio {
+  --color-checked: #a0790d;
+  --color-unchecked: #ee1717;
+}
+po-checkbox {
+  --color-checked: #2dd788;
+  --color-unchecked: #e90101;
+  --shadow-color-hover: #6b97ff;
+  --border-color: #28f0ae;
+} */
+
 :root {
+  --font-size: 30px;
   /* --custom-border-radius: 10px;
   --custom-border-width: 10px;
 
@@ -14,6 +33,7 @@
   /* --custom-default-height: 44px; */
 
   /* --custom-default-height : 27px; */
+  --color-button-group-color-selected: white;
 }
 
 /* po-combo {
@@ -24,3 +44,34 @@
 /* po-checkbox {
   --color-checked: blue;
 } */
+
+po-button-group .po-button {
+  --font-family: var(--font-family-theme);
+  --font-size: var(--font-size-default);
+  --font-weight: var(--font-weight-bold);
+  --line-height: var(--line-height-none);
+  --border-radius: var(--border-radius-md);
+  --border-width: var(--border-width-md);
+  --padding: 0 1em;
+
+  --text-color: var(--color-neutral-light-00);
+  --color: var(--color-action-default);
+  --background-color: var(--color-transparent);
+  --shadow: var(--shadow-none);
+
+  /* hover */
+  --color-hover: var(--color-action-hover);
+  --background-hover: var(--color-brand-01-lighter);
+  --border-color-hover: var(--color-brand-01-darkest);
+
+  /* focused */
+  --outline-color-focused: var(--color-action-focus);
+
+  /* pressed */
+  --color-pressed: var(--color-action-pressed);
+  --background-pressed: var(--color-brand-01-light);
+
+  /* disabled */
+  --color-disabled: var(--color-action-disabled);
+  --background-color-disabled: var(--color-transparent);
+}

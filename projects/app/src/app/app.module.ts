@@ -10,9 +10,10 @@ import { PoTemplatesModule } from '../../../templates/src/lib';
 
 import { AppComponent } from './app.component';
 import { BrowserAnimationsModule } from '@angular/platform-browser/animations';
+import { SamplePoDynamicFormRegisterComponent } from '../../../ui/src/lib/components/po-dynamic/po-dynamic-form/samples/sample-po-dynamic-form-register/sample-po-dynamic-form-register.component';
 
 @NgModule({
-  declarations: [AppComponent],
+  declarations: [AppComponent, SamplePoDynamicFormRegisterComponent ],
   imports: [
     BrowserModule,
     FormsModule,
@@ -20,7 +21,8 @@ import { BrowserAnimationsModule } from '@angular/platform-browser/animations';
     ReactiveFormsModule,
     HttpClientModule,
     RouterModule.forRoot([], {}),
-    PoModule
+    PoModule,
+    PoTemplatesModule
   ],
   bootstrap: [AppComponent]
 })

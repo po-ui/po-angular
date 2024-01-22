@@ -23,6 +23,10 @@
   }
 </style>
 
+
+
+
+
 <div class="flex-bet">
   <input class="style-inputColor" type="color" id="colorCustom" [formControl]="colorCustom.get('colorBrand')" />
 
@@ -57,6 +61,10 @@
 <br />
 <br />
 <br />
+
+<sample-po-dynamic-form-register></sample-po-dynamic-form-register>
+<!-- <po-page-login></po-page-login> -->
+
 <div style="display: flex">
   <po-button class="pad-8" p-label="PO Button"> </po-button>
 
@@ -75,6 +83,8 @@
 <po-button-group class="po-md-12" [p-buttons]="[{ label: 'Button 1' }, { label: 'Button 2' }]"> </po-button-group>
 
 <br />
+<po-button-group class="po-md-12" [p-buttons]="[{ label: 'Button 1' }, { label: 'Button 2', selected:true }]"> </po-button-group>
+
 <br />
 
 <po-multiselect name="multiselect" p-label="PO Multiselect" [p-options]="options"> </po-multiselect>
@@ -127,6 +137,7 @@
   p-field-value="value"
   p-filter-service="https://po-sample-api.onrender.com/v1/heroes"
   p-label="PO Lookup"
+  [p-multiple]="true"
 >
 </po-lookup>
 
@@ -193,6 +204,11 @@
 
 <br />
 <br />
+
+<po-switch name="switch" p-label="PO Switch"> </po-switch>
+
+<br />
+
 
 <div class="sample-container">
   <po-loading-overlay></po-loading-overlay>
