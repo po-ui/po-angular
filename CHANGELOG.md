@@ -2,6 +2,22 @@
 
 All notable changes to this project will be documented in this file. See [standard-version](https://github.com/conventional-changelog/standard-version) for commit guidelines.
 
+# [16.12.0](https://github.com/po-ui/po-angular/compare/v16.11.0...v16.12.0) (2024-01-22)
+
+
+### Bug Fixes
+
+* **multiselect:** corrige comportamento ao utilizar a tecla Tab ([36cf24c](https://github.com/po-ui/po-angular/commit/36cf24c58bcba3e4e3b762253b19b9568fb24e65))
+
+
+### Features
+
+* **disclaimer-group:** reutiliza `po-tag` no componente ([e8ab1a7](https://github.com/po-ui/po-angular/commit/e8ab1a7d5c7fa475f1f3c19182d17dacd3747b6e))
+* **po-dynamic-view:** adiciona `format` aos valores ([c4ac760](https://github.com/po-ui/po-angular/commit/c4ac760552a17d12b1a63304e6035cbaee69fe95))
+* **tag:** ajusta área de click mínima ([5e47c82](https://github.com/po-ui/po-angular/commit/5e47c82731d48b0880c99adfd9a73401a9fc0a9a))
+
+
+
 # [16.11.0](https://github.com/po-ui/po-angular/compare/v16.10.0...v16.11.0) (2024-01-12)
 
 
