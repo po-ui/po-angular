@@ -1,0 +1,47 @@
+name: PO-UI Publish Portal
+
+env:
+  AZURE_WEBAPP_NAME: wa-po-ui
+  AZURE_WEBAPP_PACKAGE_PATH: /home/runner/work/po-angular/po-angular/po-angular/dist/portal
+  WORKING_DIR: /home/runner/work/po-angular/po-angular/po-angular
+
+on:
+  workflow_dispatch:
+
+jobs:
+  build-and-publish:
+    runs-on: ubuntu-latest
+    steps:
+
+    - name: Check out po-angular
+      uses: actions/checkout@v4
+      with:
+        path: po-angular
+
+    - name: Check out style
+      uses: actions/checkout@v4
+      with:
+        repository: po-ui/po-style
+        path: po-style
+
+    - name: Check out lint
+      uses: actions/checkout@v4
+      with:
+        repository: po-ui/po-tslint
+        path: po-tslint
+
+    - name: Install and Build
+      run: npm install && npm run build
+      working-directory: ${{env.WORKING_DIR}}
+
+    # PUBLISH PORTAL
+    - name: portal build
+      run: npm run build:portal:docs && npm run build:portal:prod
+      working-directory: ${{env.WORKING_DIR}}
+
+    - name: 'Deploy to Azure Web App'
+      uses: azure/webapps-deploy@v2
+      with:
+        app-name: ${{ env.AZURE_WEBAPP_NAME }}
+        package: ${{ env.AZURE_WEBAPP_PACKAGE_PATH }}
+        publish-profile: ${{ secrets.AZURE_TOKEN }}
