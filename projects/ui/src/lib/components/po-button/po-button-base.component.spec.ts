@@ -29,12 +29,6 @@ describe('PoButtonBaseComponent', () => {
     expectPropertiesValues(component, 'disabled', booleanInvalidValues, false);
   });
 
-  it('should set property `p-small` with true if p-size is equal `small`', () => {
-    component.size = 'small';
-
-    expect(component.small).toBeTrue();
-  });
-
   it('should update property `p-kind` with valid values', () => {
     component.danger = false;
     const validValues = ['primary', 'secondary', 'tertiary'];
@@ -70,19 +64,5 @@ describe('PoButtonBaseComponent', () => {
     const invalidValues = ['extraSmall', 'extraLarge'];
 
     expectPropertiesValues(component, 'size', invalidValues, 'medium');
-  });
-
-  it('should update property `p-size` with `small` if `p-small` was declared in first', () => {
-    component.small = true;
-    component.size = PoButtonSize.large;
-
-    expect(component.size).toBe('small');
-  });
-
-  it('should ignore property `p-small` if `p-size` was declared in first with value different of `small`', () => {
-    component.size = PoButtonSize.large;
-    component.small = true;
-
-    expect(component.size).toBe('large');
   });
 });
