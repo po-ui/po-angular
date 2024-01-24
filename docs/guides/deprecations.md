@@ -35,6 +35,11 @@ A tabela a seguir lista todos os recursos depreciados, organizados pelo release 
           <td class="po-table-column">HttpClientModule</td>
           <td class="po-table-column" style="text-align: center;">v15</td>
         </tr>
+        <tr class="po-table-row">
+          <th class="po-table-column"><a href="documentation/po-button">PoButton</a></th>
+          <td class="po-table-column">p-small</td>
+          <td class="po-table-column" style="text-align: center;">v16</td>
+        </tr>
       </tbody>
     </table>
   </div>

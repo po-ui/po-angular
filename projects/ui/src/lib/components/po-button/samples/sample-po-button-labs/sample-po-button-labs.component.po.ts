@@ -23,10 +23,6 @@ export class SamplePoButtonLabsComponentPO {
     return this.poModal.element(by.css('.po-button'));
   }
 
-  get poCheckboxSmall() {
-    return this.getPoButtonProperties('small');
-  }
-
   get poCheckboxDisable() {
     return this.getPoButtonProperties('disabled');
   }
