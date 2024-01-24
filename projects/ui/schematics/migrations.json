@@ -40,6 +40,11 @@
       "version": "16",
       "description": "Atualiza @po-ui/ng-components para v16",
       "factory": "./ng-update/v16/index"
+    },
+    "migration-v17": {
+      "version": "17",
+      "description": "Atualiza @po-ui/ng-components para v17",
+      "factory": "./ng-update/v17/index"
     }
   }
 }
