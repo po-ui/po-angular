@@ -159,9 +159,10 @@ describe('PoDropdownComponent: ', () => {
     });
 
     it('onScroll: should call `hideDropdown` if `open` is `true`', () => {
+      spyOn(component, <any>'hideDropdown').and.callThrough();
+
       component['open'] = true;
-      spyOn(component, <any>'hideDropdown');
-      component.actions = [{ label: 'action1', action: () => {} }];
+      spyOn(component, <any>'isDropdownClosed').and.returnValue(false);
 
       component['onScroll']({ target: {} });
 
@@ -186,6 +187,25 @@ describe('PoDropdownComponent: ', () => {
       component['onScroll'](fakeEvent);
 
       expect(component['hideDropdown']).not.toHaveBeenCalled();
+    });
+
+    it('isDropdownClosed: check dropdown menu visibility correctly', () => {
+      const dropdownTop = 50;
+      const dropdownHeight = 30;
+      spyOn(component.dropdownRef.nativeElement, 'getBoundingClientRect').and.returnValue({
+        top: dropdownTop,
+        bottom: dropdownTop + dropdownHeight
+      });
+      const windowSpy = jasmine.createSpyObj('window', ['getComputedStyle']);
+      windowSpy.getComputedStyle.and.returnValue({ height: '500px' });
+
+      spyOnProperty(window, 'innerHeight', 'get').and.returnValue(500);
+
+      Object.defineProperty(component, 'window', { value: windowSpy });
+
+      const isVisible = component['isDropdownClosed']();
+
+      expect(isVisible).toBe(true);
     });
 
     describe('removeListeners:', () => {
