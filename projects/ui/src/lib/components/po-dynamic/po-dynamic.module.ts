@@ -16,6 +16,8 @@ import { PoDynamicFormValidationService } from './po-dynamic-form/po-dynamic-for
 import { PoDynamicViewComponent } from './po-dynamic-view/po-dynamic-view.component';
 import { PoImageModule } from '../po-image';
 import { PoDynamicViewService } from './po-dynamic-view/services/po-dynamic-view.service';
+import { PoComboFilterService } from '../po-field/po-combo/po-combo-filter.service';
+import { PoMultiselectFilterService } from '../po-field/po-multiselect/po-multiselect-filter.service';
 
 @NgModule({
   imports: [
@@ -38,7 +40,9 @@ import { PoDynamicViewService } from './po-dynamic-view/services/po-dynamic-view
     TitleCasePipe,
     PoDynamicFormLoadService,
     PoDynamicFormValidationService,
-    PoDynamicViewService
+    PoDynamicViewService,
+    PoComboFilterService,
+    PoMultiselectFilterService
   ]
 })
 export class PoDynamicModule {}

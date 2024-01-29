@@ -6,6 +6,8 @@ import { PoTimePipe } from '../../../pipes/po-time/po-time.pipe';
 import { PoDynamicViewField } from './../po-dynamic-view/po-dynamic-view-field.interface';
 import { PoDynamicViewBaseComponent } from './po-dynamic-view-base.component';
 import { PoDynamicViewService } from './services/po-dynamic-view.service';
+import { PoComboFilterService } from '../../po-field/po-combo/po-combo-filter.service';
+import { PoMultiselectFilterService } from '../../po-field/po-multiselect/po-multiselect-filter.service';
 
 /**
  * @docsExtends PoDynamicViewBaseComponent
@@ -40,9 +42,20 @@ export class PoDynamicViewComponent extends PoDynamicViewBaseComponent implement
     decimalPipe: DecimalPipe,
     timePipe: PoTimePipe,
     titleCasePipe: TitleCasePipe,
-    dynamicViewService: PoDynamicViewService
+    dynamicViewService: PoDynamicViewService,
+    comboFilterService: PoComboFilterService,
+    multiselectFilterService: PoMultiselectFilterService
   ) {
-    super(currencyPipe, datePipe, decimalPipe, timePipe, titleCasePipe, dynamicViewService);
+    super(
+      currencyPipe,
+      datePipe,
+      decimalPipe,
+      timePipe,
+      titleCasePipe,
+      dynamicViewService,
+      comboFilterService,
+      multiselectFilterService
+    );
   }
 
   ngOnChanges(changes: SimpleChanges) {
