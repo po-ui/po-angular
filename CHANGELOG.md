@@ -2,6 +2,20 @@
 
 All notable changes to this project will be documented in this file. See [standard-version](https://github.com/conventional-changelog/standard-version) for commit guidelines.
 
+# [16.13.0](https://github.com/po-ui/po-angular/compare/v16.12.0...v16.13.0) (2024-01-29)
+
+
+### Bug Fixes
+
+* **table:** ajusta propriedade width das colunas ([c46d0b0](https://github.com/po-ui/po-angular/commit/c46d0b05a46898abbb15576482c76db19af6300b))
+
+
+### Features
+
+* **po-dynamic-view:** adicionado a propriedade params ([f737eef](https://github.com/po-ui/po-angular/commit/f737eefb2829eb71dff6a217b480aa52e1159458))
+
+
+
 # [16.12.0](https://github.com/po-ui/po-angular/compare/v16.11.0...v16.12.0) (2024-01-22)
 
 
