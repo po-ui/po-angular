@@ -859,21 +859,6 @@ describe('PoTableComponent:', () => {
     expect(component.selectAll).toBeFalsy();
   });
 
-  it(`should contains po-table-wrapper-ellipsis, po-table-layout-fixed and po-table-body-ellipsis classes in
-    td when ´p-hide-text-overflow´ is true.`, () => {
-    component.hideTextOverflow = true;
-
-    fixture.detectChanges();
-
-    const hasWrapperEllipsis = nativeElement.querySelector('.po-table-body-ellipsis');
-    const hasLayoutEllipsis = nativeElement.querySelector('.po-table-body-ellipsis');
-    const hasBodyEllipsis = nativeElement.querySelector('.po-table-body-ellipsis');
-
-    expect(hasWrapperEllipsis).toBeTruthy();
-    expect(hasLayoutEllipsis).toBeTruthy();
-    expect(hasBodyEllipsis).toBeTruthy();
-  });
-
   describe('Methods:', () => {
     describe('checkDisabled:', () => {
       it('should call `disabled` function.', () => {
@@ -1277,7 +1262,6 @@ describe('PoTableComponent:', () => {
 
     it(`tooltipMouseEnter: should set tooltipText with event.target.innerText if hideTextOverflow is true,
     offsetWidth is lower than scrollWidth and innerText isn't empty,`, () => {
-      component.hideTextOverflow = true;
       const fakeEvent = {
         target: {
           offsetWidth: 30,
@@ -1293,7 +1277,6 @@ describe('PoTableComponent:', () => {
 
     it(`tooltipMouseEnter: should set tooltipText to undefined when offsetWidht is equal to scroolWidth
     and doesn't have 'column' as parameter`, () => {
-      component.hideTextOverflow = true;
       const fakeEvent = {
         target: {
           offsetWidth: 43,

@@ -122,7 +122,7 @@ export interface PoTableColumnLabel {
   /**
    * Define um texto de ajuda que será exibido ao passar o *mouse* em cima do *label*.
    *
-   * > Caso a propriedade `p-hide-text-overflow` esteja habilitada e o conteúdo da célula exceder a largura da coluna,
+   * > Caso o conteúdo da célula exceder a largura da coluna,
    * é ignorado o valor atribuido ao tooltip e será exibido justamente o conteúdo da célula.
    */
   tooltip?: string;
