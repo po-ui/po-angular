@@ -202,7 +202,7 @@ export interface PoTableColumn {
    *
    * > O tooltip só será visível se for uma coluna do tipo *link*.
    *
-   * > Caso a propriedade `p-hide-text-overflow` esteja habilitada e o conteúdo da célula exceder a largura da coluna,
+   * > Caso o conteúdo da célula exceder a largura da coluna,
    * é ignorado o valor atribuído ao *tooltip* e será exibido justamente o conteúdo da célula.
    */
   tooltip?: string;
