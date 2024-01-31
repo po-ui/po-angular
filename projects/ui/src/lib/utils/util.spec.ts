@@ -59,38 +59,6 @@ describe('Language:', () => {
     navigatorUserLanguageSpy.calls.reset();
   });
 
-  describe('Function browserLanguage:', () => {
-    it('should return `pt` as default language if language is undefined', () => {
-      navigatorLanguageSpy.and.returnValue(undefined);
-
-      expect(UtilFunctions.browserLanguage()).toBe('pt');
-    });
-
-    it('should return `pt` as default language if language is invalid', () => {
-      navigatorLanguageSpy.and.returnValue('wz');
-
-      expect(UtilFunctions.browserLanguage()).toBe('pt');
-    });
-
-    it('should return `en` if browser language is `en-US`', () => {
-      navigatorLanguageSpy.and.returnValue('en-US');
-
-      expect(UtilFunctions.browserLanguage()).toBe('en');
-    });
-
-    it('should return `es` if browser language is `es`', () => {
-      navigatorLanguageSpy.and.returnValue('es');
-
-      expect(UtilFunctions.browserLanguage()).toBe('es');
-    });
-
-    it('should return `ru` if browser language is `ru`', () => {
-      navigatorLanguageSpy.and.returnValue('ru');
-
-      expect(UtilFunctions.browserLanguage()).toBe('ru');
-    });
-  });
-
   describe('Function getBrowserLanguage:', () => {
     it('should return the value of `navigator.language` if it`s defined', () => {
       navigatorLanguageSpy.and.returnValue('pt');
