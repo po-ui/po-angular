@@ -27,28 +27,23 @@ A tabela a seguir lista todos os recursos depreciados, organizados pelo release 
       <tbody>
         <tr class="po-table-row">
           <th class="po-table-column"><a href="documentation/po-button">PoButton</a></th>
-          <td class="po-table-column">p-type</td>
-          <td class="po-table-column" style="text-align: center;">v15</td>
-        </tr>
-        <tr class="po-table-row">
-          <th class="po-table-column">Build</th>
-          <td class="po-table-column">HttpClientModule</td>
-          <td class="po-table-column" style="text-align: center;">v15</td>
-        </tr>
-        <tr class="po-table-row">
-          <th class="po-table-column"><a href="documentation/po-button">PoButton</a></th>
           <td class="po-table-column">p-small</td>
-          <td class="po-table-column" style="text-align: center;">v16</td>
+          <td class="po-table-column" style="text-align: center;">v17</td>
         </tr>
         <tr class="po-table-row">
           <th class="po-table-column"><a href="documentation/po-button-group">PoButtonGroup</a></th>
           <td class="po-table-column">p-small</td>
-          <td class="po-table-column" style="text-align: center;">v16</td>
+          <td class="po-table-column" style="text-align: center;">v17</td>
         </tr>
         <tr class="po-table-row">
           <th class="po-table-column"><a href="documentation/po-container">PoContainer</a></th>
           <td class="po-table-column">p-no-shadow</td>
-          <td class="po-table-column" style="text-align: center;">v16</td>
+          <td class="po-table-column" style="text-align: center;">v17</td>
+        </tr>
+        <tr class="po-table-row">
+          <th class="po-table-column"><a href="documentation/po-table">PoTable</a></th>
+          <td class="po-table-column">p-hide-text-overflow</td>
+          <td class="po-table-column" style="text-align: center;">v17</td>
         </tr>
       </tbody>
     </table>
@@ -196,7 +191,43 @@ export class AppModule { }
         </tr>
       </thead>
       <tbody>
-      <tr class="po-table-row">
+        <tr class="po-table-row">
+          <th class="po-table-column"><a href="documentation/po-button">PoButton</a></th>
+          <td class="po-table-column">p-small</td>
+          <td class="po-table-column">-</td>
+          <td class="po-table-column" style="text-align: center;">v17</td>
+        </tr>
+        <tr class="po-table-row">
+          <th class="po-table-column"><a href="documentation/po-button-group">PoButtonGroup</a></th>
+          <td class="po-table-column">p-small</td>
+          <td class="po-table-column">-</td>
+          <td class="po-table-column" style="text-align: center;">v17</td>
+        </tr>
+        <tr class="po-table-row">
+          <th class="po-table-column"><a href="documentation/po-container">PoContainer</a></th>
+          <td class="po-table-column">p-no-shadow</td>
+          <td class="po-table-column">-</td>
+          <td class="po-table-column" style="text-align: center;">v17</td>
+        </tr>
+        <tr class="po-table-row">
+          <th class="po-table-column"><a href="documentation/po-table">PoTable</a></th>
+          <td class="po-table-column">p-hide-text-overflow</td>
+          <td class="po-table-column">-</td>
+          <td class="po-table-column" style="text-align: center;">v17</td>
+        </tr>
+        <tr class="po-table-row">
+          <th class="po-table-column"><a href="documentation/po-button">PoButton</a></th>
+          <td class="po-table-column">p-type</td>
+          <td class="po-table-column">-</td>
+          <td class="po-table-column" style="text-align: center;">v15</td>
+        </tr>
+        <tr class="po-table-row">
+          <th class="po-table-column">Build</th>
+          <td class="po-table-column">HttpClientModule</td>
+          <td class="po-table-column">-</td>
+          <td class="po-table-column" style="text-align: center;">v15</td>
+        </tr>
+        <tr class="po-table-row">
           <th class="po-table-column"><a href="documentation/po-input">PoDynamicFormFields</a></th>
           <td class="po-table-column">p-auto-focus</td>
           <td class="po-table-column">-</td>

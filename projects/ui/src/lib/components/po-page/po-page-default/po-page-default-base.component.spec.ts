@@ -69,7 +69,7 @@ describe('PoPageDefaultBaseComponent:', () => {
       });
 
       it('should accept custom literals.', () => {
-        spyOn(UtilFunctions, <any>'browserLanguage').and.returnValue(poLocaleDefault);
+        spyOn(UtilFunctions, <any>'getShortBrowserLanguage').and.returnValue(poLocaleDefault);
 
         const customLiterals = poPageDefaultLiteralsDefault[poLocaleDefault];
 
