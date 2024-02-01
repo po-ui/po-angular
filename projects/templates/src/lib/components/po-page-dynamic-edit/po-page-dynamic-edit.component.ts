@@ -754,13 +754,15 @@ export class PoPageDynamicEditComponent implements OnInit, OnDestroy {
   }
 
   private updateModel(newResource: any = {}) {
-    const dynamicNgForm = this.dynamicForm.form;
+    if (typeof newResource !== 'undefined' && Object.keys(newResource).length !== 0) {
+      const dynamicNgForm = this.dynamicForm.form;
 
-    removeKeysProperties(this.keys, newResource);
+      removeKeysProperties(this.keys, newResource);
 
-    this.model = { ...this.model, ...newResource };
+      this.model = { ...this.model, ...newResource };
 
-    dynamicNgForm.form.patchValue(this.model);
+      dynamicNgForm.form.patchValue(this.model);
+    }
   }
 
   private saveOperation() {
