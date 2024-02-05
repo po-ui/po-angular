@@ -2,6 +2,21 @@
 
 All notable changes to this project will be documented in this file. See [standard-version](https://github.com/conventional-changelog/standard-version) for commit guidelines.
 
+# [16.14.0](https://github.com/po-ui/po-angular/compare/v16.13.0...v16.14.0) (2024-02-05)
+
+
+### Bug Fixes
+
+* **page-slide:** ajusta largura do `po-page-slide` ([4e4a458](https://github.com/po-ui/po-angular/commit/4e4a4582b3a18f11e0597576d87265ba6bfe4bc7))
+
+
+### Features
+
+* **dynamic-view:** adicionado optionsService e optionsMulti ([05475a5](https://github.com/po-ui/po-angular/commit/05475a59e90fcbed75f7895125672622f42b47aa))
+* **dynamic-edit:** otimiza validacao ([de84187](https://github.com/po-ui/po-angular/commit/de8418748ed83c3db554b29d544c8f1c3403a83a))
+
+
+
 # [16.13.0](https://github.com/po-ui/po-angular/compare/v16.12.0...v16.13.0) (2024-01-29)
 
 
