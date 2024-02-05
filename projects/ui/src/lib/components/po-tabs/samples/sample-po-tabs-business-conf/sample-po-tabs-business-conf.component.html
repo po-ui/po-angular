@@ -1,5 +1,5 @@
 <po-page-default p-title="Check the speaker's list">
-  <po-tabs>
+  <po-tabs #poTab>
     <po-tab
       *ngFor="let speaker of speakers"
       p-label="{{ speaker.createdDate | date: 'MMM d' }}"

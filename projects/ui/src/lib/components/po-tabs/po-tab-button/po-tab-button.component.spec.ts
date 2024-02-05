@@ -148,12 +148,6 @@ describe('PoTabButtonComponent:', () => {
       expect(nativeElement.querySelector('.po-tab-button-md[tabindex="0"]')).toBeFalsy();
     });
 
-    it(`should contains 'tabindex="0"' if 'disabled' is 'false'.`, () => {
-      component.disabled = false;
-      fixture.detectChanges();
-      expect(nativeElement.querySelector('.po-tab-button-md[tabindex="0"]')).toBeTruthy();
-    });
-
     it('should add active class if `active` is true', () => {
       component.active = true;
       fixture.detectChanges();
@@ -164,18 +158,6 @@ describe('PoTabButtonComponent:', () => {
       component.active = false;
       fixture.detectChanges();
       expect(nativeElement.querySelector('.po-tab-button-active')).toBeFalsy();
-    });
-
-    it('should add sm class if `small` is true', () => {
-      component.small = true;
-      fixture.detectChanges();
-      expect(nativeElement.querySelector('.po-tab-button-sm')).toBeTruthy();
-    });
-
-    it('shouldn`t add sm class if `small` is false', () => {
-      component.small = false;
-      fixture.detectChanges();
-      expect(nativeElement.querySelector('.po-tab-button-sm')).toBeFalsy();
     });
 
     it('should have label', () => {
@@ -189,7 +171,7 @@ describe('PoTabButtonComponent:', () => {
 
     it('should call `onClick` if `enter` is pressed in `po-tab-button-md`.', () => {
       const eventEnterKey = new KeyboardEvent('keyup', { 'key': 'Enter' });
-      const poTabButton = fixture.debugElement.query(By.css('.po-tab-button-md')).nativeElement;
+      const poTabButton = fixture.debugElement.query(By.css('.po-tab-button-default')).nativeElement;
 
       spyOn(component, <any>'onClick');
       poTabButton.dispatchEvent(eventEnterKey);

@@ -1,7 +1,8 @@
-import { Component, ElementRef, EventEmitter, Input, Output, ViewChild } from '@angular/core';
+import { Component, EventEmitter, Input, Output, ViewChild } from '@angular/core';
 
 import { PoPopoverComponent } from '../../po-popover/po-popover.component';
 import { PoTabComponent } from '../po-tab/po-tab.component';
+import { PoButtonComponent } from '../../po-button/po-button.component';
 
 /**
  * @docsPrivate
@@ -17,7 +18,8 @@ import { PoTabComponent } from '../po-tab/po-tab.component';
 })
 export class PoTabDropdownComponent {
   @ViewChild('popover', { static: true }) popover: PoPopoverComponent;
-  @ViewChild('tabDrop', { read: ElementRef, static: true }) tabDropdown: ElementRef;
+
+  @ViewChild(PoButtonComponent, { static: true }) button: PoButtonComponent;
 
   // Rótulo do `po-tab-button`
   @Input('p-label') label: string;
@@ -37,11 +39,12 @@ export class PoTabDropdownComponent {
   // Evento de click
   @Output('p-click') click = new EventEmitter<any>();
 
-  getContainerClass() {
-    return this.small ? 'po-tab-dropdown-container-sm' : 'po-tab-dropdown-container';
+  closeAndReturnToButtom() {
+    this.popover.close();
+    this.button.focus();
   }
 
-  togglePopover(): void {
-    this.popover.isHidden ? this.popover.open() : this.popover.close();
+  get buttonElement() {
+    return this.button.buttonElement;
   }
 }

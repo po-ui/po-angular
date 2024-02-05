@@ -1,39 +1,43 @@
-<div class="po-tabs-container" [class.po-tabs-container-mobile]="isMobileDevice">
-  <div class="po-tabs-header">
-    <ng-container *ngFor="let tab of tabs; trackBy: trackByFn">
-      <po-tab-button
-        *ngIf="isVisibleTab(tab)"
-        class="po-tab-button"
-        [class.po-tab-button-mobile]="isMobileDevice"
-        [p-active]="tab.active"
-        [p-disabled]="tab.disabled"
-        [p-hide]="tab.hide"
-        [p-id]="tab.id"
-        [p-label]="tab.label"
-        [p-small]="small"
-        (keyup.enter)="closePopover()"
-        (p-activated)="onTabActive(tab)"
-        (p-change-state)="onTabChangeState(tab)"
-        (p-click)="selectedTab(tab)"
-      >
-      </po-tab-button>
-    </ng-container>
+<div class="po-tabs-container">
+  <div #containerTabs class="po-tabs-header">
+    <div class="po-tabs-button-wrapper" role="tablist">
+      <ng-container *ngFor="let tab of tabs; trackBy: trackByFn">
+        <po-tab-button
+          #tabButton
+          class="po-tab-button"
+          [p-active]="tab.active"
+          [p-disabled]="tab.disabled"
+          [p-hide]="tab.hide"
+          [p-id]="tab.id"
+          [hidden]="tab.hide"
+          [attr.disabled]="tab.disabled"
+          [p-label]="tab.label"
+          [p-small]="small"
+          [id]="tab.id"
+          (keyup.enter)="closePopover()"
+          (p-activated)="onTabActive(tab)"
+          (p-change-state)="onTabChangeState(tab)"
+          (p-click)="selectedTab(tab)"
+        >
+        </po-tab-button>
+      </ng-container>
 
-    <po-tab-dropdown
-      #tabDropdown
-      *ngIf="isShowTabDropdown"
-      class="po-tab-button po-tab-dropdown"
-      [p-label]="literals.moreTabs"
-      [p-small]="small"
-      [p-tabs]="overflowedTabs"
-      (p-activated)="onTabActive($event)"
-      (p-change-state)="onTabChangeState($event)"
-      (p-click)="selectedTab($event)"
-    >
-    </po-tab-dropdown>
+      <po-tab-dropdown
+        #tabDropdown
+        *ngIf="isShowTabDropdown"
+        class="po-tab-dropdown"
+        [class.po-tab-dropdown-device]="!tabsDefault?.length"
+        [p-label]="literals.moreTabs"
+        [p-small]="small"
+        [p-tabs]="overflowedTabs"
+        (p-activated)="onTabActive($event)"
+        (p-change-state)="onTabChangeState($event)"
+        (p-click)="selectedTab($event)"
+      >
+      </po-tab-dropdown>
+    </div>
   </div>
 </div>
-
 <div class="po-tabs-content">
   <ng-content></ng-content>
 </div>
