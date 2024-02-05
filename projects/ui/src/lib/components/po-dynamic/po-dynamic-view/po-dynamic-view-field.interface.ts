@@ -236,7 +236,7 @@ export interface PoDynamicViewField extends PoDynamicField {
   optionsService?: string | PoComboFilter | PoMultiselectFilter;
 
   /**
-   * Habilita a visualização de múltiplas itens.
+   * Habilita a visualização de múltiplos itens.
    * Útil para exibir dados em formatos semelhantes aos componentes que suportam seleção múltipla.
    */
   optionsMulti?: boolean;

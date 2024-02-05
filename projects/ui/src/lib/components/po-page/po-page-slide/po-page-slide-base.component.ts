@@ -63,6 +63,7 @@ export class PoPageSlideBaseComponent {
    * @description
    *
    * Permite a expansão dinâmica da largura do `po-page-slide` quando `p-size` for `auto` (automático).
+   * Propriedade necessária para correto funcionamento da `po-table` dentro do `po-page-slide`
    *
    * @default `false`
    */
