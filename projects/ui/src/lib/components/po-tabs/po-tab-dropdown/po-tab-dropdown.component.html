@@ -1,32 +1,20 @@
-<div
-  #tabDrop
-  class="po-tab-dropdown-content po-tab-button-md"
-  [attr.tabindex]="0"
-  [class.po-tab-button-sm]="small"
-  (keyup.enter)="togglePopover()"
->
-  <div class="po-tab-button-label">
-    {{ label }}
-    <span class="po-icon" [ngClass]="popover.isHidden ? 'po-icon-arrow-down' : 'po-icon-arrow-up'"> </span>
-  </div>
+<div class="po-tab-dropdown-content po-tab-button-default">
+  <po-button #button p-kind="tertiary" [p-aria-label]="label" p-icon="po-icon po-icon-arrow-down"> </po-button>
 </div>
 
-<po-popover #popover p-hide-arrow p-position="bottom" [p-target]="tabDropdown">
-  <div [ngClass]="getContainerClass()">
-    <po-tab-button
-      *ngFor="let tab of tabs"
-      class="po-tab-dropdown-button"
-      [class.po-tab-dropdown-button-active]="tab.active"
-      [p-active]="tab.active"
-      [p-disabled]="tab.disabled"
-      [p-hide]="tab.hide"
-      [p-id]="tab.id"
-      [p-label]="tab.label"
-      [p-small]="small"
-      (p-activated)="activated.emit(tab)"
-      (p-change-state)="changeState.emit(tab)"
-      (p-click)="popover.close(); click.emit(tab)"
+<po-popover #popover p-hide-arrow p-position="bottom" [p-target]="buttonElement">
+  <div class="po-tab-dropdown-container">
+    <po-listbox
+      #listbox
+      #poListBoxRef
+      p-type="action"
+      [p-items]="tabs"
+      [p-is-tabs]="true"
+      (p-activated-tabs)="activated.emit($event)"
+      (p-change-state-tabs)="changeState.emit($event)"
+      (p-click-tabs)="popover.close(); click.emit($event)"
+      (p-close)="closeAndReturnToButtom()"
     >
-    </po-tab-button>
+    </po-listbox>
   </div>
 </po-popover>

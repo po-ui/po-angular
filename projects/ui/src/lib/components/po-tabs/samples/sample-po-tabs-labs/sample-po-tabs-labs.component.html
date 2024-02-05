@@ -1,4 +1,4 @@
-<po-tabs [p-small]="getSmallProperty()">
+<po-tabs #poTab>
   <po-tab
     *ngFor="let tab of tabs; let i = index"
     [p-active]="tab.active"
