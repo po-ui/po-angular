@@ -26,6 +26,7 @@ export class SamplePoPageListLabsComponent implements OnInit {
   filterModel: string;
   literals: string;
   title: string;
+  subtitle: string;
 
   public disclaimerGroup;
 
@@ -137,6 +138,7 @@ export class SamplePoPageListLabsComponent implements OnInit {
     this.filter.width = undefined;
     this.literals = '';
     this.title = 'PO Page List';
+    this.subtitle = '';
 
     this.restoreDisclaimerModel();
     this.restoreActionForm();

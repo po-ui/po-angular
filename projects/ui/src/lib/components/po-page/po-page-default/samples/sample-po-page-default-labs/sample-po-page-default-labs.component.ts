@@ -19,6 +19,7 @@ export class SamplePoPageDefaultLabsComponent implements OnInit {
   customLiterals: PoPageDefaultLiterals;
   literals: string;
   title: string;
+  subtitle: string;
 
   public readonly actionOptions: Array<PoCheckboxGroupOption> = [
     { label: 'Disabled', value: 'disabled' },
@@ -85,6 +86,7 @@ export class SamplePoPageDefaultLabsComponent implements OnInit {
     this.breadcrumbParams = {};
     this.literals = '';
     this.title = 'PO Page Default';
+    this.subtitle = '';
     this.restoreActionForm();
   }
 

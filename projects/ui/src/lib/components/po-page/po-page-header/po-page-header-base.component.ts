@@ -15,6 +15,9 @@ export class PoPageHeaderBaseComponent {
   /** Título da página. */
   @Input('p-title') title: string;
 
+  /** Subtítulo da página. */
+  @Input('p-subtitle') subtitle: string;
+
   private _breadcrumb: PoBreadcrumb;
 
   /** Objeto com propriedades do breadcrumb. */
