@@ -1,4 +1,10 @@
-<po-page-default [p-actions]="actions" [p-breadcrumb]="breadcrumb" [p-literals]="customLiterals" [p-title]="title">
+<po-page-default
+  [p-actions]="actions"
+  [p-breadcrumb]="breadcrumb"
+  [p-literals]="customLiterals"
+  [p-title]="title"
+  [p-subtitle]="subtitle"
+>
 </po-page-default>
 
 <hr />
@@ -133,6 +139,7 @@
 <form #formPage="ngForm">
   <div class="po-row">
     <po-input class="po-md-12" name="title" [(ngModel)]="title" p-label="Title" p-required> </po-input>
+    <po-input class="po-md-12" name="subtitle" [(ngModel)]="subtitle" p-label="Subtitle"> </po-input>
 
     <po-input
       class="po-lg-12"

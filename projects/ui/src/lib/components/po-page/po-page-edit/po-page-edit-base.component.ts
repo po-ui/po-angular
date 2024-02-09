@@ -151,6 +151,15 @@ export class PoPageEditBaseComponent {
     return this._title;
   }
 
+  /**
+   * @optional
+   *
+   * @description
+   *
+   * Subtitulo do Header da página
+   */
+  @Input('p-subtitle') subtitle: string;
+
   constructor(languageService: PoLanguageService) {
     this.language = languageService.getShortLanguage();
   }
