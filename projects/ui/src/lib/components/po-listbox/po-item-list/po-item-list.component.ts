@@ -1,4 +1,4 @@
-import { Component, ElementRef, ViewChild } from '@angular/core';
+import { Component, ElementRef, OnChanges, SimpleChanges, ViewChild } from '@angular/core';
 import { DomSanitizer, SafeHtml } from '@angular/platform-browser';
 
 import { PoItemListOptionGroup } from './interfaces/po-item-list-option-group.interface';
@@ -10,7 +10,7 @@ import { PoItemListFilterMode } from '../enums/po-item-list-filter-mode.enum';
   selector: 'po-item-list',
   templateUrl: './po-item-list.component.html'
 })
-export class PoItemListComponent extends PoItemListBaseComponent {
+export class PoItemListComponent extends PoItemListBaseComponent implements OnChanges {
   @ViewChild('itemList', { static: true }) itemList: ElementRef;
 
   selectedView: PoItemListOption;
@@ -20,6 +20,16 @@ export class PoItemListComponent extends PoItemListBaseComponent {
 
   constructor(private sanitized: DomSanitizer) {
     super();
+  }
+
+  ngOnChanges(changes: SimpleChanges): void {
+    if (this.isTabs) {
+      if (changes.tabHide?.currentValue || changes.disabled?.currentValue) {
+        this.tabsItem.emit(this.item);
+      } else if (changes.activeTabs?.currentValue) {
+        this.emitActiveTabs(this.item);
+      }
+    }
   }
 
   onSelectItem(itemListOption: PoItemListOption | PoItemListOptionGroup | any): void {

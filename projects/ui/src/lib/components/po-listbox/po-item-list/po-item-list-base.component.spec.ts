@@ -20,6 +20,20 @@ describe('PoListBoxBaseComponent', () => {
       expectPropertiesValues(component, 'type', invalidValues, 'action');
     });
 
+    it('should update property `p-active-tabs` with invalid values', () => {
+      const validValues = [true, '1', 'true'];
+
+      expectPropertiesValues(component, 'activeTabs', validValues, validValues);
+    });
+
+    it('emitActiveTabs: should emit `activatedTab` if tab is activated', () => {
+      spyOn(component.activatedTab, 'emit');
+
+      component['emitActiveTabs']({ label: 'tab', active: true });
+
+      expect(component.activatedTab.emit).toHaveBeenCalled();
+    });
+
     it('should set _visible to true if value is true, null or undefined', () => {
       component.visible = true;
       expect(component['_visible']).toBe(true);

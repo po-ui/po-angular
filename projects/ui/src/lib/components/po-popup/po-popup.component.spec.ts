@@ -286,11 +286,15 @@ describe('PoPopupComponent:', () => {
     });
 
     it('onScroll: should call `close` if `showPopup` is true', () => {
+      component.popupRef = {
+        nativeElement: document.createElement('div')
+      };
+
       component.showPopup = true;
 
       spyOn(component, 'close');
 
-      component['onScroll']({ target: {} });
+      component['onScroll']({ target: document.createElement('div') });
 
       expect(component.close).toHaveBeenCalled();
     });

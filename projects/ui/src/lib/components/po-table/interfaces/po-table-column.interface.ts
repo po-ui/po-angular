@@ -257,8 +257,13 @@ export interface PoTableColumn {
   visible?: boolean;
 
   /**
-   * A largura da coluna pode ser informada em pixels ou porcentagem.
-   * > Exemplo: '100px' ou '20%'.
+   *
+   * hoje o tamanho mínimo das colunas é de 32px, respeitando o padding lateral.
+   * Boas Práticas:
+   * Indicamos:
+   * - para colunas com 2 das propriedades (property, [p-draggable] e [p-sort]) : 96px
+   * - para colunas com 3 propriedades (property, [p-draggable] e [p-sort]) : 144px
+   *
    */
   width?: string;
 

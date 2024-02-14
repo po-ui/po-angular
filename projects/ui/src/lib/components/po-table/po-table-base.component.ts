@@ -452,6 +452,7 @@ export abstract class PoTableBaseComponent implements OnChanges, OnDestroy {
   paramsFilter: {};
   filteredItems: Array<any> = [];
   initialized = false;
+  fixedLayout: boolean = false;
   private initialVisibleColumns: boolean = false;
   private _spacing: PoTableColumnSpacing = PoTableColumnSpacing.Medium;
   private _filteredColumns: Array<string>;

@@ -86,12 +86,14 @@ export class PoTagComponent extends PoTagBaseComponent implements OnInit {
     if (!this.removable && !this.disabled) {
       const submittedTagItem = { value: this.value, type: this.type, event: event };
       this.click.emit(submittedTagItem);
+      if (this.poTag && this.poTag.nativeElement) {
+        this.poTag.nativeElement.focus();
+      }
     }
   }
 
   onClose(event = 'click') {
     if (!this.disabled) {
-      this.click.emit(event);
       this.onRemove();
       this.remove.emit(event);
     }

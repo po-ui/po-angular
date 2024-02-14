@@ -2,6 +2,51 @@
 
 All notable changes to this project will be documented in this file. See [standard-version](https://github.com/conventional-changelog/standard-version) for commit guidelines.
 
+# [16.14.0](https://github.com/po-ui/po-angular/compare/v16.13.0...v16.14.0) (2024-02-05)
+
+
+### Bug Fixes
+
+* **page-slide:** ajusta largura do `po-page-slide` ([4e4a458](https://github.com/po-ui/po-angular/commit/4e4a4582b3a18f11e0597576d87265ba6bfe4bc7))
+
+
+### Features
+
+* **dynamic-view:** adicionado optionsService e optionsMulti ([05475a5](https://github.com/po-ui/po-angular/commit/05475a59e90fcbed75f7895125672622f42b47aa))
+* **dynamic-edit:** otimiza validacao ([de84187](https://github.com/po-ui/po-angular/commit/de8418748ed83c3db554b29d544c8f1c3403a83a))
+
+
+
+# [16.13.0](https://github.com/po-ui/po-angular/compare/v16.12.0...v16.13.0) (2024-01-29)
+
+
+### Bug Fixes
+
+* **table:** ajusta propriedade width das colunas ([c46d0b0](https://github.com/po-ui/po-angular/commit/c46d0b05a46898abbb15576482c76db19af6300b))
+
+
+### Features
+
+* **po-dynamic-view:** adicionado a propriedade params ([f737eef](https://github.com/po-ui/po-angular/commit/f737eefb2829eb71dff6a217b480aa52e1159458))
+
+
+
+# [16.12.0](https://github.com/po-ui/po-angular/compare/v16.11.0...v16.12.0) (2024-01-22)
+
+
+### Bug Fixes
+
+* **multiselect:** corrige comportamento ao utilizar a tecla Tab ([36cf24c](https://github.com/po-ui/po-angular/commit/36cf24c58bcba3e4e3b762253b19b9568fb24e65))
+
+
+### Features
+
+* **disclaimer-group:** reutiliza `po-tag` no componente ([e8ab1a7](https://github.com/po-ui/po-angular/commit/e8ab1a7d5c7fa475f1f3c19182d17dacd3747b6e))
+* **po-dynamic-view:** adiciona `format` aos valores ([c4ac760](https://github.com/po-ui/po-angular/commit/c4ac760552a17d12b1a63304e6035cbaee69fe95))
+* **tag:** ajusta área de click mínima ([5e47c82](https://github.com/po-ui/po-angular/commit/5e47c82731d48b0880c99adfd9a73401a9fc0a9a))
+
+
+
 # [16.11.0](https://github.com/po-ui/po-angular/compare/v16.10.0...v16.11.0) (2024-01-12)
 
 

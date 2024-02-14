@@ -1,9 +1,15 @@
 <div
-  class="po-tab-button-md"
+  #tabButtom
+  role="tab"
+  [p-tooltip]="widthButton > 239 ? label : ''"
+  p-tooltip-position="top"
+  class="po-tab-button-default"
+  [id]="id"
+  [ngClass]="{ 'po-tab-focusable': !disabled && !hide }"
   [attr.tabindex]="disabled ? null : 0"
+  [attr.aria-selected]="active"
   [class.po-tab-button-active]="active"
   [class.po-tab-button-disabled]="disabled"
-  [class.po-tab-button-sm]="small"
   (click)="onClick()"
   (keyup.enter)="onClick()"
 >
@@ -11,3 +17,4 @@
     {{ label }}
   </span>
 </div>
+<div [ngClass]="{ 'po-tab-border-active': active, 'po-tab-border-disabled': !active }"></div>

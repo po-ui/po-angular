@@ -11,6 +11,11 @@ import { PoDynamicViewRequest } from './interfaces/po-dynamic-view-request.inter
 import { PoDynamicViewBaseComponent } from './po-dynamic-view-base.component';
 import { PoDynamicViewField } from './po-dynamic-view-field.interface';
 import { PoDynamicViewService } from './services/po-dynamic-view.service';
+import { PoComboFilterService } from '../../po-field/po-combo/po-combo-filter.service';
+import { PoMultiselectFilterService } from '../../po-field/po-multiselect/po-multiselect-filter.service';
+import { PoComboFilter } from '../../po-field/po-combo/interfaces/po-combo-filter.interface';
+import { PoMultiselectFilter } from '../../po-field/po-multiselect/po-multiselect-filter.interface';
+import { PoComboOption } from '../../po-field';
 
 class DynamicViewService implements PoDynamicViewRequest {
   getObjectByValue(id: string): Observable<any> {
@@ -19,6 +24,34 @@ class DynamicViewService implements PoDynamicViewRequest {
 }
 
 class TestService implements PoDynamicViewRequest {
+  getObjectByValue(id: string): Observable<any> {
+    return of({ value: 123, label: 'teste' });
+  }
+}
+
+class TestComboService implements PoComboFilter {
+  getFilteredData(params: any, filterParams?: any): Observable<Array<PoComboOption>> {
+    return of([{ value: 123, label: 'Teste' }]);
+  }
+
+  getObjectByValue(value: string | number): Observable<PoComboOption> {
+    return of({ value: 123, label: 'Teste' });
+  }
+}
+
+class TestMultiselectService implements PoMultiselectFilter {
+  getFilteredData(params: { property: string; value: string }): Observable<Array<any>> {
+    return of([
+      { value: 123, label: 'teste' },
+      { value: 456, label: 'teste' }
+    ]);
+  }
+  getObjectsByValues(values: Array<string | number>): Observable<Array<any>> {
+    return of([
+      { value: 123, label: 'teste' },
+      { value: 456, label: 'teste' }
+    ]);
+  }
   getObjectByValue(id: string): Observable<any> {
     return of({ value: 123, label: 'teste' });
   }
@@ -33,6 +66,8 @@ describe('PoDynamicViewBaseComponent:', () => {
   let timePipe;
   let currencyPipe;
   let dynamicViewService;
+  let comboFilterService;
+  let multiselectFilterService;
 
   beforeEach(() => {
     TestBed.configureTestingModule({
@@ -45,7 +80,9 @@ describe('PoDynamicViewBaseComponent:', () => {
         PoDynamicViewService,
         HttpClient,
         HttpHandler,
-        DynamicViewService
+        DynamicViewService,
+        PoComboFilterService,
+        PoMultiselectFilterService
       ]
     });
 
@@ -55,6 +92,8 @@ describe('PoDynamicViewBaseComponent:', () => {
     timePipe = TestBed.inject(PoTimePipe);
     currencyPipe = TestBed.inject(CurrencyPipe);
     dynamicViewService = TestBed.inject(PoDynamicViewService);
+    comboFilterService = TestBed.inject(PoComboFilterService);
+    multiselectFilterService = TestBed.inject(PoMultiselectFilterService);
 
     component = new PoDynamicViewBaseComponent(
       titleCase,
@@ -62,7 +101,9 @@ describe('PoDynamicViewBaseComponent:', () => {
       currencyPipe,
       datePipe,
       timePipe,
-      dynamicViewService
+      dynamicViewService,
+      comboFilterService,
+      multiselectFilterService
     );
   });
 
@@ -274,6 +315,129 @@ describe('PoDynamicViewBaseComponent:', () => {
           expectArraysSameOrdering(newFields, expectedFields);
         })
       ));
+
+      it('should return ordering fields with property optionsService using service type', fakeAsync(
+        inject([PoComboFilterService], (comboService: PoComboFilterService) => {
+          component.service = comboService;
+          const fields: Array<PoDynamicViewField> = [
+            { property: 'test 1' },
+            { property: 'test 0', optionsService: new TestComboService(), fieldLabel: 'name', fieldValue: 'id' },
+            { property: 'test 2', optionsService: 'url.com' },
+            { property: 'test 3', optionsService: 'url.com' },
+            { property: 'test 4' },
+            { property: 'test 5' }
+          ];
+          component.value[fields[1].property] = '123';
+          component.value[fields[2].property] = [{ test: 123 }];
+          component.value[fields[3].property] = { test: 123 };
+
+          spyOn(component.service, 'getObjectByValue').and.returnValue(of([{ id: 1, name: 'po' }]));
+
+          const expectedFields = [
+            { property: 'test 1', value: undefined },
+            { property: 'test 0', value: 'teste' },
+            { property: 'test 2', value: null },
+            { property: 'test 3', value: null },
+            { property: 'test 4' },
+            { property: 'test 5' }
+          ];
+
+          component.fields = [...fields];
+
+          const newFields = component['getConfiguredFields']();
+          tick(500);
+          console.log(newFields);
+
+          expectArraysSameOrdering(newFields, expectedFields);
+        })
+      ));
+
+      it('should return ordering fields with property optionsService and optionsMulti using service type', fakeAsync(
+        inject([PoMultiselectFilterService], (multiselectService: PoMultiselectFilter) => {
+          component.service = multiselectService;
+          const fields: Array<PoDynamicViewField> = [
+            { property: 'test 1' },
+            {
+              property: 'test 0',
+              optionsService: new TestMultiselectService(),
+              fieldLabel: 'name',
+              fieldValue: 'id',
+              optionsMulti: true
+            },
+            { property: 'test 2', optionsService: 'url.com', optionsMulti: true },
+            { property: 'test 3', optionsService: 'url.com', optionsMulti: true },
+            { property: 'test 4' },
+            { property: 'test 5' }
+          ];
+          component.value[fields[1].property] = '123';
+          component.value[fields[2].property] = [{ test: 123 }];
+          component.value[fields[3].property] = { test: 123 };
+
+          spyOn(component.service, 'getObjectsByValues').and.returnValue(of([{ id: 1, name: 'po' }]));
+
+          const expectedFields = [
+            { property: 'test 1', value: undefined },
+            { property: 'test 0', value: 'teste' },
+            { property: 'test 2', value: null },
+            { property: 'test 3', value: null },
+            { property: 'test 4' },
+            { property: 'test 5' }
+          ];
+
+          component.fields = [...fields];
+
+          const newFields = component['getConfiguredFields']();
+          tick(500);
+          console.log(newFields);
+
+          expectArraysSameOrdering(newFields, expectedFields);
+        })
+      ));
+
+      it('should process fields with optionsService', () => {
+        component.fields = [{ property: 'category', optionsService: 'url.optionsService.com' }];
+        component.value = { 'category': '123' };
+        spyOn(component, <any>'createFieldWithService').and.callThrough();
+        const configuredFields = component['getConfiguredFields']();
+        expect(component['createFieldWithService']).toHaveBeenCalled();
+        expect(configuredFields.length).toBeGreaterThan(0);
+      });
+
+      it('should process fields with optionsMulti', () => {
+        component.fields = [{ property: 'tags', optionsMulti: true, optionsService: 'url.optionsMultiService.com' }];
+        component.value = { 'tags': ['tag1', 'tag2'] };
+        spyOn(component, <any>'createFieldWithService').and.callThrough();
+        const configuredFields = component['getConfiguredFields']();
+        expect(component['createFieldWithService']).toHaveBeenCalled();
+        expect(configuredFields.length).toBeGreaterThan(0);
+      });
+
+      it('should not process fields with optionsService when there is no value', () => {
+        component.fields = [{ property: 'category', optionsService: 'url.optionsService.com' }];
+        component.value = { 'category': null };
+        spyOn(component, <any>'createFieldWithService');
+        const configuredFields = component['getConfiguredFields']();
+        expect(component['createFieldWithService']).not.toHaveBeenCalled();
+        expect(configuredFields.length).toBe(0);
+      });
+
+      it('should handle fields with empty array values correctly', () => {
+        component.fields = [{ property: 'emptyArray', optionsMulti: true }];
+        component.value = { 'emptyArray': [] };
+        spyOn(component, <any>'createField');
+        const configuredFields = component['getConfiguredFields']();
+        expect(component['createField']).toHaveBeenCalled();
+        expect(configuredFields.length).toBeGreaterThan(0);
+      });
+
+      it('should handle fields without defined values correctly', () => {
+        component.fields = [{ property: 'undefinedValue' }];
+        component.value = {};
+        spyOn(component, <any>'createField');
+        const configuredFields = component['getConfiguredFields']();
+        expect(component['createField']).toHaveBeenCalled();
+        expect(configuredFields.length).toBeGreaterThan(0);
+      });
     });
 
     it('searchById: should return null if value is empty', done => {
@@ -395,6 +559,39 @@ describe('PoDynamicViewBaseComponent:', () => {
       const newField = component['createField'](field);
 
       expect(newField.value).toEqual(listName);
+    });
+
+    it('transformArrayValue: should return a concatenated string of multiple properties from an array of objects', () => {
+      const inputArray = [
+        { id: 1, name: 'Company1', ssn: '261-81-7609' },
+        { id: 2, name: 'Company2', ssn: '527-84-6773' }
+      ];
+      const field = {
+        property: 'company',
+        label: 'Company',
+        fieldLabel: 'name',
+        fieldValue: 'id',
+        format: ['id', 'name', 'ssn']
+      };
+
+      const result = component['transformArrayValue'](inputArray, field);
+
+      expect(result).toBe('1 - Company1 - 261-81-7609, 2 - Company2 - 527-84-6773');
+    });
+
+    it('transformArrayValue: should return a concatenated string of properties from a single object', () => {
+      const inputArray = [{ id: 1, name: 'Company1', ssn: '261-81-7609' }];
+      const field = {
+        property: 'company',
+        label: 'Company',
+        fieldLabel: 'name',
+        fieldValue: 'id',
+        format: ['id', 'name', 'ssn']
+      };
+
+      const result = component['transformArrayValue'](inputArray, field);
+
+      expect(result).toBe('1 - Company1 - 261-81-7609');
     });
 
     it(`createField: should call 'transformFieldLabel' and return a fieldLabel property`, () => {

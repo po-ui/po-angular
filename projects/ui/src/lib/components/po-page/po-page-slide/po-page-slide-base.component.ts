@@ -61,6 +61,18 @@ export class PoPageSlideBaseComponent {
    * @optional
    *
    * @description
+   *
+   * Permite a expansão dinâmica da largura do `po-page-slide` quando `p-size` for `auto` (automático).
+   * Propriedade necessária para correto funcionamento da `po-table` dentro do `po-page-slide`
+   *
+   * @default `false`
+   */
+  @Input({ alias: 'p-flexible-width', transform: convertToBoolean }) flexibleWidth: boolean = false;
+
+  /**
+   * @optional
+   *
+   * @description
    * Evento executado ao fechar o page slide.
    */
   @Output('p-close') closePageSlide: EventEmitter<any> = new EventEmitter<any>();
@@ -84,7 +96,7 @@ export class PoPageSlideBaseComponent {
    *  - `xl` (extra-grande)
    *  - `auto` (automático)
    *
-   * > Todas as opções de tamanho possuem uma largura máxima de **768px**.
+   * > Todas as opções de tamanho, exceto `auto`, possuem uma largura máxima de **768px**.
    *
    * @default `md`
    */

@@ -79,12 +79,22 @@ export class PoListBoxComponent extends PoListBoxBaseComponent implements AfterV
         ? this.returnBooleanValue(itemListAction, 'visible')
         : true;
 
+    if (this.isTabs && !itemListAction.disabled && !itemListAction.hide) {
+      this.onClickTabs(itemListAction);
+    }
+
     if (itemListAction && itemListAction.action && !isDisabled && isVisible) {
       itemListAction.action(this.param || itemListAction);
     }
 
     if (itemListAction && itemListAction.url && !isDisabled && isVisible) {
       return this.openUrl(itemListAction.url);
+    }
+  }
+
+  onSelectAllCheckboxKeyDown(event: KeyboardEvent) {
+    if (event.code === 'Tab') {
+      this.closeEvent.emit();
     }
   }
 
@@ -138,6 +148,16 @@ export class PoListBoxComponent extends PoListBoxBaseComponent implements AfterV
     if ((event && event.code === 'Enter') || event.code === 'Space') {
       this.changeAll.emit();
     }
+  }
+
+  onSelectTabs(tab) {
+    if (this.isTabs && tab) {
+      this.changeStateTabs.emit(tab);
+    }
+  }
+
+  onActivatedTabs(tab) {
+    this.activatedTab.emit(tab);
   }
 
   callChangeSearch(event) {
@@ -210,6 +230,12 @@ export class PoListBoxComponent extends PoListBoxBaseComponent implements AfterV
 
     if (url) {
       return this.router.navigate([url]);
+    }
+  }
+
+  onClickTabs(tab) {
+    if (!tab.disabled) {
+      this.clickTab.emit(tab);
     }
   }
 }

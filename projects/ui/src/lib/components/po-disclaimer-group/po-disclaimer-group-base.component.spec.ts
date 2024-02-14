@@ -225,32 +225,6 @@ describe('PoDisclaimerGroupBaseComponent:', () => {
       expect(component.removeAll.emit).toHaveBeenCalledWith(validDisclaimers);
     });
 
-    it('onCloseAction: should remove disclaimer and emit current disclaimers', fakeAsync(() => {
-      spyOn(component.change, <any>'emit');
-
-      const disclaimerToRemove = { value: 'north', label: 'Region', property: 'region', hideClose: false };
-      const currentDisclaimers = [component.disclaimers[0], component.disclaimers[1]];
-
-      component.onCloseAction(disclaimerToRemove);
-
-      tick();
-
-      expect(component.disclaimers).toEqual(currentDisclaimers);
-      expect(component.change.emit).toHaveBeenCalledWith(component.disclaimers);
-    }));
-
-    it('onCloseAction: should emit removedDisclaimer and currentDisclaimers in remove action', () => {
-      spyOn(component.remove, <any>'emit');
-
-      const removedDisclaimer = { value: 'north', label: 'Region', property: 'region', hideClose: false };
-      const currentDisclaimers = [component.disclaimers[0], component.disclaimers[1]];
-
-      component.onCloseAction(removedDisclaimer);
-
-      expect(component.disclaimers).toEqual(currentDisclaimers);
-      expect(component.remove.emit).toHaveBeenCalledWith({ currentDisclaimers, removedDisclaimer });
-    });
-
     it('checkDisclaimers: should return only valid disclaimers.', () => {
       const checkedDisclaimers = component['checkDisclaimers']([...validDisclaimers]);
 

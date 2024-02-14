@@ -1,3 +1,4 @@
+import { PoComboFilter, PoMultiselectFilter } from '../../po-field';
 import { PoDynamicField } from '../po-dynamic-field.interface';
 import { PoDynamicViewRequest } from './interfaces/po-dynamic-view-request.interface';
 
@@ -96,26 +97,31 @@ export interface PoDynamicViewField extends PoDynamicField {
   isArrayOrObject?: boolean;
 
   /**
-   * Formato de exibição do valor do campo.
+   * Define o formato de exibição para o valor de um campo.
    *
-   * Aplicado para casos específicos de acordo com o tipo do campo.
+   * - Quando `format` é uma `string`, o formato aplicado depende da propriedade **type** segue como usar cada tipo:
+   *   - `currency`: Utiliza códigos de moeda definidos pelo [CurrencyPipe](https://angular.io/api/common/CurrencyPipe).
+   *     Exemplos: Use 'BRL' para Real Brasileiro e 'USD' para Dólar Americano.
+   *   - `date`: Adota formatos de data especificados pelo [DatePipe](https://angular.io/api/common/DatePipe).
+   *     Suporta formatos personalizados, como dia (dd), mês (MM) e ano (yyyy ou yy).
+   *     Formato padrão é 'dd/MM/yyyy'. Exemplos: 'dd/MM/yyyy', 'dd-MM-yy', 'mm/dd/yyyy'.
+   *   - `time`: Aceita formatos de tempo, incluindo hora (HH), minutos (mm), segundos (ss) e opcionalmente
+   *     milisegundos (f-ffffff). Formato padrão é 'HH:mm:ss'. Exemplos: 'HH:mm', 'HH:mm:ss.ffffff', 'HH:mm:ss.ff'.
+   *   - `number`: Usa especificações do [DecimalPipe](https://angular.io/api/common/DecimalPipe) para formatação numérica.
+   *     Na ausência de um formato específico, o número é exibido como fornecido.
+   *     Exemplo: Entrada `50`, formato `'1.2-5'`, resulta em `50.00`.
    *
-   * **types**:
-   * - `currency`: Aceita valores definidos para a propriedade `currencyCode` do
-   *  [**CurrencyPipe**](https://angular.io/api/common/CurrencyPipe)
-   * + Exemplos: 'BRL', 'USD'.
-   * - `date`: Aceita valores definidos para a propriedade `format` do [**DatePipe**](https://angular.io/api/common/DatePipe)
-   * e também aceita os caracteres de dia(dd), mês(MM) e ano (yyyy ou yy),
-   * caso não seja informado um formato o mesmo será 'dd/MM/yyyy'. Exemplos: 'dd/MM/yyyy', 'dd-MM-yy', 'mm/dd/yyyy'.
-   * - `time`: Aceita apenas os caracteres de hora(HH), minutos(mm), segundos(ss) e
-   *  milisegundos(f-ffffff), os milisegundos são opcionais, caso não seja informado um formato o mesmo será
-   * 'HH:mm:ss'. Exemplos: 'HH:mm', 'HH:mm:ss.ffffff', 'HH:mm:ss.ff', 'mm:ss.fff'.
-   * - `number`: Aceita valores definidos para a propriedade `digitsInfo` do [**DecimalPipe**](https://angular.io/api/common/DecimalPipe)
-   *  para formatação, e caso não seja informado, o número será exibido na sua forma original.
+   * - Quando `format` é um `Array<string>`:
+   *   - Cada elemento do array representa uma propriedade do objeto.
+   *   - Os valores dessas propriedades são concatenados, separados pelo padrão ' - '.
+   *   - Exemplo: Para `format: ["id", "name"]` e um objeto `{ id: 1, name: 'Carlos Diego' }`,
+   *     o resultado será `'1 - Carlos Diego'`.
    *
-   *  + Exemplo: com o valor de entrada: `50` e a valor para formatação: `'1.2-5'` o resultado será: `50.00`.
+   * @example Para formatar um campo de moeda, use format: "BRL".
+   *          Para um campo de data, use format: "dd/MM/yyyy".
+   *          Para combinar propriedades de um objeto em um campo, use format: ["id", "name"].
    */
-  format?: string;
+  format?: string | Array<string>;
 
   /**
    * Informa a ordem de exibição do campo.
@@ -221,6 +227,21 @@ export interface PoDynamicViewField extends PoDynamicField {
   options?: Array<{ label: string; value: string | number }>;
 
   /**
+   *  Serviço que será utilizado para buscar os itens e preencher a lista de opções dinamicamente.
+   *  Pode ser informada uma URL ou uma instancia do serviço baseado em PoComboFilter.
+   *  **Importante**
+   *  > Para que funcione corretamente, é importante que o serviço siga o
+   *  [guia de API do PO UI](https://po-ui.io/guides/api).
+   */
+  optionsService?: string | PoComboFilter | PoMultiselectFilter;
+
+  /**
+   * Habilita a visualização de múltiplos itens.
+   * Útil para exibir dados em formatos semelhantes aos componentes que suportam seleção múltipla.
+   */
+  optionsMulti?: boolean;
+
+  /**
    * Serviço customizado para um campo em específico.
    * Pode ser ser informada uma URL ou uma instancia do serviço baseado em PoDynamicViewRequest.
    * **Importante:**
@@ -236,4 +257,16 @@ export interface PoDynamicViewField extends PoDynamicField {
 
   /** Texto exibido quando o valor do componente for *false*. */
   booleanFalse?: string;
+
+  /**
+   * Objeto que será enviado como parâmetro nas requisições de busca `searchService` ou `optionsService`
+   * utilizadas pelos campos que dependem de serviços para carregar seus dados.
+   *
+   * Por exemplo, para o parâmetro `{ age: 23 }` a URL da requisição ficaria:
+   *
+   * ``
+   * url + /1?age=23
+   * ``
+   */
+  params?: any;
 }

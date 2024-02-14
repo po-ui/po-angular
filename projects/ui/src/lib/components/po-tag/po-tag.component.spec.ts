@@ -149,7 +149,7 @@ describe('PoTagComponent:', () => {
     it('onKeyPressed: should call `onClick` if the event `keydown` is used with `enter` key.', () => {
       fixture.detectChanges();
 
-      const tagElement = fixture.debugElement.query(By.css('.po-tag'));
+      const tagElement = fixture.debugElement.query(By.css('.po-tag-wrapper'));
       const spyOnClick = spyOn(component, 'onClick');
 
       tagElement.triggerEventHandler('keydown.enter', fakeEvent);
@@ -171,7 +171,7 @@ describe('PoTagComponent:', () => {
     it('onKeyPressed: should call `onClick` if the event `keyup` is used with `space` key.', () => {
       fixture.detectChanges();
 
-      const tagElement = fixture.debugElement.query(By.css('.po-tag'));
+      const tagElement = fixture.debugElement.query(By.css('.po-tag-wrapper'));
       const spyOnClick = spyOn(component, 'onClick');
 
       tagElement.triggerEventHandler('keyup.space', fakeEvent);
@@ -191,12 +191,13 @@ describe('PoTagComponent:', () => {
     });
 
     it('onClose: Should have been called onClose', () => {
-      spyOn(component.click, <any>'emit');
       spyOn(component, <any>'onRemove');
+      spyOn(component.remove, 'emit');
 
       component.onClose();
 
-      expect(component.click.emit).toHaveBeenCalledWith('click');
+      expect(component['onRemove']).toHaveBeenCalled();
+      expect(component.remove.emit).toHaveBeenCalledWith('click');
     });
 
     it('onRemove: Should remove the element if not disabled', () => {
