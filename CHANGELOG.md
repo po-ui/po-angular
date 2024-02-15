@@ -2,6 +2,21 @@
 
 All notable changes to this project will be documented in this file. See [standard-version](https://github.com/conventional-changelog/standard-version) for commit guidelines.
 
+# [16.15.0](https://github.com/po-ui/po-angular/compare/v16.14.0...v16.15.0) (2024-02-15)
+
+
+### Bug Fixes
+
+* **popup:** ajusta lista ao acionar `scroll` ([7fe167f](https://github.com/po-ui/po-angular/commit/7fe167fcd6eec82b119548cdfe766c499c64028f))
+
+
+### Features
+
+* **page-header:** inclusão do subtitle ([20c2e1a](https://github.com/po-ui/po-angular/commit/20c2e1a2f889fa485c8ff7e6244ae16338ed9e65))
+* **tabs:** implementa definiçoes do animaliaDS ([1c6a6b3](https://github.com/po-ui/po-angular/commit/1c6a6b39bfee6c704e2aab0da0703ddbfefd84ff))
+
+
+
 # [16.14.0](https://github.com/po-ui/po-angular/compare/v16.13.0...v16.14.0) (2024-02-05)
 
 
