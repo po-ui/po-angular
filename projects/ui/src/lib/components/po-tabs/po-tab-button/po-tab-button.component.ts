@@ -74,7 +74,10 @@ export class PoTabButtonComponent implements OnChanges, AfterViewInit {
     return this._hide;
   }
 
-  constructor(private elementRef: ElementRef, private changeDetector: ChangeDetectorRef) {}
+  constructor(
+    private elementRef: ElementRef,
+    private changeDetector: ChangeDetectorRef
+  ) {}
 
   ngAfterViewInit(): void {
     this.widthButton = this.tabButtom.nativeElement.offsetWidth;
