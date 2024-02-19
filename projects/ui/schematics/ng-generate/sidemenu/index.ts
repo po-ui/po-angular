@@ -15,10 +15,15 @@ import {
   Source,
   filter
 } from '@angular-devkit/schematics';
+import { isStandaloneApp } from '@schematics/angular/utility/ng-ast-utils';
 import { normalize, strings } from '@angular-devkit/core';
 
 import { addModuleImportToRootModule } from '@po-ui/ng-schematics/module';
-import { getProjectFromWorkspace, getWorkspaceConfigGracefully } from '@po-ui/ng-schematics/project';
+import {
+  getProjectFromWorkspace,
+  getProjectMainFile,
+  getWorkspaceConfigGracefully
+} from '@po-ui/ng-schematics/project';
 import { supportedCssExtensions } from '@po-ui/ng-schematics/utils';
 import { WorkspaceSchema } from '@schematics/angular/utility/workspace-models';
 
@@ -40,8 +45,10 @@ function createAppComponent(options: ComponentOptions): Rule {
   return (tree: Tree) => {
     const workspace = getWorkspaceConfigGracefully(tree) ?? ({} as WorkspaceSchema);
     const project: any = getProjectFromWorkspace(workspace, options.project);
+    const browserEntryPoint = getProjectMainFile(project);
     const sourceDir = `${project.sourceRoot}/app`;
-    const urlFile = Object.keys(project.schematics).length ? './files' : './files-standalone';
+
+    const urlFile = !isStandaloneApp(tree, browserEntryPoint) ? './files' : './files-standalone';
 
     if (!supportedCssExtensions.includes((options as any).style)) {
       options.style = 'css';

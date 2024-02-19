@@ -1,9 +1,11 @@
 import { chain, Rule, schematic, Tree, noop } from '@angular-devkit/schematics';
 import { WorkspaceProject, WorkspaceSchema } from '@schematics/angular/utility/workspace-models';
+import { isStandaloneApp } from '@schematics/angular/utility/ng-ast-utils';
 
 import { addModuleImportToRootModule } from '@po-ui/ng-schematics/module';
 import {
   getProjectFromWorkspace,
+  getProjectMainFile,
   getProjectTargetOptions,
   getWorkspaceConfigGracefully
 } from '@po-ui/ng-schematics/project';
@@ -83,16 +85,18 @@ function updateAppConfigFileRule(options: any): Rule {
   return (tree: Tree) => {
     const workspace = getWorkspaceConfigGracefully(tree) ?? ({} as WorkspaceSchema);
     const project: any = getProjectFromWorkspace(workspace, options.project);
-    if (Object.keys(project.schematics).length) {
-      return tree;
-    } else {
-      const content = tree.read('src/app/app.config.ts')?.toString('utf-8') || '';
+    const browserEntryPoint = getProjectMainFile(project);
 
-      const conteudoModificado = updateAppConfigFile(content);
-
-      tree.overwrite('src/app/app.config.ts', conteudoModificado);
+    if (!isStandaloneApp(tree, browserEntryPoint)) {
       return tree;
     }
+
+    const content = tree.read('src/app/app.config.ts')?.toString('utf-8') || '';
+
+    const conteudoModificado = updateAppConfigFile(content);
+
+    tree.overwrite('src/app/app.config.ts', conteudoModificado);
+    return tree;
   };
 }
 
