@@ -16,6 +16,7 @@ export class SamplePoPageDetailLabsComponent implements OnInit {
   literals: string;
   params: any;
   title: string;
+  subtitle: string;
 
   ngOnInit() {
     this.restore();
@@ -66,5 +67,6 @@ export class SamplePoPageDetailLabsComponent implements OnInit {
     this.customLiterals = undefined;
     this.literals = '';
     this.title = 'PO Page Detail';
+    this.subtitle = '';
   }
 }
