@@ -20,6 +20,33 @@ import { convertToBoolean } from '../../utils/util';
  * - Evite utilizar um `po-tabs` dentro de outro `po-tabs`;
  * - Evite utilizar uma quantidade excessiva de abas, pois irá gerar um *scroll* muito longo no `dropdown`;
  * - Evite `labels` extensos para as `tabs` pois podem quebrar seu *layout*, use `labels` diretas, curtas e intuitivas.
+ *
+ * #### Tokens customizáveis
+ *
+ * É possível alterar o estilo do componente usando os seguintes tokens (CSS):
+ *
+ * > Para maiores informações, acesse o guia [Personalizando o Tema Padrão com Tokens CSS](https://po-ui.io/guides/theme-customization).
+ *
+ * | Propriedade                            | Descrição                                             | Valor Padrão                                      |
+ * |----------------------------------------|-------------------------------------------------------|---------------------------------------------------|
+ * | **Default Values**                     |                                                       |                                                   |
+ * | `--background`                         | Cor de background                                     | `var(--color-neutral-light-00)`                   |
+ * | `--border-radius`                      | Contém o valor do raio dos cantos do elemento&nbsp;   | `var(--border-radius-md)`                         |
+ * | `--color-baseline`                     | Cor para box-shadow                                   | `var(--color-neutral-light-20)`                   |
+ * | `--font-family`                        | Família tipográfica usada                             | `var(--font-family-theme)`                        |
+ * | `--font-size`                          | Tamanho da fonte                                      | `var(--font-size-default)`                        |
+ * | `--font-weight`                        | Peso da fonte                                         | `var(--font-weight-bold)`                         |
+ * | **Disabled**                           |                                                       |                                                   |
+ * | `--color-disabled`                     | Cor da fonte no estado disabilitado                   | `var(--color-action-disabled)`                    |
+ * | `--background-item-disabled`&nbsp;     | Cor de background do item desabilitado                | `var(--color-neutral-light-10)`                   |
+ * | **Focused**                            |                                                       |                                                   |
+ * | `--outline-color-focused`              | Cor do outline do estado de focus                     | `var(--color-action-focus)`                       |
+ * | **Hover**                              |                                                       |                                                   |
+ * | `--color-hover`                        | Cor principal no estado hover                         | `var(--color-brand-01-darkest)`                   |
+ * | `--background-item-hover`              | Cor de background no estado de hover                  | `var(--color-brand-01-lightest)`                  |
+ * | **Selected**                           |                                                       |                                                   |
+ * | `--background-item-selected`           | Cor de background do ítem selecionado                 | `var(--color-neutral-light-10)`                   |
+ *
  */
 @Directive()
 export class PoTabsBaseComponent {
