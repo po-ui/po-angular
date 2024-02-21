@@ -138,10 +138,21 @@ export class PoDynamicViewBaseComponent {
     protected multiselectFilterService: PoMultiselectFilterService
   ) {}
 
+  /**
+   * Verifica se já existe algum outro campo com a order da posição dele no array,
+   * se houver ele adiciona +1 até achar uma proxima posição
+   */
+  protected getOrdertoField(field: PoDynamicViewField, index: number) {
+    const position = index + 1;
+    return this.fields.findIndex(e => e.order === position) > -1 ? this.getOrdertoField(field, position) : position;
+  }
+
   protected getConfiguredFields(useSearchService = true) {
     const newFields = [];
 
     this.fields.forEach((field, index) => {
+      field.order = field.order || this.getOrdertoField(field, index);
+
       if (!isVisibleField(field)) {
         return;
       }
@@ -156,6 +167,9 @@ export class PoDynamicViewBaseComponent {
         (!Array.isArray(this.value[field.property]) && this.value[field.property] && useSearchService);
 
       if (hasValue) {
+        const tempField = this.returnValues({ ...field }, '');
+        newFields.push(this.createField(tempField));
+
         if (field.searchService) {
           if (typeof field.searchService === 'object') {
             this.service = field.searchService as PoDynamicViewService;
@@ -181,7 +195,7 @@ export class PoDynamicViewBaseComponent {
           }
         }
 
-        const indexUpdated = field.order || index;
+        const indexUpdated = field.order;
         this.createFieldWithService(field, newFields, indexUpdated);
       }
     });
@@ -232,7 +246,7 @@ export class PoDynamicViewBaseComponent {
     this.searchById(this.value[property], field).subscribe(response => {
       const value = response;
       const allValues = this.returnValues(field, value);
-      newFields.splice(index, 0, allValues);
+      newFields.splice(index - 1, 1, allValues);
       sortFields(newFields);
     });
   }
