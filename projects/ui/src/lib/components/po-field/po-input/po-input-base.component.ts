@@ -63,6 +63,17 @@ export abstract class PoInputBaseComponent implements ControlValueAccessor, Vali
    */
   @Input('p-icon') icon?: string | TemplateRef<void>;
 
+  /**
+   * @optional
+   *
+   * @description
+   *
+   * Sempre emite as alterações do model mesmo quando o valor atual for igual ao valor anterior.
+   *
+   * @default `false`
+   */
+  @Input({ alias: 'p-emit-all-changes', transform: convertToBoolean }) emitAllChanges: boolean = false;
+
   /** Rótulo do campo. */
   @Input('p-label') label?: string;
 
@@ -358,7 +369,7 @@ export abstract class PoInputBaseComponent implements ControlValueAccessor, Vali
   }
 
   controlChangeModelEmitter(value: any) {
-    if (this.modelLastUpdate !== value) {
+    if (this.modelLastUpdate !== value || this.emitAllChanges) {
       this.changeModel.emit(value);
       this.modelLastUpdate = value;
     }
