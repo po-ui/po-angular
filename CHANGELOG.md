@@ -2,6 +2,15 @@
 
 All notable changes to this project will be documented in this file. See [standard-version](https://github.com/conventional-changelog/standard-version) for commit guidelines.
 
+## [16.16.0](https://github.com/po-ui/po-angular/compare/v16.15.0...v16.16.0) (2024-02-26)
+
+
+### Bug Fixes
+
+* **dynamic-view:** corrigido problema de ordenação dos campos ([2cc877e](https://github.com/po-ui/po-angular/commit/2cc877e886e3dd36b5884b91d76a4a6a4085eda7))
+
+
+
 # [16.15.0](https://github.com/po-ui/po-angular/compare/v16.14.0...v16.15.0) (2024-02-15)
 
 
