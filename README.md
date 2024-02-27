@@ -24,12 +24,12 @@ Para começar a utilizar o **PO UI** é pré-requisito ter o `Node.js` instalado
 
 Instalando com npm:
 ```
-npm i -g @angular/cli@^17
+npm i -g @angular/cli@17
 ```
 
 Caso prefira instalar com o yarn:
 ```
-yarn global add @angular/cli@^17
+yarn global add @angular/cli@17
 ```
 
 ### Passo 1 - Crie o seu primeiro projeto
