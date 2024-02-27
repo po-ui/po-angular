@@ -23,17 +23,17 @@ xdescribe('po-page-dynamic-search:', () => {
   let appTree: UnitTestTree;
 
   beforeEach(async () => {
-    appTree = await runner.runExternalSchematicAsync('@schematics/angular', 'workspace', workspaceOptions).toPromise();
-    appTree = await runner
-      .runExternalSchematicAsync('@schematics/angular', 'application', componentOptions, appTree)
-      .toPromise();
+    appTree = await runner.runExternalSchematic('@schematics/angular', 'workspace', workspaceOptions);
+    appTree = await runner.runExternalSchematic('@schematics/angular', 'application', componentOptions, appTree);
   });
 
   it('should create <name> component', async () => {
     const componentName = 'supply';
-    const tree = await runner
-      .runSchematicAsync('po-page-dynamic-search', { ...componentOptions, name: componentName }, appTree)
-      .toPromise();
+    const tree = await runner.runSchematic(
+      'po-page-dynamic-search',
+      { ...componentOptions, name: componentName },
+      appTree
+    );
 
     const files: Array<string> = tree.files;
 
@@ -52,7 +52,7 @@ xdescribe('po-page-dynamic-search:', () => {
 
     const options = { ...componentOptions, name: componentName, createModule, project: 'po' };
 
-    const tree = await runner.runSchematicAsync('po-page-dynamic-search', options, appTree).toPromise();
+    const tree = await runner.runSchematic('po-page-dynamic-search', options, appTree);
 
     const files: Array<string> = tree.files;
 
@@ -61,7 +61,7 @@ xdescribe('po-page-dynamic-search:', () => {
 
   it('should add declaration component in closest module by default', async () => {
     const options = { ...componentOptions, name: 'customers' };
-    const tree = await runner.runSchematicAsync('po-page-dynamic-search', options, appTree).toPromise();
+    const tree = await runner.runSchematic('po-page-dynamic-search', options, appTree);
 
     const moduleContent = getFileContent(tree, `/projects/${componentOptions.name}/src/app/app.module.ts`);
 
@@ -72,7 +72,7 @@ xdescribe('po-page-dynamic-search:', () => {
   it('should import <name> component module if createModule is true', async () => {
     const options = { ...componentOptions, name: 'customers', createModule: true };
 
-    const tree = await runner.runSchematicAsync('po-page-dynamic-search', options, appTree).toPromise();
+    const tree = await runner.runSchematic('po-page-dynamic-search', options, appTree);
     const moduleContent = getFileContent(tree, `/projects/${componentOptions.name}/src/app/app.module.ts`);
 
     expect(moduleContent).toMatch(/import.*CustomersModule.*from '.\/customers\/customers.module'/);
@@ -81,7 +81,7 @@ xdescribe('po-page-dynamic-search:', () => {
 
   it('should generate component.less if style is `less`', async () => {
     const options = { ...componentOptions, name: 'customers', style: 'less' };
-    const tree = await runner.runSchematicAsync('po-page-dynamic-search', options, appTree).toPromise();
+    const tree = await runner.runSchematic('po-page-dynamic-search', options, appTree);
 
     const files = tree.files;
 
@@ -93,7 +93,7 @@ xdescribe('po-page-dynamic-search:', () => {
   it('should generate component with stylesheet `css` if options.style is empty', async () => {
     const options = { ...componentOptions, name: 'customers', style: '' };
 
-    const tree = await runner.runSchematicAsync('po-page-dynamic-search', options, appTree).toPromise();
+    const tree = await runner.runSchematic('po-page-dynamic-search', options, appTree);
     const files = tree.files;
 
     expect(files).toContain(`/projects/${componentOptions.name}/src/app/customers/customers.component.css`);
@@ -101,7 +101,7 @@ xdescribe('po-page-dynamic-search:', () => {
 
   it('shouldn`t generate component spec if `skipTests` is true', async () => {
     const options = { ...componentOptions, name: 'customers', skipTests: true };
-    const tree = await runner.runSchematicAsync('po-page-dynamic-search', options, appTree).toPromise();
+    const tree = await runner.runSchematic('po-page-dynamic-search', options, appTree);
 
     const files = tree.files;
 
@@ -112,7 +112,7 @@ xdescribe('po-page-dynamic-search:', () => {
   it('should generate component in path informed', async () => {
     // create customers component module to use with path option
     const options = { ...componentOptions, name: 'customers', createModule: true };
-    await runner.runSchematicAsync('po-page-dynamic-search', options, appTree).toPromise();
+    await runner.runSchematic('po-page-dynamic-search', options, appTree);
 
     const optionsPath = {
       ...componentOptions,
@@ -120,7 +120,7 @@ xdescribe('po-page-dynamic-search:', () => {
       path: `/projects/${componentOptions.name}/src/app/customers`
     };
 
-    const treePath = await runner.runSchematicAsync('po-page-dynamic-search', optionsPath, appTree).toPromise();
+    const treePath = await runner.runSchematic('po-page-dynamic-search', optionsPath, appTree);
 
     const files = treePath.files;
 
@@ -134,7 +134,7 @@ xdescribe('po-page-dynamic-search:', () => {
     const prefix = 'wms';
 
     const options = { ...componentOptions, name: 'customers', prefix };
-    const tree = await runner.runSchematicAsync('po-page-dynamic-search', options, appTree).toPromise();
+    const tree = await runner.runSchematic('po-page-dynamic-search', options, appTree);
 
     const componentContent = getFileContent(
       tree,
@@ -148,7 +148,7 @@ xdescribe('po-page-dynamic-search:', () => {
     const prefix = undefined;
 
     const options = { ...componentOptions, name: 'customers', sample: true, prefix };
-    const tree = await runner.runSchematicAsync('po-page-dynamic-search', options, appTree).toPromise();
+    const tree = await runner.runSchematic('po-page-dynamic-search', options, appTree);
 
     const componentContent = getFileContent(
       tree,
@@ -162,7 +162,7 @@ xdescribe('po-page-dynamic-search:', () => {
     const prefix = '';
 
     const options = { ...componentOptions, name: 'customers', prefix };
-    const tree = await runner.runSchematicAsync('po-page-dynamic-search', options, appTree).toPromise();
+    const tree = await runner.runSchematic('po-page-dynamic-search', options, appTree);
 
     const componentContent = getFileContent(
       tree,

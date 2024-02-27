@@ -36,23 +36,23 @@ Veja abaixo a lista de dependências e as versões compatíveis, elas devem ser 
 
 ```
   "dependencies": {
-    "@angular/animations": "~17.0.4",
-    "@angular/common": "~17.0.4",
-    "@angular/compiler": "~17.0.4",
-    "@angular/core": "~17.0.4",
-    "@angular/forms": "~17.0.4",
-    "@angular/platform-browser": "~17.0.4",
-    "@angular/platform-browser-dynamic": "~17.0.4",
-    "@angular/router": "~17.0.4",
+    "@angular/animations": "~17.2.2",
+    "@angular/common": "~17.2.2",
+    "@angular/compiler": "~17.2.2",
+    "@angular/core": "~17.2.2",
+    "@angular/forms": "~17.2.2",
+    "@angular/platform-browser": "~17.2.2",
+    "@angular/platform-browser-dynamic": "~17.2.2",
+    "@angular/router": "~17.2.2",
     "rxjs": "~7.8.1",
     "tslib": "^2.6.2",
     "zone.js": "~0.14.2"
     ...
   },
   "devDependencies": {
-    "@angular-devkit/build-angular": "~17.0.3",
-    "@angular/cli": "~17.0.3",
-    "@angular/compiler-cli": "~17.0.4",
+    "@angular-devkit/build-angular": "~17.2.1",
+    "@angular/cli": "~17.2.1",
+    "@angular/compiler-cli": "~17.2.2",
     ...
     "typescript": "~5.2.2"
   }

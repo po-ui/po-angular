@@ -9,11 +9,11 @@ Para maiores detalhes sobre os serviços e métodos utilizados neste tutorial, c
 ### Pré-requisitos
 
 - [Node.js e NPM](https://nodejs.org/en/)
-- [Angular CLI](https://cli.angular.io/) (~17.0.3):
+- [Angular CLI](https://cli.angular.io/) (~17.2.2):
   - ```shell
     npm install -g @angular/cli@17
     ```
-- [Ionic](https://ionicframework.com/docs/cli/) (^7.0.0):
+- [Ionic](https://ionicframework.com/docs/cli/) (^7.7.0):
   - ```shell
     npm install -g @ionic/cli@7
     ```
@@ -49,15 +49,15 @@ Antes de executar a instalação, é necessário que todas as dependências do p
 ```typescript
   ...
   "dependencies": {
-    "@angular/animations": "~17.0.4",
-    "@angular/common": "~17.0.4",
-    "@angular/core": "~17.0.4",
-    "@angular/forms": "~17.0.4",
-    "@angular/platform-browser": "~17.0.4",
-    "@angular/platform-browser-dynamic": "~17.0.4",
-    "@angular/router": "~17.0.4",
-    "@angular/service-worker": "~17.0.4",
-    "@ionic/angular": "^7.5.7",
+    "@angular/animations": "~17.2.2",
+    "@angular/common": "~17.2.2",
+    "@angular/core": "~17.2.2",
+    "@angular/forms": "~17.2.2",
+    "@angular/platform-browser": "~17.2.2",
+    "@angular/platform-browser-dynamic": "~17.2.2",
+    "@angular/router": "~17.2.2",
+    "@angular/service-worker": "~17.2.2",
+    "@ionic/angular": "^7.7.3",
     "@capacitor/network": "^5.0.6",
     "@capacitor/splash-screen": "^5.0.6",
     "rxjs": "~7.8.1",
@@ -66,11 +66,11 @@ Antes de executar a instalação, é necessário que todas as dependências do p
     ...
   },
   "devDependencies": {
-    "@angular-devkit/build-angular": "~17.0.3",
-    "@angular/cli": "~17.0.3",
-    "@angular/compiler": "~17.0.3",
-    "@angular/compiler-cli": "~17.0.3",
-    "@angular/language-service": "~17.0.4",
+    "@angular-devkit/build-angular": "~17.2.1",
+    "@angular/cli": "~17.2.1",
+    "@angular/compiler": "~17.2.2",
+    "@angular/compiler-cli": "~17.2.2",
+    "@angular/language-service": "~17.2.2",
     "@ionic/angular-toolkit": "^10.0.0",
     "typescript": "~5.2.2"
   },

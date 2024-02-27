@@ -27,15 +27,13 @@ xdescribe('Schematic: ng-add', () => {
   let appTree: UnitTestTree;
 
   beforeEach(async () => {
-    appTree = await runner.runExternalSchematicAsync('@schematics/angular', 'workspace', workspaceOptions).toPromise();
-    appTree = await runner
-      .runExternalSchematicAsync('@schematics/angular', 'application', componentOptions, appTree)
-      .toPromise();
+    appTree = await runner.runExternalSchematic('@schematics/angular', 'workspace', workspaceOptions);
+    appTree = await runner.runExternalSchematic('@schematics/angular', 'application', componentOptions, appTree);
   });
 
   describe('Dependencies:', () => {
     it('should update package.json with @po-ui/ng-code-editor dependency and run nodePackageInstall', async () => {
-      const tree = await runner.runSchematicAsync('ng-add', componentOptions, appTree).toPromise();
+      const tree = await runner.runSchematic('ng-add', componentOptions, appTree);
 
       const packageJson = JSON.parse(getFileContent(tree, '/package.json'));
       const dependencies = packageJson.dependencies;
@@ -50,7 +48,7 @@ xdescribe('Schematic: ng-add', () => {
     it('should add the PoCodeEditorModule to the project module', async () => {
       const poCodeEditorModuleName = 'PoCodeEditorModule';
 
-      const tree = await runner.runSchematicAsync('ng-add', componentOptions, appTree).toPromise();
+      const tree = await runner.runSchematic('ng-add', componentOptions, appTree);
       const fileContent = getFileContent(tree, `projects/${componentOptions.name}/src/app/app.module.ts`);
 
       expect(fileContent).toContain(poCodeEditorModuleName);
@@ -61,7 +59,7 @@ xdescribe('Schematic: ng-add', () => {
     const defaultThemePath = './node_modules/@po-ui/style/css/po-theme-default.min.css';
 
     it('should add default theme in styles of build project', async () => {
-      const tree = await runner.runSchematicAsync('ng-add', componentOptions, appTree).toPromise();
+      const tree = await runner.runSchematic('ng-add', componentOptions, appTree);
 
       const workspace = getWorkspaceConfigGracefully(tree) ?? ({} as WorkspaceSchema);
       const project = getProjectFromWorkspace(workspace);
@@ -72,7 +70,7 @@ xdescribe('Schematic: ng-add', () => {
     it('shouldn`t add a theme file in styles of build project multiple times', async () => {
       writePropertiesFileToWorkspace(appTree, defaultThemePath, 'styles');
 
-      const tree = await runner.runSchematicAsync('ng-add', componentOptions, appTree).toPromise();
+      const tree = await runner.runSchematic('ng-add', componentOptions, appTree);
 
       const workspace = getWorkspaceConfigGracefully(tree) ?? ({} as WorkspaceSchema);
       const project = getProjectFromWorkspace(workspace);
@@ -90,7 +88,7 @@ xdescribe('Schematic: ng-add', () => {
     };
 
     it('should add assets of build project', async () => {
-      const tree = await runner.runSchematicAsync('ng-add', componentOptions, appTree).toPromise();
+      const tree = await runner.runSchematic('ng-add', componentOptions, appTree);
 
       const workspace = getWorkspaceConfigGracefully(tree) ?? ({} as WorkspaceSchema);
       const project = getProjectFromWorkspace(workspace);
@@ -106,7 +104,7 @@ xdescribe('Schematic: ng-add', () => {
     it('shouldn`t add a monaco assets file in assets of build project multiple times', async () => {
       writePropertiesFileToWorkspace(appTree, `${defaultAssetsPath}`, 'assets');
 
-      const tree = await runner.runSchematicAsync('ng-add', componentOptions, appTree).toPromise();
+      const tree = await runner.runSchematic('ng-add', componentOptions, appTree);
 
       const workspace = getWorkspaceConfigGracefully(tree) ?? ({} as WorkspaceSchema);
       const project = getProjectFromWorkspace(workspace);
