@@ -770,4 +770,26 @@ describe('PoListBoxComponent', () => {
       expect(component.checkTemplate()).toBeFalsy();
     });
   });
+
+  describe('formatItemList', () => {
+    it('should return item.id if isTabs is true', () => {
+      component.isTabs = true;
+      const item = { id: 'identifier' };
+      expect(component.formatItemList(item)).toEqual('identifier');
+    });
+
+    it('should return stringified item if isTabs is false and item is stringifiable', () => {
+      component.isTabs = false;
+      const item = { name: 'Test' };
+      expect(component.formatItemList(item)).toEqual(JSON.stringify(item));
+    });
+
+    it('should return item itself if isTabs is false and item cannot be stringified', () => {
+      component.isTabs = false;
+      const item: any = { self: null };
+      item.self = item;
+      const result = component.formatItemList(item);
+      expect(result).toBe(item);
+    });
+  });
 });
