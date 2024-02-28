@@ -54,7 +54,7 @@
           [p-disabled]="returnBooleanValue(item, 'disabled')"
           [p-visible]="returnBooleanValue(item, 'visible')"
           [p-checkbox-value]="isSelectedItem(item)"
-          [attr.data-item-list]="isTabs ? item.id : (item | json)"
+          [attr.data-item-list]="formatItemList(item)"
           [p-label]="item[fieldLabel]"
           [p-value]="item[fieldValue]"
           [p-selected]="isSelectedItem(item) || item.selected"
