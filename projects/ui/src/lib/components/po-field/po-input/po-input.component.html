@@ -32,6 +32,7 @@
       (click)="eventOnClick($event)"
       (focus)="eventOnFocus($event)"
       (input)="eventOnInput($event)"
+      (keyup.enter)="enterClick.emit($event.target)"
     />
 
     <div class="po-field-icon-container-right">
