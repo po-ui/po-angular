@@ -117,6 +117,37 @@ export const poTableLiteralsDefault = {
  *
  * Caso a largura de todas as colunas forem definidas e o total ultrapassar o tamanho tabela, será exibido um *scroll* na horizontal para a
  * completa visualização dos dados.
+ *
+ * #### Tokens customizáveis
+ *
+ * É possível alterar o estilo do componente usando os seguintes tokens (CSS):
+ *
+ * > Para maiores informações, acesse o guia [Personalizando o Tema Padrão com Tokens CSS](https://po-ui.io/guides/theme-customization).
+ *
+ * | Propriedade                            | Descrição                                             | Valor Padrão                                      |
+ * |----------------------------------------|-------------------------------------------------------|---------------------------------------------------|
+ * | **Default Values**                     |                                                       |                                                   |
+ * | `--font-family`                        | Família tipográfica usada                             | `var(--font-family-theme)`                        |
+ * | `--background-color`                   | Cor de background                                     | `var(--color-neutral-light-00)`                   |
+ * | `--color`                              | Cor principal da table                                | `var(--color-neutral-dark-95)`                    |
+ * | `--background-striped-color`           | Cor do background quando striped                      | `var(--color-neutral-light-05)`                   |
+ * | `--color-line`                         | Cor das linhas                                        | `var(--color-neutral-mid-40)`                     |
+ * | **Hover**                              |                                                       |                                                   |
+ * | `--color-hover`                        | Cor principal no estado hover                         | `var(--color-action-hover)`                       |
+ * | `--background-color-hover`             | Cor de background no estado hover                     | `var(--color-brand-01-lighter)`                   |
+ * | **Focused**                            |                                                       |                                                   |
+ * | `--outline-color-focused`              | Cor do outline do estado de focus                     | `var(--color-action-focus)`                       |
+ * | **Disabled**                           |                                                       |                                                   |
+ * | `--color-disabled`                     | Cor principal no estado disabled                      | `var(--color-neutral-mid-40)`                     |
+ * | **Headline**                           |                                                       |                                                   |
+ * | `--background-color-headline` &nbsp;   | Cor do cabeçalho                                      | `var(--color-neutral-light-10)`                   |
+ * | `--font-weight-headline`               | Peso da fonte do cabeçalho                            | `var(--font-weight-bold)`                         |
+ * | **Selected**                           |                                                       |                                                   |
+ * | `--background-color-selected`&nbsp;    | Cor de background no estado de selecionado            | `var(--color-brand-01-lightest)`                  |
+ * | **Actived**                            |                                                       |                                                   |
+ * | `--color-actived`                      | Cor do texto no estado de selecionado                 | `var(--color-neutral-dark-90)`                    |
+ * | `--background-color-actived`           | Cor de background no estado de selecionado            | `var(--color-brand-01-light)`                     |
+ *
  */
 @Directive()
 export abstract class PoTableBaseComponent implements OnChanges, OnDestroy {
