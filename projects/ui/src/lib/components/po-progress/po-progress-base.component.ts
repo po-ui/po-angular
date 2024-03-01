@@ -14,6 +14,25 @@ const poProgressMinValue = 0;
  * Componente de barra de progresso que possibilita exibir visualmente o progresso/carregamento de uma tarefa.
  *
  * Este componente pode ser utilizado no *upload* de arquivos, uma atualização no sistema ou o processamento de uma imagem.
+ *
+ * #### Tokens customizáveis
+ *
+ * É possível alterar o estilo do componente usando os seguintes tokens (CSS):
+ *
+ * > Para maiores informações, acesse o guia [Personalizando o Tema Padrão com Tokens CSS](https://po-ui.io/guides/theme-customization).
+ *
+ * | Propriedade                            | Descrição                                             | Valor Padrão                                    |
+ * |----------------------------------------|-------------------------------------------------------|-------------------------------------------------|
+ * | **Default Values**                     |                                                       |                                                 |
+ * | `--font-family`                        | Família tipográfica usada                             | `var(--font-family-theme)`                      |
+ * | `--text-color`                         | Cor do texto                                          | `var(--color-neutral-dark-90)`                  |
+ * | **Error**                              |                                                       |                                                 |
+ * | `--text-color-error`                   | Cor do texto no estado error                          | `var(--color-feedback-negative-dark)`           |
+ * | `--color-icon-error`                   | Cor do ícone no estado error                          | `var(--color-feedback-negative-dark)`           |
+ * | **po-progress-bar**                    |                                                       |                                                 |
+ * | `--background-color-tray`              | Cor do background                                     | `var(--color-brand-01-lightest)`                |
+ * | `--background-color-indicator`         | Cor do background do indicador                        | `var(--color-action-default)`                   |
+ *
  */
 @Directive()
 export class PoProgressBaseComponent {
