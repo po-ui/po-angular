@@ -21,6 +21,26 @@ import { poModalLiterals } from './po-modal.literals';
  * o componente [`PoModalFooter`](/documentation/po-modal-footer).
  *
  * > É possível fechar a modal através da tecla *ESC*, quando a propriedade `p-hide-close` não estiver habilitada.
+ *
+ * #### Tokens customizáveis
+ *
+ * É possível alterar o estilo do componente usando os seguintes tokens (css)
+ *
+ *
+ * | Propriedade                                  | Descrição                                             | Valor Padrão                                     |
+ * |----------------------------------------------|-------------------------------------------------------|--------------------------------------------------|
+ * | **Default Values**                           |                                                       |                                                  |
+ * | `--border-radius` &nbsp;                     | Contém o valor do raio dos cantos do elemento&nbsp;   | `var(--border-radius-md)`                        |
+ * | `--border-width` &nbsp;                      | Contém o valor da largura dos cantos do elemento&nbsp;| `var(--border-width-sm)`                         |
+ * | `--border-color` &nbsp;                      | Cor da borda                                          | `var(--color-neutral-light-20)`                  |
+ * | `--background` &nbsp;                        | Cor de background                                     | `var(--color-neutral-light-00)`                  |
+ * | `--shadow` &nbsp;                            | Contém o valor da sombra do elemento                  | `var(--shadow-md)`                               |
+ * | `--color-overlay` &nbsp;                     | Cor da camada visual temporária                       | `var(--color-neutral-dark-80)`                   |
+ * | `--opacity-overlay` &nbsp;                   | Opacidade da camada visual temporária &nbsp;          | `0.7`                                            |
+ * | `--color-divider` &nbsp;                     | Cor das divisões do modal                             | `var(--color-neutral-light-20)`                  |
+ *
+ * > Para customização dos tokens do componenete, verifique o guia [Customização de cores do tema padrão](https://po-ui.io/guides/colors-customization).
+ *
  */
 @Directive()
 export class PoModalBaseComponent {

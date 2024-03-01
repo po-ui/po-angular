@@ -6,6 +6,20 @@ import { PoDividerSize } from './po-divider-size.enum';
  *
  * Este componente apresenta uma linha demarcadora de blocos e pode conter um *label*. Seu uso é indicado para definição
  * e organização de informações em uma tela e sua característica é semelhante à tag `<hr>`.
+ *
+ * #### Tokens customizáveis
+ *
+ * É possível alterar o estilo do componente usando os seguintes tokens (css)
+ *
+ *
+ * | Propriedade                            | Descrição                                             | Valor Padrão                                    |
+ * |----------------------------------------|-------------------------------------------------------|-------------------------------------------------|
+ * | **Default Values**                     |                                                       |                                                 |
+ * | `--color`                              | Cor principla do divider&nbsp;                        | `var(--color-neutral-mid-40)`                   |
+ * | `--stroke-linecap`                     | Extremidade da linha&nbsp;                            | `round`                                         |
+ *
+ * > Para customização dos tokens do componenete, verifique o guia [Customização de cores do tema padrão](https://po-ui.io/guides/colors-customization).
+ *
  */
 @Directive()
 export class PoDividerBaseComponent implements OnInit {

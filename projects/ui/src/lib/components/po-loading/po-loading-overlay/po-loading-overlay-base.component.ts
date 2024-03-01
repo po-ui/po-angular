@@ -27,6 +27,29 @@ export const poLoadingOverlayLiteralsDefault = {
  *
  * Este componente mostra ao usuário uma imagem de _loading_ e bloqueia a página inteira ou o container escolhido,
  * enquanto aguarda a resposta de alguma requisição.
+ *
+ * #### Tokens customizáveis
+ *
+ * É possível alterar o estilo do componente usando os seguintes tokens (css) <br>
+ * Obs: Só é possível realizar alterações ao adicionar a classe `.po-loading`
+ *
+ *
+ * | Propriedade                            | Descrição                                             | Valor Padrão                                      |
+ * |----------------------------------------|-------------------------------------------------------|---------------------------------------------------|
+ * | **Default Values**                     |                                                       |                                                   |
+ * | `--font-family`                        | Família tipográfica usada                             | `var(--font-family-theme)`                        |
+ * | `--font-weight`                        | Peso da fonte                                         | `var(--font-weight-normal)`                       |
+ * | `--text-color`                         | Cor do texto                                          | `var(--color-neutral-dark-70)`                    |
+ * | `--border-radius`                      | Contém o valor do raio dos cantos do elemento&nbsp;   | `var(--border-radius-md)`                         |
+ * | `--border-width`                       | Contém o valor da largura dos cantos do elemento&nbsp;| `var(--border-width-sm)`                          |
+ * | `--border-color`                       | Cor da borda                                          | `var(--color-neutral-light-20)`                   |
+ * | `--background`                         | Cor de background                                     | `var(--color-neutral-light-00)`                   |
+ * | `--shadow`                             | Contém o valor da sombra do elemento                  | `var(--shadow-md)`                                |
+ * | **po-loading-icon**                    |                                                       |                                                   |
+ * | `--color`                              | Cor principal do spinner                              | `var(--color-action-default)`                     |
+ *
+ * > Para customização dos tokens do componenete, verifique o guia [Customização de cores do tema padrão](https://po-ui.io/guides/colors-customization).
+ *
  */
 @Directive()
 export class PoLoadingOverlayBaseComponent {

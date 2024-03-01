@@ -10,6 +10,23 @@ import { convertToBoolean, convertToInt } from '../../utils/util';
  * podem ser desabilitados. Ao remover sua borda a sombra também será removida. Além disso, sua altura acompanha a
  * quantidade do conteúdo, porém pode ser fixada. Para controlar sua largura, utilize o [Grid System](/guides/grid-system),
  * assim possibilitando o tratamento para diferentes resoluções.
+ *
+ * #### Tokens customizáveis
+ *
+ * É possível alterar o estilo do componente usando os seguintes tokens (css)
+ *
+ *
+ * | Propriedade                                    | Descrição                                              | Valor Padrão                                     |
+ * |------------------------------------------------|--------------------------------------------------------|--------------------------------------------------|
+ * | **Default Values**                             |                                                        |                                                  |
+ * | `--padding` &nbsp;                             | Preenchimento                                          | `1rem`                                           |
+ * | `--border-radius` &nbsp;                       | Contém o valor do raio dos cantos do elemento&nbsp;    | `var(--border-radius-md)`                        |
+ * | `--border-width` &nbsp;                        | Contém o valor da largura dos cantos do elemento&nbsp; | `var(--border-width-sm)`                         |
+ * | `--border-color` &nbsp;                        | Cor da borda                                           | `var(--color-neutral-light-20)`                  |
+ * | `--background` &nbsp;                          | Cor de background                                      | `var(--color-neutral-light-00)`                  |
+ *
+ * > Para customização dos tokens do componenete, verifique o guia [Customização de cores do tema padrão](https://po-ui.io/guides/colors-customization).
+ *
  */
 @Directive()
 export class PoContainerBaseComponent {
