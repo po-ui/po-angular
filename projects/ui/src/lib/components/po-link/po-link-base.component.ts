@@ -29,25 +29,26 @@ import { convertToBoolean, isExternalLink } from '../../utils/util';
  * - O foco precisa ter uma área mínima do dobro do perímetro do link, ter contraste de pelo menos 4.5:1 entre o estado focado e não focado do componente; e o foco não pode ficar escondido por outros elementos da tela. (WCAG [2.4.12: Focus Appearance - Enhanced](https://w3c.github.io/wcag/understanding/focus-appearance-enhanced))
  * - O estado de foco do componente deve ser sempre preservado. (WCAG [2.4.7: Focus Visible](https://www.w3.org/WAI/WCAG21/Understanding/focus-visible))
  *
- * #### Propriedades customizáveis
+ * #### Tokens customizáveis
+ *
+ * É possível alterar o estilo do componente usando os seguintes tokens (css)
+ *
  *
  * | Propriedade                            | Descrição                                             | Valor Padrão                                    |
  * |----------------------------------------|-------------------------------------------------------|-------------------------------------------------|
  * | **Default Values**                     |                                                       |                                                 |
- * | --font-family                          | Família tipográfica usada &nbsp;                      | var(--font-family-theme)                        |
- * | --text-color                           | Cor do texto                                          | var(--color-action-default)                     |
- * | ---                                    | ---                                                   | ---                                             |
+ * | `--font-family`                        | Família tipográfica usada                             | `var(--font-family-theme)`                      |
+ * | `--text-color`                         | Cor do texto                                          | `var(--color-action-default)`                   |
  * | **Hover**                              |                                                       |                                                 |
- * | --text-color-hover                     | Cor do texto quando hover                             | var(--color-action-hover)                       |
- * | ---                                    | ---                                                   | ---                                             |
+ * | `--text-color-hover`                   | Cor do texto no estado de hover                       | `var(--color-action-hover)`                     |
  * | **Pressed**                            |                                                       |                                                 |
- * | --text-color-pressed                   | Cor do texto quando pressionado                       | var(--color-action-pressed)                     |
- * | ---                                    | ---                                                   | ---                                             |
+ * | `--text-color-pressed`                 | Cor do texto no estado pressionado                    | `var(--color-action-pressed)`                   |
  * | **Focused**                            |                                                       |                                                 |
- * | --outline-color-focused &nbsp;         | Cor do outline do focus                               | var(--color-action-focus)                       |
- * | ---                                    | ---                                                   | ---                                             |
+ * | `--outline-color-focused`              | Cor do outline do estado de focus                     | `var(--color-action-focus)`                     |
  * | **Visited**                            |                                                       |                                                 |
- * | --text-color-visited                   | Cor do texto visitado                                 | var(--color-action-pressed)                     |
+ * | `--text-color-visited`                 | Cor do texto do estado Visited                        | `var(--color-action-pressed)`                   |
+ *
+ * > Para customização dos tokens do componenete, verifique o guia [Customização de cores do tema padrão](https://po-ui.io/guides/colors-customization).
  */
 @Directive()
 export class PoLinkBaseComponent {

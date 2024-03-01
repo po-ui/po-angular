@@ -83,31 +83,33 @@ export const poMultiselectLiteralsDefault = {
  * - Quando um item estiver em foco, utilize as teclas Arrow Right [seta para direita] ou Arrow Left [seta para esquerda] do teclado para navegar entre eles.
  * - Quando em foco e havendo um item ou mais já selecionado, utilize a tecla Arrow Down [seta para baixo] do teclado para abrir o listbox.
  *
- * #### Propriedades customizáveis
+ * #### Tokens customizáveis
  *
- * | Propriedade                            | Descrição                                             | Valor Padrão                                    |
- * |----------------------------------------|-------------------------------------------------------|-------------------------------------------------|
- * | **Default Values**                     |                                                       |                                                 |
- * | --font-family                          | Família tipográfica usada                             | var(--font-family-theme)                        |
- * | --font-size                            | Tamanho da fonte                                      | var(--font-size-default)                        |
- * | --text-color-placeholder &nbsp;        | Cor do texto do placeholder                           | var(--color-action-disabled)                    |
- * | --color                                | Cor do multiselect                                    | var(--color-neutral-dark-70)                    |
- * | --background                           | Cor de background                                     | var(--color-neutral-light-05)                   |
- * | ---                                    | ---                                                   | ---                                             |
- * | **Hover**                              |                                                       |                                                 |
- * | --color-hover                          | Cor de hover                                          | var(--color-action-hover)                       |
- * | --background-hover                     | Cor de background de hover                            | var(--color-brand-01-lighter)                   |
- * | ---                                    | ---                                                   | ---                                             |
- * | **Focused**                            |                                                       |                                                 |
- * | --color-focused                        | Cor no estado de focus                                | var(--color-action-default)                     |
- * | --outline-color-focused &nbsp;         | Cor do outline do focus                               | var(--color-action-focus)                       |
- * | ---                                    | ---                                                   | ---                                             |
- * | **Disabled**                           |                                                       |                                                 |
- * | --color-disabled                       | Cor no estado disabled                                | var(--color-action-disabled)                    |
- * | --background-disabled &nbsp;           | Cor de background no estado disabled &nbsp;           | var(--color-neutral-light-20)                   |
- * | ---                                    | ---                                                   | ---                                             |
- * | **Error**                              |                                                       |                                                 |
- * | --color-error                          | Cor no estado error                                   | var(--color-feedback-negative-base)             |
+ * É possível alterar o estilo do componente usando os seguintes tokens (css)
+ *
+ *
+ * | Propriedade                            | Descrição                                             | Valor Padrão                                      |
+ * |----------------------------------------|-------------------------------------------------------|---------------------------------------------------|
+ * | **Default Values**                     |                                                       |                                                   |
+ * | `--font-family`                        | Família tipográfica usada                             | `var(--font-family-theme)`                        |
+ * | `--font-size`                          | Tamanho da fonte                                      | `var(--font-size-default)`                        |
+ * | `--text-color-placeholder` &nbsp;      | Cor do texto do placeholder                           | `var(--color-action-disabled)`                    |
+ * | `--color`                              | Cor principal do multiselect                          | `var(--color-neutral-dark-70)`                    |
+ * | `--background`                         | Cor de background                                     | `var(--color-neutral-light-05)`                   |
+ * | **Hover**                              |                                                       |                                                   |
+ * | `--color-hover`                        | Cor principal no estado hover                         | `var(--color-action-hover)`                       |
+ * | `--background-hover`                   | Cor de background no estado hover                     | `var(--color-brand-01-lighter)`                   |
+ * | **Focused**                            |                                                       |                                                   |
+ * | `--color-focused`                      | Cor principal no estado de focus                      | `var(--color-action-default)`                     |
+ * | `--outline-color-focused` &nbsp;       | Cor do outline do estado de focus                     | `var(--color-action-focus)`                       |
+ * | **Disabled**                           |                                                       |                                                   |
+ * | `--color-disabled`                     | Cor principal no estado disabled                      | `var(--color-action-disabled)`                    |
+ * | `--background-disabled` &nbsp;         | Cor de background no estado disabled &nbsp;           | `var(--color-neutral-light-20)`                   |
+ * | **Error**                              |                                                       |                                                   |
+ * | `--color-error`                        | Cor principal no estado error                         | `var(--color-feedback-negative-base)`             |
+ *
+ * * > Para customização dos tokens do componenete, verifique o guia [Customização de cores do tema padrão](https://po-ui.io/guides/colors-customization).
+ *
  */
 @Directive()
 export abstract class PoMultiselectBaseComponent implements ControlValueAccessor, OnInit, Validator {

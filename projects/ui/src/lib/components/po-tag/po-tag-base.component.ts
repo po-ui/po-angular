@@ -39,51 +39,49 @@ export const PoTagLiteralsDefault = {
  *
  * Seu uso é recomendado para informações que necessitem de destaque em forma de marcação.
  *
- * #### Propriedades customizáveis
+ * #### Tokens customizáveis
+ *
+ * É possível alterar o estilo do componente usando os seguintes tokens (css)
+ *
  *
  * | Propriedade                            | Descrição                                             | Valor Padrão                                    |
  * |----------------------------------------|-------------------------------------------------------|-------------------------------------------------|
  * | **Default Values**                     |                                                       |                                                 |
- * | --font-family                          | Família tipográfica usada                             | var(--font-family-theme)                        |
- * | --font-size                            | Tamanho da fonte                                      | var(--font-size-sm)                             |
- * | --line-height                          | Tamanho da label                                      | var(---line-height-sm)                          |
- * | --border-radius                        | Arredondamento da borda                               | var(--border-radius-pill)                       |
- * | ---                                    | ---                                                   | ---                                             |
+ * | `--font-family`                        | Família tipográfica usada                             | `var(--font-family-theme)`                      |
+ * | `--font-size`                          | Tamanho da fonte                                      | `var(--font-size-sm)`                           |
+ * | `--line-height`                        | Tamanho da label                                      | `var(---line-height-sm)`                        |
+ * | `--border-radius`                      | Contém o valor do raio dos cantos do elemento&nbsp;   | `var(--border-radius-pill)`                     |
  * | **Neutral**                            |                                                       |                                                 |
- * | --color-neutral                        | Cor no estado neutral                                 | var(--color-neutral-light-10)                   |
- * | --text-color-positive                  | Cor do texto no estado neutral                        | var(--color-neutral-dark-80)                    |
- * | ---                                    | ---                                                   | ---                                             |
+ * | `--color-neutral`                      | Cor principal no estado neutral                       | `var(--color-neutral-light-10)`                 |
+ * | `--text-color-positive`                | Cor do texto no estado neutral                        | `var(--color-neutral-dark-80)`                  |
  * | **Positive**                           |                                                       |                                                 |
- * | --color-positive                       | Cor no estado positive                                | var(--color-feedback-positive-lightest)         |
- * | --text-color-positive                  | Cor do texto no estado positive                       | var(--color-feedback-positive-dark)             |
- * | ---                                    | ---                                                   | ---                                             |
+ * | `--color-positive`                     | Cor principal no estado positive                      | `var(--color-feedback-positive-lightest)`       |
+ * | `--text-color-positive`                | Cor do texto no estado positive                       | `var(--color-feedback-positive-dark)`           |
  * | **Negative**                           |                                                       |                                                 |
- * | --color-negative                       | Cor no estado danger                                  | var(--color-feedback-negative-lightest)         |
- * | --text-color-negative                  | Cor do texto no estado danger                         | var(--color-feedback-negative-darker)           |
- * | ---                                    | ---                                                   | ---                                             |
+ * | `--color-negative`                     | Cor principal no estado danger                        | `var(--color-feedback-negative-lightest)`       |
+ * | `--text-color-negative`                | Cor do texto no estado danger                         | `var(--color-feedback-negative-darker)`         |
  * | **Warning**                            |                                                       |                                                 |
- * | --color-tag-warning                    | Cor no estado warning                                 | var(--color-feedback-warning-lightest)          |
- * | --text-color-warning                   | Cor do texto no estado warning                        | var(--color-feedback-warning-darkest)           |
- * | ---                                    | ---                                                   | ---                                             |
+ * | `--color-tag-warning`                  | Cor principal no estado warning                       | `var(--color-feedback-warning-lightest)`        |
+ * | `--text-color-warning`                 | Cor do texto no estado warning                        | `var(--color-feedback-warning-darkest)`         |
  * | **Info**                               |                                                       |                                                 |
- * | --color-info                           | Cor no estado info                                    | var(--color-feedback-info-lightest)             |
- * | --text-color-info                      | Cor do texto no estado info                           | var(--color-feedback-info-dark)                 |
- * | ---                                    | ---                                                   | ---                                             |
+ * | `--color-info`                         | Cor principal no estado info                          | `var(--color-feedback-info-lightest)`           |
+ * | `--text-color-info`                    | Cor do texto no estado info                           | `var(--color-feedback-info-dark)`               |
  * | **Removable**                          |                                                       |                                                 |
- * | --color                                | Cor quando removable                                  | var(--color-brand-01-lightest)                  |
- * | --border-color                         | Cor de borda quando removable &nbsp;                  | var(--color-brand-01-lighter)                   |
- * | --color-icon                           | Cor do ícone quando removable &nbsp;                  | var(--color-action-default)                     |
- * | --text-color                           | Cor do texto quando removable &nbsp;                  | var(--color-neutral-dark-80)                    |
- * | --color-hover                          | Cor do hover quando removable &nbsp;                  | var(--color-brand-01-lighter)                   |
- * | ---                                    | ---                                                   | ---                                             |
+ * | `--color`                              | Cor principal quando removable                        | `var(--color-brand-01-lightest)`                |
+ * | `--border-color`                       | Cor de borda quando removable &nbsp;                  | `var(--color-brand-01-lighter)`                 |
+ * | `--color-icon`                         | Cor do ícone quando removable &nbsp;                  | `var(--color-action-default)`                   |
+ * | `--text-color`                         | Cor do texto quando removable &nbsp;                  | `var(--color-neutral-dark-80)`                  |
+ * | `--color-hover`                        | Cor do hover no estado removable &nbsp;               | `var(--color-brand-01-lighter)`                 |
  * | **Focused**                            |                                                       |                                                 |
- * | --outline-color-focused                | Cor do outline do focus                               | var(--color-action-focus)                       |
- * | ---                                    | ---                                                   | ---                                             |
+ * | `--outline-color-focused`              | Cor do outline do estado de focus                     | `var(--color-action-focus)`                     |
  * | **Disabled**                           |                                                       |                                                 |
- * | --color-disabled                       | Cor no estado disabled                                | var(--color-neutral-light-20)                   |
- * | --border-color-disabled &nbsp;         | Cor da borda no estado disabled &nbsp;                | var(--color-action-disabled)                    |
- * | --color-icon-disabled &nbsp;           | Cor do icone no estado disabled &nbsp;                | var(--color-action-disabled)                    |
- * | --text-color-disabled &nbsp;           | Cor do texto no estado disabled &nbsp;                | var(--color-neutral-mid-60)                     |
+ * | `--color-disabled`                     | Cor principal no estado disabled                      | `var(--color-neutral-light-20)`                 |
+ * | `--border-color-disabled`              | Cor da borda no estado disabled &nbsp;                | `var(--color-action-disabled)`                  |
+ * | `--color-icon-disabled`                | Cor do icone no estado disabled &nbsp;                | `var(--color-action-disabled)`                  |
+ * | `--text-color-disabled`                | Cor do texto no estado disabled &nbsp;                | `var(--color-neutral-mid-60)`                   |
+ *
+ * > Para customização dos tokens do componenete, verifique o guia [Customização de cores do tema padrão](https://po-ui.io/guides/colors-customization).
+ *
  */
 @Directive()
 export class PoTagBaseComponent {

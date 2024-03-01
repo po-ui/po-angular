@@ -33,27 +33,30 @@ const poRadioGroupColumnsTotalLength: number = 12;
  * Conforme documentação em: https://doc.animaliads.io/docs/components/radio
  *
  *
- * #### Propriedades customizáveis
+ * #### Tokens customizáveis
  *
- * | Propriedade                            | Descrição                                             | Valor Padrão                                    |
- * |----------------------------------------|-------------------------------------------------------|-------------------------------------------------|
- * | **Default Values**                     |                                                       |                                                 |
- * | --border-color                         | Cor da borda                                          | var(--color-neutral-dark-70)                    |
- * | ---                                    | ---                                                   | ---                                             |
- * | **Hover**                              |                                                       |                                                 |
- * | --shadow-color-hover                   | Cor da sombra no hover                                | var(--color-brand-01-lighter)                   |
- * | --color-hover                          | Cor de background no hover                            | var(--color-brand-01-dark)                      |
- * | ---                                    | ---                                                   | ---                                             |
- * | **Focused**                            |                                                       |                                                 |
- * | --outline-color-focused                | Cor do outline do focus                               | var(--color-brand-01-darkest)                   |
- * | ---                                    | ---                                                   | ---                                             |
- * | **checked**                            |                                                       |                                                 |
- * | --color-unchecked                      | Cor quando não selecionado                            | var(--color-neutral-light-00)                   |
- * | --color-checked                        | Cor quando selecionado                                | var(--color-action-default)                     |
- * | ---                                    | ---                                                   | ---                                             |
- * | **Disabled**                           |                                                       |                                                 |
- * | --color-unchecked-disabled &nbsp;      | Cor quando não selecionado no estado disabled &nbsp;  | var(--color-neutral-light-30)                   |
- * | --color-checked-disabled               | Cor quando selecionado no estado disabled             | var(--color-neutral-dark-70)                    |
+ * É possível alterar o estilo do componente usando os seguintes tokens (css) <br>
+ * obs: No componente Radio Group, a customização ocorre principalmente nos elementos `po-radio` que compõem o grupo de opções.
+ * Portanto, ao aplicar estilos customizados, é importante focar na customização dos elementos `po-radio` em vez do próprio `po-radio-group`.
+ *
+ * | Propriedade                            | Descrição                                                   | Valor Padrão                                    |
+ * |----------------------------------------|-------------------------------------------------------------|-------------------------------------------------|
+ * | **Default Values**                     |                                                             |                                                 |
+ * | `--border-color`                       | Cor da borda                                                | `var(--color-neutral-dark-70)`                    |
+ * | **Hover**                              |                                                             |                                                 |
+ * | `--shadow-color-hover`                 | Cor da sombra no estado hover                               | `var(--color-brand-01-lighter)`                   |
+ * | `--color-hover`                        | Cor principal no estado hover                               | `var(--color-brand-01-dark)`                      |
+ * | **Focused**                            |                                                             |                                                 |
+ * | `--outline-color-focused`              | Cor do outline do estado de focus                           | `var(--color-brand-01-darkest)`                   |
+ * | **checked**                            |                                                             |                                                 |
+ * | `--color-unchecked`                    | Cor quando não selecionado                                  | `var(--color-neutral-light-00)`                   |
+ * | `--color-checked`                      | Cor quando selecionado                                      | `var(--color-action-default)`                     |
+ * | **Disabled**                           |                                                             |                                                 |
+ * | `--color-unchecked-disabled`           | Cor pricipal quando não selecionado no estado disabled     | `var(--color-neutral-light-30)`                   |
+ * | `--color-checked-disabled`             | Cor pricipal quando selecionado no estado disabled         | `var(--color-neutral-dark-70)`                    |
+ *
+ * > Para customização dos tokens do componente, verifique o guia [Customização de cores do tema padrão](https://po-ui.io/guides/colors-customization).
+ *
  */
 
 @Directive()

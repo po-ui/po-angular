@@ -24,51 +24,51 @@ import { PoButtonSize } from './po-button-size.enum';
  * - Quando em foco, o botão é ativado usando as teclas de Espaço e Enter do teclado. [W3C WAI-ARIA 3.5 Button - Keyboard Interaction](https://www.w3.org/WAI/ARIA/apg/#keyboard-interaction-3)
  * - A área do foco precisa ter uma espessura de pelo menos 2 pixels CSS e o foco não pode ficar escondido por outros elementos da tela. [WCAG 2.4.12: Focus Appearance](https://www.w3.org/WAI/WCAG22/Understanding/focus-appearance-enhanced)
  *
- * #### Propriedades customizáveis
+ * #### Tokens customizáveis
  *
- * | Propriedade                            | Descrição                                             | Valor Padrão                                    |
- * |----------------------------------------|-------------------------------------------------------|-------------------------------------------------|
- * | --font-family                          | Família tipográfica usada                             | var(--font-family-theme)                        |
- * | --font-size                            | Tamanho da fonte                                      | var(--font-size-default)                        |
- * | --font-weight                          | Peso da fonte                                         | var(--font-weight-bold)                         |
- * | --line-height                          | Tamanho da label                                      | var(--line-height-none)                         |
- * | --border-radius                        | Arredondamento da borda  &nbsp;                       | var(--border-radius-md)                         |
- * | --border-width                         | Espessura do border                                   | var(--border-width-md)                          |
- * | --padding                              | Preenchimento                                         | 0 1em                                           |
- * | ---                                    | ---                                                   | ---                                             |
- * | **Danger**                             |                                                       |                                                 |
- * | --text-color-danger                    | Cor do texto danger                                   | var(--color-neutral-light-00)                   |
- * | --color-button-danger                  | Cor do botão danger                                   | var(--color-feedback-negative-dark)             |
- * | --color-danger-hover                   | Cor de hover danger                                   | var(--color-feedback-negative-darker)           |
- * | --color-danger-pressed                 | Cor pressionada danger                                | var(--color-feedback-negative-darkest)          |
- * | --background-danger-hover              | Background de hover danger                            | var(--color-feedback-negative-lighter)          |
- * | --border-color-danger-hover            | Cor da borda de hover danger                          | var(--color-feedback-negative-darkest)          |
- * | --background-danger-pressed            | Background pressionado danger                         | var(--color-feedback-negative-light)            |
- * | --background-color-button-danger &nbsp;| Cor de background do botão danger                     | var(--color-transparent)                        |
- * | ---                                    | ---                                                   | ---                                             |
- * | **Default Values**                     |                                                       |                                                 |
- * | --text-color                           | Cor do texto                                          | var(--color-neutral-light-00)                   |
- * | --color                                | Cor do botão                                          | var(--color-action-default)                     |
- * | --background-color                     | Cor de background                                     | var(--color-transparent)                        |
- * | --border-color                         | Cor da borda                                          | var(--color-transparent)                        |
- * | --shadow                               | Sombra                                                | var(--shadow-none)                              |
- * | ---                                    | ---                                                   | ---                                             |
- * | **Hover**                              |                                                       |                                                 |
- * | --color-hover                          | Cor de hover                                          | var(--color-action-hover)                       |
- * | --background-hover                     | Cor de background de hover                            | var(--color-brand-01-lighter)                   |
- * | --border-color-hover                   | Cor da borda de hover                                 | var(--color-brand-01-darkest)                   |
- * | ---                                    | ---                                                   | ---                                             |
- * | **Focused**                            |                                                       |                                                 |
- * | --outline-color-focused                | Cor do outline do focus                               | var(--color-action-focus)                       |
- * | ---                                    | ---                                                   | ---                                             |
- * | **Pressed**                            |                                                       |                                                 |
- * | --color-pressed                        | Cor quando pressionado                                | var(--color-action-pressed)                     |
- * | --background-pressed                   | Cor de background quando pressionado &nbsp;           | var(--color-brand-01-light)                     |
- * | ---                                    | ---                                                   | ---                                             |
- * | **Disabled**                           |                                                       |                                                 |
- * | --text-color-disabled                  | Cor da texto no estado disabled                       | var(--color-neutral-dark-70)                    |
- * | --color-disabled                       | Cor do botão no estado disabled                       | var(--color-action-disabled)                    |
- * | --background-color-disabled            | Cor de background no estado disabled                  | var(--color-transparent)                        |
+ * É possível alterar o estilo do componente usando os seguintes tokens (css)
+ *
+ *
+ * | Propriedade                              | Descrição                                             | Valor Padrão                                      |
+ * |------------------------------------------|-------------------------------------------------------|---------------------------------------------------|
+ * | `--font-family`                          | Família tipográfica usada                             | `var(--font-family-theme)`                        |
+ * | `--font-size`                            | Tamanho da fonte                                      | `var(--font-size-default)`                        |
+ * | `--font-weight`                          | Peso da fonte                                         | `var(--font-weight-bold)`                         |
+ * | `--line-height`                          | Tamanho da label                                      | `var(--line-height-none)`                         |
+ * | `--border-radius`                        | Contém o valor do raio dos cantos do elemento&nbsp;   | `var(--border-radius-md)`                         |
+ * | `--border-width`                         | Contém o valor da largura dos cantos do elemento&nbsp;| `var(--border-width-md)`                          |
+ * | `--padding`                              | Preenchimento                                         | `0 1em`                                           |                                                                        | ---                                             |
+ * | **Danger**                               |                                                       |                                                   |
+ * | `--text-color-danger`                    | Cor do texto no estado danger                         | `var(--color-neutral-light-00)`                   |
+ * | `--color-button-danger`                  | Cor do botão no estado danger                         | `var(--color-feedback-negative-dark)`             |
+ * | `--color-danger-hover`                   | Cor de hover no estado danger                         | `var(--color-feedback-negative-darker)`           |
+ * | `--color-danger-pressed`                 | Cor pressionada no estado danger                      | `var(--color-feedback-negative-darkest)`          |
+ * | `--background-danger-hover`              | Cor de background de hover no estado danger           | `var(--color-feedback-negative-lighter)`          |
+ * | `--border-color-danger-hover`            | Cor da borda de hover no estado danger                | `var(--color-feedback-negative-darkest)`          |
+ * | `--background-danger-pressed`            | Cor de background pressionado no estado danger        | `var(--color-feedback-negative-light)`            |
+ * | `--background-color-button-danger`&nbsp; | Cor de background do botão no estado danger           | `var(--color-transparent)`                        |
+ * | **Default Values**                       |                                                       |                                                   |
+ * | `--text-color`                           | Cor do texto                                          | `var(--color-neutral-light-00)`                   |
+ * | `--color`                                | Cor principal do botão                                | `var(--color-action-default)`                     |
+ * | `--background-color`                     | Cor de background                                     | `var(--color-transparent)`                        |
+ * | `--border-color`                         | Cor da borda                                          | `var(--color-transparent)`                        |
+ * | `--shadow`                               | Contém o valor da sombra do elemento                  | `var(--shadow-none)`                              |
+ * | **Hover**                                |                                                       |                                                   |
+ * | `--color-hover`                          | Cor principal no estado hover                         | `var(--color-action-hover)`                       |
+ * | `--background-hover`                     | Cor de background no estado hover                     | `var(--color-brand-01-lighter)`                   |
+ * | `--border-color-hover`                   | Cor da borda no estado hover                          | `var(--color-brand-01-darkest)`                   |
+ * | **Focused**                              |                                                       |                                                   |
+ * | `--outline-color-focused`                | Cor do outline do estado de focus                     | `var(--color-action-focus)`                       |
+ * | **Pressed**                              |                                                       |                                                   |
+ * | `--color-pressed`                        | Cor principal no estado de pressionado                | `var(--color-action-pressed)`                     |
+ * | `--background-pressed`                   | Cor de background no estado de pressionado&nbsp;      | `var(--color-brand-01-light)`                     |
+ * | **Disabled**                             |                                                       |                                                   |
+ * | `--text-color-disabled`                  | Cor do texto no estado disabled                       | `var(--color-neutral-dark-70)`                    |
+ * | `--color-disabled`                       | Cor principal no estado disabled                      | `var(--color-action-disabled)`                    |
+ * | `--background-color-disabled`            | Cor de background no estado disabled                  | `var(--color-transparent)`                        |
+ *
+ * > Para customização dos tokens do componenete, verifique o guia [Customização de cores do tema padrão](https://po-ui.io/guides/colors-customization).
+ *
  */
 
 @Directive()

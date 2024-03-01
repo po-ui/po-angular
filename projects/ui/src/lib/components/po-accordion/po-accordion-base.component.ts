@@ -60,43 +60,40 @@ export const poAccordionLiteralsDefault = {
  * Caso houver a necessidade de abrir algum dos `po-accordion-item` via Typescript
  * acesse a [documentação do PoAccordionItem](/documentation/po-accordion-item).
  *
- * #### Propriedades customizáveis
+ * #### Tokens customizáveis
  *
- * | Propriedade                            | Descrição                                             | Valor Padrão                                    |
- * |----------------------------------------|-------------------------------------------------------|-------------------------------------------------|
- * | **Default Values**                     |                                                       |                                                 |
- * | --font-family                          | Família tipográfica usada                             | var(--font-family-theme)                        |
- * | --font-size                            | Tamanho da fonte                                      | var(--font-size-default)                        |
- * | --color                                | Cor do accordion                                      | var(--color-action-default)                     |
- * | --background-color                     | Cor de background                                     | var(--color-neutral-light-00)                   |
- * | --font-weight                          | Peso da fonte                                         | var(--font-weight-bold)                         |
- * | ---                                    | ---                                                   | ---                                             |
- * | **Hover**                              |                                                       |                                                 |
- * | --color-hover                          | Cor de hover                                          | var(--color-action-hover)                       |
- * | --background-hover                     | Cor de background de hover                            | var(--color-brand-01-lightest)                  |
- * | ---                                    | ---                                                   | ---                                             |
- * | **Focused**                            |                                                       |                                                 |
- * | --color-focused                        | Cor no estado de focus                                | var(--color-action-focus)                       |
- * | --outline-color-focused &nbsp;         | Cor do outline do focus                               | var(--color-action-focus)                       |
- * | ---                                    | ---                                                   | ---                                             |
- * | **Disabled**                           |                                                       |                                                 |
- * | --color-disabled                       | Cor no estado disabled                                | var(--color-neutral-mid-60)                     |
- * | --background-disabled &nbsp;           | Cor de background no estado disabled                  | var(--color-neutral-light-10)                   |
- * | ---                                    | ---                                                   | ---                                             |
- * | **po-accordion-manager**               |                                                       |                                                 |
- * | --background-color                     | Cor do background                                     | var(--color-neutral-mid-60)                     |
- * | --color                                | Cor de background no estado disabled                  | var(--color-neutral-light-10)                   |
- * | --font-family                          | Família tipográfica usada                             | var(--color-neutral-light-10)                   |
- * | --font-size                            | Tamanho da fonte                                      | var(--color-neutral-light-10)                   |
- * | --font-weight                          | Peso da fonte                                         | var(--color-neutral-light-10)                   |
- * | ---                                    | ---                                                   | ---                                             |
- * | **Pressed**                            |                                                       |                                                 |
- * | --background-pressed &nbsp;            | Cor de background quando pressionado &nbsp;           | var(--color-brand-01-lighter)                   |
- * | --color-pressed                        | Cor quando pressionado                                | var(--color-action-pressed)                     |
- * | ---                                    | ---                                                   | ---                                             |
- * | **Focused**                            |                                                       |                                                 |
- * | --color-focus                          | Cor no estado de focus                                | var(--color-action-default)                     |
- * | --outline-color-focused &nbsp;         | Cor do outline do focus                               | var(--color-action-focus)                       |
+ * É possível alterar o estilo do componente usando os seguintes tokens (css)
+ *
+ *
+ * | Propriedade                            | Descrição                                             | Valor Padrão                                      |
+ * |----------------------------------------|-------------------------------------------------------|---------------------------------------------------|
+ * | **Default Values**                     |                                                       |                                                   |
+ * | `--font-family`                        | Família tipográfica usada                             | `var(--font-family-theme)`                        |
+ * | `--font-size`                          | Tamanho da fonte                                      | `var(--font-size-default)`                        |
+ * | `--color`                              | Cor principal do accordion                            | `var(--color-action-default)`                     |
+ * | `--background-color`                   | Cor de background                                     | `var(--color-neutral-light-00)`                   |
+ * | `--font-weight`                        | Peso da fonte                                         | `var(--font-weight-bold)`                         |
+ * | **Hover**                              |                                                       |                                                   |
+ * | `--color-hover`                        | Cor principal no estado hover                         | `var(--color-action-hover)`                       |
+ * | `--background-hover`                   | Cor de background no estado hover                     | `var(--color-brand-01-lightest)`                  |
+ * | **Focused**                            |                                                       |                                                   |
+ * | `--color-focused`                      | Cor principal no estado de focus                      | `var(--color-action-focus)`                       |
+ * | `--outline-color-focused` &nbsp;       | Cor do outline do estado de focus                     | `var(--color-action-focus)`                       |
+ * | **Disabled**                           |                                                       |                                                   |
+ * | `--color-disabled`                     | Cor principal no estado disabled                      | `var(--color-neutral-mid-60)`                     |
+ * | `--background-disabled` &nbsp;         | Cor de background no estado disabled                  | `var(--color-neutral-light-10)`                   |
+ * | **po-accordion-manager**               |                                                       |                                                   |
+ * | `--background-color`                   | Cor de background                                     | `var(--color-neutral-mid-60)`                     |
+ * | `--color`                              | Cor principal do accordion manager                    | `var(--color-neutral-light-10)`                   |
+ * | `--font-family`                        | Família tipográfica usada                             | `var(--color-neutral-light-10)`                   |
+ * | `--font-size`                          | Tamanho da fonte                                      | `var(--color-neutral-light-10)`                   |
+ * | `--font-weight`                        | Peso da fonte                                         | `var(--color-neutral-light-10)`                   |
+ * | **Pressed**                            |                                                       |                                                   |
+ * | `--background-pressed` &nbsp;          | Cor de background no estado de pressionado&nbsp;      | `var(--color-brand-01-lighter)`                   |
+ * | `--color-pressed`                      | Cor principal no estado de pressionado                | `var(--color-action-pressed)`                     |
+ *
+ * > Para customização dos tokens do componenete, verifique o guia [Customização de cores do tema padrão](https://po-ui.io/guides/colors-customization).
+ *
  */
 @Directive()
 export class PoAccordionBaseComponent {

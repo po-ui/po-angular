@@ -23,29 +23,32 @@ import { convertToBoolean, isTypeof, uuid } from '../../utils/util';
  * - O foco é visível e possui uma espessura superior a 2 pixels CSS, não ficando escondido por outros elementos da tela. (WCAG [2.4.12: Focus Appearance](https://www.w3.org/WAI/WCAG22/Understanding/focus-appearance-enhanced))
  * - Quando selecionável, prevê interação por teclado, podendo ser selecionado através da tecla space (WCAG [2.4.1 - Keyboard](https://www.w3.org/WAI/WCAG21/Understanding/keyboard))
  *
- * #### Propriedades customizáveis
+ * #### Tokens customizáveis
+ *
+ * É possível alterar o estilo do componente usando os seguintes tokens (css)
+ *
  *
  * | Propriedade                                  | Descrição                                                        | Valor Padrão                                     |
  * |----------------------------------------------|------------------------------------------------------------------|--------------------------------------------------|
  * | **Default Values**                           |                                                                  |                                                  |
- * | --padding                                    | Preenchimento                                                    | 1rem                                             |
- * | --border-radius                              | Arredondamento da borda                                          | var(--border-radius-md)                          |
- * | --border-color                               | Cor da borda                                                     | var(--color-neutral-light-20)                    |
- * | --background                                 | Cor de background                                                | var(--color-neutral-light-00)                    |
- * | --border-width                               | Espessura do border                                              | var(--border-width-sm)                           |
- * | --shadow                                     | Sombra                                                           | var(--shadow-md)                                 |
- * | ---                                          | ---                                                              | ---                                              |
+ * | `--padding`                                  | Preenchimento                                                    | `1rem`                                           |
+ * | `--border-radius`                            | Contém o valor do raio dos cantos do elemento&nbsp;              | `var(--border-radius-md)`                        |
+ * | `--border-width`                             | Contém o valor da largura dos cantos do elemento&nbsp;           | `var(--border-width-sm)`                         |
+ * | `--border-color`                             | Cor da borda                                                     | `var(--color-neutral-light-20)`                  |
+ * | `--background`                               | Cor de background                                                | `var(--color-neutral-light-00)`                  |
+ * | `--shadow`                                   | Contém o valor da sombra do elemento                             | `var(--shadow-md)`                               |
  * | **Selected**                                 |                                                                  |                                                  |
- * | --background-selected &nbsp;                 | Cor de background quando selecionado &nbsp;                      | var(--color-brand-01-lightest)                   |
- * | --border-color-selected &nbsp;               | Cor da borda quando selecionado                                  | var(--color-action-default)                      |
- * | ---                                          | ---                                                              | ---                                              |
+ * | `--background-selected` &nbsp;               | Cor de background no estado selecionado &nbsp;                   | `var(--color-brand-01-lightest)`                 |
+ * | `--border-color-selected` &nbsp;             | Cor da borda no estado selecionado                               | `var(--color-action-default)`                    |
  * | **Hover**                                    |                                                                  |                                                  |
- * | --border-color-hover                         | Cor da borda do widget no hover                                  | var(--color-brand-01-dark)                       |
- * | --shadow-hover                               | Sombra do widget no hover                                        | var(--shadow-lg)                                 |
- * | ---                                          | ---                                                              | ---                                              |
+ * | `--border-color-hover`                       | Cor da borda no estado hover                                     | `var(--color-brand-01-dark)`                     |
+ * | `--shadow-hover`                             | Contém o valor da sombra do elemento no estado hover  &nbsp;     | `var(--shadow-lg)`                               |
  * | **Focused**                                  |                                                                  |                                                  |
- * | --color-focused                              | Cor do widget em foco                                            | var(--color-action-default)                      |
- * | --outline-color-focused &nbsp;               | Cor do outline do widget em foco                                 | var(--color-action-focus)                        |
+ * | `--color-focused`                            | Cor principal no estado de focus                                 | `var(--color-action-default)`                    |
+ * | `--outline-color-focused` &nbsp;             | Cor do outline do estado de focus                                | `var(--color-action-focus)`                      |
+ *
+ * > Para customização dos tokens do componenete, verifique o guia [Customização de cores do tema padrão](https://po-ui.io/guides/colors-customization).
+ *
  */
 @Directive()
 export abstract class PoWidgetBaseComponent {

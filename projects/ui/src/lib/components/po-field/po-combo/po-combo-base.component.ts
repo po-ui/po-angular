@@ -36,37 +36,38 @@ const PO_COMBO_FIELD_VALUE_DEFAULT = 'value';
  * O `po-combo` guarda o último valor caso o usuário desista de uma busca, deixando o campo ou pressionando *Esc*. Caso seja digitado no
  * campo de busca a descrição completa de um item, então a seleção será automaticamente efetuada ao deixar o campo ou pressionando *Enter*.
  *
- *  * #### Propriedades customizáveis
+ * #### Tokens customizáveis
  *
- * | Propriedade                            | Descrição                                             | Valor Padrão                                    |
- * |----------------------------------------|-------------------------------------------------------|-------------------------------------------------|
- * | **Default Values**                     |                                                       |                                                 |
- * | --font-family                          | Família tipográfica usada                             | var(--font-family-theme)                        |
- * | --font-size                            | Tamanho da fonte                                      | var(--font-size-default)                        |
- * | --text-color                           | Cor do texto                                          | var(--color-neutral-dark-90)                    |
- * | --text-color-placeholder               | Cor do texto no placeholder                           | var(--color-neutral-light-30)                   |
- * | --color                                | Cor do Combo                                          | var(--color-neutral-dark-70)                    |
- * | --background                           | Cor de background                                     | var(--color-neutral-light-05)                   |
- * | --border-radius                        | Arredondamento da borda                               | var(--border-width-lg)                          |
- * | ---                                    | ---                                                   | ---                                             |
- * | **Hover**                              |                                                       |                                                 |
- * | --color-hover                          | Cor de hover                                          | var(--color-action-hover)                       |
- * | --background-hover                     | Cor de background de hover                            | var(--color-brand-01-lightest)                  |
- * | ---                                    | ---                                                   | ---                                             |
- * | **Focused**                            |                                                       |                                                 |
- * | --color-focused                        | Cor no estado de focus                                | var(--color-action-default)                     |
- * | --outline-color-focused                | Cor do outline do focus                               | var(--color-action-focus)                       |
- * | ---                                    | ---                                                   | ---                                             |
- * | **Error**                              |                                                       |                                                 |
- * | --color-error                          | Cor no estado de erro                                 | var(--color-feedback-negative-base)             |
- * | ---                                    | ---                                                   | ---                                             |
- * | **Disabled**                           |                                                       |                                                 |
- * | --color-disabled                       | Cor no estado disabled                                | var(--color-neutral-light-30)                   |
- * | --background-disabled                  | Cor de background no estado disabled &nbsp;           | var(--color-neutral-light-20)                   |
- * | ---                                    | ---                                                   | ---                                             |
- * | **Suggestion**                         |                                                       |                                                 |
- * | --text-color-suggestion                | Cor do texto quando suggestion                        | var(--color-neutral-mid-60)                     |
- * | --background-suggestion &nbsp;         | Cor do background quando suggestion &nbsp;            | var(--color-brand-01-lightest)                  |
+ * É possível alterar o estilo do componente usando os seguintes tokens (css)
+ *
+ *
+ * | Propriedade                            | Descrição                                             | Valor Padrão                                      |
+ * |----------------------------------------|-------------------------------------------------------|---------------------------------------------------|
+ * | **Default Values**                     |                                                       |                                                   |
+ * | `--font-family`                        | Família tipográfica usada                             | `var(--font-family-theme)`                        |
+ * | `--font-size`                          | Tamanho da fonte                                      | `var(--font-size-default)`                        |
+ * | `--text-color`                         | Cor do texto                                          | `var(--color-neutral-dark-90)`                    |
+ * | `--text-color-placeholder`             | Cor do texto no placeholder                           | `var(--color-neutral-light-30)`                   |
+ * | `--color`                              | Cor principal do Combo                                | `var(--color-neutral-dark-70)`                    |
+ * | `--background`                         | Cor de background                                     | `var(--color-neutral-light-05)`                   |
+ * | `--border-radius`                      | Contém o valor do raio dos cantos do elemento&nbsp;   | `var(--border-width-lg)`                          |
+ * | **Hover**                              |                                                       |                                                   |
+ * | `--color-hover`                        | Cor principal no estado hover                         | `var(--color-action-hover)`                       |
+ * | `--background-hover`                   | Cor de background no estado hover                     | `var(--color-brand-01-lightest)`                  |
+ * | **Focused**                            |                                                       |                                                   |
+ * | `--color-focused`                      | Cor principal no estado de focus                      | `var(--color-action-default)`                     |
+ * | `--outline-color-focused`              | Cor do outline do estado de focus                     | `var(--color-action-focus)`                       |
+ * | **Error**                              |                                                       |                                                   |
+ * | `--color-error`                        | Cor principal no estado de erro                       | `var(--color-feedback-negative-base)`             |
+ * | **Disabled**                           |                                                       |                                                   |
+ * | `--color-disabled`                     | Cor principal no estado disabled                      | `var(--color-neutral-light-30)`                   |
+ * | `--background-disabled`                | Cor de background no estado disabled                  | `var(--color-neutral-light-20)`                   |
+ * | **Suggestion**                         |                                                       |                                                   |
+ * | `--text-color-suggestion`              | Cor do texto no estado suggestion                     | `var(--color-neutral-mid-60)`                     |
+ * | `--background-suggestion`              | Cor do background no estado suggestion                | `var(--color-brand-01-lightest)`                  |
+ *
+ * > Para customização dos tokens do componenete, verifique o guia [Customização de cores do tema padrão](https://po-ui.io/guides/colors-customization).
+ *
  */
 @Directive()
 export abstract class PoComboBaseComponent implements ControlValueAccessor, OnInit, Validator {

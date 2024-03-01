@@ -25,22 +25,28 @@ export const poLoadingLiteralsDefault = {
  * Este componente tem o objetivo de mostrar visualmente aos usuários que a aplicação está processando
  * ou aguardando a resposta de alguma requisição.
  *
- * #### Propriedades customizáveis
+ * #### Tokens customizáveis
  *
- * | Propriedade                            | Descrição                                             | Valor Padrão                                    |
- * |----------------------------------------|-------------------------------------------------------|-------------------------------------------------|
- * | **Default Values**                     |                                                       |                                                 |
- * | --font-family                          | Família tipográfica usada                             | var(--font-family-theme)                        |
- * | --font-weight                          | Peso da fonte                                         | var(--font-weight-normal)                       |
- * | --text-color                           | Cor do texto                                          | var(--color-neutral-dark-70)                    |
- * | --border-radius                        | Arredondamento da borda &nbsp;                        | var(--border-radius-md)                         |
- * | --border-width                         | Espessura do border                                   | var(--border-width-sm)                          |
- * | --border-color                         | Cor da borda                                          | var(--color-neutral-light-20)                   |
- * | --background                           | Cor de background                                     | var(--color-neutral-light-00)                   |
- * | --shadow                               | Sombra                                                | var(--shadow-md)                                |
- * | ---                                    | ---                                                   | ---                                             |
- * | **po-loading-icon**                    |                                                       |                                                 |
- * | --color                                | Cor do spinner                                        | var(--color-action-default)                     |
+ * É possível alterar o estilo do componente usando os seguintes tokens (css),
+ * obs: Só é possível realizar alterações ao adicionar a classe `.po-loading`
+ *
+ *
+ * | Propriedade                            | Descrição                                             | Valor Padrão                                      |
+ * |----------------------------------------|-------------------------------------------------------|---------------------------------------------------|
+ * | **Default Values**                     |                                                       |                                                   |
+ * | `--font-family`                        | Família tipográfica usada                             | `var(--font-family-theme)`                        |
+ * | `--font-weight`                        | Peso da fonte                                         | `var(--font-weight-normal)`                       |
+ * | `--text-color`                         | Cor do texto                                          | `var(--color-neutral-dark-70)`                    |
+ * | `--border-radius`                      | Contém o valor do raio dos cantos do elemento&nbsp;   | `var(--border-radius-md)`                         |
+ * | `--border-width`                       | Contém o valor da largura dos cantos do elemento&nbsp;| `var(--border-width-sm)`                          |
+ * | `--border-color`                       | Cor da borda                                          | `var(--color-neutral-light-20)`                   |
+ * | `--background`                         | Cor de background                                     | `var(--color-neutral-light-00)`                   |
+ * | `--shadow`                             | Contém o valor da sombra do elemento                  | `var(--shadow-md)`                                |
+ * | **po-loading-icon**                    |                                                       |                                                   |
+ * | `--color`                              | Cor principal do spinner                              | `var(--color-action-default)`                     |
+ *
+ * > Para customização dos tokens do componenete, verifique o guia [Customização de cores do tema padrão](https://po-ui.io/guides/colors-customization).
+ *
  */
 @Directive()
 export class PoLoadingBaseComponent {

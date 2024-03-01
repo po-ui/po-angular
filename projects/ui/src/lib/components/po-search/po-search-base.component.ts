@@ -36,35 +36,37 @@ export type searchMode = 'action' | 'trigger';
  * - Permitir a interação via teclado (2.1.1: Keyboard (A));
  * - Alteração entre os estados precisa ser indicada por mais de um elemento além da cor (1.4.1: Use of Color);
  *
- *  #### Propriedades customizáveis
+ * #### Tokens customizáveis
  *
- * | Propriedade                            | Descrição                                             | Valor Padrão                                    |
- * |----------------------------------------|-------------------------------------------------------|-------------------------------------------------|
- * | **Default Values**                     |                                                       |                                                 |
- * | --font-family                          | Família tipográfica usada                             | var(--font-family-theme)                        |
- * | --font-size                            | Tamanho da fonte                                      | var(--font-size-default)                        |
- * | --text-color-placeholder               | Cor do placeholder                                    | var(--color-neutral-light-30)                   |
- * | --color                                | Cor do search                                         | var(--color-neutral-dark-70)                    |
- * | --border-radius                        | Arredondamento da borda                               | var(--border-radius-md)                         |
- * | --background                           | Cor de background                                     | var(--color-neutral-light-05)                   |
- * | --text-color                           | Cor do texto                                          | var(--color-neutral-dark-90)                    |
- * | --color-clear                          | Cor do icone close                                    | var(--color-action-default)
- * | ---                                    | ---                                                   | ---                                             |
- * | **Icon**                               |                                                       |                                                 |
- * | --color-icon-read                      | Cor do icone de leitura                               | var(--color-neutral-dark-70)                    |
- * | ---color-icon                          | Cor do icone                                          | var(--color-action-default)                     |
- * | ---                                    | ---                                                   | ---                                             |
- * | **Hover**                              |                                                       |                                                 |
- * | --color-hover                          | Cor de hover                                          | var(--color-action-hover)                       |
- * | --background-hover                     | Cor de background de hover                            | var(--color-brand-01-lightest)                  |
- * | ---                                    | ---                                                   | ---                                             |
- * | **Focused**                            |                                                       |                                                 |
- * | --color-focused                        | Cor no estado de focus                                | var(--color-action-default)                     |
- * | --outline-color-focused                | Cor do outline do focus                               | var(--color-action-focus)                       |
- * | ---                                    | ---                                                   | ---                                             |
- * | **Disabled**                           |                                                       |                                                 |
- * | --color-disabled                       | Cor no estado disabled                                | var(--color-action-disabled)                    |
- * | --background-color-disabled &nbsp;     | Cor de background no estado disabled &nbsp;           | var(--color-neutral-light-20)                   |
+ * É possível alterar o estilo do componente usando os seguintes tokens (css)
+ *
+ *
+ *  | Propriedade                             | Descrição                                             | Valor Padrão                                      |
+ * |----------------------------------------|-------------------------------------------------------|---------------------------------------------------|
+ * | **Default Values**                     |                                                       |                                                   |
+ * | `--font-family`                        | Família tipográfica usada                             | `var(--font-family-theme)`                        |
+ * | `--font-size`                          | Tamanho da fonte                                      | `var(--font-size-default)`                        |
+ * | `--text-color-placeholder`             | Cor do texto no placeholder                           | `var(--color-neutral-light-30)`                   |
+ * | `--color`                              | Cor principal do search                               | `var(--color-neutral-dark-70)`                    |
+ * | `--border-radius`                      | Contém o valor do raio dos cantos do elemento&nbsp;   | `var(--border-radius-md)`                         |
+ * | `--background`                         | Cor de background                                     | `var(--color-neutral-light-05)`                   |
+ * | `--text-color`                         | Cor do texto                                          | `var(--color-neutral-dark-90)`                    |
+ * | `--color-clear`                        | Cor principal do icone close                          | `var(--color-action-default)`                     |
+ * | **Icon**                               |                                                       |                                                   |
+ * | `--color-icon-read`                    | Cor principal do icone de leitura                     | `var(--color-neutral-dark-70)`                    |
+ * | `--color-icon`                         | Cor principal do icone                                | `var(--color-action-default)`                     |
+ * | **Hover**                              |                                                       |                                                   |
+ * | `--color-hover`                        | Cor principal no estado hover                         | `var(--color-action-hover)`                       |
+ * | `--background-hover`                   | Cor de background no estado hover                     | `var(--color-brand-01-lightest)`                  |
+ * | **Focused**                            |                                                       |                                                   |
+ * | `--color-focused`                      | Cor principal no estado de focus                      | `var(--color-action-default)`                     |
+ * | `--outline-color-focused`              | Cor do outline do estado de focus                     | `var(--color-action-focus)`                       |
+ * | **Disabled**                           |                                                       |                                                   |
+ * | `--color-disabled`                     | Cor principal no estado disabled                      | `var(--color-action-disabled)`                    |
+ * | `--background-color-disabled`          | Cor de background no estado disabled                  | `var(--color-neutral-light-20)`                   |
+ *
+ * > Para customização dos tokens do componenete, verifique o guia [Customização de cores do tema padrão](https://po-ui.io/guides/colors-customization).
+ *
  */
 @Directive()
 export class PoSearchBaseComponent {

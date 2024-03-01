@@ -24,39 +24,40 @@ const PO_TOGGLE_TYPE_DEFAULT = 'none';
  *
  * > As recomendações do `po-button` também valem para o `po-button-group`.
  *
- * #### Propriedades customizáveis
+ * #### Tokens customizáveis
+ *
+ * É possível alterar o estilo do componente usando os seguintes tokens (css)
+ *
  *
  * | Propriedade                            | Descrição                                             | Valor Padrão                                    |
  * |----------------------------------------|-------------------------------------------------------|-------------------------------------------------|
  * | **Default Values**                     |                                                       |                                                 |
- * | --font-family                          | Família tipográfica usada                             | var(--font-family-theme)                        |
- * | --font-size                            | Tamanho da fonte                                      | var(--font-size-default)                        |
- * | --font-weight                          | Peso da fonte                                         | var(--font-weight-bold)                         |
- * | --line-height                          | Tamanho da label                                      | var(--line-height-none)                         |
- * | --border-radius                        | Arredondamento da borda &nbsp;                        | var(--border-radius-md)                         |
- * | --border-width                         | Espessura do border                                   | var(--border-width-md)                          |
- * | --padding                              | Preenchimento                                         | 0 1em                                           |
- * | ---                                    | ---                                                   | ---                                             |
- * | --text-color                           | Cor do texto                                          | var(--color-neutral-light-00)                   |
- * | --color                                | Cor do botão                                          | var(--color-action-default)                     |
- * | --background-color                     | Cor de background                                     | var(--color-transparent)                        |
- * | --shadow                               | Sombra                                                | var(--shadow-none)                              |
- * | ---                                    | ---                                                   | ---                                             |
+ * | `--font-family`                        | Família tipográfica usada                             | `var(--font-family-theme)`                      |
+ * | `--font-size`                          | Tamanho da fonte                                      | `var(--font-size-default)`                      |
+ * | `--font-weight`                        | Peso da fonte                                         | `var(--font-weight-bold)`                       |
+ * | `--line-height`                        | Tamanho da label                                      | `var(--line-height-none)`                       |
+ * | `--border-radius`                      | Contém o valor do raio dos cantos do elemento&nbsp;   | `var(--border-radius-md)`                       |
+ * | `--border-width`                       | Contém o valor da largura dos cantos do elemento&nbsp;| `var(--border-width-md)`                        |
+ * | `--padding`                            | Preenchimento                                         | `0 1em`                                         |
+ * | `--text-color`                         | Cor do texto                                          | `var(--color-neutral-light-00)`                 |
+ * | `--color`                              | Cor principal do botão                                | `var(--color-action-default)`                   |
+ * | `--background-color`                   | Cor de background                                     | `var(--color-transparent)`                      |
+ * | `--shadow`                             | Contém o valor da sombra do elemento                  | `var(--shadow-none)`                            |
  * | **Hover**                              |                                                       |                                                 |
- * | --color-hover                          | Cor de hover                                          | var(--color-action-hover)                       |
- * | --background-hover                     | Cor de background de hover                            | var(--color-brand-01-lighter)                   |
- * | --border-color-hover                   | Cor da borda de hover                                 | var(--color-brand-01-darkest)                   |
- * | ---                                    | ---                                                   | ---                                             |
+ * | `--color-hover`                        | Cor principal no estado hover                         | `var(--color-action-hover)`                     |
+ * | `--background-hover`                   | Cor de background no estado hover                     | `var(--color-brand-01-lighter)`                 |
+ * | `--border-color-hover`                 | Cor da borda no estado hover                          | `var(--color-brand-01-darkest)`                 |
  * | **Focused**                            |                                                       |                                                 |
- * | --outline-color-focused                | Cor do outline do focus                               | var(--color-action-focus)                       |
- * | ---                                    | ---                                                   | ---                                             |
+ * | `--outline-color-focused`              | Cor do outline do estado de focus                     | `var(--color-action-focus)`                     |
  * | **Pressed**                            |                                                       |                                                 |
- * | --color-pressed                        | Cor quando pressionado                                | var(--color-action-pressed)                     |
- * | --background-pressed                   | Cor de background quando pressionada &nbsp;           | var(--color-brand-01-light)                     |
- * | ---                                    | ---                                                   | ---                                             |
+ * | `--color-pressed`                      | Cor principal no estado de pressionado                | `var(--color-action-pressed)`                   |
+ * | `--background-pressed`                 | Cor de background no estado de pressionado&nbsp;      | `var(--color-brand-01-light)`                   |
  * | **Disabled**                           |                                                       |                                                 |
- * | --color-disabled                       | Cor no estado disabled                                | var(--color-action-disabled)                    |
- * | --background-color-disabled &nbsp;    | Cor de background no estado disabled                   | var(--color-transparent)                        |
+ * | `--color-disabled`                     | Cor principal no estado disabled                      | `var(--color-action-disabled)`                  |
+ * | `--background-color-disabled` &nbsp;   | Cor de background no estado disabled                  | `var(--color-transparent)`                      |
+ *
+ * > Para customização dos tokens do componenete, verifique o guia [Customização de cores do tema padrão](https://po-ui.io/guides/colors-customization).
+ *
  */
 @Directive()
 export class PoButtonGroupBaseComponent {

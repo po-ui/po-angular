@@ -35,32 +35,34 @@ import { PoDropdownAction } from './po-dropdown-action.interface';
  * > Para maiores dúvidas referente à configuração de rotas, acesse em nosso portal /Guias /Começando
  * [/Configurando as rotas do po-menu](/guides/getting-started).
  *
- * #### Propriedades customizáveis
+ * #### Tokens customizáveis
  *
- * | Propriedade                            | Descrição                                             | Valor Padrão                                    |
- * |----------------------------------------|-------------------------------------------------------|-------------------------------------------------|
- * | **Default Values**                     |                                                       |                                                 |
- * | --font-family                          | Família tipográfica usada                             | var(--font-family-theme)                        |
- * | --font-size                            | Tamanho da fonte                                      | var(--font-size-default)                        |
- * | --font-weight                          | Peso da fonte                                         | var(--font-weight-bold)                         |
- * | --line-height                          | Tamanho da label                                      | var(--line-height-none)                         |
- * | --color                                | Cor do dropdown                                       | var(--color-action-default)                     |
- * | --border-radius                        | Arredondamento da borda                               | var(--border-radius-md)                         |
- * | --border-width                         | Espessura do border                                   | var(--border-width-md)                          |
- * | --padding                              | Preenchimento                                         | 0 1em                                           |
- * | ---                                    | ---                                                   | ---                                             |
- * | **Hover**                              |                                                       |                                                 |
- * | --color-hover                          | Cor de hover                                          | var((--color-brand-01-darkest)                  |
- * | --background-hover                     | Cor de background de hover                            | var(--color-brand-01-lighter)                   |
- * | ---                                    | ---                                                   | ---                                             |
- * | **Focused**                            |                                                       |                                                 |
- * | --outline-color-focused &nbsp;         | Cor do outline do focus                               | var(--color-action-focus)                       |
- * | ---                                    | ---                                                   | ---                                             |
- * | **Pressed**                            |                                                       |                                                 |
- * | --background-pressed &nbsp;            | Cor de background quando pressionado &nbsp; &nbsp;    | var(--color-brand-01-light)                     |
- * | ---                                    | ---                                                   | ---                                             |
- * | **Disabled**                           |                                                       |                                                 |
- * | --color-disabled                       | Cor no estado disabled                                | var(--color-action-disabled)                    |
+ * É possível alterar o estilo do componente usando os seguintes tokens (css)
+ *
+ *
+ * | Propriedade                            | Descrição                                             | Valor Padrão                                     |
+ * |----------------------------------------|-------------------------------------------------------|--------------------------------------------------|
+ * | **Default Values**                     |                                                       |                                                  |
+ * | `--font-family`                        | Família tipográfica usada                             | `var(--font-family-theme)`                       |
+ * | `--font-size`                          | Tamanho da fonte                                      | `var(--font-size-default)`                       |
+ * | `--font-weight`                        | Peso da fonte                                         | `var(--font-weight-bold)`                        |
+ * | `--line-height`                        | Tamanho da label                                      | `var(--line-height-none)`                        |
+ * | `--color`                              | Cor principal do dropdown                             | `var(--color-action-default)`                    |
+ * | `--border-radius`                      | Contém o valor do raio dos cantos do elemento&nbsp;   | `var(--border-radius-md)`                        |
+ * | `--border-width`                       | Contém o valor da largura dos cantos do elemento&nbsp;| `var(--border-width-md)`                         |
+ * | `--padding`                            | Preenchimento                                         | `0 1em`                                          |
+ * | **Hover**                              |                                                       |                                                  |
+ * | `--color-hover`                        | Cor principal no estado hover                         | `var(--color-brand-01-darkest)`                  |
+ * | `--background-hover`                   | Cor de background no estado hover                     | `var(--color-brand-01-lighter)`                  |
+ * | **Focused**                            |                                                       |                                                  |
+ * | `--outline-color-focused` &nbsp;       | Cor do outline do estado de focus                     | `var(--color-action-focus)`                      |
+ * | **Pressed**                            |                                                       |                                                  |
+ * | `--background-pressed` &nbsp;          | Cor de background no estado de pressionado&nbsp;      | `var(--color-brand-01-light)`                    |
+ * | **Disabled**                           |                                                       |                                                  |
+ * | `--color-disabled`                     | Cor principal no estado disabled                      | `var(--color-action-disabled)`                   |
+ *
+ * > Para customização dos tokens do componenete, verifique o guia [Customização de cores do tema padrão](https://po-ui.io/guides/colors-customization).
+ *
  */
 
 @Directive()
