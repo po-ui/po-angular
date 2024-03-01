@@ -117,9 +117,59 @@ export const poTableLiteralsDefault = {
  *
  * Caso a largura de todas as colunas forem definidas e o total ultrapassar o tamanho tabela, será exibido um *scroll* na horizontal para a
  * completa visualização dos dados.
+ *
+ * #### Tokens customizáveis
+ *
+ * É possível alterar o estilo do componente usando os seguintes tokens (css)
+ *
+ *
+ * | Propriedade                            | Descrição                                             | Valor Padrão                                      |
+ * |----------------------------------------|-------------------------------------------------------|---------------------------------------------------|
+ * | **Default Values**                     |                                                       |                                                   |
+ * | `--font-family`                        | Família tipográfica usada                             | `var(--font-family-theme)`                        |
+ * | `--background-color`                   | Cor de background                                     | `var(--color-neutral-light-00)`                   |
+ * | `--color`                              | Cor principal da table                                | `var(--color-neutral-dark-95)`                    |
+ * | `--background-striped-color`           | Cor do background quando striped                      | `var(--color-neutral-light-05)`                   |
+ * | `--color-line`                         | Cor das linhas                                        | `var(--color-neutral-mid-40)`                     |
+ * | **Hover**                              |                                                       |                                                   |
+ * | `--color-hover`                        | Cor principal no estado hover                         | `var(--color-action-hover)`                       |
+ * | `--background-color-hover`             | Cor de background no estado hover                     | `var(--color-brand-01-lighter)`                   |
+ * | **Focused**                            |                                                       |                                                   |
+ * | `--outline-color-focused`              | Cor do outline do estado de focus                     | `var(--color-action-focus)`                       |
+ * | **Disabled**                           |                                                       |                                                   |
+ * | `--color-disabled`                     | Cor principal no estado disabled                      | `var(--color-neutral-mid-40)`                     |
+ * | **Headline**                           |                                                       |                                                   |
+ * | `--background-color-headline` &nbsp;   | Cor do cabeçalho                                      | `var(--color-neutral-light-10)`                   |
+ * | `--font-weight-headline`               | Peso da fonte do cabeçalho                            | `var(--font-weight-bold)`                         |
+ * | **Selected**                           |                                                       |                                                   |
+ * | `--background-color-selected`&nbsp;    | Cor de background no estado de selecionado            | `var(--color-brand-01-lightest)`                  |
+ * | **Actived**                            |                                                       |                                                   |
+ * | `--color-actived`                      | Cor do texto no estado de selecionado                 | `var(--color-neutral-dark-90)`                    |
+ * | `--background-color-actived`           | Cor de background no estado de selecionado            | `var(--color-brand-01-light)`                     |
+ *
+ * > Para customização dos tokens do componenete, verifique o guia [Customização de cores do tema padrão](https://po-ui.io/guides/colors-customization).
+ *
  */
 @Directive()
 export abstract class PoTableBaseComponent implements OnChanges, OnDestroy {
+  /**
+   * @deprecated 16.x.x
+   *
+   * @optional
+   *
+   * @description
+   *
+   * **Deprecated 16.x.x**.
+   *
+   * > Por regras de acessibilidade a célula da tabela apresentará reticências automáticamente
+   * quando não houver espaço para o seu contéudo e por isso a propriedade será depreciada.
+   *
+   * Se verdadeiro, habilita a quebra de texto ao transborda-lo dentro de qualquer coluna.
+   * > Quando ocorrer a quebra de texto, ao passar o mouse no conteúdo da célula,
+   * o mesmo será exibido através do [`po-tooltip`](/documentation/po-tooltip).
+   */
+  @Input({ alias: 'p-hide-text-overflow', transform: convertToBoolean }) hideTextOverflow: boolean = false;
+
   /**
    * @optional
    *

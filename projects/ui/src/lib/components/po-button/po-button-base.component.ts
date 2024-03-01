@@ -15,15 +15,62 @@ import { PoButtonSize } from './po-button-size.enum';
  *
  * - Evite `labels` extensos que quebram o layout do `po-button`, use `labels` diretos, curtos e intuitivos.
  * - Utilize apenas um `po-button` configurado como `primary` por página.
- * - Para ações irreversíveis use sempre a propriedade `p-danger`.
+ * - Para ações irreversíveis, use sempre a propriedade `p-danger`.
  *
  * #### Acessibilidade tratada no componente
  *
  * Algumas diretrizes de acessibilidade já são tratadas no componente, internamente, e não podem ser alteradas pelo proprietário do conteúdo. São elas:
  *
  * - Quando em foco, o botão é ativado usando as teclas de Espaço e Enter do teclado. [W3C WAI-ARIA 3.5 Button - Keyboard Interaction](https://www.w3.org/WAI/ARIA/apg/#keyboard-interaction-3)
- * - A área do foco precisar ter uma espessura de pelo menos 2 pixels CSS e o foco não pode ficar escondido por outros elementos da tela. [WCAG 2.4.12: Focus Appearance](https://www.w3.org/WAI/WCAG22/Understanding/focus-appearance-enhanced)
+ * - A área do foco precisa ter uma espessura de pelo menos 2 pixels CSS e o foco não pode ficar escondido por outros elementos da tela. [WCAG 2.4.12: Focus Appearance](https://www.w3.org/WAI/WCAG22/Understanding/focus-appearance-enhanced)
+ *
+ * #### Tokens customizáveis
+ *
+ * É possível alterar o estilo do componente usando os seguintes tokens (css)
+ *
+ *
+ * | Propriedade                              | Descrição                                             | Valor Padrão                                      |
+ * |------------------------------------------|-------------------------------------------------------|---------------------------------------------------|
+ * | `--font-family`                          | Família tipográfica usada                             | `var(--font-family-theme)`                        |
+ * | `--font-size`                            | Tamanho da fonte                                      | `var(--font-size-default)`                        |
+ * | `--font-weight`                          | Peso da fonte                                         | `var(--font-weight-bold)`                         |
+ * | `--line-height`                          | Tamanho da label                                      | `var(--line-height-none)`                         |
+ * | `--border-radius`                        | Contém o valor do raio dos cantos do elemento&nbsp;   | `var(--border-radius-md)`                         |
+ * | `--border-width`                         | Contém o valor da largura dos cantos do elemento&nbsp;| `var(--border-width-md)`                          |
+ * | `--padding`                              | Preenchimento                                         | `0 1em`                                           |                                                                        | ---                                             |
+ * | **Danger**                               |                                                       |                                                   |
+ * | `--text-color-danger`                    | Cor do texto no estado danger                         | `var(--color-neutral-light-00)`                   |
+ * | `--color-button-danger`                  | Cor do botão no estado danger                         | `var(--color-feedback-negative-dark)`             |
+ * | `--color-danger-hover`                   | Cor de hover no estado danger                         | `var(--color-feedback-negative-darker)`           |
+ * | `--color-danger-pressed`                 | Cor pressionada no estado danger                      | `var(--color-feedback-negative-darkest)`          |
+ * | `--background-danger-hover`              | Cor de background de hover no estado danger           | `var(--color-feedback-negative-lighter)`          |
+ * | `--border-color-danger-hover`            | Cor da borda de hover no estado danger                | `var(--color-feedback-negative-darkest)`          |
+ * | `--background-danger-pressed`            | Cor de background pressionado no estado danger        | `var(--color-feedback-negative-light)`            |
+ * | `--background-color-button-danger`&nbsp; | Cor de background do botão no estado danger           | `var(--color-transparent)`                        |
+ * | **Default Values**                       |                                                       |                                                   |
+ * | `--text-color`                           | Cor do texto                                          | `var(--color-neutral-light-00)`                   |
+ * | `--color`                                | Cor principal do botão                                | `var(--color-action-default)`                     |
+ * | `--background-color`                     | Cor de background                                     | `var(--color-transparent)`                        |
+ * | `--border-color`                         | Cor da borda                                          | `var(--color-transparent)`                        |
+ * | `--shadow`                               | Contém o valor da sombra do elemento                  | `var(--shadow-none)`                              |
+ * | **Hover**                                |                                                       |                                                   |
+ * | `--color-hover`                          | Cor principal no estado hover                         | `var(--color-action-hover)`                       |
+ * | `--background-hover`                     | Cor de background no estado hover                     | `var(--color-brand-01-lighter)`                   |
+ * | `--border-color-hover`                   | Cor da borda no estado hover                          | `var(--color-brand-01-darkest)`                   |
+ * | **Focused**                              |                                                       |                                                   |
+ * | `--outline-color-focused`                | Cor do outline do estado de focus                     | `var(--color-action-focus)`                       |
+ * | **Pressed**                              |                                                       |                                                   |
+ * | `--color-pressed`                        | Cor principal no estado de pressionado                | `var(--color-action-pressed)`                     |
+ * | `--background-pressed`                   | Cor de background no estado de pressionado&nbsp;      | `var(--color-brand-01-light)`                     |
+ * | **Disabled**                             |                                                       |                                                   |
+ * | `--text-color-disabled`                  | Cor do texto no estado disabled                       | `var(--color-neutral-dark-70)`                    |
+ * | `--color-disabled`                       | Cor principal no estado disabled                      | `var(--color-action-disabled)`                    |
+ * | `--background-color-disabled`            | Cor de background no estado disabled                  | `var(--color-transparent)`                        |
+ *
+ * > Para customização dos tokens do componenete, verifique o guia [Customização de cores do tema padrão](https://po-ui.io/guides/colors-customization).
+ *
  */
+
 @Directive()
 export class PoButtonBaseComponent {
   /**
@@ -69,6 +116,7 @@ export class PoButtonBaseComponent {
   private _loading?: boolean = false;
   private _kind?: string = PoButtonKind.secondary;
   private _size?: string = PoButtonSize.medium;
+  private _small?: boolean = false;
 
   protected hasSize?: boolean = false;
 
@@ -89,6 +137,35 @@ export class PoButtonBaseComponent {
 
   get loading(): boolean {
     return this._loading;
+  }
+
+  /**
+   * @deprecated 16.x.x
+   *
+   * @optional
+   *
+   * @description
+   *
+   * **Deprecated 16.x.x**.
+   *
+   * > Por regras de acessibilidade o botão não terá mais um tamanho menor do que 44px e por isso a propriedade será depreciada.
+   * > [Saiba mais](https://animaliads.notion.site/Bot-o-fb3a921e8ba54bd38b39758c24613368)
+   *
+   * Deixa o botão menor, com 32px de altura.
+   *
+   * @default `false`
+   */
+  @Input({ alias: 'p-small', transform: convertToBoolean })
+  set small(value: boolean) {
+    this._small = !this.hasSize ? value : false;
+
+    if (this._small) {
+      this._size = 'small';
+    }
+  }
+
+  get small(): boolean {
+    return this._small;
   }
 
   /**
@@ -128,8 +205,15 @@ export class PoButtonBaseComponent {
   @HostBinding('attr.p-size')
   @Input('p-size')
   set size(value: string) {
-    this._size = PoButtonSize[value] ? PoButtonSize[value] : PoButtonSize.medium;
-    this.hasSize = true;
+    const size = this.small ? 'small' : value;
+
+    if (size === 'small') {
+      this._size = 'small';
+      this._small = true;
+    } else {
+      this._size = PoButtonSize[size] ? PoButtonSize[size] : PoButtonSize.medium;
+      this.hasSize = true;
+    }
   }
 
   get size(): string {
