@@ -116,7 +116,6 @@ export class PoButtonBaseComponent {
   private _loading?: boolean = false;
   private _kind?: string = PoButtonKind.secondary;
   private _size?: string = PoButtonSize.medium;
-  private _small?: boolean = false;
 
   protected hasSize?: boolean = false;
 
@@ -137,35 +136,6 @@ export class PoButtonBaseComponent {
 
   get loading(): boolean {
     return this._loading;
-  }
-
-  /**
-   * @deprecated 16.x.x
-   *
-   * @optional
-   *
-   * @description
-   *
-   * **Deprecated 16.x.x**.
-   *
-   * > Por regras de acessibilidade o botão não terá mais um tamanho menor do que 44px e por isso a propriedade será depreciada.
-   * > [Saiba mais](https://animaliads.notion.site/Bot-o-fb3a921e8ba54bd38b39758c24613368)
-   *
-   * Deixa o botão menor, com 32px de altura.
-   *
-   * @default `false`
-   */
-  @Input({ alias: 'p-small', transform: convertToBoolean })
-  set small(value: boolean) {
-    this._small = !this.hasSize ? value : false;
-
-    if (this._small) {
-      this._size = 'small';
-    }
-  }
-
-  get small(): boolean {
-    return this._small;
   }
 
   /**
@@ -205,15 +175,8 @@ export class PoButtonBaseComponent {
   @HostBinding('attr.p-size')
   @Input('p-size')
   set size(value: string) {
-    const size = this.small ? 'small' : value;
-
-    if (size === 'small') {
-      this._size = 'small';
-      this._small = true;
-    } else {
-      this._size = PoButtonSize[size] ? PoButtonSize[size] : PoButtonSize.medium;
-      this.hasSize = true;
-    }
+    this._size = PoButtonSize[value] ? PoButtonSize[value] : PoButtonSize.medium;
+    this.hasSize = true;
   }
 
   get size(): string {

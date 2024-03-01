@@ -19,16 +19,6 @@ describe('SamplePoButtonLabs E2E', () => {
     expect(button.poModal.isPresent()).toBeFalsy();
   });
 
-  it('Check if properties are applied', () => {
-    button.poCheckboxSmall.click();
-
-    expect(button.poButton.getAttribute('class')).toContain('po-button-sm');
-
-    button.poCheckboxDisable.click();
-
-    expect(button.poButton.isEnabled()).toBeFalsy();
-  });
-
   it('Check `po-button` show icon `po-icon-news` after select icon `po-icon-news`', () => {
     button.poRadioLogoPO.click();
 

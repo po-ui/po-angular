@@ -1,3 +1,4 @@
+import { PoComboFilter, PoMultiselectFilter } from '../../po-field';
 import { PoDynamicField } from '../po-dynamic-field.interface';
 import { PoDynamicViewRequest } from './interfaces/po-dynamic-view-request.interface';
 
@@ -226,6 +227,21 @@ export interface PoDynamicViewField extends PoDynamicField {
   options?: Array<{ label: string; value: string | number }>;
 
   /**
+   *  Serviço que será utilizado para buscar os itens e preencher a lista de opções dinamicamente.
+   *  Pode ser informada uma URL ou uma instancia do serviço baseado em PoComboFilter.
+   *  **Importante**
+   *  > Para que funcione corretamente, é importante que o serviço siga o
+   *  [guia de API do PO UI](https://po-ui.io/guides/api).
+   */
+  optionsService?: string | PoComboFilter | PoMultiselectFilter;
+
+  /**
+   * Habilita a visualização de múltiplos itens.
+   * Útil para exibir dados em formatos semelhantes aos componentes que suportam seleção múltipla.
+   */
+  optionsMulti?: boolean;
+
+  /**
    * Serviço customizado para um campo em específico.
    * Pode ser ser informada uma URL ou uma instancia do serviço baseado em PoDynamicViewRequest.
    * **Importante:**
@@ -243,7 +259,7 @@ export interface PoDynamicViewField extends PoDynamicField {
   booleanFalse?: string;
 
   /**
-   * Objeto que será enviado como parâmetro nas requisições de busca `searchService`
+   * Objeto que será enviado como parâmetro nas requisições de busca `searchService` ou `optionsService`
    * utilizadas pelos campos que dependem de serviços para carregar seus dados.
    *
    * Por exemplo, para o parâmetro `{ age: 23 }` a URL da requisição ficaria:

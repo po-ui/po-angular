@@ -251,6 +251,16 @@ describe('PoListBoxComponent', () => {
           expect(component['openUrl']).not.toHaveBeenCalled();
         });
 
+        it('should be onClickTabs if `isTabs` and tab is not disabled or hide', () => {
+          const item = { label: 'a', action: () => {}, value: 'a', disabled: false, hide: false };
+          component.isTabs = true;
+          spyOn(component, 'onClickTabs');
+
+          component.onSelectItem(item);
+
+          expect(component.onClickTabs).toHaveBeenCalled();
+        });
+
         it('should`n called action if disabled is a function that returns true', () => {
           const fnTrue = () => true;
           const item = { label: 'a', action: () => {}, value: 'a', disabled: fnTrue };
@@ -381,6 +391,28 @@ describe('PoListBoxComponent', () => {
       });
     });
 
+    describe('onSelectTabs:', () => {
+      it('Should emit if changeStateTabs if `isTabs` and has tab', () => {
+        component.isTabs = true;
+        spyOn(component.changeStateTabs, 'emit');
+
+        component.onSelectTabs({ label: 'tab', click: () => {} });
+
+        expect(component.changeStateTabs.emit).toHaveBeenCalled();
+      });
+    });
+
+    describe('onClickTabs:', () => {
+      it('Should emit if clickTab if tabs is not disabled', () => {
+        component.isTabs = true;
+        spyOn(component.clickTab, 'emit');
+
+        component.onClickTabs({ label: 'tab', click: () => {}, disabled: false });
+
+        expect(component.clickTab.emit).toHaveBeenCalled();
+      });
+    });
+
     describe('ngOnDestroy:', () => {
       const mockSubscription: Subscription = new Subscription();
 
@@ -498,6 +530,15 @@ describe('PoListBoxComponent', () => {
         component.onSelectCheckBoxItem({ option: [{ value: 'test', label: 'test' }], selected: true });
 
         expect(component.checkboxClicked).toHaveBeenCalled();
+      });
+    });
+
+    describe('onActivatedTabs:', () => {
+      it('should emit activatedTab', () => {
+        spyOn(component.activatedTab, 'emit');
+        component.onActivatedTabs({ label: 'tab' });
+
+        expect(component.activatedTab.emit).toHaveBeenCalled();
       });
     });
 
@@ -727,6 +768,28 @@ describe('PoListBoxComponent', () => {
       component.items = [];
 
       expect(component.checkTemplate()).toBeFalsy();
+    });
+  });
+
+  describe('formatItemList', () => {
+    it('should return item.id if isTabs is true', () => {
+      component.isTabs = true;
+      const item = { id: 'identifier' };
+      expect(component.formatItemList(item)).toEqual('identifier');
+    });
+
+    it('should return stringified item if isTabs is false and item is stringifiable', () => {
+      component.isTabs = false;
+      const item = { name: 'Test' };
+      expect(component.formatItemList(item)).toEqual(JSON.stringify(item));
+    });
+
+    it('should return item itself if isTabs is false and item cannot be stringified', () => {
+      component.isTabs = false;
+      const item: any = { self: null };
+      item.self = item;
+      const result = component.formatItemList(item);
+      expect(result).toBe(item);
     });
   });
 });

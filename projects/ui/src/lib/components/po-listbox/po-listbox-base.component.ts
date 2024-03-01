@@ -75,6 +75,8 @@ export class PoListBoxBaseComponent {
     return this.items.length && this.items[0].hasOwnProperty('options');
   }
 
+  @Input({ alias: 'p-is-tabs', transform: convertToBoolean }) isTabs: boolean = false;
+
   // parâmetro que pode ser passado para o popup ao clicar em um item
   @Input('p-param') param?;
 
@@ -150,6 +152,14 @@ export class PoListBoxBaseComponent {
   @Input('p-compare-cache') compareCache: boolean = false;
 
   @Input('p-combo-service') comboService: any;
+
+  // Evento disparado quando uma tab é ativada
+  @Output('p-activated-tabs') activatedTab = new EventEmitter();
+
+  // Evento disparado no click de uma aba do tabs
+  @Output('p-click-tabs') clickTab = new EventEmitter();
+
+  @Output('p-change-state-tabs') changeStateTabs = new EventEmitter();
 
   constructor(languageService: PoLanguageService) {
     this.language = languageService.getShortLanguage();

@@ -8,6 +8,8 @@ import { Observable, catchError, map, of } from 'rxjs';
 import { getGridColumnsClasses, isVisibleField } from '../po-dynamic.util';
 import { PoDynamicViewField } from './po-dynamic-view-field.interface';
 import { PoDynamicViewService } from './services/po-dynamic-view.service';
+import { PoComboFilterService } from '../../po-field/po-combo/po-combo-filter.service';
+import { PoMultiselectFilterService } from '../../po-field/po-multiselect/po-multiselect-filter.service';
 
 /**
  *
@@ -131,32 +133,73 @@ export class PoDynamicViewBaseComponent {
     private decimalPipe: DecimalPipe,
     private timePipe: PoTimePipe,
     private titleCasePipe: TitleCasePipe,
-    protected dynamicViewService: PoDynamicViewService
+    protected dynamicViewService: PoDynamicViewService,
+    protected comboFilterService: PoComboFilterService,
+    protected multiselectFilterService: PoMultiselectFilterService
   ) {}
+
+  /**
+   * Verifica se já existe algum outro campo com a order da posição dele no array,
+   * se houver ele adiciona +1 até achar uma proxima posição
+   */
+  protected getOrdertoField(field: PoDynamicViewField, index: number) {
+    const position = index + 1;
+    return this.fields.findIndex(e => e.order === position) > -1 ? this.getOrdertoField(field, position) : position;
+  }
 
   protected getConfiguredFields(useSearchService = true) {
     const newFields = [];
 
     this.fields.forEach((field, index) => {
-      if (isVisibleField(field)) {
-        if (!field.searchService) {
-          newFields.splice(index, 0, this.createField(field));
-        } else if (
-          this.value[field.property]?.length ||
-          (!Array.isArray(this.value[field.property]) && this.value[field.property] && useSearchService)
-        ) {
-          if (isTypeof(field.searchService, 'object')) {
-            this.service = <PoDynamicViewService>field.searchService;
-          }
-          if (field.searchService && isTypeof(field.searchService, 'string')) {
+      field.order = field.order || this.getOrdertoField(field, index);
+
+      if (!isVisibleField(field)) {
+        return;
+      }
+
+      if (!field.searchService && !field.optionsService) {
+        newFields.push(this.createField(field));
+        return;
+      }
+
+      const hasValue =
+        this.value[field.property]?.length ||
+        (!Array.isArray(this.value[field.property]) && this.value[field.property] && useSearchService);
+
+      if (hasValue) {
+        const tempField = this.returnValues({ ...field }, '');
+        newFields.push(this.createField(tempField));
+
+        if (field.searchService) {
+          if (typeof field.searchService === 'object') {
+            this.service = field.searchService as PoDynamicViewService;
+          } else if (typeof field.searchService === 'string') {
             this.service = this.dynamicViewService;
-            this.service.setConfig(field.searchService as string);
+            this.service.setConfig(field.searchService);
           }
-          const indexUpdated = field.order ? field.order : index;
-          this.createFieldWithService(field, newFields, indexUpdated);
+        } else if (field.optionsService) {
+          if (field.optionsMulti) {
+            if (typeof field.optionsService === 'object') {
+              this.service = field.optionsService as PoMultiselectFilterService;
+            } else {
+              this.service = this.multiselectFilterService;
+              this.service.configProperties(field.optionsService, field.fieldLabel, field.fieldValue);
+            }
+          } else {
+            if (typeof field.optionsService === 'object') {
+              this.service = field.optionsService as PoComboFilterService;
+            } else {
+              this.service = this.comboFilterService;
+              this.service.configProperties(field.optionsService, field.fieldLabel, field.fieldValue);
+            }
+          }
         }
+
+        const indexUpdated = field.order;
+        this.createFieldWithService(field, newFields, indexUpdated);
       }
     });
+
     return sortFields(newFields);
   }
 
@@ -203,7 +246,7 @@ export class PoDynamicViewBaseComponent {
     this.searchById(this.value[property], field).subscribe(response => {
       const value = response;
       const allValues = this.returnValues(field, value);
-      newFields.splice(index, 0, allValues);
+      newFields.splice(index - 1, 1, allValues);
       sortFields(newFields);
     });
   }
@@ -248,10 +291,17 @@ export class PoDynamicViewBaseComponent {
     }
 
     if (value !== '') {
-      return this.service
-        .getObjectByValue(value, field.params)
-        .pipe(map(res => this.transformArrayValue(res, field)))
-        .pipe(catchError(() => of(null)));
+      if (field.optionsMulti) {
+        return this.service
+          .getObjectsByValues(value, field.params)
+          .pipe(map(res => this.transformArrayValue(res, field)))
+          .pipe(catchError(() => of(null)));
+      } else {
+        return this.service
+          .getObjectByValue(value, field.params)
+          .pipe(map(res => this.transformArrayValue(res, field)))
+          .pipe(catchError(() => of(null)));
+      }
     } else {
       return of(null);
     }

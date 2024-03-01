@@ -153,24 +153,6 @@ export const poTableLiteralsDefault = {
 @Directive()
 export abstract class PoTableBaseComponent implements OnChanges, OnDestroy {
   /**
-   * @deprecated 16.x.x
-   *
-   * @optional
-   *
-   * @description
-   *
-   * **Deprecated 16.x.x**.
-   *
-   * > Por regras de acessibilidade a célula da tabela apresentará reticências automáticamente
-   * quando não houver espaço para o seu contéudo e por isso a propriedade será depreciada.
-   *
-   * Se verdadeiro, habilita a quebra de texto ao transborda-lo dentro de qualquer coluna.
-   * > Quando ocorrer a quebra de texto, ao passar o mouse no conteúdo da célula,
-   * o mesmo será exibido através do [`po-tooltip`](/documentation/po-tooltip).
-   */
-  @Input({ alias: 'p-hide-text-overflow', transform: convertToBoolean }) hideTextOverflow: boolean = false;
-
-  /**
    * @optional
    *
    * @description

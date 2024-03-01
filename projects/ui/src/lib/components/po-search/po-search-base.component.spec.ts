@@ -30,10 +30,10 @@ describe('PoSearchBaseComponent', () => {
     });
 
     it('should be set `literals` with browser language if `literals` is `undefined`', () => {
-      component['language'] = Utils.browserLanguage();
+      component['language'] = Utils.getShortBrowserLanguage();
       component.literals = undefined;
 
-      expect(component.literals).toEqual(poSearchLiteralsDefault[Utils.browserLanguage()]);
+      expect(component.literals).toEqual(poSearchLiteralsDefault[Utils.getShortBrowserLanguage()]);
     });
 
     it('should be in portuguese if browser is set with `pt`.', () => {

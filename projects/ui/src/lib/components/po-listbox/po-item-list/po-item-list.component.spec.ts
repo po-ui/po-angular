@@ -43,6 +43,32 @@ describe('PoItemListComponent', () => {
       });
     });
 
+    describe('onSelectItem:', () => {
+      it('should emit tabsItem when tabHide or disabled is changed', () => {
+        component.isTabs = true;
+        const tabHideChanges = { tabHide: { currentValue: true } };
+        const disabledChanges = { disabled: { currentValue: true } };
+
+        spyOn(component.tabsItem, 'emit');
+
+        component.ngOnChanges(<any>tabHideChanges);
+        component.ngOnChanges(<any>disabledChanges);
+
+        expect(component.tabsItem.emit).toHaveBeenCalledWith(component.item);
+      });
+
+      it('should emitActiveTabs when activeTabs is changed', () => {
+        component.isTabs = true;
+        const activeTabsChanges = { activeTabs: { currentValue: true } };
+
+        spyOn(component, <any>'emitActiveTabs');
+
+        component.ngOnChanges(<any>activeTabsChanges);
+
+        expect(component['emitActiveTabs']).toHaveBeenCalledWith(component.item);
+      });
+    });
+
     describe('onCheckboxItemEmit:', () => {
       it('should call `onCheckboxItem` if event is `Enter`', () => {
         const eventEnterKey = new KeyboardEvent('keydown', { 'code': 'Enter' });

@@ -1,4 +1,15 @@
-import { Component, ElementRef, EventEmitter, Input, OnChanges, Output, SimpleChanges } from '@angular/core';
+import {
+  AfterViewInit,
+  ChangeDetectorRef,
+  Component,
+  ElementRef,
+  EventEmitter,
+  Input,
+  OnChanges,
+  Output,
+  SimpleChanges,
+  ViewChild
+} from '@angular/core';
 
 import { convertToBoolean } from '../../../utils/util';
 
@@ -13,7 +24,9 @@ import { convertToBoolean } from '../../../utils/util';
   selector: 'po-tab-button',
   templateUrl: './po-tab-button.component.html'
 })
-export class PoTabButtonComponent implements OnChanges {
+export class PoTabButtonComponent implements OnChanges, AfterViewInit {
+  @ViewChild('tabButtom', { static: true }) tabButtom: ElementRef;
+
   // Desabilita o botão
   @Input('p-disabled') disabled: boolean;
 
@@ -37,6 +50,7 @@ export class PoTabButtonComponent implements OnChanges {
 
   private _active: boolean;
   private _hide: boolean;
+  widthButton;
 
   // Ativa o botão
   @Input('p-active') set active(value: boolean) {
@@ -60,7 +74,15 @@ export class PoTabButtonComponent implements OnChanges {
     return this._hide;
   }
 
-  constructor(private elementRef: ElementRef) {}
+  constructor(
+    private elementRef: ElementRef,
+    private changeDetector: ChangeDetectorRef
+  ) {}
+
+  ngAfterViewInit(): void {
+    this.widthButton = this.tabButtom.nativeElement.offsetWidth;
+    this.changeDetector.detectChanges();
+  }
 
   ngOnChanges(changes: SimpleChanges) {
     if ((changes.hide && changes.hide.currentValue) || (changes.disabled && changes.disabled.currentValue)) {

@@ -40,7 +40,6 @@ describe('PoButtonComponent: ', () => {
     expect(nativeElement.querySelector('.po-button-primary')).toBeFalsy();
     expect(nativeElement.querySelector('.po-button-danger')).toBeFalsy();
     expect(nativeElement.querySelector('.po-button-link')).toBeFalsy();
-    expect(nativeElement.querySelector('.po-button-sm')).toBeFalsy();
 
     expect(nativeElement.querySelector('span.po-icon')).toBeFalsy();
   });
@@ -50,13 +49,6 @@ describe('PoButtonComponent: ', () => {
     fixture.detectChanges();
 
     expect(nativeElement.querySelector('.po-button-label').innerHTML).toContain('Po Button');
-  });
-
-  it('should add the class `po-button-sm` when `p-small` is `true`', () => {
-    component.small = true;
-    fixture.detectChanges();
-
-    expect(nativeElement.querySelector('.po-button-sm')).toBeTruthy();
   });
 
   it('should add i with an icon when `p-icon` is defined', () => {

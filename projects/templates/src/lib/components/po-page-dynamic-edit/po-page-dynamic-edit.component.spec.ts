@@ -1182,27 +1182,6 @@ describe('PoPageDynamicEditComponent: ', () => {
       expect(component.model).toEqual(result);
     });
 
-    it('updateModel: should keep model if newResource is undefined', () => {
-      const newResource = undefined;
-      component.model = { prop1: 'test 1', prop2: 'test 2' };
-      const result = { prop1: 'test 1', prop2: 'test 2' };
-
-      component.dynamicForm = <any>{
-        form: {
-          form: {
-            patchValue: () => {}
-          }
-        }
-      };
-
-      const patchValueSpy = spyOn(component.dynamicForm.form.form, 'patchValue');
-
-      component['updateModel'](newResource);
-
-      expect(component.model).toEqual(result);
-      expect(patchValueSpy).toHaveBeenCalled();
-    });
-
     it('executeSave: should call `saveOperation`, `poNotification.success` and `navigateTo`', fakeAsync(() => {
       const saveRedirectPath = 'people';
 
@@ -1222,6 +1201,111 @@ describe('PoPageDynamicEditComponent: ', () => {
       });
       tick();
     }));
+
+    it('updateModel: should update model and call patchValue when newResource is defined and not empty', () => {
+      const newResource = { prop3: 'test 3' }; // Define newResource com uma nova propriedade
+      component.model = { prop1: 'test 1', prop2: 'test 2' }; // Estado inicial do modelo
+      const expectedModel = { ...component.model, ...newResource }; // Resultado esperado após a atualização
+
+      component.dynamicForm = <any>{
+        form: {
+          form: {
+            patchValue: () => {}
+          }
+        }
+      };
+
+      const patchValueSpy = spyOn(component.dynamicForm.form.form, 'patchValue');
+
+      component['updateModel'](newResource);
+
+      // Verifica se o modelo foi atualizado corretamente
+      expect(component.model).toEqual(expectedModel);
+      // Verifica se patchValue foi chamado com o modelo atualizado
+      expect(patchValueSpy).toHaveBeenCalledWith(expectedModel);
+    });
+
+    // Exemplo de teste ajustado sem modificar `keys`
+    it('updateModel: should update model properly without modifying read-only keys property', () => {
+      const newResource = { prop3: 'test 3' }; // Recurso para atualização
+      component.model = { prop1: 'test 1', prop2: 'test 2' };
+
+      component.dynamicForm = <any>{
+        form: {
+          form: {
+            patchValue: () => {}
+          }
+        }
+      };
+
+      const patchValueSpy = spyOn(component.dynamicForm.form.form, 'patchValue');
+
+      component['updateModel'](newResource);
+
+      // Verifique se o modelo foi atualizado corretamente
+      expect(component.model).toEqual(jasmine.objectContaining(newResource));
+      // Verifique se patchValue foi chamado
+      expect(patchValueSpy).toHaveBeenCalled();
+    });
+
+    it('updateModel: should not update model or call patchValue when newResource is undefined', () => {
+      component.model = { prop1: 'value1', prop2: 'value2' };
+      const originalModel = { ...component.model };
+
+      component.dynamicForm = <any>{
+        form: {
+          form: {
+            patchValue: () => {}
+          }
+        }
+      };
+      const patchValueSpy = spyOn(component.dynamicForm.form.form, 'patchValue');
+
+      component['updateModel'](undefined);
+
+      expect(component.model).toEqual(originalModel);
+      expect(patchValueSpy).not.toHaveBeenCalled();
+    });
+
+    it('updateModel: should not update model or call patchValue when newResource is an empty object', () => {
+      component.model = { prop1: 'value1', prop2: 'value2' };
+      const originalModel = { ...component.model };
+
+      component.dynamicForm = <any>{
+        form: {
+          form: {
+            patchValue: () => {}
+          }
+        }
+      };
+
+      const patchValueSpy = spyOn(component.dynamicForm.form.form, 'patchValue');
+
+      component['updateModel']({});
+
+      expect(component.model).toEqual(originalModel);
+      expect(patchValueSpy).not.toHaveBeenCalled();
+    });
+
+    it('updateModel: should update model and call patchValue when newResource is provided', () => {
+      component.model = { prop1: 'value1', prop2: 'value2' };
+      const newResource = { prop3: 'value3' };
+
+      component.dynamicForm = <any>{
+        form: {
+          form: {
+            patchValue: () => {}
+          }
+        }
+      };
+
+      const patchValueSpy = spyOn(component.dynamicForm.form.form, 'patchValue');
+
+      component['updateModel'](newResource);
+
+      expect(component.model).toEqual({ ...component.model, ...newResource });
+      expect(patchValueSpy).toHaveBeenCalledWith(component.model);
+    });
 
     it('executeSaveNew: should call `saveOperation`, `poNotification.success` and `navigateTo`', fakeAsync(() => {
       const saveNewRedirectPath = 'people';

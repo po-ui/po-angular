@@ -4,7 +4,8 @@
     #itemList
     [class.po-item-list__separator]="separator"
     [class.po-item-list__disabled]="disabled || !visible"
-    [class.po-item-list__selected]="selected && !disabled"
+    [class.po-item-list__selected]="(selected || activeTabs) && !disabled"
+    [class.po-item-list__hidden]="tabHide"
     [attr.aria-disabled]="disabled || !visible"
     [attr.aria-label]="label"
     [class.po-item-list__danger]="danger"

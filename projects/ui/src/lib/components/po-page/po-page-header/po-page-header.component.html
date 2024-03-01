@@ -9,11 +9,16 @@
     </po-breadcrumb>
   </div>
 
-  <div class="po-pt-1">
-    <!-- Titulo -->
-    <h1 class="po-page-header-title" *ngIf="title">
-      {{ title }}
-    </h1>
+  <div class="po-page-header-container">
+    <!-- Titulo e SubTitulo-->
+    <div class="po-page-header-title-container" *ngIf="title || subtitle">
+      <h1 class="po-page-header-title" *ngIf="title">
+        {{ title }}
+      </h1>
+      <div class="po-page-header-subtitle" *ngIf="subtitle">
+        {{ subtitle }}
+      </div>
+    </div>
 
     <!-- Operações -->
     <ng-content></ng-content>

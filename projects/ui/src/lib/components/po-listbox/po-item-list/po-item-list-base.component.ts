@@ -19,6 +19,7 @@ export class PoItemListBaseComponent {
   private _type!: PoItemListType;
   private _visible: boolean = true;
   private _disabled: boolean = false;
+  _activeTabs: boolean = false;
 
   @HostBinding('attr.p-type')
   @Input('p-type')
@@ -162,5 +163,30 @@ export class PoItemListBaseComponent {
 
   @Input('p-combo-service') comboService: any;
 
-  constructor() {}
+  // TABS PROPERTIES
+
+  @Input('p-is-tabs') isTabs?: boolean = false;
+
+  @Input('p-tab-hide') tabHide?: boolean = false;
+
+  @Output('p-emit-item-tabs') tabsItem = new EventEmitter<any>();
+
+  @Output('p-activated-tabs') activatedTab = new EventEmitter();
+
+  // Ativa o botão
+  @Input('p-active-tabs') set activeTabs(value: boolean) {
+    this._activeTabs = value;
+
+    this.emitActiveTabs(this.item);
+  }
+
+  get activeTabs() {
+    return this._activeTabs;
+  }
+
+  protected emitActiveTabs(tab) {
+    if (tab?.active) {
+      this.activatedTab.emit(tab);
+    }
+  }
 }
