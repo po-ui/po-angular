@@ -38,6 +38,49 @@ export const PoTagLiteralsDefault = {
  * utilizando a tecla *tab*.
  *
  * Seu uso é recomendado para informações que necessitem de destaque em forma de marcação.
+ *
+ * #### Tokens customizáveis
+ *
+ * É possível alterar o estilo do componente usando os seguintes tokens (CSS):
+ *
+ * > Para maiores informações, acesse o guia [Personalizando o Tema Padrão com Tokens CSS](https://po-ui.io/guides/theme-customization).
+ *
+ * | Propriedade                            | Descrição                                             | Valor Padrão                                    |
+ * |----------------------------------------|-------------------------------------------------------|-------------------------------------------------|
+ * | **Default Values**                     |                                                       |                                                 |
+ * | `--font-family`                        | Família tipográfica usada                             | `var(--font-family-theme)`                      |
+ * | `--font-size`                          | Tamanho da fonte                                      | `var(--font-size-sm)`                           |
+ * | `--line-height`                        | Tamanho da label                                      | `var(---line-height-sm)`                        |
+ * | `--border-radius`                      | Contém o valor do raio dos cantos do elemento&nbsp;   | `var(--border-radius-pill)`                     |
+ * | **Neutral**                            |                                                       |                                                 |
+ * | `--color-neutral`                      | Cor principal no estado neutral                       | `var(--color-neutral-light-10)`                 |
+ * | `--text-color-positive`                | Cor do texto no estado neutral                        | `var(--color-neutral-dark-80)`                  |
+ * | **Positive**                           |                                                       |                                                 |
+ * | `--color-positive`                     | Cor principal no estado positive                      | `var(--color-feedback-positive-lightest)`       |
+ * | `--text-color-positive`                | Cor do texto no estado positive                       | `var(--color-feedback-positive-dark)`           |
+ * | **Negative**                           |                                                       |                                                 |
+ * | `--color-negative`                     | Cor principal no estado danger                        | `var(--color-feedback-negative-lightest)`       |
+ * | `--text-color-negative`                | Cor do texto no estado danger                         | `var(--color-feedback-negative-darker)`         |
+ * | **Warning**                            |                                                       |                                                 |
+ * | `--color-tag-warning`                  | Cor principal no estado warning                       | `var(--color-feedback-warning-lightest)`        |
+ * | `--text-color-warning`                 | Cor do texto no estado warning                        | `var(--color-feedback-warning-darkest)`         |
+ * | **Info**                               |                                                       |                                                 |
+ * | `--color-info`                         | Cor principal no estado info                          | `var(--color-feedback-info-lightest)`           |
+ * | `--text-color-info`                    | Cor do texto no estado info                           | `var(--color-feedback-info-dark)`               |
+ * | **Removable**                          |                                                       |                                                 |
+ * | `--color`                              | Cor principal quando removable                        | `var(--color-brand-01-lightest)`                |
+ * | `--border-color`                       | Cor de borda quando removable &nbsp;                  | `var(--color-brand-01-lighter)`                 |
+ * | `--color-icon`                         | Cor do ícone quando removable &nbsp;                  | `var(--color-action-default)`                   |
+ * | `--text-color`                         | Cor do texto quando removable &nbsp;                  | `var(--color-neutral-dark-80)`                  |
+ * | `--color-hover`                        | Cor do hover no estado removable &nbsp;               | `var(--color-brand-01-lighter)`                 |
+ * | **Focused**                            |                                                       |                                                 |
+ * | `--outline-color-focused`              | Cor do outline do estado de focus                     | `var(--color-action-focus)`                     |
+ * | **Disabled**                           |                                                       |                                                 |
+ * | `--color-disabled`                     | Cor principal no estado disabled                      | `var(--color-neutral-light-20)`                 |
+ * | `--border-color-disabled`              | Cor da borda no estado disabled &nbsp;                | `var(--color-action-disabled)`                  |
+ * | `--color-icon-disabled`                | Cor do icone no estado disabled &nbsp;                | `var(--color-action-disabled)`                  |
+ * | `--text-color-disabled`                | Cor do texto no estado disabled &nbsp;                | `var(--color-neutral-mid-60)`                   |
+ *
  */
 @Directive()
 export class PoTagBaseComponent {

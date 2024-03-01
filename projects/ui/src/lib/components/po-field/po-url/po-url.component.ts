@@ -17,7 +17,7 @@ import { PoInputGeneric } from '../po-input-generic/po-input-generic';
  *
  * @description
  *
- * po-url é um input específico para receber URL, com o pattern já configurado.
+ * O `po-url` é um input específico para receber URL, com o pattern já configurado.
  *
  * @example
  *

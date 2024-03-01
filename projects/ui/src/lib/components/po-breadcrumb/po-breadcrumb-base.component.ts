@@ -16,6 +16,21 @@ import { PoBreadcrumbItem } from './po-breadcrumb-item.interface';
  *
  * Havendo necessidade de incluir parâmetros na requisição do serviço,
  * o componente dispõe da propriedade `p-params-service` que recebe um objeto contendo as informações.
+ *
+ * #### Tokens customizáveis
+ *
+ * É possível alterar o estilo do componente usando os seguintes tokens (CSS):
+ *
+ * > Para maiores informações, acesse o guia [Personalizando o Tema Padrão com Tokens CSS](https://po-ui.io/guides/theme-customization).
+ *
+ * | Propriedade                            | Descrição                                             | Valor Padrão                                      |
+ * |----------------------------------------|-------------------------------------------------------|---------------------------------------------------|
+ * | **Default Values**                     |                                                       |                                                   |
+ * | `--font-family`                        | Família tipográfica usada &nbsp;                      | `var(--font-family-theme)`                        |
+ * | `--color`                              | Cor principal do icone de lista                       | `var(--color-action-default)`                     |
+ * | `--color-icon`                         | Cor do icone ">"                                      | `var(--color-neutral-mid-60)`                     |
+ * | `--color-current-page` &nbsp;          | Cor do pagina atual                                   | `var(--color-neutral-mid-60)`                     |
+ *
  */
 @Directive()
 export class PoBreadcrumbBaseComponent {
