@@ -22,6 +22,32 @@ import { convertToBoolean, isTypeof, uuid } from '../../utils/util';
  * - Desenvolvido com uso de controles padrões HTML, o que permite a identificação na interface por tecnologias assistivas. (WCAG [4.1.2: Name, Role, Value](https://www.w3.org/WAI/WCAG21/Understanding/name-role-value))
  * - O foco é visível e possui uma espessura superior a 2 pixels CSS, não ficando escondido por outros elementos da tela. (WCAG [2.4.12: Focus Appearance](https://www.w3.org/WAI/WCAG22/Understanding/focus-appearance-enhanced))
  * - Quando selecionável, prevê interação por teclado, podendo ser selecionado através da tecla space (WCAG [2.4.1 - Keyboard](https://www.w3.org/WAI/WCAG21/Understanding/keyboard))
+ *
+ * #### Tokens customizáveis
+ *
+ * É possível alterar o estilo do componente usando os seguintes tokens (CSS):
+ *
+ * > Para maiores informações, acesse o guia [Personalizando o Tema Padrão com Tokens CSS](https://po-ui.io/guides/theme-customization).
+ *
+ * | Propriedade                                  | Descrição                                                        | Valor Padrão                                     |
+ * |----------------------------------------------|------------------------------------------------------------------|--------------------------------------------------|
+ * | **Default Values**                           |                                                                  |                                                  |
+ * | `--padding`                                  | Preenchimento                                                    | `1rem`                                           |
+ * | `--border-radius`                            | Contém o valor do raio dos cantos do elemento&nbsp;              | `var(--border-radius-md)`                        |
+ * | `--border-width`                             | Contém o valor da largura dos cantos do elemento&nbsp;           | `var(--border-width-sm)`                         |
+ * | `--border-color`                             | Cor da borda                                                     | `var(--color-neutral-light-20)`                  |
+ * | `--background`                               | Cor de background                                                | `var(--color-neutral-light-00)`                  |
+ * | `--shadow`                                   | Contém o valor da sombra do elemento                             | `var(--shadow-md)`                               |
+ * | **Selected**                                 |                                                                  |                                                  |
+ * | `--background-selected` &nbsp;               | Cor de background no estado selecionado &nbsp;                   | `var(--color-brand-01-lightest)`                 |
+ * | `--border-color-selected` &nbsp;             | Cor da borda no estado selecionado                               | `var(--color-action-default)`                    |
+ * | **Hover**                                    |                                                                  |                                                  |
+ * | `--border-color-hover`                       | Cor da borda no estado hover                                     | `var(--color-brand-01-dark)`                     |
+ * | `--shadow-hover`                             | Contém o valor da sombra do elemento no estado hover  &nbsp;     | `var(--shadow-lg)`                               |
+ * | **Focused**                                  |                                                                  |                                                  |
+ * | `--color-focused`                            | Cor principal no estado de focus                                 | `var(--color-action-default)`                    |
+ * | `--outline-color-focused` &nbsp;             | Cor do outline do estado de focus                                | `var(--color-action-focus)`                      |
+ *
  */
 @Directive()
 export abstract class PoWidgetBaseComponent {
