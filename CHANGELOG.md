@@ -2,9 +2,7 @@
 
 All notable changes to this project will be documented in this file. See [standard-version](https://github.com/conventional-changelog/standard-version) for commit guidelines.
 
-# [17.0.0-rc.0](https://github.com/po-ui/po-angular/compare/v17.0.0-next.0...v17.0.0-rc.0) (2024-02-26)
-
-# [17.0.0-next.0](https://github.com/po-ui/po-angular/compare/v16.16.0...v17.0.0-next.0) (2024-02-26)
+# [17.0.0](https://github.com/po-ui/po-angular/compare/v16.16.0...v17.0.0) (2024-03-04)
 
 ### BREAKING CHANGES
 
@@ -35,8 +33,13 @@ Por regras de acessibilidade o botão não terá mais um tamanho menor do que 44
 * **table:** remove a propriedade `p-hide-text-overflow` ([4d03932](https://github.com/po-ui/po-angular/commit/4d03932392206ee93822ce0b038acbaf963d2fc7))
 * **utils:** remove o método `browserLanguage` ([0b21c2e](https://github.com/po-ui/po-angular/commit/0b21c2e335ab7d60fa48b43cc16977d52a5b5f1c))
 
+### Bug Fixes
+
+* **listbox:** corrige `listbox` para permitir o uso de `TemplateRef` sem quebrar a aplicação ([618d096](https://github.com/po-ui/po-angular/commit/618d0962e40e9fe55c044d5742e2dde1cd4f4dc1))
+
 ### Features
 
+* **input:** inclui variável de controle para o `p-change-model` ([4f19adc](https://github.com/po-ui/po-angular/commit/4f19adc4e7b9d7c4d7c1dd5a8ef3b6eebaad35eb))
 * **schematics:** inclui tratamento em projetos do tipo standalone ([bda3da6](https://github.com/po-ui/po-angular/commit/bda3da6621ae5b3e94a7f2ab6c9538c18d21463d))
 * **schematics:** migração para v.17 ([cb8e0d5](https://github.com/po-ui/po-angular/commit/cb8e0d580ad04d117c7bf2fd8001537cf29c5833))
 
