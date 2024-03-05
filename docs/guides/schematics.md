@@ -10,10 +10,10 @@ Um vez que for instalado o pacotes, teremos disponível os *schematics* através
 ### PO UI Components
 
 Caso esteja iniciando uma aplicação com PO, indica-se utilizar o comando abaixo,
-no qual será instalado o pacote `@po-ui/ng-components@next` e realizadas algumas configurações, que serão descritas em seguida:
+no qual será instalado o pacote `@po-ui/ng-components` e realizadas algumas configurações, que serão descritas em seguida:
 
 ```
-ng add @po-ui/ng-components@next
+ng add @po-ui/ng-components
 ```
 
 - Substitui o `AppComponent` com uma estrutura incial de um projeto, utilizando os components `po-page-default`, `po-toolbar`, e `po-menu`;
@@ -26,7 +26,7 @@ Para a utilização de componentes de template o processo para inclusão é seme
 Primeiramente, deve-se utilizar o comando abaixo, no qual será instalado o pacote `@po-ui/ng-templates`:
 
 ```
-ng add @po-ui/ng-templates@next
+ng add @po-ui/ng-templates
 ```
 
 - Importa o módulo do PO;
