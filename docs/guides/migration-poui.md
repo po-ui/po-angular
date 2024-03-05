@@ -31,6 +31,35 @@ O nosso pacote possuía dependências que eram compatíveis com a versão anteri
 devemos utilizar a *flag* `--force` para que o Angular realize a migração do seu projeto, ignorando a versão das dependências.
 Para avaliar as *flags* disponíveis veja a [**documentação do ng update**](https://angular.io/cli/update).
 
+> Após a atualização, verifique se no arquivo `package.json` se as versões dos pacotes `@angular` estão definidas com `~`
+
+```
+  "dependencies": {
+    "@angular/animations": "~17.0.9",
+    "@angular/common": "~17.0.9",
+    "@angular/compiler": "~17.0.9",
+    "@angular/core": "~17.0.9",
+    "@angular/forms": "~17.0.9",
+    "@angular/platform-browser": "~17.0.9",
+    "@angular/platform-browser-dynamic": "~17.0.9",
+    "@angular/router": "~17.0.9",
+    ...
+    "zone.js": "~0.14.4"
+  },
+  "devDependencies": {
+    "@angular-devkit/build-angular": "~17.0.9",
+    "@angular/cli": "~17.0.9",
+    "@angular/compiler-cli": "~17.0.9",
+    ...
+    "typescript": "~5.2.2"
+  }  
+```
+
+Caso as versões estejam definidas com `^` realize as seguintes ações:
+* Altere para `~`, conforme exemplo acima.
+* Remova os diretórios `node_modules`, `.angular` (caso exista) e o arquivo `package-lock.json`
+* Execute o comando `npm install --force`
+
 ## Atualizando o PO UI
 
 Para facilitar a migração do seu projeto para o PO UI mais recente, implementamos o `ng update` nos pacotes abaixo:
