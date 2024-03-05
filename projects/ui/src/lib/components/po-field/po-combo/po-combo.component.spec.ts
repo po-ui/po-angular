@@ -237,6 +237,15 @@ describe('PoComboComponent:', () => {
     expect(component.inputEl.nativeElement.value).toBe('1234567890');
   });
 
+  it('should have been called cleanListbox', () => {
+    spyOn(component, 'cleanListbox');
+
+    component.setInputValue(null);
+    fixture.detectChanges();
+
+    expect(component.cleanListbox).toHaveBeenCalled();
+  });
+
   it('should click in document', () => {
     component['initializeListeners']();
     const documentBody = document.body;
@@ -1043,6 +1052,22 @@ describe('PoComboComponent:', () => {
       const result = component.calculateScrollTop(selectedItem, index);
 
       expect(result).toBe(100);
+    });
+
+    it('cleanListbox: should have been called updateSelectedValue and update selected option', () => {
+      component.options = [
+        {
+          label: 'a',
+          value: 'a',
+          selected: true
+        }
+      ];
+      spyOn(component, 'updateSelectedValue');
+
+      component.cleanListbox();
+
+      expect(component.updateSelectedValue).toHaveBeenCalled();
+      expect(component.options).toEqual([{ label: 'a', value: 'a', selected: false }]);
     });
 
     it(`close: should call 'removeListeners' and 'detectChanges'
