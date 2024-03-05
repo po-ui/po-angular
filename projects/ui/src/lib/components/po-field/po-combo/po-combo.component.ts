@@ -490,6 +490,10 @@ export class PoComboComponent extends PoComboBaseComponent implements AfterViewI
 
   setInputValue(value: string): void {
     this.inputEl.nativeElement.value = value;
+
+    if (value === null) {
+      this.updateSelectedValue(null);
+    }
   }
 
   wasClickedOnToggle(event: MouseEvent): void {
