@@ -49,28 +49,28 @@ Antes de executar a instalação, é necessário que todas as dependências do p
 ```typescript
   ...
   "dependencies": {
-    "@angular/animations": "~17.0.4",
-    "@angular/common": "~17.0.4",
-    "@angular/core": "~17.0.4",
-    "@angular/forms": "~17.0.4",
-    "@angular/platform-browser": "~17.0.4",
-    "@angular/platform-browser-dynamic": "~17.0.4",
-    "@angular/router": "~17.0.4",
-    "@angular/service-worker": "~17.0.4",
+    "@angular/animations": "~17.0.9",
+    "@angular/common": "~17.0.9",
+    "@angular/core": "~17.0.9",
+    "@angular/forms": "~17.0.9",
+    "@angular/platform-browser": "~17.0.9",
+    "@angular/platform-browser-dynamic": "~17.0.9",
+    "@angular/router": "~17.0.9",
+    "@angular/service-worker": "~17.0.9",
     "@ionic/angular": "^7.5.7",
     "@capacitor/network": "^5.0.6",
     "@capacitor/splash-screen": "^5.0.6",
     "rxjs": "~7.8.1",
     "tslib": "^2.6.2",
-    "zone.js": "~0.14.2"
+    "zone.js": "~0.14.4"
     ...
   },
   "devDependencies": {
-    "@angular-devkit/build-angular": "~17.0.3",
-    "@angular/cli": "~17.0.3",
-    "@angular/compiler": "~17.0.3",
-    "@angular/compiler-cli": "~17.0.3",
-    "@angular/language-service": "~17.0.4",
+    "@angular-devkit/build-angular": "~17.0.9",
+    "@angular/cli": "~17.0.9",
+    "@angular/compiler": "~17.0.9",
+    "@angular/compiler-cli": "~17.0.9",
+    "@angular/language-service": "~17.0.9",
     "@ionic/angular-toolkit": "^10.0.0",
     "typescript": "~5.2.2"
   },
