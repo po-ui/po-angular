@@ -32,4 +32,10 @@ export class PoDisclaimerComponent extends PoDisclaimerBaseComponent {
   getWidthDisclaimer() {
     return this.disclaimerContainer.nativeElement.offsetWidth > 201;
   }
+
+  emitLastDisclaimer(isLast){
+    if (isLast) {
+      this.clickNumber.emit();
+    }
+  }
 }

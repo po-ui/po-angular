@@ -1,7 +1,7 @@
 <div
   #listbox
   class="po-listbox"
-  [class.po-listbox-check]="type === 'check' || type === 'option'"
+  [class.po-listbox-check]="type === 'check' || type === 'option' || type === 'lookup'"
   [attr.data-type]="type"
   [hidden]="visible"
 >
@@ -15,6 +15,18 @@
     [p-field-value]="fieldValueSearch"
     [p-placeholder]="placeholderSearch"
   ></po-search-list>
+
+  <ul>
+    <li
+        *ngIf="type === 'lookup' && !checkTemplate()"
+      >
+        <po-item-list
+          p-type="lookup"
+          p-label="Busque por Cpf, Id ou nome"
+        >
+        </po-item-list>
+      </li>
+  </ul>
 
   <ng-container *ngIf="checkTemplate(); else noDataTemplate">
     <ul #listboxItemList cdkListbox [cdkListboxMultiple]="type === 'check'" class="po-listbox-list">
@@ -72,6 +84,7 @@
           [p-template-context]="item"
           (p-selectcheckbox-item)="checkboxClicked($event)"
           (p-selectcombo-item)="optionClicked($event)"
+          (p-select-lookup-item)="onSelectItemLookup($event)"
           (p-select-item)="onSelectCheckBoxItem(item)"
           (p-emit-item-tabs)="onSelectTabs($event)"
           (p-activated-tabs)="onActivatedTabs($event)"
@@ -85,6 +98,19 @@
       </li>
     </ul>
   </ng-container>
+  <ul>
+    <li
+        *ngIf="type === 'lookup'"
+        (click)="openLookupTable.emit()"
+      >
+        <po-item-list
+          p-type="lookup"
+          p-label="Fazer busca avançada"
+          p-icon="po-icon po-icon-exit"
+        >
+        </po-item-list>
+      </li>
+  </ul>
 
   <div *ngIf="isServerSearching && type !== 'action'" [class.po-listbox-container-loading-default]="!infiniteLoading">
     <po-loading-overlay p-size="md"></po-loading-overlay>

@@ -161,6 +161,12 @@ export class PoListBoxBaseComponent {
 
   @Output('p-change-state-tabs') changeStateTabs = new EventEmitter();
 
+
+  //evento lookup
+  @Output('p-select-lookup-item') lookupItem = new EventEmitter<any>();
+
+  @Output('p-click-open-lookup') openLookupTable = new EventEmitter<any>();
+
   constructor(languageService: PoLanguageService) {
     this.language = languageService.getShortLanguage();
   }

@@ -1,7 +1,54 @@
+<style>
+  .po-search-buttons-left {
+    display: flex;
+    height: 44px;
+    border: 1px solid #4a5c60;
+    outline: none;
+    border-radius: 4px 0px 0px 4px;
+  }
+
+  .po-search-buttons-left .po-search-button.po-search-button-trigger.trigger-selectable {
+    border-left: none;
+    outline: none;
+    border-radius: 4px 0px 0px 4px;
+  }
+
+  .po-search-input-trigger-selectable {
+    border-radius: 0px;
+    padding-left: 5px;
+  }
+
+  .po-search-value-selectable {
+    display: inline-block;
+    white-space: nowrap;
+    overflow: hidden !important;
+    text-overflow: ellipsis;
+    font-size: 1rem;
+  }
+
+
+
+</style>
+
 <div class="po-search" [class.po-search-disabled]="disabled">
   <div *ngIf="type === 'action'" class="po-search-icon">
     <po-icon [p-icon]="icon ? icon : 'po-icon-search'"></po-icon>
   </div>
+
+  <div #target (click)="popup.toggle()"  class="po-search-buttons-left">
+  <div
+      *ngIf="type === 'trigger-selectable'"
+      class="po-search-button po-search-button-trigger trigger-selectable"
+      type="button"
+      [ariaLabel]="literals.search"
+      [disabled]="disabled"
+    >
+
+      <span class="po-search-value-selectable"> {{valueDefault}} </span>
+      <po-icon [p-icon]="icon ? icon : 'po-icon-arrow-down'" > </po-icon>
+    </div>
+  </div>
+  <po-popup #popup [p-actions]="itemsFilter" [p-target]="target" [p-hide-arrow]="true"> </po-popup>
 
   <input
     #poSearchInput
@@ -10,6 +57,7 @@
     [ariaLabel]="ariaLabel"
     [class.po-search-input-clean]="!!poSearchInput.value && !disabled"
     [class.po-search-input-trigger]="type === 'trigger'"
+    [class.po-search-input-trigger-selectable]="type === 'trigger-selectable'"
     [disabled]="disabled"
     [placeholder]="literals.search"
     (input)="onSearchChange($event.target.value, type === 'action' ? true : false)"
@@ -29,7 +77,7 @@
     </button>
 
     <button
-      *ngIf="type === 'trigger'"
+      *ngIf="type === 'trigger' || 'trigger-selectable'"
       class="po-search-button po-search-button-trigger"
       type="button"
       [ariaLabel]="literals.search"

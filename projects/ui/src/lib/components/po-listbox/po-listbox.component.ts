@@ -1,6 +1,5 @@
 import {
   AfterViewInit,
-  ChangeDetectionStrategy,
   ChangeDetectorRef,
   Component,
   ElementRef,
@@ -8,19 +7,18 @@ import {
   OnDestroy,
   Renderer2,
   SimpleChanges,
-  ViewChild,
-  forwardRef
+  ViewChild
 } from '@angular/core';
 import { Router } from '@angular/router';
 
 import { PoListBoxBaseComponent } from './po-listbox-base.component';
 
-import { PoItemListOptionGroup } from './po-item-list/interfaces/po-item-list-option-group.interface';
-import { PoItemListOption } from './po-item-list/interfaces/po-item-list-option.interface';
+import { Observable, Subscription, debounceTime, fromEvent } from 'rxjs';
 import { PoLanguageService } from '../../services/po-language/po-language.service';
 import { isExternalLink, isTypeof, openExternalLink } from '../../utils/util';
+import { PoItemListOptionGroup } from './po-item-list/interfaces/po-item-list-option-group.interface';
+import { PoItemListOption } from './po-item-list/interfaces/po-item-list-option.interface';
 import { PoSearchListComponent } from './po-search-list/po-search-list.component';
-import { Observable, Subscription, debounceTime, fromEvent, merge } from 'rxjs';
 
 @Component({
   selector: 'po-listbox',
@@ -109,6 +107,9 @@ export class PoListBoxComponent extends PoListBoxBaseComponent implements AfterV
         case 'option':
           this.optionClicked(itemListAction);
           break;
+        case 'lookup':
+          this.onSelectItemLookup(itemListAction);
+          break;
         case 'action':
           this.onSelectItem(itemListAction);
           break;
@@ -124,6 +125,10 @@ export class PoListBoxComponent extends PoListBoxBaseComponent implements AfterV
     if (this.type === 'check') {
       this.change.emit({ selected, option });
     }
+  }
+
+  onSelectItemLookup(event) {
+    this.lookupItem.emit(event)
   }
 
   optionClicked(option: any) {

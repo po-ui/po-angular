@@ -140,6 +140,8 @@ export class PoItemListBaseComponent {
 
   @Output('p-selectcombo-item') comboItem = new EventEmitter<any>();
 
+  @Output('p-select-lookup-item') lookupItem = new EventEmitter<any>();
+
   //valor do checkbox de selecionar todos
   @Input('p-checkbox-value') checkboxValue: any;
 

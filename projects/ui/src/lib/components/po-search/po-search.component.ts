@@ -32,7 +32,6 @@ import { PoSearchFilterMode } from './enum/po-search-filter-mode.enum';
 })
 export class PoSearchComponent extends PoSearchBaseComponent implements OnInit {
   @ViewChild('poSearchInput', { read: ElementRef, static: true }) poSearchInput: ElementRef;
-
   filteredItems: Array<any> = [];
 
   constructor(public languageService: PoLanguageService, private renderer: Renderer2) {
@@ -52,7 +51,9 @@ export class PoSearchComponent extends PoSearchBaseComponent implements OnInit {
 
   onSearchChange(searchText: string, activated: boolean): void {
     if (activated) {
-      searchText = searchText.toLowerCase();
+      if (this.type !== 'trigger-selectable') {
+        searchText = searchText.toLowerCase();
+      }
 
       if (this.items && this.items.length > 0) {
         this.filteredItems = this.items.filter(item =>
@@ -82,6 +83,9 @@ export class PoSearchComponent extends PoSearchBaseComponent implements OnInit {
         this.filteredItemsChange.emit(this.filteredItems);
       }
       this.changeModel.emit(searchText);
+      if (this.type === 'trigger-selectable') {
+        this.modelSelectable.emit({filter: this.valueDefault, value: searchText})
+      }
     }
   }
 }

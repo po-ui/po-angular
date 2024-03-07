@@ -1,0 +1,83 @@
+<style>
+  .div-container {
+    max-width: 80%;
+    padding: 100px 50px 50px 100px;
+  }
+</style>
+
+
+
+<!-- <po-table
+  p-selectable
+  p-service-api="https://po-sample-api.onrender.com/v1/heroes"
+  (p-selected)="onSelect($event)"
+  (p-unselected)="onUnselect($event)"
+  (p-all-selected)="onAllSelected($event)"
+  (p-all-unselected)="onAllUnselected($event)"
+  (p-show-more)="showMoreEvent()"
+>
+</po-table> -->
+{{lookup}}
+<div class="div-container">
+  <!-- <po-combo name="combo" p-label="PO Combo" [p-options]="[{ value: 'Option 1' }, { value: 'Option 2' }]"> </po-combo> -->
+
+
+
+  <po-lookup
+    name="lookup MULTIPLE"
+    p-field-label="label"
+    p-field-value="value"
+    [p-multiple]="true"
+    p-filter-service="https://po-sample-api.onrender.com/v1/heroes"
+    p-label="PO Lookup MULTIPLE"
+    [(ngModel)]="lookup"
+
+  >
+  </po-lookup>
+
+  <br />
+  <br />
+  <br />
+  <br />
+  <br />
+  <br />
+  <br />
+  <br />
+  <br />
+  <br />
+  <br />
+  <br />
+  <br />
+  <br />
+  <br />
+  <br />
+  <br />
+  <br />
+  <br />
+  <br />
+  <br />
+  <br />
+  <br />
+  <br />
+  <br />
+  <br />
+  <br />
+  <br />
+  <po-lookup
+    name="lookup "
+    p-field-label="label"
+    p-field-value="value"
+    [p-multiple]="false"
+    p-filter-service="https://po-sample-api.onrender.com/v1/heroes"
+    p-label="PO Lookup"
+  >
+  </po-lookup>
+
+  <po-combo name="combo" p-label="PO Combo" [p-options]="[{ value: 'Option 1' }, { value: 'Option 2' }]"> </po-combo>
+
+</div>
+
+
+<!-- <div class="month" *ngFor="let item of [].constructor(100); let i = index">
+  <button>clique</button>
+ </div> -->

@@ -56,4 +56,24 @@
     <ng-template [ngTemplateOutlet]="template?.templateRef" [ngTemplateOutletContext]="{ $implicit: templateContext }">
     </ng-template>
   </div>
+
+
+  <div
+    *ngSwitchCase="'lookup'"
+    #itemList
+    class="po-item-list po-item-list__option"
+    [class.po-item-list__separator]="separator"
+    [class.po-item-list__selected]="selected && !disabled"
+    [attr.aria-disabled]="disabled"
+    [attr.aria-label]="label"
+    (click)="onLookupItem(item, $event)"
+  >
+    <div style="display: flex;align-items: center;justify-content: space-between;">
+      <span *ngIf="!template" class="po-item-list__label" >{{ label }}</span>
+      <po-icon *ngIf="icon && !template" class="po-popup-icon-item po-icon" [p-icon]="icon"></po-icon>
+    </div>
+    <ng-template [ngTemplateOutlet]="template" [ngTemplateOutletContext]="{ $implicit: templateContext }">
+    </ng-template>
+  </div>
+
 </ng-container>

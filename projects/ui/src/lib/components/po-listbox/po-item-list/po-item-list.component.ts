@@ -49,6 +49,12 @@ export class PoItemListComponent extends PoItemListBaseComponent implements OnCh
     this.comboItem.emit({ ...option, event });
   }
 
+  onLookupItem(options: any, event: any) {
+    const option = { [this.fieldValue]: this.value, [this.fieldLabel]: this.label };
+    this.selectedView = options;
+    this.lookupItem.emit({ ...option, event });
+  }
+
   compareObjects(obj1: any, obj2: any) {
     return JSON.stringify(obj1) === JSON.stringify(obj2);
   }

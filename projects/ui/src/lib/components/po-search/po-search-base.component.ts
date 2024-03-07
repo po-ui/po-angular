@@ -7,7 +7,7 @@ import { PoSearchLiterals } from './literals/po-search-literals';
 import { poSearchLiteralsDefault } from './literals/po-search-literals-default';
 import { PoSearchFilterMode } from './enum/po-search-filter-mode.enum';
 
-export type searchMode = 'action' | 'trigger';
+export type searchMode = 'action' | 'trigger' | 'trigger-selectable';
 /**
  * @description
  *
@@ -41,6 +41,9 @@ export class PoSearchBaseComponent {
   private _literals?: PoSearchLiterals;
   private _ariaLabel?: string;
   private language: string;
+  private _itemsFilter: Array<any> = [{ label: 'Todos', action: this.changeFilter.bind(this) }];
+  valueDefault = "Todos";
+
 
   /**
    * @optional
@@ -168,6 +171,16 @@ export class PoSearchBaseComponent {
    */
   @Input('p-filter-type') filterType: PoSearchFilterMode = PoSearchFilterMode.startsWith;
 
+
+  @Input('p-items-filter') set itemsFilter(value: Array<string>) {
+    this._itemsFilter = value.map(label => ({ label, action: this.changeFilter.bind(this) }));
+
+  }
+
+  get itemsFilter(): Array<string> {
+    return this._itemsFilter;
+  }
+
   /**
    * @optional
    *
@@ -194,6 +207,12 @@ export class PoSearchBaseComponent {
    * Pode ser informada uma função que será disparada quando houver alterações nos filtros.
    */
   @Output('p-filter') filter: EventEmitter<any> = new EventEmitter<any>();
+
+  @Output('p-change-model-selectable') modelSelectable: EventEmitter<any> = new EventEmitter<any>();
+
+  changeFilter(evento) {
+    this.valueDefault = evento.label
+  }
 
   constructor(languageService: PoLanguageService) {
     this.language = languageService.getShortLanguage();
