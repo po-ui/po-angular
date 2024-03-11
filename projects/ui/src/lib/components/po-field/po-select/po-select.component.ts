@@ -323,10 +323,10 @@ export class PoSelectComponent extends PoFieldValidateModel<any> implements OnCh
       this.selectedValue = optionFound[this.fieldValue];
       this.displayValue = optionFound[this.fieldLabel];
     } else if (validValue(this.selectedValue)) {
-      this.selectElement.nativeElement.value = undefined;
-      this.updateModel(undefined);
-      this.selectedValue = undefined;
-      this.displayValue = undefined;
+      this.selectElement.nativeElement.value = null;
+      this.updateModel(null);
+      this.selectedValue = null;
+      this.displayValue = null;
     }
 
     this.modelValue = value;

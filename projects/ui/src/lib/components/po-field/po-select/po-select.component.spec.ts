@@ -254,14 +254,14 @@ describe('PoSelectComponent:', () => {
       component.selectedValue = 'payment';
       component.options.length = 0;
       component.writeValue(undefined);
-      expect(component.selectedValue).toBeUndefined();
+      expect(component.selectedValue).toBeNull();
     });
 
     it('writeValue: should define selectedValue with undefined and doesn`t call setScrollPosition if optionsFound is false', () => {
       component.selectedValue = 'payment';
 
       component.writeValue('value invalid');
-      expect(component.selectedValue).toBeUndefined();
+      expect(component.selectedValue).toBeNull();
     });
 
     it('writeValue: should set property values and call `setScrollPosition` if is a valid option', () => {
