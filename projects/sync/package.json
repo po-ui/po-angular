@@ -26,13 +26,14 @@
     "tslib": "^2.6.2"
   },
   "peerDependencies": {
-    "@angular/core": "~17.0.3",
+    "@angular/core": "^17",
+    "@angular-devkit/schematics": "^17",
     "@capacitor/core": "^5.5.1",
     "@capacitor/network": "^5.0.6",
     "@po-ui/ng-storage": "0.0.0-PLACEHOLDER",
     "http-status-codes": "^2.3.0",
     "rxjs": "~7.8.1",
     "rxjs-compat": "~6.6.0",
-    "zone.js": "~0.14.2"
+    "zone.js": "~0.14.4"
   }
 }
