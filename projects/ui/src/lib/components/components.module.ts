@@ -46,6 +46,7 @@ import { PoTreeViewModule } from './po-tree-view/po-tree-view.module';
 import { PoWidgetModule } from './po-widget/po-widget.module';
 import { PoSearchModule } from './po-search';
 import { PoBadgeModule } from './po-badge/po-badge.module';
+import { PoMessageHourModule } from './po-message-hour';
 
 @NgModule({
   imports: [
@@ -94,7 +95,8 @@ import { PoBadgeModule } from './po-badge/po-badge.module';
     PoPageSlideModule,
     PoSwitchModule,
     PoSearchModule,
-    PoBadgeModule
+    PoBadgeModule,
+    PoMessageHourModule
   ],
   exports: [
     PoAccordionModule,
@@ -142,7 +144,8 @@ import { PoBadgeModule } from './po-badge/po-badge.module';
     PoPageSlideModule,
     PoSwitchModule,
     PoSearchModule,
-    PoBadgeModule
+    PoBadgeModule,
+    PoMessageHourModule
   ],
   providers: [],
   bootstrap: [],
