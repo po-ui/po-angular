@@ -2,6 +2,10 @@
 
 All notable changes to this project will be documented in this file. See [standard-version](https://github.com/conventional-changelog/standard-version) for commit guidelines.
 
+## [17.1.0](https://github.com/po-ui/po-angular/compare/v17.0.0...v17.1.0) (2023-10-23)
+
+**build:** atualiza para o Angular 17@latest
+
 # [17.0.0](https://github.com/po-ui/po-angular/compare/v16.16.0...v17.0.0) (2024-03-04)
 
 ### BREAKING CHANGES
