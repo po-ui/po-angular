@@ -27,6 +27,13 @@ ng update @angular/cli@17.0.9 @angular/core@17.0.9 --force
 
 > Para realizar a migração completa e avaliar se não precisa fazer alguma alteração veja o [**Guia de Upgrade do Angular**](https://update.angular.io/).
 
+> Caso o seu projeto esteja na versão Angular@16:
+Após a atualização dos pacotes @angular/cli && @angular/core, realize a instalação do pacote Schematics do Angular para o nosso script de atualização funcionar corretamente: 
+
+`` 
+npm install @angular-devkit/schematics
+``
+
 O nosso pacote possuía dependências que eram compatíveis com a versão anterior do Angular, portanto
 devemos utilizar a *flag* `--force` para que o Angular realize a migração do seu projeto, ignorando a versão das dependências.
 Para avaliar as *flags* disponíveis veja a [**documentação do ng update**](https://angular.io/cli/update).
@@ -35,21 +42,21 @@ Para avaliar as *flags* disponíveis veja a [**documentação do ng update**](ht
 
 ```
   "dependencies": {
-    "@angular/animations": "~17.0.9",
-    "@angular/common": "~17.0.9",
-    "@angular/compiler": "~17.0.9",
-    "@angular/core": "~17.0.9",
-    "@angular/forms": "~17.0.9",
-    "@angular/platform-browser": "~17.0.9",
-    "@angular/platform-browser-dynamic": "~17.0.9",
-    "@angular/router": "~17.0.9",
+    "@angular/animations": "~17.2.4",
+    "@angular/common": "~17.2.4",
+    "@angular/compiler": "~17.2.4",
+    "@angular/core": "~17.2.4",
+    "@angular/forms": "~17.2.4",
+    "@angular/platform-browser": "~17.2.4",
+    "@angular/platform-browser-dynamic": "~17.2.4",
+    "@angular/router": "~17.2.4",
     ...
     "zone.js": "~0.14.4"
   },
   "devDependencies": {
-    "@angular-devkit/build-angular": "~17.0.9",
-    "@angular/cli": "~17.0.9",
-    "@angular/compiler-cli": "~17.0.9",
+    "@angular-devkit/build-angular": "~17.2.3,
+    "@angular/cli": "~17.2.3",
+    "@angular/compiler-cli": "~17.2.4",
     ...
     "typescript": "~5.2.2"
   }  
