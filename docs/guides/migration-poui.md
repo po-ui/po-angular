@@ -13,6 +13,13 @@ Antes de atualizar a versão do PO UI, é importante que você tenha atualizado 
 o Angular que o PO UI está homologado, veja nossa
 [tabela de compatibilidade](https://github.com/po-ui/po-angular/wiki#vers%C3%B5es-angular-x-po-ui) em nosso Github Wiki.
 
+> Caso o seu projeto esteja na versão Angular@16:
+Realize a instalação do pacote Schematics do Angular para o nosso script de atualização funcionar corretamente: 
+
+```
+npm install @angular-devkit/schematics --save-dev
+```
+
 Para atualizar o Angular, execute o comando abaixo:
 
 ```
@@ -22,50 +29,15 @@ ng update @angular/cli@<version> @angular/core@<version> --force
 Por exemplo:
 
 ```
-ng update @angular/cli@17.0.9 @angular/core@17.0.9 --force
+ng update @angular/cli@17 @angular/core@17 --force
 ```
 
 > Para realizar a migração completa e avaliar se não precisa fazer alguma alteração veja o [**Guia de Upgrade do Angular**](https://update.angular.io/).
-
-> Caso o seu projeto esteja na versão Angular@16:
-Após a atualização dos pacotes @angular/cli && @angular/core, realize a instalação do pacote Schematics do Angular para o nosso script de atualização funcionar corretamente: 
-
-`` 
-npm install @angular-devkit/schematics
-``
 
 O nosso pacote possuía dependências que eram compatíveis com a versão anterior do Angular, portanto
 devemos utilizar a *flag* `--force` para que o Angular realize a migração do seu projeto, ignorando a versão das dependências.
 Para avaliar as *flags* disponíveis veja a [**documentação do ng update**](https://angular.io/cli/update).
 
-> Após a atualização, verifique se no arquivo `package.json` se as versões dos pacotes `@angular` estão definidas com `~`
-
-```
-  "dependencies": {
-    "@angular/animations": "~17.2.4",
-    "@angular/common": "~17.2.4",
-    "@angular/compiler": "~17.2.4",
-    "@angular/core": "~17.2.4",
-    "@angular/forms": "~17.2.4",
-    "@angular/platform-browser": "~17.2.4",
-    "@angular/platform-browser-dynamic": "~17.2.4",
-    "@angular/router": "~17.2.4",
-    ...
-    "zone.js": "~0.14.4"
-  },
-  "devDependencies": {
-    "@angular-devkit/build-angular": "~17.2.3,
-    "@angular/cli": "~17.2.3",
-    "@angular/compiler-cli": "~17.2.4",
-    ...
-    "typescript": "~5.2.2"
-  }  
-```
-
-Caso as versões estejam definidas com `^` realize as seguintes ações:
-* Altere para `~`, conforme exemplo acima.
-* Remova os diretórios `node_modules`, `.angular` (caso exista) e o arquivo `package-lock.json`
-* Execute o comando `npm install --force`
 
 ## Atualizando o PO UI
 
