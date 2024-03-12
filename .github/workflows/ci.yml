@@ -22,8 +22,9 @@ jobs:
           AUTHOR="${{ github.event.pull_request.user.login }}"
           PR_TITLE="${{ github.event.pull_request.title }}"
           PR_URL="${{ github.event.pull_request.html_url }}"
+          PR_BODY="${{ github.event.pull_request.body }}"
           curl -X POST -H "Content-Type: application/json" \
-          -d "{\"content\": \"🚀 **PR Criada com Sucesso 🚀**\\n- Autor: $AUTHOR\\n- Título: $PR_TITLE\\n- Link: $PR_URL\"}" \
+          -d "{\"content\": \"🚀 **PR Criada com Sucesso 🚀**\\n- Autor: $AUTHOR\\n- Título: $PR_TITLE\\n- Detalhes: $PR_BODY\\n- Link: $PR_URL\"}" \
           $DISCORD_WEBHOOK_URL
           
   lint:
