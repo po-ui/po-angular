@@ -204,6 +204,18 @@ export class PoSearchBaseComponent {
    *
    * @description
    *
+   * Exibe uma lista (auto-complete) com as opções definidas no `p-filter-keys` enquanto realiza uma busca,
+   * respeitando o `p-filter-type` como modo de pesquisa.
+   *
+   * @default `false`
+   */
+  @Input('p-show-listbox') showListbox: boolean = false;
+
+  /**
+   * @optional
+   *
+   * @description
+   *
    * Evento disparado ao alterar valor do model.
    */
   @Output('p-change-model') changeModel: EventEmitter<any> = new EventEmitter();
@@ -225,6 +237,15 @@ export class PoSearchBaseComponent {
    * Pode ser informada uma função que será disparada quando houver alterações nos filtros.
    */
   @Output('p-filter') filter: EventEmitter<any> = new EventEmitter<any>();
+
+  /**
+   * @optional
+   *
+   * @description
+   *
+   * Pode ser informada uma função que será disparada quando houver click no listbox.
+   */
+  @Output('p-listbox-onclick') listboxOnClick = new EventEmitter<any>();
 
   constructor(languageService: PoLanguageService) {
     this.language = languageService.getShortLanguage();

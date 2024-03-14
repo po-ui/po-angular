@@ -1,0 +1,18 @@
+<div class="po-row">
+  <po-search
+    class="po-md-12"
+    name="Po Search"
+    [p-items]="items"
+    [p-filter-keys]="filterKeys"
+    (p-filtered-items-change)="filtered($event)"
+    p-show-listbox="true"
+    p-search-type="trigger"
+  ></po-search>
+</div>
+
+<div class="po-row" *ngFor="let people of peopleFiltered">
+  <hr />
+  <po-info class="po-md-4" p-label="Name" [p-value]="people.name"> </po-info>
+  <po-info class="po-md-4" p-label="Nickname" [p-value]="people.nickname"> </po-info>
+  <po-info class="po-md-4" p-label="Email" [p-value]="people.email"> </po-info>
+</div>

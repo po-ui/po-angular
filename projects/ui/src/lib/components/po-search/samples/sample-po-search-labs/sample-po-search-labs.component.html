@@ -10,6 +10,7 @@
     [p-literals]="customLiterals"
     [p-filter-type]="filterMode"
     [p-search-type]="searchMode"
+    [p-show-listbox]="showListbox"
     (p-filtered-items-change)="filter($event)"
     (p-change-model)="changeModel($event)"
   ></po-search>
@@ -47,7 +48,7 @@
 <form #f="ngForm">
   <div class="po-row">
     <po-checkbox-group
-      class="po-md-12"
+      class="po-md-6"
       name="properties"
       [(ngModel)]="properties"
       p-label="Properties"
@@ -55,6 +56,8 @@
       (p-change)="propertiesChange($event)"
     >
     </po-checkbox-group>
+
+    <po-switch class="po-md-6" name="switch" p-label="showListbox" [(ngModel)]="showListbox"> </po-switch>
   </div>
   <div class="po-row">
     <po-input
