@@ -204,6 +204,18 @@ export class PoSearchBaseComponent {
    *
    * @description
    *
+   * Mostra um listbox das opções enviadas, quando estiver fazendo a busca respeitando o `p-filter-type`.
+   * Os campos mostrados são todos informados no `p-filter-keys`.
+   *
+   * @default `false`
+   */
+  @Input('p-show-listbox') showListbox: boolean = false;
+
+  /**
+   * @optional
+   *
+   * @description
+   *
    * Evento disparado ao alterar valor do model.
    */
   @Output('p-change-model') changeModel: EventEmitter<any> = new EventEmitter();

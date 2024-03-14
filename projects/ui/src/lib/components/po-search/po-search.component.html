@@ -12,8 +12,13 @@
     [class.po-search-input-trigger]="type === 'trigger'"
     [disabled]="disabled"
     [placeholder]="literals.search"
-    (input)="onSearchChange($event.target.value, type === 'action' ? true : false)"
-    (keyup.enter)="onSearchChange($event.target.value, type === 'trigger' ? true : false)"
+    (input)="
+      onSearchChange($event.target.value, false); onSearchChange($event.target.value, type === 'action' ? true : false)
+    "
+    (keyup.enter)="
+      listboxOpen ? closeListbox() : onSearchChange($event.target.value, type === 'trigger' ? true : false);
+      closeListbox()
+    "
   />
 
   <div class="po-search-buttons">
@@ -40,4 +45,16 @@
       <po-icon [p-icon]="icon ? icon : 'po-icon-search'"> </po-icon>
     </button>
   </div>
+</div>
+
+<div #poListboxContainerElement class="po-search-listbox-container" [hidden]="!listboxOpen">
+  <po-listbox
+    #poListboxElement
+    p-type="option"
+    [p-items]="listboxFilteredItems"
+    (p-selectcombo-item)="onListboxClick($event, $event.event)"
+    [p-visible]="listboxOpen"
+    [p-filter-mode]="filterType"
+    (p-close)="onCloseListbox()"
+  ></po-listbox>
 </div>

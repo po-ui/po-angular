@@ -6,6 +6,7 @@ import { PoLoadingModule } from '../po-loading';
 import { PoSearchComponent } from './po-search.component';
 import { FormsModule } from '@angular/forms';
 import { PoAccordionModule } from '../po-accordion/po-accordion.module';
+import { PoListBoxModule } from '../po-listbox';
 
 /**
  * @description
@@ -13,7 +14,15 @@ import { PoAccordionModule } from '../po-accordion/po-accordion.module';
  * Módulo do componente po-search.
  */
 @NgModule({
-  imports: [CommonModule, PoCleanModule, PoIconModule, PoLoadingModule, PoAccordionModule, FormsModule],
+  imports: [
+    CommonModule,
+    PoCleanModule,
+    PoIconModule,
+    PoLoadingModule,
+    PoAccordionModule,
+    FormsModule,
+    PoListBoxModule
+  ],
   declarations: [PoSearchComponent],
   exports: [PoSearchComponent]
 })
