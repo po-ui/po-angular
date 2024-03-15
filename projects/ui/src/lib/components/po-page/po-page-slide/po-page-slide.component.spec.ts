@@ -185,7 +185,7 @@ describe('PoPageSlideComponent', () => {
 
     tick(100);
 
-    const pageSlideContent = debugElement.query(By.css('.po-page-slide-content'));
+    const pageSlideContent = debugElement.query(By.css('button'));
     expect(document.activeElement).toEqual(pageSlideContent.nativeElement);
 
     flush();
@@ -200,7 +200,7 @@ describe('PoPageSlideComponent', () => {
 
     tick(100);
 
-    const input = fixtureTest.debugElement.query(By.css('input[name="username"]'));
+    const input = fixtureTest.debugElement.query(By.css('button'));
     expect(document.activeElement).toEqual(input.nativeElement);
 
     flush();
