@@ -118,7 +118,8 @@ export class PoPageSlideComponent extends PoPageSlideBaseComponent {
       this.firstElement.focus();
     } else {
       const elements = getFocusableElements(this.pageContent.nativeElement);
-      const element = elements[1] || this.pageContent.nativeElement;
+      /* istanbul ignore next */
+      const element = elements[0] || this.pageContent.nativeElement;
       element.focus();
     }
   }
