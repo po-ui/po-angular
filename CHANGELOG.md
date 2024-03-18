@@ -2,7 +2,14 @@
 
 All notable changes to this project will be documented in this file. See [standard-version](https://github.com/conventional-changelog/standard-version) for commit guidelines.
 
-## [17.1.0](https://github.com/po-ui/po-angular/compare/v17.0.0...v17.1.0) (2023-10-23)
+## [17.1.1](https://github.com/po-ui/po-angular/compare/v17.1.0...v17.1.1) (2024-03-18)
+
+### Bug Fixes
+
+* **page-slide:** ajusta regra do foco no elemento ([6dd317c](https://github.com/po-ui/po-angular/commit/6dd317c49e1d92115905f2fe9561cac825ed9c6d))
+* **po-page-dynamic-table:**  aplica ordem correta a colunas ([bc9cdcb](https://github.com/po-ui/po-angular/commit/bc9cdcbd2ca2fef06f9fc653d9ecc400a39fdd23))
+
+## [17.1.0](https://github.com/po-ui/po-angular/compare/v17.0.0...v17.1.0) (2024-03-11)
 
 **build:** atualiza para o Angular 17@latest
 
