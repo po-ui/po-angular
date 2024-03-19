@@ -173,3 +173,11 @@ jobs:
       env:
         PACKAGE_VERSION: ${{ steps.package-version.outputs.current-version }}
         NODE_AUTH_TOKEN: ${{ secrets.NPM_TOKEN }}
+    
+    - name: Trigger Azure DevOps Pipeline THF-COMPONENTS@development
+      uses: Azure/pipelines@v1.2
+      with:
+        azure-devops-project-url: '${{ secrets.THF_AZURE_DEVOPS_PROJECT_URL }}'
+        azure-pipeline-name: 'thf-components-development-ci'
+        azure-devops-token: '${{ secrets.THF_AZURE_DEVOPS_TOKEN }}'
+        azure-pipeline-variables:  '{"po-ui-version": "${{ steps.package-version.outputs.current-version }}"}'
