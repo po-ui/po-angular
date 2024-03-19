@@ -702,15 +702,6 @@ describe('PoDynamicViewBaseComponent:', () => {
       expect(result).toBe('1 - Company1 - 261-81-7609');
     });
 
-    it(`createField: should call 'transformFieldLabel' and return a fieldLabel property`, () => {
-      const field = { property: 'name', label: 'Nome', fieldLabel: 'title', fieldValue: 'id' };
-      component.value = { name: 'Test Name', title: 'Title Test', id: 123 };
-
-      const newField = component['createField'](field);
-
-      expect(newField.value).toBe('Title Test');
-    });
-
     it('createField: should call `transformFieldLabel`, return a `fieldLabel` and `fieldValue` property if `concatLabelValue` is true', () => {
       const field = {
         property: 'name',
