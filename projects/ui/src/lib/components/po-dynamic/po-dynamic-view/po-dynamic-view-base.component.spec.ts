@@ -410,6 +410,129 @@ describe('PoDynamicViewBaseComponent:', () => {
         })
       ));
 
+      it('should return ordering field if have duplicated order', () => {
+        const fields: Array<PoDynamicViewField> = [
+          { property: 'test 1', order: 1 },
+          { property: 'test 0', order: 1 },
+          { property: 'test 2', order: 2 },
+          { property: 'test 3' },
+          { property: 'test 4' },
+          { property: 'test 5' }
+        ];
+
+        const expectedFields = [
+          { property: 'test 1', order: 1 },
+          { property: 'test 0', order: 1 },
+          { property: 'test 2', order: 2 },
+          { property: 'test 3', order: 3 },
+          { property: 'test 4', order: 4 },
+          { property: 'test 5', order: 5 }
+        ];
+
+        component.fields = [...fields];
+
+        const newFields = component['getConfiguredFields']();
+
+        expectArraysSameOrdering(newFields, expectedFields);
+      });
+
+      it('should return ordering field with the order', () => {
+        const fields: Array<PoDynamicViewField> = [
+          { property: 'test 1' },
+          { property: 'test 0' },
+          { property: 'test 2' },
+          { property: 'test 3' },
+          { property: 'test 4' },
+          { property: 'test 5' }
+        ];
+
+        const expectedFields = [
+          { property: 'test 1', order: 1 },
+          { property: 'test 0', order: 2 },
+          { property: 'test 2', order: 3 },
+          { property: 'test 3', order: 4 },
+          { property: 'test 4', order: 5 },
+          { property: 'test 5', order: 6 }
+        ];
+
+        component.fields = [...fields];
+
+        const newFields = component['getConfiguredFields']();
+
+        expectArraysSameOrdering(newFields, expectedFields);
+      });
+
+      it('should return ordering fields with property searchService using service type with delay', fakeAsync(
+        inject([DynamicViewService], (dynamicService: DynamicViewService) => {
+          component.service = dynamicService;
+          const fields: Array<PoDynamicViewField> = [
+            { property: 'test 1' },
+            { property: 'test 0', searchService: new TestServiceWithDelay(), fieldLabel: 'name', fieldValue: 'id' },
+            { property: 'test 2', searchService: 'url.com' },
+            { property: 'test 3', searchService: 'url.com' },
+            { property: 'test 4' },
+            { property: 'test 5' }
+          ];
+          component.value[fields[1].property] = '123';
+          component.value[fields[2].property] = [{ test: 123 }];
+          component.value[fields[3].property] = { test: 123 };
+
+          const expectedFields = [
+            { property: 'test 1', order: 1 },
+            { property: 'test 0', order: 2 },
+            { property: 'test 2', order: 3 },
+            { property: 'test 3', order: 4 },
+            { property: 'test 4', order: 5 },
+            { property: 'test 5', order: 6 }
+          ];
+
+          component.fields = [...fields];
+
+          const newFields = component['getConfiguredFields']();
+          tick(2000);
+
+          expectArraysSameOrdering(newFields, expectedFields);
+        })
+      ));
+
+      it('should return ordering fields with property optionsService using service type with delay', fakeAsync(
+        inject([DynamicViewService], (dynamicService: DynamicViewService) => {
+          component.service = dynamicService;
+          const fields: Array<PoDynamicViewField> = [
+            { property: 'test 1' },
+            {
+              property: 'test 0',
+              optionsService: new TestComboServiceWithDelay(),
+              fieldLabel: 'name',
+              fieldValue: 'id'
+            },
+            { property: 'test 2', searchService: 'url.com' },
+            { property: 'test 3', searchService: 'url.com' },
+            { property: 'test 4' },
+            { property: 'test 5' }
+          ];
+          component.value[fields[1].property] = '123';
+          component.value[fields[2].property] = [{ test: 123 }];
+          component.value[fields[3].property] = { test: 123 };
+
+          const expectedFields = [
+            { property: 'test 1', order: 1 },
+            { property: 'test 0', order: 2 },
+            { property: 'test 2', order: 3 },
+            { property: 'test 3', order: 4 },
+            { property: 'test 4', order: 5 },
+            { property: 'test 5', order: 6 }
+          ];
+
+          component.fields = [...fields];
+
+          const newFields = component['getConfiguredFields']();
+          tick(2000);
+
+          expectArraysSameOrdering(newFields, expectedFields);
+        })
+      ));
+
       it('should process fields with optionsService', () => {
         component.fields = [{ property: 'category', optionsService: 'url.optionsService.com' }];
         component.value = { 'category': '123' };
@@ -455,98 +578,6 @@ describe('PoDynamicViewBaseComponent:', () => {
         expect(configuredFields.length).toBeGreaterThan(0);
       });
     });
-
-    it('should return ordering field with the order', () => {
-      const fields: Array<PoDynamicViewField> = [
-        { property: 'test 1' },
-        { property: 'test 0' },
-        { property: 'test 2' },
-        { property: 'test 3' },
-        { property: 'test 4' },
-        { property: 'test 5' }
-      ];
-
-      const expectedFields = [
-        { property: 'test 1', order: 1 },
-        { property: 'test 0', order: 2 },
-        { property: 'test 2', order: 3 },
-        { property: 'test 3', order: 4 },
-        { property: 'test 4', order: 5 },
-        { property: 'test 5', order: 6 }
-      ];
-
-      component.fields = [...fields];
-
-      const newFields = component['getConfiguredFields']();
-
-      expectArraysSameOrdering(newFields, expectedFields);
-    });
-
-    it('should return ordering fields with property searchService using service type with delay', fakeAsync(
-      inject([DynamicViewService], (dynamicService: DynamicViewService) => {
-        component.service = dynamicService;
-        const fields: Array<PoDynamicViewField> = [
-          { property: 'test 1' },
-          { property: 'test 0', searchService: new TestServiceWithDelay(), fieldLabel: 'name', fieldValue: 'id' },
-          { property: 'test 2', searchService: 'url.com' },
-          { property: 'test 3', searchService: 'url.com' },
-          { property: 'test 4' },
-          { property: 'test 5' }
-        ];
-        component.value[fields[1].property] = '123';
-        component.value[fields[2].property] = [{ test: 123 }];
-        component.value[fields[3].property] = { test: 123 };
-
-        const expectedFields = [
-          { property: 'test 1', order: 1 },
-          { property: 'test 0', order: 2 },
-          { property: 'test 2', order: 3 },
-          { property: 'test 3', order: 4 },
-          { property: 'test 4', order: 5 },
-          { property: 'test 5', order: 6 }
-        ];
-
-        component.fields = [...fields];
-
-        const newFields = component['getConfiguredFields']();
-        tick(2000);
-
-        expectArraysSameOrdering(newFields, expectedFields);
-      })
-    ));
-
-    it('should return ordering fields with property optionsService using service type with delay', fakeAsync(
-      inject([DynamicViewService], (dynamicService: DynamicViewService) => {
-        component.service = dynamicService;
-        const fields: Array<PoDynamicViewField> = [
-          { property: 'test 1' },
-          { property: 'test 0', optionsService: new TestComboServiceWithDelay(), fieldLabel: 'name', fieldValue: 'id' },
-          { property: 'test 2', searchService: 'url.com' },
-          { property: 'test 3', searchService: 'url.com' },
-          { property: 'test 4' },
-          { property: 'test 5' }
-        ];
-        component.value[fields[1].property] = '123';
-        component.value[fields[2].property] = [{ test: 123 }];
-        component.value[fields[3].property] = { test: 123 };
-
-        const expectedFields = [
-          { property: 'test 1', order: 1 },
-          { property: 'test 0', order: 2 },
-          { property: 'test 2', order: 3 },
-          { property: 'test 3', order: 4 },
-          { property: 'test 4', order: 5 },
-          { property: 'test 5', order: 6 }
-        ];
-
-        component.fields = [...fields];
-
-        const newFields = component['getConfiguredFields']();
-        tick(2000);
-
-        expectArraysSameOrdering(newFields, expectedFields);
-      })
-    ));
 
     it('searchById: should return null if value is empty', done => {
       const value = '';
