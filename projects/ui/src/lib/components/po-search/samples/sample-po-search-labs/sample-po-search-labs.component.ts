@@ -32,6 +32,7 @@ export class SamplePoSearchLabsComponent implements OnInit, OnChanges {
   customLiterals: PoSearchLiterals;
   literals: any;
   properties: Array<string>;
+  showListbox: boolean;
   search: string;
   event: string;
   service: string = 'https://po-sample-api.onrender.com/v1/heroes';
@@ -147,6 +148,7 @@ export class SamplePoSearchLabsComponent implements OnInit, OnChanges {
     this.icon = undefined;
     this.customLiterals = undefined;
     this.properties = [];
+    this.showListbox = false;
     this.filteredItems = undefined;
     this.items = undefined;
     this.itemsModel = undefined;

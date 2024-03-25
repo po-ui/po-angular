@@ -1,22 +1,35 @@
-import { ComponentFixture, TestBed } from '@angular/core/testing';
 import { ElementRef } from '@angular/core';
+import { ComponentFixture, TestBed, fakeAsync, tick } from '@angular/core/testing';
 
-import { PoSearchComponent } from './po-search.component';
+import { PoControlPositionService } from '../../services/po-control-position/po-control-position.service';
+import { PoIconModule } from '../po-icon';
+import { PoListBoxModule } from '../po-listbox';
 import { PoSearchFilterMode } from './enum/po-search-filter-mode.enum';
+import { PoSearchOption } from './interfaces/po-search-option.interface';
+import { PoSearchComponent } from './po-search.component';
 
 describe('PoSearchComponent', () => {
   let component: PoSearchComponent;
   let fixture: ComponentFixture<PoSearchComponent>;
+  let controlPositionMock: jasmine.SpyObj<PoControlPositionService>;
 
   beforeEach(async () => {
     await TestBed.configureTestingModule({
-      declarations: [PoSearchComponent]
+      imports: [PoIconModule, PoListBoxModule],
+      declarations: [PoSearchComponent],
+      providers: [PoControlPositionService]
     }).compileComponents();
   });
 
   beforeEach(() => {
+    controlPositionMock = jasmine.createSpyObj('PoControlPositionService', ['adjustPosition', 'setElements']);
+
     fixture = TestBed.createComponent(PoSearchComponent);
+
     component = fixture.componentInstance;
+
+    component['controlPosition'] = controlPositionMock;
+    fixture.detectChanges();
 
     component.poSearchInput = new ElementRef({ value: 'some search value' });
     component.items = [{ text: 'Text 1' }, { text: 'Text 2' }, { text: 'Other Text' }];
@@ -76,6 +89,14 @@ describe('PoSearchComponent', () => {
     expect(component.filteredItemsChange.emit).toHaveBeenCalledWith(component.items);
   });
 
+  it('onSearchChange: should not add value if it is null or undefined', () => {
+    component.items = [{ text: '' }, { text: null }, { text: undefined }, { text: 'Text' }];
+
+    component.onSearchChange('Text', true);
+    expect(component.filteredItems).toEqual([{ text: 'Text' }]);
+    expect(component.filteredItemsChange.emit).toHaveBeenCalledWith([{ text: 'Text' }]);
+  });
+
   it('onSearchChange: should return false if filter mode is not recognized', () => {
     component.filterType = 'invalidMode' as unknown as PoSearchFilterMode;
 
@@ -129,5 +150,186 @@ describe('PoSearchComponent', () => {
 
     expect(component.filteredItems).toEqual([]);
     expect(component.filteredItemsChange.emit).toHaveBeenCalledWith([]);
+  });
+
+  describe('showListbox: when searching with listbox', () => {
+    const eventClick = document.createEvent('MouseEvents');
+    eventClick.initEvent('click', false, true);
+
+    beforeEach(() => {
+      component.showListbox = true;
+
+      component.poSearchInput = {
+        nativeElement: {
+          focus: () => {},
+          contains: () => {},
+          dispatchEvent: () => {}
+        }
+      };
+    });
+
+    afterEach(() => {
+      component['removeListeners']();
+    });
+
+    it('should return the filtered list', () => {
+      component.filterType = PoSearchFilterMode.startsWith;
+      component.onSearchChange('text', true);
+
+      expect(component.listboxFilteredItems).toEqual([
+        { label: 'Text 1', value: 'Text 1' },
+        { label: 'Text 2', value: 'Text 2' }
+      ]);
+    });
+
+    it('should return the filtered list if filterType is contains', () => {
+      component.filterType = PoSearchFilterMode.contains;
+      component.onSearchChange('ther', true);
+
+      expect(component.listboxFilteredItems).toEqual([{ label: 'Other Text', value: 'Other Text' }]);
+    });
+
+    it('should return the filtered list if filterType is endsWith', () => {
+      component.filterType = PoSearchFilterMode.endsWith;
+      component.onSearchChange('1', true);
+
+      expect(component.listboxFilteredItems).toEqual([{ label: 'Text 1', value: 'Text 1' }]);
+    });
+
+    it("should return false list if filterType doesn't exist ", () => {
+      component.filterType = null;
+      component.onSearchChange('1', true);
+
+      expect(component.listboxFilteredItems).toEqual([]);
+    });
+
+    it('should set the value on click the list item', () => {
+      const option: PoSearchOption = { value: 'Text 1', label: 'Text 1' };
+      component.onListboxClick(option, new Event('click'));
+
+      expect(component.poSearchInput.nativeElement.value).toBe('Text 1');
+    });
+
+    it('should set the value on keypress enter into list item and if the `p-search-type` is trigger, should not search', () => {
+      const option: PoSearchOption = { value: 'Text 1', label: 'Text 1' };
+      component.type = 'trigger';
+      component.onListboxClick(
+        option,
+        new KeyboardEvent('keydown', {
+          code: 'Enter',
+          key: 'Enter',
+          charCode: 13,
+          keyCode: 13,
+          view: window
+        })
+      );
+
+      expect(component.poSearchInput.nativeElement.value).toBe('Text 1');
+      expect(component.filteredItems).toEqual([]);
+      expect(component.filteredItemsChange.emit).not.toHaveBeenCalled();
+    });
+
+    it('should set the value on keypress enter into list item and if the `p-search-type` is action, should search', () => {
+      const option: PoSearchOption = { value: 'Text 1', label: 'Text 1' };
+      component.type = 'action';
+      component.onListboxClick(
+        option,
+        new KeyboardEvent('keydown', {
+          code: 'Enter',
+          key: 'Enter',
+          charCode: 13,
+          keyCode: 13,
+          view: window
+        })
+      );
+
+      expect(component.poSearchInput.nativeElement.value).toBe('Text 1');
+      expect(component.filteredItems).toEqual([{ text: 'Text 1' }]);
+      expect(component.filteredItemsChange.emit).toHaveBeenCalledWith([{ text: 'Text 1' }]);
+    });
+
+    it('should set listboxFilteredItems to all items if the input value is empty', () => {
+      component.listboxFilteredItems = [
+        { label: 'Text 1', value: 'Text 1' },
+        { label: 'Text 2', value: 'Text 2' }
+      ];
+      component.poSearchInput.nativeElement.value = '';
+      component.poSearchInput.nativeElement.dispatchEvent(new Event('input'));
+
+      expect(component.listboxFilteredItems).toEqual([
+        { label: 'Text 1', value: 'Text 1' },
+        { label: 'Text 2', value: 'Text 2' }
+      ]);
+    });
+
+    it('should return the listboxFilteredItems with converting the boolean and number to string ', () => {
+      component.items = [{ text: true }, { text: 5 }, { text: 'Text' }];
+
+      component['ngOnInit']();
+
+      expect(component.listboxFilteredItems).toEqual([
+        { label: 'true', value: 'true' },
+        { label: '5', value: '5' },
+        { label: 'Text', value: 'Text' }
+      ]);
+    });
+
+    it('initializeListeners: should call removeListeners and initialize click, resize and scroll listeners', () => {
+      component['clickoutListener'] = undefined;
+      component['eventResizeListener'] = undefined;
+      const spyRemoveListeners = spyOn(component, <any>'removeListeners');
+
+      component['initializeListeners']();
+
+      document.dispatchEvent(eventClick);
+      window.dispatchEvent(new Event('resize'));
+
+      expect(spyRemoveListeners).toHaveBeenCalled();
+      expect(component['clickoutListener']).toBeDefined();
+      expect(component['eventResizeListener']).toBeDefined();
+    });
+
+    it('should hide the listbox when was click out of the input', () => {
+      component.listboxOpen = true;
+
+      spyOn(component, 'controlListboxVisibility');
+      component.clickedOutsideInput(eventClick);
+      expect(component.controlListboxVisibility).toHaveBeenCalled();
+    });
+
+    it('should not hide listbox when was click in input', () => {
+      component.poSearchInput.nativeElement.dispatchEvent(eventClick);
+
+      spyOn(component, 'controlListboxVisibility');
+      component.clickedOutsideInput(eventClick);
+      expect(component.controlListboxVisibility).not.toHaveBeenCalled();
+    });
+
+    it('should initialize all Listeners correctly', fakeAsync(() => {
+      spyOn(component, <any>'removeListeners').and.callThrough();
+      spyOn(component, <any>'adjustContainerPosition');
+
+      component['initializeListeners']();
+
+      expect(component['removeListeners']).toHaveBeenCalled();
+      expect(component['clickoutListener']).toBeDefined();
+      expect(component['eventResizeListener']).toBeDefined();
+
+      window.dispatchEvent(new Event('resize'));
+
+      tick(251);
+
+      expect(component['adjustContainerPosition']).toHaveBeenCalled();
+    }));
+
+    it('should adjustContainerPosition if the screen is resizing', () => {
+      spyOn(component, <any>'adjustContainerPosition');
+
+      component['initializeListeners']();
+
+      window.dispatchEvent(new Event('scroll'));
+
+      expect(component['adjustContainerPosition']).toHaveBeenCalled();
+    });
   });
 });
