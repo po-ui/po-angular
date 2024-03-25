@@ -2,6 +2,12 @@
 
 All notable changes to this project will be documented in this file. See [standard-version](https://github.com/conventional-changelog/standard-version) for commit guidelines.
 
+### [17.2.0](https://github.com/po-ui/po-angular/compare/v17.1.1...v17.2.0) (2024-03-25)
+
+### Bug Fixes
+
+* **dynamic-view:** correção campos duplicados ([b4ee54a](https://github.com/po-ui/po-angular/commit/b4ee54ae0c7529a1918d5ad5b50e86021c7f2a0c))
+
 ## [17.1.1](https://github.com/po-ui/po-angular/compare/v17.1.0...v17.1.1) (2024-03-18)
 
 ### Bug Fixes
