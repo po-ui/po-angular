@@ -1,0 +1,24 @@
+import { Component, OnInit } from '@angular/core';
+import { CommonModule } from '@angular/common';
+
+import { PoPageAction, PoPageModule } from '@po-ui/ng-components';
+
+@Component({
+  selector: '<%= selector %>',
+  standalone: true,
+  imports: [
+    CommonModule,
+    PoPageModule,
+  ],
+  templateUrl: './<%= dasherize(name) %>.component.html',
+  styleUrls: ['./<%= dasherize(name) %>.component.<%= style %>']
+})
+export class <%= classify(name) %>Component implements OnInit {
+
+  readonly pageActions: Array<PoPageAction> = [];
+
+  constructor() { }
+
+  ngOnInit() { }
+
+}
