@@ -1,0 +1,36 @@
+import { Component, OnInit } from '@angular/core';
+import { CommonModule } from '@angular/common';
+
+import { PoPageDynamicSearchModule } from '@po-ui/ng-templates';
+
+import { PoPageAction, PoDynamicFormField } from '@po-ui/ng-components';
+
+@Component({
+  selector: '<%= selector %>',
+  standalone: true,
+  imports: [
+    CommonModule,
+    PoPageDynamicSearchModule,
+  ],
+  templateUrl: './<%= dasherize(name) %>.component.html',
+  styleUrls: ['./<%= dasherize(name) %>.component.<%= style %>']
+})
+export class <%= classify(name) %>Component implements OnInit {
+
+  readonly actions: Array<PoPageAction> = [
+    { label: 'Adicionar', action: this.add.bind(this) }
+  ];
+
+  readonly filter: Array<PoDynamicFormField> = [
+    { property: 'name' }
+  ];
+
+  constructor() { }
+
+  ngOnInit() { }
+
+  add() {
+    alert('ADD');
+  }
+
+}

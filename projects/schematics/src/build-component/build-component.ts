@@ -17,21 +17,27 @@ import { parseName } from '@schematics/angular/utility/parse-name';
 import { validateHtmlSelector } from '@schematics/angular/utility/validation';
 
 import { supportedCssExtensions } from '../utils/supported-css-extensions';
-import { getProjectFromWorkspace, getDefaultPath, getWorkspaceConfigGracefully } from '../project';
+import { getProjectFromWorkspace, getDefaultPath, getWorkspaceConfigGracefully, getProjectMainFile } from '../project';
 import { addModuleImportToModule, addDeclarationComponentToModule, addExportComponentToModule } from '../module';
 import { Schema as ComponentOptions } from './schema';
 import { WorkspaceSchema } from '@schematics/angular/utility/workspace-models';
+import { isStandaloneApp } from '@schematics/angular/utility/ng-ast-utils';
 
 export function buildComponent(options: ComponentOptions): Rule {
   return (host: Tree) => {
     const workspace = getWorkspaceConfigGracefully(host) ?? ({} as WorkspaceSchema);
     const project: any = getProjectFromWorkspace(workspace, options.project);
+    const browserEntryPoint = getProjectMainFile(project);
+    const isStandAlone = isStandaloneApp(host, browserEntryPoint);
+    const urlFile = !isStandAlone ? './files' : './files-standalone';
 
     if (options.path === undefined && project) {
       options.path = getDefaultPath(project);
     }
 
-    options.module = findModuleFromOptions(host, options);
+    if (!isStandAlone) {
+      options.module = findModuleFromOptions(host, options);
+    }
 
     const parsedPath = parseName(options.path as string, options.name);
     options.name = parsedPath.name;
@@ -45,7 +51,7 @@ export function buildComponent(options: ComponentOptions): Rule {
     validateName(options.name);
     validateHtmlSelector((<any>options).selector);
 
-    const templateSource = apply(url('./files'), [
+    const templateSource = apply(url(urlFile), [
       options.routing ? noop() : filter(path => !path.endsWith('-routing.module.ts.template')),
       options.createModule ? noop() : filter(path => !path.endsWith('.module.ts.template')),
       options.skipTests ? filter(path => !path.endsWith('.spec.ts.template')) : noop(),

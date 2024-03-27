@@ -1,0 +1,28 @@
+import { Component, OnInit } from '@angular/core';
+import { CommonModule } from '@angular/common';
+
+import { PoPageDynamicTableModule } from '@po-ui/ng-templates';
+import { PoPageDynamicTableActions } from '@po-ui/ng-templates';
+
+@Component({
+  selector: '<%= selector %>',
+  standalone: true,
+  imports: [
+    CommonModule,
+    PoPageDynamicTableModule,
+  ],
+  templateUrl: './<%= dasherize(name) %>.component.html',
+  styleUrls: ['./<%= dasherize(name) %>.component.<%= style %>']
+})
+export class <%= classify(name) %>Component implements OnInit {
+
+  // PLEASE ADD THE API URL SERVICE HERE
+  readonly apiService = 'http://localhost:8080/api';
+
+  readonly actions: PoPageDynamicTableActions = { };
+
+  constructor() { }
+
+  ngOnInit() { }
+
+}
