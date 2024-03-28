@@ -109,6 +109,26 @@ describe('PoPageDynamicEditComponent: ', () => {
       expectPropertiesValues(component, 'autoRouter', invalidValues, false);
     });
 
+    it('p-notification-type: should set property to `error` if value equal `error`', () => {
+      const notificationType = 'error';
+
+      component.notificationType = notificationType;
+
+      expect(component['_notificationType']).toEqual(notificationType);
+    });
+
+    it('p-notification-type: should set property to `warning` if invalid values', () => {
+      const invalidValues = ['teste', undefined, null, NaN, 0, 'false', false];
+
+      expectPropertiesValues(component, 'notificationType', invalidValues, 'warning');
+    });
+
+    it('p-notification-type: should set property to `warning` if value is empty', () => {
+      component.notificationType = '';
+
+      expect(component.notificationType).toEqual('warning');
+    });
+
     describe('p-literals:', () => {
       it('should be in portuguese if browser is setted with an unsupported language', () => {
         component['language'] = 'zw';
@@ -1161,6 +1181,14 @@ describe('PoPageDynamicEditComponent: ', () => {
         component['save'](saveAction);
 
         expect(updateModelSpy).toHaveBeenCalledBefore(executeSaveSpy);
+      });
+    });
+
+    describe('showNotification:', () => {
+      it(`should call 'showNotification and notificationType be equal 'error'`, () => {
+        spyOn(component['poNotification'], 'error');
+        component['showNotification']('error');
+        expect(component['poNotification'].error).toHaveBeenCalled();
       });
     });
 
