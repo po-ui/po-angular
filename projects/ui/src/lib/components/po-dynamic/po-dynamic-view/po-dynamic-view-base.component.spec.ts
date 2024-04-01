@@ -290,7 +290,6 @@ describe('PoDynamicViewBaseComponent:', () => {
 
           const newFields = component['getConfiguredFields']();
           tick(500);
-          console.log(newFields);
 
           expectArraysSameOrdering(newFields, expectedFields);
         })
@@ -326,7 +325,6 @@ describe('PoDynamicViewBaseComponent:', () => {
 
           const newFields = component['getConfiguredFields']();
           tick(500);
-          console.log(newFields);
 
           expectArraysSameOrdering(newFields, expectedFields);
         })
@@ -362,7 +360,6 @@ describe('PoDynamicViewBaseComponent:', () => {
 
           const newFields = component['getConfiguredFields']();
           tick(500);
-          console.log(newFields);
 
           expectArraysSameOrdering(newFields, expectedFields);
         })
@@ -404,7 +401,6 @@ describe('PoDynamicViewBaseComponent:', () => {
 
           const newFields = component['getConfiguredFields']();
           tick(500);
-          console.log(newFields);
 
           expectArraysSameOrdering(newFields, expectedFields);
         })
@@ -576,6 +572,14 @@ describe('PoDynamicViewBaseComponent:', () => {
         const configuredFields = component['getConfiguredFields']();
         expect(component['createField']).toHaveBeenCalled();
         expect(configuredFields.length).toBeGreaterThan(0);
+      });
+
+      it('should call ensureFieldHasContainer', () => {
+        spyOn(component, 'ensureFieldHasContainer').and.callThrough();
+
+        component['getConfiguredFields']();
+
+        expect(component.ensureFieldHasContainer).toHaveBeenCalled();
       });
     });
 
