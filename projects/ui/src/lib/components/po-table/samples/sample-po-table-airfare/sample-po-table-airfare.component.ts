@@ -1,4 +1,4 @@
-import { AfterViewInit, Component, ViewChild, OnInit } from '@angular/core';
+import { AfterViewInit, Component, ViewChild, OnInit, inject } from '@angular/core';
 
 import {
   PoDialogService,
@@ -6,8 +6,9 @@ import {
   PoTableAction,
   PoTableColumn,
   PoTableComponent,
-  PoNotificationService
-} from '@po-ui/ng-components';
+  PoNotificationService,
+  PoIconService
+} from '../../../../';
 
 import { SamplePoTableAirfareService } from './sample-po-table-airfare.service';
 
@@ -20,15 +21,17 @@ export class SamplePoTableAirfareComponent implements AfterViewInit, OnInit {
   @ViewChild(PoModalComponent, { static: true }) poModal: PoModalComponent;
   @ViewChild(PoTableComponent, { static: true }) poTable: PoTableComponent;
 
+  iconService = inject(PoIconService)
+
   actions: Array<PoTableAction> = [
     {
       action: this.discount.bind(this),
-      icon: 'po-icon-finance',
+      icon: this.iconService.icons.po_icon_finance,
       label: 'Apply Discount',
       disabled: this.validateDiscount.bind(this)
     },
-    { action: this.details.bind(this), icon: 'po-icon-info', label: 'Details' },
-    { action: this.remove.bind(this), icon: 'po-icon po-icon-delete', label: 'Remove' }
+    { action: this.details.bind(this), icon: this.iconService.icons.question, label: 'Details' },
+    { action: this.remove.bind(this), icon: this.iconService.icons.po_icon_delete, label: 'Remove' }
   ];
   columns: Array<PoTableColumn>;
   columnsDefault: Array<PoTableColumn>;

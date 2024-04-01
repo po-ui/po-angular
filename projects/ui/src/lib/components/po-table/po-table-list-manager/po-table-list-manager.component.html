@@ -52,7 +52,7 @@
       <po-button
         [p-tooltip]="literals.up"
         p-tooltip-position="left"
-        p-icon="po-icon po-icon-arrow-up"
+        [p-icon]="iconService.icons.arrow_up"
         [p-disabled]="verifyArrowDisabled(option, 'up') || isFixed(option)"
         (p-click)="emitChangePosition(option, 'up')"
       >
@@ -61,7 +61,7 @@
       <po-button
         [p-tooltip]="literals.down"
         p-tooltip-position="top"
-        p-icon="po-icon po-icon-arrow-down"
+        [p-icon]="iconService.icons.arrow_down"
         [p-disabled]="verifyArrowDisabled(option, 'down') || isFixed(option)"
         (p-click)="emitChangePosition(option, 'down')"
       >

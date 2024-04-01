@@ -42,6 +42,7 @@ import { PoTableColumnTemplateDirective } from './po-table-column-template/po-ta
 import { PoTableRowTemplateDirective } from './po-table-row-template/po-table-row-template.directive';
 import { PoTableSubtitleColumn } from './po-table-subtitle-footer/po-table-subtitle-column.interface';
 import { PoTableService } from './services/po-table.service';
+import { PoIconService } from '../po-icon';
 
 /**
  * @docsExtends PoTableBaseComponent
@@ -199,7 +200,8 @@ export class PoTableComponent extends PoTableBaseComponent implements AfterViewI
     private changeDetector: ChangeDetectorRef,
     private decimalPipe: DecimalPipe,
     private router: Router,
-    private defaultService: PoTableService
+    private defaultService: PoTableService,
+    private iconService: PoIconService
   ) {
     super(poDate, poLanguageService, defaultService);
     this.JSON = JSON;
