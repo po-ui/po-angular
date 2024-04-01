@@ -1,4 +1,4 @@
-import { ComponentFixture, TestBed } from '@angular/core/testing';
+import { ComponentFixture, TestBed, fakeAsync, tick } from '@angular/core/testing';
 import { HttpClient, HttpHandler } from '@angular/common/http';
 import { SimpleChange } from '@angular/core';
 
@@ -94,15 +94,17 @@ describe('PoDynamicViewComponent:', () => {
       });
     });
 
-    it('ngOnInit: should call `updateValuesAndFieldsOnLoad` if typeof `load` is truthy', () => {
+    it('ngOnInit: should call `updateValuesAndFieldsOnLoad` if typeof `load` is truthy', fakeAsync(() => {
       component.load = 'teste';
 
-      spyOn(component, <any>'updateValuesAndFieldsOnLoad');
+      spyOn(component, <any>'updateValuesAndFieldsOnLoad').and.returnValue(Promise.resolve());
 
       component.ngOnInit();
 
+      tick();
+
       expect(component['updateValuesAndFieldsOnLoad']).toHaveBeenCalled();
-    });
+    }));
 
     it(`getValuesAndFieldsFromLoad: should call 'dynamicViewService.onLoad' if 'component.load' is string`, async () => {
       const expectedValue = { value: { name: 'teste 2' }, fields: [{ property: 'name', tag: true, inverse: true }] };

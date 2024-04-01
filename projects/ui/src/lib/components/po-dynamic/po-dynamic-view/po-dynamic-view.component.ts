@@ -29,6 +29,11 @@ import { PoMultiselectFilterService } from '../../po-field/po-multiselect/po-mul
  *  <file name="sample-po-dynamic-view-employee-on-load/sample-po-dynamic-view-employee-on-load.component.ts"> </file>
  *  <file name="sample-po-dynamic-view-employee-on-load/sample-po-dynamic-view-employee-on-load.service.ts"> </file>
  * </example>
+ *
+ * <example name="po-dynamic-view-container" title="PO Dynamic View - Employee on load">
+ *  <file name="sample-po-dynamic-view-container/sample-po-dynamic-view-container.component.html"> </file>
+ *  <file name="sample-po-dynamic-view-container/sample-po-dynamic-view-container.component.ts"> </file>
+ * </example>
  */
 @Component({
   selector: 'po-dynamic-view',
@@ -66,12 +71,15 @@ export class PoDynamicViewComponent extends PoDynamicViewBaseComponent implement
     }
     if ((changes.fields || changes.value || changes.showAllValue) && this.initChanges) {
       this.visibleFields = this.getVisibleFields();
+      this.setContainerFields();
     }
   }
 
   ngOnInit() {
     if (this.load) {
-      this.updateValuesAndFieldsOnLoad();
+      this.updateValuesAndFieldsOnLoad().finally(() => {
+        this.setContainerFields();
+      });
     }
   }
 

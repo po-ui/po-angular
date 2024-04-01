@@ -10,6 +10,7 @@ import { PoDynamicViewField } from './po-dynamic-view-field.interface';
 import { PoDynamicViewService } from './services/po-dynamic-view.service';
 import { PoComboFilterService } from '../../po-field/po-combo/po-combo-filter.service';
 import { PoMultiselectFilterService } from '../../po-field/po-multiselect/po-multiselect-filter.service';
+import { PoDynamicSharedBase } from '../shared/po-dynamic-shared-base';
 
 /**
  *
@@ -21,7 +22,7 @@ import { PoMultiselectFilterService } from '../../po-field/po-multiselect/po-mul
  *
  */
 @Directive()
-export class PoDynamicViewBaseComponent {
+export class PoDynamicViewBaseComponent extends PoDynamicSharedBase {
   /**
    * @optional
    *
@@ -57,7 +58,6 @@ export class PoDynamicViewBaseComponent {
    */
   @Input('p-load') load: string | Function;
 
-  visibleFields = [];
   service: any;
 
   private _fields: Array<PoDynamicViewField> = [];
@@ -136,10 +136,21 @@ export class PoDynamicViewBaseComponent {
     protected dynamicViewService: PoDynamicViewService,
     protected comboFilterService: PoComboFilterService,
     protected multiselectFilterService: PoMultiselectFilterService
-  ) {}
+  ) {
+    super();
+  }
 
-  protected getFieldOrder(field: PoDynamicViewField, index: number) {
-    const position = index + 1;
+  protected getFieldOrderRetroactive(position: number, index: number = 1): number {
+    if (position === index) {
+      return position;
+    }
+    return this.fields.findIndex(field => field.order === index) > -1
+      ? this.getFieldOrderRetroactive(position, index + 1)
+      : index;
+  }
+
+  protected getFieldOrder(field: PoDynamicViewField, index: number): number {
+    const position = this.getFieldOrderRetroactive(index + 1);
     return this.fields.findIndex(e => e.order === position) > -1 ? this.getFieldOrder(field, position) : position;
   }
 
@@ -195,7 +206,10 @@ export class PoDynamicViewBaseComponent {
       }
     });
 
-    return sortFields(newFields);
+    const _sortedField = sortFields(newFields);
+    this.ensureFieldHasContainer(_sortedField);
+
+    return _sortedField;
   }
 
   // retorna fields ligado ao value mais os atributos do value que não possuiam fields.

@@ -18,6 +18,8 @@ import { PoImageModule } from '../po-image';
 import { PoDynamicViewService } from './po-dynamic-view/services/po-dynamic-view.service';
 import { PoComboFilterService } from '../po-field/po-combo/po-combo-filter.service';
 import { PoMultiselectFilterService } from '../po-field/po-multiselect/po-multiselect-filter.service';
+import { PoContainerModule } from '../po-container';
+import { PoDynamicContainerComponent } from './po-dynamic-container/po-dynamic-container.component';
 
 @NgModule({
   imports: [
@@ -28,10 +30,16 @@ import { PoMultiselectFilterService } from '../po-field/po-multiselect/po-multis
     PoFieldModule,
     PoTagModule,
     PoTimeModule,
-    PoImageModule
+    PoImageModule,
+    PoContainerModule
   ],
-  declarations: [PoDynamicFormComponent, PoDynamicFormFieldsComponent, PoDynamicViewComponent],
-  exports: [PoDynamicFormComponent, PoDynamicViewComponent],
+  declarations: [
+    PoDynamicFormComponent,
+    PoDynamicFormFieldsComponent,
+    PoDynamicViewComponent,
+    PoDynamicContainerComponent
+  ],
+  exports: [PoDynamicFormComponent, PoDynamicViewComponent, PoDynamicContainerComponent],
   providers: [
     CurrencyPipe,
     DatePipe,
