@@ -192,4 +192,12 @@ export interface PoDynamicField {
    * @default `string`
    */
   type?: string | PoDynamicFieldType;
+
+  /**
+   * Exibirá um container para todos os campos abaixo dessa propriedade.
+   * Esta propriedade configura o layout dos componentes dynamic-view e dynamic-edit, deixando todos os items dentro de containers
+   *
+   * Está propriedade é do tipo string, o valor que será titulo do contianer
+   * */
+  container?: string;
 }
