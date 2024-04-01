@@ -2,6 +2,12 @@
 
 All notable changes to this project will be documented in this file. See [standard-version](https://github.com/conventional-changelog/standard-version) for commit guidelines.
 
+### [17.3.0](https://github.com/po-ui/po-angular/compare/v17.2.0...v17.3.0) (2024-04-01)
+
+### Bug Fixes
+
+* **schematics:** corrige comando generate em projetos standalone ([ca27f05](https://github.com/po-ui/po-angular/commit/ca27f05489b3a273686a59b1b79a03eb22201524))
+
 ### [17.2.0](https://github.com/po-ui/po-angular/compare/v17.1.1...v17.2.0) (2024-03-25)
 
 ### Bug Fixes
