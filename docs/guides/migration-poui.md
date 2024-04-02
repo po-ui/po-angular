@@ -13,6 +13,13 @@ Antes de atualizar a versão do PO UI, é importante que você tenha atualizado 
 o Angular que o PO UI está homologado, veja nossa
 [tabela de compatibilidade](https://github.com/po-ui/po-angular/wiki#vers%C3%B5es-angular-x-po-ui) em nosso Github Wiki.
 
+> Caso o seu projeto esteja na versão Angular@16:
+Realize a instalação do pacote Schematics do Angular para o nosso script de atualização funcionar corretamente: 
+
+```
+npm install @angular-devkit/schematics --save-dev
+```
+
 Para atualizar o Angular, execute o comando abaixo:
 
 ```
@@ -22,7 +29,7 @@ ng update @angular/cli@<version> @angular/core@<version> --force
 Por exemplo:
 
 ```
-ng update @angular/cli@16 @angular/core@16 --force
+ng update @angular/cli@17 @angular/core@17 --force
 ```
 
 > Para realizar a migração completa e avaliar se não precisa fazer alguma alteração veja o [**Guia de Upgrade do Angular**](https://update.angular.io/).
@@ -30,6 +37,7 @@ ng update @angular/cli@16 @angular/core@16 --force
 O nosso pacote possuía dependências que eram compatíveis com a versão anterior do Angular, portanto
 devemos utilizar a *flag* `--force` para que o Angular realize a migração do seu projeto, ignorando a versão das dependências.
 Para avaliar as *flags* disponíveis veja a [**documentação do ng update**](https://angular.io/cli/update).
+
 
 ## Atualizando o PO UI
 

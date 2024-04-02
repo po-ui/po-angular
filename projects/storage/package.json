@@ -12,17 +12,17 @@
   "schematics": "./schematics/collection.json",
   "dependencies": {
     "@po-ui/ng-schematics": "0.0.0-PLACEHOLDER",
-    "custom-idle-queue": "2.1.2",
-    "localforage": "1.9.0",
+    "custom-idle-queue": "3.0.1",
+    "localforage": "1.10.0",
     "lokijs": "1.5.12",
-    "tslib": "^2.3.0"
+    "tslib": "^2.6.2"
   },
   "peerDependencies": {
-    "@angular/core": "~16.2.0",
-    "custom-idle-queue": "2.1.2",
-    "localforage": "1.9.0",
+    "@angular/core": "^17",
+    "custom-idle-queue": "3.0.1",
+    "localforage": "1.10.0",
     "lokijs": "1.5.12",
-    "rxjs": "~7.5.5",
-    "zone.js": "~0.13.1"
+    "rxjs": "~7.8.1",
+    "zone.js": "~0.14.4"
   }
 }

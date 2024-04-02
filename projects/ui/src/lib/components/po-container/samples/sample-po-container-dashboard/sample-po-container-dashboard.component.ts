@@ -26,7 +26,7 @@ import {
   ],
   providers: [SampleDashboardService]
 })
-export class SamplePoContainerDashboardComponent implements AfterContentChecked {
+export class SamplePoContainerDashboardComponent implements AfterContentChecked, OnInit {
   @ViewChild('formShare', { static: true }) formShare: NgForm;
   @ViewChild(PoModalComponent) poModal: PoModalComponent;
 
@@ -63,7 +63,10 @@ export class SamplePoContainerDashboardComponent implements AfterContentChecked 
     label: 'Share'
   };
 
-  constructor(private poNotification: PoNotificationService, private sampleDashboardService: SampleDashboardService) {}
+  constructor(
+    private poNotification: PoNotificationService,
+    private sampleDashboardService: SampleDashboardService
+  ) {}
 
   ngOnInit() {
     this.columns = this.sampleDashboardService.getColumns();

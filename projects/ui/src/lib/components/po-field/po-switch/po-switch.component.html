@@ -22,6 +22,7 @@
 
       <po-label
         *ngIf="label"
+        class="po-switch-label"
         [p-disabled]="disabled"
         [p-label]="value === true ? labelOn : labelOff"
         (click)="eventClick()"

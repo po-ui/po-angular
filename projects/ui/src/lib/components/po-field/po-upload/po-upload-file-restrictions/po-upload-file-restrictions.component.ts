@@ -45,7 +45,10 @@ export class PoUploadFileRestrictionsComponent implements OnInit {
     return this._minFileSize;
   }
 
-  constructor(private changeDetector: ChangeDetectorRef, languageService: PoLanguageService) {
+  constructor(
+    private changeDetector: ChangeDetectorRef,
+    languageService: PoLanguageService
+  ) {
     this.language = languageService.getShortLanguage();
   }
 

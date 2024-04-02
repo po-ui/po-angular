@@ -141,16 +141,13 @@ describe('PoPageCustomizationService:', () => {
     });
 
     describe('getCustomOptions:', () => {
-      it(
-        'should get customized option from a function',
-        waitForAsync(() => {
-          poPageCustomizationService
-            .getCustomOptions(customOptionFunctionMock, originalPageOptions, pageOptionSchema)
-            .subscribe(optionResult => {
-              expect(optionResult).toEqual(mergedPageOptions);
-            });
-        })
-      );
+      it('should get customized option from a function', waitForAsync(() => {
+        poPageCustomizationService
+          .getCustomOptions(customOptionFunctionMock, originalPageOptions, pageOptionSchema)
+          .subscribe(optionResult => {
+            expect(optionResult).toEqual(mergedPageOptions);
+          });
+      }));
 
       it('should get customized option from a url', fakeAsync(() => {
         testUrl(originalPageOptions, newPageOptions, mergedPageOptions);

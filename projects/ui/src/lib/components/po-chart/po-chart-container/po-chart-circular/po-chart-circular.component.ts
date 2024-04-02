@@ -69,7 +69,10 @@ export abstract class PoChartCircularComponent {
     return this._series;
   }
 
-  constructor(private ngZone: NgZone, private changeDetector: ChangeDetectorRef) {}
+  constructor(
+    private ngZone: NgZone,
+    private changeDetector: ChangeDetectorRef
+  ) {}
 
   onSerieClick(selectedItem: any) {
     this.circularClick.emit(selectedItem);

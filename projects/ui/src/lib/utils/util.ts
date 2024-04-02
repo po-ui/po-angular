@@ -1,16 +1,4 @@
-import { ViewContainerRef } from '@angular/core';
 import { poLocales, poLocaleDefault } from '../services/po-language/po-language.constant';
-
-/**
- * @deprecated
- * Utilize o método `getShortBrowserLanguage`.
- *
- * @description
- * Retorna idioma do browser ou o idioma padrão.
- */
-export function browserLanguage() {
-  return getShortBrowserLanguage();
-}
 
 /**
  * Converte e formata os bytes em formato mais legível para o usuário.

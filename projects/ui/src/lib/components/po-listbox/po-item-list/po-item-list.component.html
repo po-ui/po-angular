@@ -48,7 +48,7 @@
       [p-checkboxValue]="checkboxValue === null ? 'mixed' : checkboxValue"
       [p-disabled]="disabled"
       (click)="onCheckboxItem()"
-      (p-change)="onSelectItem({label})"
+      (p-change)="onSelectItem({ label })"
     ></po-checkbox>
 
     <span class="po-item-list__label" *ngIf="!template">{{ label }}</span>

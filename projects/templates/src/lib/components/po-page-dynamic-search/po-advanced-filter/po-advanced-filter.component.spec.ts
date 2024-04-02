@@ -13,14 +13,12 @@ describe('PoAdvancedFilterComponent', () => {
   let fixture: ComponentFixture<PoAdvancedFilterComponent>;
   let filters: Array<any>;
 
-  beforeEach(
-    waitForAsync(() => {
-      TestBed.configureTestingModule({
-        imports: [FormsModule, PoDynamicModule, PoFieldModule, PoModalModule, HttpClientTestingModule],
-        declarations: [PoAdvancedFilterComponent]
-      }).compileComponents();
-    })
-  );
+  beforeEach(waitForAsync(() => {
+    TestBed.configureTestingModule({
+      imports: [FormsModule, PoDynamicModule, PoFieldModule, PoModalModule, HttpClientTestingModule],
+      declarations: [PoAdvancedFilterComponent]
+    }).compileComponents();
+  }));
 
   beforeEach(() => {
     fixture = TestBed.createComponent(PoAdvancedFilterComponent);

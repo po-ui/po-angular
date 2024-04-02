@@ -55,7 +55,11 @@ export const poPageBlockedUserButtonLiterals: Object = {
 export class PoPageBlockedUserComponent extends PoPageBlockedUserBaseComponent implements OnInit {
   literals;
 
-  constructor(private activatedRoute: ActivatedRoute, private router: Router, languageService: PoLanguageService) {
+  constructor(
+    private activatedRoute: ActivatedRoute,
+    private router: Router,
+    languageService: PoLanguageService
+  ) {
     super();
 
     const language = languageService.getShortLanguage();

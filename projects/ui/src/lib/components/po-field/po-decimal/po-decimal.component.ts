@@ -28,7 +28,6 @@ const poDecimalTotalLengthLimit = 16;
  *
  * @description
  *
- * <br>
  * - O `po-decimal` é um *input* específico para receber apenas números decimais, por isso recebe as seguintes características:
  *  + Aceita apenas números;
  *  + Utiliza ',' como separador de decimal;
@@ -238,7 +237,11 @@ export class PoDecimalComponent extends PoInputBaseComponent implements AfterVie
     return this._max;
   }
 
-  constructor(private el: ElementRef, private poLanguageService: PoLanguageService, cd: ChangeDetectorRef) {
+  constructor(
+    private el: ElementRef,
+    private poLanguageService: PoLanguageService,
+    cd: ChangeDetectorRef
+  ) {
     super(cd);
     this.isKeyboardAndroid = !!navigator.userAgent.match(/Android/i);
   }

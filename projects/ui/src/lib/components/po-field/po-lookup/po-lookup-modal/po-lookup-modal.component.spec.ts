@@ -27,16 +27,14 @@ describe('PoLookupModalComponent', () => {
 
   const advancedFilters = [{ property: 'name', gridColumns: 6, gridSmColumns: 12, order: 1, required: true }];
 
-  beforeEach(
-    waitForAsync(() => {
-      TestBed.configureTestingModule({
-        imports: [PoModalModule, HttpClientTestingModule, PoDynamicModule, RouterTestingModule],
-        declarations: [PoLookupModalComponent],
-        providers: [LookupFilterService, PoComponentInjectorService],
-        schemas: [NO_ERRORS_SCHEMA]
-      }).compileComponents();
-    })
-  );
+  beforeEach(waitForAsync(() => {
+    TestBed.configureTestingModule({
+      imports: [PoModalModule, HttpClientTestingModule, PoDynamicModule, RouterTestingModule],
+      declarations: [PoLookupModalComponent],
+      providers: [LookupFilterService, PoComponentInjectorService],
+      schemas: [NO_ERRORS_SCHEMA]
+    }).compileComponents();
+  }));
 
   beforeEach(() => {
     fixture = TestBed.createComponent(PoLookupModalComponent);
@@ -160,14 +158,12 @@ describe('PoLookupModalComponent', () => {
   });
 
   describe('AdvancedSearch: ', () => {
-    beforeEach(
-      waitForAsync(() => {
-        component.advancedFilters = advancedFilters;
-        fixture.detectChanges();
-        component.onAdvancedFilter();
-        fixture.detectChanges();
-      })
-    );
+    beforeEach(waitForAsync(() => {
+      component.advancedFilters = advancedFilters;
+      fixture.detectChanges();
+      component.onAdvancedFilter();
+      fixture.detectChanges();
+    }));
 
     afterEach(() => {
       component.advancedFilters = [];

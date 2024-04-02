@@ -18,20 +18,13 @@ describe('PoDecimalComponent:', () => {
   let inputEl: any;
   let spyService: jasmine.Spy;
 
-  beforeEach(
-    waitForAsync(() => {
-      TestBed.configureTestingModule({
-        imports: [PoIconModule],
-        declarations: [
-          PoDecimalComponent,
-          PoFieldContainerComponent,
-          PoCleanComponent,
-          PoFieldContainerBottomComponent
-        ],
-        providers: [PoLanguageService]
-      }).compileComponents();
-    })
-  );
+  beforeEach(waitForAsync(() => {
+    TestBed.configureTestingModule({
+      imports: [PoIconModule],
+      declarations: [PoDecimalComponent, PoFieldContainerComponent, PoCleanComponent, PoFieldContainerBottomComponent],
+      providers: [PoLanguageService]
+    }).compileComponents();
+  }));
 
   beforeEach(() => {
     languageService = TestBed.inject(PoLanguageService);

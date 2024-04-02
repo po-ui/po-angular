@@ -1,9 +1,11 @@
 import { chain, Rule, schematic, Tree, noop } from '@angular-devkit/schematics';
 import { WorkspaceProject, WorkspaceSchema } from '@schematics/angular/utility/workspace-models';
+import { isStandaloneApp } from '@schematics/angular/utility/ng-ast-utils';
 
 import { addModuleImportToRootModule } from '@po-ui/ng-schematics/module';
 import {
   getProjectFromWorkspace,
+  getProjectMainFile,
   getProjectTargetOptions,
   getWorkspaceConfigGracefully
 } from '@po-ui/ng-schematics/project';
@@ -27,6 +29,7 @@ export default function (options: any): Rule {
     addModuleImportToRootModule(options, poModuleName, poModuleSourcePath),
     addModuleImportToRootModule(options, httpClientModuleName, httpClientModuleSourcePath),
     addThemeToAppStyles(options),
+    updateAppConfigFileRule(options),
     configureSideMenu(options)
   ]);
 }
@@ -76,4 +79,53 @@ function addThemeStyleToTarget(
 
 function configureSideMenu(options: any) {
   return options.configSideMenu ? schematic('sidemenu', { ...options }) : noop();
+}
+
+function updateAppConfigFileRule(options: any): Rule {
+  return (tree: Tree) => {
+    const workspace = getWorkspaceConfigGracefully(tree) ?? ({} as WorkspaceSchema);
+    const project: any = getProjectFromWorkspace(workspace, options.project);
+    const browserEntryPoint = getProjectMainFile(project);
+
+    if (!isStandaloneApp(tree, browserEntryPoint)) {
+      return tree;
+    }
+
+    const content = tree.read('src/app/app.config.ts')?.toString('utf-8') || '';
+
+    const conteudoModificado = updateAppConfigFile(content);
+
+    tree.overwrite('src/app/app.config.ts', conteudoModificado);
+    return tree;
+  };
+}
+
+export function updateAppConfigFile(content: string): string {
+  const importBlock = `
+import { provideHttpClient } from '@angular/common/http';
+import { BrowserAnimationsModule } from '@angular/platform-browser/animations';
+import { PoHttpRequestModule } from '@po-ui/ng-components';
+`;
+
+  const providersBlock = `
+  providers: [
+    provideRouter(routes),
+    provideHttpClient(),
+    importProvidersFrom([BrowserAnimationsModule, PoHttpRequestModule]),
+  ],`;
+
+  const regexImport = /import {[^}]+} from '@angular\/core';/;
+  const regexProviders = /providers: \[[^\]]+\]/;
+
+  // Remove imports e providers existentes
+  let modifiedContent = content.replace(regexImport, '').replace(regexProviders, '');
+
+  // Adiciona os novos imports e providers
+  modifiedContent = modifiedContent.replace(
+    /export const appConfig: ApplicationConfig = {/,
+    `import { ApplicationConfig, importProvidersFrom } from '@angular/core';${importBlock}
+export const appConfig: ApplicationConfig = {${providersBlock}`
+  );
+
+  return modifiedContent.trim();
 }

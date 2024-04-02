@@ -20,6 +20,35 @@ import { PoMask } from './po-mask';
  * Então você precisa informar o atributo name ou o atributo [ngModelOptions]="{standalone: true}".
  * Exemplo: [(ngModel)]="pessoa.nome" [ngModelOptions]="{standalone: true}".
  *
+ * #### Tokens customizáveis
+ *
+ * É possível alterar o estilo do componente usando os seguintes tokens (CSS): <br>
+ * Obs: Só é possível realizar alterações ao adicionar a classe `.po-input`
+ *
+ * > Para maiores informações, acesse o guia [Personalizando o Tema Padrão com Tokens CSS](https://po-ui.io/guides/theme-customization).
+ *
+ * | Propriedade                            | Descrição                                             | Valor Padrão                                    |
+ * |----------------------------------------|-------------------------------------------------------|-------------------------------------------------|
+ * | **Default Values**                     |                                                       |                                                 |
+ * | `--font-family`                        | Família tipográfica usada                             | `var(--font-family-theme)`                      |
+ * | `--font-size`                          | Tamanho da fonte                                      | `var(--font-size-default)`                      |
+ * | `--text-color-placeholder`             | Cor do texto placeholder                              | `var(--color-neutral-light-30)`                 |
+ * | `--color`                              | Cor pincipal do input                                 | `var(--color-neutral-dark-70)`                  |
+ * | `--background`                         | Cor de background                                     | `var(--color-neutral-light-05)`                 |
+ * | `--padding`                            | Preenchimento                                         |  `0 0.5rem`                                     |
+ * | `--text-color`                         | Cor do texto                                          | `var(--color-neutral-dark-90)`                  |
+ * | **Hover**                              |                                                       |                                                 |
+ * | `--color-hover`                        | Cor principal no estado hover                         | `var(--color-brand-01-dark)`                    |
+ * | `--background-hover`                   | Cor de background no estado hover                     | `var(--color-brand-01-lightest)`                |
+ * | **Focused**                            |                                                       |                                                 |
+ * | `--color-focused`                      | Cor principal no estado de focus                      | `var(--color-action-default)`                   |
+ * | `--outline-color-focused`              | Cor do outline do estado de focus                     | `var(--color-action-focus)`                     |
+ * | **Disabled**                           |                                                       |                                                 |
+ * | `--color-disabled`                     | Cor principal no estado disabled                      | `var(--color-neutral-light-30)`                 |
+ * | `--background-disabled`                | Cor de background no estado disabled                  | `var(--color-neutral-light-20)`                 |
+ * | `--text-color-disabled`                | Cor do texto no estado disabled                       | `var(--color-neutral-dark-70)`                  |
+ *
+ * <br>
  */
 @Directive()
 export abstract class PoInputBaseComponent implements ControlValueAccessor, Validator {
@@ -62,6 +91,17 @@ export abstract class PoInputBaseComponent implements ControlValueAccessor, Vali
    * > Para o ícone enquadrar corretamente, deve-se utilizar `font-size: inherit` caso o ícone utilizado não aplique-o.
    */
   @Input('p-icon') icon?: string | TemplateRef<void>;
+
+  /**
+   * @optional
+   *
+   * @description
+   *
+   * Sempre emite as alterações do model mesmo quando o valor atual for igual ao valor anterior.
+   *
+   * @default `false`
+   */
+  @Input({ alias: 'p-emit-all-changes', transform: convertToBoolean }) emitAllChanges: boolean = false;
 
   /** Rótulo do campo. */
   @Input('p-label') label?: string;
@@ -358,7 +398,7 @@ export abstract class PoInputBaseComponent implements ControlValueAccessor, Vali
   }
 
   controlChangeModelEmitter(value: any) {
-    if (this.modelLastUpdate !== value) {
+    if (this.modelLastUpdate !== value || this.emitAllChanges) {
       this.changeModel.emit(value);
       this.modelLastUpdate = value;
     }

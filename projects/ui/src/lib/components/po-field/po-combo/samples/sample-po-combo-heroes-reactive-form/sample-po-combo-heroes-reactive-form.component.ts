@@ -12,7 +12,10 @@ export class SamplePoComboHeroesReactiveFormComponent implements OnInit {
   form: UntypedFormGroup;
   hero$: Observable<any>;
 
-  constructor(private http: HttpClient, private formBuilder: UntypedFormBuilder) {}
+  constructor(
+    private http: HttpClient,
+    private formBuilder: UntypedFormBuilder
+  ) {}
 
   ngOnInit() {
     this.form = this.formBuilder.group({

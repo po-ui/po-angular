@@ -10,14 +10,12 @@ describe('PoTreeViewItemHeaderComponent:', () => {
   let fixture: ComponentFixture<PoTreeViewItemHeaderComponent>;
   let debugNativeElement;
 
-  beforeEach(
-    waitForAsync(() => {
-      TestBed.configureTestingModule({
-        imports: [FormsModule, PoFieldModule],
-        declarations: [PoTreeViewItemHeaderComponent]
-      }).compileComponents();
-    })
-  );
+  beforeEach(waitForAsync(() => {
+    TestBed.configureTestingModule({
+      imports: [FormsModule, PoFieldModule],
+      declarations: [PoTreeViewItemHeaderComponent]
+    }).compileComponents();
+  }));
 
   beforeEach(() => {
     fixture = TestBed.createComponent(PoTreeViewItemHeaderComponent);

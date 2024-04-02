@@ -12,14 +12,23 @@ env:
 
 on:
   workflow_dispatch:
+    inputs:
+      version-beta:
+        description: Informe a versão do Beta do PO-UI
+        required: true
+      version-po-style:
+        description: Informe a versão do @po-ui/style
+        required: true
+        default: 'latest'
 
 jobs:
   build-and-publish:
     runs-on: ubuntu-latest
+    if: github.ref == 'refs/heads/development'
     steps:
     - uses: actions/setup-node@v3
       with:
-        node-version: '16.x'
+        node-version: '18.x'
         registry-url: 'https://registry.npmjs.org'
 
     - name: Check out po-angular
@@ -38,6 +47,10 @@ jobs:
       with:
         repository: po-ui/po-tslint
         path: po-tslint
+
+    - name: Update Version
+      run: node ./scripts/update-version.js ${{ github.event.inputs.version-beta }} ${{ github.event.inputs.version-po-style }}
+      working-directory: ${{env.WORKING_DIR}}
 
     - name: Install and Build
       run: npm install && npm run build

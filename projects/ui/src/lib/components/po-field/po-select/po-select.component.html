@@ -43,7 +43,7 @@
         <ng-container *ngFor="let item of listGroupOptions">
           <optgroup *ngIf="item?.options.length > 0" label="{{ item?.label }}" [disabled]="readonly">
             <option *ngFor="let subItem of item.options" [value]="subItem?.[this.fieldValue]" [disabled]="readonly">
-              {{ subItem?.[this.fieldLabel]  }}
+              {{ subItem?.[this.fieldLabel] }}
             </option>
           </optgroup>
         </ng-container>

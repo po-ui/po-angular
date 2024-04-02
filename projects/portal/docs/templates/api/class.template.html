@@ -2,7 +2,7 @@
   <code class="doc-code">{$ class.name $}</code>
 </h4>
 <div class="docs-api-class-description">
-  {$ class.description | marked | replace('{', '&#123;') | replace('}', '&#125;') | replace('|','&#124;') $}
+  {$ class.description | marked | replace('{', '&#123;') | replace('}', '&#125;') | replace('|','&#124;') | replace("@", "&#64;") $}
 </div>
 {%- if class.directiveSelectors -%}
 <div class="docs-api-directive-selectors">

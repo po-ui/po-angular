@@ -2,6 +2,77 @@
 
 All notable changes to this project will be documented in this file. See [standard-version](https://github.com/conventional-changelog/standard-version) for commit guidelines.
 
+### [17.3.0](https://github.com/po-ui/po-angular/compare/v17.2.0...v17.3.0) (2024-04-01)
+
+### Bug Fixes
+
+* **schematics:** corrige comando generate em projetos standalone ([ca27f05](https://github.com/po-ui/po-angular/commit/ca27f05489b3a273686a59b1b79a03eb22201524))
+
+### [17.2.0](https://github.com/po-ui/po-angular/compare/v17.1.1...v17.2.0) (2024-03-25)
+
+### Bug Fixes
+
+* **dynamic-view:** correção campos duplicados ([b4ee54a](https://github.com/po-ui/po-angular/commit/b4ee54ae0c7529a1918d5ad5b50e86021c7f2a0c))
+
+## [17.1.1](https://github.com/po-ui/po-angular/compare/v17.1.0...v17.1.1) (2024-03-18)
+
+### Bug Fixes
+
+* **page-slide:** ajusta regra do foco no elemento ([6dd317c](https://github.com/po-ui/po-angular/commit/6dd317c49e1d92115905f2fe9561cac825ed9c6d))
+* **po-page-dynamic-table:**  aplica ordem correta a colunas ([bc9cdcb](https://github.com/po-ui/po-angular/commit/bc9cdcbd2ca2fef06f9fc653d9ecc400a39fdd23))
+
+## [17.1.0](https://github.com/po-ui/po-angular/compare/v17.0.0...v17.1.0) (2024-03-11)
+
+**build:** atualiza para o Angular 17@latest
+
+# [17.0.0](https://github.com/po-ui/po-angular/compare/v16.16.0...v17.0.0) (2024-03-04)
+
+### BREAKING CHANGES
+
+* **angular:** deve ser utilizado o Angular v17
+
+Atualize seu projeto para utilizar a versão 17 do Angular, acesse a documentação [Guia de Atualização do Angular](https://update.angular.io/) para fazer a migração completa.
+
+* **utils:** removido método `browserLanguage` do utils.
+Utilize o método `getShortBrowserLanguage`.
+
+* **table:** removida propriedade `p-hide-text-overflow`
+Por regras de acessibilidade a célula da tabela apresentará reticências automáticamente quando não houver espaço para o seu contéudo e por isso a propriedade será depreciada.
+
+* **container:** removida propriedade `p-no-shadow`
+Desabilita o sombreamento em torno do po-container. Não é mais possível definir shadow para o po-container por questões de acessibilidade e usabilidade, por isso não indicamos mais o uso desta propriedade.
+
+* **button-group:** removida propriedade `p-small`
+Por regras de acessibilidade o botão não terá mais um tamanho menor do que 44px e por isso a propriedade será depreciada.
+
+* **button:** removida propriedade `p-small`
+Por regras de acessibilidade o botão não terá mais um tamanho menor do que 44px e por isso a propriedade será depreciada.
+
+### Code Refactoring
+
+* **button-group:** remove a propriedade `p-small` ([3fce646](https://github.com/po-ui/po-angular/commit/3fce646fdfe0b51456af662bac70955d57ac5fb2))
+* **button:** remove a propriedade `p-small` ([aa9b8bd](https://github.com/po-ui/po-angular/commit/aa9b8bd78716a6fee2efca541343e21547b0f9bd))
+* **container:** remove a propriedade `p-no-shadow` ([3339164](https://github.com/po-ui/po-angular/commit/333916429fbf7a5df6f26f914f5e4c61583a4db5))
+* **table:** remove a propriedade `p-hide-text-overflow` ([4d03932](https://github.com/po-ui/po-angular/commit/4d03932392206ee93822ce0b038acbaf963d2fc7))
+* **utils:** remove o método `browserLanguage` ([0b21c2e](https://github.com/po-ui/po-angular/commit/0b21c2e335ab7d60fa48b43cc16977d52a5b5f1c))
+
+### Bug Fixes
+
+* **listbox:** corrige `listbox` para permitir o uso de `TemplateRef` sem quebrar a aplicação ([618d096](https://github.com/po-ui/po-angular/commit/618d0962e40e9fe55c044d5742e2dde1cd4f4dc1))
+
+### Features
+
+* **input:** inclui variável de controle para o `p-change-model` ([4f19adc](https://github.com/po-ui/po-angular/commit/4f19adc4e7b9d7c4d7c1dd5a8ef3b6eebaad35eb))
+* **schematics:** inclui tratamento em projetos do tipo standalone ([bda3da6](https://github.com/po-ui/po-angular/commit/bda3da6621ae5b3e94a7f2ab6c9538c18d21463d))
+* **schematics:** migração para v.17 ([cb8e0d5](https://github.com/po-ui/po-angular/commit/cb8e0d580ad04d117c7bf2fd8001537cf29c5833))
+
+## [16.16.0](https://github.com/po-ui/po-angular/compare/v16.15.0...v16.16.0) (2024-02-26)
+
+
+### Bug Fixes
+
+* **dynamic-view:** corrigido problema de ordenação dos campos ([2cc877e](https://github.com/po-ui/po-angular/commit/2cc877e886e3dd36b5884b91d76a4a6a4085eda7))
+
 # [16.15.0](https://github.com/po-ui/po-angular/compare/v16.14.0...v16.15.0) (2024-02-15)
 
 

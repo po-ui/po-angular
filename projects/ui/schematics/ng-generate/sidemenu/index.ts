@@ -15,10 +15,15 @@ import {
   Source,
   filter
 } from '@angular-devkit/schematics';
+import { isStandaloneApp } from '@schematics/angular/utility/ng-ast-utils';
 import { normalize, strings } from '@angular-devkit/core';
 
 import { addModuleImportToRootModule } from '@po-ui/ng-schematics/module';
-import { getProjectFromWorkspace, getWorkspaceConfigGracefully } from '@po-ui/ng-schematics/project';
+import {
+  getProjectFromWorkspace,
+  getProjectMainFile,
+  getWorkspaceConfigGracefully
+} from '@po-ui/ng-schematics/project';
 import { supportedCssExtensions } from '@po-ui/ng-schematics/utils';
 import { WorkspaceSchema } from '@schematics/angular/utility/workspace-models';
 
@@ -39,14 +44,17 @@ export default function (options: ComponentOptions): Rule {
 function createAppComponent(options: ComponentOptions): Rule {
   return (tree: Tree) => {
     const workspace = getWorkspaceConfigGracefully(tree) ?? ({} as WorkspaceSchema);
-    const project = getProjectFromWorkspace(workspace, options.project);
+    const project: any = getProjectFromWorkspace(workspace, options.project);
+    const browserEntryPoint = getProjectMainFile(project);
     const sourceDir = `${project.sourceRoot}/app`;
+
+    const urlFile = !isStandaloneApp(tree, browserEntryPoint) ? './files' : './files-standalone';
 
     if (!supportedCssExtensions.includes((options as any).style)) {
       options.style = 'css';
     }
 
-    const templateSource = applyWithOverwrite(url('./files'), [
+    const templateSource = applyWithOverwrite(url(urlFile), [
       options.skipTests ? filter(path => !path.endsWith('.spec.ts.template')) : noop(),
       pathTemplate({ ...options }),
       applyTemplates({

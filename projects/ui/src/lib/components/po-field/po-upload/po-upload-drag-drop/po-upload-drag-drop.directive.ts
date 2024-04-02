@@ -28,7 +28,10 @@ export class PoUploadDragDropDirective {
   private files: Array<File>;
   private invalidFileType: number;
 
-  constructor(private i18nPipe: PoI18nPipe, private notification: PoNotificationService) {}
+  constructor(
+    private i18nPipe: PoI18nPipe,
+    private notification: PoNotificationService
+  ) {}
 
   @HostListener('document:dragleave', ['$event']) onDragLeave(event) {
     event.preventDefault();

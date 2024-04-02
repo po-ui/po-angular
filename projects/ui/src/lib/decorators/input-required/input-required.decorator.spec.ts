@@ -10,7 +10,9 @@ import { InputRequired } from './input-required.decorator';
 })
 class PoMockComponent implements OnInit {
   @InputRequired() myProperty: any;
-  ngOnInit() {}
+  ngOnInit() {
+    let a;
+  }
 }
 
 describe('InputRequired:', () => {

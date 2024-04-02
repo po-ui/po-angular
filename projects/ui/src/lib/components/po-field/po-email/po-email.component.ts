@@ -33,7 +33,7 @@ const providers = [
  *
  * @description
  *
- * po-email é um input específico para receber E-mail, com o pattern já configurado.
+ * O `po-email` é um input específico para receber E-mail, com o pattern já configurado.
  *
  * @example
  *

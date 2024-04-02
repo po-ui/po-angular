@@ -11,7 +11,10 @@ import { PoTabsService } from '../po-tabs.service';
   templateUrl: './po-tab.component.html'
 })
 export class PoTabComponent extends PoTabBaseComponent implements AfterContentInit, OnChanges {
-  constructor(private elementRef: ElementRef, private tabsService: PoTabsService) {
+  constructor(
+    private elementRef: ElementRef,
+    private tabsService: PoTabsService
+  ) {
     super();
   }
 

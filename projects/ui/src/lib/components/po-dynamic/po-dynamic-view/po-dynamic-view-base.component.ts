@@ -138,10 +138,17 @@ export class PoDynamicViewBaseComponent {
     protected multiselectFilterService: PoMultiselectFilterService
   ) {}
 
+  protected getFieldOrder(field: PoDynamicViewField, index: number) {
+    const position = index + 1;
+    return this.fields.findIndex(e => e.order === position) > -1 ? this.getFieldOrder(field, position) : position;
+  }
+
   protected getConfiguredFields(useSearchService = true) {
     const newFields = [];
 
     this.fields.forEach((field, index) => {
+      field.order = field.order || this.getFieldOrder(field, index);
+
       if (!isVisibleField(field)) {
         return;
       }
@@ -156,6 +163,9 @@ export class PoDynamicViewBaseComponent {
         (!Array.isArray(this.value[field.property]) && this.value[field.property] && useSearchService);
 
       if (hasValue) {
+        const _field = this.returnValues({ ...field }, '');
+        newFields.push(_field);
+
         if (field.searchService) {
           if (typeof field.searchService === 'object') {
             this.service = field.searchService as PoDynamicViewService;
@@ -181,8 +191,7 @@ export class PoDynamicViewBaseComponent {
           }
         }
 
-        const indexUpdated = field.order || index;
-        this.createFieldWithService(field, newFields, indexUpdated);
+        this.createFieldWithService(field, newFields, _field);
       }
     });
 
@@ -226,13 +235,14 @@ export class PoDynamicViewBaseComponent {
     return this.returnValues(field, value);
   }
 
-  private createFieldWithService(field: PoDynamicViewField, newFields?, index?) {
+  private createFieldWithService(field: PoDynamicViewField, newFields?, oldField?) {
     const property = field.property;
 
     this.searchById(this.value[property], field).subscribe(response => {
       const value = response;
       const allValues = this.returnValues(field, value);
-      newFields.splice(index, 0, allValues);
+      const oldFieldIndex = newFields.indexOf(newFields.find(field => field === oldField));
+      newFields.splice(oldFieldIndex, 1, allValues);
       sortFields(newFields);
     });
   }

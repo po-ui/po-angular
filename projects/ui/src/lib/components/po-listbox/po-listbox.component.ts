@@ -238,4 +238,16 @@ export class PoListBoxComponent extends PoListBoxBaseComponent implements AfterV
       this.clickTab.emit(tab);
     }
   }
+
+  formatItemList(item: any): string {
+    if (this.isTabs) {
+      return item.id;
+    } else {
+      try {
+        return JSON.stringify(item);
+      } catch (error) {
+        return item;
+      }
+    }
+  }
 }

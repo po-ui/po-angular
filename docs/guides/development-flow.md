@@ -82,7 +82,7 @@ Este guia tem por objetivo definir as regras para criação de *Issues* relacion
           <blockquote>Para seguir o guia é fundamental o conhecimento da <a href="https://git-scm.com/book/en/v2">ferramenta Git.</a>
           </blockquote>
         <ul>
-          <li>Para utilizar o PO UI, é pré-requisito ter o <code>Node.js</code> instalado (versão 16.14.0 ou acima) e o seu gerenciador de pacote favorito na versão mais atual.</li>
+          <li>Para utilizar o PO UI, é pré-requisito ter o <code>Node.js</code> instalado (versão 18.13.0 ou acima) e o seu gerenciador de pacote favorito na versão mais atual.</li>
           <li>
             <p>É importante que tenha a versão equivalente do Angular instalada. Instale-o via <code>npm</code> ou <code>yarn</code>:</p>
             <p>Instalando com npm:</p>

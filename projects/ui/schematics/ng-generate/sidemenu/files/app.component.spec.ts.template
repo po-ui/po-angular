@@ -1,30 +1,34 @@
-import { async, TestBed } from '@angular/core/testing';
+import { HttpClientTestingModule } from '@angular/common/http/testing';
+import { TestBed } from '@angular/core/testing';
 import { RouterTestingModule } from '@angular/router/testing';
 
-import { PoMenuModule, PoPageModule, PoToolbarModule } from '@po-ui/ng-components';
+import {
+  PoMenuModule,
+  PoPageModule,
+  PoToolbarModule,
+} from '@po-ui/ng-components';
 
 import { AppComponent } from './app.component';
 
 describe('AppComponent', () => {
-  beforeEach(async(() => {
-    TestBed.configureTestingModule({
+  beforeEach(async () => {
+    await TestBed.configureTestingModule({
       imports: [
         PoMenuModule,
         PoPageModule,
         PoToolbarModule,
-        RouterTestingModule
+        HttpClientTestingModule,
+        RouterTestingModule,
       ],
-      declarations: [
-        AppComponent
-      ],
+      declarations: [AppComponent],
     }).compileComponents();
-  }));
+  });
 
   it('should create the app', () => {
     const fixture = TestBed.createComponent(AppComponent);
-    const app = fixture.debugElement.componentInstance;
+    fixture.detectChanges();
+    const app = fixture.componentInstance;
 
     expect(app).toBeTruthy();
   });
-
 });

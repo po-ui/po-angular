@@ -19,7 +19,10 @@ export class SamplePoHttpRequestInterceptorLabsComponent implements OnInit, OnDe
   private subscription: Subscription;
   private apiSubscription: Subscription;
 
-  constructor(private http: HttpClient, private httpRequestInterceptor: PoHttpRequestInterceptorService) {}
+  constructor(
+    private http: HttpClient,
+    private httpRequestInterceptor: PoHttpRequestInterceptorService
+  ) {}
 
   ngOnDestroy(): void {
     this.subscription.unsubscribe();

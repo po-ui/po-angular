@@ -81,9 +81,7 @@
         class="list-container"
         p-property-title="name"
         [p-literals]="listViewLiterals"
-        [p-items]="[
-          { name: 'Painel de Controle' },
-        ]"
+        [p-items]="[{ name: 'Painel de Controle' }]"
         [p-actions]="listViewAction"
       >
         <ng-template p-list-view-content-template>
@@ -970,7 +968,7 @@
               [p-options]="[
                 { label: 'Primário', value: 1 },
                 { label: 'Secundário', value: 2 },
-                { label: 'Terciário', value: 3 },
+                { label: 'Terciário', value: 3 }
               ]"
               [ngModel]="kindButton"
               (p-change)="changeKindButton($event)"
@@ -2621,7 +2619,7 @@
               [p-options]="[
                 { label: 'Option 1', value: '1' },
                 { label: 'Option 2', value: '2' },
-                { label: 'Option 3', value: '3' },
+                { label: 'Option 3', value: '3' }
               ]"
               p-placeholder="Customize seu po-multiselect"
             ></po-multiselect>
@@ -2635,7 +2633,7 @@
               [p-options]="[
                 { label: 'Option 1', value: '1' },
                 { label: 'Option 2', value: '2' },
-                { label: 'Option 3', value: '3' },
+                { label: 'Option 3', value: '3' }
               ]"
               p-placeholder="Customize seu po-multiselect"
             ></po-multiselect>
@@ -2776,7 +2774,7 @@
               [p-options]="[
                 { label: 'Option 1', value: '1' },
                 { label: 'Option 2', value: '2' },
-                { label: 'Option 3', value: '3' },
+                { label: 'Option 3', value: '3' }
               ]"
               p-placeholder="Customize seu po-combo"
             ></po-combo>
@@ -2790,7 +2788,7 @@
               [p-options]="[
                 { label: 'Option 1', value: '1' },
                 { label: 'Option 2', value: '2' },
-                { label: 'Option 3', value: '3' },
+                { label: 'Option 3', value: '3' }
               ]"
               p-placeholder="Customize seu po-combo"
             ></po-combo>
@@ -3154,7 +3152,7 @@
                 { label: 'Success', value: 3 },
                 { label: 'Warning', value: 4 },
                 { label: 'Neutral', value: 5 },
-                { label: 'Removable', value: 6 },
+                { label: 'Removable', value: 6 }
               ]"
               [ngModel]="tagSelected"
               (p-change)="changeTag($event)"
@@ -3406,7 +3404,7 @@
     </div>
 
     <h3>
-      <a href="https://po-ui.io/guides/colors-customization" target="_blank">Customizando cores do tema padrão</a>
+      <a href="https://po-ui.io/guides/theme-customization" target="_blank">Customizando cores do tema padrão</a>
     </h3>
 
     <hr />

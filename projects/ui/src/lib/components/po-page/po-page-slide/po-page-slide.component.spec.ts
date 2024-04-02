@@ -1,4 +1,4 @@
-import { Component, DebugElement, ViewChild } from '@angular/core';
+import { Component, DebugElement, ElementRef, ViewChild } from '@angular/core';
 import { ComponentFixture, fakeAsync, flush, TestBed, tick, waitForAsync } from '@angular/core/testing';
 import { FormsModule } from '@angular/forms';
 import { By } from '@angular/platform-browser';
@@ -31,15 +31,13 @@ describe('PoPageSlideComponent', () => {
   let debugElement: DebugElement;
   let element: any;
 
-  beforeEach(
-    waitForAsync(() => {
-      TestBed.configureTestingModule({
-        imports: [FormsModule, NoopAnimationsModule, PoFieldModule],
-        declarations: [PoPageSlideComponent, TestComponent],
-        providers: [PoActiveOverlayService]
-      }).compileComponents();
-    })
-  );
+  beforeEach(waitForAsync(() => {
+    TestBed.configureTestingModule({
+      imports: [FormsModule, NoopAnimationsModule, PoFieldModule],
+      declarations: [PoPageSlideComponent, TestComponent],
+      providers: [PoActiveOverlayService]
+    }).compileComponents();
+  }));
 
   beforeEach(() => {
     fixture = TestBed.createComponent(PoPageSlideComponent);
@@ -187,7 +185,7 @@ describe('PoPageSlideComponent', () => {
 
     tick(100);
 
-    const pageSlideContent = debugElement.query(By.css('.po-page-slide-content'));
+    const pageSlideContent = debugElement.query(By.css('button'));
     expect(document.activeElement).toEqual(pageSlideContent.nativeElement);
 
     flush();
@@ -202,7 +200,7 @@ describe('PoPageSlideComponent', () => {
 
     tick(100);
 
-    const input = fixtureTest.debugElement.query(By.css('input[name="username"]'));
+    const input = fixtureTest.debugElement.query(By.css('button'));
     expect(document.activeElement).toEqual(input.nativeElement);
 
     flush();
@@ -239,5 +237,19 @@ describe('PoPageSlideComponent', () => {
 
     component.close();
     expect(component['sourceElement'].focus).toHaveBeenCalled();
+  });
+
+  it('should have pageContent.nativeElement defined', () => {
+    const div = document.createElement('div');
+    div.setAttribute('tabindex', '-1');
+
+    const mockElementRef = {
+      nativeElement: div
+    } as ElementRef;
+
+    component.pageContent = mockElementRef;
+    component['initFocus']();
+
+    expect(component.pageContent.nativeElement).toBeDefined();
   });
 });
