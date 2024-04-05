@@ -11,10 +11,12 @@ import {
   DoCheck,
   ElementRef,
   IterableDiffers,
+  OnChanges,
   OnDestroy,
   OnInit,
   QueryList,
   Renderer2,
+  SimpleChanges,
   TemplateRef,
   ViewChild,
   ViewChildren,
@@ -102,7 +104,10 @@ import { PoTableService } from './services/po-table.service';
   templateUrl: './po-table.component.html',
   providers: [PoDateService]
 })
-export class PoTableComponent extends PoTableBaseComponent implements AfterViewInit, DoCheck, OnDestroy, OnInit {
+export class PoTableComponent
+  extends PoTableBaseComponent
+  implements AfterViewInit, DoCheck, OnDestroy, OnInit, OnChanges
+{
   @ContentChild(PoTableRowTemplateDirective, { static: true }) tableRowTemplate: PoTableRowTemplateDirective;
   @ContentChild(PoTableCellTemplateDirective) tableCellTemplate: PoTableCellTemplateDirective;
 
@@ -126,6 +131,7 @@ export class PoTableComponent extends PoTableBaseComponent implements AfterViewI
   @ViewChild('filterInput') filterInput: ElementRef;
   @ViewChild('poSearchInput', { read: ElementRef, static: true }) poSearchInput: ElementRef;
   @ViewChild(CdkVirtualScrollViewport, { static: false }) public viewPort: CdkVirtualScrollViewport;
+  @ViewChild('poTableTbody') poTableTbody: ElementRef;
 
   poNotification = inject(PoNotificationService);
 
@@ -172,6 +178,9 @@ export class PoTableComponent extends PoTableBaseComponent implements AfterViewI
 
   private clickListener: () => void;
   private resizeListener: () => void;
+
+  // Propriedades para rolagem automática
+  scrollInterval: any;
 
   @ViewChild('columnManagerTarget') set columnManagerTarget(value: ElementRef) {
     this._columnManagerTarget = value;
@@ -291,6 +300,7 @@ export class PoTableComponent extends PoTableBaseComponent implements AfterViewI
   }
 
   ngOnInit() {
+    this.startAutoScroll();
     this.idRadio = `po-radio-${uuid()}`;
   }
 
@@ -302,10 +312,50 @@ export class PoTableComponent extends PoTableBaseComponent implements AfterViewI
   }
 
   ngAfterViewInit() {
+    console.log('AutoScroll on Init:', this.autoScroll);
+    if (this.autoScroll) {
+      this.startAutoScroll();
+    }
     this.initialized = true;
     this.changeHeaderWidth();
     this.changeSizeLoading();
     this.applyFixedColumns();
+  }
+
+  // Iniciar a rolagem automática
+  startAutoScroll(): void {
+    if (!this.autoScroll) {
+      console.log('A rolagem automática está desabilitada.');
+      return;
+    }
+    this.stopAutoScroll(); // apenas um intervalo esteja em execução
+
+    let itemsPerScroll = 3; //  rolar um item de cada vez
+    let currentScrollIndex = 0; // Inicia la em cima
+
+    this.scrollInterval = setInterval(() => {
+      const itemsLength = this.viewPort.getDataLength();
+
+      // Verifica se ainda há itens suficientes à frente para rolar
+      if (currentScrollIndex + itemsPerScroll < itemsLength) {
+        currentScrollIndex += itemsPerScroll;
+      } else {
+        currentScrollIndex = 0; // Reseta para começar do topo novamente se atingir o fim
+      }
+
+      // Usa 'smooth' para uma transição mais suave e lenta
+      this.viewPort.scrollToIndex(currentScrollIndex, 'smooth');
+
+      console.log(`Rolando para o índice: ${currentScrollIndex}, de ${itemsLength} itens totais.`);
+    }, 900); // tempo para trocar
+  }
+
+  stopAutoScroll(): void {
+    if (this.scrollInterval) {
+      clearInterval(this.scrollInterval);
+      this.scrollInterval = null;
+      console.log('Rolagem automática parada.');
+    }
   }
 
   showMoreInfiniteScroll({ target }): void {
@@ -332,6 +382,7 @@ export class PoTableComponent extends PoTableBaseComponent implements AfterViewI
   ngOnDestroy() {
     this.removeListeners();
     this.subscriptionService?.unsubscribe();
+    this.stopAutoScroll();
   }
 
   /**

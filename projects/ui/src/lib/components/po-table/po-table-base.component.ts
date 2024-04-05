@@ -156,6 +156,17 @@ export abstract class PoTableBaseComponent implements OnChanges, OnDestroy {
    *
    * @description
    *
+   * teste do autoscroll jorge
+   *
+   * @default `false`
+   */
+  @Input({ alias: 'p-auto-scroll', transform: convertToBoolean }) autoScroll: boolean = false;
+
+  /**
+   * @optional
+   *
+   * @description
+   *
    * Permite que o gerenciador de colunas, responsável pela definição de quais colunas serão exibidas, seja escondido.
    *
    * @default `false`
