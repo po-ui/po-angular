@@ -10,10 +10,6 @@ All notable changes to this project will be documented in this file. See [standa
 * **dynamic-edit:** inclui p-notification-type ([1d6a166](https://github.com/po-ui/po-angular/commit/1d6a166c2b7fb0c6b9fc0cec616c85f2f2335ebc))
 
 
-### Bug Fixes
-
-* **schematics:** corrige comando generate em projetos standalone ([ca27f05](https://github.com/po-ui/po-angular/commit/ca27f05489b3a273686a59b1b79a03eb22201524))
-
 ### [17.3.0](https://github.com/po-ui/po-angular/compare/v17.2.0...v17.3.0) (2024-04-01)
 
 ### Bug Fixes
