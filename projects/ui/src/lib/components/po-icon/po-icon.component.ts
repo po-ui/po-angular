@@ -1,5 +1,7 @@
 import { Input, TemplateRef, Component, ChangeDetectionStrategy } from '@angular/core';
 
+import { PoIconService } from './po-icon.service';
+
 /**
  * @docsPrivate
  *
@@ -18,7 +20,7 @@ export class PoIconComponent {
   class: string;
   private _icon: string | TemplateRef<void>;
 
-  constructor() {}
+  constructor(private poIconService: PoIconService) {}
 
   /**
    * Define o ícone a ser exibido.
@@ -43,6 +45,13 @@ export class PoIconComponent {
    */
   @Input('p-icon') set icon(value: string | TemplateRef<void>) {
     if (typeof value === 'string') {
+      const result = this.poIconService.icons[value] || null;
+
+      if (result) {
+        this.class = result;
+        return;
+      }
+
       this.addClasses(value);
     } else if (value instanceof TemplateRef) {
       this._icon = value;
