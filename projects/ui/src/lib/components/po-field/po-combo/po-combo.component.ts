@@ -480,21 +480,12 @@ export class PoComboComponent extends PoComboBaseComponent implements AfterViewI
     }
   }
 
-  cleanListbox() {
-    this.updateSelectedValue(null);
-    this.options.map(option => (option.selected = false));
-  }
-
   getInputValue() {
     return this.inputEl.nativeElement.value;
   }
 
   setInputValue(value: string): void {
     this.inputEl.nativeElement.value = value;
-
-    if (value === null) {
-      this.cleanListbox();
-    }
   }
 
   wasClickedOnToggle(event: MouseEvent): void {
