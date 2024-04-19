@@ -14,14 +14,14 @@ describe('PoToolbarActionsComponent:', () => {
   });
 
   describe('Properties:', () => {
-    it('actionsIcon: should update property `p-actions-icon` with `po-icon-more` if invalid values', () => {
+    it('actionsIcon: should update property `p-actions-icon` with `ICON_MORE` if invalid values', () => {
       const invalidValues = [undefined, null, NaN, {}, 0.1, false, true];
 
-      expectPropertiesValues(component, 'actionsIcon', invalidValues, 'po-icon-more');
+      expectPropertiesValues(component, 'actionsIcon', invalidValues, 'ICON_MORE');
     });
 
     it('actionsIcon: should update property `p-actions-icon` with valid values', () => {
-      const validValues = ['po-icon-clock', 'po-icon-cut', 'po-icon-exit'];
+      const validValues = ['ICON_CLOCK', 'ICON_CUT', 'ICON_EXIT'];
 
       expectPropertiesValues(component, 'actionsIcon', validValues, validValues);
     });

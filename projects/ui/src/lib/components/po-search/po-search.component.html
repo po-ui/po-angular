@@ -1,6 +1,6 @@
 <div class="po-search" [class.po-search-disabled]="disabled">
   <div *ngIf="type === 'action'" class="po-search-icon">
-    <po-icon [p-icon]="icon ? icon : 'po-icon-search'"></po-icon>
+    <po-icon [p-icon]="icon ? icon : 'ICON_SEARCH'"></po-icon>
   </div>
 
   <input
@@ -32,7 +32,7 @@
       (click)="clearSearch()"
       (keydown.enter)="clearSearch()"
     >
-      <po-icon p-icon="po-icon-clear-content"></po-icon>
+      <po-icon p-icon="ICON_CLEAR_CONTENT"></po-icon>
     </button>
 
     <button
@@ -44,7 +44,7 @@
       (keydown.enter)="onSearchChange(poSearchInput.value, true, true)"
       [disabled]="disabled"
     >
-      <po-icon [p-icon]="icon ? icon : 'po-icon-search'"> </po-icon>
+      <po-icon [p-icon]="icon ? icon : 'ICON_SEARCH'"> </po-icon>
     </button>
   </div>
 </div>

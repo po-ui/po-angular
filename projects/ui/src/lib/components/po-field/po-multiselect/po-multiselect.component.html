@@ -40,12 +40,13 @@
       ></po-tag>
 
       <div class="po-field-icon-container-right">
-        <span
+        <po-icon
+          p-icon="{{ dropdownIcon }}"
           #iconElement
-          class="po-icon po-field-icon {{ dropdownIcon }} {{ disabled ? 'po-icon-input-disabled' : 'po-icon-input' }}"
+          class="po-field-icon {{ disabled ? 'po-icon-input-disabled' : 'po-icon-input' }}"
           [ngClass]="disabled ? 'po-field-icon-disabled' : ''"
         >
-        </span>
+        </po-icon>
       </div>
     </div>
   </div>

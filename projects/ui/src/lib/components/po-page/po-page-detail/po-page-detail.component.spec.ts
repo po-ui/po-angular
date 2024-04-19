@@ -91,7 +91,7 @@ describe('PoPageDetailComponent:', () => {
     it(`hasEditFn: should return 'po-icon-delete' if does't have a edit action and property is 'icon'`, () => {
       component.edit.observers.length = 0;
 
-      expect(component.hasEditFn('icon')).toBe('po-icon-delete');
+      expect(component.hasEditFn('icon')).toBe('ICON_DELETE');
     });
 
     it(`hasEditFn: should return 'secondary' if have a edit action and property is 'type'`, () => {
@@ -137,7 +137,7 @@ describe('PoPageDetailComponent:', () => {
       component.remove.observers.length = 0;
       component.edit.observers.length = 0;
 
-      expect(component.hasEditOrRemoveFn('icon')).toBe('po-icon-arrow-left');
+      expect(component.hasEditOrRemoveFn('icon')).toBe('ICON_ARROW_LEFT');
     });
 
     it(`hasEditOrRemoveFn: should return 'secondary' if have a edit action, doesn't have remove action

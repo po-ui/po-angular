@@ -62,7 +62,7 @@ const providers = [
 })
 export class PoEmailComponent extends PoInputGeneric implements AfterViewInit, OnDestroy {
   id = `po-email[${uuid()}]`;
-  icon = 'po-icon-mail';
+  icon = 'ICON_MAIL';
 
   type = 'email';
 

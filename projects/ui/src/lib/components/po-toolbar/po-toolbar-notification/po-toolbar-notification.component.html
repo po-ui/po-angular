@@ -1,5 +1,5 @@
 <div class="po-toolbar-notification po-clickable" (click)="popup.toggle()">
-  <span #notification class="po-icon po-icon-notification po-toolbar-icon"></span>
+  <po-icon #notification p-icon="ICON_NOTIFICATION" class="po-toolbar-icon"></po-icon>
   <div *ngIf="notificationNumber" class="po-toolbar-notification-badge">
     {{ notificationNumber }}
   </div>

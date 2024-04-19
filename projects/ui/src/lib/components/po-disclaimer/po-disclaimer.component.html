@@ -13,17 +13,16 @@
         {{ getLabel() }}
       </span>
     </div>
-
-    <span
+    <po-icon
+      p-icon="ICON_CLOSE"
       *ngIf="hideClose === false"
       [attr.aria-label]="setAriaLabel()"
       [attr.role]="!hideClose ? 'button' : ''"
-      class="po-disclaimer-remove po-icon po-icon-close po-clickable"
+      class="po-disclaimer-remove po-clickable"
       tabindex="0"
       [class.po-disclaimer-remove-danger]="type === 'danger'"
       (click)="close()"
       (keydown)="onKeyPress($event)"
-    >
-    </span>
+    ></po-icon>
   </div>
 </div>

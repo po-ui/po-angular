@@ -153,7 +153,7 @@ export class ToolsDynamicFormComponent {
   };
 
   readonly pageActions: Array<PoPageAction> = [
-    { label: 'Importar JSON', icon: 'po-icon-upload', action: () => this.importJsonModal.open() },
+    { label: 'Importar JSON', icon: 'ICON_UPLOAD', action: () => this.importJsonModal.open() },
     { label: 'Visualizar JSON', disabled: () => !this.fields.length, action: () => this.viewJsonModal.open() },
     { label: 'Dynamic View', url: '/tools/dynamic-view' }
   ];
