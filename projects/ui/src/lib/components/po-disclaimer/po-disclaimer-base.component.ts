@@ -31,6 +31,10 @@ export class PoDisclaimerBaseComponent {
   /** Nome da propriedade vinculada à este po-disclaimer. */
   @Input('p-property') property?: string;
 
+  @Input('p-last-disclaimer') lastDisclaimer: boolean = false;
+
+  @Input('p-tooltip-position') tooltipPosition: string = 'bottom';
+
   /**
    * @optional
    *
@@ -40,6 +44,8 @@ export class PoDisclaimerBaseComponent {
    * Para este evento será passado como parâmetro um objeto com value, label e property.
    */
   @Output('p-close-action') closeAction: EventEmitter<any> = new EventEmitter<any>();
+
+  @Output('p-click-number') clickNumber: EventEmitter<any> = new EventEmitter<any>();
 
   literals: any;
   showDisclaimer = true;

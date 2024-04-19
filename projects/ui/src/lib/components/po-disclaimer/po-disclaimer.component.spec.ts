@@ -102,10 +102,19 @@ describe('PoDisclaimerComponent:', () => {
       const expectedValue = component.getWidthDisclaimer();
       expect(expectedValue).toBeTruthy();
     });
+
     it('getWidthDisclaimer: should return `false` when disclaimer-label offsetWidth < 201', () => {
       spyOnProperty(component.disclaimerContainer.nativeElement, 'offsetWidth').and.returnValue(50);
       const expectedValue = component.getWidthDisclaimer();
       expect(expectedValue).toBeFalsy();
+    });
+
+    it('emitLastDisclaimer: should emit last disclaimer', () => {
+      spyOn(component.clickNumber, 'emit');
+
+      component.emitLastDisclaimer(true);
+
+      expect(component.clickNumber.emit).toHaveBeenCalled();
     });
   });
 
