@@ -4,9 +4,10 @@ import { RouterModule } from '@angular/router';
 
 import { PoNavbarItemNavigationComponent } from './po-navbar-item-navigation.component';
 import { PoNavbarItemNavigationIconComponent } from './po-navbar-item-navigation-icon/po-navbar-item-navigation-icon.component';
+import { PoIconModule } from '../../po-icon';
 
 @NgModule({
-  imports: [CommonModule, RouterModule],
+  imports: [CommonModule, RouterModule, PoIconModule],
   declarations: [PoNavbarItemNavigationComponent, PoNavbarItemNavigationIconComponent],
   exports: [PoNavbarItemNavigationComponent]
 })

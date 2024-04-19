@@ -320,7 +320,7 @@ describe('PoUploadComponent:', () => {
       const fileStatus = PoUploadStatus.Uploaded;
       const expectedValue = {
         text: () => component.literals.sentWithSuccess,
-        icon: 'po-icon-ok'
+        icon: 'ICON_OK'
       };
 
       const infoByUploadStatus = component.infoByUploadStatus[fileStatus];

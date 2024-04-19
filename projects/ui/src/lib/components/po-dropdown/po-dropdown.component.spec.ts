@@ -120,7 +120,7 @@ describe('PoDropdownComponent: ', () => {
       expect(component['hideDropdown']).toHaveBeenCalled();
     });
 
-    it(`hideDropdown: should set icon with 'po-icon-arrow-down', call 'removeListeners', set 'open' to 'false'
+    it(`hideDropdown: should set icon with 'ICON_ARROW_DOWN', call 'removeListeners', set 'open' to 'false'
     and call 'popupRef.close'.`, () => {
       const fakeThis = {
         icon: undefined,
@@ -136,7 +136,7 @@ describe('PoDropdownComponent: ', () => {
 
       component[`hideDropdown`].call(fakeThis);
 
-      expect(fakeThis.icon).toBe('po-icon-arrow-down');
+      expect(fakeThis.icon).toBe('ICON_ARROW_DOWN');
       expect(fakeThis.removeListeners).toHaveBeenCalled();
       expect(fakeThis.popupRef.close).toHaveBeenCalled();
       expect(fakeThis.open).toBe(false);
@@ -236,7 +236,7 @@ describe('PoDropdownComponent: ', () => {
       });
     });
 
-    it(`showDropdown: should set icon with 'po-icon-arrow-up', call 'initializeListeners' set 'open' to 'false'
+    it(`showDropdown: should set icon with 'ICON_ARROW_UP', call 'initializeListeners' set 'open' to 'false'
     and call 'popupRef.close'.`, () => {
       const fakeThis = {
         icon: undefined,
@@ -252,7 +252,7 @@ describe('PoDropdownComponent: ', () => {
 
       component[`showDropdown`].call(fakeThis);
 
-      expect(fakeThis.icon).toBe('po-icon-arrow-up');
+      expect(fakeThis.icon).toBe('ICON_ARROW_UP');
       expect(fakeThis.initializeListeners).toHaveBeenCalled();
       expect(fakeThis.popupRef.open).toHaveBeenCalled();
       expect(fakeThis.open).toBe(true);

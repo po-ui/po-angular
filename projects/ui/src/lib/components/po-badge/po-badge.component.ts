@@ -99,15 +99,15 @@ export class PoBadgeComponent extends PoBadgeBaseComponent implements OnInit, On
       if (['positive', 'negative', 'warning', 'disabled'].includes(this.status)) {
         switch (this.status) {
           case 'positive':
-            this.badgeIcon = 'po-icon-ok';
+            this.badgeIcon = 'ICON_OK';
             break;
 
           case 'negative':
-            this.badgeIcon = 'po-icon-minus';
+            this.badgeIcon = 'ICON_MINUS';
             break;
 
           case 'warning':
-            this.badgeIcon = 'po-icon-warning';
+            this.badgeIcon = 'ICON_WARNING';
             break;
         }
       }

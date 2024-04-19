@@ -108,7 +108,7 @@ export class PoComboComponent extends PoComboBaseComponent implements AfterViewI
   @ViewChild('inp', { read: ElementRef, static: true }) inputEl: ElementRef;
   @ViewChild('poListbox') poListbox: PoListBoxComponent;
 
-  comboIcon: string = 'po-icon-arrow-down';
+  comboIcon: string = 'ICON_ARROW_DOWN';
   comboOpen: boolean = false;
   differ: any;
   id = `po-combo[${uuid()}]`;
@@ -579,7 +579,7 @@ export class PoComboComponent extends PoComboBaseComponent implements AfterViewI
 
     this.changeDetector.detectChanges();
 
-    this.comboIcon = 'po-icon-arrow-down';
+    this.comboIcon = 'ICON_ARROW_DOWN';
 
     this.removeListeners();
 
@@ -630,7 +630,7 @@ export class PoComboComponent extends PoComboBaseComponent implements AfterViewI
 
     this.changeDetector.detectChanges();
 
-    this.comboIcon = 'po-icon-arrow-up';
+    this.comboIcon = 'ICON_ARROW_UP';
 
     this.initializeListeners();
 

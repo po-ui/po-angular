@@ -29,11 +29,11 @@ import { PoPageEditBaseComponent } from './po-page-edit-base.component';
 export class PoPageEditComponent extends PoPageEditBaseComponent {
   getIcon(icon: string): string {
     if (icon === 'cancel') {
-      return this.isPrimaryAction('cancel') ? 'po-icon-close' : '';
+      return this.isPrimaryAction('cancel') ? 'ICON_CLOSE' : '';
     }
 
     if (icon === 'saveNew') {
-      return this.isPrimaryAction('saveNew') ? 'po-icon-ok' : '';
+      return this.isPrimaryAction('saveNew') ? 'ICON_OK' : '';
     }
 
     return '';

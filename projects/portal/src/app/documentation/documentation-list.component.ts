@@ -20,8 +20,8 @@ export class DocumentationListComponent implements OnInit {
   private _items: Array<Documentation> = [];
 
   private _listActions: Array<PoListViewAction> = [
-    { label: 'Documentação', action: this.viewDocumentation.bind(this), icon: 'po-icon-document-double' },
-    { label: 'Exemplos', action: this.viewSample.bind(this), icon: 'po-icon-light' }
+    { label: 'Documentação', action: this.viewDocumentation.bind(this), icon: 'ICON_DOCUMENT_DOUBLE' },
+    { label: 'Exemplos', action: this.viewSample.bind(this), icon: 'ICON_LIGHT' }
   ];
 
   constructor(

@@ -4,6 +4,7 @@ import { NgModule } from '@angular/core';
 
 import { PoContainerModule } from '../po-container/po-container.module';
 import { PoFieldModule } from '../po-field/po-field.module';
+import { PoIconModule } from '../po-icon/po-icon.module';
 
 import { PoTreeViewComponent } from './po-tree-view.component';
 import { PoTreeViewItemComponent } from './po-tree-view-item/po-tree-view-item.component';
@@ -43,6 +44,6 @@ import { PoTreeViewItemHeaderComponent } from './po-tree-view-item-header/po-tre
 @NgModule({
   declarations: [PoTreeViewComponent, PoTreeViewItemComponent, PoTreeViewItemHeaderComponent],
   exports: [PoTreeViewComponent],
-  imports: [CommonModule, FormsModule, PoContainerModule, PoFieldModule]
+  imports: [CommonModule, FormsModule, PoContainerModule, PoFieldModule, PoIconModule]
 })
 export class PoTreeViewModule {}

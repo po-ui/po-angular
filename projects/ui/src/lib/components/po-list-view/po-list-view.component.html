@@ -77,12 +77,9 @@
             </div>
 
             <div *ngIf="showPopupActions" class="po-list-view-more-actions">
-              <span
-                #popupTarget
-                class="po-icon po-icon-more po-list-view-more-icon po-clickable"
-                (click)="togglePopup(item, popupTarget)"
-              >
-              </span>
+              <div #popupTarget class="po-list-view-more-icon po-clickable" (click)="togglePopup(item, popupTarget)">
+                <po-icon p-icon="ICON_MORE"></po-icon>
+              </div>
             </div>
           </div>
 

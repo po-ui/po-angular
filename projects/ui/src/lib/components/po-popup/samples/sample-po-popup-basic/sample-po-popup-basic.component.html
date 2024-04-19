@@ -1,3 +1,2 @@
-<span #target class="po-clickable po-icon po-icon-help" (click)="popup.toggle()"> </span>
-
+<po-icon p-icon="ICON_HELP" #target class="po-clickable" (click)="popup.toggle()"> </po-icon>
 <po-popup #popup [p-actions]="[{ label: 'PO Popup' }]" [p-target]="target"> </po-popup>

@@ -900,7 +900,7 @@ describe('PoMultiselectComponent:', () => {
       expect(adjustPositionSpy).toHaveBeenCalledWith(poMultiselectContainerPositionDefault);
     });
 
-    it(`close: should set 'dropdownIcon' as 'po-icon-arrow-down', 'dropdownOpen' as 'false',
+    it(`close: should set 'dropdownIcon' as 'ICON_ARROW_DOWN', 'dropdownOpen' as 'false',
       call 'dropdown.controlVisibility' with 'false', 'setVisibleOptionsDropdown' with 'options' and 'removeListeners'.`, () => {
       component.dropdownIcon = undefined;
       component.dropdownOpen = undefined;
@@ -911,7 +911,7 @@ describe('PoMultiselectComponent:', () => {
 
       component['close']();
 
-      expect(component.dropdownIcon).toBe('po-icon-arrow-down');
+      expect(component.dropdownIcon).toBe('ICON_ARROW_DOWN');
       expect(component.dropdownOpen).toBe(false);
       expect(controlVisibilitySpy).toHaveBeenCalledWith(false);
       expect(setVisibleOptionsDropdownSpy).toHaveBeenCalledWith(component.options);
@@ -968,7 +968,7 @@ describe('PoMultiselectComponent:', () => {
       expect(adjustContainerPositionSpy).toHaveBeenCalled();
     });
 
-    it(`open: should set 'dropdownIcon' as 'po-icon-arrow-up', 'dropdownOpen' as 'true',
+    it(`open: should set 'dropdownIcon' as 'ICON_ARROW_UP', 'dropdownOpen' as 'true',
       call 'dropdown.controlVisibility' with 'true', 'setVisibleOptionsDropdown' with 'options',
       'initializeListeners', 'scrollToSelectedOptions', 'changeDetector.detectChanges' and 'setPositionDropdown'.`, () => {
       component.dropdownIcon = undefined;
@@ -983,7 +983,7 @@ describe('PoMultiselectComponent:', () => {
 
       component['open']();
 
-      expect(component.dropdownIcon).toBe('po-icon-arrow-up');
+      expect(component.dropdownIcon).toBe('ICON_ARROW_UP');
       expect(component.dropdownOpen).toBe(true);
       expect(controlVisibilitySpy).toHaveBeenCalledWith(true);
       expect(setVisibleOptionsDropdownSpy).toHaveBeenCalledWith(component.options);

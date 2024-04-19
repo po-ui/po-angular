@@ -11,7 +11,7 @@
     [ngClass]="{ 'po-dropdown-button-disabled': disabled, 'po-dropdown-button-open': open }"
   >
     {{ label }}
-    <div class="po-dropdown-icon po-icon {{ icon }}"></div>
+    <po-icon class="po-dropdown-icon" [p-icon]="icon"></po-icon>
   </div>
 </div>
 

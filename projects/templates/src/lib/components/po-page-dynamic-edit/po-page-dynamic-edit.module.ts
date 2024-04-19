@@ -8,6 +8,7 @@ import {
   PoDividerModule,
   PoDynamicModule,
   PoGridModule,
+  PoIconModule,
   PoPageModule,
   PoWidgetModule
 } from '@po-ui/ng-components';
@@ -25,11 +26,11 @@ import { PoPageDynamicModule } from '../../services/po-page-dynamic/po-page-dyna
     CommonModule,
     FormsModule,
     RouterModule,
-
     PoButtonModule,
     PoDividerModule,
     PoDynamicModule,
     PoGridModule,
+    PoIconModule,
     PoPageModule,
     PoWidgetModule,
     PoPageDynamicModule

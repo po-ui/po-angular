@@ -4,6 +4,7 @@ import { NgModule } from '@angular/core';
 import { RouterModule } from '@angular/router';
 
 import { PoButtonModule } from '../po-button/po-button.module';
+import { PoIconModule } from '../po-icon/po-icon.module';
 import { PoPopupModule } from '../po-popup/po-popup.module';
 import { PoCheckboxModule } from './../po-field/po-checkbox/po-checkbox.module';
 
@@ -49,6 +50,7 @@ import { PoContainerModule } from '../po-container/po-container.module';
     FormsModule,
     RouterModule,
     PoButtonModule,
+    PoIconModule,
     PoPopupModule,
     PoCheckboxModule,
     PoContainerModule

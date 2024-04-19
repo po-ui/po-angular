@@ -3,7 +3,7 @@ import { FormsModule } from '@angular/forms';
 import { NgModule } from '@angular/core';
 import { RouterModule } from '@angular/router';
 
-import { PoDynamicModule, PoModalModule, PoPageModule, PoWidgetModule } from '@po-ui/ng-components';
+import { PoDynamicModule, PoIconModule, PoModalModule, PoPageModule, PoWidgetModule } from '@po-ui/ng-components';
 
 import { PoPageDynamicDetailComponent } from './po-page-dynamic-detail.component';
 import { PoPageDynamicModule } from '../../services/po-page-dynamic/po-page-dynamic.module';
@@ -18,8 +18,8 @@ import { PoPageDynamicModule } from '../../services/po-page-dynamic/po-page-dyna
     CommonModule,
     FormsModule,
     RouterModule,
-
     PoDynamicModule,
+    PoIconModule,
     PoModalModule,
     PoPageModule,
     PoWidgetModule,

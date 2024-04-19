@@ -4,7 +4,7 @@ import { isTypeof } from '../../../utils/util';
 
 import { PoToolbarAction } from '../po-toolbar-action.interface';
 
-const poToolbarActionsIconDefault = 'po-icon-more';
+const poToolbarActionsIconDefault = 'ICON_MORE';
 
 /**
  * @docsPrivate

@@ -36,12 +36,13 @@
             </div>
 
             <div class="po-font-title po-lg-2">
-              <span class="po-icon po-icon-upload-cloud po-clickable" (click)="upload.selectFiles()"></span>
-              <span
-                class="po-icon po-icon-clear-content po-clickable"
+              <po-icon p-icon="ICON_UPLOAD-CLOUD" class="po-clickable" (click)="upload.selectFiles()"></po-icon>
+              <po-icon
+                p-icon="ICON_CLEAR_CONTENT"
+                class="po-clickable"
                 [ngClass]="{ 'po-invisible': project.length < 1 }"
                 (click)="upload.clear()"
-              ></span>
+              ></po-icon>
             </div>
           </div>
 

@@ -56,7 +56,7 @@ export class PoDropdownComponent extends PoDropdownBaseComponent {
   }
 
   private hideDropdown() {
-    this.icon = 'po-icon-arrow-down';
+    this.icon = 'ICON_ARROW_DOWN';
     this.removeListeners();
     this.popupRef.close();
     this.open = false;
@@ -99,7 +99,7 @@ export class PoDropdownComponent extends PoDropdownBaseComponent {
   }
 
   private showDropdown() {
-    this.icon = 'po-icon-arrow-up';
+    this.icon = 'ICON_ARROW_UP';
     this.initializeListeners();
     this.popupRef.open();
     this.open = true;

@@ -6,13 +6,14 @@ import { PoStepperCircleComponent } from './po-stepper-circle/po-stepper-circle.
 import { PoStepperComponent } from './po-stepper.component';
 import { PoStepperLabelComponent } from './po-stepper-label/po-stepper-label.component';
 import { PoStepperStepComponent } from './po-stepper-step/po-stepper-step.component';
+import { PoIconModule } from '../po-icon';
 
 /**
  * @description
  * Módulo do componente po-stepper
  */
 @NgModule({
-  imports: [CommonModule],
+  imports: [CommonModule, PoIconModule],
   declarations: [
     PoStepComponent,
     PoStepperCircleComponent,
