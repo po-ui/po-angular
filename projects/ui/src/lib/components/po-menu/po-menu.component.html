@@ -2,7 +2,7 @@
 
 <div>
   <div class="po-menu-mobile po-clickable" (click)="toggleMenuMobile()">
-    <po-icon p-icon="po-icon-menu"></po-icon>
+    <po-icon p-icon="ICON_MENU"></po-icon>
   </div>
 
   <div class="po-menu" [attr.aria-expanded]="!collapsed" [ngClass]="{ 'po-menu-animation': mobileOpened }">
@@ -35,7 +35,7 @@
               <ul class="po-menu-list" role="menu">
                 <li *ngIf="noData" class="po-menu-list-item" role="presentation">
                   <po-menu-item
-                    p-icon="po-icon-info"
+                    p-icon="ICON_INFO"
                     p-type="noData"
                     [p-level]="1"
                     [p-label]="literals.itemNotFound"
@@ -81,7 +81,7 @@
       >
         <span *ngIf="enableCollapseButton" aria-hidden="true">{{ literals.close }}</span>
 
-        <po-icon [p-icon]="enableCollapse ? 'po-icon-menu-open' : 'po-icon-menu-close'"></po-icon>
+        <po-icon [p-icon]="enableCollapse ? 'ICON_MENU_OPEN' : 'ICON_MENU_CLOSE'"></po-icon>
       </button>
     </div>
   </div>

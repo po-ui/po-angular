@@ -46,7 +46,7 @@ export class SamplePoDialogCancelCreditCardComponent implements OnDestroy, OnIni
     this.action = [
       {
         label: 'Cancel',
-        icon: 'po-icon po-icon-delete',
+        icon: 'ICON_DELETE',
         action: this.openConfirmDialog.bind(this),
         disabled: true
       }

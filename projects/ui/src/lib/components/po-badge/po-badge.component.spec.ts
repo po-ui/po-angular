@@ -111,7 +111,7 @@ describe('PoBadgeComponent:', () => {
 
       component.switchIconStatus();
 
-      expect(component.badgeIcon).toBe('po-icon-ok');
+      expect(component.badgeIcon).toBe('ICON_OK');
     });
 
     it('switchIconStatus: should apply all icon negative if status is negative', () => {
@@ -120,7 +120,7 @@ describe('PoBadgeComponent:', () => {
 
       component.switchIconStatus();
 
-      expect(component.badgeIcon).toBe('po-icon-minus');
+      expect(component.badgeIcon).toBe('ICON_MINUS');
     });
 
     it('switchIconStatus: should apply all icon warning if status is warning', () => {
@@ -129,7 +129,7 @@ describe('PoBadgeComponent:', () => {
 
       component.switchIconStatus();
 
-      expect(component.badgeIcon).toBe('po-icon-warning');
+      expect(component.badgeIcon).toBe('ICON_WARNING');
     });
 
     it('switchIconStatus: should apply all icon disabled if status is disabled', () => {

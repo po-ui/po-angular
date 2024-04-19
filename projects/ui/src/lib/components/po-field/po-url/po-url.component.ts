@@ -56,7 +56,7 @@ import { PoInputGeneric } from '../po-input-generic/po-input-generic';
 })
 export class PoUrlComponent extends PoInputGeneric implements AfterViewInit, OnDestroy {
   id = `po-url[${uuid()}]`;
-  icon = 'po-icon-world';
+  icon = 'ICON_WORLD';
 
   type = 'url';
 

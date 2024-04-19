@@ -81,16 +81,16 @@ describe('PoPageEditComponent', () => {
   });
 
   describe('Methods:', () => {
-    it('getIcon: should return "po-icon-close" if icon is "cancel" and "cancel" is primary action', () => {
+    it('getIcon: should return "ICON_CLOSE" if icon is "cancel" and "cancel" is primary action', () => {
       spyOn(component, <any>'isPrimaryAction').and.returnValue(true);
 
-      expect(component.getIcon('cancel')).toBe('po-icon-close');
+      expect(component.getIcon('cancel')).toBe('ICON_CLOSE');
     });
 
-    it('getIcon: should return "po-icon-ok" if icon is "saveNew" and "saveNew" is primary action', () => {
+    it('getIcon: should return "ICON_OK" if icon is "saveNew" and "saveNew" is primary action', () => {
       spyOn(component, <any>'isPrimaryAction').and.returnValue(true);
 
-      expect(component.getIcon('saveNew')).toBe('po-icon-ok');
+      expect(component.getIcon('saveNew')).toBe('ICON_OK');
     });
 
     it('getIcon: should return a empty string if icon isn`t "saveNew" or "cancel"', () => {

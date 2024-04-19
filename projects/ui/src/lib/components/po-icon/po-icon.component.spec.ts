@@ -83,6 +83,60 @@ describe('PoIconComponent: ', () => {
         expect(component.class).toBe(expectedResult);
       });
     });
+
+    describe('processIcon', () => {
+      it('should add classes correctly for single icon', () => {
+        component['processIcon']('my-icon');
+        expect(component.class).toEqual('po-fonts-icon my-icon');
+      });
+
+      it('should add classes correctly for tokenized icons', () => {
+        component['processIcon']('ICON_OK');
+        expect(component.class).toEqual('po-icon po-icon-ok');
+      });
+    });
+
+    describe('processIconTokens', () => {
+      it('should return a string for single icon token', () => {
+        const result = component['processIconTokens']('ICON_OK');
+        expect(result).toEqual('po-icon po-icon-ok');
+      });
+
+      it('should return a string for multiple icon tokens', () => {
+        const result = component['processIconTokens']('ICON_ARROW_RIGHT po-breadcrumb-icon-arrow');
+        expect(result).toEqual('po-icon po-icon-arrow-right po-breadcrumb-icon-arrow');
+      });
+    });
+
+    describe('splitIconNames', () => {
+      it('should split icon names correctly', () => {
+        const result = component['splitIconNames']('icon1 icon2');
+        expect(result).toEqual(['icon1', 'icon2']);
+      });
+
+      it('should return a string if no space is found', () => {
+        const result = component['splitIconNames']('icon');
+        expect(result).toEqual('icon');
+      });
+    });
+
+    describe('getIcon', () => {
+      it('should return the icon name if it exists in the service', () => {
+        const iconName = 'ICON_BOOK';
+        const mockIconService = { icons: { ICON_BOOK: 'book' } };
+        component = new PoIconComponent(mockIconService as any);
+        const result = component['getIcon'](iconName);
+        expect(result).toEqual('po-fonts-icon book');
+      });
+
+      it('should return an empty string if the icon does not exist in the service', () => {
+        const iconName = 'non-existing-icon';
+        const mockIconService = { icons: { ICON_BOOK: 'book' } };
+        component = new PoIconComponent(mockIconService as any);
+        const result = component['getIcon'](iconName);
+        expect(result).toEqual('');
+      });
+    });
   });
 
   describe('Template:', () => {

@@ -1,5 +1,5 @@
-import { Input, TemplateRef, Component, ChangeDetectionStrategy } from '@angular/core';
-
+import { Input, TemplateRef, Component, ChangeDetectionStrategy, ViewEncapsulation } from '@angular/core';
+import { PoIconService } from './po-icon.service';
 /**
  * @docsPrivate
  *
@@ -12,13 +12,14 @@ import { Input, TemplateRef, Component, ChangeDetectionStrategy } from '@angular
 @Component({
   selector: 'po-icon',
   templateUrl: './po-icon.component.html',
-  changeDetection: ChangeDetectionStrategy.OnPush
+  changeDetection: ChangeDetectionStrategy.OnPush,
+  providers: [PoIconService]
 })
 export class PoIconComponent {
   class: string;
   private _icon: string | TemplateRef<void>;
 
-  constructor() {}
+  constructor(private poIconService: PoIconService) {}
 
   /**
    * Define o ícone a ser exibido.
@@ -43,7 +44,7 @@ export class PoIconComponent {
    */
   @Input('p-icon') set icon(value: string | TemplateRef<void>) {
     if (typeof value === 'string') {
-      this.addClasses(value);
+      this.processIcon(value);
     } else if (value instanceof TemplateRef) {
       this._icon = value;
     }
@@ -53,9 +54,46 @@ export class PoIconComponent {
     return this._icon;
   }
 
-  private addClasses(value: string) {
-    this.class = value.startsWith('po-icon-')
-      ? (this.class = `po-icon ${value}`)
-      : (this.class = `po-fonts-icon ${value}`);
+  private addClasses(value: string, iconToken: boolean = false) {
+    this.class = iconToken
+      ? value
+      : value.startsWith('po-icon-')
+        ? (this.class = `po-icon ${value}`)
+        : (this.class = `po-fonts-icon ${value}`);
+  }
+
+  private getIcon(iconName: string): string {
+    return this.poIconService.icons.hasOwnProperty(iconName)
+      ? this.poIconService.icons[iconName].startsWith('po-icon ')
+        ? this.poIconService.icons[iconName]
+        : 'po-fonts-icon ' + this.poIconService.icons[iconName]
+      : '';
+  }
+
+  private processIcon(icon: string) {
+    const iconToken = this.processIconTokens(icon);
+    if (iconToken !== '') {
+      this.addClasses(iconToken, true);
+    } else {
+      this.addClasses(icon);
+    }
+  }
+
+  private processIconTokens(value: string): string {
+    const iconTokens = this.splitIconNames(value);
+    let icon: string = '';
+
+    if (Array.isArray(iconTokens)) {
+      iconTokens.map(iconName => {
+        icon += this.getIcon(iconName) !== '' ? ' ' + this.getIcon(iconName) : icon !== '' ? ' ' + iconName : iconName;
+      });
+    } else {
+      icon = this.getIcon(iconTokens);
+    }
+    return icon.trim();
+  }
+
+  private splitIconNames(iconName: string): string | Array<string> {
+    return iconName.includes(' ') ? iconName.split(' ') : iconName;
   }
 }

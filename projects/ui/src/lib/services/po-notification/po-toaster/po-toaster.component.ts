@@ -127,22 +127,22 @@ export class PoToasterComponent extends PoToasterBaseComponent implements AfterV
     switch (this.type) {
       case PoToasterType.Error: {
         this.toasterType = 'po-toaster-error';
-        this.icon = 'po-icon-warning';
+        this.icon = 'ICON_WARNING';
         break;
       }
       case PoToasterType.Information: {
         this.toasterType = 'po-toaster-info';
-        this.icon = 'po-icon-info';
+        this.icon = 'ICON_INFO';
         break;
       }
       case PoToasterType.Success: {
         this.toasterType = 'po-toaster-success';
-        this.icon = 'po-icon-ok';
+        this.icon = 'ICON_OK';
         break;
       }
       case PoToasterType.Warning: {
         this.toasterType = 'po-toaster-warning';
-        this.icon = 'po-icon-warning';
+        this.icon = 'ICON_WARNING';
         break;
       }
     }

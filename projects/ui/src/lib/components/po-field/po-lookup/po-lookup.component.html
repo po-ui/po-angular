@@ -22,23 +22,24 @@
 
     <div class="po-field-icon-container-right">
       <po-clean
-        class="po-icon-input"
+        class="po-icon-input po-field-icon"
         *ngIf="clean && !disabled"
         [p-element-ref]="inputEl"
         (p-change-event)="cleanModel()"
       >
       </po-clean>
 
-      <span
+      <div
         #iconLookup
-        class="po-icon po-field-icon po-icon-search po-icon-input"
+        class="po-field-icon po-field-icon-right po-icon-input"
         tabindex="-1"
         [class.po-field-icon]="!disabled"
         [class.po-field-icon-disabled]="disabled"
         (click)="openLookup()"
         (focus)="inp.focus()"
       >
-      </span>
+        <po-icon p-icon="ICON_SEARCH"></po-icon>
+      </div>
     </div>
   </div>
   <po-field-container-bottom [p-help]="help" [p-disabled]="disabled"></po-field-container-bottom>
@@ -71,16 +72,17 @@
     </div>
 
     <div class="po-field-icon-container-right">
-      <span
+      <div
         #iconLookup
-        class="po-icon po-field-icon po-icon-search po-icon-input"
+        class="po-field-icon po-icon-input"
         tabindex="-1"
         [class.po-field-icon]="!disabled"
         [class.po-field-icon-disabled]="disabled"
         (click)="openLookup()"
         (focus)="inp.focus()"
       >
-      </span>
+        <po-icon p-icon="ICON_SEARCH"></po-icon>
+      </div>
     </div>
   </div>
 </ng-template>

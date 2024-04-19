@@ -9,16 +9,14 @@
 </div>
 
 <ng-template #overlayTemplate>
-  <span class="po-upload-drag-drop-area-overlay-icon po-icon po-icon-upload-cloud"></span>
-
+  <po-icon p-icon="ICON_UPLOAD_CLOUD" class="po-upload-drag-drop-area-overlay-icon"></po-icon>
   <div class="po-upload-drag-drop-area-overlay-label">
     {{ directoryCompatible ? literals?.dropFoldersHere : literals?.dropFilesHere }}
   </div>
 </ng-template>
 
 <ng-template #defaultTemplate>
-  <span class="po-upload-drag-drop-area-icon po-icon po-icon-upload-cloud"></span>
-
+  <po-icon p-icon="ICON_UPLOAD_CLOUD" class="po-upload-drag-drop-area-icon"></po-icon>
   <div class="po-upload-drag-drop-area-label">
     {{ directoryCompatible ? literals?.dragFoldersHere : literals?.dragFilesHere }}
   </div>

@@ -26,6 +26,7 @@ describe('PoEmailComponent:', () => {
     component.label = 'Label de teste';
     component.help = 'Help de teste';
     component.clean = true;
+    component.icon = 'ICON_MAIL';
   });
 
   it('should be created', () => {

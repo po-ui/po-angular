@@ -13,7 +13,7 @@
   <div class="po-progress-info">
     <div class="po-progress-info-left">
       <po-icon *ngIf="infoIcon" [p-icon]="infoIcon" [class.po-progress-info-icon-error]="status === 'error'"></po-icon>
-      <po-icon *ngIf="isAllowInfoError" p-icon="po-icon-exclamation" class="po-progress-info-icon-error"></po-icon>
+      <po-icon *ngIf="isAllowInfoError" p-icon="ICON_EXCLAMATION" class="po-progress-info-icon-error"></po-icon>
       <span *ngIf="info" class="po-progress-info-text" [class.po-progress-info-text-error]="status === 'error'">{{
         info
       }}</span>
@@ -22,7 +22,7 @@
       <span *ngIf="showPercentage && !indeterminate">{{ value }}%</span>
       <po-button
         *ngIf="isAllowRetry"
-        p-icon="po-icon-refresh"
+        p-icon="ICON_REFRESH"
         (p-click)="emitRetry()"
         [p-aria-label]="literals.retry"
         p-kind="tertiary"
@@ -30,7 +30,7 @@
 
       <po-button
         *ngIf="isAllowCancel"
-        p-icon="po-icon-close"
+        p-icon="ICON_CLOSE"
         (p-click)="emitCancellation()"
         p-kind="secondary"
         [p-aria-label]="literals.cancel"

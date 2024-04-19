@@ -2,6 +2,7 @@ import { CommonModule } from '@angular/common';
 import { NgModule } from '@angular/core';
 
 import { PoCleanComponent } from './po-clean.component';
+import { PoIconModule } from '../../po-icon';
 
 /**
  * @description
@@ -9,7 +10,7 @@ import { PoCleanComponent } from './po-clean.component';
  * Módulo do componente `po-clean`.
  */
 @NgModule({
-  imports: [CommonModule],
+  imports: [CommonModule, PoIconModule],
   exports: [PoCleanComponent],
   declarations: [PoCleanComponent]
 })

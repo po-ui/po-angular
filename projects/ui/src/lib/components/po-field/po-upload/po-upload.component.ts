@@ -77,7 +77,7 @@ export class PoUploadComponent extends PoUploadBaseComponent implements AfterVie
   infoByUploadStatus: { [key: string]: { text: (percent?: number) => string; icon?: string } } = {
     [PoUploadStatus.Uploaded]: {
       text: () => this.literals.sentWithSuccess,
-      icon: 'po-icon-ok'
+      icon: 'ICON_OK'
     },
     [PoUploadStatus.Error]: {
       text: () => this.literals.errorOccurred

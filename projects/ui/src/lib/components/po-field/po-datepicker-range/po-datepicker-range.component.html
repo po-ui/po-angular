@@ -56,14 +56,14 @@
     </div>
 
     <div class="po-datepicker-range-icon">
-      <span
+      <po-icon
         #iconCalendar
-        class="po-icon po-field-icon po-icon-calendar {{ disabled ? 'po-icon-input-disabled' : 'po-icon-input' }}"
-        [class.po-clickable]="!disabled && !readonly"
+        [p-icon]="!disabled || !readonly ? 'ICON_CALENDAR po-clickable' : 'ICON_CALENDAR'"
+        class="po-field-icon {{ disabled ? 'po-icon-input-disabled' : 'po-icon-input' }}"
         [class.po-field-icon-disabled]="disabled || readonly"
         (click)="toggleCalendar()"
       >
-      </span>
+      </po-icon>
     </div>
   </div>
 
