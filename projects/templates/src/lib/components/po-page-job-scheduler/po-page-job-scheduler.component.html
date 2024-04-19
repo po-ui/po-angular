@@ -15,8 +15,8 @@
         <div class="po-row">
           <po-page-job-scheduler-execution
             [p-no-parameters]="parametersEmpty"
-            [p-no-custom-params-component]="!parametersTemplate?.templateRef"
-            [hidden]="step !== 1"
+            [p-no-custom-params-component]="!parametersTemplate.length"
+            [hidden]="step !== stepExecution"
             #schedulerExecution
             class="po-md-12"
             [p-is-edit]="isEdit"
@@ -27,8 +27,8 @@
           </po-page-job-scheduler-execution>
 
           <po-page-job-scheduler-parameters
-            *ngIf="stepParametersInitialized"
-            [hidden]="step !== 2"
+            *ngIf="stepParametersInitialized && !parametersTemplate.length"
+            [hidden]="step !== stepParameters"
             #schedulerParameters
             class="po-md-12"
             [p-literals]="literals"
@@ -39,8 +39,8 @@
           </po-page-job-scheduler-parameters>
 
           <po-page-job-scheduler-summary
-            [p-no-parameters]="parametersEmpty"
-            *ngIf="step === 3"
+            [p-no-parameters]="!parameters.lenght"
+            *ngIf="step === stepSummary"
             class="po-md-12"
             [p-literals]="literals"
             [p-parameters]="parameters"
@@ -49,6 +49,12 @@
           </po-page-job-scheduler-summary>
         </div>
       </form>
+
+      <ng-ng-container *ngFor="let template of parametersTemplate; index as index">
+        <div [hidden]="step !== index + (_stepExecutionLast ? 1 : 2)">
+          <ng-template [ngTemplateOutlet]="template?.templateRef"></ng-template>
+        </div>
+      </ng-ng-container>
     </po-container>
   </div>
 </po-page-default>

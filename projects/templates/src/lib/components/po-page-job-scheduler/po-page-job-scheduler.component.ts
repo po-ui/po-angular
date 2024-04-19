@@ -1,5 +1,13 @@
 import { ActivatedRoute, Router } from '@angular/router';
-import { Component, ContentChild, OnInit, ViewChild, ViewEncapsulation } from '@angular/core';
+import {
+  AfterContentInit,
+  Component,
+  ContentChildren,
+  OnInit,
+  QueryList,
+  ViewChild,
+  ViewEncapsulation
+} from '@angular/core';
 import { NgForm } from '@angular/forms';
 
 import { Observable } from 'rxjs';
@@ -46,11 +54,11 @@ import { PoJobSchedulerParametersTemplateDirective } from './po-page-job-schedul
     `
   ]
 })
-export class PoPageJobSchedulerComponent extends PoPageJobSchedulerBaseComponent implements OnInit {
+export class PoPageJobSchedulerComponent extends PoPageJobSchedulerBaseComponent implements OnInit, AfterContentInit {
   @ViewChild('schedulerExecution', { static: true }) schedulerExecution: { form: NgForm };
   @ViewChild('schedulerParameters') schedulerParameters: { form: NgForm };
-  @ContentChild(PoJobSchedulerParametersTemplateDirective)
-  parametersTemplate: PoJobSchedulerParametersTemplateDirective;
+  @ContentChildren(PoJobSchedulerParametersTemplateDirective)
+  parametersTemplate: QueryList<PoJobSchedulerParametersTemplateDirective>;
 
   isEdit = false;
   literals = {
@@ -64,7 +72,9 @@ export class PoPageJobSchedulerComponent extends PoPageJobSchedulerBaseComponent
 
   stepParametersInitialized = false;
 
-  readonly steps: Array<PoStepperItem> = [];
+  protected steps: Array<PoStepperItem> = [];
+
+  //#region Actions
 
   private backPageAction: PoPageAction = {
     label: this.literals.back,
@@ -90,6 +100,16 @@ export class PoPageJobSchedulerComponent extends PoPageJobSchedulerBaseComponent
   // eslint-disable-next-line @typescript-eslint/member-ordering
   jobSchedulerActions: Array<PoPageAction> = [...this.nextPageActions];
 
+  //#endregion
+
+  /**
+   * @ToDo
+   */
+  protected stepExecution = 1;
+  protected stepParameters = 2;
+  protected stepSummary = 3;
+  protected _stepExecutionLast: boolean;
+
   constructor(
     public poPageDynamicLookupService: PoPageJobSchedulerLookupService,
     private activatedRoute: ActivatedRoute,
@@ -110,12 +130,6 @@ export class PoPageJobSchedulerComponent extends PoPageJobSchedulerBaseComponent
     this.backPageAction.label = this.literals.back;
     this.concludePageAction.label = this.literals.conclude;
     this.nextPageAction.label = this.literals.next;
-
-    this.steps = [
-      { label: this.literals.scheduling },
-      { label: this.literals.parameterization },
-      { label: this.literals.conclude }
-    ];
   }
 
   get stepperOrientation(): 'horizontal' | 'vertical' {
@@ -138,6 +152,45 @@ export class PoPageJobSchedulerComponent extends PoPageJobSchedulerBaseComponent
     this.loadData(paramId);
   }
 
+  ngAfterContentInit(): void {
+    this.checkStepExecutionLast();
+    this.getSteps();
+  }
+
+  private checkStepExecutionLast() {
+    if (!this.parametersTemplate.length) {
+      this._stepExecutionLast = false;
+      return;
+    }
+
+    this._stepExecutionLast = this.stepExecutionLast;
+  }
+
+  /**
+   * @ToDo
+   */
+  private getSteps() {
+    const templateArray: Array<PoStepperItem> = this.parametersTemplate.map(
+      (x, index) =>
+        ({
+          label: x.title || `${this.literals.parameterization} ${index + 1}`
+        }) as PoStepperItem
+    );
+
+    this.steps = [
+      ...(!this._stepExecutionLast ? [{ label: this.literals.scheduling }] : []),
+      ...(!templateArray.length ? [{ label: this.literals.parameterization }] : []),
+      ...templateArray,
+      ...(this._stepExecutionLast ? [{ label: this.literals.scheduling }] : []),
+      { label: this.literals.conclude }
+    ];
+
+    this.stepSummary = this.steps.length;
+    if (this._stepExecutionLast) {
+      this.stepExecution = this.stepSummary - 1;
+    }
+  }
+
   changePageActionsBySteps(currentStep: number, nextStep: number) {
     const stepsLength = this.steps.length;
 
@@ -148,55 +201,108 @@ export class PoPageJobSchedulerComponent extends PoPageJobSchedulerBaseComponent
     }
   }
 
-  nextStep(stepNumber: number) {
-    if (stepNumber > 1 && this.schedulerExecution.form.invalid) {
-      this.markAsDirtyInvalidControls(this.schedulerExecution.form.controls);
+  protected nextStep(stepNumber: number) {
+    const operation: 'back' | 'next' = stepNumber > this.step ? 'next' : 'back';
+
+    // Previne o usuário pular etapas
+    const jumpStep = (stepNumber - this.step) * (operation === 'back' ? -1 : 1);
+    if (jumpStep > 1) {
       return;
     }
 
-    if (
-      stepNumber > 2 &&
-      this.schedulerParameters &&
-      this.schedulerParameters.form &&
-      this.schedulerParameters.form.invalid
-    ) {
-      this.markAsDirtyInvalidControls(this.schedulerParameters.form.controls);
+    //#region Validação
+
+    if (!this.validateStepExecution()) {
       return;
     }
 
-    if (stepNumber > 2 && this.templateHasDisable()) {
+    if (!this.validateStepSchedulerParameters()) {
       return;
     }
 
-    this.setModelRecurrent();
+    if (operation === 'next' && !this.validateStepTemplateParameters()) {
+      return;
+    }
+
+    //#endregion
+
+    //#region Update Model
+
+    if (this.step === this.stepExecution) {
+      this.setModelRecurrent();
+    }
 
     // Busca os parâmetros do template
-    if (stepNumber > 2 && this.parametersTemplate?.templateRef && this.parametersTemplate?.executionParameter) {
-      this.setPropertiesFromTemplate();
-    }
-
-    const model = JSON.parse(JSON.stringify(this.model));
+    this.setPropertiesFromTemplate();
 
     if (stepNumber === this.steps.length) {
+      const model = JSON.parse(JSON.stringify(this.model));
       this.publicValues = this.hidesSecretValues(model);
     }
 
-    this.changePageActionsBySteps(this.step, stepNumber);
+    //#endregion
 
-    const steps = this.steps[this.step - 1];
+    //#region Update UI
+
+    this.steps[this.step - 1].status = operation === 'next' ? PoStepperStatus.Done : PoStepperStatus.Default;
+
+    this.changePageActionsBySteps(this.step, stepNumber);
     this.step = stepNumber;
+
+    //#endregion
 
     // Caso já tenha iniciado a etapa de parametrização,
     // guarda essa informação para não precisar renderizar novamente
-    this.stepParametersInitialized = this.stepParametersInitialized || stepNumber === 2;
+    this.stepParametersInitialized = this.stepParametersInitialized || stepNumber === this.stepParameters;
+  }
 
-    if (steps) {
-      steps.status = PoStepperStatus.Done;
+  /**
+   * @Done
+   */
+  private validateStepExecution(): boolean {
+    const stepCurrent = this.step;
+
+    if (stepCurrent == this.stepExecution && this.schedulerExecution.form.invalid) {
+      this.markAsDirtyInvalidControls(this.schedulerExecution.form.controls);
+      return false;
     }
+
+    return true;
+  }
+
+  /**
+   * @Done
+   */
+  private validateStepSchedulerParameters(): boolean {
+    if (this.step === this.stepExecution || this.step === this.stepSummary) {
+      return true;
+    }
+
+    if (this.schedulerParameters && this.schedulerParameters.form && this.schedulerParameters.form.invalid) {
+      this.markAsDirtyInvalidControls(this.schedulerParameters.form.controls);
+      return false;
+    }
+
+    return true;
+  }
+
+  /**
+   * @ToDo
+   */
+  private validateStepTemplateParameters(): boolean {
+    if (this.step === this.stepExecution || this.step === this.stepSummary) {
+      return true;
+    }
+
+    if (!this.parametersTemplate.length) {
+      return true;
+    }
+
+    return this.templateHasDisable();
   }
 
   onChangeProcess(process: { processId: string; existAPI: boolean }) {
-    if (process.existAPI && process.processId && this.parametersEmpty && !this.parametersTemplate?.templateRef) {
+    if (process.existAPI && process.processId && this.parametersEmpty && !this.parametersTemplate.length) {
       this.getParametersByProcess(process.processId);
       if (!this.isEdit) {
         this.model.executionParameter = {};
@@ -249,20 +355,33 @@ export class PoPageJobSchedulerComponent extends PoPageJobSchedulerBaseComponent
     return model;
   }
 
-  private templateHasDisable(test?): boolean {
-    return !!this.parametersTemplate?.templateRef && this.parametersTemplate?.disabledAdvance;
+  private getTemplateCurrent() {
+    const indexTemplate = this.step - (this.stepExecutionLast ? 1 : 2);
+    return this.parametersTemplate.toArray()[indexTemplate];
+  }
+
+  private templateHasDisable(): boolean {
+    const template = this.getTemplateCurrent();
+
+    return !template?.disabledAdvance;
   }
 
   private isDisabledAdvance(): boolean {
-    const componentByStep = {
-      1: this.schedulerExecution,
-      2: this.schedulerParameters
-    };
+    if (this.step === this.stepExecution) {
+      return this.schedulerExecution?.form?.invalid;
+    }
 
-    const templateDisable = this.step === 2 ? this.templateHasDisable() : false;
-    const shouldDisable = templateDisable || componentByStep[this.step]?.form?.invalid;
+    if (this.schedulerParameters) {
+      return this.schedulerParameters?.form?.invalid;
+    }
 
-    return shouldDisable || false;
+    const templateCurrent = this.getTemplateCurrent();
+
+    if (templateCurrent) {
+      return templateCurrent.disabledAdvance;
+    }
+
+    return false;
   }
 
   private isDisabledBack(): boolean {
@@ -317,9 +436,15 @@ export class PoPageJobSchedulerComponent extends PoPageJobSchedulerBaseComponent
   }
 
   private setPropertiesFromTemplate() {
+    const templateCurrent = this.getTemplateCurrent();
+
+    if (!templateCurrent) {
+      return;
+    }
+
     this.model = {
       ...this.model,
-      executionParameter: { ...this.model.executionParameter, ...this.parametersTemplate.executionParameter }
+      executionParameter: { ...this.model.executionParameter, ...templateCurrent.executionParameter }
     };
   }
 }

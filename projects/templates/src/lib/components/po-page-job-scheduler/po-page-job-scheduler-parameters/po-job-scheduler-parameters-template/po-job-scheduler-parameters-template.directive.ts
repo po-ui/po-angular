@@ -53,6 +53,8 @@ export class PoJobSchedulerParametersTemplateDirective {
    */
   @Input('p-disable-advance') disabledAdvance: boolean = false;
 
+  @Input('p-title') title: string;
+
   // Necessário manter templateRef para o funcionamento do row template.
   constructor(public templateRef: TemplateRef<any>) {}
 }

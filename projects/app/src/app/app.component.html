@@ -1,0 +1,67 @@
+<!-- Exemplo 1 -->
+<po-page-slide #exemplo1 p-title="Exemplo do Portal">
+  <po-page-job-scheduler p-service-api="https://po-sample-api.onrender.com/v1/scheduler" p-orientation="horizontal">
+  </po-page-job-scheduler>
+</po-page-slide>
+
+<!-- Exemplo 2 -->
+<po-page-slide #exemplo2 p-title="Passando Parameters">
+  <po-page-job-scheduler
+    p-service-api="https://po-sample-api.onrender.com/v1/scheduler"
+    p-orientation="horizontal"
+    [p-parameters]="exemplo2Parameters"
+  >
+  </po-page-job-scheduler>
+</po-page-slide>
+
+<!-- Exemplo 3 -->
+<po-page-slide #exemplo3 p-title="Vários templates">
+  <po-page-job-scheduler
+    p-service-api="https://po-sample-api.onrender.com/v1/scheduler"
+    p-orientation="horizontal"
+    [p-step-execution-last]="true"
+  >
+    <ng-template
+      p-job-scheduler-parameters-template
+      [p-disable-advance]="dynamicFormExemplo3a?.form.invalid"
+      [p-execution-parameter]="dynamicFormExemplo3a?.form.value"
+      p-title="1"
+    >
+      <h1>Tab 1</h1>
+      <po-dynamic-form [p-fields]="parametersFormExemplo3a" (p-form)="getFormExemplo3a($event)"> </po-dynamic-form>
+    </ng-template>
+
+    <ng-template
+      p-job-scheduler-parameters-template
+      [p-disable-advance]="dynamicFormExemplo3b?.form.invalid"
+      [p-execution-parameter]="dynamicFormExemplo3b?.form.value"
+    >
+      <h1>Tab 2</h1>
+      <po-dynamic-form [p-fields]="parametersFormExemplo3b" (p-form)="getFormExemplo3b($event)"> </po-dynamic-form>
+    </ng-template>
+
+    <ng-template
+      p-job-scheduler-parameters-template
+      [p-disable-advance]="!selectedValue.select.length"
+      [p-execution-parameter]="selectedValue"
+    >
+      <po-table [p-items]="items" [p-selectable]="true" (p-selected)="selected($event)"></po-table>
+    </ng-template>
+  </po-page-job-scheduler>
+</po-page-slide>
+
+<!-- Botões -->
+<div class="po-row">
+  <span>Exemplo - Portal</span>
+  <po-button p-label="Exemplo 1" (p-click)="exemplo1.open()"></po-button>
+</div>
+
+<div class="po-row">
+  <span>Exemplo - Passando Parameters</span>
+  <po-button p-label="Exemplo 2" (p-click)="exemplo2.open()"></po-button>
+</div>
+
+<div class="po-row">
+  <span>Exemplo - Vários Templates</span>
+  <po-button p-label="Exemplo 3" (p-click)="exemplo3.open()"></po-button>
+</div>

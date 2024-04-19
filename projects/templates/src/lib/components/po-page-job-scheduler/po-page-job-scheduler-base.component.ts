@@ -220,6 +220,11 @@ export class PoPageJobSchedulerBaseComponent implements OnDestroy {
   @Input('p-before-send') beforeSendAction: (model: PoJobSchedulerInternal) => PoJobSchedulerInternal;
 
   /**
+   * @ToDo
+   */
+  @Input('p-step-execution-last') stepExecutionLast: boolean;
+
+  /**
    * @optional
    *
    * @description

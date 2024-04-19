@@ -13,7 +13,7 @@ import {
   PoPageModule,
   PoStepperModule,
   PoWidgetModule
-} from '@po-ui/ng-components';
+} from './../../../../../ui/src/lib';
 
 import { PoPageJobSchedulerComponent } from './po-page-job-scheduler.component';
 import { PoPageJobSchedulerExecutionComponent } from './po-page-job-scheduler-execution/po-page-job-scheduler-execution.component';
