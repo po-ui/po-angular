@@ -2,6 +2,15 @@
 
 All notable changes to this project will be documented in this file. See [standard-version](https://github.com/conventional-changelog/standard-version) for commit guidelines.
 
+## [17.6.0](https://github.com/po-ui/po-angular/compare/v17.5.0...v17.6.0) (2024-04-22)
+
+### Features
+
+Compatibilidade com @totvs/thf-components@17.6.0
+
+* **dynamic:** inclusão da propriedade container ([5302244](https://github.com/po-ui/po-angular/commit/530224431d96afe89f45c11fcb5300e42c4c70b1))
+* **search:** inclusão do listbox ao fazer o search ([6c8f299](https://github.com/po-ui/po-angular/commit/6c8f2993af5cf74c9b1ca9b01cefa26ae384da5b))
+
 ### [17.5.0](https://github.com/po-ui/po-angular/compare/v17.4.0...v17.5.0) (2024-04-15)
 
 
