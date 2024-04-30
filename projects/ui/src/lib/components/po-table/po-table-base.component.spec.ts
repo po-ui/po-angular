@@ -483,6 +483,15 @@ describe('PoTableBaseComponent:', () => {
     expect(component.hasItems).toBeTruthy();
   });
 
+  it('textWrap: should accept input for text wrapping with default value', () => {
+    expect(component.textWrap).toBe(false);
+  });
+
+  it('textWrap: should accept input for text wrapping with value true', () => {
+    component.textWrap = true;
+    expect(component.textWrap).toBe(true);
+  });
+
   describe('Methods:', () => {
     const columnsColors = [
       { label: 'Destination', property: 'destination', type: 'string', color: 'color-07' },
