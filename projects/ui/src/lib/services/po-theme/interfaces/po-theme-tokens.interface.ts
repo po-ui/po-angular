@@ -1,73 +1,64 @@
-/* eslint-disable @typescript-eslint/naming-convention */
+import { PoThemeColor } from './po-theme-color.interface';
 
 /**
  * @usedBy PoThemeService
- *
+ * @docsExtends PoThemeToken, Partial<DynamicProperties>
  * @description
- *
- * Interface para o método `setTheme()` do serviço PoThemeService.
+ * Interface para o tema da aplicação.
  */
-export interface PoThemeTokens {
-  /** Token para cor base 01 - Variação muito mais clara */
-  '--color-brand-01-lightest'?: string;
+export interface PoThemeTokens extends PoThemeToken, Partial<DynamicProperties> {}
 
-  /** Token para cor base 01 - Variação mais clara */
-  '--color-brand-01-lighter'?: string;
+/**
+ * @usedBy PoThemeService
+ * @description
+ * Interface para os tokens do Tema.
+ */
+export interface PoThemeToken {
+  /** Tokens do tipo 'color' */
+  'color'?: PoThemeColor;
 
-  /** Token para cor base 01 - Variação clara */
-  '--color-brand-01-light'?: string;
+  /**
+   * Tokens do tipo 'perComponent'
+   *
+   * Exemplo de uso:
+   *
+   * ```typescript
+   * perComponent: {
+   *   'po-badge': {
+   *     '--color': 'var(--color-neutral-dark-95)',
+   *   },
+   *   'po-container': {
+   *     '--background': '#121212',
+   *   },
+   * },
+   * ```
+   * @Optional
+   */
+  'perComponent'?: DynamicProperties;
 
-  /** Token para cor base 01 - Variação escura */
-  '--color-brand-01-dark'?: string;
+  /**
+   * Tokens do tipo 'onRoot'
+   * Esta propriedade adicionará todos os tokens passados e adicionado direto no `:root`
+   *
+   * Exemplo de uso:
+   *
+   * ```typescript
+   * onRoot: {
+   *   '--color-page-background-color-page': '#121212',
+   *   '--color-toolbar-color-badge-text': 'var(--color-neutral-dark-95)',
+   * },
+   * ```
+   * @Optional
+   */
+  'onRoot'?: DynamicProperties;
+}
 
-  /** Token para cor base 01 - Variação mais escura */
-  '--color-brand-01-darker'?: string;
-
-  /** Token para cor base 01 - Variação muito mais escura */
-  '--color-brand-01-darkest'?: string;
-
-  /** Token para cor base 01 */
-  '--color-brand-01-base'?: string;
-
-  /** Token para cor base 02 */
-  '--color-brand-02-base'?: string;
-
-  /** Token para cor base 03 */
-  '--color-brand-03-base'?: string;
-
-  /** Token para cor de fundo de componentes de calendario */
-  '--color-primary-light-80'?: string;
-
-  /**Token para paleta de cores neutras - variação mais clara - 00*/
-  '--color-neutral-light-00'?: string;
-
-  /**Token para paleta de cores neutras - variação mais clara - 05*/
-  '--color-neutral-light-05'?: string;
-
-  /**Token para paleta de cores neutras - variação mais clara - 10*/
-  '--color-neutral-light-10'?: string;
-
-  /**Token para paleta de cores neutras - variação mais clara - 20*/
-  '--color-neutral-light-20'?: string;
-
-  /**Token para paleta de cores neutras - variação mais clara - 30*/
-  '--color-neutral-light-30'?: string;
-
-  /**Token para paleta de cores neutras - variação medio - 40*/
-  '--color-neutral-mid-40'?: string;
-
-  /**Token para paleta de cores neutras - variação medio - 60*/
-  '--color-neutral-mid-60'?: string;
-
-  /**Token para paleta de cores neutras - variação escura - 70*/
-  '--color-neutral-dark-70'?: string;
-
-  /**Token para paleta de cores neutras - variação escura - 80*/
-  '--color-neutral-dark-80'?: string;
-
-  /**Token para paleta de cores neutras - variação escura - 90*/
-  '--color-neutral-dark-90'?: string;
-
-  /**Token para paleta de cores neutras - variação escura - 95*/
-  '--color-neutral-dark-95'?: string;
+/**
+ * @docsPrivate
+ * @description
+ * Interface para as variantes da cor de Brand.
+ * Tipo com index signature para aceitar propriedades dinâmicas
+ */
+interface DynamicProperties {
+  [key: string]: any;
 }

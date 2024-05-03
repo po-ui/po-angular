@@ -1,143 +1,230 @@
-import { TestBed, fakeAsync, tick } from '@angular/core/testing';
-import { Renderer2, RendererFactory2 } from '@angular/core';
+import { Renderer2, RendererFactory2, RendererType2 } from '@angular/core';
+import { TestBed } from '@angular/core/testing';
+import { PoThemeTypeEnum } from './enum/po-theme-type.enum';
 import { PoThemeService } from './po-theme.service';
-import { PoThemeTokens } from './interfaces/po-theme-tokens.interface';
+import { PoTheme } from './interfaces/po-theme.interface';
+import { DOCUMENT } from '@angular/common';
+import { poThemeDefault } from './helpers/po-theme-poui.constant';
+
+class MockRenderer2 {
+  createElement(): any {}
+  appendChild(): any {}
+  removeChild(): any {}
+  addClass(): any {}
+  removeClass(): any {}
+  setStyle(): any {}
+}
 
 describe('PoThemeService:', () => {
   let service: PoThemeService;
-  let mockRenderer: jasmine.SpyObj<Renderer2>;
 
   beforeEach(() => {
-    mockRenderer = jasmine.createSpyObj<Renderer2>('Renderer2', [
-      'setProperty',
-      'createElement',
-      'appendChild',
-      'createText',
-      'removeChild'
-    ]);
-
     TestBed.configureTestingModule({
       providers: [
-        { provide: 'Window', useValue: { document: { head: {} } } },
-        { provide: RendererFactory2, useValue: { createRenderer: () => mockRenderer } },
-        PoThemeService
+        PoThemeService,
+        { provide: 'Window', useValue: window },
+        { provide: DOCUMENT, useValue: document },
+        { provide: Renderer2, useClass: MockRenderer2 },
+        { provide: 'poThemeDefault', useValue: poThemeDefault }
       ]
     });
 
     service = TestBed.inject(PoThemeService);
   });
 
-  it('should be load `service` correctly', () => {
+  it('should be created', () => {
     expect(service).toBeTruthy();
   });
 
-  describe('Methods: ', () => {
-    it('should set a theme empty', () => {
-      service.setTheme({});
-      expect(mockRenderer.setProperty).not.toHaveBeenCalled();
+  it('should set default theme', () => {
+    service.setDefaultTheme(PoThemeTypeEnum.light);
+    const theme = service.getThemeActive();
+
+    expect(theme).toBeTruthy();
+    expect(theme.active).toEqual(PoThemeTypeEnum.light);
+  });
+
+  it('should change current theme type', () => {
+    service.setDefaultTheme(PoThemeTypeEnum.light);
+    service.changeCurrentThemeType(PoThemeTypeEnum.dark);
+
+    const theme = service.getThemeActive();
+
+    expect(theme.active).toEqual(PoThemeTypeEnum.dark);
+  });
+
+  describe('Custom Theme:', () => {
+    let poThemeTest: PoTheme;
+    let poThemeTestDark: PoTheme;
+    let poThemeWithJustAdditionalStyles: PoTheme;
+
+    beforeEach(() => {
+      poThemeTest = {
+        name: 'test',
+        type: {
+          light: {
+            color: {
+              brand: {
+                '01': {
+                  lightest: '#051f31',
+                  lighter: '#004064',
+                  light: '#00659a',
+                  base: '#0079b8',
+                  dark: '#3dadfa',
+                  darker: '#afd3fa',
+                  darkest: '#e3eefb'
+                },
+                '02': {
+                  base: '#0079b8'
+                },
+                '03': {
+                  base: '#0079b8'
+                }
+              },
+              action: {
+                disabled: 'var(--color-neutral-mid-40)'
+              },
+              feedback: {
+                info: {
+                  base: '#0079b8'
+                }
+              },
+              neutral: {
+                light: {
+                  '00': '#1c1c1c',
+                  '05': '#202020',
+                  '10': '#2b2b2b',
+                  '20': '#3b3b3b',
+                  '30': '#5a5a5a'
+                },
+                mid: {
+                  '40': '#7c7c7c',
+                  '60': '#a1a1a1'
+                },
+                dark: {
+                  '70': '#c1c1c1',
+                  '80': '#d9d9d9',
+                  '90': '#eeeeee',
+                  '95': '#fbfbfb'
+                }
+              }
+            },
+            onRoot: {
+              '--color-page-background-color-page': 'var(--color-neutral-light-00)'
+            },
+            perComponent: {
+              'po-container': {
+                '--background': 'var(--color-neutral-light-00);'
+              }
+            }
+          }
+        },
+        active: PoThemeTypeEnum.light
+      };
+      poThemeTestDark = { ...poThemeTest, active: PoThemeTypeEnum.dark };
+      poThemeWithJustAdditionalStyles = {
+        name: 'justAdditionalStyles',
+        type: {
+          light: {
+            '--color-page-background-color-page': 'var(--color-neutral-light-00)'
+          }
+        },
+        active: PoThemeTypeEnum.light
+      };
     });
 
-    it('should set theme with background image in PoSelect', fakeAsync(() => {
-      const themeWithColorBrand: PoThemeTokens = {
-        '--color-brand-01-dark': '#123456'
-      };
+    it('should set custom theme', () => {
+      service.setTheme(poThemeTest);
 
-      service.setTheme(themeWithColorBrand);
-      tick();
+      const theme = service.getThemeActive();
+      expect(theme).toEqual(poThemeTest);
+    });
 
-      expect(mockRenderer.setProperty).toHaveBeenCalledWith(
-        document.documentElement,
-        'style',
-        '--color-brand-01-dark: #123456;'
-      );
-      expect(mockRenderer.createElement).toHaveBeenCalledWith('style');
-      expect(mockRenderer.appendChild).toHaveBeenCalled();
-      expect(mockRenderer.createText).toHaveBeenCalled();
-    }));
+    it('should not set the custom theme, if it was send with a PoThemeTypeEnum that the theme does not have', () => {
+      spyOn(console, 'error');
+      service.setTheme(poThemeTest, 1);
 
-    it('should not set theme with empty color brand property in PoSelect', fakeAsync(() => {
-      const themeWithColorBrand: PoThemeTokens = {
-        '--color-brand-01-dark': ''
-      };
+      expect(console.error).not.toHaveBeenCalled();
+    });
 
-      service.setTheme(themeWithColorBrand);
-      tick();
+    it('should set custom theme, but only with the additional styles', () => {
+      service.setTheme(poThemeWithJustAdditionalStyles);
 
-      expect(mockRenderer.createElement).toHaveBeenCalledWith('style');
-      expect(mockRenderer.setProperty).not.toHaveBeenCalled();
-      expect(mockRenderer.appendChild).toHaveBeenCalled();
-      expect(mockRenderer.createText).toHaveBeenCalled();
-    }));
+      const theme = service.getThemeActive();
+      expect(theme).toEqual(poThemeWithJustAdditionalStyles);
+    });
 
-    it('should clean background image style in PoSelect', fakeAsync(() => {
-      const getBGImageStyleSpy = spyOn<any>(service, 'getBGImageStyleInPoSelect').and.returnValue(
-        {} as HTMLStyleElement
-      );
-      tick();
+    it('should set custom theme and change theme type', () => {
+      service.setTheme(poThemeTest, PoThemeTypeEnum.light);
+      service.changeCurrentThemeType(PoThemeTypeEnum.dark);
 
-      service['cleanBGImageStyleInPoSelect']();
+      const theme = service.getThemeActive();
+      expect(theme).toEqual(poThemeTest);
+      expect(theme.active).toEqual(PoThemeTypeEnum.dark);
+    });
 
-      expect(getBGImageStyleSpy).toHaveBeenCalled();
-      expect(mockRenderer.removeChild).toHaveBeenCalled();
-    }));
+    describe('Local Saved Theme Methods:', () => {
+      it('persistThemeActive: should persist and define the active theme', () => {
+        spyOn(service, 'getThemeActive').and.returnValue(poThemeTest);
+        spyOn(service, 'setTheme');
 
-    it('should get background image style in PoSelect', fakeAsync(() => {
-      const css = 'select {--background-image: url(xpto)}';
-      const style = document.createElement('style');
+        const result = service.persistThemeActive();
 
-      document.head.appendChild(style);
-      style.appendChild(document.createTextNode(css));
+        expect(service.getThemeActive).toHaveBeenCalled();
+        expect(service.setTheme).toHaveBeenCalledWith(poThemeTest, poThemeTest.active);
+        expect(result).toEqual(poThemeTest);
+      });
 
-      const result = service['getBGImageStyleInPoSelect']();
-      tick();
+      it('changeCurrentThemeType: should change current theme type', () => {
+        spyOn(service, 'getThemeActive').and.returnValue(poThemeTest);
+        spyOn(service, <any>'changeThemeType');
+        service.changeCurrentThemeType(PoThemeTypeEnum.dark);
 
-      expect(result?.textContent).toEqual(`select {--background-image: url(xpto)}`);
+        expect(service.getThemeActive).toHaveBeenCalled();
+        expect(service['changeThemeType']).toHaveBeenCalledWith(poThemeTestDark);
+      });
 
-      document.head.removeChild(style);
-    }));
+      it('cleanThemeActive: should clean active theme', () => {
+        spyOn(service, 'getThemeActive').and.returnValue(poThemeTest);
 
-    it('should be set theme sunset', fakeAsync(() => {
-      const spyChangeBGImg = spyOn<any>(service, 'changeBGImagemInPoSelect').and.callThrough();
-      service.setSunsetTheme();
-      tick();
-      expect(spyChangeBGImg).toHaveBeenCalledWith('#a5131a');
-      expect(mockRenderer.createElement).toHaveBeenCalledWith('style');
-      expect(mockRenderer.setProperty).toHaveBeenCalled();
-      expect(mockRenderer.appendChild).toHaveBeenCalled();
-      expect(mockRenderer.createText).toHaveBeenCalled();
-    }));
+        const removeSpy = spyOn(document.getElementsByTagName('html')[0].classList, 'remove');
+        const localStorageSpy = spyOn(localStorage, 'removeItem');
 
-    it('should be set theme sunset dark', fakeAsync(() => {
-      const spyChangeBGImg = spyOn<any>(service, 'changeBGImagemInPoSelect').and.callThrough();
-      service.setSunsetDarkTheme();
-      tick();
-      expect(spyChangeBGImg).toHaveBeenCalledWith('#a5131a');
-      expect(mockRenderer.createElement).toHaveBeenCalledWith('style');
-      expect(mockRenderer.setProperty).toHaveBeenCalled();
-      expect(mockRenderer.appendChild).toHaveBeenCalled();
-      expect(mockRenderer.createText).toHaveBeenCalled();
-    }));
+        service.cleanThemeActive();
 
-    it('should be set theme TOTVS', fakeAsync(() => {
-      const spyChangeBGImg = spyOn<any>(service, 'changeBGImagemInPoSelect').and.callThrough();
-      service.setTotvsTheme();
-      tick();
-      expect(spyChangeBGImg).toHaveBeenCalledWith('#013f65');
-      expect(mockRenderer.createElement).toHaveBeenCalledWith('style');
-      expect(mockRenderer.setProperty).toHaveBeenCalled();
-      expect(mockRenderer.appendChild).toHaveBeenCalled();
-      expect(mockRenderer.createText).toHaveBeenCalled();
-    }));
+        expect(service.getThemeActive).toHaveBeenCalled();
+        expect(removeSpy).toHaveBeenCalledWith('test-light');
+        expect(localStorageSpy).toHaveBeenCalledWith('totvs-theme');
+      });
 
-    it('should be set theme TOTVS dark', fakeAsync(() => {
-      const spyChangeBGImg = spyOn<any>(service, 'changeBGImagemInPoSelect').and.callThrough();
-      service.setTotvsDarkTheme();
-      tick();
-      expect(spyChangeBGImg).toHaveBeenCalledWith('#013f65');
-      expect(mockRenderer.createElement).toHaveBeenCalledWith('style');
-      expect(mockRenderer.setProperty).toHaveBeenCalled();
-      expect(mockRenderer.appendChild).toHaveBeenCalled();
-      expect(mockRenderer.createText).toHaveBeenCalled();
-    }));
+      it('setThemeActive: should set active theme', () => {
+        const theme: PoTheme = poThemeTest;
+        // const setThemeActiveSpy = spyOn<any>(service, 'setThemeActive');
+        const setItemSpy = spyOn(localStorage, 'setItem');
+
+        service['setThemeActive'](theme);
+
+        // expect(setThemeActiveSpy).toHaveBeenCalledWith(theme);
+        expect(setItemSpy).toHaveBeenCalledWith('totvs-theme', JSON.stringify(theme));
+        expect(service['theme']).toEqual(theme);
+      });
+
+      it('getThemeActive: should get active theme', () => {
+        const localStorageSpy = spyOn(localStorage, 'getItem').and.returnValue(JSON.stringify(poThemeTest));
+        const result = service.getThemeActive();
+
+        // Expectations
+        expect(localStorageSpy).toHaveBeenCalledWith('totvs-theme');
+        expect(result).toEqual(poThemeTest);
+      });
+
+      it('getThemeActive: should catch error when localStorage is corrupted', () => {
+        spyOn(localStorage, 'getItem').and.throwError('Corrupted localStorage');
+        const consoleSpy = spyOn(console, 'error');
+        service.getThemeActive();
+
+        expect(consoleSpy).toHaveBeenCalledWith('Erro ao obter o tema do armazenamento local:', jasmine.any(Error));
+      });
+    });
   });
 });
