@@ -1,0 +1,30 @@
+<div class="po-wrapper">
+  <po-toolbar p-title="AppName"></po-toolbar>
+
+  <po-menu [p-menus]="menus"></po-menu>
+
+  <po-page-default>
+    <po-multiselect
+      name="multiselect"
+      [(ngModel)]="multiselect"
+      p-label="PO Multiselect"
+      [p-options]="options"
+      (p-change)="onChangeMultiSelect($event)"
+    >
+    </po-multiselect>
+    <po-button (p-click)="onClick()" p-label="reset counter"></po-button>
+    <po-divider></po-divider>
+    <h3>PO combo</h3>
+    <po-combo
+      class="form-group po-md-12 po-lg-12 po-sm-12"
+      p-label="Cliente *"
+      [p-debounce-time]="500"
+      p-placeholder="Informe um cliente"
+      [p-disabled]="false"
+      [p-emit-object-value]="true"
+      [p-filter-service]="pfsListaClientesService"
+      (p-change)="changeCliente($event)"
+    >
+    </po-combo>
+  </po-page-default>
+</div>

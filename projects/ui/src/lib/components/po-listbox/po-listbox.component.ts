@@ -33,6 +33,7 @@ export class PoListBoxComponent extends PoListBoxBaseComponent implements AfterV
 
   private scrollEvent$: Observable<any>;
   private subscriptionScrollEvent: Subscription;
+  private counter: number = 0;
 
   constructor(
     public element: ElementRef,
@@ -121,6 +122,8 @@ export class PoListBoxComponent extends PoListBoxBaseComponent implements AfterV
   }
 
   checkboxClicked({ option, selected }) {
+    console.log('CHECKBOX FOI CLICADO', this.counter);
+    this.counter++;
     if (this.type === 'check') {
       this.change.emit({ selected, option });
     }
