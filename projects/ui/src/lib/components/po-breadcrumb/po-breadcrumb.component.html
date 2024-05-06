@@ -1,28 +1,92 @@
-<div class="po-breadcrumb" #breadcrumb>
-  <ul class="po-breadcrumb-items">
-    <li #dropdownIcon *ngIf="showDropdownToggle" class="po-breadcrumb-item po-clickable" (click)="toggleDropdown()">
-      <span class="po-breadcrumb-icon-more po-icon po-icon-more"></span>
-      <div class="po-breadcrumb-arrow"></div>
-    </li>
+<nav class="po-breadcrumb" #breadcrumb>
+  <div class="po-breadcrumb-items">
+    <ul
+      #dropdownIcon
+      *ngIf="showDropdownToggle && itemsView.length >= 4"
+      class="po-breadcrumb-item po-clickable po-breadcrumb-tooltip"
+    >
+      <li>
+        <po-link
+          [p-label]="itemsView[0].label"
+          [p-url]="itemsView[0].link"
+          (p-action)="emitAction(itemsView[0])"
+        ></po-link>
+      </li>
 
-    <div *ngFor="let item of itemsView; let itemIndex = index">
-      <po-breadcrumb-item
-        [p-action]="item.action"
-        [p-label]="item.label"
-        [p-link]="item.link"
-        [p-item-active]="itemIndex === itemsView.length - 1"
+      <po-icon p-icon="po-icon-arrow-right po-breadcrumb-icon-arrow"></po-icon>
+
+      <li
+        #target
+        class="po-breadcrumb-icon-more"
+        [attr.aria-label]="literals.literalButtonPopup"
+        role="button"
+        tabindex="0"
+        (click)="popup.toggle()"
+        (keyup)="openPopup($event)"
       >
-      </po-breadcrumb-item>
-    </div>
-  </ul>
+        <po-icon p-icon="po-icon-more-vert"></po-icon>
+      </li>
+      <po-icon p-icon="po-icon-arrow-right po-breadcrumb-icon-arrow"></po-icon>
+
+      <li>
+        <po-link
+          [p-label]="itemsView[itemsView.length - 2].label"
+          [p-url]="itemsView[itemsView.length - 2].link"
+          (p-action)="emitAction(itemsView[itemsView.length - 2])"
+        ></po-link>
+      </li>
+      <po-icon p-icon="po-icon-arrow-right po-breadcrumb-icon-arrow"></po-icon>
+
+      <li>
+        <span
+          class="po-breadcrumb-item-activate"
+          role="link"
+          tabindex="0"
+          [attr.aria-current]="itemsView[itemsView.length - 1].label"
+          >{{ itemsView[itemsView.length - 1].label }}</span
+        >
+      </li>
+      <po-popup
+        #popup
+        p-position="bottom-right"
+        (p-close)="closePopUp()"
+        [p-hide-arrow]="true"
+        [p-actions]="itemsViewPopup"
+        [p-target]="target"
+      >
+      </po-popup>
+    </ul>
+
+    <ul *ngIf="!showDropdownToggle || itemsView.length < 4" class="po-breadcrumb-item-container">
+      <li *ngFor="let item of itemsView; let itemIndex = index" class="po-breadcrumb-item">
+        <po-link
+          *ngIf="!(itemIndex === itemsView.length - 1)"
+          [p-label]="item.label"
+          [p-url]="item.link"
+          (p-action)="emitAction(item)"
+        ></po-link>
+        <span
+          class="po-breadcrumb-item-activate"
+          role="link"
+          tabindex="0"
+          *ngIf="itemIndex === itemsView.length - 1"
+          [attr.aria-current]="item.label"
+          >{{ item.label }}</span
+        >
+        <po-icon
+          *ngIf="!(itemIndex === itemsView.length - 1)"
+          p-icon="po-icon-arrow-right po-breadcrumb-icon-arrow"
+        ></po-icon>
+      </li>
+    </ul>
+  </div>
 
   <po-breadcrumb-favorite
     *ngIf="favoriteService"
     [p-favorite-service]="favoriteService"
     [p-item-active]="items[items.length - 1]"
     [p-params-service]="paramsService"
+    [p-hidden-literal]="hiddenLiteralFavorite"
   >
   </po-breadcrumb-favorite>
-
-  <po-breadcrumb-dropdown *ngIf="showDropdown" [p-items]="dropdownItems"> </po-breadcrumb-dropdown>
-</div>
+</nav>

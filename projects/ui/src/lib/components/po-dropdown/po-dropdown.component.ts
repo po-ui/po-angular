@@ -75,10 +75,16 @@ export class PoDropdownComponent extends PoDropdownBaseComponent {
   }
 
   private onScroll = ({ target }): void => {
-    if (this.open && target.className !== 'po-popup-container' && this.actions.length < 6) {
+    if (this.open && target.className !== 'po-popup-container' && !this.isDropdownClosed()) {
       this.hideDropdown();
     }
   };
+
+  private isDropdownClosed(): boolean {
+    const dropdownRect = this.dropdownRef.nativeElement.getBoundingClientRect();
+
+    return dropdownRect.top >= 0 && dropdownRect.bottom <= window.innerHeight;
+  }
 
   private removeListeners() {
     if (this.clickoutListener) {

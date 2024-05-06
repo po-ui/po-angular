@@ -18,20 +18,13 @@ describe('PoDecimalComponent:', () => {
   let inputEl: any;
   let spyService: jasmine.Spy;
 
-  beforeEach(
-    waitForAsync(() => {
-      TestBed.configureTestingModule({
-        imports: [PoIconModule],
-        declarations: [
-          PoDecimalComponent,
-          PoFieldContainerComponent,
-          PoCleanComponent,
-          PoFieldContainerBottomComponent
-        ],
-        providers: [PoLanguageService]
-      }).compileComponents();
-    })
-  );
+  beforeEach(waitForAsync(() => {
+    TestBed.configureTestingModule({
+      imports: [PoIconModule],
+      declarations: [PoDecimalComponent, PoFieldContainerComponent, PoCleanComponent, PoFieldContainerBottomComponent],
+      providers: [PoLanguageService]
+    }).compileComponents();
+  }));
 
   beforeEach(() => {
     languageService = TestBed.inject(PoLanguageService);
@@ -247,6 +240,27 @@ describe('PoDecimalComponent:', () => {
     expect(component['onTouched']).toHaveBeenCalled();
     expect(component['setViewValue']).toHaveBeenCalled();
     expect(component['callOnChange']).toHaveBeenCalled();
+  });
+
+  it('blur event must be called if has only hyphen', () => {
+    const fakeEvent = {
+      target: {
+        value: '-'
+      }
+    };
+    component['onTouched'] = () => {};
+
+    spyOn(component, <any>'setViewValue');
+    spyOn(component, <any>'onTouched');
+    spyOn(component, <any>'callOnChange');
+    spyOn(component.blur, 'emit');
+
+    component.onBlur(fakeEvent);
+
+    expect(component['onTouched']).toHaveBeenCalled();
+    expect(component['setViewValue']).toHaveBeenCalled();
+    expect(component['callOnChange']).toHaveBeenCalled();
+    expect(component.blur.emit).not.toHaveBeenCalled();
   });
 
   it('should have a call onInput method', () => {
@@ -1400,6 +1414,18 @@ describe('PoDecimalComponent:', () => {
 
     it('hasLetters: should return true with undefined value.', () => {
       expect(component.hasLetters(undefined)).toBeFalsy();
+    });
+
+    it('hasNotSpace: should return false with whitespace value.', () => {
+      expect(component.hasNotSpace(' ')).toBeFalsy();
+    });
+
+    it('hasNotSpace: should return true with number.', () => {
+      expect(component.hasNotSpace('211')).toBeTruthy();
+    });
+
+    it('hasNotSpace: should return true with undefined value.', () => {
+      expect(component.hasNotSpace(undefined)).toBeTruthy();
     });
 
     it('isGreaterThanTotalLengthLimit: should return `false` if total sum is 16.', () => {

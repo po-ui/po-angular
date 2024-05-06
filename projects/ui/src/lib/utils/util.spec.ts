@@ -59,38 +59,6 @@ describe('Language:', () => {
     navigatorUserLanguageSpy.calls.reset();
   });
 
-  describe('Function browserLanguage:', () => {
-    it('should return `pt` as default language if language is undefined', () => {
-      navigatorLanguageSpy.and.returnValue(undefined);
-
-      expect(UtilFunctions.browserLanguage()).toBe('pt');
-    });
-
-    it('should return `pt` as default language if language is invalid', () => {
-      navigatorLanguageSpy.and.returnValue('wz');
-
-      expect(UtilFunctions.browserLanguage()).toBe('pt');
-    });
-
-    it('should return `en` if browser language is `en-US`', () => {
-      navigatorLanguageSpy.and.returnValue('en-US');
-
-      expect(UtilFunctions.browserLanguage()).toBe('en');
-    });
-
-    it('should return `es` if browser language is `es`', () => {
-      navigatorLanguageSpy.and.returnValue('es');
-
-      expect(UtilFunctions.browserLanguage()).toBe('es');
-    });
-
-    it('should return `ru` if browser language is `ru`', () => {
-      navigatorLanguageSpy.and.returnValue('ru');
-
-      expect(UtilFunctions.browserLanguage()).toBe('ru');
-    });
-  });
-
   describe('Function getBrowserLanguage:', () => {
     it('should return the value of `navigator.language` if it`s defined', () => {
       navigatorLanguageSpy.and.returnValue('pt');
@@ -1407,8 +1375,8 @@ describe('Function convertNumberToDecimals:', () => {
   it('should convert number to float', () => {
     expect(convertNumberToDecimal(12.567, 2)).toBe(12.57);
     expect(convertNumberToDecimal(12.56, 2)).toBe(12.56);
-    expect(convertNumberToDecimal(12.5649584958748574897, 2)).toBe(12.56);
-    expect(convertNumberToDecimal(12.5649584958748574897, 4)).toBe(12.565);
+    expect(convertNumberToDecimal(12.564958495874857, 2)).toBe(12.56);
+    expect(convertNumberToDecimal(12.564958495874857, 4)).toBe(12.565);
     expect(convertNumberToDecimal(12.56, 1)).toBe(12.6);
     expect(convertNumberToDecimal('12.56', 1)).toBe(12.6);
     expect(convertNumberToDecimal('12', 1)).toBe(12);

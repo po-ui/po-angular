@@ -1,0 +1,14 @@
+<div class="po-dynamic-container">
+  <ng-template ngFor let-fieldsInContainer [ngForOf]="fields">
+    <div>
+      <div class="po-dynamic-container-title" *ngIf="fieldsInContainer[0].container">
+        {{ fieldsInContainer[0].container }}
+      </div>
+      <po-container>
+        <div class="po-row">
+          <ng-container *ngTemplateOutlet="content; context: { $implicit: fieldsInContainer }"> </ng-container>
+        </div>
+      </po-container>
+    </div>
+  </ng-template>
+</div>

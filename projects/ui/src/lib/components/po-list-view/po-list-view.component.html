@@ -70,7 +70,7 @@
                 [p-disabled]="returnBooleanValue(action, item, 'disabled')"
                 [p-icon]="action.icon"
                 [p-label]="action.label"
-                [p-kind]="action.type"
+                [p-danger]="action.type === 'danger'"
                 (p-click)="onClickAction(action, item)"
               >
               </po-button>

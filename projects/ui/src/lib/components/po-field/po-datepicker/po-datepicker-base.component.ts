@@ -1,4 +1,4 @@
-import { EventEmitter, Input, OnInit, Output, Directive } from '@angular/core';
+import { Directive, EventEmitter, Input, OnInit, Output } from '@angular/core';
 import { AbstractControl, ControlValueAccessor, Validator } from '@angular/forms';
 
 import {
@@ -8,17 +8,16 @@ import {
   convertToBoolean,
   formatYear,
   isTypeof,
+  replaceFormatSeparator,
   setYearFrom0To100,
-  validateDateRange,
-  replaceFormatSeparator
+  validateDateRange
 } from '../../../utils/util';
-import { dateFailed, requiredFailed } from './../validators';
-import { InputBoolean } from '../../../decorators';
 import { PoMask } from '../po-input/po-mask';
+import { dateFailed, requiredFailed } from './../validators';
 
-import { PoDatepickerIsoFormat } from './enums/po-datepicker-iso-format.enum';
-import { PoLanguageService } from '../../../services/po-language/po-language.service';
 import { poLocaleDefault } from '../../../services/po-language/po-language.constant';
+import { PoLanguageService } from '../../../services/po-language/po-language.service';
+import { PoDatepickerIsoFormat } from './enums/po-datepicker-iso-format.enum';
 
 const poDatepickerFormatDefault: string = 'dd/mm/yyyy';
 
@@ -63,6 +62,35 @@ const poDatepickerFormatDefault: string = 'dd/mm/yyyy';
  * ```
  *
  * > Não esqueça de importar o `FormsModule` em seu módulo, tal como para utilizar o `input default`.
+ *
+ * #### Tokens customizáveis
+ *
+ * É possível alterar o estilo do componente usando os seguintes tokens (CSS): <br>
+ * Obs: Só é possível realizar alterações ao adicionar a classe `.po-input`
+ *
+ * > Para maiores informações, acesse o guia [Personalizando o Tema Padrão com Tokens CSS](https://po-ui.io/guides/theme-customization).
+ *
+ * | Propriedade                            | Descrição                                             | Valor Padrão                                     |
+ * |----------------------------------------|-------------------------------------------------------|--------------------------------------------------|
+ * | **Default Values**                     |                                                       |                                                  |
+ * | `--font-family`                        | Família tipográfica usada                             | `var(--font-family-theme)`                       |
+ * | `--font-size`                          | Tamanho da fonte                                      | `var(--font-size-default)`                       |
+ * | `--text-color-placeholder` &nbsp;      | Cor principal do texto do placeholder                 | `var(--color-neutral-light-30)`                  |
+ * | `--color`                              | Cor principal do datepicker                           | `var(--color-neutral-dark-70)`                   |
+ * | `--background`                         | Cor de background                                     | `var(--color-neutral-light-05)`                  |
+ * | `--padding`                            | Preenchimento                                         | `0 0.5rem`                                       |
+ * | `--text-color`                         | Cor do texto                                          | `var(--color-neutral-dark-90)`                   |
+ * | **Hover**                              |                                                       |                                                  |
+ * | `--color-hover`                        | Cor principal no estado hover                         | `var(--color-brand-01-dark)`                     |
+ * | `--background-hover`                   | Cor de background no estado hover                     | `var(--color-brand-01-lightest)`                 |
+ * | **Focused**                            |                                                       |                                                  |
+ * | `--color-focused`                      | Cor principal no estado de focus                      | `var(--color-action-default)`                    |
+ * | `--outline-color-focused`              | Cor do outline do estado de focus                     | `var(--color-action-focus)`                      |
+ * | **Disabled**                           |                                                       |                                                  |
+ * | `--color-disabled`                     | Cor principal no estado disabled                      | `var(--color-neutral-light-30)`                  |
+ * | `--background-disabled`                | Cor de background no estado disabled &nbsp;           | `var(--color-neutral-light-20)`                  |
+ * | `--text-color-disabled`                | Cor do texto no estado disabled                       | `var(--color-neutral-dark-70)`                   |
+ *
  */
 @Directive()
 export abstract class PoDatepickerBaseComponent implements ControlValueAccessor, OnInit, Validator {
@@ -77,7 +105,7 @@ export abstract class PoDatepickerBaseComponent implements ControlValueAccessor,
    *
    * @default `false`
    */
-  @Input('p-auto-focus') @InputBoolean() autoFocus: boolean = false;
+  @Input({ alias: 'p-auto-focus', transform: convertToBoolean }) autoFocus: boolean = false;
 
   /* Nome do componente datepicker. */
   @Input('name') name: string;
@@ -122,8 +150,9 @@ export abstract class PoDatepickerBaseComponent implements ControlValueAccessor,
    */
   @Output('p-change') onchange: EventEmitter<any> = new EventEmitter<any>();
 
+  offset: number;
   protected firstStart = true;
-  protected hour: string = 'T00:00:01-00:00';
+  protected hour: string = 'T00:00:00-00:00';
   protected isExtendedISO: boolean = false;
   protected objMask: any;
   protected onChangeModel: any = null;
@@ -368,6 +397,8 @@ export abstract class PoDatepickerBaseComponent implements ControlValueAccessor,
   }
 
   ngOnInit() {
+    this.offset = new Date().getTimezoneOffset();
+    this.formatTimezoneAndHour(this.offset);
     // Classe de máscara
     this.objMask = this.buildMask(
       replaceFormatSeparator(this.format, this.languageService.getDateSeparator(this.locale))
@@ -493,6 +524,16 @@ export abstract class PoDatepickerBaseComponent implements ControlValueAccessor,
     mask = mask.replace(/YYYY/g, '9999');
 
     return new PoMask(mask, true);
+  }
+
+  formatTimezoneAndHour(offset: number) {
+    const offsetAbsolute = Math.abs(offset);
+    const timezone =
+      (offset < 0 ? '+' : '-') +
+      ('00' + Math.floor(offsetAbsolute / 60)).slice(-2) +
+      ':' +
+      ('00' + (offsetAbsolute % 60)).slice(-2);
+    this.hour = 'T00:00:00' + timezone;
   }
 
   abstract writeValue(value: any): void;

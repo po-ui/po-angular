@@ -61,6 +61,10 @@ export class PoTableLabsPage {
     return this.getPoCheckbox('actionOptions', 'showSingleAction');
   }
 
+  get poCheckboxDraggableTable() {
+    return this.getPoCheckbox('options', 'draggable');
+  }
+
   get poTableColumnDestiny() {
     return this.getPoTableColumn('Destino');
   }

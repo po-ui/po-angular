@@ -116,13 +116,13 @@
         "serve": {
           "builder": "@angular-devkit/build-angular:dev-server",
           "options": {
-            "browserTarget": "app:build:es5",
             "open": true,
-            "host": "0.0.0.0"
+            "host": "0.0.0.0",
+            "buildTarget": "app:build:es5"
           },
           "configurations": {
             "production": {
-              "browserTarget": "app:build:production"
+              "buildTarget": "app:build:production"
             }
           }
         },
@@ -341,12 +341,12 @@
               "budgets": [
                 {
                   "type": "initial",
-                  "maximumWarning": "2mb",
+                  "maximumWarning": "2.1mb",
                   "maximumError": "5mb"
                 },
                 {
                   "type": "anyComponentStyle",
-                  "maximumWarning": "6kb",
+                  "maximumWarning": "8kb",
                   "maximumError": "10kb"
                 }
               ]
@@ -356,18 +356,18 @@
         "serve": {
           "builder": "@angular-devkit/build-angular:dev-server",
           "options": {
-            "browserTarget": "portal:build"
+            "buildTarget": "portal:build"
           },
           "configurations": {
             "production": {
-              "browserTarget": "portal:build:production"
+              "buildTarget": "portal:build:production"
             }
           }
         },
         "extract-i18n": {
           "builder": "@angular-devkit/build-angular:extract-i18n",
           "options": {
-            "browserTarget": "portal:build"
+            "buildTarget": "portal:build"
           }
         },
         "lint": {

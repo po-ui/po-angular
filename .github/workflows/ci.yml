@@ -4,14 +4,28 @@ name: CI
 # Define em quais situações esse workflow será executado
 on:
   push:
-    branches: [ master ]
+    branches: [ master, development, '[0-9]+.x.x' ]
   pull_request:
-    branches: [ master ]
+    branches: [ master, development, '[0-9]+.x.x' ]
 
 # Os jobs são conjuntos de actions que são executados na mesma máquina virtual.
 # É possível ter mais de um job e assim executar ações paralelamente.
 jobs:
-
+  discord_notification_on_pr:
+    runs-on: ubuntu-latest
+    if: github.event_name == 'pull_request' && github.event.pull_request.merged == false
+    steps:
+      - name: Notify Discord on PR
+        env:
+          DISCORD_WEBHOOK_URL: ${{ secrets.DISCORD_WEBHOOK_URL }}
+        run: |
+          AUTHOR="${{ github.event.pull_request.user.login }}"
+          PR_TITLE="${{ github.event.pull_request.title }}"
+          PR_URL="${{ github.event.pull_request.html_url }}"
+          curl -X POST -H "Content-Type: application/json" \
+          -d "{\"content\": \"🚀 **PR Criada com Sucesso 🚀**\\n- Autor: $AUTHOR\\n- Título: $PR_TITLE\\n- Link: $PR_URL\"}" \
+          $DISCORD_WEBHOOK_URL
+          
   lint:
 
     runs-on: ubuntu-20.04
@@ -29,12 +43,16 @@ jobs:
 
     - uses: actions/setup-node@v3
       with:
-        node-version: 16
+        node-version: 18
 
     # Executa um comando do projeto na máquina virtual
     - run: npm i
     - run: npm run format:check
-    - run: npm run lint
+    - run: npm run lint:storage
+    - run: npm run lint:sync
+    - run: npm run lint:ui
+    - run: npm run lint:templates
+    - run: npm run lint:code-editor
 
   build:
     name: Build packages
@@ -47,7 +65,7 @@ jobs:
 
     - uses: actions/setup-node@v3
       with:
-        node-version: 16
+        node-version: 18
 
     - run: npm i
     - run: npm run build
@@ -70,7 +88,7 @@ jobs:
 
     - uses: actions/setup-node@v3
       with:
-        node-version: 16
+        node-version: 18
 
     - run: npm i
     - run: npm run test:ui
@@ -87,7 +105,7 @@ jobs:
 
     - uses: actions/setup-node@v3
       with:
-        node-version: 16
+        node-version: 18
 
     - run: npm i
     - run: npm run build:ui:lite
@@ -105,7 +123,7 @@ jobs:
 
     - uses: actions/setup-node@v3
       with:
-        node-version: 16
+        node-version: 18
 
     - run: npm i
     - run: npm run test:code-editor
@@ -122,7 +140,7 @@ jobs:
 
     - uses: actions/setup-node@v3
       with:
-        node-version: 16
+        node-version: 18
 
     - run: npm i
     - run: npm run test:storage
@@ -139,7 +157,7 @@ jobs:
 
     - uses: actions/setup-node@v3
       with:
-        node-version: 16
+        node-version: 18
 
     - run: npm i
     - run: npm run build:storage:lite

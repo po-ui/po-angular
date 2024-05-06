@@ -10,20 +10,28 @@ import { PoMenuService } from './services/po-menu.service';
 
 export const poMenuLiteralsDefault = {
   en: {
-    itemNotFound: 'Item not found.',
-    emptyLabelError: 'Attribute PoMenuItem.label can not be empty.'
+    itemNotFound: 'Item not found',
+    emptyLabelError: 'Attribute PoMenuItem.label can not be empty',
+    close: 'Close menu',
+    open: 'Open menu'
   },
   es: {
-    itemNotFound: 'Elemento no encontrado.',
-    emptyLabelError: 'El atributo PoMenuItem.label no puede ser vacío.'
+    itemNotFound: 'Elemento no encontrado',
+    emptyLabelError: 'El atributo PoMenuItem.label no puede ser vacío',
+    close: 'Cerrar menú',
+    open: 'Abrir menú'
   },
   pt: {
-    itemNotFound: 'Item não encontrado.',
-    emptyLabelError: 'O atributo PoMenuItem.label não pode ser vazio.'
+    itemNotFound: 'Item não encontrado',
+    emptyLabelError: 'O atributo PoMenuItem.label não pode ser vazio',
+    close: 'Fechar menu',
+    open: 'Abrir menu'
   },
   ru: {
-    itemNotFound: 'Предмет не найден.',
-    emptyLabelError: 'Атрибут PoMenuItem.label не может быть пустым.'
+    itemNotFound: 'Предмет не найден',
+    emptyLabelError: 'Атрибут PoMenuItem.label не может быть пустым',
+    close: 'Закрыть меню',
+    open: 'Открыть меню'
   }
 };
 
@@ -34,19 +42,58 @@ export const poMenuLiteralsDefault = {
  *
  * O componente po-menu recebe uma lista de objetos do tipo `MenuItem` com as informações dos itens de menu como
  * textos, links para redirecionamento, ações, até 4 níveis de menu e ícones para o primeiro nível de menu.
+ *
+ * #### Tokens customizáveis
+ *
+ * É possível alterar o estilo do componente usando os seguintes tokens (CSS):
+ *
+ * > Para maiores informações, acesse o guia [Personalizando o Tema Padrão com Tokens CSS](https://po-ui.io/guides/theme-customization).
+ *
+ * | Propriedade                            | Descrição                                             | Valor Padrão                                    |
+ * |----------------------------------------|-------------------------------------------------------|-------------------------------------------------|
+ * | **Default Values**                     |                                                       |                                                 |
+ * | `--border-radius`                      | Contém o valor do raio dos cantos do elemento&nbsp;   | `var(--border-radius-md)`                       |
+ * | `--border-color`                       | Cor da borda                                          | `var(--color-neutral-light-20)`                 |
+ * | `--background-color`                   | Cor de background                                     | `Var(----color-neutral-light-05)`               |
+ * | **Menu Footer**                        |                                                       |                                                 |
+ * | `--color`                              | Cor principla do menu footer                          | `var(--color-action-default)`                   |
+ * | `--font-size`                          | Tamanho da fonte                                      | `var(--font-size-default)`                      |
+ * | `--line-height`                        | Tamanho da label                                      | `var(--line-height-md)`                         |
+ * | `--outline-color-focused`              | Cor do outline do estado de focus                     | `var(--color-action-focus)`                     |
+ * | `--font-weight-lvl0`                   | Peso da fonte                                         | `var(--font-weight-bold)`                       |
+ * | **po-menu-item**                       |                                                       |                                                 |
+ * | `--font-family`                        | Família tipográfica usada                             | `var(--font-family-theme)`                      |
+ * | `--font-size`                          | Tamanho da fonte                                      | `var(--font-size-default)`                      |
+ * | `--line-height`                        | Tamanho da label                                      | `var(--line-height-md)`                         |
+ * | `--border-radius`                      | Contém o valor do raio dos cantos do elemento&nbsp;   | `var(--border-radius-md)`                       |
+ * | `--color`                              | Cor principal do item                                 | `var(--color-action-default)`                   |
+ * | `--background-color`                   | Cor do background                                     | `transparent`                                   |
+ * | **Hover**                              |                                                       |                                                 |
+ * | `--color-hover`                        | Cor principal no estado hover                         | `var(--color-brand-01-darkest)`                 |
+ * | `--background-color-hover`             | Cor de background no estado hover                     | `var(--color-brand-01-lighter)`                 |
+ * | **Focused**                            |                                                       |                                                 |
+ * | `--outline-color-focused`              | Cor do outline do estado de focus                     | `var(--color-action-focus)`                     |
+ * | **Pressed**                            |                                                       |                                                 |
+ * | `--background-color-pressed` &nbsp;    | Cor de background no estado de pressionado&nbsp;      | `var(--color-brand-01-light)`                   |
+ * | **Actived**                            |                                                       |                                                 |
+ * | `--background-color-actived`           | Cor de background no estado actived                   | `var(--color-brand-01-darkest)`                 |
+ * | `--color-actived`                      | Cor principal no estado actived                       | `var(--color-brand-01-lighter)`                 |
+ * | **Font**                               |                                                       |                                                 |
+ * | `--font-weight-lvl0`                   | Peso da fonte bold                                    | `var(--font-weight-bold)`                       |
+ * | `--font-weight-lvl1`                   | Peso da fonte                                         | `var(--font-weight-normal)`                     |
+ *
+ * <br>
  */
 @Directive()
 export abstract class PoMenuBaseComponent {
   allowIcons: boolean;
   allowCollapseMenu: boolean;
+  allowCollapseHover: boolean;
 
   filteredItems;
   filterService: PoMenuFilter;
 
-  readonly literals = {
-    ...poMenuLiteralsDefault[this.languageService.getLanguageDefault()],
-    ...poMenuLiteralsDefault[this.languageService.getShortLanguage()]
-  };
+  readonly literals: any;
 
   private _collapsed = false;
   private _filter = false;
@@ -55,6 +102,17 @@ export abstract class PoMenuBaseComponent {
   private _menus = [];
   private _params: any;
   private _service: string | PoMenuFilter;
+
+  /**
+   * @optional
+   *
+   * @description
+   *
+   * Expande e Colapsa (retrai) o menu automaticamente.
+   *
+   * @default `false`
+   */
+  @Input({ alias: 'p-automatic-toggle', transform: convertToBoolean }) automaticToggle: boolean = false;
 
   /**
    * @optional
@@ -77,6 +135,7 @@ export abstract class PoMenuBaseComponent {
   @Input('p-collapsed') set collapsed(collapsed: boolean) {
     this._collapsed = convertToBoolean(collapsed);
 
+    this.allowCollapseHover = this._collapsed;
     this.validateCollapseClass();
   }
 
@@ -238,7 +297,12 @@ export abstract class PoMenuBaseComponent {
     public menuGlobalService: PoMenuGlobalService,
     public menuService: PoMenuService,
     public languageService: PoLanguageService
-  ) {}
+  ) {
+    this.literals = {
+      ...poMenuLiteralsDefault[this.languageService?.getLanguageDefault()],
+      ...poMenuLiteralsDefault[this.languageService?.getShortLanguage()]
+    };
+  }
 
   protected setMenuExtraProperties() {
     this.allowIcons = !!this.menus.length;

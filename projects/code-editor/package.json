@@ -1,7 +1,6 @@
 {
   "name": "@po-ui/ng-code-editor",
   "version": "0.0.0-PLACEHOLDER",
-  "tag": "next",
   "description": "PO UI - Code Editor",
   "author": "PO UI",
   "license": "MIT",
@@ -14,17 +13,17 @@
   "dependencies": {
     "@po-ui/ng-components": "0.0.0-PLACEHOLDER",
     "@po-ui/ng-schematics": "0.0.0-PLACEHOLDER",
-    "monaco-editor": "0.24.0",
-    "core-js": "^3.13.0",
+    "monaco-editor": "0.44.0",
+    "core-js": "^3.33.3",
     "intl": "^1.2.5",
-    "tslib": "^2.3.0"
+    "tslib": "^2.6.2"
   },
   "peerDependencies": {
-    "@angular/common": "^15.0.3",
-    "@angular/core": "^15.0.3",
-    "@angular/forms": "^15.0.3",
+    "@angular/common": "^17",
+    "@angular/core": "^17",
+    "@angular/forms": "^17",
     "@po-ui/ng-components": "0.0.0-PLACEHOLDER",
-    "monaco-editor": "0.24.0",
-    "zone.js": "~0.12.0"
+    "monaco-editor": "0.44.0",
+    "zone.js": "~0.14.4"
   }
 }

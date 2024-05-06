@@ -1,11 +1,10 @@
+import { Component, Input, OnDestroy, OnInit } from '@angular/core';
 import { ActivatedRoute, Route, Router } from '@angular/router';
-import { Component, Input, OnInit, OnDestroy } from '@angular/core';
 
-import { Subscription, Observable, EMPTY, concat, of } from 'rxjs';
-import { tap, switchMap, map } from 'rxjs/operators';
+import { EMPTY, Observable, Subscription, of } from 'rxjs';
+import { map, switchMap, tap } from 'rxjs/operators';
 
 import {
-  InputBoolean,
   PoDialogConfirmOptions,
   PoDialogService,
   PoLanguageService,
@@ -18,28 +17,29 @@ import {
 } from '@po-ui/ng-components';
 
 import * as util from '../../utils/util';
+import { convertToBoolean } from '../../utils/util';
 
 import { PoPageDynamicDetailComponent } from '../po-page-dynamic-detail/po-page-dynamic-detail.component';
 
-import { poPageDynamicTableLiteralsDefault } from './po-page-dynamic-table-literals';
-import { PoPageDynamicListBaseComponent } from './po-page-dynamic-list-base.component';
 import { PoPageDynamicService } from '../../services/po-page-dynamic/po-page-dynamic.service';
-import { PoPageDynamicTableActions } from './interfaces/po-page-dynamic-table-actions.interface';
-import { PoPageDynamicTableOptions } from './interfaces/po-page-dynamic-table-options.interface';
-import { PoPageCustomizationService } from './../../services/po-page-customization/po-page-customization.service';
-import { PoPageDynamicOptionsSchema } from './../../services/po-page-customization/po-page-dynamic-options.interface';
-import { PoPageDynamicTableMetaData } from './interfaces/po-page-dynamic-table-metadata.interface';
-import { PoPageDynamicTableActionsService } from './po-page-dynamic-table-actions.service';
-import { PoPageDynamicTableBeforeEdit } from './interfaces/po-page-dynamic-table-before-edit.interface';
-import { PoPageDynamicTableBeforeNew } from './interfaces/po-page-dynamic-table-before-new.interface';
-import { PoPageDynamicTableBeforeRemove } from './interfaces/po-page-dynamic-table-before-remove.interface';
-import { PoPageDynamicTableBeforeDetail } from './interfaces/po-page-dynamic-table-before-detail.interface';
-import { PoPageDynamicTableBeforeDuplicate } from './interfaces/po-page-dynamic-table-before-duplicate.interface';
-import { PoPageDynamicTableBeforeRemoveAll } from './interfaces/po-page-dynamic-table-before-remove-all.interface';
-import { PoPageDynamicTableCustomAction } from './interfaces/po-page-dynamic-table-custom-action.interface';
-import { PoPageDynamicTableCustomTableAction } from './interfaces/po-page-dynamic-table-custom-table-action.interface';
 import { isExternalLink, openExternalLink, removeDuplicateItemsWithArrayKey } from '../../utils/util';
 import { PoPageDynamicSearchLiterals } from '../po-page-dynamic-search/po-page-dynamic-search-literals.interface';
+import { PoPageCustomizationService } from './../../services/po-page-customization/po-page-customization.service';
+import { PoPageDynamicOptionsSchema } from './../../services/po-page-customization/po-page-dynamic-options.interface';
+import { PoPageDynamicTableActions } from './interfaces/po-page-dynamic-table-actions.interface';
+import { PoPageDynamicTableBeforeDetail } from './interfaces/po-page-dynamic-table-before-detail.interface';
+import { PoPageDynamicTableBeforeDuplicate } from './interfaces/po-page-dynamic-table-before-duplicate.interface';
+import { PoPageDynamicTableBeforeEdit } from './interfaces/po-page-dynamic-table-before-edit.interface';
+import { PoPageDynamicTableBeforeNew } from './interfaces/po-page-dynamic-table-before-new.interface';
+import { PoPageDynamicTableBeforeRemoveAll } from './interfaces/po-page-dynamic-table-before-remove-all.interface';
+import { PoPageDynamicTableBeforeRemove } from './interfaces/po-page-dynamic-table-before-remove.interface';
+import { PoPageDynamicTableCustomAction } from './interfaces/po-page-dynamic-table-custom-action.interface';
+import { PoPageDynamicTableCustomTableAction } from './interfaces/po-page-dynamic-table-custom-table-action.interface';
+import { PoPageDynamicTableMetaData } from './interfaces/po-page-dynamic-table-metadata.interface';
+import { PoPageDynamicTableOptions } from './interfaces/po-page-dynamic-table-options.interface';
+import { PoPageDynamicListBaseComponent } from './po-page-dynamic-list-base.component';
+import { PoPageDynamicTableActionsService } from './po-page-dynamic-table-actions.service';
+import { poPageDynamicTableLiteralsDefault } from './po-page-dynamic-table-literals';
 
 const PAGE_SIZE_DEFAULT = 10;
 
@@ -55,16 +55,14 @@ type UrlOrPoCustomizationFunction = string | (() => PoPageDynamicTableOptions);
  *
  * ### Utilização via rota
  *
- * Ao utilizar as rotas para carregar o template, o `page-dynamic-table` disponibiliza propriedades para
- * poder especificar o endpoint dos dados e dos metadados. Exemplo de utilização:
+ * Ao utilizar as rotas para inicializar o template, o `page-dynamic-table` disponibiliza propriedades que devem ser fornecidas no arquivo de configuração de rotas da aplicação, para
+ * poder especificar o endpoint dos dados e dos metadados que serão carregados na inicialização.
  *
- * O componente primeiro irá carregar o metadado da rota definida na propriedade serviceMetadataApi
- * e depois irá buscar da rota definida na propriedade serviceLoadApi
+ * Exemplo de utilização:
  *
- * > Caso o servidor retornar um erro ao recuperar o metadados, será repassado o metadados salvo em cache,
- * se o cache não existe será disparado uma notificação.
- *
+ * Arquivo de configuração de rotas da aplicação: `app-routing.module.ts`
  * ```
+ * const routes: Routes = [
  * {
  *   path: 'people',
  *   component: PoPageDynamicTableComponent,
@@ -73,12 +71,22 @@ type UrlOrPoCustomizationFunction = string | (() => PoPageDynamicTableOptions);
  *     serviceMetadataApi: 'http://localhost:3000/v1/metadata', // endpoint dos metadados utilizando o método HTTP Get
  *     serviceLoadApi: 'http://localhost:3000/load-metadata' // endpoint de customizações dos metadados utilizando o método HTTP Post
  *   }
- * }
+ *  },
+ *  {
+ *   path: 'home',
+ *   component: HomeExampleComponent
+ *  }
+ * ];
  *
  * ```
+ * O componente primeiro irá carregar o metadado da rota definida na propriedade serviceMetadataApi
+ * e depois irá buscar da rota definida na propriedade serviceLoadApi.
  *
  * A requisição dos metadados é feita na inicialização do template para buscar os metadados da página passando o
  * tipo do metadado esperado e a versão cacheada pelo browser.
+ *
+ * > Caso o servidor retornar um erro ao recuperar os metadados, serão repassados os metadados salvos em cache,
+ * se o cache não existir será disparada uma notificação.
  *
  * O formato esperado na resposta da requisição está especificado na interface
  * [PoPageDynamicTableMetadata](/documentation/po-page-dynamic-table#po-page-dynamic-table-metadata). Por exemplo:
@@ -128,6 +136,11 @@ type UrlOrPoCustomizationFunction = string | (() => PoPageDynamicTableOptions);
  *  <file name="sample-po-page-dynamic-table-hotels/sample-po-page-dynamic-table-hotels.component.html"> </file>
  *  <file name="sample-po-page-dynamic-table-hotels/sample-po-page-dynamic-table-hotels.component.ts"> </file>
  * </example>
+ *
+ * <example name="po-page-dynamic-table-drag-and-drop" title="PO Page Dynamic Table - Drag and Drop">
+ *  <file name="sample-po-page-dynamic-table-drag-and-drop/sample-po-page-dynamic-table-drag-and-drop.component.html"> </file>
+ *  <file name="sample-po-page-dynamic-table-drag-and-drop/sample-po-page-dynamic-table-drag-and-drop.component.ts"> </file>
+ * </example>
  */
 @Component({
   selector: 'po-page-dynamic-table',
@@ -175,9 +188,7 @@ export class PoPageDynamicTableComponent extends PoPageDynamicListBaseComponent 
    *
    * @default `false`
    */
-  @InputBoolean()
-  @Input('p-keep-filters')
-  keepFilters: boolean = false;
+  @Input({ alias: 'p-keep-filters', transform: convertToBoolean }) keepFilters: boolean = false;
 
   /**
    * @optional
@@ -188,9 +199,7 @@ export class PoPageDynamicTableComponent extends PoPageDynamicListBaseComponent 
    *
    * @default `false`
    */
-  @InputBoolean()
-  @Input('p-actions-right')
-  actionRight?: boolean = false;
+  @Input({ alias: 'p-actions-right', transform: convertToBoolean }) actionRight: boolean = false;
 
   /**
    * @optional
@@ -214,9 +223,19 @@ export class PoPageDynamicTableComponent extends PoPageDynamicListBaseComponent 
    *
    * @default `false`
    */
-  @InputBoolean()
-  @Input('p-concat-filters')
-  concatFilters: boolean = false;
+  @Input({ alias: 'p-concat-filters', transform: convertToBoolean }) concatFilters: boolean = false;
+
+  /**
+   * @optional
+   *
+   * @description
+   *
+   * Permite que o gerenciador de colunas, responsável pela definição de quais colunas serão exibidas, seja escondido.
+   *
+   * @default `false`
+   */
+  @Input({ alias: 'p-hide-columns-manager', transform: convertToBoolean })
+  hideColumnsManager: boolean = false;
 
   /**
    * @optional
@@ -229,9 +248,8 @@ export class PoPageDynamicTableComponent extends PoPageDynamicListBaseComponent 
    *
    * @default `false`
    */
-  @InputBoolean()
-  @Input('p-hide-remove-all-disclaimer')
-  hideRemoveAllDisclaimer?: boolean = false;
+  @Input({ alias: 'p-hide-remove-all-disclaimer', transform: convertToBoolean })
+  hideRemoveAllDisclaimer: boolean = false;
 
   /**
    * @optional
@@ -246,9 +264,7 @@ export class PoPageDynamicTableComponent extends PoPageDynamicListBaseComponent 
    *
    * @default `false`
    */
-  @InputBoolean()
-  @Input('p-infinite-scroll')
-  infiniteScroll?: boolean = false;
+  @Input({ alias: 'p-infinite-scroll', transform: convertToBoolean }) infiniteScroll: boolean = false;
 
   /**
    * @description
@@ -287,6 +303,7 @@ export class PoPageDynamicTableComponent extends PoPageDynamicListBaseComponent 
   private _defaultPageActions: Array<PoPageAction> = [];
   private _defaultTableActions: Array<PoTableAction> = [];
   private _hideCloseDisclaimers: Array<string> = [];
+  private _draggable = false;
 
   private set defaultPageActions(value: Array<PoPageAction>) {
     this._defaultPageActions = value;
@@ -509,6 +526,22 @@ export class PoPageDynamicTableComponent extends PoPageDynamicListBaseComponent 
    * > O valor padrão será traduzido de acordo com o idioma configurado no [`PoI18nService`](/documentation/po-i18n) ou *browser*.
    */
   @Input('p-literals') searchLiterals: PoPageDynamicSearchLiterals;
+
+  /**
+   * @optional
+   *
+   * @description
+   *
+   * Habilita o modo drag and drop para as colunas da tabela.
+   *
+   */
+  @Input('p-draggable') set draggable(value: boolean) {
+    this._draggable = value;
+  }
+
+  get draggable(): boolean {
+    return this._draggable;
+  }
 
   constructor(
     private router: Router,

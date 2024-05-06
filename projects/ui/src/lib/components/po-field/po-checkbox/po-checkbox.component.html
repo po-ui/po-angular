@@ -5,10 +5,11 @@
   (keydown)="onKeyDown($event, checkboxValue)"
 >
   <div
+    #checkboxLabel
     role="checkbox"
     class="po-checkbox-outline"
     [attr.p-size]="size"
-    [tabindex]="disabled ? -1 : 0"
+    [tabindex]="disabled || disabladTabindex ? -1 : 0"
     [attr.aria-checked]="checkboxValue"
   >
     <span
@@ -22,7 +23,6 @@
     </span>
 
     <po-label
-      #checkboxLabel
       *ngIf="label"
       class="po-checkbox-label"
       tabindex="-1"

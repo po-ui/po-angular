@@ -60,7 +60,8 @@ export class SamplePoLookupLabsComponent implements OnInit {
     { value: 'showRequired', label: 'Show Required' },
     { value: 'infiniteScroll', label: 'Infinite Scroll' },
     { value: 'multiple', label: 'Multiple' },
-    { value: 'autoHeight', label: 'Auto Height' }
+    { value: 'autoHeight', label: 'Auto Height' },
+    { value: 'hideColumnsManager', label: 'Hide Columns Manager' }
   ];
 
   private readonly columnsDefinition = {

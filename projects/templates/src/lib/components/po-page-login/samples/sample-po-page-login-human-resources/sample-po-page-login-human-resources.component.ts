@@ -29,7 +29,7 @@ export class SamplePoPageLoginHumanResourcesComponent implements OnDestroy, OnIn
   passwordErrors = [];
   params: PoPageBlockedUserReasonParams = { attempts: 3, hours: 24 };
   passwordRecovery: PoPageLoginRecovery = {
-    url: 'https://po-sample-api.fly.dev/v1/users',
+    url: 'https://po-sample-api.onrender.com/v1/users',
     type: PoModalPasswordRecoveryType.All,
     contactMail: 'support@mail.com'
   };
@@ -37,7 +37,10 @@ export class SamplePoPageLoginHumanResourcesComponent implements OnDestroy, OnIn
 
   private i18nSubscription: Subscription;
 
-  constructor(private poI18nService: PoI18nService, private poDialog: PoDialogService) {}
+  constructor(
+    private poI18nService: PoI18nService,
+    private poDialog: PoDialogService
+  ) {}
 
   ngOnDestroy() {
     this.i18nSubscription.unsubscribe();

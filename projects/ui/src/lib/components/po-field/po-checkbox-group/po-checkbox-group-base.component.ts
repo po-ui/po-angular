@@ -1,12 +1,11 @@
+import { Directive, EventEmitter, Input, Output } from '@angular/core';
 import { AbstractControl, ControlValueAccessor, Validator } from '@angular/forms';
-import { EventEmitter, Input, Output, Directive } from '@angular/core';
 
-import { convertToBoolean, convertToInt, uuid } from './../../../utils/util';
-import { InputBoolean } from '../../../decorators';
 import { requiredFailed } from '../validators';
+import { convertToBoolean, convertToInt, uuid } from './../../../utils/util';
 
-import { PoCheckboxGroupOption } from './interfaces/po-checkbox-group-option.interface';
 import { PoCheckboxGroupOptionView } from './interfaces/po-checkbox-group-option-view.interface';
+import { PoCheckboxGroupOption } from './interfaces/po-checkbox-group-option.interface';
 
 const poCheckboxGroupColumnsDefaultLength: number = 6;
 const poCheckboxGroupColumnsTotalLength: number = 12;
@@ -53,7 +52,7 @@ export class PoCheckboxGroupBaseComponent implements ControlValueAccessor, Valid
    *
    * @default `false`
    */
-  @Input('p-auto-focus') @InputBoolean() autoFocus: boolean = false;
+  @Input({ alias: 'p-auto-focus', transform: convertToBoolean }) autoFocus: boolean = false;
 
   /** Nome dos checkboxes */
   @Input('name') name: string;
@@ -245,7 +244,7 @@ export class PoCheckboxGroupBaseComponent implements ControlValueAccessor, Valid
   }
 
   checkOption(value: PoCheckboxGroupOption) {
-    if (!this._disabled && !value.disabled) {
+    if (!this._disabled && !value.disabled && !value.fixed) {
       this.checkOptionModel(value);
       this.changeValue();
     }

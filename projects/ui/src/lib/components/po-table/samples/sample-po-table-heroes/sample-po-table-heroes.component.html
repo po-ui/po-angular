@@ -7,11 +7,14 @@
       [p-infinite-scroll]="true"
       p-selectable="true"
       [p-hide-select-all]="true"
+      [p-hide-table-search]="false"
       p-infinite-scroll-distance="80"
       (p-selected)="changeOptions($event, 'new')"
       (p-unselected)="changeOptions($event, 'change')"
       p-height="300"
       [p-items]="items"
+      (p-delete-items)="deleteItems($event)"
+      [p-hide-action-fixed-columns]="true"
     >
     </po-table>
   </div>
@@ -20,10 +23,12 @@
     <po-table
       #POItemsSelected
       [p-columns]="columns"
+      [p-hide-table-search]="false"
       [p-striped]="true"
       [p-infinite-scroll]="true"
       p-height="300"
       [p-items]="itemsSelected"
+      [p-hide-action-fixed-columns]="true"
     >
     </po-table>
   </div>

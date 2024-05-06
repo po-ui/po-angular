@@ -55,6 +55,18 @@ describe('PoInputGeneric:', () => {
     expect(component).toBeTruthy();
   });
 
+  it('validateClassesForMask: should called if mask exists', (): void => {
+    const fakeThis = {
+      mask: '99999-999',
+      validateClassesForMask: () => {}
+    };
+    spyOn(fakeThis, 'validateClassesForMask');
+
+    component.validateInitMask.call(fakeThis);
+
+    expect(fakeThis.validateClassesForMask).toHaveBeenCalled();
+  });
+
   it('should call afterViewInit', () => {
     spyOn(component, 'afterViewInit');
     component.ngAfterViewInit();
@@ -98,10 +110,12 @@ describe('PoInputGeneric:', () => {
   it('should call keydown from mask with keyCode different 229', () => {
     const fakeThis = {
       mask: '(999)',
+      passedWriteValue: true,
       objMask: {
         keydown: (value: any) => {}
       },
-      eventOnBlur: e => {}
+      eventOnBlur: e => {},
+      validateClassesForMask: (value: boolean) => {}
     };
     spyOn(fakeThis.objMask, 'keydown');
     component.onKeydown.call(fakeThis, fakeEvent);
@@ -111,6 +125,7 @@ describe('PoInputGeneric:', () => {
   it('should not call keydown from mask with keyCode different 229', () => {
     const fakeThis = {
       mask: '',
+      passedWriteValue: true,
       objMask: {
         keydown: (value: any) => {}
       },
@@ -126,6 +141,7 @@ describe('PoInputGeneric:', () => {
   it('should not call keydown when the mask is empty and keyCode is different of 229', () => {
     const fakeThis = {
       mask: '999',
+      passedWriteValue: true,
       objMask: {
         keydown: (value: any) => {}
       },
@@ -644,6 +660,55 @@ describe('PoInputGeneric:', () => {
       expect(component.el.nativeElement.classList).not.toContain('ng-invalid');
     });
 
+    it('validateClassesForMask: should add invalid classes if maskValid validation failed.', (): void => {
+      const fakeThis = {
+        inputEl: {
+          nativeElement: {
+            value: undefined
+          }
+        },
+        el: {
+          nativeElement: {
+            classList: {
+              add: value => {},
+              get: 'ng-invalid-mask'
+            }
+          }
+        },
+        mask: '99999-999'
+      };
+
+      component.validateClassesForMask.call(fakeThis);
+
+      expect(fakeThis.el.nativeElement.classList.get).toContain('ng-invalid-mask');
+      expect(fakeThis.el.nativeElement.classList.get).toContain('ng-invalid-mask');
+    });
+
+    it('validateClassesForMask: should remove invalid classes if maskValid validation sucess.', (): void => {
+      const fakeThis = {
+        inputEl: {
+          nativeElement: {
+            value: '12345-678'
+          }
+        },
+        el: {
+          nativeElement: {
+            classList: {
+              add: value => {},
+              get: 'ng-invalid-mask',
+              remove: value => {}
+            }
+          }
+        },
+        mask: '99999-999'
+      };
+      spyOn(fakeThis.el.nativeElement.classList, 'remove');
+
+      component.validateClassesForMask.call(fakeThis);
+
+      expect(fakeThis.el.nativeElement.classList.remove).toHaveBeenCalledWith('ng-invalid-mask');
+    });
+
     it('controlChangeEmitter: should emit change with input value if input value changes', fakeAsync((): void => {
       const inputValue = 'value';
 
@@ -690,7 +755,9 @@ describe('PoInputGeneric:', () => {
         inputEl: '',
         mask: '',
         changeModel: component.changeModel,
-        passedWriteValue: false
+        passedWriteValue: false,
+        validateClassesForMask: () => {},
+        validateInitMask: () => {}
       };
       spyOn(component.changeModel, 'emit');
       component.writeValueModel.call(fakeThis, value);
@@ -703,7 +770,8 @@ describe('PoInputGeneric:', () => {
         inputEl: '',
         mask: '',
         changeModel: component.changeModel,
-        passedWriteValue: false
+        passedWriteValue: false,
+        validateClassesForMask: () => {}
       };
       spyOn(component.changeModel, 'emit');
       component.writeValueModel.call(fakeThis, '');
@@ -716,7 +784,9 @@ describe('PoInputGeneric:', () => {
         inputEl: component.inputEl,
         mask: '',
         changeModel: component.changeModel,
-        passedWriteValue: false
+        passedWriteValue: false,
+        validateClassesForMask: () => {},
+        validateInitMask: () => {}
       };
       component.writeValueModel.call(fakeThis, 'valor');
       expect(component.inputEl.nativeElement.value).toBe('valor');
@@ -732,7 +802,9 @@ describe('PoInputGeneric:', () => {
           _formatModel: false
         },
         changeModel: component.changeModel,
-        passedWriteValue: false
+        passedWriteValue: false,
+        validateClassesForMask: () => {},
+        validateInitMask: () => {}
       };
       component.writeValueModel.call(fakeThis, 'valor');
       expect(component.inputEl.nativeElement.value).toBe('valor formatted');
@@ -749,7 +821,9 @@ describe('PoInputGeneric:', () => {
         },
         changeModel: component.changeModel,
         callUpdateModelWithTimeout: component.callUpdateModelWithTimeout,
-        passedWriteValue: false
+        passedWriteValue: false,
+        validateClassesForMask: () => {},
+        validateInitMask: () => {}
       };
       const callUpdateModelWithTimeout = spyOn(fakeThis, <any>'callUpdateModelWithTimeout');
       component.writeValueModel.call(fakeThis, 'valor');

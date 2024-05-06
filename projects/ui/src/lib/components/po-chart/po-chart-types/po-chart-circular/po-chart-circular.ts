@@ -30,7 +30,11 @@ export class PoChartCircular extends PoChartDynamicTypeComponent implements OnDe
   private svgPathElementsList: Array<string> = [];
   private svgTextElementsList: Array<string> = [];
 
-  constructor(protected el: ElementRef, private ngZone: NgZone, private renderer: Renderer2) {
+  constructor(
+    protected el: ElementRef,
+    private ngZone: NgZone,
+    private renderer: Renderer2
+  ) {
     super();
   }
 

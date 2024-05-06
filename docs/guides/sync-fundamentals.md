@@ -75,7 +75,7 @@ Esta sincronização pode ser acionada (gatilho) das seguintes formas:
 - [Manualmente](guides/sync-fundamentals#sync): será acionada na chamada manual do método `PoSyncService.sync()`.
 
 > Antes de continuar os próximos passos, siga as instruções do [Começando com o PO Sync](guides/sync-get-started) para
-saber como criar um novo projeto com Ionic 5 utilizando o PO Sync.
+saber como criar um novo projeto com Ionic 7 utilizando o PO Sync.
 
 <a id="knowledge"></a>
 ## Conhecimentos necessários
@@ -113,8 +113,8 @@ import { PoSyncSchema } from '@po-ui/ng-sync';
 
 const conferenceSchema: PoSyncSchema = {
   // Endpoint para o método GET
-  getUrlApi: 'https://po-sample-conference.fly.dev/conferences',
-  diffUrlApi: 'https://po-sample-conference.fly.dev/conferences/diff',
+  getUrlApi: 'https://po-sample-conference.onrender.com/conferences',
+  diffUrlApi: 'https://po-sample-conference.onrender.com/conferences/diff',
   deletedField: 'isDeleted',
   fields: [ 'id', 'title', 'date', 'location', 'description' ],
   idField: 'id',
@@ -190,8 +190,8 @@ propriedade `deletedField` na interface [PoSyncSchema](/documentation/po-sync), 
 import { PoSyncSchema } from '@po-ui/ng-sync';
 
 const conferenceSchema: PoSyncSchema = {
-  getUrlApi: 'https://po-sample-conference.fly.dev/conferences',
-  diffUrlApi: 'https://po-sample-conference.fly.dev/conferences/diff',
+  getUrlApi: 'https://po-sample-conference.onrender.com/conferences',
+  diffUrlApi: 'https://po-sample-conference.onrender.com/conferences/diff',
   // Definição do nome do campo
   deletedField: 'isDeleted',
   fields: [ 'id', 'title', 'date', 'location', 'description' ],
@@ -218,7 +218,7 @@ tiveram a última atualização maior ou igual a data que foi recebida como par�
 sincronizados serão retornados. Para cada um dos *schemas* é necessário ter um *endpoint* de sincronização.
 
 Abra o seu navegador e acesse a URL
-https://po-sample-conference.fly.dev/conferences/diff/2018-10-08T13:23:31.893Z.
+https://po-sample-conference.onrender.com/conferences/diff/2018-10-08T13:23:31.893Z.
 
 O *endpoint* de sincronização deve retornar uma resposta com a estrutura como a da URL acima, por exemplo:
 
@@ -251,9 +251,9 @@ abaixo:
 import { PoSyncSchema } from '@po-ui/ng-sync';
 
 const conferenceSchema: PoSyncSchema = {
-  getUrlApi: 'https://po-sample-conference.fly.dev/conferences',
+  getUrlApi: 'https://po-sample-conference.onrender.com/conferences',
   // Definição da URL de sincronização
-  diffUrlApi: 'https://po-sample-conference.fly.dev/conferences/diff',
+  diffUrlApi: 'https://po-sample-conference.onrender.com/conferences/diff',
   deletedField: 'isDeleted',
   fields: [ 'id', 'title', 'date', 'location', 'description' ],
   idField: 'id',

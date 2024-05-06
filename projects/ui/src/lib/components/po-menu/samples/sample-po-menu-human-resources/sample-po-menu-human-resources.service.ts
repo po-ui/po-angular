@@ -1,14 +1,14 @@
 import { HttpClient } from '@angular/common/http';
 import { Injectable } from '@angular/core';
 
-import { map } from 'rxjs/operators';
 import { Observable } from 'rxjs';
+import { map } from 'rxjs/operators';
 
 import { PoMenuFilter, PoMenuItemFiltered } from '@po-ui/ng-components';
 
 @Injectable()
 export class SamplePoMenuHumanResourcesService implements PoMenuFilter {
-  private url: string = 'https://po-sample-api.fly.io/v1/menus';
+  private url: string = 'https://po-sample-api.onrender.com/v1/menus';
 
   constructor(private http: HttpClient) {}
 

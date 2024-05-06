@@ -202,7 +202,7 @@ export interface PoTableColumn {
    *
    * > O tooltip só será visível se for uma coluna do tipo *link*.
    *
-   * > Caso a propriedade `p-hide-text-overflow` esteja habilitada e o conteúdo da célula exceder a largura da coluna,
+   * > Caso o conteúdo da célula exceder a largura da coluna,
    * é ignorado o valor atribuído ao *tooltip* e será exibido justamente o conteúdo da célula.
    */
   tooltip?: string;
@@ -257,8 +257,15 @@ export interface PoTableColumn {
   visible?: boolean;
 
   /**
-   * A largura da coluna pode ser informada em pixels ou porcentagem.
-   * > Exemplo: '100px' ou '20%'.
+   *
+   * hoje o tamanho mínimo das colunas é de 32px, respeitando o padding lateral.
+   * Boas Práticas:
+   * Indicamos:
+   * - para colunas com 2 das propriedades (property, [p-draggable] e [p-sort]) : 96px
+   * - para colunas com 3 propriedades (property, [p-draggable] e [p-sort]) : 144px
+   *
    */
   width?: string;
+
+  fixed?: boolean;
 }

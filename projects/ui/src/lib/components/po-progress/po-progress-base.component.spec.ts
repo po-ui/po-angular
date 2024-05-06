@@ -34,6 +34,18 @@ describe('PoProgressBaseComponent:', () => {
 
       expectPropertiesValues(component, 'value', validValues, 0);
     });
+
+    it('should update property `p-size` with valid values', () => {
+      const validValues = ['large', 'medium'];
+
+      expectPropertiesValues(component, 'size', validValues, validValues);
+    });
+
+    it('should update property `p-size` with large if has not valid values', () => {
+      const invalidValues = ['extrasmall', 'huge', 'extralarge'];
+
+      expectPropertiesValues(component, 'size', invalidValues, 'large');
+    });
   });
 
   describe('Methods:', () => {

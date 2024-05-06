@@ -177,6 +177,7 @@ export interface PoDynamicField {
    *
    * - `boolean`: Valores *booleanos*.
    * - `currency`: Valores monetários.
+   * - `decimal`: Valores decimais.
    * - `date`: Valores de datas.
    *  + Aceita os tipos **string** e **Date** padrão do Javascript,
    *  por exemplo: `'2017-11-28'` ou `new Date(2017, 10, 28)`.
@@ -191,4 +192,12 @@ export interface PoDynamicField {
    * @default `string`
    */
   type?: string | PoDynamicFieldType;
+
+  /**
+   * Exibirá um container para todos os campos abaixo dessa propriedade.
+   * Esta propriedade configura o layout dos componentes dynamic-view e dynamic-edit, deixando todos os items dentro de containers
+   *
+   * Está propriedade é do tipo string, o valor que será titulo do contianer
+   * */
+  container?: string;
 }

@@ -10,10 +10,11 @@ import { expectPropertiesValues, expectSettersMethod } from '../../../util-test/
 import { PoLanguageService } from '../../../services/po-language/po-language.service';
 import { poLocaleDefault } from '../../../services/po-language/po-language.constant';
 
-import { PoComboBaseComponent, poComboLiteralsDefault } from './po-combo-base.component';
+import { PoComboBaseComponent } from './po-combo-base.component';
 import { PoComboFilter } from './interfaces/po-combo-filter.interface';
 import { PoComboFilterMode } from './po-combo-filter-mode.enum';
 import { PoComboOption } from './interfaces/po-combo-option.interface';
+import { poComboLiteralsDefault } from './interfaces/po-combo-literals-default.interface';
 
 @Directive()
 class PoComboTest extends PoComboBaseComponent {
@@ -146,10 +147,10 @@ describe('PoComboBaseComponent:', () => {
 
     describe('p-literals:', () => {
       it('should be set `literals` with browser language if `literals` is `undefined`', () => {
-        component['language'] = Utils.browserLanguage();
+        component['language'] = Utils.getShortBrowserLanguage();
         component.literals = undefined;
 
-        expect(component.literals).toEqual(poComboLiteralsDefault[Utils.browserLanguage()]);
+        expect(component.literals).toEqual(poComboLiteralsDefault[Utils.getShortBrowserLanguage()]);
       });
 
       it('should be in portuguese if browser is set with `pt`.', () => {
@@ -223,8 +224,9 @@ describe('PoComboBaseComponent:', () => {
     });
 
     it('p-placeholder: should update property p-placeholder with empty value if set with invalid values.', () => {
+      component['language'] = 'pt';
       const invalidValues = [null, undefined, '', 0, false];
-      expectPropertiesValues(component, 'placeholder', invalidValues, '');
+      expectPropertiesValues(component, 'placeholder', invalidValues, 'Escolha uma opção');
     });
   });
 
@@ -428,6 +430,18 @@ describe('PoComboBaseComponent:', () => {
     expect(component.visibleOptions.length).toBe(3);
   });
 
+  it('should update with all list if removeInitialFilter is true', () => {
+    const options: Array<PoComboOption> = [
+      { label: 'Valor 1', value: '1' },
+      { label: '2', value: '2' },
+      { label: 'Valor 3', value: '3' }
+    ];
+
+    component.removeInitialFilter = true;
+    component.updateComboList(options);
+    expect(component.visibleOptions).toBe(options);
+  });
+
   it('should select a new item if no one are selected', () => {
     const options: Array<PoComboOption> = [
       { label: 'Valor 1', value: '1' },
@@ -502,9 +516,9 @@ describe('PoComboBaseComponent:', () => {
       expect(component['updateHasNext']).toHaveBeenCalled();
     });
 
-    it('should call `updateSelectedValue` when contains `options` and param is a `validValue`', () => {
+    it('should call `updateSelectedValue` when contains `options` and param is a `validValue` and set false in `removeInitialFilter`', () => {
       component.options = [{ label: '1', value: 'valor 1' }];
-
+      component.removeInitialFilter = true;
       spyOn(component, 'updateSelectedValue');
       spyOn(component, 'getOptionFromValue');
       spyOn(component, 'getObjectByValue');
@@ -514,6 +528,7 @@ describe('PoComboBaseComponent:', () => {
       expect(component.updateSelectedValue).toHaveBeenCalled();
       expect(component.getOptionFromValue).toHaveBeenCalled();
       expect(component.getObjectByValue).not.toHaveBeenCalled();
+      expect(component.removeInitialFilter).toBeFalsy();
     });
 
     it('should call `updateSelectedValue` if `changeOnEnter` is `false`', () => {
@@ -1423,11 +1438,12 @@ describe('PoComboBaseComponent:', () => {
 
     it('clear: should call `callModelChange` and `updateSelectedValue` and `updateComboList` and `initInputObservable`', () => {
       component.clean = true;
-
+      component.keyupSubscribe = of('').subscribe();
       spyOn(component, 'callModelChange');
       spyOn(component, 'updateSelectedValue');
       spyOn(component, 'updateComboList');
       spyOn(component, 'initInputObservable');
+      spyOn(component.keyupSubscribe, 'unsubscribe');
 
       component.clear('');
 
@@ -1435,6 +1451,7 @@ describe('PoComboBaseComponent:', () => {
       expect(component.updateSelectedValue).toHaveBeenCalled();
       expect(component.updateComboList).toHaveBeenCalled();
       expect(component.initInputObservable).toHaveBeenCalled();
+      expect(component.keyupSubscribe['unsubscribe']).toHaveBeenCalled();
       expect(component.selectedValue).toEqual(undefined);
     });
 
@@ -1442,6 +1459,7 @@ describe('PoComboBaseComponent:', () => {
       component['defaultService'].hasNext = false;
       component.infiniteScroll = true;
       component.service = defaultService;
+      component.keyupSubscribe = of('').subscribe();
 
       component.clear('');
 

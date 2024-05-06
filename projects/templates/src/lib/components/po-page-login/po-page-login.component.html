@@ -15,10 +15,13 @@
   (p-selected-language)="onSelectedLanguage($event)"
 >
   <header class="po-page-login-header">
-    <h1 class="po-mb-md-4 po-mb-sm-1">
-      <div class="po-page-login-header-product-name">{{ productName }}</div>
+    <div class="po-page-login-header-product-name">
+      <h1>{{ productName }}</h1>
+    </div>
+
+    <div class="po-page-login-header-product-environment po-mb-md-4 po-mb-sm-1">
       <po-tag *ngIf="environment" p-type="warning" [p-value]="environment"> </po-tag>
-    </h1>
+    </div>
     <div class="po-page-login-header-welcome po-mb-md-4 po-mb-sm-2">{{ pageLoginLiterals.welcome }}</div>
   </header>
 

@@ -37,7 +37,10 @@ export class SamplePoLookupHeroComponent {
     { property: 'name', optional: true, gridColumns: 6 }
   ];
 
-  constructor(public service: SamplePoLookupService, public notification: PoNotificationService) {}
+  constructor(
+    public service: SamplePoLookupService,
+    public notification: PoNotificationService
+  ) {}
 
   fieldFormat(value) {
     return `${value.nickname} - ${value.label}`;

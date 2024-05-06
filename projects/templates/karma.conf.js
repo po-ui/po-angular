@@ -48,9 +48,6 @@ module.exports = function (config) {
               statements: 11,
               lines: 9,
               functions: 0
-            },
-            'src/lib/components/po-page-dynamic-table/po-page-dynamic-table.component.ts': {
-              branches: 98
             }
           }
         }

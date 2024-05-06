@@ -44,7 +44,7 @@ export interface PoMenuItemBadge {
   /**
    * @description
    *
-   * Número exibido no *badge*, caso o mesmo seja maior que **99** o mesmo exibe **99+**.
+   * Número exibido no *badge*, caso o mesmo seja maior que **9** o mesmo exibe **9+**.
    */
   value: number;
 }

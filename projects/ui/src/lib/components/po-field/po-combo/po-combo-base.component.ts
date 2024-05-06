@@ -1,38 +1,23 @@
+import { Directive, EventEmitter, Input, OnInit, Output, TemplateRef } from '@angular/core';
 import { AbstractControl, ControlValueAccessor, Validator } from '@angular/forms';
-import { EventEmitter, Input, OnInit, Output, Directive, TemplateRef } from '@angular/core';
 
-import { convertToBoolean, isTypeof, validValue } from '../../../utils/util';
-import { PoLanguageService } from '../../../services/po-language/po-language.service';
 import { poLocaleDefault } from '../../../services/po-language/po-language.constant';
-import { InputBoolean } from '../../../decorators';
+import { PoLanguageService } from '../../../services/po-language/po-language.service';
+import { convertToBoolean, isTypeof, validValue } from '../../../utils/util';
 import { requiredFailed } from '../validators';
 
 import { PoComboFilter } from './interfaces/po-combo-filter.interface';
+import { PoComboGroup } from './interfaces/po-combo-group.interface';
+import { poComboLiteralsDefault } from './interfaces/po-combo-literals-default.interface';
+import { PoComboLiterals } from './interfaces/po-combo-literals.interface';
+import { PoComboOptionGroup } from './interfaces/po-combo-option-group.interface';
+import { PoComboOption } from './interfaces/po-combo-option.interface';
 import { PoComboFilterMode } from './po-combo-filter-mode.enum';
 import { PoComboFilterService } from './po-combo-filter.service';
-import { PoComboGroup } from './interfaces/po-combo-group.interface';
-import { PoComboLiterals } from './interfaces/po-combo-literals.interface';
-import { PoComboOption } from './interfaces/po-combo-option.interface';
-import { PoComboOptionGroup } from './interfaces/po-combo-option-group.interface';
 
 const PO_COMBO_DEBOUNCE_TIME_DEFAULT = 400;
 const PO_COMBO_FIELD_LABEL_DEFAULT = 'label';
 const PO_COMBO_FIELD_VALUE_DEFAULT = 'value';
-
-export const poComboLiteralsDefault = {
-  en: <PoComboLiterals>{
-    noData: 'No data found'
-  },
-  es: <PoComboLiterals>{
-    noData: 'Datos no encontrados'
-  },
-  pt: <PoComboLiterals>{
-    noData: 'Nenhum dado encontrado'
-  },
-  ru: <PoComboLiterals>{
-    noData: 'Данные не найдены'
-  }
-};
 
 /**
  * @description
@@ -50,6 +35,42 @@ export const poComboLiteralsDefault = {
  *
  * O `po-combo` guarda o último valor caso o usuário desista de uma busca, deixando o campo ou pressionando *Esc*. Caso seja digitado no
  * campo de busca a descrição completa de um item, então a seleção será automaticamente efetuada ao deixar o campo ou pressionando *Enter*.
+ *
+ * Utilizando po-combo com serviço, é possivel digitar um valor no campo de entrada e pressionar a tecla 'tab' para que o componente
+ * faça uma requisição à URL informada passando o valor digitado no campo. Se encontrado o valor, então o mesmo será selecionado, caso
+ * não seja encontrado, então a lista de itens voltará para o estado inicial.
+ *
+ * #### Tokens customizáveis
+ *
+ * É possível alterar o estilo do componente usando os seguintes tokens (CSS):
+ *
+ * > Para maiores informações, acesse o guia [Personalizando o Tema Padrão com Tokens CSS](https://po-ui.io/guides/theme-customization).
+ *
+ * | Propriedade                            | Descrição                                             | Valor Padrão                                      |
+ * |----------------------------------------|-------------------------------------------------------|---------------------------------------------------|
+ * | **Default Values**                     |                                                       |                                                   |
+ * | `--font-family`                        | Família tipográfica usada                             | `var(--font-family-theme)`                        |
+ * | `--font-size`                          | Tamanho da fonte                                      | `var(--font-size-default)`                        |
+ * | `--text-color`                         | Cor do texto                                          | `var(--color-neutral-dark-90)`                    |
+ * | `--text-color-placeholder`             | Cor do texto no placeholder                           | `var(--color-neutral-light-30)`                   |
+ * | `--color`                              | Cor principal do Combo                                | `var(--color-neutral-dark-70)`                    |
+ * | `--background`                         | Cor de background                                     | `var(--color-neutral-light-05)`                   |
+ * | `--border-radius`                      | Contém o valor do raio dos cantos do elemento&nbsp;   | `var(--border-width-lg)`                          |
+ * | **Hover**                              |                                                       |                                                   |
+ * | `--color-hover`                        | Cor principal no estado hover                         | `var(--color-action-hover)`                       |
+ * | `--background-hover`                   | Cor de background no estado hover                     | `var(--color-brand-01-lightest)`                  |
+ * | **Focused**                            |                                                       |                                                   |
+ * | `--color-focused`                      | Cor principal no estado de focus                      | `var(--color-action-default)`                     |
+ * | `--outline-color-focused`              | Cor do outline do estado de focus                     | `var(--color-action-focus)`                       |
+ * | **Error**                              |                                                       |                                                   |
+ * | `--color-error`                        | Cor principal no estado de erro                       | `var(--color-feedback-negative-base)`             |
+ * | **Disabled**                           |                                                       |                                                   |
+ * | `--color-disabled`                     | Cor principal no estado disabled                      | `var(--color-neutral-light-30)`                   |
+ * | `--background-disabled`                | Cor de background no estado disabled                  | `var(--color-neutral-light-20)`                   |
+ * | **Suggestion**                         |                                                       |                                                   |
+ * | `--text-color-suggestion`              | Cor do texto no estado suggestion                     | `var(--color-neutral-mid-60)`                     |
+ * | `--background-suggestion`              | Cor do background no estado suggestion                | `var(--color-brand-01-lightest)`                  |
+ *
  */
 @Directive()
 export abstract class PoComboBaseComponent implements ControlValueAccessor, OnInit, Validator {
@@ -64,7 +85,7 @@ export abstract class PoComboBaseComponent implements ControlValueAccessor, OnIn
    *
    * @default `false`
    */
-  @Input('p-auto-focus') @InputBoolean() autoFocus: boolean = false;
+  @Input({ alias: 'p-auto-focus', transform: convertToBoolean }) autoFocus: boolean = false;
 
   /** Label no componente. */
   @Input('p-label') label?: string;
@@ -178,7 +199,7 @@ export abstract class PoComboBaseComponent implements ControlValueAccessor, OnIn
   @Input('p-optional') optional: boolean;
 
   /** Se verdadeiro, o campo receberá um botão para ser limpo. */
-  @Input('p-clean') @InputBoolean() clean?: boolean;
+  @Input({ alias: 'p-clean', transform: convertToBoolean }) clean?: boolean;
 
   /**
    * @optional
@@ -189,7 +210,7 @@ export abstract class PoComboBaseComponent implements ControlValueAccessor, OnIn
    *
    * @default `false`
    */
-  @Input('p-emit-object-value') @InputBoolean() emitObjectValue?: boolean = false;
+  @Input({ alias: 'p-emit-object-value', transform: convertToBoolean }) emitObjectValue: boolean = false;
 
   /**
    * @optional
@@ -200,7 +221,21 @@ export abstract class PoComboBaseComponent implements ControlValueAccessor, OnIn
    *
    * @default `false`
    */
-  @Input('p-disabled-tab-filter') @InputBoolean() disabledTabFilter?: boolean = false;
+  @Input({ alias: 'p-disabled-tab-filter', transform: convertToBoolean }) disabledTabFilter: boolean = false;
+
+  /**
+   * @optional
+   *
+   * @description
+   *
+   * Define que o filtro no primeiro clique será removido.
+   *
+   * > Caso o combo tenha um valor padrão de inicialização, o primeiro clique
+   * no componente retornará todos os itens da lista e não apenas o item inicialiazado.
+   *
+   * @default `false`
+   */
+  @Input('p-remove-initial-filter') removeInitialFilter: boolean = false;
 
   /**
    * @optional
@@ -280,7 +315,6 @@ export abstract class PoComboBaseComponent implements ControlValueAccessor, OnIn
   private language: string;
   private _infiniteScrollDistance?: number = 100;
   private _infiniteScroll?: boolean = false;
-  private _height?: number;
 
   // utilizado para fazer o controle de atualizar o model.
   // não deve forçar a atualização se o gatilho for o writeValue para não deixar o campo dirty.
@@ -290,7 +324,7 @@ export abstract class PoComboBaseComponent implements ControlValueAccessor, OnIn
 
   /** Mensagem apresentada enquanto o campo estiver vazio. */
   @Input('p-placeholder') set placeholder(value: string) {
-    this._placeholder = value || '';
+    this._placeholder = value || this.literals.chooseOption;
   }
 
   get placeholder() {
@@ -602,7 +636,21 @@ export abstract class PoComboBaseComponent implements ControlValueAccessor, OnIn
    *
    * @default `true`
    */
-  @Input('p-cache') @InputBoolean() cache?: boolean = true;
+  @Input({ alias: 'p-cache', transform: convertToBoolean }) cache: boolean = true;
+
+  /**
+   * @optional
+   *
+   * @description
+   *
+   * Define que o dropdown do combo será incluido no body da página e não suspenso com a caixa de texto do componente.
+   * Opção necessária para o caso de uso do componente em páginas que necessitam renderizar o combo fora do conteúdo principal.
+   *
+   * > Obs: O uso dessa propriedade pode acarretar na perda sequencial da tabulação da página
+   *
+   * @default `false`
+   */
+  @Input({ alias: 'p-append-in-body', transform: convertToBoolean }) appendBox?: boolean = false;
 
   constructor(languageService: PoLanguageService) {
     this.language = languageService.getShortLanguage();
@@ -742,8 +790,12 @@ export abstract class PoComboBaseComponent implements ControlValueAccessor, OnIn
   updateComboList(options?: Array<any>) {
     const copyOptions = options || [...this.comboOptionsList];
 
-    const newOptions =
-      !options && !this.infiniteScroll && this.selectedValue ? [{ ...this.selectedOption }] : copyOptions;
+    let newOptions;
+    if (this.removeInitialFilter) {
+      newOptions = copyOptions;
+    } else {
+      newOptions = !options && !this.infiniteScroll && this.selectedValue ? [{ ...this.selectedOption }] : copyOptions;
+    }
 
     this.visibleOptions = newOptions;
 
@@ -823,6 +875,7 @@ export abstract class PoComboBaseComponent implements ControlValueAccessor, OnIn
       const option = this.getOptionFromValue(value, this.comboOptionsList);
       this.updateSelectedValue(option);
       this.updateComboList();
+      this.removeInitialFilter = false;
       return;
     }
 
@@ -870,6 +923,9 @@ export abstract class PoComboBaseComponent implements ControlValueAccessor, OnIn
     this.updateComboList();
     this.initInputObservable();
     this.updateHasNext();
+    if (this.service || this.filterService) {
+      this.keyupSubscribe.unsubscribe();
+    }
   }
 
   protected configAfterSetFilterService(service: PoComboFilter | string) {

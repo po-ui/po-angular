@@ -214,7 +214,7 @@ describe('PoMenuBaseComponent:', () => {
     it(`configService: shouldn't call 'menuService.configProperties' and should set 'filterService' if service parameter
       is a custom service`, () => {
       const service: PoMenuFilter = {
-        getFilteredData: (search, params) => of([{ label: 'Menu', link: '/' }])
+        getFilteredData: (search, params) => of([{ label: 'Menu', link: '/', action: () => {} }])
       };
 
       const spyConfigPropeties = spyOn(component.menuService, <any>'configProperties');

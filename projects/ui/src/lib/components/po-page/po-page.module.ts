@@ -18,6 +18,7 @@ import { PoPageHeaderComponent } from './po-page-header/po-page-header.component
 import { PoPageListComponent } from './po-page-list/po-page-list.component';
 import { PoPageSlideComponent } from './po-page-slide/po-page-slide.component';
 import { PoPageComponent } from './po-page.component';
+import { PoPageSlideModule } from './po-page-slide/po-page-slide.module';
 
 /**
  * @description
@@ -35,7 +36,8 @@ import { PoPageComponent } from './po-page.component';
     PoDropdownModule,
     PoFieldModule,
     PoLanguageModule,
-    PoModalModule
+    PoModalModule,
+    PoPageSlideModule
   ],
   declarations: [
     PoPageComponent,
@@ -44,8 +46,7 @@ import { PoPageComponent } from './po-page.component';
     PoPageDetailComponent,
     PoPageEditComponent,
     PoPageHeaderComponent,
-    PoPageListComponent,
-    PoPageSlideComponent
+    PoPageListComponent
   ],
   exports: [
     PoPageDefaultComponent,

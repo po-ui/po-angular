@@ -1,12 +1,6 @@
 import { ChangeDetectorRef, Component, OnInit, ViewChild } from '@angular/core';
 
-import {
-  PoButtonGroupItem,
-  PoMenuComponent,
-  PoMenuItem,
-  PoRadioGroupOption,
-  PoSelectOption
-} from '@po-ui/ng-components';
+import { PoButtonGroupItem, PoMenuComponent, PoMenuItem, PoSelectOption } from '@po-ui/ng-components';
 
 @Component({
   selector: 'sample-po-menu-labs',
@@ -41,7 +35,7 @@ export class SamplePoMenuLabsComponent implements OnInit {
   label: string;
   link: string;
   logo: string;
-  maxBadgeValue = 99999999999999999999;
+  maxBadgeValue = 999999999999999;
   menuItems: Array<PoMenuItem>;
   menuItemSelected: string;
   menuParams: string;

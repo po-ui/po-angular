@@ -8,7 +8,8 @@ import {
   PoLanguageService,
   PoPageFilter,
   PoDisclaimerGroupRemoveAction,
-  PoComboOption
+  PoComboOption,
+  PoPageListComponent
 } from '@po-ui/ng-components';
 
 import { capitalizeFirstLetter, getBrowserLanguage } from '../../utils/util';
@@ -44,6 +45,7 @@ type UrlOrPoCustomizationFunction = string | (() => PoPageDynamicSearchOptions);
 })
 export class PoPageDynamicSearchComponent extends PoPageDynamicSearchBaseComponent implements OnInit, OnDestroy {
   @ViewChild(PoAdvancedFilterComponent, { static: true }) poAdvancedFilter: PoAdvancedFilterComponent;
+  @ViewChild(PoPageListComponent, { static: true }) poPageList: PoPageListComponent;
 
   private loadSubscription: Subscription;
 
@@ -63,7 +65,7 @@ export class PoPageDynamicSearchComponent extends PoPageDynamicSearchBaseCompone
   };
 
   constructor(
-    languageService: PoLanguageService,
+    private languageService: PoLanguageService,
     private poPageCustomizationService: PoPageCustomizationService,
     private changeDetector: ChangeDetectorRef
   ) {
@@ -147,7 +149,7 @@ export class PoPageDynamicSearchComponent extends PoPageDynamicSearchBaseCompone
     this.poAdvancedFilter.open();
   }
 
-  onAdvancedSearch(filteredItems) {
+  onAdvancedSearch(filteredItems, isAdvancedSearch?) {
     const { filter, optionsService } = filteredItems;
 
     this._disclaimerGroup.disclaimers = this.setDisclaimers(filter, optionsService);
@@ -155,6 +157,10 @@ export class PoPageDynamicSearchComponent extends PoPageDynamicSearchBaseCompone
     this.setFilters(filter);
 
     this.advancedSearch.emit(filter);
+
+    if (isAdvancedSearch) {
+      this.poPageList.clearInputSearch();
+    }
   }
 
   private getDisclaimersWithoutQuickSearch() {
@@ -208,9 +214,9 @@ export class PoPageDynamicSearchComponent extends PoPageDynamicSearchBaseCompone
     return new Date(year, month - 1, day).toLocaleDateString(getBrowserLanguage());
   }
 
-  private formatArrayToObjectKeyValue(
-    filters: Array<{ property: string; value?: any; initValue?: any }>
-  ): { [key: string]: any } {
+  private formatArrayToObjectKeyValue(filters: Array<{ property: string; value?: any; initValue?: any }>): {
+    [key: string]: any;
+  } {
     const formattedObject = filters.reduce(
       (result, item) => Object.assign(result, { [item.property]: item.value || item.initValue }),
       {}
@@ -225,6 +231,13 @@ export class PoPageDynamicSearchComponent extends PoPageDynamicSearchBaseCompone
     return formattedObject;
   }
 
+  private formatValueToCurrency(field: any, value: any) {
+    const language = this.languageService.getLanguage();
+    return new Intl.NumberFormat(field.locale ? field.locale : language, {
+      minimumFractionDigits: 2
+    }).format(value);
+  }
+
   private getFieldByProperty(fields: Array<PoDynamicFormField>, fieldName: string) {
     return fields.find((field: PoDynamicFormField) => field.property === fieldName);
   }
@@ -232,6 +245,10 @@ export class PoPageDynamicSearchComponent extends PoPageDynamicSearchBaseCompone
   private getFilterValueToDisclaimer(field: any, value: any, optionsServiceObjectsList?: Array<PoComboOption>) {
     if (field.optionsService && optionsServiceObjectsList) {
       return this.optionsServiceDisclaimerLabel(value, optionsServiceObjectsList);
+    }
+
+    if (field.type === PoDynamicFieldType.Currency && value) {
+      return this.formatValueToCurrency(field, value);
     }
 
     if (field.type === PoDynamicFieldType.Date) {

@@ -14,8 +14,12 @@ import { PoDynamicFormFieldsComponent } from './po-dynamic-form/po-dynamic-form-
 import { PoDynamicFormLoadService } from './po-dynamic-form/po-dynamic-form-load/po-dynamic-form-load.service';
 import { PoDynamicFormValidationService } from './po-dynamic-form/po-dynamic-form-validation/po-dynamic-form-validation.service';
 import { PoDynamicViewComponent } from './po-dynamic-view/po-dynamic-view.component';
-import { PoDynamicViewService } from './po-dynamic-view/po-dynamic-view.service';
 import { PoImageModule } from '../po-image';
+import { PoDynamicViewService } from './po-dynamic-view/services/po-dynamic-view.service';
+import { PoComboFilterService } from '../po-field/po-combo/po-combo-filter.service';
+import { PoMultiselectFilterService } from '../po-field/po-multiselect/po-multiselect-filter.service';
+import { PoContainerModule } from '../po-container';
+import { PoDynamicContainerComponent } from './po-dynamic-container/po-dynamic-container.component';
 
 @NgModule({
   imports: [
@@ -26,10 +30,16 @@ import { PoImageModule } from '../po-image';
     PoFieldModule,
     PoTagModule,
     PoTimeModule,
-    PoImageModule
+    PoImageModule,
+    PoContainerModule
   ],
-  declarations: [PoDynamicFormComponent, PoDynamicFormFieldsComponent, PoDynamicViewComponent],
-  exports: [PoDynamicFormComponent, PoDynamicViewComponent],
+  declarations: [
+    PoDynamicFormComponent,
+    PoDynamicFormFieldsComponent,
+    PoDynamicViewComponent,
+    PoDynamicContainerComponent
+  ],
+  exports: [PoDynamicFormComponent, PoDynamicViewComponent, PoDynamicContainerComponent],
   providers: [
     CurrencyPipe,
     DatePipe,
@@ -38,7 +48,9 @@ import { PoImageModule } from '../po-image';
     TitleCasePipe,
     PoDynamicFormLoadService,
     PoDynamicFormValidationService,
-    PoDynamicViewService
+    PoDynamicViewService,
+    PoComboFilterService,
+    PoMultiselectFilterService
   ]
 })
 export class PoDynamicModule {}

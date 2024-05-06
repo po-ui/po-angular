@@ -352,8 +352,10 @@ export class PoMask {
       this.valueToInput = valueProcessed;
       this.valueToModel = this.removeFormattingValue(valueProcessed);
     }
+
     return valueProcessed;
   }
+
   // verifica se tem algum caracter de mascara antes do cursor
   checkMaskBefore($event: any, position: number) {
     if (this.isFixedCharacterGuide($event.target.value.toString().charAt(this.initialPosition - 1))) {

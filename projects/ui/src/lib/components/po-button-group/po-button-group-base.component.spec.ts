@@ -44,17 +44,6 @@ describe('PoButtonGroupBaseComponent', () => {
   });
 
   describe('Properties: ', () => {
-    const booleanInvalidValues = [undefined, null, 2, 'string'];
-    const booleanValidTrueValues = [true, 'true', 1, ''];
-
-    it('p-small: should update property `p-small` with valid values.', () => {
-      expectPropertiesValues(component, 'small', booleanValidTrueValues, true);
-    });
-
-    it('p-small: should update property `p-small` with invalid values.', () => {
-      expectPropertiesValues(component, 'small', booleanInvalidValues, false);
-    });
-
     it('p-toggle: should update property `p-toggle` with valid values.', () => {
       const validValues = ['multiple', 'single', 'none'];
 

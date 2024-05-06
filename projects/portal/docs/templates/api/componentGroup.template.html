@@ -33,9 +33,9 @@
 {% endmacro %}
 
 {%- macro directiveProp(property, join, sep) %}{%- if property.isDirectiveInput -%}{$ property.directiveInputAlias | dashCase | replace("'","") $}{$ join
-$}{$ property.type | escape | replace('{', '&#123;') | replace('}', '&#125;') $}{$ sep $}{%- elif property.isDirectiveOutput -%}({$ property.directiveOutputAlias
-| dashCase | replace("'","") $}){$ join $}{$ property.type | escape | replace('{', '&#123;') | replace('}', '&#125;') $}{$ sep $}{%- else -%}p-{$
-property.name | dashCase | replace("'","") $}{$ join $}{$ property.type | escape | replace('{', '&#123;') | replace('}', '&#125;') $}{$ sep $}{%- endif -%}{% endmacro -%}
+$}{$ property.type | escape | replace('{', '&#123;') | replace('}', '&#125;') | replace("@", "&#64;") $}{$ sep $}{%- elif property.isDirectiveOutput -%}({$ property.directiveOutputAlias
+| dashCase | replace("'","") $}){$ join $}{$ property.type | escape | replace('{', '&#123;') | replace("@", "&#64;") | replace('}', '&#125;') $}{$ sep $}{%- else -%}p-{$
+property.name | dashCase | replace("'","") $}{$ join $}{$ property.type | escape | replace('{', '&#123;') | replace('}', '&#125;') | replace("@", "&#64;") $}{$ sep $}{%- endif -%}{% endmacro -%}
 
 {% macro methodList(methodList, type) -%}
   {% include 'method-list.template.html' %}
@@ -49,14 +49,14 @@ property.name | dashCase | replace("'","") $}{$ join $}{$ property.type | escape
   <p class="docs-api-module-import">
     <code>
       {%- if doc.ngModule.name -%}
-        import &#123; {$ doc.ngModule.name $} &#125; from '@po-ui/ng-{$ doc.package $}';
+        import &#123; {$ doc.ngModule.name $} &#125; from '&#64;po-ui/ng-{$ doc.package $}';
       {%- else -%}
-        import &#123; {$ doc.componentName $} &#125; from '@po-ui/ng-{$ doc.package $}';
+        import &#123; {$ doc.componentName $} &#125; from '&#64;po-ui/ng-{$ doc.package $}';
       {%- endif -%}
   </code>
 
   <div class="docs-api-class-description">
-    {$ doc.ngModule.description | marked | replace('{', '&#123;') | replace('}', '&#125;') $}
+    {$ doc.ngModule.description | marked | replace('{', '&#123;') | replace('}', '&#125;') | replace("@", "&#64;") $}
   </div>
 
   {%- if doc.services.length -%}

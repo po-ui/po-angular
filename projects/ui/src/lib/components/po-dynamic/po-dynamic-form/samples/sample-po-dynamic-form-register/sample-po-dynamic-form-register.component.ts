@@ -4,7 +4,8 @@ import {
   PoDynamicFormField,
   PoDynamicFormFieldChanged,
   PoDynamicFormValidation,
-  PoNotificationService
+  PoNotificationService,
+  ForceBooleanComponentEnum
 } from '@po-ui/ng-components';
 import { PoDynamicFormRegisterService } from './sample-po-dynamic-form-register.service';
 
@@ -142,7 +143,7 @@ export class SamplePoDynamicFormRegisterComponent implements OnInit {
       gridSmColumns: 12,
       label: 'Favorite hero',
       optional: true,
-      searchService: 'https://po-sample-api.fly.dev/v1/heroes',
+      searchService: 'https://po-sample-api.onrender.com/v1/heroes',
       columns: [
         { property: 'nickname', label: 'Hero' },
         { property: 'label', label: 'Name' }
@@ -155,7 +156,7 @@ export class SamplePoDynamicFormRegisterComponent implements OnInit {
       property: 'partner',
       gridColumns: 6,
       gridSmColumns: 12,
-      optionsService: 'https://po-sample-api.fly.dev/v1/people',
+      optionsService: 'https://po-sample-api.onrender.com/v1/people',
       fieldLabel: 'name',
       fieldValue: 'id',
       optional: true
@@ -179,17 +180,27 @@ export class SamplePoDynamicFormRegisterComponent implements OnInit {
       optionsMulti: true
     },
     {
+      property: 'agree',
+      gridColumns: 12,
+      label: 'Do you agree?',
+      type: 'boolean',
+      forceBooleanComponentType: ForceBooleanComponentEnum.checkbox
+    },
+    {
       property: 'image',
       type: 'upload',
       gridColumns: 12,
       gridSmColumns: 12,
       label: 'Upload your background',
       optional: true,
-      url: 'https://po-sample-api.fly.dev/v1/uploads/addFile'
+      url: 'https://po-sample-api.onrender.com/v1/uploads/addFile'
     }
   ];
 
-  constructor(public poNotification: PoNotificationService, private registerService: PoDynamicFormRegisterService) {}
+  constructor(
+    public poNotification: PoNotificationService,
+    private registerService: PoDynamicFormRegisterService
+  ) {}
 
   ngOnInit() {
     this.person = {

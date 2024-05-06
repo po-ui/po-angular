@@ -5,6 +5,7 @@
   [p-filter]="filter"
   [p-literals]="customLiterals"
   [p-title]="title"
+  [p-subtitle]="subtitle"
 >
   <hr />
 
@@ -61,7 +62,7 @@
       name="breadcrumbFavorite"
       [(ngModel)]="breadcrumb.favorite"
       p-clean
-      p-help="https://po-sample-api.fly.dev/v1/favorite"
+      p-help="https://po-sample-api.onrender.com/v1/favorite"
       p-label="Breadcrumb favorite"
     >
     </po-input>
@@ -213,6 +214,7 @@
 <form #form="ngForm">
   <div class="po-row">
     <po-input class="po-md-6" name="title" [(ngModel)]="title" p-label="Title" p-required> </po-input>
+    <po-input class="po-md-12" name="subtitle" [(ngModel)]="subtitle" p-label="Subtitle"> </po-input>
 
     <po-input class="po-md-3" name="filterPlaceholder" [(ngModel)]="filter.placeholder" p-label="Filter placeholder">
     </po-input>

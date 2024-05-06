@@ -3,6 +3,7 @@ import { FormsModule } from '@angular/forms';
 import { NgModule } from '@angular/core';
 import { RouterModule } from '@angular/router';
 import { ScrollingModule } from '@angular/cdk/scrolling';
+import { DragDropModule } from '@angular/cdk/drag-drop';
 
 import { PoButtonModule } from './../po-button/po-button.module';
 import { PoCheckboxGroupModule } from '../po-field/po-checkbox-group/po-checkbox-group.module';
@@ -18,6 +19,7 @@ import { PoIconModule } from './../po-icon/po-icon.module';
 import { PoCheckboxModule } from './../po-field/po-checkbox/po-checkbox.module';
 import { PoRadioModule } from './../po-field/po-radio/po-radio.module';
 import { PoLinkModule } from '../po-link/po-link.module';
+import { PoPageSlideModule } from './../po-page/po-page-slide/po-page-slide.module';
 
 import { PoTableColumnIconComponent } from './po-table-column-icon/po-table-column-icon.component';
 import { PoTableColumnLabelComponent } from './po-table-column-label/po-table-column-label.component';
@@ -33,6 +35,9 @@ import { PoTableSubtitleFooterComponent } from './po-table-subtitle-footer/po-ta
 import { PoTableCellTemplateDirective } from './po-table-cell-template/po-table-cell-template.directive';
 import { PoTableColumnTemplateDirective } from './po-table-column-template/po-table-column-template.directive';
 import { PoTableListManagerComponent } from './po-table-list-manager/po-table-list-manager.component';
+import { PoSwitchModule } from './../po-field/po-switch/po-switch.module';
+import { PoTableColumnFrozenDirective } from './po-table-column-frozen/po-table-column-frozen.directive';
+import { PoSearchModule } from '../po-search/po-search.module';
 
 /**
  * @description
@@ -43,6 +48,7 @@ import { PoTableListManagerComponent } from './po-table-list-manager/po-table-li
     CommonModule,
     FormsModule,
     ScrollingModule,
+    DragDropModule,
     RouterModule,
     PoButtonModule,
     PoCheckboxGroupModule,
@@ -57,7 +63,10 @@ import { PoTableListManagerComponent } from './po-table-list-manager/po-table-li
     PoIconModule,
     PoCheckboxModule,
     PoRadioModule,
-    PoLinkModule
+    PoLinkModule,
+    PoPageSlideModule,
+    PoSwitchModule,
+    PoSearchModule
   ],
   declarations: [
     PoTableComponent,
@@ -73,7 +82,8 @@ import { PoTableListManagerComponent } from './po-table-list-manager/po-table-li
     PoTableSubtitleCircleComponent,
     PoTableSubtitleFooterComponent,
     PoTableCellTemplateDirective,
-    PoTableColumnTemplateDirective
+    PoTableColumnTemplateDirective,
+    PoTableColumnFrozenDirective
   ],
   exports: [
     PoTableComponent,

@@ -1,14 +1,32 @@
-import { EventEmitter, Input, Output, Directive, TemplateRef } from '@angular/core';
+import { Directive, EventEmitter, Input, Output, TemplateRef } from '@angular/core';
 
-import { convertToBoolean } from '../../utils/util';
 import { PoColorPaletteEnum } from '../../enums/po-color-palette.enum';
+import { convertToBoolean } from '../../utils/util';
 
-import { PoTagItem } from './interfaces/po-tag-item.interface';
+import { PoLanguageService } from './../../services/po-language/po-language.service';
+import { poLocaleDefault } from '../../services/po-language/po-language.constant';
 import { PoTagOrientation } from './enums/po-tag-orientation.enum';
 import { PoTagType } from './enums/po-tag-type.enum';
+import { PoTagItem } from './interfaces/po-tag-item.interface';
+import { PoTagLiterals } from './interfaces/po-tag-literals.interface';
 
 const poTagColors = (<any>Object).values(PoColorPaletteEnum);
 const poTagOrientationDefault = PoTagOrientation.Vertical;
+
+export const PoTagLiteralsDefault = {
+  en: {
+    remove: 'Clear'
+  },
+  es: {
+    remove: 'Eliminar'
+  },
+  pt: {
+    remove: 'Remover'
+  },
+  ru: {
+    remove: 'удалять'
+  }
+};
 
 /**
  * @description
@@ -20,6 +38,49 @@ const poTagOrientationDefault = PoTagOrientation.Vertical;
  * utilizando a tecla *tab*.
  *
  * Seu uso é recomendado para informações que necessitem de destaque em forma de marcação.
+ *
+ * #### Tokens customizáveis
+ *
+ * É possível alterar o estilo do componente usando os seguintes tokens (CSS):
+ *
+ * > Para maiores informações, acesse o guia [Personalizando o Tema Padrão com Tokens CSS](https://po-ui.io/guides/theme-customization).
+ *
+ * | Propriedade                            | Descrição                                             | Valor Padrão                                    |
+ * |----------------------------------------|-------------------------------------------------------|-------------------------------------------------|
+ * | **Default Values**                     |                                                       |                                                 |
+ * | `--font-family`                        | Família tipográfica usada                             | `var(--font-family-theme)`                      |
+ * | `--font-size`                          | Tamanho da fonte                                      | `var(--font-size-sm)`                           |
+ * | `--line-height`                        | Tamanho da label                                      | `var(---line-height-sm)`                        |
+ * | `--border-radius`                      | Contém o valor do raio dos cantos do elemento&nbsp;   | `var(--border-radius-pill)`                     |
+ * | **Neutral**                            |                                                       |                                                 |
+ * | `--color-neutral`                      | Cor principal no estado neutral                       | `var(--color-neutral-light-10)`                 |
+ * | `--text-color-positive`                | Cor do texto no estado neutral                        | `var(--color-neutral-dark-80)`                  |
+ * | **Positive**                           |                                                       |                                                 |
+ * | `--color-positive`                     | Cor principal no estado positive                      | `var(--color-feedback-positive-lightest)`       |
+ * | `--text-color-positive`                | Cor do texto no estado positive                       | `var(--color-feedback-positive-dark)`           |
+ * | **Negative**                           |                                                       |                                                 |
+ * | `--color-negative`                     | Cor principal no estado danger                        | `var(--color-feedback-negative-lightest)`       |
+ * | `--text-color-negative`                | Cor do texto no estado danger                         | `var(--color-feedback-negative-darker)`         |
+ * | **Warning**                            |                                                       |                                                 |
+ * | `--color-tag-warning`                  | Cor principal no estado warning                       | `var(--color-feedback-warning-lightest)`        |
+ * | `--text-color-warning`                 | Cor do texto no estado warning                        | `var(--color-feedback-warning-darkest)`         |
+ * | **Info**                               |                                                       |                                                 |
+ * | `--color-info`                         | Cor principal no estado info                          | `var(--color-feedback-info-lightest)`           |
+ * | `--text-color-info`                    | Cor do texto no estado info                           | `var(--color-feedback-info-dark)`               |
+ * | **Removable**                          |                                                       |                                                 |
+ * | `--color`                              | Cor principal quando removable                        | `var(--color-brand-01-lightest)`                |
+ * | `--border-color`                       | Cor de borda quando removable &nbsp;                  | `var(--color-brand-01-lighter)`                 |
+ * | `--color-icon`                         | Cor do ícone quando removable &nbsp;                  | `var(--color-action-default)`                   |
+ * | `--text-color`                         | Cor do texto quando removable &nbsp;                  | `var(--color-neutral-dark-80)`                  |
+ * | `--color-hover`                        | Cor do hover no estado removable &nbsp;               | `var(--color-brand-01-lighter)`                 |
+ * | **Focused**                            |                                                       |                                                 |
+ * | `--outline-color-focused`              | Cor do outline do estado de focus                     | `var(--color-action-focus)`                     |
+ * | **Disabled**                           |                                                       |                                                 |
+ * | `--color-disabled`                     | Cor principal no estado disabled                      | `var(--color-neutral-light-20)`                 |
+ * | `--border-color-disabled`              | Cor da borda no estado disabled &nbsp;                | `var(--color-action-disabled)`                  |
+ * | `--color-icon-disabled`                | Cor do icone no estado disabled &nbsp;                | `var(--color-action-disabled)`                  |
+ * | `--text-color-disabled`                | Cor do texto no estado disabled &nbsp;                | `var(--color-neutral-mid-60)`                   |
+ *
  */
 @Directive()
 export class PoTagBaseComponent {
@@ -32,24 +93,51 @@ export class PoTagBaseComponent {
    */
   @Input('p-label') label?: string;
 
-  /** Texto da tag. */
-  @Input('p-value') value: string;
-
   /**
-   * @deprecated 16.x.x
-   *
    * @optional
    *
    * @description
    *
-   * **Deprecated 16.x.x**.
+   * Habilita a opção de remover a tag
    *
-   * > Por regras de acessibilidade a tag não terá mais evento de click. Indicamos o uso do `Po-button` ou `Po-link`
-   * caso deseje esse comportamento.
+   * @default `false`
+   */
+  @Input({ alias: 'p-removable', transform: convertToBoolean }) removable: boolean = false;
+
+  /**
+   * @optional
+   *
+   * @description
+   *
+   * Desabilita o `po-tag` e não permite que o usuário interaja com o mesmo.
+   * > A propriedade `p-disabled` somente terá efeito caso a propriedade `p-removable` esteja definida como `true`.
+   *
+   * @default `false`
+   */
+  @Input({ alias: 'p-disabled', transform: convertToBoolean }) disabled: boolean = false;
+
+  /** Texto da tag. */
+  @Input('p-value') value: string;
+
+  /**
+   * @optional
+   *
+   * @description
    *
    * Ação que será executada ao clicar sobre o `po-tag` e que receberá como parâmetro um objeto contendo o seu valor e tipo.
+   *
+   * O evento de click só funciona se a tag não for removível.
    */
   @Output('p-click') click: EventEmitter<any> = new EventEmitter<PoTagItem>();
+
+  /**
+   * @optional
+   *
+   * @description
+   *
+   * Ação que sera executada quando clicar sobre o ícone de remover no `po-tag`
+   */
+  @Output('p-close') remove: EventEmitter<any> = new EventEmitter<any>();
 
   public readonly poTagOrientation = PoTagOrientation;
   public customColor;
@@ -60,6 +148,8 @@ export class PoTagBaseComponent {
   private _inverse?: boolean;
   private _orientation?: PoTagOrientation = poTagOrientationDefault;
   private _type?: PoTagType;
+  private _literals: PoTagLiterals;
+  private language: string;
 
   /**
    * @optional
@@ -236,17 +326,67 @@ export class PoTagBaseComponent {
    *  - `success`: cor verde utilizada para simbolizar sucesso ou êxito.
    *  - `warning`: cor amarela que representa aviso ou advertência.
    *  - `danger`: cor vermelha para erro ou aviso crítico.
-   *  - `info`: cor cinza escuro que caracteriza conteúdo informativo.
+   *  - `info`: cor azul claro que caracteriza conteúdo informativo.
+   *  - `neutral`: cor cinza claro para uso geral.
    *
    * > Quando esta propriedade for definida, irá sobrepor a definição de `p-color` e `p-icon` somente será exibido caso seja `true`.
    *
    * @default `info`
    */
   @Input('p-type') set type(value: PoTagType) {
-    this._type = (<any>Object).values(PoTagType).includes(value) ? value : undefined;
+    if (!this.removable) {
+      this._type = (<any>Object).values(PoTagType).includes(value) ? value : undefined;
+    }
   }
 
   get type(): PoTagType {
     return this._type;
+  }
+
+  /**
+   * @optional
+   *
+   * @description
+   *
+   * Objeto com as literais usadas no `po-tag`.
+   *
+   *
+   * Para utilizar, basta passar a literal customizada:
+   *
+   * ```
+   *  const customLiterals: PoTagLiterals = {
+   *    remove: 'Remover itens'
+   *  };
+   * ```
+   *
+   * E para carregar as literais customizadas, basta apenas passar o objeto para o componente:
+   *
+   * ```
+   * <po-tag
+   *   [p-literals]="customLiterals">
+   * </po-tag>
+   * ```
+   *
+   * > O objeto padrão de literais será traduzido de acordo com o idioma do
+   * [`PoI18nService`](/documentation/po-i18n) ou do browser.
+   */
+  @Input('p-literals') set literals(value: PoTagLiterals) {
+    if (value instanceof Object && !(value instanceof Array)) {
+      this._literals = {
+        ...PoTagLiteralsDefault[poLocaleDefault],
+        ...PoTagLiteralsDefault[this.language],
+        ...value
+      };
+    } else {
+      this._literals = PoTagLiteralsDefault[this.language];
+    }
+  }
+
+  get literals() {
+    return this._literals || PoTagLiteralsDefault[this.language];
+  }
+
+  constructor(languageService: PoLanguageService) {
+    this.language = languageService.getShortLanguage();
   }
 }

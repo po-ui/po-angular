@@ -1,9 +1,11 @@
-import { EventEmitter, Input, OnInit, Output, Directive } from '@angular/core';
+import { Directive, EventEmitter, Input, OnInit, Output } from '@angular/core';
 import { AbstractControl, ControlValueAccessor, Validator } from '@angular/forms';
 
 import { Observable, Subject, Subscription } from 'rxjs';
 import { debounceTime, distinctUntilChanged, switchMap, tap } from 'rxjs/operators';
 
+import { poLocaleDefault } from '../../../services/po-language/po-language.constant';
+import { PoLanguageService } from '../../../services/po-language/po-language.service';
 import {
   convertToBoolean,
   isTypeof,
@@ -12,15 +14,12 @@ import {
   sortOptionsByProperty
 } from '../../../utils/util';
 import { requiredFailed } from './../validators';
-import { PoLanguageService } from '../../../services/po-language/po-language.service';
-import { poLocaleDefault } from '../../../services/po-language/po-language.constant';
 
 import { PoMultiselectFilterMode } from './po-multiselect-filter-mode.enum';
-import { PoMultiselectLiterals } from './po-multiselect-literals.interface';
-import { PoMultiselectOption } from './po-multiselect-option.interface';
-import { InputBoolean } from '../../../decorators';
 import { PoMultiselectFilter } from './po-multiselect-filter.interface';
 import { PoMultiselectFilterService } from './po-multiselect-filter.service';
+import { PoMultiselectLiterals } from './po-multiselect-literals.interface';
+import { PoMultiselectOption } from './po-multiselect-option.interface';
 
 const PO_MULTISELECT_DEBOUNCE_TIME_DEFAULT = 400;
 const PO_MULTISELECT_FIELD_LABEL_DEFAULT = 'label';
@@ -30,22 +29,26 @@ export const poMultiselectLiteralsDefault = {
   en: <PoMultiselectLiterals>{
     noData: 'No data found',
     placeholderSearch: 'Search',
-    selectAll: 'Select all'
+    selectAll: 'Select all',
+    selectItem: 'Select items'
   },
   es: <PoMultiselectLiterals>{
     noData: 'Datos no encontrados',
     placeholderSearch: 'Busca',
-    selectAll: 'Seleccionar todo'
+    selectAll: 'Seleccionar todo',
+    selectItem: 'Seleccionar items'
   },
   pt: <PoMultiselectLiterals>{
     noData: 'Nenhum dado encontrado',
     placeholderSearch: 'Buscar',
-    selectAll: 'Selecionar todos'
+    selectAll: 'Selecionar todos',
+    selectItem: 'Selecionar itens'
   },
   ru: <PoMultiselectLiterals>{
     noData: 'Данные не найдены',
     placeholderSearch: 'искать',
-    selectAll: 'Выбрать все'
+    selectAll: 'Выбрать все',
+    selectItem: 'Выбрать элементы'
   }
 };
 
@@ -62,6 +65,50 @@ export const poMultiselectLiteralsDefault = {
  * po-select, po-combo ou po-radio-group.
  *
  * Com ele também é possível definir uma lista à partir da requisição de um serviço definido em `p-filter-service`.
+ *
+ * #### Boas práticas
+ *
+ * - Caso a lista apresente menos de 5 itens, considere utilizar outro componente;
+ * - Não utilize o multiselect caso o usuário possa selecionar apenas uma opção. Para esse caso, opte por utilizar po-radio ou po-select;
+ * - Sempre que possível, agrupe as opções e use labels curtas para descrever o conteúdo. Exemplo: em uma combinação de alimentos,
+ * as opções podem ser agrupadas por Vegetais, Frutas, etc;
+ *
+ * #### Acessibilidade tratada no componente
+ *
+ * Algumas diretrizes de acessibilidade já são tratadas no componente internamente, e não podem ser alteradas pelo proprietário do conteúdo. São elas:
+ *
+ * - Quando em foco, o multiselect abre o listbox usando as teclas de Espaço ou Enter do teclado.
+ * - Utilize as teclas Arrow Up [seta para cima] ou Arrow Down [seta para baixo] do teclado para navegar entre os itens do listbox.
+ * - Utilize a tecla Esc do teclado para fechar o listbox.
+ * - Quando um item estiver em foco, utilize as teclas Arrow Right [seta para direita] ou Arrow Left [seta para esquerda] do teclado para navegar entre eles.
+ * - Quando em foco e havendo um item ou mais já selecionado, utilize a tecla Arrow Down [seta para baixo] do teclado para abrir o listbox.
+ *
+ * #### Tokens customizáveis
+ *
+ * É possível alterar o estilo do componente usando os seguintes tokens (CSS):
+ *
+ * > Para maiores informações, acesse o guia [Personalizando o Tema Padrão com Tokens CSS](https://po-ui.io/guides/theme-customization).
+ *
+ * | Propriedade                            | Descrição                                             | Valor Padrão                                      |
+ * |----------------------------------------|-------------------------------------------------------|---------------------------------------------------|
+ * | **Default Values**                     |                                                       |                                                   |
+ * | `--font-family`                        | Família tipográfica usada                             | `var(--font-family-theme)`                        |
+ * | `--font-size`                          | Tamanho da fonte                                      | `var(--font-size-default)`                        |
+ * | `--text-color-placeholder` &nbsp;      | Cor do texto do placeholder                           | `var(--color-action-disabled)`                    |
+ * | `--color`                              | Cor principal do multiselect                          | `var(--color-neutral-dark-70)`                    |
+ * | `--background`                         | Cor de background                                     | `var(--color-neutral-light-05)`                   |
+ * | **Hover**                              |                                                       |                                                   |
+ * | `--color-hover`                        | Cor principal no estado hover                         | `var(--color-action-hover)`                       |
+ * | `--background-hover`                   | Cor de background no estado hover                     | `var(--color-brand-01-lighter)`                   |
+ * | **Focused**                            |                                                       |                                                   |
+ * | `--color-focused`                      | Cor principal no estado de focus                      | `var(--color-action-default)`                     |
+ * | `--outline-color-focused` &nbsp;       | Cor do outline do estado de focus                     | `var(--color-action-focus)`                       |
+ * | **Disabled**                           |                                                       |                                                   |
+ * | `--color-disabled`                     | Cor principal no estado disabled                      | `var(--color-action-disabled)`                    |
+ * | `--background-disabled` &nbsp;         | Cor de background no estado disabled &nbsp;           | `var(--color-neutral-light-20)`                   |
+ * | **Error**                              |                                                       |                                                   |
+ * | `--color-error`                        | Cor principal no estado error                         | `var(--color-feedback-negative-base)`             |
+ *
  */
 @Directive()
 export abstract class PoMultiselectBaseComponent implements ControlValueAccessor, OnInit, Validator {
@@ -76,7 +123,7 @@ export abstract class PoMultiselectBaseComponent implements ControlValueAccessor
    *
    * @default `false`
    */
-  @Input('p-auto-focus') @InputBoolean() autoFocus: boolean = false;
+  @Input({ alias: 'p-auto-focus', transform: convertToBoolean }) autoFocus: boolean = false;
 
   /** Label no componente. */
   @Input('p-label') label?: string;
@@ -125,7 +172,7 @@ export abstract class PoMultiselectBaseComponent implements ControlValueAccessor
    *
    * @default `false`
    */
-  @Input('p-hide-select-all') @InputBoolean() hideSelectAll: boolean;
+  @Input({ alias: 'p-hide-select-all', transform: convertToBoolean }) hideSelectAll?: boolean;
 
   /**
    * @optional
@@ -136,9 +183,23 @@ export abstract class PoMultiselectBaseComponent implements ControlValueAccessor
    */
   @Output('p-change') change: EventEmitter<any> = new EventEmitter<any>();
 
+  /**
+   * @optional
+   *
+   * @description
+   *
+   * Define que o dropdown do multiselect será incluido no body da página e não suspenso com a caixa de texto do componente.
+   * Opção necessária para o caso de uso do componente em páginas que necessitam renderizar o multiselect fora do conteúdo principal.
+   *
+   * > Obs: O uso dessa propriedade pode acarretar na perda sequencial da tabulação da página
+   *
+   * @default `false`
+   */
+  @Input({ alias: 'p-append-in-body', transform: convertToBoolean }) appendBox?: boolean = false;
+
   selectedOptions: Array<PoMultiselectOption | any> = [];
   visibleOptionsDropdown: Array<PoMultiselectOption | any> = [];
-  visibleDisclaimers = [];
+  visibleTags = [];
   isServerSearching = false;
   isFirstFilter: boolean = true;
   filterSubject = new Subject();
@@ -222,7 +283,7 @@ export abstract class PoMultiselectBaseComponent implements ControlValueAccessor
    *
    * @default `false`
    */
-  @Input('p-auto-height') @InputBoolean() set autoHeight(value: boolean) {
+  @Input({ alias: 'p-auto-height', transform: convertToBoolean }) set autoHeight(value: boolean) {
     this._autoHeight = value;
     this.autoHeightInitialValue = value;
   }
@@ -263,7 +324,9 @@ export abstract class PoMultiselectBaseComponent implements ControlValueAccessor
    * ```
    *  const customLiterals: PoMultiselectLiterals = {
    *    noData: 'Nenhum dado encontrado',
-   *    placeholderSearch: 'Buscar'
+   *    placeholderSearch: 'Buscar',
+   *    selectAll: 'Select all',
+   *    selectItem: 'Select items'
    *  };
    * ```
    *
@@ -297,6 +360,7 @@ export abstract class PoMultiselectBaseComponent implements ControlValueAccessor
       this._literals = poMultiselectLiteralsDefault[this.language];
     }
   }
+
   get literals() {
     return this._literals || poMultiselectLiteralsDefault[this.language];
   }
@@ -518,6 +582,7 @@ export abstract class PoMultiselectBaseComponent implements ControlValueAccessor
       )
       .subscribe();
 
+    this.setLabelsAndValuesOptions();
     this.validAndSortOptions();
     this.updateList(this.options);
   }
@@ -687,6 +752,15 @@ export abstract class PoMultiselectBaseComponent implements ControlValueAccessor
 
   registerOnValidatorChange(fn: () => void) {
     this.validatorChange = fn;
+  }
+
+  private setLabelsAndValuesOptions() {
+    if (this.fieldLabel && this.fieldValue && this.options) {
+      this.options.map(option => {
+        option.label = option[this.fieldLabel];
+        option.value = option[this.fieldValue];
+      });
+    }
   }
 
   private validateModel() {

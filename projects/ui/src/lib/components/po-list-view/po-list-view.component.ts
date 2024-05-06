@@ -61,7 +61,11 @@ export class PoListViewComponent extends PoListViewBaseComponent implements Afte
 
   private differ;
 
-  constructor(private changeDetector: ChangeDetectorRef, differs: IterableDiffers, languageService: PoLanguageService) {
+  constructor(
+    private changeDetector: ChangeDetectorRef,
+    differs: IterableDiffers,
+    languageService: PoLanguageService
+  ) {
     super(languageService);
     this.differ = differs.find([]).create(null);
   }

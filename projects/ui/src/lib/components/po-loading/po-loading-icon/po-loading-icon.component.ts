@@ -1,6 +1,7 @@
 import { Component, Input } from '@angular/core';
 
-import { convertToBoolean } from '../../../utils/util';
+import { convertToBoolean, uuid } from '../../../utils/util';
+import { PoLoadingIconSize } from './po-loading-icon-size-enum';
 
 /**
  * @docsPrivate
@@ -16,6 +17,8 @@ import { convertToBoolean } from '../../../utils/util';
 })
 export class PoLoadingIconComponent {
   private _neutralColor: boolean;
+  private _size: string = 'md';
+  id = uuid();
 
   /**
    * @optional
@@ -32,5 +35,28 @@ export class PoLoadingIconComponent {
 
   get neutralColor(): boolean {
     return this._neutralColor;
+  }
+
+  /**
+   * @optional
+   *
+   * @description
+   *
+   * Definição do tamanho do ícone.
+   *
+   * Valores válidos:
+   *  - `xs`: tamanho `extra small`
+   *  - `sm`: tamanho `small`
+   *  - `md`: tamanho `medium`
+   *  - `lg`: tamanho `large`
+   *
+   * @default `md`
+   */
+  @Input('p-size') set size(value: string) {
+    this._size = PoLoadingIconSize[value] ? PoLoadingIconSize[value] : PoLoadingIconSize.md;
+  }
+
+  get size(): string {
+    return this._size;
   }
 }

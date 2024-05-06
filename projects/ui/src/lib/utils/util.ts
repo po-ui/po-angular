@@ -1,16 +1,4 @@
-import { ViewContainerRef } from '@angular/core';
 import { poLocales, poLocaleDefault } from '../services/po-language/po-language.constant';
-
-/**
- * @deprecated
- * Utilize o método `getShortBrowserLanguage`.
- *
- * @description
- * Retorna idioma do browser ou o idioma padrão.
- */
-export function browserLanguage() {
-  return getShortBrowserLanguage();
-}
 
 /**
  * Converte e formata os bytes em formato mais legível para o usuário.
@@ -231,6 +219,13 @@ export function isFirefox() {
   const userAgent = window.navigator.userAgent;
 
   return userAgent.toLowerCase().indexOf('firefox') > -1;
+}
+
+// Verifica se o navegador em que está sendo usado é Safari
+export function isSafari() {
+  const userAgent = window.navigator.userAgent;
+
+  return /^(?!.*chrome).*safari.*$/.test(userAgent.toLocaleLowerCase());
 }
 
 // Verifica qual o dispositivo que está sendo usado

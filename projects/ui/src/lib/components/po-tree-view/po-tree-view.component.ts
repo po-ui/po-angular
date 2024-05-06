@@ -1,4 +1,4 @@
-import { ChangeDetectionStrategy, Component, OnInit } from '@angular/core';
+import { ChangeDetectionStrategy, Component, OnChanges, OnInit, SimpleChanges } from '@angular/core';
 
 import { PoTreeViewBaseComponent } from './po-tree-view-base.component';
 import { PoTreeViewItem } from './po-tree-view-item/po-tree-view-item.interface';
@@ -35,7 +35,7 @@ import { PoTreeViewService } from './services/po-tree-view.service';
   changeDetection: ChangeDetectionStrategy.OnPush,
   providers: [PoTreeViewService]
 })
-export class PoTreeViewComponent extends PoTreeViewBaseComponent implements OnInit {
+export class PoTreeViewComponent extends PoTreeViewBaseComponent implements OnInit, OnChanges {
   get hasItems() {
     return !!(this.items && this.items.length);
   }
@@ -52,6 +52,12 @@ export class PoTreeViewComponent extends PoTreeViewBaseComponent implements OnIn
     this.treeViewService.onSelect().subscribe((treeViewItem: PoTreeViewItem) => {
       this.emitSelected(treeViewItem);
     });
+  }
+
+  ngOnChanges(changes?: SimpleChanges) {
+    if (changes?.['inputedItems']) {
+      this.items = this.inputedItems;
+    }
   }
 
   trackByFunction(index: number) {

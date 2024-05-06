@@ -13,15 +13,13 @@ describe('PoPageBackgroundComponent:', () => {
   let languageService: PoLanguageService;
   let spyService: jasmine.Spy;
 
-  beforeEach(
-    waitForAsync(() => {
-      TestBed.configureTestingModule({
-        declarations: [PoPageBackgroundComponent],
-        providers: [PoLanguageService],
-        schemas: [NO_ERRORS_SCHEMA]
-      }).compileComponents();
-    })
-  );
+  beforeEach(waitForAsync(() => {
+    TestBed.configureTestingModule({
+      declarations: [PoPageBackgroundComponent],
+      providers: [PoLanguageService],
+      schemas: [NO_ERRORS_SCHEMA]
+    }).compileComponents();
+  }));
 
   beforeEach(() => {
     languageService = TestBed.inject(PoLanguageService);
@@ -85,7 +83,7 @@ describe('PoPageBackgroundComponent:', () => {
   });
 
   describe('Methods:', () => {
-    it('ngOnInit: should get the stored language on localstorage (or browserLanguage by default if en, pt, es or ru) and apply it to `selectedLanguageOption`', () => {
+    it('ngOnInit: should get the stored language on localstorage (or getShortLanguage by default if en, pt, es or ru) and apply it to `selectedLanguageOption`', () => {
       component.ngOnInit();
       expect(component.selectedLanguageOption).toBe(languageService.getShortLanguage());
     });

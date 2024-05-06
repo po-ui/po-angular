@@ -1,9 +1,11 @@
 import { Directive, EventEmitter, HostBinding, Input, Output, TemplateRef } from '@angular/core';
 import { InputBoolean } from '../../../decorators';
+import { convertToBoolean } from '../../../utils/util';
 import { PoItemListType } from '../enums/po-item-list-type.enum';
 import { PoItemListAction } from './interfaces/po-item-list-action.interface';
 import { PoItemListOptionGroup } from './interfaces/po-item-list-option-group.interface';
 import { PoItemListOption } from './interfaces/po-item-list-option.interface';
+import { PoItemListFilterMode } from '../enums/po-item-list-filter-mode.enum';
 
 /**
  * @description
@@ -17,6 +19,7 @@ export class PoItemListBaseComponent {
   private _type!: PoItemListType;
   private _visible: boolean = true;
   private _disabled: boolean = false;
+  _activeTabs: boolean = false;
 
   @HostBinding('attr.p-type')
   @Input('p-type')
@@ -58,7 +61,7 @@ export class PoItemListBaseComponent {
   /** Valor do item. */
   @Input('p-value') value: string;
 
-  @Input('p-danger') @InputBoolean() danger: boolean = false;
+  @Input({ alias: 'p-danger', transform: convertToBoolean }) danger: boolean = false;
 
   /**
    * @optional
@@ -91,7 +94,7 @@ export class PoItemListBaseComponent {
    *
    * @default `false`
    */
-  @Input('p-selected') @InputBoolean() selected: boolean = false;
+  @Input({ alias: 'p-selected', transform: convertToBoolean }) selected: boolean = false;
 
   /**
    * @optional
@@ -102,7 +105,7 @@ export class PoItemListBaseComponent {
    *
    * @default `false`
    */
-  @Input('p-separator') @InputBoolean() separator: boolean = false;
+  @Input({ alias: 'p-separator', transform: convertToBoolean }) separator: boolean = false;
 
   /**
    * @optional
@@ -131,5 +134,59 @@ export class PoItemListBaseComponent {
    */
   @Output('p-select-item') selectItem = new EventEmitter<PoItemListOption | PoItemListOptionGroup | any>();
 
-  constructor() {}
+  // MULTISELECT PROPERTIES
+  //emissao de evento do checkbox
+  @Output('p-selectcheckbox-item') checkboxItem = new EventEmitter<any>();
+
+  @Output('p-selectcombo-item') comboItem = new EventEmitter<any>();
+
+  //valor do checkbox de selecionar todos
+  @Input('p-checkbox-value') checkboxValue: any;
+
+  @Input('p-field-value') fieldValue: string = 'value';
+
+  @Input('p-field-label') fieldLabel: string = 'label';
+
+  @Input('p-template') template: TemplateRef<any> | any;
+
+  @Input('p-template-context') templateContext: any;
+
+  @Input('p-search-value') searchValue: string = '';
+
+  @Input('p-filter-mode') filterMode: PoItemListFilterMode = PoItemListFilterMode.contains;
+
+  @Input('p-filtering') isFiltering: boolean = false;
+
+  @Input('p-should-mark-letter') shouldMarkLetters: boolean = true;
+
+  @Input('p-compare-cache') compareCache: boolean = false;
+
+  @Input('p-combo-service') comboService: any;
+
+  // TABS PROPERTIES
+
+  @Input('p-is-tabs') isTabs?: boolean = false;
+
+  @Input('p-tab-hide') tabHide?: boolean = false;
+
+  @Output('p-emit-item-tabs') tabsItem = new EventEmitter<any>();
+
+  @Output('p-activated-tabs') activatedTab = new EventEmitter();
+
+  // Ativa o botão
+  @Input('p-active-tabs') set activeTabs(value: boolean) {
+    this._activeTabs = value;
+
+    this.emitActiveTabs(this.item);
+  }
+
+  get activeTabs() {
+    return this._activeTabs;
+  }
+
+  protected emitActiveTabs(tab) {
+    if (tab?.active) {
+      this.activatedTab.emit(tab);
+    }
+  }
 }

@@ -4,15 +4,19 @@
   [p-columns]="columns"
   [p-container]="container"
   [p-height]="height"
+  [p-filter-type]="filterType"
   [p-hide-detail]="properties.includes('hideDetail')"
   [p-hide-columns-manager]="properties.includes('hideColumnsManager')"
+  [p-hide-batch-actions]="properties.includes('hideBatchActions')"
+  [p-hide-table-search]="properties.includes('hideTableSearch')"
   [p-hide-select-all]="selection.includes('hideSelectAll')"
-  [p-hide-text-overflow]="properties.includes('hideTextOverflow')"
   [p-items]="items"
   [p-literals]="customLiterals"
+  [p-filtered-columns]="filteredColumns"
   [p-loading]="properties.includes('loading')"
   [p-max-columns]="maxColumns"
   [p-selectable]="selection.includes('selectable')"
+  [p-spacing]="spacing"
   [p-loading-show-more]="properties.includes('loadingShowMore')"
   [p-show-more-disabled]="properties.includes('showMoreDisabled')"
   [p-single-select]="selection.includes('singleSelect')"
@@ -26,6 +30,9 @@
   (p-show-more)="showMore()"
   (p-unselected)="changeEvent('p-unselected')"
   [p-auto-collapse]="properties.includes('autoCollapse')"
+  (p-delete-items)="deleteItems($event)"
+  [p-draggable]="properties.includes('draggable')"
+  [p-hide-action-fixed-columns]="properties.includes('fixed')"
 >
 </po-table>
 
@@ -92,12 +99,22 @@
     </po-number>
 
     <po-input
-      class="po-md-6"
+      class="po-md-3"
       name="literals"
       [(ngModel)]="literals"
       p-help='Ex.: {"noData": "Sem dados a serem exibidos", "noColumns": "Colunas não definidas"}'
       p-label="Literals"
       (p-change)="changeLiterals()"
+    >
+    </po-input>
+
+    <po-input
+      class="po-md-3"
+      name="filteredColumns"
+      [(ngModel)]="filteredColumns"
+      p-help='Ex.: "text, time"'
+      p-label="Filter Columns"
+      (p-change)="changeFilteredColumns()"
     >
     </po-input>
 
@@ -127,6 +144,11 @@
   </div>
 
   <div class="po-row">
+    <po-radio-group class="po-lg-6" name="spacing" [(ngModel)]="spacing" p-label="Spacing" [p-options]="typeSpacing">
+    </po-radio-group>
+  </div>
+
+  <div class="po-row">
     <po-checkbox-group
       class="po-lg-6"
       name="selection"
@@ -137,6 +159,16 @@
       (p-change)="changeSelectionOptions()"
     >
     </po-checkbox-group>
+
+    <po-radio-group
+      class="po-md-5"
+      name="filterMode"
+      [(ngModel)]="filterType"
+      p-columns="3"
+      p-label="Filter mode"
+      [p-options]="filterModeOptions"
+    >
+    </po-radio-group>
   </div>
 
   <div class="po-row">

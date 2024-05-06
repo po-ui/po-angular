@@ -61,6 +61,7 @@ export class PoPopupComponent extends PoPopupBaseComponent {
     this.removeListeners();
 
     this.showPopup = false;
+    this.closeEvent.emit();
   }
 
   onActionClick(popupAction: PoPopupAction) {
@@ -158,7 +159,9 @@ export class PoPopupComponent extends PoPopupBaseComponent {
   }
 
   private onScroll = ({ target }): void => {
-    if (this.showPopup && target.className !== 'po-popup-container' && this.actions.length < 6) {
+    const { showPopup, popupRef } = this;
+
+    if (showPopup && popupRef?.nativeElement && !popupRef.nativeElement.contains(target)) {
       this.close();
     }
   };

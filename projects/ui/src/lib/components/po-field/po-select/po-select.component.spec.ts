@@ -1,13 +1,15 @@
 import { ComponentFixture, TestBed } from '@angular/core/testing';
 import { FormsModule } from '@angular/forms';
 
-import { configureTestSuite, expectPropertiesValues, expectSettersMethod } from './../../../util-test/util-expect.spec';
 import * as UtilsFunctions from '../../../utils/util';
+import { configureTestSuite, expectPropertiesValues, expectSettersMethod } from './../../../util-test/util-expect.spec';
 
-import { PoFieldContainerBottomComponent } from './../po-field-container/po-field-container-bottom/po-field-container-bottom.component';
-import { PoFieldContainerComponent } from '../po-field-container/po-field-container.component';
-import { PoSelectComponent } from './po-select.component';
 import { removeDuplicatedOptions, removeUndefinedAndNullOptions } from '../../../utils/util';
+import { PoFieldContainerComponent } from '../po-field-container/po-field-container.component';
+import { PoFieldContainerBottomComponent } from './../po-field-container/po-field-container-bottom/po-field-container-bottom.component';
+import { PoSelectOptionGroup } from './po-select-option-group.interface';
+import { PoSelectOption } from './po-select-option.interface';
+import { PoSelectComponent } from './po-select.component';
 
 describe('PoSelectComponent:', () => {
   let component: PoSelectComponent;
@@ -160,13 +162,56 @@ describe('PoSelectComponent:', () => {
       expect(component.onUpdateOptions).toHaveBeenCalled();
     });
 
+    it('p-options: should return `optionWithoutGroup` and `listGroupOptions` emptys when option is empty', () => {
+      const options: Array<any> = [];
+
+      component.options = options;
+
+      expect(component.optionWithoutGroup).toEqual([]);
+      expect(component.listGroupOptions).toEqual([]);
+    });
+
+    it('p-options: should call `transformInArray` when options is a listGroup', () => {
+      const options: Array<any> = [
+        {
+          label: 'Group 1',
+          options: [
+            { label: 'Option 1', value: 1 },
+            { label: 'Option 2', value: 2 }
+          ]
+        },
+        { label: 'Group 2', options: [{ label: 'Option 3', value: 3 }] }
+      ];
+
+      spyOn(component, <any>'transformInArray').and.callThrough();
+      component.options = options;
+
+      expect(component.listGroupOptions).toEqual(options);
+      expect(component['transformInArray']).toHaveBeenCalledWith(options);
+    });
+
+    it("p-options: should return `listGroupOptions` empty and `optionWithoutGroup` when options isn't a listGroup", () => {
+      const options: Array<any> = [
+        { label: 'Option 1', value: 1 },
+        { label: 'Option 2', value: 2 }
+      ];
+
+      component.options = options;
+
+      expect(component.listGroupOptions).toEqual([]);
+      expect(component.optionWithoutGroup).toEqual(options);
+    });
+
     it('p-readonly: should update with valid values.', () => {
-      expectPropertiesValues(component, 'readonly', booleanValidFalseValues, false);
-      expectPropertiesValues(component, 'readonly', booleanValidTrueValues, true);
+      component.readonly = UtilsFunctions.convertToBoolean(1);
+
+      expect(component.readonly).toBe(true);
     });
 
     it('p-readonly: should update with invalid values.', () => {
-      expectPropertiesValues(component, 'readonly', booleanInvalidValues, false);
+      component.readonly = UtilsFunctions.convertToBoolean(5555);
+
+      expect(component.readonly).toBe(false);
     });
 
     it('onSelectChange: shouldn`t call `updateValues` if value is undefined', () => {
@@ -269,6 +314,84 @@ describe('PoSelectComponent:', () => {
       component.ngOnChanges(changes);
 
       expect(component.options).toEqual([{ label: 'test', value: 'test' }]);
+    });
+
+    it('isItemGroup: should return true when the item has "options" property as an array', () => {
+      const item: PoSelectOption = { label: 'Option 1', value: 'option1' };
+
+      expect(component.isItemGroup(item)).toBeFalse();
+    });
+
+    it('isItemGroup: should return true when the item has "options" property as an array', () => {
+      const item: PoSelectOptionGroup = { label: 'Group', options: [{ label: 'Option 1', value: 'option1' }] };
+
+      expect(component.isItemGroup(item)).toBeTrue();
+    });
+
+    it('isItemGroup: isItemGroup: should return false when the item has "options" property as any other type', () => {
+      const item = { label: 'Item with options', options: { option1: 'value1', option2: 'value2' } };
+
+      expect(component.isItemGroup(item)).toBeFalse();
+    });
+
+    it('separateOptions: should separate options with groups and validate each group options', () => {
+      const option1: PoSelectOption = { label: 'Option 1', value: 'option1' };
+      const optionGroup: PoSelectOptionGroup = {
+        label: 'Group',
+        options: [
+          { label: 'Option 2', value: 'option2' },
+          { label: 'Option 3', value: 'option3' }
+        ]
+      };
+
+      component.optionsDefault = [option1, optionGroup];
+
+      spyOn(component, <any>'validateOptions');
+
+      component['separateOptions']();
+
+      expect(component.listGroupOptions).toContain(optionGroup);
+      expect(component.listGroupOptions.length).toBe(1);
+      expect(component.listGroupOptions[0].options.length).toBe(2);
+      expect(component['validateOptions']).toHaveBeenCalledWith(optionGroup.options);
+      expect(component.optionWithoutGroup).toContain(option1);
+    });
+
+    it("transformInArray: should call a empty array if hasn't objects", () => {
+      const objectWithArray: Array<any> = [];
+
+      const result = component['transformInArray'](objectWithArray);
+      expect(result).toEqual([]);
+    });
+
+    it('transformInArray: should call a array with only `options` propertie', () => {
+      const objectWithArray: Array<any> = [
+        {
+          label: 'Group 1',
+          options: [
+            { label: 'Option 1', value: 1 },
+            { label: 'Option 2', value: 2 }
+          ]
+        },
+        { label: 'Group 2', options: [{ label: 'Option 3', value: 3 }] }
+      ];
+
+      const result = component['transformInArray'](objectWithArray);
+      expect(result).toEqual([
+        { label: 'Option 1', value: 1 },
+        { label: 'Option 2', value: 2 },
+        { label: 'Option 3', value: 3 }
+      ]);
+    });
+
+    it("transformInArray: should return an empty array if objects don't have `options` property", () => {
+      const objectWithArray: Array<any> = [
+        { label: 'Option 1', value: 1 },
+        { label: 'Option 2', value: 2, otherProperty: 'Test' }
+      ];
+
+      const result = component['transformInArray'](objectWithArray);
+      expect(result).toEqual([]);
     });
   });
 

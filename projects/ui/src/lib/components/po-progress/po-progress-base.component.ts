@@ -1,8 +1,9 @@
-import { EventEmitter, Input, Output, Directive } from '@angular/core';
+import { EventEmitter, Input, Output, Directive, TemplateRef } from '@angular/core';
 
 import { convertToBoolean, convertToInt } from '../../utils/util';
 
 import { PoProgressStatus } from './enums/po-progress-status.enum';
+import { PoProgressSize } from './enums/po-progress-size.enum';
 
 const poProgressMaxValue = 100;
 const poProgressMinValue = 0;
@@ -13,6 +14,25 @@ const poProgressMinValue = 0;
  * Componente de barra de progresso que possibilita exibir visualmente o progresso/carregamento de uma tarefa.
  *
  * Este componente pode ser utilizado no *upload* de arquivos, uma atualização no sistema ou o processamento de uma imagem.
+ *
+ * #### Tokens customizáveis
+ *
+ * É possível alterar o estilo do componente usando os seguintes tokens (CSS):
+ *
+ * > Para maiores informações, acesse o guia [Personalizando o Tema Padrão com Tokens CSS](https://po-ui.io/guides/theme-customization).
+ *
+ * | Propriedade                            | Descrição                                             | Valor Padrão                                    |
+ * |----------------------------------------|-------------------------------------------------------|-------------------------------------------------|
+ * | **Default Values**                     |                                                       |                                                 |
+ * | `--font-family`                        | Família tipográfica usada                             | `var(--font-family-theme)`                      |
+ * | `--text-color`                         | Cor do texto                                          | `var(--color-neutral-dark-90)`                  |
+ * | **Error**                              |                                                       |                                                 |
+ * | `--text-color-error`                   | Cor do texto no estado error                          | `var(--color-feedback-negative-dark)`           |
+ * | `--color-icon-error`                   | Cor do ícone no estado error                          | `var(--color-feedback-negative-dark)`           |
+ * | **po-progress-bar**                    |                                                       |                                                 |
+ * | `--background-color-tray`              | Cor do background                                     | `var(--color-brand-01-lightest)`                |
+ * | `--background-color-indicator`         | Cor do background do indicador                        | `var(--color-action-default)`                   |
+ *
  */
 @Directive()
 export class PoProgressBaseComponent {
@@ -34,7 +54,7 @@ export class PoProgressBaseComponent {
    *
    * Exemplo: `po-icon-ok`.
    */
-  @Input('p-info-icon') infoIcon?: string;
+  @Input('p-info-icon') infoIcon?: string | TemplateRef<void>;
 
   /**
    * @optional
@@ -85,6 +105,7 @@ export class PoProgressBaseComponent {
 
   private _indeterminate?: boolean;
   private _value?: number = 0;
+  private _size: string = 'large';
 
   /**
    * @optional
@@ -128,6 +149,38 @@ export class PoProgressBaseComponent {
   get value() {
     return this._value;
   }
+
+  /**
+   * @optional
+   *
+   * @description
+   *
+   * Definição do tamanho da altura da barra de progresso.
+   *
+   * Valores válidos:
+   *  - `medium`: tamanho médio
+   *  - `large`: tamanho grande
+   *
+   * @default `large`
+   */
+  @Input('p-size') set size(value: string) {
+    this._size = PoProgressSize[value] ? PoProgressSize[value] : PoProgressSize.large;
+  }
+
+  get size(): string {
+    return this._size;
+  }
+
+  /**
+   * @optional
+   *
+   * @description
+   *
+   * Ativa a exibição da porcentagem atual da barra de progresso.
+   *
+   * @default `false`
+   */
+  @Input({ alias: 'p-show-percentage', transform: convertToBoolean }) showPercentage: boolean = false;
 
   private isProgressRangeValue(value: number): boolean {
     return value >= poProgressMinValue && value <= poProgressMaxValue;

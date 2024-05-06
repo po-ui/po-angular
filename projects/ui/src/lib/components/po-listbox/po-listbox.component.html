@@ -1,30 +1,101 @@
-<div #listbox class="po-listbox" [attr.p-type]="type" [hidden]="visible">
+<div
+  #listbox
+  class="po-listbox"
+  [class.po-listbox-check]="type === 'check' || type === 'option'"
+  [attr.data-type]="type"
+  [hidden]="visible"
+>
   <ng-content select="[p-popup-header-template]"></ng-content>
-  <ul #listboxItemList cdkListbox class="po-listbox-list">
-    <li
-      class="po-listbox-item"
-      *ngFor="let item of items"
-      [cdkOption]="item.label"
-      [cdkOptionDisabled]="returnBooleanValue(item, 'disabled') || returnBooleanValue(item, 'visible') === false"
-      [attr.aria-selected]="item.selected"
-      (click)="onSelectItem(item)"
-      (keydown)="onKeyDown(item, $event)"
+
+  <po-search-list
+    #searchElement
+    *ngIf="!hideSearch && type === 'check'"
+    (p-change)="callChangeSearch($event)"
+    [p-literals]="literalSearch"
+    [p-field-value]="fieldValueSearch"
+    [p-placeholder]="placeholderSearch"
+  ></po-search-list>
+
+  <ng-container *ngIf="checkTemplate(); else noDataTemplate">
+    <ul #listboxItemList cdkListbox [cdkListboxMultiple]="type === 'check'" class="po-listbox-list">
+      <li
+        cdkOption="selectAll"
+        *ngIf="type === 'check' && items.length && !searchElement?.inputValue && !hideSelectAll"
+        [attr.aria-checked]="checkboxAllValue === null ? 'mixed' : checkboxAllValue"
+        (click)="changeAll.emit()"
+        (keydown)="changeAllEmit($event)"
+        (keydown)="onSelectAllCheckboxKeyDown($event)"
+      >
+        <po-item-list
+          [p-selected]="checkboxAllValue"
+          p-type="check"
+          [p-label]="literals.selectAll"
+          p-value="selectAll"
+          [p-checkbox-value]="checkboxAllValue"
+        >
+        </po-item-list>
+      </li>
+      <li
+        [class.po-listbox-item]="visible"
+        *ngFor="let item of items"
+        [cdkOption]="item[fieldLabel]"
+        [cdkOptionDisabled]="
+          returnBooleanValue(item, 'disabled') || returnBooleanValue(item, 'visible') === false || item.options
+        "
+        [attr.aria-selected]="isSelectedItem(item) || item.selected"
+        (click)="onSelectItem(item)"
+        (keydown)="onKeyDown(item, $event)"
+      >
+        <label *ngIf="item.options" class="po-combo-item-title">
+          {{ item.label }}
+        </label>
+        <po-item-list
+          *ngIf="returnBooleanValue(item, 'visible') !== false && !item.options"
+          [p-disabled]="returnBooleanValue(item, 'disabled')"
+          [p-visible]="returnBooleanValue(item, 'visible')"
+          [p-checkbox-value]="isSelectedItem(item)"
+          [attr.data-item-list]="formatItemList(item)"
+          [p-label]="item[fieldLabel]"
+          [p-value]="item[fieldValue]"
+          [p-selected]="isSelectedItem(item) || item.selected"
+          [p-active-tabs]="item.active"
+          [p-separator]="item.separator"
+          [p-danger]="item.danger || item.type === 'danger'"
+          [p-icon]="item.icon"
+          [p-type]="type"
+          [p-item]="item"
+          [p-tab-hide]="item.hide"
+          [p-is-tabs]="isTabs"
+          [p-field-value]="fieldValue"
+          [p-field-label]="fieldLabel"
+          [p-template]="template"
+          [p-template-context]="item"
+          (p-selectcheckbox-item)="checkboxClicked($event)"
+          (p-selectcombo-item)="optionClicked($event)"
+          (p-select-item)="onSelectCheckBoxItem(item)"
+          (p-emit-item-tabs)="onSelectTabs($event)"
+          (p-activated-tabs)="onActivatedTabs($event)"
+          [p-search-value]="searchValue"
+          [p-filter-mode]="filterMode"
+          [p-filtering]="isFiltering"
+          [p-should-mark-letter]="shouldMarkLetters"
+          [p-compare-cache]="compareCache"
+          [p-combo-service]="comboService"
+        ></po-item-list>
+      </li>
+    </ul>
+  </ng-container>
+
+  <div *ngIf="isServerSearching && type !== 'action'" [class.po-listbox-container-loading-default]="!infiniteLoading">
+    <po-loading-overlay p-size="md"></po-loading-overlay>
+  </div>
+
+  <ng-template #noDataTemplate>
+    <div
+      *ngIf="!items.length && !isServerSearching && type !== 'action'"
+      class="po-listbox-container-no-data po-text-center"
     >
-      <po-item-list
-        *ngIf="returnBooleanValue(item, 'visible') !== false"
-        [attr.data-item-list]="item | json"
-        [p-label]="item.label"
-        [p-value]="item.value"
-        [p-disabled]="returnBooleanValue(item, 'disabled')"
-        [p-selected]="item.selected"
-        [p-separator]="item.separator"
-        [p-visible]="returnBooleanValue(item, 'visible')"
-        [p-danger]="item.type === 'danger'"
-        [p-icon]="item.icon"
-        [p-type]="type"
-        [p-item]="item"
-        (p-select-item)="onSelectItem(item)"
-      ></po-item-list>
-    </li>
-  </ul>
+      <span> {{ literals.noItems }}</span>
+    </div>
+  </ng-template>
 </div>

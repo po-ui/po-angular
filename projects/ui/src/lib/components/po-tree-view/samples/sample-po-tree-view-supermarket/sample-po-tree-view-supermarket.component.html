@@ -21,7 +21,13 @@
             [p-disabled]="itemsListSelected.length < 1"
             (p-primary-action)="checkOut()"
           >
-            <po-table p-striped [p-columns]="columnsItemsSelected" [p-items]="itemsListSelected"> </po-table>
+            <po-table
+              p-striped
+              [p-columns]="columnsItemsSelected"
+              [p-items]="itemsListSelected"
+              [p-hide-table-search]="false"
+            >
+            </po-table>
           </po-widget>
         </po-step>
 

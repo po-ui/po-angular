@@ -155,7 +155,8 @@ export class SamplePoTableLabsService {
   private generateRandomDate() {
     const day = Math.floor(Math.random() * 28);
     const month = Math.floor(Math.random() * 12);
+    const year = Math.floor(Math.random() * 24) + 2000;
 
-    return new Date(2018, month, day);
+    return new Date(year, month, day);
   }
 }

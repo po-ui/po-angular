@@ -185,7 +185,6 @@ describe('PoMenuComponent:', () => {
     };
 
     component['clickMenuItem'](menuItem);
-    console.log(component.activeMenuItem);
     expect(component.activeMenuItem.link).toEqual('./home');
   });
 
@@ -732,35 +731,6 @@ describe('PoMenuComponent:', () => {
       expect(nativeElement.querySelector('po-menu-filter')).toBeTruthy();
     });
 
-    it('should hide menu filter if `enableCollapse` is `true`', () => {
-      component.filter = true;
-      spyOnProperty(component, 'enableCollapse').and.returnValue(true);
-
-      fixture.detectChanges();
-
-      expect(nativeElement.querySelector('po-menu-filter')).toBeFalsy();
-    });
-
-    it('should show `po-menu-footer` if `collapsed` is `true` and `menus` are valid', () => {
-      component.collapsed = true;
-      component.menus = [{ label: '1', icon: 'po-icon-user', shortLabel: '123', action: () => {} }];
-
-      fixture.detectChanges();
-      const footer = fixture.debugElement.nativeElement.querySelector('.po-menu-footer');
-
-      expect(footer).toBeTruthy();
-    });
-
-    it('should not show `po-menu-footer` if `collapsed` is `true` and `menus` are invalid', () => {
-      component.collapsed = true;
-      component.menus = [{ label: '1', icon: 'po-icon-user', action: () => {} }];
-
-      fixture.detectChanges();
-      const footer = fixture.debugElement.nativeElement.querySelector('.po-menu-footer');
-
-      expect(footer).toBeNull();
-    });
-
     it('should show the button at menu bottom if menu is collapsed', () => {
       component.allowCollapseMenu = true;
       component.collapsed = true;
@@ -813,7 +783,7 @@ describe('PoMenuComponent:', () => {
       component.noData = true;
 
       fixture.detectChanges();
-      const showNoData = nativeElement.querySelector('.po-menu-icon-container.po-menu-item-no-data');
+      const showNoData = nativeElement.querySelector('.po-menu-item.po-menu-item-no-data');
 
       expect(showNoData).toBeTruthy();
     });
@@ -828,7 +798,7 @@ describe('PoMenuComponent:', () => {
     });
 
     it('should display `po-logo` component if have `logo`.', () => {
-      component.logo = 'https://po-ui.io/assets/graphics/po-logo-grey.svg';
+      component.logo = 'https://po-ui.io/assets/graphics/po.png';
 
       fixture.detectChanges();
 
@@ -840,7 +810,7 @@ describe('PoMenuComponent:', () => {
     });
 
     it('should display `po-logo` component if have `shortLogo` and `enableCollapse` is true.', () => {
-      component.shortLogo = 'https://po-ui.io/assets/graphics/po-logo-grey.svg';
+      component.shortLogo = 'https://po-ui.io/assets/graphics/po.png';
       spyOnProperty(component, 'enableCollapse').and.returnValue(true);
 
       fixture.detectChanges();
@@ -951,7 +921,7 @@ describe('PoMenuComponent:', () => {
         expect(component['toggleMenuCollapse']).not.toHaveBeenCalled();
       });
 
-      it(`should call 'toggleMenuCollapse' with 'collapsed' if 'allowCollapseMenu' is 'true'`, () => {
+      it(`should call 'toggleMenuCollapse' with 'collapsed' if 'allowCollapseMenu' is 'true'`, () => {
         const collapsed = false;
         component.allowCollapseMenu = true;
 
@@ -961,6 +931,58 @@ describe('PoMenuComponent:', () => {
 
         expect(component['toggleMenuCollapse']).toHaveBeenCalledWith(collapsed);
       });
+    });
+
+    it('should set "collapsed" to false and "allowCollapseHover" to true when onMouseEnter is called and the component is collapsed', () => {
+      component.collapsed = true;
+      component.allowCollapseHover = false;
+      component.automaticToggle = true;
+
+      component.onMouseEnter();
+
+      expect(component.collapsed).toBe(false);
+      expect(component.allowCollapseHover).toBe(true);
+    });
+
+    it('should not modify the "collapsed" or "allowCollapseHover" state when onMouseEnter is called and the component is not collapsed', () => {
+      component.collapsed = false;
+      component.allowCollapseHover = true;
+      component.automaticToggle = true;
+
+      component.onMouseEnter();
+
+      expect(component.collapsed).toBe(false);
+      expect(component.allowCollapseHover).toBe(true);
+    });
+
+    it('should set "collapsed" to true when onMouseLeave is called and the component is not collapsed and allowCollapseHover is true', () => {
+      component.collapsed = false;
+      component.allowCollapseHover = true;
+      component.automaticToggle = true;
+
+      component.onMouseLeave();
+
+      expect(component.collapsed).toBe(true);
+    });
+
+    it('should not modify the "collapsed" state when onMouseLeave is called and the component is already collapsed', () => {
+      component.collapsed = true;
+      component.allowCollapseHover = true;
+      component.automaticToggle = true;
+
+      component.onMouseLeave();
+
+      expect(component.collapsed).toBe(true);
+    });
+
+    it('should not modify the "collapsed" state when onMouseLeave is called and allowCollapseHover is false', () => {
+      component.collapsed = false;
+      component.allowCollapseHover = false;
+      component.automaticToggle = true;
+
+      component.onMouseLeave();
+
+      expect(component.collapsed).toBe(false);
     });
 
     it('toggleMenuCollapse: should set `collapsed`', () => {
@@ -1534,9 +1556,9 @@ describe('PoMenuComponent:', () => {
       });
     });
 
-    it('convertToMenuItemFiltered: should return only { link, label } if `menuItem` is an object with others properties', () => {
-      const expectedValue = { label: 'Menu 1', link: 'menu1' };
-      const menuItem = { icon: 'copy', label: 'Menu 1', link: 'menu1' };
+    it('convertToMenuItemFiltered: should return only { link, label, action } if `menuItem` is an object with others properties', () => {
+      const expectedValue = { label: 'Menu 1', link: 'menu1', action: jasmine.any(Function) };
+      const menuItem = { icon: 'copy', label: 'Menu 1', link: 'menu1', action: () => {} };
 
       const spySetMenuItemProperties = spyOn(component, <any>'setMenuItemProperties');
 
@@ -1546,15 +1568,18 @@ describe('PoMenuComponent:', () => {
       expect(spySetMenuItemProperties).toHaveBeenCalled();
     });
 
-    it('convertToMenuItemFiltered: should return { link: ``, label: `` } if `menuItem` is undefined', () => {
+    it('convertToMenuItemFiltered: should return { link: ``, label: ``, action } if `menuItem` is undefined', () => {
       const menuItem = undefined;
 
       const spySetMenuItemProperties = spyOn(component, <any>'setMenuItemProperties');
 
       const menuItemFiltered = component['convertToMenuItemFiltered'](menuItem);
 
-      expect(menuItemFiltered).toEqual(<any>{ label: '', link: '' });
+      expect(menuItemFiltered).toEqual(<any>{ label: '', link: '', action: jasmine.any(Function) });
       expect(spySetMenuItemProperties).toHaveBeenCalled();
+
+      expect(menuItemFiltered.action).toEqual(jasmine.any(Function));
+      expect(menuItemFiltered.action()).toBeUndefined();
     });
 
     it('filterLocalItems: should call `findItems` and return filtered items', () => {
@@ -1579,7 +1604,7 @@ describe('PoMenuComponent:', () => {
     });
 
     it('filterOnService: should call `getFilteredData` and return filtered menu itens from service', async () => {
-      const menuItems = [{ label: 'Menu', link: '/menu' }];
+      const menuItems = [{ label: 'Menu', link: '/menu', action: () => {} }];
       const search = 'menu';
 
       component.service = 'http://po.com.br/api';

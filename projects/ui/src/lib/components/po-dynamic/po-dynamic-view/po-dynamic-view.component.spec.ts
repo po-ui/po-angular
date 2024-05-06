@@ -1,4 +1,4 @@
-import { ComponentFixture, TestBed } from '@angular/core/testing';
+import { ComponentFixture, TestBed, fakeAsync, tick } from '@angular/core/testing';
 import { HttpClient, HttpHandler } from '@angular/common/http';
 import { SimpleChange } from '@angular/core';
 
@@ -6,7 +6,7 @@ import { of } from 'rxjs';
 
 import { PoDynamicModule } from '../po-dynamic.module';
 import { PoDynamicViewComponent } from './po-dynamic-view.component';
-import { PoDynamicViewService } from './po-dynamic-view.service';
+import { PoDynamicViewService } from './services/po-dynamic-view.service';
 
 describe('PoDynamicViewComponent:', () => {
   let component: PoDynamicViewComponent;
@@ -80,17 +80,31 @@ describe('PoDynamicViewComponent:', () => {
         expect(component['getVisibleFields']).toHaveBeenCalled();
         expect(component.visibleFields.length).toBe(returnedValue.length);
       });
+
+      it(`should call not 'getVisibleFields' if 'load' is true and initChanges is false`, () => {
+        const changes = { showAllValue: <any>{} };
+        component.load = 'url.test.com';
+        component.visibleFields = [];
+
+        spyOn(component, <any>'getVisibleFields');
+
+        component.ngOnChanges(changes);
+
+        expect(component['getVisibleFields']).not.toHaveBeenCalled();
+      });
     });
 
-    it('ngOnInit: should call `updateValuesAndFieldsOnLoad` if typeof `load` is truthy', () => {
+    it('ngOnInit: should call `updateValuesAndFieldsOnLoad` if typeof `load` is truthy', fakeAsync(() => {
       component.load = 'teste';
 
-      spyOn(component, <any>'updateValuesAndFieldsOnLoad');
+      spyOn(component, <any>'updateValuesAndFieldsOnLoad').and.returnValue(Promise.resolve());
 
       component.ngOnInit();
 
+      tick();
+
       expect(component['updateValuesAndFieldsOnLoad']).toHaveBeenCalled();
-    });
+    }));
 
     it(`getValuesAndFieldsFromLoad: should call 'dynamicViewService.onLoad' if 'component.load' is string`, async () => {
       const expectedValue = { value: { name: 'teste 2' }, fields: [{ property: 'name', tag: true, inverse: true }] };
@@ -235,32 +249,75 @@ describe('PoDynamicViewComponent:', () => {
       expect(component['getVisibleFields']).toHaveBeenCalled();
     });
 
-    it(`setFieldValue: should return the label of the selected option if options exist and a match is found`, () => {
-      const field = {
-        value: 'value1',
-        options: [
-          { value: 'value1', label: 'label1' },
-          { value: 'value2', label: 'label2' },
-          { value: 'value3', label: 'label3' }
-        ]
-      };
+    describe('setFieldValue:', () => {
+      it(`should return the label of the selected option if options exist and a match is found`, () => {
+        const field = {
+          value: 'value1',
+          options: [
+            { value: 'value1', label: 'label1' },
+            { value: 'value2', label: 'label2' },
+            { value: 'value3', label: 'label3' }
+          ]
+        };
 
-      field.value = 'value2';
-      expect(component.setFieldValue(field)).toEqual('label2');
-    });
+        field.value = 'value2';
+        expect(component.setFieldValue(field)).toEqual('label2');
+      });
 
-    it(`setFieldValue: should return the field value if options exist but no match is found'`, () => {
-      const field = {
-        value: 'value1',
-        options: [
-          { value: 'value1', label: 'label1' },
-          { value: 'value2', label: 'label2' },
-          { value: 'value3', label: 'label3' }
-        ]
-      };
+      it(`should return the field value if options exist but no match is found'`, () => {
+        const field = {
+          value: 'value1',
+          options: [
+            { value: 'value1', label: 'label1' },
+            { value: 'value2', label: 'label2' },
+            { value: 'value3', label: 'label3' }
+          ]
+        };
 
-      field.value = 'value4';
-      expect(component.setFieldValue(field)).toEqual('value4');
+        field.value = 'value4';
+        expect(component.setFieldValue(field)).toEqual('value4');
+      });
+      it('should return the value of booleanTrue when the field value is true', () => {
+        const field = {
+          property: 'active',
+          type: 'boolean',
+          value: true,
+          booleanTrue: 'Ativo',
+          booleanFalse: 'Inativo'
+        };
+        expect(component.setFieldValue(field)).toEqual('Ativo');
+      });
+
+      it('should return the value of booleanFalse when the field value is false', () => {
+        const field = {
+          property: 'active',
+          type: 'boolean',
+          value: false,
+          booleanTrue: 'Ativo',
+          booleanFalse: 'Inativo'
+        };
+        expect(component.setFieldValue(field)).toEqual('Inativo');
+      });
+
+      it('should return "True" when the field value is true and booleanTrue is undefined', () => {
+        const field = {
+          property: 'active',
+          type: 'boolean',
+          value: true,
+          booleanFalse: 'Inativo'
+        };
+        expect(component.setFieldValue(field)).toEqual(true);
+      });
+
+      it('should return "False" when the field value is false and booleanFalse is undefined', () => {
+        const field = {
+          property: 'active',
+          type: 'boolean',
+          value: false,
+          booleanTrue: 'Ativo'
+        };
+        expect(component.setFieldValue(field)).toEqual(false);
+      });
     });
   });
 

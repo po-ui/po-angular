@@ -1,27 +1,25 @@
-import { EventEmitter, Input, OnDestroy, OnInit, Output, ViewChild, Directive, ChangeDetectorRef } from '@angular/core';
+import { ChangeDetectorRef, Directive, EventEmitter, Input, OnDestroy, OnInit, Output, ViewChild } from '@angular/core';
 
 import { Observable, Subscription, throwError } from 'rxjs';
 import { catchError } from 'rxjs/operators';
 
-import { InputBoolean } from '../../../../decorators';
-
-import { isTypeof } from '../../../../utils/util';
-import { poLocaleDefault } from '../../../../services/po-language/po-language.constant';
 import { PoModalAction } from '../../../../components/po-modal';
 import { PoModalComponent } from '../../../../components/po-modal/po-modal.component';
-import { PoTableColumnSort } from '../../../po-table/interfaces/po-table-column-sort.interface';
-import { PoTableColumnSortType } from '../../../po-table';
-import { poTableLiteralsDefault } from '../../../po-table/po-table-base.component';
+import { poLocaleDefault } from '../../../../services/po-language/po-language.constant';
 import { PoLanguageService } from '../../../../services/po-language/po-language.service';
+import { capitalizeFirstLetter, convertToBoolean, isTypeof } from '../../../../utils/util';
+import { PoTableColumnSortType } from '../../../po-table';
+import { PoTableColumnSort } from '../../../po-table/interfaces/po-table-column-sort.interface';
+import { poTableLiteralsDefault } from '../../../po-table/po-table-base.component';
 
+import { PoLookupAdvancedFilter } from '../interfaces/po-lookup-advanced-filter.interface';
 import { PoLookupColumn } from '../interfaces/po-lookup-column.interface';
 import { PoLookupFilter } from '../interfaces/po-lookup-filter.interface';
 import { PoLookupFilteredItemsParams } from '../interfaces/po-lookup-filtered-items-params.interface';
 import { PoLookupLiterals } from '../interfaces/po-lookup-literals.interface';
 import { PoLookupResponseApi } from '../interfaces/po-lookup-response-api.interface';
-import { PoDisclaimer } from './../../../po-disclaimer/po-disclaimer.interface';
 import { PoDisclaimerGroup } from './../../../po-disclaimer-group/po-disclaimer-group.interface';
-import { PoLookupAdvancedFilter } from '../interfaces/po-lookup-advanced-filter.interface';
+import { PoDisclaimer } from './../../../po-disclaimer/po-disclaimer.interface';
 import { PoTableComponent } from './../../../po-table/po-table.component';
 
 export const poLookupLiteralsDefault = {
@@ -71,9 +69,9 @@ export const poLookupLiteralsDefault = {
     modalDisclaimerGroupTitle: 'Apresentando resultados filtrados por:'
   },
   ru: <PoLookupLiterals>{
-    modalPrimaryActionLabel: 'выбирать',
-    modalSecondaryActionLabel: 'отменить',
-    modalPlaceholder: 'поиск',
+    modalPrimaryActionLabel: 'Выбрать',
+    modalSecondaryActionLabel: 'Отменить',
+    modalPlaceholder: 'Поиск',
     modalTitle: 'Выберите запись',
     modalTableNoColumns: poTableLiteralsDefault.ru.noColumns,
     modalTableNoData: poTableLiteralsDefault.ru.noData,
@@ -82,8 +80,8 @@ export const poLookupLiteralsDefault = {
     modalAdvancedSearch: 'Расширенный поиск',
     modalAdvancedSearchTitle: 'Расширенный поиск',
     modalAdvancedSearchPrimaryActionLabel: 'Фильтр',
-    modalAdvancedSearchSecondaryActionLabel: 'Вернись',
-    modalDisclaimerGroupTitle: 'Представление результатов отфильтровано по:'
+    modalAdvancedSearchSecondaryActionLabel: 'Назад',
+    modalDisclaimerGroupTitle: 'Представленные результаты отфильтрованы по:'
   }
 };
 
@@ -125,11 +123,15 @@ export abstract class PoLookupModalBaseComponent implements OnDestroy, OnInit {
   /** Classe de serviço com a implementação do cliente. */
   @Input('p-filter-params') filterParams: any;
 
+  /** Se verdadeiro, esconde o gerenciador de tarefas, responsável pela definição de quais colunas serão exibidas. */
+  @Input({ alias: 'p-hide-columns-manager', transform: convertToBoolean })
+  hideColumnsManager: boolean = false;
+
   /** Se verdadeiro, ativa a funcionalidade de scroll infinito para a tabela exibida no retorno da consulta. */
-  @Input('p-infinite-scroll') @InputBoolean() infiniteScroll: boolean = false;
+  @Input({ alias: 'p-infinite-scroll', transform: convertToBoolean }) infiniteScroll: boolean = false;
 
   /** Se verdadeiro, ativa a funcionalidade de multipla seleção. */
-  @Input('p-multiple') @InputBoolean() multiple: boolean = false;
+  @Input({ alias: 'p-multiple', transform: convertToBoolean }) multiple: boolean = false;
 
   /** Evento utilizado ao selecionar um registro da tabela. */
   @Output('p-change-model') model: EventEmitter<any> = new EventEmitter<any>();
@@ -193,6 +195,7 @@ export abstract class PoLookupModalBaseComponent implements OnDestroy, OnInit {
   private filterSubscription: Subscription;
   private searchSubscription: Subscription;
   private showMoreSubscription: Subscription;
+  private disclaimerLabel: string;
 
   private _literals: PoLookupLiterals;
   private _title: string;
@@ -258,7 +261,10 @@ export abstract class PoLookupModalBaseComponent implements OnDestroy, OnInit {
     return this._title;
   }
 
-  constructor(languageService: PoLanguageService, protected changeDetector: ChangeDetectorRef) {
+  constructor(
+    languageService: PoLanguageService,
+    protected changeDetector: ChangeDetectorRef
+  ) {
     this.language = languageService.getShortLanguage();
   }
 
@@ -296,9 +302,29 @@ export abstract class PoLookupModalBaseComponent implements OnDestroy, OnInit {
   }
 
   addDisclaimer(value: any, property: string) {
+    this.disclaimerLabel = '';
+    const fieldFilter = this.advancedFilters.find(filter => filter.property === property);
     this.disclaimer = <any>{ property: property };
     this.disclaimer.value = value;
+    const labelProperty = fieldFilter.label || capitalizeFirstLetter(fieldFilter.property);
 
+    if (fieldFilter.type === 'currency' && value) {
+      this.formatValueToCurrency(fieldFilter, value);
+    }
+
+    if (fieldFilter.type === 'boolean' && (value === true || value === false)) {
+      this.formatValueToBoolean(fieldFilter, value);
+    }
+
+    if (fieldFilter.options && value) {
+      this.applyDisclaimerLabelValue(fieldFilter, value);
+    }
+
+    if (!this.disclaimerLabel) {
+      this.disclaimerLabel = this.disclaimer.value;
+    }
+
+    this.disclaimer.label = `${labelProperty}: ${this.disclaimerLabel}`;
     this.disclaimerGroup.disclaimers = [...this.disclaimerGroup.disclaimers, this.disclaimer];
   }
 
@@ -383,6 +409,36 @@ export abstract class PoLookupModalBaseComponent implements OnDestroy, OnInit {
     if (this.selectedItems && this.selectedItems.length) {
       this.selecteds = [...this.selectedItems];
     }
+  }
+
+  private applyDisclaimerLabelValue(field: PoLookupAdvancedFilter, filterValue: any) {
+    const values = Array.isArray(filterValue) ? filterValue : [filterValue];
+    const labels = values.map(optionValue => {
+      const findOption = field.options.find(option => option.value === optionValue);
+      return findOption.label;
+    });
+
+    if (labels.join()) {
+      this.disclaimerLabel = labels.join(', ');
+    }
+  }
+
+  private formatValueToCurrency(field: PoLookupAdvancedFilter, filterValue: any) {
+    const currencyLabel = new Intl.NumberFormat(field.locale ? field.locale : this.language, {
+      minimumFractionDigits: 2
+    }).format(filterValue);
+    this.disclaimerLabel = currencyLabel;
+  }
+
+  private formatValueToBoolean(field: PoLookupAdvancedFilter, filterValue: any) {
+    let labelBoolean: string;
+
+    if (filterValue) {
+      labelBoolean = field.booleanTrue ? field.booleanTrue : filterValue;
+    } else {
+      labelBoolean = field.booleanFalse ? field.booleanFalse : filterValue;
+    }
+    this.disclaimerLabel = `${labelBoolean}`;
   }
 
   private setAdvancedFilterModalProperties() {

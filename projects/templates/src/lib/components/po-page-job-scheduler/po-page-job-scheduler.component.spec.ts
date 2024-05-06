@@ -1,7 +1,16 @@
-import { ComponentFixture, fakeAsync, TestBed, tick, waitForAsync } from '@angular/core/testing';
+import {
+  ComponentFixture,
+  discardPeriodicTasks,
+  fakeAsync,
+  flush,
+  flushMicrotasks,
+  TestBed,
+  tick,
+  waitForAsync
+} from '@angular/core/testing';
 import { RouterTestingModule } from '@angular/router/testing';
 
-import { Observable, of } from 'rxjs';
+import { delay, Observable, of, throwError } from 'rxjs';
 
 import { changeBrowserInnerWidth } from './../../util-test/util-expect.spec';
 import { getObservable } from '../../util-test/util-expect.spec';
@@ -16,13 +25,11 @@ describe('PoPageJobSchedulerComponent:', () => {
   let component: PoPageJobSchedulerComponent;
   let fixture: ComponentFixture<PoPageJobSchedulerComponent>;
 
-  beforeEach(
-    waitForAsync(() => {
-      TestBed.configureTestingModule({
-        imports: [RouterTestingModule.withRoutes([]), PoPageJobSchedulerModule, HttpClientTestingModule]
-      }).compileComponents();
-    })
-  );
+  beforeEach(waitForAsync(() => {
+    TestBed.configureTestingModule({
+      imports: [RouterTestingModule.withRoutes([]), PoPageJobSchedulerModule, HttpClientTestingModule]
+    }).compileComponents();
+  }));
 
   beforeEach(() => {
     fixture = TestBed.createComponent(PoPageJobSchedulerComponent);
@@ -433,17 +440,49 @@ describe('PoPageJobSchedulerComponent:', () => {
       });
     });
 
-    it(`emitSuccessMessage: should call 'poNotification.success' with message and call 'resetJobSchedulerForm'`, async () => {
-      const message = 'msgSuccess';
+    it('should emit success event, show notification, and reset form on successful save', fakeAsync(() => {
+      const model = {
+        periodicity: 'always',
+        firstExecution: new Date(),
+        firstExecutionHour: '23:55:00',
+        recurrent: true
+      };
 
+      const parameters = [''];
+      const successSpy = spyOn(component.success, 'emit').and.callThrough();
       spyOn(component['poNotification'], 'success');
       spyOn(component, <any>'resetJobSchedulerForm');
+      spyOn(component['poPageJobSchedulerService'], 'createResource').and.returnValue(getObservable(parameters));
 
-      await component['emitSuccessMessage'](message, of());
+      component['save'](model, null);
 
-      expect(component['poNotification'].success).toHaveBeenCalledWith(message);
+      tick(50);
+
       expect(component['resetJobSchedulerForm']).toHaveBeenCalled();
-    });
+      expect(component['poNotification'].success).toHaveBeenCalled();
+      expect(successSpy).toHaveBeenCalled();
+
+      discardPeriodicTasks();
+    }));
+
+    it('should emit error if there is an error in the API return', fakeAsync(() => {
+      const model = {
+        periodicity: 'always',
+        firstExecution: new Date(),
+        firstExecutionHour: '23:55:00',
+        recurrent: true
+      };
+
+      const errorSpy = spyOn(component.error, 'emit').and.callThrough();
+      spyOn(component['poPageJobSchedulerService'], 'createResource').and.returnValue(throwError(() => {}));
+
+      component['save'](model, null);
+
+      tick(50);
+      expect(errorSpy).toHaveBeenCalled();
+
+      discardPeriodicTasks();
+    }));
 
     it(`getParametersByProcess: should call 'getParametersByProcess' with process and set 'component.parameters'
     with 'parameters'`, fakeAsync(() => {

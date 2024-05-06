@@ -12,6 +12,7 @@ import { PoTagComponent } from './po-tag.component';
 import { PoTagIcon } from './enums/po-tag-icon.enum';
 import { PoTagOrientation } from './enums/po-tag-orientation.enum';
 import { PoTagType } from './enums/po-tag-type.enum';
+import { PoTagLiterals } from './po-tag.literals';
 
 @Component({
   template: ` <po-tag p-label="Mock" (p-click)="onClick()"></po-tag> `
@@ -138,13 +139,17 @@ describe('PoTagComponent:', () => {
 
       component.onClick();
 
-      expect(component.click.emit).toHaveBeenCalledWith({ 'value': component.value, 'type': component.type });
+      expect(component.click.emit).toHaveBeenCalledWith({
+        'value': component.value,
+        'type': component.type,
+        'event': 'click'
+      });
     });
 
     it('onKeyPressed: should call `onClick` if the event `keydown` is used with `enter` key.', () => {
       fixture.detectChanges();
 
-      const tagElement = fixture.debugElement.query(By.css('.po-tag'));
+      const tagElement = fixture.debugElement.query(By.css('.po-tag-wrapper'));
       const spyOnClick = spyOn(component, 'onClick');
 
       tagElement.triggerEventHandler('keydown.enter', fakeEvent);
@@ -166,7 +171,7 @@ describe('PoTagComponent:', () => {
     it('onKeyPressed: should call `onClick` if the event `keyup` is used with `space` key.', () => {
       fixture.detectChanges();
 
-      const tagElement = fixture.debugElement.query(By.css('.po-tag'));
+      const tagElement = fixture.debugElement.query(By.css('.po-tag-wrapper'));
       const spyOnClick = spyOn(component, 'onClick');
 
       tagElement.triggerEventHandler('keyup.space', fakeEvent);
@@ -183,6 +188,46 @@ describe('PoTagComponent:', () => {
       tagElement.triggerEventHandler('keyup.enter', fakeEvent);
 
       expect(spyOnClick).not.toHaveBeenCalled();
+    });
+
+    it('onClose: Should have been called onClose', () => {
+      spyOn(component, <any>'onRemove');
+      spyOn(component.remove, 'emit');
+
+      component.onClose();
+
+      expect(component['onRemove']).toHaveBeenCalled();
+      expect(component.remove.emit).toHaveBeenCalledWith('click');
+    });
+
+    it('onRemove: Should remove the element if not disabled', () => {
+      const mockElementRef = {
+        nativeElement: {
+          remove: jasmine.createSpy('remove')
+        }
+      };
+      component['el'] = mockElementRef;
+      component.disabled = false;
+
+      component['onRemove']();
+
+      expect(mockElementRef.nativeElement.remove).toHaveBeenCalled();
+    });
+
+    it('should set aria-label', () => {
+      component.literals = {
+        ...PoTagLiterals['pt']
+      };
+      component.label = 'Label';
+      expect(component.setAriaLabel()).toContain('Label Remove');
+    });
+
+    it('should set aria-label', () => {
+      component.literals = {
+        ...PoTagLiterals['pt']
+      };
+      component.value = 'Label';
+      expect(component.setAriaLabel()).toContain('Label Remove');
     });
   });
 
@@ -284,6 +329,14 @@ describe('PoTagComponent:', () => {
       fixture.detectChanges();
 
       expect(nativeElement.querySelector('.po-tag-warning')).toBeTruthy();
+    });
+
+    it('should add `po-tag-neutral` if type is `PoTagType.Neutral`.', () => {
+      component.type = PoTagType.Neutral;
+
+      fixture.detectChanges();
+
+      expect(nativeElement.querySelector('.po-tag-neutral')).toBeTruthy();
     });
 
     it('should add `PoTagIcon.Danger` if type is `PoTagType.Danger and `icon` is true`.', () => {

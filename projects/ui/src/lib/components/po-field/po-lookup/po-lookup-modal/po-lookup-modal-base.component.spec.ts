@@ -9,6 +9,7 @@ import { PoTableColumnSortType } from '../../../po-table/enums/po-table-column-s
 import { PoTableColumnSort } from '../../../po-table/interfaces/po-table-column-sort.interface';
 import { PoLookupResponseApi } from '../interfaces/po-lookup-response-api.interface';
 import { poLookupLiteralsDefault, PoLookupModalBaseComponent } from './po-lookup-modal-base.component';
+import { convertToBoolean } from 'projects/ui/src/lib/utils/util';
 
 @Directive()
 class PoLookupModalComponent extends PoLookupModalBaseComponent {
@@ -514,10 +515,15 @@ describe('PoLookupModalBaseComponent:', () => {
     });
 
     it('addDisclaimer: should create disclaimer and disclaimerGroup.disclaimer with parameters', () => {
-      const expectedValueDisclaimer = { property: 'propertyTest', value: 'valueTest' };
+      component.advancedFilters = [{ property: 'propertyTest' }];
+      const expectedValueDisclaimer = {
+        property: 'propertyTest',
+        value: 'valueTest',
+        label: 'PropertyTest: valueTest'
+      };
       const expectedValueDisclaimerGroup = {
         title: 'titleTest',
-        disclaimers: [{ property: 'propertyTest', value: 'valueTest' }]
+        disclaimers: [{ property: 'propertyTest', value: 'valueTest', label: 'PropertyTest: valueTest' }]
       };
 
       component.addDisclaimer('valueTest', 'propertyTest');
@@ -526,11 +532,175 @@ describe('PoLookupModalBaseComponent:', () => {
       expect(component.disclaimerGroup.disclaimers).toEqual(expectedValueDisclaimerGroup.disclaimers);
     });
 
-    it('p-infinite-scroll: should update property `p-infinite-scroll`', () => {
-      const booleanValidTrueValues = [true, 'true', 1, ''];
-      const booleanInvalidValues = [undefined, null, NaN, 2, 'string'];
-      expectPropertiesValues(component, 'infiniteScroll', booleanInvalidValues, false);
-      expectPropertiesValues(component, 'infiniteScroll', booleanValidTrueValues, true);
+    it("addDisclaimer: should return formated currency in locale default if field type is 'currency'", () => {
+      component['language'] = 'pt';
+      component.advancedFilters = [{ property: 'value', type: 'currency' }];
+      const expectedValueDisclaimer = { property: 'value', value: 321, label: 'Value: 321,00' };
+      const expectedValueDisclaimerGroup = {
+        title: 'titleTest',
+        disclaimers: [{ property: 'value', value: 321, label: 'Value: 321,00' }]
+      };
+
+      component.addDisclaimer(321, 'value');
+
+      expect(component.disclaimer).toEqual(expectedValueDisclaimer);
+      expect(component.disclaimerGroup.disclaimers).toEqual(expectedValueDisclaimerGroup.disclaimers);
+    });
+
+    it("addDisclaimer: should return formated currency in locale 'En' if field type is 'currency' and locale is 'en'", () => {
+      component.advancedFilters = [{ property: 'value', type: 'currency', locale: 'en' }];
+      const expectedValueDisclaimer = { property: 'value', value: 321, label: 'Value: 321.00' };
+      const expectedValueDisclaimerGroup = {
+        title: 'titleTest',
+        disclaimers: [{ property: 'value', value: 321, label: 'Value: 321.00' }]
+      };
+
+      component.addDisclaimer(321, 'value');
+
+      expect(component.disclaimer).toEqual(expectedValueDisclaimer);
+      expect(component.disclaimerGroup.disclaimers).toEqual(expectedValueDisclaimerGroup.disclaimers);
+    });
+
+    it('addDisclaimer: should return label of option if options and label are defined', () => {
+      component.advancedFilters = [
+        {
+          property: 'company',
+          options: [
+            { label: 'Totvs', value: 1 },
+            { label: 'PO UI', value: 2 }
+          ]
+        }
+      ];
+      const expectedValueDisclaimer = { property: 'company', value: 1, label: 'Company: Totvs' };
+      const expectedValueDisclaimerGroup = {
+        title: 'titleTest',
+        disclaimers: [{ property: 'company', value: 1, label: 'Company: Totvs' }]
+      };
+
+      component.addDisclaimer(1, 'company');
+
+      expect(component.disclaimer).toEqual(expectedValueDisclaimer);
+      expect(component.disclaimerGroup.disclaimers).toEqual(expectedValueDisclaimerGroup.disclaimers);
+    });
+
+    it('addDisclaimer: should return value of option if options is defined and label is undefined', () => {
+      component.advancedFilters = [
+        {
+          property: 'company',
+          options: [{ value: 1 }, { value: 2 }]
+        }
+      ];
+      const expectedValueDisclaimer = { property: 'company', value: 1, label: 'Company: 1' };
+      const expectedValueDisclaimerGroup = {
+        title: 'titleTest',
+        disclaimers: [{ property: 'company', value: 1, label: 'Company: 1' }]
+      };
+
+      component.addDisclaimer(1, 'company');
+
+      expect(component.disclaimer).toEqual(expectedValueDisclaimer);
+      expect(component.disclaimerGroup.disclaimers).toEqual(expectedValueDisclaimerGroup.disclaimers);
+    });
+
+    it('addDisclaimer: should return option label if options and label are defined and optionsMulti is true', () => {
+      component.advancedFilters = [
+        {
+          property: 'company',
+          label: 'The company',
+          optionsMulti: true,
+          options: [
+            { label: 'Totvs', value: 1 },
+            { label: 'PO UI', value: 2 }
+          ]
+        }
+      ];
+      const expectedValueDisclaimer = { property: 'company', value: [1, 2], label: 'The company: Totvs, PO UI' };
+      const expectedValueDisclaimerGroup = {
+        title: 'titleTest',
+        disclaimers: [{ property: 'company', value: [1, 2], label: 'The company: Totvs, PO UI' }]
+      };
+
+      component.addDisclaimer([1, 2], 'company');
+
+      expect(component.disclaimer).toEqual(expectedValueDisclaimer);
+      expect(component.disclaimerGroup.disclaimers).toEqual(expectedValueDisclaimerGroup.disclaimers);
+    });
+
+    it('addDisclaimer: should add disclaimer for boolean property when value is true', () => {
+      component.advancedFilters = [{ property: 'isApproved', type: 'boolean', label: 'Is Approved' }];
+
+      component.addDisclaimer(true, 'isApproved');
+
+      expect(component.disclaimer.label).toBe('Is Approved: true');
+    });
+
+    it('addDisclaimer: should add disclaimer for boolean property when value is false', () => {
+      component.advancedFilters = [{ property: 'isActive', type: 'boolean', label: 'Is Active' }];
+
+      component.addDisclaimer(false, 'isActive');
+
+      expect(component.disclaimer.label).toBe('Is Active: false');
+    });
+
+    it('formatValueToBoolean: should format value to boolean when filterValue is truthy', () => {
+      const filterValue = true;
+      const field = {
+        label: 'Field Label',
+        booleanTrue: 'Yes',
+        property: 'fieldProperty'
+      };
+
+      component['formatValueToBoolean'](field, filterValue);
+
+      expect(component['disclaimerLabel']).toBe('Yes');
+    });
+
+    it('formatValueToBoolean: should format value to boolean when filterValue is falsy', () => {
+      const filterValue = false;
+      const field = {
+        label: 'Field Label',
+        booleanFalse: 'No',
+        property: 'fieldProperty'
+      };
+
+      component['formatValueToBoolean'](field, filterValue);
+
+      expect(component['disclaimerLabel']).toBe('No');
+    });
+
+    it('formatValueToBoolean: should format value to property when label is not provided', () => {
+      const filterValue = true;
+      const field = {
+        property: 'fieldProperty'
+      };
+
+      component['formatValueToBoolean'](field, filterValue);
+
+      expect(component['disclaimerLabel']).toBe('true');
+    });
+
+    it('p-hide-columns-manager: should update property `p-hide-columns-manager` with valid value', () => {
+      component.hideColumnsManager = convertToBoolean(1);
+
+      expect(component.hideColumnsManager).toBe(true);
+    });
+
+    it('p-hide-columns-manager: should update property `p-hide-columns-manager` with invalid value', () => {
+      component.hideColumnsManager = convertToBoolean(21211);
+
+      expect(component.hideColumnsManager).toBe(false);
+    });
+
+    it('p-infinite-scroll: should update property `p-infinite-scroll` with valid value', () => {
+      component.infiniteScroll = convertToBoolean(1);
+
+      expect(component.infiniteScroll).toBe(true);
+    });
+
+    it('p-infinite-scroll: should update property `p-infinite-scroll` with invalid value', () => {
+      component.infiniteScroll = convertToBoolean(21211);
+
+      expect(component.infiniteScroll).toBe(false);
     });
 
     it('setDisclaimersItems: should set selecteds with component.selectedItems if component.selectedItems is array', () => {

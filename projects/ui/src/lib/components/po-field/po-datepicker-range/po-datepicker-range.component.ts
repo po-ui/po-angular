@@ -81,7 +81,8 @@ const providers = [
 })
 export class PoDatepickerRangeComponent
   extends PoDatepickerRangeBaseComponent
-  implements AfterViewInit, OnInit, OnDestroy, OnChanges {
+  implements AfterViewInit, OnInit, OnDestroy, OnChanges
+{
   @ViewChild('dateRangeField', { read: ElementRef, static: true }) dateRangeField: ElementRef;
   @ViewChild('endDateInput', { read: ElementRef, static: true }) endDateInput: ElementRef;
   @ViewChild('startDateInput', { read: ElementRef, static: true }) startDateInput: ElementRef;

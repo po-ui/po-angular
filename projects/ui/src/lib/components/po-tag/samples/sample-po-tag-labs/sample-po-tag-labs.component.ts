@@ -1,6 +1,12 @@
 import { Component, OnInit } from '@angular/core';
 
-import { PoRadioGroupOption, PoSelectOption, PoTagOrientation, PoTagType } from '@po-ui/ng-components';
+import {
+  PoRadioGroupOption,
+  PoSelectOption,
+  PoTagOrientation,
+  PoTagType,
+  PoCheckboxGroupOption
+} from '@po-ui/ng-components';
 
 @Component({
   selector: 'sample-po-tag-labs',
@@ -27,6 +33,12 @@ export class SamplePoTagLabsComponent implements OnInit {
   orientation: PoTagOrientation;
   type: PoTagType;
   value: string;
+  properties: Array<string>;
+
+  propertiesOptions: Array<PoCheckboxGroupOption> = [
+    { value: 'disabled', label: 'Disabled' },
+    { value: 'removable', label: 'Removable' }
+  ];
 
   public readonly iconList: Array<PoSelectOption> = [
     { label: 'po-icon-bluetooth', value: 'po-icon-bluetooth' },
@@ -49,7 +61,8 @@ export class SamplePoTagLabsComponent implements OnInit {
     { label: 'Info', value: PoTagType.Info },
     { label: 'Danger', value: PoTagType.Danger },
     { label: 'Success', value: PoTagType.Success },
-    { label: 'Warning', value: PoTagType.Warning }
+    { label: 'Warning', value: PoTagType.Warning },
+    { label: 'Neutral', value: PoTagType.Neutral }
   ];
 
   ngOnInit() {
@@ -58,6 +71,18 @@ export class SamplePoTagLabsComponent implements OnInit {
 
   changeEvent(event: string) {
     this.event = event;
+  }
+
+  propertiesChange(event) {
+    const value = [...this.propertiesOptions];
+
+    if (event.includes('removable')) {
+      value[0] = { value: 'disabled', label: 'Disabled', disabled: false };
+      this.propertiesOptions = value;
+    } else {
+      value[0] = { value: 'disabled', label: 'Disabled', disabled: true };
+      this.propertiesOptions = value;
+    }
   }
 
   restore() {
@@ -69,5 +94,6 @@ export class SamplePoTagLabsComponent implements OnInit {
     this.type = undefined;
     this.event = '';
     this.textColor = undefined;
+    this.properties = [];
   }
 }

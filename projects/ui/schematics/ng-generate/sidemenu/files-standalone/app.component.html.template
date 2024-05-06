@@ -1,0 +1,9 @@
+<div class="po-wrapper">
+  <po-toolbar p-title="<%= classify(appName) %>"></po-toolbar>
+
+  <po-menu [p-menus]="menus"></po-menu>
+
+  <po-page-default p-title="<%= classify(appName) %>">
+    <p> <%= classify(appName) %> page </p>
+  </po-page-default>
+</div>

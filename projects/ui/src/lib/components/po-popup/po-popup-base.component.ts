@@ -1,4 +1,4 @@
-import { ElementRef, Input, Directive } from '@angular/core';
+import { ElementRef, Input, Directive, Output, EventEmitter } from '@angular/core';
 
 import { convertToBoolean } from '../../utils/util';
 import { PO_CONTROL_POSITIONS } from './../../services/po-control-position/po-control-position.constants';
@@ -30,6 +30,43 @@ const poPopupDefaultPosition = 'bottom-left';
  *   </div>
  * </po-popup >
  * ```
+ *
+ * #### Tokens customizáveis
+ *
+ * É possível alterar o estilo do componente usando os seguintes tokens (CSS):
+ *
+ * > Para maiores informações, acesse o guia [Personalizando o Tema Padrão com Tokens CSS](https://po-ui.io/guides/theme-customization).
+ *
+ * | Propriedade                            | Descrição                                             | Valor Padrão                                    |
+ * |----------------------------------------|-------------------------------------------------------|-------------------------------------------------|
+ * | **Default Values**                     |                                                       |                                                 |
+ * | `--border-radius`                      | Contém o valor do raio dos cantos do elemento&nbsp;   | `var(--border-radius-md)`                       |
+ * | `--border-width`                       | Contém o valor da largura dos cantos do elemento&nbsp;| `var(--border-width-sm)`                        |
+ * | `--border-color`                       | Cor da borda                                          | `var(--color-neutral-light-20)`                 |
+ * | `--background`                         | Cor do background                                     | `var(--color-neutral-light-00)`                 |
+ * | `--shadow`                             | Contém o valor da sombra do elemento                  | `var(--shadow-md)`                              |
+ * | **po-popup po-item-list**              |                                                       |                                                 |
+ * | `--font-family`                        | Família tipográfica usada                             | `var(--font-family-theme)`                      |
+ * | `--font-size`                          | Tamanho da fonte                                      | `var(--font-size-default)`                      |
+ * | `--line-height`                        | Tamanho da label                                      | `var(--line-height-md)`                         |
+ * | **Action**                             |                                                       |                                                 |
+ * | `--font-weight`                        | Peso da fonte                                         | `var(--font-weight-bold)`                       |
+ * | `--color`                              | Cor principal do popup                                | `var(--color-action-default)`                   |
+ * | **Hover**                              |                                                       |                                                 |
+ * | `--color-hover`                        | Cor principal no estado hover                         | `var(--color-brand-01-darkest)`                 |
+ * | `--background-hover`                   | Cor de background no estado hover                     | `var(--color-brand-01-lighter)`                 |
+ * | **Focused**                            |                                                       |                                                 |
+ * | `--outline-color-focused`              | Cor do outline do estado de focus                     | `var(--color-action-focus)`                     |
+ * | **Pressed**                            |                                                       |                                                 |
+ * | `--background-pressed`                 | Cor de background no estado de pressionado&nbsp;      | `var(--color-brand-01-light)`                   |
+ * | **Disabled**                           |                                                       |                                                 |
+ * | `--color-disabled`                     | Cor principal no estado disabled                      | `var(--color-action-disabled)`                  |
+ * | **Selected**                           |                                                       |                                                 |
+ * | `--font-weight-selected`               | Peso da fonte no estado selecionado                   | `var(--font-weight-bold)`                       |
+ * | `--background-selected`                | Cor de background no estado selecionado               | `var(--color-brand-01-lightest)`                |
+ * | **Option e check**                     |                                                       |                                                 |
+ * | `--color-option`                       | Cor principa no estado Option/check                   | `var(--color-neutral-dark-90)`                  |
+ *
  */
 @Directive()
 export class PoPopupBaseComponent {
@@ -196,4 +233,6 @@ export class PoPopupBaseComponent {
   get target() {
     return this._target;
   }
+
+  @Output('p-close') closeEvent: EventEmitter<any> = new EventEmitter();
 }

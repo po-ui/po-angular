@@ -23,17 +23,21 @@ export const poMenuFilterLiteralsDefault = {
 export class PoMenuFilterComponent {
   @Input('p-loading') loading: boolean;
 
+  @Input('p-enable-collapse') enableCollapse: boolean = false;
+
   // utilizado para repassar ao po-clean
   @ViewChild('inputFilter', { read: ElementRef, static: true }) inputFilterElement: ElementRef;
 
   @Output('p-filter') filter = new EventEmitter();
 
-  public literals = {
-    ...poMenuFilterLiteralsDefault[this.languageService.getLanguageDefault()],
-    ...poMenuFilterLiteralsDefault[this.languageService.getShortLanguage()]
-  };
+  public literals: any;
 
-  constructor(public languageService: PoLanguageService) {}
+  constructor(public languageService: PoLanguageService) {
+    this.literals = {
+      ...poMenuFilterLiteralsDefault[this.languageService?.getLanguageDefault()],
+      ...poMenuFilterLiteralsDefault[this.languageService?.getShortLanguage()]
+    };
+  }
   filterItems(search: string) {
     this.filter.emit(search);
   }

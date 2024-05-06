@@ -1,9 +1,9 @@
 // import { PoRadioGroupOption } from './../../../../../../../dist/ng-components/lib/components/po-field/po-radio-group/po-radio-group-option.interface.d';
-import { Component, OnDestroy, OnInit } from '@angular/core';
 import { HttpClient } from '@angular/common/http';
+import { Component, OnDestroy, OnInit } from '@angular/core';
 
-import { Subscription } from 'rxjs';
 import { PoRadioGroupOption } from '@po-ui/ng-components';
+import { Subscription } from 'rxjs';
 
 @Component({
   selector: 'sample-po-http-interceptor-labs',
@@ -80,8 +80,8 @@ export class SamplePoHttpInterceptorLabsComponent implements OnDestroy, OnInit {
     return this.headerParam === 'No-Message'
       ? { 'X-PO-No-Message': 'true' }
       : this.headerParam === 'No-Error'
-      ? { 'X-PO-No-Error': 'true' }
-      : {};
+        ? { 'X-PO-No-Error': 'true' }
+        : {};
   }
 
   processRequest() {
@@ -90,7 +90,7 @@ export class SamplePoHttpInterceptorLabsComponent implements OnDestroy, OnInit {
     const params = { status: this.status || '' };
 
     this.apiSubscription = this.http
-      .post(`https://po-sample-api.fly.dev/v1/messages`, body, { headers, params })
+      .post(`https://po-sample-api.onrender.com/v1/messages`, body, { headers, params })
       .subscribe();
   }
 

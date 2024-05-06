@@ -30,84 +30,17 @@ export class PoRichTextToolbarComponent implements AfterViewInit {
 
   @Output('p-link-editing') linkEditing = new EventEmitter<any>();
 
-  readonly literals = {
-    ...poRichTextLiteralsDefault[this.languageService.getShortLanguage()]
-  };
+  readonly literals?: any;
 
-  alignButtons: Array<PoRichTextToolbarButtonGroupItem> = [
-    {
-      command: 'justifyleft',
-      icon: 'po-icon-align-left',
-      tooltip: this.literals.left,
-      action: this.emitAlignCommand.bind(this, 'justifyleft'),
-      selected: true
-    },
-    {
-      command: 'justifycenter',
-      icon: 'po-icon-align-center',
-      tooltip: this.literals.center,
-      action: this.emitAlignCommand.bind(this, 'justifycenter')
-    },
-    {
-      command: 'justifyright',
-      icon: 'po-icon-align-right',
-      tooltip: this.literals.right,
-      action: this.emitAlignCommand.bind(this, 'justifyright')
-    },
-    {
-      command: 'justifyfull',
-      icon: 'po-icon-align-justify',
-      tooltip: this.literals.justify,
-      action: this.emitAlignCommand.bind(this, 'justifyfull')
-    }
-  ];
+  alignButtons: Array<PoRichTextToolbarButtonGroupItem>;
 
-  formatButtons: Array<PoRichTextToolbarButtonGroupItem> = [
-    {
-      command: 'bold',
-      icon: 'po-icon-text-bold',
-      tooltip: this.literals.bold,
-      action: this.emitCommand.bind(this, 'bold')
-    },
-    {
-      command: 'italic',
-      icon: 'po-icon-text-italic',
-      tooltip: this.literals.italic,
-      action: this.emitCommand.bind(this, 'italic')
-    },
-    {
-      command: 'underline',
-      icon: 'po-icon-text-underline',
-      tooltip: this.literals.underline,
-      action: this.emitCommand.bind(this, 'underline')
-    }
-  ];
+  formatButtons: Array<PoRichTextToolbarButtonGroupItem>;
 
-  listButtons: Array<PoRichTextToolbarButtonGroupItem> = [
-    {
-      command: 'insertUnorderedList',
-      icon: 'po-icon-list',
-      tooltip: this.literals.unorderedList,
-      action: this.emitCommand.bind(this, 'insertUnorderedList')
-    }
-  ];
+  listButtons: Array<PoRichTextToolbarButtonGroupItem>;
 
-  linkButtons: Array<PoRichTextToolbarButtonGroupItem> = [
-    {
-      command: 'Createlink',
-      icon: 'po-icon-link',
-      tooltip: `${this.literals.insertLink} (Ctrl + K)`,
-      action: () => this.richTextLinkModal.openModal(this.selectedLinkElement)
-    }
-  ];
+  linkButtons: Array<PoRichTextToolbarButtonGroupItem>;
 
-  mediaButtons: Array<PoButtonGroupItem> = [
-    {
-      tooltip: this.literals.insertImage,
-      icon: 'po-icon-picture',
-      action: () => this.richTextImageModal.openModal()
-    }
-  ];
+  mediaButtons: Array<PoButtonGroupItem>;
 
   private _disabledTextAlign: boolean;
   private _readonly: boolean;
@@ -134,7 +67,85 @@ export class PoRichTextToolbarComponent implements AfterViewInit {
     return isIE();
   }
 
-  constructor(private languageService: PoLanguageService) {}
+  constructor(private languageService: PoLanguageService) {
+    this.literals = {
+      ...poRichTextLiteralsDefault[this.languageService?.getShortLanguage()]
+    };
+    this.alignButtons = [
+      {
+        command: 'justifyleft',
+        icon: 'po-icon-align-left',
+        tooltip: this.literals.left,
+        action: this.emitAlignCommand.bind(this, 'justifyleft'),
+        selected: true
+      },
+      {
+        command: 'justifycenter',
+        icon: 'po-icon-align-center',
+        tooltip: this.literals.center,
+        action: this.emitAlignCommand.bind(this, 'justifycenter')
+      },
+      {
+        command: 'justifyright',
+        icon: 'po-icon-align-right',
+        tooltip: this.literals.right,
+        action: this.emitAlignCommand.bind(this, 'justifyright')
+      },
+      {
+        command: 'justifyfull',
+        icon: 'po-icon-align-justify',
+        tooltip: this.literals.justify,
+        action: this.emitAlignCommand.bind(this, 'justifyfull')
+      }
+    ];
+
+    this.formatButtons = [
+      {
+        command: 'bold',
+        icon: 'po-icon-text-bold',
+        tooltip: this.literals.bold,
+        action: this.emitCommand.bind(this, 'bold')
+      },
+      {
+        command: 'italic',
+        icon: 'po-icon-text-italic',
+        tooltip: this.literals.italic,
+        action: this.emitCommand.bind(this, 'italic')
+      },
+      {
+        command: 'underline',
+        icon: 'po-icon-text-underline',
+        tooltip: this.literals.underline,
+        action: this.emitCommand.bind(this, 'underline')
+      }
+    ];
+
+    this.listButtons = [
+      {
+        command: 'insertUnorderedList',
+        icon: 'po-icon-list',
+        tooltip: this.literals.unorderedList,
+        action: this.emitCommand.bind(this, 'insertUnorderedList')
+      }
+    ];
+
+    this.mediaButtons = [
+      {
+        tooltip: this.literals.insertImage,
+        icon: 'po-icon-picture',
+        action: () => this.richTextImageModal.openModal()
+      }
+    ];
+
+    this.linkButtons = [
+      {
+        command: 'Createlink',
+        icon: 'po-icon-link',
+        tooltip: `${this.literals.insertLink} (Ctrl + K)`,
+        action: () => this.richTextLinkModal.openModal(this.selectedLinkElement)
+      }
+    ];
+  }
 
   ngAfterViewInit() {
     this.removeButtonFocus();

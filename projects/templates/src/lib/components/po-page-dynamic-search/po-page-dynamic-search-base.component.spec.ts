@@ -1,17 +1,16 @@
-import * as utilsFunctions from './../../utils/util';
 import { expectPropertiesValues } from '../../util-test/util-expect.spec';
-import { PoLanguageService } from './../../../../../ui/src/lib/services/po-language/po-language.service';
 import { poLocaleDefault } from './../../../../../ui/src/lib/services/po-language/po-language.constant';
+import { PoLanguageService } from './../../../../../ui/src/lib/services/po-language/po-language.service';
 
+import { Component } from '@angular/core';
 import { PoAdvancedFilterLiterals } from './po-advanced-filter/po-advanced-filter-literals.interface';
-import { PoPageDynamicSearchLiterals } from './po-page-dynamic-search-literals.interface';
 import {
   PoPageDynamicSearchBaseComponent,
   poPageDynamicSearchLiteralsDefault
 } from './po-page-dynamic-search-base.component';
 import { PoPageDynamicSearchFilters } from './po-page-dynamic-search-filters.interface';
-import { PoPageAction, PoBreadcrumb } from '@po-ui/ng-components/lib';
-import { Component } from '@angular/core';
+import { PoPageDynamicSearchLiterals } from './po-page-dynamic-search-literals.interface';
+import { convertToBoolean } from '../../utils/util';
 
 @Component({
   selector: 'mock-component',
@@ -48,15 +47,15 @@ describe('PoPageDynamicSearchBaseComponent:', () => {
     });
 
     it('hideRemoveAllDisclaimer: should set property `p-hide-remove-all-disclaimer` to `false` if invalid value', () => {
-      const booleanInvalidValues = [undefined, null, NaN, 2, 'string'];
+      component.hideRemoveAllDisclaimer = convertToBoolean(3);
 
-      expectPropertiesValues(component, 'hideRemoveAllDisclaimer', booleanInvalidValues, false);
+      expect(component.hideRemoveAllDisclaimer).toBe(false);
     });
 
     it('hideRemoveAllDisclaimer: should update property `p-hide-remove-all-disclaimer` to `true` with valid values', () => {
-      const booleanValidTrueValues = [true, 'true', 1, ''];
+      component.hideRemoveAllDisclaimer = convertToBoolean(1);
 
-      expectPropertiesValues(component, 'hideRemoveAllDisclaimer', booleanValidTrueValues, true);
+      expect(component.hideRemoveAllDisclaimer).toBe(true);
     });
 
     it('hideCloseDisclaimers: should set property `p-hide-close-disclaimers` to `[]` if not Array value', () => {

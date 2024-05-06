@@ -125,7 +125,6 @@ class="po-sm-12"
 [p-disabled]="properties.includes('disabled')"
 [p-icon]="icon"
 [p-label]="label"
-[p-small]="properties.includes('small')"
 [p-type]="type"
 (p-click)="buttonClick()">
 

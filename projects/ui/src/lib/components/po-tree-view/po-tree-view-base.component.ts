@@ -1,6 +1,6 @@
 import { EventEmitter, Input, Output, Directive } from '@angular/core';
 
-import { convertToBoolean } from '../../utils/util';
+import { convertToBoolean, convertToInt } from '../../utils/util';
 
 import { PoTreeViewItem } from './po-tree-view-item/po-tree-view-item.interface';
 
@@ -67,11 +67,18 @@ export class PoTreeViewBaseComponent {
 
   private _items: Array<PoTreeViewItem> = [];
   private _selectable: boolean = false;
+  private _maxLevel = poTreeViewMaxLevel;
+  private _singleSelect: boolean = false;
+
+  // armazena o value do item selecionado
+  selectedValue: string | number;
 
   /**
    * Lista de itens do tipo `PoTreeViewItem` que será renderizada pelo componente.
    */
-  @Input('p-items') set items(value: Array<PoTreeViewItem>) {
+  @Input('p-items') inputedItems: Array<PoTreeViewItem>;
+
+  set items(value: Array<PoTreeViewItem>) {
     this._items = Array.isArray(value) ? this.getItemsByMaxLevel(value) : [];
   }
 
@@ -96,6 +103,42 @@ export class PoTreeViewBaseComponent {
     return this._selectable;
   }
 
+  /**
+   * @optional
+   *
+   * @description
+   *
+   * Habilita a seleção para item único atráves de po-radio.
+   *
+   * @default false
+   */
+  @Input('p-single-select') set singleSelect(value: boolean) {
+    this._singleSelect = convertToBoolean(value);
+  }
+
+  get singleSelect() {
+    return this._singleSelect;
+  }
+
+  /**
+   * @optional
+   *
+   * @description
+   *
+   * Define o máximo de níveis para o tree-view.
+   *
+   * > O valor padrão é 4
+   *
+   * @default 4
+   */
+  @Input('p-max-level') set maxLevel(value: number) {
+    this._maxLevel = convertToInt(value, poTreeViewMaxLevel);
+  }
+
+  get maxLevel() {
+    return this._maxLevel;
+  }
+
   protected emitExpanded(treeViewItem: PoTreeViewItem) {
     const event = treeViewItem.expanded ? 'expanded' : 'collapsed';
 
@@ -105,9 +148,15 @@ export class PoTreeViewBaseComponent {
   protected emitSelected(treeViewItem: PoTreeViewItem) {
     const event = treeViewItem.selected ? 'selected' : 'unselected';
 
-    this.updateItemsOnSelect(treeViewItem);
+    this.selectedValue = treeViewItem.value;
 
-    this[event].emit({ ...treeViewItem });
+    // Não emitir subItems quando for singleSelect
+    const { subItems, ...rest } = treeViewItem;
+    const treeViewToEmit = this.singleSelect ? { ...rest } : treeViewItem;
+
+    this.updateItemsOnSelect(treeViewToEmit);
+
+    this[event].emit({ ...treeViewToEmit });
   }
 
   private addChildItemInParent(childItem: PoTreeViewItem, parentItem: PoTreeViewItem) {
@@ -128,8 +177,12 @@ export class PoTreeViewBaseComponent {
       if (isNewItem) {
         this.expandParentItem(childItem, parentItem);
       }
+
       this.addChildItemInParent(childItem, parentItem);
-      this.selectItemBySubItems(parentItem);
+
+      if (!this.singleSelect) {
+        this.selectItemBySubItems(parentItem);
+      }
 
       items.push(parentItem);
     } else {
@@ -143,7 +196,7 @@ export class PoTreeViewBaseComponent {
         this.selectAllItems(item.subItems, isSelected);
       }
 
-      item.selected = isSelected;
+      item.selected = item.isSelectable !== false ? isSelected : false;
     });
   }
 
@@ -189,7 +242,7 @@ export class PoTreeViewBaseComponent {
     items.forEach(item => {
       const { subItems, ...currentItem } = item;
 
-      if (level === poTreeViewMaxLevel) {
+      if (level === this.maxLevel) {
         return;
       }
 
@@ -201,6 +254,10 @@ export class PoTreeViewBaseComponent {
 
         this.getItemsByMaxLevel(subItems, ++level, currentItem);
         --level;
+      }
+
+      if (item.selected) {
+        this.selectedValue = currentItem.value;
       }
 
       this.addItem(newItems, currentItem, parentItem, true);
@@ -224,7 +281,7 @@ export class PoTreeViewBaseComponent {
   }
 
   private updateItemsOnSelect(selectedItem: PoTreeViewItem) {
-    if (selectedItem.subItems) {
+    if (selectedItem.subItems && !this.singleSelect) {
       this.selectAllItems(selectedItem.subItems, selectedItem.selected);
     }
 

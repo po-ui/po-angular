@@ -51,6 +51,13 @@ export interface PoPageDynamicEditLiterals {
   /**
    * @description
    *
+   * Texto exibido para ocorrência de alguma inconsistência ao salvar.
+   */
+  saveNotificationError?: string;
+
+  /**
+   * @description
+   *
    * Texto exibido para recurso salvo com sucesso.
    */
   saveNotificationSuccessSave?: string;

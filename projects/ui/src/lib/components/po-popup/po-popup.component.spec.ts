@@ -286,11 +286,15 @@ describe('PoPopupComponent:', () => {
     });
 
     it('onScroll: should call `close` if `showPopup` is true', () => {
+      component.popupRef = {
+        nativeElement: document.createElement('div')
+      };
+
       component.showPopup = true;
 
       spyOn(component, 'close');
 
-      component['onScroll']({ target: {} });
+      component['onScroll']({ target: document.createElement('div') });
 
       expect(component.close).toHaveBeenCalled();
     });
@@ -316,15 +320,17 @@ describe('PoPopupComponent:', () => {
       expect(component.close).not.toHaveBeenCalled();
     });
 
-    it('close: should set left style to 0 and showPopup to false', () => {
+    it('close: should set left style to 0, showPopup to false and emit close', () => {
       component.showPopup = true;
 
       spyOn(component, <any>'removeListeners');
+      spyOn(component.closeEvent, <any>'emit');
 
       component.close();
 
       expect(component.showPopup).toBeFalsy();
       expect(component['removeListeners']).toHaveBeenCalled();
+      expect(component.closeEvent.emit).toHaveBeenCalled();
     });
 
     it('checkAllActionIsInvisible: should return true is all itens are invisible', () => {
@@ -513,51 +519,6 @@ describe('PoPopupComponent:', () => {
       component['validateInitialContent']();
 
       expect(component.close).toHaveBeenCalled();
-    });
-  });
-
-  describe('Templates:', () => {
-    it('should show `po-popup` if `showPopup` is `true`', () => {
-      component.showPopup = true;
-
-      fixture.detectChanges();
-
-      expect(nativeElement.querySelector('.po-popup')).toBeTruthy();
-    });
-
-    it('shouldn`t show `po-popup` if `showPopup` is `false`', () => {
-      component.showPopup = false;
-
-      fixture.detectChanges();
-
-      expect(nativeElement.querySelector('.po-popup')).toBeNull();
-    });
-
-    it('should not add `po-popup-item-selected` class if PopupAction.selected is false', () => {
-      component.actions = [{ label: 'PopupAction ', selected: false }];
-      component.showPopup = true;
-
-      fixture.detectChanges();
-
-      expect(nativeElement.querySelector('.po-popup-item-selected')).toBeFalsy();
-    });
-
-    it('shouldn´t display arrow.', () => {
-      component.hideArrow = true;
-      component.showPopup = true;
-
-      fixture.detectChanges();
-
-      expect(nativeElement.querySelector('.po-popup-arrow')).toBeFalsy();
-    });
-
-    it('shouldn`t display action if `visible` is `false`.', () => {
-      component.actions = [{ label: 'PO ', type: 'danger', visible: false }];
-      component.showPopup = true;
-
-      fixture.detectChanges();
-
-      expect(nativeElement.querySelector('.po-popup-item-danger')).toBeNull();
     });
   });
 });

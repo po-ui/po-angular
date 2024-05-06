@@ -20,16 +20,16 @@ Biblioteca de componentes de UI para Angular.
 
 ### Pré-requisitos
 
-Para começar a utilizar o **PO UI** é pré-requisito ter o `Node.js` instalado (versão 14.20.x ou acima) e o seu gerenciador de pacote favorito na versão mais atual. Caso você ainda não tenha instalado o pacote `@angular/cli`, instale-o via `npm` ou `yarn`.
+Para começar a utilizar o **PO UI** é pré-requisito ter o `Node.js` instalado (versão 18.13.x ou acima) e o seu gerenciador de pacote favorito na versão mais atual. Caso você ainda não tenha instalado o pacote `@angular/cli`, instale-o via `npm` ou `yarn`.
 
 Instalando com npm:
 ```
-npm i -g @angular/cli@^15
+npm i -g @angular/cli@17
 ```
 
 Caso prefira instalar com o yarn:
 ```
-yarn global add @angular/cli@^15
+yarn global add @angular/cli@17
 ```
 
 ### Passo 1 - Crie o seu primeiro projeto
@@ -53,25 +53,25 @@ Veja abaixo a lista de dependências e as versões compatíveis, elas devem ser 
 
 ```
  "dependencies": {
-    "@angular/animations": "~15.0.3",
-    "@angular/common": "~15.0.3",
-    "@angular/compiler": "~15.0.3",
-    "@angular/core": "~15.0.3",
-    "@angular/forms": "~15.0.3",
-    "@angular/platform-browser": "~15.0.3",
-    "@angular/platform-browser-dynamic": "~15.0.3",
-    "@angular/router": "~15.0.3",
-    "rxjs": "~7.5.5",
-    "tslib": "^2.3.0",
-    "zone.js": "~0.12.0"
+    "@angular/animations": "~17.2.4",
+    "@angular/common": "~17.2.4",
+    "@angular/compiler": "~17.2.4",
+    "@angular/core": "~17.2.4",
+    "@angular/forms": "~17.2.4",
+    "@angular/platform-browser": "~17.2.4",
+    "@angular/platform-browser-dynamic": "~17.2.4",
+    "@angular/router": "~17.2.4",
+    "rxjs": "~7.8.1",
+    "tslib": "^2.6.2",
+    "zone.js": "~0.14.4"
     ...
   },
   "devDependencies": {
-    "@angular-devkit/build-angular": "~15.0.3",
-    "@angular/cli": "~15.0.3",
-    "@angular/compiler-cli": "~15.0.3",
+    "@angular-devkit/build-angular": "~17.2.3",
+    "@angular/cli": "~17.2.3",
+    "@angular/compiler-cli": "~17.2.4",
     ...
-    "typescript": "~4.8.4"
+    "typescript": "~5.2.2"
   }
 ```
 

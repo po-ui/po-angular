@@ -19,6 +19,7 @@ export class SamplePoPageEditLabsComponent implements OnInit {
   params: any;
   properties: Array<string>;
   title: string;
+  subtitle: string;
 
   public readonly propertiesOptions: Array<PoCheckboxGroupOption> = [
     { value: 'disableSubmit', label: 'Disable Submit' }
@@ -66,6 +67,7 @@ export class SamplePoPageEditLabsComponent implements OnInit {
     this.literals = '';
     this.properties = [];
     this.title = 'PO Page Edit';
+    this.subtitle = '';
   }
 
   save() {

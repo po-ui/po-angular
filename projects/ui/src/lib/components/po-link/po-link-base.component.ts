@@ -1,7 +1,7 @@
 import { Input, Directive, Output, EventEmitter } from '@angular/core';
 
 import { InputBoolean } from '../../decorators';
-import { isExternalLink } from '../../utils/util';
+import { convertToBoolean, isExternalLink } from '../../utils/util';
 
 /**
  * @description
@@ -28,6 +28,27 @@ import { isExternalLink } from '../../utils/util';
  * - A cor não deve ser o único meio para diferenciar o link de textos comuns ou outros elementos, por isso deve-se manter o underline no link, para proporcionar essa diferença. (WCAG [1.4.1: Use of Color](https://www.w3.org/WAI/WCAG21/Understanding/use-of-color)/ [3.2.4: Consistent Identification](https://www.w3.org/WAI/WCAG21/Understanding/consistent-identification))
  * - O foco precisa ter uma área mínima do dobro do perímetro do link, ter contraste de pelo menos 4.5:1 entre o estado focado e não focado do componente; e o foco não pode ficar escondido por outros elementos da tela. (WCAG [2.4.12: Focus Appearance - Enhanced](https://w3c.github.io/wcag/understanding/focus-appearance-enhanced))
  * - O estado de foco do componente deve ser sempre preservado. (WCAG [2.4.7: Focus Visible](https://www.w3.org/WAI/WCAG21/Understanding/focus-visible))
+ *
+ * #### Tokens customizáveis
+ *
+ * É possível alterar o estilo do componente usando os seguintes tokens (CSS):
+ *
+ * > Para maiores informações, acesse o guia [Personalizando o Tema Padrão com Tokens CSS](https://po-ui.io/guides/theme-customization).
+ *
+ * | Propriedade                            | Descrição                                             | Valor Padrão                                    |
+ * |----------------------------------------|-------------------------------------------------------|-------------------------------------------------|
+ * | **Default Values**                     |                                                       |                                                 |
+ * | `--font-family`                        | Família tipográfica usada                             | `var(--font-family-theme)`                      |
+ * | `--text-color`                         | Cor do texto                                          | `var(--color-action-default)`                   |
+ * | **Hover**                              |                                                       |                                                 |
+ * | `--text-color-hover`                   | Cor do texto no estado de hover                       | `var(--color-action-hover)`                     |
+ * | **Pressed**                            |                                                       |                                                 |
+ * | `--text-color-pressed`                 | Cor do texto no estado pressionado                    | `var(--color-action-pressed)`                   |
+ * | **Focused**                            |                                                       |                                                 |
+ * | `--outline-color-focused`              | Cor do outline do estado de focus                     | `var(--color-action-focus)`                     |
+ * | **Visited**                            |                                                       |                                                 |
+ * | `--text-color-visited`                 | Cor do texto do estado Visited                        | `var(--color-action-pressed)`                   |
+ *
  */
 @Directive()
 export class PoLinkBaseComponent {
@@ -35,7 +56,7 @@ export class PoLinkBaseComponent {
   @Input('p-label') label: string;
 
   /** Indica se o link deverá ser aberto em uma nova aba. Sempre que utilizar essa propriedade, é importante informar isso ao usuário através da label. */
-  @Input('p-open-new-tab') @InputBoolean() openNewTab?: boolean = false;
+  @Input({ alias: 'p-open-new-tab', transform: convertToBoolean }) openNewTab: boolean = false;
 
   /** Url que será aberta ao clicar no link. */
   @Input('p-url') url: string;

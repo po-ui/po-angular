@@ -9,9 +9,10 @@ import { PoDynamicFormField } from '../po-dynamic-form-field.interface';
 import { PoDynamicFormFieldInternal } from './po-dynamic-form-field-internal.interface';
 import { PoComboFilter } from '../../../po-field/po-combo/interfaces/po-combo-filter.interface';
 import { PoLookupFilter } from '../../../po-field/po-lookup/interfaces/po-lookup-filter.interface';
+import { PoDynamicSharedBase } from '../../shared/po-dynamic-shared-base';
 
 @Directive()
-export class PoDynamicFormFieldsBaseComponent {
+export class PoDynamicFormFieldsBaseComponent extends PoDynamicSharedBase {
   @Input('p-auto-focus') autoFocus?: string;
 
   @Input('p-disabled-form') disabledForm: boolean;
@@ -26,8 +27,6 @@ export class PoDynamicFormFieldsBaseComponent {
   @Output('p-object-value') objectValue = new EventEmitter<any>();
 
   @Input('p-validate-on-input') validateOnInput: boolean;
-
-  visibleFields: Array<PoDynamicFormFieldInternal> = [];
 
   private _fields: Array<PoDynamicFormField>;
   private _validateFields: Array<string>;
@@ -59,7 +58,9 @@ export class PoDynamicFormFieldsBaseComponent {
     return this._validateFields;
   }
 
-  constructor(private titleCasePipe: TitleCasePipe) {}
+  constructor(private titleCasePipe: TitleCasePipe) {
+    super();
+  }
 
   compareTo(value, compareTo) {
     return value === compareTo;
@@ -87,7 +88,10 @@ export class PoDynamicFormFieldsBaseComponent {
       }
     });
 
-    return sortFields(visibleFields);
+    const _visibleFields = sortFields(visibleFields);
+    this.ensureFieldHasContainer(_visibleFields);
+
+    return _visibleFields;
   }
 
   // converte um array em string para um array de objetos que contem label e value.
@@ -150,7 +154,13 @@ export class PoDynamicFormFieldsBaseComponent {
   private getComponentControl(field: PoDynamicFormField = <any>{}) {
     const type = field && field.type ? field.type.toLocaleLowerCase() : 'string';
 
-    const forceOptionComponent = this.verifyforceOptionComponent(field);
+    const { forceBooleanComponentType } = field;
+    const forceOptionComponent = this.verifyForceOptionComponent(field);
+
+    if (forceBooleanComponentType) {
+      return forceBooleanComponentType;
+    }
+
     if (forceOptionComponent) {
       const { forceOptionsComponentType } = field;
       return forceOptionsComponentType;
@@ -158,7 +168,7 @@ export class PoDynamicFormFieldsBaseComponent {
 
     if (this.isNumberType(field, type)) {
       return 'number';
-    } else if (this.isCurrencyType(field, type)) {
+    } else if (this.isCurrencyType(field, type) || type === PoDynamicFieldType.Decimal) {
       return 'decimal';
     } else if (this.isSelect(field)) {
       return 'select';
@@ -257,7 +267,7 @@ export class PoDynamicFormFieldsBaseComponent {
     return url && type === 'upload';
   }
 
-  private verifyforceOptionComponent(field: PoDynamicFormField) {
+  private verifyForceOptionComponent(field: PoDynamicFormField) {
     const { optionsMulti, optionsService, forceOptionsComponentType } = field;
 
     if (forceOptionsComponentType && !optionsMulti && !optionsService) {

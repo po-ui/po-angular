@@ -27,7 +27,7 @@ describe('PoMenuService:', () => {
   });
 
   describe('Methods:', () => {
-    const itemsFiltered = [{ label: 'Menu', link: '/menu' }];
+    const itemsFiltered = [{ label: 'Menu', link: '/menu', action: () => {} }];
     const expectedResponse = {
       items: itemsFiltered
     };

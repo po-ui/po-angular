@@ -1,14 +1,18 @@
 <po-page-default p-title="Blood donation FAQs">
   <p class="po-pb-2">You don't have to be afraid of being a blood donor!</p>
 
-  <po-accordion>
+  <po-accordion [p-show-manager-accordion]="true">
     <po-accordion-item p-label="Who can donate?" #questionOne>
       In principle, we can say that we can all apply for blood donation. However, our acceptance depends on compliance
       with current legislation and a number of factors that take into account the risk that such a donation may pose to
       the health of the candidate himself and to the health of the individual receiving the donated blood.
     </po-accordion-item>
 
-    <po-accordion-item p-label="How long does it take for the blood to be processed?">
+    <po-accordion-item
+      p-label="How long does it take for the blood to be processed?"
+      p-label-tag="Important!"
+      p-type-tag="danger"
+    >
       Blood is processed as soon as collected, preferably within 6 hours of donation.
     </po-accordion-item>
 

@@ -1,7 +1,9 @@
-import { ChangeDetectionStrategy, Component } from '@angular/core';
+import { ChangeDetectionStrategy, Component, OnInit, inject } from '@angular/core';
 
 import { PoProgressBaseComponent } from './po-progress-base.component';
 import { PoProgressStatus } from './enums/po-progress-status.enum';
+import { PoLanguageService } from '../../services/po-language/po-language.service';
+import { poProgressLiterals } from './literals/po-progress.literals';
 
 /**
  * @docsExtends PoProgressBaseComponent
@@ -27,13 +29,16 @@ import { PoProgressStatus } from './enums/po-progress-status.enum';
   templateUrl: './po-progress.component.html',
   changeDetection: ChangeDetectionStrategy.OnPush
 })
-export class PoProgressComponent extends PoProgressBaseComponent {
+export class PoProgressComponent extends PoProgressBaseComponent implements OnInit {
+  language;
+  literals;
+
   get isAllowCancel(): boolean {
     return !!this.cancel.observers.length && this.status !== PoProgressStatus.Success;
   }
 
-  get isAllowProgressInfo(): boolean {
-    return !!(this.info || this.infoIcon || this.isAllowCancel || this.isAllowRetry);
+  get isAllowInfoError(): boolean {
+    return !!(!this.infoIcon && this.info && this.status === PoProgressStatus.Error);
   }
 
   get isAllowRetry(): boolean {
@@ -50,6 +55,16 @@ export class PoProgressComponent extends PoProgressBaseComponent {
     }
 
     return 'po-progress-default';
+  }
+
+  private poLanguageService = inject(PoLanguageService);
+
+  ngOnInit(): void {
+    this.language = this.poLanguageService.getShortLanguage();
+
+    this.literals = {
+      ...poProgressLiterals[this.language]
+    };
   }
 
   emitCancellation() {

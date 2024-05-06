@@ -10,7 +10,10 @@ import { MenuComponentsService } from './menu-components.service';
 export class DocumentationComponent implements OnInit {
   menus = [];
 
-  constructor(private menuComponentsService: MenuComponentsService, private http: HttpClient) {}
+  constructor(
+    private menuComponentsService: MenuComponentsService,
+    private http: HttpClient
+  ) {}
 
   ngOnInit() {
     this.http.get('./assets/json/api-list.json').subscribe(

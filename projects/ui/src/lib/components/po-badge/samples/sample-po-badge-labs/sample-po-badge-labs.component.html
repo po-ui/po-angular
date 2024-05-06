@@ -1,0 +1,64 @@
+<div class="po-row">
+  <po-badge
+    [p-color]="color"
+    [p-icon]="showIcon ? true : icon"
+    [p-size]="size"
+    [p-status]="status"
+    [p-show-border]="properties.includes('showBorder')"
+    [p-value]="value"
+  ></po-badge>
+</div>
+
+<hr />
+
+<form #f="ngForm">
+  <div class="po-row">
+    <po-number class="po-md-4" name="value" [(ngModel)]="value" p-label="Value" [p-min]="0"> </po-number>
+    <po-input
+      class="po-md-4"
+      name="color"
+      [(ngModel)]="color"
+      p-label="Color"
+      p-help="color-01, red, rgb(201, 53, 125), #753399"
+    ></po-input>
+  </div>
+
+  <div class="po-row">
+    <po-checkbox-group
+      class="po-md-12"
+      name="properties"
+      [(ngModel)]="properties"
+      p-label="Properties"
+      [p-options]="propertiesOptions"
+      (p-change)="propertiesChange($event)"
+    >
+    </po-checkbox-group>
+
+    <po-radio-group
+      class="po-lg-12"
+      name="status"
+      [(ngModel)]="status"
+      p-label="Status"
+      [p-options]="statusOptions"
+      (p-change)="statusChange($event)"
+    >
+    </po-radio-group>
+
+    <po-radio-group class="po-lg-12" name="size" [(ngModel)]="size" p-label="Size" [p-options]="sizesOptions">
+    </po-radio-group>
+
+    <po-radio-group
+      class="po-lg-12"
+      name="icon"
+      [(ngModel)]="icon"
+      p-label="Icon"
+      [p-options]="iconsOptions"
+      (p-change)="iconsChange($event)"
+    >
+    </po-radio-group>
+  </div>
+
+  <div class="po-row">
+    <po-button class="po-md-3" p-label="Sample Restore" (p-click)="restore()"> </po-button>
+  </div>
+</form>

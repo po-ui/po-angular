@@ -32,6 +32,9 @@ import { PoPageDynamicEditLiterals } from './interfaces/po-page-dynamic-edit-lit
 type UrlOrPoCustomizationFunction = string | (() => PoPageDynamicEditOptions);
 type SaveAction = PoPageDynamicEditActions['save'] | PoPageDynamicEditActions['saveNew'];
 
+export const poNotificationType = ['error', 'warning'];
+export const poNotificationTypeDefault = 'warning';
+
 export const poPageDynamicEditLiteralsDefault = {
   en: <PoPageDynamicEditLiterals>{
     cancelConfirmMessage: 'Are you sure you want to cancel this operation?',
@@ -40,6 +43,7 @@ export const poPageDynamicEditLiteralsDefault = {
     pageActionSave: 'Save',
     pageActionSaveNew: 'Save and new',
     registerNotFound: 'Register not found.',
+    saveNotificationError: 'Mandatory field(s) not filled.',
     saveNotificationSuccessSave: 'Resource successfully saved.',
     saveNotificationSuccessUpdate: 'Resource successfully updated.',
     saveNotificationWarning: 'Form must be filled out correctly.'
@@ -51,6 +55,7 @@ export const poPageDynamicEditLiteralsDefault = {
     pageActionSave: 'Guardar',
     pageActionSaveNew: 'Guardar y nuevo',
     registerNotFound: 'Registro no encontrado.',
+    saveNotificationError: 'Campo(s) obligatorio(s) no completado(s).',
     saveNotificationSuccessSave: 'Recurso salvo con éxito.',
     saveNotificationSuccessUpdate: 'Recurso actualizado con éxito.',
     saveNotificationWarning: 'El formulario debe llenarse correctamente.'
@@ -62,6 +67,7 @@ export const poPageDynamicEditLiteralsDefault = {
     pageActionSave: 'Salvar',
     pageActionSaveNew: 'Salvar e novo',
     registerNotFound: 'Registro não encontrado.',
+    saveNotificationError: 'Campo(s) obrigatório(s) sem preenchimento.',
     saveNotificationSuccessSave: 'Recurso salvo com sucesso.',
     saveNotificationSuccessUpdate: 'Recurso atualizado com sucesso.',
     saveNotificationWarning: 'Formulário precisa ser preenchido corretamente.'
@@ -73,6 +79,7 @@ export const poPageDynamicEditLiteralsDefault = {
     pageActionSave: 'Сохранить',
     pageActionSaveNew: 'Сохранить и создать',
     registerNotFound: 'Запись не найдена.',
+    saveNotificationError: 'Обязательное поле(я) не заполнено.',
     saveNotificationSuccessSave: 'Ресурс успешно сохранен.',
     saveNotificationSuccessUpdate: 'Ресурс успешно обновлен.',
     saveNotificationWarning: 'Форма должна быть заполнена правильно.'
@@ -87,16 +94,14 @@ export const poPageDynamicEditLiteralsDefault = {
  *
  * ### Utilização via rota
  *
- * Ao utilizar as rotas para carregar o template, o `page-dynamic-edit` disponibiliza propriedades para
- * poder especificar o endpoint dos dados e dos metadados. Exemplo de utilização:
+ * Ao utilizar as rotas para inicializar o template, o `page-dynamic-edit` disponibiliza propriedades que devem ser fornecidas no arquivo de configuração de rotas da aplicação, para
+ * poder especificar o endpoint dos dados e dos metadados que serão carregados na inicialização.
  *
- * O componente primeiro irá carregar o metadado da rota definida na propriedade serviceMetadataApi
- * e depois irá buscar da rota definida na propriedade serviceLoadApi
+ * Exemplo de utilização:
  *
- * > Caso o servidor retornar um erro ao recuperar o metadados, será repassado o metadados salvo em cache,
- * se o cache não existe será disparado uma notificação.
- *
+ * Arquivo de configuração de rotas da aplicação: `app-routing.module.ts`
  * ```
+ * const routes: Routes = [
  * {
  *   path: 'people',
  *   component: PoPageDynamicEditComponent,
@@ -105,9 +110,22 @@ export const poPageDynamicEditLiteralsDefault = {
  *     serviceMetadataApi: 'http://localhost:3000/v1/metadata', // endpoint dos metadados utilizando o método HTTP Get
  *     serviceLoadApi: 'http://localhost:3000/load-metadata' // endpoint de customizações dos metadados utilizando o método HTTP Post
  *   }
- * }
+ *  },
+ *  {
+ *   path: 'home',
+ *   component: HomeExampleComponent
+ *  }
+ * ];
  *
  * ```
+ * O componente primeiro irá carregar o metadado da rota definida na propriedade serviceMetadataApi
+ * e depois irá buscar da rota definida na propriedade serviceLoadApi.
+ *
+ * A requisição dos metadados é feita na inicialização do template para buscar os metadados da página passando o
+ * tipo do metadado esperado e a versão cacheada pelo browser.
+ *
+ * > Caso o servidor retornar um erro ao recuperar os metadados, serão repassados os metadados salvos em cache,
+ * se o cache não existir será disparada uma notificação.
  *
  * Para carregar com um recurso já existente, deve-se ser incluído um parâmetro na rota chamado `id`:
  *
@@ -317,6 +335,7 @@ export class PoPageDynamicEditComponent implements OnInit, OnDestroy {
   // beforeInsert: : return boolean
   readonly detailActions: PoGridRowActions = {};
 
+  private indexFocus = 0;
   private language: string;
   private subscriptions: Array<Subscription> = [];
   private _actions: PoPageDynamicEditActions = {};
@@ -328,7 +347,7 @@ export class PoPageDynamicEditComponent implements OnInit, OnDestroy {
   private _fields: Array<any> = [];
   private _keys: Array<any> = [];
   private _pageActions: Array<PoPageAction> = [];
-
+  private _notificationType?: string = poNotificationTypeDefault;
   /**
    * @optional
    *
@@ -363,6 +382,7 @@ export class PoPageDynamicEditComponent implements OnInit, OnDestroy {
    *    pageActionSave: 'Gravar',
    *    pageActionSaveNew: 'Gravar e incluir',
    *    registerNotFound: 'Nenhum registro encontrado.',
+   *    saveNotificationError: 'Campo(s) obrigatório(s) sem preenchimento.',
    *    saveNotificationSuccessSave: 'Item salvo com sucesso.',
    *    saveNotificationSuccessUpdate: 'Item atualizado com sucesso.',
    *    saveNotificationWarning: 'Necessário preencher o formulário corretamente.'
@@ -395,6 +415,32 @@ export class PoPageDynamicEditComponent implements OnInit, OnDestroy {
 
   get literals() {
     return this._literals || poPageDynamicEditLiteralsDefault[this.language];
+  }
+
+  /**
+   * @optional
+   *
+   * @description
+   *
+   * Tipo da notificação.
+   *
+   * É possivel definir o tipo de notificação que será exibido quando houver algum campo inválido no formulário.
+   *
+   * ```
+   * <po-page-dynamic-edit
+   *   p-notification-type="warning">
+   * </po-page-dynamic-edit>
+   * ```
+   *
+   * > Os valores aceitos são 'warning' e 'error'.
+   * @default warning
+   */
+  @Input('p-notification-type') set notificationType(value: string) {
+    this._notificationType = poNotificationType.includes(value) ? value : poNotificationTypeDefault;
+  }
+
+  get notificationType() {
+    return this._notificationType;
   }
 
   /**
@@ -608,6 +654,45 @@ export class PoPageDynamicEditComponent implements OnInit, OnDestroy {
     return EMPTY;
   }
 
+  private focusCheckboxInput(control: string): void {
+    const checkboxGroup = document.querySelector(`po-checkbox-group[ng-reflect-name=${control}]`);
+    if (checkboxGroup) {
+      const checkBoxComponent = checkboxGroup.querySelector('po-checkbox[ng-reflect-disabled=false]');
+      const labelInput: HTMLInputElement = checkBoxComponent?.querySelector('.po-checkbox-outline');
+      if (labelInput) {
+        labelInput.focus();
+      } else {
+        this.indexFocus--;
+      }
+    }
+  }
+
+  private focusControl(control: string): void {
+    const inputElement: HTMLInputElement = document.querySelector(`[name=${control}]`);
+    if (inputElement) {
+      if (inputElement.tagName === 'INPUT') {
+        inputElement.focus();
+      } else {
+        this.focusRadioInput(inputElement, control);
+      }
+    } else {
+      this.focusCheckboxInput(control);
+    }
+  }
+
+  private focusRadioInput(inputElement: Element, control: string): void {
+    const radioComponent = inputElement.querySelector(
+      `po-radio[ng-reflect-name=${control}][ng-reflect-disabled=false]`
+    );
+    if (radioComponent) {
+      const radioInput = radioComponent.querySelector('input');
+      radioInput.focus();
+      radioInput.parentElement.parentElement.classList.add('po-radio-focus');
+    } else {
+      this.indexFocus--;
+    }
+  }
+
   private getPoDynamicPageOptions(onLoad: UrlOrPoCustomizationFunction): Observable<PoPageDynamicEditOptions> {
     const originalOption: PoPageDynamicEditOptions = {
       fields: this.fields,
@@ -658,6 +743,19 @@ export class PoPageDynamicEditComponent implements OnInit, OnDestroy {
     return this.loadOptionsOnInitialize(onLoad);
   }
 
+  private markControlsAsDirtyAndFocusFirstInvalid(): void {
+    this.indexFocus = 0;
+    const controls = Object.keys(this.dynamicForm.form.controls);
+
+    controls.forEach(control => {
+      this.dynamicForm.form.controls[control].markAsDirty();
+      if (this.dynamicForm.form.controls[control].hasError('required') && this.indexFocus === 0) {
+        this.focusControl(control);
+        this.indexFocus++;
+      }
+    });
+  }
+
   private navigateTo(path: string) {
     if (path) {
       const url = this.resolveUrl(this.model, path);
@@ -690,18 +788,32 @@ export class PoPageDynamicEditComponent implements OnInit, OnDestroy {
   }
 
   private updateModel(newResource: any = {}) {
-    const dynamicNgForm = this.dynamicForm.form;
+    if (typeof newResource !== 'undefined' && Object.keys(newResource).length !== 0) {
+      const dynamicNgForm = this.dynamicForm.form;
 
-    removeKeysProperties(this.keys, newResource);
+      removeKeysProperties(this.keys, newResource);
 
-    this.model = { ...this.model, ...newResource };
+      this.model = { ...this.model, ...newResource };
 
-    dynamicNgForm.form.patchValue(this.model);
+      dynamicNgForm.form.patchValue(this.model);
+    }
+  }
+
+  private showNotification(type: string) {
+    switch (type) {
+      case 'warning':
+        this.poNotification.warning(this.literals.saveNotificationWarning);
+        break;
+      case 'error':
+        this.poNotification.error(this.literals.saveNotificationError);
+        break;
+    }
   }
 
   private saveOperation() {
     if (this.dynamicForm.form.invalid) {
-      this.poNotification.warning(this.literals.saveNotificationWarning);
+      this.markControlsAsDirtyAndFocusFirstInvalid();
+      this.showNotification(this._notificationType);
       return EMPTY;
     }
 

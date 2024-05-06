@@ -10,7 +10,10 @@ import { MenuGuidesService } from './menu-guides.service';
 export class GuidesComponent implements OnInit {
   menus = [];
 
-  constructor(private menuGuidesService: MenuGuidesService, private http: HttpClient) {}
+  constructor(
+    private menuGuidesService: MenuGuidesService,
+    private http: HttpClient
+  ) {}
 
   ngOnInit() {
     this.http.get('./assets/json/api-list.json').subscribe(

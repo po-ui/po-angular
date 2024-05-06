@@ -6,17 +6,18 @@ import {
   OnChanges,
   OnDestroy,
   Output,
+  Renderer2,
   SimpleChange,
   SimpleChanges,
-  Renderer2,
   ViewChild
 } from '@angular/core';
 
-import { capitalizeFirstLetter, convertToInt } from '../../../utils/util';
-import { PoCheckboxGroupOption } from '../../po-field/po-checkbox-group/interfaces/po-checkbox-group-option.interface';
-import { PoPopoverComponent } from '../../po-popover/po-popover.component';
-import { PoLanguageService } from '../../../services/po-language/po-language.service';
 import { poLocaleDefault } from '../../../services/po-language/po-language.constant';
+import { PoLanguageService } from '../../../services/po-language/po-language.service';
+import { capitalizeFirstLetter, convertToBoolean, convertToInt } from '../../../utils/util';
+import { PoCheckboxGroupOption } from '../../po-field/po-checkbox-group/interfaces/po-checkbox-group-option.interface';
+import { PoPageSlideComponent } from '../../po-page';
+import { PoPopoverComponent } from '../../po-popover/po-popover.component';
 import { PoTableColumn } from '../interfaces/po-table-column.interface';
 
 const PoTableColumnManagerMaxColumnsDefault = 99999;
@@ -48,6 +49,7 @@ type Direction = 'up' | 'down';
 })
 export class PoTableColumnManagerComponent implements OnChanges, OnDestroy {
   @ViewChild(PoPopoverComponent) popover: PoPopoverComponent;
+  @ViewChild('pageSlideColumnsManager') pageSlideColumnsManager: PoPageSlideComponent;
 
   @Input('p-columns') columns: Array<PoTableColumn> = [];
 
@@ -64,6 +66,8 @@ export class PoTableColumnManagerComponent implements OnChanges, OnDestroy {
   @Output('p-change-visible-columns') changeVisibleColumns = new EventEmitter<Array<string>>();
 
   @Output('p-initial-columns') initialColumns = new EventEmitter<Array<String>>();
+
+  @Input({ alias: 'p-hide-action-fixed-columns', transform: convertToBoolean }) hideActionFixedColumns: boolean = false;
 
   literals;
   columnsOptions: Array<PoCheckboxGroupOption> = [];
@@ -85,7 +89,10 @@ export class PoTableColumnManagerComponent implements OnChanges, OnDestroy {
     return this._maxColumns;
   }
 
-  constructor(private renderer: Renderer2, languageService: PoLanguageService) {
+  constructor(
+    private renderer: Renderer2,
+    languageService: PoLanguageService
+  ) {
     const language = languageService.getShortLanguage();
 
     this.literals = {
@@ -95,7 +102,7 @@ export class PoTableColumnManagerComponent implements OnChanges, OnDestroy {
   }
 
   ngOnChanges(changes: SimpleChanges) {
-    const { columns, maxColumns, target } = changes;
+    const { columns, maxColumns, target, lastVisibleColumnsSelected } = changes;
 
     if (target && target.firstChange) {
       this.initializeListeners();
@@ -107,6 +114,10 @@ export class PoTableColumnManagerComponent implements OnChanges, OnDestroy {
 
     if (maxColumns) {
       this.updateValues(this.columns);
+    }
+
+    if (lastVisibleColumnsSelected?.currentValue) {
+      this.pageSlideColumnsManager.open();
     }
   }
 
@@ -126,6 +137,7 @@ export class PoTableColumnManagerComponent implements OnChanges, OnDestroy {
 
   restore() {
     this.restoreDefaultEvent = true;
+    this.defaultColumns = this.removePropertyFixed(this.defaultColumns);
     const defaultColumns = this.getVisibleColumns(this.defaultColumns);
     this.initialColumns.emit(this.getVisibleColumns(this.colunsDefault));
     this.checkChanges(defaultColumns, this.restoreDefaultEvent);
@@ -138,6 +150,33 @@ export class PoTableColumnManagerComponent implements OnChanges, OnDestroy {
     this.changePositionColumn(newColumn, indexColumn, direction);
     this.columns = newColumn;
     this.visibleColumnsChange.emit(this.columns);
+  }
+
+  emitColumnFixed(option) {
+    const newColumn = [...this.columns];
+    if (option) {
+      newColumn.forEach(itemColumn => {
+        if (itemColumn.property === option.value) {
+          itemColumn.fixed = option.fixed;
+        }
+      });
+
+      const amountOfFixed = newColumn.filter(itemFixed => itemFixed.fixed === true).length;
+      const indexColumn = newColumn.findIndex(el => el.property === option.value);
+      const item = newColumn.splice(indexColumn, 1)[0];
+
+      if (option.fixed) {
+        newColumn.splice(amountOfFixed - 1, 0, item);
+      }
+
+      if (option.fixed === false) {
+        newColumn.splice(amountOfFixed, 0, item);
+      }
+
+      this.columns = [...newColumn];
+    }
+
+    this.visibleColumnsChange.emit(newColumn);
   }
 
   private changePositionColumn(array: Array<PoTableColumn>, index: number, direction: Direction) {
@@ -358,6 +397,15 @@ export class PoTableColumnManagerComponent implements OnChanges, OnDestroy {
       if (key !== 'icon' && key !== 'searchService') {
         return value;
       }
+    });
+  }
+
+  private removePropertyFixed(arr: Array<any>) {
+    return arr.map(obj => {
+      if (obj.hasOwnProperty('fixed')) {
+        obj.fixed = false;
+      }
+      return obj;
     });
   }
 }

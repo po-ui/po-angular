@@ -1,7 +1,7 @@
 import { Directive, Input } from '@angular/core';
 import { AbstractControl, ValidationErrors, Validator } from '@angular/forms';
 
-import { InputBoolean } from '../../decorators';
+import { convertToBoolean } from '../..//utils/util';
 import { PoFieldModel } from './po-field.model';
 import { requiredFailed } from './validators';
 
@@ -23,7 +23,7 @@ export abstract class PoFieldValidateModel<T> extends PoFieldModel<T> implements
    *
    * @default `false`
    */
-  @Input('p-optional') @InputBoolean() optional: boolean = false;
+  @Input({ alias: 'p-optional', transform: convertToBoolean }) optional: boolean = false;
 
   /**
    * @optional
@@ -34,7 +34,7 @@ export abstract class PoFieldValidateModel<T> extends PoFieldModel<T> implements
    *
    * @default `false`
    */
-  @Input('p-required') @InputBoolean() required: boolean = false;
+  @Input({ alias: 'p-required', transform: convertToBoolean }) required: boolean = false;
 
   /**
    *  Define se a indicação de campo obrigatório será exibida.

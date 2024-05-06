@@ -52,7 +52,7 @@ const poMenuRootLevel = 1;
  * Para o menu funcionar corretamente é necessário importar o `RouterModule` e `Routes` do módulo principal de
  *  sua aplicação:
  *
- * ````
+ * ```
  * import { RouterModule, Routes } from '@angular/router';
  *
  * ...
@@ -297,6 +297,19 @@ export class PoMenuComponent extends PoMenuBaseComponent implements AfterViewIni
     }
   }
 
+  onMouseEnter(): void {
+    if (this.collapsed && this.automaticToggle) {
+      this.collapsed = false;
+      this.allowCollapseHover = true;
+    }
+  }
+
+  onMouseLeave(): void {
+    if (!this.collapsed && this.allowCollapseHover && this.automaticToggle) {
+      this.collapsed = true;
+    }
+  }
+
   protected checkingRouterChildrenFragments() {
     const childrenPrimary = this.router.parseUrl(this.router.url).root.children['primary'];
 
@@ -319,11 +332,13 @@ export class PoMenuComponent extends PoMenuBaseComponent implements AfterViewIni
   private activateMenuItem(menu: PoMenuItem): void {
     this.activeMenuItem = menu;
     this.linkActive = menu.link;
+
     if (this.activeMenuItem['level'] > poMenuRootLevel) {
       this.openParentMenu(this.activeMenuItem);
     } else {
       this.groupedMenuItem = null;
     }
+
     this.menuItemsService.sendToChildMenuClicked({
       active: this.activeMenuItem,
       grouped: this.groupedMenuItem,
@@ -363,10 +378,10 @@ export class PoMenuComponent extends PoMenuBaseComponent implements AfterViewIni
     }
   }
 
-  private convertToMenuItemFiltered(menuItem: any = { label: '', link: '' }): PoMenuItemFiltered {
-    const { label, link } = menuItem;
+  private convertToMenuItemFiltered(menuItem: any = { label: '', link: '', action: () => {} }): PoMenuItemFiltered {
+    const { label, link, action } = menuItem;
 
-    const menuItemFiltered: PoMenuItemFiltered = { label, link };
+    const menuItemFiltered: PoMenuItemFiltered = { label, link, action };
 
     this.setMenuItemProperties(menuItemFiltered);
 

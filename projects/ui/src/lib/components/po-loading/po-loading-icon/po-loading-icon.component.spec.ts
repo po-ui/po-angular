@@ -45,10 +45,34 @@ describe('PoLoadingOverlayComponent', () => {
   });
 
   describe('Templates', () => {
-    it('should count the amount of `po-loading-icon-bar` elements', () => {
-      const iconBars = fixture.debugElement.queryAll(By.css('.po-loading-icon-bar'));
+    it('should contain `po-loading-svg-xs` size is `xs`', () => {
+      component.size = 'xs';
+      fixture.detectChanges();
+      expect(nativeElement.querySelector('.po-loading-svg-xs')).toBeTruthy();
+    });
 
-      expect(iconBars.length).toBe(8);
+    it('should contain `po-loading-svg-sm` size is `sm`', () => {
+      component.size = 'sm';
+      fixture.detectChanges();
+      expect(nativeElement.querySelector('.po-loading-svg-sm')).toBeTruthy();
+    });
+
+    it('should contain `po-loading-svg-md` size is `md`', () => {
+      component.size = 'md';
+      fixture.detectChanges();
+      expect(nativeElement.querySelector('.po-loading-svg-md')).toBeTruthy();
+    });
+
+    it('should contain `po-loading-svg-lg` size is `lg`', () => {
+      component.size = 'lg';
+      fixture.detectChanges();
+      expect(nativeElement.querySelector('.po-loading-svg-lg')).toBeTruthy();
+    });
+
+    it('should contain `po-loading-svg-md` size is invalid value', () => {
+      component.size = 'huge';
+      fixture.detectChanges();
+      expect(nativeElement.querySelector('.po-loading-svg-md')).toBeTruthy();
     });
   });
 });

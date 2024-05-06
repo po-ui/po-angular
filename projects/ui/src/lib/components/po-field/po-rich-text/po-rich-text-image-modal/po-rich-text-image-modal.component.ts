@@ -1,4 +1,4 @@
-import { Component, EventEmitter, OnInit, Output, ViewChild } from '@angular/core';
+import { Component, EventEmitter, Output, ViewChild } from '@angular/core';
 import { AbstractControl, NgForm } from '@angular/forms';
 
 import { convertImageToBase64 } from '../../../../utils/util';
@@ -32,25 +32,11 @@ export class PoRichTextImageModalComponent {
   };
   urlImage: string;
 
-  readonly literals = {
-    ...poRichTextLiteralsDefault[this.languageService.getShortLanguage()]
-  };
+  readonly literals: any;
 
-  modalCancelAction: PoModalAction = {
-    label: this.literals.cancel,
-    action: () => {
-      this.modal.close();
-      this.command.emit();
-      this.retrieveCursorPosition();
-      this.cleanUpFields();
-    }
-  };
+  modalCancelAction: PoModalAction;
 
-  modalConfirmAction: PoModalAction = {
-    label: this.literals.insert,
-    disabled: false,
-    action: () => this.insertElementRef()
-  };
+  modalConfirmAction: PoModalAction;
 
   get isUploadValid(): boolean {
     return !!(this.uploadModel && this.uploadModel.length);
@@ -60,7 +46,27 @@ export class PoRichTextImageModalComponent {
     return !!this.urlImage && this.modalImageForm && this.modalImageForm.valid;
   }
 
-  constructor(private languageService: PoLanguageService) {}
+  constructor(private languageService: PoLanguageService) {
+    this.literals = {
+      ...poRichTextLiteralsDefault[this.languageService.getShortLanguage()]
+    };
+
+    this.modalCancelAction = {
+      label: this.literals.cancel,
+      action: () => {
+        this.modal.close();
+        this.command.emit();
+        this.retrieveCursorPosition();
+        this.cleanUpFields();
+      }
+    };
+
+    this.modalConfirmAction = {
+      label: this.literals.insert,
+      disabled: false,
+      action: () => this.insertElementRef()
+    };
+  }
 
   openModal() {
     this.saveCursorPosition();

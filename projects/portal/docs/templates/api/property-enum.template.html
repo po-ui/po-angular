@@ -8,7 +8,7 @@
   <td class="docs-api-property-description">
     {% if property.isOptional %}<em><strong>(opcional)</strong></em
     >{% endif %} {$ property.description | marked | replace("< ", "&lt; ") | replace("{", "&#123;") | replace('}',
-    '&#125;') $}
+    '&#125;') | replace("@", "&#64;") $}
   </td>
 </tr>
 {%- endif -%}

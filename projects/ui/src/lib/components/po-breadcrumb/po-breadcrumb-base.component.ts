@@ -16,6 +16,21 @@ import { PoBreadcrumbItem } from './po-breadcrumb-item.interface';
  *
  * Havendo necessidade de incluir parâmetros na requisição do serviço,
  * o componente dispõe da propriedade `p-params-service` que recebe um objeto contendo as informações.
+ *
+ * #### Tokens customizáveis
+ *
+ * É possível alterar o estilo do componente usando os seguintes tokens (CSS):
+ *
+ * > Para maiores informações, acesse o guia [Personalizando o Tema Padrão com Tokens CSS](https://po-ui.io/guides/theme-customization).
+ *
+ * | Propriedade                            | Descrição                                             | Valor Padrão                                      |
+ * |----------------------------------------|-------------------------------------------------------|---------------------------------------------------|
+ * | **Default Values**                     |                                                       |                                                   |
+ * | `--font-family`                        | Família tipográfica usada &nbsp;                      | `var(--font-family-theme)`                        |
+ * | `--color`                              | Cor principal do icone de lista                       | `var(--color-action-default)`                     |
+ * | `--color-icon`                         | Cor do icone ">"                                      | `var(--color-neutral-mid-60)`                     |
+ * | `--color-current-page` &nbsp;          | Cor do pagina atual                                   | `var(--color-neutral-mid-60)`                     |
+ *
  */
 @Directive()
 export class PoBreadcrumbBaseComponent {
@@ -92,6 +107,7 @@ export class PoBreadcrumbBaseComponent {
   @Input('p-params-service') paramsService?: object;
 
   itemsView: Array<PoBreadcrumbItem> = [];
+  itemsViewPopup: Array<any> = [];
 
   protected clickoutListener: () => void;
   protected resizeListener: () => void;
@@ -111,9 +127,33 @@ export class PoBreadcrumbBaseComponent {
   @Input('p-items') set items(items: Array<PoBreadcrumbItem>) {
     this._items = items;
     this.itemsView = [].concat(items);
+    if (this.itemsView.length >= 4) {
+      this.transformToArrayPopup(items);
+    }
   }
 
   get items() {
     return this._items;
+  }
+
+  private transformToArrayPopup(items: Array<PoBreadcrumbItem>) {
+    const itemsCopy = items.map(obj => ({ ...obj }));
+    itemsCopy.shift();
+    itemsCopy.splice(-2, 1);
+    itemsCopy.pop();
+    this.itemsViewPopup = this.transformArrayToActionPopUp(itemsCopy);
+  }
+
+  private transformArrayToActionPopUp(items: Array<PoBreadcrumbItem>) {
+    return items.map(obj => {
+      if (obj.hasOwnProperty('link')) {
+        obj['url'] = obj.link;
+        delete obj.link;
+        if (obj.hasOwnProperty('action')) {
+          delete obj.action;
+        }
+      }
+      return obj;
+    });
   }
 }

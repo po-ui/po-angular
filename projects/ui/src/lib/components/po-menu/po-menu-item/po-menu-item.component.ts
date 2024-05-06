@@ -203,6 +203,7 @@ export class PoMenuItemComponent implements OnDestroy, OnInit {
       this.maxHeight = 0;
       return;
     }
+
     this.accordionAnimation(menuActive, menuOpened, hasSubItemOpened, activatedByRoute);
   }
 

@@ -19,22 +19,20 @@ describe('PoPageDynamicSearchComponent:', () => {
   let component: PoPageDynamicSearchComponent;
   let fixture: ComponentFixture<PoPageDynamicSearchComponent>;
 
-  beforeEach(
-    waitForAsync(() => {
-      TestBed.configureTestingModule({
-        imports: [
-          FormsModule,
-          RouterTestingModule.withRoutes(routes),
-          PoPageCustomizationModule,
-          PoDynamicModule,
-          HttpClientTestingModule
-        ],
-        declarations: [PoPageDynamicSearchComponent, PoAdvancedFilterComponent],
-        providers: [TitleCasePipe],
-        schemas: [NO_ERRORS_SCHEMA]
-      }).compileComponents();
-    })
-  );
+  beforeEach(waitForAsync(() => {
+    TestBed.configureTestingModule({
+      imports: [
+        FormsModule,
+        RouterTestingModule.withRoutes(routes),
+        PoPageCustomizationModule,
+        PoDynamicModule,
+        HttpClientTestingModule
+      ],
+      declarations: [PoPageDynamicSearchComponent, PoAdvancedFilterComponent],
+      providers: [TitleCasePipe],
+      schemas: [NO_ERRORS_SCHEMA]
+    }).compileComponents();
+  }));
 
   beforeEach(() => {
     fixture = TestBed.createComponent(PoPageDynamicSearchComponent);
@@ -246,6 +244,30 @@ describe('PoPageDynamicSearchComponent:', () => {
       expect(component['convertToFilters']).toHaveBeenCalledWith(filters);
     });
 
+    it(`onAdvancedSearch: should call 'clearInputSearch' if isAdvancedSearch is true`, () => {
+      const fakeThis = {
+        setDisclaimers: () => ['test'],
+        _disclaimerGroup: {
+          disclaimers: ['test']
+        },
+        setFilters: () => {},
+        advancedSearch: {
+          emit: () => {}
+        },
+        poPageList: {
+          clearInputSearch: () => {}
+        }
+      };
+      const filteredItems = { filter: 'fakeFilter', optionsService: 'fakeOptionsService' };
+      const isAdvancedSearch = true;
+
+      spyOn(fakeThis.poPageList, 'clearInputSearch');
+
+      component.onAdvancedSearch.call(fakeThis, filteredItems, isAdvancedSearch);
+
+      expect(fakeThis.poPageList.clearInputSearch).toHaveBeenCalled();
+    });
+
     it(`setFilters: should update filters value if the objects are compatible`, () => {
       const filterThatWillBeApplied = { city: 'Ontario' };
       const formattedFilters = [{ property: 'city', value: 'Ontario' }];
@@ -454,6 +476,23 @@ describe('PoPageDynamicSearchComponent:', () => {
       const result = component['getFilterValueToDisclaimer'](field, value);
 
       expect(result).toBe('12/08/2020');
+    });
+
+    it('getFilterValueToDisclaimer: should return formated currency in locale default if field type is PoDynamicFieldType.Currency', () => {
+      component['languageService'].setLanguage('pt');
+      const field = { type: PoDynamicFieldType.Currency, property: '1', label: 'currency' };
+      const value = 322;
+
+      const result = component['getFilterValueToDisclaimer'](field, value);
+      expect(result).toBe('322,00');
+    });
+
+    it("getFilterValueToDisclaimer: should return formated currency in locale 'En' if field type is PoDynamicFieldType.Currency and locale is 'en'", () => {
+      const field = { type: PoDynamicFieldType.Currency, property: '1', label: 'currency', locale: 'en' };
+      const value = 322;
+
+      const result = component['getFilterValueToDisclaimer'](field, value);
+      expect(result).toBe('322.00');
     });
 
     it('getFilterValueToDisclaimer: should return formated date if field type is PoDynamicFieldType.Date with range', () => {

@@ -1,17 +1,17 @@
-import { EventEmitter, Input, Output, ViewChild, Directive } from '@angular/core';
+import { Directive, EventEmitter, Input, Output, ViewChild } from '@angular/core';
 
 import {
-  InputBoolean,
+  PoComboOption,
   PoDynamicFormField,
   PoLanguageService,
   PoModalAction,
   PoModalComponent,
-  poLocaleDefault,
-  PoComboOption
+  poLocaleDefault
 } from '@po-ui/ng-components';
 
-import { PoAdvancedFilterLiterals } from './po-advanced-filter-literals.interface';
+import { convertToBoolean } from '../../../utils/util';
 import { PoPageDynamicSearchFilters } from '../po-page-dynamic-search-filters.interface';
+import { PoAdvancedFilterLiterals } from './po-advanced-filter-literals.interface';
 
 export const poAdvancedFiltersLiteralsDefault = {
   en: <PoAdvancedFilterLiterals>{
@@ -51,9 +51,7 @@ export class PoAdvancedFilterBaseComponent {
   /**
    * Mantém na modal de busca avançada os valores preenchidos do último filtro realizado pelo usuário.
    */
-  @InputBoolean()
-  @Input('p-keep-filters')
-  keepFilters: boolean = false;
+  @Input({ alias: 'p-keep-filters', transform: convertToBoolean }) keepFilters: boolean = false;
 
   /** Função que será disparada e receberá os valores do formulário ao ser clicado no botão buscar. */
   @Output('p-search-event') searchEvent = new EventEmitter<any>();

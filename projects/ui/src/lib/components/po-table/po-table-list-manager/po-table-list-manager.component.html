@@ -1,39 +1,103 @@
-<li
-  class="po-table-list-manager-container"
-  *ngFor="let option of checkboxGroupOptionsView; trackBy: trackByFn"
-  [class.po-checkbox-group-item-disabled]="option.disabled || disabled"
->
+<section class="po-table-list-manager-section" *ngIf="existedFixedItem()">
+  <p class="po-table-list-manager-title-group-items">{{ literals.fixedColumns }}</p>
+  <ng-container *ngFor="let option of checkboxGroupOptionsView; trackBy: trackByFn">
+    <ng-container *ngIf="isFixed(option)">
+      <li class="po-table-list-manager-container" [class.po-checkbox-group-item-disabled]="option.disabled || disabled">
+        <ng-container *ngTemplateOutlet="listItemsManagerDefault; context: { $implicit: option }"></ng-container>
+      </li>
+    </ng-container>
+  </ng-container>
+</section>
+
+<section class="po-table-list-manager-section">
+  <p class="po-table-list-manager-title-group-items">{{ literals.otherColumns }}</p>
+  <ng-container *ngFor="let option of checkboxGroupOptionsView; trackBy: trackByFn">
+    <ng-container *ngIf="!isFixed(option)">
+      <li class="po-table-list-manager-container" [class.po-checkbox-group-item-disabled]="option.disabled || disabled">
+        <ng-container *ngIf="!isFixed(option)">
+          <ng-container *ngTemplateOutlet="listItemsManagerDefault; context: { $implicit: option }"></ng-container>
+        </ng-container>
+      </li>
+    </ng-container>
+  </ng-container>
+</section>
+
+<ng-template #listItemsManagerDefault let-option>
   <div class="po-table-list-manager-item">
-    <po-checkbox
-      #checkboxLabel
-      [p-label]="option.label"
-      [p-disabled]="option.disabled || disabled"
-      (click)="checkOption(option)"
-      (keydown)="onKeyDown($event, option)"
-      [p-checkboxValue]="checkedOptions[option.value] === null ? 'mixed' : checkedOptions[option.value]"
-      [p-required]="required"
-    >
-    </po-checkbox>
-    <div class="po-container-icons-arrows-columns-manager">
+    <div class="po-table-list-manager-item-switch">
+      <po-switch
+        name="switch"
+        (p-change)="clickSwitch(option)"
+        (keydown)="onKeyDown($event, option)"
+        [p-disabled]="option.disabled || disabled || isFixed(option)"
+        [p-value]="checkedOptions[option.value]"
+        p-label-off=" "
+        p-label-on=" "
+      >
+      </po-switch>
+      <span class="po-table-list-manager-item-text">
+        {{ option.label }}
+      </span>
+    </div>
+
+    <div class="po-table-list-manager-item-buttons">
+      <po-button
+        *ngIf="!hideActionFixedColumns"
+        [p-icon]="isFixed(option) ? templateIconFixed : templateIconNotFixed"
+        (p-click)="emitFixed(option)"
+        [p-disabled]="!option.visible || checksIfHasFiveFixed(option)"
+      >
+      </po-button>
+
       <po-button
         [p-tooltip]="literals.up"
         p-tooltip-position="left"
-        p-kind="tertiary"
         p-icon="po-icon po-icon-arrow-up"
-        [p-disabled]="verifyArrowDisabled(option, 'up')"
-        (click)="emitChangePosition(option, 'up'); $event.stopPropagation()"
+        [p-disabled]="verifyArrowDisabled(option, 'up') || isFixed(option)"
+        (p-click)="emitChangePosition(option, 'up')"
       >
       </po-button>
 
       <po-button
         [p-tooltip]="literals.down"
         p-tooltip-position="top"
-        p-kind="tertiary"
         p-icon="po-icon po-icon-arrow-down"
-        [p-disabled]="verifyArrowDisabled(option, 'down')"
-        (click)="emitChangePosition(option, 'down'); $event.stopPropagation()"
+        [p-disabled]="verifyArrowDisabled(option, 'down') || isFixed(option)"
+        (p-click)="emitChangePosition(option, 'down')"
       >
       </po-button>
     </div>
   </div>
-</li>
+</ng-template>
+
+<ng-template #templateIconNotFixed>
+  <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none">
+    <g clip-path="url(#clip0_12562_15948)">
+      <path
+        d="M13.7143 5.71429V10C13.7143 10.96 14.0314 11.8514 14.5714 12.5714H9.42857C9.98571 11.8343 10.2857 10.9429 10.2857 10V5.71429H13.7143ZM16.2857 4H7.71429C7.24286 4 6.85714 4.38571 6.85714 4.85714C6.85714 5.32857 7.24286 5.71429 7.71429 5.71429H8.57143V10C8.57143 11.4229 7.42286 12.5714 6 12.5714V14.2857H11.1171V20.2857L11.9743 21.1429L12.8314 20.2857V14.2857H18V12.5714C16.5771 12.5714 15.4286 11.4229 15.4286 10V5.71429H16.2857C16.7571 5.71429 17.1429 5.32857 17.1429 4.85714C17.1429 4.38571 16.7571 4 16.2857 4Z"
+        fill="black"
+      />
+    </g>
+    <defs>
+      <clipPath id="clip0_12562_15948">
+        <rect width="24" height="24" fill="white" />
+      </clipPath>
+    </defs>
+  </svg>
+</ng-template>
+
+<ng-template #templateIconFixed>
+  <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none">
+    <g clip-path="url(#clip0_12562_17487)">
+      <path
+        d="M16.2857 4H7.71429C7.24286 4 6.85714 4.38571 6.85714 4.85714C6.85714 5.32857 7.24286 5.71429 7.71429 5.71429H8.57143V10C8.57143 11.4229 7.42286 12.5714 6 12.5714V14.2857H11.1171V20.2857L11.9743 21.1429L12.8314 20.2857V14.2857H18V12.5714C16.5771 12.5714 15.4286 11.4229 15.4286 10V5.71429H16.2857C16.7571 5.71429 17.1429 5.32857 17.1429 4.85714C17.1429 4.38571 16.7571 4 16.2857 4Z"
+        fill="#B4B4C0"
+      />
+    </g>
+    <defs>
+      <clipPath id="clip0_12562_17487">
+        <rect width="24" height="24" fill="black" />
+      </clipPath>
+    </defs>
+  </svg>
+</ng-template>

@@ -5,6 +5,7 @@
   (p-back)="back()"
   (p-edit)="edit()"
   (p-remove)="remove()"
+  [p-subtitle]="subtitle"
 >
   <div class="po-row">
     <po-info class="po-md-12" p-label="Action" [p-value]="action"> </po-info>
@@ -15,6 +16,7 @@
   <form #f="ngForm">
     <div class="po-row">
       <po-input class="po-md-12" name="title" [(ngModel)]="title" p-label="Title"> </po-input>
+      <po-input class="po-md-12" name="subtitle" [(ngModel)]="subtitle" p-label="Subtitle"> </po-input>
     </div>
 
     <hr />
@@ -26,7 +28,7 @@
           name="breadcrumbFavorite"
           [(ngModel)]="breadcrumb.favorite"
           p-clean
-          p-help="https://po-sample-api.fly.dev/v1/favorite"
+          p-help="https://po-sample-api.onrender.com/v1/favorite"
           p-label="Breadcrumb favorite"
         >
         </po-input>

@@ -66,15 +66,11 @@
               [p-src]="getStateByLabel(option.label)"
             >
             </po-avatar>
-            <p class="po-combo-item-title po-sm-10 po-md-9 po-lg-11">{{ option.label }}</p>
+            <p class="po-sm-10 po-md-9 po-lg-11">{{ option.label }}</p>
           </div>
         </ng-template>
         <ng-template #optionsGroup>
-          <div class="po-combo-item">
-            <div class="po-row">
-              <div class="po-sm-10 po-md-9 po-lg-11">{{ option.label }}</div>
-            </div>
-          </div>
+          <div class="po-sm-10 po-md-9 po-lg-11">{{ option.label }}</div>
         </ng-template>
       </ng-template>
     </po-combo>

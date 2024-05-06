@@ -1,6 +1,6 @@
 import { Component, EventEmitter, Input, Output } from '@angular/core';
 
-import { browserLanguage, convertToBoolean, isTypeof } from './../../../utils/util';
+import { getShortBrowserLanguage, convertToBoolean, isTypeof } from './../../../utils/util';
 import { poLocaleDefault } from './../../../services/po-language/po-language.constant';
 import { PoStepperOrientation } from '../enums/po-stepper-orientation.enum';
 import { PoStepperStatus } from '../enums/po-stepper-status.enum';
@@ -45,7 +45,7 @@ export class PoStepperStepComponent {
 
   readonly literals = {
     ...poStepLiteralsDefault[poLocaleDefault],
-    ...poStepLiteralsDefault[browserLanguage()]
+    ...poStepLiteralsDefault[getShortBrowserLanguage()]
   };
 
   private _label: string;

@@ -61,7 +61,11 @@ const poCalendarRangeWidth = 600;
 export class PoCalendarComponent extends PoCalendarBaseComponent implements OnInit, OnChanges {
   hoverValue: Date;
 
-  constructor(private changeDetector: ChangeDetectorRef, poDate: PoDateService, languageService: PoLanguageService) {
+  constructor(
+    private changeDetector: ChangeDetectorRef,
+    poDate: PoDateService,
+    languageService: PoLanguageService
+  ) {
     super(poDate, languageService);
   }
 

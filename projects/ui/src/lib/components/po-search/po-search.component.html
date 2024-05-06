@@ -1,0 +1,66 @@
+<div class="po-search" [class.po-search-disabled]="disabled">
+  <div *ngIf="type === 'action'" class="po-search-icon">
+    <po-icon [p-icon]="icon ? icon : 'po-icon-search'"></po-icon>
+  </div>
+
+  <input
+    #poSearchInput
+    class="po-search-input"
+    type="text"
+    [ariaLabel]="ariaLabel"
+    [class.po-search-input-clean]="!!poSearchInput.value && !disabled"
+    [class.po-search-input-trigger]="type === 'trigger'"
+    [disabled]="disabled"
+    [placeholder]="literals.search"
+    (input)="
+      onSearchChange($event.target.value, false); onSearchChange($event.target.value, type === 'action' ? true : false)
+    "
+    (keyup.enter)="
+      listboxOpen ? closeListbox() : onSearchChange($event.target.value, type === 'trigger' ? true : false, true);
+      closeListbox()
+    "
+    (keydown)="onKeyDown($event)"
+    (blur)="onBlur()"
+  />
+
+  <div class="po-search-buttons">
+    <button
+      *ngIf="!!poSearchInput.value && !disabled"
+      class="po-search-button po-search-button-clean"
+      type="button"
+      [ariaLabel]="literals.clean"
+      (click)="clearSearch()"
+      (keydown.enter)="clearSearch()"
+    >
+      <po-icon p-icon="po-icon-clear-content"></po-icon>
+    </button>
+
+    <button
+      *ngIf="type === 'trigger'"
+      class="po-search-button po-search-button-trigger"
+      type="button"
+      [ariaLabel]="literals.search"
+      (click)="onSearchChange(poSearchInput.value, true, true)"
+      (keydown.enter)="onSearchChange(poSearchInput.value, true, true)"
+      [disabled]="disabled"
+    >
+      <po-icon [p-icon]="icon ? icon : 'po-icon-search'"> </po-icon>
+    </button>
+  </div>
+</div>
+
+<div #poListboxContainerElement class="po-search-listbox-container" [hidden]="!listboxOpen">
+  <po-listbox
+    #poListbox
+    #poListboxElement
+    p-type="option"
+    [p-items]="listboxFilteredItems"
+    (p-selectcombo-item)="onListboxClick($event, $event.event)"
+    [p-visible]="listboxOpen"
+    [p-filter-mode]="filterType"
+    [p-should-mark-letter]="shouldMarkLetters"
+    [p-filtering]="isFiltering"
+    [p-search-value]="getInputValue()"
+    (p-close)="onCloseListbox()"
+  ></po-listbox>
+</div>

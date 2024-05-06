@@ -1,6 +1,6 @@
-import { Directive, Input } from '@angular/core';
+import { Directive, EventEmitter, Input, Output } from '@angular/core';
 
-import { InputBoolean } from '../../../decorators';
+import { convertToBoolean } from '../../../utils/util';
 
 /**
  * @description
@@ -44,7 +44,7 @@ export class PoPageSlideBaseComponent {
    *
    * @default `false`
    */
-  @Input('p-hide-close') @InputBoolean() hideClose?: boolean = false;
+  @Input({ alias: 'p-hide-close', transform: convertToBoolean }) hideClose: boolean = false;
 
   /**
    * @optional
@@ -55,7 +55,27 @@ export class PoPageSlideBaseComponent {
    *
    * @default `false`
    */
-  @Input('p-click-out') @InputBoolean() clickOut?: boolean = false;
+  @Input({ alias: 'p-click-out', transform: convertToBoolean }) clickOut: boolean = false;
+
+  /**
+   * @optional
+   *
+   * @description
+   *
+   * Permite a expansão dinâmica da largura do `po-page-slide` quando `p-size` for `auto` (automático).
+   * Propriedade necessária para correto funcionamento da `po-table` dentro do `po-page-slide`
+   *
+   * @default `false`
+   */
+  @Input({ alias: 'p-flexible-width', transform: convertToBoolean }) flexibleWidth: boolean = false;
+
+  /**
+   * @optional
+   *
+   * @description
+   * Evento executado ao fechar o page slide.
+   */
+  @Output('p-close') closePageSlide: EventEmitter<any> = new EventEmitter<any>();
 
   // Controla se a página está ou não oculta, por padrão é oculto.
   public hidden = true;
@@ -76,7 +96,7 @@ export class PoPageSlideBaseComponent {
    *  - `xl` (extra-grande)
    *  - `auto` (automático)
    *
-   * > Todas as opções de tamanho possuem uma largura máxima de **768px**.
+   * > Todas as opções de tamanho, exceto `auto`, possuem uma largura máxima de **768px**.
    *
    * @default `md`
    */
@@ -136,5 +156,6 @@ export class PoPageSlideBaseComponent {
    */
   public close(): void {
     this.hidden = true;
+    this.closePageSlide.emit();
   }
 }

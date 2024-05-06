@@ -23,6 +23,7 @@
     [p-columns]="columns"
     [p-items]="items"
     [p-height]="height"
+    [p-hide-columns-manager]="hideColumnsManager"
     [p-infinite-scroll]="infiniteScroll"
     [p-show-more-disabled]="!hasNext"
     (p-show-more)="showMore()"
@@ -30,6 +31,7 @@
     (p-change-visible-columns)="onChangeVisibleColumns($event)"
     (p-restore-column-manager)="onColumnRestoreManager($event)"
     (p-sort-by)="onSortBy($event)"
+    [p-draggable]="draggable"
   >
   </po-table>
 </po-page-dynamic-search>

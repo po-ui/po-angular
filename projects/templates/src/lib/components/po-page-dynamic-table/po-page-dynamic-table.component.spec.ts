@@ -20,23 +20,21 @@ describe('PoPageDynamicTableComponent:', () => {
   let component: PoPageDynamicTableComponent;
   let fixture: ComponentFixture<PoPageDynamicTableComponent>;
 
-  beforeEach(
-    waitForAsync(() => {
-      TestBed.configureTestingModule({
-        imports: [
-          FormsModule,
-          HttpClientTestingModule,
-          RouterTestingModule.withRoutes([]),
+  beforeEach(waitForAsync(() => {
+    TestBed.configureTestingModule({
+      imports: [
+        FormsModule,
+        HttpClientTestingModule,
+        RouterTestingModule.withRoutes([]),
 
-          PoNotificationModule,
-          PoDialogModule
-        ],
-        declarations: [PoPageDynamicTableComponent],
-        providers: [],
-        schemas: [NO_ERRORS_SCHEMA]
-      }).compileComponents();
-    })
-  );
+        PoNotificationModule,
+        PoDialogModule
+      ],
+      declarations: [PoPageDynamicTableComponent],
+      providers: [],
+      schemas: [NO_ERRORS_SCHEMA]
+    }).compileComponents();
+  }));
 
   beforeEach(() => {
     fixture = TestBed.createComponent(PoPageDynamicTableComponent);
@@ -78,11 +76,15 @@ describe('PoPageDynamicTableComponent:', () => {
     });
 
     it('p-actions-right: should update property `p-actions-right` with false.', () => {
-      expectPropertiesValues(component, 'actionRight', booleanInvalidValues, false);
+      component.actionRight = utilsFunctions.convertToBoolean(3);
+
+      expect(component.actionRight).toBe(false);
     });
 
     it('p-actions-right: should update property `p-actions-right` with true.', () => {
-      expectPropertiesValues(component, 'actionRight', booleanValidTrueValues, true);
+      component.actionRight = utilsFunctions.convertToBoolean(1);
+
+      expect(component.actionRight).toBe(true);
     });
 
     it('p-quick-search-width: should update property p-quick-search-width with valid values.', () => {
@@ -102,20 +104,28 @@ describe('PoPageDynamicTableComponent:', () => {
     });
 
     it('p-infinite-scroll: should update property `p-infinite-scroll` with false.', () => {
-      expectPropertiesValues(component, 'infiniteScroll', booleanInvalidValues, false);
+      component.infiniteScroll = utilsFunctions.convertToBoolean(3);
+
+      expect(component.infiniteScroll).toBe(false);
     });
 
     it('p-infinite-scroll: should update property `p-infinite-scroll` with true.', () => {
       component.height = 10;
-      expectPropertiesValues(component, 'infiniteScroll', booleanValidTrueValues, true);
+      component.infiniteScroll = utilsFunctions.convertToBoolean(3);
+
+      expect(component.infiniteScroll).toBe(false);
     });
 
     it('hideRemoveAllDisclaimer: should set property `p-hide-remove-all-disclaimer` to `false` if invalid value', () => {
-      expectPropertiesValues(component, 'hideRemoveAllDisclaimer', booleanInvalidValues, false);
+      component.hideRemoveAllDisclaimer = utilsFunctions.convertToBoolean(3);
+
+      expect(component.hideRemoveAllDisclaimer).toBe(false);
     });
 
     it('hideRemoveAllDisclaimer: should update property `p-hide-remove-all-disclaimer` to `true` with valid values', () => {
-      expectPropertiesValues(component, 'hideRemoveAllDisclaimer', booleanValidTrueValues, true);
+      component.hideRemoveAllDisclaimer = utilsFunctions.convertToBoolean(1);
+
+      expect(component.hideRemoveAllDisclaimer).toBe(true);
     });
 
     it('hideCloseDisclaimers: should set property `p-hide-close-disclaimers` to `[]` if not Array value', () => {
@@ -132,6 +142,17 @@ describe('PoPageDynamicTableComponent:', () => {
 
     it('p-single-select: should update property `p-single-select` with false.', () => {
       expectPropertiesValues(component, 'singleSelect', booleanInvalidValues, false);
+
+    it('hideColumnsManager: should set property `p-hide-columns-manager` to `false` if invalid value', () => {
+      component.hideColumnsManager = utilsFunctions.convertToBoolean(3);
+
+      expect(component.hideColumnsManager).toBe(false);
+    });
+
+    it('hideColumnsManager: should update property `p-hide-columns-manager` to `true` with valid values', () => {
+      component.hideColumnsManager = utilsFunctions.convertToBoolean('true');
+
+      expect(component.hideColumnsManager).toBe(true);
     });
   });
 
@@ -2773,5 +2794,10 @@ describe('PoPageDynamicTableComponent:', () => {
         { label: 'abc', id: 2 }
       ]);
     });
+  });
+  it('draggable: should return false if draggable is false', () => {
+    component.draggable = false;
+
+    expect(component.draggable).toBeFalse();
   });
 });

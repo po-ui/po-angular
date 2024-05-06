@@ -6,13 +6,11 @@ describe('PoChartLegendComponent:', () => {
   let component: PoChartLegendComponent;
   let fixture: ComponentFixture<PoChartLegendComponent>;
 
-  beforeEach(
-    waitForAsync(() => {
-      TestBed.configureTestingModule({
-        declarations: [PoChartLegendComponent]
-      }).compileComponents();
-    })
-  );
+  beforeEach(waitForAsync(() => {
+    TestBed.configureTestingModule({
+      declarations: [PoChartLegendComponent]
+    }).compileComponents();
+  }));
 
   beforeEach(() => {
     fixture = TestBed.createComponent(PoChartLegendComponent);

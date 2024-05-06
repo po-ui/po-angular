@@ -1,6 +1,7 @@
 import { NgModule } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { FormsModule } from '@angular/forms';
+import { OverlayModule } from '@angular/cdk/overlay';
 
 import { PoButtonGroupModule } from '../po-button-group/index';
 import { PoButtonModule } from '../po-button/index';
@@ -26,7 +27,6 @@ import { PoListBoxModule } from '../po-listbox/po-listbox.module';
 import { PoComboComponent } from './po-combo/po-combo.component';
 import { PoComboOptionTemplateDirective } from './po-combo/po-combo-option-template/po-combo-option-template.directive';
 import { PoMultiselectOptionTemplateDirective } from './po-multiselect/po-multiselect-option-template/po-multiselect-option-template.directive';
-import { PoDatepickerComponent } from './po-datepicker/po-datepicker.component';
 import { PoDatepickerRangeComponent } from './po-datepicker-range/po-datepicker-range.component';
 import { PoDecimalComponent } from './po-decimal/po-decimal.component';
 import { PoEmailComponent } from './po-email/po-email.component';
@@ -35,8 +35,6 @@ import { PoLookupComponent } from './po-lookup/po-lookup.component';
 import { PoLookupModalComponent } from './po-lookup/po-lookup-modal/po-lookup-modal.component';
 import { PoMultiselectDropdownComponent } from './po-multiselect/po-multiselect-dropdown/po-multiselect-dropdown.component';
 import { PoMultiselectComponent } from './po-multiselect/po-multiselect.component';
-import { PoMultiselectItemComponent } from './po-multiselect/po-multiselect-item/po-multiselect-item.component';
-import { PoMultiselectSearchComponent } from './po-multiselect/po-multiselect-search/po-multiselect-search.component';
 import { PoRichTextBodyComponent } from './po-rich-text/po-rich-text-body/po-rich-text-body.component';
 import { PoRichTextComponent } from './po-rich-text/po-rich-text.component';
 import { PoRichTextImageModalComponent } from './po-rich-text/po-rich-text-image-modal/po-rich-text-image-modal.component';
@@ -46,7 +44,6 @@ import { PoInputComponent } from './po-input/po-input.component';
 import { PoNumberComponent } from './po-number/po-number.component';
 import { PoPasswordComponent } from './po-password/po-password.component';
 import { PoSelectComponent } from './po-select/po-select.component';
-import { PoSwitchComponent } from './po-switch/po-switch.component';
 import { PoTextareaComponent } from './po-textarea/po-textarea.component';
 import { PoUploadComponent } from './po-upload/po-upload.component';
 import { PoUploadDragDropComponent } from './po-upload/po-upload-drag-drop/po-upload-drag-drop.component';
@@ -56,7 +53,9 @@ import { PoUploadDragDropAreaComponent } from './po-upload/po-upload-drag-drop/p
 import { PoUploadFileRestrictionsComponent } from './po-upload/po-upload-file-restrictions/po-upload-file-restrictions.component';
 import { PoUrlComponent } from './po-url/po-url.component';
 import { PoCheckboxModule } from './po-checkbox/po-checkbox.module';
+import { PoSwitchModule } from './po-switch/po-switch.module';
 import { PoLabelModule } from '../po-label';
+import { PoTagModule } from '../po-tag';
 
 /**
  * @description
@@ -75,6 +74,7 @@ import { PoLabelModule } from '../po-label';
     FormsModule.withConfig({
       callSetDisabledState: 'whenDisabledForLegacyCode'
     }),
+    OverlayModule,
     PoButtonGroupModule,
     PoButtonModule,
     PoCleanModule,
@@ -96,7 +96,9 @@ import { PoLabelModule } from '../po-label';
     PoCheckboxModule,
     PoRadioModule,
     PoLabelModule,
-    PoListBoxModule
+    PoListBoxModule,
+    PoSwitchModule,
+    PoTagModule
   ],
   exports: [
     PoCheckboxGroupModule,
@@ -119,13 +121,14 @@ import { PoLabelModule } from '../po-label';
     PoPasswordComponent,
     PoRichTextComponent,
     PoSelectComponent,
-    PoSwitchComponent,
     PoTextareaComponent,
     PoUploadComponent,
     PoUrlComponent,
     PoCheckboxModule,
     PoRadioModule,
-    PoLabelModule
+    PoLabelModule,
+    PoSwitchModule,
+    PoTagModule
   ],
   declarations: [
     PoComboComponent,
@@ -140,8 +143,6 @@ import { PoLabelModule } from '../po-label';
     PoLookupModalComponent,
     PoMultiselectComponent,
     PoMultiselectDropdownComponent,
-    PoMultiselectItemComponent,
-    PoMultiselectSearchComponent,
     PoNumberComponent,
     PoPasswordComponent,
     PoRichTextBodyComponent,
@@ -150,7 +151,6 @@ import { PoLabelModule } from '../po-label';
     PoRichTextLinkModalComponent,
     PoRichTextToolbarComponent,
     PoSelectComponent,
-    PoSwitchComponent,
     PoTextareaComponent,
     PoUploadComponent,
     PoUploadDragDropComponent,

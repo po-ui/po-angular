@@ -1,0 +1,8 @@
+<po-page-edit
+  p-title="<%= classify(name) %>"
+  (p-cancel)="cancel()"
+  (p-save)="save()"
+  (p-save-new)="saveNew()">
+
+  <!-- BUILD YOUR FORM HERE -->
+</po-page-edit>

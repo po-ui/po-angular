@@ -98,6 +98,16 @@ describe('PoTableColumnManagerComponent:', () => {
         expect(component['updateValues']).toHaveBeenCalledWith(component.columns);
       });
 
+      it(`ngOnChanges: should open page slide if 'lastVisibleColumnsSelected.currentValue' is defined`, () => {
+        const changes = { lastVisibleColumnsSelected: { currentValue: ['table'] } };
+
+        spyOn(component.pageSlideColumnsManager, 'open');
+
+        component.ngOnChanges(<any>changes);
+
+        expect(component.pageSlideColumnsManager.open).toHaveBeenCalled();
+      });
+
       it(`ngOnChanges: shouldn't call 'updateValues' if 'maxColumns' is undefined`, () => {
         const changes = { maxColumns: undefined };
 
@@ -116,6 +126,16 @@ describe('PoTableColumnManagerComponent:', () => {
         component.ngOnChanges(<any>changes);
 
         expect(component['onChangeColumns']).not.toHaveBeenCalled();
+      });
+
+      it(`ngOnChanges: shouldn't call page slide if 'lastVisibleColumnsSelected.current' is undefined`, () => {
+        const changes = { lastVisibleColumnsSelected: { currentValue: undefined } };
+
+        spyOn(component.pageSlideColumnsManager, 'open');
+
+        component.ngOnChanges(<any>changes);
+
+        expect(component.pageSlideColumnsManager.open).not.toHaveBeenCalled();
       });
     });
 
@@ -205,6 +225,12 @@ describe('PoTableColumnManagerComponent:', () => {
         component['verifyToEmitChange'](fakeEvent);
 
         expect(component['emitChangesToSelectedColumns']).not.toHaveBeenCalledWith(fakeEvent);
+      });
+
+      it('should return change fixed to false', () => {
+        const result = component['removePropertyFixed']([{ value: 'test', fixed: true }]);
+
+        expect(result).toEqual([{ value: 'test', fixed: false }]);
       });
     });
 
@@ -1123,6 +1149,91 @@ describe('PoTableColumnManagerComponent:', () => {
       component['removeListeners']();
 
       expect(component['resizeListener']).toHaveBeenCalled();
+    });
+
+    describe('emitColumnFixed', () => {
+      it(`should emit visibleColumnsChange with new column and add fixed to option`, () => {
+        component.columns = [
+          {
+            property: 'Name',
+            visible: true
+          },
+          {
+            property: 'City',
+            visible: true
+          }
+        ];
+        spyOn(component.visibleColumnsChange, 'emit');
+
+        component.emitColumnFixed({
+          property: 'City',
+          value: 'City',
+          visible: true,
+          fixed: true
+        });
+
+        expect(component.columns).toEqual([
+          {
+            property: 'City',
+            visible: true,
+            fixed: true
+          },
+          {
+            property: 'Name',
+            visible: true
+          }
+        ]);
+
+        expect(component.visibleColumnsChange.emit).toHaveBeenCalled();
+      });
+
+      it(`should emit visibleColumnsChange with new column and remove fixed option`, () => {
+        component.columns = [
+          {
+            property: 'Name',
+            visible: true,
+            fixed: true
+          },
+          {
+            property: 'Age',
+            visible: true,
+            fixed: true
+          },
+          {
+            property: 'City',
+            visible: true,
+            fixed: true
+          }
+        ];
+        spyOn(component.visibleColumnsChange, 'emit');
+
+        component.emitColumnFixed({
+          property: 'Age',
+          value: 'Age',
+          visible: true,
+          fixed: false
+        });
+
+        expect(component.columns).toEqual([
+          {
+            property: 'Name',
+            visible: true,
+            fixed: true
+          },
+          {
+            property: 'City',
+            visible: true,
+            fixed: true
+          },
+          {
+            property: 'Age',
+            visible: true,
+            fixed: false
+          }
+        ]);
+
+        expect(component.visibleColumnsChange.emit).toHaveBeenCalled();
+      });
     });
 
     describe('stringify', () => {

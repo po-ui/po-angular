@@ -29,7 +29,10 @@ import { PoMenuPanelModule } from './po-menu-panel/po-menu-panel.module';
 import { PoMenuModule } from './po-menu/po-menu.module';
 import { PoModalModule } from './po-modal/po-modal.module';
 import { PoNavbarModule } from './po-navbar/po-navbar.module';
+import { PoOverlayModule } from './po-overlay/po-overlay.module';
 import { PoPageModule } from './po-page/po-page.module';
+import { PoPageSlideModule } from './po-page/po-page-slide/po-page-slide.module';
+import { PoSwitchModule } from './po-field/po-switch/po-switch.module';
 import { PoPopoverModule } from './po-popover/po-popover.module';
 import { PoPopupModule } from './po-popup/po-popup.module';
 import { PoProgressModule } from './po-progress/po-progress.module';
@@ -41,6 +44,8 @@ import { PoTagModule } from './po-tag/po-tag.module';
 import { PoToolbarModule } from './po-toolbar/po-toolbar.module';
 import { PoTreeViewModule } from './po-tree-view/po-tree-view.module';
 import { PoWidgetModule } from './po-widget/po-widget.module';
+import { PoSearchModule } from './po-search';
+import { PoBadgeModule } from './po-badge/po-badge.module';
 
 @NgModule({
   imports: [
@@ -70,6 +75,7 @@ import { PoWidgetModule } from './po-widget/po-widget.module';
     PoMenuPanelModule,
     PoModalModule,
     PoNavbarModule,
+    PoOverlayModule,
     PoPageModule,
     PoPopoverModule,
     PoPopupModule,
@@ -84,7 +90,11 @@ import { PoWidgetModule } from './po-widget/po-widget.module';
     PoWidgetModule,
     PoLinkModule,
     PoLabelModule,
-    PoImageModule
+    PoImageModule,
+    PoPageSlideModule,
+    PoSwitchModule,
+    PoSearchModule,
+    PoBadgeModule
   ],
   exports: [
     PoAccordionModule,
@@ -113,6 +123,7 @@ import { PoWidgetModule } from './po-widget/po-widget.module';
     PoMenuPanelModule,
     PoModalModule,
     PoNavbarModule,
+    PoOverlayModule,
     PoPageModule,
     PoPopoverModule,
     PoPopupModule,
@@ -127,9 +138,14 @@ import { PoWidgetModule } from './po-widget/po-widget.module';
     PoWidgetModule,
     PoLinkModule,
     PoLabelModule,
-    PoImageModule
+    PoImageModule,
+    PoPageSlideModule,
+    PoSwitchModule,
+    PoSearchModule,
+    PoBadgeModule
   ],
   providers: [],
-  bootstrap: []
+  bootstrap: [],
+  declarations: []
 })
 export class PoComponentsModule {}

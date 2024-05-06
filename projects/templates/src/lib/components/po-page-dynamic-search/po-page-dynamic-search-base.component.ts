@@ -1,7 +1,6 @@
-import { EventEmitter, Input, Output, Directive } from '@angular/core';
+import { Directive, EventEmitter, Input, Output } from '@angular/core';
 
 import {
-  InputBoolean,
   PoBreadcrumb,
   PoDynamicFormField,
   PoLanguageService,
@@ -9,13 +8,13 @@ import {
   poLocaleDefault
 } from '@po-ui/ng-components';
 
-import { convertToInt } from '../../utils/util';
+import { convertToBoolean, convertToInt } from '../../utils/util';
 
-import { PoPageDynamicSearchLiterals } from './po-page-dynamic-search-literals.interface';
 import { poAdvancedFiltersLiteralsDefault } from './po-advanced-filter/po-advanced-filter-base.component';
 import { PoAdvancedFilterLiterals } from './po-advanced-filter/po-advanced-filter-literals.interface';
-import { PoPageDynamicSearchOptions } from './po-page-dynamic-search-options.interface';
 import { PoPageDynamicSearchFilters } from './po-page-dynamic-search-filters.interface';
+import { PoPageDynamicSearchLiterals } from './po-page-dynamic-search-literals.interface';
+import { PoPageDynamicSearchOptions } from './po-page-dynamic-search-options.interface';
 
 export const poPageDynamicSearchLiteralsDefault = {
   en: <PoPageDynamicSearchLiterals>{
@@ -75,9 +74,7 @@ export abstract class PoPageDynamicSearchBaseComponent {
    *
    * @default `false`
    */
-  @InputBoolean()
-  @Input('p-keep-filters')
-  keepFilters: boolean = false;
+  @Input({ alias: 'p-keep-filters', transform: convertToBoolean }) keepFilters: boolean = false;
 
   /**
    * @optional
@@ -96,9 +93,7 @@ export abstract class PoPageDynamicSearchBaseComponent {
    *
    * @default `false`
    */
-  @InputBoolean()
-  @Input('p-concat-filters')
-  concatFilters: boolean = false;
+  @Input({ alias: 'p-concat-filters', transform: convertToBoolean }) concatFilters: boolean = false;
 
   /**
    * @optional
@@ -111,9 +106,8 @@ export abstract class PoPageDynamicSearchBaseComponent {
    *
    * @default `false`
    */
-  @InputBoolean()
-  @Input('p-hide-remove-all-disclaimer')
-  hideRemoveAllDisclaimer?: boolean = false;
+  @Input({ alias: 'p-hide-remove-all-disclaimer', transform: convertToBoolean })
+  hideRemoveAllDisclaimer: boolean = false;
 
   /**
    * Função ou serviço que será executado na inicialização do componente.

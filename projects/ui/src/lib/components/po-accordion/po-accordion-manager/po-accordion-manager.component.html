@@ -1,0 +1,13 @@
+<div class="po-accordion-manager-header">
+  <button class="po-accordion-manager-button po-clickable" (click)="onClick()" [attr.aria-expanded]="expandedAllItems">
+    <div class="po-text-ellipsis po-accordion-manager-button-content">
+      {{ expandedAllItems ? literals.closeAllItems : literals.expandAllItems }}
+    </div>
+    <po-icon
+      p-icon="po-icon-last-page"
+      [ngClass]="expandedAllItems ? 'icon-down' : 'icon-up'"
+      class="po-icon po-accordion-manager-icon"
+    >
+    </po-icon>
+  </button>
+</div>

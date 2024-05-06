@@ -1,6 +1,6 @@
 import { ComponentFixture, fakeAsync, TestBed, tick, waitForAsync } from '@angular/core/testing';
 import { NO_ERRORS_SCHEMA } from '@angular/core';
-import { FormsModule, NgForm } from '@angular/forms';
+import { FormControl, FormsModule, NgForm, Validators } from '@angular/forms';
 import { HttpClientTestingModule } from '@angular/common/http/testing';
 import { RouterTestingModule } from '@angular/router/testing';
 
@@ -23,16 +23,14 @@ describe('PoPageDynamicEditComponent: ', () => {
   let component: PoPageDynamicEditComponent;
   let fixture: ComponentFixture<PoPageDynamicEditComponent>;
 
-  beforeEach(
-    waitForAsync(() => {
-      TestBed.configureTestingModule({
-        imports: [FormsModule, HttpClientTestingModule, RouterTestingModule.withRoutes([]), PoDialogModule],
-        providers: [],
-        declarations: [PoPageDynamicEditComponent, PoDynamicFormStubComponent],
-        schemas: [NO_ERRORS_SCHEMA]
-      }).compileComponents();
-    })
-  );
+  beforeEach(waitForAsync(() => {
+    TestBed.configureTestingModule({
+      imports: [FormsModule, HttpClientTestingModule, RouterTestingModule.withRoutes([]), PoDialogModule],
+      providers: [],
+      declarations: [PoPageDynamicEditComponent, PoDynamicFormStubComponent],
+      schemas: [NO_ERRORS_SCHEMA]
+    }).compileComponents();
+  }));
 
   beforeEach(() => {
     fixture = TestBed.createComponent(PoPageDynamicEditComponent);
@@ -109,6 +107,26 @@ describe('PoPageDynamicEditComponent: ', () => {
       const invalidValues = ['teste', undefined, null, NaN, 0, 'false', false];
 
       expectPropertiesValues(component, 'autoRouter', invalidValues, false);
+    });
+
+    it('p-notification-type: should set property to `error` if value equal `error`', () => {
+      const notificationType = 'error';
+
+      component.notificationType = notificationType;
+
+      expect(component['_notificationType']).toEqual(notificationType);
+    });
+
+    it('p-notification-type: should set property to `warning` if invalid values', () => {
+      const invalidValues = ['teste', undefined, null, NaN, 0, 'false', false];
+
+      expectPropertiesValues(component, 'notificationType', invalidValues, 'warning');
+    });
+
+    it('p-notification-type: should set property to `warning` if value is empty', () => {
+      component.notificationType = '';
+
+      expect(component.notificationType).toEqual('warning');
     });
 
     describe('p-literals:', () => {
@@ -197,9 +215,15 @@ describe('PoPageDynamicEditComponent: ', () => {
       }
     };
 
+    const fakeFormControl = {
+      control1: new FormControl('', Validators.required),
+      control2: new FormControl('', Validators.required)
+    };
+
     const dynamicFormInvalid: any = {
       form: {
-        invalid: true
+        invalid: true,
+        controls: fakeFormControl
       }
     };
 
@@ -847,6 +871,96 @@ describe('PoPageDynamicEditComponent: ', () => {
 
         tick();
       }));
+
+      it('should mark controls as dirty with a Input Element control', () => {
+        component.dynamicForm = dynamicFormInvalid;
+        const fakeInputElement = document.createElement('input');
+        fakeInputElement.setAttribute('name', 'control1');
+
+        spyOn(document, 'querySelector').and.returnValue(fakeInputElement);
+
+        component['saveOperation']();
+
+        expect(component.dynamicForm.form.controls.control1.dirty).toBeTrue();
+        expect(component.dynamicForm.form.controls.control2.dirty).toBeTrue();
+        expect(document.querySelector).toHaveBeenCalledWith('[name=control1]');
+      });
+
+      it('should focus radio input', () => {
+        component.dynamicForm = dynamicFormInvalid;
+        const fakeRadioComponent = document.createElement('po-radio');
+        fakeRadioComponent.setAttribute('ng-reflect-name', 'control1');
+        fakeRadioComponent.setAttribute('ng-reflect-disabled', 'false');
+
+        const fakeParentElement = document.createElement('span');
+        fakeParentElement.setAttribute('name', 'control1');
+
+        const fakeInput = document.createElement('input');
+        fakeParentElement.appendChild(fakeRadioComponent).appendChild(fakeInput);
+
+        spyOn(document, 'querySelector').and.returnValue(fakeParentElement);
+        component['saveOperation']();
+
+        expect(document.querySelector).toHaveBeenCalledWith('[name=control1]');
+      });
+
+      it('should focus radio input but radios are all disabled', () => {
+        component.dynamicForm = dynamicFormInvalid;
+        const fakeRadioComponent = document.createElement('po-radio');
+        fakeRadioComponent.setAttribute('ng-reflect-name', 'control1');
+        fakeRadioComponent.setAttribute('ng-reflect-disabled', 'true');
+
+        const fakeParentElement = document.createElement('span');
+        fakeParentElement.setAttribute('name', 'control1');
+
+        fakeParentElement.appendChild(fakeRadioComponent);
+
+        spyOn(document, 'querySelector').and.returnValue(fakeParentElement);
+        component['saveOperation']();
+
+        expect(document.querySelector).toHaveBeenCalledWith('[name=control1]');
+        expect(component['indexFocus']).toBe(0);
+      });
+
+      it('should focus checkbox input', () => {
+        component.dynamicForm = dynamicFormInvalid;
+        const fakeCheckboxInputElement = document.createElement('po-checkbox-group');
+        fakeCheckboxInputElement.setAttribute('ng-reflect-name', 'control1');
+
+        const fakeCheckboxComponent = document.createElement('po-checkbox');
+        fakeCheckboxComponent.setAttribute('ng-reflect-name', 'control1');
+        fakeCheckboxComponent.setAttribute('ng-reflect-disabled', 'false');
+
+        const fakeOutline = document.createElement('div');
+        fakeOutline.classList.add('po-checkbox-outline');
+        fakeCheckboxInputElement.appendChild(fakeCheckboxComponent).appendChild(fakeOutline);
+
+        spyOn(document, 'querySelector').and.returnValue(fakeCheckboxInputElement);
+
+        component['focusCheckboxInput']('control1');
+
+        expect(document.querySelector).toHaveBeenCalledWith('po-checkbox-group[ng-reflect-name=control1]');
+      });
+
+      it('should focus checkbox input but checkboxes are all disabled', () => {
+        component.dynamicForm = dynamicFormInvalid;
+        const fakeCheckboxInputElement = document.createElement('po-checkbox-group');
+        fakeCheckboxInputElement.setAttribute('ng-reflect-name', 'control1');
+
+        const fakeCheckboxComponent = document.createElement('po-checkbox');
+        fakeCheckboxComponent.setAttribute('ng-reflect-name', 'control1');
+        fakeCheckboxComponent.setAttribute('ng-reflect-disabled', 'true');
+
+        fakeCheckboxInputElement.appendChild(fakeCheckboxComponent);
+
+        spyOn(document, 'querySelector').and.returnValue(fakeCheckboxInputElement);
+
+        component['indexFocus'] = 1;
+        component['focusCheckboxInput']('control1');
+
+        expect(document.querySelector).toHaveBeenCalledWith('po-checkbox-group[ng-reflect-name=control1]');
+        expect(component['indexFocus']).toBe(0);
+      });
     });
 
     describe('save:', () => {
@@ -1070,6 +1184,14 @@ describe('PoPageDynamicEditComponent: ', () => {
       });
     });
 
+    describe('showNotification:', () => {
+      it(`should call 'showNotification and notificationType be equal 'error'`, () => {
+        spyOn(component['poNotification'], 'error');
+        component['showNotification']('error');
+        expect(component['poNotification'].error).toHaveBeenCalled();
+      });
+    });
+
     it('updateModel: should merge the properties', () => {
       const newResource = { prop4: 'test 4', prop5: 'test 5' };
       component.model = { prop1: 'test 1', prop2: 'test 2' };
@@ -1086,27 +1208,6 @@ describe('PoPageDynamicEditComponent: ', () => {
       component['updateModel'](newResource);
 
       expect(component.model).toEqual(result);
-    });
-
-    it('updateModel: should keep model if newResource is undefined', () => {
-      const newResource = undefined;
-      component.model = { prop1: 'test 1', prop2: 'test 2' };
-      const result = { prop1: 'test 1', prop2: 'test 2' };
-
-      component.dynamicForm = <any>{
-        form: {
-          form: {
-            patchValue: () => {}
-          }
-        }
-      };
-
-      const patchValueSpy = spyOn(component.dynamicForm.form.form, 'patchValue');
-
-      component['updateModel'](newResource);
-
-      expect(component.model).toEqual(result);
-      expect(patchValueSpy).toHaveBeenCalled();
     });
 
     it('executeSave: should call `saveOperation`, `poNotification.success` and `navigateTo`', fakeAsync(() => {
@@ -1128,6 +1229,111 @@ describe('PoPageDynamicEditComponent: ', () => {
       });
       tick();
     }));
+
+    it('updateModel: should update model and call patchValue when newResource is defined and not empty', () => {
+      const newResource = { prop3: 'test 3' }; // Define newResource com uma nova propriedade
+      component.model = { prop1: 'test 1', prop2: 'test 2' }; // Estado inicial do modelo
+      const expectedModel = { ...component.model, ...newResource }; // Resultado esperado após a atualização
+
+      component.dynamicForm = <any>{
+        form: {
+          form: {
+            patchValue: () => {}
+          }
+        }
+      };
+
+      const patchValueSpy = spyOn(component.dynamicForm.form.form, 'patchValue');
+
+      component['updateModel'](newResource);
+
+      // Verifica se o modelo foi atualizado corretamente
+      expect(component.model).toEqual(expectedModel);
+      // Verifica se patchValue foi chamado com o modelo atualizado
+      expect(patchValueSpy).toHaveBeenCalledWith(expectedModel);
+    });
+
+    // Exemplo de teste ajustado sem modificar `keys`
+    it('updateModel: should update model properly without modifying read-only keys property', () => {
+      const newResource = { prop3: 'test 3' }; // Recurso para atualização
+      component.model = { prop1: 'test 1', prop2: 'test 2' };
+
+      component.dynamicForm = <any>{
+        form: {
+          form: {
+            patchValue: () => {}
+          }
+        }
+      };
+
+      const patchValueSpy = spyOn(component.dynamicForm.form.form, 'patchValue');
+
+      component['updateModel'](newResource);
+
+      // Verifique se o modelo foi atualizado corretamente
+      expect(component.model).toEqual(jasmine.objectContaining(newResource));
+      // Verifique se patchValue foi chamado
+      expect(patchValueSpy).toHaveBeenCalled();
+    });
+
+    it('updateModel: should not update model or call patchValue when newResource is undefined', () => {
+      component.model = { prop1: 'value1', prop2: 'value2' };
+      const originalModel = { ...component.model };
+
+      component.dynamicForm = <any>{
+        form: {
+          form: {
+            patchValue: () => {}
+          }
+        }
+      };
+      const patchValueSpy = spyOn(component.dynamicForm.form.form, 'patchValue');
+
+      component['updateModel'](undefined);
+
+      expect(component.model).toEqual(originalModel);
+      expect(patchValueSpy).not.toHaveBeenCalled();
+    });
+
+    it('updateModel: should not update model or call patchValue when newResource is an empty object', () => {
+      component.model = { prop1: 'value1', prop2: 'value2' };
+      const originalModel = { ...component.model };
+
+      component.dynamicForm = <any>{
+        form: {
+          form: {
+            patchValue: () => {}
+          }
+        }
+      };
+
+      const patchValueSpy = spyOn(component.dynamicForm.form.form, 'patchValue');
+
+      component['updateModel']({});
+
+      expect(component.model).toEqual(originalModel);
+      expect(patchValueSpy).not.toHaveBeenCalled();
+    });
+
+    it('updateModel: should update model and call patchValue when newResource is provided', () => {
+      component.model = { prop1: 'value1', prop2: 'value2' };
+      const newResource = { prop3: 'value3' };
+
+      component.dynamicForm = <any>{
+        form: {
+          form: {
+            patchValue: () => {}
+          }
+        }
+      };
+
+      const patchValueSpy = spyOn(component.dynamicForm.form.form, 'patchValue');
+
+      component['updateModel'](newResource);
+
+      expect(component.model).toEqual({ ...component.model, ...newResource });
+      expect(patchValueSpy).toHaveBeenCalledWith(component.model);
+    });
 
     it('executeSaveNew: should call `saveOperation`, `poNotification.success` and `navigateTo`', fakeAsync(() => {
       const saveNewRedirectPath = 'people';

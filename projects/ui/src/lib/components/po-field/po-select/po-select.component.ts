@@ -2,12 +2,10 @@ import {
   ChangeDetectionStrategy,
   ChangeDetectorRef,
   Component,
-  DoCheck,
   ElementRef,
   EventEmitter,
   forwardRef,
   Input,
-  IterableDiffers,
   OnChanges,
   Output,
   Renderer2,
@@ -17,16 +15,16 @@ import {
 import { AbstractControl, NG_VALIDATORS, NG_VALUE_ACCESSOR } from '@angular/forms';
 
 import {
+  convertToBoolean,
+  isSafari,
   removeDuplicatedOptions,
-  removeDuplicatedOptionsWithFieldValue,
   removeUndefinedAndNullOptions,
-  removeUndefinedAndNullOptionsWithFieldValue,
   uuid,
   validValue
 } from '../../../utils/util';
 
-import { InputBoolean } from '../../../decorators';
 import { PoFieldValidateModel } from '../po-field-validate.model';
+import { PoSelectOptionGroup } from './po-select-option-group.interface';
 import { PoSelectOption } from './po-select-option.interface';
 
 const PO_SELECT_FIELD_LABEL_DEFAULT = 'label';
@@ -91,7 +89,7 @@ const PO_SELECT_FIELD_VALUE_DEFAULT = 'value';
     }
   ]
 })
-export class PoSelectComponent extends PoFieldValidateModel<any> implements DoCheck, OnChanges {
+export class PoSelectComponent extends PoFieldValidateModel<any> implements OnChanges {
   @ViewChild('select', { read: ElementRef, static: true }) selectElement: ElementRef;
 
   /**
@@ -119,7 +117,7 @@ export class PoSelectComponent extends PoFieldValidateModel<any> implements DoCh
    *
    * @default `false`
    */
-  @Input('p-readonly') @InputBoolean() readonly: boolean = false;
+  @Input({ alias: 'p-readonly', transform: convertToBoolean }) readonly: boolean = false;
 
   /** Mensagem que aparecerá enquanto nenhuma opção estiver selecionada. */
   @Input('p-placeholder') placeholder?: string;
@@ -128,15 +126,20 @@ export class PoSelectComponent extends PoFieldValidateModel<any> implements DoCh
   id = `po-select[${uuid()}]`;
   modelValue: any;
   selectedValue: any;
+  optionsDefault = [];
+  listGroupOptions = [];
+  optionWithoutGroup = [];
+  isSafari: boolean = isSafari();
+
   protected onModelTouched: any;
 
-  private differ: any;
   private _fieldLabel?: string = PO_SELECT_FIELD_LABEL_DEFAULT;
   private _fieldValue?: string = PO_SELECT_FIELD_VALUE_DEFAULT;
-  private _options: Array<PoSelectOption> | Array<any>;
+  private _options: Array<PoSelectOption> | Array<PoSelectOptionGroup> | Array<any>;
 
   /**
-   * Nesta propriedade deve ser definido uma coleção de objetos que implementam a interface `PoSelectOption`.
+   * Nesta propriedade deve ser definido uma coleção de objetos que implementam a interface `PoSelectOption`,
+   * ou uma coleção de objetos dentro de grupos diferentes, que seriam da interface `PoSelectOptionGroup`.
    *
    * Caso esta lista estiver vazia, o model será `undefined`.
    *
@@ -150,19 +153,50 @@ export class PoSelectComponent extends PoFieldValidateModel<any> implements DoCh
    * // evite, pois não atualiza a referência do objeto podendo gerar atrasos na atualização do template
    * this.options.push({ value: 'x', label: 'Nova opção' });
    * ```
+   *
+   * > Para coleção de objetos dentro de grupos distintos será exibido a label e opções somente se a propriedade `options` possua valores.
+   *  Sendo assim, a estrutura seguiria dessa forma:
+   *
+   * ```
+   * this.options = [{
+   *  label: 'Opções',
+   *  options: [
+   *    { value: 1, label: 'opção 1' },
+   *    { value: 2, label: 'opção 2' }
+   *  ],
+   * }];
+   * ```
+   *
+   * É possível a utilização de opções agrupadas e desagrupadas em conjunto, porém será feita a ordenação de exibir as opções
+   * desagrupadas acima.
+   *
    */
-  @Input('p-options') set options(options: Array<any>) {
+  @Input('p-options') set options(options: Array<PoSelectOption | PoSelectOptionGroup | any>) {
+    this.listGroupOptions = [];
+    this.optionWithoutGroup = [];
+
     if (this.fieldLabel && this.fieldValue && options) {
       options.map(option => {
-        option.label = option[this.fieldLabel];
-        option.value = option[this.fieldValue];
+        if (this.isItemGroup(option)) {
+          option.options.map(opt => {
+            opt.label = opt[this.fieldLabel];
+            opt.value = opt[this.fieldValue];
+          });
+        } else {
+          option.label = option[this.fieldLabel];
+          option.value = option[this.fieldValue];
+        }
       });
     }
 
     if (options) {
-      this.validateOptions([...options]);
+      this.optionsDefault = [...options];
+      this.separateOptions();
+
+      this.optionsDefault = [];
+      this.optionsDefault = [...this.optionWithoutGroup, ...this.transformInArray(this.listGroupOptions)];
       this.onUpdateOptions();
-      this._options = [...options];
+      this._options = [...this.optionsDefault];
     }
   }
 
@@ -211,17 +245,11 @@ export class PoSelectComponent extends PoFieldValidateModel<any> implements DoCh
   }
 
   /* istanbul ignore next */
-  constructor(private changeDetector: ChangeDetectorRef, differs: IterableDiffers, public renderer: Renderer2) {
+  constructor(
+    private changeDetector: ChangeDetectorRef,
+    public renderer: Renderer2
+  ) {
     super();
-    this.differ = differs.find([]).create(null);
-  }
-
-  ngDoCheck() {
-    const change = this.differ.diff(this.options);
-
-    if (change) {
-      this.validateOptions(this.options);
-    }
   }
 
   ngOnChanges(changes: SimpleChanges): void {
@@ -309,6 +337,13 @@ export class PoSelectComponent extends PoFieldValidateModel<any> implements DoCh
     return null;
   }
 
+  isItemGroup(item: PoSelectOption | PoSelectOptionGroup | any): boolean {
+    if (item.options) {
+      return Array.isArray(item.options) ? true : false;
+    }
+    return false;
+  }
+
   registerOnTouched(fn: any): void {
     this.onModelTouched = fn;
   }
@@ -331,10 +366,32 @@ export class PoSelectComponent extends PoFieldValidateModel<any> implements DoCh
     }
   }
 
+  private transformInArray(objectWithArray: Array<any>): Array<PoSelectOptionGroup | any> {
+    return objectWithArray.reduce((options, items) => {
+      if (items.options) {
+        return options.concat(items.options);
+      }
+      return [];
+    }, []);
+  }
+
+  private separateOptions() {
+    this.optionsDefault.forEach(option => {
+      if (this.isItemGroup(option)) {
+        this.validateOptions(option.options);
+        this.listGroupOptions.push(option);
+      } else {
+        this.optionWithoutGroup.push(option);
+      }
+    });
+
+    if (this.optionWithoutGroup.length > 0) {
+      this.validateOptions(this.optionWithoutGroup);
+    }
+  }
+
   private validateOptions(options: Array<any>) {
     removeDuplicatedOptions(options);
     removeUndefinedAndNullOptions(options);
-    removeDuplicatedOptionsWithFieldValue(options, this.fieldValue);
-    removeUndefinedAndNullOptionsWithFieldValue(options, this.fieldValue);
   }
 }

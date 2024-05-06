@@ -7,6 +7,8 @@ import { PoButtonGroupModule } from '../../../po-button-group';
 import { PoFieldModule } from '../../po-field.module';
 import { PoModalModule } from '../../../po-modal/po-modal.module';
 import { PoRichTextToolbarComponent } from './po-rich-text-toolbar.component';
+import { PoRichTextLinkModalComponent } from '../po-rich-text-link-modal/po-rich-text-link-modal.component';
+import { PoRichTextImageModalComponent } from '../po-rich-text-image-modal/po-rich-text-image-modal.component';
 import { PoTooltipModule } from './../../../../directives/po-tooltip/po-tooltip.module';
 import { HttpClientTestingModule } from '@angular/common/http/testing';
 
@@ -76,10 +78,10 @@ describe('PoRichTextToolbarComponent:', () => {
 
     it('mediaButtons: should call richTextImageModal.openModal', () => {
       spyOn(component.richTextImageModal, <any>'openModal');
-
       component.mediaButtons[0].action();
 
       expect(component.richTextImageModal.openModal).toHaveBeenCalled();
+      expect(component.richTextImageModal).not.toBeUndefined();
     });
 
     it('linkButtons: should call richTextLinkModal.openModal', () => {

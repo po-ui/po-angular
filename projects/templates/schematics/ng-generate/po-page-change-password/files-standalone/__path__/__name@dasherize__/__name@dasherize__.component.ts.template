@@ -1,0 +1,22 @@
+import { Component, OnInit } from '@angular/core';
+import { CommonModule } from '@angular/common';
+
+import { PoPageChangePasswordModule } from '@po-ui/ng-templates';
+
+@Component({
+  selector: '<%= selector %>',
+  standalone: true,
+  imports: [
+    CommonModule,
+    PoPageChangePasswordModule,
+  ],
+  templateUrl: './<%= dasherize(name) %>.component.html',
+  styleUrls: ['./<%= dasherize(name) %>.component.<%= style %>']
+})
+export class <%= classify(name) %>Component implements OnInit {
+
+  constructor() { }
+
+  ngOnInit() { }
+
+}

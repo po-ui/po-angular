@@ -1,8 +1,8 @@
 import { HttpClient } from '@angular/common/http';
 import { Injectable } from '@angular/core';
-import { pluck } from 'rxjs/operators';
+import { PoTableColumn } from '@po-ui/ng-components';
 import { Observable } from 'rxjs';
-import { PoTableColumn, PoTableComponent } from '@po-ui/ng-components';
+import { pluck } from 'rxjs/operators';
 
 @Injectable()
 export class SamplePoTableHeroesService {
@@ -16,6 +16,6 @@ export class SamplePoTableHeroesService {
   }
 
   getItems(): Observable<any> {
-    return this.http.get('https://po-sample-api.fly.dev/v1/heroes').pipe(pluck('items'));
+    return this.http.get('https://po-sample-api.onrender.com/v1/heroes').pipe(pluck('items'));
   }
 }

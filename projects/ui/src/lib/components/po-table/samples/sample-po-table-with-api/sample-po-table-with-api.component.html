@@ -2,7 +2,7 @@
   <po-input
     class="po-md-12"
     p-label="URL API service"
-    p-help="https://po-sample-api.fly.dev/v1/heroes"
+    p-help="https://po-sample-api.onrender.com/v1/heroes"
     [(ngModel)]="service"
     (p-change)="changeService(service)"
   >
@@ -49,6 +49,7 @@
     [p-columns]="columns"
     [p-service-api]="sampleService"
     [p-height]="300"
+    [p-hide-table-search]="false"
     [p-infinite-scroll]="true"
   >
   </po-table>

@@ -229,6 +229,7 @@ describe('PoInputBase:', () => {
     it('controlChangeModelEmitter: should not emit changeModel if previous model value is equal to current model value', () => {
       const newModelValue: number = 1;
       component.modelLastUpdate = 1;
+      component.emitAllChanges = false;
 
       spyOn(component.changeModel, 'emit');
       component.controlChangeModelEmitter.call(component, newModelValue);
@@ -237,9 +238,10 @@ describe('PoInputBase:', () => {
     });
 
     it(`controlChangeModelEmitter: should emit changeModel with new value if previous
-        model value is different from current model value`, () => {
+    model value is different from current model value`, () => {
       const newModelValue: number = 2;
       component.modelLastUpdate = 1;
+      component.emitAllChanges = true;
 
       spyOn(component.changeModel, 'emit');
       component.controlChangeModelEmitter.call(component, newModelValue);

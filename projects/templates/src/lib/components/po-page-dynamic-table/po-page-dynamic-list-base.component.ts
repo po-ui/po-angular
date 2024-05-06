@@ -1,6 +1,6 @@
 import { Input, Directive, Output, EventEmitter } from '@angular/core';
 
-import { PoBreadcrumb, PoTableColumnSort } from '@po-ui/ng-components';
+import { InputBoolean, PoBreadcrumb, PoTableColumnSort } from '@po-ui/ng-components';
 
 import { convertToBoolean } from '../../utils/util';
 
@@ -177,7 +177,7 @@ export class PoPageDynamicListBaseComponent {
   }
 
   set columns(value) {
-    this._columns = [...value];
+    this._columns = [...(this._columns = this.sortColumnsByOrder(value))];
   }
 
   get columns() {
@@ -221,5 +221,54 @@ export class PoPageDynamicListBaseComponent {
     );
     this.keys = fields.filter(field => field.key === true).map(field => field.property);
     this.duplicates = fields.filter(field => field.duplicate === true).map(field => field.property);
+  }
+
+  /**
+   * Ordena um array de colunas com base na propriedade `order` de cada coluna.
+   *
+   * Este método é utilizado para organizar as colunas de uma tabela ou qualquer coleção similar
+   * que necessite de ordenação baseada em um critério numérico definido pela propriedade `order`.
+   * A ordenação segue as seguintes regras:
+   *
+   * 1. Colunas que possuem a propriedade `order` com um valor numérico válido e maior que zero
+   *    são ordenadas em ordem crescente de acordo com este valor.
+   *
+   * 2. Colunas que não possuem a propriedade `order` ou que possuem um valor inválido ou não numérico
+   *    para esta propriedade são consideradas iguais em termos de ordenação e mantêm a ordem original
+   *    em que apareceram no array fornecido.
+   *
+   * 3. No caso de duas colunas com valores de `order` válidos e idênticos, a ordem entre essas duas colunas
+   *    é determinada pela sua ordem original no array fornecido.
+   *
+   * @param columns Array de colunas a ser ordenado. Cada coluna é um objeto que pode conter uma propriedade `order`.
+   *                O tipo `Array<any>` é utilizado aqui para permitir flexibilidade nos objetos de coluna que podem ser passados,
+   *                mas espera-se que cada objeto tenha pelo menos uma propriedade `order` para a ordenação adequada.
+   *
+   * @returns Um novo array de colunas ordenado com base na propriedade `order`.
+   */
+  private sortColumnsByOrder(columns: Array<any>): Array<any> {
+    return columns.sort((a, b) => {
+      // Checa se 'order' existe e é um número válido em ambos os objetos
+      const hasValidOrderA = 'order' in a && typeof a.order === 'number' && a.order > 0;
+      const hasValidOrderB = 'order' in b && typeof b.order === 'number' && b.order > 0;
+
+      // Se ambos têm 'order' válido, compara diretamente
+      if (hasValidOrderA && hasValidOrderB) {
+        return a.order - b.order;
+      }
+
+      // Se apenas A tem 'order' válido, A vem antes de B
+      if (hasValidOrderA) {
+        return -1;
+      }
+
+      // Se apenas B tem 'order' válido, B vem antes de A
+      if (hasValidOrderB) {
+        return 1;
+      }
+
+      // Se nenhum dos dois tem 'order' válido, mantém a ordem original (considerando como iguais neste contexto)
+      return 0;
+    });
   }
 }
