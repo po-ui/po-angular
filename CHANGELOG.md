@@ -2,6 +2,30 @@
 
 All notable changes to this project will be documented in this file. See [standard-version](https://github.com/conventional-changelog/standard-version) for commit guidelines.
 
+### [17.7.0](https://github.com/po-ui/po-angular/compare/v17.6.0...v17.7.0) (2024-04-26)
+
+Compatibilidade com @totvs/thf-components@17.7.0
+
+## [17.6.0](https://github.com/po-ui/po-angular/compare/v17.5.0...v17.6.0) (2024-04-22)
+
+### Features
+
+Compatibilidade com @totvs/thf-components@17.6.0
+
+* **dynamic:** inclusão da propriedade container ([5302244](https://github.com/po-ui/po-angular/commit/530224431d96afe89f45c11fcb5300e42c4c70b1))
+* **search:** inclusão do listbox ao fazer o search ([6c8f299](https://github.com/po-ui/po-angular/commit/6c8f2993af5cf74c9b1ca9b01cefa26ae384da5b))
+
+### [17.5.0](https://github.com/po-ui/po-angular/compare/v17.4.0...v17.5.0) (2024-04-15)
+
+
+### Bug Fixes
+
+* **combo:** Ao enviar o setInputValue como null, deve-se mudar o 'selectedValue' e 'selectedOption' para valor nulo ([70c5ac0](https://github.com/po-ui/po-angular/commit/70c5ac089d9073d6db80e99d00add3d6cdb86d8e))
+
+### Features
+
+Compatibilidade com @totvs/thf-components@17.5.0
+
 ## [17.4.0](https://github.com/po-ui/po-angular/compare/v17.3.0...v17.4.0) (2024-04-08)
 
 
@@ -16,11 +40,21 @@ All notable changes to this project will be documented in this file. See [standa
 
 * **schematics:** corrige comando generate em projetos standalone ([ca27f05](https://github.com/po-ui/po-angular/commit/ca27f05489b3a273686a59b1b79a03eb22201524))
 
+### Features
+
+Compatibilidade com @totvs/thf-components@17.3.0
+
+
 ### [17.2.0](https://github.com/po-ui/po-angular/compare/v17.1.1...v17.2.0) (2024-03-25)
 
 ### Bug Fixes
 
 * **dynamic-view:** correção campos duplicados ([b4ee54a](https://github.com/po-ui/po-angular/commit/b4ee54ae0c7529a1918d5ad5b50e86021c7f2a0c))
+
+### Features
+
+Compatibilidade com @totvs/thf-components@17.2.0
+
 
 ## [17.1.1](https://github.com/po-ui/po-angular/compare/v17.1.0...v17.1.1) (2024-03-18)
 

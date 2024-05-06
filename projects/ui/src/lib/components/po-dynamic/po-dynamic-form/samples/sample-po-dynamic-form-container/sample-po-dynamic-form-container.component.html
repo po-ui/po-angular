@@ -1,0 +1,22 @@
+<po-dynamic-form
+  #dynamicForm
+  p-auto-focus="name"
+  [p-fields]="fields"
+  [p-load]="onLoadFields.bind(this)"
+  [p-validate]="this.onChangeFields.bind(this)"
+  [p-validate-fields]="validateFields"
+  [p-value]="person"
+>
+</po-dynamic-form>
+
+<br />
+
+<div class="po-row">
+  <po-button
+    class="po-md-3"
+    p-label="Save"
+    [p-disabled]="dynamicForm?.form.invalid"
+    (p-click)="poNotification.success('Data saved successfully!'); dynamicForm.form.reset()"
+  >
+  </po-button>
+</div>

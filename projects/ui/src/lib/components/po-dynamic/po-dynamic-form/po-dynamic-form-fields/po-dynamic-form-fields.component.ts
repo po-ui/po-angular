@@ -37,6 +37,7 @@ export class PoDynamicFormFieldsComponent extends PoDynamicFormFieldsBaseCompone
   ngOnChanges(changes: SimpleChanges) {
     if (changes.fields) {
       this.visibleFields = this.getVisibleFields();
+      this.setContainerFields();
     }
   }
 
@@ -130,6 +131,7 @@ export class PoDynamicFormFieldsComponent extends PoDynamicFormFieldsBaseCompone
   private updateFields() {
     this.fieldsChange.emit(this.fields);
     this.visibleFields = this.getVisibleFields();
+    this.setContainerFields();
   }
 
   private validateFieldsChecker(validateFields: Array<string>, propertyField: PoDynamicFormField['property']): boolean {
