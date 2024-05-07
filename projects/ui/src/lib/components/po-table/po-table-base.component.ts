@@ -177,6 +177,19 @@ export abstract class PoTableBaseComponent implements OnChanges, OnDestroy {
    *
    * @description
    *
+   * Habilita ou desabilita a quebra automática de texto. Quando ativada, o texto que excede
+   * o espaço disponível é transferido para a próxima linha em pontos apropriados para uma
+   * leitura clara.
+   *
+   * @default `false`
+   */
+  @Input({ alias: 'p-text-wrap', transform: convertToBoolean }) textWrap?: boolean = false;
+
+  /**
+   * @optional
+   *
+   * @description
+   *
    * Permite que as ações para fixar uma coluna da tabela sejam escondidas.
    *
    * @default `false`

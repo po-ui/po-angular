@@ -32,6 +32,9 @@ import { PoPageDynamicEditLiterals } from './interfaces/po-page-dynamic-edit-lit
 type UrlOrPoCustomizationFunction = string | (() => PoPageDynamicEditOptions);
 type SaveAction = PoPageDynamicEditActions['save'] | PoPageDynamicEditActions['saveNew'];
 
+export const poNotificationType = ['error', 'warning'];
+export const poNotificationTypeDefault = 'warning';
+
 export const poPageDynamicEditLiteralsDefault = {
   en: <PoPageDynamicEditLiterals>{
     cancelConfirmMessage: 'Are you sure you want to cancel this operation?',
@@ -40,6 +43,7 @@ export const poPageDynamicEditLiteralsDefault = {
     pageActionSave: 'Save',
     pageActionSaveNew: 'Save and new',
     registerNotFound: 'Register not found.',
+    saveNotificationError: 'Mandatory field(s) not filled.',
     saveNotificationSuccessSave: 'Resource successfully saved.',
     saveNotificationSuccessUpdate: 'Resource successfully updated.',
     saveNotificationWarning: 'Form must be filled out correctly.'
@@ -51,6 +55,7 @@ export const poPageDynamicEditLiteralsDefault = {
     pageActionSave: 'Guardar',
     pageActionSaveNew: 'Guardar y nuevo',
     registerNotFound: 'Registro no encontrado.',
+    saveNotificationError: 'Campo(s) obligatorio(s) no completado(s).',
     saveNotificationSuccessSave: 'Recurso salvo con éxito.',
     saveNotificationSuccessUpdate: 'Recurso actualizado con éxito.',
     saveNotificationWarning: 'El formulario debe llenarse correctamente.'
@@ -62,6 +67,7 @@ export const poPageDynamicEditLiteralsDefault = {
     pageActionSave: 'Salvar',
     pageActionSaveNew: 'Salvar e novo',
     registerNotFound: 'Registro não encontrado.',
+    saveNotificationError: 'Campo(s) obrigatório(s) sem preenchimento.',
     saveNotificationSuccessSave: 'Recurso salvo com sucesso.',
     saveNotificationSuccessUpdate: 'Recurso atualizado com sucesso.',
     saveNotificationWarning: 'Formulário precisa ser preenchido corretamente.'
@@ -73,6 +79,7 @@ export const poPageDynamicEditLiteralsDefault = {
     pageActionSave: 'Сохранить',
     pageActionSaveNew: 'Сохранить и создать',
     registerNotFound: 'Запись не найдена.',
+    saveNotificationError: 'Обязательное поле(я) не заполнено.',
     saveNotificationSuccessSave: 'Ресурс успешно сохранен.',
     saveNotificationSuccessUpdate: 'Ресурс успешно обновлен.',
     saveNotificationWarning: 'Форма должна быть заполнена правильно.'
@@ -340,7 +347,7 @@ export class PoPageDynamicEditComponent implements OnInit, OnDestroy {
   private _fields: Array<any> = [];
   private _keys: Array<any> = [];
   private _pageActions: Array<PoPageAction> = [];
-
+  private _notificationType?: string = poNotificationTypeDefault;
   /**
    * @optional
    *
@@ -375,6 +382,7 @@ export class PoPageDynamicEditComponent implements OnInit, OnDestroy {
    *    pageActionSave: 'Gravar',
    *    pageActionSaveNew: 'Gravar e incluir',
    *    registerNotFound: 'Nenhum registro encontrado.',
+   *    saveNotificationError: 'Campo(s) obrigatório(s) sem preenchimento.',
    *    saveNotificationSuccessSave: 'Item salvo com sucesso.',
    *    saveNotificationSuccessUpdate: 'Item atualizado com sucesso.',
    *    saveNotificationWarning: 'Necessário preencher o formulário corretamente.'
@@ -407,6 +415,32 @@ export class PoPageDynamicEditComponent implements OnInit, OnDestroy {
 
   get literals() {
     return this._literals || poPageDynamicEditLiteralsDefault[this.language];
+  }
+
+  /**
+   * @optional
+   *
+   * @description
+   *
+   * Tipo da notificação.
+   *
+   * É possivel definir o tipo de notificação que será exibido quando houver algum campo inválido no formulário.
+   *
+   * ```
+   * <po-page-dynamic-edit
+   *   p-notification-type="warning">
+   * </po-page-dynamic-edit>
+   * ```
+   *
+   * > Os valores aceitos são 'warning' e 'error'.
+   * @default warning
+   */
+  @Input('p-notification-type') set notificationType(value: string) {
+    this._notificationType = poNotificationType.includes(value) ? value : poNotificationTypeDefault;
+  }
+
+  get notificationType() {
+    return this._notificationType;
   }
 
   /**
@@ -765,10 +799,21 @@ export class PoPageDynamicEditComponent implements OnInit, OnDestroy {
     }
   }
 
+  private showNotification(type: string) {
+    switch (type) {
+      case 'warning':
+        this.poNotification.warning(this.literals.saveNotificationWarning);
+        break;
+      case 'error':
+        this.poNotification.error(this.literals.saveNotificationError);
+        break;
+    }
+  }
+
   private saveOperation() {
     if (this.dynamicForm.form.invalid) {
       this.markControlsAsDirtyAndFocusFirstInvalid();
-      this.poNotification.warning(this.literals.saveNotificationWarning);
+      this.showNotification(this._notificationType);
       return EMPTY;
     }
 

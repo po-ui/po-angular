@@ -1,5 +1,14 @@
-<div class="po-row" *ngIf="visibleFields && visibleFields.length > 0">
-  <ng-container *ngFor="let field of visibleFields; trackBy: trackBy">
+<div class="po-row" [class.po-dynamic]="hasContainers" *ngIf="visibleFields && visibleFields.length > 0">
+  <ng-container
+    *ngTemplateOutlet="
+      hasContainers ? poContentContainer : poContent;
+      context: { $implicit: hasContainers ? containerFields : visibleFields }
+    "
+  ></ng-container>
+</div>
+
+<ng-template #poContent let-fields>
+  <ng-container *ngFor="let field of fields; trackBy: trackBy">
     <po-divider *ngIf="field?.divider?.trim()" class="po-sm-12" [p-label]="field.divider"> </po-divider>
 
     <po-datepicker
@@ -416,4 +425,8 @@
     >
     </po-upload>
   </ng-container>
-</div>
+</ng-template>
+
+<ng-template #poContentContainer let-fields>
+  <po-dynamic-container [p-fields]="fields" [p-content]="poContent"></po-dynamic-container>
+</ng-template>
