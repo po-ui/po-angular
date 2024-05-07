@@ -559,7 +559,6 @@ export abstract class PoTableBaseComponent implements OnChanges, OnDestroy {
 
     if (hasColumnsWithVisible && !this.initialVisibleColumns) {
       this.initialVisibleColumns = true;
-      this.verifyInteractiveColumns();
     }
 
     if (this._columns.length) {
@@ -880,8 +879,6 @@ export abstract class PoTableBaseComponent implements OnChanges, OnDestroy {
    * Responsável por aplicar espaçamento nas colunas.
    *
    * Deve receber um dos valores do enum `PoTableColumnSpacing`.
-   *
-   * Valor `small` só funciona em tabelas não interativas. Caso seja setado com `small` e a tabela seja interativa, o valor será retornado para `medium`.
    *
    * @default `medium`
    */
@@ -1250,13 +1247,6 @@ export abstract class PoTableBaseComponent implements OnChanges, OnDestroy {
         item.$selected = false;
       }
     });
-  }
-
-  private verifyInteractiveColumns() {
-    const hasLinkOrDetail = this.columns.find(column => column.type === 'link' || column.type === 'detail');
-    if (this.spacing === 'small' && (this.selectable || hasLinkOrDetail || this.visibleActions.length > 0)) {
-      this.spacing = PoTableColumnSpacing.Medium;
-    }
   }
 
   private verifyWidthColumnsPixels() {

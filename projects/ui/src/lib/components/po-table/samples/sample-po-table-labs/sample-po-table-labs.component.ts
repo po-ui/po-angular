@@ -106,7 +106,7 @@ export class SamplePoTableLabsComponent implements OnInit {
   ];
 
   public readonly typeSpacing: Array<PoRadioGroupOption> = [
-    { label: 'Small', value: 'small', disabled: false },
+    { label: 'Small', value: 'small' },
     { label: 'Medium', value: 'medium' },
     { label: 'Large', value: 'large' }
   ];
@@ -212,30 +212,14 @@ export class SamplePoTableLabsComponent implements OnInit {
 
   updateColumns() {
     this.columns = [];
-    this.typeSpacing[0].disabled = false;
     this.columnsName.forEach(column => {
       this.columns.push(this.columnsDefinition[column]);
-      this.verifySpacing(column);
     });
   }
 
   private spacingSelectOrAction() {
     if (this.columnsName.length > 0) {
       this.updateColumns();
-    } else {
-      this.verifySpacing();
-      if (this.actions.length === 0 && this.selection[0] !== 'selectable') {
-        this.typeSpacing[0].disabled = false;
-      }
-    }
-  }
-
-  private verifySpacing(column?: string) {
-    if (column === 'link' || column === 'detail' || this.selection[0] === 'selectable' || this.actions.length > 0) {
-      this.typeSpacing[0].disabled = true;
-      if (this.spacing === 'small') {
-        this.spacing = PoTableColumnSpacing.Medium;
-      }
     }
   }
 }
