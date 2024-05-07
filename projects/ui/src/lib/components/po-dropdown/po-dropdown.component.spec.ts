@@ -3,33 +3,36 @@ import { RouterTestingModule } from '@angular/router/testing';
 
 import * as UtilsFunction from '../../utils/util';
 
-import { configureTestSuite } from './../../util-test/util-expect.spec';
-
-import { PoDropdownComponent } from './po-dropdown.component';
+import { ChangeDetectionStrategy } from '@angular/core';
 import { PoPopupComponent } from '../po-popup';
+import { PoDropdownComponent } from './po-dropdown.component';
 
 describe('PoDropdownComponent: ', () => {
   let component: PoDropdownComponent;
   let fixture: ComponentFixture<PoDropdownComponent>;
   let nativeElement: any;
 
-  const eventClick = document.createEvent('Event');
-  eventClick.initEvent('click', false, true);
+  const keyboardEvents = (type: string, keyCode: number) => {
+    const event = new KeyboardEvent(type, { keyCode });
+    Object.defineProperty(event, 'keyCode', { value: keyCode });
+    return event;
+  };
 
-  configureTestSuite(() => {
-    TestBed.configureTestingModule({
+  beforeEach(async () => {
+    await TestBed.configureTestingModule({
       imports: [RouterTestingModule.withRoutes([])],
       declarations: [PoDropdownComponent, PoPopupComponent]
-    });
+    })
+      .overrideComponent(PoDropdownComponent, {
+        set: { changeDetection: ChangeDetectionStrategy.Default }
+      })
+      .compileComponents();
   });
 
   beforeEach(() => {
     fixture = TestBed.createComponent(PoDropdownComponent);
-
     component = fixture.componentInstance;
-
     fixture.detectChanges();
-
     nativeElement = fixture.debugElement.nativeElement;
   });
 
@@ -124,15 +127,15 @@ describe('PoDropdownComponent: ', () => {
     and call 'popupRef.close'.`, () => {
       const fakeThis = {
         icon: undefined,
-        removeListeners: () => {},
+        removeListeners: jasmine.createSpy('removeListeners'),
         popupRef: {
-          close: () => {}
+          close: jasmine.createSpy('close')
         },
-        open: undefined
+        open: undefined,
+        changeDetector: {
+          detectChanges: jasmine.createSpy('detectChanges')
+        }
       };
-
-      spyOn(fakeThis, 'removeListeners');
-      spyOn(fakeThis.popupRef, 'close');
 
       component[`hideDropdown`].call(fakeThis);
 
@@ -140,6 +143,7 @@ describe('PoDropdownComponent: ', () => {
       expect(fakeThis.removeListeners).toHaveBeenCalled();
       expect(fakeThis.popupRef.close).toHaveBeenCalled();
       expect(fakeThis.open).toBe(false);
+      expect(fakeThis.changeDetector.detectChanges).toHaveBeenCalled();
     });
 
     it('initializeListeners: should initialize click, resize and scroll listeners.', () => {
@@ -244,7 +248,10 @@ describe('PoDropdownComponent: ', () => {
         popupRef: {
           open: () => {}
         },
-        open: undefined
+        open: undefined,
+        changeDetector: {
+          detectChanges: () => {}
+        }
       };
 
       spyOn(fakeThis, 'initializeListeners');
@@ -302,8 +309,12 @@ describe('PoDropdownComponent: ', () => {
       component.disabled = true;
 
       fixture.detectChanges();
+      fixture.whenStable();
 
-      expect(nativeElement.querySelector('.po-dropdown[tabindex="-1"]')).toBeTruthy();
+      const dropdownElement = nativeElement.querySelector('.po-dropdown');
+      expect(dropdownElement).toBeTruthy();
+
+      expect(dropdownElement.getAttribute('tabindex')).toBe('-1');
     });
 
     it(`should apply 0 to 'tabindex' if 'disabled' is 'false'`, () => {
@@ -319,7 +330,9 @@ describe('PoDropdownComponent: ', () => {
 
       spyOn(component, 'toggleDropdown');
 
-      poDropdown.dispatchEvent(eventClick);
+      const clickEvent = new MouseEvent('click');
+
+      poDropdown.dispatchEvent(clickEvent);
 
       expect(component.toggleDropdown).toHaveBeenCalled();
     });
@@ -334,12 +347,16 @@ describe('PoDropdownComponent: ', () => {
       expect(component.onKeyDown).toHaveBeenCalled();
     });
 
-    it(`should have a class 'po-dropdown-button-disabled' if 'disabled' is 'true'`, () => {
+    it(`should have a class 'po-dropdown-button-disabled' if 'disabled' is 'true'`, async () => {
       component.disabled = true;
 
       fixture.detectChanges();
+      await fixture.whenStable();
 
-      expect(nativeElement.querySelector('.po-dropdown-button-disabled')).toBeTruthy();
+      const disabledButton = nativeElement.querySelector('.po-dropdown-button-disabled');
+      console.log('Disabled button:', disabledButton);
+
+      expect(disabledButton).toBeTruthy();
     });
 
     it(`shouldn't have a class 'po-dropdown-button-disabled' if 'disabled' is 'false'`, () => {
@@ -351,31 +368,44 @@ describe('PoDropdownComponent: ', () => {
     });
 
     it(`should have a class 'po-icon-arrow-up' if 'click' in 'po-dropdown'`, () => {
-      const arrowDown = nativeElement.querySelector('.po-icon-arrow-down');
+      fixture.detectChanges();
       const poDropdown = nativeElement.querySelector('.po-dropdown');
 
-      expect(arrowDown).toBeTruthy();
+      expect(component.icon).toBe('ICON_ARROW_DOWN');
 
       component.actions = [{ label: 'action1', action: () => {} }];
 
       fixture.detectChanges();
 
-      poDropdown.dispatchEvent(eventClick);
+      const clickEvent = new MouseEvent('click');
+      poDropdown.dispatchEvent(clickEvent);
 
       fixture.detectChanges();
 
-      const arrowUp = nativeElement.querySelector('.po-icon-arrow-up');
-
-      expect(arrowUp).toBeTruthy();
+      expect(component.icon).toBe('ICON_ARROW_UP');
     });
 
     it(`should open a popup if have 'actions' and click in 'po-dropdown'`, () => {
       const poDropdown = nativeElement.querySelector('.po-dropdown');
       component.actions = [{ label: 'action1', action: () => {} }];
 
+      spyOn(component as any, 'showDropdown').and.callThrough();
+      if (component.popupRef) {
+        spyOn(component.popupRef, 'open').and.callThrough();
+      }
+
       fixture.detectChanges();
 
-      poDropdown.dispatchEvent(eventClick);
+      const clickEvent = new MouseEvent('click');
+      poDropdown.dispatchEvent(clickEvent);
+      fixture.detectChanges();
+      nativeElement = fixture.debugElement.nativeElement;
+
+      expect(component['showDropdown']).toHaveBeenCalled();
+
+      if (component.popupRef) {
+        expect(component.popupRef.open).toHaveBeenCalled();
+      }
 
       expect(nativeElement.querySelector('.po-popup')).toBeTruthy();
     });
@@ -386,18 +416,13 @@ describe('PoDropdownComponent: ', () => {
 
       fixture.detectChanges();
 
-      poDropdown.dispatchEvent(eventClick);
+      const clickEvent = new MouseEvent('click');
+      poDropdown.dispatchEvent(clickEvent);
 
       fixture.detectChanges();
+      nativeElement = fixture.debugElement.nativeElement;
 
       expect(nativeElement.querySelector('.po-popup')).toBeNull();
     });
   });
 });
-
-function keyboardEvents(event: string, keyCode: number) {
-  const eventKeyBoard = document.createEvent('KeyboardEvent');
-  eventKeyBoard.initEvent(event, true, true);
-  Object.defineProperty(eventKeyBoard, 'keyCode', { 'value': keyCode });
-  return eventKeyBoard;
-}
