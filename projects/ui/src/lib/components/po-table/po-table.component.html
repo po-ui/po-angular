@@ -185,8 +185,8 @@
               <ng-container *ngIf="this.isDraggable && !column.fixed">
                 <svg
                   cdkDragHandle
-                  width="24"
-                  height="24"
+                  width="16"
+                  height="16"
                   viewBox="0 0 24 24"
                   fill="none"
                   xmlns="http://www.w3.org/2000/svg"
@@ -528,8 +528,8 @@
                 <ng-container *ngIf="this.isDraggable && !column.fixed">
                   <svg
                     cdkDragHandle
-                    width="24"
-                    height="24"
+                    width="16"
+                    height="16"
                     viewBox="0 0 24 24"
                     fill="none"
                     xmlns="http://www.w3.org/2000/svg"
@@ -830,7 +830,7 @@
     "
   >
     <ng-container *ngIf="JSON.stringify(sortedColumn?.property) !== JSON.stringify(column)">
-      <svg width="24" height="24" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
+      <svg width="16" height="16" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
         <path
           fill-rule="evenodd"
           clip-rule="evenodd"
@@ -841,7 +841,7 @@
     </ng-container>
 
     <ng-container *ngIf="JSON.stringify(sortedColumn?.property) === JSON.stringify(column) && sortedColumn.ascending">
-      <svg width="24" height="24" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
+      <svg width="16" height="16" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
         <path
           fill-rule="evenodd"
           clip-rule="evenodd"
@@ -852,7 +852,7 @@
     </ng-container>
 
     <ng-container *ngIf="JSON.stringify(sortedColumn?.property) === JSON.stringify(column) && !sortedColumn.ascending">
-      <svg width="24" height="24" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
+      <svg width="16" height="16" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
         <path
           fill-rule="evenodd"
           clip-rule="evenodd"
