@@ -1,10 +1,11 @@
-import { ElementRef } from '@angular/core';
+import { ElementRef, SimpleChange, SimpleChanges } from '@angular/core';
 import { ComponentFixture, TestBed, fakeAsync, tick } from '@angular/core/testing';
 
 import { PoControlPositionService } from '../../services/po-control-position/po-control-position.service';
 import { PoIconModule } from '../po-icon';
 import { PoListBoxModule } from '../po-listbox';
 import { PoSearchFilterMode } from './enum/po-search-filter-mode.enum';
+import { PoSearchFilterSelect } from './interfaces/po-search-filter-select.interface';
 import { PoSearchOption } from './interfaces/po-search-option.interface';
 import { PoSearchComponent } from './po-search.component';
 
@@ -463,5 +464,189 @@ describe('PoSearchComponent', () => {
       document.body.removeChild(mockListboxItem);
       document.body.removeChild(mockListboxItem2);
     }));
+  });
+
+  describe('filterSelect', () => {
+    let filterSelect: Array<PoSearchFilterSelect>;
+
+    beforeEach(() => {
+      filterSelect = [
+        { label: 'personal', value: ['name', 'gender'] },
+        { label: 'address', value: ['planet'] },
+        { label: 'family', value: ['father'] }
+      ];
+      component.poSearchInput = {
+        nativeElement: {
+          focus: () => {},
+          contains: () => {},
+          dispatchEvent: () => {}
+        }
+      };
+      component.poSearchInput.nativeElement.value = 'Anakin';
+      component['language'] = 'en';
+    });
+
+    it('should create dropdown filter select options, and an `all` option then update filterKeys', () => {
+      component.items = [
+        { name: 'Luke Skywalker', gender: 'male', planet: 'Tatooine', father: 'Anakin Skywalker' },
+        { name: 'Leia Organa', gender: 'female', planet: 'Alderaan', father: 'Anakin Skywalker' },
+        { name: 'Han Solo', gender: 'male', planet: 'Corellia', father: 'Ovan' }
+      ];
+      component.filterKeys = ['name'];
+      component.filterSelect = filterSelect;
+
+      component['ngOnInit']();
+
+      const expectedFilterKeys = ['name', 'gender', 'planet', 'father'];
+      expect(component.filterKeys).toEqual(expectedFilterKeys);
+      expect(component.searchFilterSelectActions.some(action => action.label === component.literals.all)).toBeTrue();
+    });
+
+    it('should change `filterKeys` when clicking `personal`', () => {
+      component.filterSelect = filterSelect;
+      component['ngOnInit']();
+
+      component.searchFilterSelectActions.find(action => action.label === 'personal').action();
+
+      const expectedFilterKeys = ['name', 'gender'];
+      expect(component.filterKeys).toEqual(expectedFilterKeys);
+    });
+
+    it('should not create dropdown filter select actions if filterSelect is undefined', () => {
+      component.filterSelect = undefined;
+      component.createDropdownFilterSelect();
+      expect(component.searchFilterSelectActions.length).toBe(0);
+    });
+
+    it('should not create dropdown filter select actions if filterSelect is null', () => {
+      component.filterSelect = null;
+      component.createDropdownFilterSelect();
+      expect(component.searchFilterSelectActions.length).toBe(0);
+    });
+
+    it('should set filterKeys to an array if filterOption.value is an array', () => {
+      const filterOption = { label: 'name', value: ['name1', 'name2'] };
+      component.changeFilterSelect(filterOption);
+
+      expect(component.filterKeys).toEqual(['name1', 'name2']);
+    });
+
+    it('should set filterKeys to an array if filterOption.value is not an array', () => {
+      const filterOption = { label: 'name', value: 'name' };
+      component.changeFilterSelect(filterOption);
+
+      expect(component.filterKeys).toEqual(['name']);
+    });
+
+    it('should focus and search input, if an option on dropdown filter is selected and the search-type is `action`', () => {
+      const _filterSelect = [{ label: 'personal', value: ['name', 'gender'] }];
+      component.filterSelect = _filterSelect;
+      component.type = 'action';
+
+      component['ngOnInit']();
+
+      const expectedFilterKeys = ['name', 'gender'];
+      expect(component.filterKeys).toEqual(expectedFilterKeys);
+      expect(component.filteredItemsChange.emit).toHaveBeenCalled();
+    });
+
+    it('should call createDropdownFilterSelect when filterSelect changes', () => {
+      component.filterSelect = [
+        { label: 'name', value: 'name' },
+        { label: 'gender', value: 'gender' }
+      ];
+      component['ngOnInit']();
+
+      expect(component.filterKeys).toEqual(['name', 'gender']);
+
+      spyOn(component as any, 'createDropdownFilterSelect').and.callThrough();
+
+      const changes: SimpleChanges = {
+        filterSelect: new SimpleChange(null, [{ label: 'planet', value: 'planet' }], false)
+      };
+
+      component['ngOnChanges'](changes);
+
+      expect(component['createDropdownFilterSelect']).toHaveBeenCalled();
+    });
+
+    it('should populate searchFilterSelectActions correctly in createDropdownFilterSelect', () => {
+      component.filterSelect = [
+        { label: 'name', value: 'name' },
+        { label: 'gender', value: 'gender' }
+      ];
+
+      component['createDropdownFilterSelect']();
+
+      const expectedActions = [
+        { label: 'All', action: jasmine.any(Function), selected: true },
+        { label: 'name', action: jasmine.any(Function), selected: false },
+        { label: 'gender', action: jasmine.any(Function), selected: false }
+      ];
+
+      expect(component.searchFilterSelectActions).toEqual(expectedActions);
+    });
+
+    it('should call changeFilterSelect in createDropdownFilterSelect', () => {
+      component.filterSelect = [
+        { label: 'name', value: 'name' },
+        { label: 'gender', value: 'gender' }
+      ];
+
+      const changeFilterSelectSpy = spyOn(component as any, 'changeFilterSelect').and.callThrough();
+
+      component['createDropdownFilterSelect']();
+
+      expect(changeFilterSelectSpy).toHaveBeenCalledWith({ label: 'All', value: ['name', 'gender'] });
+    });
+
+    it('should set `filterSelect` to undefined when values is not provided or empty', () => {
+      component.filterSelect = undefined;
+      expect(component['_filterSelect']).toBeUndefined();
+
+      component.filterSelect = [];
+      expect(component['_filterSelect']).toBeUndefined();
+    });
+
+    it('should change `filterKeys` even if the value is not an array', () => {
+      const _filterSelect = [{ label: 'personal', value: 'name' }];
+      component.filterSelect = _filterSelect;
+      component['ngOnInit']();
+
+      const expectedFilterKeys = ['name'];
+      expect(component.filterKeys).toEqual(expectedFilterKeys);
+    });
+
+    describe('ensureFilterSelectOption', () => {
+      it('should wrap a single string value into an array of objects with label and value', () => {
+        const value = 'name';
+        const result = component.ensureFilterSelectOption(value);
+        expect(result).toEqual([{ label: 'name', value: 'name' }]);
+      });
+
+      it('should convert an array of strings into an array of objects with label and value', () => {
+        const values = ['name', 'gender'];
+        const result = component.ensureFilterSelectOption(values);
+        expect(result).toEqual([
+          { label: 'name', value: 'name' },
+          { label: 'gender', value: 'gender' }
+        ]);
+      });
+
+      it('should return the same array of objects if passed in', () => {
+        const values: Array<PoSearchFilterSelect> = [
+          { label: 'name', value: 'name' },
+          { label: 'gender', value: 'gender' }
+        ];
+        const result = component.ensureFilterSelectOption(values);
+        expect(result).toEqual(values);
+      });
+
+      it('should convert a single object into an array of that object', () => {
+        const value: PoSearchFilterSelect = { label: 'name', value: 'name' };
+        const result = component.ensureFilterSelectOption(value);
+        expect(result).toEqual([value]);
+      });
+    });
   });
 });

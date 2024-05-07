@@ -20,4 +20,15 @@ export interface PoSearchLiterals {
    * search: Texto usado no leitor de tela para acessibilidade.
    */
   clean?: string;
+
+  /**
+   * @usedBy PoSearchComponent
+   *
+   * @optional
+   *
+   * @description
+   *
+   * search: Texto usado no dropdown, para demarcar todos os tipos de filtro.
+   */
+  all?: string;
 }

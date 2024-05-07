@@ -7,6 +7,7 @@ import { PoSearchComponent } from './po-search.component';
 import { FormsModule } from '@angular/forms';
 import { PoAccordionModule } from '../po-accordion/po-accordion.module';
 import { PoListBoxModule } from '../po-listbox';
+import { PoDropdownModule } from '../po-dropdown';
 
 /**
  * @description
@@ -21,7 +22,8 @@ import { PoListBoxModule } from '../po-listbox';
     PoLoadingModule,
     PoAccordionModule,
     FormsModule,
-    PoListBoxModule
+    PoListBoxModule,
+    PoDropdownModule
   ],
   declarations: [PoSearchComponent],
   exports: [PoSearchComponent]

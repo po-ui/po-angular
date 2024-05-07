@@ -1,4 +1,9 @@
 <div class="po-search" [class.po-search-disabled]="disabled">
+  <div class="po-search-select" *ngIf="filterSelect">
+    <po-dropdown [p-label]="searchFilterSelectLabel" [p-disabled]="disabled" [p-actions]="searchFilterSelectActions">
+    </po-dropdown>
+  </div>
+
   <div *ngIf="type === 'action'" class="po-search-icon">
     <po-icon [p-icon]="icon ? icon : 'ICON_SEARCH'"></po-icon>
   </div>

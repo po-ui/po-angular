@@ -7,6 +7,7 @@
     [p-items]="items"
     [p-disabled]="properties.includes('disabled')"
     [p-filter-keys]="fieldKeys"
+    [p-filter-select]="fieldSelect"
     [p-literals]="customLiterals"
     [p-filter-type]="filterMode"
     [p-search-type]="searchMode"
@@ -69,6 +70,15 @@
       (p-change-model)="changeItems($event)"
     >
     </po-input>
+    <po-input
+      class="po-md-6"
+      name="literals"
+      [(ngModel)]="literals"
+      p-help='Ex.: {"search": "Search people"}'
+      p-label="Literals"
+      (p-change)="changeLiterals()"
+    >
+    </po-input>
   </div>
 
   <div class="po-row">
@@ -81,14 +91,13 @@
       (p-change-model)="updateFilterKeys($event)"
     >
     </po-input>
-
     <po-input
       class="po-md-6"
-      name="literals"
-      [(ngModel)]="literals"
-      p-help='Ex.: {"search": "Search people"}'
-      p-label="Literals"
-      (p-change)="changeLiterals()"
+      name="Filter Select"
+      [(ngModel)]="filterSelectModel"
+      p-label="Filter Select"
+      p-help='Ex.: [ { "label": "Name", "value": ["name", "nickname"] }, { "label": "Email", "value": "email" } ]'
+      (p-change)="updateFilterSelect($event)"
     >
     </po-input>
 
