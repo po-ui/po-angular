@@ -3,19 +3,22 @@ import {
   ChangeDetectorRef,
   Component,
   ElementRef,
+  OnChanges,
   OnDestroy,
   OnInit,
   Renderer2,
+  SimpleChanges,
   ViewChild
 } from '@angular/core';
 import { PoControlPositionService } from '../../services/po-control-position/po-control-position.service';
 import { PoLanguageService } from '../../services/po-language/po-language.service';
+import { PoDropdownAction } from '../po-dropdown';
+import { PoListBoxComponent } from '../po-listbox';
+import { PoKeyCodeEnum } from './../../enums/po-key-code.enum';
 import { PoSearchFilterMode } from './enum/po-search-filter-mode.enum';
+import { PoSearchFilterSelect } from './interfaces/po-search-filter-select.interface';
 import { PoSearchOption } from './interfaces/po-search-option.interface';
 import { PoSearchBaseComponent } from './po-search-base.component';
-import { PoKeyCodeEnum } from './../../enums/po-key-code.enum';
-import { PoListBoxComponent } from '../po-listbox';
-import { CdkOption } from '@angular/cdk/listbox';
 const poSearchContainerOffset = 8;
 const poSearchContainerPositionDefault = 'bottom';
 /**
@@ -46,14 +49,19 @@ const poSearchContainerPositionDefault = 'bottom';
  *  <file name="sample-po-search-listbox/sample-po-search-listbox.service.ts"> </file>
  * </example>
  *
+ * <example name="po-search-filter-select" title="PO Search With Filter Select + Listbox">
+ *  <file name="sample-po-search-filter-select/sample-po-search-filter-select.component.html"> </file>
+ *  <file name="sample-po-search-filter-select/sample-po-search-filter-select.component.ts"> </file>
+ * </example>
+ *
  */
 @Component({
   selector: 'po-search',
   templateUrl: './po-search.component.html',
-  changeDetection: ChangeDetectionStrategy.OnPush,
-  providers: [PoControlPositionService]
+  providers: [PoControlPositionService],
+  changeDetection: ChangeDetectionStrategy.OnPush
 })
-export class PoSearchComponent extends PoSearchBaseComponent implements OnInit, OnDestroy {
+export class PoSearchComponent extends PoSearchBaseComponent implements OnInit, OnDestroy, OnChanges {
   private clickoutListener: () => void;
   private eventResizeListener: () => void;
 
@@ -69,6 +77,11 @@ export class PoSearchComponent extends PoSearchBaseComponent implements OnInit, 
   isFiltering: boolean = false;
   listboxItemclicked: boolean = false;
 
+  searchFilter = {};
+
+  searchFilterSelectLabel: string;
+  searchFilterSelectActions: Array<PoDropdownAction>;
+
   constructor(
     public languageService: PoLanguageService,
     private renderer: Renderer2,
@@ -82,6 +95,15 @@ export class PoSearchComponent extends PoSearchBaseComponent implements OnInit, 
     this.filteredItems = this.items;
     if (this.showListbox) {
       this.listboxFilteredItems = this.listboxItems;
+    }
+    if (this.filterSelect) {
+      this.createDropdownFilterSelect();
+    }
+  }
+
+  ngOnChanges(changes: SimpleChanges): void {
+    if (changes.filterSelect && changes.filterSelect.currentValue) {
+      this.createDropdownFilterSelect();
     }
   }
 
@@ -97,7 +119,10 @@ export class PoSearchComponent extends PoSearchBaseComponent implements OnInit, 
   }
 
   onSearchChange(searchText: string, activated: boolean, buttonClick?: boolean): void {
-    searchText = searchText.toLowerCase();
+    const searchTextInitial = searchText;
+    if (searchText !== undefined) {
+      searchText = searchText.toLowerCase();
+    }
     this.isFiltering = true;
 
     if (this.showListbox && !buttonClick && searchText.length > 0) {
@@ -112,6 +137,19 @@ export class PoSearchComponent extends PoSearchBaseComponent implements OnInit, 
     if (activated && !this.listboxItemclicked) {
       this.updateFilteredItems(searchText);
       this.filteredItemsChange.emit(this.filteredItems);
+
+      if (this.filterSelect) {
+        this.searchFilter = {
+          ...this.searchFilter,
+          value: searchTextInitial
+        };
+      } else {
+        this.searchFilter = {
+          filter: this.filterKeys,
+          value: searchTextInitial
+        };
+      }
+      this.filter.emit(this.searchFilter);
       this.changeModel.emit(searchText);
     }
 
@@ -164,7 +202,8 @@ export class PoSearchComponent extends PoSearchBaseComponent implements OnInit, 
     return this.items
       .map(item => this.filterKeys.map(key => item[key]).map(item => (typeof item !== 'string' ? String(item) : item)))
       .flat()
-      .map(value => ({ label: value, value }));
+      .map(value => ({ label: value, value }))
+      .filter((obj, index, self) => index === self.findIndex(o => o.label === obj.label && o.value === obj.value));
   }
 
   onCloseListbox() {
@@ -332,5 +371,48 @@ export class PoSearchComponent extends PoSearchBaseComponent implements OnInit, 
 
   getInputValue() {
     return this.poSearchInput.nativeElement.value;
+  }
+
+  createDropdownFilterSelect(): void {
+    this.searchFilterSelectActions = [];
+    if (!this.filterSelect) {
+      return;
+    }
+    this.filterSelect.forEach(filterOption => {
+      const selectOption: PoDropdownAction = {
+        label: filterOption.label,
+        action: () => this.changeFilterSelect(filterOption),
+        selected: this.isSelected(filterOption)
+      };
+      this.searchFilterSelectActions.push(selectOption);
+    });
+
+    this.changeFilterSelect(this.filterSelect[0]);
+  }
+
+  isSelected(filterOption: PoSearchFilterSelect): boolean {
+    return this.searchFilterSelectLabel === filterOption.label;
+  }
+
+  changeFilterSelect(filterOption: PoSearchFilterSelect) {
+    this.searchFilterSelectLabel = filterOption.label;
+    this.filterKeys = Array.isArray(filterOption.value) ? [...filterOption.value] : [filterOption.value];
+
+    if (!this.searchFilterSelectActions) {
+      return;
+    }
+
+    this.searchFilterSelectActions.map(action => (action.selected = false));
+    const selectAction = this.searchFilterSelectActions.find(action => action.label === this.searchFilterSelectLabel);
+    selectAction.selected = true;
+
+    this.searchFilter = {
+      filter: filterOption.label === this.literals.all ? ['all'] : filterOption.value
+    };
+
+    this.poSearchInput.nativeElement.focus();
+    if (this.type === 'action') {
+      this.onSearchChange(this.getInputValue(), true);
+    }
   }
 }

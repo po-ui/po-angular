@@ -1,4 +1,4 @@
-import { Component, ElementRef, Renderer2, ViewChild } from '@angular/core';
+import { ChangeDetectionStrategy, ChangeDetectorRef, Component, ElementRef, Renderer2, ViewChild } from '@angular/core';
 
 import { isKeyCodeEnter } from './../../utils/util';
 
@@ -28,7 +28,8 @@ import { PoDropdownBaseComponent } from './po-dropdown-base.component';
  */
 @Component({
   selector: 'po-dropdown',
-  templateUrl: './po-dropdown.component.html'
+  templateUrl: './po-dropdown.component.html',
+  changeDetection: ChangeDetectionStrategy.OnPush
 })
 export class PoDropdownComponent extends PoDropdownBaseComponent {
   @ViewChild('dropdownRef', { read: ElementRef, static: true }) dropdownRef: ElementRef;
@@ -37,7 +38,10 @@ export class PoDropdownComponent extends PoDropdownBaseComponent {
   private clickoutListener: () => void;
   private resizeListener: () => void;
 
-  constructor(private renderer: Renderer2) {
+  constructor(
+    private renderer: Renderer2,
+    private changeDetector: ChangeDetectorRef
+  ) {
     super();
   }
 
@@ -60,6 +64,7 @@ export class PoDropdownComponent extends PoDropdownBaseComponent {
     this.removeListeners();
     this.popupRef.close();
     this.open = false;
+    this.changeDetector.detectChanges();
   }
 
   private initializeListeners() {
@@ -103,6 +108,7 @@ export class PoDropdownComponent extends PoDropdownBaseComponent {
     this.initializeListeners();
     this.popupRef.open();
     this.open = true;
+    this.changeDetector.detectChanges();
   }
 
   private wasClickedOnDropdown(event: MouseEvent) {

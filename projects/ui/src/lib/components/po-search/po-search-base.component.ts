@@ -6,6 +6,8 @@ import { convertToBoolean } from '../../utils/util';
 import { PoSearchLiterals } from './literals/po-search-literals';
 import { poSearchLiteralsDefault } from './literals/po-search-literals-default';
 import { PoSearchFilterMode } from './enum/po-search-filter-mode.enum';
+import { PoSearchOption } from './interfaces/po-search-option.interface';
+import { PoSearchFilterSelect } from './interfaces/po-search-filter-select.interface';
 
 export type searchMode = 'action' | 'trigger';
 /**
@@ -72,6 +74,7 @@ export class PoSearchBaseComponent {
   private _literals?: PoSearchLiterals;
   private _ariaLabel?: string;
   private language: string;
+  private _filterSelect?: Array<PoSearchFilterSelect>;
 
   /**
    * @optional
@@ -209,7 +212,46 @@ export class PoSearchBaseComponent {
    *
    * @default `false`
    */
-  @Input('p-show-listbox') showListbox: boolean = false;
+  @Input({ alias: 'p-show-listbox', transform: convertToBoolean }) showListbox?: boolean = false;
+
+  /**
+   * @description
+   *
+   * Define os tipos de filtros (p-filter-keys) a serem aplicados na busca ou lista do componente (p-items).
+   * Automaticamente adiciona a opção 'Todos', com um mapeamento de todas as opções passadas.
+   *
+   * > O uso desta propriedade torna a propriedade 'p-filter-keys' inválida.
+   *
+   * Exemplo de uso:
+   * ```typescript
+   * const filterSelect = [
+   *   { label: 'personal', value: ['name', 'email', 'nickname'] },
+   *   { label: 'address', value: ['country', 'state', 'city', 'street'] },
+   *   { label: 'family', value: ['father', 'mother', 'dependents'] }
+   * ];
+   * ```
+   */
+  @Input('p-filter-select') set filterSelect(values: Array<PoSearchFilterSelect>) {
+    if (!Array.isArray(values) || values.length === 0 || values.every(value => Object.keys(value).length === 0)) {
+      this._filterSelect = undefined;
+      return;
+    }
+    const _values: Array<PoSearchFilterSelect> = this.ensureFilterSelectOption(values);
+
+    const allValues = _values.flatMap(e => e.value);
+    const uniqueValues = [...new Set(allValues)];
+
+    const filterOptionAll: PoSearchFilterSelect = {
+      label: this.literals.all,
+      value: uniqueValues
+    };
+
+    this._filterSelect = [filterOptionAll, ..._values];
+  }
+
+  get filterSelect() {
+    return this._filterSelect;
+  }
 
   /**
    * @optional
@@ -249,5 +291,10 @@ export class PoSearchBaseComponent {
 
   constructor(languageService: PoLanguageService) {
     this.language = languageService.getShortLanguage();
+  }
+
+  ensureFilterSelectOption(values: any) {
+    const _values = Array.isArray(values) ? values : Array.of(values);
+    return _values.map(value => (typeof value === 'object' ? value : { label: value, value }));
   }
 }
