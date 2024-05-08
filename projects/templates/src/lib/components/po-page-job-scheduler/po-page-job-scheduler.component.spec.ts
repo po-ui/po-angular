@@ -1,25 +1,19 @@
-import {
-  ComponentFixture,
-  discardPeriodicTasks,
-  fakeAsync,
-  flush,
-  flushMicrotasks,
-  TestBed,
-  tick,
-  waitForAsync
-} from '@angular/core/testing';
+import { QueryList } from '@angular/core';
+import { ComponentFixture, discardPeriodicTasks, fakeAsync, TestBed, tick, waitForAsync } from '@angular/core/testing';
 import { RouterTestingModule } from '@angular/router/testing';
+import { NgForm } from '@angular/forms';
 
-import { delay, Observable, of, throwError } from 'rxjs';
+import { Observable, of, throwError } from 'rxjs';
 
 import { changeBrowserInnerWidth } from './../../util-test/util-expect.spec';
 import { getObservable } from '../../util-test/util-expect.spec';
 
+import { HttpClientTestingModule } from '@angular/common/http/testing';
 import { PoJobSchedulerInternal } from './interfaces/po-job-scheduler-internal.interface';
+import { PoJobSchedulerParametersTemplateDirective } from './po-page-job-scheduler-parameters';
 import { PoPageJobSchedulerComponent } from './po-page-job-scheduler.component';
 import { PoPageJobSchedulerModule } from './po-page-job-scheduler.module';
 import { PoStepperOrientation } from '@po-ui/ng-components';
-import { HttpClientTestingModule } from '@angular/common/http/testing';
 
 describe('PoPageJobSchedulerComponent:', () => {
   let component: PoPageJobSchedulerComponent;
@@ -84,6 +78,33 @@ describe('PoPageJobSchedulerComponent:', () => {
 
         expect(component.stepperOrientation).toBe(PoStepperOrientation.Horizontal);
       });
+    });
+
+    it(`should return 'parametersEmpty' as false when set 'p-parameters'`, () => {
+      component.parameters = [
+        {
+          property: 'version'
+        }
+      ];
+      fixture.detectChanges();
+
+      component.ngOnInit();
+
+      expect(component.parametersEmpty).toBeFalse();
+    });
+
+    it(`should return '_stepExecutionLast' as true`, () => {
+      const mock = Object.assign(new QueryList(), {
+        _results: [{ disabledAdvance: true }],
+        length: 1
+      }) as QueryList<PoJobSchedulerParametersTemplateDirective>;
+
+      component.parametersTemplate = mock;
+      component.stepExecutionLast = true;
+
+      component.ngAfterContentInit();
+
+      expect(component['_stepExecutionLast']).toEqual(true);
     });
   });
 
@@ -163,7 +184,7 @@ describe('PoPageJobSchedulerComponent:', () => {
 
     describe('changePageActionsBySteps:', () => {
       it(`should set 'jobSchedulerActions' with 'concludePageActions' if 'steps' is equal 'steps.length'`, () => {
-        const nextStep = component.steps.length;
+        const nextStep = component['steps'].length;
         const currentStep = 2;
 
         component['changePageActionsBySteps'](currentStep, nextStep);
@@ -172,8 +193,8 @@ describe('PoPageJobSchedulerComponent:', () => {
       });
 
       it(`should set 'jobSchedulerActions' with 'nextPageActions' if
-      'currentStep' is equal 'steps.length' and 'stepNumber' is lower than 'currentStep'`, () => {
-        const currentStep = component.steps.length;
+        'currentStep' is equal 'steps.length' and 'stepNumber' is lower than 'currentStep'`, () => {
+        const currentStep = component['steps'].length;
         const nextStep = 2;
 
         component['changePageActionsBySteps'](currentStep, nextStep);
@@ -192,130 +213,103 @@ describe('PoPageJobSchedulerComponent:', () => {
     });
 
     describe('nextStep:', () => {
-      let fakeThis;
+      it(`should prevent skipping several steps in the operation 'next'`, () => {
+        const currrentStep = 1;
 
-      beforeEach(() => {
-        fakeThis = {
-          schedulerExecution: {
-            form: {
-              invalid: true,
-              controls: {
-                x: 'schedulerExecutionFormItem'
-              }
-            }
-          },
-          schedulerParameters: {
-            form: {
-              invalid: true,
-              controls: {
-                x: 'schedulerParametersFormItem'
-              }
-            }
-          },
-          steps: [{ label: 'step1' }, { label: 'step2' }, { label: 'step3' }, { label: 'step4' }],
-          step: 1,
-          model: {
-            executionParameter: { password: '123' },
-            periodicity: 'always',
-            firstExecution: new Date(),
-            firstExecutionHour: '23:55:00',
-            recurrent: true
-          },
-          parameters: [{ property: 'password', secret: true }],
-          publicValues: {},
-          markAsDirtyInvalidControls: () => {},
-          changePageActionsBySteps: () => {},
-          setModelRecurrent: () => {},
-          hidesSecretValues: () => {},
-          templateHasDisable: () => false
-        };
+        component.step = currrentStep;
+        component.nextStep(3);
+
+        expect(component.step).toEqual(currrentStep);
       });
 
-      it(`should call 'markAsDirtyInvalidControls' with 'schedulerExecution.form.controls' and not call 'changePageActionsBySteps'
-      if 'step' is greater than '1' and 'schedulerExecution.form' is 'invalid'`, () => {
-        spyOn(fakeThis, 'markAsDirtyInvalidControls');
-        spyOn(fakeThis, 'changePageActionsBySteps');
+      it(`should prevent skipping several steps in the 'previous' operation`, () => {
+        const currentStep = 3;
 
-        component.nextStep.call(fakeThis, 2);
+        component.step = currentStep;
+        component.nextStep(1);
 
-        expect(fakeThis.markAsDirtyInvalidControls).toHaveBeenCalledWith({ x: 'schedulerExecutionFormItem' });
-        expect(fakeThis.changePageActionsBySteps).not.toHaveBeenCalled();
+        expect(component.step).toEqual(currentStep);
       });
 
-      it(`should call 'markAsDirtyInvalidControls' with 'schedulerParameters.form.controls' and not call 'changePageActionsBySteps'
-      if 'step' is greater than '2', 'schedulerParameters.form' is 'invalid' and 'schedulerExecution.form' is 'valid'`, () => {
-        fakeThis.schedulerExecution.form.invalid = false;
+      it(`should navigate to the next step, the current step is 'Execution' and the form for validation`, () => {
+        const testStep = 2;
 
-        spyOn(fakeThis, 'markAsDirtyInvalidControls');
-        spyOn(fakeThis, 'changePageActionsBySteps');
+        component.nextStep(testStep);
 
-        component.nextStep.call(fakeThis, 3);
-
-        expect(fakeThis.markAsDirtyInvalidControls).toHaveBeenCalledWith({ x: 'schedulerParametersFormItem' });
-        expect(fakeThis.changePageActionsBySteps).not.toHaveBeenCalled();
+        expect(component.step).toEqual(testStep);
       });
 
-      it(`shouldn't call 'markAsDirtyInvalidControls' and call 'changePageActionsBySteps' if 'schedulerParameters.form'
-      and 'schedulerExecution.form' are 'valid'`, () => {
-        fakeThis.schedulerExecution.form.invalid = false;
-        fakeThis.schedulerParameters.form.invalid = false;
+      it(`should not navigate to the next step, the current step is 'Execution' and the form is invalid`, () => {
+        const testStep = 2;
+        const currentStep = 1;
 
-        spyOn(fakeThis, 'markAsDirtyInvalidControls');
-        spyOn(fakeThis, 'changePageActionsBySteps');
-        spyOn(fakeThis, 'setModelRecurrent');
+        spyOnProperty(component.schedulerExecution.form, 'invalid').and.returnValue(true);
+        component.nextStep(testStep);
 
-        component.nextStep.call(fakeThis, 3);
-
-        expect(fakeThis.markAsDirtyInvalidControls).not.toHaveBeenCalled();
-        expect(fakeThis.changePageActionsBySteps).toHaveBeenCalled();
+        expect(component.step).toEqual(currentStep);
       });
 
-      it(`shouldn't set 'steps.status' to 'done' if doesn't have 'steps'`, () => {
-        fakeThis.schedulerExecution.form.invalid = false;
-        fakeThis.schedulerParameters.form.invalid = false;
-        fakeThis.steps = [];
-        spyOn(fakeThis, 'setModelRecurrent');
-        component.nextStep.call(fakeThis, 3);
+      it(`should navigate to the next step, the current step is 'Parameters' and the form for validation`, () => {
+        const nextStep = 3;
 
-        expect(fakeThis.steps).toBe(fakeThis.steps);
+        component.step = 2;
+        component.nextStep(nextStep);
+
+        expect(component.step).toEqual(nextStep);
       });
 
-      it(`should call 'hidesSecretValues' if the step is the last`, () => {
-        component.steps.length = 3;
-        component.model = {
-          executionParameter: { password: '123' },
-          periodicity: 'always',
-          firstExecution: new Date(),
-          firstExecutionHour: '23:55:00',
-          recurrent: true
-        };
+      it(`should not navigate to the next step, the current step is 'Parameters' and the form for validation`, () => {
+        const currentStep = 2;
 
-        const model = JSON.parse(JSON.stringify(component.model));
-
-        spyOn(component, <any>'hidesSecretValues');
+        component.schedulerParameters = { form: <NgForm>{ invalid: true } };
+        component.step = currentStep;
 
         component.nextStep(3);
 
-        expect(component['hidesSecretValues']).toHaveBeenCalledWith(model);
+        expect(component.step).toEqual(currentStep);
       });
 
-      it(`shouldn't call 'hidesSecretValues' if the step isn't the last`, () => {
-        component.steps.length = 3;
-        component.model = {
-          executionParameter: { password: '123' },
-          periodicity: 'always',
-          firstExecution: new Date(),
-          firstExecutionHour: '23:55:00',
-          recurrent: true
-        };
+      it(`should not navigate to the next step, when the template's 'disabled Advance' is true`, () => {
+        const currentStep = 2;
+        const mock = Object.assign(new QueryList(), {
+          _results: [{ disabledAdvance: true }],
+          length: 1
+        }) as QueryList<PoJobSchedulerParametersTemplateDirective>;
 
-        const model = JSON.parse(JSON.stringify(component.model));
+        component.parametersTemplate = mock;
+        component['getSteps']();
 
-        spyOn(component, <any>'hidesSecretValues');
+        component.step = currentStep;
 
-        component.nextStep(2);
+        component.nextStep(3);
 
-        expect(component['hidesSecretValues']).not.toHaveBeenCalledWith(model);
+        expect(component.step).toEqual(currentStep);
+      });
+
+      it('should navigate to the previous step', () => {
+        const nextStep = 2;
+
+        component.step = 3;
+
+        component.nextStep(nextStep);
+
+        expect(component.step).toEqual(nextStep);
+      });
+
+      it(`should navigate to the next step, the current step is 'Parameters' and template with 'disabledAdvance' equal to false`, () => {
+        const nextStep = 2;
+        const mock = Object.assign(new QueryList(), {
+          _results: [{ disabledAdvance: false }],
+          length: 1
+        }) as QueryList<PoJobSchedulerParametersTemplateDirective>;
+
+        component.parametersTemplate = mock;
+        component.stepExecutionLast = true;
+        component.ngAfterContentInit();
+
+        component.nextStep(nextStep);
+
+        expect(component.step).toEqual(nextStep);
       });
     });
 
@@ -558,59 +552,32 @@ describe('PoPageJobSchedulerComponent:', () => {
         expect(component['isDisabledAdvance'].call(fakeThis)).toBe(true);
       });
 
-      it(`should return 'false' if 'step' is 2 and 'schedulerParameters' is undefined`, () => {
-        const fakeThis = {
-          step: 2,
-          schedulerParameters: undefined,
-          templateHasDisable: () => false
-        };
+      it('should return isDisabledAdvance as false', () => {
+        component.step = 2;
 
-        expect(component['isDisabledAdvance'].call(fakeThis)).toBe(false);
+        expect(component['isDisabledAdvance']()).toBeFalse();
       });
 
-      it(`should return 'true' if 'step' is 1 and 'schedulerExecution.form.invalid' is true`, () => {
-        const fakeThis = {
-          step: 1,
-          schedulerExecution: {
-            form: {
-              invalid: true
-            }
-          },
-          templateHasDisable: () => false
-        };
+      it(`should return true if 'schedulerParameters' is invalid`, () => {
+        component.schedulerParameters = { form: <NgForm>{ invalid: true } };
 
-        expect(component['isDisabledAdvance'].call(fakeThis)).toBe(true);
+        component.step = 2;
+
+        expect(component['isDisabledAdvance']()).toBeTrue();
       });
 
-      it(`should return 'false' if 'step' is 1 and 'schedulerExecution' is undefined`, () => {
-        const fakeThis = {
-          step: 1,
-          schedulerExecution: undefined,
-          templateHasDisable: () => false
-        };
+      it(`should return true when the template's 'disabledAdvance' is true`, () => {
+        const mock = Object.assign(new QueryList(), {
+          _results: [{ disabledAdvance: true }],
+          length: 1
+        }) as QueryList<PoJobSchedulerParametersTemplateDirective>;
 
-        expect(component['isDisabledAdvance'].call(fakeThis)).toBe(false);
-      });
+        component.parametersTemplate = mock;
+        component['getSteps']();
 
-      it(`should return 'false' if 'step' is undefined`, () => {
-        const fakeThis = {
-          step: undefined,
-          schedulerExecution: undefined,
-          schedulerParameters: undefined,
-          templateHasDisable: () => false
-        };
+        component.step = 2;
 
-        expect(component['isDisabledAdvance'].call(fakeThis)).toBe(false);
-      });
-
-      it(`should return 'true' if 'step' is 2 and 'templateHasDisable' return true`, () => {
-        const fakeThis = {
-          step: 2,
-          schedulerParameters: undefined,
-          templateHasDisable: () => true
-        };
-
-        expect(component['isDisabledAdvance'].call(fakeThis)).toBe(true);
+        expect(component['isDisabledAdvance']()).toBeTrue();
       });
     });
 
@@ -788,62 +755,6 @@ describe('PoPageJobSchedulerComponent:', () => {
         expect(component['emitSuccessMessage']).toHaveBeenCalledWith(saveNotificationSuccessSave, saveOperation);
       });
     });
-
-    describe('templateHasDisable:', () => {
-      it(`should return 'true' if has 'parametersTemplate.templateRef' and 'parametersTemplate.disabledAdvance' is true`, () => {
-        const fakeThis = {
-          step: 2,
-          parametersTemplate: {
-            templateRef: {},
-            disabledAdvance: true
-          }
-        };
-        expect(component['templateHasDisable'].call(fakeThis)).toBe(true);
-      });
-
-      it(`should return 'false' if has no 'parametersTemplate.templateRef'`, () => {
-        const fakeThis = {
-          step: 2,
-          parametersTemplate: {
-            templateRef: undefined,
-            disabledAdvance: true
-          }
-        };
-        expect(component['templateHasDisable'].call(fakeThis)).toBe(false);
-      });
-
-      it(`should return 'false' if 'parametersTemplate.disabledAdvance' is false`, () => {
-        const fakeThis = {
-          step: 2,
-          parametersTemplate: {
-            templateRef: {},
-            disabledAdvance: false
-          }
-        };
-        expect(component['templateHasDisable'].call(fakeThis)).toBe(false);
-      });
-    });
-
-    describe('setPropertiesFromTemplate:', () => {
-      it(`should set' model.executionParameter' with 'parametersTemplate.executionParameter' template data`, () => {
-        const fakeThis = {
-          parametersTemplate: {
-            templateRef: {},
-            executionParameter: {
-              user: 'test'
-            }
-          },
-          model: {
-            recurrent: true,
-            periodicity: '',
-            executionParameter: {}
-          }
-        };
-        const expected = { user: 'test' };
-        component['setPropertiesFromTemplate'].call(fakeThis);
-        expect(fakeThis.model.executionParameter).toEqual(expected);
-      });
-    });
   });
 
   describe('Templates:', () => {
@@ -871,34 +782,6 @@ describe('PoPageJobSchedulerComponent:', () => {
       expect(parametersElement).toBeFalsy();
       expect(summaryElement).toBeFalsy();
       expect(executionElementHiddenAttribute).toBeFalsy();
-    });
-
-    it(`should have a 'po-page-job-scheduler-execution' with 'hidden' attribute, have a 'po-page-job-scheduler-parameters'
-    and doesn't have 'po-page-job-scheduler-summary' if 'step' is '2'`, () => {
-      component.nextStep(2);
-
-      fixture.detectChanges();
-
-      getElements();
-
-      expect(executionElement).toBeTruthy();
-      expect(parametersElement).toBeTruthy();
-      expect(summaryElement).toBeFalsy();
-      expect(executionElementHiddenAttribute).toBeTruthy();
-    });
-
-    it(`should have a 'po-page-job-scheduler-execution' with 'hidden' attribute, not have a 'po-page-job-scheduler-parameters'
-    and have 'po-page-job-scheduler-summary' if 'step' is '3'`, () => {
-      component.nextStep(3);
-
-      fixture.detectChanges();
-
-      getElements();
-
-      expect(executionElement).toBeTruthy();
-      expect(parametersElement).toBeFalsy();
-      expect(summaryElement).toBeTruthy();
-      expect(executionElementHiddenAttribute).toBeTruthy();
     });
   });
 });

@@ -224,6 +224,17 @@ export class PoPageJobSchedulerBaseComponent implements OnDestroy {
    *
    * @description
    *
+   * Define se o step `Agendamento` deve ser exibido como o último na sequência de steps
+   *
+   * > Aplicável apenas quando utilizado `PoJobSchedulerParametersTemplateDirective`
+   */
+  @Input('p-step-execution-last') stepExecutionLast: boolean;
+
+  /**
+   * @optional
+   *
+   * @description
+   *
    * Evento disparado ao concluir o processo de agendamento com sucesso.
    */
   @Output('p-success') success = new EventEmitter<any>();
