@@ -4,6 +4,10 @@ import { PoCleanBaseComponent } from './po-clean-base.component';
 
 @Directive()
 class PoClean extends PoCleanBaseComponent {
+  focus(): void {}
+
+  blur(): void {}
+
   setInputValue(value: string): void {}
 
   getInputValue(): string {
