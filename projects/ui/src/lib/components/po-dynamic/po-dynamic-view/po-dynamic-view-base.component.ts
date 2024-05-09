@@ -140,17 +140,8 @@ export class PoDynamicViewBaseComponent extends PoDynamicSharedBase {
     super();
   }
 
-  protected getFieldOrderRetroactive(position: number, index: number = 1): number {
-    if (position === index) {
-      return position;
-    }
-    return this.fields.findIndex(field => field.order === index) > -1
-      ? this.getFieldOrderRetroactive(position, index + 1)
-      : index;
-  }
-
-  protected getFieldOrder(field: PoDynamicViewField, index: number): number {
-    const position = this.getFieldOrderRetroactive(index + 1);
+  protected getFieldOrder(field: PoDynamicViewField, index: number) {
+    const position = index + 1;
     return this.fields.findIndex(e => e.order === position) > -1 ? this.getFieldOrder(field, position) : position;
   }
 
