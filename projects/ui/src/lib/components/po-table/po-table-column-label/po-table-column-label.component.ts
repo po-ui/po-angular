@@ -16,15 +16,13 @@ import { PoTableColumnLabel } from './po-table-column-label.interface';
   changeDetection: ChangeDetectionStrategy.OnPush
 })
 export class PoTableColumnLabelComponent implements OnInit {
-  hasLabel: boolean = false;
-
   @Input('p-value') value: PoTableColumnLabel;
 
   ngOnInit(): void {
     this.checkValueHasLabel();
   }
 
-  checkValueHasLabel(): void {
-    this.hasLabel = this.value?.label?.trim() ? true : false;
+  checkValueHasLabel() {
+    return this.value?.label?.trim() ? true : false;
   }
 }
