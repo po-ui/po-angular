@@ -37,20 +37,20 @@ describe('PoTableColumnLabelComponent:', () => {
   describe('Methods: ', () => {
     it('should return false if value property contains a label with only whitespace', () => {
       component.value = labels[4];
-      component.checkValueHasLabel();
-      expect(component.hasLabel).toBeFalse();
+      const result = component.checkValueHasLabel();
+      expect(result).toBeFalse();
     });
 
     it('should return true if value property contains a label', () => {
       component.value = labels[1];
-      component.checkValueHasLabel();
-      expect(component.hasLabel).toBeTrue();
+      const result = component.checkValueHasLabel();
+      expect(result).toBeTrue();
     });
 
     it('should returns false if value is undefined', () => {
       component.value = undefined;
-      component.checkValueHasLabel();
-      expect(component.hasLabel).toBeFalse();
+      const result = component.checkValueHasLabel();
+      expect(result).toBeFalse();
     });
   });
 
