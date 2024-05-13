@@ -2073,7 +2073,8 @@ describe('PoPageDynamicTableComponent:', () => {
           {
             label: component.literals.pageActionRemoveAll,
             action: jasmine.any(Function),
-            disabled: jasmine.any(Function)
+            disabled: jasmine.any(Function),
+            type: 'danger'
           }
         ];
         component.actions = actions;

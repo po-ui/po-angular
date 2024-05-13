@@ -1200,7 +1200,8 @@ export class PoPageDynamicTableComponent extends PoPageDynamicListBaseComponent 
         {
           label: this.literals.pageActionRemoveAll,
           action: this.confirmRemoveAll.bind(this, action.removeAll, action.beforeRemoveAll),
-          disabled: this.disableRemoveAll.bind(this)
+          disabled: this.disableRemoveAll.bind(this),
+          type: 'danger'
         }
       ];
     }

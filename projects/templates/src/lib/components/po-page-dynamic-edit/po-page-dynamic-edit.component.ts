@@ -899,7 +899,9 @@ export class PoPageDynamicEditComponent implements OnInit, OnDestroy {
   }
 
   private getPageActions(actions: PoPageDynamicEditActions = {}): Array<PoPageAction> {
-    const pageActions = [{ label: this.literals.pageActionSave, action: this.save.bind(this, actions.save) }];
+    const pageActions: Array<PoPageAction> = [
+      { label: this.literals.pageActionSave, action: this.save.bind(this, actions.save) }
+    ];
 
     if (actions.saveNew) {
       pageActions.push({
