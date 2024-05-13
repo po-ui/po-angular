@@ -12,6 +12,7 @@
 
       <po-button
         *ngIf="visibleActions.length === 3 && visibleActions[2] && !isMobile"
+        [p-danger]="visibleActions[2].type === 'danger'"
         [p-disabled]="actionIsDisabled(visibleActions[2])"
         [p-label]="visibleActions[2].label"
         (p-click)="callAction(visibleActions[2])"
@@ -22,6 +23,7 @@
         *ngIf="visibleActions[1] && (visibleActions.length === 2 || !isMobile)"
         [p-disabled]="actionIsDisabled(visibleActions[1])"
         [p-label]="visibleActions[1].label"
+        [p-danger]="visibleActions[1].type === 'danger'"
         (p-click)="callAction(visibleActions[1])"
       >
       </po-button>
@@ -29,6 +31,7 @@
       <po-button
         *ngIf="visibleActions[0]"
         p-kind="primary"
+        [p-danger]="visibleActions[0].type === 'danger'"
         [p-disabled]="actionIsDisabled(visibleActions[0])"
         [p-icon]="visibleActions[0].icon"
         [p-label]="visibleActions[0].label"
