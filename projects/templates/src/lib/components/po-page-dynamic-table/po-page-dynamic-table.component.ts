@@ -13,6 +13,7 @@ import {
   PoTableAction,
   PoTableColumnSort,
   PoTableColumnSortType,
+  PoTableColumnSpacing,
   poLocaleDefault
 } from '@po-ui/ng-components';
 
@@ -295,6 +296,7 @@ export class PoPageDynamicTableComponent extends PoPageDynamicListBaseComponent 
   private _defaultTableActions: Array<PoTableAction> = [];
   private _hideCloseDisclaimers: Array<string> = [];
   private _draggable = false;
+  private _spacing: PoTableColumnSpacing = PoTableColumnSpacing.Medium;
 
   private set defaultPageActions(value: Array<PoPageAction>) {
     this._defaultPageActions = value;
@@ -517,6 +519,44 @@ export class PoPageDynamicTableComponent extends PoPageDynamicListBaseComponent 
    * > O valor padrão será traduzido de acordo com o idioma configurado no [`PoI18nService`](/documentation/po-i18n) ou *browser*.
    */
   @Input('p-literals') searchLiterals: PoPageDynamicSearchLiterals;
+
+  /**
+   * @optional
+   *
+   * @description
+   *
+   * Responsável por aplicar espaçamento nas colunas.
+   *
+   * Deve receber um dos valores do enum `PoTableColumnSpacing`.
+   *
+   * Valor `small` só funciona em tabelas não interativas. Caso seja setado com `small` e a tabela seja interativa, o valor será retornado para `medium`.
+   *
+   * @default `medium`
+   */
+  @Input('p-spacing') set spacing(value: PoTableColumnSpacing) {
+    if (value === 'small' || value === 'medium' || value === 'large') {
+      this._spacing = value;
+    } else {
+      this._spacing = PoTableColumnSpacing.Medium;
+    }
+  }
+
+  get spacing() {
+    return this._spacing;
+  }
+
+  /**
+   * @optional
+   *
+   * @description
+   *
+   * Habilita ou desabilita a quebra automática de texto. Quando ativada, o texto que excede
+   * o espaço disponível é transferido para a próxima linha em pontos apropriados para uma
+   * leitura clara.
+   *
+   * @default `false`
+   */
+  @Input({ alias: 'p-text-wrap', transform: convertToBoolean }) textWrap?: boolean = false;
 
   /**
    * @optional

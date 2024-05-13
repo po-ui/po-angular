@@ -30,7 +30,9 @@
     (p-change-visible-columns)="onChangeVisibleColumns($event)"
     (p-restore-column-manager)="onColumnRestoreManager($event)"
     (p-sort-by)="onSortBy($event)"
+    [p-text-wrap]="textWrap"
     [p-draggable]="draggable"
+    [p-spacing]="spacing"
   >
   </po-table>
 </po-page-dynamic-search>
