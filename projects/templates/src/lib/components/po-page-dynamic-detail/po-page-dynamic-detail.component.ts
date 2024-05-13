@@ -529,7 +529,8 @@ export class PoPageDynamicDetailComponent implements OnInit, OnDestroy {
     if (actions.remove) {
       pageActions.push({
         label: this.literals.pageActionRemove,
-        action: this.confirmRemove.bind(this, actions.remove, this.actions.beforeRemove)
+        action: this.confirmRemove.bind(this, actions.remove, this.actions.beforeRemove),
+        type: 'danger'
       });
     }
 
