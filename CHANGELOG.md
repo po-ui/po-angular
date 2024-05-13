@@ -2,6 +2,20 @@
 
 All notable changes to this project will be documented in this file. See [standard-version](https://github.com/conventional-changelog/standard-version) for commit guidelines.
 
+## [17.9.0](https://github.com/po-ui/po-angular/compare/v17.8.0...v17.9.0) (2024-05-13)
+
+
+### Features
+
+* **job-scheduler:** adiciona possibilidade de inclusao de varias etapas ([8d91210](https://github.com/po-ui/po-angular/commit/8d91210479053d3a10c2a0df15a50b1fcb35d516))
+* **temas:** implementa melhorias no serviço de troca de temas ([d7345ba](https://github.com/po-ui/po-angular/commit/d7345ba7dcd93897b284c554624666be6a130eaf))
+* **theme:** adiciona serviço para a troca de tema ([2e125b0](https://github.com/po-ui/po-angular/commit/2e125b0edb5435262225367d34e7ff00f7e9290e)), closes [#1964](https://github.com/po-ui/po-angular/issues/1964)
+
+
+### Bug Fixes
+
+* **table:** corrige coluna do tipo label ([785cb64](https://github.com/po-ui/po-angular/commit/785cb64d1c55c49cefcd4c1bf769e9095c923dfd))
+
 ## [17.8.0](https://github.com/po-ui/po-angular/compare/v17.7.0...v17.8.0) (2024-05-06)
 
 
