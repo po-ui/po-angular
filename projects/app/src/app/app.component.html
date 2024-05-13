@@ -14,7 +14,46 @@
     </po-multiselect>
     <po-button (p-click)="onClick()" p-label="reset counter"></po-button>
     <po-divider></po-divider>
-    <h3>PO combo</h3>
+    <br />
+    <br />
+    <br />
+    <br />
+    <br />
+    <br />
+    <br />
+    <br />
+    <br />
+    <br />
+    <br />
+    <br />
+    <br />
+    <br />
+    <br />
+    <br />
+    <br />
+    <br />
+    <br />
+    <br />
+    <br />
+    <br />
+    <br />
+    <br />
+    <br />
+    <br />
+    <br />
+    <br />
+    <br />
+    <br />
+    <br />
+    <br />
+    <br />
+    <br />
+    <br />
+    <br />
+    <br />
+    <br />
+    <br />
+    <!-- <h3>PO combo</h3>
     <po-combo
       class="form-group po-md-12 po-lg-12 po-sm-12"
       p-label="Cliente *"
@@ -25,6 +64,35 @@
       [p-filter-service]="pfsListaClientesService"
       (p-change)="changeCliente($event)"
     >
-    </po-combo>
+    </po-combo> -->
+    <div id="dadosDadosFiscais" class="anchor">
+      <po-widget>
+        <po-divider class="po-lg-12" p-label="dados fiscais"></po-divider>
+        <po-combo
+          class="form-group po-md-12 po-lg-12 po-sm-12"
+          p-label="Cliente *"
+          [p-debounce-time]="500"
+          p-placeholder="Informe um cliente"
+          [p-disabled]="false"
+          [p-emit-object-value]="true"
+          [p-filter-service]="pfsListaClientesService"
+          (p-change)="changeCliente($event)"
+          ngModel="value"
+        >
+        </po-combo>
+      </po-widget>
+    </div>
+    <br />
+    <br />
+    <br />
+    <br />
+    <br />
+    <br />
+    <br />
+    <br />
+    <br />
+    <br />
+    <br />
+    <br />
   </po-page-default>
 </div>

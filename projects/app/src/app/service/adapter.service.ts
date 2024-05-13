@@ -33,17 +33,21 @@ export class AdapterService implements PoComboFilter {
     );
   }
 
-  getObjectByValue(value: string | number, filterParams?: any): Observable<RetornoInfoClienteReturn> {
-    return new Observable().pipe(
-      map(() => {
-        let newOpt: RetornoInfoClienteReturn = {
-          label: 'Item ' + 321321312,
-          value: 321321312,
-          cgcCliente: Math.random().toPrecision(10).toString()
+  getObjectByValue(value: string | number, filterParams?: any): Observable<PoComboOption> {
+    return new Observable(subscriber => {
+      subscriber.next({
+        texto: 'Hellow!'
+      });
+    }).pipe(
+      map((value, index) => {
+        let newOpt: PoComboOption = {
+          label: 'Item 2',
+          value: 2
         };
 
         return newOpt;
-      })
+      }),
+      tap()
     );
   }
 }

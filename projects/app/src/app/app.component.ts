@@ -1,4 +1,4 @@
-import { Component } from '@angular/core';
+import { Component, OnInit } from '@angular/core';
 import { PoMenuItem, PoMultiselectOption } from '../../../ui/src/lib';
 import { AdapterService, RetornoInfoClienteReturn } from './service/adapter.service';
 
@@ -6,7 +6,7 @@ import { AdapterService, RetornoInfoClienteReturn } from './service/adapter.serv
   selector: 'app-root',
   templateUrl: './app.component.html'
 })
-export class AppComponent {
+export class AppComponent implements OnInit {
   multiselect: Array<string> = [];
   counter: number = 0;
   readonly menus: Array<PoMenuItem> = [{ label: 'Home', action: this.onClick.bind(this) }];
@@ -19,8 +19,12 @@ export class AppComponent {
     { value: 'poMultiselect5', label: 'PO Multiselect 5' },
     { value: 'poMultiselect6', label: 'PO Multiselect 6' }
   ];
-
+  value: any;
   constructor(public pfsListaClientesService: AdapterService) {}
+
+  ngOnInit(): void {
+    this.value = { value: 0, label: 'Item 0' };
+  }
 
   onClick() {
     this.counter = 0;
