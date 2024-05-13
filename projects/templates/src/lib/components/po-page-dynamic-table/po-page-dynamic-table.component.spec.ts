@@ -6,7 +6,13 @@ import { RouterTestingModule } from '@angular/router/testing';
 
 import { of, EMPTY } from 'rxjs';
 
-import { PoDialogModule, PoNotificationModule, PoTableColumnSort, PoTableColumnSortType } from '@po-ui/ng-components';
+import {
+  PoDialogModule,
+  PoNotificationModule,
+  PoTableColumnSort,
+  PoTableColumnSortType,
+  PoTableColumnSpacing
+} from '@po-ui/ng-components';
 
 import * as utilsFunctions from '../../utils/util';
 import { expectPropertiesValues } from '../../util-test/util-expect.spec';
@@ -150,6 +156,20 @@ describe('PoPageDynamicTableComponent:', () => {
       component.hideColumnsManager = utilsFunctions.convertToBoolean('true');
 
       expect(component.hideColumnsManager).toBe(true);
+    });
+
+    describe('spacing:', () => {
+      it('should set spacing to the given valid value', () => {
+        const validValues = [PoTableColumnSpacing.Small, PoTableColumnSpacing.Medium, PoTableColumnSpacing.Large];
+
+        expectPropertiesValues(component, 'spacing', validValues, validValues);
+      });
+
+      it('should set spacing to PoTableColumnSpacing.Medium if the given value is invalid', () => {
+        const invalidValue = 'double-extra-large' as unknown as PoTableColumnSpacing;
+
+        expectPropertiesValues(component, 'spacing', [invalidValue], PoTableColumnSpacing.Medium);
+      });
     });
   });
 
