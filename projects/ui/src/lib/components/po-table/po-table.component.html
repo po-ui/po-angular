@@ -14,7 +14,7 @@
 
     <div class="po-table-actions-batch-actions__buttons">
       <po-button
-        p-icon="po-icon-delete"
+        [p-icon]="iconService.icons.po_icon_delete"
         [p-danger]="true"
         [p-disabled]="itemsSelected.length > 1 && serviceDeleteApi !== undefined"
         [p-label]="literals.delete"
@@ -26,7 +26,7 @@
   <div #columnManager *ngIf="hasValidColumns && !hideColumnsManager" class="po-table-actions-column-manager">
     <po-button
       #columnManagerTarget
-      p-icon="po-icon-settings"
+      [p-icon]="iconService.icons.po_icon_settings"
       p-kind="tertiary"
       p-tooltip-position="left"
       [p-aria-label]="literals.columnsManager"

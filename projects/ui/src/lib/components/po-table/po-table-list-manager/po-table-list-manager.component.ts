@@ -6,6 +6,7 @@ import { PoLanguageService } from '../../../services/po-language/po-language.ser
 import { convertToBoolean } from '../../../utils/util';
 import { PoCheckboxGroupComponent } from '../../po-field/po-checkbox-group/po-checkbox-group.component';
 import { PoTableColumn } from '../interfaces/po-table-column.interface';
+import { PoIconService } from '../../po-icon';
 
 export const poTableListManagerLiterals = {
   en: {
@@ -60,7 +61,7 @@ export class PoTableListManagerComponent extends PoCheckboxGroupComponent {
 
   literals;
 
-  constructor(languageService: PoLanguageService, changeDetector: ChangeDetectorRef) {
+  constructor(languageService: PoLanguageService, changeDetector: ChangeDetectorRef, private iconService: PoIconService) {
     super(changeDetector);
 
     const language = languageService.getShortLanguage();
