@@ -6,7 +6,9 @@ import {
   PoLookupFilter,
   PoLookupLiterals,
   PoDynamicFormField,
-  PoSelectOption
+  PoSelectOption,
+  PoTableColumnSpacing,
+  PoRadioGroupOption
 } from '@po-ui/ng-components';
 
 import { SamplePoLookupService } from '../sample-po-lookup.service';
@@ -34,6 +36,7 @@ export class SamplePoLookupLabsComponent implements OnInit {
   properties: Array<string>;
   advancedFilters: string;
   customAdvancedFilters: Array<PoDynamicFormField>;
+  spacing: PoTableColumnSpacing = PoTableColumnSpacing.Medium;
 
   public readonly columnsOptions: Array<PoCheckboxGroupOption> = [
     { value: 'id', label: 'Id' },
@@ -61,7 +64,8 @@ export class SamplePoLookupLabsComponent implements OnInit {
     { value: 'infiniteScroll', label: 'Infinite Scroll' },
     { value: 'multiple', label: 'Multiple' },
     { value: 'autoHeight', label: 'Auto Height' },
-    { value: 'hideColumnsManager', label: 'Hide Columns Manager' }
+    { value: 'hideColumnsManager', label: 'Hide Columns Manager' },
+    { value: 'textWrap', label: 'Text Wrap' }
   ];
 
   private readonly columnsDefinition = {
@@ -69,6 +73,12 @@ export class SamplePoLookupLabsComponent implements OnInit {
     name: <PoLookupColumn>{ property: 'name', label: 'Name' },
     email: <PoLookupColumn>{ property: 'email', label: 'Email' }
   };
+
+  public readonly typeSpacing: Array<PoRadioGroupOption> = [
+    { label: 'Small', value: 'small' },
+    { label: 'Medium', value: 'medium' },
+    { label: 'Large', value: 'large' }
+  ];
 
   constructor(public sampleFilterService: SamplePoLookupService) {}
 
