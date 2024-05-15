@@ -59,11 +59,11 @@ export class PoThemeService {
     const additionalStyles = this.generateAdditionalStyles(_themeType);
 
     const combinedStyles = `
-      .${theme.name}-${PoThemeTypeEnum[themeType]}:root { 
-        ${colorStyles} 
+      .${theme.name}-${PoThemeTypeEnum[themeType]}:root {
+        ${colorStyles}
         ${perComponentStyles}
         ${onRootStyles}
-        ${additionalStyles} 
+        ${additionalStyles}
       }`;
 
     this.applyThemeStyles(combinedStyles);

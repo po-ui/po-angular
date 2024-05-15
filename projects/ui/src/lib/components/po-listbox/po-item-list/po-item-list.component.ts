@@ -32,11 +32,6 @@ export class PoItemListComponent extends PoItemListBaseComponent implements OnCh
     }
   }
 
-  onSelectItem(itemListOption: PoItemListOption | PoItemListOptionGroup | any): void {
-    this.selectedView = itemListOption;
-    this.selectItem.emit(itemListOption);
-  }
-
   onCheckboxItem() {
     const option = { [this.fieldValue]: this.value, [this.fieldLabel]: this.label };
     const selected = !this.checkboxValue;
