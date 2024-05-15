@@ -46,6 +46,8 @@ describe('PoLookupModalService:', () => {
     selectedItems: null,
     fieldValue: 'value',
     fieldLabel: 'label',
+    spacing: 'medium',
+    textWrap: false,
     changeVisibleColumns: new EventEmitter(),
     columnRestoreManager: new EventEmitter()
   };
