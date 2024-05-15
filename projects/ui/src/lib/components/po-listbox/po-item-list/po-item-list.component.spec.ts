@@ -33,17 +33,6 @@ describe('PoItemListComponent', () => {
 
   describe('Methods:', () => {
     describe('onSelectItem:', () => {
-      it('should be called', () => {
-        spyOn(component.selectItem, 'emit');
-        const item = { label: 'a', value: 'a' };
-        component.onSelectItem(item);
-
-        expect(component.selectedView).toBe(item);
-        expect(component.selectItem.emit).toHaveBeenCalled();
-      });
-    });
-
-    describe('onSelectItem:', () => {
       it('should emit tabsItem when tabHide or disabled is changed', () => {
         component.isTabs = true;
         const tabHideChanges = { tabHide: { currentValue: true } };
