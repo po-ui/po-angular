@@ -5,8 +5,7 @@ import { Directive, Input, TemplateRef } from '@angular/core';
  *
  * @description
  *
- * Esta diretiva permite personalizar o conteúdo da etapa de parametrização do componente de PoPageJobScheduler.
- *
+ * Esta diretiva permite personalizar o conteúdo da uma ou várias etapa(s) de parametrização do componente de PoPageJobScheduler.
  *
  * Para repassar as alterações realizadas no componente customizado ao model do PoPageJobScheduler, deve
  * ser atualizado os valores através da propriedade p-execution-parameter. Dessa forma as alterações serão adicionadas ao
@@ -16,8 +15,19 @@ import { Directive, Input, TemplateRef } from '@angular/core';
  * ```
  * ...
  * <po-page-job-scheduler [p-service-api]="serviceApi">
- *     <ng-template p-combo-option-template [p-execution-parameter]="executionParameter" [p-disable-advance]="disableAdvance">
- *       <option-template [option]="option"></option-template>
+ *     <ng-template p-job-scheduler-parameters-template
+ *      [p-execution-parameter]="executionParameter"
+ *      [p-disable-advance]="disableAdvance"
+ *      p-label-step="titleStep"
+ *     >
+ *       ...
+ *     </ng-template>
+ *     <ng-template p-job-scheduler-parameters-template
+ *      [p-execution-parameter]="executionParameter"
+ *      [p-disable-advance]="disableAdvance"
+ *      p-label-step="titleStep"
+ *     >
+ *       ...
  *     </ng-template>
  * </po-page-job-scheduler>
  * ...
@@ -52,6 +62,15 @@ export class PoJobSchedulerParametersTemplateDirective {
    * > Pode ser utilizado para validar campos antes de avançar.
    */
   @Input('p-disable-advance') disabledAdvance: boolean = false;
+
+  /**
+   * @optional
+   *
+   * @description
+   *
+   * Determina o label do step
+   */
+  @Input('p-label-step') title: string;
 
   // Necessário manter templateRef para o funcionamento do row template.
   constructor(public templateRef: TemplateRef<any>) {}

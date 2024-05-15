@@ -27,7 +27,7 @@ body {
 
 .docs-api-property-type {
   border-radius: 3px;
-  color: #ffffff;
+  color: var(--color-neutral-light-00);
   font-family: Roboto, sans-serif;
   font-size: 12px;
   line-height: 1.4;
@@ -212,7 +212,7 @@ pre code {
 }
 
 .docs-api-properties-table {
-  border: 0px none #ffffff;
+  border: 0px none var(--color-neutral-light-00);
   border-spacing: 10px;
   border-collapse: initial;
   width: 100%;
@@ -237,7 +237,7 @@ pre code {
 }
 
 .docs-sample-container {
-  background: #fff;
+  background: var(--color-neutral-light-00);
   box-shadow: 0 10px 6px -6px rgba(0, 0, 0, 0.2);
   -moz-box-shadow: 0 10px 6px -6px rgba(0, 0, 0, 0.2);
   -webkit-box-shadow: 0 10px 6px -6px rgba(0, 0, 0, 0.2);
@@ -569,7 +569,7 @@ a,
 
 .po-icon-list li a:hover {
   background-color: var(--color-portal-highlight);
-  color: #ffffff;
+  color: var(--color-neutral-light-00);
 }
 
 .po-icon-list li a .po-icon {
@@ -618,7 +618,7 @@ blockquote {
 
 .guides-grid-system-box div,
 .guides-grid-system-containers div {
-  border-right: 2px solid #ffffff;
+  border-right: 2px solid var(--color-neutral-light-00);
   color: white;
   font-family: Roboto-Bold;
   height: 30px;
@@ -641,7 +641,7 @@ blockquote {
 
 .guides-spacing div {
   background: rgba(12, 154, 190, 0.5);
-  color: #ffffff;
+  color: var(--color-neutral-light-00);
   font-family: Roboto-Bold;
   height: 30px;
   padding: 5px;
@@ -731,7 +731,7 @@ blockquote {
 
 .card-list-item::after {
   background-color: #ffd464;
-  border: 2px solid #fff;
+  border: 2px solid var(--color-neutral-light-00);
   border-radius: 50%;
   border-top-right-radius: 0;
   margin-left: -14px;
