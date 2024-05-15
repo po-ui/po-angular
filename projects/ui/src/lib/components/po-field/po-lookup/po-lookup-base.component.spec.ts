@@ -924,5 +924,9 @@ describe('PoLookupBaseComponent:', () => {
       const invalidValues = [false, 0, null, undefined, NaN];
       expectPropertiesValues(component, 'placeholder', invalidValues, '');
     });
+
+    it('p-spacing: should update property with valid values', () => {
+      expectPropertiesValues(component, 'spacing', 'small', 'small');
+    });
   });
 });

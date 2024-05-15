@@ -204,6 +204,8 @@ export class PoLookupComponent extends PoLookupBaseComponent implements AfterVie
         multiple,
         fieldLabel,
         fieldValue,
+        spacing,
+        textWrap,
         changeVisibleColumns,
         columnRestoreManager
       } = this;
@@ -223,6 +225,8 @@ export class PoLookupComponent extends PoLookupBaseComponent implements AfterVie
         selectedItems,
         fieldLabel,
         fieldValue,
+        spacing,
+        textWrap,
         changeVisibleColumns,
         columnRestoreManager
       });

@@ -8,7 +8,7 @@ import { PoModalComponent } from '../../../../components/po-modal/po-modal.compo
 import { poLocaleDefault } from '../../../../services/po-language/po-language.constant';
 import { PoLanguageService } from '../../../../services/po-language/po-language.service';
 import { capitalizeFirstLetter, convertToBoolean, isTypeof } from '../../../../utils/util';
-import { PoTableColumnSortType } from '../../../po-table';
+import { PoTableColumnSortType, PoTableColumnSpacing } from '../../../po-table';
 import { PoTableColumnSort } from '../../../po-table/interfaces/po-table-column-sort.interface';
 import { poTableLiteralsDefault } from '../../../po-table/po-table-base.component';
 
@@ -150,6 +150,19 @@ export abstract class PoLookupModalBaseComponent implements OnDestroy, OnInit {
    * > Atenção: Caso não seja passada ou tenha o conteúdo incorreto, não irá atualizar o model do formulário.
    */
   @Input('p-field-value') fieldValue: string;
+
+  /**
+   * Responsável por aplicar espaçamento nas colunas da tabela contida no lookup.
+   * Deve receber um dos valores do enum `PoTableColumnSpacing`.
+   */
+  @Input('p-spacing') spacing: PoTableColumnSpacing = PoTableColumnSpacing.Medium;
+
+  /**
+   * Habilita ou desabilita a quebra automática de texto. Quando ativada, o texto que excede
+   * o espaço disponível é transferido para a próxima linha em pontos apropriados para uma
+   * leitura clara.
+   */
+  @Input({ alias: 'p-text-wrap', transform: convertToBoolean }) textWrap?: boolean = false;
 
   /**
    * @optional

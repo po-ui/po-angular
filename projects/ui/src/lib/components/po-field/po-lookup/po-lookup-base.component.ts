@@ -25,6 +25,7 @@ import { PoLookupFilter } from './interfaces/po-lookup-filter.interface';
 import { PoLookupLiterals } from './interfaces/po-lookup-literals.interface';
 import { PoLookupFilterService } from './services/po-lookup-filter.service';
 import { PoLookupModalService } from './services/po-lookup-modal.service';
+import { PoTableColumnSpacing } from '../../po-table/enums/po-table-spacing.enum';
 
 /**
  * @description
@@ -284,6 +285,34 @@ export abstract class PoLookupBaseComponent
    * @default `false`
    */
   @Input({ alias: 'p-auto-height', transform: convertToBoolean }) autoHeight: boolean = false;
+
+  /**
+   * @optional
+   *
+   * @description
+   *
+   * Responsável por aplicar espaçamento nas colunas da tabela contida no lookup.
+   *
+   * Deve receber um dos valores do enum `PoTableColumnSpacing`.
+   *
+   * @default `medium`
+   */
+  @Input('p-spacing') spacing: PoTableColumnSpacing = PoTableColumnSpacing.Medium;
+
+  /**
+   * @optional
+   *
+   * @description
+   *
+   * Habilita ou desabilita a quebra automática de texto. Quando ativada, o texto que excede
+   * o espaço disponível é transferido para a próxima linha em pontos apropriados para uma
+   * leitura clara.
+   *
+   * Esta propriedade aplica-se ao texto contido nas células da tabela.
+   *
+   * @default `false`
+   */
+  @Input({ alias: 'p-text-wrap', transform: convertToBoolean }) textWrap?: boolean = false;
 
   /**
    * Evento será disparado quando ocorrer algum erro na requisição de busca do item.
