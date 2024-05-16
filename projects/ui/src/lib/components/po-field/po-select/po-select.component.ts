@@ -4,13 +4,15 @@ import {
   Component,
   ElementRef,
   EventEmitter,
-  forwardRef,
+  Inject,
   Input,
   OnChanges,
+  Optional,
   Output,
   Renderer2,
   SimpleChanges,
-  ViewChild
+  ViewChild,
+  forwardRef
 } from '@angular/core';
 import { AbstractControl, NG_VALIDATORS, NG_VALUE_ACCESSOR } from '@angular/forms';
 
@@ -23,6 +25,7 @@ import {
   validValue
 } from '../../../utils/util';
 
+import { ICONS_DICTIONARY, PoIconDictionary } from '../../po-icon';
 import { PoFieldValidateModel } from '../po-field-validate.model';
 import { PoSelectOptionGroup } from './po-select-option-group.interface';
 import { PoSelectOption } from './po-select-option.interface';
@@ -90,6 +93,8 @@ const PO_SELECT_FIELD_VALUE_DEFAULT = 'value';
   ]
 })
 export class PoSelectComponent extends PoFieldValidateModel<any> implements OnChanges {
+  private _iconToken: { [key: string]: string };
+
   @ViewChild('select', { read: ElementRef, static: true }) selectElement: ElementRef;
 
   /**
@@ -244,12 +249,19 @@ export class PoSelectComponent extends PoFieldValidateModel<any> implements OnCh
     return this._fieldValue;
   }
 
+  get iconNameLib() {
+    return this._iconToken.NAME_LIB;
+  }
+
   /* istanbul ignore next */
   constructor(
+    @Optional() @Inject(ICONS_DICTIONARY) value: { [key: string]: string },
     private changeDetector: ChangeDetectorRef,
     public renderer: Renderer2
   ) {
     super();
+
+    this._iconToken = value ?? PoIconDictionary;
   }
 
   ngOnChanges(changes: SimpleChanges): void {

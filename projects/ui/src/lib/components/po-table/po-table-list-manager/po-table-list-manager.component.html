@@ -42,8 +42,16 @@
 
     <div class="po-table-list-manager-item-buttons">
       <po-button
-        *ngIf="!hideActionFixedColumns"
+        *ngIf="!hideActionFixedColumns && iconNameLib === 'PoIcon'"
         [p-icon]="isFixed(option) ? templateIconFixed : templateIconNotFixed"
+        (p-click)="emitFixed(option)"
+        [p-disabled]="!option.visible || checksIfHasFiveFixed(option)"
+      >
+      </po-button>
+
+      <po-button
+        *ngIf="!hideActionFixedColumns && iconNameLib === 'PhosphorIcon'"
+        [p-icon]="isFixed(option) ? 'ICON_PUSH_PIN_SLASH' : 'ICON_PUSH_PIN'"
         (p-click)="emitFixed(option)"
         [p-disabled]="!option.visible || checksIfHasFiveFixed(option)"
       >

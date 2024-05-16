@@ -17,6 +17,7 @@
       aria-label=" "
       [id]="id"
       class="po-checkbox"
+      [ngClass]="iconNameLib === 'PhosphorIcon' ? 'po-checkbox-phosphor' : 'po-checkbox-poicon'"
       [attr.aria-disabled]="disabled"
       [attr.required]="checkBoxRequired"
     >

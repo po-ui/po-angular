@@ -5,6 +5,7 @@ import { PoThemeService } from './po-theme.service';
 import { PoTheme } from './interfaces/po-theme.interface';
 import { DOCUMENT } from '@angular/common';
 import { poThemeDefault } from './helpers/po-theme-poui.constant';
+import { ICONS_DICTIONARY, PhosphorIconDictionary } from '../../components/po-icon';
 
 class MockRenderer2 {
   createElement(): any {}
@@ -199,12 +200,10 @@ describe('PoThemeService:', () => {
 
       it('setThemeActive: should set active theme', () => {
         const theme: PoTheme = poThemeTest;
-        // const setThemeActiveSpy = spyOn<any>(service, 'setThemeActive');
         const setItemSpy = spyOn(localStorage, 'setItem');
 
         service['setThemeActive'](theme);
 
-        // expect(setThemeActiveSpy).toHaveBeenCalledWith(theme);
         expect(setItemSpy).toHaveBeenCalledWith('totvs-theme', JSON.stringify(theme));
         expect(service['theme']).toEqual(theme);
       });
@@ -226,5 +225,32 @@ describe('PoThemeService:', () => {
         expect(consoleSpy).toHaveBeenCalledWith('Erro ao obter o tema do armazenamento local:', jasmine.any(Error));
       });
     });
+  });
+});
+
+describe(`PoThemeService with 'PhosphorIconDictionary':`, () => {
+  let service: PoThemeService;
+
+  beforeEach(() => {
+    TestBed.configureTestingModule({
+      providers: [
+        PoThemeService,
+        { provide: 'Window', useValue: window },
+        { provide: DOCUMENT, useValue: document },
+        { provide: Renderer2, useClass: MockRenderer2 },
+        { provide: 'poThemeDefault', useValue: poThemeDefault },
+        { provide: ICONS_DICTIONARY, useValue: PhosphorIconDictionary }
+      ]
+    });
+
+    service = TestBed.inject(PoThemeService);
+  });
+
+  it('should set default theme', () => {
+    service.setDefaultTheme(PoThemeTypeEnum.light);
+    const theme = service.getThemeActive();
+
+    expect(theme).toBeTruthy();
+    expect(theme.active).toEqual(PoThemeTypeEnum.light);
   });
 });

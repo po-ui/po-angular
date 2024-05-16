@@ -345,7 +345,7 @@ describe('PoTagComponent:', () => {
 
       fixture.detectChanges();
 
-      expect(nativeElement.querySelector(`.${PoTagIcon.Danger}`)).toBeTruthy();
+      expect(nativeElement.querySelector(`[ng-reflect-icon="${PoTagIcon.Danger}"]`)).toBeTruthy();
     });
 
     it('should add `PoTagIcon.Info` if type is `PoTagType.Info and `icon` is true`.', () => {
@@ -354,7 +354,7 @@ describe('PoTagComponent:', () => {
 
       fixture.detectChanges();
 
-      expect(nativeElement.querySelector(`.${PoTagIcon.Info}`)).toBeTruthy();
+      expect(nativeElement.querySelector(`[ng-reflect-icon="${PoTagIcon.Info}"]`)).toBeTruthy();
     });
 
     it('should add `PoTagIcon.Success` if type is `PoTagType.Success and `icon` is true`.', () => {
@@ -363,7 +363,7 @@ describe('PoTagComponent:', () => {
 
       fixture.detectChanges();
 
-      expect(nativeElement.querySelector(`.${PoTagIcon.Success}`)).toBeTruthy();
+      expect(nativeElement.querySelector(`[ng-reflect-icon="${PoTagIcon.Success}"]`)).toBeTruthy();
     });
 
     it('should add `PoTagIcon.Warning` if type is `PoTagType.Warning and `icon` is true`.', () => {
@@ -372,7 +372,7 @@ describe('PoTagComponent:', () => {
 
       fixture.detectChanges();
 
-      expect(nativeElement.querySelector(`.${PoTagIcon.Warning}`)).toBeTruthy();
+      expect(nativeElement.querySelector(`[ng-reflect-icon="${PoTagIcon.Warning}"]`)).toBeTruthy();
     });
 
     it('should add `po-clickable` if `p-click` @Output is wire up`.', () => {
