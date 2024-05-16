@@ -74,7 +74,7 @@ export interface PoMenuItem {
   icon?: string | TemplateRef<void>;
 
   /**
-   * Texto curto para o item que aparece quando o menu estiver colapsado.
+   * Texto curto exibido através de um tooltip para o item que aparece quando o menu estiver colapsado.
    * Se colapsado, aparecerá somente se todos os itens de primeiro nível de menu que possuírem ícones e textos curtos.
    */
   shortLabel?: string;

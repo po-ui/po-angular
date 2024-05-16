@@ -5,15 +5,39 @@
   role="menuitem"
   [attr.aria-label]="label"
   [routerLink]="link"
+  (keydown.enter)="clickMenuItem($event)"
+  (keydown.space)="clickMenuItem($event)"
+  p-tooltip-position="right"
+  [p-tooltip]="collapsedMenu && shortLabel ? shortLabel : undefined"
 >
   <ng-container *ngTemplateOutlet="menuItemTemplate"></ng-container>
 </a>
 <!-- menu com link externo -->
-<a *ngIf="type === 'externalLink'" class="po-menu-item-link" role="menuitem" [attr.aria-label]="label" [href]="link">
+<a
+  *ngIf="type === 'externalLink'"
+  class="po-menu-item-link"
+  role="menuitem"
+  [attr.aria-label]="label"
+  [href]="link"
+  (keydown.enter)="clickMenuItem($event)"
+  (keydown.space)="clickMenuItem($event)"
+  p-tooltip-position="right"
+  [p-tooltip]="collapsedMenu && shortLabel ? shortLabel : undefined"
+>
   <ng-container *ngTemplateOutlet="menuItemTemplate"></ng-container>
 </a>
 <!-- menu sem link -->
-<a *ngIf="type === 'noLink'" class="po-menu-item-link" href="javascript:;" role="menuitem" [attr.aria-label]="label">
+<a
+  *ngIf="type === 'noLink'"
+  class="po-menu-item-link"
+  href="javascript:;"
+  role="menuitem"
+  [attr.aria-label]="label"
+  (keydown.enter)="clickMenuItem($event)"
+  (keydown.space)="clickMenuItem($event)"
+  p-tooltip-position="right"
+  [p-tooltip]="collapsedMenu && shortLabel ? shortLabel : undefined"
+>
   <ng-container *ngTemplateOutlet="menuItemTemplate"></ng-container>
 </a>
 <!-- menu sem dados -->
@@ -60,6 +84,8 @@
 
 <ng-template #menuItemTemplate>
   <div
+    p-tooltip-position="right"
+    [p-tooltip]="type === 'subItems' && collapsedMenu && shortLabel ? shortLabel : undefined"
     class="po-menu-item"
     [tabindex]="type === 'subItems' ? 0 : -1"
     [attr.aria-label]="label"
