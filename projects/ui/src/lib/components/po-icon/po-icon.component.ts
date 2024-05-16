@@ -1,5 +1,5 @@
-import { Input, TemplateRef, Component, ChangeDetectionStrategy, ViewEncapsulation } from '@angular/core';
-import { PoIconService } from './po-icon.service';
+import { Input, TemplateRef, Component, ChangeDetectionStrategy, Inject, Optional } from '@angular/core';
+import { ICONS_DICTIONARY, PoIconDictionary } from './po-icon-dictionary';
 /**
  * @docsPrivate
  *
@@ -12,14 +12,16 @@ import { PoIconService } from './po-icon.service';
 @Component({
   selector: 'po-icon',
   templateUrl: './po-icon.component.html',
-  changeDetection: ChangeDetectionStrategy.OnPush,
-  providers: [PoIconService]
+  changeDetection: ChangeDetectionStrategy.OnPush
 })
 export class PoIconComponent {
   class: string;
   private _icon: string | TemplateRef<void>;
+  private _iconToken: { [key: string]: string };
 
-  constructor(private poIconService: PoIconService) {}
+  constructor(@Optional() @Inject(ICONS_DICTIONARY) value: { [key: string]: string }) {
+    this._iconToken = value ?? PoIconDictionary;
+  }
 
   /**
    * Define o ícone a ser exibido.
@@ -63,10 +65,10 @@ export class PoIconComponent {
   }
 
   private getIcon(iconName: string): string {
-    return this.poIconService.icons.hasOwnProperty(iconName)
-      ? this.poIconService.icons[iconName].startsWith('po-icon ')
-        ? this.poIconService.icons[iconName]
-        : 'po-fonts-icon ' + this.poIconService.icons[iconName]
+    return this._iconToken.hasOwnProperty(iconName)
+      ? this._iconToken[iconName].startsWith('po-icon ')
+        ? this._iconToken[iconName]
+        : 'po-fonts-icon ' + this._iconToken[iconName]
       : '';
   }
 

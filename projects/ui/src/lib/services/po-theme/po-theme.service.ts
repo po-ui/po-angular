@@ -1,11 +1,12 @@
 import { DOCUMENT } from '@angular/common';
-import { Inject, Injectable, Renderer2, RendererFactory2 } from '@angular/core';
+import { Inject, Injectable, Optional, Renderer2, RendererFactory2 } from '@angular/core';
 import { BehaviorSubject, Observable } from 'rxjs';
 import { PoThemeTypeEnum } from './enum/po-theme-type.enum';
 import { poThemeDefault } from './helpers/po-theme-poui.constant';
 import { PoThemeColor } from './interfaces/po-theme-color.interface';
 import { PoThemeTokens } from './interfaces/po-theme-tokens.interface';
 import { PoTheme } from './interfaces/po-theme.interface';
+import { ICONS_DICTIONARY, PoIconDictionary } from '../../components/po-icon/index';
 
 /**
  * @description
@@ -22,13 +23,21 @@ import { PoTheme } from './interfaces/po-theme.interface';
 export class PoThemeService {
   private renderer: Renderer2;
   private theme: PoTheme = poThemeDefault;
+  private _iconToken: { [key: string]: string };
+
+  get iconNameLib() {
+    return this._iconToken.NAME_LIB;
+  }
 
   constructor(
     @Inject('Window') private window: Window,
     @Inject(DOCUMENT) private document: Document,
-    rendererFactory: RendererFactory2
+    rendererFactory: RendererFactory2,
+    @Optional() @Inject(ICONS_DICTIONARY) value: { [key: string]: string }
   ) {
     this.renderer = rendererFactory.createRenderer(null, null);
+
+    this._iconToken = value ?? PoIconDictionary;
   }
 
   /**
@@ -250,13 +259,29 @@ export class PoThemeService {
     let selectBgIcon = '';
 
     if (themeColor?.brand?.['01']?.dark) {
-      selectBgIcon += `po-select { --background-image: url(${this.getSelectBgIcon(themeColor.brand['01'].dark)}); };`;
+      const selector = this.iconNameLib === 'PhosphorIcon' ? 'po-select .po-select-phosphor' : 'po-select';
+      selectBgIcon += `${selector} { --background-image: url(${this.getSelectBgIcon(themeColor.brand['01'].dark)}); };`;
     }
-    if (themeColor?.feedback?.negative?.base)
-      selectBgIcon += `po-select.ng-dirty.ng-invalid select { --background-image: url(${this.getSelectBgIcon(themeColor.feedback.negative.base)}); };`;
 
-    if (themeColor?.neutral?.light?.['30'])
-      selectBgIcon += `select:disabled { --background-image: url(${this.getSelectBgIcon(themeColor.neutral.light['30'])}); };`;
+    if (themeColor?.feedback?.negative?.base) {
+      if (this.iconNameLib === 'PoIcon') {
+        selectBgIcon += `po-select.ng-dirty.ng-invalid select { --background-image: url(${this.getSelectBgIcon(themeColor.feedback.negative.base)}); };`;
+      }
+
+      if (this.iconNameLib === 'PhosphorIcon') {
+        selectBgIcon += `po-select.ng-dirty.ng-invalid select.po-select-phosphor { background-image: url(${this.getSelectBgIcon(themeColor.feedback.negative.base)}); };`;
+      }
+    }
+
+    if (themeColor?.neutral?.light?.['30']) {
+      if (this.iconNameLib === 'PoIcon') {
+        selectBgIcon += `select:disabled { background-image: url(${this.getSelectBgIcon(themeColor.neutral.light['30'])}); };`;
+      }
+
+      if (this.iconNameLib === 'PhosphorIcon') {
+        selectBgIcon += `po-select select.po-select-phosphor:disabled { background-image: url(${this.getSelectBgIcon(themeColor.neutral.light['30'])}); };`;
+      }
+    }
 
     return selectBgIcon;
   }
@@ -270,14 +295,27 @@ export class PoThemeService {
    * @returns {string} Imagem SVG utilizada no po-select.
    */
   private getSelectBgIcon(color: string): string {
-    let svg: string = `"data:image/svg+xml,%3Csvg width='24' height='24' viewBox='0 0 24 24' fill='none' `;
+    let svg: string;
 
-    svg = svg.concat(`xmlns='http://www.w3.org/2000/svg'%3E%3Cpath fill-rule='evenodd' clip-rule='evenodd' `);
-    svg = svg.concat(`d='M18.707 8.29301C18.316 7.90201 17.684 7.90201 17.293 8.29301L12 13.586L6.70701 `);
-    svg = svg.concat(`8.29301C6.31601 7.90201 5.68401 7.90201 5.29301 8.29301C4.90201 8.68401 4.90201 `);
-    svg = svg.concat(`9.31601 5.29301 9.70701L11.293 15.707C11.488 15.902 11.744 16 12 16C12.256 16 12.512 `);
-    svg = svg.concat(`15.902 12.707 15.707L18.707 9.70701C19.098 9.31601 19.098 8.68401 18.707 8.29301Z' `);
-    svg = svg.concat(`fill='${color.replace('#', '%23')}'/%3E%3C/svg%3E%0A");`);
+    if (this.iconNameLib === 'PoIcon') {
+      svg = `"data:image/svg+xml,%3Csvg width='24' height='24' viewBox='0 0 24 24' fill='none' `;
+
+      svg = svg.concat(`xmlns='http://www.w3.org/2000/svg'%3E%3Cpath fill-rule='evenodd' clip-rule='evenodd' `);
+      svg = svg.concat(`d='M18.707 8.29301C18.316 7.90201 17.684 7.90201 17.293 8.29301L12 13.586L6.70701 `);
+      svg = svg.concat(`8.29301C6.31601 7.90201 5.68401 7.90201 5.29301 8.29301C4.90201 8.68401 4.90201 `);
+      svg = svg.concat(`9.31601 5.29301 9.70701L11.293 15.707C11.488 15.902 11.744 16 12 16C12.256 16 12.512 `);
+      svg = svg.concat(`15.902 12.707 15.707L18.707 9.70701C19.098 9.31601 19.098 8.68401 18.707 8.29301Z' `);
+      svg = svg.concat(`fill='${color.replace('#', '%23')}'/%3E%3C/svg%3E%0A");`);
+
+      return svg;
+    }
+
+    svg = `"data:image/svg+xml,%3Csvg width='24' height='24' viewBox='0 0 256 256' fill='${color.replace('#', '%23')}' `;
+    svg = svg.concat(`xmlns='http://www.w3.org/2000/svg'%3E%3Cpath `);
+    svg = svg.concat(
+      `d='M213.66,101.66l-80,80a8,8,0,0,1-11.32,0l-80-80A8,8,0,0,1,53.66,90.34L128,164.69l74.34-74.35a8,8,0,0,1,11.32,11.32Z'`
+    );
+    svg = svg.concat(`%3E%3C/path%3E%3C/svg%3E");`);
 
     return svg;
   }

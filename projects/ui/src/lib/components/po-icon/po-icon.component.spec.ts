@@ -2,6 +2,7 @@ import { TemplateRef } from '@angular/core';
 import { ComponentFixture, fakeAsync, TestBed, waitForAsync } from '@angular/core/testing';
 
 import { PoIconComponent } from './po-icon.component';
+import { ICONS_DICTIONARY, PoIconDictionary } from './po-icon-dictionary';
 
 class TemplateA extends TemplateRef<void> {
   elementRef;
@@ -18,7 +19,8 @@ describe('PoIconComponent: ', () => {
 
   beforeEach(waitForAsync(() => {
     TestBed.configureTestingModule({
-      declarations: [PoIconComponent]
+      declarations: [PoIconComponent],
+      providers: [{ provide: ICONS_DICTIONARY, useValue: PoIconDictionary }]
     }).compileComponents();
   }));
 
@@ -123,18 +125,22 @@ describe('PoIconComponent: ', () => {
     describe('getIcon', () => {
       it('should return the icon name if it exists in the service', () => {
         const iconName = 'ICON_BOOK';
-        const mockIconService = { icons: { ICON_BOOK: 'book' } };
-        component = new PoIconComponent(mockIconService as any);
         const result = component['getIcon'](iconName);
-        expect(result).toEqual('po-fonts-icon book');
+        expect(result).toEqual('po-icon po-icon-book');
       });
 
       it('should return an empty string if the icon does not exist in the service', () => {
         const iconName = 'non-existing-icon';
-        const mockIconService = { icons: { ICON_BOOK: 'book' } };
-        component = new PoIconComponent(mockIconService as any);
         const result = component['getIcon'](iconName);
         expect(result).toEqual('');
+      });
+
+      it(`should concatenate 'po-fonts-icon' if it does not exist in the service`, () => {
+        const iconName = 'ICON_BOOK';
+        const mockIconService = { ICON_BOOK: 'book' };
+        component = new PoIconComponent(mockIconService as any);
+        const result = component['getIcon'](iconName);
+        expect(result).toEqual('po-fonts-icon book');
       });
     });
   });
@@ -161,5 +167,27 @@ describe('PoIconComponent: ', () => {
       expect(poClass).toBeFalsy();
       expect(fontClass).toBeTruthy();
     });
+  });
+});
+
+describe('PoIconComponent - optional parameter', () => {
+  let component: PoIconComponent;
+  let fixture: ComponentFixture<PoIconComponent>;
+
+  beforeEach(waitForAsync(() => {
+    TestBed.configureTestingModule({
+      declarations: [PoIconComponent]
+    }).compileComponents();
+  }));
+
+  beforeEach(() => {
+    fixture = TestBed.createComponent(PoIconComponent);
+    component = fixture.componentInstance;
+  });
+
+  it('should return the icon name if it exists in the service', () => {
+    const iconName = 'ICON_BOOK';
+    const result = component['getIcon'](iconName);
+    expect(result).toEqual('po-icon po-icon-book');
   });
 });
