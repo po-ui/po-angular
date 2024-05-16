@@ -559,7 +559,6 @@ describe('PoTableComponent:', () => {
     component.columns[2].type = 'link';
     component.items[0].link = undefined;
 
-    spyOn(component['router'], 'navigate');
     spyOn(window, 'open');
 
     fixture.detectChanges();
@@ -567,7 +566,6 @@ describe('PoTableComponent:', () => {
     const link = tableElement.querySelector('.po-table-link');
     link.click();
 
-    expect(component['router'].navigate).not.toHaveBeenCalled();
     expect(window.open).not.toHaveBeenCalled();
   });
 

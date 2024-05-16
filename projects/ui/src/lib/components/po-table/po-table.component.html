@@ -183,7 +183,9 @@
               [class.po-table-header-flex-center]="column.type === 'subtitle'"
             >
               <ng-container *ngIf="this.isDraggable && !column.fixed">
+                <po-icon cdkDragHandle *ngIf="iconNameLib === 'PhosphorIcon'" p-icon="ICON_DRAG"></po-icon>
                 <svg
+                  *ngIf="iconNameLib === 'PoIcon'"
                   cdkDragHandle
                   width="16"
                   height="16"
@@ -526,7 +528,9 @@
                 [class.po-table-header-flex-center]="column.type === 'subtitle'"
               >
                 <ng-container *ngIf="this.isDraggable && !column.fixed">
+                  <po-icon cdkDragHandle *ngIf="iconNameLib === 'PhosphorIcon'" p-icon="ICON_DRAG"></po-icon>
                   <svg
+                    *ngIf="iconNameLib === 'PoIcon'"
                     cdkDragHandle
                     width="16"
                     height="16"
@@ -829,7 +833,15 @@
     "
   >
     <ng-container *ngIf="JSON.stringify(sortedColumn?.property) !== JSON.stringify(column)">
-      <svg width="16" height="16" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
+      <po-icon *ngIf="iconNameLib === 'PhosphorIcon'" p-icon="ICON_SORT"></po-icon>
+      <svg
+        *ngIf="iconNameLib === 'PoIcon'"
+        width="16"
+        height="16"
+        viewBox="0 0 24 24"
+        fill="none"
+        xmlns="http://www.w3.org/2000/svg"
+      >
         <path
           fill-rule="evenodd"
           clip-rule="evenodd"
@@ -840,7 +852,15 @@
     </ng-container>
 
     <ng-container *ngIf="JSON.stringify(sortedColumn?.property) === JSON.stringify(column) && sortedColumn.ascending">
-      <svg width="16" height="16" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
+      <po-icon *ngIf="iconNameLib === 'PhosphorIcon'" p-icon="ICON_SORT_ASC"></po-icon>
+      <svg
+        *ngIf="iconNameLib === 'PoIcon'"
+        width="16"
+        height="16"
+        viewBox="0 0 24 24"
+        fill="none"
+        xmlns="http://www.w3.org/2000/svg"
+      >
         <path
           fill-rule="evenodd"
           clip-rule="evenodd"
@@ -851,7 +871,15 @@
     </ng-container>
 
     <ng-container *ngIf="JSON.stringify(sortedColumn?.property) === JSON.stringify(column) && !sortedColumn.ascending">
-      <svg width="16" height="16" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
+      <po-icon cdkDragHandle *ngIf="iconNameLib === 'PhosphorIcon'" p-icon="ICON_SORT_DESC"></po-icon>
+      <svg
+        *ngIf="iconNameLib === 'PoIcon'"
+        width="16"
+        height="16"
+        viewBox="0 0 24 24"
+        fill="none"
+        xmlns="http://www.w3.org/2000/svg"
+      >
         <path
           fill-rule="evenodd"
           clip-rule="evenodd"

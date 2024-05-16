@@ -1,5 +1,5 @@
 <div class="po-slide-control-{{ control }}">
   <div class="po-slide-arrow-circle" (click)="click.emit()">
-    <div class="po-slide-arrow po-slide-arrow-{{ control }}"></div>
+    <po-icon [p-icon]="control === 'next' ? 'ICON_ARROW_RIGHT' : 'ICON_ARROW_LEFT'"></po-icon>
   </div>
 </div>

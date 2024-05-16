@@ -1,5 +1,6 @@
 import { ComponentFixture, TestBed } from '@angular/core/testing';
 
+import { PoIconModule } from '../../po-icon';
 import { PoSlideControlComponent } from './po-slide-control.component';
 
 describe('PoSlideControlComponent:', () => {
@@ -9,7 +10,8 @@ describe('PoSlideControlComponent:', () => {
 
   beforeEach(async () => {
     await TestBed.configureTestingModule({
-      declarations: [PoSlideControlComponent]
+      declarations: [PoSlideControlComponent],
+      imports: [PoIconModule]
     }).compileComponents();
 
     fixture = TestBed.createComponent(PoSlideControlComponent);
@@ -24,25 +26,25 @@ describe('PoSlideControlComponent:', () => {
   });
 
   describe('Template:', () => {
-    it('should apply `po-slide-control-previous` and `po-slide-arrow-previous` if `control` is `previous`', () => {
+    it('should apply `po-slide-control-previous` and `ICON_ARROW_LEFT` if `control` is `previous`', () => {
       component.control = 'previous';
 
       fixture.detectChanges();
 
       const controlPrevious = nativeElement.querySelector('.po-slide-control-previous');
-      const arrowPrevious = nativeElement.querySelector('.po-slide-arrow-previous');
+      const arrowPrevious = controlPrevious.querySelector('[ng-reflect-icon="ICON_ARROW_LEFT"]');
 
       expect(controlPrevious).toBeTruthy();
       expect(arrowPrevious).toBeTruthy();
     });
 
-    it('should apply `po-slide-control-next` and `po-slide-arrow-next` if `control` is `next`', () => {
+    it('should apply `po-slide-control-next` and `"ICON_ARROW_RIGHT` if `control` is `next`', () => {
       component.control = 'next';
 
       fixture.detectChanges();
 
       const controlNext = nativeElement.querySelector('.po-slide-control-next');
-      const arrowNext = nativeElement.querySelector('.po-slide-arrow-next');
+      const arrowNext = controlNext.querySelector('[ng-reflect-icon="ICON_ARROW_RIGHT"]');
 
       expect(controlNext).toBeTruthy();
       expect(arrowNext).toBeTruthy();

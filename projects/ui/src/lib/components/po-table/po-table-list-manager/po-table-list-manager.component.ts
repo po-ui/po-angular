@@ -1,6 +1,7 @@
-import { ChangeDetectorRef, Component, EventEmitter, Input, Output, forwardRef } from '@angular/core';
+import { ChangeDetectorRef, Component, EventEmitter, Inject, Input, Optional, Output, forwardRef } from '@angular/core';
 import { NG_VALUE_ACCESSOR } from '@angular/forms';
 
+import { ICONS_DICTIONARY, PoIconDictionary } from '../../po-icon';
 import { poLocaleDefault } from '../../../services/po-language/po-language.constant';
 import { PoLanguageService } from '../../../services/po-language/po-language.service';
 import { convertToBoolean } from '../../../utils/util';
@@ -48,6 +49,8 @@ type Direction = 'up' | 'down';
   ]
 })
 export class PoTableListManagerComponent extends PoCheckboxGroupComponent {
+  private _iconToken: { [key: string]: string };
+
   @Output('p-change-position')
   private changePosition = new EventEmitter<any>();
 
@@ -60,7 +63,15 @@ export class PoTableListManagerComponent extends PoCheckboxGroupComponent {
 
   literals;
 
-  constructor(languageService: PoLanguageService, changeDetector: ChangeDetectorRef) {
+  get iconNameLib() {
+    return this._iconToken.NAME_LIB;
+  }
+
+  constructor(
+    languageService: PoLanguageService,
+    changeDetector: ChangeDetectorRef,
+    @Optional() @Inject(ICONS_DICTIONARY) value: { [key: string]: string }
+  ) {
     super(changeDetector);
 
     const language = languageService.getShortLanguage();
@@ -69,6 +80,8 @@ export class PoTableListManagerComponent extends PoCheckboxGroupComponent {
       ...poTableListManagerLiterals[poLocaleDefault],
       ...poTableListManagerLiterals[language]
     };
+
+    this._iconToken = value ?? PoIconDictionary;
   }
 
   emitChangePosition(option, direction: Direction) {
