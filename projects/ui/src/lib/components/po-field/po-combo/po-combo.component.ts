@@ -423,10 +423,16 @@ export class PoComboComponent extends PoComboBaseComponent implements AfterViewI
     }, this.debounceTime);
   }
 
+  setShouldApplyFocus(value: boolean) {
+    this.shouldApplyFocus = value;
+  }
+
   toggleComboVisibility(isButton?: boolean): void {
     if (this.disabled) {
       return;
     }
+
+    this.setShouldApplyFocus(true);
 
     if (this.service && !this.disabledInitFilter) {
       this.applyFilterInFirstClick();
@@ -469,7 +475,10 @@ export class PoComboComponent extends PoComboBaseComponent implements AfterViewI
     }
 
     this.previousSearchValue = this.selectedView[this.dynamicLabel];
-    this.inputEl.nativeElement.focus();
+
+    if (this.shouldApplyFocus) {
+      this.inputEl.nativeElement.focus();
+    }
   }
 
   calculateScrollTop(selectedItem, index) {
