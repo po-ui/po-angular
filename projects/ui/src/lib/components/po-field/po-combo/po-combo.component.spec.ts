@@ -341,6 +341,31 @@ describe('PoComboComponent:', () => {
       expect(component.inputEl.nativeElement.focus).not.toHaveBeenCalled();
     });
 
+    it('focus: should have shouldApplyFocus default to false', () => {
+      expect(component.shouldApplyFocus).toBe(false);
+    });
+
+    it('focus: should focus input element when shouldApplyFocus is true', () => {
+      const mockElement = document.createElement('div');
+      component.containerElement = { nativeElement: mockElement };
+
+      component.renderer = {
+        removeClass: jasmine.createSpy('removeClass'),
+        addClass: jasmine.createSpy('addClass')
+      } as any;
+
+      component.inputEl = {
+        nativeElement: {
+          focus: jasmine.createSpy('focus')
+        }
+      };
+
+      component.shouldApplyFocus = true;
+      component.onOptionClick({ value: 'test', label: 'Test' });
+
+      expect(component.inputEl.nativeElement.focus).toHaveBeenCalled();
+    });
+
     it('onBlur: should be called when blur event', () => {
       component['onModelTouched'] = () => {};
       spyOn(component, <any>'onModelTouched');
