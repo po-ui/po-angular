@@ -529,8 +529,6 @@ export class PoPageDynamicTableComponent extends PoPageDynamicListBaseComponent 
    *
    * Deve receber um dos valores do enum `PoTableColumnSpacing`.
    *
-   * Valor `small` só funciona em tabelas não interativas. Caso seja setado com `small` e a tabela seja interativa, o valor será retornado para `medium`.
-   *
    * @default `medium`
    */
   @Input('p-spacing') set spacing(value: PoTableColumnSpacing) {
