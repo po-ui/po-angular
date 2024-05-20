@@ -2,6 +2,17 @@
 
 All notable changes to this project will be documented in this file. See [standard-version](https://github.com/conventional-changelog/standard-version) for commit guidelines.
 
+## [17.11.0](https://github.com/po-ui/po-angular/compare/v17.10.0...v17.11.0) (2024-05-20)
+
+
+### Features
+
+* **dynamic-table:** repassa propriedade p-spacing e p-text-wrap ([a01890d](https://github.com/po-ui/po-angular/commit/a01890d641859b29ad03d37759c4cd7e08714cee))
+* **icon:** inclui dicionário de tokens ([e0527ea](https://github.com/po-ui/po-angular/commit/e0527ea952333227b190a5a220a8e75761adb855))
+* **lookup:** inclui p-spacing e p-text-wrap ([d1ab4cc](https://github.com/po-ui/po-angular/commit/d1ab4cc0d6661f11ef8577a1c34bb7c5e6d2ea84))
+* **menu:** adiciona tooltip para exibição do shortLabel ([de9c951](https://github.com/po-ui/po-angular/commit/de9c951f6f1b1c84c8d8d9e9473d0d278f1f53cd))
+* **table:** permite mais visão de itens e colunas ([18684a7](https://github.com/po-ui/po-angular/commit/18684a7a094bf878e20e97dfa82c34d345084f2b))
+
 ### [17.10.0](https://github.com/po-ui/po-angular/compare/v17.9.0...v17.10.0) (2024-05-14)
 
 Compatibilidade com @totvs/thf-components@17.10.0
