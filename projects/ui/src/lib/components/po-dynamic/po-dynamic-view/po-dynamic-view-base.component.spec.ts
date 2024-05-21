@@ -581,6 +581,28 @@ describe('PoDynamicViewBaseComponent:', () => {
 
         expect(component.ensureFieldHasContainer).toHaveBeenCalled();
       });
+
+      it('should call createFieldWithService if the field has a container, even if the property value is null', () => {
+        component.fields = [
+          {
+            searchService: 'https://api/test',
+            container: 'Dados Empresa',
+            property: 'empresa',
+            type: 'string',
+            label: 'Empresa'
+          }
+        ];
+
+        component.value = {
+          empresa: null
+        };
+
+        spyOn(component, <any>'createFieldWithService');
+
+        component['getConfiguredFields']();
+
+        expect(component['createFieldWithService']).toHaveBeenCalled();
+      });
     });
 
     it('searchById: should return null if value is empty', done => {
