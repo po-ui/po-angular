@@ -9,6 +9,7 @@
   (keydown.space)="clickMenuItem($event)"
   p-tooltip-position="right"
   [p-tooltip]="collapsedMenu && shortLabel ? shortLabel : undefined"
+  [p-append-in-body]="true"
 >
   <ng-container *ngTemplateOutlet="menuItemTemplate"></ng-container>
 </a>
@@ -23,6 +24,7 @@
   (keydown.space)="clickMenuItem($event)"
   p-tooltip-position="right"
   [p-tooltip]="collapsedMenu && shortLabel ? shortLabel : undefined"
+  [p-append-in-body]="true"
 >
   <ng-container *ngTemplateOutlet="menuItemTemplate"></ng-container>
 </a>
@@ -37,6 +39,7 @@
   (keydown.space)="clickMenuItem($event)"
   p-tooltip-position="right"
   [p-tooltip]="collapsedMenu && shortLabel ? shortLabel : undefined"
+  [p-append-in-body]="true"
 >
   <ng-container *ngTemplateOutlet="menuItemTemplate"></ng-container>
 </a>
@@ -86,6 +89,7 @@
   <div
     p-tooltip-position="right"
     [p-tooltip]="type === 'subItems' && collapsedMenu && shortLabel ? shortLabel : undefined"
+    [p-append-in-body]="true"
     class="po-menu-item"
     [tabindex]="type === 'subItems' ? 0 : -1"
     [attr.aria-label]="label"
