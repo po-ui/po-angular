@@ -171,7 +171,8 @@ export class PoDynamicViewBaseComponent extends PoDynamicSharedBase {
 
       const hasValue =
         this.value[field.property]?.length ||
-        (!Array.isArray(this.value[field.property]) && this.value[field.property] && useSearchService);
+        (!Array.isArray(this.value[field.property]) && this.value[field.property] && useSearchService) ||
+        field.container;
 
       if (hasValue) {
         const _field = this.returnValues({ ...field }, '');
