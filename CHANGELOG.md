@@ -2,6 +2,22 @@
 
 All notable changes to this project will be documented in this file. See [standard-version](https://github.com/conventional-changelog/standard-version) for commit guidelines.
 
+## [17.12.0](https://github.com/po-ui/po-angular/compare/v17.11.0...v17.12.0) (2024-05-27)
+
+
+### Features
+
+* **disclaimer:** adiciona propriedades internas ([2cd834b](https://github.com/po-ui/po-angular/commit/2cd834b47e3258e56f8c8c8009cefd4645ba2cd4))
+
+
+### Bug Fixes
+
+* **combo:** corrige a rotina de focus do componente na inicialização ([576631d](https://github.com/po-ui/po-angular/commit/576631d88bfa43ede9bd67dbf772c822d67e9c34))
+* **listbox:** corrige emissão de eventos no `po-combo` e `po-multiselect` ([a9801ec](https://github.com/po-ui/po-angular/commit/a9801eca3370a0e5cb2ecd7d75860b243c0eff01))
+* **menu:** corrige sobreposicao da `po-tooltip` ([4384d3d](https://github.com/po-ui/po-angular/commit/4384d3d53617a2ac297fe56c58d8dd61d7cd2619))
+* **page-dynamic:** corrige container sem titulo quando o valor é `null` e utiliza serviço ([9f072b5](https://github.com/po-ui/po-angular/commit/9f072b5a9b350d91191807db63fd4dcff9cb2fb2))
+* **page:** corrige a propriedade "type" das actions que determina o tipo do botão entre `danger` e `default` ([be33782](https://github.com/po-ui/po-angular/commit/be337826105dd8d6012b302db60f9c144d3630f5))
+
 ## [17.11.0](https://github.com/po-ui/po-angular/compare/v17.10.0...v17.11.0) (2024-05-20)
 
 
