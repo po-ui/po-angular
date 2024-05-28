@@ -31,21 +31,19 @@
     />
 
     <div class="po-field-icon-container-right">
-      <div
+      <po-clean
         tabindex="0"
         role="button"
         [attr.aria-label]="literals.clean"
+        class="po-combo-clean po-icon-input"
         *ngIf="clean && !disabled && inp.value"
-        class="po-combo-clean"
+        [p-element-ref]="inputEl"
+        (p-change-event)="clear($event)"
         (click)="clear(null); $event.preventDefault()"
         (keydown.enter)="clearAndFocus(); $event.preventDefault()"
       >
-        <po-icon
-          p-icon="ICON_CLEAR_CONTENT"
-          [class.po-border-focused]="!disabled && comboOpen"
-          class="po-field-icon"
-        ></po-icon>
-      </div>
+      </po-clean>
+
       <div
         #iconArrow
         class="po-combo-arrow po-field-icon"
