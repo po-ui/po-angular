@@ -537,7 +537,7 @@ export class PoTableComponent extends PoTableBaseComponent implements AfterViewI
   }
 
   getColumnLabel(row: any, columnLabel: PoTableColumn): PoTableColumnLabel {
-    return columnLabel.labels.find(labelItem => this.getCellData(row, columnLabel) === labelItem.value);
+    return columnLabel.labels?.find(labelItem => this.getCellData(row, columnLabel) === labelItem.value);
   }
 
   getSubtitleColumn(row: any, subtitleColumn: PoTableColumn): PoTableSubtitleColumn {

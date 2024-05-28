@@ -225,7 +225,7 @@ export interface PoTableColumn {
    *
    * - `detail`: array de objetos para o master-detail.
    * - `icon`: *array* de *string* ou objetos para a coluna de ícones.
-   * - `label`: texto com destaque.
+   * - `label`: texto com destaque, deverá ser utilizado em conjunto com a propriedade `labels`.
    * - `link`: habilita link na coluna para ação ou navegação.
    * - `number`: valores numéricos.
    * - `string`: textos.
