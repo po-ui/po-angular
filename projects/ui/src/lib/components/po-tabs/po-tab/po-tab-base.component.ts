@@ -26,6 +26,7 @@ export abstract class PoTabBaseComponent {
   private _active?: boolean = false;
   private _disabled?: boolean = false;
   private _hide?: boolean = false;
+  widthButton;
 
   /**
    * @optional
