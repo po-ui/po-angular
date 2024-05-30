@@ -1,4 +1,5 @@
 import {
+  AfterContentInit,
   AfterViewInit,
   ChangeDetectorRef,
   Component,
@@ -65,7 +66,7 @@ const poTabsMaxNumberOfTabs = 5;
   selector: 'po-tabs',
   templateUrl: './po-tabs.component.html'
 })
-export class PoTabsComponent extends PoTabsBaseComponent implements OnInit, AfterViewInit, OnDestroy {
+export class PoTabsComponent extends PoTabsBaseComponent implements OnInit, AfterViewInit, OnDestroy, AfterContentInit {
   // Tabs utilizados no ng-content
   @ContentChildren(PoTabComponent) tabsChildren: QueryList<PoTabComponent>;
   @ViewChildren('tabButton', { read: ElementRef }) tabButton: QueryList<any>;
@@ -81,11 +82,12 @@ export class PoTabsComponent extends PoTabsBaseComponent implements OnInit, Afte
   initializeComponent = false;
 
   quantityTabsButton;
+  defaultLastTabWidth!: number;
 
   private previousActiveTab: PoTabComponent;
   private subscription: Subscription = new Subscription();
   private subscriptionTabsService: Subscription = new Subscription();
-
+  private subscriptionTabActive: Subscription = new Subscription();
   constructor(
     private changeDetector: ChangeDetectorRef,
     private languageService: PoLanguageService,
@@ -101,24 +103,38 @@ export class PoTabsComponent extends PoTabsBaseComponent implements OnInit, Afte
 
   ngOnInit(): void {
     this.subscriptionTabsService = this.tabsService.onChangesTriggered$.subscribe(() => {
+      this.updateTabsState();
       if (this.initializeComponent) {
         this.handleKeyboardNavigationTab();
+      }
+    });
+
+    this.subscriptionTabActive = this.tabsService.triggerActiveOnChanges$.subscribe(tab => {
+      const isTabInDropdown = this.tabsDropdown.some(t => t.id === tab.id);
+      if (isTabInDropdown) {
+        this.onTabActiveByDropdown(tab);
       }
     });
   }
 
   ngAfterViewInit(): void {
     this.calculateTabs(this.initializeCalculation);
-
     this.initializeCalculation = false;
+
+    this.updateTabsState();
     this.changeDetector.detectChanges();
     this.handleKeyboardNavigationTab();
     this.initializeComponent = true;
   }
 
+  ngAfterContentInit() {
+    this.updateTabsState(true);
+  }
+
   ngOnDestroy(): void {
     this.subscription.unsubscribe();
     this.subscriptionTabsService.unsubscribe();
+    this.subscriptionTabActive.unsubscribe();
   }
 
   get isShowTabDropdown() {
@@ -134,6 +150,10 @@ export class PoTabsComponent extends PoTabsBaseComponent implements OnInit, Afte
     return this.tabsChildren['_results'].slice(0, this.quantityTabsButton);
   }
 
+  get tabsChildrenArray(): Array<PoTabComponent> {
+    return this.tabsChildren.toArray();
+  }
+
   closePopover(): void {
     const containsPopoverVisible = this.tabDropdown && this.tabDropdown.popover && !this.tabDropdown.popover.isHidden;
 
@@ -146,10 +166,22 @@ export class PoTabsComponent extends PoTabsBaseComponent implements OnInit, Afte
     return !tab.hide;
   }
 
-  // Função disparada quando alguma tab ficar ativa
-  onTabActive(tab) {
-    this.previousActiveTab = this.tabsChildren.find(tabChild => tabChild.active && tabChild.id !== tab.id);
+  onTabActiveByDropdown(tab: PoTabComponent): void {
+    this.changeTabPositionByDropdown(tab);
+    const lastTabWidth =
+      this.defaultLastTabWidth > 0
+        ? this.defaultLastTabWidth
+        : this.tabsChildren.find(e => e === this.tabsChildrenArray[this.quantityTabsButton - 1])?.widthButton;
 
+    this.reorderTabs(tab);
+    tab.widthButton = lastTabWidth;
+    this.tabButton.last.nativeElement.style.width = `${lastTabWidth}px`;
+    this.handleKeyboardNavigationTab();
+  }
+
+  // Função disparada quando alguma tab ficar ativa
+  onTabActive(tab: PoTabComponent) {
+    this.previousActiveTab = this.tabsChildren.find(tabChild => tabChild.active && tabChild.id !== tab.id);
     this.deactivateTab();
   }
 
@@ -164,12 +196,28 @@ export class PoTabsComponent extends PoTabsBaseComponent implements OnInit, Afte
     }
   }
 
+  reorderTabs(tabToReorder: PoTabComponent): void {
+    const tabsArray = this.tabsChildrenArray;
+    const tabIndex = tabsArray.findIndex(item => item.id === tabToReorder.id);
+    if (tabIndex !== -1) {
+      const [tab] = tabsArray.splice(tabIndex, 1);
+      tabsArray.splice(this.quantityTabsButton - 1, 0, tab);
+    }
+    this.tabsChildren.reset(tabsArray);
+    this.changeDetector.detectChanges();
+  }
+
   // selectiona a aba informada por parametro, caso houver click faz a emição do evento.
   selectedTab(tab: PoTabComponent | any) {
     tab.active = true;
 
     if (tab.click) {
       tab.click.emit(tab);
+    }
+
+    const isTabInDropdown = this.tabsDropdown.some(t => t.id === tab.id);
+    if (isTabInDropdown) {
+      this.onTabActiveByDropdown(tab);
     }
 
     this.changeDetector.detectChanges();
@@ -198,12 +246,49 @@ export class PoTabsComponent extends PoTabsBaseComponent implements OnInit, Afte
     });
   }
 
+  // Movimenta a tab da visão de tabs para o dropdown, e vice-versa.
+  private changeTabPositionByDropdown(tabToActivate: PoTabComponent): void {
+    const lastTab = this.tabsDefault[this.tabsDefault.length - 1];
+    this.tabsDefault = this.tabsDefault.filter(tab => tab.id !== lastTab.id);
+    this.tabsDefault.push(tabToActivate);
+
+    const _tabsDropdown = this.tabsDropdown.filter(tab => tab.id !== tabToActivate.id);
+    _tabsDropdown.unshift(lastTab);
+    this.tabsDropdown = _tabsDropdown;
+
+    tabToActivate.active = true;
+    this.onTabActive(tabToActivate);
+  }
+
   // desativa previousActiveTab e dispara a detecção de mudança.
   private deactivateTab() {
     if (this.previousActiveTab) {
       this.previousActiveTab.active = false;
 
       this.changeDetector.detectChanges();
+    }
+  }
+
+  private updateTabsState(initialState: boolean = false): void {
+    this.defaultLastTabWidth = this.tabButton?.last?.nativeElement?.getBoundingClientRect().width;
+    if (this.defaultLastTabWidth <= 0) {
+      return;
+    }
+
+    const lastTabChildren: PoTabComponent = this.tabsChildrenArray[this.quantityTabsButton - 1];
+    if (lastTabChildren) {
+      lastTabChildren.widthButton = this.defaultLastTabWidth;
+    }
+
+    if (this.tabsChildren) {
+      const _tabsChildren = this.tabsChildrenArray;
+      if (initialState) {
+        this.tabsDefault = _tabsChildren;
+        this.tabsDropdown = _tabsChildren;
+      } else {
+        this.tabsDefault = _tabsChildren.slice(0, this.quantityTabsButton);
+        this.tabsDropdown = _tabsChildren.slice(this.quantityTabsButton);
+      }
     }
   }
 
