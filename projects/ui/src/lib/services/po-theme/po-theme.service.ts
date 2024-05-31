@@ -250,13 +250,13 @@ export class PoThemeService {
     let selectBgIcon = '';
 
     if (themeColor?.brand?.['01']?.dark) {
-      selectBgIcon += `po-select { --background-image: url("${this.getSelectBgIcon(themeColor.brand['01'].dark)}"); };`;
+      selectBgIcon += `po-select { --background-image: url(${this.getSelectBgIcon(themeColor.brand['01'].dark)}); };`;
     }
     if (themeColor?.feedback?.negative?.base)
-      selectBgIcon += `po-select.ng-dirty.ng-invalid select { --background-image: url("${this.getSelectBgIcon(themeColor.feedback.negative.base)}"); };`;
+      selectBgIcon += `po-select.ng-dirty.ng-invalid select { --background-image: url(${this.getSelectBgIcon(themeColor.feedback.negative.base)}); };`;
 
     if (themeColor?.neutral?.light?.['30'])
-      selectBgIcon += `select:disabled { --background-image: url("${this.getSelectBgIcon(themeColor.neutral.light['30'])}"); };`;
+      selectBgIcon += `select:disabled { --background-image: url(${this.getSelectBgIcon(themeColor.neutral.light['30'])}); };`;
 
     return selectBgIcon;
   }
@@ -277,7 +277,7 @@ export class PoThemeService {
     svg = svg.concat(`8.29301C6.31601 7.90201 5.68401 7.90201 5.29301 8.29301C4.90201 8.68401 4.90201 `);
     svg = svg.concat(`9.31601 5.29301 9.70701L11.293 15.707C11.488 15.902 11.744 16 12 16C12.256 16 12.512 `);
     svg = svg.concat(`15.902 12.707 15.707L18.707 9.70701C19.098 9.31601 19.098 8.68401 18.707 8.29301Z' `);
-    svg = svg.concat(`fill='%23${color}'/%3E%3C/svg%3E%0A");`);
+    svg = svg.concat(`fill='${color.replace('#', '%23')}'/%3E%3C/svg%3E%0A");`);
 
     return svg;
   }
