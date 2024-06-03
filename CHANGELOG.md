@@ -2,6 +2,19 @@
 
 All notable changes to this project will be documented in this file. See [standard-version](https://github.com/conventional-changelog/standard-version) for commit guidelines.
 
+## [17.13.0](https://github.com/po-ui/po-angular/compare/v17.12.0...v17.13.0) (2024-06-03)
+
+
+### Features
+
+* **clean:** atualiza icone definido pelo animalia ([b44a721](https://github.com/po-ui/po-angular/commit/b44a7218a2823e095d94826b51e1b6395be4840a))
+* **search:** inclusão da propriedade filterSelect ([4057910](https://github.com/po-ui/po-angular/commit/4057910ddaa56a3698aea686739173a6943f1ef6))
+
+
+### Bug Fixes
+
+* **tema:** correção do icone no po-select ([f0e28cc](https://github.com/po-ui/po-angular/commit/f0e28cc283581183b7f7d0dc6b47bf515d81514a))
+
 ## [17.12.0](https://github.com/po-ui/po-angular/compare/v17.11.0...v17.12.0) (2024-05-27)
 
 
