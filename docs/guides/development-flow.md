@@ -14,7 +14,7 @@
   - [Modificando Componentes](guides/development-flow#modifying-components)
   - [Subindo as modificações localmente](guides/development-flow#preview-changes)
   - [Testes Unitários](guides/development-flow#tests)
-  - [TS Lint](guides/development-flow#lint)
+  - [ES Lint](guides/development-flow#lint)
   - [Po Style](guides/development-flow#po-style)
   - [Build das modificações](guides/development-flow#build)
   - [Criando Pull Request](guides/development-flow#pr)
