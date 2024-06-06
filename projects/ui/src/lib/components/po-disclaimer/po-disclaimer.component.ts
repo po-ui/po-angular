@@ -36,6 +36,6 @@ export class PoDisclaimerComponent extends PoDisclaimerBaseComponent {
   }
 
   getWidthDisclaimer() {
-    return this.disclaimerContainer.nativeElement.offsetWidth > 201;
+    return this.disclaimerContainer.nativeElement.offsetWidth > this.disclaimerCustomWidth;
   }
 }
