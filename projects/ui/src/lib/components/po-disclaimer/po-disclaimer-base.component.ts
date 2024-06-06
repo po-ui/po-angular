@@ -31,6 +31,8 @@ export class PoDisclaimerBaseComponent {
   /** Nome da propriedade vinculada à este po-disclaimer. */
   @Input('p-property') property?: string;
 
+  @Input('p-disclaimer-custom-width') disclaimerCustomWidth: number = 201;
+
   @Input('p-last-disclaimer') lastDisclaimer: boolean = false;
 
   @Input('p-tooltip-position') tooltipPosition: string = 'bottom';
