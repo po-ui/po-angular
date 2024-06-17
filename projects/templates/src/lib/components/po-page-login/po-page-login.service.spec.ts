@@ -1,8 +1,9 @@
-import { HttpClientTestingModule, HttpTestingController } from '@angular/common/http/testing';
+import { HttpTestingController, provideHttpClientTesting } from '@angular/common/http/testing';
 import { TestBed } from '@angular/core/testing';
 
 import { PoPageLoginAuthenticationType } from './enums/po-page-login-authentication-type.enum';
 import { PoPageLoginService } from './po-page-login.service';
+import { provideHttpClient, withInterceptorsFromDi } from '@angular/common/http';
 
 describe('PoPageLoginService:', () => {
   let httpMock: HttpTestingController;
@@ -10,8 +11,8 @@ describe('PoPageLoginService:', () => {
 
   beforeEach(() => {
     TestBed.configureTestingModule({
-      imports: [HttpClientTestingModule],
-      providers: [PoPageLoginService]
+      imports: [],
+      providers: [PoPageLoginService, provideHttpClient(withInterceptorsFromDi()), provideHttpClientTesting()]
     });
 
     poPageLoginService = TestBed.inject(PoPageLoginService);

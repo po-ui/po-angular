@@ -43,6 +43,7 @@ function applyUpdateInContent(tree: Tree, path: string) {
   if (directory.subfiles.length) {
     directory.subfiles.forEach(file => {
       const filePath = path + '/' + file;
+      // eslint-disable-next-line @typescript-eslint/no-unnecessary-type-assertion
       const content = tree.read(filePath)!.toString('utf-8');
       if (!content) {
         return;

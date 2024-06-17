@@ -1,7 +1,8 @@
-import { HttpClientTestingModule, HttpTestingController } from '@angular/common/http/testing';
+import { HttpTestingController, provideHttpClientTesting } from '@angular/common/http/testing';
 import { TestBed, fakeAsync, tick } from '@angular/core/testing';
 
 import { PoPageDynamicDetailActionsService } from './po-page-dynamic-detail-actions.service';
+import { provideHttpClient, withInterceptorsFromDi } from '@angular/common/http';
 
 describe('PoPageDynamicDetailActionsService', () => {
   let service: PoPageDynamicDetailActionsService;
@@ -9,8 +10,12 @@ describe('PoPageDynamicDetailActionsService', () => {
 
   beforeEach(() => {
     TestBed.configureTestingModule({
-      imports: [HttpClientTestingModule],
-      providers: [PoPageDynamicDetailActionsService]
+      imports: [],
+      providers: [
+        PoPageDynamicDetailActionsService,
+        provideHttpClient(withInterceptorsFromDi()),
+        provideHttpClientTesting()
+      ]
     });
 
     service = TestBed.inject(PoPageDynamicDetailActionsService);

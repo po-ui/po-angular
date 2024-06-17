@@ -59,6 +59,7 @@ function applyUpdateInContent(tree: Tree, path: string) {
   if (directory.subfiles.length) {
     directory.subfiles.forEach(file => {
       const filePath = path + '/' + file;
+      // eslint-disable-next-line @typescript-eslint/no-unnecessary-type-assertion
       const content = tree.read(filePath)!.toString('utf-8');
       if (!content) {
         return;
@@ -147,6 +148,7 @@ function replaceWithChanges(replaces: Array<ReplaceChanges>, content: string = '
 function updatePackageJson(version: string, dependenciesChanges: { [key: string]: string }) {
   return (tree: Tree): Tree => {
     if (tree.exists('package.json')) {
+      // eslint-disable-next-line @typescript-eslint/no-unnecessary-type-assertion
       const sourceText = tree.read('package.json')!.toString('utf-8');
       const json = JSON.parse(sourceText);
 

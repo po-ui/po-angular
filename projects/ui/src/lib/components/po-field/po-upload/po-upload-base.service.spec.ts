@@ -1,7 +1,7 @@
 import { ChangeDetectorRef, EventEmitter } from '@angular/core';
 import { inject, TestBed } from '@angular/core/testing';
-import { HttpClientTestingModule } from '@angular/common/http/testing';
-import { HttpResponse } from '@angular/common/http';
+import { provideHttpClientTesting } from '@angular/common/http/testing';
+import { HttpResponse, provideHttpClient, withInterceptorsFromDi } from '@angular/common/http';
 
 import { Observable } from 'rxjs';
 
@@ -11,8 +11,8 @@ import { PoUploadFile } from './po-upload-file';
 describe('PoUploadBaseService:', () => {
   beforeEach(() => {
     TestBed.configureTestingModule({
-      imports: [HttpClientTestingModule],
-      providers: [PoUploadBaseService]
+      imports: [],
+      providers: [PoUploadBaseService, provideHttpClient(withInterceptorsFromDi()), provideHttpClientTesting()]
     });
   });
 

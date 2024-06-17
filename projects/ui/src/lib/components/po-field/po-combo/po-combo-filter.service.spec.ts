@@ -1,6 +1,6 @@
 import { TestBed } from '@angular/core/testing';
-import { HttpRequest } from '@angular/common/http';
-import { HttpClientTestingModule, HttpTestingController } from '@angular/common/http/testing';
+import { HttpRequest, provideHttpClient, withInterceptorsFromDi } from '@angular/common/http';
+import { HttpTestingController, provideHttpClientTesting } from '@angular/common/http/testing';
 
 import { PoComboFilterService } from './po-combo-filter.service';
 import { PoComboOption } from './interfaces/po-combo-option.interface';
@@ -13,8 +13,8 @@ describe('PoComboFilterService ', () => {
 
   beforeEach(() => {
     TestBed.configureTestingModule({
-      imports: [HttpClientTestingModule],
-      providers: [PoComboFilterService]
+      imports: [],
+      providers: [PoComboFilterService, provideHttpClient(withInterceptorsFromDi()), provideHttpClientTesting()]
     });
 
     comboService = TestBed.inject(PoComboFilterService);

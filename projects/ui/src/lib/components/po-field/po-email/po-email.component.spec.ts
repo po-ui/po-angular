@@ -108,7 +108,7 @@ describe('PoEmailComponent:', () => {
 
     it('should have `mail` icon', () => {
       fixture.detectChanges();
-      expect(fixture.debugElement.nativeElement.querySelector('.po-icon-mail')).toBeTruthy();
+      expect(fixture.debugElement.nativeElement.querySelector('.ph-envelope-simple')).toBeTruthy();
     });
 
     it('should call `getScreenValue` and `verifyPattern` on input keyup', fakeAsync(() => {
