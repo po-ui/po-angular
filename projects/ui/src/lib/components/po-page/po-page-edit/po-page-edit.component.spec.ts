@@ -225,8 +225,8 @@ describe('PoPageEditComponent', () => {
 
       fixture.detectChanges();
 
-      const saveIcon = debugElement.querySelectorAll('po-button button po-icon i[class="po-icon po-icon-ok"]');
-      const cancelIcon = debugElement.querySelectorAll('po-button button po-icon i[class="po-icon po-icon-close"]');
+      const saveIcon = debugElement.querySelectorAll('po-button button po-icon i[class="ph ph-check po-fonts-icon"]');
+      const cancelIcon = debugElement.querySelectorAll('po-button button po-icon i[class="ph ph-x po-fonts-icon"]');
 
       expect(saveIcon.length).toBe(1);
       expect(cancelIcon.length).toBe(0);
@@ -238,8 +238,8 @@ describe('PoPageEditComponent', () => {
 
       fixture.detectChanges();
 
-      const saveIcon = debugElement.querySelectorAll('po-button button po-icon i[class="po-icon po-icon-ok"]');
-      const cancelIcon = debugElement.querySelectorAll('po-button button po-icon i[class="po-icon po-icon-close"]');
+      const saveIcon = debugElement.querySelectorAll('po-button button po-icon i[class="ph ph-check po-fonts-icon"]');
+      const cancelIcon = debugElement.querySelectorAll('po-button button po-icon i[class="ph ph-x po-fonts-icon"]');
 
       expect(saveIcon.length).toBe(1);
       expect(cancelIcon.length).toBe(0);
@@ -250,8 +250,8 @@ describe('PoPageEditComponent', () => {
 
       fixture.detectChanges();
 
-      const saveIcon = debugElement.querySelectorAll('po-button button po-icon i[class="po-icon po-icon-ok"]');
-      const cancelIcon = debugElement.querySelectorAll('po-button button po-icon i[class="po-icon po-icon-close"]');
+      const saveIcon = debugElement.querySelectorAll('po-button button po-icon i[class="ph ph-check po-fonts-icon"]');
+      const cancelIcon = debugElement.querySelectorAll('po-button button po-icon i[class="ph ph-x po-fonts-icon"]');
 
       expect(saveIcon.length).toBe(0);
       expect(cancelIcon.length).toBe(1);

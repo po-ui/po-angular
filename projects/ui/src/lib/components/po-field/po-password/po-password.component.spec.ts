@@ -198,23 +198,23 @@ describe('PoNumberComponent:', () => {
       expect(nativeElement.querySelector('.po-input-icon-right')).toBeFalsy();
     });
 
-    it('should have the icon `eye-off`.', () => {
+    it('should have the icon `ph-eye-closed`.', () => {
       component.hidePasswordPeek = false;
       component.visiblePassword = false;
       fixture.detectChanges();
 
-      expect(nativeElement.querySelector('.po-icon-eye')).toBeNull();
-      expect(nativeElement.querySelector('.po-icon-eye-off')).toBeTruthy();
+      expect(nativeElement.querySelector('.ph-eye')).toBeNull();
+      expect(nativeElement.querySelector('.ph-eye-closed')).toBeTruthy();
       expect(nativeElement.querySelector('.po-field-icon-disabled')).toBeTruthy();
     });
 
-    it('should have the icon `eye`.', () => {
+    it('should have the icon `ph-eye`.', () => {
       component.hidePasswordPeek = false;
       component.visiblePassword = true;
       fixture.detectChanges();
 
-      expect(nativeElement.querySelector('.po-icon-eye')).toBeTruthy();
-      expect(nativeElement.querySelector('.po-icon-eye-off')).toBeNull();
+      expect(nativeElement.querySelector('.ph-eye')).toBeTruthy();
+      expect(nativeElement.querySelector('.ph-eye-closed')).toBeNull();
       expect(nativeElement.querySelector('.po-field-icon-disabled')).toBeNull();
     });
 

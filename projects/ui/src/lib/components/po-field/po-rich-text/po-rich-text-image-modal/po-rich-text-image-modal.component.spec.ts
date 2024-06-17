@@ -6,7 +6,8 @@ import { PoFieldModule } from '../../po-field.module';
 import { PoButtonGroupModule } from '../../../po-button-group';
 import { PoModalModule } from '../../../po-modal/po-modal.module';
 import { PoRichTextImageModalComponent } from './po-rich-text-image-modal.component';
-import { HttpClientTestingModule } from '@angular/common/http/testing';
+import { provideHttpClientTesting } from '@angular/common/http/testing';
+import { provideHttpClient, withInterceptorsFromDi } from '@angular/common/http';
 
 describe('PoRichTextImageModalComponent', () => {
   let component: PoRichTextImageModalComponent;
@@ -15,8 +16,9 @@ describe('PoRichTextImageModalComponent', () => {
 
   beforeEach(async () => {
     await TestBed.configureTestingModule({
-      imports: [PoButtonGroupModule, PoModalModule, PoFieldModule, HttpClientTestingModule],
-      declarations: []
+      declarations: [],
+      imports: [PoButtonGroupModule, PoModalModule, PoFieldModule],
+      providers: [provideHttpClient(withInterceptorsFromDi()), provideHttpClientTesting()]
     }).compileComponents();
 
     fixture = TestBed.createComponent(PoRichTextImageModalComponent);

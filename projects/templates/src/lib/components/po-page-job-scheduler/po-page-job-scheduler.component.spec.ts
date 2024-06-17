@@ -8,12 +8,13 @@ import { Observable, of, throwError } from 'rxjs';
 import { changeBrowserInnerWidth } from './../../util-test/util-expect.spec';
 import { getObservable } from '../../util-test/util-expect.spec';
 
-import { HttpClientTestingModule } from '@angular/common/http/testing';
+import { provideHttpClientTesting } from '@angular/common/http/testing';
 import { PoJobSchedulerInternal } from './interfaces/po-job-scheduler-internal.interface';
 import { PoJobSchedulerParametersTemplateDirective } from './po-page-job-scheduler-parameters';
 import { PoPageJobSchedulerComponent } from './po-page-job-scheduler.component';
 import { PoPageJobSchedulerModule } from './po-page-job-scheduler.module';
 import { PoStepperOrientation } from '@po-ui/ng-components';
+import { provideHttpClient, withInterceptorsFromDi } from '@angular/common/http';
 
 describe('PoPageJobSchedulerComponent:', () => {
   let component: PoPageJobSchedulerComponent;
@@ -21,7 +22,8 @@ describe('PoPageJobSchedulerComponent:', () => {
 
   beforeEach(waitForAsync(() => {
     TestBed.configureTestingModule({
-      imports: [RouterTestingModule.withRoutes([]), PoPageJobSchedulerModule, HttpClientTestingModule]
+      imports: [RouterTestingModule.withRoutes([]), PoPageJobSchedulerModule],
+      providers: [provideHttpClient(withInterceptorsFromDi()), provideHttpClientTesting()]
     }).compileComponents();
   }));
 

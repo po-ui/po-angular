@@ -13,8 +13,9 @@ import { PoLookupBaseComponent } from './po-lookup-base.component';
 import { PoLookupComponent } from './po-lookup.component';
 import { PoLookupFilter } from './interfaces/po-lookup-filter.interface';
 import { NgControl } from '@angular/forms';
-import { HttpClientTestingModule } from '@angular/common/http/testing';
+import { provideHttpClientTesting } from '@angular/common/http/testing';
 import { PoTableColumnSpacing } from '../../po-table';
+import { provideHttpClient, withInterceptorsFromDi } from '@angular/common/http';
 class LookupFilterService implements PoLookupFilter {
   getFilteredItems(params: any): Observable<any> {
     return of({ items: [{ value: 123, label: 'teste' }] });
@@ -40,8 +41,16 @@ describe('PoLookupComponent:', () => {
 
   beforeEach(async () => {
     await TestBed.configureTestingModule({
-      imports: [RouterTestingModule.withRoutes(routes), PoFieldModule, HttpClientTestingModule],
-      providers: [LookupFilterService, PoComponentInjectorService, PoControlPositionService, Injector, NgControl]
+      imports: [RouterTestingModule.withRoutes(routes), PoFieldModule],
+      providers: [
+        LookupFilterService,
+        PoComponentInjectorService,
+        PoControlPositionService,
+        Injector,
+        NgControl,
+        provideHttpClient(withInterceptorsFromDi()),
+        provideHttpClientTesting()
+      ]
     }).compileComponents();
 
     fixture = TestBed.createComponent(PoLookupComponent);

@@ -1,7 +1,7 @@
 import { ComponentFixture, fakeAsync, TestBed, tick, waitForAsync } from '@angular/core/testing';
 import { NO_ERRORS_SCHEMA } from '@angular/core';
 import { FormsModule } from '@angular/forms';
-import { HttpClientTestingModule } from '@angular/common/http/testing';
+import { provideHttpClientTesting } from '@angular/common/http/testing';
 import { RouterTestingModule } from '@angular/router/testing';
 
 import { of, EMPTY } from 'rxjs';
@@ -21,6 +21,7 @@ import { PoPageDynamicDetailComponent } from '../po-page-dynamic-detail/po-page-
 import { PoPageDynamicTableComponent } from './po-page-dynamic-table.component';
 import { PoPageDynamicTableBeforeRemove } from './interfaces/po-page-dynamic-table-before-remove.interface';
 import { PoPageDynamicTableBeforeRemoveAll } from './interfaces/po-page-dynamic-table-before-remove-all.interface';
+import { provideHttpClient, withInterceptorsFromDi } from '@angular/common/http';
 
 describe('PoPageDynamicTableComponent:', () => {
   let component: PoPageDynamicTableComponent;
@@ -28,17 +29,10 @@ describe('PoPageDynamicTableComponent:', () => {
 
   beforeEach(waitForAsync(() => {
     TestBed.configureTestingModule({
-      imports: [
-        FormsModule,
-        HttpClientTestingModule,
-        RouterTestingModule.withRoutes([]),
-
-        PoNotificationModule,
-        PoDialogModule
-      ],
       declarations: [PoPageDynamicTableComponent],
-      providers: [],
-      schemas: [NO_ERRORS_SCHEMA]
+      schemas: [NO_ERRORS_SCHEMA],
+      imports: [FormsModule, RouterTestingModule.withRoutes([]), PoNotificationModule, PoDialogModule],
+      providers: [provideHttpClient(withInterceptorsFromDi()), provideHttpClientTesting()]
     }).compileComponents();
   }));
 

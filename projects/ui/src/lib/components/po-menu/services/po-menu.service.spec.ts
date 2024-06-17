@@ -1,5 +1,5 @@
-import { HttpClientTestingModule, HttpTestingController } from '@angular/common/http/testing';
-import { HttpRequest } from '@angular/common/http';
+import { HttpTestingController, provideHttpClientTesting } from '@angular/common/http/testing';
+import { HttpRequest, provideHttpClient, withInterceptorsFromDi } from '@angular/common/http';
 import { TestBed } from '@angular/core/testing';
 
 import { PoMenuService } from './po-menu.service';
@@ -12,8 +12,8 @@ describe('PoMenuService:', () => {
 
   beforeEach(() => {
     TestBed.configureTestingModule({
-      imports: [HttpClientTestingModule],
-      providers: [PoMenuService]
+      imports: [],
+      providers: [PoMenuService, provideHttpClient(withInterceptorsFromDi()), provideHttpClientTesting()]
     });
 
     menuService = TestBed.inject(PoMenuService);

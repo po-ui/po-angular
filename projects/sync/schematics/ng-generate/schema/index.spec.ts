@@ -22,17 +22,13 @@ xdescribe('schema:', () => {
   let appTree: UnitTestTree;
 
   beforeEach(async () => {
-    appTree = await runner.runExternalSchematicAsync('@schematics/angular', 'workspace', workspaceOptions).toPromise();
-    appTree = await runner
-      .runExternalSchematicAsync('@schematics/angular', 'application', componentOptions, appTree)
-      .toPromise();
+    appTree = await runner.runExternalSchematic('@schematics/angular', 'workspace', workspaceOptions);
+    appTree = await runner.runExternalSchematic('@schematics/angular', 'application', componentOptions, appTree);
   });
 
   it('should create sync schema', async () => {
     const schemaName = 'supply';
-    const tree = await runner
-      .runSchematicAsync('schema', { ...componentOptions, name: schemaName }, appTree)
-      .toPromise();
+    const tree = await runner.runSchematic('schema', { ...componentOptions, name: schemaName }, appTree);
 
     const files: Array<string> = tree.files;
 

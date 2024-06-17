@@ -1,7 +1,8 @@
 import { TestBed, tick, fakeAsync } from '@angular/core/testing';
-import { HttpClientTestingModule, HttpTestingController } from '@angular/common/http/testing';
+import { HttpTestingController, provideHttpClientTesting } from '@angular/common/http/testing';
 
 import { PoPageDynamicEditActionsService } from './po-page-dynamic-edit-actions.service';
+import { provideHttpClient, withInterceptorsFromDi } from '@angular/common/http';
 
 describe('PoPageDynamicEditActions:', () => {
   let service: PoPageDynamicEditActionsService;
@@ -15,8 +16,12 @@ describe('PoPageDynamicEditActions:', () => {
 
   beforeEach(() => {
     TestBed.configureTestingModule({
-      imports: [HttpClientTestingModule],
-      providers: [PoPageDynamicEditActionsService]
+      imports: [],
+      providers: [
+        PoPageDynamicEditActionsService,
+        provideHttpClient(withInterceptorsFromDi()),
+        provideHttpClientTesting()
+      ]
     });
 
     service = TestBed.inject(PoPageDynamicEditActionsService);

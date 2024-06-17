@@ -32,19 +32,24 @@
       "factory": "./ng-update/v14/index"
     },
     "migration-v15": {
-      "version": "0.0.0-PLACEHOLDER",
+      "version": "15",
       "description": "Atualiza @po-ui/ng-sync para v15",
       "factory": "./ng-update/v15/index"
     },
     "migration-v16": {
-      "version": "0.0.0-PLACEHOLDER",
+      "version": "16",
       "description": "Atualiza @po-ui/ng-sync para v16",
       "factory": "./ng-update/v16/index"
     },
     "migration-v17": {
-      "version": "0.0.0-PLACEHOLDER",
+      "version": "17",
       "description": "Atualiza @po-ui/ng-sync para v17",
       "factory": "./ng-update/v17/index"
+    },
+    "migration-v18": {
+      "version": "0.0.0-PLACEHOLDER",
+      "description": "Atualiza @po-ui/ng-sync para v18",
+      "factory": "./ng-update/v18/index"
     }
   }
 }

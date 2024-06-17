@@ -29,7 +29,7 @@ ng update @angular/cli@<version> @angular/core@<version> --force
 Por exemplo:
 
 ```
-ng update @angular/cli@17 @angular/core@17 --force
+ng update @angular/cli@18 @angular/core@18 --force
 ```
 
 > Para realizar a migração completa e avaliar se não precisa fazer alguma alteração veja o [**Guia de Upgrade do Angular**](https://update.angular.io/).
@@ -65,6 +65,16 @@ ng update @po-ui/ng-components --allow-dirty --force
 
 > Caso ocorra um erro ao concluir o comando acima pode ser necessário fazer uma instalação limpa no projeto apagando a pasta `node_modules` e o arquivo `package-lock.json` e executando o comando `npm i --legacy-peer-deps` antes de realizar o `ng update`.
 
+> Caso sua aplicação seja configurada com módulos, pode ser necessária a inclusão da seguinte `devDependencies`:
+
+```
+  "devDependencies": {
+    ...,
+    "@angular-devkit/schematics": "~18.0.2",
+    ...
+  }
+```
+
 O `ng update` ajudará nas alterações necessárias para seu projeto seguir atualizado, que são elas:
   - Caso houver *breaking changes*, serão realizados as alterações possíveis, mas fique atento ao
   [CHANGELOG](https://github.com/po-ui/po-angular/blob/master/CHANGELOG.md);
@@ -76,6 +86,7 @@ O `ng update` ajudará nas alterações necessárias para seu projeto seguir atu
     - `@po-ui/ng-sync`;
     - `@po-ui/style`;
 
+Além disso, será realizada uma pergunta para que o usuário decida se quer utilizar a nova biblioteca de ícones. Caso a escolha seja positiva, o processo de update irá substituir classes de ícones do po-ui pelas novas referências.
 
 <a id="sync"></a>
 ### ng update @po-ui/ng-sync

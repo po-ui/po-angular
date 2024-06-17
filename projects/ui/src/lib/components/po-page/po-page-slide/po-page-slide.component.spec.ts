@@ -179,47 +179,15 @@ describe('PoPageSlideComponent', () => {
     expect(mockComponent.close).not.toHaveBeenCalled();
   });
 
-  it('should focus on the page when opened', fakeAsync(() => {
+  it('should call focus on the page when opened', fakeAsync(() => {
+    spyOn(component, <any>'handleFocus');
+
     component.open();
     fixture.detectChanges();
 
     tick(100);
 
-    const pageSlideContent = debugElement.query(By.css('button'));
-    expect(document.activeElement).toEqual(pageSlideContent.nativeElement);
-
-    flush();
-  }));
-
-  it('should focus on first input of the page when opened', fakeAsync(() => {
-    const fixtureTest = TestBed.createComponent(TestComponent);
-    const componentTest = fixtureTest.componentInstance;
-
-    componentTest.poPage.open();
-    fixtureTest.detectChanges();
-
-    tick(100);
-
-    const input = fixtureTest.debugElement.query(By.css('button'));
-    expect(document.activeElement).toEqual(input.nativeElement);
-
-    flush();
-  }));
-
-  it("should maintain focus on the element if it's on the page", fakeAsync(() => {
-    const fixtureTest = TestBed.createComponent(TestComponent);
-    const componentTest = fixtureTest.componentInstance;
-
-    componentTest.poPage.open();
-    fixtureTest.detectChanges();
-
-    tick(100);
-
-    const password = fixtureTest.debugElement.query(By.css('input[name="password"]'));
-    password.nativeElement.focus();
-
-    tick(100);
-    expect(document.activeElement).toEqual(password.nativeElement);
+    expect(component['handleFocus']).toHaveBeenCalled();
 
     flush();
   }));

@@ -1,6 +1,6 @@
 import { fakeAsync, TestBed, tick } from '@angular/core/testing';
 import { UntypedFormControl } from '@angular/forms';
-import { HttpClientTestingModule } from '@angular/common/http/testing';
+import { provideHttpClientTesting } from '@angular/common/http/testing';
 
 import { throwError } from 'rxjs';
 
@@ -12,6 +12,7 @@ import { PoPageJobSchedulerInternal } from './po-page-job-scheduler-internal';
 import { PoPageJobSchedulerService } from './po-page-job-scheduler.service';
 import { PoStepperOrientation } from '@po-ui/ng-components';
 import { expectPropertiesValues } from './../../util-test/util-expect.spec';
+import { provideHttpClient, withInterceptorsFromDi } from '@angular/common/http';
 
 describe('PoPageJobSchedulerBaseComponent:', () => {
   let serviceJobScheduler: PoPageJobSchedulerService;
@@ -19,8 +20,8 @@ describe('PoPageJobSchedulerBaseComponent:', () => {
 
   beforeEach(() => {
     TestBed.configureTestingModule({
-      imports: [HttpClientTestingModule],
-      providers: [PoPageJobSchedulerService]
+      imports: [],
+      providers: [PoPageJobSchedulerService, provideHttpClient(withInterceptorsFromDi()), provideHttpClientTesting()]
     });
 
     serviceJobScheduler = TestBed.inject(PoPageJobSchedulerService);

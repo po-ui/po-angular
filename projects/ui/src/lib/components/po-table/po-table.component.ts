@@ -1,5 +1,5 @@
-import { CdkVirtualScrollViewport } from '@angular/cdk/scrolling';
 import { CdkDragDrop, moveItemInArray } from '@angular/cdk/drag-drop';
+import { CdkVirtualScrollViewport } from '@angular/cdk/scrolling';
 
 import { DecimalPipe } from '@angular/common';
 import {
@@ -33,7 +33,7 @@ import { PoPopupComponent } from '../po-popup/po-popup.component';
 import { PoTableColumnLabel } from './po-table-column-label/po-table-column-label.interface';
 
 import { uuid } from '../../utils/util';
-import { PoPageSlideComponent } from '../po-page';
+import { ICONS_DICTIONARY, PhosphorIconDictionary } from '../po-icon';
 import { PoTableRowTemplateArrowDirection } from './enums/po-table-row-template-arrow-direction.enum';
 import { PoTableAction } from './interfaces/po-table-action.interface';
 import { PoTableColumn } from './interfaces/po-table-column.interface';
@@ -43,7 +43,6 @@ import { PoTableColumnTemplateDirective } from './po-table-column-template/po-ta
 import { PoTableRowTemplateDirective } from './po-table-row-template/po-table-row-template.directive';
 import { PoTableSubtitleColumn } from './po-table-subtitle-footer/po-table-subtitle-column.interface';
 import { PoTableService } from './services/po-table.service';
-import { ICONS_DICTIONARY, PoIconDictionary } from '../po-icon';
 
 /**
  * @docsExtends PoTableBaseComponent
@@ -220,7 +219,7 @@ export class PoTableComponent extends PoTableBaseComponent implements AfterViewI
       this.debounceResize();
     });
 
-    this._iconToken = value ?? PoIconDictionary;
+    this._iconToken = value ?? PhosphorIconDictionary;
   }
 
   get hasRowTemplateWithArrowDirectionRight() {

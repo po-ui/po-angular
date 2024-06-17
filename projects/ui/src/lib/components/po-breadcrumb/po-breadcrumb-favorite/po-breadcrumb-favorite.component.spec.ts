@@ -1,10 +1,11 @@
 import { ComponentFixture, TestBed } from '@angular/core/testing';
-import { HttpClientTestingModule } from '@angular/common/http/testing';
+import { provideHttpClientTesting } from '@angular/common/http/testing';
 
 import { Observable } from 'rxjs';
 
 import { PoBreadcrumbFavoriteComponent } from './po-breadcrumb-favorite.component';
 import { PoBreadcrumbFavoriteService } from './po-breadcrumb-favorite.service';
+import { provideHttpClient, withInterceptorsFromDi } from '@angular/common/http';
 
 describe('PoBreadcrumbFavoriteComponent', () => {
   let component: PoBreadcrumbFavoriteComponent;
@@ -20,8 +21,9 @@ describe('PoBreadcrumbFavoriteComponent', () => {
 
   beforeEach(async () => {
     await TestBed.configureTestingModule({
-      imports: [HttpClientTestingModule],
-      declarations: [PoBreadcrumbFavoriteComponent]
+      declarations: [PoBreadcrumbFavoriteComponent],
+      imports: [],
+      providers: [provideHttpClient(withInterceptorsFromDi()), provideHttpClientTesting()]
     }).compileComponents();
 
     fixture = TestBed.createComponent(PoBreadcrumbFavoriteComponent);
