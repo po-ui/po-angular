@@ -89,7 +89,7 @@ describe('PoToolbarComponent:', () => {
       fixture.detectChanges();
 
       expect(nativeElement.querySelector('po-toolbar-actions')).toBeTruthy();
-      expect(nativeElement.querySelector('.po-icon-more')).toBeTruthy();
+      expect(nativeElement.querySelector('.ph-dots-three')).toBeTruthy();
     });
 
     it('should show actions with `po-icon-cart` if has an action and `actionsIcon` is `po-icon-cart`', () => {

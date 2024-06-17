@@ -6,7 +6,7 @@ import { PoLanguageService } from '../../services/po-language/po-language.servic
 import { expectPropertiesValues, expectSettersMethod } from '../../util-test/util-expect.spec';
 import * as utilsFunctions from '../../utils/util';
 
-import { HttpClientTestingModule } from '@angular/common/http/testing';
+import { provideHttpClientTesting } from '@angular/common/http/testing';
 import { TestBed } from '@angular/core/testing';
 import { Observable, of } from 'rxjs';
 import { PoTableColumnSortType } from './enums/po-table-column-sort-type.enum';
@@ -15,6 +15,7 @@ import { PoTableAction } from './interfaces/po-table-action.interface';
 import { PoTableColumn } from './interfaces/po-table-column.interface';
 import { PoTableBaseComponent, poTableLiteralsDefault } from './po-table-base.component';
 import { PoTableService } from './services/po-table.service';
+import { provideHttpClient, withInterceptorsFromDi } from '@angular/common/http';
 
 @Directive()
 class PoTableComponent extends PoTableBaseComponent {
@@ -35,8 +36,14 @@ describe('PoTableBaseComponent:', () => {
 
   beforeEach(async () => {
     await TestBed.configureTestingModule({
-      providers: [PoTableService, PoLanguageService, PoDateService],
-      imports: [HttpClientTestingModule]
+      imports: [],
+      providers: [
+        PoTableService,
+        PoLanguageService,
+        PoDateService,
+        provideHttpClient(withInterceptorsFromDi()),
+        provideHttpClientTesting()
+      ]
     }).compileComponents();
 
     dateService = new PoDateService();

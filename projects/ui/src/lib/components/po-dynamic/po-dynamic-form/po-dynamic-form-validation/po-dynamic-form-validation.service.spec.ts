@@ -1,10 +1,11 @@
-import { HttpTestingController, HttpClientTestingModule } from '@angular/common/http/testing';
+import { HttpTestingController, provideHttpClientTesting } from '@angular/common/http/testing';
 import { TestBed } from '@angular/core/testing';
 
 import { of } from 'rxjs';
 
 import { PoDynamicFormField } from '../po-dynamic-form-field.interface';
 import { PoDynamicFormValidationService } from './po-dynamic-form-validation.service';
+import { provideHttpClient, withInterceptorsFromDi } from '@angular/common/http';
 
 describe('PoDynamicFormValidationService:', () => {
   let httpMock: HttpTestingController;
@@ -16,8 +17,12 @@ describe('PoDynamicFormValidationService:', () => {
 
   beforeEach(() => {
     TestBed.configureTestingModule({
-      imports: [HttpClientTestingModule],
-      providers: [PoDynamicFormValidationService]
+      imports: [],
+      providers: [
+        PoDynamicFormValidationService,
+        provideHttpClient(withInterceptorsFromDi()),
+        provideHttpClientTesting()
+      ]
     });
 
     httpMock = TestBed.inject(HttpTestingController);

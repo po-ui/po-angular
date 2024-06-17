@@ -1,5 +1,5 @@
 import { DecimalPipe } from '@angular/common';
-import { HttpClientTestingModule } from '@angular/common/http/testing';
+import { provideHttpClientTesting } from '@angular/common/http/testing';
 import { Component, ElementRef, TemplateRef, ViewChild } from '@angular/core';
 import { ComponentFixture, TestBed, fakeAsync, tick } from '@angular/core/testing';
 import { By } from '@angular/platform-browser';
@@ -23,6 +23,7 @@ import { PoTableColumnTemplateDirective } from './po-table-column-template/po-ta
 import { PoTableComponent } from './po-table.component';
 import { PoTableModule } from './po-table.module';
 import { PoTableService } from './services/po-table.service';
+import { provideHttpClient, withInterceptorsFromDi } from '@angular/common/http';
 
 @Component({ template: 'Search' })
 export class SearchComponent {}
@@ -222,8 +223,8 @@ describe('PoTableComponent:', () => {
 
     changeDetector = jasmine.createSpyObj('ChangeDetectorRef', ['detectChanges']);
     await TestBed.configureTestingModule({
-      imports: [RouterTestingModule.withRoutes(routes), PoTableModule, NoopAnimationsModule, HttpClientTestingModule],
       declarations: [TestMenuComponent, SearchComponent],
+      imports: [RouterTestingModule.withRoutes(routes), PoTableModule, NoopAnimationsModule],
       providers: [
         PoControlPositionService,
         PoDateService,
@@ -231,7 +232,9 @@ describe('PoTableComponent:', () => {
         PoColorPaletteService,
         PoTableService,
         { provide: CdkVirtualScrollViewport, useValue: mockViewPort },
-        { provide: changeDetector, useValue: changeDetector }
+        { provide: changeDetector, useValue: changeDetector },
+        provideHttpClient(withInterceptorsFromDi()),
+        provideHttpClientTesting()
       ]
     }).compileComponents();
 

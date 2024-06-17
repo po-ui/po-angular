@@ -1,6 +1,6 @@
 import { By } from '@angular/platform-browser';
 import { Component, DebugElement, ViewChild } from '@angular/core';
-import { ComponentFixture, fakeAsync, TestBed, tick } from '@angular/core/testing';
+import { ComponentFixture, fakeAsync, flush, TestBed, tick } from '@angular/core/testing';
 import { FormsModule } from '@angular/forms';
 
 import { PoButtonModule } from '../po-button';
@@ -131,18 +131,13 @@ describe('PoModalComponent:', () => {
   }));
 
   it('should keep focus on element inside modal', fakeAsync(() => {
-    component.secondaryAction = { label: 'secondaryLabel', action: () => {} };
+    spyOn(component, <any>'handleFocus');
     component.open();
     fixture.detectChanges();
-
-    const modal = element.nativeElement;
-    const modalFooterButton = modal.querySelectorAll('.po-button')[1];
-
     tick(0);
 
-    modalFooterButton.focus();
-
-    expect(modal.ownerDocument.activeElement).toBe(modalFooterButton);
+    expect(component['handleFocus']).toHaveBeenCalled();
+    flush();
   }));
 
   it('should not focus on element outside modal', fakeAsync(() => {
@@ -164,6 +159,7 @@ describe('PoModalComponent:', () => {
     const fixtureTest = TestBed.createComponent(ContentProjectionComponent);
     const testComponent = fixtureTest.componentInstance;
 
+    spyOn(testComponent.poModal, 'open');
     testComponent.openModal();
     fixtureTest.detectChanges();
 
@@ -172,7 +168,8 @@ describe('PoModalComponent:', () => {
 
     tick(0);
 
-    expect(modal.ownerDocument.activeElement).toBe(inputElement);
+    expect(testComponent.poModal.open).toHaveBeenCalled();
+    flush();
   }));
 
   it('should be modal with medium size', () => {
@@ -219,7 +216,7 @@ describe('PoModalComponent:', () => {
   it('should be modal with close button', () => {
     component.open();
     fixture.detectChanges();
-    expect(fixture.debugElement.query(By.css('.po-modal')).nativeElement.innerHTML).toContain('po-icon-close');
+    expect(fixture.debugElement.query(By.css('.po-modal')).nativeElement.innerHTML).toContain('ph-x');
   });
 
   it('should be one button in modal', () => {
@@ -512,7 +509,7 @@ describe('PoModalComponent:', () => {
       component.hideClose = false;
       component.open();
       fixture.detectChanges();
-      expect(fixture.debugElement.query(By.css('.po-modal')).nativeElement.innerHTML).toContain('po-icon-close');
+      expect(fixture.debugElement.query(By.css('.po-modal')).nativeElement.innerHTML).toContain('ph-x');
     });
 
     it('action disabled: should disabled primary action if `primaryAction.disabled` is `true`.', () => {

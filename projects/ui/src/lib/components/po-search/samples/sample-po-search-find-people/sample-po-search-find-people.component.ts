@@ -9,7 +9,7 @@ import { SamplePoSearchFindPeopleService } from './sample-po-search-find-people.
       li {
         list-style: none;
         display: flex;
-        align-itens: center;
+        align-items: center;
       }
     `,
     `

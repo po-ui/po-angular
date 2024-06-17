@@ -45,6 +45,11 @@
       "version": "17",
       "description": "Atualiza @po-ui/ng-components para v17",
       "factory": "./ng-update/v17/index"
+    },
+    "migration-v18": {
+      "version": "18",
+      "description": "Atualiza @po-ui/ng-components para v18",
+      "factory": "./ng-update/v18/index"
     }
   }
 }

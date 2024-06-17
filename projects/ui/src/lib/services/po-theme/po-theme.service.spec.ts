@@ -1,11 +1,11 @@
-import { Renderer2, RendererFactory2, RendererType2 } from '@angular/core';
-import { TestBed } from '@angular/core/testing';
-import { PoThemeTypeEnum } from './enum/po-theme-type.enum';
-import { PoThemeService } from './po-theme.service';
-import { PoTheme } from './interfaces/po-theme.interface';
 import { DOCUMENT } from '@angular/common';
+import { Renderer2 } from '@angular/core';
+import { TestBed } from '@angular/core/testing';
+import { ICONS_DICTIONARY, PoIconDictionary } from '../../components/po-icon';
+import { PoThemeTypeEnum } from './enum/po-theme-type.enum';
 import { poThemeDefault } from './helpers/po-theme-poui.constant';
-import { ICONS_DICTIONARY, PhosphorIconDictionary } from '../../components/po-icon';
+import { PoTheme } from './interfaces/po-theme.interface';
+import { PoThemeService } from './po-theme.service';
 
 class MockRenderer2 {
   createElement(): any {}
@@ -26,7 +26,8 @@ describe('PoThemeService:', () => {
         { provide: 'Window', useValue: window },
         { provide: DOCUMENT, useValue: document },
         { provide: Renderer2, useClass: MockRenderer2 },
-        { provide: 'poThemeDefault', useValue: poThemeDefault }
+        { provide: 'poThemeDefault', useValue: poThemeDefault },
+        { provide: ICONS_DICTIONARY, useValue: PoIconDictionary }
       ]
     });
 
@@ -238,12 +239,15 @@ describe(`PoThemeService with 'PhosphorIconDictionary':`, () => {
         { provide: 'Window', useValue: window },
         { provide: DOCUMENT, useValue: document },
         { provide: Renderer2, useClass: MockRenderer2 },
-        { provide: 'poThemeDefault', useValue: poThemeDefault },
-        { provide: ICONS_DICTIONARY, useValue: PhosphorIconDictionary }
+        { provide: 'poThemeDefault', useValue: poThemeDefault }
       ]
     });
 
     service = TestBed.inject(PoThemeService);
+  });
+
+  it('should be created', () => {
+    expect(service).toBeTruthy();
   });
 
   it('should set default theme', () => {

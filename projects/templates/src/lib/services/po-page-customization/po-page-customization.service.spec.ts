@@ -1,9 +1,10 @@
 import { PoPageDynamicOptionsSchema } from './po-page-dynamic-options.interface';
 import { TestBed, fakeAsync, tick, waitForAsync } from '@angular/core/testing';
-import { HttpTestingController, HttpClientTestingModule } from '@angular/common/http/testing';
+import { HttpTestingController, provideHttpClientTesting } from '@angular/common/http/testing';
 
 import { PoPageCustomizationService } from './po-page-customization.service';
 import { PoPageDynamicSearchOptions } from '../../components/po-page-dynamic-search/po-page-dynamic-search-options.interface';
+import { provideHttpClient, withInterceptorsFromDi } from '@angular/common/http';
 
 const originalPageOptions: PoPageDynamicSearchOptions = {
   title: 'Original Title',
@@ -91,8 +92,8 @@ describe('PoPageCustomizationService:', () => {
 
   beforeEach(() => {
     TestBed.configureTestingModule({
-      imports: [HttpClientTestingModule],
-      providers: [PoPageCustomizationService]
+      imports: [],
+      providers: [PoPageCustomizationService, provideHttpClient(withInterceptorsFromDi()), provideHttpClientTesting()]
     });
 
     poPageCustomizationService = TestBed.inject(PoPageCustomizationService);

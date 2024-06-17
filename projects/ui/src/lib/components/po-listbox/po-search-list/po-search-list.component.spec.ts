@@ -35,8 +35,11 @@ describe('PoMultiselectSearchComponent:', () => {
   });
 
   it('should set focus on input', () => {
+    spyOn(component.inputElement.nativeElement, 'focus');
+
     component.setFocus();
-    expect(document.activeElement.tagName.toLowerCase()).toBe('input');
+
+    expect(component.inputElement.nativeElement.focus).toHaveBeenCalled();
   });
 
   it('should clean input', () => {

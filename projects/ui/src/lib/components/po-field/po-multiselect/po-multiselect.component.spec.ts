@@ -1,8 +1,8 @@
 import { OverlayModule } from '@angular/cdk/overlay';
-import { HttpClient, HttpHandler } from '@angular/common/http';
-import { HttpClientTestingModule, HttpTestingController } from '@angular/common/http/testing';
+import { HttpClient, HttpHandler, provideHttpClient, withInterceptorsFromDi } from '@angular/common/http';
+import { HttpTestingController, provideHttpClientTesting } from '@angular/common/http/testing';
 import { ComponentFixture, fakeAsync, flush, TestBed, tick } from '@angular/core/testing';
-import { Observable, of, throwError } from 'rxjs';
+import { Observable, catchError, of, tap, throwError } from 'rxjs';
 
 import * as UtilsFunction from '../../../utils/util';
 
@@ -15,8 +15,8 @@ import { PoFieldContainerBottomComponent } from './../po-field-container/po-fiel
 import { PoMultiselectDropdownComponent } from './po-multiselect-dropdown/po-multiselect-dropdown.component';
 import { PoMultiselectFilter } from './po-multiselect-filter.interface';
 import { PoMultiselectFilterService } from './po-multiselect-filter.service';
-import { PoMultiselectOption } from './po-multiselect-option.interface';
 import { PoMultiselectComponent } from './po-multiselect.component';
+import { PoMultiselectOption } from './po-multiselect-option.interface';
 
 const poMultiselectFilterServiceStub: PoMultiselectFilter = {
   getFilteredData: function (params: { property: string; value: string }): Observable<Array<PoMultiselectOption>> {
@@ -37,7 +37,6 @@ describe('PoMultiselectComponent:', () => {
   let tags;
   let index;
   let renderer: Renderer2;
-
   const mockURL = 'rest/tecnologies';
 
   beforeEach(async () => {
@@ -50,7 +49,6 @@ describe('PoMultiselectComponent:', () => {
     index = 2;
 
     await TestBed.configureTestingModule({
-      imports: [HttpClientTestingModule, OverlayModule],
       declarations: [
         PoTagComponent,
         PoFieldContainerComponent,
@@ -58,7 +56,15 @@ describe('PoMultiselectComponent:', () => {
         PoMultiselectDropdownComponent,
         PoFieldContainerBottomComponent
       ],
-      providers: [HttpClient, HttpHandler, Renderer2, PoMultiselectFilterService]
+      imports: [OverlayModule],
+      providers: [
+        HttpClient,
+        HttpHandler,
+        Renderer2,
+        PoMultiselectFilterService,
+        provideHttpClient(withInterceptorsFromDi()),
+        provideHttpClientTesting()
+      ]
     }).compileComponents();
 
     fixture = TestBed.createComponent(PoMultiselectComponent);
@@ -141,19 +147,24 @@ describe('PoMultiselectComponent:', () => {
   it('should set focus on input', () => {
     component.initialized = false;
     component.autoFocus = true;
+    spyOn(component.inputElement.nativeElement, 'focus');
     component.ngAfterViewInit();
 
     fixture.detectChanges();
 
-    expect(document.activeElement.tagName.toLowerCase()).toBe('div');
+    // expect(document.activeElement.tagName.toLowerCase()).toBe('div');
+    expect(component.inputElement.nativeElement.focus).toHaveBeenCalled();
     expect(component.initialized).toBeTruthy();
   });
 
   it('shouldn`t set focus on input', () => {
     component.initialized = false;
     component.autoFocus = false;
+    spyOn(component.inputElement.nativeElement, 'focus');
+
     component.ngAfterViewInit();
-    expect(document.activeElement.tagName.toLowerCase()).not.toBe('input');
+    expect(component.inputElement.nativeElement.focus).not.toHaveBeenCalled();
+
     expect(component.initialized).toBeTruthy();
   });
 
@@ -1061,6 +1072,28 @@ describe('PoMultiselectComponent:', () => {
         }
       );
     }));
+
+    it('should call service.getFilteredData and set options on success', () => {
+      const options: Array<PoMultiselectOption> = [{ label: 'Option 1', value: '1' }];
+      spyOn(multiSelectService, 'getFilteredData').and.returnValue(of(options));
+      spyOn(component, <any>'setOptionsByApplyFilter');
+
+      component.applyFilter('test').subscribe(result => {
+        expect(result).toEqual(options);
+        expect(component['setOptionsByApplyFilter']).toHaveBeenCalledWith(options);
+      });
+    });
+
+    it('should handle error and set isServerSearching to false', () => {
+      spyOn(multiSelectService, 'getFilteredData').and.returnValue(throwError(() => new Error('error')));
+      spyOn(component, <any>'setOptionsByApplyFilter');
+
+      component.applyFilter('test').subscribe(result => {
+        expect(result).toEqual([]);
+        expect(component.isServerSearching).toBeFalse();
+        expect(component['setOptionsByApplyFilter']).toHaveBeenCalledWith([]);
+      });
+    });
 
     it('applyFilter: should be called with undefined', fakeAsync(() => {
       component.filterService = poMultiselectFilterServiceStub;

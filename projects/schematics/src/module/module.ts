@@ -1,12 +1,12 @@
-import { addImportToModule, addDeclarationToModule, addExportToModule } from '@schematics/angular/utility/ast-utils';
-import { getAppModulePath, isStandaloneApp } from '@schematics/angular/utility/ng-ast-utils';
-import { InsertChange, Change } from '@schematics/angular/utility/change';
 import { SchematicsException, Tree } from '@angular-devkit/schematics';
+import { addDeclarationToModule, addExportToModule, addImportToModule } from '@schematics/angular/utility/ast-utils';
+import { Change, InsertChange } from '@schematics/angular/utility/change';
+import { getAppModulePath, isStandaloneApp } from '@schematics/angular/utility/ng-ast-utils';
 
 import * as ts from 'typescript';
 
-import { getProjectMainFile, getProjectFromWorkspace, getWorkspaceConfigGracefully } from '../project';
 import { WorkspaceSchema } from '@schematics/angular/utility/workspace-models';
+import { getProjectFromWorkspace, getProjectMainFile, getWorkspaceConfigGracefully } from '../project';
 
 export function addModuleImportToRootModule(options: any, moduleName: string, modulePath: string) {
   return (host: Tree) => {

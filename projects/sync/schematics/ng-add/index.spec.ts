@@ -23,10 +23,8 @@ xdescribe('Schematic: ng-add', () => {
   let infoOutput: Array<string>;
 
   beforeEach(async () => {
-    appTree = await runner.runExternalSchematicAsync('@schematics/angular', 'workspace', workspaceOptions).toPromise();
-    appTree = await runner
-      .runExternalSchematicAsync('@schematics/angular', 'application', componentOptions, appTree)
-      .toPromise();
+    appTree = await runner.runExternalSchematic('@schematics/angular', 'workspace', workspaceOptions);
+    appTree = await runner.runExternalSchematic('@schematics/angular', 'application', componentOptions, appTree);
 
     infoOutput = [];
     runner.logger.subscribe(e => {
@@ -38,7 +36,7 @@ xdescribe('Schematic: ng-add', () => {
 
   describe('Dependencies:', () => {
     it('should update package.json with @po-ui/ng-sync dependencies and run nodePackageInstall', async () => {
-      const tree = await runner.runSchematicAsync('ng-add', componentOptions, appTree).toPromise();
+      const tree = await runner.runSchematic('ng-add', componentOptions, appTree);
       const packageJson = JSON.parse(getFileContent(tree, '/package.json'));
       const dependencies = packageJson.dependencies;
 
@@ -54,7 +52,7 @@ xdescribe('Schematic: ng-add', () => {
       const poSyncModuleName = 'PoSyncModule';
       const poStorageModuleName = 'PoStorageModule';
 
-      const tree = await runner.runSchematicAsync('ng-add', componentOptions, appTree).toPromise();
+      const tree = await runner.runSchematic('ng-add', componentOptions, appTree);
       const fileContent = getFileContent(tree, `projects/${componentOptions.name}/src/app/app.module.ts`);
 
       expect(fileContent).toContain(poSyncModuleName);

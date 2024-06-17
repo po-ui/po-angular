@@ -1,5 +1,12 @@
-import { HttpClient, HttpHeaders, HTTP_INTERCEPTORS, HttpRequest } from '@angular/common/http';
-import { HttpClientTestingModule, HttpTestingController } from '@angular/common/http/testing';
+import {
+  HttpClient,
+  HttpHeaders,
+  HTTP_INTERCEPTORS,
+  HttpRequest,
+  provideHttpClient,
+  withInterceptorsFromDi
+} from '@angular/common/http';
+import { HttpTestingController, provideHttpClientTesting } from '@angular/common/http/testing';
 import { inject, TestBed } from '@angular/core/testing';
 
 import { Observable } from 'rxjs';
@@ -20,7 +27,7 @@ describe('PoHttpRequestInterceptorService: ', () => {
 
   beforeEach(() => {
     TestBed.configureTestingModule({
-      imports: [HttpClientTestingModule, PoHttpRequestModule],
+      imports: [PoHttpRequestModule],
       providers: [
         PoHttpRequesControltService,
         PoHttpRequestInterceptorService,
@@ -29,7 +36,9 @@ describe('PoHttpRequestInterceptorService: ', () => {
           provide: HTTP_INTERCEPTORS,
           useClass: PoHttpRequestInterceptorService,
           multi: true
-        }
+        },
+        provideHttpClient(withInterceptorsFromDi()),
+        provideHttpClientTesting()
       ]
     });
 

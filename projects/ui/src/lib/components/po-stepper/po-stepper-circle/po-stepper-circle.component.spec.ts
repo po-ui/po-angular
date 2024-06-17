@@ -334,14 +334,14 @@ describe('PoStepperCircleComponent:', () => {
   });
 
   function PoIconInfo() {
-    return nativeElement.querySelector('.po-icon-info');
+    return nativeElement.querySelector('.ph-info');
   }
 
   function PoIconOk() {
-    return nativeElement.querySelector('.po-icon-ok');
+    return nativeElement.querySelector('.ph-check');
   }
 
   function PoIconExclamation() {
-    return nativeElement.querySelector('.po-icon-exclamation');
+    return nativeElement.querySelector('.ph-warning-circle');
   }
 });
