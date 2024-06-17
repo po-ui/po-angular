@@ -25,7 +25,7 @@ jobs:
           curl -X POST -H "Content-Type: application/json" \
           -d "{\"content\": \"🚀 **PR Criada com Sucesso 🚀**\\n- Autor: $AUTHOR\\n- Título: $PR_TITLE\\n- Link: $PR_URL\"}" \
           $DISCORD_WEBHOOK_URL
-          
+
   lint:
 
     runs-on: ubuntu-20.04
@@ -46,7 +46,7 @@ jobs:
         node-version: 18
 
     # Executa um comando do projeto na máquina virtual
-    - run: npm i
+    - run: npm i --force
     - run: npm run format:check
     - run: npm run lint:storage
     - run: npm run lint:sync
@@ -67,7 +67,7 @@ jobs:
       with:
         node-version: 18
 
-    - run: npm i
+    - run: npm i --force
     - run: npm run build
     - run: npm run build:portal:docs
     - run: npm run build:portal:prod
@@ -90,7 +90,7 @@ jobs:
       with:
         node-version: 18
 
-    - run: npm i
+    - run: npm i --force
     - run: npm run test:ui
     - run: npm run test:ui:schematics
 
@@ -107,7 +107,7 @@ jobs:
       with:
         node-version: 18
 
-    - run: npm i
+    - run: npm i --force
     - run: npm run build:ui:lite
     - run: npm run test:templates
     - run: npm run test:templates:schematics
@@ -125,7 +125,7 @@ jobs:
       with:
         node-version: 18
 
-    - run: npm i
+    - run: npm i --force
     - run: npm run test:code-editor
     - run: npm run test:code-editor:schematics
 
@@ -142,7 +142,7 @@ jobs:
       with:
         node-version: 18
 
-    - run: npm i
+    - run: npm i --force
     - run: npm run test:storage
     - run: npm run test:storage:schematics
 
@@ -159,7 +159,7 @@ jobs:
       with:
         node-version: 18
 
-    - run: npm i
+    - run: npm i --force
     - run: npm run build:storage:lite
     - run: npm run test:sync
     - run: npm run test:sync:schematics

@@ -1,4 +1,4 @@
-import { HttpClientTestingModule, HttpTestingController } from '@angular/common/http/testing';
+import { HttpTestingController, provideHttpClientTesting } from '@angular/common/http/testing';
 import { TestBed } from '@angular/core/testing';
 
 import { of } from 'rxjs';
@@ -9,6 +9,7 @@ import * as utilsFunctions from '../../utils/util';
 import { PoJobScheduler } from './interfaces/po-job-scheduler.interface';
 import { PoJobSchedulerInternal } from './interfaces/po-job-scheduler-internal.interface';
 import { PoPageJobSchedulerService } from './po-page-job-scheduler.service';
+import { provideHttpClient, withInterceptorsFromDi } from '@angular/common/http';
 
 describe('PoPageJobSchedulerService:', () => {
   let poPageJobSchedulerService: PoPageJobSchedulerService;
@@ -16,8 +17,8 @@ describe('PoPageJobSchedulerService:', () => {
 
   beforeEach(() => {
     TestBed.configureTestingModule({
-      imports: [HttpClientTestingModule],
-      providers: [PoPageJobSchedulerService]
+      imports: [],
+      providers: [PoPageJobSchedulerService, provideHttpClient(withInterceptorsFromDi()), provideHttpClientTesting()]
     });
 
     poPageJobSchedulerService = TestBed.inject(PoPageJobSchedulerService);

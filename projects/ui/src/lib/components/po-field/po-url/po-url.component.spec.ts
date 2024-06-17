@@ -190,7 +190,7 @@ describe('PoUrlComponent:', () => {
 
     it('should have `world` icon', () => {
       fixture.detectChanges();
-      expect(fixture.debugElement.nativeElement.querySelector('.po-icon-world')).toBeTruthy();
+      expect(fixture.debugElement.nativeElement.querySelector('.ph-globe-simple')).toBeTruthy();
     });
 
     it('should call `getScreenValue` and `verifyPattern` on input keyup', fakeAsync(() => {

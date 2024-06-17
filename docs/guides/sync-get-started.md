@@ -1,7 +1,7 @@
 [comment]: # (@label Começando com o PO Sync)
 [comment]: # (@link guides/sync-get-started)
 
-Esse guia servirá para criar e configurar uma aplicação em [Ionic 6](https://ionicframework.com/docs) com o uso do PO Sync.
+Esse guia servirá para criar e configurar uma aplicação em [Ionic 7](https://ionicframework.com/docs) com o uso do PO Sync.
 
 Para maiores detalhes sobre os serviços e métodos utilizados neste tutorial, consulte a documentação de
 [Fundamentos do PO Sync](/guides/sync-fundamentals) e a documentação de referência de [API do PO Sync](/documentation/po-sync).
@@ -9,11 +9,11 @@ Para maiores detalhes sobre os serviços e métodos utilizados neste tutorial, c
 ### Pré-requisitos
 
 - [Node.js e NPM](https://nodejs.org/en/)
-- [Angular CLI](https://cli.angular.io/) (~17.2.2):
+- [Angular CLI](https://cli.angular.io/) (~18.0.1):
   - ```shell
-    npm install -g @angular/cli@17
+    npm install -g @angular/cli@18
     ```
-- [Ionic](https://ionicframework.com/docs/cli/) (^7.7.0):
+- [Ionic](https://ionicframework.com/docs/cli/) (^7.2.0):
   - ```shell
     npm install -g @ionic/cli@7
     ```
@@ -49,31 +49,32 @@ Antes de executar a instalação, é necessário que todas as dependências do p
 ```typescript
   ...
   "dependencies": {
-    "@angular/animations": "~17.2.4",
-    "@angular/common": "~17.2.4",
-    "@angular/core": "~17.2.4",
-    "@angular/forms": "~17.2.4",
-    "@angular/platform-browser": "~17.2.4",
-    "@angular/platform-browser-dynamic": "~17.2.4",
-    "@angular/router": "~17.2.4",
-    "@angular/service-worker": "~17.2.2",
-    "@ionic/angular": "^7.7.3",
-    "@capacitor/network": "^5.0.6",
-    "@capacitor/splash-screen": "^5.0.6",
+    "@angular/animations": "~18.0.1",
+    "@angular/common": "~18.0.1",
+    "@angular/compiler": "~18.0.1",
+    "@angular/core": "~18.0.1",
+    "@angular/forms": "~18.0.1",
+    "@angular/platform-browser": "~18.0.1",
+    "@angular/platform-browser-dynamic": "~18.0.1",
+    "@angular/router": "~18.0.1",
+    "@angular/service-worker": "~18.0.1",
+    "@ionic/angular": "^8.0.0",
+    "@capacitor/network": "^6.0.1",
+    "@capacitor/splash-screen": "^6.0.1",
+    "@capacitor/status-bar": "6.0.0",
     "rxjs": "~7.8.1",
     "tslib": "^2.6.2",
     "zone.js": "~0.14.4"
     ...
   },
   "devDependencies": {
-    "@angular-devkit/build-angular": "~17.2.3",
-    "@angular-devkit/schematics": "~17.2.3",
-    "@angular/cli": "~17.2.3",
-    "@angular/compiler": "~17.2.4",
-    "@angular/compiler-cli": "~17.2.4",
-    "@angular/language-service": "~17.2.4",
-    "@ionic/angular-toolkit": "^10.0.0",
-    "typescript": "~5.2.2"
+    "@angular-devkit/build-angular": "~18.0.2",
+    "@angular-devkit/schematics": "~18.0.2",
+    "@angular/cli": "~18.0.2",
+    "@angular/compiler-cli": "~18.0.1",
+    "@angular/language-service": "~18.0.1",
+    "@ionic/angular-toolkit": "^11.0.1",
+    "typescript": "~5.4.5"
   },
   ...
 ```
@@ -105,13 +106,10 @@ ng add @po-ui/ng-sync
 #### Passo 4.1 - Importando o `po-sync` e o `po-storage`
 No arquivo `src/app/app.module.ts`, adicione a importação dos módulos do `po-storage` e do `po-sync`: 
 
-> Caso você utilize o comando `ng add`, esse passo será feito automaticamente.
-
 ```typescript
 import { NgModule } from '@angular/core';
 import { BrowserModule } from '@angular/platform-browser';
 import { RouteReuseStrategy } from '@angular/router';
-import { HttpClientModule } from '@angular/common/http';
 
 import { IonicModule, IonicRouteStrategy } from '@ionic/angular';
 
@@ -120,6 +118,7 @@ import { PoSyncModule } from '@po-ui/ng-sync';
 
 import { AppRoutingModule } from './app-routing.module';
 import { AppComponent } from './app.component';
+import { provideHttpClient, withInterceptorsFromDi } from '@angular/common/http';
 
 @NgModule({
   declarations: [AppComponent],
@@ -128,12 +127,13 @@ import { AppComponent } from './app.component';
     IonicModule.forRoot(),
     AppRoutingModule,
     PoStorageModule.forRoot(),
-    HttpClientModule,
-    PoSyncModule
+    PoSyncModule,
   ],
   providers: [
-    { provide: RouteReuseStrategy, useClass: IonicRouteStrategy }],
-  bootstrap: [AppComponent]
+    { provide: RouteReuseStrategy, useClass: IonicRouteStrategy },
+    provideHttpClient(withInterceptorsFromDi()),
+  ],
+  bootstrap: [AppComponent],
 })
 export class AppModule {}
 ```

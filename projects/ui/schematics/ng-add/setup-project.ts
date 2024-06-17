@@ -1,21 +1,23 @@
-import { chain, Rule, schematic, Tree, noop } from '@angular-devkit/schematics';
+import { Rule, Tree, chain, noop, schematic } from '@angular-devkit/schematics';
+import { getAppModulePath, isStandaloneApp } from '@schematics/angular/utility/ng-ast-utils';
 import { WorkspaceProject, WorkspaceSchema } from '@schematics/angular/utility/workspace-models';
-import { isStandaloneApp } from '@schematics/angular/utility/ng-ast-utils';
 
-import { addModuleImportToRootModule } from '@po-ui/ng-schematics/module';
+import { addModuleImportToRootModule, getSourceFile } from '@po-ui/ng-schematics/module';
 import {
   getProjectFromWorkspace,
   getProjectMainFile,
   getProjectTargetOptions,
   getWorkspaceConfigGracefully
 } from '@po-ui/ng-schematics/project';
+import { addProviderToModule } from '@schematics/angular/utility/ast-utils';
 
 /** PO Module name that will insert in app root module */
 const poModuleName = 'PoModule';
 const poModuleSourcePath = '@po-ui/ng-components';
 
 /** HttpClient Module name that will insert in app root module */
-const httpClientModuleName = 'HttpClientModule';
+const httpProvideHttpClientName = 'provideHttpClient';
+const httpWithInterceptorsFromDiName = 'withInterceptorsFromDi';
 const httpClientModuleSourcePath = '@angular/common/http';
 
 /**
@@ -27,11 +29,42 @@ const httpClientModuleSourcePath = '@angular/common/http';
 export default function (options: any): Rule {
   return chain([
     addModuleImportToRootModule(options, poModuleName, poModuleSourcePath),
-    addModuleImportToRootModule(options, httpClientModuleName, httpClientModuleSourcePath),
+    addImportOnly(options, [httpProvideHttpClientName, httpWithInterceptorsFromDiName], httpClientModuleSourcePath),
+    addProviderToAppModule(options, 'provideHttpClient(withInterceptorsFromDi()),'),
     addThemeToAppStyles(options),
     updateAppConfigFileRule(options),
     configureSideMenu(options)
   ]);
+}
+
+//insere um import no módulo sem adicionar na lista de importação
+export function addImportOnly(options: any, moduleNames: string | Array<String>, importPath: string) {
+  return (host: Tree) => {
+    const workspace = getWorkspaceConfigGracefully(host) ?? ({} as WorkspaceSchema);
+    const project: any = getProjectFromWorkspace(workspace, options.project);
+
+    const browserEntryPoint = getProjectMainFile(project);
+
+    if (isStandaloneApp(host, browserEntryPoint)) {
+      return host;
+    }
+
+    const modulePath = getAppModulePath(host, browserEntryPoint);
+    let importStatement: string;
+
+    if (Array.isArray(moduleNames)) {
+      const names = moduleNames.join(', ');
+      importStatement = `import { ${names} } from '${importPath}';\n`;
+    } else {
+      importStatement = `import { ${moduleNames} } from '${importPath}';\n`;
+    }
+
+    const recorder = host.beginUpdate(modulePath);
+    recorder.insertLeft(0, importStatement);
+    host.commitUpdate(recorder);
+
+    return host;
+  };
 }
 
 /** Add PO theme to project styles */
@@ -100,10 +133,59 @@ function updateAppConfigFileRule(options: any): Rule {
   };
 }
 
+export function addProviderToAppModule(options: any, provider: { provide: string; useValue: string } | string) {
+  return (host: Tree) => {
+    const workspace = getWorkspaceConfigGracefully(host) ?? ({} as WorkspaceSchema);
+    const project: any = getProjectFromWorkspace(workspace, options.project);
+    const browserEntryPoint = getProjectMainFile(project);
+
+    if (isStandaloneApp(host, browserEntryPoint)) {
+      return host;
+    }
+
+    const appModulePath = getAppModulePath(host, browserEntryPoint);
+
+    addProviderToModuleProvider(host, appModulePath, provider);
+
+    return host;
+  };
+}
+
+// para inserir variáveis no provider
+export function addProviderToModuleProvider(
+  tree: Tree,
+  modulePath: string,
+  provider: { provide: string; useValue: string } | string
+) {
+  const moduleSource = getSourceFile(tree, modulePath);
+  const changes = addProviderToModule(
+    moduleSource as any,
+    modulePath,
+    `
+    ${provider}`,
+    null as any
+  );
+
+  return insertChanges(tree, changes, modulePath);
+}
+
+/** Inserts the specified changes into the module file. */
+function insertChanges(tree: Tree, changes: Array<any>, modulePath: string) {
+  const recorder = tree.beginUpdate(modulePath);
+
+  changes.forEach(change => {
+    if (change) {
+      recorder.insertLeft(change.pos, change.toAdd);
+    }
+  });
+
+  tree.commitUpdate(recorder);
+}
+
 export function updateAppConfigFile(content: string): string {
   const importBlock = `
-import { provideHttpClient } from '@angular/common/http';
-import { BrowserAnimationsModule } from '@angular/platform-browser/animations';
+import { provideHttpClient, withInterceptorsFromDi } from '@angular/common/http';
+
 import { PoHttpRequestModule } from '@po-ui/ng-components';
 `;
 
@@ -111,7 +193,9 @@ import { PoHttpRequestModule } from '@po-ui/ng-components';
   providers: [
     provideRouter(routes),
     provideHttpClient(),
-    importProvidersFrom([BrowserAnimationsModule, PoHttpRequestModule]),
+    importProvidersFrom([PoHttpRequestModule]),
+    provideZoneChangeDetection({ eventCoalescing: true }),
+    provideHttpClient(withInterceptorsFromDi())
   ],`;
 
   const regexImport = /import {[^}]+} from '@angular\/core';/;
@@ -123,7 +207,7 @@ import { PoHttpRequestModule } from '@po-ui/ng-components';
   // Adiciona os novos imports e providers
   modifiedContent = modifiedContent.replace(
     /export const appConfig: ApplicationConfig = {/,
-    `import { ApplicationConfig, importProvidersFrom } from '@angular/core';${importBlock}
+    `import { ApplicationConfig, importProvidersFrom, provideZoneChangeDetection } from '@angular/core';${importBlock}
 export const appConfig: ApplicationConfig = {${providersBlock}`
   );
 

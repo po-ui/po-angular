@@ -1,11 +1,11 @@
 import { ChangeDetectorRef, Component, EventEmitter, Inject, Input, Optional, Output, forwardRef } from '@angular/core';
 import { NG_VALUE_ACCESSOR } from '@angular/forms';
 
-import { ICONS_DICTIONARY, PoIconDictionary } from '../../po-icon';
 import { poLocaleDefault } from '../../../services/po-language/po-language.constant';
 import { PoLanguageService } from '../../../services/po-language/po-language.service';
 import { convertToBoolean } from '../../../utils/util';
 import { PoCheckboxGroupComponent } from '../../po-field/po-checkbox-group/po-checkbox-group.component';
+import { ICONS_DICTIONARY, PhosphorIconDictionary } from '../../po-icon';
 import { PoTableColumn } from '../interfaces/po-table-column.interface';
 
 export const poTableListManagerLiterals = {
@@ -81,7 +81,7 @@ export class PoTableListManagerComponent extends PoCheckboxGroupComponent {
       ...poTableListManagerLiterals[language]
     };
 
-    this._iconToken = value ?? PoIconDictionary;
+    this._iconToken = value ?? PhosphorIconDictionary;
   }
 
   emitChangePosition(option, direction: Direction) {

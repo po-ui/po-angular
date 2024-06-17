@@ -23,17 +23,15 @@ xdescribe('sidemenu:', () => {
   let appTree: UnitTestTree;
 
   beforeEach(async () => {
-    appTree = await runner.runExternalSchematicAsync('@schematics/angular', 'workspace', workspaceOptions).toPromise();
-    appTree = await runner
-      .runExternalSchematicAsync('@schematics/angular', 'application', componentOptions, appTree)
-      .toPromise();
+    appTree = await runner.runExternalSchematic('@schematics/angular', 'workspace', workspaceOptions);
+    appTree = await runner.runExternalSchematic('@schematics/angular', 'application', componentOptions, appTree);
   });
 
   describe('Imports:', () => {
     it('should add the RouterModule to the project module', async () => {
       const routerModuleName = 'RouterModule';
 
-      const tree = await runner.runSchematicAsync('sidemenu', componentOptions, appTree).toPromise();
+      const tree = await runner.runSchematic('sidemenu', componentOptions, appTree);
       const fileContent = getFileContent(tree, `projects/${componentOptions.name}/src/app/app.module.ts`);
 
       expect(fileContent).toContain(routerModuleName);
@@ -42,7 +40,7 @@ xdescribe('sidemenu:', () => {
 
   describe('Component: ', () => {
     it('should create app.component.ts|html|css', async () => {
-      const tree = await runner.runSchematicAsync('sidemenu', componentOptions, appTree).toPromise();
+      const tree = await runner.runSchematic('sidemenu', componentOptions, appTree);
 
       const files: Array<string> = tree.files;
 
@@ -58,7 +56,7 @@ xdescribe('sidemenu:', () => {
 
       const htmlComponent = `projects/${componentOptions.name}/src/app/app.component.html`;
 
-      const tree = await runner.runSchematicAsync('sidemenu', componentOptions, appTree).toPromise();
+      const tree = await runner.runSchematic('sidemenu', componentOptions, appTree);
 
       const fileContent = getFileContent(tree, htmlComponent);
 

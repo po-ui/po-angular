@@ -1,4 +1,4 @@
-import { HttpClientTestingModule } from '@angular/common/http/testing';
+import { provideHttpClientTesting } from '@angular/common/http/testing';
 import { NO_ERRORS_SCHEMA } from '@angular/core';
 import { ComponentFixture, TestBed, waitForAsync } from '@angular/core/testing';
 import { RouterTestingModule } from '@angular/router/testing';
@@ -11,6 +11,7 @@ import { changeBrowserInnerHeight } from '../../../../util-test/util-expect.spec
 import { PoDynamicModule } from '../../../po-dynamic/po-dynamic.module';
 import { PoTableColumnSortType } from '../../../po-table/enums/po-table-column-sort-type.enum';
 import { PoTableColumnSort } from '../../../po-table/interfaces/po-table-column-sort.interface';
+import { provideHttpClient, withInterceptorsFromDi } from '@angular/common/http';
 
 class LookupFilterService implements PoLookupFilter {
   getFilteredItems(params: any): Observable<any> {
@@ -29,10 +30,15 @@ describe('PoLookupModalComponent', () => {
 
   beforeEach(waitForAsync(() => {
     TestBed.configureTestingModule({
-      imports: [PoModalModule, HttpClientTestingModule, PoDynamicModule, RouterTestingModule],
       declarations: [PoLookupModalComponent],
-      providers: [LookupFilterService, PoComponentInjectorService],
-      schemas: [NO_ERRORS_SCHEMA]
+      schemas: [NO_ERRORS_SCHEMA],
+      imports: [PoModalModule, PoDynamicModule, RouterTestingModule],
+      providers: [
+        LookupFilterService,
+        PoComponentInjectorService,
+        provideHttpClient(withInterceptorsFromDi()),
+        provideHttpClientTesting()
+      ]
     }).compileComponents();
   }));
 
@@ -129,7 +135,7 @@ describe('PoLookupModalComponent', () => {
     spyOn(component, 'search');
     spyOn(component, <any>'validateEnterPressed').and.returnValue(true);
 
-    const element = fixture.debugElement.nativeElement.querySelector('.po-icon-search');
+    const element = fixture.debugElement.nativeElement.querySelector('.ph-magnifying-glass');
     element.click();
 
     expect(component.search).toHaveBeenCalled();

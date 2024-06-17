@@ -659,8 +659,8 @@ describe('PoPageChangePasswordComponent:', () => {
       component.requirements = requirements;
       fixture.detectChanges();
 
-      expect(nativeElement.querySelector('.po-icon-ok.po-page-change-password-required-ok')).toBeTruthy();
-      expect(nativeElement.querySelector('.po-icon-minus po-page-change-password-required-minus')).toBeFalsy();
+      expect(nativeElement.querySelector('.ph-check.po-page-change-password-required-ok')).toBeTruthy();
+      expect(nativeElement.querySelector('.ph-minus po-page-change-password-required-minus')).toBeFalsy();
     });
 
     it('should add a `po-icon-minus` for a requirement with false status', () => {
@@ -668,8 +668,8 @@ describe('PoPageChangePasswordComponent:', () => {
       component.requirements = requirements;
       fixture.detectChanges();
 
-      expect(nativeElement.querySelector('.po-icon-minus.po-page-change-password-required-minus')).toBeTruthy();
-      expect(nativeElement.querySelector('.po-icon-ok.po-page-change-password-required-ok')).toBeFalsy();
+      expect(nativeElement.querySelector('.ph-minus.po-page-change-password-required-minus')).toBeTruthy();
+      expect(nativeElement.querySelector('.ph-check.po-page-change-password-required-ok')).toBeFalsy();
     });
 
     it('should add requirement text', () => {

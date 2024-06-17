@@ -4,9 +4,11 @@ import {
   HttpHeaders,
   HTTP_INTERCEPTORS,
   HttpRequest,
-  HttpResponse
+  HttpResponse,
+  provideHttpClient,
+  withInterceptorsFromDi
 } from '@angular/common/http';
-import { HttpClientTestingModule, HttpTestingController } from '@angular/common/http/testing';
+import { HttpTestingController, provideHttpClientTesting } from '@angular/common/http/testing';
 import { inject, TestBed } from '@angular/core/testing';
 import { NO_ERRORS_SCHEMA } from '@angular/core';
 
@@ -37,15 +39,17 @@ describe('PoHttpInterceptorBaseService', () => {
 
   beforeEach(async () => {
     await TestBed.configureTestingModule({
-      imports: [HttpClientTestingModule, PoHttpInterceptorModule],
       schemas: [NO_ERRORS_SCHEMA],
+      imports: [PoHttpInterceptorModule],
       providers: [
         PoComponentInjectorService,
         {
           provide: HTTP_INTERCEPTORS,
           useClass: PoHttpInterceptorService,
           multi: true
-        }
+        },
+        provideHttpClient(withInterceptorsFromDi()),
+        provideHttpClientTesting()
       ]
     }).compileComponents();
 

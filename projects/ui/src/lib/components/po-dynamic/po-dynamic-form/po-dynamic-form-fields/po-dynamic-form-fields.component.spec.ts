@@ -7,7 +7,8 @@ import { of } from 'rxjs';
 import { PoDynamicFormFieldsBaseComponent } from './po-dynamic-form-fields-base.component';
 import { PoDynamicFormFieldsComponent } from './po-dynamic-form-fields.component';
 import { PoDynamicModule } from '../../po-dynamic.module';
-import { HttpClientTestingModule } from '@angular/common/http/testing';
+import { provideHttpClientTesting } from '@angular/common/http/testing';
+import { provideHttpClient, withInterceptorsFromDi } from '@angular/common/http';
 
 describe('PoDynamicFormFieldsComponent: ', () => {
   let component: PoDynamicFormFieldsComponent;
@@ -17,8 +18,12 @@ describe('PoDynamicFormFieldsComponent: ', () => {
 
   beforeEach(async () => {
     await TestBed.configureTestingModule({
-      imports: [FormsModule, ReactiveFormsModule, PoDynamicModule, HttpClientTestingModule],
-      providers: [{ provide: NgForm, useValue: new NgForm(null, null) }]
+      imports: [FormsModule, ReactiveFormsModule, PoDynamicModule],
+      providers: [
+        { provide: NgForm, useValue: new NgForm(null, null) },
+        provideHttpClient(withInterceptorsFromDi()),
+        provideHttpClientTesting()
+      ]
     }).compileComponents();
 
     fixture = TestBed.createComponent(PoDynamicFormFieldsComponent);

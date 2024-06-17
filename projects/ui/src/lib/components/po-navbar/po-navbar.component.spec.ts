@@ -11,7 +11,8 @@ import { PoNavbarLogoComponent } from './po-navbar-logo/po-navbar-logo.component
 import { PoNavbarComponent } from './po-navbar.component';
 import { BrowserAnimationsModule } from '@angular/platform-browser/animations';
 import { changeBrowserInnerWidth } from 'projects/templates/src/lib/util-test/util-expect.spec';
-import { HttpClientTestingModule } from '@angular/common/http/testing';
+import { provideHttpClientTesting } from '@angular/common/http/testing';
+import { provideHttpClient, withInterceptorsFromDi } from '@angular/common/http';
 
 describe('PoNavbarComponent:', () => {
   let component: PoNavbarComponent;
@@ -26,9 +27,9 @@ describe('PoNavbarComponent:', () => {
         PoNavbarItemsModule,
         PoNavbarItemNavigationModule,
         PoMenuModule,
-        RouterModule.forRoot([], {}),
-        HttpClientTestingModule
-      ]
+        RouterModule.forRoot([], {})
+      ],
+      providers: [provideHttpClient(withInterceptorsFromDi()), provideHttpClientTesting()]
     }).compileComponents();
 
     fixture = TestBed.createComponent(PoNavbarComponent);

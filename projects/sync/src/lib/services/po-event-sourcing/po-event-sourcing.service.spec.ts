@@ -1,5 +1,5 @@
-import { HttpClientTestingModule } from '@angular/common/http/testing';
-import { HttpResponse } from '@angular/common/http';
+import { provideHttpClientTesting } from '@angular/common/http/testing';
+import { HttpResponse, provideHttpClient, withInterceptorsFromDi } from '@angular/common/http';
 import { Injectable } from '@angular/core';
 import { TestBed } from '@angular/core/testing';
 
@@ -59,13 +59,15 @@ describe('PoEventSourcingService:', () => {
 
   beforeEach(() => {
     TestBed.configureTestingModule({
-      imports: [HttpClientTestingModule],
+      imports: [],
       providers: [
         PoEventSourcingService,
         { provide: PoStorageService, useClass: StorageServiceMock },
         { provide: PoSchemaService, useClass: PoSchemaService },
         { provide: PoSchemaDefinitionService, useClass: PoSchemaDefinitionService },
-        { provide: PoHttpClientService, useClass: PoHttpClientService }
+        { provide: PoHttpClientService, useClass: PoHttpClientService },
+        provideHttpClient(withInterceptorsFromDi()),
+        provideHttpClientTesting()
       ]
     });
 
