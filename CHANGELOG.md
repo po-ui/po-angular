@@ -2,6 +2,14 @@
 
 All notable changes to this project will be documented in this file. See [standard-version](https://github.com/conventional-changelog/standard-version) for commit guidelines.
 
+## [17.15.0](https://github.com/po-ui/po-angular/compare/v17.14.0...v17.15.0) (2024-06-17)
+
+
+### Features
+
+* **disclaimer:** adiciona propriedade para validar exibição do tooltip ([52bec69](https://github.com/po-ui/po-angular/commit/52bec69d04e335ad6db98a601ec48ee8365de1d1))
+* **tabs:** adiciona reordenação visual das abas ([9244235](https://github.com/po-ui/po-angular/commit/9244235d945f04f3e4bcf71890e9ebde154c1393))
+
 ### [17.14.0](https://github.com/po-ui/po-angular/compare/v17.13.1...v17.14.0) (2024-06-10)
 
 Compatibilidade com @totvs/thf-components@17.14.0
