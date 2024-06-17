@@ -1,6 +1,7 @@
 import { TestBed, fakeAsync, tick } from '@angular/core/testing';
-import { HttpClientTestingModule, HttpTestingController } from '@angular/common/http/testing';
+import { HttpTestingController, provideHttpClientTesting } from '@angular/common/http/testing';
 import { PoPageDynamicTableActionsService } from './po-page-dynamic-table-actions.service';
+import { provideHttpClient, withInterceptorsFromDi } from '@angular/common/http';
 
 describe('PoPageDynamicTableActionsService:', () => {
   let service: PoPageDynamicTableActionsService;
@@ -8,8 +9,12 @@ describe('PoPageDynamicTableActionsService:', () => {
 
   beforeEach(() => {
     TestBed.configureTestingModule({
-      imports: [HttpClientTestingModule],
-      providers: [PoPageDynamicTableActionsService]
+      imports: [],
+      providers: [
+        PoPageDynamicTableActionsService,
+        provideHttpClient(withInterceptorsFromDi()),
+        provideHttpClientTesting()
+      ]
     });
 
     service = TestBed.inject(PoPageDynamicTableActionsService);

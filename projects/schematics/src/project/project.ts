@@ -1,6 +1,6 @@
-import { parse } from 'jsonc-parser';
 import { SchematicsException, Tree } from '@angular-devkit/schematics';
 import { WorkspaceProject, WorkspaceSchema } from '@schematics/angular/utility/workspace-models';
+import { parse } from 'jsonc-parser';
 
 /** Name of the default Angular CLI workspace configuration files. */
 const defaultWorkspaceConfigPaths = ['/angular.json', '/.angular.json'];

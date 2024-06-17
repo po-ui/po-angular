@@ -1,5 +1,5 @@
-import { HttpClientTestingModule, HttpTestingController } from '@angular/common/http/testing';
-import { HttpResponse, HttpHeaders } from '@angular/common/http';
+import { HttpTestingController, provideHttpClientTesting } from '@angular/common/http/testing';
+import { HttpResponse, HttpHeaders, provideHttpClient, withInterceptorsFromDi } from '@angular/common/http';
 import { TestBed } from '@angular/core/testing';
 
 import { of } from 'rxjs';
@@ -14,8 +14,8 @@ describe('PoHttpClientService', () => {
 
   beforeEach(() => {
     TestBed.configureTestingModule({
-      imports: [HttpClientTestingModule],
-      providers: [PoHttpClientService]
+      imports: [],
+      providers: [PoHttpClientService, provideHttpClient(withInterceptorsFromDi()), provideHttpClientTesting()]
     });
 
     poHttpClientService = TestBed.inject(PoHttpClientService);

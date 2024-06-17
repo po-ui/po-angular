@@ -10,7 +10,8 @@ import { PoRichTextToolbarComponent } from './po-rich-text-toolbar.component';
 import { PoRichTextLinkModalComponent } from '../po-rich-text-link-modal/po-rich-text-link-modal.component';
 import { PoRichTextImageModalComponent } from '../po-rich-text-image-modal/po-rich-text-image-modal.component';
 import { PoTooltipModule } from './../../../../directives/po-tooltip/po-tooltip.module';
-import { HttpClientTestingModule } from '@angular/common/http/testing';
+import { provideHttpClientTesting } from '@angular/common/http/testing';
+import { provideHttpClient, withInterceptorsFromDi } from '@angular/common/http';
 
 describe('PoRichTextToolbarComponent:', () => {
   let component: PoRichTextToolbarComponent;
@@ -19,15 +20,9 @@ describe('PoRichTextToolbarComponent:', () => {
 
   beforeEach(async () => {
     await TestBed.configureTestingModule({
-      imports: [
-        FormsModule,
-        PoButtonGroupModule,
-        PoModalModule,
-        PoTooltipModule,
-        PoFieldModule,
-        HttpClientTestingModule
-      ],
-      declarations: []
+      declarations: [],
+      imports: [FormsModule, PoButtonGroupModule, PoModalModule, PoTooltipModule, PoFieldModule],
+      providers: [provideHttpClient(withInterceptorsFromDi()), provideHttpClientTesting()]
     }).compileComponents();
 
     fixture = TestBed.createComponent(PoRichTextToolbarComponent);

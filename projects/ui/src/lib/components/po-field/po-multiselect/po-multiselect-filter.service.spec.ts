@@ -1,6 +1,6 @@
 import { TestBed } from '@angular/core/testing';
-import { HttpRequest } from '@angular/common/http';
-import { HttpClientTestingModule, HttpTestingController } from '@angular/common/http/testing';
+import { HttpRequest, provideHttpClient, withInterceptorsFromDi } from '@angular/common/http';
+import { HttpTestingController, provideHttpClientTesting } from '@angular/common/http/testing';
 import { PoMultiselectFilterService } from './po-multiselect-filter.service';
 
 describe('PoMultiSelectFilterService ', () => {
@@ -11,8 +11,8 @@ describe('PoMultiSelectFilterService ', () => {
 
   beforeEach(() => {
     TestBed.configureTestingModule({
-      imports: [HttpClientTestingModule],
-      providers: [PoMultiselectFilterService]
+      imports: [],
+      providers: [PoMultiselectFilterService, provideHttpClient(withInterceptorsFromDi()), provideHttpClientTesting()]
     });
 
     multiSelectService = TestBed.inject(PoMultiselectFilterService);

@@ -1,6 +1,7 @@
-import { HttpClientTestingModule, HttpTestingController } from '@angular/common/http/testing';
+import { HttpTestingController, provideHttpClientTesting } from '@angular/common/http/testing';
 import { fakeAsync, TestBed, tick } from '@angular/core/testing';
 import { PoLookupFilterService } from './po-lookup-filter.service';
+import { provideHttpClient, withInterceptorsFromDi } from '@angular/common/http';
 
 describe('PoLookupFilterService', () => {
   let service: PoLookupFilterService;
@@ -8,8 +9,8 @@ describe('PoLookupFilterService', () => {
 
   beforeEach(() => {
     TestBed.configureTestingModule({
-      imports: [HttpClientTestingModule],
-      providers: [PoLookupFilterService]
+      imports: [],
+      providers: [PoLookupFilterService, provideHttpClient(withInterceptorsFromDi()), provideHttpClientTesting()]
     });
 
     service = TestBed.inject(PoLookupFilterService);

@@ -1,5 +1,5 @@
 import { Location } from '@angular/common';
-import { HttpClientTestingModule } from '@angular/common/http/testing';
+import { provideHttpClientTesting } from '@angular/common/http/testing';
 import { Component } from '@angular/core';
 import { ComponentFixture, fakeAsync, TestBed, tick } from '@angular/core/testing';
 import { Router, Routes, UrlSegment, UrlSegmentGroup, UrlTree } from '@angular/router';
@@ -19,6 +19,7 @@ import { PoMenuItemComponent } from './po-menu-item/po-menu-item.component';
 import { PoMenuComponent } from './po-menu.component';
 import { PoMenuItemsService } from './services/po-menu-items.service';
 import { PoMenuService } from './services/po-menu.service';
+import { provideHttpClient, withInterceptorsFromDi } from '@angular/common/http';
 
 @Component({ template: 'Search' })
 export class SearchComponent {}
@@ -45,7 +46,6 @@ describe('PoMenuComponent:', () => {
 
   beforeEach(async () => {
     await TestBed.configureTestingModule({
-      imports: [HttpClientTestingModule, RouterTestingModule.withRoutes(routes), PoLoadingModule, PoIconModule],
       declarations: [
         PoCleanComponent,
         PoMenuComponent,
@@ -55,7 +55,13 @@ describe('PoMenuComponent:', () => {
         SearchComponent,
         PoBadgeComponent
       ],
-      providers: [PoMenuItemsService, PoMenuService]
+      imports: [RouterTestingModule.withRoutes(routes), PoLoadingModule, PoIconModule],
+      providers: [
+        PoMenuItemsService,
+        PoMenuService,
+        provideHttpClient(withInterceptorsFromDi()),
+        provideHttpClientTesting()
+      ]
     }).compileComponents();
 
     router = TestBed.inject(Router);

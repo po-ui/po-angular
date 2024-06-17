@@ -15,7 +15,8 @@ import { PoModalPasswordRecoveryErrorMessageComponent } from './po-modal-passwor
 import { PoModalPasswordRecoveryModalContent } from './enums/po-modal-password-recovery-modal-content.enum';
 import { PoModalPasswordRecoveryService } from './po-modal-password-recovery.service';
 import { PoModalPasswordRecoveryType } from './enums/po-modal-password-recovery-type.enum';
-import { HttpClientTestingModule } from '@angular/common/http/testing';
+import { provideHttpClientTesting } from '@angular/common/http/testing';
+import { provideHttpClient, withInterceptorsFromDi } from '@angular/common/http';
 
 describe('PoModalPasswordRecoveryComponent:', () => {
   let component: PoModalPasswordRecoveryComponent;
@@ -25,9 +26,14 @@ describe('PoModalPasswordRecoveryComponent:', () => {
 
   beforeEach(waitForAsync(() => {
     TestBed.configureTestingModule({
-      imports: [FormsModule, RouterTestingModule.withRoutes([]), PoFieldModule, PoModalModule, HttpClientTestingModule],
       declarations: [PoModalPasswordRecoveryErrorMessageComponent, PoModalPasswordRecoveryComponent],
-      providers: [PoI18nPipe, PoModalPasswordRecoveryService]
+      imports: [FormsModule, RouterTestingModule.withRoutes([]), PoFieldModule, PoModalModule],
+      providers: [
+        PoI18nPipe,
+        PoModalPasswordRecoveryService,
+        provideHttpClient(withInterceptorsFromDi()),
+        provideHttpClientTesting()
+      ]
     }).compileComponents();
   }));
 

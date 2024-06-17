@@ -27,6 +27,7 @@ export function addPackageToPackageJson(host: Tree, pkg: string, version: string
 export function updatePackageJson(version: string, { dependencies, devDependencies }: UpdateDependencies) {
   return (tree: Tree): Tree => {
     if (tree.exists('package.json')) {
+      // eslint-disable-next-line @typescript-eslint/no-unnecessary-type-assertion
       const sourceText = tree.read('package.json')!.toString('utf-8');
       const json = JSON.parse(sourceText);
 

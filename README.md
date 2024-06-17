@@ -20,16 +20,16 @@ Biblioteca de componentes de UI para Angular.
 
 ### Pré-requisitos
 
-Para começar a utilizar o **PO UI** é pré-requisito ter o `Node.js` instalado (versão 18.13.x ou acima) e o seu gerenciador de pacote favorito na versão mais atual. Caso você ainda não tenha instalado o pacote `@angular/cli`, instale-o via `npm` ou `yarn`.
+Para começar a utilizar o **PO UI** é pré-requisito ter o `Node.js` instalado (versão 18.19.x ou acima) e o seu gerenciador de pacote favorito na versão mais atual. Caso você ainda não tenha instalado o pacote `@angular/cli`, instale-o via `npm` ou `yarn`.
 
 Instalando com npm:
 ```
-npm i -g @angular/cli@17
+npm i -g @angular/cli@18
 ```
 
 Caso prefira instalar com o yarn:
 ```
-yarn global add @angular/cli@17
+yarn global add @angular/cli@18
 ```
 
 ### Passo 1 - Crie o seu primeiro projeto
@@ -52,26 +52,27 @@ Antes de executar a instalação ou inserir o **Po** no seu projeto existente, �
 Veja abaixo a lista de dependências e as versões compatíveis, elas devem ser conferidas e se necessário, ajustadas no seu projeto.
 
 ```
- "dependencies": {
-    "@angular/animations": "~17.2.4",
-    "@angular/common": "~17.2.4",
-    "@angular/compiler": "~17.2.4",
-    "@angular/core": "~17.2.4",
-    "@angular/forms": "~17.2.4",
-    "@angular/platform-browser": "~17.2.4",
-    "@angular/platform-browser-dynamic": "~17.2.4",
-    "@angular/router": "~17.2.4",
+  "dependencies": {
+    "@angular/animations": "~18.0.1",
+    "@angular/common": "~18.0.1",
+    "@angular/compiler": "~18.0.1",
+    "@angular/core": "~18.0.1",
+    "@angular/forms": "~18.0.1",
+    "@angular/platform-browser": "~18.0.1",
+    "@angular/platform-browser-dynamic": "~18.0.1",
+    "@angular/router": "~18.0.1",
     "rxjs": "~7.8.1",
     "tslib": "^2.6.2",
     "zone.js": "~0.14.4"
     ...
   },
   "devDependencies": {
-    "@angular-devkit/build-angular": "~17.2.3",
-    "@angular/cli": "~17.2.3",
-    "@angular/compiler-cli": "~17.2.4",
+    "@angular-devkit/build-angular": "~18.0.2",
+    "@angular-devkit/schematics": "~18.0.2",
+    "@angular/cli": "~18.0.2",
+    "@angular/compiler-cli": "~18.0.1",
     ...
-    "typescript": "~5.2.2"
+    "typescript": "~5.4.5"
   }
 ```
 

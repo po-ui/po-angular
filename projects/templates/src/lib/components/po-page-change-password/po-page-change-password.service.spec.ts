@@ -1,6 +1,7 @@
-import { HttpClientTestingModule, HttpTestingController } from '@angular/common/http/testing';
+import { HttpTestingController, provideHttpClientTesting } from '@angular/common/http/testing';
 import { TestBed } from '@angular/core/testing';
 import { PoPageChangePasswordService } from './po-page-change-password.service';
+import { provideHttpClient, withInterceptorsFromDi } from '@angular/common/http';
 
 describe('PoPageChangePasswordService:', () => {
   let poPageChangePasswordService: PoPageChangePasswordService;
@@ -8,8 +9,8 @@ describe('PoPageChangePasswordService:', () => {
 
   beforeEach(() => {
     TestBed.configureTestingModule({
-      imports: [HttpClientTestingModule],
-      providers: [PoPageChangePasswordService]
+      imports: [],
+      providers: [PoPageChangePasswordService, provideHttpClient(withInterceptorsFromDi()), provideHttpClientTesting()]
     });
 
     poPageChangePasswordService = TestBed.inject(PoPageChangePasswordService);

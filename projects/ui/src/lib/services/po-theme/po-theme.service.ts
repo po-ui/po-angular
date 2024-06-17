@@ -1,12 +1,11 @@
 import { DOCUMENT } from '@angular/common';
 import { Inject, Injectable, Optional, Renderer2, RendererFactory2 } from '@angular/core';
-import { BehaviorSubject, Observable } from 'rxjs';
+import { ICONS_DICTIONARY, PhosphorIconDictionary } from '../../components/po-icon/index';
 import { PoThemeTypeEnum } from './enum/po-theme-type.enum';
 import { poThemeDefault } from './helpers/po-theme-poui.constant';
 import { PoThemeColor } from './interfaces/po-theme-color.interface';
 import { PoThemeTokens } from './interfaces/po-theme-tokens.interface';
 import { PoTheme } from './interfaces/po-theme.interface';
-import { ICONS_DICTIONARY, PoIconDictionary } from '../../components/po-icon/index';
 
 /**
  * @description
@@ -37,7 +36,7 @@ export class PoThemeService {
   ) {
     this.renderer = rendererFactory.createRenderer(null, null);
 
-    this._iconToken = value ?? PoIconDictionary;
+    this._iconToken = value ?? PhosphorIconDictionary;
   }
 
   /**

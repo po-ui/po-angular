@@ -10,7 +10,8 @@ import { PoControlPositionService } from './../../../../services/po-control-posi
 import { PoFieldModule } from '../../../../components/po-field/po-field.module';
 import { PoLookupFilter } from '../../../../components/po-field/po-lookup/interfaces/po-lookup-filter.interface';
 import { PoLookupModalService } from '../../../../components/po-field/po-lookup/services/po-lookup-modal.service';
-import { HttpClientTestingModule } from '@angular/common/http/testing';
+import { provideHttpClientTesting } from '@angular/common/http/testing';
+import { provideHttpClient, withInterceptorsFromDi } from '@angular/common/http';
 
 class LookupFilterService implements PoLookupFilter {
   getObjectByValue(id: string): Observable<any> {
@@ -54,9 +55,16 @@ describe('PoLookupModalService:', () => {
 
   beforeEach(() => {
     TestBed.configureTestingModule({
-      imports: [RouterTestingModule.withRoutes(routes), PoFieldModule, HttpClientTestingModule],
-      providers: [LookupFilterService, PoComponentInjectorService, PoControlPositionService, PoLookupModalService],
-      schemas: [NO_ERRORS_SCHEMA]
+      schemas: [NO_ERRORS_SCHEMA],
+      imports: [RouterTestingModule.withRoutes(routes), PoFieldModule],
+      providers: [
+        LookupFilterService,
+        PoComponentInjectorService,
+        PoControlPositionService,
+        PoLookupModalService,
+        provideHttpClient(withInterceptorsFromDi()),
+        provideHttpClientTesting()
+      ]
     });
 
     poLookupModalService = TestBed.inject(PoLookupModalService);

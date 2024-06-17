@@ -1,7 +1,7 @@
 import { ComponentFixture, fakeAsync, TestBed, tick, waitForAsync } from '@angular/core/testing';
 import { NO_ERRORS_SCHEMA } from '@angular/core';
 import { FormControl, FormsModule, NgForm, Validators } from '@angular/forms';
-import { HttpClientTestingModule } from '@angular/common/http/testing';
+import { provideHttpClientTesting } from '@angular/common/http/testing';
 import { RouterTestingModule } from '@angular/router/testing';
 
 import { throwError, of } from 'rxjs';
@@ -18,6 +18,7 @@ import { PoPageDynamicEditActions } from './interfaces/po-page-dynamic-edit-acti
 import { PoDynamicFormStubComponent } from './test/po-dynamic-form-stub-component';
 import { PoPageDynamicEditBeforeSave } from './interfaces/po-page-dynamic-edit-before-save.interface';
 import { PoPageDynamicEditBeforeSaveNew } from './interfaces/po-page-dynamic-edit-before-save-new.interface';
+import { provideHttpClient, withInterceptorsFromDi } from '@angular/common/http';
 
 describe('PoPageDynamicEditComponent: ', () => {
   let component: PoPageDynamicEditComponent;
@@ -25,10 +26,10 @@ describe('PoPageDynamicEditComponent: ', () => {
 
   beforeEach(waitForAsync(() => {
     TestBed.configureTestingModule({
-      imports: [FormsModule, HttpClientTestingModule, RouterTestingModule.withRoutes([]), PoDialogModule],
-      providers: [],
       declarations: [PoPageDynamicEditComponent, PoDynamicFormStubComponent],
-      schemas: [NO_ERRORS_SCHEMA]
+      schemas: [NO_ERRORS_SCHEMA],
+      imports: [FormsModule, RouterTestingModule.withRoutes([]), PoDialogModule],
+      providers: [provideHttpClient(withInterceptorsFromDi()), provideHttpClientTesting()]
     }).compileComponents();
   }));
 
