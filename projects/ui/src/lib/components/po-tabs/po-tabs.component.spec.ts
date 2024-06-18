@@ -61,7 +61,7 @@ describe('PoTabsComponent:', () => {
 
       component['tabsService'].triggerActiveOnChanges(tabMock);
 
-      expect(component.onTabActiveByDropdown).toHaveBeenCalledWith(tabMock);
+      expect(component.onTabActiveByDropdown).toHaveBeenCalledWith(tabMock, false);
     });
 
     it('ngOnInit: should unsubscribe', () => {
@@ -518,6 +518,7 @@ describe('PoTabsComponent:', () => {
 
     it('onTabActiveByDropdown: should correctly call methods and update styles when called', () => {
       const tabMock = jasmine.createSpyObj('PoTabComponent', ['id'], { id: 'tab-id' });
+      tabMock.click = { emit: () => {} };
       component.defaultLastTabWidth = 100;
 
       const nativeElementMock = { style: { width: '' }, getBoundingClientRect: () => ({ width: 100 }) };
@@ -531,10 +532,12 @@ describe('PoTabsComponent:', () => {
       component.tabsDefault = [tabMock];
       component.tabsDropdown = [tabMock];
 
+      spyOn(tabMock.click, 'emit');
       spyOn(component, 'handleKeyboardNavigationTab');
 
       component.onTabActiveByDropdown(tabMock);
 
+      expect(tabMock.click.emit).toHaveBeenCalledWith(tabMock);
       expect(component.tabButton.last.nativeElement.style.width).toBe('100px');
       expect(component.handleKeyboardNavigationTab).toHaveBeenCalled();
       expect(component.tabsDefault.includes(tabMock)).toBe(true);
@@ -543,6 +546,7 @@ describe('PoTabsComponent:', () => {
 
     it('reorderTabs: should reorder tabs if tabIndex is not -1', () => {
       const tabMock = jasmine.createSpyObj('PoTabComponent', ['id'], { id: 'tab4', widthButton: '130' });
+      tabMock.click = { emit: () => {} };
       const tabsArrayMock = [
         jasmine.createSpyObj('PoTabComponent', ['id'], { id: 'tab1', widthButton: '100' }),
         jasmine.createSpyObj('PoTabComponent', ['id'], { id: 'tab2', widthButton: '110' }),
@@ -556,6 +560,7 @@ describe('PoTabsComponent:', () => {
 
       component.quantityTabsButton = 3;
 
+      spyOn(tabMock.click, 'emit');
       spyOn(component, <any>'changeTabPositionByDropdown').and.callFake((tab: PoTabComponent) => {
         const tabIndex = component.tabsChildren.toArray().indexOf(tab);
         if (tabIndex !== -1) {
@@ -572,6 +577,7 @@ describe('PoTabsComponent:', () => {
 
       const reorderedTabs = component.tabsChildren.toArray();
 
+      expect(tabMock.click.emit).toHaveBeenCalledWith(tabMock);
       expect(reorderedTabs.map(tab => tab.id)).toEqual(['tab1', 'tab2', 'tab4', 'tab3']);
       expect(component.tabButton.last.nativeElement.style.width).toBe('130px');
     });

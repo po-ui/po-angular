@@ -112,7 +112,7 @@ export class PoTabsComponent extends PoTabsBaseComponent implements OnInit, Afte
     this.subscriptionTabActive = this.tabsService.triggerActiveOnChanges$.subscribe(tab => {
       const isTabInDropdown = this.tabsDropdown.some(t => t.id === tab.id);
       if (isTabInDropdown) {
-        this.onTabActiveByDropdown(tab);
+        this.onTabActiveByDropdown(tab, false);
       }
     });
   }
@@ -166,7 +166,7 @@ export class PoTabsComponent extends PoTabsBaseComponent implements OnInit, Afte
     return !tab.hide;
   }
 
-  onTabActiveByDropdown(tab: PoTabComponent): void {
+  onTabActiveByDropdown(tab: PoTabComponent, eventEmitter = true): void {
     this.changeTabPositionByDropdown(tab);
     const lastTabWidth =
       this.defaultLastTabWidth > 0
@@ -177,6 +177,10 @@ export class PoTabsComponent extends PoTabsBaseComponent implements OnInit, Afte
     tab.widthButton = lastTabWidth;
     this.tabButton.last.nativeElement.style.width = `${lastTabWidth}px`;
     this.handleKeyboardNavigationTab();
+
+    if (eventEmitter) {
+      tab.click.emit(tab);
+    }
   }
 
   // Função disparada quando alguma tab ficar ativa
