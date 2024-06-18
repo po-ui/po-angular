@@ -2,6 +2,13 @@
 
 All notable changes to this project will be documented in this file. See [standard-version](https://github.com/conventional-changelog/standard-version) for commit guidelines.
 
+### [17.15.2](https://github.com/po-ui/po-angular/compare/v17.15.1...v17.15.2) (2024-06-18)
+
+
+### Bug Fixes
+
+* **tabs:** corrige emissão de evento p-click ([08b7f8d](https://github.com/po-ui/po-angular/commit/08b7f8da55092504cc5c061244043dbfb92c5526))
+
 ### [17.15.1](https://github.com/po-ui/po-angular/compare/v17.15.0...v17.15.1) (2024-06-17)
 
 Compatibilidade com @totvs/thf-components@17.15.1
