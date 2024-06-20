@@ -1,0 +1,44 @@
+<div class="po-row">
+  <po-toaster
+    #toasterRef
+    class="po-md-12"
+    [p-hide]="hide"
+    (p-hide-change)="hideChange($event)"
+    [p-mode]="mode"
+    [p-message]="message"
+    [p-support-message]="supportMessage"
+    [p-type]="type"
+    [p-show-close]="showClose"
+    [p-action]="action"
+    [p-action-label]="actionLabel"
+  ></po-toaster>
+</div>
+
+<hr />
+
+<form #f="ngForm">
+  <po-radio-group
+    p-label="Type"
+    class="po-md-12"
+    name="type"
+    [(ngModel)]="type"
+    [p-options]="typeOptions"
+  ></po-radio-group>
+  <po-input p-label="Message" class="po-md-6" name="message" [(ngModel)]="message" p-clean p-required> </po-input>
+  <po-input p-label="Support Message" class="po-md-6" name="supportMessage" [(ngModel)]="supportMessage" p-clean>
+  </po-input>
+  <po-switch p-label="Has Action" class="po-md-4" (p-change)="changeAction()" name="action" [(ngModel)]="hasAction">
+  </po-switch>
+  <po-input p-label="Action Label" class="po-md-4" name="actionLabel" [(ngModel)]="actionLabel" p-clean> </po-input>
+  <po-switch p-label="Show Close" class="po-md-4" name="showClose" [(ngModel)]="showClose"> </po-switch>
+
+  <po-divider></po-divider>
+
+  <div class="po-row">
+    <po-button class="po-md-4" p-label="Sample Restore" (p-click)="restore()"> </po-button>
+    <po-button class="po-md-4" name="hide" (p-click)="changeHide()" p-label="{{ hide ? 'Show' : 'Hide' }} Toaster">
+    </po-button>
+  </div>
+</form>
+
+<po-modal p-title="PO Notification"> Notification Action </po-modal>

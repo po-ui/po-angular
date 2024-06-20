@@ -1,9 +1,7 @@
 import { ComponentRef } from '@angular/core';
 
 import { PoNotification } from './po-notification.interface';
-import { PoToaster } from './po-toaster/po-toaster.interface';
-import { PoToasterOrientation } from './po-toaster/po-toaster-orientation.enum';
-import { PoToasterType } from './po-toaster/po-toaster-type.enum';
+import { PoToaster, PoToasterMode, PoToasterOrientation, PoToasterType } from '../../components/po-toaster';
 
 /**
  * @description
@@ -113,6 +111,9 @@ export abstract class PoNotificationBaseService {
       action: (<PoNotification>notification).action,
       actionLabel: (<PoNotification>notification).actionLabel,
       position: index,
+      mode: (<PoNotification>notification).mode || PoToasterMode.Alert,
+      showClose: (<PoNotification>notification).showClose || true,
+      supportMessage: (<PoNotification>notification).supportMessage,
       duration: (<PoNotification>notification).duration || this.defaultDuration
     };
 

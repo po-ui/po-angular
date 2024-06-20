@@ -1,4 +1,4 @@
-import { PoToasterOrientation } from './po-toaster/po-toaster-orientation.enum';
+import { PoToasterMode, PoToasterOrientation } from '../../components/po-toaster';
 
 /**
  * @usedBy PoNotificationService
@@ -24,6 +24,9 @@ export interface PoNotification {
   /** Mensagem a ser exibida na notificação. */
   message: string;
 
+  /** Mensagem de suporte a ser exibida na notificação. */
+  supportMessage?: string;
+
   /**
    * @description
    *
@@ -39,4 +42,20 @@ export interface PoNotification {
    * > Caso a notificação tenha uma ação ou seja uma notificação de `erro`, a propriedade será ignorada.
    */
   duration?: number;
+
+  /**
+   * Define o Modo/Tipo do Toaster.
+   *
+   * @default `Alert`
+   */
+  mode?: PoToasterMode;
+
+  /**
+   * Exibe o botão de fechar a notificação.
+   *
+   * > Caso a notificação seja do modo `default`, a propriedade será ignorada.
+   *
+   * @default `false`
+   */
+  showClose?: boolean;
 }

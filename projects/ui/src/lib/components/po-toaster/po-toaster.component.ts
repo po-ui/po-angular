@@ -3,34 +3,45 @@ import {
   ChangeDetectorRef,
   Component,
   ElementRef,
+  OnChanges,
   OnDestroy,
   Renderer2,
+  SimpleChanges,
   ViewChild
 } from '@angular/core';
 
 import { Subject } from 'rxjs';
-
-import { PoLanguageService } from '../../po-language/po-language.service';
-import { poToasterLiterals } from './po-toaster.literals';
-
+import { PoToasterMode } from './enum/po-toaster-mode.enum';
+import { PoToasterOrientation } from './enum/po-toaster-orientation.enum';
+import { PoToasterType } from './enum/po-toaster-type.enum';
+import { PoToaster } from './interface/po-toaster.interface';
+import { poToasterLiterals } from './literals/po-toaster.literals';
 import { PoToasterBaseComponent } from './po-toaster-base.component';
-import { PoToaster } from './po-toaster.interface';
-import { PoToasterType } from './po-toaster-type.enum';
-import { PoToasterOrientation } from './po-toaster-orientation.enum';
-import { PoButtonComponent } from '../../../components/po-button/po-button.component';
+import { PoButtonComponent } from '../po-button';
+import { PoLanguageService } from '../../services/po-language';
 
 const SPACE_BETWEEN_TOASTERS = 8;
 
 /**
- * @docsPrivate
- *
  * @docsExtends PoToasterBaseComponent
+ *
+ * @example
+ *
+ * <example name="po-toaster-basic" title="PO Toaster Basic">
+ *  <file name="sample-po-toaster-basic/sample-po-toaster-basic.component.html"> </file>
+ *  <file name="sample-po-toaster-basic/sample-po-toaster-basic.component.ts"> </file>
+ * </example>
+ *
+ * <example name="po-toaster-labs" title="PO Toaster Labs">
+ *  <file name="sample-po-toaster-labs/sample-po-toaster-labs.component.html"> </file>
+ *  <file name="sample-po-toaster-labs/sample-po-toaster-labs.component.ts"> </file>
+ * </example>
  */
 @Component({
   selector: 'po-toaster',
   templateUrl: './po-toaster.component.html'
 })
-export class PoToasterComponent extends PoToasterBaseComponent implements AfterViewInit, OnDestroy {
+export class PoToasterComponent extends PoToasterBaseComponent implements AfterViewInit, OnDestroy, OnChanges {
   /* Componente toaster */
   @ViewChild('toaster') toaster: ElementRef;
   @ViewChild('buttonClose') buttonClose: PoButtonComponent;
@@ -40,15 +51,15 @@ export class PoToasterComponent extends PoToasterBaseComponent implements AfterV
   literals: any;
 
   /* Ícone do Toaster */
-  private icon: string;
+  icon: string;
   /* Margem do Toaster referênte à sua orientação e posição*/
-  private margin: number = 0;
+  margin: number = 0;
   /* Observable para monitorar o Close to Toaster */
-  private observableOnClose = new Subject<any>();
+  observableOnClose = new Subject<any>();
   /* Posição do Toaster*/
-  private toasterPosition: string = 'po-toaster-bottom';
+  toasterPosition: string = 'po-toaster-bottom';
   /* Tipo do Toaster */
-  private toasterType: string;
+  toasterType: string;
 
   constructor(
     poLanguageService: PoLanguageService,
@@ -67,7 +78,23 @@ export class PoToasterComponent extends PoToasterBaseComponent implements AfterV
   }
 
   ngAfterViewInit() {
-    setTimeout(() => this.renderer.addClass(this.toaster.nativeElement, 'po-toaster-visible'));
+    setTimeout(() => {
+      this.renderer.addClass(this.toaster.nativeElement, 'po-toaster-visible');
+      if (this.isInline()) {
+        this.configToaster(this);
+      }
+    });
+  }
+
+  ngOnChanges(changes: SimpleChanges): void {
+    if (changes.isHide && changes.isHide.previousValue !== undefined) {
+      if (changes.isHide.currentValue === true) {
+        this.hide();
+      } else {
+        this.show();
+      }
+      this.changeDetector.detectChanges();
+    }
   }
 
   /* Muda a posição do Toaster na tela*/
@@ -89,12 +116,21 @@ export class PoToasterComponent extends PoToasterBaseComponent implements AfterV
 
   /* Fecha o componente Toaster */
   close(): void {
-    this.observableOnClose.next(true);
+    if (this.isAlert()) {
+      this.observableOnClose.next(true);
+    } else {
+      this.hide();
+    }
   }
 
   setFadeOut() {
     this.renderer.removeClass(this.toaster.nativeElement, 'po-toaster-visible');
     this.renderer.addClass(this.toaster.nativeElement, 'po-toaster-invisible');
+  }
+
+  setFadeIn() {
+    this.renderer.removeClass(this.toaster.nativeElement, 'po-toaster-invisible');
+    this.renderer.addClass(this.toaster.nativeElement, 'po-toaster-visible');
   }
 
   /* Configura o Toaster com os atributos passados para ele */
@@ -106,10 +142,19 @@ export class PoToasterComponent extends PoToasterBaseComponent implements AfterV
     this.action = poToaster.action;
     this.actionLabel = poToaster.actionLabel;
     this.componentRef = poToaster.componentRef;
+    this.mode = poToaster.mode;
+    this.showClose = poToaster.showClose;
+    this.supportMessage = poToaster.supportMessage;
 
     /* Muda a orientação do Toaster */
     if (this.orientation === PoToasterOrientation.Top) {
       this.toasterPosition = 'po-toaster-top';
+    }
+    if (!this.mode) {
+      this.mode = PoToasterMode.Inline;
+    }
+    if (!this.type || !Object.values(PoToasterType).includes(this.type)) {
+      this.type = PoToasterType.Information;
     }
 
     /* Muda a posição do Toaster */
@@ -123,16 +168,54 @@ export class PoToasterComponent extends PoToasterBaseComponent implements AfterV
       this.toaster.nativeElement.setAttribute('role', 'status');
     }
 
-    /* Switch para o tipo de Toaster */
+    this.getToasterType();
+
+    this.changeDetector.detectChanges();
+    this.buttonClose?.buttonElement.nativeElement.setAttribute('aria-label', this.literals.close);
+  }
+
+  hasClose() {
+    return this.isAlert() || this.showClose;
+  }
+
+  isAlert() {
+    return this.mode === 'alert';
+  }
+
+  isInline() {
+    return this.mode === 'inline';
+  }
+
+  getIcon() {
+    return this.icon;
+  }
+
+  show() {
+    this.isHide = true;
+    this.setFadeIn();
+    this.renderer.removeAttribute(this.toaster.nativeElement, 'hidden');
+  }
+
+  hide() {
+    this.isHide = true;
+    this.setFadeOut();
+    this.renderer.setAttribute(this.toaster.nativeElement, 'hidden', 'true');
+  }
+
+  getToasterPosition() {
+    return this.toasterPosition;
+  }
+
+  getToasterType() {
     switch (this.type) {
       case PoToasterType.Error: {
         this.toasterType = 'po-toaster-error';
-        this.icon = 'ICON_WARNING';
+        this.icon = 'ICON_CLOSE';
         break;
       }
       case PoToasterType.Information: {
         this.toasterType = 'po-toaster-info';
-        this.icon = 'ICON_INFO';
+        this.icon = this.isAlert() ? 'ICON_INFO' : 'ICON_WARNING';
         break;
       }
       case PoToasterType.Success: {
@@ -142,24 +225,11 @@ export class PoToasterComponent extends PoToasterBaseComponent implements AfterV
       }
       case PoToasterType.Warning: {
         this.toasterType = 'po-toaster-warning';
-        this.icon = 'ICON_WARNING';
+        this.icon = this.isAlert() ? 'ICON_EXCLAMATION' : 'ICON_WARNING';
         break;
       }
     }
 
-    this.buttonClose.buttonElement.nativeElement.setAttribute('aria-label', this.literals.close);
-    this.changeDetector.detectChanges();
-  }
-
-  getIcon() {
-    return this.icon;
-  }
-
-  getToasterPosition() {
-    return this.toasterPosition;
-  }
-
-  getToasterType() {
     return this.toasterType;
   }
 
@@ -169,6 +239,9 @@ export class PoToasterComponent extends PoToasterBaseComponent implements AfterV
     } else {
       this.close();
     }
+    if (this.isInline()) {
+      this.isHideChange.emit(this.isHide);
+    }
   }
 
   /* Chama a função passada pelo atributo `action` */
@@ -176,7 +249,7 @@ export class PoToasterComponent extends PoToasterBaseComponent implements AfterV
     this.action(this);
   }
 
-  private returnHeightToaster(position) {
+  returnHeightToaster(position) {
     if (this.orientation === PoToasterOrientation.Top) {
       return (document.querySelectorAll('.po-toaster-top')[position] as HTMLElement).offsetHeight;
     }
