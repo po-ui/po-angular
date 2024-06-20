@@ -21,7 +21,7 @@ export class SamplePoNotificationLabsComponent implements OnInit {
   actionLabel: string;
   message: string;
   orientation: number;
-  type: number;
+  type: PoToasterType;
   duration: number;
 
   public readonly orientationOptions: Array<PoRadioGroupOption> = [

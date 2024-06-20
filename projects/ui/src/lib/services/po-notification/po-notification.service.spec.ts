@@ -4,7 +4,7 @@ import { configureTestSuite } from './../../util-test/util-expect.spec';
 
 import { PoComponentInjectorService } from './../po-component-injector/po-component-injector.service';
 import { PoNotificationService } from './po-notification.service';
-import { PoToasterOrientation } from './po-toaster/po-toaster-orientation.enum';
+import { PoToasterOrientation } from '../../components/po-toaster';
 
 describe('PoNotificationService:', () => {
   let notificationService: PoNotificationService;
