@@ -2,6 +2,7 @@ import { NgModule } from '@angular/core';
 
 import { PoAccordionModule } from './po-accordion/po-accordion.module';
 import { PoAvatarModule } from './po-avatar/po-avatar.module';
+import { PoBadgeModule } from './po-badge/po-badge.module';
 import { PoBreadcrumbModule } from './po-breadcrumb/po-breadcrumb.module';
 import { PoButtonGroupModule } from './po-button-group/po-button-group.module';
 import { PoButtonModule } from './po-button/po-button.module';
@@ -14,6 +15,7 @@ import { PoDividerModule } from './po-divider/po-divider.module';
 import { PoDropdownModule } from './po-dropdown/po-dropdown.module';
 import { PoDynamicModule } from './po-dynamic/po-dynamic.module';
 import { PoFieldModule } from './po-field/po-field.module';
+import { PoSwitchModule } from './po-field/po-switch/po-switch.module';
 import { PoGaugeModule } from './po-gauge/po-gauge.module';
 import { PoGridModule } from './po-grid/po-grid.module';
 import { PoIconModule } from './po-icon/po-icon.module';
@@ -30,12 +32,12 @@ import { PoMenuModule } from './po-menu/po-menu.module';
 import { PoModalModule } from './po-modal/po-modal.module';
 import { PoNavbarModule } from './po-navbar/po-navbar.module';
 import { PoOverlayModule } from './po-overlay/po-overlay.module';
-import { PoPageModule } from './po-page/po-page.module';
 import { PoPageSlideModule } from './po-page/po-page-slide/po-page-slide.module';
-import { PoSwitchModule } from './po-field/po-switch/po-switch.module';
+import { PoPageModule } from './po-page/po-page.module';
 import { PoPopoverModule } from './po-popover/po-popover.module';
 import { PoPopupModule } from './po-popup/po-popup.module';
 import { PoProgressModule } from './po-progress/po-progress.module';
+import { PoSearchModule } from './po-search';
 import { PoSlideModule } from './po-slide/po-slide.module';
 import { PoStepperModule } from './po-stepper/po-stepper.module';
 import { PoTableModule } from './po-table/po-table.module';
@@ -44,9 +46,7 @@ import { PoTagModule } from './po-tag/po-tag.module';
 import { PoToolbarModule } from './po-toolbar/po-toolbar.module';
 import { PoTreeViewModule } from './po-tree-view/po-tree-view.module';
 import { PoWidgetModule } from './po-widget/po-widget.module';
-import { PoSearchModule } from './po-search';
-import { PoBadgeModule } from './po-badge/po-badge.module';
-
+import { PoToasterModule } from './po-toaster';
 @NgModule({
   imports: [
     PoAccordionModule,
@@ -94,7 +94,8 @@ import { PoBadgeModule } from './po-badge/po-badge.module';
     PoPageSlideModule,
     PoSwitchModule,
     PoSearchModule,
-    PoBadgeModule
+    PoBadgeModule,
+    PoToasterModule
   ],
   exports: [
     PoAccordionModule,
@@ -142,7 +143,8 @@ import { PoBadgeModule } from './po-badge/po-badge.module';
     PoPageSlideModule,
     PoSwitchModule,
     PoSearchModule,
-    PoBadgeModule
+    PoBadgeModule,
+    PoToasterModule
   ],
   providers: [],
   bootstrap: [],

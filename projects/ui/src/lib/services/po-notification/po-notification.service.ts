@@ -1,13 +1,10 @@
 import { ComponentRef, Injectable } from '@angular/core';
 
-import { PoComponentInjectorService } from './../po-component-injector/po-component-injector.service';
-import { PoNotificationBaseService } from './po-notification-base.service';
-import { PoToaster } from './po-toaster/po-toaster.interface';
-import { PoToasterOrientation } from './po-toaster/po-toaster-orientation.enum';
-import { PoToasterType } from './po-toaster/po-toaster-type.enum';
-import { PoToasterComponent } from './po-toaster/po-toaster.component';
 import { timer } from 'rxjs';
 import { takeWhile } from 'rxjs/operators';
+import { PoComponentInjectorService } from './../po-component-injector/po-component-injector.service';
+import { PoNotificationBaseService } from './po-notification-base.service';
+import { PoToaster, PoToasterComponent, PoToasterType, PoToasterOrientation } from '../../components/po-toaster';
 
 const PoNotificationMaxLength = 5;
 const PoNotificationFadeTime = 200;

@@ -1,0 +1,43 @@
+<div
+  #toaster
+  class="
+    po-toaster 
+    {{ getToasterType() }} 
+    {{ getToasterPosition() }}
+  "
+  [class.po-toaster-inline]="isInline()"
+  [hidden]="isHide"
+>
+  <div class="po-toaster-icon" [ngClass]="isAlert() ? 'po-toaster-icon-default' : 'po-toaster-decoration'">
+    <po-icon *ngIf="isAlert()" [p-icon]="getIcon()"></po-icon>
+  </div>
+
+  <po-icon class="po-toaster-inline-icon" *ngIf="isInline()" [p-icon]="getIcon()"></po-icon>
+
+  <div class="po-toaster-actions">
+    <div class="po-toaster-message">
+      {{ message }}
+      <div *ngIf="supportMessage" class="po-toaster-support-message">{{ supportMessage }}</div>
+    </div>
+
+    <div class="po-toaster-action">
+      <po-button
+        *ngIf="action && actionLabel"
+        (p-click)="poToasterAction($event)"
+        [p-label]="actionLabel"
+        p-kind="tertiary"
+      ></po-button>
+    </div>
+  </div>
+
+  <div *ngIf="hasClose()" class="po-toaster-close">
+    <div class="po-toaster-divider"></div>
+    <po-button
+      #buttonClose
+      class="po-toaster-button-close"
+      (p-click)="onButtonClose($event)"
+      p-icon="ICON_CLOSE"
+      p-kind="tertiary"
+    ></po-button>
+  </div>
+</div>

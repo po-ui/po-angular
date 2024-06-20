@@ -1,8 +1,4 @@
-/**
- * @docsPrivate
- *
- * Enums para a orientação da notificação, do componente po-toaster-base.component.
- */
+// Define as orientações possíveis para o `PoToasterComponent`.
 export enum PoToasterOrientation {
   /** Orientção do componente fica no rodapé */
   Bottom,
