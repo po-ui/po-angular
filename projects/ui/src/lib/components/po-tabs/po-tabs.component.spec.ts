@@ -612,14 +612,13 @@ describe('PoTabsComponent:', () => {
 
     it('selectedTab: should correctly handle a tab in the dropdown', () => {
       const clickEventMock = new EventEmitter<any>();
-      component.quantityTabsButton = 2;
 
       const tabMock1 = { id: 'tab1', active: false, click: clickEventMock };
       const tabMock2 = { id: 'tab2', active: false, click: clickEventMock };
-      const tabMockInDropdown = { id: 'tab3', active: false, click: clickEventMock };
+      const tabMockInDropdown = { id: 'tab1', active: false, click: clickEventMock };
 
       component['tabsDefault'] = [tabMock1, tabMock2];
-      component['tabsDropdown'] = [tabMockInDropdown];
+      component.tabsChildren['_results'] = [tabMockInDropdown];
 
       spyOn(component, 'onTabActiveByDropdown');
       const changeDetectorSpy = spyOn(component['changeDetector'], 'detectChanges');
