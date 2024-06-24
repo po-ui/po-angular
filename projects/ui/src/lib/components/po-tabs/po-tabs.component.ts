@@ -219,7 +219,7 @@ export class PoTabsComponent extends PoTabsBaseComponent implements OnInit, Afte
       tab.click.emit(tab);
     }
 
-    const isTabInDropdown = this.tabsDropdown.some(t => t.id === tab.id);
+    const isTabInDropdown = this.overflowedTabs.some(t => t.id === tab.id);
     if (isTabInDropdown) {
       this.onTabActiveByDropdown(tab);
     }
