@@ -2,6 +2,20 @@
 
 All notable changes to this project will be documented in this file. See [standard-version](https://github.com/conventional-changelog/standard-version) for commit guidelines.
 
+## [17.16.0](https://github.com/po-ui/po-angular/compare/v17.15.2...v17.16.0) (2024-06-24)
+
+
+### Features
+
+* **icon:** adiciona biblioteca de ícones phosphor ([1d759e0](https://github.com/po-ui/po-style/commit/1d759e0bc4602e0effbe514a8f44c6935e8ad1cc))
+* **icon:** permite chavear lib de ícones ([ff2426a](https://github.com/po-ui/po-angular/commit/ff2426abee238e12778e265336143fa99ce237a0))
+* **toaster:** criação do componente po-toaster ([d39f20c](https://github.com/po-ui/po-angular/commit/d39f20c1c1b5d8a78a39333844f61797e844bc7e))
+
+
+### Bug Fixes
+
+* **tabs:** ajusta reposicionamento de tabs filhas ([0fed393](https://github.com/po-ui/po-angular/commit/0fed393b311154c4483aa48ad895ce6bc3d8fd31))
+
 ### [17.15.2](https://github.com/po-ui/po-angular/compare/v17.15.1...v17.15.2) (2024-06-18)
 
 
