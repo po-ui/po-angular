@@ -31,32 +31,32 @@
     />
 
     <div class="po-field-icon-container-right">
-      <div
+      <po-clean
         tabindex="0"
         role="button"
         [attr.aria-label]="literals.clean"
+        class="po-combo-clean po-icon-input"
         *ngIf="clean && !disabled && inp.value"
-        class="po-combo-clean"
+        [p-element-ref]="inputEl"
+        (p-change-event)="clear($event)"
         (click)="clear(null); $event.preventDefault()"
         (keydown.enter)="clearAndFocus(); $event.preventDefault()"
       >
-        <span
-          [class.po-border-focused]="!disabled && comboOpen"
-          class="po-icon po-field-icon po-icon-clear-content"
-        ></span>
-      </div>
-      <span
+      </po-clean>
+
+      <div
         #iconArrow
-        class="po-icon po-field-icon po-icon-input"
+        class="po-combo-arrow po-field-icon"
         [class.po-field-icon-disabled]="disabled"
-        [class.po-icon-arrow-up]="comboOpen"
-        [class.po-icon-arrow-down]="!comboOpen"
-        [class.po-field-icon]="!disabled"
-        [class.po-combo-default-border]="!disabled && inp.value"
-        [class.po-combo-background-arrow-up]="!disabled && comboOpen"
         (click)="toggleComboVisibility(true)"
       >
-      </span>
+        <po-icon
+          [p-icon]="comboOpen ? 'ICON_ARROW_UP po-icon-input' : 'ICON_ARROW_DOWN po-icon-input'"
+          [class.po-field-icon]="!disabled"
+          [class.po-combo-default-border]="!disabled && inp.value"
+          [class.po-combo-background-arrow-up]="!disabled && comboOpen"
+        ></po-icon>
+      </div>
     </div>
   </div>
 

@@ -11,7 +11,7 @@
     [class.po-item-list__danger]="danger"
     class="po-item-list po-item-list__action"
   >
-    <po-icon *ngIf="icon" class="po-popup-icon-item po-icon" [p-icon]="icon"></po-icon>
+    <po-icon *ngIf="icon" class="po-popup-icon-item" [p-icon]="icon"></po-icon>
     <span class="po-item-list-label">{{ label }}</span>
   </div>
 
@@ -47,8 +47,6 @@
       [p-disabled-tabindex]="true"
       [p-checkboxValue]="checkboxValue === null ? 'mixed' : checkboxValue"
       [p-disabled]="disabled"
-      (click)="onCheckboxItem()"
-      (p-change)="onSelectItem({ label })"
     ></po-checkbox>
 
     <span class="po-item-list__label" *ngIf="!template">{{ label }}</span>

@@ -125,15 +125,6 @@ export class PoItemListBaseComponent {
    */
   @Output('p-click-item') clickItem = new EventEmitter<PoItemListAction | any>();
 
-  /**
-   * @optional
-   *
-   * @description
-   *
-   * Ação a ser realizada ao selecionar no item do type `check`.
-   */
-  @Output('p-select-item') selectItem = new EventEmitter<PoItemListOption | PoItemListOptionGroup | any>();
-
   // MULTISELECT PROPERTIES
   //emissao de evento do checkbox
   @Output('p-selectcheckbox-item') checkboxItem = new EventEmitter<any>();

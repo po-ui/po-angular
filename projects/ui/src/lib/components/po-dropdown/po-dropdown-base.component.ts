@@ -69,7 +69,7 @@ export class PoDropdownBaseComponent {
   /** Adiciona um rótulo ao `dropdown`. */
   @Input('p-label') label: string;
 
-  icon: string = 'po-icon-arrow-down';
+  icon: string = 'ICON_ARROW_DOWN';
   open: boolean = false;
 
   private _actions: Array<PoDropdownAction>;

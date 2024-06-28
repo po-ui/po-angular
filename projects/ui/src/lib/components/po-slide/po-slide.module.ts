@@ -3,6 +3,7 @@ import { NgModule } from '@angular/core';
 import { RouterModule } from '@angular/router';
 
 import { PoContainerModule } from '../po-container/po-container.module';
+import { PoIconModule } from '../po-icon';
 
 import { PoSlideCirclesComponent } from './po-slide-circles/po-slide-circles.component';
 import { PoSlideComponent } from './po-slide.component';
@@ -42,7 +43,7 @@ import { PoSlideItemComponent } from './po-slide-item/po-slide-item.component';
  * ```
  */
 @NgModule({
-  imports: [CommonModule, RouterModule, PoContainerModule],
+  imports: [CommonModule, RouterModule, PoContainerModule, PoIconModule],
   declarations: [
     PoSlideCirclesComponent,
     PoSlideComponent,

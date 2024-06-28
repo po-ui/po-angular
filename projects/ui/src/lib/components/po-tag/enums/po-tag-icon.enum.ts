@@ -7,14 +7,14 @@
  */
 export enum PoTagIcon {
   /** Ícone fechar. */
-  Danger = 'po-icon-close',
+  Danger = 'ICON_CLOSE',
 
   /** Ícone de informação. */
-  Info = 'po-icon-info',
+  Info = 'ICON_INFO',
 
   /** Ícone que representa confirmação. */
-  Success = 'po-icon-ok',
+  Success = 'ICON_OK',
 
   /** Ícone com ponto de exclamação. */
-  Warning = 'po-icon-warning'
+  Warning = 'ICON_WARNING'
 }

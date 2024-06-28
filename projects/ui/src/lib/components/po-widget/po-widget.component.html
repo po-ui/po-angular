@@ -16,15 +16,16 @@
     <ng-template #noTitleAction>{{ title }}</ng-template>
 
     <div *ngIf="setting.observers[0] || help" class="po-pull-right">
-      <span
+      <po-icon
         id="settingAction-{{ id }}"
         *ngIf="setting.observers[0]"
-        class="po-clickable po-icon po-icon-settings"
+        p-icon="ICON_SETTINGS"
+        class="po-clickable"
         (click)="settingOutput($event)"
       >
-      </span>
-      <span id="helpLink-{{ id }}" *ngIf="help" class="po-clickable po-icon po-icon-help" (click)="openHelp($event)">
-      </span>
+      </po-icon>
+      <po-icon id="helpLink-{{ id }}" *ngIf="help" p-icon="ICON_HELP" (click)="openHelp($event)" class="po-clickable">
+      </po-icon>
     </div>
   </div>
 

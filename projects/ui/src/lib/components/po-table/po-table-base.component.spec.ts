@@ -483,6 +483,15 @@ describe('PoTableBaseComponent:', () => {
     expect(component.hasItems).toBeTruthy();
   });
 
+  it('textWrap: should accept input for text wrapping with default value', () => {
+    expect(component.textWrap).toBe(false);
+  });
+
+  it('textWrap: should accept input for text wrapping with value true', () => {
+    component.textWrap = true;
+    expect(component.textWrap).toBe(true);
+  });
+
   describe('Methods:', () => {
     const columnsColors = [
       { label: 'Destination', property: 'destination', type: 'string', color: 'color-07' },
@@ -648,47 +657,6 @@ describe('PoTableBaseComponent:', () => {
 
         expect(component['unselectOtherRows']).not.toHaveBeenCalled();
         expect(component['isEverySelected']).not.toHaveBeenCalled();
-      });
-    });
-
-    describe('verifyInteractiveColumns: ', () => {
-      it('should call spacing `large`', () => {
-        component.columns = [
-          { label: 'Table', property: 'table', visible: true },
-          { label: 'Angular', property: 'angular', visible: true }
-        ];
-        component.spacing = PoTableColumnSpacing.Large;
-
-        component['verifyInteractiveColumns']();
-
-        expect(component.spacing).toBe('large');
-      });
-
-      it('should call spacing `small` when row is not interactive', () => {
-        component.columns = [
-          { label: 'Table', property: 'table', visible: true },
-          { label: 'Angular', property: 'angular', visible: true }
-        ];
-        component.selectable = false;
-        component.actions = [];
-        component.spacing = PoTableColumnSpacing.Small;
-
-        component['verifyInteractiveColumns']();
-
-        expect(component.spacing).toBe('small');
-      });
-
-      it('should call spacing `medium` when row is interactive and set spacing `small`', () => {
-        component.columns = [
-          { label: 'Table', property: 'table', visible: true },
-          { label: 'Angular', property: 'angular', visible: true, type: 'link' }
-        ];
-        component.selectable = true;
-        component.spacing = PoTableColumnSpacing.Small;
-
-        component['verifyInteractiveColumns']();
-
-        expect(component.spacing).toBe('medium');
       });
     });
 
@@ -1589,19 +1557,6 @@ describe('PoTableBaseComponent:', () => {
       component.columns = [];
 
       expect(component['getDefaultColumns']).not.toHaveBeenCalled();
-    });
-
-    it('p-columns: should call `verifyInteractiveColumns` if have a column if visible propertie', () => {
-      spyOn(component, <any>'verifyInteractiveColumns');
-
-      component['initialVisibleColumns'] = false;
-      component.columns = [
-        { label: 'Table', property: 'table', visible: true },
-        { label: 'Angular', property: 'angular', visible: true }
-      ];
-
-      expect(component['initialVisibleColumns']).toBe(true);
-      expect(component['verifyInteractiveColumns']).toHaveBeenCalled();
     });
 
     it('p-container: should update property with valid values', () => {

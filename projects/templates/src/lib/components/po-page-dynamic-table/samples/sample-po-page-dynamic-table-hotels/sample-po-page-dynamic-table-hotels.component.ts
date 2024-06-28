@@ -49,7 +49,7 @@ export class SamplePoPageDynamicTableHotelsComponent {
 
   readonly fields: Array<any> = [
     { property: 'id', key: true, visible: false },
-    { property: 'name', label: 'Name', filter: true, gridColumns: 6 },
+    { property: 'name', label: 'Name', width: '115px', filter: true, gridColumns: 6 },
     {
       property: 'floors',
       label: 'Floors',

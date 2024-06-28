@@ -2,17 +2,169 @@
 
 All notable changes to this project will be documented in this file. See [standard-version](https://github.com/conventional-changelog/standard-version) for commit guidelines.
 
+### [17.16.1](https://github.com/po-ui/po-angular/compare/v17.16.0...v17.16.1) (2024-06-25)
+
+Compatibilidade com @totvs/thf-components@17.16.1
+
+## [17.16.0](https://github.com/po-ui/po-angular/compare/v17.15.2...v17.16.0) (2024-06-24)
+
+
+### Features
+
+* **icon:** adiciona biblioteca de ícones phosphor ([1d759e0](https://github.com/po-ui/po-style/commit/1d759e0bc4602e0effbe514a8f44c6935e8ad1cc))
+* **icon:** permite chavear lib de ícones ([ff2426a](https://github.com/po-ui/po-angular/commit/ff2426abee238e12778e265336143fa99ce237a0))
+* **toaster:** criação do componente po-toaster ([d39f20c](https://github.com/po-ui/po-angular/commit/d39f20c1c1b5d8a78a39333844f61797e844bc7e))
+
+
+### Bug Fixes
+
+* **tabs:** ajusta reposicionamento de tabs filhas ([0fed393](https://github.com/po-ui/po-angular/commit/0fed393b311154c4483aa48ad895ce6bc3d8fd31))
+
+### [17.15.2](https://github.com/po-ui/po-angular/compare/v17.15.1...v17.15.2) (2024-06-18)
+
+
+### Bug Fixes
+
+* **tabs:** corrige emissão de evento p-click ([08b7f8d](https://github.com/po-ui/po-angular/commit/08b7f8da55092504cc5c061244043dbfb92c5526))
+
+### [17.15.1](https://github.com/po-ui/po-angular/compare/v17.15.0...v17.15.1) (2024-06-17)
+
+Compatibilidade com @totvs/thf-components@17.15.1
+
+## [17.15.0](https://github.com/po-ui/po-angular/compare/v17.14.0...v17.15.0) (2024-06-17)
+
+
+### Features
+
+* **disclaimer:** adiciona propriedade para validar exibição do tooltip ([52bec69](https://github.com/po-ui/po-angular/commit/52bec69d04e335ad6db98a601ec48ee8365de1d1))
+* **tabs:** adiciona reordenação visual das abas ([9244235](https://github.com/po-ui/po-angular/commit/9244235d945f04f3e4bcf71890e9ebde154c1393))
+
+### [17.14.0](https://github.com/po-ui/po-angular/compare/v17.13.1...v17.14.0) (2024-06-10)
+
+Compatibilidade com @totvs/thf-components@17.14.0
+
+### [17.13.1](https://github.com/po-ui/po-angular/compare/v17.13.0...v17.13.1) (2024-06-04)
+
+Compatibilidade com @totvs/thf-components@17.13.1
+
+## [17.13.0](https://github.com/po-ui/po-angular/compare/v17.12.0...v17.13.0) (2024-06-03)
+
+
+### Features
+
+* **clean:** atualiza icone definido pelo animalia ([b44a721](https://github.com/po-ui/po-angular/commit/b44a7218a2823e095d94826b51e1b6395be4840a))
+* **search:** inclusão da propriedade filterSelect ([4057910](https://github.com/po-ui/po-angular/commit/4057910ddaa56a3698aea686739173a6943f1ef6))
+
+
+### Bug Fixes
+
+* **tema:** correção do icone no po-select ([f0e28cc](https://github.com/po-ui/po-angular/commit/f0e28cc283581183b7f7d0dc6b47bf515d81514a))
+
+## [17.12.0](https://github.com/po-ui/po-angular/compare/v17.11.0...v17.12.0) (2024-05-27)
+
+
+### Features
+
+* **disclaimer:** adiciona propriedades internas ([2cd834b](https://github.com/po-ui/po-angular/commit/2cd834b47e3258e56f8c8c8009cefd4645ba2cd4))
+
+
+### Bug Fixes
+
+* **combo:** corrige a rotina de focus do componente na inicialização ([576631d](https://github.com/po-ui/po-angular/commit/576631d88bfa43ede9bd67dbf772c822d67e9c34))
+* **listbox:** corrige emissão de eventos no `po-combo` e `po-multiselect` ([a9801ec](https://github.com/po-ui/po-angular/commit/a9801eca3370a0e5cb2ecd7d75860b243c0eff01))
+* **menu:** corrige sobreposicao da `po-tooltip` ([4384d3d](https://github.com/po-ui/po-angular/commit/4384d3d53617a2ac297fe56c58d8dd61d7cd2619))
+* **page-dynamic:** corrige container sem titulo quando o valor é `null` e utiliza serviço ([9f072b5](https://github.com/po-ui/po-angular/commit/9f072b5a9b350d91191807db63fd4dcff9cb2fb2))
+* **page:** corrige a propriedade "type" das actions que determina o tipo do botão entre `danger` e `default` ([be33782](https://github.com/po-ui/po-angular/commit/be337826105dd8d6012b302db60f9c144d3630f5))
+
+## [17.11.0](https://github.com/po-ui/po-angular/compare/v17.10.0...v17.11.0) (2024-05-20)
+
+
+### Features
+
+* **dynamic-table:** repassa propriedade p-spacing e p-text-wrap ([a01890d](https://github.com/po-ui/po-angular/commit/a01890d641859b29ad03d37759c4cd7e08714cee))
+* **icon:** inclui dicionário de tokens ([e0527ea](https://github.com/po-ui/po-angular/commit/e0527ea952333227b190a5a220a8e75761adb855))
+* **lookup:** inclui p-spacing e p-text-wrap ([d1ab4cc](https://github.com/po-ui/po-angular/commit/d1ab4cc0d6661f11ef8577a1c34bb7c5e6d2ea84))
+* **menu:** adiciona tooltip para exibição do shortLabel ([de9c951](https://github.com/po-ui/po-angular/commit/de9c951f6f1b1c84c8d8d9e9473d0d278f1f53cd))
+* **table:** permite mais visão de itens e colunas ([18684a7](https://github.com/po-ui/po-angular/commit/18684a7a094bf878e20e97dfa82c34d345084f2b))
+
+### [17.10.0](https://github.com/po-ui/po-angular/compare/v17.9.0...v17.10.0) (2024-05-14)
+
+Compatibilidade com @totvs/thf-components@17.10.0
+
+## [17.9.0](https://github.com/po-ui/po-angular/compare/v17.8.0...v17.9.0) (2024-05-13)
+
+
+### Features
+
+* **job-scheduler:** adiciona possibilidade de inclusao de varias etapas ([8d91210](https://github.com/po-ui/po-angular/commit/8d91210479053d3a10c2a0df15a50b1fcb35d516))
+* **temas:** implementa melhorias no serviço de troca de temas ([d7345ba](https://github.com/po-ui/po-angular/commit/d7345ba7dcd93897b284c554624666be6a130eaf))
+* **theme:** adiciona serviço para a troca de tema ([2e125b0](https://github.com/po-ui/po-angular/commit/2e125b0edb5435262225367d34e7ff00f7e9290e)), closes [#1964](https://github.com/po-ui/po-angular/issues/1964)
+
+
+### Bug Fixes
+
+* **table:** corrige coluna do tipo label ([785cb64](https://github.com/po-ui/po-angular/commit/785cb64d1c55c49cefcd4c1bf769e9095c923dfd))
+
+## [17.8.0](https://github.com/po-ui/po-angular/compare/v17.7.0...v17.8.0) (2024-05-06)
+
+
+### Features
+
+* **table:**  adiciona propriedade `p-text-wrap` para permitir quebra de linha no conteúdo da tabela ([867d40c](https://github.com/po-ui/po-angular/commit/867d40c31d5d1c885cd7f069546a460087482833))
+
+### [17.7.0](https://github.com/po-ui/po-angular/compare/v17.6.0...v17.7.0) (2024-04-26)
+
+Compatibilidade com @totvs/thf-components@17.7.0
+
+## [17.6.0](https://github.com/po-ui/po-angular/compare/v17.5.0...v17.6.0) (2024-04-22)
+
+### Features
+
+Compatibilidade com @totvs/thf-components@17.6.0
+
+* **dynamic:** inclusão da propriedade container ([5302244](https://github.com/po-ui/po-angular/commit/530224431d96afe89f45c11fcb5300e42c4c70b1))
+* **search:** inclusão do listbox ao fazer o search ([6c8f299](https://github.com/po-ui/po-angular/commit/6c8f2993af5cf74c9b1ca9b01cefa26ae384da5b))
+
+### [17.5.0](https://github.com/po-ui/po-angular/compare/v17.4.0...v17.5.0) (2024-04-15)
+
+
+### Bug Fixes
+
+* **combo:** Ao enviar o setInputValue como null, deve-se mudar o 'selectedValue' e 'selectedOption' para valor nulo ([70c5ac0](https://github.com/po-ui/po-angular/commit/70c5ac089d9073d6db80e99d00add3d6cdb86d8e))
+
+### Features
+
+Compatibilidade com @totvs/thf-components@17.5.0
+
+## [17.4.0](https://github.com/po-ui/po-angular/compare/v17.3.0...v17.4.0) (2024-04-08)
+
+
+### Features
+
+* **dynamic-edit:** inclui p-notification-type ([1d6a166](https://github.com/po-ui/po-angular/commit/1d6a166c2b7fb0c6b9fc0cec616c85f2f2335ebc))
+
+
 ### [17.3.0](https://github.com/po-ui/po-angular/compare/v17.2.0...v17.3.0) (2024-04-01)
 
 ### Bug Fixes
 
 * **schematics:** corrige comando generate em projetos standalone ([ca27f05](https://github.com/po-ui/po-angular/commit/ca27f05489b3a273686a59b1b79a03eb22201524))
 
+### Features
+
+Compatibilidade com @totvs/thf-components@17.3.0
+
+
 ### [17.2.0](https://github.com/po-ui/po-angular/compare/v17.1.1...v17.2.0) (2024-03-25)
 
 ### Bug Fixes
 
 * **dynamic-view:** correção campos duplicados ([b4ee54a](https://github.com/po-ui/po-angular/commit/b4ee54ae0c7529a1918d5ad5b50e86021c7f2a0c))
+
+### Features
+
+Compatibilidade com @totvs/thf-components@17.2.0
+
 
 ## [17.1.1](https://github.com/po-ui/po-angular/compare/v17.1.0...v17.1.1) (2024-03-18)
 

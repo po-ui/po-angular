@@ -5,15 +5,42 @@
   role="menuitem"
   [attr.aria-label]="label"
   [routerLink]="link"
+  (keydown.enter)="clickMenuItem($event)"
+  (keydown.space)="clickMenuItem($event)"
+  p-tooltip-position="right"
+  [p-tooltip]="collapsedMenu && shortLabel ? shortLabel : undefined"
+  [p-append-in-body]="true"
 >
   <ng-container *ngTemplateOutlet="menuItemTemplate"></ng-container>
 </a>
 <!-- menu com link externo -->
-<a *ngIf="type === 'externalLink'" class="po-menu-item-link" role="menuitem" [attr.aria-label]="label" [href]="link">
+<a
+  *ngIf="type === 'externalLink'"
+  class="po-menu-item-link"
+  role="menuitem"
+  [attr.aria-label]="label"
+  [href]="link"
+  (keydown.enter)="clickMenuItem($event)"
+  (keydown.space)="clickMenuItem($event)"
+  p-tooltip-position="right"
+  [p-tooltip]="collapsedMenu && shortLabel ? shortLabel : undefined"
+  [p-append-in-body]="true"
+>
   <ng-container *ngTemplateOutlet="menuItemTemplate"></ng-container>
 </a>
 <!-- menu sem link -->
-<a *ngIf="type === 'noLink'" class="po-menu-item-link" href="javascript:;" role="menuitem" [attr.aria-label]="label">
+<a
+  *ngIf="type === 'noLink'"
+  class="po-menu-item-link"
+  href="javascript:;"
+  role="menuitem"
+  [attr.aria-label]="label"
+  (keydown.enter)="clickMenuItem($event)"
+  (keydown.space)="clickMenuItem($event)"
+  p-tooltip-position="right"
+  [p-tooltip]="collapsedMenu && shortLabel ? shortLabel : undefined"
+  [p-append-in-body]="true"
+>
   <ng-container *ngTemplateOutlet="menuItemTemplate"></ng-container>
 </a>
 <!-- menu sem dados -->
@@ -60,6 +87,9 @@
 
 <ng-template #menuItemTemplate>
   <div
+    p-tooltip-position="right"
+    [p-tooltip]="type === 'subItems' && collapsedMenu && shortLabel ? shortLabel : undefined"
+    [p-append-in-body]="true"
     class="po-menu-item"
     [tabindex]="type === 'subItems' ? 0 : -1"
     [attr.aria-label]="label"
@@ -80,12 +110,11 @@
   >
     <po-icon *ngIf="level === 1 && icon" aria-hidden="true" class="po-menu-icon-item" [p-icon]="icon"></po-icon>
 
-    <span
+    <po-icon
       *ngIf="type === 'subItems' && !collapsedMenu"
-      class="po-icon po-menu-group-icon"
-      [class.po-icon-arrow-up]="isOpened"
-      [class.po-icon-arrow-down]="!isOpened"
-    ></span>
+      class="po-menu-group-icon"
+      [p-icon]="isOpened ? 'ICON_ARROW_UP po-field-icon' : 'ICON_ARROW_DOWN po-field-icon'"
+    ></po-icon>
 
     <span [class.po-menu-icon-label]="level === 1 && icon">
       {{ label }}

@@ -1,19 +1,20 @@
 <div class="po-calendar-header">
-  <span
+  <po-icon
+    p-icon="ICON_ARROW_LEFT"
     *ngIf="previous?.observers && !hidePrevious"
-    class="po-calendar-header-left po-icon po-icon-arrow-left"
+    class="po-calendar-header-left"
     (click)="previous.emit()"
   >
-  </span>
-
+  </po-icon>
   <div class="po-calendar-header-title" attr-calendar>
     <ng-content></ng-content>
   </div>
 
-  <span
+  <po-icon
+    p-icon="ICON_ARROW_RIGHT"
     *ngIf="next?.observers.length && !hideNext"
-    class="po-calendar-header-right po-icon po-icon-arrow-right"
+    class="po-calendar-header-right"
     (click)="next.emit()"
   >
-  </span>
+  </po-icon>
 </div>

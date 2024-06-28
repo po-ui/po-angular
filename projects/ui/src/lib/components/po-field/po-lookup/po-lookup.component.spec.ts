@@ -14,6 +14,7 @@ import { PoLookupComponent } from './po-lookup.component';
 import { PoLookupFilter } from './interfaces/po-lookup-filter.interface';
 import { NgControl } from '@angular/forms';
 import { HttpClientTestingModule } from '@angular/common/http/testing';
+import { PoTableColumnSpacing } from '../../po-table';
 class LookupFilterService implements PoLookupFilter {
   getFilteredItems(params: any): Observable<any> {
     return of({ items: [{ value: 123, label: 'teste' }] });
@@ -958,6 +959,8 @@ describe('PoLookupComponent:', () => {
         component.multiple = false;
         component.fieldLabel = 'label';
         component.fieldValue = 'value';
+        component.spacing = PoTableColumnSpacing.Medium;
+        component.textWrap = false;
         component.changeVisibleColumns = new EventEmitter();
         component.columnRestoreManager = new EventEmitter();
 
@@ -972,6 +975,8 @@ describe('PoLookupComponent:', () => {
           multiple,
           fieldLabel,
           fieldValue,
+          spacing,
+          textWrap,
           changeVisibleColumns,
           columnRestoreManager
         } = component;
@@ -991,6 +996,8 @@ describe('PoLookupComponent:', () => {
           selectedItems,
           fieldLabel,
           fieldValue,
+          spacing,
+          textWrap,
           changeVisibleColumns,
           columnRestoreManager
         };

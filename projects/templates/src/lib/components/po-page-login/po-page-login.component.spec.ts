@@ -28,6 +28,7 @@ import { PoPageLoginCustomField } from './interfaces/po-page-login-custom-field.
 import { PoPageLoginLiterals } from './interfaces/po-page-login-literals.interface';
 import { PoPageLoginService } from './po-page-login.service';
 import { OverlayModule } from '@angular/cdk/overlay';
+import { element } from 'protractor';
 
 describe('PoPageLoginComponent: ', () => {
   let component: PoPageLoginComponent;
@@ -164,9 +165,15 @@ describe('PoPageLoginComponent: ', () => {
   it('Should show a icon if not send literals', () => {
     fixture.detectChanges();
 
-    const spanLoginHint = nativeElement.querySelector('span.po-icon-info');
+    const iconLoginHints = nativeElement.querySelectorAll('po-icon');
+    const iconInfoElement = Array.from(iconLoginHints).find(element => {
+      if (element instanceof HTMLElement) {
+        return element.getAttribute('p-icon') === 'ICON_INFO';
+      }
+      return false;
+    });
 
-    expect(spanLoginHint).not.toBeNull();
+    expect(iconInfoElement).not.toBeNull();
   });
 
   it('Should show a icon if send literals', () => {
@@ -176,9 +183,15 @@ describe('PoPageLoginComponent: ', () => {
 
     fixture.detectChanges();
 
-    const spanLoginHint = nativeElement.querySelector('span.po-icon-info');
+    const iconLoginHints = nativeElement.querySelectorAll('po-icon');
+    const iconInfoElement = Array.from(iconLoginHints).find(element => {
+      if (element instanceof HTMLElement) {
+        return element.getAttribute('p-icon') === 'ICON_INFO';
+      }
+      return false;
+    });
 
-    expect(spanLoginHint).not.toBeNull();
+    expect(iconInfoElement).not.toBeNull();
   });
 
   it('shouldn`t show a icon if literals is empty', () => {
@@ -189,9 +202,15 @@ describe('PoPageLoginComponent: ', () => {
 
     fixture.detectChanges();
 
-    const spanLoginHint = nativeElement.querySelector('span.po-icon-info');
+    const iconLoginHints = nativeElement.querySelectorAll('po-icon');
+    const iconInfoElement = Array.from(iconLoginHints).find(element => {
+      if (element instanceof HTMLElement) {
+        return element.getAttribute('p-icon') === 'ICON_INFO';
+      }
+      return false;
+    });
 
-    expect(spanLoginHint).toBeNull();
+    expect(iconInfoElement).toBeUndefined();
   });
 
   it('Should contain dynamic class in login and password fields if literals is empty', () => {
@@ -1030,13 +1049,13 @@ describe('PoPageLoginComponent: ', () => {
     });
 
     it('should add 2 information icons with tooltip directive', () => {
-      const infoIcons = nativeElement.querySelectorAll('.po-icon.po-field-icon.po-icon-info');
+      const divs = nativeElement.querySelectorAll('.po-page-login-info-icon-container');
 
-      expect(infoIcons.length).toBe(2);
-      expect(infoIcons[0].outerHTML).toContain('p-tooltip');
-      expect(infoIcons[1].outerHTML).toContain('p-tooltip');
-
-      expect(nativeElement.querySelectorAll('.po-page-login-info-icon-container').length).toBe(2);
+      expect(divs.length).toBe(2);
+      divs.forEach(div => {
+        expect(div.outerHTML).toContain('ICON_INFO');
+        expect(div.outerHTML).toContain('p-tooltip');
+      });
     });
 
     it('should add 2 errors `div` with icons and text', () => {
@@ -1046,7 +1065,7 @@ describe('PoPageLoginComponent: ', () => {
 
       expect(divs.length).toBe(2);
       divs.forEach(div => {
-        expect(div.outerHTML).toContain('po-icon po-icon-exclamation');
+        expect(div.outerHTML).toContain('ICON_EXCLAMATION');
         expect(div.outerHTML).toContain('po-field-container-error-text');
       });
     });

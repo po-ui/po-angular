@@ -15,8 +15,7 @@ import { PoComponentInjectorService } from '../../services/po-component-injector
 import { PoHttpInterceptorDetail } from './po-http-interceptor-detail/po-http-interceptor-detail.interface';
 import { PoHttpInterceptorModule } from './po-http-interceptor.module';
 import { PoHttpInterceptorService } from './po-http-interceptor.service';
-
-import { PoToasterOrientation } from '../../services/po-notification/po-toaster/po-toaster-orientation.enum';
+import { PoToasterOrientation } from '../../components/po-toaster';
 
 const mockNotification = {
   success: (message: string) => {},

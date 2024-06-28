@@ -3,18 +3,22 @@ import { PoSearchLiterals } from './po-search-literals';
 export const poSearchLiteralsDefault = {
   en: <PoSearchLiterals>{
     search: 'Search',
-    clean: 'Clean'
+    clean: 'Clean',
+    all: 'All'
   },
   es: <PoSearchLiterals>{
     search: 'Buscar',
-    clean: 'limpiar'
+    clean: 'limpiar',
+    all: 'Todo'
   },
   pt: <PoSearchLiterals>{
     search: 'Pesquisar',
-    clean: 'Apagar'
+    clean: 'Apagar',
+    all: 'Todos'
   },
   ru: <PoSearchLiterals>{
     search: 'Поиск',
-    clean: 'чистый'
+    clean: 'чистый',
+    all: 'Все'
   }
 };

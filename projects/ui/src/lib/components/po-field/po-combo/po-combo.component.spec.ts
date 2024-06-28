@@ -237,6 +237,15 @@ describe('PoComboComponent:', () => {
     expect(component.inputEl.nativeElement.value).toBe('1234567890');
   });
 
+  it('should have been called cleanListbox', () => {
+    spyOn(component, 'cleanListbox');
+
+    component.setInputValue(null);
+    fixture.detectChanges();
+
+    expect(component.cleanListbox).toHaveBeenCalled();
+  });
+
   it('should click in document', () => {
     component['initializeListeners']();
     const documentBody = document.body;
@@ -330,6 +339,31 @@ describe('PoComboComponent:', () => {
       component.focus();
 
       expect(component.inputEl.nativeElement.focus).not.toHaveBeenCalled();
+    });
+
+    it('focus: should have shouldApplyFocus default to false', () => {
+      expect(component.shouldApplyFocus).toBe(false);
+    });
+
+    it('focus: should focus input element when shouldApplyFocus is true', () => {
+      const mockElement = document.createElement('div');
+      component.containerElement = { nativeElement: mockElement };
+
+      component.renderer = {
+        removeClass: jasmine.createSpy('removeClass'),
+        addClass: jasmine.createSpy('addClass')
+      } as any;
+
+      component.inputEl = {
+        nativeElement: {
+          focus: jasmine.createSpy('focus')
+        }
+      };
+
+      component.shouldApplyFocus = true;
+      component.onOptionClick({ value: 'test', label: 'Test' });
+
+      expect(component.inputEl.nativeElement.focus).toHaveBeenCalled();
     });
 
     it('onBlur: should be called when blur event', () => {
@@ -964,7 +998,7 @@ describe('PoComboComponent:', () => {
     });
 
     it(`open: should call 'setContainerPosition', 'detectChanges', if contains 'visibleOptions' call 'initializeListeners'
-      and update properties 'comboOpen' to 'true' and 'comboIcon' to 'po-icon-arrow-up'`, () => {
+      and update properties 'comboOpen' to 'true' and 'comboIcon' to 'ICON_ARROW_UP'`, () => {
       component.comboOpen = false;
       component.comboIcon = 'po-icon-arrow-down';
       component.visibleOptions = [{ value: 'po', label: 'PO' }];
@@ -981,7 +1015,7 @@ describe('PoComboComponent:', () => {
       expect(spySetContainerPosition).toHaveBeenCalled();
       expect(spyInitializeListeners).toHaveBeenCalled();
       expect(component.comboOpen).toBe(true);
-      expect(component.comboIcon).toBe('po-icon-arrow-up');
+      expect(component.comboIcon).toBe('ICON_ARROW_UP');
     });
 
     it('open: shouldn`t call `scrollTo` if infiniteScroll is false', () => {
@@ -1045,10 +1079,26 @@ describe('PoComboComponent:', () => {
       expect(result).toBe(100);
     });
 
+    it('cleanListbox: should have been called updateSelectedValue and update selected option', () => {
+      component.options = [
+        {
+          label: 'a',
+          value: 'a',
+          selected: true
+        }
+      ];
+      spyOn(component, 'updateSelectedValue');
+
+      component.cleanListbox();
+
+      expect(component.updateSelectedValue).toHaveBeenCalled();
+      expect(component.options).toEqual([{ label: 'a', value: 'a', selected: false }]);
+    });
+
     it(`close: should call 'removeListeners' and 'detectChanges'
       and update properties 'comboOpen' to 'false' and 'comboIcon' to 'po-icon-arrow-down'`, () => {
       component.comboOpen = true;
-      component.comboIcon = 'po-icon-arrow-up';
+      component.comboIcon = 'ICON_ARROW_UP';
 
       const spyRemoveListeners = spyOn(component, <any>'removeListeners');
       const spyDetectChanges = spyOn(component['changeDetector'], <any>'detectChanges');
@@ -1059,7 +1109,7 @@ describe('PoComboComponent:', () => {
       expect(spyRemoveListeners).toHaveBeenCalled();
 
       expect(component.comboOpen).toBe(false);
-      expect(component.comboIcon).toBe('po-icon-arrow-down');
+      expect(component.comboIcon).toBe('ICON_ARROW_DOWN');
     });
 
     it(`close: 'page' should be 1 when has 'infiniteScroll' and has inputValue`, () => {
@@ -1150,14 +1200,14 @@ describe('PoComboComponent:', () => {
     });
 
     it('should includes an icon.', () => {
-      component.icon = 'po-icon-news';
+      component.icon = 'ICON_NEWS';
       fixture.detectChanges();
 
       expect(nativeElement.querySelector('.po-icon-news')).toBeTruthy();
     });
 
     it('should attribute `po-field-icon-disabled` class when input is disabled.', () => {
-      component.icon = 'po-icon-news';
+      component.icon = 'ICON_NEWS';
       component.disabled = true;
       fixture.detectChanges();
 

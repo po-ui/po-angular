@@ -30,9 +30,8 @@
         [p-label]="literals.moreTabs"
         [p-small]="small"
         [p-tabs]="overflowedTabs"
-        (p-activated)="onTabActive($event)"
         (p-change-state)="onTabChangeState($event)"
-        (p-click)="selectedTab($event)"
+        (p-click)="onTabActiveByDropdown($event)"
       >
       </po-tab-dropdown>
     </div>

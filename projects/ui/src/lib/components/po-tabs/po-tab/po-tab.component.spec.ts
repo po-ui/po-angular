@@ -2,6 +2,7 @@ import { ComponentFixture, TestBed, fakeAsync, tick } from '@angular/core/testin
 
 import { PoTabsService } from '../po-tabs.service';
 import { PoTabComponent } from './po-tab.component';
+import { SimpleChange, SimpleChanges } from '@angular/core';
 
 describe('PoTabComponent:', () => {
   let component: PoTabComponent;
@@ -48,7 +49,11 @@ describe('PoTabComponent:', () => {
     it('should trigger onChanges after 100ms delay', fakeAsync(() => {
       spyOn(tabsService, 'triggerOnChanges');
 
-      component.ngOnChanges();
+      const changes: SimpleChanges = {
+        active: new SimpleChange(null, true, true)
+      };
+
+      component.ngOnChanges(changes);
       tick(101);
 
       expect(tabsService.triggerOnChanges).toHaveBeenCalled();

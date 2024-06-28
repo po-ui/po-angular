@@ -128,7 +128,7 @@ export class PoMultiselectComponent
   @ViewChild('inputElement', { read: ElementRef, static: true }) inputElement: ElementRef;
 
   literalsTag;
-  dropdownIcon: string = 'po-icon-arrow-down';
+  dropdownIcon: string = 'ICON_ARROW_DOWN';
   dropdownOpen: boolean = false;
   initialized = false;
   hasMoreTag: boolean;
@@ -493,7 +493,7 @@ export class PoMultiselectComponent
   }
 
   private close(): void {
-    this.dropdownIcon = 'po-icon-arrow-down';
+    this.dropdownIcon = 'ICON_ARROW_DOWN';
     this.dropdownOpen = false;
 
     this.dropdown.controlVisibility(false);
@@ -608,7 +608,7 @@ export class PoMultiselectComponent
   };
 
   private open(): void {
-    this.dropdownIcon = 'po-icon-arrow-up';
+    this.dropdownIcon = 'ICON_ARROW_UP';
     this.dropdownOpen = true;
 
     this.dropdown.controlVisibility(true);

@@ -4,6 +4,7 @@ import { configureTestSuite } from './../../../util-test/util-expect.spec';
 import { PoCleanComponent } from './../../po-field/po-clean/po-clean.component';
 
 import { PoLoadingModule } from '../../po-loading';
+import { By } from '@angular/platform-browser';
 
 import { PoMenuFilterComponent } from './po-menu-filter.component';
 
@@ -30,10 +31,13 @@ describe('PoMenuFilterComponent:', () => {
   });
 
   it('should show po-clean icon', () => {
-    component.inputFilterElement.nativeElement.value = 'teste';
-    fixture.detectChanges();
+    fixture.whenStable().then(() => {
+      const inputFilterElement = fixture.debugElement.query(By.css('#inputFilter'));
+      inputFilterElement.nativeElement.value = 'teste';
+      fixture.detectChanges();
 
-    expect(fixture.debugElement.nativeElement.querySelector('.po-icon-close')).not.toBeNull();
+      expect(fixture.debugElement.nativeElement.querySelector('.po-icon-close')).not.toBeNull();
+    });
   });
 
   it('should hide po-clean icon', () => {

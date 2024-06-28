@@ -108,7 +108,7 @@ export class PoComboComponent extends PoComboBaseComponent implements AfterViewI
   @ViewChild('inp', { read: ElementRef, static: true }) inputEl: ElementRef;
   @ViewChild('poListbox') poListbox: PoListBoxComponent;
 
-  comboIcon: string = 'po-icon-arrow-down';
+  comboIcon: string = 'ICON_ARROW_DOWN';
   comboOpen: boolean = false;
   differ: any;
   id = `po-combo[${uuid()}]`;
@@ -423,10 +423,16 @@ export class PoComboComponent extends PoComboBaseComponent implements AfterViewI
     }, this.debounceTime);
   }
 
+  setShouldApplyFocus(value: boolean) {
+    this.shouldApplyFocus = value;
+  }
+
   toggleComboVisibility(isButton?: boolean): void {
     if (this.disabled) {
       return;
     }
+
+    this.setShouldApplyFocus(true);
 
     if (this.service && !this.disabledInitFilter) {
       this.applyFilterInFirstClick();
@@ -469,7 +475,10 @@ export class PoComboComponent extends PoComboBaseComponent implements AfterViewI
     }
 
     this.previousSearchValue = this.selectedView[this.dynamicLabel];
-    this.inputEl.nativeElement.focus();
+
+    if (this.shouldApplyFocus) {
+      this.inputEl.nativeElement.focus();
+    }
   }
 
   calculateScrollTop(selectedItem, index) {
@@ -480,12 +489,21 @@ export class PoComboComponent extends PoComboBaseComponent implements AfterViewI
     }
   }
 
+  cleanListbox() {
+    this.updateSelectedValue(null);
+    this.options.map(option => (option.selected = false));
+  }
+
   getInputValue() {
     return this.inputEl.nativeElement.value;
   }
 
   setInputValue(value: string): void {
     this.inputEl.nativeElement.value = value;
+
+    if (value === null) {
+      this.cleanListbox();
+    }
   }
 
   wasClickedOnToggle(event: MouseEvent): void {
@@ -570,7 +588,7 @@ export class PoComboComponent extends PoComboBaseComponent implements AfterViewI
 
     this.changeDetector.detectChanges();
 
-    this.comboIcon = 'po-icon-arrow-down';
+    this.comboIcon = 'ICON_ARROW_DOWN';
 
     this.removeListeners();
 
@@ -621,7 +639,7 @@ export class PoComboComponent extends PoComboBaseComponent implements AfterViewI
 
     this.changeDetector.detectChanges();
 
-    this.comboIcon = 'po-icon-arrow-up';
+    this.comboIcon = 'ICON_ARROW_UP';
 
     this.initializeListeners();
 

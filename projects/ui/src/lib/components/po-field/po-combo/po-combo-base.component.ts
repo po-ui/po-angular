@@ -293,6 +293,7 @@ export abstract class PoComboBaseComponent implements ControlValueAccessor, OnIn
   loading: boolean = false;
   dynamicLabel: string = 'label';
   dynamicValue: string = 'value';
+  shouldApplyFocus: boolean = false;
 
   protected cacheStaticOptions: Array<any> = [];
   protected comboOptionsList: Array<any> = [];

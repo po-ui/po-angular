@@ -42,8 +42,16 @@
 
     <div class="po-table-list-manager-item-buttons">
       <po-button
-        *ngIf="!hideActionFixedColumns"
+        *ngIf="!hideActionFixedColumns && iconNameLib === 'PoIcon'"
         [p-icon]="isFixed(option) ? templateIconFixed : templateIconNotFixed"
+        (p-click)="emitFixed(option)"
+        [p-disabled]="!option.visible || checksIfHasFiveFixed(option)"
+      >
+      </po-button>
+
+      <po-button
+        *ngIf="!hideActionFixedColumns && iconNameLib === 'PhosphorIcon'"
+        [p-icon]="isFixed(option) ? 'ICON_PUSH_PIN_SLASH' : 'ICON_PUSH_PIN'"
         (p-click)="emitFixed(option)"
         [p-disabled]="!option.visible || checksIfHasFiveFixed(option)"
       >
@@ -52,7 +60,7 @@
       <po-button
         [p-tooltip]="literals.up"
         p-tooltip-position="left"
-        p-icon="po-icon po-icon-arrow-up"
+        p-icon="ICON_ARROW_UP"
         [p-disabled]="verifyArrowDisabled(option, 'up') || isFixed(option)"
         (p-click)="emitChangePosition(option, 'up')"
       >
@@ -61,7 +69,7 @@
       <po-button
         [p-tooltip]="literals.down"
         p-tooltip-position="top"
-        p-icon="po-icon po-icon-arrow-down"
+        p-icon="ICON_ARROW_DOWN"
         [p-disabled]="verifyArrowDisabled(option, 'down') || isFixed(option)"
         (p-click)="emitChangePosition(option, 'down')"
       >

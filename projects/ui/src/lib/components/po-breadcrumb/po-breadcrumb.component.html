@@ -13,7 +13,7 @@
         ></po-link>
       </li>
 
-      <po-icon p-icon="po-icon-arrow-right po-breadcrumb-icon-arrow"></po-icon>
+      <po-icon p-icon="ICON_ARROW_RIGHT po-breadcrumb-icon-arrow"></po-icon>
 
       <li
         #target
@@ -24,9 +24,9 @@
         (click)="popup.toggle()"
         (keyup)="openPopup($event)"
       >
-        <po-icon p-icon="po-icon-more-vert"></po-icon>
+        <po-icon p-icon="ICON_MORE_VERT"></po-icon>
       </li>
-      <po-icon p-icon="po-icon-arrow-right po-breadcrumb-icon-arrow"></po-icon>
+      <po-icon p-icon="ICON_ARROW_RIGHT po-breadcrumb-icon-arrow"></po-icon>
 
       <li>
         <po-link
@@ -35,7 +35,7 @@
           (p-action)="emitAction(itemsView[itemsView.length - 2])"
         ></po-link>
       </li>
-      <po-icon p-icon="po-icon-arrow-right po-breadcrumb-icon-arrow"></po-icon>
+      <po-icon p-icon="ICON_ARROW_RIGHT po-breadcrumb-icon-arrow"></po-icon>
 
       <li>
         <span
@@ -75,7 +75,7 @@
         >
         <po-icon
           *ngIf="!(itemIndex === itemsView.length - 1)"
-          p-icon="po-icon-arrow-right po-breadcrumb-icon-arrow"
+          p-icon="ICON_ARROW_RIGHT po-breadcrumb-icon-arrow"
         ></po-icon>
       </li>
     </ul>

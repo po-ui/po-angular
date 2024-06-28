@@ -1,6 +1,11 @@
 <div class="po-search" [class.po-search-disabled]="disabled">
+  <div class="po-search-select" *ngIf="filterSelect">
+    <po-dropdown [p-label]="searchFilterSelectLabel" [p-disabled]="disabled" [p-actions]="searchFilterSelectActions">
+    </po-dropdown>
+  </div>
+
   <div *ngIf="type === 'action'" class="po-search-icon">
-    <po-icon [p-icon]="icon ? icon : 'po-icon-search'"></po-icon>
+    <po-icon [p-icon]="icon ? icon : 'ICON_SEARCH'"></po-icon>
   </div>
 
   <input
@@ -12,8 +17,15 @@
     [class.po-search-input-trigger]="type === 'trigger'"
     [disabled]="disabled"
     [placeholder]="literals.search"
-    (input)="onSearchChange($event.target.value, type === 'action' ? true : false)"
-    (keyup.enter)="onSearchChange($event.target.value, type === 'trigger' ? true : false)"
+    (input)="
+      onSearchChange($event.target.value, false); onSearchChange($event.target.value, type === 'action' ? true : false)
+    "
+    (keyup.enter)="
+      listboxOpen ? closeListbox() : onSearchChange($event.target.value, type === 'trigger' ? true : false, true);
+      closeListbox()
+    "
+    (keydown)="onKeyDown($event)"
+    (blur)="onBlur()"
   />
 
   <div class="po-search-buttons">
@@ -25,7 +37,7 @@
       (click)="clearSearch()"
       (keydown.enter)="clearSearch()"
     >
-      <po-icon p-icon="po-icon-clear-content"></po-icon>
+      <po-clean class="po-icon-input"></po-clean>
     </button>
 
     <button
@@ -33,11 +45,27 @@
       class="po-search-button po-search-button-trigger"
       type="button"
       [ariaLabel]="literals.search"
-      (click)="onSearchChange(poSearchInput.value, true)"
-      (keydown.enter)="onSearchChange(poSearchInput.value, true)"
+      (click)="onSearchChange(poSearchInput.value, true, true)"
+      (keydown.enter)="onSearchChange(poSearchInput.value, true, true)"
       [disabled]="disabled"
     >
-      <po-icon [p-icon]="icon ? icon : 'po-icon-search'"> </po-icon>
+      <po-icon [p-icon]="icon ? icon : 'ICON_SEARCH'"> </po-icon>
     </button>
   </div>
+</div>
+
+<div #poListboxContainerElement class="po-search-listbox-container" [hidden]="!listboxOpen">
+  <po-listbox
+    #poListbox
+    #poListboxElement
+    p-type="option"
+    [p-items]="listboxFilteredItems"
+    (p-selectcombo-item)="onListboxClick($event, $event.event)"
+    [p-visible]="listboxOpen"
+    [p-filter-mode]="filterType"
+    [p-should-mark-letter]="shouldMarkLetters"
+    [p-filtering]="isFiltering"
+    [p-search-value]="getInputValue()"
+    (p-close)="onCloseListbox()"
+  ></po-listbox>
 </div>

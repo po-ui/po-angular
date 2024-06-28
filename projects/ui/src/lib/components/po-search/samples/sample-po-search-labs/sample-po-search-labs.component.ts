@@ -32,12 +32,14 @@ export class SamplePoSearchLabsComponent implements OnInit, OnChanges {
   customLiterals: PoSearchLiterals;
   literals: any;
   properties: Array<string>;
+  showListbox: boolean;
   search: string;
   event: string;
   service: string = 'https://po-sample-api.onrender.com/v1/heroes';
   items: Array<any> = [];
   filteredItems: Array<any> = [];
   fieldKeys: Array<any> = [];
+  fieldSelect: Array<any> = [];
   tooltip: string;
   icon: string;
   filterMode: PoSearchFilterMode;
@@ -45,6 +47,7 @@ export class SamplePoSearchLabsComponent implements OnInit, OnChanges {
   fieldKey: any;
   itemsModel: any;
   filterModel: any;
+  filterSelectModel: any;
 
   public readonly propertiesOptions: Array<PoCheckboxGroupOption> = [{ value: 'disabled', label: 'Disabled' }];
 
@@ -93,6 +96,10 @@ export class SamplePoSearchLabsComponent implements OnInit, OnChanges {
 
   updateFilterKeys(event: string) {
     this.fieldKeys = this.convertToArray(event);
+  }
+
+  updateFilterSelect(event: string) {
+    this.fieldSelect = this.convertToArray(event);
   }
 
   filter(event: Array<any>) {
@@ -147,11 +154,14 @@ export class SamplePoSearchLabsComponent implements OnInit, OnChanges {
     this.icon = undefined;
     this.customLiterals = undefined;
     this.properties = [];
+    this.showListbox = false;
     this.filteredItems = undefined;
     this.items = undefined;
     this.itemsModel = undefined;
     this.filterModel = '["name"]';
+    this.filterSelectModel = '';
     this.fieldKeys = undefined;
+    this.fieldSelect = undefined;
     this.filterMode = PoSearchFilterMode.startsWith;
     this.searchMode = 'action';
     this.literals = undefined;

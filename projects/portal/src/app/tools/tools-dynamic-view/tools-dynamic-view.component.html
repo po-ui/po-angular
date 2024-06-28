@@ -25,12 +25,7 @@
           </div>
 
           <div class="po-row">
-            <po-button
-              class="po-m-1"
-              p-icon="po-icon-parameters"
-              p-label="Campos avançados"
-              (p-click)="advancedFields()"
-            >
+            <po-button class="po-m-1" p-icon="ICON_PARAMETERS" p-label="Campos avançados" (p-click)="advancedFields()">
             </po-button>
           </div>
         </form>
@@ -62,7 +57,7 @@
             </po-textarea>
 
             <div *ngIf="displayMessageError" class="msg-danger">
-              <span class="po-icon po-icon-info"></span> Formato inválido, informe no seguinte padrão:
+              <po-icon p-icon="ICON_INFO"></po-icon> Formato inválido, informe no seguinte padrão:
               {{ '{"property": "value"}' }}.
             </div>
           </po-widget>
@@ -85,12 +80,7 @@
 
 <po-modal #viewJsonModal p-title="JSON">
   <div class="po-row">
-    <po-button
-      class="po-sm-4 po-pr-0 po-pl-0 po-mb-1"
-      p-icon="po-icon-copy"
-      p-label="Copy"
-      (p-click)="copyToClipboard()"
-    >
+    <po-button class="po-sm-4 po-pr-0 po-pl-0 po-mb-1" p-icon="ICON_COPY" p-label="Copy" (p-click)="copyToClipboard()">
     </po-button>
   </div>
 

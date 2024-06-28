@@ -559,7 +559,6 @@ describe('PoTableComponent:', () => {
     component.columns[2].type = 'link';
     component.items[0].link = undefined;
 
-    spyOn(component['router'], 'navigate');
     spyOn(window, 'open');
 
     fixture.detectChanges();
@@ -567,7 +566,6 @@ describe('PoTableComponent:', () => {
     const link = tableElement.querySelector('.po-table-link');
     link.click();
 
-    expect(component['router'].navigate).not.toHaveBeenCalled();
     expect(window.open).not.toHaveBeenCalled();
   });
 
@@ -2340,19 +2338,6 @@ describe('PoTableComponent:', () => {
       fixture.detectChanges();
 
       expect(nativeElement.querySelector('[p-spacing="small"]')).toBeTruthy();
-    });
-
-    it('should call attr-p-spacing `medium` if p-spacing is `small` and row is interactive', () => {
-      component.spacing = PoTableColumnSpacing.Small;
-      component['initialVisibleColumns'] = false;
-      component.columns = [
-        { property: 'name', type: 'link', visible: true },
-        { property: 'age', visible: true }
-      ];
-      fixture.detectChanges();
-
-      expect(nativeElement.querySelector('[p-spacing="small"]')).toBeNull();
-      expect(nativeElement.querySelector('[p-spacing="medium"]')).toBeTruthy();
     });
 
     it('should display .po-table-header-master-detail if columns contains detail and rowTemplate is undefined', () => {

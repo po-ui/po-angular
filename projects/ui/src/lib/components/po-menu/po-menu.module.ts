@@ -12,6 +12,7 @@ import { PoMenuFilterComponent } from './po-menu-filter/po-menu-filter.component
 import { PoMenuHeaderTemplateDirective } from './po-menu-header-template/po-menu-header-template.directive';
 import { PoMenuItemComponent } from './po-menu-item/po-menu-item.component';
 import { PoMenuComponent } from './po-menu.component';
+import { PoTooltipModule } from '../../directives/po-tooltip/po-tooltip.module';
 
 /**
  * @description
@@ -19,7 +20,16 @@ import { PoMenuComponent } from './po-menu.component';
  * Módulo do componente po-menu.
  */
 @NgModule({
-  imports: [CommonModule, RouterModule, PoBadgeModule, PoFieldModule, PoLoadingModule, PoLogoModule, PoIconModule],
+  imports: [
+    CommonModule,
+    RouterModule,
+    PoBadgeModule,
+    PoFieldModule,
+    PoLoadingModule,
+    PoLogoModule,
+    PoIconModule,
+    PoTooltipModule
+  ],
   declarations: [PoMenuComponent, PoMenuFilterComponent, PoMenuHeaderTemplateDirective, PoMenuItemComponent],
   exports: [PoMenuComponent, PoMenuHeaderTemplateDirective]
 })

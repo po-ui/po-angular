@@ -1,13 +1,11 @@
-import { ViewContainerRef, Injectable, ComponentRef, ElementRef } from '@angular/core';
+import { ComponentRef, ElementRef, Injectable, ViewContainerRef } from '@angular/core';
 import { TestBed } from '@angular/core/testing';
 
 import { configureTestSuite } from './../../util-test/util-expect.spec';
 
+import { PoToaster, PoToasterOrientation, PoToasterType } from '../../components/po-toaster';
+import { PoToasterBaseComponent } from '../../components/po-toaster/po-toaster-base.component';
 import { PoNotificationBaseService } from './po-notification-base.service';
-import { PoToasterOrientation } from './po-toaster/po-toaster-orientation.enum';
-import { PoToasterType } from './po-toaster/po-toaster-type.enum';
-import { PoToaster } from './po-toaster/po-toaster.interface';
-import { PoToasterBaseComponent } from './po-toaster/po-toaster-base.component';
 
 @Injectable()
 class PoNotificationService extends PoNotificationBaseService {
@@ -193,6 +191,9 @@ function mockToaster(obj: any) {
     action: undefined,
     actionLabel: undefined,
     position: 0,
+    mode: 'alert',
+    showClose: true,
+    supportMessage: undefined,
     duration: 9000
   };
 

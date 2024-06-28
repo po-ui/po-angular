@@ -1,0 +1,22 @@
+<form #f="ngForm">
+  <div class="po-row">
+    <po-radio-group class="po-md-6" name="theme" [(ngModel)]="theme" p-label="Tema" [p-options]="themeOptions">
+    </po-radio-group>
+
+    <po-switch
+      class="po-md-6"
+      name="type"
+      [(ngModel)]="type"
+      p-label="Light / Dark"
+      p-label-off="light"
+      p-label-on="dark"
+    >
+    </po-switch>
+  </div>
+
+  <div class="po-row">
+    <po-button class="po-md-3" p-label="Change Theme" (p-click)="changeTheme()"> </po-button>
+    <po-button class="po-md-3" p-label="Get LocalStorage Last Theme" (p-click)="getSavedTheme()"> </po-button>
+    <po-button class="po-md-3" p-label="Sample Restore" (p-click)="restore()"> </po-button>
+  </div>
+</form>

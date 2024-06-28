@@ -1,5 +1,5 @@
 <button class="po-page-login-support" (click)="activateSupport()" [hidden]="!support">
-  <span class="po-icon po-icon-help"></span>
+  <po-icon p-icon="ICON_HELP"></po-icon>
   {{ pageLoginLiterals?.support }}
 </button>
 
@@ -54,13 +54,13 @@
               !pageLoginLiterals.loginHint && !pageLoginLiterals.rememberUserHint
             "
           >
-            <span
+            <po-icon
+              p-icon="ICON_INFO po-field-icon"
               *ngIf="pageLoginLiterals.loginHint"
-              class="po-icon po-field-icon po-icon-info"
               p-tooltip-position="right"
               [p-tooltip]="pageLoginLiterals.loginHint"
             >
-            </span>
+            </po-icon>
           </div>
         </div>
 
@@ -69,7 +69,7 @@
             *ngFor="let error of allLoginErrors"
             class="po-field-container-bottom-text-error po-field-container-error-item"
           >
-            <span class="po-icon po-icon-exclamation"></span>
+            <po-icon p-icon="ICON_EXCLAMATION"></po-icon>
             <span class="po-field-container-error-text">{{ error }}</span>
           </div>
         </div>
@@ -112,7 +112,7 @@
             *ngFor="let error of allPasswordErrors"
             class="po-field-container-bottom-text-error po-field-container-error-item"
           >
-            <span class="po-icon po-icon-exclamation"></span>
+            <po-icon p-icon="ICON_EXCLAMATION"></po-icon>
             <span class="po-field-container-error-text">{{ error }}</span>
           </div>
         </div>
@@ -175,13 +175,13 @@
             class="po-page-login-info-icon-container po-page-login-info-icon-remember-user"
             [class.po-page-login-info-icon-container-dynamic]="!pageLoginLiterals.rememberUserHint"
           >
-            <span
+            <po-icon
+              p-icon="ICON_INFO po-field-icon"
               *ngIf="pageLoginLiterals.rememberUserHint"
-              class="po-icon po-field-icon po-icon-info"
               p-tooltip-position="right"
               [p-tooltip]="pageLoginLiterals.rememberUserHint"
             >
-            </span>
+            </po-icon>
           </div>
         </div>
       </div>

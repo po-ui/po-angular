@@ -14,6 +14,7 @@
           <po-button
             *ngIf="visibleActions[0]"
             p-kind="primary"
+            [p-danger]="visibleActions[0].type === 'danger'"
             [p-disabled]="actionIsDisabled(actions[0])"
             [p-icon]="visibleActions[0].icon"
             [p-label]="visibleActions[0].label"
@@ -23,6 +24,7 @@
 
           <po-button
             *ngIf="visibleActions[1] && (visibleActions.length === 2 || !isMobile)"
+            [p-danger]="visibleActions[1].type === 'danger'"
             [p-disabled]="actionIsDisabled(actions[1])"
             [p-label]="visibleActions[1].label"
             (p-click)="callAction(visibleActions[1])"
@@ -31,6 +33,7 @@
 
           <po-button
             *ngIf="visibleActions.length === 3 && visibleActions[2] && !isMobile"
+            [p-danger]="visibleActions[2].type === 'danger'"
             [p-disabled]="actionIsDisabled(visibleActions[2])"
             [p-label]="visibleActions[2].label"
             (p-click)="callAction(visibleActions[2])"
@@ -62,8 +65,8 @@
             "
           >
             <div class="po-field-icon-container-right">
-              <span class="po-icon po-icon-search po-field-icon po-icon-input" (click)="callActionFilter('action')">
-              </span>
+              <po-icon p-icon="ICON_SEARCH" class="po-field-icon po-icon-input" (click)="callActionFilter('action')">
+              </po-icon>
             </div>
 
             <input

@@ -10,9 +10,11 @@ import {
   ContentChildren,
   DoCheck,
   ElementRef,
+  Inject,
   IterableDiffers,
   OnDestroy,
   OnInit,
+  Optional,
   QueryList,
   Renderer2,
   TemplateRef,
@@ -20,7 +22,6 @@ import {
   ViewChildren,
   inject
 } from '@angular/core';
-import { Router } from '@angular/router';
 import { Observable, Subscription } from 'rxjs';
 
 import { PoDateService } from '../../services/po-date/po-date.service';
@@ -42,6 +43,7 @@ import { PoTableColumnTemplateDirective } from './po-table-column-template/po-ta
 import { PoTableRowTemplateDirective } from './po-table-row-template/po-table-row-template.directive';
 import { PoTableSubtitleColumn } from './po-table-subtitle-footer/po-table-subtitle-column.interface';
 import { PoTableService } from './services/po-table.service';
+import { ICONS_DICTIONARY, PoIconDictionary } from '../po-icon';
 
 /**
  * @docsExtends PoTableBaseComponent
@@ -161,6 +163,7 @@ export class PoTableComponent extends PoTableBaseComponent implements AfterViewI
 
   private _columnManagerTarget: ElementRef;
   private _columnManagerTargetFixed: ElementRef;
+  private _iconToken: { [key: string]: string };
   private differ;
   private footerHeight;
   private headerHeight;
@@ -191,6 +194,10 @@ export class PoTableComponent extends PoTableBaseComponent implements AfterViewI
     return this._columnManagerTargetFixed;
   }
 
+  get iconNameLib() {
+    return this._iconToken.NAME_LIB;
+  }
+
   constructor(
     poDate: PoDateService,
     differs: IterableDiffers,
@@ -198,8 +205,8 @@ export class PoTableComponent extends PoTableBaseComponent implements AfterViewI
     poLanguageService: PoLanguageService,
     private changeDetector: ChangeDetectorRef,
     private decimalPipe: DecimalPipe,
-    private router: Router,
-    private defaultService: PoTableService
+    private defaultService: PoTableService,
+    @Optional() @Inject(ICONS_DICTIONARY) value: { [key: string]: string }
   ) {
     super(poDate, poLanguageService, defaultService);
     this.JSON = JSON;
@@ -212,6 +219,8 @@ export class PoTableComponent extends PoTableBaseComponent implements AfterViewI
     this.resizeListener = renderer.listen('window', 'resize', (event: any) => {
       this.debounceResize();
     });
+
+    this._iconToken = value ?? PoIconDictionary;
   }
 
   get hasRowTemplateWithArrowDirectionRight() {

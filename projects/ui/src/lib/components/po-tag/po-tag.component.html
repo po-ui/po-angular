@@ -52,20 +52,21 @@
           >
         </div>
 
-        <span
+        <po-icon
           #tagClose
           *ngIf="removable"
+          p-icon="ICON_CLOSE"
           p-tooltip-position="top"
           [p-tooltip]="literals.remove"
           [attr.aria-label]="setAriaLabel()"
-          class="po-tag-remove po-icon po-icon-close"
+          class="po-tag-remove"
           [class.po-clickable]="!disabled"
           [tabindex]="!disabled ? 0 : -1"
           [attr.role]="!disabled ? 'button' : ''"
           (click)="onClose()"
           (keydown.enter)="onClose('enter')"
         >
-        </span>
+        </po-icon>
       </div>
     </div>
   </div>

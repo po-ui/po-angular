@@ -14,6 +14,7 @@
 
       <po-button
         *ngIf="hasEvent('remove')"
+        p-danger
         [p-icon]="hasEditFn('icon')"
         [p-label]="literals.remove"
         [p-kind]="hasEditFn('type')"
@@ -23,7 +24,7 @@
 
       <po-button
         *ngIf="hasEvent('edit')"
-        p-icon="po-icon-edit"
+        p-icon="ICON_EDIT"
         p-kind="primary"
         [p-label]="literals.edit"
         (p-click)="edit.emit()"

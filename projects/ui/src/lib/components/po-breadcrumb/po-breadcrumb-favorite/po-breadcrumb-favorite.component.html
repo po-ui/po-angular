@@ -5,12 +5,12 @@
   (click)="toggleFavoriteAction()"
   (keyup.enter)="toggleFavoriteAction()"
 >
-  <span
-    class="po-icon po-icon-star po-breadcrumb-favorite-star po-clickable"
+  <po-icon
+    p-icon="ICON_STAR"
+    class="po-breadcrumb-favorite-star po-clickable"
     [class.po-breadcrumb-favorite-star-active]="favorite"
   >
-  </span>
-
+  </po-icon>
   <span class="po-hidden-sm po-breadcrumb-favorite-label" *ngIf="favorite && !hiddenLiteral">{{
     literals?.unfavorite
   }}</span>

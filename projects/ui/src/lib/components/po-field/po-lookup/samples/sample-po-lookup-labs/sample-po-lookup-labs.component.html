@@ -1,29 +1,30 @@
 <po-lookup
   name="lookup"
   [(ngModel)]="lookup"
+  [p-advanced-filters]="customAdvancedFilters"
+  [p-auto-height]="properties.includes('autoHeight')"
   [p-clean]="properties.includes('clean')"
   [p-columns]="columns"
   [p-disabled]="properties.includes('disabled')"
-  [p-field-label]="fieldLabel"
-  [p-field-value]="fieldValue"
   [p-field-format]="fieldFormat"
+  [p-field-label]="fieldLabel"
   [p-filter-service]="filterService || sampleFilterService"
+  [p-field-value]="fieldValue"
   [p-help]="help"
+  [p-hide-columns-manager]="properties.includes('hideColumnsManager')"
   [p-label]="label"
   [p-literals]="customLiterals"
-  [p-advanced-filters]="customAdvancedFilters"
+  [p-multiple]="properties.includes('multiple')"
   [p-no-autocomplete]="properties.includes('noAutocomplete')"
   [p-optional]="properties.includes('optional')"
   [p-placeholder]="placeholder"
   [p-required]="properties.includes('required')"
   [p-show-required]="properties.includes('showRequired')"
-  [p-hide-columns-manager]="properties.includes('hideColumnsManager')"
-  [p-infinite-scroll]="properties.includes('infiniteScroll')"
-  [p-multiple]="properties.includes('multiple')"
-  [p-auto-height]="properties.includes('autoHeight')"
+  [p-spacing]="spacing"
+  [p-text-wrap]="properties.includes('textWrap')"
+  (p-change)="changeEvent('p-change')"
   (p-error)="changeEvent('p-error')"
   (p-selected)="changeEvent('p-selected')"
-  (p-change)="changeEvent('p-change')"
 >
 </po-lookup>
 
@@ -95,7 +96,7 @@
 
   <div class="po-row">
     <po-input
-      class="po-lg-12"
+      class="po-lg-6"
       name="literals"
       [(ngModel)]="literals"
       p-help='Ex.: { "modalTitle": "Select a register", "modalPrimaryActionLabel": "Select", "modalPlaceholder": "Search Value" }'
@@ -113,9 +114,11 @@
       (p-change)="onFieldFormatChange($event)"
     >
     </po-input>
+  </div>
 
+  <div class="po-row">
     <po-checkbox-group
-      class="po-lg-6 po-md-12"
+      class="po-lg-6"
       name="properties"
       [(ngModel)]="properties"
       p-columns="2"
@@ -123,6 +126,9 @@
       [p-options]="propertiesOptions"
     >
     </po-checkbox-group>
+
+    <po-radio-group class="po-lg-6" name="spacing" [(ngModel)]="spacing" p-label="Spacing" [p-options]="typeSpacing">
+    </po-radio-group>
   </div>
 
   <div class="po-row">

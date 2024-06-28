@@ -1,15 +1,18 @@
 import {
+  AfterViewInit,
   ChangeDetectionStrategy,
   ChangeDetectorRef,
   Component,
   ElementRef,
-  forwardRef,
+  Inject,
+  Optional,
   ViewChild,
-  AfterViewInit
+  forwardRef
 } from '@angular/core';
 import { NG_VALUE_ACCESSOR } from '@angular/forms';
 
 import { PoKeyCodeEnum } from './../../../enums/po-key-code.enum';
+import { ICONS_DICTIONARY, PoIconDictionary } from '../../po-icon';
 
 import { PoCheckboxBaseComponent } from './po-checkbox-base.component';
 
@@ -46,10 +49,17 @@ import { PoCheckboxBaseComponent } from './po-checkbox-base.component';
   ]
 })
 export class PoCheckboxComponent extends PoCheckboxBaseComponent implements AfterViewInit {
+  private _iconToken: { [key: string]: string };
+
   @ViewChild('checkboxLabel', { static: true }) checkboxLabel: ElementRef;
 
-  constructor(private changeDetector: ChangeDetectorRef) {
+  constructor(
+    @Optional() @Inject(ICONS_DICTIONARY) value: { [key: string]: string },
+    private changeDetector: ChangeDetectorRef
+  ) {
     super();
+
+    this._iconToken = value ?? PoIconDictionary;
   }
 
   /**
@@ -102,5 +112,9 @@ export class PoCheckboxComponent extends PoCheckboxBaseComponent implements Afte
       this.checkboxValue = typeof value === 'boolean' || value === null ? value : false;
     }
     this.changeDetector.detectChanges();
+  }
+
+  get iconNameLib() {
+    return this._iconToken.NAME_LIB;
   }
 }

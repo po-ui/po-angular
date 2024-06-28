@@ -22,9 +22,12 @@ export class PoTabComponent extends PoTabBaseComponent implements AfterContentIn
     this.setDisplayOnActive();
   }
 
-  ngOnChanges(): void {
+  ngOnChanges(changes: SimpleChanges): void {
     setTimeout(() => {
       this.tabsService.triggerOnChanges();
+      if (changes?.active?.currentValue) {
+        this.tabsService.triggerActiveOnChanges(this);
+      }
     }, 100);
   }
 

@@ -74,26 +74,26 @@ export class PoRichTextToolbarComponent implements AfterViewInit {
     this.alignButtons = [
       {
         command: 'justifyleft',
-        icon: 'po-icon-align-left',
+        icon: 'ICON_ALIGN_LEFT',
         tooltip: this.literals.left,
         action: this.emitAlignCommand.bind(this, 'justifyleft'),
         selected: true
       },
       {
         command: 'justifycenter',
-        icon: 'po-icon-align-center',
+        icon: 'ICON_ALIGN_CENTER',
         tooltip: this.literals.center,
         action: this.emitAlignCommand.bind(this, 'justifycenter')
       },
       {
         command: 'justifyright',
-        icon: 'po-icon-align-right',
+        icon: 'ICON_ALIGN_RIGHT',
         tooltip: this.literals.right,
         action: this.emitAlignCommand.bind(this, 'justifyright')
       },
       {
         command: 'justifyfull',
-        icon: 'po-icon-align-justify',
+        icon: 'ICON_ALIGN_JUSTIFY',
         tooltip: this.literals.justify,
         action: this.emitAlignCommand.bind(this, 'justifyfull')
       }
@@ -102,19 +102,19 @@ export class PoRichTextToolbarComponent implements AfterViewInit {
     this.formatButtons = [
       {
         command: 'bold',
-        icon: 'po-icon-text-bold',
+        icon: 'ICON_TEXT_BOLD',
         tooltip: this.literals.bold,
         action: this.emitCommand.bind(this, 'bold')
       },
       {
         command: 'italic',
-        icon: 'po-icon-text-italic',
+        icon: 'ICON_TEXT_ITALIC',
         tooltip: this.literals.italic,
         action: this.emitCommand.bind(this, 'italic')
       },
       {
         command: 'underline',
-        icon: 'po-icon-text-underline',
+        icon: 'ICON_TEXT_UNDERLINE',
         tooltip: this.literals.underline,
         action: this.emitCommand.bind(this, 'underline')
       }
@@ -123,7 +123,7 @@ export class PoRichTextToolbarComponent implements AfterViewInit {
     this.listButtons = [
       {
         command: 'insertUnorderedList',
-        icon: 'po-icon-list',
+        icon: 'ICON_LIST',
         tooltip: this.literals.unorderedList,
         action: this.emitCommand.bind(this, 'insertUnorderedList')
       }
@@ -132,7 +132,7 @@ export class PoRichTextToolbarComponent implements AfterViewInit {
     this.mediaButtons = [
       {
         tooltip: this.literals.insertImage,
-        icon: 'po-icon-picture',
+        icon: 'ICON_PICTURE',
         action: () => this.richTextImageModal.openModal()
       }
     ];
@@ -140,7 +140,7 @@ export class PoRichTextToolbarComponent implements AfterViewInit {
     this.linkButtons = [
       {
         command: 'Createlink',
-        icon: 'po-icon-link',
+        icon: 'ICON_LINK',
         tooltip: `${this.literals.insertLink} (Ctrl + K)`,
         action: () => this.richTextLinkModal.openModal(this.selectedLinkElement)
       }
