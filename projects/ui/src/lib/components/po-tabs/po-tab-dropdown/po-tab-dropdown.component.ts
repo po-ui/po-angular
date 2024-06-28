@@ -1,4 +1,4 @@
-import { Component, EventEmitter, Input, Output, ViewChild } from '@angular/core';
+import { Component, ElementRef, EventEmitter, HostListener, Input, Output, ViewChild } from '@angular/core';
 
 import { PoPopoverComponent } from '../../po-popover/po-popover.component';
 import { PoTabComponent } from '../po-tab/po-tab.component';
@@ -39,12 +39,56 @@ export class PoTabDropdownComponent {
   // Evento de click
   @Output('p-click') click = new EventEmitter<any>();
 
+  isDropdownOpen: boolean = false;
+  dropdownStyles: any = {};
+
+  constructor(private elementRef: ElementRef) {}
+
+  ngAfterViewInit() {
+    this.setDropdownPosition();
+  }
+
+  toggleDropdown() {
+    this.isDropdownOpen = !this.isDropdownOpen;
+    if (this.isDropdownOpen) {
+      this.setDropdownPosition();
+    }
+  }
+
+  closeDropdown() {
+    this.isDropdownOpen = false;
+  }
+
   closeAndReturnToButtom() {
-    this.popover.close();
+    this.closeDropdown();
     this.button.focus();
   }
 
   get buttonElement() {
     return this.button.buttonElement;
+  }
+
+  setDropdownPosition() {
+    const buttonRect = this.buttonElement.nativeElement.getBoundingClientRect();
+    const tabsContainerRect = this.buttonElement.nativeElement.closest('.po-tabs-container').getBoundingClientRect();
+    const dropdownWidth = 300;
+
+    let leftPosition = buttonRect.right - dropdownWidth;
+    if (leftPosition < 0) {
+      leftPosition = 0;
+    }
+
+    this.dropdownStyles = {
+      top: `${tabsContainerRect.bottom + 4 + window.scrollY}px`,
+      left: `${leftPosition + window.scrollX}px`,
+      width: `${dropdownWidth}px`
+    };
+  }
+
+  @HostListener('document:click', ['$event'])
+  onClickOutside(event: MouseEvent) {
+    if (this.isDropdownOpen && !this.elementRef.nativeElement.contains(event.target)) {
+      this.closeDropdown();
+    }
   }
 }

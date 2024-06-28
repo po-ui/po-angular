@@ -154,11 +154,9 @@ export class PoTabsComponent extends PoTabsBaseComponent implements OnInit, Afte
     return this.tabsChildren.toArray();
   }
 
-  closePopover(): void {
-    const containsPopoverVisible = this.tabDropdown && this.tabDropdown.popover && !this.tabDropdown.popover.isHidden;
-
-    if (containsPopoverVisible) {
-      this.tabDropdown.popover.close();
+  closeListbox(): void {
+    if (this.tabDropdown && this.tabDropdown.isDropdownOpen) {
+      this.tabDropdown.closeDropdown();
     }
   }
 

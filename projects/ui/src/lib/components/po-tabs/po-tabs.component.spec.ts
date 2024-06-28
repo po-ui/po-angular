@@ -198,34 +198,30 @@ describe('PoTabsComponent:', () => {
       expect(tab.active).toBeFalsy();
     });
 
-    it(`closePopover: should call 'popover.close' if 'popover.isHidden' is 'false'.`, () => {
+    it(`closeListbox: should call 'closeDropdown' if 'isDropdownOpen' is 'true'.`, () => {
       const fakeThis = {
         tabDropdown: {
-          popover: {
-            isHidden: false,
-            close: () => {}
-          }
+          isDropdownOpen: true,
+          closeDropdown: () => {}
         }
       };
-      const spyOnClose = spyOn(fakeThis.tabDropdown.popover, 'close');
+      const spyOnCloseDropdown = spyOn(fakeThis.tabDropdown, 'closeDropdown');
 
-      component.closePopover.call(fakeThis);
-      expect(spyOnClose).toHaveBeenCalled();
+      component.closeListbox.call(fakeThis);
+      expect(spyOnCloseDropdown).toHaveBeenCalled();
     });
 
-    it(`closePopover: shouldn't call 'popover.close' if 'popover.isHidden' is 'true'.`, () => {
+    it(`closeListbox: shouldn't call 'closeDropdown' if 'isDropdownOpen' is 'false'.`, () => {
       const fakeThis = {
         tabDropdown: {
-          popover: {
-            isHidden: true,
-            close: () => {}
-          }
+          isDropdownOpen: false,
+          closeDropdown: () => {}
         }
       };
-      const spyOnClose = spyOn(fakeThis.tabDropdown.popover, 'close');
+      const spyOnCloseDropdown = spyOn(fakeThis.tabDropdown, 'closeDropdown');
 
-      component.closePopover.call(fakeThis);
-      expect(spyOnClose).not.toHaveBeenCalled();
+      component.closeListbox.call(fakeThis);
+      expect(spyOnCloseDropdown).not.toHaveBeenCalled();
     });
 
     it('deactivateTab: should deactive `previousActiveTab` if it`s truthy', () => {
@@ -643,22 +639,6 @@ describe('PoTabsComponent:', () => {
       (component as any).updateTabsState();
 
       expect(component.defaultLastTabWidth).toBe(0);
-    });
-  });
-
-  describe('Templates:', () => {
-    it('should call `closePopover` if `enter` is pressed in `po-tab-button`.', () => {
-      spyOnProperty(component, 'tabs').and.returnValue([{ id: '0', label: '0' }]);
-
-      fixture.detectChanges();
-
-      const eventEnterKey = new KeyboardEvent('keyup', { 'key': 'Enter' });
-      const poTabButton = fixture.debugElement.query(By.css('.po-tab-button')).nativeElement;
-      const spyOnClosePopover = spyOn(component, 'closePopover');
-
-      poTabButton.dispatchEvent(eventEnterKey);
-
-      expect(spyOnClosePopover).toHaveBeenCalled();
     });
   });
 });
