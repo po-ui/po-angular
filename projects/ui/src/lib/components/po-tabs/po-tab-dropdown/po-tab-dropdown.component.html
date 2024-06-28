@@ -1,20 +1,19 @@
 <div class="po-tab-dropdown-content po-tab-button-default">
-  <po-button #button p-kind="tertiary" [p-aria-label]="label" p-icon="ICON_ARROW_DOWN"> </po-button>
+  <po-button #button p-kind="tertiary" [p-aria-label]="label" p-icon="ICON_ARROW_DOWN" (p-click)="toggleDropdown()">
+  </po-button>
 </div>
 
-<po-popover #popover p-hide-arrow p-position="bottom" [p-target]="buttonElement">
-  <div class="po-tab-dropdown-container">
-    <po-listbox
-      #listbox
-      #poListBoxRef
-      p-type="action"
-      [p-items]="tabs"
-      [p-is-tabs]="true"
-      (p-activated-tabs)="activated.emit($event)"
-      (p-change-state-tabs)="changeState.emit($event)"
-      (p-click-tabs)="popover.close(); click.emit($event)"
-      (p-close)="closeAndReturnToButtom()"
-    >
-    </po-listbox>
-  </div>
-</po-popover>
+<div class="po-tab-dropdown-container" *ngIf="isDropdownOpen" [ngStyle]="dropdownStyles">
+  <po-listbox
+    #listbox
+    #poListBoxRef
+    p-type="action"
+    [p-items]="tabs"
+    [p-is-tabs]="true"
+    (p-activated-tabs)="activated.emit($event)"
+    (p-change-state-tabs)="changeState.emit($event)"
+    (p-click-tabs)="closeDropdown(); click.emit($event)"
+    (p-close)="closeAndReturnToButtom()"
+  >
+  </po-listbox>
+</div>

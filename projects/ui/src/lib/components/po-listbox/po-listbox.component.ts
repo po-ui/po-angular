@@ -47,6 +47,7 @@ export class PoListBoxComponent extends PoListBoxBaseComponent implements AfterV
   ngAfterViewInit(): void {
     this.setListBoxMaxHeight();
     this.listboxItemList?.nativeElement.focus();
+    this.changeDetector.detectChanges();
   }
 
   ngOnChanges(changes?: SimpleChanges): void {

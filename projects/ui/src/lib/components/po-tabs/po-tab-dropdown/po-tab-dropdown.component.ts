@@ -1,4 +1,13 @@
-import { Component, EventEmitter, Input, Output, ViewChild } from '@angular/core';
+import {
+  AfterViewInit,
+  Component,
+  ElementRef,
+  EventEmitter,
+  HostListener,
+  Input,
+  Output,
+  ViewChild
+} from '@angular/core';
 
 import { PoPopoverComponent } from '../../po-popover/po-popover.component';
 import { PoTabComponent } from '../po-tab/po-tab.component';
@@ -16,7 +25,7 @@ import { PoButtonComponent } from '../../po-button/po-button.component';
   selector: 'po-tab-dropdown',
   templateUrl: './po-tab-dropdown.component.html'
 })
-export class PoTabDropdownComponent {
+export class PoTabDropdownComponent implements AfterViewInit {
   @ViewChild('popover', { static: true }) popover: PoPopoverComponent;
 
   @ViewChild(PoButtonComponent, { static: true }) button: PoButtonComponent;
@@ -39,12 +48,56 @@ export class PoTabDropdownComponent {
   // Evento de click
   @Output('p-click') click = new EventEmitter<any>();
 
+  isDropdownOpen: boolean = false;
+  dropdownStyles: any = {};
+
+  constructor(private elementRef: ElementRef) {}
+
+  ngAfterViewInit(): void {
+    this.setDropdownPosition();
+  }
+
+  toggleDropdown() {
+    this.isDropdownOpen = !this.isDropdownOpen;
+    if (this.isDropdownOpen) {
+      this.setDropdownPosition();
+    }
+  }
+
   closeAndReturnToButtom() {
-    this.popover.close();
+    this.closeDropdown();
     this.button.focus();
+  }
+
+  closeDropdown() {
+    this.isDropdownOpen = false;
   }
 
   get buttonElement() {
     return this.button.buttonElement;
+  }
+
+  setDropdownPosition() {
+    const buttonRect = this.buttonElement.nativeElement.getBoundingClientRect();
+    const tabsContainerRect = this.buttonElement.nativeElement.closest('.po-tabs-container').getBoundingClientRect();
+    const dropdownWidth = 300;
+
+    let rightPosition = tabsContainerRect.width - buttonRect.right;
+    if (rightPosition < 0) {
+      rightPosition = 0;
+    }
+
+    this.dropdownStyles = {
+      top: `${tabsContainerRect.bottom + 4 + window.scrollY}px`,
+      maxWidth: `${dropdownWidth}px`,
+      right: `${rightPosition}px`
+    };
+  }
+
+  @HostListener('document:click', ['$event'])
+  onClickOutside(event: MouseEvent) {
+    if (this.isDropdownOpen && !this.elementRef.nativeElement.contains(event.target)) {
+      this.closeDropdown();
+    }
   }
 }
