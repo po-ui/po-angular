@@ -111,7 +111,8 @@ const poThemeDefaultDarkValues = {
     },
     /** TOASTER */
     'po-toaster': {
-      '--color-icon': 'var(--color-neutral-dark-80)'
+      '--color-icon': 'var(--color-neutral-dark-80)',
+      '--color-icon-warning': 'var(--color-neutral-light-00)'
     },
     /** BADGE */
     'po-badge': {
