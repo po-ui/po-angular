@@ -2,6 +2,13 @@
 
 All notable changes to this project will be documented in this file. See [standard-version](https://github.com/conventional-changelog/standard-version) for commit guidelines.
 
+### [17.17.0](https://github.com/po-ui/po-angular/compare/v17.16.1...v17.17.0) (2024-07-01)
+
+* **icon:** remove import svg da lib Phosphor ([8d60b23](https://github.com/po-ui/po-style/commit/8d60b23db2bfc080ce072f54e4a4eefca86fec49))
+
+Compatibilidade com @totvs/thf-components@17.17.0
+
+
 ### [17.16.1](https://github.com/po-ui/po-angular/compare/v17.16.0...v17.16.1) (2024-06-25)
 
 Compatibilidade com @totvs/thf-components@17.16.1
