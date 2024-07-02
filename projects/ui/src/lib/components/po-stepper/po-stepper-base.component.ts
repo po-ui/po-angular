@@ -145,7 +145,7 @@ export class PoStepperBaseComponent {
    */
   @Input('p-steps') set steps(steps: Array<PoStepperItem>) {
     this._steps = Array.isArray(steps) ? steps : [];
-    this._steps.forEach(step => (step.status = PoStepperStatus.Default));
+    this._steps.forEach(step => (step.status = step.status ?? PoStepperStatus.Default));
     this.step = 1;
   }
 
