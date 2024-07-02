@@ -54,6 +54,18 @@ describe('PoStepperBaseComponent:', () => {
       expect(component.step).toBe(1);
     });
 
+    it('p-steps: should respect status disabled', () => {
+      component.steps = [
+        { label: 'Step 1', status: PoStepperStatus.Active },
+        { label: 'Step 2', status: PoStepperStatus.Disabled },
+        { label: 'Step 3', status: PoStepperStatus.Disabled }
+      ];
+
+      expect(component.steps[0].status).toBe(PoStepperStatus.Active);
+      expect(component.steps[1].status).toBe(PoStepperStatus.Disabled);
+      expect(component.steps[2].status).toBe(PoStepperStatus.Disabled);
+    });
+
     it('p-orientation: should update property with `horizontal` when invalid values', () => {
       const invalidValues = [undefined, null, '', true, false, 0, 1, 'string', [], {}];
 
