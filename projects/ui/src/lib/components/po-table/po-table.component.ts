@@ -762,6 +762,8 @@ export class PoTableComponent extends PoTableBaseComponent implements AfterViewI
     } else {
       this.sizeLoading = 'lg';
     }
+
+    this.changeDetector.detectChanges();
   }
 
   private checkChangesItems() {
