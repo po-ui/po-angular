@@ -3170,6 +3170,9 @@ describe('PoTableComponent:', () => {
         nativeElement: {
           offsetHeight: 150
         }
+      },
+      changeDetector: {
+        detectChanges: () => {}
       }
     };
 
@@ -3185,6 +3188,9 @@ describe('PoTableComponent:', () => {
         nativeElement: {
           offsetHeight: 260
         }
+      },
+      changeDetector: {
+        detectChanges: () => {}
       }
     };
 
@@ -3200,6 +3206,9 @@ describe('PoTableComponent:', () => {
         nativeElement: {
           offsetHeight: 200
         }
+      },
+      changeDetector: {
+        detectChanges: () => {}
       }
     };
 
@@ -3217,6 +3226,9 @@ describe('PoTableComponent:', () => {
             anotherProperty: null
           }
         }
+      },
+      changeDetector: {
+        detectChanges: () => {}
       }
     };
 
