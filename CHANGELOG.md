@@ -2,6 +2,16 @@
 
 All notable changes to this project will be documented in this file. See [standard-version](https://github.com/conventional-changelog/standard-version) for commit guidelines.
 
+### [17.18.0](https://github.com/po-ui/po-angular/compare/v17.17.1...v17.18.0) (2024-07-08)
+
+
+### Bug Fixes
+
+* **stepper:** corrige status disabled do stepper ([27dd6e1](https://github.com/po-ui/po-angular/commit/27dd6e1e541a9f2a6f84208740914673ba606b4b))
+* **tab-dropdown:** corrige posicionamento do po-listbox possibilitando uma visibilidade melhor dos itens ([8c3aa86](https://github.com/po-ui/po-angular/commit/8c3aa8690922e66e6eaf004bac1da89ce4048a67))
+* **table:** corrige erro no console ao incluir o componente dentro de um po-modal ([b7e4dbf](https://github.com/po-ui/po-angular/commit/b7e4dbfeb4797aee043b5ffaaf860bed8ffe711a))
+* **toaster:** corrige z-index e cor ícone warning no tema dark ([b575b81](https://github.com/po-ui/po-angular/commit/b575b8156effec5e6719f01b089c614b54865505))
+
 ### [17.17.1](https://github.com/po-ui/po-angular/compare/v17.17.0...v17.17.1) (2024-07-02)
 
 Compatibilidade com @totvs/thf-components@17.17.1
