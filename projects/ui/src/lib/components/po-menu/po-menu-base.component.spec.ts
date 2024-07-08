@@ -124,6 +124,16 @@ describe('PoMenuBaseComponent:', () => {
     expectPropertiesValues(component, 'filter', falseValues, false);
   });
 
+  it('should set searchTreeItems when filter is true', () => {
+    const trueValues = ['', true, 1];
+    const falseValues = [undefined, null, false, 0];
+
+    component.filter = true;
+
+    expectPropertiesValues(component, 'searchTreeItems', trueValues, true);
+    expectPropertiesValues(component, 'searchTreeItems', falseValues, false);
+  });
+
   it('should set menu item properties', () => {
     const menuItem: any = { label: 'Utilidades', link: 'utilities' };
 

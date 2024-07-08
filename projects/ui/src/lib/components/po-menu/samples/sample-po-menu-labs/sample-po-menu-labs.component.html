@@ -6,6 +6,7 @@
     [p-params]="params"
     [p-service]="service"
     [p-short-logo]="shortLogo"
+    [p-search-tree-items]="searchTreeItems"
   >
   </po-menu>
 
@@ -34,6 +35,18 @@
           p-label="Filter"
           p-label-off="Disabled"
           p-label-on="Enabled"
+          (ngModelChange)="onFilterChange($event)"
+        >
+        </po-switch>
+
+        <po-switch
+          class="po-lg-6"
+          name="searchTreeItems"
+          [(ngModel)]="searchTreeItems"
+          p-label="Filter Search Tree Items"
+          p-label-off="Disabled"
+          p-label-on="Enabled"
+          [p-disabled]="!filter"
         >
         </po-switch>
       </div>

@@ -45,6 +45,7 @@ export class SamplePoMenuLabsComponent implements OnInit {
   service: string;
   shortLabel: string;
   shortLogo: string;
+  searchTreeItems: boolean;
 
   public readonly badgeColorList: Array<PoSelectOption> = [
     { label: 'color-01', value: 'color-01' },
@@ -133,6 +134,7 @@ export class SamplePoMenuLabsComponent implements OnInit {
     this.menuParams = undefined;
     this.service = '';
     this.shortLogo = undefined;
+    this.searchTreeItems = false;
 
     this.updateMenuItems();
   }
@@ -202,5 +204,12 @@ export class SamplePoMenuLabsComponent implements OnInit {
         });
       }
     });
+  }
+
+  onFilterChange(newValue: boolean) {
+    this.filter = newValue;
+    if (!this.filter && this.searchTreeItems) {
+      this.searchTreeItems = false;
+    }
   }
 }
