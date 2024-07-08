@@ -1603,6 +1603,29 @@ describe('PoMenuComponent:', () => {
       expect(component['findItems']).toHaveBeenCalled();
     });
 
+    it('filterLocalItems: should return grouped items if `searchTreeItems` is true and `filter` is true', () => {
+      const menus = [
+        { label: 'Account', link: '/account' },
+        { label: 'Company Account', link: '/companyAccount' },
+        { label: 'Test', subItems: [{ label: 'list', link: '/test/list' }] }
+      ];
+
+      const foundMenu = [{ label: 'Test', subItems: [{ label: 'list', link: '/test/list' }], type: 'subItems' }];
+
+      const filter = 'Test';
+
+      component.filter = true;
+      component.searchTreeItems = true;
+      component.menus = menus;
+
+      spyOn(component, <any>'findItems').and.callThrough();
+
+      const filteredItems = component['filterLocalItems'](filter);
+
+      expect(filteredItems).toEqual(foundMenu);
+      expect(component['findItems']).toHaveBeenCalled();
+    });
+
     it('filterOnService: should call `getFilteredData` and return filtered menu itens from service', async () => {
       const menuItems = [{ label: 'Menu', link: '/menu', action: () => {} }];
       const search = 'menu';

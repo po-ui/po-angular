@@ -97,6 +97,7 @@ export abstract class PoMenuBaseComponent {
 
   private _collapsed = false;
   private _filter = false;
+  private _searchTreeItems = false;
   private _level;
   private _maxLevel = 4;
   private _menus = [];
@@ -183,6 +184,27 @@ export abstract class PoMenuBaseComponent {
 
   get filter() {
     return this._filter;
+  }
+
+  /**
+   * @optional
+   *
+   * @description
+   *
+   * Quando ativado, a pesquisa também retornará itens agrupadores além dos itens que contêm uma ação e/ou link definidos.
+   * Isso pode ser útil quando se deseja encontrar rapidamente categorias ou seções do menu.
+   *
+   * > É necessário que a propriedade `p-filter` esteja habilitada.
+   *
+   * @default `false`
+   */
+  @Input('p-search-tree-items') set searchTreeItems(searchTreeItems: boolean) {
+    this._searchTreeItems = <any>searchTreeItems === '' ? true : convertToBoolean(searchTreeItems);
+    this.filteredItems = [...this._menus];
+  }
+
+  get searchTreeItems() {
+    return this._searchTreeItems;
   }
 
   /**

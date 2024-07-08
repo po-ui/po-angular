@@ -452,14 +452,16 @@ export class PoMenuComponent extends PoMenuBaseComponent implements AfterViewIni
 
   private findItems(menus: Array<PoMenuItem>, filter: string, filteredItems: Array<any>) {
     menus.forEach(menu => {
-      const hasAction = menu.action || menu.link;
+      const hasAction = this.searchTreeItems ? this.searchTreeItems : menu.action || menu.link;
       const labelHasFilter = menu.label.toLowerCase().includes(filter);
 
       if (labelHasFilter && hasAction) {
         const newMenu = { ...menu };
 
         if (newMenu.subItems?.length) {
-          delete newMenu.subItems;
+          if (!this.searchTreeItems) {
+            delete newMenu.subItems;
+          }
           newMenu['type'] = this.setMenuType(newMenu);
         }
 
