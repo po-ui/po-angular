@@ -19,7 +19,6 @@
         #poTag
         class="po-tag"
         [class.po-clickable]="isClickable && !disabled && !removable"
-        [class.po-tag-inverse]="inverse && !type && !customTextColor && !removable"
         [class.po-tag-removable]="removable"
         [class.po-tag-disabled]="disabled && removable"
         [ngClass]="tagColor"
@@ -29,27 +28,14 @@
           *ngIf="icon && !removable"
           class="po-tag-icon"
           [p-icon]="!type ? icon : iconFromType"
-          [ngStyle]="
-            !tagColor && inverse && !customTextColor
-              ? { 'color': customColor }
-              : !type && customTextColor
-                ? { 'color': customTextColor }
-                : ''
-          "
+          [ngStyle]="!type && customTextColor ? { 'color': customTextColor } : ''"
         >
         </po-icon>
 
         <div #tagContainer class="po-tag-value" [p-tooltip]="getWidthTag() ? value : ''" p-tooltip-position="top">
-          <span
-            [ngStyle]="
-              !tagColor && inverse && !customTextColor
-                ? { 'color': customColor }
-                : !type && customTextColor && !removable
-                  ? { 'color': customTextColor }
-                  : ''
-            "
-            >{{ value }}</span
-          >
+          <span [ngStyle]="!type && customTextColor && !removable ? { 'color': customTextColor } : ''">{{
+            value
+          }}</span>
         </div>
 
         <po-icon
