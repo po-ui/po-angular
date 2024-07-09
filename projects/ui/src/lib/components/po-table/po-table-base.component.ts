@@ -252,7 +252,7 @@ export abstract class PoTableBaseComponent implements OnChanges, OnDestroy {
   /**
    * @description
    *
-   * Se verdadeiro, torna habilitado o botão "Carregar mais resultados".
+   * Se verdadeiro, torna o botão "Carregar mais resultados" desabilitado.
    *
    * @default `false`
    */
