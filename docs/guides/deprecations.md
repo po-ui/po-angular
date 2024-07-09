@@ -26,6 +26,16 @@ A tabela a seguir lista todos os recursos depreciados, organizados pelo release 
       </thead>
       <tbody>
         <tr class="po-table-row">
+          <th class="po-table-column"><a href="documentation/po-tabs">PoTabs</a></th>
+          <td class="po-table-column">p-small</td>
+          <td class="po-table-column" style="text-align: center;">v18</td>
+        </tr>
+        <tr class="po-table-row">
+          <th class="po-table-column"><a href="documentation/po-tag">PoTag</a></th>
+          <td class="po-table-column">p-inverse</td>
+          <td class="po-table-column" style="text-align: center;">v18</td>
+        </tr>
+        <tr class="po-table-row">
           <th class="po-table-column"><a href="documentation/po-button">PoButton</a></th>
           <td class="po-table-column">p-small</td>
           <td class="po-table-column" style="text-align: center;">v17</td>
@@ -191,6 +201,18 @@ export class AppModule { }
         </tr>
       </thead>
       <tbody>
+      <tr class="po-table-row">
+          <th class="po-table-column"><a href="documentation/po-tabs">PoTabs</a></th>
+          <td class="po-table-column">p-small</td>
+          <td class="po-table-column">-</td>
+          <td class="po-table-column" style="text-align: center;">v18</td>
+        </tr>
+        <tr class="po-table-row">
+          <th class="po-table-column"><a href="documentation/po-tag">PoTag</a></th>
+          <td class="po-table-column">p-inverse</td>
+          <td class="po-table-column">-</td>
+          <td class="po-table-column" style="text-align: center;">v18</td>
+        </tr>
         <tr class="po-table-row">
           <th class="po-table-column"><a href="documentation/po-button">PoButton</a></th>
           <td class="po-table-column">p-small</td>

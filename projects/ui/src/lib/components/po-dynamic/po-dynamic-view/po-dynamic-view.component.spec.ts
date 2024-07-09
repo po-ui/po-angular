@@ -107,7 +107,7 @@ describe('PoDynamicViewComponent:', () => {
     }));
 
     it(`getValuesAndFieldsFromLoad: should call 'dynamicViewService.onLoad' if 'component.load' is string`, async () => {
-      const expectedValue = { value: { name: 'teste 2' }, fields: [{ property: 'name', tag: true, inverse: true }] };
+      const expectedValue = { value: { name: 'teste 2' }, fields: [{ property: 'name', tag: true }] };
 
       component.load = 'teste';
 
@@ -172,11 +172,11 @@ describe('PoDynamicViewComponent:', () => {
 
     it(`setFieldOnLoad: should update field value if it is an existing field`, () => {
       const field = { property: 'name', tag: true };
-      const fakeFieldOnLoad = { ...field, inverse: true };
+      const fakeFieldOnLoad = { ...field };
 
       component.fields = [{ ...field }];
 
-      const expectedValue = <any>{ property: 'name', tag: true, inverse: true };
+      const expectedValue = <any>{ property: 'name', tag: true };
 
       component['setFieldOnLoad'](fakeFieldOnLoad);
 
@@ -189,8 +189,7 @@ describe('PoDynamicViewComponent:', () => {
 
       const fakeFieldOnLoad = {
         property: 'age',
-        tag: true,
-        inverse: true
+        tag: true
       };
 
       const expectedFields = [{ property: 'name' }, { ...fakeFieldOnLoad }];
@@ -201,7 +200,7 @@ describe('PoDynamicViewComponent:', () => {
     });
 
     it(`setFieldsOnLoad: should call 'setFieldOnLoad' if 'fields' is array`, () => {
-      const fakeField = { property: 'name', tag: true, inverse: true };
+      const fakeField = { property: 'name', tag: true };
       const fakeFieldsOnLoad = [{ ...fakeField }];
 
       spyOn(component, <any>'setFieldOnLoad');
@@ -213,7 +212,7 @@ describe('PoDynamicViewComponent:', () => {
 
     it(`setFieldsOnLoad: shouldn't call 'setFieldOnLoad' if 'fields' is undefined`, () => {
       const fakeFieldsOnLoad = undefined;
-      const fakeField = { property: 'name', tag: true, inverse: true };
+      const fakeField = { property: 'name', tag: true };
 
       spyOn(component, <any>'setFieldOnLoad');
 
@@ -235,7 +234,7 @@ describe('PoDynamicViewComponent:', () => {
 
     it(`updateValuesAndFieldsOnLoad: should call 'getValuesAndFieldsFromLoad', 'setValueOnLoad', 'setFieldsOnLoad'
     and 'getVisibleFields'`, async () => {
-      const fakeDataOnLoad = { value: { name: 'teste 2' }, fields: [{ property: 'name', tag: true, inverse: true }] };
+      const fakeDataOnLoad = { value: { name: 'teste 2' }, fields: [{ property: 'name', tag: true }] };
       spyOn(component, <any>'getValuesAndFieldsFromLoad').and.returnValue(fakeDataOnLoad);
       spyOn(component, <any>'setValueOnLoad');
       spyOn(component, <any>'setFieldsOnLoad');
@@ -507,8 +506,8 @@ describe('PoDynamicViewComponent:', () => {
       expect(nativeElement.querySelector('.po-color-07')).toBeFalsy();
     });
 
-    it(`should create 'po-tag-inverse' with custom and inverse colors if 'color', 'tag' and 'inverse' properties contain values.`, () => {
-      component.fields = [{ property: 'cpf', label: 'CPF', tag: true, color: 'color-07', inverse: true }];
+    it(`should create 'po-tag' with a custom color  if only 'tag' and 'color' contain values.`, () => {
+      component.fields = [{ property: 'cpf', label: 'CPF', tag: true, color: 'color-07' }];
 
       component.ngOnChanges({
         fields: new SimpleChange(null, component.fields, true)
@@ -517,27 +516,12 @@ describe('PoDynamicViewComponent:', () => {
       fixture.detectChanges();
 
       expect(nativeElement.querySelector('po-tag')).toBeTruthy();
-      expect(nativeElement.querySelector('.po-tag-inverse')).toBeTruthy();
-      expect(nativeElement.querySelector('.po-text-color-07')).toBeTruthy();
-    });
-
-    it(`should create 'po-tag' with a custom color and without 'inverse' if only 'tag' and 'color' contain values.`, () => {
-      component.fields = [{ property: 'cpf', label: 'CPF', tag: true, color: 'color-07', inverse: false }];
-
-      component.ngOnChanges({
-        fields: new SimpleChange(null, component.fields, true)
-      });
-
-      fixture.detectChanges();
-
-      expect(nativeElement.querySelector('po-tag')).toBeTruthy();
-      expect(nativeElement.querySelector('.po-tag-inverse')).toBeFalsy();
       expect(nativeElement.querySelector('.po-text-color-07')).toBeFalsy();
       expect(nativeElement.querySelector('.po-color-07')).toBeTruthy();
     });
 
-    it(`should create 'po-tag-inverse' if 'tag' is 'default' and 'inverse'.`, () => {
-      component.fields = [{ property: 'cpf', label: 'CPF', tag: true, inverse: true }];
+    it(`should create 'po-tag' with a custom color and text-color if 'tag', 'color' and 'textColor' contain values.`, () => {
+      component.fields = [{ property: 'cpf', label: 'CPF', tag: true, color: 'color-07', textColor: 'white' }];
 
       component.ngOnChanges({
         fields: new SimpleChange(null, component.fields, true)
@@ -546,23 +530,8 @@ describe('PoDynamicViewComponent:', () => {
       fixture.detectChanges();
 
       expect(nativeElement.querySelector('po-tag')).toBeTruthy();
-      expect(nativeElement.querySelector('.po-tag-inverse')).toBeTruthy();
-      expect(nativeElement.querySelector('.po-tag-info-inverse')).toBeTruthy();
-    });
-
-    it(`shouldn't create 'po-tag-inverse' if 'tag' is 'default' and 'inverse' is false.`, () => {
-      component.fields = [{ property: 'cpf', label: 'CPF', tag: true, inverse: false }];
-
-      component.ngOnChanges({
-        fields: new SimpleChange(null, component.fields, true)
-      });
-
-      fixture.detectChanges();
-
-      expect(nativeElement.querySelector('po-tag')).toBeTruthy();
-      expect(nativeElement.querySelector('.po-tag-inverse')).toBeFalsy();
-      expect(nativeElement.querySelector('.po-tag-info-inverse')).toBeFalsy();
-      expect(nativeElement.querySelector('.po-tag-info')).toBeTruthy();
+      expect(nativeElement.querySelector('.po-color-07')).toBeTruthy();
+      expect(nativeElement.querySelector('po-tag span[style="color: white;"]')).toBeTruthy();
     });
   });
 });

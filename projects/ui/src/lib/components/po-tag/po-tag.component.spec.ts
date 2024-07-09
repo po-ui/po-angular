@@ -81,46 +81,6 @@ describe('PoTagComponent:', () => {
       expect(component.iconFromType).toBe(PoTagIcon.Warning);
     });
 
-    it('tagColor: should return tag type without `inverse`.', () => {
-      component.type = PoTagType.Danger;
-      component.inverse = false;
-      expect(component.tagColor).toBe('po-tag-danger');
-    });
-
-    it('tagColor: should return tag type with `inverse`.', () => {
-      component.type = PoTagType.Danger;
-      component.inverse = true;
-      expect(component.tagColor).toBe('po-tag-danger-inverse');
-    });
-
-    it('tagColor: should return tag color without `text`.', () => {
-      component.color = 'color-07';
-      component.type = undefined;
-      component.inverse = false;
-      expect(component.tagColor).toBe('po-color-07');
-    });
-
-    it('tagColor: should return tag color with `text`.', () => {
-      component.color = 'color-07';
-      component.type = undefined;
-      component.inverse = true;
-      expect(component.tagColor).toBe('po-text-color-07');
-    });
-
-    it('tagColor: should return tag type default without `inverse`.', () => {
-      component.color = undefined;
-      component.type = undefined;
-      component.inverse = false;
-      expect(component.tagColor).toBe('po-tag-info');
-    });
-
-    it('tagColor: should return tag type default with `inverse`.', () => {
-      component.color = undefined;
-      component.type = undefined;
-      component.inverse = true;
-      expect(component.tagColor).toBe('po-tag-info-inverse');
-    });
-
     it('tagOrientation: should return true if orientation is horizontal.', () => {
       component.orientation = PoTagOrientation.Horizontal;
       expect(component.tagOrientation).toBe(true);
@@ -388,28 +348,6 @@ describe('PoTagComponent:', () => {
       expect(nativeElement.querySelector('.po-clickable')).toBeFalsy();
     });
 
-    it('should add `po-tag-inverse` if `inverse` is true.', () => {
-      component.inverse = true;
-
-      fixture.detectChanges();
-      expect(nativeElement.querySelector('.po-tag-inverse')).toBeTruthy();
-    });
-
-    it('shouldn`t add `po-tag-inverse` if `inverse` is false.', () => {
-      component.inverse = false;
-
-      fixture.detectChanges();
-      expect(nativeElement.querySelector('.po-tag-inverse')).toBeFalsy();
-    });
-
-    it('styleTag : should change the background if there is no inverse', () => {
-      component.color = 'red';
-      component.customColor = 'red';
-
-      const result = component.styleTag();
-      expect(result).toEqual({ 'background-color': 'red', 'color': 'white' });
-    });
-
     it('styleTag : should change customTextColor to white if it is not defined and customColor is defined ', () => {
       component.customTextColor = '';
       component.customColor = 'red';
@@ -418,22 +356,12 @@ describe('PoTagComponent:', () => {
       expect(result).toEqual({ 'background-color': 'red', 'color': 'white' });
     });
 
-    it('styleTag : should change the border if there is inverse and customColor', () => {
-      component.customTextColor = null;
-      component.color = 'red';
-      component.inverse = true;
+    it('styleTag : should return a empty object if color is defined', () => {
+      component.color = 'color-01';
+      component.removable = false;
 
       const result = component.styleTag();
-      expect(result).toEqual({ 'border': '1px solid red' });
-    });
-
-    it('styleTag : should change the border if there is inverse and customColor', () => {
-      component.customTextColor = 'blue';
-      component.color = 'red';
-      component.inverse = true;
-
-      const result = component.styleTag();
-      expect(result).toEqual({ 'border': '1px solid blue', 'background-color': 'red' });
+      expect(result).toEqual({});
     });
   });
 });
