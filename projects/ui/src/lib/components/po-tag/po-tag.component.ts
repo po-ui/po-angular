@@ -69,15 +69,15 @@ export class PoTagComponent extends PoTagBaseComponent implements OnInit {
 
   get tagColor() {
     if (this.type && !this.removable) {
-      return this.inverse ? `po-tag-${this.type}-inverse` : `po-tag-${this.type}`;
+      return `po-tag-${this.type}`;
     }
 
     if (this.color && !this.removable) {
-      return this.inverse ? `po-text-${this.color}` : `po-${this.color}`;
+      return `po-${this.color}`;
     }
 
     if (!this.customColor && !this.removable) {
-      return this.inverse ? `${poTagTypeDefault}-inverse` : poTagTypeDefault;
+      return poTagTypeDefault;
     }
   }
 
@@ -109,12 +109,8 @@ export class PoTagComponent extends PoTagBaseComponent implements OnInit {
   }
 
   styleTag() {
-    if (!this.tagColor && !this.inverse && !this.removable) {
+    if (!this.tagColor && !this.removable) {
       return { 'background-color': this.customColor, 'color': 'white' };
-    } else if (!this.tagColor && this.inverse && !this.customTextColor) {
-      return { 'border': '1px solid ' + this.customColor };
-    } else if (!this.tagColor && this.inverse && this.customTextColor) {
-      return { 'border': '1px solid ' + this.customTextColor, 'background-color': this.customColor };
     } else {
       return {};
     }

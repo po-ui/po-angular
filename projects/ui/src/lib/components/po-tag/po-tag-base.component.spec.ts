@@ -50,14 +50,6 @@ describe('PoTagBaseComponent:', () => {
       expectPropertiesValues(component, 'icon', validValues, validValues);
     });
 
-    it('inverse: should update property with valid and invalid values.', () => {
-      const validValues = [true, 'true', 1, ''];
-      const invalidValues = [false, 'false', 0];
-
-      expectPropertiesValues(component, 'inverse', validValues, true);
-      expectPropertiesValues(component, 'inverse', invalidValues, false);
-    });
-
     it('orientation: should update property with valid values', () => {
       const validValues = (<any>Object).values(PoTagOrientation);
 

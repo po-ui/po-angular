@@ -95,7 +95,7 @@ const poThemeDefaultDarkValues = {
   perComponent: {
     /** TAB */
     '.po-tab-border-active': {
-      'background-color': 'var(--color-tab-button-box-shadow-active, var(--color))'
+      'background-color': 'var(--color)'
     },
     /** GAUGE */
     '.po-gauge-wrapper': {
@@ -181,7 +181,6 @@ const poThemeDefaultDarkValues = {
     '--color-black-alpha-10': 'rgba(255, 255, 255, 0.1)',
     '--color-black-alpha-15': 'rgba(255, 255, 255, 0.15)',
     '--color-black-alpha-30': 'rgba(255, 255, 255, 0.3)',
-    '--color-primary': 'var(--color-brand-02-base)',
     '--color-primary-light-80': 'color-mix(in srgb, var(--color-brand-02-base) 80%, black)',
     '--color-primary-light-95': 'color-mix(in srgb, var(--color-brand-02-base) 95%, black)',
     '--color-primary-alpha-50': 'color-mix(in srgb, var(--color-brand-02-base) 50%, white)',
