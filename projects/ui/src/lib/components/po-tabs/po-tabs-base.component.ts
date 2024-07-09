@@ -49,25 +49,4 @@ import { convertToBoolean } from '../../utils/util';
  *
  */
 @Directive()
-export class PoTabsBaseComponent {
-  private _small?: boolean = false;
-
-  /**
-   * @deprecated 17.x.x
-   *
-   * @optinal
-   *
-   * @description
-   *
-   * Diminui o tamanho das abas.
-   *
-   * @default `false`
-   */
-  @Input('p-small') set small(value: boolean) {
-    this._small = convertToBoolean(value);
-  }
-
-  get small(): boolean {
-    return this._small;
-  }
-}
+export class PoTabsBaseComponent {}

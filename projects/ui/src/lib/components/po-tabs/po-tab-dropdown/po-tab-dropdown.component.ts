@@ -33,9 +33,6 @@ export class PoTabDropdownComponent implements AfterViewInit {
   // Rótulo do `po-tab-button`
   @Input('p-label') label: string;
 
-  // Diminui o tamanho do botão
-  @Input('p-small') small: boolean;
-
   // Lista de abas
   @Input('p-tabs') tabs: Array<PoTabComponent> = [];
 

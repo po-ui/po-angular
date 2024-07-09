@@ -36,9 +36,6 @@ export class PoTabButtonComponent implements OnChanges, AfterViewInit {
   // Rótulo do botão
   @Input('p-label') label: string;
 
-  // Diminui o tamanho do botão
-  @Input('p-small') small: boolean;
-
   // Função sera emitida quando a tab ficar ativada
   @Output('p-activated') activated = new EventEmitter();
 

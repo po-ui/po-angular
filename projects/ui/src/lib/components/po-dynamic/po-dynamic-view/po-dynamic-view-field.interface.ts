@@ -42,6 +42,14 @@ export interface PoDynamicViewField extends PoDynamicField {
   color?: string;
 
   /**
+   * Determina a cor do texto da tag. As maneiras de customizar as cores são:
+   * - Hexadeximal, por exemplo `#c64840`;
+   * - RGB, como `rgb(0, 0, 165)`;
+   * - O nome da cor, por exemplo `blue`;
+   */
+  textColor?: string;
+
+  /**
    * Permite que seja exibido em tela, de forma concatenada as propriedades `fieldLabel` + `fieldValue`.
    * A ordem sempre será `fieldLabel` e depois `fieldValue`, não sendo possível alterar.
    *
@@ -73,17 +81,6 @@ export interface PoDynamicViewField extends PoDynamicField {
    * > Veja os valores válidos na [biblioteca de ícones](guides/icons).
    */
   icon?: string;
-
-  /**
-   * Possibilita a inversão de cores para o campo do tipo `tag`,
-   * tornando possível uma visualização de status ativo e inativo.
-   *
-   * > A cor do texto, do ícone e da borda ficam com a cor utilizada na propriedade `color` ou a cor default,
-   * e a cor do fundo fica branca.
-   *
-   * @default `false`
-   */
-  inverse?: boolean;
 
   /**
    * Define que a propriedade `property` é uma lista ou um objeto.

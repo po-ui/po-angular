@@ -43,7 +43,6 @@ export class PoDynamicViewBaseComponent extends PoDynamicSharedBase {
    *     updated: (new Date()).toString() // atribui valor ao campo novo
    *   },
    *   fields: [
-   *     { property: 'cnpj', tag: true, inverse: true }, // atribui novas propriedades ao field
    *     { property: 'updated', tag: true } // inclui campo novo
    *   ]
    * }
