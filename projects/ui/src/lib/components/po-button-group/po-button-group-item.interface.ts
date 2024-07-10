@@ -22,11 +22,17 @@ export interface PoButtonGroupItem {
   /**
    * Ícone exibido ao lado esquerdo do label do botão.
    *
-   * É possível usar qualquer um dos ícones da [Biblioteca de ícones](/guides/icons). conforme exemplo abaixo:
+   * **Deprecated v20.x.x.** É possível usar qualquer um dos ícones da [Biblioteca de ícones](/guides/icons). conforme exemplo abaixo:
    * ```
    * buttons: Array<PoButtonGroupItem> = [
    *  { label: 'Button 1', action: this.action.bind(this), icon: 'po-icon-user' },
    * ];
+   * ```
+   * Utilize os ícones disponíveis na Lib [Phosphor](/guides/icons), conforme exemplo:
+   * ```
+   * <po-component
+   *  [p-property]="[{ label: 'ICON', icon: 'ph ph-user' }]">
+   * </po-component>
    * ```
    * Também é possível utilizar outras fontes de ícones, por exemplo a biblioteca *Font Awesome*, da seguinte forma:
    * ```

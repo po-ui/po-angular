@@ -28,9 +28,13 @@ export class PoToolbarBaseComponent {
    *
    * Define um [ícone](/guides/icons) para a propriedade `p-actions`.
    *
-   * É possível usar qualquer um dos ícones da [Biblioteca de ícones](/guides/icons). conforme exemplo abaixo:
+   * **Deprecated v20.x.x.** É possível usar qualquer um dos ícones da [Biblioteca de ícones](/guides/icons). conforme exemplo abaixo:
    * ```
    * <po-toolbar p-actions-icon="po-icon-user" [p-actions]="actions"></po-toolbar>
+   * ```
+   * Utilize os ícones disponíveis na Lib [Phosphor](/guides/icons), conforme exemplo:
+   * ```
+   * <po-tag p-icon="ph ph-user" p-value="PO Tag"></po-button>
    * ```
    * Também é possível utilizar outras fontes de ícones, por exemplo a biblioteca *Font Awesome*, da seguinte forma:
    * ```

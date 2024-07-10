@@ -70,7 +70,14 @@ export interface PoDynamicViewField extends PoDynamicField {
   /**
    * Define um ícone que será exibido ao lado do valor para o campo do tipo *tag*.
    *
-   * > Veja os valores válidos na [biblioteca de ícones](guides/icons).
+   * > **Deprecated v20.x.x.** Veja os valores válidos na [biblioteca de ícones](guides/icons).
+   *
+   * Utilize os ícones disponíveis na Lib [Phosphor](/guides/icons), conforme exemplo:
+   * ```
+   * <po-component
+   *  [p-property]="[{ label: 'ICON', icon: 'ph ph-user' }]">
+   * </po-component>
+   * ```
    */
   icon?: string;
 

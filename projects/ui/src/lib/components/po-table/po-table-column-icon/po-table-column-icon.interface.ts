@@ -41,11 +41,14 @@ export interface PoTableColumnIcon {
   disabled?: Function;
 
   /**
-   * É possível usar qualquer um dos ícones da [Biblioteca de ícones](/guides/icons). conforme exemplo abaixo:
+   * **Deprecated v20.x.x.** É possível usar qualquer um dos ícones da [Biblioteca de ícones](/guides/icons). conforme exemplo abaixo:
    * ```
    * [ { icon: 'po-icon-plus' } ]
    * ```
-   *
+   * Utilize os ícones disponíveis na Lib [Phosphor](/guides/icons), conforme exemplo:
+   * ```
+   * [{ icon: 'ph ph-user' }]
+   * ```
    * Também é possível utilizar outras fontes de ícones, por exemplo a biblioteca Font Awesome, da seguinte forma:
    * ```
    * [ {  icon: 'fas fa-plus' } ]

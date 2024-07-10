@@ -48,10 +48,16 @@ export interface PoPageDynamicTableCustomAction {
    *
    * Define um ícone que será exibido ao lado esquerdo do rótulo.
    *
-   * É possível usar qualquer um dos ícones da [Biblioteca de ícones](/guides/icons). conforme exemplo abaixo:
+   * **Deprecated v20.x.x.** É possível usar qualquer um dos ícones da [Biblioteca de ícones](/guides/icons). conforme exemplo abaixo:
    * ```
    * <po-component
    *  [p-property]="[{ label: 'PO ICON', icon: 'po-icon-news' }]">
+   * </po-component>
+   * ```
+   * Utilize os ícones disponíveis na Lib [Phosphor](/guides/icons), conforme exemplo:
+   * ```
+   * <po-component
+   *  [p-property]="[{ label: 'ICON', icon: 'ph ph-user' }]">
    * </po-component>
    * ```
    *
