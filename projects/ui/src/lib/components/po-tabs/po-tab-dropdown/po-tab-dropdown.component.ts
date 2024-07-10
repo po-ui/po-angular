@@ -82,12 +82,28 @@ export class PoTabDropdownComponent implements AfterViewInit {
     const tabsContainerRect = this.buttonElement.nativeElement.closest('.po-tabs-container').getBoundingClientRect();
     const dropdownWidth = 300;
 
-    let rightPosition = tabsContainerRect.width - buttonRect.right;
-    if (rightPosition < 0) {
-      rightPosition = 0;
+    const isInsidePage = this.elementRef.nativeElement.closest('.po-page-content');
+    this.dropdownStyles = this.calculateDropdownStyles(buttonRect, tabsContainerRect, dropdownWidth, isInsidePage);
+  }
+
+  private calculateDropdownStyles(
+    buttonRect: DOMRect,
+    tabsContainerRect: DOMRect,
+    dropdownWidth: number,
+    isInsidePage: boolean
+  ) {
+    if (isInsidePage) {
+      return {
+        top: `${tabsContainerRect.height + 4 + window.scrollY}px`,
+        maxWidth: `${dropdownWidth}px`,
+        right: `${tabsContainerRect.right - buttonRect.right}px`
+      };
     }
 
-    this.dropdownStyles = {
+    let rightPosition = tabsContainerRect.width - buttonRect.right;
+    rightPosition = Math.max(0, rightPosition);
+
+    return {
       top: `${tabsContainerRect.bottom + 4 + window.scrollY}px`,
       maxWidth: `${dropdownWidth}px`,
       right: `${rightPosition}px`
