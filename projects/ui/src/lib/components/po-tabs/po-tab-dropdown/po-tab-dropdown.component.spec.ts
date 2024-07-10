@@ -23,15 +23,26 @@ describe('PoTabDropdownComponent:', () => {
   const buttonElementRefMock = {
     nativeElement: {
       getBoundingClientRect: () => ({
-        right: 100,
-        bottom: 100
+        right: 200,
+        height: 50
       }),
-      closest: (selector: string) => ({
-        getBoundingClientRect: () => ({
-          width: 300,
-          bottom: 120
-        })
-      })
+      closest: (selector: string) => {
+        if (selector === '.po-tabs-container') {
+          return {
+            getBoundingClientRect: () => ({
+              bottom: 150,
+              width: 400
+            })
+          };
+        }
+        return null;
+      }
+    }
+  };
+
+  const elementRefMock = {
+    nativeElement: {
+      closest: (selector: string) => null
     }
   };
 
@@ -108,42 +119,54 @@ describe('PoTabDropdownComponent:', () => {
       expect(component.closeDropdown).toHaveBeenCalled();
     });
 
-    it('setDropdownPosition: should set dropdownStyles with correct values when rightPosition is positive', () => {
+    it('setDropdownPosition: should set dropdownStyles with correct values when not inside a PoPage', () => {
+      component['elementRef'] = elementRefMock as ElementRef;
+
       component.setDropdownPosition();
 
       const expectedStyles = {
-        top: `${120 + 4 + 50}px`,
+        top: `${150 + 4 + window.scrollY}px`,
         maxWidth: '300px',
-        right: `${300 - 100}px`
+        right: `${200}px`
       };
 
       expect(component.dropdownStyles).toEqual(expectedStyles);
     });
 
-    it('setDropdownPosition: should set dropdownStyles with correct values when rightPosition is zero', () => {
-      const buttonElementRefMockZero = {
+    it('setDropdownPosition: should set dropdownStyles with correct values when inside a PoPage', () => {
+      const buttonElementRefMock = {
         nativeElement: {
-          getBoundingClientRect: () => ({
-            right: 350,
-            bottom: 100
-          }),
-          closest: (selector: string) => ({
-            getBoundingClientRect: () => ({
-              width: 300,
-              bottom: 120
-            })
-          })
+          getBoundingClientRect: () => ({ right: 300, height: 100 }),
+          closest: (selector: string) => {
+            if (selector === '.po-tabs-container') {
+              return { getBoundingClientRect: () => ({ right: 350, height: 120 }) };
+            } else if (selector === '.po-page-content') {
+              return true;
+            }
+            return null;
+          }
+        }
+      };
+      const elementRefMock = {
+        nativeElement: {
+          closest: (selector: string) => {
+            if (selector === '.po-page-content') {
+              return true;
+            }
+            return null;
+          }
         }
       };
 
-      component.button.buttonElement = buttonElementRefMockZero as ElementRef;
+      component.button.buttonElement = buttonElementRefMock as ElementRef;
+      component['elementRef'] = elementRefMock as ElementRef;
 
       component.setDropdownPosition();
 
       const expectedStyles = {
-        top: `${120 + 4 + 50}px`,
+        top: `${120 + 4 + window.scrollY}px`,
         maxWidth: '300px',
-        right: '0px'
+        right: '50px'
       };
 
       expect(component.dropdownStyles).toEqual(expectedStyles);
