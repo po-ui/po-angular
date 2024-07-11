@@ -2,6 +2,13 @@
 
 All notable changes to this project will be documented in this file. See [standard-version](https://github.com/conventional-changelog/standard-version) for commit guidelines.
 
+### [17.18.1](https://github.com/po-ui/po-angular/compare/v17.18.0...v17.18.1) (2024-07-11)
+
+
+### Bug Fixes
+
+* **tabs:** corrige posicionamento do dropdown ([b0f42b5](https://github.com/po-ui/po-angular/commit/b0f42b5cc7c2916c2297134d0d98ea3ff1a254a4))
+
 ### [17.18.0](https://github.com/po-ui/po-angular/compare/v17.17.1...v17.18.0) (2024-07-08)
 
 
