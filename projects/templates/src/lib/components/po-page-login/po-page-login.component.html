@@ -39,6 +39,7 @@
             p-auto-focus
             p-required
             [p-label]="pageLoginLiterals.loginLabel"
+            [p-no-autocomplete]="noAutocompleteLogin"
             [p-pattern]="loginPattern"
             [p-placeholder]="pageLoginLiterals.loginPlaceholder"
             (click)="closePopover()"
@@ -85,7 +86,9 @@
             name="password"
             [(ngModel)]="password"
             p-required
+            [p-hide-password-peek]="hidePasswordPeek"
             [p-label]="pageLoginLiterals.passwordLabel"
+            [p-no-autocomplete]="noAutocompletePassword"
             [p-pattern]="passwordPattern"
             [p-placeholder]="pageLoginLiterals.passwordPlaceholder"
             (click)="closePopover()"
