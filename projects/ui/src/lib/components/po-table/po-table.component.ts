@@ -693,7 +693,7 @@ export class PoTableComponent extends PoTableBaseComponent implements AfterViewI
   }
 
   public getTemplate(column: PoTableColumn): TemplateRef<any> {
-    const template: PoTableColumnTemplateDirective = this.tableColumnTemplates.find(
+    const template: PoTableColumnTemplateDirective = this.tableColumnTemplates?.find(
       tableColumnTemplate => tableColumnTemplate.targetProperty === column.property
     );
     if (!template) {
