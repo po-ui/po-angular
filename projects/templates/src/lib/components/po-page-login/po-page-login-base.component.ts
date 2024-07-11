@@ -286,6 +286,41 @@ export abstract class PoPageLoginBaseComponent implements OnDestroy {
    */
   @Output('p-language-change') languageChange: EventEmitter<PoLanguage> = new EventEmitter<PoLanguage>();
 
+  /**
+   * @optional
+   *
+   * @description
+   *
+   * Define a propriedade nativa `autocomplete` do campo como `off`.
+   *
+   * @default `false`
+   */
+  @Input('p-no-autocomplete-login') noAutocompleteLogin: boolean;
+
+  /**
+   * @optional
+   *
+   * @description
+   *
+   * Define a propriedade nativa `autocomplete` do campo como `off`.
+   *
+   * > No componente `po-password` será definido como `new-password`.
+   *
+   * @default `false`
+   */
+  @Input('p-no-autocomplete-password') noAutocompletePassword: boolean;
+
+  /**
+   * @optional
+   *
+   * @description
+   *
+   * Permite esconder a função de espiar a senha digitada.
+   *
+   * @default `false`
+   */
+  @Input('p-hide-password-peek') hidePasswordPeek: boolean;
+
   allLoginErrors: Array<string> = [];
   allPasswordErrors: Array<string> = [];
   customFieldObject: PoPageLoginCustomField;
