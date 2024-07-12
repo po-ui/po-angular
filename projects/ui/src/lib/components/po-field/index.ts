@@ -18,6 +18,7 @@ export * from './po-datepicker-range/po-datepicker-range.component';
 export * from './po-decimal/po-decimal.component';
 export * from './po-email/po-email.component';
 export * from './po-input/po-input.component';
+export * from './po-input/po-mask';
 export * from './po-login/po-login.component';
 export * from './po-lookup/interfaces/po-lookup-column.interface';
 export * from './po-lookup/interfaces/po-lookup-filter.interface';
