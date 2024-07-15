@@ -2,6 +2,18 @@
 
 All notable changes to this project will be documented in this file. See [standard-version](https://github.com/conventional-changelog/standard-version) for commit guidelines.
 
+## [17.19.0](https://github.com/po-ui/po-angular/compare/v17.18.1...v17.19.0) (2024-07-15)
+
+
+### Features
+
+* **page-login:** permite desabilitar o autocomplete ([e6d5d61](https://github.com/po-ui/po-angular/commit/e6d5d614f5f21da77eb92e0b137f8b8e8f83a8d8))
+
+
+### Bug Fixes
+
+* **table:** corrige erro no console ([f74447b](https://github.com/po-ui/po-angular/commit/f74447b1b3978d694f7335f417a60ee8d0ed3a06))
+
 ### [17.18.1](https://github.com/po-ui/po-angular/compare/v17.18.0...v17.18.1) (2024-07-11)
 
 
