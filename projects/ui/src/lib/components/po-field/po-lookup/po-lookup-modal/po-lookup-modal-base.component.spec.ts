@@ -733,6 +733,16 @@ describe('PoLookupModalBaseComponent:', () => {
       expect(component.selecteds).toEqual(expectSelecteds);
     });
 
+    it('setDisclaimersItems: should set selecteds with selectedItems if selecteds is empty and selectedItems is an array with elements', () => {
+      const expectSelecteds = [{ value: 123, label: '123' }];
+      component.selecteds = [];
+      component.selectedItems = [...expectSelecteds];
+
+      component.setDisclaimersItems();
+
+      expect(component.selecteds).toEqual(expectSelecteds);
+    });
+
     it('Should emit item selected when component is not multiple ', () => {
       component.selecteds = [{ value: 123456789 }];
       component.multiple = true;

@@ -419,7 +419,7 @@ export abstract class PoLookupModalBaseComponent implements OnDestroy, OnInit {
       return;
     }
 
-    if (this.selectedItems && this.selectedItems.length) {
+    if (this.selecteds.length === 0 && this.selectedItems && this.selectedItems.length) {
       this.selecteds = [...this.selectedItems];
     }
   }
