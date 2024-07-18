@@ -2,6 +2,14 @@
 
 All notable changes to this project will be documented in this file. See [standard-version](https://github.com/conventional-changelog/standard-version) for commit guidelines.
 
+## [18.0.0-next.0](https://github.com/po-ui/po-angular/compare/v17.19.0...v18.0.0-next.0) (2024-07-18)
+
+### Features
+
+* **angular:** Atualização para o Angular v18
+
+Atualize seu projeto para utilizar a versão 18 do Angular, acesse a documentação [Guia de Atualização do Angular](https://update.angular.io/) para fazer a migração completa.
+
 ## [17.19.0](https://github.com/po-ui/po-angular/compare/v17.18.1...v17.19.0) (2024-07-15)
 
 
