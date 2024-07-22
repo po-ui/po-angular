@@ -2,6 +2,18 @@
 
 All notable changes to this project will be documented in this file. See [standard-version](https://github.com/conventional-changelog/standard-version) for commit guidelines.
 
+## [17.20.0](https://github.com/po-ui/po-angular/compare/v17.19.0...v17.20.0) (2024-07-22)
+
+
+### Features
+
+* **menu:** adiciona propriedade p-search-tree-items ([d1e0480](https://github.com/po-ui/po-angular/commit/d1e048013eb0b595535742724f4413a28bc18405))
+
+
+### Bug Fixes
+
+* **lookup:** corrige itens selecionados que são omitidos após a pesquisa ([9dbdee1](https://github.com/po-ui/po-angular/commit/9dbdee15f138307c006d86aa92b6cf3822973bd1))
+
 ## [17.19.0](https://github.com/po-ui/po-angular/compare/v17.18.1...v17.19.0) (2024-07-15)
 
 
