@@ -87,6 +87,43 @@ describe('PoUploadBaseService:', () => {
     expect(service.sendFile).toHaveBeenCalled();
   }));
 
+  it('should call formData.append with correct parameters', inject(
+    [PoUploadBaseService],
+    (service: PoUploadBaseService) => {
+      const fakeFile = new Blob([]);
+      fakeFile['lastModified'] = 1504558774471;
+      fakeFile['lastModifiedDate'] = new Date();
+      fakeFile['name'] = 'Teste';
+      fakeFile['webkitRelativePath'] = '';
+      const files = [new PoUploadFile(<File>fakeFile)];
+      const headers = { Authorization: '145236' };
+      const tOnUpload = new EventEmitter<any>();
+      const callback = (file: PoUploadFile, event: any) => '';
+
+      const formData = new FormData();
+      spyOn(window, 'FormData').and.returnValue(formData);
+      spyOn(formData, 'append');
+
+      const uploadEvent = {
+        extraFormData: { param1: 'value1', param2: 'value2' },
+        data: { key: 'value' },
+        url: 'http://example.com/upload',
+        headers: { 'Content-Type': 'application/json' }
+      };
+
+      spyOn(tOnUpload, 'emit').and.callFake(event => {
+        event.extraFormData = uploadEvent.extraFormData;
+        event.data = uploadEvent.data;
+        event.url = uploadEvent.url;
+        event.headers = uploadEvent.headers;
+      });
+
+      service.upload('', files, headers, tOnUpload, callback, callback, callback);
+
+      expect(formData.append).toHaveBeenCalled();
+    }
+  ));
+
   it('should execute uploadCallback function', inject([PoUploadBaseService], (service: PoUploadBaseService) => {
     const methods = returnMethodsCallback();
     const fakeThis = {
