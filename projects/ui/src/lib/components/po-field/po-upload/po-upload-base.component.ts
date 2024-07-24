@@ -235,11 +235,18 @@ export abstract class PoUploadBaseComponent implements ControlValueAccessor, Val
    *
    * Função que será executada no momento de realizar o envio do arquivo,
    * onde será possível adicionar informações ao parâmetro que será enviado na requisição.
-   * É passado por parâmetro um objeto com o arquivo e a propriedade data nesta propriedade pode ser informado algum dado,
-   * que será enviado em conjunto com o arquivo na requisição, por exemplo:
+   * É passado por parâmetro um objeto com o arquivo e as propriedades data e extraFormData,
+   * que serão enviadas em conjunto com o arquivo na requisição, por exemplo:
    *
+   * > data, nesta propriedade pode ser informado algum dado
    * ```
    *   event.data = {id: 'id do usuário'};
+   * ```
+   * > extraFormData, nesta propriedade pode ser informado algum dado solicitado pela API
+   * > que não possa estar no objeto `data`, assim o conteúdo sará extraído do objeto e
+   * > enviado como parâmetro
+   * ```
+   *   event.extraFormData = {id: 'id do usuário'};
    * ```
    */
   @Output('p-upload') onUpload: EventEmitter<any> = new EventEmitter<any>();
