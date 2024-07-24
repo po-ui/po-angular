@@ -2,6 +2,16 @@
 
 All notable changes to this project will be documented in this file. See [standard-version](https://github.com/conventional-changelog/standard-version) for commit guidelines.
 
+## [18.0.0-rc.0](https://github.com/po-ui/po-angular/compare/v18.0.0-next.0...v18.0.0-rc.0) (2024-07-24)
+
+### Code Refactoring
+
+* **components:** remove depreciações ([39adc2d](https://github.com/po-ui/po-angular/commit/39adc2d55b99c28fb2eb711860bbf9948181a35b))
+
+### Features
+
+* **angular:** build v18 ([26d4854](https://github.com/po-ui/po-angular/commit/26d4854a2d54557664c6c4cdf6eaa71c4975f6a7))
+
 ## [17.20.0](https://github.com/po-ui/po-angular/compare/v17.19.0...v17.20.0) (2024-07-22)
 
 
