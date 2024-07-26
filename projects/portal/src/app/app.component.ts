@@ -40,9 +40,9 @@ export class AppComponent implements OnInit {
     ];
 
     this.iconActions = [
-      { icon: 'po-icon-social-github', link: 'https://github.com/po-ui', label: 'Github' },
-      { icon: 'po-icon-social-twitter', link: 'https://twitter.com/@pouidev', label: 'Twitter' },
-      { icon: 'po-icon-social-instagram', link: 'https://www.instagram.com/pouidev/', label: 'Instagram' }
+      { icon: 'ph ph-github-logo', link: 'https://github.com/po-ui', label: 'Github' },
+      { icon: 'ph ph-x-logo', link: 'https://twitter.com/@pouidev', label: 'Twitter' },
+      { icon: 'ph ph-instagram-logo', link: 'https://www.instagram.com/pouidev/', label: 'Instagram' }
     ];
   }
 

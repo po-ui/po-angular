@@ -79,7 +79,7 @@ export class SamplePoDynamicFormRegisterComponent implements OnInit {
       booleanFalse: 'Inactive',
       formatModel: true
     },
-    { property: 'email', divider: 'CONTACTS', gridColumns: 6, icon: 'po-icon-mail' },
+    { property: 'email', divider: 'CONTACTS', gridColumns: 6, icon: 'ph ph-envelope' },
     { property: 'phone', mask: '(99) 99999-9999', gridColumns: 6 },
     { property: 'address', gridColumns: 6 },
     {
@@ -126,7 +126,7 @@ export class SamplePoDynamicFormRegisterComponent implements OnInit {
       gridSmColumns: 12,
       decimalsLength: 2,
       thousandMaxlength: 7,
-      icon: 'po-icon-finance'
+      icon: 'ph ph-currency-circle-dollar'
     },
     {
       property: 'hobbies',

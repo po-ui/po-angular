@@ -236,14 +236,14 @@ export class PoTagBaseComponent {
    * Define ou ativa um ícone que será exibido ao lado do valor da *tag*.
    *
    * Quando `p-type` estiver definida, basta informar um valor igual a `true` para que o ícone seja exibido conforme descrições abaixo:
-   * - <span class="po-icon po-icon-ok"></span> - `success`
-   * - <span class="po-icon po-icon-warning"></span> - `warning`
-   * - <span class="po-icon po-icon-close"></span> - `danger`
-   * - <span class="po-icon po-icon-info"></span> - `info`
+   * - <span class="ph ph-check"></span> - `success`
+   * - <span class="ph ph-warning-circle"></span> - `warning`
+   * - <span class="ph ph-x"></span> - `danger`
+   * - <span class="ph ph-info"></span> - `info`
    *
    * Também É possível usar qualquer um dos ícones da [Biblioteca de ícones](/guides/icons). conforme exemplo abaixo:
    * ```
-   * <po-tag p-icon="po-icon-user" p-value="PO Tag"></po-tag>
+   * <po-tag p-icon="ph ph-user" p-value="PO Tag"></po-tag>
    * ```
    * como também utilizar outras fontes de ícones, por exemplo a biblioteca *Font Awesome*, da seguinte forma:
    * ```

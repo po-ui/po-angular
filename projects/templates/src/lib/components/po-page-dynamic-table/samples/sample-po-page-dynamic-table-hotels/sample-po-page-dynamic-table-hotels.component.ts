@@ -94,25 +94,25 @@ export class SamplePoPageDynamicTableHotelsComponent {
       label: 'Hide Remove All Disclaimer',
       action: this.onClickRemoveAllDisclaimer.bind(this),
       visible: this.isVisibleRemoveAllDisclaimer.bind(this),
-      icon: 'po-icon-eye-off'
+      icon: 'ph ph-eye-closed'
     },
     {
       label: 'Show Remove All Disclaimer',
       action: this.onClickRemoveAllDisclaimer.bind(this),
       visible: this.isHideRemoveAllDisclaimer.bind(this),
-      icon: 'po-icon-eye'
+      icon: 'ph ph-eye'
     },
     {
       label: 'Hide Close City Disclaimer',
       action: this.onClickCloseCityDisclaimer.bind(this),
       visible: this.isVisibleCloseCityDisclaimer.bind(this),
-      icon: 'po-icon-eye-off'
+      icon: 'ph ph-eye-closed'
     },
     {
       label: 'Show Close City Disclaimer',
       action: this.onClickCloseCityDisclaimer.bind(this),
       visible: this.isHideCloseCityDisclaimer.bind(this),
-      icon: 'po-icon-eye'
+      icon: 'ph ph-eye'
     }
   ];
 
@@ -120,7 +120,7 @@ export class SamplePoPageDynamicTableHotelsComponent {
     {
       label: 'Details',
       action: this.onClickHotelDetail.bind(this),
-      icon: 'po-icon-user'
+      icon: 'ph ph-user'
     }
   ];
 

@@ -165,7 +165,7 @@ export abstract class PoComboBaseComponent implements ControlValueAccessor, OnIn
    *
    * É possível usar qualquer um dos ícones da [Biblioteca de ícones](/guides/icons). conforme exemplo abaixo:
    * ```
-   * <po-combo p-icon="po-icon-user" p-label="PO combo"></po-combo>
+   * <po-combo p-icon="ph ph-user" p-label="PO combo"></po-combo>
    * ```
    * Também é possível utilizar outras fontes de ícones, por exemplo a biblioteca *Font Awesome*, da seguinte forma:
    * ```

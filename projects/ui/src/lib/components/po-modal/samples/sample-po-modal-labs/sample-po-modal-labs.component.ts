@@ -35,8 +35,8 @@ export class SamplePoModalLabsComponent implements OnInit {
     { value: 'loading', label: 'Loading' }
   ];
   public readonly iconOptions: Array<PoSelectOption> = [
-    { value: 'po-icon-news', label: 'po-icon-news' },
-    { value: 'po-icon-search', label: 'po-icon-search' },
+    { value: 'ph ph-newspaper', label: 'ph ph-newspaper' },
+    { value: 'ph ph-magnifying-glass', label: 'ph ph-magnifying-glass' },
     { value: 'fa fa-calculator', label: 'fa fa-calculator' }
   ];
 

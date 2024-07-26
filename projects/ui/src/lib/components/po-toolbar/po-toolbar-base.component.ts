@@ -30,7 +30,7 @@ export class PoToolbarBaseComponent {
    *
    * É possível usar qualquer um dos ícones da [Biblioteca de ícones](/guides/icons). conforme exemplo abaixo:
    * ```
-   * <po-toolbar p-actions-icon="po-icon-user" [p-actions]="actions"></po-toolbar>
+   * <po-toolbar p-actions-icon="ph ph-user" [p-actions]="actions"></po-toolbar>
    * ```
    * Também é possível utilizar outras fontes de ícones, por exemplo a biblioteca *Font Awesome*, da seguinte forma:
    * ```
@@ -48,7 +48,7 @@ export class PoToolbarBaseComponent {
    *
    * > Caso não haja ações definidas em `p-actions`, o ícone não será exibido.
    *
-   * @default `po-icon-more`
+   * @default `ph-dots-three`
    */
   @Input('p-actions-icon') actionsIcon?: string | TemplateRef<void>;
 

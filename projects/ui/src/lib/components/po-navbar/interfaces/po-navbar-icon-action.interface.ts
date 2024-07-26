@@ -23,7 +23,7 @@ export interface PoNavbarIconAction {
    * É possível usar qualquer um dos ícones da [Biblioteca de ícones](/guides/icons). conforme exemplo abaixo:
    * ```
    * <po-navbar
-   *   [p-icon-actions]="[{ link: '/', icon: 'po-icon-news' }]">
+   *   [p-icon-actions]="[{ link: '/', icon: 'ph ph-newspaper' }]">
    * </po-navbar>
    * ```
    *
