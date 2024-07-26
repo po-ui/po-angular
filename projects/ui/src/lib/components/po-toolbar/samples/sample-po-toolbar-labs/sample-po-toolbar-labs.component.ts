@@ -31,19 +31,19 @@ export class SamplePoToolbarLabsComponent implements OnInit {
   ];
 
   public readonly iconOptions: Array<PoSelectOption> = [
-    { value: 'po-icon-chat', label: 'po-icon-chat' },
-    { value: 'po-icon-clock', label: 'po-icon-clock' },
-    { value: 'po-icon-exit', label: 'po-icon-exit' },
-    { value: 'po-icon-lock', label: 'po-icon-lock' },
+    { value: 'ph ph-chats', label: 'ph ph-chats' },
+    { value: 'ph ph-clock', label: 'ph ph-clock' },
+    { value: 'ph ph-sign-out', label: 'ph ph-sign-out' },
+    { value: 'ph ph-lock', label: 'ph ph-lock' },
     { value: 'fa fa-calculator', label: 'fa fa-calculator' },
     { value: 'far fa-comment-alt', label: 'far fa-comment-alt' }
   ];
 
   public readonly actionsIconOptions: Array<PoSelectOption> = [
-    { value: 'po-icon-clock', label: 'po-icon-clock' },
-    { value: 'po-icon-exit', label: 'po-icon-exit' },
-    { value: 'po-icon-lock', label: 'po-icon-lock' },
-    { value: 'po-icon-settings', label: 'po-icon-settings' },
+    { value: 'ph ph-clock', label: 'ph ph-clock' },
+    { value: 'ph ph-sign-out', label: 'ph ph-sign-out' },
+    { value: 'ph ph-lock', label: 'ph ph-lock' },
+    { value: 'ph ph-gear', label: 'ph ph-gear' },
     { value: 'far fa-comment-alt', label: 'far fa-comment-alt' }
   ];
 

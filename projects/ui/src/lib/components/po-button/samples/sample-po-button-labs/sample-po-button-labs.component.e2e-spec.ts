@@ -19,10 +19,10 @@ describe('SamplePoButtonLabs E2E', () => {
     expect(button.poModal.isPresent()).toBeFalsy();
   });
 
-  it('Check `po-button` show icon `po-icon-news` after select icon `po-icon-news`', () => {
+  it('Check `po-button` show icon `ph ph-newspaper` after select icon `ph ph-newspaper`', () => {
     button.poRadioLogoPO.click();
 
-    expect(button.poButtonIcon.getAttribute('class')).toContain('po-icon-news');
+    expect(button.poButtonIcon.getAttribute('class')).toContain('ph ph-newspaper');
   });
 
   it('Check `po-button` show icon `po-icon-user` after select icon `po-icon-user`', () => {

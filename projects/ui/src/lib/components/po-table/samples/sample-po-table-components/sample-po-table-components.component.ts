@@ -78,14 +78,14 @@ export class SamplePoTableComponentsComponent implements OnInit {
         {
           action: this.favorite.bind(this),
           color: this.isFavorite.bind(this),
-          icon: 'po-icon-star',
+          icon: 'ph ph-star',
           tooltip: 'Favorite',
           value: 'favorite'
         },
         {
           action: this.goToDocumentation.bind(this),
           disabled: this.canGoToDocumentation.bind(this),
-          icon: 'po-icon-export',
+          icon: 'ph ph-arrow-square-out',
           tooltip: 'Click to go to documentation',
           value: 'documentation'
         }

@@ -52,7 +52,7 @@ export class PoProgressBaseComponent {
    *
    * Ícone que aparecerá ao lado do texto da propriedade `p-info`.
    *
-   * Exemplo: `po-icon-ok`.
+   * Exemplo: `ph ph-check`.
    */
   @Input('p-info-icon') infoIcon?: string | TemplateRef<void>;
 

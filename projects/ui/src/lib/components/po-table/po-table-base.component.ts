@@ -735,7 +735,7 @@ export abstract class PoTableBaseComponent implements OnChanges, OnDestroy {
    * Define uma lista de ações.
    *
    * Quando houver apenas uma ação definida ela será exibida diretamente na coluna, caso contrário, o componente
-   * se encarrega de agrupá-las exibindo o ícone [**po-icon-more**](/guides/icons) que listará as ações ao ser clicado.
+   * se encarrega de agrupá-las exibindo o ícone [**ph ph-dots-three**](/guides/icons) que listará as ações ao ser clicado.
    *
    * **A coluna de ações não será exibida quando:**
    *  - a lista conter valores inválidos ou indefinidos.

@@ -22,8 +22,8 @@ export class SamplePoNumberLabsComponent implements OnInit {
   step: string;
 
   public readonly iconOptions: Array<PoSelectOption> = [
-    { value: 'po-icon-finance', label: 'po-icon-finance' },
-    { value: 'po-icon-finance-bitcoin', label: 'po-icon-finance-bitcoin' },
+    { value: 'ph ph-currency-circle-dollar', label: 'ph ph-currency-circle-dollar' },
+    { value: 'ph ph-currency-btc', label: 'ph ph-currency-btc' },
     { value: 'fa fa-calculator', label: 'fa fa-calculator' }
   ];
 

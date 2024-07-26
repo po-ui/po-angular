@@ -25,7 +25,7 @@ export interface PoItemListAction {
    * É possível usar qualquer um dos ícones da [Biblioteca de ícones](/guides/icons). conforme exemplo abaixo:
    * ```
    * <po-component
-   *  [p-property]="[{ label: 'PO ICON', icon: 'po-icon-news' }]">
+   *  [p-property]="[{ label: 'PHOSPHOR ICON', icon: 'ph ph-newspaper' }]">
    * </po-component>
    * ```
    *

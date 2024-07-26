@@ -43,9 +43,9 @@ export class SamplePoPageListLabsComponent implements OnInit {
   };
 
   public readonly iconOptions: Array<PoSelectOption> = [
-    { value: 'po-icon-news', label: 'po-icon-news' },
-    { value: 'po-icon-search', label: 'po-icon-search' },
-    { value: 'po-icon-world', label: 'po-icon-world' },
+    { value: 'ph ph-newspaper', label: 'ph ph-newspaper' },
+    { value: 'ph ph-magnifying-glass', label: 'ph ph-magnifying-glass' },
+    { value: 'ph ph-globe', label: 'ph ph-globe' },
     { value: 'fa fa-podcast', label: 'fa fa-podcast' }
   ];
 

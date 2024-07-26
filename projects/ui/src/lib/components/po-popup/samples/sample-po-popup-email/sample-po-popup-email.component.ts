@@ -41,9 +41,9 @@ export class SamplePoPopupEmailComponent implements OnInit {
 
   ngOnInit() {
     this.popupActions = [
-      { icon: 'po-icon-plus', label: 'Upper Text', type: 'default', action: this.upper.bind(this) },
-      { icon: 'po-icon-minus', label: 'Lower Text', type: 'default', action: this.lower.bind(this) },
-      { icon: 'po-icon-close', label: 'Clear', type: 'danger', action: this.clear.bind(this), separator: true }
+      { icon: 'ph ph-plus', label: 'Upper Text', type: 'default', action: this.upper.bind(this) },
+      { icon: 'ph ph-minus', label: 'Lower Text', type: 'default', action: this.lower.bind(this) },
+      { icon: 'ph ph-x', label: 'Clear', type: 'danger', action: this.clear.bind(this), separator: true }
     ];
 
     this.primaryAction = {

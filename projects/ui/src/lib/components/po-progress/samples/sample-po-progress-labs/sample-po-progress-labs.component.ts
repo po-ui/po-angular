@@ -17,10 +17,10 @@ export class SamplePoProgressLabsComponent implements OnInit {
   value: number;
 
   infoIconsOptions: Array<PoRadioGroupOption> = [
-    { label: 'po-icon-exclamation', value: 'po-icon-exclamation' },
-    { label: 'po-icon-ok', value: 'po-icon-ok' },
-    { label: 'po-icon-user', value: 'po-icon-user' },
-    { label: 'po-icon-no-signal', value: 'po-icon-no-signal' }
+    { label: 'ph ph-warning-circle', value: 'ph ph-warning-circle' },
+    { label: 'ph ph-check', value: 'ph ph-check' },
+    { label: 'ph ph-user', value: 'ph ph-user' },
+    { label: 'ph ph-cloud-slash', value: 'ph ph-cloud-slash' }
   ];
 
   propertiesOptions: Array<PoCheckboxGroupOption> = [

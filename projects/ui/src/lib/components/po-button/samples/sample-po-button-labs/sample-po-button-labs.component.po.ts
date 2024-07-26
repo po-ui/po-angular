@@ -28,15 +28,15 @@ export class SamplePoButtonLabsComponentPO {
   }
 
   get poRadioLogoPO() {
-    return this.getPoButtonIcon('po-icon-news');
+    return this.getPoButtonIcon('ph ph-newspaper');
   }
 
   get poRadioCalendar() {
-    return this.getPoButtonIcon('po-icon-calendar');
+    return this.getPoButtonIcon('ph ph-calendar-dots');
   }
 
   get poRadioUser() {
-    return this.getPoButtonIcon('po-icon-user');
+    return this.getPoButtonIcon('ph ph-user');
   }
   get poRadioNone() {
     return this.getPoButtonIcon('undefined');

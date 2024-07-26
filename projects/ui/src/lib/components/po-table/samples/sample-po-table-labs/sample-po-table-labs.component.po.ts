@@ -94,6 +94,6 @@ export class PoTableLabsPage {
   }
 
   get poTableActions() {
-    return element.all(by.css(`${this.sampleTable} po-table .po-icon.po-icon-more.po-clickable`));
+    return element.all(by.css(`${this.sampleTable} po-table .po-icon.ph ph-dots-three.po-clickable`));
   }
 }

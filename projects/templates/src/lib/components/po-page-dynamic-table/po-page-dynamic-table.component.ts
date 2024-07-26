@@ -683,7 +683,7 @@ export class PoPageDynamicTableComponent extends PoPageDynamicListBaseComponent 
    * {
    *   label: 'Update',
    *   action: this.updateTable.bind(this),
-   *   icon: 'po-icon-refresh'
+   *   icon: 'ph-arrows-clockwise'
    * }]
    *
    * updateTable() {
