@@ -12,6 +12,6 @@ export class SamplePoDatepickerBasicComponentPO {
   }
 
   get poDatepickerIcon() {
-    return element(by.css(`${this.sampleDatepicker} po-field-container .po-field-icon, .po-icon-calendar`));
+    return element(by.css(`${this.sampleDatepicker} po-field-container .po-field-icon, .ph ph-calendar-dots`));
   }
 }

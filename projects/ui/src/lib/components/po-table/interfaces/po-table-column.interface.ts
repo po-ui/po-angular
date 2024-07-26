@@ -72,7 +72,7 @@ export interface PoTableColumn {
    *
    * ```
    * { property: 'columnIcon', label: 'Like', type: 'icon', color: 'color-08', icons: [
-   *   { value: 'po-icon-star', action: () => this.notification() }
+   *   { value: 'ph ph-star', action: () => this.notification() }
    * ]},
    * ```
    */
@@ -118,15 +118,15 @@ export interface PoTableColumn {
    *
    * ```
    *  { property: 'columnIcon', label: 'Icons', type: 'icon', action: this.favorite.bind(this), icons: [
-   *    { value: 'delete', icon: 'po-icon-plus', color: 'color-06', action: this.add.bind(this), tooltip: 'Adiciona um novo item' },
-   *    { value: 'edit', icon: 'po-icon-edit', action: this.edit.bind(this) },
-   *    { value: 'delete', icon: 'po-icon-delete', color: 'color-12', action: this.remove.bind(this) }
+   *    { value: 'delete', icon: 'ph ph-plus', color: 'color-06', action: this.add.bind(this), tooltip: 'Adiciona um novo item' },
+   *    { value: 'edit', icon: 'ph ph-pencil-simple', action: this.edit.bind(this) },
+   *    { value: 'delete', icon: 'ph ph-trash', color: 'color-12', action: this.remove.bind(this) }
    *  ]},
    * ```
    *
    * ```
    *  ...
-   *  { id: 1, columnIcon: ['po-icon-edit', 'po-icon-remove', 'po-icon-star'] }
+   *  { id: 1, columnIcon: ['ph ph-pencil-simple', 'ph ph-trash', 'ph ph-star'] }
    *  ...
    *
    * ```

@@ -88,7 +88,7 @@ export class PoButtonBaseComponent {
    *
    * É possível usar qualquer um dos ícones da [Biblioteca de ícones](/guides/icons). conforme exemplo abaixo:
    * ```
-   * <po-button p-icon="po-icon-user" p-label="PO button"></po-button>
+   * <po-button p-icon="ph ph-user" p-label="PO button"></po-button>
    * ```
    * Também é possível utilizar outras fontes de ícones, por exemplo a biblioteca *Font Awesome*, da seguinte forma:
    * ```

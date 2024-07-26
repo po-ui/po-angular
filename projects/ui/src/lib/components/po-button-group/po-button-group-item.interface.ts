@@ -25,7 +25,7 @@ export interface PoButtonGroupItem {
    * É possível usar qualquer um dos ícones da [Biblioteca de ícones](/guides/icons). conforme exemplo abaixo:
    * ```
    * buttons: Array<PoButtonGroupItem> = [
-   *  { label: 'Button 1', action: this.action.bind(this), icon: 'po-icon-user' },
+   *  { label: 'Button 1', action: this.action.bind(this), icon: 'ph ph-user' },
    * ];
    * ```
    * Também é possível utilizar outras fontes de ícones, por exemplo a biblioteca *Font Awesome*, da seguinte forma:

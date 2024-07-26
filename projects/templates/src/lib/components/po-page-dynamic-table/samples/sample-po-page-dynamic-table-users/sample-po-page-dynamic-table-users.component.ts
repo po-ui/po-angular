@@ -80,27 +80,27 @@ export class SamplePoPageDynamicTableUsersComponent implements OnInit {
       label: 'Actions Right',
       action: this.onClickActionsSide.bind(this),
       visible: this.isVisibleActionsRight.bind(this),
-      icon: 'po-icon-arrow-right'
+      icon: 'ph ph-caret-right'
     },
     {
       label: 'Actions Left',
       action: this.onClickActionsSide.bind(this),
       visible: this.isVisibleActionsLeft.bind(this),
-      icon: 'po-icon-arrow-left'
+      icon: 'ph ph-caret-left'
     },
     {
       label: 'Fixed Filter',
       action: this.onClickFixedFilter.bind(this),
       visible: this.isVisibleFixedFilter.bind(this),
-      icon: 'po-icon-lock'
+      icon: 'ph ph-lock'
     },
     {
       label: 'Not Fixed Filter',
       action: this.onClickFixedFilter.bind(this),
       visible: this.isVisibleNotFixedFilter.bind(this),
-      icon: 'po-icon-lock-off'
+      icon: 'ph ph-lock-open'
     },
-    { label: 'Print', action: this.printPage.bind(this), icon: 'po-icon-print' }
+    { label: 'Print', action: this.printPage.bind(this), icon: 'ph ph-printer' }
   ];
 
   tableCustomActions: Array<PoPageDynamicTableCustomTableAction> = [
@@ -108,13 +108,13 @@ export class SamplePoPageDynamicTableUsersComponent implements OnInit {
       label: 'Details',
       action: this.onClickUserDetail.bind(this),
       disabled: this.isUserInactive.bind(this),
-      icon: 'po-icon-user'
+      icon: 'ph ph-user'
     },
     {
       label: 'Dependents',
       action: this.onClickDependents.bind(this),
       visible: this.hasDependents.bind(this),
-      icon: 'po-icon-user'
+      icon: 'ph ph-user'
     }
   ];
 
@@ -126,7 +126,7 @@ export class SamplePoPageDynamicTableUsersComponent implements OnInit {
       {
         label: 'Download .csv',
         action: this.usersService.downloadCsv.bind(this.usersService, this.serviceApi),
-        icon: 'po-icon-download'
+        icon: 'ph ph-download-simple'
       }
     ];
   }

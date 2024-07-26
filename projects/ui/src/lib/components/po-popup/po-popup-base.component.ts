@@ -196,7 +196,7 @@ export class PoPopupBaseComponent {
    * de abertura no mesmo e com isso, invocará a função `toggle`, por exemplo:
    *
    * ```
-   * <span #icon class="po-icon po-icon-credit-payment" (click)="popup.toggle()">
+   * <span #icon class="ph ph-credit-card" (click)="popup.toggle()">
    *   Credit Actions
    * </span>
    *

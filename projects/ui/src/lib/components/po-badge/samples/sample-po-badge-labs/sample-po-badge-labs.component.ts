@@ -19,7 +19,7 @@ export class SamplePoBadgeLabsComponent implements OnInit {
   iconsOptions: Array<PoRadioGroupOption> = [
     { label: 'ph-check', value: 'ph ph-check' },
     { label: 'ph-check-circle', value: 'ph ph-check-circle' },
-    { label: 'po-icon-ok', value: 'po-icon-ok' },
+    { label: 'ph ph-check', value: 'ph ph-check' },
     { label: 'fa-minus', value: 'fa fa-minus' },
     { label: 'true (Enabled when status is settled)', value: 'true', disabled: true },
     { label: 'None', value: 'false' }

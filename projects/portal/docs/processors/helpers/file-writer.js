@@ -117,12 +117,12 @@ import { Component } from '@angular/core';
 export class Sample{{component}}ViewComponent {
   hideSampleCodeTabs = true;
   sampleCodeButtonLabel = 'Talk is cheap, show me the code!';
-  sampleCodeButtonIcon = 'po-icon po-icon-plus';
+  sampleCodeButtonIcon = 'ph ph-plus';
 
   toggleSampleCodeTabs() {
     this.hideSampleCodeTabs = !this.hideSampleCodeTabs;
     this.sampleCodeButtonLabel = this.hideSampleCodeTabs ? 'Talk is cheap, show me the code!' : 'Okay, hide the code';
-    this.sampleCodeButtonIcon = this.hideSampleCodeTabs ? 'po-icon-plus' : 'po-icon-minus';
+    this.sampleCodeButtonIcon = this.hideSampleCodeTabs ? 'ph ph-plus' : 'ph ph-minus';
   }
 }
 `;
@@ -203,7 +203,7 @@ export class Doc{{component}}Component implements OnInit, OnDestroy {
   activeTab = 'doc';
 
   actions: Array<{}> = [
-    { label: 'Documentação', action: this.goBack.bind(this), icon: 'po-icon-document-filled' },
+    { label: 'Documentação', action: this.goBack.bind(this), icon: 'ph ph-file-text' },
     { label: 'Colabore', action: this.improveDocs.bind(this) },
   ];
 

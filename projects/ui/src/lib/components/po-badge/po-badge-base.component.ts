@@ -90,7 +90,7 @@ export class PoBadgeBaseComponent {
    * ```
    * É possível usar qualquer um dos ícones da [Biblioteca de ícones](/guides/icons). conforme exemplo abaixo:
    * ```
-   * <po-badge p-icon="po-icon-user"></po-badge>
+   * <po-badge p-icon="ph ph-user"></po-badge>
    * ```
    * Também é possível utilizar outras fontes de ícones, por exemplo a biblioteca *Font Awesome*, da seguinte forma:
    * ```

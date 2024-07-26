@@ -20,17 +20,17 @@ export class SamplePoMenuHumanResourcesComponent {
   menuItemSelected: string;
 
   menus: Array<PoMenuItem> = [
-    { label: 'Register user', action: this.printMenuAction.bind(this), icon: 'po-icon-user', shortLabel: 'Register' },
+    { label: 'Register user', action: this.printMenuAction.bind(this), icon: 'ph ph-user', shortLabel: 'Register' },
     {
       label: 'Timekeeping',
       action: this.printMenuAction.bind(this),
-      icon: 'po-icon-clock',
+      icon: 'ph ph-clock',
       shortLabel: 'Timekeeping',
       badge: { value: 1 }
     },
     {
       label: 'Useful links',
-      icon: 'po-icon-share',
+      icon: 'ph ph-share',
       shortLabel: 'Links',
       subItems: [
         { label: 'Ministry of Labour', action: this.printMenuAction.bind(this), link: 'http://trabalho.gov.br/' },
@@ -39,7 +39,7 @@ export class SamplePoMenuHumanResourcesComponent {
     },
     {
       label: 'Benefits',
-      icon: 'po-icon-star',
+      icon: 'ph ph-star',
       shortLabel: 'Benefits',
       subItems: [
         {

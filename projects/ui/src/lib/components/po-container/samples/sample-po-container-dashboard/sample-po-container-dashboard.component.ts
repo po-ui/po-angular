@@ -36,10 +36,10 @@ export class SamplePoContainerDashboardComponent implements AfterContentChecked,
   items: Array<object>;
 
   public readonly actions: Array<PoPageAction> = [
-    { label: 'Share', action: this.modalOpen.bind(this), icon: 'po-icon-share' },
+    { label: 'Share', action: this.modalOpen.bind(this), icon: 'ph ph-share' },
     {
       label: 'Disable notification',
-      icon: 'po-icon-notification',
+      icon: 'ph ph-bell',
       action: this.disableNotification.bind(this),
       disabled: () => this.isSubscribed
     }

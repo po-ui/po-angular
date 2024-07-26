@@ -10,11 +10,11 @@ export class SamplePoMenuPanelCustomerComponent {
   title: string = 'Customers';
 
   public readonly menuItems: Array<PoMenuPanelItem> = [
-    { label: 'Home', action: this.changeTitle.bind(this), icon: 'po-icon-home' },
-    { label: 'Customers', action: this.changeTitle.bind(this), icon: 'po-icon-user' },
-    { label: 'New Sale', action: this.changeTitle.bind(this), icon: 'po-icon-money' },
-    { label: 'Reports', action: this.changeTitle.bind(this), icon: 'po-icon-news' },
-    { label: 'Settings', action: this.changeTitle.bind(this), icon: 'po-icon-settings' }
+    { label: 'Home', action: this.changeTitle.bind(this), icon: 'ph ph-house-line' },
+    { label: 'Customers', action: this.changeTitle.bind(this), icon: 'ph ph-user' },
+    { label: 'New Sale', action: this.changeTitle.bind(this), icon: 'ph ph-money' },
+    { label: 'Reports', action: this.changeTitle.bind(this), icon: 'ph ph-newspaper' },
+    { label: 'Settings', action: this.changeTitle.bind(this), icon: 'ph ph-gear' }
   ];
 
   changeTitle(menu: PoMenuPanelItem) {
