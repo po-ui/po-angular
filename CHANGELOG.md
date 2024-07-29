@@ -2,6 +2,14 @@
 
 All notable changes to this project will be documented in this file. See [standard-version](https://github.com/conventional-changelog/standard-version) for commit guidelines.
 
+## [17.21.0](https://github.com/po-ui/po-angular/compare/v17.20.0...v17.21.0) (2024-07-29)
+
+
+### Features
+
+* **mask:** disponibiliza `po-mask` ([edcc5db](https://github.com/po-ui/po-angular/commit/edcc5db34a67ac5f5e63230a480f0c2035498600))
+* **upload:** adiciona o parâmetro `extraFormData` no evento `p-upload` ([08cf174](https://github.com/po-ui/po-angular/commit/08cf1742ee845bacfcdd461141fc94e63aea7e25)), closes [#1395](https://github.com/po-ui/po-angular/issues/1395)
+
 ## [17.20.0](https://github.com/po-ui/po-angular/compare/v17.19.0...v17.20.0) (2024-07-22)
 
 
