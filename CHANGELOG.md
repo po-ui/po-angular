@@ -10,7 +10,7 @@ All notable changes to this project will be documented in this file. See [standa
 
 Atualize seu projeto para utilizar a versão 18 do Angular, acesse a documentação [Guia de Atualização do Angular](https://update.angular.io/) para fazer a migração completa.
 
-* **tabs:** removido propriedade `p-smail`
+* **tabs:** removido propriedade `p-small`
 * **tag:** removido propriedade `p-inverse`
 
 ### Code Refactoring
