@@ -2,6 +2,29 @@
 
 All notable changes to this project will be documented in this file. See [standard-version](https://github.com/conventional-changelog/standard-version) for commit guidelines.
 
+## [18.0.0](https://github.com/po-ui/po-angular/compare/v17.21.0...v18.0.0) (2024-07-29)
+
+### BREAKING CHANGES
+
+* **angular:** deve ser utilizado o Angular v18
+
+Atualize seu projeto para utilizar a versão 18 do Angular, acesse a documentação [Guia de Atualização do Angular](https://update.angular.io/) para fazer a migração completa.
+
+* **tabs:** removido propriedade `p-smail`
+* **tag:** removido propriedade `p-inverse`
+
+### Code Refactoring
+
+* **components:** remove depreciações ([39adc2d](https://github.com/po-ui/po-angular/commit/39adc2d55b99c28fb2eb711860bbf9948181a35b))
+
+
+### Features
+
+* **icon:** deprecia a lib Po Icon ([59aff87](https://github.com/po-ui/po-angular/commit/59aff8792d89813a421f2c8e2ffd4da3a7d81025))
+* **dynamic-view:** adiciona `textColor` ([39adc2d](https://github.com/po-ui/po-angular/commit/39adc2d55b99c28fb2eb711860bbf9948181a35b))
+
+
+
 ## [17.21.0](https://github.com/po-ui/po-angular/compare/v17.20.0...v17.21.0) (2024-07-29)
 
 
@@ -10,15 +33,6 @@ All notable changes to this project will be documented in this file. See [standa
 * **mask:** disponibiliza `po-mask` ([edcc5db](https://github.com/po-ui/po-angular/commit/edcc5db34a67ac5f5e63230a480f0c2035498600))
 * **upload:** adiciona o parâmetro `extraFormData` no evento `p-upload` ([08cf174](https://github.com/po-ui/po-angular/commit/08cf1742ee845bacfcdd461141fc94e63aea7e25)), closes [#1395](https://github.com/po-ui/po-angular/issues/1395)
 
-## [18.0.0-rc.0](https://github.com/po-ui/po-angular/compare/v18.0.0-next.0...v18.0.0-rc.0) (2024-07-24)
-
-### Code Refactoring
-
-* **components:** remove depreciações ([39adc2d](https://github.com/po-ui/po-angular/commit/39adc2d55b99c28fb2eb711860bbf9948181a35b))
-
-### Features
-
-* **angular:** build v18 ([26d4854](https://github.com/po-ui/po-angular/commit/26d4854a2d54557664c6c4cdf6eaa71c4975f6a7))
 
 ## [17.20.0](https://github.com/po-ui/po-angular/compare/v17.19.0...v17.20.0) (2024-07-22)
 
