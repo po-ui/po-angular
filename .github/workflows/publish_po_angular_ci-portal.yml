@@ -31,7 +31,7 @@ jobs:
         path: po-tslint
 
     - name: Install and Build
-      run: npm install && npm run build
+      run: npm install --force && npm run build
       working-directory: ${{env.WORKING_DIR}}
 
     # PUBLISH PORTAL
