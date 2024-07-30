@@ -43,8 +43,8 @@ module.exports = function (config) {
     reporters: ['progress', 'kjhtml'],
     port: 9876,
     colors: true,
-    logLevel: config.LOG_INFO,
-    autoWatch: true,
+    logLevel: config.LOG_DEBUG,
+    autoWatch: false,
     browsers: ['ChromeHeadless'],
     customLaunchers: {
       ChromeHeadless: {
@@ -52,8 +52,11 @@ module.exports = function (config) {
         flags: ['--no-sandbox', '--headless', '--disable-gpu', '--disable-web-security', '--remote-debugging-port=9222']
       }
     },
-    singleRun: false,
+    singleRun: true,
     restartOnFileChange: true,
-    browserNoActivityTimeout: 30000
+    browserNoActivityTimeout: 30000,
+    browserDisconnectTimeout: 30000,
+    captureTimeout: 30000,
+    browserDisconnectTolerance: 3
   });
 };

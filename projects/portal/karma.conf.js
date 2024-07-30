@@ -23,10 +23,14 @@ module.exports = function (config) {
     reporters: ['progress', 'kjhtml'],
     port: 9876,
     colors: true,
-    logLevel: config.LOG_INFO,
-    autoWatch: true,
+    logLevel: config.LOG_DEBUG,
+    autoWatch: false,
     browsers: ['Chrome'],
-    singleRun: false,
-    restartOnFileChange: true
+    singleRun: true,
+    restartOnFileChange: true,
+    browserNoActivityTimeout: 30000,
+    browserDisconnectTimeout: 30000,
+    captureTimeout: 30000,
+    browserDisconnectTolerance: 3
   });
 };
