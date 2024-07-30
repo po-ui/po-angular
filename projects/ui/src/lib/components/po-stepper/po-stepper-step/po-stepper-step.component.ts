@@ -1,4 +1,4 @@
-import { Component, EventEmitter, Input, Output } from '@angular/core';
+import { Component, EventEmitter, Input, OnChanges, Output, SimpleChanges, TemplateRef } from '@angular/core';
 
 import { getShortBrowserLanguage, convertToBoolean, isTypeof } from './../../../utils/util';
 import { poLocaleDefault } from './../../../services/po-language/po-language.constant';
@@ -24,7 +24,7 @@ const poStepLiteralsDefault = {
   selector: 'po-stepper-step',
   templateUrl: 'po-stepper-step.component.html'
 })
-export class PoStepperStepComponent {
+export class PoStepperStepComponent implements OnChanges {
   // Conteúdo que será repassado para o componente `p-circle-content` através da propriedade `p-content`.
   @Input('p-circle-content') circleContent: any;
 
@@ -48,10 +48,14 @@ export class PoStepperStepComponent {
     ...poStepLiteralsDefault[getShortBrowserLanguage()]
   };
 
+  stepSizeOriginal: number;
   private _label: string;
   private _status: PoStepperStatus;
   private _stepIcons?: boolean = false;
   private _stepSize: number = poStepperStepSizeDefault;
+  private _iconDefault?: string | TemplateRef<void>;
+  private _iconDone?: string | TemplateRef<void>;
+  private _iconActive?: string | TemplateRef<void>;
 
   // Label do *step*.
   @Input('p-label') set label(value: string) {
@@ -106,6 +110,40 @@ export class PoStepperStepComponent {
     return this.isVerticalOrientation ? undefined : this.halfStepSize;
   }
 
+  @Input('p-icon-default') set iconDefault(value: string | TemplateRef<void>) {
+    this._iconDefault = value;
+  }
+
+  get iconDefault(): string | TemplateRef<void> {
+    return this._iconDefault;
+  }
+
+  @Input('p-step-icon-done') set iconDone(value: string | TemplateRef<void>) {
+    this._iconDone = value;
+  }
+
+  get iconDone(): string | TemplateRef<void> {
+    return this._iconDone;
+  }
+
+  @Input('p-step-icon-active') set iconActive(value: string | TemplateRef<void>) {
+    this._iconActive = value;
+  }
+
+  get iconActive(): string | TemplateRef<void> {
+    return this._iconActive;
+  }
+
+  ngOnChanges(changes: SimpleChanges): void {
+    if (this.stepSizeOriginal === undefined || changes['stepSize']) {
+      this.stepSizeOriginal = this._stepSize;
+    }
+
+    if (changes['status'] || changes['stepSize']) {
+      this.setDefaultStepSize();
+    }
+  }
+
   getStatusClass(status: string): string {
     switch (status) {
       case PoStepperStatus.Active:
@@ -130,6 +168,16 @@ export class PoStepperStepComponent {
   onEnter(): void {
     if (this.status !== PoStepperStatus.Disabled) {
       this.enter.emit();
+    }
+  }
+
+  setDefaultStepSize(): void {
+    if (this._stepSize === poStepperStepSizeDefault && this._status === PoStepperStatus.Active) {
+      this._stepSize = poStepperStepSizeDefault + 8;
+    } else if (this.stepSizeOriginal === poStepperStepSizeDefault && this._status === PoStepperStatus.Error) {
+      this._stepSize = poStepperStepSizeDefault + 8;
+    } else {
+      this._stepSize = this.stepSizeOriginal;
     }
   }
 }

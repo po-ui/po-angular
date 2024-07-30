@@ -1,4 +1,4 @@
-import { AfterContentInit, Component, ElementRef, Input } from '@angular/core';
+import { AfterContentInit, Component, ElementRef, Input, TemplateRef } from '@angular/core';
 import { Observable } from 'rxjs';
 
 import { uuid } from '../../../utils/util';
@@ -75,7 +75,7 @@ export class PoStepComponent implements AfterContentInit {
     | ((currentStep) => Observable<boolean>);
 
   /** Título que será exibido descrevendo o passo (*step*). */
-  @Input('p-label') label: string;
+  @Input('p-label') label: string = '';
 
   // ID do step
   id?: string = uuid();
@@ -92,6 +92,42 @@ export class PoStepComponent implements AfterContentInit {
   get status() {
     return this._status;
   }
+
+  /**
+   * @optional
+   *
+   * @description
+   * Define o ícone padrão do step em seu status *default*.
+   * Esta propriedade permite usar ícones da [Biblioteca de ícones](/guides/icons) ou da biblioteca [Phosphor](https://phosphoricons.com/).
+   *
+   * Exemplo usando a biblioteca de ícones padrão:
+   * ```
+   * <po-stepper>
+   *    ...
+   *    <po-step p-icon-default="po-icon po-icon-pin"></po-step>
+   * </po-stepper>
+   * ```
+   * Exemplo usando a biblioteca *Phosphor*:
+   * ```
+   * <po-stepper>
+   *    ...
+   *    <po-step p-icon-default="ph ph-map-pin"></po-step>
+   * </po-stepper>
+   * ```
+   * Outra opção seria a customização do ícone através do `TemplateRef`, conforme exemplo abaixo:
+   * ```
+   * <po-stepper>
+   *    ...
+   *    <po-step [p-icon-default]="template"></po-step>
+   * </po-stepper>
+   *
+   * <ng-template #template>
+   *    <i class="ph ph-shopping-cart"></i>
+   * </ng-template
+   * ```
+   * > Deve-se usar `font-size: inherit` para ajustar ícones que não se ajustam automaticamente.
+   */
+  @Input('p-icon-default') iconDefault?: string | TemplateRef<void>;
 
   constructor(private elementRef: ElementRef) {}
 

@@ -212,6 +212,32 @@ describe('PoStepperStepComponent:', () => {
 
       expect(component.enter.emit).not.toHaveBeenCalled();
     });
+
+    it('setDefaultStepSize: should increase step size by 8px if status is `Active` and step size is default.', () => {
+      (component as any)._stepSize = 24;
+      component.status = PoStepperStatus.Active;
+
+      component.setDefaultStepSize();
+
+      expect((component as any)._stepSize).toBe(32);
+    });
+
+    it('setDefaultStepSize: should increase step size by 8px if status is `Error` and stepSizeOriginal is default.', () => {
+      component.stepSizeOriginal = 24;
+      component.status = PoStepperStatus.Error;
+
+      component.setDefaultStepSize();
+
+      expect((component as any)._stepSize).toBe(32);
+    });
+
+    it('setDefaultStepSize: should keep the original step size if step size is not default.', () => {
+      component.stepSizeOriginal = 64;
+
+      component.setDefaultStepSize();
+
+      expect((component as any)._stepSize).toBe(64);
+    });
   });
 
   describe('Templates:', () => {
@@ -220,7 +246,7 @@ describe('PoStepperStepComponent:', () => {
     it(`should find 'po-stepper-step-container' and style.width is stepSize value if 'isVerticalOrientation' is 'true'.`, () => {
       component.orientation = PoStepperOrientation.Vertical;
       component.stepSize = 60;
-
+      component.label = '';
       fixture.detectChanges();
 
       const stepperContainer = elementByClass('po-stepper-step-container');
@@ -365,13 +391,32 @@ describe('PoStepperStepComponent:', () => {
 
     it(`should create class 'po-stepper-step-dashed-border-vertical' if 'nextStatus' is disabled and position is vertical`, () => {
       component.orientation = PoStepperOrientation.Vertical;
-      component.nextStatus = 'disabled';
+      component.nextStatus = PoStepperStatus.Disabled;
+      component.label = '';
 
       fixture.detectChanges();
 
       const stepperDashedBorderVertical = elementByClass('po-stepper-step-dashed-border-vertical');
 
       expect(stepperDashedBorderVertical).toBeTruthy();
+    });
+
+    it('should change `tabindex` to `-1` if component is disabled', () => {
+      component.status = PoStepperStatus.Disabled;
+      fixture.detectChanges();
+
+      const poStepperStepElement = nativeElement.querySelector('.po-stepper-step[tabindex="-1"]');
+
+      expect(poStepperStepElement).toBeTruthy();
+    });
+
+    it('should change `tabindex` to `0` if component isn’t disabled', () => {
+      component.status = PoStepperStatus.Active;
+      fixture.detectChanges();
+
+      const poStepperStepElement = nativeElement.querySelector('.po-stepper-step[tabindex="0"]');
+
+      expect(poStepperStepElement).toBeTruthy();
     });
   });
 });

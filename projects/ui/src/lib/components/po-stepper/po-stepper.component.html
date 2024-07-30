@@ -1,5 +1,5 @@
 <div class="po-stepper po-stepper-{{ orientation }}">
-  <div class="po-stepper-container">
+  <div class="po-stepper-container po-md-12" role="tablist">
     <po-stepper-step
       *ngFor="let step of stepList; let index = index; trackBy: trackByFn"
       class="po-stepper-step-position"
@@ -13,11 +13,14 @@
       (p-activated)="onStepActive(step)"
       (p-click)="changeStep(index, step)"
       (p-enter)="changeStep(index, step)"
+      [p-icon-default]="step.iconDefault"
+      [p-step-icon-active]="iconActive"
+      [p-step-icon-done]="iconDone"
     >
     </po-stepper-step>
   </div>
 
-  <div *ngIf="usePoSteps" class="po-stepper-content">
+  <div *ngIf="usePoSteps" class="po-stepper-content" [ngClass]="{ 'po-md-12': orientation === 'horizontal' }">
     <ng-content></ng-content>
   </div>
 </div>

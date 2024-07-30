@@ -200,6 +200,13 @@ export class PoStepperComponent extends PoStepperBaseComponent implements AfterC
     return canActiveNextStep$.pipe(
       tap(isCanActiveNextStep => {
         currentActiveStep.status = this.getStepperStatusByCanActive(isCanActiveNextStep);
+        const { steps, stepIndex } = this.getStepsAndIndex(currentActiveStep);
+        const nextIndex = stepIndex + 1;
+
+        if (nextIndex < steps.length) {
+          const nextStep = steps[nextIndex];
+          nextStep.status = isCanActiveNextStep ? PoStepperStatus.Default : PoStepperStatus.Disabled;
+        }
       }),
       catchError(err => {
         currentActiveStep.status = PoStepperStatus.Error;

@@ -25,7 +25,7 @@ export class SamplePoStepperLabsComponent implements OnInit {
     {
       property: 'orientation',
       options: [
-        { value: 'vertical', label: 'Vertical' },
+        { value: 'vertical', label: 'Vertical', checked: true },
         { value: 'horizontal', label: 'Horizontal' }
       ],
       gridLgColumns: 4
@@ -35,6 +35,18 @@ export class SamplePoStepperLabsComponent implements OnInit {
       gridLgColumns: 4,
       property: 'stepIcons',
       type: 'boolean'
+    },
+    {
+      label: 'Step Icon Active Custom',
+      help: 'Ex.: po-icon po-icon-light',
+      gridLgColumns: 4,
+      property: 'iconActive'
+    },
+    {
+      label: 'Step Icon Done Custom',
+      help: 'Ex.: po-icon po-icon-arrow-right',
+      gridLgColumns: 4,
+      property: 'iconDone'
     }
   ];
 
@@ -43,7 +55,13 @@ export class SamplePoStepperLabsComponent implements OnInit {
       divider: 'Step form',
       property: 'label',
       label: 'Step Label',
-      required: true,
+      gridMdColumns: 6,
+      gridXlColumns: 6
+    },
+    {
+      property: 'iconDefault',
+      label: 'Step Icon Default Custom',
+      help: 'Ex.: po-icon po-icon-help',
       gridMdColumns: 6,
       gridXlColumns: 6
     }
@@ -57,6 +75,8 @@ export class SamplePoStepperLabsComponent implements OnInit {
 
   addItem(stepItem: PoStepperItem) {
     this.steps = [...this.steps, { ...stepItem }];
+    this.stepItem = {};
+    this.changeDetector.detectChanges();
   }
 
   changeStep(event) {
@@ -69,5 +89,6 @@ export class SamplePoStepperLabsComponent implements OnInit {
     this.properties = {};
     this.steps = [];
     this.event = undefined;
+    this.properties.orientation = 'horizontal';
   }
 }

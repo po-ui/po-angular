@@ -1,3 +1,16 @@
-<div class="po-stepper-label">
+<div
+  [ngClass]="{
+    'po-stepper-label-vertical': isVerticalOrientation,
+    'po-stepper-label-active': status === 'active' || status === 'error',
+    'po-stepper-label': content && content.length > 0,
+    'po-stepper-label-none': !content || content.length === 0,
+    'po-stepper-label-done': status === 'done',
+    'po-link': status !== 'disabled'
+  }"
+  #labelElement
+  [p-tooltip]="tooltipContent"
+  (mouseover)="onMouseOver()"
+  (mouseout)="onMouseOut()"
+>
   {{ content }}
 </div>

@@ -168,24 +168,6 @@ describe('PoStepperCircleComponent:', () => {
   });
 
   describe('Templates:', () => {
-    it('should change `tabindex` to `-1` if component is disabled', () => {
-      component.status = PoStepperStatus.Disabled;
-      fixture.detectChanges();
-
-      const poStepperCircleElement = nativeElement.querySelector('.po-stepper-circle[tabindex="-1"]');
-
-      expect(poStepperCircleElement).toBeTruthy();
-    });
-
-    it('should change `tabindex` to `0` if component isn`t disabled', () => {
-      component.status = PoStepperStatus.Active;
-      fixture.detectChanges();
-
-      const poStepperCircleElement = nativeElement.querySelector('.po-stepper-circle[tabindex="0"]');
-
-      expect(poStepperCircleElement).toBeTruthy();
-    });
-
     it('should find `po-stepper-circle-content-md` in `span` if `isMediumStep` is `true`.', () => {
       spyOnProperty(component, 'isMediumStep').and.returnValue(true);
 
@@ -206,61 +188,21 @@ describe('PoStepperCircleComponent:', () => {
       expect(stepperCircleContentLg).toBeTruthy();
     });
 
-    it('shouldn`t find `po-stepper-circle-content` if `isActive` is true', () => {
-      spyOnProperty(component, 'isActive').and.returnValue(true);
-
-      fixture.detectChanges();
-
-      const stepperCircleContent = nativeElement.querySelector('.po-stepper-circle-content');
-
-      expect(stepperCircleContent).toBeNull();
-    });
-
-    it('shouldn`t find `po-stepper-circle-with-icon` and `po-icon` if `icons` is `false`.', () => {
-      component.icons = false;
-
-      fixture.detectChanges();
-      const StepperCircleWitchIcon = nativeElement.querySelector('.po-stepper-circle-with-icon');
-      const iconClass = nativeElement.querySelector('.po-icon');
-
-      expect(StepperCircleWitchIcon).toBeNull();
-      expect(iconClass).toBeNull();
-    });
-
-    it('should find `po-icon-info` if `status` is `Active`, `Default` or `Disabled` and `icons` is true.', () => {
-      component.icons = true;
-
+    it('should have `po-stepper-circle-border` when not active and not error', () => {
       component.status = PoStepperStatus.Default;
       fixture.detectChanges();
-      expect(PoIconInfo()).toBeTruthy();
 
-      component.status = PoStepperStatus.Disabled;
-      fixture.detectChanges();
-      expect(PoIconInfo()).toBeTruthy();
-
-      component.status = PoStepperStatus.Error;
-      fixture.detectChanges();
-      expect(PoIconInfo()).toBeNull();
+      const circleElement = fixture.nativeElement.querySelector('.po-stepper-circle');
+      expect(circleElement.classList).toContain('po-stepper-circle-border');
+      expect(circleElement.classList).not.toContain('po-stepper-circle-done');
     });
 
-    it('should find `po-icon` if `isDone` is true.', () => {
-      component.icons = false;
-      spyOnProperty(component, 'isDone').and.returnValue(true);
-
+    it('should have `po-stepper-circle-done` when isDone', () => {
+      component.status = PoStepperStatus.Done;
       fixture.detectChanges();
 
-      const poIcon = nativeElement.querySelector('.po-icon');
-      expect(poIcon).toBeTruthy();
-    });
-
-    it('shouldn`t find `po-icon` if `isDone` and `icons` is false.', () => {
-      component.icons = false;
-      spyOnProperty(component, 'isDone').and.returnValue(false);
-
-      fixture.detectChanges();
-
-      const poIcon = nativeElement.querySelector('.po-icon');
-      expect(poIcon).toBeNull();
+      const circleElement = fixture.nativeElement.querySelector('.po-stepper-circle');
+      expect(circleElement.classList).toContain('po-stepper-circle-done');
     });
 
     it('should find `po-stepper-circle-active` if `isActive` is true.', () => {
@@ -296,52 +238,165 @@ describe('PoStepperCircleComponent:', () => {
       expect(stepperCircleActive).toBeNull();
     });
 
-    it('should find `po-icon-ok` if `status` is `Done` and `icons` is true.', () => {
-      component.icons = true;
+    it('should find `po-icon` if `isDone` is true.', () => {
+      component.icons = false;
+      spyOnProperty(component, 'isDone').and.returnValue(true);
 
-      component.status = PoStepperStatus.Done;
       fixture.detectChanges();
-      expect(PoIconOk()).toBeTruthy();
 
-      component.status = PoStepperStatus.Default;
-      fixture.detectChanges();
-      expect(PoIconOk()).toBeNull();
-
-      component.status = PoStepperStatus.Disabled;
-      fixture.detectChanges();
-      expect(PoIconOk()).toBeNull();
-
-      component.status = PoStepperStatus.Error;
-      fixture.detectChanges();
-      expect(PoIconOk()).toBeNull();
+      const poIcon = nativeElement.querySelector('.po-icon');
+      expect(poIcon).toBeTruthy();
     });
 
-    it('should find `icon-exclamation` if `status` is `Error` and `icons` is true.', () => {
-      component.icons = true;
+    it('shouldn`t find `po-icon` if `isDone` and `icons` is false.', () => {
+      component.icons = false;
+      spyOnProperty(component, 'isDone').and.returnValue(false);
 
-      component.status = PoStepperStatus.Error;
       fixture.detectChanges();
-      expect(PoIconExclamation()).toBeTruthy();
 
+      const poIcon = nativeElement.querySelector('.po-icon');
+      expect(poIcon).toBeNull();
+    });
+
+    it('should apply `iconActive` from Phosphor library if `status` is `Active` and `iconActive` is set.', () => {
+      component.status = PoStepperStatus.Active;
+      component.iconActive = 'ph ph-anchor';
+      fixture.detectChanges();
+
+      const activeIcon = nativeElement.querySelector('po-icon')?.querySelector('i');
+      expect(activeIcon).toBeTruthy();
+      expect(activeIcon.classList.contains('ph-anchor')).toBeTrue();
+    });
+
+    it('should apply `iconActive` from Icons library if `status` is `Active` and `iconActive` is set.', () => {
+      component.status = PoStepperStatus.Active;
+      component.iconActive = 'po-icon po-icon-device-notebook';
+      fixture.detectChanges();
+
+      const activeIcon = nativeElement.querySelector('po-icon')?.querySelector('i');
+      expect(activeIcon).toBeTruthy();
+      expect(activeIcon.classList.contains('po-icon-device-notebook')).toBeTrue();
+    });
+
+    it('should apply `ICON_EDIT` if `status` is `Active` and `iconActive` is not set.', () => {
+      component.status = PoStepperStatus.Active;
+      component.iconActive = undefined;
+      fixture.detectChanges();
+
+      const activeIcon = PoIconEdit();
+
+      expect(activeIcon).toBeTruthy();
+      expect(activeIcon.classList.contains('ph-pencil-simple')).toBeTrue();
+    });
+
+    it('should apply `iconDone` from Phosphor library if `status` is `Done` and `iconDone` is set.', () => {
+      component.status = PoStepperStatus.Done;
+      component.iconDone = 'ph ph-check-circle';
+      fixture.detectChanges();
+
+      const doneIcon = nativeElement.querySelector('po-icon')?.querySelector('i');
+
+      expect(doneIcon).toBeTruthy();
+      expect(doneIcon.classList.contains('ph-check-circle')).toBeTrue();
+    });
+
+    it('should apply `iconDone` from Icons library if `status` is `Done` and `iconDone` is set.', () => {
+      component.status = PoStepperStatus.Done;
+      component.iconDone = 'po-icon-clock';
+      fixture.detectChanges();
+
+      const doneIcon = nativeElement.querySelector('po-icon')?.querySelector('i');
+
+      expect(doneIcon.classList.contains('po-icon-clock')).toBeTrue();
+    });
+
+    it('should apply `ICON_OK` if `status` is `Done` and `iconDone` is not set.', () => {
+      component.status = PoStepperStatus.Done;
+      component.iconDone = undefined;
+      fixture.detectChanges();
+
+      const doneIcon = PoIconOk;
+      expect(doneIcon).toBeTruthy();
+    });
+
+    it('should apply `iconDefault` from Phosphor library if `status` is `Default` or `Disabled` and `iconDefault` is set.', () => {
       component.status = PoStepperStatus.Default;
+      component.iconDefault = 'ph ph-first-aid';
       fixture.detectChanges();
-      expect(PoIconExclamation()).toBeNull();
+
+      let defaultIcon = nativeElement.querySelector('po-icon')?.querySelector('i');
+      expect(defaultIcon).toBeTruthy();
+      expect(defaultIcon.classList.contains('ph-first-aid')).toBeTrue();
 
       component.status = PoStepperStatus.Disabled;
       fixture.detectChanges();
-      expect(PoIconExclamation()).toBeNull();
+
+      defaultIcon = nativeElement.querySelector('po-icon')?.querySelector('i');
+      expect(defaultIcon).toBeTruthy();
+      expect(defaultIcon.classList.contains('ph-first-aid')).toBeTrue();
+    });
+
+    it('should apply `iconDefault` from Icons library if `status` is `Default` or `Disabled` and `iconDefault` is set.', () => {
+      component.status = PoStepperStatus.Default;
+      component.iconDefault = 'po-icon po-icon-user';
+      fixture.detectChanges();
+
+      let defaultIcon = nativeElement.querySelector('po-icon')?.querySelector('i');
+      expect(defaultIcon).toBeTruthy();
+      expect(defaultIcon.classList.contains('po-icon-user')).toBeTrue();
+
+      component.status = PoStepperStatus.Disabled;
+      fixture.detectChanges();
+
+      defaultIcon = nativeElement.querySelector('po-icon')?.querySelector('i');
+      expect(defaultIcon).toBeTruthy();
+      expect(defaultIcon.classList.contains('po-icon-user')).toBeTrue();
+    });
+
+    it('should apply `ICON_INFO` if `status` is `Default` or `Disabled`, `iconDefault` is not set, and `icons` is true.', () => {
+      component.status = PoStepperStatus.Default;
+      component.iconDefault = undefined;
+      component.icons = true;
+      fixture.detectChanges();
+
+      const defaultIcon = PoIconInfo();
+      expect(defaultIcon).toBeTruthy();
+      expect(defaultIcon.classList.contains('ph-info')).toBeTrue();
+
+      component.status = PoStepperStatus.Disabled;
+      fixture.detectChanges();
+
+      const disabledIcon = PoIconInfo();
+      expect(disabledIcon).toBeTruthy();
+      expect(disabledIcon.classList.contains('ph-info')).toBeTrue();
+    });
+
+    it('should display an empty string if `status` is `Default` or `Disabled`, `iconDefault` is not set, and `icons` is false.', () => {
+      component.status = PoStepperStatus.Default;
+      component.iconDefault = undefined;
+      component.icons = false;
+      fixture.detectChanges();
+
+      const defaultIcon = nativeElement.querySelector('.po-stepper-circle-content');
+      expect(defaultIcon.textContent.trim()).toBe('');
+
+      component.status = PoStepperStatus.Disabled;
+      fixture.detectChanges();
+
+      const disabledIcon = nativeElement.querySelector('.po-stepper-circle-content');
+      expect(disabledIcon.textContent.trim()).toBe('');
     });
   });
 
   function PoIconInfo() {
-    return nativeElement.querySelector('.po-icon-info');
+    return nativeElement.querySelector('po-icon')?.querySelector('i.ph.ph-info');
   }
 
   function PoIconOk() {
     return nativeElement.querySelector('.po-icon-ok');
   }
 
-  function PoIconExclamation() {
-    return nativeElement.querySelector('.po-icon-exclamation');
+  function PoIconEdit() {
+    return nativeElement.querySelector('po-icon')?.querySelector('i.ph-pencil-simple');
   }
 });

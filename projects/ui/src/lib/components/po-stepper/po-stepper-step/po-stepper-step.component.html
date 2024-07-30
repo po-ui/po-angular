@@ -1,12 +1,30 @@
-<div class="po-stepper-step" [ngClass]="getStatusClass(status)" (click)="onClick()" (keydown.enter)="onEnter()">
-  <div class="po-stepper-step-container" [style.width.px]="isVerticalOrientation ? stepSize : undefined">
+<div
+  class="po-stepper-step"
+  [ngClass]="getStatusClass(status)"
+  (click)="onClick()"
+  (keydown.enter)="onEnter()"
+  [tabindex]="status === 'disabled' ? -1 : 0"
+  role="tab"
+  [attr.aria-selected]="status === 'active'"
+  [attr.aria-disabled]="status === 'disabled'"
+  [attr.aria-invalid]="status === 'error'"
+>
+  <div class="po-stepper-step-container" [style.width.px]="isVerticalOrientation ? stepSize : null">
     <div
       [class.po-stepper-step-bar-top]="isVerticalOrientation"
       [class.po-stepper-step-bar-left]="!isVerticalOrientation"
       [style.margin-right.px]="marginHorizontalBar"
     ></div>
 
-    <po-stepper-circle [p-content]="circleContent" [p-icons]="stepIcons" [p-size]="stepSize" [p-status]="status">
+    <po-stepper-circle
+      [p-content]="circleContent"
+      [p-icons]="stepIcons"
+      [p-size]="stepSize"
+      [p-status]="status"
+      [p-icon-default]="iconDefault"
+      [p-step-icon-done]="iconDone"
+      [p-step-icon-active]="iconActive"
+    >
     </po-stepper-circle>
 
     <div
@@ -18,5 +36,11 @@
     ></div>
   </div>
 
-  <po-stepper-label class="po-stepper-step-label-position" [p-content]="label"> </po-stepper-label>
+  <po-stepper-label
+    class="po-stepper-step-label-position"
+    [p-content]="label"
+    [isVerticalOrientation]="isVerticalOrientation"
+    [status]="status"
+  >
+  </po-stepper-label>
 </div>

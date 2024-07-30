@@ -1,4 +1,4 @@
-import { Component, Input } from '@angular/core';
+import { Component, Input, TemplateRef } from '@angular/core';
 
 import { PoStepperStatus } from '../enums/po-stepper-status.enum';
 
@@ -28,6 +28,15 @@ export class PoStepperCircleComponent {
 
   // Status do *step*.
   @Input('p-status') status: string;
+
+  // Ícone para o status default do *step*.
+  @Input('p-icon-default') iconDefault?: string | TemplateRef<void>;
+
+  // Ícone para o status Done do *step*.
+  @Input('p-step-icon-done') iconDone?: string | TemplateRef<void>;
+
+  // Ícone para o status Active do *step*.
+  @Input('p-step-icon-active') iconActive?: string | TemplateRef<void>;
 
   get isActive(): boolean {
     return this.status === PoStepperStatus.Active;
