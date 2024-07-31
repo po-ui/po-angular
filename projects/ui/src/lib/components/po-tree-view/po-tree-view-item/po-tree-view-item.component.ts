@@ -10,24 +10,25 @@ import { PoTreeViewService } from '../services/po-tree-view.service';
   changeDetection: ChangeDetectionStrategy.OnPush,
   animations: [
     trigger('toggleBody', [
-      state(
-        'collapsed',
+      transition(':enter', [
         style({
           'overflow-y': 'hidden',
           visibility: 'hidden',
           opacity: 0,
           height: '0'
-        })
-      ),
-      transition('expanded => collapsed', [
-        style({ height: '*' }),
-        animate(100, style({ opacity: 0 })),
-        animate(200, style({ height: 0 }))
+        }),
+        animate(200, style({ height: '*' })),
+        animate(100, style({ opacity: 1 }))
       ]),
-      transition('collapsed => expanded', [
-        style({ height: '0' }),
-        animate(100, style({ opacity: 1 })),
-        animate(200, style({ height: '*' }))
+      transition(':leave', [
+        style({
+          'overflow-y': 'hidden',
+          visibility: 'visible',
+          opacity: 1,
+          height: '*'
+        }),
+        animate(200, style({ height: 0 })),
+        animate(100, style({ opacity: 0 }))
       ])
     ])
   ]
