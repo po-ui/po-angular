@@ -186,6 +186,8 @@ export abstract class PoMenuBaseComponent {
     return this._filter;
   }
 
+  @Input('p-logo-link') logoLink: boolean = true;
+
   /**
    * @optional
    *
