@@ -38,8 +38,9 @@
           </po-page-job-scheduler-parameters>
 
           <po-page-job-scheduler-summary
-            [p-no-parameters]="!parameters.length"
             *ngIf="step === stepSummary"
+            [p-no-parameters]="!parameters.length"
+            [p-summary-template]="jobSchedulerSummaryTemplate"
             class="po-md-12"
             [p-literals]="literals"
             [p-parameters]="parameters"
