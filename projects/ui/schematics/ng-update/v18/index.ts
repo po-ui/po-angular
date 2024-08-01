@@ -235,43 +235,57 @@ function createUpgradeRule() {
 
 function applyUpdateInContent(tree: Tree, path: string) {
   const directory = tree.getDir(path);
-  if (directory.subfiles.length) {
-    directory.subfiles.forEach(file => {
-      const filePath = path + '/' + file;
-      // eslint-disable-next-line @typescript-eslint/no-unnecessary-type-assertion
-      const content = tree.read(filePath)!.toString('utf-8');
-      if (!content) {
-        return;
-      }
 
-      let updated = content;
-
-      if (file.endsWith('.html') || file.endsWith('.ts')) {
-        //atualiza para as instancias dos novos ícones
-        updated = replaceWithChanges(poIconInsideReplaces, updated);
-        updated = replaceWithChanges(poIconReplaces, updated);
-
-        const icons = iconsReplaced.filter((icon: any) => updated.includes(icon.replace));
-
-        icons.forEach(icon => {
-          const regexChange = new RegExp('(class="\\s?)?' + icon.replace + '(\\s?)?(?="|>|\\s|$|\'|")', 'gmi');
-
-          if (icon.fill) {
-            updated = replaceWithChanges([{ replace: regexChange, replaceWith: `$1${icon.replaceWith}$2` }], updated);
-          } else {
-            updated = replaceWithChanges(
-              [{ replace: regexChange, replaceWith: `$1ph ${icon.replaceWith}$2` }],
-              updated
-            );
-          }
-        });
-
-        if (updated !== content) {
-          tree.overwrite(filePath, updated);
+  // Função recursiva para processar arquivos e subdiretórios
+  const processDirectory = (dir: any) => {
+    // Processa todos os arquivos no diretório atual
+    if (dir.subfiles.length) {
+      dir.subfiles.forEach((file: string) => {
+        const filePath = dir.path + '/' + file;
+        const content = tree.read(filePath)!.toString('utf-8');
+        if (!content) {
+          return;
         }
-      }
-    });
-  }
+
+        let updated = content;
+
+        if (file.endsWith('.html') || file.endsWith('.ts')) {
+          // Atualiza para as instâncias dos novos ícones
+          updated = replaceWithChanges(poIconInsideReplaces, updated);
+          updated = replaceWithChanges(poIconReplaces, updated);
+
+          const icons = iconsReplaced.filter((icon: any) => updated.includes(icon.replace));
+
+          icons.forEach(icon => {
+            const regexChange = new RegExp('(class="\\s?)?' + icon.replace + '(\\s?)?(?="|>|\\s|$|\'|")', 'gmi');
+
+            if (icon.fill) {
+              updated = replaceWithChanges([{ replace: regexChange, replaceWith: `$1${icon.replaceWith}$2` }], updated);
+            } else {
+              updated = replaceWithChanges(
+                [{ replace: regexChange, replaceWith: `$1ph ${icon.replaceWith}$2` }],
+                updated
+              );
+            }
+          });
+
+          if (updated !== content) {
+            tree.overwrite(filePath, updated);
+          }
+        }
+      });
+    }
+
+    // Processa subdiretórios recursivamente
+    if (dir.subdirs.length) {
+      dir.subdirs.forEach((subdir: string) => {
+        processDirectory(tree.getDir(dir.path + '/' + subdir));
+      });
+    }
+  };
+
+  // Inicia o processamento a partir do diretório especificado
+  processDirectory(directory);
 }
 
 function replaceWithChanges(replaces: Array<ReplaceChanges>, content: string = '') {
