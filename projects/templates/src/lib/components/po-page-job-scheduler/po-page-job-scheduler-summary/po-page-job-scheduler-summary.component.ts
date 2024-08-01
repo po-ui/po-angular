@@ -1,5 +1,5 @@
-import { Component, Input, OnInit } from '@angular/core';
 import { DatePipe } from '@angular/common';
+import { Component, Input, OnInit } from '@angular/core';
 
 import { PoDynamicViewField, PoInfoOrientation } from '@po-ui/ng-components';
 
@@ -17,6 +17,8 @@ export class PoPageJobSchedulerSummaryComponent implements OnInit {
   @Input('p-value') value: PoJobSchedulerInternal = <any>{};
 
   @Input('p-no-parameters') noParameters: Boolean = true;
+
+  @Input('p-summary-template') jobSchedulerSummaryTemplate;
 
   executionValue = '';
   firstExecutionValue = '';
