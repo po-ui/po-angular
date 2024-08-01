@@ -1,7 +1,7 @@
-import { ActivatedRoute, Router } from '@angular/router';
 import {
   AfterContentInit,
   Component,
+  ContentChild,
   ContentChildren,
   OnInit,
   QueryList,
@@ -9,6 +9,7 @@ import {
   ViewEncapsulation
 } from '@angular/core';
 import { NgForm } from '@angular/forms';
+import { ActivatedRoute } from '@angular/router';
 
 import { Observable } from 'rxjs';
 
@@ -24,12 +25,13 @@ import {
 } from '@po-ui/ng-components';
 
 import { PoJobSchedulerInternal } from './interfaces/po-job-scheduler-internal.interface';
-import { PoPageJobSchedulerInternal } from './po-page-job-scheduler-internal';
 import { PoPageJobSchedulerBaseComponent } from './po-page-job-scheduler-base.component';
+import { PoPageJobSchedulerInternal } from './po-page-job-scheduler-internal';
 import { poPageJobSchedulerLiteralsDefault } from './po-page-job-scheduler-literals';
 import { PoPageJobSchedulerLookupService } from './po-page-job-scheduler-lookup.service';
-import { PoPageJobSchedulerService } from './po-page-job-scheduler.service';
 import { PoJobSchedulerParametersTemplateDirective } from './po-page-job-scheduler-parameters';
+import { PoJobSchedulerSummaryTemplateDirective } from './po-page-job-scheduler-summary';
+import { PoPageJobSchedulerService } from './po-page-job-scheduler.service';
 
 /**
  * @docsExtends PoPageJobSchedulerBaseComponent
@@ -39,6 +41,11 @@ import { PoJobSchedulerParametersTemplateDirective } from './po-page-job-schedul
  * <example name="po-page-job-scheduler-background-process" title="PO Page Job Scheduler - Background Process">
  *  <file name="sample-po-page-job-scheduler-background-process/sample-po-page-job-scheduler-background-process.component.html"> </file>
  *  <file name="sample-po-page-job-scheduler-background-process/sample-po-page-job-scheduler-background-process.component.ts"> </file>
+ * </example>
+ *
+ * <example name="po-page-job-scheduler-directives" title="PO Page Job Scheduler - Directives">
+ *  <file name="sample-po-page-job-scheduler-directives/sample-po-page-job-scheduler-directives.component.html"> </file>
+ *  <file name="sample-po-page-job-scheduler-directives/sample-po-page-job-scheduler-directives.component.ts"> </file>
  * </example>
  *
  */
@@ -59,6 +66,9 @@ export class PoPageJobSchedulerComponent extends PoPageJobSchedulerBaseComponent
   @ViewChild('schedulerParameters') schedulerParameters: { form: NgForm };
   @ContentChildren(PoJobSchedulerParametersTemplateDirective)
   parametersTemplate: QueryList<PoJobSchedulerParametersTemplateDirective>;
+
+  @ContentChild(PoJobSchedulerSummaryTemplateDirective)
+  jobSchedulerSummaryTemplate: PoJobSchedulerSummaryTemplateDirective;
 
   isEdit = false;
   literals = {

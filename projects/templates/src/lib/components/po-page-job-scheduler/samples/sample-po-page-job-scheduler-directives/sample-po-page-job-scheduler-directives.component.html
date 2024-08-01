@@ -1,0 +1,28 @@
+<po-page-job-scheduler
+  p-service-api="https://po-sample-api.onrender.com/v1/scheduler"
+  p-orientation="horizontal"
+  [p-step-execution-last]="true"
+>
+  <ng-template
+    p-job-scheduler-parameters-template
+    [p-disable-advance]="dynamicForm?.form.invalid"
+    [p-execution-parameter]="dynamicForm?.form.value"
+    p-title="1"
+  >
+    <h1>Etapa 1</h1>
+    <po-dynamic-form [p-fields]="parametersForm" (p-form)="getFormExample($event)"> </po-dynamic-form>
+  </ng-template>
+
+  <ng-template
+    p-job-scheduler-parameters-template
+    [p-disable-advance]="!selectedValue.select.length"
+    [p-execution-parameter]="selectedValue"
+  >
+    <po-table [p-items]="items" [p-selectable]="true" (p-selected)="selectedItem($event)"></po-table>
+  </ng-template>
+  <ng-template p-job-scheduler-summary-template>
+    <po-widget p-title="Parâmetros">
+      <po-dynamic-view [p-fields]="fieldsSummary" [p-value]="valueSummary"> </po-dynamic-view>
+    </po-widget>
+  </ng-template>
+</po-page-job-scheduler>

@@ -30,7 +30,13 @@
   <po-info [p-label]="literals.firstExecution" [p-orientation]="infoOrientation" [p-value]="firstExecutionValue">
   </po-info>
 </div>
-
-<po-widget *ngIf="parameters && parameters.length" class="po-pt-1 po-pb-1 po-md-12" [p-title]="literals.parameters">
+<po-widget
+  *ngIf="parameters && parameters.length && !jobSchedulerSummaryTemplate"
+  class="po-pt-1 po-pb-1 po-md-12"
+  [p-title]="literals.parameters"
+>
   <po-dynamic-view [p-fields]="parameters" [p-value]="value.executionParameter"> </po-dynamic-view>
 </po-widget>
+<div *ngIf="jobSchedulerSummaryTemplate" class="po-pt-1 po-pb-1 po-md-12">
+  <ng-template [ngTemplateOutlet]="jobSchedulerSummaryTemplate?.templateRef"></ng-template>
+</div>
