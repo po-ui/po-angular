@@ -40,7 +40,7 @@ jobs:
         path: po-tslint
 
     - name: Install and Build
-      run: npm install --force && npm run build
+      run: npm install && npm run build
       working-directory: ${{env.WORKING_DIR}}
 
     # Pega as versões publicadas no NPM e salva no arquivo versions.json

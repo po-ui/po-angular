@@ -2,6 +2,13 @@
 
 All notable changes to this project will be documented in this file. See [standard-version](https://github.com/conventional-changelog/standard-version) for commit guidelines.
 
+### [18.0.1](https://github.com/po-ui/po-angular/compare/v18.0.0...v18.0.1) (2024-08-01)
+
+
+### Bug Fixes
+
+* **schematics:** corrige update em sub diretorios ([cd51737](https://github.com/po-ui/po-angular/commit/cd5173716dcafd8caee0288b54f1fdd3e1f6d4e8))
+
 ## [18.0.0](https://github.com/po-ui/po-angular/compare/v17.21.0...v18.0.0) (2024-07-29)
 
 ### BREAKING CHANGES
