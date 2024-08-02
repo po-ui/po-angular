@@ -74,6 +74,34 @@ const PO_SELECT_FIELD_VALUE_DEFAULT = 'value';
  * veja mais em **[p-combo-option-template](/documentation/po-combo-option-template)**.
  *
  * > Obs: o template **[p-select-option-template](/documentation/po-select-option-template)** será depreciado na versão 14.x.x.
+ *
+ * #### Tokens customizáveis
+ *
+ * É possível alterar o estilo do componente usando os seguintes tokens (CSS):
+ *
+ * > Para maiores informações, acesse o guia [Personalizando o Tema Padrão com Tokens CSS](https://po-ui.io/guides/theme-customization).
+ *
+ * | Propriedade                            | Descrição                                             | Valor Padrão                                    |
+ * |----------------------------------------|-------------------------------------------------------|-------------------------------------------------|
+ * | **Default Values**                     |                                                       |                                                 |
+ * | `--font-family`                        | Família tipográfica usada                             | `var(--font-family-theme)`                      |
+ * | `--font-size`                          | Tamanho da fonte                                      | `var(--font-size-default)`                      |
+ * | `--text-color-empty`                   | Cor do placeholder                                    | `var(--color-neutral-light-30)`                 |
+ * | `--color`                              | Cor da borda                                          | `var(--color-neutral-dark-70)`                  |
+ * | `--background`                         | Cor de background                                     | `var(--color-neutral-light-05)`                 |
+ * | `--text-color`                         | Cor do texto                                          | `var(--color-neutral-dark-90)`                  |
+ * | `--padding-horizontal`                 | Preenchimento horizontal                              | `0.5em`                                         |
+ * | `--padding-vertical`                   | Preenchimento vertical                                | `0.7em`                                         |
+ * | **Hover**                              |                                                       |                                                 |
+ * | `--color-hover`                        | Cor principal no estado hover                         | `var(--color-brand-01-dark)`                    |
+ * | `--background-hover`                   | Cor de background no estado hover                     | `var(--color-brand-01-lighter)`                 |
+ * | **Focused**                            |                                                       |                                                 |
+ * | `--outline-color-focused`              | Cor do outline do estado de focus                     | `var(--color-action-focus)`                     |
+ * | `--color-focused`                      | Cor da borda no estado de focus                       | `var(--color-action-default)`                   |
+ * | **Disabled**                           |                                                       |                                                 |
+ * | `--color-disabled`                     | Cor principal no estado disabled                      | `var(--color-neutral-light-30)`                 |
+ * | `--background-color-disabled`&nbsp;    | Cor de background no estado disabled                  | `var(--color-neutral-light-20)`                 |
+ *
  */
 @Component({
   selector: 'po-select',
