@@ -2,6 +2,13 @@
 
 All notable changes to this project will be documented in this file. See [standard-version](https://github.com/conventional-changelog/standard-version) for commit guidelines.
 
+### [18.1.0](https://github.com/po-ui/po-angular/compare/v18.0.1...v18.1.0) (2024-08-05)
+
+
+### Bug Fixes
+
+* **treeview:** corrige abertura dentro de um `page-slide` ([a4c9a14](https://github.com/po-ui/po-angular/commit/a4c9a141d50d4bfdb1f04b5086d0108b5d826859))
+
 ### [18.0.1](https://github.com/po-ui/po-angular/compare/v18.0.0...v18.0.1) (2024-08-01)
 
 
