@@ -2,6 +2,18 @@
 
 All notable changes to this project will be documented in this file. See [standard-version](https://github.com/conventional-changelog/standard-version) for commit guidelines.
 
+## [17.22.0](https://github.com/po-ui/po-angular/compare/v17.21.0...v17.22.0) (2024-08-12)
+
+
+### Features
+
+* **job-scheduler:** cria diretiva p-job-scheduler-summary-template ([5e4725f](https://github.com/po-ui/po-angular/commit/5e4725f8d38e1d275c0e59b96734bf3981dc66f1))
+
+
+### Bug Fixes
+
+* **treeview:** corrige abertura dentro de um `page-slide` ([9005c3a](https://github.com/po-ui/po-angular/commit/9005c3aed10bf7f33b363ae23fa7cbeebedfb216))
+
 ## [17.21.0](https://github.com/po-ui/po-angular/compare/v17.20.0...v17.21.0) (2024-07-29)
 
 
