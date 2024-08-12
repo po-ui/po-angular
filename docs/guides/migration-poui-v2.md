@@ -42,29 +42,100 @@ Para poder utilizar o comando e realizar a migração, execute os comandos abaix
 
 Nesta nova versão o nome dos pacotes foram alterados, de acordo com a tabela abaixo:
 
-| Pacotes                                                 | Substituído por                      |
-| --------------------------------------------------------| -------------------------------------|
-| `@portinari/portinari-ui`                               | `@po-ui/ng-components`               |
-| `@portinari/portinari-templates`                        | `@po-ui/ng-templates`                |
-| `@portinari/portinari-code-editor`                      | `@po-ui/ng-code-editor`              |
-| `@portinari/tslint`                                     | `@po-ui/ng-tslint`                   |
-| `@portinari/style`                                      | `@po-ui/style`                       |
+<table>
+  <thead>
+    <tr>
+      <th class="po-text-color-neutral-dark-40">Pacotes</th>
+      <th class="po-text-color-neutral-dark-40">Substituído por</th>
+    </tr>
+  </thead>
+  <tbody>
+    <tr>
+      <td><code>@portinari/portinari-ui</code></td>
+      <td><code>@po-ui/ng-components</code></td>
+    </tr>
+    <tr>
+      <td><code>@portinari/portinari-templates</code></td>
+      <td><code>@po-ui/ng-templates</code></td>
+    </tr>
+    <tr>
+      <td><code>@portinari/portinari-code-editor</code></td>
+      <td><code>@po-ui/ng-code-editor</code></td>
+    </tr>
+    <tr>
+      <td><code>@portinari/tslint</code></td>
+      <td><code>@po-ui/ng-tslint</code></td>
+    </tr>
+    <tr>
+      <td><code>@portinari/style</code></td>
+      <td><code>@po-ui/style</code></td>
+    </tr>
+  </tbody>
+</table>
 
 Também foi realizado remoções das propriedades, onde passam a valer as novas definições, veja a tabela abaixo:
 
-| Componentes                            | Anteriormente                            | Substituído por                   |
-| ---------------------------------------| -----------------------------------------| ----------------------------------|
-| `PoFieldModule`                        | `[p-focus]`                              | `[p-auto-focus]`                  |
-| `PoHttpResquestInterceptor`            | `X-Portinari-Screen-Lock`                | `X-PO-Screen-Lock`                |
-| `PoHttpResquestInterceptor`            | `X-Portinari-No-Count-Pending-Requests`  | `X-PO-No-Count-Pending-Requests`  |
-| `PoHttpInterceptor`                    | `X-Portinari-No-Message`                 | `X-PO-No-Message`                 |
-| `PoPageEdit`                           | Possuir a ação `cancel() {}` no TS       | `(p-cancel)`                      |
-| `PoPageEdit`                           | Possuir a ação `save() {}` no TS         | `(p-save)`                        |
-| `PoPageEdit`                           | Possuir a ação `saveNew() {}` no TS      | `(p-save-new)`                    |
-| `PoPageDetail`                         | Possuir a ação `back() {}` no TS         | `(p-back)`                        |
-| `PoPageDetail`                         | Possuir a ação `edit() {}` no TS         | `(p-edit)`                        |
-| `PoPageDetail`                         | Possuir a ação `remove() {}` no TS       | `(p-remove)`                      |
-
+<table>
+  <thead>
+    <tr>
+      <th class="po-text-color-neutral-dark-40">Componentes</th>
+      <th class="po-text-color-neutral-dark-40">Anteriormente</th>
+      <th class="po-text-color-neutral-dark-40">Substituído por</th>
+    </tr>
+  </thead>
+  <tbody>
+    <tr>
+      <td><code>PoFieldModule</code></td>
+      <td><code>[p-focus]</code></td>
+      <td><code>[p-auto-focus]</code></td>
+    </tr>
+    <tr>
+      <td><code>PoHttpResquestInterceptor</code></td>
+      <td><code>X-Portinari-Screen-Lock</code></td>
+      <td><code>X-PO-Screen-Lock</code></td>
+    </tr>
+    <tr>
+      <td><code>PoHttpResquestInterceptor</code></td>
+      <td><code>X-Portinari-No-Count-Pending-Requests</code></td>
+      <td><code>X-PO-No-Count-Pending-Requests</code></td>
+    </tr>
+    <tr>
+      <td><code>PoHttpInterceptor</code></td>
+      <td><code>X-Portinari-No-Message</code></td>
+      <td><code>X-PO-No-Message</code></td>
+    </tr>
+    <tr>
+      <td><code>PoPageEdit</code></td>
+      <td class="po-text-color-neutral-dark-40">Possuir a ação <code>cancel() {}</code> no TS</td>
+      <td><code>(p-cancel)</code></td>
+    </tr>
+    <tr>
+      <td><code>PoPageEdit</code></td>
+      <td class="po-text-color-neutral-dark-40">Possuir a ação <code>save() {}</code> no TS</td>
+      <td><code>(p-save)</code></td>
+    </tr>
+    <tr>
+      <td><code>PoPageEdit</code></td>
+      <td class="po-text-color-neutral-dark-40">Possuir a ação <code>saveNew() {}</code> no TS</td>
+      <td><code>(p-save-new)</code></td>
+    </tr>
+    <tr>
+      <td><code>PoPageDetail</code></td>
+      <td class="po-text-color-neutral-dark-40">Possuir a ação <code>back() {}</code> no TS</td>
+      <td><code>(p-back)</code></td>
+    </tr>
+    <tr>
+      <td><code>PoPageDetail</code></td>
+      <td class="po-text-color-neutral-dark-40">Possuir a ação <code>edit() {}</code> no TS</td>
+      <td><code>(p-edit)</code></td>
+    </tr>
+    <tr>
+      <td><code>PoPageDetail</code></td>
+      <td class="po-text-color-neutral-dark-40">Possuir a ação <code>remove() {}</code> no TS</td>
+      <td><code>(p-remove)</code></td>
+    </tr>
+  </tbody>
+</table>
 
 #### Depreciação
 
@@ -161,12 +232,28 @@ Para poder utilizar o comando e realizar a migração, execute os comandos abaix
 
 Nesta nova versão o nome dos pacotes foram alterados, de acordo com a tabela abaixo:
 
-| Pacotes                                                 | Substituído por                      |
-| --------------------------------------------------------| ------------------------------------ |
-| `@portinari/portinari-sync`                             | `@po-ui/ng-sync`                     |
-| `@portinari/portinari-storage`                          | `@po-ui/ng-storage`                  |
-| `@portinari/tslint`                                     | `@po-ui/ng-tslint`                   |
-
+<table>
+  <thead>
+    <tr>
+      <th class="po-text-color-neutral-dark-40">Pacotes</th>
+      <th class="po-text-color-neutral-dark-40">Substituído por</th>
+    </tr>
+  </thead>
+  <tbody>
+    <tr>
+      <td><code>@portinari/portinari-sync</code></td>
+      <td><code>@po-ui/ng-sync</code></td>
+    </tr>
+    <tr>
+      <td><code>@portinari/portinari-storage</code></td>
+      <td><code>@po-ui/ng-storage</code></td>
+    </tr>
+    <tr>
+      <td><code>@portinari/tslint</code></td>
+      <td><code>@po-ui/ng-tslint</code></td>
+    </tr>
+  </tbody>
+</table>
 
 #### Depreciação
 

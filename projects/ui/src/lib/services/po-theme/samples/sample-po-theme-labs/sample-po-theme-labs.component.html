@@ -1,22 +1,61 @@
-<form #f="ngForm">
-  <div class="po-row">
-    <po-radio-group class="po-md-6" name="theme" [(ngModel)]="theme" p-label="Tema" [p-options]="themeOptions">
-    </po-radio-group>
-
-    <po-switch
-      class="po-md-6"
-      name="type"
-      [(ngModel)]="type"
-      p-label="Light / Dark"
-      p-label-off="light"
-      p-label-on="dark"
+<po-container id="test">
+  <po-widget p-title="Theme Change">
+    <po-radio-group
+      class="po-lg-4 po-pl-2"
+      name="theme"
+      [(ngModel)]="theme"
+      [p-options]="themeOptions"
+      (p-change)="changeTheme($event)"
     >
-    </po-switch>
-  </div>
+    </po-radio-group>
+  </po-widget>
+  <po-widget p-title="Example">
+    <po-page-default p-title="Dashboard" [p-actions]="actions" [p-breadcrumb]="breadcrumb">
+      <div class="po-row">
+        <po-widget class="po-md-6 po-lg-4 po-mb-2" p-title="Daily visitors">
+          <div class="po-font-subtitle po-text-center">540</div>
+          <div class="po-text-center sample-widget-text-subtitle">www.po.com.br</div>
+        </po-widget>
 
-  <div class="po-row">
-    <po-button class="po-md-3" p-label="Change Theme" (p-click)="changeTheme()"> </po-button>
-    <po-button class="po-md-3" p-label="Get LocalStorage Last Theme" (p-click)="getSavedTheme()"> </po-button>
-    <po-button class="po-md-3" p-label="Sample Restore" (p-click)="restore()"> </po-button>
-  </div>
-</form>
+        <po-widget class="po-md-6 po-lg-4 po-mb-2" p-title="Most viewed page">
+          <div class="po-font-subtitle po-text-center">300 views</div>
+          <div class="po-text-center sample-widget-text-subtitle">https://po-ui.io</div>
+        </po-widget>
+
+        <po-widget class="po-md-6 po-lg-4 po-mb-2" p-title="Website status">
+          <div class="po-font-subtitle po-text-center">Online</div>
+          <div class="po-text-center sample-widget-text-subtitle">28 days</div>
+        </po-widget>
+
+        <po-widget class="po-md-6 po-lg-4 po-mb-2" p-title="NPM downloads">
+          <div class="po-font-subtitle po-text-center">266</div>
+          <div class="po-text-center sample-widget-text-subtitle">&#64;po-ui/ng-components - 1.10.1</div>
+        </po-widget>
+
+        <po-widget class="po-md-6 po-lg-4 po-mb-2" p-title="Devforum PO questions">
+          <div class="po-font-subtitle po-text-center">800 questions</div>
+          <div class="po-text-center sample-widget-text-subtitle">https://devforum.po.com.br</div>
+        </po-widget>
+
+        <po-widget class="po-md-6 po-lg-4 po-mb-2" p-title="Angular versions supported">
+          <div class="po-font-subtitle po-text-center">AngularJS - Angular 6</div>
+          <div class="po-text-center sample-widget-text-subtitle">Angular 6 most downloaded</div>
+        </po-widget>
+      </div>
+    </po-page-default>
+  </po-widget>
+</po-container>
+
+<po-modal p-title="Share webpage" [p-primary-action]="shareAction" [p-secondary-action]="cancelAction">
+  <form #formShare="ngForm">
+    <po-email
+      class="po-lg-12"
+      name="email"
+      [(ngModel)]="email"
+      p-clean
+      p-label="Type an e-mail for sharing webpage: http://www.po.com.br"
+      p-required
+    >
+    </po-email>
+  </form>
+</po-modal>

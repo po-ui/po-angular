@@ -52,7 +52,7 @@ ng generate @po-ui/ng-components:<schematic-name>
 
 <div class="po-row">
   <div class="po-sm-12">
-    <table class="po-table">
+    <table class="po-table po-text-color-neutral-dark-40">
       <thead>
         <tr class="po-table-header">
           <th class="po-table-header-ellipsis">Nome</th>
@@ -95,7 +95,7 @@ ng generate @po-ui/ng-templates:<schematic-name>
 
 <div class="po-row">
   <div class="po-sm-12">
-    <table class="po-table">
+    <table class="po-table po-text-color-neutral-dark-40">
       <thead>
         <tr class="po-table-header">
           <th class="po-table-header-ellipsis">Nome</th>

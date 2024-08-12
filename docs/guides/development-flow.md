@@ -79,7 +79,7 @@ Este guia tem por objetivo definir as regras para criação de *Issues* relacion
       <div class="po-pl-md-5 po-pr-lg-5">
         <img class="card-list-icon" src="./assets/graphics/contribute/setup.png">
         <h3 class="po-font-subtitle po-pb-1">Setup Inicial</h3>
-          <blockquote>Para seguir o guia é fundamental o conhecimento da <a href="https://git-scm.com/book/en/v2">ferramenta Git.</a>
+          <blockquote class="po-text-color-neutral-dark-40">Para seguir o guia é fundamental o conhecimento da <a href="https://git-scm.com/book/en/v2">ferramenta Git.</a>
           </blockquote>
         <ul>
           <li>Para utilizar o PO UI, é pré-requisito ter o <code>Node.js</code> instalado (versão 18.13.0 ou acima) e o seu gerenciador de pacote favorito na versão mais atual.</li>

@@ -16,6 +16,16 @@ import { PoTheme } from './interfaces/po-theme.interface';
  *
  * > Obs.: Não está documentado aqui e não indicamos a customização das cores de 'feedback' por motivos de acessibilidade e usabilidade.
  */
+
+/**
+ * @example
+ *
+ * <example name="po-theme-labs" title="PO Theme Labs">
+ *  <file name="sample-po-theme-labs/sample-po-theme-labs.component.html"> </file>
+ *  <file name="sample-po-theme-labs/sample-po-theme-labs.component.ts"> </file>
+ * </example>
+ *
+ */
 @Injectable({
   providedIn: 'root'
 })

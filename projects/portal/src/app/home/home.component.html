@@ -33,7 +33,7 @@
           >
           </po-button>
         </div>
-        <p class="po-mt-1 po-mt-sm-4">Últimos componentes homologados.</p>
+        <p class="po-mt-1 po-mt-sm-4 po-text-color-neutral-dark-60">Últimos componentes homologados.</p>
         <div class="box-widget">
           <po-widget
             class="app-home-widget-components po-md-4 home-widget-components-left"
@@ -92,12 +92,14 @@
 
       <section class="section-open-source po-mb-5">
         <div class="section-open-source-icon po-md-2 po-sm-3">
-          <img src="./assets/graphics/home-icon-heart.svg" alt="Open source icon" class="section-title-icon" />
+          <img [attr.src]="imageHeart()" alt="Open source icon" class="section-title-icon" />
           <div class="color-ball"></div>
         </div>
         <div class="section-open-source-title po-md-10 po-sm-9">
           <h4 class="section-title-primary po-pt-1">PO UI é open source</h4>
-          <p>Resumindo… Você pode contribuir e ajudar o desenvolvimento do framework PO UI.</p>
+          <p class="po-text-color-neutral-dark-60">
+            Resumindo… Você pode contribuir e ajudar o desenvolvimento do framework PO UI.
+          </p>
         </div>
       </section>
 
