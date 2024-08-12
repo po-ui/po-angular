@@ -2,6 +2,13 @@
 
 All notable changes to this project will be documented in this file. See [standard-version](https://github.com/conventional-changelog/standard-version) for commit guidelines.
 
+## [18.2.0](https://github.com/po-ui/po-angular/compare/v18.1.0...v18.2.0) (2024-08-12)
+
+
+### Features
+
+* **job-scheduler:** cria diretiva p-job-scheduler-summary-template ([b6d69a9](https://github.com/po-ui/po-angular/commit/b6d69a940ddf32fd542497df0fb67ea0b5413bf3))
+
 ### [18.1.0](https://github.com/po-ui/po-angular/compare/v18.0.1...v18.1.0) (2024-08-05)
 
 
