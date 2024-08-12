@@ -25,7 +25,7 @@
 }
 
 .title {
-  color: #1d2426;
+  color: var(--color-neutral-dark-80);
   font-size: 50px;
   margin: 0px;
   padding-top: 100px;
@@ -33,7 +33,7 @@
 }
 
 .library {
-  color: #1d2426;
+  color: var(--color-neutral-dark-70);
   font-size: 34px;
   font-family: var(--font-family-po-ui-light);
 }

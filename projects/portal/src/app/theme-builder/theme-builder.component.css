@@ -118,7 +118,7 @@ p {
 }
 
 .constructor-title {
-  color: #000;
+  color: var(--color-neutral-dark-70);
   margin: auto;
   font-size: 34px;
   font-family: var(--font-family-po-ui-light);
@@ -137,6 +137,7 @@ p {
 
 .p-contrast {
   width: 150px;
+  color: var(--color-neutral-dark-80);
 }
 
 .customize-item {
@@ -200,12 +201,12 @@ p {
   }
 
   .po-list-view-title {
-    color: #00000094;
+    color: var(--color-neutral-dark-95);
     font-size: 18px;
   }
 
   .po-list-view-detail-button > po-button > button {
-    color: #00000094;
+    color: var(--color-neutral-dark-95);
     font-size: 14px;
   }
 
@@ -242,20 +243,17 @@ p {
 }
 
 .widget-color > .po-widget {
-  background: #d7d7d7;
+  background-color: var(--color-neutral-light-10);
 }
 
 .widget-menu {
-  .po-widget {
-    background: #efefef;
-  }
-
   .po-container {
     padding: 0;
   }
 
   .po-widget-body {
     height: 140px;
+    background-color: var(--color-neutral-light-10);
   }
 }
 
@@ -544,6 +542,7 @@ p {
   display: flex;
   align-items: center;
   justify-content: center;
+  background-color: var(--color-neutral-light-10);
 }
 
 .menu-with-constrast {
@@ -569,6 +568,11 @@ p {
   display: flex;
   align-items: center;
   flex-direction: row;
+  color: #4a5c60;
+}
+
+.item-painel {
+  color: var(--color-neutral-dark-70);
 }
 
 .po-tag-container-theme {
@@ -606,8 +610,8 @@ p {
   margin-left: 10px;
   margin-right: 10px;
   background-color: transparent;
-  border-color: #753399;
-  color: #753399;
+  border-color: var(--color-action-default);
+  color: var(--color-action-default);
   cursor: pointer;
   min-width: max-content;
 }

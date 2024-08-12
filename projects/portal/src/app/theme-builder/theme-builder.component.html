@@ -88,14 +88,14 @@
           <div class="po-row">
             <div class="container">
               <div class="container-item po-pl-1">
-                <p><strong> Cores </strong></p>
+                <p><strong class="po-text-color-neutral"> Cores </strong></p>
               </div>
             </div>
           </div>
           <div class="po-row po-pl-1 po-mb-2">
             <div class="container">
               <div class="container-item">
-                <label for="color" class="po-mr-2">Marca principal </label>
+                <label for="color" class="po-mr-2 po-text-color-neutral">Marca principal </label>
                 <input
                   class="style-inputColor"
                   type="color"
@@ -103,7 +103,7 @@
                   [formControl]="brandFormS.get('colorAction')"
                 />
 
-                <label for="color" class="po-mr-2 po-ml-1">Marca secundária </label>
+                <label for="color" class="po-mr-2 po-ml-1 po-text-color-neutral">Marca secundária </label>
                 <input
                   class="style-inputColor"
                   type="color"
@@ -111,7 +111,7 @@
                   [formControl]="brandFormP.get('colorAction')"
                 />
 
-                <label for="color" class="po-mr-2 po-ml-1">Marca terciária </label>
+                <label for="color" class="po-mr-2 po-ml-1 po-text-color-neutral">Marca terciária </label>
                 <input
                   class="style-inputColor"
                   type="color"
@@ -955,7 +955,7 @@
   >
     <ng-template [ngSwitchCase]="'button'">
       <div class="container-item">
-        <p class="color-title-p"><strong>Estados</strong></p>
+        <p class="po-text-color-neutral-dark-40"><strong>Estados</strong></p>
       </div>
       <po-widget class="widget-color">
         <div class="container content-page-slide po-pl-2 po-pr-2">
@@ -1119,7 +1119,7 @@
         </div>
       </po-widget>
       <div class="container-item po-mt-2 po-mb-2">
-        <p class="color-title-p"><strong>Acessibilidade</strong></p>
+        <p class="po-text-color-neutral-dark-40"><strong>Acessibilidade</strong></p>
       </div>
       <section *ngIf="kindButton === 1">
         <ng-container *ngTemplateOutlet="acessibility"></ng-container>
@@ -1130,7 +1130,7 @@
         </div>
       </section>
       <div class="container-item po-mt-2 po-mb-2">
-        <p class="color-title-p"><strong>Personalizar</strong></p>
+        <p class="po-text-color-neutral-dark-40"><strong>Personalizar</strong></p>
       </div>
 
       <section *ngIf="kindButton === 1">
@@ -1302,7 +1302,7 @@
     </ng-template>
     <ng-template [ngSwitchCase]="'switch'">
       <div class="container-item">
-        <p class="color-title-p"><strong>Estados</strong></p>
+        <p class="po-text-color-neutral-dark-40"><strong>Estados</strong></p>
       </div>
       <po-widget class="widget-color">
         <div class="container content-page-slide po-pl-2 po-pr-2 po-pt-1">
@@ -1332,7 +1332,7 @@
         </div>
       </po-widget>
       <div class="container-item po-mt-2 po-mb-2">
-        <p class="color-title-p"><strong>Acessibilidade</strong></p>
+        <p class="po-text-color-neutral-dark-40"><strong>Acessibilidade</strong></p>
       </div>
       <div class="container widget-align">
         <p><strong>É necessário cor do background e cor do texto para funcionamento da acessibilidade</strong></p>
@@ -1340,7 +1340,7 @@
 
       <section>
         <div class="container-item po-mt-2 po-mb-2">
-          <p class="color-title-p"><strong>Personalizar</strong></p>
+          <p class="po-text-color-neutral-dark-40"><strong>Personalizar</strong></p>
         </div>
 
         <div class="po-row">
@@ -1390,7 +1390,7 @@
     </ng-template>
     <ng-template [ngSwitchCase]="'disclaimer'">
       <div class="container-item">
-        <p class="color-title-p"><strong>Estados</strong></p>
+        <p class="po-text-color-neutral-dark-40"><strong>Estados</strong></p>
       </div>
       <po-widget class="widget-color">
         <div class="container content-page-slide po-pl-2 po-pr-2 po-pt-1">
@@ -1414,13 +1414,13 @@
         </div>
       </po-widget>
       <div class="container-item po-mt-2 po-mb-2">
-        <p class="color-title-p"><strong>Acessibilidade</strong></p>
+        <p class="po-text-color-neutral-dark-40"><strong>Acessibilidade</strong></p>
       </div>
       <ng-container *ngTemplateOutlet="acessibility"></ng-container>
 
       <section>
         <div class="container-item po-mt-2 po-mb-2">
-          <p class="color-title-p"><strong>Personalizar</strong></p>
+          <p class="po-text-color-neutral-dark-40"><strong>Personalizar</strong></p>
         </div>
         <div class="po-row">
           <div class="po-md-12 po-lg-6 customize-item po-mb-1 po-pl-0">
@@ -1493,7 +1493,7 @@
     </ng-template>
     <ng-template [ngSwitchCase]="'input'">
       <div class="container-item">
-        <p class="color-title-p"><strong>Estados</strong></p>
+        <p class="po-text-color-neutral-dark-40"><strong>Estados</strong></p>
       </div>
       <po-widget class="widget-color">
         <div class="container content-page-slide po-pl-2 po-pr-2 po-pt-1">
@@ -1529,13 +1529,13 @@
         </div>
       </po-widget>
       <div class="container-item po-mt-2 po-mb-2">
-        <p class="color-title-p"><strong>Acessibilidade</strong></p>
+        <p class="po-text-color-neutral-dark-40"><strong>Acessibilidade</strong></p>
       </div>
       <ng-container *ngTemplateOutlet="acessibility"></ng-container>
 
       <section>
         <div class="container-item po-mt-2 po-mb-2">
-          <p class="color-title-p"><strong>Personalizar</strong></p>
+          <p class="po-text-color-neutral-dark-40"><strong>Personalizar</strong></p>
         </div>
         <div class="po-row">
           <div class="po-md-12 po-lg-6 customize-item po-mb-1 po-pl-0">
@@ -1591,7 +1591,7 @@
     </ng-template>
     <ng-template [ngSwitchCase]="'select'">
       <div class="container-item">
-        <p class="color-title-p"><strong>Estados</strong></p>
+        <p class="po-text-color-neutral-dark-40"><strong>Estados</strong></p>
       </div>
       <po-widget class="widget-color">
         <div class="container content-page-slide po-pl-2 po-pr-2 po-pt-1">
@@ -1657,12 +1657,12 @@
         </div>
       </po-widget>
       <div class="container-item po-mt-2 po-mb-2">
-        <p class="color-title-p"><strong>Acessibilidade</strong></p>
+        <p class="po-text-color-neutral-dark-40"><strong>Acessibilidade</strong></p>
       </div>
       <ng-container *ngTemplateOutlet="acessibility"></ng-container>
       <section>
         <div class="container-item po-mt-2 po-mb-2">
-          <p class="color-title-p"><strong>Personalizar</strong></p>
+          <p class="po-text-color-neutral-dark-40"><strong>Personalizar</strong></p>
         </div>
 
         <div class="po-row">
@@ -1740,7 +1740,7 @@
     </ng-template>
     <ng-template [ngSwitchCase]="'textarea'">
       <div class="container-item">
-        <p class="color-title-p"><strong>Estados</strong></p>
+        <p class="po-text-color-neutral-dark-40"><strong>Estados</strong></p>
       </div>
       <po-widget class="widget-color">
         <div class="container content-page-slide po-pl-2 po-pr-2 po-pt-1">
@@ -1790,13 +1790,13 @@
         </div>
       </po-widget>
       <div class="container-item po-mt-2 po-mb-2">
-        <p class="color-title-p"><strong>Acessibilidade</strong></p>
+        <p class="po-text-color-neutral-dark-40"><strong>Acessibilidade</strong></p>
       </div>
       <ng-container *ngTemplateOutlet="acessibility"></ng-container>
 
       <section>
         <div class="container-item po-mt-2 po-mb-2">
-          <p class="color-title-p"><strong>Personalizar</strong></p>
+          <p class="po-text-color-neutral-dark-40"><strong>Personalizar</strong></p>
         </div>
         <div class="po-row">
           <div class="po-md-12 po-lg-6 customize-item po-mb-1 po-pl-0">
@@ -1853,7 +1853,7 @@
     </ng-template>
     <ng-template [ngSwitchCase]="'dropdown'">
       <div class="container-item">
-        <p class="color-title-p"><strong>Estados</strong></p>
+        <p class="po-text-color-neutral-dark-40"><strong>Estados</strong></p>
       </div>
       <po-widget class="widget-color">
         <div class="container content-page-slide po-pl-2 po-pr-2 po-pt-1">
@@ -1906,13 +1906,13 @@
         </div>
       </po-widget>
       <div class="container-item po-mt-2 po-mb-2">
-        <p class="color-title-p"><strong>Acessibilidade</strong></p>
+        <p class="po-text-color-neutral-dark-40"><strong>Acessibilidade</strong></p>
       </div>
       <div class="container widget-align">
         <p><strong>É necessário cor do background e cor do texto para funcionamento da acessibilidade</strong></p>
       </div>
       <div class="container-item po-mt-2 po-mb-2">
-        <p class="color-title-p"><strong>Personalizar</strong></p>
+        <p class="po-text-color-neutral-dark-40"><strong>Personalizar</strong></p>
       </div>
 
       <section>
@@ -1972,7 +1972,7 @@
     </ng-template>
     <ng-template [ngSwitchCase]="'datepicker'">
       <div class="container-item">
-        <p class="color-title-p"><strong>Estados</strong></p>
+        <p class="po-text-color-neutral-dark-40"><strong>Estados</strong></p>
       </div>
       <po-widget class="widget-color">
         <div class="container content-page-slide po-pl-2 po-pr-2 po-pt-1">
@@ -2025,11 +2025,11 @@
         </div>
       </po-widget>
       <div class="container-item po-mt-2 po-mb-2">
-        <p class="color-title-p"><strong>Acessibilidade</strong></p>
+        <p class="po-text-color-neutral-dark-40"><strong>Acessibilidade</strong></p>
       </div>
       <ng-container *ngTemplateOutlet="acessibility"></ng-container>
       <div class="container-item po-mt-2 po-mb-2">
-        <p class="color-title-p"><strong>Personalizar</strong></p>
+        <p class="po-text-color-neutral-dark-40"><strong>Personalizar</strong></p>
       </div>
 
       <section>
@@ -2128,7 +2128,7 @@
     </ng-template>
     <ng-template [ngSwitchCase]="'link'">
       <div class="container-item">
-        <p class="color-title-p"><strong>Estados</strong></p>
+        <p class="po-text-color-neutral-dark-40"><strong>Estados</strong></p>
       </div>
       <po-widget class="widget-color">
         <div class="container content-page-slide po-pl-2 po-pr-2 po-pt-1">
@@ -2152,7 +2152,7 @@
         </div>
       </po-widget>
       <div class="container-item po-mt-2 po-mb-2">
-        <p class="color-title-p"><strong>Acessibilidade</strong></p>
+        <p class="po-text-color-neutral-dark-40"><strong>Acessibilidade</strong></p>
       </div>
       <div class="container widget-align">
         <p><strong>É necessário cor do background e cor do texto para funcionamento da acessibilidade</strong></p>
@@ -2160,7 +2160,7 @@
 
       <section>
         <div class="container-item po-mt-2 po-mb-2">
-          <p class="color-title-p"><strong>Personalizar</strong></p>
+          <p class="po-text-color-neutral-dark-40"><strong>Personalizar</strong></p>
         </div>
         <div class="po-row">
           <div class="po-md-12 po-lg-6 customize-item po-mb-1 po-pl-0">
@@ -2190,7 +2190,7 @@
     </ng-template>
     <ng-template [ngSwitchCase]="'tooltip'">
       <div class="container-item">
-        <p class="color-title-p"><strong>Estados</strong></p>
+        <p class="po-text-color-neutral-dark-40"><strong>Estados</strong></p>
       </div>
       <po-widget class="widget-color">
         <div class="container content-page-slide po-pl-2 po-pr-2 po-pt-1">
@@ -2213,13 +2213,13 @@
         </div>
       </po-widget>
       <div class="container-item po-mt-2 po-mb-2">
-        <p class="color-title-p"><strong>Acessibilidade</strong></p>
+        <p class="po-text-color-neutral-dark-40"><strong>Acessibilidade</strong></p>
       </div>
       <ng-container *ngTemplateOutlet="acessibility"></ng-container>
 
       <section>
         <div class="container-item po-mt-2 po-mb-2">
-          <p class="color-title-p"><strong>Personalizar</strong></p>
+          <p class="po-text-color-neutral-dark-40"><strong>Personalizar</strong></p>
         </div>
 
         <div class="po-row">
@@ -2251,7 +2251,7 @@
     </ng-template>
     <ng-template [ngSwitchCase]="'modal'">
       <div class="container-item">
-        <p class="color-title-p"><strong>Estados</strong></p>
+        <p class="po-text-color-neutral-dark-40"><strong>Estados</strong></p>
       </div>
       <po-widget class="widget-color">
         <div class="container content-page-slide po-pl-2 po-pr-2 po-pt-1">
@@ -2269,14 +2269,14 @@
         </div>
       </po-widget>
       <div class="container-item po-mt-2 po-mb-2">
-        <p class="color-title-p"><strong>Acessibilidade</strong></p>
+        <p class="po-text-color-neutral-dark-40"><strong>Acessibilidade</strong></p>
       </div>
       <div class="container widget-align">
         <p><strong>É necessário cor do background e cor do texto para funcionamento da acessibilidade</strong></p>
       </div>
       <section>
         <div class="container-item po-mt-2 po-mb-2">
-          <p class="color-title-p"><strong>Personalizar</strong></p>
+          <p class="po-text-color-neutral-dark-40"><strong>Personalizar</strong></p>
         </div>
 
         <div class="po-row">
@@ -2340,7 +2340,7 @@
     </ng-template>
     <ng-template [ngSwitchCase]="'popup'">
       <div class="container-item">
-        <p class="color-title-p"><strong>Estados</strong></p>
+        <p class="po-text-color-neutral-dark-40"><strong>Estados</strong></p>
       </div>
       <po-widget class="widget-color">
         <div class="container content-page-slide po-pl-2 po-pr-2 po-pt-1">
@@ -2375,12 +2375,12 @@
         </div>
       </po-widget>
       <div class="container-item po-mt-2 po-mb-2">
-        <p class="color-title-p"><strong>Acessibilidade</strong></p>
+        <p class="po-text-color-neutral-dark-40"><strong>Acessibilidade</strong></p>
       </div>
       <ng-container *ngTemplateOutlet="acessibility"></ng-container>
       <section>
         <div class="container-item po-mt-2 po-mb-2">
-          <p class="color-title-p"><strong>Personalizar</strong></p>
+          <p class="po-text-color-neutral-dark-40"><strong>Personalizar</strong></p>
         </div>
 
         <div class="po-row">
@@ -2420,7 +2420,7 @@
     </ng-template>
     <ng-template [ngSwitchCase]="'radio'">
       <div class="container-item">
-        <p class="color-title-p"><strong>Estados</strong></p>
+        <p class="po-text-color-neutral-dark-40"><strong>Estados</strong></p>
       </div>
       <po-widget class="widget-color">
         <div class="container content-page-slide po-pl-2 po-pr-2 po-pt-1">
@@ -2470,14 +2470,14 @@
         </div>
       </po-widget>
       <div class="container-item po-mt-2 po-mb-2">
-        <p class="color-title-p"><strong>Acessibilidade</strong></p>
+        <p class="po-text-color-neutral-dark-40"><strong>Acessibilidade</strong></p>
       </div>
       <div class="container widget-align">
         <p><strong>É necessário cor do background e cor do texto para funcionamento da acessibilidade</strong></p>
       </div>
       <section>
         <div class="container-item po-mt-2 po-mb-2">
-          <p class="color-title-p"><strong>Personalizar</strong></p>
+          <p class="po-text-color-neutral-dark-40"><strong>Personalizar</strong></p>
         </div>
 
         <div class="po-row">
@@ -2517,7 +2517,7 @@
     </ng-template>
     <ng-template [ngSwitchCase]="'checkbox'">
       <div class="container-item">
-        <p class="color-title-p"><strong>Estados</strong></p>
+        <p class="po-text-color-neutral-dark-40"><strong>Estados</strong></p>
       </div>
       <po-widget class="widget-color">
         <div class="container content-page-slide po-pl-2 po-pr-2 po-pt-1">
@@ -2550,14 +2550,14 @@
         </div>
       </po-widget>
       <div class="container-item po-mt-2 po-mb-2">
-        <p class="color-title-p"><strong>Acessibilidade</strong></p>
+        <p class="po-text-color-neutral-dark-40"><strong>Acessibilidade</strong></p>
       </div>
       <div class="container widget-align">
         <p><strong>É necessário cor do background e cor do texto para funcionamento da acessibilidade</strong></p>
       </div>
       <section>
         <div class="container-item po-mt-2 po-mb-2">
-          <p class="color-title-p"><strong>Personalizar</strong></p>
+          <p class="po-text-color-neutral-dark-40"><strong>Personalizar</strong></p>
         </div>
 
         <div class="po-row">
@@ -2602,7 +2602,7 @@
     </ng-template>
     <ng-template [ngSwitchCase]="'multiselect'">
       <div class="container-item">
-        <p class="color-title-p"><strong>Estados</strong></p>
+        <p class="po-text-color-neutral-dark-40"><strong>Estados</strong></p>
       </div>
       <po-widget class="widget-color">
         <div class="container content-page-slide po-pl-2 po-pr-2 po-pt-1">
@@ -2670,12 +2670,12 @@
         </div>
       </po-widget>
       <div class="container-item po-mt-2 po-mb-2">
-        <p class="color-title-p"><strong>Acessibilidade</strong></p>
+        <p class="po-text-color-neutral-dark-40"><strong>Acessibilidade</strong></p>
       </div>
       <ng-container *ngTemplateOutlet="acessibility"></ng-container>
       <section>
         <div class="container-item po-mt-2 po-mb-2">
-          <p class="color-title-p"><strong>Personalizar</strong></p>
+          <p class="po-text-color-neutral-dark-40"><strong>Personalizar</strong></p>
         </div>
 
         <div class="po-row">
@@ -2757,7 +2757,7 @@
     </ng-template>
     <ng-template [ngSwitchCase]="'combo'">
       <div class="container-item">
-        <p class="color-title-p"><strong>Estados</strong></p>
+        <p class="po-text-color-neutral-dark-40"><strong>Estados</strong></p>
       </div>
       <po-widget class="widget-color">
         <div class="container content-page-slide po-pl-2 po-pr-2 po-pt-1">
@@ -2825,12 +2825,12 @@
         </div>
       </po-widget>
       <div class="container-item po-mt-2 po-mb-2">
-        <p class="color-title-p"><strong>Acessibilidade</strong></p>
+        <p class="po-text-color-neutral-dark-40"><strong>Acessibilidade</strong></p>
       </div>
       <ng-container *ngTemplateOutlet="acessibility"></ng-container>
       <section>
         <div class="container-item po-mt-2 po-mb-2">
-          <p class="color-title-p"><strong>Personalizar</strong></p>
+          <p class="po-text-color-neutral-dark-40"><strong>Personalizar</strong></p>
         </div>
 
         <div class="po-row">
@@ -2910,7 +2910,7 @@
     </ng-template>
     <ng-template [ngSwitchCase]="'accordion'">
       <div class="container-item">
-        <p class="color-title-p"><strong>Estados</strong></p>
+        <p class="po-text-color-neutral-dark-40"><strong>Estados</strong></p>
       </div>
       <po-widget class="widget-color">
         <div class="container content-page-slide po-pl-2 po-pr-2 po-pt-1">
@@ -2962,12 +2962,12 @@
         </div>
       </po-widget>
       <div class="container-item po-mt-2 po-mb-2">
-        <p class="color-title-p"><strong>Acessibilidade</strong></p>
+        <p class="po-text-color-neutral-dark-40"><strong>Acessibilidade</strong></p>
       </div>
       <ng-container *ngTemplateOutlet="acessibility"></ng-container>
       <section>
         <div class="container-item po-mt-2 po-mb-2">
-          <p class="color-title-p"><strong>Personalizar</strong></p>
+          <p class="po-text-color-neutral-dark-40"><strong>Personalizar</strong></p>
         </div>
 
         <div class="po-row">
@@ -3067,7 +3067,7 @@
     </ng-template>
     <ng-template [ngSwitchCase]="'breadcrumb'">
       <div class="container-item">
-        <p class="color-title-p"><strong>Estados</strong></p>
+        <p class="po-text-color-neutral-dark-40"><strong>Estados</strong></p>
       </div>
       <po-widget class="widget-color">
         <div class="container content-page-slide po-pl-2 po-pr-2 po-pt-1">
@@ -3094,13 +3094,13 @@
         </div>
       </po-widget>
       <div class="container-item po-mt-2 po-mb-2">
-        <p class="color-title-p"><strong>Acessibilidade</strong></p>
+        <p class="po-text-color-neutral-dark-40"><strong>Acessibilidade</strong></p>
       </div>
       <div class="container widget-align">
         <p><strong>É necessário cor do background e cor do texto para funcionamento da acessibilidade</strong></p>
       </div>
       <div class="container-item po-mt-2 po-mb-2">
-        <p class="color-title-p"><strong>Personalizar</strong></p>
+        <p class="po-text-color-neutral-dark-40"><strong>Personalizar</strong></p>
       </div>
       <section>
         <div class="po-row">
@@ -3136,7 +3136,7 @@
     </ng-template>
     <ng-template [ngSwitchCase]="'tag'">
       <div class="container-item">
-        <p class="color-title-p"><strong>Estados</strong></p>
+        <p class="po-text-color-neutral-dark-40"><strong>Estados</strong></p>
       </div>
       <po-widget class="widget-color">
         <div class="container content-page-slide po-pl-2 po-pr-2">
@@ -3212,12 +3212,12 @@
         </div>
       </po-widget>
       <div class="container-item po-mt-2 po-mb-2">
-        <p class="color-title-p"><strong>Acessibilidade</strong></p>
+        <p class="po-text-color-neutral-dark-40"><strong>Acessibilidade</strong></p>
       </div>
       <ng-container *ngTemplateOutlet="acessibility"></ng-container>
       <section>
         <div class="container-item po-mt-2 po-mb-2">
-          <p class="color-title-p"><strong>Personalizar</strong></p>
+          <p class="po-text-color-neutral-dark-40"><strong>Personalizar</strong></p>
         </div>
 
         <div class="po-row">
