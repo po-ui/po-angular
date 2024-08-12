@@ -16,7 +16,7 @@ A tabela a seguir lista todos os recursos depreciados, organizados pelo release 
 
 <div class="po-row">
   <div class="po-xl-6 po-lg-8 po-md-10 po-sm-12">
-    <table class="po-table">
+    <table class="po-table po-text-color-neutral-dark-40">
       <thead>
         <tr class="po-table-header">
           <th class="po-table-header-ellipsis">Área</th>
@@ -70,7 +70,7 @@ Esta seção contém uma lista completa de todos os recursos obsoletos com detal
 
 <div class="po-row">
   <div class="po-xl-6 po-lg-8 po-md-10 po-sm-12">
-    <table class="po-table">
+    <table class="po-table po-text-color-neutral-dark-40">
       <thead>
         <tr class="po-table-header">
           <th class="po-table-header-ellipsis">Recurso</th>
@@ -191,7 +191,7 @@ export class AppModule { }
 
 <div class="po-row">
   <div class="po-xl-6 po-lg-8 po-md-10 po-sm-12">
-    <table class="po-table">
+    <table class="po-table po-text-color-neutral-dark-40">
       <thead>
         <tr class="po-table-header">
           <th class="po-table-header-ellipsis">Área</th>

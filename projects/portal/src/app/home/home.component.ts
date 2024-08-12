@@ -16,4 +16,10 @@ export class HomeComponent {
   openExternalLink(url) {
     window.open(url, '_blank');
   }
+
+  imageHeart() {
+    return localStorage.getItem('po-ui-theme') === 'po-theme-dark'
+      ? './assets/graphics/home-icon-heart-white.svg'
+      : './assets/graphics/home-icon-heart.svg';
+  }
 }

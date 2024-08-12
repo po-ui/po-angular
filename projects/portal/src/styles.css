@@ -1,7 +1,7 @@
 :root {
-  --color-portal-highlight: #c9357d;
+  --color-portal-highlight: var(--color-action-default);
   --color-portal-background-color-highlight: #e6f1f5;
-  --color-portal-titles: #425357;
+  --color-portal-titles: var(--color-neutral-dark-70);
 
   --font-family-po-ui: Roboto;
   --font-family-po-ui-light: Roboto-Condensed-Light;
@@ -44,10 +44,10 @@ body {
 }
 
 pre {
-  background-color: #efefef;
+  background-color: var(--color-neutral-light-10);
   border: 0;
   border-radius: 4px;
-  color: #333;
+  color: var(--color-neutral-dark-80);
   font-size: 13px;
   line-height: 1.42857143;
   margin: 0 0 10px;
@@ -118,7 +118,7 @@ blockquote ul {
 }
 
 code {
-  background-color: var(--color-portal-background-color-highlight);
+  background-color: var(--color-neutral-light-10);
   border-radius: 4px;
   color: var(--color-portal-highlight);
   font-size: 90%;
@@ -141,6 +141,20 @@ pre code {
 
 .docs-api-class-description ul {
   margin-left: 30px;
+}
+
+.docs-api-class-description p,
+.docs-api-property-description p,
+.docs-api-property-description li,
+.docs-api-class-description td,
+.docs-api-class-description li,
+.docs-api-property-default {
+  color: var(--color-neutral-dark-80);
+}
+
+.docs-api-class-description th,
+.docs-api-property-description strong {
+  color: var(--color-neutral-dark-70);
 }
 
 .app-home-title {
@@ -197,6 +211,7 @@ pre code {
 
 .docs-api-properties-name-cell {
   min-width: 150px;
+  color: var(--color-neutral-dark-70);
 }
 
 .docs-api-properties-type-cell {
@@ -208,7 +223,7 @@ pre code {
 }
 
 .docs-api-output-alias {
-  color: #3d82af;
+  color: var(--color-feedback-info-base);
 }
 
 .docs-api-properties-table {
@@ -234,6 +249,7 @@ pre code {
 .docs-api-properties-table td {
   padding: 8px;
   vertical-align: top;
+  color: var(--color-neutral-dark-80);
 }
 
 .docs-sample-container {
@@ -460,7 +476,7 @@ a,
 .app-portal a:hover,
 .docs-api a:hover,
 .show-me-the-code:hover {
-  color: #23527c;
+  color: var(--color-brand-01-dark);
   text-decoration: underline;
 }
 
@@ -469,6 +485,7 @@ a,
 .app-portal ul:not(.po-listbox-list),
 .app-portal li:not(.po-listbox-item) {
   margin-bottom: 10px;
+  color: var(--color-neutral-dark-80);
 }
 
 .guides blockquote p,
@@ -497,7 +514,7 @@ a,
 }
 
 .docs-api-property-type.boolean {
-  background-color: #3a539b;
+  background-color: var(--color-feedback-info-dark);
 }
 
 .docs-api-property-type.string {
@@ -505,11 +522,11 @@ a,
 }
 
 .docs-api-property-type.Date {
-  background-color: #3d82af;
+  background-color: var(--color-feedback-info-base);
 }
 
 .docs-api-property-type.EventEmitter {
-  background-color: #075c72;
+  background-color: var(--color-feedback-positive-dark);
 }
 
 .docs-api-property-type.number {
@@ -528,6 +545,7 @@ a,
   font-size: 16px;
   font-style: italic;
   font-weight: bold;
+  color: var(--color-neutral-dark-70);
 }
 
 .po-icon-sample:hover {
@@ -552,7 +570,7 @@ a,
 
 .po-icon-list li a {
   border-radius: 1em;
-  color: #111;
+  color: var(--color-neutral-dark-80);
   cursor: pointer;
   font-family: NunitoSans, sans-serif;
   font-size: 16px;
@@ -568,8 +586,8 @@ a,
 }
 
 .po-icon-list li a:hover {
-  background-color: var(--color-portal-highlight);
-  color: var(--color-neutral-light-00);
+  background-color: var(--color-brand-01-light);
+  color: var(--color-neutral-dark-60);
 }
 
 .po-icon-list li a .po-icon {
@@ -594,6 +612,7 @@ a,
   text-overflow: ellipsis;
   /* white-space: nowrap; */
   width: 100%;
+  color: var(--color-neutral-dark-80);
 }
 
 .app-portal,

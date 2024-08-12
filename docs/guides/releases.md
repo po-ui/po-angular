@@ -29,7 +29,7 @@ Consulte abaixo nossos guias de migração de versão para obter mais informaç�
 
 <div class="po-row">
   <div class="po-xl-6 po-lg-8 po-md-10 po-sm-12">
-    <table class="po-table">
+    <table class="po-table po-text-color-neutral-dark-40">
       <thead>
         <tr class="po-table-header">
           <th class="po-table-header-ellipsis">Angular</th>
