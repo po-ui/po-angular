@@ -61,7 +61,7 @@ export class PoLoadingOverlayBaseComponent {
    *
    * @description
    *
-   * Define se o *overlay* será aplicado a um *container* ou a página inteira.
+   * Define se o *overlay* será aplicado a um *container* ou à página inteira.
    *
    * Para utilizar o componente como um *container*, o elemento pai deverá receber uma posição relativa, por exemplo:
    *
@@ -93,7 +93,7 @@ export class PoLoadingOverlayBaseComponent {
    *
    * Texto a ser exibido no componente.
    *
-   * > O valor padrão será traduzido acordo com o idioma configurado no [**PoI18n**](/documentation/po-i18n) ou navegador.
+   * > O valor padrão será traduzido de acordo com o idioma configurado no [**PoI18n**](/documentation/po-i18n) ou navegador.
    *
    * @default `Carregando`
    */
@@ -110,7 +110,13 @@ export class PoLoadingOverlayBaseComponent {
    *
    * @description
    *
-   * Define o tamnho do componente.
+   * Define o tamanho do componente com base no tamanho do ícone de *loading*.
+   *
+   * Tamanhos disponíveis para o *loading*:
+   * - `xs`: 16px
+   * - `sm`: 24px
+   * - `md`: 48px
+   * - `lg`: 80px (valor padrão)
    *
    * @default `lg`
    */

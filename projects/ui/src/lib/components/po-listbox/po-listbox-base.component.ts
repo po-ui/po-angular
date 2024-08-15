@@ -153,6 +153,8 @@ export class PoListBoxBaseComponent {
 
   @Input('p-combo-service') comboService: any;
 
+  @Input('p-container-width') containerWidth: number;
+
   // Evento disparado quando uma tab é ativada
   @Output('p-activated-tabs') activatedTab = new EventEmitter();
 

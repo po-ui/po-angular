@@ -57,6 +57,8 @@ export class PoMultiselectDropdownComponent {
 
   @Input('p-multiselect-template') multiselectTemplate: TemplateRef<any> | any;
 
+  @Input('p-container-width') containerWidth: number;
+
   /** Evento disparado a cada tecla digitada na pesquisa. */
   @Output('p-change-search') changeSearch = new EventEmitter();
 

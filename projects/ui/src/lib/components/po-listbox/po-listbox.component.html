@@ -86,7 +86,7 @@
   </ng-container>
 
   <div *ngIf="isServerSearching && type !== 'action'" [class.po-listbox-container-loading-default]="!infiniteLoading">
-    <po-loading-overlay p-size="md"></po-loading-overlay>
+    <po-loading-overlay [p-size]="getSizeLoading()" [p-text]="getTextLoading()"></po-loading-overlay>
   </div>
 
   <ng-template #noDataTemplate>

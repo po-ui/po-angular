@@ -1,6 +1,5 @@
 import {
   AfterViewInit,
-  ChangeDetectionStrategy,
   ChangeDetectorRef,
   Component,
   ElementRef,
@@ -8,8 +7,7 @@ import {
   OnDestroy,
   Renderer2,
   SimpleChanges,
-  ViewChild,
-  forwardRef
+  ViewChild
 } from '@angular/core';
 import { Router } from '@angular/router';
 
@@ -20,7 +18,7 @@ import { PoItemListOption } from './po-item-list/interfaces/po-item-list-option.
 import { PoLanguageService } from '../../services/po-language/po-language.service';
 import { isExternalLink, isTypeof, openExternalLink } from '../../utils/util';
 import { PoSearchListComponent } from './po-search-list/po-search-list.component';
-import { Observable, Subscription, debounceTime, fromEvent, merge } from 'rxjs';
+import { Observable, Subscription, debounceTime, fromEvent } from 'rxjs';
 
 @Component({
   selector: 'po-listbox',
@@ -184,6 +182,24 @@ export class PoListBoxComponent extends PoListBoxBaseComponent implements AfterV
     if (this.hasInfiniteScroll()) {
       this.includeInfiniteScroll();
     }
+  }
+
+  protected getSizeLoading() {
+    const width = this.listbox.nativeElement.offsetWidth || this.containerWidth;
+
+    if (width > 180) {
+      return 'md';
+    } else if (width >= 140) {
+      return 'sm';
+    } else {
+      return 'xs';
+    }
+  }
+
+  protected getTextLoading() {
+    const width = this.listbox.nativeElement.offsetWidth || this.containerWidth;
+
+    return width < 140 ? ' ' : '';
   }
 
   private hasInfiniteScroll(): boolean {
