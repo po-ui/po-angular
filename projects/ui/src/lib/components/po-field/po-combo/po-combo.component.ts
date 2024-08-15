@@ -101,7 +101,7 @@ const poComboContainerPositionDefault = 'bottom';
 })
 export class PoComboComponent extends PoComboBaseComponent implements AfterViewInit, OnChanges, OnDestroy {
   @ContentChild(PoComboOptionTemplateDirective, { static: true }) comboOptionTemplate: PoComboOptionTemplateDirective;
-
+  @ViewChild('outerContainer ', { read: ElementRef }) outerContainer: ElementRef;
   @ViewChild('containerElement', { read: ElementRef }) containerElement: ElementRef;
   @ViewChild('contentElement', { read: ElementRef }) contentElement: ElementRef;
   @ViewChild('iconArrow', { read: ElementRef, static: true }) iconElement: ElementRef;
@@ -116,6 +116,7 @@ export class PoComboComponent extends PoComboBaseComponent implements AfterViewI
   scrollTop = 0;
   shouldMarkLetters: boolean = true;
   infiniteLoading: boolean = false;
+  containerWidth: number;
 
   private _isServerSearching: boolean = false;
   private lastKey;
@@ -163,6 +164,8 @@ export class PoComboComponent extends PoComboBaseComponent implements AfterViewI
     if (this.autoFocus) {
       this.focus();
     }
+
+    this.setContainerWidth();
   }
 
   ngOnChanges(changes: SimpleChanges) {
@@ -648,6 +651,9 @@ export class PoComboComponent extends PoComboBaseComponent implements AfterViewI
       : this.inputEl.nativeElement.focus();
 
     this.setContainerPosition();
+    if (this.comboOpen) {
+      this.setContainerWidth();
+    }
   }
 
   private removeListeners() {
@@ -672,6 +678,12 @@ export class PoComboComponent extends PoComboBaseComponent implements AfterViewI
     );
 
     this.adjustContainerPosition();
+  }
+
+  private setContainerWidth(): void {
+    if (this.outerContainer) {
+      this.containerWidth = this.outerContainer.nativeElement.offsetWidth;
+    }
   }
 
   private setOptions() {

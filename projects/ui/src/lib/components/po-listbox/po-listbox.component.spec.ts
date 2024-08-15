@@ -1,4 +1,4 @@
-import { EventEmitter, NO_ERRORS_SCHEMA, SimpleChange } from '@angular/core';
+import { ElementRef, NO_ERRORS_SCHEMA, SimpleChange } from '@angular/core';
 import { ComponentFixture, TestBed, fakeAsync, tick } from '@angular/core/testing';
 
 import { PoListBoxComponent } from './po-listbox.component';
@@ -713,6 +713,112 @@ describe('PoListBoxComponent', () => {
 
         component.onSelectAllCheckboxKeyDown(mockEvent);
         expect(component.closeEvent.emit).toHaveBeenCalled();
+      });
+    });
+
+    describe('getSizeLoading', () => {
+      it('should return `md` when containerWidth > 180', () => {
+        const listboxMock = new ElementRef({
+          offsetWidth: 0
+        });
+
+        component['listbox'] = listboxMock;
+        component.containerWidth = 190;
+
+        expect((component as any).getSizeLoading()).toBe('md');
+      });
+
+      it('should return `sm` when containerWidth is between 140 and 180', () => {
+        const listboxMock = new ElementRef({
+          offsetWidth: 0
+        });
+
+        component['listbox'] = listboxMock;
+        component.containerWidth = 150;
+        expect((component as any).getSizeLoading()).toBe('sm');
+      });
+
+      it('should return `xs` when containerWidth < 140', () => {
+        const listboxMock = new ElementRef({
+          offsetWidth: 0
+        });
+
+        component['listbox'] = listboxMock;
+        component.containerWidth = 130;
+        expect((component as any).getSizeLoading()).toBe('xs');
+      });
+
+      it('should return `md` when listbox width > 180', () => {
+        const listboxMock = new ElementRef({
+          offsetWidth: 181
+        });
+
+        component['listbox'] = listboxMock;
+        component.containerWidth = 0;
+        expect((component as any).getSizeLoading()).toBe('md');
+      });
+
+      it('should return `sm` when listbox width is between 140 and 180', () => {
+        const listboxMock = new ElementRef({
+          offsetWidth: 150
+        });
+
+        component['listbox'] = listboxMock;
+        component.containerWidth = 0;
+        expect((component as any).getSizeLoading()).toBe('sm');
+      });
+
+      it('should return `xs` when listbox width < 140', () => {
+        const listboxMock = new ElementRef({
+          offsetWidth: 120
+        });
+
+        component['listbox'] = listboxMock;
+        component.containerWidth = 0;
+        expect((component as any).getSizeLoading()).toBe('xs');
+      });
+    });
+
+    describe('getTextLoading', () => {
+      it('should return space when containerWidth < 140', () => {
+        const listboxMock = new ElementRef({
+          offsetWidth: 0
+        });
+
+        component['listbox'] = listboxMock;
+        component.containerWidth = 130;
+        expect((component as any).getTextLoading()).toBe(' ');
+      });
+
+      it('should return empty string when containerWidth >= 140', () => {
+        const listboxMock = new ElementRef({
+          offsetWidth: 0
+        });
+
+        component['listbox'] = listboxMock;
+        component.containerWidth = 140;
+        expect((component as any).getTextLoading()).toBe('');
+      });
+
+      it('should return space when listbox width < 140', () => {
+        const listboxMock = new ElementRef({
+          offsetWidth: 120
+        });
+
+        component['listbox'] = listboxMock;
+        component['containerWidth'] = 0;
+
+        expect((component as any).getTextLoading()).toBe(' ');
+      });
+
+      it('should return empty string when listbox width >= 140', () => {
+        const listboxMock = new ElementRef({
+          offsetWidth: 140
+        });
+
+        component['listbox'] = listboxMock;
+        component['containerWidth'] = 130;
+        expect((component as any).getTextLoading()).toBe('');
       });
     });
   });
