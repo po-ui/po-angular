@@ -56,6 +56,7 @@ const PO_COMBO_FIELD_VALUE_DEFAULT = 'value';
  * | `--color`                              | Cor principal do Combo                                | `var(--color-neutral-dark-70)`                    |
  * | `--background`                         | Cor de background                                     | `var(--color-neutral-light-05)`                   |
  * | `--border-radius`                      | Contém o valor do raio dos cantos do elemento&nbsp;   | `var(--border-width-lg)`                          |
+ * | `--min-width`                          | Largura mínima do combo                               | `150px`
  * | **Hover**                              |                                                       |                                                   |
  * | `--color-hover`                        | Cor principal no estado hover                         | `var(--color-action-hover)`                       |
  * | `--background-hover`                   | Cor de background no estado hover                     | `var(--color-brand-01-lightest)`                  |

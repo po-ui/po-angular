@@ -1,89 +1,92 @@
-<po-field-container
-  [p-disabled]="disabled"
-  [p-label]="label"
-  [p-optional]="optional"
-  [p-required]="required"
-  [p-show-required]="showRequired"
->
-  <div
-    cdkOverlayOrigin
-    #trigger="cdkOverlayOrigin"
-    class="po-field-container-content"
-    [class.po-multiselect-show]="dropdownOpen"
+<div #outerContainer>
+  <po-field-container
+    [p-disabled]="disabled"
+    [p-label]="label"
+    [p-optional]="optional"
+    [p-required]="required"
+    [p-show-required]="showRequired"
   >
     <div
-      #inputElement
-      [tabindex]="disabled ? -1 : 0"
-      [attr.disabled]="disabled"
-      [attr.aria-label]="label"
-      class="po-input-icon-right po-multiselect-input"
-      [class.po-multiselect-input-auto]="autoHeight"
-      [class.po-multiselect-input-static]="!autoHeight"
-      [class.po-multiselect-input-disabled]="disabled"
-      [class.po-multiselect-input-font]="!disabled && !visibleTags?.length"
-      (keydown)="onKeyDown($event)"
-      (click)="toggleDropdownVisibility()"
-      (blur)="onBlur()"
+      cdkOverlayOrigin
+      #trigger="cdkOverlayOrigin"
+      class="po-field-container-content"
+      [class.po-multiselect-show]="dropdownOpen"
     >
-      <span *ngIf="!disabled && !visibleTags?.length" class="po-multiselect-input-placeholder" aria-hidden="true">
-        {{ placeholder ? placeholder : literals.selectItem }}
-      </span>
+      <div
+        #inputElement
+        [tabindex]="disabled ? -1 : 0"
+        [attr.disabled]="disabled"
+        [attr.aria-label]="label"
+        class="po-input-icon-right po-multiselect-input"
+        [class.po-multiselect-input-auto]="autoHeight"
+        [class.po-multiselect-input-static]="!autoHeight"
+        [class.po-multiselect-input-disabled]="disabled"
+        [class.po-multiselect-input-font]="!disabled && !visibleTags?.length"
+        (keydown)="onKeyDown($event)"
+        (click)="toggleDropdownVisibility()"
+        (blur)="onBlur()"
+      >
+        <span *ngIf="!disabled && !visibleTags?.length" class="po-multiselect-input-placeholder" aria-hidden="true">
+          {{ placeholder ? placeholder : literals.selectItem }}
+        </span>
 
-      <po-tag
-        *ngFor="let tag of visibleTags; index as i"
-        [p-value]="tag[fieldLabel]"
-        [p-literals]="i + 1 === visibleTags.length && hasMoreTag ? literalsTag : undefined"
-        [p-removable]="true"
-        [class.po-clickable]="tag[fieldValue] === '' && !disabled"
-        [p-disabled]="disabled"
-        (p-close)="closeTag(tag[fieldValue], $event)"
-      ></po-tag>
+        <po-tag
+          *ngFor="let tag of visibleTags; index as i"
+          [p-value]="tag[fieldLabel]"
+          [p-literals]="i + 1 === visibleTags.length && hasMoreTag ? literalsTag : undefined"
+          [p-removable]="true"
+          [class.po-clickable]="tag[fieldValue] === '' && !disabled"
+          [p-disabled]="disabled"
+          (p-close)="closeTag(tag[fieldValue], $event)"
+        ></po-tag>
 
-      <div class="po-field-icon-container-right">
-        <po-icon
-          p-icon="{{ dropdownIcon }}"
-          #iconElement
-          class="po-field-icon {{ disabled ? 'po-icon-input-disabled' : 'po-icon-input' }}"
-          [ngClass]="disabled ? 'po-field-icon-disabled' : ''"
-        >
-        </po-icon>
+        <div class="po-field-icon-container-right">
+          <po-icon
+            p-icon="{{ dropdownIcon }}"
+            #iconElement
+            class="po-field-icon {{ disabled ? 'po-icon-input-disabled' : 'po-icon-input' }}"
+            [ngClass]="disabled ? 'po-field-icon-disabled' : ''"
+          >
+          </po-icon>
+        </div>
       </div>
     </div>
-  </div>
 
-  <ng-container *ngIf="appendBox; then dropdownCDK; else dropdownDefault"> </ng-container>
+    <ng-container *ngIf="appendBox; then dropdownCDK; else dropdownDefault"> </ng-container>
 
-  <ng-template #dropdownDefault>
-    <ng-container *ngTemplateOutlet="dropdownListbox"> </ng-container>
-  </ng-template>
-
-  <ng-template #dropdownCDK>
-    <ng-template cdkConnectedOverlay [cdkConnectedOverlayOrigin]="trigger" [cdkConnectedOverlayOpen]="true">
-      <ng-container *ngTemplateOutlet="dropdownListbox"></ng-container>
+    <ng-template #dropdownDefault>
+      <ng-container *ngTemplateOutlet="dropdownListbox"> </ng-container>
     </ng-template>
+
+    <ng-template #dropdownCDK>
+      <ng-template cdkConnectedOverlay [cdkConnectedOverlayOrigin]="trigger" [cdkConnectedOverlayOpen]="true">
+        <ng-container *ngTemplateOutlet="dropdownListbox"></ng-container>
+      </ng-template>
+    </ng-template>
+
+    <po-field-container-bottom [p-help]="help" [p-disabled]="disabled"></po-field-container-bottom>
+  </po-field-container>
+
+  <ng-template #dropdownListbox>
+    <po-multiselect-dropdown
+      #dropdownElement
+      [p-searching]="isServerSearching"
+      [p-hide-search]="hideSearch"
+      [p-hide-select-all]="hideSelectAll"
+      [p-literals]="literals"
+      [p-options]="options"
+      [p-visible-options]="visibleOptionsDropdown"
+      [p-selected-options]="selectedOptions"
+      [p-placeholder-search]="placeholderSearch"
+      [p-field-value]="fieldValue"
+      [p-field-label]="fieldLabel"
+      [p-multiselect-template]="multiselectOptionTemplate"
+      (p-change)="changeItems($event)"
+      (p-change-search)="changeSearch($event)"
+      (p-close-dropdown)="controlDropdownVisibility(false)"
+      (keydown)="onKeyDownDropdown($event, 0)"
+      [p-container-width]="containerWidth"
+    >
+    </po-multiselect-dropdown>
   </ng-template>
-
-  <po-field-container-bottom [p-help]="help" [p-disabled]="disabled"></po-field-container-bottom>
-</po-field-container>
-
-<ng-template #dropdownListbox>
-  <po-multiselect-dropdown
-    #dropdownElement
-    [p-searching]="isServerSearching"
-    [p-hide-search]="hideSearch"
-    [p-hide-select-all]="hideSelectAll"
-    [p-literals]="literals"
-    [p-options]="options"
-    [p-visible-options]="visibleOptionsDropdown"
-    [p-selected-options]="selectedOptions"
-    [p-placeholder-search]="placeholderSearch"
-    [p-field-value]="fieldValue"
-    [p-field-label]="fieldLabel"
-    [p-multiselect-template]="multiselectOptionTemplate"
-    (p-change)="changeItems($event)"
-    (p-change-search)="changeSearch($event)"
-    (p-close-dropdown)="controlDropdownVisibility(false)"
-    (keydown)="onKeyDownDropdown($event, 0)"
-  >
-  </po-multiselect-dropdown>
-</ng-template>
+</div>
