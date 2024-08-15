@@ -21,6 +21,7 @@
         (p-change-all)="onClickSelectAll()"
         (p-change-search)="callChangeSearch($event)"
         (p-close)="closeDropdown.emit()"
+        [p-container-width]="containerWidth"
       >
       </po-listbox>
     </ng-container>

@@ -126,6 +126,7 @@ export class PoMultiselectComponent
   @ViewChild('dropdownElement') dropdown;
   @ViewChild('iconElement', { read: ElementRef, static: true }) iconElement: ElementRef;
   @ViewChild('inputElement', { read: ElementRef, static: true }) inputElement: ElementRef;
+  @ViewChild('outerContainer ', { read: ElementRef }) outerContainer: ElementRef;
 
   literalsTag;
   dropdownIcon: string = 'ICON_ARROW_DOWN';
@@ -134,6 +135,8 @@ export class PoMultiselectComponent
   hasMoreTag: boolean;
   timeoutResize;
   visibleElement = false;
+  containerWidth: number;
+
   private subscription: Subscription = new Subscription();
   private enterCloseTag = false;
   private initCalculateItems = true;
@@ -618,6 +621,10 @@ export class PoMultiselectComponent
 
     this.changeDetector.detectChanges();
     this.setPositionDropdown();
+
+    if (this.dropdownOpen) {
+      this.setContainerWidth();
+    }
   }
 
   private removeListeners(): void {
@@ -631,6 +638,12 @@ export class PoMultiselectComponent
 
     window.removeEventListener('scroll', this.onScroll, true);
     this.changeDetector.markForCheck();
+  }
+
+  private setContainerWidth(): void {
+    if (this.outerContainer) {
+      this.containerWidth = this.outerContainer.nativeElement.offsetWidth;
+    }
   }
 
   private setPositionDropdown(): void {

@@ -1,5 +1,6 @@
 <div class="sample-container">
-  <po-loading-overlay [p-screen-lock]="properties?.includes('screenLock')" [p-text]="text"> </po-loading-overlay>
+  <po-loading-overlay [p-screen-lock]="properties?.includes('screenLock')" [p-text]="text" [p-size]="size">
+  </po-loading-overlay>
 </div>
 
 <hr />
@@ -18,10 +19,14 @@
     >
     </po-checkbox-group>
   </div>
+  <div class="po-row">
+    <po-radio-group class="po-md-6" name="size" [(ngModel)]="size" p-label="Size" [p-options]="sizesOptions">
+    </po-radio-group>
+  </div>
 
   <div class="po-row">
     <div class="po-md-3">
-      <po-button p-label="Sample Restore" (p-click)="formProperties.reset()"> </po-button>
+      <po-button p-label="Sample Restore" (p-click)="restore()"> </po-button>
     </div>
   </div>
 </form>
