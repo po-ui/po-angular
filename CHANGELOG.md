@@ -2,6 +2,14 @@
 
 All notable changes to this project will be documented in this file. See [standard-version](https://github.com/conventional-changelog/standard-version) for commit guidelines.
 
+### [17.23.0](https://github.com/po-ui/po-angular/compare/v17.22.0...v17.23.0) (2024-08-19)
+
+
+### Features
+
+* **feat:** implementa tokens para cor do texto em compatibilidade com tema dark ([0d22797](https://github.com/po-ui/po-style/commit/0d227978b3030159516b23813cffc3cf8c4a43e5))
+
+
 ## [17.22.0](https://github.com/po-ui/po-angular/compare/v17.21.0...v17.22.0) (2024-08-12)
 
 
