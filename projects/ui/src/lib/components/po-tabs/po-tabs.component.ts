@@ -283,10 +283,9 @@ export class PoTabsComponent extends PoTabsBaseComponent implements OnInit, Afte
     }
 
     if (this.tabsChildren) {
-      const _tabsChildren = this.tabsChildrenArray;
+      const _tabsChildren = [...this.tabsChildrenArray];
       if (initialState) {
         this.tabsDefault = _tabsChildren;
-        this.tabsDropdown = _tabsChildren;
       } else {
         this.tabsDefault = _tabsChildren.slice(0, this.quantityTabsButton);
         this.tabsDropdown = _tabsChildren.slice(this.quantityTabsButton);
