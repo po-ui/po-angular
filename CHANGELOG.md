@@ -2,12 +2,20 @@
 
 All notable changes to this project will be documented in this file. See [standard-version](https://github.com/conventional-changelog/standard-version) for commit guidelines.
 
+### [17.24.0](https://github.com/po-ui/po-angular/compare/v17.23.0...v17.24.0) (2024-08-26)
+
+
+### Bug Fixes
+
+* **listbox:** ajusta dimensões do loading-overlay no po-listbox ([074ab5f](https://github.com/po-ui/po-angular/commit/074ab5f848536470f6644f5867a6da68712eafb2))
+* **tabs:** corrige renderização das tabs no estado inicial do componente ([72fc789](https://github.com/po-ui/po-angular/commit/72fc789f9e2757c076c9b6e9a9552461fc2e4fd9))
+
 ### [17.23.0](https://github.com/po-ui/po-angular/compare/v17.22.0...v17.23.0) (2024-08-19)
 
 
 ### Features
 
-* **feat:** implementa tokens para cor do texto em compatibilidade com tema dark ([0d22797](https://github.com/po-ui/po-style/commit/0d227978b3030159516b23813cffc3cf8c4a43e5))
+* **components:** implementa tokens para cor do texto em compatibilidade com tema dark ([0d22797](https://github.com/po-ui/po-style/commit/0d227978b3030159516b23813cffc3cf8c4a43e5))
 
 
 ## [17.22.0](https://github.com/po-ui/po-angular/compare/v17.21.0...v17.22.0) (2024-08-12)
