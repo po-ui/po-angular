@@ -25,7 +25,18 @@
 </ng-template>
 
 <ng-template #poInfo let-field>
-  <po-info [ngClass]="field.cssClass" [p-label]="field.label" [p-value]="setFieldValue(field)"> </po-info>
+  <ng-container *ngIf="textWrap; else defaultInfo">
+    <po-info
+      [ngClass]="[field.cssClass, containsLineBreak(setFieldValue(field)) ? 'po-info-value-pre' : '']"
+      [p-label]="field.label"
+      [p-value]="setFieldValue(field)"
+    >
+    </po-info>
+  </ng-container>
+
+  <ng-template #defaultInfo>
+    <po-info [ngClass]="field.cssClass" [p-label]="field.label" [p-value]="setFieldValue(field)"> </po-info>
+  </ng-template>
 </ng-template>
 
 <ng-template #poTag let-field>
