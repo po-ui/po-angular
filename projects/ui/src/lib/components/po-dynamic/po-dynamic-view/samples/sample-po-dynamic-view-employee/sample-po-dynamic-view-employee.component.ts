@@ -38,6 +38,12 @@ export class SamplePoDynamicViewEmployeeComponent {
         { label: 'yes ', value: '1' },
         { label: 'no', value: '2' }
       ]
+    },
+    {
+      property: 'hobbies',
+      label: 'Hobbies',
+      gridColumns: 12,
+      divider: 'Additional Information'
     }
   ];
 
@@ -61,6 +67,11 @@ export class SamplePoDynamicViewEmployeeComponent {
     admissionDate: '2014-10-14T13:45:00-00:00',
     hoursPerDay: '08:30:00',
     marriedStatus: '1',
-    children: '1'
+    children: '1',
+    hobbies:
+      'Leitura de livros técnicos e ficção científica.\n' +
+      'Prática de corrida ao ar livre.\n' +
+      'Jogos de tabuleiro e videogames.\n' +
+      'Culinária, especialmente cozinha italiana.'
   };
 }
