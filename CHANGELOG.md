@@ -2,6 +2,14 @@
 
 All notable changes to this project will be documented in this file. See [standard-version](https://github.com/conventional-changelog/standard-version) for commit guidelines.
 
+### [18.4.0](https://github.com/po-ui/po-angular/compare/v18.3.0...v18.4.0) (2024-08-26)
+
+
+### Bug Fixes
+
+* **listbox:** ajusta dimensões do loading-overlay no po-listbox ([77a7105](https://github.com/po-ui/po-angular/commit/77a7105961266fa9f2ab42ac9bce314df3d48e3b))
+* **tabs:** corrige renderização das tabs no estado inicial do componente ([ed87c50](https://github.com/po-ui/po-angular/commit/ed87c5073ae18c122a0dd985abc1b6dc5ec1f389))
+
 ### [18.3.0](https://github.com/po-ui/po-angular/compare/v18.2.0...v18.3.0) (2024-08-19)
 
 
