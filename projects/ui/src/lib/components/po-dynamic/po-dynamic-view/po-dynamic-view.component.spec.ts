@@ -318,6 +318,11 @@ describe('PoDynamicViewComponent:', () => {
         expect(component.setFieldValue(field)).toEqual(false);
       });
     });
+
+    it('containsLineBreak: should return true if the string contains a newline character', () => {
+      const value = 'Hello\nWorld';
+      expect(component['containsLineBreak'](value)).toBeTrue();
+    });
   });
 
   describe('Templates:', () => {
