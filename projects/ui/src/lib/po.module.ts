@@ -7,6 +7,7 @@ import { PoInterceptorsModule } from './interceptors/interceptors.module';
 import { PoPipesModule } from './pipes/pipes.module';
 import { PoServicesModule } from './services/services.module';
 import { PoNotificationService } from './services/po-notification/po-notification.service';
+import { PoThemeA11yEnum, poThemeDefault, PoThemeService, PoThemeTypeEnum } from './services';
 
 @NgModule({
   declarations: [],
@@ -29,4 +30,10 @@ import { PoNotificationService } from './services/po-notification/po-notificatio
   providers: [PoNotificationService],
   bootstrap: []
 })
-export class PoModule {}
+export class PoModule {
+  constructor(private themeService: PoThemeService) {
+    if (this.themeService.getThemeActive() === undefined) {
+      this.themeService.setTheme(poThemeDefault, PoThemeTypeEnum.light, PoThemeA11yEnum.AAA, false);
+    }
+  }
+}
