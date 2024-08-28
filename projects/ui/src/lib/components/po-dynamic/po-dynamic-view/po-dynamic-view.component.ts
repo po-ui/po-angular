@@ -3,11 +3,11 @@ import { Component, OnChanges, OnInit, SimpleChanges } from '@angular/core';
 
 import { PoTimePipe } from '../../../pipes/po-time/po-time.pipe';
 
+import { PoComboFilterService } from '../../po-field/po-combo/po-combo-filter.service';
+import { PoMultiselectFilterService } from '../../po-field/po-multiselect/po-multiselect-filter.service';
 import { PoDynamicViewField } from './../po-dynamic-view/po-dynamic-view-field.interface';
 import { PoDynamicViewBaseComponent } from './po-dynamic-view-base.component';
 import { PoDynamicViewService } from './services/po-dynamic-view.service';
-import { PoComboFilterService } from '../../po-field/po-combo/po-combo-filter.service';
-import { PoMultiselectFilterService } from '../../po-field/po-multiselect/po-multiselect-filter.service';
 
 /**
  * @docsExtends PoDynamicViewBaseComponent
@@ -37,30 +37,27 @@ import { PoMultiselectFilterService } from '../../po-field/po-multiselect/po-mul
  */
 @Component({
   selector: 'po-dynamic-view',
-  templateUrl: './po-dynamic-view.component.html'
+  templateUrl: './po-dynamic-view.component.html',
+  providers: [
+    DecimalPipe,
+    TitleCasePipe,
+    DatePipe,
+    PoTimePipe,
+    CurrencyPipe,
+    PoDynamicViewService,
+    PoComboFilterService,
+    PoComboFilterService,
+    PoMultiselectFilterService
+  ]
 })
 export class PoDynamicViewComponent extends PoDynamicViewBaseComponent implements OnChanges, OnInit {
   initChanges;
   constructor(
-    currencyPipe: CurrencyPipe,
-    datePipe: DatePipe,
-    decimalPipe: DecimalPipe,
-    timePipe: PoTimePipe,
-    titleCasePipe: TitleCasePipe,
     dynamicViewService: PoDynamicViewService,
     comboFilterService: PoComboFilterService,
     multiselectFilterService: PoMultiselectFilterService
   ) {
-    super(
-      currencyPipe,
-      datePipe,
-      decimalPipe,
-      timePipe,
-      titleCasePipe,
-      dynamicViewService,
-      comboFilterService,
-      multiselectFilterService
-    );
+    super(dynamicViewService, comboFilterService, multiselectFilterService);
   }
 
   ngOnChanges(changes: SimpleChanges) {

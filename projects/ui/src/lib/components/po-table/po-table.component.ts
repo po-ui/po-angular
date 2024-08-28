@@ -101,7 +101,7 @@ import { PoTableService } from './services/po-table.service';
 @Component({
   selector: 'po-table',
   templateUrl: './po-table.component.html',
-  providers: [PoDateService]
+  providers: [PoDateService, DecimalPipe]
 })
 export class PoTableComponent extends PoTableBaseComponent implements AfterViewInit, DoCheck, OnDestroy, OnInit {
   @ContentChild(PoTableRowTemplateDirective, { static: true }) tableRowTemplate: PoTableRowTemplateDirective;
@@ -175,6 +175,8 @@ export class PoTableComponent extends PoTableBaseComponent implements AfterViewI
   private clickListener: () => void;
   private resizeListener: () => void;
 
+  private _decimalPipe = inject(DecimalPipe);
+
   @ViewChild('columnManagerTarget') set columnManagerTarget(value: ElementRef) {
     this._columnManagerTarget = value;
     this.changeDetector.detectChanges();
@@ -203,7 +205,6 @@ export class PoTableComponent extends PoTableBaseComponent implements AfterViewI
     renderer: Renderer2,
     poLanguageService: PoLanguageService,
     private changeDetector: ChangeDetectorRef,
-    private decimalPipe: DecimalPipe,
     private defaultService: PoTableService,
     @Optional() @Inject(ICONS_DICTIONARY) value: { [key: string]: string }
   ) {
@@ -499,7 +500,7 @@ export class PoTableComponent extends PoTableBaseComponent implements AfterViewI
       return value;
     }
 
-    return this.decimalPipe.transform(value, format);
+    return this._decimalPipe.transform(value, format);
   }
 
   getCellData(row: any, column: PoTableColumn): any {

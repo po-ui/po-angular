@@ -1,4 +1,4 @@
-import { Component, EventEmitter, Input, Output } from '@angular/core';
+import { Component, EventEmitter, inject, Input, Output } from '@angular/core';
 import { DecimalPipe } from '@angular/common';
 
 import { capitalizeFirstLetter, isTypeof } from '../../../utils/util';
@@ -15,9 +15,12 @@ import { PoTableDetailColumn } from './po-table-detail-column.interface';
  */
 @Component({
   selector: 'po-table-detail',
-  templateUrl: './po-table-detail.component.html'
+  templateUrl: './po-table-detail.component.html',
+  providers: [DecimalPipe]
 })
 export class PoTableDetailComponent {
+  private _decimalPipe = inject(DecimalPipe);
+
   /**
    * Lista de itens do _detail_ da tabela.
    */
@@ -50,8 +53,6 @@ export class PoTableDetailComponent {
     return this._detail;
   }
 
-  constructor(private decimalPipe: DecimalPipe) {}
-
   get detailColumns(): Array<PoTableDetailColumn> {
     return this.detail?.columns || [];
   }
@@ -69,7 +70,7 @@ export class PoTableDetailComponent {
       return value;
     }
 
-    return this.decimalPipe.transform(value, format);
+    return this._decimalPipe.transform(value, format);
   }
 
   getColumnTitleLabel(detail: PoTableDetailColumn) {

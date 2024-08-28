@@ -1,16 +1,16 @@
 import { CurrencyPipe, DatePipe, DecimalPipe, TitleCasePipe } from '@angular/common';
-import { Directive, Input } from '@angular/core';
+import { Directive, inject, Input } from '@angular/core';
 
 import { PoTimePipe } from '../../../pipes/po-time/po-time.pipe';
 import { convertToBoolean, isTypeof, sortFields } from '../../../utils/util';
 
-import { Observable, catchError, map, of } from 'rxjs';
-import { getGridColumnsClasses, isVisibleField } from '../po-dynamic.util';
-import { PoDynamicViewField } from './po-dynamic-view-field.interface';
-import { PoDynamicViewService } from './services/po-dynamic-view.service';
+import { catchError, map, Observable, of } from 'rxjs';
 import { PoComboFilterService } from '../../po-field/po-combo/po-combo-filter.service';
 import { PoMultiselectFilterService } from '../../po-field/po-multiselect/po-multiselect-filter.service';
+import { getGridColumnsClasses, isVisibleField } from '../po-dynamic.util';
 import { PoDynamicSharedBase } from '../shared/po-dynamic-shared-base';
+import { PoDynamicViewField } from './po-dynamic-view-field.interface';
+import { PoDynamicViewService } from './services/po-dynamic-view.service';
 
 /**
  *
@@ -126,12 +126,12 @@ export class PoDynamicViewBaseComponent extends PoDynamicSharedBase {
     return this._value;
   }
 
+  private _decimalPipe = inject(DecimalPipe);
+  private _currencyPipe = inject(CurrencyPipe);
+  private _datePipe = inject(DatePipe);
+  private _timePipe = inject(PoTimePipe);
+  private _titleCasePipe = inject(TitleCasePipe);
   constructor(
-    private currencyPipe: CurrencyPipe,
-    private datePipe: DatePipe,
-    private decimalPipe: DecimalPipe,
-    private timePipe: PoTimePipe,
-    private titleCasePipe: TitleCasePipe,
     protected dynamicViewService: PoDynamicViewService,
     protected comboFilterService: PoComboFilterService,
     protected multiselectFilterService: PoMultiselectFilterService
@@ -289,7 +289,7 @@ export class PoDynamicViewBaseComponent extends PoDynamicSharedBase {
     return {
       property,
       value,
-      label: this.titleCasePipe.transform(property),
+      label: this._titleCasePipe.transform(property),
       cssClass: classesGridColumns,
       ...field
     };
@@ -366,19 +366,19 @@ export class PoDynamicViewBaseComponent extends PoDynamicSharedBase {
 
     switch (type) {
       case 'currency':
-        transformedValue = this.currencyPipe.transform(value, format || 'BRL', 'symbol', '1.2-2');
+        transformedValue = this._currencyPipe.transform(value, format || 'BRL', 'symbol', '1.2-2');
         break;
       case 'date':
-        transformedValue = this.datePipe.transform(value, format || 'dd/MM/yyyy');
+        transformedValue = this._datePipe.transform(value, format || 'dd/MM/yyyy');
         break;
       case 'dateTime':
-        transformedValue = this.datePipe.transform(value, format || 'dd/MM/yyyy HH:mm:ss');
+        transformedValue = this._datePipe.transform(value, format || 'dd/MM/yyyy HH:mm:ss');
         break;
       case 'number':
-        transformedValue = this.decimalPipe.transform(value, format);
+        transformedValue = this._decimalPipe.transform(value, format);
         break;
       case 'time':
-        transformedValue = this.timePipe.transform(value, format || 'HH:mm:ss.ffffff');
+        transformedValue = this._timePipe.transform(value, format || 'HH:mm:ss.ffffff');
         break;
     }
 

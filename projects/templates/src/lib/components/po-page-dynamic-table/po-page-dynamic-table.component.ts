@@ -146,7 +146,7 @@ type UrlOrPoCustomizationFunction = string | (() => PoPageDynamicTableOptions);
 @Component({
   selector: 'po-page-dynamic-table',
   templateUrl: './po-page-dynamic-table.component.html',
-  providers: [PoPageDynamicService]
+  providers: [PoPageDynamicService, PoDialogService]
 })
 export class PoPageDynamicTableComponent extends PoPageDynamicListBaseComponent implements OnInit, OnDestroy {
   /**
