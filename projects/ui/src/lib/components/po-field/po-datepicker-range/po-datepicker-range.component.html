@@ -6,64 +6,68 @@
   [p-required]="required"
   [p-show-required]="showRequired"
 >
-  <div
-    #dateRangeField
-    class="po-datepicker-range-field po-input"
-    [class.po-datepicker-range-field-disabled]="disabled"
-    [attr.disabled]="disabled"
-  >
-    <div class="po-datepicker-range-start-date">
-      <input
-        #startDateInput
-        class="po-datepicker-range-input"
-        maxlength="10"
-        type="text"
-        [attr.aria-label]="label"
-        [autocomplete]="autocomplete"
-        [disabled]="disabled"
-        [name]="startDateInputName"
-        [readonly]="readonly"
-        (blur)="onBlur($event)"
-        (focus)="onFocus($event)"
-        (keydown)="onKeydown($event)"
-        (keyup)="onKeyup($event)"
-        (click)="eventOnClick($event)"
-      />
-    </div>
-
-    <div class="po-datepicker-range-separator">-</div>
-
-    <div class="po-datepicker-range-end-date">
-      <input
-        #endDateInput
-        class="po-datepicker-range-input"
-        maxlength="10"
-        type="text"
-        [autocomplete]="autocomplete"
-        [disabled]="disabled"
-        [name]="endDateInputName"
-        [readonly]="readonly"
-        (blur)="onBlur($event)"
-        (focus)="onFocus($event)"
-        (keydown)="onKeydown($event)"
-        (keyup)="onKeyup($event)"
-        (click)="eventOnClick($event)"
-      />
-    </div>
-
-    <div class="po-datepicker-range-icon">
-      <po-clean class="po-icon-input" *ngIf="enableCleaner" (p-change-event)="clear()"></po-clean>
-    </div>
-
-    <div class="po-datepicker-range-icon">
-      <po-icon
-        #iconCalendar
-        [p-icon]="!disabled || !readonly ? 'ICON_CALENDAR po-clickable' : 'ICON_CALENDAR'"
-        class="po-field-icon {{ disabled ? 'po-icon-input-disabled' : 'po-icon-input' }}"
-        [class.po-field-icon-disabled]="disabled || readonly"
-        (click)="toggleCalendar()"
+  <div class="po-field-container-content">
+    <div class="po-field-container-input">
+      <div
+        #dateRangeField
+        class="po-datepicker-range-field po-input"
+        [class.po-datepicker-range-field-disabled]="disabled"
+        [attr.disabled]="disabled"
       >
-      </po-icon>
+        <div class="po-datepicker-range-start-date">
+          <input
+            #startDateInput
+            class="po-datepicker-range-input"
+            maxlength="10"
+            type="text"
+            [attr.aria-label]="label"
+            [autocomplete]="autocomplete"
+            [disabled]="disabled"
+            [name]="startDateInputName"
+            [readonly]="readonly"
+            (blur)="onBlur($event)"
+            (focus)="onFocus($event)"
+            (keydown)="onKeydown($event)"
+            (keyup)="onKeyup($event)"
+            (click)="eventOnClick($event)"
+          />
+        </div>
+
+        <div class="po-datepicker-range-separator">-</div>
+
+        <div class="po-datepicker-range-end-date">
+          <input
+            #endDateInput
+            class="po-datepicker-range-input"
+            maxlength="10"
+            type="text"
+            [autocomplete]="autocomplete"
+            [disabled]="disabled"
+            [name]="endDateInputName"
+            [readonly]="readonly"
+            (blur)="onBlur($event)"
+            (focus)="onFocus($event)"
+            (keydown)="onKeydown($event)"
+            (keyup)="onKeyup($event)"
+            (click)="eventOnClick($event)"
+          />
+        </div>
+
+        <div class="po-datepicker-range-icon">
+          <po-clean class="po-icon-input" *ngIf="enableCleaner" (p-change-event)="clear()"></po-clean>
+        </div>
+
+        <div class="po-datepicker-range-icon">
+          <po-icon
+            #iconCalendar
+            [p-icon]="!disabled || !readonly ? 'ICON_CALENDAR po-clickable' : 'ICON_CALENDAR'"
+            class="po-field-icon {{ disabled ? 'po-icon-input-disabled' : 'po-icon-input' }}"
+            [class.po-field-icon-disabled]="disabled || readonly"
+            (click)="toggleCalendar()"
+          >
+          </po-icon>
+        </div>
+      </div>
     </div>
   </div>
 

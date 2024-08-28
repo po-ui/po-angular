@@ -1,3 +1,4 @@
+import { PoThemeA11yEnum } from '../enum/po-theme-a11y.enum';
 import { PoThemeTypeEnum } from '../enum/po-theme-type.enum';
 import { PoThemeTokens } from '../interfaces/po-theme-tokens.interface';
 import { PoTheme } from '../interfaces/po-theme.interface';
@@ -5,9 +6,14 @@ import {
   poThemeDefaultActions,
   poThemeDefaultBrands,
   poThemeDefaultFeedback,
-  poThemeDefaultLightValues,
   poThemeDefaultNeutrals
-} from './po-theme-light-defaults.constant';
+} from './types/po-theme-light-defaults.constant';
+import {
+  poThemeDefaultActionsDark,
+  poThemeDefaultBrandsDark,
+  poThemeDefaultFeedbackDark,
+  poThemeDefaultNeutralsDark
+} from './types/po-theme-dark-defaults.constant';
 
 /**
  * Tokens de tema padrão para temas claros.
@@ -18,12 +24,18 @@ const poThemeDefaultLight: PoThemeTokens = {
     action: poThemeDefaultActions,
     neutral: poThemeDefaultNeutrals,
     feedback: poThemeDefaultFeedback
-  },
-  perComponent: {
-    ...poThemeDefaultLightValues.perComponent
-  },
-  onRoot: {
-    ...poThemeDefaultLightValues.onRoot
+  }
+};
+
+/**
+ * Tokens de tema padrão para o tema escuro.
+ */
+const poThemeDefaultDark: PoThemeTokens = {
+  color: {
+    brand: poThemeDefaultBrandsDark,
+    action: poThemeDefaultActionsDark,
+    neutral: poThemeDefaultNeutralsDark,
+    feedback: poThemeDefaultFeedbackDark
   }
 };
 
@@ -32,10 +44,19 @@ const poThemeDefaultLight: PoThemeTokens = {
  */
 const poThemeDefault: PoTheme = {
   name: 'default',
-  type: {
-    light: poThemeDefaultLight
-  },
-  active: PoThemeTypeEnum.light
+  type: [
+    {
+      light: poThemeDefaultLight,
+      dark: poThemeDefaultDark,
+      a11y: PoThemeA11yEnum.AAA
+    },
+    {
+      light: poThemeDefaultLight,
+      dark: poThemeDefaultDark,
+      a11y: PoThemeA11yEnum.AA
+    }
+  ],
+  active: { type: PoThemeTypeEnum.light, a11y: PoThemeA11yEnum.AAA }
 };
 
-export { poThemeDefault, poThemeDefaultLight };
+export { poThemeDefault, poThemeDefaultDark, poThemeDefaultLight };

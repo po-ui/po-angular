@@ -5,7 +5,6 @@ import { NgModule } from '@angular/core';
 import { RouterModule } from '@angular/router';
 
 import { PoModule } from '@po-ui/ng-components';
-
 import { AppComponent } from './app.component';
 
 @NgModule({
