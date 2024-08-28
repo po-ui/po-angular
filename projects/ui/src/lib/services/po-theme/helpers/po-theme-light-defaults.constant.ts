@@ -115,8 +115,24 @@ const poThemeDefaultBrands: poThemeColorBrand = {
  * Define estilos específicos por componente e onRoot para temas claros.
  */
 const poThemeDefaultLightValues = {
-  perComponent: {},
+  perComponent: {
+    /*------------------------------------*\
+    LISTBOX
+    \*------------------------------------*/
+    'po-listbox [hidden]': {
+      'display': 'flex !important',
+    },
+  },
   onRoot: {
+    /*------------------------------------*\
+    FONT
+    \*------------------------------------*/
+    '--font-family': 'Roboto',
+    '--font-family-theme': 'Roboto',
+    '--font-family-theme-bold': 'Roboto-Bold',
+    '--font-family-theme-extra-light': 'Roboto-Condensed-Light',
+    '--font-family-heading': 'Roboto',
+    '--font-family-code': 'Monospace',
     /* WIDGET */
     '--color-widget-color-action-active': 'var(--color-primary-dark-20)',
     '--color-widget-color-action-hover': 'var(--color-primary-dark-20)',
@@ -138,7 +154,9 @@ const poThemeDefaultLightValues = {
     '--color-toolbar-color-default': 'var(--color-brand-02-base)',
     '--color-toolbar-color-title': 'var(--color-action-default)',
     /* CALENDAR */
-    '--color-calendar-background-color-box-background-range': 'var(--color-primary-light-80)'
+    '--color-calendar-background-color-box-background-range': 'var(--color-primary-light-80)',
+    /* BUTTON */
+    '--button-group-container-margin': '-2px',
   }
 };
 

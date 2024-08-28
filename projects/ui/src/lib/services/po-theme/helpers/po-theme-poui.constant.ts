@@ -2,10 +2,15 @@ import { PoThemeTypeEnum } from '../enum/po-theme-type.enum';
 import { PoThemeTokens } from '../interfaces/po-theme-tokens.interface';
 import { PoTheme } from '../interfaces/po-theme.interface';
 import {
+  poThemeDefaultActionsDark,
+  poThemeDefaultBrandsDark,
+  poThemeDefaultFeedbackDark,
+  poThemeDefaultNeutralsDark
+} from './po-theme-dark-defaults.constant';
+import {
   poThemeDefaultActions,
   poThemeDefaultBrands,
   poThemeDefaultFeedback,
-  poThemeDefaultLightValues,
   poThemeDefaultNeutrals
 } from './po-theme-light-defaults.constant';
 
@@ -19,12 +24,18 @@ const poThemeDefaultLight: PoThemeTokens = {
     neutral: poThemeDefaultNeutrals,
     feedback: poThemeDefaultFeedback
   },
-  perComponent: {
-    ...poThemeDefaultLightValues.perComponent
+};
+
+/**
+ * Tokens de tema padrão para o tema escuro.
+ */
+const poThemeDefaultDark: PoThemeTokens = {
+  color: {
+    brand: poThemeDefaultBrandsDark,
+    action: poThemeDefaultActionsDark,
+    neutral: poThemeDefaultNeutralsDark,
+    feedback: poThemeDefaultFeedbackDark
   },
-  onRoot: {
-    ...poThemeDefaultLightValues.onRoot
-  }
 };
 
 /**
@@ -33,9 +44,11 @@ const poThemeDefaultLight: PoThemeTokens = {
 const poThemeDefault: PoTheme = {
   name: 'default',
   type: {
-    light: poThemeDefaultLight
+    light: poThemeDefaultLight,
+    dark: poThemeDefaultDark
   },
   active: PoThemeTypeEnum.light
 };
 
-export { poThemeDefault, poThemeDefaultLight };
+export { poThemeDefault, poThemeDefaultDark, poThemeDefaultLight };
+
