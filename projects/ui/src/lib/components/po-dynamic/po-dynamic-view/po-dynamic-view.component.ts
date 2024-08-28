@@ -94,6 +94,10 @@ export class PoDynamicViewComponent extends PoDynamicViewBaseComponent implement
     }
   }
 
+  protected containsLineBreak(value: string): boolean {
+    return value && value.includes('\n');
+  }
+
   private async getValuesAndFieldsFromLoad(): Promise<{ value?: any; fields?: Array<PoDynamicViewField> }> {
     let valueAndFieldsFromLoad;
 
