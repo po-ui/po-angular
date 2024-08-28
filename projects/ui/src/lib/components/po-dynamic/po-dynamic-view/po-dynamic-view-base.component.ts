@@ -111,6 +111,29 @@ export class PoDynamicViewBaseComponent extends PoDynamicSharedBase {
   }
 
   /**
+   * @optional
+   *
+   * @description
+   *
+   * Permite a quebra de linha no texto do `p-value`, aplicando-a onde há `\n`.
+   *
+   * ```
+   * <po-dynamic-view
+   *   [p-value]="{ description: 'Primeira linha\nSegunda linha' }"
+   *   [p-text-wrap]="true"
+   * ></po-dynamic-view>
+   * ```
+   *
+   * Saída:
+   * ```
+   * Primeira linha
+   * Segunda linha
+   * ```
+   * @default `false`
+   */
+  @Input('p-text-wrap') textWrap: boolean = false;
+
+  /**
    * @description
    *
    * Objeto que será utilizado para exibir as informações dinâmicas, o valor será recuperado através do atributo *property*
