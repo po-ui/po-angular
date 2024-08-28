@@ -7,6 +7,7 @@ import { PoInterceptorsModule } from './interceptors/interceptors.module';
 import { PoPipesModule } from './pipes/pipes.module';
 import { PoServicesModule } from './services/services.module';
 import { PoNotificationService } from './services/po-notification/po-notification.service';
+import { PoThemeA11yEnum, poThemeDefault, PoThemeService, PoThemeTypeEnum } from './services';
 
 @NgModule({
   declarations: [],
