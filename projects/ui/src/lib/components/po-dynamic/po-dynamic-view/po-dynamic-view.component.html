@@ -25,8 +25,14 @@
 </ng-template>
 
 <ng-template #poInfo let-field>
-  <po-info [ngClass]="field.cssClass" [p-label]="field.label" [p-value]="setFieldValue(field)"> </po-info>
-</ng-template>
+  <po-info
+    [ngClass]="field.cssClass"
+    [class.po-info-value-pre]="textWrap && containsLineBreak(setFieldValue(field))"
+    [p-label]="field.label"
+    [p-value]="setFieldValue(field)"
+  >
+  </po-info
+></ng-template>
 
 <ng-template #poTag let-field>
   <po-tag
