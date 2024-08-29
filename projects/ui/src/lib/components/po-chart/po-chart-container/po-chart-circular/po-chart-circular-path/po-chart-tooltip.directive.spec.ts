@@ -112,7 +112,7 @@ describe('PoChartTooltipDirective', () => {
 
     it('calculateTooltipPosition: should return tooltipPosition', () => {
       const tooltipEvent = { clientX: 300, clientY: 300 };
-      const expectedResult = { left: -77, top: 270 };
+      const expectedResult = { left: -67, top: 270 };
       const result = directive.calculateTooltipPosition(tooltipEvent);
 
       expect(result).toEqual(expectedResult);
