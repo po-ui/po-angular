@@ -6,6 +6,6 @@
     "types": ["jasmine", "node"]
   },
   "files": ["src/test.ts"],
-  "include": ["**/*.spec.ts", "**/*.d.ts"],
+  "include": ["**/*.spec.ts", "**/*.d.ts", "src/lib/util-test/util-setup.ts"],
   "exclude": ["schematics/**/*.spec.ts", "**/*.d.ts"]
 }
