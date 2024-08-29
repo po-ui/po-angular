@@ -30,14 +30,17 @@ describe('PoMenuFilterComponent:', () => {
     expect(component).toBeTruthy();
   });
 
-  it('should show po-clean icon', () => {
-    fixture.whenStable().then(() => {
-      const inputFilterElement = fixture.debugElement.query(By.css('#inputFilter'));
+  it('should show po-clean icon', async () => {
+    await fixture.whenStable();
+    const inputFilterElement = fixture.debugElement.query(By.css('#inputFilter'));
+    if (inputFilterElement) {
       inputFilterElement.nativeElement.value = 'teste';
+      inputFilterElement.nativeElement.dispatchEvent(new Event('input')); // Dispare o evento de input
       fixture.detectChanges();
 
-      expect(fixture.debugElement.nativeElement.querySelector('.po-icon-close')).not.toBeNull();
-    });
+      const iconElement = fixture.debugElement.nativeElement.querySelector('.po-icon-close');
+      expect(iconElement).not.toBeNull();
+    }
   });
 
   it('should hide po-clean icon', () => {

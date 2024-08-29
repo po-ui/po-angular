@@ -1,13 +1,12 @@
 import { provideHttpClientTesting } from '@angular/common/http/testing';
 import { NO_ERRORS_SCHEMA } from '@angular/core';
-import { ComponentFixture, TestBed, waitForAsync } from '@angular/core/testing';
+import { ComponentFixture, discardPeriodicTasks, fakeAsync, flush, TestBed, tick } from '@angular/core/testing';
 import { RouterTestingModule } from '@angular/router/testing';
 import { Observable, of } from 'rxjs';
 import { PoLookupFilter } from '../../../../components/po-field/po-lookup/interfaces/po-lookup-filter.interface';
 import { PoLookupModalComponent } from '../../../../components/po-field/po-lookup/po-lookup-modal/po-lookup-modal.component';
 import { PoModalModule } from '../../../../components/po-modal/po-modal.module';
 import { PoComponentInjectorService } from '../../../../services/po-component-injector/po-component-injector.service';
-import { changeBrowserInnerHeight } from '../../../../util-test/util-expect.spec';
 import { PoDynamicModule } from '../../../po-dynamic/po-dynamic.module';
 import { PoTableColumnSortType } from '../../../po-table/enums/po-table-column-sort-type.enum';
 import { PoTableColumnSort } from '../../../po-table/interfaces/po-table-column-sort.interface';
@@ -28,7 +27,7 @@ describe('PoLookupModalComponent', () => {
 
   const advancedFilters = [{ property: 'name', gridColumns: 6, gridSmColumns: 12, order: 1, required: true }];
 
-  beforeEach(waitForAsync(() => {
+  beforeEach(fakeAsync(() => {
     TestBed.configureTestingModule({
       declarations: [PoLookupModalComponent],
       schemas: [NO_ERRORS_SCHEMA],
@@ -40,9 +39,7 @@ describe('PoLookupModalComponent', () => {
         provideHttpClientTesting()
       ]
     }).compileComponents();
-  }));
 
-  beforeEach(() => {
     fixture = TestBed.createComponent(PoLookupModalComponent);
     component = fixture.componentInstance;
     component.infiniteScroll = false;
@@ -57,7 +54,7 @@ describe('PoLookupModalComponent', () => {
         }),
       getObjectByValue: () => of({ items: [{ value: 123, label: 'teste' }] })
     };
-  });
+  }));
 
   afterEach(() => {
     component.poModal.close();
@@ -164,11 +161,16 @@ describe('PoLookupModalComponent', () => {
   });
 
   describe('AdvancedSearch: ', () => {
-    beforeEach(waitForAsync(() => {
+    beforeEach(fakeAsync(() => {
       component.advancedFilters = advancedFilters;
       fixture.detectChanges();
       component.onAdvancedFilter();
+
+      tick(10);
       fixture.detectChanges();
+
+      flush();
+      discardPeriodicTasks();
     }));
 
     afterEach(() => {

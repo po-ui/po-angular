@@ -83,4 +83,26 @@ describe('PoResizeObserverDirective', () => {
 
     window.ResizeObserver = resizeRef;
   }));
+
+  it('ngOnInit: should call chartWidthResize$.next when ResizeObserver callback is triggered', fakeAsync(() => {
+    const mockObserver = {
+      observe: jasmine.createSpy('observe'),
+      unobserve: jasmine.createSpy('unobserve')
+    };
+
+    spyOn(window as any, 'ResizeObserver').and.callFake(function (callback) {
+      this.observe = mockObserver.observe;
+      this.unobserve = mockObserver.unobserve;
+      this.callback = callback;
+    });
+
+    const nextSpy = spyOn(directive['chartWidthResize$'], 'next');
+
+    directive.ngOnInit();
+
+    directive['observer'].callback();
+    tick(20);
+
+    expect(nextSpy).toHaveBeenCalledWith({});
+  }));
 });

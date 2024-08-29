@@ -2,21 +2,22 @@ import { OverlayModule } from '@angular/cdk/overlay';
 import { HttpClient, HttpHandler, provideHttpClient, withInterceptorsFromDi } from '@angular/common/http';
 import { HttpTestingController, provideHttpClientTesting } from '@angular/common/http/testing';
 import { ComponentFixture, fakeAsync, flush, TestBed, tick } from '@angular/core/testing';
-import { Observable, catchError, of, tap, throwError } from 'rxjs';
+import { Observable, of, throwError } from 'rxjs';
 
 import * as UtilsFunction from '../../../utils/util';
 
-import { PoTagComponent } from '../../po-tag/po-tag.component';
 import { Renderer2 } from '@angular/core';
 import { PoKeyCodeEnum } from '../../../enums/po-key-code.enum';
+import { PoControlPositionService } from '../../../services/po-control-position/po-control-position.service';
+import { PoTagComponent } from '../../po-tag/po-tag.component';
 import { PoFieldContainerComponent } from '../po-field-container/po-field-container.component';
 import { PoMultiselectBaseComponent } from '../po-multiselect/po-multiselect-base.component';
 import { PoFieldContainerBottomComponent } from './../po-field-container/po-field-container-bottom/po-field-container-bottom.component';
 import { PoMultiselectDropdownComponent } from './po-multiselect-dropdown/po-multiselect-dropdown.component';
 import { PoMultiselectFilter } from './po-multiselect-filter.interface';
 import { PoMultiselectFilterService } from './po-multiselect-filter.service';
-import { PoMultiselectComponent } from './po-multiselect.component';
 import { PoMultiselectOption } from './po-multiselect-option.interface';
+import { PoMultiselectComponent } from './po-multiselect.component';
 
 const poMultiselectFilterServiceStub: PoMultiselectFilter = {
   getFilteredData: function (params: { property: string; value: string }): Observable<Array<PoMultiselectOption>> {
@@ -31,6 +32,7 @@ describe('PoMultiselectComponent:', () => {
   let fnAdjustContainerPosition;
   let component: PoMultiselectComponent;
   let fixture: ComponentFixture<PoMultiselectComponent>;
+  let controlPositionMock: jasmine.SpyObj<PoControlPositionService>;
 
   let multiSelectService: PoMultiselectFilterService;
   let httpMock: HttpTestingController;
@@ -62,6 +64,7 @@ describe('PoMultiselectComponent:', () => {
         HttpHandler,
         Renderer2,
         PoMultiselectFilterService,
+        PoControlPositionService,
         provideHttpClient(withInterceptorsFromDi()),
         provideHttpClientTesting()
       ]
@@ -71,7 +74,8 @@ describe('PoMultiselectComponent:', () => {
     component = fixture.componentInstance;
     renderer = TestBed.inject(Renderer2);
     fnAdjustContainerPosition = component['adjustContainerPosition'];
-    component['adjustContainerPosition'] = () => {};
+    controlPositionMock = jasmine.createSpyObj('PoControlPositionService', ['adjustPosition', 'setElements']);
+    component['adjustContainerPosition'] = () => controlPositionMock.adjustPosition('bottom');
 
     component.options = [{ label: 'label', value: 1 }];
     component.autoHeight = true;
@@ -157,10 +161,12 @@ describe('PoMultiselectComponent:', () => {
     expect(component.initialized).toBeTruthy();
   });
 
-  it('shouldn`t set focus on input', () => {
+  it('shouldn`t set focus on input', done => {
     component.initialized = false;
     component.autoFocus = false;
     spyOn(component.inputElement.nativeElement, 'focus');
+
+    done();
 
     component.ngAfterViewInit();
     expect(component.inputElement.nativeElement.focus).not.toHaveBeenCalled();
