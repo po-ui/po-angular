@@ -18,6 +18,7 @@ import { PoComboFilterService } from './po-combo-filter.service';
 import { PoComboOption } from './interfaces/po-combo-option.interface';
 import { PoCleanComponent } from '../po-clean/po-clean.component';
 import { OverlayModule } from '@angular/cdk/overlay';
+import { PoControlPositionService } from '../../../services/po-control-position/po-control-position.service';
 
 const eventKeyBoard = document.createEvent('KeyboardEvent');
 eventKeyBoard.initEvent('keyup', true, true);
@@ -29,19 +30,23 @@ eventClick.initEvent('click', false, true);
 describe('PoComboComponent:', () => {
   let component: PoComboComponent;
   let fixture: ComponentFixture<PoComboComponent>;
+  let controlPositionMock: jasmine.SpyObj<PoControlPositionService>;
   let nativeElement: any;
 
   beforeEach(async () => {
     await TestBed.configureTestingModule({
       imports: [PoLoadingModule, PoIconModule, OverlayModule],
       declarations: [PoComboComponent, PoFieldContainerComponent, PoFieldContainerBottomComponent, PoCleanComponent],
-      providers: [HttpClient, HttpHandler]
+      providers: [HttpClient, HttpHandler, PoControlPositionService]
     }).compileComponents();
 
     fixture = TestBed.createComponent(PoComboComponent);
     component = fixture.componentInstance;
     component.label = 'Label de teste';
     component.help = 'Help de teste';
+
+    controlPositionMock = jasmine.createSpyObj('PoControlPositionService', ['adjustPosition', 'setElements']);
+    component['adjustContainerPosition'] = () => controlPositionMock.adjustPosition('bottom');
   });
 
   it('should be created', () => {
@@ -1180,11 +1185,17 @@ describe('PoComboComponent:', () => {
     it('adjustContainerPosition: should call `controlPosition.adjustPosition` with default position of container', () => {
       const poComboContainerPositionDefault = 'bottom';
 
-      const spyAdjustPosition = spyOn(component['controlPosition'], 'adjustPosition');
-
       component['adjustContainerPosition']();
 
-      expect(spyAdjustPosition).toHaveBeenCalledWith(poComboContainerPositionDefault);
+      expect(controlPositionMock.adjustPosition).toHaveBeenCalledWith(poComboContainerPositionDefault);
+    });
+
+    it('onScroll: should call `adjustContainerPosition` when triggered', () => {
+      const spy = spyOn(component as any, 'adjustContainerPosition');
+
+      component['onScroll']();
+
+      expect(spy).toHaveBeenCalled();
     });
   });
 

@@ -354,7 +354,6 @@ describe('PoDropdownComponent: ', () => {
       await fixture.whenStable();
 
       const disabledButton = nativeElement.querySelector('.po-dropdown-button-disabled');
-      console.log('Disabled button:', disabledButton);
 
       expect(disabledButton).toBeTruthy();
     });

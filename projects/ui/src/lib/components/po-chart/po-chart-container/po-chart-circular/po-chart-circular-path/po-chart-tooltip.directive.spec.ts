@@ -53,6 +53,9 @@ describe('PoChartTooltipDirective', () => {
     directive.createTooltip();
     fixture.detectChanges();
 
+    spyOnProperty(directive.tooltipElement, 'offsetWidth').and.returnValue(154);
+    spyOnProperty(directive.tooltipElement, 'offsetHeight').and.returnValue(60);
+
     event = document.createEvent('MouseEvents');
     event.initEvent('scroll', false, true);
   });
@@ -112,7 +115,7 @@ describe('PoChartTooltipDirective', () => {
 
     it('calculateTooltipPosition: should return tooltipPosition', () => {
       const tooltipEvent = { clientX: 300, clientY: 300 };
-      const expectedResult = { left: -77, top: 270 };
+      const expectedResult = { left: 223, top: 228 };
       const result = directive.calculateTooltipPosition(tooltipEvent);
 
       expect(result).toEqual(expectedResult);

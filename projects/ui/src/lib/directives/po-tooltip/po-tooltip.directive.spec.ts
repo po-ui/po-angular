@@ -5,6 +5,7 @@ import { By } from '@angular/platform-browser';
 import { PoButtonModule } from '../../components/po-button/po-button.module';
 
 import { PoTooltipDirective } from './po-tooltip.directive';
+import { PoControlPositionService } from '../../services/po-control-position/po-control-position.service';
 
 @Component({
   template: `
@@ -20,13 +21,15 @@ describe('PoTooltipDirective', () => {
   let directive;
 
   let fixture: ComponentFixture<TestComponent>;
+  let controlPositionMock: jasmine.SpyObj<PoControlPositionService>;
 
-  let event;
+  const event = new Event('scroll', { bubbles: true });
 
   beforeEach(async () => {
     await TestBed.configureTestingModule({
       imports: [PoButtonModule],
-      declarations: [PoTooltipDirective, TestComponent]
+      declarations: [PoTooltipDirective, TestComponent],
+      providers: [PoControlPositionService]
     }).compileComponents();
 
     fixture = TestBed.createComponent(TestComponent);
@@ -34,11 +37,16 @@ describe('PoTooltipDirective', () => {
     directiveElement = fixture.debugElement.query(By.directive(PoTooltipDirective));
 
     directive = directiveElement.injector.get(PoTooltipDirective);
+    fixture.detectChanges();
     directive.createTooltip();
     fixture.detectChanges();
 
-    event = document.createEvent('MouseEvents');
-    event.initEvent('scroll', false, true);
+    controlPositionMock = jasmine.createSpyObj('PoControlPositionService', [
+      'adjustPosition',
+      'setElements',
+      'getArrowDirection'
+    ]);
+    directive['poControlPosition'] = controlPositionMock;
   });
 
   it('should be created TestComponent', () => {
@@ -147,8 +155,6 @@ describe('PoTooltipDirective', () => {
     spyOn(directive, 'createTooltip');
     spyOn(directive, 'removeArrow');
     spyOn(directive, 'addArrow');
-    spyOn(directive['poControlPosition'], 'adjustPosition');
-    spyOn(directive['poControlPosition'], 'getArrowDirection');
 
     directive.onMouseEnter();
 
@@ -172,8 +178,6 @@ describe('PoTooltipDirective', () => {
     spyOn(directive, 'createTooltip');
     spyOn(directive, 'removeArrow');
     spyOn(directive, 'addArrow');
-    spyOn(directive['poControlPosition'], 'adjustPosition');
-    spyOn(directive['poControlPosition'], 'getArrowDirection');
 
     directive.onMouseEnter();
 
@@ -198,8 +202,6 @@ describe('PoTooltipDirective', () => {
     spyOn(directive, 'createTooltip');
     spyOn(directive, 'removeArrow');
     spyOn(directive, 'addArrow');
-    spyOn(directive['poControlPosition'], 'adjustPosition');
-    spyOn(directive['poControlPosition'], 'getArrowDirection');
 
     directive.onMouseEnter();
 
@@ -223,8 +225,6 @@ describe('PoTooltipDirective', () => {
     spyOn(directive, 'createTooltip');
     spyOn(directive, 'removeArrow');
     spyOn(directive, 'addArrow');
-    spyOn(directive['poControlPosition'], 'adjustPosition');
-    spyOn(directive['poControlPosition'], 'getArrowDirection');
 
     directive.onMouseEnter();
 
@@ -401,8 +401,6 @@ describe('PoTooltipDirective', () => {
   });
 
   it('should call adjustPosition through of function of scroll listener', fakeAsync((): void => {
-    spyOn(directive['poControlPosition'], 'adjustPosition');
-
     directive.addScrollEventListener();
 
     window.dispatchEvent(event);
@@ -413,8 +411,6 @@ describe('PoTooltipDirective', () => {
   }));
 
   it('shouldn`t call adjustPosition through of function of scroll listener', fakeAsync(() => {
-    spyOn(directive['poControlPosition'], 'adjustPosition');
-
     directive.addScrollEventListener();
     directive.isHidden = true;
 

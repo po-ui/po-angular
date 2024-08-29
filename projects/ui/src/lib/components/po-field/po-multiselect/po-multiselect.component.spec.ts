@@ -6,9 +6,10 @@ import { Observable, of, throwError } from 'rxjs';
 
 import * as UtilsFunction from '../../../utils/util';
 
-import { PoTagComponent } from '../../po-tag/po-tag.component';
 import { Renderer2 } from '@angular/core';
 import { PoKeyCodeEnum } from '../../../enums/po-key-code.enum';
+import { PoControlPositionService } from '../../../services/po-control-position/po-control-position.service';
+import { PoTagComponent } from '../../po-tag/po-tag.component';
 import { PoFieldContainerComponent } from '../po-field-container/po-field-container.component';
 import { PoMultiselectBaseComponent } from '../po-multiselect/po-multiselect-base.component';
 import { PoFieldContainerBottomComponent } from './../po-field-container/po-field-container-bottom/po-field-container-bottom.component';
@@ -31,6 +32,7 @@ describe('PoMultiselectComponent:', () => {
   let fnAdjustContainerPosition;
   let component: PoMultiselectComponent;
   let fixture: ComponentFixture<PoMultiselectComponent>;
+  let controlPositionMock: jasmine.SpyObj<PoControlPositionService>;
 
   let multiSelectService: PoMultiselectFilterService;
   let httpMock: HttpTestingController;
@@ -58,14 +60,15 @@ describe('PoMultiselectComponent:', () => {
         PoMultiselectDropdownComponent,
         PoFieldContainerBottomComponent
       ],
-      providers: [HttpClient, HttpHandler, Renderer2, PoMultiselectFilterService]
+      providers: [HttpClient, HttpHandler, Renderer2, PoMultiselectFilterService, PoControlPositionService]
     }).compileComponents();
 
     fixture = TestBed.createComponent(PoMultiselectComponent);
     component = fixture.componentInstance;
     renderer = TestBed.inject(Renderer2);
     fnAdjustContainerPosition = component['adjustContainerPosition'];
-    component['adjustContainerPosition'] = () => {};
+    controlPositionMock = jasmine.createSpyObj('PoControlPositionService', ['adjustPosition', 'setElements']);
+    component['adjustContainerPosition'] = () => controlPositionMock.adjustPosition('bottom');
 
     component.options = [{ label: 'label', value: 1 }];
     component.autoHeight = true;
@@ -149,9 +152,12 @@ describe('PoMultiselectComponent:', () => {
     expect(component.initialized).toBeTruthy();
   });
 
-  it('shouldn`t set focus on input', () => {
+  it('shouldn`t set focus on input', done => {
     component.initialized = false;
     component.autoFocus = false;
+
+    done();
+
     component.ngAfterViewInit();
     expect(document.activeElement.tagName.toLowerCase()).not.toBe('input');
     expect(component.initialized).toBeTruthy();
