@@ -563,7 +563,7 @@ describe('PoLookupComponent:', () => {
       expect(spyCallOnChange).toHaveBeenCalled();
     });
 
-    it('updateVisibleItems: should concat `visibleDisclaimers` with items of disclaimers', () => {
+    it('updateVisibleItems: should concat `visibleDisclaimers` with items of disclaimers', fakeAsync(() => {
       fixture.detectChanges();
       const itemsDisclaimers = [
         {
@@ -579,58 +579,57 @@ describe('PoLookupComponent:', () => {
       const spyDebounceResize = spyOn(component, 'debounceResize');
 
       component.disclaimers = itemsDisclaimers;
-
       component.updateVisibleItems();
+
+      tick();
 
       expect(component.visibleDisclaimers.length).toEqual(2);
       expect(spyDebounceResize).toHaveBeenCalled();
-    });
+    }));
 
-    it(`updateVisibleItems: shouldn't concat 'visibleDisclaimers' with items of disclaimers`, () => {
+    it(`updateVisibleItems: shouldn't concat 'visibleDisclaimers' with items of disclaimers`, fakeAsync(() => {
       fixture.detectChanges();
       const spyDebounceResize = spyOn(component, 'debounceResize');
 
       component.disclaimers = [];
-
-      component.visibleDisclaimers = [
-        {
-          value: 'test',
-          label: 'test'
-        }
-      ];
+      component.visibleDisclaimers = [{ value: 'test', label: 'test' }];
       component.updateVisibleItems();
+
+      tick();
 
       expect(component.disclaimers.length).toEqual(0);
       expect(component.visibleDisclaimers.length).toEqual(1);
       expect(spyDebounceResize).toHaveBeenCalled();
-    });
+    }));
 
-    it('updateVisibleItems: should set true in `isCalculateVisibleItems` if `offsetWidth` is false', () => {
+    it('updateVisibleItems: should set true in `isCalculateVisibleItems` if `offsetWidth` is false', fakeAsync(() => {
       fixture.detectChanges();
       const spyDebounceResize = spyOn(component, 'debounceResize');
       component.disclaimers = [];
 
       spyOnProperty(component.inputEl.nativeElement, 'offsetWidth').and.returnValue(false);
-
       component.updateVisibleItems();
+
+      tick();
 
       expect(component['isCalculateVisibleItems']).toBeTruthy();
       expect(spyDebounceResize).toHaveBeenCalled();
-    });
+    }));
 
-    it('updateVisibleItems: should set false in `isCalculateVisibleItems` if `offsetWidth` is true', () => {
+    it('updateVisibleItems: should set false in `isCalculateVisibleItems` if `offsetWidth` is true', fakeAsync(() => {
       fixture.detectChanges();
       component['isCalculateVisibleItems'] = false;
       const spyDebounceResize = spyOn(component, 'debounceResize');
       component.disclaimers = [];
 
       spyOnProperty(component.inputEl.nativeElement, 'offsetWidth').and.returnValue(true);
-
       component.updateVisibleItems();
+
+      tick();
 
       expect(component['isCalculateVisibleItems']).toBeFalsy();
       expect(spyDebounceResize).toHaveBeenCalled();
-    });
+    }));
 
     it(`debounceResize: should call 'calculateVisibleItems'`, fakeAsync(() => {
       component.autoHeight = false;

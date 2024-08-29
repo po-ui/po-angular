@@ -312,6 +312,25 @@ describe('PoDisclaimerGroupComponent:', () => {
     expect(component['focusOnRemoveTag']).toHaveBeenCalled();
   });
 
+  it('focusOnNextTag: should select attribute index 0 when event is not enter', () => {
+    const tagsFake = document.createElement('div');
+    tagsFake.innerHTML = `
+      <div class="po-tag-remove"></div>
+      <div class="po-tag-remove"></div>
+      <div class="po-tag-remove"></div>
+    `;
+
+    document.body.appendChild(tagsFake);
+
+    spyOn(component as any, 'handleKeyboardNavigationTag');
+
+    component['focusOnNextTag'](null, 'click');
+
+    expect(component['handleKeyboardNavigationTag']).toHaveBeenCalledWith(0);
+
+    document.body.removeChild(tagsFake);
+  });
+
   describe('Templates:', () => {
     it(`should set tabindex to 0 if have a disclaimer with 'hideClose'.`, () => {
       component.disclaimers = [{ value: 'po', hideClose: false }];
