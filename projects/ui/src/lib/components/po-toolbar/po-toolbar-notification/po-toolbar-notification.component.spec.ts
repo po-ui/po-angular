@@ -1,5 +1,5 @@
 import { ComponentFixture, TestBed } from '@angular/core/testing';
-import { ElementRef, NO_ERRORS_SCHEMA, Renderer2 } from '@angular/core';
+import { ChangeDetectorRef, ElementRef, NO_ERRORS_SCHEMA, Renderer2 } from '@angular/core';
 import { RouterTestingModule } from '@angular/router/testing';
 
 import { configureTestSuite, expectPropertiesValues } from '../../../util-test/util-expect.spec';
@@ -42,10 +42,27 @@ describe('PoToolbarNotificationComponent: ', () => {
     nativeElement = fixture.debugElement.nativeElement;
 
     component['_notificationNumber'] = 0;
+
+    fixture.detectChanges();
   });
 
   it('should be created', () => {
     expect(component).toBeTruthy();
+  });
+
+  it('should call detectChanges after view init', async () => {
+    const detectChangesSpy = spyOn(component['cdr'], 'detectChanges');
+
+    component.ngAfterViewInit();
+
+    expect(detectChangesSpy).toHaveBeenCalled();
+  });
+
+  it('should correctly reference the ViewChild notification element', () => {
+    fixture.detectChanges(); // Garante que o ViewChild foi inicializado após a renderização
+
+    const notificationElement = fixture.nativeElement.querySelector('po-icon');
+    expect(component.notificationRef.nativeElement).toBe(notificationElement);
   });
 
   describe('Properties: ', () => {
