@@ -1,0 +1,164 @@
+<po-widget p-title="Toaster Inline (Example)">
+  <po-toaster
+    #toasterRef
+    class="po-md-12 labs"
+    [(p-hide)]="hide"
+    [p-mode]="mode"
+    [p-message]="message"
+    [p-support-message]="supportMessage"
+    [p-type]="type"
+    [p-show-close]="showClose"
+    [p-action]="action"
+    [p-action-label]="actionLabel"
+    [p-show-close]="showIcon"
+  ></po-toaster>
+</po-widget>
+
+<po-divider></po-divider>
+
+<form #f="ngForm">
+  <po-widget p-title="Toaster Inline (Configuration)">
+    <div class="po-row">
+      <po-button class="po-md-4" p-label="Sample Restore" (p-click)="restore()"> </po-button>
+      <po-button class="po-md-4" name="hide" (p-click)="changeHide()" p-label="{{ hide ? 'Show' : 'Hide' }} Toaster">
+      </po-button>
+    </div>
+
+    <po-divider></po-divider>
+
+    <po-tabs>
+      <po-tab p-label="Properties" p-active="true">
+        <div class="po-container">
+          <div class="po-row tokenHeader">
+            <div class="po-md-2">Propertie</div>
+            <div class="po-md-10">Value</div>
+          </div>
+          <div class="po-row tokenRow">
+            <div class="po-md-2">Type</div>
+            <po-radio-group class="po-md-10" name="type" [(ngModel)]="type" [p-options]="typeOptions"></po-radio-group>
+          </div>
+          <div class="po-row tokenRow">
+            <div class="po-md-2">Mode</div>
+            <po-radio-group
+              class="po-md-10"
+              name="mode"
+              [(ngModel)]="mode"
+              [p-options]="modeOptions"
+              p-disabled="true"
+            ></po-radio-group>
+          </div>
+          <div class="po-row tokenRow">
+            <div class="po-md-2">Message</div>
+            <po-input class="po-md-10" name="message" [(ngModel)]="message" p-clean p-required> </po-input>
+          </div>
+          <div class="po-row tokenRow">
+            <div class="po-md-2">Support Message</div>
+            <po-input class="po-md-10" name="supportMessage" [(ngModel)]="supportMessage" p-clean> </po-input>
+          </div>
+          <div class="po-row tokenRow">
+            <div class="po-md-2">Has Action</div>
+            <po-switch (p-change)="changeAction()" class="po-md-10" name="action" [(ngModel)]="hasAction"> </po-switch>
+          </div>
+          <div class="po-row tokenRow">
+            <div class="po-md-2">Action Label</div>
+            <po-input class="po-md-10" name="actionLabel" [(ngModel)]="actionLabel" p-clean> </po-input>
+          </div>
+          <div class="po-row tokenRow">
+            <div class="po-md-2">Show Close</div>
+            <po-switch class="po-md-10" name="showClose" [(ngModel)]="showClose"> </po-switch>
+          </div>
+          <div class="po-row tokenRow">
+            <div class="po-md-2">Show Icon</div>
+            <po-switch class="po-md-10" name="showIcon" [(ngModel)]="showIcon"> </po-switch>
+          </div>
+        </div>
+      </po-tab>
+      <po-tab p-label="Styles">
+        <div class="po-container">
+          <div class="po-row tokenHeader">
+            <div class="po-md-2">Propertie</div>
+            <div class="po-md-10">Value</div>
+          </div>
+          
+          <div class="po-row tokenSub">
+            <div class="po-md-2">Default Values</div>
+            <div class="po-md-1">Use poui tokens</div>
+            <div class="po-md-9">value</div>
+          </div>
+          <div class="po-row tokenRow" *ngFor="let item of toasterTokensDefault | keyvalue">
+            <div class="po-md-2">{{ item.key }}</div>
+            <po-switch 
+              class="po-md-1 justify-center"
+              ></po-switch>
+              <!-- [(ngModel)]="tokensDefaultUseTokens" -->
+            <div class="po-md-9 flex-group" >
+              <po-info p-value="#dddddd"> </po-info>
+              <po-combo class="flex-1" [p-options]="[{ value: 'Option 1' }, { value: 'Option 2' }]"></po-combo>
+            </div>
+            <!-- *ngIf="!tokensDefaultUseTokens" -->
+            <!-- <po-input 
+              class="po-md-9"
+              name="{{ item.key }}"
+              [(ngModel)]="item.value"
+              (p-change)="changeTokenDefault(item.key, $event)"
+            ></po-input> -->
+          </div>
+
+          <div class="po-row tokenSub">
+            <div class="po-md-12">Type Success</div>
+          </div>
+          <div class="po-row tokenRow" *ngFor="let item of toasterTokensSuccess | keyvalue">
+            <div class="po-md-2">{{ item.key }}</div>
+            <po-input
+              class="po-md-10"
+              name="{{ item.key }}"
+              [(ngModel)]="item.value"
+              (p-change)="changeTokenSuccess(item.key, $event)"
+            ></po-input>
+          </div>
+
+          <div class="po-row tokenSub">
+            <div class="po-md-12">Type Error</div>
+          </div>
+          <div class="po-row tokenRow" *ngFor="let item of toasterTokensError | keyvalue">
+            <div class="po-md-2">{{ item.key }}</div>
+            <po-input
+              class="po-md-10"
+              name="{{ item.key }}"
+              [(ngModel)]="item.value"
+              (p-change)="changeTokenError(item.key, $event)"
+            ></po-input>
+          </div>
+
+          <div class="po-row tokenSub">
+            <div class="po-md-12">Type Warning</div>
+          </div>
+          <div class="po-row tokenRow" *ngFor="let item of toasterTokensWarning | keyvalue">
+            <div class="po-md-2">{{ item.key }}</div>
+            <po-input
+              class="po-md-10"
+              name="{{ item.key }}"
+              [(ngModel)]="item.value"
+              (p-change)="changeTokenWarning(item.key, $event)"
+            ></po-input>
+          </div>
+
+          <div class="po-row tokenSub">
+            <div class="po-md-12">Type Info</div>
+          </div>
+          <div class="po-row tokenRow" *ngFor="let item of toasterTokensInfo | keyvalue">
+            <div class="po-md-2">{{ item.key }}</div>
+            <po-input
+              class="po-md-10"
+              name="{{ item.key }}"
+              [(ngModel)]="item.value"
+              (p-change)="changeTokenInfo(item.key, $event)"
+            ></po-input>
+          </div>
+        </div>
+      </po-tab>
+    </po-tabs>
+  </po-widget>
+</form>
+
+<po-modal p-title="PO Notification"> Notification Action </po-modal>

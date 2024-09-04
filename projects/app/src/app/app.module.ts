@@ -4,12 +4,12 @@ import { FormsModule } from '@angular/forms';
 import { NgModule } from '@angular/core';
 import { RouterModule } from '@angular/router';
 
-import { PoModule } from '@po-ui/ng-components';
-
 import { AppComponent } from './app.component';
+import { PoModule } from '../../../ui/src/lib';
+import { SamplePoToasterLabsComponent } from './sample-po-toaster-labs.component';
 
 @NgModule({
-  declarations: [AppComponent],
+  declarations: [AppComponent, SamplePoToasterLabsComponent],
   bootstrap: [AppComponent],
   imports: [BrowserModule, FormsModule, RouterModule.forRoot([], {}), PoModule],
   providers: [provideHttpClient(withInterceptorsFromDi())]
