@@ -8,6 +8,7 @@ const routes: Routes = [
     loadChildren: () => import('./documentation/documentation.module').then(m => m.DocumentationModule)
   },
   { path: 'guides', loadChildren: () => import('./guide/guide.module').then(m => m.GuideModule) },
+  { path: 'icons', loadChildren: () => import('./icons/icons.module').then(m => m.IconsModule) },
   { path: 'tools', loadChildren: () => import('./tools/tools.module').then(m => m.ToolsModule) },
   {
     path: 'construtor-de-temas',

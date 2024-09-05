@@ -47,7 +47,7 @@
     "build": "npm run build:schematics && npm run build:ui && npm run build:templates && npm run build:storage && npm run build:sync && npm run build:code-editor",
     "build:portal:prod": "ng build portal --configuration production --build-optimizer=false",
     "build:portal": "npm run build:ui && npm run build:templates && npm run build:code-editor && npm run build:portal:docs",
-    "build:portal:docs": "cd projects/portal && gulp build",
+    "build:portal:docs": "cd projects/portal && gulp build && npm run script:copy-icons",
     "release": "standard-version -- --preset angular",
     "sonarqube": "gulp sonarqube",
     "format:check": "prettier --check --log-level error \"**/*{.ts,.js,.json,.css,.scss,.html}\"",
@@ -59,7 +59,8 @@
     "publish:code-editor:local": "npm publish ./dist/ng-code-editor --registry http://localhost:4873 --ignore-scripts",
     "publish:schematics:local": "npm publish ./dist/ng-schematics --registry http://localhost:4873 --ignore-scripts",
     "publish:local": "npm run publish:schematics:local && npm run publish:ui:local && npm run publish:templates:local && npm run publish:code-editor:local && npm run publish:sync:local && npm run publish:storage:local",
-    "prepare": "husky install"
+    "prepare": "husky install",
+    "script:copy-icons": "node scripts/copy-icons.js"
   },
   "private": true,
   "dependencies": {
@@ -104,6 +105,7 @@
     "@angular/cli": "~18.0.2",
     "@angular/compiler-cli": "~18.0.1",
     "@angular/language-service": "~18.0.1",
+    "@animaliads/animalia-icon": "1.0.2",
     "@commitlint/cli": "^18.4.3",
     "@commitlint/config-angular": "^18.4.3",
     "@po-ui/ng-schematics": "^18.0.0",
