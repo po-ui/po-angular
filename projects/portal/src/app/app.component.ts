@@ -51,6 +51,7 @@ export class AppComponent implements OnInit, OnDestroy {
       { label: 'Iniciar', link: '/' },
       { label: 'Componentes', link: '/documentation' },
       { label: 'Guias', link: '/guides' },
+      { label: 'Ícones', link: '/icons' },
       { label: 'Ferramentas', link: '/tools' },
       { label: 'Construtor de temas', link: '/construtor-de-temas' },
       { label: 'Como contribuir', link: 'https://github.com/po-ui/po-angular/blob/master/CONTRIBUTING.md' },

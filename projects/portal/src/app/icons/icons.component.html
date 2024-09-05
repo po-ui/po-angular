@@ -1,0 +1,116 @@
+<po-page-default id="myPortal" class="app-portal app-portal-home">
+  <div class="home-colorful-content">
+    <div class="larger-boxes">
+      <div class="larger-box color-1"></div>
+      <div class="larger-box color-2"></div>
+      <div class="larger-box color-3"></div>
+      <div class="larger-box color-4"></div>
+      <div class="larger-box color-5"></div>
+      <div class="larger-box color-6"></div>
+      <div class="larger-box color-7"></div>
+      <div class="larger-box color-8"></div>
+      <div class="larger-box color-9"></div>
+      <div class="larger-box color-10"></div>
+      <div class="larger-box color-11"></div>
+      <div class="larger-box color-12"></div>
+      <div class="larger-box color-13"></div>
+      <div class="larger-box color-14"></div>
+      <div class="larger-box color-15"></div>
+      <div class="larger-box color-16"></div>
+    </div>
+    <div class="smaller-boxes">
+      <div class="smaller-box color-16"></div>
+      <div class="smaller-box color-15"></div>
+      <div class="smaller-box color-14"></div>
+      <div class="smaller-box color-13"></div>
+      <div class="smaller-box color-12"></div>
+      <div class="smaller-box color-11"></div>
+      <div class="smaller-box color-10"></div>
+      <div class="smaller-box color-9"></div>
+      <div class="smaller-box color-8"></div>
+      <div class="smaller-box color-7"></div>
+      <div class="smaller-box color-6"></div>
+      <div class="smaller-box color-5"></div>
+      <div class="smaller-box color-4"></div>
+      <div class="smaller-box color-3"></div>
+      <div class="smaller-box color-2"></div>
+      <div class="smaller-box color-17"></div>
+    </div>
+    <div class="po-mb-5"></div>
+  </div>
+  <div class="po-row">
+    <div class="po-offset-md-1 po-offset-lg-1 po-offset-xl-1 po-md-10 po-sm-12">
+      <div class="po-row po-mb-3">
+        <div class="po-md-6 po-sm-12 po-pr-0 po-pl-0">
+          <div class="container container-title">
+            <div class="container-item">
+              <p class="constructor-title">Biblioteca de ícones</p>
+            </div>
+          </div>
+        </div>
+      </div>
+      <div class="container">
+        <div class="container-item po-pb-2">
+          <p class="constructor-subtitle">
+            Deprecated v20.x.x . A Biblioteca de ícones POIcon está depreciada e será removida na v20. Recomendamos o
+            uso da Lib Animalia Icons conforme documentação abaixo
+          </p>
+        </div>
+      </div>
+      <div class="po-row po-pb-2">
+        <div class="po-sm-12">
+          <h3 class="po-pt-1">Como Usar?</h3>
+          <pre><code appCodeHighlight class="language-html">&lt;po-input p-icon=&quot;ph ph-user&quot; p-label=&quot;PO input&quot;&gt;&lt;/po-input&gt;</code></pre>
+          <p class="po-pt-2 po-pb-2">
+            Outra opção seria a customização do ícone através do TemplateRef, conforme exemplo abaixo:
+          </p>
+          <pre><code appCodeHighlight class="language-html">&lt;po-input [p-icon]="template" p-label="input template"&gt;&lt;/po-input&gt;\n
+...
+&lt;ng-template #template&gt;
+  &lt;i class="ph ph-arrow-fat-line-down"&gt;&lt;/i&gt;
+&lt;/ng-template&gt;</code></pre>
+        </div>
+      </div>
+      <po-container>
+        <div class="po-row">
+          <div class="po-lg-2 po-md-12 po-sm-12">
+            <div class="container container-title">
+              <p class="constructor-subtitle">Ícones</p>
+            </div>
+          </div>
+          <div class="po-sm-12 po-md-12 po-lg-10">
+            <div class="container-item iconFilter po-row">
+              <po-select
+                class="po-sm-12 po-md-4"
+                [(ngModel)]="iconType"
+                [p-options]="iconTypeOptions"
+                (p-change)="onTypeChange()"
+              ></po-select>
+              <po-search
+                #poSearch
+                class="po-sm-12 po-md-8"
+                [p-items]="iconsItems"
+                [p-filter-keys]="iconFilterKeys"
+                [p-filter-type]="iconFilterType"
+                (p-filtered-items-change)="filter($event)"
+              ></po-search>
+            </div>
+          </div>
+        </div>
+      </po-container>
+      <div class="ph pallet-full"></div>
+      <div class="ph-fill pallet-full"></div>
+
+      <div class="grid grid-flow gap-16 po-pt-3 po-pb-3">
+        <po-loading-overlay p-text="Carregando ícones" p-size="lg" *ngIf="loading; else content"> </po-loading-overlay>
+
+        <ng-template #content>
+          <div *ngFor="let icon of filteredItems" class="icon-list" (click)="copyClipboard(icon.code)">
+            <po-icon [p-icon]="icon.code"></po-icon>
+            <span>{{ icon.value }}</span>
+          </div>
+        </ng-template>
+      </div>
+    </div>
+  </div>
+</po-page-default>

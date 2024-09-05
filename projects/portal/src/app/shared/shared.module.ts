@@ -14,7 +14,6 @@ import { HighlightCodeDirective } from './../documentation/documentation-code.di
     CommonModule,
     FormsModule,
     ReactiveFormsModule,
-
     PoModule,
     PoTemplatesModule,
     PoI18nModule.config({
@@ -60,7 +59,6 @@ import { HighlightCodeDirective } from './../documentation/documentation-code.di
         cache: true
       }
     }),
-
     PoCodeEditorModule.forRegister(customLanguage)
   ],
   declarations: [HighlightCodeDirective],
@@ -69,7 +67,6 @@ import { HighlightCodeDirective } from './../documentation/documentation-code.di
     FormsModule,
     ReactiveFormsModule,
     HighlightCodeDirective,
-
     PoModule,
     PoTemplatesModule,
     PoCodeEditorModule
