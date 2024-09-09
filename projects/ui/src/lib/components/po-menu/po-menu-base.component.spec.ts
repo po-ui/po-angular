@@ -491,6 +491,23 @@ describe('PoMenuBaseComponent:', () => {
 
       expectPropertiesValues(component, 'menus', invalidValues, []);
     });
+
+    describe('logoLink: ', () => {
+      it('should set logoLink as true if no value is provided', () => {
+        component.logoLink = undefined;
+        expect(component.logoLink).toBe(true);
+      });
+
+      it('should default to true if any other value is passed', () => {
+        component.logoLink = null;
+        expect(component.logoLink).toBe(true);
+      });
+
+      it('should set logoLink as false if the value is false', () => {
+        component.logoLink = false;
+        expect(component.logoLink).toBe(false);
+      });
+    });
   });
 
   describe('Integration:', () => {

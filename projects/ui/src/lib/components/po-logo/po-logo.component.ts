@@ -29,6 +29,7 @@ export class PoLogoComponent {
 
   private _logo?: string;
   private _logoAlt: string;
+  private _link: boolean | string = './';
 
   /**
    * Define uma classe para o elemento `img` do componente.
@@ -40,13 +41,21 @@ export class PoLogoComponent {
   @Input('p-class') className: string = 'po-logo';
 
   /**
-   * Define se o componente terá o elemento âncora para a página inicial.
+   * Define se o componente terá o elemento âncora para uma rota específica.
    *
    * > Caso seja definido como false, o componente apenas renderizará o elemento `img`.
-   * O valor inicial é `true`.
+   * > Caso seja definido como true, a rota será `./`.
+   * > Caso seja definido como string, a rota será a string passada.
    *
+   * @default `true`
    */
-  @Input('p-link') link: boolean = true;
+  @Input('p-link') set link(value: boolean | string) {
+    this._link = value !== false ? value : false;
+  }
+
+  get link() {
+    return this._link;
+  }
 
   /**
    * Definie o caminho para a imagem, que será exibida como logomarca.
