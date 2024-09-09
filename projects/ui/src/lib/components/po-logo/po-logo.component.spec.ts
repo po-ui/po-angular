@@ -3,11 +3,14 @@ import { ComponentFixture, TestBed, waitForAsync } from '@angular/core/testing';
 import { expectPropertiesValues } from './../../util-test/util-expect.spec';
 
 import { PoLogoComponent } from './po-logo.component';
+import { DebugElement } from '@angular/core';
+import { By } from '@angular/platform-browser';
 
 describe('PoLogoComponent', () => {
   let component: PoLogoComponent;
   let fixture: ComponentFixture<PoLogoComponent>;
   let nativeElement: any;
+  let debugElement: DebugElement;
 
   const poLanguageService: any = {
     getShortLanguage: () => 'pt',
@@ -24,6 +27,7 @@ describe('PoLogoComponent', () => {
     fixture = TestBed.createComponent(PoLogoComponent);
     component = fixture.componentInstance;
     nativeElement = fixture.debugElement.nativeElement;
+    debugElement = fixture.debugElement;
 
     fixture.detectChanges();
   });
@@ -79,15 +83,37 @@ describe('PoLogoComponent', () => {
 
       expectPropertiesValues(component, 'logoAlt', validValues, validValues);
     });
+
+    it('link: should render an anchor tag with the correct href, when link is a string', () => {
+      const testLink = 'https://example.com';
+      component.link = testLink;
+      fixture.detectChanges();
+
+      const anchorElement = debugElement.query(By.css('a'));
+      expect(anchorElement).toBeTruthy();
+      expect(anchorElement.nativeElement.getAttribute('href')).toBe(testLink);
+    });
+
+    it('link: should render an anchor tag with "./" as the href, when link is true', () => {
+      component.link = true;
+      fixture.detectChanges();
+
+      const anchorElement = debugElement.query(By.css('a'));
+      expect(anchorElement).toBeTruthy();
+      expect(anchorElement.nativeElement.getAttribute('href')).toBe('./');
+    });
   });
 
   describe('Templates:', () => {
-    it(`should display template 'noLink' if 'link' is false.`, () => {
+    it(`link: should not render an anchor tag and should only render an img tag, when link is false`, () => {
       component.link = false;
-
       fixture.detectChanges();
 
-      expect(nativeElement.querySelector('a')).toBeNull();
+      const anchorElement = debugElement.query(By.css('a'));
+      const imgElement = debugElement.query(By.css('img'));
+
+      expect(anchorElement).toBeFalsy();
+      expect(imgElement).toBeTruthy();
     });
   });
 });

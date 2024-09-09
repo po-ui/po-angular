@@ -103,6 +103,7 @@ export abstract class PoMenuBaseComponent {
   private _menus = [];
   private _params: any;
   private _service: string | PoMenuFilter;
+  private _logoLink: boolean | string = true;
 
   /**
    * @optional
@@ -314,6 +315,26 @@ export abstract class PoMenuBaseComponent {
    * - Caso não informar um valor, esta propriedade passa a assumir o valor informado na propriedade `p-logo`.
    */
   @Input('p-short-logo') shortLogo: string;
+
+  /**
+   * @optional
+   *
+   * @description
+   * Define o link para a rota ao clicar no logo do menu.
+   *
+   * - Se o valor for uma string, define a rota para o link informado.
+   * - Se for `false`, o logo não terá link associado.
+   * - Se for `true`, o logo terá a rota padrão `./`.
+   *
+   * @default `true`
+   */
+  @Input('p-logo-link') set logoLink(value: boolean | string) {
+    this._logoLink = value === false ? false : value || true;
+  }
+
+  get logoLink(): boolean | string {
+    return this._logoLink;
+  }
 
   constructor(
     public menuGlobalService: PoMenuGlobalService,

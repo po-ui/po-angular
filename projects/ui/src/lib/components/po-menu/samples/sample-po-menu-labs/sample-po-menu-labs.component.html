@@ -2,6 +2,7 @@
   <po-menu
     [p-filter]="filter"
     [p-logo]="logo"
+    [p-logo-link]="logoLink"
     [p-menus]="menuItems"
     [p-params]="params"
     [p-service]="service"
@@ -158,6 +159,18 @@
           p-clean
           p-help="https://po-ui.io/assets/graphics/logo-dgeni.png"
           p-label="Short Logo"
+        >
+        </po-input>
+      </div>
+
+      <div class="po-row">
+        <po-input
+          class="po-md-12"
+          name="logo link"
+          [(ngModel)]="logoLink"
+          p-clean
+          p-help="ex.: '/documentation/po-menu','https://github.com/po-ui/po-angular/blob/master/CONTRIBUTING.md'"
+          p-label="Logo link"
         >
         </po-input>
       </div>

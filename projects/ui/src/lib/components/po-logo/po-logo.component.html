@@ -1,4 +1,4 @@
-<a *ngIf="link; else noLink" href="/">
+<a *ngIf="link !== false; else noLink" [href]="link === true ? './' : link">
   <img [alt]="logoAlt" [class]="className" [src]="logo" [title]="logoAlt" />
 </a>
 

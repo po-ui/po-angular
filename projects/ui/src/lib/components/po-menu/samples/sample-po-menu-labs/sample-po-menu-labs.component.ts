@@ -35,6 +35,7 @@ export class SamplePoMenuLabsComponent implements OnInit {
   label: string;
   link: string;
   logo: string;
+  logoLink: string;
   maxBadgeValue = 999999999999999;
   menuItems: Array<PoMenuItem>;
   menuItemSelected: string;
@@ -128,6 +129,7 @@ export class SamplePoMenuLabsComponent implements OnInit {
     this.badgeColor = undefined;
     this.badgeValue = undefined;
     this.logo = undefined;
+    this.logoLink = undefined;
     this.params = undefined;
     this.parentList = [];
     this.menuItems = [];
