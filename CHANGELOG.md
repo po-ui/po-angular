@@ -2,6 +2,19 @@
 
 All notable changes to this project will be documented in this file. See [standard-version](https://github.com/conventional-changelog/standard-version) for commit guidelines.
 
+### [18.6.0](https://github.com/po-ui/po-angular/compare/v18.5.0...v18.6.0) (2024-09-09)
+
+
+### Bug Fixes
+
+* **toolbar:** corrige posicionamento do popup ao abrir notificação ([7ed23c9](https://github.com/po-ui/po-angular/commit/7ed23c9cc3c6465b267838f6e42105ac45a476a0))
+
+
+### Docs
+
+* **icons:** atualiza documentação para nova Lib Animalia Icons ([d934a92](https://github.com/po-ui/po-angular/commit/d934a92acacaa95d10f43ccfeba4afb080dbbf6f))
+
+
 ## [18.5.0](https://github.com/po-ui/po-angular/compare/v18.4.0...v18.5.0) (2024-09-02)
 
 
