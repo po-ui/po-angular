@@ -44,6 +44,7 @@ npm-debug.log
 yarn-error.log
 testem.log
 /typings
+.scannerwork
 
 # System Files
 .DS_Store
@@ -57,3 +58,4 @@ projects/portal/src/app/menu.service.ts
 projects/portal/src/assets/json/api-list.json
 projects/portal/src/assets/json/version.json
 projects/portal/src/app/documentation/documentation-routing.module.ts
+
