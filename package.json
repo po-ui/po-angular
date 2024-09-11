@@ -141,7 +141,7 @@
     "protractor": "~7.0.0",
     "rollup": "4.6.0",
     "sonarjs": "latest",
-    "sonarqube-scanner": "^2.8.0",
+    "sonarqube-scanner": "^4.2.2",
     "standard-version": "^9.5.0",
     "ts-node": "~10.9.1",
     "typemoq": "^2.1.0",
