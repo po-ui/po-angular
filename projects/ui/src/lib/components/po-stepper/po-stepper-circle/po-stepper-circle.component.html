@@ -1,5 +1,6 @@
 <div
   class="po-stepper-circle"
+  [class.po-stepper-circle-center]="alignCenter"
   [ngClass]="{ 'po-stepper-circle-border': !isActive && !isError, 'po-stepper-circle-done': isDone }"
   [style.height.px]="size"
   [style.width.px]="size"

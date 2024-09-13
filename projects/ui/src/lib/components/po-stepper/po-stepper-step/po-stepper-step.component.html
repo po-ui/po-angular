@@ -11,6 +11,7 @@
 >
   <div class="po-stepper-step-container">
     <po-stepper-circle
+      [p-align-center]="alignCenter"
       [p-content]="circleContent"
       [p-icons]="stepIcons"
       [p-size]="stepSize"
@@ -19,6 +20,7 @@
       [p-step-icon-done]="iconDone"
       [p-step-icon-active]="iconActive"
       [class.po-stepper-circle-vertical]="isVerticalOrientation"
+      [class.po-stepper-circle-vertical-center]="alignCenter"
       [class.po-stepper-circle-horizontal]="!isVerticalOrientation"
       [style.minWidth.px]="minWidthCircle"
       [style.minHeight.px]="minHeightCircle"
@@ -28,6 +30,7 @@
     <po-stepper-label
       *ngIf="label"
       class="po-stepper-step-label-position"
+      [p-align-center]="alignCenter"
       [p-content]="label"
       [p-status]="status"
       [p-vertical-orientation]="isVerticalOrientation"

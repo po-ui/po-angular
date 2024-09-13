@@ -82,7 +82,6 @@ const poStepperOrientationDefault = PoStepperOrientation.Horizontal;
 @Directive()
 export class PoStepperBaseComponent {
   /**
-   *
    * @optional
    *
    * @description
@@ -113,10 +112,32 @@ export class PoStepperBaseComponent {
   /** Ação que será executada quando o usuário mudar o passo do `po-stepper`. */
   @Output('p-change-step') onChangeStep = new EventEmitter<number | PoStepComponent>();
 
+  private _alignCenter?: boolean = true;
   private _orientation?: PoStepperOrientation = poStepperOrientationDefault;
   private _sequential?: boolean = true;
   private _step: number = 1;
   private _steps: Array<PoStepperItem> = [];
+
+  /**
+   * @optional
+   *
+   * @description
+   *
+   * Define o alinhamento dos *steps* e *labels* no *stepper*, dependendo da orientação.
+   *
+   * - Quando `true`, ficam centralizados em ambas as orientações (horizontal e vertical).
+   * - Quando `false`, ficam alinhados à esquerda na orientação horizontal e ao topo na orientação vertical.
+   *
+   * @default `true`
+   */
+
+  @Input('p-align-center') set alignCenter(alignCenter: boolean) {
+    this._alignCenter = convertToBoolean(alignCenter);
+  }
+
+  get alignCenter(): boolean {
+    return this._alignCenter;
+  }
 
   /**
    * @optional

@@ -25,6 +25,9 @@ const poStepLiteralsDefault = {
   templateUrl: 'po-stepper-step.component.html'
 })
 export class PoStepperStepComponent implements OnChanges {
+  // Alinhamento do *step* e da label.
+  @Input('p-align-center') alignCenter: boolean;
+
   // Conteúdo que será repassado para o componente `p-circle-content` através da propriedade `p-content`.
   @Input('p-circle-content') circleContent: any;
 
@@ -180,7 +183,10 @@ export class PoStepperStepComponent implements OnChanges {
   setDefaultStepSize(): void {
     if (this._stepSize === poStepperStepSizeDefault && this._status === PoStepperStatus.Active) {
       this._stepSize = poStepperStepSizeDefault + 8;
-    } else if (this.stepSizeOriginal === poStepperStepSizeDefault && this._status === PoStepperStatus.Error) {
+    } else if (
+      this.stepSizeOriginal === poStepperStepSizeDefault &&
+      (this._status === PoStepperStatus.Error || this._status === PoStepperStatus.Active)
+    ) {
       this._stepSize = poStepperStepSizeDefault + 8;
     } else {
       this._stepSize = this.stepSizeOriginal;

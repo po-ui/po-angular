@@ -5,6 +5,7 @@
   [class.po-stepper-label-active]="status === 'active' || status === 'error'"
   [class.po-stepper-label-done]="status === 'done'"
   [class.po-stepper-label-vertical]="isVerticalOrientation"
+  [class.po-stepper-label-center]="alignCenter"
   [p-tooltip]="tooltipContent"
   aria-hidden="true"
   (mouseover)="onMouseOver()"

@@ -2,8 +2,20 @@
   <div role="tablist" class="po-stepper-container-{{ orientation }}">
     <ng-container *ngFor="let step of stepList; let index = index; trackBy: trackByFn">
       <div class="po-stepper-step-wrapper">
+        <div
+          *ngIf="index > 0"
+          [class.po-stepper-step-bar-top]="alignCenter && isVerticalOrientation"
+          [class.po-stepper-step-dashed-border-vertical]="
+            alignCenter && isVerticalOrientation && isDashedBorderTop(step, index)
+          "
+          [style.left.px]="
+            isVerticalOrientation ? (!stepSizeCircle || stepSizeCircle === 24 ? 16 : stepSizeCircle / 2) : null
+          "
+        ></div>
+
         <po-stepper-step
-          class="po-stepper-step-position"
+          [class.po-stepper-step-position-center]="alignCenter"
+          [p-align-center]="alignCenter"
           [p-circle-content]="index + 1"
           [p-label]="step.label"
           [p-orientation]="orientation"
@@ -24,7 +36,9 @@
         <div
           *ngIf="index < stepList.length - 1"
           [class.po-stepper-step-bar-bottom]="isVerticalOrientation"
+          [class.po-stepper-step-bar-bottom-center]="alignCenter && isVerticalOrientation"
           [class.po-stepper-step-bar-right]="!isVerticalOrientation"
+          [class.po-stepper-step-bar-center]="alignCenter && !isVerticalOrientation"
           [class.po-stepper-step-dashed-border]="!isVerticalOrientation && isDashedBorder(step, index)"
           [class.po-stepper-step-dashed-border-vertical]="isVerticalOrientation && isDashedBorder(step, index)"
           [style.top.px]="!isVerticalOrientation ? (stepSizeCircle === 24 ? 16 : stepSizeCircle / 2) : null"
