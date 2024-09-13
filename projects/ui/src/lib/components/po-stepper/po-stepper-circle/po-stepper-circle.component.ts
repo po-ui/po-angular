@@ -17,6 +17,9 @@ const poLargeStepSize = 48;
   templateUrl: './po-stepper-circle.component.html'
 })
 export class PoStepperCircleComponent {
+  // Alinhamento do *step*.
+  @Input('p-align-center') alignCenter: boolean;
+
   // Conteúdo que irá aparecer no círculo do *step*.
   @Input('p-content') content: any;
 

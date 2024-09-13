@@ -11,6 +11,18 @@ describe('PoStepperBaseComponent:', () => {
   });
 
   describe('Properties:', () => {
+    it('p-align-center: should update property with `true` if valid values', () => {
+      const validValues = [true, 'true', 1, ''];
+
+      expectPropertiesValues(component, 'alignCenter', validValues, true);
+    });
+
+    it('p-align-center: should update property with `false` if invalid values', () => {
+      const invalidValues = [false, 'false', 0, undefined, null];
+
+      expectPropertiesValues(component, 'alignCenter', invalidValues, false);
+    });
+
     it('p-sequential: should update property with `true` if valid values', () => {
       const validValues = [true, 'true', 1, ''];
 

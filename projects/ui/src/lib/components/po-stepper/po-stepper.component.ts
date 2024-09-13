@@ -45,7 +45,6 @@ import { PoStepperItem } from './po-stepper-item.interface';
 })
 export class PoStepperComponent extends PoStepperBaseComponent implements AfterContentInit {
   @ContentChildren(PoStepComponent) poSteps: QueryList<PoStepComponent>;
-  nextStepDone: boolean = false;
 
   private currentActiveStep: PoStepComponent;
   private previousActiveStepIndex: number | null = null;
@@ -170,7 +169,6 @@ export class PoStepperComponent extends PoStepperBaseComponent implements AfterC
       .subscribe(nextStepAllowed => {
         if (nextStepAllowed) {
           const isDifferentStep = !this.currentActiveStep || step.id !== this.currentActiveStep.id;
-          const nextStep = this.getNextSteps(stepIndex);
 
           if (this.usePoSteps && isDifferentStep) {
             this.controlStepsStatus(step);
@@ -178,22 +176,53 @@ export class PoStepperComponent extends PoStepperBaseComponent implements AfterC
           } else if (!this.usePoSteps && stepIndex !== this.currentStepIndex) {
             // if para tratamento do modelo antigo do po-stepper
             this.onChangeStep.emit(stepIndex + 1);
-            this.nextStepDone = this.isNextStepsDone(nextStep);
           }
         }
       });
   }
 
-  getNextPoSteps(stepIndex: number): PoStepperItem {
+  getNextPoSteps(stepIndex: number): PoStepComponent {
     const poSteps = this.getPoSteps();
     return poSteps[stepIndex + 1];
   }
 
+  getNextSteps(stepIndex: number): PoStepperItem {
+    return this.steps[stepIndex + 1];
+  }
+
+  getPreviousPoSteps(stepIndex: number): PoStepComponent {
+    const poSteps = this.getPoSteps();
+    return poSteps[stepIndex - 1];
+  }
+
+  getPreviousSteps(stepIndex: number): PoStepperItem {
+    return this.steps[stepIndex - 1];
+  }
+
   isDashedBorder(step: PoStepComponent, index: number): boolean {
-    const nextStep = this.getNextPoSteps(index);
+    const nextStepPoSteps = this.getNextPoSteps(index);
+    const nextStepSteps = this.getNextSteps(index);
     return (
-      !(step.status === 'active' && (nextStep?.status === 'done' || this.nextStepDone)) &&
+      !(step.status === 'active' && (nextStepPoSteps?.status === 'done' || nextStepSteps?.status === 'done')) &&
       step.status !== 'done' &&
+      (this.usePoSteps || this.sequential)
+    );
+  }
+
+  isDashedBorderTop(step: PoStepComponent, index: number): boolean {
+    const previousStepPoSteps = this.getPreviousPoSteps(index);
+    const getPreviousSteps = this.getPreviousSteps(index);
+
+    return (
+      ((step.status === 'done' && previousStepPoSteps?.status !== 'done' && previousStepPoSteps?.status !== 'active') ||
+        step.status !== 'done') &&
+      ((step.status === 'done' && getPreviousSteps?.status !== 'done' && getPreviousSteps?.status !== 'active') ||
+        step.status !== 'done') &&
+      (step.status !== 'active' || (step.status === 'active' && getPreviousSteps?.status === 'error')) &&
+      ((step.status === 'default' && getPreviousSteps?.status !== 'done') ||
+        step.status === 'disabled' ||
+        getPreviousSteps?.status !== 'done') &&
+      previousStepPoSteps?.status !== 'done' &&
       (this.usePoSteps || this.sequential)
     );
   }
@@ -316,10 +345,6 @@ export class PoStepperComponent extends PoStepperBaseComponent implements AfterC
     return this.stepSize >= 24 && this.stepSize <= 64 ? this.stepSize : 24;
   }
 
-  private getNextSteps(stepIndex: number): PoStepperItem {
-    return this.steps[stepIndex + 1];
-  }
-
   private getStepperStatusByCanActive(canActiveNextStep: boolean): PoStepperStatus {
     return canActiveNextStep ? PoStepperStatus.Done : PoStepperStatus.Error;
   }
@@ -360,10 +385,6 @@ export class PoStepperComponent extends PoStepperBaseComponent implements AfterC
     const currentActiveStepIndex = () => this.getPoSteps().findIndex(step => step.id === this.currentActiveStep.id);
 
     return !!this.currentActiveStep && currentActiveStepIndex() >= stepIndex;
-  }
-
-  private isNextStepsDone(nextStep?: PoStepperItem): boolean {
-    return nextStep?.status === PoStepperStatus.Done;
   }
 
   private setFinalSteppersAsDisabled(stepIndex: number): void {

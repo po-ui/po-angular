@@ -31,8 +31,14 @@ export class SamplePoStepperLabsComponent implements OnInit {
       gridLgColumns: 4
     },
     {
+      label: 'Align Steps Center',
+      gridLgColumns: 3,
+      property: 'alignCenter',
+      type: 'boolean'
+    },
+    {
       label: 'Step icons',
-      gridLgColumns: 4,
+      gridLgColumns: 3,
       property: 'stepIcons',
       type: 'boolean'
     },
@@ -90,5 +96,6 @@ export class SamplePoStepperLabsComponent implements OnInit {
     this.steps = [];
     this.event = undefined;
     this.properties.orientation = 'horizontal';
+    this.properties.alignCenter = false;
   }
 }

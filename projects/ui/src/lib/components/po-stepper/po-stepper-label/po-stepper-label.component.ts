@@ -23,6 +23,9 @@ import {
   templateUrl: './po-stepper-label.component.html'
 })
 export class PoStepperLabelComponent implements AfterViewInit, OnChanges {
+  // Alinhamento da label.
+  @Input('p-align-center') alignCenter: boolean;
+
   // Conteúdo da label.
   @Input('p-content') content: string;
 

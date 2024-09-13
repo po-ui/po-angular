@@ -9,6 +9,7 @@ import { PoStepComponent } from './po-step/po-step.component';
 import { PoStepperBaseComponent } from './po-stepper-base.component';
 import { PoStepperComponent } from './po-stepper.component';
 import { PoStepperModule } from './po-stepper.module';
+import { PoStepperItem } from './po-stepper-item.interface';
 
 describe('PoStepperComponent:', () => {
   let component: PoStepperComponent;
@@ -324,6 +325,89 @@ describe('PoStepperComponent:', () => {
       expect(spyAllowNextStep).toHaveBeenCalledWith(stepIndex);
       expect(spyOnChangeStep).toHaveBeenCalledWith(stepNumber);
     }));
+
+    it('isDashedBorderTop: should return true when the step status is done and the previous step is not done or active', () => {
+      const step = { status: 'done' } as PoStepComponent;
+      const previousStep = { status: 'error' } as PoStepComponent;
+
+      spyOn(component, 'getPreviousPoSteps').and.returnValue(previousStep);
+      spyOn(component, 'getPreviousSteps').and.returnValue(previousStep);
+
+      const result = component.isDashedBorderTop(step, 1);
+
+      expect(result).toBeTrue();
+    });
+
+    it('isDashedBorderTop: should return false when the step status is done and the previous step is done', () => {
+      const step = { status: 'done' } as PoStepComponent;
+      const previousStep = { status: 'done' } as PoStepComponent;
+
+      spyOn(component, 'getPreviousPoSteps').and.returnValue(previousStep);
+      spyOn(component, 'getPreviousSteps').and.returnValue(previousStep);
+
+      const result = component.isDashedBorderTop(step, 1);
+
+      expect(result).toBeFalse();
+    });
+
+    it('isDashedBorderTop: should return true when the step status is active and the previous step status is error', () => {
+      const step = { status: 'active' } as PoStepComponent;
+      const previousStep = { status: 'error' } as PoStepComponent;
+
+      spyOn(component, 'getPreviousPoSteps').and.returnValue(previousStep);
+      spyOn(component, 'getPreviousSteps').and.returnValue(previousStep);
+
+      const result = component.isDashedBorderTop(step, 1);
+
+      expect(result).toBeTrue();
+    });
+
+    it('isDashedBorderTop: should return false when the step status is active and the previous step status is done', () => {
+      const step = { status: 'active' } as PoStepComponent;
+      const previousStep = { status: 'done' } as PoStepComponent;
+
+      spyOn(component, 'getPreviousPoSteps').and.returnValue(previousStep);
+      spyOn(component, 'getPreviousSteps').and.returnValue(previousStep);
+
+      const result = component.isDashedBorderTop(step, 1);
+
+      expect(result).toBeFalse();
+    });
+
+    it('isDashedBorderTop: should return true when the step status is error and the next step is done', () => {
+      const step = { status: 'error' } as PoStepComponent;
+      const nextStep = { status: 'done' } as PoStepComponent;
+
+      spyOn(component, 'getNextPoSteps').and.returnValue(nextStep);
+
+      const result = component.isDashedBorderTop(step, 1);
+
+      expect(result).toBeTrue();
+    });
+
+    it('isDashedBorderTop: should return true when the step status is default and the previous step is not done', () => {
+      const step = { status: 'default' } as PoStepComponent;
+      const previousStep = { status: 'active' } as PoStepperItem;
+
+      spyOn(component, 'getPreviousPoSteps').and.returnValue(previousStep as unknown as PoStepComponent);
+      spyOn(component, 'getPreviousSteps').and.returnValue(previousStep);
+
+      const result = component.isDashedBorderTop(step, 1);
+
+      expect(result).toBeTrue();
+    });
+
+    it('isDashedBorderTop: should return true when the step status is disabled', () => {
+      const step = { status: 'disabled' } as PoStepComponent;
+      const previousStep = { status: 'default' } as PoStepperItem;
+
+      spyOn(component, 'getPreviousPoSteps').and.returnValue(previousStep as unknown as PoStepComponent);
+      spyOn(component, 'getPreviousSteps').and.returnValue(previousStep);
+
+      const result = component.isDashedBorderTop(step, 1);
+
+      expect(result).toBeTrue();
+    });
 
     it('onStepActive: should set `currentActiveStep` to `currentActiveStep`', () => {
       component['currentActiveStep'] = undefined;
