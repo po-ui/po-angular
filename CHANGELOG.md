@@ -2,6 +2,14 @@
 
 All notable changes to this project will be documented in this file. See [standard-version](https://github.com/conventional-changelog/standard-version) for commit guidelines.
 
+## [18.7.0](https://github.com/po-ui/po-angular/compare/v18.6.0...v18.7.0) (2024-09-16)
+
+
+### Features
+
+* **menu:** customiza link do logo ([063195b](https://github.com/po-ui/po-angular/commit/063195bc177979139b7f4a0931e6a4c27baa6380))
+* **sonar:** habilita análise Sonar Totvs ([ccf2aa8](https://github.com/po-ui/po-angular/commit/ccf2aa8d6d208322ed14a2c056f18cce99f9604c))
+
 ### [18.6.0](https://github.com/po-ui/po-angular/compare/v18.5.0...v18.6.0) (2024-09-09)
 
 
