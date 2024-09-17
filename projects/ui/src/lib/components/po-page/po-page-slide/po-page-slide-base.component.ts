@@ -16,6 +16,8 @@ import { convertToBoolean } from '../../../utils/util';
  * > Para o correto funcionamento do componente `po-page-slide`, deve ser
  * > importado o módulo `BrowserAnimationsModule` no módulo principal da sua
  * > aplicação.
+ *
+ *  Caso utilize componentes de field dentro do page-slide, recomenda-se o uso do [Grid System](https://po-ui.io/guides/grid-system).
  */
 @Directive()
 export class PoPageSlideBaseComponent {
