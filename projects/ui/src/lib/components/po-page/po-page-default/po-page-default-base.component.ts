@@ -1,12 +1,12 @@
-import { Input, ViewChild, Directive } from '@angular/core';
+import { Directive, Input, ViewChild } from '@angular/core';
 
-import { PoLanguageService } from './../../../services/po-language/po-language.service';
 import { poLocaleDefault } from './../../../services/po-language/po-language.constant';
+import { PoLanguageService } from './../../../services/po-language/po-language.service';
 
 import { PoBreadcrumb } from '../../po-breadcrumb/po-breadcrumb.interface';
 import { PoPageAction } from '../po-page-action.interface';
-import { PoPageDefaultLiterals } from './po-page-default-literals.interface';
 import { PoPageContentComponent } from '../po-page-content/po-page-content.component';
+import { PoPageDefaultLiterals } from './po-page-default-literals.interface';
 
 export const poPageDefaultLiteralsDefault = {
   en: <PoPageDefaultLiterals>{
@@ -27,6 +27,19 @@ export const poPageDefaultLiteralsDefault = {
  * @description
  *
  * O componente `po-page-default` é utilizado como o container principal para as telas sem um template definido.
+ *
+ * #### Tokens customizáveis
+ *
+ * > Para maiores informações, acesse o guia [Personalizando o Tema Padrão com Tokens CSS](https://po-ui.io/guides/theme-customization).
+ *
+ * | Propriedade                            | Descrição                                             | Valor Padrão                                    |
+ * |----------------------------------------|-------------------------------------------------------|-------------------------------------------------|
+ * | **Default Values**                     |                                                       |                                                 |
+ * | `--padding`                            | Espaçamento do componente                             | `var(--spacing-xs) var(--spacing-md)`           |
+ * | `--gap`                                | Gap entre o header e o conteúdo                       | `var(--spacing-md)`                             |
+ * | `--padding-top-header`                 | Espaçamento do topo do header                         | `var(--color-neutral-light-30)`                 |
+ * | `--gap-actions`                        | Gap entre os botões de action                         | `var(--spacing-xs)`                             |
+ * | `--padding-content`                    | Espaçamento do conteúdo                               | `var(--spacing-xs) var(--spacing-sm)`           |
  */
 @Directive()
 export abstract class PoPageDefaultBaseComponent {

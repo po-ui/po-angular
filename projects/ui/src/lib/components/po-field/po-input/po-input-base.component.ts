@@ -25,6 +25,8 @@ import { PoMask } from './po-mask';
  * É possível alterar o estilo do componente usando os seguintes tokens (CSS): <br>
  * Obs: Só é possível realizar alterações ao adicionar a classe `.po-input`
  *
+ * > Para correto alinhamento é recomendado o uso das classes de espaçamento do [Grid System](https://po-ui.io/guides/grid-system).
+ *
  * > Para maiores informações, acesse o guia [Personalizando o Tema Padrão com Tokens CSS](https://po-ui.io/guides/theme-customization).
  *
  * | Propriedade                            | Descrição                                             | Valor Padrão                                    |
