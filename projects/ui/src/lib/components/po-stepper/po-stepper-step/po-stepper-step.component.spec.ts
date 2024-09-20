@@ -86,41 +86,6 @@ describe('PoStepperStepComponent:', () => {
       expectPropertiesValues(component, 'stepSize', invalidValues, poStepperStepSizeDefault);
     });
 
-    it('halfStepSize: should return half of step size.', () => {
-      const expectedValue = 24;
-
-      component.stepSize = 48;
-
-      expect(component.halfStepSize).toBe(expectedValue);
-    });
-
-    it('isVerticalOrientation: should return `true` if `orientation` is `vertical`.', () => {
-      component.orientation = PoStepperOrientation.Vertical;
-
-      expect(component.isVerticalOrientation).toBeTruthy();
-    });
-
-    it('isVerticalOrientation: should return `false` if `orientation` is `horizontal`.', () => {
-      component.orientation = PoStepperOrientation.Horizontal;
-
-      expect(component.isVerticalOrientation).toBeFalsy();
-    });
-
-    it('marginHorizontalBar: should return half of step size if `orientation` is `horizontal`.', () => {
-      const defaultHalftStepSize = 12;
-
-      component.stepSize = 24;
-      component.orientation = PoStepperOrientation.Horizontal;
-
-      expect(component.marginHorizontalBar).toBe(defaultHalftStepSize);
-    });
-
-    it('marginHorizontalBar: should return undefined if `orientation` is `vertical`.', () => {
-      component.orientation = PoStepperOrientation.Vertical;
-
-      expect(component.marginHorizontalBar).toBeUndefined();
-    });
-
     it('p-step-icons: should update property with valid values to `true`.', () => {
       const booleanValidTrueValues = [true, 'true', 1, ''];
 
@@ -131,6 +96,40 @@ describe('PoStepperStepComponent:', () => {
       const booleanInvalidValues = [undefined, null, 2, 'string'];
 
       expectPropertiesValues(component, 'stepIcons', booleanInvalidValues, false);
+    });
+
+    it('minHeightCircle: should return 32 if `stepSize` is less than or equal to 24 and orientation is vertical.', () => {
+      component.stepSize = 24;
+      component.isVerticalOrientation = true;
+
+      expect(component.minHeightCircle).toBe(32);
+    });
+
+    it('minHeightCircle: should return `stepSize + 8` if `stepSize` is greater than 24 and orientation is vertical.', () => {
+      component.stepSize = 40;
+      component.isVerticalOrientation = true;
+
+      expect(component.minHeightCircle).toBe(48);
+    });
+
+    it('minHeightCircle: should return 32 if `stepSize` is 24 and the orientation is horizontal.', () => {
+      component.stepSize = 24;
+      component.isVerticalOrientation = false;
+
+      expect(component.minHeightCircle).toBe(32);
+    });
+
+    it('minWidthCircle: should return 32 if `stepSize` is 24 and the orientation is vertical.', () => {
+      component.stepSize = 24;
+      component.isVerticalOrientation = true;
+
+      expect(component.minWidthCircle).toBe(32);
+    });
+
+    it('minWidthCircle: should return null if orientation is horizontal.', () => {
+      component.isVerticalOrientation = false;
+
+      expect(component.minWidthCircle).toBeNull();
     });
   });
 
@@ -212,22 +211,91 @@ describe('PoStepperStepComponent:', () => {
 
       expect(component.enter.emit).not.toHaveBeenCalled();
     });
+
+    it('setDefaultStepSize: should increase step size by 8px if status is `Active` and step size is default.', () => {
+      (component as any)._stepSize = 24;
+      component.status = PoStepperStatus.Active;
+
+      component.setDefaultStepSize();
+
+      expect((component as any)._stepSize).toBe(32);
+    });
+
+    it('setDefaultStepSize: should increase step size by 8px if status is `Error` and stepSizeOriginal is default.', () => {
+      component.stepSizeOriginal = 24;
+      component.status = PoStepperStatus.Error;
+
+      component.setDefaultStepSize();
+
+      expect((component as any)._stepSize).toBe(32);
+    });
+
+    it('setDefaultStepSize: should keep the original step size if step size is not default.', () => {
+      component.stepSizeOriginal = 64;
+
+      component.setDefaultStepSize();
+
+      expect((component as any)._stepSize).toBe(64);
+    });
+
+    it('should update stepSizeOriginal and call setDefaultStepSize if stepSize changes and stepSizeOriginal is undefined', () => {
+      (component as any)._stepSize = 40;
+      component.stepSizeOriginal = undefined;
+
+      spyOn(component, 'setDefaultStepSize');
+
+      const changes = {
+        stepSize: { currentValue: 40, previousValue: 30, firstChange: false, isFirstChange: () => false }
+      };
+
+      component.ngOnChanges(changes);
+
+      expect(component.stepSizeOriginal).toBe((component as any)._stepSize);
+      expect(component.setDefaultStepSize).toHaveBeenCalled();
+    });
+
+    it('should call setDefaultStepSize if status changes', () => {
+      component.stepSizeOriginal = 30;
+
+      spyOn(component, 'setDefaultStepSize');
+
+      const changes = {
+        status: {
+          currentValue: PoStepperStatus.Active,
+          previousValue: PoStepperStatus.Default,
+          firstChange: false,
+          isFirstChange: () => false
+        }
+      };
+
+      component.ngOnChanges(changes);
+
+      expect(component.setDefaultStepSize).toHaveBeenCalled();
+    });
+
+    it('should call setDefaultStepSize if both stepSize and status change', () => {
+      component.stepSizeOriginal = 30;
+
+      spyOn(component, 'setDefaultStepSize');
+
+      const changes = {
+        stepSize: { currentValue: 40, previousValue: 30, firstChange: false, isFirstChange: () => false },
+        status: {
+          currentValue: PoStepperStatus.Active,
+          previousValue: PoStepperStatus.Default,
+          firstChange: false,
+          isFirstChange: () => false
+        }
+      };
+
+      component.ngOnChanges(changes);
+
+      expect(component.setDefaultStepSize).toHaveBeenCalled();
+    });
   });
 
   describe('Templates:', () => {
     const elementByClass = (className: string) => nativeElement.querySelector(`.${className}`);
-
-    it(`should find 'po-stepper-step-container' and style.width is stepSize value if 'isVerticalOrientation' is 'true'.`, () => {
-      component.orientation = PoStepperOrientation.Vertical;
-      component.stepSize = 60;
-
-      fixture.detectChanges();
-
-      const stepperContainer = elementByClass('po-stepper-step-container');
-
-      expect(stepperContainer).toBeTruthy();
-      expect(stepperContainer.style.width).toBe('60px');
-    });
 
     it('should find `po-stepper-step-container` and it not contains width if `orientation` is `horizontal`.', () => {
       component.orientation = PoStepperOrientation.Horizontal;
@@ -239,52 +307,6 @@ describe('PoStepperStepComponent:', () => {
 
       expect(stepperContainer).toBeTruthy();
       expect(stepperContainer.style.width).toBe('');
-    });
-
-    it(`should create class 'po-stepper-step-bar-left' and 'po-stepper-step-bar-right' if 'p-orientation' is 'horizontal'.`, () => {
-      component.orientation = PoStepperOrientation.Horizontal;
-      component.label = 'Step 1';
-
-      fixture.detectChanges();
-
-      const stepperBarLeft = elementByClass('po-stepper-step-bar-left');
-      const stepperBarRight = elementByClass('po-stepper-step-bar-right');
-
-      expect(stepperBarLeft).toBeTruthy();
-      expect(stepperBarRight).toBeTruthy();
-      expect(elementByClass('po-stepper-bar-top')).toBeFalsy();
-      expect(elementByClass('po-stepper-bar-bottom')).toBeFalsy();
-    });
-
-    it(`should create class 'po-stepper-step-bar-top' and 'po-stepper-step-bar-bottom' if 'p-orientation' is 'vertical'.`, () => {
-      component.orientation = PoStepperOrientation.Vertical;
-      component.label = 'Step 1';
-
-      fixture.detectChanges();
-
-      const stepperBarLeft = elementByClass('po-stepper-step-bar-left');
-      const stepperBarRight = elementByClass('po-stepper-step-bar-right');
-
-      expect(stepperBarLeft).toBeFalsy();
-      expect(stepperBarRight).toBeFalsy();
-      expect(elementByClass('po-stepper-step-bar-top')).toBeTruthy();
-      expect(elementByClass('po-stepper-step-bar-bottom')).toBeTruthy();
-    });
-
-    it(`should add margin-left and margin-right in 'step-bar-left' and 'step-bar-right' with 'marginHorizontalBar'.`, () => {
-      const marginHorizontalBar = 12;
-      component.orientation = PoStepperOrientation.Horizontal;
-      component.label = 'Step 1';
-
-      spyOnProperty(component, 'marginHorizontalBar').and.returnValue(marginHorizontalBar);
-
-      fixture.detectChanges();
-
-      const stepperBarLeft = elementByClass('po-stepper-step-bar-left');
-      const stepperBarRight = elementByClass('po-stepper-step-bar-right');
-
-      expect(stepperBarLeft.style.marginRight).toBe(`${marginHorizontalBar}px`);
-      expect(stepperBarRight.style.marginLeft).toBe(`${marginHorizontalBar}px`);
     });
 
     it('should find `po-stepper-circle` and it contains height and width with 24px if stepSize is greater than 64.', () => {
@@ -352,26 +374,22 @@ describe('PoStepperStepComponent:', () => {
       expect(elementByClass('po-stepper-step-default')).toBeTruthy();
     });
 
-    it(`should create class 'po-stepper-step-dashed-border' if 'nextStatus' is disabled and position is not vertical`, () => {
-      component.orientation = PoStepperOrientation.Horizontal;
-      component.nextStatus = 'disabled';
-
+    it('should change `tabindex` to `-1` if component is disabled', () => {
+      component.status = PoStepperStatus.Disabled;
       fixture.detectChanges();
 
-      const stepperDashedBorder = elementByClass('po-stepper-step-dashed-border');
+      const poStepperStepElement = nativeElement.querySelector('.po-stepper-step[tabindex="-1"]');
 
-      expect(stepperDashedBorder).toBeTruthy();
+      expect(poStepperStepElement).toBeTruthy();
     });
 
-    it(`should create class 'po-stepper-step-dashed-border-vertical' if 'nextStatus' is disabled and position is vertical`, () => {
-      component.orientation = PoStepperOrientation.Vertical;
-      component.nextStatus = 'disabled';
-
+    it('should change `tabindex` to `0` if component isn’t disabled', () => {
+      component.status = PoStepperStatus.Active;
       fixture.detectChanges();
 
-      const stepperDashedBorderVertical = elementByClass('po-stepper-step-dashed-border-vertical');
+      const poStepperStepElement = nativeElement.querySelector('.po-stepper-step[tabindex="0"]');
 
-      expect(stepperDashedBorderVertical).toBeTruthy();
+      expect(poStepperStepElement).toBeTruthy();
     });
   });
 });

@@ -1,4 +1,4 @@
-import { EventEmitter, Input, Output, Directive } from '@angular/core';
+import { EventEmitter, Input, Output, Directive, TemplateRef } from '@angular/core';
 
 import { convertToBoolean } from '../../utils/util';
 
@@ -49,6 +49,35 @@ const poStepperOrientationDefault = PoStepperOrientation.Horizontal;
  *
  * - Evite `labels` extensos que quebram o layout do `po-stepper`, use `labels` diretos, curtos e intuitivos.
  * - Utilize apenas um `po-stepper` por página.
+ *
+ * #### Tokens customizáveis
+ *
+ * É possível alterar o estilo do componente usando os seguintes tokens (CSS):
+ *
+ * > Para maiores informações, acesse o guia [Personalizando o Tema Padrão com Tokens CSS](https://po-ui.io/guides/theme-customization).
+ *
+ * | Propriedade                              | Descrição                                             | Valor Padrão                                      |
+ * |------------------------------------------|-------------------------------------------------------|---------------------------------------------------|
+ * | **Label**                                |                                                       |                                                   |
+ * | `--font-family`                          | Família tipográfica usada                             | `var(--font-family-theme)`                        |
+ * | `--font-size`                            | Tamanho da fonte                                      | `var(--font-size-default)`                        |
+ * | `--font-weight`                          | Peso da fonte                                         | `var(--font-weight-normal)`                       |
+ * | **Step - Done**                          |                                                       |                                                   |
+ * | `--text-color`                           | Cor do texto no step concluído                        | `var(--color-neutral-dark-70)`                    |
+ * | `--color-icon-done`                      | Cor do ícone no step concluído                        | `var(--color-neutral-dark-70)`                    |
+ * | `--background-done`                      | Cor de fundo no step concluído                        | `var(--color-neutral-light-00)`                   |
+ * | **Line - Done**                          |                                                       |                                                   |
+ * | `--color-line-done`                      | Cor da linha no step concluído                        | `var(--color-neutral-mid-40)`                     |
+ * | **Step - Current**                       |                                                       |                                                   |
+ * | `--color-icon-current`                   | Cor do ícone no step atual                            | `var(--color-neutral-light-00)`                   |
+ * | `--background-current`                   | Cor de fundo no step atual                            | `var(--color-action-default)`                     |
+ * | `--font-weight-current`                  | Peso da fonte no step atual                           | `var(--font-weight-bold)`                         |
+ * | **Step - Next**                          |                                                       |                                                   |
+ * | `--font-size-circle`                     | Tamanho da fonte no círculo do próximo step           | `var(--font-size-sm)`                             |
+ * | `--color-next`                           | Cor do ícone no próximo step                          | `var(--color-action-disabled)`                    |
+ * | `--text-color-next`                      | Cor do texto no próximo step                          | `var(--color-neutral-light-30)`                   |
+ * | **Focused**                              |                                                       |                                                   |
+ * | `--outline-color-focused`                | Cor do outline do estado de focus                     | `var(--color-action-focus)`                       |
  */
 @Directive()
 export class PoStepperBaseComponent {
@@ -146,7 +175,7 @@ export class PoStepperBaseComponent {
   @Input('p-steps') set steps(steps: Array<PoStepperItem>) {
     this._steps = Array.isArray(steps) ? steps : [];
     this._steps.forEach(step => (step.status = step.status ?? PoStepperStatus.Default));
-    this.step = 1;
+    this.initializeSteps();
   }
 
   get steps(): Array<PoStepperItem> {
@@ -170,5 +199,75 @@ export class PoStepperBaseComponent {
 
   get sequential(): boolean {
     return this._sequential;
+  }
+
+  /**
+   * @optional
+   *
+   * @description
+   * Permite definir o ícone do step no status concluído.
+   * Esta propriedade permite usar ícones da [Biblioteca de ícones](/guides/icons) ou da biblioteca [Phosphor](https://phosphoricons.com/).
+   *
+   * Exemplo usando a biblioteca de ícones padrão:
+   * ```
+   * <po-stepper p-step-icon-done="po-icon po-icon-eye">
+   *    ...
+   * </po-stepper>
+   * ```
+   * Exemplo usando a biblioteca *Phosphor*:
+   * ```
+   * <po-stepper p-step-icon-done="ph ph-check-circle">
+   *    ...
+   * </po-stepper>
+   * ```
+   * Outra opção seria a customização do ícone através do `TemplateRef`, conforme exemplo abaixo:
+   * ```
+   * <po-stepper [p-step-icon-done]="doneIcon">
+   *    ...
+   * </po-stepper>
+   *
+   * <ng-template #doneIcon>
+   *    <i class="ph ph-check-fat"></i>
+   * </ng-template>
+   * ```
+   * > Deve-se usar `font-size: inherit` para ajustar ícones que não se ajustam automaticamente.
+   *
+   * @default `po-icon-ok`
+   */
+  @Input('p-step-icon-done') iconDone?: string | TemplateRef<void>;
+
+  /**
+   * @optional
+   *
+   * @description
+   * Permite definir o ícone do step no status ativo.
+   * Esta propriedade permite usar ícones da [Biblioteca de ícones](/guides/icons) ou da biblioteca [Phosphor](https://phosphoricons.com/).
+   *
+   * Exemplo usando a biblioteca de ícones padrão:
+   * ```
+   * <po-stepper p-step-icon-active="po-icon po-icon-settings">
+   *    ...
+   * </po-stepper>
+   * ```
+   * Exemplo usando a biblioteca *Phosphor*:
+   * ```
+   * <po-stepper p-step-icon-active="ph ph-pencil-simple-line">
+   *    ...
+   * </po-stepper>
+   * ```
+   * Para customizar o ícone através do `TemplateRef`, veja a documentação da propriedade `p-step-icon-done`.
+   *
+   * > Deve-se usar `font-size: inherit` para ajustar ícones que não se ajustam automaticamente.
+   *
+   * @default `po-icon-edit`
+   */
+  @Input('p-step-icon-active') iconActive?: string | TemplateRef<void>;
+
+  private initializeSteps(): void {
+    const hasStatus = this._steps.some(step => step.status !== PoStepperStatus.Default);
+
+    if (!hasStatus && this.step === 1) {
+      this.step = 1;
+    }
   }
 }

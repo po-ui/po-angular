@@ -1,4 +1,4 @@
-import { Component, Input } from '@angular/core';
+import { Component, Input, TemplateRef } from '@angular/core';
 
 import { PoStepperStatus } from '../enums/po-stepper-status.enum';
 
@@ -19,6 +19,15 @@ const poLargeStepSize = 48;
 export class PoStepperCircleComponent {
   // Conteúdo que irá aparecer no círculo do *step*.
   @Input('p-content') content: any;
+
+  // Ícone para o status Active do *step*.
+  @Input('p-step-icon-active') iconActive?: string | TemplateRef<void>;
+
+  // Ícone para o status Done do *step*.
+  @Input('p-step-icon-done') iconDone?: string | TemplateRef<void>;
+
+  // Ícone para o status default do *step*.
+  @Input('p-icon-default') iconDefault?: string | TemplateRef<void>;
 
   // Define se serão exibidos ícones no lugar de números nos steps.
   @Input('p-icons') icons: boolean;

@@ -34,24 +34,21 @@ describe('PoStepperBaseComponent:', () => {
 
     it('p-step: shouldn`t set property with invalid values', () => {
       const invalidValues = [0, 3, undefined, null, {}, ''];
+      const validStep = 1;
 
       component.steps = [{ label: 'Step 1' }];
+      component.step = validStep;
 
-      expectPropertiesValues(component, 'step', invalidValues, 1);
+      invalidValues.forEach(value => {
+        component.step = value as any;
+        expect(component.step).toBe(validStep);
+      });
     });
 
     it('p-steps: should update property with empty `array` if invalid values', () => {
       const invalidValues = [false, 0, [], undefined, null, {}, ''];
 
       expectPropertiesValues(component, 'steps', invalidValues, []);
-    });
-
-    it('p-steps: should update property with `array` with status default and initial step 1', () => {
-      component.steps = [{ label: 'Step 1' }, { label: 'Step 2' }];
-
-      expect(component.steps[0].status).toBe(PoStepperStatus.Active);
-      expect(component.steps[1].status).toBe(PoStepperStatus.Default);
-      expect(component.step).toBe(1);
     });
 
     it('p-steps: should respect status disabled', () => {

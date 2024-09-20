@@ -1,3 +1,14 @@
-<div class="po-stepper-label">
-  {{ content }}
+<div
+  #labelElement
+  class="po-stepper-label"
+  [class.po-link]="status !== 'disabled'"
+  [class.po-stepper-label-active]="status === 'active' || status === 'error'"
+  [class.po-stepper-label-done]="status === 'done'"
+  [class.po-stepper-label-vertical]="isVerticalOrientation"
+  [p-tooltip]="tooltipContent"
+  aria-hidden="true"
+  (mouseover)="onMouseOver()"
+  (mouseout)="onMouseOut()"
+>
+  {{ displayedContent }}
 </div>
