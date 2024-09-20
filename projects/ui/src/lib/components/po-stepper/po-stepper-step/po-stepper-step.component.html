@@ -1,22 +1,38 @@
-<div class="po-stepper-step" [ngClass]="getStatusClass(status)" (click)="onClick()" (keydown.enter)="onEnter()">
-  <div class="po-stepper-step-container" [style.width.px]="isVerticalOrientation ? stepSize : undefined">
-    <div
-      [class.po-stepper-step-bar-top]="isVerticalOrientation"
-      [class.po-stepper-step-bar-left]="!isVerticalOrientation"
-      [style.margin-right.px]="marginHorizontalBar"
-    ></div>
-
-    <po-stepper-circle [p-content]="circleContent" [p-icons]="stepIcons" [p-size]="stepSize" [p-status]="status">
+<div
+  class="po-stepper-step"
+  [ngClass]="getStatusClass(status)"
+  role="tab"
+  [tabindex]="status === 'disabled' ? -1 : 0"
+  [attr.aria-selected]="status === 'active'"
+  [attr.aria-disabled]="status === 'disabled'"
+  [attr.aria-required]="status === 'error'"
+  (click)="onClick()"
+  (keydown.enter)="onEnter()"
+>
+  <div class="po-stepper-step-container">
+    <po-stepper-circle
+      [p-content]="circleContent"
+      [p-icons]="stepIcons"
+      [p-size]="stepSize"
+      [p-status]="status"
+      [p-icon-default]="iconDefault"
+      [p-step-icon-done]="iconDone"
+      [p-step-icon-active]="iconActive"
+      [class.po-stepper-circle-vertical]="isVerticalOrientation"
+      [class.po-stepper-circle-horizontal]="!isVerticalOrientation"
+      [style.minWidth.px]="minWidthCircle"
+      [style.minHeight.px]="minHeightCircle"
+    >
     </po-stepper-circle>
 
-    <div
-      [class.po-stepper-step-bar-bottom]="isVerticalOrientation"
-      [class.po-stepper-step-bar-right]="!isVerticalOrientation"
-      [class.po-stepper-step-dashed-border]="nextStatus === 'disabled' && !isVerticalOrientation"
-      [class.po-stepper-step-dashed-border-vertical]="nextStatus === 'disabled' && isVerticalOrientation"
-      [style.margin-left.px]="marginHorizontalBar"
-    ></div>
+    <po-stepper-label
+      *ngIf="label"
+      class="po-stepper-step-label-position"
+      [p-content]="label"
+      [p-status]="status"
+      [p-vertical-orientation]="isVerticalOrientation"
+      [attr.aria-label]="label"
+    >
+    </po-stepper-label>
   </div>
-
-  <po-stepper-label class="po-stepper-step-label-position" [p-content]="label"> </po-stepper-label>
 </div>
