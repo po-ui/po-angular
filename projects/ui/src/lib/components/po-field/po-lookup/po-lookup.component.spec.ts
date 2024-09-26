@@ -969,6 +969,7 @@ describe('PoLookupComponent:', () => {
         component.fieldValue = 'value';
         component.spacing = PoTableColumnSpacing.Medium;
         component.textWrap = false;
+        component.virtualScroll = true;
         component.changeVisibleColumns = new EventEmitter();
         component.columnRestoreManager = new EventEmitter();
 
@@ -985,6 +986,7 @@ describe('PoLookupComponent:', () => {
           fieldValue,
           spacing,
           textWrap,
+          virtualScroll,
           changeVisibleColumns,
           columnRestoreManager
         } = component;
@@ -1006,6 +1008,7 @@ describe('PoLookupComponent:', () => {
           fieldValue,
           spacing,
           textWrap,
+          virtualScroll,
           changeVisibleColumns,
           columnRestoreManager
         };

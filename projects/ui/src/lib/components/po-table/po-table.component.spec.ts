@@ -2992,15 +2992,71 @@ describe('PoTableComponent:', () => {
     expect(spy).not.toHaveBeenCalled();
   });
 
-  it('includeInfiniteScroll: should call `scrollListeneter called when `infiniteScroll` is used', () => {
+  it('includeInfiniteScroll: should call `scrollListener` when `infiniteScroll` is used (virtualScroll is false)', () => {
     component.height = 100;
     component.infiniteScroll = true;
-    const spy = spyOn(poTableService, 'scrollListener').and.returnValue(
+    component.virtualScroll = false;
+
+    const mockScrollableElement = {
+      scrollHeight: 200,
+      closest: jasmine.createSpy('closest').and.returnValue({}),
+      addEventListener: jasmine.createSpy('addEventListener'),
+      removeEventListener: jasmine.createSpy('removeEventListener')
+    };
+
+    component.tableScrollable = new ElementRef(mockScrollableElement);
+
+    const spyScrollListener = spyOn(poTableService, 'scrollListener').and.returnValue(
       of({ target: { offsetHeight: 100, scrollTop: 100, scrollHeight: 1 } })
     );
 
     component['includeInfiniteScroll']();
-    expect(spy).toHaveBeenCalled();
+
+    expect(spyScrollListener).toHaveBeenCalledWith(mockScrollableElement.closest());
+    expect(mockScrollableElement.closest).toHaveBeenCalledWith('.po-table-container-overflow');
+  });
+
+  it('includeInfiniteScroll: should call `scrollListener` when `infiniteScroll` is used (virtualScroll is true)', () => {
+    component.height = 100;
+    component.infiniteScroll = true;
+    component.virtualScroll = true;
+
+    const mockTableVirtualScroll = new ElementRef({
+      nativeElement: {
+        scrollHeight: 200
+      }
+    });
+
+    component.tableVirtualScroll = mockTableVirtualScroll;
+
+    const spyScrollListener = spyOn(poTableService, 'scrollListener').and.returnValue(
+      of({ target: { offsetHeight: 100, scrollTop: 100, scrollHeight: 1 } })
+    );
+
+    component['includeInfiniteScroll']();
+
+    expect(spyScrollListener).toHaveBeenCalled();
+  });
+
+  it('checkInfiniteScroll: should use tableScrollable scrollHeight when virtualScroll is false', () => {
+    const spyDetectChanges = spyOn(component['changeDetector'], 'detectChanges');
+    const spyIncludeInfiniteScroll = spyOn(component, <any>'includeInfiniteScroll');
+
+    component.height = 100;
+    component.virtualScroll = false;
+    spyOnProperty(component, 'hasItems').and.returnValue(true);
+    component.infiniteScroll = true;
+
+    const mockTableScrollable = new ElementRef({
+      scrollHeight: 120,
+      closest: () => null
+    });
+    component.tableScrollable = mockTableScrollable;
+
+    component['checkInfiniteScroll']();
+
+    expect(spyIncludeInfiniteScroll).toHaveBeenCalled();
+    expect(spyDetectChanges).toHaveBeenCalled();
   });
 
   it('checkInfiniteScroll: should call includeInfiniteScroll if height is smaller than scrollHeight', () => {

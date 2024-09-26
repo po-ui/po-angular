@@ -1719,5 +1719,22 @@ describe('PoTableBaseComponent:', () => {
     it('p-infinite-scroll-distance: should update property `p-infinite-scroll-distance` with values > 100 .', () => {
       expectSettersMethod(component, 'infiniteScrollDistance', 150, 'infiniteScrollDistance', 100);
     });
+
+    it('p-virtual-scroll: should default virtualScroll to true when height is defined.', () => {
+      component.height = 300;
+      expect(component.virtualScroll).toBe(true);
+    });
+
+    it('p-virtual-scroll: should allow setting virtualScroll to false when height is defined.', () => {
+      component.height = 300;
+      component.virtualScroll = false;
+      expect(component.virtualScroll).toBe(false);
+    });
+
+    it('p-virtual-scroll: should allow setting virtualScroll to true when height is defined.', () => {
+      component.height = 300;
+      component.virtualScroll = true;
+      expect(component.virtualScroll).toBe(true);
+    });
   });
 });
