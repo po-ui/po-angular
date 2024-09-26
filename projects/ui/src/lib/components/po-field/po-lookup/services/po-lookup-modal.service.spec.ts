@@ -48,6 +48,7 @@ describe('PoLookupModalService:', () => {
     fieldLabel: 'label',
     spacing: 'medium',
     textWrap: false,
+    virtualScroll: true,
     changeVisibleColumns: new EventEmitter(),
     columnRestoreManager: new EventEmitter()
   };

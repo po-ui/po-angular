@@ -224,6 +224,7 @@ export interface PoTableColumn {
    * e o tipo _Date_ padrão do Javascript, por exemplo: `'2017-11-28T00:00:00-02:00'` ou `new Date(2017, 10, 28)`.
    *
    * - `detail`: array de objetos para o master-detail.
+   *  + Incompatível com `virtual-scroll`, que requer altura fixa nas linhas.
    * - `icon`: *array* de *string* ou objetos para a coluna de ícones.
    * - `label`: texto com destaque.
    * - `link`: habilita link na coluna para ação ou navegação.

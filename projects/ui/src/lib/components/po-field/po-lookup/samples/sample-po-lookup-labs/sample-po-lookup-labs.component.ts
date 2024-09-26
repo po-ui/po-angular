@@ -65,7 +65,8 @@ export class SamplePoLookupLabsComponent implements OnInit {
     { value: 'multiple', label: 'Multiple' },
     { value: 'autoHeight', label: 'Auto Height' },
     { value: 'hideColumnsManager', label: 'Hide Columns Manager' },
-    { value: 'textWrap', label: 'Text Wrap' }
+    { value: 'textWrap', label: 'Text Wrap' },
+    { value: 'virtualScroll', label: 'Virtual Sroll' }
   ];
 
   private readonly columnsDefinition = {

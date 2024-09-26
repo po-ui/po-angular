@@ -171,6 +171,23 @@ describe('PoPageDynamicTableComponent:', () => {
         expectPropertiesValues(component, 'spacing', [invalidValue], PoTableColumnSpacing.Medium);
       });
     });
+
+    it('p-virtual-scroll: should default virtualScroll to true when height is defined.', () => {
+      component.height = 300;
+      expect(component.virtualScroll).toBe(true);
+    });
+
+    it('p-virtual-scroll: should allow setting virtualScroll to false when height is defined.', () => {
+      component.height = 300;
+      component.virtualScroll = false;
+      expect(component.virtualScroll).toBe(false);
+    });
+
+    it('p-virtual-scroll: should allow setting virtualScroll to true when height is defined.', () => {
+      component.height = 300;
+      component.virtualScroll = true;
+      expect(component.virtualScroll).toBe(true);
+    });
   });
 
   describe('Methods:', () => {
