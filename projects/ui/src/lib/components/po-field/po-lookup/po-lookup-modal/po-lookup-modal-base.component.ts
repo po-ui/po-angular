@@ -161,8 +161,25 @@ export abstract class PoLookupModalBaseComponent implements OnDestroy, OnInit {
    * Habilita ou desabilita a quebra automática de texto. Quando ativada, o texto que excede
    * o espaço disponível é transferido para a próxima linha em pontos apropriados para uma
    * leitura clara.
+   *
+   * > Incompatível com `virtual-scroll`, que requer altura fixa nas linhas.
+   *
    */
   @Input({ alias: 'p-text-wrap', transform: convertToBoolean }) textWrap?: boolean = false;
+
+  /**
+   * @optional
+   *
+   * @description
+   *
+   * Habilita o `virtual-scroll` na tabela para melhorar a performance com grandes volumes de dados.
+   * A altura da tabela já é pré-definida, portanto o `virtual-scroll` será ativado automaticamente.
+   *
+   * > Incompatível com `p-text-wrap` e `master-detail`, pois o `virtual-scroll` exige altura fixa nas linhas.
+   *
+   * @default `true`
+   */
+  @Input({ alias: 'p-virtual-scroll', transform: convertToBoolean }) virtualScroll?: boolean = true;
 
   /**
    * @optional

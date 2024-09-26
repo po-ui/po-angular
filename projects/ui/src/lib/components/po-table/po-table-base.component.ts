@@ -181,6 +181,8 @@ export abstract class PoTableBaseComponent implements OnChanges, OnDestroy {
    * o espaço disponível é transferido para a próxima linha em pontos apropriados para uma
    * leitura clara.
    *
+   * > Incompatível com `virtual-scroll`, que requer altura fixa nas linhas.
+   *
    * @default `false`
    */
   @Input({ alias: 'p-text-wrap', transform: convertToBoolean }) textWrap?: boolean = false;
@@ -501,6 +503,7 @@ export abstract class PoTableBaseComponent implements OnChanges, OnDestroy {
   private _infiniteScroll?: boolean = false;
   private _draggable?: boolean = false;
   private _hideActionFixedColumns?: boolean = false;
+  private _virtualScroll?: boolean = true;
 
   constructor(
     private poDate: PoDateService,
@@ -973,6 +976,26 @@ export abstract class PoTableBaseComponent implements OnChanges, OnDestroy {
 
   get draggable() {
     return this._draggable;
+  }
+
+  /**
+   * @optional
+   *
+   * @description
+   *
+   * Habilita o `virtual-scroll` na tabela para melhorar a performance com grandes volumes de dados.
+   * Requer altura (`p-height`) para funcionar corretamente.
+   *
+   * > Incompatível com `p-text-wrap` e `master-detail`, pois o `virtual-scroll` exige altura fixa nas linhas.
+   *
+   * @default `true`
+   */
+  @Input('p-virtual-scroll') set virtualScroll(value: boolean) {
+    this._virtualScroll = convertToBoolean(value && this.height > 0);
+  }
+
+  get virtualScroll() {
+    return this._virtualScroll;
   }
 
   ngOnDestroy() {

@@ -117,6 +117,7 @@ export class PoTableComponent extends PoTableBaseComponent implements AfterViewI
 
   @ViewChild('tableTemplate', { read: ElementRef, static: false }) tableTemplate;
   @ViewChild('tableVirtualScroll', { read: ElementRef, static: false }) tableVirtualScroll;
+  @ViewChild('tableScrollable', { read: ElementRef, static: false }) tableScrollable;
 
   @ViewChild('columnManager', { read: ElementRef, static: false }) columnManager;
   @ViewChild('columnBatchActions', { read: ElementRef, static: false }) columnBatchActions;
@@ -734,7 +735,15 @@ export class PoTableComponent extends PoTableBaseComponent implements AfterViewI
 
   protected checkInfiniteScroll(): void {
     if (this.hasInfiniteScroll()) {
-      if (this.tableVirtualScroll.nativeElement.scrollHeight >= this.height) {
+      let scrollHeight = 0;
+
+      if (this.virtualScroll) {
+        scrollHeight = this.tableVirtualScroll.nativeElement.scrollHeight;
+      } else {
+        scrollHeight = this.tableScrollable.nativeElement.scrollHeight;
+      }
+
+      if (scrollHeight >= this.height) {
         this.includeInfiniteScroll();
       } else {
         this.infiniteScroll = false;
@@ -854,18 +863,31 @@ export class PoTableComponent extends PoTableBaseComponent implements AfterViewI
   }
 
   private hasInfiniteScroll(): boolean {
-    return (
-      this.infiniteScroll &&
-      this.hasItems &&
-      !this.subscriptionScrollEvent &&
-      this.height &&
-      this.tableVirtualScroll.nativeElement.scrollHeight
-    );
+    let scrollHeight = 0;
+
+    if (this.virtualScroll && this.tableVirtualScroll) {
+      scrollHeight = this.tableVirtualScroll.nativeElement.scrollHeight;
+    }
+    if (!this.virtualScroll && this.tableScrollable) {
+      scrollHeight = this.tableScrollable.nativeElement.scrollHeight;
+    }
+
+    return this.infiniteScroll && this.hasItems && !this.subscriptionScrollEvent && this.height > 0 && scrollHeight > 0;
   }
 
   private includeInfiniteScroll(): void {
-    this.scrollEvent$ = this.defaultService.scrollListener(this.tableVirtualScroll.nativeElement);
-    this.subscriptionScrollEvent = this.scrollEvent$.subscribe(event => this.showMoreInfiniteScroll(event));
+    let element: HTMLElement | null = null;
+
+    if (this.virtualScroll) {
+      element = this.tableVirtualScroll?.nativeElement;
+    } else {
+      element = this.tableScrollable.nativeElement.closest('.po-table-container-overflow');
+    }
+
+    if (element) {
+      this.scrollEvent$ = this.defaultService.scrollListener(element);
+      this.subscriptionScrollEvent = this.scrollEvent$.subscribe(event => this.showMoreInfiniteScroll(event));
+    }
 
     this.changeDetector.detectChanges();
   }

@@ -96,7 +96,8 @@ export class SamplePoTableLabsComponent implements OnInit {
     { label: 'Actions Right', value: 'actionsRight' },
     { label: 'Draggable', value: 'draggable' },
     { label: 'Hide action fixed columns', value: 'fixed' },
-    { label: 'Hide Table Search', value: 'hideTableSearch' }
+    { label: 'Hide Table Search', value: 'hideTableSearch' },
+    { label: 'Virtual Scroll', value: 'virtualScroll' }
   ];
 
   public readonly typeHeaderOptions: Array<PoRadioGroupOption> = [
