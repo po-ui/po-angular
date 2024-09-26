@@ -206,6 +206,7 @@ export class PoLookupComponent extends PoLookupBaseComponent implements AfterVie
         fieldValue,
         spacing,
         textWrap,
+        virtualScroll,
         changeVisibleColumns,
         columnRestoreManager
       } = this;
@@ -227,6 +228,7 @@ export class PoLookupComponent extends PoLookupBaseComponent implements AfterVie
         fieldValue,
         spacing,
         textWrap,
+        virtualScroll,
         changeVisibleColumns,
         columnRestoreManager
       });

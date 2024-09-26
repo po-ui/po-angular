@@ -50,6 +50,7 @@ export class PoLookupModalService {
     fieldValue: string;
     spacing: string;
     textWrap: boolean;
+    virtualScroll: boolean;
     changeVisibleColumns: Function;
     columnRestoreManager: Function;
   }): void {
@@ -68,6 +69,7 @@ export class PoLookupModalService {
       fieldValue,
       spacing,
       textWrap,
+      virtualScroll,
       changeVisibleColumns,
       columnRestoreManager
     } = params;
@@ -92,6 +94,7 @@ export class PoLookupModalService {
     this.componentRef.instance.hideColumnsManager = hideColumnsManager;
     this.componentRef.instance.spacing = spacing;
     this.componentRef.instance.textWrap = textWrap;
+    this.componentRef.instance.virtualScroll = virtualScroll;
     this.componentRef.changeDetectorRef.detectChanges();
     this.componentRef.instance.openModal();
   }

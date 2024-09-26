@@ -297,6 +297,7 @@ export class PoPageDynamicTableComponent extends PoPageDynamicListBaseComponent 
   private _hideCloseDisclaimers: Array<string> = [];
   private _draggable = false;
   private _spacing: PoTableColumnSpacing = PoTableColumnSpacing.Medium;
+  private _virtualScroll?: boolean = true;
 
   private set defaultPageActions(value: Array<PoPageAction>) {
     this._defaultPageActions = value;
@@ -552,6 +553,8 @@ export class PoPageDynamicTableComponent extends PoPageDynamicListBaseComponent 
    * o espaço disponível é transferido para a próxima linha em pontos apropriados para uma
    * leitura clara.
    *
+   * > Incompatível com `virtual-scroll`, que requer altura fixa nas linhas.
+   *
    * @default `false`
    */
   @Input({ alias: 'p-text-wrap', transform: convertToBoolean }) textWrap?: boolean = false;
@@ -570,6 +573,26 @@ export class PoPageDynamicTableComponent extends PoPageDynamicListBaseComponent 
 
   get draggable(): boolean {
     return this._draggable;
+  }
+
+  /**
+   * @optional
+   *
+   * @description
+   *
+   * Habilita o `virtual-scroll` na tabela para melhorar a performance com grandes volumes de dados.
+   * Requer altura (`p-height`) para funcionar corretamente.
+   *
+   * > Incompatível com `p-text-wrap` e `master-detail`, pois o `virtual-scroll` exige altura fixa nas linhas.
+   *
+   * @default `true`
+   */
+  @Input('p-virtual-scroll') set virtualScroll(value: boolean) {
+    this._virtualScroll = convertToBoolean(value && this.height > 0);
+  }
+
+  get virtualScroll() {
+    return this._virtualScroll;
   }
 
   constructor(

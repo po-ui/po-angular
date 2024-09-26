@@ -310,9 +310,25 @@ export abstract class PoLookupBaseComponent
    *
    * Esta propriedade aplica-se ao texto contido nas células da tabela.
    *
+   * > Incompatível com `virtual-scroll`, que requer altura fixa nas linhas.
+   *
    * @default `false`
    */
   @Input({ alias: 'p-text-wrap', transform: convertToBoolean }) textWrap?: boolean = false;
+
+  /**
+   * @optional
+   *
+   * @description
+   *
+   * Habilita o `virtual-scroll` na tabela para melhorar a performance com grandes volumes de dados.
+   * A altura da tabela já é pré-definida, portanto o `virtual-scroll` será ativado automaticamente.
+   *
+   * > Incompatível com `p-text-wrap` e `master-detail`, pois o `virtual-scroll` exige altura fixa nas linhas.
+   *
+   * @default `true`
+   */
+  @Input({ alias: 'p-virtual-scroll', transform: convertToBoolean }) virtualScroll?: boolean = true;
 
   /**
    * Evento será disparado quando ocorrer algum erro na requisição de busca do item.
