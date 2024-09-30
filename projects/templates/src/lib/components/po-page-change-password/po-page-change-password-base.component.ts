@@ -269,5 +269,18 @@ export abstract class PoPageChangePasswordBaseComponent {
     return this._urlHome;
   }
 
+  /**
+   * @optional
+   *
+   * @description
+   *
+   * Define a propriedade nativa `autocomplete` do campo como `off`.
+   *
+   * > No input de senha(`po-password`) será definido como `new-password`.
+   *
+   * @default `true`
+   */
+  @Input('p-no-autocomplete-password') noAutocompletePassword: boolean = true;
+
   abstract navigateTo(url: string): void;
 }
