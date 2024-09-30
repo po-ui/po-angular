@@ -41,6 +41,16 @@ describe('PoNumberComponent:', () => {
     expect(component.type === 'password').toBeTruthy();
   });
 
+  it('should set autoComplete with value `new-password` if noAutocomplete is true', () => {
+    component.noAutocomplete = true;
+    expect(component.autocomplete).toBe('new-password');
+  });
+
+  it('should set autoComplete with value `on` if noAutocomplete is false', () => {
+    component.noAutocomplete = false;
+    expect(component.autocomplete).toBe('on');
+  });
+
   describe('Properties:', () => {
     it('p-hide-password-peek: should update property with valid values.', () => {
       const validValues = [false, true, '', 'false', 'true'];
