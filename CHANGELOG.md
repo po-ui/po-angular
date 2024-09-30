@@ -2,6 +2,19 @@
 
 All notable changes to this project will be documented in this file. See [standard-version](https://github.com/conventional-changelog/standard-version) for commit guidelines.
 
+## [18.8.0](https://github.com/po-ui/po-angular/compare/v18.7.0...v18.8.0) (2024-09-30)
+
+
+### Features
+
+* **stepper:** adiciona propriedade p-align-center ([260b596](https://github.com/po-ui/po-angular/commit/260b596e55e211881ef65c2abedb2db50f9ee390))
+* **stepper:** implementa definições do AnimaliaDS ([e9b8b25](https://github.com/po-ui/po-angular/commit/e9b8b251e02435b7c22dad9a0214365ef61dfddc))
+
+
+### Bug Fixes
+
+* **table:** possibilita desabilitar a propriedade p-virtual-scroll ([a87a116](https://github.com/po-ui/po-angular/commit/a87a1163b35ede9305d1d49f51dd8deaf449e366))
+
 ## [18.7.0](https://github.com/po-ui/po-angular/compare/v18.6.0...v18.7.0) (2024-09-16)
 
 
