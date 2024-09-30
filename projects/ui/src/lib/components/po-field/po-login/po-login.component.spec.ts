@@ -33,6 +33,16 @@ describe('PoLoginComponent:', () => {
     expect(component.extraValidation(null)).toBeNull();
   });
 
+  it('should set autoComplete with value `off` if noAutocomplete is true', () => {
+    component.noAutocomplete = true;
+    expect(component.autocomplete).toBe('off');
+  });
+
+  it('should set autoComplete with value `on` if noAutocomplete is false', () => {
+    component.noAutocomplete = false;
+    expect(component.autocomplete).toBe('on');
+  });
+
   it('should be type text', () => {
     fixture.detectChanges();
     expect(component.type === 'text').toBeTruthy();
