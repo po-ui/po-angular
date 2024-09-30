@@ -1,7 +1,7 @@
-import { ChangeDetectionStrategy, ChangeDetectorRef, Component, ElementRef, forwardRef } from '@angular/core';
-import { AbstractControl, NG_VALUE_ACCESSOR, NG_VALIDATORS } from '@angular/forms';
+import { ChangeDetectionStrategy, ChangeDetectorRef, Component, ElementRef, forwardRef, Input } from '@angular/core';
+import { AbstractControl, NG_VALIDATORS, NG_VALUE_ACCESSOR } from '@angular/forms';
 
-import { uuid } from '../../../utils/util';
+import { convertToBoolean, uuid } from '../../../utils/util';
 
 import { PoInputGeneric } from '../po-input-generic/po-input-generic';
 
@@ -54,6 +54,19 @@ const providers = [
 export class PoLoginComponent extends PoInputGeneric {
   id = `po-login[${uuid()}]`;
   type = 'text';
+  private _noAutocompleteLogin?: boolean = true;
+
+  @Input('p-no-autocomplete') override set noAutocomplete(value: boolean) {
+    this._noAutocompleteLogin = convertToBoolean(value);
+  }
+
+  override get noAutocomplete() {
+    return this._noAutocompleteLogin;
+  }
+
+  override get autocomplete(): string {
+    return this.noAutocomplete ? 'off' : 'on';
+  }
 
   /* istanbul ignore next */
   constructor(el: ElementRef, cd: ChangeDetectorRef) {
