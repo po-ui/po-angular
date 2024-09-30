@@ -293,9 +293,9 @@ export abstract class PoPageLoginBaseComponent implements OnDestroy {
    *
    * Define a propriedade nativa `autocomplete` do campo como `off`.
    *
-   * @default `false`
+   * @default `true`
    */
-  @Input('p-no-autocomplete-login') noAutocompleteLogin: boolean;
+  @Input('p-no-autocomplete-login') noAutocompleteLogin: boolean = true;
 
   /**
    * @optional
@@ -306,9 +306,9 @@ export abstract class PoPageLoginBaseComponent implements OnDestroy {
    *
    * > No componente `po-password` será definido como `new-password`.
    *
-   * @default `false`
+   * @default `true`
    */
-  @Input('p-no-autocomplete-password') noAutocompletePassword: boolean;
+  @Input('p-no-autocomplete-password') noAutocompletePassword: boolean = true;
 
   /**
    * @optional
