@@ -1,5 +1,5 @@
-import { AbstractControl, NG_VALIDATORS, NG_VALUE_ACCESSOR } from '@angular/forms';
 import { ChangeDetectionStrategy, ChangeDetectorRef, Component, ElementRef, forwardRef, Input } from '@angular/core';
+import { AbstractControl, NG_VALIDATORS, NG_VALUE_ACCESSOR } from '@angular/forms';
 
 import { convertToBoolean, uuid } from '../../../utils/util';
 import { PoInputGeneric } from '../po-input-generic/po-input-generic';
@@ -50,6 +50,7 @@ export class PoPasswordComponent extends PoInputGeneric {
   visiblePassword = false;
 
   private _hidePasswordPeek?: boolean = false;
+  private _noAutocompletePassword?: boolean = true;
 
   /**
    * @optional
@@ -66,6 +67,14 @@ export class PoPasswordComponent extends PoInputGeneric {
       this.visiblePassword = false;
       this.type = 'password';
     }
+  }
+
+  @Input('p-no-autocomplete') override set noAutocomplete(value: boolean) {
+    this._noAutocompletePassword = convertToBoolean(value);
+  }
+
+  override get noAutocomplete() {
+    return this._noAutocompletePassword;
   }
 
   get hidePasswordPeek(): boolean {
