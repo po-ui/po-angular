@@ -8,6 +8,7 @@ import { PoDateTimeModule } from './po-date/po-date.module';
 import { PoDialogModule } from './po-dialog/po-dialog.module';
 import { PoI18nPipe } from './po-i18n/po-i18n.pipe';
 import { PoLanguageModule } from './po-language/po-language.module';
+import { PoMediaQueryModule } from './po-media-query/po-media-query.module';
 import { PoNotificationModule } from './po-notification/po-notification.module';
 import { PoThemeModule } from './po-theme/po-theme.module';
 
@@ -21,6 +22,7 @@ import { PoThemeModule } from './po-theme/po-theme.module';
     PoDateTimeModule,
     PoDialogModule,
     PoLanguageModule,
+    PoMediaQueryModule,
     PoNotificationModule,
     PoThemeModule
   ],
@@ -32,6 +34,7 @@ import { PoThemeModule } from './po-theme/po-theme.module';
     PoDateTimeModule,
     PoDialogModule,
     PoI18nPipe,
+    PoMediaQueryModule,
     PoNotificationModule,
     PoThemeModule
   ],
