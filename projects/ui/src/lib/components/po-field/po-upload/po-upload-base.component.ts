@@ -310,6 +310,7 @@ export abstract class PoUploadBaseComponent implements ControlValueAccessor, Val
   private _isMultiple?: boolean;
   private _literals?: any;
   private _required?: boolean;
+  private _showProgress?: boolean;
   private language: string;
   private validatorChange: any;
 
@@ -408,6 +409,15 @@ export abstract class PoUploadBaseComponent implements ControlValueAccessor, Val
   @Input('p-hide-send-button') set hideSendButton(value: boolean) {
     this._hideSendButton = convertToBoolean(value);
   }
+
+  @Input('p-hide-progress') set showProgress(value: boolean) {
+    this._showProgress = convertToBoolean(value);
+  }
+
+  get showProgress(): boolean {
+    return this._showProgress;
+  }
+
   get hideSendButton(): boolean {
     return this._hideSendButton;
   }

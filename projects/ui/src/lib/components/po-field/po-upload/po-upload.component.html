@@ -54,7 +54,7 @@
       >
       </po-upload-file-restrictions>
 
-      <div *ngIf="currentFiles && currentFiles.length" class="po-upload-progress-container">
+      <div *ngIf="currentFiles && currentFiles.length && showProgress" class="po-upload-progress-container">
         <po-container
           [p-height]="hasMoreThanFourItems ? 280 : 'auto'"
           [p-no-border]="!hasMoreThanFourItems"
