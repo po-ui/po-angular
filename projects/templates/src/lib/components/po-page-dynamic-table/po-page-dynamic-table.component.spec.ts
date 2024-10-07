@@ -984,6 +984,20 @@ describe('PoPageDynamicTableComponent:', () => {
       expect(component['router'].navigate).toHaveBeenCalledWith([route.path], { queryParams: route.params });
     }));
 
+    it('navigateTo: should navigate to a external link', () => {
+      const route = {
+        path: 'http://google.com',
+        component: PoPageDynamicTableComponent,
+        params: {}
+      };
+
+      const openExternalLink = spyOn(utilsFunctions, 'openExternalLink');
+
+      component['navigateTo'](route);
+
+      expect(openExternalLink).toHaveBeenCalled();
+    });
+
     it('navigateTo: should call `router.config.unshift` and `navigateTo` only twice if `autoRouter` is true', fakeAsync(() => {
       const route: any = {
         path: '/people/api',
