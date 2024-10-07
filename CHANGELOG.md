@@ -2,6 +2,30 @@
 
 All notable changes to this project will be documented in this file. See [standard-version](https://github.com/conventional-changelog/standard-version) for commit guidelines.
 
+## [18.9.0](https://github.com/po-ui/po-angular/compare/v18.8.0...v18.9.0) (2024-10-07)
+
+
+### ⚠ BREAKING CHANGES
+
+* **po-password:** Altera valor padrão da propriedade `p-no-autocomplete` de `false` para `true`
+* **po-login:** Altera valor padrão da propriedade `p-no-autocomplete` de `false` para `true`
+* **page-login:** Altera valor padrão da propriedade `p-no-autocomplete-login` de `false` para `true`
+
+### Features
+
+* **components:** permite melhor alinhamento ([67b9ca4](https://github.com/po-ui/po-angular/commit/67b9ca41c0d878212174531b0b57b4e7a3bf9e49))
+* **media-query:** implementa serviço para media query customizável ([7121442](https://github.com/po-ui/po-angular/commit/71214423d494a60279c246210dd94b6f060128ce))
+
+
+### Bug Fixes
+
+* **change-password:** permite desabilitar auto-complete ([3c19a26](https://github.com/po-ui/po-angular/commit/3c19a269428e072534a947887172329791141c9e))
+
+
+* **page-login:** altera valor padrão do `p-no-autocomplete-login` ([46c3380](https://github.com/po-ui/po-angular/commit/46c33801dc9e2224b13db96b6c29fe206df90365))
+* **po-login:** altera valor padrão do `p-no-autocomplete` ([be35fc9](https://github.com/po-ui/po-angular/commit/be35fc9ea85380a876952fc723fb87ef84f630d3))
+* **po-password:** altera valor padrão do `p-no-autocomplete` ([fa5563d](https://github.com/po-ui/po-angular/commit/fa5563da6b4fde9935874a06f76ab7f6cf2365cd))
+
 ## [18.8.0](https://github.com/po-ui/po-angular/compare/v18.7.0...v18.8.0) (2024-09-30)
 
 
