@@ -2,6 +2,24 @@
 
 All notable changes to this project will be documented in this file. See [standard-version](https://github.com/conventional-changelog/standard-version) for commit guidelines.
 
+## [17.26.2](https://github.com/po-ui/po-angular/compare/v17.26.1...v17.26.2) (2024-10-07)
+
+
+### ⚠ BREAKING CHANGES
+
+* **po-password:** Altera valor padrão da propriedade `p-no-autocomplete` de `false` para `true`
+* **po-login:** Altera valor padrão da propriedade `p-no-autocomplete` de `false` para `true`
+* **page-login:** Altera valor padrão da propriedade `p-no-autocomplete-login` de `false` para `true`
+
+### Bug Fixes
+
+* **change-password:** permite desabilitar auto-complete ([3a39434](https://github.com/po-ui/po-angular/commit/3a394342c587b251caa2728e1c0339268e475503))
+
+
+* **page-login:** altera valor padrão do `p-no-autocomplete-login` ([aebe9f1](https://github.com/po-ui/po-angular/commit/aebe9f14f844736632cffeefc3ec1257e5b9d851))
+* **po-login:** altera valor padrão do `p-no-autocomplete` ([07e189f](https://github.com/po-ui/po-angular/commit/07e189ff7e628a78ab00875414e13f04c979e4fd))
+* **po-password:** altera valor padrão do `p-no-autocomplete` ([11d8c5f](https://github.com/po-ui/po-angular/commit/11d8c5f98731ff3a5623bf3c08d66a8169e4ef80))
+
 ### [17.26.1](https://github.com/po-ui/po-angular/compare/v17.26.0...v17.26.1) (2024-09-30)
 
 
