@@ -842,6 +842,10 @@ export class PoPageDynamicTableComponent extends PoPageDynamicListBaseComponent 
     route: { path: string; component?; url?: string; params?: any },
     forceStopAutoRouter: boolean = false
   ) {
+    if (isExternalLink(route.path)) {
+      return openExternalLink(route.path);
+    }
+
     this.router.navigate([route.url || route.path], { queryParams: route.params }).catch(() => {
       if (forceStopAutoRouter || !this.autoRouter) {
         return;
