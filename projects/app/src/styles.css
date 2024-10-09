@@ -1,1 +1,33 @@
 /* You can add global styles to this file, and also import other style files */
+.po-link {
+  padding-inline: var(--spacing-sm);
+  min-height: var(--target-size-aaa);
+  color: var(--text-color);
+  font-family: var(--font-family);
+  font-size: inherit;
+  font-weight: var(--font-weight);
+  letter-spacing: var(--letter-spacing-auto);
+  line-height: inherit;
+  text-decoration: underline;
+}
+
+.po-link[p-size='small'] {
+  min-height: var(--target-size-aa); /* Deve ser 32px */
+  padding-inline: var(--spacing-xs); /* Ajuste adicional para small */
+}
+
+.po-link[p-size='large'] {
+  min-height: calc(var(--target-size-aaa) * 1.25); /* Ajuste maior para link grande */
+}
+
+.po-link:focus {
+  outline-color: var(--outline-color-focused);
+  outline-offset: 2px;
+  outline-style: solid;
+  outline-width: var(--focus-aaa);
+}
+
+/* Quando o nível de acessibilidade é AA, aplica outline-width menor */
+:host-context([accessibility-level='AA']) .po-link:focus {
+  outline-width: var(--focus-aa);
+}

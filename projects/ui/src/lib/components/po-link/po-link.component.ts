@@ -1,6 +1,7 @@
-import { Component, ElementRef, ViewChild } from '@angular/core';
+import { Component, ElementRef, Renderer2, ViewChild } from '@angular/core';
 
 import { PoLinkBaseComponent } from './po-link-base.component';
+import { PoThemeService } from '../../services/po-theme/po-theme.service';
 
 /**
  * @docsExtends PoLinkBaseComponent
@@ -27,6 +28,27 @@ import { PoLinkBaseComponent } from './po-link-base.component';
   templateUrl: './po-link.component.html'
 })
 export class PoLinkComponent extends PoLinkBaseComponent {
+  constructor(
+    private themeService: PoThemeService,
+    private renderer: Renderer2,
+    private el: ElementRef
+  ) {
+    super();
+  }
+
+  ngAfterViewInit(): void {
+    this.applyAccessibilityTokens();
+  }
+
+  private applyAccessibilityTokens(): void {
+    const linkElement = this.el.nativeElement.querySelector('.po-link');
+    if (linkElement) {
+      this.themeService.setAccessibilityStyles(linkElement, this.size);
+    } else {
+      console.error(' erro teste joprge');
+    }
+  }
+
   onClick() {
     if (this.url) {
       return;

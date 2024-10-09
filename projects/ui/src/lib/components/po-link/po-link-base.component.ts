@@ -1,5 +1,4 @@
 import { Input, Directive, Output, EventEmitter } from '@angular/core';
-
 import { InputBoolean } from '../../decorators';
 import { convertToBoolean, isExternalLink } from '../../utils/util';
 
@@ -60,6 +59,9 @@ export class PoLinkBaseComponent {
 
   /** Url que será aberta ao clicar no link. */
   @Input('p-url') url: string;
+
+  /** Define o tamanho do link. */
+  @Input('p-size') size: 'small' | 'medium' | 'large' = 'medium';
 
   get type(): string {
     if (!this.url && this.action.observed) {

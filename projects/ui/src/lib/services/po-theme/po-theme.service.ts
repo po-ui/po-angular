@@ -26,6 +26,7 @@ import { PoTheme } from './interfaces/po-theme.interface';
  * </example>
  *
  */
+
 @Injectable({
   providedIn: 'root'
 })
@@ -86,6 +87,33 @@ export class PoThemeService {
 
     this.applyThemeStyles(combinedStyles);
     this.changeThemeType(theme);
+  }
+
+  setAccessibilityStyles(element: HTMLElement, componentSize: 'small' | 'medium' | 'large') {
+    const theme = this.getThemeActive();
+    const accessibilityLevel = theme && theme['accessibilityLevel'] ? theme['accessibilityLevel'] : 'AAA';
+
+    console.log('acessibilidade atual:', accessibilityLevel);
+    console.log('tamanho do componente:', componentSize);
+
+    if (accessibilityLevel === 'AA' && componentSize === 'small') {
+      // nivel de acessibilidade AA e tamanho 'small', define altura minima de 32px
+      console.log('aplicando altura minima de 32px para tamanho "small" com acessibilidade AA.');
+      this.renderer.setStyle(element, 'min-height', 'var(--target-size-aa)'); // 32px
+    } else if (accessibilityLevel === 'AAA') {
+      // nivel de acessibilidade AAA, aplica a altura míinima padrao de 44px
+      console.log('aplicando altura minima de 44px para acessibilidade AAA, independentemente do tamanho "small".');
+      this.renderer.setStyle(element, 'min-height', 'var(--target-size-aaa)'); // Token AAA
+    }
+
+    // aplica o outline conforme o nivel de acessibilidade
+    if (accessibilityLevel === 'AA') {
+      console.log('Aplicando outline-width de 2px para acessibilidade AA.');
+      this.renderer.setStyle(element, 'outline-width', 'var(--focus-aa)'); // Token AA
+    } else if (accessibilityLevel === 'AAA') {
+      console.log('Aplicando outline-width de 4px para acessibilidade AAA.');
+      this.renderer.setStyle(element, 'outline-width', 'var(--focus-aaa)');
+    }
   }
 
   /**
@@ -187,6 +215,8 @@ export class PoThemeService {
     } catch (error) {
       console.error('Erro ao obter o tema do armazenamento local:', error);
     }
+    this.theme['accessibilityLevel'] = 'AA'; //teste jorge
+
     return this.theme;
   }
 
