@@ -759,6 +759,46 @@ describe('PoTableBaseComponent:', () => {
       expect(component['emitSelectEvents']).toHaveBeenCalledWith(row);
     });
 
+    it('selectRow: should update child items $selected property if row has detail', () => {
+      const childItems = [
+        { id: 2, $selected: false },
+        { id: 3, $selected: false }
+      ];
+      const row = { id: 1, $selected: false, detail: childItems };
+
+      component.selectRow(row);
+
+      expect(row.$selected).toBeTruthy();
+      row.detail.forEach(childItem => {
+        expect(childItem.$selected).toBeTruthy();
+      });
+    });
+
+    it('selectRow: should call setSelectedList after selecting a row', () => {
+      const row = { id: 1, $selected: false };
+
+      spyOn(component, 'setSelectedList');
+
+      component.selectRow(row);
+
+      expect(component.setSelectedList).toHaveBeenCalled();
+    });
+
+    it('selectRow: should update child items $selected property if row has detail and $selected is false', () => {
+      const childItems = [
+        { id: 2, $selected: true },
+        { id: 3, $selected: true }
+      ];
+      const row = { id: 1, $selected: true, detail: childItems };
+
+      component.selectRow(row);
+
+      expect(row.$selected).toBeFalsy();
+      row.detail.forEach(childItem => {
+        expect(childItem.$selected).toBeFalsy();
+      });
+    });
+
     it('emitSelectEvents: should emit `selected` if `row.$selected` is `true`', () => {
       const row = { id: 1, $selected: true };
       spyOn(component.selected, 'emit');
@@ -787,6 +827,80 @@ describe('PoTableBaseComponent:', () => {
       expect(component['emitSelectAllEvents']).toHaveBeenCalled();
     });
 
+    describe('selectAllRows:', () => {
+      beforeEach(() => {
+        component.hideSelectAll = false;
+        component.selectAll = false;
+        component.items = [
+          { id: 1, $selected: false, detail: [{ id: 4, $selected: false }] },
+          { id: 2, $selected: false, detail: [{ id: 5, $selected: false }] }
+        ];
+      });
+
+      it('should call emitSelectEvents and updateParentRowSelection', () => {
+        const row = { id: 1, $selected: false, detail: [{ id: 4 }] };
+        const parentRow = { id: 2, detail: [row] };
+
+        spyOn(component, <any>'emitSelectEvents');
+        spyOn(component, <any>'updateParentRowSelection');
+
+        component.selectDetailRow({ item: row, parentRow });
+
+        expect(component['emitSelectEvents']).toHaveBeenCalledWith(row);
+        expect(component['updateParentRowSelection']).toHaveBeenCalledWith(parentRow);
+      });
+
+      it('should select all rows when selectAll is false', () => {
+        component.selectAllRows();
+
+        expect(component.selectAll).toBeTrue();
+        component.items.forEach(item => {
+          expect(item.$selected).toBeTrue();
+          item.detail.forEach(childItem => {
+            expect(childItem.$selected).toBeTrue();
+          });
+        });
+      });
+
+      it('should unselect all rows when selectAll is true', () => {
+        component.selectAll = true;
+        component.items.forEach(item => {
+          item.$selected = true;
+          item.detail.forEach(childItem => (childItem.$selected = true));
+        });
+
+        component.selectAllRows();
+
+        expect(component.selectAll).toBeFalse();
+        component.items.forEach(item => {
+          expect(item.$selected).toBeFalse();
+          item.detail.forEach(childItem => {
+            expect(childItem.$selected).toBeFalse();
+          });
+        });
+      });
+
+      it('should not select all rows if hideSelectAll is true', () => {
+        component.hideSelectAll = true;
+
+        component.selectAllRows();
+
+        component.items.forEach(item => {
+          expect(item.$selected).toBeFalse();
+        });
+      });
+
+      it('should emit selectAll events and update selected list', () => {
+        spyOn(component as any, 'emitSelectAllEvents');
+        spyOn(component, 'setSelectedList');
+
+        component.selectAllRows();
+
+        expect((component as any).emitSelectAllEvents).toHaveBeenCalledWith(true, jasmine.any(Array));
+        expect(component.setSelectedList).toHaveBeenCalled();
+      });
+    });
+
     it('emitSelectAllEvents: should emit `allSelected` if `selectAll` is `true`', () => {
       const rows = [{ id: 1, $selected: true }];
       const selectAll = true;
@@ -809,14 +923,34 @@ describe('PoTableBaseComponent:', () => {
       expect(component.allUnselected.emit).toHaveBeenCalledWith(rows);
     });
 
-    it('selectDetailRow: should call `emitSelectEvents`', () => {
-      const row = { id: 1, $selected: false };
+    it('updateParentRowSelection: should set parentRow.$selected to true if all child items are selected', () => {
+      const parentRow: any = {
+        detail: [{ $selected: true }, { $selected: true }, { $selected: true }]
+      };
 
-      spyOn(component, <any>'emitSelectEvents');
+      component.updateParentRowSelection(parentRow);
 
-      component.selectDetailRow(row);
+      expect(parentRow.$selected).toBe(true);
+    });
 
-      expect(component['emitSelectEvents']).toHaveBeenCalledWith(row);
+    it('updateParentRowSelection: should set parentRow.$selected to false if all child items are not selected', () => {
+      const parentRow: any = {
+        detail: [{ $selected: false }, { $selected: false }, { $selected: false }]
+      };
+
+      component.updateParentRowSelection(parentRow);
+
+      expect(parentRow.$selected).toBe(false);
+    });
+
+    it('updateParentRowSelection: should set parentRow.$selected to null if some child items are selected and some are not', () => {
+      const parentRow: any = {
+        detail: [{ $selected: true }, { $selected: false }, { $selected: true }]
+      };
+
+      component.updateParentRowSelection(parentRow);
+
+      expect(parentRow.$selected).toBeNull();
     });
 
     describe('getColumnColor:', () => {
