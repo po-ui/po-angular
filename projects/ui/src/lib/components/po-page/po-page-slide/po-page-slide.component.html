@@ -1,8 +1,8 @@
-<div class="po-page-slide" tabindex="0" *ngIf="!hidden" [@fade]>
+<div class="po-page-slide" tabindex="0" (keydown.esc)="close()" *ngIf="!hidden" [@fade]="fadeParams">
   <div class="po-page-slide-overlay" (mousedown)="onClickOut($event)"></div>
   <div
     class="po-page-slide-container po-page-slide-right po-page-slide-{{ size }}"
-    [@slide]
+    [@slide]="slideParams"
     [ngStyle]="{ 'width': flexibleWidth ? '' : size === 'auto' ? 'auto' : '' }"
   >
     <div class="po-page-slide-content" tabindex="-1" #pageContent>
@@ -11,10 +11,22 @@
           <span>{{ title }}</span>
           <div class="po-page-slide-subtitle" *ngIf="subtitle">{{ subtitle }}</div>
         </div>
-        <po-button *ngIf="!hideClose" p-icon="ICON_CLOSE" p-kind="tertiary" (p-click)="close()"> </po-button>
+        <po-button
+          *ngIf="!hideClose"
+          p-icon="ICON_CLOSE"
+          p-kind="tertiary"
+          (p-click)="close()"
+          [p-aria-label]="buttonAriaLabel"
+        >
+        </po-button>
       </div>
       <div class="po-page-slide-body">
         <ng-content></ng-content>
+      </div>
+
+      <div class="po-page-slide-footer-content" *ngIf="pageSlideFooter">
+        <po-divider></po-divider>
+        <ng-content select="po-page-slide-footer"></ng-content>
       </div>
     </div>
   </div>

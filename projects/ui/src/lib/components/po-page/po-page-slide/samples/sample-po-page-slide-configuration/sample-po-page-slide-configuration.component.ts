@@ -1,4 +1,5 @@
 import { Component } from '@angular/core';
+import { Router } from '@angular/router';
 
 @Component({
   selector: 'sample-po-page-slide-configuration',
@@ -11,4 +12,10 @@ export class SamplePoPageSlideConfigurationComponent {
   public notification = true;
   public favorited = false;
   public localization = true;
+
+  constructor(private router: Router) {}
+
+  openPageSlideFooterDocumentation() {
+    this.router.navigate(['documentation', 'po-page-slide-footer']);
+  }
 }
