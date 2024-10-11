@@ -1024,6 +1024,11 @@ export abstract class PoTableBaseComponent implements OnChanges, OnDestroy {
 
       this.items.forEach(item => {
         item.$selected = this.selectAll;
+
+        if (item[this.nameColumnDetail]) {
+          const childItems = item[this.nameColumnDetail];
+          childItems.forEach(childItem => (childItem.$selected = this.selectAll));
+        }
       });
 
       this.emitSelectAllEvents(this.selectAll, [...this.items]);
@@ -1035,8 +1040,13 @@ export abstract class PoTableBaseComponent implements OnChanges, OnDestroy {
     row.$selected = !row.$selected;
 
     this.emitSelectEvents(row);
-
     this.configAfterSelectRow(this.items, row);
+
+    if (row[this.nameColumnDetail] && (row.$selected === true || row.$selected === false)) {
+      const childItems = row[this.nameColumnDetail];
+      childItems.forEach(item => (item.$selected = row.$selected));
+    }
+
     this.setSelectedList();
   }
 
@@ -1044,8 +1054,21 @@ export abstract class PoTableBaseComponent implements OnChanges, OnDestroy {
     return this.selectable && this.selectableEntireLine;
   }
 
-  selectDetailRow(row: any) {
-    this.emitSelectEvents(row);
+  selectDetailRow(event: any) {
+    const { item, parentRow } = event;
+    this.emitSelectEvents(item);
+    this.updateParentRowSelection(parentRow);
+  }
+
+  updateParentRowSelection(parentRow: any) {
+    const childItems = parentRow[this.nameColumnDetail];
+    if (childItems.every(item => item.$selected)) {
+      parentRow.$selected = true;
+    } else if (childItems.every(item => !item.$selected)) {
+      parentRow.$selected = false;
+    } else {
+      parentRow.$selected = null;
+    }
   }
 
   setSelectedList() {
