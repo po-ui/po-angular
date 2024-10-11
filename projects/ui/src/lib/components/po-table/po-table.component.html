@@ -434,6 +434,7 @@
               [p-selectable]="selectable && !detailHideSelect"
               [p-detail]="columnMasterDetail.detail"
               [p-items]="row[nameColumnDetail]"
+              [p-parent-row]="row"
               (p-select-row)="selectDetailRow($event)"
             >
             </po-table-detail>
@@ -790,6 +791,7 @@
                 [p-selectable]="selectable && !detailHideSelect"
                 [p-detail]="columnMasterDetail.detail"
                 [p-items]="row[nameColumnDetail]"
+                [p-parent-row]="row"
                 (p-select-row)="selectDetailRow($event)"
               >
               </po-table-detail>
@@ -820,7 +822,7 @@
   <po-checkbox
     name="checkbox"
     (p-change)="selectable ? selectRow(row) : 'javascript:;'"
-    [p-checkboxValue]="row.$selected"
+    [p-checkboxValue]="row.$selected === null ? 'mixed' : row.$selected"
   ></po-checkbox>
 </ng-template>
 
