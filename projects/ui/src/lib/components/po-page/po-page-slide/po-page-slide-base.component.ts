@@ -18,6 +18,38 @@ import { convertToBoolean } from '../../../utils/util';
  * > aplicação.
  *
  *  Caso utilize componentes de field dentro do page-slide, recomenda-se o uso do [Grid System](https://po-ui.io/guides/grid-system).
+ *
+ * No rodapé é possível utilizar o componente [`PoPageSlideFooter`](/documentation/po-page-slide-footer) para customização do template.
+ *
+ *  * #### Tokens customizáveis
+ *
+ * É possível alterar o estilo do componente usando os seguintes tokens (CSS):
+ *
+ * > Para maiores informações, acesse o guia [Personalizando o Tema Padrão com Tokens CSS](https://po-ui.io/guides/theme-customization).
+ *
+ * | Propriedade                              | Descrição                                                         | Valor Padrão                                                                  |
+ * |------------------------------------------|-------------------------------------------------------------------|-------------------------------------------------------------------------------|
+ * | `--font-family`                          | Família tipográfica usada                                         | `var(--font-family-theme)`                                                    |
+ * | `--font-weight`                          | Peso da fonte                                                     | `var(--font-weight-bold)`                                                     |
+ * | `--padding-header`                       | Espaçamento do header                                             | `var(--spacing-md)`                                                           |
+ * | `--padding-body`                         | Espaçamento do conteúdo                                           | `var(--line-height-none)`                                                     |
+ * | `--padding-footer`                       | Espaçamento do footer                                             | `var(--spacing-sm) var(--spacing-md) var(--spacing-xl) var(--spacing-md)`     |
+ * | **Default Values**                       |                                                                   |                                                                               |
+ * | `--color-overlay`                        | Cor do overlay                                                    | `var(--color-neutral-dark-80)`                                                |
+ * | `--opacity-overlay`                      | Cor da opacidade do overlay                                       | `0.7`                                                                         |
+ * | `--background-color`                     | Cor de background                                                 | `var(--color-neutral-light-00)`                                               |
+ * | `--border-color`                         | Cor da borda                                                      | `var(--color-neutral-light-20)`                                               |
+ * | `--color-title`                          | Cor do titulo do header                                           | `var(--color-neutral-dark-95)`                                                |
+ * | `--border-radius`                        | Radius da borda                                                   | `var(--border-radius-md) 0 0 var(--border-radius-md)`                         |
+ * | `--transition-duration`                  | Duração da transição                                              | `var(--duration-extra-fast)`                                                  |
+ * | `--transition-timing`                    | Duração da transição com o tipo de transição                      | `var(--duration-extra-slow) var(--timing-standart)`                           |
+ * | `--page-slide-width-sm`                  | Tamanho da largura do componente no tamanho `small`               | `40%`                                                                         |
+ * | `--page-slide-width-md`                  | Tamanho da largura do componente no tamanho `medium`              | `50%`                                                                         |
+ * | `--page-slide-width-lg`                  | Tamanho da largura do componente no tamanho `large`               | `60%`                                                                         |
+ * | `--page-slide-width-xl`                  | Tamanho da largura do componente no tamanho `extra large`         | `70%`                                                                         |
+ * | `--page-slide-min-width-auto`            | Tamanho da largura mínima do componente no tamanho `auto`         | `40%`                                                                         |
+ * | `--page-slide-max-width-auto`            | Tamanho da largura máxima do componente no tamanho `auto`         | `90%`                                                                         |
+ *
  */
 @Directive()
 export class PoPageSlideBaseComponent {

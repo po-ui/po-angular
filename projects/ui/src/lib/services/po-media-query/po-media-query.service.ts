@@ -46,7 +46,7 @@ import { PoMediaQueryTokens } from './po-media-query.interface';
  *    };
  *
  *    // Atualiza os tokens de media queries com os novos valores
- *    this.styleService.updateTokens(tokensMediaQueries);
+ *    this.poMediaQueryService.updateTokens(tokens);
  *  }
  * }
  * ```
