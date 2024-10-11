@@ -160,7 +160,7 @@ const poThemeDefaultDarkValues = {
         'box-shadow': 'inset 0 0 20px 20px #23232329'
       },
     'po-overlay, po-page-slide': {
-      '--color-overlay': 'var(--color-neutral-light-20)'
+      '--color-overlay': 'var(--color-neutral-light-05)'
     },
     'po-select': {
       '--color-hover': 'var(--color-action-hover);'

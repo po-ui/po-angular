@@ -1,5 +1,5 @@
 import { animate, animateChild, group, query, style, transition, trigger } from '@angular/animations';
-import { Component, ElementRef, ViewChild } from '@angular/core';
+import { Component, ContentChild, ElementRef, ViewChild } from '@angular/core';
 import { ReplaySubject } from 'rxjs';
 import { delay, take } from 'rxjs/operators';
 
@@ -7,6 +7,24 @@ import { getFocusableElements, uuid } from '../../../utils/util';
 
 import { PoActiveOverlayService } from '../../../services/po-active-overlay/po-active-overlay.service';
 import { PoPageSlideBaseComponent } from './po-page-slide-base.component';
+import { PoPageSlideFooterComponent } from './po-page-slide-footer/po-page-slide-footer.component';
+import { PoPageSlideLiterals } from './interfaces/po-page-slide-literals.interface';
+import { PoLanguageService } from '../../../services/po-language/po-language.service';
+
+export const poPageSlideLiteralsDefault = {
+  en: <PoPageSlideLiterals>{
+    close: 'Close'
+  },
+  es: <PoPageSlideLiterals>{
+    close: 'Cerrar'
+  },
+  pt: <PoPageSlideLiterals>{
+    close: 'Fechar'
+  },
+  ru: <PoPageSlideLiterals>{
+    close: 'Закрывать'
+  }
+};
 
 /**
  * @docsExtends PoPageSlideBaseComponent
@@ -36,14 +54,14 @@ import { PoPageSlideBaseComponent } from './po-page-slide-base.component';
     trigger('fade', [
       transition(':enter', [
         style({ opacity: 0 }),
-        group([animate('150ms', style({ opacity: 1 })), query('@slide', animateChild())])
+        group([animate(`{{duration}}`, style({ opacity: 1 })), query('@slide', animateChild())])
       ]),
       transition(':leave', group([query('@slide', animateChild()), animate('150ms', style({ opacity: 0 }))]))
     ]),
     trigger('slide', [
       transition(':enter', [
         style({ transform: 'translateX(50px)' }),
-        animate('691ms ease-in-out', style({ transform: 'none' }))
+        animate(`{{timing }}`, style({ transform: 'none' }))
       ]),
       transition(':leave', [animate('150ms', style({ transform: 'translateX(50px)' }))])
     ])
@@ -56,8 +74,13 @@ export class PoPageSlideComponent extends PoPageSlideBaseComponent {
   private id: string = uuid();
   private loadingCompleted = new ReplaySubject<void>();
   private sourceElement: any;
+  buttonAriaLabel: string;
+  duration: string = '70ms';
+  timing: string = '700ms Cubic-Bezier(0.35, 0, 0.1, 1)';
 
   private focusEvent: EventListener;
+
+  @ContentChild(PoPageSlideFooterComponent) pageSlideFooter: PoPageSlideFooterComponent;
 
   @ViewChild('pageContent', { read: ElementRef }) set pageContent(pageContent: ElementRef) {
     if (pageContent) {
@@ -70,8 +93,13 @@ export class PoPageSlideComponent extends PoPageSlideBaseComponent {
     return this._pageContent;
   }
 
-  constructor(private poActiveOverlayService: PoActiveOverlayService) {
+  constructor(
+    private poActiveOverlayService: PoActiveOverlayService,
+    private languageService: PoLanguageService
+  ) {
     super();
+    this.setTimeFromCSS();
+    this.buttonAriaLabel = this.getTextDefault();
   }
 
   public open(): void {
@@ -92,6 +120,18 @@ export class PoPageSlideComponent extends PoPageSlideBaseComponent {
     if (this.clickOut && !this.pageContent.nativeElement.contains(event.target)) {
       this.close();
     }
+  }
+
+  private setTimeFromCSS(): void {
+    const rootStyles = getComputedStyle(document.documentElement);
+    this.duration = rootStyles.getPropertyValue('--transition-duration').trim();
+    this.timing = rootStyles.getPropertyValue('--transition-timing').trim();
+  }
+
+  private getTextDefault(): string {
+    const language = this.languageService.getShortLanguage();
+
+    return poPageSlideLiteralsDefault[language].close;
   }
 
   private handleFocus(): void {
@@ -130,5 +170,19 @@ export class PoPageSlideComponent extends PoPageSlideBaseComponent {
   private removeEventListeners(): void {
     document.removeEventListener('focus', this.focusEvent, true);
     this.loadingCompleted.complete();
+  }
+
+  get fadeParams() {
+    return {
+      value: true,
+      params: { duration: this.duration || '70ms' }
+    };
+  }
+
+  get slideParams() {
+    return {
+      value: true,
+      params: { timing: this.timing || '700ms cubic-bezier(0.35, 0, 0.1, 1)' }
+    };
   }
 }
