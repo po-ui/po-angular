@@ -241,9 +241,13 @@ export class PoTagBaseComponent {
    * - <span class="ph ph-x"></span> - `danger`
    * - <span class="ph ph-info"></span> - `info`
    *
-   * Também É possível usar qualquer um dos ícones da [Biblioteca de ícones](/guides/icons). conforme exemplo abaixo:
+   * **Deprecated v20.x.x.** Também É possível usar qualquer um dos ícones da [Biblioteca de ícones](/guides/icons). conforme exemplo abaixo:
    * ```
    * <po-tag p-icon="ph ph-user" p-value="PO Tag"></po-tag>
+   * ```
+   * Utilize os ícones disponíveis na Lib [Phosphor](/guides/icons), conforme exemplo:
+   * ```
+   * <po-tag p-icon="ph ph-user" p-value="PO Tag"></po-button>
    * ```
    * como também utilizar outras fontes de ícones, por exemplo a biblioteca *Font Awesome*, da seguinte forma:
    * ```

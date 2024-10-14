@@ -114,7 +114,14 @@ export interface PoDynamicFormField extends PoDynamicField {
    * - Combo;
    * - Password;
    *
-   * > Veja a disponibilidade de ícones em [biblioteca de ícones](guides/icons).
+   * > **Deprecated v20.x.x.** Veja a disponibilidade de ícones em [biblioteca de ícones](guides/icons).
+   *
+   * Utilize os ícones disponíveis na Lib [Phosphor](/guides/icons), conforme exemplo:
+   * ```
+   * <po-component
+   *  [p-property]="[{ label: 'ICON', icon: 'ph ph-user' }]">
+   * </po-component>
+   * ```
    */
   icon?: string | TemplateRef<void>;
 
