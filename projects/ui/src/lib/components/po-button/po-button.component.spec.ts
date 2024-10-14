@@ -66,6 +66,18 @@ describe('PoButtonComponent: ', () => {
     expect(component.click.emit).toHaveBeenCalled();
   });
 
+  it('button type should default to `button`', () => {
+    fixture.detectChanges();
+    expect(nativeElement.querySelector('button').getAttribute('type')).toBe('button');
+  });
+
+  it('should set type to `submit`', () => {
+    component.type = 'submit';
+    fixture.detectChanges();
+
+    expect(nativeElement.querySelector('button').getAttribute('type')).toBe('submit');
+  });
+
   describe('Properties: ', () => {
     it('p-loading: should attribute the propertie when set valid values.', () => {
       const booleanTrueValues = [true, 'true', 1, ''];
