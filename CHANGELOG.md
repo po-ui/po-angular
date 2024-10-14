@@ -2,6 +2,13 @@
 
 All notable changes to this project will be documented in this file. See [standard-version](https://github.com/conventional-changelog/standard-version) for commit guidelines.
 
+### [17.26.3](https://github.com/po-ui/po-angular/compare/v17.26.2...v17.26.3) (2024-10-14)
+
+
+### Bug Fixes
+
+* **dynamic-table:** corrige rota no PageCustomAction ([9618631](https://github.com/po-ui/po-angular/commit/96186319623ebc21e41d08ba81f6ae6c5f9c9bb6))
+
 ## [17.26.2](https://github.com/po-ui/po-angular/compare/v17.26.1...v17.26.2) (2024-10-07)
 
 
