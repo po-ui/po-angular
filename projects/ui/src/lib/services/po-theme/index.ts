@@ -3,6 +3,7 @@ export * from './helpers/po-theme-light-defaults.constant';
 export * from './helpers/po-theme-poui.constant';
 
 export * from './enum/po-theme-type.enum';
+export * from './enum/po-theme-accessibility.enum';
 
 export * from './interfaces/po-theme-tokens.interface';
 export * from './interfaces/po-theme-color.interface';

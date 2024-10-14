@@ -1,4 +1,9 @@
-import { PoThemeColorAction, PoThemeColorFeedback, PoThemeColorNeutral } from '../interfaces/po-theme-color.interface';
+import {
+  PoThemeColorAction,
+  poThemeColorBrand,
+  PoThemeColorFeedback,
+  PoThemeColorNeutral
+} from '../interfaces/po-theme-color.interface';
 
 /**
  * Define as cores de ação padrão para temas escuros.
@@ -61,7 +66,7 @@ const poThemeDefaultFeedbackDark: PoThemeColorFeedback = {
     lightest: '#081536',
     lighter: '#0f2557',
     light: '#173782',
-    base: '#23489f',
+    base: '#0079b8',
     dark: '#7996d7',
     darker: '#b0c1e8',
     darkest: '#e3e9f7'
@@ -85,6 +90,24 @@ const poThemeDefaultFeedbackDark: PoThemeColorFeedback = {
     dark: '#f1cd6a',
     darker: '#f7dd97',
     darkest: '#fcf6e3'
+  }
+};
+
+const poThemeDefaultBrandsDark: poThemeColorBrand = {
+  '01': {
+    lightest: '#260538',
+    lighter: '#400e58',
+    light: '#5b1c7d',
+    base: '#753399',
+    dark: '#bd94d1',
+    darker: '#d9c2e5',
+    darkest: '#f2eaf6'
+  },
+  '02': {
+    base: '#b92f72'
+  },
+  '03': {
+    base: '#ffd464'
   }
 };
 
@@ -167,9 +190,24 @@ const poThemeDefaultDarkValues = {
     },
     'po-select select': {
       '--color': 'var(--color-neutral-light-30);'
-    }
+    },
+    /*------------------------------------*\
+    LISTBOX
+    \*------------------------------------*/
+    'po-listbox [hidden]': {
+      'display': 'flex !important',
+    },
   },
   onRoot: {
+    /*------------------------------------*\
+    FONT
+    \*------------------------------------*/
+    '--font-family': 'Roboto',
+    '--font-family-theme': 'Roboto',
+    '--font-family-theme-bold': 'Roboto-Bold',
+    '--font-family-theme-extra-light': 'Roboto-Condensed-Light',
+    '--font-family-heading': 'Roboto',
+    '--font-family-code': 'Monospace',
     /* CORES LEGADAS */
     '--color-neutral': 'var(--color-neutral-dark-70)',
     '--color-secondary': 'var(--color-action-default)',
@@ -190,7 +228,7 @@ const poThemeDefaultDarkValues = {
     '--color-tertiary-light-90': 'color-mix(in srgb, var(--color-brand-03-base) 90%, black)',
     '--color-tertiary-dark-5': 'color-mix(in srgb, var(--color-brand-03-base) 5%, white)',
     /* PO-PAGE  */
-    '--color-page-background-color-page': 'var(--color-neutral-light-00)',
+    '--color-page-background-color-page': 'var(--color-neutral-light-05)',
     /* TOOLBAR BADGE */
     '--color-toolbar-color-badge-text': 'var(--color-neutral-dark-95)',
     /* POPOVER */
@@ -201,11 +239,15 @@ const poThemeDefaultDarkValues = {
     /* STEPPER */
     '--color-stepper-circle-disabled': 'var(--color-neutral-mid-40)',
     '--color-stepper-bar-disabled': 'var(--color-neutral-mid-40)',
-    /* TAB */
-    '--po-tab-smart-active': 'var(--color-neutral-dark-95)',
-    '--po-tab-smart-background-item-selected': 'var(--color-brand-01-lighter)',
-    '--po-tab-smart-background-hover': 'var(--color-brand-01-lightest)'
+    /* BUTTON */
+    '--button-group-container-margin': '-2px',
   }
 };
 
-export { poThemeDefaultActionsDark, poThemeDefaultFeedbackDark, poThemeDefaultNeutralsDark, poThemeDefaultDarkValues };
+export {
+  poThemeDefaultBrandsDark,
+  poThemeDefaultActionsDark,
+  poThemeDefaultFeedbackDark,
+  poThemeDefaultNeutralsDark,
+  poThemeDefaultDarkValues
+};

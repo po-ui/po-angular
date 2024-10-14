@@ -6,6 +6,7 @@ import { PoThemeTypeEnum } from './enum/po-theme-type.enum';
 import { poThemeDefault } from './helpers/po-theme-poui.constant';
 import { PoTheme } from './interfaces/po-theme.interface';
 import { PoThemeService } from './po-theme.service';
+import { PoThemeAccessibilityEnum } from './enum/po-theme-accessibility.enum';
 
 class MockRenderer2 {
   createElement(): any {}
@@ -43,7 +44,10 @@ describe('PoThemeService:', () => {
     const theme = service.getThemeActive();
 
     expect(theme).toBeTruthy();
-    expect(theme.active).toEqual(PoThemeTypeEnum.light);
+    expect(theme.active).toEqual({
+      type: PoThemeTypeEnum.light,
+      accessibility: PoThemeAccessibilityEnum.AAA
+    });
   });
 
   it('should change current theme type', () => {
@@ -52,11 +56,15 @@ describe('PoThemeService:', () => {
 
     const theme = service.getThemeActive();
 
-    expect(theme.active).toEqual(PoThemeTypeEnum.dark);
+    expect(theme.active).toEqual({
+      type: PoThemeTypeEnum.dark,
+      accessibility: PoThemeAccessibilityEnum.AAA
+    });
   });
 
   describe('Custom Theme:', () => {
     let poThemeTest: PoTheme;
+    let poThemeInit: PoTheme;
     let poThemeTestDark: PoTheme;
     let poThemeWithJustAdditionalStyles: PoTheme;
 
@@ -119,19 +127,53 @@ describe('PoThemeService:', () => {
                 '--background': 'var(--color-neutral-light-00);'
               }
             }
-          }
+          },
+          dark: {},
+          accessibility: PoThemeAccessibilityEnum.AAA
         },
-        active: PoThemeTypeEnum.light
+        active: {
+          type: PoThemeTypeEnum.light,
+          accessibility: PoThemeAccessibilityEnum.AAA
+        }
       };
-      poThemeTestDark = { ...poThemeTest, active: PoThemeTypeEnum.dark };
+      poThemeTestDark = {
+        ...poThemeTest,
+        active: {
+          type: PoThemeTypeEnum.dark,
+          accessibility: PoThemeAccessibilityEnum.AAA
+        }
+      };
       poThemeWithJustAdditionalStyles = {
         name: 'justAdditionalStyles',
         type: {
           light: {
             '--color-page-background-color-page': 'var(--color-neutral-light-00)'
-          }
+          },
+          accessibility: PoThemeAccessibilityEnum.AAA
         },
-        active: PoThemeTypeEnum.light
+        active: {
+          type: PoThemeTypeEnum.light,
+          accessibility: PoThemeAccessibilityEnum.AAA
+        }
+      };
+      poThemeInit = {
+        name: 'custom',
+        type: [
+          {
+            light: {},
+            dark: {},
+            accessibility: PoThemeAccessibilityEnum.AA
+          },
+          {
+            light: {},
+            dark: {},
+            accessibility: PoThemeAccessibilityEnum.AAA
+          }
+        ],
+        active: {
+          type: PoThemeTypeEnum.light,
+          accessibility: PoThemeAccessibilityEnum.AAA
+        }
       };
     });
 
@@ -162,19 +204,103 @@ describe('PoThemeService:', () => {
 
       const theme = service.getThemeActive();
       expect(theme).toEqual(poThemeTest);
-      expect(theme.active).toEqual(PoThemeTypeEnum.dark);
+      expect(typeof theme.active === 'object' ? theme.active.type : theme.active).toEqual(PoThemeTypeEnum.dark);
+    });
+
+    it('should set theme default, and get the active type and accessibility', () => {
+      const _theme = {
+        name: 'customOld',
+        type: {
+          light: {},
+          dark: {}
+        },
+        active: PoThemeTypeEnum.light
+      };
+      spyOn(service, 'getThemeActive').and.returnValue(_theme);
+      service.changeCurrentThemeType(PoThemeTypeEnum.dark);
+
+      const activeTypeFromTheme = service['getActiveTypeFromTheme'](_theme.active);
+      const activeAccessibilityFromTheme = service['getActiveAccessibilityFromTheme'](_theme.active);
+
+      const theme = service.getThemeActive();
+      expect(theme).toEqual(_theme);
+      expect(activeTypeFromTheme).toEqual(PoThemeTypeEnum.dark);
+      expect(activeAccessibilityFromTheme).toEqual(PoThemeAccessibilityEnum.AAA);
+    });
+
+    it('should set custom theme, theme type and accessibility', () => {
+      service.setTheme(poThemeInit, PoThemeTypeEnum.light, PoThemeAccessibilityEnum.AA);
+      service.setCurrentThemeType(PoThemeTypeEnum.dark);
+      service.setCurrentThemeAccessibility(PoThemeAccessibilityEnum.AAA);
+
+      const theme = service.getThemeActive();
+      expect(theme).toEqual(poThemeInit);
+      expect(typeof theme.active === 'object' ? theme.active.type : theme.active).toEqual(PoThemeTypeEnum.dark);
+      expect(typeof theme.active === 'object' ? theme.active.accessibility : PoThemeAccessibilityEnum.AAA).toEqual(
+        PoThemeAccessibilityEnum.AAA
+      );
+    });
+
+    it('setTheme: should return if the type dont exist', () => {
+      spyOn(service, 'getThemeActive').and.returnValue(undefined);
+      const theme = service.setTheme(poThemeInit, 2 as PoThemeTypeEnum, PoThemeAccessibilityEnum.AA);
+
+      expect(theme).toEqual(undefined);
     });
 
     describe('Local Saved Theme Methods:', () => {
-      it('persistThemeActive: should persist and define the active theme', () => {
+      it('applyTheme: should persist and define the active theme', () => {
         spyOn(service, 'getThemeActive').and.returnValue(poThemeTest);
         spyOn(service, 'setTheme');
 
-        const result = service.persistThemeActive();
+        const result = service.applyTheme();
 
         expect(service.getThemeActive).toHaveBeenCalled();
-        expect(service.setTheme).toHaveBeenCalledWith(poThemeTest, poThemeTest.active);
+        expect(service.setTheme).toHaveBeenCalledWith(
+          poThemeTest,
+          typeof poThemeTest.active === 'object' ? poThemeTest.active.type : poThemeTest.active,
+          typeof poThemeTest.active === 'object' ? poThemeTest.active.accessibility : PoThemeAccessibilityEnum.AAA
+        );
         expect(result).toEqual(poThemeTest);
+      });
+
+      it('applyTheme: should apply local theme, if theme passed is the same saved', () => {
+        spyOn(service, 'getThemeActive').and.returnValue(poThemeTest);
+        spyOn(service, 'setTheme');
+
+        const result = service.applyTheme(poThemeTest);
+
+        expect(service.getThemeActive).toHaveBeenCalled();
+        expect(service.setTheme).toHaveBeenCalledWith(
+          poThemeTest,
+          typeof poThemeTest.active === 'object' ? poThemeTest.active.type : poThemeTest.active,
+          typeof poThemeTest.active === 'object' ? poThemeTest.active.accessibility : PoThemeAccessibilityEnum.AAA
+        );
+        expect(result).toEqual(poThemeTest);
+      });
+
+      it('applyTheme: should apply new theme and persist and define as active theme', () => {
+        spyOn(service, 'getThemeActive').and.returnValue(poThemeTest);
+        spyOn(service, 'setTheme');
+
+        const result = service.applyTheme(poThemeInit);
+
+        expect(service.setTheme).toHaveBeenCalledWith(
+          poThemeInit,
+          typeof poThemeInit.active === 'object' ? poThemeInit.active.type : poThemeInit.active,
+          typeof poThemeInit.active === 'object' ? poThemeInit.active.accessibility : PoThemeAccessibilityEnum.AAA
+        );
+        expect(result).toEqual(poThemeInit);
+      });
+
+      it('applyTheme: should not apply theme if none is passed and there is none local saved', () => {
+        spyOn(service, 'getThemeActive').and.returnValue(undefined);
+        spyOn(service, 'setTheme');
+
+        const result = service.applyTheme();
+
+        expect(service.getThemeActive).toHaveBeenCalled();
+        expect(result).toEqual(undefined);
       });
 
       it('changeCurrentThemeType: should change current theme type', () => {
@@ -199,11 +325,11 @@ describe('PoThemeService:', () => {
         expect(localStorageSpy).toHaveBeenCalledWith('totvs-theme');
       });
 
-      it('setThemeActive: should set active theme', () => {
+      it('setThemeLocal: should set active theme', () => {
         const theme: PoTheme = poThemeTest;
         const setItemSpy = spyOn(localStorage, 'setItem');
 
-        service['setThemeActive'](theme);
+        service['setThemeLocal'](theme);
 
         expect(setItemSpy).toHaveBeenCalledWith('totvs-theme', JSON.stringify(theme));
         expect(service['theme']).toEqual(theme);
@@ -224,6 +350,125 @@ describe('PoThemeService:', () => {
         service.getThemeActive();
 
         expect(consoleSpy).toHaveBeenCalledWith('Erro ao obter o tema do armazenamento local:', jasmine.any(Error));
+      });
+    });
+
+    describe('setThemeType', () => {
+      beforeEach(() => {
+        spyOn(service, 'setTheme');
+      });
+
+      it('should set theme type to light by default, if it is not defined', () => {
+        const theme = { ...poThemeInit, active: PoThemeTypeEnum.light } as PoTheme;
+
+        service.setThemeType(theme);
+
+        expect(service.setTheme).toHaveBeenCalledWith(theme, PoThemeTypeEnum.light, PoThemeAccessibilityEnum.AAA);
+      });
+
+      it('should set theme type to dark', () => {
+        const theme = { ...poThemeInit, active: PoThemeTypeEnum.dark } as PoTheme;
+
+        service.setThemeType(theme, PoThemeTypeEnum.dark);
+
+        expect(service.setTheme).toHaveBeenCalledWith(theme, PoThemeTypeEnum.dark, PoThemeAccessibilityEnum.AAA);
+      });
+
+      it('should use accessibility from theme if available', () => {
+        const theme = {
+          ...poThemeInit,
+          active: { type: PoThemeTypeEnum.light, accessibility: PoThemeAccessibilityEnum.AA }
+        } as PoTheme;
+
+        service.setThemeType(theme);
+
+        expect(service.setTheme).toHaveBeenCalledWith(theme, PoThemeTypeEnum.light, PoThemeAccessibilityEnum.AA);
+      });
+    });
+
+    describe('setCurrentThemeType', () => {
+      beforeEach(() => {
+        spyOn(service, 'getThemeActive').and.returnValue({ ...poThemeInit, active: PoThemeTypeEnum.light } as PoTheme);
+        spyOn(service, 'setThemeType');
+      });
+
+      it('should set current theme type to light by default', () => {
+        service.setCurrentThemeType();
+
+        expect(service.setThemeType).toHaveBeenCalledWith(
+          { ...poThemeInit, active: PoThemeTypeEnum.light } as PoTheme,
+          PoThemeTypeEnum.light
+        );
+      });
+
+      it('should set current theme type to dark', () => {
+        service.setCurrentThemeType(PoThemeTypeEnum.dark);
+
+        expect(service.setThemeType).toHaveBeenCalledWith(
+          { ...poThemeInit, active: PoThemeTypeEnum.light } as PoTheme,
+          PoThemeTypeEnum.dark
+        );
+      });
+    });
+
+    describe('setThemeAccessibility', () => {
+      beforeEach(() => {
+        spyOn(service, 'setTheme');
+      });
+
+      it('should set theme accessibility to AAA by default, if it is not defined', () => {
+        const theme = { ...poThemeInit, active: PoThemeTypeEnum.light } as PoTheme;
+
+        service.setThemeAccessibility(theme);
+
+        expect(service.setTheme).toHaveBeenCalledWith(theme, PoThemeTypeEnum.light, PoThemeAccessibilityEnum.AAA);
+      });
+
+      it('should set theme accessibility to AA', () => {
+        const theme = { ...poThemeInit, active: PoThemeTypeEnum.dark } as PoTheme;
+
+        service.setThemeAccessibility(theme, PoThemeAccessibilityEnum.AA);
+
+        expect(service.setTheme).toHaveBeenCalledWith(theme, PoThemeTypeEnum.dark, PoThemeAccessibilityEnum.AA);
+      });
+
+      it('should use type from theme if available', () => {
+        const theme = {
+          ...poThemeInit,
+          active: { type: PoThemeTypeEnum.dark, accessibility: PoThemeAccessibilityEnum.AA }
+        } as PoTheme;
+
+        service.setThemeAccessibility(theme, PoThemeAccessibilityEnum.AA);
+
+        expect(service.setTheme).toHaveBeenCalledWith(theme, PoThemeTypeEnum.dark, PoThemeAccessibilityEnum.AA);
+      });
+    });
+
+    describe('setCurrentThemeAccessibility', () => {
+      beforeEach(() => {
+        spyOn(service, 'getThemeActive').and.returnValue({
+          ...poThemeInit,
+          active: { type: PoThemeTypeEnum.light }
+        } as PoTheme);
+        spyOn(service, 'setThemeAccessibility');
+      });
+
+      it('should set current theme accessibility to AAA by default', () => {
+        service.setCurrentThemeAccessibility();
+
+        expect(service.setThemeAccessibility).toHaveBeenCalledWith(
+          { ...poThemeInit, active: { type: PoThemeTypeEnum.light } } as PoTheme,
+          PoThemeAccessibilityEnum.AAA
+        );
+      });
+
+      it('should set current theme accessibility to AA', () => {
+        service.setCurrentThemeAccessibility(PoThemeAccessibilityEnum.AA);
+
+        expect(service.setThemeAccessibility).toHaveBeenCalledWith(
+          { ...poThemeInit, active: { type: PoThemeTypeEnum.light } } as PoTheme,
+          PoThemeAccessibilityEnum.AA
+        );
       });
     });
   });
@@ -255,6 +500,6 @@ describe(`PoThemeService with 'PhosphorIconDictionary':`, () => {
     const theme = service.getThemeActive();
 
     expect(theme).toBeTruthy();
-    expect(theme.active).toEqual(PoThemeTypeEnum.light);
+    expect(typeof theme.active === 'object' ? theme.active.type : theme.active).toEqual(PoThemeTypeEnum.light);
   });
 });
