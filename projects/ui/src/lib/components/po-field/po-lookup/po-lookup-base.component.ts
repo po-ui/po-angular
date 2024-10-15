@@ -1,3 +1,5 @@
+import { PoLanguageService } from '../../../services/po-language/po-language.service';
+import { poLocaleDefault } from '../../../services/po-language/po-language.constant';
 import {
   AfterViewInit,
   Directive,
@@ -27,6 +29,25 @@ import { PoLookupFilterService } from './services/po-lookup-filter.service';
 import { PoLookupModalService } from './services/po-lookup-modal.service';
 import { PoTableColumnSpacing } from '../../po-table/enums/po-table-spacing.enum';
 
+export const poLookupLiteralsDefault = {
+  en: <PoLookupLiterals>{
+    search: 'Search',
+    clean: 'Clean'
+  },
+  es: <PoLookupLiterals>{
+    search: 'Buscar',
+    clean: 'Limpiar'
+  },
+  pt: <PoLookupLiterals>{
+    search: 'Pesquisar',
+    clean: 'Apagar'
+  },
+  ru: <PoLookupLiterals>{
+    search: 'Поиск',
+    clean: 'чистый'
+  }
+};
+
 /**
  * @description
  *
@@ -47,6 +68,8 @@ import { PoTableColumnSpacing } from '../../po-table/enums/po-table-spacing.enum
 export abstract class PoLookupBaseComponent
   implements ControlValueAccessor, OnDestroy, OnInit, Validator, AfterViewInit, OnChanges
 {
+  private _literals?: PoLookupLiterals;
+  private language: string;
   /**
    * @optional
    *
@@ -112,7 +135,21 @@ export abstract class PoLookupBaseComponent
    * > O objeto padrão de literais será traduzido de acordo com o idioma do
    * [`PoI18nService`](/documentation/po-i18n) ou do browser.
    */
-  @Input('p-literals') literals?: PoLookupLiterals;
+  @Input('p-literals') set literals(value: PoLookupLiterals) {
+    if (value instanceof Object && !(value instanceof Array)) {
+      this._literals = {
+        ...poLookupLiteralsDefault[poLocaleDefault],
+        ...poLookupLiteralsDefault[this.language],
+        ...value
+      };
+    } else {
+      this._literals = poLookupLiteralsDefault[this.language];
+    }
+  }
+
+  get literals() {
+    return this._literals || poLookupLiteralsDefault[this.language];
+  }
 
   /** Texto de apoio do campo. */
   @Input('p-help') help?: string;
@@ -537,8 +574,11 @@ export abstract class PoLookupBaseComponent
   constructor(
     private defaultService: PoLookupFilterService,
     @Inject(Injector) private injector: Injector,
-    public poLookupModalService: PoLookupModalService
-  ) {}
+    public poLookupModalService: PoLookupModalService,
+    languageService: PoLanguageService
+  ) {
+    this.language = languageService.getShortLanguage();
+  }
 
   ngOnDestroy() {
     if (this.getSubscription) {
