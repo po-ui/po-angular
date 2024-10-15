@@ -17,6 +17,7 @@ import { Subscription } from 'rxjs';
 
 import { uuid } from '../../../utils/util';
 
+import { PoLanguageService } from '../../../services/po-language/po-language.service';
 import { PoLookupBaseComponent } from './po-lookup-base.component';
 import { PoLookupFilterService } from './services/po-lookup-filter.service';
 import { PoLookupModalService } from './services/po-lookup-modal.service';
@@ -63,6 +64,38 @@ const providers = [
  *   [ngModelOptions]="{standalone: true}">
  * </po-lookup>
  * ```
+ *
+ * #### Tokens customizáveis
+ *
+ * É possível alterar o estilo do componente usando os seguintes tokens (CSS):
+ *
+ * > Para maiores informações, acesse o guia [Personalizando o Tema Padrão com Tokens CSS](https://po-ui.io/guides/theme-customization).
+ *
+ * | Propriedade                            |  Descrição                                            | Valor Padrão                                     |
+ * |----------------------------------------|-------------------------------------------------------|--------------------------------------------------|
+ * | **Default Values**                     |                                                       |                                                  |
+ * | `--font-family`                        | Família tipográfica usada                             | `var(--font-family-theme)`                       |
+ * | `--font-size`                          | Tamanho da fonte                                      | `var(--font-size-default)`                       |
+ * | `--text-color-placeholder`             | Cor do texto no placeholder                           | `var(--color-neutral-light-30)`                  |
+ * | `--color`                              | Cor principal do lookup                               | `var(--color-neutral-dark-70)`                   |
+ * | `--border-radius`                      | Contém o valor do raio dos cantos do elemento&nbsp;   | `var(--border-radius-md)`                        |
+ * | `--background`                         | Cor de background                                     | `var(--color-neutral-light-05)`                  |
+ * | `--text-color`                         | Cor do texto                                          | `var(--color-neutral-dark-90)`                   |
+ * | `--color-clear`                        | Cor principal do icone clear                          | `var(--color-action-default)`                    |
+ * | **Icon**                               |                                                       |                                                  |
+ * | `--color-icon`                         | Cor principal do icone pesquisar                      | `var(--color-action-default)`                    |
+ * | **Hover**                              |                                                       |                                                  |
+ * | `--color-hover`                        | Cor principal no estado hover                         | `var(--color-action-hover)`                      |
+ * | `--background-hover`                   | Cor de background no estado hover                     | `var(--color-brand-01-lightest)`                 |
+ * | **Focused**                            |                                                       |                                                  |
+ * | `--color-focused`                      | Cor principal no estado de focus                      | `var(--color-action-default)`                    |
+ * | `--outline-color-focused`              | Cor do outline do estado de focus                     | `var(--color-action-focus)`                      |
+ * | **Disabled**                           |                                                       |                                                  |
+ * | `--color-disabled`                     | Cor principal no estado disabled                      | `var(--color-action-disabled)`                   |
+ * | `--background-disabled`                | Cor de background no estado disabled                  | `var(--color-neutral-light-20)`                  |
+ * | `--text-color-disabled`                | Cor do texto quando campo está desabilitado           | `var(--color-action-disabled)`                   |
+ * | **Error**                              |                                                       |                                                  |
+ * | `--color-error`                        | Cor de background no estado de requerido              | `var(--color-feedback-negative-base)`            |
  *
  * @example
  *
@@ -113,6 +146,7 @@ export class PoLookupComponent extends PoLookupBaseComponent implements AfterVie
   initialized = false;
   timeoutResize;
   visibleElement = false;
+  heightGroupButtons = 44;
 
   disclaimers = [];
   visibleDisclaimers = [];
@@ -127,13 +161,14 @@ export class PoLookupComponent extends PoLookupBaseComponent implements AfterVie
   }
 
   constructor(
+    languageService: PoLanguageService,
     private renderer: Renderer2,
     poLookupFilterService: PoLookupFilterService,
     poLookupModalService: PoLookupModalService,
     private cd: ChangeDetectorRef,
     injector: Injector
   ) {
-    super(poLookupFilterService, injector, poLookupModalService);
+    super(poLookupFilterService, injector, poLookupModalService, languageService);
   }
 
   ngAfterViewInit() {
@@ -314,14 +349,16 @@ export class PoLookupComponent extends PoLookupBaseComponent implements AfterVie
   debounceResize() {
     if (!this.autoHeight) {
       clearTimeout(this.timeoutResize);
-      this.timeoutResize = setTimeout(() => {
-        this.calculateVisibleItems();
-      }, 200);
+      this.debounce(this.calculateVisibleItems.bind(this), 200);
     }
   }
 
+  debounce(func: () => void, delay: number) {
+    this.timeoutResize = setTimeout(func, delay);
+  }
+
   getInputWidth() {
-    return this.inputEl.nativeElement.offsetWidth - 40;
+    return this.inputEl.nativeElement.offsetWidth - (this.clean ? 80 : 40);
   }
 
   getDisclaimersWidth() {

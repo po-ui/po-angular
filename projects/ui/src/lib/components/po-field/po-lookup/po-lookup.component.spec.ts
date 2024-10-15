@@ -61,6 +61,11 @@ describe('PoLookupComponent:', () => {
       { property: 'label', label: 'Nome', type: 'string', fieldLabel: true }
     ];
     component['initializeColumn']();
+    component.inputEl = {
+      nativeElement: {
+        offsetHeight: 44
+      }
+    };
   });
 
   afterEach(() => {
@@ -646,7 +651,7 @@ describe('PoLookupComponent:', () => {
       const spyCalculateVisibleItems = spyOn(component, 'calculateVisibleItems');
 
       component.debounceResize();
-      tick(201);
+      tick(401);
 
       expect(spyCalculateVisibleItems).toHaveBeenCalled();
     }));

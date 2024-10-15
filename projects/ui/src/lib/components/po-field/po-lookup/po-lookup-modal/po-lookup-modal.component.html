@@ -19,13 +19,14 @@
           name="contentSearch"
           [(ngModel)]="searchValue"
           [placeholder]="literals.modalPlaceholder"
+          (keydown.enter)="search()"
           type="text"
         />
       </div>
 
       <div *ngIf="advancedFilters && advancedFilters.length > 0" class="po-lookup-advanced-search">
         <span
-          class="po-lookup-advanced-search-link po-icon-input"
+          class="po-lookup-advanced-search-link"
           tabindex="0"
           (click)="onAdvancedFilter()"
           (keydown.enter)="onAdvancedFilter()"

@@ -1,5 +1,4 @@
 import {
-  AfterViewInit,
   ChangeDetectionStrategy,
   ChangeDetectorRef,
   Component,
@@ -29,7 +28,7 @@ import { sortArrayOfObjects } from '../../../../utils/util';
   templateUrl: './po-lookup-modal.component.html',
   changeDetection: ChangeDetectionStrategy.OnPush
 })
-export class PoLookupModalComponent extends PoLookupModalBaseComponent implements OnInit, AfterViewInit {
+export class PoLookupModalComponent extends PoLookupModalBaseComponent implements OnInit {
   @ViewChild('inpsearch') inputSearchEl: ElementRef;
   @ViewChild('container', { read: ViewContainerRef }) container: ViewContainerRef;
 
@@ -51,10 +50,6 @@ export class PoLookupModalComponent extends PoLookupModalBaseComponent implement
   ngOnInit() {
     super.ngOnInit();
     this.setTableHeight();
-  }
-
-  ngAfterViewInit() {
-    this.initializeEventInput();
   }
 
   // Seleciona um item na tabela
@@ -86,18 +81,6 @@ export class PoLookupModalComponent extends PoLookupModalBaseComponent implement
     this.selecteds = [];
   }
 
-  initializeEventInput(): void {
-    this.keyUpObservable = fromEvent(this.inputSearchEl.nativeElement, 'keyup').pipe(
-      filter((e: any) => this.validateEnterPressed(e)),
-      debounceTime(400)
-    );
-
-    this.keyUpObservable.subscribe(() => {
-      this.search();
-      this.changeDetector.detectChanges();
-    });
-  }
-
   openModal() {
     this.poModal.open();
   }
@@ -122,10 +105,6 @@ export class PoLookupModalComponent extends PoLookupModalBaseComponent implement
 
   private setTableHeight() {
     this.tableHeight = this.infiniteScroll ? 515 : 615;
-  }
-
-  private validateEnterPressed(e: any) {
-    return e.keyCode === 13;
   }
 
   private setupModalAdvancedFilter() {
