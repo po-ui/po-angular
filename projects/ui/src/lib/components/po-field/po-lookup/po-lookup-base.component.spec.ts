@@ -4,12 +4,13 @@ import { UntypedFormControl, NgControl } from '@angular/forms';
 import { Observable, of, throwError } from 'rxjs';
 import { expectPropertiesValues, expectSettersMethod } from '../../../util-test/util-expect.spec';
 import * as ValidatorsFunctions from '../validators';
+import { PoLanguageService } from '../../../services/po-language/po-language.service';
 import { PoLookupFilter } from './interfaces/po-lookup-filter.interface';
-import { PoLookupBaseComponent } from './po-lookup-base.component';
+import { poLookupLiteralsDefault, PoLookupBaseComponent } from './po-lookup-base.component';
 import { PoLookupFilterService } from './services/po-lookup-filter.service';
 import { PoLookupModalService } from './services/po-lookup-modal.service';
 import { convertToBoolean } from '../../../utils/util';
-
+import { PoLookupLiterals } from './interfaces/po-lookup-literals.interface';
 class LookupFilterService implements PoLookupFilter {
   getObjectByValue(id: string): Observable<any> {
     return of({ value: 123, label: 'teste' });
@@ -35,7 +36,9 @@ describe('PoLookupBaseComponent:', () => {
   let component: PoLookupComponent;
   let defaultService: PoLookupFilterService;
   let injector: Injector;
+  let languageService: PoLanguageService;
   let poLookupModalService: PoLookupModalService;
+  let spyService: jasmine.Spy;
 
   const fakeSubscription = <any>{ unsubscribe: () => {} };
 
@@ -46,14 +49,47 @@ describe('PoLookupBaseComponent:', () => {
     }).compileComponents();
 
     defaultService = new PoLookupFilterService(undefined);
+    languageService = TestBed.inject(PoLanguageService);
+    spyService = spyOn(languageService, 'getShortLanguage').and.returnValue('pt');
     injector = TestBed.inject(Injector);
     poLookupModalService = TestBed.inject(PoLookupModalService);
-    component = new PoLookupComponent(defaultService, injector, poLookupModalService);
+    component = new PoLookupComponent(defaultService, injector, poLookupModalService, languageService);
     component['keysDescription'] = ['label'];
   });
 
   it('should be created', () => {
     expect(component instanceof PoLookupBaseComponent).toBeTruthy();
+  });
+
+  it('should set `_literals` with merged values when an object (not an array) is passed', () => {
+    const customLiterals: PoLookupLiterals = { search: 'Search', clean: 'Clean' };
+
+    component.literals = customLiterals;
+
+    expect(component['_literals']).toEqual({
+      ...poLookupLiteralsDefault['en'],
+      ...customLiterals
+    });
+  });
+
+  it('should set `_literals` with default values when an array is passed', () => {
+    const arrayValue = ['value1', 'value2'];
+
+    component.literals = arrayValue as any;
+
+    expect(component['_literals']).toEqual({
+      ...poLookupLiteralsDefault['pt'],
+      ...poLookupLiteralsDefault[component['_language']]
+    });
+  });
+
+  it('should set `_literals` with default values when a non-object value is passed', () => {
+    component.literals = 'invalid' as any;
+
+    expect(component['_literals']).toEqual({
+      ...poLookupLiteralsDefault['pt'],
+      ...poLookupLiteralsDefault[component['_language']]
+    });
   });
 
   it('should set name', () => {

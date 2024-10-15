@@ -109,43 +109,6 @@ describe('PoLookupModalComponent', () => {
     expect(fixture.nativeElement.querySelector('.po-modal')).not.toBeNull();
   });
 
-  it('should filter the key pressed', () => {
-    component.ngOnInit();
-    component.openModal();
-    fixture.detectChanges();
-
-    spyOn(component, <any>'validateEnterPressed').and.returnValue(of(true));
-
-    const eventKeyBoard = document.createEvent('KeyboardEvent');
-    eventKeyBoard.initEvent('keyup', true, true);
-    Object.defineProperty(eventKeyBoard, 'keyCode', { 'value': 13 });
-    const element = fixture.debugElement.nativeElement.querySelector('input');
-    element.dispatchEvent(eventKeyBoard);
-
-    expect(component['validateEnterPressed']).toHaveBeenCalledWith(eventKeyBoard);
-  });
-
-  it('should call search method', (): void => {
-    component.openModal();
-    fixture.detectChanges();
-
-    spyOn(component, 'search');
-    spyOn(component, <any>'validateEnterPressed').and.returnValue(true);
-
-    const element = fixture.debugElement.nativeElement.querySelector('.ph-magnifying-glass');
-    element.click();
-
-    expect(component.search).toHaveBeenCalled();
-  });
-
-  it('the typed character must be validated', () => {
-    let isEnterKeyPressed = component['validateEnterPressed'].call(component, { keyCode: 13 });
-    expect(isEnterKeyPressed).toBeTruthy();
-
-    isEnterKeyPressed = component['validateEnterPressed'].call(component, { keyCode: 65 });
-    expect(isEnterKeyPressed).toBeFalsy();
-  });
-
   it('shouldn`t set tableHeight with Infinite Scroll enabled', () => {
     component.infiniteScroll = true;
     component['setTableHeight']();

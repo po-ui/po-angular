@@ -6,53 +6,54 @@
   [p-required]="required"
   [p-show-required]="showRequired"
 >
-  <div class="po-field-container-content" *ngIf="!disclaimers.length; else disclaimersTemplate">
+  <div class="po-lookup" [class.po-lookup-disabled]="disabled" *ngIf="!disclaimers.length; else disclaimersTemplate">
     <input
       #inp
-      class="po-input"
+      class="po-lookup-input po-lookup-input-trigger"
+      [ngClass]="clean && inp.value ? 'po-input-double-icon-right' : 'po-input-icon-right'"
       [id]="id"
       type="text"
-      [ngClass]="clean && inp.value ? 'po-input-double-icon-right' : 'po-input-icon-right'"
       [autocomplete]="autocomplete"
       [disabled]="disabled"
-      [placeholder]="disabled ? '' : placeholder"
+      [placeholder]="placeholder"
       [required]="required"
       (blur)="searchEvent()"
     />
-
-    <div class="po-field-icon-container-right">
-      <po-clean
-        class="po-icon-input po-field-icon"
-        *ngIf="clean && !disabled"
-        [p-element-ref]="inputEl"
-        (p-change-event)="cleanModel()"
+    <div class="po-lookup-buttons">
+      <button
+        *ngIf="clean && !disabled && !!inp.value"
+        type="button"
+        class="po-lookup-button po-lookup-button-clean"
+        [ariaLabel]="literals.clean"
+        (click)="cleanModel()"
       >
-      </po-clean>
-
-      <div
+        <po-clean class="po-icon-input"></po-clean>
+      </button>
+      <button
         #iconLookup
-        class="po-field-icon po-field-icon-right po-icon-input"
-        tabindex="-1"
-        [class.po-field-icon]="!disabled"
-        [class.po-field-icon-disabled]="disabled"
+        class="po-lookup-button po-lookup-button-trigger"
+        [class.po-lookup-button-disabled]="disabled"
+        [ariaLabel]="literals.search"
         (click)="openLookup()"
-        (focus)="inp.focus()"
+        [disabled]="disabled"
       >
-        <po-icon p-icon="ICON_SEARCH"></po-icon>
-      </div>
+        <po-icon p-icon="ICON_SEARCH" class="po-icon-input"></po-icon>
+      </button>
     </div>
   </div>
   <po-field-container-bottom [p-help]="help" [p-disabled]="disabled"></po-field-container-bottom>
 </po-field-container>
 
 <ng-template #disclaimersTemplate>
-  <div class="po-field-container-content">
+  <div class="po-lookup" [class.po-lookup-disabled]="disabled">
     <div
       #inp
       [tabindex]="disabled ? -1 : 0"
-      class="po-input po-input-icon-right po-lookup-input po-icon-input"
+      class="po-lookup-input po-input-icon-right po-lookup-input po-icon-input"
+      [ngClass]="clean && inp.value ? 'po-input-double-icon-right' : 'po-input-icon-right'"
       [class.po-lookup-input-auto]="autoHeight"
       [class.po-lookup-input-static]="!autoHeight"
+      [class.po-lookup-input-padding-button-clean]="clean"
       [class.po-lookup-input-disabled]="disabled"
     >
       <span *ngIf="placeholder && !disclaimers?.length" class="po-lookup-input-placeholder">
@@ -70,19 +71,26 @@
       >
       </po-disclaimer>
     </div>
-
-    <div class="po-field-icon-container-right">
-      <div
-        #iconLookup
-        class="po-field-icon po-icon-input"
-        tabindex="-1"
-        [class.po-field-icon]="!disabled"
-        [class.po-field-icon-disabled]="disabled"
-        (click)="openLookup()"
-        (focus)="inp.focus()"
+    <div class="po-lookup-buttons">
+      <button
+        *ngIf="clean && !disabled"
+        type="button"
+        class="po-lookup-button po-lookup-button-clean"
+        [disabled]="disabled"
+        [ariaLabel]="literals.clean"
+        (click)="cleanModel()"
       >
-        <po-icon p-icon="ICON_SEARCH"></po-icon>
-      </div>
+        <po-clean class="po-icon-input"></po-clean>
+      </button>
+      <button
+        #iconLookup
+        class="po-lookup-button po-lookup-button-trigger"
+        [ariaLabel]="literals.search"
+        (click)="openLookup()"
+        [disabled]="disabled"
+      >
+        <po-icon p-icon="ICON_SEARCH" class="po-icon-input"></po-icon>
+      </button>
     </div>
   </div>
 </ng-template>
