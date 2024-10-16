@@ -21,7 +21,7 @@
       </div>
 
       <po-label
-        *ngIf="label"
+        *ngIf="!hideLabelStatus"
         class="po-switch-label"
         [p-disabled]="disabled"
         [p-label]="value === true ? labelOn : labelOff"

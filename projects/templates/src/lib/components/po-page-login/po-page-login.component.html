@@ -170,6 +170,7 @@
             [p-label-off]="pageLoginLiterals.rememberUser"
             [p-label-on]="pageLoginLiterals.rememberUser"
             (keyup.enter)="loginForm.valid && onLoginSubmit()"
+            [p-hide-label-status]="hideLabelStatus"
           >
           </po-switch>
 

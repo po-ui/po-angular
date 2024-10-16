@@ -140,6 +140,18 @@ export class PoSwitchComponent extends PoFieldModel<any> {
    *
    * @description
    *
+   * Indica se o status do `model` será escondido visualmente ao lado do switch.
+   *
+   * > Por padrão será atribuído `false`.
+   * @default `false`
+   */
+  @Input({ alias: 'p-hide-label-status', transform: convertToBoolean }) hideLabelStatus: boolean = false;
+
+  /**
+   * @optional
+   *
+   * @description
+   *
    * Posição de exibição do rótulo que fica ao lado do switch.
    *
    * > Por padrão exibe à direita.
