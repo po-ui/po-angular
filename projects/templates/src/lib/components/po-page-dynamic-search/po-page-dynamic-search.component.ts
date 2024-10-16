@@ -243,6 +243,10 @@ export class PoPageDynamicSearchComponent extends PoPageDynamicSearchBaseCompone
   }
 
   private getFilterValueToDisclaimer(field: any, value: any, optionsServiceObjectsList?: Array<PoComboOption>) {
+    if (field.type === PoDynamicFieldType.Boolean) {
+      value = value ? field.booleanTrue || value : field.booleanFalse || value;
+    }
+
     if (field.optionsService && optionsServiceObjectsList) {
       return this.optionsServiceDisclaimerLabel(value, optionsServiceObjectsList);
     }

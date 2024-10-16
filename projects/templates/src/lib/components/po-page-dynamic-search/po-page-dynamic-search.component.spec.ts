@@ -462,6 +462,42 @@ describe('PoPageDynamicSearchComponent:', () => {
       expect(component['setDisclaimers'](filters)).toEqual(result);
     });
 
+    it('getFilterValueToDisclaimer: should return true if field type is PoDynamicFieldType.Boolean', () => {
+      const field = { type: PoDynamicFieldType.Boolean, property: '1', label: 'boolean' };
+      const value = true;
+
+      const result = component['getFilterValueToDisclaimer'](field, value);
+
+      expect(result).toBe(true);
+    });
+
+    it('getFilterValueToDisclaimer: should return yes if field type is PoDynamicFieldType.Boolean', () => {
+      const field = { type: PoDynamicFieldType.Boolean, property: '1', label: 'boolean', booleanTrue: 'Yes' };
+      const value = true;
+
+      const result = component['getFilterValueToDisclaimer'](field, value);
+
+      expect(result).toBe('Yes');
+    });
+
+    it('getFilterValueToDisclaimer: should return false if field type is PoDynamicFieldType.Boolean', () => {
+      const field = { type: PoDynamicFieldType.Boolean, property: '1', label: 'boolean' };
+      const value = false;
+
+      const result = component['getFilterValueToDisclaimer'](field, value);
+
+      expect(result).toBe(false);
+    });
+
+    it('getFilterValueToDisclaimer: should return no if field type is PoDynamicFieldType.Boolean', () => {
+      const field = { type: PoDynamicFieldType.Boolean, property: '1', label: 'boolean', booleanFalse: 'No' };
+      const value = false;
+
+      const result = component['getFilterValueToDisclaimer'](field, value);
+
+      expect(result).toBe('No');
+    });
+
     it('getFilterValueToDisclaimer: should return formated date if field type is PoDynamicFieldType.Date', () => {
       const field = { type: PoDynamicFieldType.Date, property: '1', label: 'date' };
       const value = '2020-08-12';
