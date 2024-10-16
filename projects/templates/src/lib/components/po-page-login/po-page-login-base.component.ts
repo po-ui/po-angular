@@ -315,6 +315,18 @@ export abstract class PoPageLoginBaseComponent implements OnDestroy {
    *
    * @description
    *
+   * Indica se o status do `model` do switch de lembrar o usuário será escondido visualmente.
+   *
+   * > Por padrão será atribuído `false`.
+   * @default `false`
+   */
+  @Input({ alias: 'p-hide-label-status', transform: convertToBoolean }) hideLabelStatus: boolean = false;
+
+  /**
+   * @optional
+   *
+   * @description
+   *
    * Permite esconder a função de espiar a senha digitada.
    *
    * @default `false`
