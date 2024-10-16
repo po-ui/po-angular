@@ -163,6 +163,9 @@ export interface PoDynamicFormField extends PoDynamicField {
   /** Texto exibido quando o valor do componente for *false*. */
   booleanFalse?: string;
 
+  /** Indica se o status do `model` será escondido visualmente ao lado do switch */
+  hideLabelStatus?: boolean;
+
   /**
    * Indica se o `model` receberá o valor formatado pelas propriedades `p-label-on` e `p-label-off` ou
    * apenas o valor puro (sem formatação).
