@@ -23,7 +23,8 @@ export class SamplePoSwitchLabsComponent implements OnInit {
 
   public readonly propertiesOptions: Array<PoCheckboxGroupOption> = [
     { value: 'disabled', label: 'Disabled' },
-    { value: 'formatModel', label: 'Format Model' }
+    { value: 'formatModel', label: 'Format Model' },
+    { value: 'hideLabelStatus', label: 'Hide label status' }
   ];
 
   ngOnInit() {
