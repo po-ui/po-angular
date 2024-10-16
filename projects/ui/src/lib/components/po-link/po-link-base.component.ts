@@ -68,6 +68,8 @@ export class PoLinkBaseComponent {
     return isExternalLink(this.url) ? 'externalLink' : 'internalLink';
   }
 
+  @Input('p-a11y') a11y: 'AA' | 'AAA' = 'AAA';
+
   /** Ação que será executada quando o usuário clicar sobre o `po-link`.
    * > Ao utilizar junto da propriedade `p-url` a ação será ignorada.
    */

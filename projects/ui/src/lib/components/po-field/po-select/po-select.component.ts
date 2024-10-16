@@ -152,6 +152,10 @@ export class PoSelectComponent extends PoFieldValidateModel<any> implements OnCh
    */
   @Input({ alias: 'p-readonly', transform: convertToBoolean }) readonly: boolean = false;
 
+  @Input('p-size') size: 'small' | 'default' = 'default';
+
+  @Input('p-a11y') a11y: 'AA' | 'AAA' = 'AAA';
+
   /** Mensagem que aparecerá enquanto nenhuma opção estiver selecionada. */
   @Input('p-placeholder') placeholder?: string;
 

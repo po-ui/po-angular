@@ -1,4 +1,4 @@
-<div #radio class="po-radio">
+<div #radio class="po-radio" [class.po-field-a11y-aa]="a11y === 'AA'">
   <label (click)="eventClick()" (keydown)="onKeyDown($event)">
     <input
       #radioInput

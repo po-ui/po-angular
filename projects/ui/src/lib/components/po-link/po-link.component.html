@@ -1,11 +1,26 @@
 <ng-container [ngSwitch]="type">
-  <button *ngSwitchCase="'action'" class="po-link" type="button" (click)="onClick()">{{ label }}</button>
+  <button
+    *ngSwitchCase="'action'"
+    [class.po-field-a11y-aa]="a11y === 'AA'"
+    class="po-link"
+    type="button"
+    (click)="onClick()"
+  >
+    {{ label }}
+  </button>
 
-  <a *ngSwitchCase="'externalLink'" class="po-link" [href]="url" [target]="openNewTab ? '_blank' : '_self'">{{
+  <a
+    *ngSwitchCase="'externalLink'"
+    [class.po-field-a11y-aa]="a11y === 'AA'"
+    class="po-link"
+    [href]="url"
+    [target]="openNewTab ? '_blank' : '_self'"
+    >{{ label }}</a
+  >
+
+  <a *ngSwitchCase="'internalLink'" [class.po-field-a11y-aa]="a11y === 'AA'" class="po-link" [routerLink]="url">{{
     label
   }}</a>
 
-  <a *ngSwitchCase="'internalLink'" class="po-link" [routerLink]="url">{{ label }}</a>
-
-  <a *ngSwitchDefault class="po-link" [href]="url">{{ label }}</a>
+  <a *ngSwitchDefault class="po-link" [class.po-field-a11y-aa]="a11y === 'AA'" [href]="url">{{ label }}</a>
 </ng-container>

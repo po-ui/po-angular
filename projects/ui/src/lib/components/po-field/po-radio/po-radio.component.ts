@@ -54,6 +54,8 @@ export class PoRadioComponent extends PoFieldModel<boolean> {
     this._size = Object.values(PoRadioSize).includes(value) ? value : PoRadioSize.Medium;
   }
 
+  @Input('p-a11y') a11y: 'AA' | 'AAA' = 'AAA';
+
   get size() {
     return this._size;
   }

@@ -1,4 +1,5 @@
 <po-field-container
+  [class.po-field-a11y-aa]="a11y === 'AA'"
   [p-disabled]="disabled"
   [p-id]="id"
   [p-label]="label"
@@ -9,6 +10,7 @@
   <div class="po-field-container-content">
     <select
       #select
+      [attr.p-size]="size"
       class="po-select"
       [ngClass]="iconNameLib === 'PhosphorIcon' ? 'po-select-phosphor' : 'po-select-poicon'"
       [attr.name]="name"
