@@ -1,4 +1,4 @@
-:root {
+/* :root {
   --target-size-aaa: 2.75rem;
   --target-size-aa: 2rem;
   --focus-aaa: 4px;
@@ -16,4 +16,44 @@ html.AA {
   po-input .po-input {
     min-height: var(--target-size-aa);
   }
+} */
+
+/* Variáveis de tokens */
+:root {
+  --target-size-aaa: 2.75rem;
+  --target-size-aa: 2rem;
+  --focus-aaa: 4px;
+  --focus-aa: 2px;
+}
+
+/* Estilos para acessibilidade AA */
+.accessibility-AA po-input .po-input,
+.accessibility-AA po-password .po-input,
+.accessibility-AA po-decimal .po-input,
+.accessibility-AA po-email .po-input,
+.accessibility-AA po-select select {
+  min-height: var(--target-size-aa);
+}
+
+.accessibility-AA po-input .po-input:focus,
+.accessibility-AA po-password .po-input:focus,
+.accessibility-AA po-decimal .po-input:focus,
+.accessibility-AA po-email .po-input:focus {
+  outline-width: var(--focus-aa);
+}
+
+/* Estilos para acessibilidade AAA */
+.accessibility-AAA po-input .po-input,
+.accessibility-AAA po-password .po-input,
+.accessibility-AAA po-decimal .po-input,
+.accessibility-AAA po-email .po-input,
+.accessibility-AAA po-select select {
+  min-height: var(--target-size-aaa);
+}
+
+.accessibility-AAA po-input .po-input:focus,
+.accessibility-AAA po-password .po-input:focus,
+.accessibility-AAA po-decimal .po-input:focus,
+.accessibility-AAA po-email .po-input:focus {
+  outline-width: var(--focus-aaa);
 }

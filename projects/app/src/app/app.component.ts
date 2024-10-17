@@ -1,11 +1,24 @@
 import { Component } from '@angular/core';
-import { PoThemeService } from '../../../ui/src/lib';
+import { PoThemeService, PoSelectOption } from '../../../ui/src/lib';
 
 @Component({
   selector: 'app-root',
-  templateUrl: './app.component.html'
+  templateUrl: './app.component.html',
+  styleUrls: ['./app.component.css']
 })
 export class AppComponent {
+  inputValueAA: string = '';
+  inputValueAAA: string = '';
+
+  passwordValueAA: string = '';
+  passwordValueAAA: string = '';
+
+  decimalValueAA: number | null = null;
+  decimalValueAAA: number | null = null;
+
+  emailValueAA: string = '';
+  emailValueAAA: string = '';
+
   selectedValue: string = '';
   radioValue: string = '';
   inputValue: string = '';
@@ -16,6 +29,12 @@ export class AppComponent {
   ];
 
   accessibilityLevel: 'AA' | 'AAA' = 'AAA';
+
+  // SELECT
+  selectOptions: Array<PoSelectOption> = [
+    { label: 'Option 1', value: '1' },
+    { label: 'Option 2', value: '2' }
+  ];
 
   constructor(private poThemeService: PoThemeService) {
     document.documentElement.className = this.accessibilityLevel;
