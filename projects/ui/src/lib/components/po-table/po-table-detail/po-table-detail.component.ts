@@ -24,6 +24,12 @@ export class PoTableDetailComponent {
   @Input('p-items') items: Array<any>;
 
   /**
+   * Linha do registro pai correspondente ao item de detalhe selecionado. Utilizado para gerenciar o estado de seleção do elemento pai,
+   * permitindo que o mesmo seja atualizado para refletir a seleção de todos os filhos ou estado indeterminado.
+   */
+  @Input('p-parent-row') parentRow: PoTableDetail;
+
+  /**
    * Define se a tabela possui a opção de `selectable` habilitada.
    */
   @Input('p-selectable') isSelectable?: boolean = false;
@@ -92,7 +98,7 @@ export class PoTableDetailComponent {
 
   onSelectRow(item) {
     item.$selected = !item.$selected;
-    this.selectRow.emit(item);
+    this.selectRow.emit({ item: item, parentRow: this.parentRow });
   }
 
   private returnPoTableDetailObject(value: any) {
