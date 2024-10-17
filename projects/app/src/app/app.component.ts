@@ -19,6 +19,9 @@ export class AppComponent {
   emailValueAA: string = '';
   emailValueAAA: string = '';
 
+  numberValueAA: number | null = null;
+  numberValueAAA: number | null = null;
+
   selectedValue: string = '';
   radioValue: string = '';
   inputValue: string = '';

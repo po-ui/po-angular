@@ -31,6 +31,7 @@ html.AA {
 .accessibility-AA po-password .po-input,
 .accessibility-AA po-decimal .po-input,
 .accessibility-AA po-email .po-input,
+.accessibility-AA po-number .po-input,
 .accessibility-AA po-select select {
   min-height: var(--target-size-aa);
 }
@@ -38,7 +39,8 @@ html.AA {
 .accessibility-AA po-input .po-input:focus,
 .accessibility-AA po-password .po-input:focus,
 .accessibility-AA po-decimal .po-input:focus,
-.accessibility-AA po-email .po-input:focus {
+.accessibility-AA po-email .po-input:focus,
+.accessibility-AA po-number .po-input:focus {
   outline-width: var(--focus-aa);
 }
 
@@ -47,6 +49,7 @@ html.AA {
 .accessibility-AAA po-password .po-input,
 .accessibility-AAA po-decimal .po-input,
 .accessibility-AAA po-email .po-input,
+.accessibility-AAA po-number .po-input,
 .accessibility-AAA po-select select {
   min-height: var(--target-size-aaa);
 }
@@ -54,6 +57,7 @@ html.AA {
 .accessibility-AAA po-input .po-input:focus,
 .accessibility-AAA po-password .po-input:focus,
 .accessibility-AAA po-decimal .po-input:focus,
-.accessibility-AAA po-email .po-input:focus {
+.accessibility-AAA po-email .po-input:focus,
+.accessibility-AAA po-number .po-input:focus {
   outline-width: var(--focus-aaa);
 }

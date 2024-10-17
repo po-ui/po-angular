@@ -183,6 +183,45 @@
         </div>
       </div>
 
+      <!-- number -->
+      <div class="content">
+        <div>INPUT - number</div>
+
+        <!-- Acessibilidade AA -->
+        <div class="accessibility-AA">
+          <po-number
+            name="numberAA"
+            p-label="Number"
+            p-help="Informe um número inteiro entre 1 e 100"
+            p-icon="po-icon-number"
+            p-clean="true"
+            [(ngModel)]="numberValueAA"
+            p-placeholder="Digite um número"
+            p-min="1"
+            p-max="100"
+            p-error-pattern="Número inválido. Insira um valor entre 1 e 100."
+            p-pattern="^[1-9][0-9]?$|^100$"
+          ></po-number>
+        </div>
+
+        <!-- Acessibilidade AAA -->
+        <div class="accessibility-AAA">
+          <po-number
+            name="numberAAA"
+            p-label="Number"
+            p-help="Informe um número inteiro entre 1 e 1000"
+            p-icon="po-icon-number"
+            p-clean="true"
+            [(ngModel)]="numberValueAAA"
+            p-placeholder="Digite um número"
+            p-min="1"
+            p-max="1000"
+            p-error-pattern="Número inválido. Insira um valor entre 1 e 1000."
+            p-pattern="^[1-9][0-9]{0,2}$|^1000$"
+          ></po-number>
+        </div>
+      </div>
+
       <!-- select -->
       <div class="content">
         <div>SELECT</div>
