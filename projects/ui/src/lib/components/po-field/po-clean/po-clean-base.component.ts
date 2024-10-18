@@ -29,6 +29,8 @@ export abstract class PoCleanBaseComponent {
   @Output('p-change-event') changeEvent: EventEmitter<any> = new EventEmitter<any>();
 
   clear() {
+    this.focus();
+    this.blur();
     this.setInputValue(this.defaultValue);
     this.changeEvent.emit(this.defaultValue);
   }
@@ -36,6 +38,10 @@ export abstract class PoCleanBaseComponent {
   showIcon() {
     return this.defaultValue !== this.getInputValue();
   }
+
+  abstract focus(): void;
+
+  abstract blur(): void;
 
   abstract setInputValue(value: string): void;
 
