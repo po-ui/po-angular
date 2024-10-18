@@ -113,3 +113,32 @@
 .accessibility-AAA .po-combo-container-content .po-combo-arrow .po-field-icon > i {
   min-height: var(--target-size-aaa);
 }
+
+/* Estilos para Acessibilidade AA */
+.accessibility-AA .po-radio input[p-size='small'] {
+  min-width: 16px;
+  min-height: 16px;
+  width: 16px;
+  height: 16px;
+}
+
+/* .accessibility-AA .po-radio label {
+  min-height: var(--target-size-aa);
+  display: flex;
+  align-items: center;
+} */
+
+.accessibility-AA .po-radio input[p-size='small']:focus {
+  outline: var(--focus-aa);
+}
+
+/* Estilos para Acessibilidade AAA */
+/* .accessibility-AAA .po-radio label {
+  min-height: var(--target-size-aaa);
+  display: flex;
+  align-items: center;
+} */
+
+.accessibility-AAA .po-radio input[p-size='medium']:focus {
+  outline: var(--focus-aaa);
+}

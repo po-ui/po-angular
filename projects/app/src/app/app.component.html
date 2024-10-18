@@ -14,10 +14,9 @@
 
       <!-- text -->
       <div class="content">
-        <!-- TYPE -->
         <div>INPUT - text</div>
 
-        <!-- AAA -->
+        <!-- Acessibilidade AA -->
         <div class="accessibility-AA">
           <po-input
             p-label="input text"
@@ -31,7 +30,7 @@
           ></po-input>
         </div>
 
-        <!-- AA -->
+        <!-- Acessibilidade AAA -->
         <div class="accessibility-AAA">
           <po-input
             p-label="input text"
@@ -52,20 +51,6 @@
 
         <div class="accessibility-AA">
           <po-password
-            name="passwordAAA"
-            p-label="Password"
-            p-help="Informe sua senha"
-            p-icon="po-icon-lock"
-            p-clean="true"
-            p-pattern="^(?=.*[a-z])(?=.*[A-Z])(?=.*\d)(?=.*[@$!%*?&])[A-Za-z\d@$!%*?&]{12,}$"
-            p-error-pattern="A senha deve ter pelo menos 12 caracteres, incluindo letras maiúsculas, minúsculas, números e caracteres especiais."
-            [(ngModel)]="passwordValueAAA"
-            p-placeholder="Digite sua senha"
-          ></po-password>
-        </div>
-
-        <div class="accessibility-AAA">
-          <po-password
             name="passwordAA"
             p-label="Password"
             p-help="Informe sua senha"
@@ -74,6 +59,20 @@
             p-pattern="^(?=.*[A-Za-z])(?=.*\d)[A-Za-z\d]{8,}$"
             p-error-pattern="A senha deve ter pelo menos 8 caracteres, incluindo letras e números."
             [(ngModel)]="passwordValueAA"
+            p-placeholder="Digite sua senha"
+          ></po-password>
+        </div>
+
+        <div class="accessibility-AAA">
+          <po-password
+            name="passwordAAA"
+            p-label="Password"
+            p-help="Informe sua senha"
+            p-icon="po-icon-lock"
+            p-clean="true"
+            p-pattern="^(?=.*[a-z])(?=.*[A-Z])(?=.*\d)(?=.*[@$!%*?&])[A-Za-z\d@$!%*?&]{12,}$"
+            p-error-pattern="A senha deve ter pelo menos 12 caracteres, incluindo letras maiúsculas, minúsculas, números e caracteres especiais."
+            [(ngModel)]="passwordValueAAA"
             p-placeholder="Digite sua senha"
           ></po-password>
         </div>
@@ -204,13 +203,44 @@
         </div>
       </div>
 
+      <!-- radio -->
+      <div class="content">
+        <div>RADIO</div>
+
+        <!-- Acessibilidade AA -->
+        <div class="accessibility-AA">
+          <div class="radio-option">
+            <po-radio
+              name="radioAA"
+              p-label="Opção 1"
+              p-size="small"
+              [p-checked]="radioValueAAOption1"
+              (p-change-selected)="onRadioChangeAA('1')"
+            ></po-radio>
+          </div>
+        </div>
+
+        <!-- Acessibilidade AAA -->
+        <div class="accessibility-AAA">
+          <div class="radio-option">
+            <po-radio
+              name="radioAAA"
+              p-label="Opção 1"
+              p-size="medium"
+              [p-checked]="radioValueAAAOption1"
+              (p-change-selected)="onRadioChangeAAA('1')"
+            ></po-radio>
+          </div>
+        </div>
+      </div>
+
       <!-- select -->
       <div class="content">
         <div>SELECT</div>
 
         <div class="accessibility-AA">
           <po-select
-            name="select"
+            name="selectAA"
             p-label="PO Select"
             p-help="Select Help"
             p-placeholder="Select Placeholder"
@@ -221,7 +251,7 @@
 
         <div class="accessibility-AAA">
           <po-select
-            name="select"
+            name="selectAAA"
             p-label="PO Select"
             p-help="Select Help"
             p-placeholder="Select Placeholder"

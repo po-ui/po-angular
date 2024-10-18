@@ -7,5 +7,6 @@
  */
 export enum PoRadioSize {
   Medium = 'medium',
-  Large = 'large'
+  Large = 'large',
+  Small = 'small'
 }
