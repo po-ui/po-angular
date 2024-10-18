@@ -1,23 +1,3 @@
-/* :root {
-  --target-size-aaa: 2.75rem;
-  --target-size-aa: 2rem;
-  --focus-aaa: 4px;
-  --focus-aa: 2px;
-}
-
-html.AAA {
-  --outline-width-focus-visible: var(--focus-aaa);
-  po-input .po-input {
-    min-height: var(--target-size-aaa);
-  }
-}
-html.AA {
-  --outline-width-focus-visible: var(--focus-aa);
-  po-input .po-input {
-    min-height: var(--target-size-aa);
-  }
-} */
-
 /* Variáveis de tokens */
 :root {
   --target-size-aaa: 2.75rem;
@@ -59,5 +39,26 @@ html.AA {
 .accessibility-AAA po-decimal .po-input:focus,
 .accessibility-AAA po-email .po-input:focus,
 .accessibility-AAA po-number .po-input:focus {
+  outline-width: var(--focus-aaa);
+}
+
+.accessibility-AA po-link a.po-link:focus {
+  outline-width: var(--focus-aa);
+}
+
+.accessibility-AA po-link a.po-link:active {
+  outline-width: var(--focus-aa);
+}
+
+/* Estilos para acessibilidade AAA */
+.accessibility-AAA po-link a.po-link {
+  min-height: var(--target-size-aaa);
+}
+
+.accessibility-AAA po-link a.po-link:focus {
+  outline-width: var(--focus-aaa);
+}
+
+.accessibility-AAA po-link a.po-link:active {
   outline-width: var(--focus-aaa);
 }

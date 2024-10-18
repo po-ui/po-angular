@@ -22,6 +22,11 @@ export class AppComponent {
   numberValueAA: number | null = null;
   numberValueAAA: number | null = null;
 
+  linkLabelAA: string = 'Clique aqui para saber mais (abre em nova aba)';
+  linkLabelAAA: string = 'Clique aqui para saber mais (abre em nova aba)';
+  linkUrlAA: string = 'https://example.com';
+  linkUrlAAA: string = 'https://example.com';
+
   selectedValue: string = '';
   radioValue: string = '';
   inputValue: string = '';
