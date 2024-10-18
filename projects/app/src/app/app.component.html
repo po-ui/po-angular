@@ -1,36 +1,3 @@
-<!-- <po-page-default>
-  <po-button [p-label]="accessibilityLevel" (p-click)="toggleAccessibility()"></po-button>
-
-  <br /><br />
-
-  <po-widget p-title="Input">
-    <po-input p-label=" texto" [(ngModel)]="inputValue" p-placeholder="Digite algo"></po-input> -->
-
-<!-- <po-input [p-a11y]="accessibilityLevel" p-size="default" p-label="Entrada de texto" [(ngModel)]="inputValue"
-      p-placeholder="Digite algo"></po-input> -->
-<!-- </po-widget> -->
-
-<!-- OPA  e awe  -->
-
-<!-- <po-widget p-title="select">
-    <po-select [p-a11y]="accessibilityLevel" p-size="small"  p-label="Selecione uma opção" [(ngModel)]="selectedValue" [p-options]="options"></po-select>
-    
-    <po-select [p-a11y]="accessibilityLevel" p-size="default"  p-label="Selecione uma opção" [(ngModel)]="selectedValue" [p-options]="options"></po-select>
-  </po-widget>
-
-  <po-widget p-title="radio">
-    <po-radio  p-size="medium" [p-a11y]="accessibilityLevel" p-label="Opção 1" p-value="opcao1" [(ngModel)]="radioValue">Opção 2</po-radio>
-    <po-radio  p-size="large"   [p-a11y]="accessibilityLevel" p-label="Opção 1" p-value="opcao1" [(ngModel)]="radioValue">Opção 3</po-radio>
-  </po-widget>
-
-
-  <po-widget p-title="link">
-    <po-link [p-a11y]="accessibilityLevel" p-size="small" p-label="PO Link" p-url="https://po-ui.io"></po-link> <br>
-    <po-link [p-a11y]="accessibilityLevel" p-size="default" p-label="PO Link" p-url="https://po-ui.io"></po-link>
-  </po-widget> -->
-
-<!-- <br /><br />
-</po-page-default> -->
 <po-page-default>
   <po-widget p-title="Comparação de Acessibilidade">
     <div class="inputs-container">
@@ -261,6 +228,71 @@
             [p-options]="selectOptions"
           >
           </po-select>
+        </div>
+      </div>
+
+      <!-- COMBO -->
+      <div class="content">
+        <div>COMBO</div>
+
+        <div class="accessibility-AA">
+          <po-combo
+            name="combo"
+            p-label="PO Combo"
+            p-help="Select Help"
+            p-placeholder="Select Placeholder"
+            [p-options]="selectOptions"
+          ></po-combo>
+        </div>
+
+        <div class="accessibility-AAA">
+          <po-combo
+            name="combo"
+            p-label="PO Combo"
+            p-help="Select Help"
+            p-placeholder="Select Placeholder"
+            [p-options]="selectOptions"
+          ></po-combo>
+        </div>
+      </div>
+
+      <!-- MULTISELECT -->
+      <div class="content">
+        <div>MULTISELECT</div>
+
+        <div class="accessibility-AA">
+          <po-multiselect
+            name="multiselect"
+            p-label="PO Multiselect"
+            [p-options]="multiOptions"
+            p-help="Select Help"
+            p-placeholder="Select Placeholder"
+          >
+          </po-multiselect>
+        </div>
+
+        <div class="accessibility-AAA">
+          <po-multiselect
+            name="multiselect"
+            p-label="PO Multiselect"
+            [p-options]="multiOptions"
+            p-help="Select Help"
+            p-placeholder="Select Placeholder"
+          >
+          </po-multiselect>
+        </div>
+      </div>
+
+      <!-- DROPDOWN -->
+      <div class="content">
+        <div>DROPDOWN</div>
+
+        <div class="accessibility-AA">
+          <po-dropdown p-label="PO Dropdown" [p-actions]="[{ label: 'How to install PO' }]"> </po-dropdown>
+        </div>
+
+        <div class="accessibility-AAA">
+          <po-dropdown p-label="PO Dropdown" [p-actions]="[{ label: 'How to install PO' }]"> </po-dropdown>
         </div>
       </div>
 

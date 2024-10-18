@@ -1,5 +1,5 @@
 import { Component } from '@angular/core';
-import { PoThemeService, PoSelectOption } from '../../../ui/src/lib';
+import { PoThemeService, PoSelectOption, PoMultiselectOption } from '../../../ui/src/lib';
 
 @Component({
   selector: 'app-root',
@@ -42,6 +42,10 @@ export class AppComponent {
   selectOptions: Array<PoSelectOption> = [
     { label: 'Option 1', value: '1' },
     { label: 'Option 2', value: '2' }
+  ];
+  multiOptions: Array<PoMultiselectOption> = [
+    { value: 'poMultiselect1', label: 'PO Multiselect 1' },
+    { value: 'poMultiselect2', label: 'PO Multiselect 2' }
   ];
 
   constructor(private poThemeService: PoThemeService) {

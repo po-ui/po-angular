@@ -11,8 +11,7 @@
 .accessibility-AA po-password .po-input,
 .accessibility-AA po-decimal .po-input,
 .accessibility-AA po-email .po-input,
-.accessibility-AA po-number .po-input,
-.accessibility-AA po-select select {
+.accessibility-AA po-number .po-input {
   min-height: var(--target-size-aa);
 }
 
@@ -29,8 +28,7 @@
 .accessibility-AAA po-password .po-input,
 .accessibility-AAA po-decimal .po-input,
 .accessibility-AAA po-email .po-input,
-.accessibility-AAA po-number .po-input,
-.accessibility-AAA po-select select {
+.accessibility-AAA po-number .po-input {
   min-height: var(--target-size-aaa);
 }
 
@@ -61,4 +59,57 @@
 
 .accessibility-AAA po-link a.po-link:active {
   outline-width: var(--focus-aaa);
+}
+
+/* SELECT */
+.accessibility-AA po-select,
+.accessibility-AA .po-combo-input,
+.accessibility-AA .po-dropdown {
+  --padding-vertical: 0.5rem;
+  --padding-horizonta: 0.7rem;
+  --font-size: var(--font-size-sm);
+  --outline-width-focus-visible: var(--focus-aa);
+  --outline-width: var(--focus-aa);
+}
+.accessibility-AA .po-dropdown-button {
+  font-size: var(--font-size-sm);
+}
+.accessibility-AA po-select .po-select-phosphor {
+  --background-image: url("data:image/svg+xml,%3Csvg width='16' height='17' viewBox='0 0 16 17' fill='none' xmlns='http://www.w3.org/2000/svg'%3E%3Cg clip-path='url(%23clip0_28118_1824)'%3E%3Cpath fill-rule='evenodd' clip-rule='evenodd' d='M12.4717 6.02851C12.211 5.76784 11.7897 5.76784 11.529 6.02851L8.00033 9.55717L4.47166 6.02851C4.211 5.76784 3.78966 5.76784 3.529 6.02851C3.26833 6.28917 3.26833 6.71051 3.529 6.97117L7.529 10.9712C7.659 11.1012 7.82966 11.1665 8.00033 11.1665C8.171 11.1665 8.34166 11.1012 8.47166 10.9712L12.4717 6.97117C12.7323 6.71051 12.7323 6.28917 12.4717 6.02851Z' fill='%234545A1'/%3E%3C/g%3E%3Cdefs%3E%3CclipPath id='clip0_28118_1824'%3E%3Crect width='16' height='16' fill='white' transform='translate(0.000366211 0.5)'/%3E%3C/clipPath%3E%3C/defs%3E%3C/svg%3E%0A");
+}
+.accessibility-AA po-select select,
+.accessibility-AA .po-combo-input,
+.accessibility-AA .po-combo-container-content .po-combo-arrow .po-field-icon > i,
+.accessibility-AA .po-multiselect-input {
+  min-height: var(--target-size-aa);
+  padding-block: 0px;
+}
+.accessibility-AA .po-dropdown-button {
+  height: var(--target-size-aa);
+}
+
+.accessibility-AA .po-combo-container-content .po-combo-arrow .po-field-icon,
+.accessibility-AA .po-dropdown-icon,
+.accessibility-AA .po-multiselect-input .po-field-icon {
+  font-size: 16px;
+}
+.accessibility-AA .po-combo-container-content .po-combo-arrow .po-field-icon > i {
+  height: var(--target-size-aa);
+  width: var(--target-size-aa);
+}
+
+.accessibility-AA po-combo po-label,
+.accessibility-AA po-select po-label,
+.accessibility-AA po-multiselect po-label {
+  --font-weight-field: var(--font-weight-normal);
+}
+
+.accessibility-AAA po-select {
+  --outline-width-focus-visible: var(--focus-aaa);
+  --outline-width: var(--focus-aaa);
+}
+.accessibility-AAA po-select select,
+.accessibility-AAA .po-combo-input,
+.accessibility-AAA .po-combo-container-content .po-combo-arrow .po-field-icon > i {
+  min-height: var(--target-size-aaa);
 }
