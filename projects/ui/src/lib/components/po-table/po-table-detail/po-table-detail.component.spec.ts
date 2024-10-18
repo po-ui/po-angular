@@ -178,7 +178,7 @@ describe('PoTableDetailComponent', () => {
       component.onSelectRow(row);
 
       expect(row.$selected).toBeTruthy();
-      expect(component.selectRow.emit).toHaveBeenCalledWith(row);
+      expect(component.selectRow.emit).toHaveBeenCalledWith({ item: row, parentRow: undefined });
     });
 
     describe('returnPoTableDetailObject: ', () => {
