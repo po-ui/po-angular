@@ -27,14 +27,12 @@ export class AppComponent {
   linkUrlAA: string = 'https://example.com';
   linkUrlAAA: string = 'https://example.com';
 
-  selectedValue: string = '';
-  radioValue: string = '';
-  inputValue: string = '';
+  // Propriedades para o po-radio
+  radioValueAAOption1: boolean = false;
+  radioValueAAOption2: boolean = false;
 
-  options = [
-    { value: '1', label: 'Opção 1' },
-    { value: '2', label: 'Opção 2' }
-  ];
+  radioValueAAAOption1: boolean = false;
+  radioValueAAAOption2: boolean = false;
 
   accessibilityLevel: 'AA' | 'AAA' = 'AAA';
 
@@ -51,5 +49,16 @@ export class AppComponent {
   toggleAccessibility(): void {
     this.accessibilityLevel = this.accessibilityLevel === 'AA' ? 'AAA' : 'AA';
     document.documentElement.className = this.accessibilityLevel;
+  }
+
+  // Função para gerenciar a seleção dos rádios (apenas uma opção pode ser selecionada)
+  onRadioChangeAA(option: string) {
+    this.radioValueAAOption1 = option === '1';
+    this.radioValueAAOption2 = option === '2';
+  }
+
+  onRadioChangeAAA(option: string) {
+    this.radioValueAAAOption1 = option === '1';
+    this.radioValueAAAOption2 = option === '2';
   }
 }
