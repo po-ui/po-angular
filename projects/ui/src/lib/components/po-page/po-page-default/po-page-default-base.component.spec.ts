@@ -11,6 +11,8 @@ import { PoPageDefaultBaseComponent, poPageDefaultLiteralsDefault } from './po-p
 @Directive()
 class PoPageDefaultComponent extends PoPageDefaultBaseComponent {
   setDropdownActions() {}
+
+  getVisibleActions() {}
 }
 
 describe('PoPageDefaultBaseComponent:', () => {

@@ -52,7 +52,8 @@ export abstract class PoPageDefaultBaseComponent {
    */
   @Input('p-actions') set actions(actions: Array<PoPageAction>) {
     this._actions = Array.isArray(actions) ? actions : [];
-    this.visibleActions = this.actions.filter(action => action.visible !== false);
+
+    this.visibleActions = this.getVisibleActions();
     this.setDropdownActions();
   }
 
@@ -134,4 +135,6 @@ export abstract class PoPageDefaultBaseComponent {
 
   // Seta a lista de ações no dropdown.
   abstract setDropdownActions();
+
+  abstract getVisibleActions();
 }
