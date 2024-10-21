@@ -1,11 +1,14 @@
 import { DOCUMENT } from '@angular/common';
 import { Inject, Injectable, Optional, Renderer2, RendererFactory2 } from '@angular/core';
 import { ICONS_DICTIONARY, PhosphorIconDictionary } from '../../components/po-icon/index';
+import { PoThemeAccessibilityEnum } from './enum/po-theme-accessibility.enum';
 import { PoThemeTypeEnum } from './enum/po-theme-type.enum';
 import { poThemeDefault } from './helpers/po-theme-poui.constant';
+import { poThemeDefaultLightValues } from './helpers/po-theme-light-defaults.constant';
+import { poThemeDefaultDarkValues } from './helpers/po-theme-dark-defaults.constant';
 import { PoThemeColor } from './interfaces/po-theme-color.interface';
 import { PoThemeTokens } from './interfaces/po-theme-tokens.interface';
-import { PoTheme } from './interfaces/po-theme.interface';
+import { PoTheme, PoThemeActive } from './interfaces/po-theme.interface';
 
 /**
  * @description
@@ -45,39 +48,49 @@ export class PoThemeService {
     @Optional() @Inject(ICONS_DICTIONARY) value: { [key: string]: string }
   ) {
     this.renderer = rendererFactory.createRenderer(null, null);
-
     this._iconToken = value ?? PhosphorIconDictionary;
+
+    // SET BASE PERCOMPONENT & ONROOT... VALUES from light & dark
+    this.setPerComponentAndOnRoot({ type: PoThemeTypeEnum.light }, poThemeDefaultLightValues.perComponent, poThemeDefaultLightValues.onRoot);
+    this.setPerComponentAndOnRoot({ type: PoThemeTypeEnum.dark }, poThemeDefaultDarkValues.perComponent, poThemeDefaultDarkValues.onRoot);
   }
 
   /**
    * Define o tema a ser aplicado no componente, de acordo com o tipo de tema especificado.
    *
-   * Este método define o tema a ser aplicado no componente com base no objeto `theme` fornecido e no tipo de tema especificado.
-   * Ele atualiza as propriedades do componente para refletir o tema selecionado, como cores, estilos e comportamentos.
+   * Este método define o tema a ser aplicado no componente com base no objeto `theme` fornecido, no tipo de tema especificado
+   * e no nível de acessibilidade, se informado. Ele atualiza as propriedades do componente para refletir o tema selecionado,
+   * como cores, estilos e comportamentos.
    *
    * @param {PoTheme} theme - Objeto contendo as definições de tema a serem aplicadas no componente.
    * @param {PoThemeTypeEnum} [themeType=PoThemeTypeEnum.light] - (Opcional) Tipo de tema a ser aplicado, podendo ser 'light' (claro) ou 'dark' (escuro). Por padrão, o tema claro é aplicado.
+   * @param {PoThemeAccessibilityEnum} [accessibility=PoThemeAccessibilityEnum.AAA] - (Opcional) Nível de acessibilidade a ser aplicado ao tema, como AA ou AAA. Se não for informado, por padrão a acessibilidade será AAA.
    */
-  setTheme(theme: PoTheme, themeType: PoThemeTypeEnum = PoThemeTypeEnum.light): void {
+  setTheme(
+    theme: PoTheme,
+    themeType: PoThemeTypeEnum = PoThemeTypeEnum.light,
+    accessibility: PoThemeAccessibilityEnum = PoThemeAccessibilityEnum.AAA
+  ): void {
     // Change theme name, remove special characteres and number, replace space with dash
-    theme.name = theme.name
-      .toLowerCase()
-      .replace(/[^a-zA-Z ]/g, '')
-      .replace(/\s+/g, '-');
-    theme.active = themeType;
+    this.formatTheme(theme, themeType, accessibility);
 
-    const _themeType = theme.type[PoThemeTypeEnum[themeType]];
+    const _themeActive =
+      Array.isArray(theme.type) && theme.type.length > 1
+        ? theme.type.find(e => e.accessibility === accessibility)
+        : theme.type;
+
+    const _themeType = _themeActive[PoThemeTypeEnum[themeType]];
     if (!_themeType) {
       return;
     }
-
+    
     const colorStyles = _themeType.color ? this.generateThemeStyles(_themeType.color) : '';
     const perComponentStyles = _themeType.perComponent ? this.generatePerComponentStyles(_themeType.perComponent) : '';
     const onRootStyles = _themeType.onRoot ? this.generateAdditionalStyles(_themeType.onRoot) : '';
     const additionalStyles = this.generateAdditionalStyles(_themeType);
 
     const combinedStyles = `
-      .${theme.name}-${PoThemeTypeEnum[themeType]}:root {
+      html.${theme.name}-${PoThemeTypeEnum[themeType]}-${accessibility}:root {
         ${colorStyles}
         ${perComponentStyles}
         ${onRootStyles}
@@ -86,6 +99,87 @@ export class PoThemeService {
 
     this.applyThemeStyles(combinedStyles);
     this.changeThemeType(theme);
+  }
+
+  /**
+   * @docsPrivate
+   * 
+   * Aplica estilos customizados para o componente e para o root HTML, utilizando os tokens definidos.
+   * 
+   * Esse método é chamado para inserir ou atualizar estilos no DOM, aplicando tanto tokens de `onRoot` (ex: `--font-family: 'Roboto'`)
+   * quanto estilos específicos de componentes (`perComponent`, como `po-listbox [hidden]: { display: 'flex !important' }`).
+   * 
+   * O seletor CSS gerado leva em consideração o tema (`type`) e as configurações de acessibilidade (`accessibility`) do tema ativo.
+   * A classe do tema é aplicada no HTML e pode ser formatada como `html[class*="-light-highcontrast"]` para personalizações 
+   * em temas específicos.
+   * 
+   * @param {PoThemeActive} active - Objeto que define o tema ativo, com `type` e `accessibility`.
+   * @param {any} perComponent - Objeto contendo os estilos específicos para componentes a serem aplicados.
+   * @param {any} onRoot - Objeto contendo tokens de estilo que serão aplicados diretamente no seletor `:root` do HTML.
+   * 
+   * @example
+   * 
+   * // Exemplo de utilização com um tema ativo e tokens de estilo
+   * const themeActive = { type: 'light', accessibility: 'highcontrast' };
+   * const perComponentStyles = {
+   *   'po-listbox [hidden]': {
+   *     'display': 'flex !important'
+   *   }
+   * };
+   * const onRootStyles = {
+   *   '--font-family': 'Roboto',
+   *   '--background-color': '#fff'
+   * };
+   * 
+   * this.setPerComponentAndOnRoot(themeActive, perComponentStyles, onRootStyles);
+   * 
+   * // Resultado:
+   * // Gera e aplica os seguintes estilos no DOM
+   * // html[class*="-light-highcontrast"]:root {
+   * //   --font-family: 'Roboto';
+   * //   --background-color: '#fff';
+   * //   po-listbox [hidden] {
+   * //     display: flex !important;
+   * //   }
+   * // }
+   * 
+   * @docsPrivate
+   */
+  public setPerComponentAndOnRoot(active: PoThemeActive, perComponent: any, onRoot: any) {
+    const perComponentStyles = perComponent ? this.generatePerComponentStyles(perComponent) : '';
+    const onRootStyles = onRoot ? this.generateAdditionalStyles(onRoot) : '';
+
+    let selector = 'html';
+    const typeSelector = active.type !== undefined ? `-${PoThemeTypeEnum[active.type]}` : '';
+    const accessibilitySelector = active.accessibility !== undefined ? `-${PoThemeAccessibilityEnum[active.accessibility]}` : '';
+
+    if (typeSelector && accessibilitySelector) {
+      // Quando ambos type e accessibility estão presentes
+      selector += `[class*="${typeSelector}${accessibilitySelector}"]`;
+    } else if (!typeSelector && accessibilitySelector) {
+      // Quando só accessibility está presente
+      selector += `[class$="${accessibilitySelector}"]`;
+    } else if (typeSelector) {
+      // Quando só type está presente
+      selector += `[class*="${typeSelector}"]`;
+    }
+
+    const styleCss = `
+      ${selector}:root {
+        ${perComponentStyles}
+        ${onRootStyles}
+      }
+    `;
+
+    let styleElement = document.head.querySelector('#baseStyle'); 
+    if (!styleElement) {
+      styleElement = this.renderer.createElement('style');
+      styleElement.id = 'baseStyle';
+      this.renderer.appendChild(styleElement, this.renderer.createText(styleCss));
+      this.renderer.appendChild(document.head, styleElement);
+    } else {
+      this.renderer.appendChild(styleElement, this.renderer.createText(styleCss));
+    }
   }
 
   /**
@@ -109,8 +203,8 @@ export class PoThemeService {
    * @param styleCss Os estilos CSS a serem aplicados.
    */
   private applyThemeStyles(styleCss: string): void {
-    const styleElement = this.createStyleElement(styleCss);
-    const existingStyleElement = document.head.querySelector('#pouiTheme');
+    const styleElement = this.createStyleElement(styleCss, 'theme');
+    const existingStyleElement = document.head.querySelector('#theme');
 
     if (existingStyleElement) {
       this.renderer.removeChild(document.head, existingStyleElement);
@@ -121,8 +215,13 @@ export class PoThemeService {
 
   private changeThemeType(theme: PoTheme) {
     this.cleanThemeActive();
-    this.setThemeActive(theme);
-    document.getElementsByTagName('html')[0].classList.add(...[`${theme.name}-${PoThemeTypeEnum[theme.active]}`]);
+    this.setThemeLocal(theme);
+
+    document
+      .getElementsByTagName('html')[0]
+      .classList.add(...[
+        `${theme.name}-${PoThemeTypeEnum[this.getActiveTypeFromTheme(theme.active)]}-${PoThemeAccessibilityEnum[this.getActiveAccessibilityFromTheme(theme.active)]}`
+      ]);
   }
 
   /**
@@ -134,8 +233,44 @@ export class PoThemeService {
    */
   persistThemeActive() {
     const _theme = this.getThemeActive();
-    this.setTheme(_theme, _theme.active);
+    this.setTheme(
+      _theme,
+      this.getActiveTypeFromTheme(_theme.active),
+      this.getActiveAccessibilityFromTheme(_theme.active)
+    );
     return _theme;
+  }
+
+  private formatTheme(theme, themeType, accessibility) {
+    theme.name = theme.name
+      .toLowerCase()
+      .replace(/[^a-zA-Z ]/g, '')
+      .replace(/\s+/g, '-');
+    theme.active = { type: themeType, accessibility: accessibility };
+  }
+  
+  applyTheme(theme?: any): any {
+    const _localTheme = this.getThemeActive();
+
+    if (!theme) {
+      if (_localTheme) {
+        this.persistThemeActive();
+        return _localTheme;
+      }
+      return undefined;
+    }
+
+    const _type = this.getActiveTypeFromTheme(theme.active);
+    const _accessibility = this.getActiveAccessibilityFromTheme(theme.active);
+
+    if (_localTheme && JSON.stringify(_localTheme) === JSON.stringify(theme)) {
+      this.persistThemeActive();
+      return _localTheme;
+    }
+
+    this.formatTheme(theme, _type, _accessibility);
+    this.setTheme(theme, _type, _accessibility);
+    return theme;
   }
 
   /**
@@ -147,7 +282,7 @@ export class PoThemeService {
    */
   changeCurrentThemeType(type: PoThemeTypeEnum): void {
     const _theme = this.getThemeActive();
-    _theme.active = type;
+    typeof _theme.active === 'object' ? (_theme.active.type = type) : (_theme.active = type);
     this.changeThemeType(_theme);
   }
 
@@ -157,8 +292,20 @@ export class PoThemeService {
    */
   cleanThemeActive(): void {
     const _theme = this.getThemeActive();
-    document.getElementsByTagName('html')[0].classList.remove(`${_theme.name}-${PoThemeTypeEnum[_theme.active]}`);
+    document
+      .getElementsByTagName('html')[0]
+      .classList.remove(
+        `${_theme.name}-${PoThemeTypeEnum[this.getActiveTypeFromTheme(_theme.active)]}-${PoThemeAccessibilityEnum[this.getActiveAccessibilityFromTheme(_theme.active)]}`
+      );
     localStorage.removeItem('totvs-theme');
+  }
+
+  private getActiveTypeFromTheme(active): PoThemeTypeEnum {
+    return typeof active === 'object' ? active.type : active;
+  }
+
+  private getActiveAccessibilityFromTheme(active): PoThemeAccessibilityEnum {
+    return typeof active === 'object' ? active.accessibility : PoThemeAccessibilityEnum.AAA;
   }
 
   /**
@@ -167,7 +314,7 @@ export class PoThemeService {
    * Este método define um dados do tema e o armazena.
    * @param theme Os tokens de tema contendo os estilos adicionais a serem gerados.
    */
-  private setThemeActive(theme: PoTheme): void {
+  private setThemeLocal(theme: PoTheme): void {
     if (theme) {
       localStorage.setItem('totvs-theme', JSON.stringify(theme));
       this.theme = theme;
@@ -194,12 +341,13 @@ export class PoThemeService {
    * @docsPrivate
    *
    * Gera estilos CSS com base nos tokens de cores fornecidos.
-   * @param themeColor Os tokens de cor a serem usados para gerar os estilos.
+   * @param css Os tokens de cor a serem usados para gerar os estilos.
+   * @param id id do style a ser aplicado.
    * @returns Uma string contendo os estilos CSS gerados.
    */
-  private createStyleElement(css: string): HTMLStyleElement {
+  private createStyleElement(css: string, id: string): HTMLStyleElement {
     const styleElement = this.renderer.createElement('style');
-    styleElement.id = 'pouiTheme';
+    styleElement.id = id;
     this.renderer.appendChild(styleElement, this.renderer.createText(css));
     return styleElement;
   }
@@ -327,5 +475,47 @@ export class PoThemeService {
     svg = svg.concat(`%3E%3C/path%3E%3C/svg%3E");`);
 
     return svg;
+  }
+
+  /**
+   * Define o tipo (light/dark) quando um tema está sendo aplicado.
+   *
+   * @param {PoTheme} theme - Objeto contendo as definições de tema a serem aplicadas no componente.
+   * @param {PoThemeTypeEnum} [themeType=PoThemeTypeEnum.light] - (Opcional) Tipo de tema a ser aplicado, podendo ser 'light' (claro) ou 'dark' (escuro). Por padrão, o tema claro é aplicado.
+   */
+  setThemeType(theme: PoTheme, themeType: PoThemeTypeEnum = PoThemeTypeEnum.light) {
+    const _accessibility = typeof theme.active === 'object' ? theme.active.accessibility : PoThemeAccessibilityEnum.AAA;
+    this.setTheme(theme, themeType, _accessibility);
+  }
+
+  /**
+   *  Define o tipo (light/dark) para um tema já ativo.
+   *
+   * @param {PoThemeTypeEnum} [themeType=PoThemeTypeEnum.light] - (Opcional) Tipo de tema a ser aplicado, podendo ser 'light' (claro) ou 'dark' (escuro). Por padrão, o tema claro é aplicado.
+   */
+  setCurrentThemeType(themeType: PoThemeTypeEnum = PoThemeTypeEnum.light) {
+    const _theme = this.getThemeActive();
+    this.setThemeType(_theme, themeType);
+  }
+
+  /**
+   * Define o nivel de acessibilidade quando um tema está sendo aplicado.
+   *
+   * @param {PoTheme} theme - Objeto contendo as definições de tema a serem aplicadas no componente.
+   * @param {PoThemeAccessibilityEnum} [accessibility=PoThemeAccessibilityEnum.AAA] - (Opcional) Nível de acessibilidade a ser aplicado ao tema, como AA ou AAA. Se não for informado, por padrão a acessibilidade será AAA.
+   */
+  setThemeAccessibility(theme: PoTheme, accessibility: PoThemeAccessibilityEnum = PoThemeAccessibilityEnum.AAA) {
+    const _type = (typeof theme.active === 'object' ? theme.active.type : theme.active) || 0;
+    this.setTheme(theme, _type, accessibility);
+  }
+
+  /**
+   * Define o nivel de acessibilidade para um tema já ativo.
+   *
+   * @param {PoThemeAccessibilityEnum} [accessibility=PoThemeAccessibilityEnum.AAA] - (Opcional) Nível de acessibilidade a ser aplicado ao tema, como AA ou AAA. Se não for informado, por padrão a acessibilidade será AAA.
+   */
+  setCurrentThemeAccessibility(accessibility: PoThemeAccessibilityEnum = PoThemeAccessibilityEnum.AAA) {
+    const _theme = this.getThemeActive();
+    this.setThemeAccessibility(_theme, accessibility);
   }
 }
