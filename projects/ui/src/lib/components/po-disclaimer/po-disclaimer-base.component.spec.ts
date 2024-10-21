@@ -2,6 +2,7 @@ import { PoLanguageService } from './../../services/po-language/po-language.serv
 import { PoDisclaimerBaseComponent } from './po-disclaimer-base.component';
 
 import { expectSettersMethod } from './../../util-test/util-expect.spec';
+import { PoDisclaimerLiterals } from './po-disclaimer.literals';
 
 describe('PoDisclaimerBaseComponent', () => {
   const component = new PoDisclaimerBaseComponent(new PoLanguageService());
@@ -71,6 +72,9 @@ describe('PoDisclaimerBaseComponent', () => {
 
   it('should set aria-label', () => {
     component.label = 'Label';
+    component.literals = {
+      ...PoDisclaimerLiterals['en']
+    };
     expect(component.setAriaLabel()).toContain('Label Remove');
   });
 
