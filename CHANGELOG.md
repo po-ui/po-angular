@@ -2,6 +2,14 @@
 
 All notable changes to this project will be documented in this file. See [standard-version](https://github.com/conventional-changelog/standard-version) for commit guidelines.
 
+### [17.26.4](https://github.com/po-ui/po-angular/compare/v17.26.3...v17.26.4) (2024-10-21)
+
+
+### Bug Fixes
+
+* **page-login:** corrige literals rememberUser ([09a1a80](https://github.com/po-ui/po-angular/commit/09a1a80e98d001ffb2fe8c4481137ebd67167e89))
+* **table:** aplica regra indeterminate no checkbox ([1ec244f](https://github.com/po-ui/po-angular/commit/1ec244faf96ef5ed0f8321761db0d9581c200a8c))
+
 ### [17.26.3](https://github.com/po-ui/po-angular/compare/v17.26.2...v17.26.3) (2024-10-14)
 
 
