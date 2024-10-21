@@ -8,6 +8,7 @@ import { PoCheckboxGroupOption } from '@po-ui/ng-components';
 })
 export class SamplePoContainerLabsComponent implements OnInit {
   content: string;
+  title: string;
   height: number;
   properties: Array<string>;
 
@@ -21,6 +22,7 @@ export class SamplePoContainerLabsComponent implements OnInit {
   }
 
   restore() {
+    this.title = undefined;
     this.content = undefined;
     this.height = undefined;
     this.properties = [];
