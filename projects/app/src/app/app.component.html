@@ -28,6 +28,32 @@
             [(ngModel)]="inputValueAA"
             p-placeholder="Digite algo"
           ></po-input>
+
+          <br />
+
+          <po-input
+            p-label="input text"
+            p-help="teste help"
+            p-error-pattern="Nome inválido. Por favor, use apenas letras."
+            p-pattern="^[a-zA-Z\s]*$"
+            p-icon="po-icon-user"
+            p-clean="true"
+            [(ngModel)]="inputValueAA"
+            p-placeholder="Digite algo"
+            p-disabled="true"
+          ></po-input>
+          <br />
+          <po-input
+            p-label="input text"
+            p-help="teste help"
+            p-error-pattern="Nome inválido. Por favor, use apenas letras."
+            p-pattern="^[a-zA-Z\s]*$"
+            p-icon="po-icon-user"
+            p-clean="true"
+            [(ngModel)]="inputValueAA"
+            p-placeholder="Digite algo"
+            p-readonly="true"
+          ></po-input>
         </div>
 
         <!-- Acessibilidade AAA -->
@@ -42,6 +68,30 @@
             [(ngModel)]="inputValueAAA"
             p-placeholder="Digite algo"
           ></po-input>
+          <br />
+          <po-input
+            p-label="input text"
+            p-help="teste help"
+            p-error-pattern="Nome inválido. Por favor, use apenas letras."
+            p-pattern="^[a-zA-Z\s]*$"
+            p-icon="po-icon-user"
+            p-clean="true"
+            [(ngModel)]="inputValueAA"
+            p-placeholder="Digite algo"
+            p-disabled="true"
+          ></po-input>
+          <br />
+          <po-input
+            p-label="input text"
+            p-help="teste help"
+            p-error-pattern="Nome inválido. Por favor, use apenas letras."
+            p-pattern="^[a-zA-Z\s]*$"
+            p-icon="po-icon-user"
+            p-clean="true"
+            [(ngModel)]="inputValueAA"
+            p-placeholder="Digite algo"
+            p-readonly="true"
+          ></po-input>
         </div>
       </div>
 
@@ -49,7 +99,9 @@
       <div class="content">
         <div>INPUT - password</div>
 
+        <!-- Acessibilidade AA -->
         <div class="accessibility-AA">
+          <!-- Campo normal -->
           <po-password
             name="passwordAA"
             p-label="Password"
@@ -61,9 +113,35 @@
             [(ngModel)]="passwordValueAA"
             p-placeholder="Digite sua senha"
           ></po-password>
+          <br />
+          <!-- Campo desabilitado -->
+          <po-password
+            name="passwordAADisabled"
+            p-label="Password"
+            p-help="Campo desabilitado"
+            p-icon="po-icon-lock"
+            p-clean="true"
+            [(ngModel)]="passwordValueAADisabled"
+            p-placeholder="Campo desabilitado"
+            p-disabled="true"
+          ></po-password>
+          <br />
+          <!-- Campo somente leitura -->
+          <po-password
+            name="passwordAAReadonly"
+            p-label="Password"
+            p-help="Campo somente leitura"
+            p-icon="po-icon-lock"
+            p-clean="true"
+            [(ngModel)]="passwordValueAAReadonly"
+            p-placeholder="Campo somente leitura"
+            p-readonly="true"
+          ></po-password>
         </div>
 
+        <!-- Acessibilidade AAA -->
         <div class="accessibility-AAA">
+          <!-- Campo normal -->
           <po-password
             name="passwordAAA"
             p-label="Password"
@@ -75,6 +153,30 @@
             [(ngModel)]="passwordValueAAA"
             p-placeholder="Digite sua senha"
           ></po-password>
+          <br />
+          <!-- Campo desabilitado -->
+          <po-password
+            name="passwordAAADisabled"
+            p-label="Password"
+            p-help="Campo desabilitado"
+            p-icon="po-icon-lock"
+            p-clean="true"
+            [(ngModel)]="passwordValueAAADisabled"
+            p-placeholder="Campo desabilitado"
+            p-disabled="true"
+          ></po-password>
+          <br />
+          <!-- Campo somente leitura -->
+          <po-password
+            name="passwordAAAReadonly"
+            p-label="Password"
+            p-help="Campo somente leitura"
+            p-icon="po-icon-lock"
+            p-clean="true"
+            [(ngModel)]="passwordValueAAAReadonly"
+            p-placeholder="Campo somente leitura"
+            p-readonly="true"
+          ></po-password>
         </div>
       </div>
 
@@ -82,7 +184,9 @@
       <div class="content">
         <div>INPUT - decimal</div>
 
+        <!-- Acessibilidade AA -->
         <div class="accessibility-AA">
+          <!-- Campo normal -->
           <po-decimal
             name="decimalAA"
             p-label="Decimal"
@@ -97,9 +201,39 @@
             p-pattern="^\d{1,4}(\.\d{1,2})?$"
             p-error-pattern="Valor inválido. Insira um número até 1000 com até 2 casas decimais."
           ></po-decimal>
+
+          <br />
+
+          <!-- Campo desabilitado -->
+          <po-decimal
+            name="decimalAADisabled"
+            p-label="Decimal"
+            p-help="Campo desabilitado"
+            p-icon="po-icon-finance"
+            p-clean="true"
+            [(ngModel)]="decimalValueAADisabled"
+            p-placeholder="Campo desabilitado"
+            p-disabled="true"
+          ></po-decimal>
+
+          <br />
+
+          <!-- Campo somente leitura -->
+          <po-decimal
+            name="decimalAAReadonly"
+            p-label="Decimal"
+            p-help="Campo somente leitura"
+            p-icon="po-icon-finance"
+            p-clean="true"
+            [(ngModel)]="decimalValueAAReadonly"
+            p-placeholder="Campo somente leitura"
+            p-readonly="true"
+          ></po-decimal>
         </div>
 
+        <!-- Acessibilidade AAA -->
         <div class="accessibility-AAA">
+          <!-- Campo normal -->
           <po-decimal
             name="decimalAAA"
             p-label="Decimal"
@@ -112,14 +246,44 @@
             p-thousand-maxlength="13"
             p-max="9999999999999.99"
           ></po-decimal>
+
+          <br />
+
+          <!-- Campo desabilitado -->
+          <po-decimal
+            name="decimalAAADisabled"
+            p-label="Decimal"
+            p-help="Campo desabilitado"
+            p-icon="po-icon-finance"
+            p-clean="true"
+            [(ngModel)]="decimalValueAAADisabled"
+            p-placeholder="Campo desabilitado"
+            p-disabled="true"
+          ></po-decimal>
+
+          <br />
+
+          <!-- Campo somente leitura -->
+          <po-decimal
+            name="decimalAAAReadonly"
+            p-label="Decimal"
+            p-help="Campo somente leitura"
+            p-icon="po-icon-finance"
+            p-clean="true"
+            [(ngModel)]="decimalValueAAAReadonly"
+            p-placeholder="Campo somente leitura"
+            p-readonly="true"
+          ></po-decimal>
         </div>
       </div>
 
+      <!-- email -->
       <div class="content">
         <div>INPUT - email</div>
 
         <!-- Acessibilidade AA -->
         <div class="accessibility-AA">
+          <!-- Campo normal -->
           <po-email
             name="emailAA"
             p-label="Email"
@@ -131,10 +295,35 @@
             p-error-pattern="Email inválido. Por favor, insira um email válido."
             p-pattern="^[a-z0-9._%+-]+@[a-z0-9.-]+\.[a-z]{2,}$"
           ></po-email>
+          <br />
+          <!-- Campo desabilitado -->
+          <po-email
+            name="emailAADisabled"
+            p-label="Email"
+            p-help="Campo desabilitado"
+            p-icon="po-icon-mail"
+            p-clean="true"
+            [(ngModel)]="emailValueAADisabled"
+            p-placeholder="Campo desabilitado"
+            p-disabled="true"
+          ></po-email>
+          <br />
+          <!-- Campo somente leitura -->
+          <po-email
+            name="emailAAReadonly"
+            p-label="Email"
+            p-help="Campo somente leitura"
+            p-icon="po-icon-mail"
+            p-clean="true"
+            [(ngModel)]="emailValueAAReadonly"
+            p-placeholder="Campo somente leitura"
+            p-readonly="true"
+          ></po-email>
         </div>
 
         <!-- Acessibilidade AAA -->
         <div class="accessibility-AAA">
+          <!-- Campo normal -->
           <po-email
             name="emailAAA"
             p-label="Email"
@@ -146,6 +335,30 @@
             p-error-pattern="Email inválido. Por favor, insira um email válido."
             p-pattern="^[a-z0-9._%+-]+@[a-z0-9.-]+\.[a-z]{2,}$"
           ></po-email>
+          <br />
+          <!-- Campo desabilitado -->
+          <po-email
+            name="emailAAADisabled"
+            p-label="Email"
+            p-help="Campo desabilitado"
+            p-icon="po-icon-mail"
+            p-clean="true"
+            [(ngModel)]="emailValueAAADisabled"
+            p-placeholder="Campo desabilitado"
+            p-disabled="true"
+          ></po-email>
+          <br />
+          <!-- Campo somente leitura -->
+          <po-email
+            name="emailAAAReadonly"
+            p-label="Email"
+            p-help="Campo somente leitura"
+            p-icon="po-icon-mail"
+            p-clean="true"
+            [(ngModel)]="emailValueAAAReadonly"
+            p-placeholder="Campo somente leitura"
+            p-readonly="true"
+          ></po-email>
         </div>
       </div>
 
@@ -155,11 +368,12 @@
 
         <!-- Acessibilidade AA -->
         <div class="accessibility-AA">
+          <!-- Campo normal -->
           <po-number
             name="numberAA"
             p-label="Number"
             p-help="Informe um número inteiro entre 1 e 100"
-            p-icon="po-icon-number"
+            p-icon="ph ph-list-numbers"
             p-clean="true"
             [(ngModel)]="numberValueAA"
             p-placeholder="Digite um número"
@@ -168,15 +382,40 @@
             p-error-pattern="Número inválido. Insira um valor entre 1 e 100."
             p-pattern="^[1-9][0-9]?$|^100$"
           ></po-number>
+          <br />
+          <!-- Campo desabilitado -->
+          <po-number
+            name="numberAADisabled"
+            p-label="Number"
+            p-help="Campo desabilitado"
+            p-icon="ph ph-list-numbers"
+            p-clean="true"
+            [(ngModel)]="numberValueAADisabled"
+            p-placeholder="Campo desabilitado"
+            p-disabled="true"
+          ></po-number>
+          <br />
+          <!-- Campo somente leitura -->
+          <po-number
+            name="numberAAReadonly"
+            p-label="Number"
+            p-help="Campo somente leitura"
+            p-icon="ph ph-list-numbers"
+            p-clean="true"
+            [(ngModel)]="numberValueAAReadonly"
+            p-placeholder="Campo somente leitura"
+            p-readonly="true"
+          ></po-number>
         </div>
 
         <!-- Acessibilidade AAA -->
         <div class="accessibility-AAA">
+          <!-- Campo normal -->
           <po-number
             name="numberAAA"
             p-label="Number"
             p-help="Informe um número inteiro entre 1 e 1000"
-            p-icon="po-icon-number"
+            p-icon="ph ph-list-numbers"
             p-clean="true"
             [(ngModel)]="numberValueAAA"
             p-placeholder="Digite um número"
@@ -184,6 +423,30 @@
             p-max="1000"
             p-error-pattern="Número inválido. Insira um valor entre 1 e 1000."
             p-pattern="^[1-9][0-9]{0,2}$|^1000$"
+          ></po-number>
+          <br />
+          <!-- Campo desabilitado -->
+          <po-number
+            name="numberAAADisabled"
+            p-label="Number"
+            p-help="Campo desabilitado"
+            p-icon="ph ph-list-numbers"
+            p-clean="true"
+            [(ngModel)]="numberValueAAADisabled"
+            p-placeholder="Campo desabilitado"
+            p-disabled="true"
+          ></po-number>
+          <br />
+          <!-- Campo somente leitura -->
+          <po-number
+            name="numberAAAReadonly"
+            p-label="Number"
+            p-help="Campo somente leitura"
+            p-icon="ph ph-list-numbers"
+            p-clean="true"
+            [(ngModel)]="numberValueAAAReadonly"
+            p-placeholder="Campo somente leitura"
+            p-readonly="true"
           ></po-number>
         </div>
       </div>
@@ -203,6 +466,85 @@
         </div>
       </div>
 
+      <!-- login -->
+      <div class="content">
+        <div>LOGIN</div>
+
+        <!-- Acessibilidade AA -->
+        <div class="accessibility-AA">
+          <!-- Login padrão -->
+          <po-login
+            name="loginAA"
+            p-label="Login"
+            p-clean="true"
+            [(ngModel)]="loginValueAA"
+            p-placeholder="Digite seu login"
+            p-help="Informe seu login para acessar"
+            p-error-pattern="Login inválido. Use apenas letras e números."
+            p-pattern="^[a-zA-Z0-9]+$"
+          ></po-login>
+          <br />
+          <!-- Login desabilitado -->
+          <po-login
+            name="loginDisabledAA"
+            p-label="Login (desabilitado)"
+            p-clean="true"
+            [(ngModel)]="loginValueDisabledAA"
+            p-placeholder="Digite seu login"
+            p-disabled="true"
+            p-help="Este campo está desabilitado"
+          ></po-login>
+          <br />
+          <!-- Login somente leitura -->
+          <po-login
+            name="loginReadonlyAA"
+            p-label="Login (somente leitura)"
+            p-clean="true"
+            [(ngModel)]="loginValueReadonlyAA"
+            p-placeholder="Digite seu login"
+            p-readonly="true"
+            p-help="Este campo está em modo somente leitura"
+          ></po-login>
+        </div>
+
+        <!-- Acessibilidade AAA -->
+        <div class="accessibility-AAA">
+          <!-- Login padrão -->
+          <po-login
+            name="loginAAA"
+            p-label="Login"
+            p-clean="true"
+            [(ngModel)]="loginValueAAA"
+            p-placeholder="Digite seu login"
+            p-help="Informe seu login para acessar"
+            p-error-pattern="Login inválido. Use apenas letras e números."
+            p-pattern="^[a-zA-Z0-9]+$"
+          ></po-login>
+          <br />
+          <!-- Login desabilitado -->
+          <po-login
+            name="loginDisabledAAA"
+            p-label="Login (desabilitado)"
+            p-clean="true"
+            [(ngModel)]="loginValueDisabledAAA"
+            p-placeholder="Digite seu login"
+            p-disabled="true"
+            p-help="Este campo está desabilitado"
+          ></po-login>
+          <br />
+          <!-- Login somente leitura -->
+          <po-login
+            name="loginReadonlyAAA"
+            p-label="Login (somente leitura)"
+            p-clean="true"
+            [(ngModel)]="loginValueReadonlyAAA"
+            p-placeholder="Digite seu login"
+            p-readonly="true"
+            p-help="Este campo está em modo somente leitura"
+          ></po-login>
+        </div>
+      </div>
+
       <!-- radio -->
       <div class="content">
         <div>RADIO</div>
@@ -210,27 +552,152 @@
         <!-- Acessibilidade AA -->
         <div class="accessibility-AA">
           <div class="radio-option">
-            <po-radio
-              name="radioAA"
-              p-label="Opção 1"
+            <po-radio-group
+              name="radioGroupBasic1"
+              p-label="PO Radio Group"
               p-size="small"
-              [p-checked]="radioValueAAOption1"
-              (p-change-selected)="onRadioChangeAA('1')"
-            ></po-radio>
+              p-help="help message"
+              [(ngModel)]="radioSelect"
+              [p-options]="[
+                { label: 'Option 1', value: '1' },
+                { label: 'Option 2', value: '2' }
+              ]"
+            >
+            </po-radio-group>
+
+            <po-radio-group
+              name="radioGroupBasic2"
+              p-label="PO Radio Group"
+              p-size="small"
+              p-help="help message"
+              [p-disabled]="true"
+              [(ngModel)]="radioSelect"
+              [p-options]="[
+                { label: 'Option 1', value: '1' },
+                { label: 'Option 2', value: '2' }
+              ]"
+            >
+            </po-radio-group>
           </div>
         </div>
 
         <!-- Acessibilidade AAA -->
         <div class="accessibility-AAA">
           <div class="radio-option">
-            <po-radio
-              name="radioAAA"
-              p-label="Opção 1"
-              p-size="medium"
-              [p-checked]="radioValueAAAOption1"
-              (p-change-selected)="onRadioChangeAAA('1')"
-            ></po-radio>
+            <po-radio-group
+              name="radioGroupBasic3"
+              p-label="PO Radio Group"
+              p-help="help message"
+              [(ngModel)]="radioSelect"
+              [p-options]="[
+                { label: 'Option 1', value: '1' },
+                { label: 'Option 2', value: '2' }
+              ]"
+            >
+            </po-radio-group>
+
+            <po-radio-group
+              name="radioGroupBasic4"
+              p-label="PO Radio Group"
+              p-help="help message"
+              [p-disabled]="true"
+              [(ngModel)]="radioSelect"
+              [p-options]="[
+                { label: 'Option 1', value: '1' },
+                { label: 'Option 2', value: '2' }
+              ]"
+            >
+            </po-radio-group>
           </div>
+        </div>
+      </div>
+
+      <!-- URL -->
+      <div class="content">
+        <div>INPUT - URL</div>
+
+        <!-- Acessibilidade AA -->
+        <div class="accessibility-AA">
+          <po-url
+            name="urlAA"
+            p-label="URL"
+            p-help="Informe uma URL válida"
+            p-icon="po-icon-world"
+            p-clean="true"
+            [(ngModel)]="urlValueAA"
+            p-placeholder="Digite uma URL"
+            p-error-pattern="URL inválida. Por favor, insira uma URL válida."
+          ></po-url>
+
+          <br />
+
+          <!-- Exemplo com p-disabled -->
+          <po-url
+            name="urlAADisabled"
+            p-label="URL"
+            p-help="Campo desabilitado"
+            p-icon="po-icon-world"
+            p-clean="true"
+            [(ngModel)]="urlValueAADisabled"
+            p-placeholder="Campo desabilitado"
+            p-disabled="true"
+          ></po-url>
+
+          <br />
+
+          <!-- Exemplo com p-readonly -->
+          <po-url
+            name="urlAAReadonly"
+            p-label="URL"
+            p-help="Campo somente leitura"
+            p-icon="po-icon-world"
+            p-clean="true"
+            [(ngModel)]="urlValueAAReadonly"
+            p-placeholder="Campo somente leitura"
+            p-readonly="true"
+          ></po-url>
+        </div>
+
+        <!-- Acessibilidade AAA -->
+        <div class="accessibility-AAA">
+          <po-url
+            name="urlAAA"
+            p-label="URL"
+            p-help="Informe uma URL válida"
+            p-icon="po-icon-world"
+            p-clean="true"
+            [(ngModel)]="urlValueAAA"
+            p-placeholder="Digite uma URL"
+            p-error-pattern="URL inválida. Por favor, insira uma URL válida."
+          ></po-url>
+
+          <br />
+
+          <!-- Exemplo com p-disabled -->
+          <po-url
+            name="urlAAADisabled"
+            p-label="URL"
+            p-help="Campo desabilitado"
+            p-icon="po-icon-world"
+            p-clean="true"
+            [(ngModel)]="urlValueAAADisabled"
+            p-placeholder="Campo desabilitado"
+            p-disabled="true"
+          ></po-url>
+
+          <br />
+
+          <!-- Exemplo com p-readonly -->
+          <po-url
+            name="urlAAAReadonly"
+            p-label="URL"
+            p-help="Campo somente leitura"
+            p-icon="po-icon-world"
+            p-clean="true"
+            [(ngModel)]="urlValueAAAReadonly"
+            p-placeholder="Campo somente leitura"
+            p-readonly="true"
+          ></po-url>
         </div>
       </div>
 
@@ -247,6 +714,15 @@
             [p-options]="selectOptions"
           >
           </po-select>
+
+          <po-select
+            name="selectAA"
+            p-label="PO Select"
+            p-help="Select Help"
+            p-placeholder="Select Placeholder"
+            [p-options]="selectOptions"
+            p-disabled="true"
+          ></po-select>
         </div>
 
         <div class="accessibility-AAA">
@@ -258,6 +734,15 @@
             [p-options]="selectOptions"
           >
           </po-select>
+
+          <po-select
+            name="selectAA"
+            p-label="PO Select"
+            p-help="Select Help"
+            p-placeholder="Select Placeholder"
+            [p-options]="selectOptions"
+            p-disabled="true"
+          ></po-select>
         </div>
       </div>
 
@@ -271,7 +756,18 @@
             p-label="PO Combo"
             p-help="Select Help"
             p-placeholder="Select Placeholder"
+            p-clean="true"
             [p-options]="selectOptions"
+          ></po-combo>
+
+          <po-combo
+            name="combo"
+            p-label="PO Combo"
+            p-help="Select Help"
+            p-placeholder="Select Placeholder"
+            p-clean="true"
+            [p-options]="selectOptions"
+            p-disabled="true"
           ></po-combo>
         </div>
 
@@ -281,7 +777,18 @@
             p-label="PO Combo"
             p-help="Select Help"
             p-placeholder="Select Placeholder"
+            p-clear="true"
             [p-options]="selectOptions"
+          ></po-combo>
+
+          <po-combo
+            name="combo"
+            p-label="PO Combo"
+            p-help="Select Help"
+            p-placeholder="Select Placeholder"
+            p-clear="true"
+            [p-options]="selectOptions"
+            p-disabled="true"
           ></po-combo>
         </div>
       </div>
@@ -297,8 +804,15 @@
             [p-options]="multiOptions"
             p-help="Select Help"
             p-placeholder="Select Placeholder"
-          >
-          </po-multiselect>
+          ></po-multiselect>
+
+          <po-multiselect
+            p-label="PO Multiselect"
+            name="PO Multiselect"
+            [p-disabled]="true"
+            p-help="Select Help"
+            p-placeholder="Select Placeholder"
+          ></po-multiselect>
         </div>
 
         <div class="accessibility-AAA">
@@ -310,6 +824,14 @@
             p-placeholder="Select Placeholder"
           >
           </po-multiselect>
+
+          <po-multiselect
+            name="multiselect"
+            p-label="PO Multiselect"
+            [p-options]="multiOptions"
+            p-help="Select Help"
+            p-placeholder="Select Placeholder"
+          ></po-multiselect>
         </div>
       </div>
 
@@ -319,26 +841,16 @@
 
         <div class="accessibility-AA">
           <po-dropdown p-label="PO Dropdown" [p-actions]="[{ label: 'How to install PO' }]"> </po-dropdown>
+          <po-dropdown p-label="PO Dropdown" [p-actions]="[{ label: 'How to install PO' }]" p-disabled="true">
+          </po-dropdown>
         </div>
 
         <div class="accessibility-AAA">
           <po-dropdown p-label="PO Dropdown" [p-actions]="[{ label: 'How to install PO' }]"> </po-dropdown>
+          <po-dropdown p-label="PO Dropdown" [p-actions]="[{ label: 'How to install PO' }]" p-disabled="true">
+          </po-dropdown>
         </div>
       </div>
-
-      <!--  COPIAR TEMPLATE
-      <div class="content">
-        <div>
-        </div>
-
-        <div class="accessibility-AA">
-        </div>
-        
-        <div class="accessibility-AAA">
-        </div>
-
-      </div>
-      -->
     </div>
   </po-widget>
 </po-page-default>
