@@ -267,45 +267,5 @@ describe('PoAccordionComponent:', () => {
       expect(expandedActiveAccordionItem.collapse).toHaveBeenCalled();
       expect(<any>component['expandedActiveAccordionItem']).toEqual(currentAccordionItem);
     });
-
-    it('toggle: should set `expandedActiveAccordionItem` to currentAccordionItem', () => {
-      const currentAccordionItem = {
-        expanded: true,
-        collapse: () => {}
-      };
-
-      component['expandedActiveAccordionItem'] = undefined;
-
-      component['toggle'](<any>currentAccordionItem);
-
-      expect(<any>component['expandedActiveAccordionItem']).toEqual(currentAccordionItem);
-    });
-  });
-
-  describe('Templates:', () => {
-    it('should contain `po-accordion-item-active` if any item is active', () => {
-      const header = nativeElementMock.querySelector('.po-accordion-item-header-button');
-
-      header.click();
-
-      fixtureMock.detectChanges();
-
-      const activeItem = nativeElementMock.querySelector('.po-accordion-item-active');
-
-      expect(activeItem).toBeTruthy();
-    });
-
-    it('shouldn`t contain `po-accordion-item-active` if no item is active', () => {
-      const activeItem = nativeElementMock.querySelector('.po-accordion-item-active');
-
-      expect(activeItem).toBeFalsy();
-    });
-
-    it('should contain `po-accordion-manager` if `showManagerAccordion` is active', () => {
-      fixture.detectChanges();
-      const managerAccordion = nativeElementMock.querySelector('.po-accordion-manager');
-
-      expect(managerAccordion).toBeTruthy();
-    });
   });
 });

@@ -75,6 +75,8 @@
     "@angular/router": "~18.0.1",
     "@capacitor/core": "5.7.2",
     "@capacitor/network": "^5.0.7",
+    "@po-ui/ng-components": "^18.10.0",
+    "@po-ui/ng-storage": "^18.10.0",
     "@po-ui/style": "18.10.0",
     "capitalize": "^2.0.4",
     "colors": "1.4.0",
