@@ -923,16 +923,6 @@ describe('PoTableBaseComponent:', () => {
       expect(component.allUnselected.emit).toHaveBeenCalledWith(rows);
     });
 
-    it('updateParentRowSelection: should set parentRow.$selected to true if all child items are selected', () => {
-      const parentRow: any = {
-        detail: [{ $selected: true }, { $selected: true }, { $selected: true }]
-      };
-
-      component.updateParentRowSelection(parentRow);
-
-      expect(parentRow.$selected).toBe(true);
-    });
-
     it('updateParentRowSelection: should set parentRow.$selected to false if all child items are not selected', () => {
       const parentRow: any = {
         detail: [{ $selected: false }, { $selected: false }, { $selected: false }]
@@ -941,6 +931,16 @@ describe('PoTableBaseComponent:', () => {
       component.updateParentRowSelection(parentRow);
 
       expect(parentRow.$selected).toBe(false);
+    });
+
+    it('updateParentRowSelection: should set parentRow.$selected to true if all child items are selected', () => {
+      const parentRow: any = {
+        detail: [{ $selected: true }, { $selected: true }, { $selected: true }]
+      };
+
+      component.updateParentRowSelection(parentRow);
+
+      expect(parentRow.$selected).toBe(true);
     });
 
     it('updateParentRowSelection: should set parentRow.$selected to null if some child items are selected and some are not', () => {
