@@ -49,4 +49,10 @@ export interface PoLookupLiterals {
 
   /** Texto exibido no título do disclaimer. */
   modalDisclaimerGroupTitle?: string;
+
+  /** Texto usado no leitor de tela para acessibilidade. Aplica-se ao ícone de pesquisa. */
+  search?: string;
+
+  /** Texto usado no leitor de tela para acessibilidade. Aplica-se ao ícone de limpar. */
+  clean?: string;
 }

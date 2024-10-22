@@ -19,6 +19,7 @@
           name="contentSearch"
           [(ngModel)]="searchValue"
           [placeholder]="literals.modalPlaceholder"
+          (keydown.enter)="search()"
           type="text"
         />
       </div>
