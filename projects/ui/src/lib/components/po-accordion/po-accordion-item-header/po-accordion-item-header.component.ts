@@ -11,6 +11,7 @@ export class PoAccordionItemHeaderComponent {
   private language: string = poLocaleDefault;
 
   @ViewChild('accordionElement', { read: ElementRef, static: true }) accordionElement: ElementRef;
+  @ViewChild('accordionHeaderElement', { read: ElementRef, static: true }) accordionHeaderElement: ElementRef;
 
   @Input('p-expanded') expanded: boolean = false;
 
@@ -32,5 +33,15 @@ export class PoAccordionItemHeaderComponent {
     this.expanded = !this.expanded;
 
     this.toggle.emit(this.expanded);
+  }
+
+  getTooltip() {
+    const widthContainer = this.accordionElement.nativeElement.offsetWidth - 56;
+    const widthHeaderElement = this.accordionHeaderElement.nativeElement.offsetWidth;
+
+    if (widthHeaderElement >= widthContainer) {
+      return this.label;
+    }
+    return null;
   }
 }

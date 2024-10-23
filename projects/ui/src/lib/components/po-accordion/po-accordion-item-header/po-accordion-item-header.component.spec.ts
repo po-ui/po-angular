@@ -38,6 +38,26 @@ describe('PoAccordionItemHeaderComponent:', () => {
       expect(component.expanded).toBe(expectedValue);
       expect(component.toggle.emit).toHaveBeenCalledWith(expectedValue);
     });
+
+    it('getTooltip: should return label', () => {
+      component.label = 'my Label';
+      spyOnProperty(component.accordionElement.nativeElement, 'offsetWidth').and.returnValue(156);
+
+      spyOnProperty(component.accordionHeaderElement.nativeElement, 'offsetWidth').and.returnValue(100);
+
+      const tooltip = component.getTooltip();
+      expect(tooltip).toBe(component.label);
+    });
+
+    it('getTooltip: should not return label', () => {
+      component.label = 'my Label';
+      spyOnProperty(component.accordionElement.nativeElement, 'offsetWidth').and.returnValue(200);
+
+      spyOnProperty(component.accordionHeaderElement.nativeElement, 'offsetWidth').and.returnValue(100);
+
+      const tooltip = component.getTooltip();
+      expect(tooltip).toBe(null);
+    });
   });
 
   describe('Templates:', () => {

@@ -4,6 +4,7 @@ import { NgModule } from '@angular/core';
 import { PoDividerModule } from '../po-divider';
 import { PoIconModule } from '../po-icon';
 import { PoTagModule } from '../po-tag';
+import { PoTooltipModule } from '../../directives/po-tooltip/po-tooltip.module';
 
 import { PoAccordionItemBodyComponent } from './po-accordion-item-body/po-accordion-item-body.component';
 import { PoAccordionItemHeaderComponent } from './po-accordion-item-header/po-accordion-item-header.component';
@@ -43,7 +44,7 @@ import { PoAccordionComponent } from './po-accordion.component';
  * ```
  */
 @NgModule({
-  imports: [CommonModule, PoTagModule, PoIconModule, PoDividerModule],
+  imports: [CommonModule, PoTagModule, PoIconModule, PoDividerModule, PoTooltipModule],
   declarations: [
     PoAccordionComponent,
     PoAccordionItemBodyComponent,
