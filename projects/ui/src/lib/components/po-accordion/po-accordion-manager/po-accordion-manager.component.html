@@ -1,6 +1,12 @@
 <div class="po-accordion-manager-header">
-  <button class="po-accordion-manager-button po-clickable" (click)="onClick()" [attr.aria-expanded]="expandedAllItems">
-    <div class="po-text-ellipsis po-accordion-manager-button-content">
+  <button
+    #accordionHeaderButtonManagerElement
+    class="po-accordion-manager-button po-clickable"
+    (click)="onClick()"
+    [attr.aria-expanded]="expandedAllItems"
+    [p-tooltip]="getTooltip()"
+  >
+    <div #accordionHeaderManagerElement class="po-text-ellipsis po-accordion-manager-button-content">
       {{ expandedAllItems ? literals.closeAllItems : literals.expandAllItems }}
     </div>
     <po-icon
