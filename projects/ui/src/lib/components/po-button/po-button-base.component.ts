@@ -106,6 +106,15 @@ export class PoButtonBaseComponent {
    */
   @Input('p-icon') icon?: string | TemplateRef<void>;
 
+  
+  /**
+   * @optional
+   *
+   * @description
+   * Define o tipo do botão.
+   */
+  @Input('p-type') type?: 'submit' | 'button' | 'reset' = 'button';
+
   /** Ação que será executada quando o usuário clicar sobre o `po-button`. */
   @Output('p-click') click = new EventEmitter<null>();
 
