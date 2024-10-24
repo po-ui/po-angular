@@ -66,6 +66,10 @@ export class PoPageDefaultComponent extends PoPageDefaultBaseComponent implement
     return isTypeof(action.disabled, 'function') ? action.disabled(action) : action.disabled;
   }
 
+  actionIsVisible(action: any) {
+    return isTypeof(action.visible, 'function') ? action.visible(action) : action.visible;
+  }
+
   callAction(item: PoPageAction): void {
     if (item.url) {
       isExternalLink(item.url) ? openExternalLink(item.url) : this.router.navigate([item.url]);
@@ -75,6 +79,9 @@ export class PoPageDefaultComponent extends PoPageDefaultBaseComponent implement
   }
 
   hasPageHeader() {
+    this.visibleActions = this.getVisibleActions();
+    this.setDropdownActions();
+
     return !!(
       this.title ||
       (this.visibleActions && this.visibleActions.length) ||
@@ -86,6 +93,10 @@ export class PoPageDefaultComponent extends PoPageDefaultBaseComponent implement
     if (this.visibleActions.length > this.limitPrimaryActions) {
       this.dropdownActions = this.visibleActions.slice(this.limitPrimaryActions - 1);
     }
+  }
+
+  getVisibleActions() {
+    return this.actions.filter(action => this.actionIsVisible(action) !== false);
   }
 
   private onResize(event: Event): void {
