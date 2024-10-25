@@ -28,6 +28,7 @@ jobs:
   #         $DISCORD_WEBHOOK_URL
 
   lint:
+    if: github.event_name != 'pull_request' || github.event.action != 'closed'
     runs-on: ubuntu-20.04
 
     # As etapas do workflow são definidas nessa tag.
@@ -55,7 +56,7 @@ jobs:
 
   build:
     name: Build packages
-
+    if: github.event_name != 'pull_request' || github.event.action != 'closed'
     runs-on: ubuntu-20.04
 
     steps:
@@ -77,6 +78,7 @@ jobs:
 
   sonar_analysis:
     name: SonarQube Analysis
+    if: github.event_name != 'pull_request' || github.event.action != 'closed'
     runs-on: ubuntu-20.04
     needs: [test-ui, test-templates, test-code-editor, test-storage, test-sync]
     steps:
@@ -151,7 +153,7 @@ jobs:
 
   test-ui:
     name: Test ui
-
+    if: github.event_name != 'pull_request' || github.event.action != 'closed'
     runs-on: ubuntu-20.04
 
     steps:
@@ -174,7 +176,7 @@ jobs:
 
   test-templates:
     name: Test templates
-
+    if: github.event_name != 'pull_request' || github.event.action != 'closed'
     runs-on: ubuntu-20.04
 
     steps:
@@ -198,7 +200,7 @@ jobs:
 
   test-code-editor:
     name: Test code editor
-
+    if: github.event_name != 'pull_request' || github.event.action != 'closed'
     runs-on: ubuntu-20.04
 
     steps:
@@ -221,7 +223,7 @@ jobs:
 
   test-storage:
     name: Test storage
-
+    if: github.event_name != 'pull_request' || github.event.action != 'closed'
     runs-on: ubuntu-20.04
 
     steps:
@@ -244,7 +246,7 @@ jobs:
 
   test-sync:
     name: Test sync
-
+    if: github.event_name != 'pull_request' || github.event.action != 'closed'
     runs-on: ubuntu-20.04
 
     steps:
