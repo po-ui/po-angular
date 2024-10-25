@@ -2,6 +2,21 @@
 
 All notable changes to this project will be documented in this file. See [standard-version](https://github.com/conventional-changelog/standard-version) for commit guidelines.
 
+## [18.11.0](https://github.com/po-ui/po-angular/compare/v18.10.0...v18.11.0) (2024-10-21)
+
+
+### Features
+
+* **dynamic-form:** cria propriedade `hideLabelStatus` na interface ([738f6f2](https://github.com/po-ui/po-angular/commit/738f6f22ea424396b797ef1e8bfa940d28e1c5b7))
+* **page-slide:** implementa definições do animalia-DS ([1ae9457](https://github.com/po-ui/po-angular/commit/1ae9457351bb162b13089d1f163f7f1dd813f6d4))
+* **switch:** cria propriedade `p-hide-label-status` ([929b241](https://github.com/po-ui/po-angular/commit/929b24134936397744621151f6ef7b058e78d337))
+
+
+### Bug Fixes
+
+* **page-login:** corrige literals `rememberUser` ([45c7d45](https://github.com/po-ui/po-angular/commit/45c7d4586e6606c0975e53b1feaf0bb81c12367b))
+* **table:** aplica regra indeterminate no checkbox ([9b90946](https://github.com/po-ui/po-angular/commit/9b9094685f567b90285cd2d92806974bc2985cb7))
+
 ### [18.10.0](https://github.com/po-ui/po-angular/compare/v18.9.0...v18.10.0) (2024-10-14)
 
 

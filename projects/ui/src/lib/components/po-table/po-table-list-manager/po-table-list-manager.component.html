@@ -31,8 +31,7 @@
         (keydown)="onKeyDown($event, option)"
         [p-disabled]="option.disabled || disabled || isFixed(option)"
         [p-value]="checkedOptions[option.value]"
-        p-label-off=" "
-        p-label-on=" "
+        [p-hide-label-status]="true"
       >
       </po-switch>
       <span class="po-table-list-manager-item-text">
