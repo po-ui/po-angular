@@ -19,12 +19,20 @@ import { convertToBoolean, convertToInt } from '../../utils/util';
  *
  * | Propriedade                                    | Descrição                                              | Valor Padrão                                     |
  * |------------------------------------------------|--------------------------------------------------------|--------------------------------------------------|
- * | **Default Values**                             |                                                        |                                                  |
- * | `--padding` &nbsp;                             | Preenchimento                                          | `1rem`                                           |
+ * | **Default Values - CONTENT **                  |                                                        |                                                  |
+ * | `--padding` &nbsp;                             | Preenchimento                                          | `var(--spacing-sm)`                              |
  * | `--border-radius` &nbsp;                       | Contém o valor do raio dos cantos do elemento&nbsp;    | `var(--border-radius-md)`                        |
  * | `--border-width` &nbsp;                        | Contém o valor da largura dos cantos do elemento&nbsp; | `var(--border-width-sm)`                         |
  * | `--border-color` &nbsp;                        | Cor da borda                                           | `var(--color-neutral-light-20)`                  |
  * | `--background` &nbsp;                          | Cor de background                                      | `var(--color-neutral-light-00)`                  |
+ * | **Default Values - TITLE **                    |                                                        |                                                  |
+ * | `--font-family` &nbsp;                         | Font aplicado ao titulo                                | `var(--font-family-theme)`                       |
+ * | `--line-weight` &nbsp;                         | Espessura da Fonte a ser aplicada do titulo            | `var(--font-weight-semibold)`                    |
+ * | `--line-height` &nbsp;                         | tamanho da linha do titulo                             | `var(--line-height-md)`                          |
+ * | `--text-color` &nbsp;                          | Cor do Texto do titulo                                 | `var(--color-neutral-dark-90)`                   |
+ * | `--font-size` &nbsp;                           | Tamanho da fonte do titulo                             | `1.125rem`                                       |
+ * | `--letter-spacing` &nbsp;                      | distancia entre letras do titulo                       | `0.017rem`                                       |
+ * | `--margin` &nbsp;                              | Margin entre o titulo e o conteudo                     | `0 0 var(--spacing-xs)`                          |
  *
  */
 @Directive()
@@ -83,4 +91,13 @@ export class PoContainerBaseComponent {
   get noPadding(): boolean {
     return this._noPadding;
   }
+
+  /**
+   * @optional
+   *
+   * @description
+   *
+   * Título do Container.
+   */
+  @Input('p-title') title: string;
 }

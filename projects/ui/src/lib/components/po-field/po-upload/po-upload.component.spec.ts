@@ -1100,7 +1100,7 @@ describe('PoUploadComponent:', () => {
 
       fixture.detectChanges();
 
-      expect(fixture.debugElement.nativeElement.querySelector('.po-container').style.height).toBe('280px');
+      expect(fixture.debugElement.nativeElement.querySelector('.po-container-content').style.height).toBe('280px');
     });
 
     it('should fix the height of `po-container` to `auto` if `hasMoreThanFourItems` is false', () => {
@@ -1109,7 +1109,7 @@ describe('PoUploadComponent:', () => {
 
       fixture.detectChanges();
 
-      expect(fixture.debugElement.nativeElement.querySelector('.po-container').style.height).toBe('auto');
+      expect(fixture.debugElement.nativeElement.querySelector('.po-container-content').style.height).toBe('auto');
     });
   });
 });

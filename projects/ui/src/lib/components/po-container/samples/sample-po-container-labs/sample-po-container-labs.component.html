@@ -1,4 +1,5 @@
 <po-container
+  [p-title]="title"
   [p-height]="height"
   [p-no-border]="properties.includes('noBorder')"
   [p-no-padding]="properties.includes('noPadding')"
@@ -10,10 +11,12 @@
 
 <form #f="ngForm">
   <div class="po-row">
-    <po-number class="po-md-6" name="height" [(ngModel)]="height" p-label="Height"> </po-number>
+    <po-input class="po-md-4" name="title" [(ngModel)]="title" p-label="Titulo"> </po-input>
+
+    <po-number class="po-md-4" name="height" [(ngModel)]="height" p-label="Height"> </po-number>
 
     <po-checkbox-group
-      class="po-md-6"
+      class="po-md-4"
       name="properties"
       [(ngModel)]="properties"
       p-label="Properties"

@@ -23,6 +23,11 @@ class TestComponent {
 
   public username: string;
   public password: string;
+
+  constructor() {
+    this.poPage.duration = '70ms';
+    this.poPage.timing = '700ms cubic-bezier(0.35, 0, 0.1, 1)';
+  }
 }
 
 describe('PoPageSlideComponent', () => {
@@ -44,6 +49,10 @@ describe('PoPageSlideComponent', () => {
     component = fixture.componentInstance;
     debugElement = fixture.debugElement;
     element = debugElement.nativeElement;
+    component.duration = '70ms';
+    component.timing = '700ms cubic-bezier(0.35, 0, 0.1, 1)';
+
+    fixture.detectChanges();
   });
 
   afterEach(() => {
@@ -219,5 +228,15 @@ describe('PoPageSlideComponent', () => {
     component['initFocus']();
 
     expect(component.pageContent.nativeElement).toBeDefined();
+  });
+
+  it('getTextDefault: should return `Fechar` if `getShortLanguage` returns `pt`', () => {
+    const fakeThis = {
+      languageService: {
+        getShortLanguage: () => 'pt'
+      }
+    };
+
+    expect(component['getTextDefault'].call(fakeThis)).toBe('Fechar');
   });
 });

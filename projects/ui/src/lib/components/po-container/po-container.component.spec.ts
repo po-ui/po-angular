@@ -65,7 +65,7 @@ describe('PoContainerComponent:', () => {
 
       fixture.detectChanges();
 
-      expect(nativeElement.querySelector('.po-container').style.height).toBe('500px');
+      expect(nativeElement.querySelector('.po-container-content').style.height).toBe('500px');
       expect(nativeElement.querySelector('.po-container-no-padding')).toBeTruthy();
     });
 
@@ -74,7 +74,23 @@ describe('PoContainerComponent:', () => {
 
       fixture.detectChanges();
 
-      expect(nativeElement.querySelector('.po-container').style.height).toBe('auto');
+      expect(nativeElement.querySelector('.po-container-content').style.height).toBe('auto');
+    });
+
+    it('should have title.', () => {
+      component.title = 'Title';
+
+      fixture.detectChanges();
+
+      expect(nativeElement.querySelector('.po-container-title')).toBeTruthy();
+    });
+
+    it('should not have title.', () => {
+      component.title = undefined;
+
+      fixture.detectChanges();
+
+      expect(nativeElement.querySelector('.po-container-title')).toBeFalsy();
     });
   });
 });

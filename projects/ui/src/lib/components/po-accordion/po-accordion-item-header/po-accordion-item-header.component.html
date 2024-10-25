@@ -7,8 +7,8 @@
     class="po-accordion-item-header-button po-clickable"
     (click)="onClick()"
   >
-    <div class="po-accordion-item-header-button-content">
-      <div class="po-text-ellipsis po-accordion-item-header-title">{{ label }}</div>
+    <div class="po-accordion-item-header-button-content" [p-tooltip]="getTooltip()">
+      <div #accordionHeaderElement class="po-text-ellipsis po-accordion-item-header-title">{{ label }}</div>
       <po-tag *ngIf="labelTag" class="po-accordion-item-header-tag" [p-value]="labelTag" [p-type]="typeTag"> </po-tag>
     </div>
     <po-icon p-icon="ICON_ARROW_DOWN" class="po-icon po-accordion-item-header-icon"></po-icon>
