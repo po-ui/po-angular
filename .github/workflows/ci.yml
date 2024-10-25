@@ -7,6 +7,7 @@ on:
     branches: [master, development, "[0-9]+.x.x"]
   pull_request:
     branches: [master, development, "[0-9]+.x.x"]
+    types: [opened, reopened, synchronize, closed]
 
 # Os jobs são conjuntos de actions que são executados na mesma máquina virtual.
 # É possível ter mais de um job e assim executar ações paralelamente.
@@ -264,3 +265,19 @@ jobs:
         with:
           name: sync-coverage
           path: coverage/sync/lcov.info
+
+  # Job para excluir a ramificação do SonarQube após o merge
+  delete_sonar_branch:
+    if: github.event.pull_request.merged == true
+    runs-on: ubuntu-20.04
+    steps:
+      - name: Excluir Ramificação do SonarQube
+        env:
+          SONAR_TOKEN: ${{ secrets.SONAR_TOKEN }}
+          SONAR_HOST_URL: ${{ secrets.SONAR_HOST_URL }}
+          SONAR_PROJECT_KEY: ${{secrets.SONAR_PROJECT_KEY}}
+          BRANCH_NAME: ${{ github.head_ref }}
+        run: |
+          curl -u "${SONAR_TOKEN}:" -X POST "${SONAR_HOST_URL}/api/project_branches/delete" \
+            -d "project=${SONAR_PROJECT_KEY}" \
+            -d "branch=${BRANCH_NAME}"
