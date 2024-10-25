@@ -1,58 +1,56 @@
-# Nome do workflow, um repositório pode tem um ou mais workflows.
+# Nome do workflow, um repositório pode ter um ou mais workflows.
 name: CI
 
 # Define em quais situações esse workflow será executado
 on:
   push:
-    branches: [ master, development, '[0-9]+.x.x' ]
+    branches: [master, development, "[0-9]+.x.x"]
   pull_request:
-    branches: [ master, development, '[0-9]+.x.x' ]
+    branches: [master, development, "[0-9]+.x.x"]
 
 # Os jobs são conjuntos de actions que são executados na mesma máquina virtual.
 # É possível ter mais de um job e assim executar ações paralelamente.
 jobs:
-  discord_notification_on_pr:
-    runs-on: ubuntu-latest
-    if: github.event_name == 'pull_request' && github.event.pull_request.merged == false
-    steps:
-      - name: Notify Discord on PR
-        env:
-          DISCORD_WEBHOOK_URL: ${{ secrets.DISCORD_WEBHOOK_URL }}
-        run: |
-          AUTHOR="${{ github.event.pull_request.user.login }}"
-          PR_TITLE="${{ github.event.pull_request.title }}"
-          PR_URL="${{ github.event.pull_request.html_url }}"
-          curl -X POST -H "Content-Type: application/json" \
-          -d "{\"content\": \"🚀 **PR Criada com Sucesso 🚀**\\n- Autor: $AUTHOR\\n- Título: $PR_TITLE\\n- Link: $PR_URL\"}" \
-          $DISCORD_WEBHOOK_URL
+  # discord_notification_on_pr:
+  #   runs-on: ubuntu-latest
+  #   if: github.event_name == 'pull_request' && github.event.pull_request.merged == false
+  #   steps:
+  #     - name: Notify Discord on PR
+  #       env:
+  #         DISCORD_WEBHOOK_URL: ${{ secrets.DISCORD_WEBHOOK_URL }}
+  #       run: |
+  #         AUTHOR="${{ github.event.pull_request.user.login }}"
+  #         PR_TITLE="${{ github.event.pull_request.title }}"
+  #         PR_URL="${{ github.event.pull_request.html_url }}"
+  #         curl -X POST -H "Content-Type: application/json" \
+  #         -d "{\"content\": \"🚀 **PR Criada com Sucesso 🚀**\\n- Autor: $AUTHOR\\n- Título: $PR_TITLE\\n- Link: $PR_URL\"}" \
+  #         $DISCORD_WEBHOOK_URL
 
   lint:
-
     runs-on: ubuntu-20.04
 
     # As etapas do workflow são definidas nessa tag.
     steps:
+      # Definição da action
+      - uses: actions/checkout@v3
+        # Parâmetros para a ação
+        with:
+          fetch-depth: 0
 
-    # Definição da action
-    - uses: actions/checkout@v3
-      # Parâmetros para a ação
-      with:
-        fetch-depth: 0
+      - uses: wagoid/commitlint-github-action@v5
 
-    - uses: wagoid/commitlint-github-action@v5
+      - uses: actions/setup-node@v3
+        with:
+          node-version: 18
 
-    - uses: actions/setup-node@v3
-      with:
-        node-version: 18
-
-    # Executa um comando do projeto na máquina virtual
-    - run: npm i
-    - run: npm run format:check
-    - run: npm run lint:storage
-    - run: npm run lint:sync
-    - run: npm run lint:ui
-    - run: npm run lint:templates
-    - run: npm run lint:code-editor
+      # Executa um comando do projeto na máquina virtual
+      - run: npm i
+      - run: npm run format:check
+      - run: npm run lint:storage
+      - run: npm run lint:sync
+      - run: npm run lint:ui
+      - run: npm run lint:templates
+      - run: npm run lint:code-editor
 
   build:
     name: Build packages
@@ -60,22 +58,95 @@ jobs:
     runs-on: ubuntu-20.04
 
     steps:
+      - uses: actions/checkout@v3
 
-    - uses: actions/checkout@v3
+      - uses: actions/setup-node@v3
+        with:
+          node-version: 18
 
-    - uses: actions/setup-node@v3
-      with:
-        node-version: 18
+      - run: npm i
+      - run: npm run build
+      - run: npm run build:portal:docs
+      - run: npm run build:portal:prod
 
-    - run: npm i
-    - run: npm run build
-    - run: npm run build:portal:docs
-    - run: npm run build:portal:prod
+      - uses: actions/upload-artifact@v3
+        with:
+          name: portal
+          path: dist/portal
 
-    - uses: actions/upload-artifact@v3
-      with:
-        name: portal
-        path: dist/portal
+  sonar_analysis:
+    name: SonarQube Analysis
+    runs-on: ubuntu-20.04
+    needs: [test-ui, test-templates, test-code-editor, test-storage, test-sync]
+    steps:
+      - uses: actions/checkout@v3
+        with:
+          fetch-depth: 0
+
+      - name: Install Node.js
+        uses: actions/setup-node@v3
+        with:
+          node-version: 18
+
+      - run: npm i
+
+      # Baixa os artefatos de cobertura gerados pelos jobs de teste e extrai para o diretório correto
+      - name: Download UI coverage report
+        uses: actions/download-artifact@v3
+        with:
+          name: ui-coverage
+          path: coverage/ui
+
+      - name: Download Code Editor coverage report
+        uses: actions/download-artifact@v3
+        with:
+          name: code-editor-coverage
+          path: coverage/code-editor
+
+      - name: Download Storage coverage report
+        uses: actions/download-artifact@v3
+        with:
+          name: storage-coverage
+          path: coverage/storage
+
+      - name: Download Sync coverage report
+        uses: actions/download-artifact@v3
+        with:
+          name: sync-coverage
+          path: coverage/sync
+
+      - name: Download Templates coverage report
+        uses: actions/download-artifact@v3
+        with:
+          name: templates-coverage
+          path: coverage/templates
+
+      # Verifica se os arquivos de cobertura foram baixados corretamente
+      - name: Verificar arquivos de cobertura
+        run: ls -la coverage/code-editor/lcov.info coverage/storage/lcov.info coverage/sync/lcov.info coverage/templates/lcov.info coverage/ui/lcov.info
+
+      # Executa o script do Gulp para o SonarQube
+      # - name: Run SonarQube
+      #   run: npm run sonarqube -- --url=${{ secrets.SONAR_HOST_URL }} --projectKey=${{ secrets.SONAR_PROJECT_KEY }} --token=${{ secrets.SONAR_TOKEN }}
+
+      # - name: Run SonarQube for PR
+      #   run: |
+      #     export SONARQUBE_SCANNER_PARAMS='{
+      #       "sonar.pullrequest.key": "${{ github.event.pull_request.number }}",
+      #       "sonar.pullrequest.branch": "${{ github.head_ref }}",
+      #       "sonar.pullrequest.base": "${{ github.base_ref }}"
+      #     }'
+      #     npm run sonarqube -- --url=${{ secrets.SONAR_HOST_URL }} --projectKey=${{ secrets.SONAR_PROJECT_KEY }} --token=${{ secrets.SONAR_TOKEN }}
+
+      - name: Run full SonarQube analysis
+        run: |
+          export SONAR_SCANNER_JSON_PARAMS='{
+            "sonar.pullrequest.key": "${{ github.event.pull_request.number }}",
+            "sonar.pullrequest.branch": "${{ github.head_ref }}",
+            "sonar.pullrequest.base": "${{ github.base_ref }}",
+            "sonar.scm.exclusions.disabled": "true"
+          }'
+          npm run sonarqube -- --url=${{ secrets.SONAR_HOST_URL }} --projectKey=${{ secrets.SONAR_PROJECT_KEY }} --token=${{ secrets.SONAR_TOKEN }}
 
   test-ui:
     name: Test ui
@@ -83,16 +154,22 @@ jobs:
     runs-on: ubuntu-20.04
 
     steps:
+      - uses: actions/checkout@v3
 
-    - uses: actions/checkout@v3
+      - uses: actions/setup-node@v3
+        with:
+          node-version: 18
 
-    - uses: actions/setup-node@v3
-      with:
-        node-version: 18
+      - run: npm i
+      - run: npm run test:ui
+      - run: npm run test:ui:schematics
 
-    - run: npm i
-    - run: npm run test:ui
-    - run: npm run test:ui:schematics
+      # Salva o relatório de cobertura como artefato no GitHub Actions
+      - name: Upload coverage report
+        uses: actions/upload-artifact@v3
+        with:
+          name: ui-coverage
+          path: coverage/ui/lcov.info
 
   test-templates:
     name: Test templates
@@ -100,17 +177,23 @@ jobs:
     runs-on: ubuntu-20.04
 
     steps:
+      - uses: actions/checkout@v3
 
-    - uses: actions/checkout@v3
+      - uses: actions/setup-node@v3
+        with:
+          node-version: 18
 
-    - uses: actions/setup-node@v3
-      with:
-        node-version: 18
+      - run: npm i
+      - run: npm run build:ui:lite
+      - run: npm run test:templates
+      - run: npm run test:templates:schematics
 
-    - run: npm i
-    - run: npm run build:ui:lite
-    - run: npm run test:templates
-    - run: npm run test:templates:schematics
+      # Salva o relatório de cobertura como artefato no GitHub Actions
+      - name: Upload coverage report
+        uses: actions/upload-artifact@v3
+        with:
+          name: templates-coverage
+          path: coverage/templates/lcov.info
 
   test-code-editor:
     name: Test code editor
@@ -118,16 +201,22 @@ jobs:
     runs-on: ubuntu-20.04
 
     steps:
+      - uses: actions/checkout@v3
 
-    - uses: actions/checkout@v3
+      - uses: actions/setup-node@v3
+        with:
+          node-version: 18
 
-    - uses: actions/setup-node@v3
-      with:
-        node-version: 18
+      - run: npm i
+      - run: npm run test:code-editor
+      - run: npm run test:code-editor:schematics
 
-    - run: npm i
-    - run: npm run test:code-editor
-    - run: npm run test:code-editor:schematics
+      # Salva o relatório de cobertura como artefato no GitHub Actions
+      - name: Upload coverage report
+        uses: actions/upload-artifact@v3
+        with:
+          name: code-editor-coverage
+          path: coverage/code-editor/lcov.info
 
   test-storage:
     name: Test storage
@@ -135,16 +224,22 @@ jobs:
     runs-on: ubuntu-20.04
 
     steps:
+      - uses: actions/checkout@v3
 
-    - uses: actions/checkout@v3
+      - uses: actions/setup-node@v3
+        with:
+          node-version: 18
 
-    - uses: actions/setup-node@v3
-      with:
-        node-version: 18
+      - run: npm i
+      - run: npm run test:storage
+      - run: npm run test:storage:schematics
 
-    - run: npm i
-    - run: npm run test:storage
-    - run: npm run test:storage:schematics
+      # Salva o relatório de cobertura como artefato no GitHub Actions
+      - name: Upload coverage report
+        uses: actions/upload-artifact@v3
+        with:
+          name: storage-coverage
+          path: coverage/storage/lcov.info
 
   test-sync:
     name: Test sync
@@ -152,14 +247,20 @@ jobs:
     runs-on: ubuntu-20.04
 
     steps:
+      - uses: actions/checkout@v3
 
-    - uses: actions/checkout@v3
+      - uses: actions/setup-node@v3
+        with:
+          node-version: 18
 
-    - uses: actions/setup-node@v3
-      with:
-        node-version: 18
+      - run: npm i
+      - run: npm run build:storage:lite
+      - run: npm run test:sync
+      - run: npm run test:sync:schematics
 
-    - run: npm i
-    - run: npm run build:storage:lite
-    - run: npm run test:sync
-    - run: npm run test:sync:schematics
+      # Salva o relatório de cobertura como artefato no GitHub Actions
+      - name: Upload coverage report
+        uses: actions/upload-artifact@v3
+        with:
+          name: sync-coverage
+          path: coverage/sync/lcov.info
