@@ -16,6 +16,9 @@
       "path": "./projects/app/tsconfig.app.json"
     },
     {
+      "path": "./projects/custom-elements/tsconfig.app.json"
+    },
+    {
       "path": "./projects/storage/tsconfig.lib.json"
     },
     {
