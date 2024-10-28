@@ -1,11 +1,11 @@
-import { Component, ChangeDetectorRef, OnChanges, QueryList, SimpleChanges, ViewChildren } from '@angular/core';
-import { ControlContainer, NgForm } from '@angular/forms';
 import { TitleCasePipe } from '@angular/common';
+import { ChangeDetectorRef, Component, OnChanges, QueryList, SimpleChanges, ViewChildren } from '@angular/core';
+import { ControlContainer, NgForm } from '@angular/forms';
 
 import { PoDynamicFormField } from '../po-dynamic-form-field.interface';
-import { PoDynamicFormFieldsBaseComponent } from './po-dynamic-form-fields-base.component';
 import { PoDynamicFormFieldValidation } from '../po-dynamic-form-validation/po-dynamic-form-field-validation.interface';
 import { PoDynamicFormValidationService } from '../po-dynamic-form-validation/po-dynamic-form-validation.service';
+import { PoDynamicFormFieldsBaseComponent } from './po-dynamic-form-fields-base.component';
 
 /**
  * @docsPrivate
@@ -37,7 +37,14 @@ export class PoDynamicFormFieldsComponent extends PoDynamicFormFieldsBaseCompone
   ngOnChanges(changes: SimpleChanges) {
     if (changes.fields) {
       this.visibleFields = this.getVisibleFields();
-      this.setContainerFields();
+
+      if (changes.fields.previousValue && this.hasContainer()) {
+        this.hasChangeContainer(changes.fields.previousValue, changes.fields.currentValue);
+      }
+
+      if (!changes.fields.previousValue || !changes.fields.currentValue) {
+        this.setContainerFields();
+      }
     }
   }
 
@@ -150,6 +157,134 @@ export class PoDynamicFormFieldsComponent extends PoDynamicFormFieldsBaseCompone
       this.applyFieldValidation(fieldIndex, validatedField);
     } catch {
       visibleField.disabled = previousDisabled;
+    }
+  }
+
+  private hasChangeContainer(previous: Array<PoDynamicFormField>, current: Array<PoDynamicFormField>): void {
+    const prevArray = previous.map((item, index) => ({
+      container: item.container || null,
+      property: item.property,
+      index,
+      order: item.order
+    }));
+
+    const currArray = current.map((item, index) => ({
+      container: item.container || null,
+      property: item.property,
+      index,
+      order: item.order
+    }));
+
+    const prevContainers = prevArray.filter(item => item.container);
+    const currContainers = currArray.filter(item => item.container);
+
+    const prevOrder = prevArray.filter(item => item.order);
+    const currOrder = currArray.filter(item => item.order);
+
+    // Verifica mudança na quantidade de containers
+    if (prevContainers.length !== currContainers.length) {
+      this.setContainerFields();
+      return;
+    }
+
+    // Verifica mudança na quantidade de order
+    if (prevOrder.length !== currOrder.length) {
+      this.setContainerFields();
+      return;
+    }
+
+    if (currContainers.length) {
+      this.handleChangesContainer(prevContainers, currContainers, 'container');
+    }
+
+    if (currOrder.length) {
+      this.handleChangesContainer(prevOrder, currOrder, 'order');
+    }
+
+    //atualiza container sem mudança na estrutura da interface
+    const result = this.diffObjectsArray(previous, this.getVisibleFields());
+    this.containerFields = this.updateFieldContainer(result, this.containerFields);
+  }
+
+  private updateFieldContainer(changes, containerFields) {
+    const mapchanges = new Map(changes.map(obj => [obj.property, obj]));
+
+    containerFields.forEach(subArray => {
+      subArray.forEach((subItem, index) => {
+        const item: any = mapchanges.get(subItem.property);
+        if (item) {
+          subArray[index] = { ...subItem, ...item };
+        }
+      });
+    });
+
+    return containerFields;
+  }
+
+  private diffObjectsArray(oldArray, newArray) {
+    const differences = [];
+
+    newArray.forEach(newObj => {
+      const oldObj = oldArray.find(o => o.property === newObj.property);
+
+      if (!oldObj) {
+        // Se o objeto é novo, adiciona todo o objeto com a propriedade "property"
+        differences.push({ ...newObj });
+      } else {
+        // Verificar se há diferenças nas propriedades
+        const diff = { property: newObj.property };
+        let hasDifferences = false;
+
+        for (const key in newObj) {
+          if (newObj[key] !== oldObj[key]) {
+            diff[key] = newObj[key];
+            hasDifferences = true;
+          }
+        }
+
+        if (hasDifferences) {
+          differences.push(diff);
+        }
+      }
+    });
+
+    //retorna mudanças nos fields para atualização do containerFields
+    return differences;
+  }
+
+  private hasContainer() {
+    return this.visibleFields && this.visibleFields.some(field => field.container);
+  }
+
+  private handleChangesContainer(prevContainers, currContainers, key) {
+    for (let i = 0; i < prevContainers.length; i++) {
+      const prev = prevContainers[i];
+      const curr = currContainers[i];
+
+      //Verifica se container mudou de posição
+      if (prev[key] === curr[key] && prev.index !== curr.index) {
+        this.setContainerFields();
+        return;
+      }
+      //Verifica se foi apenas mudança da string em caso do container ou valor no order
+      if (prev[key] !== curr[key] && prev.index === curr.index) {
+        if (key === 'order') {
+          this.setContainerFields();
+          return;
+        }
+        this.containerFields.forEach(subItem =>
+          subItem.forEach(item => {
+            if (item.property === curr.property) {
+              item[key] = curr[key];
+            }
+          })
+        );
+      }
+      //verifica se manteve o mesmo número de container, mas alterou property do container
+      if (prev[key] !== curr[key] && prev.property !== curr.property) {
+        this.setContainerFields();
+        return;
+      }
     }
   }
 }
