@@ -50,7 +50,7 @@ export class PoDynamicFormBaseComponent {
    * o `po-textarea`, caso o valor da propriedade `rows` seja menor que 3 o componente criado será o `po-input`.
    * - Caso seja informada a propriedade `secret` o componente criado será o `po-password`.
    * - Caso o *type* informado seja *string* o componente criado será o `po-input`.
-   *
+   * > Ao alterar o valor das `properties` e/ou agrupamentos via container, os `fields` que utilizam serviço podem refazer as chamadas para as API's.
    * @default `[]`
    */
   @Input('p-fields') fields: Array<PoDynamicFormField>;
