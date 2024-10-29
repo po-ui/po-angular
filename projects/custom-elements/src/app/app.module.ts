@@ -199,15 +199,6 @@ export class AppModule implements DoBootstrap {
   // constructor(private injector: Injector,
   // ) {
 
-  // const poBreadcrumbElement = createCustomElement(PoBreadcrumbComponent, {injector: this._injector});
-  // customElements.define('po-breadcrumb', poBreadcrumbElement);
-
-  // const poButtonElement = createCustomElement(PoButtonComponent, {injector: this._injector});
-  // customElements.define('po-ce-button', poButtonElement);
-
-  // const poButtonGroupElement = createCustomElement(PoButtonGroupComponent, {injector: this._injector});
-  // customElements.define('po-button-group', poButtonGroupElement);
-
   // const poCalendarElement = createCustomElement(PoCalendarComponent, {injector: this._injector});
   // customElements.define('po-calendar', poCalendarElement);
 
@@ -298,9 +289,6 @@ export class AppModule implements DoBootstrap {
   // const poImageElement = createCustomElement(PoImageComponent, {injector: this._injector});
   // customElements.define('po-image', poImageElement);
 
-  // const poInfoElement = createCustomElement(PoInfoComponent, {injector: this._injector});
-  // customElements.define('po-info', poInfoElement);
-
   // const poLinkElement = createCustomElement(PoLinkComponent, {injector: this._injector});
   // customElements.define('po-link', poLinkElement);
 
@@ -318,9 +306,6 @@ export class AppModule implements DoBootstrap {
 
   // const poNavbarElement = createCustomElement(PoNavbarComponent, {injector: this._injector});
   // customElements.define('po-navbar', poNavbarElement);
-
-  // const poPageDefaultElement = createCustomElement(PoPageDefaultComponent, {injector: this._injector});
-  // customElements.define('po-page-default', poPageDefaultElement);
 
   // const poProgressElement = createCustomElement(PoProgressComponent, {injector: this._injector});
   // customElements.define('po-progress', poProgressElement);
@@ -380,5 +365,20 @@ export class AppModule implements DoBootstrap {
 
     const poBadgeElement = createCustomElement(PoBadgeComponent, { injector: this._injector });
     customElements.define('po-badge', poBadgeElement);
+
+    const poInfoElement = createCustomElement(PoInfoComponent, { injector: this._injector });
+    customElements.define('po-info', poInfoElement);
+
+    const poPageDefaultElement = createCustomElement(PoPageDefaultComponent, { injector: this._injector });
+    customElements.define('po-page-default', poPageDefaultElement);
+
+    const poBreadcrumbElement = createCustomElement(PoBreadcrumbComponent, { injector: this._injector });
+    customElements.define('po-breadcrumb', poBreadcrumbElement);
+
+    const poButtonElement = createCustomElement(PoButtonComponent, { injector: this._injector });
+    customElements.define('po-ce-button', poButtonElement);
+
+    const poButtonGroupElement = createCustomElement(PoButtonGroupComponent, { injector: this._injector });
+    customElements.define('po-button-group', poButtonGroupElement);
   }
 }
