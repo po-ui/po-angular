@@ -2,6 +2,20 @@
 
 All notable changes to this project will be documented in this file. See [standard-version](https://github.com/conventional-changelog/standard-version) for commit guidelines.
 
+## [18.12.0](https://github.com/po-ui/po-angular/compare/v18.11.0...v18.12.0) (2024-10-29)
+
+
+### Features
+
+* **container:** adiciona titulo ([5144053](https://github.com/po-ui/po-angular/commit/5144053a9a2ddd87cc7c4cbe7b299b7dea308194))
+
+
+### Bug Fixes
+
+* **accordion:** corrige texto grande no componente ([cc10dfc](https://github.com/po-ui/po-angular/commit/cc10dfc952673d4a7da18a3d7b0f859183c63847))
+* **dynamic-form:** corrige requisição repetida ([ac8f918](https://github.com/po-ui/po-angular/commit/ac8f9183a236e70808a0b3b896f86fb8aec20546))
+* **page-default:** ajusta propriedade `visible` do `PoPageAction` ([b503b19](https://github.com/po-ui/po-angular/commit/b503b1932bb5a03d03a943bca86e23af5c9d97c7)), closes [#1836](https://github.com/po-ui/po-angular/issues/1836)
+
 ## [18.11.0](https://github.com/po-ui/po-angular/compare/v18.10.0...v18.11.0) (2024-10-21)
 
 
