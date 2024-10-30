@@ -107,6 +107,20 @@ export abstract class PoDatepickerBaseComponent implements ControlValueAccessor,
    */
   @Input({ alias: 'p-auto-focus', transform: convertToBoolean }) autoFocus: boolean = false;
 
+  /**
+   * @optional
+   *
+   * @description
+   *
+   * Define que o dropdown do calendário será incluído no body da página ao invés de ser suspenso junto ao campo de texto do componente.
+   * Essa opção é útil em situações onde o `po-datepicker` está sendo utilizado em áreas da página que requerem o dropdown renderizado fora do conteúdo principal.
+   *
+   * > Obs: O uso dessa propriedade pode acarretar na perda da sequência de tabulação da página.
+   *
+   * @default `false`
+   */
+  @Input({ alias: 'p-append-in-body', transform: convertToBoolean }) appendBox?: boolean = false;
+
   /* Nome do componente datepicker. */
   @Input('name') name: string;
 

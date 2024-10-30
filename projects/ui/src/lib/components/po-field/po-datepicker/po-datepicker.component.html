@@ -6,7 +6,11 @@
   [p-required]="required"
   [p-show-required]="showRequired"
 >
-  <div class="po-field-container-content po-field-container-content-datepicker">
+  <div
+    cdkOverlayOrigin
+    #trigger="cdkOverlayOrigin"
+    class="po-field-container-content po-field-container-content-datepicker"
+  >
     <div class="po-field-container-input">
       <input
         #inp
@@ -45,19 +49,33 @@
     </po-button>
   </div>
 
-  <div #dialogPicker [class.po-datepicker-popup-calendar]="!verifyMobile()">
-    <div *ngIf="verifyMobile()" class="po-datepicker-calendar-overlay"></div>
-    <po-calendar
-      [class.po-datepicker-calendar-mobile]="verifyMobile()"
-      #calendar
-      [(ngModel)]="date"
-      [p-max-date]="maxDate"
-      [p-min-date]="minDate"
-      [p-locale]="locale"
-      (p-change)="dateSelected()"
-    >
-    </po-calendar>
-  </div>
+  <ng-container *ngIf="appendBox; then dropdownCDK; else dropdownDefault"> </ng-container>
+
+  <ng-template #dropdownDefault>
+    <ng-container *ngTemplateOutlet="dropdownCalendar"> </ng-container>
+  </ng-template>
+
+  <ng-template #dropdownCDK>
+    <ng-template cdkConnectedOverlay [cdkConnectedOverlayOrigin]="trigger" [cdkConnectedOverlayOpen]="true">
+      <ng-container *ngTemplateOutlet="dropdownCalendar"></ng-container>
+    </ng-template>
+  </ng-template>
+
+  <ng-template #dropdownCalendar>
+    <div #dialogPicker [class.po-datepicker-popup-calendar]="!verifyMobile()">
+      <div *ngIf="verifyMobile()" class="po-datepicker-calendar-overlay"></div>
+      <po-calendar
+        [class.po-datepicker-calendar-mobile]="verifyMobile()"
+        #calendar
+        [(ngModel)]="date"
+        [p-max-date]="maxDate"
+        [p-min-date]="minDate"
+        [p-locale]="locale"
+        (p-change)="dateSelected()"
+      >
+      </po-calendar>
+    </div>
+  </ng-template>
 
   <po-field-container-bottom
     [p-help]="help"
