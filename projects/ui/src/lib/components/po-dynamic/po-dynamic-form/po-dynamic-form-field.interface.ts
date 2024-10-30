@@ -1,5 +1,6 @@
 import { TemplateRef } from '@angular/core';
 import {
+  ErrorAsyncProperties,
   PoCheckboxGroupOption,
   PoComboFilter,
   PoComboLiterals,
@@ -10,8 +11,8 @@ import {
   PoMultiselectFilterMode,
   PoMultiselectLiterals,
   PoSwitchLabelPosition,
-  PoUploadLiterals,
-  PoUploadFileRestrictions
+  PoUploadFileRestrictions,
+  PoUploadLiterals
 } from '../../po-field';
 import { PoLookupAdvancedFilter } from '../../po-field/po-lookup/interfaces/po-lookup-advanced-filter.interface';
 import { PoLookupColumn } from '../../po-field/po-lookup/interfaces/po-lookup-column.interface';
@@ -19,6 +20,7 @@ import { PoMultiselectOption } from '../../po-field/po-multiselect/po-multiselec
 import { PoSelectOption } from '../../po-field/po-select/po-select-option.interface';
 import { ForceBooleanComponentEnum, ForceOptionComponentEnum } from '../po-dynamic-field-force-component.enum';
 
+import { Observable } from 'rxjs';
 import { PoDynamicField } from '../po-dynamic-field.interface';
 
 /**
@@ -44,6 +46,16 @@ export interface PoDynamicFormField extends PoDynamicField {
 
   /** Define a obrigatoriedade do campo. */
   required?: boolean;
+
+  /**
+   *
+   * Exibe a mensagem setada na propriedade `errorMessage` se o campo estiver vazio e for requerido.
+   *
+   * > Necessário que a propriedade `required` esteja habilitada.
+   *
+   * **Componentes compatíveis:** `po-datepicker`, `po-input`, `po-number`, `po-decimal`, `po-password`.
+   */
+  requiredFieldErrorMessage?: boolean;
 
   /**
    * Define se a indicação de campo opcional será exibida.
@@ -258,6 +270,24 @@ export interface PoDynamicFormField extends PoDynamicField {
    * **Componentes compatíveis:** `po-datepicker`, `po-input`, `po-number`, `po-decimal`, `po-password`.
    */
   errorMessage?: string;
+
+  /**
+   * Função executada para realizar a validação assíncrona personalizada.
+   * Executada ao disparar o output `change` ou `change-model`, dependendo do valor da propriedade `triggerMode`.
+   *
+   *
+   * > Retorna `Observable com o valor true` para sinalizar o erro `false` para indicar que não há erro.
+   *
+   * **Componente compatível**: `po-datepicker`
+   */
+  errorAsyncFunction?: (value) => Observable<boolean>;
+
+  /**
+   * Realiza alguma validação customizada assíncrona no componente.
+   *
+   * **Componentes compatíveis:** `po-input`, `po-number`, `po-decimal`, `po-password`.
+   */
+  errorAsyncProperties?: ErrorAsyncProperties;
 
   /**
    * Formato de exibição no campo.
