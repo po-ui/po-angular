@@ -1,11 +1,12 @@
 import { AbstractControl } from '@angular/forms';
 import { ComponentFixture, fakeAsync, TestBed, tick } from '@angular/core/testing';
-import { Component, ElementRef } from '@angular/core';
+import { ChangeDetectorRef, Component, ElementRef } from '@angular/core';
 
 import { configureTestSuite } from './../../../util-test/util-expect.spec';
 
 import { PoFieldModule } from './../po-field.module';
 import { PoInputGeneric } from './po-input-generic';
+import { of, Subscription } from 'rxjs';
 
 @Component({
   template: `
@@ -40,7 +41,8 @@ describe('PoInputGeneric:', () => {
   configureTestSuite(() => {
     TestBed.configureTestingModule({
       imports: [PoFieldModule],
-      declarations: [ContentProjectionComponent]
+      declarations: [ContentProjectionComponent],
+      providers: [ChangeDetectorRef]
     });
   });
 
@@ -168,7 +170,12 @@ describe('PoInputGeneric:', () => {
         valueToModel: ''
       },
       callOnChange: () => {},
-      eventOnBlur: e => {}
+      eventOnBlur: e => {},
+      errorAsyncProperties: {
+        errorAsync: value => of(true),
+        triggerMode: 'changeModel'
+      },
+      verifyErrorAsync: () => {}
     };
 
     spyOn(fakeThis, 'callOnChange');
@@ -230,7 +237,12 @@ describe('PoInputGeneric:', () => {
       callOnChange: (v: any) => {},
       validMaxLength: component.validMaxLength,
       maxlength: 5,
-      inputEl: component.inputEl
+      inputEl: component.inputEl,
+      errorAsyncProperties: {
+        errorAsync: value => of(true),
+        triggerMode: 'changeModel'
+      },
+      verifyErrorAsync: () => {}
     };
     fakeEvent.target.value = '1234567890';
 
@@ -325,7 +337,8 @@ describe('PoInputGeneric:', () => {
       inputEl: component.inputEl,
       valueBeforeChange: '1',
       getScreenValue: component.getScreenValue,
-      change: component.change
+      change: component.change,
+      verifyErrorAsync: () => {}
     };
 
     spyOn(fakeThis.change, 'emit');
@@ -367,6 +380,24 @@ describe('PoInputGeneric:', () => {
     expect(component.hasInvalidClass()).toBeTruthy();
   });
 
+  it('should return true in hasInvalidClass if showErrorMessageRequired and required is true', () => {
+    component.el.nativeElement.classList.add('ng-invalid');
+    component.el.nativeElement.classList.add('ng-dirty');
+    component.inputEl.nativeElement.value = '';
+    component.showErrorMessageRequired = true;
+    component.required = true;
+    expect(component.hasInvalidClass()).toBeTruthy();
+  });
+
+  it('should return true in hasInvalidClass if showErrorMessageRequired and hasValidatorRequired is true', () => {
+    component.el.nativeElement.classList.add('ng-invalid');
+    component.el.nativeElement.classList.add('ng-dirty');
+    component.inputEl.nativeElement.value = '';
+    component.showErrorMessageRequired = true;
+    component.hasValidatorRequired = true;
+    expect(component.hasInvalidClass()).toBeTruthy();
+  });
+
   it('should return false in hasInvalidClass', () => {
     component.el.nativeElement.classList.add('ng-invalid');
     component.el.nativeElement.classList.remove('ng-dirty');
@@ -392,6 +423,10 @@ describe('PoInputGeneric:', () => {
 
   it('should call callOnChange and controlChangeEmitter when input is cleaned', () => {
     component.clean = true;
+    component.errorAsyncProperties = {
+      errorAsync: value => of(true),
+      triggerMode: 'changeModel'
+    };
 
     spyOn(component, 'callOnChange');
     spyOn(component, 'controlChangeEmitter');
@@ -719,7 +754,8 @@ describe('PoInputGeneric:', () => {
           }
         },
         valueBeforeChange: '1',
-        change: component.change
+        change: component.change,
+        verifyErrorAsync: () => {}
       };
 
       spyOn(fakeThis.change, 'emit');
@@ -757,7 +793,8 @@ describe('PoInputGeneric:', () => {
         changeModel: component.changeModel,
         passedWriteValue: false,
         validateClassesForMask: () => {},
-        validateInitMask: () => {}
+        validateInitMask: () => {},
+        verifyErrorAsync: () => {}
       };
       spyOn(component.changeModel, 'emit');
       component.writeValueModel.call(fakeThis, value);
@@ -786,7 +823,8 @@ describe('PoInputGeneric:', () => {
         changeModel: component.changeModel,
         passedWriteValue: false,
         validateClassesForMask: () => {},
-        validateInitMask: () => {}
+        validateInitMask: () => {},
+        verifyErrorAsync: () => {}
       };
       component.writeValueModel.call(fakeThis, 'valor');
       expect(component.inputEl.nativeElement.value).toBe('valor');
@@ -804,7 +842,8 @@ describe('PoInputGeneric:', () => {
         changeModel: component.changeModel,
         passedWriteValue: false,
         validateClassesForMask: () => {},
-        validateInitMask: () => {}
+        validateInitMask: () => {},
+        verifyErrorAsync: () => {}
       };
       component.writeValueModel.call(fakeThis, 'valor');
       expect(component.inputEl.nativeElement.value).toBe('valor formatted');
@@ -823,13 +862,65 @@ describe('PoInputGeneric:', () => {
         callUpdateModelWithTimeout: component.callUpdateModelWithTimeout,
         passedWriteValue: false,
         validateClassesForMask: () => {},
-        validateInitMask: () => {}
+        validateInitMask: () => {},
+        verifyErrorAsync: () => {}
       };
       const callUpdateModelWithTimeout = spyOn(fakeThis, <any>'callUpdateModelWithTimeout');
       component.writeValueModel.call(fakeThis, 'valor');
       expect(component.inputEl.nativeElement.value).toBe('valor formatted');
       expect(callUpdateModelWithTimeout).toHaveBeenCalled();
       expect(fakeThis.passedWriteValue).toBeTruthy();
+    });
+  });
+
+  describe('verifyErrorAsync', () => {
+    beforeEach(() => {
+      component['cd'] = { detectChanges: () => {} } as any;
+      component['inputEl'] = { nativeElement: { value: 'test' } } as ElementRef;
+      component['el'] = { nativeElement: document.createElement('div') } as ElementRef;
+
+      component.errorPattern = 'Erro de exemplo';
+      component.errorAsyncProperties = {
+        errorAsync: jasmine.createSpy('errorAsync').and.returnValue(of(true))
+      };
+
+      component['subscriptionValidator'] = new Subscription();
+    });
+
+    afterEach(() => {
+      component['subscriptionValidator'].unsubscribe();
+    });
+
+    it('should add ng-invalid and ng-dirty classes when error is true', () => {
+      spyOn(component['cd'], 'detectChanges');
+      component.verifyErrorAsync();
+
+      expect(component.errorAsyncProperties.errorAsync).toHaveBeenCalledWith('test');
+      expect(component['el'].nativeElement.classList.contains('ng-invalid')).toBeTrue();
+      expect(component['el'].nativeElement.classList.contains('ng-dirty')).toBeTrue();
+      expect(component['cd'].detectChanges).toHaveBeenCalled();
+    });
+
+    it('should remove ng-invalid class when error is false and isInvalid is false', () => {
+      spyOn(component['cd'], 'detectChanges');
+      component.errorAsyncProperties.errorAsync = jasmine.createSpy('errorAsync').and.returnValue(of(false));
+      component['el'].nativeElement.classList.add('ng-invalid');
+      component['el'].nativeElement.classList.add('ng-dirty');
+      component.isInvalid = false;
+
+      component.verifyErrorAsync();
+
+      expect(component.errorAsyncProperties.errorAsync).toHaveBeenCalledWith('test');
+      expect(component['el'].nativeElement.classList.contains('ng-invalid')).toBeFalse();
+      expect(component['cd'].detectChanges).toHaveBeenCalled();
+    });
+
+    it('must cancel the previous subscription from subscriptionValidator', () => {
+      const unsubscribeSpy = spyOn(component['subscriptionValidator'], 'unsubscribe');
+
+      component.verifyErrorAsync();
+
+      expect(unsubscribeSpy).toHaveBeenCalled();
     });
   });
 });

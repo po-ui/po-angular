@@ -1,9 +1,10 @@
 import { Directive } from '@angular/core';
 import { fakeAsync, tick } from '@angular/core/testing';
-import { AbstractControl, UntypedFormControl } from '@angular/forms';
+import { AbstractControl, FormControl, UntypedFormControl, Validators } from '@angular/forms';
 
 import { expectPropertiesValues, expectSettersMethod } from '../../../util-test/util-expect.spec';
 
+import { Subject } from 'rxjs';
 import { PoInputBaseComponent } from './po-input-base.component';
 import { PoMask } from './po-mask';
 
@@ -23,6 +24,7 @@ class PoInput extends PoInputBaseComponent {
 
 describe('PoInputBase:', () => {
   let component: PoInput;
+  const fakeSubscription = <any>{ unsubscribe: () => {} };
 
   beforeEach(() => {
     component = new PoInput();
@@ -30,6 +32,16 @@ describe('PoInputBase:', () => {
 
   it('should be created', () => {
     expect(component instanceof PoInput).toBeTruthy();
+  });
+
+  it('ngOnDestroy: should unsubscribe `subscription` on destroy', () => {
+    component['subscription'] = fakeSubscription;
+
+    spyOn(component['subscription'], <any>'unsubscribe');
+
+    component.ngOnDestroy();
+
+    expect(component['subscription'].unsubscribe).toHaveBeenCalled();
   });
 
   it('should set disabled', () => {
@@ -149,6 +161,35 @@ describe('PoInputBase:', () => {
     spyOn(component, 'extraValidation');
     expect(component.validate(new UntypedFormControl('2'))).not.toBeNull();
     expect(component.extraValidation).not.toHaveBeenCalled();
+  });
+
+  it('should call markForCheck when status is INVALID', fakeAsync(() => {
+    component['cd'] = { markForCheck: () => {} } as any;
+    component.errorPattern = 'Erro inválido';
+    const controlMock = {
+      statusChanges: new Subject<string>()
+    } as any;
+
+    spyOn(component['cd'], 'markForCheck');
+
+    component.validate(controlMock);
+
+    controlMock.statusChanges.next('INVALID');
+    tick();
+
+    expect(component.isInvalid).toBeTrue();
+    expect(component['cd'].markForCheck).toHaveBeenCalled();
+  }));
+
+  it('validate: should set hasValidatorRequired to true if showErrorMessageRequired is true and control has required validator', () => {
+    component.hasValidatorRequired = false;
+    component.showErrorMessageRequired = true;
+
+    const controlMock = new FormControl('', Validators.required);
+
+    component.validate(controlMock);
+
+    expect(component.hasValidatorRequired).toBeTrue();
   });
 
   it('should register function OnChangePropagate', () => {

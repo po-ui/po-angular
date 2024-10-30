@@ -1,7 +1,9 @@
-import { ChangeDetectorRef, Directive, EventEmitter, Input, Output, TemplateRef } from '@angular/core';
-import { AbstractControl, ControlValueAccessor, Validator } from '@angular/forms';
+import { ChangeDetectorRef, Directive, EventEmitter, Input, OnDestroy, Output, TemplateRef } from '@angular/core';
+import { AbstractControl, ControlValueAccessor, Validator, Validators } from '@angular/forms';
 
+import { Subject, Subscription, switchMap } from 'rxjs';
 import { convertToBoolean } from '../../../utils/util';
+import { ErrorAsyncProperties } from '../shared/interfaces/error-async-properties.interface';
 import { maxlengpoailed, minlengpoailed, patternFailed, requiredFailed } from './../validators';
 import { PoMask } from './po-mask';
 
@@ -53,7 +55,7 @@ import { PoMask } from './po-mask';
  * <br>
  */
 @Directive()
-export abstract class PoInputBaseComponent implements ControlValueAccessor, Validator {
+export abstract class PoInputBaseComponent implements ControlValueAccessor, Validator, OnDestroy {
   /**
    * @optional
    *
@@ -115,11 +117,23 @@ export abstract class PoInputBaseComponent implements ControlValueAccessor, Vali
   @Input('name') name: string;
 
   /**
+   * @optional
+   *
+   * @description
+   *
+   * Realiza alguma validação customizada assíncrona no componente.
+   * Aconselhamos a utilização dessa propriedade somente em componentes que não estejam
+   * utilizando `Reactive Forms`. Em formulários reativos, pode-se utilizar o próprio `asyncValidators`.
+   */
+  @Input('p-error-async-properties') errorAsyncProperties: ErrorAsyncProperties;
+
+  /**
    * @description
    *
    * Mensagem que será apresentada quando o `pattern` ou a máscara não for satisfeita.
    *
-   * > Esta mensagem não é apresentada quando o campo estiver vazio, mesmo que ele seja requerido.
+   * > Por padrão, esta mensagem não é apresentada quando o campo estiver vazio, mesmo que ele seja requerido.
+   * Para exibir a mensagem com o campo vazio, utilize a propriedade `p-required-field-error-message` em conjunto.
    */
   @Input('p-error-pattern') errorPattern?: string = '';
 
@@ -137,6 +151,19 @@ export abstract class PoInputBaseComponent implements ControlValueAccessor, Vali
    * @default `false`
    */
   @Input('p-optional') optional: boolean;
+
+  /**
+   * @optional
+   *
+   * @description
+   *
+   * Exibe a mensagem setada na propriedade `p-error-pattern` se o campo estiver vazio e for requerido.
+   *
+   * > Necessário que a propriedade `p-required` esteja habilitada.
+   *
+   * @default `false`
+   */
+  @Input('p-required-field-error-message') showErrorMessageRequired: boolean = false;
 
   /**
    * @description
@@ -187,6 +214,9 @@ export abstract class PoInputBaseComponent implements ControlValueAccessor, Vali
   onChangePropagate: any = null;
   objMask: any;
   modelLastUpdate: any;
+  isInvalid: boolean;
+  hasValidatorRequired = false;
+  private subscription: Subscription = new Subscription();
   protected onTouched: any = null;
 
   protected passedWriteValue: boolean = false;
@@ -387,8 +417,12 @@ export abstract class PoInputBaseComponent implements ControlValueAccessor, Vali
     }
   }
 
-  constructor(private cd?: ChangeDetectorRef) {
+  constructor(protected cd?: ChangeDetectorRef) {
     this.objMask = new PoMask(this.mask, this.maskFormatModel);
+  }
+
+  ngOnDestroy(): void {
+    this.subscription.unsubscribe();
   }
 
   callOnChange(value: any) {
@@ -439,7 +473,13 @@ export abstract class PoInputBaseComponent implements ControlValueAccessor, Vali
   }
 
   validate(c: AbstractControl): { [key: string]: any } {
+    this.subscription?.unsubscribe();
+    if (!this.hasValidatorRequired && this.showErrorMessageRequired && c.hasValidator(Validators.required)) {
+      this.hasValidatorRequired = true;
+    }
+
     if (requiredFailed(this.required, this.disabled, this.getScreenValue())) {
+      this.isInvalid = true;
       return {
         required: {
           valid: false
@@ -448,6 +488,7 @@ export abstract class PoInputBaseComponent implements ControlValueAccessor, Vali
     }
 
     if (maxlengpoailed(this.maxlength, this.getScreenValue())) {
+      this.isInvalid = true;
       return {
         maxlength: {
           valid: false
@@ -456,6 +497,7 @@ export abstract class PoInputBaseComponent implements ControlValueAccessor, Vali
     }
 
     if (minlengpoailed(this.minlength, this.getScreenValue())) {
+      this.isInvalid = true;
       return {
         minlength: {
           valid: false
@@ -464,6 +506,7 @@ export abstract class PoInputBaseComponent implements ControlValueAccessor, Vali
     }
 
     if (patternFailed(this.pattern, c.value)) {
+      this.isInvalid = true;
       this.validatePatternOnWriteValue(c.value);
       return {
         pattern: {
@@ -472,6 +515,21 @@ export abstract class PoInputBaseComponent implements ControlValueAccessor, Vali
       };
     }
 
+    if (this.errorPattern !== '') {
+      this.subscription = c.statusChanges
+        .pipe(
+          switchMap(status => {
+            if (status === 'INVALID') {
+              this.isInvalid = true;
+              this.cd.markForCheck();
+            }
+            return [];
+          })
+        )
+        .subscribe();
+    }
+
+    this.isInvalid = false;
     return this.extraValidation(c);
   }
 

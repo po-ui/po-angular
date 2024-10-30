@@ -143,7 +143,8 @@ export class PoNumberComponent extends PoNumberBaseComponent {
     return (
       (this.el.nativeElement.classList.contains('ng-invalid') &&
         this.el.nativeElement.classList.contains('ng-dirty') &&
-        this.inputEl.nativeElement.value !== '') ||
+        (this.inputEl.nativeElement.value !== '' ||
+          (this.showErrorMessageRequired && (this.required || this.hasValidatorRequired)))) ||
       this.invalidInputValueOnBlur
     );
   }

@@ -26,6 +26,9 @@ export abstract class PoNumberBaseComponent extends PoInputGeneric {
       }
 
       this.callOnChange(this.formatNumber(value));
+      if (this.errorAsyncProperties?.triggerMode === 'changeModel') {
+        this.verifyErrorAsync();
+      }
     }
   }
 
@@ -83,6 +86,7 @@ export abstract class PoNumberBaseComponent extends PoInputGeneric {
     // Emite evento quando o model é atualizado, inclusive a primeira vez
 
     this.changeModel.emit(value);
+    this.verifyErrorAsync();
   }
 
   private isEndWithDot(value: string) {

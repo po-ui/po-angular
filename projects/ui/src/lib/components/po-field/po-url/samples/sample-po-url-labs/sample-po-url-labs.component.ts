@@ -24,6 +24,7 @@ export class SamplePoUrlLabsComponent implements OnInit {
     { value: 'optional', label: 'Optional' },
     { value: 'readonly', label: 'Read Only' },
     { value: 'showRequired', label: 'Show Required' },
+    { value: 'requiredFieldErrorMessage', label: 'Required Field Error Message' },
     { value: 'required', label: 'Required' }
   ];
 

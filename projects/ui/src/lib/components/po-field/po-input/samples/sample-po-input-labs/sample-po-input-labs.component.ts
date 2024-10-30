@@ -34,6 +34,7 @@ export class SamplePoInputLabsComponent implements OnInit {
     { value: 'optional', label: 'Optional' },
     { value: 'readonly', label: 'Read Only' },
     { value: 'required', label: 'Required' },
+    { value: 'requiredFieldErrorMessage', label: 'Required Field Error Message' },
     { value: 'uppercase', label: 'Upper Case' },
     { value: 'showRequired', label: 'Show Required' }
   ];

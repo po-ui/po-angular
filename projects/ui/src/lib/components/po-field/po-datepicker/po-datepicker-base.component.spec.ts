@@ -1,6 +1,6 @@
-import { Directive } from '@angular/core';
-import { fakeAsync, tick } from '@angular/core/testing';
-import { UntypedFormControl } from '@angular/forms';
+import { ChangeDetectorRef, Directive } from '@angular/core';
+import { fakeAsync, TestBed, tick } from '@angular/core/testing';
+import { FormControl, UntypedFormControl, Validators } from '@angular/forms';
 
 import * as UtilsFunctions from '../../../utils/util';
 import * as ValidatorsFunctions from './../validators';
@@ -11,6 +11,7 @@ import { PoDatepickerBaseComponent } from './po-datepicker-base.component';
 import { PoDatepickerIsoFormat } from './enums/po-datepicker-iso-format.enum';
 import { PoMask } from '../po-input/po-mask';
 import { PoLanguageService } from '../../../services/po-language/po-language.service';
+import { Subject } from 'rxjs';
 
 @Directive()
 class PoDatepickerComponent extends PoDatepickerBaseComponent {
@@ -21,10 +22,12 @@ class PoDatepickerComponent extends PoDatepickerBaseComponent {
 
 describe('PoDatepickerBaseComponent:', () => {
   let component: PoDatepickerComponent;
+  const fakeSubscription = <any>{ unsubscribe: () => {} };
   const languageService: PoLanguageService = new PoLanguageService();
 
   beforeEach(() => {
-    component = new PoDatepickerComponent(languageService);
+    const changeDetector: any = { detectChanges: () => {} };
+    component = new PoDatepickerComponent(languageService, changeDetector);
     component['shortLanguage'] = 'pt';
   });
 
@@ -421,6 +424,34 @@ describe('PoDatepickerBaseComponent:', () => {
         expect(component.validate(new UntypedFormControl('Tue Jun 05 2018 00:00:00'))).toEqual(null);
         expect(component.errorPattern).toBe('');
       });
+
+      it('should call markForCheck when status is INVALID', fakeAsync(() => {
+        component['cd'] = { markForCheck: () => {} } as any;
+        component.errorPattern = 'Erro inválido';
+        const controlMock = {
+          statusChanges: new Subject<string>()
+        } as any;
+
+        spyOn(component['cd'], 'markForCheck');
+
+        component.validate(controlMock);
+
+        controlMock.statusChanges.next('INVALID');
+        tick();
+
+        expect(component['cd'].markForCheck).toHaveBeenCalled();
+      }));
+
+      it('should set hasValidatorRequired to true if showErrorMessageRequired is true and control has required validator', () => {
+        component['hasValidatorRequired'] = false;
+        component.showErrorMessageRequired = true;
+
+        const controlMock = new FormControl('', Validators.required);
+
+        component.validate(controlMock);
+
+        expect(component['hasValidatorRequired']).toBeTrue();
+      });
     });
 
     it('ngOnInit: should call buildMask', () => {
@@ -429,6 +460,16 @@ describe('PoDatepickerBaseComponent:', () => {
       component.ngOnInit();
 
       expect(component['buildMask']).toHaveBeenCalled();
+    });
+
+    it('ngOnDestroy: should unsubscribe `subscription` on destroy', () => {
+      component['subscription'] = fakeSubscription;
+
+      spyOn(component['subscription'], <any>'unsubscribe');
+
+      component.ngOnDestroy();
+
+      expect(component['subscription'].unsubscribe).toHaveBeenCalled();
     });
 
     it('validateModel: shouldn`t call `validatorChange` when it is falsy', () => {

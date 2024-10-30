@@ -1,11 +1,20 @@
-import { AfterViewInit, ElementRef, HostListener, ViewChild, Directive, ChangeDetectorRef } from '@angular/core';
+import {
+  AfterViewInit,
+  ElementRef,
+  HostListener,
+  ViewChild,
+  Directive,
+  ChangeDetectorRef,
+  OnDestroy
+} from '@angular/core';
 import { AbstractControl } from '@angular/forms';
 
 import { PoInputBaseComponent } from '../po-input/po-input-base.component';
+import { isObservable, of, Subscription, switchMap } from 'rxjs';
 
 /* eslint-disable @angular-eslint/directive-class-suffix */
 @Directive()
-export abstract class PoInputGeneric extends PoInputBaseComponent implements AfterViewInit {
+export abstract class PoInputGeneric extends PoInputBaseComponent implements AfterViewInit, OnDestroy {
   @ViewChild('inp', { read: ElementRef, static: true }) inputEl: ElementRef;
 
   type = 'text';
@@ -13,6 +22,7 @@ export abstract class PoInputGeneric extends PoInputBaseComponent implements Aft
   el: ElementRef;
   valueBeforeChange: any;
   timeoutChange: any;
+  private subscriptionValidator: Subscription = new Subscription();
 
   get autocomplete(): string {
     return this.noAutocomplete ? 'off' : 'on';
@@ -41,6 +51,9 @@ export abstract class PoInputGeneric extends PoInputBaseComponent implements Aft
         this.objMask.keyup(e);
       }
       this.callOnChange(this.objMask.valueToModel);
+      if (this.errorAsyncProperties?.triggerMode === 'changeModel') {
+        this.verifyErrorAsync();
+      }
     }
   }
 
@@ -53,6 +66,10 @@ export abstract class PoInputGeneric extends PoInputBaseComponent implements Aft
     if (this.type !== 'password') {
       this.setPaddingInput();
     }
+  }
+
+  ngOnDestroy(): void {
+    this.subscriptionValidator?.unsubscribe();
   }
 
   focus() {
@@ -95,6 +112,9 @@ export abstract class PoInputGeneric extends PoInputBaseComponent implements Aft
       : this.inputEl.nativeElement.value;
     value = this.upperCase ? value.toUpperCase() : value;
     this.callOnChange(value);
+    if (this.errorAsyncProperties?.triggerMode === 'changeModel') {
+      this.verifyErrorAsync();
+    }
   }
 
   validMaxLength(maxlength: number, value: string) {
@@ -134,6 +154,10 @@ export abstract class PoInputGeneric extends PoInputBaseComponent implements Aft
       clearTimeout(this.timeoutChange);
       this.timeoutChange = setTimeout(() => {
         this.change.emit(elementValue);
+        const errorAsync = this.errorAsyncProperties;
+        if (errorAsync?.triggerMode === 'change' || !errorAsync?.triggerMode) {
+          this.verifyErrorAsync();
+        }
       }, 200);
     }
   }
@@ -149,8 +173,38 @@ export abstract class PoInputGeneric extends PoInputBaseComponent implements Aft
     return (
       this.el.nativeElement.classList.contains('ng-invalid') &&
       this.el.nativeElement.classList.contains('ng-dirty') &&
-      this.inputEl.nativeElement.value !== ''
+      (this.inputEl.nativeElement.value !== '' ||
+        (this.showErrorMessageRequired && (this.required || this.hasValidatorRequired)))
     );
+  }
+
+  verifyErrorAsync() {
+    if (this.errorPattern !== '' && this.errorAsyncProperties?.errorAsync) {
+      const errorAsync = this.errorAsyncProperties.errorAsync(this.inputEl.nativeElement.value);
+      if (isObservable(errorAsync)) {
+        this.subscriptionValidator.unsubscribe();
+        this.subscriptionValidator = errorAsync
+          .pipe(
+            switchMap(error => {
+              const element = this.el.nativeElement;
+              if (error) {
+                element.classList.add('ng-invalid');
+                element.classList.add('ng-dirty');
+                this.cd.detectChanges();
+              } else if (
+                element.classList.contains('ng-invalid') &&
+                element.classList.contains('ng-dirty') &&
+                !this.isInvalid
+              ) {
+                element.classList.remove('ng-invalid');
+                this.cd.detectChanges();
+              }
+              return of('');
+            })
+          )
+          .subscribe();
+      }
+    }
   }
 
   getErrorPattern() {
@@ -187,6 +241,9 @@ export abstract class PoInputGeneric extends PoInputBaseComponent implements Aft
   clear(value) {
     this.callOnChange(value);
     this.controlChangeEmitter();
+    if (this.errorAsyncProperties?.triggerMode === 'changeModel') {
+      this.verifyErrorAsync();
+    }
   }
 
   writeValueModel(value) {
@@ -213,6 +270,7 @@ export abstract class PoInputGeneric extends PoInputBaseComponent implements Aft
     if (value) {
       this.validateInitMask();
       this.changeModel.emit(value);
+      this.verifyErrorAsync();
     }
   }
 
