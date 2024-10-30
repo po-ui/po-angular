@@ -25,6 +25,7 @@ export class SamplePoLoginLabsComponent implements OnInit {
     { value: 'optional', label: 'Optional' },
     { value: 'readonly', label: 'Read Only' },
     { value: 'required', label: 'Required' },
+    { value: 'requiredFieldErrorMessage', label: 'Required Field Error Message' },
     { value: 'showRequired', label: 'Show Required' }
   ];
 

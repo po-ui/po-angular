@@ -6,14 +6,16 @@ import {
   ElementRef,
   forwardRef,
   Input,
+  OnDestroy,
   OnInit,
   ViewChild
 } from '@angular/core';
-import { AbstractControl, NG_VALUE_ACCESSOR, NG_VALIDATORS } from '@angular/forms';
+import { AbstractControl, NG_VALIDATORS, NG_VALUE_ACCESSOR } from '@angular/forms';
 import { PoLanguageService } from '../../../services/po-language/po-language.service';
 
-import { minFailed, maxFailed, maxlengpoailed } from '../validators';
+import { maxFailed, maxlengpoailed, minFailed } from '../validators';
 
+import { isObservable, of, Subscription, switchMap } from 'rxjs';
 import { convertToInt, uuid } from '../../../utils/util';
 import { PoInputBaseComponent } from '../po-input/po-input-base.component';
 
@@ -78,7 +80,7 @@ const poDecimalTotalLengthLimit = 16;
     }
   ]
 })
-export class PoDecimalComponent extends PoInputBaseComponent implements AfterViewInit, OnInit {
+export class PoDecimalComponent extends PoInputBaseComponent implements AfterViewInit, OnInit, OnDestroy {
   @ViewChild('inp', { read: ElementRef, static: true }) inputEl: ElementRef;
 
   id = `po-decimal[${uuid()}]`;
@@ -96,6 +98,7 @@ export class PoDecimalComponent extends PoInputBaseComponent implements AfterVie
   private oldDotsLength = null;
   private thousandSeparator: string;
   private valueBeforeChange: any;
+  private subscriptionValidator: Subscription = new Subscription();
 
   private regex = {
     thousand: new RegExp('\\' + ',', 'g'),
@@ -265,9 +268,17 @@ export class PoDecimalComponent extends PoInputBaseComponent implements AfterVie
     this.setPaddingInput();
   }
 
+  ngOnDestroy(): void {
+    this.subscriptionValidator?.unsubscribe();
+  }
+
   clear(value) {
     this.callOnChange(value);
     this.controlChangeEmitter();
+
+    if (this.errorAsyncProperties?.triggerMode === 'changeModel') {
+      this.verifyErrorAsync(value);
+    }
   }
 
   extraValidation(abstractControl: AbstractControl): { [key: string]: any } {
@@ -322,7 +333,7 @@ export class PoDecimalComponent extends PoInputBaseComponent implements AfterVie
     return (
       this.el.nativeElement.classList.contains('ng-invalid') &&
       this.el.nativeElement.classList.contains('ng-dirty') &&
-      this.getScreenValue() !== ''
+      (this.getScreenValue() !== '' || (this.showErrorMessageRequired && (this.required || this.hasValidatorRequired)))
     );
   }
 
@@ -398,6 +409,10 @@ export class PoDecimalComponent extends PoInputBaseComponent implements AfterVie
     }
 
     this.callOnChange(this.formatToModelValue(modelValue));
+
+    if (this.errorAsyncProperties?.triggerMode === 'changeModel') {
+      this.verifyErrorAsync(this.formatToModelValue(modelValue));
+    }
   }
 
   onInputKeyboardAndroid(event: any) {
@@ -451,6 +466,7 @@ export class PoDecimalComponent extends PoInputBaseComponent implements AfterVie
 
     if (formatedViewValue) {
       this.change.emit(value);
+      this.verifyErrorAsync(value);
     }
   }
 
@@ -485,6 +501,10 @@ export class PoDecimalComponent extends PoInputBaseComponent implements AfterVie
       this.fireChange = true;
       setTimeout(() => {
         this.change.emit(elementValue);
+        const errorAsync = this.errorAsyncProperties;
+        if (errorAsync?.triggerMode === 'change' || !errorAsync?.triggerMode) {
+          this.verifyErrorAsync(elementValue);
+        }
       }, 200);
     }
   }
@@ -717,6 +737,35 @@ export class PoDecimalComponent extends PoInputBaseComponent implements AfterVie
       valueBeforeSeparatorOriginal.length === this.thousandMaxlength &&
       !this.isKeyDecimalSeparator(event)
     );
+  }
+
+  private verifyErrorAsync(value) {
+    if (this.errorPattern !== '' && this.errorAsyncProperties?.errorAsync) {
+      const errorAsync = this.errorAsyncProperties.errorAsync(value);
+      if (isObservable(errorAsync)) {
+        this.subscriptionValidator?.unsubscribe();
+        this.subscriptionValidator = errorAsync
+          .pipe(
+            switchMap(error => {
+              const element = this.el.nativeElement;
+              if (error) {
+                element.classList.add('ng-invalid');
+                element.classList.add('ng-dirty');
+                this.cd.detectChanges();
+              } else if (
+                element.classList.contains('ng-invalid') &&
+                element.classList.contains('ng-dirty') &&
+                !this.isInvalid
+              ) {
+                element.classList.remove('ng-invalid');
+                this.cd.detectChanges();
+              }
+              return of('');
+            })
+          )
+          .subscribe();
+      }
+    }
   }
 
   private verifyThousandLength(event: any): boolean {

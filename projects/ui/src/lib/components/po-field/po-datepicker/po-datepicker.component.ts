@@ -1,6 +1,7 @@
 import {
   AfterViewInit,
   ChangeDetectionStrategy,
+  ChangeDetectorRef,
   Component,
   ElementRef,
   forwardRef,
@@ -17,17 +18,18 @@ import {
   isKeyCodeEnter,
   isKeyCodeSpace,
   isMobile,
+  replaceFormatSeparator,
   setYearFrom0To100,
-  uuid,
-  replaceFormatSeparator
+  uuid
 } from '../../../utils/util';
 import { PoControlPositionService } from './../../../services/po-control-position/po-control-position.service';
 
+import { isObservable, of, Subscription, switchMap } from 'rxjs';
+import { PoLanguageService } from '../../../services/po-language/po-language.service';
+import { PoButtonComponent } from '../../po-button/po-button.component';
 import { PoCalendarComponent } from '../../po-calendar/po-calendar.component';
 import { PoDatepickerBaseComponent } from './po-datepicker-base.component';
-import { PoLanguageService } from '../../../services/po-language/po-language.service';
 import { PoDatepickerLiterals } from './po-datepicker.literals';
-import { PoButtonComponent } from '../../po-button/po-button.component';
 
 const poCalendarContentOffset = 8;
 const poCalendarPositionDefault = 'bottom-left';
@@ -112,6 +114,7 @@ export class PoDatepickerComponent extends PoDatepickerBaseComponent implements 
   );
   private timeoutChange: any;
   private valueBeforeChange: string;
+  private subscriptionValidator: Subscription = new Subscription();
 
   get autocomplete() {
     return this.noAutocomplete ? 'off' : 'on';
@@ -119,11 +122,12 @@ export class PoDatepickerComponent extends PoDatepickerBaseComponent implements 
 
   constructor(
     protected languageService: PoLanguageService,
+    protected cd: ChangeDetectorRef,
     private controlPosition: PoControlPositionService,
     private renderer: Renderer2,
     el: ElementRef
   ) {
-    super(languageService);
+    super(languageService, cd);
     this.shortLanguage = this.languageService.getShortLanguage();
     this.el = el;
     const language = languageService.getShortLanguage();
@@ -171,6 +175,7 @@ export class PoDatepickerComponent extends PoDatepickerBaseComponent implements 
   }
 
   ngOnDestroy() {
+    this.subscriptionValidator?.unsubscribe();
     this.removeListeners();
   }
 
@@ -242,7 +247,8 @@ export class PoDatepickerComponent extends PoDatepickerBaseComponent implements 
     return (
       this.el.nativeElement.classList.contains('ng-invalid') &&
       this.el.nativeElement.classList.contains('ng-dirty') &&
-      this.inputEl.nativeElement.value !== ''
+      (this.inputEl.nativeElement.value !== '' ||
+        (this.showErrorMessageRequired && (this.required || this.hasValidatorRequired)))
     );
   }
 
@@ -351,7 +357,10 @@ export class PoDatepickerComponent extends PoDatepickerBaseComponent implements 
         this.inputEl.nativeElement.value = '';
         this.date = undefined;
       }
+
       this.controlModel(this.date);
+      const dateModelFormatted = this.formatToDate(this.date);
+      this.verifyErrorAsync(dateModelFormatted);
     } else if (this.inputEl) {
       this.inputEl.nativeElement.value = '';
       this.date = undefined;
@@ -371,6 +380,35 @@ export class PoDatepickerComponent extends PoDatepickerBaseComponent implements 
 
   hasOverlayClass(element: any) {
     return element.classList.contains('po-datepicker-calendar-overlay');
+  }
+
+  verifyErrorAsync(value) {
+    if (this.errorPattern !== '' && this.errorAsync) {
+      const errorAsync = this.errorAsync(value);
+      if (isObservable(errorAsync)) {
+        this.subscriptionValidator?.unsubscribe();
+        this.subscriptionValidator = errorAsync
+          .pipe(
+            switchMap(error => {
+              const element = this.el.nativeElement;
+              if (error) {
+                element.classList.add('ng-invalid');
+                element.classList.add('ng-dirty');
+                this.cd.detectChanges();
+              } else if (
+                element.classList.contains('ng-invalid') &&
+                element.classList.contains('ng-dirty') &&
+                !this.isInvalid
+              ) {
+                element.classList.remove('ng-invalid');
+                this.cd.detectChanges();
+              }
+              return of('');
+            })
+          )
+          .subscribe();
+      }
+    }
   }
 
   /* istanbul ignore next */
@@ -393,6 +431,7 @@ export class PoDatepickerComponent extends PoDatepickerBaseComponent implements 
       clearTimeout(this.timeoutChange);
       this.timeoutChange = setTimeout(() => {
         this.onchange.emit(dateModelFormatted);
+        this.verifyErrorAsync(dateModelFormatted);
       }, 200);
     }
   }

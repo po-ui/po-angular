@@ -6,6 +6,7 @@ import { configureTestSuite } from './../../../util-test/util-expect.spec';
 
 import { PoFieldModule } from './../po-field.module';
 import { PoNumberBaseComponent } from './po-number-base.component';
+import { of } from 'rxjs';
 
 @Component({
   template: `
@@ -271,7 +272,12 @@ describe('PoNumberBaseComponent', () => {
       formatNumber: component['formatNumber'],
       inputEl: component.inputEl,
       invalidInputValueOnBlur: true,
-      isEndWithDot: () => {}
+      isEndWithDot: () => {},
+      errorAsyncProperties: {
+        errorAsync: value => of(true),
+        triggerMode: 'changeModel'
+      },
+      verifyErrorAsync: () => {}
     };
 
     spyOn(fakeThis, 'callOnChange');
@@ -376,7 +382,8 @@ describe('PoNumberBaseComponent', () => {
       const fakeThis = {
         inputEl: '',
         mask: '',
-        changeModel: component.changeModel
+        changeModel: component.changeModel,
+        verifyErrorAsync: () => {}
       };
       spyOn(component.changeModel, 'emit');
 
@@ -389,7 +396,8 @@ describe('PoNumberBaseComponent', () => {
       const fakeThis = {
         inputEl: component.inputEl,
         mask: '',
-        changeModel: component.change
+        changeModel: component.change,
+        verifyErrorAsync: () => {}
       };
 
       component.writeValueModel.call(fakeThis, 10);
@@ -405,7 +413,8 @@ describe('PoNumberBaseComponent', () => {
           controlFormatting: value => value + '999',
           formatModel: false
         },
-        changeModel: component.changeModel
+        changeModel: component.changeModel,
+        verifyErrorAsync: () => {}
       };
 
       component.writeValueModel.call(fakeThis, '100');
@@ -423,7 +432,8 @@ describe('PoNumberBaseComponent', () => {
           controlFormatting: value => {},
           formatModel: true
         },
-        changeModel: component.changeModel
+        changeModel: component.changeModel,
+        verifyErrorAsync: () => {}
       };
 
       component.writeValueModel.call(fakeThis, '');
@@ -442,6 +452,7 @@ describe('PoNumberBaseComponent', () => {
           formatModel: true
         },
         changeModel: component.changeModel,
+        verifyErrorAsync: () => {},
         onChangePropagate: component.onChangePropagate
       };
 

@@ -3,12 +3,14 @@ import { UntypedFormControl } from '@angular/forms';
 
 import { expectPropertiesValues } from '../../../util-test/util-expect.spec';
 
-import { PoCleanComponent } from './../po-clean/po-clean.component';
-import { PoDecimalComponent } from './po-decimal.component';
-import { PoFieldContainerBottomComponent } from './../po-field-container/po-field-container-bottom/po-field-container-bottom.component';
-import { PoFieldContainerComponent } from '../po-field-container/po-field-container.component';
+import { ElementRef } from '@angular/core';
+import { of, Subscription } from 'rxjs';
 import { PoLanguageService } from '../../../services';
 import { PoIconModule } from '../../po-icon';
+import { PoFieldContainerComponent } from '../po-field-container/po-field-container.component';
+import { PoCleanComponent } from './../po-clean/po-clean.component';
+import { PoFieldContainerBottomComponent } from './../po-field-container/po-field-container-bottom/po-field-container-bottom.component';
+import { PoDecimalComponent } from './po-decimal.component';
 
 describe('PoDecimalComponent:', () => {
   let component: PoDecimalComponent;
@@ -187,6 +189,32 @@ describe('PoDecimalComponent:', () => {
     expect(component.hasInvalidClass.call(fakeThis)).toBeTruthy();
   });
 
+  it('should return true in hasInvalidClass if showErrorMessageRequired and required is true', () => {
+    const fakeThis = {
+      el: component.inputEl,
+      getScreenValue: () => '',
+      showErrorMessageRequired: true,
+      required: true
+    };
+
+    fakeThis.el.nativeElement.classList.add('ng-invalid');
+    fakeThis.el.nativeElement.classList.add('ng-dirty');
+    expect(component.hasInvalidClass.call(fakeThis)).toBeTruthy();
+  });
+
+  it('should return true in hasInvalidClass if showErrorMessageRequired and hasValidatorRequired is true', () => {
+    const fakeThis = {
+      el: component.inputEl,
+      getScreenValue: () => '',
+      showErrorMessageRequired: true,
+      hasValidatorRequired: true
+    };
+
+    fakeThis.el.nativeElement.classList.add('ng-invalid');
+    fakeThis.el.nativeElement.classList.add('ng-dirty');
+    expect(component.hasInvalidClass.call(fakeThis)).toBeTruthy();
+  });
+
   it('blur event must be called', () => {
     const fakeEvent = {
       target: {
@@ -270,6 +298,10 @@ describe('PoDecimalComponent:', () => {
         selectionEnd: 5,
         value: '10425'
       }
+    };
+    component.errorAsyncProperties = {
+      errorAsync: value => of(true),
+      triggerMode: 'changeModel'
     };
 
     spyOn(component, <any>'setViewValue');
@@ -672,7 +704,8 @@ describe('PoDecimalComponent:', () => {
       inputEl: component.inputEl,
       valueBeforeChange: undefined,
       change: component.change,
-      getScreenValue: () => {}
+      getScreenValue: () => {},
+      verifyErrorAsync: () => {}
     };
 
     spyOn(fakeThis.change, 'emit');
@@ -727,6 +760,10 @@ describe('PoDecimalComponent:', () => {
 
   it('should call callOnChange if input is cleaned', () => {
     component.clean = true;
+    component.errorAsyncProperties = {
+      errorAsync: value => of(true),
+      triggerMode: 'changeModel'
+    };
 
     spyOn(component, <any>'callOnChange');
     component.clear('');
@@ -1345,7 +1382,8 @@ describe('PoDecimalComponent:', () => {
         valueBeforeChange: '1',
         fireChange: true,
         change: component.change,
-        getScreenValue: () => value
+        getScreenValue: () => value,
+        verifyErrorAsync: () => {}
       };
 
       spyOn(fakeThis.change, 'emit');
@@ -1360,7 +1398,8 @@ describe('PoDecimalComponent:', () => {
         valueBeforeChange: 1,
         fireChange: false,
         change: component.change,
-        getScreenValue: () => {}
+        getScreenValue: () => {},
+        verifyErrorAsync: () => {}
       };
 
       spyOn(fakeThis.change, 'emit');
@@ -1501,6 +1540,57 @@ describe('PoDecimalComponent:', () => {
 
         expect(expectedResult).toBe('');
         expect(fixture.debugElement.nativeElement.querySelector('.po-field-container-bottom-text-error')).toBeNull();
+      });
+    });
+
+    describe('verifyErrorAsync', () => {
+      beforeEach(() => {
+        component['cd'] = { detectChanges: () => {} } as any;
+        component['inputEl'] = { nativeElement: { value: 'test' } } as ElementRef;
+        component['el'] = { nativeElement: document.createElement('div') } as ElementRef;
+
+        component.errorPattern = 'Erro de exemplo';
+        component.errorAsyncProperties = {
+          errorAsync: jasmine.createSpy('errorAsync').and.returnValue(of(true))
+        };
+
+        component['subscriptionValidator'] = new Subscription();
+      });
+
+      afterEach(() => {
+        component['subscriptionValidator'].unsubscribe();
+      });
+
+      it('should add ng-invalid and ng-dirty classes when error is true', () => {
+        spyOn(component['cd'], 'detectChanges');
+        component['verifyErrorAsync']('test');
+
+        expect(component.errorAsyncProperties.errorAsync).toHaveBeenCalledWith('test');
+        expect(component['el'].nativeElement.classList.contains('ng-invalid')).toBeTrue();
+        expect(component['el'].nativeElement.classList.contains('ng-dirty')).toBeTrue();
+        expect(component['cd'].detectChanges).toHaveBeenCalled();
+      });
+
+      it('should remove ng-invalid class when error is false and isInvalid is false', () => {
+        spyOn(component['cd'], 'detectChanges');
+        component.errorAsyncProperties.errorAsync = jasmine.createSpy('errorAsync').and.returnValue(of(false));
+        component['el'].nativeElement.classList.add('ng-invalid');
+        component['el'].nativeElement.classList.add('ng-dirty');
+        component.isInvalid = false;
+
+        component['verifyErrorAsync']('test');
+
+        expect(component.errorAsyncProperties.errorAsync).toHaveBeenCalledWith('test');
+        expect(component['el'].nativeElement.classList.contains('ng-invalid')).toBeFalse();
+        expect(component['cd'].detectChanges).toHaveBeenCalled();
+      });
+
+      it('must cancel the previous subscription from subscriptionValidator', () => {
+        const unsubscribeSpy = spyOn(component['subscriptionValidator'], 'unsubscribe');
+
+        component['verifyErrorAsync']('value');
+
+        expect(unsubscribeSpy).toHaveBeenCalled();
       });
     });
   });

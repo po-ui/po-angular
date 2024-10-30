@@ -1,5 +1,5 @@
 import { ComponentFixture, fakeAsync, TestBed, tick } from '@angular/core/testing';
-import { Component } from '@angular/core';
+import { Component, ElementRef } from '@angular/core';
 
 import * as UtilsFunctions from '../../../utils/util';
 import { formatYear, setYearFrom0To100 } from '../../../utils/util';
@@ -12,6 +12,7 @@ import { PoDatepickerComponent } from './po-datepicker.component';
 import { PoDatepickerIsoFormat } from './enums/po-datepicker-iso-format.enum';
 
 import { PoDatepickerModule } from './po-datepicker.module';
+import { of, Subscription } from 'rxjs';
 
 function keyboardEvents(event: string, keyCode: number) {
   const eventKeyBoard = document.createEvent('KeyboardEvent');
@@ -202,6 +203,25 @@ describe('PoDatepickerComponent:', () => {
     component.inputEl.nativeElement.value = 'teste';
     expect(component.hasInvalidClass()).toBe(true);
   });
+
+  it('should return true in hasInvalidClass if showErrorMessageRequired and required is true', () => {
+    component.el.nativeElement.classList.add('ng-invalid');
+    component.el.nativeElement.classList.add('ng-dirty');
+    component.inputEl.nativeElement.value = '';
+    component.showErrorMessageRequired = true;
+    component.required = true;
+    expect(component.hasInvalidClass()).toBeTruthy();
+  });
+
+  it('should return true in hasInvalidClass if showErrorMessageRequired and hasValidatorRequired is true', () => {
+    component.el.nativeElement.classList.add('ng-invalid');
+    component.el.nativeElement.classList.add('ng-dirty');
+    component.inputEl.nativeElement.value = '';
+    component.showErrorMessageRequired = true;
+    component.required = false;
+    component['hasValidatorRequired'] = true;
+    expect(component.hasInvalidClass()).toBeTruthy();
+  });
 });
 
 @Component({
@@ -244,6 +264,7 @@ describe('PoDatepicker mocked with form', () => {
 describe('PoDatepickerComponent:', () => {
   let component: PoDatepickerComponent;
   let fixture: ComponentFixture<PoDatepickerComponent>;
+  const fakeSubscription = <any>{ unsubscribe: () => {} };
 
   beforeEach(async () => {
     await TestBed.configureTestingModule({
@@ -458,6 +479,16 @@ describe('PoDatepickerComponent:', () => {
       const removeListener = spyOn(component, <any>'removeListeners');
       component.ngOnDestroy();
       expect(removeListener).toHaveBeenCalled();
+    });
+
+    it('ngOnDestroy: should unsubscribe `subscriptionValidator` on destroy', () => {
+      component['subscriptionValidator'] = fakeSubscription;
+
+      spyOn(component['subscriptionValidator'], <any>'unsubscribe');
+
+      component.ngOnDestroy();
+
+      expect(component['subscriptionValidator'].unsubscribe).toHaveBeenCalled();
     });
 
     it('focus: should call `focus` of datepicker', () => {
@@ -848,7 +879,8 @@ describe('PoDatepickerComponent:', () => {
         valueBeforeChange: '',
         timeOutChange: () => {},
         formatToDate: () => {},
-        onchange: { emit: arg => {} }
+        onchange: { emit: arg => {} },
+        verifyErrorAsync: () => {}
       };
 
       spyOn(fakeThis.onchange, 'emit');
@@ -868,7 +900,8 @@ describe('PoDatepickerComponent:', () => {
       const fakeThis = {
         valueBeforeChange: value,
         formatToDate: () => {},
-        onchange: { emit: () => {} }
+        onchange: { emit: () => {} },
+        verifyErrorAsync: () => {}
       };
 
       spyOn(fakeThis, <any>'formatToDate').and.returnValue(value);
@@ -1090,6 +1123,55 @@ describe('PoDatepickerComponent:', () => {
       component['togglePicker']();
 
       expect(component['removeListeners']).toHaveBeenCalled();
+    });
+
+    describe('verifyErrorAsync', () => {
+      beforeEach(() => {
+        component['cd'] = { detectChanges: () => {} } as any;
+        component['inputEl'] = { nativeElement: { value: 'test' } } as ElementRef;
+        component['el'] = { nativeElement: document.createElement('div') } as ElementRef;
+
+        component.errorPattern = 'Erro de exemplo';
+        component.errorAsync = jasmine.createSpy('errorAsync').and.returnValue(of(true));
+
+        component['subscriptionValidator'] = new Subscription();
+      });
+
+      afterEach(() => {
+        component['subscriptionValidator'].unsubscribe();
+      });
+
+      it('should add ng-invalid and ng-dirty classes when error is true', () => {
+        spyOn(component['cd'], 'detectChanges');
+        component['verifyErrorAsync']('test');
+
+        expect(component.errorAsync).toHaveBeenCalledWith('test');
+        expect(component['el'].nativeElement.classList.contains('ng-invalid')).toBeTrue();
+        expect(component['el'].nativeElement.classList.contains('ng-dirty')).toBeTrue();
+        expect(component['cd'].detectChanges).toHaveBeenCalled();
+      });
+
+      it('should remove ng-invalid class when error is false and isInvalid is false', () => {
+        spyOn(component['cd'], 'detectChanges');
+        component.errorAsync = jasmine.createSpy('errorAsync').and.returnValue(of(false));
+        component['el'].nativeElement.classList.add('ng-invalid');
+        component['el'].nativeElement.classList.add('ng-dirty');
+        component['isInvalid'] = false;
+
+        component['verifyErrorAsync']('test');
+
+        expect(component.errorAsync).toHaveBeenCalledWith('test');
+        expect(component['el'].nativeElement.classList.contains('ng-invalid')).toBeFalse();
+        expect(component['cd'].detectChanges).toHaveBeenCalled();
+      });
+
+      it('must cancel the previous subscription from subscriptionValidator', () => {
+        const unsubscribeSpy = spyOn(component['subscriptionValidator'], 'unsubscribe');
+
+        component['verifyErrorAsync']('value');
+
+        expect(unsubscribeSpy).toHaveBeenCalled();
+      });
     });
   });
 

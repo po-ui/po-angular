@@ -63,3 +63,5 @@ export * from './po-switch/index';
 
 export * from './po-field-container/index';
 export * from './po-clean/index';
+
+export * from './shared/interfaces/error-async-properties.interface';

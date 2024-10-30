@@ -106,6 +106,25 @@ describe('PoNumberComponent:', () => {
       expect(component.validate(new UntypedFormControl(5))).not.toBeNull();
     });
 
+    it('containsInvalidClass: should return true in containsInvalidClass if showErrorMessageRequired and required is true', () => {
+      component.el.nativeElement.classList.add('ng-invalid');
+      component.el.nativeElement.classList.add('ng-dirty');
+      component.inputEl.nativeElement.value = '';
+      component.showErrorMessageRequired = true;
+      component.required = true;
+      expect(component['containsInvalidClass']()).toBeTruthy();
+    });
+
+    it('containsInvalidClass: should return true in containsInvalidClass if showErrorMessageRequired and hasValidatorRequired is true', () => {
+      component.el.nativeElement.classList.add('ng-invalid');
+      component.el.nativeElement.classList.add('ng-dirty');
+      component.inputEl.nativeElement.value = '';
+      component.showErrorMessageRequired = true;
+      component.hasValidatorRequired = true;
+      component.required = false;
+      expect(component['containsInvalidClass']()).toBeTruthy();
+    });
+
     describe('getErrorPatternMessage: ', () => {
       it('should return errorPattern value if errorPattern has value and containsInvalidClass returns true and show the properly message in template', () => {
         component.el.nativeElement.value = '1e';

@@ -1,5 +1,5 @@
-import { Directive, EventEmitter, Input, OnInit, Output } from '@angular/core';
-import { AbstractControl, ControlValueAccessor, Validator } from '@angular/forms';
+import { ChangeDetectorRef, Directive, EventEmitter, Input, OnDestroy, OnInit, Output } from '@angular/core';
+import { AbstractControl, ControlValueAccessor, Validator, Validators } from '@angular/forms';
 
 import {
   convertDateToISODate,
@@ -15,6 +15,7 @@ import {
 import { PoMask } from '../po-input/po-mask';
 import { dateFailed, requiredFailed } from './../validators';
 
+import { Observable, Subscription, switchMap } from 'rxjs';
 import { poLocaleDefault } from '../../../services/po-language/po-language.constant';
 import { PoLanguageService } from '../../../services/po-language/po-language.service';
 import { PoDatepickerIsoFormat } from './enums/po-datepicker-iso-format.enum';
@@ -93,7 +94,7 @@ const poDatepickerFormatDefault: string = 'dd/mm/yyyy';
  *
  */
 @Directive()
-export abstract class PoDatepickerBaseComponent implements ControlValueAccessor, OnInit, Validator {
+export abstract class PoDatepickerBaseComponent implements ControlValueAccessor, OnInit, OnDestroy, Validator {
   /**
    * @optional
    *
@@ -106,6 +107,20 @@ export abstract class PoDatepickerBaseComponent implements ControlValueAccessor,
    * @default `false`
    */
   @Input({ alias: 'p-auto-focus', transform: convertToBoolean }) autoFocus: boolean = false;
+
+  /**
+   * @optional
+   *
+   * @description
+   *
+   * Função executada para realizar a validação assíncrona personalizada.
+   * Executada ao disparar o output `change`.
+   *
+   * @param value Valor atual preenchido no campo.
+   *
+   * @returns Retorna Observable com o valor `true` para sinalizar o erro `false` para indicar que não há erro.
+   */
+  @Input('p-error-async') errorAsync: (value) => Observable<boolean>;
 
   /* Nome do componente datepicker. */
   @Input('name') name: string;
@@ -128,9 +143,23 @@ export abstract class PoDatepickerBaseComponent implements ControlValueAccessor,
   /**
    * Mensagem apresentada quando a data for inválida ou fora do período.
    *
-   * > Esta mensagem não é apresentada quando o campo estiver vazio, mesmo que ele seja obrigatório.
+   * > Por padrão, esta mensagem não é apresentada quando o campo estiver vazio, mesmo que ele seja requerido.
+   * Para exibir a mensagem com o campo vazio, utilize a propriedade `p-required-field-error-message` em conjunto.
    */
   @Input('p-error-pattern') errorPattern?: string = '';
+
+  /**
+   * @optional
+   *
+   * @description
+   *
+   * Exibe a mensagem setada na propriedade `p-error-pattern` se o campo estiver vazio e for requerido.
+   *
+   * > Necessário que a propriedade `p-required` esteja habilitada.
+   *
+   * @default `false`
+   */
+  @Input('p-required-field-error-message') showErrorMessageRequired: boolean = false;
 
   /**
    * @optional
@@ -159,6 +188,8 @@ export abstract class PoDatepickerBaseComponent implements ControlValueAccessor,
   protected validatorChange: any;
   protected onTouchedModel: any = null;
   protected shortLanguage: string;
+  protected isInvalid: boolean;
+  protected hasValidatorRequired: boolean;
 
   private _format?: string = poDatepickerFormatDefault;
   private _isoFormat: PoDatepickerIsoFormat;
@@ -167,6 +198,7 @@ export abstract class PoDatepickerBaseComponent implements ControlValueAccessor,
   private _noAutocomplete?: boolean = false;
   private _placeholder?: string = '';
   private previousValue: any;
+  private subscription: Subscription = new Subscription();
   private _date: Date;
 
   /**
@@ -386,7 +418,10 @@ export abstract class PoDatepickerBaseComponent implements ControlValueAccessor,
     return this._locale || this.shortLanguage;
   }
 
-  constructor(protected languageService: PoLanguageService) {}
+  constructor(
+    protected languageService: PoLanguageService,
+    protected cd: ChangeDetectorRef
+  ) {}
 
   set date(value: any) {
     this._date = typeof value === 'string' ? convertIsoToDate(value, false, false) : value;
@@ -403,6 +438,10 @@ export abstract class PoDatepickerBaseComponent implements ControlValueAccessor,
     this.objMask = this.buildMask(
       replaceFormatSeparator(this.format, this.languageService.getDateSeparator(this.locale))
     );
+  }
+
+  ngOnDestroy(): void {
+    this.subscription?.unsubscribe();
   }
 
   // Converte um objeto string em Date
@@ -478,6 +517,10 @@ export abstract class PoDatepickerBaseComponent implements ControlValueAccessor,
     this.errorPattern =
       this.errorPattern !== 'Data inválida' && this.errorPattern !== 'Data fora do período' ? this.errorPattern : '';
 
+    if (!this.hasValidatorRequired && this.showErrorMessageRequired && c.hasValidator(Validators.required)) {
+      this.hasValidatorRequired = true;
+    }
+
     if (dateFailed(c.value)) {
       this.errorPattern = this.errorPattern || 'Data inválida';
 
@@ -504,6 +547,20 @@ export abstract class PoDatepickerBaseComponent implements ControlValueAccessor,
           valid: false
         }
       };
+    }
+
+    if (this.errorPattern !== '') {
+      this.subscription?.unsubscribe();
+      this.subscription = c.statusChanges
+        .pipe(
+          switchMap(status => {
+            if (status === 'INVALID') {
+              this.cd.markForCheck();
+            }
+            return [];
+          })
+        )
+        .subscribe();
     }
 
     return null;
