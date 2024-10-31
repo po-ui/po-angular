@@ -192,7 +192,7 @@ describe('PoPageJobSchedulerService:', () => {
       const jobSchedulerInternal = {
         periodicity: 'single',
         recurrent: undefined,
-        firstExecution: new Date(),
+        firstExecution: new Date().toISOString(),
         firstExecutionHour: '10:00'
       };
 

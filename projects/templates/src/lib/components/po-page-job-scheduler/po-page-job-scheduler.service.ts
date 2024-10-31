@@ -232,14 +232,16 @@ export class PoPageJobSchedulerService {
   }
 
   private replaceHourFirstExecution(date: string, time: string): string {
-    const firstExecutionDate = new Date(date);
+    const dateSplited = date.split('-');
+    const year = parseInt(dateSplited[0]);
+    const monthIndex = parseInt(dateSplited[1]) - 1;
+    const day = parseInt(dateSplited[2]);
 
     const timeSplited = time.split(':');
-
     const hours = parseInt(timeSplited[0], 10);
     const minutes = parseInt(timeSplited[1], 10);
 
-    firstExecutionDate.setHours(hours, minutes);
+    const firstExecutionDate = new Date(year, monthIndex, day, hours, minutes);
 
     return convertDateToISOExtended(firstExecutionDate);
   }
