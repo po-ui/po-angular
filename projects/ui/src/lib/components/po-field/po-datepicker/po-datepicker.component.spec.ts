@@ -931,14 +931,17 @@ describe('PoDatepickerComponent:', () => {
     });
 
     it(`setCalendarPosition: should call 'controlPosition.setElements' and 'controlPosition.adjustPosition'.`, () => {
-      const setDialogPickerStyleDisplay = spyOn(component, <any>'setDialogPickerStyleDisplay');
-      const setElements = spyOn(component['controlPosition'], 'setElements');
-      const adjustPosition = spyOn(component['controlPosition'], 'adjustPosition');
+      component.dialogPicker = {
+        nativeElement: document.createElement('div')
+      };
+
+      const setDialogPickerStyleDisplay = spyOn(component as any, 'setDialogPickerStyleDisplay').and.callFake(() => {});
+      const setElements = spyOn(component['controlPosition'], 'setElements').and.callFake(() => {});
+      const adjustPosition = spyOn(component['controlPosition'], 'adjustPosition').and.callFake(() => {});
 
       component['setCalendarPosition']();
 
       expect(setDialogPickerStyleDisplay).toHaveBeenCalled();
-      expect(adjustPosition).toHaveBeenCalled();
       expect(setElements).toHaveBeenCalledWith(
         component.dialogPicker.nativeElement,
         poCalendarContentOffset,
@@ -947,6 +950,7 @@ describe('PoDatepickerComponent:', () => {
         false,
         true
       );
+      expect(adjustPosition).toHaveBeenCalled();
     });
 
     it('onScroll: should call `controlPosition.adjustPosition()`.', () => {
@@ -958,6 +962,10 @@ describe('PoDatepickerComponent:', () => {
     });
 
     it('setDialogPickerStyleDisplay: should change style display.', () => {
+      component.dialogPicker = {
+        nativeElement: document.createElement('div')
+      };
+
       component['setDialogPickerStyleDisplay']('none');
       expect(component.dialogPicker.nativeElement.style.display).toBe('none');
 
