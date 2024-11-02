@@ -8,6 +8,7 @@ import { PoCleanModule } from '../po-clean/po-clean.module';
 import { PoButtonModule } from '../../po-button';
 
 import { PoDatepickerComponent } from './po-datepicker.component';
+import { OverlayModule } from '@angular/cdk/overlay';
 
 /**
  * @description
@@ -15,7 +16,15 @@ import { PoDatepickerComponent } from './po-datepicker.component';
  * Módulo do componente `po-datepicker`.
  */
 @NgModule({
-  imports: [CommonModule, FormsModule, PoFieldContainerModule, PoCleanModule, PoCalendarModule, PoButtonModule],
+  imports: [
+    CommonModule,
+    FormsModule,
+    PoFieldContainerModule,
+    OverlayModule,
+    PoCleanModule,
+    PoCalendarModule,
+    PoButtonModule
+  ],
   exports: [PoDatepickerComponent],
   declarations: [PoDatepickerComponent]
 })
