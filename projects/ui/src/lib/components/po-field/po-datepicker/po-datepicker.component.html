@@ -6,57 +6,76 @@
   [p-required]="required"
   [p-show-required]="showRequired"
 >
-  <div class="po-field-container-content po-field-container-content-datepicker">
-    <div class="po-field-container-input">
-      <input
-        #inp
-        class="po-input po-datepicker"
-        [class.po-input-icon-right]="clean && inp.value"
-        type="text"
-        [attr.name]="name"
-        [autocomplete]="autocomplete"
-        [disabled]="disabled"
-        [id]="id"
-        [placeholder]="disabled ? '' : placeholder"
-        [readonly]="readonly"
-        [required]="required"
-        (blur)="eventOnBlur($event)"
-        (click)="eventOnClick($event)"
-      />
-      <div class="po-field-icon-container-right">
-        <po-clean
-          class="po-icon-input"
-          *ngIf="clean && !disabled && !readonly"
-          [p-element-ref]="inputEl"
-          (p-change-event)="clear()"
-        >
-        </po-clean>
+  <div #outerContainer>
+    <div
+      cdkOverlayOrigin
+      #trigger="cdkOverlayOrigin"
+      class="po-field-container-content po-field-container-content-datepicker"
+    >
+      <div class="po-field-container-input">
+        <input
+          #inp
+          class="po-input po-datepicker"
+          [class.po-input-icon-right]="clean && inp.value"
+          type="text"
+          [attr.name]="name"
+          [autocomplete]="autocomplete"
+          [disabled]="disabled"
+          [id]="id"
+          [placeholder]="disabled ? '' : placeholder"
+          [readonly]="readonly"
+          [required]="required"
+          (blur)="eventOnBlur($event)"
+          (click)="eventOnClick($event)"
+        />
+        <div class="po-field-icon-container-right">
+          <po-clean
+            class="po-icon-input"
+            *ngIf="clean && !disabled && !readonly"
+            [p-element-ref]="inputEl"
+            (p-change-event)="clear()"
+          >
+          </po-clean>
+        </div>
       </div>
+      <po-button
+        #iconDatepicker
+        class="po-datepicker-button"
+        p-icon="ICON_CALENDAR"
+        p-kind="tertiary"
+        [p-disabled]="disabled || readonly"
+        (keydown)="onKeyPress($event)"
+        (p-click)="togglePicker()"
+      >
+      </po-button>
     </div>
-    <po-button
-      #iconDatepicker
-      class="po-datepicker-button"
-      p-icon="ICON_CALENDAR"
-      p-kind="tertiary"
-      [p-disabled]="disabled || readonly"
-      (keydown)="onKeyPress($event)"
-      (p-click)="togglePicker()"
-    >
-    </po-button>
-  </div>
 
-  <div #dialogPicker [class.po-datepicker-popup-calendar]="!verifyMobile()">
-    <div *ngIf="verifyMobile()" class="po-datepicker-calendar-overlay"></div>
-    <po-calendar
-      [class.po-datepicker-calendar-mobile]="verifyMobile()"
-      #calendar
-      [(ngModel)]="date"
-      [p-max-date]="maxDate"
-      [p-min-date]="minDate"
-      [p-locale]="locale"
-      (p-change)="dateSelected()"
-    >
-    </po-calendar>
+    <ng-container *ngIf="appendBox; then dropdownCDK; else dropdownDefault"> </ng-container>
+
+    <ng-template #sharedCalendarContent>
+      <div #dialogPicker [class.po-datepicker-popup-calendar]="!verifyMobile()">
+        <div *ngIf="verifyMobile()" class="po-datepicker-calendar-overlay"></div>
+        <po-calendar
+          [class.po-datepicker-calendar-mobile]="verifyMobile()"
+          #calendar
+          [(ngModel)]="date"
+          [p-max-date]="maxDate"
+          [p-min-date]="minDate"
+          [p-locale]="locale"
+          (p-change)="dateSelected()"
+        ></po-calendar>
+      </div>
+    </ng-template>
+
+    <ng-template #dropdownDefault>
+      <ng-container *ngTemplateOutlet="sharedCalendarContent"></ng-container>
+    </ng-template>
+
+    <ng-template #dropdownCDK>
+      <ng-template cdkConnectedOverlay [cdkConnectedOverlayOrigin]="trigger" [cdkConnectedOverlayOpen]="true">
+        <ng-container *ngTemplateOutlet="sharedCalendarContent"></ng-container>
+      </ng-template>
+    </ng-template>
   </div>
 
   <po-field-container-bottom
