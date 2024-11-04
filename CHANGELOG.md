@@ -2,6 +2,19 @@
 
 All notable changes to this project will be documented in this file. See [standard-version](https://github.com/conventional-changelog/standard-version) for commit guidelines.
 
+## [18.13.0](https://github.com/po-ui/po-angular/compare/v18.12.0...v18.13.0) (2024-11-04)
+
+
+### Features
+
+* **dynamic-form:** cria propriedades requiredFieldErrorMessage e errorAsync ([662812f](https://github.com/po-ui/po-angular/commit/662812f8c1016ab2d8df884b56454fc35593f275))
+* **fields:** cria propriedades requiredFieldErrorMessage e errorAsync ([ee20f96](https://github.com/po-ui/po-angular/commit/ee20f963b0c3aa4ccf78a65ebbd8a50c2b1b064a))
+
+
+### Bug Fixes
+
+* **page-job-scheduler:** ajusta diferença na data selecionada ([ebea302](https://github.com/po-ui/po-angular/commit/ebea3020dc52b4e8fbee2f8eab9623faf0cdf6b0))
+
 ## [18.12.0](https://github.com/po-ui/po-angular/compare/v18.11.0...v18.12.0) (2024-10-29)
 
 
