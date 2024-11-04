@@ -2,6 +2,13 @@
 
 All notable changes to this project will be documented in this file. See [standard-version](https://github.com/conventional-changelog/standard-version) for commit guidelines.
 
+### [17.26.6](https://github.com/po-ui/po-angular/compare/v17.26.5...v17.26.6) (2024-11-04)
+
+
+### Bug Fixes
+
+* **page-job-scheduler:** ajusta diferença na data selecionada ([2269392](https://github.com/po-ui/po-angular/commit/2269392aafbe328106087025c77611444af695c5))
+
 ### [17.26.5](https://github.com/po-ui/po-angular/compare/v17.26.4...v17.26.5) (2024-10-29)
 
 
