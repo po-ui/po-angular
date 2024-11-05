@@ -33,7 +33,8 @@ import {
   removeDuplicatedOptionsWithFieldValue,
   removeUndefinedAndNullOptionsWithFieldValue,
   isValidImageBase64,
-  sortArrayOfObjects
+  sortArrayOfObjects,
+  isValidUrl
 } from './util';
 
 import * as UtilFunctions from './util';
@@ -161,6 +162,25 @@ describe('Function isLanguage:', () => {
     expect(UtilFunctions.isLanguage('pt PT')).toBe(false);
     expect(UtilFunctions.isLanguage(123)).toBe(false);
     expect(UtilFunctions.isLanguage(undefined)).toBe(false);
+  });
+});
+
+describe('isValidUrl', () => {
+  it('should return true for the current page URL', () => {
+    const mockLocation = { origin: 'http://localhost', pathname: '/current-path' } as Location;
+    const currentUrl = 'http://localhost/current-path';
+    expect(isValidUrl(currentUrl, mockLocation)).toBe(true);
+  });
+
+  it('should return false for a different URL', () => {
+    const mockLocation = { origin: 'http://localhost', pathname: '/current-path' } as Location;
+    const differentUrl = 'http://localhost/different-path';
+    expect(isValidUrl(differentUrl, mockLocation)).toBe(false);
+  });
+
+  it('should use window.location as the default location', () => {
+    const currentUrl = window.location.origin + window.location.pathname;
+    expect(isValidUrl(currentUrl)).toBe(true);
   });
 });
 

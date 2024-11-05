@@ -67,7 +67,15 @@ export function isLanguage(value) {
 
 /* istanbul ignore next */
 export function reloadCurrentPage() {
-  window.location.assign(location.href);
+  const currentUrl = window.location.origin + window.location.pathname;
+
+  if (isValidUrl(currentUrl)) {
+    window.location.assign(currentUrl);
+  }
+}
+
+export function isValidUrl(url: string, location: Location = window.location): boolean {
+  return url === location.origin + location.pathname;
 }
 
 export function convertToBoolean(val: any): boolean {
