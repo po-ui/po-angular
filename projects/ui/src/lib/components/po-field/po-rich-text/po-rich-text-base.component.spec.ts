@@ -6,6 +6,7 @@ import { expectPropertiesValues } from '../../../util-test/util-expect.spec';
 
 import { PoRichTextBaseComponent } from './po-rich-text-base.component';
 import { PoRichTextService } from './po-rich-text.service';
+import { PoRichTextToolbarActions } from './enum/po-rich-text-toolbar-actions.enum';
 
 @Directive()
 class PoRichTextComponent extends PoRichTextBaseComponent {}
@@ -59,6 +60,32 @@ describe('PoRichTextBaseComponent:', () => {
       expectPropertiesValues(component, 'required', booleanInvalidValues, false);
 
       expect(component['validateModel']).toHaveBeenCalledWith(component.value);
+    });
+
+    describe('p-hide-toolbar-actions:', () => {
+      it('should set hideToolbarActions as an array if provided with a single action', () => {
+        component.hideToolbarActions = PoRichTextToolbarActions.Align;
+        expect(component.hideToolbarActions).toEqual([PoRichTextToolbarActions.Align]);
+      });
+
+      it('should set hideToolbarActions as an array if provided with multiple actions', () => {
+        const actions = [PoRichTextToolbarActions.Align, PoRichTextToolbarActions.Color];
+        component.hideToolbarActions = actions;
+        expect(component.hideToolbarActions).toEqual(actions);
+      });
+
+      it('should set hideToolbarActions as an empty array if provided with an empty array', () => {
+        component.hideToolbarActions = [];
+        expect(component.hideToolbarActions).toEqual([]);
+      });
+
+      it('should update hideToolbarActions correctly when changed', () => {
+        component.hideToolbarActions = PoRichTextToolbarActions.Format;
+        expect(component.hideToolbarActions).toEqual([PoRichTextToolbarActions.Format]);
+
+        component.hideToolbarActions = [PoRichTextToolbarActions.List, PoRichTextToolbarActions.Link];
+        expect(component.hideToolbarActions).toEqual([PoRichTextToolbarActions.List, PoRichTextToolbarActions.Link]);
+      });
     });
   });
 

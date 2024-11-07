@@ -1,7 +1,6 @@
 <po-rich-text
   name="richText"
   [(ngModel)]="richText"
-  [p-disabled-text-align]="properties.includes('disabledTextAlign')"
   [p-error-message]="errorMessage"
   [p-height]="height"
   [p-help]="help"
@@ -10,6 +9,7 @@
   [p-placeholder]="placeholder"
   [p-readonly]="properties.includes('readonly')"
   [p-required]="properties.includes('required')"
+  [p-hide-toolbar-actions]="toolbarHideActions"
   [p-show-required]="properties.includes('showRequired')"
   (p-change)="changeEvent('p-change')"
   (p-change-model)="changeEvent('p-change-model')"
@@ -41,10 +41,10 @@
   </div>
 
   <div class="po-row">
-    <po-number class="po-md-6" name="height" [(ngModel)]="height" p-label="Height"> </po-number>
+    <po-number class="po-md-1" name="height" [(ngModel)]="height" p-label="Height"> </po-number>
 
     <po-checkbox-group
-      class="po-md-6"
+      class="po-md-5"
       name="properties"
       [(ngModel)]="properties"
       p-columns="4"
@@ -52,6 +52,16 @@
       [p-options]="propertiesOptions"
     >
     </po-checkbox-group>
+
+    <po-multiselect
+      class="po-md-6"
+      name="multiselect"
+      p-label="Hide Toolbar Actions "
+      [p-options]="toolbarHideActionsOptions"
+      [(ngModel)]="toolbarHideActions"
+      p-placeholder="color"
+    >
+    </po-multiselect>
   </div>
 
   <div class="po-row">

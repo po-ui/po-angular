@@ -1,13 +1,14 @@
 import { AfterViewInit, Component, ElementRef, EventEmitter, Input, Output, ViewChild } from '@angular/core';
 
-import { isIE } from '../../../../utils/util';
 import { PoLanguageService } from '../../../../services/po-language/po-language.service';
+import { isIE } from '../../../../utils/util';
 
 import { PoButtonGroupItem } from '../../../po-button-group';
-import { poRichTextLiteralsDefault } from '../po-rich-text-literals';
+import { PoRichTextToolbarActions } from '../enum/po-rich-text-toolbar-actions.enum';
 import { PoRichTextToolbarButtonGroupItem } from '../interfaces/po-rich-text-toolbar-button-group-item.interface';
 import { PoRichTextImageModalComponent } from '../po-rich-text-image-modal/po-rich-text-image-modal.component';
 import { PoRichTextLinkModalComponent } from '../po-rich-text-link-modal/po-rich-text-link-modal.component';
+import { poRichTextLiteralsDefault } from '../po-rich-text-literals';
 
 const poRichTextDefaultColor = '#000000';
 
@@ -42,16 +43,47 @@ export class PoRichTextToolbarComponent implements AfterViewInit {
 
   mediaButtons: Array<PoButtonGroupItem>;
 
-  private _disabledTextAlign: boolean;
   private _readonly: boolean;
   private selectedLinkElement;
 
-  @Input('p-disabled-text-align') set disabledTextAlign(value: boolean) {
-    this._disabledTextAlign = value;
+  private _hideToolbarActions: Array<PoRichTextToolbarActions> = [];
+
+  formatToolbarAction = PoRichTextToolbarActions.Format;
+  colorToolbarAction = PoRichTextToolbarActions.Color;
+  alignToolbarAction = PoRichTextToolbarActions.Align;
+  listToolbarAction = PoRichTextToolbarActions.List;
+  linkToolbarAction = PoRichTextToolbarActions.Link;
+  mediaToolbarAction = PoRichTextToolbarActions.Media;
+
+  /**
+   * @optional
+   *
+   * @description
+   *
+   * Define as ações da barra de ferramentas do `PoRichTextComponent` que serão ocultadas.
+   * Aceita um único valor do tipo `PoRichTextToolbarActions` ou uma lista de valores.
+   *
+   * > Esta propriedade sobrepõe a configuração da propriedade `p-disabled-text-align` quando for passada como `false`, caso sejam definidas simultaneamente.
+   *
+   * @default `[]`
+   *
+   * @example
+   * ```
+   * // Oculta apenas o seletor de cores
+   * component.hideToolbarActions = PoRichTextToolbarActions.Color;
+   *
+   * // Oculta as opções de alinhamento e link
+   * component.hideToolbarActions = [PoRichTextToolbarActions.Align, PoRichTextToolbarActions.Link];
+   * ```
+   */
+  @Input('p-hide-toolbar-actions') set hideToolbarActions(
+    actions: Array<PoRichTextToolbarActions> | PoRichTextToolbarActions
+  ) {
+    this._hideToolbarActions = Array.isArray(actions) ? [...actions] : [actions];
   }
 
-  get disabledTextAlign() {
-    return this._disabledTextAlign;
+  get hideToolbarActions(): Array<PoRichTextToolbarActions> {
+    return this._hideToolbarActions;
   }
 
   @Input('p-readonly') set readonly(value: boolean) {
@@ -149,7 +181,9 @@ export class PoRichTextToolbarComponent implements AfterViewInit {
 
   ngAfterViewInit() {
     this.removeButtonFocus();
-    this.setColorInColorPicker(poRichTextDefaultColor);
+    if (this.showColor()) {
+      this.setColorInColorPicker(poRichTextDefaultColor);
+    }
   }
 
   changeTextColor(value) {
@@ -174,6 +208,15 @@ export class PoRichTextToolbarComponent implements AfterViewInit {
       this.linkButtons[0].selected = obj.commands.includes(this.linkButtons[0].command);
       this.setColorInColorPicker(obj.hexColor);
     }
+  }
+
+  // Verifica se uma ação específica do toolbar está oculta
+  isActionHidden(action: PoRichTextToolbarActions): boolean {
+    return this.hideToolbarActions.includes(action);
+  }
+
+  showColor(): boolean {
+    return !this.isInternetExplorer && !this.isActionHidden(PoRichTextToolbarActions.Color);
   }
 
   shortcutTrigger() {

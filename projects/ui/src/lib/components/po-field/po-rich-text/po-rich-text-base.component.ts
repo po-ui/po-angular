@@ -1,9 +1,9 @@
 import { Directive, EventEmitter, Input, Output } from '@angular/core';
 import { AbstractControl, ControlValueAccessor, Validator } from '@angular/forms';
 
-import { InputBoolean } from '../../../decorators';
 import { convertToBoolean } from '../../../utils/util';
 import { requiredFailed } from '../validators';
+import { PoRichTextToolbarActions } from './enum/po-rich-text-toolbar-actions.enum';
 import { PoRichTextService } from './po-rich-text.service';
 
 /**
@@ -39,7 +39,7 @@ export abstract class PoRichTextBaseComponent implements ControlValueAccessor, V
    *
    * @default `false`
    */
-  @Input({ alias: 'p-disabled-text-align', transform: convertToBoolean }) disabledTextAlign: boolean = false;
+  @Input({ alias: 'p-disabled-text-align', transform: convertToBoolean }) disabledTextAlign: boolean;
 
   /**
    * @description
@@ -83,6 +83,39 @@ export abstract class PoRichTextBaseComponent implements ControlValueAccessor, V
    * @default `false`
    */
   @Input('p-optional') optional: boolean;
+
+  private _hideToolbarActions: Array<PoRichTextToolbarActions> = [];
+
+  /**
+   * @optional
+   *
+   * @description
+   *
+   * Define as ações da barra de ferramentas do `PoRichTextComponent` que serão ocultadas.
+   * Aceita um único valor do tipo `PoRichTextToolbarActions` ou uma lista de valores.
+   *
+   * > Esta propriedade sobrepõe a configuração da propriedade `p-disabled-text-align` quando for passada como `false`, caso sejam definidas simultaneamente.
+   *
+   * @default `[]`
+   *
+   * @example
+   * ```
+   * // Oculta apenas o seletor de cores
+   * component.hideToolbarActions = PoRichTextToolbarActions.Color;
+   *
+   * // Oculta as opções de alinhamento e link
+   * component.hideToolbarActions = [PoRichTextToolbarActions.Align, PoRichTextToolbarActions.Link];
+   * ```
+   */
+  @Input('p-hide-toolbar-actions') set hideToolbarActions(
+    actions: Array<PoRichTextToolbarActions> | PoRichTextToolbarActions
+  ) {
+    this._hideToolbarActions = Array.isArray(actions) ? [...actions] : [actions];
+  }
+
+  get hideToolbarActions(): Array<PoRichTextToolbarActions> {
+    return this._hideToolbarActions;
+  }
 
   /**
    * @optional

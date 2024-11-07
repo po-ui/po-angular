@@ -4,14 +4,19 @@ import {
   Component,
   ElementRef,
   forwardRef,
+  OnChanges,
   OnDestroy,
+  OnInit,
+  SimpleChanges,
   ViewChild
 } from '@angular/core';
 
 import { NG_VALIDATORS, NG_VALUE_ACCESSOR } from '@angular/forms';
 
+import { PoRichTextToolbarActions } from './enum/po-rich-text-toolbar-actions.enum';
 import { PoRichTextBaseComponent } from './po-rich-text-base.component';
 import { PoRichTextBodyComponent } from './po-rich-text-body/po-rich-text-body.component';
+import { PoRichTextToolbarComponent } from './po-rich-text-toolbar/po-rich-text-toolbar.component';
 import { PoRichTextService } from './po-rich-text.service';
 
 /* istanbul ignore next */
@@ -60,11 +65,16 @@ const providers = [
   providers,
   changeDetection: ChangeDetectionStrategy.OnPush
 })
-export class PoRichTextComponent extends PoRichTextBaseComponent implements AfterViewInit, OnDestroy {
+export class PoRichTextComponent
+  extends PoRichTextBaseComponent
+  implements AfterViewInit, OnDestroy, OnInit, OnChanges
+{
   @ViewChild(PoRichTextBodyComponent, { static: true }) bodyElement: PoRichTextBodyComponent;
+  @ViewChild(PoRichTextToolbarComponent, { static: false }) richTextToolbar: PoRichTextToolbarComponent;
 
   private listener = this.validateClassesForRequired.bind(this);
   private modelLastUpdate: any;
+  toolbarActions: Array<PoRichTextToolbarActions> = [];
 
   get errorMsg() {
     return this.errorMessage !== '' && !this.value && this.required && this.invalid ? this.errorMessage : '';
@@ -77,10 +87,23 @@ export class PoRichTextComponent extends PoRichTextBaseComponent implements Afte
     super(richTextService);
   }
 
+  ngOnInit(): void {
+    this.toolbarActions = [...this.hideToolbarActions];
+  }
+
+  ngOnChanges(changes: SimpleChanges): void {
+    if (changes.hideToolbarActions || changes.disabledTextAlign) {
+      this.toolbarActions = [...this.hideToolbarActions];
+      this.updateAlignOnHideToolbarActionsList();
+    }
+  }
+
   ngAfterViewInit() {
     // Se não tem ngModel ou reactive form adiciona validação com classes css
     this.addKeyListeners();
     this.verifyAutoFocus();
+
+    this.updateAlignOnHideToolbarActionsList();
   }
 
   ngOnDestroy() {
@@ -162,5 +185,15 @@ export class PoRichTextComponent extends PoRichTextBaseComponent implements Afte
         element.classList.remove('ng-invalid');
       }
     });
+  }
+
+  isAllActionsHidden(): boolean {
+    return Object.values(PoRichTextToolbarActions).every(action => this.toolbarActions.includes(action));
+  }
+
+  updateAlignOnHideToolbarActionsList() {
+    if (this.disabledTextAlign && !this.toolbarActions.includes(PoRichTextToolbarActions.Align)) {
+      this.toolbarActions.push(PoRichTextToolbarActions.Align);
+    }
   }
 }

@@ -8,9 +8,9 @@
       [p-placeholder]="placeholder"
       [p-readonly]="readonly"
       (p-change)="onChangeValue($event)"
-      (p-commands)="richTextToolbar.setButtonsStates($event)"
-      (p-selected-link)="richTextToolbar.selectedLink($event)"
-      (p-shortcut-command)="richTextToolbar.shortcutTrigger()"
+      (p-commands)="richTextToolbar?.setButtonsStates($event)"
+      (p-selected-link)="richTextToolbar?.selectedLink($event)"
+      (p-shortcut-command)="richTextToolbar?.shortcutTrigger()"
       (p-value)="updateValue($event)"
       (p-blur)="onBlur()"
     >
@@ -18,8 +18,9 @@
 
     <po-rich-text-toolbar
       #richTextToolbar
+      *ngIf="!isAllActionsHidden()"
       [p-readonly]="readonly"
-      [p-disabled-text-align]="disabledTextAlign"
+      [p-hide-toolbar-actions]="toolbarActions"
       (p-link-editing)="richTextBody.linkEditing($event)"
       (p-command)="richTextBody.executeCommand($event)"
     >
