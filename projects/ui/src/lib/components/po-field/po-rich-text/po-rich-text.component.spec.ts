@@ -1,13 +1,14 @@
-import { BrowserAnimationsModule } from '@angular/platform-browser/animations';
+import { NO_ERRORS_SCHEMA, SimpleChange, SimpleChanges } from '@angular/core';
 import { ComponentFixture, fakeAsync, TestBed, tick } from '@angular/core/testing';
 import { FormsModule } from '@angular/forms';
-import { NO_ERRORS_SCHEMA } from '@angular/core';
+import { BrowserAnimationsModule } from '@angular/platform-browser/animations';
 
 import { PoFieldContainerBottomComponent } from '../po-field-container/po-field-container-bottom/po-field-container-bottom.component';
 import { PoFieldContainerComponent } from '../po-field-container/po-field-container.component';
+import { PoRichTextToolbarActions } from './enum/po-rich-text-toolbar-actions.enum';
 import { PoRichTextBodyComponent } from './po-rich-text-body/po-rich-text-body.component';
-import { PoRichTextComponent } from './po-rich-text.component';
 import { PoRichTextToolbarComponent } from './po-rich-text-toolbar/po-rich-text-toolbar.component';
+import { PoRichTextComponent } from './po-rich-text.component';
 
 describe('PoRichTextComponent:', () => {
   let component: PoRichTextComponent;
@@ -140,8 +141,8 @@ describe('PoRichTextComponent:', () => {
       expect(nativeElement.removeEventListener).not.toHaveBeenCalled();
     });
 
-    it('focus: should call input `focus`', () => {
-      spyOn(component.bodyElement, 'focus');
+    it('should call focus on bodyElement', () => {
+      component.bodyElement = jasmine.createSpyObj('PoRichTextBodyComponent', ['focus']);
 
       component.focus();
 
@@ -237,6 +238,122 @@ describe('PoRichTextComponent:', () => {
       component['controlChangeModelEmitter'](value);
 
       expect(component.changeModel.emit).not.toHaveBeenCalled();
+    });
+
+    describe('ngOnChanges:', () => {
+      it('should update `hideToolbarActions` if it changes', () => {
+        component.hideToolbarActions = [PoRichTextToolbarActions.Color];
+        component.disabledTextAlign = true;
+
+        const changes: SimpleChanges = {
+          hideToolbarActions: new SimpleChange(
+            [PoRichTextToolbarActions.Color, PoRichTextToolbarActions.Align],
+            [],
+            false
+          )
+        };
+        component.ngOnChanges(changes);
+        fixture.detectChanges();
+
+        expect(component['toolbarActions']).toContain(PoRichTextToolbarActions.Align);
+      });
+
+      it('should update `hideToolbarActions` if `disabledTextAlign` changes', () => {
+        component.hideToolbarActions = [PoRichTextToolbarActions.Color];
+        component.disabledTextAlign = false;
+        fixture.detectChanges();
+
+        component.disabledTextAlign = true;
+        const changes: SimpleChanges = {
+          disabledTextAlign: new SimpleChange(false, true, false)
+        };
+
+        component.ngOnChanges(changes);
+        fixture.detectChanges();
+
+        expect(component['toolbarActions']).toEqual([PoRichTextToolbarActions.Color, PoRichTextToolbarActions.Align]);
+      });
+    });
+
+    describe('isAllActionsHidden:', () => {
+      it('should return true if all toolbar actions are hidden', () => {
+        component.hideToolbarActions = Object.values(PoRichTextToolbarActions);
+        component.disabledTextAlign = false;
+
+        fixture.detectChanges();
+
+        expect(component.isAllActionsHidden()).toBeTrue();
+      });
+
+      it('should return false if not all toolbar actions are hidden', () => {
+        component.hideToolbarActions = [PoRichTextToolbarActions.Align, PoRichTextToolbarActions.Color];
+
+        expect(component.isAllActionsHidden()).toBeFalse();
+      });
+
+      it('should prioritize `disabledTextAlign` as true and include `Align` action even if not in `hideToolbarActions`', () => {
+        component.disabledTextAlign = true;
+        component.hideToolbarActions = [PoRichTextToolbarActions.Color];
+
+        expect(component.isAllActionsHidden()).toBeFalse();
+        expect(component.hideToolbarActions.includes(PoRichTextToolbarActions.Align)).toBeFalse();
+      });
+
+      it('should prioritize `disabledTextAlign` as false and exclude `Align` action if present in `hideToolbarActions`', () => {
+        component.disabledTextAlign = false;
+        component.hideToolbarActions = [PoRichTextToolbarActions.Align, PoRichTextToolbarActions.Color];
+
+        expect(component.isAllActionsHidden()).toBeFalse();
+        expect(component.hideToolbarActions.includes(PoRichTextToolbarActions.Align)).toBeTrue();
+      });
+
+      it('should ignore `disabledTextAlign` if it is undefined', () => {
+        component.disabledTextAlign = undefined;
+        component.hideToolbarActions = [PoRichTextToolbarActions.Align, PoRichTextToolbarActions.Color];
+
+        expect(component.isAllActionsHidden()).toBeFalse();
+      });
+
+      it('should return true if all actions in hideToolbarActions and disabledTextAlign as true includes `Align`', () => {
+        component.disabledTextAlign = true;
+        component.hideToolbarActions = Object.values(PoRichTextToolbarActions).filter(
+          action => action !== PoRichTextToolbarActions.Align
+        );
+
+        fixture.detectChanges();
+
+        expect(component.isAllActionsHidden()).toBeTrue();
+      });
+    });
+  });
+
+  describe('Template:', () => {
+    it('should display `po-rich-text-toolbar` when `isAllActionsHidden` returns false', () => {
+      spyOn(component, 'isAllActionsHidden').and.returnValue(false);
+
+      fixture.detectChanges();
+
+      const toolbarElement = nativeElement.querySelector('po-rich-text-toolbar');
+      expect(toolbarElement).not.toBeNull();
+    });
+
+    it('should not display `po-rich-text-toolbar` and display `richTextWithNoToolbar` template when `isAllActionsHidden` returns true', () => {
+      spyOn(component, 'isAllActionsHidden').and.returnValue(true);
+      fixture.detectChanges();
+
+      const toolbar = nativeElement.querySelector('po-rich-text-toolbar');
+      const richTextWithNoToolbar = nativeElement.querySelector('#richTextWithNoToolbar');
+
+      expect(toolbar).toBeNull();
+      expect(richTextWithNoToolbar).toBeDefined();
+    });
+
+    it('should call `isAllActionsHidden` to determine which template to display', () => {
+      const spyIsAllActionsHidden = spyOn(component, 'isAllActionsHidden').and.callThrough();
+
+      fixture.detectChanges();
+
+      expect(spyIsAllActionsHidden).toHaveBeenCalled();
     });
   });
 });

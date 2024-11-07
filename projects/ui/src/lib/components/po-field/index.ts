@@ -37,7 +37,11 @@ export * from './po-number/po-number.component';
 export * from './po-password/po-password.component';
 export * from './po-radio-group/po-radio-group-option.interface';
 export * from './po-radio-group/po-radio-group.component';
+
 export * from './po-rich-text/po-rich-text.component';
+export * from './po-rich-text/enum/po-rich-text-toolbar-actions.enum';
+export * from './po-rich-text/interfaces/po-rich-text-toolbar-button-group-item.interface';
+
 export * from './po-select/po-select-option.interface';
 export * from './po-select/po-select-option-group.interface';
 export * from './po-select/po-select.component';

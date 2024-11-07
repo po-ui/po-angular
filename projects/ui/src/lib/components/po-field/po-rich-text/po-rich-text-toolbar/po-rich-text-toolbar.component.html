@@ -1,9 +1,13 @@
 <div class="po-rich-text-toolbar" #toolbarElement>
-  <div class="po-rich-text-toolbar-button-align" data-rich-text-toolbar="format">
+  <div
+    class="po-rich-text-toolbar-button-align"
+    data-rich-text-toolbar="format"
+    *ngIf="!isActionHidden(formatToolbarAction)"
+  >
     <po-button-group p-toggle="multiple" [p-buttons]="formatButtons"> </po-button-group>
   </div>
 
-  <div *ngIf="!isInternetExplorer" class="po-rich-text-toolbar-button-align" data-rich-text-toolbar="color">
+  <div *ngIf="showColor()" class="po-rich-text-toolbar-button-align" data-rich-text-toolbar="color">
     <div class="po-rich-text-toolbar-color-picker-container">
       <button
         type="button"
@@ -24,19 +28,35 @@
     </div>
   </div>
 
-  <div *ngIf="!disabledTextAlign" class="po-rich-text-toolbar-button-align" data-rich-text-toolbar="align">
+  <div
+    class="po-rich-text-toolbar-button-align"
+    data-rich-text-toolbar="align"
+    *ngIf="!isActionHidden(alignToolbarAction)"
+  >
     <po-button-group p-toggle="single" [p-buttons]="alignButtons"> </po-button-group>
   </div>
 
-  <div class="po-rich-text-toolbar-button-align" data-rich-text-toolbar="list">
+  <div
+    class="po-rich-text-toolbar-button-align"
+    data-rich-text-toolbar="list"
+    *ngIf="!isActionHidden(listToolbarAction)"
+  >
     <po-button-group p-toggle="single" [p-buttons]="listButtons"> </po-button-group>
   </div>
 
-  <div class="po-rich-text-toolbar-button-align" data-rich-text-toolbar="link">
+  <div
+    class="po-rich-text-toolbar-button-align"
+    data-rich-text-toolbar="link"
+    *ngIf="!isActionHidden(linkToolbarAction)"
+  >
     <po-button-group [p-buttons]="linkButtons"> </po-button-group>
   </div>
 
-  <div class="po-rich-text-toolbar-button-align" data-rich-text-toolbar="media">
+  <div
+    class="po-rich-text-toolbar-button-align"
+    data-rich-text-toolbar="media"
+    *ngIf="!isActionHidden(mediaToolbarAction)"
+  >
     <po-button-group [p-buttons]="mediaButtons"> </po-button-group>
   </div>
 </div>

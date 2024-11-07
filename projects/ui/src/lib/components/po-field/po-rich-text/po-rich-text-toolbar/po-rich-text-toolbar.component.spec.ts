@@ -3,15 +3,14 @@ import { FormsModule } from '@angular/forms';
 
 import * as UtilsFunction from '../../../../utils/util';
 
-import { PoButtonGroupModule } from '../../../po-button-group';
-import { PoFieldModule } from '../../po-field.module';
-import { PoModalModule } from '../../../po-modal/po-modal.module';
-import { PoRichTextToolbarComponent } from './po-rich-text-toolbar.component';
-import { PoRichTextLinkModalComponent } from '../po-rich-text-link-modal/po-rich-text-link-modal.component';
-import { PoRichTextImageModalComponent } from '../po-rich-text-image-modal/po-rich-text-image-modal.component';
-import { PoTooltipModule } from './../../../../directives/po-tooltip/po-tooltip.module';
-import { provideHttpClientTesting } from '@angular/common/http/testing';
 import { provideHttpClient, withInterceptorsFromDi } from '@angular/common/http';
+import { provideHttpClientTesting } from '@angular/common/http/testing';
+import { PoButtonGroupModule } from '../../../po-button-group';
+import { PoModalModule } from '../../../po-modal/po-modal.module';
+import { PoFieldModule } from '../../po-field.module';
+import { PoRichTextToolbarActions } from '../enum/po-rich-text-toolbar-actions.enum';
+import { PoTooltipModule } from './../../../../directives/po-tooltip/po-tooltip.module';
+import { PoRichTextToolbarComponent } from './po-rich-text-toolbar.component';
 
 describe('PoRichTextToolbarComponent:', () => {
   let component: PoRichTextToolbarComponent;
@@ -36,26 +35,6 @@ describe('PoRichTextToolbarComponent:', () => {
   });
 
   describe('Properties:', () => {
-    it('disabledTextAlign: should remove a children element from po-rich-text', () => {
-      component.disabledTextAlign = true;
-
-      fixture.detectChanges();
-
-      const poRichTextToolbarButtonAlign = nativeElement.querySelector('[data-rich-text-toolbar="align"]');
-
-      expect(poRichTextToolbarButtonAlign).toBeNull();
-    });
-
-    it('disabledTextAlign: should keep all children elements inside component po-rich-text', () => {
-      component.disabledTextAlign = false;
-
-      fixture.detectChanges();
-
-      const poRichTextToolbarButtonAlign = nativeElement.querySelector('[data-rich-text-toolbar="align"]');
-
-      expect(poRichTextToolbarButtonAlign).toBeDefined();
-    });
-
     it('readonly: should call toggleDisableButtons', () => {
       spyOn(component, <any>'toggleDisableButtons');
 
@@ -87,6 +66,43 @@ describe('PoRichTextToolbarComponent:', () => {
       component.linkButtons[0].action();
 
       expect(component.richTextLinkModal.openModal).toHaveBeenCalledWith(component['selectedLinkElement']);
+    });
+
+    describe('hideToolbarActions:', () => {
+      it('should initialize with an empty array by default', () => {
+        expect(component.hideToolbarActions).toEqual([]);
+      });
+
+      it('should hide specified toolbar actions, when passed as array', () => {
+        component.hideToolbarActions = [PoRichTextToolbarActions.Align, PoRichTextToolbarActions.Color];
+        fixture.detectChanges();
+
+        expect(component.hideToolbarActions).toContain(PoRichTextToolbarActions.Align);
+        expect(component.hideToolbarActions).toContain(PoRichTextToolbarActions.Color);
+      });
+
+      it('should hide specified toolbar action when passed as string', () => {
+        component.hideToolbarActions = 'color' as PoRichTextToolbarActions;
+        fixture.detectChanges();
+
+        expect(component.hideToolbarActions).toContain(PoRichTextToolbarActions.Color);
+      });
+
+      it('should show media button when media action is not in hideToolbarActions', () => {
+        component.hideToolbarActions = [PoRichTextToolbarActions.Color];
+        fixture.detectChanges();
+
+        const mediaButton = nativeElement.querySelector('[data-rich-text-toolbar="media"]');
+        expect(mediaButton).toBeTruthy();
+      });
+
+      it('should hide media button when media action is in hideToolbarActions', () => {
+        component.hideToolbarActions = [PoRichTextToolbarActions.Media];
+        fixture.detectChanges();
+
+        const mediaButton = nativeElement.querySelector('[data-rich-text-toolbar="media"]');
+        expect(mediaButton).toBeNull();
+      });
     });
   });
 
@@ -278,6 +294,20 @@ describe('PoRichTextToolbarComponent:', () => {
 
       expect(component.richTextLinkModal.openModal).toHaveBeenCalledWith(component['selectedLinkElement']);
     });
+
+    describe('isActionHidden:', () => {
+      it('should return true if the action is hidden', () => {
+        component.hideToolbarActions = [PoRichTextToolbarActions.Color];
+
+        expect(component.isActionHidden(PoRichTextToolbarActions.Color)).toBeTrue();
+      });
+
+      it('should return false if the action is not hidden', () => {
+        component.hideToolbarActions = [PoRichTextToolbarActions.Align];
+
+        expect(component.isActionHidden(PoRichTextToolbarActions.Color)).toBeFalse();
+      });
+    });
   });
 
   describe('Templates:', () => {
@@ -305,6 +335,54 @@ describe('PoRichTextToolbarComponent:', () => {
 
       expect(inputColorPicker.getAttribute('aria-label')).toBe(component.literals.textColor);
       expect(buttonColorPicker.getAttribute('aria-label')).toBe(component.literals.textColor);
+    });
+
+    it('should show format button group when format action is not hidden', () => {
+      component.hideToolbarActions = [];
+      fixture.detectChanges();
+
+      const formatButton = nativeElement.querySelector('[data-rich-text-toolbar="format"]');
+      expect(formatButton).toBeTruthy();
+    });
+
+    it('should hide format button group when format action is hidden', () => {
+      component.hideToolbarActions = [PoRichTextToolbarActions.Format];
+      fixture.detectChanges();
+
+      const formatButton = nativeElement.querySelector('[data-rich-text-toolbar="format"]');
+      expect(formatButton).toBeNull();
+    });
+
+    it('should show align button group when align action is not hidden', () => {
+      component.hideToolbarActions = [];
+      fixture.detectChanges();
+
+      const alignButton = nativeElement.querySelector('[data-rich-text-toolbar="align"]');
+      expect(alignButton).toBeTruthy();
+    });
+
+    it('should hide align button group when align action is hidden', () => {
+      component.hideToolbarActions = [PoRichTextToolbarActions.Align];
+      fixture.detectChanges();
+
+      const alignButton = nativeElement.querySelector('[data-rich-text-toolbar="align"]');
+      expect(alignButton).toBeNull();
+    });
+
+    it('should show color picker when color action is not hidden', () => {
+      component.hideToolbarActions = [];
+      fixture.detectChanges();
+
+      const colorPicker = nativeElement.querySelector('[data-rich-text-toolbar="color"]');
+      expect(colorPicker).toBeTruthy();
+    });
+
+    it('should hide color picker when color action is hidden', () => {
+      component.hideToolbarActions = [PoRichTextToolbarActions.Color];
+      fixture.detectChanges();
+
+      const colorPicker = nativeElement.querySelector('[data-rich-text-toolbar="color"]');
+      expect(colorPicker).toBeNull();
     });
   });
 });
