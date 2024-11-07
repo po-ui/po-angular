@@ -79,7 +79,7 @@ const poCalendarPositionDefault = 'bottom-left';
 })
 export class PoDatepickerComponent extends PoDatepickerBaseComponent implements AfterViewInit, OnDestroy {
   @ViewChild('calendar', { static: true }) calendar: PoCalendarComponent;
-  @ViewChild('dialogPicker', { read: ElementRef, static: true }) dialogPicker: ElementRef;
+  @ViewChild('dialogPicker', { read: ElementRef, static: false }) dialogPicker: ElementRef;
   @ViewChild('iconDatepicker') iconDatepicker: PoButtonComponent;
   @ViewChild('inp', { read: ElementRef, static: true }) inputEl: ElementRef;
 
@@ -434,22 +434,24 @@ export class PoDatepickerComponent extends PoDatepickerBaseComponent implements 
     window.removeEventListener('scroll', this.onScroll, true);
   }
 
-  private setDialogPickerStyleDisplay(value) {
-    this.dialogPicker.nativeElement.style.display = value;
+  private setDialogPickerStyleDisplay(value: string): void {
+    if (this.dialogPicker && this.dialogPicker.nativeElement) {
+      this.dialogPicker.nativeElement.style.display = value;
+    }
   }
 
-  private setCalendarPosition() {
+  private setCalendarPosition(): void {
     this.setDialogPickerStyleDisplay('block');
-
-    this.controlPosition.setElements(
-      this.dialogPicker.nativeElement,
-      poCalendarContentOffset,
-      this.inputEl,
-      ['top-left', 'top-right', 'bottom-left', 'bottom-right'],
-      false,
-      true
-    );
-
-    this.controlPosition.adjustPosition(poCalendarPositionDefault);
+    if (this.dialogPicker && this.dialogPicker.nativeElement) {
+      this.controlPosition.setElements(
+        this.dialogPicker.nativeElement,
+        poCalendarContentOffset,
+        this.inputEl,
+        ['top-left', 'top-right', 'bottom-left', 'bottom-right'],
+        false,
+        true
+      );
+      this.controlPosition.adjustPosition(poCalendarPositionDefault);
+    }
   }
 }

@@ -386,6 +386,21 @@ export abstract class PoDatepickerBaseComponent implements ControlValueAccessor,
     return this._locale || this.shortLanguage;
   }
 
+  /**
+   * @optional
+   *
+   * @description
+   *
+   * Define que o calendário do DatePicker será incluído no body da página, em vez de suspenso junto ao campo de entrada do componente.
+   * Essa opção é útil em cenários onde o DatePicker precisa ser renderizado fora do conteúdo principal da página,
+   * como em formulários que utilizam scroll ou containers com overflow escondido.
+   *
+   * > Obs: O uso dessa propriedade pode interferir na sequência de tabulação da página, especialmente em formulários longos.
+   *
+   * @default `false`
+   */
+  @Input({ alias: 'p-append-in-body', transform: convertToBoolean }) appendBox: boolean = false;
+
   constructor(protected languageService: PoLanguageService) {}
 
   set date(value: any) {
