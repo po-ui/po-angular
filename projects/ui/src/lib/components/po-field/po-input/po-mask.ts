@@ -100,9 +100,9 @@ export class PoMask {
 
   setSelectionRange($event: any) {
     if (this.initialPosition > this.finalPosition) {
-      $event.target.setSelectionRange(this.finalPosition, this.initialPosition);
+      $event.target.setSelectionRange?.(this.finalPosition, this.initialPosition);
     } else {
-      $event.target.setSelectionRange(this.initialPosition, this.finalPosition);
+      $event.target.setSelectionRange?.(this.initialPosition, this.finalPosition);
     }
   }
 
@@ -237,7 +237,7 @@ export class PoMask {
 
   // posiciona o cursor de acordo com o controle de posição
   setPositions($event: any) {
-    $event.target.setSelectionRange(this.initialPosition, this.finalPosition);
+    $event.target.setSelectionRange?.(this.initialPosition, this.finalPosition);
   }
 
   // muda a posição do cursor e atualiza o controle de posição

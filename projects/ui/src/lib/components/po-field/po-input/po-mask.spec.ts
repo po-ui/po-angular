@@ -473,6 +473,40 @@ describe('PoMask', () => {
     expect(fakeThis.finalPosition).toBe(fakeThis.initialPosition);
   });
 
+  it('resetPositions: should not call the function if the event does not have setSelectionRange', () => {
+    const mockEvent = {
+      target: {}
+    };
+
+    const fakeThis = mask;
+
+    expect(() => fakeThis.setPositions(mockEvent)).not.toThrow();
+  });
+
+  it('setSelectionRange: should not call the function if the event does not have setSelectionRange', () => {
+    const mockEvent = {
+      target: {}
+    };
+
+    const fakeThis = mask;
+    fakeThis.initialPosition = 2;
+    fakeThis.finalPosition = 1;
+
+    expect(() => fakeThis.setSelectionRange(mockEvent)).not.toThrow();
+  });
+
+  it('setSelectionRange: should not call the function if the event does not have setSelectionRange and final is larger than initial', () => {
+    const mockEvent = {
+      target: {}
+    };
+
+    const fakeThis = mask;
+    fakeThis.initialPosition = 1;
+    fakeThis.finalPosition = 2;
+
+    expect(() => fakeThis.setSelectionRange(mockEvent)).not.toThrow();
+  });
+
   it('should change the positions with a defined value', () => {
     const fakeThis = mask;
     fakeThis.initialPosition = 3;
