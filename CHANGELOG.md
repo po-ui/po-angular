@@ -2,6 +2,21 @@
 
 All notable changes to this project will be documented in this file. See [standard-version](https://github.com/conventional-changelog/standard-version) for commit guidelines.
 
+## [18.14.0](https://github.com/po-ui/po-angular/compare/v18.13.0...v18.14.0) (2024-11-11)
+
+
+### Features
+
+* **lookup:** implementa definições animalia-DS ([e694051](https://github.com/po-ui/po-angular/commit/e694051f2b8e99d329457f98950f4e034fd60b1d))
+* **richtext:** inclusão propriedade para ocultar botões do toolbar ([c16dad4](https://github.com/po-ui/po-angular/commit/c16dad483eeddfec82864d879383b9408be12a9f))
+
+
+### Bug Fixes
+
+* corrige vulnerabilidades mapeadas pelo sonar ([0b0a7d3](https://github.com/po-ui/po-angular/commit/0b0a7d33c1f8e6d82f1dea6d1554ade8caa8a7dc))
+* **date-picker:** corrige erro no console ([93e141c](https://github.com/po-ui/po-angular/commit/93e141c8b1dab661a70804f5682dc5293b07b50d))
+* **datepicker:** corrige posicionamento do calendar ([f101416](https://github.com/po-ui/po-angular/commit/f10141662041529dea873e2670b231cfda3384c4))
+
 ## [18.13.0](https://github.com/po-ui/po-angular/compare/v18.12.0...v18.13.0) (2024-11-04)
 
 
