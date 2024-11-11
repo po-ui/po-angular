@@ -2,6 +2,15 @@
 
 All notable changes to this project will be documented in this file. See [standard-version](https://github.com/conventional-changelog/standard-version) for commit guidelines.
 
+### [17.26.7](https://github.com/po-ui/po-angular/compare/v17.26.6...v17.26.7) (2024-11-11)
+
+
+### Bug Fixes
+
+* corrige vulnerabilidades mapeadas pelo sonar ([2ba3ccb](https://github.com/po-ui/po-angular/commit/2ba3ccb326c027503eaf4011c8b907e8d0e9ba70))
+* **date-picker:** corrige erro no console ([c70612a](https://github.com/po-ui/po-angular/commit/c70612ad3549216860103010713ffb9aa8ae2c1b))
+* **datepicker:** corrige posicionamento do calendar ([61090da](https://github.com/po-ui/po-angular/commit/61090dade3beaeda3618ab836f7908c76a0fbe1d))
+
 ### [17.26.6](https://github.com/po-ui/po-angular/compare/v17.26.5...v17.26.6) (2024-11-04)
 
 
