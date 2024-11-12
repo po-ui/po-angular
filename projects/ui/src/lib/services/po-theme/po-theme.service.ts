@@ -260,7 +260,7 @@ export class PoThemeService {
 
     if (themeColor?.brand?.['01']?.dark) {
       const selector = this.iconNameLib === 'PhosphorIcon' ? 'po-select .po-select-phosphor' : 'po-select';
-      selectBgIcon += `${selector} { --background-image: url(${this.getSelectBgIcon(themeColor.brand['01'].dark)}); };`;
+      selectBgIcon += `${selector} { --background-image: url(${this.getSelectBgIcon(themeColor.neutral.dark[70])}); };`;
     }
 
     if (themeColor?.feedback?.negative?.base) {
