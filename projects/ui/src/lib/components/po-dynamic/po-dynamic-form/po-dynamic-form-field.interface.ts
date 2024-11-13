@@ -92,6 +92,8 @@ export interface PoDynamicFormField extends PoDynamicField {
    */
   optionsService?: string | PoComboFilter;
 
+  removeInitialFilter?: boolean;
+
   /**
    * Serviço que será utilizado para realizar a busca avançada. Pode ser utilizado em conjunto com a propriedade `columns`.
    * Pode ser ser informada uma URL ou uma instancia do serviço baseado em PoLookupFilter.

@@ -1,0 +1,36 @@
+<po-page-default p-title="Exemplo p-remove-initial-filter">
+  <p><strong>Combo sem p-remove-initial-filter (comportamento padrão):</strong></p>
+  <po-combo name="combo1" p-label="PO Combo 1" [p-options]="options" [(ngModel)]="selectedOption1"> </po-combo>
+
+  <po-divider></po-divider>
+
+  <p><strong>Combo com p-remove-initial-filter="true":</strong></p>
+  <po-combo
+    name="combo2"
+    p-label="PO Combo 2"
+    [p-options]="options"
+    [(ngModel)]="selectedOption2"
+    p-remove-initial-filter="true"
+  >
+  </po-combo>
+
+  <po-divider></po-divider>
+
+  <p><strong>Combo com p-filter-service e p-remove-initial-filter="true":</strong></p>
+  <po-combo
+    name="combo3"
+    p-label="PO Combo com Serviço"
+    p-filter-service="https://po-sample-api.onrender.com/v1/people"
+    p-field-label="name"
+    p-field-value="id"
+    p-disabled-init-filter="true"
+    [(ngModel)]="selectedOption3"
+  >
+  </po-combo>
+
+  <po-divider></po-divider>
+
+  <!-- Dynamic Form -->
+  <p><strong>Combo com p-filter-service e Dynamic Form p-remove-initial-filter="true":</strong></p>
+  <po-dynamic-form [p-fields]="fields" [p-value]="value"> </po-dynamic-form>
+</po-page-default>

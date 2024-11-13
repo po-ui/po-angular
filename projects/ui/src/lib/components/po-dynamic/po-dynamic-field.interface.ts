@@ -45,6 +45,8 @@ export interface PoDynamicField {
    */
   gridMdColumns?: number;
 
+  removeInitialFilter?: boolean;
+
   /**
    * Tamanho de exibição do campo em telas grandes (lg).
    *
