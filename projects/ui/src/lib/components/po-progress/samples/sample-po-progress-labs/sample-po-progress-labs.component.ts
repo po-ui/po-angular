@@ -24,6 +24,7 @@ export class SamplePoProgressLabsComponent implements OnInit {
   ];
 
   propertiesOptions: Array<PoCheckboxGroupOption> = [
+    { label: 'Disabled Cancel', value: 'disabledCancel' },
     { label: 'Indeterminate', value: 'indeterminate' },
     { label: 'Show percentage', value: 'showPercentage' }
   ];

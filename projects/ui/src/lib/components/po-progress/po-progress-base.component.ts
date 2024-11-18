@@ -41,6 +41,20 @@ export class PoProgressBaseComponent {
    *
    * @description
    *
+   * Desabilita botão de cancelamento na parte inferior da barra de progresso.
+   *
+   * > Se nenhuma função for passada para o evento `(p-cancel)` ou a barra de progresso estiver com o status `PoProgressStatus.Success`,
+   * o ícone de cancelamento não será exibido.
+   *
+   * @default `false`
+   */
+  @Input({ alias: 'p-disabled-cancel', transform: convertToBoolean }) disabledCancel: boolean = false;
+
+  /**
+   * @optional
+   *
+   * @description
+   *
    * Informação adicional que aparecerá abaixo da barra de progresso ao lado direito.
    */
   @Input('p-info') info?: string;

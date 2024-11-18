@@ -33,6 +33,7 @@
         p-icon="ICON_CLOSE"
         (p-click)="emitCancellation()"
         p-kind="secondary"
+        [p-disabled]="disabledCancel"
         [p-aria-label]="literals.cancel"
         [p-danger]="true"
       ></po-button>

@@ -1,4 +1,5 @@
 import { expectPropertiesValues } from '../../util-test/util-expect.spec';
+import { convertToBoolean } from '../../utils/util';
 
 import { PoProgressBaseComponent } from './po-progress-base.component';
 
@@ -10,6 +11,18 @@ describe('PoProgressBaseComponent:', () => {
   });
 
   describe('Properties:', () => {
+    it('p-disabled-cancel: should update property with `true` if valid values', () => {
+      component.disabledCancel = convertToBoolean(1);
+
+      expect(component.disabledCancel).toBe(true);
+    });
+
+    it('p-disabled-cancel: should update property with `false` if invalid values', () => {
+      component.disabledCancel = convertToBoolean(3);
+
+      expect(component.disabledCancel).toBe(false);
+    });
+
     it('p-indeterminate: should update property with `true` if valid values', () => {
       const validValues = [true, 'true', 1, ''];
 
