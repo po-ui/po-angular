@@ -63,6 +63,7 @@
           <div [ngClass]="{ 'po-upload-progress-container-area po-pt-2 po-pl-1': hasMoreThanFourItems }">
             <po-progress
               *ngFor="let file of currentFiles; trackBy: trackByFn"
+              [p-disabled-cancel]="disabledRemoveFile"
               [p-info]="infoByUploadStatus[file.status]?.text(file.percent)"
               [p-info-icon]="infoByUploadStatus[file.status]?.icon"
               [p-status]="progressStatusByFileStatus[file.status]"

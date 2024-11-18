@@ -1,14 +1,14 @@
-import { ComponentFixture, TestBed } from '@angular/core/testing';
-import { Component } from '@angular/core';
-import { UntypedFormControl, FormsModule } from '@angular/forms';
 import { HttpClient, HttpHandler } from '@angular/common/http';
+import { Component } from '@angular/core';
+import { ComponentFixture, TestBed } from '@angular/core/testing';
+import { FormsModule, UntypedFormControl } from '@angular/forms';
 
 import { expectPropertiesValues } from '../../../util-test/util-expect.spec';
 
+import { poLocaleDefault } from '../../../services/po-language/po-language.constant';
+import { PoLanguageService } from '../../../services/po-language/po-language.service';
 import * as utilsFunctions from '../../../utils/util';
 import * as ValidatorsFunctions from '../validators';
-import { PoLanguageService } from '../../../services/po-language/po-language.service';
-import { poLocaleDefault } from '../../../services/po-language/po-language.constant';
 
 import { PoUploadBaseComponent, poUploadLiteralsDefault } from './po-upload-base.component';
 import { PoUploadFile } from './po-upload-file';
@@ -679,6 +679,18 @@ describe('PoUploadBaseComponent:', () => {
       const invalidValues = [null, undefined, NaN, false, 0, 'false', 'teste'];
 
       expectPropertiesValues(component, 'directory', invalidValues, false);
+    });
+
+    it('disabledRemoveFile: should set `disabledRemoveFile` with valid values', () => {
+      component.disabledRemoveFile = utilsFunctions.convertToBoolean(1);
+
+      expect(component.disabledRemoveFile).toBe(true);
+    });
+
+    it('disabledRemoveFile: should set `disabledRemoveFile` to false with invalid values', () => {
+      component.disabledRemoveFile = utilsFunctions.convertToBoolean(3);
+
+      expect(component.disabledRemoveFile).toBe(false);
     });
 
     it('directory: should apply true to `canHandleDirectory` if directory is true and `isIE` plus `isMobile` return false', () => {
