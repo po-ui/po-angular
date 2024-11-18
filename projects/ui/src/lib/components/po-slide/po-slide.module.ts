@@ -41,6 +41,18 @@ import { PoSlideItemComponent } from './po-slide-item/po-slide-item.component';
  * })
  * export class AppModule { }
  * ```
+ *
+ * Em aplicações Standalone, utilize a seguinte configuração para o bootstrap:
+ *
+ * ```
+ * import { bootstrapApplication } from '@angular/platform-browser';
+ * import { BrowserAnimationsModule } from '@angular/platform-browser/animations';
+ * import { AppComponent } from './app.component';
+ *
+ * bootstrapApplication(AppComponent, {
+ *   providers: [importProvidersFrom(BrowserAnimationsModule)]
+ * }).catch(err => console.error(err));
+ * ```
  */
 @NgModule({
   imports: [CommonModule, RouterModule, PoContainerModule, PoIconModule],
