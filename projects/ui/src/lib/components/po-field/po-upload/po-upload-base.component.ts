@@ -196,6 +196,17 @@ export abstract class PoUploadBaseComponent implements ControlValueAccessor, Val
    *
    * @description
    *
+   * Desabilita botão de remover o(s) arquivo(s) selecionado(s).
+   *
+   * @default `false`
+   */
+  @Input({ alias: 'p-disabled-remove-file', transform: convertToBoolean }) disabledRemoveFile: boolean = false;
+
+  /**
+   * @optional
+   *
+   * @description
+   *
    * Define se a indicação de campo opcional será exibida.
    *
    * > Não será exibida a indicação se:
