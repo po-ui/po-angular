@@ -165,14 +165,16 @@ export class PoDynamicFormFieldsComponent extends PoDynamicFormFieldsBaseCompone
       container: item.container || null,
       property: item.property,
       index,
-      order: item.order
+      order: item.order,
+      visible: item.visible ?? true
     }));
 
     const currArray = current.map((item, index) => ({
       container: item.container || null,
       property: item.property,
       index,
-      order: item.order
+      order: item.order,
+      visible: item.visible ?? true
     }));
 
     const prevContainers = prevArray.filter(item => item.container);
@@ -180,6 +182,12 @@ export class PoDynamicFormFieldsComponent extends PoDynamicFormFieldsBaseCompone
 
     const prevOrder = prevArray.filter(item => item.order);
     const currOrder = currArray.filter(item => item.order);
+
+    const prevVisibleTrue = prevArray.filter(item => item.visible === true);
+    const currVisibleTrue = currArray.filter(item => item.visible === true);
+
+    const prevVisibleFalse = prevArray.filter(item => !item.visible);
+    const currVisibleFalse = currArray.filter(item => !item.visible);
 
     // Verifica mudança na quantidade de containers
     if (prevContainers.length !== currContainers.length) {
@@ -193,12 +201,32 @@ export class PoDynamicFormFieldsComponent extends PoDynamicFormFieldsBaseCompone
       return;
     }
 
+    // Verifica mudança na quantidade de visible
+    if (prevVisibleTrue.length !== currVisibleTrue.length) {
+      this.setContainerFields();
+      return;
+    }
+
+    // Verifica mudança na quantidade de visible
+    if (prevVisibleFalse.length !== currVisibleFalse.length) {
+      this.setContainerFields();
+      return;
+    }
+
     if (currContainers.length) {
       this.handleChangesContainer(prevContainers, currContainers, 'container');
     }
 
     if (currOrder.length) {
       this.handleChangesContainer(prevOrder, currOrder, 'order');
+    }
+
+    if (currVisibleTrue.length) {
+      this.handleChangesContainer(prevVisibleTrue, currVisibleTrue, 'visible');
+    }
+
+    if (currVisibleFalse.length) {
+      this.handleChangesContainer(prevVisibleFalse, currVisibleFalse, 'visible');
     }
 
     //atualiza container sem mudança na estrutura da interface
