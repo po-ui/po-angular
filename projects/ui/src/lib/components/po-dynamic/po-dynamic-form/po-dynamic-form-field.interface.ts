@@ -8,6 +8,7 @@ import {
   PoDatepickerRangeLiterals,
   PoLookupFilter,
   PoLookupLiterals,
+  PoMultiselectFilter,
   PoMultiselectFilterMode,
   PoMultiselectLiterals,
   PoSwitchLabelPosition,
@@ -90,7 +91,7 @@ export interface PoDynamicFormField extends PoDynamicField {
    *  > Para que funcione corretamente, é importante que o serviço siga o
    *  [guia de API do PO UI](https://po-ui.io/guides/api).
    */
-  optionsService?: string | PoComboFilter;
+  optionsService?: string | PoComboFilter | PoMultiselectFilter;
 
   /**
    * Serviço que será utilizado para realizar a busca avançada. Pode ser utilizado em conjunto com a propriedade `columns`.
