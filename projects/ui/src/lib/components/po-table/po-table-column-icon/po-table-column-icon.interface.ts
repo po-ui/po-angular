@@ -41,7 +41,7 @@ export interface PoTableColumnIcon {
   disabled?: Function;
 
   /**
-   * É possível usar qualquer um dos ícones da [Biblioteca de ícones](/guides/icons). conforme exemplo abaixo:
+   * É possível usar qualquer um dos ícones da [Biblioteca de ícones](https://po-ui.io/icons). conforme exemplo abaixo:
    * ```
    * [ { icon: 'ph ph-plus' } ]
    * ```

@@ -75,7 +75,7 @@ export interface PoTableColumnLabel {
    * - <span class="ph ph-x"></span> - `danger`
    * - <span class="ph ph-info"></span> - `info`
    *
-   * Também É possível usar qualquer um dos ícones da [Biblioteca de ícones](/guides/icons). conforme exemplo abaixo:
+   * Também É possível usar qualquer um dos ícones da [Biblioteca de ícones](https://po-ui.io/icons). conforme exemplo abaixo:
    * ```
    * <po-tag p-icon="ph ph-user" p-value="PO Tag"></po-tag>
    * ```

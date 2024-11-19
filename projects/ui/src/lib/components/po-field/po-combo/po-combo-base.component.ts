@@ -165,7 +165,7 @@ export abstract class PoComboBaseComponent implements ControlValueAccessor, OnIn
    *
    * Define o ícone que será exibido no início do campo.
    *
-   * É possível usar qualquer um dos ícones da [Biblioteca de ícones](/guides/icons). conforme exemplo abaixo:
+   * É possível usar qualquer um dos ícones da [Biblioteca de ícones](https://po-ui.io/icons). conforme exemplo abaixo:
    * ```
    * <po-combo p-icon="ph ph-user" p-label="PO combo"></po-combo>
    * ```

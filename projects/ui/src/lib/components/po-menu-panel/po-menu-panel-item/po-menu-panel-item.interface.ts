@@ -10,7 +10,7 @@ export interface PoMenuPanelItem {
   /** Ação personalizada para clique do item de menu. */
   action?: Function;
 
-  /**  Ícone para o item de menu, os [ícones aceitos](/guides/icons) são os definidos no guia de estilo da PO. */
+  /**  Ícone para o item de menu, os [ícones aceitos](https://po-ui.io/icons) são os definidos no guia de estilo da PO. */
   icon: string;
 
   /** Texto do item de menu. */

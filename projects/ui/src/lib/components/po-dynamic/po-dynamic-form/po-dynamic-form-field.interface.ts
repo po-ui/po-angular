@@ -127,7 +127,7 @@ export interface PoDynamicFormField extends PoDynamicField {
    * - Combo;
    * - Password;
    *
-   * > Veja a disponibilidade de ícones em [biblioteca de ícones](guides/icons).
+   * > Veja a disponibilidade de ícones em [biblioteca de ícones](https://po-ui.io/icons).
    */
   icon?: string | TemplateRef<void>;
 

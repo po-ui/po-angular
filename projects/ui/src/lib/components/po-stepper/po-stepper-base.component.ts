@@ -227,7 +227,7 @@ export class PoStepperBaseComponent {
    *
    * @description
    * Permite definir o ícone do step no status concluído.
-   * Esta propriedade permite usar ícones da [Biblioteca de ícones](/guides/icons) ou da biblioteca [Phosphor](https://phosphoricons.com/).
+   * Esta propriedade permite usar ícones da [Biblioteca de ícones](https://po-ui.io/icons) ou da biblioteca [Phosphor](https://phosphoricons.com/).
    *
    * Exemplo usando a biblioteca de ícones padrão:
    * ```
@@ -262,7 +262,7 @@ export class PoStepperBaseComponent {
    *
    * @description
    * Permite definir o ícone do step no status ativo.
-   * Esta propriedade permite usar ícones da [Biblioteca de ícones](/guides/icons) ou da biblioteca [Phosphor](https://phosphoricons.com/).
+   * Esta propriedade permite usar ícones da [Biblioteca de ícones](https://po-ui.io/icons) ou da biblioteca [Phosphor](https://phosphoricons.com/).
    *
    * Exemplo usando a biblioteca de ícones padrão:
    * ```
