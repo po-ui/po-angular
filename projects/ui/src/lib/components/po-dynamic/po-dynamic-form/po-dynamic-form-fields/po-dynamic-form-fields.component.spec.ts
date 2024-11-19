@@ -669,6 +669,57 @@ describe('PoDynamicFormFieldsComponent: ', () => {
       expect(component.setContainerFields).toHaveBeenCalled();
     });
 
+    it('hasChangeContainer: should call `setContainerFields` if there is a change in hidden fields', () => {
+      const fieldPrevious: Array<PoDynamicFormField> = [
+        { property: 'campo 1', visible: false },
+        { property: 'campo 2' }
+      ];
+      const fieldCurrent: Array<PoDynamicFormField> = [{ property: 'campo 1', visible: true }, { property: 'campo 2' }];
+
+      component.visibleFields = fieldCurrent;
+
+      spyOn(component, <any>'setContainerFields');
+
+      component['hasChangeContainer'](fieldPrevious, fieldCurrent);
+
+      expect(component['setContainerFields']).toHaveBeenCalled();
+    });
+
+    it('hasChangeContainer: if there is a change in the visible fields', () => {
+      const fieldPrevious: Array<PoDynamicFormField> = [{ property: 'campo 1' }, { property: 'campo 2' }];
+      const fieldCurrent: Array<PoDynamicFormField> = [
+        { property: 'campo 1' },
+        { property: 'campo 2' },
+        { property: 'campo 3', visible: false }
+      ];
+
+      component.visibleFields = fieldCurrent.filter(x => x.visible === false);
+
+      spyOn(component, <any>'setContainerFields');
+
+      component['hasChangeContainer'](fieldPrevious, fieldCurrent);
+
+      expect(component['setContainerFields']).toHaveBeenCalled();
+    });
+
+    it('hasChangeContainer: should call "handleChange Container" if there is a change of fields to visible', () => {
+      const fieldPrevious: Array<PoDynamicFormField> = [
+        { property: 'campo 1', visible: true },
+        { property: 'campo 2', visible: false }
+      ];
+      const fieldCurrent: Array<PoDynamicFormField> = [
+        { property: 'campo 1', visible: false },
+        { property: 'campo 2', visible: true }
+      ];
+
+      spyOn(component, <any>'getVisibleFields').and.returnValue(fieldCurrent.filter(x => x.visible === true));
+      spyOn(component, <any>'handleChangesContainer');
+
+      component['hasChangeContainer'](fieldPrevious, fieldCurrent);
+
+      expect(component['handleChangesContainer']).toHaveBeenCalled();
+    });
+
     it('handleChangesContainer: should not call `setContainerFields` if order had its value changed', () => {
       const previous: Array<PoDynamicFormField> = [{ property: 'property1', order: 1 }, { property: 'property2' }];
 
