@@ -32,7 +32,7 @@ export const poPageListLiteralsDefault = {
  * podendo ser apresentado como lista ou tabela.
  *
  * Este componente possibilita realizar filtro dos dados, no qual permite que seja atribuido uma função que será executada no momento
- * da filtragem. Este comportamento pode ser acionado tanto ao *click* do ícone [ph-magnifying-glass](/guides/icons)
+ * da filtragem. Este comportamento pode ser acionado tanto ao *click* do ícone [ph-magnifying-glass](https://po-ui.io/icons)
  * quanto ao pressionar da tecla *ENTER* quando o foco estiver no campo de pesquisa.
  *
  * Para facilitar a manipulação e visualização dos filtros aplicados, é possível também utilizar o componente

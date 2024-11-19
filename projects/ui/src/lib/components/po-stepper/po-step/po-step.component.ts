@@ -98,7 +98,7 @@ export class PoStepComponent implements AfterContentInit {
    *
    * @description
    * Define o ícone padrão do step em seu status *default*.
-   * Esta propriedade permite usar ícones da [Biblioteca de ícones](/guides/icons) ou da biblioteca [Phosphor](https://phosphoricons.com/).
+   * Esta propriedade permite usar ícones da [Biblioteca de ícones](https://po-ui.io/icons) ou da biblioteca [Phosphor](https://phosphoricons.com/).
    *
    * Exemplo usando a biblioteca de ícones padrão:
    * ```

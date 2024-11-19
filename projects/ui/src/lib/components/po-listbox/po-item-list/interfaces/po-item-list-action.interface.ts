@@ -22,7 +22,7 @@ export interface PoItemListAction {
    *
    * Define um ícone que será exibido ao lado esquerdo do rótulo.
    *
-   * É possível usar qualquer um dos ícones da [Biblioteca de ícones](/guides/icons). conforme exemplo abaixo:
+   * É possível usar qualquer um dos ícones da [Biblioteca de ícones](https://po-ui.io/icons). conforme exemplo abaixo:
    * ```
    * <po-component
    *  [p-property]="[{ label: 'PHOSPHOR ICON', icon: 'ph ph-newspaper' }]">

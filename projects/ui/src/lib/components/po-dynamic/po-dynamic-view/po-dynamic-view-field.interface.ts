@@ -78,7 +78,7 @@ export interface PoDynamicViewField extends PoDynamicField {
   /**
    * Define um ícone que será exibido ao lado do valor para o campo do tipo *tag*.
    *
-   * > Veja os valores válidos na [biblioteca de ícones](guides/icons).
+   * > Veja os valores válidos na [biblioteca de ícones](https://po-ui.io/icons).
    */
   icon?: string;
 

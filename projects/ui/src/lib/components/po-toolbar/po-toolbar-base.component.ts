@@ -26,9 +26,9 @@ export class PoToolbarBaseComponent {
    *
    * @description
    *
-   * Define um [ícone](/guides/icons) para a propriedade `p-actions`.
+   * Define um [ícone](https://po-ui.io/icons) para a propriedade `p-actions`.
    *
-   * É possível usar qualquer um dos ícones da [Biblioteca de ícones](/guides/icons). conforme exemplo abaixo:
+   * É possível usar qualquer um dos ícones da [Biblioteca de ícones](https://po-ui.io/icons). conforme exemplo abaixo:
    * ```
    * <po-toolbar p-actions-icon="ph ph-user" [p-actions]="actions"></po-toolbar>
    * ```

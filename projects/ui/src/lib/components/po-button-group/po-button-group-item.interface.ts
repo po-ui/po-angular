@@ -22,7 +22,7 @@ export interface PoButtonGroupItem {
   /**
    * Ícone exibido ao lado esquerdo do label do botão.
    *
-   * É possível usar qualquer um dos ícones da [Biblioteca de ícones](/guides/icons). conforme exemplo abaixo:
+   * É possível usar qualquer um dos ícones da [Biblioteca de ícones](https://po-ui.io/icons). conforme exemplo abaixo:
    * ```
    * buttons: Array<PoButtonGroupItem> = [
    *  { label: 'Button 1', action: this.action.bind(this), icon: 'ph ph-user' },

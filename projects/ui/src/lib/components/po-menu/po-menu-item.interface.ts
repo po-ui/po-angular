@@ -33,7 +33,7 @@ export interface PoMenuItem {
   action?: Function;
 
   /**
-   * É possível usar qualquer um dos ícones da [Biblioteca de ícones](/guides/icons). conforme exemplo abaixo:
+   * É possível usar qualquer um dos ícones da [Biblioteca de ícones](https://po-ui.io/icons). conforme exemplo abaixo:
    * ```
    * <po-menu
    *  [p-menus]="[{ link: '/', label: 'PO ICON', icon: 'ph ph-newspaper' }]">

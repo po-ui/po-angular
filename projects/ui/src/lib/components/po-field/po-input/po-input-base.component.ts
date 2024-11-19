@@ -76,7 +76,7 @@ export abstract class PoInputBaseComponent implements ControlValueAccessor, Vali
    *
    * Define o ícone que será exibido no início do campo.
    *
-   * É possível usar qualquer um dos ícones da [Biblioteca de ícones](/guides/icons). conforme exemplo abaixo:
+   * É possível usar qualquer um dos ícones da [Biblioteca de ícones](https://po-ui.io/icons). conforme exemplo abaixo:
    * ```
    * <po-input p-icon="ph ph-user" p-label="PO input"></po-input>
    * ```
