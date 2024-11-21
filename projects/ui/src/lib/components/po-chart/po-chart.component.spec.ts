@@ -378,6 +378,12 @@ describe('PoChartComponent:', () => {
 
       expect(component['getAxisXLabelArea'](axisXLabel)).toBe(56);
     });
+
+    it('getAxisXLabelArea: should calculate and return width for a decimal number', () => {
+      const axisXLabel = 12.111111111111;
+
+      expect(component['getAxisXLabelArea'](axisXLabel)).toBe(56);
+    });
   });
 
   describe('Template', () => {

@@ -181,7 +181,9 @@ export class PoChartComponent extends PoChartBaseComponent implements AfterViewI
     const spanElement = this.renderer.createElement('span');
 
     this.renderer.addClass(spanElement, 'po-chart-axis-x-label');
-    spanElement.innerHTML = axisXLabel;
+
+    const formattedLabel = typeof axisXLabel === 'number' ? axisXLabel.toFixed(2) : axisXLabel;
+    spanElement.innerHTML = formattedLabel;
 
     this.renderer.appendChild(this.elementRef.nativeElement, spanElement);
     const axisXLabelWidth = Math.ceil(spanElement.offsetWidth) + labelPoChartPadding;
