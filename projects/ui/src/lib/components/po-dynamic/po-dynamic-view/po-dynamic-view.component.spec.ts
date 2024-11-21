@@ -250,6 +250,36 @@ describe('PoDynamicViewComponent:', () => {
     });
 
     describe('setFieldValue:', () => {
+      it(`should return the labels of the selected options if options exist and a match is found`, () => {
+        const field = {
+          value: ['value1'],
+          optionsMulti: true,
+          options: [
+            { value: 'value1', label: 'label1' },
+            { value: 'value2', label: 'label2' },
+            { value: 'value3', label: 'label3' }
+          ]
+        };
+
+        field.value = ['value1', 'value2'];
+        expect(component.setFieldValue(field)).toEqual(['label1', 'label2']);
+      });
+
+      it(`should return the field values if options exist but no match is found'`, () => {
+        const field = {
+          value: ['value1'],
+          optionsMulti: true,
+          options: [
+            { value: 'value1', label: 'label1' },
+            { value: 'value2', label: 'label2' },
+            { value: 'value3', label: 'label3' }
+          ]
+        };
+
+        field.value = ['value4'];
+        expect(component.setFieldValue(field)).toEqual(['value4']);
+      });
+
       it(`should return the label of the selected option if options exist and a match is found`, () => {
         const field = {
           value: 'value1',
