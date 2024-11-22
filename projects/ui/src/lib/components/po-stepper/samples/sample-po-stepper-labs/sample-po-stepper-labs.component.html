@@ -8,7 +8,12 @@
     [p-step-icon-done]="properties.iconDone"
     (p-change-step)="changeStep('change')"
   >
-    <po-step *ngFor="let step of steps" [p-label]="step.label" [p-icon-default]="step.iconDefault">
+    <po-step
+      *ngFor="let step of steps"
+      [p-label]="step.label"
+      [p-icon-default]="step.iconDefault"
+      [p-disable-click]="step.disabledClick"
+    >
       <h2>Step Content {{ step.label }}</h2>
     </po-step>
   </po-stepper>
