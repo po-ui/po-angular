@@ -284,6 +284,17 @@ export class PoStepperBaseComponent {
    */
   @Input('p-step-icon-active') iconActive?: string | TemplateRef<void>;
 
+  /**
+   * @optional
+   *
+   * @description
+   *
+   * Desabilita o clique nos steps.
+   *
+   * @default `false`
+   */
+  @Input('p-disable-click') disabledClick: boolean = false;
+
   private initializeSteps(): void {
     const hasStatus = this._steps.some(step => step.status !== PoStepperStatus.Default);
 

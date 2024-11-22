@@ -194,6 +194,15 @@ describe('PoStepperStepComponent:', () => {
       expect(component.click.emit).not.toHaveBeenCalled();
     });
 
+    it('onClick: shouldn´t call `click.emit` if `disabledClick` is `true`.', () => {
+      component.status = PoStepperStatus.Active;
+      component.disabledClick = true;
+      spyOn(component.click, 'emit');
+      component.onClick();
+
+      expect(component.click.emit).not.toHaveBeenCalled();
+    });
+
     it('onEnter: should call `click.emit` if `status` is different of `disabled`.', () => {
       component.status = PoStepperStatus.Active;
 
@@ -206,6 +215,15 @@ describe('PoStepperStepComponent:', () => {
     it('onEnter: shouldn´t call `click.emit` if `status` is `disabled`.', () => {
       component.status = PoStepperStatus.Disabled;
 
+      spyOn(component.enter, 'emit');
+      component.onEnter();
+
+      expect(component.enter.emit).not.toHaveBeenCalled();
+    });
+
+    it('onEnter: shouldn´t call `click.emit` if `disabledClick` is `true`.', () => {
+      component.status = PoStepperStatus.Active;
+      component.disabledClick = true;
       spyOn(component.enter, 'emit');
       component.onEnter();
 

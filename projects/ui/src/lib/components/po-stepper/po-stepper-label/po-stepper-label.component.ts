@@ -37,6 +37,8 @@ export class PoStepperLabelComponent implements AfterViewInit, OnChanges {
 
   @ViewChild('labelElement') labelElement: ElementRef;
 
+  @Input('p-disable-click') disabledClick: boolean = false;
+
   displayedContent: string;
   tooltipContent: string;
 

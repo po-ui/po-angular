@@ -6,6 +6,7 @@
     [p-step-size]="properties.stepSize"
     [p-step-icon-active]="properties.iconActive"
     [p-step-icon-done]="properties.iconDone"
+    [p-disable-click]="properties.disabledClick"
     (p-change-step)="changeStep('change')"
   >
     <po-step *ngFor="let step of steps" [p-label]="step.label" [p-icon-default]="step.iconDefault">
