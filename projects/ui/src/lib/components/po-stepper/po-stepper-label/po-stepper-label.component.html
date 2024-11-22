@@ -1,7 +1,8 @@
 <div
   #labelElement
   class="po-stepper-label"
-  [class.po-link]="status !== 'disabled'"
+  [class.po-link]="status !== 'disabled' && !this.disabledClick"
+  [class.po-stepper-disabled-click]="this.disabledClick"
   [class.po-stepper-label-active]="status === 'active' || status === 'error'"
   [class.po-stepper-label-done]="status === 'done'"
   [class.po-stepper-label-vertical]="isVerticalOrientation"
