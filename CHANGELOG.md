@@ -2,6 +2,16 @@
 
 All notable changes to this project will be documented in this file. See [standard-version](https://github.com/conventional-changelog/standard-version) for commit guidelines.
 
+### [17.26.8](https://github.com/po-ui/po-angular/compare/v17.26.7...v17.26.8) (2024-11-25)
+
+
+### Bug Fixes
+
+* **chart:** corrige espaço em branco ([62643a2](https://github.com/po-ui/po-angular/commit/62643a2177257f709f5327ec21a0f5b32fea66f1))
+* **combo/select:** ajusta cores do chevron-down conforme AnimaliaDS ([241a436](https://github.com/po-ui/po-angular/commit/241a4362e350bcf0f5e037445958250fda081b28)), closes [#2154](https://github.com/po-ui/po-angular/issues/2154)
+* **dynamic-form:** adiciona interface de multiselect em optionsService ([38a9e03](https://github.com/po-ui/po-angular/commit/38a9e0342bf02c6d6fd4bcd1b39f44bd10734600))
+* **dynamic-form:** corrige erro de visibilidade dos campos no container ([af21138](https://github.com/po-ui/po-angular/commit/af211383ed04384c049c9399b158c2fe03c29f5c))
+
 ### [17.26.7](https://github.com/po-ui/po-angular/compare/v17.26.6...v17.26.7) (2024-11-11)
 
 
