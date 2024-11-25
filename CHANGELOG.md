@@ -2,6 +2,22 @@
 
 All notable changes to this project will be documented in this file. See [standard-version](https://github.com/conventional-changelog/standard-version) for commit guidelines.
 
+## [18.16.0](https://github.com/po-ui/po-angular/compare/v18.15.0...v18.16.0) (2024-11-25)
+
+
+### Features
+
+* **progress:** cria propriedade p-disabled-cancel ([a820c84](https://github.com/po-ui/po-angular/commit/a820c84240e4a3fa590ce4d78bf886ee66b200b5))
+* **upload:** cria propriedade p-disabled-remove-file ([ba7fe5b](https://github.com/po-ui/po-angular/commit/ba7fe5b993aaa283784783088ecb585eba408470))
+
+
+### Bug Fixes
+
+* **chart:** corrige espaço em branco ([4c81889](https://github.com/po-ui/po-angular/commit/4c818898e0b50e03e853776278ee720dc8aed7ef))
+* **combo/select:** ajusta cores do chevron-down conforme AnimaliaDS ([d674f1f](https://github.com/po-ui/po-angular/commit/d674f1fac5893b37b44b1dde084493967c8e3bd5)), closes [#2154](https://github.com/po-ui/po-angular/issues/2154)
+* **dynamic-form:** adiciona interface de multiselect em optionsService ([bad149c](https://github.com/po-ui/po-angular/commit/bad149caf0899433da39d546e0f261cf7f870a78))
+* **dynamic-form:** corrige erro de visibilidade dos campos no container ([3647b03](https://github.com/po-ui/po-angular/commit/3647b031a7f5d7d0e5444e4ad0fbeb638d74fefe))
+
 ### [18.15.0](https://github.com/po-ui/po-angular/compare/v18.14.0...v18.15.0) (2024-11-18)
 
 Compatibilidade com @totvs/thf-components@18.15.0
