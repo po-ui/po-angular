@@ -814,4 +814,15 @@ export interface PoDynamicFormField extends PoDynamicField {
    * **Componente compatível**: `po-upload`
    */
   onUpload?: Function;
+
+  /**
+   *
+   * Define que o filtro no primeiro clique será removido.
+   *
+   * > Caso o combo tenha um valor padrão de inicialização, o primeiro clique
+   * no componente retornará todos os itens da lista e não apenas o item inicialiazado.
+   *
+   * **Componente compatível**: `po-combo`
+   */
+  removeInitialFilter?: boolean;
 }
