@@ -445,7 +445,10 @@ export class PoComboComponent extends PoComboBaseComponent implements AfterViewI
   }
 
   applyFilterInFirstClick() {
-    if (this.isFirstFilter && !this.selectedValue) {
+    const shouldResetFilter = this.removeInitialFilter && this.isFirstFilter;
+    const isEmptyFirstFilter = this.isFirstFilter && !this.selectedValue;
+
+    if (shouldResetFilter || isEmptyFirstFilter) {
       this.options = [];
       const scrollingControl = this.setScrollingControl();
       this.applyFilter('', scrollingControl);
