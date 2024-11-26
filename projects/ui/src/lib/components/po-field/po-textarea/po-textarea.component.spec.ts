@@ -2,8 +2,8 @@ import { ComponentFixture, TestBed } from '@angular/core/testing';
 
 import { configureTestSuite } from './../../../util-test/util-expect.spec';
 
-import { PoFieldContainerBottomComponent } from './../po-field-container/po-field-container-bottom/po-field-container-bottom.component';
 import { PoFieldContainerComponent } from '../po-field-container/po-field-container.component';
+import { PoFieldContainerBottomComponent } from './../po-field-container/po-field-container-bottom/po-field-container-bottom.component';
 import { PoTextareaBaseComponent } from './po-textarea-base.component';
 import { PoTextareaComponent } from './po-textarea.component';
 
@@ -221,6 +221,33 @@ describe('PoTextareaComponent:', () => {
       component.writeValueModel.call(fakeThis);
 
       expect(fakeThis.change.emit).not.toHaveBeenCalled();
+    });
+
+    describe('getErrorPattern:', () => {
+      it('should return true in hasInvalidClass if fieldErrorMessage and required is true', () => {
+        component['el'].nativeElement.classList.add('ng-invalid');
+        component['el'].nativeElement.classList.add('ng-dirty');
+        component.fieldErrorMessage = 'Field Invalid';
+        component.required = true;
+        expect(component.hasInvalidClass()).toBeTruthy();
+        expect(component.getErrorPattern()).toBe('Field Invalid');
+      });
+
+      it('should return true in hasInvalidClass if fieldErrorMessage and hasValidatorRequired is true', () => {
+        component['el'].nativeElement.classList.add('ng-invalid');
+        component['el'].nativeElement.classList.add('ng-dirty');
+        component.fieldErrorMessage = 'Field Invalid';
+        component['hasValidatorRequired'] = true;
+        expect(component.hasInvalidClass()).toBeTruthy();
+        expect(component.getErrorPattern()).toBe('Field Invalid');
+      });
+
+      it('should return empty if fieldErrorMessage is undefined', () => {
+        component['el'].nativeElement.classList.add('ng-invalid');
+        component['el'].nativeElement.classList.add('ng-dirty');
+        component.fieldErrorMessage = undefined;
+        expect(component.getErrorPattern()).toBe('');
+      });
     });
   });
 });

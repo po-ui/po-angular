@@ -1,25 +1,25 @@
 import { Directive } from '@angular/core';
-import { UntypedFormControl } from '@angular/forms';
+import { FormControl, UntypedFormControl, Validators } from '@angular/forms';
 
 import { Observable, of } from 'rxjs';
 
+import { expectPropertiesValues, expectSettersMethod } from '../../../util-test/util-expect.spec';
 import * as Utils from '../../../utils/util';
 import * as ValidatorsFunctions from '../validators';
-import { expectPropertiesValues, expectSettersMethod } from '../../../util-test/util-expect.spec';
 
-import { PoLanguageService } from '../../../services/po-language/po-language.service';
 import { poLocaleDefault } from '../../../services/po-language/po-language.constant';
+import { PoLanguageService } from '../../../services/po-language/po-language.service';
 
-import { PoComboBaseComponent } from './po-combo-base.component';
 import { PoComboFilter } from './interfaces/po-combo-filter.interface';
-import { PoComboFilterMode } from './po-combo-filter-mode.enum';
-import { PoComboOption } from './interfaces/po-combo-option.interface';
 import { poComboLiteralsDefault } from './interfaces/po-combo-literals-default.interface';
+import { PoComboOption } from './interfaces/po-combo-option.interface';
+import { PoComboBaseComponent } from './po-combo-base.component';
+import { PoComboFilterMode } from './po-combo-filter-mode.enum';
 
 @Directive()
 class PoComboTest extends PoComboBaseComponent {
   constructor() {
-    super(new PoLanguageService());
+    super(new PoLanguageService(), { detectChanges: () => {}, markForCheck: () => {} } as any);
   }
 
   getInputValue(): string {
@@ -812,6 +812,17 @@ describe('PoComboBaseComponent:', () => {
 
       expect(component.validate(new UntypedFormControl(null))).toBeUndefined();
       expect(ValidatorsFunctions.requiredFailed).toHaveBeenCalled();
+    });
+
+    it('validate: should set hasValidatorRequired to true if fieldErrorMessage is valid and control has required validator', () => {
+      component['hasValidatorRequired'] = false;
+      component.fieldErrorMessage = 'Field Invalid';
+
+      const controlMock = new FormControl('', Validators.required);
+
+      component.validate(controlMock);
+
+      expect(component['hasValidatorRequired']).toBeTrue();
     });
 
     it('validateModel: should call `validatorChange` when `validateModel` is a function.', () => {

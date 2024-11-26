@@ -17,6 +17,7 @@ export class SamplePoCheckboxGroupLabsComponent implements OnInit {
   option: PoCheckboxGroupOption;
   options: Array<PoCheckboxGroupOption>;
   properties: Array<string>;
+  fieldErrorMessage: string;
 
   public readonly columnOptions: Array<PoRadioGroupOption> = [
     { label: '1 column', value: 1 },
@@ -56,6 +57,7 @@ export class SamplePoCheckboxGroupLabsComponent implements OnInit {
     this.label = undefined;
     this.options = [];
     this.properties = [];
+    this.fieldErrorMessage = '';
 
     this.clearOption();
   }

@@ -1,6 +1,7 @@
-import { Directive, Input } from '@angular/core';
-import { AbstractControl, ValidationErrors, Validator } from '@angular/forms';
+import { ChangeDetectorRef, Directive, Input } from '@angular/core';
+import { AbstractControl, ValidationErrors, Validator, Validators } from '@angular/forms';
 
+import { Subscription } from 'rxjs';
 import { convertToBoolean } from '../..//utils/util';
 import { PoFieldModel } from './po-field.model';
 import { requiredFailed } from './validators';
@@ -37,6 +38,18 @@ export abstract class PoFieldValidateModel<T> extends PoFieldModel<T> implements
   @Input({ alias: 'p-required', transform: convertToBoolean }) required: boolean = false;
 
   /**
+   * @optional
+   *
+   * @description
+   *
+   * Exibe a mensagem setada se o campo estiver vazio e for requerido.
+   *
+   * > Necessário que a propriedade `p-required` esteja habilitada.
+   *
+   */
+  @Input('p-field-error-message') fieldErrorMessage: string;
+
+  /**
    *  Define se a indicação de campo obrigatório será exibida.
    *
    * > Não será exibida a indicação se:
@@ -44,10 +57,20 @@ export abstract class PoFieldValidateModel<T> extends PoFieldModel<T> implements
    */
   @Input('p-show-required') showRequired: boolean = false;
 
+  protected hasValidatorRequired = false;
   private onValidatorChange;
 
+  constructor(public changeDetector: ChangeDetectorRef) {
+    super();
+  }
+
   validate(abstractControl: AbstractControl): ValidationErrors {
-    if (requiredFailed(this.required, this.disabled, abstractControl.value)) {
+    if (!this.hasValidatorRequired && this.fieldErrorMessage && abstractControl.hasValidator(Validators.required)) {
+      this.hasValidatorRequired = true;
+    }
+
+    if (requiredFailed(this.required || this.hasValidatorRequired, this.disabled, abstractControl.value)) {
+      this.changeDetector.markForCheck();
       return {
         required: {
           valid: false

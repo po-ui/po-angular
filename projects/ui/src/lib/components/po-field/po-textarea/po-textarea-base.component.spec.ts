@@ -1,8 +1,8 @@
 import { Directive } from '@angular/core';
-import { UntypedFormControl } from '@angular/forms';
+import { FormControl, UntypedFormControl, Validators } from '@angular/forms';
 
-import * as ValidatorsFunctions from '../validators';
 import { expectPropertiesValues, expectSettersMethod } from '../../../util-test/util-expect.spec';
+import * as ValidatorsFunctions from '../validators';
 
 import { PoTextareaBaseComponent } from './po-textarea-base.component';
 
@@ -246,6 +246,17 @@ describe('PoTextareaBase:', () => {
 
         expect(component.validate(new UntypedFormControl())).toBeUndefined();
         expect(ValidatorsFunctions.maxlengpoailed).toHaveBeenCalled();
+      });
+
+      it('validate: should set hasValidatorRequired to true if fieldErrorMessage is valid and control has required validator', () => {
+        component['hasValidatorRequired'] = false;
+        component.fieldErrorMessage = 'Field Invalid';
+
+        const controlMock = new FormControl('', Validators.required);
+
+        component.validate(controlMock);
+
+        expect(component['hasValidatorRequired']).toBeTrue();
       });
     });
 

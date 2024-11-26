@@ -78,6 +78,7 @@ export class PoRadioGroupComponent extends PoRadioGroupBaseComponent implements 
 
   constructor(
     differs: IterableDiffers,
+    private el: ElementRef,
     private cd: ChangeDetectorRef
   ) {
     super();
@@ -134,6 +135,16 @@ export class PoRadioGroupComponent extends PoRadioGroupBaseComponent implements 
 
   getElementByValue(value) {
     return this.inputEl.nativeElement.querySelector(`input[value='${value}']`);
+  }
+
+  getErrorPattern() {
+    return this.fieldErrorMessage && this.hasInvalidClass() ? this.fieldErrorMessage : '';
+  }
+
+  hasInvalidClass() {
+    return (
+      this.el.nativeElement.classList.contains('ng-invalid') && this.el.nativeElement.classList.contains('ng-dirty')
+    );
   }
 
   onKeyUp(event: KeyboardEvent, value) {

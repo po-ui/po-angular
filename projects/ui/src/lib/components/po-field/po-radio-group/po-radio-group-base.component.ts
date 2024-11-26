@@ -1,5 +1,5 @@
 import { Directive, EventEmitter, Input, Output } from '@angular/core';
-import { AbstractControl, ControlValueAccessor, Validator } from '@angular/forms';
+import { AbstractControl, ControlValueAccessor, Validator, Validators } from '@angular/forms';
 
 import { convertToBoolean, convertToInt, removeDuplicatedOptions } from '../../../utils/util';
 import { requiredFailed } from '../validators';
@@ -90,6 +90,18 @@ export abstract class PoRadioGroupBaseComponent implements ControlValueAccessor,
    * @default `false`
    */
   @Input('p-optional') optional: boolean;
+
+  /**
+   * @optional
+   *
+   * @description
+   *
+   * Exibe a mensagem setada se o campo estiver vazio e for requerido.
+   *
+   * > Necessário que a propriedade `p-required` esteja habilitada.
+   *
+   */
+  @Input('p-field-error-message') fieldErrorMessage: string;
 
   /**
    * @optional

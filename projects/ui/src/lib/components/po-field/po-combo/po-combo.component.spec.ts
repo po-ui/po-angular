@@ -780,6 +780,24 @@ describe('PoComboComponent:', () => {
       });
     });
 
+    describe('getErrorPattern:', () => {
+      it('should return true in hasInvalidClass if fieldErrorMessage', () => {
+        component.element.nativeElement.classList.add('ng-invalid');
+        component.element.nativeElement.classList.add('ng-dirty');
+        component.fieldErrorMessage = 'Field Invalid';
+        component.required = true;
+        expect(component.hasInvalidClass()).toBeTruthy();
+        expect(component.getErrorPattern()).toBe('Field Invalid');
+      });
+
+      it('should return empty if fieldErrorMessage is undefined', () => {
+        component.element.nativeElement.classList.add('ng-invalid');
+        component.element.nativeElement.classList.add('ng-dirty');
+        component.fieldErrorMessage = undefined;
+        expect(component.getErrorPattern()).toBe('');
+      });
+    });
+
     it('should call controlComboVisibility with false', () => {
       spyOn(component, 'controlComboVisibility');
 

@@ -1,5 +1,5 @@
 import { ChangeDetectorRef, Directive, EventEmitter, Input, Output } from '@angular/core';
-import { AbstractControl, ControlValueAccessor, Validator } from '@angular/forms';
+import { AbstractControl, ControlValueAccessor, Validator, Validators } from '@angular/forms';
 
 import { convertToBoolean, convertToInt } from '../../../utils/util';
 import { maxlengpoailed, minlengpoailed, requiredFailed } from '../validators';
@@ -76,6 +76,18 @@ export abstract class PoTextareaBaseComponent implements ControlValueAccessor, V
    *
    * @description
    *
+   * Exibe a mensagem setada se o campo estiver vazio e for requerido.
+   *
+   * > Necessário que a propriedade `p-required` esteja habilitada.
+   *
+   */
+  @Input('p-field-error-message') fieldErrorMessage: string;
+
+  /**
+   * @optional
+   *
+   * @description
+   *
    * Evento disparado ao sair do campo.
    */
   @Output('p-blur') blur: EventEmitter<any> = new EventEmitter<any>();
@@ -120,6 +132,7 @@ export abstract class PoTextareaBaseComponent implements ControlValueAccessor, V
   private validatorChange: any;
   // eslint-disable-next-line
   protected onTouched: any = null;
+  protected hasValidatorRequired = false;
 
   /** Placeholder, mensagem que aparecerá enquanto o campo não estiver preenchido. */
   @Input('p-placeholder') set placeholder(value: string) {
@@ -280,6 +293,10 @@ export abstract class PoTextareaBaseComponent implements ControlValueAccessor, V
   }
 
   validate(abstractControl: AbstractControl): { [key: string]: any } {
+    if (!this.hasValidatorRequired && this.fieldErrorMessage && abstractControl.hasValidator(Validators.required)) {
+      this.hasValidatorRequired = true;
+    }
+
     if (requiredFailed(this.required, this.disabled, abstractControl.value)) {
       return {
         required: {

@@ -34,6 +34,7 @@ export class SamplePoComboLabsComponent implements OnInit {
   optionsGroupList: Array<PoSelectOption>;
   placeholder: string;
   properties: Array<string>;
+  fieldErrorMessage: string;
 
   option: PoComboOption;
   options: Array<PoComboOption | PoComboOptionGroup>;
@@ -112,6 +113,7 @@ export class SamplePoComboLabsComponent implements OnInit {
     this.optionsGroupList = [];
     this.placeholder = '';
     this.properties = [];
+    this.fieldErrorMessage = '';
     this.selectedOptionsGroup = undefined;
   }
 

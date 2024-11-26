@@ -1,5 +1,5 @@
-import { Directive, EventEmitter, Input, Output } from '@angular/core';
-import { AbstractControl, ControlValueAccessor, ValidationErrors, Validator } from '@angular/forms';
+import { ChangeDetectorRef, Directive, EventEmitter, Input, OnDestroy, Output } from '@angular/core';
+import { AbstractControl, ControlValueAccessor, ValidationErrors, Validator, Validators } from '@angular/forms';
 import { poLocaleDefault } from '../../../services/po-language/po-language.constant';
 import { PoLanguageService } from '../../../services/po-language/po-language.service';
 import { PoMask } from '../po-input/po-mask';
@@ -15,6 +15,7 @@ import {
 import { PoDatepickerRangeLiterals } from './interfaces/po-datepicker-range-literals.interface';
 import { PoDatepickerRange } from './interfaces/po-datepicker-range.interface';
 import { poDatepickerRangeLiteralsDefault } from './po-datepicker-range.literals';
+import { Subscription, switchMap } from 'rxjs';
 
 /**
  * @description
@@ -58,7 +59,7 @@ import { poDatepickerRangeLiteralsDefault } from './po-datepicker-range.literals
  * - Para a validação do formulário, utilize o `[(ngModel)]`.
  */
 @Directive()
-export abstract class PoDatepickerRangeBaseComponent implements ControlValueAccessor, Validator {
+export abstract class PoDatepickerRangeBaseComponent implements ControlValueAccessor, Validator, OnDestroy {
   /**
    * @optional
    *
@@ -110,6 +111,18 @@ export abstract class PoDatepickerRangeBaseComponent implements ControlValueAcce
    *
    * @description
    *
+   * Exibe a mensagem setada se o campo estiver vazio e for requerido.
+   *
+   * > Necessário que a propriedade `p-required` esteja habilitada.
+   *
+   */
+  @Input('p-field-error-message') fieldErrorMessage: string;
+
+  /**
+   * @optional
+   *
+   * @description
+   *
    * Evento disparado ao alterar valor do campo.
    */
   @Output('p-change') onChange: EventEmitter<any> = new EventEmitter<any>();
@@ -122,6 +135,7 @@ export abstract class PoDatepickerRangeBaseComponent implements ControlValueAcce
   protected isStartDateRangeInputValid: boolean = true;
   protected onTouchedModel: any;
   protected poMaskObject: PoMask;
+  protected hasValidatorRequired = false;
 
   private _clean?: boolean = false;
   private _disabled?;
@@ -138,6 +152,7 @@ export abstract class PoDatepickerRangeBaseComponent implements ControlValueAcce
   private language;
   private onChangeModel: any;
   private validatorChange: any;
+  private subscription = new Subscription();
 
   get isDateRangeInputValid() {
     return this.isDateRangeInputFormatValid && this.isStartDateRangeInputValid;
@@ -407,10 +422,15 @@ export abstract class PoDatepickerRangeBaseComponent implements ControlValueAcce
   }
 
   constructor(
+    protected changeDetector: ChangeDetectorRef,
     protected poDateService: PoDateService,
     private languageService: PoLanguageService
   ) {
     this.language = languageService.getShortLanguage();
+  }
+
+  ngOnDestroy(): void {
+    this.subscription?.unsubscribe();
   }
 
   // Função implementada do ControlValueAccessor
@@ -439,6 +459,10 @@ export abstract class PoDatepickerRangeBaseComponent implements ControlValueAcce
     const value: PoDatepickerRange = control.value || {};
     const startDate = value.start ? this.convertPatternDateFormat(value.start) : '';
     const endDate = value.end ? this.convertPatternDateFormat(value.end) : '';
+
+    if (!this.hasValidatorRequired && this.fieldErrorMessage && control.hasValidator(Validators.required)) {
+      this.hasValidatorRequired = true;
+    }
 
     if (this.requiredDateRangeFailed(startDate, endDate)) {
       this.errorMessage = '';
@@ -487,6 +511,20 @@ export abstract class PoDatepickerRangeBaseComponent implements ControlValueAcce
           valid: false
         }
       };
+    }
+
+    if (this.fieldErrorMessage) {
+      this.subscription?.unsubscribe();
+      this.subscription = control.statusChanges
+        .pipe(
+          switchMap(status => {
+            if (status === 'INVALID') {
+              this.changeDetector.markForCheck();
+            }
+            return [];
+          })
+        )
+        .subscribe();
     }
 
     return null;
@@ -591,8 +629,8 @@ export abstract class PoDatepickerRangeBaseComponent implements ControlValueAcce
   private requiredDateRangeFailed(startDate: string, endDate: string): boolean {
     return (
       this.isDateRangeInputValid &&
-      requiredFailed(this.required, this.disabled, startDate) &&
-      requiredFailed(this.required, this.disabled, endDate)
+      requiredFailed(this.required || this.hasValidatorRequired, this.disabled, startDate) &&
+      requiredFailed(this.required || this.hasValidatorRequired, this.disabled, endDate)
     );
   }
 

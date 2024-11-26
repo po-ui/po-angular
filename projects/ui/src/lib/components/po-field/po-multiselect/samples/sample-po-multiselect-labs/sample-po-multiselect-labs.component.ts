@@ -24,6 +24,7 @@ export class SamplePoMultiselectLabsComponent implements OnInit {
   placeholder: string;
   placeholderSearch: string;
   properties: Array<string>;
+  fieldErrorMessage: string;
   filterService: string;
   fieldLabel: string;
   fieldValue: string;
@@ -75,6 +76,7 @@ export class SamplePoMultiselectLabsComponent implements OnInit {
     this.placeholder = '';
     this.placeholderSearch = undefined;
     this.properties = [];
+    this.fieldErrorMessage = '';
     this.filterService = '';
     this.fieldLabel = '';
     this.fieldValue = '';

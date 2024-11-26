@@ -14,6 +14,7 @@ export class SamplePoTextareaLabsComponent implements OnInit {
   minlength: number;
   placeholder: string;
   properties: Array<string>;
+  fieldErrorMessage: string;
   rows: string;
   textarea: string;
 
@@ -40,6 +41,7 @@ export class SamplePoTextareaLabsComponent implements OnInit {
     this.minlength = undefined;
     this.maxlength = undefined;
     this.event = undefined;
+    this.fieldErrorMessage = '';
     this.rows = undefined;
     this.placeholder = '';
     this.properties = [];

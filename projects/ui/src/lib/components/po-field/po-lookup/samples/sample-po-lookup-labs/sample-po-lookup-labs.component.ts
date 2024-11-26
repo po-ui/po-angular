@@ -34,6 +34,7 @@ export class SamplePoLookupLabsComponent implements OnInit {
   lookup: any;
   placeholder: string;
   properties: Array<string>;
+  fieldErrorMessage: string;
   advancedFilters: string;
   customAdvancedFilters: Array<PoDynamicFormField>;
   spacing: PoTableColumnSpacing = PoTableColumnSpacing.Medium;
@@ -132,6 +133,7 @@ export class SamplePoLookupLabsComponent implements OnInit {
     this.lookup = undefined;
     this.placeholder = '';
     this.properties = [];
+    this.fieldErrorMessage = '';
     this.customAdvancedFilters = [];
   }
 

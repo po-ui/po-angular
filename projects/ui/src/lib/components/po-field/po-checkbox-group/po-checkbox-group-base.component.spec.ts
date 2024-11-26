@@ -4,8 +4,8 @@ import * as UtilsFunction from '../../../utils/util';
 import * as ValidatorsFunctions from '../validators';
 import { expectPropertiesValues } from './../../../util-test/util-expect.spec';
 
-import { PoCheckboxGroupBaseComponent } from './po-checkbox-group-base.component';
 import { PoCheckboxGroupOption } from './interfaces/po-checkbox-group-option.interface';
+import { PoCheckboxGroupBaseComponent } from './po-checkbox-group-base.component';
 
 describe('PoCheckboxGroupBaseComponent: ', () => {
   let component: PoCheckboxGroupBaseComponent;

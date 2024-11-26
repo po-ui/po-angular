@@ -1,9 +1,9 @@
 import { Directive } from '@angular/core';
 import { UntypedFormControl } from '@angular/forms';
 
+import { expectPropertiesValues } from '../../../util-test/util-expect.spec';
 import * as UtilsFunction from '../../../utils/util';
 import * as ValidatorsFunctions from '../validators';
-import { expectPropertiesValues } from '../../../util-test/util-expect.spec';
 
 import { PoRadioGroupBaseComponent } from './po-radio-group-base.component';
 

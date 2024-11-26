@@ -21,6 +21,7 @@ export class SamplePoDatepickerRangeLabsComponent implements OnInit {
   label: string;
   literals: string;
   properties: Array<string>;
+  fieldErrorMessage: string;
   startDate: string | Date;
   maxDate: string | Date;
   minDate: string | Date;
@@ -72,6 +73,7 @@ export class SamplePoDatepickerRangeLabsComponent implements OnInit {
     this.label = undefined;
     this.literals = undefined;
     this.properties = [];
+    this.fieldErrorMessage = '';
     this.startDate = undefined;
     this.maxDate = undefined;
     this.minDate = undefined;

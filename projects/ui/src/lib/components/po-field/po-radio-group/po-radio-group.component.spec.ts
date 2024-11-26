@@ -125,6 +125,26 @@ describe('PoRadioGroupComponent:', () => {
       expect(spyFocus).not.toHaveBeenCalled();
     });
 
+    describe('getErrorPattern:', () => {
+      it('should return true in hasInvalidClass if fieldErrorMessage', () => {
+        component['el'].nativeElement.classList.add('ng-invalid');
+        component['el'].nativeElement.classList.add('ng-dirty');
+        component.inputEl.nativeElement.value = '';
+        component.fieldErrorMessage = 'Field Invalid';
+        component.required = true;
+        expect(component.hasInvalidClass()).toBeTruthy();
+        expect(component.getErrorPattern()).toBe('Field Invalid');
+      });
+
+      it('should return empty if fieldErrorMessage is undefined', () => {
+        component['el'].nativeElement.classList.add('ng-invalid');
+        component['el'].nativeElement.classList.add('ng-dirty');
+        component.inputEl.nativeElement.value = '';
+        component.fieldErrorMessage = undefined;
+        expect(component.getErrorPattern()).toBe('');
+      });
+    });
+
     describe('focus:', () => {
       it('should call `focus` of radio', () => {
         component.options = [

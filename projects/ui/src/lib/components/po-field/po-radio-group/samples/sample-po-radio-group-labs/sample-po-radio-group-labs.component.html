@@ -8,6 +8,7 @@
   [p-optional]="properties.includes('optional')"
   [p-options]="options"
   [p-required]="properties.includes('required')"
+  [p-field-error-message]="fieldErrorMessage"
   [p-show-required]="properties.includes('showRequired')"
   [p-size]="size"
   (p-change)="changeEvent('p-change')"
@@ -76,9 +77,19 @@
       [p-options]="propertiesOptions"
     >
     </po-checkbox-group>
-
+  </div>
+  <div class="po-row">
     <po-radio-group class="po-lg-6 po-md-12" name="size" [(ngModel)]="size" p-label="Size" [p-options]="sizesOptions">
     </po-radio-group>
+
+    <po-input
+      class="po-md-6"
+      name="fieldErrorMessage"
+      [(ngModel)]="fieldErrorMessage"
+      p-clean
+      p-label="Field Error Message"
+    >
+    </po-input>
   </div>
 
   <div class="po-row">
