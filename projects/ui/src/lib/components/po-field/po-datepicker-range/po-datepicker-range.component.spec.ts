@@ -1691,6 +1691,24 @@ describe('PoDatepickerRangeComponent:', () => {
       expect(component['updateScreenByModel']).toHaveBeenCalledWith({ start: '', end: '' });
       expect(component['updateModelByScreen']).toHaveBeenCalledWith(null, '', '');
     }));
+
+    describe('getErrorMessage:', () => {
+      it('should return true in hasInvalidClass if fieldErrorMessage and required is true', () => {
+        component['poDatepickerRangeElement'].nativeElement.classList.add('ng-invalid');
+        component['poDatepickerRangeElement'].nativeElement.classList.add('ng-dirty');
+        component.fieldErrorMessage = 'Field Invalid';
+        component.errorMessage = undefined;
+        expect(component['hasInvalidClass']()).toBeTruthy();
+        expect(component.getErrorMessage).toBe('Field Invalid');
+      });
+
+      it('should return empty if fieldErrorMessage is undefined', () => {
+        component['poDatepickerRangeElement'].nativeElement.classList.add('ng-invalid');
+        component['poDatepickerRangeElement'].nativeElement.classList.add('ng-dirty');
+        component.fieldErrorMessage = undefined;
+        expect(component.getErrorMessage).toBe('');
+      });
+    });
   });
 
   describe('Templates:', () => {

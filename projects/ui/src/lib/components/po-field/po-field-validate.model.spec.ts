@@ -1,5 +1,4 @@
-import { AbstractControl } from '@angular/forms';
-import { UntypedFormControl } from '@angular/forms';
+import { AbstractControl, FormControl, UntypedFormControl, Validators } from '@angular/forms';
 
 import { PoFieldValidateModel } from './po-field-validate.model';
 import * as ValidatorsFunctions from './validators';
@@ -14,9 +13,10 @@ class FieldValidate extends PoFieldValidateModel<any> {
 
 describe('PoFieldValidateModel', () => {
   let component: FieldValidate;
+  const changeDetector: any = { detectChanges: () => {}, markForCheck: () => {} };
 
   beforeEach(() => {
-    component = new FieldValidate();
+    component = new FieldValidate(changeDetector);
   });
 
   it('registerOnValidatorChange: should register validatorChange function.', () => {
@@ -34,6 +34,17 @@ describe('PoFieldValidateModel', () => {
   it('should return object invalid in validate', () => {
     component.required = true;
     expect(component.validate(new UntypedFormControl('test'))).toBeNull();
+  });
+
+  it('validate: should set hasValidatorRequired to true if fieldErrorMessage is valid and control has required validator', () => {
+    component['hasValidatorRequired'] = false;
+    component.fieldErrorMessage = 'Field Invalid';
+
+    const controlMock = new FormControl('', Validators.required);
+
+    component.validate(controlMock);
+
+    expect(component['hasValidatorRequired']).toBeTrue();
   });
 
   it('validateModel: should call `onValidatorChange` when it is true.', () => {

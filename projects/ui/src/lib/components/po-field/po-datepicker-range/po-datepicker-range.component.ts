@@ -112,6 +112,9 @@ export class PoDatepickerRangeComponent
   }
 
   get getErrorMessage(): string {
+    if (this.fieldErrorMessage && !this.errorMessage && this.hasInvalidClass()) {
+      return this.fieldErrorMessage;
+    }
     return this.errorMessage !== '' && this.hasInvalidClass() ? this.errorMessage : '';
   }
 
@@ -135,7 +138,7 @@ export class PoDatepickerRangeComponent
   }
 
   constructor(
-    private changeDetector: ChangeDetectorRef,
+    protected changeDetector: ChangeDetectorRef,
     private controlPosition: PoControlPositionService,
     private renderer: Renderer2,
     private cd: ChangeDetectorRef,
@@ -143,7 +146,7 @@ export class PoDatepickerRangeComponent
     poDateService: PoDateService,
     poDatepickerRangeElement: ElementRef
   ) {
-    super(poDateService, poLanguageService);
+    super(changeDetector, poDateService, poLanguageService);
     this.poDatepickerRangeElement = poDatepickerRangeElement;
   }
 

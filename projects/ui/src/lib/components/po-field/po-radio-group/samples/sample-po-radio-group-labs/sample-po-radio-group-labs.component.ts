@@ -15,6 +15,7 @@ export class SamplePoRadioGroupLabsComponent implements OnInit {
   options: Array<PoRadioGroupOption>;
   properties: Array<string>;
   radioGroup: string;
+  fieldErrorMessage: string;
   size: string;
 
   readonly columnOptions: Array<PoRadioGroupOption> = [
@@ -53,6 +54,7 @@ export class SamplePoRadioGroupLabsComponent implements OnInit {
     this.event = '';
     this.radioGroup = undefined;
     this.properties = [];
+    this.fieldErrorMessage = '';
 
     this.option = this.getNewOption();
     this.options = [];

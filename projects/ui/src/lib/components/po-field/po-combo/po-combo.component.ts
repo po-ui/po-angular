@@ -134,11 +134,11 @@ export class PoComboComponent extends PoComboBaseComponent implements AfterViewI
     public differs: IterableDiffers,
     public defaultService: PoComboFilterService,
     public renderer: Renderer2,
-    private changeDetector: ChangeDetectorRef,
     private controlPosition: PoControlPositionService,
+    protected changeDetector: ChangeDetectorRef,
     languageService: PoLanguageService
   ) {
-    super(languageService);
+    super(languageService, changeDetector);
 
     this.differ = differs.find([]).create(null);
   }
@@ -400,6 +400,17 @@ export class PoComboComponent extends PoComboBaseComponent implements AfterViewI
 
       this.cacheOptions = this.comboOptionsList;
     }
+  }
+
+  getErrorPattern() {
+    return this.fieldErrorMessage && this.hasInvalidClass() ? this.fieldErrorMessage : '';
+  }
+
+  hasInvalidClass() {
+    return (
+      this.element.nativeElement.classList.contains('ng-invalid') &&
+      this.element.nativeElement.classList.contains('ng-dirty')
+    );
   }
 
   getObjectByValue(value) {

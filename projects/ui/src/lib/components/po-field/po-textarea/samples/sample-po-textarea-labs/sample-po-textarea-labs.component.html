@@ -10,6 +10,7 @@
   [p-placeholder]="placeholder"
   [p-readonly]="properties.includes('readonly')"
   [p-required]="properties.includes('required')"
+  [p-field-error-message]="fieldErrorMessage"
   [p-show-required]="properties.includes('showRequired')"
   [p-rows]="rows"
   (p-blur)="changeEvent('p-blur')"
@@ -49,8 +50,17 @@
   </div>
 
   <div class="po-row">
+    <po-input
+      class="po-md-6"
+      name="fieldErrorMessage"
+      [(ngModel)]="fieldErrorMessage"
+      p-clean
+      p-label="Field Error Message"
+    >
+    </po-input>
+
     <po-checkbox-group
-      class="po-md-12"
+      class="po-md-6"
       name="properties"
       [(ngModel)]="properties"
       p-columns="4"

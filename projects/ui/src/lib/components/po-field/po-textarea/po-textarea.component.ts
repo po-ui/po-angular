@@ -1,11 +1,11 @@
 import {
+  AfterViewInit,
+  ChangeDetectionStrategy,
+  ChangeDetectorRef,
   Component,
   ElementRef,
-  ChangeDetectorRef,
   forwardRef,
-  ViewChild,
-  AfterViewInit,
-  ChangeDetectionStrategy
+  ViewChild
 } from '@angular/core';
 import { NG_VALIDATORS, NG_VALUE_ACCESSOR } from '@angular/forms';
 
@@ -63,7 +63,10 @@ export class PoTextareaComponent extends PoTextareaBaseComponent implements Afte
   valueBeforeChange: any;
   fireChange: boolean = false;
 
-  constructor(cd: ChangeDetectorRef) {
+  constructor(
+    cd: ChangeDetectorRef,
+    private el: ElementRef
+  ) {
     super(cd);
   }
 
@@ -94,6 +97,19 @@ export class PoTextareaComponent extends PoTextareaBaseComponent implements Afte
     if (this.autoFocus) {
       this.focus();
     }
+  }
+
+  getErrorPattern() {
+    return this.fieldErrorMessage && this.hasInvalidClass() ? this.fieldErrorMessage : '';
+  }
+
+  hasInvalidClass() {
+    return (
+      this.el.nativeElement.classList.contains('ng-invalid') &&
+      this.el.nativeElement.classList.contains('ng-dirty') &&
+      !this.inputEl.nativeElement.value &&
+      (this.required || this.hasValidatorRequired)
+    );
   }
 
   writeValueModel(value: any): void {

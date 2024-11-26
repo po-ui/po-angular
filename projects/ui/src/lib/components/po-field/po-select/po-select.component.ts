@@ -284,10 +284,11 @@ export class PoSelectComponent extends PoFieldValidateModel<any> implements OnCh
   /* istanbul ignore next */
   constructor(
     @Optional() @Inject(ICONS_DICTIONARY) value: { [key: string]: string },
-    private changeDetector: ChangeDetectorRef,
+    changeDetector: ChangeDetectorRef,
+    private el: ElementRef,
     public renderer: Renderer2
   ) {
-    super();
+    super(changeDetector);
 
     this._iconToken = value ?? PhosphorIconDictionary;
   }
@@ -319,6 +320,16 @@ export class PoSelectComponent extends PoFieldValidateModel<any> implements OnCh
     if (!this.disabled) {
       this.selectElement.nativeElement.focus();
     }
+  }
+
+  getErrorPattern() {
+    return this.fieldErrorMessage && this.hasInvalidClass() ? this.fieldErrorMessage : '';
+  }
+
+  hasInvalidClass() {
+    return (
+      this.el.nativeElement.classList.contains('ng-invalid') && this.el.nativeElement.classList.contains('ng-dirty')
+    );
   }
 
   onBlur() {

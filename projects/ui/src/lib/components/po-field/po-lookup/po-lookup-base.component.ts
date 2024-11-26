@@ -14,7 +14,14 @@ import {
   Output,
   SimpleChanges
 } from '@angular/core';
-import { AbstractControl, ControlValueAccessor, NgControl, UntypedFormControl, Validator } from '@angular/forms';
+import {
+  AbstractControl,
+  ControlValueAccessor,
+  NgControl,
+  UntypedFormControl,
+  Validator,
+  Validators
+} from '@angular/forms';
 import { Subscription } from 'rxjs';
 import { finalize } from 'rxjs/operators';
 
@@ -322,6 +329,18 @@ export abstract class PoLookupBaseComponent
    * @default `false`
    */
   @Input({ alias: 'p-auto-height', transform: convertToBoolean }) autoHeight: boolean = false;
+
+  /**
+   * @optional
+   *
+   * @description
+   *
+   * Exibe a mensagem setada se o campo estiver vazio e for requerido.
+   *
+   * > Necessário que a propriedade `p-required` esteja habilitada.
+   *
+   */
+  @Input('p-field-error-message') fieldErrorMessage: string;
 
   /**
    * @optional

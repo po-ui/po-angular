@@ -1,18 +1,18 @@
 import {
   AfterViewInit,
-  DoCheck,
+  ChangeDetectionStrategy,
+  ChangeDetectorRef,
   Component,
+  DoCheck,
   ElementRef,
   forwardRef,
   Injector,
   OnDestroy,
   OnInit,
   Renderer2,
-  ViewChild,
-  ChangeDetectionStrategy,
-  ChangeDetectorRef
+  ViewChild
 } from '@angular/core';
-import { NgControl, NG_VALIDATORS, NG_VALUE_ACCESSOR } from '@angular/forms';
+import { NG_VALIDATORS, NG_VALUE_ACCESSOR, NgControl } from '@angular/forms';
 import { Subscription } from 'rxjs';
 
 import { uuid } from '../../../utils/util';
@@ -166,6 +166,7 @@ export class PoLookupComponent extends PoLookupBaseComponent implements AfterVie
     poLookupFilterService: PoLookupFilterService,
     poLookupModalService: PoLookupModalService,
     private cd: ChangeDetectorRef,
+    private el: ElementRef,
     injector: Injector
   ) {
     super(poLookupFilterService, injector, poLookupModalService, languageService);
@@ -315,6 +316,16 @@ export class PoLookupComponent extends PoLookupBaseComponent implements AfterVie
 
   getViewValue(): string {
     return this.inputEl.nativeElement.value;
+  }
+
+  getErrorPattern() {
+    return this.fieldErrorMessage && this.hasInvalidClass() ? this.fieldErrorMessage : '';
+  }
+
+  hasInvalidClass() {
+    return (
+      this.el.nativeElement.classList.contains('ng-invalid') && this.el.nativeElement.classList.contains('ng-dirty')
+    );
   }
 
   searchEvent() {

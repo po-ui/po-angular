@@ -1,5 +1,5 @@
 import { Directive, EventEmitter, Input, OnInit, Output } from '@angular/core';
-import { AbstractControl, ControlValueAccessor, Validator } from '@angular/forms';
+import { AbstractControl, ControlValueAccessor, Validator, Validators } from '@angular/forms';
 
 import { Observable, Subject, Subscription } from 'rxjs';
 import { debounceTime, distinctUntilChanged, switchMap, tap } from 'rxjs/operators';
@@ -173,6 +173,18 @@ export abstract class PoMultiselectBaseComponent implements ControlValueAccessor
    * @default `false`
    */
   @Input({ alias: 'p-hide-select-all', transform: convertToBoolean }) hideSelectAll?: boolean;
+
+  /**
+   * @optional
+   *
+   * @description
+   *
+   * Exibe a mensagem setada se o campo estiver vazio e for requerido.
+   *
+   * > Necessário que a propriedade `p-required` esteja habilitada.
+   *
+   */
+  @Input('p-field-error-message') fieldErrorMessage: string;
 
   /**
    * @optional

@@ -20,6 +20,7 @@
   [p-optional]="properties.includes('optional')"
   [p-placeholder]="placeholder"
   [p-required]="properties.includes('required')"
+  [p-field-error-message]="fieldErrorMessage"
   [p-show-required]="properties.includes('showRequired')"
   [p-spacing]="spacing"
   [p-text-wrap]="properties.includes('textWrap')"
@@ -82,12 +83,21 @@
 
   <div class="po-row">
     <po-input
-      class="po-sm-12"
+      class="po-md-6"
       name="filterService"
       [(ngModel)]="filterService"
       p-clean
       p-help="https://po-sample-api.onrender.com/v1/people"
       p-label="Filter Service"
+    >
+    </po-input>
+
+    <po-input
+      class="po-md-6"
+      name="fieldErrorMessage"
+      [(ngModel)]="fieldErrorMessage"
+      p-clean
+      p-label="Field Error Message"
     >
     </po-input>
   </div>

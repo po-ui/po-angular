@@ -4,7 +4,9 @@ import {
   ChangeDetectionStrategy,
   ChangeDetectorRef,
   Component,
+  ElementRef,
   forwardRef,
+  inject,
   QueryList,
   ViewChildren
 } from '@angular/core';
@@ -54,6 +56,7 @@ import { PoCheckboxGroupBaseComponent } from './po-checkbox-group-base.component
 export class PoCheckboxGroupComponent extends PoCheckboxGroupBaseComponent implements AfterViewChecked, AfterViewInit {
   @ViewChildren('checkboxLabel') checkboxLabels: QueryList<PoCheckboxComponent>;
 
+  private el: ElementRef = inject(ElementRef);
   constructor(private changeDetector: ChangeDetectorRef) {
     super();
   }
@@ -93,6 +96,16 @@ export class PoCheckboxGroupComponent extends PoCheckboxGroupBaseComponent imple
         checkboxLabel.checkboxLabel.nativeElement.focus();
       }
     }
+  }
+
+  getErrorPattern() {
+    return this.fieldErrorMessage && this.hasInvalidClass() ? this.fieldErrorMessage : '';
+  }
+
+  hasInvalidClass() {
+    return (
+      this.el.nativeElement.classList.contains('ng-invalid') && this.el.nativeElement.classList.contains('ng-dirty')
+    );
   }
 
   onKeyDown(event: KeyboardEvent, option: PoCheckboxGroupOption) {

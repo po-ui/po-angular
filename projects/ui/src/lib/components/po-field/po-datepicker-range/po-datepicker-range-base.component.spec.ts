@@ -1,15 +1,16 @@
 import { Directive } from '@angular/core';
-import { UntypedFormControl } from '@angular/forms';
+import { FormControl, UntypedFormControl, Validators } from '@angular/forms';
 
-import { expectPropertiesValues } from '../../../util-test/util-expect.spec';
-import * as UtilsFunctions from '../../../utils/util';
-import * as ValidatorsFunctions from '../validators';
 import { poLocaleDefault } from '../../../services/po-language/po-language.constant';
+import { expectPropertiesValues } from '../../../util-test/util-expect.spec';
+import * as ValidatorsFunctions from '../validators';
 
+import { fakeAsync, tick } from '@angular/core/testing';
+import { Subject } from 'rxjs';
+import { PoLanguageService } from '../../../services';
 import { PoDatepickerRange } from './interfaces/po-datepicker-range.interface';
 import { PoDatepickerRangeBaseComponent } from './po-datepicker-range-base.component';
 import { poDatepickerRangeLiteralsDefault } from './po-datepicker-range.literals';
-import { PoLanguageService } from '../../../services';
 
 describe('PoDatepickerRangeBaseComponent:', () => {
   @Directive()
@@ -33,8 +34,10 @@ describe('PoDatepickerRangeBaseComponent:', () => {
     validateDateRange: () => {},
     validateDate: () => {}
   };
+  const changeDetector: any = { detectChanges: () => {}, markForCheck: () => {} };
+  const fakeSubscription = <any>{ unsubscribe: () => {} };
 
-  const component = new PoDatepickerRangeComponent(mockedService, new PoLanguageService());
+  const component = new PoDatepickerRangeComponent(mockedService, changeDetector, new PoLanguageService());
 
   it('should be created', () => {
     expect(component instanceof PoDatepickerRangeBaseComponent).toBeTruthy();
@@ -273,6 +276,16 @@ describe('PoDatepickerRangeBaseComponent:', () => {
   });
 
   describe('Methods:', () => {
+    it('ngOnDestroy: should unsubscribe `subscription` on destroy', () => {
+      component['subscription'] = fakeSubscription;
+
+      spyOn(component['subscription'], <any>'unsubscribe');
+
+      component.ngOnDestroy();
+
+      expect(component['subscription'].unsubscribe).toHaveBeenCalled();
+    });
+
     it('registerOnChange: should set `onChangeModel` with value of the `func`.', () => {
       const func = () => {};
 
@@ -453,6 +466,49 @@ describe('PoDatepickerRangeBaseComponent:', () => {
         expect(component.errorMessage).toEqual(component.literals.dateOutOfPeriod);
         expect(component['validateDateInRange']).toHaveBeenCalled();
         expect(validate).toEqual(invalidDateRangeError);
+      });
+
+      it('should call markForCheck when status is INVALID', fakeAsync(() => {
+        spyOn(component, <any>'requiredDateRangeFailed').and.returnValue(false);
+        spyOn(component, <any>'verifyValidDate').and.returnValue(true);
+        spyOn(component, <any>'dateRangeObjectFailed').and.returnValue(false);
+        spyOn(component, <any>'dateRangeFormatFailed').and.returnValue(false);
+        spyOn(component, <any>'dateRangeFailed').and.returnValue(false);
+        spyOn(component, <any>'validateDateInRange').and.returnValue(false);
+
+        component['changeDetector'] = { markForCheck: () => {} } as any;
+        component['hasValidatorRequired'] = true;
+        component.fieldErrorMessage = 'Erro inválido';
+        const controlMock = {
+          statusChanges: new Subject<string>()
+        } as any;
+
+        spyOn(component['changeDetector'], 'markForCheck');
+
+        component.validate(controlMock);
+
+        controlMock.statusChanges.next('INVALID');
+        tick();
+
+        expect(component['changeDetector'].markForCheck).toHaveBeenCalled();
+      }));
+
+      it('should set hasValidatorRequired to true if fieldErrorMessage is valid and control has required validator', () => {
+        spyOn(component, <any>'requiredDateRangeFailed').and.returnValue(false);
+        spyOn(component, <any>'verifyValidDate').and.returnValue(true);
+        spyOn(component, <any>'dateRangeObjectFailed').and.returnValue(false);
+        spyOn(component, <any>'dateRangeFormatFailed').and.returnValue(false);
+        spyOn(component, <any>'dateRangeFailed').and.returnValue(false);
+        spyOn(component, <any>'validateDateInRange').and.returnValue(false);
+
+        component['hasValidatorRequired'] = false;
+        component.fieldErrorMessage = 'Field Invalid';
+
+        const controlMock = new FormControl('', Validators.required);
+
+        component.validate(controlMock);
+
+        expect(component['hasValidatorRequired']).toBeTrue();
       });
     });
 

@@ -9,6 +9,7 @@
   [p-optional]="properties.includes('optional')"
   [p-options]="options"
   [p-required]="properties.includes('required')"
+  [p-field-error-message]="fieldErrorMessage"
   [p-show-required]="properties.includes('showRequired')"
   (p-change)="changeEvent('p-change')"
 >
@@ -45,6 +46,16 @@
     <po-input class="po-lg-6" name="label" [(ngModel)]="label" p-clean p-label="Label"> </po-input>
 
     <po-input class="po-lg-6" name="help" [(ngModel)]="help" p-clean p-label="Help"> </po-input>
+  </div>
+  <div class="po-row">
+    <po-input
+      class="po-md-6"
+      name="fieldErrorMessage"
+      [(ngModel)]="fieldErrorMessage"
+      p-clean
+      p-label="Field Error Message"
+    >
+    </po-input>
   </div>
 
   <div class="po-row">

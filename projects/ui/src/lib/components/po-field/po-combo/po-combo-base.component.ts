@@ -1,5 +1,5 @@
-import { Directive, EventEmitter, Input, OnInit, Output, TemplateRef } from '@angular/core';
-import { AbstractControl, ControlValueAccessor, Validator } from '@angular/forms';
+import { ChangeDetectorRef, Directive, EventEmitter, Input, OnInit, Output, TemplateRef } from '@angular/core';
+import { AbstractControl, ControlValueAccessor, Validator, Validators } from '@angular/forms';
 
 import { poLocaleDefault } from '../../../services/po-language/po-language.constant';
 import { PoLanguageService } from '../../../services/po-language/po-language.service';
@@ -14,6 +14,7 @@ import { PoComboOptionGroup } from './interfaces/po-combo-option-group.interface
 import { PoComboOption } from './interfaces/po-combo-option.interface';
 import { PoComboFilterMode } from './po-combo-filter-mode.enum';
 import { PoComboFilterService } from './po-combo-filter.service';
+import { Subscription } from 'rxjs';
 
 const PO_COMBO_DEBOUNCE_TIME_DEFAULT = 400;
 const PO_COMBO_FIELD_LABEL_DEFAULT = 'label';
@@ -243,6 +244,18 @@ export abstract class PoComboBaseComponent implements ControlValueAccessor, OnIn
    *
    * @description
    *
+   * Exibe a mensagem setada se o campo estiver vazio e for requerido.
+   *
+   * > Necessário que a propriedade `p-required` esteja habilitada.
+   *
+   */
+  @Input('p-field-error-message') fieldErrorMessage: string;
+
+  /**
+   * @optional
+   *
+   * @description
+   *
    * Deve ser informada uma função que será disparada quando houver alterações no ngModel. A função receberá como argumento o model modificado.
    *
    * > Pode-se optar pelo recebimento do objeto selecionado ao invés do model através da propriedade `p-emit-object-value`.
@@ -296,6 +309,7 @@ export abstract class PoComboBaseComponent implements ControlValueAccessor, OnIn
   dynamicValue: string = 'value';
   shouldApplyFocus: boolean = false;
 
+  protected hasValidatorRequired = false;
   protected cacheStaticOptions: Array<any> = [];
   protected comboOptionsList: Array<any> = [];
   protected onModelTouched: any = null;
@@ -654,7 +668,10 @@ export abstract class PoComboBaseComponent implements ControlValueAccessor, OnIn
    */
   @Input({ alias: 'p-append-in-body', transform: convertToBoolean }) appendBox?: boolean = false;
 
-  constructor(languageService: PoLanguageService) {
+  constructor(
+    languageService: PoLanguageService,
+    protected changeDetector: ChangeDetectorRef
+  ) {
     this.language = languageService.getShortLanguage();
   }
 
@@ -910,7 +927,12 @@ export abstract class PoComboBaseComponent implements ControlValueAccessor, OnIn
   }
 
   validate(abstractControl: AbstractControl): { [key: string]: any } {
-    if (requiredFailed(this.required, this.disabled, abstractControl.value)) {
+    if (!this.hasValidatorRequired && this.fieldErrorMessage && abstractControl.hasValidator(Validators.required)) {
+      this.hasValidatorRequired = true;
+    }
+
+    if (requiredFailed(this.required || this.hasValidatorRequired, this.disabled, abstractControl.value)) {
+      this.changeDetector.markForCheck();
       return {
         required: {
           valid: false

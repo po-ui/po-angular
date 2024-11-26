@@ -222,6 +222,16 @@ export class PoMultiselectComponent
     return Array.from(tags).map(tag => tag['offsetWidth']);
   }
 
+  getErrorPattern() {
+    return this.fieldErrorMessage && this.hasInvalidClass() ? this.fieldErrorMessage : '';
+  }
+
+  hasInvalidClass() {
+    return (
+      this.el.nativeElement.classList.contains('ng-invalid') && this.el.nativeElement.classList.contains('ng-dirty')
+    );
+  }
+
   calculateVisibleItems() {
     this.hasMoreTag = false;
     const tagsWidth = this.getTagsWidth();

@@ -10,6 +10,7 @@
   [p-placeholder]="placeholder"
   [p-readonly]="properties.includes('readonly')"
   [p-required]="properties.includes('required')"
+  [p-field-error-message]="fieldErrorMessage"
   [p-show-required]="properties.includes('showRequired')"
   (p-blur)="changeEvent('p-blur')"
   (p-change)="changeEvent('p-change')"
@@ -82,11 +83,21 @@
 
 <form #f="ngForm">
   <div class="po-row">
-    <po-input class="po-md-4" name="label" [(ngModel)]="label" p-label="Label"> </po-input>
+    <po-input class="po-md-6" name="label" [(ngModel)]="label" p-label="Label"> </po-input>
 
-    <po-input class="po-md-4" name="help" [(ngModel)]="help" p-label="Help"> </po-input>
+    <po-input class="po-md-6" name="help" [(ngModel)]="help" p-label="Help"> </po-input>
+  </div>
+  <div class="po-row">
+    <po-input class="po-md-6" name="placeholder" [(ngModel)]="placeholder" p-label="Placeholder"> </po-input>
 
-    <po-input class="po-md-4" name="placeholder" [(ngModel)]="placeholder" p-label="Placeholder"> </po-input>
+    <po-input
+      class="po-md-6"
+      name="fieldErrorMessage"
+      [(ngModel)]="fieldErrorMessage"
+      p-clean
+      p-label="Field Error Message"
+    >
+    </po-input>
   </div>
 
   <div class="po-row">

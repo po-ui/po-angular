@@ -1,16 +1,16 @@
 import { Directive, Injector, SimpleChanges } from '@angular/core';
 import { fakeAsync, inject, TestBed, tick } from '@angular/core/testing';
-import { UntypedFormControl, NgControl } from '@angular/forms';
+import { NgControl, UntypedFormControl } from '@angular/forms';
 import { Observable, of, throwError } from 'rxjs';
-import { expectPropertiesValues, expectSettersMethod } from '../../../util-test/util-expect.spec';
-import * as ValidatorsFunctions from '../validators';
 import { PoLanguageService } from '../../../services/po-language/po-language.service';
+import { expectPropertiesValues, expectSettersMethod } from '../../../util-test/util-expect.spec';
+import { convertToBoolean } from '../../../utils/util';
+import * as ValidatorsFunctions from '../validators';
 import { PoLookupFilter } from './interfaces/po-lookup-filter.interface';
-import { poLookupLiteralsDefault, PoLookupBaseComponent } from './po-lookup-base.component';
+import { PoLookupLiterals } from './interfaces/po-lookup-literals.interface';
+import { PoLookupBaseComponent, poLookupLiteralsDefault } from './po-lookup-base.component';
 import { PoLookupFilterService } from './services/po-lookup-filter.service';
 import { PoLookupModalService } from './services/po-lookup-modal.service';
-import { convertToBoolean } from '../../../utils/util';
-import { PoLookupLiterals } from './interfaces/po-lookup-literals.interface';
 class LookupFilterService implements PoLookupFilter {
   getObjectByValue(id: string): Observable<any> {
     return of({ value: 123, label: 'teste' });

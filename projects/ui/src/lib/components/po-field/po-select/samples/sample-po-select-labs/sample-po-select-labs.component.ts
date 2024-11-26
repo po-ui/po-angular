@@ -16,6 +16,7 @@ export class SamplePoSelectLabsComponent implements OnInit {
   optionsGroupList: Array<PoSelectOption> = [];
   placeholder: string;
   properties: Array<string>;
+  fieldErrorMessage: string;
   select: string;
   selectedOptionsGroup: string;
   selectOptionGroupSwitch: boolean;
@@ -58,6 +59,7 @@ export class SamplePoSelectLabsComponent implements OnInit {
     this.optionsGroupList = [];
     this.placeholder = '';
     this.properties = [];
+    this.fieldErrorMessage = '';
     this.select = '';
     this.selectOptionGroupSwitch = false;
     this.selectedOptionsGroup = undefined;

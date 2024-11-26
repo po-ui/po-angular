@@ -14,6 +14,7 @@
   [p-optional]="properties.includes('optional')"
   [p-readonly]="properties.includes('readonly')"
   [p-required]="properties.includes('required')"
+  [p-field-error-message]="fieldErrorMessage"
   [p-show-required]="properties.includes('showRequired')"
   [p-start-date]="startDate"
   [p-locale]="locale"
@@ -62,7 +63,7 @@
 
   <div class="po-row">
     <po-input
-      class="po-lg-6 po-md-12"
+      class="po-md-6"
       name="literals"
       [(ngModel)]="literals"
       p-help='Ex.: { "invalidFormat": "Date in inconsistent format", "startDateGreaterThanEndDate": "End date less than start date" }'
@@ -71,6 +72,17 @@
     >
     </po-input>
 
+    <po-input
+      class="po-md-6"
+      name="fieldErrorMessage"
+      [(ngModel)]="fieldErrorMessage"
+      p-clean
+      p-label="Field Error Message"
+    >
+    </po-input>
+  </div>
+
+  <div class="po-row">
     <po-checkbox-group
       class="po-md-6"
       name="properties"
@@ -80,10 +92,8 @@
       [p-options]="propertiesOptions"
     >
     </po-checkbox-group>
-  </div>
 
-  <div class="po-row">
-    <po-select class="po-lg-6 po-md-12" name="locale" p-label="Locale" [(ngModel)]="locale" [p-options]="localeOptions">
+    <po-select class="po-md-6" name="locale" p-label="Locale" [(ngModel)]="locale" [p-options]="localeOptions">
     </po-select>
   </div>
 

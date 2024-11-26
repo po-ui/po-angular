@@ -1,23 +1,23 @@
 import { Directive } from '@angular/core';
-import { UntypedFormControl } from '@angular/forms';
 import { fakeAsync, tick } from '@angular/core/testing';
+import { UntypedFormControl } from '@angular/forms';
 
 import { Observable, of } from 'rxjs';
 
 import { expectPropertiesValues, expectSettersMethod } from '../../../util-test/util-expect.spec';
+import * as UtilsFunctions from '../../../utils/util';
 import {
   removeDuplicatedOptionsWithFieldValue,
   removeUndefinedAndNullOptionsWithFieldValue,
   sortOptionsByProperty
 } from '../../../utils/util';
-import * as UtilsFunctions from '../../../utils/util';
 
-import { PoLanguageService } from '../../../services/po-language/po-language.service';
 import { poLocaleDefault } from '../../../services/po-language/po-language.constant';
+import { PoLanguageService } from '../../../services/po-language/po-language.service';
 import { PoMultiselectBaseComponent, poMultiselectLiteralsDefault } from './po-multiselect-base.component';
 import { PoMultiselectFilterMode } from './po-multiselect-filter-mode.enum';
-import { PoMultiselectOption } from './po-multiselect-option.interface';
 import { PoMultiselectFilter } from './po-multiselect-filter.interface';
+import { PoMultiselectOption } from './po-multiselect-option.interface';
 
 const poMultiselectFilterServiceStub: PoMultiselectFilter = {
   getFilteredData: function (params: { property: string; value: string }): Observable<Array<PoMultiselectOption>> {
