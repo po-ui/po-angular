@@ -32,6 +32,35 @@ describe('PoItemListComponent', () => {
   });
 
   describe('Methods:', () => {
+    describe('shouldUpdateSelected', () => {
+      it('should return true when searchValue and label from changes exist and have equal values', () => {
+        const changes = {
+          searchValue: { currentValue: 'test', previousValue: null, firstChange: true, isFirstChange: () => true },
+          label: { currentValue: 'test', previousValue: null, firstChange: true, isFirstChange: () => true }
+        };
+        component.ngOnChanges(<any>changes);
+
+        expect(component['shouldUpdateSelected'](changes)).toBeTrue();
+      });
+
+      it('should return false when searchValue and label from changes exist but have different values', () => {
+        const changes = {
+          searchValue: { currentValue: 'test', previousValue: null, firstChange: true, isFirstChange: () => true },
+          label: { currentValue: 'different', previousValue: null, firstChange: true, isFirstChange: () => true }
+        };
+
+        expect(component['shouldUpdateSelected'](changes)).toBeFalse();
+      });
+
+      it('should return false when searchValue is not present in changes', () => {
+        const changes = {
+          label: { currentValue: 'test', previousValue: null, firstChange: true, isFirstChange: () => true }
+        };
+
+        expect(component['shouldUpdateSelected'](changes)).toBeFalse();
+      });
+    });
+
     describe('onSelectItem:', () => {
       it('should emit tabsItem when tabHide or disabled is changed', () => {
         component.isTabs = true;
