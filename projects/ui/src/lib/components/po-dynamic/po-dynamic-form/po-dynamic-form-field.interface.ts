@@ -265,10 +265,17 @@ export interface PoDynamicFormField extends PoDynamicField {
    *  - pattern;
    *  - minValue;
    *  - maxValue;
+   *  - required;
    *
-   * > Esta mensagem não é apresentada quando o campo estiver vazio, mesmo que ele seja requerido.
+   * > Esta mensagem pode ser exibida quando o campo estiver vazio, caso seja requerido. Em casos de componentes como
+   * `po-datepicker`, `po-input`, `po-number`, `po-decimal`, `po-password`, é necessário que a propriedade
+   * `requiredFieldErrorMessage` esteja como `true` para que a mensagem seja exibida com o campo vazio. Componentes
+   * como `po-datepicker-range`, `po-select`, `po-checkbox-group`, `po-radio-group`, `po-multiselect`, `po-combo`,
+   * `po-lookup` e `po-textarea` não é necessário passar a propriedade `requiredFieldErrorMessage`.
    *
-   * **Componentes compatíveis:** `po-datepicker`, `po-input`, `po-number`, `po-decimal`, `po-password`.
+   *
+   * **Componentes compatíveis:** `po-datepicker`, `po-input`, `po-number`, `po-decimal`, `po-password`, `po-datepicker-range`,
+   *  `po-select`, `po-checkbox-group`, `po-radio-group`, `po-multiselect`, `po-combo`, `po-lookup`, `po-textarea`.
    */
   errorMessage?: string;
 

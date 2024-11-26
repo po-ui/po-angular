@@ -58,6 +58,7 @@
       [p-optional]="field.optional"
       [p-readonly]="field.readonly"
       [p-required]="field.required"
+      [p-field-error-message]="field.errorMessage"
       [p-show-required]="field.showRequired"
       (p-change)="onChangeField(field)"
     >
@@ -172,6 +173,7 @@
       [p-optional]="field.optional"
       [p-options]="field.options"
       [p-required]="field.required"
+      [p-field-error-message]="field.errorMessage"
       [p-show-required]="field.showRequired"
       (p-change)="onChangeField(field)"
       [p-placeholder]="field.placeholder"
@@ -193,6 +195,7 @@
       [p-optional]="field.optional"
       [p-options]="field.options"
       [p-required]="field.required"
+      [p-field-error-message]="field.errorMessage"
       [p-show-required]="field.showRequired"
       (p-change)="onChangeField(field)"
     >
@@ -253,6 +256,7 @@
       [p-optional]="field.optional"
       [p-sort]="field.sort"
       [p-required]="field.required"
+      [p-field-error-message]="field.errorMessage"
       [p-show-required]="field.showRequired"
       (p-change)="onChangeField(field, $event)"
       [p-icon]="field.icon"
@@ -292,6 +296,7 @@
       [p-no-autocomplete]="field.noAutocomplete"
       [p-optional]="field.optional"
       [p-required]="field.required"
+      [p-field-error-message]="field.errorMessage"
       [p-show-required]="field.showRequired"
       (p-change)="onChangeField(field)"
       [p-placeholder]="field.placeholder"
@@ -316,6 +321,7 @@
       [p-options]="field.options"
       [p-required]="field.required"
       [p-show-required]="field.showRequired"
+      [p-field-error-message]="field.errorMessage"
       (p-change)="onChangeField(field)"
     >
     </po-checkbox-group>
@@ -335,6 +341,7 @@
       [p-optional]="field.optional"
       [p-options]="field.options"
       [p-required]="field.required"
+      [p-field-error-message]="field.errorMessage"
       [p-show-required]="field.showRequired"
       (p-change)="onChangeField(field)"
       [p-placeholder]="field.placeholder"
@@ -365,6 +372,7 @@
       [p-optional]="field.optional"
       [p-readonly]="field.readonly"
       [p-required]="field.required"
+      [p-field-error-message]="field.errorMessage"
       [p-show-required]="field.showRequired"
       [p-rows]="field.rows"
       (p-change)="onChangeField(field)"
