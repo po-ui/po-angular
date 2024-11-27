@@ -19,6 +19,8 @@ export class PoChartSeriesPointComponent {
 
   @Input({ alias: 'p-is-active', transform: convertToBoolean }) isActive?: boolean;
 
+  @Input({ alias: 'p-is-fixed', transform: convertToBoolean }) isFixed?: boolean;
+
   @Input({ alias: 'p-chart-line', transform: convertToBoolean }) chartLine: boolean = false;
 
   // Referência para o svgPathGroup ao qual pertence o ponto. Necessário para reordenação dos svgElements no DOM para tratamento onHover
@@ -31,6 +33,9 @@ export class PoChartSeriesPointComponent {
   coordinates$: Observable<Array<PoChartPointsCoordinates>>;
   radius: number = RADIUS_DEFAULT_SIZE;
   strokeColor: string;
+
+  textWidth: number = 0;
+  textHeight: number = 0;
 
   private _color: string;
   private _coordinates: Array<PoChartPointsCoordinates> = [];
@@ -50,6 +55,10 @@ export class PoChartSeriesPointComponent {
     this._coordinates = value;
 
     this.coordinates$ = this.displayPointsWithDelay(this._coordinates);
+
+    setTimeout(() => {
+      this._coordinates.forEach(item => this.updateTextDimensions(item));
+    });
   }
 
   get coordinates() {
@@ -72,6 +81,7 @@ export class PoChartSeriesPointComponent {
   }
 
   onMouseEnter(event: any, point: PoChartPointsCoordinates) {
+    this.updateTextDimensions(point);
     this.setPointAttribute(event.target, true);
 
     const selectedItem = { label: point.label, data: point.data, category: point.category };
@@ -99,7 +109,11 @@ export class PoChartSeriesPointComponent {
   }
 
   private setPointAttribute(target: SVGElement, isHover: boolean) {
-    this.renderer.setAttribute(target, 'r', isHover ? RADIUS_HOVER_SIZE.toString() : RADIUS_DEFAULT_SIZE.toString());
+    this.renderer.setAttribute(
+      target,
+      'r',
+      isHover && !this.isFixed ? RADIUS_HOVER_SIZE.toString() : RADIUS_DEFAULT_SIZE.toString()
+    );
     if (this.color.includes('po-color')) {
       this.renderer.setAttribute(
         target,
@@ -108,6 +122,15 @@ export class PoChartSeriesPointComponent {
       );
     } else {
       this.renderer[isHover ? 'setStyle' : 'removeStyle'](target, 'fill', isHover ? this.color : undefined);
+    }
+  }
+
+  updateTextDimensions(item: PoChartPointsCoordinates) {
+    const svgText = this.elementRef.nativeElement.querySelector(`.po-chart-series-point-text[data-id="${item.label}"]`);
+    if (svgText) {
+      const bbox = svgText.getBBox();
+      this.textWidth = bbox.width;
+      this.textHeight = bbox.height;
     }
   }
 }

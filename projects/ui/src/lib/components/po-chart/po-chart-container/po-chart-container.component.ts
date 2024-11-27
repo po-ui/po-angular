@@ -7,6 +7,7 @@ import { PoChartAxisOptions } from '../interfaces/po-chart-axis-options.interfac
 import { PoChartMathsService } from '../services/po-chart-maths.service';
 import { PoChartMinMaxValues } from '../interfaces/po-chart-min-max-values.interface';
 import { PoChartSerie } from '../interfaces/po-chart-serie.interface';
+import { PoChartDataLabel } from '../interfaces/po-chart-serie-data-label.interface';
 
 @Component({
   selector: 'po-chart-container',
@@ -18,6 +19,8 @@ export class PoChartContainerComponent implements OnChanges {
   @Input('p-type') type: PoChartType;
 
   @Input('p-container-size') containerSize: PoChartContainerSize;
+
+  @Input('p-data-label') dataLabel?: PoChartDataLabel;
 
   @Output('p-serie-click') serieClick = new EventEmitter<any>();
 
@@ -32,6 +35,7 @@ export class PoChartContainerComponent implements OnChanges {
   seriesByType;
   svgSpace;
   viewBox: string;
+  insideChart: boolean;
 
   private _options: PoChartOptions;
   private _series: Array<PoChartSerie> = [];
@@ -39,7 +43,6 @@ export class PoChartContainerComponent implements OnChanges {
   @Input('p-options') set options(value: PoChartOptions) {
     if (value instanceof Object && !(value instanceof Array)) {
       this._options = value;
-
       this.verifyAxisOptions(this._options);
     }
   }
@@ -69,6 +72,24 @@ export class PoChartContainerComponent implements OnChanges {
     if (changes.type || changes.containerSize) {
       this.setViewBox();
       this.setSvgSpace();
+    }
+    if (changes.dataLabel) {
+      this.updateRangeAxis();
+    }
+  }
+
+  updateRangeAxis() {
+    if (this.dataLabel?.fixed === true) {
+      // minimo valor para o grafico = maior numero + 5 de respingo
+      const calculatedMaxValue = this.mathsService.calculateMinAndMaxValues(this.series).maxValue + 5;
+
+      // Certifique-se de que o `maxValue` nunca seja menor que o maior valor mais 5.
+      const newMaxValue = Math.max(calculatedMaxValue, this.range.maxValue);
+
+      if (this.range.maxValue !== newMaxValue) {
+        this.range.maxValue = newMaxValue;
+        this.axisOptions.maxRange = newMaxValue;
+      }
     }
   }
 
@@ -146,5 +167,13 @@ export class PoChartContainerComponent implements OnChanges {
         ...options.axis
       };
     }
+  }
+
+  onChartMouseEnter() {
+    this.insideChart = true;
+  }
+
+  onChartMouseLeave() {
+    this.insideChart = false;
   }
 }

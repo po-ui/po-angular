@@ -1,13 +1,16 @@
-import { Component, ElementRef, Renderer2 } from '@angular/core';
+import { Component, ElementRef, OnChanges, Renderer2, SimpleChanges } from '@angular/core';
 
 import { PoChartLineBaseComponent } from './po-chart-line-base.component';
 import { PoChartMathsService } from '../../services/po-chart-maths.service';
+import { PoChartPathCoordinates } from '../../interfaces/po-chart-path-coordinates.interface';
 
 @Component({
   selector: '[po-chart-line]',
   templateUrl: './po-chart-line.component.svg'
 })
-export class PoChartLineComponent extends PoChartLineBaseComponent {
+export class PoChartLineComponent extends PoChartLineBaseComponent implements OnChanges {
+  selectedPath: PoChartPathCoordinates;
+
   constructor(
     protected mathsService: PoChartMathsService,
     protected renderer: Renderer2,
@@ -15,11 +18,29 @@ export class PoChartLineComponent extends PoChartLineBaseComponent {
   ) {
     super(mathsService, renderer, elementRef);
   }
+  ngOnChanges(changes: SimpleChanges): void {
+    if (changes.insideChart && !this.insideChart) {
+      this.seriesPathsCoordinates.forEach(item => (item.isBlur = false));
+    }
+  }
 
   onEnter(serieIndex: number) {
+    const newPath = this.seriesPathsCoordinates[serieIndex];
+    if (this.selectedPath !== newPath) {
+      this.onLeave(serieIndex);
+      this.selectedPath = newPath;
+    }
+    if (this.dataLabel?.fixed) {
+      this.seriesPathsCoordinates.filter(e => e !== this.selectedPath).map(e => (e.isBlur = true));
+    }
     return null;
   }
+
   onLeave(serieIndex: number) {
+    const newPath = this.seriesPathsCoordinates[serieIndex];
+    if (this.dataLabel?.fixed && this.selectedPath !== newPath) {
+      this.seriesPathsCoordinates.map(e => (e.isBlur = false));
+    }
     return null;
   }
 

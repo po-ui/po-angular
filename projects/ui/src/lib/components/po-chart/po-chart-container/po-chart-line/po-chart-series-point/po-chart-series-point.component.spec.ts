@@ -11,6 +11,8 @@ describe('PoChartSeriesPointComponent', () => {
   let component: PoChartSeriesPointComponent;
   let fixture: ComponentFixture<PoChartSeriesPointComponent>;
   let nativeElement;
+  const RADIUS_DEFAULT_SIZE = 5;
+  const RADIUS_HOVER_SIZE = 10;
 
   const coordinates = {
     category: 'janeiro',
@@ -145,6 +147,51 @@ describe('PoChartSeriesPointComponent', () => {
 
         expect(spySetAttribute).toHaveBeenCalledWith(event.target, 'r', radiusDefaultSize);
         expect(spyRemoveStyle).toHaveBeenCalledWith(event.target, 'fill', undefined);
+      });
+
+      it('setPointAttribute: should set `r` to `RADIUS_HOVER_SIZE` if isHover is true and isFixed is false', () => {
+        const target = document.createElementNS('http://www.w3.org/2000/svg', 'circle') as SVGElement;
+        const isHover = true;
+
+        component.color = 'red';
+        component.isFixed = false;
+
+        const spySetAttribute = spyOn(component['renderer'], 'setAttribute');
+        const spySetStyle = spyOn(component['renderer'], 'setStyle');
+
+        component['setPointAttribute'](target, isHover);
+
+        expect(spySetAttribute).toHaveBeenCalledWith(target, 'r', RADIUS_HOVER_SIZE.toString());
+        expect(spySetStyle).toHaveBeenCalledWith(target, 'fill', component.color);
+      });
+
+      it('should set `r` to `RADIUS_DEFAULT_SIZE` if isHover is true and isFixed is true', () => {
+        const target = document.createElementNS('http://www.w3.org/2000/svg', 'circle') as SVGElement;
+        const isHover = true;
+
+        component.color = 'po-color-blue';
+        component.isFixed = true;
+
+        const spySetAttribute = spyOn(component['renderer'], 'setAttribute');
+
+        component['setPointAttribute'](target, isHover);
+
+        expect(spySetAttribute).toHaveBeenCalledWith(target, 'r', RADIUS_DEFAULT_SIZE.toString());
+      });
+
+      it('should set `r` to `RADIUS_DEFAULT_SIZE` if isHover is false', () => {
+        const target = document.createElementNS('http://www.w3.org/2000/svg', 'circle') as SVGElement;
+        const isHover = false;
+
+        component.color = 'red'; // Defina um valor válido para `color`
+
+        const spySetAttribute = spyOn(component['renderer'], 'setAttribute');
+        const spyRemoveStyle = spyOn(component['renderer'], 'removeStyle');
+
+        component['setPointAttribute'](target, isHover);
+
+        expect(spySetAttribute).toHaveBeenCalledWith(target, 'r', RADIUS_DEFAULT_SIZE.toString());
+        expect(spyRemoveStyle).toHaveBeenCalledWith(target, 'fill', undefined);
       });
     });
 
@@ -282,6 +329,61 @@ describe('PoChartSeriesPointComponent', () => {
 
       expect(component.strokeColor).toBe('red');
     });
+
+    it('p-is-fixed: should render text elements only when isFixed is true', () => {
+      const mockCoordinates: Array<PoChartPointsCoordinates> = [
+        {
+          category: 'Category A',
+          label: 'Label A',
+          tooltipLabel: 'Tooltip A',
+          data: 100,
+          xCoordinate: 100,
+          yCoordinate: 200,
+          isFixed: false
+        },
+        {
+          category: 'Category B',
+          label: 'Label B',
+          tooltipLabel: 'Tooltip B',
+          data: 200,
+          xCoordinate: 150,
+          yCoordinate: 250,
+          isFixed: true
+        }
+      ];
+
+      component.coordinates$ = of(mockCoordinates);
+      fixture.detectChanges();
+
+      const textElements = fixture.nativeElement.querySelectorAll('text');
+
+      expect(textElements.length).toBe(1);
+      expect(textElements[0].textContent.trim()).toBe('200');
+      expect(textElements[0].getAttribute('x')).toBe('150');
+      expect(textElements[0].getAttribute('y')).toBe('240');
+    });
+
+    it('updateTextDimensions: should update textWidth and textHeight based on text element dimensions', () => {
+      const mockItem = {
+        category: 'Category A',
+        label: 'Label A',
+        tooltipLabel: 'Tooltip A',
+        data: 100,
+        xCoordinate: 50,
+        yCoordinate: 50
+      };
+
+      const mockSvgText = document.createElementNS('http://www.w3.org/2000/svg', 'text');
+      mockSvgText.setAttribute('data-id', mockItem.label);
+
+      spyOn(mockSvgText, 'getBBox').and.returnValue({ width: 50, height: 20 } as DOMRect);
+      spyOn(component['elementRef'].nativeElement, 'querySelector').and.returnValue(mockSvgText);
+
+      component.updateTextDimensions(mockItem);
+
+      expect(component.textWidth).toBe(50);
+      expect(component.textHeight).toBe(20);
+    });
   });
 
   describe('Template:', () => {
@@ -296,6 +398,64 @@ describe('PoChartSeriesPointComponent', () => {
 
       expect(chartPoints).toBeTruthy();
       expect(chartPoints.length).toBe(1);
+    });
+
+    it('should render circles with correct attributes and classes', () => {
+      component.coordinates$ = of([
+        {
+          category: 'Janeiro',
+          tooltipLabel: 'Tooltip de exemplo',
+          label: 'Exemplo',
+          data: 100,
+          xCoordinate: 150,
+          yCoordinate: 50,
+          isFixed: false,
+          isActive: true
+        }
+      ]);
+
+      fixture.detectChanges();
+
+      const circles = nativeElement.querySelectorAll('circle');
+      expect(circles.length).toBe(1);
+
+      const circle = circles[0];
+      expect(circle.getAttribute('cx')).toBe('150');
+      expect(circle.getAttribute('cy')).toBe('50');
+      expect(circle.getAttribute('r')).toBe(RADIUS_DEFAULT_SIZE.toString());
+      expect(circle.getAttribute('class')).toContain('po-chart-line-point');
+    });
+
+    it('should render text with correct attributes and content when item.isFixed is true', () => {
+      component.coordinates$ = of([
+        {
+          category: 'Category A',
+          label: 'Label A',
+          tooltipLabel: 'Tooltip A',
+          data: 100,
+          xCoordinate: 50,
+          yCoordinate: 100,
+          isFixed: false
+        },
+        {
+          category: 'Category B',
+          label: 'Label B',
+          tooltipLabel: 'Tooltip B',
+          data: 200,
+          xCoordinate: 150,
+          yCoordinate: 200,
+          isFixed: true
+        }
+      ]);
+      fixture.detectChanges();
+
+      const textElements = nativeElement.querySelectorAll('.po-chart-series-point-text');
+
+      expect(textElements.length).toBe(1);
+      const renderedText = textElements[0];
+      expect(renderedText.getAttribute('x')).toBe('150');
+      expect(renderedText.getAttribute('y')).toBe((200 - RADIUS_DEFAULT_SIZE - 5).toString());
+      expect(renderedText.textContent.trim()).toBe('200');
     });
   });
 });

@@ -70,5 +70,67 @@ describe('PoChartLineComponent', () => {
       expect(component.animate).toBeFalsy();
       expect(spyAppendChild).toHaveBeenCalled();
     });
+
+    it('ngOnChanges: should set `isBlur` to false for all items in `seriesPathsCoordinates` when `insideChart` is false', () => {
+      component.seriesPathsCoordinates = [
+        { coordinates: 'M10 10', color: '#29B6C5', isBlur: true },
+        { coordinates: 'M20 20', color: '#94DAE2', isBlur: true }
+      ];
+
+      const changes = {
+        insideChart: {
+          currentValue: false,
+          previousValue: true,
+          firstChange: false,
+          isFirstChange: () => false
+        }
+      };
+
+      component.ngOnChanges(changes);
+
+      expect(component.seriesPathsCoordinates[0].isBlur).toBeFalse();
+      expect(component.seriesPathsCoordinates[1].isBlur).toBeFalse();
+    });
+
+    it('onEnter: should update `selectedPath`, call `onLeave`, and set `isBlur` to true for non-selected paths if `dataLabel?.fixed` is true', () => {
+      const spyOnLeave = spyOn(component, 'onLeave').and.callThrough();
+      component.seriesPathsCoordinates = [
+        { coordinates: 'M10 10', color: '#29B6C5', isBlur: false },
+        { coordinates: 'M20 20', color: '#94DAE2', isBlur: false }
+      ];
+      component.dataLabel = { fixed: true };
+
+      component.onEnter(1);
+
+      expect(spyOnLeave).toHaveBeenCalledWith(1);
+      expect(component.selectedPath).toEqual(component.seriesPathsCoordinates[1]);
+      expect(component.seriesPathsCoordinates[0].isBlur).toBeTrue();
+      expect(component.seriesPathsCoordinates[1].isBlur).toBeFalse();
+    });
+
+    it('onLeave: should set `isBlur` to false for all items in `seriesPathsCoordinates` if `dataLabel?.fixed` is true', () => {
+      component.seriesPathsCoordinates = [
+        { coordinates: 'M10 10', color: '#29B6C5', isBlur: true },
+        { coordinates: 'M20 20', color: '#94DAE2', isBlur: true }
+      ];
+      component.dataLabel = { fixed: true };
+
+      component.onLeave(1);
+
+      expect(component.seriesPathsCoordinates[0].isBlur).toBeFalse();
+      expect(component.seriesPathsCoordinates[1].isBlur).toBeFalse();
+    });
+
+    it('ngOnChanges: should not modify `isBlur` if `insideChart` is true', () => {
+      component.insideChart = true;
+      component.seriesPathsCoordinates = [{ isBlur: true }, { isBlur: true }];
+
+      const changes = { insideChart: { currentValue: true, previousValue: false, firstChange: false } };
+
+      component.ngOnChanges(<any>changes);
+
+      // Verificar que `isBlur` permanece inalterado
+      expect(component.seriesPathsCoordinates.every(item => item.isBlur)).toBe(true);
+    });
   });
 });

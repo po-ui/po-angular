@@ -25,4 +25,10 @@ export interface PoChartPathCoordinates {
 
   /** O texto de exibição no tooltip. */
   tooltipLabel?: string;
+
+  /** Indica se é elemento não está em foco. */
+  isBlur?: boolean;
+
+  /** Indica se o valor da série está mostrando fixado na tela. */
+  isFixed?: boolean;
 }
