@@ -31,4 +31,7 @@ export interface PoChartPointsCoordinates {
 
   /** Coordenada vertical. */
   yCoordinate: number;
+
+  /** Indica se o valor da série está mostrando fixado na tela. */
+  isFixed?: boolean;
 }

@@ -7,6 +7,7 @@ import { PoChartType } from './enums/po-chart-type.enum';
 import { PoChartOptions } from './interfaces/po-chart-options.interface';
 import { PoChartSerie } from './interfaces/po-chart-serie.interface';
 import { PoColorService } from '../../services/po-color/po-color.service';
+import { PoChartDataLabel } from './interfaces/po-chart-serie-data-label.interface';
 
 const poChartDefaultHeight = 400;
 const poChartMinHeight = 200;
@@ -209,6 +210,30 @@ export abstract class PoChartBaseComponent implements OnChanges {
   get options() {
     return this._options;
   }
+
+  /**
+   * @optional
+   *
+   * @description
+   *
+   * Permite configurar as propriedades de exibição dos rótulos das séries no gráfico.
+   *
+   * Essa configuração possibilita fixar os valores das séries diretamente no gráfico, alterando o comportamento visual:
+   * - Os valores das séries permanecem visíveis, sem a necessidade de hover.
+   * - O *tooltip* não será exibido.
+   * - Os marcadores (*bullets*) terão seu estilo ajustado.
+   * - As outras séries ficarão com opacidade reduzida ao passar o mouse sobre a série ativa.
+   *
+   * > Disponível apenas para gráficos do tipo `line`.
+   *
+   * #### Exemplo de utilização:
+   * ```typescript
+   * dataLabel: PoChartDataLabel = {
+   *   fixed: true,
+   * };
+   * ```
+   */
+  @Input('p-data-label') dataLabel?: PoChartDataLabel;
 
   constructor(protected colorService: PoColorService) {}
 

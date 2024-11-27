@@ -1,6 +1,13 @@
 import { Component, OnInit } from '@angular/core';
 
-import { PoChartSerie, PoChartType, PoSelectOption, PoChartOptions, PoCheckboxGroupOption } from '@po-ui/ng-components';
+import {
+  PoChartSerie,
+  PoChartType,
+  PoSelectOption,
+  PoChartOptions,
+  PoCheckboxGroupOption,
+  PoChartDataLabel
+} from '@po-ui/ng-components';
 
 @Component({
   selector: 'sample-po-chart-labs',
@@ -27,6 +34,7 @@ export class SamplePoChartLabsComponent implements OnInit {
       gridLines: undefined
     }
   };
+  dataLabel: PoChartDataLabel;
 
   readonly propertiesOptions: Array<PoCheckboxGroupOption> = [{ value: 'legend', label: 'Legend' }];
 
@@ -38,6 +46,8 @@ export class SamplePoChartLabsComponent implements OnInit {
     { label: 'Column', value: PoChartType.Column },
     { label: 'Bar', value: PoChartType.Bar }
   ];
+
+  readonly dataLabelOptions: Array<PoCheckboxGroupOption> = [{ value: 'fixed', label: 'Fixed' }];
 
   ngOnInit() {
     this.restore();
@@ -68,6 +78,14 @@ export class SamplePoChartLabsComponent implements OnInit {
     this.addOptions({ legend });
   }
 
+  isLineType(): boolean {
+    return this.type === PoChartType.Line;
+  }
+
+  changeDataLabelOptions() {
+    const fixed = this.dataLabel.fixed;
+  }
+
   changeEvent(eventName: string, serieEvent: PoChartSerie): void {
     this.event = `${eventName}: ${JSON.stringify(serieEvent)}`;
   }
@@ -87,6 +105,9 @@ export class SamplePoChartLabsComponent implements OnInit {
     this.allCategories = [];
     this.optionsActions = {
       legend: null
+    };
+    this.dataLabel = {
+      fixed: false
     };
     this.options = {
       ...this.optionsActions,

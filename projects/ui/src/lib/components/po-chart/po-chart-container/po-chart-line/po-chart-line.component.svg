@@ -1,7 +1,9 @@
 <svg:g #chartLine>
 
   <svg:g *ngFor="let item of seriesPathsCoordinates; let i = index; trackBy: trackBy"
+    class='po-chart-line-path-group'
     [class]="'po-chart-line-path-group-' + i"
+    [class.po-chart-line-path-blur]="item.isBlur"
     (mouseenter)="onEnter(i)"
     (mouseleave)="onLeave(i)"
   >
@@ -12,9 +14,9 @@
       [p-animate]="animate"
       [p-color]="item.color" 
       [p-coordinates]="item?.coordinates"
-      [p-is-active]="item.isActive"
+      [p-is-active]="item.isFixed"
       >
-      </svg:g>
+    </svg:g>
 
     <!-- SERIES POINTS -->
     <svg:g po-chart-series-point
@@ -23,6 +25,7 @@
       [p-color]="item.color"
       [p-coordinates]="seriesPointsCoordinates[i]"
       [p-is-active]="activeTooltip"
+      [p-is-fixed]="item.isFixed"
       [p-relative-to]="'po-chart-line-path-group-' + i" 
       [attr.key]="'po-chart-line-path-points-group-' + i"
       (p-point-click)="onSeriePointClick($event)"

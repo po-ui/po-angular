@@ -1,7 +1,7 @@
 <svg:circle *ngFor="let item of coordinates$ | async; trackBy: trackBy" 
-  [p-tooltip]="item.tooltipLabel"
+  [p-tooltip]="!item.isFixed ? item.tooltipLabel : null"
   [p-append-in-body]='true'
-  [p-display-tooltip]="!chartLine && item.isActive"
+  [p-display-tooltip]="!chartLine && item.isActive && !item.isFixed"
   p-tooltip-position="top"
   class="po-chart-line-point"
   [class]="strokeColor?.includes('po-border-color') ? strokeColor : ''"
@@ -15,3 +15,28 @@
   (mouseleave)="onMouseLeave($event)"
   >
 </svg:circle>
+
+<ng-container *ngFor="let item of coordinates$ | async; trackBy: trackBy">
+
+  <svg:rect 
+    *ngIf="item.isFixed"
+    [attr.x]="item.xCoordinate - textWidth / 2 - 2"
+    [attr.y]="item.yCoordinate - radius - 5 - textHeight / 2 - 4"
+    [attr.width]="textWidth + 4"
+    [attr.height]="textHeight === 0 ? 0 : textHeight - 2"
+    class='po-chart-series-point-text-rect'
+    rx="2" ry="2"
+  ></svg:rect>
+
+  <svg:text 
+    *ngIf="item.isFixed"
+    [attr.x]="item.xCoordinate"
+    [attr.y]="item.yCoordinate - radius - 5"
+    class='po-chart-series-point-text'
+    [attr.data-id]="item.label"
+    [class]="strokeColor?.includes('po-border-color') ? strokeColor : ''"
+    text-anchor="middle">
+    {{ item.data }}
+  </svg:text>
+
+</ng-container>

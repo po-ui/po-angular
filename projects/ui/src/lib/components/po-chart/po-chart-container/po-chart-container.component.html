@@ -5,6 +5,8 @@
   [attr.viewBox]="viewBox"
   [attr.width]="containerSize.svgWidth"
   [attr.height]="containerSize.svgHeight"
+  (mouseenter)="onChartMouseEnter()"
+  (mouseleave)="onChartMouseLeave()"
 >
   <!-- axis -->
   <svg:g
@@ -55,6 +57,8 @@
     [p-range]="range"
     [p-series]="seriesByType['line']"
     [p-container-size]="containerSize"
+    [p-data-label]="dataLabel"
+    [p-insideChart]="insideChart"
     (p-point-hover)="onSerieHover($event)"
     (p-point-click)="onSerieClick($event)"
   ></svg:g>

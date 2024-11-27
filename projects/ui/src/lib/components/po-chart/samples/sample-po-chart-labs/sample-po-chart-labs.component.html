@@ -19,12 +19,24 @@
 <po-divider class="po-md-12" p-label="Properties"></po-divider>
 
 <form>
-  <po-select class="po-md-4" name="type" [(ngModel)]="type" p-columns="3" p-label="Type" [p-options]="typeOptions">
+  <po-select class="po-md-3" name="type" [(ngModel)]="type" p-columns="3" p-label="Type" [p-options]="typeOptions">
   </po-select>
 
-  <po-number class="po-md-4" name="height" [(ngModel)]="height" p-label="Height"> </po-number>
+  <po-number class="po-md-2" name="height" [(ngModel)]="height" p-label="Height"> </po-number>
 
   <po-input class="po-md-4" name="title" [(ngModel)]="title" p-label="Title"> </po-input>
+
+  <po-checkbox-group
+    *ngIf="isLineType()"
+    class="po-md-3"
+    name="dataLabel"
+    p-label="dataLabel"
+    p-help="only for Line Chart"
+    [(ngModel)]="dataLabel"
+    [p-options]="dataLabelOptions"
+    (p-change)="changeDataLabelOptions($event)"
+  >
+  </po-checkbox-group>
 </form>
 
 <form #chartSeries="ngForm">

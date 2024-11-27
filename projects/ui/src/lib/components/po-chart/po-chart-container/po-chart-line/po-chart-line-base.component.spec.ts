@@ -103,8 +103,8 @@ describe('PoChartLineBaseComponent', () => {
         component['seriePathPointsDefinition'](component.containerSize, component.series, range);
 
         const expectedResult = [
-          { coordinates: ' M93 27 L136 26 L178 26', color: '#0C6C94', isActive: true },
-          { coordinates: ' M93 21 L136 14 L178 8', color: '#29B6C5', isActive: true }
+          { coordinates: ' M93 27 L136 26 L178 26', color: '#0C6C94', isActive: true, isFixed: undefined },
+          { coordinates: ' M93 21 L136 14 L178 8', color: '#29B6C5', isActive: true, isFixed: undefined }
         ];
 
         expect(component.seriesPathsCoordinates).toEqual(expectedResult);
@@ -113,6 +113,7 @@ describe('PoChartLineBaseComponent', () => {
 
       it('should apply apply value to `seriesPointsCoordinates`', () => {
         component.series = [{ label: 'Vancouver', data: [5, 10], type: PoChartType.Line, color: 'blue' }];
+        component.dataLabel = { fixed: true };
 
         component['seriePathPointsDefinition'](component.containerSize, component.series, range);
 
@@ -126,7 +127,8 @@ describe('PoChartLineBaseComponent', () => {
               data: 5,
               xCoordinate: 104,
               yCoordinate: 24,
-              isActive: true
+              isActive: true,
+              isFixed: true
             },
             {
               category: undefined,
@@ -136,7 +138,8 @@ describe('PoChartLineBaseComponent', () => {
               data: 10,
               xCoordinate: 168,
               yCoordinate: 21,
-              isActive: true
+              isActive: true,
+              isFixed: true
             }
           ]
         ];
@@ -149,6 +152,7 @@ describe('PoChartLineBaseComponent', () => {
       it('should apply apply only data to tooltipLabel if label is undefined', () => {
         const minMaxSeriesValues = { minValue: 5, maxValue: 10 };
         component.series = [{ label: undefined, data: [5, 10], type: PoChartType.Line, color: 'blue' }];
+        component.dataLabel = { fixed: true }; // Definir `dataLabel` para incluir `fixed`
 
         component['seriePathPointsDefinition'](component.containerSize, component.series, minMaxSeriesValues);
 
@@ -162,7 +166,8 @@ describe('PoChartLineBaseComponent', () => {
               data: 5,
               xCoordinate: 104,
               yCoordinate: 28,
-              isActive: true
+              isActive: true,
+              isFixed: true // Adicione a propriedade esperada
             },
             {
               category: undefined,
@@ -172,7 +177,8 @@ describe('PoChartLineBaseComponent', () => {
               data: 10,
               xCoordinate: 168,
               yCoordinate: 8,
-              isActive: true
+              isActive: true,
+              isFixed: true // Adicione a propriedade esperada
             }
           ]
         ];
@@ -186,8 +192,7 @@ describe('PoChartLineBaseComponent', () => {
         const minMaxSeriesValues = { minValue: 5, maxValue: 10 };
         component.series = [{ label: 'Vancouver', data: [5, 10], type: PoChartType.Line, color: 'blue' }];
         component.categories = ['janeiro', 'fevereiro'];
-
-        component['seriePathPointsDefinition'](component.containerSize, component.series, minMaxSeriesValues);
+        component.dataLabel = { fixed: true }; // Configurar o dataLabel
 
         const expectedResult = [
           [
@@ -199,7 +204,8 @@ describe('PoChartLineBaseComponent', () => {
               data: 5,
               xCoordinate: 104,
               yCoordinate: 28,
-              isActive: true
+              isActive: true,
+              isFixed: true // Adicionar isFixed
             },
             {
               category: 'fevereiro',
@@ -209,10 +215,13 @@ describe('PoChartLineBaseComponent', () => {
               data: 10,
               xCoordinate: 168,
               yCoordinate: 8,
-              isActive: true
+              isActive: true,
+              isFixed: true // Adicionar isFixed
             }
           ]
         ];
+
+        component['seriePathPointsDefinition'](component.containerSize, component.series, minMaxSeriesValues);
 
         expect(component.seriesPointsCoordinates).toEqual(expectedResult);
         expect(component.seriesPointsCoordinates.length).toBe(1);
@@ -234,7 +243,8 @@ describe('PoChartLineBaseComponent', () => {
               data: 10,
               xCoordinate: 93,
               yCoordinate: 8,
-              isActive: true
+              isActive: true,
+              isFixed: undefined
             },
             {
               category: 'março',
@@ -244,7 +254,8 @@ describe('PoChartLineBaseComponent', () => {
               data: 12,
               xCoordinate: 178,
               yCoordinate: 0,
-              isActive: true
+              isActive: true,
+              isFixed: undefined
             }
           ]
         ];
@@ -253,7 +264,7 @@ describe('PoChartLineBaseComponent', () => {
 
         expect(component.seriesPointsCoordinates).toEqual(expectedPointsResult);
         expect(component.seriesPathsCoordinates).toEqual([
-          { coordinates: ' M93 8 L178 0', color: '#29B6C5', isActive: true }
+          { coordinates: ' M93 8 L178 0', color: '#29B6C5', isActive: true, isFixed: undefined }
         ]);
       });
 
@@ -274,7 +285,7 @@ describe('PoChartLineBaseComponent', () => {
 
         component['seriePathPointsDefinition'](component.containerSize, component.series, minMaxSeriesValues);
 
-        const expectedResult = [{ coordinates: ' M136 28', color: '#29B6C5', isActive: true }];
+        const expectedResult = [{ coordinates: ' M136 28', color: '#29B6C5', isActive: true, isFixed: undefined }];
 
         expect(component.seriesPathsCoordinates).toEqual(expectedResult);
         expect(component.seriesPathsCoordinates.length).toBe(1);
@@ -417,6 +428,20 @@ describe('PoChartLineBaseComponent', () => {
       component.range = <any>false;
 
       expect(spyseriePathPointsDefinition).not.toHaveBeenCalled();
+    });
+
+    describe('isFixed:', () => {
+      it('should include `isFixed` property in `pointCoordinates` when `dataLabel?.fixed` is true', () => {
+        component.dataLabel = { fixed: true };
+
+        component.series = [{ label: 'Test', data: [10], type: PoChartType.Line, color: 'blue' }];
+
+        component['seriePathPointsDefinition'](component.containerSize, component.series, range);
+
+        const point = component.seriesPointsCoordinates[0][0];
+
+        expect(point.isFixed).toBeTrue();
+      });
     });
   });
 });

@@ -9,6 +9,7 @@ import { PoChartMinMaxValues } from '../../interfaces/po-chart-min-max-values.in
 import { PoChartPathCoordinates } from '../../interfaces/po-chart-path-coordinates.interface';
 import { PoChartPointsCoordinates } from '../../interfaces/po-chart-points-coordinates.interface';
 import { PoChartSerie } from '../../interfaces/po-chart-serie.interface';
+import { PoChartDataLabel } from '../../interfaces/po-chart-serie-data-label.interface';
 
 @Directive()
 export abstract class PoChartLineBaseComponent {
@@ -19,6 +20,10 @@ export abstract class PoChartLineBaseComponent {
   @Input('p-categories-coordinates') categoriesCoordinates: Array<number>;
 
   @Input('p-svg-space') svgSpace;
+
+  @Input('p-data-label') dataLabel?: PoChartDataLabel;
+
+  @Input('p-insideChart') insideChart?: boolean;
 
   @Output('p-point-click') pointClick = new EventEmitter<any>();
 
@@ -42,7 +47,6 @@ export abstract class PoChartLineBaseComponent {
   @Input('p-range') set range(value: PoChartMinMaxValues) {
     if (value instanceof Object && !(value instanceof Array)) {
       this._range = value;
-
       this.seriePathPointsDefinition(this.containerSize, this._series, this._range);
     }
   }
@@ -153,7 +157,17 @@ export abstract class PoChartLineBaseComponent {
             const isActive = this.chartType === PoChartType.Line;
             pointCoordinates = [
               ...pointCoordinates,
-              { category, label, tooltipLabel, data: data, xCoordinate, yCoordinate, color, isActive }
+              {
+                category,
+                label,
+                tooltipLabel,
+                data: data,
+                xCoordinate,
+                yCoordinate,
+                color,
+                isActive,
+                isFixed: this.dataLabel?.fixed
+              }
             ];
             pathCoordinates += ` ${svgPathCommand}${xCoordinate} ${yCoordinate}`;
           }
@@ -163,7 +177,7 @@ export abstract class PoChartLineBaseComponent {
 
         this.seriesPointsCoordinates = [...this.seriesPointsCoordinates, pointCoordinates];
 
-        return { coordinates: pathCoordinates, color, isActive: true };
+        return { coordinates: pathCoordinates, color, isActive: true, isFixed: this.dataLabel?.fixed };
       }
     });
   }

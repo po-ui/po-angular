@@ -274,6 +274,83 @@ describe('PoChartContainerComponent', () => {
 
       expect(fnError).not.toThrow();
     });
+
+    it('onChartMouseEnter: should set `insideChart` to true', () => {
+      component.insideChart = false;
+      component.onChartMouseEnter();
+
+      expect(component.insideChart).toBeTrue();
+    });
+
+    it('onChartMouseLeave: should set `insideChart` to false', () => {
+      component.insideChart = true;
+      component.onChartMouseLeave();
+
+      expect(component.insideChart).toBeFalse();
+    });
+
+    it('onChartMouseEnter and onChartMouseLeave: should toggle `insideChart` between true and false', () => {
+      component.insideChart = false;
+
+      component.onChartMouseEnter();
+      expect(component.insideChart).toBeTrue();
+
+      component.onChartMouseLeave();
+      expect(component.insideChart).toBeFalse();
+    });
+
+    describe('updateRangeAxis', () => {
+      it('should set `range.maxValue` and `axisOptions.maxRange` to at least the highest value + 5', () => {
+        component.options = { axis: { minRange: 0, maxRange: 46 } };
+        component.series = [{ label: 'Category', data: [10, 20, 45], type: PoChartType.Line }];
+        component.dataLabel = { fixed: true };
+
+        component.updateRangeAxis();
+
+        expect(component.range.maxValue).toBe(50); // Valor máximo da série + 5
+        expect(component.axisOptions.maxRange).toBe(50);
+      });
+
+      it('should not change `range.maxValue` or `axisOptions.maxRange` if already greater than the highest value + 5', () => {
+        component.options = { axis: { minRange: 0, maxRange: 60 } };
+        component.series = [{ label: 'Category', data: [10, 20, 45], type: PoChartType.Line }];
+        component.dataLabel = { fixed: true };
+
+        component.updateRangeAxis();
+
+        expect(component.range.maxValue).toBe(60); // Não deve mudar
+        expect(component.axisOptions.maxRange).toBe(60);
+      });
+
+      it('should not update `range.maxValue` or `axisOptions.maxRange` if `dataLabel.fixed` is false', () => {
+        component.options = { axis: { minRange: 0, maxRange: 46 } };
+        component.series = [{ label: 'Category', data: [10, 20, 45], type: PoChartType.Line }];
+        component.dataLabel = { fixed: false };
+
+        component.updateRangeAxis();
+
+        expect(component.range.maxValue).toBe(46); // Não deve mudar
+        expect(component.axisOptions.maxRange).toBe(46);
+      });
+    });
+
+    it('ngOnChanges: should call `updateRangeAxis` if `dataLabel` has changed', () => {
+      const changes = { dataLabel: { currentValue: { fixed: true }, previousValue: {}, firstChange: false } };
+      const spyUpdateRangeAxis = spyOn(component, 'updateRangeAxis');
+
+      component.ngOnChanges(<any>changes);
+
+      expect(spyUpdateRangeAxis).toHaveBeenCalled();
+    });
+
+    it('ngOnChanges: should not call `updateRangeAxis` if `dataLabel` has not changed', () => {
+      const changes = { type: { currentValue: PoChartType.Line, previousValue: PoChartType.Bar, firstChange: false } };
+      const spyUpdateRangeAxis = spyOn(component, 'updateRangeAxis');
+
+      component.ngOnChanges(<any>changes);
+
+      expect(spyUpdateRangeAxis).not.toHaveBeenCalled();
+    });
   });
 
   describe('Properties: ', () => {
@@ -402,6 +479,24 @@ describe('PoChartContainerComponent', () => {
       expect(chartLineElementList.length).toBe(1);
       expect(chartBarElementList[0]).toBeTruthy();
       expect(chartBarElementList.length).toBe(6);
+    });
+
+    it('should call `onChartMouseEnter` and `onChartMouseLeave` on mouse enter and leave', () => {
+      const svgElement = nativeElement.querySelector('svg');
+      const spyOnChartMouseEnter = spyOn(component, 'onChartMouseEnter').and.callThrough();
+      const spyOnChartMouseLeave = spyOn(component, 'onChartMouseLeave').and.callThrough();
+
+      svgElement.dispatchEvent(new Event('mouseenter'));
+      fixture.detectChanges();
+
+      expect(spyOnChartMouseEnter).toHaveBeenCalled();
+      expect(component.insideChart).toBeTrue();
+
+      svgElement.dispatchEvent(new Event('mouseleave'));
+      fixture.detectChanges();
+
+      expect(spyOnChartMouseLeave).toHaveBeenCalled();
+      expect(component.insideChart).toBeFalse();
     });
   });
 });

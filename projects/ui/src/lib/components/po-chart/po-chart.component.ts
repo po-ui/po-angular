@@ -45,6 +45,11 @@ import { PoChartMathsService } from './services/po-chart-maths.service';
  *  <file name="sample-po-chart-coffee-ranking/sample-po-chart-coffee-ranking.component.html"> </file>
  *  <file name="sample-po-chart-coffee-ranking/sample-po-chart-coffee-ranking.component.ts"> </file>
  * </example>
+ *
+ * <example name="po-chart-world-exports" title="PO Chart - World Exports">
+ *  <file name="sample-po-chart-world-exports/sample-po-chart-world-exports.component.html"> </file>
+ *  <file name="sample-po-chart-world-exports/sample-po-chart-world-exports.component.ts"> </file>
+ * </example>
  */
 @Component({
   selector: 'po-chart',
