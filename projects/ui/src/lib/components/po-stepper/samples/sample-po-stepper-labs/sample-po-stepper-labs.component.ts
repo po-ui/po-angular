@@ -53,6 +53,11 @@ export class SamplePoStepperLabsComponent implements OnInit {
       help: 'Ex.: ph ph-check-fat',
       gridLgColumns: 4,
       property: 'iconDone'
+    },
+    {
+      property: 'disabledClick',
+      label: 'Disabled click',
+      type: 'boolean'
     }
   ];
 
@@ -70,11 +75,6 @@ export class SamplePoStepperLabsComponent implements OnInit {
       help: 'Ex.: ph ph-question',
       gridMdColumns: 6,
       gridXlColumns: 6
-    },
-    {
-      property: 'disabledClick',
-      label: 'Disabled click',
-      type: 'boolean'
     }
   ];
 

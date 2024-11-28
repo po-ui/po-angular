@@ -129,17 +129,6 @@ export class PoStepComponent implements AfterContentInit {
    */
   @Input('p-icon-default') iconDefault?: string | TemplateRef<void>;
 
-  /**
-   * @optional
-   *
-   * @description
-   *
-   * Desabilita o clique no step.
-   *
-   * @default `false`
-   */
-  @Input('p-disable-click') disabledClick: boolean = false;
-
   constructor(private elementRef: ElementRef) {}
 
   ngAfterContentInit() {

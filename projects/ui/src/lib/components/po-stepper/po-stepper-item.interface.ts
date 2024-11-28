@@ -23,7 +23,4 @@ export interface PoStepperItem {
 
   /** Define o estado de exibição do *step*. */
   status?: PoStepperStatus;
-
-  /** Desabilita o clique no step.*/
-  disabledClick?: boolean;
 }
