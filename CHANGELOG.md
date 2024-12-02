@@ -2,6 +2,15 @@
 
 All notable changes to this project will be documented in this file. See [standard-version](https://github.com/conventional-changelog/standard-version) for commit guidelines.
 
+## [18.17.0](https://github.com/po-ui/po-angular/compare/v18.16.0...v18.17.0) (2024-12-02)
+
+
+### Features
+
+* **chart:** inclusão propriedade `p-data-label` para chart tipo `line` ([182d394](https://github.com/po-ui/po-angular/commit/182d394b260ada9c31e47eb5fb740e264962f72a))
+* **dynamic-form:** adiciona mensagem de erro de required nos componentes ([7e74ff6](https://github.com/po-ui/po-angular/commit/7e74ff6d5ad2377cb4b278358b4b79c6b3a58e73))
+* **fields:** adiciona mensagem de erro de required nos componentes ([43d1111](https://github.com/po-ui/po-angular/commit/43d1111a13f75cd63d9f4a7b460596edfec8d194))
+
 ## [18.16.0](https://github.com/po-ui/po-angular/compare/v18.15.0...v18.16.0) (2024-11-25)
 
 
