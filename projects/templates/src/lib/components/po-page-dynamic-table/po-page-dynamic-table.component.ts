@@ -595,6 +595,26 @@ export class PoPageDynamicTableComponent extends PoPageDynamicListBaseComponent 
     return this._virtualScroll;
   }
 
+  /**
+   * @optional
+   *
+   * @description
+   *
+   * Controla a visibilidade dos filtros fixos na página.
+   *
+   * - Quando `true` (default), todos os filtros, incluindo os fixos, são exibidos, permitindo que o usuário visualize os filtros aplicados.
+   * - Quando `false`, os filtros fixos são ocultados, não sendo exibidos na interface, mas ainda sendo aplicados como filtros nas requisições.
+   *
+   * Esta propriedade trabalha em conjunto com a propriedade `fixed` dos filtros individuais. Filtros marcados como `fixed: true` não serão exibidos na interface do filtro avançado quando `visibleFixedFilters` for `false`, mas continuarão a ser aplicados de forma transparente ao usuário. Dessa forma, permite-se maior flexibilidade no controle de quais filtros devem ser visíveis ao usuário ou devem ser aplicados permanentemente sem interferência.
+   *
+   * **Exemplo de uso:**
+   * ```html
+   * <!-- Para ocultar os filtros fixos -->
+   * <po-page-dynamic-table [p-visible-fixed-filters]="false"></po-page-dynamic-table>
+   * ```
+   */
+  @Input('p-visible-fixed-filters') visibleFixedFilters: boolean = true;
+
   constructor(
     private router: Router,
     private activatedRoute: ActivatedRoute,
