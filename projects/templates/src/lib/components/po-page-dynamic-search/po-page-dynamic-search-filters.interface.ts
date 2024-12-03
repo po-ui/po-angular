@@ -12,4 +12,9 @@ export interface PoPageDynamicSearchFilters extends PoDynamicFormField {
    * Define um valor inicial para um filtro de busca avançada.
    */
   initValue?: any;
+
+  /**
+   * Define um valor fixed para um filtro de busca avançada.
+   */
+  fixed?: boolean;
 }
