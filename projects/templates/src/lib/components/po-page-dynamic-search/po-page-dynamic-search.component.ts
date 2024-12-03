@@ -1,4 +1,4 @@
-import { Component, ViewChild, OnInit, OnDestroy, ChangeDetectorRef } from '@angular/core';
+import { Component, ViewChild, OnInit, OnDestroy, ChangeDetectorRef, AfterViewInit } from '@angular/core';
 
 import { Observable, Subscription } from 'rxjs';
 import {
@@ -43,7 +43,10 @@ type UrlOrPoCustomizationFunction = string | (() => PoPageDynamicSearchOptions);
   selector: 'po-page-dynamic-search',
   templateUrl: './po-page-dynamic-search.component.html'
 })
-export class PoPageDynamicSearchComponent extends PoPageDynamicSearchBaseComponent implements OnInit, OnDestroy {
+export class PoPageDynamicSearchComponent
+  extends PoPageDynamicSearchBaseComponent
+  implements OnInit, OnDestroy, AfterViewInit
+{
   @ViewChild(PoAdvancedFilterComponent, { static: true }) poAdvancedFilter: PoAdvancedFilterComponent;
   @ViewChild(PoPageListComponent, { static: true }) poPageList: PoPageListComponent;
 
@@ -107,6 +110,14 @@ export class PoPageDynamicSearchComponent extends PoPageDynamicSearchBaseCompone
     }
   }
 
+  ngAfterViewInit(): void {
+    if (this.stringify(this.filters) !== this.stringify(this.previousFilters)) {
+      this.onChangeFilters(this.filters);
+
+      this.previousFilters = [...this.filters];
+    }
+  }
+
   onChangeFilters(filters: Array<PoPageDynamicSearchFilters>) {
     const filterObjectWithValue = filters
       .filter(filter => filter.initValue)
@@ -152,7 +163,12 @@ export class PoPageDynamicSearchComponent extends PoPageDynamicSearchBaseCompone
   onAdvancedSearch(filteredItems, isAdvancedSearch?) {
     const { filter, optionsService } = filteredItems;
 
-    this._disclaimerGroup.disclaimers = this.setDisclaimers(filter, optionsService);
+    const visibleFilters =
+      this.visibleFixedFilters === false
+        ? this.filters.filter(filter => !('fixed' in filter) || !filter.fixed)
+        : this.filters;
+
+    this._disclaimerGroup.disclaimers = this.setDisclaimers(filter, optionsService, visibleFilters);
 
     this.setFilters(filter);
 
@@ -264,8 +280,22 @@ export class PoPageDynamicSearchComponent extends PoPageDynamicSearchBaseCompone
 
   private onRemoveDisclaimer(removeData: PoDisclaimerGroupRemoveAction) {
     const { currentDisclaimers } = removeData;
+    const fixedFilters = this.filters
+      .filter(filter => filter.fixed === true && filter.initValue !== undefined && filter.initValue !== null)
+      .map(filter => ({
+        property: filter.property,
+        value: filter.initValue,
+        label: `${filter.label}: ${filter.initValue}`,
+        hideClose: true
+      }));
+    const updatedDisclaimers = [
+      ...currentDisclaimers,
+      ...fixedFilters.filter(
+        fixedFilter => !currentDisclaimers.some(disclaimer => disclaimer.property === fixedFilter.property)
+      )
+    ];
 
-    this.emitChangesDisclaimers(currentDisclaimers);
+    this.emitChangesDisclaimers(updatedDisclaimers);
   }
 
   private emitChangesDisclaimers(currentDisclaimers: any) {
@@ -274,29 +304,51 @@ export class PoPageDynamicSearchComponent extends PoPageDynamicSearchBaseCompone
   }
 
   private onRemoveAllDisclaimers() {
-    this.emitChangesDisclaimers([]);
+    const fixedFilters = this.filters.filter(
+      filter =>
+        filter.fixed === true &&
+        filter.hasOwnProperty('initValue') &&
+        filter.initValue !== undefined &&
+        filter.initValue !== null
+    );
+
+    const disclaimersToKeep = fixedFilters.map(filter => ({
+      property: filter.property,
+      value: filter.initValue,
+      label: `${filter.label}: ${filter.initValue}`,
+      hideClose: true
+    }));
+
+    this.emitChangesDisclaimers(disclaimersToKeep);
   }
 
-  private setDisclaimers(filters, optionsServiceObjects?: Array<PoComboOption>) {
+  private setDisclaimers(
+    filters,
+    optionsServiceObjects?: Array<PoComboOption>,
+    visibleFilters?: Array<PoPageDynamicSearchFilters>
+  ) {
     const disclaimers = [];
     const properties = Object.keys(filters);
+    const visibleProperties = visibleFilters ? visibleFilters.map(filter => filter.property) : properties;
 
     properties.forEach(property => {
-      const field = this.getFieldByProperty(this.filters, property);
-      const label = field.label || capitalizeFirstLetter(field.property);
-      const value = filters[property];
-      const hideClose =
-        this.hideCloseDisclaimers.some(hideCloseDisclaimer => hideCloseDisclaimer === property) || false;
+      if (visibleProperties.includes(property)) {
+        const field = this.getFieldByProperty(this.filters, property);
+        const label = field.label || capitalizeFirstLetter(field.property);
+        const value = filters[property];
+        const hideClose =
+          this.hideCloseDisclaimers.some(hideCloseDisclaimer => hideCloseDisclaimer === property) || false;
 
-      const valueDisplayedOnTheDisclaimerLabel = this.getFilterValueToDisclaimer(field, value, optionsServiceObjects);
+        const valueDisplayedOnTheDisclaimerLabel = this.getFilterValueToDisclaimer(field, value, optionsServiceObjects);
 
-      if (valueDisplayedOnTheDisclaimerLabel !== '') {
-        disclaimers.push({
-          label: `${label}: ${valueDisplayedOnTheDisclaimerLabel}`,
-          property,
-          value,
-          hideClose
-        });
+        if (valueDisplayedOnTheDisclaimerLabel !== '') {
+          disclaimers.push({
+            label: `${label}: ${valueDisplayedOnTheDisclaimerLabel}`,
+            property,
+            value,
+            hideClose
+          });
+        }
       }
     });
 

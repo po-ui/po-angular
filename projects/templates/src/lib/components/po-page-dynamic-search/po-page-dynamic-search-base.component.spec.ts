@@ -183,4 +183,26 @@ describe('PoPageDynamicSearchBaseComponent:', () => {
       expect(component.advancedFilterLiterals).toEqual(expectedValue);
     });
   });
+
+  describe('p-visible-fixed-filters:', () => {
+    it('should update `_visibleFixedFilters` when `visibleFixedFilters` is set', () => {
+      component.visibleFixedFilters = true;
+      expect(component['_visibleFixedFilters']).toBe(true);
+
+      component.visibleFixedFilters = false;
+      expect(component['_visibleFixedFilters']).toBe(false);
+    });
+
+    it('should return `_visibleFixedFilters` when `visibleFixedFilters` is accessed', () => {
+      component['_visibleFixedFilters'] = true;
+      expect(component.visibleFixedFilters).toBe(true);
+
+      component['_visibleFixedFilters'] = false;
+      expect(component.visibleFixedFilters).toBe(false);
+    });
+
+    it('should have a default value of `true` for `visibleFixedFilters` if not set', () => {
+      expect(component.visibleFixedFilters).toBeTrue();
+    });
+  });
 });

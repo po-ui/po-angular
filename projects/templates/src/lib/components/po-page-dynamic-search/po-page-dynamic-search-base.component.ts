@@ -154,6 +154,34 @@ export abstract class PoPageDynamicSearchBaseComponent {
    */
   @Input('p-quick-search-value') quickSearchValue: string;
 
+  _visibleFixedFilters = true;
+
+  /**
+   * @optional
+   *
+   * @description
+   *
+   * Controla a visibilidade dos filtros fixos na página.
+   *
+   * - Quando `true` (default), todos os filtros, incluindo os fixos, são exibidos, permitindo que o usuário visualize os filtros aplicados.
+   * - Quando `false`, os filtros fixos são ocultados, não sendo exibidos na interface, mas ainda sendo aplicados como filtros nas requisições.
+   *
+   * Esta propriedade trabalha em conjunto com a propriedade `fixed` dos filtros individuais. Filtros marcados como `fixed: true` não serão exibidos na interface do filtro avançado quando `visibleFixedFilters` for `false`, mas continuarão a ser aplicados de forma transparente ao usuário. Dessa forma, permite-se maior flexibilidade no controle de quais filtros devem ser visíveis ao usuário ou devem ser aplicados permanentemente sem interferência.
+   *
+   * **Exemplo de uso:**
+   * ```html
+   * <!-- Para ocultar os filtros fixos -->
+   * <po-page-dynamic-table [p-visible-fixed-filters]="false"></po-page-dynamic-table>
+   * ```
+   */
+  @Input('p-visible-fixed-filters') set visibleFixedFilters(visible: boolean) {
+    this._visibleFixedFilters = visible;
+  }
+
+  get visibleFixedFilters(): boolean {
+    return this._visibleFixedFilters;
+  }
+
   /**
    * @optional
    *
@@ -189,9 +217,9 @@ export abstract class PoPageDynamicSearchBaseComponent {
   private _hideCloseDisclaimers: Array<string> = [];
   private _literals: PoPageDynamicSearchLiterals;
   private _quickSearchWidth: number;
-
-  private previousFilters: Array<PoDynamicFormField>;
   private language: string;
+
+  previousFilters: Array<PoDynamicFormField>;
 
   /**
    * @optional
@@ -258,12 +286,6 @@ export abstract class PoPageDynamicSearchBaseComponent {
    */
   @Input('p-filters') set filters(filters: Array<PoPageDynamicSearchFilters>) {
     this._filters = Array.isArray(filters) ? [...filters] : [];
-
-    if (this.stringify(this._filters) !== this.stringify(this.previousFilters)) {
-      this.onChangeFilters(this.filters);
-
-      this.previousFilters = [...this._filters];
-    }
   }
 
   get filters(): Array<PoPageDynamicSearchFilters> {
@@ -320,7 +342,7 @@ export abstract class PoPageDynamicSearchBaseComponent {
     };
   }
 
-  private stringify(columns: Array<PoPageDynamicSearchFilters>) {
+  stringify(columns: Array<PoPageDynamicSearchFilters>) {
     // não faz o stringify da propriedade searchService, pois pode conter objeto complexo e disparar um erro.
     return JSON.stringify(columns, (key, value) => {
       if (key !== 'searchService') {
