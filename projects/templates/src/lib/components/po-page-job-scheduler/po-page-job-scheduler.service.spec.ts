@@ -378,6 +378,84 @@ describe('PoPageJobSchedulerService:', () => {
       expect(poPageJobSchedulerService['removeInvalidKeys']).toHaveBeenCalledWith(jobSchedulerInternal);
     });
 
+    it(`convertToJobScheduler: should ignore when 'firstExecutionHour' is set but 'firstExecution' is not set`, () => {
+      const jobSchedulerInternal = {
+        executionParameter: 'value',
+        firstExecution: undefined,
+        firstExecutionHour: '15:30',
+        processID: '1'
+      };
+
+      const jobSchedulerInternalExpected = {
+        executionParameter: 'value',
+        firstExecution: undefined,
+        processID: '1'
+      };
+
+      const result = <any>poPageJobSchedulerService['convertToJobScheduler'](jobSchedulerInternal);
+
+      expect(result).toEqual(jobSchedulerInternalExpected);
+    });
+
+    it(`convertToJobScheduler: should ignore when 'firstExecutionHour' is set but 'firstExecution' is set date invalid`, () => {
+      const jobSchedulerInternal = {
+        executionParameter: 'value',
+        firstExecution: 'XPTO',
+        firstExecutionHour: '99',
+        processID: '1'
+      };
+
+      const jobSchedulerInternalExpected = {
+        executionParameter: 'value',
+        firstExecution: 'XPTO',
+        processID: '1'
+      };
+
+      const result = <any>poPageJobSchedulerService['convertToJobScheduler'](jobSchedulerInternal);
+
+      expect(result).toEqual(jobSchedulerInternalExpected);
+    });
+
+    it(`convertToJobScheduler: should ignore when 'firstExecutionHour' is set but 'firstExecution' is set string in format yyyy-mm-dd`, () => {
+      const jobSchedulerInternal = {
+        executionParameter: 'value',
+        firstExecution: 'XPTO-XP-TO',
+        firstExecutionHour: '15:30',
+        processID: '1'
+      };
+
+      const jobSchedulerInternalExpected = {
+        executionParameter: 'value',
+        firstExecution: 'XPTO-XP-TO',
+        processID: '1'
+      };
+
+      const result = <any>poPageJobSchedulerService['convertToJobScheduler'](jobSchedulerInternal);
+
+      expect(result).toEqual(jobSchedulerInternalExpected);
+    });
+
+    it(`convertToJobScheduler: should ignore 'firstExecutionHour' when thrown error`, () => {
+      const jobSchedulerInternal = {
+        executionParameter: 'value',
+        firstExecution: '2024-12-30',
+        firstExecutionHour: '15:30',
+        processID: '1'
+      };
+
+      const jobSchedulerInternalExpected = {
+        executionParameter: 'value',
+        firstExecution: '2024-12-30',
+        processID: '1'
+      };
+
+      spyOn(utilsFunctions, 'convertDateToISOExtended').and.throwError('Convert Date');
+
+      const result = <any>poPageJobSchedulerService['convertToJobScheduler'](jobSchedulerInternal);
+
+      expect(result).toEqual(jobSchedulerInternalExpected);
+    });
+
     it(`convertToJobSchedulerInternal: should set 'jobSchedulerInternal.firstExecutionHour' with 'getHourFirstExecution'
       return if 'firstExecution' is defined`, () => {
       const jobSchedulerInternal = {
@@ -482,6 +560,7 @@ describe('PoPageJobSchedulerService:', () => {
 
       expect(result).toEqual(jobSchedulerInternalExpected);
     });
+
     it(`convertToJobSchedulerInternal: should return the merge between 'jobSchedulerInternal' and
       the return from 'convertToPeriodicityInternal'`, () => {
       const jobSchedulerInternal = {
@@ -785,6 +864,15 @@ describe('PoPageJobSchedulerService:', () => {
       expect(poPageJobSchedulerService['replaceHourFirstExecution'](initialDate, timeToReplace).substring(0, 19)).toBe(
         result
       );
+    });
+
+    it(`replaceHourFirstExecution: should replace hour add time zone`, () => {
+      const stringDate = new Date().toString();
+      const timeZone = `${stringDate.substring(28, 31)}:${stringDate.substring(31, 33)}`;
+
+      const result = `2025-12-24T23:59:00${timeZone}`;
+
+      expect(poPageJobSchedulerService['replaceHourFirstExecution']('2025-12-24', '23:59')).toBe(result);
     });
 
     it('returnValidExecutionParameter: should remove keys that have undefined value', () => {

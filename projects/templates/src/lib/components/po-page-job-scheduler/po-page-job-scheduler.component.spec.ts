@@ -784,4 +784,22 @@ describe('PoPageJobSchedulerComponent:', () => {
       expect(executionElementHiddenAttribute).toBeFalsy();
     });
   });
+
+  it(`getSteps: should use 'literals' when the parameterization step title is not defined`, () => {
+    const mock = Object.assign(new QueryList(), {
+      _results: [{}, {}],
+      length: 1
+    }) as QueryList<PoJobSchedulerParametersTemplateDirective>;
+
+    component.parametersTemplate = mock;
+    component['getSteps']();
+
+    const result = component['steps'].slice(1, -1);
+    const resultExpected = [
+      { label: `${component['literals']['parameterization']} 1` },
+      { label: `${component['literals']['parameterization']} 2` }
+    ];
+
+    expect(result).toEqual(resultExpected);
+  });
 });
