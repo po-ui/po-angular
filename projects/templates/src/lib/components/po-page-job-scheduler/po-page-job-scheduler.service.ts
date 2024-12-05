@@ -232,18 +232,35 @@ export class PoPageJobSchedulerService {
   }
 
   private replaceHourFirstExecution(date: string, time: string): string {
-    const dateSplited = date.split('-');
-    const year = parseInt(dateSplited[0]);
-    const monthIndex = parseInt(dateSplited[1]) - 1;
-    const day = parseInt(dateSplited[2]);
+    try {
+      if (!date) {
+        return date;
+      }
 
-    const timeSplited = time.split(':');
-    const hours = parseInt(timeSplited[0], 10);
-    const minutes = parseInt(timeSplited[1], 10);
+      const dateSplited = date.split('-');
+      const timeSplited = time.split(':');
 
-    const firstExecutionDate = new Date(year, monthIndex, day, hours, minutes);
+      if (dateSplited.length < 2 || timeSplited.length < 1) {
+        return date;
+      }
 
-    return convertDateToISOExtended(firstExecutionDate);
+      const year = parseInt(dateSplited[0]);
+      const monthIndex = parseInt(dateSplited[1]) - 1;
+      const day = parseInt(dateSplited[2]);
+
+      const hours = parseInt(timeSplited[0], 10);
+      const minutes = parseInt(timeSplited[1], 10);
+
+      const firstExecutionDate = new Date(year, monthIndex, day, hours, minutes);
+
+      if (!(firstExecutionDate instanceof Date && !isNaN(firstExecutionDate.getTime()))) {
+        return date;
+      }
+
+      return convertDateToISOExtended(firstExecutionDate);
+    } catch {
+      return date;
+    }
   }
 
   private returnValidExecutionParameter(parameter: object) {
