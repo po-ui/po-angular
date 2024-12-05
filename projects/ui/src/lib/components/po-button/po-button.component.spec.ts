@@ -9,6 +9,7 @@ import { PoButtonComponent } from './po-button.component';
 import { PoButtonBaseComponent } from './po-button-base.component';
 
 import { expectPropertiesValues } from '../../util-test/util-expect.spec';
+import { PoButtonType } from './po-button-type.enum';
 
 describe('PoButtonComponent: ', () => {
   let component: PoButtonComponent;
@@ -64,6 +65,25 @@ describe('PoButtonComponent: ', () => {
     component.onClick();
 
     expect(component.click.emit).toHaveBeenCalled();
+  });
+
+  it('button type should default to `button`.', () => {
+    fixture.detectChanges();
+    expect(nativeElement.querySelector('button').getAttribute('type')).toBe(PoButtonType.Button);
+  });
+
+  it('should set type to `submit`.', () => {
+    component.type = PoButtonType.Submit;
+    fixture.detectChanges();
+
+    expect(nativeElement.querySelector('button').getAttribute('type')).toBe(PoButtonType.Submit);
+  });
+
+  it('should set type to `reset`.', () => {
+    component.type = PoButtonType.Reset;
+    fixture.detectChanges();
+
+    expect(nativeElement.querySelector('button').getAttribute('type')).toBe(PoButtonType.Reset);
   });
 
   describe('Properties: ', () => {
