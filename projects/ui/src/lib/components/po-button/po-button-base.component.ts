@@ -4,6 +4,7 @@ import { convertToBoolean } from '../../utils/util';
 
 import { PoButtonKind } from './po-button-kind.enum';
 import { PoButtonSize } from './po-button-size.enum';
+import { PoButtonType } from './po-button-type.enum';
 /**
  * @description
  *
@@ -105,6 +106,16 @@ export class PoButtonBaseComponent {
    * > Para o ícone enquadrar corretamente, deve-se utilizar `font-size: inherit` caso o ícone utilizado não aplique-o.
    */
   @Input('p-icon') icon?: string | TemplateRef<void>;
+
+  /**
+   * @optional
+   *
+   * @description
+   * Define o tipo do botão.
+   *
+   * @default `PoButtonType.Button`
+   */
+  @Input('p-type') type?: PoButtonType = PoButtonType.Button;
 
   /** Ação que será executada quando o usuário clicar sobre o `po-button`. */
   @Output('p-click') click = new EventEmitter<null>();

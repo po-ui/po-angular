@@ -1,6 +1,6 @@
 import { Component, OnInit } from '@angular/core';
 
-import { PoCheckboxGroupOption, PoRadioGroupOption, PoDialogService } from '@po-ui/ng-components';
+import { PoCheckboxGroupOption, PoRadioGroupOption, PoDialogService, PoButtonType } from '@po-ui/ng-components';
 
 @Component({
   selector: 'sample-po-button-labs',
@@ -12,6 +12,7 @@ export class SamplePoButtonLabsComponent implements OnInit {
   icon: string;
   size: string;
   properties: Array<string>;
+  type: string;
 
   propertiesOptions: Array<PoCheckboxGroupOption> = [
     { value: 'disabled', label: 'Disabled' },
@@ -35,6 +36,12 @@ export class SamplePoButtonLabsComponent implements OnInit {
   sizesOptions: Array<PoRadioGroupOption> = [
     { label: 'medium', value: 'medium' },
     { label: 'large', value: 'large' }
+  ];
+
+  typeOptions: Array<PoRadioGroupOption> = [
+    { label: 'button', value: PoButtonType.Button },
+    { label: 'submit', value: PoButtonType.Submit },
+    { label: 'reset', value: PoButtonType.Reset }
   ];
 
   constructor(private poDialog: PoDialogService) {}
@@ -78,6 +85,7 @@ export class SamplePoButtonLabsComponent implements OnInit {
     this.kind = 'secondary';
     this.size = 'medium';
     this.icon = undefined;
+    this.type = PoButtonType.Button;
     this.properties = [];
     this.kindsOptions[2] = { ...this.kindsOptions[2], disabled: false };
     this.sizesOptions[0] = { ...this.sizesOptions[0], disabled: false };
