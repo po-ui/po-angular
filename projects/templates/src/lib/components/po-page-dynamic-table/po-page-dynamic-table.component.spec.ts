@@ -182,6 +182,18 @@ describe('PoPageDynamicTableComponent:', () => {
       component.virtualScroll = true;
       expect(component.virtualScroll).toBe(true);
     });
+
+    it('visibleFilterDisclaimers: should update property `p-visible-filter-disclaimers` to `false` when valid boolean value is given', () => {
+      component.visibleFilterDisclaimers = false;
+
+      expect(component.visibleFilterDisclaimers).toBe(false);
+    });
+
+    it('visibleFilterDisclaimers: should update property `p-visible-filter-disclaimers` to `true` when valid boolean value is given', () => {
+      component.visibleFilterDisclaimers = true;
+
+      expect(component.visibleFilterDisclaimers).toBe(true);
+    });
   });
 
   describe('Methods:', () => {

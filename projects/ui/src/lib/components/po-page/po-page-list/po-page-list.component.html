@@ -95,7 +95,7 @@
 
       <!-- DISCLAIMER -->
       <po-disclaimer-group
-        *ngIf="!!disclaimerGroup"
+        *ngIf="!!disclaimerGroup && visibleFilterDisclaimers"
         [class.po-page-list-disclaimer-group]="!!disclaimerGroup?.disclaimers?.length"
         [p-disclaimers]="disclaimerGroup?.disclaimers"
         [p-hide-remove-all]="disclaimerGroup?.hideRemoveAll"

@@ -182,6 +182,26 @@ export abstract class PoPageListBaseComponent {
    */
   @Input('p-subtitle') subtitle: string;
 
+  /**
+   * @optional
+   *
+   * @description
+   *
+   * Controla a visibilidade dos disclaimers de filtro na página.
+   *
+   * - Quando `true` (defualt), os disclaimers de filtro são exibidos, permitindo que o usuário visualize e remova individualmente os filtros aplicados.
+   * - Quando `false`, os disclaimers de filtro são ocultados, desativando a opção de visualização e remoção de filtros diretamente na interface.
+   *
+   * Esta propriedade é útil para ajustar a experiência do usuário em relação aos filtros aplicados, especialmente em casos onde não se deseja exibir os disclaimers de filtro na interface.
+   *
+   * **Exemplo de uso:**
+   * ```html
+   * <!-- Para ocultar os disclaimers de filtro -->
+   * <po-page-list [p-visible-filter-disclaimers]="false"></po-page-list>
+   * ```
+   */
+  @Input('p-visible-filter-disclaimers') visibleFilterDisclaimers: boolean = true;
+
   constructor(languageService: PoLanguageService) {
     this.language = languageService.getShortLanguage();
   }
