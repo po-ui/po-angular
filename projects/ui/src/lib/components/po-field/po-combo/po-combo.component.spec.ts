@@ -171,6 +171,23 @@ describe('PoComboComponent:', () => {
     expect(fakeThis.applyFilter).toHaveBeenCalled();
   });
 
+  it('should reset filter when isFirstFilter is true and removeInitialFilter is true', () => {
+    const fakeThis = {
+      isFirstFilter: true,
+      removeInitialFilter: true,
+      selectedValue: true,
+      applyFilter: component.applyFilter,
+      setScrollingControl: component['setScrollingControl']
+    };
+
+    spyOn(fakeThis, 'applyFilter');
+    spyOn(fakeThis, 'setScrollingControl');
+    component.applyFilterInFirstClick.call(fakeThis);
+
+    expect(component.options).toEqual([]);
+    expect(fakeThis.applyFilter).toHaveBeenCalled();
+  });
+
   it('shouldn`t call applyFilter', () => {
     const fakeThis = {
       isFirstFilter: true,
