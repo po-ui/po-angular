@@ -14,7 +14,8 @@ import { convertToBoolean } from '../../utils/util';
 
 @Component({
   selector: 'mock-component',
-  template: ''
+  template: '',
+  standalone: false
 })
 class MockComponent extends PoPageDynamicSearchBaseComponent {
   onChangeFilters(filters: Array<PoPageDynamicSearchFilters>) {}

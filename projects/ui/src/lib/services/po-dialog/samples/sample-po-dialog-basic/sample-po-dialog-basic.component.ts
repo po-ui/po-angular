@@ -4,7 +4,8 @@ import { PoDialogService } from '@po-ui/ng-components';
 
 @Component({
   selector: 'sample-po-dialog-basic',
-  templateUrl: './sample-po-dialog-basic.component.html'
+  templateUrl: './sample-po-dialog-basic.component.html',
+  standalone: false
 })
 export class SamplePoDialogBasicComponent {
   constructor(public poDialog: PoDialogService) {}

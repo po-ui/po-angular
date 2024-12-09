@@ -4,7 +4,8 @@ import { PoDatepickerComponent, PoNotificationService, PoSelectOption } from '@p
 
 @Component({
   selector: 'sample-po-image-travel',
-  templateUrl: './sample-po-image-travel.component.html'
+  templateUrl: './sample-po-image-travel.component.html',
+  standalone: false
 })
 export class SamplePoImageTravelComponent {
   @ViewChild('bookingForm', { static: true }) form: NgForm;

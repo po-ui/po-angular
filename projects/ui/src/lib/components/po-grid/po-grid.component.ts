@@ -33,7 +33,8 @@ import { PoGridRowActions } from './po-grid-row-actions.interface';
  */
 @Component({
   selector: 'po-grid',
-  templateUrl: './po-grid.component.html'
+  templateUrl: './po-grid.component.html',
+  standalone: false
 })
 export class PoGridComponent implements OnDestroy {
   @ViewChild('table', { static: true }) tableElement: ElementRef;

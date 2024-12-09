@@ -6,7 +6,8 @@ import { PoPageAction } from '@po-ui/ng-components';
 
 @Component({
   selector: 'sample-po-textarea-email',
-  templateUrl: './sample-po-textarea-email.component.html'
+  templateUrl: './sample-po-textarea-email.component.html',
+  standalone: false
 })
 export class SamplePoTextareaEmailComponent {
   @ViewChild('formEmail', { static: true }) formEmail: UntypedFormControl;

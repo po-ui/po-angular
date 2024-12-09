@@ -4,7 +4,8 @@ import { PoChartPathCoordinates } from '../../../interfaces/po-chart-path-coordi
 
 @Component({
   selector: '[po-chart-circular-path]',
-  templateUrl: './po-chart-circular-path.component.svg'
+  templateUrl: './po-chart-circular-path.component.svg',
+  standalone: false
 })
 export class PoChartCircularPathComponent {
   @Input('p-serie') serie: PoChartPathCoordinates;

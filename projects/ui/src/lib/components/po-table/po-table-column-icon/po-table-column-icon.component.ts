@@ -13,7 +13,8 @@ import { PoTableColumnIcon } from './po-table-column-icon.interface';
 @Component({
   selector: 'po-table-column-icon',
   templateUrl: './po-table-column-icon.component.html',
-  changeDetection: ChangeDetectionStrategy.OnPush
+  changeDetection: ChangeDetectionStrategy.OnPush,
+  standalone: false
 })
 export class PoTableColumnIconComponent {
   /** Definição da coluna que utiliza os icones. */

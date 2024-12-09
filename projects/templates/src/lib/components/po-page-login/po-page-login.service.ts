@@ -10,7 +10,7 @@ import { PoPageLoginAuthenticationType } from './enums/po-page-login-authenticat
 export class PoPageLoginService {
   constructor(private http: HttpClient) {}
 
-  onLogin(url: string, type: PoPageLoginAuthenticationType, loginForm: PoPageLogin): Observable<Object> {
+  onLogin(url: string, type: PoPageLoginAuthenticationType, loginForm: PoPageLogin): Observable<object> {
     if (type === PoPageLoginAuthenticationType.Bearer) {
       loginForm.password = btoa(loginForm.password);
       return this.http.post(url, loginForm);

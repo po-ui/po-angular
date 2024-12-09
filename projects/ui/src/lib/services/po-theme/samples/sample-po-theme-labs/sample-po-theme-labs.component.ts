@@ -21,7 +21,8 @@ import { PoPageAction } from '@po-ui/ng-components';
 @Component({
   selector: 'sample-po-theme-labs',
   templateUrl: './sample-po-theme-labs.component.html',
-  providers: [PoThemeService]
+  providers: [PoThemeService],
+  standalone: false
 })
 export class SamplePoThemeLabsComponent implements OnInit, OnDestroy {
   @ViewChild('formShare', { static: true })

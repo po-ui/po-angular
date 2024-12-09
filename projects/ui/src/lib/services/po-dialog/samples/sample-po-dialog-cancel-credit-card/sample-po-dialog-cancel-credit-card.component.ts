@@ -7,7 +7,8 @@ import { PoDialogService, PoNotificationService, PoPageAction, PoRadioGroupOptio
 
 @Component({
   selector: 'sample-po-dialog-cancel-credit-card',
-  templateUrl: './sample-po-dialog-cancel-credit-card.component.html'
+  templateUrl: './sample-po-dialog-cancel-credit-card.component.html',
+  standalone: false
 })
 export class SamplePoDialogCancelCreditCardComponent implements OnDestroy, OnInit {
   @ViewChild('form', { static: true }) form: UntypedFormControl;

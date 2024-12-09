@@ -76,8 +76,8 @@ const providers = [
 @Component({
   selector: 'po-datepicker-range',
   templateUrl: './po-datepicker-range.component.html',
-  providers,
-  changeDetection: ChangeDetectionStrategy.OnPush
+  changeDetection: ChangeDetectionStrategy.OnPush,
+  standalone: false
 })
 export class PoDatepickerRangeComponent
   extends PoDatepickerRangeBaseComponent

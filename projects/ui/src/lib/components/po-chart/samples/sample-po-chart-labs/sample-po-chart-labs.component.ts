@@ -11,7 +11,8 @@ import {
 
 @Component({
   selector: 'sample-po-chart-labs',
-  templateUrl: './sample-po-chart-labs.component.html'
+  templateUrl: './sample-po-chart-labs.component.html',
+  standalone: false
 })
 export class SamplePoChartLabsComponent implements OnInit {
   allCategories: Array<string> = [];

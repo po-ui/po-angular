@@ -31,7 +31,8 @@ import { SamplePoSelectCustomerRegistrationService } from './sample-po-select-cu
         text-transform: uppercase;
       }
     `
-  ]
+  ],
+  standalone: false
 })
 export class SamplePoSelectCustomerRegistrationComponent implements OnDestroy, OnInit {
   address: string;

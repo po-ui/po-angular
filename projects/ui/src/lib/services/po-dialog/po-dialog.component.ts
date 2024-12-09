@@ -36,7 +36,8 @@ export const poDialogConfirmLiteralsDefault = {
  */
 
 @Component({
-  templateUrl: './po-dialog.component.html'
+  templateUrl: './po-dialog.component.html',
+  standalone: false
 })
 export class PoDialogComponent implements OnDestroy, OnInit {
   // ViewChild para o uso do po-modal.component

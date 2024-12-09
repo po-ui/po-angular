@@ -5,7 +5,8 @@ import { MenuGuidesService } from './menu-guides.service';
 
 @Component({
   templateUrl: './guides.component.html',
-  providers: [MenuGuidesService]
+  providers: [MenuGuidesService],
+  standalone: false
 })
 export class GuidesComponent implements OnInit {
   menus = [];

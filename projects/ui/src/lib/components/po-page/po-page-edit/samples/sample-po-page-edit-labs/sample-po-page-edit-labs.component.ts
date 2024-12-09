@@ -7,7 +7,8 @@ import { PoPageEditLiterals } from '@po-ui/ng-components';
 
 @Component({
   selector: 'sample-po-page-edit-labs',
-  templateUrl: './sample-po-page-edit-labs.component.html'
+  templateUrl: './sample-po-page-edit-labs.component.html',
+  standalone: false
 })
 export class SamplePoPageEditLabsComponent implements OnInit {
   action: string;

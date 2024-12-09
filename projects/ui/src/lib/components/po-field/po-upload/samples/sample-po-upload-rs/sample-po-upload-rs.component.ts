@@ -5,7 +5,8 @@ import { PoModalAction, PoModalComponent, PoStepperComponent, PoUploadComponent 
 
 @Component({
   selector: 'sample-po-upload-rs',
-  templateUrl: 'sample-po-upload-rs.component.html'
+  templateUrl: 'sample-po-upload-rs.component.html',
+  standalone: false
 })
 export class SamplePoUploadRsComponent implements OnInit {
   @ViewChild('upload', { static: true }) upload: PoUploadComponent;

@@ -18,7 +18,8 @@ import { PoDynamicFormFieldsBaseComponent } from './po-dynamic-form-fields-base.
   selector: 'po-dynamic-form-fields',
   templateUrl: 'po-dynamic-form-fields.component.html',
   viewProviders: [{ provide: ControlContainer, useExisting: NgForm }],
-  providers: [PoDynamicFormValidationService]
+  providers: [PoDynamicFormValidationService],
+  standalone: false
 })
 export class PoDynamicFormFieldsComponent extends PoDynamicFormFieldsBaseComponent implements OnChanges {
   @ViewChildren('component') components: QueryList<{ name: string; focus: () => void }>;

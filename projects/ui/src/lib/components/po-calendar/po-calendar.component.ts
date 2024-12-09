@@ -56,7 +56,7 @@ const poCalendarRangeWidth = 600;
   selector: 'po-calendar',
   templateUrl: './po-calendar.component.html',
   changeDetection: ChangeDetectionStrategy.OnPush,
-  providers
+  standalone: false
 })
 export class PoCalendarComponent extends PoCalendarBaseComponent implements OnInit, OnChanges {
   hoverValue: Date;

@@ -12,7 +12,8 @@ import { poFieldContainerLiterals } from './po-field-container-literals';
 @Component({
   selector: 'po-field-container',
   templateUrl: './po-field-container.component.html',
-  changeDetection: ChangeDetectionStrategy.OnPush
+  changeDetection: ChangeDetectionStrategy.OnPush,
+  standalone: false
 })
 export class PoFieldContainerComponent implements OnInit, OnChanges {
   /** Indica se o campo será desabilitado. */

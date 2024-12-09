@@ -74,7 +74,7 @@ export default function (options: any): Rule {
   return (_tree: Tree, _context: SchematicContext) => main(options);
 }
 
-export function addImportOnly(_: any, moduleNames: string | Array<String>, importPath: string) {
+export function addImportOnly(_: any, moduleNames: string | Array<string>, importPath: string) {
   return (host: Tree) => {
     const workspace = getWorkspaceConfigGracefully(host) ?? ({} as WorkspaceSchema);
 

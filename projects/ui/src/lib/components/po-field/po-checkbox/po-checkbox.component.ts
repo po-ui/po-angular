@@ -46,7 +46,8 @@ import { PoCheckboxBaseComponent } from './po-checkbox-base.component';
       useExisting: forwardRef(() => PoCheckboxComponent),
       multi: true
     }
-  ]
+  ],
+  standalone: false
 })
 export class PoCheckboxComponent extends PoCheckboxBaseComponent implements AfterViewInit {
   private _iconToken: { [key: string]: string };

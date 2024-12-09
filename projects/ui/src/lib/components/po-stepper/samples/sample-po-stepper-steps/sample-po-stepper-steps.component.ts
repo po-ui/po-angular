@@ -3,7 +3,8 @@ import { PoStepperItem, PoStepperStatus } from '@po-ui/ng-components';
 
 @Component({
   selector: 'sample-po-stepper-steps',
-  templateUrl: './sample-po-stepper-steps.component.html'
+  templateUrl: './sample-po-stepper-steps.component.html',
+  standalone: false
 })
 export class SamplePoStepperStepsComponent implements AfterViewInit {
   currentStep: number;

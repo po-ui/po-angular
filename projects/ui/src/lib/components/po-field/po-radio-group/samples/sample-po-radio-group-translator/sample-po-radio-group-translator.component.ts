@@ -4,7 +4,8 @@ import { PoRadioGroupOption, PoSelectOption } from '@po-ui/ng-components';
 
 @Component({
   selector: 'sample-po-radio-group-translator',
-  templateUrl: './sample-po-radio-group-translator.component.html'
+  templateUrl: './sample-po-radio-group-translator.component.html',
+  standalone: false
 })
 export class SamplePoRadioGroupTranslatorComponent {
   language: string = 'es';

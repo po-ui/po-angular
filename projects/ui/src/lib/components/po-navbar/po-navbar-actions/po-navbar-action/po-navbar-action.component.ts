@@ -5,7 +5,8 @@ import { callFunction, isExternalLink, openExternalLink } from '../../../../util
 
 @Component({
   selector: 'po-navbar-action',
-  templateUrl: './po-navbar-action.component.html'
+  templateUrl: './po-navbar-action.component.html',
+  standalone: false
 })
 export class PoNavbarActionComponent {
   @Input('p-action') action?: Function;

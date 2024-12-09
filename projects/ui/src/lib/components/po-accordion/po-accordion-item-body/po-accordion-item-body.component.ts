@@ -9,7 +9,8 @@ import { animate, style, transition, trigger } from '@angular/animations';
       transition('* => void', [style({ height: '*' }), animate(200, style({ height: 0 }))]),
       transition('void => *', [style({ height: '0' }), animate(200, style({ height: '*' }))])
     ])
-  ]
+  ],
+  standalone: false
 })
 export class PoAccordionItemBodyComponent {
   @Input('p-expanded') expanded: boolean = false;

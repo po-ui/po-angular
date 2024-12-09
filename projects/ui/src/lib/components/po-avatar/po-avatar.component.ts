@@ -27,7 +27,8 @@ import { PoAvatarBaseComponent } from './po-avatar-base.component';
 @Component({
   selector: 'po-avatar',
   templateUrl: './po-avatar.component.html',
-  changeDetection: ChangeDetectionStrategy.OnPush
+  changeDetection: ChangeDetectionStrategy.OnPush,
+  standalone: false
 })
 export class PoAvatarComponent extends PoAvatarBaseComponent implements OnInit {
   ngOnInit(): void {

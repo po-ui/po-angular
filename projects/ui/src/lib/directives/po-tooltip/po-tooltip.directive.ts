@@ -28,7 +28,8 @@ const nativeElements = ['input', 'button'];
  */
 @Directive({
   selector: '[p-tooltip]',
-  providers: [PoTooltipControlPositionService]
+  providers: [PoTooltipControlPositionService],
+  standalone: false
 })
 export class PoTooltipDirective extends PoTooltipBaseDirective implements OnInit, OnDestroy {
   private arrowDirection: string;

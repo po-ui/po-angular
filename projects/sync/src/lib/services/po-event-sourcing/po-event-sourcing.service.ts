@@ -283,7 +283,7 @@ export class PoEventSourcingService {
     }
   }
 
-  private diffServerItems(currentUrlDiff): Observable<HttpResponse<Object>> {
+  private diffServerItems(currentUrlDiff): Observable<HttpResponse<object>> {
     return this.poHttpClient.get(currentUrlDiff);
   }
 
@@ -433,7 +433,7 @@ export class PoEventSourcingService {
 
   private sendResponseSubject(
     eventSourcingItem: PoEventSourcingItem,
-    response: HttpResponse<Object> | HttpErrorResponse | PoEventSourcingErrorResponse,
+    response: HttpResponse<object> | HttpErrorResponse | PoEventSourcingErrorResponse,
     isSubjectError: boolean = false
   ): Promise<any> {
     const poSyncResponse: PoSyncResponse = {

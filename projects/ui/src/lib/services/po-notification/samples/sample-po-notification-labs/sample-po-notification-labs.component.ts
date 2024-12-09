@@ -12,7 +12,8 @@ import {
 @Component({
   selector: 'sample-po-notification-labs',
   templateUrl: './sample-po-notification-labs.component.html',
-  providers: [PoNotificationService]
+  providers: [PoNotificationService],
+  standalone: false
 })
 export class SamplePoNotificationLabsComponent implements OnInit {
   @ViewChild(PoModalComponent, { static: true }) poModal: PoModalComponent;

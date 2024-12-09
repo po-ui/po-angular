@@ -12,7 +12,8 @@ import { of } from 'rxjs';
   template: `
     <input type="number" #inp />
     <span #clean></span>
-  `
+  `,
+  standalone: false
 })
 class ContentProjectionComponent extends PoNumberBaseComponent {
   constructor(el: ElementRef, cd: ChangeDetectorRef) {

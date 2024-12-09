@@ -4,7 +4,8 @@ import { PoNotificationService, PoTabsComponent } from '@po-ui/ng-components';
 
 @Component({
   selector: 'sample-po-tabs-business-conf',
-  templateUrl: './sample-po-tabs-business-conf.component.html'
+  templateUrl: './sample-po-tabs-business-conf.component.html',
+  standalone: false
 })
 export class SamplePoTabsBusinessConfComponent implements OnInit {
   @ViewChild('poTab', { static: true }) poTab: PoTabsComponent;

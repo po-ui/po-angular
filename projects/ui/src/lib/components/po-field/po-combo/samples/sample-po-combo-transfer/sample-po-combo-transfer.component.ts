@@ -5,7 +5,8 @@ import { PoModalAction, PoModalComponent, PoNotificationService, PoSelectOption 
 
 @Component({
   selector: 'sample-po-combo-transfer',
-  templateUrl: './sample-po-combo-transfer.component.html'
+  templateUrl: './sample-po-combo-transfer.component.html',
+  standalone: false
 })
 export class SamplePoComboTransferComponent {
   @ViewChild('transferForm', { static: true }) form: NgForm;

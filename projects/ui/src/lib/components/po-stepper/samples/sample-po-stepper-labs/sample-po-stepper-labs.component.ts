@@ -4,7 +4,8 @@ import { PoDynamicFormField, PoStepperItem } from '@po-ui/ng-components';
 
 @Component({
   selector: 'sample-po-stepper-labs',
-  templateUrl: './sample-po-stepper-labs.component.html'
+  templateUrl: './sample-po-stepper-labs.component.html',
+  standalone: false
 })
 export class SamplePoStepperLabsComponent implements OnInit {
   event: any;

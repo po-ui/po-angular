@@ -6,7 +6,8 @@ import { SamplePoMultiselectHeroesService } from './sample-po-multiselect-heroes
 @Component({
   selector: 'sample-po-multiselect-heroes',
   templateUrl: './sample-po-multiselect-heroes.component.html',
-  providers: [SamplePoMultiselectHeroesService]
+  providers: [SamplePoMultiselectHeroesService],
+  standalone: false
 })
 export class SamplePoMultiselectHeroesComponent {
   debounce = 500;

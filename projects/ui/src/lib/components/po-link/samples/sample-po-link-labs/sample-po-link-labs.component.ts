@@ -2,7 +2,8 @@ import { Component, OnInit } from '@angular/core';
 
 @Component({
   selector: 'sample-po-link-labs',
-  templateUrl: './sample-po-link-labs.component.html'
+  templateUrl: './sample-po-link-labs.component.html',
+  standalone: false
 })
 export class SamplePoLinkLabsComponent implements OnInit {
   url: string;

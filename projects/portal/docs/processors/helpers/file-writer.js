@@ -83,7 +83,8 @@ import { Component } from '@angular/core';
 
 @Component({
   selector: 'sample-{{docName}}-doc',
-  templateUrl: './sample-{{docName}}-doc.component.html'
+  templateUrl: './sample-{{docName}}-doc.component.html',
+  standalone: false
 })
 export class Sample{{component}}DocComponent { }
 `;
@@ -112,7 +113,8 @@ import { Component } from '@angular/core';
 
 @Component({
   selector: 'sample-{{name}}-view',
-  templateUrl: './sample-{{name}}-view.component.html'
+  templateUrl: './sample-{{name}}-view.component.html',
+  standalone: false
 })
 export class Sample{{component}}ViewComponent {
   hideSampleCodeTabs = true;
@@ -192,7 +194,8 @@ import { ActivatedRoute, Router } from '@angular/router';
 import { Component, OnInit, OnDestroy } from '@angular/core';
 
 @Component({
-  templateUrl: './doc-{{docName}}.component.html'
+  templateUrl: './doc-{{docName}}.component.html',
+  standalone: false
 })
 export class Doc{{component}}Component implements OnInit, OnDestroy {
   sub: any;

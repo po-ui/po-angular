@@ -2,7 +2,8 @@ import { Component } from '@angular/core';
 
 @Component({
   selector: 'sample-po-code-editor-diff',
-  templateUrl: './sample-po-code-editor-diff.component.html'
+  templateUrl: './sample-po-code-editor-diff.component.html',
+  standalone: false
 })
 export class SamplePoCodeEditorDiffComponent {
   code = [

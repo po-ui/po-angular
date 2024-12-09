@@ -12,7 +12,7 @@ export class PoModalPasswordRecoveryService {
     urlRecovery: string,
     item: PoModalPasswordRecovery,
     params?: HttpParams | { [param: string]: string | Array<string> }
-  ): Observable<HttpResponse<Object>> {
+  ): Observable<HttpResponse<object>> {
     return this.http.post<any>(urlRecovery, item, { observe: 'response', params: params });
   }
 }

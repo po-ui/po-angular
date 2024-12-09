@@ -7,7 +7,8 @@ import { SamplePoDisclaimerGroupSwPlanetsService } from './sample-po-disclaimer-
 @Component({
   selector: 'sample-po-disclaimer-group-sw-planets',
   templateUrl: './sample-po-disclaimer-group-sw-planets.component.html',
-  providers: [SamplePoDisclaimerGroupSwPlanetsService]
+  providers: [SamplePoDisclaimerGroupSwPlanetsService],
+  standalone: false
 })
 export class SamplePoDisclaimerGroupSwPlanetsComponent implements OnInit {
   climate: string;

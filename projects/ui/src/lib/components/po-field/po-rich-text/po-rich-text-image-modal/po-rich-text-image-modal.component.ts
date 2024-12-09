@@ -13,7 +13,8 @@ const uploadRestrictions = ['.apng', '.bmp', '.gif', '.ico', '.jpeg', '.jpg', '.
 
 @Component({
   selector: 'po-rich-text-image-modal',
-  templateUrl: './po-rich-text-image-modal.component.html'
+  templateUrl: './po-rich-text-image-modal.component.html',
+  standalone: false
 })
 export class PoRichTextImageModalComponent {
   @ViewChild('modal', { static: true }) modal: PoModalComponent;
