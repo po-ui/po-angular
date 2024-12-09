@@ -6,7 +6,8 @@ import { PoChartPathCoordinates } from '../../interfaces/po-chart-path-coordinat
 
 @Component({
   selector: '[po-chart-line]',
-  templateUrl: './po-chart-line.component.svg'
+  templateUrl: './po-chart-line.component.svg',
+  standalone: false
 })
 export class PoChartLineComponent extends PoChartLineBaseComponent implements OnChanges {
   selectedPath: PoChartPathCoordinates;

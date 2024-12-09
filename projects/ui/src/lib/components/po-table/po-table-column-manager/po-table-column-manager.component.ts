@@ -45,7 +45,8 @@ type Direction = 'up' | 'down';
 
 @Component({
   selector: 'po-table-column-manager',
-  templateUrl: './po-table-column-manager.component.html'
+  templateUrl: './po-table-column-manager.component.html',
+  standalone: false
 })
 export class PoTableColumnManagerComponent implements OnChanges, OnDestroy {
   @ViewChild(PoPopoverComponent) popover: PoPopoverComponent;
@@ -65,7 +66,7 @@ export class PoTableColumnManagerComponent implements OnChanges, OnDestroy {
   // O po-table envia como parâmetro um array de string com as colunas visíveis atualizadas. Por exemplo: ["idCard", "name", "hireStatus", "age"].
   @Output('p-change-visible-columns') changeVisibleColumns = new EventEmitter<Array<string>>();
 
-  @Output('p-initial-columns') initialColumns = new EventEmitter<Array<String>>();
+  @Output('p-initial-columns') initialColumns = new EventEmitter<Array<string>>();
 
   @Input({ alias: 'p-hide-action-fixed-columns', transform: convertToBoolean }) hideActionFixedColumns: boolean = false;
 

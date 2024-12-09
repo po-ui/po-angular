@@ -23,7 +23,8 @@ const eventResize = document.createEvent('Event');
 eventResize.initEvent('resize', false, true);
 
 @Component({
-  template: ` <po-page-default p-title="Unit Test" [p-actions]="actions"> </po-page-default> `
+  template: ` <po-page-default p-title="Unit Test" [p-actions]="actions"> </po-page-default> `,
+  standalone: false
 })
 class MobileComponent {
   public actions: Array<{}> = [
@@ -134,7 +135,8 @@ describe('PoPageDefaultComponent mobile', () => {
 });
 
 @Component({
-  template: ` <po-page-default p-title="Unit Test" [p-actions]="actions"> </po-page-default> `
+  template: ` <po-page-default p-title="Unit Test" [p-actions]="actions"> </po-page-default> `,
+  standalone: false
 })
 class DesktopComponent {
   public actions: Array<{}> = [

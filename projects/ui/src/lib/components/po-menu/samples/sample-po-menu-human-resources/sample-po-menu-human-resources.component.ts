@@ -14,7 +14,8 @@ import { SamplePoMenuHumanResourcesService } from './sample-po-menu-human-resour
         color: #9da7a9;
       }
     `
-  ]
+  ],
+  standalone: false
 })
 export class SamplePoMenuHumanResourcesComponent {
   menuItemSelected: string;

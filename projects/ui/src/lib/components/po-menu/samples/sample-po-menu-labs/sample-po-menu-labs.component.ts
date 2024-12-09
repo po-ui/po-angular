@@ -18,7 +18,8 @@ import { PoButtonGroupItem, PoMenuComponent, PoMenuItem, PoSelectOption } from '
         vertical-align: middle;
       }
     `
-  ]
+  ],
+  standalone: false
 })
 export class SamplePoMenuLabsComponent implements OnInit {
   @ViewChild(PoMenuComponent, { static: true }) menu: PoMenuComponent;

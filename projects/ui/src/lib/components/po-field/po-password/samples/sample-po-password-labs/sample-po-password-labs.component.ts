@@ -4,7 +4,8 @@ import { PoCheckboxGroupOption } from '@po-ui/ng-components';
 
 @Component({
   selector: 'sample-po-password-labs',
-  templateUrl: './sample-po-password-labs.component.html'
+  templateUrl: './sample-po-password-labs.component.html',
+  standalone: false
 })
 export class SamplePoPasswordLabsComponent implements OnInit {
   errorPattern: string;

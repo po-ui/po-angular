@@ -9,7 +9,8 @@ import {
 
 @Component({
   selector: 'sample-po-datepicker-range-labs',
-  templateUrl: './sample-po-datepicker-range-labs.component.html'
+  templateUrl: './sample-po-datepicker-range-labs.component.html',
+  standalone: false
 })
 export class SamplePoDatepickerRangeLabsComponent implements OnInit {
   clean: boolean;

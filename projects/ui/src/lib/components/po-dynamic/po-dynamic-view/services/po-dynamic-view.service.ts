@@ -11,7 +11,9 @@ import { PoDynamicViewField } from '../po-dynamic-view-field.interface';
  *
  * Serviço padrão utilizado para filtrar os dados dos campos que utilizam a propriedade `searchService`.
  */
-@Injectable()
+@Injectable({
+  providedIn: 'root'
+})
 export class PoDynamicViewService {
   readonly headers: HttpHeaders = new HttpHeaders({
     'X-PO-No-Message': 'true'

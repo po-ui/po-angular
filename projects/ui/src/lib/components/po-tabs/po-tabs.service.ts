@@ -2,7 +2,9 @@ import { Injectable } from '@angular/core';
 import { Subject } from 'rxjs';
 import { PoTabComponent } from './po-tab/po-tab.component';
 
-@Injectable()
+@Injectable({
+  providedIn: 'root'
+})
 export class PoTabsService {
   private onChangesTriggeredSource = new Subject<void>();
   private onChangesTriggeredActiveSource = new Subject<any>();

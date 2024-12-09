@@ -22,7 +22,8 @@ import { SamplePoSearchFindPeopleService } from './sample-po-search-find-people.
       }
     `
   ],
-  providers: [SamplePoSearchFindPeopleService]
+  providers: [SamplePoSearchFindPeopleService],
+  standalone: false
 })
 export class SamplePoSearchFindPeopleComponent implements OnInit {
   items: any;

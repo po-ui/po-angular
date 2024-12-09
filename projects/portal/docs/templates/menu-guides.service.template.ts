@@ -2,7 +2,9 @@ import { Injectable } from '@angular/core';
 
 import { PoMenuItem } from '@po-ui/ng-components';
 
-@Injectable()
+@Injectable({
+  providedIn: 'root'
+})
 export class MenuGuidesService {
   constructor() {}
 

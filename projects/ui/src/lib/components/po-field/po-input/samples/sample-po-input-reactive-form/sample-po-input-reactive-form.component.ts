@@ -5,7 +5,8 @@ import { PoModalAction, PoModalComponent } from '@po-ui/ng-components';
 
 @Component({
   selector: 'sample-po-input-reactive-form',
-  templateUrl: './sample-po-input-reactive-form.component.html'
+  templateUrl: './sample-po-input-reactive-form.component.html',
+  standalone: false
 })
 export class SamplePoInputReactiveFormComponent {
   @ViewChild('reactiveFormData', { static: true }) reactiveFormModal: PoModalComponent;

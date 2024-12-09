@@ -11,7 +11,8 @@ import { PoChartDataLabel } from '../interfaces/po-chart-serie-data-label.interf
 
 @Component({
   selector: 'po-chart-container',
-  templateUrl: './po-chart-container.component.html'
+  templateUrl: './po-chart-container.component.html',
+  standalone: false
 })
 export class PoChartContainerComponent implements OnChanges {
   @Input('p-categories') categories: Array<string>;

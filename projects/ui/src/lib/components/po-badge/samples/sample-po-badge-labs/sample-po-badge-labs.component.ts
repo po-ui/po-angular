@@ -3,7 +3,8 @@ import { PoCheckboxGroupOption, PoRadioGroupOption } from '@po-ui/ng-components'
 
 @Component({
   selector: 'sample-po-badge-labs',
-  templateUrl: './sample-po-badge-labs.component.html'
+  templateUrl: './sample-po-badge-labs.component.html',
+  standalone: false
 })
 export class SamplePoBadgeLabsComponent implements OnInit {
   value: number;

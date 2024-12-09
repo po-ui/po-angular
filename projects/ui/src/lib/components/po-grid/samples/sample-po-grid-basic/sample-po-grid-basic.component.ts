@@ -2,7 +2,8 @@ import { Component } from '@angular/core';
 
 @Component({
   selector: 'sample-po-grid-basic',
-  templateUrl: './sample-po-grid-basic.component.html'
+  templateUrl: './sample-po-grid-basic.component.html',
+  standalone: false
 })
 export class SamplePoGridBasicComponent {
   rowActions = {

@@ -5,7 +5,8 @@ import { PoChartType, PoChartOptions, PoChartSerie, PoDialogService } from '@po-
 @Component({
   selector: 'sample-po-chart-coffee-ranking',
   templateUrl: './sample-po-chart-coffee-ranking.component.html',
-  providers: [PoDialogService]
+  providers: [PoDialogService],
+  standalone: false
 })
 export class SamplePoChartCoffeeRankingComponent {
   participationByCountryInWorldExportsType: PoChartType = PoChartType.Line;

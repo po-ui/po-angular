@@ -90,7 +90,8 @@ import { PoTableRowTemplateArrowDirection } from '../enums/po-table-row-template
  * não correspondam à *delivered*.
  */
 @Directive({
-  selector: '[p-table-row-template]'
+  selector: '[p-table-row-template]',
+  standalone: false
 })
 export class PoTableRowTemplateDirective {
   /**

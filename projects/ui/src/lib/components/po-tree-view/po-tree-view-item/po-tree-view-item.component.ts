@@ -31,7 +31,8 @@ import { PoTreeViewService } from '../services/po-tree-view.service';
         animate(100, style({ opacity: 0 }))
       ])
     ])
-  ]
+  ],
+  standalone: false
 })
 export class PoTreeViewItemComponent {
   @Input('p-item') item: PoTreeViewItem;

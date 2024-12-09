@@ -9,9 +9,9 @@ Para maiores detalhes sobre os serviços e métodos utilizados neste tutorial, c
 ### Pré-requisitos
 
 - [Node.js e NPM](https://nodejs.org/en/)
-- [Angular CLI](https://cli.angular.io/) (~18.0.1):
+- [Angular CLI](https://cli.angular.io/) (~19.0.0):
   - ```shell
-    npm install -g @angular/cli@18
+    npm install -g @angular/cli@19
     ```
 - [Ionic](https://ionicframework.com/docs/cli/) (^7.2.0):
   - ```shell
@@ -46,35 +46,35 @@ cd po-sync-getting-started
 
 Antes de executar a instalação, é necessário que todas as dependências do projeto estejam declaradas de acordo com a versão do PO no arquivo `package.json`, localizado na raiz da aplicação:
 
-```typescript
+```json
   ...
   "dependencies": {
-    "@angular/animations": "~18.0.1",
-    "@angular/common": "~18.0.1",
-    "@angular/compiler": "~18.0.1",
-    "@angular/core": "~18.0.1",
-    "@angular/forms": "~18.0.1",
-    "@angular/platform-browser": "~18.0.1",
-    "@angular/platform-browser-dynamic": "~18.0.1",
-    "@angular/router": "~18.0.1",
-    "@angular/service-worker": "~18.0.1",
+    "@angular/animations": "~19.0.0",
+    "@angular/common": "~19.0.0",
+    "@angular/compiler": "~19.0.0",
+    "@angular/core": "~19.0.0",
+    "@angular/forms": "~19.0.0",
+    "@angular/platform-browser": "~19.0.0",
+    "@angular/platform-browser-dynamic": "~19.0.0",
+    "@angular/router": "~19.0.0",
+    "@angular/service-worker": "~19.0.0",
     "@ionic/angular": "^8.0.0",
     "@capacitor/network": "^6.0.1",
     "@capacitor/splash-screen": "^6.0.1",
     "@capacitor/status-bar": "6.0.0",
-    "rxjs": "~7.8.1",
-    "tslib": "^2.6.2",
-    "zone.js": "~0.14.4"
+    "rxjs": "~7.8.0",
+    "tslib": "^2.3.0",
+    "zone.js": "~0.15.0"
     ...
   },
   "devDependencies": {
-    "@angular-devkit/build-angular": "~18.0.2",
-    "@angular-devkit/schematics": "~18.0.2",
-    "@angular/cli": "~18.0.2",
-    "@angular/compiler-cli": "~18.0.1",
-    "@angular/language-service": "~18.0.1",
+    "@angular-devkit/build-angular": "~19.0.5",
+    "@angular-devkit/schematics": "~19.0.5",
+    "@angular/cli": "~19.0.5",
+    "@angular/compiler-cli": "~19.0.0",
+    "@angular/language-service": "~19.0.0",
     "@ionic/angular-toolkit": "^11.0.1",
-    "typescript": "~5.4.5"
+    "typescript": "~5.6.2"
   },
   ...
 ```
@@ -179,6 +179,7 @@ import { conferenceSchema } from './home/conference-schema.constants';
   selector: 'app-root',
   templateUrl: 'app.component.html',
   styleUrls: ['app.component.scss'],
+  standalone: false
 })
 export class AppComponent {
   constructor(private platform: Platform, private poSync: PoSyncService) {
@@ -222,6 +223,7 @@ import { PoSyncService } from '@po-ui/ng-sync';
   selector: 'app-home',
   templateUrl: 'home.page.html',
   styleUrls: ['home.page.scss'],
+  standalone: false
 })
 export class HomePage {
 

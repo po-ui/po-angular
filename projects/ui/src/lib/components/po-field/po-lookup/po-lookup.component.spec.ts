@@ -704,7 +704,7 @@ describe('PoLookupComponent:', () => {
     });
 
     it(`calculateVisibleItems: should set 'visibleDisclaimers' with value and '+1' in input`, () => {
-      const arrayDisclaimers: Array<Number> = [116, 97];
+      const arrayDisclaimers: Array<number> = [116, 97];
       const spyGetDisclaimersWidth = spyOn(component, 'getDisclaimersWidth').and.returnValue(arrayDisclaimers);
       const spyGetInputWidth = spyOn(component, 'getInputWidth').and.returnValue(186);
       const expectValue = [
@@ -739,7 +739,7 @@ describe('PoLookupComponent:', () => {
     });
 
     it(`calculateVisibleItems: should set empty array in'visibleDisclaimers' if 'InputWidth' is less than 0`, () => {
-      const arrayDisclaimers: Array<Number> = [116, 97];
+      const arrayDisclaimers: Array<number> = [116, 97];
       const spyGetDisclaimersWidth = spyOn(component, 'getDisclaimersWidth').and.returnValue(arrayDisclaimers);
       const spyGetInputWidth = spyOn(component, 'getInputWidth').and.returnValue(0);
 
@@ -765,7 +765,7 @@ describe('PoLookupComponent:', () => {
     });
 
     it(`calculateVisibleItems: should set empty array in 'visibleDisclaimers' if 'disclaimers' are empty`, () => {
-      const arrayDisclaimers: Array<Number> = [116, 97];
+      const arrayDisclaimers: Array<number> = [116, 97];
       const spyGetDisclaimersWidth = spyOn(component, 'getDisclaimersWidth').and.returnValue(arrayDisclaimers);
       const spyGetInputWidth = spyOn(component, 'getInputWidth').and.returnValue(0);
 
@@ -782,7 +782,7 @@ describe('PoLookupComponent:', () => {
     });
 
     it(`calculateVisibleItems: set 'Object' in 'disclaimers' when 'visibleDisclaimers' is empty but 'disclaimers' contain item`, () => {
-      const arrayDisclaimers: Array<Number> = [90];
+      const arrayDisclaimers: Array<number> = [90];
       const spyGetDisclaimersWidth = spyOn(component, 'getDisclaimersWidth').and.returnValue(arrayDisclaimers);
       const spyGetInputWidth = spyOn(component, 'getInputWidth').and.returnValue(1);
       const expectValue = [
@@ -814,7 +814,7 @@ describe('PoLookupComponent:', () => {
     });
 
     it(`calculateVisibleItems: set object in 'visibleDisclaimers' if disclaimers is empty `, () => {
-      const arrayDisclaimers: Array<Number> = [90];
+      const arrayDisclaimers: Array<number> = [90];
       const spyGetDisclaimersWidth = spyOn(component, 'getDisclaimersWidth').and.returnValue(arrayDisclaimers);
       const spyGetInputWidth = spyOn(component, 'getInputWidth').and.returnValue(1);
 

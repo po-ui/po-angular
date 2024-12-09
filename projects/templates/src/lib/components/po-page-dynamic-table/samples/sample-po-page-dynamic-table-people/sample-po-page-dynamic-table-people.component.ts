@@ -2,7 +2,8 @@ import { Component } from '@angular/core';
 
 @Component({
   selector: 'sample-po-page-dynamic-table-people',
-  templateUrl: './sample-po-page-dynamic-table-people.component.html'
+  templateUrl: './sample-po-page-dynamic-table-people.component.html',
+  standalone: false
 })
 export class SamplePoPageDynamicTablePeopleComponent {
   readonly serviceApi = 'https://po-sample-api.onrender.com/v1/people';

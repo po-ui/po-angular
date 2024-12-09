@@ -5,7 +5,8 @@ import { PoDialogService, PoNotificationService, PoToolbarAction, PoToolbarProfi
 @Component({
   selector: 'sample-po-toolbar-logged',
   templateUrl: './sample-po-toolbar-logged.component.html',
-  providers: [PoNotificationService]
+  providers: [PoNotificationService],
+  standalone: false
 })
 export class SamplePoToolbarLoggedComponent {
   notificationActions: Array<PoToolbarAction> = [

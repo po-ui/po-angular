@@ -12,7 +12,8 @@ import { PoNotificationService, PoCheckboxGroupOption, PoSelectOption, PoPopupAc
         margin-bottom: 20px;
       }
     `
-  ]
+  ],
+  standalone: false
 })
 export class SamplePoPopupLabsComponent implements OnInit {
   @ViewChild('target', { read: ElementRef, static: true }) targetRef: ElementRef;

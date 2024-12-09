@@ -5,7 +5,8 @@ import { PoMenuItem } from '@po-ui/ng-components';
 @Component({
   selector: 'app-root',
   templateUrl: './app.component.html',
-  styleUrls: ['./app.component.<%= style %>']
+  styleUrls: ['./app.component.<%= style %>'],
+  standalone: false
 })
 export class AppComponent {
 

@@ -20,7 +20,7 @@ import { PoTabComponent } from './po-tab/po-tab.component';
 import { PoTabsBaseComponent } from './po-tabs-base.component';
 import { PoTabsService } from './po-tabs.service';
 
-export const poTabsLiterals: Object = {
+export const poTabsLiterals: object = {
   en: <any>{
     moreTabs: 'More'
   },
@@ -64,7 +64,8 @@ const poTabsMaxNumberOfTabs = 5;
  */
 @Component({
   selector: 'po-tabs',
-  templateUrl: './po-tabs.component.html'
+  templateUrl: './po-tabs.component.html',
+  standalone: false
 })
 export class PoTabsComponent extends PoTabsBaseComponent implements OnInit, AfterViewInit, OnDestroy, AfterContentInit {
   // Tabs utilizados no ng-content
@@ -347,7 +348,7 @@ export class PoTabsComponent extends PoTabsBaseComponent implements OnInit, Afte
    * }
    * ```
    */
-  setQuantityTabsButton(number: Number) {
+  setQuantityTabsButton(number: number) {
     this.quantityTabsButton = number;
   }
 

@@ -6,7 +6,9 @@ import { map } from 'rxjs/operators';
 
 import { PoMenuFilter, PoMenuItemFiltered } from '@po-ui/ng-components';
 
-@Injectable()
+@Injectable({
+  providedIn: 'root'
+})
 export class SamplePoMenuHumanResourcesService implements PoMenuFilter {
   private url: string = 'https://po-sample-api.onrender.com/v1/menus';
 

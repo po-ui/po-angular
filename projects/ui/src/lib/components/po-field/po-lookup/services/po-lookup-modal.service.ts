@@ -12,7 +12,9 @@ import { PoLookupModalComponent } from '../po-lookup-modal/po-lookup-modal.compo
  *
  * Serviço responsável por controlar a abertura do componente Po Lookup Modal.
  */
-@Injectable()
+@Injectable({
+  providedIn: 'root'
+})
 export class PoLookupModalService {
   selectValueEvent: EventEmitter<any> = new EventEmitter<any>();
 

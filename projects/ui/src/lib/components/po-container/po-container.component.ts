@@ -25,6 +25,7 @@ import { PoContainerBaseComponent } from './po-container-base.component';
  */
 @Component({
   selector: 'po-container',
-  templateUrl: './po-container.component.html'
+  templateUrl: './po-container.component.html',
+  standalone: false
 })
 export class PoContainerComponent extends PoContainerBaseComponent {}

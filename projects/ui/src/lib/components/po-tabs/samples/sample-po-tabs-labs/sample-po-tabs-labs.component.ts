@@ -4,7 +4,8 @@ import { PoDynamicFormField, PoNotificationService, PoTab, PoTabsComponent } fro
 
 @Component({
   selector: 'sample-po-tabs-labs',
-  templateUrl: './sample-po-tabs-labs.component.html'
+  templateUrl: './sample-po-tabs-labs.component.html',
+  standalone: false
 })
 export class SamplePoTabsLabsComponent implements OnInit {
   @ViewChild('poTab', { static: true }) poTab: PoTabsComponent;

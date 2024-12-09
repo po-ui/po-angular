@@ -35,7 +35,8 @@ import { Directive, Input, TemplateRef } from '@angular/core';
  *
  */
 @Directive({
-  selector: '[p-job-scheduler-parameters-template]'
+  selector: '[p-job-scheduler-parameters-template]',
+  standalone: false
 })
 export class PoJobSchedulerParametersTemplateDirective {
   /**
@@ -48,7 +49,7 @@ export class PoJobSchedulerParametersTemplateDirective {
    *
    * > O componente deve manter essa propriedade atualizada. É chamada após o avançar da etapa de parametrização.
    */
-  @Input('p-execution-parameter') executionParameter: Object;
+  @Input('p-execution-parameter') executionParameter: object;
 
   /**
    * @optional

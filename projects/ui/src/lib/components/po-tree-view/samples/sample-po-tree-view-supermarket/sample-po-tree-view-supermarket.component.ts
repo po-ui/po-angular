@@ -4,7 +4,8 @@ import { PoStepperComponent, PoTableColumn, PoTreeViewItem } from '@po-ui/ng-com
 
 @Component({
   selector: 'sample-po-tree-view-supermarket',
-  templateUrl: 'sample-po-tree-view-supermarket.component.html'
+  templateUrl: 'sample-po-tree-view-supermarket.component.html',
+  standalone: false
 })
 export class SamplePoTreeViewSupermarketComponent {
   @ViewChild('stepper', { static: true }) stepper: PoStepperComponent;

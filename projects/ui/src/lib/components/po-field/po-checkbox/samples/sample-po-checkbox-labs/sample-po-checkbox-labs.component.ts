@@ -2,7 +2,8 @@ import { Component, OnInit } from '@angular/core';
 
 @Component({
   selector: 'sample-po-checkbox-labs',
-  templateUrl: './sample-po-checkbox-labs.component.html'
+  templateUrl: './sample-po-checkbox-labs.component.html',
+  standalone: false
 })
 export class SamplePoCheckboxLabsComponent implements OnInit {
   checkbox: boolean | null;

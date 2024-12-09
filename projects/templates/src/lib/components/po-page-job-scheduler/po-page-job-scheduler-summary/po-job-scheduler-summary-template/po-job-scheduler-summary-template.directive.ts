@@ -27,7 +27,8 @@ import { Directive, TemplateRef } from '@angular/core';
  *
  */
 @Directive({
-  selector: '[p-job-scheduler-summary-template]'
+  selector: '[p-job-scheduler-summary-template]',
+  standalone: false
 })
 export class PoJobSchedulerSummaryTemplateDirective {
   // Necessário manter templateRef para o funcionamento do row template.

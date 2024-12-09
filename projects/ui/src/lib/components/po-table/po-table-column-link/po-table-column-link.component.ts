@@ -12,7 +12,8 @@ import { isExternalLink } from '../../../utils/util';
 @Component({
   selector: 'po-table-column-link',
   templateUrl: './po-table-column-link.component.html',
-  changeDetection: ChangeDetectionStrategy.OnPush
+  changeDetection: ChangeDetectionStrategy.OnPush,
+  standalone: false
 })
 export class PoTableColumnLinkComponent {
   @Input('p-action') action: Function;

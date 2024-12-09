@@ -16,7 +16,8 @@ import { PoPageHeaderComponent } from '../po-page-header/po-page-header.componen
 @Component({
   template: `
     <po-page-detail p-title="Unit Test" (p-back)="back()" (p-edit)="edit()" (p-remove)="remove()"> </po-page-detail>
-  `
+  `,
+  standalone: false
 })
 class ContainerComponent {
   back(): boolean {

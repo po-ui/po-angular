@@ -1,4 +1,4 @@
-import { APP_INITIALIZER, ModuleWithProviders, NgModule } from '@angular/core';
+import { ModuleWithProviders, NgModule, inject, provideAppInitializer } from '@angular/core';
 import { HttpClient } from '@angular/common/http';
 
 import { PoLanguageService } from './../po-language/po-language.service';
@@ -164,12 +164,10 @@ export class PoI18nModule {
           provide: I18N_CONFIG,
           useValue: config
         },
-        {
-          provide: APP_INITIALIZER,
-          useFactory: initializeLanguageDefault,
-          multi: true,
-          deps: [I18N_CONFIG, PoLanguageService]
-        },
+        provideAppInitializer(() => {
+          const initializerFn = initializeLanguageDefault(inject(I18N_CONFIG), inject(PoLanguageService));
+          return initializerFn();
+        }),
         {
           provide: PoI18nService,
           useFactory: returnPoI18nService,

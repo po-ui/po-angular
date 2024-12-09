@@ -5,7 +5,6 @@ import { PoPageDynamicDetailModule, PoPageDynamicDetailField } from '@po-ui/ng-t
 
 @Component({
   selector: '<%= selector %>',
-  standalone: true,
   imports: [
     CommonModule,
     PoPageDynamicDetailModule

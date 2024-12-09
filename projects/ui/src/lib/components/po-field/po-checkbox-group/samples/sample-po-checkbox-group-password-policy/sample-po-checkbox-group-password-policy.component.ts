@@ -6,7 +6,8 @@ import { PoNotificationService } from '@po-ui/ng-components';
 
 @Component({
   selector: 'sample-po-checkbox-group-password-policy',
-  templateUrl: './sample-po-checkbox-group-password-policy.component.html'
+  templateUrl: './sample-po-checkbox-group-password-policy.component.html',
+  standalone: false
 })
 export class SamplePoCheckboxGroupPasswordPolicyComponent {
   attempts: number;

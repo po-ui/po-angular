@@ -118,7 +118,8 @@ const PO_SELECT_FIELD_VALUE_DEFAULT = 'value';
       useExisting: forwardRef(() => PoSelectComponent),
       multi: true
     }
-  ]
+  ],
+  standalone: false
 })
 export class PoSelectComponent extends PoFieldValidateModel<any> implements OnChanges {
   private _iconToken: { [key: string]: string };

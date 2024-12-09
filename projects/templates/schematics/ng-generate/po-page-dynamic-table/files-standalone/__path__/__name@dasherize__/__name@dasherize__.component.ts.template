@@ -6,7 +6,6 @@ import { PoPageDynamicTableActions } from '@po-ui/ng-templates';
 
 @Component({
   selector: '<%= selector %>',
-  standalone: true,
   imports: [
     CommonModule,
     PoPageDynamicTableModule,

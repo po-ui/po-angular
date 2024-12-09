@@ -7,7 +7,9 @@ import { PoToaster, PoToasterOrientation, PoToasterType } from '../../components
 import { PoToasterBaseComponent } from '../../components/po-toaster/po-toaster-base.component';
 import { PoNotificationBaseService } from './po-notification-base.service';
 
-@Injectable()
+@Injectable({
+  providedIn: 'root'
+})
 class PoNotificationService extends PoNotificationBaseService {
   createToaster(toaster: PoToaster, viewContainerRef?: ViewContainerRef): void {
     const elementRef: ElementRef = {

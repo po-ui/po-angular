@@ -5,7 +5,6 @@ import { PoPageJobSchedulerModule } from '@po-ui/ng-templates';
 
 @Component({
   selector: '<%= selector %>',
-  standalone: true,
   imports: [
     CommonModule,
     PoPageJobSchedulerModule,

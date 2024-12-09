@@ -4,7 +4,8 @@ import { PoNotificationService } from '@po-ui/ng-components';
 
 @Component({
   selector: 'sample-po-button-social-network',
-  templateUrl: './sample-po-button-social-network.component.html'
+  templateUrl: './sample-po-button-social-network.component.html',
+  standalone: false
 })
 export class SamplePoButtonSocialNetworkComponent implements OnInit {
   currentFriend: object;

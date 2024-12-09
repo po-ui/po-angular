@@ -5,7 +5,7 @@
  */
 export interface PropertyDecoratorInterface {
   /** Métodos de acesso a propriedade, por exemplo: `get` e `set`. */
-  originalDescriptor?: Object;
+  originalDescriptor?: object;
 
   /** Nome da propriedade. */
   property?: string;

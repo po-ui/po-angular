@@ -4,7 +4,9 @@ import { PoMenuItem } from '@po-ui/ng-components';
 
 import { Documentation } from './documentation/documentation.class';
 
-@Injectable()
+@Injectable({
+  providedIn: 'root'
+})
 export class MenuService {
 
   constructor() { }

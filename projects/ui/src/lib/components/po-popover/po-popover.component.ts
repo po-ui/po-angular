@@ -36,7 +36,8 @@ import { PoPopoverBaseComponent } from './po-popover-base.component';
 @Component({
   selector: 'po-popover',
   templateUrl: './po-popover.component.html',
-  providers: [PoControlPositionService]
+  providers: [PoControlPositionService],
+  standalone: false
 })
 export class PoPopoverComponent extends PoPopoverBaseComponent implements AfterViewInit, OnDestroy {
   @ViewChild('popoverElement', { read: ElementRef, static: true }) popoverElement: ElementRef;

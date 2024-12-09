@@ -16,7 +16,8 @@ import { PoPageSlideComponent } from './po-page-slide.component';
         <po-input name="password" [(ngModel)]="password" p-label="Password"></po-input>
       </form>
     </po-page-slide>
-  `
+  `,
+  standalone: false
 })
 class TestComponent {
   @ViewChild(PoPageSlideComponent, { static: true }) poPage: PoPageSlideComponent;

@@ -49,7 +49,8 @@ type UrlOrPoCustomizationFunction = string | (() => PoPageDynamicSearchOptions);
  */
 @Component({
   selector: 'po-page-dynamic-search',
-  templateUrl: './po-page-dynamic-search.component.html'
+  templateUrl: './po-page-dynamic-search.component.html',
+  standalone: false
 })
 export class PoPageDynamicSearchComponent
   extends PoPageDynamicSearchBaseComponent

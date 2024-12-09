@@ -82,7 +82,9 @@ export const PO_STORAGE_CONFIG_TOKEN = new InjectionToken('PO_STORAGE_CONFIG_TOK
  * export class AppModule {}
  * ```
  */
-@Injectable()
+@Injectable({
+  providedIn: 'root'
+})
 export class PoStorageService {
   private driver: string = null;
   private idleQueue = new IdleQueue();

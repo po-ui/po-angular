@@ -4,7 +4,9 @@ import { PoTableColumn } from '@po-ui/ng-components';
 import { Observable } from 'rxjs';
 import { pluck } from 'rxjs/operators';
 
-@Injectable()
+@Injectable({
+  providedIn: 'root'
+})
 export class SamplePoTableHeroesService {
   constructor(private http: HttpClient) {}
   getColumns(): Array<PoTableColumn> {

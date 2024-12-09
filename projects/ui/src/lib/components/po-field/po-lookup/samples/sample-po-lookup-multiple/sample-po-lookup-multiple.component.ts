@@ -6,7 +6,8 @@ import { SamplePoLookupMultipleService } from './sample-po-lookup-multiple.servi
 @Component({
   selector: 'sample-po-lookup-multiple',
   templateUrl: './sample-po-lookup-multiple.component.html',
-  styles: []
+  styles: [],
+  standalone: false
 })
 export class SamplePoLookupMultipleComponent {
   loading: boolean = false;

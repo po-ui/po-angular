@@ -10,7 +10,8 @@ import { PoDynamicFormComponent } from '@po-ui/ng-components';
       provide: PoDynamicFormComponent,
       useClass: PoDynamicFormStubComponent
     }
-  ]
+  ],
+  standalone: false
 })
 export class PoDynamicFormStubComponent {
   private _form: NgForm;
