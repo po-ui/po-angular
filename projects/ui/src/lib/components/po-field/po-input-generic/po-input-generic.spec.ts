@@ -12,7 +12,8 @@ import { of, Subscription } from 'rxjs';
   template: `
     <input type="text" #inp />
     <span #clean></span>
-  `
+  `,
+  standalone: false
 })
 class ContentProjectionComponent extends PoInputGeneric {
   constructor(el: ElementRef) {

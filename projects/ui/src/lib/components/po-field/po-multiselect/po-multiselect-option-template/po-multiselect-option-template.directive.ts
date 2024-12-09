@@ -32,7 +32,8 @@ import { Directive, TemplateRef } from '@angular/core';
  *
  */
 @Directive({
-  selector: '[p-multiselect-option-template]'
+  selector: '[p-multiselect-option-template]',
+  standalone: false
 })
 export class PoMultiselectOptionTemplateDirective {
   // Necessário manter templateRef para o funcionamento do row template.

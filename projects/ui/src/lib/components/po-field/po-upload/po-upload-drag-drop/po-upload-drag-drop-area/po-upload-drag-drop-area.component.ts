@@ -5,7 +5,8 @@ import { PoUploadLiterals } from '../../interfaces/po-upload-literals.interface'
 @Component({
   selector: 'po-upload-drag-drop-area',
   templateUrl: './po-upload-drag-drop-area.component.html',
-  changeDetection: ChangeDetectionStrategy.OnPush
+  changeDetection: ChangeDetectionStrategy.OnPush,
+  standalone: false
 })
 export class PoUploadDragDropAreaComponent {
   @Input('p-directory-compatible') directoryCompatible: boolean;

@@ -5,7 +5,8 @@ import { Observable } from 'rxjs';
 
 @Component({
   selector: 'sample-po-combo-heroes',
-  templateUrl: './sample-po-combo-heroes.component.html'
+  templateUrl: './sample-po-combo-heroes.component.html',
+  standalone: false
 })
 export class SamplePoComboHeroesComponent {
   hero$: Observable<any>;

@@ -9,7 +9,8 @@ import { PoModalComponent } from '@po-ui/ng-components';
 
 @Component({
   selector: 'sample-po-modal-fruits-salad',
-  templateUrl: './sample-po-modal-fruits-salad.component.html'
+  templateUrl: './sample-po-modal-fruits-salad.component.html',
+  standalone: false
 })
 export class SamplePoModalFruitsSaladComponent {
   @ViewChild('optionsForm', { static: true }) form: NgForm;

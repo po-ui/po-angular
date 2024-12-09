@@ -9,7 +9,8 @@ import { convertToBoolean } from '../../utils/util';
 
 @Component({
   selector: 'po-label',
-  templateUrl: './po-label.component.html'
+  templateUrl: './po-label.component.html',
+  standalone: false
 })
 export class PoLabelComponent {
   private _disabled?: boolean = false;

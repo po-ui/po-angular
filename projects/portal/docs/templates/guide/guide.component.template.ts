@@ -10,6 +10,7 @@ import { Component } from '@angular/core';
     li {
       margin-left: 16px;
     }
-  `]
+  `],
+  standalone: false
 })
 export class Guide<%- component %>Component { }

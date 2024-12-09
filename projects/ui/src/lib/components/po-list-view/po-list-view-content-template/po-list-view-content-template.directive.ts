@@ -83,7 +83,8 @@ import { Directive, Input, TemplateRef } from '@angular/core';
  * ```
  */
 @Directive({
-  selector: '[p-list-view-content-template]'
+  selector: '[p-list-view-content-template]',
+  standalone: false
 })
 export class PoListViewContentTemplateDirective {
   /**

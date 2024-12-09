@@ -4,7 +4,8 @@ import { PoSelectOption } from '@po-ui/ng-components';
 
 @Component({
   selector: 'sample-po-multiselect-any-array',
-  templateUrl: './sample-po-multiselect-any-array.component.html'
+  templateUrl: './sample-po-multiselect-any-array.component.html',
+  standalone: false
 })
 export class SamplePoMultiselectAnyArrayComponent {
   company;

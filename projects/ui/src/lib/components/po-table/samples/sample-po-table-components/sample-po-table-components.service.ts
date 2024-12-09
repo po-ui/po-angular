@@ -2,7 +2,9 @@ import { Injectable } from '@angular/core';
 
 import { PoTableColumnSort, PoTableColumnSortType } from '@po-ui/ng-components';
 
-@Injectable()
+@Injectable({
+  providedIn: 'root'
+})
 export class SamplePoTableComponentsService {
   readonly items = [
     {

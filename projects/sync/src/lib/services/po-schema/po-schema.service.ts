@@ -13,7 +13,9 @@ import { PoSyncSchema } from '../po-sync/interfaces/po-sync-schema.interface';
  *
  * Serviço que realiza as operações nos `schemas`.
  */
-@Injectable()
+@Injectable({
+  providedIn: 'root'
+})
 export class PoSchemaService {
   constructor(
     private poSchemaDefinitionService: PoSchemaDefinitionService,

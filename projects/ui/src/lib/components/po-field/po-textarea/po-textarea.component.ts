@@ -54,7 +54,8 @@ import { PoTextareaBaseComponent } from './po-textarea-base.component';
       useExisting: forwardRef(() => PoTextareaComponent),
       multi: true
     }
-  ]
+  ],
+  standalone: false
 })
 export class PoTextareaComponent extends PoTextareaBaseComponent implements AfterViewInit {
   @ViewChild('inp', { read: ElementRef, static: true }) inputEl: ElementRef;

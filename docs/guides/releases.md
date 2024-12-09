@@ -39,6 +39,11 @@ Consulte abaixo nossos guias de migração de versão para obter mais informaç�
       </thead>
       <tbody>
         <tr class="po-table-row">
+          <td class="po-table-column">19.0.0</td>
+          <td class="po-table-column">19.0.0</td>
+          <td class="po-table-column"><a href="guides/migration-poui">Migração do PO UI</a></td>
+        </tr>
+        <tr class="po-table-row">
           <td class="po-table-column">18.0.0</td>
           <td class="po-table-column">18.0.0</td>
           <td class="po-table-column"><a href="guides/migration-poui">Migração do PO UI</a></td>

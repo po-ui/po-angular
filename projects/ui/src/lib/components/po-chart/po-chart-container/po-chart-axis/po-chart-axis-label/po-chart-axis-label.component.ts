@@ -5,7 +5,8 @@ import { PoChartLabelCoordinates } from '../../../interfaces/po-chart-label-coor
 
 @Component({
   selector: '[po-chart-axis-label]',
-  templateUrl: './po-chart-axis-label.component.svg'
+  templateUrl: './po-chart-axis-label.component.svg',
+  standalone: false
 })
 export class PoChartAxisLabelComponent {
   @Input('p-align-by-the-corners') alignByTheCorners: boolean = false;

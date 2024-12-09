@@ -14,7 +14,8 @@ const poLargeStepSize = 48;
  */
 @Component({
   selector: 'po-stepper-circle',
-  templateUrl: './po-stepper-circle.component.html'
+  templateUrl: './po-stepper-circle.component.html',
+  standalone: false
 })
 export class PoStepperCircleComponent {
   // Alinhamento do *step*.

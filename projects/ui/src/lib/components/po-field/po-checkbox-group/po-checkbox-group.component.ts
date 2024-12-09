@@ -51,7 +51,8 @@ import { PoCheckboxGroupBaseComponent } from './po-checkbox-group-base.component
       useExisting: forwardRef(() => PoCheckboxGroupComponent),
       multi: true
     }
-  ]
+  ],
+  standalone: false
 })
 export class PoCheckboxGroupComponent extends PoCheckboxGroupBaseComponent implements AfterViewChecked, AfterViewInit {
   @ViewChildren('checkboxLabel') checkboxLabels: QueryList<PoCheckboxComponent>;

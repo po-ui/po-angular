@@ -4,7 +4,8 @@ import { PoCheckboxGroupOption } from '@po-ui/ng-components';
 
 @Component({
   selector: 'sample-po-widget-labs',
-  templateUrl: './sample-po-widget-labs.component.html'
+  templateUrl: './sample-po-widget-labs.component.html',
+  standalone: false
 })
 export class SamplePoWidgetLabsComponent implements OnInit {
   action: string;

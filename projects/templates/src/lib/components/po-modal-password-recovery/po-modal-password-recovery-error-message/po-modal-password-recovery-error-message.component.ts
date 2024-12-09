@@ -9,7 +9,8 @@ import { Component, Input } from '@angular/core';
  */
 @Component({
   selector: 'po-modal-password-recovery-error-message',
-  templateUrl: './po-modal-password-recovery-error-message.component.html'
+  templateUrl: './po-modal-password-recovery-error-message.component.html',
+  standalone: false
 })
 export class PoModalPasswordRecoveryErrorMessageComponent {
   /** Texto exibido na mensagem de erro. */

@@ -146,7 +146,8 @@ type UrlOrPoCustomizationFunction = string | (() => PoPageDynamicTableOptions);
 @Component({
   selector: 'po-page-dynamic-table',
   templateUrl: './po-page-dynamic-table.component.html',
-  providers: [PoPageDynamicService]
+  providers: [PoPageDynamicService],
+  standalone: false
 })
 export class PoPageDynamicTableComponent extends PoPageDynamicListBaseComponent implements OnInit, OnDestroy {
   /**
@@ -686,7 +687,7 @@ export class PoPageDynamicTableComponent extends PoPageDynamicListBaseComponent 
     this.changeVisibleColumns.emit(value);
   }
 
-  onColumnRestoreManager(value: Array<String>) {
+  onColumnRestoreManager(value: Array<string>) {
     this.columnRestoreManager.emit(value);
   }
 

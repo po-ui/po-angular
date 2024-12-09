@@ -1,6 +1,8 @@
 import { Injectable } from '@angular/core';
 
-@Injectable()
+@Injectable({
+  providedIn: 'root'
+})
 export class PoDynamicFormRegisterService {
   getCity(state: number) {
     switch (state) {

@@ -52,7 +52,8 @@ import { PoInputGeneric } from '../po-input-generic/po-input-generic';
       useExisting: forwardRef(() => PoUrlComponent),
       multi: true
     }
-  ]
+  ],
+  standalone: false
 })
 export class PoUrlComponent extends PoInputGeneric implements AfterViewInit, OnDestroy {
   id = `po-url[${uuid()}]`;

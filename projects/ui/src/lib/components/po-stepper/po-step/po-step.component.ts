@@ -44,7 +44,8 @@ import { PoStepperStatus } from '../enums/po-stepper-status.enum';
  */
 @Component({
   selector: 'po-step',
-  templateUrl: 'po-step.component.html'
+  templateUrl: 'po-step.component.html',
+  standalone: false
 })
 export class PoStepComponent implements AfterContentInit {
   /**

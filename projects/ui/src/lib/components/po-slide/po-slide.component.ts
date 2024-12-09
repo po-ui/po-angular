@@ -59,7 +59,8 @@ const poSlideTiming = '250ms ease';
  */
 @Component({
   selector: 'po-slide',
-  templateUrl: './po-slide.component.html'
+  templateUrl: './po-slide.component.html',
+  standalone: false
 })
 export class PoSlideComponent extends PoSlideBaseComponent implements OnInit, DoCheck, OnChanges, OnDestroy {
   @ContentChild(PoSlideContentTemplateDirective, { static: true })

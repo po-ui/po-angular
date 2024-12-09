@@ -4,7 +4,8 @@ import { PoGaugeRanges } from '@po-ui/ng-components';
 
 @Component({
   selector: 'sample-po-gauge-summary',
-  templateUrl: './sample-po-gauge-summary.component.html'
+  templateUrl: './sample-po-gauge-summary.component.html',
+  standalone: false
 })
 export class SamplePoGaugeSummaryComponent {
   salesRanges: Array<PoGaugeRanges> = [

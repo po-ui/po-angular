@@ -4,7 +4,8 @@ import { PoGaugeCoordinates } from '../../interfaces/po-gauge-coordinates.interf
 
 @Component({
   selector: '[po-gauge-path]',
-  templateUrl: './po-gauge-path.component.svg'
+  templateUrl: './po-gauge-path.component.svg',
+  standalone: false
 })
 export class PoGaugePathComponent {
   @Input('p-base-coordinates') baseCoordinates: PoGaugeCoordinates;

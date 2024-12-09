@@ -9,7 +9,8 @@ import { SamplePoTableTransportService } from './sample-po-table-transport.servi
 @Component({
   selector: 'sample-po-table-transport',
   templateUrl: 'sample-po-table-transport.component.html',
-  providers: [SamplePoTableTransportService]
+  providers: [SamplePoTableTransportService],
+  standalone: false
 })
 export class SamplePoTableTransportComponent implements OnInit {
   columns: Array<PoTableColumn>;

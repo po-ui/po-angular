@@ -24,7 +24,8 @@ import { PoModalFooterComponent } from '.';
         <po-input name="userName" [(ngModel)]="userName" p-label="Nome"></po-input>
       </form>
     </po-modal>
-  `
+  `,
+  standalone: false
 })
 class ContentProjectionComponent {
   @ViewChild(PoModalComponent, { static: true }) poModal;

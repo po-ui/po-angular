@@ -7,12 +7,12 @@ Para começar a utilizar o **PO UI** é pré-requisito ter o `Node.js` instalado
 
 Instalando com npm:
 ```
-npm i -g @angular/cli@18
+npm i -g @angular/cli@19
 ```
 
 Caso prefira instalar com o yarn:
 ```
-yarn global add @angular/cli@18
+yarn global add @angular/cli@19
 ```
 
 ### Passo 1 - Crie o seu primeiro projeto
@@ -34,28 +34,28 @@ Antes de executar a instalação ou inserir o **Po** no seu projeto existente, �
 
 Veja abaixo a lista de dependências e as versões compatíveis, elas devem ser conferidas e se necessário, ajustadas no seu projeto.
 
-```
+```json
   "dependencies": {
-    "@angular/animations": "~18.0.1",
-    "@angular/common": "~18.0.1",
-    "@angular/compiler": "~18.0.1",
-    "@angular/core": "~18.0.1",
-    "@angular/forms": "~18.0.1",
-    "@angular/platform-browser": "~18.0.1",
-    "@angular/platform-browser-dynamic": "~18.0.1",
-    "@angular/router": "~18.0.1",
-    "rxjs": "~7.8.1",
-    "tslib": "^2.6.2",
-    "zone.js": "~0.14.4"
+    "@angular/animations": "~19.0.0",
+    "@angular/common": "~19.0.0",
+    "@angular/compiler": "~19.0.0",
+    "@angular/core": "~19.0.0",
+    "@angular/forms": "~19.0.0",
+    "@angular/platform-browser": "~19.0.0",
+    "@angular/platform-browser-dynamic": "~19.0.0",
+    "@angular/router": "~19.0.0",
+    "rxjs": "~7.8.0",
+    "tslib": "^2.3.0",
+    "zone.js": "~0.15.0"
     ...
   },
   "devDependencies": {
-    "@angular-devkit/build-angular": "~18.0.2",
-    "@angular-devkit/schematics": "~18.0.2",
-    "@angular/cli": "~18.0.2",
-    "@angular/compiler-cli": "~18.0.1",
+    "@angular-devkit/build-angular": "~19.0.5",
+    "@angular-devkit/schematics": "~19.0.5",
+    "@angular/cli": "~19.0.5",
+    "@angular/compiler-cli": "~19.0.0",
     ...
-    "typescript": "~5.4.5"
+    "typescript": "~5.6.2"
   }
 ```
 

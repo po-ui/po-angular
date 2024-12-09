@@ -5,7 +5,8 @@ import { PoDialogService, PoNotificationService, PoSelectOption } from '@po-ui/n
 
 @Component({
   selector: 'sample-po-datepicker-airfare',
-  templateUrl: './sample-po-datepicker-airfare.component.html'
+  templateUrl: './sample-po-datepicker-airfare.component.html',
+  standalone: false
 })
 export class SamplePoDatepickerAirfareComponent {
   @ViewChild('formAirfare', { static: true }) formAirfare: UntypedFormControl;

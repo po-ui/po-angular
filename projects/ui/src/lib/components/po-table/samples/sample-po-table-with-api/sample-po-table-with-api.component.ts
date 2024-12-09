@@ -3,7 +3,8 @@ import { PoDisclaimerGroupRemoveAction, PoDisclaimer, PoTableComponent, PoTableC
 
 @Component({
   selector: 'sample-po-table-with-api',
-  templateUrl: './sample-po-table-with-api.component.html'
+  templateUrl: './sample-po-table-with-api.component.html',
+  standalone: false
 })
 export class SamplePoTableWithApiComponent {
   @ViewChild('table') tableComponent: PoTableComponent;
