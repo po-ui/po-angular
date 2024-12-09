@@ -2,6 +2,20 @@
 
 All notable changes to this project will be documented in this file. See [standard-version](https://github.com/conventional-changelog/standard-version) for commit guidelines.
 
+## [18.19.0](https://github.com/po-ui/po-angular/compare/v18.18.0...v18.19.0) (2024-12-09)
+
+
+### Features
+
+* **button:** adiciona input type ([9562105](https://github.com/po-ui/po-angular/commit/956210536bf435f5dcbfa1a8062cc427da52191d))
+* **theme:** melhoria no tema para diferentes acessibilidades ([58425a1](https://github.com/po-ui/po-angular/commit/58425a13452a2de70c735dc1eba8751ecd9a0ee2))
+
+
+### Bug Fixes
+
+* **dynamic-view:** ajusta renderização do multiselect ([d77f819](https://github.com/po-ui/po-angular/commit/d77f819af58f4a005f2a145a522533c554b789a8)), closes [#2308](https://github.com/po-ui/po-angular/issues/2308)
+* **page-job-scheduler:** corrige erro quando 'firstExecution' undefined ([c916ed4](https://github.com/po-ui/po-angular/commit/c916ed416e85980c5974b4c8b7db33dd0ea1b30f))
+
 ### [18.18.0](https://github.com/po-ui/po-angular/compare/v18.17.0...v18.18.0) (2024-12-03)
 
 Compatibilidade com @po-ui/style@18.18.0
