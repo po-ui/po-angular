@@ -114,6 +114,8 @@ export class PoStepperStepComponent implements OnChanges {
   // Evento que será emitido ao focar no *step* e pressionar a tecla *enter*.
   @Output('p-enter') enter = new EventEmitter<any>();
 
+  @Input('p-disable-click') disabledClick: boolean = false;
+
   readonly literals = {
     ...poStepLiteralsDefault[poLocaleDefault],
     ...poStepLiteralsDefault[getShortBrowserLanguage()]
@@ -169,13 +171,13 @@ export class PoStepperStepComponent implements OnChanges {
   }
 
   onClick(): void {
-    if (this.status !== PoStepperStatus.Disabled) {
+    if (this.status !== PoStepperStatus.Disabled && !this.disabledClick) {
       this.click.emit();
     }
   }
 
   onEnter(): void {
-    if (this.status !== PoStepperStatus.Disabled) {
+    if (this.status !== PoStepperStatus.Disabled && !this.disabledClick) {
       this.enter.emit();
     }
   }

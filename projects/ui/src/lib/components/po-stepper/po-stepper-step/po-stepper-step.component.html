@@ -2,10 +2,11 @@
   class="po-stepper-step"
   [ngClass]="getStatusClass(status)"
   role="tab"
-  [tabindex]="status === 'disabled' ? -1 : 0"
+  [tabindex]="status === 'disabled' || disabledClick ? -1 : 0"
   [attr.aria-selected]="status === 'active'"
   [attr.aria-disabled]="status === 'disabled'"
   [attr.aria-required]="status === 'error'"
+  [class.po-stepper-disabled-click]="disabledClick"
   (click)="onClick()"
   (keydown.enter)="onEnter()"
 >
@@ -35,6 +36,7 @@
       [p-status]="status"
       [p-vertical-orientation]="isVerticalOrientation"
       [attr.aria-label]="label"
+      [p-disable-click]="disabledClick"
     >
     </po-stepper-label>
   </div>
