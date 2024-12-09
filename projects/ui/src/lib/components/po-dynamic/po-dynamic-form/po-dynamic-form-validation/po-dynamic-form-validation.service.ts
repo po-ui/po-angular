@@ -9,7 +9,9 @@ import { PoDynamicFormFieldChanged } from './po-dynamic-form-field-changed.inter
 import { PoDynamicFormOperation } from '../po-dynamic-form-operation/po-dynamic-form-operation';
 import { PoDynamicFormValidation } from './po-dynamic-form-validation.interface';
 
-@Injectable()
+@Injectable({
+  providedIn: 'root'
+})
 export class PoDynamicFormValidationService extends PoDynamicFormOperation {
   constructor(http: HttpClient) {
     super(http);

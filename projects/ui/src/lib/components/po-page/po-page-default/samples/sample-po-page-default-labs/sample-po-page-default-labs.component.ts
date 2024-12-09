@@ -8,7 +8,8 @@ import { PoPageAction, PoPageDefaultLiterals } from '@po-ui/ng-components';
 
 @Component({
   selector: 'sample-po-page-default-labs',
-  templateUrl: './sample-po-page-default-labs.component.html'
+  templateUrl: './sample-po-page-default-labs.component.html',
+  standalone: false
 })
 export class SamplePoPageDefaultLabsComponent implements OnInit {
   action: PoPageAction;

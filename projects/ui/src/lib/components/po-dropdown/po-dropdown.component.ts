@@ -29,7 +29,8 @@ import { PoDropdownBaseComponent } from './po-dropdown-base.component';
 @Component({
   selector: 'po-dropdown',
   templateUrl: './po-dropdown.component.html',
-  changeDetection: ChangeDetectionStrategy.OnPush
+  changeDetection: ChangeDetectionStrategy.OnPush,
+  standalone: false
 })
 export class PoDropdownComponent extends PoDropdownBaseComponent {
   @ViewChild('dropdownRef', { read: ElementRef, static: true }) dropdownRef: ElementRef;

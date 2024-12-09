@@ -17,7 +17,8 @@ const poToolbarActionsIconDefault = 'ICON_MORE';
  */
 @Component({
   selector: 'po-toolbar-actions',
-  templateUrl: './po-toolbar-actions.component.html'
+  templateUrl: './po-toolbar-actions.component.html',
+  standalone: false
 })
 export class PoToolbarActionsComponent {
   /** Define uma lista de ações. */

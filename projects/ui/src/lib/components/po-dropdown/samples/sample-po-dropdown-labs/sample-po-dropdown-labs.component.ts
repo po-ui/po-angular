@@ -4,7 +4,8 @@ import { PoCheckboxGroupOption, PoSelectOption, PoDropdownAction, PoNotification
 
 @Component({
   selector: 'sample-po-dropdown-labs',
-  templateUrl: './sample-po-dropdown-labs.component.html'
+  templateUrl: './sample-po-dropdown-labs.component.html',
+  standalone: false
 })
 export class SamplePoDropdownLabsComponent implements OnInit {
   action: PoDropdownAction;

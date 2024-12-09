@@ -2,7 +2,9 @@ import { Injectable } from '@angular/core';
 
 import { PoTableColumn, PoTableDetail } from '@po-ui/ng-components';
 
-@Injectable()
+@Injectable({
+  providedIn: 'root'
+})
 export class SamplePoTableAirfareService {
   getColumns(): Array<PoTableColumn> {
     const airfareDetail: PoTableDetail = {

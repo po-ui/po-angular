@@ -42,7 +42,8 @@ import { PoInputGeneric } from '../po-input-generic/po-input-generic';
       useExisting: forwardRef(() => PoPasswordComponent),
       multi: true
     }
-  ]
+  ],
+  standalone: false
 })
 export class PoPasswordComponent extends PoInputGeneric {
   id = `po-password[${uuid()}]`;

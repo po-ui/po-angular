@@ -22,7 +22,8 @@ import { SampleDashboardService } from './sample-po-page-default-dashboard.servi
       }
     `
   ],
-  providers: [SampleDashboardService]
+  providers: [SampleDashboardService],
+  standalone: false
 })
 export class SamplePoPageDefaultDashboardComponent implements OnInit {
   @ViewChild('formShare', { static: true }) formShare: NgForm;

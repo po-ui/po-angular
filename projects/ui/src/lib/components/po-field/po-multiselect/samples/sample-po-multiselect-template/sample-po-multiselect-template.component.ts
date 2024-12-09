@@ -23,7 +23,8 @@ import { PoSelectOption } from '@po-ui/ng-components';
         padding: 8px;
       }
     `
-  ]
+  ],
+  standalone: false
 })
 export class SamplePoMultiselectTemplateComponent {
   employee;

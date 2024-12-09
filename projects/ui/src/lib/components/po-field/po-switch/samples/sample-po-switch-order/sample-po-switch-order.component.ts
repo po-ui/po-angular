@@ -4,7 +4,8 @@ import { PoNotificationService, PoSwitchLabelPosition, PoTableColumn } from '@po
 
 @Component({
   selector: 'sample-po-switch-order',
-  templateUrl: './sample-po-switch-order.component.html'
+  templateUrl: './sample-po-switch-order.component.html',
+  standalone: false
 })
 export class SamplePoSwitchOrderComponent {
   labelPosition: PoSwitchLabelPosition = PoSwitchLabelPosition.Left;

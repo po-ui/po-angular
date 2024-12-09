@@ -10,7 +10,8 @@ import { SamplePoLookupService } from '../sample-po-lookup.service';
 @Component({
   selector: 'sample-po-lookup-hero-reactive-form',
   templateUrl: './sample-po-lookup-hero-reactive-form.component.html',
-  providers: [SamplePoLookupService]
+  providers: [SamplePoLookupService],
+  standalone: false
 })
 export class SamplePoLookupHeroReactiveFormComponent implements OnInit {
   formMission: UntypedFormGroup;

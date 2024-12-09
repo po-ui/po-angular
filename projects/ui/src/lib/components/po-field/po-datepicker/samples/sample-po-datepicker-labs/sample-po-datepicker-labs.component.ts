@@ -4,7 +4,8 @@ import { PoCheckboxGroupOption, PoDatepickerIsoFormat, PoRadioGroupOption } from
 
 @Component({
   selector: 'sample-po-datepicker-labs',
-  templateUrl: './sample-po-datepicker-labs.component.html'
+  templateUrl: './sample-po-datepicker-labs.component.html',
+  standalone: false
 })
 export class SamplePoDatepickerLabsComponent implements OnInit {
   datepicker: string | Date;

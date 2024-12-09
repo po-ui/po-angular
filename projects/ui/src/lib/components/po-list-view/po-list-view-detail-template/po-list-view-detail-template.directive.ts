@@ -46,7 +46,8 @@ import { Directive, TemplateRef, Input } from '@angular/core';
  * ```
  */
 @Directive({
-  selector: '[p-list-view-detail-template]'
+  selector: '[p-list-view-detail-template]',
+  standalone: false
 })
 export class PoListViewDetailTemplateDirective {
   /**

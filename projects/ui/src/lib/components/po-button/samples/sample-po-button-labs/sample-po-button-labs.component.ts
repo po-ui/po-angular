@@ -4,7 +4,8 @@ import { PoCheckboxGroupOption, PoRadioGroupOption, PoDialogService, PoButtonTyp
 
 @Component({
   selector: 'sample-po-button-labs',
-  templateUrl: './sample-po-button-labs.component.html'
+  templateUrl: './sample-po-button-labs.component.html',
+  standalone: false
 })
 export class SamplePoButtonLabsComponent implements OnInit {
   label: string;

@@ -6,7 +6,9 @@ import { map } from 'rxjs/operators';
 
 import { PoMultiselectFilter, PoMultiselectOption } from '@po-ui/ng-components';
 
-@Injectable()
+@Injectable({
+  providedIn: 'root'
+})
 export class SamplePoMultiselectHeroesService implements PoMultiselectFilter {
   constructor(private http: HttpClient) {}
 

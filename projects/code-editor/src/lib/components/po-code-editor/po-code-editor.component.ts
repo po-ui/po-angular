@@ -59,7 +59,8 @@ const providers: Array<Provider> = [
 @Component({
   selector: 'po-code-editor',
   templateUrl: './po-code-editor.component.html',
-  providers
+  providers,
+  standalone: false
 })
 export class PoCodeEditorComponent extends PoCodeEditorBaseComponent implements AfterViewInit, DoCheck {
   @ViewChild('editorContainer', { static: true }) editorContainer: ElementRef;

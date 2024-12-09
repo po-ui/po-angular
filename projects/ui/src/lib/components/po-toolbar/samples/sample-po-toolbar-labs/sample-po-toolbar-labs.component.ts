@@ -11,7 +11,8 @@ import {
 
 @Component({
   selector: 'sample-po-toolbar-labs',
-  templateUrl: './sample-po-toolbar-labs.component.html'
+  templateUrl: './sample-po-toolbar-labs.component.html',
+  standalone: false
 })
 export class SamplePoToolbarLabsComponent implements OnInit {
   action: PoToolbarAction;

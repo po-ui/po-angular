@@ -439,7 +439,7 @@ export class PoI18nBaseService {
   }
 
   // Atualiza a variável local com as literais com os objetos passados na configuração
-  private setVarI18n(contexts: Object) {
+  private setVarI18n(contexts: object) {
     // Percorre os contextos
     for (const context of Object.keys(contexts)) {
       const contextContent = contexts[context];

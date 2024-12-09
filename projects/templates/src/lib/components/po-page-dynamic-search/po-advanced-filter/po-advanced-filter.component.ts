@@ -20,7 +20,8 @@ import { PoPageDynamicSearchFilters } from '../po-page-dynamic-search-filters.in
  */
 @Component({
   selector: 'po-advanced-filter',
-  templateUrl: './po-advanced-filter.component.html'
+  templateUrl: './po-advanced-filter.component.html',
+  standalone: false
 })
 export class PoAdvancedFilterComponent extends PoAdvancedFilterBaseComponent implements OnDestroy, OnInit {
   @ViewChild(PoDynamicFormComponent, { static: true }) poDynamicForm: PoDynamicFormComponent;

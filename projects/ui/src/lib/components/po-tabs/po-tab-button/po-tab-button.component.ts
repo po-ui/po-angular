@@ -22,7 +22,8 @@ import { convertToBoolean } from '../../../utils/util';
  */
 @Component({
   selector: 'po-tab-button',
-  templateUrl: './po-tab-button.component.html'
+  templateUrl: './po-tab-button.component.html',
+  standalone: false
 })
 export class PoTabButtonComponent implements OnChanges, AfterViewInit {
   @ViewChild('tabButtom', { static: true }) tabButtom: ElementRef;

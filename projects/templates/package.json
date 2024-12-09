@@ -16,16 +16,16 @@
     "tslib": "^2.6.2"
   },
   "peerDependencies": {
-    "@angular/animations": "^18",
-    "@angular/common": "^18",
-    "@angular/compiler": "^18",
-    "@angular/core": "^18",
-    "@angular/forms": "^18",
-    "@angular/platform-browser": "^18",
-    "@angular/platform-browser-dynamic": "^18",
-    "@angular/router": "^18",
+    "@angular/animations": "^19",
+    "@angular/common": "^19",
+    "@angular/compiler": "^19",
+    "@angular/core": "^19",
+    "@angular/forms": "^19",
+    "@angular/platform-browser": "^19",
+    "@angular/platform-browser-dynamic": "^19",
+    "@angular/router": "^19",
     "@po-ui/ng-components": "0.0.0-PLACEHOLDER",
     "rxjs": "~7.8.1",
-    "zone.js": "~0.14.4"
+    "zone.js": "~0.15.0"
   }
 }

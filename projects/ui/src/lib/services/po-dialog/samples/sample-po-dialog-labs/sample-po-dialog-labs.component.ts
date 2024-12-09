@@ -6,7 +6,8 @@ import { PoDialogAlertLiterals, PoDialogConfirmLiterals, PoDialogService } from 
 
 @Component({
   selector: 'sample-po-dialog-labs',
-  templateUrl: './sample-po-dialog-labs.component.html'
+  templateUrl: './sample-po-dialog-labs.component.html',
+  standalone: false
 })
 export class SamplePoDialogLabsComponent implements OnInit {
   action: string;

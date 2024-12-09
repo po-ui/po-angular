@@ -22,7 +22,8 @@ import { PoResizeObserverDirective } from './po-resize-observer.directive';
         ></path>
       </svg>
     </div>
-  `
+  `,
+  standalone: false
 })
 export class TestComponent {
   testResize() {}

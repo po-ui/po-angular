@@ -5,7 +5,8 @@ import { PoDialogService, PoNotificationService, PoSelectOption } from '@po-ui/n
 
 @Component({
   selector: 'sample-po-datepicker-airfare-reactive-form',
-  templateUrl: './sample-po-datepicker-airfare-reactive-form.component.html'
+  templateUrl: './sample-po-datepicker-airfare-reactive-form.component.html',
+  standalone: false
 })
 export class SamplePoDatepickerAirfareReactiveFormComponent implements OnInit {
   formAirfare: UntypedFormGroup;

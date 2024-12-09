@@ -78,7 +78,8 @@ const poDecimalTotalLengthLimit = 16;
       useExisting: forwardRef(() => PoDecimalComponent),
       multi: true
     }
-  ]
+  ],
+  standalone: false
 })
 export class PoDecimalComponent extends PoInputBaseComponent implements AfterViewInit, OnInit, OnDestroy {
   @ViewChild('inp', { read: ElementRef, static: true }) inputEl: ElementRef;

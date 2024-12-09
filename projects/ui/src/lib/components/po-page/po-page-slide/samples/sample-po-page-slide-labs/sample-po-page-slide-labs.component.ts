@@ -3,7 +3,8 @@ import { PoCheckboxGroupOption, PoPageSlideComponent, PoRadioGroupOption } from 
 
 @Component({
   selector: 'sample-po-page-slide-labs',
-  templateUrl: './sample-po-page-slide-labs.component.html'
+  templateUrl: './sample-po-page-slide-labs.component.html',
+  standalone: false
 })
 export class SamplePoPageSlideLabsComponent implements OnInit {
   @ViewChild('poPageSlide')

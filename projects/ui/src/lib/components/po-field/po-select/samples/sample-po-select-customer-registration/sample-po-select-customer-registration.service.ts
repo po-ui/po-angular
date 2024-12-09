@@ -1,7 +1,9 @@
 import { HttpClient } from '@angular/common/http';
 import { Injectable } from '@angular/core';
 
-@Injectable()
+@Injectable({
+  providedIn: 'root'
+})
 export class SamplePoSelectCustomerRegistrationService {
   private url: string = 'https://po-sample-api.onrender.com/v1/sampleSelect';
 

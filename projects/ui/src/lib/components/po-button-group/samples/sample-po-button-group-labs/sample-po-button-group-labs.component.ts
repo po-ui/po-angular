@@ -10,7 +10,8 @@ import {
 
 @Component({
   selector: 'sample-po-button-group-labs',
-  templateUrl: './sample-po-button-group-labs.component.html'
+  templateUrl: './sample-po-button-group-labs.component.html',
+  standalone: false
 })
 export class SamplePoButtonGroupLabsComponent implements OnInit {
   button: any;

@@ -7,7 +7,8 @@ import { PoPageLoginRecovery } from '../interfaces/po-page-login-recovery.interf
 
 @Component({
   selector: 'po-page-login-popover',
-  templateUrl: './po-page-login-popover.component.html'
+  templateUrl: './po-page-login-popover.component.html',
+  standalone: false
 })
 
 /**

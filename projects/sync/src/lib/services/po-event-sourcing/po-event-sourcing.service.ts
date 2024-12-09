@@ -25,7 +25,9 @@ import { PoSyncConfig } from '../po-sync/interfaces/po-sync-config.interface';
 import { PoSyncResponse } from '../po-sync/interfaces/po-sync-response.interface';
 import { PoSyncSchema } from './../po-sync/interfaces/po-sync-schema.interface';
 
-@Injectable()
+@Injectable({
+  providedIn: 'root'
+})
 export class PoEventSourcingService {
   static readonly event_sourcing_name: string = 'EventSourcing';
 
@@ -283,7 +285,7 @@ export class PoEventSourcingService {
     }
   }
 
-  private diffServerItems(currentUrlDiff): Observable<HttpResponse<Object>> {
+  private diffServerItems(currentUrlDiff): Observable<HttpResponse<object>> {
     return this.poHttpClient.get(currentUrlDiff);
   }
 
@@ -433,7 +435,7 @@ export class PoEventSourcingService {
 
   private sendResponseSubject(
     eventSourcingItem: PoEventSourcingItem,
-    response: HttpResponse<Object> | HttpErrorResponse | PoEventSourcingErrorResponse,
+    response: HttpResponse<object> | HttpErrorResponse | PoEventSourcingErrorResponse,
     isSubjectError: boolean = false
   ): Promise<any> {
     const poSyncResponse: PoSyncResponse = {

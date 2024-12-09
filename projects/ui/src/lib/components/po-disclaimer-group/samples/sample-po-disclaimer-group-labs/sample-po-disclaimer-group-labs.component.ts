@@ -4,7 +4,8 @@ import { PoCheckboxGroupOption, PoDisclaimer } from '@po-ui/ng-components';
 
 @Component({
   selector: 'sample-po-disclaimer-group-labs',
-  templateUrl: './sample-po-disclaimer-group-labs.component.html'
+  templateUrl: './sample-po-disclaimer-group-labs.component.html',
+  standalone: false
 })
 export class SamplePoDisclaimerGroupLabsComponent implements OnInit {
   disclaimer: PoDisclaimer;

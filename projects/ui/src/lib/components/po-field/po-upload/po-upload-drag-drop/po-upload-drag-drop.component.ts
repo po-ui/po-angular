@@ -20,7 +20,8 @@ const PoUploadDragDropHeightMin = 160;
 @Component({
   selector: 'po-upload-drag-drop',
   templateUrl: './po-upload-drag-drop.component.html',
-  changeDetection: ChangeDetectionStrategy.OnPush
+  changeDetection: ChangeDetectionStrategy.OnPush,
+  standalone: false
 })
 export class PoUploadDragDropComponent {
   @ViewChild('dragDropOverlay', { read: ElementRef }) dragDropOverlayElement: ElementRef;

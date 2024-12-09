@@ -8,10 +8,16 @@ import { PoBreadcrumbComponent } from './po-breadcrumb.component';
 import { PoBreadcrumbFavoriteComponent } from './po-breadcrumb-favorite/po-breadcrumb-favorite.component';
 import { PoBreadcrumbItem } from './po-breadcrumb-item.interface';
 
-@Component({ template: 'Documentation' })
+@Component({
+  template: 'Documentation',
+  standalone: false
+})
 export class DocumentationComponent {}
 
-@Component({ template: 'Guides' })
+@Component({
+  template: 'Guides',
+  standalone: false
+})
 export class GuidesComponent {}
 
 export const routes: Routes = [

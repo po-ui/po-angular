@@ -4,7 +4,8 @@ import { PoCheckboxGroupOption } from '@po-ui/ng-components';
 
 @Component({
   selector: 'sample-po-textarea-labs',
-  templateUrl: './sample-po-textarea-labs.component.html'
+  templateUrl: './sample-po-textarea-labs.component.html',
+  standalone: false
 })
 export class SamplePoTextareaLabsComponent implements OnInit {
   event: string;

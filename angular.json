@@ -45,12 +45,13 @@
       "prefix": "app",
       "architect": {
         "build": {
-          "builder": "@angular-devkit/build-angular:browser",
+          "builder": "@angular-devkit/build-angular:application",
           "options": {
-            "outputPath": "dist/app",
+            "outputPath": {
+              "base": "dist/app"
+            },
             "index": "projects/app/src/index.html",
-            "main": "projects/app/src/main.ts",
-            "polyfills": "projects/app/src/polyfills.ts",
+            "polyfills": ["projects/app/src/polyfills.ts"],
             "tsConfig": "projects/app/tsconfig.app.json",
             "assets": [
               "projects/app/src/favicon.ico",
@@ -68,12 +69,11 @@
             ],
             "styles": ["./node_modules/@po-ui/style/css/po-theme-default.min.css", "projects/app/src/styles.css"],
             "scripts": [],
-            "vendorChunk": true,
             "extractLicenses": false,
-            "buildOptimizer": false,
             "sourceMap": true,
             "optimization": false,
-            "namedChunks": true
+            "namedChunks": true,
+            "browser": "projects/app/src/main.ts"
           },
           "configurations": {
             "production": {
@@ -88,8 +88,6 @@
               "sourceMap": false,
               "namedChunks": false,
               "extractLicenses": true,
-              "vendorChunk": false,
-              "buildOptimizer": true,
               "budgets": [
                 {
                   "type": "initial",
@@ -288,12 +286,13 @@
       "prefix": "app",
       "architect": {
         "build": {
-          "builder": "@angular-devkit/build-angular:browser",
+          "builder": "@angular-devkit/build-angular:application",
           "options": {
-            "outputPath": "dist/portal",
+            "outputPath": {
+              "base": "dist/portal"
+            },
             "index": "projects/portal/src/index.html",
-            "main": "projects/portal/src/main.ts",
-            "polyfills": "projects/portal/src/polyfills.ts",
+            "polyfills": ["projects/portal/src/polyfills.ts"],
             "tsConfig": "projects/portal/tsconfig.app.json",
             "assets": [
               "projects/portal/src/favicon.ico",
@@ -316,12 +315,11 @@
               "projects/portal/src/styles.css"
             ],
             "scripts": [],
-            "vendorChunk": true,
             "extractLicenses": false,
-            "buildOptimizer": false,
             "sourceMap": true,
             "optimization": false,
-            "namedChunks": true
+            "namedChunks": true,
+            "browser": "projects/portal/src/main.ts"
           },
           "configurations": {
             "production": {
@@ -336,8 +334,6 @@
               "sourceMap": false,
               "namedChunks": false,
               "extractLicenses": true,
-              "vendorChunk": false,
-              "buildOptimizer": true,
               "budgets": [
                 {
                   "type": "initial",

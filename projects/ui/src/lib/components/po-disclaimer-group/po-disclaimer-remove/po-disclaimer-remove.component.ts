@@ -9,7 +9,8 @@ import { Component, EventEmitter, Input, Output } from '@angular/core';
  */
 @Component({
   selector: 'po-disclaimer-remove',
-  templateUrl: './po-disclaimer-remove.component.html'
+  templateUrl: './po-disclaimer-remove.component.html',
+  standalone: false
 })
 export class PoDisclaimerRemoveComponent {
   /** Texto exibido.  */

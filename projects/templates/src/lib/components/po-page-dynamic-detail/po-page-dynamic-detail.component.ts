@@ -146,7 +146,8 @@ export const poPageDynamicDetailLiteralsDefault = {
 @Component({
   selector: 'po-page-dynamic-detail',
   templateUrl: './po-page-dynamic-detail.component.html',
-  providers: [PoPageDynamicService, PoPageDynamicDetailActionsService]
+  providers: [PoPageDynamicService, PoPageDynamicDetailActionsService],
+  standalone: false
 })
 export class PoPageDynamicDetailComponent implements OnInit, OnDestroy {
   /** Objeto com propriedades do breadcrumb. */

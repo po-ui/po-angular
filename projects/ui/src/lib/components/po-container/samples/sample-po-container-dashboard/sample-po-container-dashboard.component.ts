@@ -24,7 +24,8 @@ import {
       }
     `
   ],
-  providers: [SampleDashboardService]
+  providers: [SampleDashboardService],
+  standalone: false
 })
 export class SamplePoContainerDashboardComponent implements AfterContentChecked, OnInit {
   @ViewChild('formShare', { static: true }) formShare: NgForm;

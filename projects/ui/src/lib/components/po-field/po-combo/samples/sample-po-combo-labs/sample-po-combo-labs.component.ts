@@ -11,7 +11,8 @@ import {
 
 @Component({
   selector: 'sample-po-combo-labs',
-  templateUrl: './sample-po-combo-labs.component.html'
+  templateUrl: './sample-po-combo-labs.component.html',
+  standalone: false
 })
 export class SamplePoComboLabsComponent implements OnInit {
   combo: string;

@@ -13,7 +13,8 @@ import { expectPropertiesValues } from 'projects/templates/src/lib/util-test/uti
 
 @Component({
   selector: 'po-chart-circular-test',
-  template: ` <svg:path #svgPaths></svg:path> `
+  template: ` <svg:path #svgPaths></svg:path> `,
+  standalone: false
 })
 class PoChartPieComponent extends PoChartCircularComponent {
   constructor(ngZone: NgZone, changeDetector: ChangeDetectorRef) {

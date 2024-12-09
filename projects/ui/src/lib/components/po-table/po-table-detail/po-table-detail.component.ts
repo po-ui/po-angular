@@ -15,7 +15,8 @@ import { PoTableDetailColumn } from './po-table-detail-column.interface';
  */
 @Component({
   selector: 'po-table-detail',
-  templateUrl: './po-table-detail.component.html'
+  templateUrl: './po-table-detail.component.html',
+  standalone: false
 })
 export class PoTableDetailComponent {
   /**

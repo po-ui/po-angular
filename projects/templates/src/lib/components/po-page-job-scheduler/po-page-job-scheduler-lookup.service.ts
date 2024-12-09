@@ -6,7 +6,9 @@ import { PoLookupFilter } from '@po-ui/ng-components';
 
 import { PoPageJobSchedulerService } from './po-page-job-scheduler.service';
 
-@Injectable()
+@Injectable({
+  providedIn: 'root'
+})
 export class PoPageJobSchedulerLookupService implements PoLookupFilter {
   constructor(private poPageJobSchedulerService: PoPageJobSchedulerService) {}
 

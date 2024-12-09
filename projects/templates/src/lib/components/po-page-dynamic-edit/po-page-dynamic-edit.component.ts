@@ -184,7 +184,8 @@ export const poPageDynamicEditLiteralsDefault = {
 @Component({
   selector: 'po-page-dynamic-edit',
   templateUrl: './po-page-dynamic-edit.component.html',
-  providers: [PoPageDynamicService]
+  providers: [PoPageDynamicService],
+  standalone: false
 })
 export class PoPageDynamicEditComponent implements OnInit, OnDestroy {
   @ViewChild('dynamicForm') dynamicForm: PoDynamicFormComponent;

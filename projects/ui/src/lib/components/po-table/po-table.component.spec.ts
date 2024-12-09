@@ -25,10 +25,16 @@ import { PoTableModule } from './po-table.module';
 import { PoTableService } from './services/po-table.service';
 import { provideHttpClient, withInterceptorsFromDi } from '@angular/common/http';
 
-@Component({ template: 'Search' })
+@Component({
+  template: 'Search',
+  standalone: false
+})
 export class SearchComponent {}
 
-@Component({ template: 'Home' })
+@Component({
+  template: 'Home',
+  standalone: false
+})
 export class TestMenuComponent {}
 
 export const routes: Routes = [

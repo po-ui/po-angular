@@ -6,7 +6,9 @@ import { map } from 'rxjs/operators';
 
 import { Documentation } from './documentation.class';
 
-@Injectable()
+@Injectable({
+  providedIn: 'root'
+})
 export class DocumentationService {
   constructor(private http: HttpClient) {}
 

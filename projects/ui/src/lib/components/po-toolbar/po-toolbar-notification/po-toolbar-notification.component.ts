@@ -20,7 +20,8 @@ import { PoToolbarAction } from '../po-toolbar-action.interface';
 @Component({
   selector: 'po-toolbar-notification',
   templateUrl: './po-toolbar-notification.component.html',
-  providers: [PoControlPositionService]
+  providers: [PoControlPositionService],
+  standalone: false
 })
 export class PoToolbarNotificationComponent implements AfterViewInit {
   @ViewChild('notification', { read: ElementRef }) notificationRef: ElementRef;

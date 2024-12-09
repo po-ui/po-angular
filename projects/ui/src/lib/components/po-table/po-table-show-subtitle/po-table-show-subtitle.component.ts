@@ -11,7 +11,8 @@ import { PoTableSubtitleColumn } from '../po-table-subtitle-footer/po-table-subt
  */
 @Component({
   selector: 'po-table-show-subtitle',
-  templateUrl: './po-table-show-subtitle.component.html'
+  templateUrl: './po-table-show-subtitle.component.html',
+  standalone: false
 })
 export class PoTableShowSubtitleComponent {
   /** Objeto com os dados da legenda. */

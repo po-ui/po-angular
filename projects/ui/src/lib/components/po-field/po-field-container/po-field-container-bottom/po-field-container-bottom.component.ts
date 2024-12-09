@@ -11,7 +11,8 @@ import { ChangeDetectionStrategy, Component, Input } from '@angular/core';
 @Component({
   selector: 'po-field-container-bottom',
   templateUrl: './po-field-container-bottom.component.html',
-  changeDetection: ChangeDetectionStrategy.OnPush
+  changeDetection: ChangeDetectionStrategy.OnPush,
+  standalone: false
 })
 export class PoFieldContainerBottomComponent {
   /**

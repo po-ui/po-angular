@@ -138,7 +138,8 @@ const providers = [
   selector: 'po-lookup',
   templateUrl: './po-lookup.component.html',
   changeDetection: ChangeDetectionStrategy.OnPush,
-  providers
+  providers,
+  standalone: false
 })
 export class PoLookupComponent extends PoLookupBaseComponent implements AfterViewInit, OnDestroy, OnInit, DoCheck {
   @ViewChild('inp', { read: ElementRef, static: false }) inputEl: ElementRef;

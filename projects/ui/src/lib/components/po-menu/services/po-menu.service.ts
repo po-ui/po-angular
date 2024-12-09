@@ -15,7 +15,9 @@ import { PoMenuFilter } from '../po-menu-filter/po-menu-filter.interface';
  * Serviço que implementa a interface `PoMenuFilter`, utilizado para fazer requisições ao serviço informado pelo usuário,
  * caso for uma URL, no componente `po-menu`.
  */
-@Injectable()
+@Injectable({
+  providedIn: 'root'
+})
 export class PoMenuService implements PoMenuFilter {
   private _url: string;
 

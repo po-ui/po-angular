@@ -6,7 +6,9 @@ import { map } from 'rxjs/operators';
 
 import { PoComboOption, PoTableColumn } from '@po-ui/ng-components';
 
-@Injectable()
+@Injectable({
+  providedIn: 'root'
+})
 export class SamplePoDisclaimerGroupSwPlanetsService {
   constructor(private http: HttpClient) {}
 

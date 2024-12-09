@@ -6,7 +6,9 @@ import { map } from 'rxjs/operators';
 import { PoMultiselectFilter } from './po-multiselect-filter.interface';
 import { PoMultiselectOption } from './po-multiselect-option.interface';
 
-@Injectable()
+@Injectable({
+  providedIn: 'root'
+})
 export class PoMultiselectFilterService implements PoMultiselectFilter {
   fieldLabel: string = 'label';
   fieldValue: string = 'value';

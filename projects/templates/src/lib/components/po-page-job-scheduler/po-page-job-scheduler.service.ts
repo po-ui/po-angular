@@ -10,7 +10,9 @@ import { PoDynamicFormField } from '@po-ui/ng-components';
 import { PoJobScheduler } from './interfaces/po-job-scheduler.interface';
 import { PoJobSchedulerInternal } from './interfaces/po-job-scheduler-internal.interface';
 
-@Injectable()
+@Injectable({
+  providedIn: 'root'
+})
 export class PoPageJobSchedulerService {
   readonly headers: HttpHeaders = new HttpHeaders({
     'X-PO-SCREEN-LOCK': 'true'

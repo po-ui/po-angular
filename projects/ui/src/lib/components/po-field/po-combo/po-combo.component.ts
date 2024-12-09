@@ -97,7 +97,8 @@ const poComboContainerPositionDefault = 'bottom';
       useExisting: forwardRef(() => PoComboComponent),
       multi: true
     }
-  ]
+  ],
+  standalone: false
 })
 export class PoComboComponent extends PoComboBaseComponent implements AfterViewInit, OnChanges, OnDestroy {
   @ContentChild(PoComboOptionTemplateDirective, { static: true }) comboOptionTemplate: PoComboOptionTemplateDirective;

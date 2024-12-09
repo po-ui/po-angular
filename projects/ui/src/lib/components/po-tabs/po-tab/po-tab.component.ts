@@ -8,7 +8,8 @@ import { PoTabsService } from '../po-tabs.service';
  */
 @Component({
   selector: 'po-tab',
-  templateUrl: './po-tab.component.html'
+  templateUrl: './po-tab.component.html',
+  standalone: false
 })
 export class PoTabComponent extends PoTabBaseComponent implements AfterContentInit, OnChanges {
   constructor(

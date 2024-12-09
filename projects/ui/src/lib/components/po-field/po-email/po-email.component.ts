@@ -58,7 +58,8 @@ const providers = [
   selector: 'po-email',
   templateUrl: '../po-input/po-input.component.html',
   changeDetection: ChangeDetectionStrategy.OnPush,
-  providers
+  providers,
+  standalone: false
 })
 export class PoEmailComponent extends PoInputGeneric implements AfterViewInit, OnDestroy {
   id = `po-email[${uuid()}]`;

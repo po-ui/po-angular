@@ -12,10 +12,16 @@ import { PoIconModule } from '../../po-icon/po-icon.module';
 import { PoMenuItemsService } from '../services/po-menu-items.service';
 import { PoMenuItemComponent } from './po-menu-item.component';
 
-@Component({ template: 'Search' })
+@Component({
+  template: 'Search',
+  standalone: false
+})
 export class SearchComponent {}
 
-@Component({ template: 'Home' })
+@Component({
+  template: 'Home',
+  standalone: false
+})
 export class HomeComponent {}
 
 export const routes: Routes = [

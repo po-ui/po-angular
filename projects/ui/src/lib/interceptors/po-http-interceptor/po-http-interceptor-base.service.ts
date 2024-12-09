@@ -66,7 +66,9 @@ const NO_MESSAGE_HEADER_PARAM = 'X-PO-No-Message';
  *
  * ...
  *
- * @Injectable()
+ * @Injectable({
+ *   providedIn: 'root'
+ * })
  * export class UserService {
  *
  *   constructor(private http: HttpClient) { }

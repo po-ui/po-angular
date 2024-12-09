@@ -22,7 +22,8 @@ import { Observable, Subscription, debounceTime, fromEvent } from 'rxjs';
 
 @Component({
   selector: 'po-listbox',
-  templateUrl: './po-listbox.component.html'
+  templateUrl: './po-listbox.component.html',
+  standalone: false
 })
 export class PoListBoxComponent extends PoListBoxBaseComponent implements AfterViewInit, OnChanges, OnDestroy {
   @ViewChild('listbox', { static: true }) listbox: ElementRef;

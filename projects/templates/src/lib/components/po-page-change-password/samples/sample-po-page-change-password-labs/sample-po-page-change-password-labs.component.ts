@@ -9,7 +9,8 @@ import {
 
 @Component({
   selector: 'sample-po-page-change-password-labs',
-  templateUrl: './sample-po-page-change-password-labs.component.html'
+  templateUrl: './sample-po-page-change-password-labs.component.html',
+  standalone: false
 })
 export class SamplePoPageChangePasswordLabsComponent implements OnInit {
   @ViewChild(PoPageChangePasswordComponent, { static: true }) changePassword: PoPageChangePasswordComponent;

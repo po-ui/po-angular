@@ -10,10 +10,16 @@ import { PoMenuPanelItemComponent } from './po-menu-panel-item/po-menu-panel-ite
 import { PoMenuPanelComponent } from './po-menu-panel.component';
 import { PoMenuPanelItemsService } from './services/po-menu-panel-items.service';
 
-@Component({ template: 'Search' })
+@Component({
+  template: 'Search',
+  standalone: false
+})
 export class SearchComponent {}
 
-@Component({ template: 'Home' })
+@Component({
+  template: 'Home',
+  standalone: false
+})
 export class HomeComponent {}
 
 export const routes: Routes = [

@@ -22,7 +22,8 @@ import { PoPageContentComponent } from './po-page-content.component';
         width: 100%;
       }
     `
-  ]
+  ],
+  standalone: false
 })
 class ContentDivComponent {}
 

@@ -12,7 +12,8 @@ import { ICONS_DICTIONARY, PhosphorIconDictionary } from './po-icon-dictionary';
 @Component({
   selector: 'po-icon',
   templateUrl: './po-icon.component.html',
-  changeDetection: ChangeDetectionStrategy.OnPush
+  changeDetection: ChangeDetectionStrategy.OnPush,
+  standalone: false
 })
 export class PoIconComponent {
   class: string;
