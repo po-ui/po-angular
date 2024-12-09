@@ -3,8 +3,9 @@ import { Component } from '@angular/core';
 import { PoButtonGroupItem } from '@po-ui/ng-components';
 
 @Component({
-  selector: 'sample-po-button-group-basic',
-  templateUrl: './sample-po-button-group-basic.component.html'
+    selector: 'sample-po-button-group-basic',
+    templateUrl: './sample-po-button-group-basic.component.html',
+    standalone: false
 })
 export class SamplePoButtonGroupBasicComponent {
   buttons: Array<PoButtonGroupItem> = [

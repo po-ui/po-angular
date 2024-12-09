@@ -13,8 +13,9 @@ import {
 import { PoAccordionLiterals } from '../interfaces/po-accordion-literals.interface';
 
 @Component({
-  selector: 'po-accordion-manager',
-  templateUrl: 'po-accordion-manager.component.html'
+    selector: 'po-accordion-manager',
+    templateUrl: 'po-accordion-manager.component.html',
+    standalone: false
 })
 export class PoAccordionManagerComponent implements OnChanges {
   labelValue: string = '';

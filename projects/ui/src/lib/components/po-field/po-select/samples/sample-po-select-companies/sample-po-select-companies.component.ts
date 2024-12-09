@@ -3,8 +3,9 @@ import { Component } from '@angular/core';
 import { PoSelectOption, PoSelectOptionGroup } from '@po-ui/ng-components';
 
 @Component({
-  selector: 'sample-po-select-companies',
-  templateUrl: './sample-po-select-companies.component.html'
+    selector: 'sample-po-select-companies',
+    templateUrl: './sample-po-select-companies.component.html',
+    standalone: false
 })
 export class SamplePoSelectCompaniesComponent {
   select: Array<string>;

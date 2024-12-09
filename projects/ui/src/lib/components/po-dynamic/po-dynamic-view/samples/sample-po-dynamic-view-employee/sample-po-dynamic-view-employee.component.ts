@@ -3,8 +3,9 @@ import { Component } from '@angular/core';
 import { PoDynamicViewField } from '@po-ui/ng-components';
 
 @Component({
-  selector: 'sample-po-dynamic-view-employee',
-  templateUrl: './sample-po-dynamic-view-employee.component.html'
+    selector: 'sample-po-dynamic-view-employee',
+    templateUrl: './sample-po-dynamic-view-employee.component.html',
+    standalone: false
 })
 export class SamplePoDynamicViewEmployeeComponent {
   fields: Array<PoDynamicViewField> = [

@@ -20,16 +20,17 @@ import { convertToBoolean } from '../../../utils/util';
 import { PoRadioSize } from './po-radio-size.enum';
 
 @Component({
-  selector: 'po-radio',
-  templateUrl: './po-radio.component.html',
-  changeDetection: ChangeDetectionStrategy.OnPush,
-  providers: [
-    {
-      provide: NG_VALUE_ACCESSOR,
-      useExisting: forwardRef(() => PoRadioComponent),
-      multi: true
-    }
-  ]
+    selector: 'po-radio',
+    templateUrl: './po-radio.component.html',
+    changeDetection: ChangeDetectionStrategy.OnPush,
+    providers: [
+        {
+            provide: NG_VALUE_ACCESSOR,
+            useExisting: forwardRef(() => PoRadioComponent),
+            multi: true
+        }
+    ],
+    standalone: false
 })
 export class PoRadioComponent extends PoFieldModel<boolean> {
   @ViewChild('radio', { static: true }) radio: ElementRef;

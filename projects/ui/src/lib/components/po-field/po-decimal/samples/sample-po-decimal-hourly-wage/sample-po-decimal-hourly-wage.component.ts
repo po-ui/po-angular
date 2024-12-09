@@ -1,8 +1,9 @@
 import { Component } from '@angular/core';
 
 @Component({
-  selector: 'sample-po-decimal-hourly-wage',
-  templateUrl: './sample-po-decimal-hourly-wage.component.html'
+    selector: 'sample-po-decimal-hourly-wage',
+    templateUrl: './sample-po-decimal-hourly-wage.component.html',
+    standalone: false
 })
 export class SamplePoDecimalHourlyWageComponent {
   hourlyWage: number;

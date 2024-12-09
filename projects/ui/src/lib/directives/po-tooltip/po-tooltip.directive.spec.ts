@@ -8,11 +8,12 @@ import { PoTooltipDirective } from './po-tooltip.directive';
 import { PoControlPositionService } from '../../services/po-control-position/po-control-position.service';
 
 @Component({
-  template: `
+    template: `
     <div #tooltipContainer p-tooltip="Teste" p-tooltip-position="top">
       <po-button p-label="Passe o mouse"> </po-button>
     </div>
-  `
+  `,
+    standalone: false
 })
 export class TestComponent {}
 

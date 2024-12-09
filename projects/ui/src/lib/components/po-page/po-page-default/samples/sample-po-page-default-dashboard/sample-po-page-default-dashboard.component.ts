@@ -10,10 +10,10 @@ import { PoTableColumn } from '@po-ui/ng-components';
 import { SampleDashboardService } from './sample-po-page-default-dashboard.service';
 
 @Component({
-  selector: 'sample-po-page-default-dashboard',
-  templateUrl: './sample-po-page-default-dashboard.component.html',
-  styles: [
-    `
+    selector: 'sample-po-page-default-dashboard',
+    templateUrl: './sample-po-page-default-dashboard.component.html',
+    styles: [
+        `
       .sample-widget-text-subtitle {
         font-family: NunitoSans;
         font-size: 14px;
@@ -21,8 +21,9 @@ import { SampleDashboardService } from './sample-po-page-default-dashboard.servi
         color: #9da7a9;
       }
     `
-  ],
-  providers: [SampleDashboardService]
+    ],
+    providers: [SampleDashboardService],
+    standalone: false
 })
 export class SamplePoPageDefaultDashboardComponent implements OnInit {
   @ViewChild('formShare', { static: true }) formShare: NgForm;

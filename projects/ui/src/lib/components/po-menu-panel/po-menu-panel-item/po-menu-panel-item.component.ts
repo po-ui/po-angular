@@ -13,8 +13,9 @@ import { PoMenuPanelItemsService } from '../services/po-menu-panel-items.service
  * Componente que implementa cada item do po-menu-panel.
  */
 @Component({
-  selector: 'po-menu-panel-item',
-  templateUrl: './po-menu-panel-item.component.html'
+    selector: 'po-menu-panel-item',
+    templateUrl: './po-menu-panel-item.component.html',
+    standalone: false
 })
 export class PoMenuPanelItemComponent implements OnDestroy, OnInit {
   @Input('p-menu-item-internal') menuItemInternal: PoMenuPanelItemInternal;

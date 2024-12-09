@@ -91,16 +91,17 @@ import { PoSwitchLabelPosition } from './po-switch-label-position.enum';
  * </example>
  */
 @Component({
-  selector: 'po-switch',
-  templateUrl: './po-switch.component.html',
-  changeDetection: ChangeDetectionStrategy.OnPush,
-  providers: [
-    {
-      provide: NG_VALUE_ACCESSOR,
-      useExisting: forwardRef(() => PoSwitchComponent),
-      multi: true
-    }
-  ]
+    selector: 'po-switch',
+    templateUrl: './po-switch.component.html',
+    changeDetection: ChangeDetectionStrategy.OnPush,
+    providers: [
+        {
+            provide: NG_VALUE_ACCESSOR,
+            useExisting: forwardRef(() => PoSwitchComponent),
+            multi: true
+        }
+    ],
+    standalone: false
 })
 export class PoSwitchComponent extends PoFieldModel<any> {
   @ViewChild('switchContainer', { static: true }) switchContainer: ElementRef;

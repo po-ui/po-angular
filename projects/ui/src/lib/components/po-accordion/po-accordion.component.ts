@@ -31,9 +31,10 @@ import { PoAccordionService } from './services/po-accordion.service';
  * </example>
  */
 @Component({
-  selector: 'po-accordion',
-  templateUrl: 'po-accordion.component.html',
-  providers: [PoAccordionService]
+    selector: 'po-accordion',
+    templateUrl: 'po-accordion.component.html',
+    providers: [PoAccordionService],
+    standalone: false
 })
 export class PoAccordionComponent extends PoAccordionBaseComponent implements OnDestroy {
   @ViewChildren(PoAccordionItemHeaderComponent) accordionsHeader: QueryList<PoAccordionItemHeaderComponent>;

@@ -10,8 +10,9 @@ import {
 } from '@po-ui/ng-components';
 
 @Component({
-  selector: 'sample-po-toolbar-labs',
-  templateUrl: './sample-po-toolbar-labs.component.html'
+    selector: 'sample-po-toolbar-labs',
+    templateUrl: './sample-po-toolbar-labs.component.html',
+    standalone: false
 })
 export class SamplePoToolbarLabsComponent implements OnInit {
   action: PoToolbarAction;

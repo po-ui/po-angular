@@ -4,8 +4,9 @@ import { UntypedFormControl } from '@angular/forms';
 import { PoNotificationService } from '@po-ui/ng-components';
 
 @Component({
-  selector: 'sample-po-upload-resume-drag-drop',
-  templateUrl: 'sample-po-upload-resume-drag-drop.component.html'
+    selector: 'sample-po-upload-resume-drag-drop',
+    templateUrl: 'sample-po-upload-resume-drag-drop.component.html',
+    standalone: false
 })
 export class SamplePoUploadResumeDragDropComponent implements OnInit {
   @ViewChild('formOpportunity', { static: true }) formOpportunity: UntypedFormControl;

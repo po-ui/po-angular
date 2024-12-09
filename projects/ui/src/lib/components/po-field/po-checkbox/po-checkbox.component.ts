@@ -37,16 +37,17 @@ import { PoCheckboxBaseComponent } from './po-checkbox-base.component';
  * </example>
  */
 @Component({
-  selector: 'po-checkbox',
-  templateUrl: './po-checkbox.component.html',
-  changeDetection: ChangeDetectionStrategy.OnPush,
-  providers: [
-    {
-      provide: NG_VALUE_ACCESSOR,
-      useExisting: forwardRef(() => PoCheckboxComponent),
-      multi: true
-    }
-  ]
+    selector: 'po-checkbox',
+    templateUrl: './po-checkbox.component.html',
+    changeDetection: ChangeDetectionStrategy.OnPush,
+    providers: [
+        {
+            provide: NG_VALUE_ACCESSOR,
+            useExisting: forwardRef(() => PoCheckboxComponent),
+            multi: true
+        }
+    ],
+    standalone: false
 })
 export class PoCheckboxComponent extends PoCheckboxBaseComponent implements AfterViewInit {
   private _iconToken: { [key: string]: string };

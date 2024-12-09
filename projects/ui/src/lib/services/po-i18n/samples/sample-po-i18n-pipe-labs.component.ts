@@ -1,8 +1,9 @@
 import { Component } from '@angular/core';
 
 @Component({
-  selector: 'sample-po-i18n-pipe-labs',
-  templateUrl: './sample-po-i18n-pipe-labs.component.html'
+    selector: 'sample-po-i18n-pipe-labs',
+    templateUrl: './sample-po-i18n-pipe-labs.component.html',
+    standalone: false
 })
 export class SamplePoI18nPipeLabsComponent {
   literal: string = 'Olá {name}, seja bem vindo e tenha um {greeting}!';

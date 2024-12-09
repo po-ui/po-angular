@@ -2,9 +2,10 @@ import { Component, OnInit } from '@angular/core';
 import { SamplePoSearchListboxService } from './sample-po-search-listbox.service';
 
 @Component({
-  selector: 'sample-po-search-listbox',
-  templateUrl: './sample-po-search-listbox.component.html',
-  providers: [SamplePoSearchListboxService]
+    selector: 'sample-po-search-listbox',
+    templateUrl: './sample-po-search-listbox.component.html',
+    providers: [SamplePoSearchListboxService],
+    standalone: false
 })
 export class SamplePoSearchListboxComponent implements OnInit {
   items: any;

@@ -48,21 +48,22 @@ import { PoRadioGroupBaseComponent } from './po-radio-group-base.component';
  *
  */
 @Component({
-  selector: 'po-radio-group',
-  templateUrl: './po-radio-group.component.html',
-  changeDetection: ChangeDetectionStrategy.OnPush,
-  providers: [
-    {
-      provide: NG_VALUE_ACCESSOR,
-      useExisting: forwardRef(() => PoRadioGroupComponent),
-      multi: true
-    },
-    {
-      provide: NG_VALIDATORS,
-      useExisting: forwardRef(() => PoRadioGroupComponent),
-      multi: true
-    }
-  ]
+    selector: 'po-radio-group',
+    templateUrl: './po-radio-group.component.html',
+    changeDetection: ChangeDetectionStrategy.OnPush,
+    providers: [
+        {
+            provide: NG_VALUE_ACCESSOR,
+            useExisting: forwardRef(() => PoRadioGroupComponent),
+            multi: true
+        },
+        {
+            provide: NG_VALIDATORS,
+            useExisting: forwardRef(() => PoRadioGroupComponent),
+            multi: true
+        }
+    ],
+    standalone: false
 })
 export class PoRadioGroupComponent extends PoRadioGroupBaseComponent implements AfterViewInit, DoCheck {
   /** Label do campo. */

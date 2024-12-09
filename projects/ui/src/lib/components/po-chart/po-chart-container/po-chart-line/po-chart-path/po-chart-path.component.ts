@@ -5,8 +5,9 @@ import { convertToBoolean, isIE } from '../../../../../utils/util';
 const pathDashoffsetDefaultWidth = 0;
 
 @Component({
-  selector: '[po-chart-path]',
-  templateUrl: './po-chart-path.component.svg'
+    selector: '[po-chart-path]',
+    templateUrl: './po-chart-path.component.svg',
+    standalone: false
 })
 export class PoChartPathComponent implements AfterViewInit {
   @Input({ alias: 'p-is-active', transform: convertToBoolean }) isActive: boolean = true;

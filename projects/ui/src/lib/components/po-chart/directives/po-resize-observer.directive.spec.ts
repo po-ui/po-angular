@@ -5,7 +5,7 @@ import { PoChartModule } from '../po-chart.module';
 import { PoResizeObserverDirective } from './po-resize-observer.directive';
 
 @Component({
-  template: `
+    template: `
     <div class="po-chart-wrapper" (p-resize-observer)="testResize()">
       <svg
         preserveAspectRatio="xMidYMin meet"
@@ -22,7 +22,8 @@ import { PoResizeObserverDirective } from './po-resize-observer.directive';
         ></path>
       </svg>
     </div>
-  `
+  `,
+    standalone: false
 })
 export class TestComponent {
   testResize() {}

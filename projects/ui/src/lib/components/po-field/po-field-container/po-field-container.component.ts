@@ -10,9 +10,10 @@ import { poFieldContainerLiterals } from './po-field-container-literals';
  * Componente de uso interno, responsável por atribuir uma label para o campo
  */
 @Component({
-  selector: 'po-field-container',
-  templateUrl: './po-field-container.component.html',
-  changeDetection: ChangeDetectionStrategy.OnPush
+    selector: 'po-field-container',
+    templateUrl: './po-field-container.component.html',
+    changeDetection: ChangeDetectionStrategy.OnPush,
+    standalone: false
 })
 export class PoFieldContainerComponent implements OnInit, OnChanges {
   /** Indica se o campo será desabilitado. */

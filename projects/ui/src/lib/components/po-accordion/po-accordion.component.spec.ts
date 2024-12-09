@@ -7,12 +7,13 @@ import { PoAccordionModule } from './po-accordion.module';
 import { PoAccordionService } from './services/po-accordion.service';
 
 @Component({
-  template: `
+    template: `
     <po-accordion p-show-manager-accordion="true">
       <po-accordion-item p-label="PO Accordion 1"> Item 1 </po-accordion-item>
       <po-accordion-item p-label="PO Accordion 2"> Item 2 </po-accordion-item>
     </po-accordion>
-  `
+  `,
+    standalone: false
 })
 class PoAccordionMockComponent {}
 

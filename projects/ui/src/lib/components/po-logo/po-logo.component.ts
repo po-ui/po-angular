@@ -21,8 +21,9 @@ const poLogoLiteralsDefault = {
 const MAX_LENGHT: number = 125;
 
 @Component({
-  selector: 'po-logo',
-  templateUrl: './po-logo.component.html'
+    selector: 'po-logo',
+    templateUrl: './po-logo.component.html',
+    standalone: false
 })
 export class PoLogoComponent {
   readonly literals: any;

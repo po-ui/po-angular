@@ -3,8 +3,9 @@ import { Component, OnInit } from '@angular/core';
 import { PoGaugeRanges } from '@po-ui/ng-components';
 
 @Component({
-  selector: 'sample-po-gauge-labs',
-  templateUrl: './sample-po-gauge-labs.component.html'
+    selector: 'sample-po-gauge-labs',
+    templateUrl: './sample-po-gauge-labs.component.html',
+    standalone: false
 })
 export class SamplePoGaugeLabsComponent implements OnInit {
   description: string;

@@ -54,8 +54,9 @@ import { PoPageLoginService } from './po-page-login.service';
  */
 
 @Component({
-  selector: 'po-page-login',
-  templateUrl: './po-page-login.component.html'
+    selector: 'po-page-login',
+    templateUrl: './po-page-login.component.html',
+    standalone: false
 })
 export class PoPageLoginComponent extends PoPageLoginBaseComponent implements AfterViewChecked, OnInit {
   @ViewChild('loginForm', { read: NgForm, static: true }) loginForm: NgForm;

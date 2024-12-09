@@ -8,9 +8,10 @@ import { ChangeDetectionStrategy, Component, EventEmitter, Input, Output, Templa
  * Componente responsável por exibir um ícone na tabela.
  */
 @Component({
-  selector: 'po-table-icon',
-  templateUrl: './po-table-icon.component.html',
-  changeDetection: ChangeDetectionStrategy.OnPush
+    selector: 'po-table-icon',
+    templateUrl: './po-table-icon.component.html',
+    changeDetection: ChangeDetectionStrategy.OnPush,
+    standalone: false
 })
 export class PoTableIconComponent {
   /** Define se o ícone é clicável. */

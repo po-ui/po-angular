@@ -4,9 +4,10 @@ import { PoTableColumn, PoMultiselectFilter } from '@po-ui/ng-components';
 import { SamplePoMultiselectHeroesService } from './sample-po-multiselect-heroes.service';
 
 @Component({
-  selector: 'sample-po-multiselect-heroes',
-  templateUrl: './sample-po-multiselect-heroes.component.html',
-  providers: [SamplePoMultiselectHeroesService]
+    selector: 'sample-po-multiselect-heroes',
+    templateUrl: './sample-po-multiselect-heroes.component.html',
+    providers: [SamplePoMultiselectHeroesService],
+    standalone: false
 })
 export class SamplePoMultiselectHeroesComponent {
   debounce = 500;

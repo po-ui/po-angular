@@ -49,7 +49,7 @@ const providers = [
   selector: 'po-login',
   templateUrl: './po-login.component.html',
   changeDetection: ChangeDetectionStrategy.OnPush,
-  providers
+  standalone: false
 })
 export class PoLoginComponent extends PoInputGeneric {
   id = `po-login[${uuid()}]`;

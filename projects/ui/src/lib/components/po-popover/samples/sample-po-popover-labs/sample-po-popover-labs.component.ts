@@ -3,8 +3,9 @@ import { Component, ElementRef, ViewChild } from '@angular/core';
 import { PoCheckboxGroupOption, PoRadioGroupOption } from '@po-ui/ng-components';
 
 @Component({
-  selector: 'sample-po-popover-labs',
-  templateUrl: './sample-po-popover-labs.component.html'
+    selector: 'sample-po-popover-labs',
+    templateUrl: './sample-po-popover-labs.component.html',
+    standalone: false
 })
 export class SamplePoPopoverLabsComponent {
   @ViewChild('buttonClick', { read: ElementRef, static: true }) buttonClickRef: ElementRef;

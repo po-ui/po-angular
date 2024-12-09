@@ -40,21 +40,22 @@ import { PoTextareaBaseComponent } from './po-textarea-base.component';
  *
  */
 @Component({
-  selector: 'po-textarea',
-  templateUrl: './po-textarea.component.html',
-  changeDetection: ChangeDetectionStrategy.OnPush,
-  providers: [
-    {
-      provide: NG_VALUE_ACCESSOR,
-      useExisting: forwardRef(() => PoTextareaComponent),
-      multi: true
-    },
-    {
-      provide: NG_VALIDATORS,
-      useExisting: forwardRef(() => PoTextareaComponent),
-      multi: true
-    }
-  ]
+    selector: 'po-textarea',
+    templateUrl: './po-textarea.component.html',
+    changeDetection: ChangeDetectionStrategy.OnPush,
+    providers: [
+        {
+            provide: NG_VALUE_ACCESSOR,
+            useExisting: forwardRef(() => PoTextareaComponent),
+            multi: true
+        },
+        {
+            provide: NG_VALIDATORS,
+            useExisting: forwardRef(() => PoTextareaComponent),
+            multi: true
+        }
+    ],
+    standalone: false
 })
 export class PoTextareaComponent extends PoTextareaBaseComponent implements AfterViewInit {
   @ViewChild('inp', { read: ElementRef, static: true }) inputEl: ElementRef;

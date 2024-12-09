@@ -15,8 +15,9 @@ import { PoCleanBaseComponent } from './po-clean-base.component';
  * </example-private>
  */
 @Component({
-  selector: 'po-clean',
-  templateUrl: './po-clean.component.html'
+    selector: 'po-clean',
+    templateUrl: './po-clean.component.html',
+    standalone: false
 })
 export class PoCleanComponent extends PoCleanBaseComponent {
   setInputValue(value?: string) {

@@ -4,8 +4,9 @@ import { NgForm } from '@angular/forms';
 import { PoModalAction, PoModalComponent, PoStepperComponent, PoUploadComponent } from '@po-ui/ng-components';
 
 @Component({
-  selector: 'sample-po-upload-rs',
-  templateUrl: 'sample-po-upload-rs.component.html'
+    selector: 'sample-po-upload-rs',
+    templateUrl: 'sample-po-upload-rs.component.html',
+    standalone: false
 })
 export class SamplePoUploadRsComponent implements OnInit {
   @ViewChild('upload', { static: true }) upload: PoUploadComponent;

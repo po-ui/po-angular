@@ -8,8 +8,9 @@ import { PoModalAction, PoModalComponent } from '../../../po-modal';
 import { poRichTextLiteralsDefault } from '../po-rich-text-literals';
 
 @Component({
-  selector: 'po-rich-text-link-modal',
-  templateUrl: './po-rich-text-link-modal.component.html'
+    selector: 'po-rich-text-link-modal',
+    templateUrl: './po-rich-text-link-modal.component.html',
+    standalone: false
 })
 export class PoRichTextLinkModalComponent implements OnInit {
   @ViewChild('modal', { static: true }) modal: PoModalComponent;

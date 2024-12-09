@@ -19,9 +19,10 @@ import { PoModalAction, PoModalComponent } from '@po-ui/ng-components';
 import { PoNotificationService } from '@po-ui/ng-components';
 import { PoPageAction } from '@po-ui/ng-components';
 @Component({
-  selector: 'sample-po-theme-labs',
-  templateUrl: './sample-po-theme-labs.component.html',
-  providers: [PoThemeService]
+    selector: 'sample-po-theme-labs',
+    templateUrl: './sample-po-theme-labs.component.html',
+    providers: [PoThemeService],
+    standalone: false
 })
 export class SamplePoThemeLabsComponent implements OnInit, OnDestroy {
   @ViewChild('formShare', { static: true })

@@ -21,8 +21,9 @@ import { convertToBoolean } from '../../../utils/util';
  * Componente responsável por manipular os botões de aba.
  */
 @Component({
-  selector: 'po-tab-button',
-  templateUrl: './po-tab-button.component.html'
+    selector: 'po-tab-button',
+    templateUrl: './po-tab-button.component.html',
+    standalone: false
 })
 export class PoTabButtonComponent implements OnChanges, AfterViewInit {
   @ViewChild('tabButtom', { static: true }) tabButtom: ElementRef;

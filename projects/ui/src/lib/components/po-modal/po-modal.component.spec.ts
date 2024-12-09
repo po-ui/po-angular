@@ -17,14 +17,15 @@ import { PoModalComponent } from './po-modal.component';
 import { PoModalFooterComponent } from '.';
 
 @Component({
-  template: `
+    template: `
     <po-modal p-title="i'm the title" [p-primary-action]="primaryAction">
       <form #f="ngForm">
         <po-input name="teste" [(ngModel)]="teste" p-label="Teste"></po-input>
         <po-input name="userName" [(ngModel)]="userName" p-label="Nome"></po-input>
       </form>
     </po-modal>
-  `
+  `,
+    standalone: false
 })
 class ContentProjectionComponent {
   @ViewChild(PoModalComponent, { static: true }) poModal;

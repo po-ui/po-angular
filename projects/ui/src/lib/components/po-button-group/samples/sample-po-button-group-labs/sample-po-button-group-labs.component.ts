@@ -9,8 +9,9 @@ import {
 } from '@po-ui/ng-components';
 
 @Component({
-  selector: 'sample-po-button-group-labs',
-  templateUrl: './sample-po-button-group-labs.component.html'
+    selector: 'sample-po-button-group-labs',
+    templateUrl: './sample-po-button-group-labs.component.html',
+    standalone: false
 })
 export class SamplePoButtonGroupLabsComponent implements OnInit {
   button: any;

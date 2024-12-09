@@ -3,8 +3,9 @@ import { Component, OnInit } from '@angular/core';
 import { PoMenuPanelItem, PoRadioGroupOption } from '@po-ui/ng-components';
 
 @Component({
-  selector: 'sample-po-menu-panel-labs',
-  templateUrl: './sample-po-menu-panel-labs.component.html'
+    selector: 'sample-po-menu-panel-labs',
+    templateUrl: './sample-po-menu-panel-labs.component.html',
+    standalone: false
 })
 export class SamplePoMenuPanelLabsComponent implements OnInit {
   menuItem: PoMenuPanelItem = { icon: undefined, label: undefined };

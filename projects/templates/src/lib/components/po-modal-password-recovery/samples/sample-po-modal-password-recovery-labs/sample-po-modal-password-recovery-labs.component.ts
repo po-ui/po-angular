@@ -8,8 +8,9 @@ import {
 } from '@po-ui/ng-templates';
 
 @Component({
-  selector: 'sample-po-modal-password-recovery-labs',
-  templateUrl: './sample-po-modal-password-recovery-labs.component.html'
+    selector: 'sample-po-modal-password-recovery-labs',
+    templateUrl: './sample-po-modal-password-recovery-labs.component.html',
+    standalone: false
 })
 export class SamplePoModalPasswordRecoveryLabsComponent implements OnInit {
   @ViewChild(PoModalPasswordRecoveryComponent) poModalPasswordRecovery: PoModalPasswordRecoveryComponent;

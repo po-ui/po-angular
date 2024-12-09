@@ -4,8 +4,9 @@ import { Router } from '@angular/router';
 import { PoBreadcrumb } from '@po-ui/ng-components';
 
 @Component({
-  selector: 'sample-po-divider-user-detail',
-  templateUrl: './sample-po-divider-user-detail.component.html'
+    selector: 'sample-po-divider-user-detail',
+    templateUrl: './sample-po-divider-user-detail.component.html',
+    standalone: false
 })
 export class SamplePoDividerUserDetailComponent {
   birthDate: string = '26/12/1978';

@@ -3,8 +3,9 @@ import { Component, ViewChild } from '@angular/core';
 import { PoModalComponent, PoTableColumn } from '@po-ui/ng-components';
 
 @Component({
-  selector: 'sample-po-widget-finance-dashboard',
-  templateUrl: './sample-po-widget-finance-dashboard.component.html'
+    selector: 'sample-po-widget-finance-dashboard',
+    templateUrl: './sample-po-widget-finance-dashboard.component.html',
+    standalone: false
 })
 export class SamplePoWidgetFinanceDashboardComponent {
   @ViewChild('detailsModal', { static: true }) detailsModalElement: PoModalComponent;

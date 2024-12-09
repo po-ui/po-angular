@@ -3,8 +3,9 @@ import { Component, OnInit } from '@angular/core';
 import { PoCheckboxGroupOption, PoMultiselectOption, PoRichTextToolbarActions } from '@po-ui/ng-components';
 
 @Component({
-  selector: 'sample-po-rich-text-labs',
-  templateUrl: './sample-po-rich-text-labs.component.html'
+    selector: 'sample-po-rich-text-labs',
+    templateUrl: './sample-po-rich-text-labs.component.html',
+    standalone: false
 })
 export class SamplePoRichTextLabsComponent implements OnInit {
   errorMessage: string;

@@ -9,8 +9,9 @@ import {
 } from '@po-ui/ng-components';
 
 @Component({
-  selector: 'sample-po-modal-labs',
-  templateUrl: './sample-po-modal-labs.component.html'
+    selector: 'sample-po-modal-labs',
+    templateUrl: './sample-po-modal-labs.component.html',
+    standalone: false
 })
 export class SamplePoModalLabsComponent implements OnInit {
   @ViewChild(PoModalComponent, { static: true }) poModal: PoModalComponent;

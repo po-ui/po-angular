@@ -35,7 +35,8 @@ import { Directive, Input, TemplateRef } from '@angular/core';
  *
  */
 @Directive({
-  selector: '[p-job-scheduler-parameters-template]'
+    selector: '[p-job-scheduler-parameters-template]',
+    standalone: false
 })
 export class PoJobSchedulerParametersTemplateDirective {
   /**

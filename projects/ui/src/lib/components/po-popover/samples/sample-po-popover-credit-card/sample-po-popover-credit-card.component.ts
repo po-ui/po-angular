@@ -1,8 +1,9 @@
 import { Component, ElementRef, ViewChild } from '@angular/core';
 
 @Component({
-  selector: 'sample-po-popover-credit-card',
-  templateUrl: './sample-po-popover-credit-card.component.html'
+    selector: 'sample-po-popover-credit-card',
+    templateUrl: './sample-po-popover-credit-card.component.html',
+    standalone: false
 })
 export class SamplePoPopoverCreditCardComponent {
   @ViewChild('cardname', { read: ElementRef, static: true }) cardnameref: ElementRef;

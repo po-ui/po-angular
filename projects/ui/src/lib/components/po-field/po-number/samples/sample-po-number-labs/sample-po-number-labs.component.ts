@@ -3,8 +3,9 @@ import { Component, OnInit } from '@angular/core';
 import { PoCheckboxGroupOption, PoSelectOption } from '@po-ui/ng-components';
 
 @Component({
-  selector: 'sample-po-number-labs',
-  templateUrl: './sample-po-number-labs.component.html'
+    selector: 'sample-po-number-labs',
+    templateUrl: './sample-po-number-labs.component.html',
+    standalone: false
 })
 export class SamplePoNumberLabsComponent implements OnInit {
   event: string;

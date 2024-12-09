@@ -9,8 +9,9 @@ import { PoPageJobSchedulerLookupService } from '../po-page-job-scheduler-lookup
 import { PoPageJobSchedulerService } from '../po-page-job-scheduler.service';
 
 @Component({
-  selector: 'po-page-job-scheduler-execution',
-  templateUrl: 'po-page-job-scheduler-execution.component.html'
+    selector: 'po-page-job-scheduler-execution',
+    templateUrl: 'po-page-job-scheduler-execution.component.html',
+    standalone: false
 })
 export class PoPageJobSchedulerExecutionComponent implements OnInit, AfterViewInit {
   @ViewChild('formExecution', { static: true }) form: NgForm;

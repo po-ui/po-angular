@@ -3,8 +3,9 @@ import { Component, OnInit } from '@angular/core';
 import { PoCheckboxGroupOption } from '@po-ui/ng-components';
 
 @Component({
-  selector: 'sample-po-avatar-labs',
-  templateUrl: './sample-po-avatar-labs.component.html'
+    selector: 'sample-po-avatar-labs',
+    templateUrl: './sample-po-avatar-labs.component.html',
+    standalone: false
 })
 export class SamplePoAvatarLabsComponent implements OnInit {
   src: string;

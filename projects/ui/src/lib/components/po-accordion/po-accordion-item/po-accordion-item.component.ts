@@ -37,8 +37,9 @@ import { PoAccordionService } from '../services/po-accordion.service';
  * ```
  */
 @Component({
-  selector: 'po-accordion-item',
-  templateUrl: 'po-accordion-item.component.html'
+    selector: 'po-accordion-item',
+    templateUrl: 'po-accordion-item.component.html',
+    standalone: false
 })
 export class PoAccordionItemComponent implements OnDestroy {
   private _type?: PoTagType;

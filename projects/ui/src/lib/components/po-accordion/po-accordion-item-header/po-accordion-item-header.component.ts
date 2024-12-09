@@ -3,9 +3,10 @@ import { PoLanguageService } from '../../../services/po-language';
 import { poLocaleDefault } from '../../../services/po-language/po-language.constant';
 
 @Component({
-  selector: 'po-accordion-item-header',
-  templateUrl: 'po-accordion-item-header.component.html',
-  changeDetection: ChangeDetectionStrategy.OnPush
+    selector: 'po-accordion-item-header',
+    templateUrl: 'po-accordion-item-header.component.html',
+    changeDetection: ChangeDetectionStrategy.OnPush,
+    standalone: false
 })
 export class PoAccordionItemHeaderComponent {
   private language: string = poLocaleDefault;

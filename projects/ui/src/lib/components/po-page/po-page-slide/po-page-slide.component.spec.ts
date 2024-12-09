@@ -9,14 +9,15 @@ import { PoFieldModule } from '../../po-field';
 import { PoPageSlideComponent } from './po-page-slide.component';
 
 @Component({
-  template: `
+    template: `
     <po-page-slide p-title="Po Page Slide Title" p-subtitle="Po Page Slide Subtitle">
       <form #f="ngForm">
         <po-input name="username" [(ngModel)]="username" p-label="Username"></po-input>
         <po-input name="password" [(ngModel)]="password" p-label="Password"></po-input>
       </form>
     </po-page-slide>
-  `
+  `,
+    standalone: false
 })
 class TestComponent {
   @ViewChild(PoPageSlideComponent, { static: true }) poPage: PoPageSlideComponent;

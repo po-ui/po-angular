@@ -3,16 +3,17 @@ import { Component, OnInit } from '@angular/core';
 import { PoCheckboxGroupOption, PoRadioGroupOption } from '@po-ui/ng-components';
 
 @Component({
-  selector: 'sample-po-loading-overlay-labs',
-  templateUrl: './sample-po-loading-overlay-labs.component.html',
-  styles: [
-    `
+    selector: 'sample-po-loading-overlay-labs',
+    templateUrl: './sample-po-loading-overlay-labs.component.html',
+    styles: [
+        `
       .sample-container {
         position: relative;
         height: 300px;
       }
     `
-  ]
+    ],
+    standalone: false
 })
 export class SamplePoLoadingOverlayLabsComponent implements OnInit {
   properties: Array<string> = [];

@@ -6,8 +6,9 @@ import { of } from 'rxjs';
 import { delay, finalize, map, tap } from 'rxjs/operators';
 
 @Component({
-  selector: 'sample-po-stepper-sales',
-  templateUrl: './sample-po-stepper-sales.component.html'
+    selector: 'sample-po-stepper-sales',
+    templateUrl: './sample-po-stepper-sales.component.html',
+    standalone: false
 })
 export class SamplePoStepperSalesComponent {
   @ViewChild('addressForm', { static: true }) addressForm: NgForm;

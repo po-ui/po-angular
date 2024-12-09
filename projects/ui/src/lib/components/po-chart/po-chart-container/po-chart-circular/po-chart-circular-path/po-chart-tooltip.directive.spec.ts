@@ -8,7 +8,7 @@ import { PoChartModule } from '../../../po-chart.module';
 import { PoChartTooltipDirective } from './po-chart-tooltip.directive';
 
 @Component({
-  template: `
+    template: `
     <div class="po-chart-wrapper">
       <svg
         preserveAspectRatio="xMidYMin meet"
@@ -25,7 +25,8 @@ import { PoChartTooltipDirective } from './po-chart-tooltip.directive';
         ></path>
       </svg>
     </div>
-  `
+  `,
+    standalone: false
 })
 export class TestComponent {}
 

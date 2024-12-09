@@ -37,21 +37,22 @@ import { PoCheckboxGroupBaseComponent } from './po-checkbox-group-base.component
  * </example>
  */
 @Component({
-  selector: 'po-checkbox-group',
-  templateUrl: './po-checkbox-group.component.html',
-  changeDetection: ChangeDetectionStrategy.OnPush,
-  providers: [
-    {
-      provide: NG_VALUE_ACCESSOR,
-      useExisting: forwardRef(() => PoCheckboxGroupComponent),
-      multi: true
-    },
-    {
-      provide: NG_VALIDATORS,
-      useExisting: forwardRef(() => PoCheckboxGroupComponent),
-      multi: true
-    }
-  ]
+    selector: 'po-checkbox-group',
+    templateUrl: './po-checkbox-group.component.html',
+    changeDetection: ChangeDetectionStrategy.OnPush,
+    providers: [
+        {
+            provide: NG_VALUE_ACCESSOR,
+            useExisting: forwardRef(() => PoCheckboxGroupComponent),
+            multi: true
+        },
+        {
+            provide: NG_VALIDATORS,
+            useExisting: forwardRef(() => PoCheckboxGroupComponent),
+            multi: true
+        }
+    ],
+    standalone: false
 })
 export class PoCheckboxGroupComponent extends PoCheckboxGroupBaseComponent implements AfterViewChecked, AfterViewInit {
   @ViewChildren('checkboxLabel') checkboxLabels: QueryList<PoCheckboxComponent>;

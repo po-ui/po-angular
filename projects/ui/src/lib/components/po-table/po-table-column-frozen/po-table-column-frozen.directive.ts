@@ -1,11 +1,12 @@
 import { AfterViewInit, Directive, ElementRef, Input, Renderer2, OnChanges, SimpleChanges } from '@angular/core';
 
 @Directive({
-  selector: '[pFrozenColumn]',
-  host: {
-    class: 'p-element',
-    '[class.po-frozen-column]': 'frozen'
-  }
+    selector: '[pFrozenColumn]',
+    host: {
+        class: 'p-element',
+        '[class.po-frozen-column]': 'frozen'
+    },
+    standalone: false
 })
 export class PoTableColumnFrozenDirective implements AfterViewInit, OnChanges {
   _frozen: boolean = true;

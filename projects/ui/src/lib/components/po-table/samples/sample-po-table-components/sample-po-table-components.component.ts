@@ -7,10 +7,11 @@ import { SamplePoTableComponentStatus } from './sample-po-table-components.enum'
 import { SamplePoTableComponentsService } from './sample-po-table-components.service';
 
 @Component({
-  selector: 'sample-po-table-components',
-  templateUrl: './sample-po-table-components.component.html',
-  styleUrls: ['./sample-po-table-components.component.css'],
-  providers: [SamplePoTableComponentsService]
+    selector: 'sample-po-table-components',
+    templateUrl: './sample-po-table-components.component.html',
+    styleUrls: ['./sample-po-table-components.component.css'],
+    providers: [SamplePoTableComponentsService],
+    standalone: false
 })
 export class SamplePoTableComponentsComponent implements OnInit {
   @ViewChild(PoModalComponent, { static: true }) poModal: PoModalComponent;

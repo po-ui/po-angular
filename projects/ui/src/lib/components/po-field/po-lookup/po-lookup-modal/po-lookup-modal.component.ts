@@ -24,9 +24,10 @@ import { sortArrayOfObjects } from '../../../../utils/util';
  * @docsExtends PoLookupModalBaseComponent
  */
 @Component({
-  selector: 'po-lookup-modal',
-  templateUrl: './po-lookup-modal.component.html',
-  changeDetection: ChangeDetectionStrategy.OnPush
+    selector: 'po-lookup-modal',
+    templateUrl: './po-lookup-modal.component.html',
+    changeDetection: ChangeDetectionStrategy.OnPush,
+    standalone: false
 })
 export class PoLookupModalComponent extends PoLookupModalBaseComponent implements OnInit {
   @ViewChild('inpsearch') inputSearchEl: ElementRef;

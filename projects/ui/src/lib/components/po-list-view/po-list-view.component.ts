@@ -40,16 +40,17 @@ import { PoListViewDetailTemplateDirective } from './po-list-view-detail-templat
  * </example>
  */
 @Component({
-  selector: 'po-list-view',
-  templateUrl: './po-list-view.component.html',
-  animations: [
-    trigger('showHideDetail', [
-      state('*', style({ 'overflow-y': 'visible' })),
-      state('void', style({ 'overflow-y': 'hidden' })),
-      transition('* => void', [style({ height: '*', 'overflow-y': 'hidden' }), animate(100, style({ height: 0 }))]),
-      transition('void => *', [style({ height: '0' }), animate(100, style({ height: '*' }))])
-    ])
-  ]
+    selector: 'po-list-view',
+    templateUrl: './po-list-view.component.html',
+    animations: [
+        trigger('showHideDetail', [
+            state('*', style({ 'overflow-y': 'visible' })),
+            state('void', style({ 'overflow-y': 'hidden' })),
+            transition('* => void', [style({ height: '*', 'overflow-y': 'hidden' }), animate(100, style({ height: 0 }))]),
+            transition('void => *', [style({ height: '0' }), animate(100, style({ height: '*' }))])
+        ])
+    ],
+    standalone: false
 })
 export class PoListViewComponent extends PoListViewBaseComponent implements AfterContentInit, DoCheck {
   @ContentChild(PoListViewContentTemplateDirective, { static: true })

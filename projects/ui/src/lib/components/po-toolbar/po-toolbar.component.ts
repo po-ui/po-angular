@@ -24,8 +24,9 @@ import { PoToolbarBaseComponent } from './po-toolbar-base.component';
  * </example>
  */
 @Component({
-  selector: 'po-toolbar',
-  templateUrl: './po-toolbar.component.html'
+    selector: 'po-toolbar',
+    templateUrl: './po-toolbar.component.html',
+    standalone: false
 })
 export class PoToolbarComponent extends PoToolbarBaseComponent implements OnInit {
   constructor(

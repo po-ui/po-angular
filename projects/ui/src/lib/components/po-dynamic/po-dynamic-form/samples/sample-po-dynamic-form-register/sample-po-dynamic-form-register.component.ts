@@ -10,9 +10,10 @@ import {
 import { PoDynamicFormRegisterService } from './sample-po-dynamic-form-register.service';
 
 @Component({
-  selector: 'sample-po-dynamic-form-register',
-  templateUrl: './sample-po-dynamic-form-register.component.html',
-  providers: [PoDynamicFormRegisterService]
+    selector: 'sample-po-dynamic-form-register',
+    templateUrl: './sample-po-dynamic-form-register.component.html',
+    providers: [PoDynamicFormRegisterService],
+    standalone: false
 })
 export class SamplePoDynamicFormRegisterComponent implements OnInit {
   person = {};

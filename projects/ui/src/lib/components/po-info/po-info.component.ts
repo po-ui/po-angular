@@ -25,9 +25,10 @@ import { PoInfoBaseComponent } from './po-info-base.component';
  * </example>
  */
 @Component({
-  selector: 'po-info',
-  templateUrl: './po-info.component.html',
-  changeDetection: ChangeDetectionStrategy.OnPush
+    selector: 'po-info',
+    templateUrl: './po-info.component.html',
+    changeDetection: ChangeDetectionStrategy.OnPush,
+    standalone: false
 })
 export class PoInfoComponent extends PoInfoBaseComponent {
   get isExternalLink() {

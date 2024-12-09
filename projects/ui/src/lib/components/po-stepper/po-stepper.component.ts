@@ -40,8 +40,9 @@ import { PoStepperItem } from './po-stepper-item.interface';
  * </example>
  */
 @Component({
-  selector: 'po-stepper',
-  templateUrl: './po-stepper.component.html'
+    selector: 'po-stepper',
+    templateUrl: './po-stepper.component.html',
+    standalone: false
 })
 export class PoStepperComponent extends PoStepperBaseComponent implements AfterContentInit {
   @ContentChildren(PoStepComponent) poSteps: QueryList<PoStepComponent>;

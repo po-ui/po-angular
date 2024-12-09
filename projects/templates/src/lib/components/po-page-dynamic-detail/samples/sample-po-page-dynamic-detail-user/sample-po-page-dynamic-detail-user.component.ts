@@ -4,8 +4,9 @@ import { PoBreadcrumb } from '@po-ui/ng-components';
 import { PoPageDynamicDetailActions, PoPageDynamicDetailField } from '@po-ui/ng-templates';
 
 @Component({
-  selector: 'sample-po-page-dynamic-detail-user',
-  templateUrl: './sample-po-page-dynamic-detail-user.component.html'
+    selector: 'sample-po-page-dynamic-detail-user',
+    templateUrl: './sample-po-page-dynamic-detail-user.component.html',
+    standalone: false
 })
 export class SamplePoPageDynamicDetailUserComponent {
   public readonly serviceApi = 'https://po-sample-api.onrender.com/v1/people';

@@ -4,8 +4,9 @@ import { UntypedFormControl } from '@angular/forms';
 import { PoDialogService, PoNotificationService, PoSelectOption } from '@po-ui/ng-components';
 
 @Component({
-  selector: 'sample-po-datepicker-airfare',
-  templateUrl: './sample-po-datepicker-airfare.component.html'
+    selector: 'sample-po-datepicker-airfare',
+    templateUrl: './sample-po-datepicker-airfare.component.html',
+    standalone: false
 })
 export class SamplePoDatepickerAirfareComponent {
   @ViewChild('formAirfare', { static: true }) formAirfare: UntypedFormControl;

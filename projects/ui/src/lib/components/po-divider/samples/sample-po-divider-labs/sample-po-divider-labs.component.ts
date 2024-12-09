@@ -3,8 +3,9 @@ import { Component, OnInit } from '@angular/core';
 import { PoSelectOption } from '@po-ui/ng-components';
 
 @Component({
-  selector: 'sample-po-divider-labs',
-  templateUrl: './sample-po-divider-labs.component.html'
+    selector: 'sample-po-divider-labs',
+    templateUrl: './sample-po-divider-labs.component.html',
+    standalone: false
 })
 export class SamplePoDividerLabsComponent implements OnInit {
   borderWidth: string;

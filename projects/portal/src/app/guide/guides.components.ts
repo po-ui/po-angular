@@ -4,8 +4,9 @@ import { HttpClient } from '@angular/common/http';
 import { MenuGuidesService } from './menu-guides.service';
 
 @Component({
-  templateUrl: './guides.component.html',
-  providers: [MenuGuidesService]
+    templateUrl: './guides.component.html',
+    providers: [MenuGuidesService],
+    standalone: false
 })
 export class GuidesComponent implements OnInit {
   menus = [];

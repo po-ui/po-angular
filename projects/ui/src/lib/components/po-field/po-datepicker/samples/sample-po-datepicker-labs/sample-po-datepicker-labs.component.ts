@@ -3,8 +3,9 @@ import { Component, OnInit } from '@angular/core';
 import { PoCheckboxGroupOption, PoDatepickerIsoFormat, PoRadioGroupOption } from '@po-ui/ng-components';
 
 @Component({
-  selector: 'sample-po-datepicker-labs',
-  templateUrl: './sample-po-datepicker-labs.component.html'
+    selector: 'sample-po-datepicker-labs',
+    templateUrl: './sample-po-datepicker-labs.component.html',
+    standalone: false
 })
 export class SamplePoDatepickerLabsComponent implements OnInit {
   datepicker: string | Date;

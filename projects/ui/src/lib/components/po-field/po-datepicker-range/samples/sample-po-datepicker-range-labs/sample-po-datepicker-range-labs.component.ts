@@ -8,8 +8,9 @@ import {
 } from '@po-ui/ng-components';
 
 @Component({
-  selector: 'sample-po-datepicker-range-labs',
-  templateUrl: './sample-po-datepicker-range-labs.component.html'
+    selector: 'sample-po-datepicker-range-labs',
+    templateUrl: './sample-po-datepicker-range-labs.component.html',
+    standalone: false
 })
 export class SamplePoDatepickerRangeLabsComponent implements OnInit {
   clean: boolean;

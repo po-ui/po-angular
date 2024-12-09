@@ -3,8 +3,9 @@ import { Component, EventEmitter, Input, Output } from '@angular/core';
 import { PoChartBarCoordinates } from '../../../interfaces/po-chart-bar-coordinates.interface';
 
 @Component({
-  selector: '[po-chart-bar-path]',
-  templateUrl: './po-chart-bar-path.component.svg'
+    selector: '[po-chart-bar-path]',
+    templateUrl: './po-chart-bar-path.component.svg',
+    standalone: false
 })
 export class PoChartBarPathComponent {
   @Input('p-color') color?: string;

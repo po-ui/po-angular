@@ -3,9 +3,10 @@ import { Component } from '@angular/core';
 import { PoDialogService, PoNotificationService, PoToolbarAction, PoToolbarProfile } from '@po-ui/ng-components';
 
 @Component({
-  selector: 'sample-po-toolbar-logged',
-  templateUrl: './sample-po-toolbar-logged.component.html',
-  providers: [PoNotificationService]
+    selector: 'sample-po-toolbar-logged',
+    templateUrl: './sample-po-toolbar-logged.component.html',
+    providers: [PoNotificationService],
+    standalone: false
 })
 export class SamplePoToolbarLoggedComponent {
   notificationActions: Array<PoToolbarAction> = [

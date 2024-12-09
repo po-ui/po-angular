@@ -3,8 +3,9 @@ import { Component } from '@angular/core';
 import { Observable } from 'rxjs';
 
 @Component({
-  selector: 'sample-po-combo-infinity-scroll',
-  templateUrl: './sample-po-combo-infinity-scroll.component.html'
+    selector: 'sample-po-combo-infinity-scroll',
+    templateUrl: './sample-po-combo-infinity-scroll.component.html',
+    standalone: false
 })
 export class SamplePoComboInfinityScrollComponent {
   peopleName: string;

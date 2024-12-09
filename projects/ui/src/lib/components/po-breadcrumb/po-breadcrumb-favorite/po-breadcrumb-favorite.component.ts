@@ -34,9 +34,10 @@ export const PoBreadcrumbLiterals: Object = {
  */
 
 @Component({
-  selector: 'po-breadcrumb-favorite',
-  templateUrl: './po-breadcrumb-favorite.component.html',
-  providers: [PoBreadcrumbFavoriteService]
+    selector: 'po-breadcrumb-favorite',
+    templateUrl: './po-breadcrumb-favorite.component.html',
+    providers: [PoBreadcrumbFavoriteService],
+    standalone: false
 })
 export class PoBreadcrumbFavoriteComponent implements OnInit, OnDestroy {
   // URL do serviço.

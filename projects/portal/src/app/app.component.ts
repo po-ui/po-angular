@@ -10,8 +10,9 @@ import { VersionService } from './shared/version.service';
 const KEY_STORAGE_REVIEW_SURVEY = 'review_survey_po_ui';
 
 @Component({
-  selector: 'app-root',
-  templateUrl: './app.component.html'
+    selector: 'app-root',
+    templateUrl: './app.component.html',
+    standalone: false
 })
 export class AppComponent implements OnInit, OnDestroy {
   menus: Array<PoMenuItem> = [];

@@ -64,21 +64,22 @@ const poDecimalTotalLengthLimit = 16;
  * </example>
  */
 @Component({
-  selector: 'po-decimal',
-  templateUrl: './po-decimal.component.html',
-  changeDetection: ChangeDetectionStrategy.OnPush,
-  providers: [
-    {
-      provide: NG_VALUE_ACCESSOR,
-      useExisting: forwardRef(() => PoDecimalComponent),
-      multi: true
-    },
-    {
-      provide: NG_VALIDATORS,
-      useExisting: forwardRef(() => PoDecimalComponent),
-      multi: true
-    }
-  ]
+    selector: 'po-decimal',
+    templateUrl: './po-decimal.component.html',
+    changeDetection: ChangeDetectionStrategy.OnPush,
+    providers: [
+        {
+            provide: NG_VALUE_ACCESSOR,
+            useExisting: forwardRef(() => PoDecimalComponent),
+            multi: true
+        },
+        {
+            provide: NG_VALIDATORS,
+            useExisting: forwardRef(() => PoDecimalComponent),
+            multi: true
+        }
+    ],
+    standalone: false
 })
 export class PoDecimalComponent extends PoInputBaseComponent implements AfterViewInit, OnInit, OnDestroy {
   @ViewChild('inp', { read: ElementRef, static: true }) inputEl: ElementRef;

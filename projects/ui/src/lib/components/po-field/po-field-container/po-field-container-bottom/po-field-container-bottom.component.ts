@@ -9,9 +9,10 @@ import { ChangeDetectionStrategy, Component, Input } from '@angular/core';
  * Essa margem inferior pode conter uma mensagem de erro.
  */
 @Component({
-  selector: 'po-field-container-bottom',
-  templateUrl: './po-field-container-bottom.component.html',
-  changeDetection: ChangeDetectionStrategy.OnPush
+    selector: 'po-field-container-bottom',
+    templateUrl: './po-field-container-bottom.component.html',
+    changeDetection: ChangeDetectionStrategy.OnPush,
+    standalone: false
 })
 export class PoFieldContainerBottomComponent {
   /**

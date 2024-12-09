@@ -3,8 +3,9 @@ import { ChangeDetectorRef, Component, OnInit } from '@angular/core';
 import { PoCheckboxGroupOption, PoSelectOption, PoSelectOptionGroup } from '@po-ui/ng-components';
 
 @Component({
-  selector: 'sample-po-select-labs',
-  templateUrl: './sample-po-select-labs.component.html'
+    selector: 'sample-po-select-labs',
+    templateUrl: './sample-po-select-labs.component.html',
+    standalone: false
 })
 export class SamplePoSelectLabsComponent implements OnInit {
   event: string;

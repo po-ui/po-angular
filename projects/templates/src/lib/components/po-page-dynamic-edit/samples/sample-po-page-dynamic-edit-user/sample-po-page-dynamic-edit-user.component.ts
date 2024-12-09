@@ -5,8 +5,9 @@ import { PoBreadcrumb, PoDynamicFormField } from '@po-ui/ng-components';
 import { PoPageDynamicEditActions, PoPageDynamicEditLiterals } from '@po-ui/ng-templates';
 
 @Component({
-  selector: 'sample-po-page-dynamic-edit-user',
-  templateUrl: './sample-po-page-dynamic-edit-user.component.html'
+    selector: 'sample-po-page-dynamic-edit-user',
+    templateUrl: './sample-po-page-dynamic-edit-user.component.html',
+    standalone: false
 })
 export class SamplePoPageDynamicEditUserComponent {
   public readonly serviceApi = 'https://po-sample-api.onrender.com/v1/people';

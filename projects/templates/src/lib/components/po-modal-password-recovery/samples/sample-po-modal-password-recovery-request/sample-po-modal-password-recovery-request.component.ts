@@ -3,8 +3,9 @@ import { Component, ViewChild } from '@angular/core';
 import { PoModalPasswordRecoveryComponent, PoModalPasswordRecoveryType } from '@po-ui/ng-templates';
 
 @Component({
-  selector: 'sample-po-modal-password-recovery-request',
-  templateUrl: './sample-po-modal-password-recovery-request.component.html'
+    selector: 'sample-po-modal-password-recovery-request',
+    templateUrl: './sample-po-modal-password-recovery-request.component.html',
+    standalone: false
 })
 export class SamplePoModalPasswordRecoveryRequestComponent {
   @ViewChild(PoModalPasswordRecoveryComponent) poModalPasswordRecovery: PoModalPasswordRecoveryComponent;

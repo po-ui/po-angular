@@ -47,25 +47,26 @@ export const poPageSlideLiteralsDefault = {
  * </example>
  */
 @Component({
-  selector: 'po-page-slide',
-  templateUrl: './po-page-slide.component.html',
-  providers: [],
-  animations: [
-    trigger('fade', [
-      transition(':enter', [
-        style({ opacity: 0 }),
-        group([animate(`{{duration}}`, style({ opacity: 1 })), query('@slide', animateChild())])
-      ]),
-      transition(':leave', group([query('@slide', animateChild()), animate('150ms', style({ opacity: 0 }))]))
-    ]),
-    trigger('slide', [
-      transition(':enter', [
-        style({ transform: 'translateX(50px)' }),
-        animate(`{{timing }}`, style({ transform: 'none' }))
-      ]),
-      transition(':leave', [animate('150ms', style({ transform: 'translateX(50px)' }))])
-    ])
-  ]
+    selector: 'po-page-slide',
+    templateUrl: './po-page-slide.component.html',
+    providers: [],
+    animations: [
+        trigger('fade', [
+            transition(':enter', [
+                style({ opacity: 0 }),
+                group([animate(`{{duration}}`, style({ opacity: 1 })), query('@slide', animateChild())])
+            ]),
+            transition(':leave', group([query('@slide', animateChild()), animate('150ms', style({ opacity: 0 }))]))
+        ]),
+        trigger('slide', [
+            transition(':enter', [
+                style({ transform: 'translateX(50px)' }),
+                animate(`{{timing }}`, style({ transform: 'none' }))
+            ]),
+            transition(':leave', [animate('150ms', style({ transform: 'translateX(50px)' }))])
+        ])
+    ],
+    standalone: false
 })
 export class PoPageSlideComponent extends PoPageSlideBaseComponent {
   private _pageContent: ElementRef;

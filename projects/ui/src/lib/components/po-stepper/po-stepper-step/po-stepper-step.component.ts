@@ -21,8 +21,9 @@ const poStepLiteralsDefault = {
  * Componente que representa um *step* contendo as ligações das laterais (`po-stepper-step-bar`) e a label.
  */
 @Component({
-  selector: 'po-stepper-step',
-  templateUrl: 'po-stepper-step.component.html'
+    selector: 'po-stepper-step',
+    templateUrl: 'po-stepper-step.component.html',
+    standalone: false
 })
 export class PoStepperStepComponent implements OnChanges {
   // Alinhamento do *step* e da label.

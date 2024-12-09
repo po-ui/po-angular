@@ -30,8 +30,9 @@ import { PoPageDefaultBaseComponent } from './po-page-default-base.component';
  * </example>
  */
 @Component({
-  selector: 'po-page-default',
-  templateUrl: './po-page-default.component.html'
+    selector: 'po-page-default',
+    templateUrl: './po-page-default.component.html',
+    standalone: false
 })
 export class PoPageDefaultComponent extends PoPageDefaultBaseComponent implements AfterContentInit, OnChanges {
   limitPrimaryActions: number = 3;

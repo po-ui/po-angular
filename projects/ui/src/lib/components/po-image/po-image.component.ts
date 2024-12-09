@@ -24,7 +24,8 @@ import { PoImageBaseComponent } from './po-image-base.component';
  */
 
 @Component({
-  selector: 'po-image',
-  templateUrl: './po-image.component.html'
+    selector: 'po-image',
+    templateUrl: './po-image.component.html',
+    standalone: false
 })
 export class PoImageComponent extends PoImageBaseComponent {}

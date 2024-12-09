@@ -5,8 +5,9 @@ import { PoCheckboxGroupOption, PoSelectOption, PoDialogService } from '@po-ui/n
 import { PoPageLogin, PoPageLoginCustomField, PoPageLoginLiterals } from '@po-ui/ng-templates';
 
 @Component({
-  selector: 'sample-po-page-login-labs',
-  templateUrl: './sample-po-page-login-labs.component.html'
+    selector: 'sample-po-page-login-labs',
+    templateUrl: './sample-po-page-login-labs.component.html',
+    standalone: false
 })
 export class SamplePoPageLoginLabsComponent implements OnInit {
   background: string;

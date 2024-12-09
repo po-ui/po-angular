@@ -4,9 +4,10 @@ import { PoTableColumn, PoTableComponent } from '@po-ui/ng-components';
 import { SamplePoTableHeroesService } from './sample-po-table-heroes.service';
 
 @Component({
-  selector: 'sample-po-table-heroes',
-  templateUrl: './sample-po-table-heroes.component.html',
-  providers: [SamplePoTableHeroesService]
+    selector: 'sample-po-table-heroes',
+    templateUrl: './sample-po-table-heroes.component.html',
+    providers: [SamplePoTableHeroesService],
+    standalone: false
 })
 export class SamplePoTableHeroesComponent implements OnInit {
   @ViewChild('POItemsOri', { static: true }) poItemsOri: PoTableComponent;

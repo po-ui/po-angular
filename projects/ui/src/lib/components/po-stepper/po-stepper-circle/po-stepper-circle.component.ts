@@ -13,8 +13,9 @@ const poLargeStepSize = 48;
  * Componente responsável por exibir os círculos dos *steps*.
  */
 @Component({
-  selector: 'po-stepper-circle',
-  templateUrl: './po-stepper-circle.component.html'
+    selector: 'po-stepper-circle',
+    templateUrl: './po-stepper-circle.component.html',
+    standalone: false
 })
 export class PoStepperCircleComponent {
   // Alinhamento do *step*.

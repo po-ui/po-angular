@@ -2,10 +2,10 @@ import { Component } from '@angular/core';
 import { PoSelectOption } from '@po-ui/ng-components';
 
 @Component({
-  selector: 'sample-po-multiselect-template',
-  templateUrl: './sample-po-multiselect-template.component.html',
-  styles: [
-    `
+    selector: 'sample-po-multiselect-template',
+    templateUrl: './sample-po-multiselect-template.component.html',
+    styles: [
+        `
       .containerFlex {
         display: flex;
         align-items: center;
@@ -23,7 +23,8 @@ import { PoSelectOption } from '@po-ui/ng-components';
         padding: 8px;
       }
     `
-  ]
+    ],
+    standalone: false
 })
 export class SamplePoMultiselectTemplateComponent {
   employee;

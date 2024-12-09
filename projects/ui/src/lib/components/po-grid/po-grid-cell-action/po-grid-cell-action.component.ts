@@ -1,8 +1,9 @@
 import { Component, Input } from '@angular/core';
 
 @Component({
-  selector: 'po-grid-cell-action',
-  templateUrl: './po-grid-cell-action.component.html'
+    selector: 'po-grid-cell-action',
+    templateUrl: './po-grid-cell-action.component.html',
+    standalone: false
 })
 export class PoGridCellActionComponent {
   @Input('p-position') position?: string = '';

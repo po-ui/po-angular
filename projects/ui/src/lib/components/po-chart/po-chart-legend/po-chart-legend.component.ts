@@ -3,9 +3,10 @@ import { ChangeDetectionStrategy, Component, Input } from '@angular/core';
 import { PoChartType } from '../enums/po-chart-type.enum';
 
 @Component({
-  selector: 'po-chart-legend',
-  templateUrl: './po-chart-legend.component.html',
-  changeDetection: ChangeDetectionStrategy.OnPush
+    selector: 'po-chart-legend',
+    templateUrl: './po-chart-legend.component.html',
+    changeDetection: ChangeDetectionStrategy.OnPush,
+    standalone: false
 })
 export class PoChartLegendComponent {
   @Input('p-type') type: PoChartType;

@@ -4,8 +4,9 @@ import { UntypedFormBuilder, UntypedFormGroup, Validators } from '@angular/forms
 import { PoRadioGroupOption, PoSelectOption } from '@po-ui/ng-components';
 
 @Component({
-  selector: 'sample-po-radio-group-translator-reactive-form',
-  templateUrl: './sample-po-radio-group-translator-reactive-form.component.html'
+    selector: 'sample-po-radio-group-translator-reactive-form',
+    templateUrl: './sample-po-radio-group-translator-reactive-form.component.html',
+    standalone: false
 })
 export class SamplePoRadioGroupTranslatorReactiveFormComponent implements OnInit {
   translatorForm: UntypedFormGroup;

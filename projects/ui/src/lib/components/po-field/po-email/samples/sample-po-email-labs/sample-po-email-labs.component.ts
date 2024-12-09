@@ -3,8 +3,9 @@ import { Component, OnInit } from '@angular/core';
 import { PoCheckboxGroupOption } from '@po-ui/ng-components';
 
 @Component({
-  selector: 'sample-po-email-labs',
-  templateUrl: './sample-po-email-labs.component.html'
+    selector: 'sample-po-email-labs',
+    templateUrl: './sample-po-email-labs.component.html',
+    standalone: false
 })
 export class SamplePoEmailLabsComponent implements OnInit {
   email: string;

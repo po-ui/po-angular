@@ -18,9 +18,10 @@ import { PoListBoxLiterals } from '../interfaces/po-listbox-literals.interface';
  * Componente de pesquisa que será criado dentro do search do `po-listbox`.
  */
 @Component({
-  selector: 'po-search-list',
-  templateUrl: './po-search-list.component.html',
-  changeDetection: ChangeDetectionStrategy.OnPush
+    selector: 'po-search-list',
+    templateUrl: './po-search-list.component.html',
+    changeDetection: ChangeDetectionStrategy.OnPush,
+    standalone: false
 })
 export class PoSearchListComponent {
   @ViewChild('inputElement', { read: ElementRef, static: true }) inputElement: ElementRef;

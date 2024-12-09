@@ -11,8 +11,9 @@ const RADIUS_HOVER_SIZE = 10;
 const ANIMATION_DURATION_TIME = 700;
 
 @Component({
-  selector: '[po-chart-series-point]',
-  templateUrl: './po-chart-series-point.component.svg'
+    selector: '[po-chart-series-point]',
+    templateUrl: './po-chart-series-point.component.svg',
+    standalone: false
 })
 export class PoChartSeriesPointComponent {
   @Input('p-animate') animate: boolean;

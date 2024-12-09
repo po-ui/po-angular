@@ -10,8 +10,9 @@ import { PoTableSubtitleColumn } from './po-table-subtitle-column.interface';
  * Componente para a criação de um conjunto de legendas.
  */
 @Component({
-  selector: 'po-table-subtitle-footer',
-  templateUrl: './po-table-subtitle-footer.component.html'
+    selector: 'po-table-subtitle-footer',
+    templateUrl: './po-table-subtitle-footer.component.html',
+    standalone: false
 })
 export class PoTableSubtitleFooterComponent implements AfterViewInit, DoCheck, OnDestroy {
   /** Propriedade que recebe as literais definidas no `po-table`. */

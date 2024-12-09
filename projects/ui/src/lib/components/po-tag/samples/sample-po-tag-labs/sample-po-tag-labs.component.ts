@@ -9,10 +9,10 @@ import {
 } from '@po-ui/ng-components';
 
 @Component({
-  selector: 'sample-po-tag-labs',
-  templateUrl: './sample-po-tag-labs.component.html',
-  styles: [
-    `
+    selector: 'sample-po-tag-labs',
+    templateUrl: './sample-po-tag-labs.component.html',
+    styles: [
+        `
       .sample-tag-color-circle {
         border-radius: 10px;
         display: inline-block;
@@ -22,7 +22,8 @@ import {
         width: 16px;
       }
     `
-  ]
+    ],
+    standalone: false
 })
 export class SamplePoTagLabsComponent implements OnInit {
   color: string;

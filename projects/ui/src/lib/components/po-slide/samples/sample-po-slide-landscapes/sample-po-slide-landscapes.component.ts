@@ -3,8 +3,9 @@ import { Component, ViewChild } from '@angular/core';
 import { PoModalComponent, PoSlideItem } from '@po-ui/ng-components';
 
 @Component({
-  selector: 'sample-po-slide-landscapes',
-  templateUrl: './sample-po-slide-landscapes.component.html'
+    selector: 'sample-po-slide-landscapes',
+    templateUrl: './sample-po-slide-landscapes.component.html',
+    standalone: false
 })
 export class SamplePoSlideLandscapesComponent {
   @ViewChild(PoModalComponent, { static: true }) modal: PoModalComponent;

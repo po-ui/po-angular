@@ -10,8 +10,9 @@ import {
 } from '@po-ui/ng-components';
 
 @Component({
-  selector: 'sample-po-accordion-labs',
-  templateUrl: './sample-po-accordion-labs.component.html'
+    selector: 'sample-po-accordion-labs',
+    templateUrl: './sample-po-accordion-labs.component.html',
+    standalone: false
 })
 export class SamplePoAccordionLabsComponent implements OnInit {
   accordionFieldsForm: Array<PoDynamicFormField> = [

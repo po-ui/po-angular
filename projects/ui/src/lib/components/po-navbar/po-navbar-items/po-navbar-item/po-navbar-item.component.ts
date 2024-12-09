@@ -5,8 +5,9 @@ import { PoNavbarItem } from '../../interfaces/po-navbar-item.interface';
 import { isExternalLink } from '../../../../utils/util';
 
 @Component({
-  selector: 'po-navbar-item',
-  templateUrl: './po-navbar-item.component.html'
+    selector: 'po-navbar-item',
+    templateUrl: './po-navbar-item.component.html',
+    standalone: false
 })
 export class PoNavbarItemComponent {
   @Input('p-action') action: Function;

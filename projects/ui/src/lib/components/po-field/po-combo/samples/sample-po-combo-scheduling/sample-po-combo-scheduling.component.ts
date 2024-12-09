@@ -5,9 +5,10 @@ import { PoComboOption, PoComboOptionGroup, PoNotificationService, PoSelectOptio
 import { SamplePoComboSchedulingService } from './sample-po-combo-scheduling.service';
 
 @Component({
-  selector: 'sample-po-combo-scheduling',
-  templateUrl: './sample-po-combo-scheduling.component.html',
-  providers: [SamplePoComboSchedulingService]
+    selector: 'sample-po-combo-scheduling',
+    templateUrl: './sample-po-combo-scheduling.component.html',
+    providers: [SamplePoComboSchedulingService],
+    standalone: false
 })
 export class SamplePoComboSchedulingComponent implements OnInit {
   @ViewChild('schedulingForm', { static: true }) form: NgForm;

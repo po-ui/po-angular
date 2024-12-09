@@ -3,14 +3,15 @@ import { NgForm } from '@angular/forms';
 import { PoDynamicFormComponent } from '@po-ui/ng-components';
 
 @Component({
-  selector: 'po-dynamic-form',
-  template: '',
-  providers: [
-    {
-      provide: PoDynamicFormComponent,
-      useClass: PoDynamicFormStubComponent
-    }
-  ]
+    selector: 'po-dynamic-form',
+    template: '',
+    providers: [
+        {
+            provide: PoDynamicFormComponent,
+            useClass: PoDynamicFormStubComponent
+        }
+    ],
+    standalone: false
 })
 export class PoDynamicFormStubComponent {
   private _form: NgForm;

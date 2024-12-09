@@ -5,9 +5,10 @@ import { PoComboOption, PoDisclaimer, PoTableColumn } from '@po-ui/ng-components
 import { SamplePoDisclaimerGroupSwPlanetsService } from './sample-po-disclaimer-group-sw-planets.service';
 
 @Component({
-  selector: 'sample-po-disclaimer-group-sw-planets',
-  templateUrl: './sample-po-disclaimer-group-sw-planets.component.html',
-  providers: [SamplePoDisclaimerGroupSwPlanetsService]
+    selector: 'sample-po-disclaimer-group-sw-planets',
+    templateUrl: './sample-po-disclaimer-group-sw-planets.component.html',
+    providers: [SamplePoDisclaimerGroupSwPlanetsService],
+    standalone: false
 })
 export class SamplePoDisclaimerGroupSwPlanetsComponent implements OnInit {
   climate: string;

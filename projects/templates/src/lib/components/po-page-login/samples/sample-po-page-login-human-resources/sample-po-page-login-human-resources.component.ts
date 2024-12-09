@@ -12,8 +12,9 @@ import {
 } from '@po-ui/ng-templates';
 
 @Component({
-  selector: 'sample-po-page-login-human-resources',
-  templateUrl: './sample-po-page-login-human-resources.component.html'
+    selector: 'sample-po-page-login-human-resources',
+    templateUrl: './sample-po-page-login-human-resources.component.html',
+    standalone: false
 })
 export class SamplePoPageLoginHumanResourcesComponent implements OnDestroy, OnInit {
   customField: PoPageLoginCustomField = {

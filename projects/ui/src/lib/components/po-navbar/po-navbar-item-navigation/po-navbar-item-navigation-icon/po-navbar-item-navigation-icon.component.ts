@@ -1,8 +1,9 @@
 import { Component, EventEmitter, Input, Output } from '@angular/core';
 
 @Component({
-  selector: 'po-navbar-item-navigation-icon',
-  templateUrl: './po-navbar-item-navigation-icon.component.html'
+    selector: 'po-navbar-item-navigation-icon',
+    templateUrl: './po-navbar-item-navigation-icon.component.html',
+    standalone: false
 })
 export class PoNavbarItemNavigationIconComponent {
   @Input('p-disabled') disabled: boolean;

@@ -10,9 +10,10 @@ import {
 } from '@po-ui/ng-components';
 
 @Component({
-  selector: 'sample-po-notification-labs',
-  templateUrl: './sample-po-notification-labs.component.html',
-  providers: [PoNotificationService]
+    selector: 'sample-po-notification-labs',
+    templateUrl: './sample-po-notification-labs.component.html',
+    providers: [PoNotificationService],
+    standalone: false
 })
 export class SamplePoNotificationLabsComponent implements OnInit {
   @ViewChild(PoModalComponent, { static: true }) poModal: PoModalComponent;

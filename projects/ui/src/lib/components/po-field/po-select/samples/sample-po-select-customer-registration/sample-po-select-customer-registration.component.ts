@@ -7,11 +7,11 @@ import { PoRadioGroupOption, PoSelectOption } from '@po-ui/ng-components';
 import { SamplePoSelectCustomerRegistrationService } from './sample-po-select-customer-registration.service';
 
 @Component({
-  selector: 'sample-po-select-customer-registration',
-  templateUrl: './sample-po-select-customer-registration.component.html',
-  providers: [SamplePoSelectCustomerRegistrationService],
-  styles: [
-    `
+    selector: 'sample-po-select-customer-registration',
+    templateUrl: './sample-po-select-customer-registration.component.html',
+    providers: [SamplePoSelectCustomerRegistrationService],
+    styles: [
+        `
       .sample-select-option-template-container {
         display: inline-flex;
         align-items: flex-start;
@@ -31,7 +31,8 @@ import { SamplePoSelectCustomerRegistrationService } from './sample-po-select-cu
         text-transform: uppercase;
       }
     `
-  ]
+    ],
+    standalone: false
 })
 export class SamplePoSelectCustomerRegistrationComponent implements OnDestroy, OnInit {
   address: string;

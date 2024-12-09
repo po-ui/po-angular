@@ -4,8 +4,9 @@ import { NgForm } from '@angular/forms';
 import { PoDynamicFormField } from '@po-ui/ng-components';
 
 @Component({
-  selector: 'po-page-job-scheduler-parameters',
-  templateUrl: 'po-page-job-scheduler-parameters.component.html'
+    selector: 'po-page-job-scheduler-parameters',
+    templateUrl: 'po-page-job-scheduler-parameters.component.html',
+    standalone: false
 })
 export class PoPageJobSchedulerParametersComponent implements AfterViewInit {
   @ViewChild('parametersForm') form: NgForm;

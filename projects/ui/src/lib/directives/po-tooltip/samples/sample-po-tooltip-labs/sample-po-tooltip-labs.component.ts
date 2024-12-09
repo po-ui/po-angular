@@ -3,8 +3,9 @@ import { Component, OnInit } from '@angular/core';
 import { PoCheckboxGroupOption } from '@po-ui/ng-components';
 
 @Component({
-  selector: 'sample-po-tooltip-labs',
-  templateUrl: './sample-po-tooltip-labs.component.html'
+    selector: 'sample-po-tooltip-labs',
+    templateUrl: './sample-po-tooltip-labs.component.html',
+    standalone: false
 })
 export class SamplePoTooltipLabsComponent implements OnInit {
   tooltip: string;

@@ -4,8 +4,9 @@ import { PoChartType } from '../../../enums/po-chart-type.enum';
 import { PoChartLabelCoordinates } from '../../../interfaces/po-chart-label-coordinates.interface';
 
 @Component({
-  selector: '[po-chart-axis-label]',
-  templateUrl: './po-chart-axis-label.component.svg'
+    selector: '[po-chart-axis-label]',
+    templateUrl: './po-chart-axis-label.component.svg',
+    standalone: false
 })
 export class PoChartAxisLabelComponent {
   @Input('p-align-by-the-corners') alignByTheCorners: boolean = false;

@@ -14,9 +14,10 @@ import {
 import { SamplePoTableLabsService } from './sample-po-table-labs.service';
 
 @Component({
-  selector: 'sample-po-table-labs',
-  templateUrl: './sample-po-table-labs.component.html',
-  providers: [SamplePoTableLabsService]
+    selector: 'sample-po-table-labs',
+    templateUrl: './sample-po-table-labs.component.html',
+    providers: [SamplePoTableLabsService],
+    standalone: false
 })
 export class SamplePoTableLabsComponent implements OnInit {
   @ViewChild(PoModalComponent, { static: true }) poModal: PoModalComponent;

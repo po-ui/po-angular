@@ -5,8 +5,9 @@ import { PoSelectOption, PoStepperComponent } from '@po-ui/ng-components';
 import { SamplePoStepperActiveService } from './sample-po-stepper-active.service';
 
 @Component({
-  selector: 'sample-po-stepper-active',
-  templateUrl: './sample-po-stepper-active.component.html'
+    selector: 'sample-po-stepper-active',
+    templateUrl: './sample-po-stepper-active.component.html',
+    standalone: false
 })
 export class SamplePoStepperActiveComponent implements OnInit, AfterViewInit, OnDestroy {
   @ViewChild('basicInformation', { static: true }) basicInformationForm: NgForm;

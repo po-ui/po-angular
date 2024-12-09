@@ -14,9 +14,10 @@ import { poPageEditLiteralsDefault } from './po-page-edit-base.component';
 import { PoPageHeaderComponent } from '../po-page-header/po-page-header.component';
 
 @Component({
-  template: `
+    template: `
     <po-page-edit p-title="Unit Test" (p-cancel)="cancel()" (p-save)="save()" (p-save-new)="saveNew()"> </po-page-edit>
-  `
+  `,
+    standalone: false
 })
 class ContainerComponent {
   cancel(): boolean {

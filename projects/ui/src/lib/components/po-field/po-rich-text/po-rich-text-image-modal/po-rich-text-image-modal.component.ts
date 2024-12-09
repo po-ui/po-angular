@@ -12,8 +12,9 @@ import { PoUploadFileRestrictions } from '../../po-upload/interfaces/po-upload-f
 const uploadRestrictions = ['.apng', '.bmp', '.gif', '.ico', '.jpeg', '.jpg', '.png', '.svg'];
 
 @Component({
-  selector: 'po-rich-text-image-modal',
-  templateUrl: './po-rich-text-image-modal.component.html'
+    selector: 'po-rich-text-image-modal',
+    templateUrl: './po-rich-text-image-modal.component.html',
+    standalone: false
 })
 export class PoRichTextImageModalComponent {
   @ViewChild('modal', { static: true }) modal: PoModalComponent;

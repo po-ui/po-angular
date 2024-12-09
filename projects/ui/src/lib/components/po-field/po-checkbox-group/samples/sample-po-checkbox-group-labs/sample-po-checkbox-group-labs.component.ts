@@ -3,8 +3,9 @@ import { Component, OnInit } from '@angular/core';
 import { PoCheckboxGroupOption, PoRadioGroupOption } from '@po-ui/ng-components';
 
 @Component({
-  selector: 'sample-po-checkbox-group-labs',
-  templateUrl: './sample-po-checkbox-group-labs.component.html'
+    selector: 'sample-po-checkbox-group-labs',
+    templateUrl: './sample-po-checkbox-group-labs.component.html',
+    standalone: false
 })
 export class SamplePoCheckboxGroupLabsComponent implements OnInit {
   checkboxGroup: object;

@@ -3,8 +3,9 @@ import { Component } from '@angular/core';
 import { PoTreeViewItem } from '@po-ui/ng-components';
 
 @Component({
-  selector: 'sample-po-tree-view-folder-structure',
-  templateUrl: 'sample-po-tree-view-folder-structure.component.html'
+    selector: 'sample-po-tree-view-folder-structure',
+    templateUrl: 'sample-po-tree-view-folder-structure.component.html',
+    standalone: false
 })
 export class SamplePoTreeViewFolderStructureComponent {
   readonly items: Array<PoTreeViewItem> = [

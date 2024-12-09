@@ -49,23 +49,24 @@ import { PoUploadService } from './po-upload.service';
  * </example>
  */
 @Component({
-  selector: 'po-upload',
-  templateUrl: './po-upload.component.html',
-  changeDetection: ChangeDetectionStrategy.OnPush,
-  providers: [
-    PoI18nPipe,
-    PoUploadService,
-    {
-      provide: NG_VALUE_ACCESSOR,
-      useExisting: forwardRef(() => PoUploadComponent),
-      multi: true
-    },
-    {
-      provide: NG_VALIDATORS,
-      useExisting: forwardRef(() => PoUploadComponent),
-      multi: true
-    }
-  ]
+    selector: 'po-upload',
+    templateUrl: './po-upload.component.html',
+    changeDetection: ChangeDetectionStrategy.OnPush,
+    providers: [
+        PoI18nPipe,
+        PoUploadService,
+        {
+            provide: NG_VALUE_ACCESSOR,
+            useExisting: forwardRef(() => PoUploadComponent),
+            multi: true
+        },
+        {
+            provide: NG_VALIDATORS,
+            useExisting: forwardRef(() => PoUploadComponent),
+            multi: true
+        }
+    ],
+    standalone: false
 })
 export class PoUploadComponent extends PoUploadBaseComponent implements AfterViewInit {
   @ViewChild('inputFile', { read: ElementRef, static: true }) private inputFile: ElementRef;

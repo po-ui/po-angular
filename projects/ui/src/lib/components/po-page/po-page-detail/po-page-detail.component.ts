@@ -23,8 +23,9 @@ import { PoPageDetailBaseComponent } from './po-page-detail-base.component';
  * </example>
  */
 @Component({
-  selector: 'po-page-detail',
-  templateUrl: './po-page-detail.component.html'
+    selector: 'po-page-detail',
+    templateUrl: './po-page-detail.component.html',
+    standalone: false
 })
 export class PoPageDetailComponent extends PoPageDetailBaseComponent {
   hasAnyAction(): boolean {

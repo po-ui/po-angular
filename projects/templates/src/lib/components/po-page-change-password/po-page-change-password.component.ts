@@ -54,8 +54,9 @@ import { PoPageChangePasswordService } from './po-page-change-password.service';
  * </example>
  */
 @Component({
-  selector: 'po-page-change-password',
-  templateUrl: './po-page-change-password.component.html'
+    selector: 'po-page-change-password',
+    templateUrl: './po-page-change-password.component.html',
+    standalone: false
 })
 export class PoPageChangePasswordComponent
   extends PoPageChangePasswordBaseComponent

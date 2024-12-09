@@ -11,9 +11,10 @@ import {
 import { SamplePoListViewHiringProcessesService } from './sample-po-list-view-hiring-processes.service';
 
 @Component({
-  selector: 'sample-po-list-view-hiring-processes',
-  templateUrl: 'sample-po-list-view-hiring-processes.component.html',
-  providers: [SamplePoListViewHiringProcessesService]
+    selector: 'sample-po-list-view-hiring-processes',
+    templateUrl: 'sample-po-list-view-hiring-processes.component.html',
+    providers: [SamplePoListViewHiringProcessesService],
+    standalone: false
 })
 export class SamplePoListViewHiringProcessesComponent implements OnInit {
   @ViewChild('detailsModal', { static: true }) detailsModalElement: PoModalComponent;

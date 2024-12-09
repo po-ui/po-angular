@@ -11,8 +11,9 @@ import { PoChartType } from '../../enums/po-chart-type.enum';
 import { expectPropertiesValues } from 'projects/ui/src/lib/util-test/util-expect.spec';
 
 @Component({
-  selector: 'po-chart-line-test',
-  template: ` <svg:path></svg:path> `
+    selector: 'po-chart-line-test',
+    template: ` <svg:path></svg:path> `,
+    standalone: false
 })
 class PoChartLineComponent extends PoChartLineBaseComponent {
   constructor(mathsService: PoChartMathsService, renderer: Renderer2, elementRef: ElementRef) {

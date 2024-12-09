@@ -45,8 +45,9 @@ export const poBreadcrumbLiterals: Object = {
  * </example>
  */
 @Component({
-  selector: 'po-breadcrumb',
-  templateUrl: './po-breadcrumb.component.html'
+    selector: 'po-breadcrumb',
+    templateUrl: './po-breadcrumb.component.html',
+    standalone: false
 })
 export class PoBreadcrumbComponent extends PoBreadcrumbBaseComponent implements AfterViewInit, DoCheck, OnDestroy {
   @ViewChild('breadcrumb', { read: ElementRef, static: true }) breadcrumbElement: ElementRef;

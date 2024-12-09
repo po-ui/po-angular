@@ -15,9 +15,10 @@ import {
 import { SamplePoPageDynamicSearchHiringProcessesService } from './sample-po-page-dynamic-search-hiring-processes.service';
 
 @Component({
-  selector: 'sample-po-page-dynamic-search-hiring-processes',
-  templateUrl: './sample-po-page-dynamic-search-hiring-processes.component.html',
-  providers: [SamplePoPageDynamicSearchHiringProcessesService]
+    selector: 'sample-po-page-dynamic-search-hiring-processes',
+    templateUrl: './sample-po-page-dynamic-search-hiring-processes.component.html',
+    providers: [SamplePoPageDynamicSearchHiringProcessesService],
+    standalone: false
 })
 export class SamplePoPageDynamicSearchHiringProcessesComponent implements OnInit {
   hiringProcesses: Array<object>;

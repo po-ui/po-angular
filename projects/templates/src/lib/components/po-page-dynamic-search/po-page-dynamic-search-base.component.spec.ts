@@ -13,8 +13,9 @@ import { PoPageDynamicSearchLiterals } from './po-page-dynamic-search-literals.i
 import { convertToBoolean } from '../../utils/util';
 
 @Component({
-  selector: 'mock-component',
-  template: ''
+    selector: 'mock-component',
+    template: '',
+    standalone: false
 })
 class MockComponent extends PoPageDynamicSearchBaseComponent {
   onChangeFilters(filters: Array<PoPageDynamicSearchFilters>) {}

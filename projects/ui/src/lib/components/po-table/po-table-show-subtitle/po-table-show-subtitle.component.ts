@@ -10,8 +10,9 @@ import { PoTableSubtitleColumn } from '../po-table-subtitle-footer/po-table-subt
  * Componente para a criação de um botão e modal para visualização de todas as legendas.
  */
 @Component({
-  selector: 'po-table-show-subtitle',
-  templateUrl: './po-table-show-subtitle.component.html'
+    selector: 'po-table-show-subtitle',
+    templateUrl: './po-table-show-subtitle.component.html',
+    standalone: false
 })
 export class PoTableShowSubtitleComponent {
   /** Objeto com os dados da legenda. */

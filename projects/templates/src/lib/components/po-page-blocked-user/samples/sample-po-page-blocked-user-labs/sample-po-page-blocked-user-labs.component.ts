@@ -4,8 +4,9 @@ import { PoPageBlockedUserReason, PoPageBlockedUserReasonParams } from '@po-ui/n
 import { PoRadioGroupOption } from '@po-ui/ng-components';
 
 @Component({
-  selector: 'sample-po-page-blocked-user-labs',
-  templateUrl: './sample-po-page-blocked-user-labs.component.html'
+    selector: 'sample-po-page-blocked-user-labs',
+    templateUrl: './sample-po-page-blocked-user-labs.component.html',
+    standalone: false
 })
 export class SamplePoPageBlockedUserLabsComponent implements OnInit {
   contactMail: string;

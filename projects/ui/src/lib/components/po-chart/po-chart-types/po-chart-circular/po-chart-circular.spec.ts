@@ -9,8 +9,9 @@ import { PoChartDynamicTypeComponent } from '../po-chart-dynamic-type.component'
 import { PoChartType } from '../../enums/po-chart-type.enum';
 
 @Component({
-  selector: 'po-chart-circular-test',
-  templateUrl: '../po-chart-dynamic-type.component.html'
+    selector: 'po-chart-circular-test',
+    templateUrl: '../po-chart-dynamic-type.component.html',
+    standalone: false
 })
 class PoChartCircularComponent extends PoChartCircular {
   constructor(el: ElementRef, ngZone: NgZone, renderer: Renderer2) {

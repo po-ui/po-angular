@@ -44,8 +44,9 @@ export const poTableColumnManagerLiteralsDefault = {
 type Direction = 'up' | 'down';
 
 @Component({
-  selector: 'po-table-column-manager',
-  templateUrl: './po-table-column-manager.component.html'
+    selector: 'po-table-column-manager',
+    templateUrl: './po-table-column-manager.component.html',
+    standalone: false
 })
 export class PoTableColumnManagerComponent implements OnChanges, OnDestroy {
   @ViewChild(PoPopoverComponent) popover: PoPopoverComponent;

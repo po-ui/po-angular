@@ -5,16 +5,17 @@ import { PoMenuItem } from '@po-ui/ng-components';
 import { SamplePoMenuHumanResourcesService } from './sample-po-menu-human-resources.service';
 
 @Component({
-  selector: 'sample-po-menu-human-resources',
-  templateUrl: './sample-po-menu-human-resources.component.html',
-  providers: [SamplePoMenuHumanResourcesService],
-  styles: [
-    `
+    selector: 'sample-po-menu-human-resources',
+    templateUrl: './sample-po-menu-human-resources.component.html',
+    providers: [SamplePoMenuHumanResourcesService],
+    styles: [
+        `
       .sample-menu-header-text-color {
         color: #9da7a9;
       }
     `
-  ]
+    ],
+    standalone: false
 })
 export class SamplePoMenuHumanResourcesComponent {
   menuItemSelected: string;

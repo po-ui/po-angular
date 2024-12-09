@@ -3,8 +3,9 @@ import { Component, OnInit } from '@angular/core';
 import { PoCheckboxGroupOption, PoUploadFileRestrictions, PoUploadLiterals } from '@po-ui/ng-components';
 
 @Component({
-  selector: 'sample-po-upload-labs',
-  templateUrl: './sample-po-upload-labs.component.html'
+    selector: 'sample-po-upload-labs',
+    templateUrl: './sample-po-upload-labs.component.html',
+    standalone: false
 })
 export class SamplePoUploadLabsComponent implements OnInit {
   allowedExtensions: string;

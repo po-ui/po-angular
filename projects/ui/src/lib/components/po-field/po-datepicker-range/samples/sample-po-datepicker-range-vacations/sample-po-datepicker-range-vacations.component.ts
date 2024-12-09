@@ -4,8 +4,9 @@ import { UntypedFormControl } from '@angular/forms';
 import { PoDatepickerRange, PoModalAction, PoModalComponent, PoNotificationService } from '@po-ui/ng-components';
 
 @Component({
-  selector: 'sample-po-datepicker-range-vacations',
-  templateUrl: './sample-po-datepicker-range-vacations.component.html'
+    selector: 'sample-po-datepicker-range-vacations',
+    templateUrl: './sample-po-datepicker-range-vacations.component.html',
+    standalone: false
 })
 export class SamplePoDatepickerRangeVacationsComponent {
   @ViewChild('formVacationSuggestion', { static: true }) formVacationSuggestion: UntypedFormControl;

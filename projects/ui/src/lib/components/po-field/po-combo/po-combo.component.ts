@@ -81,23 +81,24 @@ const poComboContainerPositionDefault = 'bottom';
  * </example>
  */
 @Component({
-  selector: 'po-combo',
-  templateUrl: './po-combo.component.html',
-  changeDetection: ChangeDetectionStrategy.OnPush,
-  providers: [
-    PoComboFilterService,
-    PoControlPositionService,
-    {
-      provide: NG_VALUE_ACCESSOR,
-      useExisting: forwardRef(() => PoComboComponent),
-      multi: true
-    },
-    {
-      provide: NG_VALIDATORS,
-      useExisting: forwardRef(() => PoComboComponent),
-      multi: true
-    }
-  ]
+    selector: 'po-combo',
+    templateUrl: './po-combo.component.html',
+    changeDetection: ChangeDetectionStrategy.OnPush,
+    providers: [
+        PoComboFilterService,
+        PoControlPositionService,
+        {
+            provide: NG_VALUE_ACCESSOR,
+            useExisting: forwardRef(() => PoComboComponent),
+            multi: true
+        },
+        {
+            provide: NG_VALIDATORS,
+            useExisting: forwardRef(() => PoComboComponent),
+            multi: true
+        }
+    ],
+    standalone: false
 })
 export class PoComboComponent extends PoComboBaseComponent implements AfterViewInit, OnChanges, OnDestroy {
   @ContentChild(PoComboOptionTemplateDirective, { static: true }) comboOptionTemplate: PoComboOptionTemplateDirective;

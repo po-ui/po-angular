@@ -8,8 +8,9 @@ import {
 } from '@po-ui/ng-components';
 
 @Component({
-  selector: 'sample-po-multiselect-labs',
-  templateUrl: './sample-po-multiselect-labs.component.html'
+    selector: 'sample-po-multiselect-labs',
+    templateUrl: './sample-po-multiselect-labs.component.html',
+    standalone: false
 })
 export class SamplePoMultiselectLabsComponent implements OnInit {
   customLiterals: PoMultiselectLiterals;

@@ -7,9 +7,10 @@ import { PoTableColumn } from '@po-ui/ng-components';
 import { SamplePoTableTransportService } from './sample-po-table-transport.service';
 
 @Component({
-  selector: 'sample-po-table-transport',
-  templateUrl: 'sample-po-table-transport.component.html',
-  providers: [SamplePoTableTransportService]
+    selector: 'sample-po-table-transport',
+    templateUrl: 'sample-po-table-transport.component.html',
+    providers: [SamplePoTableTransportService],
+    standalone: false
 })
 export class SamplePoTableTransportComponent implements OnInit {
   columns: Array<PoTableColumn>;

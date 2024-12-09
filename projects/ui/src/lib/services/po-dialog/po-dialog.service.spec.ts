@@ -16,8 +16,9 @@ import { PoModalModule } from '../../components/po-modal';
 class TestModule {}
 
 @Component({
-  template: ` test component `,
-  providers: [PoComponentInjectorService, PoDialogService]
+    template: ` test component `,
+    providers: [PoComponentInjectorService, PoDialogService],
+    standalone: false
 })
 class TestComponent {
   constructor(poDialog: PoDialogService) {}

@@ -8,10 +8,11 @@ import { PoCalendarService } from '../services/po-calendar.service';
 import { PoDateService } from '../../../services/po-date/po-date.service';
 
 @Component({
-  selector: 'po-calendar-wrapper',
-  templateUrl: './po-calendar-wrapper.component.html',
-  providers: [PoCalendarService],
-  changeDetection: ChangeDetectionStrategy.OnPush
+    selector: 'po-calendar-wrapper',
+    templateUrl: './po-calendar-wrapper.component.html',
+    providers: [PoCalendarService],
+    changeDetection: ChangeDetectionStrategy.OnPush,
+    standalone: false
 })
 export class PoCalendarWrapperComponent implements OnInit, OnChanges {
   @Input('p-value') value;

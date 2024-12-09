@@ -3,9 +3,10 @@ import { ChangeDetectionStrategy, ChangeDetectorRef, Component, ElementRef, Inpu
 const poPageBlockedUserContactItemMargin = 16;
 
 @Component({
-  selector: 'po-page-blocked-user-contacts',
-  templateUrl: './po-page-blocked-user-contacts.component.html',
-  changeDetection: ChangeDetectionStrategy.OnPush
+    selector: 'po-page-blocked-user-contacts',
+    templateUrl: './po-page-blocked-user-contacts.component.html',
+    changeDetection: ChangeDetectionStrategy.OnPush,
+    standalone: false
 })
 export class PoPageBlockedUserContactsComponent {
   @ViewChild('contactGroup', { static: true }) contactGroup: ElementRef;

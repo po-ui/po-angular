@@ -12,8 +12,9 @@ import { PoSlideContentTemplateDirective } from '../directives/po-slide-content-
  * Componente para cada item do po-slide.
  */
 @Component({
-  selector: 'po-slide-item',
-  templateUrl: './po-slide-item.component.html'
+    selector: 'po-slide-item',
+    templateUrl: './po-slide-item.component.html',
+    standalone: false
 })
 export class PoSlideItemComponent {
   @ViewChild('slideItem', { static: true }) itemElement: ElementRef;

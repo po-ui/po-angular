@@ -3,9 +3,10 @@ import { Component } from '@angular/core';
 import { PoChartType, PoChartOptions, PoChartSerie, PoDialogService } from '@po-ui/ng-components';
 
 @Component({
-  selector: 'sample-po-chart-coffee-ranking',
-  templateUrl: './sample-po-chart-coffee-ranking.component.html',
-  providers: [PoDialogService]
+    selector: 'sample-po-chart-coffee-ranking',
+    templateUrl: './sample-po-chart-coffee-ranking.component.html',
+    providers: [PoDialogService],
+    standalone: false
 })
 export class SamplePoChartCoffeeRankingComponent {
   participationByCountryInWorldExportsType: PoChartType = PoChartType.Line;

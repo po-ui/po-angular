@@ -3,8 +3,9 @@ import { Component, OnChanges, ViewChild } from '@angular/core';
 import { PoSlideComponent } from '@po-ui/ng-components';
 
 @Component({
-  selector: 'sample-po-slide-external-controls',
-  templateUrl: './sample-po-slide-external-controls.component.html'
+    selector: 'sample-po-slide-external-controls',
+    templateUrl: './sample-po-slide-external-controls.component.html',
+    standalone: false
 })
 export class SamplePoSlideExternalControlsComponent {
   @ViewChild('slideComponent', { static: true }) slideComponent: PoSlideComponent;

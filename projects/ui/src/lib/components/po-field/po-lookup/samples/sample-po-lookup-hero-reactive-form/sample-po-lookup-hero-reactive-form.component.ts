@@ -8,9 +8,10 @@ import { PoNotificationService } from '@po-ui/ng-components';
 import { SamplePoLookupService } from '../sample-po-lookup.service';
 
 @Component({
-  selector: 'sample-po-lookup-hero-reactive-form',
-  templateUrl: './sample-po-lookup-hero-reactive-form.component.html',
-  providers: [SamplePoLookupService]
+    selector: 'sample-po-lookup-hero-reactive-form',
+    templateUrl: './sample-po-lookup-hero-reactive-form.component.html',
+    providers: [SamplePoLookupService],
+    standalone: false
 })
 export class SamplePoLookupHeroReactiveFormComponent implements OnInit {
   formMission: UntypedFormGroup;

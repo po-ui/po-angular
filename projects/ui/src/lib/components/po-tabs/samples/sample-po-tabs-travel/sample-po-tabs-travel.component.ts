@@ -3,8 +3,9 @@ import { Component } from '@angular/core';
 import { PoNotificationService, PoRadioGroupOption, PoSelectOption } from '@po-ui/ng-components';
 
 @Component({
-  selector: 'sample-po-tabs-travel',
-  templateUrl: './sample-po-tabs-travel.component.html'
+    selector: 'sample-po-tabs-travel',
+    templateUrl: './sample-po-tabs-travel.component.html',
+    standalone: false
 })
 export class SamplePoTabsTravelComponent {
   card: number;

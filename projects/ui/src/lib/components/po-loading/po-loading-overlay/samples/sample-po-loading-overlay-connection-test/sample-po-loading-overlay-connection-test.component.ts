@@ -3,8 +3,9 @@ import { Component } from '@angular/core';
 import { PoNotificationService } from '@po-ui/ng-components';
 
 @Component({
-  selector: 'sample-po-loading-overlay-connection-test',
-  templateUrl: 'sample-po-loading-overlay-connection-test.component.html'
+    selector: 'sample-po-loading-overlay-connection-test',
+    templateUrl: 'sample-po-loading-overlay-connection-test.component.html',
+    standalone: false
 })
 export class SamplePoLoadingOverlayConnectionTestComponent {
   environment = {

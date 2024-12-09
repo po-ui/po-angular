@@ -3,8 +3,9 @@ import { Component, ViewChild } from '@angular/core';
 import { PoModalAction, PoModalComponent } from '@po-ui/ng-components';
 
 @Component({
-  selector: 'sample-po-checkbox-acceptance-term',
-  templateUrl: './sample-po-checkbox-acceptance-term.component.html'
+    selector: 'sample-po-checkbox-acceptance-term',
+    templateUrl: './sample-po-checkbox-acceptance-term.component.html',
+    standalone: false
 })
 export class SamplePoCheckboxAcceptanceTermComponent {
   @ViewChild(PoModalComponent, { static: true }) modalTerm: PoModalComponent;

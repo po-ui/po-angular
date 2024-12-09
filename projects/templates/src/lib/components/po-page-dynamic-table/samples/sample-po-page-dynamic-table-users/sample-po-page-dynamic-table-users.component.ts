@@ -12,9 +12,10 @@ import {
 import { SamplePoPageDynamicTableUsersService } from './sample-po-page-dynamic-table-users.service';
 
 @Component({
-  selector: 'sample-po-page-dynamic-table-users',
-  templateUrl: './sample-po-page-dynamic-table-users.component.html',
-  providers: [SamplePoPageDynamicTableUsersService]
+    selector: 'sample-po-page-dynamic-table-users',
+    templateUrl: './sample-po-page-dynamic-table-users.component.html',
+    providers: [SamplePoPageDynamicTableUsersService],
+    standalone: false
 })
 export class SamplePoPageDynamicTableUsersComponent implements OnInit {
   @ViewChild('userDetailModal') userDetailModal!: PoModalComponent;

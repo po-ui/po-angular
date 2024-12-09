@@ -2,8 +2,9 @@ import { Component, OnInit, ViewChild } from '@angular/core';
 import { PoCheckboxGroupOption, PoPageSlideComponent, PoRadioGroupOption } from '@po-ui/ng-components';
 
 @Component({
-  selector: 'sample-po-page-slide-labs',
-  templateUrl: './sample-po-page-slide-labs.component.html'
+    selector: 'sample-po-page-slide-labs',
+    templateUrl: './sample-po-page-slide-labs.component.html',
+    standalone: false
 })
 export class SamplePoPageSlideLabsComponent implements OnInit {
   @ViewChild('poPageSlide')

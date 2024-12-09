@@ -1,8 +1,9 @@
 import { Component, Input, ViewChild, ElementRef, ChangeDetectorRef, Output, EventEmitter } from '@angular/core';
 
 @Component({
-  selector: 'po-grid-cell',
-  templateUrl: './po-grid-cell.component.html'
+    selector: 'po-grid-cell',
+    templateUrl: './po-grid-cell.component.html',
+    standalone: false
 })
 export class PoGridCellComponent {
   @Input('p-align') align?: string = 'left';

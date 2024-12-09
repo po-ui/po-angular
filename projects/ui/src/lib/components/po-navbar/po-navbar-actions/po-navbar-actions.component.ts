@@ -3,8 +3,9 @@ import { Component, Input } from '@angular/core';
 import { PoNavbarIconAction } from '../interfaces/po-navbar-icon-action.interface';
 
 @Component({
-  selector: 'po-navbar-actions',
-  templateUrl: './po-navbar-actions.component.html'
+    selector: 'po-navbar-actions',
+    templateUrl: './po-navbar-actions.component.html',
+    standalone: false
 })
 export class PoNavbarActionsComponent {
   private _iconActions: Array<PoNavbarIconAction>;

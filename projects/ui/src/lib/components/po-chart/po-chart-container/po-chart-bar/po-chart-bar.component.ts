@@ -9,8 +9,9 @@ import { PoChartContainerSize } from './../../interfaces/po-chart-container-size
 import { PoChartMinMaxValues } from './../../interfaces/po-chart-min-max-values.interface';
 
 @Component({
-  selector: '[po-chart-bar]',
-  templateUrl: './po-chart-bar.component.svg'
+    selector: '[po-chart-bar]',
+    templateUrl: './po-chart-bar.component.svg',
+    standalone: false
 })
 export class PoChartBarComponent extends PoChartBarBaseComponent {
   readonly tooltipPosition = 'right';

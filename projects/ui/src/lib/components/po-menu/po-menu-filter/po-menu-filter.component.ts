@@ -17,8 +17,9 @@ export const poMenuFilterLiteralsDefault = {
  * Componente que apresenta o campo de pesquisa no po-menu.
  */
 @Component({
-  selector: 'po-menu-filter',
-  templateUrl: './po-menu-filter.component.html'
+    selector: 'po-menu-filter',
+    templateUrl: './po-menu-filter.component.html',
+    standalone: false
 })
 export class PoMenuFilterComponent {
   @Input('p-loading') loading: boolean;

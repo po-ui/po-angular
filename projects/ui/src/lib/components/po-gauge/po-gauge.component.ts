@@ -26,8 +26,9 @@ import { PoGaugeSvgContainer } from './interfaces/po-gauge-svg-container.interfa
  * </example>
  */
 @Component({
-  selector: 'po-gauge',
-  templateUrl: './po-gauge.component.html'
+    selector: 'po-gauge',
+    templateUrl: './po-gauge.component.html',
+    standalone: false
 })
 export class PoGaugeComponent extends PoGaugeBaseComponent implements DoCheck {
   @ViewChild('descriptionEl', { read: ElementRef }) descriptionEl: ElementRef;

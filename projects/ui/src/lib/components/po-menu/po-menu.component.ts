@@ -113,9 +113,10 @@ const poMenuRootLevel = 1;
  * </example>
  */
 @Component({
-  selector: 'po-menu',
-  templateUrl: './po-menu.component.html',
-  providers: [PoMenuItemsService, PoMenuService]
+    selector: 'po-menu',
+    templateUrl: './po-menu.component.html',
+    providers: [PoMenuItemsService, PoMenuService],
+    standalone: false
 })
 export class PoMenuComponent extends PoMenuBaseComponent implements AfterViewInit, OnDestroy, OnInit, DoCheck {
   @ContentChild(PoMenuHeaderTemplateDirective, { static: true }) menuHeaderTemplate: PoMenuHeaderTemplateDirective;

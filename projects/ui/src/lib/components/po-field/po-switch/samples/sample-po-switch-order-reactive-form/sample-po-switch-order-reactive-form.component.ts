@@ -4,8 +4,9 @@ import { UntypedFormBuilder, UntypedFormGroup } from '@angular/forms';
 import { PoNotificationService, PoSwitchLabelPosition, PoTableColumn } from '@po-ui/ng-components';
 
 @Component({
-  selector: 'sample-po-switch-order-reactive-form',
-  templateUrl: './sample-po-switch-order-reactive-form.component.html'
+    selector: 'sample-po-switch-order-reactive-form',
+    templateUrl: './sample-po-switch-order-reactive-form.component.html',
+    standalone: false
 })
 export class SamplePoSwitchOrderReactiveFormComponent implements OnInit {
   formOrderSummary: UntypedFormGroup;

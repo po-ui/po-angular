@@ -3,9 +3,10 @@ import { PoRadioGroupOption } from '@po-ui/ng-components';
 import { SamplePoLookupSwFilmsService } from './sample-po-lookup-sw-films.service';
 
 @Component({
-  selector: 'sample-po-lookup-sw-films',
-  templateUrl: './sample-po-lookup-sw-films.component.html',
-  providers: [SamplePoLookupSwFilmsService]
+    selector: 'sample-po-lookup-sw-films',
+    templateUrl: './sample-po-lookup-sw-films.component.html',
+    providers: [SamplePoLookupSwFilmsService],
+    standalone: false
 })
 export class SamplePoLookupSwFilmsComponent implements OnInit {
   entity;

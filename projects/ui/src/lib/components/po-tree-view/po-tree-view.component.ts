@@ -30,10 +30,11 @@ import { PoTreeViewService } from './services/po-tree-view.service';
  * </example>
  */
 @Component({
-  selector: 'po-tree-view',
-  templateUrl: './po-tree-view.component.html',
-  changeDetection: ChangeDetectionStrategy.OnPush,
-  providers: [PoTreeViewService]
+    selector: 'po-tree-view',
+    templateUrl: './po-tree-view.component.html',
+    changeDetection: ChangeDetectionStrategy.OnPush,
+    providers: [PoTreeViewService],
+    standalone: false
 })
 export class PoTreeViewComponent extends PoTreeViewBaseComponent implements OnInit, OnChanges {
   get hasItems() {

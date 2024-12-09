@@ -3,8 +3,9 @@ import { Component, OnInit } from '@angular/core';
 import { PoCheckboxGroupOption } from '@po-ui/ng-components';
 
 @Component({
-  selector: 'sample-po-url-labs',
-  templateUrl: './sample-po-url-labs.component.html'
+    selector: 'sample-po-url-labs',
+    templateUrl: './sample-po-url-labs.component.html',
+    standalone: false
 })
 export class SamplePoUrlLabsComponent implements OnInit {
   errorPattern: string;

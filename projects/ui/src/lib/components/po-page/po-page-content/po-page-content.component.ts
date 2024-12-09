@@ -8,8 +8,9 @@ import { PoPageContentBaseComponent } from './po-page-content-base.component';
  * @docsExtends PoPageContentBaseComponent
  */
 @Component({
-  selector: 'po-page-content',
-  templateUrl: './po-page-content.component.html'
+    selector: 'po-page-content',
+    templateUrl: './po-page-content.component.html',
+    standalone: false
 })
 export class PoPageContentComponent extends PoPageContentBaseComponent implements AfterViewInit, OnDestroy {
   contentOpacity: number = 0;

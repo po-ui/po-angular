@@ -52,8 +52,9 @@ import { PoChartMathsService } from './services/po-chart-maths.service';
  * </example>
  */
 @Component({
-  selector: 'po-chart',
-  templateUrl: './po-chart.component.html'
+    selector: 'po-chart',
+    templateUrl: './po-chart.component.html',
+    standalone: false
 })
 export class PoChartComponent extends PoChartBaseComponent implements AfterViewInit, DoCheck, OnDestroy, OnInit {
   @ViewChild('chartContainer', { read: ViewContainerRef, static: true }) chartContainer: ViewContainerRef;

@@ -3,9 +3,10 @@ import { Component } from '@angular/core';
 import { PoComboOption, PoNotificationService, PoTableColumn } from '@po-ui/ng-components';
 
 @Component({
-  selector: 'sample-po-notification-sales',
-  templateUrl: './sample-po-notification-sales.component.html',
-  providers: [PoNotificationService]
+    selector: 'sample-po-notification-sales',
+    templateUrl: './sample-po-notification-sales.component.html',
+    providers: [PoNotificationService],
+    standalone: false
 })
 export class SamplePoNotificationSalesComponent {
   name: string;

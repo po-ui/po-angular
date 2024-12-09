@@ -3,8 +3,9 @@ import { Component, OnInit, ViewChild } from '@angular/core';
 import { PoDynamicFormField, PoNotificationService, PoTab, PoTabsComponent } from '@po-ui/ng-components';
 
 @Component({
-  selector: 'sample-po-tabs-labs',
-  templateUrl: './sample-po-tabs-labs.component.html'
+    selector: 'sample-po-tabs-labs',
+    templateUrl: './sample-po-tabs-labs.component.html',
+    standalone: false
 })
 export class SamplePoTabsLabsComponent implements OnInit {
   @ViewChild('poTab', { static: true }) poTab: PoTabsComponent;

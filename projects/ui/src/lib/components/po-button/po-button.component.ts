@@ -27,9 +27,10 @@ import { PoButtonBaseComponent } from './po-button-base.component';
  * </example>
  */
 @Component({
-  selector: 'po-button',
-  templateUrl: './po-button.component.html',
-  changeDetection: ChangeDetectionStrategy.OnPush
+    selector: 'po-button',
+    templateUrl: './po-button.component.html',
+    changeDetection: ChangeDetectionStrategy.OnPush,
+    standalone: false
 })
 export class PoButtonComponent extends PoButtonBaseComponent {
   @ViewChild('button', { static: true }) buttonElement: ElementRef;

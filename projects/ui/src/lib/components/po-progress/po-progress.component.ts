@@ -25,9 +25,10 @@ import { poProgressLiterals } from './literals/po-progress.literals';
  * </example>
  */
 @Component({
-  selector: 'po-progress',
-  templateUrl: './po-progress.component.html',
-  changeDetection: ChangeDetectionStrategy.OnPush
+    selector: 'po-progress',
+    templateUrl: './po-progress.component.html',
+    changeDetection: ChangeDetectionStrategy.OnPush,
+    standalone: false
 })
 export class PoProgressComponent extends PoProgressBaseComponent implements OnInit {
   language;

@@ -7,8 +7,9 @@ import { PoNotificationService } from '@po-ui/ng-components';
 import { PoPageAction, PoPageFilter, PoPageListLiterals } from '@po-ui/ng-components';
 
 @Component({
-  selector: 'sample-po-page-list-labs',
-  templateUrl: './sample-po-page-list-labs.component.html'
+    selector: 'sample-po-page-list-labs',
+    templateUrl: './sample-po-page-list-labs.component.html',
+    standalone: false
 })
 export class SamplePoPageListLabsComponent implements OnInit {
   action: PoPageAction;

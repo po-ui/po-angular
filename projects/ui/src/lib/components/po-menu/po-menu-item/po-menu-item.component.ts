@@ -18,8 +18,9 @@ const poMenuItemSubItemSize = 98;
  * Componente que implementa cada item do po-menu.
  */
 @Component({
-  selector: 'po-menu-item',
-  templateUrl: './po-menu-item.component.html'
+    selector: 'po-menu-item',
+    templateUrl: './po-menu-item.component.html',
+    standalone: false
 })
 export class PoMenuItemComponent implements OnDestroy, OnInit {
   // Ação que será chamada ao clicar no item.

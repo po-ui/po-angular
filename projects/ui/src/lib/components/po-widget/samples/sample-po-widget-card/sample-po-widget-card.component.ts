@@ -3,8 +3,9 @@ import { Component, OnInit, ViewChild } from '@angular/core';
 import { PoModalComponent } from '@po-ui/ng-components';
 
 @Component({
-  selector: 'sample-po-widget-card',
-  templateUrl: './sample-po-widget-card.component.html'
+    selector: 'sample-po-widget-card',
+    templateUrl: './sample-po-widget-card.component.html',
+    standalone: false
 })
 export class SamplePoWidgetCardComponent implements OnInit {
   @ViewChild(PoModalComponent, { static: true }) poModal: PoModalComponent;

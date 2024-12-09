@@ -9,10 +9,11 @@ import { PoNumberBaseComponent } from './po-number-base.component';
 import { of } from 'rxjs';
 
 @Component({
-  template: `
+    template: `
     <input type="number" #inp />
     <span #clean></span>
-  `
+  `,
+    standalone: false
 })
 class ContentProjectionComponent extends PoNumberBaseComponent {
   constructor(el: ElementRef, cd: ChangeDetectorRef) {

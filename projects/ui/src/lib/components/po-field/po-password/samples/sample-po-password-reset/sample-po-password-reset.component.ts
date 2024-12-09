@@ -3,9 +3,10 @@ import { Component } from '@angular/core';
 import { PoDialogService } from '@po-ui/ng-components';
 
 @Component({
-  selector: 'sample-po-password-reset',
-  templateUrl: './sample-po-password-reset.component.html',
-  providers: [PoDialogService]
+    selector: 'sample-po-password-reset',
+    templateUrl: './sample-po-password-reset.component.html',
+    providers: [PoDialogService],
+    standalone: false
 })
 export class SamplePoPasswordResetComponent {
   confirmNewPassword: string;

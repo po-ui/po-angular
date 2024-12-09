@@ -15,8 +15,9 @@ import { PoChartAxisOptions } from '../../interfaces/po-chart-axis-options.inter
 import { PoChartType } from '../../enums/po-chart-type.enum';
 
 @Component({
-  selector: '[po-chart-axis]',
-  templateUrl: './po-chart-axis.component.svg'
+    selector: '[po-chart-axis]',
+    templateUrl: './po-chart-axis.component.svg',
+    standalone: false
 })
 export class PoChartAxisComponent {
   @Input('p-align-by-the-corners') alignByTheCorners: boolean = false;

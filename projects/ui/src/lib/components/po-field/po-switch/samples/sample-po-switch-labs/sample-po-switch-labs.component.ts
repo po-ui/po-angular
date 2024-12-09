@@ -3,8 +3,9 @@ import { Component, OnInit } from '@angular/core';
 import { PoCheckboxGroupOption, PoRadioGroupOption, PoSwitchLabelPosition } from '@po-ui/ng-components';
 
 @Component({
-  selector: 'sample-po-switch-labs',
-  templateUrl: './sample-po-switch-labs.component.html'
+    selector: 'sample-po-switch-labs',
+    templateUrl: './sample-po-switch-labs.component.html',
+    standalone: false
 })
 export class SamplePoSwitchLabsComponent implements OnInit {
   event: string;

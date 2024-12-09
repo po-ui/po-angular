@@ -3,8 +3,9 @@ import { Component, OnInit } from '@angular/core';
 import { PoInfoOrientation, PoRadioGroupOption } from '@po-ui/ng-components';
 
 @Component({
-  selector: 'sample-po-info-labs',
-  templateUrl: './sample-po-info-labs.component.html'
+    selector: 'sample-po-info-labs',
+    templateUrl: './sample-po-info-labs.component.html',
+    standalone: false
 })
 export class SamplePoInfoLabsComponent implements OnInit {
   label: string;

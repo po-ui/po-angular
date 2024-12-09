@@ -40,8 +40,9 @@ type UrlOrPoCustomizationFunction = string | (() => PoPageDynamicSearchOptions);
  * </example>
  */
 @Component({
-  selector: 'po-page-dynamic-search',
-  templateUrl: './po-page-dynamic-search.component.html'
+    selector: 'po-page-dynamic-search',
+    templateUrl: './po-page-dynamic-search.component.html',
+    standalone: false
 })
 export class PoPageDynamicSearchComponent extends PoPageDynamicSearchBaseComponent implements OnInit, OnDestroy {
   @ViewChild(PoAdvancedFilterComponent, { static: true }) poAdvancedFilter: PoAdvancedFilterComponent;

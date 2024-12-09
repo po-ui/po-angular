@@ -3,16 +3,17 @@ import { Component, ElementRef, OnInit, ViewChild } from '@angular/core';
 import { PoNotificationService, PoCheckboxGroupOption, PoSelectOption, PoPopupAction } from '@po-ui/ng-components';
 
 @Component({
-  selector: 'sample-po-popup-labs',
-  templateUrl: './sample-po-popup-labs.component.html',
-  styles: [
-    `
+    selector: 'sample-po-popup-labs',
+    templateUrl: './sample-po-popup-labs.component.html',
+    styles: [
+        `
       .sample-button-container {
         margin-top: 20px;
         margin-bottom: 20px;
       }
     `
-  ]
+    ],
+    standalone: false
 })
 export class SamplePoPopupLabsComponent implements OnInit {
   @ViewChild('target', { read: ElementRef, static: true }) targetRef: ElementRef;

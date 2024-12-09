@@ -17,8 +17,9 @@ import { Component, Input } from '@angular/core';
  * ```
  */
 @Component({
-  selector: 'po-page-slide-footer',
-  templateUrl: './po-page-slide-footer.component.html'
+    selector: 'po-page-slide-footer',
+    templateUrl: './po-page-slide-footer.component.html',
+    standalone: false
 })
 export class PoPageSlideFooterComponent {
   /**

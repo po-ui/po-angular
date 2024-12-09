@@ -4,10 +4,10 @@ import { UntypedFormControl } from '@angular/forms';
 import { PoModalAction, PoModalComponent, PoPopupAction } from '@po-ui/ng-components';
 
 @Component({
-  selector: 'sample-po-popup-email',
-  templateUrl: './sample-po-popup-email.component.html',
-  styles: [
-    `
+    selector: 'sample-po-popup-email',
+    templateUrl: './sample-po-popup-email.component.html',
+    styles: [
+        `
       .sample-logo-po {
         height: 15%;
         padding-top: 2.5%;
@@ -22,7 +22,8 @@ import { PoModalAction, PoModalComponent, PoPopupAction } from '@po-ui/ng-compon
         padding-top: 5%;
       }
     `
-  ]
+    ],
+    standalone: false
 })
 export class SamplePoPopupEmailComponent implements OnInit {
   @ViewChild('formEmail', { static: true }) formEmail: UntypedFormControl;

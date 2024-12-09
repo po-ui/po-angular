@@ -8,8 +8,9 @@ import { Component, Input } from '@angular/core';
  * Componente utilizado para exibição da mensagem customizada de erro em um campo de formulário.
  */
 @Component({
-  selector: 'po-modal-password-recovery-error-message',
-  templateUrl: './po-modal-password-recovery-error-message.component.html'
+    selector: 'po-modal-password-recovery-error-message',
+    templateUrl: './po-modal-password-recovery-error-message.component.html',
+    standalone: false
 })
 export class PoModalPasswordRecoveryErrorMessageComponent {
   /** Texto exibido na mensagem de erro. */

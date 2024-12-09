@@ -2,8 +2,9 @@ import { AfterViewInit, Component, ElementRef, Input, Renderer2, ViewChild } fro
 import { PoGaugeCoordinates } from '../../interfaces/po-gauge-coordinates.interface';
 
 @Component({
-  selector: '[po-gauge-pointer]',
-  templateUrl: './po-gauge-pointer.component.svg'
+    selector: '[po-gauge-pointer]',
+    templateUrl: './po-gauge-pointer.component.svg',
+    standalone: false
 })
 export class PoGaugePointerComponent implements AfterViewInit {
   @ViewChild('pointer') pointer: ElementRef;

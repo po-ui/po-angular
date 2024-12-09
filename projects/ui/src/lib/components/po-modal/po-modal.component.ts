@@ -29,8 +29,9 @@ import { PoLanguageService } from '../../services/po-language/po-language.servic
  */
 
 @Component({
-  selector: 'po-modal',
-  templateUrl: './po-modal.component.html'
+    selector: 'po-modal',
+    templateUrl: './po-modal.component.html',
+    standalone: false
 })
 export class PoModalComponent extends PoModalBaseComponent {
   @ViewChild('modalContent', { read: ElementRef }) modalContent: ElementRef;

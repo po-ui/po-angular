@@ -10,9 +10,10 @@ import {
 import { PoDynamicFormContainerService } from './sample-po-dynamic-form-container.service';
 
 @Component({
-  selector: 'sample-po-dynamic-form-container',
-  templateUrl: './sample-po-dynamic-form-container.component.html',
-  providers: [PoDynamicFormContainerService]
+    selector: 'sample-po-dynamic-form-container',
+    templateUrl: './sample-po-dynamic-form-container.component.html',
+    providers: [PoDynamicFormContainerService],
+    standalone: false
 })
 export class SamplePoDynamicFormContainerComponent implements OnInit {
   person = {};

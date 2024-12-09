@@ -9,10 +9,11 @@ import { PoInputGeneric } from './po-input-generic';
 import { of, Subscription } from 'rxjs';
 
 @Component({
-  template: `
+    template: `
     <input type="text" #inp />
     <span #clean></span>
-  `
+  `,
+    standalone: false
 })
 class ContentProjectionComponent extends PoInputGeneric {
   constructor(el: ElementRef) {

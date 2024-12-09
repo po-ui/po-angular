@@ -31,10 +31,11 @@ import {
 } from '../../../../ui/src/lib';
 
 @Component({
-  selector: 'app-theme-builder',
-  templateUrl: './theme-builder.component.html',
-  styleUrls: ['theme-builder.component.css'],
-  encapsulation: ViewEncapsulation.None
+    selector: 'app-theme-builder',
+    templateUrl: './theme-builder.component.html',
+    styleUrls: ['theme-builder.component.css'],
+    encapsulation: ViewEncapsulation.None,
+    standalone: false
 })
 export class ThemeBuilderComponent implements AfterViewInit, OnInit {
   @ViewChild('viewCSSModal') viewCSSModal: PoModalComponent;

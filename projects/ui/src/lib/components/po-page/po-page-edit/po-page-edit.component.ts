@@ -23,8 +23,9 @@ import { PoPageEditBaseComponent } from './po-page-edit-base.component';
  * </example>
  */
 @Component({
-  selector: 'po-page-edit',
-  templateUrl: './po-page-edit.component.html'
+    selector: 'po-page-edit',
+    templateUrl: './po-page-edit.component.html',
+    standalone: false
 })
 export class PoPageEditComponent extends PoPageEditBaseComponent {
   getIcon(icon: string): string {

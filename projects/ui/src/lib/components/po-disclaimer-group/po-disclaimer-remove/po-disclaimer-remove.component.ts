@@ -8,8 +8,9 @@ import { Component, EventEmitter, Input, Output } from '@angular/core';
  * po-disclaimers do grupo.
  */
 @Component({
-  selector: 'po-disclaimer-remove',
-  templateUrl: './po-disclaimer-remove.component.html'
+    selector: 'po-disclaimer-remove',
+    templateUrl: './po-disclaimer-remove.component.html',
+    standalone: false
 })
 export class PoDisclaimerRemoveComponent {
   /** Texto exibido.  */

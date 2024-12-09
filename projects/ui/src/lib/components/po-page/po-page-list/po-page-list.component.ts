@@ -44,8 +44,9 @@ import { PoPageListBaseComponent } from './po-page-list-base.component';
  * </example>
  */
 @Component({
-  selector: 'po-page-list',
-  templateUrl: './po-page-list.component.html'
+    selector: 'po-page-list',
+    templateUrl: './po-page-list.component.html',
+    standalone: false
 })
 export class PoPageListComponent
   extends PoPageListBaseComponent

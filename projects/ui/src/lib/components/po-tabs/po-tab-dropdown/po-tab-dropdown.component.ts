@@ -22,8 +22,9 @@ import { PoButtonComponent } from '../../po-button/po-button.component';
  * no formato de lista.
  */
 @Component({
-  selector: 'po-tab-dropdown',
-  templateUrl: './po-tab-dropdown.component.html'
+    selector: 'po-tab-dropdown',
+    templateUrl: './po-tab-dropdown.component.html',
+    standalone: false
 })
 export class PoTabDropdownComponent implements AfterViewInit {
   @ViewChild('popover', { static: true }) popover: PoPopoverComponent;

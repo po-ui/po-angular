@@ -4,9 +4,10 @@ import { PoDynamicViewField } from '@po-ui/ng-components';
 import { SamplePoDynamicViewEmployeeOnLoadService } from './sample-po-dynamic-view-employee-on-load.service';
 
 @Component({
-  selector: 'sample-po-dynamic-view-employee-on-load',
-  templateUrl: './sample-po-dynamic-view-employee-on-load.component.html',
-  providers: [SamplePoDynamicViewEmployeeOnLoadService]
+    selector: 'sample-po-dynamic-view-employee-on-load',
+    templateUrl: './sample-po-dynamic-view-employee-on-load.component.html',
+    providers: [SamplePoDynamicViewEmployeeOnLoadService],
+    standalone: false
 })
 export class SamplePoDynamicViewEmployeeOnLoadComponent implements OnInit {
   employee = {

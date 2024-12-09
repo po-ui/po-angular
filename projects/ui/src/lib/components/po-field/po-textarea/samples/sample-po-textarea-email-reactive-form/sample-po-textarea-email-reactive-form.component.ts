@@ -5,8 +5,9 @@ import { PoModalAction, PoModalComponent } from '@po-ui/ng-components';
 import { PoPageAction } from '@po-ui/ng-components';
 
 @Component({
-  selector: 'sample-po-textarea-email-reactive-form',
-  templateUrl: './sample-po-textarea-email-reactive-form.component.html'
+    selector: 'sample-po-textarea-email-reactive-form',
+    templateUrl: './sample-po-textarea-email-reactive-form.component.html',
+    standalone: false
 })
 export class SamplePoTextareaEmailReactiveFormComponent implements OnInit {
   @ViewChild(PoModalComponent, { static: true }) poModal: PoModalComponent;

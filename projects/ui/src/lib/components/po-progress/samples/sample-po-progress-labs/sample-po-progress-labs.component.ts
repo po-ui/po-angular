@@ -3,8 +3,9 @@ import { Component, OnInit } from '@angular/core';
 import { PoCheckboxGroupOption, PoProgressStatus, PoRadioGroupOption, PoProgressSize } from '@po-ui/ng-components';
 
 @Component({
-  selector: 'sample-po-progress-labs',
-  templateUrl: './sample-po-progress-labs.component.html'
+    selector: 'sample-po-progress-labs',
+    templateUrl: './sample-po-progress-labs.component.html',
+    standalone: false
 })
 export class SamplePoProgressLabsComponent implements OnInit {
   event: any;

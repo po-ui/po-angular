@@ -7,8 +7,9 @@ import { PoChartDonutDefaultThickness, PoChartStartAngle } from '../../../helper
 import { PoChartCircularComponent } from '../po-chart-circular.component';
 
 @Component({
-  selector: '[po-chart-donut]',
-  templateUrl: '../po-chart-circular.component.svg'
+    selector: '[po-chart-donut]',
+    templateUrl: '../po-chart-circular.component.svg',
+    standalone: false
 })
 export class PoChartDonutComponent extends PoChartCircularComponent implements OnChanges {
   private readonly poChartBlackColor = '#000000';

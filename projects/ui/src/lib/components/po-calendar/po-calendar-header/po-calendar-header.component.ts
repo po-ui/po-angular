@@ -1,9 +1,10 @@
 import { ChangeDetectionStrategy, Component, EventEmitter, Input, Output } from '@angular/core';
 
 @Component({
-  selector: 'po-calendar-header',
-  templateUrl: './po-calendar-header.component.html',
-  changeDetection: ChangeDetectionStrategy.OnPush
+    selector: 'po-calendar-header',
+    templateUrl: './po-calendar-header.component.html',
+    changeDetection: ChangeDetectionStrategy.OnPush,
+    standalone: false
 })
 export class PoCalendarHeaderComponent {
   @Input('p-hide-previous') hidePrevious = false;

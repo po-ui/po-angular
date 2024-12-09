@@ -14,9 +14,10 @@ import {
 import { SamplePoLookupService } from '../sample-po-lookup.service';
 
 @Component({
-  selector: 'sample-po-lookup-labs',
-  templateUrl: './sample-po-lookup-labs.component.html',
-  providers: [SamplePoLookupService]
+    selector: 'sample-po-lookup-labs',
+    templateUrl: './sample-po-lookup-labs.component.html',
+    providers: [SamplePoLookupService],
+    standalone: false
 })
 export class SamplePoLookupLabsComponent implements OnInit {
   columns: Array<PoLookupColumn>;

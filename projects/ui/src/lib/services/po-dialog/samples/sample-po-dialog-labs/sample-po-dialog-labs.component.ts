@@ -5,8 +5,9 @@ import { PoCheckboxGroupOption, PoRadioGroupOption } from '@po-ui/ng-components'
 import { PoDialogAlertLiterals, PoDialogConfirmLiterals, PoDialogService } from '@po-ui/ng-components';
 
 @Component({
-  selector: 'sample-po-dialog-labs',
-  templateUrl: './sample-po-dialog-labs.component.html'
+    selector: 'sample-po-dialog-labs',
+    templateUrl: './sample-po-dialog-labs.component.html',
+    standalone: false
 })
 export class SamplePoDialogLabsComponent implements OnInit {
   action: string;

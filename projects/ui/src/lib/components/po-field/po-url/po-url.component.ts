@@ -38,21 +38,22 @@ import { PoInputGeneric } from '../po-input-generic/po-input-generic';
  *
  */
 @Component({
-  selector: 'po-url',
-  templateUrl: '../po-input/po-input.component.html',
-  changeDetection: ChangeDetectionStrategy.OnPush,
-  providers: [
-    {
-      provide: NG_VALUE_ACCESSOR,
-      useExisting: forwardRef(() => PoUrlComponent),
-      multi: true
-    },
-    {
-      provide: NG_VALIDATORS,
-      useExisting: forwardRef(() => PoUrlComponent),
-      multi: true
-    }
-  ]
+    selector: 'po-url',
+    templateUrl: '../po-input/po-input.component.html',
+    changeDetection: ChangeDetectionStrategy.OnPush,
+    providers: [
+        {
+            provide: NG_VALUE_ACCESSOR,
+            useExisting: forwardRef(() => PoUrlComponent),
+            multi: true
+        },
+        {
+            provide: NG_VALIDATORS,
+            useExisting: forwardRef(() => PoUrlComponent),
+            multi: true
+        }
+    ],
+    standalone: false
 })
 export class PoUrlComponent extends PoInputGeneric implements AfterViewInit, OnDestroy {
   id = `po-url[${uuid()}]`;

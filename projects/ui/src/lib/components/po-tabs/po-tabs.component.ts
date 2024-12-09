@@ -63,8 +63,9 @@ const poTabsMaxNumberOfTabs = 5;
  * </example>
  */
 @Component({
-  selector: 'po-tabs',
-  templateUrl: './po-tabs.component.html'
+    selector: 'po-tabs',
+    templateUrl: './po-tabs.component.html',
+    standalone: false
 })
 export class PoTabsComponent extends PoTabsBaseComponent implements OnInit, AfterViewInit, OnDestroy, AfterContentInit {
   // Tabs utilizados no ng-content

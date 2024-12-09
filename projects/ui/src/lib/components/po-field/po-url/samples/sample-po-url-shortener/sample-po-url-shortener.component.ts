@@ -3,8 +3,9 @@ import { Component, ElementRef, ViewChild } from '@angular/core';
 import { PoNotificationService, PoTableColumn } from '@po-ui/ng-components';
 
 @Component({
-  selector: 'sample-po-url-shortener',
-  templateUrl: './sample-po-url-shortener.component.html'
+    selector: 'sample-po-url-shortener',
+    templateUrl: './sample-po-url-shortener.component.html',
+    standalone: false
 })
 export class SamplePoUrlShortenerComponent {
   @ViewChild('boxUrl', { read: ElementRef, static: true }) boxUrlElement;

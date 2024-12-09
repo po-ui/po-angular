@@ -11,9 +11,10 @@ import { PoTableColumnIcon } from './po-table-column-icon.interface';
  * Componente responsável por exibir ícones nas colunas.
  */
 @Component({
-  selector: 'po-table-column-icon',
-  templateUrl: './po-table-column-icon.component.html',
-  changeDetection: ChangeDetectionStrategy.OnPush
+    selector: 'po-table-column-icon',
+    templateUrl: './po-table-column-icon.component.html',
+    changeDetection: ChangeDetectionStrategy.OnPush,
+    standalone: false
 })
 export class PoTableColumnIconComponent {
   /** Definição da coluna que utiliza os icones. */

@@ -28,21 +28,22 @@ import { PoInputGeneric } from '../po-input-generic/po-input-generic';
  * </example>
  */
 @Component({
-  selector: 'po-password',
-  templateUrl: './po-password.component.html',
-  changeDetection: ChangeDetectionStrategy.OnPush,
-  providers: [
-    {
-      provide: NG_VALUE_ACCESSOR,
-      useExisting: forwardRef(() => PoPasswordComponent),
-      multi: true
-    },
-    {
-      provide: NG_VALIDATORS,
-      useExisting: forwardRef(() => PoPasswordComponent),
-      multi: true
-    }
-  ]
+    selector: 'po-password',
+    templateUrl: './po-password.component.html',
+    changeDetection: ChangeDetectionStrategy.OnPush,
+    providers: [
+        {
+            provide: NG_VALUE_ACCESSOR,
+            useExisting: forwardRef(() => PoPasswordComponent),
+            multi: true
+        },
+        {
+            provide: NG_VALIDATORS,
+            useExisting: forwardRef(() => PoPasswordComponent),
+            multi: true
+        }
+    ],
+    standalone: false
 })
 export class PoPasswordComponent extends PoInputGeneric {
   id = `po-password[${uuid()}]`;

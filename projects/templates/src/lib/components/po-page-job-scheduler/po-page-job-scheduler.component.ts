@@ -50,16 +50,17 @@ import { PoPageJobSchedulerService } from './po-page-job-scheduler.service';
  *
  */
 @Component({
-  selector: 'po-page-job-scheduler',
-  templateUrl: './po-page-job-scheduler.component.html',
-  encapsulation: ViewEncapsulation.None,
-  styles: [
-    `
+    selector: 'po-page-job-scheduler',
+    templateUrl: './po-page-job-scheduler.component.html',
+    encapsulation: ViewEncapsulation.None,
+    styles: [
+        `
       po-container .po-container {
         overflow-y: unset;
       }
     `
-  ]
+    ],
+    standalone: false
 })
 export class PoPageJobSchedulerComponent extends PoPageJobSchedulerBaseComponent implements OnInit, AfterContentInit {
   @ViewChild('schedulerExecution', { static: true }) schedulerExecution: { form: NgForm };

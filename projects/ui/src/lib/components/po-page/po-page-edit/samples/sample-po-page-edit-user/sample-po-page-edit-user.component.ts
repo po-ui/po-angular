@@ -7,8 +7,9 @@ import { PoDialogService } from '@po-ui/ng-components';
 import { PoNotificationService } from '@po-ui/ng-components';
 
 @Component({
-  selector: 'sample-po-page-edit-user',
-  templateUrl: './sample-po-page-edit-user.component.html'
+    selector: 'sample-po-page-edit-user',
+    templateUrl: './sample-po-page-edit-user.component.html',
+    standalone: false
 })
 export class SamplePoPageEditUserComponent implements OnInit {
   @ViewChild('formEditUser', { static: true }) formEditUser: NgForm;

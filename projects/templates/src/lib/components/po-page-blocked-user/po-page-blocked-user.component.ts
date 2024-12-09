@@ -49,8 +49,9 @@ export const poPageBlockedUserButtonLiterals: Object = {
  */
 
 @Component({
-  selector: 'po-page-blocked-user',
-  templateUrl: './po-page-blocked-user.component.html'
+    selector: 'po-page-blocked-user',
+    templateUrl: './po-page-blocked-user.component.html',
+    standalone: false
 })
 export class PoPageBlockedUserComponent extends PoPageBlockedUserBaseComponent implements OnInit {
   literals;

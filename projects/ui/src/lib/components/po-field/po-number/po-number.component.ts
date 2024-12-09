@@ -42,21 +42,22 @@ import { uuid } from '../../../utils/util';
  * </example>
  */
 @Component({
-  selector: 'po-number',
-  templateUrl: './po-number.component.html',
-  changeDetection: ChangeDetectionStrategy.OnPush,
-  providers: [
-    {
-      provide: NG_VALUE_ACCESSOR,
-      useExisting: forwardRef(() => PoNumberComponent),
-      multi: true
-    },
-    {
-      provide: NG_VALIDATORS,
-      useExisting: forwardRef(() => PoNumberComponent),
-      multi: true
-    }
-  ]
+    selector: 'po-number',
+    templateUrl: './po-number.component.html',
+    changeDetection: ChangeDetectionStrategy.OnPush,
+    providers: [
+        {
+            provide: NG_VALUE_ACCESSOR,
+            useExisting: forwardRef(() => PoNumberComponent),
+            multi: true
+        },
+        {
+            provide: NG_VALIDATORS,
+            useExisting: forwardRef(() => PoNumberComponent),
+            multi: true
+        }
+    ],
+    standalone: false
 })
 export class PoNumberComponent extends PoNumberBaseComponent {
   /**

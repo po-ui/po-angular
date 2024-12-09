@@ -6,8 +6,9 @@ import { PoDynamicViewField, PoInfoOrientation } from '@po-ui/ng-components';
 import { PoJobSchedulerInternal } from '../interfaces/po-job-scheduler-internal.interface';
 
 @Component({
-  selector: 'po-page-job-scheduler-summary',
-  templateUrl: 'po-page-job-scheduler-summary.component.html'
+    selector: 'po-page-job-scheduler-summary',
+    templateUrl: 'po-page-job-scheduler-summary.component.html',
+    standalone: false
 })
 export class PoPageJobSchedulerSummaryComponent implements OnInit {
   @Input('p-literals') literals = <any>{};

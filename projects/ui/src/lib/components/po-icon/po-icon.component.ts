@@ -10,9 +10,10 @@ import { ICONS_DICTIONARY, PhosphorIconDictionary } from './po-icon-dictionary';
  * Permite a exibição de ícones.
  */
 @Component({
-  selector: 'po-icon',
-  templateUrl: './po-icon.component.html',
-  changeDetection: ChangeDetectionStrategy.OnPush
+    selector: 'po-icon',
+    templateUrl: './po-icon.component.html',
+    changeDetection: ChangeDetectionStrategy.OnPush,
+    standalone: false
 })
 export class PoIconComponent {
   class: string;

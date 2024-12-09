@@ -8,8 +8,9 @@ import {
 } from '@po-ui/ng-templates';
 
 @Component({
-  selector: 'sample-po-page-dynamic-table-hotels',
-  templateUrl: './sample-po-page-dynamic-table-hotels.component.html'
+    selector: 'sample-po-page-dynamic-table-hotels',
+    templateUrl: './sample-po-page-dynamic-table-hotels.component.html',
+    standalone: false
 })
 export class SamplePoPageDynamicTableHotelsComponent {
   @ViewChild('hotelDetailModal') hotelDetailModal!: PoModalComponent;

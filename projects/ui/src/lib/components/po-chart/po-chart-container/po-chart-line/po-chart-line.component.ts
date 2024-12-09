@@ -5,8 +5,9 @@ import { PoChartMathsService } from '../../services/po-chart-maths.service';
 import { PoChartPathCoordinates } from '../../interfaces/po-chart-path-coordinates.interface';
 
 @Component({
-  selector: '[po-chart-line]',
-  templateUrl: './po-chart-line.component.svg'
+    selector: '[po-chart-line]',
+    templateUrl: './po-chart-line.component.svg',
+    standalone: false
 })
 export class PoChartLineComponent extends PoChartLineBaseComponent implements OnChanges {
   selectedPath: PoChartPathCoordinates;

@@ -38,15 +38,16 @@ export const poTableListManagerLiterals = {
 type Direction = 'up' | 'down';
 
 @Component({
-  selector: 'po-table-list-manager',
-  templateUrl: './po-table-list-manager.component.html',
-  providers: [
-    {
-      provide: NG_VALUE_ACCESSOR,
-      useExisting: forwardRef(() => PoTableListManagerComponent),
-      multi: true
-    }
-  ]
+    selector: 'po-table-list-manager',
+    templateUrl: './po-table-list-manager.component.html',
+    providers: [
+        {
+            provide: NG_VALUE_ACCESSOR,
+            useExisting: forwardRef(() => PoTableListManagerComponent),
+            multi: true
+        }
+    ],
+    standalone: false
 })
 export class PoTableListManagerComponent extends PoCheckboxGroupComponent {
   private _iconToken: { [key: string]: string };

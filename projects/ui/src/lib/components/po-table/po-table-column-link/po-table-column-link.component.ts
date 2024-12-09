@@ -10,9 +10,10 @@ import { isExternalLink } from '../../../utils/util';
  * Componente responsável por exibir link nas colunas.
  */
 @Component({
-  selector: 'po-table-column-link',
-  templateUrl: './po-table-column-link.component.html',
-  changeDetection: ChangeDetectionStrategy.OnPush
+    selector: 'po-table-column-link',
+    templateUrl: './po-table-column-link.component.html',
+    changeDetection: ChangeDetectionStrategy.OnPush,
+    standalone: false
 })
 export class PoTableColumnLinkComponent {
   @Input('p-action') action: Function;

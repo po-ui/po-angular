@@ -6,13 +6,13 @@ import { changeBrowserInnerWidth, configureTestSuite } from '../../../util-test/
 import { PoPageContentComponent } from './po-page-content.component';
 
 @Component({
-  selector: 'po-page-content-div',
-  template: `
+    selector: 'po-page-content-div',
+    template: `
     <div class="po-toolbar"></div>
     <div class="po-page-header"></div>
   `,
-  styles: [
-    `
+    styles: [
+        `
       .po-page-header {
         height: 100px;
         width: 100%;
@@ -22,7 +22,8 @@ import { PoPageContentComponent } from './po-page-content.component';
         width: 100%;
       }
     `
-  ]
+    ],
+    standalone: false
 })
 class ContentDivComponent {}
 

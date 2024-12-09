@@ -8,7 +8,8 @@ import { PoPageBaseComponent } from './po-page-base.component';
  * @docsExtends PoPageBaseComponent
  */
 @Component({
-  selector: 'po-page',
-  templateUrl: './po-page.component.html'
+    selector: 'po-page',
+    templateUrl: './po-page.component.html',
+    standalone: false
 })
 export class PoPageComponent extends PoPageBaseComponent {}

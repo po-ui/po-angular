@@ -33,21 +33,22 @@ import { PoInputGeneric } from '../po-input-generic/po-input-generic';
  * </example>
  */
 @Component({
-  selector: 'po-input',
-  templateUrl: './po-input.component.html',
-  providers: [
-    {
-      provide: NG_VALUE_ACCESSOR,
-      useExisting: forwardRef(() => PoInputComponent),
-      multi: true
-    },
-    {
-      provide: NG_VALIDATORS,
-      useExisting: forwardRef(() => PoInputComponent),
-      multi: true
-    }
-  ],
-  changeDetection: ChangeDetectionStrategy.OnPush
+    selector: 'po-input',
+    templateUrl: './po-input.component.html',
+    providers: [
+        {
+            provide: NG_VALUE_ACCESSOR,
+            useExisting: forwardRef(() => PoInputComponent),
+            multi: true
+        },
+        {
+            provide: NG_VALIDATORS,
+            useExisting: forwardRef(() => PoInputComponent),
+            multi: true
+        }
+    ],
+    changeDetection: ChangeDetectionStrategy.OnPush,
+    standalone: false
 })
 export class PoInputComponent extends PoInputGeneric {
   @ViewChild('inp', { static: true }) inp: ElementRef;

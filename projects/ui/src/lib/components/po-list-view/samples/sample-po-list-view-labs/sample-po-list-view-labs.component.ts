@@ -9,8 +9,9 @@ import {
 } from '@po-ui/ng-components';
 
 @Component({
-  selector: 'sample-po-list-view-labs',
-  templateUrl: './sample-po-list-view-labs.component.html'
+    selector: 'sample-po-list-view-labs',
+    templateUrl: './sample-po-list-view-labs.component.html',
+    standalone: false
 })
 export class SamplePoListViewLabsComponent implements OnInit {
   action: PoListViewAction;

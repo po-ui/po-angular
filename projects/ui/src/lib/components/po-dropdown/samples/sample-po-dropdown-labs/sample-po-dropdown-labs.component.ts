@@ -3,8 +3,9 @@ import { Component, OnInit } from '@angular/core';
 import { PoCheckboxGroupOption, PoSelectOption, PoDropdownAction, PoNotificationService } from '@po-ui/ng-components';
 
 @Component({
-  selector: 'sample-po-dropdown-labs',
-  templateUrl: './sample-po-dropdown-labs.component.html'
+    selector: 'sample-po-dropdown-labs',
+    templateUrl: './sample-po-dropdown-labs.component.html',
+    standalone: false
 })
 export class SamplePoDropdownLabsComponent implements OnInit {
   action: PoDropdownAction;

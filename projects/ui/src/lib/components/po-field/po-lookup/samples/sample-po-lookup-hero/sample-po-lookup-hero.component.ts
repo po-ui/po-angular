@@ -7,9 +7,10 @@ import { PoNotificationService, PoDynamicFormField } from '@po-ui/ng-components'
 import { SamplePoLookupService } from '../sample-po-lookup.service';
 
 @Component({
-  selector: 'sample-po-lookup-hero',
-  templateUrl: './sample-po-lookup-hero.component.html',
-  providers: [SamplePoLookupService]
+    selector: 'sample-po-lookup-hero',
+    templateUrl: './sample-po-lookup-hero.component.html',
+    providers: [SamplePoLookupService],
+    standalone: false
 })
 export class SamplePoLookupHeroComponent {
   hero: string;

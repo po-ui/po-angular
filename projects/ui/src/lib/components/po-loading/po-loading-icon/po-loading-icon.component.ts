@@ -12,8 +12,9 @@ import { PoLoadingIconSize } from './po-loading-icon-size-enum';
  * É possível alterá-la para um tom cinza conforme a necessidade.
  */
 @Component({
-  selector: 'po-loading-icon',
-  templateUrl: 'po-loading-icon.component.html'
+    selector: 'po-loading-icon',
+    templateUrl: 'po-loading-icon.component.html',
+    standalone: false
 })
 export class PoLoadingIconComponent {
   private _neutralColor: boolean;

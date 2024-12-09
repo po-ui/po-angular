@@ -104,21 +104,22 @@ const PO_SELECT_FIELD_VALUE_DEFAULT = 'value';
  *
  */
 @Component({
-  selector: 'po-select',
-  templateUrl: './po-select.component.html',
-  changeDetection: ChangeDetectionStrategy.OnPush,
-  providers: [
-    {
-      provide: NG_VALUE_ACCESSOR,
-      useExisting: forwardRef(() => PoSelectComponent),
-      multi: true
-    },
-    {
-      provide: NG_VALIDATORS,
-      useExisting: forwardRef(() => PoSelectComponent),
-      multi: true
-    }
-  ]
+    selector: 'po-select',
+    templateUrl: './po-select.component.html',
+    changeDetection: ChangeDetectionStrategy.OnPush,
+    providers: [
+        {
+            provide: NG_VALUE_ACCESSOR,
+            useExisting: forwardRef(() => PoSelectComponent),
+            multi: true
+        },
+        {
+            provide: NG_VALIDATORS,
+            useExisting: forwardRef(() => PoSelectComponent),
+            multi: true
+        }
+    ],
+    standalone: false
 })
 export class PoSelectComponent extends PoFieldValidateModel<any> implements OnChanges {
   private _iconToken: { [key: string]: string };

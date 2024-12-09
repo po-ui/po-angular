@@ -5,8 +5,9 @@ import { PoLanguage, poLanguageDefault, PoLanguageService, PoSelectOption } from
 import { convertToBoolean } from './../../utils/util';
 
 @Component({
-  selector: 'po-page-background',
-  templateUrl: './po-page-background.component.html'
+    selector: 'po-page-background',
+    templateUrl: './po-page-background.component.html',
+    standalone: false
 })
 
 /**

@@ -5,8 +5,9 @@ import { configureTestSuite, expectPropertiesValues } from '../../util-test/util
 import { InputBoolean } from './input-boolean.decorator';
 
 @Component({
-  selector: 'mock-component',
-  template: ''
+    selector: 'mock-component',
+    template: '',
+    standalone: false
 })
 class PoMockComponent {
   @InputBoolean() myProperty: boolean;

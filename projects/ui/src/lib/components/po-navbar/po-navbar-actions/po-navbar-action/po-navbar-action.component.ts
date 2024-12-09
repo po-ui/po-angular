@@ -4,8 +4,9 @@ import { Router } from '@angular/router';
 import { callFunction, isExternalLink, openExternalLink } from '../../../../utils/util';
 
 @Component({
-  selector: 'po-navbar-action',
-  templateUrl: './po-navbar-action.component.html'
+    selector: 'po-navbar-action',
+    templateUrl: './po-navbar-action.component.html',
+    standalone: false
 })
 export class PoNavbarActionComponent {
   @Input('p-action') action?: Function;

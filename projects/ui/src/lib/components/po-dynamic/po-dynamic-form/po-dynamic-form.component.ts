@@ -35,8 +35,9 @@ import { PoDynamicFormValidationService } from './po-dynamic-form-validation/po-
  */
 
 @Component({
-  selector: 'po-dynamic-form',
-  templateUrl: './po-dynamic-form.component.html'
+    selector: 'po-dynamic-form',
+    templateUrl: './po-dynamic-form.component.html',
+    standalone: false
 })
 export class PoDynamicFormComponent extends PoDynamicFormBaseComponent implements OnInit, OnDestroy {
   @ViewChild('fieldsComponent') fieldsComponent: { focus: (property: string) => void; updatePreviousValue: () => void };

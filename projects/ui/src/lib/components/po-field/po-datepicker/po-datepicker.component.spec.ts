@@ -225,11 +225,12 @@ describe('PoDatepickerComponent:', () => {
 });
 
 @Component({
-  template: `
+    template: `
     <form>
       <po-datepicker name="name_teste" [(ngModel)]="value" p-required p-clean> </po-datepicker>
     </form>
-  `
+  `,
+    standalone: false
 })
 class ContentProjectionComponent {
   value = new Date().toISOString();

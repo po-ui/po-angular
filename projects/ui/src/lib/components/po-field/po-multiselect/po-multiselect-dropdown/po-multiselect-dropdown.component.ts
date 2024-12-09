@@ -22,9 +22,10 @@ import { PoListBoxComponent } from './../../../po-listbox/po-listbox.component';
  * Componente que construíra o dropdown, contendo o campo de pesquisa e os itens para seleção.
  */
 @Component({
-  selector: 'po-multiselect-dropdown',
-  templateUrl: './po-multiselect-dropdown.component.html',
-  changeDetection: ChangeDetectionStrategy.OnPush
+    selector: 'po-multiselect-dropdown',
+    templateUrl: './po-multiselect-dropdown.component.html',
+    changeDetection: ChangeDetectionStrategy.OnPush,
+    standalone: false
 })
 export class PoMultiselectDropdownComponent {
   /** Propriedade que indica se deve exibir o loading. */

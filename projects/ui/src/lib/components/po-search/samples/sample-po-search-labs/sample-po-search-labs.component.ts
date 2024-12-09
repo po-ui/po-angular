@@ -9,10 +9,10 @@ import { Component, OnChanges, OnInit, SimpleChanges, ViewChild } from '@angular
 import { HttpClient } from '@angular/common/http';
 
 @Component({
-  selector: 'sample-po-search-labs',
-  templateUrl: './sample-po-search-labs.component.html',
-  styles: [
-    `
+    selector: 'sample-po-search-labs',
+    templateUrl: './sample-po-search-labs.component.html',
+    styles: [
+        `
       .sample-list-search {
         list-style: none;
         display: grid;
@@ -24,7 +24,8 @@ import { HttpClient } from '@angular/common/http';
         text-transform: capitalize;
       }
     `
-  ]
+    ],
+    standalone: false
 })
 export class SamplePoSearchLabsComponent implements OnInit, OnChanges {
   @ViewChild('poSearch', { static: true }) PoSearch: PoSearchComponent;

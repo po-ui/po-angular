@@ -2,8 +2,9 @@ import { Component, ViewChild } from '@angular/core';
 import { PoDisclaimerGroupRemoveAction, PoDisclaimer, PoTableComponent, PoTableColumn } from '@po-ui/ng-components';
 
 @Component({
-  selector: 'sample-po-table-with-api',
-  templateUrl: './sample-po-table-with-api.component.html'
+    selector: 'sample-po-table-with-api',
+    templateUrl: './sample-po-table-with-api.component.html',
+    standalone: false
 })
 export class SamplePoTableWithApiComponent {
   @ViewChild('table') tableComponent: PoTableComponent;

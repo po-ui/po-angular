@@ -12,9 +12,10 @@ import {
 import { SamplePoTableAirfareService } from './sample-po-table-airfare.service';
 
 @Component({
-  selector: 'sample-po-table-airfare',
-  templateUrl: './sample-po-table-airfare.component.html',
-  providers: [SamplePoTableAirfareService, PoDialogService]
+    selector: 'sample-po-table-airfare',
+    templateUrl: './sample-po-table-airfare.component.html',
+    providers: [SamplePoTableAirfareService, PoDialogService],
+    standalone: false
 })
 export class SamplePoTableAirfareComponent implements AfterViewInit, OnInit {
   @ViewChild(PoModalComponent, { static: true }) poModal: PoModalComponent;

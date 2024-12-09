@@ -3,8 +3,9 @@ import { PoLanguage } from '@po-ui/ng-components';
 import { PoPageLoginLiterals } from '@po-ui/ng-templates';
 
 @Component({
-  selector: 'sample-po-page-login-automatic-service',
-  templateUrl: './sample-po-page-login-automatic-service.component.html'
+    selector: 'sample-po-page-login-automatic-service',
+    templateUrl: './sample-po-page-login-automatic-service.component.html',
+    standalone: false
 })
 export class SamplePoPageLoginAutomaticServiceComponent {
   literals: PoPageLoginLiterals;

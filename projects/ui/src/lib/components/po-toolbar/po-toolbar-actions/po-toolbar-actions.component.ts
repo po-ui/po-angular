@@ -16,8 +16,9 @@ const poToolbarActionsIconDefault = 'ICON_MORE';
  * O componente `po-toolbar-actions` tem como objetivo receber uma lista de ações e um ícone que podem ser personalizados.
  */
 @Component({
-  selector: 'po-toolbar-actions',
-  templateUrl: './po-toolbar-actions.component.html'
+    selector: 'po-toolbar-actions',
+    templateUrl: './po-toolbar-actions.component.html',
+    standalone: false
 })
 export class PoToolbarActionsComponent {
   /** Define uma lista de ações. */

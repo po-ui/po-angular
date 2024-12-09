@@ -62,22 +62,23 @@ const poCalendarPositionDefault = 'bottom-left';
  * </example>
  */
 @Component({
-  selector: 'po-datepicker',
-  templateUrl: './po-datepicker.component.html',
-  providers: [
-    {
-      provide: NG_VALUE_ACCESSOR,
-      useExisting: forwardRef(() => PoDatepickerComponent),
-      multi: true
-    },
-    {
-      provide: NG_VALIDATORS,
-      useExisting: forwardRef(() => PoDatepickerComponent),
-      multi: true
-    },
-    PoControlPositionService
-  ],
-  changeDetection: ChangeDetectionStrategy.OnPush
+    selector: 'po-datepicker',
+    templateUrl: './po-datepicker.component.html',
+    providers: [
+        {
+            provide: NG_VALUE_ACCESSOR,
+            useExisting: forwardRef(() => PoDatepickerComponent),
+            multi: true
+        },
+        {
+            provide: NG_VALIDATORS,
+            useExisting: forwardRef(() => PoDatepickerComponent),
+            multi: true
+        },
+        PoControlPositionService
+    ],
+    changeDetection: ChangeDetectionStrategy.OnPush,
+    standalone: false
 })
 export class PoDatepickerComponent extends PoDatepickerBaseComponent implements AfterViewInit, OnDestroy {
   @ViewChild('calendar', { static: true }) calendar: PoCalendarComponent;

@@ -2,17 +2,17 @@ import { Component, OnInit } from '@angular/core';
 import { SamplePoSearchFindPeopleService } from './sample-po-search-find-people.service';
 
 @Component({
-  selector: 'sample-po-search-find-people',
-  templateUrl: './sample-po-search-find-people.component.html',
-  styles: [
-    `
+    selector: 'sample-po-search-find-people',
+    templateUrl: './sample-po-search-find-people.component.html',
+    styles: [
+        `
       li {
         list-style: none;
         display: flex;
         align-items: center;
       }
     `,
-    `
+        `
       li div {
         width: 0.75em;
         height: 0.75em;
@@ -21,8 +21,9 @@ import { SamplePoSearchFindPeopleService } from './sample-po-search-find-people.
         margin-left: 10px;
       }
     `
-  ],
-  providers: [SamplePoSearchFindPeopleService]
+    ],
+    providers: [SamplePoSearchFindPeopleService],
+    standalone: false
 })
 export class SamplePoSearchFindPeopleComponent implements OnInit {
   items: any;

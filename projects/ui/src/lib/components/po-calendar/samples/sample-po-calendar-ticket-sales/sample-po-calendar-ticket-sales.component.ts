@@ -3,8 +3,9 @@ import { Component } from '@angular/core';
 import { PoNotificationService, PoPageAction, PoSelectOption } from '@po-ui/ng-components';
 
 @Component({
-  selector: 'sample-po-calendar-ticket-sales',
-  templateUrl: './sample-po-calendar-ticket-sales.component.html'
+    selector: 'sample-po-calendar-ticket-sales',
+    templateUrl: './sample-po-calendar-ticket-sales.component.html',
+    standalone: false
 })
 export class SamplePoCalendarTicketSalesComponent {
   date: string;

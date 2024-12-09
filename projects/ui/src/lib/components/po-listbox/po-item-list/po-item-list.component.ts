@@ -7,8 +7,9 @@ import { PoItemListBaseComponent } from './po-item-list-base.component';
 import { PoItemListFilterMode } from '../enums/po-item-list-filter-mode.enum';
 
 @Component({
-  selector: 'po-item-list',
-  templateUrl: './po-item-list.component.html'
+    selector: 'po-item-list',
+    templateUrl: './po-item-list.component.html',
+    standalone: false
 })
 export class PoItemListComponent extends PoItemListBaseComponent implements OnChanges {
   @ViewChild('itemList', { static: true }) itemList: ElementRef;

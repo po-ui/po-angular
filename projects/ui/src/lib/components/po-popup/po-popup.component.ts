@@ -31,9 +31,10 @@ import { PoListBoxComponent } from '../po-listbox';
  *
  */
 @Component({
-  selector: 'po-popup',
-  templateUrl: './po-popup.component.html',
-  providers: [PoControlPositionService]
+    selector: 'po-popup',
+    templateUrl: './po-popup.component.html',
+    providers: [PoControlPositionService],
+    standalone: false
 })
 export class PoPopupComponent extends PoPopupBaseComponent {
   @ViewChild('popupRef', { read: ElementRef }) popupRef: ElementRef;

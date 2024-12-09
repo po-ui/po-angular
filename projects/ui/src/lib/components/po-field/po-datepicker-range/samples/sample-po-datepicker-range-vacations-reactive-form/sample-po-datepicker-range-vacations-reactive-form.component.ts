@@ -4,8 +4,9 @@ import { UntypedFormBuilder, UntypedFormGroup, Validators } from '@angular/forms
 import { PoDatepickerRange, PoModalAction, PoModalComponent, PoNotificationService } from '@po-ui/ng-components';
 
 @Component({
-  selector: 'sample-po-datepicker-range-vacations-reactive-form',
-  templateUrl: './sample-po-datepicker-range-vacations-reactive-form.component.html'
+    selector: 'sample-po-datepicker-range-vacations-reactive-form',
+    templateUrl: './sample-po-datepicker-range-vacations-reactive-form.component.html',
+    standalone: false
 })
 export class SamplePoDatepickerRangeVacationsReactiveFormComponent implements OnInit {
   @ViewChild(PoModalComponent, { static: true }) poModal: PoModalComponent;

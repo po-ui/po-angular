@@ -5,8 +5,9 @@ import { configureTestSuite } from '../../util-test/util-expect.spec';
 import { InputRequired } from './input-required.decorator';
 
 @Component({
-  selector: 'mock-component',
-  template: ''
+    selector: 'mock-component',
+    template: '',
+    standalone: false
 })
 class PoMockComponent implements OnInit {
   @InputRequired() myProperty: any;

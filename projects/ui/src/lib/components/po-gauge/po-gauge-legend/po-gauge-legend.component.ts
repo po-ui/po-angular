@@ -3,8 +3,9 @@ import { Component, Input } from '@angular/core';
 import { PoGaugeRanges } from '../interfaces/po-gauge-ranges.interface';
 
 @Component({
-  selector: 'po-gauge-legend',
-  templateUrl: './po-gauge-legend.component.html'
+    selector: 'po-gauge-legend',
+    templateUrl: './po-gauge-legend.component.html',
+    standalone: false
 })
 export class PoGaugeLegendComponent {
   private _ranges: Array<PoGaugeRanges>;

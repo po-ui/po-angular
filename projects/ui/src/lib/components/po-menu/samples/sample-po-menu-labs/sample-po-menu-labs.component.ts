@@ -3,10 +3,10 @@ import { ChangeDetectorRef, Component, OnInit, ViewChild } from '@angular/core';
 import { PoButtonGroupItem, PoMenuComponent, PoMenuItem, PoSelectOption } from '@po-ui/ng-components';
 
 @Component({
-  selector: 'sample-po-menu-labs',
-  templateUrl: './sample-po-menu-labs.component.html',
-  styles: [
-    `
+    selector: 'sample-po-menu-labs',
+    templateUrl: './sample-po-menu-labs.component.html',
+    styles: [
+        `
       .sample-menu-circle {
         border-radius: 14px;
         display: inline-block;
@@ -18,7 +18,8 @@ import { PoButtonGroupItem, PoMenuComponent, PoMenuItem, PoSelectOption } from '
         vertical-align: middle;
       }
     `
-  ]
+    ],
+    standalone: false
 })
 export class SamplePoMenuLabsComponent implements OnInit {
   @ViewChild(PoMenuComponent, { static: true }) menu: PoMenuComponent;

@@ -14,9 +14,10 @@ import { PoPageListComponent } from '@po-ui/ng-components';
 import { SamplePoPageListHiringProcessesService } from './sample-po-page-list-hiring-processes.service';
 
 @Component({
-  selector: 'sample-po-page-list-hiring-processes',
-  templateUrl: './sample-po-page-list-hiring-processes.component.html',
-  providers: [SamplePoPageListHiringProcessesService]
+    selector: 'sample-po-page-list-hiring-processes',
+    templateUrl: './sample-po-page-list-hiring-processes.component.html',
+    providers: [SamplePoPageListHiringProcessesService],
+    standalone: false
 })
 export class SamplePoPageListHiringProcessesComponent implements OnInit {
   @ViewChild('advancedFilterModal', { static: true }) advancedFilterModal: PoModalComponent;

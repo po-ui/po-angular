@@ -4,8 +4,9 @@ import { UntypedFormBuilder, UntypedFormGroup, Validators } from '@angular/forms
 import { PoDialogService, PoNotificationService, PoSelectOption } from '@po-ui/ng-components';
 
 @Component({
-  selector: 'sample-po-datepicker-airfare-reactive-form',
-  templateUrl: './sample-po-datepicker-airfare-reactive-form.component.html'
+    selector: 'sample-po-datepicker-airfare-reactive-form',
+    templateUrl: './sample-po-datepicker-airfare-reactive-form.component.html',
+    standalone: false
 })
 export class SamplePoDatepickerAirfareReactiveFormComponent implements OnInit {
   formAirfare: UntypedFormGroup;

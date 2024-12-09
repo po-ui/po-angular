@@ -3,9 +3,10 @@ import { Component, ViewChild } from '@angular/core';
 import { PoComboOption, PoNotificationService, PoSearchComponent, PoSearchFilterMode } from '../../../../ui/src/lib';
 
 @Component({
-  selector: 'app-icons',
-  templateUrl: './icons.component.html',
-  styleUrls: ['icons.component.css']
+    selector: 'app-icons',
+    templateUrl: './icons.component.html',
+    styleUrls: ['icons.component.css'],
+    standalone: false
 })
 export class IconsComponent {
   @ViewChild('poSearch', { static: true }) PoSearch: PoSearchComponent;

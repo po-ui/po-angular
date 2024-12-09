@@ -15,9 +15,10 @@ import {
 } from '@po-ui/ng-components';
 
 @Component({
-  selector: 'app-tools-dynamic-view',
-  templateUrl: 'tools-dynamic-view.component.html',
-  styleUrls: ['tools-dynamic-view.component.css']
+    selector: 'app-tools-dynamic-view',
+    templateUrl: 'tools-dynamic-view.component.html',
+    styleUrls: ['tools-dynamic-view.component.css'],
+    standalone: false
 })
 export class ToolsDynamicViewComponent {
   @ViewChild('generatorForm') generatorForm: NgForm;
