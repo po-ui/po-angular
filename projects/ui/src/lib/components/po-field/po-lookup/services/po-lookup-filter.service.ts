@@ -16,7 +16,9 @@ import { PoLookupFilteredItemsParams } from '../interfaces/po-lookup-filtered-it
  *
  * Serviço padrão utilizado para filtrar os dados do componente po-lookup.
  */
-@Injectable()
+@Injectable({
+  providedIn: 'root'
+})
 export class PoLookupFilterService implements PoLookupFilter {
   readonly headers: HttpHeaders = new HttpHeaders({
     'X-PO-No-Message': 'true'

@@ -5,7 +5,8 @@ import { PoDatepickerRange, PoModalAction, PoModalComponent, PoNotificationServi
 
 @Component({
   selector: 'sample-po-datepicker-range-vacations-reactive-form',
-  templateUrl: './sample-po-datepicker-range-vacations-reactive-form.component.html'
+  templateUrl: './sample-po-datepicker-range-vacations-reactive-form.component.html',
+  standalone: false
 })
 export class SamplePoDatepickerRangeVacationsReactiveFormComponent implements OnInit {
   @ViewChild(PoModalComponent, { static: true }) poModal: PoModalComponent;

@@ -4,7 +4,8 @@ import { PoCheckboxGroupOption, PoRadioGroupOption, PoSwitchLabelPosition } from
 
 @Component({
   selector: 'sample-po-switch-labs',
-  templateUrl: './sample-po-switch-labs.component.html'
+  templateUrl: './sample-po-switch-labs.component.html',
+  standalone: false
 })
 export class SamplePoSwitchLabsComponent implements OnInit {
   event: string;

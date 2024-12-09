@@ -27,7 +27,8 @@ import { PoLoadingOverlayBaseComponent } from './po-loading-overlay-base.compone
  */
 @Component({
   selector: 'po-loading-overlay',
-  templateUrl: 'po-loading-overlay.component.html'
+  templateUrl: 'po-loading-overlay.component.html',
+  standalone: false
 })
 export class PoLoadingOverlayComponent extends PoLoadingOverlayBaseComponent {
   constructor(

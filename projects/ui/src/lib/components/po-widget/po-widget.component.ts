@@ -31,7 +31,8 @@ import { PoKeyCodeEnum } from './../../enums/po-key-code.enum';
  */
 @Component({
   selector: 'po-widget',
-  templateUrl: './po-widget.component.html'
+  templateUrl: './po-widget.component.html',
+  standalone: false
 })
 export class PoWidgetComponent extends PoWidgetBaseComponent implements OnInit {
   get showTitleAction(): boolean {

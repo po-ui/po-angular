@@ -2,7 +2,8 @@ import { Component, Input } from '@angular/core';
 
 @Component({
   selector: 'po-navbar-logo',
-  templateUrl: './po-navbar-logo.component.html'
+  templateUrl: './po-navbar-logo.component.html',
+  standalone: false
 })
 export class PoNavbarLogoComponent {
   @Input('p-logo') logo?: string;

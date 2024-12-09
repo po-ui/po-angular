@@ -24,7 +24,8 @@ import { PoListBoxComponent } from './../../../po-listbox/po-listbox.component';
 @Component({
   selector: 'po-multiselect-dropdown',
   templateUrl: './po-multiselect-dropdown.component.html',
-  changeDetection: ChangeDetectionStrategy.OnPush
+  changeDetection: ChangeDetectionStrategy.OnPush,
+  standalone: false
 })
 export class PoMultiselectDropdownComponent {
   /** Propriedade que indica se deve exibir o loading. */

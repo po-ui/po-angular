@@ -9,7 +9,8 @@ import {
 
 @Component({
   selector: 'sample-po-toaster-labs',
-  templateUrl: './sample-po-toaster-labs.component.html'
+  templateUrl: './sample-po-toaster-labs.component.html',
+  standalone: false
 })
 export class SamplePoToasterLabsComponent {
   @ViewChild(PoModalComponent, { static: true }) poModal: PoModalComponent;

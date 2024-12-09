@@ -5,7 +5,8 @@ import { PoNotificationService } from '@po-ui/ng-components';
 
 @Component({
   selector: 'sample-po-login-confirm',
-  templateUrl: './sample-po-login-confirm.component.html'
+  templateUrl: './sample-po-login-confirm.component.html',
+  standalone: false
 })
 export class SamplePoLoginConfirmComponent {
   @ViewChild(PoModalComponent, { static: true }) poModal: PoModalComponent;

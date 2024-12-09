@@ -11,7 +11,8 @@ import { PoTableSubtitleColumn } from './po-table-subtitle-column.interface';
  */
 @Component({
   selector: 'po-table-subtitle-footer',
-  templateUrl: './po-table-subtitle-footer.component.html'
+  templateUrl: './po-table-subtitle-footer.component.html',
+  standalone: false
 })
 export class PoTableSubtitleFooterComponent implements AfterViewInit, DoCheck, OnDestroy {
   /** Propriedade que recebe as literais definidas no `po-table`. */

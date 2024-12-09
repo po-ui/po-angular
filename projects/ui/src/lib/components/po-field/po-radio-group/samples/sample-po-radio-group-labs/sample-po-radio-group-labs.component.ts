@@ -4,7 +4,8 @@ import { PoCheckboxGroupOption, PoRadioGroupOption } from '@po-ui/ng-components'
 
 @Component({
   selector: 'sample-po-radio-group-labs',
-  templateUrl: './sample-po-radio-group-labs.component.html'
+  templateUrl: './sample-po-radio-group-labs.component.html',
+  standalone: false
 })
 export class SamplePoRadioGroupLabsComponent implements OnInit {
   columns: number;

@@ -5,7 +5,8 @@ import { PoComboOption, PoNotificationService, PoTableColumn } from '@po-ui/ng-c
 @Component({
   selector: 'sample-po-notification-sales',
   templateUrl: './sample-po-notification-sales.component.html',
-  providers: [PoNotificationService]
+  providers: [PoNotificationService],
+  standalone: false
 })
 export class SamplePoNotificationSalesComponent {
   name: string;

@@ -22,7 +22,8 @@ import { PoModalAction, PoModalComponent, PoPopupAction } from '@po-ui/ng-compon
         padding-top: 5%;
       }
     `
-  ]
+  ],
+  standalone: false
 })
 export class SamplePoPopupEmailComponent implements OnInit {
   @ViewChild('formEmail', { static: true }) formEmail: UntypedFormControl;

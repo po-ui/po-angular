@@ -1,7 +1,8 @@
 import { Directive, ElementRef, HostListener, Input, Renderer2 } from '@angular/core';
 
 @Directive({
-  selector: '[p-chart-tooltip]'
+  selector: '[p-chart-tooltip]',
+  standalone: false
 })
 export class PoChartTooltipDirective {
   @Input('p-chart-tooltip') tooltip: string;

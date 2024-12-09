@@ -4,7 +4,8 @@ import { PoButtonGroupItem } from '@po-ui/ng-components';
 
 @Component({
   selector: 'sample-po-button-group-post',
-  templateUrl: './sample-po-button-group-post.component.html'
+  templateUrl: './sample-po-button-group-post.component.html',
+  standalone: false
 })
 export class SamplePoButtonGroupPostComponent {
   setBold: boolean;

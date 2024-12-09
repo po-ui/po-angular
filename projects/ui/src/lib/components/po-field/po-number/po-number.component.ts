@@ -56,7 +56,8 @@ import { uuid } from '../../../utils/util';
       useExisting: forwardRef(() => PoNumberComponent),
       multi: true
     }
-  ]
+  ],
+  standalone: false
 })
 export class PoNumberComponent extends PoNumberBaseComponent {
   /**

@@ -3,7 +3,8 @@ import { PoDynamicViewField } from '@po-ui/ng-components';
 
 @Component({
   selector: 'sample-po-dynamic-view-container',
-  templateUrl: './sample-po-dynamic-view-container.component.html'
+  templateUrl: './sample-po-dynamic-view-container.component.html',
+  standalone: false
 })
 export class SamplePoDynamicViewContainerComponent {
   fields: Array<PoDynamicViewField> = [

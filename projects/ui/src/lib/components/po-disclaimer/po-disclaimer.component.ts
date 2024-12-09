@@ -18,7 +18,8 @@ import { PoDisclaimerBaseComponent } from './po-disclaimer-base.component';
  */
 @Component({
   selector: 'po-disclaimer',
-  templateUrl: './po-disclaimer.component.html'
+  templateUrl: './po-disclaimer.component.html',
+  standalone: false
 })
 export class PoDisclaimerComponent extends PoDisclaimerBaseComponent {
   @ViewChild('disclaimerContainer', { static: true }) disclaimerContainer: ElementRef;

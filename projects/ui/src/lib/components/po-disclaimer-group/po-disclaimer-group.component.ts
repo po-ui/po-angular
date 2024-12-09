@@ -41,7 +41,8 @@ import { PoDisclaimer } from '../po-disclaimer/po-disclaimer.interface';
 @Component({
   selector: 'po-disclaimer-group',
   templateUrl: './po-disclaimer-group.component.html',
-  changeDetection: ChangeDetectionStrategy.OnPush
+  changeDetection: ChangeDetectionStrategy.OnPush,
+  standalone: false
 })
 export class PoDisclaimerGroupComponent extends PoDisclaimerGroupBaseComponent implements AfterViewInit, OnChanges {
   private subscription: Subscription = new Subscription();

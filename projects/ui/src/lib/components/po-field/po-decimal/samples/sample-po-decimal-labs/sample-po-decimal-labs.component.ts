@@ -4,7 +4,8 @@ import { PoCheckboxGroupOption, PoSelectOption } from '@po-ui/ng-components';
 
 @Component({
   selector: 'sample-po-decimal-labs',
-  templateUrl: './sample-po-decimal-labs.component.html'
+  templateUrl: './sample-po-decimal-labs.component.html',
+  standalone: false
 })
 export class SamplePoDecimalLabsComponent implements OnInit {
   decimal: number;

@@ -45,7 +45,6 @@ export class PoThemeService {
   }
 
   constructor(
-    @Inject('Window') private window: Window,
     @Inject(DOCUMENT) private document: Document,
     rendererFactory: RendererFactory2,
     @Optional() @Inject(ICONS_DICTIONARY) value: { [key: string]: string }

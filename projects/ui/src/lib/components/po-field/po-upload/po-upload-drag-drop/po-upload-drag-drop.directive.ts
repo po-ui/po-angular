@@ -6,7 +6,8 @@ import { PoUploadLiterals } from '../interfaces/po-upload-literals.interface';
 
 @Directive({
   selector: '[p-upload-drag-drop]',
-  providers: [PoI18nPipe]
+  providers: [PoI18nPipe],
+  standalone: false
 })
 export class PoUploadDragDropDirective {
   @Input('p-area-element') areaElement: HTMLElement;

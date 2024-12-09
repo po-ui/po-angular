@@ -4,7 +4,8 @@ import { PoButtonGroupItem, PoNotificationService } from '@po-ui/ng-components';
 
 @Component({
   selector: 'sample-po-button-group-attendance',
-  templateUrl: './sample-po-button-group-attendance.component.html'
+  templateUrl: './sample-po-button-group-attendance.component.html',
+  standalone: false
 })
 export class SamplePoButtonGroupAttendanceComponent {
   attendances: Array<PoButtonGroupItem> = [

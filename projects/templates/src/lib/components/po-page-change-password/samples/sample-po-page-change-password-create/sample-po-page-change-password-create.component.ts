@@ -3,7 +3,8 @@ import { PoPageChangePasswordComponent, PoPageChangePasswordRequirement } from '
 
 @Component({
   selector: 'sample-po-page-change-password-create',
-  templateUrl: './sample-po-page-change-password-create.component.html'
+  templateUrl: './sample-po-page-change-password-create.component.html',
+  standalone: false
 })
 export class SamplePoPageChangePasswordCreateComponent {
   @ViewChild(PoPageChangePasswordComponent, { static: true }) changePassword: PoPageChangePasswordComponent;

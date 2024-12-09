@@ -15,7 +15,8 @@ import { PoTagType } from './enums/po-tag-type.enum';
 import { PoTagLiterals } from './po-tag.literals';
 
 @Component({
-  template: ` <po-tag p-label="Mock" (p-click)="onClick()"></po-tag> `
+  template: ` <po-tag p-label="Mock" (p-click)="onClick()"></po-tag> `,
+  standalone: false
 })
 class PoTagClickableComponent {
   onClick() {}

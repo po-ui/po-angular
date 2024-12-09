@@ -39,7 +39,9 @@ const poControlPositionSidesDefault: Array<string> = [
   'right-top'
 ];
 
-@Injectable()
+@Injectable({
+  providedIn: 'root'
+})
 export class PoControlPositionService {
   private arrowDirection: string;
   private customPositions: Array<string>;

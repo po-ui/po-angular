@@ -62,7 +62,8 @@ import { PoRadioGroupBaseComponent } from './po-radio-group-base.component';
       useExisting: forwardRef(() => PoRadioGroupComponent),
       multi: true
     }
-  ]
+  ],
+  standalone: false
 })
 export class PoRadioGroupComponent extends PoRadioGroupBaseComponent implements AfterViewInit, DoCheck {
   /** Label do campo. */

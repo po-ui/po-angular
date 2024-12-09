@@ -5,7 +5,8 @@ import { poLocaleDefault } from '../../../services/po-language/po-language.const
 @Component({
   selector: 'po-accordion-item-header',
   templateUrl: 'po-accordion-item-header.component.html',
-  changeDetection: ChangeDetectionStrategy.OnPush
+  changeDetection: ChangeDetectionStrategy.OnPush,
+  standalone: false
 })
 export class PoAccordionItemHeaderComponent {
   private language: string = poLocaleDefault;

@@ -24,7 +24,8 @@ import { HttpClient } from '@angular/common/http';
         text-transform: capitalize;
       }
     `
-  ]
+  ],
+  standalone: false
 })
 export class SamplePoSearchLabsComponent implements OnInit, OnChanges {
   @ViewChild('poSearch', { static: true }) PoSearch: PoSearchComponent;

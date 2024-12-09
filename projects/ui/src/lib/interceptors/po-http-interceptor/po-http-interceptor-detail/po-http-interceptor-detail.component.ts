@@ -18,7 +18,8 @@ export const colors = { success: 'color-11', error: 'color-07', warning: 'color-
  */
 @Component({
   selector: 'po-http-interceptor-detail',
-  templateUrl: './po-http-interceptor-detail.component.html'
+  templateUrl: './po-http-interceptor-detail.component.html',
+  standalone: false
 })
 export class PoHttpInterceptorDetailComponent implements OnInit {
   @ViewChild(PoModalComponent, { static: true }) modal: PoModalComponent;

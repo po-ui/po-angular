@@ -2,7 +2,8 @@ import { Component, Input, ViewChild, ElementRef, ChangeDetectorRef, Output, Eve
 
 @Component({
   selector: 'po-grid-cell',
-  templateUrl: './po-grid-cell.component.html'
+  templateUrl: './po-grid-cell.component.html',
+  standalone: false
 })
 export class PoGridCellComponent {
   @Input('p-align') align?: string = 'left';

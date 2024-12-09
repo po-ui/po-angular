@@ -13,7 +13,8 @@ import { PoLoadingIconSize } from './po-loading-icon-size-enum';
  */
 @Component({
   selector: 'po-loading-icon',
-  templateUrl: 'po-loading-icon.component.html'
+  templateUrl: 'po-loading-icon.component.html',
+  standalone: false
 })
 export class PoLoadingIconComponent {
   private _neutralColor: boolean;

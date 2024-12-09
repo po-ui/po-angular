@@ -14,7 +14,8 @@ const poRichTextDefaultColor = '#000000';
 
 @Component({
   selector: 'po-rich-text-toolbar',
-  templateUrl: './po-rich-text-toolbar.component.html'
+  templateUrl: './po-rich-text-toolbar.component.html',
+  standalone: false
 })
 export class PoRichTextToolbarComponent implements AfterViewInit {
   @ViewChild('colorPickerInput', { read: ElementRef }) colorPickerInput: ElementRef;

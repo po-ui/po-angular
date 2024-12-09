@@ -4,7 +4,8 @@ import { PoNotificationService, PoPageAction, PoSelectOption } from '@po-ui/ng-c
 
 @Component({
   selector: 'sample-po-calendar-ticket-sales',
-  templateUrl: './sample-po-calendar-ticket-sales.component.html'
+  templateUrl: './sample-po-calendar-ticket-sales.component.html',
+  standalone: false
 })
 export class SamplePoCalendarTicketSalesComponent {
   date: string;

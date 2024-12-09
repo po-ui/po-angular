@@ -12,7 +12,8 @@ export const poGaugeStartAngle = -Math.PI;
 
 @Component({
   selector: 'po-gauge-svg',
-  templateUrl: './po-gauge-svg.component.html'
+  templateUrl: './po-gauge-svg.component.html',
+  standalone: false
 })
 export class PoGaugeSvgComponent implements OnChanges {
   @Input('p-container') container: PoGaugeSvgContainer;

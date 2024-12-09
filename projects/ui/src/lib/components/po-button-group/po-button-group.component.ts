@@ -30,7 +30,8 @@ import { PoButtonGroupBaseComponent } from './po-button-group-base.component';
  */
 @Component({
   selector: 'po-button-group',
-  templateUrl: './po-button-group.component.html'
+  templateUrl: './po-button-group.component.html',
+  standalone: false
 })
 export class PoButtonGroupComponent extends PoButtonGroupBaseComponent {
   constructor(viewRef: ViewContainerRef) {

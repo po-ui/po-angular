@@ -9,7 +9,8 @@ import { PoTableColumnFrozenDirective } from './po-table-column-frozen.directive
     <div #parentElement>
       <div pFrozenColumn [pFrozenColumn]="frozen" [alignFrozen]="alignFrozen"></div>
     </div>
-  `
+  `,
+  standalone: false
 })
 class TestHostComponent {
   frozen: boolean;

@@ -59,7 +59,8 @@ const poSearchContainerPositionDefault = 'bottom';
   selector: 'po-search',
   templateUrl: './po-search.component.html',
   providers: [PoControlPositionService],
-  changeDetection: ChangeDetectionStrategy.OnPush
+  changeDetection: ChangeDetectionStrategy.OnPush,
+  standalone: false
 })
 export class PoSearchComponent extends PoSearchBaseComponent implements OnInit, OnDestroy, OnChanges {
   private clickoutListener: () => void;

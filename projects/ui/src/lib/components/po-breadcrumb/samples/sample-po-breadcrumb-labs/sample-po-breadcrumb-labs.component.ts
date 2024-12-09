@@ -4,7 +4,8 @@ import { PoBreadcrumbItem, PoNotificationService } from '@po-ui/ng-components';
 
 @Component({
   selector: 'sample-po-breadcrumb-labs',
-  templateUrl: './sample-po-breadcrumb-labs.component.html'
+  templateUrl: './sample-po-breadcrumb-labs.component.html',
+  standalone: false
 })
 export class SamplePoBreadcrumbLabsComponent implements OnInit {
   breadcrumbItem: PoBreadcrumbItem;
