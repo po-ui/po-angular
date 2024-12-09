@@ -6,7 +6,8 @@ import { PoPageLogin, PoPageLoginCustomField, PoPageLoginLiterals } from '@po-ui
 
 @Component({
   selector: 'sample-po-page-login-labs',
-  templateUrl: './sample-po-page-login-labs.component.html'
+  templateUrl: './sample-po-page-login-labs.component.html',
+  standalone: false
 })
 export class SamplePoPageLoginLabsComponent implements OnInit {
   background: string;

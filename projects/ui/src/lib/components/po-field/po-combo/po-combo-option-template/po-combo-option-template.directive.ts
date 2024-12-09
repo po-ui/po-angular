@@ -66,7 +66,8 @@ import { Directive, TemplateRef } from '@angular/core';
  * ```
  */
 @Directive({
-  selector: '[p-combo-option-template]'
+  selector: '[p-combo-option-template]',
+  standalone: false
 })
 export class PoComboOptionTemplateDirective {
   // Necessário manter templateRef para o funcionamento do row template.

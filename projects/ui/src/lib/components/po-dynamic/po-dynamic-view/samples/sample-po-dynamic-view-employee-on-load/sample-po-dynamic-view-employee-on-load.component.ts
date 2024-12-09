@@ -6,7 +6,8 @@ import { SamplePoDynamicViewEmployeeOnLoadService } from './sample-po-dynamic-vi
 @Component({
   selector: 'sample-po-dynamic-view-employee-on-load',
   templateUrl: './sample-po-dynamic-view-employee-on-load.component.html',
-  providers: [SamplePoDynamicViewEmployeeOnLoadService]
+  providers: [SamplePoDynamicViewEmployeeOnLoadService],
+  standalone: false
 })
 export class SamplePoDynamicViewEmployeeOnLoadComponent implements OnInit {
   employee = {

@@ -25,6 +25,7 @@ import { PoDividerBaseComponent } from './po-divider-base.component';
 @Component({
   selector: 'po-divider',
   templateUrl: './po-divider.component.html',
-  changeDetection: ChangeDetectionStrategy.OnPush
+  changeDetection: ChangeDetectionStrategy.OnPush,
+  standalone: false
 })
 export class PoDividerComponent extends PoDividerBaseComponent {}

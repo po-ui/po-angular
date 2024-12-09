@@ -2,7 +2,8 @@ import { Component } from '@angular/core';
 
 @Component({
   selector: 'sample-po-tag-bank-account',
-  templateUrl: './sample-po-tag-bank-account.component.html'
+  templateUrl: './sample-po-tag-bank-account.component.html',
+  standalone: false
 })
 export class SamplePoTagBankAccountComponent {
   investiments = [

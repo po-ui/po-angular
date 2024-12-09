@@ -2,7 +2,8 @@ import { AfterViewInit, ChangeDetectorRef, Component, ElementRef, ViewChild } fr
 
 @Component({
   selector: 'sample-po-popup-basic',
-  templateUrl: './sample-po-popup-basic.component.html'
+  templateUrl: './sample-po-popup-basic.component.html',
+  standalone: false
 })
 export class SamplePoPopupBasicComponent implements AfterViewInit {
   @ViewChild('target', { read: ElementRef }) targetRef: ElementRef;

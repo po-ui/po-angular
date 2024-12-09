@@ -6,7 +6,9 @@ import { Observable } from 'rxjs';
 
 import { PoLookupFilter, PoLookupResponseApi, PoLookupFilteredItemsParams } from '@po-ui/ng-components';
 
-@Injectable()
+@Injectable({
+  providedIn: 'root'
+})
 export class SamplePoLookupSwFilmsService implements PoLookupFilter {
   private baseUrl = 'https://swapi.dev/api';
   private filmsUrl = 'https://swapi.dev/api/films/';

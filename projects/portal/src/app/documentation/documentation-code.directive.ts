@@ -4,7 +4,8 @@ import { AfterViewInit } from '@angular/core';
 declare const hljs: any;
 
 @Directive({
-  selector: '[appCodeHighlight]'
+  selector: '[appCodeHighlight]',
+  standalone: false
 })
 export class HighlightCodeDirective implements AfterViewInit {
   constructor(private element: ElementRef) {}

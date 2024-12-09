@@ -15,7 +15,8 @@ import {
 @Component({
   selector: 'app-tools-dynamic-form',
   templateUrl: 'tools-dynamic-form.component.html',
-  styleUrls: ['tools-dynamic-form.component.css']
+  styleUrls: ['tools-dynamic-form.component.css'],
+  standalone: false
 })
 export class ToolsDynamicFormComponent {
   @ViewChild('generatorForm') generatorForm: NgForm;

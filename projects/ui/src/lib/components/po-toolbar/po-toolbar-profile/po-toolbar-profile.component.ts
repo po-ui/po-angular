@@ -17,7 +17,8 @@ import { PoToolbarAction } from '../po-toolbar-action.interface';
 @Component({
   selector: 'po-toolbar-profile',
   templateUrl: './po-toolbar-profile.component.html',
-  providers: [PoControlPositionService]
+  providers: [PoControlPositionService],
+  standalone: false
 })
 export class PoToolbarProfileComponent {
   /** Objeto que implementa a interface `PoToolbarProfile`. */

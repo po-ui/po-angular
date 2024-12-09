@@ -201,7 +201,7 @@ export abstract class PoLookupModalBaseComponent implements OnDestroy, OnInit {
    * O componente envia como parâmetro um array de string com as colunas configuradas inicialmente.
    * Por exemplo: ["idCard", "name", "hireStatus", "age"].
    */
-  @Output('p-restore-column-manager') columnRestoreManager = new EventEmitter<Array<String>>();
+  @Output('p-restore-column-manager') columnRestoreManager = new EventEmitter<Array<string>>();
 
   hasNext = true;
   isLoading = false;
@@ -500,7 +500,7 @@ export abstract class PoLookupModalBaseComponent implements OnDestroy, OnInit {
 
   private getAdvancedFilters(advancedParams: any) {
     if (advancedParams && advancedParams.length > 0) {
-      const filters: Object = {};
+      const filters: object = {};
       let validatedAdvacendFilters: any;
 
       advancedParams.forEach((filter: any) => {

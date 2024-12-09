@@ -5,7 +5,8 @@ import { PoRadioGroupOption } from '@po-ui/ng-components';
 
 @Component({
   selector: 'sample-po-page-blocked-user-labs',
-  templateUrl: './sample-po-page-blocked-user-labs.component.html'
+  templateUrl: './sample-po-page-blocked-user-labs.component.html',
+  standalone: false
 })
 export class SamplePoPageBlockedUserLabsComponent implements OnInit {
   contactMail: string;

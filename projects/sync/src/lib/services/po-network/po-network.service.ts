@@ -13,7 +13,9 @@ import { PoNetworkStatus } from './../../models';
  * O `PoNetworkService` é utilizado para verificar o status e o tipo da conexão de rede do dispositivo.
  */
 
-@Injectable()
+@Injectable({
+  providedIn: 'root'
+})
 export class PoNetworkService {
   private networkType: string;
   private networkTypeNow: Subject<{ status: boolean; type: string }>;

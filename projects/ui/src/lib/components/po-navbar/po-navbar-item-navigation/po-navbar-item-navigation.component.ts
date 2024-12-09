@@ -2,7 +2,8 @@ import { Component, EventEmitter, Input, Output } from '@angular/core';
 
 @Component({
   selector: 'po-navbar-item-navigation',
-  templateUrl: './po-navbar-item-navigation.component.html'
+  templateUrl: './po-navbar-item-navigation.component.html',
+  standalone: false
 })
 export class PoNavbarItemNavigationComponent {
   @Input('p-disable-left') disableLeft: boolean;

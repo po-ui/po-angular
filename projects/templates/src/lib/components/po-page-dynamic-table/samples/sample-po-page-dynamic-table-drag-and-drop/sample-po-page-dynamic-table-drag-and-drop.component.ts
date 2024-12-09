@@ -2,7 +2,8 @@ import { Component } from '@angular/core';
 
 @Component({
   selector: 'sample-po-page-dynamic-table-drag-and-drop',
-  templateUrl: './sample-po-page-dynamic-table-drag-and-drop.component.html'
+  templateUrl: './sample-po-page-dynamic-table-drag-and-drop.component.html',
+  standalone: false
 })
 export class SamplePoPageDynamicTableDragAndDropComponent {
   readonly serviceApi = 'https://po-sample-api.onrender.com/v1/people';

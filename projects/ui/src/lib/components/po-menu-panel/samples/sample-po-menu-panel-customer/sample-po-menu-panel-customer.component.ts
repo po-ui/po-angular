@@ -4,7 +4,8 @@ import { PoMenuPanelItem } from '@po-ui/ng-components';
 
 @Component({
   selector: 'sample-po-menu-panel-customer',
-  templateUrl: './sample-po-menu-panel-customer.component.html'
+  templateUrl: './sample-po-menu-panel-customer.component.html',
+  standalone: false
 })
 export class SamplePoMenuPanelCustomerComponent {
   title: string = 'Customers';

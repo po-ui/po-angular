@@ -5,7 +5,8 @@ import { PoDatepickerRange, PoModalAction, PoModalComponent, PoNotificationServi
 
 @Component({
   selector: 'sample-po-datepicker-range-vacations',
-  templateUrl: './sample-po-datepicker-range-vacations.component.html'
+  templateUrl: './sample-po-datepicker-range-vacations.component.html',
+  standalone: false
 })
 export class SamplePoDatepickerRangeVacationsComponent {
   @ViewChild('formVacationSuggestion', { static: true }) formVacationSuggestion: UntypedFormControl;

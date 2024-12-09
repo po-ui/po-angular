@@ -4,7 +4,8 @@ import { PoCheckboxGroupOption, PoMultiselectOption, PoRichTextToolbarActions } 
 
 @Component({
   selector: 'sample-po-rich-text-labs',
-  templateUrl: './sample-po-rich-text-labs.component.html'
+  templateUrl: './sample-po-rich-text-labs.component.html',
+  standalone: false
 })
 export class SamplePoRichTextLabsComponent implements OnInit {
   errorMessage: string;

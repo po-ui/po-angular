@@ -10,7 +10,8 @@ import { PoChartPointsCoordinates } from '../../../interfaces/po-chart-points-co
 
 @Component({
   selector: '[po-chart-area]',
-  templateUrl: '../po-chart-line.component.svg'
+  templateUrl: '../po-chart-line.component.svg',
+  standalone: false
 })
 export class PoChartAreaComponent extends PoChartLineBaseComponent {
   private currentActiveSerieIndex: number;

@@ -22,7 +22,8 @@ import {
         width: 16px;
       }
     `
-  ]
+  ],
+  standalone: false
 })
 export class SamplePoTagLabsComponent implements OnInit {
   color: string;

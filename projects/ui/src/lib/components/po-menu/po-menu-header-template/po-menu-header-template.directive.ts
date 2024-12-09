@@ -36,7 +36,8 @@ import { Directive, TemplateRef } from '@angular/core';
  * > Quando o menu estiver colapsado ou tela for _mobile_ o conteúdo personalizado não será exibido.
  */
 @Directive({
-  selector: '[p-menu-header-template]'
+  selector: '[p-menu-header-template]',
+  standalone: false
 })
 export class PoMenuHeaderTemplateDirective {
   // Necessário manter templateRef para o funcionamento do row template.

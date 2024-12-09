@@ -113,7 +113,8 @@ const providers = [
   selector: 'po-multiselect',
   templateUrl: './po-multiselect.component.html',
   changeDetection: ChangeDetectionStrategy.OnPush,
-  providers
+  providers,
+  standalone: false
 })
 export class PoMultiselectComponent
   extends PoMultiselectBaseComponent

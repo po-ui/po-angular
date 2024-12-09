@@ -4,7 +4,8 @@ import { PoRadioGroupOption, PoCalendarMode } from '@po-ui/ng-components';
 
 @Component({
   selector: 'sample-po-calendar-labs',
-  templateUrl: './sample-po-calendar-labs.component.html'
+  templateUrl: './sample-po-calendar-labs.component.html',
+  standalone: false
 })
 export class SamplePoCalendarLabsComponent implements OnInit {
   calendar;

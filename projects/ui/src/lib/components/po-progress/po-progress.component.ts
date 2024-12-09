@@ -29,7 +29,8 @@ import { PoProgressBaseComponent } from './po-progress-base.component';
 @Component({
   selector: 'po-progress',
   templateUrl: './po-progress.component.html',
-  changeDetection: ChangeDetectionStrategy.OnPush
+  changeDetection: ChangeDetectionStrategy.OnPush,
+  standalone: false
 })
 export class PoProgressComponent extends PoProgressBaseComponent implements OnInit {
   language;

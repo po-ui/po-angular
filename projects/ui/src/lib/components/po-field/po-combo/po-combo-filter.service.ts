@@ -16,7 +16,9 @@ import { validateObjectType } from '../../../utils/util';
  *
  * Serviço padrão utilizado para filtrar os dados do componente po-combo.
  */
-@Injectable()
+@Injectable({
+  providedIn: 'root'
+})
 export class PoComboFilterService implements PoComboFilter {
   fieldLabel: string = 'label';
   fieldValue: string = 'value';

@@ -9,7 +9,8 @@ import {
 
 @Component({
   selector: 'sample-po-page-dynamic-table-hotels',
-  templateUrl: './sample-po-page-dynamic-table-hotels.component.html'
+  templateUrl: './sample-po-page-dynamic-table-hotels.component.html',
+  standalone: false
 })
 export class SamplePoPageDynamicTableHotelsComponent {
   @ViewChild('hotelDetailModal') hotelDetailModal!: PoModalComponent;

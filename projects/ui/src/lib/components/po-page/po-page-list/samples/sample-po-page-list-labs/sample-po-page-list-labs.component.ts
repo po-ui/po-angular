@@ -8,7 +8,8 @@ import { PoPageAction, PoPageFilter, PoPageListLiterals } from '@po-ui/ng-compon
 
 @Component({
   selector: 'sample-po-page-list-labs',
-  templateUrl: './sample-po-page-list-labs.component.html'
+  templateUrl: './sample-po-page-list-labs.component.html',
+  standalone: false
 })
 export class SamplePoPageListLabsComponent implements OnInit {
   action: PoPageAction;

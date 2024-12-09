@@ -112,7 +112,7 @@ export class PoPageDynamicListBaseComponent {
    * O componente envia como parâmetro um array de string com as colunas configuradas inicialmente.
    * Por exemplo: ["idCard", "name", "hireStatus", "age"].
    */
-  @Output('p-restore-column-manager') columnRestoreManager = new EventEmitter<Array<String>>();
+  @Output('p-restore-column-manager') columnRestoreManager = new EventEmitter<Array<string>>();
 
   /**
    * @optional

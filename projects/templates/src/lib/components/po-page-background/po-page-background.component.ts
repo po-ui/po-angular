@@ -6,7 +6,8 @@ import { convertToBoolean } from './../../utils/util';
 
 @Component({
   selector: 'po-page-background',
-  templateUrl: './po-page-background.component.html'
+  templateUrl: './po-page-background.component.html',
+  standalone: false
 })
 
 /**

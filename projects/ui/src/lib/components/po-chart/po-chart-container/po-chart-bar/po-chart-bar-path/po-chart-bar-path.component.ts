@@ -4,7 +4,8 @@ import { PoChartBarCoordinates } from '../../../interfaces/po-chart-bar-coordina
 
 @Component({
   selector: '[po-chart-bar-path]',
-  templateUrl: './po-chart-bar-path.component.svg'
+  templateUrl: './po-chart-bar-path.component.svg',
+  standalone: false
 })
 export class PoChartBarPathComponent {
   @Input('p-color') color?: string;

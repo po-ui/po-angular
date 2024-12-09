@@ -16,7 +16,8 @@ import { SamplePoPageListHiringProcessesService } from './sample-po-page-list-hi
 @Component({
   selector: 'sample-po-page-list-hiring-processes',
   templateUrl: './sample-po-page-list-hiring-processes.component.html',
-  providers: [SamplePoPageListHiringProcessesService]
+  providers: [SamplePoPageListHiringProcessesService],
+  standalone: false
 })
 export class SamplePoPageListHiringProcessesComponent implements OnInit {
   @ViewChild('advancedFilterModal', { static: true }) advancedFilterModal: PoModalComponent;

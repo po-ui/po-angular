@@ -21,10 +21,16 @@ import { PoMenuItemsService } from './services/po-menu-items.service';
 import { PoMenuService } from './services/po-menu.service';
 import { provideHttpClient, withInterceptorsFromDi } from '@angular/common/http';
 
-@Component({ template: 'Search' })
+@Component({
+  template: 'Search',
+  standalone: false
+})
 export class SearchComponent {}
 
-@Component({ template: 'Home' })
+@Component({
+  template: 'Home',
+  standalone: false
+})
 export class HomeComponent {}
 
 export const routes: Routes = [

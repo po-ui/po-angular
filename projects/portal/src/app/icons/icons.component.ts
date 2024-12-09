@@ -5,7 +5,8 @@ import { PoComboOption, PoNotificationService, PoSearchComponent, PoSearchFilter
 @Component({
   selector: 'app-icons',
   templateUrl: './icons.component.html',
-  styleUrls: ['icons.component.css']
+  styleUrls: ['icons.component.css'],
+  standalone: false
 })
 export class IconsComponent {
   @ViewChild('poSearch', { static: true }) PoSearch: PoSearchComponent;

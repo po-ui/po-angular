@@ -4,7 +4,8 @@ import { PoCheckboxGroupOption, PoSelectOption } from '@po-ui/ng-components';
 
 @Component({
   selector: 'sample-po-code-editor-labs',
-  templateUrl: './sample-po-code-editor-labs.component.html'
+  templateUrl: './sample-po-code-editor-labs.component.html',
+  standalone: false
 })
 export class SamplePoCodeEditorLabsComponent implements OnInit {
   codeEditor: string;

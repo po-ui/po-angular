@@ -6,11 +6,13 @@ import { Observable } from 'rxjs';
 import { PoPageLogin } from './interfaces/po-page-login.interface';
 import { PoPageLoginAuthenticationType } from './enums/po-page-login-authentication-type.enum';
 
-@Injectable()
+@Injectable({
+  providedIn: 'root'
+})
 export class PoPageLoginService {
   constructor(private http: HttpClient) {}
 
-  onLogin(url: string, type: PoPageLoginAuthenticationType, loginForm: PoPageLogin): Observable<Object> {
+  onLogin(url: string, type: PoPageLoginAuthenticationType, loginForm: PoPageLogin): Observable<object> {
     if (type === PoPageLoginAuthenticationType.Bearer) {
       loginForm.password = btoa(loginForm.password);
       return this.http.post(url, loginForm);

@@ -12,7 +12,8 @@ import { PoCheckboxGroupOption, PoRadioGroupOption } from '@po-ui/ng-components'
         height: 300px;
       }
     `
-  ]
+  ],
+  standalone: false
 })
 export class SamplePoLoadingOverlayLabsComponent implements OnInit {
   properties: Array<string> = [];

@@ -2,7 +2,8 @@ import { Component, Input } from '@angular/core';
 
 @Component({
   selector: 'po-grid-head',
-  templateUrl: './po-grid-head.component.html'
+  templateUrl: './po-grid-head.component.html',
+  standalone: false
 })
 export class PoGridHeadComponent {
   @Input('p-align') align?: string = 'left';

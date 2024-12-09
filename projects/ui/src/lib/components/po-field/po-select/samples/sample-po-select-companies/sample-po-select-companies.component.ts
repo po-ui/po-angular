@@ -4,12 +4,13 @@ import { PoSelectOption, PoSelectOptionGroup } from '@po-ui/ng-components';
 
 @Component({
   selector: 'sample-po-select-companies',
-  templateUrl: './sample-po-select-companies.component.html'
+  templateUrl: './sample-po-select-companies.component.html',
+  standalone: false
 })
 export class SamplePoSelectCompaniesComponent {
   select: Array<string>;
-  fieldLabel = undefined ?? 'nomeFantasia';
-  fieldValue = undefined ?? 'cnpj';
+  fieldLabel = 'nomeFantasia';
+  fieldValue = 'cnpj';
 
   empresas: Array<any> = [
     {

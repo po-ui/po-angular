@@ -29,7 +29,8 @@ import { PoRadioSize } from './po-radio-size.enum';
       useExisting: forwardRef(() => PoRadioComponent),
       multi: true
     }
-  ]
+  ],
+  standalone: false
 })
 export class PoRadioComponent extends PoFieldModel<boolean> {
   @ViewChild('radio', { static: true }) radio: ElementRef;

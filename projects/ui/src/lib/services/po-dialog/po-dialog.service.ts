@@ -26,7 +26,9 @@ import { PoDialogType } from './po-dialog.enum';
  *  <file name="sample-po-dialog-cancel-credit-card/sample-po-dialog-cancel-credit-card.component.ts"> </file>
  * </example>
  */
-@Injectable()
+@Injectable({
+  providedIn: 'root'
+})
 export class PoDialogService extends PoDialogBaseService {
   constructor(private poComponentInjector: PoComponentInjectorService) {
     super();
