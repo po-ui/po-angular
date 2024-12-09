@@ -2,6 +2,14 @@
 
 All notable changes to this project will be documented in this file. See [standard-version](https://github.com/conventional-changelog/standard-version) for commit guidelines.
 
+### [17.26.9](https://github.com/po-ui/po-angular/compare/v17.26.8...v17.26.9) (2024-12-09)
+
+
+### Bug Fixes
+
+* **dynamic-view:** ajusta renderização do multiselect ([18c18bb](https://github.com/po-ui/po-angular/commit/18c18bb3f5048cbe8bbc092db73aee7b3a108f0a)), closes [#2308](https://github.com/po-ui/po-angular/issues/2308)
+* **page-job-scheduler:** corrige erro quando 'firstExecution' undefined ([b32312f](https://github.com/po-ui/po-angular/commit/b32312fdb8de633303971eff6d0d2bd9ee0cbb43))
+
 ### [17.26.8](https://github.com/po-ui/po-angular/compare/v17.26.7...v17.26.8) (2024-11-25)
 
 
