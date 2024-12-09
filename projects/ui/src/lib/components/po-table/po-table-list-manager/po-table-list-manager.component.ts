@@ -46,7 +46,8 @@ type Direction = 'up' | 'down';
       useExisting: forwardRef(() => PoTableListManagerComponent),
       multi: true
     }
-  ]
+  ],
+  standalone: false
 })
 export class PoTableListManagerComponent extends PoCheckboxGroupComponent {
   private _iconToken: { [key: string]: string };

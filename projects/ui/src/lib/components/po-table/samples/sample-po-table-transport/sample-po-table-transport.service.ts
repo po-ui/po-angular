@@ -2,7 +2,9 @@ import { Injectable } from '@angular/core';
 
 import { PoTableColumn, PoTagType } from '@po-ui/ng-components';
 
-@Injectable()
+@Injectable({
+  providedIn: 'root'
+})
 export class SamplePoTableTransportService {
   getColumns(): Array<PoTableColumn> {
     return [

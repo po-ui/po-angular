@@ -2,7 +2,8 @@ import { Component } from '@angular/core';
 
 @Component({
   selector: 'sample-po-clean-labs',
-  templateUrl: './sample-po-clean-labs.component.html'
+  templateUrl: './sample-po-clean-labs.component.html',
+  standalone: false
 })
 export class SamplePoCleanLabsComponent {
   fieldValue: string;

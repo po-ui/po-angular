@@ -20,7 +20,8 @@ const poRichTextBodyCommands = [
 
 @Component({
   selector: 'po-rich-text-body',
-  templateUrl: './po-rich-text-body.component.html'
+  templateUrl: './po-rich-text-body.component.html',
+  standalone: false
 })
 export class PoRichTextBodyComponent implements OnInit, OnDestroy {
   @ViewChild('bodyElement', { static: true }) bodyElement: ElementRef;

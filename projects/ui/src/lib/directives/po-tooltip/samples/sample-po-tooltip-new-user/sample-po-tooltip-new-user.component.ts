@@ -5,7 +5,8 @@ import { PoNotificationService } from '@po-ui/ng-components';
 
 @Component({
   selector: 'sample-po-tooltip-new-user',
-  templateUrl: './sample-po-tooltip-new-user.component.html'
+  templateUrl: './sample-po-tooltip-new-user.component.html',
+  standalone: false
 })
 export class SamplePoTooltipNewUserComponent implements OnInit {
   @ViewChild('formNewUser', { static: true }) formNewUser: UntypedFormControl;

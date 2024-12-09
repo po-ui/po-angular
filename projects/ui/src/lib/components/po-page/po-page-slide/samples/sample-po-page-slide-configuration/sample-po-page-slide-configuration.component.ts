@@ -3,7 +3,8 @@ import { Router } from '@angular/router';
 
 @Component({
   selector: 'sample-po-page-slide-configuration',
-  templateUrl: './sample-po-page-slide-configuration.component.html'
+  templateUrl: './sample-po-page-slide-configuration.component.html',
+  standalone: false
 })
 export class SamplePoPageSlideConfigurationComponent {
   public bluetooth = true;

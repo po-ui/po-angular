@@ -70,7 +70,8 @@ import { PoUploadService } from './po-upload.service';
       useExisting: forwardRef(() => PoUploadComponent),
       multi: true
     }
-  ]
+  ],
+  standalone: false
 })
 export class PoUploadComponent extends PoUploadBaseComponent implements AfterViewInit {
   @ViewChild('inputFile', { read: ElementRef, static: true }) private inputFile: ElementRef;

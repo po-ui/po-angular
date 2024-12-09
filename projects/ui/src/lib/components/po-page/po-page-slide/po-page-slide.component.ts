@@ -65,7 +65,8 @@ export const poPageSlideLiteralsDefault = {
       ]),
       transition(':leave', [animate('150ms', style({ transform: 'translateX(50px)' }))])
     ])
-  ]
+  ],
+  standalone: false
 })
 export class PoPageSlideComponent extends PoPageSlideBaseComponent {
   private _pageContent: ElementRef;

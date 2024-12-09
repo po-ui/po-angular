@@ -5,7 +5,8 @@ import { HomeColorfulService } from './home-colorful.service';
 @Component({
   selector: 'app-home-colorful',
   templateUrl: './home-colorful.component.html',
-  styleUrls: ['./home-colorful.component.css']
+  styleUrls: ['./home-colorful.component.css'],
+  standalone: false
 })
 export class HomeColorfulComponent implements OnInit {
   public stargazers_count: number;

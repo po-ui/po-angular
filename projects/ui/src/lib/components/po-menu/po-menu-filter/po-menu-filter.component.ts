@@ -18,7 +18,8 @@ export const poMenuFilterLiteralsDefault = {
  */
 @Component({
   selector: 'po-menu-filter',
-  templateUrl: './po-menu-filter.component.html'
+  templateUrl: './po-menu-filter.component.html',
+  standalone: false
 })
 export class PoMenuFilterComponent {
   @Input('p-loading') loading: boolean;

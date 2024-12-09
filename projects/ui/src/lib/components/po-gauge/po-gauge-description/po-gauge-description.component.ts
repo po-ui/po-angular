@@ -2,7 +2,8 @@ import { Component, ElementRef, Input, ViewChild } from '@angular/core';
 
 @Component({
   selector: 'po-gauge-description',
-  templateUrl: './po-gauge-description.component.html'
+  templateUrl: './po-gauge-description.component.html',
+  standalone: false
 })
 export class PoGaugeDescriptionComponent {
   @Input('p-description') description: string;

@@ -2,7 +2,8 @@ import { Component } from '@angular/core';
 
 @Component({
   selector: 'sample-po-progress-publication',
-  templateUrl: './sample-po-progress-publication.component.html'
+  templateUrl: './sample-po-progress-publication.component.html',
+  standalone: false
 })
 export class SamplePoProgressPublicationComponent {
   buttonDisabled: boolean;

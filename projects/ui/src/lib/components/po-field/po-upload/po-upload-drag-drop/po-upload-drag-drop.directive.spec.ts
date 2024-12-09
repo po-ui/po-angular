@@ -5,7 +5,8 @@ import { ComponentFixture, fakeAsync, TestBed, tick } from '@angular/core/testin
 import { PoUploadDragDropDirective } from './po-upload-drag-drop.directive';
 
 @Component({
-  template: ` <div p-upload-drag-drop></div> `
+  template: ` <div p-upload-drag-drop></div> `,
+  standalone: false
 })
 export class TestComponent {}
 

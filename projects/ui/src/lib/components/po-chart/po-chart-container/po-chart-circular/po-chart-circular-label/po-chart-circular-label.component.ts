@@ -4,7 +4,8 @@ import { PoChartLabelCoordinates } from '../../../interfaces/po-chart-label-coor
 
 @Component({
   selector: '[po-chart-circular-label]',
-  templateUrl: './po-chart-circular-label.component.svg'
+  templateUrl: './po-chart-circular-label.component.svg',
+  standalone: false
 })
 export class PoChartCircularLabelComponent {
   @Input('p-serie') serie: PoChartLabelCoordinates;

@@ -26,14 +26,18 @@ import { PoSyncSchema } from './../po-sync/interfaces/po-sync-schema.interface';
 
 const EVENT_SOURCING_NAME: string = PoEventSourcingService['event_sourcing_name'];
 
-@Injectable()
+@Injectable({
+  providedIn: 'root'
+})
 class StorageServiceMock extends PoStorageService {
   constructor() {
     super();
   }
 }
 
-@Injectable()
+@Injectable({
+  providedIn: 'root'
+})
 class PoDataTransformMock extends PoDataTransform {
   getDateFieldName(): string {
     return undefined;

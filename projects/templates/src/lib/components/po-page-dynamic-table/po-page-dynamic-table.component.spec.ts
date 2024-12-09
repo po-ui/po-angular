@@ -389,7 +389,7 @@ describe('PoPageDynamicTableComponent:', () => {
 
     it('updateDataTable: should be called with the current parameters', () => {
       const expectValue = { page: 1, search: 'test' };
-      component['quickSearchParam'] = null || undefined;
+      component['quickSearchParam'] = null;
       component['currentPage'] = 1;
       component['params'] = { [component.quickSearchParam]: 'test' };
 

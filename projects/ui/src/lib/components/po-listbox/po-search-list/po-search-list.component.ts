@@ -20,7 +20,8 @@ import { PoListBoxLiterals } from '../interfaces/po-listbox-literals.interface';
 @Component({
   selector: 'po-search-list',
   templateUrl: './po-search-list.component.html',
-  changeDetection: ChangeDetectionStrategy.OnPush
+  changeDetection: ChangeDetectionStrategy.OnPush,
+  standalone: false
 })
 export class PoSearchListComponent {
   @ViewChild('inputElement', { read: ElementRef, static: true }) inputElement: ElementRef;

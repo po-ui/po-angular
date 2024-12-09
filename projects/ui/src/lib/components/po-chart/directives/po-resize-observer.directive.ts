@@ -5,7 +5,8 @@ import { Subject, Subscription } from 'rxjs';
 import { debounceTime } from 'rxjs/operators';
 
 @Directive({
-  selector: '[p-resize-observer]'
+  selector: '[p-resize-observer]',
+  standalone: false
 })
 export class PoResizeObserverDirective implements OnDestroy, OnInit {
   @Output('p-resize-observer') resize = new EventEmitter();

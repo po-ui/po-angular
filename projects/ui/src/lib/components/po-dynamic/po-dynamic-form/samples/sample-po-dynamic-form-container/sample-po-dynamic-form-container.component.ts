@@ -13,7 +13,8 @@ import { PoDynamicFormContainerService } from './sample-po-dynamic-form-containe
 @Component({
   selector: 'sample-po-dynamic-form-container',
   templateUrl: './sample-po-dynamic-form-container.component.html',
-  providers: [PoDynamicFormContainerService]
+  providers: [PoDynamicFormContainerService],
+  standalone: false
 })
 export class SamplePoDynamicFormContainerComponent implements OnInit {
   person = {};

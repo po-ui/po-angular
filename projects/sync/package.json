@@ -18,22 +18,22 @@
     ]
   },
   "dependencies": {
-    "@capacitor/core": "^5.5.1",
-    "@capacitor/network": "^5.0.6",
+    "@capacitor/core": "^6.2.0",
+    "@capacitor/network": "^6.0.1",
     "@po-ui/ng-storage": "0.0.0-PLACEHOLDER",
     "http-status-codes": "^2.3.0",
     "@po-ui/ng-schematics": "0.0.0-PLACEHOLDER",
-    "tslib": "^2.6.2"
+    "tslib": "^2.3.0"
   },
   "peerDependencies": {
-    "@angular/core": "^18",
-    "@angular-devkit/schematics": "^18",
-    "@capacitor/core": "^5.5.1",
-    "@capacitor/network": "^5.0.6",
+    "@angular/core": "^19",
+    "@angular-devkit/schematics": "^19",
+    "@capacitor/core": "^6.2.0",
+    "@capacitor/network": "^6.0.1",
     "@po-ui/ng-storage": "0.0.0-PLACEHOLDER",
     "http-status-codes": "^2.3.0",
-    "rxjs": "~7.8.1",
+    "rxjs": "~7.8.0",
     "rxjs-compat": "~6.6.0",
-    "zone.js": "~0.14.4"
+    "zone.js": "~0.15.0"
   }
 }

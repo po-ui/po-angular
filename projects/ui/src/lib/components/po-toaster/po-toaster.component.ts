@@ -39,7 +39,8 @@ const SPACE_BETWEEN_TOASTERS = 8;
  */
 @Component({
   selector: 'po-toaster',
-  templateUrl: './po-toaster.component.html'
+  templateUrl: './po-toaster.component.html',
+  standalone: false
 })
 export class PoToasterComponent extends PoToasterBaseComponent implements AfterViewInit, OnDestroy, OnChanges {
   /* Componente toaster */

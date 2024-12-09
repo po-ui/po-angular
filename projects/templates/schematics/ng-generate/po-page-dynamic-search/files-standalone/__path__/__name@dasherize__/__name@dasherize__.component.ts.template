@@ -7,7 +7,6 @@ import { PoPageAction, PoDynamicFormField } from '@po-ui/ng-components';
 
 @Component({
   selector: '<%= selector %>',
-  standalone: true,
   imports: [
     CommonModule,
     PoPageDynamicSearchModule,

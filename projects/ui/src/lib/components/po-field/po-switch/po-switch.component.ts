@@ -100,7 +100,8 @@ import { PoSwitchLabelPosition } from './po-switch-label-position.enum';
       useExisting: forwardRef(() => PoSwitchComponent),
       multi: true
     }
-  ]
+  ],
+  standalone: false
 })
 export class PoSwitchComponent extends PoFieldModel<any> {
   @ViewChild('switchContainer', { static: true }) switchContainer: ElementRef;

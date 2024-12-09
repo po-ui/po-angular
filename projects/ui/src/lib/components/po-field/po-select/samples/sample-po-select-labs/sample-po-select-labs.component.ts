@@ -4,7 +4,8 @@ import { PoCheckboxGroupOption, PoSelectOption, PoSelectOptionGroup } from '@po-
 
 @Component({
   selector: 'sample-po-select-labs',
-  templateUrl: './sample-po-select-labs.component.html'
+  templateUrl: './sample-po-select-labs.component.html',
+  standalone: false
 })
 export class SamplePoSelectLabsComponent implements OnInit {
   event: string;

@@ -101,7 +101,8 @@ import { PoTableService } from './services/po-table.service';
 @Component({
   selector: 'po-table',
   templateUrl: './po-table.component.html',
-  providers: [PoDateService]
+  providers: [PoDateService],
+  standalone: false
 })
 export class PoTableComponent extends PoTableBaseComponent implements AfterViewInit, DoCheck, OnDestroy, OnInit {
   @ContentChild(PoTableRowTemplateDirective, { static: true }) tableRowTemplate: PoTableRowTemplateDirective;
@@ -581,7 +582,7 @@ export class PoTableComponent extends PoTableBaseComponent implements AfterViewI
     this.changeVisibleColumns.emit(columns);
   }
 
-  onColumnRestoreManager(value: Array<String>) {
+  onColumnRestoreManager(value: Array<string>) {
     this.columnRestoreManager.emit(value);
   }
 

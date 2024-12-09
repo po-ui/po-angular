@@ -49,7 +49,8 @@ import { PoListViewDetailTemplateDirective } from './po-list-view-detail-templat
       transition('* => void', [style({ height: '*', 'overflow-y': 'hidden' }), animate(100, style({ height: 0 }))]),
       transition('void => *', [style({ height: '0' }), animate(100, style({ height: '*' }))])
     ])
-  ]
+  ],
+  standalone: false
 })
 export class PoListViewComponent extends PoListViewBaseComponent implements AfterContentInit, DoCheck {
   @ContentChild(PoListViewContentTemplateDirective, { static: true })

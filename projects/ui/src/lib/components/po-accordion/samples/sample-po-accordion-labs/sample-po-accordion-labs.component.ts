@@ -11,7 +11,8 @@ import {
 
 @Component({
   selector: 'sample-po-accordion-labs',
-  templateUrl: './sample-po-accordion-labs.component.html'
+  templateUrl: './sample-po-accordion-labs.component.html',
+  standalone: false
 })
 export class SamplePoAccordionLabsComponent implements OnInit {
   accordionFieldsForm: Array<PoDynamicFormField> = [

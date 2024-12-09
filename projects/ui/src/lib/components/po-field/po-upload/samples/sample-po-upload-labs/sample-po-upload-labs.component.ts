@@ -11,7 +11,8 @@ import {
 
 @Component({
   selector: 'sample-po-upload-labs',
-  templateUrl: './sample-po-upload-labs.component.html'
+  templateUrl: './sample-po-upload-labs.component.html',
+  standalone: false
 })
 export class SamplePoUploadLabsComponent implements OnInit {
   allowedExtensions: string;

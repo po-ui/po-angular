@@ -4,7 +4,8 @@ import { PoCheckboxGroupOption, PoSelectOption, PoTreeViewItem } from '@po-ui/ng
 
 @Component({
   selector: 'sample-po-tree-view-labs',
-  templateUrl: 'sample-po-tree-view-labs.component.html'
+  templateUrl: 'sample-po-tree-view-labs.component.html',
+  standalone: false
 })
 export class SamplePoTreeViewLabsComponent implements OnInit {
   event: string;

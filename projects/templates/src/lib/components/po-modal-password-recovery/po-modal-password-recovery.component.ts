@@ -42,7 +42,8 @@ import { PoModalPasswordRecoveryType } from './enums/po-modal-password-recovery-
 
 @Component({
   selector: 'po-modal-password-recovery',
-  templateUrl: './po-modal-password-recovery.component.html'
+  templateUrl: './po-modal-password-recovery.component.html',
+  standalone: false
 })
 export class PoModalPasswordRecoveryComponent extends PoModalPasswordRecoveryBaseComponent implements OnDestroy {
   @ViewChild('emailForm') emailForm: NgForm;

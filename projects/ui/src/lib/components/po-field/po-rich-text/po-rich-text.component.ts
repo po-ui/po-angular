@@ -62,8 +62,9 @@ const providers = [
 @Component({
   selector: 'po-rich-text',
   templateUrl: './po-rich-text.component.html',
+  changeDetection: ChangeDetectionStrategy.OnPush,
   providers,
-  changeDetection: ChangeDetectionStrategy.OnPush
+  standalone: false
 })
 export class PoRichTextComponent
   extends PoRichTextBaseComponent

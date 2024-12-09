@@ -8,14 +8,18 @@ import { PoSchemaService } from './po-schema.service';
 import { PoSchemaUtil } from './po-schema-util/po-schema-util.model';
 import { PoSyncSchema } from './../po-sync/interfaces/po-sync-schema.interface';
 
-@Injectable()
+@Injectable({
+  providedIn: 'root'
+})
 class PoStorageServiceMock extends PoStorageService {
   constructor() {
     super();
   }
 }
 
-@Injectable()
+@Injectable({
+  providedIn: 'root'
+})
 class PoSchemaDefinitionServiceMock extends PoSchemaDefinitionService {}
 
 describe('PoSchemaService:', () => {

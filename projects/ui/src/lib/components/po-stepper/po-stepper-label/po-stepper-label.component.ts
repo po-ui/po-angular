@@ -20,7 +20,8 @@ import {
  */
 @Component({
   selector: 'po-stepper-label',
-  templateUrl: './po-stepper-label.component.html'
+  templateUrl: './po-stepper-label.component.html',
+  standalone: false
 })
 export class PoStepperLabelComponent implements AfterViewInit, OnChanges {
   // Alinhamento da label.
