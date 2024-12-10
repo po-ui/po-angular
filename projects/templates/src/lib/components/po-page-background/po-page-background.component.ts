@@ -1,8 +1,8 @@
 import { Component, EventEmitter, Input, OnInit, Output } from '@angular/core';
 
-import { PoLanguage, poLanguageDefault, PoLanguageService, PoSelectOption } from '@po-ui/ng-components';
+import { PoLanguage, poLanguageDefault, PoLanguageService, PoSelectOption, PoThemeService } from '@po-ui/ng-components';
 
-import { convertToBoolean } from './../../utils/util';
+import { convertToBoolean, getDefaultSize, validateSize } from './../../utils/util';
 
 @Component({
   selector: 'po-page-background',
@@ -43,9 +43,32 @@ export class PoPageBackgroundComponent implements OnInit {
 
   selectedLanguageOption: string;
 
+  private _componentsSize?: string = undefined;
   private _showSelectLanguage?: boolean = false;
   private _languagesList: Array<PoLanguage>;
   private _selectLanguageOptions: Array<PoSelectOption>;
+
+  /**
+   * @optional
+   *
+   * @description
+   *
+   * Define o tamanho dos componentes de formulário no template:
+   * - `small`: aplica a medida small de cada componente (disponível apenas para acessibilidade AA).
+   * - `medium`: aplica a medida medium de cada componente.
+   *
+   * > Caso a acessibilidade AA não esteja configurada, o tamanho `medium` será mantido.
+   * Para mais detalhes, consulte a documentação do [po-theme](https://po-ui.io/documentation/po-theme).
+   *
+   * @default `medium`
+   */
+  @Input('p-components-size') set componentsSize(value: string) {
+    this._componentsSize = validateSize(value, this.poThemeService);
+  }
+
+  get componentsSize(): string {
+    return this._componentsSize ?? getDefaultSize(this.poThemeService);
+  }
 
   /** Lista de idiomas para o combo box */
   @Input('p-languages') set languagesList(value: Array<PoLanguage>) {
@@ -83,7 +106,10 @@ export class PoPageBackgroundComponent implements OnInit {
     return this._showSelectLanguage;
   }
 
-  constructor(public poLanguageService: PoLanguageService) {}
+  constructor(
+    public poLanguageService: PoLanguageService,
+    protected poThemeService: PoThemeService
+  ) {}
 
   ngOnInit() {
     this.selectedLanguageOption = this.initialSelectLanguage || this.poLanguageService.getShortLanguage();

@@ -3,15 +3,28 @@
     #inputFilter
     type="text"
     class="po-menu-filter"
+    [class.po-menu-filter-aa]="componentsSize === 'small'"
     [placeholder]="literals.search"
     (keyup)="filterItems(inputFilter.value)"
   />
 
-  <div class="po-menu-filter-search-icon-container">
-    <po-icon p-icon="ICON_SEARCH po-field-icon" *ngIf="!loading" class="po-menu-filter-icon"></po-icon>
-    <po-loading-icon *ngIf="loading" p-size="sm"></po-loading-icon>
+  <div
+    class="po-menu-filter-search-icon-container"
+    [class.po-menu-filter-search-icon-container-aa]="componentsSize === 'small'"
+  >
+    <po-icon
+      p-icon="ICON_SEARCH"
+      *ngIf="!loading"
+      class="po-menu-filter-icon po-field-icon"
+      [class.po-field-icon-aa]="componentsSize === 'small'"
+    ></po-icon>
+    <po-loading-icon *ngIf="loading" [p-size]="componentsSize === 'small' ? 'xs' : 'sm'"></po-loading-icon>
   </div>
-  <div class="po-menu-filter-close-icon-container">
-    <po-clean [p-element-ref]="inputFilterElement" (p-change-event)="filterItems(inputFilter.value)"></po-clean>
+  <div class="po-field-icon-container-right">
+    <po-clean
+      [p-element-ref]="inputFilterElement"
+      [p-size]="componentsSize"
+      (p-change-event)="filterItems(inputFilter.value)"
+    ></po-clean>
   </div>
 </div>

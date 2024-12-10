@@ -5,7 +5,9 @@ import { PoLanguageService } from '../../services/po-language/po-language.servic
 import { PoItemListType } from './enums/po-item-list-type.enum';
 import { PoItemListAction } from './po-item-list/interfaces/po-item-list-action.interface';
 
-import { convertToBoolean } from '../../utils/util';
+import { PoFieldSize } from '../../enums/po-field-size.enum';
+import { PoThemeService } from '../../services';
+import { convertToBoolean, getDefaultSize, validateSize } from '../../utils/util';
 import { PoItemListFilterMode } from './enums/po-item-list-filter-mode.enum';
 import { PoListBoxLiterals } from './interfaces/po-listbox-literals.interface';
 import { PoItemListOptionGroup } from './po-item-list/interfaces/po-item-list-option-group.interface';
@@ -36,6 +38,7 @@ export class PoListBoxBaseComponent {
   private _type!: PoItemListType;
   private _literals: PoListBoxLiterals;
   private language: string = poLocaleDefault;
+  private _size?: string = undefined;
 
   @Input({ alias: 'p-visible', transform: convertToBoolean }) visible: boolean = false;
 
@@ -149,6 +152,14 @@ export class PoListBoxBaseComponent {
 
   @Input('p-should-mark-letter') shouldMarkLetters: boolean = true;
 
+  @Input('p-size') set size(value: string) {
+    this._size = validateSize(value, this.poThemeService, PoFieldSize);
+  }
+
+  get size(): string {
+    return this._size ?? getDefaultSize(this.poThemeService, PoFieldSize);
+  }
+
   @Input('p-compare-cache') compareCache: boolean = false;
 
   @Input('p-combo-service') comboService: any;
@@ -163,7 +174,10 @@ export class PoListBoxBaseComponent {
 
   @Output('p-change-state-tabs') changeStateTabs = new EventEmitter();
 
-  constructor(languageService: PoLanguageService) {
+  constructor(
+    languageService: PoLanguageService,
+    protected poThemeService: PoThemeService
+  ) {
     this.language = languageService.getShortLanguage();
   }
 }

@@ -1,7 +1,7 @@
 import { Component, OnInit } from '@angular/core';
 
-import { PoPageBlockedUserReason, PoPageBlockedUserReasonParams } from '@po-ui/ng-templates';
 import { PoRadioGroupOption } from '@po-ui/ng-components';
+import { PoPageBlockedUserReason, PoPageBlockedUserReasonParams } from '@po-ui/ng-templates';
 
 @Component({
   selector: 'sample-po-page-blocked-user-labs',
@@ -9,6 +9,7 @@ import { PoRadioGroupOption } from '@po-ui/ng-components';
   standalone: false
 })
 export class SamplePoPageBlockedUserLabsComponent implements OnInit {
+  componentsSize: string;
   contactMail: string;
   contactPhone: string;
   customParams: PoPageBlockedUserReasonParams;
@@ -17,6 +18,11 @@ export class SamplePoPageBlockedUserLabsComponent implements OnInit {
   reason: PoPageBlockedUserReason = PoPageBlockedUserReason.None;
   secondaryLogo: string;
   url: string;
+
+  public readonly componentsSizeOptions: Array<PoRadioGroupOption> = [
+    { label: 'small', value: 'small' },
+    { label: 'medium', value: 'medium' }
+  ];
 
   public readonly reasonOptions: Array<PoRadioGroupOption> = [
     { label: 'Default', value: PoPageBlockedUserReason.None },
@@ -37,6 +43,7 @@ export class SamplePoPageBlockedUserLabsComponent implements OnInit {
   }
 
   restore() {
+    this.componentsSize = 'medium';
     this.contactMail = undefined;
     this.contactPhone = undefined;
     this.customParams = { attempts: 5, days: 90, hours: 24 };

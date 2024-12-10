@@ -9,8 +9,10 @@ import {
 } from '@angular/core';
 import { NG_VALUE_ACCESSOR } from '@angular/forms';
 
-import { convertToBoolean, uuid } from '../../../utils/util';
+import { convertToBoolean, getDefaultSize, uuid, validateSize } from '../../../utils/util';
 
+import { PoFieldSize } from '../../../enums/po-field-size.enum';
+import { PoThemeService } from '../../../services';
 import { PoFieldModel } from '../po-field.model';
 import { PoKeyCodeEnum } from './../../../enums/po-key-code.enum';
 import { PoSwitchLabelPosition } from './po-switch-label-position.enum';
@@ -115,6 +117,7 @@ export class PoSwitchComponent extends PoFieldModel<any> {
   private _labelOn: string = 'true';
   private _labelPosition: PoSwitchLabelPosition = PoSwitchLabelPosition.Right;
   private _formatModel: boolean = false;
+  private _size?: string = undefined;
 
   /**
    * @optional
@@ -191,7 +194,33 @@ export class PoSwitchComponent extends PoFieldModel<any> {
     return this._labelOn;
   }
 
-  constructor(private changeDetector: ChangeDetectorRef) {
+  /**
+   * @optional
+   *
+   * @description
+   *
+   * Define o tamanho do componente:
+   * - `small`: altura de 16px (disponível apenas para acessibilidade AA).
+   * - `medium`: altura de 24px.
+   *
+   * > Caso a acessibilidade AA não esteja configurada, o tamanho `medium` será mantido.
+   * Para mais detalhes, consulte a documentação do [po-theme](https://po-ui.io/documentation/po-theme).
+   *
+   * @default `medium`
+   *
+   */
+  @Input('p-size') set size(value: string) {
+    this._size = validateSize(value, this.poThemeService, PoFieldSize);
+  }
+
+  get size(): string {
+    return this._size ?? getDefaultSize(this.poThemeService, PoFieldSize);
+  }
+
+  constructor(
+    protected poThemeService: PoThemeService,
+    private changeDetector: ChangeDetectorRef
+  ) {
     super();
   }
 

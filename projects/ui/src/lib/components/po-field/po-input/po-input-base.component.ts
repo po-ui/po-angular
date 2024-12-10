@@ -2,7 +2,9 @@ import { ChangeDetectorRef, Directive, EventEmitter, Input, OnDestroy, Output, T
 import { AbstractControl, ControlValueAccessor, Validator, Validators } from '@angular/forms';
 
 import { Subscription, switchMap } from 'rxjs';
-import { convertToBoolean } from '../../../utils/util';
+import { PoFieldSize } from '../../../enums/po-field-size.enum';
+import { PoThemeService } from '../../../services';
+import { convertToBoolean, getDefaultSize, validateSize } from '../../../utils/util';
 import { ErrorAsyncProperties } from '../shared/interfaces/error-async-properties.interface';
 import { maxlengpoailed, minlengpoailed, patternFailed, requiredFailed } from './../validators';
 import { PoMask } from './po-mask';
@@ -322,6 +324,7 @@ export abstract class PoInputBaseComponent implements ControlValueAccessor, Vali
   private _minlength?: number;
   private _noAutocomplete?: boolean = false;
   private _placeholder?: string = '';
+  private _size?: string = undefined;
 
   /**
    * @optional
@@ -398,6 +401,28 @@ export abstract class PoInputBaseComponent implements ControlValueAccessor, Vali
     this.required = required === '' ? true : convertToBoolean(required);
 
     this.validateModel();
+  }
+
+  /**
+   * @optional
+   *
+   * @description
+   *
+   * Define o tamanho do componente:
+   * - `small`: altura do input como 32px (disponível apenas para acessibilidade AA).
+   * - `medium`: altura do input como 44px.
+   *
+   * > Caso a acessibilidade AA não esteja configurada, o tamanho `medium` será mantido.
+   * Para mais detalhes, consulte a documentação do [po-theme](https://po-ui.io/documentation/po-theme).
+   *
+   * @default `medium`
+   */
+  @Input('p-size') set size(value: string) {
+    this._size = validateSize(value, this.poThemeService, PoFieldSize);
+  }
+
+  get size(): string {
+    return this._size ?? getDefaultSize(this.poThemeService, PoFieldSize);
   }
 
   /**
@@ -513,7 +538,10 @@ export abstract class PoInputBaseComponent implements ControlValueAccessor, Vali
     }
   }
 
-  constructor(protected cd?: ChangeDetectorRef) {
+  constructor(
+    protected cd?: ChangeDetectorRef,
+    protected poThemeService?: PoThemeService
+  ) {
     this.objMask = new PoMask(this.mask, this.maskFormatModel);
   }
 

@@ -1,6 +1,7 @@
 <po-modal
   #modal
   p-hide-close
+  [p-components-size]="size"
   [p-primary-action]="modalConfirmAction"
   [p-secondary-action]="modalCancelAction"
   [p-title]="literals.insertImage"
@@ -20,6 +21,7 @@
         [p-drag-drop]="!modal.isHidden"
         [p-disabled]="isUrlValid"
         [p-restrictions]="uploadRestrictions"
+        [p-size]="size"
       >
       </po-upload>
     </div>
@@ -31,6 +33,7 @@
         [(ngModel)]="urlImage"
         [p-label]="literals.urlImage"
         [p-disabled]="isUploadValid"
+        [p-size]="size"
       >
       </po-url>
     </div>

@@ -19,16 +19,18 @@ import { fromEvent, Subscription } from 'rxjs';
 import { debounceTime, distinctUntilChanged, filter, map, tap } from 'rxjs/operators';
 
 import { PoControlPositionService } from '../../../services/po-control-position/po-control-position.service';
-import { PoKeyCodeEnum } from './../../../enums/po-key-code.enum';
 import { PoLanguageService } from '../../../services/po-language/po-language.service';
+import { PoKeyCodeEnum } from './../../../enums/po-key-code.enum';
 
-import { PoComboBaseComponent } from './po-combo-base.component';
-import { PoComboFilterService } from './po-combo-filter.service';
+import { PoThemeService } from '../../../services/po-theme/po-theme.service';
+import { uuid } from '../../../utils/util';
+import { PoFieldSize } from '../../../enums/po-field-size.enum';
+import { PoListBoxComponent } from './../../po-listbox/po-listbox.component';
 import { PoComboGroup } from './interfaces/po-combo-group.interface';
 import { PoComboOption } from './interfaces/po-combo-option.interface';
+import { PoComboBaseComponent } from './po-combo-base.component';
+import { PoComboFilterService } from './po-combo-filter.service';
 import { PoComboOptionTemplateDirective } from './po-combo-option-template/po-combo-option-template.directive';
-import { uuid } from '../../../utils/util';
-import { PoListBoxComponent } from './../../po-listbox/po-listbox.component';
 
 const poComboContainerOffset = 8;
 const poComboContainerPositionDefault = 'bottom';
@@ -137,9 +139,10 @@ export class PoComboComponent extends PoComboBaseComponent implements AfterViewI
     public renderer: Renderer2,
     private controlPosition: PoControlPositionService,
     protected changeDetector: ChangeDetectorRef,
+    protected poThemeService: PoThemeService,
     languageService: PoLanguageService
   ) {
-    super(languageService, changeDetector);
+    super(languageService, changeDetector, poThemeService);
 
     this.differ = differs.find([]).create(null);
   }

@@ -6,16 +6,16 @@ import { PoTimePipe } from '../../../pipes/po-time/po-time.pipe';
 import { expectArraysSameOrdering, expectPropertiesValues } from '../../../util-test/util-expect.spec';
 
 import { Observable, mergeMap, of, timer } from 'rxjs';
+import { PoComboOption } from '../../po-field';
+import { PoComboFilter } from '../../po-field/po-combo/interfaces/po-combo-filter.interface';
+import { PoComboFilterService } from '../../po-field/po-combo/po-combo-filter.service';
+import { PoMultiselectFilter } from '../../po-field/po-multiselect/interfaces/po-multiselect-filter.interface';
+import { PoMultiselectFilterService } from '../../po-field/po-multiselect/po-multiselect-filter.service';
 import * as PoDynamicUtil from '../po-dynamic.util';
 import { PoDynamicViewRequest } from './interfaces/po-dynamic-view-request.interface';
 import { PoDynamicViewBaseComponent } from './po-dynamic-view-base.component';
 import { PoDynamicViewField } from './po-dynamic-view-field.interface';
 import { PoDynamicViewService } from './services/po-dynamic-view.service';
-import { PoComboFilterService } from '../../po-field/po-combo/po-combo-filter.service';
-import { PoMultiselectFilterService } from '../../po-field/po-multiselect/po-multiselect-filter.service';
-import { PoComboFilter } from '../../po-field/po-combo/interfaces/po-combo-filter.interface';
-import { PoMultiselectFilter } from '../../po-field/po-multiselect/po-multiselect-filter.interface';
-import { PoComboOption } from '../../po-field';
 
 class DynamicViewService implements PoDynamicViewRequest {
   getObjectByValue(id: string): Observable<any> {

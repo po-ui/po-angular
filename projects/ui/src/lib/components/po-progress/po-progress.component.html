@@ -27,6 +27,7 @@
         (p-click)="emitRetry()"
         [p-aria-label]="literals.retry"
         p-kind="tertiary"
+        [p-size]="sizeActions"
       ></po-button>
 
       <po-button
@@ -36,6 +37,7 @@
         [p-disabled]="actionIsDisabled(customAction)"
         [p-label]="customAction.label || ''"
         [p-icon]="customAction.icon"
+        [p-size]="sizeActions"
         (p-click)="callAction()"
       >
       </po-button>
@@ -48,6 +50,7 @@
         [p-disabled]="disabledCancel"
         [p-aria-label]="literals.cancel"
         [p-danger]="true"
+        [p-size]="sizeActions"
       ></po-button>
     </div>
   </div>

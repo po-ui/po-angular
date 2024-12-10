@@ -1,7 +1,13 @@
 <ng-container *ngIf="groupForm; then reuseFormTemplate; else uniqueFormTemplate"></ng-container>
 
 <ng-template #reuseFormTemplate>
-  <po-dynamic-form-fields #fieldsComponent [p-auto-focus]="autoFocus" [p-fields]="fields" [p-value]="value">
+  <po-dynamic-form-fields
+    #fieldsComponent
+    [p-auto-focus]="autoFocus"
+    [p-components-size]="componentsSize"
+    [p-fields]="fields"
+    [p-value]="value"
+  >
   </po-dynamic-form-fields>
 </ng-template>
 
@@ -12,6 +18,7 @@
       [(p-fields)]="fields"
       [p-auto-focus]="autoFocus"
       [p-disabled-form]="disabledForm"
+      [p-components-size]="componentsSize"
       [p-validate]="validate"
       [p-validate-fields]="validateFields"
       [p-validate-on-input]="validateOnInput"

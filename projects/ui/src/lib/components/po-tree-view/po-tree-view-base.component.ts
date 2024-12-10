@@ -1,7 +1,9 @@
-import { EventEmitter, Input, Output, Directive } from '@angular/core';
+import { Directive, EventEmitter, Input, Output } from '@angular/core';
 
-import { convertToBoolean, convertToInt } from '../../utils/util';
+import { convertToBoolean, convertToInt, getDefaultSize, validateSize } from '../../utils/util';
 
+import { PoFieldSize } from '../../enums/po-field-size.enum';
+import { PoThemeService } from '../../services';
 import { PoTreeViewItem } from './po-tree-view-item/po-tree-view-item.interface';
 
 const poTreeViewMaxLevel = 4;
@@ -65,6 +67,7 @@ export class PoTreeViewBaseComponent {
    */
   @Output('p-unselected') unselected = new EventEmitter<PoTreeViewItem>();
 
+  private _componentsSize: string = undefined;
   private _items: Array<PoTreeViewItem> = [];
   private _selectable: boolean = false;
   private _maxLevel = poTreeViewMaxLevel;
@@ -73,6 +76,27 @@ export class PoTreeViewBaseComponent {
   // armazena o value do item selecionado
   selectedValue: string | number;
 
+  /**
+   * @optional
+   *
+   * @description
+   *
+   * Define o tamanho dos componentes de formulário:
+   * - `small`: aplica a medida small de cada componente (disponível apenas para acessibilidade AA).
+   * - `medium`: aplica a medida medium de cada componente.
+   *
+   * > Caso a acessibilidade AA não esteja configurada, o tamanho `medium` será mantido.
+   * Para mais detalhes, consulte a documentação do [po-theme](https://po-ui.io/documentation/po-theme).
+   *
+   * @default `medium`
+   */
+  @Input('p-components-size') set componentsSize(value: string) {
+    this._componentsSize = validateSize(value, this.poThemeService, PoFieldSize);
+  }
+
+  get componentsSize(): string {
+    return this._componentsSize ?? getDefaultSize(this.poThemeService, PoFieldSize);
+  }
   /**
    * Lista de itens do tipo `PoTreeViewItem` que será renderizada pelo componente.
    */
@@ -138,6 +162,8 @@ export class PoTreeViewBaseComponent {
   get maxLevel() {
     return this._maxLevel;
   }
+
+  constructor(protected poThemeService: PoThemeService) {}
 
   protected emitExpanded(treeViewItem: PoTreeViewItem) {
     const event = treeViewItem.expanded ? 'expanded' : 'collapsed';

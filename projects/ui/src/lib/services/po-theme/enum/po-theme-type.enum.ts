@@ -1,22 +1,19 @@
 /**
- * Enum para definir os tipos de tema suportados pelo serviço de temas.
- *
  * @usedBy PoThemeService
  *
- * @example
- *
- * Em um serviço de tema, você pode usar este enum para alternar entre os tipos de temas suportados.
+ * @description
+ * Enum utilizado para configurar o tipo de tema suportado, é possível alternar entre os tipos definidos.
  *
  * ```
  * import { PoThemeTypeEnum } from '@po-ui/theme';
  *
- * // Definindo o tipo de tema para light
+ * // Definindo o tipo de tema como claro
  * themeService.setTheme(...theme, PoThemeTypeEnum.light);
  *
- * // Definindo o tipo de tema para dark
+ * // Definindo o tipo de tema como escuro
  * themeService.setTheme(...theme, PoThemeTypeEnum.dark);
  *
- * // Definir o tipo do tema de um tema já aplicado
+ * // Alterando o tipo do tema para um tema já aplicado
  * themeService.setCurrentThemeType(PoThemeTypeEnum.dark);
  * ```
  */

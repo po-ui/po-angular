@@ -3,9 +3,9 @@ import { TestBed } from '@angular/core/testing';
 
 import { of } from 'rxjs';
 
-import { PoDynamicFormField } from '../po-dynamic-form-field.interface';
-import { PoDynamicFormValidationService } from './po-dynamic-form-validation.service';
 import { provideHttpClient, withInterceptorsFromDi } from '@angular/common/http';
+import { PoDynamicFormField } from '../interfaces/po-dynamic-form-field.interface';
+import { PoDynamicFormValidationService } from './po-dynamic-form-validation.service';
 
 describe('PoDynamicFormValidationService:', () => {
   let httpMock: HttpTestingController;

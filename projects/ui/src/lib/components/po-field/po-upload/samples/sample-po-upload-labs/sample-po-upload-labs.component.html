@@ -21,6 +21,7 @@
   [p-required]="properties.includes('required')"
   [p-show-required]="properties.includes('showRequired')"
   [p-restrictions]="restrictions"
+  [p-size]="size"
   [p-url]="url"
   [p-headers]="headers"
   [p-custom-action]="action"
@@ -152,17 +153,28 @@
     <div *ngIf="properties.includes('showCustomAction')">
       <po-widget p-title="Action Button">
         <form [formGroup]="actionForm" class="po-row">
-          <po-input class="po-sm-6 po-md-4" formControlName="label" p-label="Label" />
-          <po-select class="po-sm-6 po-md-2" formControlName="icon" p-label="Icon" [p-options]="iconOptions" />
-          <po-select class="po-sm-6 po-md-2" formControlName="type" p-label="Type" [p-options]="typeOptions" />
-          <po-switch class="po-sm-6 po-md-2" formControlName="disabled" p-label="Disabled" />
-          <po-switch class="po-sm-6 po-md-2" formControlName="visible" p-label="Visible" />
+          <po-input class="po-md-6 po-lg-4" formControlName="label" p-label="Label" />
+          <po-select class="po-md-6 po-lg-3" formControlName="icon" p-label="Icon" [p-options]="iconOptions" />
+          <po-select class="po-md-6 po-lg-3" formControlName="type" p-label="Type" [p-options]="typeOptions" />
+          <po-switch class="po-md-3 po-lg-2" formControlName="disabled" p-label="Disabled" />
+          <po-switch class="po-md-3 po-lg-2" formControlName="visible" p-label="Visible" />
         </form>
       </po-widget>
     </div>
 
+    <po-radio-group
+      class="po-md-12"
+      name="size"
+      [(ngModel)]="size"
+      p-columns="4"
+      p-label="Size"
+      p-help="Para aplicar o tamanho small, configure o nível de acessibilidade para AA, ajustável no navbar ou serviço de tema (https://po-ui.io/documentation/po-theme)."
+      [p-options]="sizeOptions"
+    >
+    </po-radio-group>
+
     <div class="po-row po-mt-1">
-      <po-button class="po-md-3" p-label="Sample Restore" (p-click)="restore()"> </po-button>
+      <po-button class="po-lg-3 po-md-6" p-label="Sample Restore" (p-click)="restore()"> </po-button>
     </div>
   </form>
 </div>

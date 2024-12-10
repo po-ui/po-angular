@@ -2,10 +2,11 @@ import { Component, OnInit } from '@angular/core';
 
 import {
   PoCheckboxGroupOption,
-  PoSelectOption,
   PoListViewAction,
   PoListViewLiterals,
-  PoNotificationService
+  PoNotificationService,
+  PoRadioGroupOption,
+  PoSelectOption
 } from '@po-ui/ng-components';
 
 @Component({
@@ -16,6 +17,7 @@ import {
 export class SamplePoListViewLabsComponent implements OnInit {
   action: PoListViewAction;
   actions: Array<PoListViewAction>;
+  componentsSize: string = 'medium';
   customLiterals: PoListViewLiterals;
   height: number;
   items: Array<any>;
@@ -37,6 +39,11 @@ export class SamplePoListViewLabsComponent implements OnInit {
     { label: 'Separator', value: 'separator' },
     { label: 'Selected', value: 'selected' },
     { label: 'Visible', value: 'visible' }
+  ];
+
+  readonly componentsSizeOptions: Array<PoRadioGroupOption> = [
+    { label: 'small', value: 'small' },
+    { label: 'medium', value: 'medium' }
   ];
 
   readonly iconOptions: Array<PoSelectOption> = [
@@ -101,6 +108,7 @@ export class SamplePoListViewLabsComponent implements OnInit {
 
   restore() {
     this.actions = [];
+    this.componentsSize = 'medium';
     this.items = [];
     this.height = undefined;
     this.literals = '';

@@ -4,7 +4,7 @@ import { ComponentFixture, TestBed, fakeAsync, tick } from '@angular/core/testin
 import { PoControlPositionService } from '../../services/po-control-position/po-control-position.service';
 import { PoIconModule } from '../po-icon';
 import { PoListBoxModule } from '../po-listbox';
-import { PoSearchFilterMode } from './enum/po-search-filter-mode.enum';
+import { PoSearchFilterMode } from './enums/po-search-filter-mode.enum';
 import { PoSearchFilterSelect } from './interfaces/po-search-filter-select.interface';
 import { PoSearchOption } from './interfaces/po-search-option.interface';
 import { PoSearchComponent } from './po-search.component';

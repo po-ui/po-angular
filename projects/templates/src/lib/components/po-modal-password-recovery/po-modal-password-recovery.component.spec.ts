@@ -256,6 +256,7 @@ describe('PoModalPasswordRecoveryComponent:', () => {
         component.literals.closeButton,
         component['submitAction'],
         component.literals.resendEmailButton,
+        component.componentsSize,
         false
       );
     });
@@ -283,6 +284,7 @@ describe('PoModalPasswordRecoveryComponent:', () => {
         component.literals.continueButton,
         component['cancelAction'],
         component.literals.cancelButton,
+        component.componentsSize,
         true
       );
       expect(component.formModelChangesCheck).toHaveBeenCalledWith(component.smsCodeForm);
@@ -493,6 +495,7 @@ describe('PoModalPasswordRecoveryComponent:', () => {
         primarylabel: '',
         secondaryAction: jasmine.any(Function),
         secondaryLabel: '',
+        componentsSize: undefined,
         disabled: true
       };
 
@@ -501,6 +504,7 @@ describe('PoModalPasswordRecoveryComponent:', () => {
         fakeThis.primarylabel,
         fakeThis.secondaryAction,
         fakeThis.secondaryLabel,
+        fakeThis.componentsSize,
         fakeThis.disabled
       );
 
@@ -517,6 +521,7 @@ describe('PoModalPasswordRecoveryComponent:', () => {
         primarylabel: '',
         secondaryAction: () => {},
         secondaryLabel: '',
+        componentsSize: undefined,
         disabled: true
       };
 
@@ -528,6 +533,7 @@ describe('PoModalPasswordRecoveryComponent:', () => {
         fakeThis.primarylabel,
         fakeThis.secondaryAction,
         fakeThis.secondaryLabel,
+        fakeThis.componentsSize,
         fakeThis.disabled
       );
 

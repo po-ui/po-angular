@@ -1,5 +1,5 @@
-import { PoDynamicFormField } from '../po-dynamic-form-field.interface';
-import { PoDynamicFormResponse } from '../po-dynamic-form-response.interface';
+import { PoDynamicFormField } from '../interfaces/po-dynamic-form-field.interface';
+import { PoDynamicFormResponse } from '../interfaces/po-dynamic-form-response.interface';
 
 /**
  * @usedBy PoDynamicFormComponent

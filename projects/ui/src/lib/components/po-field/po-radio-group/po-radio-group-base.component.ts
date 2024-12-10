@@ -1,9 +1,17 @@
 import { Directive, EventEmitter, Input, Output } from '@angular/core';
-import { AbstractControl, ControlValueAccessor, Validator, Validators } from '@angular/forms';
+import { AbstractControl, ControlValueAccessor, Validator } from '@angular/forms';
 
-import { convertToBoolean, convertToInt, removeDuplicatedOptions } from '../../../utils/util';
+import {
+  convertToBoolean,
+  convertToInt,
+  getDefaultSize,
+  removeDuplicatedOptions,
+  validateSize
+} from '../../../utils/util';
 import { requiredFailed } from '../validators';
 
+import { PoThemeService } from '../../../services';
+import { PoRadioSize } from '../po-radio/enums/po-radio-size.enum';
 import { PoRadioGroupOption } from './po-radio-group-option.interface';
 
 const poRadioGroupColumnsDefaultLength: number = 6;
@@ -183,7 +191,7 @@ export abstract class PoRadioGroupBaseComponent implements ControlValueAccessor,
   private _disabled?: boolean = false;
   private _options: Array<PoRadioGroupOption>;
   private _required?: boolean = false;
-
+  private _size?: string = undefined;
   private onChangePropagate: any = null;
   private validatorChange;
 
@@ -276,10 +284,25 @@ export abstract class PoRadioGroupBaseComponent implements ControlValueAccessor,
    *
    * @description
    *
-   * Define o tamanho do *radio*
+   * Define o tamanho dos radios do componente:
+   * - `small`: 16x16 (disponível apenas para acessibilidade AA).
+   * - `medium`: 24x24.
+   *
+   * > Caso a acessibilidade AA não esteja configurada, o tamanho `medium` será mantido.
+   * Para mais detalhes, consulte a documentação do [po-theme](https://po-ui.io/documentation/po-theme).
+   *
    * @default `medium`
+   *
    */
-  @Input('p-size') size: string;
+  @Input('p-size') set size(value: string) {
+    this._size = validateSize(value, this.poThemeService, PoRadioSize);
+  }
+
+  get size(): string {
+    return this._size ?? getDefaultSize(this.poThemeService, PoRadioSize);
+  }
+
+  constructor(protected poThemeService: PoThemeService) {}
 
   // Função que controla quando deve ser emitido onChange e atualiza o Model
   changeValue(changedValue: any) {
