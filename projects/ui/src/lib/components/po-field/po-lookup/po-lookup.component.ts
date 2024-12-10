@@ -21,6 +21,7 @@ import { PoLanguageService } from '../../../services/po-language/po-language.ser
 import { PoLookupBaseComponent } from './po-lookup-base.component';
 import { PoLookupFilterService } from './services/po-lookup-filter.service';
 import { PoLookupModalService } from './services/po-lookup-modal.service';
+import { PoThemeService } from '../../../services';
 
 /* istanbul ignore next */
 const providers = [
@@ -167,9 +168,10 @@ export class PoLookupComponent extends PoLookupBaseComponent implements AfterVie
     poLookupModalService: PoLookupModalService,
     private cd: ChangeDetectorRef,
     private el: ElementRef,
-    injector: Injector
+    injector: Injector,
+    protected poThemeService: PoThemeService
   ) {
-    super(poLookupFilterService, injector, poLookupModalService, languageService);
+    super(poLookupFilterService, injector, poLookupModalService, languageService, poThemeService);
   }
 
   ngAfterViewInit() {

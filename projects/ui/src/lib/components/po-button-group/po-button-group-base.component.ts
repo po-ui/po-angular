@@ -1,8 +1,9 @@
 import { Input, Directive } from '@angular/core';
 
-import { convertToBoolean } from '../../utils/util';
 import { PoButtonGroupItem } from './po-button-group-item.interface';
-import { PoButtonGroupToggle } from './po-button-group-toggle.enum';
+import { PoButtonGroupToggle } from './enums/po-button-group-toggle.enum';
+import { PoButtonGroupSize } from './enums/po-button-group-size.enum';
+import { PoThemeService } from '../../services';
 
 const PO_TOGGLE_TYPE_DEFAULT = 'none';
 
@@ -40,7 +41,7 @@ const PO_TOGGLE_TYPE_DEFAULT = 'none';
  * | `--line-height`                        | Tamanho da label                                      | `var(--line-height-none)`                       |
  * | `--border-radius`                      | Contém o valor do raio dos cantos do elemento&nbsp;   | `var(--border-radius-md)`                       |
  * | `--border-width`                       | Contém o valor da largura dos cantos do elemento&nbsp;| `var(--border-width-md)`                        |
- * | `--padding`                            | Preenchimento                                         | `0 1em`                                         |
+ * | `--padding`                            | Preenchimento horizontal                              | `var(--spacing-sm)`                             |
  * | `--text-color`                         | Cor do texto                                          | `var(--color-neutral-light-00)`                 |
  * | `--color`                              | Cor principal do botão                                | `var(--color-action-default)`                   |
  * | `--background-color`                   | Cor de background                                     | `var(--color-transparent)`                      |
@@ -64,6 +65,8 @@ export class PoButtonGroupBaseComponent {
   /** Lista de botões. */
   @Input('p-buttons') buttons: Array<PoButtonGroupItem> = [];
 
+  private _size?: string = undefined;
+
   private _toggle?: string = PO_TOGGLE_TYPE_DEFAULT;
 
   /**
@@ -71,9 +74,12 @@ export class PoButtonGroupBaseComponent {
    *
    * @description
    *
-   * Define o modo de seleção de botões.
+   * Permite definir o modo de seleção dos botões no componente.
    *
-   * > Veja os valores válidos no *enum* `PoButtonGroupToggle`.
+   * Valores válidos no enum `PoButtonGroupToggle`:
+   *  - `multiple`: permite múltiplas seleções.
+   *  - `none`: desativa a funcionalidade de seleção.
+   *  - `single`: restringe a seleção a um único botão.
    *
    * @default `none`
    */
@@ -86,6 +92,33 @@ export class PoButtonGroupBaseComponent {
   get toggle(): string {
     return this._toggle;
   }
+
+  /**
+   * @optional
+   *
+   * @description
+   *
+   * Permite definir o tamanho dos botões do componente.
+   *
+   * Valores válidos no enum `PoButtonGroupSize`:
+   * - small
+   * - medium
+   *
+   * > A medida `small` **só estará disponível** quando a acessibilidade AA estiver configurada. Caso contrário, mesmo
+   * que o tamanho seja definido como `small`, a medida padrão `medium` será mantida. Para mais informações sobre como
+   * configurar a acessibilidade AA, consulte a documentação do [po-theme](https://po-ui.io/documentation/po-theme).
+   *
+   * @default `medium`
+   */
+  @Input('p-size') set size(value: string) {
+    this._size = this.validateSize(value);
+  }
+
+  get size(): string {
+    return this._size ?? this.getDefaultSize();
+  }
+
+  constructor(protected poThemeService: PoThemeService) {}
 
   onButtonClick(buttonClicked: PoButtonGroupItem, buttonIndex: number) {
     if (this.toggle === PoButtonGroupToggle.Single) {
@@ -110,5 +143,19 @@ export class PoButtonGroupBaseComponent {
 
   private deselectAllButtons() {
     this.buttons.forEach(button => (button.selected = false));
+  }
+
+  private getDefaultSize(): string {
+    return this.poThemeService.getA11yDefaultSize() === 'small' ? PoButtonGroupSize.small : PoButtonGroupSize.medium;
+  }
+
+  private validateSize(value: string): string {
+    if (value && Object.values(PoButtonGroupSize).includes(value as PoButtonGroupSize)) {
+      if (value === PoButtonGroupSize.small && this.poThemeService.getA11yLevel() !== 'AA') {
+        return PoButtonGroupSize.medium;
+      }
+      return value;
+    }
+    return this.poThemeService.getA11yDefaultSize() === 'small' ? PoButtonGroupSize.small : PoButtonGroupSize.medium;
   }
 }

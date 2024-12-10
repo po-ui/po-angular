@@ -1,6 +1,6 @@
 import { ChangeDetectorRef, Component, OnInit } from '@angular/core';
 
-import { PoCheckboxGroupOption, PoSelectOption, PoSelectOptionGroup } from '@po-ui/ng-components';
+import { PoCheckboxGroupOption, PoRadioGroupOption, PoSelectOption, PoSelectOptionGroup } from '@po-ui/ng-components';
 
 @Component({
   selector: 'sample-po-select-labs',
@@ -20,6 +20,7 @@ export class SamplePoSelectLabsComponent implements OnInit {
   select: string;
   selectedOptionsGroup: string;
   selectOptionGroupSwitch: boolean;
+  size: string;
 
   readonly propertiesOptions: Array<PoCheckboxGroupOption> = [
     { value: 'disabled', label: 'Disabled' },
@@ -27,6 +28,11 @@ export class SamplePoSelectLabsComponent implements OnInit {
     { value: 'required', label: 'Required' },
     { value: 'showRequired', label: 'Show Required' },
     { value: 'readonly', label: 'Read Only' }
+  ];
+
+  public readonly sizeOptions: Array<PoRadioGroupOption> = [
+    { label: 'small', value: 'small' },
+    { label: 'medium', value: 'medium' }
   ];
 
   constructor(private readonly cdr: ChangeDetectorRef) {}
@@ -63,6 +69,7 @@ export class SamplePoSelectLabsComponent implements OnInit {
     this.select = '';
     this.selectOptionGroupSwitch = false;
     this.selectedOptionsGroup = undefined;
+    this.size = 'medium';
   }
 
   restoreSwitch(event: boolean) {

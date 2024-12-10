@@ -18,6 +18,7 @@ import { PoRichTextBaseComponent } from './po-rich-text-base.component';
 import { PoRichTextBodyComponent } from './po-rich-text-body/po-rich-text-body.component';
 import { PoRichTextToolbarComponent } from './po-rich-text-toolbar/po-rich-text-toolbar.component';
 import { PoRichTextService } from './po-rich-text.service';
+import { PoThemeService } from '../../../services';
 
 /* istanbul ignore next */
 const providers = [
@@ -82,9 +83,10 @@ export class PoRichTextComponent
 
   constructor(
     private element: ElementRef,
-    richTextService: PoRichTextService
+    richTextService: PoRichTextService,
+    protected poThemeService: PoThemeService
   ) {
-    super(richTextService);
+    super(richTextService, poThemeService);
   }
 
   ngOnInit(): void {

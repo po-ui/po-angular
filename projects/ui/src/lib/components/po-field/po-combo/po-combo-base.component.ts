@@ -12,9 +12,10 @@ import { poComboLiteralsDefault } from './interfaces/po-combo-literals-default.i
 import { PoComboLiterals } from './interfaces/po-combo-literals.interface';
 import { PoComboOptionGroup } from './interfaces/po-combo-option-group.interface';
 import { PoComboOption } from './interfaces/po-combo-option.interface';
-import { PoComboFilterMode } from './po-combo-filter-mode.enum';
+import { PoComboFilterMode } from './enums/po-combo-filter-mode.enum';
 import { PoComboFilterService } from './po-combo-filter.service';
-import { Subscription } from 'rxjs';
+import { PoFieldSize } from '../enums/po-field-size.enum';
+import { PoThemeService } from '../../../services';
 
 const PO_COMBO_DEBOUNCE_TIME_DEFAULT = 400;
 const PO_COMBO_FIELD_LABEL_DEFAULT = 'label';
@@ -327,6 +328,7 @@ export abstract class PoComboBaseComponent implements ControlValueAccessor, OnIn
   private _options: Array<PoComboOption | PoComboOptionGroup | any> = [];
   private _placeholder: string = '';
   private _required?: boolean = false;
+  private _size?: string = undefined;
   private _sort?: boolean = false;
   private language: string;
   private _infiniteScrollDistance?: number = 100;
@@ -482,6 +484,31 @@ export abstract class PoComboBaseComponent implements ControlValueAccessor, OnIn
    * - Não possuir `p-help` e/ou `p-label`.
    */
   @Input('p-show-required') showRequired: boolean = false;
+
+  /**
+   * @optional
+   *
+   * @description
+   *
+   * Permite definir o tamanho do componente.
+   *
+   * Valores válidos no enum `PoFieldSize`:
+   * - small
+   * - medium
+   *
+   * > A medida `small` **só estará disponível** quando a acessibilidade AA estiver configurada. Caso contrário, mesmo
+   * que o tamanho seja definido como `small`, a medida padrão `medium` será mantida. Para mais informações sobre como
+   * configurar a acessibilidade AA, consulte a documentação do [po-theme](https://po-ui.io/documentation/po-theme).
+   *
+   * @default `medium`
+   */
+  @Input('p-size') set size(value: string) {
+    this._size = this.validateSize(value);
+  }
+
+  get size(): string {
+    return this._size ?? this.getDefaultSize();
+  }
 
   /**
    * @optional
@@ -670,7 +697,8 @@ export abstract class PoComboBaseComponent implements ControlValueAccessor, OnIn
 
   constructor(
     languageService: PoLanguageService,
-    protected changeDetector: ChangeDetectorRef
+    protected changeDetector: ChangeDetectorRef,
+    protected poThemeService: PoThemeService
   ) {
     this.language = languageService.getShortLanguage();
   }
@@ -1011,6 +1039,10 @@ export abstract class PoComboBaseComponent implements ControlValueAccessor, OnIn
     };
   }
 
+  private getDefaultSize(): string {
+    return this.poThemeService.getA11yDefaultSize() === 'small' ? PoFieldSize.small : PoFieldSize.medium;
+  }
+
   private hasDuplicatedOption(options: Array<any>, currentOption: string, accumulatedGroupOptions?: Array<any>) {
     if (accumulatedGroupOptions) {
       return accumulatedGroupOptions.some(option => option[this.dynamicLabel] === currentOption);
@@ -1036,6 +1068,16 @@ export abstract class PoComboBaseComponent implements ControlValueAccessor, OnIn
     if (comboOptionsList.length > 0 && this.sort) {
       return comboOptionsList.sort(this.compareOptions(this.dynamicLabel));
     }
+  }
+
+  private validateSize(value: string): string {
+    if (value && Object.values(PoFieldSize).includes(value as PoFieldSize)) {
+      if (value === PoFieldSize.small && this.poThemeService.getA11yLevel() !== 'AA') {
+        return PoFieldSize.medium;
+      }
+      return value;
+    }
+    return this.poThemeService.getA11yDefaultSize() === 'small' ? PoFieldSize.small : PoFieldSize.medium;
   }
 
   private validateValue(currentOption: any, verifyingOptionsGroup: boolean = false) {

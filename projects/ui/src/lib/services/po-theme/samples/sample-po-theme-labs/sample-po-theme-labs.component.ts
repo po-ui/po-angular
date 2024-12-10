@@ -12,7 +12,8 @@ import {
   poThemeDefaultFeedback,
   poThemeDefaultFeedbackDark,
   poThemeDefaultLightValues,
-  poThemeDefaultNeutrals
+  poThemeDefaultNeutrals,
+  PoThemeA11yEnum
 } from '@po-ui/ng-components';
 
 import { PoModalAction, PoModalComponent } from '@po-ui/ng-components';
@@ -32,10 +33,21 @@ export class SamplePoThemeLabsComponent implements OnInit, OnDestroy {
   email: string = '';
   isSubscribed: boolean = false;
 
+  a11yLevel: PoThemeA11yEnum;
+  a11ySmallDefault: boolean;
   theme: PoThemeTypeEnum = 0;
   themeStorage = 'po-theme-default';
+  a11yLevelStorage = 'po-a11y-AAA';
+  private a11yChangeListenerAAA: any;
+  private a11yChangeListenerAA: any;
+
   private themeChangeListenerDark: any;
   private themeChangeListenerDefault: any;
+
+  readonly a11yLevelOptions: Array<PoRadioGroupOption> = [
+    { label: 'AA', value: 'AA' },
+    { label: 'AAA', value: 'AAA' }
+  ];
 
   readonly themeOptions: Array<PoRadioGroupOption> = [
     { label: 'Light', value: 0 },
@@ -188,15 +200,25 @@ export class SamplePoThemeLabsComponent implements OnInit, OnDestroy {
   ) {
     const _poTheme = this.poTheme.applyTheme();
     if (!_poTheme) {
-      this.poTheme.setTheme(this.poThemeSample, this.theme);
+      this.poTheme.setTheme(this.poThemeSample, this.theme, this.a11yLevel);
       this.theme = this.poThemeSample.active;
     } else {
       this.theme = _poTheme.active || 0;
     }
   }
 
+  changeA11yLevel(value: PoThemeA11yEnum, dispatchEvent = true) {
+    this.poTheme.setCurrentThemeA11y(value);
+    value === 'AA'
+      ? localStorage.setItem('po-ui-a11y', 'po-a11y-AA')
+      : localStorage.setItem('po-ui-a11y', 'po-a11y-AAA');
+    if (dispatchEvent) {
+      window.dispatchEvent(new Event('po-sample-change-a11y'));
+    }
+  }
+
   changeTheme(value: number, dispatchEvent = true) {
-    this.poTheme.setTheme(this.poThemeSample, value);
+    this.poTheme.setTheme(this.poThemeSample, value, this.a11yLevel);
     value === 1
       ? localStorage.setItem('po-ui-theme', 'po-theme-dark')
       : localStorage.setItem('po-ui-theme', 'po-theme-default');
@@ -213,6 +235,17 @@ export class SamplePoThemeLabsComponent implements OnInit, OnDestroy {
     this.theme = this.themeStorage === 'po-theme-default' ? 0 : 1;
     this.changeTheme(this.theme, false);
 
+    if (localStorage.getItem('po-ui-a11y')) {
+      this.a11yLevelStorage = localStorage.getItem('po-ui-a11y');
+    }
+
+    this.a11yLevel = this.a11yLevelStorage === 'po-a11y-AAA' ? PoThemeA11yEnum.AAA : PoThemeA11yEnum.AA;
+    this.changeA11yLevel(this.a11yLevel, false);
+
+    const smallSizePreference = localStorage.getItem('smallSizePreference');
+    this.a11ySmallDefault = smallSizePreference === 'small';
+    this.poTheme.setA11yDefaultSizeSmall(this.a11ySmallDefault);
+
     this.themeChangeListenerDefault = () => {
       this.changeTheme(0, false);
       this.theme = 0;
@@ -223,6 +256,18 @@ export class SamplePoThemeLabsComponent implements OnInit, OnDestroy {
       this.theme = 1;
     };
 
+    this.a11yChangeListenerAAA = () => {
+      this.changeA11yLevel(PoThemeA11yEnum.AAA, false);
+      this.a11yLevel = PoThemeA11yEnum.AAA;
+    };
+
+    this.a11yChangeListenerAA = () => {
+      this.changeA11yLevel(PoThemeA11yEnum.AA, false);
+      this.a11yLevel = PoThemeA11yEnum.AA;
+    };
+
+    window.addEventListener('po-a11y-AA', this.a11yChangeListenerAA);
+    window.addEventListener('po-a11y-AAA', this.a11yChangeListenerAAA);
     window.addEventListener('po-theme-default', this.themeChangeListenerDefault);
     window.addEventListener('po-theme-dark', this.themeChangeListenerDark);
   }
@@ -248,9 +293,20 @@ export class SamplePoThemeLabsComponent implements OnInit, OnDestroy {
   ngOnDestroy(): void {
     window.removeEventListener('po-theme-default', this.themeChangeListenerDefault);
     window.removeEventListener('po-theme-dark', this.themeChangeListenerDark);
+
+    window.removeEventListener('po-a11y-AA', this.a11yChangeListenerAA);
+    window.removeEventListener('po-a11y-AAA', this.a11yChangeListenerAAA);
   }
 
   private disableNotification() {
     this.isSubscribed = true;
+  }
+
+  changeA11ySmallDefault(event: boolean): void {
+    const newPreference = event ? 'small' : 'medium';
+
+    localStorage.setItem('sizeDefaultPreference', newPreference);
+
+    this.poTheme.setA11yDefaultSizeSmall(newPreference === 'small');
   }
 }

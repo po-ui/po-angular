@@ -30,6 +30,7 @@ import { PoButtonComponent } from '../../po-button/po-button.component';
 import { PoCalendarComponent } from '../../po-calendar/po-calendar.component';
 import { PoDatepickerBaseComponent } from './po-datepicker-base.component';
 import { PoDatepickerLiterals } from './po-datepicker.literals';
+import { PoThemeService } from '../../../services';
 
 const poCalendarContentOffset = 8;
 const poCalendarPositionDefault = 'bottom-left';
@@ -125,9 +126,10 @@ export class PoDatepickerComponent extends PoDatepickerBaseComponent implements 
     protected cd: ChangeDetectorRef,
     private controlPosition: PoControlPositionService,
     private renderer: Renderer2,
-    el: ElementRef
+    el: ElementRef,
+    poThemeService: PoThemeService
   ) {
-    super(languageService, cd);
+    super(languageService, cd, poThemeService);
     this.shortLanguage = this.languageService.getShortLanguage();
     this.el = el;
     const language = languageService.getShortLanguage();

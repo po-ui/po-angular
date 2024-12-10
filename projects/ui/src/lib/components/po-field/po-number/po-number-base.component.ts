@@ -1,6 +1,7 @@
 import { ChangeDetectorRef, ElementRef, Directive } from '@angular/core';
 
 import { PoInputGeneric } from '../po-input-generic/po-input-generic';
+import { PoThemeService } from '../../../services';
 
 @Directive()
 export abstract class PoNumberBaseComponent extends PoInputGeneric {
@@ -9,8 +10,12 @@ export abstract class PoNumberBaseComponent extends PoInputGeneric {
   protected invalidInputValueOnBlur = false;
 
   /* istanbul ignore next */
-  constructor(elementRef: ElementRef, cd: ChangeDetectorRef) {
-    super(elementRef, cd);
+  constructor(
+    elementRef: ElementRef,
+    cd: ChangeDetectorRef,
+    protected poThemeService: PoThemeService
+  ) {
+    super(elementRef, cd, poThemeService);
   }
 
   eventOnInput(e: any) {

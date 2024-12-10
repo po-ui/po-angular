@@ -33,6 +33,7 @@ export class SamplePoRadioGroupLabsComponent implements OnInit {
   ];
 
   readonly sizesOptions: Array<PoRadioGroupOption> = [
+    { label: 'Small', value: 'small' },
     { label: 'Medium', value: 'medium' },
     { label: 'Large', value: 'large' }
   ];
@@ -55,7 +56,7 @@ export class SamplePoRadioGroupLabsComponent implements OnInit {
     this.radioGroup = undefined;
     this.properties = [];
     this.fieldErrorMessage = '';
-
+    this.size = 'medium';
     this.option = this.getNewOption();
     this.options = [];
   }

@@ -1,6 +1,6 @@
 import { Component, OnInit } from '@angular/core';
 
-import { PoCheckboxGroupOption, PoSelectOption } from '@po-ui/ng-components';
+import { PoCheckboxGroupOption, PoRadioGroupOption, PoSelectOption } from '@po-ui/ng-components';
 
 @Component({
   selector: 'sample-po-input-labs',
@@ -19,6 +19,7 @@ export class SamplePoInputLabsComponent implements OnInit {
   pattern: string;
   placeholder: string;
   properties: Array<string>;
+  size: string;
 
   public readonly iconOptions: Array<PoSelectOption> = [
     { value: 'ph ph-newspaper', label: 'ph ph-newspaper' },
@@ -40,6 +41,11 @@ export class SamplePoInputLabsComponent implements OnInit {
     { value: 'maskNoLengthValidation', label: 'Mask No Length Validation' }
   ];
 
+  public readonly sizeOptions: Array<PoRadioGroupOption> = [
+    { label: 'small', value: 'small' },
+    { label: 'medium', value: 'medium' }
+  ];
+
   ngOnInit() {
     this.restore();
   }
@@ -50,5 +56,6 @@ export class SamplePoInputLabsComponent implements OnInit {
 
   restore() {
     this.input = undefined;
+    this.size = 'medium';
   }
 }

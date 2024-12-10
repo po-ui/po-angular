@@ -13,6 +13,7 @@ import {
 import { PoMultiselectLiterals } from '../../index';
 import { PoMultiselectOption } from '../po-multiselect-option.interface';
 import { PoListBoxComponent } from './../../../po-listbox/po-listbox.component';
+import { PoFieldSize } from '../../enums/po-field-size.enum';
 
 /**
  * @docsPrivate
@@ -58,6 +59,9 @@ export class PoMultiselectDropdownComponent {
   @Input('p-multiselect-template') multiselectTemplate: TemplateRef<any> | any;
 
   @Input('p-container-width') containerWidth: number;
+
+  /** Tamanho do componente. */
+  @Input('p-size') size: PoFieldSize;
 
   /** Evento disparado a cada tecla digitada na pesquisa. */
   @Output('p-change-search') changeSearch = new EventEmitter();

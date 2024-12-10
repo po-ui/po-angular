@@ -1,1 +1,8 @@
-<po-icon p-icon="ICON_CLEAR_CONTENT po-field-icon" *ngIf="showIcon()" (click)="clear()"> </po-icon>
+<po-icon
+  *ngIf="showIcon()"
+  p-icon="ICON_CLEAR_CONTENT po-field-icon"
+  [class.po-icon-aa]="size === 'small'"
+  [class.po-icon-large]="size === 'large'"
+  (click)="clear()"
+>
+</po-icon>

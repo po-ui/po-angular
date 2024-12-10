@@ -15,6 +15,7 @@ import {
 export class SamplePoButtonGroupLabsComponent implements OnInit {
   button: any;
   buttons: Array<PoButtonGroupItem>;
+  size: string;
   toggle: PoButtonGroupToggle;
 
   iconsOptions: Array<PoRadioGroupOption> = [
@@ -22,6 +23,11 @@ export class SamplePoButtonGroupLabsComponent implements OnInit {
     { label: 'ph ph-calendar-dots', value: 'ph ph-calendar-dots' },
     { label: 'fa fa-podcast', value: 'fa fa-podcast' },
     { label: 'fa fa-calculator', value: 'fa fa-calculator' }
+  ];
+
+  sizeOptions: Array<PoRadioGroupOption> = [
+    { label: 'small', value: 'small' },
+    { label: 'medium', value: 'medium' }
   ];
 
   readonly toggleOptions: Array<PoSelectOption> = [
@@ -53,6 +59,7 @@ export class SamplePoButtonGroupLabsComponent implements OnInit {
   }
 
   restore() {
+    this.size = 'medium';
     this.button = {};
     this.buttons = [];
   }

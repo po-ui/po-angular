@@ -9,6 +9,7 @@ import { PoDynamicFormLoad } from './po-dynamic-form-load/po-dynamic-form-load.i
 import { PoDynamicFormLoadService } from './po-dynamic-form-load/po-dynamic-form-load.service';
 import { PoDynamicFormValidation } from './po-dynamic-form-validation/po-dynamic-form-validation.interface';
 import { PoDynamicFormValidationService } from './po-dynamic-form-validation/po-dynamic-form-validation.service';
+import { PoThemeService } from '../../../services';
 
 /**
  * @docsExtends PoDynamicFormBaseComponent
@@ -65,9 +66,10 @@ export class PoDynamicFormComponent extends PoDynamicFormBaseComponent implement
   constructor(
     private changes: ChangeDetectorRef,
     private loadService: PoDynamicFormLoadService,
-    private validationService: PoDynamicFormValidationService
+    private validationService: PoDynamicFormValidationService,
+    protected poThemeService: PoThemeService
   ) {
-    super();
+    super(poThemeService);
   }
 
   ngOnDestroy() {

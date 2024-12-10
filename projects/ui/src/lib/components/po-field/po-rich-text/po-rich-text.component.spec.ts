@@ -5,10 +5,10 @@ import { BrowserAnimationsModule } from '@angular/platform-browser/animations';
 
 import { PoFieldContainerBottomComponent } from '../po-field-container/po-field-container-bottom/po-field-container-bottom.component';
 import { PoFieldContainerComponent } from '../po-field-container/po-field-container.component';
-import { PoRichTextToolbarActions } from './enum/po-rich-text-toolbar-actions.enum';
 import { PoRichTextBodyComponent } from './po-rich-text-body/po-rich-text-body.component';
 import { PoRichTextToolbarComponent } from './po-rich-text-toolbar/po-rich-text-toolbar.component';
 import { PoRichTextComponent } from './po-rich-text.component';
+import { PoRichTextToolbarActions } from './enum/po-rich-text-toolbar-actions.enum';
 
 describe('PoRichTextComponent:', () => {
   let component: PoRichTextComponent;

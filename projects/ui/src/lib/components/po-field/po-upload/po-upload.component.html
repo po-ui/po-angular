@@ -37,8 +37,10 @@
         #uploadButton
         class="po-upload-button"
         for="file"
+        p-size="medium"
         [p-disabled]="isDisabled"
         [p-label]="selectFileButtonLabel"
+        [p-size]="size"
         (p-click)="selectFiles()"
       >
       </po-button>
@@ -82,8 +84,10 @@
         class="po-upload-send-button"
         [class.po-mt-3]="hasMoreThanFourItems"
         p-kind="primary"
+        p-size="medium"
         [p-disabled]="hasAnyFileUploading(currentFiles)"
         [p-label]="literals.startSending"
+        [p-size]="size"
         (p-click)="uploadFiles(currentFiles)"
       ></po-button>
     </div>

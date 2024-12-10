@@ -3,8 +3,10 @@ import { AbstractControl, ControlValueAccessor, Validator } from '@angular/forms
 
 import { convertToBoolean } from '../../../utils/util';
 import { requiredFailed } from '../validators';
-import { PoRichTextToolbarActions } from './enum/po-rich-text-toolbar-actions.enum';
 import { PoRichTextService } from './po-rich-text.service';
+import { PoFieldSize } from '../enums/po-field-size.enum';
+import { PoRichTextToolbarActions } from './enum/po-rich-text-toolbar-actions.enum';
+import { PoThemeService } from '../../../services';
 
 /**
  * @description
@@ -143,7 +145,7 @@ export abstract class PoRichTextBaseComponent implements ControlValueAccessor, V
   private _placeholder: string;
   private _readonly: boolean;
   private _required: boolean;
-
+  private _size?: string = undefined;
   private validatorChange: any;
   // eslint-disable-next-line
   protected onTouched: any = null;
@@ -219,6 +221,31 @@ export abstract class PoRichTextBaseComponent implements ControlValueAccessor, V
   }
 
   /**
+   * @optional
+   *
+   * @description
+   *
+   * Permite definir o tamanho dos botões do componente.
+   *
+   * Valores válidos no enum `PoFieldSize`:
+   * - small
+   * - medium
+   *
+   * > A medida `small` **só estará disponível** quando a acessibilidade AA estiver configurada. Caso contrário, mesmo
+   * que o tamanho seja definido como `small`, a medida padrão `medium` será mantida. Para mais informações sobre como
+   * configurar a acessibilidade AA, consulte a documentação do [po-theme](https://po-ui.io/documentation/po-theme).
+   *
+   * @default `medium`
+   */
+  @Input('p-size') set size(value: string) {
+    this._size = this.validateSize(value);
+  }
+
+  get size(): string {
+    return this._size ?? this.getDefaultSize();
+  }
+
+  /**
    * Define se a indicação de campo obrigatório será exibida.
    *
    * > Não será exibida a indicação se:
@@ -226,7 +253,10 @@ export abstract class PoRichTextBaseComponent implements ControlValueAccessor, V
    */
   @Input('p-show-required') showRequired: boolean = false;
 
-  constructor(private richTextService: PoRichTextService) {}
+  constructor(
+    private richTextService: PoRichTextService,
+    protected poThemeService: PoThemeService
+  ) {}
 
   // Função implementada do ControlValueAccessor
   // Usada para interceptar as mudanças e não atualizar automaticamente o Model
@@ -272,5 +302,19 @@ export abstract class PoRichTextBaseComponent implements ControlValueAccessor, V
     if (this.validatorChange) {
       this.validatorChange(value);
     }
+  }
+
+  private getDefaultSize(): string {
+    return this.poThemeService.getA11yDefaultSize() === 'small' ? PoFieldSize.small : PoFieldSize.medium;
+  }
+
+  private validateSize(value: string): string {
+    if (value && Object.values(PoFieldSize).includes(value as PoFieldSize)) {
+      if (value === PoFieldSize.small && this.poThemeService.getA11yLevel() !== 'AA') {
+        return PoFieldSize.medium;
+      }
+      return value;
+    }
+    return this.poThemeService.getA11yDefaultSize() === 'small' ? PoFieldSize.small : PoFieldSize.medium;
   }
 }

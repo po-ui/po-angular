@@ -1,6 +1,11 @@
 import { Component, OnInit } from '@angular/core';
 
-import { PoCheckboxGroupOption, PoMultiselectOption, PoRichTextToolbarActions } from '@po-ui/ng-components';
+import {
+  PoCheckboxGroupOption,
+  PoMultiselectOption,
+  PoRadioGroupOption,
+  PoRichTextToolbarActions
+} from '@po-ui/ng-components';
 
 @Component({
   selector: 'sample-po-rich-text-labs',
@@ -15,7 +20,7 @@ export class SamplePoRichTextLabsComponent implements OnInit {
   placeholder: string;
   properties: Array<string>;
   richText: string;
-
+  size: string;
   toolbarHideActions = [PoRichTextToolbarActions.Link];
 
   public readonly toolbarHideActionsOptions: Array<PoMultiselectOption> = [
@@ -34,6 +39,11 @@ export class SamplePoRichTextLabsComponent implements OnInit {
     { value: 'showRequired', label: 'Show Required' }
   ];
 
+  public readonly sizeOptions: Array<PoRadioGroupOption> = [
+    { label: 'small', value: 'small' },
+    { label: 'medium', value: 'medium' }
+  ];
+
   ngOnInit() {
     this.restore();
   }
@@ -49,5 +59,6 @@ export class SamplePoRichTextLabsComponent implements OnInit {
     this.placeholder = '';
     this.properties = [];
     this.richText = '';
+    this.size = 'medium';
   }
 }

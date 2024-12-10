@@ -3,6 +3,7 @@ import { AbstractControl, NG_VALIDATORS, NG_VALUE_ACCESSOR } from '@angular/form
 
 import { convertToBoolean, uuid } from '../../../utils/util';
 import { PoInputGeneric } from '../po-input-generic/po-input-generic';
+import { PoThemeService } from '../../../services';
 
 /**
  * @docsExtends PoInputBaseComponent
@@ -86,8 +87,12 @@ export class PoPasswordComponent extends PoInputGeneric {
   }
 
   /* istanbul ignore next */
-  constructor(el: ElementRef, cd: ChangeDetectorRef) {
-    super(el, cd);
+  constructor(
+    el: ElementRef,
+    cd: ChangeDetectorRef,
+    protected poThemeService: PoThemeService
+  ) {
+    super(el, cd, poThemeService);
   }
 
   extraValidation(c: AbstractControl): { [key: string]: any } {

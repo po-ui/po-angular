@@ -3,6 +3,7 @@ import { ChangeDetectionStrategy, ChangeDetectorRef, Component, ElementRef, Rend
 import { isKeyCodeEnter } from './../../utils/util';
 
 import { PoDropdownBaseComponent } from './po-dropdown-base.component';
+import { PoThemeService } from '../../services';
 
 /**
  * @docsExtends PoDropdownBaseComponent
@@ -40,9 +41,10 @@ export class PoDropdownComponent extends PoDropdownBaseComponent {
 
   constructor(
     private renderer: Renderer2,
-    private changeDetector: ChangeDetectorRef
+    private changeDetector: ChangeDetectorRef,
+    protected poThemeService: PoThemeService
   ) {
-    super();
+    super(poThemeService);
   }
 
   onKeyDown(event: any) {

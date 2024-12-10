@@ -34,6 +34,7 @@ export class SamplePoButtonLabsComponent implements OnInit {
   ];
 
   sizesOptions: Array<PoRadioGroupOption> = [
+    { label: 'small', value: 'small' },
     { label: 'medium', value: 'medium' },
     { label: 'large', value: 'large' }
   ];

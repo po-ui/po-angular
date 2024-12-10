@@ -1,6 +1,11 @@
 import { Component, OnInit } from '@angular/core';
 
-import { PoCheckboxGroupOption, PoUploadFileRestrictions, PoUploadLiterals } from '@po-ui/ng-components';
+import {
+  PoCheckboxGroupOption,
+  PoRadioGroupOption,
+  PoUploadFileRestrictions,
+  PoUploadLiterals
+} from '@po-ui/ng-components';
 
 @Component({
   selector: 'sample-po-upload-labs',
@@ -24,6 +29,8 @@ export class SamplePoUploadLabsComponent implements OnInit {
   url: string;
   headers: { [name: string]: string | Array<string> };
   headersLabs: string;
+  size: string;
+
   public readonly propertiesOptions: Array<PoCheckboxGroupOption> = [
     { value: 'autoupload', label: 'Automatic upload' },
     { value: 'directory', label: 'Directory' },
@@ -38,6 +45,11 @@ export class SamplePoUploadLabsComponent implements OnInit {
     { value: 'restrictionsInfo', label: 'Hide Restrictions Info' },
     { value: 'selectButton', label: 'Hide Select Files Button' },
     { value: 'sendButton', label: 'Hide Send Files Button' }
+  ];
+
+  public readonly sizeOptions: Array<PoRadioGroupOption> = [
+    { label: 'small', value: 'small' },
+    { label: 'medium', value: 'medium' }
   ];
 
   ngOnInit() {
@@ -98,6 +110,7 @@ export class SamplePoUploadLabsComponent implements OnInit {
     this.url = 'https://po-sample-api.onrender.com/v1/uploads/addFile';
     this.headers = undefined;
     this.headersLabs = undefined;
+    this.size = 'medium';
   }
 
   private getValueInBytes(value: number) {

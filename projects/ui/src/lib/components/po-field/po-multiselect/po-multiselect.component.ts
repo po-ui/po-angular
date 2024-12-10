@@ -28,6 +28,7 @@ import { PoMultiselectBaseComponent } from './po-multiselect-base.component';
 import { PoMultiselectFilterService } from './po-multiselect-filter.service';
 import { PoMultiselectOptionTemplateDirective } from './po-multiselect-option-template/po-multiselect-option-template.directive';
 import { PoMultiselectOption } from './po-multiselect-option.interface';
+import { PoThemeService } from '../../../services';
 
 const poMultiselectContainerOffset = 8;
 const poMultiselectContainerPositionDefault = 'bottom';
@@ -150,9 +151,10 @@ export class PoMultiselectComponent
     private el: ElementRef,
     private controlPosition: PoControlPositionService,
     public defaultService: PoMultiselectFilterService,
-    languageService: PoLanguageService
+    languageService: PoLanguageService,
+    protected poThemeService: PoThemeService
   ) {
-    super(languageService);
+    super(languageService, poThemeService);
     const language = languageService.getShortLanguage();
     this.literalsTag = {
       ...literalsTagRemoveOthers[poLocaleDefault],

@@ -3,7 +3,7 @@
   [(ngModel)]="checkbox"
   [p-disabled]="disabled"
   [p-label]="label"
-  [p-size]="size ? 'large' : 'medium'"
+  [p-size]="size"
   (p-change)="changeEvent('p-change')"
 >
 </po-checkbox>
@@ -20,15 +20,23 @@
 
 <form #f="ngForm">
   <div class="po-row">
-    <po-input class="po-sm-6" name="label" [(ngModel)]="label" p-label="Label"> </po-input>
+    <po-input class="po-md-6" name="label" [(ngModel)]="label" p-label="Label"> </po-input>
 
-    <po-switch class="po-sm-3" name="disabled" [(ngModel)]="disabled" p-label="Disabled"> </po-switch>
+    <po-switch class="po-md-6" name="disabled" [(ngModel)]="disabled" p-label="Disabled"> </po-switch>
 
-    <po-switch class="po-sm-3" name="size" [(ngModel)]="size" p-label="Size" p-label-off="medium" p-label-on="large">
-    </po-switch>
+    <po-radio-group
+      class="po-md-12"
+      name="size"
+      [(ngModel)]="size"
+      p-columns="4"
+      p-label="Size"
+      p-help="Defina o nível de acessibilidade AA para habilitar a medida Small."
+      [p-options]="sizeOptions"
+    >
+    </po-radio-group>
   </div>
 
   <div class="po-row">
-    <po-button class="po-md-3" p-label="Sample Restore" (p-click)="restore()"> </po-button>
+    <po-button class="po-lg-3 po-md-6" p-label="Sample Restore" (p-click)="restore()"> </po-button>
   </div>
 </form>

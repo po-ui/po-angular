@@ -10,6 +10,8 @@ import { ElementRef, EventEmitter, Input, Output, Directive } from '@angular/cor
  */
 @Directive()
 export abstract class PoCleanBaseComponent {
+  private _size?: string = undefined;
+
   /** Nesta propriedade deve-se informar o elementRef do campo de entrada que utilizará o po-clean. */
   @Input('p-element-ref') inputRef: ElementRef;
 
@@ -21,6 +23,30 @@ export abstract class PoCleanBaseComponent {
    *
    * @description
    *
+   * Permite definir o tamanho do componente.
+   *
+   * Valores válidos no enum `PoFieldSize`:
+   * - small
+   * - medium
+   *
+   * > A medida `small` **só estará disponível** quando a acessibilidade AA estiver configurada. Caso contrário, mesmo
+   * que o tamanho seja definido como `small`, a medida padrão `medium` será mantida. Para mais informações sobre como
+   * configurar a acessibilidade AA, consulte a documentação do [po-theme](https://po-ui.io/documentation/po-theme).
+   *
+   * @default `medium`
+   */
+  @Input('p-size') set size(value: string) {
+    this._size = value;
+  }
+
+  get size(): string {
+    return this._size;
+  }
+
+  /**
+   * @optional
+   *
+   * @description
    *
    * Evento disparado quando executada ação do po-clean.
    * Este evento deve ser usado para avisar para o componente que está usando o po-clean, que o botão foi disparado,

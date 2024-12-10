@@ -3,13 +3,14 @@ import { CommonModule } from '@angular/common';
 
 import { PoInfoComponent } from './po-info.component';
 import { RouterModule } from '@angular/router';
+import { PoLinkModule } from '../po-link';
 /**
  * @description
  *
  * Módulo do componente po-info.
  */
 @NgModule({
-  imports: [CommonModule, RouterModule],
+  imports: [CommonModule, RouterModule, PoLinkModule],
   declarations: [PoInfoComponent],
   exports: [PoInfoComponent],
   providers: [],

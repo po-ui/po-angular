@@ -1,6 +1,6 @@
 import { Component, OnInit } from '@angular/core';
 
-import { PoCheckboxGroupOption } from '@po-ui/ng-components';
+import { PoCheckboxGroupOption, PoRadioGroupOption } from '@po-ui/ng-components';
 
 @Component({
   selector: 'sample-po-login-labs',
@@ -17,6 +17,7 @@ export class SamplePoLoginLabsComponent implements OnInit {
   pattern: string;
   placeholder: string;
   properties: Array<string>;
+  size: string;
 
   public readonly propertiesOptions: Array<PoCheckboxGroupOption> = [
     { value: 'clean', label: 'Clean' },
@@ -27,6 +28,11 @@ export class SamplePoLoginLabsComponent implements OnInit {
     { value: 'required', label: 'Required' },
     { value: 'requiredFieldErrorMessage', label: 'Required Field Error Message' },
     { value: 'showRequired', label: 'Show Required' }
+  ];
+
+  public readonly sizeOptions: Array<PoRadioGroupOption> = [
+    { label: 'small', value: 'small' },
+    { label: 'medium', value: 'medium' }
   ];
 
   ngOnInit() {
@@ -52,5 +58,6 @@ export class SamplePoLoginLabsComponent implements OnInit {
     this.pattern = '';
     this.placeholder = '';
     this.properties = [];
+    this.size = 'medium';
   }
 }

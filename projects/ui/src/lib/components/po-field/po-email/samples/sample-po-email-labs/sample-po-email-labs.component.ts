@@ -1,6 +1,6 @@
 import { Component, OnInit } from '@angular/core';
 
-import { PoCheckboxGroupOption } from '@po-ui/ng-components';
+import { PoCheckboxGroupOption, PoRadioGroupOption } from '@po-ui/ng-components';
 
 @Component({
   selector: 'sample-po-email-labs',
@@ -16,6 +16,7 @@ export class SamplePoEmailLabsComponent implements OnInit {
   minlength: number;
   placeholder: string;
   properties: Array<string>;
+  size: string;
 
   public readonly propertiesOptions: Array<PoCheckboxGroupOption> = [
     { value: 'clean', label: 'Clean' },
@@ -25,6 +26,11 @@ export class SamplePoEmailLabsComponent implements OnInit {
     { value: 'readonly', label: 'Read Only' },
     { value: 'required', label: 'Required' },
     { value: 'requiredFieldErrorMessage', label: 'Required Field Error Message' }
+  ];
+
+  public readonly sizeOptions: Array<PoRadioGroupOption> = [
+    { label: 'small', value: 'small' },
+    { label: 'medium', value: 'medium' }
   ];
 
   ngOnInit() {
@@ -44,6 +50,8 @@ export class SamplePoEmailLabsComponent implements OnInit {
 
     this.email = '';
     this.event = '';
+
+    this.size = 'medium';
   }
 
   changeEvent(event: string) {

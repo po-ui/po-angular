@@ -17,6 +17,7 @@
         p-hide-restrictions-info
         p-hide-send-button
         p-url="x"
+        p-size="medium"
         [p-drag-drop]="!modal.isHidden"
         [p-disabled]="isUrlValid"
         [p-restrictions]="uploadRestrictions"
@@ -28,6 +29,7 @@
       <po-url
         class="po-md-12 po-mt-3"
         name="url"
+        p-size="medium"
         [(ngModel)]="urlImage"
         [p-label]="literals.urlImage"
         [p-disabled]="isUploadValid"

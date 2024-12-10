@@ -9,6 +9,7 @@ import {
   ViewChild
 } from '@angular/core';
 import { PoListBoxLiterals } from '../interfaces/po-listbox-literals.interface';
+import { PoItemListSize } from '../enums/po-item-list-size.enum';
 
 /**
  * @docsPrivate
@@ -29,6 +30,9 @@ export class PoSearchListComponent {
   @Input('p-literals') literals?: PoListBoxLiterals;
 
   @Input('p-field-value') fieldValue: string;
+
+  /** Tamanho do texto de exibido do item. */
+  @Input('p-size') size: PoItemListSize;
 
   /** Evento que será disparado a cada tecla digitada no campo de busca. */
   @Output('p-change') change = new EventEmitter();

@@ -19,6 +19,8 @@ import { Observable, Subscription, switchMap } from 'rxjs';
 import { poLocaleDefault } from '../../../services/po-language/po-language.constant';
 import { PoLanguageService } from '../../../services/po-language/po-language.service';
 import { PoDatepickerIsoFormat } from './enums/po-datepicker-iso-format.enum';
+import { PoFieldSize } from '../enums/po-field-size.enum';
+import { PoThemeService } from '../../../services';
 
 const poDatepickerFormatDefault: string = 'dd/mm/yyyy';
 
@@ -198,6 +200,7 @@ export abstract class PoDatepickerBaseComponent implements ControlValueAccessor,
   private _noAutocomplete?: boolean = false;
   private _placeholder?: string = '';
   private previousValue: any;
+  private _size?: string = undefined;
   private subscription: Subscription = new Subscription();
   private _date: Date;
 
@@ -273,6 +276,31 @@ export abstract class PoDatepickerBaseComponent implements ControlValueAccessor,
    * - Não possuir `p-help` e/ou `p-label`.
    */
   @Input('p-show-required') showRequired: boolean = false;
+
+  /**
+   * @optional
+   *
+   * @description
+   *
+   * Permite definir o tamanho do componente.
+   *
+   * Valores válidos no enum `PoFieldSize`:
+   * - small
+   * - medium
+   *
+   * > A medida `small` **só estará disponível** quando a acessibilidade AA estiver configurada. Caso contrário, mesmo
+   * que o tamanho seja definido como `small`, a medida padrão `medium` será mantida. Para mais informações sobre como
+   * configurar a acessibilidade AA, consulte a documentação do [po-theme](https://po-ui.io/documentation/po-theme).
+   *
+   * @default `medium`
+   */
+  @Input('p-size') set size(value: string) {
+    this._size = this.validateSize(value);
+  }
+
+  get size(): string {
+    return this._size ?? this.getDefaultSize();
+  }
 
   /** Habilita ação para limpar o campo. */
   // eslint-disable-next-line @typescript-eslint/member-ordering
@@ -435,7 +463,8 @@ export abstract class PoDatepickerBaseComponent implements ControlValueAccessor,
 
   constructor(
     protected languageService: PoLanguageService,
-    protected cd: ChangeDetectorRef
+    protected cd: ChangeDetectorRef,
+    protected poThemeService: PoThemeService
   ) {}
 
   set date(value: any) {
@@ -606,6 +635,20 @@ export abstract class PoDatepickerBaseComponent implements ControlValueAccessor,
       ':' +
       ('00' + (offsetAbsolute % 60)).slice(-2);
     this.hour = 'T00:00:00' + timezone;
+  }
+
+  private getDefaultSize(): string {
+    return this.poThemeService.getA11yDefaultSize() === 'small' ? PoFieldSize.small : PoFieldSize.medium;
+  }
+
+  private validateSize(value: string): string {
+    if (value && Object.values(PoFieldSize).includes(value as PoFieldSize)) {
+      if (value === PoFieldSize.small && this.poThemeService.getA11yLevel() !== 'AA') {
+        return PoFieldSize.medium;
+      }
+      return value;
+    }
+    return this.poThemeService.getA11yDefaultSize() === 'small' ? PoFieldSize.small : PoFieldSize.medium;
   }
 
   abstract writeValue(value: any): void;

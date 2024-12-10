@@ -9,41 +9,50 @@ import { PoThemeTokens } from './po-theme-tokens.interface';
  * Interface para o método `setTheme()`.
  */
 export interface PoTheme {
-  /** Nome do tema: 'default', 'totvs', 'sunset', etc. */
+  /** Nome para o tema:
+   * Ex.: default, totvs, sunset... */
   name: string;
 
-  /** Tipos de tema: 'light' e 'dark' */
+  /** Tipo de tema:
+   * - light
+   * - dark */
   type: PoThemeType | Array<PoThemeType>;
 
-  /** Tipo e nivel de acessibilidade de tema ativo */
+  /** Tipo e nível de acessibilidade de tema ativo */
   active?: PoThemeTypeEnum | PoThemeActive;
 }
 
 /**
  * @docsPrivate
  * @description
- * Interface para os tipos de tema ('light' e 'dark').
+ * Interface para os tipos de tema ('light' | 'dark').
  */
 export interface PoThemeType {
-  /** Tipo de tipo 'light' */
+  /** Tema claro */
   light?: PoThemeTokens;
 
-  /** Tipo de tipo 'dark' */
+  /** Tema escuro */
   dark?: PoThemeTokens;
 
-  /** Nivel de Acessibilidade */
+  /** Nível de acessibilidade dos componentes:
+   * - AA
+   * - AAA */
   a11y?: PoThemeA11yEnum;
 }
 
 /**
  * @docsPrivate
  * @description
- * Interface para o tipo de tema ativo.
+ * Interface para o tema ativo.
  */
 export interface PoThemeActive {
-  /** Tipo de tema ativo */
+  /** Tipo de tema:
+   * - light
+   * - dark */
   type?: PoThemeTypeEnum;
 
-  /** Nivel de Acessibilidade */
+  /** Nível de acessibilidade dos componentes:
+   * - AA
+   * - AAA */
   a11y?: PoThemeA11yEnum;
 }

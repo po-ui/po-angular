@@ -14,18 +14,10 @@ import {
   Output,
   SimpleChanges
 } from '@angular/core';
-import {
-  AbstractControl,
-  ControlValueAccessor,
-  NgControl,
-  UntypedFormControl,
-  Validator,
-  Validators
-} from '@angular/forms';
+import { AbstractControl, ControlValueAccessor, NgControl, UntypedFormControl, Validator } from '@angular/forms';
 import { Subscription } from 'rxjs';
 import { finalize } from 'rxjs/operators';
 
-import { InputBoolean } from '../../../decorators';
 import { convertToBoolean, isTypeof } from '../../../utils/util';
 import { requiredFailed } from '../validators';
 import { PoLookupAdvancedFilter } from './interfaces/po-lookup-advanced-filter.interface';
@@ -35,6 +27,8 @@ import { PoLookupLiterals } from './interfaces/po-lookup-literals.interface';
 import { PoLookupFilterService } from './services/po-lookup-filter.service';
 import { PoLookupModalService } from './services/po-lookup-modal.service';
 import { PoTableColumnSpacing } from '../../po-table/enums/po-table-spacing.enum';
+import { PoFieldSize } from '../enums/po-field-size.enum';
+import { PoThemeService } from '../../../services';
 
 export const poLookupLiteralsDefault = {
   en: <PoLookupLiterals>{
@@ -77,6 +71,8 @@ export abstract class PoLookupBaseComponent
 {
   private _literals?: PoLookupLiterals;
   private language: string;
+  private _size?: string = undefined;
+
   /**
    * @optional
    *
@@ -347,6 +343,31 @@ export abstract class PoLookupBaseComponent
    *
    * @description
    *
+   * Permite definir o tamanho do componente.
+   *
+   * Valores válidos no enum `PoFieldSize`:
+   * - small
+   * - medium
+   *
+   * > A medida `small` **só estará disponível** quando a acessibilidade AA estiver configurada. Caso contrário, mesmo
+   * que o tamanho seja definido como `small`, a medida padrão `medium` será mantida. Para mais informações sobre como
+   * configurar a acessibilidade AA, consulte a documentação do [po-theme](https://po-ui.io/documentation/po-theme).
+   *
+   * @default `medium`
+   */
+  @Input('p-size') set size(value: string) {
+    this._size = this.validateSize(value);
+  }
+
+  get size(): string {
+    return this._size ?? this.getDefaultSize();
+  }
+
+  /**
+   * @optional
+   *
+   * @description
+   *
    * Responsável por aplicar espaçamento nas colunas da tabela contida no lookup.
    *
    * Deve receber um dos valores do enum `PoTableColumnSpacing`.
@@ -594,7 +615,8 @@ export abstract class PoLookupBaseComponent
     private defaultService: PoLookupFilterService,
     @Inject(Injector) private injector: Injector,
     public poLookupModalService: PoLookupModalService,
-    languageService: PoLanguageService
+    languageService: PoLanguageService,
+    protected poThemeService: PoThemeService
   ) {
     this.language = languageService.getShortLanguage();
   }
@@ -789,6 +811,10 @@ export abstract class PoLookupBaseComponent
     }
   }
 
+  private getDefaultSize(): string {
+    return this.poThemeService.getA11yDefaultSize() === 'small' ? PoFieldSize.small : PoFieldSize.medium;
+  }
+
   private setService(service: PoLookupFilter | string) {
     if (isTypeof(service, 'object')) {
       this.service = <PoLookupFilterService>service;
@@ -816,6 +842,16 @@ export abstract class PoLookupBaseComponent
 
       this.keysDescription = this.columns.filter(element => element.fieldLabel).map(element => element.property);
     }
+  }
+
+  private validateSize(value: string): string {
+    if (value && Object.values(PoFieldSize).includes(value as PoFieldSize)) {
+      if (value === PoFieldSize.small && this.poThemeService.getA11yLevel() !== 'AA') {
+        return PoFieldSize.medium;
+      }
+      return value;
+    }
+    return this.poThemeService.getA11yDefaultSize() === 'small' ? PoFieldSize.small : PoFieldSize.medium;
   }
 
   // Atribui um ou mais valores ao campo.
