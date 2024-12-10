@@ -1,10 +1,18 @@
+import { PoThemeA11yEnum, PoThemeService } from '../../services';
 import { expectPropertiesValues } from '../../util-test/util-expect.spec';
 import { convertToBoolean } from '../../utils/util';
 
 import { PoProgressBaseComponent } from './po-progress-base.component';
 
 describe('PoProgressBaseComponent:', () => {
-  const component = new PoProgressBaseComponent();
+  let component: PoProgressBaseComponent;
+  let poThemeServiceMock: jasmine.SpyObj<PoThemeService>;
+
+  beforeEach(() => {
+    poThemeServiceMock = jasmine.createSpyObj('PoThemeService', ['getA11yLevel', 'getA11yDefaultSize']);
+
+    component = new PoProgressBaseComponent(poThemeServiceMock);
+  });
 
   it('should be created', () => {
     expect(component instanceof PoProgressBaseComponent).toBeTruthy();
@@ -35,6 +43,49 @@ describe('PoProgressBaseComponent:', () => {
       expectPropertiesValues(component, 'indeterminate', invalidValues, false);
     });
 
+    describe('p-size-actions', () => {
+      it('should set property with valid values for accessibility level is AA', () => {
+        poThemeServiceMock.getA11yLevel.and.returnValue(PoThemeA11yEnum.AA);
+
+        component.sizeActions = 'small';
+        expect(component.sizeActions).toBe('small');
+
+        component.sizeActions = 'medium';
+        expect(component.sizeActions).toBe('medium');
+      });
+
+      it('should set property with valid values for accessibility level is AAA', () => {
+        poThemeServiceMock.getA11yLevel.and.returnValue(PoThemeA11yEnum.AAA);
+
+        component.sizeActions = 'small';
+        expect(component.sizeActions).toBe('medium');
+
+        component.sizeActions = 'medium';
+        expect(component.sizeActions).toBe('medium');
+      });
+
+      it('should return small when accessibility is AA and getA11yDefaultSize is small', () => {
+        poThemeServiceMock.getA11yLevel.and.returnValue(PoThemeA11yEnum.AA);
+        poThemeServiceMock.getA11yDefaultSize.and.returnValue('small');
+
+        component['_sizeActions'] = undefined;
+        expect(component.sizeActions).toBe('small');
+      });
+
+      it('should return medium when accessibility is AA and getA11yDefaultSize is medium', () => {
+        poThemeServiceMock.getA11yLevel.and.returnValue(PoThemeA11yEnum.AA);
+        poThemeServiceMock.getA11yDefaultSize.and.returnValue('medium');
+
+        component['_sizeActions'] = undefined;
+        expect(component.sizeActions).toBe('medium');
+      });
+
+      it('should return medium when accessibility is AAA, regardless of getA11yDefaultSize', () => {
+        poThemeServiceMock.getA11yLevel.and.returnValue(PoThemeA11yEnum.AAA);
+        component['_sizeActions'] = undefined;
+        expect(component.sizeActions).toBe('medium');
+      });
+    });
     it('p-value: should update property with valid values', () => {
       const validValues = ['1', 25, 100, '50'];
       const expectedValues = [1, 25, 100, 50];

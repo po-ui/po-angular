@@ -18,6 +18,18 @@ export interface PoDialogOptions {
    * > Pode-se informar um conteúdo HTML na mensagem.
    */
   message: string;
+
+  /**
+   * Define o tamanho dos componentes de formulário no dialog:
+   * - `small`: aplica a medida small de cada componente (disponível apenas para acessibilidade AA).
+   * - `medium`: aplica a medida medium de cada componente.
+   *
+   * > Caso a acessibilidade AA não esteja configurada, o tamanho `medium` será mantido.
+   * Para mais detalhes, consulte a documentação do [po-theme](https://po-ui.io/documentation/po-theme).
+   *
+   * @default `medium`
+   */
+  componentsSize?: string;
 }
 
 /**

@@ -3,6 +3,9 @@ import { Directive, EventEmitter, Input, Output, ViewChild } from '@angular/core
 import { poLocaleDefault } from '../../../services/po-language/po-language.constant';
 import { PoLanguageService } from '../../../services/po-language/po-language.service';
 
+import { PoFieldSize } from '../../../enums/po-field-size.enum';
+import { PoThemeService } from '../../../services';
+import { getDefaultSize, validateSize } from '../../../utils/util';
 import { PoBreadcrumb } from '../../po-breadcrumb/po-breadcrumb.interface';
 import { PoPageContentComponent } from '../po-page-content/po-page-content.component';
 import { PoPageEditLiterals } from './po-page-edit-literals.interface';
@@ -86,9 +89,32 @@ export class PoPageEditBaseComponent {
    */
   @Output('p-save-new') saveNew = new EventEmitter();
 
+  private _componentsSize?: string = undefined;
   private _literals: PoPageEditLiterals;
   private _title: string;
   private language: string;
+
+  /**
+   * @optional
+   *
+   * @description
+   *
+   * Define o tamanho dos componentes de formulário no template:
+   * - `small`: aplica a medida small de cada componente (disponível apenas para acessibilidade AA).
+   * - `medium`: aplica a medida medium de cada componente.
+   *
+   * > Caso a acessibilidade AA não esteja configurada, o tamanho `medium` será mantido.
+   * Para mais detalhes, consulte a documentação do [po-theme](https://po-ui.io/documentation/po-theme).
+   *
+   * @default `medium`
+   */
+  @Input('p-components-size') set componentsSize(value: string) {
+    this._componentsSize = validateSize(value, this.poThemeService, PoFieldSize);
+  }
+
+  get componentsSize(): string {
+    return this._componentsSize ?? getDefaultSize(this.poThemeService, PoFieldSize);
+  }
 
   /**
    * @optional
@@ -160,7 +186,10 @@ export class PoPageEditBaseComponent {
    */
   @Input('p-subtitle') subtitle: string;
 
-  constructor(languageService: PoLanguageService) {
+  constructor(
+    languageService: PoLanguageService,
+    protected poThemeService: PoThemeService
+  ) {
     this.language = languageService.getShortLanguage();
   }
 }

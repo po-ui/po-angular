@@ -1,4 +1,4 @@
-import { PoBreadcrumb } from '../po-breadcrumb/po-breadcrumb.interface';
+import { PoBreadcrumb } from '../../po-breadcrumb/po-breadcrumb.interface';
 
 /**
  * @usedBy PoPageComponent

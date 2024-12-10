@@ -3,13 +3,18 @@
   [class.po-list-view-main-container]="!showHeader"
   [style.height.px]="height"
 >
-  <div *ngIf="showHeader" class="po-list-view-main-header">
+  <div
+    *ngIf="showHeader"
+    class="po-list-view-main-header po-pt-1 po-pb-1"
+    [class.po-list-view-main-header-aa]="componentsSize"
+  >
     <div class="po-checkbox-group-item">
       <div class="po-list-view-main-select">
         <po-checkbox
           name="selectAll"
           [(ngModel)]="selectAll"
           [p-label]="literals.selectAll"
+          [p-size]="componentsSize"
           (p-change)="selectAllListItems()"
           (click)="selectAllListItems()"
         ></po-checkbox>
@@ -33,6 +38,7 @@
                 <po-checkbox
                   [(ngModel)]="item.$selected"
                   name="checkbox"
+                  [p-size]="componentsSize"
                   (p-change)="selectListItem(item)"
                   (click)="selectListItem(item)"
                 ></po-checkbox>
@@ -71,6 +77,7 @@
                 [p-icon]="action.icon"
                 [p-label]="action.label"
                 [p-danger]="action.type === 'danger'"
+                [p-size]="componentsSize"
                 (p-click)="onClickAction(action, item)"
               >
               </po-button>
@@ -109,6 +116,7 @@
           <po-button
             p-kind="tertiary"
             [p-label]="item.$showDetail ? literals.hideDetails : literals.showDetails"
+            [p-size]="componentsSize"
             (p-click)="item.$showDetail = !item.$showDetail"
           >
           </po-button>
@@ -119,7 +127,13 @@
 </div>
 
 <div *ngIf="displayShowMoreButton" class="po-mb-2 po-text-center">
-  <po-button [p-disabled]="showMoreDisabled" [p-label]="literals.loadMoreData" (p-click)="onShowMore()"> </po-button>
+  <po-button
+    [p-disabled]="showMoreDisabled"
+    [p-label]="literals.loadMoreData"
+    [p-size]="componentsSize"
+    (p-click)="onShowMore()"
+  >
+  </po-button>
 </div>
 
-<po-popup #popup [p-actions]="actions" [p-target]="popupTarget"> </po-popup>
+<po-popup #popup [p-actions]="actions" [p-size]="componentsSize" [p-target]="popupTarget"> </po-popup>

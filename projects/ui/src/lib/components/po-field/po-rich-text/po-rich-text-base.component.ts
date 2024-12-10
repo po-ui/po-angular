@@ -1,7 +1,9 @@
 import { Directive, EventEmitter, Input, Output } from '@angular/core';
 import { AbstractControl, ControlValueAccessor, Validator } from '@angular/forms';
 
-import { convertToBoolean } from '../../../utils/util';
+import { PoFieldSize } from '../../../enums/po-field-size.enum';
+import { PoThemeService } from '../../../services';
+import { convertToBoolean, getDefaultSize, validateSize } from '../../../utils/util';
 import { requiredFailed } from '../validators';
 import { PoRichTextToolbarActions } from './enum/po-rich-text-toolbar-actions.enum';
 import { PoRichTextService } from './po-rich-text.service';
@@ -202,7 +204,7 @@ export abstract class PoRichTextBaseComponent implements ControlValueAccessor, V
   private _placeholder: string;
   private _readonly: boolean;
   private _required: boolean;
-
+  private _size?: string = undefined;
   private validatorChange: any;
   // eslint-disable-next-line
   protected onTouched: any = null;
@@ -278,6 +280,28 @@ export abstract class PoRichTextBaseComponent implements ControlValueAccessor, V
   }
 
   /**
+   * @optional
+   *
+   * @description
+   *
+   * Define o tamanho do componente:
+   * - `small`: altura dos buttons como 32px (disponível apenas para acessibilidade AA).
+   * - `medium`: altura dos buttons como 44px.
+   *
+   * > Caso a acessibilidade AA não esteja configurada, o tamanho `medium` será mantido.
+   * Para mais detalhes, consulte a documentação do [po-theme](https://po-ui.io/documentation/po-theme).
+   *
+   * @default `medium`
+   */
+  @Input('p-size') set size(value: string) {
+    this._size = validateSize(value, this.poThemeService, PoFieldSize);
+  }
+
+  get size(): string {
+    return this._size ?? getDefaultSize(this.poThemeService, PoFieldSize);
+  }
+
+  /**
    * Define se a indicação de campo obrigatório será exibida.
    *
    * > Não será exibida a indicação se:
@@ -285,7 +309,10 @@ export abstract class PoRichTextBaseComponent implements ControlValueAccessor, V
    */
   @Input('p-show-required') showRequired: boolean = false;
 
-  constructor(private richTextService: PoRichTextService) {}
+  constructor(
+    private richTextService: PoRichTextService,
+    protected poThemeService: PoThemeService
+  ) {}
 
   // Função implementada do ControlValueAccessor
   // Usada para interceptar as mudanças e não atualizar automaticamente o Model

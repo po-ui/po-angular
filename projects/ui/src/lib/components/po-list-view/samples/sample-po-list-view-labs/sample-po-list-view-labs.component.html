@@ -1,5 +1,6 @@
 <po-list-view
   [p-actions]="actions"
+  [p-components-size]="componentsSize"
   [p-height]="height"
   [p-hide-select-all]="properties.includes('hideSelectAll')"
   [p-items]="items"
@@ -49,7 +50,7 @@
 <form #propertiesForm="ngForm">
   <div class="po-row">
     <po-select
-      class="po-md-6"
+      class="po-md-6 po-lg-3"
       name="propertyTitle"
       [(ngModel)]="propertyTitle"
       p-help="Ex.: email"
@@ -59,7 +60,7 @@
     </po-select>
 
     <po-number
-      class="po-md-6"
+      class="po-md-6 po-lg-3"
       name="height"
       [(ngModel)]="height"
       p-help="Ex.: 200"
@@ -67,22 +68,18 @@
       (p-change)="changeLiterals()"
     >
     </po-number>
-  </div>
 
-  <div class="po-row">
     <po-input
-      class="po-md-12"
+      class="po-md-6"
       name="propertyLinkValue"
       [(ngModel)]="propertyLinkValue"
       p-help='Ex.: "http://po.com.br"'
       p-label="Title Link"
     >
     </po-input>
-  </div>
 
-  <div class="po-row">
     <po-input
-      class="po-md-12"
+      class="po-md-12 po-lg-6"
       name="literals"
       [(ngModel)]="literals"
       p-help='Ex.: { "hideDetails": "Esconder detalhes", "showDetails": "Ver detalhes", "loadMoreData": "Ver mais", "noData": "Sem itens cadastrados" }'
@@ -90,6 +87,16 @@
       (p-change)="changeLiterals()"
     >
     </po-input>
+
+    <po-radio-group
+      class="po-lg-6"
+      name="size"
+      [(ngModel)]="componentsSize"
+      p-label="Components size"
+      p-help="Para aplicar o tamanho small, configure o nível de acessibilidade para AA, ajustável no navbar ou serviço de tema (https://po-ui.io/documentation/po-theme)."
+      [p-options]="componentsSizeOptions"
+    >
+    </po-radio-group>
   </div>
 
   <div class="po-row">
@@ -97,7 +104,7 @@
       class="po-md-12"
       name="properties"
       [(ngModel)]="properties"
-      p-columns="3"
+      p-columns="4"
       p-label="Properties"
       p-help='To enable the "Hide Select All" option, you must select the "Select" option first.'
       [p-options]="propertiesOptions"
@@ -111,22 +118,20 @@
 
 <form #actionForm="ngForm">
   <div class="po-row">
-    <po-input class="po-md-4" name="actionAction" [(ngModel)]="action.action" p-clean p-label="Action"> </po-input>
+    <po-input class="po-md-6" name="actionAction" [(ngModel)]="action.action" p-clean p-label="Action"> </po-input>
 
-    <po-input class="po-md-4" name="actionLabel" [(ngModel)]="action.label" p-label="Label" p-required> </po-input>
+    <po-input class="po-md-6" name="actionLabel" [(ngModel)]="action.label" p-label="Label" p-required> </po-input>
 
-    <po-input class="po-md-4" name="actionURL" [(ngModel)]="action.url" p-label="URL"> </po-input>
-  </div>
+    <po-input class="po-md-6" name="actionURL" [(ngModel)]="action.url" p-label="URL"> </po-input>
 
-  <div class="po-row">
-    <po-select class="po-md-3" name="type" [(ngModel)]="action.type" p-label="Type" [p-options]="typeOptions">
+    <po-select class="po-md-6 po-lg-3" name="type" [(ngModel)]="action.type" p-label="Type" [p-options]="typeOptions">
     </po-select>
 
-    <po-select class="po-md-3" name="icon" [(ngModel)]="action.icon" p-label="Icon" [p-options]="iconOptions">
+    <po-select class="po-md-6 po-lg-3" name="icon" [(ngModel)]="action.icon" p-label="Icon" [p-options]="iconOptions">
     </po-select>
 
     <po-checkbox-group
-      class="po-md-6"
+      class="po-md-12"
       name="action"
       [(ngModel)]="action"
       p-columns="4"
@@ -139,7 +144,7 @@
 
   <div class="po-row">
     <po-button
-      class="po-md-6 po-lg-3"
+      class="po-md-4 po-lg-3"
       p-label="Add Action"
       [p-disabled]="actionForm.invalid"
       (p-click)="addAction(action)"
@@ -151,5 +156,5 @@
 <hr />
 
 <div class="po-row">
-  <po-button class="po-md-3" p-label="Sample Restore" (p-click)="actionForm.reset(); restore()"> </po-button>
+  <po-button class="po-lg-3 po-md-6" p-label="Sample Restore" (p-click)="actionForm.reset(); restore()"> </po-button>
 </div>

@@ -1,6 +1,6 @@
 import { Component, OnInit } from '@angular/core';
 
-import { PoCheckboxGroupOption, PoSelectOption, PoTreeViewItem } from '@po-ui/ng-components';
+import { PoCheckboxGroupOption, PoRadioGroupOption, PoSelectOption, PoTreeViewItem } from '@po-ui/ng-components';
 
 @Component({
   selector: 'sample-po-tree-view-labs',
@@ -8,6 +8,7 @@ import { PoCheckboxGroupOption, PoSelectOption, PoTreeViewItem } from '@po-ui/ng
   standalone: false
 })
 export class SamplePoTreeViewLabsComponent implements OnInit {
+  componentsSize: string = 'medium';
   event: string;
   items: Array<PoTreeViewItem>;
   itemProperties: Array<string>;
@@ -17,6 +18,11 @@ export class SamplePoTreeViewLabsComponent implements OnInit {
   treeViewItem: PoTreeViewItem;
   maxLevel: number = 4;
   singleSelect: boolean = false;
+
+  readonly componentsSizeOptions: Array<PoRadioGroupOption> = [
+    { value: 'small', label: 'Small' },
+    { value: 'medium', label: 'Medium' }
+  ];
 
   readonly itemPropertiesOptions: Array<PoCheckboxGroupOption> = [
     { value: 'selected', label: 'Selected' },
@@ -56,6 +62,7 @@ export class SamplePoTreeViewLabsComponent implements OnInit {
   }
 
   restore() {
+    this.componentsSize = 'medium';
     this.event = undefined;
     this.items = [];
     this.parent = undefined;

@@ -9,18 +9,19 @@ import {
   PoLanguageService,
   PoModalAction,
   PoModalComponent,
+  PoThemeService,
   poLocaleDefault
 } from '@po-ui/ng-components';
 
 import { isExternalLink, isTypeof } from '../../utils/util';
 
-import { PoModalPasswordRecoveryComponent } from '../po-modal-password-recovery/po-modal-password-recovery.component';
 import { PoModalPasswordRecoveryType } from '../po-modal-password-recovery/enums/po-modal-password-recovery-type.enum';
-import { PoPageChangePassword } from './interfaces/po-page-change-password.interface';
-import { PoPageChangePasswordBaseComponent } from './po-page-change-password-base.component';
-import { poPageChangePasswordLiterals } from './literals/i18n/po-page-change-password-literals';
+import { PoModalPasswordRecoveryComponent } from '../po-modal-password-recovery/po-modal-password-recovery.component';
 import { PoPageChangePasswordRecovery } from './interfaces/po-page-change-password-recovery.interface';
 import { PoPageChangePasswordRequirement } from './interfaces/po-page-change-password-requirement.interface';
+import { PoPageChangePassword } from './interfaces/po-page-change-password.interface';
+import { poPageChangePasswordLiterals } from './literals/i18n/po-page-change-password-literals';
+import { PoPageChangePasswordBaseComponent } from './po-page-change-password-base.component';
 import { PoPageChangePasswordService } from './po-page-change-password.service';
 
 /**
@@ -100,10 +101,11 @@ export class PoPageChangePasswordComponent
     private router: Router,
     private service: PoPageChangePasswordService,
     private poComponentInjector: PoComponentInjectorService,
+    protected poThemeService: PoThemeService,
     languageService: PoLanguageService,
     viewRef: ViewContainerRef
   ) {
-    super();
+    super(poThemeService);
 
     const language = languageService.getShortLanguage();
 

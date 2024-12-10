@@ -3,7 +3,7 @@
  *
  * @description
  *
- * Define o tipo de seleção dos botões do `po-button-group`.
+ * Tipos de seleção (`p-toggle`) disponíveis para o componente.
  */
 export enum PoButtonGroupToggle {
   /** Seleção múltipla. */

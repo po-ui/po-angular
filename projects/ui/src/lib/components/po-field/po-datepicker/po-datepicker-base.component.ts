@@ -7,15 +7,19 @@ import {
   convertIsoToDate,
   convertToBoolean,
   formatYear,
+  getDefaultSize,
   isTypeof,
   replaceFormatSeparator,
   setYearFrom0To100,
-  validateDateRange
+  validateDateRange,
+  validateSize
 } from '../../../utils/util';
 import { PoMask } from '../po-input/po-mask';
 import { dateFailed, requiredFailed } from './../validators';
 
 import { Observable, Subscription, switchMap } from 'rxjs';
+import { PoFieldSize } from '../../../enums/po-field-size.enum';
+import { PoThemeService } from '../../../services';
 import { poLocaleDefault } from '../../../services/po-language/po-language.constant';
 import { PoLanguageService } from '../../../services/po-language/po-language.service';
 import { PoDatepickerIsoFormat } from './enums/po-datepicker-iso-format.enum';
@@ -244,6 +248,7 @@ export abstract class PoDatepickerBaseComponent implements ControlValueAccessor,
   private _noAutocomplete?: boolean = false;
   private _placeholder?: string = '';
   private previousValue: any;
+  private _size?: string = undefined;
   private subscription: Subscription = new Subscription();
   private _date: Date;
 
@@ -319,6 +324,28 @@ export abstract class PoDatepickerBaseComponent implements ControlValueAccessor,
    * - Não possuir `p-help` e/ou `p-label`.
    */
   @Input('p-show-required') showRequired: boolean = false;
+
+  /**
+   * @optional
+   *
+   * @description
+   *
+   * Define o tamanho do componente:
+   * - `small`: altura do input como 32px (disponível apenas para acessibilidade AA).
+   * - `medium`: altura do input como 44px.
+   *
+   * > Caso a acessibilidade AA não esteja configurada, o tamanho `medium` será mantido.
+   * Para mais detalhes, consulte a documentação do [po-theme](https://po-ui.io/documentation/po-theme).
+   *
+   * @default `medium`
+   */
+  @Input('p-size') set size(value: string) {
+    this._size = validateSize(value, this.poThemeService, PoFieldSize);
+  }
+
+  get size(): string {
+    return this._size ?? getDefaultSize(this.poThemeService, PoFieldSize);
+  }
 
   /** Habilita ação para limpar o campo. */
   // eslint-disable-next-line @typescript-eslint/member-ordering
@@ -481,7 +508,8 @@ export abstract class PoDatepickerBaseComponent implements ControlValueAccessor,
 
   constructor(
     protected languageService: PoLanguageService,
-    protected cd: ChangeDetectorRef
+    protected cd: ChangeDetectorRef,
+    protected poThemeService: PoThemeService
   ) {}
 
   set date(value: any) {

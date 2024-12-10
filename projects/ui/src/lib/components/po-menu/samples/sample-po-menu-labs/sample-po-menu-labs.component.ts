@@ -1,6 +1,12 @@
 import { ChangeDetectorRef, Component, OnInit, ViewChild } from '@angular/core';
 
-import { PoButtonGroupItem, PoMenuComponent, PoMenuItem, PoSelectOption } from '@po-ui/ng-components';
+import {
+  PoButtonGroupItem,
+  PoMenuComponent,
+  PoMenuItem,
+  PoRadioGroupOption,
+  PoSelectOption
+} from '@po-ui/ng-components';
 
 @Component({
   selector: 'sample-po-menu-labs',
@@ -31,6 +37,7 @@ export class SamplePoMenuLabsComponent implements OnInit {
     { label: 'Expand', action: this.expand.bind(this) },
     { label: 'Toggle', action: this.toggle.bind(this) }
   ];
+  componentsSize: string;
   filter: boolean;
   icon: string;
   label: string;
@@ -62,6 +69,11 @@ export class SamplePoMenuLabsComponent implements OnInit {
     { label: 'color-10', value: 'color-10' },
     { label: 'color-11', value: 'color-11' },
     { label: 'color-12', value: 'color-12' }
+  ];
+
+  public readonly componentsSizeOptions: Array<PoRadioGroupOption> = [
+    { label: 'small', value: 'small' },
+    { label: 'medium', value: 'medium' }
   ];
 
   public readonly iconsOptions: Array<PoSelectOption> = [
@@ -157,6 +169,7 @@ export class SamplePoMenuLabsComponent implements OnInit {
   private formReset() {
     this.badgeColor = undefined;
     this.badgeValue = undefined;
+    this.componentsSize = 'medium';
     this.icon = undefined;
     this.label = 'PO Menu';
     this.link = undefined;

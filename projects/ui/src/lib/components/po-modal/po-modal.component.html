@@ -16,6 +16,7 @@
             p-icon="ICON_CLOSE"
             (p-click)="close(true)"
             p-kind="tertiary"
+            [p-size]="componentsSize"
           >
           </po-button>
         </div>
@@ -38,6 +39,7 @@
                 [p-label]="secondaryAction.label"
                 [p-loading]="secondaryAction.loading"
                 p-kind="secondary"
+                [p-size]="componentsSize"
                 (p-click)="secondaryAction.action()"
               >
               </po-button>
@@ -49,6 +51,7 @@
                 [p-label]="primaryAction.label"
                 [p-loading]="primaryAction.loading"
                 p-kind="primary"
+                [p-size]="componentsSize"
                 (p-click)="primaryAction.action()"
               >
               </po-button>

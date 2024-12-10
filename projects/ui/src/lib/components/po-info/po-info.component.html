@@ -28,9 +28,9 @@
 </ng-template>
 
 <ng-template #externalLink>
-  <a class="po-info-value po-info-link" [href]="url" target="_blank">{{ value }}</a>
+  <po-link [p-label]="value" [p-url]="url" [p-open-new-tab]="true"></po-link>
 </ng-template>
 
 <ng-template #internalLink>
-  <a class="po-info-value po-info-link" [routerLink]="url">{{ value }}</a>
+  <po-link [p-label]="value" [p-url]="url" [p-open-new-tab]="false"></po-link>
 </ng-template>

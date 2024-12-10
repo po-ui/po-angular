@@ -20,6 +20,7 @@
   [p-required]="properties.includes('required')"
   [p-required-field-error-message]="properties.includes('requiredFieldErrorMessage')"
   [p-show-required]="properties.includes('showRequired')"
+  [p-size]="size"
   [p-thousand-maxlength]="thousandMaxlength"
   (p-blur)="changeEvent('p-blur')"
   (p-change)="changeEvent('p-change')"
@@ -105,6 +106,17 @@
     [p-options]="propertiesOptions"
   >
   </po-checkbox-group>
+
+  <po-radio-group
+    class="po-md-12"
+    name="size"
+    [(ngModel)]="size"
+    p-columns="4"
+    p-label="Size"
+    p-help="Para aplicar o tamanho small, configure o nível de acessibilidade para AA, ajustável no navbar ou serviço de tema (https://po-ui.io/documentation/po-theme)."
+    [p-options]="sizeOptions"
+  >
+  </po-radio-group>
 
   <div class="po-row">
     <po-button class="po-lg-3 po-md-6" p-label="Sample Restore" (p-click)="restore()"> </po-button>

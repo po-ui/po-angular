@@ -22,7 +22,12 @@
       <ng-container *ngIf="isSelectable; else masterDetailSpace">
         <td class="po-table-column-master-detail-space-checkbox"></td>
         <td class="po-table-column po-table-column-selectable">
-          <po-checkbox name="checkbox" (p-change)="onSelectRow(item)" [p-checkboxValue]="item.$selected"></po-checkbox>
+          <po-checkbox
+            name="checkbox"
+            (p-change)="onSelectRow(item)"
+            [p-checkboxValue]="item.$selected"
+            [p-size]="componentsSize"
+          ></po-checkbox>
         </td>
       </ng-container>
 

@@ -1,18 +1,19 @@
+import { Renderer2, SimpleChange, SimpleChanges } from '@angular/core';
 import { ComponentFixture, fakeAsync, TestBed, tick } from '@angular/core/testing';
 import { By } from '@angular/platform-browser';
-import { PoToaster } from './interface/po-toaster.interface';
-import { PoToasterType } from './enum/po-toaster-type.enum';
-import { PoToasterOrientation } from './enum/po-toaster-orientation.enum';
-import { PoToasterComponent } from './po-toaster.component';
-import { configureTestSuite } from '../../util-test/util-expect.spec';
+import { PoThemeA11yEnum, PoThemeService } from '../../services';
 import { PoButtonModule } from '../po-button';
 import { PoIconModule } from '../po-icon';
 import { PoToasterMode } from './enum/po-toaster-mode.enum';
-import { Renderer2, SimpleChange, SimpleChanges } from '@angular/core';
+import { PoToasterOrientation } from './enum/po-toaster-orientation.enum';
+import { PoToasterType } from './enum/po-toaster-type.enum';
+import { PoToaster } from './interface/po-toaster.interface';
+import { PoToasterComponent } from './po-toaster.component';
 
 describe('PoToasterComponent', () => {
   let component: PoToasterComponent;
   let fixture: ComponentFixture<PoToasterComponent>;
+  let poThemeServiceMock: jasmine.SpyObj<PoThemeService>;
   let renderer: Renderer2;
 
   const toasterErrorWithAction: PoToaster = {
@@ -81,15 +82,15 @@ describe('PoToasterComponent', () => {
     orientation: PoToasterOrientation.Top
   };
 
-  configureTestSuite(() => {
+  beforeEach(() => {
+    poThemeServiceMock = jasmine.createSpyObj('PoThemeService', ['getA11yLevel', 'getA11yDefaultSize']);
+
     TestBed.configureTestingModule({
       imports: [PoButtonModule, PoIconModule],
       declarations: [PoToasterComponent],
-      providers: [Renderer2]
+      providers: [Renderer2, { provide: PoThemeService, useValue: poThemeServiceMock }]
     });
-  });
 
-  beforeEach(() => {
     fixture = TestBed.createComponent(PoToasterComponent);
     component = fixture.componentInstance;
     renderer = fixture.componentRef.injector.get<Renderer2>(Renderer2);
@@ -492,6 +493,50 @@ describe('PoToasterComponent', () => {
       component['toasterType'] = 'po-toaster-info';
 
       expect(component.getToasterType()).toBe('po-toaster-info');
+    });
+
+    describe('p-size-actions', () => {
+      it('should set property with valid values for accessibility level is AA', () => {
+        poThemeServiceMock.getA11yLevel.and.returnValue(PoThemeA11yEnum.AA);
+
+        component.sizeActions = 'small';
+        expect(component.sizeActions).toBe('small');
+
+        component.sizeActions = 'medium';
+        expect(component.sizeActions).toBe('medium');
+      });
+
+      it('should set property with valid values for accessibility level is AAA', () => {
+        poThemeServiceMock.getA11yLevel.and.returnValue(PoThemeA11yEnum.AAA);
+
+        component.sizeActions = 'small';
+        expect(component.sizeActions).toBe('medium');
+
+        component.sizeActions = 'medium';
+        expect(component.sizeActions).toBe('medium');
+      });
+
+      it('should return small when accessibility is AA and getA11yDefaultSize is small', () => {
+        poThemeServiceMock.getA11yLevel.and.returnValue(PoThemeA11yEnum.AA);
+        poThemeServiceMock.getA11yDefaultSize.and.returnValue('small');
+
+        component['_sizeActions'] = undefined;
+        expect(component.sizeActions).toBe('small');
+      });
+
+      it('should return medium when accessibility is AA and getA11yDefaultSize is medium', () => {
+        poThemeServiceMock.getA11yLevel.and.returnValue(PoThemeA11yEnum.AA);
+        poThemeServiceMock.getA11yDefaultSize.and.returnValue('medium');
+
+        component['_sizeActions'] = undefined;
+        expect(component.sizeActions).toBe('medium');
+      });
+
+      it('should return medium when accessibility is AAA, regardless of getA11yDefaultSize', () => {
+        poThemeServiceMock.getA11yLevel.and.returnValue(PoThemeA11yEnum.AAA);
+        component['_sizeActions'] = undefined;
+        expect(component.sizeActions).toBe('medium');
+      });
     });
   });
 });

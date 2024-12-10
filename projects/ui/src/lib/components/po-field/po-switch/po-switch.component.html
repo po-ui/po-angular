@@ -1,9 +1,10 @@
 <po-field-container [p-disabled]="disabled" [p-id]="id" [p-label]="label">
   <div class="po-field-container-content" [attr.name]="name">
-    <div class="po-switch" [attr.data-label-position]="getLabelPosition()">
+    <div class="po-switch" [class.po-switch-aa]="size === 'small'" [attr.data-label-position]="getLabelPosition()">
       <div
         #switchContainer
         class="po-switch-container"
+        [class.po-switch-container-aa]="size === 'small'"
         role="switch"
         [attr.aria-checked]="value"
         [attr.aria-disabled]="disabled"
@@ -13,9 +14,18 @@
         (click)="eventClick()"
         (keydown)="onKeyDown($event)"
       >
-        <div class="po-switch-track">
-          <div class="po-switch-toggle" [attr.aria-label]="value === true ? labelOn : labelOff">
-            <po-icon *ngIf="value === true" class="po-switch-icon" p-icon="ICON_OK"></po-icon>
+        <div class="po-switch-track" [class.po-switch-track-aa]="size === 'small'">
+          <div
+            class="po-switch-toggle"
+            [class.po-switch-toggle-aa]="size === 'small'"
+            [attr.aria-label]="value === true ? labelOn : labelOff"
+          >
+            <po-icon
+              *ngIf="value === true"
+              class="po-switch-icon"
+              [class.po-switch-icon-aa]="size === 'small'"
+              p-icon="ICON_OK"
+            ></po-icon>
           </div>
         </div>
       </div>
@@ -23,6 +33,7 @@
       <po-label
         *ngIf="!hideLabelStatus"
         class="po-switch-label"
+        [class.po-switch-label-aa]="size === 'small'"
         [p-disabled]="disabled"
         [p-label]="value === true ? labelOn : labelOff"
         (click)="eventClick()"

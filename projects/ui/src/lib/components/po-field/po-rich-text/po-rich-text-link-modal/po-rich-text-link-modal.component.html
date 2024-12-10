@@ -1,6 +1,7 @@
 <po-modal
   #modal
   p-hide-close
+  [p-components-size]="size"
   [p-primary-action]="modalConfirmAction"
   [p-secondary-action]="modalCancelAction"
   [p-title]="linkConfirmAction()"
@@ -14,6 +15,7 @@
         p-optional
         [p-label]="literals.linkTextLabel"
         [p-placeholder]="literals.linkTextLabel"
+        [p-size]="size"
       >
       </po-input>
 
@@ -25,6 +27,7 @@
         p-required
         [p-help]="literals.linkUrlTextHelper"
         [p-placeholder]="literals.linkUrlTextPlaceholder"
+        [p-size]="size"
         (p-change-model)="formModelValidate()"
       >
       </po-url>

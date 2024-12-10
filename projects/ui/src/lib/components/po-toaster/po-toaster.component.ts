@@ -11,14 +11,15 @@ import {
 } from '@angular/core';
 
 import { Subject } from 'rxjs';
+import { PoThemeService } from '../../services';
+import { PoLanguageService } from '../../services/po-language';
+import { PoButtonComponent } from '../po-button';
 import { PoToasterMode } from './enum/po-toaster-mode.enum';
 import { PoToasterOrientation } from './enum/po-toaster-orientation.enum';
 import { PoToasterType } from './enum/po-toaster-type.enum';
 import { PoToaster } from './interface/po-toaster.interface';
 import { poToasterLiterals } from './literals/po-toaster.literals';
 import { PoToasterBaseComponent } from './po-toaster-base.component';
-import { PoButtonComponent } from '../po-button';
-import { PoLanguageService } from '../../services/po-language';
 
 const SPACE_BETWEEN_TOASTERS = 8;
 
@@ -65,9 +66,10 @@ export class PoToasterComponent extends PoToasterBaseComponent implements AfterV
   constructor(
     poLanguageService: PoLanguageService,
     public changeDetector: ChangeDetectorRef,
+    protected poThemeService: PoThemeService,
     private renderer?: Renderer2
   ) {
-    super();
+    super(poThemeService);
     this.language = poLanguageService.getShortLanguage();
     this.literals = {
       ...poToasterLiterals[this.language]
@@ -144,6 +146,7 @@ export class PoToasterComponent extends PoToasterBaseComponent implements AfterV
     this.actionLabel = poToaster.actionLabel;
     this.componentRef = poToaster.componentRef;
     this.mode = poToaster.mode;
+    this.sizeActions = poToaster.sizeActions;
     this.showClose = poToaster.showClose;
     this.supportMessage = poToaster.supportMessage;
 

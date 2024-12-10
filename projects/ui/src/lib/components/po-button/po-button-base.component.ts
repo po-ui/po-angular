@@ -1,10 +1,11 @@
 import { Directive, EventEmitter, HostBinding, Input, Output, TemplateRef } from '@angular/core';
 
-import { convertToBoolean } from '../../utils/util';
+import { convertToBoolean, getDefaultSize, validateSize } from '../../utils/util';
 
-import { PoButtonKind } from './po-button-kind.enum';
-import { PoButtonSize } from './po-button-size.enum';
-import { PoButtonType } from './po-button-type.enum';
+import { PoThemeService } from '../../services';
+import { PoButtonKind } from './enums/po-button-kind.enum';
+import { PoButtonSize } from './enums/po-button-size.enum';
+import { PoButtonType } from './enums/po-button-type.enum';
 /**
  * @description
  *
@@ -127,8 +128,7 @@ export class PoButtonBaseComponent {
   private _disabled?: boolean = false;
   private _loading?: boolean = false;
   private _kind?: string = PoButtonKind.secondary;
-  private _size?: string = PoButtonSize.medium;
-
+  private _size?: string = undefined;
   protected hasSize?: boolean = false;
 
   /**
@@ -175,41 +175,13 @@ export class PoButtonBaseComponent {
    *
    * @description
    *
-   * Define o tamanho do `po-button`.
-   *
-   * Valores válidos:
-   * - `medium`: o `po-button` fica do tamanho padrão, com 44px de altura.;
-   * - `large`: o `po-button` fica maior, com 56px de altura.;
-   *
-   * @default `medium`
-   *
-   */
-  @HostBinding('attr.p-size')
-  @Input('p-size')
-  set size(value: string) {
-    this._size = PoButtonSize[value] ? PoButtonSize[value] : PoButtonSize.medium;
-    this.hasSize = true;
-  }
-
-  get size(): string {
-    return this._size;
-  }
-
-  /**
-   * @optional
-   *
-   * @description
-   *
-   * Define o estilo do `po-button`.
-   *
-   * Valores válidos:
-   *  - `primary`: deixa o `po-button` com destaque, deve ser usado para ações primárias.
-   *  - `secondary`: estilo padrão do `po-button`.
-   *  - `tertiary`: o `po-button` é exibido sem cor do fundo, recebendo menos destaque entre as ações.
+   * Define o estilo visual do componente conforme valores especificados no enum `PoButtonKind`:
+   *  - `primary`: destaca o botão, sendo recomendado para ações principais.
+   *  - `secondary`: estilo padrão, ideal para ações secundárias.
+   *  - `tertiary`: exibe o botão sem preenchimento no fundo, indicado para ações opcionais.
    *
    * @default `secondary`
    */
-
   @HostBinding('attr.p-kind')
   @Input('p-kind')
   set kind(value: string) {
@@ -248,4 +220,29 @@ export class PoButtonBaseComponent {
    * > Em caso de botões com apenas ícone a atribuição de valor à esta propriedade é muito importante para acessibilidade.
    */
   @Input('p-aria-label') ariaLabel?: string;
+
+  /**
+   * @optional
+   *
+   * @description
+   *
+   * Define o tamanho do componente:
+   * - `small`: altura de 32px (disponível apenas para acessibilidade AA).
+   * - `medium`: altura de 44px.
+   * - `large`: altura de 56px.
+   *
+   * > Caso a acessibilidade AA não esteja configurada, o tamanho `medium` será mantido.
+   * Para mais detalhes, consulte a documentação do [po-theme](https://po-ui.io/documentation/po-theme).
+   *
+   * @default `medium`
+   */
+  @Input('p-size') set size(value: string) {
+    this._size = validateSize(value, this.poThemeService, PoButtonSize);
+  }
+
+  get size(): string {
+    return this._size ?? getDefaultSize(this.poThemeService, PoButtonSize);
+  }
+
+  constructor(protected poThemeService: PoThemeService) {}
 }

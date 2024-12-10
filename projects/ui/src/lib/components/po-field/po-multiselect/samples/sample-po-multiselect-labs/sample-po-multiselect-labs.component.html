@@ -22,6 +22,7 @@
     [p-required]="properties.includes('required')"
     [p-field-error-message]="fieldErrorMessage"
     [p-show-required]="properties.includes('showRequired')"
+    [p-size]="size"
     [p-sort]="properties.includes('sort')"
     (p-change)="changeEvent('p-change')"
     (p-keydown)="changeEvent('p-keydown')"
@@ -50,7 +51,7 @@
   </div>
 
   <div class="po-row">
-    <po-button class="po-md-4 po-lg-3" p-label="Add Option" [p-disabled]="fOption.form.invalid" (p-click)="addOption()">
+    <po-button class="po-md-4 po-lg-2" p-label="Add Option" [p-disabled]="fOption.form.invalid" (p-click)="addOption()">
     </po-button>
   </div>
 </form>
@@ -102,7 +103,7 @@
   </po-input>
 
   <po-input
-    class="po-md-12"
+    class="po-md-12 po-lg-6"
     name="filterService"
     [(ngModel)]="filterService"
     p-clean
@@ -133,6 +134,17 @@
     p-label="Filter mode"
     [p-disabled]="properties.includes('hideSearch')"
     [p-options]="filterModeOptions"
+  >
+  </po-radio-group>
+
+  <po-radio-group
+    class="po-md-12"
+    name="size"
+    [(ngModel)]="size"
+    p-columns="4"
+    p-label="Size"
+    p-help="Para aplicar o tamanho small, configure o nível de acessibilidade para AA, ajustável no navbar ou serviço de tema (https://po-ui.io/documentation/po-theme)."
+    [p-options]="sizeOptions"
   >
   </po-radio-group>
 

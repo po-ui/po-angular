@@ -18,6 +18,7 @@
         [p-danger]="true"
         [p-disabled]="itemsSelected.length > 1 && serviceDeleteApi !== undefined"
         [p-label]="literals.delete"
+        [p-size]="componentsSize"
         (p-click)="modalDelete.open()"
       ></po-button>
     </div>
@@ -31,6 +32,7 @@
       p-tooltip-position="left"
       [p-aria-label]="literals.columnsManager"
       [p-tooltip]="literals.columnsManager"
+      [p-size]="componentsSize"
       (p-click)="onOpenColumnManager()"
     ></po-button>
   </div>
@@ -40,6 +42,7 @@
       [p-items]="items"
       [p-filter-keys]="filteredColumns"
       [p-filter-type]="filterType"
+      [p-size]="componentsSize"
       (p-filtered-items-change)="onFilteredItemsChange($event)"
     >
     </po-search>
@@ -79,7 +82,12 @@
 
   <div class="po-table-footer" *ngIf="hasFooter">
     <ng-container *ngFor="let column of subtitleColumns; trackBy: trackBy">
-      <po-table-subtitle-footer [p-literals]="literals" [p-subtitles]="column.subtitles"> </po-table-subtitle-footer>
+      <po-table-subtitle-footer
+        [p-components-size]="componentsSize"
+        [p-literals]="literals"
+        [p-subtitles]="column.subtitles"
+      >
+      </po-table-subtitle-footer>
     </ng-container>
   </div>
 </ng-template>
@@ -96,6 +104,7 @@
     [p-disabled]="showMoreDisabled"
     [p-label]="literals.loadMoreData"
     [p-loading]="loadingShowMore"
+    [p-size]="componentsSize"
     (p-click)="onShowMore()"
   >
   </po-button>
@@ -113,7 +122,7 @@
       'po-table-data-fixed-columns': applyFixedColumns(),
       'po-table-text-wrap-enabled': textWrap
     }"
-    [attr.p-spacing]="spacing"
+    [attr.p-spacing]="componentsSize === 'small' ? 'small' : spacing"
   >
     <thead [class.po-table-header-sticky]="height > 0 && !virtualScroll">
       <tr
@@ -132,6 +141,7 @@
             <po-checkbox
               name="selectAll"
               *ngIf="!hideSelectAll"
+              [p-size]="componentsSize"
               (p-change)="selectAllRows()"
               [p-checkboxValue]="selectAll === null ? 'mixed' : selectAll"
             ></po-checkbox>
@@ -425,6 +435,7 @@
               [p-detail]="columnMasterDetail.detail"
               [p-items]="row[nameColumnDetail]"
               [p-parent-row]="row"
+              [p-components-size]="componentsSize"
               (p-select-row)="selectDetailRow($event)"
             >
             </po-table-detail>
@@ -453,7 +464,7 @@
         'po-table-data-fixed-columns': applyFixedColumns(),
         'po-table-text-wrap-enabled': textWrap
       }"
-      [attr.p-spacing]="spacing"
+      [attr.p-spacing]="componentsSize === 'small' ? 'small' : spacing"
     >
       <thead class="po-table-header-sticky" [style.top]="inverseOfTranslation">
         <tr
@@ -473,6 +484,7 @@
                 *ngIf="!hideSelectAll"
                 (p-change)="selectAllRows()"
                 [p-checkboxValue]="selectAll === null ? 'mixed' : selectAll"
+                [p-size]="componentsSize"
               ></po-checkbox>
             </div>
           </th>
@@ -774,6 +786,7 @@
                 [p-detail]="columnMasterDetail.detail"
                 [p-items]="row[nameColumnDetail]"
                 [p-parent-row]="row"
+                [p-components-size]="componentsSize"
                 (p-select-row)="selectDetailRow($event)"
               >
               </po-table-detail>
@@ -785,7 +798,7 @@
   </cdk-virtual-scroll-viewport>
 </ng-template>
 
-<po-popup #popup [p-actions]="actions" [p-target]="popupTarget"> </po-popup>
+<po-popup #popup [p-actions]="actions" [p-size]="componentsSize" [p-target]="popupTarget"> </po-popup>
 
 <ng-template #poTableColumnDetail let-row="row" let-rowIndex="rowIndex">
   <po-icon
@@ -797,7 +810,12 @@
 </ng-template>
 
 <ng-template #inputRadio let-row>
-  <po-radio [name]="idRadio" [p-checked]="row.$selected" (p-change-selected)="selectRow(row)"></po-radio>
+  <po-radio
+    [name]="idRadio"
+    [p-checked]="row.$selected"
+    [p-size]="componentsSize"
+    (p-change-selected)="selectRow(row)"
+  ></po-radio>
 </ng-template>
 
 <ng-template #inputCheckbox let-row>
@@ -805,6 +823,7 @@
     name="checkbox"
     (p-change)="selectable ? selectRow(row) : 'javascript:;'"
     [p-checkboxValue]="row.$selected === null ? 'mixed' : row.$selected"
+    [p-size]="componentsSize"
   ></po-checkbox>
 </ng-template>
 
@@ -936,12 +955,14 @@
   (p-visible-columns-change)="onVisibleColumnsChange($event)"
   (p-change-visible-columns)="onChangeVisibleColumns($event)"
   [p-columns-default]="initialColumns"
+  [p-components-size]="componentsSize"
   (p-initial-columns)="onColumnRestoreManager($event)"
 >
 </po-table-column-manager>
 
 <po-modal
   #modalDelete
+  [p-components-size]="componentsSize"
   [p-title]="literals.delete"
   [p-primary-action]="confirm"
   [p-secondary-action]="close"

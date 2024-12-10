@@ -1,9 +1,11 @@
 import { Directive, EventEmitter, Input, Output } from '@angular/core';
-import { AbstractControl, ControlValueAccessor, Validator, Validators } from '@angular/forms';
+import { AbstractControl, ControlValueAccessor, Validator } from '@angular/forms';
 
 import { requiredFailed } from '../validators';
-import { convertToBoolean, convertToInt, uuid } from './../../../utils/util';
+import { convertToBoolean, convertToInt, getDefaultSize, uuid, validateSize } from './../../../utils/util';
 
+import { PoFieldSize } from '../../../enums/po-field-size.enum';
+import { PoThemeService } from '../../../services';
 import { PoCheckboxGroupOptionView } from './interfaces/po-checkbox-group-option-view.interface';
 import { PoCheckboxGroupOption } from './interfaces/po-checkbox-group-option.interface';
 
@@ -190,6 +192,7 @@ export class PoCheckboxGroupBaseComponent implements ControlValueAccessor, Valid
   private _indeterminate?: boolean = false;
   private _options?: Array<PoCheckboxGroupOption>;
   private _required?: boolean = false;
+  private _size?: string = undefined;
 
   /**
    * @optional
@@ -300,6 +303,31 @@ export class PoCheckboxGroupBaseComponent implements ControlValueAccessor, Valid
    * - Não possuir `p-help` e/ou `p-label`.
    */
   @Input('p-show-required') showRequired: boolean = false;
+
+  /**
+   * @optional
+   *
+   * @description
+   *
+   * Define o tamanho dos checkboxes do componente:
+   * - `small`: 16x16 (disponível apenas para acessibilidade AA).
+   * - `medium`: 24x24.
+   *
+   * > Caso a acessibilidade AA não esteja configurada, o tamanho `medium` será mantido.
+   * Para mais detalhes, consulte a documentação do [po-theme](https://po-ui.io/documentation/po-theme).
+   *
+   * @default `medium`
+   *
+   */
+  @Input('p-size') set size(value: string) {
+    this._size = validateSize(value, this.poThemeService, PoFieldSize);
+  }
+
+  get size(): string {
+    return this._size ?? getDefaultSize(this.poThemeService, PoFieldSize);
+  }
+
+  constructor(protected poThemeService: PoThemeService) {}
 
   changeValue() {
     const value = this.checkIndeterminate();

@@ -12,12 +12,13 @@ import {
   sortOptionsByProperty
 } from '../../../utils/util';
 
+import { PoThemeA11yEnum, PoThemeService } from '../../../services';
 import { poLocaleDefault } from '../../../services/po-language/po-language.constant';
 import { PoLanguageService } from '../../../services/po-language/po-language.service';
+import { PoMultiselectFilterMode } from './enums/po-multiselect-filter-mode.enum';
+import { PoMultiselectFilter } from './interfaces/po-multiselect-filter.interface';
+import { PoMultiselectOption } from './interfaces/po-multiselect-option.interface';
 import { PoMultiselectBaseComponent, poMultiselectLiteralsDefault } from './po-multiselect-base.component';
-import { PoMultiselectFilterMode } from './po-multiselect-filter-mode.enum';
-import { PoMultiselectFilter } from './po-multiselect-filter.interface';
-import { PoMultiselectOption } from './po-multiselect-option.interface';
 
 const poMultiselectFilterServiceStub: PoMultiselectFilter = {
   getFilteredData: function (params: { property: string; value: string }): Observable<Array<PoMultiselectOption>> {
@@ -39,8 +40,8 @@ const defaultService: any = {
 
 @Directive()
 class PoMultiselectTestComponent extends PoMultiselectBaseComponent {
-  constructor() {
-    super(new PoLanguageService());
+  constructor(poThemeService: PoThemeService) {
+    super(new PoLanguageService(), poThemeService);
   }
 
   applyFilter(value?: string): Observable<Array<PoMultiselectOption>> {
@@ -52,8 +53,11 @@ class PoMultiselectTestComponent extends PoMultiselectBaseComponent {
 
 describe('PoMultiselectBaseComponent:', () => {
   let component;
+  let poThemeServiceMock: jasmine.SpyObj<PoThemeService>;
+
   beforeEach(() => {
-    component = new PoMultiselectTestComponent();
+    poThemeServiceMock = jasmine.createSpyObj('PoThemeService', ['getA11yLevel', 'getA11yDefaultSize']);
+    component = new PoMultiselectTestComponent(poThemeServiceMock);
   });
 
   it('should be created', () => {
@@ -702,6 +706,50 @@ describe('PoMultiselectBaseComponent:', () => {
       component.debounceTime = 600;
 
       expect(component.debounceTime).toBe(600);
+    });
+
+    describe('p-size', () => {
+      it('should set property with valid values for accessibility level is AA', () => {
+        poThemeServiceMock.getA11yLevel.and.returnValue(PoThemeA11yEnum.AA);
+
+        component.size = 'small';
+        expect(component.size).toBe('small');
+
+        component.size = 'medium';
+        expect(component.size).toBe('medium');
+      });
+
+      it('should set property with valid values for accessibility level is AAA', () => {
+        poThemeServiceMock.getA11yLevel.and.returnValue(PoThemeA11yEnum.AAA);
+
+        component.size = 'small';
+        expect(component.size).toBe('medium');
+
+        component.size = 'medium';
+        expect(component.size).toBe('medium');
+      });
+
+      it('should return small when accessibility is AA and getA11yDefaultSize is small', () => {
+        poThemeServiceMock.getA11yLevel.and.returnValue(PoThemeA11yEnum.AA);
+        poThemeServiceMock.getA11yDefaultSize.and.returnValue('small');
+
+        component['_size'] = undefined;
+        expect(component.size).toBe('small');
+      });
+
+      it('should return medium when accessibility is AA and getA11yDefaultSize is medium', () => {
+        poThemeServiceMock.getA11yLevel.and.returnValue(PoThemeA11yEnum.AA);
+        poThemeServiceMock.getA11yDefaultSize.and.returnValue('medium');
+
+        component['_size'] = undefined;
+        expect(component.size).toBe('medium');
+      });
+
+      it('should return medium when accessibility is AAA, regardless of getA11yDefaultSize', () => {
+        poThemeServiceMock.getA11yLevel.and.returnValue(PoThemeA11yEnum.AAA);
+        component['_size'] = undefined;
+        expect(component.size).toBe('medium');
+      });
     });
   });
 

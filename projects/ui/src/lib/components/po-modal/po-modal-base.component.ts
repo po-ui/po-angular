@@ -1,8 +1,10 @@
-import { Input, EventEmitter, Directive, Output, TemplateRef } from '@angular/core';
+import { Directive, EventEmitter, Input, Output, TemplateRef } from '@angular/core';
 
-import { convertToBoolean } from './../../utils/util';
+import { convertToBoolean, getDefaultSize, validateSize } from './../../utils/util';
 import { PoModalAction } from './po-modal-action.interface';
 
+import { PoFieldSize } from '../../enums/po-field-size.enum';
+import { PoThemeService } from '../../services';
 import { PoLanguageService } from '../../services/po-language/po-language.service';
 import { poModalLiterals } from './po-modal.literals';
 
@@ -69,7 +71,7 @@ export class PoModalBaseComponent {
 
   // Event emmiter para quando a modal é fechada pelo 'X'.
   public onXClosed = new EventEmitter<boolean>();
-
+  private _componentsSize?: string = undefined;
   private _hideClose?: boolean = false;
   private _size?: string = 'md';
 
@@ -104,6 +106,28 @@ export class PoModalBaseComponent {
   clickOut?: boolean = false;
   @Input('p-click-out') set setClickOut(value: boolean | string) {
     this.clickOut = value === '' ? false : convertToBoolean(value);
+  }
+
+  /**
+   * @optional
+   *
+   * @description
+   *
+   * Define o tamanho dos componentes de formulário no modal:
+   * - `small`: aplica a medida small de cada componente (disponível apenas para acessibilidade AA).
+   * - `medium`: aplica a medida medium de cada componente.
+   *
+   * > Caso a acessibilidade AA não esteja configurada, o tamanho `medium` será mantido.
+   * Para mais detalhes, consulte a documentação do [po-theme](https://po-ui.io/documentation/po-theme).
+   *
+   * @default `medium`
+   */
+  @Input('p-components-size') set componentsSize(value: string) {
+    this._componentsSize = validateSize(value, this.poThemeService, PoFieldSize);
+  }
+
+  get componentsSize(): string {
+    return this._componentsSize ?? getDefaultSize(this.poThemeService, PoFieldSize);
   }
 
   /**
@@ -150,7 +174,10 @@ export class PoModalBaseComponent {
    */
   @Input('p-icon') icon?: string | TemplateRef<void>;
 
-  constructor(poLanguageService: PoLanguageService) {
+  constructor(
+    poLanguageService: PoLanguageService,
+    protected poThemeService: PoThemeService
+  ) {
     this.language = poLanguageService.getShortLanguage();
 
     this.literals = {
