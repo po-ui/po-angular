@@ -30,13 +30,14 @@ export class AppComponent implements OnInit, OnDestroy {
     private poTheme: PoThemeService,
     public router: Router
   ) {
-    const _poTheme = this.poTheme.applyTheme();
+    const _poTheme = this.poTheme.persistThemeActive();
     if (!_poTheme) {
       this.theme = poThemeConstant.active;
-      this.poTheme.setTheme(poThemeConstant, this.theme);
     } else {
-      this.theme = typeof _poTheme.active === 'object' ? _poTheme.active.type : _poTheme.active;
+      this.theme = _poTheme.active || 0;
     }
+
+    this.poTheme.setTheme(poThemeConstant, this.theme);
   }
 
   async ngOnInit() {

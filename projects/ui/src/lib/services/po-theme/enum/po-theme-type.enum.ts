@@ -15,9 +15,6 @@
  *
  * // Definindo o tipo de tema para dark
  * themeService.setTheme(...theme, PoThemeTypeEnum.dark);
- *
- * // Definir o tipo do tema de um tema já aplicado
- * themeService.setCurrentThemeType(PoThemeTypeEnum.dark);
  * ```
  */
 export enum PoThemeTypeEnum {

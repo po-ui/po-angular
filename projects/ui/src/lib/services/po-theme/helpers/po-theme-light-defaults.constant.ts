@@ -3,7 +3,7 @@ import {
   PoThemeColorFeedback,
   PoThemeColorNeutral,
   poThemeColorBrand
-} from '../../interfaces/po-theme-color.interface';
+} from '../interfaces/po-theme-color.interface';
 
 /**
  * Define as cores de ação padrão para temas claros.
@@ -93,9 +93,6 @@ const poThemeDefaultFeedback: PoThemeColorFeedback = {
   }
 };
 
-/**
- * Define as cores da Brand padrão para temas claros.
- */
 const poThemeDefaultBrands: poThemeColorBrand = {
   '01': {
     lightest: '#f2eaf6',
@@ -115,11 +112,34 @@ const poThemeDefaultBrands: poThemeColorBrand = {
 };
 
 /**
- * Define estilos específicos por componente e onRoot para temas claros para AAA.
+ * Define estilos específicos por componente e onRoot para temas claros.
  */
 const poThemeDefaultLightValues = {
   perComponent: {},
-  onRoot: {}
+  onRoot: {
+    /* WIDGET */
+    '--color-widget-color-action-active': 'var(--color-primary-dark-20)',
+    '--color-widget-color-action-hover': 'var(--color-primary-dark-20)',
+    '--color-widget-color-action': 'var(--color-brand-02-base)',
+    '--color-widget-color-default': 'var(--color-neutral-dark-70)',
+    '--color-widget-color-title-action': 'var(--color-brand-02-base)',
+    '--color-widget-color-widget-primary': 'var(--color-neutral-dark-90)',
+    /* CALENDAR */
+    '--color-calendar-arrow': 'var(--color-brand-02-base)',
+    '--color-calendar-title': 'var(--color-brand-02-base)',
+    '--color-calendar-text-box-background-active': 'var(--color-neutral-dark-90)',
+    '--color-calendar-background-color-border-today': 'var(--color-brand-02-base)',
+    '--color-calendar-color-box-foreground': 'var(--color-neutral-dark-70)',
+    '--color-calendar-color-box-foreground-selected': 'var(--color-neutral-dark-90)',
+    '--color-calendar-color-box-foreground-pressed': 'var(--color-neutral-dark-90)',
+    '--color-calendar-color-box-foreground-range': 'var(--color-brand-02-base)',
+    '--color-calendar-color-box-foreground-today': 'var(--color-brand-02-base)',
+    /* TOOLBAR */
+    '--color-toolbar-color-default': 'var(--color-brand-02-base)',
+    '--color-toolbar-color-title': 'var(--color-action-default)',
+    /* CALENDAR */
+    '--color-calendar-background-color-box-background-range': 'var(--color-primary-light-80)'
+  }
 };
 
 export {

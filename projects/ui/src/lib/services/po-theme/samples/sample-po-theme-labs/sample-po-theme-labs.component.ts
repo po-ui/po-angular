@@ -186,13 +186,14 @@ export class SamplePoThemeLabsComponent implements OnInit, OnDestroy {
     private poNotification: PoNotificationService,
     private poTheme: PoThemeService
   ) {
-    const _poTheme = this.poTheme.applyTheme();
+    const _poTheme = this.poTheme.persistThemeActive();
     if (!_poTheme) {
-      this.poTheme.setTheme(this.poThemeSample, this.theme);
       this.theme = this.poThemeSample.active;
     } else {
       this.theme = _poTheme.active || 0;
     }
+
+    this.poTheme.setTheme(this.poThemeSample, this.theme);
   }
 
   changeTheme(value: number, dispatchEvent = true) {

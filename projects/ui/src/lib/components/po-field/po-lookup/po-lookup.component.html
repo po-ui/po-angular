@@ -6,53 +6,39 @@
   [p-required]="required"
   [p-show-required]="showRequired"
 >
-  <div
-    class="po-field-container-content po-lookup"
-    [class.po-lookup-disabled]="disabled"
-    *ngIf="!disclaimers.length; else disclaimersTemplate"
-  >
-    <div class="po-search-container-wrapper">
-      <input
-        #inp
-        class="po-lookup-input po-lookup-input-trigger"
-        [ngClass]="clean && inp.value ? 'po-input-double-icon-right' : 'po-input-icon-right'"
-        [id]="id"
-        type="text"
-        [autocomplete]="autocomplete"
+  <div class="po-lookup" [class.po-lookup-disabled]="disabled" *ngIf="!disclaimers.length; else disclaimersTemplate">
+    <input
+      #inp
+      class="po-lookup-input po-lookup-input-trigger"
+      [ngClass]="clean && inp.value ? 'po-input-double-icon-right' : 'po-input-icon-right'"
+      [id]="id"
+      type="text"
+      [autocomplete]="autocomplete"
+      [disabled]="disabled"
+      [placeholder]="placeholder"
+      [required]="required"
+      (blur)="searchEvent()"
+    />
+    <div class="po-lookup-buttons">
+      <button
+        *ngIf="clean && !disabled && !!inp.value"
+        type="button"
+        class="po-lookup-button po-lookup-button-clean"
+        [ariaLabel]="literals.clean"
+        (click)="cleanModel()"
+      >
+        <po-clean class="po-icon-input"></po-clean>
+      </button>
+      <button
+        #iconLookup
+        class="po-lookup-button po-lookup-button-trigger"
+        [class.po-lookup-button-disabled]="disabled"
+        [ariaLabel]="literals.search"
+        (click)="openLookup()"
         [disabled]="disabled"
-        [placeholder]="placeholder"
-        [required]="required"
-        (blur)="searchEvent()"
-      />
-
-      <div class="po-field-icon-container-right po-lookup-buttons">
-        <po-clean
-          *ngIf="clean && !disabled && !!inp.value"
-          tabindex="0"
-          role="button"
-          [attr.aria-label]="literals.clean"
-          class="po-icon-input po-lookup-button po-lookup-button-clean"
-          class="po-lookup-button po-lookup-button-clean"
-          [p-element-ref]="inp"
-          (p-change-event)="cleanModel()"
-          (click)="cleanModel(); $event.preventDefault()"
-          (keydown.enter)="cleanModel(); $event.preventDefault()"
-        >
-        </po-clean>
-        <div
-          #iconLookup
-          tabindex="0"
-          role="button"
-          class="po-lookup-button po-lookup-button-trigger po-field-icon"
-          [class.po-field-icon-disabled]="disabled"
-          [ariaLabel]="literals.search"
-          (p-change-event)="openLookup()"
-          (click)="openLookup(); $event.preventDefault()"
-          (keydown.enter)="openLookup(); $event.preventDefault()"
-        >
-          <po-icon p-icon="ICON_SEARCH" [class.po-field-icon]="!disabled"></po-icon>
-        </div>
-      </div>
+      >
+        <po-icon p-icon="ICON_SEARCH" class="po-icon-input"></po-icon>
+      </button>
     </div>
   </div>
   <po-field-container-bottom
@@ -89,32 +75,26 @@
       >
       </po-disclaimer>
     </div>
-    <div class="po-field-icon-container-right po-lookup-buttons">
-      <po-clean
-        *ngIf="clean && !disabled && !!inp.value"
-        tabindex="0"
-        role="button"
-        [attr.aria-label]="literals.clean"
+    <div class="po-lookup-buttons">
+      <button
+        *ngIf="clean && !disabled"
+        type="button"
         class="po-lookup-button po-lookup-button-clean"
-        [p-element-ref]="inp"
-        (p-change-event)="cleanModel()"
-        (click)="cleanModel(); $event.preventDefault()"
-        (keydown.enter)="cleanModel(); $event.preventDefault()"
+        [disabled]="disabled"
+        [ariaLabel]="literals.clean"
+        (click)="cleanModel()"
       >
-      </po-clean>
-      <div
+        <po-clean class="po-icon-input"></po-clean>
+      </button>
+      <button
         #iconLookup
-        tabindex="0"
-        role="button"
-        class="po-lookup-button po-lookup-button-trigger po-field-icon"
-        [class.po-field-icon-disabled]="disabled"
+        class="po-lookup-button po-lookup-button-trigger"
         [ariaLabel]="literals.search"
-        (p-change-event)="openLookup()"
-        (click)="openLookup(); $event.preventDefault()"
-        (keydown.enter)="openLookup(); $event.preventDefault()"
+        (click)="openLookup()"
+        [disabled]="disabled"
       >
-        <po-icon p-icon="ICON_SEARCH" [class.po-field-icon]="!disabled"></po-icon>
-      </div>
+        <po-icon p-icon="ICON_SEARCH" class="po-icon-input"></po-icon>
+      </button>
     </div>
   </div>
 </ng-template>
