@@ -238,6 +238,10 @@ p {
   }
 }
 
+.widget-items > .po-widget {
+  height: 255px;
+}
+
 .widget-color > .po-widget {
   background-color: var(--color-neutral-light-10);
 }

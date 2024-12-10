@@ -27,7 +27,6 @@ speed-measure-plugin.json
 .vscode
 
 # IDE - VSCode
-.vscode
 .vscode/*
 !.vscode/settings.json
 !.vscode/tasks.json
@@ -36,7 +35,6 @@ speed-measure-plugin.json
 .history/*
 
 # misc
-.angular
 /.angular/cache
 /.sass-cache
 /connect.lock
