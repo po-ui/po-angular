@@ -11,10 +11,11 @@
       <div
         #dateRangeField
         class="po-datepicker-range-field po-input"
+        [class.po-input-aa]="size === 'small'"
         [class.po-datepicker-range-field-disabled]="disabled"
         [attr.disabled]="disabled"
       >
-        <div class="po-datepicker-range-start-date">
+        <div class="po-datepicker-range-start-date" [class.po-datepicker-range-start-date-aa]="size === 'small'">
           <input
             #startDateInput
             class="po-datepicker-range-input"
@@ -54,7 +55,7 @@
         </div>
 
         <div class="po-datepicker-range-icon">
-          <po-clean class="po-icon-input" *ngIf="enableCleaner" (p-change-event)="clear()"></po-clean>
+          <po-clean *ngIf="enableCleaner" [p-size]="size" (p-change-event)="clear()"></po-clean>
         </div>
 
         <div class="po-datepicker-range-icon">
@@ -63,6 +64,7 @@
             [p-icon]="!disabled || !readonly ? 'ICON_CALENDAR po-clickable' : 'ICON_CALENDAR'"
             class="po-field-icon {{ disabled ? 'po-icon-input-disabled' : 'po-icon-input' }}"
             [class.po-field-icon-disabled]="disabled || readonly"
+            [class.po-field-icon-aa]="size === 'small'"
             (click)="toggleCalendar()"
           >
           </po-icon>

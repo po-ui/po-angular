@@ -1,4 +1,4 @@
-export * from './po-dialog.enum';
+export * from './enums/po-dialog.enum';
 export * from './interfaces/po-dialog-alert-literals.interface';
 export * from './interfaces/po-dialog-confirm-literals.interface';
 export * from './interfaces/po-dialog.interface';

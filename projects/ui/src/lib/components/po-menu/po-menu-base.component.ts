@@ -1,7 +1,18 @@
 import { Directive, Input } from '@angular/core';
 
-import { convertToBoolean, convertToInt, isExternalLink, isTypeof, uuid, validValue } from '../../utils/util';
+import {
+  convertToBoolean,
+  convertToInt,
+  getDefaultSize,
+  isExternalLink,
+  isTypeof,
+  uuid,
+  validateSize,
+  validValue
+} from '../../utils/util';
 
+import { PoFieldSize } from '../../enums/po-field-size.enum';
+import { PoThemeService } from '../../services';
 import { PoLanguageService } from '../../services/po-language/po-language.service';
 import { PoMenuFilter } from './po-menu-filter/po-menu-filter.interface';
 import { PoMenuItem } from './po-menu-item.interface';
@@ -96,6 +107,7 @@ export abstract class PoMenuBaseComponent {
   readonly literals: any;
 
   private _collapsed = false;
+  private _componentsSize: string = undefined;
   private _filter = false;
   private _searchTreeItems = false;
   private _level;
@@ -143,6 +155,28 @@ export abstract class PoMenuBaseComponent {
 
   get collapsed() {
     return this._collapsed;
+  }
+
+  /**
+   * @optional
+   *
+   * @description
+   *
+   * Define o tamanho dos componentes de formulário no menu:
+   * - `small`: aplica a medida small de cada componente (disponível apenas para acessibilidade AA).
+   * - `medium`: aplica a medida medium de cada componente.
+   *
+   * > Caso a acessibilidade AA não esteja configurada, o tamanho `medium` será mantido.
+   * Para mais detalhes, consulte a documentação do [po-theme](https://po-ui.io/documentation/po-theme).
+   *
+   * @default `medium`
+   */
+  @Input('p-components-size') set componentsSize(value: string) {
+    this._componentsSize = validateSize(value, this.poThemeService, PoFieldSize);
+  }
+
+  get componentsSize(): string {
+    return this._componentsSize ?? getDefaultSize(this.poThemeService, PoFieldSize);
   }
 
   /** Lista dos itens do menu. Se o valor estiver indefinido ou inválido, será inicializado como um array vazio. */
@@ -339,7 +373,8 @@ export abstract class PoMenuBaseComponent {
   constructor(
     public menuGlobalService: PoMenuGlobalService,
     public menuService: PoMenuService,
-    public languageService: PoLanguageService
+    public languageService: PoLanguageService,
+    protected poThemeService: PoThemeService
   ) {
     this.literals = {
       ...poMenuLiteralsDefault[this.languageService?.getLanguageDefault()],

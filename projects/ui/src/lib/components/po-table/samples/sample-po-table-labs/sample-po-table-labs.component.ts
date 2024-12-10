@@ -4,11 +4,11 @@ import {
   PoCheckboxGroupOption,
   PoModalComponent,
   PoRadioGroupOption,
+  PoSearchFilterMode,
   PoTableAction,
   PoTableColumn,
   PoTableColumnSpacing,
-  PoTableLiterals,
-  PoSearchFilterMode
+  PoTableLiterals
 } from '@po-ui/ng-components';
 
 import { SamplePoTableLabsService } from './sample-po-table-labs.service';
@@ -34,6 +34,7 @@ export class SamplePoTableLabsComponent implements OnInit {
   columns: Array<PoTableColumn>;
   columnsDefinition: any;
   columnsName: Array<string>;
+  componentsSize: string;
   container: string;
   currentItem: string;
   customLiterals: PoTableLiterals;
@@ -60,6 +61,11 @@ export class SamplePoTableLabsComponent implements OnInit {
     { label: 'Selectable', value: 'selectable' },
     { label: 'Hide select all', value: 'hideSelectAll', disabled: true },
     { label: 'Single select', value: 'singleSelect', disabled: true }
+  ];
+
+  public readonly componentsSizeOptions: Array<PoRadioGroupOption> = [
+    { label: 'small', value: 'small' },
+    { label: 'medium', value: 'medium' }
   ];
 
   public readonly filterModeOptions: Array<PoRadioGroupOption> = [
@@ -195,6 +201,7 @@ export class SamplePoTableLabsComponent implements OnInit {
     this.container = '';
     this.customLiterals = undefined;
     this.height = undefined;
+    this.componentsSize = 'medium';
     this.items = [];
     this.itemIndex = 0;
     this.literals = '';

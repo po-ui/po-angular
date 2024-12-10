@@ -1,5 +1,6 @@
-import { AfterViewInit, ChangeDetectionStrategy, Component, ElementRef, ViewChild } from '@angular/core';
+import { ChangeDetectionStrategy, Component, ElementRef, ViewChild } from '@angular/core';
 
+import { PoThemeService } from '../../services';
 import { PoButtonBaseComponent } from './po-button-base.component';
 
 /**
@@ -35,6 +36,10 @@ import { PoButtonBaseComponent } from './po-button-base.component';
 export class PoButtonComponent extends PoButtonBaseComponent {
   @ViewChild('button', { static: true }) buttonElement: ElementRef;
 
+  constructor(protected poThemeService: PoThemeService) {
+    super(poThemeService);
+  }
+
   onBlur(): void {
     this.blur.emit();
   }
@@ -60,6 +65,15 @@ export class PoButtonComponent extends PoButtonBaseComponent {
     if (!this.disabled) {
       this.buttonElement.nativeElement.focus();
     }
+  }
+
+  mapSizeToIcon(size: string): string {
+    const sizeMap: { [key: string]: string } = {
+      small: 'xs',
+      medium: 'sm',
+      large: 'sm'
+    };
+    return sizeMap[size] || 'sm';
   }
 
   onClick() {

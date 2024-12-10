@@ -41,6 +41,7 @@ export class SamplePoComboLabsComponent implements OnInit {
   option: PoComboOption;
   options: Array<PoComboOption | PoComboOptionGroup>;
   selectedOptionsGroup: string;
+  size: string;
 
   public readonly filterModeOptions: Array<PoRadioGroupOption> = [
     { label: 'Starts With', value: 'startsWith' },
@@ -65,6 +66,11 @@ export class SamplePoComboLabsComponent implements OnInit {
     { value: 'clean', label: 'Clean' },
     { value: 'disabledTabFilter', label: 'Disabled Tab Filter' },
     { value: 'errorLimit', label: 'Limit Error Message' }
+  ];
+
+  public readonly sizeOptions: Array<PoRadioGroupOption> = [
+    { label: 'small', value: 'small' },
+    { label: 'medium', value: 'medium' }
   ];
 
   ngOnInit() {
@@ -119,6 +125,7 @@ export class SamplePoComboLabsComponent implements OnInit {
     this.properties = [];
     this.fieldErrorMessage = '';
     this.selectedOptionsGroup = undefined;
+    this.size = 'medium';
   }
 
   private insertGroupIntoSelectInput(value: string) {

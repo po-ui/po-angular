@@ -49,11 +49,13 @@ export class SamplePoSearchLabsComponent implements OnInit, OnChanges {
   itemsModel: any;
   filterModel: any;
   filterSelectModel: any;
+  size: string;
 
   public readonly propertiesOptions: Array<PoCheckboxGroupOption> = [{ value: 'disabled', label: 'Disabled' }];
 
   public readonly iconsOptions: Array<PoRadioGroupOption> = [
     { label: 'fa-search', value: 'fa fa-search' },
+    { label: 'an-user', value: 'an an-user' },
     { label: 'an-magnifying-glass', value: 'an an-magnifying-glass' }
   ];
 
@@ -66,6 +68,11 @@ export class SamplePoSearchLabsComponent implements OnInit, OnChanges {
   public readonly searchModeOptions: Array<PoRadioGroupOption> = [
     { label: 'Action', value: 'action' },
     { label: 'Trigger', value: 'trigger' }
+  ];
+
+  public readonly sizeOptions: Array<PoRadioGroupOption> = [
+    { label: 'small', value: 'small' },
+    { label: 'medium', value: 'medium' }
   ];
 
   constructor(private http: HttpClient) {}
@@ -166,6 +173,7 @@ export class SamplePoSearchLabsComponent implements OnInit, OnChanges {
     this.filterMode = PoSearchFilterMode.startsWith;
     this.searchMode = 'action';
     this.literals = undefined;
+    this.size = 'medium';
     this.cleanInput();
     this.onChangeService();
   }

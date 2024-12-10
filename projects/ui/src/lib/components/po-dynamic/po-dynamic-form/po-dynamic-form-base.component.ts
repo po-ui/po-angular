@@ -1,8 +1,9 @@
 import { Directive, EventEmitter, Input, Output } from '@angular/core';
 import { NgForm } from '@angular/forms';
-import { convertToBoolean } from '../../../utils/util';
-
-import { PoDynamicFormField } from './po-dynamic-form-field.interface';
+import { PoFieldSize } from '../../../enums/po-field-size.enum';
+import { PoThemeService } from '../../../services';
+import { convertToBoolean, getDefaultSize, validateSize } from '../../../utils/util';
+import { PoDynamicFormField } from './interfaces/po-dynamic-form-field.interface';
 
 /**
  *
@@ -201,7 +202,30 @@ export class PoDynamicFormBaseComponent {
    */
   @Input('p-validate-fields') validateFields?: Array<string>;
 
+  private _componentsSize?: string = undefined;
   private _groupForm?: boolean = false;
+
+  /**
+   * @optional
+   *
+   * @description
+   *
+   * Define o tamanho dos componentes de formulário no template:
+   * - `small`: aplica a medida small de cada componente (disponível apenas para acessibilidade AA).
+   * - `medium`: aplica a medida medium de cada componente.
+   *
+   * > Caso a acessibilidade AA não esteja configurada, o tamanho `medium` será mantido.
+   * Para mais detalhes, consulte a documentação do [po-theme](https://po-ui.io/documentation/po-theme).
+   *
+   * @default `medium`
+   */
+  @Input('p-components-size') set componentsSize(value: string) {
+    this._componentsSize = validateSize(value, this.poThemeService, PoFieldSize);
+  }
+
+  get componentsSize(): string {
+    return this._componentsSize ?? getDefaultSize(this.poThemeService, PoFieldSize);
+  }
 
   /**
    * @optional
@@ -246,4 +270,6 @@ export class PoDynamicFormBaseComponent {
    *
    */
   @Input({ alias: 'p-validate-on-input', transform: convertToBoolean }) validateOnInput: boolean = false;
+
+  constructor(protected poThemeService: PoThemeService) {}
 }

@@ -1,17 +1,19 @@
 import { Directive, EventEmitter, HostBinding, Input, Output } from '@angular/core';
 import { AbstractControl, ControlValueAccessor, Validator } from '@angular/forms';
 
-import { convertToBoolean, isEquals, isIE, isMobile } from '../../../utils/util';
+import { convertToBoolean, getDefaultSize, isEquals, isIE, isMobile, validateSize } from '../../../utils/util';
 import { requiredFailed } from '../validators';
 
+import { PoFieldSize } from '../../../enums/po-field-size.enum';
+import { PoThemeService } from '../../../services';
 import { poLocaleDefault } from '../../../services/po-language/po-language.constant';
 import { PoLanguageService } from '../../../services/po-language/po-language.service';
+import { PoProgressAction } from '../../po-progress';
 import { PoUploadFileRestrictions } from './interfaces/po-upload-file-restriction.interface';
 import { PoUploadLiterals } from './interfaces/po-upload-literals.interface';
 import { PoUploadFile } from './po-upload-file';
 import { PoUploadStatus } from './po-upload-status.enum';
 import { PoUploadService } from './po-upload.service';
-import { PoProgressAction } from '../../po-progress';
 
 export const poUploadLiteralsDefault = {
   en: <PoUploadLiterals>{
@@ -450,6 +452,7 @@ export abstract class PoUploadBaseComponent implements ControlValueAccessor, Val
   private _isMultiple?: boolean;
   private _literals?: any;
   private _required?: boolean;
+  private _size?: string = undefined;
   private language: string;
   private validatorChange: any;
 
@@ -694,7 +697,30 @@ export abstract class PoUploadBaseComponent implements ControlValueAccessor, Val
    */
   @Input('p-show-required') showRequired: boolean = false;
 
+  /**
+   * @optional
+   *
+   * @description
+   *
+   * Define o tamanho e as ações do componente:
+   * - `small`: altura do button como 32px (disponível apenas para acessibilidade AA).
+   * - `medium`: altura do button como 44px.
+   *
+   * > Caso a acessibilidade AA não esteja configurada, o tamanho `medium` será mantido.
+   * Para mais detalhes, consulte a documentação do [po-theme](https://po-ui.io/documentation/po-theme).
+   *
+   * @default `medium`
+   */
+  @Input('p-size') set size(value: string) {
+    this._size = validateSize(value, this.poThemeService, PoFieldSize);
+  }
+
+  get size(): string {
+    return this._size ?? getDefaultSize(this.poThemeService, PoFieldSize);
+  }
+
   constructor(
+    protected poThemeService: PoThemeService,
     protected uploadService: PoUploadService,
     languageService: PoLanguageService
   ) {

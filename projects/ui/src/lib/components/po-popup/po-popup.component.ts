@@ -1,12 +1,13 @@
 import { ChangeDetectorRef, Component, ElementRef, Renderer2, ViewChild, ViewContainerRef } from '@angular/core';
 import { Router } from '@angular/router';
 
-import { callFunction, isExternalLink, isTypeof, openExternalLink } from '../../utils/util';
 import { PoControlPositionService } from '../../services/po-control-position/po-control-position.service';
+import { isExternalLink, isTypeof, openExternalLink } from '../../utils/util';
 
+import { PoThemeService } from '../../services';
+import { PoListBoxComponent } from '../po-listbox';
 import { PoPopupAction } from './po-popup-action.interface';
 import { PoPopupBaseComponent } from './po-popup-base.component';
-import { PoListBoxComponent } from '../po-listbox';
 
 /**
  *
@@ -45,12 +46,13 @@ export class PoPopupComponent extends PoPopupBaseComponent {
 
   constructor(
     viewContainerRef: ViewContainerRef,
+    protected poThemeService: PoThemeService,
     private renderer: Renderer2,
     private router: Router,
     private poControlPosition: PoControlPositionService,
     public changeDetector: ChangeDetectorRef
   ) {
-    super();
+    super(poThemeService);
   }
 
   /**

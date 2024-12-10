@@ -1,9 +1,11 @@
-import { EventEmitter, Input, Output, Directive, TemplateRef } from '@angular/core';
+import { Directive, EventEmitter, Input, Output, TemplateRef } from '@angular/core';
 
-import { convertToBoolean, convertToInt } from '../../utils/util';
+import { convertToBoolean, convertToInt, getDefaultSize, validateSize } from '../../utils/util';
 
-import { PoProgressStatus } from './enums/po-progress-status.enum';
+import { PoFieldSize } from '../../enums/po-field-size.enum';
+import { PoThemeService } from '../../services';
 import { PoProgressSize } from './enums/po-progress-size.enum';
+import { PoProgressStatus } from './enums/po-progress-status.enum';
 import { PoProgressAction } from './interfaces';
 
 const poProgressMaxValue = 100;
@@ -202,6 +204,7 @@ export class PoProgressBaseComponent {
   private _indeterminate?: boolean;
   private _value?: number = 0;
   private _size: string = 'large';
+  private _sizeActions: string = undefined;
 
   /**
    * @optional
@@ -251,11 +254,11 @@ export class PoProgressBaseComponent {
    *
    * @description
    *
-   * Definição do tamanho da altura da barra de progresso.
+   * Define a expessura da barra de progresso.
    *
    * Valores válidos:
-   *  - `medium`: tamanho médio
-   *  - `large`: tamanho grande
+   *  - medium
+   *  - large
    *
    * @default `large`
    */
@@ -272,11 +275,35 @@ export class PoProgressBaseComponent {
    *
    * @description
    *
+   * Define o tamanho das ações no componente com excessão da barra de progresso que pode ser ajustada através da propriedade `p-size`:
+   * - `small`: aplica a medida small de cada componente (disponível apenas para acessibilidade AA).
+   * - `medium`: aplica a medida medium de cada componente.
+   *
+   * > Caso a acessibilidade AA não esteja configurada, o tamanho `medium` será mantido.
+   * Para mais detalhes, consulte a documentação do [po-theme](https://po-ui.io/documentation/po-theme).
+   *
+   * @default `medium`
+   */
+  @Input('p-size-actions') set sizeActions(value: string) {
+    this._sizeActions = validateSize(value, this.poThemeService, PoFieldSize);
+  }
+
+  get sizeActions(): string {
+    return this._sizeActions ?? getDefaultSize(this.poThemeService, PoFieldSize);
+  }
+
+  /**
+   * @optional
+   *
+   * @description
+   *
    * Ativa a exibição da porcentagem atual da barra de progresso.
    *
    * @default `false`
    */
   @Input({ alias: 'p-show-percentage', transform: convertToBoolean }) showPercentage: boolean = false;
+
+  constructor(protected poThemeService: PoThemeService) {}
 
   private isProgressRangeValue(value: number): boolean {
     return value >= poProgressMinValue && value <= poProgressMaxValue;

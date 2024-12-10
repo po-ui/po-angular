@@ -11,6 +11,8 @@ import { PoDynamicFormField } from '@po-ui/ng-components';
 export class PoPageJobSchedulerParametersComponent implements AfterViewInit {
   @ViewChild('parametersForm') form: NgForm;
 
+  @Input('p-components-size') componentsSize: string;
+
   @Input('p-literals') literals = <any>{};
 
   @Input('p-parameters') parameters: Array<PoDynamicFormField> = [];

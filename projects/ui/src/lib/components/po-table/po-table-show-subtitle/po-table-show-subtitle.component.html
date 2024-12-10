@@ -4,7 +4,7 @@
   </div>
 </div>
 
-<po-modal #modal p-size="sm" [p-title]="literals.completeSubtitle">
+<po-modal #modal p-size="sm" [p-title]="literals.completeSubtitle" [p-components-size]="componentsSize">
   <div *ngFor="let subtitle of subtitles" class="po-table-subtitle-footer-modal po-row">
     <po-table-subtitle-circle p-hide-title="true" [p-subtitle]="subtitle"> </po-table-subtitle-circle>
     <span class="po-table-subtitle-text">{{ subtitle.label }}</span>

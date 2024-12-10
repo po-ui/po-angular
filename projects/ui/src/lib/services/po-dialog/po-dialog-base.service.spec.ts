@@ -5,7 +5,7 @@ import { configureTestSuite } from './../../util-test/util-expect.spec';
 
 import { PoDialogAlertOptions, PoDialogConfirmOptions } from './interfaces/po-dialog.interface';
 import { PoDialogBaseService } from './po-dialog-base.service';
-import { PoDialogType } from './po-dialog.enum';
+import { PoDialogType } from './enums/po-dialog.enum';
 
 class PoDialogService extends PoDialogBaseService {
   openDialog(

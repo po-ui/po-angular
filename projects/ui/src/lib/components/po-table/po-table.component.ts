@@ -32,8 +32,9 @@ import { PoModalAction, PoModalComponent } from '../po-modal';
 import { PoPopupComponent } from '../po-popup/po-popup.component';
 import { PoTableColumnLabel } from './po-table-column-label/po-table-column-label.interface';
 
+import { PoThemeService } from '../../services';
 import { uuid } from '../../utils/util';
-import { ICONS_DICTIONARY, AnimaliaIconDictionary } from '../po-icon';
+import { AnimaliaIconDictionary, ICONS_DICTIONARY } from '../po-icon';
 import { PoTableRowTemplateArrowDirection } from './enums/po-table-row-template-arrow-direction.enum';
 import { PoTableAction } from './interfaces/po-table-action.interface';
 import { PoTableColumn } from './interfaces/po-table-column.interface';
@@ -199,17 +200,20 @@ export class PoTableComponent extends PoTableBaseComponent implements AfterViewI
     return this._iconToken.NAME_LIB;
   }
 
+  /* eslint-disable max-params */
+
   constructor(
     poDate: PoDateService,
     differs: IterableDiffers,
     renderer: Renderer2,
     poLanguageService: PoLanguageService,
+    protected poThemeService: PoThemeService,
     private changeDetector: ChangeDetectorRef,
     private decimalPipe: DecimalPipe,
     private defaultService: PoTableService,
     @Optional() @Inject(ICONS_DICTIONARY) value: { [key: string]: string }
   ) {
-    super(poDate, poLanguageService, defaultService);
+    super(poDate, poLanguageService, poThemeService, defaultService);
     this.JSON = JSON;
     this.differ = differs.find([]).create(null);
 
@@ -223,6 +227,7 @@ export class PoTableComponent extends PoTableBaseComponent implements AfterViewI
 
     this._iconToken = value ?? AnimaliaIconDictionary;
   }
+  /* eslint-enable max-params */
 
   get hasRowTemplateWithArrowDirectionRight() {
     return this.tableRowTemplate?.tableRowTemplateArrowDirection === PoTableRowTemplateArrowDirection.Right;

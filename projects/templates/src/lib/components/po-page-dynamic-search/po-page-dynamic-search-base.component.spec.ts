@@ -3,14 +3,15 @@ import { poLocaleDefault } from './../../../../../ui/src/lib/services/po-languag
 import { PoLanguageService } from './../../../../../ui/src/lib/services/po-language/po-language.service';
 
 import { Component } from '@angular/core';
+import { PoThemeA11yEnum, PoThemeService } from '@po-ui/ng-components';
+import { convertToBoolean } from '../../utils/util';
+import { PoPageDynamicSearchFilters } from './interfaces/po-page-dynamic-search-filters.interface';
+import { PoPageDynamicSearchLiterals } from './interfaces/po-page-dynamic-search-literals.interface';
 import { PoAdvancedFilterLiterals } from './po-advanced-filter/po-advanced-filter-literals.interface';
 import {
   PoPageDynamicSearchBaseComponent,
   poPageDynamicSearchLiteralsDefault
 } from './po-page-dynamic-search-base.component';
-import { PoPageDynamicSearchFilters } from './po-page-dynamic-search-filters.interface';
-import { PoPageDynamicSearchLiterals } from './po-page-dynamic-search-literals.interface';
-import { convertToBoolean } from '../../utils/util';
 
 @Component({
   selector: 'mock-component',
@@ -23,11 +24,13 @@ class MockComponent extends PoPageDynamicSearchBaseComponent {
 
 describe('PoPageDynamicSearchBaseComponent:', () => {
   let component;
-
+  let poThemeServiceMock: jasmine.SpyObj<PoThemeService>;
   const languageService = new PoLanguageService();
 
   beforeEach(() => {
-    component = new MockComponent(<any>languageService);
+    poThemeServiceMock = jasmine.createSpyObj('PoThemeService', ['getA11yLevel', 'getA11yDefaultSize']);
+
+    component = new MockComponent(<any>languageService, poThemeServiceMock);
   });
 
   it('should be created', () => {
@@ -35,6 +38,50 @@ describe('PoPageDynamicSearchBaseComponent:', () => {
   });
 
   describe('Properties:', () => {
+    describe('p-components-size', () => {
+      it('should set property with valid values for accessibility level is AA', () => {
+        poThemeServiceMock.getA11yLevel.and.returnValue(PoThemeA11yEnum.AA);
+
+        component.componentsSize = 'small';
+        expect(component.componentsSize).toBe('small');
+
+        component.componentsSize = 'medium';
+        expect(component.componentsSize).toBe('medium');
+      });
+
+      it('should set property with valid values for accessibility level is AAA', () => {
+        poThemeServiceMock.getA11yLevel.and.returnValue(PoThemeA11yEnum.AAA);
+
+        component.componentsSize = 'small';
+        expect(component.componentsSize).toBe('medium');
+
+        component.componentsSize = 'medium';
+        expect(component.componentsSize).toBe('medium');
+      });
+
+      it('should return small when accessibility is AA and getA11yDefaultSize is small', () => {
+        poThemeServiceMock.getA11yLevel.and.returnValue(PoThemeA11yEnum.AA);
+        poThemeServiceMock.getA11yDefaultSize.and.returnValue('small');
+
+        component['_componentsSize'] = undefined;
+        expect(component.componentsSize).toBe('small');
+      });
+
+      it('should return medium when accessibility is AA and getA11yDefaultSize is medium', () => {
+        poThemeServiceMock.getA11yLevel.and.returnValue(PoThemeA11yEnum.AA);
+        poThemeServiceMock.getA11yDefaultSize.and.returnValue('medium');
+
+        component['_componentsSize'] = undefined;
+        expect(component.componentsSize).toBe('medium');
+      });
+
+      it('should return medium when accessibility is AAA, regardless of getA11yDefaultSize', () => {
+        poThemeServiceMock.getA11yLevel.and.returnValue(PoThemeA11yEnum.AAA);
+        component['_componentsSize'] = undefined;
+        expect(component.componentsSize).toBe('medium');
+      });
+    });
+
     it('filters: should set `filters` to `[]` if not Array value', () => {
       const invalidValues = [undefined, null, '', true, false, 0, 1, 'string', {}];
 

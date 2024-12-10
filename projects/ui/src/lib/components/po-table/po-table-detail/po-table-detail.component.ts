@@ -1,10 +1,12 @@
-import { Component, EventEmitter, Input, Output } from '@angular/core';
 import { DecimalPipe } from '@angular/common';
+import { Component, EventEmitter, Input, Output } from '@angular/core';
 
-import { capitalizeFirstLetter, isTypeof } from '../../../utils/util';
+import { capitalizeFirstLetter, getDefaultSize, isTypeof, validateSize } from '../../../utils/util';
 
-import { PoTableDetail } from './po-table-detail.interface';
+import { PoFieldSize } from '../../../enums/po-field-size.enum';
+import { PoThemeService } from '../../../services';
 import { PoTableDetailColumn } from './po-table-detail-column.interface';
+import { PoTableDetail } from './po-table-detail.interface';
 
 /**
  * @docsPrivate
@@ -19,6 +21,30 @@ import { PoTableDetailColumn } from './po-table-detail-column.interface';
   standalone: false
 })
 export class PoTableDetailComponent {
+  private _componentsSize?: string = undefined;
+
+  /**
+   * @optional
+   *
+   * @description
+   *
+   * Define o tamanho dos componentes de formulário no table:
+   * - `small`: aplica a medida small de cada componente (disponível apenas para acessibilidade AA).
+   * - `medium`: aplica a medida medium de cada componente.
+   *
+   * > Caso a acessibilidade AA não esteja configurada, o tamanho `medium` será mantido.
+   * Para mais detalhes, consulte a documentação do [po-theme](https://po-ui.io/documentation/po-theme).
+   *
+   * @default `medium`
+   */
+  @Input('p-components-size') set componentsSize(value: string) {
+    this._componentsSize = validateSize(value, this.poThemeService, PoFieldSize);
+  }
+
+  get componentsSize(): string {
+    return this._componentsSize ?? getDefaultSize(this.poThemeService, PoFieldSize);
+  }
+
   /**
    * Lista de itens do _detail_ da tabela.
    */
@@ -57,7 +83,10 @@ export class PoTableDetailComponent {
     return this._detail;
   }
 
-  constructor(private decimalPipe: DecimalPipe) {}
+  constructor(
+    protected poThemeService: PoThemeService,
+    private decimalPipe: DecimalPipe
+  ) {}
 
   get detailColumns(): Array<PoTableDetailColumn> {
     return this.detail?.columns || [];

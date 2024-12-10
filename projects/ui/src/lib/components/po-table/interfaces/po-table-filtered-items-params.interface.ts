@@ -32,4 +32,7 @@ export interface PoTableFilteredItemsParams {
    * - Coluna ascendente será informada da seguinte forma: `<colunaOrdenada>, por exemplo `name`.
    */
   order?: string;
+
+  /** Define o tamnho dos componentes de formulário no table. */
+  size?: string;
 }

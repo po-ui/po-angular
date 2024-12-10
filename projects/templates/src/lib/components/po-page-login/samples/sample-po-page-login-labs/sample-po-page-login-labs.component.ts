@@ -1,6 +1,6 @@
 import { Component, OnInit } from '@angular/core';
 
-import { PoCheckboxGroupOption, PoSelectOption, PoDialogService } from '@po-ui/ng-components';
+import { PoCheckboxGroupOption, PoDialogService, PoRadioGroupOption, PoSelectOption } from '@po-ui/ng-components';
 
 import { PoPageLogin, PoPageLoginCustomField, PoPageLoginLiterals } from '@po-ui/ng-templates';
 
@@ -11,6 +11,7 @@ import { PoPageLogin, PoPageLoginCustomField, PoPageLoginLiterals } from '@po-ui
 })
 export class SamplePoPageLoginLabsComponent implements OnInit {
   background: string;
+  componentsSize: string;
   contactEmail: string;
   customField: PoPageLoginCustomField;
   customFieldOption: any;
@@ -33,6 +34,11 @@ export class SamplePoPageLoginLabsComponent implements OnInit {
   recovery: string;
   registerUrl: string;
   support: string;
+
+  public readonly componentsSizeOptions: Array<PoRadioGroupOption> = [
+    { label: 'small', value: 'small' },
+    { label: 'medium', value: 'medium' }
+  ];
 
   public readonly propertiesOptions: Array<PoCheckboxGroupOption> = [
     { value: 'hideRememberUser', label: 'Hide remember user' },
@@ -75,7 +81,8 @@ export class SamplePoPageLoginLabsComponent implements OnInit {
     if (this.exceededAttempts <= 0) {
       this.poDialog.alert({
         title: 'Authenticate',
-        message: JSON.stringify(formData)
+        message: JSON.stringify(formData),
+        componentsSize: this.componentsSize
       });
     }
   }
@@ -87,6 +94,7 @@ export class SamplePoPageLoginLabsComponent implements OnInit {
   restore() {
     this.properties = [];
     this.background = '';
+    this.componentsSize = 'medium';
     this.contactEmail = '';
     this.customField = { property: undefined };
     this.customFieldOption = { label: undefined, value: undefined };

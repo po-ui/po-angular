@@ -4,6 +4,7 @@ import {
   PoCheckboxGroupOption,
   PoDatepickerRange,
   PoDatepickerRangeLiterals,
+  PoRadioGroupOption,
   PoSelectOption
 } from '@po-ui/ng-components';
 
@@ -28,6 +29,7 @@ export class SamplePoDatepickerRangeLabsComponent implements OnInit {
   maxDate: string | Date;
   minDate: string | Date;
   locale: string;
+  size: string;
 
   public readonly propertiesOptions: Array<PoCheckboxGroupOption> = [
     { value: 'clean', label: 'Clean' },
@@ -45,6 +47,11 @@ export class SamplePoDatepickerRangeLabsComponent implements OnInit {
     { label: 'Español', value: 'es' },
     { label: 'Português', value: 'pt' },
     { label: 'Pусский', value: 'ru' }
+  ];
+
+  public readonly sizeOptions: Array<PoRadioGroupOption> = [
+    { label: 'small', value: 'small' },
+    { label: 'medium', value: 'medium' }
   ];
 
   ngOnInit() {
@@ -82,6 +89,7 @@ export class SamplePoDatepickerRangeLabsComponent implements OnInit {
     this.maxDate = undefined;
     this.minDate = undefined;
     this.locale = undefined;
+    this.size = 'medium';
     setTimeout(() => (this.datepickerRange = undefined));
   }
 }

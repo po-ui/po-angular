@@ -1,7 +1,9 @@
-import { Input, Directive } from '@angular/core';
+import { Directive, Input } from '@angular/core';
 
-import { convertToBoolean } from './../../utils/util';
+import { convertToBoolean, getDefaultSize, validateSize } from './../../utils/util';
 
+import { PoFieldSize } from '../../enums/po-field-size.enum';
+import { PoThemeService } from '../../services';
 import { PoDropdownAction } from './po-dropdown-action.interface';
 
 /**
@@ -74,6 +76,7 @@ export class PoDropdownBaseComponent {
 
   private _actions: Array<PoDropdownAction>;
   private _disabled: boolean = false;
+  private _size?: string = undefined;
 
   /** Lista de ações que serão exibidas no componente. */
   @Input('p-actions') set actions(value: Array<PoDropdownAction>) {
@@ -100,4 +103,28 @@ export class PoDropdownBaseComponent {
   get disabled(): boolean {
     return this._disabled;
   }
+
+  /**
+   * @optional
+   *
+   * @description
+   *
+   * Define o tamanho do componente:
+   * - `small`: altura do button como 32px (disponível apenas para acessibilidade AA).
+   * - `medium`: altura do button como 44px.
+   *
+   * > Caso a acessibilidade AA não esteja configurada, o tamanho `medium` será mantido.
+   * Para mais detalhes, consulte a documentação do [po-theme](https://po-ui.io/documentation/po-theme).
+   *
+   * @default `medium`
+   */
+  @Input('p-size') set size(value: string) {
+    this._size = validateSize(value, this.poThemeService, PoFieldSize);
+  }
+
+  get size(): string {
+    return this._size ?? getDefaultSize(this.poThemeService, PoFieldSize);
+  }
+
+  constructor(protected poThemeService: PoThemeService) {}
 }

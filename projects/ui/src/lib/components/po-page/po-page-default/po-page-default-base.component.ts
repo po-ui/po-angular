@@ -3,8 +3,11 @@ import { Directive, Input, ViewChild } from '@angular/core';
 import { poLocaleDefault } from './../../../services/po-language/po-language.constant';
 import { PoLanguageService } from './../../../services/po-language/po-language.service';
 
+import { PoFieldSize } from '../../../enums/po-field-size.enum';
+import { PoThemeService } from '../../../services';
+import { getDefaultSize, validateSize } from '../../../utils/util';
 import { PoBreadcrumb } from '../../po-breadcrumb/po-breadcrumb.interface';
-import { PoPageAction } from '../po-page-action.interface';
+import { PoPageAction } from '../interfaces/po-page-action.interface';
 import { PoPageContentComponent } from '../po-page-content/po-page-content.component';
 import { PoPageDefaultLiterals } from './po-page-default-literals.interface';
 
@@ -53,6 +56,7 @@ export abstract class PoPageDefaultBaseComponent {
   protected language: string;
 
   private _actions?: Array<PoPageAction> = [];
+  private _componentsSize?: string = undefined;
   private _literals: PoPageDefaultLiterals;
   private _title: string;
 
@@ -72,6 +76,28 @@ export abstract class PoPageDefaultBaseComponent {
 
   get actions(): Array<PoPageAction> {
     return this._actions;
+  }
+
+  /**
+   * @optional
+   *
+   * @description
+   *
+   * Define o tamanho dos componentes de formulário no template:
+   * - `small`: aplica a medida small de cada componente (disponível apenas para acessibilidade AA).
+   * - `medium`: aplica a medida medium de cada componente.
+   *
+   * > Caso a acessibilidade AA não esteja configurada, o tamanho `medium` será mantido.
+   * Para mais detalhes, consulte a documentação do [po-theme](https://po-ui.io/documentation/po-theme).
+   *
+   * @default `medium`
+   */
+  @Input('p-components-size') set componentsSize(value: string) {
+    this._componentsSize = validateSize(value, this.poThemeService, PoFieldSize);
+  }
+
+  get componentsSize(): string {
+    return this._componentsSize ?? getDefaultSize(this.poThemeService, PoFieldSize);
   }
 
   /**
@@ -142,7 +168,10 @@ export abstract class PoPageDefaultBaseComponent {
    */
   @Input('p-subtitle') subtitle: string;
 
-  constructor(languageService: PoLanguageService) {
+  constructor(
+    languageService: PoLanguageService,
+    protected poThemeService: PoThemeService
+  ) {
     this.language = languageService.getShortLanguage();
   }
 

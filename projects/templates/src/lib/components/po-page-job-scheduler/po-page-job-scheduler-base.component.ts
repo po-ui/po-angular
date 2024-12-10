@@ -1,12 +1,13 @@
+import { Directive, EventEmitter, Input, OnDestroy, Output } from '@angular/core';
 import { AbstractControl } from '@angular/forms';
-import { Input, Directive, OnDestroy, Output, EventEmitter } from '@angular/core';
 
-import { PoBreadcrumb, PoDynamicFormField, PoStepperOrientation } from '@po-ui/ng-components';
+import { PoBreadcrumb, PoDynamicFormField, PoStepperOrientation, PoThemeService } from '@po-ui/ng-components';
 
+import { Subscription } from 'rxjs';
+import { getDefaultSize, validateSize } from '../../utils/util';
 import { PoJobSchedulerInternal } from './interfaces/po-job-scheduler-internal.interface';
 import { PoPageJobSchedulerInternal } from './po-page-job-scheduler-internal';
 import { PoPageJobSchedulerService } from './po-page-job-scheduler.service';
-import { Subscription } from 'rxjs';
 
 /**
  * @description
@@ -21,8 +22,32 @@ import { Subscription } from 'rxjs';
  */
 @Directive()
 export class PoPageJobSchedulerBaseComponent implements OnDestroy {
+  private _componentsSize?: string = undefined;
+
   /** Objeto com as propriedades do breadcrumb. */
   @Input('p-breadcrumb') breadcrumb?: PoBreadcrumb = { items: [] };
+
+  /**
+   * @optional
+   *
+   * @description
+   *
+   * Define o tamanho dos componentes de formulário no template:
+   * - `small`: aplica a medida small de cada componente (disponível apenas para acessibilidade AA).
+   * - `medium`: aplica a medida medium de cada componente.
+   *
+   * > Caso a acessibilidade AA não esteja configurada, o tamanho `medium` será mantido.
+   * Para mais detalhes, consulte a documentação do [po-theme](https://po-ui.io/documentation/po-theme).
+   *
+   * @default `medium`
+   */
+  @Input('p-components-size') set componentsSize(value: string) {
+    this._componentsSize = validateSize(value, this.poThemeService);
+  }
+
+  get componentsSize(): string {
+    return this._componentsSize ?? getDefaultSize(this.poThemeService);
+  }
 
   /**
    * Endpoint usado pelo componente para busca dos processos e parâmetros que serão utilizados para criação e edição dos agendamentos.
@@ -254,7 +279,10 @@ export class PoPageJobSchedulerBaseComponent implements OnDestroy {
   private _subscription = new Subscription();
   private _orientation;
 
-  constructor(protected poPageJobSchedulerService: PoPageJobSchedulerService) {}
+  constructor(
+    protected poPageJobSchedulerService: PoPageJobSchedulerService,
+    protected poThemeService: PoThemeService
+  ) {}
 
   ngOnDestroy() {
     this._subscription.unsubscribe();

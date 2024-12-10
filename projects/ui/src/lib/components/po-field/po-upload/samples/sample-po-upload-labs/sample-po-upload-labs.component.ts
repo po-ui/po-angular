@@ -5,6 +5,7 @@ import {
   PoCheckboxGroupOption,
   PoProgressAction,
   PoSelectOption,
+  PoRadioGroupOption,
   PoUploadFileRestrictions,
   PoUploadLiterals
 } from '@po-ui/ng-components';
@@ -35,6 +36,7 @@ export class SamplePoUploadLabsComponent implements OnInit {
   headersLabs: string;
   action: PoProgressAction;
   actionForm: FormGroup;
+  size: string;
 
   public readonly propertiesOptions: Array<PoCheckboxGroupOption> = [
     { value: 'autoupload', label: 'Automatic upload' },
@@ -51,6 +53,11 @@ export class SamplePoUploadLabsComponent implements OnInit {
     { value: 'selectButton', label: 'Hide Select Files Button' },
     { value: 'sendButton', label: 'Hide Send Files Button' },
     { value: 'showCustomAction', label: 'Add Custom Action to Progress' }
+  ];
+
+  public readonly sizeOptions: Array<PoRadioGroupOption> = [
+    { label: 'small', value: 'small' },
+    { label: 'medium', value: 'medium' }
   ];
 
   public readonly typeOptions: Array<PoSelectOption> = [
@@ -147,6 +154,7 @@ export class SamplePoUploadLabsComponent implements OnInit {
     this.headersLabs = undefined;
     this.actionForm.reset({ type: 'default', visible: true });
     this.action = { label: '', type: 'default' };
+    this.size = 'medium';
   }
 
   private getValueInBytes(value: number) {

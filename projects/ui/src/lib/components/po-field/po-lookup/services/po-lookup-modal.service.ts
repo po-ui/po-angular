@@ -1,9 +1,9 @@
-import { Injectable, ComponentRef, EventEmitter } from '@angular/core';
+import { ComponentRef, EventEmitter, Injectable } from '@angular/core';
 
-import { PoDynamicFormField } from './../../../po-dynamic/po-dynamic-form/po-dynamic-form-field.interface';
-import { PoComponentInjectorService } from '../../../../services/po-component-injector/po-component-injector.service';
 import { PoLookupColumn } from '../../../../components/po-field/po-lookup/interfaces/po-lookup-column.interface';
 import { PoLookupFilter } from '../../../../components/po-field/po-lookup/interfaces/po-lookup-filter.interface';
+import { PoComponentInjectorService } from '../../../../services/po-component-injector/po-component-injector.service';
+import { PoDynamicFormField } from '../../../po-dynamic/po-dynamic-form/interfaces/po-dynamic-form-field.interface';
 import { PoLookupLiterals } from '../interfaces/po-lookup-literals.interface';
 import { PoLookupModalComponent } from '../po-lookup-modal/po-lookup-modal.component';
 
@@ -50,6 +50,7 @@ export class PoLookupModalService {
     selectedItems: Array<any>;
     fieldLabel: string;
     fieldValue: string;
+    size: string;
     spacing: string;
     textWrap: boolean;
     virtualScroll: boolean;
@@ -69,6 +70,7 @@ export class PoLookupModalService {
       selectedItems,
       fieldLabel,
       fieldValue,
+      size,
       spacing,
       textWrap,
       virtualScroll,
@@ -94,6 +96,7 @@ export class PoLookupModalService {
     this.componentRef.instance.changeVisibleColumns = changeVisibleColumns;
     this.componentRef.instance.columnRestoreManager = columnRestoreManager;
     this.componentRef.instance.hideColumnsManager = hideColumnsManager;
+    this.componentRef.instance.size = size;
     this.componentRef.instance.spacing = spacing;
     this.componentRef.instance.textWrap = textWrap;
     this.componentRef.instance.virtualScroll = virtualScroll;

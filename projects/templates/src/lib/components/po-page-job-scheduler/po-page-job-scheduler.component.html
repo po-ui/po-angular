@@ -1,4 +1,9 @@
-<po-page-default [p-actions]="jobSchedulerActions" [p-breadcrumb]="breadcrumb" [p-title]="title">
+<po-page-default
+  [p-actions]="jobSchedulerActions"
+  [p-breadcrumb]="breadcrumb"
+  [p-components-size]="componentsSize"
+  [p-title]="title"
+>
   <div class="po-row">
     <po-stepper
       [ngClass]="stepperDefaultOrientation === 'horizontal' ? 'po-lg-12 po-xl-12' : 'po-lg-3 po-xl-2'"
@@ -19,6 +24,7 @@
             [hidden]="step !== stepExecution"
             #schedulerExecution
             class="po-md-12"
+            [p-components-size]="componentsSize"
             [p-is-edit]="isEdit"
             [p-literals]="literals"
             [p-value]="model"
@@ -31,6 +37,7 @@
             [hidden]="step !== stepParameters"
             #schedulerParameters
             class="po-md-12"
+            [p-components-size]="componentsSize"
             [p-literals]="literals"
             [p-parameters]="parameters || []"
             [(p-value)]="model.executionParameter"
@@ -42,6 +49,7 @@
             [p-no-parameters]="!parameters.length"
             [p-summary-template]="jobSchedulerSummaryTemplate"
             class="po-md-12"
+            [p-components-size]="componentsSize"
             [p-literals]="literals"
             [p-parameters]="parameters"
             [p-value]="publicValues"

@@ -12,6 +12,8 @@ import { PoTreeViewItem } from '../po-tree-view-item/po-tree-view-item.interface
 export class PoTreeViewItemHeaderComponent {
   @ViewChild('inputCheckbox') inputCheckbox;
 
+  @Input('p-components-size') componentsSize: string;
+
   @Input('p-item') item: PoTreeViewItem;
 
   @Input('p-selectable') selectable: boolean = false;

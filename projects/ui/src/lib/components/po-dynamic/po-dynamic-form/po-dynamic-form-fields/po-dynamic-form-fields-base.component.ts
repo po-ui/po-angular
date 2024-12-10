@@ -1,15 +1,17 @@
-import { Input, EventEmitter, Output, Directive } from '@angular/core';
 import { TitleCasePipe } from '@angular/common';
+import { Directive, EventEmitter, Input, Output } from '@angular/core';
 
-import { isTypeof, sortFields } from '../../../../utils/util';
+import { getDefaultSize, isTypeof, sortFields, validateSize } from '../../../../utils/util';
 
-import { getGridColumnsClasses, isVisibleField } from '../../po-dynamic.util';
-import { PoDynamicFieldType } from '../../po-dynamic-field-type.enum';
-import { PoDynamicFormField } from '../po-dynamic-form-field.interface';
-import { PoDynamicFormFieldInternal } from './po-dynamic-form-field-internal.interface';
+import { PoFieldSize } from '../../../../enums/po-field-size.enum';
+import { PoThemeService } from '../../../../services';
 import { PoComboFilter } from '../../../po-field/po-combo/interfaces/po-combo-filter.interface';
 import { PoLookupFilter } from '../../../po-field/po-lookup/interfaces/po-lookup-filter.interface';
+import { PoDynamicFieldType } from '../../enums/po-dynamic-field-type.enum';
+import { getGridColumnsClasses, isVisibleField } from '../../po-dynamic.util';
 import { PoDynamicSharedBase } from '../../shared/po-dynamic-shared-base';
+import { PoDynamicFormField } from '../interfaces/po-dynamic-form-field.interface';
+import { PoDynamicFormFieldInternal } from './po-dynamic-form-field-internal.interface';
 
 @Directive()
 export class PoDynamicFormFieldsBaseComponent extends PoDynamicSharedBase {
@@ -28,9 +30,19 @@ export class PoDynamicFormFieldsBaseComponent extends PoDynamicSharedBase {
 
   @Input('p-validate-on-input') validateOnInput: boolean;
 
+  private _componentsSize?: string = undefined;
   private _fields: Array<PoDynamicFormField>;
   private _validateFields: Array<string>;
   private _value?: any = {};
+
+  // Define o tamanho dos componentes de formulário.
+  @Input('p-components-size') set componentsSize(value: string) {
+    this._componentsSize = validateSize(value, this.poThemeService, PoFieldSize);
+  }
+
+  get componentsSize(): string {
+    return this._componentsSize ?? getDefaultSize(this.poThemeService, PoFieldSize);
+  }
 
   // array de objetos que implementam a interface PoDynamicFormField, que serão exibidos no componente.
   @Input('p-fields') set fields(value: Array<PoDynamicFormField>) {
@@ -58,7 +70,10 @@ export class PoDynamicFormFieldsBaseComponent extends PoDynamicSharedBase {
     return this._validateFields;
   }
 
-  constructor(private titleCasePipe: TitleCasePipe) {
+  constructor(
+    protected poThemeService: PoThemeService,
+    private titleCasePipe: TitleCasePipe
+  ) {
     super();
   }
 

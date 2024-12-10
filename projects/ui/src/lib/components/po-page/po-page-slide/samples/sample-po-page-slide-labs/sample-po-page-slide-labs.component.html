@@ -1,5 +1,6 @@
 <po-page-slide
   [p-click-out]="properties.includes('click-out')"
+  [p-components-size]="componentsSize"
   [p-hide-close]="properties.includes('hide-close')"
   [p-size]="size"
   [p-subtitle]="subtitle"
@@ -14,32 +15,40 @@
 <hr />
 
 <form #f="ngForm">
-  <div class="po-row">
-    <po-input class="po-md-6" name="Title" [(ngModel)]="title" p-clean p-label="Title" p-required></po-input>
-    <po-input class="po-md-6" name="Subtitle" [(ngModel)]="subtitle" p-clean p-label="Subtitle" p-optional></po-input>
-    <po-input class="po-sm-12" name="Content" [(ngModel)]="content" p-clean p-label="Content" p-required></po-input>
-  </div>
+  <po-input class="po-md-6" name="Title" [(ngModel)]="title" p-clean p-label="Title" p-required></po-input>
+  <po-input class="po-md-6" name="Subtitle" [(ngModel)]="subtitle" p-clean p-label="Subtitle" p-optional></po-input>
+  <po-input class="po-md-6" name="Content" [(ngModel)]="content" p-clean p-label="Content" p-required></po-input>
+
+  <po-checkbox-group
+    class="po-md-12 po-lg-6"
+    name="properties"
+    [(ngModel)]="properties"
+    p-label="Properties"
+    [p-options]="propertiesOptions"
+  ></po-checkbox-group>
+
+  <po-radio-group
+    class="po-md-12"
+    name="Size"
+    [(ngModel)]="size"
+    p-columns="4"
+    p-label="Size"
+    [p-options]="sizeOptions"
+    p-optional
+  ></po-radio-group>
+
+  <po-radio-group
+    class="po-md-12"
+    name="size"
+    [(ngModel)]="componentsSize"
+    p-columns="4"
+    p-label="Components size"
+    p-help="Para aplicar o tamanho small, configure o nível de acessibilidade para AA, ajustável no navbar ou serviço de tema (https://po-ui.io/documentation/po-theme)."
+    [p-options]="componentsSizeOptions"
+  >
+  </po-radio-group>
 
   <div class="po-row">
-    <po-checkbox-group
-      class="po-sm-6"
-      name="properties"
-      [(ngModel)]="properties"
-      p-label="Properties"
-      [p-options]="propertiesOptions"
-    ></po-checkbox-group>
-
-    <po-radio-group
-      class="po-sm-6"
-      name="Size"
-      [(ngModel)]="size"
-      p-label="Size"
-      [p-options]="sizeOptions"
-      p-optional
-    ></po-radio-group>
-  </div>
-
-  <div class="po-row">
-    <po-button class="po-sm-3" p-label="Sample Restore" (p-click)="restore()"></po-button>
+    <po-button class="po-lg-3 po-md-6" p-label="Sample Restore" (p-click)="restore()"></po-button>
   </div>
 </form>

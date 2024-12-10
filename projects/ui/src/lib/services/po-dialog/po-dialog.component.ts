@@ -1,4 +1,4 @@
-import { Component, ComponentRef, OnDestroy, OnInit, ViewChild } from '@angular/core';
+import { Component, ComponentRef, Input, OnDestroy, OnInit, ViewChild } from '@angular/core';
 
 import { Subscription } from 'rxjs';
 
@@ -6,12 +6,15 @@ import { poLocaleDefault } from '../po-language/po-language.constant';
 
 import { PoLanguageService } from '../po-language/po-language.service';
 
-import { PoDialogAlertLiterals } from './interfaces/po-dialog-alert-literals.interface';
-import { PoDialogAlertOptions, PoDialogConfirmOptions } from './interfaces/po-dialog.interface';
-import { PoDialogConfirmLiterals } from './interfaces/po-dialog-confirm-literals.interface';
-import { PoDialogType } from './po-dialog.enum';
 import { PoModalAction } from '../../components/po-modal/po-modal-action.interface';
 import { PoModalComponent } from '../../components/po-modal/po-modal.component';
+import { PoFieldSize } from '../../enums/po-field-size.enum';
+import { getDefaultSize, validateSize } from '../../utils/util';
+import { PoThemeService } from '../po-theme/po-theme.service';
+import { PoDialogType } from './enums/po-dialog.enum';
+import { PoDialogAlertLiterals } from './interfaces/po-dialog-alert-literals.interface';
+import { PoDialogConfirmLiterals } from './interfaces/po-dialog-confirm-literals.interface';
+import { PoDialogAlertOptions, PoDialogConfirmOptions } from './interfaces/po-dialog.interface';
 
 export const poDialogAlertLiteralsDefault = {
   en: <PoDialogAlertLiterals>{ ok: 'Ok' },
@@ -67,9 +70,23 @@ export class PoDialogComponent implements OnDestroy, OnInit {
   // Atributo para armazenar a referencia do componente criado via serviço.
   private componentRef: ComponentRef<PoDialogComponent>;
   private closeSubscription: Subscription;
+  private _componentsSize?: string = undefined;
+
   private language: string;
 
-  constructor(languageService: PoLanguageService) {
+  // Define o tamanho dos componentes de formulário no dialog.
+  @Input('p-components-size') set componentsSize(value: string) {
+    this._componentsSize = validateSize(value, this.poThemeService, PoFieldSize);
+  }
+
+  get componentsSize(): string {
+    return this._componentsSize ?? getDefaultSize(this.poThemeService, PoFieldSize);
+  }
+
+  constructor(
+    languageService: PoLanguageService,
+    protected poThemeService: PoThemeService
+  ) {
     this.language = languageService.getShortLanguage();
   }
 
@@ -130,6 +147,7 @@ export class PoDialogComponent implements OnDestroy, OnInit {
     dialogType: PoDialogType,
     componentRef?: ComponentRef<PoDialogComponent>
   ): void {
+    this.componentsSize = dialogOptions.componentsSize;
     this.title = dialogOptions.title;
     this.message = dialogOptions.message;
 

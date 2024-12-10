@@ -1,4 +1,9 @@
-<po-page-default [p-actions]="pageActions" [p-breadcrumb]="breadcrumb" [p-title]="title">
+<po-page-default
+  [p-actions]="pageActions"
+  [p-breadcrumb]="breadcrumb"
+  [p-components-size]="componentsSize"
+  [p-title]="title"
+>
   <ng-container *ngIf="model; then viewFieldsTemplate; else registerNotFoundTemplate"> </ng-container>
 </po-page-default>
 

@@ -1,10 +1,10 @@
-<div class="po-rich-text-toolbar" #toolbarElement>
+<div class="po-rich-text-toolbar" [class.po-rich-text-toolbar-aa]="size === 'small'" #toolbarElement>
   <div
     class="po-rich-text-toolbar-button-align"
     data-rich-text-toolbar="format"
     *ngIf="!isActionHidden(formatToolbarAction)"
   >
-    <po-button-group p-toggle="multiple" [p-buttons]="formatButtons"> </po-button-group>
+    <po-button-group p-toggle="multiple" [p-buttons]="formatButtons" [p-size]="size"> </po-button-group>
   </div>
 
   <div *ngIf="showColor()" class="po-rich-text-toolbar-button-align" data-rich-text-toolbar="color">
@@ -12,6 +12,7 @@
       <button
         type="button"
         class="po-button po-button-default po-rich-text-toolbar-color-picker-button"
+        [class.po-rich-text-toolbar-color-picker-button-aa]="size === 'small'"
         [disabled]="readonly"
         [p-tooltip]="literals.textColor"
         [attr.aria-label]="literals.textColor"
@@ -33,7 +34,7 @@
     data-rich-text-toolbar="align"
     *ngIf="!isActionHidden(alignToolbarAction)"
   >
-    <po-button-group p-toggle="single" [p-buttons]="alignButtons"> </po-button-group>
+    <po-button-group p-toggle="single" [p-buttons]="alignButtons" [p-size]="size"> </po-button-group>
   </div>
 
   <div
@@ -41,7 +42,7 @@
     data-rich-text-toolbar="list"
     *ngIf="!isActionHidden(listToolbarAction)"
   >
-    <po-button-group p-toggle="single" [p-buttons]="listButtons"> </po-button-group>
+    <po-button-group p-toggle="single" [p-buttons]="listButtons" [p-size]="size"> </po-button-group>
   </div>
 
   <div
@@ -49,7 +50,7 @@
     data-rich-text-toolbar="link"
     *ngIf="!isActionHidden(linkToolbarAction)"
   >
-    <po-button-group [p-buttons]="linkButtons"> </po-button-group>
+    <po-button-group [p-buttons]="linkButtons" [p-size]="size"> </po-button-group>
   </div>
 
   <div
@@ -57,14 +58,16 @@
     data-rich-text-toolbar="media"
     *ngIf="!isActionHidden(mediaToolbarAction)"
   >
-    <po-button-group [p-buttons]="mediaButtons"> </po-button-group>
+    <po-button-group [p-buttons]="mediaButtons" [p-size]="size"> </po-button-group>
   </div>
 </div>
 
-<po-rich-text-image-modal #richTextImageModal (p-command)="emitCommand($event)"> </po-rich-text-image-modal>
+<po-rich-text-image-modal #richTextImageModal [p-size]="size" (p-command)="emitCommand($event)">
+</po-rich-text-image-modal>
 
 <po-rich-text-link-modal
   #richTextLinkModal
+  [p-size]="size"
   (p-command)="emitCommand($event)"
   (p-link-editing)="emitLinkEditing($event)"
 >

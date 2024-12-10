@@ -11,6 +11,8 @@ import { PoJobSchedulerInternal } from '../interfaces/po-job-scheduler-internal.
   standalone: false
 })
 export class PoPageJobSchedulerSummaryComponent implements OnInit {
+  @Input('p-components-size') componentsSize: string;
+
   @Input('p-literals') literals = <any>{};
 
   @Input('p-parameters') parameters: Array<PoDynamicViewField> = [];

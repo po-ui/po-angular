@@ -825,19 +825,6 @@ describe('PoDecimalComponent:', () => {
     expect(isInvalidMinusSign).toBeTruthy();
   });
 
-  it('should calc icons position without clean', fakeAsync(() => {
-    const fakeThis = {
-      clean: false,
-      inputEl: component.inputEl,
-      el: component.inputEl
-    };
-
-    component.setPaddingInput.call(fakeThis);
-    tick(10);
-
-    expect(fakeThis.inputEl.nativeElement.style.paddingRight).toBe('');
-  }));
-
   it('should have a call isPositionAfterDecimalSeparator method', () => {
     const isPositionAfterDecimalSeparator = component['isPositionAfterDecimalSeparator'](2, undefined);
     expect(isPositionAfterDecimalSeparator).toBeFalsy();

@@ -8,6 +8,7 @@
     [p-disabled]="button.disabled"
     [p-icon]="button.icon"
     [p-label]="button.label"
+    [p-size]="size"
     [p-tooltip]="!button.disabled ? button.tooltip : undefined"
     (p-click)="onButtonClick(button, i); button.action(button)"
   >

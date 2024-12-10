@@ -1,6 +1,6 @@
 import { Component, OnInit, ViewChild } from '@angular/core';
 
-import { PoDialogService, PoSelectOption } from '@po-ui/ng-components';
+import { PoDialogService, PoRadioGroupOption, PoSelectOption } from '@po-ui/ng-components';
 import {
   PoModalPasswordRecovery,
   PoModalPasswordRecoveryComponent,
@@ -16,6 +16,7 @@ export class SamplePoModalPasswordRecoveryLabsComponent implements OnInit {
   @ViewChild(PoModalPasswordRecoveryComponent) poModalPasswordRecovery: PoModalPasswordRecoveryComponent;
 
   codeError: string;
+  componentsSize: string;
   email: string;
   event: string;
   invalidCode: boolean = true;
@@ -23,6 +24,11 @@ export class SamplePoModalPasswordRecoveryLabsComponent implements OnInit {
   phoneMask: string;
   submitEvent: string;
   type: PoModalPasswordRecoveryType;
+
+  public readonly componentsSizeOptions: Array<PoRadioGroupOption> = [
+    { label: 'small', value: 'small' },
+    { label: 'medium', value: 'medium' }
+  ];
 
   typeOptions: Array<PoSelectOption> = [
     { label: 'All', value: PoModalPasswordRecoveryType.All },
@@ -46,6 +52,7 @@ export class SamplePoModalPasswordRecoveryLabsComponent implements OnInit {
 
   restore() {
     this.codeError = undefined;
+    this.componentsSize = 'medium';
     this.email = undefined;
     this.event = undefined;
     this.phoneMask = undefined;

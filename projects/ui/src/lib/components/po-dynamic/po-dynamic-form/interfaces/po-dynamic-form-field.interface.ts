@@ -15,16 +15,16 @@ import {
   PoUploadFile,
   PoUploadFileRestrictions,
   PoUploadLiterals
-} from '../../po-field';
-import { PoLookupAdvancedFilter } from '../../po-field/po-lookup/interfaces/po-lookup-advanced-filter.interface';
-import { PoLookupColumn } from '../../po-field/po-lookup/interfaces/po-lookup-column.interface';
-import { PoMultiselectOption } from '../../po-field/po-multiselect/po-multiselect-option.interface';
-import { PoSelectOption } from '../../po-field/po-select/po-select-option.interface';
-import { ForceBooleanComponentEnum, ForceOptionComponentEnum } from '../po-dynamic-field-force-component.enum';
-import { PoProgressAction } from '../../po-progress/';
+} from '../../../po-field';
+import { PoLookupAdvancedFilter } from '../../../po-field/po-lookup/interfaces/po-lookup-advanced-filter.interface';
+import { PoLookupColumn } from '../../../po-field/po-lookup/interfaces/po-lookup-column.interface';
+import { PoMultiselectOption } from '../../../po-field/po-multiselect/interfaces/po-multiselect-option.interface';
+import { PoSelectOption } from '../../../po-field/po-select/po-select-option.interface';
+import { PoProgressAction } from '../../../po-progress';
+import { ForceBooleanComponentEnum, ForceOptionComponentEnum } from '../../enums/po-dynamic-field-force-component.enum';
 
 import { Observable } from 'rxjs';
-import { PoDynamicField } from '../po-dynamic-field.interface';
+import { PoDynamicField } from '../../po-dynamic-field.interface';
 
 /**
  * @usedBy PoDynamicFormComponent, PoAdvancedFilterComponent, PoPageDynamicSearchComponent
@@ -819,4 +819,16 @@ export interface PoDynamicFormField extends PoDynamicField {
    * **Componente compatível**: `po-combo`
    */
   removeInitialFilter?: boolean;
+
+  /**
+   * Define o tamanho dos componentes de formulário no template conforme suas respectivas documentações:
+   * - `small`: aplica a medida small de cada componente (disponível apenas para acessibilidade AA).
+   * - `medium`: aplica a medida medium de cada componente.
+   * - `large`: aplica a medida large de cada componente (disponível para `po-checkbox` e `po-radio-group`).
+   * > Caso a acessibilidade AA não esteja configurada, o tamanho `medium` será mantido.
+   * Para mais detalhes, consulte a documentação do [po-theme](https://po-ui.io/documentation/po-theme).
+   *
+   * @default `medium`
+   */
+  size?: string;
 }

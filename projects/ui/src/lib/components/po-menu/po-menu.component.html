@@ -25,6 +25,7 @@
           *ngIf="filter"
           [p-enable-collapse]="enableCollapse"
           [p-loading]="filterLoading"
+          [p-components-size]="componentsSize"
           (p-filter)="debounceFilter($event)"
         ></po-menu-filter>
       </div>

@@ -1,30 +1,30 @@
 import { ComponentFixture, TestBed } from '@angular/core/testing';
 
-import { configureTestSuite } from './../../util-test/util-expect.spec';
-
 import { PoLoadingModule } from '../po-loading';
 import { PoIconModule } from './../po-icon';
 
-import { PoButtonComponent } from './po-button.component';
 import { PoButtonBaseComponent } from './po-button-base.component';
+import { PoButtonComponent } from './po-button.component';
 
+import { PoThemeService } from '../../services';
 import { expectPropertiesValues } from '../../util-test/util-expect.spec';
-import { PoButtonType } from './po-button-type.enum';
+import { PoButtonType } from './enums/po-button-type.enum';
 
 describe('PoButtonComponent: ', () => {
   let component: PoButtonComponent;
   let fixture: ComponentFixture<PoButtonComponent>;
-
   let nativeElement: any;
-
-  configureTestSuite(() => {
-    TestBed.configureTestingModule({
-      imports: [PoLoadingModule, PoIconModule],
-      declarations: [PoButtonComponent]
-    });
-  });
+  let poThemeServiceMock: jasmine.SpyObj<PoThemeService>;
 
   beforeEach(() => {
+    poThemeServiceMock = jasmine.createSpyObj('PoThemeService', ['getA11yLevel', 'getA11yDefaultSize']);
+
+    TestBed.configureTestingModule({
+      imports: [PoLoadingModule, PoIconModule],
+      declarations: [PoButtonComponent],
+      providers: [{ provide: PoThemeService, useValue: poThemeServiceMock }]
+    });
+
     fixture = TestBed.createComponent(PoButtonComponent);
     component = fixture.componentInstance;
 
@@ -148,6 +148,28 @@ describe('PoButtonComponent: ', () => {
       component.focus();
 
       expect(component.buttonElement.nativeElement.focus).not.toHaveBeenCalled();
+    });
+
+    describe('mapSizeToIcon: ', () => {
+      it('should return "xs" for "small" size', () => {
+        expect(component.mapSizeToIcon('small')).toBe('xs');
+      });
+
+      it('should return "sm" for "medium" size', () => {
+        expect(component.mapSizeToIcon('medium')).toBe('sm');
+      });
+
+      it('should return "sm" for "large" size', () => {
+        expect(component.mapSizeToIcon('large')).toBe('sm');
+      });
+
+      it('should return "sm" for invalid size', () => {
+        expect(component.mapSizeToIcon('invalid')).toBe('sm');
+      });
+
+      it('should return "sm" when size is empty', () => {
+        expect(component.mapSizeToIcon('')).toBe('sm');
+      });
     });
   });
 

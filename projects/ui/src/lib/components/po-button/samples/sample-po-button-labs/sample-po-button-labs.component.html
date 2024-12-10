@@ -1,4 +1,3 @@
-<!-- Component -->
 <div class="po-row">
   <po-button
     class="po-sm-12"
@@ -17,53 +16,66 @@
 
 <hr />
 
-<!-- Properties -->
 <form #f="ngForm">
   <div class="po-row">
-    <po-input class="po-md-6" name="label" [(ngModel)]="label" p-clean p-label="Label"> </po-input>
+    <po-input class="po-lg-6 po-md-6" name="label" [(ngModel)]="label" p-clean p-label="Label"> </po-input>
   </div>
 
-  <div class="po-row">
-    <po-checkbox-group
-      class="po-md-12"
-      name="properties"
-      [(ngModel)]="properties"
-      p-label="Properties"
-      [p-options]="propertiesOptions"
-      (p-change)="propertiesChange($event)"
-    >
-    </po-checkbox-group>
-  </div>
+  <po-checkbox-group
+    class="po-lg-12"
+    name="properties"
+    [(ngModel)]="properties"
+    p-columns="4"
+    p-label="Properties"
+    [p-options]="propertiesOptions"
+    (p-change)="propertiesChange($event)"
+  >
+  </po-checkbox-group>
+
+  <po-radio-group
+    class="po-lg-12"
+    name="icon"
+    [(ngModel)]="icon"
+    p-columns="4"
+    p-label="Icon"
+    [p-options]="iconsOptions"
+  >
+  </po-radio-group>
+
+  <po-radio-group
+    class="po-lg-12"
+    name="kind"
+    [(ngModel)]="kind"
+    p-columns="4"
+    p-label="Kind"
+    [p-options]="kindsOptions"
+    (p-change)="verifyDisabled($event)"
+  >
+  </po-radio-group>
+
+  <po-radio-group
+    class="po-lg-12"
+    name="type"
+    [(ngModel)]="type"
+    p-columns="4"
+    p-label="Type"
+    [p-options]="typeOptions"
+  >
+  </po-radio-group>
+
+  <po-radio-group
+    class="po-lg-12"
+    name="size"
+    [(ngModel)]="size"
+    p-columns="4"
+    p-label="Size"
+    p-help="Para aplicar o tamanho small, configure o nível de acessibilidade para AA, ajustável no navbar ou serviço de tema (https://po-ui.io/documentation/po-theme)."
+    [p-options]="sizesOptions"
+    (p-change)="verifyDisabled($event)"
+  >
+  </po-radio-group>
 
   <div class="po-row">
-    <po-radio-group class="po-lg-12" name="icon" [(ngModel)]="icon" p-label="Icon" [p-options]="iconsOptions">
-    </po-radio-group>
-
-    <po-radio-group
-      class="po-lg-12"
-      name="kind"
-      [(ngModel)]="kind"
-      p-label="Kind"
-      [p-options]="kindsOptions"
-      (p-change)="verifyDisabled($event)"
-    >
-    </po-radio-group>
-
-    <po-radio-group
-      class="po-lg-12"
-      name="size"
-      [(ngModel)]="size"
-      p-label="Size"
-      [p-options]="sizesOptions"
-      (p-change)="verifyDisabled($event)"
-    >
-    </po-radio-group>
-
-    <po-radio-group class="po-lg-12" name="type" [(ngModel)]="type" p-label="Type" [p-options]="typeOptions">
-    </po-radio-group>
-  </div>
-
-  <div class="po-row">
-    <po-button class="po-md-3" p-label="Sample Restore" (p-click)="restore()"> </po-button>
+    <po-button class="po-lg-3 po-md-6" p-label="Sample Restore" (p-click)="restore()"> </po-button>
   </div>
 </form>

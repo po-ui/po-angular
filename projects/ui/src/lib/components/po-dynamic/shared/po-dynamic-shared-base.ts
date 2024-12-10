@@ -1,5 +1,5 @@
 import { Directive } from '@angular/core';
-import { PoDynamicFormField } from '../po-dynamic-form/po-dynamic-form-field.interface';
+import { PoDynamicFormField } from '../po-dynamic-form/interfaces/po-dynamic-form-field.interface';
 import { PoDynamicViewField } from '../po-dynamic-view/po-dynamic-view-field.interface';
 
 /**
