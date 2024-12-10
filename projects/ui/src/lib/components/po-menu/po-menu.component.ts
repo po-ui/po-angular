@@ -17,6 +17,7 @@ import { map } from 'rxjs/operators';
 
 import { getFormattedLink, isMobile, openExternalLink, uuid } from '../../utils/util';
 
+import { PoThemeService } from '../../services';
 import { PoLanguageService } from '../../services/po-language/po-language.service';
 import { PoMenuBaseComponent } from './po-menu-base.component';
 import { PoMenuHeaderTemplateDirective } from './po-menu-header-template/po-menu-header-template.directive';
@@ -139,6 +140,7 @@ export class PoMenuComponent extends PoMenuBaseComponent implements AfterViewIni
   private itemSubscription: Subscription;
   private routeSubscription: Subscription;
 
+  /* eslint-disable max-params */
   constructor(
     public changeDetector: ChangeDetectorRef,
     private element: ElementRef,
@@ -147,10 +149,12 @@ export class PoMenuComponent extends PoMenuBaseComponent implements AfterViewIni
     private menuItemsService: PoMenuItemsService,
     menuGlobalService: PoMenuGlobalService,
     menuService: PoMenuService,
-    languageService: PoLanguageService
+    languageService: PoLanguageService,
+    protected poThemeService: PoThemeService
   ) {
-    super(menuGlobalService, menuService, languageService);
+    super(menuGlobalService, menuService, languageService, poThemeService);
   }
+  /* eslint-enable max-params */
 
   private get isActiveItemMenuSubMenu() {
     return this.activeMenuItem['level'] > this.groupedMenuItem['level'];

@@ -1,5 +1,5 @@
 import { PoDialogAlertOptions, PoDialogConfirmOptions } from './interfaces/po-dialog.interface';
-import { PoDialogType } from './po-dialog.enum';
+import { PoDialogType } from './enums/po-dialog.enum';
 
 /**
  * @description

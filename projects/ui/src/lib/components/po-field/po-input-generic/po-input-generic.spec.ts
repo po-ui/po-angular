@@ -76,40 +76,6 @@ describe('PoInputGeneric:', () => {
     expect(component.afterViewInit).toHaveBeenCalled();
   });
 
-  it('should call verifyAutoFocus and setPaddingInput', () => {
-    spyOn(component, 'verifyAutoFocus');
-    spyOn(component, 'setPaddingInput');
-    component.afterViewInit();
-    expect(component.verifyAutoFocus).toHaveBeenCalled();
-    expect(component.setPaddingInput).toHaveBeenCalled();
-  });
-
-  it('should calc icons position with clean', fakeAsync(() => {
-    const fakeThis = {
-      clean: true,
-      inputEl: component.inputEl,
-      el: component.el
-    };
-
-    component.setPaddingInput.call(fakeThis);
-    tick(10);
-
-    expect(fakeThis.inputEl.nativeElement.style.paddingRight).toBe('36px');
-  }));
-
-  it('should calc icons position without clean', fakeAsync(() => {
-    const fakeThis = {
-      clean: false,
-      inputEl: component.inputEl,
-      el: component.el
-    };
-
-    component.setPaddingInput.call(fakeThis);
-    tick(10);
-
-    expect(fakeThis.inputEl.nativeElement.style.paddingRight).toBe('');
-  }));
-
   it('should call keydown from mask with keyCode different 229', () => {
     const fakeThis = {
       mask: '(999)',
@@ -508,20 +474,6 @@ describe('PoInputGeneric:', () => {
         getAdditionalHelpTooltip: () => false
       };
     }
-
-    it('afterViewInit: should call `setPaddingInput` if the `type` is not `password`.', () => {
-      spyOn(component, 'setPaddingInput');
-      component.type = 'text';
-      component.afterViewInit();
-      expect(component.setPaddingInput).toHaveBeenCalled();
-    });
-
-    it('afterViewInit: should not call `setPaddingInput` if the `type` is not `password`.', () => {
-      spyOn(component, 'setPaddingInput');
-      component.type = 'password';
-      component.afterViewInit();
-      expect(component.setPaddingInput).not.toHaveBeenCalled();
-    });
 
     it('focus: should call `focus` of input', () => {
       component.inputEl = {

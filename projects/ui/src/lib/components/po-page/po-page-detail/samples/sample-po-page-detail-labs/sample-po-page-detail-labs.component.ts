@@ -1,7 +1,6 @@
 import { Component, OnInit } from '@angular/core';
 
-import { PoBreadcrumb, PoBreadcrumbItem } from '@po-ui/ng-components';
-import { PoPageDetailLiterals } from '@po-ui/ng-components';
+import { PoBreadcrumb, PoBreadcrumbItem, PoPageDetailLiterals, PoRadioGroupOption } from '@po-ui/ng-components';
 
 @Component({
   selector: 'sample-po-page-detail-labs',
@@ -13,11 +12,17 @@ export class SamplePoPageDetailLabsComponent implements OnInit {
   breadcrumb: PoBreadcrumb;
   breadcrumbItem: PoBreadcrumbItem;
   breadcrumbParams: any;
+  componentsSize: string;
   customLiterals: PoPageDetailLiterals;
   literals: string;
   params: any;
   title: string;
   subtitle: string;
+
+  public readonly componentsSizeOptions: Array<PoRadioGroupOption> = [
+    { label: 'small', value: 'small' },
+    { label: 'medium', value: 'medium' }
+  ];
 
   ngOnInit() {
     this.restore();
@@ -65,6 +70,7 @@ export class SamplePoPageDetailLabsComponent implements OnInit {
     this.breadcrumb = { items: [] };
     this.breadcrumbItem = { label: undefined, link: undefined };
     this.breadcrumbParams = {};
+    this.componentsSize = 'medium';
     this.customLiterals = undefined;
     this.literals = '';
     this.title = 'PO Page Detail';

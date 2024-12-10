@@ -1,11 +1,13 @@
 import { ChangeDetectorRef, Component, EventEmitter, Inject, Input, Optional, Output, forwardRef } from '@angular/core';
 import { NG_VALUE_ACCESSOR } from '@angular/forms';
 
+import { PoFieldSize } from '../../../enums/po-field-size.enum';
+import { PoThemeService } from '../../../services';
 import { poLocaleDefault } from '../../../services/po-language/po-language.constant';
 import { PoLanguageService } from '../../../services/po-language/po-language.service';
-import { convertToBoolean } from '../../../utils/util';
+import { convertToBoolean, getDefaultSize, validateSize } from '../../../utils/util';
 import { PoCheckboxGroupComponent } from '../../po-field/po-checkbox-group/po-checkbox-group.component';
-import { ICONS_DICTIONARY, AnimaliaIconDictionary } from '../../po-icon';
+import { AnimaliaIconDictionary, ICONS_DICTIONARY } from '../../po-icon';
 import { PoTableColumn } from '../interfaces/po-table-column.interface';
 
 export const poTableListManagerLiterals = {
@@ -50,6 +52,7 @@ type Direction = 'up' | 'down';
   standalone: false
 })
 export class PoTableListManagerComponent extends PoCheckboxGroupComponent {
+  private _componentsSize?: string = undefined;
   private _iconToken: { [key: string]: string };
 
   @Output('p-change-position')
@@ -59,6 +62,28 @@ export class PoTableListManagerComponent extends PoCheckboxGroupComponent {
   private changeColumnFixed = new EventEmitter<any>();
 
   @Input('p-columns-manager') columnsManager: Array<PoTableColumn>;
+
+  /**
+   * @optional
+   *
+   * @description
+   *
+   * Define o tamanho dos componentes de formulário no table:
+   * - `small`: aplica a medida small de cada componente (disponível apenas para acessibilidade AA).
+   * - `medium`: aplica a medida medium de cada componente.
+   *
+   * > Caso a acessibilidade AA não esteja configurada, o tamanho `medium` será mantido.
+   * Para mais detalhes, consulte a documentação do [po-theme](https://po-ui.io/documentation/po-theme).
+   *
+   * @default `medium`
+   */
+  @Input('p-components-size') set componentsSize(value: string) {
+    this._componentsSize = validateSize(value, this.poThemeService, PoFieldSize);
+  }
+
+  get componentsSize(): string {
+    return this._componentsSize ?? getDefaultSize(this.poThemeService, PoFieldSize);
+  }
 
   @Input({ alias: 'p-hide-action-fixed-columns', transform: convertToBoolean }) hideActionFixedColumns: boolean = false;
 
@@ -71,9 +96,10 @@ export class PoTableListManagerComponent extends PoCheckboxGroupComponent {
   constructor(
     languageService: PoLanguageService,
     changeDetector: ChangeDetectorRef,
-    @Optional() @Inject(ICONS_DICTIONARY) value: { [key: string]: string }
+    @Optional() @Inject(ICONS_DICTIONARY) value: { [key: string]: string },
+    protected poThemeService: PoThemeService
   ) {
-    super(changeDetector);
+    super(changeDetector, poThemeService);
 
     const language = languageService.getShortLanguage();
 

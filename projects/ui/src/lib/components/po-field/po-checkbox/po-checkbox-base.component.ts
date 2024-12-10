@@ -1,8 +1,9 @@
 import { Directive, EventEmitter, Input, Output } from '@angular/core';
 import { ControlValueAccessor } from '@angular/forms';
 
-import { convertToBoolean, uuid } from './../../../utils/util';
-import { PoCheckboxSize } from './po-checkbox-size.enum';
+import { PoThemeService } from '../../../services';
+import { convertToBoolean, getDefaultSize, uuid, validateSize } from './../../../utils/util';
+import { PoCheckboxSize } from './enums/po-checkbox-size.enum';
 
 /**
  * @description
@@ -147,6 +148,7 @@ export abstract class PoCheckboxBaseComponent implements ControlValueAccessor {
   onTouched;
 
   private _disabled?: boolean = false;
+  private _size?: string = undefined;
 
   /**
    * @optional
@@ -165,29 +167,31 @@ export abstract class PoCheckboxBaseComponent implements ControlValueAccessor {
     return this._disabled;
   }
 
-  private _size?: string = PoCheckboxSize.medium;
-
   /**
    * @optional
    *
    * @description
    *
-   * Define o tamanho do *checkbox*
+   * Define o tamanho da caixa de seleção do componente:
+   * - `small`: 16x16 (disponível apenas para acessibilidade AA).
+   * - `medium`: 24x24.
+   * - `large`: 32x32.
    *
-   * Valores válidos:
-   * - `medium`: o `po-checkbox` fica do tamanho padrão, com 24px de altura.;
-   * - `large`: o `po-checkbox` fica maior, com 32px de altura.;
+   * > Caso a acessibilidade AA não esteja configurada, o tamanho `medium` será mantido.
+   * Para mais detalhes, consulte a documentação do [po-theme](https://po-ui.io/documentation/po-theme).
    *
    * @default `medium`
    *
    */
   @Input('p-size') set size(value: string) {
-    this._size = PoCheckboxSize[value] ? PoCheckboxSize[value] : PoCheckboxSize.medium;
+    this._size = validateSize(value, this.poThemeService, PoCheckboxSize);
   }
 
   get size(): string {
-    return this._size;
+    return this._size ?? getDefaultSize(this.poThemeService, PoCheckboxSize);
   }
+
+  constructor(protected poThemeService: PoThemeService) {}
 
   changeValue() {
     if (this.propagateChange) {

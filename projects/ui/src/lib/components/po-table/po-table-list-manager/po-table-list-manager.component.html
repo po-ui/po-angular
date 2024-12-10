@@ -32,9 +32,13 @@
         [p-disabled]="option.disabled || disabled || isFixed(option)"
         [p-value]="checkedOptions[option.value]"
         [p-hide-label-status]="true"
+        [p-size]="componentsSize"
       >
       </po-switch>
-      <span class="po-table-list-manager-item-text">
+      <span
+        class="po-table-list-manager-item-text"
+        [class.po-table-list-manager-item-text-aa]="componentsSize === 'small'"
+      >
         {{ option.label }}
       </span>
     </div>
@@ -45,6 +49,7 @@
         [p-icon]="isFixed(option) ? templateIconFixed : templateIconNotFixed"
         (p-click)="emitFixed(option)"
         [p-disabled]="!option.visible || checksIfHasFiveFixed(option)"
+        [p-size]="componentsSize"
       >
       </po-button>
 
@@ -53,6 +58,7 @@
         [p-icon]="isFixed(option) ? 'ICON_PUSH_PIN_SLASH' : 'ICON_PUSH_PIN'"
         (p-click)="emitFixed(option)"
         [p-disabled]="!option.visible || checksIfHasFiveFixed(option)"
+        [p-size]="componentsSize"
       >
       </po-button>
 
@@ -61,6 +67,7 @@
         p-tooltip-position="left"
         p-icon="ICON_ARROW_UP"
         [p-disabled]="verifyArrowDisabled(option, 'up') || isFixed(option)"
+        [p-size]="componentsSize"
         (p-click)="emitChangePosition(option, 'up')"
       >
       </po-button>
@@ -70,6 +77,7 @@
         p-tooltip-position="top"
         p-icon="ICON_ARROW_DOWN"
         [p-disabled]="verifyArrowDisabled(option, 'down') || isFixed(option)"
+        [p-size]="componentsSize"
         (p-click)="emitChangePosition(option, 'down')"
       >
       </po-button>

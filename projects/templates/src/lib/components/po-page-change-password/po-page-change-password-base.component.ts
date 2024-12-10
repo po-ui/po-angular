@@ -1,8 +1,8 @@
-import { EventEmitter, Input, Output, Directive } from '@angular/core';
+import { Directive, EventEmitter, Input, Output } from '@angular/core';
 
-import { PoModalAction } from '@po-ui/ng-components';
+import { PoModalAction, PoThemeService } from '@po-ui/ng-components';
 
-import { convertToBoolean, isExternalLink, isTypeof } from '../../utils/util';
+import { convertToBoolean, getDefaultSize, isExternalLink, isTypeof, validateSize } from '../../utils/util';
 
 import { PoPageChangePasswordRecovery } from './interfaces/po-page-change-password-recovery.interface';
 import { PoPageChangePasswordRequirement } from './interfaces/po-page-change-password-requirement.interface';
@@ -179,10 +179,33 @@ export abstract class PoPageChangePasswordBaseComponent {
 
   protected validatorChange: any;
 
+  private _componentsSize?: string = undefined;
   private _hideCurrentPassword: boolean = false;
   private _recovery: string | PoPageChangePasswordRecovery | Function;
   private _requirements: Array<PoPageChangePasswordRequirement> = [];
   private _urlHome: string = '/';
+
+  /**
+   * @optional
+   *
+   * @description
+   *
+   * Define o tamanho dos componentes de formulário no template:
+   * - `small`: aplica a medida small de cada componente (disponível apenas para acessibilidade AA).
+   * - `medium`: aplica a medida medium de cada componente.
+   *
+   * > Caso a acessibilidade AA não esteja configurada, o tamanho `medium` será mantido.
+   * Para mais detalhes, consulte a documentação do [po-theme](https://po-ui.io/documentation/po-theme).
+   *
+   * @default `medium`
+   */
+  @Input('p-components-size') set componentsSize(value: string) {
+    this._componentsSize = validateSize(value, this.poThemeService);
+  }
+
+  get componentsSize(): string {
+    return this._componentsSize ?? getDefaultSize(this.poThemeService);
+  }
 
   /**
    * @optional
@@ -281,6 +304,8 @@ export abstract class PoPageChangePasswordBaseComponent {
    * @default `true`
    */
   @Input('p-no-autocomplete-password') noAutocompletePassword: boolean = true;
+
+  constructor(protected poThemeService: PoThemeService) {}
 
   abstract navigateTo(url: string): void;
 }

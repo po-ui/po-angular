@@ -1,7 +1,9 @@
 import { ChangeDetectorRef, Directive, EventEmitter, Input, Output } from '@angular/core';
 import { AbstractControl, ControlValueAccessor, Validator, Validators } from '@angular/forms';
 
-import { convertToBoolean, convertToInt } from '../../../utils/util';
+import { PoFieldSize } from '../../../enums/po-field-size.enum';
+import { PoThemeService } from '../../../services';
+import { convertToBoolean, convertToInt, getDefaultSize, validateSize } from '../../../utils/util';
 import { maxlengpoailed, minlengpoailed, requiredFailed } from '../validators';
 
 /**
@@ -31,6 +33,22 @@ import { maxlengpoailed, minlengpoailed, requiredFailed } from '../validators';
  * elementos da tela. [WCAG 2.4.12: Focus Appearance)](https://www.w3.org/WAI/WCAG22/Understanding/focus-appearance-enhanced)
  * - A identificação do erro acontece também através da mudança de cor do campo, mas também de um ícone
  * junto da mensagem. [WGAG 1.4.1: Use of Color, 3.2.4: Consistent Identification](https://www.w3.org/WAI/WCAG21/Understanding/use-of-color)
+ *
+ * #### Tokens customizáveis
+ *
+ * É possível alterar o estilo do componente usando os seguintes tokens (CSS):
+ *
+ * > Para maiores informações, acesse o guia [Personalizando o Tema Padrão com Tokens CSS](https://po-ui.io/guides/theme-customization).
+ *
+ * | Propriedade                            | Descrição                                             | Valor Padrão                                    |
+ * |----------------------------------------|-------------------------------------------------------|-------------------------------------------------|
+ * | **Default Values**                     |                                                       |                                                 |
+ * | `--font-family`                        | Família tipográfica usada                             | `var(--font-family-theme)`                      |
+ * | `--font-size`                          | Tamanho da fonte                                      | `var(--font-size-default)`                      |
+ * | `--text-color-placeholder`             | Cor do texto placeholder                              | `var(--color-neutral-light-30)`                 |
+ * | `--color`                              | Cor pincipal do campo                                 | `var(--color-neutral-dark-70)`                  |
+ * | `--background`                         | Cor de background                                     | `var(--color-neutral-light-05)`                 |
+ *
  */
 @Directive()
 export abstract class PoTextareaBaseComponent implements ControlValueAccessor, Validator {
@@ -189,6 +207,7 @@ export abstract class PoTextareaBaseComponent implements ControlValueAccessor, V
   private _readonly: boolean = false;
   private _required: boolean = false;
   private _rows: number = 3;
+  private _size?: string = undefined;
 
   private modelLastUpdate: any;
   private onChangePropagate: any = null;
@@ -316,7 +335,32 @@ export abstract class PoTextareaBaseComponent implements ControlValueAccessor, V
     return this._rows;
   }
 
-  constructor(public cd: ChangeDetectorRef) {}
+  /**
+   * @optional
+   *
+   * @description
+   *
+   * Define o tamanho do componente:
+   * - `small` (disponível apenas para acessibilidade AA)
+   * - `medium`
+   *
+   * > Caso a acessibilidade AA não esteja configurada, o tamanho `medium` será mantido.
+   * Para mais detalhes, consulte a documentação do [po-theme](https://po-ui.io/documentation/po-theme).
+   *
+   * @default `medium`
+   */
+  @Input('p-size') set size(value: string) {
+    this._size = validateSize(value, this.poThemeService, PoFieldSize);
+  }
+
+  get size(): string {
+    return this._size ?? getDefaultSize(this.poThemeService, PoFieldSize);
+  }
+
+  constructor(
+    public cd: ChangeDetectorRef,
+    protected poThemeService: PoThemeService
+  ) {}
 
   callOnChange(value: any) {
     // Quando o input não possui um formulário, então esta função não é registrada

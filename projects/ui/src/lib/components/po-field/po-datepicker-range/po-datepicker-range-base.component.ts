@@ -1,5 +1,8 @@
 import { ChangeDetectorRef, Directive, EventEmitter, Input, OnDestroy, Output } from '@angular/core';
 import { AbstractControl, ControlValueAccessor, ValidationErrors, Validator, Validators } from '@angular/forms';
+import { Subscription, switchMap } from 'rxjs';
+import { PoFieldSize } from '../../../enums/po-field-size.enum';
+import { PoThemeService } from '../../../services';
 import { poLocaleDefault } from '../../../services/po-language/po-language.constant';
 import { PoLanguageService } from '../../../services/po-language/po-language.service';
 import { PoMask } from '../po-input/po-mask';
@@ -8,14 +11,15 @@ import { PoDateService } from './../../../services/po-date/po-date.service';
 import {
   convertIsoToDate,
   convertToBoolean,
+  getDefaultSize,
   replaceFormatSeparator,
   setYearFrom0To100,
-  validateDateRange
+  validateDateRange,
+  validateSize
 } from './../../../utils/util';
 import { PoDatepickerRangeLiterals } from './interfaces/po-datepicker-range-literals.interface';
 import { PoDatepickerRange } from './interfaces/po-datepicker-range.interface';
 import { poDatepickerRangeLiteralsDefault } from './po-datepicker-range.literals';
-import { Subscription, switchMap } from 'rxjs';
 
 /**
  * @description
@@ -213,6 +217,7 @@ export abstract class PoDatepickerRangeBaseComponent implements ControlValueAcce
   private _required?: boolean = false;
   private _startDate?;
   private _locale?: string;
+  private _size?: string = undefined;
 
   private language;
   private onChangeModel: any;
@@ -445,6 +450,28 @@ export abstract class PoDatepickerRangeBaseComponent implements ControlValueAcce
    *
    * @description
    *
+   * Define o tamanho do componente:
+   * - `small`: altura do input como 32px (disponível apenas para acessibilidade AA).
+   * - `medium`: altura do input como 44px.
+   *
+   * > Caso a acessibilidade AA não esteja configurada, o tamanho `medium` será mantido.
+   * Para mais detalhes, consulte a documentação do [po-theme](https://po-ui.io/documentation/po-theme).
+   *
+   * @default `medium`
+   */
+  @Input('p-size') set size(value: string) {
+    this._size = validateSize(value, this.poThemeService, PoFieldSize);
+  }
+
+  get size(): string {
+    return this._size ?? getDefaultSize(this.poThemeService, PoFieldSize);
+  }
+
+  /**
+   * @optional
+   *
+   * @description
+   *
    * Data inicial.
    */
   @Input('p-start-date') set startDate(date: string | Date) {
@@ -489,6 +516,7 @@ export abstract class PoDatepickerRangeBaseComponent implements ControlValueAcce
   constructor(
     protected changeDetector: ChangeDetectorRef,
     protected poDateService: PoDateService,
+    protected poThemeService: PoThemeService,
     private languageService: PoLanguageService
   ) {
     this.language = languageService.getShortLanguage();

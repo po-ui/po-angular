@@ -1,35 +1,42 @@
-import { ComponentFixture, fakeAsync, TestBed, tick, waitForAsync } from '@angular/core/testing';
-import { NO_ERRORS_SCHEMA } from '@angular/core';
-import { FormControl, FormsModule, NgForm, Validators } from '@angular/forms';
+import { provideHttpClient, withInterceptorsFromDi } from '@angular/common/http';
 import { provideHttpClientTesting } from '@angular/common/http/testing';
+import { NO_ERRORS_SCHEMA } from '@angular/core';
+import { ComponentFixture, fakeAsync, TestBed, tick, waitForAsync } from '@angular/core/testing';
+import { FormControl, FormsModule, NgForm, Validators } from '@angular/forms';
 import { RouterTestingModule } from '@angular/router/testing';
 
-import { throwError, of } from 'rxjs';
+import { of, throwError } from 'rxjs';
 
-import { PoDialogModule } from '@po-ui/ng-components';
+import { PoDialogModule, PoThemeA11yEnum, PoThemeService } from '@po-ui/ng-components';
 
-import * as util from './../../utils/util';
 import { expectPropertiesValues } from './../../util-test/util-expect.spec';
+import * as util from './../../utils/util';
 
 import { poLocaleDefault } from './../../../../../ui/src/lib/services/po-language/po-language.constant';
 
-import { PoPageDynamicEditComponent, poPageDynamicEditLiteralsDefault } from './po-page-dynamic-edit.component';
 import { PoPageDynamicEditActions } from './interfaces/po-page-dynamic-edit-actions.interface';
-import { PoDynamicFormStubComponent } from './test/po-dynamic-form-stub-component';
-import { PoPageDynamicEditBeforeSave } from './interfaces/po-page-dynamic-edit-before-save.interface';
 import { PoPageDynamicEditBeforeSaveNew } from './interfaces/po-page-dynamic-edit-before-save-new.interface';
-import { provideHttpClient, withInterceptorsFromDi } from '@angular/common/http';
+import { PoPageDynamicEditBeforeSave } from './interfaces/po-page-dynamic-edit-before-save.interface';
+import { PoPageDynamicEditComponent, poPageDynamicEditLiteralsDefault } from './po-page-dynamic-edit.component';
+import { PoDynamicFormStubComponent } from './test/po-dynamic-form-stub-component';
 
 describe('PoPageDynamicEditComponent: ', () => {
   let component: PoPageDynamicEditComponent;
   let fixture: ComponentFixture<PoPageDynamicEditComponent>;
+  let poThemeServiceMock: jasmine.SpyObj<PoThemeService>;
 
   beforeEach(waitForAsync(() => {
+    poThemeServiceMock = jasmine.createSpyObj('PoThemeService', ['getA11yLevel', 'getA11yDefaultSize']);
+
     TestBed.configureTestingModule({
       declarations: [PoPageDynamicEditComponent, PoDynamicFormStubComponent],
       schemas: [NO_ERRORS_SCHEMA],
       imports: [FormsModule, RouterTestingModule.withRoutes([]), PoDialogModule],
-      providers: [provideHttpClient(withInterceptorsFromDi()), provideHttpClientTesting()]
+      providers: [
+        { provide: PoThemeService, useValue: poThemeServiceMock },
+        provideHttpClient(withInterceptorsFromDi()),
+        provideHttpClientTesting()
+      ]
     }).compileComponents();
   }));
 
@@ -79,6 +86,50 @@ describe('PoPageDynamicEditComponent: ', () => {
 
       component.actions = invalidActions[3];
       expect(component['_actions']).toEqual({});
+    });
+
+    describe('p-components-size', () => {
+      it('should set property with valid values for accessibility level is AA', () => {
+        poThemeServiceMock.getA11yLevel.and.returnValue(PoThemeA11yEnum.AA);
+
+        component.componentsSize = 'small';
+        expect(component.componentsSize).toBe('small');
+
+        component.componentsSize = 'medium';
+        expect(component.componentsSize).toBe('medium');
+      });
+
+      it('should set property with valid values for accessibility level is AAA', () => {
+        poThemeServiceMock.getA11yLevel.and.returnValue(PoThemeA11yEnum.AAA);
+
+        component.componentsSize = 'small';
+        expect(component.componentsSize).toBe('medium');
+
+        component.componentsSize = 'medium';
+        expect(component.componentsSize).toBe('medium');
+      });
+
+      it('should return small when accessibility is AA and getA11yDefaultSize is small', () => {
+        poThemeServiceMock.getA11yLevel.and.returnValue(PoThemeA11yEnum.AA);
+        poThemeServiceMock.getA11yDefaultSize.and.returnValue('small');
+
+        component['_componentsSize'] = undefined;
+        expect(component.componentsSize).toBe('small');
+      });
+
+      it('should return medium when accessibility is AA and getA11yDefaultSize is medium', () => {
+        poThemeServiceMock.getA11yLevel.and.returnValue(PoThemeA11yEnum.AA);
+        poThemeServiceMock.getA11yDefaultSize.and.returnValue('medium');
+
+        component['_componentsSize'] = undefined;
+        expect(component.componentsSize).toBe('medium');
+      });
+
+      it('should return medium when accessibility is AAA, regardless of getA11yDefaultSize', () => {
+        poThemeServiceMock.getA11yLevel.and.returnValue(PoThemeA11yEnum.AAA);
+        component['_componentsSize'] = undefined;
+        expect(component.componentsSize).toBe('medium');
+      });
     });
 
     it('p-fields: should call `getKeysByFields` and `getDuplicatesByFields` and set property with valid values', () => {

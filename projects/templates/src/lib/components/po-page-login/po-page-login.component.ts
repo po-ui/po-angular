@@ -1,5 +1,3 @@
-import { AbstractControl, NgForm } from '@angular/forms';
-import { ActivatedRoute, Router } from '@angular/router';
 import {
   AfterViewChecked,
   ChangeDetectorRef,
@@ -10,20 +8,22 @@ import {
   ViewChild,
   ViewContainerRef
 } from '@angular/core';
+import { AbstractControl, NgForm } from '@angular/forms';
+import { ActivatedRoute, Router } from '@angular/router';
 
-import { PoLanguageService } from '@po-ui/ng-components';
+import { PoLanguageService, PoThemeService } from '@po-ui/ng-components';
 
-import { isExternalLink } from '../../utils/util';
 import { PoComponentInjectorService } from '@po-ui/ng-components';
+import { isExternalLink } from '../../utils/util';
 
-import { PoModalPasswordRecoveryComponent } from '../po-modal-password-recovery/po-modal-password-recovery.component';
 import { PoModalPasswordRecoveryType } from '../po-modal-password-recovery/enums/po-modal-password-recovery-type.enum';
+import { PoModalPasswordRecoveryComponent } from '../po-modal-password-recovery/po-modal-password-recovery.component';
+import { PoPageLoginRecovery } from './interfaces/po-page-login-recovery.interface';
 import {
   PoPageLoginBaseComponent,
   poPageLoginLiteralIn,
   poPageLoginLiteralsDefault
 } from './po-page-login-base.component';
-import { PoPageLoginRecovery } from './interfaces/po-page-login-recovery.interface';
 import { PoPageLoginService } from './po-page-login.service';
 
 /**
@@ -69,6 +69,7 @@ export class PoPageLoginComponent extends PoPageLoginBaseComponent implements Af
   private readonly customPasswordError = { custom: false };
 
   constructor(
+    protected poThemeService: PoThemeService,
     public changeDetector: ChangeDetectorRef,
     private activatedRoute: ActivatedRoute,
     private poComponentInjector: PoComponentInjectorService,
@@ -77,7 +78,7 @@ export class PoPageLoginComponent extends PoPageLoginBaseComponent implements Af
     router: Router,
     poLanguageService: PoLanguageService
   ) {
-    super(loginService, router, poLanguageService);
+    super(poThemeService, loginService, router, poLanguageService);
     this.differ = differs.find([]).create(null);
   }
 

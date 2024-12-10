@@ -1,17 +1,18 @@
-import { TestBed } from '@angular/core/testing';
 import { TitleCasePipe } from '@angular/common';
+import { TestBed } from '@angular/core/testing';
 
-import { expectPropertiesValues, expectArraysSameOrdering } from '../../../../util-test/util-expect.spec';
+import { expectArraysSameOrdering, expectPropertiesValues } from '../../../../util-test/util-expect.spec';
 
+import { ForceBooleanComponentEnum, ForceOptionComponentEnum } from '../../enums/po-dynamic-field-force-component.enum';
+import { PoDynamicFieldType } from '../../enums/po-dynamic-field-type.enum';
 import * as PoDynamicUtil from '../../po-dynamic.util';
-import { PoDynamicFieldType } from '../../po-dynamic-field-type.enum';
+import { PoDynamicFormField } from '../interfaces/po-dynamic-form-field.interface';
 import { PoDynamicFormFieldsBaseComponent } from './po-dynamic-form-fields-base.component';
-import { PoDynamicFormField } from '../po-dynamic-form-field.interface';
-import { ForceBooleanComponentEnum, ForceOptionComponentEnum } from '../../po-dynamic-field-force-component.enum';
+import { PoThemeService } from 'projects/ui/src/lib/services';
 
 describe('PoDynamicFormFieldsBaseComponent:', () => {
   let component: PoDynamicFormFieldsBaseComponent;
-
+  let poThemeService: jasmine.SpyObj<PoThemeService>;
   let titleCase;
 
   beforeEach(() => {
@@ -21,7 +22,7 @@ describe('PoDynamicFormFieldsBaseComponent:', () => {
 
     titleCase = TestBed.inject(TitleCasePipe);
 
-    component = new PoDynamicFormFieldsBaseComponent(titleCase);
+    component = new PoDynamicFormFieldsBaseComponent(poThemeService, titleCase);
   });
 
   it('should be created', () => {

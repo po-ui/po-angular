@@ -1,4 +1,4 @@
-<po-tabs #poTab>
+<po-tabs #poTab [p-size]="size">
   <po-tab
     *ngFor="let tab of tabs; let i = index"
     [p-active]="tab.active"
@@ -23,7 +23,18 @@
   </po-button>
 </div>
 
-<po-dynamic-form #propertiesForm [p-fields]="propertiesFieldsForm" [p-value]="properties"> </po-dynamic-form>
+<po-divider></po-divider>
+
+<po-radio-group
+  class="po-md-12"
+  name="size"
+  [(ngModel)]="size"
+  p-columns="4"
+  p-label="Size"
+  p-help="Para aplicar o tamanho small, configure o nível de acessibilidade para AA, ajustável no navbar ou serviço de tema (https://po-ui.io/documentation/po-theme)."
+  [p-options]="sizeOptions"
+>
+</po-radio-group>
 
 <div class="po-row">
   <po-button class="po-md-3" p-label="Sample Restore" (p-click)="restore()"> </po-button>

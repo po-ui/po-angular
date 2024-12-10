@@ -18,7 +18,7 @@
       {{ errorPattern }}
     </span>
   </div>
-  <div *ngIf="!errorPattern" class="po-field-container-bottom-help-text">
+  <div *ngIf="!errorPattern && (help || showAdditionalHelpIcon)" class="po-field-container-bottom-help-text">
     <span *ngIf="help">
       {{ help }}
     </span>

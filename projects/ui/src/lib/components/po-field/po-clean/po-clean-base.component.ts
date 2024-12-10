@@ -1,4 +1,4 @@
-import { ElementRef, EventEmitter, Input, Output, Directive } from '@angular/core';
+import { Directive, ElementRef, EventEmitter, Input, Output } from '@angular/core';
 
 /**
  * @docsPrivate
@@ -10,17 +10,27 @@ import { ElementRef, EventEmitter, Input, Output, Directive } from '@angular/cor
  */
 @Directive()
 export abstract class PoCleanBaseComponent {
+  private _size?: string = undefined;
+
   /** Nesta propriedade deve-se informar o elementRef do campo de entrada que utilizará o po-clean. */
   @Input('p-element-ref') inputRef: ElementRef;
 
   /** Valor que será atribuído ao campo quando for clicado no po-clean. */
   @Input('p-default-value') defaultValue?: string = '';
 
+  // Tamanho do componente.
+  @Input('p-size') set size(value: string) {
+    this._size = value;
+  }
+
+  get size(): string {
+    return this._size;
+  }
+
   /**
    * @optional
    *
    * @description
-   *
    *
    * Evento disparado quando executada ação do po-clean.
    * Este evento deve ser usado para avisar para o componente que está usando o po-clean, que o botão foi disparado,

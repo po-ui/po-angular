@@ -24,6 +24,18 @@ export interface PoNotification {
   /** Mensagem a ser exibida na notificação. */
   message: string;
 
+  /**
+   * Define o tamanho das ações:
+   * - `small`: aplica a medida small de cada ação (disponível apenas para acessibilidade AA).
+   * - `medium`: aplica a medida medium de cada ação.
+   *
+   * > Caso a acessibilidade AA não esteja configurada, o tamanho `medium` será mantido.
+   * Para mais detalhes, consulte a documentação do [po-theme](https://po-ui.io/documentation/po-theme).
+   *
+   * @default `small`
+   */
+  sizeActions?: string;
+
   /** Mensagem de suporte a ser exibida na notificação. */
   supportMessage?: string;
 

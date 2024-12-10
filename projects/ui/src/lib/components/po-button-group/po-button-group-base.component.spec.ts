@@ -1,14 +1,18 @@
-import { PoButtonGroupItem } from './po-button-group-item.interface';
 import { PoButtonGroupBaseComponent } from './po-button-group-base.component';
+import { PoButtonGroupItem } from './po-button-group-item.interface';
 
+import { PoThemeA11yEnum, PoThemeService } from '../../services';
 import { expectPropertiesValues } from '../../util-test/util-expect.spec';
 
 describe('PoButtonGroupBaseComponent', () => {
-  let component;
+  let component: PoButtonGroupBaseComponent;
   let fakeButtons: Array<PoButtonGroupItem>;
+  let poThemeServiceMock: jasmine.SpyObj<PoThemeService>;
 
   beforeEach(() => {
-    component = new PoButtonGroupBaseComponent();
+    poThemeServiceMock = jasmine.createSpyObj('PoThemeService', ['getA11yLevel', 'getA11yDefaultSize']);
+    component = new PoButtonGroupBaseComponent(poThemeServiceMock);
+
     fakeButtons = [
       {
         label: 'acao',
@@ -54,6 +58,50 @@ describe('PoButtonGroupBaseComponent', () => {
       const invalidValues = [false, true, {}, 'invalid', []];
 
       expectPropertiesValues(component, 'toggle', invalidValues, 'none');
+    });
+
+    describe('p-size', () => {
+      it('should set property with valid values for accessibility level is AA', () => {
+        poThemeServiceMock.getA11yLevel.and.returnValue(PoThemeA11yEnum.AA);
+
+        component.size = 'small';
+        expect(component.size).toBe('small');
+
+        component.size = 'medium';
+        expect(component.size).toBe('medium');
+      });
+
+      it('should set property with valid values for accessibility level is AAA', () => {
+        poThemeServiceMock.getA11yLevel.and.returnValue(PoThemeA11yEnum.AAA);
+
+        component.size = 'small';
+        expect(component.size).toBe('medium');
+
+        component.size = 'medium';
+        expect(component.size).toBe('medium');
+      });
+
+      it('should return small when accessibility is AA and getA11yDefaultSize is small', () => {
+        poThemeServiceMock.getA11yLevel.and.returnValue(PoThemeA11yEnum.AA);
+        poThemeServiceMock.getA11yDefaultSize.and.returnValue('small');
+
+        component['_size'] = undefined;
+        expect(component.size).toBe('small');
+      });
+
+      it('should return medium when accessibility is AA and getA11yDefaultSize is medium', () => {
+        poThemeServiceMock.getA11yLevel.and.returnValue(PoThemeA11yEnum.AA);
+        poThemeServiceMock.getA11yDefaultSize.and.returnValue('medium');
+
+        component['_size'] = undefined;
+        expect(component.size).toBe('medium');
+      });
+
+      it('should return medium when accessibility is AAA, regardless of getA11yDefaultSize', () => {
+        poThemeServiceMock.getA11yLevel.and.returnValue(PoThemeA11yEnum.AAA);
+        component['_size'] = undefined;
+        expect(component.size).toBe('medium');
+      });
     });
   });
 

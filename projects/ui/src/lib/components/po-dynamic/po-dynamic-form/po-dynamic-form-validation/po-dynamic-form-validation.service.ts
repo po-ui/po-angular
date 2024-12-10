@@ -4,7 +4,7 @@ import { Injectable } from '@angular/core';
 import { map } from 'rxjs/operators';
 import { Observable } from 'rxjs';
 
-import { PoDynamicFormField } from '../po-dynamic-form-field.interface';
+import { PoDynamicFormField } from '../interfaces/po-dynamic-form-field.interface';
 import { PoDynamicFormFieldChanged } from './po-dynamic-form-field-changed.interface';
 import { PoDynamicFormOperation } from '../po-dynamic-form-operation/po-dynamic-form-operation';
 import { PoDynamicFormValidation } from './po-dynamic-form-validation.interface';

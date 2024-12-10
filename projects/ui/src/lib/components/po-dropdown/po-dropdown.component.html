@@ -1,6 +1,7 @@
 <div
   #dropdownRef
   class="po-dropdown"
+  [class.po-dropdown-aa]="size === 'small'"
   [attr.disabled]="disabled"
   tabindex="{{ disabled ? -1 : 0 }}"
   (click)="toggleDropdown()"
@@ -8,10 +9,11 @@
 >
   <div
     class="po-dropdown-button"
+    [class.po-dropdown-button-aa]="size === 'small'"
     [ngClass]="{ 'po-dropdown-button-disabled': disabled, 'po-dropdown-button-open': open }"
   >
     <span>{{ label }}</span>
-    <po-icon class="po-dropdown-icon" [p-icon]="icon"></po-icon>
+    <po-icon class="po-dropdown-icon" [class.po-dropdown-icon-aa]="size === 'small'" [p-icon]="icon"></po-icon>
   </div>
 </div>
 
@@ -22,6 +24,7 @@
   p-position="bottom-left"
   [p-actions]="actions"
   [p-custom-positions]="['bottom-left', 'top-left']"
+  [p-size]="size"
   [p-target]="dropdownRef"
 >
 </po-popup>

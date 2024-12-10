@@ -29,6 +29,7 @@
     [(ngModel)]="item.selected"
     (p-change)="selected.emit(item)"
     [p-disabled]="item.isSelectable === false"
+    [p-size]="componentsSize"
   >
   </po-checkbox>
 </ng-template>
@@ -45,6 +46,7 @@
     [p-checked]="item.value === selectedValue"
     (p-change-selected)="selected.emit(item)"
     [p-disabled]="item.isSelectable === false"
+    [p-size]="componentsSize"
   >
   </po-radio>
 </ng-template>

@@ -9,9 +9,9 @@ import {
   ViewChild
 } from '@angular/core';
 
+import { PoButtonComponent } from '../../po-button/po-button.component';
 import { PoPopoverComponent } from '../../po-popover/po-popover.component';
 import { PoTabComponent } from '../po-tab/po-tab.component';
-import { PoButtonComponent } from '../../po-button/po-button.component';
 
 /**
  * @docsPrivate
@@ -36,6 +36,8 @@ export class PoTabDropdownComponent implements AfterViewInit {
 
   // Lista de abas
   @Input('p-tabs') tabs: Array<PoTabComponent> = [];
+
+  @Input('p-size') size: string;
 
   // Evento que será emitido ao ativar uma aba
   @Output('p-activated') activated = new EventEmitter<any>();

@@ -1,4 +1,4 @@
-import { PoDynamicFieldType } from './po-dynamic-field-type.enum';
+import { PoDynamicFieldType } from './enums/po-dynamic-field-type.enum';
 
 export interface PoDynamicField {
   /** Identificador */

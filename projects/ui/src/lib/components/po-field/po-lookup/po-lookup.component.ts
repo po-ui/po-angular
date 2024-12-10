@@ -17,6 +17,7 @@ import { Subscription } from 'rxjs';
 
 import { uuid } from '../../../utils/util';
 
+import { PoThemeService } from '../../../services';
 import { PoLanguageService } from '../../../services/po-language/po-language.service';
 import { PoLookupBaseComponent } from './po-lookup-base.component';
 import { PoLookupFilterService } from './services/po-lookup-filter.service';
@@ -168,9 +169,10 @@ export class PoLookupComponent extends PoLookupBaseComponent implements AfterVie
     poLookupModalService: PoLookupModalService,
     private cd: ChangeDetectorRef,
     private el: ElementRef,
-    injector: Injector
+    injector: Injector,
+    protected poThemeService: PoThemeService
   ) {
-    super(poLookupFilterService, injector, poLookupModalService, languageService);
+    super(poLookupFilterService, injector, poLookupModalService, languageService, poThemeService);
   }
 
   ngAfterViewInit() {
@@ -251,6 +253,7 @@ export class PoLookupComponent extends PoLookupBaseComponent implements AfterVie
         multiple,
         fieldLabel,
         fieldValue,
+        size,
         spacing,
         textWrap,
         virtualScroll,
@@ -273,6 +276,7 @@ export class PoLookupComponent extends PoLookupBaseComponent implements AfterVie
         selectedItems,
         fieldLabel,
         fieldValue,
+        size,
         spacing,
         textWrap,
         virtualScroll,

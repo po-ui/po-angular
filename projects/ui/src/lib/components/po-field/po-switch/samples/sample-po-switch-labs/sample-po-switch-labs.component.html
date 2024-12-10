@@ -10,6 +10,7 @@
   [p-label-position]="labelPosition"
   [p-format-model]="properties.includes('formatModel')"
   [p-hide-label-status]="properties.includes('hideLabelStatus')"
+  [p-size]="size"
   (p-change)="changeEvent('p-change')"
   (p-keydown)="changeEvent('p-keydown')"
 >
@@ -57,6 +58,15 @@
   >
   </po-input>
 
+  <po-radio-group
+    class="po-lg-6"
+    name="labelPosition"
+    [(ngModel)]="labelPosition"
+    p-label="Label Position"
+    [p-options]="labelPositionOptions"
+  >
+  </po-radio-group>
+
   <po-checkbox-group
     class="po-lg-12"
     name="properties"
@@ -69,10 +79,11 @@
 
   <po-radio-group
     class="po-lg-6"
-    name="labelPosition"
-    [(ngModel)]="labelPosition"
-    p-label="Label Position"
-    [p-options]="labelPositionOptions"
+    name="size"
+    [(ngModel)]="size"
+    p-label="Size"
+    p-help="Para aplicar o tamanho small, configure o nível de acessibilidade para AA, ajustável no navbar ou serviço de tema (https://po-ui.io/documentation/po-theme)."
+    [p-options]="sizeOptions"
   >
   </po-radio-group>
 

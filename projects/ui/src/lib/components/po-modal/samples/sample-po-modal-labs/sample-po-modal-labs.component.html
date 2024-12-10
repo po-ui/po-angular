@@ -1,5 +1,6 @@
 <po-modal
   [p-click-out]="properties.includes('click-out')"
+  [p-components-size]="componentsSize"
   [p-hide-close]="properties.includes('hide-close')"
   [p-primary-action]="primaryAction"
   [p-secondary-action]="secondaryActionLabel ? secondaryAction : null"
@@ -16,15 +17,21 @@
 
 <form #f="ngForm">
   <div class="po-row">
-    <po-input class="po-md-6" name="Title" [(ngModel)]="title" p-clean p-label="Title" p-required> </po-input>
+    <po-input class="po-md-6 po-lg-3" name="Title" [(ngModel)]="title" p-clean p-label="Title" p-required> </po-input>
 
-    <po-input class="po-sm-12 po-md-6" name="Content" [(ngModel)]="content" p-clean p-label="Content" p-maxlength="200">
+    <po-select
+      class="po-md-6 po-lg-3"
+      name="icon"
+      [(ngModel)]="icon"
+      p-label="Icon"
+      [p-options]="iconOptions"
+    ></po-select>
+
+    <po-input class="po-md-6" name="Content" [(ngModel)]="content" p-clean p-label="Content" p-maxlength="200">
     </po-input>
-  </div>
 
-  <div class="po-row">
     <po-input
-      class="po-md-6"
+      class="po-md-6 po-lg-3"
       name="primaryActionLabel"
       [(ngModel)]="primaryActionLabel"
       p-clean
@@ -34,7 +41,7 @@
     </po-input>
 
     <po-checkbox-group
-      class="po-md-6"
+      class="po-md-12 po-lg-9"
       name="primaryActionProperties"
       [(ngModel)]="primaryActionProperties"
       p-columns="3"
@@ -42,11 +49,9 @@
       [p-options]="primaryActionOptions"
     >
     </po-checkbox-group>
-  </div>
 
-  <div class="po-row">
     <po-input
-      class="po-md-6"
+      class="po-md-6 po-lg-3"
       name="secondaryActionLabel"
       [(ngModel)]="secondaryActionLabel"
       p-clean
@@ -56,7 +61,7 @@
     </po-input>
 
     <po-checkbox-group
-      class="po-md-6"
+      class="po-md-12 po-lg-9"
       name="secondaryActionProperties"
       [(ngModel)]="secondaryActionProperties"
       p-columns="3"
@@ -64,25 +69,38 @@
       [p-options]="secondaryActionOptions"
     >
     </po-checkbox-group>
-  </div>
 
-  <div class="po-row">
-    <po-radio-group class="po-lg-6" name="Size" [(ngModel)]="size" p-label="Size" [p-options]="sizeOptions">
+    <po-radio-group
+      class="po-md-12"
+      name="Size"
+      [(ngModel)]="size"
+      p-columns="4"
+      p-label="Size"
+      [p-options]="sizeOptions"
+    >
     </po-radio-group>
 
-    <po-select class="po-lg-6" name="icon" [(ngModel)]="icon" p-label="Icon" [p-options]="iconOptions"></po-select>
-
     <po-checkbox-group
-      class="po-md-6"
+      class="po-md-12 po-lg-6"
       name="properties"
       [(ngModel)]="properties"
       p-label="Properties"
       [p-options]="propertiesOptions"
     >
     </po-checkbox-group>
+
+    <po-radio-group
+      class="po-md-12 po-lg-6"
+      name="componentsSize"
+      [(ngModel)]="componentsSize"
+      p-label="Components size"
+      p-help="Para aplicar o tamanho small, configure o nível de acessibilidade para AA, ajustável no navbar ou serviço de tema (https://po-ui.io/documentation/po-theme)."
+      [p-options]="componentsSizeOptions"
+    >
+    </po-radio-group>
   </div>
 
   <div class="po-row">
-    <po-button class="po-md-3" p-label="Sample Restore" (p-click)="restore()"> </po-button>
+    <po-button class="po-lg-3 po-md-6" p-label="Sample Restore" (p-click)="restore()"> </po-button>
   </div>
 </form>
