@@ -97,13 +97,11 @@ class MockRendererFactory2 {
 describe('PoThemeService:', () => {
   let service: PoThemeService;
   let renderer: MockRenderer2;
-  let styleElement: HTMLStyleElement;
 
   beforeEach(() => {
     TestBed.configureTestingModule({
       providers: [
         PoThemeService,
-        { provide: 'Window', useValue: window },
         { provide: DOCUMENT, useValue: document },
         { provide: RendererFactory2, useClass: MockRendererFactory2 },
         { provide: 'poThemeDefault', useValue: poThemeDefault },
@@ -115,6 +113,9 @@ describe('PoThemeService:', () => {
     service = TestBed.inject(PoThemeService);
 
     spyOn(renderer, 'createText').and.callFake(css => document.createTextNode(css));
+    spyOn(document.documentElement, 'setAttribute');
+
+    return TestBed.inject(PoThemeService);
   });
 
   it('should be created', () => {
@@ -329,6 +330,90 @@ describe('PoThemeService:', () => {
       const theme = service.setTheme(poThemeInit, 2 as PoThemeTypeEnum, PoThemeA11yEnum.AA);
 
       expect(theme).toEqual(undefined);
+    });
+
+    it('setTheme: should set a11y attribute when changing theme', () => {
+      service.setTheme(poThemeTest, PoThemeTypeEnum.light, PoThemeA11yEnum.AAA);
+      expect(document.documentElement.setAttribute).toHaveBeenCalledWith('data-a11y', 'AAA');
+
+      service.setTheme(poThemeTestDark, PoThemeTypeEnum.dark, PoThemeA11yEnum.AA);
+      expect(document.documentElement.setAttribute).toHaveBeenCalledWith('data-a11y', 'AA');
+    });
+
+    describe('getA11yLevel:', () => {
+      beforeEach(() => {
+        spyOn(document.documentElement, 'getAttribute').and.callThrough();
+      });
+
+      it('should return AAA if data-a11y is not set or is not AA', () => {
+        (document.documentElement.getAttribute as jasmine.Spy).and.returnValue(null);
+        expect(service.getA11yLevel()).toBe(PoThemeA11yEnum.AAA);
+
+        (document.documentElement.getAttribute as jasmine.Spy).and.returnValue('AB');
+        expect(service.getA11yLevel()).toBe(PoThemeA11yEnum.AAA);
+      });
+
+      it('should return AA if data-a11y is set to AA', () => {
+        (document.documentElement.getAttribute as jasmine.Spy).and.returnValue('AA');
+        expect(service.getA11yLevel()).toBe(PoThemeA11yEnum.AA);
+      });
+
+      it('should return AAA if data-a11y is set to AAA', () => {
+        (document.documentElement.getAttribute as jasmine.Spy).and.returnValue('AAA');
+        expect(service.getA11yLevel()).toBe(PoThemeA11yEnum.AAA);
+      });
+    });
+
+    describe('setA11yDefaultSizeSmall:', () => {
+      beforeEach(() => {
+        spyOn(document.documentElement, 'getAttribute').and.callThrough();
+      });
+
+      it('should set enableSmallSizeForComponents to false if data-a11y is not AA or not set', () => {
+        (document.documentElement.getAttribute as jasmine.Spy).and.returnValue(null);
+        service.setA11yDefaultSizeSmall(true);
+        expect(service['enableSmallSizeForComponents']).toBeFalse();
+
+        (document.documentElement.getAttribute as jasmine.Spy).and.returnValue('AB');
+        service.setA11yDefaultSizeSmall(true);
+        expect(service['enableSmallSizeForComponents']).toBeFalse();
+      });
+
+      it('should set enableSmallSizeForComponents to false if data-a11y is not AA even if enable is true', () => {
+        (document.documentElement.getAttribute as jasmine.Spy).and.returnValue('AAA');
+        service.setA11yDefaultSizeSmall(true);
+        expect(service['enableSmallSizeForComponents']).toBeFalse();
+      });
+
+      it('should enable small size only if data-a11y is AA and enable is true', () => {
+        (document.documentElement.getAttribute as jasmine.Spy).and.returnValue('AA');
+        service.setA11yDefaultSizeSmall(true);
+        expect(service['enableSmallSizeForComponents']).toBeTrue();
+
+        service.setA11yDefaultSizeSmall(false);
+        expect(service['enableSmallSizeForComponents']).toBeFalse();
+      });
+
+      it('should not enable small size if data-a11y is AAA, regardless of enable', () => {
+        (document.documentElement.getAttribute as jasmine.Spy).and.returnValue('AAA');
+        service.setA11yDefaultSizeSmall(true);
+        expect(service['enableSmallSizeForComponents']).toBeFalse();
+
+        service.setA11yDefaultSizeSmall(false);
+        expect(service['enableSmallSizeForComponents']).toBeFalse();
+      });
+    });
+
+    describe('getA11yDefaultSize:', () => {
+      it('should return "small" if enableSmallSizeForComponents is true', () => {
+        service['enableSmallSizeForComponents'] = true;
+        expect(service.getA11yDefaultSize()).toBe('small');
+      });
+
+      it('should return "medium" if enableSmallSizeForComponents is false', () => {
+        service['enableSmallSizeForComponents'] = false;
+        expect(service.getA11yDefaultSize()).toBe('medium');
+      });
     });
 
     describe('Local Saved Theme Methods:', () => {

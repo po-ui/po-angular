@@ -18,6 +18,7 @@
           <po-icon
             class="po-field-icon po-icon-input"
             [class.po-field-icon-disabled]="disabled"
+            [class.po-field-icon-aa]="size === 'small'"
             [p-icon]="icon"
           ></po-icon>
         </div>
@@ -25,8 +26,18 @@
         <input
           #inp
           class="po-combo-input"
-          [ngClass]="clean && inp.value ? 'po-input-double-icon-right' : 'po-input-icon-right'"
+          [ngClass]="
+            clean && inp.value
+              ? size === 'small'
+                ? 'po-input-double-icon-right-aa'
+                : 'po-input-double-icon-right'
+              : size === 'small'
+                ? 'po-input-icon-right-aa'
+                : 'po-input-icon-right'
+          "
+          [class.po-combo-input-aa]="size === 'small'"
           [class.po-input-icon-left]="icon"
+          [class.po-input-icon-left-aa]="icon && size === 'small'"
           autocomplete="off"
           type="text"
           [attr.name]="name"
@@ -47,8 +58,10 @@
             role="button"
             [attr.aria-label]="literals.clean"
             class="po-combo-clean po-icon-input"
+            [class.po-combo-clean-aa]="size === 'small'"
             *ngIf="clean && !disabled && inp.value"
             [p-element-ref]="inputEl"
+            [p-size]="size"
             (p-change-event)="clear($event)"
             (click)="clear(null); $event.preventDefault()"
             (keydown.enter)="clearAndFocus(); $event.preventDefault()"
@@ -59,11 +72,13 @@
             #iconArrow
             class="po-combo-arrow po-field-icon"
             [class.po-field-icon-disabled]="disabled"
+            [class.po-field-icon-disabled-aa]="disabled && size === 'small'"
             (click)="toggleComboVisibility(true)"
           >
             <po-icon
               [p-icon]="comboOpen ? 'ICON_ARROW_UP po-icon-input' : 'ICON_ARROW_DOWN po-icon-input'"
               [class.po-field-icon]="!disabled"
+              [class.po-field-icon-aa]="size === 'small'"
               [class.po-combo-default-border]="!disabled && inp.value"
               [class.po-combo-background-arrow-up]="!disabled && comboOpen"
             ></po-icon>
@@ -120,6 +135,7 @@
         [p-compare-cache]="compareObjects(cacheOptions, visibleOptions)"
         [p-combo-service]="service"
         [p-infinite-scroll-distance]="infiniteScrollDistance"
+        [p-size]="size"
         (p-update-infinite-scroll)="showMoreInfiniteScroll()"
         (p-close)="onCloseCombo()"
         [p-container-width]="containerWidth"

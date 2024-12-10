@@ -1,5 +1,6 @@
 import { Component, ViewContainerRef } from '@angular/core';
 
+import { PoThemeService } from '../../services';
 import { PoButtonGroupBaseComponent } from './po-button-group-base.component';
 
 /**
@@ -34,7 +35,10 @@ import { PoButtonGroupBaseComponent } from './po-button-group-base.component';
   standalone: false
 })
 export class PoButtonGroupComponent extends PoButtonGroupBaseComponent {
-  constructor(viewRef: ViewContainerRef) {
-    super();
+  constructor(
+    viewRef: ViewContainerRef,
+    protected poThemeService: PoThemeService
+  ) {
+    super(poThemeService);
   }
 }

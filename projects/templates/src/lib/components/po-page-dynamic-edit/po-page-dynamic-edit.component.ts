@@ -1,8 +1,8 @@
-import { Component, Input, OnInit, ViewChild, OnDestroy } from '@angular/core';
+import { Component, Input, OnDestroy, OnInit, ViewChild } from '@angular/core';
 import { ActivatedRoute, Router } from '@angular/router';
 
-import { Observable, concat, of, Subscription, EMPTY, throwError } from 'rxjs';
-import { tap, catchError, map, switchMap } from 'rxjs/operators';
+import { concat, EMPTY, Observable, of, Subscription, throwError } from 'rxjs';
+import { catchError, map, switchMap, tap } from 'rxjs/operators';
 
 import {
   PoBreadcrumb,
@@ -11,23 +11,31 @@ import {
   PoGridComponent,
   PoGridRowActions,
   PoLanguageService,
+  poLocaleDefault,
   PoNotificationService,
   PoPageAction,
-  poLocaleDefault
+  PoThemeService
 } from '@po-ui/ng-components';
 
-import { convertToBoolean, mapObjectByProperties, valuesFromObject, removeKeysProperties } from './../../utils/util';
+import {
+  convertToBoolean,
+  getDefaultSize,
+  mapObjectByProperties,
+  removeKeysProperties,
+  validateSize,
+  valuesFromObject
+} from './../../utils/util';
 
-import { PoPageDynamicEditActions } from './interfaces/po-page-dynamic-edit-actions.interface';
-import { PoPageDynamicEditField } from './interfaces/po-page-dynamic-edit-field.interface';
-import { PoPageDynamicService } from '../../services/po-page-dynamic/po-page-dynamic.service';
-import { PoPageDynamicEditOptions } from './interfaces/po-page-dynamic-edit-options.interface';
 import { PoPageCustomizationService } from '../../services/po-page-customization/po-page-customization.service';
-import { PoPageDynamicEditMetadata } from './interfaces/po-page-dynamic-edit-metadata.interface';
 import { PoPageDynamicOptionsSchema } from '../../services/po-page-customization/po-page-dynamic-options.interface';
-import { PoPageDynamicEditActionsService } from './po-page-dynamic-edit-actions.service';
+import { PoPageDynamicService } from '../../services/po-page-dynamic/po-page-dynamic.service';
+import { PoPageDynamicEditActions } from './interfaces/po-page-dynamic-edit-actions.interface';
 import { PoPageDynamicEditBeforeCancel } from './interfaces/po-page-dynamic-edit-before-cancel.interface';
+import { PoPageDynamicEditField } from './interfaces/po-page-dynamic-edit-field.interface';
 import { PoPageDynamicEditLiterals } from './interfaces/po-page-dynamic-edit-literals.interface';
+import { PoPageDynamicEditMetadata } from './interfaces/po-page-dynamic-edit-metadata.interface';
+import { PoPageDynamicEditOptions } from './interfaces/po-page-dynamic-edit-options.interface';
+import { PoPageDynamicEditActionsService } from './po-page-dynamic-edit-actions.service';
 
 type UrlOrPoCustomizationFunction = string | (() => PoPageDynamicEditOptions);
 type SaveAction = PoPageDynamicEditActions['save'] | PoPageDynamicEditActions['saveNew'];
@@ -340,6 +348,7 @@ export class PoPageDynamicEditComponent implements OnInit, OnDestroy {
   private language: string;
   private subscriptions: Array<Subscription> = [];
   private _actions: PoPageDynamicEditActions = {};
+  private _componentsSize?: string = undefined;
   private _literals: PoPageDynamicEditLiterals;
   private _autoRouter: boolean = false;
   private _controlFields: Array<any> = [];
@@ -481,6 +490,29 @@ export class PoPageDynamicEditComponent implements OnInit, OnDestroy {
     return this._fields;
   }
 
+  /**
+   * @optional
+   *
+   * @description
+   *
+   * Define o tamanho dos componentes de formulário no template:
+   * - `small`: aplica a medida small de cada componente (disponível apenas para acessibilidade AA).
+   * - `medium`: aplica a medida medium de cada componente.
+   *
+   * > Caso a acessibilidade AA não esteja configurada, o tamanho `medium` será mantido.
+   * Para mais detalhes, consulte a documentação do [po-theme](https://po-ui.io/documentation/po-theme).
+   *
+   * @default `medium`
+   */
+  @Input('p-components-size') set componentsSize(value: string) {
+    this._componentsSize = validateSize(value, this.poThemeService);
+  }
+
+  get componentsSize(): string {
+    return this._componentsSize ?? getDefaultSize(this.poThemeService);
+  }
+
+  /* eslint-disable max-params */
   constructor(
     private router: Router,
     private activatedRoute: ActivatedRoute,
@@ -489,10 +521,12 @@ export class PoPageDynamicEditComponent implements OnInit, OnDestroy {
     private poPageDynamicService: PoPageDynamicService,
     private poPageCustomizationService: PoPageCustomizationService,
     private poPageDynamicEditActionsService: PoPageDynamicEditActionsService,
+    private poThemeService: PoThemeService,
     languageService: PoLanguageService
   ) {
     this.language = languageService.getShortLanguage();
   }
+  /* eslint-enable max-params */
 
   ngOnInit(): void {
     this.loadDataFromAPI();

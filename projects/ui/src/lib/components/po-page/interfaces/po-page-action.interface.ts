@@ -1,4 +1,4 @@
-import { PoPopupAction } from '../po-popup/po-popup-action.interface';
+import { PoPopupAction } from '../../po-popup/po-popup-action.interface';
 
 /**
  * @description

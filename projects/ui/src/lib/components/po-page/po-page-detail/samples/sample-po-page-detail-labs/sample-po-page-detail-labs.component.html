@@ -1,5 +1,6 @@
 <po-page-detail
   [p-breadcrumb]="breadcrumb"
+  [p-components-size]="componentsSize"
   [p-literals]="customLiterals"
   [p-title]="title"
   (p-back)="back()"
@@ -12,113 +13,122 @@
   </div>
 
   <hr />
+</po-page-detail>
+<form #f="ngForm">
+  <po-input class="po-md-6" name="title" [(ngModel)]="title" p-label="Title"> </po-input>
 
-  <form #f="ngForm">
-    <div class="po-row">
-      <po-input class="po-md-12" name="title" [(ngModel)]="title" p-label="Title"> </po-input>
-      <po-input class="po-md-12" name="subtitle" [(ngModel)]="subtitle" p-label="Subtitle"> </po-input>
-    </div>
+  <po-input class="po-md-6" name="subtitle" [(ngModel)]="subtitle" p-label="Subtitle"> </po-input>
 
-    <hr />
+  <po-radio-group
+    class="po-md-12"
+    name="size"
+    [(ngModel)]="componentsSize"
+    p-columns="4"
+    p-label="Components size"
+    p-help="Para aplicar o tamanho small, configure o nível de acessibilidade para AA, ajustável no navbar ou serviço de tema (https://po-ui.io/documentation/po-theme)."
+    [p-options]="componentsSizeOptions"
+  >
+  </po-radio-group>
 
-    <form #formBreadcrumbFavorite="ngForm">
-      <div class="po-row">
-        <po-input
-          class="po-lg-6"
-          name="breadcrumbFavorite"
-          [(ngModel)]="breadcrumb.favorite"
-          p-clean
-          p-help="https://po-sample-api.onrender.com/v1/favorite"
-          p-label="Breadcrumb favorite"
-        >
-        </po-input>
-      </div>
-    </form>
+  <hr />
 
-    <form #formBreadcrumbItems="ngForm">
-      <div class="po-row">
-        <po-input
-          class="po-md-6"
-          name="breadcrumbItemLabel"
-          [(ngModel)]="breadcrumbItem.label"
-          p-clean
-          p-label="Breadcrumb item label"
-          p-required
-        >
-        </po-input>
-
-        <po-input
-          class="po-md-6"
-          name="breadcrumbItemLink"
-          [(ngModel)]="breadcrumbItem.link"
-          p-clean
-          p-label="Breadcrumb item link"
-          p-required
-        >
-        </po-input>
-      </div>
-
-      <div class="po-row">
-        <po-button
-          class="po-md-6 po-lg-4"
-          p-label="Add breadcrumb item"
-          [p-disabled]="formBreadcrumbItems.invalid"
-          (p-click)="addBreadcrumbItem()"
-        >
-        </po-button>
-      </div>
-    </form>
-
-    <hr />
-
-    <form #formBreadcrumbParams="ngForm">
-      <div class="po-row">
-        <po-input
-          class="po-md-6"
-          name="breadcrumbParamsProperty"
-          [(ngModel)]="breadcrumbParams.property"
-          p-clean
-          p-label="Breadcrumb params property"
-          p-required
-        >
-        </po-input>
-
-        <po-input
-          class="po-md-6"
-          name="breadcrumbParamsValue"
-          [(ngModel)]="breadcrumbParams.value"
-          p-clean
-          p-label="Breadcrumb params value"
-          p-required
-        >
-        </po-input>
-      </div>
-
-      <div class="po-row">
-        <po-button
-          class="po-md-6 po-lg-4"
-          p-label="Add breadcrumb params"
-          [p-disabled]="formBreadcrumbParams.invalid"
-          (p-click)="addBreadcrumbParam()"
-        >
-        </po-button>
-      </div>
-    </form>
-
+  <form #formBreadcrumbFavorite="ngForm">
     <div class="po-row">
       <po-input
-        class="po-lg-12"
-        name="literals"
-        [(ngModel)]="literals"
-        p-help='Ex.: {"back": "Retornar", "edit": "Edição", "remove": "Excluir registro"}'
-        p-label="Literals"
-        (p-change)="changeLiterals()"
+        class="po-md-6"
+        name="breadcrumbFavorite"
+        [(ngModel)]="breadcrumb.favorite"
+        p-clean
+        p-help="https://po-sample-api.onrender.com/v1/favorite"
+        p-label="Breadcrumb favorite"
+      >
+      </po-input>
+    </div>
+  </form>
+
+  <form #formBreadcrumbItems="ngForm">
+    <div class="po-row">
+      <po-input
+        class="po-md-6"
+        name="breadcrumbItemLabel"
+        [(ngModel)]="breadcrumbItem.label"
+        p-clean
+        p-label="Breadcrumb item label"
+        p-required
+      >
+      </po-input>
+
+      <po-input
+        class="po-md-6"
+        name="breadcrumbItemLink"
+        [(ngModel)]="breadcrumbItem.link"
+        p-clean
+        p-label="Breadcrumb item link"
+        p-required
       >
       </po-input>
     </div>
 
     <div class="po-row">
-      <po-button class="po-md-3" p-label="Sample Restore" (p-click)="restore()"> </po-button>
+      <po-button
+        class="po-md-6 po-lg-3"
+        p-label="Add breadcrumb item"
+        [p-disabled]="formBreadcrumbItems.invalid"
+        (p-click)="addBreadcrumbItem()"
+      >
+      </po-button>
     </div>
   </form>
-</po-page-detail>
+
+  <hr />
+
+  <form #formBreadcrumbParams="ngForm">
+    <div class="po-row">
+      <po-input
+        class="po-md-6"
+        name="breadcrumbParamsProperty"
+        [(ngModel)]="breadcrumbParams.property"
+        p-clean
+        p-label="Breadcrumb params property"
+        p-required
+      >
+      </po-input>
+
+      <po-input
+        class="po-md-6"
+        name="breadcrumbParamsValue"
+        [(ngModel)]="breadcrumbParams.value"
+        p-clean
+        p-label="Breadcrumb params value"
+        p-required
+      >
+      </po-input>
+    </div>
+
+    <div class="po-row">
+      <po-button
+        class="po-md-6 po-lg-3"
+        p-label="Add breadcrumb params"
+        [p-disabled]="formBreadcrumbParams.invalid"
+        (p-click)="addBreadcrumbParam()"
+      >
+      </po-button>
+    </div>
+  </form>
+
+  <div class="po-row">
+    <po-input
+      class="po-md-12 po-lg-6"
+      name="literals"
+      [(ngModel)]="literals"
+      p-help='Ex.: {"back": "Retornar", "edit": "Edição", "remove": "Excluir registro"}'
+      p-label="Literals"
+      (p-change)="changeLiterals()"
+    >
+    </po-input>
+  </div>
+
+  <div class="po-row">
+    <po-button class="po-lg-3 po-md-6" p-label="Sample Restore" (p-click)="restore()"> </po-button>
+  </div>
+</form>

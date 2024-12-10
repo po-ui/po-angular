@@ -1,26 +1,27 @@
 import {
+  AfterViewInit,
+  ChangeDetectionStrategy,
   ChangeDetectorRef,
   Component,
   ElementRef,
   forwardRef,
-  OnInit,
-  ViewChild,
-  AfterViewInit,
-  Renderer2,
-  OnDestroy,
-  SimpleChanges,
   OnChanges,
-  ChangeDetectionStrategy
+  OnDestroy,
+  OnInit,
+  Renderer2,
+  SimpleChanges,
+  ViewChild
 } from '@angular/core';
 import { NG_VALIDATORS, NG_VALUE_ACCESSOR } from '@angular/forms';
 
 import { PoControlPositionService } from './../../../services/po-control-position/po-control-position.service';
 
+import { PoThemeService } from '../../../services';
+import { PoLanguageService } from '../../../services/po-language/po-language.service';
+import { PoDateService } from './../../../services/po-date/po-date.service';
+import { replaceFormatSeparator } from './../../../utils/util';
 import { PoDatepickerRange } from './interfaces/po-datepicker-range.interface';
 import { PoDatepickerRangeBaseComponent } from './po-datepicker-range-base.component';
-import { PoDateService } from './../../../services/po-date/po-date.service';
-import { PoLanguageService } from '../../../services/po-language/po-language.service';
-import { replaceFormatSeparator } from './../../../utils/util';
 
 const arrowLeftKey = 37;
 const arrowRightKey = 39;
@@ -145,9 +146,10 @@ export class PoDatepickerRangeComponent
     private cd: ChangeDetectorRef,
     private poLanguageService: PoLanguageService,
     poDateService: PoDateService,
-    poDatepickerRangeElement: ElementRef
+    poDatepickerRangeElement: ElementRef,
+    protected poThemeService: PoThemeService
   ) {
-    super(changeDetector, poDateService, poLanguageService);
+    super(changeDetector, poDateService, poThemeService, poLanguageService);
     this.poDatepickerRangeElement = poDatepickerRangeElement;
   }
 

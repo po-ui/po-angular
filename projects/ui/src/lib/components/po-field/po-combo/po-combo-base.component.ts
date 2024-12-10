@@ -3,16 +3,18 @@ import { AbstractControl, ControlValueAccessor, Validator, Validators } from '@a
 
 import { poLocaleDefault } from '../../../services/po-language/po-language.constant';
 import { PoLanguageService } from '../../../services/po-language/po-language.service';
-import { convertToBoolean, isTypeof, validValue } from '../../../utils/util';
+import { convertToBoolean, getDefaultSize, isTypeof, validateSize, validValue } from '../../../utils/util';
 import { requiredFailed } from '../validators';
 
+import { PoFieldSize } from '../../../enums/po-field-size.enum';
+import { PoThemeService } from '../../../services';
+import { PoComboFilterMode } from './enums/po-combo-filter-mode.enum';
 import { PoComboFilter } from './interfaces/po-combo-filter.interface';
 import { PoComboGroup } from './interfaces/po-combo-group.interface';
 import { poComboLiteralsDefault } from './interfaces/po-combo-literals-default.interface';
 import { PoComboLiterals } from './interfaces/po-combo-literals.interface';
 import { PoComboOptionGroup } from './interfaces/po-combo-option-group.interface';
 import { PoComboOption } from './interfaces/po-combo-option.interface';
-import { PoComboFilterMode } from './po-combo-filter-mode.enum';
 import { PoComboFilterService } from './po-combo-filter.service';
 
 const PO_COMBO_DEBOUNCE_TIME_DEFAULT = 400;
@@ -380,6 +382,7 @@ export abstract class PoComboBaseComponent implements ControlValueAccessor, OnIn
   private _options: Array<PoComboOption | PoComboOptionGroup | any> = [];
   private _placeholder: string = '';
   private _required?: boolean = false;
+  private _size?: string = undefined;
   private _sort?: boolean = false;
   private language: string;
   private _infiniteScrollDistance?: number = 100;
@@ -535,6 +538,28 @@ export abstract class PoComboBaseComponent implements ControlValueAccessor, OnIn
    * - Não possuir `p-help` e/ou `p-label`.
    */
   @Input('p-show-required') showRequired: boolean = false;
+
+  /**
+   * @optional
+   *
+   * @description
+   *
+   * Define o tamanho do componente:
+   * - `small`: altura do input como 32px (disponível apenas para acessibilidade AA).
+   * - `medium`: altura do input como 44px.
+   *
+   * > Caso a acessibilidade AA não esteja configurada, o tamanho `medium` será mantido.
+   * Para mais detalhes, consulte a documentação do [po-theme](https://po-ui.io/documentation/po-theme).
+   *
+   * @default `medium`
+   */
+  @Input('p-size') set size(value: string) {
+    this._size = validateSize(value, this.poThemeService, PoFieldSize);
+  }
+
+  get size(): string {
+    return this._size ?? getDefaultSize(this.poThemeService, PoFieldSize);
+  }
 
   /**
    * @optional
@@ -725,7 +750,8 @@ export abstract class PoComboBaseComponent implements ControlValueAccessor, OnIn
 
   constructor(
     languageService: PoLanguageService,
-    protected changeDetector: ChangeDetectorRef
+    protected changeDetector: ChangeDetectorRef,
+    protected poThemeService: PoThemeService
   ) {
     this.language = languageService.getShortLanguage();
   }

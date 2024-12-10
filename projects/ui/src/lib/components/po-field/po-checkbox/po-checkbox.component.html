@@ -1,4 +1,7 @@
-<po-field-container [p-disabled]="disabled">
+<po-field-container
+  [p-disabled]="disabled"
+  [class.po-container-no-padding]="noPadding && !showAdditionalHelpIcon() && !help"
+>
   <div class="po-field-container-content">
     <div
       class="container-po-checkbox"
@@ -10,7 +13,8 @@
         #checkboxLabel
         role="checkbox"
         class="po-checkbox-outline"
-        [attr.p-size]="size"
+        [class.po-checkbox-outline-aa]="size === 'small'"
+        [class.po-checkbox-outline-large]="size === 'large'"
         [tabindex]="disabled || disabladTabindex ? -1 : 0"
         [attr.aria-checked]="checkboxValue"
         (blur)="onBlur()"
@@ -20,7 +24,9 @@
           aria-label=" "
           [id]="id"
           class="po-checkbox"
-          [ngClass]="iconNameLib === 'AnimaliaIcon' ? 'po-checkbox-phosphor' : 'po-checkbox-poicon'"
+          [ngClass]="iconNameLib === 'PhosphorIcon' ? 'po-checkbox-phosphor' : 'po-checkbox-poicon'"
+          [class.po-checkbox-aa]="size === 'small'"
+          [class.po-checkbox-large]="size === 'large'"
           [attr.aria-disabled]="disabled"
           [attr.required]="checkBoxRequired"
         >
@@ -29,6 +35,7 @@
         <po-label
           *ngIf="label"
           class="po-checkbox-label"
+          [class.po-checkbox-label-aa]="size === 'small'"
           tabindex="-1"
           [p-disabled]="disabled"
           [p-for]="id"

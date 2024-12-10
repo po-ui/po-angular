@@ -1,3 +1,5 @@
+import { PoFieldSize } from '../enums/po-field-size.enum';
+import { PoThemeA11yEnum, PoThemeService } from '../services';
 import { handleThrowError } from './../util-test/util-expect.spec';
 
 import {
@@ -6,35 +8,34 @@ import {
   clearObject,
   convertDateToISODate,
   convertDateToISOExtended,
-  convertIsoToDate,
   convertImageToBase64,
+  convertIsoToDate,
   convertNumberToDecimal,
   convertToBoolean,
   convertToInt,
   formatYear,
   getFormattedLink,
   isEquals,
+  isExternalLink,
   isKeyCodeEnter,
   isKeyCodeSpace,
-  isExternalLink,
   isTypeof,
+  isValidImageBase64,
+  isValidUrl,
   mapArrayByProperties,
   mapObjectByProperties,
   openExternalLink,
   removeDuplicatedOptions,
+  removeDuplicatedOptionsWithFieldValue,
   removeUndefinedAndNullOptions,
+  removeUndefinedAndNullOptionsWithFieldValue,
   setYearFrom0To100,
   sortOptionsByProperty,
   sortValues,
   validateDateRange,
   validateObjectType,
   validValue,
-  valuesFromObject,
-  removeDuplicatedOptionsWithFieldValue,
-  removeUndefinedAndNullOptionsWithFieldValue,
-  isValidImageBase64,
-  sortArrayOfObjects,
-  isValidUrl
+  valuesFromObject
 } from './util';
 
 import * as UtilFunctions from './util';
@@ -1660,5 +1661,61 @@ describe('replaceFormatSeparator: ', () => {
       { country: 'china', id: 2 },
       { country: 'japao', id: 1 }
     ]);
+  });
+});
+
+describe('accessibility level: ', () => {
+  describe('getDefaultSize', () => {
+    let poThemeServiceMock: jasmine.SpyObj<PoThemeService>;
+
+    beforeEach(() => {
+      poThemeServiceMock = jasmine.createSpyObj('PoThemeService', ['getA11yLevel', 'getA11yDefaultSize']);
+    });
+
+    it('should return `small` when the default component size is `small` in accessibility level AA', () => {
+      poThemeServiceMock.getA11yLevel.and.returnValue(PoThemeA11yEnum.AA);
+      poThemeServiceMock.getA11yDefaultSize.and.returnValue('small');
+
+      expect(UtilFunctions.getDefaultSize(poThemeServiceMock, PoFieldSize)).toBe(PoFieldSize.Small);
+    });
+
+    it('should return `medium` if accessibility AA and default size is not set', () => {
+      poThemeServiceMock.getA11yLevel.and.returnValue(PoThemeA11yEnum.AA);
+
+      expect(UtilFunctions.getDefaultSize(poThemeServiceMock, PoFieldSize)).toBe(PoFieldSize.Medium);
+    });
+
+    it('should return `medium` when the accessibility level is AAA', () => {
+      poThemeServiceMock.getA11yLevel.and.returnValue(PoThemeA11yEnum.AAA);
+
+      expect(UtilFunctions.getDefaultSize(poThemeServiceMock, PoFieldSize)).toBe(PoFieldSize.Medium);
+    });
+  });
+
+  describe('validateSize', () => {
+    let poThemeServiceMock: jasmine.SpyObj<PoThemeService>;
+
+    beforeEach(() => {
+      poThemeServiceMock = jasmine.createSpyObj('PoThemeService', ['getA11yLevel', 'getA11yDefaultSize']);
+    });
+
+    it('should return valid values based on accessibility level', () => {
+      poThemeServiceMock.getA11yLevel.and.returnValue(PoThemeA11yEnum.AA);
+
+      expect(UtilFunctions.validateSize(PoFieldSize.Small, poThemeServiceMock, PoFieldSize)).toBe(PoFieldSize.Small);
+      expect(UtilFunctions.validateSize(PoFieldSize.Medium, poThemeServiceMock, PoFieldSize)).toBe(PoFieldSize.Medium);
+    });
+
+    it('should return `medium` when the value is `small` but the accessibility level is not AA', () => {
+      poThemeServiceMock.getA11yLevel.and.returnValue(PoThemeA11yEnum.AAA);
+
+      expect(UtilFunctions.validateSize(PoFieldSize.Small, poThemeServiceMock, PoFieldSize)).toBe(PoFieldSize.Medium);
+    });
+
+    it('should return the default size when an invalid value is provided', () => {
+      poThemeServiceMock.getA11yLevel.and.returnValue(PoThemeA11yEnum.AA);
+
+      expect(UtilFunctions.validateSize('xxg', poThemeServiceMock, PoFieldSize)).toBe(PoFieldSize.Medium);
+    });
   });
 });

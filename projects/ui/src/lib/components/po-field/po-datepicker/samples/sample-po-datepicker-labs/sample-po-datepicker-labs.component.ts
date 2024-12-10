@@ -21,6 +21,7 @@ export class SamplePoDatepickerLabsComponent implements OnInit {
   placeholder: string;
   properties: Array<string>;
   minDate: string | Date;
+  size: string;
 
   public readonly isoFormatOptions: Array<PoRadioGroupOption> = [
     { label: 'Basic', value: PoDatepickerIsoFormat.Basic },
@@ -52,6 +53,11 @@ export class SamplePoDatepickerLabsComponent implements OnInit {
     { label: 'ru', value: 'ru' }
   ];
 
+  public readonly sizeOptions: Array<PoRadioGroupOption> = [
+    { label: 'small', value: 'small' },
+    { label: 'medium', value: 'medium' }
+  ];
+
   ngOnInit() {
     this.restore();
   }
@@ -74,5 +80,6 @@ export class SamplePoDatepickerLabsComponent implements OnInit {
     this.placeholder = undefined;
     this.properties = [];
     this.minDate = undefined;
+    this.size = 'medium';
   }
 }

@@ -1,12 +1,12 @@
-import { Component, ViewChild, OnInit } from '@angular/core';
+import { Component, OnInit, ViewChild } from '@angular/core';
 
 import {
   PoModalComponent,
   PoNotification,
   PoNotificationService,
+  PoRadioGroupOption,
   PoToasterOrientation,
-  PoToasterType,
-  PoRadioGroupOption
+  PoToasterType
 } from '@po-ui/ng-components';
 
 @Component({
@@ -22,12 +22,18 @@ export class SamplePoNotificationLabsComponent implements OnInit {
   actionLabel: string;
   message: string;
   orientation: number;
+  sizeActions: string;
   type: PoToasterType;
   duration: number;
 
   public readonly orientationOptions: Array<PoRadioGroupOption> = [
     { label: 'Top', value: PoToasterOrientation.Top },
     { label: 'Bottom', value: PoToasterOrientation.Bottom }
+  ];
+
+  public readonly sizeActionsOptions: Array<PoRadioGroupOption> = [
+    { label: 'small', value: 'small' },
+    { label: 'medium', value: 'medium' }
   ];
 
   public readonly typeOptions: Array<PoRadioGroupOption> = [
@@ -50,6 +56,7 @@ export class SamplePoNotificationLabsComponent implements OnInit {
     this.action = false;
     this.actionLabel = '';
     this.duration = undefined;
+    this.sizeActions = 'medium';
   }
 
   showNotification() {
@@ -58,7 +65,8 @@ export class SamplePoNotificationLabsComponent implements OnInit {
       orientation: this.orientation,
       action: undefined,
       actionLabel: this.actionLabel,
-      duration: this.duration
+      duration: this.duration,
+      sizeActions: this.sizeActions
     };
 
     if (this.action) {

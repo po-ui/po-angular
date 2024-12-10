@@ -31,6 +31,9 @@ export class PoSearchListComponent {
 
   @Input('p-field-value') fieldValue: string;
 
+  /** Tamanho do texto de exibido do item. */
+  @Input('p-size') size: string;
+
   /** Evento que será disparado a cada tecla digitada no campo de busca. */
   @Output('p-change') change = new EventEmitter();
 

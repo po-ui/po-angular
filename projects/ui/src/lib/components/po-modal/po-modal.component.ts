@@ -1,9 +1,10 @@
 import { Component, ContentChild, ElementRef, ViewChild } from '@angular/core';
 
+import { uuid } from '../../utils/util';
 import { PoModalBaseComponent } from './po-modal-base.component';
 import { PoModalFooterComponent } from './po-modal-footer/po-modal-footer.component';
-import { uuid } from '../../utils/util';
 
+import { PoThemeService } from '../../services';
 import { PoActiveOverlayService } from '../../services/po-active-overlay/po-active-overlay.service';
 import { PoLanguageService } from '../../services/po-language/po-language.service';
 
@@ -46,9 +47,10 @@ export class PoModalComponent extends PoModalBaseComponent {
 
   constructor(
     private poActiveOverlayService: PoActiveOverlayService,
-    poLanguageService: PoLanguageService
+    poLanguageService: PoLanguageService,
+    protected poThemeService: PoThemeService
   ) {
-    super(poLanguageService);
+    super(poLanguageService, poThemeService);
   }
 
   close(xClosed = false) {

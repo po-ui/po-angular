@@ -12,6 +12,7 @@ import { PoTableColumnSortType, PoTableColumnSpacing } from '../../../po-table';
 import { PoTableColumnSort } from '../../../po-table/interfaces/po-table-column-sort.interface';
 import { poTableLiteralsDefault } from '../../../po-table/po-table-base.component';
 
+import { PoFieldSize } from '../../../../enums/po-field-size.enum';
 import { PoLookupAdvancedFilter } from '../interfaces/po-lookup-advanced-filter.interface';
 import { PoLookupColumn } from '../interfaces/po-lookup-column.interface';
 import { PoLookupFilter } from '../interfaces/po-lookup-filter.interface';
@@ -156,6 +157,9 @@ export abstract class PoLookupModalBaseComponent implements OnDestroy, OnInit {
    * Deve receber um dos valores do enum `PoTableColumnSpacing`.
    */
   @Input('p-spacing') spacing: PoTableColumnSpacing = PoTableColumnSpacing.Medium;
+
+  /** Define o tamanho do componente. */
+  @Input('p-size') size: string;
 
   /**
    * Habilita ou desabilita a quebra automática de texto. Quando ativada, o texto que excede

@@ -2,7 +2,8 @@
   #button
   class="po-button"
   [type]="type"
-  [attr.p-size]="size"
+  [class.po-button-aa]="size === 'small'"
+  [class.po-button-large]="size === 'large'"
   [attr.p-kind]="kind"
   [attr.p-danger]="danger"
   [disabled]="disabled || loading"
@@ -11,11 +12,11 @@
   (click)="onClick()"
 >
   <div *ngIf="loading" class="po-button-loading-icon">
-    <po-loading-icon p-neutral-color p-size="sm"></po-loading-icon>
+    <po-loading-icon p-neutral-color [p-size]="mapSizeToIcon(size)"></po-loading-icon>
   </div>
 
   <div class="po-button-container">
-    <po-icon *ngIf="icon" class="po-button-icon" [p-icon]="icon"></po-icon>
+    <po-icon *ngIf="icon" class="po-button-icon" [class.po-button-icon-aa]="size === 'small'" [p-icon]="icon"></po-icon>
     <span *ngIf="label" class="po-button-label">{{ label }}</span>
   </div>
 </button>
