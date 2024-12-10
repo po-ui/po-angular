@@ -10,16 +10,17 @@ import * as ValidatorsFunctions from '../validators';
 import { poLocaleDefault } from '../../../services/po-language/po-language.constant';
 import { PoLanguageService } from '../../../services/po-language/po-language.service';
 
+import { PoThemeA11yEnum, PoThemeService } from '../../../services';
+import { PoComboFilterMode } from './enums/po-combo-filter-mode.enum';
 import { PoComboFilter } from './interfaces/po-combo-filter.interface';
 import { poComboLiteralsDefault } from './interfaces/po-combo-literals-default.interface';
 import { PoComboOption } from './interfaces/po-combo-option.interface';
 import { PoComboBaseComponent } from './po-combo-base.component';
-import { PoComboFilterMode } from './po-combo-filter-mode.enum';
 
 @Directive()
 class PoComboTest extends PoComboBaseComponent {
-  constructor() {
-    super(new PoLanguageService(), { detectChanges: () => {}, markForCheck: () => {} } as any);
+  constructor(poThemeService: PoThemeService) {
+    super(new PoLanguageService(), { detectChanges: () => {}, markForCheck: () => {} } as any, poThemeService);
   }
 
   getInputValue(): string {
@@ -37,6 +38,7 @@ class PoComboTest extends PoComboBaseComponent {
 
 describe('PoComboBaseComponent:', () => {
   let component: PoComboTest;
+  let poThemeService: jasmine.SpyObj<PoThemeService>;
 
   const defaultService: any = {
     url: '',
@@ -53,8 +55,9 @@ describe('PoComboBaseComponent:', () => {
   };
 
   beforeEach(() => {
-    component = new PoComboTest();
+    poThemeService = jasmine.createSpyObj('PoThemeService', ['getA11yDefaultSize', 'getA11yLevel']);
 
+    component = new PoComboTest(poThemeService);
     component.filterService = service;
     component.defaultService = defaultService;
   });
@@ -227,6 +230,46 @@ describe('PoComboBaseComponent:', () => {
       component['language'] = 'pt';
       const invalidValues = [null, undefined, '', 0, false];
       expectPropertiesValues(component, 'placeholder', invalidValues, 'Escolha uma opção');
+    });
+
+    describe('p-size:', () => {
+      it('should update size with valid values', () => {
+        const validValues = ['medium'];
+
+        expectPropertiesValues(component, 'size', validValues, validValues);
+      });
+
+      it('should update size to `medium` with invalid values', () => {
+        poThemeService.getA11yDefaultSize.and.returnValue('medium');
+
+        const invalidValues = ['extraSmall', 'extraLarge'];
+
+        expectPropertiesValues(component, 'size', invalidValues, 'medium');
+      });
+
+      it('should use default size when size is not set', () => {
+        poThemeService.getA11yDefaultSize.and.returnValue('small');
+
+        component.size = undefined;
+        expect(component.size).toBe('small');
+      });
+
+      it('should return `p-size` if it is defined', () => {
+        component['_size'] = 'large';
+        expect(component.size).toBe('large');
+      });
+
+      it('should call `getDefaultSize` and return its value if `p-size` is null or undefined', () => {
+        spyOn(component as any, 'getDefaultSize').and.returnValue('medium');
+
+        component['_size'] = null;
+        expect(component.size).toBe('medium');
+        expect(component['getDefaultSize']).toHaveBeenCalled();
+
+        component['_size'] = undefined;
+        expect(component.size).toBe('medium');
+        expect(component['getDefaultSize']).toHaveBeenCalledTimes(2);
+      });
     });
   });
 
@@ -997,7 +1040,8 @@ describe('PoComboBaseComponent:', () => {
 
     describe('VisibleOptions:', () => {
       beforeEach(() => {
-        component = new PoComboTest();
+        poThemeService = jasmine.createSpyObj('PoThemeService', ['getA11yDefaultSize', 'getA11yLevel']);
+        component = new PoComboTest(poThemeService);
 
         component.filterService = null;
         component.defaultService = null;
@@ -1516,11 +1560,53 @@ describe('PoComboBaseComponent:', () => {
 
       expect(expectLabel).toEqual('valueTest');
     });
+
+    describe('validateSize:', () => {
+      it('should return the same size if valid and accessibility level allows it', () => {
+        poThemeService.getA11yLevel.and.returnValue(PoThemeA11yEnum.AA);
+
+        expect(component['validateSize']('small')).toBe('small');
+        expect(component['validateSize']('medium')).toBe('medium');
+      });
+
+      it('should return `medium` if p-size is `small` and accessibility level is not `AA`', () => {
+        poThemeService.getA11yLevel.and.returnValue(PoThemeA11yEnum.AAA);
+
+        expect(component['validateSize']('small')).toBe('medium');
+      });
+
+      it('should return default size from getA11yDefaultSize if value is invalid', () => {
+        poThemeService.getA11yDefaultSize.and.returnValue('small');
+
+        expect(component['validateSize']('invalid')).toBe('small');
+      });
+
+      it('should return `medium` if default size is `medium`', () => {
+        poThemeService.getA11yDefaultSize.and.returnValue('medium');
+
+        expect(component['validateSize']('invalid')).toBe('medium');
+      });
+    });
+
+    describe('getDefaultSize:', () => {
+      it('should return `small` if getA11yDefaultSize returns `small`', () => {
+        poThemeService.getA11yDefaultSize.and.returnValue('small');
+
+        expect(component['getDefaultSize']()).toBe('small');
+      });
+
+      it('should return `medium` if getA11yDefaultSize returns `medium`', () => {
+        poThemeService.getA11yDefaultSize.and.returnValue('medium');
+
+        expect(component['getDefaultSize']()).toBe('medium');
+      });
+    });
   });
 });
 
 describe('PoComboBaseComponent using Service', () => {
   let component: PoComboTest;
+  let poThemeService: jasmine.SpyObj<PoThemeService>;
 
   const defaultService: any = {
     url: '',
@@ -1537,7 +1623,8 @@ describe('PoComboBaseComponent using Service', () => {
   };
 
   beforeEach(() => {
-    component = new PoComboTest();
+    poThemeService = jasmine.createSpyObj('PoThemeService', ['getA11yDefaultSize', 'getA11yLevel']);
+    component = new PoComboTest(poThemeService);
 
     component.filterService = service;
     component.defaultService = defaultService;

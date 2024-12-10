@@ -1,8 +1,9 @@
-import { ElementRef, Input, Directive, Output, EventEmitter } from '@angular/core';
+import { Directive, ElementRef, EventEmitter, Input, Output } from '@angular/core';
 
 import { convertToBoolean } from '../../utils/util';
 import { PO_CONTROL_POSITIONS } from './../../services/po-control-position/po-control-position.constants';
 
+import { PoPopupSize } from './enums/po-popup-size.enum';
 import { PoPopupAction } from './po-popup-action.interface';
 
 const poPopupDefaultPosition = 'bottom-left';
@@ -83,6 +84,7 @@ export class PoPopupBaseComponent {
   private _hideArrow: boolean = false;
   private _isCornerAlign: boolean = false;
   private _position?: string = poPopupDefaultPosition;
+  private _size?: string = PoPopupSize.medium;
   private _target: any;
 
   /** Lista de ações que serão exibidas no componente. */
@@ -188,6 +190,9 @@ export class PoPopupBaseComponent {
   get customPositions() {
     return this._customPositions;
   }
+
+  // Tamanho do texto exibido.
+  @Input('p-size') size: string;
 
   /**
    * @description

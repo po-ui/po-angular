@@ -5,6 +5,7 @@
     <div class="po-page-header-actions">
       <po-dropdown
         *ngIf="visibleActions.length > limitPrimaryActions"
+        p-size="medium"
         [p-label]="literals.otherActions"
         [p-actions]="dropdownActions"
       >
@@ -12,6 +13,7 @@
 
       <po-button
         *ngIf="visibleActions.length === 3 && visibleActions[2] && !isMobile"
+        p-size="medium"
         [p-danger]="visibleActions[2].type === 'danger'"
         [p-disabled]="actionIsDisabled(visibleActions[2])"
         [p-label]="visibleActions[2].label"
@@ -21,6 +23,7 @@
 
       <po-button
         *ngIf="visibleActions[1] && (visibleActions.length === 2 || !isMobile)"
+        p-size="medium"
         [p-disabled]="actionIsDisabled(visibleActions[1])"
         [p-label]="visibleActions[1].label"
         [p-danger]="visibleActions[1].type === 'danger'"
@@ -31,6 +34,7 @@
       <po-button
         *ngIf="visibleActions[0]"
         p-kind="primary"
+        p-size="medium"
         [p-danger]="visibleActions[0].type === 'danger'"
         [p-disabled]="actionIsDisabled(visibleActions[0])"
         [p-icon]="visibleActions[0].icon"

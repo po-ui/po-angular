@@ -16,6 +16,7 @@ import { NG_VALIDATORS, NG_VALUE_ACCESSOR } from '@angular/forms';
 
 import { removeDuplicatedOptions } from '../../../utils/util';
 
+import { PoThemeService } from '../../../services';
 import { PoRadioComponent } from '../po-radio/po-radio.component';
 import { PoRadioGroupBaseComponent } from './po-radio-group-base.component';
 
@@ -80,9 +81,10 @@ export class PoRadioGroupComponent extends PoRadioGroupBaseComponent implements 
   constructor(
     differs: IterableDiffers,
     private el: ElementRef,
-    private cd: ChangeDetectorRef
+    private cd: ChangeDetectorRef,
+    protected poThemeService: PoThemeService
   ) {
-    super();
+    super(poThemeService);
     this.differ = differs.find([]).create(null);
   }
 

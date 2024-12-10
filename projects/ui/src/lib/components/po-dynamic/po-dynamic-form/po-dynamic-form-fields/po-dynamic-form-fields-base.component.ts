@@ -1,21 +1,24 @@
-import { Input, EventEmitter, Output, Directive } from '@angular/core';
 import { TitleCasePipe } from '@angular/common';
+import { Directive, EventEmitter, Input, Output } from '@angular/core';
 
 import { isTypeof, sortFields } from '../../../../utils/util';
 
-import { getGridColumnsClasses, isVisibleField } from '../../po-dynamic.util';
-import { PoDynamicFieldType } from '../../po-dynamic-field-type.enum';
-import { PoDynamicFormField } from '../po-dynamic-form-field.interface';
-import { PoDynamicFormFieldInternal } from './po-dynamic-form-field-internal.interface';
 import { PoComboFilter } from '../../../po-field/po-combo/interfaces/po-combo-filter.interface';
 import { PoLookupFilter } from '../../../po-field/po-lookup/interfaces/po-lookup-filter.interface';
+import { PoDynamicFieldSize } from '../../enums/po-dynamic-field-size.enum';
+import { PoDynamicFieldType } from '../../enums/po-dynamic-field-type.enum';
+import { getGridColumnsClasses, isVisibleField } from '../../po-dynamic.util';
 import { PoDynamicSharedBase } from '../../shared/po-dynamic-shared-base';
+import { PoDynamicFormField } from '../po-dynamic-form-field.interface';
+import { PoDynamicFormFieldInternal } from './po-dynamic-form-field-internal.interface';
 
 @Directive()
 export class PoDynamicFormFieldsBaseComponent extends PoDynamicSharedBase {
   @Input('p-auto-focus') autoFocus?: string;
 
   @Input('p-disabled-form') disabledForm: boolean;
+
+  @Input('p-size') size: PoDynamicFieldSize;
 
   @Input('p-validate') validate?: string | Function;
 

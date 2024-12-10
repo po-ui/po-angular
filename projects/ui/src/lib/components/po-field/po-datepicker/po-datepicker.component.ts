@@ -25,6 +25,7 @@ import {
 import { PoControlPositionService } from './../../../services/po-control-position/po-control-position.service';
 
 import { isObservable, of, Subscription, switchMap } from 'rxjs';
+import { PoThemeService } from '../../../services';
 import { PoLanguageService } from '../../../services/po-language/po-language.service';
 import { PoButtonComponent } from '../../po-button/po-button.component';
 import { PoCalendarComponent } from '../../po-calendar/po-calendar.component';
@@ -127,9 +128,10 @@ export class PoDatepickerComponent extends PoDatepickerBaseComponent implements 
     protected cd: ChangeDetectorRef,
     private controlPosition: PoControlPositionService,
     private renderer: Renderer2,
-    el: ElementRef
+    el: ElementRef,
+    poThemeService: PoThemeService
   ) {
-    super(languageService, cd);
+    super(languageService, cd, poThemeService);
     this.shortLanguage = this.languageService.getShortLanguage();
     this.el = el;
     const language = languageService.getShortLanguage();

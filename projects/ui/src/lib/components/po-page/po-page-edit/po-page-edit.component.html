@@ -5,6 +5,7 @@
     <div *ngIf="hasAnyAction()" class="po-page-header-actions">
       <po-button
         *ngIf="hasEvent('cancel')"
+        p-size="medium"
         [p-icon]="getIcon('cancel')"
         [p-label]="literals.cancel"
         [p-kind]="getType('cancel')"
@@ -14,6 +15,7 @@
 
       <po-button
         *ngIf="hasEvent('saveNew')"
+        p-size="medium"
         [p-disabled]="disableSubmit"
         [p-icon]="getIcon('saveNew')"
         [p-label]="literals.saveNew"
@@ -26,6 +28,7 @@
         *ngIf="hasEvent('save')"
         p-icon="ICON_OK"
         p-kind="primary"
+        p-size="medium"
         [p-disabled]="disableSubmit"
         [p-label]="literals.save"
         (p-click)="save.emit()"

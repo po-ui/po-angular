@@ -1,9 +1,11 @@
-import { EventEmitter, Input, Output, Directive, TemplateRef } from '@angular/core';
+import { Directive, EventEmitter, Input, Output, TemplateRef } from '@angular/core';
 
 import { convertToBoolean, convertToInt } from '../../utils/util';
 
-import { PoProgressStatus } from './enums/po-progress-status.enum';
+import { PoThemeService } from '../../services';
+import { PoProgressSizeActions } from './enums/po-progress-size-actions.enum';
 import { PoProgressSize } from './enums/po-progress-size.enum';
+import { PoProgressStatus } from './enums/po-progress-status.enum';
 import { PoProgressAction } from './interfaces';
 
 const poProgressMaxValue = 100;
@@ -202,6 +204,7 @@ export class PoProgressBaseComponent {
   private _indeterminate?: boolean;
   private _value?: number = 0;
   private _size: string = 'large';
+  private _sizeActions: string = undefined;
 
   /**
    * @optional
@@ -251,11 +254,11 @@ export class PoProgressBaseComponent {
    *
    * @description
    *
-   * Definição do tamanho da altura da barra de progresso.
+   * Define a expessura da barra de progresso.
    *
    * Valores válidos:
-   *  - `medium`: tamanho médio
-   *  - `large`: tamanho grande
+   *  - medium
+   *  - large
    *
    * @default `large`
    */
@@ -272,13 +275,59 @@ export class PoProgressBaseComponent {
    *
    * @description
    *
+   * Define o tamanho dos elementos que compõe o componente conforme os valores especificados no enum `PoProgressSizeActions`,
+   * com excessão da barra de progresso que pode ser ajustada através da propriedade `p-size`.
+   *
+   * Valores válidos:
+   *  - small
+   *  - medium
+   *
+   * > A medida `small` **só estará disponível** quando a acessibilidade AA estiver configurada. Caso contrário, mesmo
+   * que o tamanho seja definido como `small`, a medida padrão `medium` será mantida. Para mais informações sobre como
+   * configurar a acessibilidade AA, consulte a documentação do [po-theme](https://po-ui.io/documentation/po-theme).
+   *
+   * @default `medium`
+   */
+  @Input('p-size-actions') set sizeActions(value: string) {
+    this._sizeActions = this.validateSize(value);
+  }
+
+  get sizeActions(): string {
+    return this._sizeActions ?? this.getDefaultSize();
+  }
+
+  /**
+   * @optional
+   *
+   * @description
+   *
    * Ativa a exibição da porcentagem atual da barra de progresso.
    *
    * @default `false`
    */
   @Input({ alias: 'p-show-percentage', transform: convertToBoolean }) showPercentage: boolean = false;
 
+  constructor(protected poThemeService: PoThemeService) {}
+
+  private getDefaultSize(): string {
+    return this.poThemeService.getA11yDefaultSize() === 'small'
+      ? PoProgressSizeActions.small
+      : PoProgressSizeActions.medium;
+  }
+
   private isProgressRangeValue(value: number): boolean {
     return value >= poProgressMinValue && value <= poProgressMaxValue;
+  }
+
+  private validateSize(value: string): string {
+    if (value && Object.values(PoProgressSizeActions).includes(value as PoProgressSizeActions)) {
+      if (value === PoProgressSizeActions.small && this.poThemeService.getA11yLevel() !== 'AA') {
+        return PoProgressSizeActions.medium;
+      }
+      return value;
+    }
+    return this.poThemeService.getA11yDefaultSize() === 'small'
+      ? PoProgressSizeActions.small
+      : PoProgressSizeActions.medium;
   }
 }

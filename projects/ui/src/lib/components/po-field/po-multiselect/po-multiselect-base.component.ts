@@ -15,6 +15,8 @@ import {
 } from '../../../utils/util';
 import { requiredFailed } from './../validators';
 
+import { PoThemeService } from '../../../services';
+import { PoFieldSize } from '../enums/po-field-size.enum';
 import { PoMultiselectFilterMode } from './po-multiselect-filter-mode.enum';
 import { PoMultiselectFilter } from './po-multiselect-filter.interface';
 import { PoMultiselectFilterService } from './po-multiselect-filter.service';
@@ -286,6 +288,7 @@ export abstract class PoMultiselectBaseComponent implements ControlValueAccessor
   private _autoHeight: boolean = false;
   private _fieldLabel?: string = PO_MULTISELECT_FIELD_LABEL_DEFAULT;
   private _fieldValue?: string = PO_MULTISELECT_FIELD_VALUE_DEFAULT;
+  private _size?: string = undefined;
   private language: string;
 
   private lastLengthModel;
@@ -459,6 +462,29 @@ export abstract class PoMultiselectBaseComponent implements ControlValueAccessor
    *
    * @description
    *
+   * Define o tamanho do componente conforme os valores especificados no enum `PoFieldSize`:
+   * - small
+   * - medium
+   *
+   * > A medida `small` **só estará disponível** quando a acessibilidade AA estiver configurada. Caso contrário, mesmo
+   * que o tamanho seja definido como `small`, a medida padrão `medium` será mantida. Para mais informações sobre como
+   * configurar a acessibilidade AA, consulte a documentação do [po-theme](https://po-ui.io/documentation/po-theme).
+   *
+   * @default `medium`
+   */
+  @Input('p-size') set size(value: string) {
+    this._size = this.validateSize(value);
+  }
+
+  get size(): string {
+    return this._size ?? this.getDefaultSize();
+  }
+
+  /**
+   * @optional
+   *
+   * @description
+   *
    * Indica que o campo será desabilitado.
    *
    * @default `false`
@@ -624,7 +650,10 @@ export abstract class PoMultiselectBaseComponent implements ControlValueAccessor
     return this._fieldValue;
   }
 
-  constructor(languageService: PoLanguageService) {
+  constructor(
+    languageService: PoLanguageService,
+    protected poThemeService: PoThemeService
+  ) {
     this.language = languageService.getShortLanguage();
   }
 
@@ -815,6 +844,10 @@ export abstract class PoMultiselectBaseComponent implements ControlValueAccessor
     this.validatorChange = fn;
   }
 
+  private getDefaultSize(): string {
+    return this.poThemeService.getA11yDefaultSize() === 'small' ? PoFieldSize.small : PoFieldSize.medium;
+  }
+
   private setLabelsAndValuesOptions() {
     if (this.fieldLabel && this.fieldValue && this.options) {
       this.options.map(option => {
@@ -828,6 +861,16 @@ export abstract class PoMultiselectBaseComponent implements ControlValueAccessor
     if (this.validatorChange) {
       this.validatorChange();
     }
+  }
+
+  private validateSize(value: string): string {
+    if (value && Object.values(PoFieldSize).includes(value as PoFieldSize)) {
+      if (value === PoFieldSize.small && this.poThemeService.getA11yLevel() !== 'AA') {
+        return PoFieldSize.medium;
+      }
+      return value;
+    }
+    return this.poThemeService.getA11yDefaultSize() === 'small' ? PoFieldSize.small : PoFieldSize.medium;
   }
 
   abstract applyFilter(value?: string): Observable<Array<PoMultiselectOption | any>>;

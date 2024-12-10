@@ -5,6 +5,7 @@
   [p-optional]="optional"
   [p-required]="required"
   [p-show-required]="showRequired"
+  [p-size]="size"
 >
   <div class="po-field-container-content">
     <div class="po-upload">
@@ -37,9 +38,10 @@
         #uploadButton
         class="po-upload-button"
         for="file"
-        (p-blur)="onBlur()"
         [p-disabled]="isDisabled"
         [p-label]="selectFileButtonLabel"
+        [p-size]="size"
+        (p-blur)="onBlur()"
         (p-click)="selectFiles()"
         (keydown)="onKeyDown($event)"
       >
@@ -75,6 +77,7 @@
               (p-custom-action-click)="customClick(file)"
               (p-cancel)="cancel(file)"
               (p-retry)="uploadFiles([file])"
+              [p-size-actions]="size"
             >
             </po-progress>
           </div>
@@ -88,6 +91,7 @@
         p-kind="primary"
         [p-disabled]="hasAnyFileUploading(currentFiles)"
         [p-label]="literals.startSending"
+        [p-size]="size"
         (p-click)="uploadFiles(currentFiles)"
       ></po-button>
     </div>

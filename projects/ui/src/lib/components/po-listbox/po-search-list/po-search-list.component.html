@@ -1,11 +1,17 @@
 <div class="po-field-container-content po-listbox-container-search">
   <div class="po-field-icon-container-left">
-    <po-icon p-icon="ICON_SEARCH" class="po-field-icon po-icon-input"></po-icon>
+    <po-icon
+      p-icon="ICON_SEARCH"
+      class="po-field-icon po-icon-input"
+      [class.po-field-icon-aa]="size === 'small'"
+    ></po-icon>
   </div>
 
   <input
     #inputElement
     class="po-input po-input-icon-left po-listbox-search-input"
+    [class.po-input-aa]="size === 'small'"
+    [class.po-input-icon-left-aa]="size === 'small'"
     type="text"
     [placeholder]="placeholder"
     (keyup)="onChange($event)"

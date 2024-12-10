@@ -1,8 +1,9 @@
-import { Directive, EventEmitter, Input, Output } from '@angular/core';
+import { Directive, EventEmitter, Input, OnInit, Output } from '@angular/core';
 import { ControlValueAccessor } from '@angular/forms';
 
 import { convertToBoolean, uuid } from './../../../utils/util';
-import { PoCheckboxSize } from './po-checkbox-size.enum';
+import { PoCheckboxSize } from './enums/po-checkbox-size.enum';
+import { PoThemeService } from '../../../services';
 
 /**
  * @description
@@ -147,6 +148,8 @@ export abstract class PoCheckboxBaseComponent implements ControlValueAccessor {
   onTouched;
 
   private _disabled?: boolean = false;
+  private _noPadding?: boolean = false;
+  private _size?: string = undefined;
 
   /**
    * @optional
@@ -165,29 +168,48 @@ export abstract class PoCheckboxBaseComponent implements ControlValueAccessor {
     return this._disabled;
   }
 
-  private _size?: string = PoCheckboxSize.medium;
+  /**
+   * @optional
+   *
+   * @description
+   *
+   * Remove o espaçamento interno (padding) do componente.
+   *
+   * @default `false`
+   */ @Input('p-no-padding') set noPadding(value: boolean) {
+    this._noPadding = convertToBoolean(value);
+  }
+
+  get noPadding(): boolean {
+    return this._noPadding;
+  }
 
   /**
    * @optional
    *
    * @description
    *
-   * Define o tamanho do *checkbox*
+   * Define o tamanho do componente conforme os valores especificados no enum `PoCheckboxSize`:
+   * - small
+   * - medium
+   * - large
    *
-   * Valores válidos:
-   * - `medium`: o `po-checkbox` fica do tamanho padrão, com 24px de altura.;
-   * - `large`: o `po-checkbox` fica maior, com 32px de altura.;
+   * > A medida `small` **só estará disponível** quando a acessibilidade AA estiver configurada. Caso contrário, mesmo
+   * que o tamanho seja definido como `small`, a medida padrão `medium` será mantida. Para mais informações sobre como
+   * configurar a acessibilidade AA, consulte a documentação do [po-theme](https://po-ui.io/documentation/po-theme).
    *
    * @default `medium`
    *
    */
   @Input('p-size') set size(value: string) {
-    this._size = PoCheckboxSize[value] ? PoCheckboxSize[value] : PoCheckboxSize.medium;
+    this._size = this.validateSize(value);
   }
 
   get size(): string {
-    return this._size;
+    return this._size ?? this.getDefaultSize();
   }
+
+  constructor(protected poThemeService: PoThemeService) {}
 
   changeValue() {
     if (this.propagateChange) {
@@ -225,4 +247,18 @@ export abstract class PoCheckboxBaseComponent implements ControlValueAccessor {
   }
 
   protected abstract changeModelValue(value: boolean | null);
+
+  private getDefaultSize(): string {
+    return this.poThemeService.getA11yDefaultSize() === 'small' ? PoCheckboxSize.small : PoCheckboxSize.medium;
+  }
+
+  private validateSize(value: string): string {
+    if (value && Object.values(PoCheckboxSize).includes(value as PoCheckboxSize)) {
+      if (value === PoCheckboxSize.small && this.poThemeService.getA11yLevel() !== 'AA') {
+        return PoCheckboxSize.medium;
+      }
+      return value;
+    }
+    return this.poThemeService.getA11yDefaultSize() === 'small' ? PoCheckboxSize.small : PoCheckboxSize.medium;
+  }
 }

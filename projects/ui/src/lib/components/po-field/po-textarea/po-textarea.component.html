@@ -5,11 +5,13 @@
   [p-optional]="optional"
   [p-required]="required"
   [p-show-required]="showRequired"
+  [p-size]="size"
 >
   <div class="po-field-container-content">
     <textarea
       #inp
       class="po-textarea"
+      [class.po-textarea-aa]="size === 'small'"
       (blur)="eventOnBlur()"
       (focus)="eventOnFocus()"
       (input)="eventOnInput($event)"

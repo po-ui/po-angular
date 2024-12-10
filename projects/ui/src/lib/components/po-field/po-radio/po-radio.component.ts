@@ -17,7 +17,7 @@ import { PoFieldModel } from '../po-field.model';
 import { PoKeyCodeEnum } from './../../../enums/po-key-code.enum';
 
 import { convertToBoolean } from '../../../utils/util';
-import { PoRadioSize } from './po-radio-size.enum';
+import { PoRadioSize } from './enums/po-radio-size.enum';
 
 @Component({
   selector: 'po-radio',
@@ -38,26 +38,11 @@ export class PoRadioComponent extends PoFieldModel<boolean> {
 
   value = false;
 
-  private _size: PoRadioSize = PoRadioSize.Medium;
-
   /** Define o valor do *radio* */
   @Input('p-value') radioValue: string;
 
-  /**
-   * @optional
-   *
-   * @description
-   *
-   * Define o tamanho do *radio*
-   * @default `medium`
-   */
-  @Input('p-size') set size(value: PoRadioSize) {
-    this._size = Object.values(PoRadioSize).includes(value) ? value : PoRadioSize.Medium;
-  }
-
-  get size() {
-    return this._size;
-  }
+  /** Define o tamanho do rádio. */
+  @Input('p-size') size: string = PoRadioSize.Medium;
 
   @Input({ alias: 'p-required', transform: convertToBoolean }) required?: boolean;
 

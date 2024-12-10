@@ -1,9 +1,10 @@
+import { ElementRef } from '@angular/core';
 import { ComponentFixture, TestBed } from '@angular/core/testing';
 import { RouterTestingModule } from '@angular/router/testing';
-import { ElementRef } from '@angular/core';
 
 import { configureTestSuite } from './../../../util-test/util-expect.spec';
 
+import { PoThemeService } from '../../../services';
 import { PoButtonComponent } from '../../po-button';
 import { PoPopoverComponent, PoPopoverModule } from '../../po-popover';
 import { PoTabDropdownComponent } from './po-tab-dropdown.component';
@@ -12,6 +13,7 @@ describe('PoTabDropdownComponent:', () => {
   let component: PoTabDropdownComponent;
   let fixture: ComponentFixture<PoTabDropdownComponent>;
   let nativeElement: any;
+  let poThemeService: jasmine.SpyObj<PoThemeService>;
 
   const tabs: Array<any> = [
     { label: 'Tab 1', overflow: true, click: () => {} },
@@ -59,9 +61,10 @@ describe('PoTabDropdownComponent:', () => {
     component = fixture.componentInstance;
     nativeElement = fixture.debugElement.nativeElement;
     Object.defineProperty(window, 'scrollY', { value: 50, writable: true });
+    poThemeService = jasmine.createSpyObj('PoThemeService', ['getA11yDefaultSize', 'getA11yLevel']);
 
     component.tabs = tabs;
-    component.button = new PoButtonComponent();
+    component.button = new PoButtonComponent(poThemeService);
     component.button.buttonElement = buttonElementRefMock as ElementRef;
     component.popover = new PoPopoverComponent(null, null);
     fixture.detectChanges();

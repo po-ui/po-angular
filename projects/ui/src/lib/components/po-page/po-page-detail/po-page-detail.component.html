@@ -5,6 +5,7 @@
     <div *ngIf="hasAnyAction()" class="po-page-header-actions">
       <po-button
         *ngIf="hasEvent('back')"
+        p-size="medium"
         [p-icon]="hasEditOrRemoveFn('icon')"
         [p-label]="literals.back"
         [p-kind]="hasEditOrRemoveFn('type')"
@@ -15,6 +16,7 @@
       <po-button
         *ngIf="hasEvent('remove')"
         p-danger
+        p-size="medium"
         [p-icon]="hasEditFn('icon')"
         [p-label]="literals.remove"
         [p-kind]="hasEditFn('type')"
@@ -26,6 +28,7 @@
         *ngIf="hasEvent('edit')"
         p-icon="ICON_EDIT"
         p-kind="primary"
+        p-size="medium"
         [p-label]="literals.edit"
         (p-click)="edit.emit()"
       >

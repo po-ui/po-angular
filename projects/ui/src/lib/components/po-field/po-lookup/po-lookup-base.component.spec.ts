@@ -2,7 +2,9 @@ import { Directive, Injector, SimpleChanges } from '@angular/core';
 import { fakeAsync, inject, TestBed, tick } from '@angular/core/testing';
 import { NgControl, UntypedFormControl } from '@angular/forms';
 import { Observable, of, throwError } from 'rxjs';
+import { PoThemeA11yEnum } from '../../../services';
 import { PoLanguageService } from '../../../services/po-language/po-language.service';
+import { PoThemeService } from '../../../services/po-theme/po-theme.service';
 import { expectPropertiesValues, expectSettersMethod } from '../../../util-test/util-expect.spec';
 import { convertToBoolean } from '../../../utils/util';
 import * as ValidatorsFunctions from '../validators';
@@ -38,11 +40,14 @@ describe('PoLookupBaseComponent:', () => {
   let injector: Injector;
   let languageService: PoLanguageService;
   let poLookupModalService: PoLookupModalService;
+  let poThemeService: jasmine.SpyObj<PoThemeService>;
   let spyService: jasmine.Spy;
 
   const fakeSubscription = <any>{ unsubscribe: () => {} };
 
   beforeEach(async () => {
+    poThemeService = jasmine.createSpyObj('PoThemeService', ['getA11yDefaultSize', 'getA11yLevel']);
+
     await TestBed.configureTestingModule({
       declarations: [],
       providers: [LookupFilterService, Injector, NgControl, PoLookupModalService]
@@ -53,7 +58,7 @@ describe('PoLookupBaseComponent:', () => {
     spyService = spyOn(languageService, 'getShortLanguage').and.returnValue('pt');
     injector = TestBed.inject(Injector);
     poLookupModalService = TestBed.inject(PoLookupModalService);
-    component = new PoLookupComponent(defaultService, injector, poLookupModalService, languageService);
+    component = new PoLookupComponent(defaultService, injector, poLookupModalService, languageService, poThemeService);
     component['keysDescription'] = ['label'];
   });
 
@@ -963,6 +968,89 @@ describe('PoLookupBaseComponent:', () => {
 
     it('p-spacing: should update property with valid values', () => {
       expectPropertiesValues(component, 'spacing', 'small', 'small');
+    });
+
+    describe('p-size:', () => {
+      it('should update size with valid values', () => {
+        const validValues = ['medium'];
+
+        expectPropertiesValues(component, 'size', validValues, validValues);
+      });
+
+      it('should update size to `medium` with invalid values', () => {
+        poThemeService.getA11yDefaultSize.and.returnValue('medium');
+
+        const invalidValues = ['extraSmall', 'extraLarge'];
+
+        expectPropertiesValues(component, 'size', invalidValues, 'medium');
+      });
+
+      it('should use default size when size is not set', () => {
+        poThemeService.getA11yDefaultSize.and.returnValue('small');
+
+        component.size = undefined;
+        expect(component.size).toBe('small');
+      });
+
+      it('should return `p-size` if it is defined', () => {
+        component['_size'] = 'large';
+        expect(component.size).toBe('large');
+      });
+
+      it('should call `getDefaultSize` and return its value if `p-size` is null or undefined', () => {
+        spyOn(component as any, 'getDefaultSize').and.returnValue('medium');
+
+        component['_size'] = null;
+        expect(component.size).toBe('medium');
+        expect(component['getDefaultSize']).toHaveBeenCalled();
+
+        component['_size'] = undefined;
+        expect(component.size).toBe('medium');
+        expect(component['getDefaultSize']).toHaveBeenCalledTimes(2);
+      });
+    });
+  });
+
+  describe('Methods: ', () => {
+    describe('validateSize:', () => {
+      it('should return the same size if valid and accessibility level allows it', () => {
+        poThemeService.getA11yLevel.and.returnValue(PoThemeA11yEnum.AA);
+
+        expect(component['validateSize']('small')).toBe('small');
+        expect(component['validateSize']('medium')).toBe('medium');
+      });
+
+      it('should return `medium` if p-size is `small` and accessibility level is not `AA`', () => {
+        poThemeService.getA11yLevel.and.returnValue(PoThemeA11yEnum.AAA);
+
+        expect(component['validateSize']('small')).toBe('medium');
+      });
+
+      it('should return default size from getA11yDefaultSize if value is invalid', () => {
+        poThemeService.getA11yDefaultSize.and.returnValue('small');
+
+        expect(component['validateSize']('invalid')).toBe('small');
+      });
+
+      it('should return `medium` if default size is `medium`', () => {
+        poThemeService.getA11yDefaultSize.and.returnValue('medium');
+
+        expect(component['validateSize']('invalid')).toBe('medium');
+      });
+    });
+
+    describe('getDefaultSize:', () => {
+      it('should return `small` if getA11yDefaultSize returns `small`', () => {
+        poThemeService.getA11yDefaultSize.and.returnValue('small');
+
+        expect(component['getDefaultSize']()).toBe('small');
+      });
+
+      it('should return `medium` if getA11yDefaultSize returns `medium`', () => {
+        poThemeService.getA11yDefaultSize.and.returnValue('medium');
+
+        expect(component['getDefaultSize']()).toBe('medium');
+      });
     });
   });
 });

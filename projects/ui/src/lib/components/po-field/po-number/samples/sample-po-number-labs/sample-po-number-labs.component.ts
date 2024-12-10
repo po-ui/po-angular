@@ -1,6 +1,6 @@
 import { Component, OnInit } from '@angular/core';
 
-import { PoCheckboxGroupOption, PoSelectOption } from '@po-ui/ng-components';
+import { PoCheckboxGroupOption, PoRadioGroupOption, PoSelectOption } from '@po-ui/ng-components';
 
 @Component({
   selector: 'sample-po-number-labs',
@@ -21,6 +21,7 @@ export class SamplePoNumberLabsComponent implements OnInit {
   number: number;
   placeholder: string;
   properties: Array<string>;
+  size: string;
   step: string;
 
   public readonly iconOptions: Array<PoSelectOption> = [
@@ -39,6 +40,11 @@ export class SamplePoNumberLabsComponent implements OnInit {
     { value: 'requiredFieldErrorMessage', label: 'Required Field Error Message' },
     { value: 'showRequired', label: 'Show Required' },
     { value: 'errorLimit', label: 'Limit Error Message' }
+  ];
+
+  public readonly sizeOptions: Array<PoRadioGroupOption> = [
+    { label: 'small', value: 'small' },
+    { label: 'medium', value: 'medium' }
   ];
 
   ngOnInit() {
@@ -62,6 +68,7 @@ export class SamplePoNumberLabsComponent implements OnInit {
     this.placeholder = '';
     this.help = '';
     this.icon = '';
+    this.size = 'medium';
     this.step = undefined;
     this.properties = [];
   }
