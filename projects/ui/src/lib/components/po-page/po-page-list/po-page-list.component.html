@@ -18,6 +18,7 @@
             [p-disabled]="actionIsDisabled(actions[0])"
             [p-icon]="visibleActions[0].icon"
             [p-label]="visibleActions[0].label"
+            [p-size]="componentsSize"
             (p-click)="callAction(visibleActions[0])"
           >
           </po-button>
@@ -27,6 +28,7 @@
             [p-danger]="visibleActions[1].type === 'danger'"
             [p-disabled]="actionIsDisabled(actions[1])"
             [p-label]="visibleActions[1].label"
+            [p-size]="componentsSize"
             (p-click)="callAction(visibleActions[1])"
           >
           </po-button>
@@ -36,6 +38,7 @@
             [p-danger]="visibleActions[2].type === 'danger'"
             [p-disabled]="actionIsDisabled(visibleActions[2])"
             [p-label]="visibleActions[2].label"
+            [p-size]="componentsSize"
             (p-click)="callAction(visibleActions[2])"
           >
           </po-button>
@@ -44,6 +47,7 @@
             *ngIf="visibleActions.length > limitPrimaryActions"
             [p-actions]="dropdownActions"
             [p-label]="literals.otherActions"
+            [p-size]="componentsSize"
           >
           </po-dropdown>
         </div>
@@ -51,27 +55,36 @@
         <!-- FILTER -->
         <div
           class="po-page-list-filter-wrapper"
+          [class.po-page-list-filter-wrapper-aa]="componentsSize === 'small'"
           *ngIf="filter"
           [ngClass]="hasCustomFilterSize() ? filterSizeClass(filter.width) : ''"
         >
           <div
             class="po-field-container-content po-page-filter-content"
-            [ngClass]="
+            [ngClass]="[
               hasCustomFilterSize()
                 ? filter.advancedAction
                   ? 'po-page-filter-input-variable-size'
                   : 'po-page-filter-input-variable-size-wo-adv-search'
-                : ''
-            "
+                : '',
+              componentsSize === 'small' ? 'po-page-filter-content-aa' : ''
+            ]"
           >
             <div class="po-field-icon-container-right">
-              <po-icon p-icon="ICON_SEARCH" class="po-field-icon po-icon-input" (click)="callActionFilter('action')">
+              <po-icon
+                p-icon="ICON_SEARCH"
+                class="po-field-icon po-icon-input"
+                [class.po-field-icon-aa]="componentsSize === 'small'"
+                (click)="callActionFilter('action')"
+              >
               </po-icon>
             </div>
 
             <input
               #filterInput
               class="po-input po-input-icon-right"
+              [class.po-input-aa]="componentsSize === 'small'"
+              [class.po-input-icon-right-aa]="componentsSize === 'small'"
               name="model"
               type="text"
               [placeholder]="filter.placeholder || ''"

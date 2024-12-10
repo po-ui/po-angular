@@ -6,11 +6,12 @@ import {
   PoLanguageService,
   PoModalAction,
   PoModalComponent,
+  PoThemeService,
   poLocaleDefault
 } from '@po-ui/ng-components';
 
-import { convertToBoolean } from '../../../utils/util';
-import { PoPageDynamicSearchFilters } from '../po-page-dynamic-search-filters.interface';
+import { convertToBoolean, getDefaultSize, validateSize } from '../../../utils/util';
+import { PoPageDynamicSearchFilters } from '../interfaces/po-page-dynamic-search-filters.interface';
 import { PoAdvancedFilterLiterals } from './po-advanced-filter-literals.interface';
 
 export const poAdvancedFiltersLiteralsDefault = {
@@ -78,8 +79,31 @@ export class PoAdvancedFilterBaseComponent {
 
   protected optionsServiceChosenOptions: Array<PoComboOption> = [];
 
+  private _componentsSize?: string = undefined;
   private _filters: Array<PoDynamicFormField> = [];
   private _literals: PoAdvancedFilterLiterals;
+
+  /**
+   * @optional
+   *
+   * @description
+   *
+   * Define o tamanho dos componentes de formulário no template:
+   * - `small`: aplica a medida small de cada componente (disponível apenas para acessibilidade AA).
+   * - `medium`: aplica a medida medium de cada componente.
+   *
+   * > Caso a acessibilidade AA não esteja configurada, o tamanho `medium` será mantido.
+   * Para mais detalhes, consulte a documentação do [po-theme](https://po-ui.io/documentation/po-theme).
+   *
+   * @default `medium`
+   */
+  @Input('p-components-size') set componentsSize(value: string) {
+    this._componentsSize = validateSize(value, this.poThemeService);
+  }
+
+  get componentsSize(): string {
+    return this._componentsSize ?? getDefaultSize(this.poThemeService);
+  }
 
   /**
    * Coleção de objetos que implementam a interface PoPageDynamicSearchFilters, para definição dos campos que serão criados
@@ -113,7 +137,10 @@ export class PoAdvancedFilterBaseComponent {
     return this._literals || poAdvancedFiltersLiteralsDefault[this.language];
   }
 
-  constructor(languageService: PoLanguageService) {
+  constructor(
+    languageService: PoLanguageService,
+    protected poThemeService: PoThemeService
+  ) {
     this.language = languageService.getShortLanguage();
   }
 

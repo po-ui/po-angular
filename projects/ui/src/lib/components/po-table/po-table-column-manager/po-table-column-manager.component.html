@@ -3,6 +3,7 @@
   p-size="auto"
   [p-title]="literals.columnsManager"
   [p-click-out]="true"
+  [p-components-size]="componentsSize"
   (p-close)="checkChanges([], true)"
 >
   <div>
@@ -11,12 +12,13 @@
         name="visibleColumns"
         [(ngModel)]="visibleColumns"
         p-columns="1"
+        [p-columns-manager]="columns"
+        [p-components-size]="componentsSize"
         [p-options]="columnsOptions"
         [p-hide-action-fixed-columns]="hideActionFixedColumns"
         (p-change)="checkChanges($event, false)"
         (p-change-position)="changePosition($event)"
         (p-change-fixed)="emitColumnFixed($event)"
-        [p-columns-manager]="columns"
       >
       </po-table-list-manager>
     </div>
@@ -26,6 +28,7 @@
         class="po-table-column-manager-footer-restore"
         p-kind="tertiary"
         [p-label]="literals.restoreDefault"
+        [p-size]="componentsSize"
         (p-click)="restore()"
       >
       </po-button>

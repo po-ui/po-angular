@@ -1,4 +1,4 @@
-import { PoDynamicFormField } from './../../../po-dynamic/po-dynamic-form/po-dynamic-form-field.interface';
+import { PoDynamicFormField } from '../../../po-dynamic/po-dynamic-form/interfaces/po-dynamic-form-field.interface';
 
 /**
  * @docsExtends PoDynamicFormField

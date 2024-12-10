@@ -1,9 +1,11 @@
 import { Directive, EventEmitter, Input, Output } from '@angular/core';
-import { PoToaster } from './interface/po-toaster.interface';
-import { convertToBoolean } from '../../utils/util';
+import { PoFieldSize } from '../../enums/po-field-size.enum';
+import { PoThemeService } from '../../services';
+import { convertToBoolean, getDefaultSize, validateSize } from '../../utils/util';
 import { PoToasterMode } from './enum/po-toaster-mode.enum';
-import { PoToasterType } from './enum/po-toaster-type.enum';
 import { PoToasterOrientation } from './enum/po-toaster-orientation.enum';
+import { PoToasterType } from './enum/po-toaster-type.enum';
+import { PoToaster } from './interface/po-toaster.interface';
 
 /**
  *
@@ -55,6 +57,7 @@ import { PoToasterOrientation } from './enum/po-toaster-orientation.enum';
 @Directive()
 export abstract class PoToasterBaseComponent {
   private _isHide: boolean;
+  private _sizeActions: string = undefined;
 
   /**
    * @optional
@@ -120,6 +123,28 @@ export abstract class PoToasterBaseComponent {
    *
    * @description
    *
+   * Define o tamanho das ações no componente:
+   * - `small`: aplica a medida small de cada componente (disponível apenas para acessibilidade AA).
+   * - `medium`: aplica a medida medium de cada componente.
+   *
+   * > Caso a acessibilidade AA não esteja configurada, o tamanho `medium` será mantido.
+   * Para mais detalhes, consulte a documentação do [po-theme](https://po-ui.io/documentation/po-theme).
+   *
+   * @default `medium`
+   */
+  @Input('p-size-actions') set sizeActions(value: string) {
+    this._sizeActions = validateSize(value, this.poThemeService, PoFieldSize);
+  }
+
+  get sizeActions(): string {
+    return this._sizeActions ?? getDefaultSize(this.poThemeService, PoFieldSize);
+  }
+
+  /**
+   * @optional
+   *
+   * @description
+   *
    * Mensagem de suporte a ser exibida na notificação.
    */
   @Input('p-support-message') supportMessage?: string;
@@ -149,6 +174,8 @@ export abstract class PoToasterBaseComponent {
 
   // Posição para notificação aparecer na tela.
   position: number;
+
+  constructor(protected poThemeService: PoThemeService) {}
 
   // Fecha a notificação.
   abstract close(): void;

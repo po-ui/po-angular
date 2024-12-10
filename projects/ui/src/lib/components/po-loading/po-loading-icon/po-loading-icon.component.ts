@@ -1,7 +1,7 @@
 import { Component, Input } from '@angular/core';
 
 import { convertToBoolean, uuid } from '../../../utils/util';
-import { PoLoadingIconSize } from './po-loading-icon-size-enum';
+import { PoLoadingIconSize } from '../enums/po-loading-icon-size-enum';
 
 /**
  * @docsPrivate

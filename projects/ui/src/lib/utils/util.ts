@@ -1,4 +1,5 @@
-import { poLocales, poLocaleDefault } from '../services/po-language/po-language.constant';
+import { PoThemeA11yEnum, PoThemeService } from '../services';
+import { poLocaleDefault, poLocales } from '../services/po-language/po-language.constant';
 
 /**
  * Converte e formata os bytes em formato mais legível para o usuário.
@@ -33,6 +34,13 @@ export function getBrowserLanguage(): string {
   const shortLanguage = getShortLanguage(language);
 
   return poLocales.includes(shortLanguage) ? language : poLocaleDefault;
+}
+
+/**
+ * Retorna o tamanho padrão dos componentes conforme o nível de acessibilidade.
+ */
+export function getDefaultSize<T>(poThemeService: PoThemeService, sizeEnum: T): T[keyof T] {
+  return poThemeService.getA11yDefaultSize() === 'small' ? sizeEnum['Small'] : sizeEnum['Medium'];
 }
 
 /**
@@ -661,4 +669,20 @@ export function sortArrayOfObjects(items, key, isAscendingOrder) {
       }
     });
   }
+}
+
+/**
+ * Valida e retorna um tamanho permitido para os componentes, considerando a acessibilidade.
+ */
+export function validateSize<T>(value: string, poThemeService: PoThemeService, sizeEnum: T): T[keyof T] {
+  const validSizes = Object.values(sizeEnum) as Array<string>;
+
+  if (value && validSizes.includes(value)) {
+    if (value === sizeEnum['Small'] && poThemeService.getA11yLevel() === PoThemeA11yEnum.AAA) {
+      return sizeEnum['Medium'];
+    }
+    return value as T[keyof T];
+  }
+
+  return getDefaultSize(poThemeService, sizeEnum);
 }

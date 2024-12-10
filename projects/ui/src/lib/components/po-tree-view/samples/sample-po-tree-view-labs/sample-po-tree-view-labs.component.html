@@ -1,4 +1,5 @@
 <po-tree-view
+  [p-components-size]="componentsSize"
   [p-items]="items"
   [p-selectable]="selectable"
   (p-collapsed)="changeEvent('p-collapsed', $event)"
@@ -19,9 +20,20 @@
 <po-divider p-label="Po Tree View Config"></po-divider>
 
 <div class="po-row">
-  <po-input class="po-md-4" name="level" [(ngModel)]="maxLevel" p-label="Max Level"> </po-input>
-  <po-switch class="po-md-4" name="selectable" [(ngModel)]="selectable" p-label="Selectable"> </po-switch>
-  <po-switch class="po-md-4" name="singleSelect" [(ngModel)]="singleSelect" p-label="Single Select"> </po-switch>
+  <po-input class="po-md-6 po-lg-3" name="level" [(ngModel)]="maxLevel" p-label="Max Level"> </po-input>
+  <po-switch class="po-md-6 po-lg-2" name="selectable" [(ngModel)]="selectable" p-label="Selectable"> </po-switch>
+  <po-switch class="po-md-6 po-lg-2" name="singleSelect" [(ngModel)]="singleSelect" p-label="Single Select">
+  </po-switch>
+
+  <po-radio-group
+    class="po-lg-5"
+    name="componentsSize"
+    [(ngModel)]="componentsSize"
+    p-label="Components size"
+    p-help="Para aplicar o tamanho small, configure o nível de acessibilidade para AA, ajustável no navbar ou serviço de tema (https://po-ui.io/documentation/po-theme)."
+    [p-options]="componentsSizeOptions"
+  >
+  </po-radio-group>
 </div>
 
 <po-divider p-label="Po Tree View Item"></po-divider>
@@ -29,7 +41,7 @@
 <form #treeViewItemForm="ngForm">
   <div class="po-row">
     <po-select
-      class="po-md-4"
+      class="po-md-6 po-lg-4"
       name="parent"
       [(ngModel)]="parent"
       p-label="Parent Item"
@@ -38,14 +50,16 @@
     >
     </po-select>
 
-    <po-input class="po-md-4" name="label" [(ngModel)]="treeViewItem.label" p-label="Label" p-required> </po-input>
+    <po-input class="po-md-6 po-lg-4" name="label" [(ngModel)]="treeViewItem.label" p-label="Label" p-required>
+    </po-input>
 
-    <po-input class="po-md-4" name="value" [(ngModel)]="treeViewItem.value" p-label="Value" p-required> </po-input>
+    <po-input class="po-md-6 po-lg-4" name="value" [(ngModel)]="treeViewItem.value" p-label="Value" p-required>
+    </po-input>
   </div>
 
   <div class="po-row">
     <po-checkbox-group
-      class="po-md-9"
+      class="po-md-6"
       name="itemProperties"
       [(ngModel)]="itemProperties"
       p-columns="3"
@@ -57,7 +71,7 @@
 
   <div class="po-row">
     <po-button
-      class="po-md-3"
+      class="o-md-4 po-lg-2"
       p-label="Add"
       [p-disabled]="treeViewItemForm.invalid"
       (p-click)="add(treeViewItem); treeViewItemForm.reset(); this.itemProperties = []"
@@ -69,5 +83,5 @@
 <hr />
 
 <div class="po-row">
-  <po-button class="po-md-3" p-label="Sample Restore" (p-click)="restore()"> </po-button>
+  <po-button class="po-md-6 po-lg-3" p-label="Sample Restore" (p-click)="restore()"> </po-button>
 </div>

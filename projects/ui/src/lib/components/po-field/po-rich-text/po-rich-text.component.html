@@ -7,6 +7,7 @@
       [p-model-value]="value"
       [p-placeholder]="placeholder"
       [p-readonly]="readonly"
+      [p-size]="size"
       (p-change)="onChangeValue($event)"
       (p-commands)="richTextToolbar?.setButtonsStates($event)"
       (p-selected-link)="richTextToolbar?.selectedLink($event)"
@@ -22,6 +23,7 @@
       *ngIf="!isAllActionsHidden()"
       [p-readonly]="readonly"
       [p-hide-toolbar-actions]="toolbarActions"
+      [p-size]="size"
       (p-link-editing)="richTextBody.linkEditing($event)"
       (p-command)="richTextBody.executeCommand($event)"
     >

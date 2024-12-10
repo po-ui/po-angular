@@ -2,7 +2,9 @@ import { Directive, Injector, SimpleChanges } from '@angular/core';
 import { fakeAsync, inject, TestBed, tick } from '@angular/core/testing';
 import { NgControl, UntypedFormControl } from '@angular/forms';
 import { Observable, of, throwError } from 'rxjs';
+import { PoThemeA11yEnum } from '../../../services';
 import { PoLanguageService } from '../../../services/po-language/po-language.service';
+import { PoThemeService } from '../../../services/po-theme/po-theme.service';
 import { expectPropertiesValues, expectSettersMethod } from '../../../util-test/util-expect.spec';
 import { convertToBoolean } from '../../../utils/util';
 import * as ValidatorsFunctions from '../validators';
@@ -38,11 +40,14 @@ describe('PoLookupBaseComponent:', () => {
   let injector: Injector;
   let languageService: PoLanguageService;
   let poLookupModalService: PoLookupModalService;
+  let poThemeServiceMock: jasmine.SpyObj<PoThemeService>;
   let spyService: jasmine.Spy;
 
   const fakeSubscription = <any>{ unsubscribe: () => {} };
 
   beforeEach(async () => {
+    poThemeServiceMock = jasmine.createSpyObj('PoThemeService', ['getA11yLevel', 'getA11yDefaultSize']);
+
     await TestBed.configureTestingModule({
       declarations: [],
       providers: [LookupFilterService, Injector, NgControl, PoLookupModalService]
@@ -53,7 +58,13 @@ describe('PoLookupBaseComponent:', () => {
     spyService = spyOn(languageService, 'getShortLanguage').and.returnValue('pt');
     injector = TestBed.inject(Injector);
     poLookupModalService = TestBed.inject(PoLookupModalService);
-    component = new PoLookupComponent(defaultService, injector, poLookupModalService, languageService);
+    component = new PoLookupComponent(
+      defaultService,
+      injector,
+      poLookupModalService,
+      languageService,
+      poThemeServiceMock
+    );
     component['keysDescription'] = ['label'];
   });
 
@@ -963,6 +974,50 @@ describe('PoLookupBaseComponent:', () => {
 
     it('p-spacing: should update property with valid values', () => {
       expectPropertiesValues(component, 'spacing', 'small', 'small');
+    });
+
+    describe('p-size', () => {
+      it('should set property with valid values for accessibility level is AA', () => {
+        poThemeServiceMock.getA11yLevel.and.returnValue(PoThemeA11yEnum.AA);
+
+        component.size = 'small';
+        expect(component.size).toBe('small');
+
+        component.size = 'medium';
+        expect(component.size).toBe('medium');
+      });
+
+      it('should set property with valid values for accessibility level is AAA', () => {
+        poThemeServiceMock.getA11yLevel.and.returnValue(PoThemeA11yEnum.AAA);
+
+        component.size = 'small';
+        expect(component.size).toBe('medium');
+
+        component.size = 'medium';
+        expect(component.size).toBe('medium');
+      });
+
+      it('should return small when accessibility is AA and getA11yDefaultSize is small', () => {
+        poThemeServiceMock.getA11yLevel.and.returnValue(PoThemeA11yEnum.AA);
+        poThemeServiceMock.getA11yDefaultSize.and.returnValue('small');
+
+        component['_size'] = undefined;
+        expect(component.size).toBe('small');
+      });
+
+      it('should return medium when accessibility is AA and getA11yDefaultSize is medium', () => {
+        poThemeServiceMock.getA11yLevel.and.returnValue(PoThemeA11yEnum.AA);
+        poThemeServiceMock.getA11yDefaultSize.and.returnValue('medium');
+
+        component['_size'] = undefined;
+        expect(component.size).toBe('medium');
+      });
+
+      it('should return medium when accessibility is AAA, regardless of getA11yDefaultSize', () => {
+        poThemeServiceMock.getA11yLevel.and.returnValue(PoThemeA11yEnum.AAA);
+        component['_size'] = undefined;
+        expect(component.size).toBe('medium');
+      });
     });
   });
 });

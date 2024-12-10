@@ -8,6 +8,7 @@
         [p-icon]="getIcon('cancel')"
         [p-label]="literals.cancel"
         [p-kind]="getType('cancel')"
+        [p-size]="componentsSize"
         (p-click)="cancel.emit()"
       >
       </po-button>
@@ -18,6 +19,7 @@
         [p-icon]="getIcon('saveNew')"
         [p-label]="literals.saveNew"
         [p-kind]="getType('saveNew')"
+        [p-size]="componentsSize"
         (p-click)="saveNew.emit()"
       >
       </po-button>
@@ -28,6 +30,7 @@
         p-kind="primary"
         [p-disabled]="disableSubmit"
         [p-label]="literals.save"
+        [p-size]="componentsSize"
         (p-click)="save.emit()"
       >
       </po-button>

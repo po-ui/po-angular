@@ -14,6 +14,7 @@
     [p-literals]="literalSearch"
     [p-field-value]="fieldValueSearch"
     [p-placeholder]="placeholderSearch"
+    [p-size]="size"
   ></po-search-list>
 
   <ng-container *ngIf="checkTemplate(); else noDataTemplate">
@@ -32,6 +33,7 @@
           [p-label]="literals.selectAll"
           p-value="selectAll"
           [p-checkbox-value]="checkboxAllValue"
+          [p-size]="size"
         >
         </po-item-list>
       </li>
@@ -77,6 +79,7 @@
           [p-search-value]="searchValue"
           [p-filter-mode]="filterMode"
           [p-filtering]="isFiltering"
+          [p-size]="size"
           [p-should-mark-letter]="shouldMarkLetters"
           [p-compare-cache]="compareCache"
           [p-combo-service]="comboService"

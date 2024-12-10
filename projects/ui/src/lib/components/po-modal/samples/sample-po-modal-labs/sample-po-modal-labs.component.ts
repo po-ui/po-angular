@@ -1,10 +1,10 @@
 import { Component, OnInit, ViewChild } from '@angular/core';
 
 import {
+  PoCheckboxGroupOption,
   PoModalAction,
   PoModalComponent,
   PoRadioGroupOption,
-  PoCheckboxGroupOption,
   PoSelectOption
 } from '@po-ui/ng-components';
 
@@ -16,6 +16,7 @@ import {
 export class SamplePoModalLabsComponent implements OnInit {
   @ViewChild(PoModalComponent, { static: true }) poModal: PoModalComponent;
 
+  componentsSize: string;
   content;
   size;
   title;
@@ -35,6 +36,12 @@ export class SamplePoModalLabsComponent implements OnInit {
     { value: 'disabled', label: 'Disabled' },
     { value: 'loading', label: 'Loading' }
   ];
+
+  public readonly componentsSizeOptions: Array<PoRadioGroupOption> = [
+    { label: 'small', value: 'small' },
+    { label: 'medium', value: 'medium' }
+  ];
+
   public readonly iconOptions: Array<PoSelectOption> = [
     { value: 'an an-newspaper', label: 'an an-newspaper' },
     { value: 'an an-magnifying-glass', label: 'an an-magnifying-glass' },
@@ -98,6 +105,7 @@ export class SamplePoModalLabsComponent implements OnInit {
     this.primaryActionProperties = [];
     this.secondaryActionLabel = undefined;
     this.secondaryActionProperties = [];
+    this.componentsSize = 'medium';
     this.icon = undefined;
   }
 }

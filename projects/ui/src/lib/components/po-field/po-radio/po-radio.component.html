@@ -1,4 +1,4 @@
-<div #radio class="po-radio">
+<div #radio class="po-radio" [class.po-radio-aa]="size === 'small'">
   <label (click)="eventClick()" (keydown)="onKeyDown($event)">
     <input
       #radioInput
@@ -11,6 +11,11 @@
       [value]="radioValue ?? ''"
       (blur)="onBlur()"
     />
-    <po-label *ngIf="label" [p-disabled]="disabled" [p-label]="label"></po-label>
+    <po-label
+      [class.line-height-aa]="size === 'small'"
+      *ngIf="label"
+      [p-disabled]="disabled"
+      [p-label]="label"
+    ></po-label>
   </label>
 </div>

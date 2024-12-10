@@ -1,8 +1,10 @@
-import { ElementRef, Input, Directive, Output, EventEmitter } from '@angular/core';
+import { Directive, ElementRef, EventEmitter, Input, Output } from '@angular/core';
 
-import { convertToBoolean } from '../../utils/util';
+import { convertToBoolean, getDefaultSize, validateSize } from '../../utils/util';
 import { PO_CONTROL_POSITIONS } from './../../services/po-control-position/po-control-position.constants';
 
+import { PoFieldSize } from '../../enums/po-field-size.enum';
+import { PoThemeService } from '../../services';
 import { PoPopupAction } from './po-popup-action.interface';
 
 const poPopupDefaultPosition = 'bottom-left';
@@ -83,6 +85,7 @@ export class PoPopupBaseComponent {
   private _hideArrow: boolean = false;
   private _isCornerAlign: boolean = false;
   private _position?: string = poPopupDefaultPosition;
+  private _size?: string = undefined;
   private _target: any;
 
   /** Lista de ações que serão exibidas no componente. */
@@ -190,6 +193,28 @@ export class PoPopupBaseComponent {
   }
 
   /**
+   * @optional
+   *
+   * @description
+   *
+   * Define o tamanho dos componentes de formulário no template:
+   * - `small`: aplica a medida small de cada componente (disponível apenas para acessibilidade AA).
+   * - `medium`: aplica a medida medium de cada componente.
+   *
+   * > Caso a acessibilidade AA não esteja configurada, o tamanho `medium` será mantido.
+   * Para mais detalhes, consulte a documentação do [po-theme](https://po-ui.io/documentation/po-theme).
+   *
+   * @default `medium`
+   */
+  @Input('p-size') set size(value: string) {
+    this._size = validateSize(value, this.poThemeService, PoFieldSize);
+  }
+
+  get size(): string {
+    return this._size ?? getDefaultSize(this.poThemeService, PoFieldSize);
+  }
+
+  /**
    * @description
    *
    * Para utilizar o `po-popup` deve-se colocar uma variável local no componente que disparará o evento
@@ -235,4 +260,6 @@ export class PoPopupBaseComponent {
   }
 
   @Output('p-close') closeEvent: EventEmitter<any> = new EventEmitter();
+
+  constructor(protected poThemeService: PoThemeService) {}
 }

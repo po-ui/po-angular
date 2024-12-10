@@ -1,5 +1,5 @@
-import { PoPage } from '../po-page.interface';
-import { PoPageAction } from '../po-page-action.interface';
+import { PoPage } from '../interfaces/po-page.interface';
+import { PoPageAction } from '../interfaces/po-page-action.interface';
 
 /**
  * @usedBy PoPageComponent

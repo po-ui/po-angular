@@ -1,16 +1,30 @@
-import { Subscription } from 'rxjs';
-import { EventEmitter, Input, OnDestroy, Output, Directive } from '@angular/core';
+import { Directive, EventEmitter, Input, OnDestroy, Output } from '@angular/core';
 import { Router } from '@angular/router';
+import { Subscription } from 'rxjs';
 
-import { convertToBoolean, convertToInt, getShortBrowserLanguage, isExternalLink, isTypeof } from './../../utils/util';
+import {
+  convertToBoolean,
+  convertToInt,
+  getDefaultSize,
+  getShortBrowserLanguage,
+  isExternalLink,
+  isTypeof,
+  validateSize
+} from './../../utils/util';
 
-import { PoLanguageService, poLocaleDefault, PoLanguage, poLanguageDefault } from '@po-ui/ng-components';
+import {
+  PoLanguage,
+  poLanguageDefault,
+  PoLanguageService,
+  poLocaleDefault,
+  PoThemeService
+} from '@po-ui/ng-components';
 
-import { PoPageLogin } from './interfaces/po-page-login.interface';
 import { PoPageLoginAuthenticationType } from './enums/po-page-login-authentication-type.enum';
 import { PoPageLoginCustomField } from './interfaces/po-page-login-custom-field.interface';
 import { PoPageLoginLiterals } from './interfaces/po-page-login-literals.interface';
 import { PoPageLoginRecovery } from './interfaces/po-page-login-recovery.interface';
+import { PoPageLogin } from './interfaces/po-page-login.interface';
 import { PoPageLoginService } from './po-page-login.service';
 
 const poPageLoginContentMaxLength = 40;
@@ -346,6 +360,7 @@ export abstract class PoPageLoginBaseComponent implements OnDestroy {
   private _authenticationType: PoPageLoginAuthenticationType = PoPageLoginAuthenticationType.Basic;
   private _authenticationUrl: string;
   private _blockedUrl: string;
+  private _componentsSize?: string = undefined;
   private _contactEmail: string;
   private _customField: string | PoPageLoginCustomField;
   private _environment?: string;
@@ -361,6 +376,28 @@ export abstract class PoPageLoginBaseComponent implements OnDestroy {
   private _registerUrl: string;
   private _support: string | Function;
   private _languagesList: Array<PoLanguage>;
+
+  /**
+   * @optional
+   *
+   * @description
+   *
+   * Define o tamanho dos componentes de formulário no template:
+   * - `small`: aplica a medida small de cada componente (disponível apenas para acessibilidade AA).
+   * - `medium`: aplica a medida medium de cada componente.
+   *
+   * > Caso a acessibilidade AA não esteja configurada, o tamanho `medium` será mantido.
+   * Para mais detalhes, consulte a documentação do [po-theme](https://po-ui.io/documentation/po-theme).
+   *
+   * @default `medium`
+   */
+  @Input('p-components-size') set componentsSize(value: string) {
+    this._componentsSize = validateSize(value, this.poThemeService);
+  }
+
+  get componentsSize(): string {
+    return this._componentsSize ?? getDefaultSize(this.poThemeService);
+  }
 
   /**
    * @optional
@@ -986,6 +1023,7 @@ export abstract class PoPageLoginBaseComponent implements OnDestroy {
   }
 
   constructor(
+    protected poThemeService: PoThemeService,
     private loginService: PoPageLoginService,
     public router: Router,
     public poLanguageService: PoLanguageService

@@ -1,12 +1,12 @@
-import { AbstractControl } from '@angular/forms';
-import { ComponentFixture, TestBed } from '@angular/core/testing';
 import { ChangeDetectorRef, Component, ElementRef } from '@angular/core';
+import { ComponentFixture, TestBed } from '@angular/core/testing';
+import { AbstractControl } from '@angular/forms';
 
 import { configureTestSuite } from './../../../util-test/util-expect.spec';
 
+import { of } from 'rxjs';
 import { PoFieldModule } from './../po-field.module';
 import { PoNumberBaseComponent } from './po-number-base.component';
-import { of } from 'rxjs';
 
 @Component({
   template: `
@@ -17,7 +17,10 @@ import { of } from 'rxjs';
 })
 class ContentProjectionComponent extends PoNumberBaseComponent {
   constructor(el: ElementRef, cd: ChangeDetectorRef) {
-    super(el, cd);
+    const poThemeServiceMock = jasmine.createSpyObj('PoThemeService', ['getA11yDefaultSize']);
+    poThemeServiceMock.getA11yDefaultSize.and.returnValue('medium');
+
+    super(el, cd, poThemeServiceMock);
   }
 
   extraValidation(c: AbstractControl): { [key: string]: any } {

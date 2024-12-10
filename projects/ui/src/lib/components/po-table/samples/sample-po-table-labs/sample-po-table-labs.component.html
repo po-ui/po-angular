@@ -5,6 +5,7 @@
   [p-container]="container"
   [p-height]="height"
   [p-filter-type]="filterType"
+  [p-components-size]="componentsSize"
   [p-hide-detail]="properties.includes('hideDetail')"
   [p-hide-columns-manager]="properties.includes('hideColumnsManager')"
   [p-hide-batch-actions]="properties.includes('hideBatchActions')"
@@ -67,7 +68,8 @@
 
   <div class="po-row">
     <po-radio-group
-      class="po-lg-6"
+      class="po-lg-9"
+      p-columns="3"
       name="typeHeader"
       [(ngModel)]="columnsDefinition.detail.detail.typeHeader"
       p-label="Column detail typeHeader"
@@ -76,7 +78,7 @@
     </po-radio-group>
 
     <po-switch
-      class="po-lg-6"
+      class="po-lg-3"
       name="hideSelect"
       [(ngModel)]="columnsDefinition.detail.detail.hideSelect"
       p-label="Column detail hideSelect"
@@ -90,44 +92,10 @@
       name="properties"
       [(ngModel)]="properties"
       p-label="Properties"
+      p-columns="4"
       [p-options]="propertiesOptions"
     >
     </po-checkbox-group>
-  </div>
-
-  <div class="po-row">
-    <po-number class="po-md-3" name="height" [(ngModel)]="height" p-clean p-help="Height of table" p-label="Height">
-    </po-number>
-
-    <po-input
-      class="po-md-3"
-      name="literals"
-      [(ngModel)]="literals"
-      p-help='Ex.: {"noData": "Sem dados a serem exibidos", "noColumns": "Colunas não definidas"}'
-      p-label="Literals"
-      (p-change)="changeLiterals()"
-    >
-    </po-input>
-
-    <po-input
-      class="po-md-3"
-      name="filteredColumns"
-      [(ngModel)]="filteredColumns"
-      p-help='Ex.: "text, time"'
-      p-label="Filter Columns"
-      (p-change)="changeFilteredColumns()"
-    >
-    </po-input>
-
-    <po-number
-      class="po-md-3"
-      name="maxColumns"
-      [(ngModel)]="maxColumns"
-      p-clean
-      p-help="Max columns to be visible"
-      p-label="Max Columns"
-    >
-    </po-number>
   </div>
 
   <div class="po-row">
@@ -145,15 +113,23 @@
   </div>
 
   <div class="po-row">
-    <po-radio-group class="po-lg-6" name="spacing" [(ngModel)]="spacing" p-label="Spacing" [p-options]="typeSpacing">
+    <po-radio-group
+      class="po-lg-12"
+      name="spacing"
+      [(ngModel)]="spacing"
+      p-columns="4"
+      p-label="Spacing"
+      [p-options]="typeSpacing"
+    >
     </po-radio-group>
   </div>
 
   <div class="po-row">
     <po-checkbox-group
-      class="po-lg-6"
+      class="po-lg-12"
       name="selection"
       [(ngModel)]="selection"
+      p-columns="4"
       p-help="To enable 'hide select all' and 'single select' check 'selectable'."
       p-label="Selection"
       [p-options]="selectionOptions"
@@ -162,14 +138,67 @@
     </po-checkbox-group>
 
     <po-radio-group
-      class="po-md-5"
+      class="po-md-12"
       name="filterMode"
       [(ngModel)]="filterType"
-      p-columns="3"
+      p-columns="4"
       p-label="Filter mode"
       [p-options]="filterModeOptions"
     >
     </po-radio-group>
+
+    <po-radio-group
+      class="po-md-12"
+      name="size"
+      [(ngModel)]="componentsSize"
+      p-columns="4"
+      p-label="Components size"
+      p-help="Para aplicar o tamanho small, configure o nível de acessibilidade para AA, ajustável no navbar ou serviço de tema (https://po-ui.io/documentation/po-theme)."
+      [p-options]="componentsSizeOptions"
+    >
+    </po-radio-group>
+  </div>
+
+  <div class="po-row">
+    <po-input
+      class="po-md-12 po-lg-6"
+      name="literals"
+      [(ngModel)]="literals"
+      p-help='Ex.: {"noData": "Sem dados a serem exibidos", "noColumns": "Colunas não definidas"}'
+      p-label="Literals"
+      (p-change)="changeLiterals()"
+    >
+    </po-input>
+
+    <po-input
+      class="po-md-6"
+      name="filteredColumns"
+      [(ngModel)]="filteredColumns"
+      p-help='Ex.: "text, time"'
+      p-label="Filter Columns"
+      (p-change)="changeFilteredColumns()"
+    >
+    </po-input>
+
+    <po-number
+      class="po-md-6 po-lg-3"
+      name="height"
+      [(ngModel)]="height"
+      p-clean
+      p-help="Height of table"
+      p-label="Height"
+    >
+    </po-number>
+
+    <po-number
+      class="po-md-6 po-lg-3"
+      name="maxColumns"
+      [(ngModel)]="maxColumns"
+      p-clean
+      p-help="Max columns to be visible"
+      p-label="Max Columns"
+    >
+    </po-number>
   </div>
 
   <div class="po-row">

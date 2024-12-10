@@ -2,13 +2,13 @@
   <po-toaster
     #toasterRef
     class="po-md-12"
-    [p-hide]="hide"
-    (p-hide-change)="hideChange($event)"
+    [p-size-actions]="sizeActions"
+    [p-hide]="properties.includes('hide')"
     [p-mode]="mode"
     [p-message]="message"
     [p-support-message]="supportMessage"
     [p-type]="type"
-    [p-show-close]="showClose"
+    [p-show-close]="properties.includes('showClose')"
     [p-action]="action"
     [p-action-label]="actionLabel"
   ></po-toaster>
@@ -18,26 +18,56 @@
 
 <form #f="ngForm">
   <po-radio-group
+    p-columns="4"
     p-label="Type"
-    class="po-md-12"
+    class="po-lg-12"
     name="type"
     [(ngModel)]="type"
     [p-options]="typeOptions"
   ></po-radio-group>
+
   <po-input p-label="Message" class="po-md-6" name="message" [(ngModel)]="message" p-clean p-required> </po-input>
+
   <po-input p-label="Support Message" class="po-md-6" name="supportMessage" [(ngModel)]="supportMessage" p-clean>
   </po-input>
-  <po-switch p-label="Has Action" class="po-md-4" (p-change)="changeAction()" name="action" [(ngModel)]="hasAction">
+
+  <po-switch
+    p-label="Has Action"
+    class="po-md-6 po-lg-2"
+    (p-change)="changeAction()"
+    name="action"
+    [(ngModel)]="hasAction"
+  >
   </po-switch>
-  <po-input p-label="Action Label" class="po-md-4" name="actionLabel" [(ngModel)]="actionLabel" p-clean> </po-input>
-  <po-switch p-label="Show Close" class="po-md-4" name="showClose" [(ngModel)]="showClose"> </po-switch>
+
+  <po-input p-label="Action Label" class="po-md-6 po-lg-4" name="actionLabel" [(ngModel)]="actionLabel" p-clean>
+  </po-input>
+
+  <div class="po-row">
+    <po-checkbox-group
+      class="po-lg-6"
+      name="properties"
+      [(ngModel)]="properties"
+      p-label="Properties"
+      [p-options]="propertiesOptions"
+    >
+    </po-checkbox-group>
+
+    <po-radio-group
+      class="po-lg-6"
+      name="sizeActions"
+      [(ngModel)]="sizeActions"
+      p-label="Size actions"
+      p-help="Para aplicar o tamanho small, configure o nível de acessibilidade para AA, ajustável no navbar ou serviço de tema (https://po-ui.io/documentation/po-theme)."
+      [p-options]="sizeActionsOptions"
+    >
+    </po-radio-group>
+  </div>
 
   <po-divider></po-divider>
 
   <div class="po-row">
-    <po-button class="po-md-4" p-label="Sample Restore" (p-click)="restore()"> </po-button>
-    <po-button class="po-md-4" name="hide" (p-click)="changeHide()" p-label="{{ hide ? 'Show' : 'Hide' }} Toaster">
-    </po-button>
+    <po-button class="po-md-6 po-lg-3" p-label="Sample Restore" (p-click)="restore()"> </po-button>
   </div>
 </form>
 

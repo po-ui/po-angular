@@ -1,25 +1,26 @@
 import {
   AfterContentInit,
+  ChangeDetectorRef,
   Component,
+  ElementRef,
   OnChanges,
   OnDestroy,
   OnInit,
   Renderer2,
   SimpleChange,
   ViewChild,
-  ViewContainerRef,
-  ChangeDetectorRef,
-  ElementRef
+  ViewContainerRef
 } from '@angular/core';
 import { Router } from '@angular/router';
 
 import { callFunction, isExternalLink, isTypeof, openExternalLink } from '../../../utils/util';
 import { PoLanguageService } from './../../../services/po-language/po-language.service';
 
-import { PoPageAction } from '../po-page-action.interface';
-import { PoDisclaimer } from '../../po-disclaimer/po-disclaimer.interface';
 import { PoDisclaimerGroupRemoveAction } from '../../po-disclaimer-group/po-disclaimer-group-remove-action.interface';
+import { PoDisclaimer } from '../../po-disclaimer/po-disclaimer.interface';
+import { PoPageAction } from '../interfaces/po-page-action.interface';
 
+import { PoThemeService } from '../../../services';
 import { PoPageListBaseComponent } from './po-page-list-base.component';
 
 /**
@@ -69,10 +70,11 @@ export class PoPageListComponent
     viewRef: ViewContainerRef,
     languageService: PoLanguageService,
     public renderer: Renderer2,
+    protected poThemeService: PoThemeService,
     private router: Router,
     private changeDetector: ChangeDetectorRef
   ) {
-    super(languageService);
+    super(languageService, poThemeService);
     this.initializeListeners();
   }
 

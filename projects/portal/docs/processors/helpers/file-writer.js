@@ -230,8 +230,12 @@ export class Doc{{component}}Component implements OnInit, OnDestroy {
       this.activeTab = view || 'doc';
 
       this.hidePoWebSample = this.samplesLength === 0;
-
     });
+  }
+
+  changeTab(tab: string) {
+    this.router.navigate([], { queryParams: { view: tab }, queryParamsHandling: 'merge' });
+    this.activeTab = tab;
   }
 
   ngOnDestroy() {
@@ -322,10 +326,10 @@ export class Doc{{component}}Module { }
     const htmlSource = `
 <po-page-default p-title="{{title}}" [p-actions]="actions">
   <po-tabs p-size="1">
-    <po-tab p-label="Documentação" [p-active]="activeTab.includes('doc')">
+    <po-tab p-label="Documentação" [p-active]="activeTab === 'doc'" (p-click)="changeTab('doc')">
       <sample-{{docName}}-doc></sample-{{docName}}-doc>
     </po-tab>
-    <po-tab p-label="Exemplos" [p-hide]="hidePoWebSample" [p-active]="activeTab.includes('web')">
+    <po-tab p-label="Exemplos" [p-hide]="hidePoWebSample" [p-active]="activeTab === 'web'" (p-click)="changeTab('web')">
     {{#each samples}}
       <sample-{{name}}-view></sample-{{name}}-view>
     {{/each}}
@@ -336,24 +340,24 @@ export class Doc{{component}}Module { }
 
     const htmlTemplate = handlebars.compile(htmlSource);
     let htmlContent = htmlTemplate({
-      title: `${this.capitalizeDocName(docName)}`,
-      docName: docName,
-      samples: samples
+        title: `${this.capitalizeDocName(docName)}`,
+        docName: docName,
+        samples: samples
     });
 
     this.writeFile(
-      `${configuration.outputFolder}sample-${docName}/doc-${docName}.component.html`,
-      htmlContent,
-      result => {
-        if (result) {
-          console.error(
-            `error`.red + ':   ',
-            `Erro ao salvar arquivo sample-${docName}/doc-${docName}.component.html: ${result.message}`
-          );
+        `${configuration.outputFolder}sample-${docName}/doc-${docName}.component.html`,
+        htmlContent,
+        result => {
+            if (result) {
+                console.error(
+                    `error`.red + ':   ',
+                    `Erro ao salvar arquivo sample-${docName}/doc-${docName}.component.html: ${result.message}`
+                );
+            }
         }
-      }
     );
-  },
+},
   generateDocumentationRoutingModule: function (docs) {
     const routingModuleSource = `
 import { NgModule } from '@angular/core';

@@ -5,6 +5,7 @@
 
 <po-page-background
   #pageLogin
+  [p-components-size]="componentsSize"
   [p-show-select-language]="showLanguage"
   [p-languages]="languagesList"
   [p-initial-language]="initialSelectLanguage"
@@ -42,6 +43,7 @@
             [p-no-autocomplete]="noAutocompleteLogin"
             [p-pattern]="loginPattern"
             [p-placeholder]="pageLoginLiterals.loginPlaceholder"
+            [p-size]="componentsSize"
             (click)="closePopover()"
             (keyup.enter)="loginForm.valid && onLoginSubmit()"
             (p-change-model)="changeLoginModel()"
@@ -91,6 +93,7 @@
             [p-no-autocomplete]="noAutocompletePassword"
             [p-pattern]="passwordPattern"
             [p-placeholder]="pageLoginLiterals.passwordPlaceholder"
+            [p-size]="componentsSize"
             (click)="closePopover()"
             (keyup.enter)="loginForm.valid && onLoginSubmit()"
             (p-change-model)="changePasswordModel()"
@@ -131,6 +134,7 @@
         [p-error-pattern]="customFieldObject.errorPattern || pageLoginLiterals.customFieldErrorPattern"
         [p-pattern]="customFieldObject.pattern"
         [p-placeholder]="customFieldObject.placeholder || pageLoginLiterals.customFieldPlaceholder"
+        [p-size]="componentsSize"
         (keyup.enter)="loginForm.valid && onLoginSubmit()"
       >
       </po-input>
@@ -145,6 +149,7 @@
         [p-field-value]="customFieldObject.fieldValue"
         [p-filter-service]="customFieldObject.url"
         [p-placeholder]="customFieldObject.placeholder || pageLoginLiterals.customFieldPlaceholder"
+        [p-size]="componentsSize"
       >
       </po-combo>
 
@@ -157,6 +162,7 @@
         p-required
         [p-placeholder]="customFieldObject.placeholder || pageLoginLiterals.customFieldPlaceholder"
         [p-options]="customFieldObject.options"
+        [p-size]="componentsSize"
       >
       </po-select>
 
@@ -169,6 +175,7 @@
             p-label-position="1"
             [p-label-off]="pageLoginLiterals.rememberUser"
             [p-label-on]="pageLoginLiterals.rememberUser"
+            [p-size]="componentsSize"
             (keyup.enter)="loginForm.valid && onLoginSubmit()"
             [p-hide-label-status]="hideLabelStatus"
           >
@@ -197,6 +204,7 @@
         [p-disabled]="loginForm.invalid"
         [p-label]="loading ? pageLoginLiterals.submittedLabel : pageLoginLiterals.submitLabel"
         [p-loading]="loading"
+        [p-size]="componentsSize"
         (p-click)="onLoginSubmit()"
       >
       </po-button>

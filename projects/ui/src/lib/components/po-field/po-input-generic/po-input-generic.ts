@@ -1,16 +1,17 @@
 import {
   AfterViewInit,
+  ChangeDetectorRef,
+  Directive,
   ElementRef,
   HostListener,
-  ViewChild,
-  Directive,
-  ChangeDetectorRef,
-  OnDestroy
+  OnDestroy,
+  ViewChild
 } from '@angular/core';
 import { AbstractControl } from '@angular/forms';
 
-import { PoInputBaseComponent } from '../po-input/po-input-base.component';
 import { isObservable, of, Subscription, switchMap } from 'rxjs';
+import { PoThemeService } from '../../../services';
+import { PoInputBaseComponent } from '../po-input/po-input-base.component';
 
 /* eslint-disable @angular-eslint/directive-class-suffix */
 @Directive()
@@ -28,8 +29,12 @@ export abstract class PoInputGeneric extends PoInputBaseComponent implements Aft
     return this.noAutocomplete ? 'off' : 'on';
   }
 
-  constructor(el: ElementRef, cd?: ChangeDetectorRef) {
-    super(cd);
+  constructor(
+    el: ElementRef,
+    cd?: ChangeDetectorRef,
+    protected poThemeService?: PoThemeService
+  ) {
+    super(cd, poThemeService);
 
     this.el = el;
   }
@@ -61,9 +66,6 @@ export abstract class PoInputGeneric extends PoInputBaseComponent implements Aft
 
   afterViewInit() {
     this.verifyAutoFocus();
-    if (this.type !== 'password') {
-      this.setPaddingInput();
-    }
   }
 
   ngOnDestroy(): void {
@@ -82,19 +84,6 @@ export abstract class PoInputGeneric extends PoInputBaseComponent implements Aft
     if (isFieldFocused) {
       this.keydown.emit(event);
     }
-  }
-
-  setPaddingInput() {
-    setTimeout(() => {
-      const selectorIcons = '.po-field-icon-container:not(.po-field-icon-container-left) > .po-icon';
-      let icons = this.el.nativeElement.querySelectorAll(selectorIcons).length;
-      if (this.clean) {
-        icons++;
-      }
-      if (icons) {
-        this.inputEl.nativeElement.style.paddingRight = `${icons * 36}px`;
-      }
-    });
   }
 
   verifyAutoFocus() {

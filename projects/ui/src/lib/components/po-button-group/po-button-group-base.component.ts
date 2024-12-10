@@ -1,8 +1,10 @@
-import { Input, Directive } from '@angular/core';
+import { Directive, Input } from '@angular/core';
 
-import { convertToBoolean } from '../../utils/util';
+import { PoFieldSize } from '../../enums/po-field-size.enum';
+import { PoThemeService } from '../../services';
+import { getDefaultSize, validateSize } from '../../utils/util';
+import { PoButtonGroupToggle } from './enums/po-button-group-toggle.enum';
 import { PoButtonGroupItem } from './po-button-group-item.interface';
-import { PoButtonGroupToggle } from './po-button-group-toggle.enum';
 
 const PO_TOGGLE_TYPE_DEFAULT = 'none';
 
@@ -64,6 +66,8 @@ export class PoButtonGroupBaseComponent {
   /** Lista de botões. */
   @Input('p-buttons') buttons: Array<PoButtonGroupItem> = [];
 
+  private _size?: string = undefined;
+
   private _toggle?: string = PO_TOGGLE_TYPE_DEFAULT;
 
   /**
@@ -71,9 +75,10 @@ export class PoButtonGroupBaseComponent {
    *
    * @description
    *
-   * Define o modo de seleção de botões.
-   *
-   * > Veja os valores válidos no *enum* `PoButtonGroupToggle`.
+   * Define o modo de seleção dos botões no componente conforme valores especificados no enum `PoButtonGroupToggle`:
+   *  - `multiple`: permite múltiplas seleções.
+   *  - `none`: desativa a funcionalidade de seleção.
+   *  - `single`: restringe a seleção a um único botão.
    *
    * @default `none`
    */
@@ -86,6 +91,30 @@ export class PoButtonGroupBaseComponent {
   get toggle(): string {
     return this._toggle;
   }
+
+  /**
+   * @optional
+   *
+   * @description
+   *
+   * Define o tamanho do componente:
+   * - `small`: altura de 32px (disponível apenas para acessibilidade AA).
+   * - `medium`: altura de 44px.
+   *
+   * > Caso a acessibilidade AA não esteja configurada, o tamanho `medium` será mantido.
+   * Para mais detalhes, consulte a documentação do [po-theme](https://po-ui.io/documentation/po-theme).
+   *
+   * @default `medium`
+   */
+  @Input('p-size') set size(value: string) {
+    this._size = validateSize(value, this.poThemeService, PoFieldSize);
+  }
+
+  get size(): string {
+    return this._size ?? getDefaultSize(this.poThemeService, PoFieldSize);
+  }
+
+  constructor(protected poThemeService: PoThemeService) {}
 
   onButtonClick(buttonClicked: PoButtonGroupItem, buttonIndex: number) {
     if (this.toggle === PoButtonGroupToggle.Single) {

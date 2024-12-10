@@ -1,6 +1,7 @@
 import { ChangeDetectionStrategy, Component, OnInit, inject } from '@angular/core';
 
 import { Router } from '@angular/router';
+import { PoThemeService } from '../../services';
 import { PoLanguageService } from '../../services/po-language/po-language.service';
 import { isTypeof } from '../../utils/util';
 import { PoProgressStatus } from './enums/po-progress-status.enum';
@@ -62,6 +63,10 @@ export class PoProgressComponent extends PoProgressBaseComponent implements OnIn
 
   private poLanguageService = inject(PoLanguageService);
   private router = inject(Router);
+
+  constructor(protected poThemeService: PoThemeService) {
+    super(poThemeService);
+  }
 
   ngOnInit(): void {
     this.language = this.poLanguageService.getShortLanguage();

@@ -5,16 +5,17 @@ import {
   PoDynamicFormField,
   PoLanguageService,
   PoPageAction,
+  PoThemeService,
   poLocaleDefault
 } from '@po-ui/ng-components';
 
-import { convertToBoolean, convertToInt } from '../../utils/util';
+import { convertToBoolean, convertToInt, getDefaultSize, validateSize } from '../../utils/util';
 
+import { PoPageDynamicSearchFilters } from './interfaces/po-page-dynamic-search-filters.interface';
+import { PoPageDynamicSearchLiterals } from './interfaces/po-page-dynamic-search-literals.interface';
+import { PoPageDynamicSearchOptions } from './interfaces/po-page-dynamic-search-options.interface';
 import { poAdvancedFiltersLiteralsDefault } from './po-advanced-filter/po-advanced-filter-base.component';
 import { PoAdvancedFilterLiterals } from './po-advanced-filter/po-advanced-filter-literals.interface';
-import { PoPageDynamicSearchFilters } from './po-page-dynamic-search-filters.interface';
-import { PoPageDynamicSearchLiterals } from './po-page-dynamic-search-literals.interface';
-import { PoPageDynamicSearchOptions } from './po-page-dynamic-search-options.interface';
 
 export const poPageDynamicSearchLiteralsDefault = {
   en: <PoPageDynamicSearchLiterals>{
@@ -213,6 +214,7 @@ export abstract class PoPageDynamicSearchBaseComponent {
 
   advancedFilterLiterals: PoAdvancedFilterLiterals;
 
+  private _componentsSize?: string = undefined;
   private _filters: Array<PoDynamicFormField> = [];
   private _hideCloseDisclaimers: Array<string> = [];
   private _literals: PoPageDynamicSearchLiterals;
@@ -220,6 +222,28 @@ export abstract class PoPageDynamicSearchBaseComponent {
   private language: string;
 
   previousFilters: Array<PoDynamicFormField>;
+
+  /**
+   * @optional
+   *
+   * @description
+   *
+   * Define o tamanho dos componentes de formulário no template:
+   * - `small`: aplica a medida small de cada componente (disponível apenas para acessibilidade AA).
+   * - `medium`: aplica a medida medium de cada componente.
+   *
+   * > Caso a acessibilidade AA não esteja configurada, o tamanho `medium` será mantido.
+   * Para mais detalhes, consulte a documentação do [po-theme](https://po-ui.io/documentation/po-theme).
+   *
+   * @default `medium`
+   */
+  @Input('p-components-size') set componentsSize(value: string) {
+    this._componentsSize = validateSize(value, this.poThemeService);
+  }
+
+  get componentsSize(): string {
+    return this._componentsSize ?? getDefaultSize(this.poThemeService);
+  }
 
   /**
    * @optional
@@ -330,7 +354,10 @@ export abstract class PoPageDynamicSearchBaseComponent {
     return this._hideCloseDisclaimers;
   }
 
-  constructor(languageService: PoLanguageService) {
+  constructor(
+    languageService: PoLanguageService,
+    protected poThemeService: PoThemeService
+  ) {
     this.language = languageService.getShortLanguage();
   }
 

@@ -1,5 +1,6 @@
 <li class="po-tree-view-item">
   <po-tree-view-item-header
+    [p-components-size]="componentsSize"
     [p-item]="item"
     [p-selectable]="selectable"
     [p-single-select]="singleSelect"
@@ -13,6 +14,7 @@
     <div *ngIf="item.expanded" @toggleBody>
       <po-tree-view-item
         *ngFor="let subItem of item.subItems; trackBy: trackByFunction"
+        [p-components-size]="componentsSize"
         [p-item]="subItem"
         [p-selectable]="selectable"
         [p-single-select]="singleSelect"

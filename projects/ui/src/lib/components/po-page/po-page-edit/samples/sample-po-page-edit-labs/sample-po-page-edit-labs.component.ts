@@ -1,7 +1,6 @@
 import { Component, OnInit } from '@angular/core';
 
-import { PoBreadcrumb, PoBreadcrumbItem } from '@po-ui/ng-components';
-import { PoCheckboxGroupOption } from '@po-ui/ng-components';
+import { PoBreadcrumb, PoBreadcrumbItem, PoCheckboxGroupOption, PoRadioGroupOption } from '@po-ui/ng-components';
 
 import { PoPageEditLiterals } from '@po-ui/ng-components';
 
@@ -15,12 +14,18 @@ export class SamplePoPageEditLabsComponent implements OnInit {
   breadcrumb: PoBreadcrumb;
   breadcrumbItem: PoBreadcrumbItem;
   breadcrumbParams: any;
+  componentsSize: string;
   customLiterals: PoPageEditLiterals;
   literals: string;
   params: any;
   properties: Array<string>;
   title: string;
   subtitle: string;
+
+  public readonly componentsSizeOptions: Array<PoRadioGroupOption> = [
+    { label: 'small', value: 'small' },
+    { label: 'medium', value: 'medium' }
+  ];
 
   public readonly propertiesOptions: Array<PoCheckboxGroupOption> = [
     { value: 'disableSubmit', label: 'Disable Submit' }
@@ -64,6 +69,7 @@ export class SamplePoPageEditLabsComponent implements OnInit {
     this.breadcrumb = { items: [] };
     this.breadcrumbItem = { label: undefined, link: undefined };
     this.breadcrumbParams = {};
+    this.componentsSize = 'medium';
     this.customLiterals = undefined;
     this.literals = '';
     this.properties = [];

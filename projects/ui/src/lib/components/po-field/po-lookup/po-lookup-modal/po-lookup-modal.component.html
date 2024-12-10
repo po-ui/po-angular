@@ -2,6 +2,7 @@
   p-click-out="false"
   p-hide-close="false"
   p-size="lg"
+  [p-components-size]="size"
   [p-primary-action]="isAdvancedFilter ? primaryActionAdvancedFilter : primaryAction"
   [p-secondary-action]="isAdvancedFilter ? secondaryActionAdvancedFilter : secondaryAction"
   [p-title]="isAdvancedFilter ? advancedFilterModalTitle : title"
@@ -10,12 +11,20 @@
     <po-field-container class="po-lookup-header po-pull-right" [p-optional]="false">
       <div class="po-lookup-filter-content">
         <div class="po-field-icon-container-right">
-          <po-icon #iconLookup p-icon="ICON_SEARCH" class="po-field-icon po-icon-input" (click)="search()"> </po-icon>
+          <po-icon
+            #iconLookup
+            p-icon="ICON_SEARCH"
+            class="po-field-icon po-icon-input"
+            [class.po-field-icon-aa]="size === 'small'"
+            (click)="search()"
+          >
+          </po-icon>
         </div>
 
         <input
           #inpsearch
           class="po-input po-input-icon-right"
+          [class.po-input-aa]="size === 'small'"
           name="contentSearch"
           [(ngModel)]="searchValue"
           [placeholder]="literals.modalPlaceholder"
@@ -50,6 +59,7 @@
       <po-table
         #poTable
         class="po-md-12"
+        [p-components-size]="size"
         [p-selectable]="true"
         [p-hide-detail]="true"
         [p-single-select]="!multiple"

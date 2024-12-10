@@ -3,7 +3,7 @@ import { TestBed, fakeAsync, tick, waitForAsync } from '@angular/core/testing';
 import { HttpTestingController, provideHttpClientTesting } from '@angular/common/http/testing';
 
 import { PoPageCustomizationService } from './po-page-customization.service';
-import { PoPageDynamicSearchOptions } from '../../components/po-page-dynamic-search/po-page-dynamic-search-options.interface';
+import { PoPageDynamicSearchOptions } from '../../components/po-page-dynamic-search/interfaces/po-page-dynamic-search-options.interface';
 import { provideHttpClient, withInterceptorsFromDi } from '@angular/common/http';
 
 const originalPageOptions: PoPageDynamicSearchOptions = {

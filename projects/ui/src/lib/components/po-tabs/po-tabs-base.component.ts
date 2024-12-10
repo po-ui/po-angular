@@ -1,6 +1,7 @@
-import { Input, Directive } from '@angular/core';
-
-import { convertToBoolean } from '../../utils/util';
+import { Directive, Input } from '@angular/core';
+import { PoFieldSize } from '../../enums/po-field-size.enum';
+import { PoThemeService } from '../../services';
+import { getDefaultSize, validateSize } from '../../utils/util';
 
 /**
  * @description
@@ -54,4 +55,30 @@ import { convertToBoolean } from '../../utils/util';
  *
  */
 @Directive()
-export class PoTabsBaseComponent {}
+export class PoTabsBaseComponent {
+  private _size?: string = undefined;
+
+  /**
+   * @optional
+   *
+   * @description
+   *
+   * Define o tamanho do componente:
+   * - `small`: altura dos tabs como 32px (disponível apenas para acessibilidade AA).
+   * - `medium`: altura dos tabs como 44px.
+   *
+   * > Caso a acessibilidade AA não esteja configurada, o tamanho `medium` será mantido.
+   * Para mais detalhes, consulte a documentação do [po-theme](https://po-ui.io/documentation/po-theme).
+   *
+   * @default `medium`
+   */
+  @Input('p-size') set size(value: string) {
+    this._size = validateSize(value, this.poThemeService, PoFieldSize);
+  }
+
+  get size(): string {
+    return this._size ?? getDefaultSize(this.poThemeService, PoFieldSize);
+  }
+
+  constructor(protected poThemeService: PoThemeService) {}
+}

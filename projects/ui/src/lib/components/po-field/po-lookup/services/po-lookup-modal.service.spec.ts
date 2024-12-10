@@ -47,6 +47,7 @@ describe('PoLookupModalService:', () => {
     selectedItems: null,
     fieldValue: 'value',
     fieldLabel: 'label',
+    size: 'medium',
     spacing: 'medium',
     textWrap: false,
     virtualScroll: true,

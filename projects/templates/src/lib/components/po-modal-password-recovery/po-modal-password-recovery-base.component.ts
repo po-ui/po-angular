@@ -1,9 +1,10 @@
-import { EventEmitter, Input, Output, Directive } from '@angular/core';
+import { Directive, EventEmitter, Input, Output } from '@angular/core';
 
-import { PoLanguageService, poLocaleDefault } from '@po-ui/ng-components';
+import { PoLanguageService, poLocaleDefault, PoThemeService } from '@po-ui/ng-components';
 
-import { poModalPasswordRecoveryLiterals } from './literals/i18n/po-modal-password-recovery-literals';
+import { getDefaultSize, validateSize } from '../../utils/util';
 import { PoModalPasswordRecoveryType } from './enums/po-modal-password-recovery-type.enum';
+import { poModalPasswordRecoveryLiterals } from './literals/i18n/po-modal-password-recovery-literals';
 
 const PoModalPasswordRecoveryDefaultMaxLength = 15;
 const PoModalPasswordRecoveryDefaultMinLength = 15;
@@ -237,9 +238,32 @@ export abstract class PoModalPasswordRecoveryBaseComponent {
     typeCodeTitle: string;
   } = poModalPasswordRecoveryLiterals[poLocaleDefault];
 
+  private _componentsSize?: string;
   private _contactEmail: string;
   private _phoneMask = PoModalPasswordRecoveryDefaultPhone;
   private _type: PoModalPasswordRecoveryType = PoModalPasswordRecoveryTypeDefault;
+
+  /**
+   * @optional
+   *
+   * @description
+   *
+   * Define o tamanho dos componentes de formulário no modal:
+   * - `small`: aplica a medida small de cada componente (disponível apenas para acessibilidade AA).
+   * - `medium`: aplica a medida medium de cada componente.
+   *
+   * > Caso a acessibilidade AA não esteja configurada, o tamanho `medium` será mantido.
+   * Para mais detalhes, consulte a documentação do [po-theme](https://po-ui.io/documentation/po-theme).
+   *
+   * @default `medium`
+   */
+  @Input('p-components-size') set componentsSize(value: string) {
+    this._componentsSize = validateSize(value, this.poThemeService);
+  }
+
+  get componentsSize(): string {
+    return this._componentsSize ?? getDefaultSize(this.poThemeService);
+  }
 
   /**
    * @optional
@@ -296,7 +320,10 @@ export abstract class PoModalPasswordRecoveryBaseComponent {
     return this._type;
   }
 
-  constructor(languageService: PoLanguageService) {
+  constructor(
+    languageService: PoLanguageService,
+    protected poThemeService: PoThemeService
+  ) {
     this.literals = {
       ...this.literals,
       ...poModalPasswordRecoveryLiterals[languageService.getShortLanguage()]
