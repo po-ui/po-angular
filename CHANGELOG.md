@@ -2,6 +2,13 @@
 
 All notable changes to this project will be documented in this file. See [standard-version](https://github.com/conventional-changelog/standard-version) for commit guidelines.
 
+## [18.20.0](https://github.com/po-ui/po-angular/compare/v18.19.1...v18.20.0) (2024-12-11)
+
+
+### Features
+
+* **theme:** melhoria no tema para diferentes acessibilidades ([ca35dda](https://github.com/po-ui/po-angular/commit/ca35dda2bae3d25143f2a018fc6809d75f87f1fe))
+
 ### [18.19.1](https://github.com/po-ui/po-angular/compare/v18.19.0...v18.19.1) (2024-12-10)
 
 
