@@ -181,6 +181,8 @@ export abstract class PoInputBaseComponent implements ControlValueAccessor, Vali
    * - Quando `true`, apenas os caracteres alfanuméricos serão contabilizados para a validação dos comprimentos.
    * - Quando `false`, todos os caracteres, incluindo os especiais da máscara, serão considerados na validação.
    *
+   * > Será ignorado essa propriedade , caso esteja utilizando junto com a propriedade `p-mask-format-model`.
+   *
    * Exemplo:
    * ```
    * <po-input
@@ -510,7 +512,9 @@ export abstract class PoInputBaseComponent implements ControlValueAccessor, Vali
       };
     }
 
-    if (maxlengpoailed(this.maxlength, this.getScreenValue(), this.maskNoLengthValidation)) {
+    if (
+      maxlengpoailed(this.maxlength, this.getScreenValue(), this.maskFormatModel ? false : this.maskNoLengthValidation)
+    ) {
       this.isInvalid = true;
       return {
         maxlength: {
@@ -519,7 +523,9 @@ export abstract class PoInputBaseComponent implements ControlValueAccessor, Vali
       };
     }
 
-    if (minlengpoailed(this.minlength, this.getScreenValue(), this.maskNoLengthValidation)) {
+    if (
+      minlengpoailed(this.minlength, this.getScreenValue(), this.maskFormatModel ? false : this.maskNoLengthValidation)
+    ) {
       this.isInvalid = true;
       return {
         minlength: {
