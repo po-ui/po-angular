@@ -7,16 +7,46 @@ export function requiredFailed(required: boolean, disabled: boolean, value: stri
   return required && !disabled && !valid;
 }
 
-export function maxlengpoailed(maxlength: number, value: string | number) {
-  const validMaxlength = maxlength || maxlength === 0;
-  const validValue = (value || value === 0) && value.toString();
-  return validMaxlength && validValue && validValue.length > Number(maxlength);
+export function maxlengpoailed(
+  maxlength: number,
+  value: string | number,
+  maskNoLengthValidation: boolean = false
+): boolean {
+  return validateLength(maxlength, value, 'max', maskNoLengthValidation);
 }
 
-export function minlengpoailed(minlength: number, value: string | number) {
-  const validMinlength = minlength || minlength === 0;
+export function minlengpoailed(
+  minlength: number,
+  value: string | number,
+  maskNoLengthValidation: boolean = false
+): boolean {
+  return validateLength(minlength, value, 'min', maskNoLengthValidation);
+}
+
+export function validateLength(
+  limit: number,
+  value: string | number,
+  comparison: 'max' | 'min',
+  maskNoLengthValidation: boolean = false
+): boolean {
+  if (!limit && limit !== 0) {
+    return false;
+  }
+
   const validValue = (value || value === 0) && value.toString();
-  return validMinlength && validValue && validValue.length < Number(minlength);
+  if (!validValue) {
+    return false;
+  }
+
+  const processedValue = maskNoLengthValidation ? validValue.replace(/[^\w]/g, '') : validValue;
+
+  if (comparison === 'max') {
+    return processedValue.length > Number(limit);
+  } else if (comparison === 'min') {
+    return processedValue.length < Number(limit);
+  }
+
+  return false;
 }
 
 export function patternFailed(pattern: string, value: string) {
