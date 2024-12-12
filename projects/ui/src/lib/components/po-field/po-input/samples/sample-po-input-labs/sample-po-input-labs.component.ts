@@ -36,7 +36,8 @@ export class SamplePoInputLabsComponent implements OnInit {
     { value: 'required', label: 'Required' },
     { value: 'requiredFieldErrorMessage', label: 'Required Field Error Message' },
     { value: 'uppercase', label: 'Upper Case' },
-    { value: 'showRequired', label: 'Show Required' }
+    { value: 'showRequired', label: 'Show Required' },
+    { value: 'maskNoLengthValidation', label: 'Mask No Length Validation' }
   ];
 
   ngOnInit() {
