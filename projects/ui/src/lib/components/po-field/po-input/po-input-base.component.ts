@@ -1,7 +1,7 @@
 import { ChangeDetectorRef, Directive, EventEmitter, Input, OnDestroy, Output, TemplateRef } from '@angular/core';
 import { AbstractControl, ControlValueAccessor, Validator, Validators } from '@angular/forms';
 
-import { Subject, Subscription, switchMap } from 'rxjs';
+import { Subscription, switchMap } from 'rxjs';
 import { convertToBoolean } from '../../../utils/util';
 import { ErrorAsyncProperties } from '../shared/interfaces/error-async-properties.interface';
 import { maxlengpoailed, minlengpoailed, patternFailed, requiredFailed } from './../validators';
@@ -172,6 +172,40 @@ export abstract class PoInputBaseComponent implements ControlValueAccessor, Vali
    *
    */
   @Input({ alias: 'p-upper-case', transform: convertToBoolean }) upperCase: boolean = false;
+
+  _maskNoLengthValidation = false;
+  /**
+   * @description
+   *
+   * Define se os caracteres especiais da máscara devem ser ignorados ao validar os comprimentos mínimo (`minLength`) e máximo (`maxLength`) do campo.
+   *
+   * - Quando `true`, apenas os caracteres alfanuméricos serão contabilizados para a validação dos comprimentos.
+   * - Quando `false`, todos os caracteres, incluindo os especiais da máscara, serão considerados na validação.
+   *
+   * > Será ignorado essa propriedade , caso esteja utilizando junto com a propriedade `p-mask-format-model`.
+   *
+   * Exemplo:
+   * ```
+   * <po-input
+   *   p-mask="999-999"
+   *   p-maxlength="6"
+   *   p-minlength="4"
+   *   p-mask-no-length-validation="true"
+   * ></po-input>
+   * ```
+   * - Entrada: `123-456` → Validação será aplicada somente aos números, ignorando o caractere especial `-`.
+   *
+   * @default `false`
+   */
+  @Input('p-mask-no-length-validation') set maskNoLengthValidation(value: boolean) {
+    this._maskNoLengthValidation = convertToBoolean(value);
+
+    this.validateModel();
+  }
+
+  get maskNoLengthValidation() {
+    return this._maskNoLengthValidation;
+  }
 
   /**
    * @optional
@@ -487,7 +521,9 @@ export abstract class PoInputBaseComponent implements ControlValueAccessor, Vali
       };
     }
 
-    if (maxlengpoailed(this.maxlength, this.getScreenValue())) {
+    if (
+      maxlengpoailed(this.maxlength, this.getScreenValue(), this.maskFormatModel ? false : this.maskNoLengthValidation)
+    ) {
       this.isInvalid = true;
       return {
         maxlength: {
@@ -496,7 +532,9 @@ export abstract class PoInputBaseComponent implements ControlValueAccessor, Vali
       };
     }
 
-    if (minlengpoailed(this.minlength, this.getScreenValue())) {
+    if (
+      minlengpoailed(this.minlength, this.getScreenValue(), this.maskFormatModel ? false : this.maskNoLengthValidation)
+    ) {
       this.isInvalid = true;
       return {
         minlength: {
