@@ -5,7 +5,8 @@ import {
   patternFailed,
   minFailed,
   maxFailed,
-  dateFailed
+  dateFailed,
+  validateLength
 } from './validators';
 
 describe('requiredFailed: ', () => {
@@ -41,25 +42,41 @@ describe('requiredFailed: ', () => {
 });
 
 describe('Function maxlengpoailed:', () => {
-  it('should return `true` if value.length is greater than `maxlength`', () => {
-    expect(maxlengpoailed(3, '1234')).toBeTruthy();
-    expect(maxlengpoailed(3, '1234567')).toBeTruthy();
-    expect(maxlengpoailed(5, 'abcdef')).toBeTruthy();
-    expect(maxlengpoailed(10, 'abcdefghijk')).toBeTruthy();
-    expect(maxlengpoailed(0, 'abc')).toBeTruthy();
+  it('should return `true` if value.length is greater than `maxlength` without ignoring special characters', () => {
+    expect(maxlengpoailed(3, '1234', false)).toBeTruthy();
+    expect(maxlengpoailed(5, 'abc-de', false)).toBeTruthy();
+    expect(maxlengpoailed(7, 'abc@def!', false)).toBeTruthy();
   });
 
-  it('should return `false` if value.length is less or equal than `maxlength` or value or `maxlength` is invalid', () => {
-    expect(maxlengpoailed(3, '123')).toBeFalsy();
-    expect(maxlengpoailed(1, '1')).toBeFalsy();
-    expect(maxlengpoailed(0, '')).toBeFalsy();
-    expect(maxlengpoailed(20, null)).toBeFalsy();
-    expect(maxlengpoailed(20, undefined)).toBeFalsy();
-    expect(maxlengpoailed(5, 'abcd')).toBeFalsy();
-    expect(maxlengpoailed(2, 'a')).toBeFalsy();
-    expect(maxlengpoailed(undefined, 'abc')).toBeFalsy();
-    expect(maxlengpoailed(null, '123')).toBeFalsy();
-    expect(maxlengpoailed(NaN, '123')).toBeFalsy();
+  it('should return `false` if value.length is less or equal than `maxlength` without ignoring special characters', () => {
+    expect(maxlengpoailed(3, '123', false)).toBeFalsy();
+    expect(maxlengpoailed(6, 'abc-def', false)).toBeTruthy();
+    expect(maxlengpoailed(7, 'abcdef!', false)).toBeFalsy();
+  });
+
+  it('should return `true` if alphanumeric value.length exceeds `maxlength` while ignoring special characters', () => {
+    expect(maxlengpoailed(3, '123-4', true)).toBeTruthy();
+    expect(maxlengpoailed(3, 'abc@de!', true)).toBeTruthy();
+  });
+
+  it('should return `false` if alphanumeric value.length is within `maxlength` while ignoring special characters', () => {
+    expect(maxlengpoailed(4, '123-4', true)).toBeFalsy();
+    expect(maxlengpoailed(5, 'abc@d!', true)).toBeFalsy();
+  });
+
+  it('should handle null or undefined values gracefully', () => {
+    expect(maxlengpoailed(3, null, true)).toBeFalsy();
+    expect(maxlengpoailed(3, undefined, true)).toBeFalsy();
+  });
+
+  it('should handle edge cases for special character-only inputs', () => {
+    expect(maxlengpoailed(1, '---', true)).toBeFalsy();
+    expect(maxlengpoailed(1, '@@@', true)).toBeFalsy();
+  });
+
+  it('should consider all characters when ignoring special characters is disabled', () => {
+    expect(maxlengpoailed(5, '123-4', false)).toBeFalsy();
+    expect(maxlengpoailed(5, 'abc@!', false)).toBeFalsy();
   });
 });
 
@@ -84,6 +101,73 @@ describe('Function minlengpoailed:', () => {
     expect(minlengpoailed(null, 'abc')).toBeFalsy();
     expect(minlengpoailed(NaN, '123')).toBeFalsy();
     expect(minlengpoailed(0, '123')).toBeFalsy();
+  });
+
+  it('should correctly handle maskNoLengthValidation when true', () => {
+    expect(minlengpoailed(3, '1-2', true)).toBeTruthy();
+    expect(minlengpoailed(3, '1-2-3', true)).toBeFalsy();
+    expect(minlengpoailed(5, '12-345', true)).toBeFalsy();
+    expect(minlengpoailed(5, '12--34', true)).toBeTruthy();
+  });
+
+  it('should correctly handle maskNoLengthValidation when false', () => {
+    expect(minlengpoailed(3, '1-2', false)).toBeFalsy();
+    expect(minlengpoailed(3, '1-2-3', false)).toBeFalsy();
+    expect(minlengpoailed(5, '12-345', false)).toBeFalsy();
+    expect(minlengpoailed(5, '12--34', false)).toBeFalsy();
+  });
+
+  it('should return `false` for invalid values or limits regardless of maskNoLengthValidation', () => {
+    expect(minlengpoailed(undefined, '123', true)).toBeFalsy();
+    expect(minlengpoailed(null, '123', true)).toBeFalsy();
+    expect(minlengpoailed(3, null, true)).toBeFalsy();
+    expect(minlengpoailed(3, undefined, true)).toBeFalsy();
+
+    expect(minlengpoailed(undefined, '123', false)).toBeFalsy();
+    expect(minlengpoailed(null, '123', false)).toBeFalsy();
+    expect(minlengpoailed(3, null, false)).toBeFalsy();
+    expect(minlengpoailed(3, undefined, false)).toBeFalsy();
+  });
+});
+
+describe('Function validateLength:', () => {
+  it('should return true if value length exceeds limit and comparison is "max"', () => {
+    expect(validateLength(3, '1234', 'max')).toBeTruthy();
+    expect(validateLength(5, 'abcdef', 'max')).toBeTruthy();
+  });
+
+  it('should return false if value length is within limit and comparison is "max"', () => {
+    expect(validateLength(3, '123', 'max')).toBeFalsy();
+    expect(validateLength(5, 'abcd', 'max')).toBeFalsy();
+  });
+
+  it('should return true if value length is below limit and comparison is "min"', () => {
+    expect(validateLength(5, '1234', 'min')).toBeTruthy();
+    expect(validateLength(3, '12', 'min')).toBeTruthy();
+  });
+
+  it('should return false if value length meets or exceeds limit and comparison is "min"', () => {
+    expect(validateLength(3, '123', 'min')).toBeFalsy();
+    expect(validateLength(5, 'abcdef', 'min')).toBeFalsy();
+  });
+
+  it('should correctly handle maskNoLengthValidation when true', () => {
+    expect(validateLength(5, '1-2-3-4-5', 'max', true)).toBeFalsy();
+    expect(validateLength(5, '1-2-3', 'min', true)).toBeTruthy();
+  });
+
+  it('should return false for invalid values or limits', () => {
+    expect(validateLength(undefined, '123', 'max')).toBeFalsy();
+    expect(validateLength(null, '123', 'max')).toBeFalsy();
+    expect(validateLength(3, null, 'max')).toBeFalsy();
+    expect(validateLength(3, undefined, 'max')).toBeFalsy();
+  });
+
+  it('should return false if comparison is not "max" or "min"', () => {
+    expect(validateLength(3, '1234', 'invalidComparison' as any)).toBeFalsy();
+    expect(validateLength(3, '1234', '' as any)).toBeFalsy();
+    expect(validateLength(3, '1234', null)).toBeFalsy();
+    expect(validateLength(3, '1234', undefined)).toBeFalsy();
   });
 });
 

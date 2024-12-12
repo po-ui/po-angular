@@ -264,6 +264,153 @@ describe('PoInputBase:', () => {
       const validValues = [true, 'true', 1, ' '];
       expectPropertiesValues(component, 'noAutocomplete', validValues, true);
     });
+
+    describe('p-mask-no-length-validation:', () => {
+      describe('with p-maxlength:', () => {
+        it('validate: should return maxlength false when `maskNoLengthValidation` is false and value exceeds maxlength', () => {
+          component.maxlength = 5;
+          component.maskNoLengthValidation = false;
+          component.getScreenValue = () => '123456';
+
+          const result = component.validate(new FormControl('123456'));
+
+          expect(result).toEqual({
+            maxlength: {
+              valid: false
+            }
+          });
+        });
+
+        it('validate: should return null when `maskNoLengthValidation` is false and value is within maxlength', () => {
+          component.maxlength = 6;
+          component.maskNoLengthValidation = false;
+          component.getScreenValue = () => '123456';
+
+          const result = component.validate(new FormControl('123456'));
+
+          expect(result).toBeNull();
+        });
+
+        it('validate: should return maxlength false when `maskNoLengthValidation` is true, ignoring special characters, and value exceeds maxlength', () => {
+          component.maxlength = 5;
+          component.maskNoLengthValidation = true;
+          component.getScreenValue = () => '12-3456';
+
+          const result = component.validate(new FormControl('12-3456'));
+
+          expect(result).toEqual({
+            maxlength: {
+              valid: false
+            }
+          });
+        });
+
+        it('validate: should return null when `maskNoLengthValidation` is true and alphanumeric value is within maxlength ignoring special characters', () => {
+          component.maxlength = 6;
+          component.maskNoLengthValidation = true;
+          component.getScreenValue = () => '12-345';
+
+          const result = component.validate(new FormControl('12-345'));
+
+          expect(result).toBeNull();
+        });
+
+        it('validate: should handle special characters-only input correctly when `maskNoLengthValidation` is true', () => {
+          component.maxlength = 1;
+          component.maskNoLengthValidation = true;
+          component.getScreenValue = () => '---';
+
+          const result = component.validate(new FormControl('---'));
+
+          expect(result).toBeNull();
+        });
+
+        it('validate: should handle null or undefined values gracefully', () => {
+          component.maxlength = 5;
+          component.maskNoLengthValidation = true;
+
+          let result = component.validate(new FormControl(null));
+          expect(result).toBeNull();
+
+          result = component.validate(new FormControl(undefined));
+          expect(result).toBeNull();
+        });
+      });
+      describe('with p-minlength:', () => {
+        it('validate: should return minlength false when `maskNoLengthValidation` is false and value is below minlength', () => {
+          component.minlength = 5;
+          component.maskNoLengthValidation = false;
+          component.getScreenValue = () => '123';
+
+          const result = component.validate(new FormControl('123'));
+
+          expect(result).toEqual({
+            minlength: {
+              valid: false
+            }
+          });
+        });
+
+        it('validate: should return null when `maskNoLengthValidation` is false and value meets minlength', () => {
+          component.minlength = 3;
+          component.maskNoLengthValidation = false;
+          component.getScreenValue = () => '123';
+
+          const result = component.validate(new FormControl('123'));
+
+          expect(result).toBeNull();
+        });
+
+        it('validate: should return minlength false when `maskNoLengthValidation` is true, ignoring special characters, and value is below minlength', () => {
+          component.minlength = 5;
+          component.maskNoLengthValidation = true;
+          component.getScreenValue = () => '1-2-3';
+
+          const result = component.validate(new FormControl('1-2-3'));
+
+          expect(result).toEqual({
+            minlength: {
+              valid: false
+            }
+          });
+        });
+
+        it('validate: should return null when `maskNoLengthValidation` is true and alphanumeric value meets minlength ignoring special characters', () => {
+          component.minlength = 3;
+          component.maskNoLengthValidation = true;
+          component.getScreenValue = () => '1-2-3';
+
+          const result = component.validate(new FormControl('1-2-3'));
+
+          expect(result).toBeNull();
+        });
+
+        it('validate: should handle special characters-only input correctly when `maskNoLengthValidation` is true', () => {
+          component.minlength = 1;
+          component.maskNoLengthValidation = true;
+          component.getScreenValue = () => '---';
+
+          const result = component.validate(new FormControl('---'));
+
+          expect(result).toEqual({
+            minlength: {
+              valid: false
+            }
+          });
+        });
+
+        it('validate: should handle null or undefined values gracefully', () => {
+          component.minlength = 5;
+          component.maskNoLengthValidation = true;
+
+          let result = component.validate(new FormControl(null));
+          expect(result).toBeNull();
+
+          result = component.validate(new FormControl(undefined));
+          expect(result).toBeNull();
+        });
+      });
+    });
   });
 
   describe('Methods:', () => {

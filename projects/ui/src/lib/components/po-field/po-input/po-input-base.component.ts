@@ -174,6 +174,29 @@ export abstract class PoInputBaseComponent implements ControlValueAccessor, Vali
   @Input({ alias: 'p-upper-case', transform: convertToBoolean }) upperCase: boolean = false;
 
   /**
+   * @description
+   *
+   * Define se os caracteres especiais da máscara devem ser ignorados ao validar os comprimentos mínimo (`minLength`) e máximo (`maxLength`) do campo.
+   *
+   * - Quando `true`, apenas os caracteres alfanuméricos serão contabilizados para a validação dos comprimentos.
+   * - Quando `false`, todos os caracteres, incluindo os especiais da máscara, serão considerados na validação.
+   *
+   * Exemplo:
+   * ```
+   * <po-input
+   *   p-mask="999-999"
+   *   p-maxlength="6"
+   *   p-minlength="4"
+   *   p-mask-no-length-validation="true"
+   * ></po-input>
+   * ```
+   * - Entrada: `123-456` → Validação será aplicada somente aos números, ignorando o caractere especial `-`.
+   *
+   * @default `false`
+   */
+  @Input({ alias: 'p-mask-no-length-validation', transform: convertToBoolean }) maskNoLengthValidation: boolean = false;
+
+  /**
    * @optional
    *
    * @description
@@ -487,7 +510,7 @@ export abstract class PoInputBaseComponent implements ControlValueAccessor, Vali
       };
     }
 
-    if (maxlengpoailed(this.maxlength, this.getScreenValue())) {
+    if (maxlengpoailed(this.maxlength, this.getScreenValue(), this.maskNoLengthValidation)) {
       this.isInvalid = true;
       return {
         maxlength: {
@@ -496,7 +519,7 @@ export abstract class PoInputBaseComponent implements ControlValueAccessor, Vali
       };
     }
 
-    if (minlengpoailed(this.minlength, this.getScreenValue())) {
+    if (minlengpoailed(this.minlength, this.getScreenValue(), this.maskNoLengthValidation)) {
       this.isInvalid = true;
       return {
         minlength: {
