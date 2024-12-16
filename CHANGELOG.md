@@ -2,6 +2,15 @@
 
 All notable changes to this project will be documented in this file. See [standard-version](https://github.com/conventional-changelog/standard-version) for commit guidelines.
 
+## [18.21.0](https://github.com/po-ui/po-angular/compare/v18.20.0...v18.21.0) (2024-12-16)
+
+
+### Features
+
+* **dynamics:** cria nova propriedade visibleFixedFilters ([1ccbbdc](https://github.com/po-ui/po-angular/commit/1ccbbdca1d40622ddb499c03be7ab672feef40b6))
+* **input:** inclusão da propriedade `p-mask-no-length-validation` ([2fbbf86](https://github.com/po-ui/po-angular/commit/2fbbf861e73ae5a8967649fa46b4cd48fabf4e87))
+* **stepper:** cria a propriedade p-disable-click ([c4c4239](https://github.com/po-ui/po-angular/commit/c4c42392562814db5075ce0a11fd0a9e086f20cf))
+
 ## [18.20.0](https://github.com/po-ui/po-angular/compare/v18.19.1...v18.20.0) (2024-12-11)
 
 
