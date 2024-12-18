@@ -75,22 +75,22 @@ describe('PoProgressComponent:', () => {
     });
 
     it('isActionVisible: should return true if action.icon is defined and action.visible is true', () => {
-      component.customAction = { icon: 'ph ph-icon', visible: true };
+      component.customAction = { icon: 'an an-icon', visible: true };
       expect(component.isActionVisible(component.customAction)).toBeTrue();
     });
 
     it('isActionVisible: should return false if action.icon is defined but action.visible is false', () => {
-      component.customAction = { icon: 'ph ph-icon', visible: false };
+      component.customAction = { icon: 'an an-icon', visible: false };
       expect(component.isActionVisible(component.customAction)).toBeFalse();
     });
 
     it('isActionVisible: should return true if action.icon is defined and action.visible is a function that returns true', () => {
-      component.customAction = { icon: 'ph ph-icon', visible: () => true };
+      component.customAction = { icon: 'an an-icon', visible: () => true };
       expect(component.isActionVisible(component.customAction)).toBeTrue();
     });
 
     it('isActionVisible: should return false if action.icon is defined and action.visible is a function that returns false', () => {
-      component.customAction = { icon: 'ph ph-icon', visible: () => false };
+      component.customAction = { icon: 'an an-icon', visible: () => false };
       expect(component.isActionVisible(component.customAction)).toBeFalse();
     });
 
@@ -192,7 +192,7 @@ describe('PoProgressComponent:', () => {
       it('should set customAction correctly when a valid object is assigned', () => {
         const customAction = {
           label: 'Download',
-          icon: 'ph ph-download',
+          icon: 'an an-download',
           type: 'default',
           visible: true,
           disabled: false
@@ -311,21 +311,21 @@ describe('PoProgressComponent:', () => {
       expect(nativeElement.querySelector('.po-progress-bar-indeterminate')).toBeFalsy();
     });
 
-    it('should contain `ph-x` if `cancel` is defined', () => {
+    it('should contain `an-x` if `cancel` is defined', () => {
       const cancelFunction = () => {};
       component.cancel.observers.push(<any>[new Observable(cancelFunction)]);
 
       fixture.detectChanges();
 
-      expect(nativeElement.querySelector('.ph-x')).toBeTruthy();
+      expect(nativeElement.querySelector('.an-x')).toBeTruthy();
     });
 
-    it('shouldn`t contain `ph-x` if `cancel` is undefined', () => {
+    it('shouldn`t contain `an-x` if `cancel` is undefined', () => {
       component.cancel.observers.length = 0;
 
       fixture.detectChanges();
 
-      expect(nativeElement.querySelector('.ph-x')).toBeFalsy();
+      expect(nativeElement.querySelector('.an-x')).toBeFalsy();
     });
 
     it('should emit cancellation with status if `cancel` is clicked', () => {
@@ -336,7 +336,7 @@ describe('PoProgressComponent:', () => {
 
       spyOn(component.cancel, 'emit');
 
-      nativeElement.querySelector('.ph-x').click();
+      nativeElement.querySelector('.an-x').click();
 
       expect(component.cancel.emit).toHaveBeenCalledWith(component.status);
     });
@@ -351,7 +351,7 @@ describe('PoProgressComponent:', () => {
 
       spyOn(component.retry, 'emit');
 
-      nativeElement.querySelector('.ph-arrow-clockwise').click();
+      nativeElement.querySelector('.an-arrow-clockwise').click();
 
       expect(component.retry.emit).toHaveBeenCalled();
     });
@@ -394,7 +394,7 @@ describe('PoProgressComponent:', () => {
     it('should display customAction button with correct label and icon when customAction is defined and visible', () => {
       component.customAction = {
         label: 'Download',
-        icon: 'ph ph-download',
+        icon: 'an an-download',
         visible: true
       };
 
@@ -403,12 +403,12 @@ describe('PoProgressComponent:', () => {
       const customActionButton = nativeElement.querySelector('po-button');
       expect(customActionButton).toBeTruthy();
       expect(customActionButton.textContent.trim()).toBe('Download');
-      expect(customActionButton.querySelector('.ph.ph-download')).toBeTruthy();
+      expect(customActionButton.querySelector('.an.an-download')).toBeTruthy();
     });
 
     it('should display customAction button when visible is undefined', () => {
       component.customAction = {
-        icon: 'ph ph-download'
+        icon: 'an an-download'
       };
 
       fixture.detectChanges();

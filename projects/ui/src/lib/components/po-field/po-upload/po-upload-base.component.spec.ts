@@ -785,7 +785,7 @@ describe('PoUploadBaseComponent:', () => {
     it('p-custom-action: should assign a valid PoProgressAction object', () => {
       const validAction: PoProgressAction = {
         label: 'Download',
-        icon: 'ph-download',
+        icon: 'an-download',
         type: 'default',
         disabled: false,
         visible: true

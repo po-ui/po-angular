@@ -267,7 +267,7 @@ export abstract class PoUploadBaseComponent implements ControlValueAccessor, Val
    * ```typescript
    * customAction: PoProgressAction = {
    *   label: 'Baixar',
-   *   icon: 'ph ph-download',
+   *   icon: 'an an-download',
    *   type: 'default',
    *   visible: true
    * };
@@ -301,7 +301,7 @@ export abstract class PoUploadBaseComponent implements ControlValueAccessor, Val
    * ```typescript
    * customAction: PoProgressAction = {
    *   label: 'Baixar',
-   *   icon: 'ph ph-download',
+   *   icon: 'an an-download',
    *   type: 'default',
    *   visible: true
    * };

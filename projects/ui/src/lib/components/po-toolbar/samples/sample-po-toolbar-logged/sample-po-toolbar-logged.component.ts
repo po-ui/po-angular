@@ -11,12 +11,12 @@ import { PoDialogService, PoNotificationService, PoToolbarAction, PoToolbarProfi
 export class SamplePoToolbarLoggedComponent {
   notificationActions: Array<PoToolbarAction> = [
     {
-      icon: 'ph ph-newspaper',
+      icon: 'an an-newspaper',
       label: 'PO news, stay tuned!',
       type: 'danger',
       action: item => this.onClickNotification(item)
     },
-    { icon: 'ph ph-chat', label: 'New message', type: 'danger', action: item => this.openDialog(item) }
+    { icon: 'an an-chat', label: 'New message', type: 'danger', action: item => this.openDialog(item) }
   ];
 
   profile: PoToolbarProfile = {
@@ -26,10 +26,10 @@ export class SamplePoToolbarLoggedComponent {
   };
 
   profileActions: Array<PoToolbarAction> = [
-    { icon: 'ph ph-user', label: 'User data', action: item => this.showAction(item) },
-    { icon: 'ph ph-building-apartment', label: 'Company data', action: item => this.showAction(item) },
-    { icon: 'ph ph-gear', label: 'Settings', action: item => this.showAction(item) },
-    { icon: 'ph ph-sign-out', label: 'Exit', type: 'danger', separator: true, action: item => this.showAction(item) }
+    { icon: 'an an-user', label: 'User data', action: item => this.showAction(item) },
+    { icon: 'an an-building-apartment', label: 'Company data', action: item => this.showAction(item) },
+    { icon: 'an an-gear', label: 'Settings', action: item => this.showAction(item) },
+    { icon: 'an an-sign-out', label: 'Exit', type: 'danger', separator: true, action: item => this.showAction(item) }
   ];
 
   actions: Array<PoToolbarAction> = [

@@ -24,12 +24,12 @@ export class SamplePoTableAirfareComponent implements AfterViewInit, OnInit {
   actions: Array<PoTableAction> = [
     {
       action: this.discount.bind(this),
-      icon: 'ph ph-currency-circle-dollar',
+      icon: 'an an-currency-circle-dollar',
       label: 'Apply Discount',
       disabled: this.validateDiscount.bind(this)
     },
-    { action: this.details.bind(this), icon: 'ph ph-info', label: 'Details' },
-    { action: this.remove.bind(this), icon: 'po-icon ph ph-trash', label: 'Remove' }
+    { action: this.details.bind(this), icon: 'an an-info', label: 'Details' },
+    { action: this.remove.bind(this), icon: 'po-icon an an-trash', label: 'Remove' }
   ];
   columns: Array<PoTableColumn>;
   columnsDefault: Array<PoTableColumn>;
