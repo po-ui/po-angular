@@ -722,7 +722,7 @@ export interface PoDynamicFormField extends PoDynamicField {
    * ```typescript
    * customAction: {
    *   label: 'Baixar',
-   *   icon: 'ph-download',
+   *   icon: 'an-download',
    *   type: 'default',
    *   visible: true,
    *   disabled: false

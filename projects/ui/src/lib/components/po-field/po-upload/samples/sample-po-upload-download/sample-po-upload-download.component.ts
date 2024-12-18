@@ -1,13 +1,14 @@
-import { Component, OnInit } from '@angular/core';
+import { Component } from '@angular/core';
 import { PoProgressAction } from '@po-ui/ng-components';
 
 @Component({
   selector: 'sample-po-upload-download',
-  templateUrl: 'sample-po-upload-download.component.html'
+  templateUrl: 'sample-po-upload-download.component.html',
+  standalone: false
 })
 export class SamplePoUploadDownloadComponent {
   customAction: PoProgressAction = {
-    icon: 'ph ph-download',
+    icon: 'an an-download',
     type: 'default',
     visible: false
   };

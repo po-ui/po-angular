@@ -64,7 +64,7 @@ describe('PoProgressBaseComponent:', () => {
       it('should accept a valid PoProgressAction', () => {
         const validCustomAction = {
           label: 'Download',
-          icon: 'ph ph-download',
+          icon: 'an an-download',
           type: 'default',
           visible: true,
           disabled: false

@@ -32,10 +32,10 @@ export class SamplePoProgressLabsComponent implements OnInit {
   showAction: false;
 
   infoIconsOptions: Array<PoRadioGroupOption> = [
-    { label: 'ph ph-warning-circle', value: 'ph ph-warning-circle' },
-    { label: 'ph ph-check', value: 'ph ph-check' },
-    { label: 'ph ph-user', value: 'ph ph-user' },
-    { label: 'ph ph-cloud-slash', value: 'ph ph-cloud-slash' }
+    { label: 'an an-warning-circle', value: 'an an-warning-circle' },
+    { label: 'an an-check', value: 'an an-check' },
+    { label: 'an an-user', value: 'an an-user' },
+    { label: 'an an-cloud-slash', value: 'an an-cloud-slash' }
   ];
 
   statusOptions: Array<PoRadioGroupOption> = [
@@ -55,10 +55,10 @@ export class SamplePoProgressLabsComponent implements OnInit {
   ];
 
   public readonly iconOptions: Array<PoSelectOption> = [
-    { value: 'ph ph-download', label: 'ph ph-download' },
-    { value: 'ph ph-Server', label: 'ph ph-Server' },
-    { value: 'ph ph-upload', label: 'ph ph-upload' },
-    { value: 'ph ph-share', label: 'ph ph-share' }
+    { value: 'an an-download', label: 'an an-download' },
+    { value: 'an an-Server', label: 'an an-Server' },
+    { value: 'an an-upload', label: 'an an-upload' },
+    { value: 'an an-share', label: 'an an-share' }
   ];
 
   public readonly actionOptions: Array<PoCheckboxGroupOption> = [

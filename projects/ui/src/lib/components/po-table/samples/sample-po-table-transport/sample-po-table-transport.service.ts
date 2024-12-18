@@ -23,7 +23,7 @@ export class SamplePoTableTransportService {
           { value: 'delivered', color: 'blue', label: 'Delivered' },
           { value: 'transport', label: 'Transport', type: PoTagType.Success },
           { value: 'production', color: ' #745678', label: 'Production' },
-          { value: 'stock', color: 'rgb(201, 53, 125)', label: 'Stock', icon: 'ph ph-package' }
+          { value: 'stock', color: 'rgb(201, 53, 125)', label: 'Stock', icon: 'an an-package' }
         ]
       }
     ];

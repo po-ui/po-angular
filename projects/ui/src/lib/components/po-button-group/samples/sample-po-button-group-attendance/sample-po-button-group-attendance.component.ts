@@ -9,9 +9,9 @@ import { PoButtonGroupItem, PoNotificationService } from '@po-ui/ng-components';
 })
 export class SamplePoButtonGroupAttendanceComponent {
   attendances: Array<PoButtonGroupItem> = [
-    { label: 'Appointment', icon: 'ph ph-calendar-dots', action: this.getPassword.bind(this) },
-    { label: 'Emergency', icon: 'ph ph-syringe', action: this.getPassword.bind(this) },
-    { label: 'Exams', icon: 'ph ph-flask', action: this.getPassword.bind(this) }
+    { label: 'Appointment', icon: 'an an-calendar-dots', action: this.getPassword.bind(this) },
+    { label: 'Emergency', icon: 'an an-syringe', action: this.getPassword.bind(this) },
+    { label: 'Exams', icon: 'an an-flask', action: this.getPassword.bind(this) }
   ];
 
   constructor(private poNotification: PoNotificationService) {}

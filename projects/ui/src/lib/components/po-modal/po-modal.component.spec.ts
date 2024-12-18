@@ -217,7 +217,7 @@ describe('PoModalComponent:', () => {
   it('should be modal with close button', () => {
     component.open();
     fixture.detectChanges();
-    expect(fixture.debugElement.query(By.css('.po-modal')).nativeElement.innerHTML).toContain('ph-x');
+    expect(fixture.debugElement.query(By.css('.po-modal')).nativeElement.innerHTML).toContain('an-x');
   });
 
   it('should be one button in modal', () => {
@@ -510,7 +510,7 @@ describe('PoModalComponent:', () => {
       component.hideClose = false;
       component.open();
       fixture.detectChanges();
-      expect(fixture.debugElement.query(By.css('.po-modal')).nativeElement.innerHTML).toContain('ph-x');
+      expect(fixture.debugElement.query(By.css('.po-modal')).nativeElement.innerHTML).toContain('an-x');
     });
 
     it('action disabled: should disabled primary action if `primaryAction.disabled` is `true`.', () => {

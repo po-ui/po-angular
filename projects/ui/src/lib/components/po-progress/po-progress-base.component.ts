@@ -67,7 +67,7 @@ export class PoProgressBaseComponent {
    *
    * Ícone que aparecerá ao lado do texto da propriedade `p-info`.
    *
-   * Exemplo: `ph ph-check`.
+   * Exemplo: `an an-check`.
    */
   @Input('p-info-icon') infoIcon?: string | TemplateRef<void>;
 
@@ -119,7 +119,7 @@ export class PoProgressBaseComponent {
    * ```typescript
    * customAction: PoProgressAction = {
    *   label: 'Baixar',
-   *   icon: 'ph ph-download',
+   *   icon: 'an an-download',
    *   type: 'default',
    *   visible: () => true
    * };
@@ -157,7 +157,7 @@ export class PoProgressBaseComponent {
    * ```typescript
    * customAction: PoProgressAction = {
    *   label: 'Cancelar',
-   *   icon: 'ph ph-x',
+   *   icon: 'an an-x',
    *   type: 'danger',
    *   visible: true
    * };
