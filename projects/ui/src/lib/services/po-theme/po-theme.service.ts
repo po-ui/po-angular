@@ -1,6 +1,6 @@
 import { DOCUMENT } from '@angular/common';
 import { Inject, Injectable, Optional, Renderer2, RendererFactory2 } from '@angular/core';
-import { ICONS_DICTIONARY, PhosphorIconDictionary } from '../../components/po-icon/index';
+import { ICONS_DICTIONARY, AnimaliaIconDictionary } from '../../components/po-icon/index';
 
 import { PoThemeColor } from './interfaces/po-theme-color.interface';
 import { PoThemeTokens } from './interfaces/po-theme-tokens.interface';
@@ -50,7 +50,7 @@ export class PoThemeService {
     @Optional() @Inject(ICONS_DICTIONARY) value: { [key: string]: string }
   ) {
     this.renderer = rendererFactory.createRenderer(null, null);
-    this._iconToken = value ?? PhosphorIconDictionary;
+    this._iconToken = value ?? AnimaliaIconDictionary;
 
     // set triple A for all themes (its the base theme)
     // result: html:root
@@ -448,7 +448,7 @@ export class PoThemeService {
     let selectBgIcon = '';
 
     if (themeColor?.brand?.['01']?.dark) {
-      const selector = this.iconNameLib === 'PhosphorIcon' ? 'po-select .po-select-phosphor' : 'po-select';
+      const selector = this.iconNameLib === 'AnimaliaIcon' ? 'po-select .po-select-phosphor' : 'po-select';
       selectBgIcon += `${selector} { --background-image: url(${this.getSelectBgIcon(themeColor.neutral.dark[70])}); };`;
     }
 
@@ -457,7 +457,7 @@ export class PoThemeService {
         selectBgIcon += `po-select.ng-dirty.ng-invalid select { --background-image: url(${this.getSelectBgIcon(themeColor.feedback.negative.base)}); };`;
       }
 
-      if (this.iconNameLib === 'PhosphorIcon') {
+      if (this.iconNameLib === 'AnimaliaIcon') {
         selectBgIcon += `po-select.ng-dirty.ng-invalid select.po-select-phosphor { background-image: url(${this.getSelectBgIcon(themeColor.feedback.negative.base)}); };`;
       }
     }
@@ -467,7 +467,7 @@ export class PoThemeService {
         selectBgIcon += `select:disabled { background-image: url(${this.getSelectBgIcon(themeColor.neutral.light['30'])}); };`;
       }
 
-      if (this.iconNameLib === 'PhosphorIcon') {
+      if (this.iconNameLib === 'AnimaliaIcon') {
         selectBgIcon += `po-select select.po-select-phosphor:disabled { background-image: url(${this.getSelectBgIcon(themeColor.neutral.light['30'])}); };`;
       }
     }

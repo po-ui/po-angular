@@ -81,7 +81,7 @@ export class SamplePoDynamicFormContainerComponent implements OnInit {
       booleanFalse: 'Inactive',
       formatModel: true
     },
-    { property: 'email', container: 'CONTACTS', gridColumns: 6, icon: 'ph ph-envelope' },
+    { property: 'email', container: 'CONTACTS', gridColumns: 6, icon: 'an an-envelope' },
     { property: 'phone', mask: '(99) 99999-9999', gridColumns: 6 },
     { property: 'address', gridColumns: 6 },
     {
@@ -128,7 +128,7 @@ export class SamplePoDynamicFormContainerComponent implements OnInit {
       gridSmColumns: 12,
       decimalsLength: 2,
       thousandMaxlength: 7,
-      icon: 'ph ph-currency-circle-dollar'
+      icon: 'an an-currency-circle-dollar'
     },
     {
       property: 'hobbies',
@@ -196,7 +196,7 @@ export class SamplePoDynamicFormContainerComponent implements OnInit {
       label: 'Upload your background',
       optional: true,
       url: 'https://po-sample-api.onrender.com/v1/uploads/addFile',
-      customAction: { icon: 'ph ph-download', visible: true },
+      customAction: { icon: 'an an-download', visible: true },
       customActionClick: (file: PoUploadFile) => {
         console.log('Iniciar download para o arquivo:', file.name);
       }

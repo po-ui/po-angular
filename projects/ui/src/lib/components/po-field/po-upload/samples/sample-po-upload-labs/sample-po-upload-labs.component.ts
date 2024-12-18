@@ -58,10 +58,10 @@ export class SamplePoUploadLabsComponent implements OnInit {
   ];
 
   public readonly iconOptions: Array<PoSelectOption> = [
-    { value: 'ph ph-download', label: 'ph ph-download' },
-    { value: 'ph ph-Server', label: 'ph ph-Server' },
-    { value: 'ph ph-upload', label: 'ph ph-upload' },
-    { value: 'ph ph-share', label: 'ph ph-share' }
+    { value: 'an an-download', label: 'an an-download' },
+    { value: 'an an-Server', label: 'an an-Server' },
+    { value: 'an an-upload', label: 'an an-upload' },
+    { value: 'an an-share', label: 'an an-share' }
   ];
 
   constructor(private fb: FormBuilder) {

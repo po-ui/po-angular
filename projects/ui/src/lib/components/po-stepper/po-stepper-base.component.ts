@@ -227,17 +227,9 @@ export class PoStepperBaseComponent {
    *
    * @description
    * Permite definir o ícone do step no status concluído.
-   * Esta propriedade permite usar ícones da [Biblioteca de ícones](https://po-ui.io/icons) ou da biblioteca [Phosphor](https://phosphoricons.com/).
-   *
-   * Exemplo usando a biblioteca de ícones padrão:
+   * Esta propriedade permite usar ícones da [Biblioteca de ícones](https://po-ui.io/icons)
    * ```
-   * <po-stepper p-step-icon-done="po-icon po-icon-eye">
-   *    ...
-   * </po-stepper>
-   * ```
-   * Exemplo usando a biblioteca *Phosphor*:
-   * ```
-   * <po-stepper p-step-icon-done="ph ph-check-circle">
+   * <po-stepper p-step-icon-done="an an-check-circle">
    *    ...
    * </po-stepper>
    * ```
@@ -248,7 +240,7 @@ export class PoStepperBaseComponent {
    * </po-stepper>
    *
    * <ng-template #doneIcon>
-   *    <i class="ph ph-check-fat"></i>
+   *    <i class="an an-check-fat"></i>
    * </ng-template>
    * ```
    * > Deve-se usar `font-size: inherit` para ajustar ícones que não se ajustam automaticamente.
@@ -262,17 +254,9 @@ export class PoStepperBaseComponent {
    *
    * @description
    * Permite definir o ícone do step no status ativo.
-   * Esta propriedade permite usar ícones da [Biblioteca de ícones](https://po-ui.io/icons) ou da biblioteca [Phosphor](https://phosphoricons.com/).
-   *
-   * Exemplo usando a biblioteca de ícones padrão:
+   * Esta propriedade permite usar ícones da [Biblioteca de ícones](https://po-ui.io/icons).
    * ```
-   * <po-stepper p-step-icon-active="po-icon po-icon-settings">
-   *    ...
-   * </po-stepper>
-   * ```
-   * Exemplo usando a biblioteca *Phosphor*:
-   * ```
-   * <po-stepper p-step-icon-active="ph ph-pencil-simple-line">
+   * <po-stepper p-step-icon-active="an an-pencil-simple-line">
    *    ...
    * </po-stepper>
    * ```
