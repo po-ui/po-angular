@@ -5,7 +5,8 @@ import {
   OnDestroy,
   ChangeDetectorRef,
   AfterViewInit,
-  SimpleChanges
+  SimpleChanges,
+  OnChanges
 } from '@angular/core';
 
 import { Observable, Subscription } from 'rxjs';
@@ -54,7 +55,7 @@ type UrlOrPoCustomizationFunction = string | (() => PoPageDynamicSearchOptions);
 })
 export class PoPageDynamicSearchComponent
   extends PoPageDynamicSearchBaseComponent
-  implements OnInit, OnDestroy, AfterViewInit
+  implements OnInit, OnDestroy, AfterViewInit, OnChanges
 {
   @ViewChild(PoAdvancedFilterComponent, { static: true }) poAdvancedFilter: PoAdvancedFilterComponent;
   @ViewChild(PoPageListComponent, { static: true }) poPageList: PoPageListComponent;

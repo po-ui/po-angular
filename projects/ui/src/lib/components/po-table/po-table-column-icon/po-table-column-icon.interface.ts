@@ -43,7 +43,7 @@ export interface PoTableColumnIcon {
   /**
    * É possível usar qualquer um dos ícones da [Biblioteca de ícones](https://po-ui.io/icons). conforme exemplo abaixo:
    * ```
-   * [ { icon: 'ph ph-plus' } ]
+   * [ { icon: 'an an-plus' } ]
    * ```
    *
    * Também é possível utilizar outras fontes de ícones, por exemplo a biblioteca Font Awesome, da seguinte forma:

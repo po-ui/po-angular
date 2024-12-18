@@ -11,7 +11,7 @@ import {
 } from '@angular/core';
 import { NG_VALUE_ACCESSOR } from '@angular/forms';
 
-import { ICONS_DICTIONARY, PhosphorIconDictionary } from '../../po-icon';
+import { ICONS_DICTIONARY, AnimaliaIconDictionary } from '../../po-icon';
 import { PoKeyCodeEnum } from './../../../enums/po-key-code.enum';
 
 import { PoCheckboxBaseComponent } from './po-checkbox-base.component';
@@ -60,7 +60,7 @@ export class PoCheckboxComponent extends PoCheckboxBaseComponent implements Afte
   ) {
     super();
 
-    this._iconToken = value ?? PhosphorIconDictionary;
+    this._iconToken = value ?? AnimaliaIconDictionary;
   }
 
   /**

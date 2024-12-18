@@ -54,7 +54,7 @@ export class SamplePoSearchLabsComponent implements OnInit, OnChanges {
 
   public readonly iconsOptions: Array<PoRadioGroupOption> = [
     { label: 'fa-search', value: 'fa fa-search' },
-    { label: 'ph-magnifying-glass', value: 'ph ph-magnifying-glass' }
+    { label: 'an-magnifying-glass', value: 'an an-magnifying-glass' }
   ];
 
   public readonly filterModeOptions: Array<PoRadioGroupOption> = [

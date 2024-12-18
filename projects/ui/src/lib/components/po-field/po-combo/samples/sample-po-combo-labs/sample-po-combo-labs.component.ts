@@ -48,8 +48,8 @@ export class SamplePoComboLabsComponent implements OnInit {
   ];
 
   public readonly iconsOptions: Array<PoRadioGroupOption> = [
-    { label: 'ph ph-building-apartment', value: 'ph ph-building-apartment' },
-    { label: 'ph ph-gas-pump', value: 'ph ph-gas-pump' },
+    { label: 'an an-building-apartment', value: 'an an-building-apartment' },
+    { label: 'an an-gas-pump', value: 'an an-gas-pump' },
     { label: 'fa fa-calculator', value: 'fa fa-calculator' }
   ];
 

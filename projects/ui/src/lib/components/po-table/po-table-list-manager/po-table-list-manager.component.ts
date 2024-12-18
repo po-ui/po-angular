@@ -5,7 +5,7 @@ import { poLocaleDefault } from '../../../services/po-language/po-language.const
 import { PoLanguageService } from '../../../services/po-language/po-language.service';
 import { convertToBoolean } from '../../../utils/util';
 import { PoCheckboxGroupComponent } from '../../po-field/po-checkbox-group/po-checkbox-group.component';
-import { ICONS_DICTIONARY, PhosphorIconDictionary } from '../../po-icon';
+import { ICONS_DICTIONARY, AnimaliaIconDictionary } from '../../po-icon';
 import { PoTableColumn } from '../interfaces/po-table-column.interface';
 
 export const poTableListManagerLiterals = {
@@ -82,7 +82,7 @@ export class PoTableListManagerComponent extends PoCheckboxGroupComponent {
       ...poTableListManagerLiterals[language]
     };
 
-    this._iconToken = value ?? PhosphorIconDictionary;
+    this._iconToken = value ?? AnimaliaIconDictionary;
   }
 
   emitChangePosition(option, direction: Direction) {

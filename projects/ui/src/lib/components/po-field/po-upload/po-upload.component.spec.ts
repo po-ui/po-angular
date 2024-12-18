@@ -1019,7 +1019,7 @@ describe('PoUploadComponent:', () => {
 
     it('customClick: should emit customActionClick with the provided file if customAction is defined', () => {
       const mockFile = { name: 'mock-file.txt' } as PoUploadFile;
-      component.customAction = { label: 'Download', icon: 'ph-download' } as PoProgressAction;
+      component.customAction = { label: 'Download', icon: 'an-download' } as PoProgressAction;
 
       spyOn(component.customActionClick, 'emit');
 

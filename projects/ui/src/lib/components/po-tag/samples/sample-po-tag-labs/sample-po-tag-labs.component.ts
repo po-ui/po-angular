@@ -42,12 +42,12 @@ export class SamplePoTagLabsComponent implements OnInit {
   ];
 
   public readonly iconList: Array<PoSelectOption> = [
-    { label: 'ph ph-bluetooth', value: 'ph ph-bluetooth' },
-    { label: 'ph ph-heart', value: 'ph ph-heart' },
-    { label: 'ph ph-lightbulb', value: 'ph ph-lightbulb' },
-    { label: 'ph ph-star', value: 'ph ph-star' },
-    { label: 'ph ph-gear', value: 'ph ph-gear' },
-    { label: 'ph ph-globe', value: 'ph ph-globe' },
+    { label: 'an an-bluetooth', value: 'an an-bluetooth' },
+    { label: 'an an-heart', value: 'an an-heart' },
+    { label: 'an an-lightbulb', value: 'an an-lightbulb' },
+    { label: 'an an-star', value: 'an an-star' },
+    { label: 'an an-gear', value: 'an an-gear' },
+    { label: 'an an-globe', value: 'an an-globe' },
     { label: 'fa fa-address-card', value: 'fa fa-address-card' },
     { label: 'fa fa-bell', value: 'fa fa-bell' }
   ];

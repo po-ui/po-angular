@@ -33,7 +33,7 @@ import { PoPopupComponent } from '../po-popup/po-popup.component';
 import { PoTableColumnLabel } from './po-table-column-label/po-table-column-label.interface';
 
 import { uuid } from '../../utils/util';
-import { ICONS_DICTIONARY, PhosphorIconDictionary } from '../po-icon';
+import { ICONS_DICTIONARY, AnimaliaIconDictionary } from '../po-icon';
 import { PoTableRowTemplateArrowDirection } from './enums/po-table-row-template-arrow-direction.enum';
 import { PoTableAction } from './interfaces/po-table-action.interface';
 import { PoTableColumn } from './interfaces/po-table-column.interface';
@@ -221,7 +221,7 @@ export class PoTableComponent extends PoTableBaseComponent implements AfterViewI
       this.debounceResize();
     });
 
-    this._iconToken = value ?? PhosphorIconDictionary;
+    this._iconToken = value ?? AnimaliaIconDictionary;
   }
 
   get hasRowTemplateWithArrowDirectionRight() {

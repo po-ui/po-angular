@@ -134,7 +134,7 @@ export class PoModalBaseComponent {
    *
    * É possível usar qualquer um dos ícones da [Biblioteca de ícones](https://po-ui.io/icons). conforme exemplo abaixo:
    * ```
-   * <po-modal p-icon="ph ph-user" p-title="PO Modal"></po-modal>
+   * <po-modal p-icon="an an-user" p-title="PO Modal"></po-modal>
    * ```
    * Também é possível utilizar outras fontes de ícones, por exemplo a biblioteca *Font Awesome*, da seguinte forma:
    * ```
