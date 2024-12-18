@@ -208,23 +208,23 @@ describe('PoNumberComponent:', () => {
       expect(nativeElement.querySelector('.po-input-icon-right')).toBeFalsy();
     });
 
-    it('should have the icon `ph-eye-closed`.', () => {
+    it('should have the icon `an-eye-closed`.', () => {
       component.hidePasswordPeek = false;
       component.visiblePassword = false;
       fixture.detectChanges();
 
-      expect(nativeElement.querySelector('.ph-eye')).toBeNull();
-      expect(nativeElement.querySelector('.ph-eye-closed')).toBeTruthy();
+      expect(nativeElement.querySelector('.an-eye')).toBeNull();
+      expect(nativeElement.querySelector('.an-eye-closed')).toBeTruthy();
       expect(nativeElement.querySelector('.po-field-icon-disabled')).toBeTruthy();
     });
 
-    it('should have the icon `ph-eye`.', () => {
+    it('should have the icon `an-eye`.', () => {
       component.hidePasswordPeek = false;
       component.visiblePassword = true;
       fixture.detectChanges();
 
-      expect(nativeElement.querySelector('.ph-eye')).toBeTruthy();
-      expect(nativeElement.querySelector('.ph-eye-closed')).toBeNull();
+      expect(nativeElement.querySelector('.an-eye')).toBeTruthy();
+      expect(nativeElement.querySelector('.an-eye-closed')).toBeNull();
       expect(nativeElement.querySelector('.po-field-icon-disabled')).toBeNull();
     });
 

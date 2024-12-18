@@ -662,7 +662,7 @@ describe('PoThemeService:', () => {
 
         const expectedCss = `
           html[class*="-light-AAA"]:root {
-            
+
           }
         `;
         validateStyleContent(expectedCss);
@@ -697,7 +697,7 @@ describe('PoThemeService:', () => {
   });
 });
 
-describe(`PoThemeService with 'PhosphorIconDictionary':`, () => {
+describe(`PoThemeService with 'AnimaliaIconDictionary':`, () => {
   let service: PoThemeService;
 
   beforeEach(() => {

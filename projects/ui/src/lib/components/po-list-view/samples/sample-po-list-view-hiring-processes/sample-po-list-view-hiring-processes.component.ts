@@ -31,14 +31,14 @@ export class SamplePoListViewHiringProcessesComponent implements OnInit {
       label: 'Hire',
       action: this.hireCandidate.bind(this),
       disabled: this.isHiredOrCanceled.bind(this),
-      icon: 'ph ph-check'
+      icon: 'an an-check'
     },
     {
       label: 'Cancel',
       action: this.cancelCandidate.bind(this),
       disabled: this.isHiredOrCanceled.bind(this),
       type: 'danger',
-      icon: 'ph ph-x'
+      icon: 'an an-x'
     }
   ];
 
@@ -47,13 +47,13 @@ export class SamplePoListViewHiringProcessesComponent implements OnInit {
       label: 'Hire selected',
       action: this.updateCandidates.bind(this, this.hireCandidate),
       disabled: this.disableHireButton.bind(this),
-      icon: 'ph ph-check'
+      icon: 'an an-check'
     },
     {
       label: 'Cancel selected',
       action: this.updateCandidates.bind(this, this.cancelCandidate),
       disabled: this.disableHireButton.bind(this),
-      icon: 'ph ph-x'
+      icon: 'an an-x'
     }
   ];
 

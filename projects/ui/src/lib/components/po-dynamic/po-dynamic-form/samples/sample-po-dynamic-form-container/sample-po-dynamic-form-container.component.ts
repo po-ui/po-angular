@@ -80,7 +80,7 @@ export class SamplePoDynamicFormContainerComponent implements OnInit {
       booleanFalse: 'Inactive',
       formatModel: true
     },
-    { property: 'email', container: 'CONTACTS', gridColumns: 6, icon: 'ph ph-envelope' },
+    { property: 'email', container: 'CONTACTS', gridColumns: 6, icon: 'an an-envelope' },
     { property: 'phone', mask: '(99) 99999-9999', gridColumns: 6 },
     { property: 'address', gridColumns: 6 },
     {
@@ -127,7 +127,7 @@ export class SamplePoDynamicFormContainerComponent implements OnInit {
       gridSmColumns: 12,
       decimalsLength: 2,
       thousandMaxlength: 7,
-      icon: 'ph ph-currency-circle-dollar'
+      icon: 'an an-currency-circle-dollar'
     },
     {
       property: 'hobbies',

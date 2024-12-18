@@ -228,21 +228,21 @@ describe('PoProgressComponent:', () => {
       expect(nativeElement.querySelector('.po-progress-bar-indeterminate')).toBeFalsy();
     });
 
-    it('should contain `ph-x` if `cancel` is defined', () => {
+    it('should contain `an-x` if `cancel` is defined', () => {
       const cancelFunction = () => {};
       component.cancel.observers.push(<any>[new Observable(cancelFunction)]);
 
       fixture.detectChanges();
 
-      expect(nativeElement.querySelector('.ph-x')).toBeTruthy();
+      expect(nativeElement.querySelector('.an-x')).toBeTruthy();
     });
 
-    it('shouldn`t contain `ph-x` if `cancel` is undefined', () => {
+    it('shouldn`t contain `an-x` if `cancel` is undefined', () => {
       component.cancel.observers.length = 0;
 
       fixture.detectChanges();
 
-      expect(nativeElement.querySelector('.ph-x')).toBeFalsy();
+      expect(nativeElement.querySelector('.an-x')).toBeFalsy();
     });
 
     it('should emit cancellation with status if `cancel` is clicked', () => {
@@ -253,7 +253,7 @@ describe('PoProgressComponent:', () => {
 
       spyOn(component.cancel, 'emit');
 
-      nativeElement.querySelector('.ph-x').click();
+      nativeElement.querySelector('.an-x').click();
 
       expect(component.cancel.emit).toHaveBeenCalledWith(component.status);
     });
@@ -268,7 +268,7 @@ describe('PoProgressComponent:', () => {
 
       spyOn(component.retry, 'emit');
 
-      nativeElement.querySelector('.ph-arrow-clockwise').click();
+      nativeElement.querySelector('.an-arrow-clockwise').click();
 
       expect(component.retry.emit).toHaveBeenCalled();
     });

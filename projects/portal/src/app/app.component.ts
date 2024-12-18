@@ -91,11 +91,11 @@ export class AppComponent implements OnInit, OnDestroy {
 
   get actions() {
     return [
-      { icon: 'ph ph-github-logo', link: 'https://github.com/po-ui', label: 'Github' },
-      { icon: 'ph ph-x-logo', link: 'https://twitter.com/@pouidev', label: 'Twitter' },
-      { icon: 'ph ph-instagram-logo', link: 'https://www.instagram.com/pouidev/', label: 'Instagram' },
+      { icon: 'an an-github-logo', link: 'https://github.com/po-ui', label: 'Github' },
+      { icon: 'an an-x-logo', link: 'https://twitter.com/@pouidev', label: 'Twitter' },
+      { icon: 'an an-instagram-logo', link: 'https://www.instagram.com/pouidev/', label: 'Instagram' },
       {
-        icon: `${this.themeStorage === 'po-theme-dark' ? 'ph ph-sun' : 'ph ph-moon'}`,
+        icon: `${this.themeStorage === 'po-theme-dark' ? 'an an-sun' : 'an an-moon'}`,
         label: 'tema',
         action: this.changeTheme.bind(this)
       }

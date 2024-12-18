@@ -78,7 +78,7 @@ export abstract class PoInputBaseComponent implements ControlValueAccessor, Vali
    *
    * É possível usar qualquer um dos ícones da [Biblioteca de ícones](https://po-ui.io/icons). conforme exemplo abaixo:
    * ```
-   * <po-input p-icon="ph ph-user" p-label="PO input"></po-input>
+   * <po-input p-icon="an an-user" p-label="PO input"></po-input>
    * ```
    * Também é possível utilizar outras fontes de ícones, por exemplo a biblioteca *Font Awesome*, da seguinte forma:
    * ```

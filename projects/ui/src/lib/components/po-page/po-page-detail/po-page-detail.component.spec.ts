@@ -221,45 +221,45 @@ describe('PoPageDetailComponent:', () => {
       expect(debugElement.querySelector('po-page-header')).toBeFalsy();
     });
 
-    it('should apply only `ph-pencil-simple` if have a back, remove and edit functions.', () => {
+    it('should apply only `an-pencil-simple` if have a back, remove and edit functions.', () => {
       component.back.observers.push(<any>of({}));
       component.remove.observers.push(<any>of({}));
       component.edit.observers.push(<any>of({}));
 
       fixture.detectChanges();
 
-      const editIcon = debugElement.querySelector('.ph-pencil-simple');
-      const removeIcon = debugElement.querySelector('.ph-trash');
-      const backIcon = debugElement.querySelector('.ph-caret-left');
+      const editIcon = debugElement.querySelector('.an-pencil-simple');
+      const removeIcon = debugElement.querySelector('.an-trash');
+      const backIcon = debugElement.querySelector('.an-caret-left');
 
       expect(editIcon).toBeTruthy();
       expect(removeIcon).toBeNull();
       expect(backIcon).toBeNull();
     });
 
-    it('should apply only `ph-trash` if have back and remove functions and doesn`t have a edit function.', () => {
+    it('should apply only `an-trash` if have back and remove functions and doesn`t have a edit function.', () => {
       component.back.observers.push(<any>of({}));
       component.remove.observers.push(<any>of({}));
 
       fixture.detectChanges();
 
-      const editIcon = debugElement.querySelector('.ph-pencil-simple');
-      const removeIcon = debugElement.querySelector('.ph-trash');
-      const backIcon = debugElement.querySelector('.ph-caret-left');
+      const editIcon = debugElement.querySelector('.an-pencil-simple');
+      const removeIcon = debugElement.querySelector('.an-trash');
+      const backIcon = debugElement.querySelector('.an-caret-left');
 
       expect(editIcon).toBeNull();
       expect(removeIcon).toBeTruthy();
       expect(backIcon).toBeNull();
     });
 
-    it('should apply only `ph-caret-left` if have only back function and doesn`t have a edit and remove functions.', () => {
+    it('should apply only `an-caret-left` if have only back function and doesn`t have a edit and remove functions.', () => {
       component.back.observers.push(<any>of({}));
 
       fixture.detectChanges();
 
-      const editIcon = debugElement.querySelector('.ph-pencil-simple');
-      const removeIcon = debugElement.querySelector('.ph-trash');
-      const backIcon = debugElement.querySelector('.ph-caret-left');
+      const editIcon = debugElement.querySelector('.an-pencil-simple');
+      const removeIcon = debugElement.querySelector('.an-trash');
+      const backIcon = debugElement.querySelector('.an-caret-left');
 
       expect(editIcon).toBeNull();
       expect(removeIcon).toBeNull();

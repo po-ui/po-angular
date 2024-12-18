@@ -14,12 +14,12 @@ export class SamplePoMenuPanelLabsComponent implements OnInit {
   logo: string;
 
   public readonly iconsOptions: Array<PoRadioGroupOption> = [
-    { label: 'ph ph-newspaper', value: 'ph ph-newspaper' },
-    { label: 'ph ph-camera', value: 'ph ph-camera' },
-    { label: 'ph ph-calendar-dots', value: 'ph ph-calendar-dots' },
-    { label: 'ph ph-user', value: 'ph ph-user' },
-    { label: 'ph ph-chat', value: 'ph ph-chat' },
-    { label: 'ph ph-package', value: 'ph ph-package' }
+    { label: 'an an-newspaper', value: 'an an-newspaper' },
+    { label: 'an an-camera', value: 'an an-camera' },
+    { label: 'an an-calendar-dots', value: 'an an-calendar-dots' },
+    { label: 'an an-user', value: 'an an-user' },
+    { label: 'an an-chat', value: 'an an-chat' },
+    { label: 'an an-package', value: 'an an-package' }
   ];
 
   ngOnInit(): void {

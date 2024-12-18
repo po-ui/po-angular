@@ -23,8 +23,8 @@ export class SamplePoNumberLabsComponent implements OnInit {
   step: string;
 
   public readonly iconOptions: Array<PoSelectOption> = [
-    { value: 'ph ph-currency-circle-dollar', label: 'ph ph-currency-circle-dollar' },
-    { value: 'ph ph-currency-btc', label: 'ph ph-currency-btc' },
+    { value: 'an an-currency-circle-dollar', label: 'an an-currency-circle-dollar' },
+    { value: 'an an-currency-btc', label: 'an an-currency-btc' },
     { value: 'fa fa-calculator', label: 'fa fa-calculator' }
   ];
 

@@ -28,7 +28,7 @@ export interface PoPopupAction {
    * É possível usar qualquer um dos ícones da [Biblioteca de ícones](https://po-ui.io/icons). conforme exemplo abaixo:
    * ```
    * <po-component
-   *  [p-property]="[{ label: 'PHOSPHOR ICON', icon: 'ph ph-newspaper' }]">
+   *  [p-property]="[{ label: 'PHOSPHOR ICON', icon: 'an an-newspaper' }]">
    * </po-component>
    * ```
    *

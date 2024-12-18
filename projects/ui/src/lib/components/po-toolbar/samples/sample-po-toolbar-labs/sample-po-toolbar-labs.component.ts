@@ -32,19 +32,19 @@ export class SamplePoToolbarLabsComponent implements OnInit {
   ];
 
   public readonly iconOptions: Array<PoSelectOption> = [
-    { value: 'ph ph-chats', label: 'ph ph-chats' },
-    { value: 'ph ph-clock', label: 'ph ph-clock' },
-    { value: 'ph ph-sign-out', label: 'ph ph-sign-out' },
-    { value: 'ph ph-lock', label: 'ph ph-lock' },
+    { value: 'an an-chats', label: 'an an-chats' },
+    { value: 'an an-clock', label: 'an an-clock' },
+    { value: 'an an-sign-out', label: 'an an-sign-out' },
+    { value: 'an an-lock', label: 'an an-lock' },
     { value: 'fa fa-calculator', label: 'fa fa-calculator' },
     { value: 'far fa-comment-alt', label: 'far fa-comment-alt' }
   ];
 
   public readonly actionsIconOptions: Array<PoSelectOption> = [
-    { value: 'ph ph-clock', label: 'ph ph-clock' },
-    { value: 'ph ph-sign-out', label: 'ph ph-sign-out' },
-    { value: 'ph ph-lock', label: 'ph ph-lock' },
-    { value: 'ph ph-gear', label: 'ph ph-gear' },
+    { value: 'an an-clock', label: 'an an-clock' },
+    { value: 'an an-sign-out', label: 'an an-sign-out' },
+    { value: 'an an-lock', label: 'an an-lock' },
+    { value: 'an an-gear', label: 'an an-gear' },
     { value: 'far fa-comment-alt', label: 'far fa-comment-alt' }
   ];
 

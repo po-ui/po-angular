@@ -18,10 +18,10 @@ export class SamplePoProgressLabsComponent implements OnInit {
   value: number;
 
   infoIconsOptions: Array<PoRadioGroupOption> = [
-    { label: 'ph ph-warning-circle', value: 'ph ph-warning-circle' },
-    { label: 'ph ph-check', value: 'ph ph-check' },
-    { label: 'ph ph-user', value: 'ph ph-user' },
-    { label: 'ph ph-cloud-slash', value: 'ph ph-cloud-slash' }
+    { label: 'an an-warning-circle', value: 'an an-warning-circle' },
+    { label: 'an an-check', value: 'an an-check' },
+    { label: 'an an-user', value: 'an an-user' },
+    { label: 'an an-cloud-slash', value: 'an an-cloud-slash' }
   ];
 
   propertiesOptions: Array<PoCheckboxGroupOption> = [

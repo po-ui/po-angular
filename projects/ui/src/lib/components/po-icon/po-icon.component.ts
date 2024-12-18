@@ -1,5 +1,5 @@
 import { ChangeDetectionStrategy, Component, Inject, Input, Optional, TemplateRef } from '@angular/core';
-import { ICONS_DICTIONARY, PhosphorIconDictionary } from './po-icon-dictionary';
+import { ICONS_DICTIONARY, AnimaliaIconDictionary } from './po-icon-dictionary';
 /**
  * @docsPrivate
  *
@@ -21,7 +21,7 @@ export class PoIconComponent {
   private _iconToken: { [key: string]: string };
 
   constructor(@Optional() @Inject(ICONS_DICTIONARY) value: { [key: string]: string }) {
-    this._iconToken = value ?? PhosphorIconDictionary;
+    this._iconToken = value ?? AnimaliaIconDictionary;
   }
 
   /**
@@ -29,7 +29,7 @@ export class PoIconComponent {
    *
    * É possível usar qualquer um dos ícones da [Biblioteca de ícones](https://po-ui.io/icons). conforme exemplo abaixo:
    * ```
-   * <po-button p-icon="ph ph-user" p-label="PO button"></po-button>
+   * <po-button p-icon="an an-user" p-label="PO button"></po-button>
    * ```
    * Também é possível utilizar outras fontes de ícones, por exemplo a biblioteca *Font Awesome*, da seguinte forma:
    * ```

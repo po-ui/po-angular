@@ -51,7 +51,7 @@ export class IconsComponent {
         return {
           value: _iconName,
           tags: _iconTags,
-          code: `ph${isFill ? '-fill' : ''} ph-${_iconName}`
+          code: `an${isFill ? '-fill' : ''} an-${_iconName}`
         };
       });
 

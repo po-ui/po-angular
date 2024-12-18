@@ -18,9 +18,9 @@ export class SamplePoBadgeLabsComponent implements OnInit {
   propertiesOptions: Array<PoCheckboxGroupOption> = [{ value: 'showBorder', label: 'Show Border' }];
 
   iconsOptions: Array<PoRadioGroupOption> = [
-    { label: 'ph-check', value: 'ph ph-check' },
-    { label: 'ph-check-circle', value: 'ph ph-check-circle' },
-    { label: 'ph ph-check', value: 'ph ph-check' },
+    { label: 'an-check', value: 'an an-check' },
+    { label: 'an-check-circle', value: 'an an-check-circle' },
+    { label: 'an an-check', value: 'an an-check' },
     { label: 'fa-minus', value: 'fa fa-minus' },
     { label: 'true (Enabled when status is settled)', value: 'true', disabled: true },
     { label: 'None', value: 'false' }

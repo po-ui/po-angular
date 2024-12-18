@@ -131,8 +131,8 @@ export class SamplePoTableLabsService {
   }
 
   private generateRandomIcon(index: number) {
-    const iconsOne = ['ph ph-copy', 'ph ph-check', 'ph ph-camera', 'ph ph-plant', 'ph ph-building-apartment'];
-    const iconsTwo = ['ph ph-trash', 'ph ph-newspaper', 'ph ph-gas-pump', 'ph ph-chats', 'ph ph-bluetooth'];
+    const iconsOne = ['an an-copy', 'an an-check', 'an an-camera', 'an an-plant', 'an an-building-apartment'];
+    const iconsTwo = ['an an-trash', 'an an-newspaper', 'an an-gas-pump', 'an an-chats', 'an an-bluetooth'];
 
     const randomIcon = Math.floor(Math.random() * 5);
 

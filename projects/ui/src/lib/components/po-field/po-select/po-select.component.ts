@@ -25,7 +25,7 @@ import {
   validValue
 } from '../../../utils/util';
 
-import { ICONS_DICTIONARY, PhosphorIconDictionary } from '../../po-icon';
+import { ICONS_DICTIONARY, AnimaliaIconDictionary } from '../../po-icon';
 import { PoFieldValidateModel } from '../po-field-validate.model';
 import { PoSelectOptionGroup } from './po-select-option-group.interface';
 import { PoSelectOption } from './po-select-option.interface';
@@ -291,7 +291,7 @@ export class PoSelectComponent extends PoFieldValidateModel<any> implements OnCh
   ) {
     super(changeDetector);
 
-    this._iconToken = value ?? PhosphorIconDictionary;
+    this._iconToken = value ?? AnimaliaIconDictionary;
   }
 
   ngOnChanges(changes: SimpleChanges): void {
