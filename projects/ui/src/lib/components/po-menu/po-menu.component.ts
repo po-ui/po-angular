@@ -317,7 +317,8 @@ export class PoMenuComponent extends PoMenuBaseComponent implements AfterViewIni
   }
 
   protected validateCollapseClass(collapsedMobile: boolean = false) {
-    const wrapper = this.element.nativeElement.parentNode;
+    const wrapper = this.element.nativeElement.closest('.po-wrapper') || this.element.nativeElement.parentNode;
+
     this.renderer[this.isCollapsed && !collapsedMobile ? 'addClass' : 'removeClass'](wrapper, 'po-collapsed-menu');
   }
 
