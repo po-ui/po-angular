@@ -2,6 +2,10 @@
 
 All notable changes to this project will be documented in this file. See [standard-version](https://github.com/conventional-changelog/standard-version) for commit guidelines.
 
+### [18.22.0](https://github.com/po-ui/po-angular/compare/v18.21.0...v18.22.0) (2024-12-23)
+
+Compatibilidade com @totvs/thf-components@18.22.0
+
 ## [18.21.0](https://github.com/po-ui/po-angular/compare/v18.20.0...v18.21.0) (2024-12-16)
 
 
