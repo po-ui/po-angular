@@ -363,6 +363,10 @@ export class PoComboComponent extends PoComboBaseComponent implements AfterViewI
   }
 
   applyFilter(value: string, reset: boolean = false, isArrowDown?: boolean) {
+    if (this.removeInitialFilter) {
+      this.defaultService.hasNext = true;
+    }
+
     if (this.defaultService.hasNext) {
       this.controlComboVisibility(false, reset);
       this.isServerSearching = true;
@@ -397,8 +401,7 @@ export class PoComboComponent extends PoComboBaseComponent implements AfterViewI
 
     if (this.isFirstFilter) {
       this.isFirstFilter = !this.isFirstFilter;
-
-      this.cacheOptions = this.comboOptionsList;
+      this.updateCacheOptions();
     }
   }
 
@@ -456,7 +459,9 @@ export class PoComboComponent extends PoComboBaseComponent implements AfterViewI
   }
 
   applyFilterInFirstClick() {
-    if (this.isFirstFilter && !this.selectedValue) {
+    const isEmptyFirstFilter = this.isFirstFilter && !this.selectedValue;
+
+    if (this.removeInitialFilter || isEmptyFirstFilter) {
       this.options = [];
       const scrollingControl = this.setScrollingControl();
       this.applyFilter('', scrollingControl);
@@ -581,6 +586,12 @@ export class PoComboComponent extends PoComboBaseComponent implements AfterViewI
   clearAndFocus() {
     this.clear(null);
     this.inputEl.nativeElement.focus();
+  }
+
+  updateCacheOptions(): void {
+    this.cacheOptions = this.comboOptionsList.map(item =>
+      item.label === this.getInputValue() ? { ...item, selected: true } : item
+    );
   }
 
   private adjustContainerPosition() {
