@@ -18,6 +18,7 @@ import { removeDuplicatedOptions } from '../../../utils/util';
 
 import { PoRadioComponent } from '../po-radio/po-radio.component';
 import { PoRadioGroupBaseComponent } from './po-radio-group-base.component';
+import { PoThemeService } from '../../../services';
 
 /**
  * @docsExtends PoRadioGroupBaseComponent
@@ -79,9 +80,10 @@ export class PoRadioGroupComponent extends PoRadioGroupBaseComponent implements 
   constructor(
     differs: IterableDiffers,
     private el: ElementRef,
-    private cd: ChangeDetectorRef
+    private cd: ChangeDetectorRef,
+    protected poThemeService: PoThemeService
   ) {
-    super();
+    super(poThemeService);
     this.differ = differs.find([]).create(null);
   }
 

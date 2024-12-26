@@ -7,6 +7,7 @@ import { convertToBoolean } from '../../../utils/util';
 import { PoCheckboxGroupComponent } from '../../po-field/po-checkbox-group/po-checkbox-group.component';
 import { ICONS_DICTIONARY, PhosphorIconDictionary } from '../../po-icon';
 import { PoTableColumn } from '../interfaces/po-table-column.interface';
+import { PoThemeService } from '../../../services';
 
 export const poTableListManagerLiterals = {
   en: {
@@ -70,9 +71,10 @@ export class PoTableListManagerComponent extends PoCheckboxGroupComponent {
   constructor(
     languageService: PoLanguageService,
     changeDetector: ChangeDetectorRef,
-    @Optional() @Inject(ICONS_DICTIONARY) value: { [key: string]: string }
+    @Optional() @Inject(ICONS_DICTIONARY) value: { [key: string]: string },
+    protected poThemeService: PoThemeService
   ) {
-    super(changeDetector);
+    super(changeDetector, poThemeService);
 
     const language = languageService.getShortLanguage();
 

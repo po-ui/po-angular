@@ -5,6 +5,7 @@ import {
   ElementRef,
   forwardRef,
   Input,
+  OnInit,
   ViewChild
 } from '@angular/core';
 import { NG_VALUE_ACCESSOR } from '@angular/forms';
@@ -14,6 +15,8 @@ import { convertToBoolean, uuid } from '../../../utils/util';
 import { PoFieldModel } from '../po-field.model';
 import { PoKeyCodeEnum } from './../../../enums/po-key-code.enum';
 import { PoSwitchLabelPosition } from './po-switch-label-position.enum';
+import { PoFieldSize } from '../enums/po-field-size.enum';
+import { PoThemeService } from '../../../services';
 
 /**
  * @docsExtends PoFieldModel
@@ -114,6 +117,7 @@ export class PoSwitchComponent extends PoFieldModel<any> {
   private _labelOn: string = 'true';
   private _labelPosition: PoSwitchLabelPosition = PoSwitchLabelPosition.Right;
   private _formatModel: boolean = false;
+  private _size?: string = undefined;
 
   /**
    * @optional
@@ -190,7 +194,36 @@ export class PoSwitchComponent extends PoFieldModel<any> {
     return this._labelOn;
   }
 
-  constructor(private changeDetector: ChangeDetectorRef) {
+  /**
+   * @optional
+   *
+   * @description
+   *
+   * Permite definir o tamanho do componente.
+   *
+   * Valores válidos no enum `PoFieldSize`:
+   * - small
+   * - medium
+   *
+   * > A medida `small` **só estará disponível** quando a acessibilidade AA estiver configurada. Caso contrário, mesmo
+   * que o tamanho seja definido como `small`, a medida padrão `medium` será mantida. Para mais informações sobre como
+   * configurar a acessibilidade AA, consulte a documentação do [po-theme](https://po-ui.io/documentation/po-theme).
+   *
+   * @default `medium`
+   *
+   */
+  @Input('p-size') set size(value: string) {
+    this._size = this.validateSize(value);
+  }
+
+  get size(): string {
+    return this._size ?? this.getDefaultSize();
+  }
+
+  constructor(
+    private changeDetector: ChangeDetectorRef,
+    protected poThemeService: PoThemeService
+  ) {
     super();
   }
 
@@ -270,5 +303,19 @@ export class PoSwitchComponent extends PoFieldModel<any> {
       }
       this.changeDetector.markForCheck();
     }
+  }
+
+  private getDefaultSize(): string {
+    return this.poThemeService.getA11yDefaultSize() === 'small' ? PoFieldSize.small : PoFieldSize.medium;
+  }
+
+  private validateSize(value: string): string {
+    if (value && Object.values(PoFieldSize).includes(value as PoFieldSize)) {
+      if (value === PoFieldSize.small && this.poThemeService.getA11yLevel() !== 'AA') {
+        return PoFieldSize.medium;
+      }
+      return value;
+    }
+    return this.poThemeService.getA11yDefaultSize() === 'small' ? PoFieldSize.small : PoFieldSize.medium;
   }
 }

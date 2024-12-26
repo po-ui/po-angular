@@ -9,7 +9,7 @@ import { PoButtonComponent } from './po-button.component';
 import { PoButtonBaseComponent } from './po-button-base.component';
 
 import { expectPropertiesValues } from '../../util-test/util-expect.spec';
-import { PoButtonType } from './po-button-type.enum';
+import { PoButtonType } from './enums/po-button-type.enum';
 
 describe('PoButtonComponent: ', () => {
   let component: PoButtonComponent;
@@ -140,6 +140,28 @@ describe('PoButtonComponent: ', () => {
       component.focus();
 
       expect(component.buttonElement.nativeElement.focus).not.toHaveBeenCalled();
+    });
+
+    describe('mapSizeToIcon: ', () => {
+      it('should return "xs" for "small" size', () => {
+        expect(component.mapSizeToIcon('small')).toBe('xs');
+      });
+
+      it('should return "sm" for "medium" size', () => {
+        expect(component.mapSizeToIcon('medium')).toBe('sm');
+      });
+
+      it('should return "sm" for "large" size', () => {
+        expect(component.mapSizeToIcon('large')).toBe('sm');
+      });
+
+      it('should return "sm" for invalid size', () => {
+        expect(component.mapSizeToIcon('invalid')).toBe('sm');
+      });
+
+      it('should return "sm" when size is empty', () => {
+        expect(component.mapSizeToIcon('')).toBe('sm');
+      });
     });
   });
 

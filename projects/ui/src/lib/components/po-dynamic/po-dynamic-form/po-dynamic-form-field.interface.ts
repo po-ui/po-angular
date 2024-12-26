@@ -19,7 +19,7 @@ import { PoLookupAdvancedFilter } from '../../po-field/po-lookup/interfaces/po-l
 import { PoLookupColumn } from '../../po-field/po-lookup/interfaces/po-lookup-column.interface';
 import { PoMultiselectOption } from '../../po-field/po-multiselect/po-multiselect-option.interface';
 import { PoSelectOption } from '../../po-field/po-select/po-select-option.interface';
-import { ForceBooleanComponentEnum, ForceOptionComponentEnum } from '../po-dynamic-field-force-component.enum';
+import { ForceBooleanComponentEnum, ForceOptionComponentEnum } from '../enums/po-dynamic-field-force-component.enum';
 
 import { Observable } from 'rxjs';
 import { PoDynamicField } from '../po-dynamic-field.interface';

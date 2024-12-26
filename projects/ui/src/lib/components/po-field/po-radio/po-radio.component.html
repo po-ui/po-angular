@@ -10,6 +10,11 @@
       [required]="required"
       [value]="radioValue ?? ''"
     />
-    <po-label *ngIf="label" [p-disabled]="disabled" [p-label]="label"></po-label>
+    <po-label
+      [class.line-height-aa]="size === 'small'"
+      *ngIf="label"
+      [p-disabled]="disabled"
+      [p-label]="label"
+    ></po-label>
   </label>
 </div>

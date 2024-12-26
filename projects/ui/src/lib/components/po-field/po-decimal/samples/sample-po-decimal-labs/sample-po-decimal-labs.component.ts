@@ -1,6 +1,6 @@
 import { Component, OnInit } from '@angular/core';
 
-import { PoCheckboxGroupOption, PoSelectOption } from '@po-ui/ng-components';
+import { PoCheckboxGroupOption, PoRadioGroupOption, PoSelectOption } from '@po-ui/ng-components';
 
 @Component({
   selector: 'sample-po-decimal-labs',
@@ -20,6 +20,7 @@ export class SamplePoDecimalLabsComponent implements OnInit {
   errorPattern: string;
   max: number;
   min: number;
+  size: string;
 
   public readonly localeOptions: Array<PoSelectOption> = [
     { value: 'pt', label: 'Portuguese' },
@@ -43,6 +44,11 @@ export class SamplePoDecimalLabsComponent implements OnInit {
     { value: 'required', label: 'Required' },
     { value: 'requiredFieldErrorMessage', label: 'Required Field Error Message' },
     { value: 'showRequired', label: 'Show Required' }
+  ];
+
+  public readonly sizeOptions: Array<PoRadioGroupOption> = [
+    { label: 'small', value: 'small' },
+    { label: 'medium', value: 'medium' }
   ];
 
   get maxDecimalsLength() {
@@ -74,6 +80,7 @@ export class SamplePoDecimalLabsComponent implements OnInit {
     this.errorPattern = undefined;
     this.max = undefined;
     this.min = undefined;
+    this.size = 'medium';
 
     this.properties = [];
   }

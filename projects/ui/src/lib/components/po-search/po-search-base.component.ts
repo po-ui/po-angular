@@ -1,13 +1,14 @@
 import { PoLanguageService } from '../../services/po-language/po-language.service';
 import { poLocaleDefault } from '../../services/po-language/po-language.constant';
 
-import { Directive, EventEmitter, Input, Output, TemplateRef } from '@angular/core';
+import { Directive, EventEmitter, Input, OnInit, Output, TemplateRef } from '@angular/core';
 import { convertToBoolean } from '../../utils/util';
 import { PoSearchLiterals } from './literals/po-search-literals';
 import { poSearchLiteralsDefault } from './literals/po-search-literals-default';
 import { PoSearchFilterMode } from './enum/po-search-filter-mode.enum';
-import { PoSearchOption } from './interfaces/po-search-option.interface';
 import { PoSearchFilterSelect } from './interfaces/po-search-filter-select.interface';
+import { PoSearchSize } from './enum/po-search-size.enum';
+import { PoThemeService } from '../../services';
 
 export type searchMode = 'action' | 'trigger';
 /**
@@ -75,6 +76,7 @@ export class PoSearchBaseComponent {
   private _ariaLabel?: string;
   private language: string;
   private _filterSelect?: Array<PoSearchFilterSelect>;
+  private _size?: string = undefined;
 
   /**
    * @optional
@@ -258,6 +260,31 @@ export class PoSearchBaseComponent {
    *
    * @description
    *
+   * Permite definir o tamanho do componente.
+   *
+   * Valores válidos no enum `PoSearchSize`:
+   * - small
+   * - medium
+   *
+   * > A medida `small` **só estará disponível** quando a acessibilidade AA estiver configurada. Caso contrário, mesmo
+   * que o tamanho seja definido como `small`, a medida padrão `medium` será mantida. Para mais informações sobre como
+   * configurar a acessibilidade AA, consulte a documentação do [po-theme](https://po-ui.io/documentation/po-theme).
+   *
+   * @default `medium`
+   */
+  @Input('p-size') set size(value: string) {
+    this._size = this.validateSize(value);
+  }
+
+  get size(): string {
+    return this._size ?? this.getDefaultSize();
+  }
+
+  /**
+   * @optional
+   *
+   * @description
+   *
    * Evento disparado ao alterar valor do model.
    */
   @Output('p-change-model') changeModel: EventEmitter<any> = new EventEmitter();
@@ -289,12 +316,29 @@ export class PoSearchBaseComponent {
    */
   @Output('p-listbox-onclick') listboxOnClick = new EventEmitter<any>();
 
-  constructor(languageService: PoLanguageService) {
+  constructor(
+    languageService: PoLanguageService,
+    protected poThemeService: PoThemeService
+  ) {
     this.language = languageService.getShortLanguage();
   }
 
   ensureFilterSelectOption(values: any) {
     const _values = Array.isArray(values) ? values : Array.of(values);
     return _values.map(value => (typeof value === 'object' ? value : { label: value, value }));
+  }
+
+  private getDefaultSize(): string {
+    return this.poThemeService.getA11yDefaultSize() === 'small' ? PoSearchSize.small : PoSearchSize.medium;
+  }
+
+  private validateSize(value: string): string {
+    if (value && Object.values(PoSearchSize).includes(value as PoSearchSize)) {
+      if (value === PoSearchSize.small && this.poThemeService.getA11yLevel() !== 'AA') {
+        return PoSearchSize.medium;
+      }
+      return value;
+    }
+    return this.poThemeService.getA11yDefaultSize() === 'small' ? PoSearchSize.small : PoSearchSize.medium;
   }
 }

@@ -17,7 +17,6 @@ import { PoFieldModel } from '../po-field.model';
 import { PoKeyCodeEnum } from './../../../enums/po-key-code.enum';
 
 import { convertToBoolean } from '../../../utils/util';
-import { PoRadioSize } from './po-radio-size.enum';
 
 @Component({
   selector: 'po-radio',
@@ -37,8 +36,6 @@ export class PoRadioComponent extends PoFieldModel<boolean> {
 
   value = false;
 
-  private _size: PoRadioSize = PoRadioSize.Medium;
-
   /** Define o valor do *radio* */
   @Input('p-value') radioValue: string;
 
@@ -47,16 +44,21 @@ export class PoRadioComponent extends PoFieldModel<boolean> {
    *
    * @description
    *
-   * Define o tamanho do *radio*
+   * Define o tamanho do rádio.
+   *
+   * Valores válidos no enum `PoRadioSize`:
+   * - `small`: altura de 16px.
+   * - `medium`: altura de 24px.
+   * - `large`: altura de 32px.
+   *
+   * > A medida `small` **só estará disponível** quando a acessibilidade AA estiver configurada. Caso contrário, mesmo
+   * que o tamanho seja definido como `small`, a medida padrão `medium` será mantida. Para mais informações sobre como
+   * configurar a acessibilidade AA, consulte a documentação do [po-theme](https://po-ui.io/documentation/po-theme).
+   *
    * @default `medium`
+   *
    */
-  @Input('p-size') set size(value: PoRadioSize) {
-    this._size = Object.values(PoRadioSize).includes(value) ? value : PoRadioSize.Medium;
-  }
-
-  get size() {
-    return this._size;
-  }
+  @Input('p-size') size: string;
 
   @Input({ alias: 'p-required', transform: convertToBoolean }) required?: boolean;
 

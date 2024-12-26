@@ -8,9 +8,9 @@ import { provideHttpClientTesting } from '@angular/common/http/testing';
 import { PoButtonGroupModule } from '../../../po-button-group';
 import { PoModalModule } from '../../../po-modal/po-modal.module';
 import { PoFieldModule } from '../../po-field.module';
-import { PoRichTextToolbarActions } from '../enum/po-rich-text-toolbar-actions.enum';
 import { PoTooltipModule } from './../../../../directives/po-tooltip/po-tooltip.module';
 import { PoRichTextToolbarComponent } from './po-rich-text-toolbar.component';
+import { PoRichTextToolbarActions } from '../enum/po-rich-text-toolbar-actions.enum';
 
 describe('PoRichTextToolbarComponent:', () => {
   let component: PoRichTextToolbarComponent;

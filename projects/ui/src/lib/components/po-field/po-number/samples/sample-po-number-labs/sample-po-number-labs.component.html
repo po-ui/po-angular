@@ -19,6 +19,7 @@
   [p-required]="properties.includes('required')"
   [p-required-field-error-message]="properties.includes('requiredFieldErrorMessage')"
   [p-show-required]="properties.includes('showRequired')"
+  [p-size]="size"
   [p-step]="step"
   (p-blur)="changeEvent('p-blur')"
   (p-change)="changeEvent('p-change')"
@@ -36,57 +37,56 @@
 <hr />
 
 <form #f="ngForm">
+  <po-input class="po-md-6" name="label" [(ngModel)]="label" p-clean p-label="Label"> </po-input>
+
+  <po-input class="po-md-6" name="help" [(ngModel)]="help" p-clean p-label="Help"> </po-input>
+
+  <po-input class="po-md-6" name="placeholder" [(ngModel)]="placeholder" p-clean p-label="Placeholder"> </po-input>
+
+  <po-input
+    class="po-md-6"
+    name="messageErrorPattern"
+    [(ngModel)]="messageErrorPattern"
+    p-clean
+    p-label="Message error pattern"
+  >
+  </po-input>
+
+  <po-number class="po-md-6 po-lg-3" name="min" [(ngModel)]="min" p-clean p-label="Min"> </po-number>
+
+  <po-number class="po-md-6 po-lg-3" name="minlength" [(ngModel)]="minlength" p-clean p-label="Minlength"> </po-number>
+
+  <po-number class="po-md-6 po-lg-3" name="max" [(ngModel)]="max" p-clean p-label="Max"> </po-number>
+
+  <po-number class="po-md-6 po-lg-3" name="maxlength" [(ngModel)]="maxlength" p-clean p-label="Maxlength"> </po-number>
+
+  <po-number class="po-md-6 po-lg-3" name="step" [(ngModel)]="step" p-clean p-label="Step"> </po-number>
+
+  <po-select class="po-md-6 po-lg-3" name="icon" [(ngModel)]="icon" p-clean p-label="Icon" [p-options]="iconOptions">
+  </po-select>
+
+  <po-checkbox-group
+    class="po-md-12"
+    name="properties"
+    [(ngModel)]="properties"
+    p-columns="4"
+    p-label="Properties"
+    [p-options]="propertiesOptions"
+  >
+  </po-checkbox-group>
+
+  <po-radio-group
+    class="po-md-12"
+    name="size"
+    [(ngModel)]="size"
+    p-columns="4"
+    p-label="Size"
+    p-help="Defina o nível de acessibilidade AA para habilitar a medida Small."
+    [p-options]="sizeOptions"
+  >
+  </po-radio-group>
+
   <div class="po-row">
-    <po-input class="po-md-6" name="label" [(ngModel)]="label" p-clean p-label="Label"> </po-input>
-
-    <po-input class="po-md-6" name="help" [(ngModel)]="help" p-clean p-label="Help"> </po-input>
-  </div>
-
-  <div class="po-row">
-    <po-input class="po-md-6" name="placeholder" [(ngModel)]="placeholder" p-clean p-label="Placeholder"> </po-input>
-
-    <po-input
-      class="po-md-6"
-      name="messageErrorPattern"
-      [(ngModel)]="messageErrorPattern"
-      p-clean
-      p-label="Message error pattern"
-    >
-    </po-input>
-  </div>
-
-  <div class="po-row">
-    <po-number class="po-md-6 po-lg-3" name="min" [(ngModel)]="min" p-clean p-label="Min"> </po-number>
-
-    <po-number class="po-md-6 po-lg-3" name="minlength" [(ngModel)]="minlength" p-clean p-label="Minlength">
-    </po-number>
-
-    <po-number class="po-md-6 po-lg-3" name="max" [(ngModel)]="max" p-clean p-label="Max"> </po-number>
-
-    <po-number class="po-md-6 po-lg-3" name="maxlength" [(ngModel)]="maxlength" p-clean p-label="Maxlength">
-    </po-number>
-  </div>
-
-  <div class="po-row">
-    <po-number class="po-md-6" name="step" [(ngModel)]="step" p-clean p-label="Step"> </po-number>
-
-    <po-select class="po-lg-6" name="icon" [(ngModel)]="icon" p-clean p-label="Icon" [p-options]="iconOptions">
-    </po-select>
-  </div>
-
-  <div class="po-row">
-    <po-checkbox-group
-      class="po-md-6"
-      name="properties"
-      [(ngModel)]="properties"
-      p-columns="3"
-      p-label="Properties"
-      [p-options]="propertiesOptions"
-    >
-    </po-checkbox-group>
-  </div>
-
-  <div class="po-row">
-    <po-button class="po-md-3" p-label="Sample Restore" (p-click)="restore()"> </po-button>
+    <po-button class="po-lg-3 po-md-6" p-label="Sample Restore" (p-click)="restore()"> </po-button>
   </div>
 </form>

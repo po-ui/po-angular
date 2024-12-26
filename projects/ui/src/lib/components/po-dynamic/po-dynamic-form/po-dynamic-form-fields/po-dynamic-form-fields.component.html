@@ -34,6 +34,7 @@
       [p-readonly]="field.readonly"
       [p-required]="field.required"
       [p-required-field-error-message]="field.requiredFieldErrorMessage"
+      [p-size]="size"
       [p-show-required]="field.showRequired"
       (p-change)="onChangeField(field)"
       [p-placeholder]="field.placeholder"
@@ -60,6 +61,7 @@
       [p-required]="field.required"
       [p-field-error-message]="field.errorMessage"
       [p-show-required]="field.showRequired"
+      [p-size]="size"
       (p-change)="onChangeField(field)"
     >
     </po-datepicker-range>
@@ -87,6 +89,7 @@
       [p-required]="field.required"
       [p-required-field-error-message]="field.requiredFieldErrorMessage"
       [p-show-required]="field.showRequired"
+      [p-size]="size"
       (p-change)="onChangeField(field)"
       (p-change-model)="onChangeFieldModel(field)"
       [p-icon]="field.icon"
@@ -119,6 +122,7 @@
       [p-required]="field.required"
       [p-required-field-error-message]="field.requiredFieldErrorMessage"
       [p-show-required]="field.showRequired"
+      [p-size]="size"
       (p-change)="onChangeField(field)"
       (p-change-model)="onChangeFieldModel(field)"
       [p-icon]="field.icon"
@@ -153,6 +157,7 @@
       [p-required]="field.required"
       [p-required-field-error-message]="field.requiredFieldErrorMessage"
       [p-show-required]="field.showRequired"
+      [p-size]="size"
       (p-change)="onChangeField(field)"
       (p-change-model)="onChangeFieldModel(field)"
       [p-placeholder]="field.placeholder"
@@ -175,6 +180,7 @@
       [p-required]="field.required"
       [p-field-error-message]="field.errorMessage"
       [p-show-required]="field.showRequired"
+      [p-size]="size"
       (p-change)="onChangeField(field)"
       [p-placeholder]="field.placeholder"
       [p-readonly]="field.readonly"
@@ -197,6 +203,7 @@
       [p-required]="field.required"
       [p-field-error-message]="field.errorMessage"
       [p-show-required]="field.showRequired"
+      [p-size]="size"
       (p-change)="onChangeField(field)"
     >
     </po-radio-group>
@@ -215,6 +222,7 @@
       [p-label-on]="field.booleanTrue"
       [p-label-position]="field.labelPosition"
       [p-hide-label-status]="field.hideLabelStatus"
+      [p-size]="size"
       (p-change)="onChangeField(field)"
     >
     </po-switch>
@@ -228,7 +236,7 @@
       [p-auto-focus]="field.focus"
       [p-disabled]="isDisabled(field)"
       [p-label]="field.label"
-      [p-size]="field.size"
+      [p-size]="size"
       (p-change)="onChangeField(field)"
     >
     </po-checkbox>
@@ -267,6 +275,7 @@
       [p-disabled-tab-filter]="field.disabledTabFilter"
       [p-debounce-time]="field.debounceTime"
       [p-change-on-enter]="field.changeOnEnter"
+      [p-size]="size"
     >
     </po-combo>
 
@@ -298,6 +307,7 @@
       [p-required]="field.required"
       [p-field-error-message]="field.errorMessage"
       [p-show-required]="field.showRequired"
+      [p-size]="size"
       (p-change)="onChangeField(field)"
       [p-placeholder]="field.placeholder"
       [p-advanced-filters]="field.advancedFilters"
@@ -322,6 +332,7 @@
       [p-required]="field.required"
       [p-show-required]="field.showRequired"
       [p-field-error-message]="field.errorMessage"
+      [p-size]="size"
       (p-change)="onChangeField(field)"
     >
     </po-checkbox-group>
@@ -354,6 +365,7 @@
       [p-placeholder-search]="field.placeholderSearch"
       [p-hide-search]="field.hideSearch"
       [p-hide-select-all]="field.hideSelectAll"
+      [p-size]="size"
     >
     </po-multiselect>
 
@@ -375,6 +387,7 @@
       [p-field-error-message]="field.errorMessage"
       [p-show-required]="field.showRequired"
       [p-rows]="field.rows"
+      [p-size]="size"
       (p-change)="onChangeField(field)"
       (p-change-model)="onChangeFieldModel(field)"
       [p-placeholder]="field.placeholder"
@@ -405,6 +418,7 @@
       [p-required]="field.required"
       [p-required-field-error-message]="field.requiredFieldErrorMessage"
       [p-show-required]="field.showRequired"
+      [p-size]="size"
       (p-change)="onChangeField(field)"
       (p-change-model)="onChangeFieldModel(field)"
       [p-placeholder]="field.placeholder"
@@ -438,6 +452,7 @@
       [p-optional]="field.optional"
       [p-required]="field.required"
       [p-show-required]="field.showRequired"
+      [p-size]="size"
       (p-change)="onChangeField(field)"
       (p-change-model)="onChangeFieldModel(field)"
       [p-url]="field.url"

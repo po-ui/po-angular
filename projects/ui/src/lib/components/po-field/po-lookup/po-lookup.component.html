@@ -15,7 +15,17 @@
       <input
         #inp
         class="po-lookup-input po-lookup-input-trigger"
-        [ngClass]="clean && inp.value ? 'po-input-double-icon-right' : 'po-input-icon-right'"
+        [class.po-lookup-input-aa]="size === 'small'"
+        [class.po-lookup-input-trigger-aa]="size === 'small'"
+        [ngClass]="
+          clean && inp.value
+            ? size === 'small'
+              ? 'po-input-double-icon-right-aa'
+              : 'po-input-double-icon-right'
+            : size === 'small'
+              ? 'po-input-icon-right-aa'
+              : 'po-input-icon-right'
+        "
         [id]="id"
         type="text"
         [autocomplete]="autocomplete"
@@ -33,7 +43,9 @@
           [attr.aria-label]="literals.clean"
           class="po-icon-input po-lookup-button po-lookup-button-clean"
           class="po-lookup-button po-lookup-button-clean"
+          [class.po-lookup-button-aa]="size === 'small'"
           [p-element-ref]="inp"
+          [p-size]="size"
           (p-change-event)="cleanModel()"
           (click)="cleanModel(); $event.preventDefault()"
           (keydown.enter)="cleanModel(); $event.preventDefault()"
@@ -45,12 +57,17 @@
           role="button"
           class="po-lookup-button po-lookup-button-trigger po-field-icon"
           [class.po-field-icon-disabled]="disabled"
+          [class.po-lookup-button-aa]="size === 'small'"
           [ariaLabel]="literals.search"
           (p-change-event)="openLookup()"
           (click)="openLookup(); $event.preventDefault()"
           (keydown.enter)="openLookup(); $event.preventDefault()"
         >
-          <po-icon p-icon="ICON_SEARCH" [class.po-field-icon]="!disabled"></po-icon>
+          <po-icon
+            p-icon="ICON_SEARCH"
+            [class.po-field-icon]="!disabled"
+            [class.po-field-icon-aa]="!disabled && size === 'small'"
+          ></po-icon>
         </div>
       </div>
     </div>
@@ -71,8 +88,11 @@
       [ngClass]="clean && inp.value ? 'po-input-double-icon-right' : 'po-input-icon-right'"
       [class.po-lookup-input-auto]="autoHeight"
       [class.po-lookup-input-static]="!autoHeight"
+      [class.po-lookup-input-static-aa]="!autoHeight && size === 'small'"
       [class.po-lookup-input-padding-button-clean]="clean"
+      [class.po-lookup-input-padding-button-clean-aa]="clean && size === 'small'"
       [class.po-lookup-input-disabled]="disabled"
+      [class.po-lookup-input-aa]="size === 'small'"
     >
       <span *ngIf="placeholder && !disclaimers?.length" class="po-lookup-input-placeholder">
         {{ placeholder }}
@@ -97,6 +117,7 @@
         [attr.aria-label]="literals.clean"
         class="po-lookup-button po-lookup-button-clean"
         [p-element-ref]="inp"
+        [p-size]="size"
         (p-change-event)="cleanModel()"
         (click)="cleanModel(); $event.preventDefault()"
         (keydown.enter)="cleanModel(); $event.preventDefault()"
@@ -108,12 +129,17 @@
         role="button"
         class="po-lookup-button po-lookup-button-trigger po-field-icon"
         [class.po-field-icon-disabled]="disabled"
+        [class.po-lookup-button-aa]="size === 'small'"
         [ariaLabel]="literals.search"
         (p-change-event)="openLookup()"
         (click)="openLookup(); $event.preventDefault()"
         (keydown.enter)="openLookup(); $event.preventDefault()"
       >
-        <po-icon p-icon="ICON_SEARCH" [class.po-field-icon]="!disabled"></po-icon>
+        <po-icon
+          p-icon="ICON_SEARCH"
+          [class.po-field-icon]="!disabled"
+          [class.po-field-icon-aa]="!disabled && size === 'small'"
+        ></po-icon>
       </div>
     </div>
   </div>

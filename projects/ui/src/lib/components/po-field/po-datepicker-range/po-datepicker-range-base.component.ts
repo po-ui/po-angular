@@ -1,4 +1,4 @@
-import { ChangeDetectorRef, Directive, EventEmitter, Input, OnDestroy, Output } from '@angular/core';
+import { ChangeDetectorRef, Directive, EventEmitter, Input, OnDestroy, OnInit, Output } from '@angular/core';
 import { AbstractControl, ControlValueAccessor, ValidationErrors, Validator, Validators } from '@angular/forms';
 import { poLocaleDefault } from '../../../services/po-language/po-language.constant';
 import { PoLanguageService } from '../../../services/po-language/po-language.service';
@@ -16,6 +16,8 @@ import { PoDatepickerRangeLiterals } from './interfaces/po-datepicker-range-lite
 import { PoDatepickerRange } from './interfaces/po-datepicker-range.interface';
 import { poDatepickerRangeLiteralsDefault } from './po-datepicker-range.literals';
 import { Subscription, switchMap } from 'rxjs';
+import { PoFieldSize } from '../enums/po-field-size.enum';
+import { PoThemeService } from '../../../services';
 
 /**
  * @description
@@ -148,6 +150,7 @@ export abstract class PoDatepickerRangeBaseComponent implements ControlValueAcce
   private _required?: boolean = false;
   private _startDate?;
   private _locale?: string;
+  private _size?: string = undefined;
 
   private language;
   private onChangeModel: any;
@@ -380,6 +383,31 @@ export abstract class PoDatepickerRangeBaseComponent implements ControlValueAcce
    *
    * @description
    *
+   * Permite definir o tamanho do componente.
+   *
+   * Valores válidos no enum `PoFieldSize`:
+   * - small
+   * - medium
+   *
+   * > A medida `small` **só estará disponível** quando a acessibilidade AA estiver configurada. Caso contrário, mesmo
+   * que o tamanho seja definido como `small`, a medida padrão `medium` será mantida. Para mais informações sobre como
+   * configurar a acessibilidade AA, consulte a documentação do [po-theme](https://po-ui.io/documentation/po-theme).
+   *
+   * @default `medium`
+   */
+  @Input('p-size') set size(value: string) {
+    this._size = this.validateSize(value);
+  }
+
+  get size(): string {
+    return this._size ?? this.getDefaultSize();
+  }
+
+  /**
+   * @optional
+   *
+   * @description
+   *
    * Data inicial.
    */
   @Input('p-start-date') set startDate(date: string | Date) {
@@ -424,7 +452,8 @@ export abstract class PoDatepickerRangeBaseComponent implements ControlValueAcce
   constructor(
     protected changeDetector: ChangeDetectorRef,
     protected poDateService: PoDateService,
-    private languageService: PoLanguageService
+    private languageService: PoLanguageService,
+    protected poThemeService: PoThemeService
   ) {
     this.language = languageService.getShortLanguage();
   }
@@ -622,6 +651,10 @@ export abstract class PoDatepickerRangeBaseComponent implements ControlValueAcce
     return value && !this.isDateRangeObject(value);
   }
 
+  private getDefaultSize(): string {
+    return this.poThemeService.getA11yDefaultSize() === 'small' ? PoFieldSize.small : PoFieldSize.medium;
+  }
+
   private isDateRangeObject(value): boolean {
     return value && value.hasOwnProperty('start') && value.hasOwnProperty('end');
   }
@@ -654,6 +687,16 @@ export abstract class PoDatepickerRangeBaseComponent implements ControlValueAcce
         return day < 1 || day > 28 ? false : true;
       }
     }
+  }
+
+  private validateSize(value: string): string {
+    if (value && Object.values(PoFieldSize).includes(value as PoFieldSize)) {
+      if (value === PoFieldSize.small && this.poThemeService.getA11yLevel() !== 'AA') {
+        return PoFieldSize.medium;
+      }
+      return value;
+    }
+    return this.poThemeService.getA11yDefaultSize() === 'small' ? PoFieldSize.small : PoFieldSize.medium;
   }
 
   protected abstract resetDateRangeInputValidation(): void;

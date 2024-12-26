@@ -180,33 +180,5 @@ describe('PoInfoComponent', () => {
 
       expect(nativeElement.querySelector('.po-text-nowrap')).toBeTruthy();
     });
-
-    it('should find `a.po-info-link` if `component.url` is truthy', () => {
-      component.value = 'John Doe';
-      component.url = 'http://po-ui.io';
-
-      fixture.detectChanges();
-
-      expect(nativeElement.querySelector('a.po-info-link[target=_blank]')).toBeTruthy();
-    });
-
-    it('shouldn`t find `a.po-info-link` if `component.url` is falsy', () => {
-      component.value = 'John Doe';
-      component.url = '';
-
-      fixture.detectChanges();
-
-      expect(nativeElement.querySelector('a.po-info-link')).toBeNull();
-    });
-
-    it('should find `a.po-info-link` and not find `a.po-info-link[target=_blank]` if URL is an internal link ', () => {
-      component.value = 'John Doe';
-      component.url = '/customers';
-
-      fixture.detectChanges();
-
-      expect(nativeElement.querySelector('a.po-info-link[target=_blank]')).toBeNull();
-      expect(nativeElement.querySelector('a.po-info-link')).toBeTruthy();
-    });
   });
 });

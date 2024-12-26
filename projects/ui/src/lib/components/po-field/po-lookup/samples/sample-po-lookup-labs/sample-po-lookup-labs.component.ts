@@ -37,6 +37,7 @@ export class SamplePoLookupLabsComponent implements OnInit {
   fieldErrorMessage: string;
   advancedFilters: string;
   customAdvancedFilters: Array<PoDynamicFormField>;
+  size: string;
   spacing: PoTableColumnSpacing = PoTableColumnSpacing.Medium;
 
   public readonly columnsOptions: Array<PoCheckboxGroupOption> = [
@@ -80,6 +81,11 @@ export class SamplePoLookupLabsComponent implements OnInit {
     { label: 'Small', value: 'small' },
     { label: 'Medium', value: 'medium' },
     { label: 'Large', value: 'large' }
+  ];
+
+  public readonly sizeOptions: Array<PoRadioGroupOption> = [
+    { label: 'small', value: 'small' },
+    { label: 'medium', value: 'medium' }
   ];
 
   constructor(public sampleFilterService: SamplePoLookupService) {}
@@ -135,6 +141,7 @@ export class SamplePoLookupLabsComponent implements OnInit {
     this.properties = [];
     this.fieldErrorMessage = '';
     this.customAdvancedFilters = [];
+    this.size = 'medium';
   }
 
   updateColumns() {

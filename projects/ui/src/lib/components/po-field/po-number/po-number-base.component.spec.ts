@@ -16,7 +16,10 @@ import { of } from 'rxjs';
 })
 class ContentProjectionComponent extends PoNumberBaseComponent {
   constructor(el: ElementRef, cd: ChangeDetectorRef) {
-    super(el, cd);
+    const poThemeServiceMock = jasmine.createSpyObj('PoThemeService', ['getA11yDefaultSize']);
+    poThemeServiceMock.getA11yDefaultSize.and.returnValue('medium');
+
+    super(el, cd, poThemeServiceMock);
   }
 
   extraValidation(c: AbstractControl): { [key: string]: any } {

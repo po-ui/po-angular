@@ -1,9 +1,7 @@
 import { ComponentFixture, TestBed } from '@angular/core/testing';
-import { NG_VALUE_ACCESSOR } from '@angular/forms';
-
-import { configureTestSuite, expectPropertiesValues } from './../../../util-test/util-expect.spec';
-
 import { PoRadioComponent } from './po-radio.component';
+import { configureTestSuite } from '../../../util-test/util-expect.spec';
+import { NG_VALUE_ACCESSOR } from '@angular/forms';
 
 describe('PoRadioComponent', () => {
   let component: PoRadioComponent;
@@ -34,20 +32,6 @@ describe('PoRadioComponent', () => {
 
   it('should create a po-label for po-radio', () => {
     expect(labelField).toBeTruthy();
-  });
-
-  describe('Properties:', () => {
-    it('should update property `p-size` with valid values', () => {
-      const validValues = ['medium', 'large'];
-
-      expectPropertiesValues(component, 'size', validValues, validValues);
-    });
-
-    it('should update property `p-size` with `medium` when invalid values', () => {
-      const invalidValues = ['small', 'extraLarge'];
-
-      expectPropertiesValues(component, 'size', invalidValues, 'medium');
-    });
   });
 
   describe('Methods:', () => {

@@ -7,6 +7,7 @@ import {
   Inject,
   Input,
   OnChanges,
+  OnInit,
   Optional,
   Output,
   Renderer2,
@@ -29,6 +30,8 @@ import { ICONS_DICTIONARY, PhosphorIconDictionary } from '../../po-icon';
 import { PoFieldValidateModel } from '../po-field-validate.model';
 import { PoSelectOptionGroup } from './po-select-option-group.interface';
 import { PoSelectOption } from './po-select-option.interface';
+import { PoFieldSize } from '../enums/po-field-size.enum';
+import { PoThemeService } from '../../../services';
 
 const PO_SELECT_FIELD_LABEL_DEFAULT = 'label';
 const PO_SELECT_FIELD_VALUE_DEFAULT = 'value';
@@ -169,6 +172,7 @@ export class PoSelectComponent extends PoFieldValidateModel<any> implements OnCh
   private _fieldLabel?: string = PO_SELECT_FIELD_LABEL_DEFAULT;
   private _fieldValue?: string = PO_SELECT_FIELD_VALUE_DEFAULT;
   private _options: Array<PoSelectOption> | Array<PoSelectOptionGroup> | Array<any>;
+  private _size?: string = undefined;
 
   /**
    * Nesta propriedade deve ser definido uma coleção de objetos que implementam a interface `PoSelectOption`,
@@ -281,12 +285,38 @@ export class PoSelectComponent extends PoFieldValidateModel<any> implements OnCh
     return this._iconToken.NAME_LIB;
   }
 
+  /**
+   * @optional
+   *
+   * @description
+   *
+   * Permite definir o tamanho do componente.
+   *
+   * Valores válidos no enum `PoFieldSize`:
+   * - small
+   * - medium
+   *
+   * > A medida `small` **só estará disponível** quando a acessibilidade AA estiver configurada. Caso contrário, mesmo
+   * que o tamanho seja definido como `small`, a medida padrão `medium` será mantida. Para mais informações sobre como
+   * configurar a acessibilidade AA, consulte a documentação do [po-theme](https://po-ui.io/documentation/po-theme).
+   *
+   * @default `medium`
+   */
+  @Input('p-size') set size(value: string) {
+    this._size = this.validateSize(value);
+  }
+
+  get size(): string {
+    return this._size ?? this.getDefaultSize();
+  }
+
   /* istanbul ignore next */
   constructor(
     @Optional() @Inject(ICONS_DICTIONARY) value: { [key: string]: string },
     changeDetector: ChangeDetectorRef,
     private el: ElementRef,
-    public renderer: Renderer2
+    public renderer: Renderer2,
+    protected poThemeService: PoThemeService
   ) {
     super(changeDetector);
 
@@ -399,6 +429,10 @@ export class PoSelectComponent extends PoFieldValidateModel<any> implements OnCh
     this.onModelTouched = fn;
   }
 
+  private getDefaultSize(): string {
+    return this.poThemeService.getA11yDefaultSize() === 'small' ? PoFieldSize.small : PoFieldSize.medium;
+  }
+
   private isEqual(value: any, inputValue: any): boolean {
     if ((value || value === 0) && inputValue) {
       return value.toString() === inputValue.toString();
@@ -444,5 +478,15 @@ export class PoSelectComponent extends PoFieldValidateModel<any> implements OnCh
   private validateOptions(options: Array<any>) {
     removeDuplicatedOptions(options);
     removeUndefinedAndNullOptions(options);
+  }
+
+  private validateSize(value: string): string {
+    if (value && Object.values(PoFieldSize).includes(value as PoFieldSize)) {
+      if (value === PoFieldSize.small && this.poThemeService.getA11yLevel() !== 'AA') {
+        return PoFieldSize.medium;
+      }
+      return value;
+    }
+    return this.poThemeService.getA11yDefaultSize() === 'small' ? PoFieldSize.small : PoFieldSize.medium;
   }
 }

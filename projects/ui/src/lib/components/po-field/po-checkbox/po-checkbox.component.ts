@@ -15,6 +15,7 @@ import { ICONS_DICTIONARY, PhosphorIconDictionary } from '../../po-icon';
 import { PoKeyCodeEnum } from './../../../enums/po-key-code.enum';
 
 import { PoCheckboxBaseComponent } from './po-checkbox-base.component';
+import { PoThemeService } from '../../../services';
 
 /**
  * @docsExtends PoCheckboxBaseComponent
@@ -55,9 +56,10 @@ export class PoCheckboxComponent extends PoCheckboxBaseComponent implements Afte
 
   constructor(
     @Optional() @Inject(ICONS_DICTIONARY) value: { [key: string]: string },
-    private changeDetector: ChangeDetectorRef
+    private changeDetector: ChangeDetectorRef,
+    protected poThemeService: PoThemeService
   ) {
-    super();
+    super(poThemeService);
 
     this._iconToken = value ?? PhosphorIconDictionary;
   }

@@ -11,6 +11,7 @@ import { AbstractControl, NG_VALUE_ACCESSOR, NG_VALIDATORS } from '@angular/form
 import { uuid } from '../../../utils/util';
 
 import { PoInputGeneric } from '../po-input-generic/po-input-generic';
+import { PoThemeService } from '../../../services';
 
 /**
  * @docsExtends PoInputBaseComponent
@@ -73,8 +74,12 @@ export class PoUrlComponent extends PoInputGeneric implements AfterViewInit, OnD
   private listener = this.validateClassesForPattern.bind(this);
 
   /* istanbul ignore next */
-  constructor(el: ElementRef, cd: ChangeDetectorRef) {
-    super(el, cd);
+  constructor(
+    el: ElementRef,
+    cd: ChangeDetectorRef,
+    protected poThemeService: PoThemeService
+  ) {
+    super(el, cd, poThemeService);
     this.maxlength = 254;
   }
 

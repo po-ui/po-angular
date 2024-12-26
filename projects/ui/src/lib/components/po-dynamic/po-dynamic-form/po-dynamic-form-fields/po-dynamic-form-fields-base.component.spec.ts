@@ -4,10 +4,10 @@ import { TitleCasePipe } from '@angular/common';
 import { expectPropertiesValues, expectArraysSameOrdering } from '../../../../util-test/util-expect.spec';
 
 import * as PoDynamicUtil from '../../po-dynamic.util';
-import { PoDynamicFieldType } from '../../po-dynamic-field-type.enum';
+import { PoDynamicFieldType } from '../../enums/po-dynamic-field-type.enum';
 import { PoDynamicFormFieldsBaseComponent } from './po-dynamic-form-fields-base.component';
 import { PoDynamicFormField } from '../po-dynamic-form-field.interface';
-import { ForceBooleanComponentEnum, ForceOptionComponentEnum } from '../../po-dynamic-field-force-component.enum';
+import { ForceBooleanComponentEnum, ForceOptionComponentEnum } from '../../enums/po-dynamic-field-force-component.enum';
 
 describe('PoDynamicFormFieldsBaseComponent:', () => {
   let component: PoDynamicFormFieldsBaseComponent;

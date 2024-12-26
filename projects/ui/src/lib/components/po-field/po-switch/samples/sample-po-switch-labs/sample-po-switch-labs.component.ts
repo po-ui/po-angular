@@ -14,6 +14,7 @@ export class SamplePoSwitchLabsComponent implements OnInit {
   labelOn: string;
   labelPosition: PoSwitchLabelPosition;
   properties: Array<string>;
+  size: string;
   switch: boolean;
 
   public readonly labelPositionOptions: Array<PoRadioGroupOption> = [
@@ -25,6 +26,11 @@ export class SamplePoSwitchLabsComponent implements OnInit {
     { value: 'disabled', label: 'Disabled' },
     { value: 'formatModel', label: 'Format Model' },
     { value: 'hideLabelStatus', label: 'Hide label status' }
+  ];
+
+  public readonly sizeOptions: Array<PoRadioGroupOption> = [
+    { label: 'small', value: 'small' },
+    { label: 'medium', value: 'medium' }
   ];
 
   ngOnInit() {
@@ -43,6 +49,7 @@ export class SamplePoSwitchLabsComponent implements OnInit {
     this.labelOff = '';
     this.labelPosition = undefined;
     this.properties = [];
+    this.size = 'medium';
     this.switch = undefined;
   }
 }

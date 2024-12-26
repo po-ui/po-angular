@@ -5,6 +5,8 @@ import { expectPropertiesValues, expectSettersMethod } from '../../../util-test/
 import * as ValidatorsFunctions from '../validators';
 
 import { PoTextareaBaseComponent } from './po-textarea-base.component';
+import { PoThemeService } from '../../../services/po-theme/po-theme.service';
+import { PoThemeA11yEnum } from '../../../services';
 
 @Directive()
 class PoTextareaComponent extends PoTextareaBaseComponent {
@@ -13,8 +15,13 @@ class PoTextareaComponent extends PoTextareaBaseComponent {
 
 describe('PoTextareaBase:', () => {
   const cd = <any>{ markForCheck: () => {} };
+  let component: PoTextareaComponent;
+  let poThemeService: jasmine.SpyObj<PoThemeService>;
 
-  const component = new PoTextareaComponent(cd);
+  beforeEach(() => {
+    poThemeService = jasmine.createSpyObj('PoThemeService', ['getA11yDefaultSize', 'getA11yLevel']);
+    component = new PoTextareaComponent(cd, poThemeService);
+  });
 
   it('should be created', () => {
     expect(component instanceof PoTextareaBaseComponent).toBeTruthy();
@@ -139,6 +146,46 @@ describe('PoTextareaBase:', () => {
     it('p-placeholder: should update property p-placeholder with empty value if set with invalid values.', () => {
       const invalidValues = [null, undefined, '', 0, false];
       expectPropertiesValues(component, 'placeholder', invalidValues, '');
+    });
+
+    describe('p-size:', () => {
+      it('should update size with valid values', () => {
+        const validValues = ['medium'];
+
+        expectPropertiesValues(component, 'size', validValues, validValues);
+      });
+
+      it('should update size to `medium` with invalid values', () => {
+        poThemeService.getA11yDefaultSize.and.returnValue('medium');
+
+        const invalidValues = ['extraSmall', 'extraLarge'];
+
+        expectPropertiesValues(component, 'size', invalidValues, 'medium');
+      });
+
+      it('should use default size when size is not set', () => {
+        poThemeService.getA11yDefaultSize.and.returnValue('small');
+
+        component.size = undefined;
+        expect(component.size).toBe('small');
+      });
+
+      it('should return `p-size` if it is defined', () => {
+        component['_size'] = 'large';
+        expect(component.size).toBe('large');
+      });
+
+      it('should call `getDefaultSize` and return its value if `p-size` is null or undefined', () => {
+        spyOn(component as any, 'getDefaultSize').and.returnValue('medium');
+
+        component['_size'] = null;
+        expect(component.size).toBe('medium');
+        expect(component['getDefaultSize']).toHaveBeenCalled();
+
+        component['_size'] = undefined;
+        expect(component.size).toBe('medium');
+        expect(component['getDefaultSize']).toHaveBeenCalledTimes(2);
+      });
     });
   });
 
@@ -275,6 +322,47 @@ describe('PoTextareaBase:', () => {
       component['validateModel']();
 
       expect(component['validatorChange']).toBeUndefined();
+    });
+
+    describe('validateSize:', () => {
+      it('should return the same size if valid and accessibility level allows it', () => {
+        poThemeService.getA11yLevel.and.returnValue(PoThemeA11yEnum.AA);
+
+        expect(component['validateSize']('small')).toBe('small');
+        expect(component['validateSize']('medium')).toBe('medium');
+      });
+
+      it('should return `medium` if p-size is `small` and accessibility level is not `AA`', () => {
+        poThemeService.getA11yLevel.and.returnValue(PoThemeA11yEnum.AAA);
+
+        expect(component['validateSize']('small')).toBe('medium');
+      });
+
+      it('should return default size from getA11yDefaultSize if value is invalid', () => {
+        poThemeService.getA11yDefaultSize.and.returnValue('small');
+
+        expect(component['validateSize']('invalid')).toBe('small');
+      });
+
+      it('should return `medium` if default size is `medium`', () => {
+        poThemeService.getA11yDefaultSize.and.returnValue('medium');
+
+        expect(component['validateSize']('invalid')).toBe('medium');
+      });
+    });
+
+    describe('getDefaultSize:', () => {
+      it('should return `small` if getA11yDefaultSize returns `small`', () => {
+        poThemeService.getA11yDefaultSize.and.returnValue('small');
+
+        expect(component['getDefaultSize']()).toBe('small');
+      });
+
+      it('should return `medium` if getA11yDefaultSize returns `medium`', () => {
+        poThemeService.getA11yDefaultSize.and.returnValue('medium');
+
+        expect(component['getDefaultSize']()).toBe('medium');
+      });
     });
   });
 });

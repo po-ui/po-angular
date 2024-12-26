@@ -8,7 +8,8 @@
     #checkboxLabel
     role="checkbox"
     class="po-checkbox-outline"
-    [attr.p-size]="size"
+    [class.po-checkbox-outline-aa]="size === 'small'"
+    [class.po-checkbox-outline-large]="size === 'large'"
     [tabindex]="disabled || disabladTabindex ? -1 : 0"
     [attr.aria-checked]="checkboxValue"
   >
@@ -18,6 +19,8 @@
       [id]="id"
       class="po-checkbox"
       [ngClass]="iconNameLib === 'PhosphorIcon' ? 'po-checkbox-phosphor' : 'po-checkbox-poicon'"
+      [class.po-checkbox-aa]="size === 'small'"
+      [class.po-checkbox-large]="size === 'large'"
       [attr.aria-disabled]="disabled"
       [attr.required]="checkBoxRequired"
     >

@@ -29,6 +29,7 @@ import { PoComboOption } from './interfaces/po-combo-option.interface';
 import { PoComboOptionTemplateDirective } from './po-combo-option-template/po-combo-option-template.directive';
 import { uuid } from '../../../utils/util';
 import { PoListBoxComponent } from './../../po-listbox/po-listbox.component';
+import { PoThemeService } from '../../../services/po-theme/po-theme.service';
 
 const poComboContainerOffset = 8;
 const poComboContainerPositionDefault = 'bottom';
@@ -136,9 +137,10 @@ export class PoComboComponent extends PoComboBaseComponent implements AfterViewI
     public renderer: Renderer2,
     private controlPosition: PoControlPositionService,
     protected changeDetector: ChangeDetectorRef,
-    languageService: PoLanguageService
+    languageService: PoLanguageService,
+    protected poThemeService: PoThemeService
   ) {
-    super(languageService, changeDetector);
+    super(languageService, changeDetector, poThemeService);
 
     this.differ = differs.find([]).create(null);
   }

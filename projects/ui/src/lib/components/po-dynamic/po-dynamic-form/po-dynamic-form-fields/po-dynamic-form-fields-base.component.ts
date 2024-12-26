@@ -4,18 +4,21 @@ import { TitleCasePipe } from '@angular/common';
 import { isTypeof, sortFields } from '../../../../utils/util';
 
 import { getGridColumnsClasses, isVisibleField } from '../../po-dynamic.util';
-import { PoDynamicFieldType } from '../../po-dynamic-field-type.enum';
+import { PoDynamicFieldType } from '../../enums/po-dynamic-field-type.enum';
 import { PoDynamicFormField } from '../po-dynamic-form-field.interface';
 import { PoDynamicFormFieldInternal } from './po-dynamic-form-field-internal.interface';
 import { PoComboFilter } from '../../../po-field/po-combo/interfaces/po-combo-filter.interface';
 import { PoLookupFilter } from '../../../po-field/po-lookup/interfaces/po-lookup-filter.interface';
 import { PoDynamicSharedBase } from '../../shared/po-dynamic-shared-base';
+import { PoDynamicFieldSize } from '../../enums/po-dynamic-field-size.enum';
 
 @Directive()
 export class PoDynamicFormFieldsBaseComponent extends PoDynamicSharedBase {
   @Input('p-auto-focus') autoFocus?: string;
 
   @Input('p-disabled-form') disabledForm: boolean;
+
+  @Input('p-size') size: PoDynamicFieldSize;
 
   @Input('p-validate') validate?: string | Function;
 

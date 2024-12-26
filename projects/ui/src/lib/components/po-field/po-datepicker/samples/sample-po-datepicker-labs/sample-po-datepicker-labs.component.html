@@ -19,6 +19,7 @@
   [p-required]="properties.includes('required')"
   [p-required-field-error-message]="properties.includes('requiredFieldErrorMessage')"
   [p-show-required]="properties.includes('showRequired')"
+  [p-size]="size"
   (p-blur)="changeEvent('p-blur')"
   (p-change)="changeEvent('p-change')"
 >
@@ -72,51 +73,58 @@
     </po-datepicker>
   </div>
 
+  <po-checkbox-group
+    class="po-md-12"
+    name="properties"
+    [(ngModel)]="properties"
+    p-columns="4"
+    p-label="Properties"
+    [p-options]="propertiesOptions"
+  >
+  </po-checkbox-group>
+
+  <po-radio-group
+    class="po-md-12"
+    name="locale"
+    [(ngModel)]="locale"
+    p-columns="4"
+    p-label="Locale"
+    [p-options]="localeOptions"
+  >
+  </po-radio-group>
+
+  <po-radio-group
+    class="po-md-12"
+    name="format"
+    [(ngModel)]="format"
+    p-columns="4"
+    p-label="Format"
+    [p-options]="formatOptions"
+  >
+  </po-radio-group>
+
+  <po-radio-group
+    class="po-md-12"
+    name="isoFormat"
+    [(ngModel)]="isoFormat"
+    p-columns="4"
+    p-label="Iso Format"
+    [p-options]="isoFormatOptions"
+  >
+  </po-radio-group>
+
+  <po-radio-group
+    class="po-md-12"
+    name="size"
+    [(ngModel)]="size"
+    p-columns="4"
+    p-label="Size"
+    p-help="Defina o nível de acessibilidade AA para habilitar a medida Small."
+    [p-options]="sizeOptions"
+  >
+  </po-radio-group>
+
   <div class="po-row">
-    <po-radio-group
-      class="po-md-6"
-      name="format"
-      [(ngModel)]="format"
-      p-columns="3"
-      p-label="Format"
-      [p-options]="formatOptions"
-    >
-    </po-radio-group>
-
-    <po-radio-group
-      class="po-md-6"
-      name="locale"
-      [(ngModel)]="locale"
-      p-columns="3"
-      p-label="Locale"
-      [p-options]="localeOptions"
-    >
-    </po-radio-group>
-  </div>
-
-  <div class="po-row">
-    <po-radio-group
-      class="po-md-4"
-      name="isoFormat"
-      [(ngModel)]="isoFormat"
-      p-columns="1"
-      p-label="Iso Format"
-      [p-options]="isoFormatOptions"
-    >
-    </po-radio-group>
-
-    <po-checkbox-group
-      class="po-sm-8"
-      name="properties"
-      [(ngModel)]="properties"
-      p-columns="3"
-      p-label="Properties"
-      [p-options]="propertiesOptions"
-    >
-    </po-checkbox-group>
-  </div>
-
-  <div class="po-row">
-    <po-button class="po-md-3" name="restore" p-label="Sample Restore" (p-click)="restore()"> </po-button>
+    <po-button class="po-lg-3 po-md-6" name="restore" p-label="Sample Restore" (p-click)="restore()"> </po-button>
   </div>
 </form>

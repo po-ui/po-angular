@@ -8,6 +8,7 @@
       <div class="po-list-view-main-select">
         <po-checkbox
           name="selectAll"
+          p-size="medium"
           [(ngModel)]="selectAll"
           [p-label]="literals.selectAll"
           (p-change)="selectAllListItems()"
@@ -33,6 +34,7 @@
                 <po-checkbox
                   [(ngModel)]="item.$selected"
                   name="checkbox"
+                  p-size="medium"
                   (p-change)="selectListItem(item)"
                   (click)="selectListItem(item)"
                 ></po-checkbox>
@@ -67,6 +69,7 @@
             <div *ngIf="showButtonsActions" class="po-list-view-actions">
               <po-button
                 *ngFor="let action of visibleActions"
+                p-size="medium"
                 [p-disabled]="returnBooleanValue(action, item, 'disabled')"
                 [p-icon]="action.icon"
                 [p-label]="action.label"
@@ -108,6 +111,7 @@
         <div *ngIf="hasDetailTemplate" class="po-list-view-detail-button">
           <po-button
             p-kind="tertiary"
+            p-size="medium"
             [p-label]="item.$showDetail ? literals.hideDetails : literals.showDetails"
             (p-click)="item.$showDetail = !item.$showDetail"
           >
@@ -119,7 +123,8 @@
 </div>
 
 <div *ngIf="displayShowMoreButton" class="po-mb-2 po-text-center">
-  <po-button [p-disabled]="showMoreDisabled" [p-label]="literals.loadMoreData" (p-click)="onShowMore()"> </po-button>
+  <po-button p-size="medium" [p-disabled]="showMoreDisabled" [p-label]="literals.loadMoreData" (p-click)="onShowMore()">
+  </po-button>
 </div>
 
 <po-popup #popup [p-actions]="actions" [p-target]="popupTarget"> </po-popup>

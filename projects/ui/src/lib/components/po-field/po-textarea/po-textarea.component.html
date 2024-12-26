@@ -10,6 +10,7 @@
     <textarea
       #inp
       class="po-textarea"
+      [class.po-textarea-aa]="size === 'small'"
       (blur)="eventOnBlur()"
       (focus)="eventOnFocus()"
       (input)="eventOnInput($event)"

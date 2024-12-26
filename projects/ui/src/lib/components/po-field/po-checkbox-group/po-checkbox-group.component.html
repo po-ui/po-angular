@@ -21,6 +21,7 @@
           (keydown)="onKeyDown($event, option)"
           [p-checkboxValue]="checkedOptions[option.value] === null ? 'mixed' : checkedOptions[option.value]"
           [p-required]="required"
+          [p-size]="size"
         >
         </po-checkbox>
       </li>

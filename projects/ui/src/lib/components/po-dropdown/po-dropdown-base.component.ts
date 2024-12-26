@@ -1,8 +1,10 @@
-import { Input, Directive } from '@angular/core';
+import { Input, Directive, OnInit } from '@angular/core';
 
 import { convertToBoolean } from './../../utils/util';
 
 import { PoDropdownAction } from './po-dropdown-action.interface';
+import { PoDropdownSize } from './enums/po-drodown-size.enum';
+import { PoThemeService } from '../../services';
 
 /**
  * @description
@@ -51,7 +53,7 @@ import { PoDropdownAction } from './po-dropdown-action.interface';
  * | `--color`                              | Cor principal do dropdown                             | `var(--color-action-default)`                    |
  * | `--border-radius`                      | Contém o valor do raio dos cantos do elemento&nbsp;   | `var(--border-radius-md)`                        |
  * | `--border-width`                       | Contém o valor da largura dos cantos do elemento&nbsp;| `var(--border-width-md)`                         |
- * | `--padding`                            | Preenchimento                                         | `0 1em`                                          |
+ * | `--padding`                            | Preenchimento horizontal                              | `0 1em`                                          |
  * | **Hover**                              |                                                       |                                                  |
  * | `--color-hover`                        | Cor principal no estado hover                         | `var(--color-brand-01-darkest)`                  |
  * | `--background-hover`                   | Cor de background no estado hover                     | `var(--color-brand-01-lighter)`                  |
@@ -74,6 +76,7 @@ export class PoDropdownBaseComponent {
 
   private _actions: Array<PoDropdownAction>;
   private _disabled: boolean = false;
+  private _size?: string = undefined;
 
   /** Lista de ações que serão exibidas no componente. */
   @Input('p-actions') set actions(value: Array<PoDropdownAction>) {
@@ -99,5 +102,46 @@ export class PoDropdownBaseComponent {
 
   get disabled(): boolean {
     return this._disabled;
+  }
+
+  /**
+   * @optional
+   *
+   * @description
+   *
+   * Permite definir o tamanho do componente.
+   *
+   * Valores válidos no enum `PoDropdownSize`:
+   * - small
+   * - medium
+   *
+   * > A medida `small` **só estará disponível** quando a acessibilidade AA estiver configurada. Caso contrário, mesmo
+   * que o tamanho seja definido como `small`, a medida padrão `medium` será mantida. Para mais informações sobre como
+   * configurar a acessibilidade AA, consulte a documentação do [po-theme](https://po-ui.io/documentation/po-theme).
+   *
+   * @default `medium`
+   */
+  @Input('p-size') set size(value: string) {
+    this._size = this.validateSize(value);
+  }
+
+  get size(): string {
+    return this._size ?? this.getDefaultSize();
+  }
+
+  constructor(protected poThemeService: PoThemeService) {}
+
+  private getDefaultSize(): string {
+    return this.poThemeService.getA11yDefaultSize() === 'small' ? PoDropdownSize.small : PoDropdownSize.medium;
+  }
+
+  private validateSize(value: string): string {
+    if (value && Object.values(PoDropdownSize).includes(value as PoDropdownSize)) {
+      if (value === PoDropdownSize.small && this.poThemeService.getA11yLevel() !== 'AA') {
+        return PoDropdownSize.medium;
+      }
+      return value;
+    }
+    return this.poThemeService.getA11yDefaultSize() === 'small' ? PoDropdownSize.small : PoDropdownSize.medium;
   }
 }

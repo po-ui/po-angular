@@ -1,4 +1,4 @@
-import { Component, Input, OnInit, ViewChild, OnDestroy } from '@angular/core';
+import { Component, Input, OnInit, ViewChild, OnDestroy, Inject, AfterViewInit } from '@angular/core';
 import { ActivatedRoute, Router } from '@angular/router';
 
 import { Observable, concat, of, Subscription, EMPTY, throwError } from 'rxjs';
@@ -13,7 +13,8 @@ import {
   PoLanguageService,
   PoNotificationService,
   PoPageAction,
-  poLocaleDefault
+  poLocaleDefault,
+  PoThemeService
 } from '@po-ui/ng-components';
 
 import { convertToBoolean, mapObjectByProperties, valuesFromObject, removeKeysProperties } from './../../utils/util';
@@ -28,6 +29,7 @@ import { PoPageDynamicOptionsSchema } from '../../services/po-page-customization
 import { PoPageDynamicEditActionsService } from './po-page-dynamic-edit-actions.service';
 import { PoPageDynamicEditBeforeCancel } from './interfaces/po-page-dynamic-edit-before-cancel.interface';
 import { PoPageDynamicEditLiterals } from './interfaces/po-page-dynamic-edit-literals.interface';
+import { PoPageDynamicEditActionsSize } from './enums/po-page-dynamic-edit-actions.size.enum';
 
 type UrlOrPoCustomizationFunction = string | (() => PoPageDynamicEditOptions);
 type SaveAction = PoPageDynamicEditActions['save'] | PoPageDynamicEditActions['saveNew'];
@@ -348,6 +350,7 @@ export class PoPageDynamicEditComponent implements OnInit, OnDestroy {
   private _keys: Array<any> = [];
   private _pageActions: Array<PoPageAction> = [];
   private _notificationType?: string = poNotificationTypeDefault;
+  private _size?: string = undefined;
   /**
    * @optional
    *
@@ -480,18 +483,69 @@ export class PoPageDynamicEditComponent implements OnInit, OnDestroy {
     return this._fields;
   }
 
+  /**
+   * @optional
+   *
+   * @description
+   *
+   * Permite definir o tamanho dos fields entre `small` ou `medium`, conforme os valores especificados
+   * no enum `PoDynamicFieldSize`.
+   *
+   * Os componentes que suportam essa configuração são:
+   * - `po-button`
+   * - `po-button-group`
+   * - `po-checkbox`
+   * - `po-checkbox-group`
+   * - `po-combo`
+   * - `po-datepicker`
+   * - `po-datepicker-range`
+   * - `po-decimal`
+   * - `po-dropdown`
+   * - `po-email`
+   * - `po-input`
+   * - `po-login`
+   * - `po-lookup`
+   * - `po-multiselect`
+   * - `po-number`
+   * - `po-password`
+   * - `po-radio-group`
+   * - `po-richtext`
+   * - `po-search`
+   * - `po-select`
+   * - `po-switch`
+   * - `po-textarea`
+   * - `po-upload`
+   * - `po-url`
+   *
+   * > A medida `small` **só estará disponível** quando a acessibilidade AA estiver configurada. Caso contrário, mesmo
+   * que o tamanho seja definido como `small`, a medida padrão `medium` será mantida. Para mais informações sobre como
+   * configurar a acessibilidade AA, consulte a documentação do [po-theme](https://po-ui.io/documentation/po-theme).
+   *
+   * @default `medium`
+   */
+  @Input('p-size') set size(value: string) {
+    this._size = this.validateSize(value);
+  }
+
+  get size(): string {
+    return this._size ?? this.getDefaultSize();
+  }
+
+  /* eslint-disable max-params */
   constructor(
-    private router: Router,
-    private activatedRoute: ActivatedRoute,
-    private poNotification: PoNotificationService,
-    private poDialogService: PoDialogService,
-    private poPageDynamicService: PoPageDynamicService,
-    private poPageCustomizationService: PoPageCustomizationService,
-    private poPageDynamicEditActionsService: PoPageDynamicEditActionsService,
+    public router: Router,
+    public activatedRoute: ActivatedRoute,
+    public poNotification: PoNotificationService,
+    public poDialogService: PoDialogService,
+    public poPageDynamicService: PoPageDynamicService,
+    public poPageCustomizationService: PoPageCustomizationService,
+    public poPageDynamicEditActionsService: PoPageDynamicEditActionsService,
+    protected poThemeService: PoThemeService,
     languageService: PoLanguageService
   ) {
     this.language = languageService.getShortLanguage();
   }
+  /* eslint-enable max-params */
 
   ngOnInit(): void {
     this.loadDataFromAPI();
@@ -724,6 +778,12 @@ export class PoPageDynamicEditComponent implements OnInit, OnDestroy {
     return this.poPageCustomizationService.getCustomOptions(onLoad, originalOption, pageOptionSchema);
   }
 
+  private getDefaultSize(): string {
+    return this.poThemeService.getA11yDefaultSize() === 'small'
+      ? PoPageDynamicEditActionsSize.small
+      : PoPageDynamicEditActionsSize.medium;
+  }
+
   private getMetadata(serviceApiFromRoute: string, paramId: string | number, onLoad: UrlOrPoCustomizationFunction) {
     const typeMetadata = paramId ? 'edit' : 'create';
 
@@ -922,5 +982,17 @@ export class PoPageDynamicEditComponent implements OnInit, OnDestroy {
 
   private isObject(value: any): boolean {
     return !!value && typeof value === 'object' && !Array.isArray(value);
+  }
+
+  private validateSize(value: string): string {
+    if (value && Object.values(PoPageDynamicEditActionsSize).includes(value as PoPageDynamicEditActionsSize)) {
+      if (value === PoPageDynamicEditActionsSize.small && this.poThemeService.getA11yLevel() !== 'AA') {
+        return PoPageDynamicEditActionsSize.medium;
+      }
+      return value;
+    }
+    return this.poThemeService.getA11yDefaultSize() === 'small'
+      ? PoPageDynamicEditActionsSize.small
+      : PoPageDynamicEditActionsSize.medium;
   }
 }

@@ -28,6 +28,7 @@ export class SamplePoMultiselectLabsComponent implements OnInit {
   filterService: string;
   fieldLabel: string;
   fieldValue: string;
+  size: string;
 
   public readonly filterModeOptions: Array<PoRadioGroupOption> = [
     { label: 'Starts With', value: 'startsWith' },
@@ -44,6 +45,11 @@ export class SamplePoMultiselectLabsComponent implements OnInit {
     { value: 'autoHeight', label: 'Auto Height' },
     { value: 'sort', label: 'Sort' },
     { value: 'hideSelectAll', label: 'Hide Select All' }
+  ];
+
+  public readonly sizeOptions: Array<PoRadioGroupOption> = [
+    { label: 'small', value: 'small' },
+    { label: 'medium', value: 'medium' }
   ];
 
   ngOnInit() {
@@ -86,5 +92,6 @@ export class SamplePoMultiselectLabsComponent implements OnInit {
 
     this.event = '';
     this.multiselect = [];
+    this.size = 'medium';
   }
 }

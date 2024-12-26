@@ -3,6 +3,8 @@ import { NgForm } from '@angular/forms';
 import { convertToBoolean } from '../../../utils/util';
 
 import { PoDynamicFormField } from './po-dynamic-form-field.interface';
+import { PoDynamicFieldSize } from '../enums/po-dynamic-field-size.enum';
+import { PoThemeService } from '../../../services';
 
 /**
  *
@@ -14,6 +16,8 @@ import { PoDynamicFormField } from './po-dynamic-form-field.interface';
  */
 @Directive()
 export class PoDynamicFormBaseComponent {
+  private _size?: string = undefined;
+
   /**
    * @optional
    *
@@ -235,6 +239,54 @@ export class PoDynamicFormBaseComponent {
    *
    * @description
    *
+   * Permite definir o tamanho dos fields entre `small` ou `medium`, conforme os valores especificados
+   * no enum `PoDynamicFieldSize`.
+   *
+   * Os componentes que suportam essa configuração são:
+   * - `po-button`
+   * - `po-button-group`
+   * - `po-checkbox`
+   * - `po-checkbox-group`
+   * - `po-combo`
+   * - `po-datepicker`
+   * - `po-datepicker-range`
+   * - `po-decimal`
+   * - `po-dropdown`
+   * - `po-email`
+   * - `po-input`
+   * - `po-login`
+   * - `po-lookup`
+   * - `po-multiselect`
+   * - `po-number`
+   * - `po-password`
+   * - `po-radio-group`
+   * - `po-richtext`
+   * - `po-search`
+   * - `po-select`
+   * - `po-switch`
+   * - `po-textarea`
+   * - `po-upload`
+   * - `po-url`
+   *
+   * > A medida `small` **só estará disponível** quando a acessibilidade AA estiver configurada. Caso contrário, mesmo
+   * que o tamanho seja definido como `small`, a medida padrão `medium` será mantida. Para mais informações sobre como
+   * configurar a acessibilidade AA, consulte a documentação do [po-theme](https://po-ui.io/documentation/po-theme).
+   *
+   * @default `medium`
+   */
+  @Input('p-size') set size(value: string) {
+    this._size = this.validateSize(value);
+  }
+
+  get size(): string {
+    return this._size ?? this.getDefaultSize();
+  }
+
+  /**
+   * @optional
+   *
+   * @description
+   *
    * Ao informar esta propriedade, o componente passará a emitir o valor a cada caractere digitado.
    *
    * Pode ser aplicado nos seguintes componentes:
@@ -249,4 +301,20 @@ export class PoDynamicFormBaseComponent {
    *
    */
   @Input({ alias: 'p-validate-on-input', transform: convertToBoolean }) validateOnInput: boolean = false;
+
+  constructor(protected poThemeService: PoThemeService) {}
+
+  private getDefaultSize(): string {
+    return this.poThemeService.getA11yDefaultSize() === 'small' ? PoDynamicFieldSize.small : PoDynamicFieldSize.medium;
+  }
+
+  private validateSize(value: string): string {
+    if (value && Object.values(PoDynamicFieldSize).includes(value as PoDynamicFieldSize)) {
+      if (value === PoDynamicFieldSize.small && this.poThemeService.getA11yLevel() !== 'AA') {
+        return PoDynamicFieldSize.medium;
+      }
+      return value;
+    }
+    return this.poThemeService.getA11yDefaultSize() === 'small' ? PoDynamicFieldSize.small : PoDynamicFieldSize.medium;
+  }
 }

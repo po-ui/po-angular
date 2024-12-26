@@ -9,6 +9,7 @@ import { PoRichTextToolbarButtonGroupItem } from '../interfaces/po-rich-text-too
 import { PoRichTextImageModalComponent } from '../po-rich-text-image-modal/po-rich-text-image-modal.component';
 import { PoRichTextLinkModalComponent } from '../po-rich-text-link-modal/po-rich-text-link-modal.component';
 import { poRichTextLiteralsDefault } from '../po-rich-text-literals';
+import { PoFieldSize } from '../../enums/po-field-size.enum';
 
 const poRichTextDefaultColor = '#000000';
 
@@ -98,6 +99,9 @@ export class PoRichTextToolbarComponent implements AfterViewInit {
   get isInternetExplorer() {
     return isIE();
   }
+
+  /** Tamanho dos botões. */
+  @Input('p-size') size: string;
 
   constructor(private languageService: PoLanguageService) {
     this.literals = {

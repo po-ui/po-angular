@@ -22,6 +22,7 @@ import { PoUploadDragDropComponent } from './po-upload-drag-drop/po-upload-drag-
 import { PoUploadFile } from './po-upload-file';
 import { PoUploadStatus } from './po-upload-status.enum';
 import { PoUploadService } from './po-upload.service';
+import { PoThemeService } from '../../../services';
 
 /**
  * @docsExtends PoUploadBaseComponent
@@ -100,9 +101,10 @@ export class PoUploadComponent extends PoUploadBaseComponent implements AfterVie
     private i18nPipe: PoI18nPipe,
     private notification: PoNotificationService,
     private cd: ChangeDetectorRef,
-    languageService: PoLanguageService
+    languageService: PoLanguageService,
+    protected poThemeService: PoThemeService
   ) {
-    super(uploadService, languageService);
+    super(uploadService, languageService, poThemeService);
   }
 
   get displayDragDrop(): boolean {
