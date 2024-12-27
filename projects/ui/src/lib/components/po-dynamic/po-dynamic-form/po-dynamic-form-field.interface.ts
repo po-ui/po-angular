@@ -12,6 +12,7 @@ import {
   PoMultiselectFilterMode,
   PoMultiselectLiterals,
   PoSwitchLabelPosition,
+  PoUploadFile,
   PoUploadFileRestrictions,
   PoUploadLiterals
 } from '../../po-field';
@@ -20,6 +21,7 @@ import { PoLookupColumn } from '../../po-field/po-lookup/interfaces/po-lookup-co
 import { PoMultiselectOption } from '../../po-field/po-multiselect/po-multiselect-option.interface';
 import { PoSelectOption } from '../../po-field/po-select/po-select-option.interface';
 import { ForceBooleanComponentEnum, ForceOptionComponentEnum } from '../po-dynamic-field-force-component.enum';
+import { PoProgressAction } from '../../po-progress/';
 
 import { Observable } from 'rxjs';
 import { PoDynamicField } from '../po-dynamic-field.interface';
@@ -709,6 +711,46 @@ export interface PoDynamicFormField extends PoDynamicField {
    * - Não possuir `p-help` e/ou `p-label`.
    */
   showRequired?: boolean;
+
+  /**
+   * Define uma ação personalizada no componente `po-upload`, adicionando um botão no canto inferior direito
+   * de cada barra de progresso associada aos arquivos enviados ou em envio.
+   *
+   * **Componente compatível**: `po-upload`,
+   *
+   * **Exemplo de configuração**:
+   * ```typescript
+   * customAction: {
+   *   label: 'Baixar',
+   *   icon: 'ph-download',
+   *   type: 'default',
+   *   visible: true,
+   *   disabled: false
+   * };
+   * ```
+   */
+  customAction?: PoProgressAction;
+
+  /**
+   * Evento emitido ao clicar na ação personalizada configurada no `p-custom-action`.
+   *
+   * **Componente compatível**: `po-upload`,
+   *
+   * Este evento é emitido quando o botão de ação personalizada é clicado na barra de progresso associada a um arquivo.
+   * O arquivo relacionado à barra de progresso será passado como parâmetro do evento, permitindo executar operações específicas para aquele arquivo.
+   *
+   * **Parâmetro do evento**:
+   * - `file`: O arquivo associado ao botão de ação. Este objeto é da classe `PoUploadFile` e contém informações sobre o arquivo, como nome, status e progresso.
+   *
+   * **Exemplo de uso**:
+   * ```typescript
+   * customActionClick: (file: PoUploadFile) => {
+   *   console.log('Ação personalizada clicada para o arquivo:', file.name);
+   *   // Lógica de download ou outra ação relacionada ao arquivo
+   * }
+   * ```
+   */
+  customActionClick?: (file: PoUploadFile) => void;
 
   /**
    * Evento será disparado quando ocorrer algum erro no envio do arquivo.

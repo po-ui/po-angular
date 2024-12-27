@@ -47,6 +47,11 @@ import { PoUploadService } from './po-upload.service';
  *   <file name="sample-po-upload-rs/sample-po-upload-rs.component.html"> </file>
  *   <file name="sample-po-upload-rs/sample-po-upload-rs.component.ts"> </file>
  * </example>
+ *
+ * <example name="po-upload-download" title="PO Upload - with Download Button">
+ *   <file name="sample-po-upload-download/sample-po-upload-download.component.html"> </file>
+ *   <file name="sample-po-upload-download/sample-po-upload-download.component.ts"> </file>
+ * </example>
  */
 @Component({
   selector: 'po-upload',
@@ -339,6 +344,12 @@ export class PoUploadComponent extends PoUploadBaseComponent implements AfterVie
         this.onError.emit(eventError);
       }
     );
+  }
+
+  customClick(file: PoUploadFile) {
+    if (this.customAction) {
+      this.customActionClick.emit(file);
+    }
   }
 
   private cleanInputValue() {

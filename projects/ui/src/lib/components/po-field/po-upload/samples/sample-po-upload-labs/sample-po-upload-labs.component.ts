@@ -1,6 +1,13 @@
 import { Component, OnInit } from '@angular/core';
+import { FormBuilder, FormGroup } from '@angular/forms';
 
-import { PoCheckboxGroupOption, PoUploadFileRestrictions, PoUploadLiterals } from '@po-ui/ng-components';
+import {
+  PoCheckboxGroupOption,
+  PoProgressAction,
+  PoSelectOption,
+  PoUploadFileRestrictions,
+  PoUploadLiterals
+} from '@po-ui/ng-components';
 
 @Component({
   selector: 'sample-po-upload-labs',
@@ -24,6 +31,9 @@ export class SamplePoUploadLabsComponent implements OnInit {
   url: string;
   headers: { [name: string]: string | Array<string> };
   headersLabs: string;
+  action: PoProgressAction;
+  actionForm: FormGroup;
+
   public readonly propertiesOptions: Array<PoCheckboxGroupOption> = [
     { value: 'autoupload', label: 'Automatic upload' },
     { value: 'directory', label: 'Directory' },
@@ -37,11 +47,45 @@ export class SamplePoUploadLabsComponent implements OnInit {
     { value: 'showRequired', label: 'Show Required' },
     { value: 'restrictionsInfo', label: 'Hide Restrictions Info' },
     { value: 'selectButton', label: 'Hide Select Files Button' },
-    { value: 'sendButton', label: 'Hide Send Files Button' }
+    { value: 'sendButton', label: 'Hide Send Files Button' },
+    { value: 'showCustomAction', label: 'Add Custom Action to Progress' }
   ];
+
+  public readonly typeOptions: Array<PoSelectOption> = [
+    { label: 'Danger', value: 'danger' },
+    { label: 'Default', value: 'default' }
+  ];
+
+  public readonly iconOptions: Array<PoSelectOption> = [
+    { value: 'ph ph-download', label: 'ph ph-download' },
+    { value: 'ph ph-Server', label: 'ph ph-Server' },
+    { value: 'ph ph-upload', label: 'ph ph-upload' },
+    { value: 'ph ph-share', label: 'ph ph-share' }
+  ];
+
+  constructor(private fb: FormBuilder) {
+    this.initializeActionForm();
+  }
+
+  initializeActionForm() {
+    this.actionForm = this.fb.group({
+      label: [''],
+      icon: [''],
+      type: ['default'],
+      visible: [true],
+      disabled: [false]
+    });
+  }
 
   ngOnInit() {
     this.restore();
+    this.actionForm.valueChanges.subscribe(formValue => {
+      this.updateAction(formValue);
+    });
+  }
+
+  updateAction(formValue: any) {
+    this.action = formValue;
   }
 
   changeEvent(event: string) {
@@ -98,6 +142,8 @@ export class SamplePoUploadLabsComponent implements OnInit {
     this.url = 'https://po-sample-api.onrender.com/v1/uploads/addFile';
     this.headers = undefined;
     this.headersLabs = undefined;
+    this.actionForm.reset({ type: 'default', visible: true });
+    this.action = { label: '', type: 'default' };
   }
 
   private getValueInBytes(value: number) {

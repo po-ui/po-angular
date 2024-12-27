@@ -69,6 +69,8 @@
               [p-status]="progressStatusByFileStatus[file.status]"
               [p-text]="file.displayName"
               [p-value]="file.percent"
+              [p-custom-action]="customAction"
+              (p-custom-action-click)="customClick(file)"
               (p-cancel)="cancel(file)"
               (p-retry)="uploadFiles([file])"
             >

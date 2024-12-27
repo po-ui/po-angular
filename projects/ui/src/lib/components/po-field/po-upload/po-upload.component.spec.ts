@@ -20,6 +20,7 @@ import { PoUploadFile } from './po-upload-file';
 import { PoUploadFileRestrictionsComponent } from './po-upload-file-restrictions/po-upload-file-restrictions.component';
 import { PoUploadService } from './po-upload.service';
 import { PoUploadStatus } from './po-upload-status.enum';
+import { PoProgressAction } from '../../po-progress';
 
 describe('PoUploadComponent:', () => {
   let component: PoUploadComponent;
@@ -1014,6 +1015,28 @@ describe('PoUploadComponent:', () => {
         'webkitdirectory'
       );
       expect(component.renderer.removeAttribute).toHaveBeenCalledTimes(1);
+    });
+
+    it('customClick: should emit customActionClick with the provided file if customAction is defined', () => {
+      const mockFile = { name: 'mock-file.txt' } as PoUploadFile;
+      component.customAction = { label: 'Download', icon: 'ph-download' } as PoProgressAction;
+
+      spyOn(component.customActionClick, 'emit');
+
+      component.customClick(mockFile);
+
+      expect(component.customActionClick.emit).toHaveBeenCalledWith(mockFile);
+    });
+
+    it('customClick: should not emit customActionClick if customAction is undefined', () => {
+      const mockFile = { name: 'mock-file.txt' } as PoUploadFile;
+      component.customAction = undefined;
+
+      spyOn(component.customActionClick, 'emit');
+
+      component.customClick(mockFile);
+
+      expect(component.customActionClick.emit).not.toHaveBeenCalled();
     });
   });
 

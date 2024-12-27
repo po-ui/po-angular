@@ -2,9 +2,9 @@ import { ComponentFixture, TestBed, waitForAsync } from '@angular/core/testing';
 
 import { Observable } from 'rxjs';
 
+import { PoProgressStatus } from './enums/po-progress-status.enum';
 import { PoProgressComponent } from './po-progress.component';
 import { PoProgressModule } from './po-progress.module';
-import { PoProgressStatus } from './enums/po-progress-status.enum';
 
 describe('PoProgressComponent:', () => {
   let component: PoProgressComponent;
@@ -48,6 +48,66 @@ describe('PoProgressComponent:', () => {
       component.emitRetry();
 
       expect(component.retry.emit).toHaveBeenCalled();
+    });
+
+    it('callAction: should emit customActionClick event', () => {
+      spyOn(component.customActionClick, 'emit');
+
+      component.callAction();
+
+      expect(component.customActionClick.emit).toHaveBeenCalled();
+    });
+
+    it('isActionVisible: should return true if visible is true or a function that returns true', () => {
+      component.customAction = { label: 'Action', visible: true };
+      expect(component.isActionVisible(component.customAction)).toBeTrue();
+
+      component.customAction = { label: 'Action', visible: () => true };
+      expect(component.isActionVisible(component.customAction)).toBeTrue();
+    });
+
+    it('isActionVisible: should return false if visible is false or a function that returns false', () => {
+      component.customAction = { label: 'Action', visible: false };
+      expect(component.isActionVisible(component.customAction)).toBeFalse();
+
+      component.customAction = { label: 'Action', visible: () => false };
+      expect(component.isActionVisible(component.customAction)).toBeFalse();
+    });
+
+    it('isActionVisible: should return true if action.icon is defined and action.visible is true', () => {
+      component.customAction = { icon: 'ph ph-icon', visible: true };
+      expect(component.isActionVisible(component.customAction)).toBeTrue();
+    });
+
+    it('isActionVisible: should return false if action.icon is defined but action.visible is false', () => {
+      component.customAction = { icon: 'ph ph-icon', visible: false };
+      expect(component.isActionVisible(component.customAction)).toBeFalse();
+    });
+
+    it('isActionVisible: should return true if action.icon is defined and action.visible is a function that returns true', () => {
+      component.customAction = { icon: 'ph ph-icon', visible: () => true };
+      expect(component.isActionVisible(component.customAction)).toBeTrue();
+    });
+
+    it('isActionVisible: should return false if action.icon is defined and action.visible is a function that returns false', () => {
+      component.customAction = { icon: 'ph ph-icon', visible: () => false };
+      expect(component.isActionVisible(component.customAction)).toBeFalse();
+    });
+
+    it('actionIsDisabled: should return true if disabled is true or a function that returns true', () => {
+      component.customAction = { label: 'Action', disabled: true };
+      expect(component.actionIsDisabled(component.customAction)).toBeTrue();
+
+      component.customAction = { label: 'Action', disabled: () => true };
+      expect(component.actionIsDisabled(component.customAction)).toBeTrue();
+    });
+
+    it('actionIsDisabled: should return false if disabled is false or a function that returns false', () => {
+      component.customAction = { label: 'Action', disabled: false };
+      expect(component.actionIsDisabled(component.customAction)).toBeFalse();
+
+      component.customAction = { label: 'Action', disabled: () => false };
+      expect(component.actionIsDisabled(component.customAction)).toBeFalse();
     });
   });
 
@@ -126,6 +186,29 @@ describe('PoProgressComponent:', () => {
       component.status = PoProgressStatus.Default;
 
       expect(component.isAllowRetry).toBe(false);
+    });
+
+    describe('p-custom-action:', () => {
+      it('should set customAction correctly when a valid object is assigned', () => {
+        const customAction = {
+          label: 'Download',
+          icon: 'ph ph-download',
+          type: 'default',
+          visible: true,
+          disabled: false
+        };
+
+        component.customAction = customAction;
+
+        expect(component.customAction).toEqual(customAction);
+      });
+
+      it('should handle undefined or null values for customAction', () => {
+        [undefined, null].forEach(value => {
+          component.customAction = value;
+          expect(component.customAction).toBe(value);
+        });
+      });
     });
   });
 
@@ -306,6 +389,86 @@ describe('PoProgressComponent:', () => {
       const progressInfo = nativeElement.querySelector('.po-progress-info-text');
 
       expect(progressInfo).toBe(null);
+    });
+
+    it('should display customAction button with correct label and icon when customAction is defined and visible', () => {
+      component.customAction = {
+        label: 'Download',
+        icon: 'ph ph-download',
+        visible: true
+      };
+
+      fixture.detectChanges();
+
+      const customActionButton = nativeElement.querySelector('po-button');
+      expect(customActionButton).toBeTruthy();
+      expect(customActionButton.textContent.trim()).toBe('Download');
+      expect(customActionButton.querySelector('.ph.ph-download')).toBeTruthy();
+    });
+
+    it('should display customAction button when visible is undefined', () => {
+      component.customAction = {
+        icon: 'ph ph-download'
+      };
+
+      fixture.detectChanges();
+
+      const customActionButton = nativeElement.querySelector('po-button');
+      expect(customActionButton).toBeTruthy();
+    });
+
+    it('should not display customAction button when customAction is not visible', () => {
+      component.customAction = {
+        label: 'Hidden Action',
+        visible: false
+      };
+
+      fixture.detectChanges();
+
+      const customActionButton = nativeElement.querySelector('po-button');
+      expect(customActionButton).toBeFalsy();
+    });
+
+    it('should emit customActionClick event when customAction button is clicked', () => {
+      component.customAction = { label: 'Download', icon: 'download', type: 'default', visible: true };
+      spyOn(component.customActionClick, 'emit');
+
+      fixture.detectChanges();
+
+      const customButton = nativeElement.querySelector('.po-progress-custom-button');
+      expect(customButton).toBeTruthy();
+
+      component.callAction();
+      expect(component.customActionClick.emit).toHaveBeenCalled();
+    });
+
+    it('should disable customAction button when disabled is true', () => {
+      component.customAction = {
+        icon: 'download',
+        label: 'Download',
+        visible: true,
+        disabled: true
+      };
+
+      fixture.detectChanges();
+
+      const customActionButton = nativeElement.querySelector('.po-progress-custom-button button');
+      expect(customActionButton).toBeTruthy();
+
+      expect(customActionButton.disabled).toBeTrue();
+    });
+
+    it('should not disable customAction button when disabled is false', () => {
+      component.customAction = {
+        label: 'Enabled Action',
+        visible: true,
+        disabled: false
+      };
+
+      fixture.detectChanges();
+
+      const customActionButton = nativeElement.querySelector('.po-progress-custom-button button');
+      expect(customActionButton.hasAttribute('disabled')).toBeFalse();
     });
   });
 });

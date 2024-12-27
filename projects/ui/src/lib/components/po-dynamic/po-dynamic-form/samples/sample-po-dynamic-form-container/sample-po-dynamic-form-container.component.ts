@@ -5,7 +5,8 @@ import {
   PoDynamicFormFieldChanged,
   PoDynamicFormValidation,
   PoNotificationService,
-  ForceBooleanComponentEnum
+  ForceBooleanComponentEnum,
+  PoUploadFile
 } from '@po-ui/ng-components';
 import { PoDynamicFormContainerService } from './sample-po-dynamic-form-container.service';
 
@@ -193,7 +194,11 @@ export class SamplePoDynamicFormContainerComponent implements OnInit {
       gridSmColumns: 12,
       label: 'Upload your background',
       optional: true,
-      url: 'https://po-sample-api.onrender.com/v1/uploads/addFile'
+      url: 'https://po-sample-api.onrender.com/v1/uploads/addFile',
+      customAction: { icon: 'ph ph-download', visible: true },
+      customActionClick: (file: PoUploadFile) => {
+        console.log('Iniciar download para o arquivo:', file.name);
+      }
     }
   ];
 

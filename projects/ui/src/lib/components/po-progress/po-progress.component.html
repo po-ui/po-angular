@@ -20,6 +20,7 @@
     </div>
     <div class="po-progress-info-right">
       <span *ngIf="showPercentage && !indeterminate">{{ value }}%</span>
+
       <po-button
         *ngIf="isAllowRetry"
         p-icon="ICON_REFRESH"
@@ -27,6 +28,17 @@
         [p-aria-label]="literals.retry"
         p-kind="tertiary"
       ></po-button>
+
+      <po-button
+        *ngIf="isActionVisible(customAction)"
+        class="po-progress-custom-button"
+        [p-danger]="customAction.type === 'danger'"
+        [p-disabled]="actionIsDisabled(customAction)"
+        [p-label]="customAction.label || ''"
+        [p-icon]="customAction.icon"
+        (p-click)="callAction()"
+      >
+      </po-button>
 
       <po-button
         *ngIf="isAllowCancel"
