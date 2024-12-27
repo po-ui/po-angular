@@ -1,59 +1,77 @@
-<po-progress
-  [p-disabled-cancel]="properties.includes('disabledCancel')"
-  [p-indeterminate]="properties.includes('indeterminate')"
-  [p-show-percentage]="properties.includes('showPercentage')"
-  [p-info]="info"
-  [p-info-icon]="infoIcon"
-  [p-status]="status"
-  [p-text]="text"
-  [p-value]="value"
-  [p-size]="size"
-  (p-cancel)="onEvent('p-cancel')"
-  (p-retry)="onEvent('p-retry')"
->
-</po-progress>
+<div style="display: grid; gap: 16px">
+  <po-progress
+    [p-disabled-cancel]="disabledCancel"
+    [p-indeterminate]="indeterminate"
+    [p-show-percentage]="showPercentage"
+    [p-info]="info"
+    [p-info-icon]="infoIcon"
+    [p-status]="status"
+    [p-text]="text"
+    [p-value]="value"
+    [p-size]="size"
+    [p-custom-action]="action"
+    (p-custom-action-click)="onEvent('p-custom-action-click')"
+    (p-cancel)="onEvent('p-cancel')"
+    (p-retry)="onEvent('p-retry')"
+  />
 
-<po-divider></po-divider>
+  <po-widget p-title="Events">
+    <po-info [p-value]="event" />
+  </po-widget>
 
-<po-info p-label="Event" [p-value]="event"> </po-info>
+  <po-widget p-title="Properties">
+    <form #progressBarPropertiesForm="ngForm">
+      <div class="po-row">
+        <po-input class="po-sm-6 po-md-3" name="text" [(ngModel)]="text" p-clean p-label="Label" />
+        <po-number
+          class="po-sm-6 po-md-3"
+          name="value"
+          [(ngModel)]="value"
+          p-clean
+          p-label="Value"
+          p-max="100"
+          p-min="0"
+        />
+        <po-select class="po-sm-6 po-md-3" name="Size" p-label="Size" [(ngModel)]="size" [p-options]="sizeOptions" />
+        <po-select
+          class="po-sm-6 po-md-3"
+          name="Status"
+          p-label="Status"
+          [(ngModel)]="status"
+          [p-options]="statusOptions"
+        />
+      </div>
 
-<po-divider></po-divider>
+      <div class="po-row">
+        <po-select
+          class="po-sm-6 po-md-3"
+          name="infoIcon"
+          [(ngModel)]="infoIcon"
+          p-label="Info icon"
+          [p-options]="infoIconsOptions"
+        />
+        <po-input class="po-sm-6 po-md-9" name="info" [(ngModel)]="info" p-clean p-label="Info" />
+      </div>
 
-<form #progressBarPropertiesForm="ngForm">
-  <div class="po-row">
-    <po-input class="po-md-6" name="text" [(ngModel)]="text" p-clean p-label="Text"> </po-input>
-
-    <po-number class="po-md-6" name="value" [(ngModel)]="value" p-clean p-label="Value" p-max="100" p-min="0">
-    </po-number>
-
-    <po-input class="po-md-6" name="info" [(ngModel)]="info" p-clean p-label="Info"> </po-input>
-
-    <po-checkbox-group
-      class="po-md-6"
-      name="properties"
-      [(ngModel)]="properties"
-      p-label="Properties"
-      [p-options]="propertiesOptions"
-    >
-    </po-checkbox-group>
-
-    <po-radio-group
-      class="po-md-6"
-      name="infoIcon"
-      [(ngModel)]="infoIcon"
-      p-label="Info icon"
-      [p-options]="infoIconsOptions"
-    >
-    </po-radio-group>
-
-    <po-radio-group class="po-md-6" name="status" [(ngModel)]="status" p-label="Status" [p-options]="statusOptions">
-    </po-radio-group>
-
-    <po-radio-group class="po-md-6" name="size" [(ngModel)]="size" p-label="Size" [p-options]="sizeOptions">
-    </po-radio-group>
+      <po-switch class="po-sm-3 po-md-2" name="disabledCancel" [(ngModel)]="disabledCancel" p-label="Disabled Cancel" />
+      <po-switch class="po-sm-3 po-md-2" name="indeterminate" [(ngModel)]="indeterminate" p-label="Indeterminate" />
+      <po-switch class="po-sm-3 po-md-2" name="showPercentage" [(ngModel)]="showPercentage" p-label="Show Percentage" />
+      <po-switch class="po-sm-3 po-md-2" name="addAction" [(ngModel)]="showAction" p-label="Add Action Button" />
+    </form>
+  </po-widget>
+  <div *ngIf="showAction">
+    <po-widget p-title="Action Button">
+      <form [formGroup]="actionForm" class="po-row">
+        <po-input class="po-sm-6 po-md-4" formControlName="label" p-label="Label" />
+        <po-select class="po-sm-6 po-md-2" formControlName="icon" p-label="Icon" [p-options]="iconOptions" />
+        <po-select class="po-sm-6 po-md-2" formControlName="type" p-label="Type" [p-options]="typeOptions" />
+        <po-switch class="po-sm-6 po-md-2" formControlName="disabled" p-label="Disabled" />
+        <po-switch class="po-sm-6 po-md-2" formControlName="visible" p-label="Visible" />
+      </form>
+    </po-widget>
   </div>
 
   <div class="po-row">
     <po-button class="po-md-3" p-label="Sample Restore" (p-click)="restore()"> </po-button>
   </div>
-</form>
+</div>

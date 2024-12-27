@@ -13,6 +13,7 @@ import * as ValidatorsFunctions from '../validators';
 import { PoUploadBaseComponent, poUploadLiteralsDefault } from './po-upload-base.component';
 import { PoUploadFile } from './po-upload-file';
 import { PoUploadService } from './po-upload.service';
+import { PoProgressAction } from '../../po-progress';
 
 @Component({
   selector: 'po-upload',
@@ -501,6 +502,15 @@ describe('PoUploadBaseComponent:', () => {
 
       expect(files.splice).not.toHaveBeenCalled();
     });
+
+    it('callCustomAction: should emit customActionClick event with the provided file', () => {
+      const mockFile = { name: 'mock-file.txt', size: 12345 } as PoUploadFile;
+      spyOn(component.customActionClick, 'emit');
+
+      component.customActionClick.emit(mockFile);
+
+      expect(component.customActionClick.emit).toHaveBeenCalledWith(mockFile);
+    });
   });
 
   describe('Properties:', () => {
@@ -769,6 +779,46 @@ describe('PoUploadBaseComponent:', () => {
       component.directory = true;
 
       expect(component.isMultiple).toBe(true);
+    });
+
+    it('p-custom-action: should assign a valid PoProgressAction object', () => {
+      const validAction: PoProgressAction = {
+        label: 'Download',
+        icon: 'ph-download',
+        type: 'default',
+        disabled: false,
+        visible: true
+      };
+
+      component.customAction = validAction;
+
+      expect(component.customAction).toEqual(validAction);
+    });
+
+    it('p-custom-action: should handle undefined or null values for customAction', () => {
+      const invalidValues = [null, undefined];
+      invalidValues.forEach(value => {
+        component.customAction = value;
+        fixture.detectChanges();
+
+        expect(component.customAction).toBeFalsy();
+      });
+    });
+
+    it('p-custom-action: should handle partial PoProgressAction objects', () => {
+      const partialAction: PoProgressAction = { label: 'Partial Action' };
+      component.customAction = partialAction;
+
+      expect(component.customAction).toEqual(partialAction);
+    });
+
+    it('p-custom-action-click: should emit event when called', () => {
+      const mockFile = { name: 'mock-file.txt', size: 12345 } as PoUploadFile;
+      spyOn(component.customActionClick, 'emit');
+
+      component.customActionClick.emit(mockFile);
+
+      expect(component.customActionClick.emit).toHaveBeenCalledWith(mockFile);
     });
   });
 });

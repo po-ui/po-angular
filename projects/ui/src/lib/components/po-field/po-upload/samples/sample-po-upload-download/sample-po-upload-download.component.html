@@ -1,0 +1,8 @@
+<po-upload
+  name="upload"
+  p-url="https://po-sample-api.onrender.com/v1/uploads/addFile"
+  [p-custom-action]="customAction"
+  (p-custom-action-click)="onCustomActionClick($event)"
+  [p-multiple]="true"
+  (p-success)="uploadSuccess()"
+></po-upload>

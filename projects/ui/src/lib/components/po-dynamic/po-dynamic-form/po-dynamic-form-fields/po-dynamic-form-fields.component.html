@@ -432,6 +432,8 @@
       [p-label]="field.label"
       [p-literals]="field.literals"
       [name]="field.property"
+      [p-custom-action]="field.customAction"
+      (p-custom-action-click)="field.customActionClick($event)"
       (p-error)="field.onError($event)"
       (p-success)="field.onSuccess($event)"
       (p-upload)="field.onUpload($event)"

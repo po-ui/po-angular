@@ -22,6 +22,8 @@
   [p-restrictions]="restrictions"
   [p-url]="url"
   [p-headers]="headers"
+  [p-custom-action]="action"
+  (p-custom-action-click)="changeEvent('p-custom-action-click')"
   (p-error)="changeEvent('p-error')"
   (p-success)="changeEvent('p-success')"
   (p-upload)="changeEvent('p-upload')"
@@ -147,7 +149,19 @@
     </po-checkbox-group>
   </div>
 
-  <div class="po-row">
+  <div *ngIf="properties.includes('showCustomAction')">
+    <po-widget p-title="Action Button">
+      <form [formGroup]="actionForm" class="po-row">
+        <po-input class="po-sm-6 po-md-4" formControlName="label" p-label="Label" />
+        <po-select class="po-sm-6 po-md-2" formControlName="icon" p-label="Icon" [p-options]="iconOptions" />
+        <po-select class="po-sm-6 po-md-2" formControlName="type" p-label="Type" [p-options]="typeOptions" />
+        <po-switch class="po-sm-6 po-md-2" formControlName="disabled" p-label="Disabled" />
+        <po-switch class="po-sm-6 po-md-2" formControlName="visible" p-label="Visible" />
+      </form>
+    </po-widget>
+  </div>
+
+  <div class="po-row po-mt-1">
     <po-button class="po-md-3" p-label="Sample Restore" (p-click)="restore()"> </po-button>
   </div>
 </form>

@@ -59,6 +59,69 @@ describe('PoProgressBaseComponent:', () => {
 
       expectPropertiesValues(component, 'size', invalidValues, 'large');
     });
+
+    describe('p-custom-action:', () => {
+      it('should accept a valid PoProgressAction', () => {
+        const validCustomAction = {
+          label: 'Download',
+          icon: 'ph ph-download',
+          type: 'default',
+          visible: true,
+          disabled: false
+        };
+
+        component.customAction = validCustomAction;
+
+        expect(component.customAction).toEqual(validCustomAction);
+      });
+
+      it('should handle undefined or null values for customAction', () => {
+        const invalidValues = [null, undefined];
+
+        invalidValues.forEach(value => {
+          component.customAction = value;
+          expect(component.customAction).toBeFalsy();
+        });
+      });
+
+      it('should respect the visible property when it is a boolean', () => {
+        component.customAction = { label: 'Download', visible: true };
+
+        expect(component.customAction.visible).toBeTrue();
+      });
+
+      it('should respect the visible property when it is a function', () => {
+        component.customAction = { label: 'Download', visible: () => false };
+
+        const isVisible = (component.customAction.visible as Function)();
+
+        expect(isVisible).toBeFalse();
+      });
+
+      it('should respect the disabled property when it is a boolean', () => {
+        component.customAction = { label: 'Download', disabled: true };
+
+        expect(component.customAction.disabled).toBeTrue();
+      });
+
+      it('should respect the disabled property when it is a function', () => {
+        component.customAction = { label: 'Download', disabled: () => true };
+
+        const isDisabled = (component.customAction.disabled as Function)();
+
+        expect(isDisabled).toBeTrue();
+      });
+    });
+    describe('p-custom-action-click:', () => {
+      it('should emit when the event is triggered', () => {
+        spyOn(component.customActionClick, 'emit');
+
+        const mockFile = { name: 'example.txt' };
+        component.customActionClick.emit(mockFile);
+
+        expect(component.customActionClick.emit).toHaveBeenCalledWith(mockFile);
+      });
+    });
   });
 
   describe('Methods:', () => {

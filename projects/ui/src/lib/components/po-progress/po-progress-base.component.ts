@@ -4,6 +4,7 @@ import { convertToBoolean, convertToInt } from '../../utils/util';
 
 import { PoProgressStatus } from './enums/po-progress-status.enum';
 import { PoProgressSize } from './enums/po-progress-size.enum';
+import { PoProgressAction } from './interfaces';
 
 const poProgressMaxValue = 100;
 const poProgressMinValue = 0;
@@ -90,6 +91,87 @@ export class PoProgressBaseComponent {
    * Texto principal que aparecerá abaixo da barra de progresso no lado esquerdo.
    */
   @Input('p-text') text?: string;
+
+  /**
+   * @optional
+   *
+   * @description
+   *
+   * Permite definir uma ação personalizada no componente `po-progress`, exibindo um botão no canto inferior direito
+   * da barra de progresso. A ação deve implementar a interface **PoProgressAction**, possibilitando configurar:
+   *
+   * - **`label`**: Texto exibido no botão (opcional).
+   * - **`icon`**: Ícone exibido no botão (opcional).
+   * - **`type`**: Tipo do botão (`default` ou `danger`) para indicar a intenção da ação (opcional).
+   * - **`disabled`**: Indica se o botão deve estar desabilitado (opcional).
+   * - **`visible`**: Determina se o botão será exibido. Pode ser um valor booleano ou uma função que retorna um booleano (opcional).
+   *
+   * @example
+   * **Exemplo de uso:**
+   * ```html
+   * <po-progress
+   *  [p-value]="50"
+   *  [p-custom-action]="customAction"
+   *  (p-custom-action-click)="onCustomActionClick()"
+   * ></po-progress>
+   * ```
+   *
+   * ```typescript
+   * customAction: PoProgressAction = {
+   *   label: 'Baixar',
+   *   icon: 'ph ph-download',
+   *   type: 'default',
+   *   visible: () => true
+   * };
+   *
+   * onCustomActionClick() {
+   *   console.log('Custom action triggered!');
+   * }
+   * ```
+   *
+   * **Cenários comuns:**
+   * 1. **Download de Arquivos**: Exibir um botão para realizar o download de um arquivo associado à barra de progresso.
+   * 2. **Cancelamento Personalizado**: Adicionar uma ação para interromper ou reverter uma operação em andamento.
+   */
+  @Input('p-custom-action') customAction?: PoProgressAction;
+
+  /**
+   * @optional
+   *
+   * @description
+   *
+   * Evento emitido quando o botão definido em `p-custom-action` é clicado. Este evento retorna informações
+   * relacionadas à barra de progresso ou ao arquivo/processo associado, permitindo executar ações específicas.
+   *
+   * @example
+   * **Exemplo de uso:**
+   *
+   * ```html
+   * <po-progress
+   *  [p-value]="50"
+   *  [p-custom-action]="customAction"
+   *  (p-custom-action-click)="onCustomActionClick()"
+   * ></po-progress>
+   * ```
+   *
+   * ```typescript
+   * customAction: PoProgressAction = {
+   *   label: 'Cancelar',
+   *   icon: 'ph ph-x',
+   *   type: 'danger',
+   *   visible: true
+   * };
+   *
+   * onCustomActionClick() {
+   *   console.log('Custom action triggered!');
+   * }
+   * ```
+   *
+   * **Cenários comuns:**
+   * 1. **Botão de Download**: Disparar o download do arquivo associado à barra de progresso.
+   * 2. **Ação Condicional**: Realizar uma validação ou chamada de API antes de prosseguir com a ação.
+   */
+  @Output('p-custom-action-click') customActionClick: EventEmitter<any> = new EventEmitter();
 
   /**
    * @optional

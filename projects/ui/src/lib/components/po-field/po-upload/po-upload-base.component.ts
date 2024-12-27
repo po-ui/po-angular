@@ -11,6 +11,7 @@ import { PoUploadLiterals } from './interfaces/po-upload-literals.interface';
 import { PoUploadFile } from './po-upload-file';
 import { PoUploadStatus } from './po-upload-status.enum';
 import { PoUploadService } from './po-upload.service';
+import { PoProgressAction } from '../../po-progress';
 
 export const poUploadLiteralsDefault = {
   en: <PoUploadLiterals>{
@@ -238,6 +239,86 @@ export abstract class PoUploadBaseComponent implements ControlValueAccessor, Val
   @HostBinding('attr.p-required-url')
   @Input({ alias: 'p-required-url', transform: convertToBoolean })
   requiredUrl: boolean = true;
+
+  /**
+   * @optional
+   *
+   * @description
+   *
+   * Define uma ação personalizada no componente `po-upload`, adicionando um botão no canto inferior direito
+   * de cada barra de progresso associada aos arquivos enviados ou em envio.
+   *
+   * A ação deve implementar a interface **PoProgressAction**, permitindo configurar propriedades como:
+   * - `label`: Texto do botão.
+   * - `icon`: Ícone a ser exibido no botão.
+   * - `type`: Tipo de botão (ex.: `danger` ou `default`).
+   * - `disabled`: Indica se o botão deve estar desabilitado.
+   * - `visible`: Indica se o botão deve estar visível.
+   *
+   * **Exemplo de uso:**
+   *
+   * ```html
+   * <po-upload
+   *  [p-custom-action]="customAction"
+   *  (p-custom-action-click)="onCustomActionClick($event)">
+   * </po-upload>
+   * ```
+   *
+   * ```typescript
+   * customAction: PoProgressAction = {
+   *   label: 'Baixar',
+   *   icon: 'ph ph-download',
+   *   type: 'default',
+   *   visible: true
+   * };
+   *
+   * onCustomActionClick(file: PoUploadFile) {
+   *   console.log(`Ação personalizada clicada para o arquivo: ${file.name}`);
+   * }
+   * ```
+   */
+  @Input('p-custom-action') customAction?: PoProgressAction;
+
+  /**
+   * @optional
+   *
+   * @description
+   *
+   * Evento emitido ao clicar na ação personalizada configurada no `p-custom-action`.
+   *
+   * O evento retorna o arquivo associado à barra de progresso onde a ação foi clicada,
+   * permitindo executar operações específicas para aquele arquivo.
+   *
+   * **Exemplo de uso:**
+   *
+   * ```html
+   * <po-upload
+   *  [p-custom-action]="customAction"
+   *  (p-custom-action-click)="onCustomActionClick($event)">
+   * </po-upload>
+   * ```
+   *
+   * ```typescript
+   * customAction: PoProgressAction = {
+   *   label: 'Baixar',
+   *   icon: 'ph ph-download',
+   *   type: 'default',
+   *   visible: true
+   * };
+   *
+   * onCustomActionClick(file: PoUploadFile) {
+   *   console.log(`Ação personalizada clicada para o arquivo: ${file.name}`);
+   *   // Lógica para download do arquivo
+   *   this.downloadFile(file);
+   * }
+   *
+   * downloadFile(file: PoUploadFile) {
+   *   // Exemplo de download
+   *   console.log(`Iniciando o download do arquivo: ${file.name}`);
+   * }
+   * ```
+   */
+  @Output('p-custom-action-click') customActionClick: EventEmitter<any> = new EventEmitter();
 
   /**
    * @optional
