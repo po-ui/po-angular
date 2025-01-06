@@ -28,6 +28,7 @@
   (p-change)="changeEvent('p-change')"
   (p-error)="changeEvent('p-error')"
   (p-selected)="changeEvent('p-selected')"
+  [p-error-limit]="properties?.includes('errorLimit')"
 >
 </po-lookup>
 

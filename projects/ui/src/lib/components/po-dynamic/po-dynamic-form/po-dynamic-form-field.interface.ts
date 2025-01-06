@@ -280,6 +280,25 @@ export interface PoDynamicFormField extends PoDynamicField {
   errorMessage?: string;
 
   /**
+   * @optional
+   *
+   * @description
+   *
+   * Limita a exibição da mensagem de erro a duas linhas e exibe um tooltip com o texto completo.
+   *
+   * > Caso essa propriedade seja definida como `true`, a mensagem de erro será limitada a duas linhas
+   * e um tooltip será exibido ao passar o mouse sobre a mensagem para mostrar o conteúdo completo.
+   *
+   * **Componentes compatíveis:** `po-datepicker`, `po-input`, `po-number`, `po-decimal`, `po-password`, `po-datepicker-range`,
+   *  `po-select`, `po-checkbox-group`, `po-radio-group`, `po-multiselect`, `po-combo`, `po-lookup`, `po-textarea`.
+   *
+   * @default `false`
+   */
+  errorLimit?: boolean;
+
+  errorAppendBox?: boolean;
+
+  /**
    * Função executada para realizar a validação assíncrona personalizada.
    * Executada ao disparar o output `change` ou `change-model`, dependendo do valor da propriedade `triggerMode`.
    *

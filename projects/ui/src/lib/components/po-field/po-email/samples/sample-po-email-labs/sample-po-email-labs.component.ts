@@ -24,7 +24,8 @@ export class SamplePoEmailLabsComponent implements OnInit {
     { value: 'optional', label: 'Optional' },
     { value: 'readonly', label: 'Read Only' },
     { value: 'required', label: 'Required' },
-    { value: 'requiredFieldErrorMessage', label: 'Required Field Error Message' }
+    { value: 'requiredFieldErrorMessage', label: 'Required Field Error Message' },
+    { value: 'errorLimit', label: 'Limit Error Message' }
   ];
 
   ngOnInit() {

@@ -1,4 +1,5 @@
 import { ChangeDetectionStrategy, Component, Input } from '@angular/core';
+import { convertToBoolean } from '../../../../utils/util';
 
 /**
  * @docsPrivate
@@ -20,7 +21,14 @@ export class PoFieldContainerBottomComponent {
    */
   @Input('p-error-pattern') errorPattern?: string = '';
 
+  /**
+   * Limita a exibição da mensagem de erro a duas linhas e exibe um tooltip com o texto completo.
+   */
+  @Input('p-error-limit') errorLimit: boolean = false;
+
   @Input('p-disabled') disabled: boolean = false;
 
   @Input('p-help') help?: string;
+
+  @Input({ alias: 'p-append-in-body', transform: convertToBoolean }) appendBox?: boolean = false;
 }

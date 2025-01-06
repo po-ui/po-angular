@@ -61,7 +61,8 @@ export class SamplePoComboLabsComponent implements OnInit {
     { value: 'showRequired', label: 'Show Required' },
     { value: 'sort', label: 'Sort' },
     { value: 'clean', label: 'Clean' },
-    { value: 'disabledTabFilter', label: 'Disabled Tab Filter' }
+    { value: 'disabledTabFilter', label: 'Disabled Tab Filter' },
+    { value: 'errorLimit', label: 'Limit Error Message' }
   ];
 
   ngOnInit() {

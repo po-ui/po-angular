@@ -29,7 +29,8 @@ export class SamplePoRadioGroupLabsComponent implements OnInit {
     { value: 'disabled', label: 'Disabled' },
     { value: 'optional', label: 'Optional' },
     { value: 'required', label: 'Required' },
-    { value: 'showRequired', label: 'Show Required' }
+    { value: 'showRequired', label: 'Show Required' },
+    { value: 'errorLimit', label: 'Limit Error Message' }
   ];
 
   readonly sizesOptions: Array<PoRadioGroupOption> = [

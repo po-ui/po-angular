@@ -142,6 +142,22 @@ export abstract class PoInputBaseComponent implements ControlValueAccessor, Vali
    *
    * @description
    *
+   * Limita a exibição da mensagem de erro a duas linhas e exibe um tooltip com o texto completo.
+   *
+   * > Caso essa propriedade seja definida como `true`, a mensagem de erro será limitada a duas linhas
+   * e um tooltip será exibido ao passar o mouse sobre a mensagem para mostrar o conteúdo completo.
+   *
+   * @default `false`
+   */
+  @Input('p-error-limit') errorLimit: boolean = false;
+
+  @Input({ alias: 'p-error-append-in-body', transform: convertToBoolean }) errorAppendBox?: boolean = false;
+
+  /**
+   * @optional
+   *
+   * @description
+   *
    * Define se a indicação de campo opcional será exibida.
    *
    * > Não será exibida a indicação se:
