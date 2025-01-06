@@ -10,6 +10,7 @@
   [p-options]="options"
   [p-required]="properties.includes('required')"
   [p-field-error-message]="fieldErrorMessage"
+  [p-error-limit]="properties?.includes('errorLimit')"
   [p-show-required]="properties.includes('showRequired')"
   (p-change)="changeEvent('p-change')"
 >

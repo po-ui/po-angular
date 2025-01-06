@@ -26,7 +26,8 @@ export class SamplePoSelectLabsComponent implements OnInit {
     { value: 'optional', label: 'Optional' },
     { value: 'required', label: 'Required' },
     { value: 'showRequired', label: 'Show Required' },
-    { value: 'readonly', label: 'Read Only' }
+    { value: 'readonly', label: 'Read Only' },
+    { value: 'errorLimit', label: 'Limit Error Message' }
   ];
 
   constructor(private readonly cdr: ChangeDetectorRef) {}

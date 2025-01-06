@@ -26,7 +26,8 @@ export class SamplePoLoginLabsComponent implements OnInit {
     { value: 'readonly', label: 'Read Only' },
     { value: 'required', label: 'Required' },
     { value: 'requiredFieldErrorMessage', label: 'Required Field Error Message' },
-    { value: 'showRequired', label: 'Show Required' }
+    { value: 'showRequired', label: 'Show Required' },
+    { value: 'errorLimit', label: 'Limit Error Message' }
   ];
 
   ngOnInit() {
