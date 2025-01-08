@@ -193,10 +193,8 @@ export class PoI18nBaseService {
 
     return new Observable(observer => {
       if (this.servicesContext[context]) {
-        // Faz o processo de busca de um contexto que contém serviço
         this.getLiteralsFromContextService(language, context, literals, observer);
       } else {
-        // Faz o processo de busca de um contexto que utiliza constante
         this.getLiteralsFromContextConstant(language, context, literals, observer);
       }
     });
