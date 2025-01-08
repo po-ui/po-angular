@@ -99,6 +99,12 @@ export class PoRadioGroupComponent extends PoRadioGroupBaseComponent implements 
     this.cd.markForCheck();
   }
 
+  emitAdditionalHelp() {
+    if (this.isAdditionalHelpEventTriggered()) {
+      this.additionalHelp.emit();
+    }
+  }
+
   eventClick(value: any, disabled: any) {
     if (!disabled) {
       this.onTouched?.();
@@ -133,6 +139,10 @@ export class PoRadioGroupComponent extends PoRadioGroupBaseComponent implements 
     }
   }
 
+  getAdditionalHelpTooltip() {
+    return this.isAdditionalHelpEventTriggered() ? null : this.additionalHelpTooltip;
+  }
+
   getElementByValue(value) {
     return this.inputEl.nativeElement.querySelector(`input[value='${value}']`);
   }
@@ -153,6 +163,17 @@ export class PoRadioGroupComponent extends PoRadioGroupBaseComponent implements 
     if (this.isArrowKey(key)) {
       this.changeValue(value);
     }
+  }
+
+  showAdditionalHelpIcon() {
+    return !!this.additionalHelpTooltip || this.isAdditionalHelpEventTriggered();
+  }
+
+  private isAdditionalHelpEventTriggered(): boolean {
+    return (
+      this.additionalHelpEventTrigger === 'event' ||
+      (this.additionalHelpEventTrigger === undefined && this.additionalHelp.observed)
+    );
   }
 
   private isArrowKey(key: number) {

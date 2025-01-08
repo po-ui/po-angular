@@ -7,6 +7,7 @@ import { PoCheckboxGroupOption, PoRadioGroupOption } from '@po-ui/ng-components'
   templateUrl: './sample-po-radio-group-labs.component.html'
 })
 export class SamplePoRadioGroupLabsComponent implements OnInit {
+  additionalHelpTooltip: string;
   columns: number;
   event: string;
   help: string;
@@ -51,11 +52,12 @@ export class SamplePoRadioGroupLabsComponent implements OnInit {
   }
 
   restore() {
+    this.additionalHelpTooltip = '';
     this.event = '';
     this.radioGroup = undefined;
     this.properties = [];
     this.fieldErrorMessage = '';
-
+    this.size = 'medium';
     this.option = this.getNewOption();
     this.options = [];
   }

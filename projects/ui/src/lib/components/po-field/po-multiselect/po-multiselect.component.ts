@@ -190,6 +190,12 @@ export class PoMultiselectComponent
     this.subscription.unsubscribe();
   }
 
+  emitAdditionalHelp() {
+    if (this.isAdditionalHelpEventTriggered()) {
+      this.additionalHelp.emit();
+    }
+  }
+
   /**
    * Função que atribui foco ao componente.
    *
@@ -211,6 +217,10 @@ export class PoMultiselectComponent
     if (!this.disabled) {
       this.inputElement.nativeElement.focus();
     }
+  }
+
+  getAdditionalHelpTooltip() {
+    return this.isAdditionalHelpEventTriggered() ? null : this.additionalHelpTooltip;
   }
 
   getInputWidth() {
@@ -454,6 +464,10 @@ export class PoMultiselectComponent
     }, 300);
   }
 
+  showAdditionalHelpIcon() {
+    return !!this.additionalHelpTooltip || this.isAdditionalHelpEventTriggered();
+  }
+
   wasClickedOnToggle(event: MouseEvent): void {
     if (
       this.dropdownOpen &&
@@ -614,6 +628,13 @@ export class PoMultiselectComponent
     });
 
     window.addEventListener('scroll', this.onScroll, true);
+  }
+
+  private isAdditionalHelpEventTriggered(): boolean {
+    return (
+      this.additionalHelpEventTrigger === 'event' ||
+      (this.additionalHelpEventTrigger === undefined && this.additionalHelp.observed)
+    );
   }
 
   private onScroll = (): void => {

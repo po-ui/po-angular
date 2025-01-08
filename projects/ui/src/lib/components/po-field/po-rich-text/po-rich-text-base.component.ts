@@ -21,6 +21,17 @@ export abstract class PoRichTextBaseComponent implements ControlValueAccessor, V
    * @optional
    *
    * @description
+   * Exibe um ícone de ajuda adicional ao `p-help`, com o texto desta propriedade no tooltip.
+   * Se o evento `p-additional-help` estiver definido, o tooltip não será exibido.
+   * **Como boa prática, indica-se utilizar um texto com até 140 caracteres.**
+   * > Requer um recuo mínimo de 8px se o componente estiver próximo à lateral da tela.
+   */
+  @Input('p-additional-help-tooltip') additionalHelpTooltip?: string;
+
+  /**
+   * @optional
+   *
+   * @description
    *
    * Aplica foco no elemento ao ser iniciado.
    *
@@ -116,6 +127,15 @@ export abstract class PoRichTextBaseComponent implements ControlValueAccessor, V
   get hideToolbarActions(): Array<PoRichTextToolbarActions> {
     return this._hideToolbarActions;
   }
+
+  /**
+   * @optional
+   *
+   * @description
+   * Evento disparado ao clicar no ícone de ajuda adicional.
+   * Este evento ativa automaticamente a exibição do ícone de ajuda adicional ao `p-help`.
+   */
+  @Output('p-additional-help') additionalHelp = new EventEmitter<any>();
 
   /**
    * @optional

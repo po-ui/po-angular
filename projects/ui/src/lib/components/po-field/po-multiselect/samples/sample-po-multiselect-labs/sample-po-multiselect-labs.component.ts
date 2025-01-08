@@ -12,6 +12,7 @@ import {
   templateUrl: './sample-po-multiselect-labs.component.html'
 })
 export class SamplePoMultiselectLabsComponent implements OnInit {
+  additionalHelpTooltip: string;
   customLiterals: PoMultiselectLiterals;
   event: string;
   filterMode: string;
@@ -68,6 +69,7 @@ export class SamplePoMultiselectLabsComponent implements OnInit {
   }
 
   restore() {
+    this.additionalHelpTooltip = '';
     this.customLiterals = undefined;
     this.help = '';
     this.filterMode = undefined;

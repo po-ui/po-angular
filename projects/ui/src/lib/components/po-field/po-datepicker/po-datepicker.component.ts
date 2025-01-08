@@ -179,6 +179,12 @@ export class PoDatepickerComponent extends PoDatepickerBaseComponent implements 
     this.removeListeners();
   }
 
+  emitAdditionalHelp() {
+    if (this.isAdditionalHelpEventTriggered()) {
+      this.additionalHelp.emit();
+    }
+  }
+
   /**
    * Função que atribui foco ao componente.
    *
@@ -200,6 +206,10 @@ export class PoDatepickerComponent extends PoDatepickerBaseComponent implements 
     if (!this.disabled) {
       this.inputEl.nativeElement.focus();
     }
+  }
+
+  getAdditionalHelpTooltip() {
+    return this.isAdditionalHelpEventTriggered() ? null : this.additionalHelpTooltip;
   }
 
   togglePicker() {
@@ -382,6 +392,10 @@ export class PoDatepickerComponent extends PoDatepickerBaseComponent implements 
     return element.classList.contains('po-datepicker-calendar-overlay');
   }
 
+  showAdditionalHelpIcon() {
+    return !!this.additionalHelpTooltip || this.isAdditionalHelpEventTriggered();
+  }
+
   verifyErrorAsync(value) {
     if (this.errorPattern !== '' && this.errorAsync) {
       const errorAsync = this.errorAsync(value);
@@ -455,6 +469,13 @@ export class PoDatepickerComponent extends PoDatepickerBaseComponent implements 
     });
 
     window.addEventListener('scroll', this.onScroll, true);
+  }
+
+  private isAdditionalHelpEventTriggered(): boolean {
+    return (
+      this.additionalHelpEventTrigger === 'event' ||
+      (this.additionalHelpEventTrigger === undefined && this.additionalHelp.observed)
+    );
   }
 
   private onScroll = (): void => {

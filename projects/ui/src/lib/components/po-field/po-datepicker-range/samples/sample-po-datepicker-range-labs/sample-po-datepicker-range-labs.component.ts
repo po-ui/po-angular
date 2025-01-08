@@ -12,6 +12,7 @@ import {
   templateUrl: './sample-po-datepicker-range-labs.component.html'
 })
 export class SamplePoDatepickerRangeLabsComponent implements OnInit {
+  additionalHelpTooltip: string;
   clean: boolean;
   customLiterals: PoDatepickerRangeLiterals;
   datepickerRange: PoDatepickerRange;
@@ -65,6 +66,7 @@ export class SamplePoDatepickerRangeLabsComponent implements OnInit {
   }
 
   restore() {
+    this.additionalHelpTooltip = '';
     this.clean = undefined;
     this.customLiterals = undefined;
     this.endDate = undefined;

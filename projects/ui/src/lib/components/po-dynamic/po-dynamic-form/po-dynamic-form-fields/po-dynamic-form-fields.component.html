@@ -10,13 +10,14 @@
 <ng-template #poContent let-fields>
   <ng-container *ngFor="let field of fields; trackBy: trackBy">
     <po-divider *ngIf="field?.divider?.trim()" class="po-sm-12" [p-label]="field.divider"> </po-divider>
-
     <po-datepicker
       #component
       *ngIf="compareTo(field.control, 'datepicker')"
       [name]="field.property"
       [(ngModel)]="value[field.property]"
       [ngClass]="field.componentClass"
+      [additionalHelpEventTrigger]="field.additionalHelp ? 'event' : 'noEvent'"
+      [p-additional-help-tooltip]="field.additionalHelpTooltip"
       [p-clean]="field.clean"
       [p-disabled]="isDisabled(field)"
       [p-error-pattern]="field.errorMessage"
@@ -37,6 +38,7 @@
       [p-show-required]="field.showRequired"
       (p-change)="onChangeField(field)"
       [p-placeholder]="field.placeholder"
+      (p-additional-help)="field.additionalHelp?.($event)"
     >
     </po-datepicker>
 
@@ -46,6 +48,8 @@
       [name]="field.property"
       [(ngModel)]="value[field.property]"
       [ngClass]="field.componentClass"
+      [additionalHelpEventTrigger]="field.additionalHelp ? 'event' : 'noEvent'"
+      [p-additional-help-tooltip]="field.additionalHelpTooltip"
       [p-clean]="field.clean"
       [p-disabled]="isDisabled(field)"
       [p-auto-focus]="field.focus"
@@ -60,6 +64,7 @@
       [p-required]="field.required"
       [p-field-error-message]="field.errorMessage"
       [p-show-required]="field.showRequired"
+      (p-additional-help)="field.additionalHelp?.($event)"
       (p-change)="onChangeField(field)"
     >
     </po-datepicker-range>
@@ -70,6 +75,8 @@
       [name]="field.property"
       [(ngModel)]="value[field.property]"
       [ngClass]="field.componentClass"
+      [additionalHelpEventTrigger]="field.additionalHelp ? 'event' : 'noEvent'"
+      [p-additional-help-tooltip]="field.additionalHelpTooltip"
       [p-clean]="field.clean"
       [p-disabled]="isDisabled(field)"
       [p-error-pattern]="field.errorMessage"
@@ -87,6 +94,7 @@
       [p-required]="field.required"
       [p-required-field-error-message]="field.requiredFieldErrorMessage"
       [p-show-required]="field.showRequired"
+      (p-additional-help)="field.additionalHelp?.($event)"
       (p-change)="onChangeField(field)"
       (p-change-model)="onChangeFieldModel(field)"
       [p-icon]="field.icon"
@@ -101,6 +109,8 @@
       [name]="field.property"
       [(ngModel)]="value[field.property]"
       [ngClass]="field.componentClass"
+      [additionalHelpEventTrigger]="field.additionalHelp ? 'event' : 'noEvent'"
+      [p-additional-help-tooltip]="field.additionalHelpTooltip"
       [p-clean]="field.clean"
       [p-disabled]="isDisabled(field)"
       [p-error-pattern]="field.errorMessage"
@@ -119,6 +129,7 @@
       [p-required]="field.required"
       [p-required-field-error-message]="field.requiredFieldErrorMessage"
       [p-show-required]="field.showRequired"
+      (p-additional-help)="field.additionalHelp?.($event)"
       (p-change)="onChangeField(field)"
       (p-change-model)="onChangeFieldModel(field)"
       [p-icon]="field.icon"
@@ -132,6 +143,8 @@
       [name]="field.property"
       [(ngModel)]="value[field.property]"
       [ngClass]="field.componentClass"
+      [additionalHelpEventTrigger]="field.additionalHelp ? 'event' : 'noEvent'"
+      [p-additional-help-tooltip]="field.additionalHelpTooltip"
       [p-clean]="field.clean"
       [p-error-pattern]="field.errorMessage"
       [p-error-async-properties]="field.errorAsyncProperties"
@@ -153,6 +166,7 @@
       [p-required]="field.required"
       [p-required-field-error-message]="field.requiredFieldErrorMessage"
       [p-show-required]="field.showRequired"
+      (p-additional-help)="field.additionalHelp?.($event)"
       (p-change)="onChangeField(field)"
       (p-change-model)="onChangeFieldModel(field)"
       [p-placeholder]="field.placeholder"
@@ -165,6 +179,8 @@
       [name]="field.property"
       [(ngModel)]="value[field.property]"
       [ngClass]="field.componentClass"
+      [additionalHelpEventTrigger]="field.additionalHelp ? 'event' : 'noEvent'"
+      [p-additional-help-tooltip]="field.additionalHelpTooltip"
       [p-field-label]="field.fieldLabel"
       [p-field-value]="field.fieldValue"
       [p-disabled]="isDisabled(field)"
@@ -175,6 +191,7 @@
       [p-required]="field.required"
       [p-field-error-message]="field.errorMessage"
       [p-show-required]="field.showRequired"
+      (p-additional-help)="field.additionalHelp?.($event)"
       (p-change)="onChangeField(field)"
       [p-placeholder]="field.placeholder"
       [p-readonly]="field.readonly"
@@ -187,6 +204,8 @@
       [name]="field.property"
       [(ngModel)]="value[field.property]"
       [ngClass]="field.componentClass"
+      [additionalHelpEventTrigger]="field.additionalHelp ? 'event' : 'noEvent'"
+      [p-additional-help-tooltip]="field.additionalHelpTooltip"
       [p-columns]="field.columns || 3"
       [p-auto-focus]="field.focus"
       [p-disabled]="isDisabled(field)"
@@ -197,6 +216,7 @@
       [p-required]="field.required"
       [p-field-error-message]="field.errorMessage"
       [p-show-required]="field.showRequired"
+      (p-additional-help)="field.additionalHelp?.($event)"
       (p-change)="onChangeField(field)"
     >
     </po-radio-group>
@@ -207,6 +227,8 @@
       [name]="field.property"
       [(ngModel)]="value[field.property]"
       [ngClass]="field.componentClass"
+      [additionalHelpEventTrigger]="field.additionalHelp ? 'event' : 'noEvent'"
+      [p-additional-help-tooltip]="field.additionalHelpTooltip"
       [p-disabled]="isDisabled(field)"
       [p-format-model]="field.formatModel"
       [p-help]="field.help"
@@ -215,6 +237,7 @@
       [p-label-on]="field.booleanTrue"
       [p-label-position]="field.labelPosition"
       [p-hide-label-status]="field.hideLabelStatus"
+      (p-additional-help)="field.additionalHelp?.($event)"
       (p-change)="onChangeField(field)"
     >
     </po-switch>
@@ -225,10 +248,13 @@
       [name]="field.property"
       [(ngModel)]="value[field.property]"
       [ngClass]="field.componentClass"
+      [additionalHelpEventTrigger]="field.additionalHelp ? 'event' : 'noEvent'"
+      [p-additional-help-tooltip]="field.additionalHelpTooltip"
       [p-auto-focus]="field.focus"
       [p-disabled]="isDisabled(field)"
       [p-label]="field.label"
       [p-size]="field.size"
+      (p-additional-help)="field.additionalHelp?.($event)"
       (p-change)="onChangeField(field)"
     >
     </po-checkbox>
@@ -240,6 +266,8 @@
       [(ngModel)]="value[field.property]"
       [ngClass]="field.componentClass"
       p-emit-object-value
+      [additionalHelpEventTrigger]="field.additionalHelp ? 'event' : 'noEvent'"
+      [p-additional-help-tooltip]="field.additionalHelpTooltip"
       [p-auto-focus]="field.focus"
       [p-clean]="field.clean"
       [p-disabled]="isDisabled(field)"
@@ -267,6 +295,7 @@
       [p-disabled-tab-filter]="field.disabledTabFilter"
       [p-debounce-time]="field.debounceTime"
       [p-change-on-enter]="field.changeOnEnter"
+      (p-additional-help)="field.additionalHelp?.($event)"
     >
     </po-combo>
 
@@ -278,6 +307,8 @@
       p-field-label="label"
       p-field-value="value"
       [ngClass]="field.componentClass"
+      [additionalHelpEventTrigger]="field.additionalHelp ? 'event' : 'noEvent'"
+      [p-additional-help-tooltip]="field.additionalHelpTooltip"
       [p-clean]="field.clean"
       [p-columns]="field.columns"
       [p-disabled]="isDisabled(field)"
@@ -301,6 +332,7 @@
       (p-change)="onChangeField(field)"
       [p-placeholder]="field.placeholder"
       [p-advanced-filters]="field.advancedFilters"
+      (p-additional-help)="field.additionalHelp?.($event)"
       (p-change-visible-columns)="field.changeVisibleColumns?.($event)"
       (p-restore-column-manager)="field.columnRestoreManager?.($event)"
     >
@@ -312,6 +344,8 @@
       [name]="field.property"
       [(ngModel)]="value[field.property]"
       [ngClass]="field.componentClass"
+      [additionalHelpEventTrigger]="field.additionalHelp ? 'event' : 'noEvent'"
+      [p-additional-help-tooltip]="field.additionalHelpTooltip"
       [p-columns]="field.columns || 3"
       [p-auto-focus]="field.focus"
       [p-disabled]="isDisabled(field)"
@@ -322,6 +356,7 @@
       [p-required]="field.required"
       [p-show-required]="field.showRequired"
       [p-field-error-message]="field.errorMessage"
+      (p-additional-help)="field.additionalHelp?.($event)"
       (p-change)="onChangeField(field)"
     >
     </po-checkbox-group>
@@ -332,6 +367,8 @@
       [name]="field.property"
       [(ngModel)]="value[field.property]"
       [ngClass]="field.componentClass"
+      [additionalHelpEventTrigger]="field.additionalHelp ? 'event' : 'noEvent'"
+      [p-additional-help-tooltip]="field.additionalHelpTooltip"
       [p-disabled]="isDisabled(field)"
       [p-auto-focus]="field.focus"
       [p-auto-height]="field.autoHeight"
@@ -354,6 +391,7 @@
       [p-placeholder-search]="field.placeholderSearch"
       [p-hide-search]="field.hideSearch"
       [p-hide-select-all]="field.hideSelectAll"
+      (p-additional-help)="field.additionalHelp?.($event)"
     >
     </po-multiselect>
 
@@ -363,6 +401,8 @@
       [name]="field.property"
       [(ngModel)]="value[field.property]"
       [ngClass]="field.componentClass"
+      [additionalHelpEventTrigger]="field.additionalHelp ? 'event' : 'noEvent'"
+      [p-additional-help-tooltip]="field.additionalHelpTooltip"
       [p-disabled]="isDisabled(field)"
       [p-auto-focus]="field.focus"
       [p-help]="field.help"
@@ -375,6 +415,7 @@
       [p-field-error-message]="field.errorMessage"
       [p-show-required]="field.showRequired"
       [p-rows]="field.rows"
+      (p-additional-help)="field.additionalHelp?.($event)"
       (p-change)="onChangeField(field)"
       (p-change-model)="onChangeFieldModel(field)"
       [p-placeholder]="field.placeholder"
@@ -387,6 +428,8 @@
       [name]="field.property"
       [(ngModel)]="value[field.property]"
       [ngClass]="field.componentClass"
+      [additionalHelpEventTrigger]="field.additionalHelp ? 'event' : 'noEvent'"
+      [p-additional-help-tooltip]="field.additionalHelpTooltip"
       [p-clean]="field.clean"
       [p-disabled]="isDisabled(field)"
       [p-error-pattern]="field.errorMessage"
@@ -405,6 +448,7 @@
       [p-required]="field.required"
       [p-required-field-error-message]="field.requiredFieldErrorMessage"
       [p-show-required]="field.showRequired"
+      (p-additional-help)="field.additionalHelp?.($event)"
       (p-change)="onChangeField(field)"
       (p-change-model)="onChangeFieldModel(field)"
       [p-placeholder]="field.placeholder"
@@ -416,6 +460,8 @@
       *ngIf="compareTo(field.control, 'upload')"
       [(ngModel)]="value[field.property]"
       [ngClass]="field.componentClass"
+      [additionalHelpEventTrigger]="field.additionalHelp ? 'event' : 'noEvent'"
+      [p-additional-help-tooltip]="field.additionalHelpTooltip"
       [p-auto-upload]="field.autoUpload"
       [p-directory]="field.directory"
       [p-disabled]="isDisabled(field)"
@@ -438,6 +484,7 @@
       [p-optional]="field.optional"
       [p-required]="field.required"
       [p-show-required]="field.showRequired"
+      (p-additional-help)="field.additionalHelp?.($event)"
       (p-change)="onChangeField(field)"
       (p-change-model)="onChangeFieldModel(field)"
       [p-url]="field.url"

@@ -7,6 +7,7 @@ import { PoCheckboxGroupOption, PoSelectOption, PoSelectOptionGroup } from '@po-
   templateUrl: './sample-po-select-labs.component.html'
 })
 export class SamplePoSelectLabsComponent implements OnInit {
+  additionalHelpTooltip: string;
   event: string;
   help: string;
   label: string;
@@ -50,6 +51,7 @@ export class SamplePoSelectLabsComponent implements OnInit {
   }
 
   restore() {
+    this.additionalHelpTooltip = '';
     this.event = '';
     this.help = undefined;
     this.label = undefined;

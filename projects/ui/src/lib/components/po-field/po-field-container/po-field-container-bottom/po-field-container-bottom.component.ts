@@ -1,4 +1,5 @@
-import { ChangeDetectionStrategy, Component, Input } from '@angular/core';
+import { ChangeDetectionStrategy, Component, EventEmitter, Input, Output } from '@angular/core';
+import { convertToBoolean } from '../../../../utils/util';
 
 /**
  * @docsPrivate
@@ -14,13 +15,25 @@ import { ChangeDetectionStrategy, Component, Input } from '@angular/core';
   changeDetection: ChangeDetectionStrategy.OnPush
 })
 export class PoFieldContainerBottomComponent {
+  /** Texto exibido no tooltip do ícone de ajuda adicional. */
+  @Input('p-additional-help-tooltip') additionalHelpTooltip?: string = '';
+
+  /** Define se o tooltip será inserido no `body` em vez do componente. */
+  @Input({ alias: 'p-append-in-body', transform: convertToBoolean }) appendBox: boolean = false;
+
+  @Input('p-disabled') disabled: boolean = false;
+
   /**
    * Mensagem que será apresentada quando o pattern ou a máscara não for satisfeita.
    * Obs: Esta mensagem não é apresentada quando o campo estiver vazio, mesmo que ele seja requerido.
    */
   @Input('p-error-pattern') errorPattern?: string = '';
 
-  @Input('p-disabled') disabled: boolean = false;
-
   @Input('p-help') help?: string;
+
+  /** Exibe o ícone de ajuda adicional. */
+  @Input('p-show-additional-help-icon') showAdditionalHelpIcon: boolean = false;
+
+  /** Evento disparado ao clicar no ícone de ajuda adicional. */
+  @Output('p-additional-help') additionalHelp = new EventEmitter<any>();
 }

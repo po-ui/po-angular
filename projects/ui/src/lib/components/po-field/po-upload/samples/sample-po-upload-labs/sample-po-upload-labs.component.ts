@@ -7,6 +7,7 @@ import { PoCheckboxGroupOption, PoUploadFileRestrictions, PoUploadLiterals } fro
   templateUrl: './sample-po-upload-labs.component.html'
 })
 export class SamplePoUploadLabsComponent implements OnInit {
+  additionalHelpTooltip: string;
   allowedExtensions: string;
   customLiterals: PoUploadLiterals;
   dragDropHeight: number;
@@ -24,6 +25,7 @@ export class SamplePoUploadLabsComponent implements OnInit {
   url: string;
   headers: { [name: string]: string | Array<string> };
   headersLabs: string;
+
   public readonly propertiesOptions: Array<PoCheckboxGroupOption> = [
     { value: 'autoupload', label: 'Automatic upload' },
     { value: 'directory', label: 'Directory' },
@@ -81,6 +83,7 @@ export class SamplePoUploadLabsComponent implements OnInit {
   }
 
   restore() {
+    this.additionalHelpTooltip = '';
     this.allowedExtensions = undefined;
     this.customLiterals = undefined;
     this.dragDropHeight = undefined;

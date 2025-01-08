@@ -7,6 +7,7 @@ import { PoCheckboxGroupOption, PoSelectOption } from '@po-ui/ng-components';
   templateUrl: './sample-po-number-labs.component.html'
 })
 export class SamplePoNumberLabsComponent implements OnInit {
+  additionalHelpTooltip: string;
   event: string;
   messageErrorPattern: string;
   help: string;
@@ -47,6 +48,7 @@ export class SamplePoNumberLabsComponent implements OnInit {
   }
 
   restore() {
+    this.additionalHelpTooltip = '';
     this.number = undefined;
     this.max = undefined;
     this.maxlength = undefined;

@@ -7,6 +7,7 @@ import { PoCheckboxGroupOption } from '@po-ui/ng-components';
   templateUrl: './sample-po-textarea-labs.component.html'
 })
 export class SamplePoTextareaLabsComponent implements OnInit {
+  additionalHelpTooltip: string;
   event: string;
   help: string;
   label: string;
@@ -35,6 +36,7 @@ export class SamplePoTextareaLabsComponent implements OnInit {
   }
 
   restore() {
+    this.additionalHelpTooltip = '';
     this.textarea = undefined;
     this.label = undefined;
     this.help = undefined;
