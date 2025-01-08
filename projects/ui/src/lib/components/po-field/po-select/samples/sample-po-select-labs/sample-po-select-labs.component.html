@@ -2,6 +2,7 @@
   class="po-md-12"
   name="select"
   [(ngModel)]="select"
+  [p-additional-help-tooltip]="additionalHelpTooltip"
   [p-disabled]="properties.includes('disabled')"
   [p-help]="help"
   [p-label]="label"
@@ -35,7 +36,7 @@
 
   <div class="po-row">
     <po-switch
-      class="po-md-2"
+      class="po-lg-2 po-md-12"
       name="selectOptionGroupSwitch"
       (p-change)="restoreSwitch($event)"
       [(ngModel)]="selectOptionGroupSwitch"
@@ -44,7 +45,7 @@
     </po-switch>
 
     <po-select
-      class="po-md-5"
+      class="po-lg-4 po-md-6"
       name="selectedsOptionsGroup"
       [(ngModel)]="selectedOptionsGroup"
       p-label="Options group list"
@@ -55,7 +56,7 @@
     </po-select>
 
     <po-input
-      class="po-md-5"
+      class="po-lg-4 po-md-6"
       name="optionsGroup"
       [(ngModel)]="optionsGroup"
       p-label="New Options Group"
@@ -75,7 +76,7 @@
   </div>
 
   <div class="po-row">
-    <po-button class="po-md-6 po-lg-3" p-label="Add Option" [p-disabled]="fOption.invalid" (p-click)="addOption()">
+    <po-button class="po-lg-3 po-md-4" p-label="Add Option" [p-disabled]="fOption.invalid" (p-click)="addOption()">
     </po-button>
   </div>
 </form>
@@ -83,38 +84,42 @@
 <hr />
 
 <form #f="ngForm">
-  <div class="po-row">
-    <po-input class="po-md-6" name="label" [(ngModel)]="label" p-label="Label"> </po-input>
+  <po-input class="po-md-6" name="label" [(ngModel)]="label" p-label="Label"> </po-input>
 
-    <po-input class="po-md-6" name="help" [(ngModel)]="help" p-label="Help"> </po-input>
-  </div>
-  <div class="po-row">
-    <po-input class="po-md-6" name="placeholder" [(ngModel)]="placeholder" p-label="Placeholder"> </po-input>
+  <po-input class="po-md-6" name="help" [(ngModel)]="help" p-label="Help"> </po-input>
 
-    <po-input
-      class="po-md-6"
-      name="fieldErrorMessage"
-      [(ngModel)]="fieldErrorMessage"
-      p-clean
-      p-label="Field Error Message"
-    >
-    </po-input>
-  </div>
+  <po-input
+    class="po-md-6"
+    name="additionalHelpTooltip"
+    [(ngModel)]="additionalHelpTooltip"
+    p-clean
+    p-label="Additional Help Tooltip"
+  >
+  </po-input>
+
+  <po-input class="po-md-6" name="placeholder" [(ngModel)]="placeholder" p-label="Placeholder"> </po-input>
+
+  <po-input
+    class="po-md-6"
+    name="fieldErrorMessage"
+    [(ngModel)]="fieldErrorMessage"
+    p-clean
+    p-label="Field Error Message"
+  >
+  </po-input>
+
+  <po-checkbox-group
+    class="po-md-12"
+    name="properties"
+    [(ngModel)]="properties"
+    p-columns="4"
+    p-label="Properties"
+    [p-options]="propertiesOptions"
+  >
+  </po-checkbox-group>
 
   <div class="po-row">
-    <po-checkbox-group
-      class="po-md-12"
-      name="properties"
-      [(ngModel)]="properties"
-      p-columns="4"
-      p-label="Properties"
-      [p-options]="propertiesOptions"
-    >
-    </po-checkbox-group>
-  </div>
-
-  <div class="po-row">
-    <div class="po-md-3">
+    <div class="po-lg-3 po-md-6">
       <po-button p-label="Sample Restore" (p-click)="restore()"> </po-button>
     </div>
   </div>

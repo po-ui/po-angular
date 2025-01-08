@@ -20,6 +20,7 @@ import { SamplePoLookupService } from '../sample-po-lookup.service';
   standalone: false
 })
 export class SamplePoLookupLabsComponent implements OnInit {
+  additionalHelpTooltip: string;
   columns: Array<PoLookupColumn>;
   columnsName: Array<string>;
   customLiterals: PoLookupLiterals;
@@ -119,6 +120,7 @@ export class SamplePoLookupLabsComponent implements OnInit {
   }
 
   restore() {
+    this.additionalHelpTooltip = '';
     this.columnsName = ['id', 'name'];
     this.customLiterals = undefined;
     this.updateColumns();

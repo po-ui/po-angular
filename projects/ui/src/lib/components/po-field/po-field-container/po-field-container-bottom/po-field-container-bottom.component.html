@@ -18,8 +18,19 @@
       {{ errorPattern }}
     </span>
   </div>
-
-  <span *ngIf="help && !errorPattern" class="po-field-container-bottom-help-text">
-    {{ help }}
-  </span>
+  <div *ngIf="!errorPattern" class="po-field-container-bottom-help-text">
+    <span *ngIf="help">
+      {{ help }}
+    </span>
+    <div *ngIf="showAdditionalHelpIcon" class="po-icon-container">
+      <po-icon
+        class="po-icon-additional-help"
+        [class.po-clickable]="!additionalHelpTooltip"
+        p-icon="an an-fill an an-info"
+        [p-append-in-body]="appendBox"
+        [p-tooltip]="additionalHelpTooltip"
+        (click)="additionalHelp.emit()"
+      ></po-icon>
+    </div>
+  </div>
 </div>

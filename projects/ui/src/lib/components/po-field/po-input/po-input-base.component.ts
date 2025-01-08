@@ -56,6 +56,35 @@ import { PoMask } from './po-mask';
  */
 @Directive()
 export abstract class PoInputBaseComponent implements ControlValueAccessor, Validator, OnDestroy {
+  // Propriedade interna que define se o ícone de ajuda adicional terá cursor clicável (evento) ou padrão (tooltip).
+  @Input() additionalHelpEventTrigger: string | undefined;
+
+  /**
+   * @optional
+   *
+   * @description
+   * Exibe um ícone de ajuda adicional ao `p-help`, com o texto desta propriedade no tooltip.
+   * Se o evento `p-additional-help` estiver definido, o tooltip não será exibido.
+   * **Como boa prática, indica-se utilizar um texto com até 140 caracteres.**
+   * > Requer um recuo mínimo de 8px se o componente estiver próximo à lateral da tela.
+   */
+  @Input('p-additional-help-tooltip') additionalHelpTooltip?: string;
+
+  /**
+   * @optional
+   *
+   * @description
+   *
+   * Define que o tooltip (`p-additional-help-tooltip` e/ou `p-error-limit`) será incluído no body da página e não
+   * dentro do componente. Essa opção pode ser necessária em cenários com containers que possuem scroll ou overflow
+   * escondido, garantindo o posicionamento correto do tooltip próximo ao elemento.
+   *
+   * > Quando utilizado com `p-additional-help-tooltip`, leitores de tela como o NVDA podem não ler o conteúdo do tooltip.
+   *
+   * @default `false`
+   */
+  @Input({ alias: 'p-append-in-body', transform: convertToBoolean }) appendBox: boolean = false;
+
   /**
    * @optional
    *
@@ -151,8 +180,6 @@ export abstract class PoInputBaseComponent implements ControlValueAccessor, Vali
    */
   @Input('p-error-limit') errorLimit: boolean = false;
 
-  @Input({ alias: 'p-error-append-in-body', transform: convertToBoolean }) errorAppendBox?: boolean = false;
-
   /**
    * @optional
    *
@@ -222,6 +249,15 @@ export abstract class PoInputBaseComponent implements ControlValueAccessor, Vali
   get maskNoLengthValidation() {
     return this._maskNoLengthValidation;
   }
+
+  /**
+   * @optional
+   *
+   * @description
+   * Evento disparado ao clicar no ícone de ajuda adicional.
+   * Este evento ativa automaticamente a exibição do ícone de ajuda adicional ao `p-help`.
+   */
+  @Output('p-additional-help') additionalHelp = new EventEmitter<any>();
 
   /**
    * @optional
@@ -492,6 +528,16 @@ export abstract class PoInputBaseComponent implements ControlValueAccessor, Vali
     }
   }
 
+  emitAdditionalHelp() {
+    if (this.isAdditionalHelpEventTriggered()) {
+      this.additionalHelp.emit();
+    }
+  }
+
+  getAdditionalHelpTooltip() {
+    return this.isAdditionalHelpEventTriggered() ? null : this.additionalHelpTooltip;
+  }
+
   // Função implementada do ControlValueAccessor
   // Usada para interceptar os estados de habilitado via forms api
   setDisabledState(isDisabled: boolean) {
@@ -513,6 +559,10 @@ export abstract class PoInputBaseComponent implements ControlValueAccessor, Vali
 
   registerOnValidatorChange(fn: () => void) {
     this.validatorChange = fn;
+  }
+
+  showAdditionalHelpIcon() {
+    return !!this.additionalHelpTooltip || this.isAdditionalHelpEventTriggered();
   }
 
   updateModel(value: any) {
@@ -597,6 +647,13 @@ export abstract class PoInputBaseComponent implements ControlValueAccessor, Vali
     if (this.validatorChange) {
       this.validatorChange();
     }
+  }
+
+  private isAdditionalHelpEventTriggered(): boolean {
+    return (
+      this.additionalHelpEventTrigger === 'event' ||
+      (this.additionalHelpEventTrigger === undefined && this.additionalHelp.observed)
+    );
   }
 
   // utilizado para validar o pattern na inicializacao, fazendo dessa forma o campo fica sujo (dirty).

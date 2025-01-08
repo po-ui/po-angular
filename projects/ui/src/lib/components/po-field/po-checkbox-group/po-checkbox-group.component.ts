@@ -72,6 +72,12 @@ export class PoCheckboxGroupComponent extends PoCheckboxGroupBaseComponent imple
     }
   }
 
+  emitAdditionalHelp() {
+    if (this.isAdditionalHelpEventTriggered()) {
+      this.additionalHelp.emit();
+    }
+  }
+
   /**
    * Função que atribui foco ao componente.
    *
@@ -99,6 +105,10 @@ export class PoCheckboxGroupComponent extends PoCheckboxGroupBaseComponent imple
     }
   }
 
+  getAdditionalHelpTooltip() {
+    return this.isAdditionalHelpEventTriggered() ? null : this.additionalHelpTooltip;
+  }
+
   getErrorPattern() {
     return this.fieldErrorMessage && this.hasInvalidClass() ? this.fieldErrorMessage : '';
   }
@@ -119,7 +129,18 @@ export class PoCheckboxGroupComponent extends PoCheckboxGroupBaseComponent imple
     }
   }
 
+  showAdditionalHelpIcon() {
+    return !!this.additionalHelpTooltip || this.isAdditionalHelpEventTriggered();
+  }
+
   trackByFn(index) {
     return index;
+  }
+
+  private isAdditionalHelpEventTriggered(): boolean {
+    return (
+      this.additionalHelpEventTrigger === 'event' ||
+      (this.additionalHelpEventTrigger === undefined && this.additionalHelp.observed)
+    );
   }
 }

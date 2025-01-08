@@ -8,6 +8,7 @@ import { PoCheckboxGroupOption, PoMultiselectOption, PoRichTextToolbarActions } 
   standalone: false
 })
 export class SamplePoRichTextLabsComponent implements OnInit {
+  additionalHelpTooltip: string;
   errorMessage: string;
   event: string;
   help: string;
@@ -16,7 +17,6 @@ export class SamplePoRichTextLabsComponent implements OnInit {
   placeholder: string;
   properties: Array<string>;
   richText: string;
-
   toolbarHideActions = [PoRichTextToolbarActions.Link];
 
   public readonly toolbarHideActionsOptions: Array<PoMultiselectOption> = [
@@ -45,6 +45,7 @@ export class SamplePoRichTextLabsComponent implements OnInit {
   }
 
   restore() {
+    this.additionalHelpTooltip = '';
     this.errorMessage = '';
     this.help = '';
     this.label = '';

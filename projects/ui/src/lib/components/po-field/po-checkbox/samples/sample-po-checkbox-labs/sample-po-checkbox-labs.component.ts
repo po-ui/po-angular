@@ -6,8 +6,10 @@ import { Component, OnInit } from '@angular/core';
   standalone: false
 })
 export class SamplePoCheckboxLabsComponent implements OnInit {
+  additionalHelpTooltip: string;
   checkbox: boolean | null;
   disabled: boolean;
+  help: string;
   size: boolean;
   event: string;
   label: string;
@@ -21,9 +23,11 @@ export class SamplePoCheckboxLabsComponent implements OnInit {
   }
 
   restore() {
+    this.additionalHelpTooltip = '';
     this.checkbox = undefined;
     this.disabled = false;
     this.event = undefined;
+    this.help = '';
     this.label = undefined;
   }
 }

@@ -78,6 +78,55 @@ describe('PoCheckboxComponent:', () => {
       });
     });
 
+    describe('emitAdditionalHelp:', () => {
+      it('should emit additionalHelp when isAdditionalHelpEventTriggered returns true', () => {
+        spyOn(component.additionalHelp, 'emit');
+        spyOn(component as any, 'isAdditionalHelpEventTriggered').and.returnValue(true);
+
+        component.emitAdditionalHelp();
+
+        expect(component.additionalHelp.emit).toHaveBeenCalled();
+      });
+
+      it('should not emit additionalHelp when isAdditionalHelpEventTriggered returns false', () => {
+        spyOn(component.additionalHelp, 'emit');
+        spyOn(component as any, 'isAdditionalHelpEventTriggered').and.returnValue(false);
+
+        component.emitAdditionalHelp();
+
+        expect(component.additionalHelp.emit).not.toHaveBeenCalled();
+      });
+    });
+
+    describe('getAdditionalHelpTooltip:', () => {
+      it('should return null when isAdditionalHelpEventTriggered returns true', () => {
+        spyOn(component as any, 'isAdditionalHelpEventTriggered').and.returnValue(true);
+
+        const result = component.getAdditionalHelpTooltip();
+
+        expect(result).toBeNull();
+      });
+
+      it('should return additionalHelpTooltip when isAdditionalHelpEventTriggered returns false', () => {
+        const tooltip = 'Test Tooltip';
+        component.additionalHelpTooltip = tooltip;
+        spyOn(component as any, 'isAdditionalHelpEventTriggered').and.returnValue(false);
+
+        const result = component.getAdditionalHelpTooltip();
+
+        expect(result).toBe(tooltip);
+      });
+
+      it('should return undefined when additionalHelpTooltip is undefined and isAdditionalHelpEventTriggered returns false', () => {
+        component.additionalHelpTooltip = undefined;
+        spyOn(component as any, 'isAdditionalHelpEventTriggered').and.returnValue(false);
+
+        const result = component.getAdditionalHelpTooltip();
+
+        expect(result).toBeUndefined();
+      });
+    });
+
     describe('onKeyDown:', () => {
       let fakeEvent: any;
 
@@ -147,6 +196,27 @@ describe('PoCheckboxComponent:', () => {
       component['changeModelValue'](true);
 
       expect(component['changeDetector'].detectChanges).toHaveBeenCalled();
+    });
+
+    describe('isAdditionalHelpEventTriggered:', () => {
+      it('should return true when additionalHelpEventTrigger is "event"', () => {
+        component.additionalHelpEventTrigger = 'event';
+        expect((component as any).isAdditionalHelpEventTriggered()).toBeTrue();
+      });
+
+      it('should return true when additionalHelpEventTrigger is undefined and additionalHelp is observed', () => {
+        component.additionalHelpEventTrigger = undefined;
+        component.additionalHelp = {
+          observed: true
+        } as any;
+
+        expect((component as any).isAdditionalHelpEventTriggered()).toBeTrue();
+      });
+
+      it('should return false when additionalHelpEventTrigger is not "event" and additionalHelp is not observed', () => {
+        component.additionalHelpEventTrigger = 'noEvent';
+        expect((component as any).isAdditionalHelpEventTriggered()).toBeFalse();
+      });
     });
 
     it('onBlur: should call `onTouched` on blur', () => {

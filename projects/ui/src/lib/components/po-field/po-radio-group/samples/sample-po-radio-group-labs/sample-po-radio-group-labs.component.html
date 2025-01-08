@@ -1,6 +1,7 @@
 <po-radio-group
   name="radioGroupLabs"
   [(ngModel)]="radioGroup"
+  [p-additional-help-tooltip]="additionalHelpTooltip"
   [p-columns]="columns"
   [p-disabled]="properties.includes('disabled')"
   [p-help]="help"
@@ -52,48 +53,59 @@
 <hr />
 
 <form #propertiesForm="ngForm">
+  <po-input class="po-md-6" name="label" [(ngModel)]="label" p-clean p-label="Label"> </po-input>
+
+  <po-input class="po-md-6" name="help" [(ngModel)]="help" p-clean p-label="Help"> </po-input>
+
+  <po-input
+    class="po-md-6"
+    name="additionalHelpTooltip"
+    [(ngModel)]="additionalHelpTooltip"
+    p-clean
+    p-label="Additional Help Tooltip"
+  >
+  </po-input>
+
+  <po-input
+    class="po-md-6"
+    name="fieldErrorMessage"
+    [(ngModel)]="fieldErrorMessage"
+    p-clean
+    p-label="Field Error Message"
+  >
+  </po-input>
+
+  <po-radio-group
+    class="po-md-12"
+    name="columns"
+    [(ngModel)]="columns"
+    p-columns="4"
+    p-label="Columns"
+    [p-options]="columnOptions"
+  >
+  </po-radio-group>
+
+  <po-checkbox-group
+    class="po-md-12"
+    name="properties"
+    [(ngModel)]="properties"
+    p-columns="4"
+    p-label="Properties"
+    [p-options]="propertiesOptions"
+  >
+  </po-checkbox-group>
+  <po-radio-group
+    class="po-md-12"
+    name="size"
+    [(ngModel)]="size"
+    p-columns="4"
+    p-label="Size"
+    [p-options]="sizesOptions"
+  >
+  </po-radio-group>
+
   <div class="po-row">
-    <po-input class="po-md-6" name="label" [(ngModel)]="label" p-clean p-label="Label"> </po-input>
-
-    <po-input class="po-md-6" name="help" [(ngModel)]="help" p-clean p-label="Help"> </po-input>
-  </div>
-
-  <div class="po-row">
-    <po-radio-group
-      class="po-lg-6 po-md-12"
-      name="columns"
-      [(ngModel)]="columns"
-      p-columns="3"
-      p-label="Columns"
-      [p-options]="columnOptions"
-    >
-    </po-radio-group>
-
-    <po-checkbox-group
-      class="po-lg-6 po-md-12"
-      name="properties"
-      [(ngModel)]="properties"
-      p-columns="3"
-      p-label="Properties"
-      [p-options]="propertiesOptions"
-    >
-    </po-checkbox-group>
-  </div>
-  <div class="po-row">
-    <po-radio-group class="po-lg-6 po-md-12" name="size" [(ngModel)]="size" p-label="Size" [p-options]="sizesOptions">
-    </po-radio-group>
-
-    <po-input
-      class="po-md-6"
-      name="fieldErrorMessage"
-      [(ngModel)]="fieldErrorMessage"
-      p-clean
-      p-label="Field Error Message"
-    >
-    </po-input>
-  </div>
-
-  <div class="po-row">
-    <po-button class="po-md-3" p-label="Sample Restore" (click)="propertiesForm.reset(); restore()"> </po-button>
+    <po-button class="po-lg-3 po-md-6" p-label="Sample Restore" (click)="propertiesForm.reset(); restore()">
+    </po-button>
   </div>
 </form>

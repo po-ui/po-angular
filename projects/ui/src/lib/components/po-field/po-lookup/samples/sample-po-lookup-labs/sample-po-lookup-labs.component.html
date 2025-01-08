@@ -1,6 +1,7 @@
 <po-lookup
   name="lookup"
   [(ngModel)]="lookup"
+  [p-additional-help-tooltip]="additionalHelpTooltip"
   [p-advanced-filters]="customAdvancedFilters"
   [p-auto-height]="properties.includes('autoHeight')"
   [p-clean]="properties.includes('clean')"
@@ -45,121 +46,123 @@
 <hr />
 
 <form #f="ngForm">
+  <po-input class="po-md-6" name="label" [(ngModel)]="label" p-clean p-label="Label"> </po-input>
+
+  <po-checkbox-group
+    class="po-md-12 po-lg-6"
+    name="columnsName"
+    [(ngModel)]="columnsName"
+    p-columns="3"
+    p-label="Columns"
+    [p-options]="columnsOptions"
+    (p-change)="updateColumns()"
+  >
+  </po-checkbox-group>
+
+  <po-select
+    class="po-md-6 po-lg-12"
+    name="fieldLabel"
+    [(ngModel)]="fieldLabel"
+    p-label="Field Label"
+    p-required
+    [p-options]="fieldLabelOptions"
+  >
+  </po-select>
+
+  <po-select
+    class="po-md-6"
+    name="fieldValue"
+    [(ngModel)]="fieldValue"
+    p-label="Field Value"
+    p-required
+    [p-options]="fieldValueOptions"
+  >
+  </po-select>
+
+  <po-input
+    class="po-md-12 po-lg-6"
+    name="filterService"
+    [(ngModel)]="filterService"
+    p-clean
+    p-help="https://po-sample-api.onrender.com/v1/people"
+    p-label="Filter Service"
+  >
+  </po-input>
+
+  <po-input
+    class="po-md-6"
+    name="fieldErrorMessage"
+    [(ngModel)]="fieldErrorMessage"
+    p-clean
+    p-label="Field Error Message"
+  >
+  </po-input>
+
+  <po-input class="po-md-6" name="help" [(ngModel)]="help" p-clean p-label="Help"> </po-input>
+
+  <po-input
+    class="po-md-6"
+    name="additionalHelpTooltip"
+    [(ngModel)]="additionalHelpTooltip"
+    p-clean
+    p-label="Additional Help Tooltip"
+  >
+  </po-input>
+
+  <po-input class="po-md-6" name="placeholder" [(ngModel)]="placeholder" p-clean p-label="Placeholder"> </po-input>
+
+  <po-input
+    class="po-lg-6"
+    name="literals"
+    [(ngModel)]="literals"
+    p-help='Ex.: { "modalTitle": "Select a register", "modalPrimaryActionLabel": "Select", "modalPlaceholder": "Search Value" }'
+    p-label="Literals"
+    (p-change)="changeLiterals()"
+  >
+  </po-input>
+
+  <po-input
+    name="formatField"
+    [(ngModel)]="formatField"
+    class="po-lg-6"
+    p-label="Field Format"
+    p-help='Ex.: ["id", "name"]'
+    (p-change)="onFieldFormatChange($event)"
+  >
+  </po-input>
+
+  <po-checkbox-group
+    class="po-lg-12"
+    name="properties"
+    [(ngModel)]="properties"
+    p-columns="4"
+    p-label="Properties"
+    [p-options]="propertiesOptions"
+  >
+  </po-checkbox-group>
+
+  <po-radio-group
+    class="po-lg-12"
+    name="spacing"
+    [(ngModel)]="spacing"
+    p-columns="4"
+    p-label="Spacing"
+    [p-options]="typeSpacing"
+  >
+  </po-radio-group>
+
+  <po-textarea
+    class="po-md-12 po-lg-12"
+    name="advancedFilters"
+    [(ngModel)]="advancedFilters"
+    (p-change)="changeAdvancedFilters()"
+    p-help='Ex.: [{"property":"name","divider":"PERSONAL DATA","required":true,"gridColumns":6},{"property":"id","optional":true,"gridColumns":6}]'
+    p-label="Advanced Filters"
+    p-rows="4"
+  >
+  </po-textarea>
+
   <div class="po-row">
-    <po-input class="po-md-6" name="label" [(ngModel)]="label" p-clean p-label="Label"> </po-input>
-
-    <po-checkbox-group
-      class="po-md-6"
-      name="columnsName"
-      [(ngModel)]="columnsName"
-      p-columns="4"
-      p-label="Columns"
-      [p-options]="columnsOptions"
-      (p-change)="updateColumns()"
-    >
-    </po-checkbox-group>
-  </div>
-
-  <div class="po-row">
-    <po-select
-      class="po-md-6"
-      name="fieldLabel"
-      [(ngModel)]="fieldLabel"
-      p-label="Field Label"
-      p-required
-      [p-options]="fieldLabelOptions"
-    >
-    </po-select>
-
-    <po-select
-      class="po-md-6"
-      name="fieldValue"
-      [(ngModel)]="fieldValue"
-      p-label="Field Value"
-      p-required
-      [p-options]="fieldValueOptions"
-    >
-    </po-select>
-  </div>
-
-  <div class="po-row">
-    <po-input
-      class="po-md-6"
-      name="filterService"
-      [(ngModel)]="filterService"
-      p-clean
-      p-help="https://po-sample-api.onrender.com/v1/people"
-      p-label="Filter Service"
-    >
-    </po-input>
-
-    <po-input
-      class="po-md-6"
-      name="fieldErrorMessage"
-      [(ngModel)]="fieldErrorMessage"
-      p-clean
-      p-label="Field Error Message"
-    >
-    </po-input>
-  </div>
-
-  <div class="po-row">
-    <po-input class="po-lg-6" name="help" [(ngModel)]="help" p-clean p-label="Help"> </po-input>
-
-    <po-input class="po-lg-6" name="placeholder" [(ngModel)]="placeholder" p-clean p-label="Placeholder"> </po-input>
-  </div>
-
-  <div class="po-row">
-    <po-input
-      class="po-lg-6"
-      name="literals"
-      [(ngModel)]="literals"
-      p-help='Ex.: { "modalTitle": "Select a register", "modalPrimaryActionLabel": "Select", "modalPlaceholder": "Search Value" }'
-      p-label="Literals"
-      (p-change)="changeLiterals()"
-    >
-    </po-input>
-
-    <po-input
-      name="formatField"
-      [(ngModel)]="formatField"
-      class="po-lg-6"
-      p-label="Field Format"
-      p-help='Ex.: ["id", "name"]'
-      (p-change)="onFieldFormatChange($event)"
-    >
-    </po-input>
-  </div>
-
-  <div class="po-row">
-    <po-checkbox-group
-      class="po-lg-6"
-      name="properties"
-      [(ngModel)]="properties"
-      p-columns="2"
-      p-label="Properties"
-      [p-options]="propertiesOptions"
-    >
-    </po-checkbox-group>
-
-    <po-radio-group class="po-lg-6" name="spacing" [(ngModel)]="spacing" p-label="Spacing" [p-options]="typeSpacing">
-    </po-radio-group>
-  </div>
-
-  <div class="po-row">
-    <po-textarea
-      class="po-md-6"
-      name="advancedFilters"
-      [(ngModel)]="advancedFilters"
-      (p-change)="changeAdvancedFilters()"
-      p-help='Ex.: [{"property":"name","divider":"PERSONAL DATA","required":true,"gridColumns":6},{"property":"id","optional":true,"gridColumns":6}]'
-      p-label="Advanced Filters"
-      p-rows="4"
-    >
-    </po-textarea>
-  </div>
-
-  <div class="po-row">
-    <po-button class="po-md-3" p-label="Sample Restore" (p-click)="restore()"> </po-button>
+    <po-button class="po-lg-3 po-md-6" p-label="Sample Restore" (p-click)="restore()"> </po-button>
   </div>
 </form>
