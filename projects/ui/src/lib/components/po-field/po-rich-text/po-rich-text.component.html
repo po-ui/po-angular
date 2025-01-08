@@ -28,8 +28,13 @@
   </div>
 
   <po-field-container-bottom
+    *ngIf="!readonly"
+    [p-additional-help-tooltip]="additionalHelp.observed ? null : additionalHelpTooltip"
+    [p-append-in-body]="appendBox"
     [p-help]="help"
-    [p-error-pattern]="errorMsg"
     [p-error-limit]="errorLimit"
+    [p-error-pattern]="errorMsg"
+    [p-show-additional-help-icon]="!!additionalHelpTooltip || additionalHelp.observed"
+    (p-additional-help)="additionalHelp.emit()"
   ></po-field-container-bottom>
 </po-field-container>

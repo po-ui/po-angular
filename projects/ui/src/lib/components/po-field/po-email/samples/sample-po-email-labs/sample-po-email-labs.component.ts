@@ -8,6 +8,7 @@ import { PoCheckboxGroupOption } from '@po-ui/ng-components';
   standalone: false
 })
 export class SamplePoEmailLabsComponent implements OnInit {
+  additionalHelpTooltip: string;
   email: string;
   errorPattern: string;
   event: string;
@@ -34,6 +35,7 @@ export class SamplePoEmailLabsComponent implements OnInit {
   }
 
   restore() {
+    this.additionalHelpTooltip = '';
     this.properties = [];
 
     this.label = undefined;

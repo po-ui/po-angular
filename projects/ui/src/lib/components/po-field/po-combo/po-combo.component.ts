@@ -196,6 +196,12 @@ export class PoComboComponent extends PoComboBaseComponent implements AfterViewI
     }
   }
 
+  emitAdditionalHelp() {
+    if (this.isAdditionalHelpEventTriggered()) {
+      this.additionalHelp.emit();
+    }
+  }
+
   /**
    * Função que atribui foco ao componente.
    *
@@ -217,6 +223,10 @@ export class PoComboComponent extends PoComboBaseComponent implements AfterViewI
     if (!this.disabled) {
       this.inputEl.nativeElement.focus();
     }
+  }
+
+  getAdditionalHelpTooltip() {
+    return this.isAdditionalHelpEventTriggered() ? null : this.additionalHelpTooltip;
   }
 
   onBlur() {
@@ -571,6 +581,10 @@ export class PoComboComponent extends PoComboBaseComponent implements AfterViewI
     }
   }
 
+  showAdditionalHelpIcon() {
+    return !!this.additionalHelpTooltip || this.isAdditionalHelpEventTriggered();
+  }
+
   showMoreInfiniteScroll(): void {
     if (this.defaultService.hasNext) {
       this.infiniteLoading = true;
@@ -625,6 +639,13 @@ export class PoComboComponent extends PoComboBaseComponent implements AfterViewI
     });
 
     window.addEventListener('scroll', this.onScroll, true);
+  }
+
+  private isAdditionalHelpEventTriggered(): boolean {
+    return (
+      this.additionalHelpEventTrigger === 'event' ||
+      (this.additionalHelpEventTrigger === undefined && this.additionalHelp.observed)
+    );
   }
 
   private onErrorGetObjectByValue() {

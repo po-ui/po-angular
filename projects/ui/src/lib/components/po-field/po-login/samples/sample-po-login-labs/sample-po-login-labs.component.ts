@@ -8,6 +8,7 @@ import { PoCheckboxGroupOption } from '@po-ui/ng-components';
   standalone: false
 })
 export class SamplePoLoginLabsComponent implements OnInit {
+  additionalHelpTooltip: string;
   errorPattern: string;
   event: string;
   help: string;
@@ -40,6 +41,7 @@ export class SamplePoLoginLabsComponent implements OnInit {
   }
 
   restore() {
+    this.additionalHelpTooltip = '';
     this.errorPattern = '';
     this.event = '';
 

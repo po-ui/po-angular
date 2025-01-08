@@ -1,5 +1,5 @@
 import { Directive, EventEmitter, Input, OnInit, Output } from '@angular/core';
-import { AbstractControl, ControlValueAccessor, Validator, Validators } from '@angular/forms';
+import { AbstractControl, ControlValueAccessor, Validator } from '@angular/forms';
 
 import { Observable, Subject, Subscription } from 'rxjs';
 import { debounceTime, distinctUntilChanged, switchMap, tap } from 'rxjs/operators';
@@ -112,6 +112,20 @@ export const poMultiselectLiteralsDefault = {
  */
 @Directive()
 export abstract class PoMultiselectBaseComponent implements ControlValueAccessor, OnInit, Validator {
+  // Propriedade interna que define se o ícone de ajuda adicional terá cursor clicável (evento) ou padrão (tooltip).
+  @Input() additionalHelpEventTrigger: string | undefined;
+
+  /**
+   * @optional
+   *
+   * @description
+   * Exibe um ícone de ajuda adicional ao `p-help`, com o texto desta propriedade no tooltip.
+   * Se o evento `p-additional-help` estiver definido, o tooltip não será exibido.
+   * **Como boa prática, indica-se utilizar um texto com até 140 caracteres.**
+   * > Requer um recuo mínimo de 8px se o componente estiver próximo à lateral da tela.
+   */
+  @Input('p-additional-help-tooltip') additionalHelpTooltip?: string;
+
   /**
    * @optional
    *
@@ -190,6 +204,15 @@ export abstract class PoMultiselectBaseComponent implements ControlValueAccessor
    * @optional
    *
    * @description
+   * Evento disparado ao clicar no ícone de ajuda adicional.
+   * Este evento ativa automaticamente a exibição do ícone de ajuda adicional ao `p-help`.
+   */
+  @Output('p-additional-help') additionalHelp = new EventEmitter<any>();
+
+  /**
+   * @optional
+   *
+   * @description
    *
    * Limita a exibição da mensagem de erro a duas linhas e exibe um tooltip com o texto completo.
    *
@@ -214,16 +237,16 @@ export abstract class PoMultiselectBaseComponent implements ControlValueAccessor
    *
    * @description
    *
-   * Define que o dropdown do multiselect será incluido no body da página e não suspenso com a caixa de texto do componente.
-   * Opção necessária para o caso de uso do componente em páginas que necessitam renderizar o multiselect fora do conteúdo principal.
+   * Define que o `listbox` e/ou tooltip (`p-additional-help-tooltip` e/ou `p-error-limit`) serão incluídos no body da
+   * página e não dentro do componente. Essa opção pode ser necessária em cenários com containers que possuem scroll ou
+   * overflow escondido, garantindo o posicionamento correto de ambos próximo ao elemento.
    *
-   * > Obs: O uso dessa propriedade pode acarretar na perda sequencial da tabulação da página
+   * > O uso dessa propriedade pode interferir na sequência de tabulação da página. Quando utilizado com
+   * `p-additional-help-tooltip`, leitores de tela como o NVDA podem não ler o conteúdo do tooltip.
    *
    * @default `false`
    */
   @Input({ alias: 'p-append-in-body', transform: convertToBoolean }) appendBox?: boolean = false;
-
-  @Input({ alias: 'p-error-append-in-body', transform: convertToBoolean }) errorAppendBox?: boolean = false;
 
   selectedOptions: Array<PoMultiselectOption | any> = [];
   visibleOptionsDropdown: Array<PoMultiselectOption | any> = [];

@@ -2,6 +2,7 @@
   class="po-sm-12"
   name="datepicker"
   [(ngModel)]="datepicker"
+  [p-additional-help-tooltip]="additionalHelpTooltip"
   [p-clean]="properties.includes('clean')"
   [p-disabled]="properties.includes('disabled')"
   [p-max-date]="maxDate"
@@ -36,88 +37,86 @@
 <hr />
 
 <form #f="ngForm">
-  <div class="po-row">
-    <po-input class="po-md-6" name="label" [(ngModel)]="label" p-clean p-label="Label"> </po-input>
+  <po-input class="po-md-6" name="label" [(ngModel)]="label" p-clean p-label="Label"> </po-input>
 
-    <po-input class="po-md-6" name="help" [(ngModel)]="help" p-clean p-label="Help"> </po-input>
-  </div>
+  <po-input class="po-md-6" name="help" [(ngModel)]="help" p-clean p-label="Help"> </po-input>
 
-  <div class="po-row">
-    <po-input class="po-md-6" name="placeholder" [(ngModel)]="placeholder" p-clean p-label="Placeholder"> </po-input>
+  <po-input
+    class="po-md-6"
+    name="additionalHelpTooltip"
+    [(ngModel)]="additionalHelpTooltip"
+    p-clean
+    p-label="Additional Help Tooltip"
+  >
+  </po-input>
 
-    <po-input class="po-md-6" name="errorPattern" [(ngModel)]="errorPattern" p-clean p-label="Error Pattern">
-    </po-input>
-  </div>
+  <po-input class="po-md-6" name="placeholder" [(ngModel)]="placeholder" p-clean p-label="Placeholder"> </po-input>
 
-  <div class="po-row">
-    <po-datepicker
-      class="po-md-6"
-      name="minDate"
-      [(ngModel)]="minDate"
-      p-clean
-      p-label="Min date"
-      [p-max-date]="maxDate"
-      [p-format]="format"
-    >
-    </po-datepicker>
+  <po-input class="po-md-6" name="errorPattern" [(ngModel)]="errorPattern" p-clean p-label="Error Pattern"> </po-input>
 
-    <po-datepicker
-      class="po-md-6"
-      name="maxDate"
-      [(ngModel)]="maxDate"
-      p-clean
-      p-label="Max date"
-      [p-format]="format"
-      [p-min-date]="minDate"
-    >
-    </po-datepicker>
-  </div>
+  <po-datepicker
+    class="po-md-6"
+    name="minDate"
+    [(ngModel)]="minDate"
+    p-clean
+    p-label="Min date"
+    [p-max-date]="maxDate"
+    [p-format]="format"
+  >
+  </po-datepicker>
 
-  <div class="po-row">
-    <po-radio-group
-      class="po-md-6"
-      name="format"
-      [(ngModel)]="format"
-      p-columns="3"
-      p-label="Format"
-      [p-options]="formatOptions"
-    >
-    </po-radio-group>
+  <po-datepicker
+    class="po-md-6"
+    name="maxDate"
+    [(ngModel)]="maxDate"
+    p-clean
+    p-label="Max date"
+    [p-format]="format"
+    [p-min-date]="minDate"
+  >
+  </po-datepicker>
 
-    <po-radio-group
-      class="po-md-6"
-      name="locale"
-      [(ngModel)]="locale"
-      p-columns="3"
-      p-label="Locale"
-      [p-options]="localeOptions"
-    >
-    </po-radio-group>
-  </div>
+  <po-checkbox-group
+    class="po-md-12"
+    name="properties"
+    [(ngModel)]="properties"
+    p-columns="4"
+    p-label="Properties"
+    [p-options]="propertiesOptions"
+  >
+  </po-checkbox-group>
 
-  <div class="po-row">
-    <po-radio-group
-      class="po-md-4"
-      name="isoFormat"
-      [(ngModel)]="isoFormat"
-      p-columns="1"
-      p-label="Iso Format"
-      [p-options]="isoFormatOptions"
-    >
-    </po-radio-group>
+  <po-radio-group
+    class="po-md-12"
+    name="locale"
+    [(ngModel)]="locale"
+    p-columns="4"
+    p-label="Locale"
+    [p-options]="localeOptions"
+  >
+  </po-radio-group>
 
-    <po-checkbox-group
-      class="po-sm-8"
-      name="properties"
-      [(ngModel)]="properties"
-      p-columns="3"
-      p-label="Properties"
-      [p-options]="propertiesOptions"
-    >
-    </po-checkbox-group>
-  </div>
+  <po-radio-group
+    class="po-md-12"
+    name="format"
+    [(ngModel)]="format"
+    p-columns="4"
+    p-label="Format"
+    [p-options]="formatOptions"
+  >
+  </po-radio-group>
+
+  <po-radio-group
+    class="po-md-12"
+    name="isoFormat"
+    [(ngModel)]="isoFormat"
+    p-columns="4"
+    p-label="Iso Format"
+    [p-options]="isoFormatOptions"
+  >
+  </po-radio-group>
 
   <div class="po-row">
-    <po-button class="po-md-3" name="restore" p-label="Sample Restore" (p-click)="restore()"> </po-button>
+    <po-button class="po-lg-3 po-md-6" name="restore" p-label="Sample Restore" (p-click)="restore()"> </po-button>
   </div>
 </form>

@@ -1,6 +1,5 @@
 <po-field-container
   [p-disabled]="disabled"
-  [p-help]="help"
   [p-label]="label"
   [p-optional]="optional"
   [p-required]="required"
@@ -24,9 +23,16 @@
         </po-radio>
       </div>
     </div>
+
+    <po-field-container-bottom
+      [p-additional-help-tooltip]="getAdditionalHelpTooltip()"
+      [p-append-in-body]="appendBox"
+      [p-disabled]="disabled"
+      [p-error-limit]="errorLimit"
+      [p-error-pattern]="getErrorPattern()"
+      [p-help]="help"
+      [p-show-additional-help-icon]="showAdditionalHelpIcon()"
+      (p-additional-help)="emitAdditionalHelp()"
+    ></po-field-container-bottom>
   </div>
-  <po-field-container-bottom
-    [p-error-pattern]="getErrorPattern()"
-    [p-error-limit]="errorLimit"
-  ></po-field-container-bottom>
 </po-field-container>

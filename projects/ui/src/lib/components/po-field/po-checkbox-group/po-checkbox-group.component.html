@@ -1,13 +1,12 @@
 <po-field-container
   [p-disabled]="disabled"
-  [p-help]="help"
   [p-label]="label"
   [p-optional]="optional"
   [p-required]="required"
   [p-show-required]="showRequired"
 >
-  <div role="group" [attr.aria-label]="label" class="po-field-container-content po-checkbox-group-content">
-    <ul class="po-row po-pt-2 po-pb-1">
+  <div role="group" [attr.aria-label]="label" class="po-checkbox-group-content">
+    <ul class="po-row">
       <li
         *ngFor="let option of checkboxGroupOptionsView; trackBy: trackByFn"
         class="po-checkbox-group-item po-md-{{ mdColumns }} po-lg-{{ columns }}"
@@ -28,7 +27,13 @@
   </div>
 
   <po-field-container-bottom
-    [p-error-pattern]="getErrorPattern()"
+    [p-additional-help-tooltip]="getAdditionalHelpTooltip()"
+    [p-append-in-body]="appendBox"
+    [p-help]="help"
+    [p-disabled]="disabled"
     [p-error-limit]="errorLimit"
+    [p-error-pattern]="getErrorPattern()"
+    [p-show-additional-help-icon]="showAdditionalHelpIcon()"
+    (p-additional-help)="emitAdditionalHelp()"
   ></po-field-container-bottom>
 </po-field-container>

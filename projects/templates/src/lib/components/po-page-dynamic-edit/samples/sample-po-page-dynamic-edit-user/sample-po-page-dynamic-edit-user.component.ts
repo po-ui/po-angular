@@ -37,7 +37,14 @@ export class SamplePoPageDynamicEditUserComponent {
     { property: 'name', divider: 'Personal data', required: true },
     { property: 'nickname' },
     { property: 'email', label: 'E-mail' },
-    { property: 'birthdate', label: 'Birth date', type: 'date' },
+    {
+      property: 'birthdate',
+      label: 'Birth date',
+      type: 'date',
+      errorMessage: 'Invalid date.',
+      help: 'Enter or select a valid date.',
+      additionalHelpTooltip: 'Please enter a valid date in the format MMDDYYYY.'
+    },
     { property: 'genre', options: ['female', 'male', 'others'], gridLgColumns: 6 },
     { property: 'nationality' },
     { property: 'birthPlace', label: 'Place of birth' },

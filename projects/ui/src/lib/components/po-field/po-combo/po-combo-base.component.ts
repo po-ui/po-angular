@@ -14,7 +14,6 @@ import { PoComboOptionGroup } from './interfaces/po-combo-option-group.interface
 import { PoComboOption } from './interfaces/po-combo-option.interface';
 import { PoComboFilterMode } from './po-combo-filter-mode.enum';
 import { PoComboFilterService } from './po-combo-filter.service';
-import { Subscription } from 'rxjs';
 
 const PO_COMBO_DEBOUNCE_TIME_DEFAULT = 400;
 const PO_COMBO_FIELD_LABEL_DEFAULT = 'label';
@@ -76,6 +75,20 @@ const PO_COMBO_FIELD_VALUE_DEFAULT = 'value';
  */
 @Directive()
 export abstract class PoComboBaseComponent implements ControlValueAccessor, OnInit, Validator {
+  // Propriedade interna que define se o ícone de ajuda adicional terá cursor clicável (evento) ou padrão (tooltip).
+  @Input() additionalHelpEventTrigger: string | undefined;
+
+  /**
+   * @optional
+   *
+   * @description
+   * Exibe um ícone de ajuda adicional ao `p-help`, com o texto desta propriedade no tooltip.
+   * Se o evento `p-additional-help` estiver definido, o tooltip não será exibido.
+   * **Como boa prática, indica-se utilizar um texto com até 140 caracteres.**
+   * > Requer um recuo mínimo de 8px se o componente estiver próximo à lateral da tela.
+   */
+  @Input('p-additional-help-tooltip') additionalHelpTooltip?: string;
+
   /**
    * @optional
    *
@@ -255,6 +268,15 @@ export abstract class PoComboBaseComponent implements ControlValueAccessor, OnIn
    * @optional
    *
    * @description
+   * Evento disparado ao clicar no ícone de ajuda adicional.
+   * Este evento ativa automaticamente a exibição do ícone de ajuda adicional ao `p-help`.
+   */
+  @Output('p-additional-help') additionalHelp = new EventEmitter<any>();
+
+  /**
+   * @optional
+   *
+   * @description
    *
    * Limita a exibição da mensagem de erro a duas linhas e exibe um tooltip com o texto completo.
    *
@@ -264,8 +286,6 @@ export abstract class PoComboBaseComponent implements ControlValueAccessor, OnIn
    * @default `false`
    */
   @Input('p-error-limit') errorLimit: boolean = false;
-
-  @Input({ alias: 'p-error-append-in-body', transform: convertToBoolean }) errorAppendBox?: boolean = false;
 
   /**
    * @optional
@@ -675,10 +695,12 @@ export abstract class PoComboBaseComponent implements ControlValueAccessor, OnIn
    *
    * @description
    *
-   * Define que o dropdown do combo será incluido no body da página e não suspenso com a caixa de texto do componente.
-   * Opção necessária para o caso de uso do componente em páginas que necessitam renderizar o combo fora do conteúdo principal.
+   * Define que o `listbox` e/ou tooltip (`p-additional-help-tooltip` e/ou `p-error-limit`) serão incluídos no body da
+   * página e não dentro do componente. Essa opção pode ser necessária em cenários com containers que possuem scroll ou
+   * overflow escondido,garantindo o posicionamento correto de ambos próximo ao elemento.
    *
-   * > Obs: O uso dessa propriedade pode acarretar na perda sequencial da tabulação da página
+   * > O uso dessa propriedade pode acarretar na perda sequencial da tabulação da página. Quando utilizado com
+   * `p-additional-help-tooltip`, leitores de tela como o NVDA podem não ler o conteúdo do tooltip.
    *
    * @default `false`
    */

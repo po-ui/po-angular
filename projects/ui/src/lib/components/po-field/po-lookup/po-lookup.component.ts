@@ -228,6 +228,16 @@ export class PoLookupComponent extends PoLookupBaseComponent implements AfterVie
     }
   }
 
+  emitAdditionalHelp() {
+    if (this.isAdditionalHelpEventTriggered()) {
+      this.additionalHelp.emit();
+    }
+  }
+
+  getAdditionalHelpTooltip() {
+    return this.isAdditionalHelpEventTriggered() ? null : this.additionalHelpTooltip;
+  }
+
   openLookup(): void {
     if (this.isAllowedOpenModal()) {
       const {
@@ -420,6 +430,17 @@ export class PoLookupComponent extends PoLookupBaseComponent implements AfterVie
     }
 
     this.visibleDisclaimers = [...newDisclaimers];
+  }
+
+  showAdditionalHelpIcon() {
+    return !!this.additionalHelpTooltip || this.isAdditionalHelpEventTriggered();
+  }
+
+  private isAdditionalHelpEventTriggered(): boolean {
+    return (
+      this.additionalHelpEventTrigger === 'event' ||
+      (this.additionalHelpEventTrigger === undefined && this.additionalHelp.observed)
+    );
   }
 
   private isAllowedOpenModal(): boolean {

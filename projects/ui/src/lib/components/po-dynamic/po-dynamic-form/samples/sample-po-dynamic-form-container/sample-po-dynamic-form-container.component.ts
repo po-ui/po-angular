@@ -41,7 +41,9 @@ export class SamplePoDynamicFormContainerComponent implements OnInit {
       gridSmColumns: 12,
       maxValue: '2010-01-01',
       errorMessage: 'The date must be before the year 2010.',
-      order: -1
+      order: -1,
+      help: 'Enter or select a valid date.',
+      additionalHelpTooltip: 'Please enter a valid date in the format MMDDYYYY.'
     },
     { property: 'cpf', label: 'CPF', mask: '999.999.999-99', gridColumns: 6, gridSmColumns: 12, visible: false },
     { property: 'cnpj', label: 'CNPJ', mask: '99.999.999/9999-99', gridColumns: 6, gridSmColumns: 12, visible: false },
@@ -61,7 +63,9 @@ export class SamplePoDynamicFormContainerComponent implements OnInit {
       secret: true,
       pattern: '[a-zA]{5}[Z0-9]{3}',
       errorMessage: 'At least 5 alphabetic and 3 numeric characters are required.',
-      placeholder: 'Type your password'
+      placeholder: 'Type your password',
+      help: 'Password must include a combination of letters and numbers.',
+      additionalHelpTooltip: 'At least 5 alphabetic and 3 numeric characters are required.'
     },
     {
       property: 'rememberSecretKey',
@@ -111,7 +115,9 @@ export class SamplePoDynamicFormContainerComponent implements OnInit {
       container: 'Work data',
       range: true,
       gridColumns: 5,
-      gridSmColumns: 12
+      gridSmColumns: 12,
+      help: 'Enter or select a valid date range.',
+      additionalHelpTooltip: 'Ensure the start date is earlier than or equal to the end date.'
     },
     {
       property: 'entryTime',
