@@ -191,7 +191,7 @@ export class PoI18nBaseService {
     const context = options['context'] ? options['context'] : this.contextDefault;
     const literals: Array<string> = options['literals'] ? options['literals'] : [];
 
-    return new Observable(observer => {
+    return new Observable<any>(observer => {
       if (this.servicesContext[context]) {
         // Faz o processo de busca de um contexto que contém serviço
         this.getLiteralsFromContextService(language, context, literals, observer);
