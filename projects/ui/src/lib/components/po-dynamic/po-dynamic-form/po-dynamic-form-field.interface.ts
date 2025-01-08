@@ -35,6 +35,27 @@ import { PoDynamicField } from '../po-dynamic-field.interface';
  */
 export interface PoDynamicFormField extends PoDynamicField {
   /**
+   * Evento disparado ao clicar no ícone de ajuda adicional.
+   * Este evento ativa automaticamente a exibição do ícone de ajuda adicional ao `p-help`.
+   *
+   * **Componentes compatíveis:** `po-checkbox`, `po-checkbox-group`, `po-combo`, `po-datepicker`, `po-datepicker-range`,
+   * `po-decimal`, `po-email`, `po-input`, `po-login`, `po-lookup`, `po-multiselect`, `po-number`, `po-password`,
+   * `po-radio-group`, `po-rich-text`, `po-select`, `po-switch`, `po-textarea`, `po-upload`, `po-url`.
+   */
+  additionalHelp?: Function;
+
+  /**
+   * Exibe um ícone de ajuda adicional ao `p-help`, com o texto desta propriedade no tooltip.
+   * Se o evento `p-additional-help` estiver definido, o tooltip não será exibido.
+   * **Como boa prática, indica-se utilizar um texto com até 140 caracteres.**
+   *
+   * **Componentes compatíveis:** `po-checkbox`, `po-checkbox-group`, `po-combo`, `po-datepicker`, `po-datepicker-range`,
+   * `po-decimal`, `po-email`, `po-input`, `po-login`, `po-lookup`, `po-multiselect`, `po-number`, `po-password`,
+   * `po-radio-group`, `po-rich-text`, `po-select`, `po-switch`, `po-textarea`, `po-upload`, `po-url`.
+   */
+  additionalHelpTooltip?: string;
+
+  /**
    * Define as colunas para utilização da busca avançada. Usada somente em conjunto com a propriedade `searchService`,
    * essa propriedade deve receber um array de objetos que implementam a interface [`PoLookupColumn`](/documentation/po-lookup).
    *

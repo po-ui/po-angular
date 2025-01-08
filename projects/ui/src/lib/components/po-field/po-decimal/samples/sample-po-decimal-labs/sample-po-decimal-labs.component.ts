@@ -7,6 +7,7 @@ import { PoCheckboxGroupOption, PoSelectOption } from '@po-ui/ng-components';
   templateUrl: './sample-po-decimal-labs.component.html'
 })
 export class SamplePoDecimalLabsComponent implements OnInit {
+  additionalHelpTooltip: string;
   decimal: number;
   decimalsLength: number;
   event: string;
@@ -62,6 +63,7 @@ export class SamplePoDecimalLabsComponent implements OnInit {
   }
 
   restore() {
+    this.additionalHelpTooltip = '';
     this.decimal = undefined;
     this.decimalsLength = undefined;
     this.event = '';

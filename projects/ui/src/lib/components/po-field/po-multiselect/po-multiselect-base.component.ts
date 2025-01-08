@@ -1,5 +1,5 @@
 import { Directive, EventEmitter, Input, OnInit, Output } from '@angular/core';
-import { AbstractControl, ControlValueAccessor, Validator, Validators } from '@angular/forms';
+import { AbstractControl, ControlValueAccessor, Validator } from '@angular/forms';
 
 import { Observable, Subject, Subscription } from 'rxjs';
 import { debounceTime, distinctUntilChanged, switchMap, tap } from 'rxjs/operators';
@@ -112,6 +112,20 @@ export const poMultiselectLiteralsDefault = {
  */
 @Directive()
 export abstract class PoMultiselectBaseComponent implements ControlValueAccessor, OnInit, Validator {
+  // Propriedade interna que define se o ícone de ajuda adicional terá cursor clicável (evento) ou padrão (tooltip).
+  @Input() additionalHelpEventTrigger: string | undefined;
+
+  /**
+   * @optional
+   *
+   * @description
+   * Exibe um ícone de ajuda adicional ao `p-help`, com o texto desta propriedade no tooltip.
+   * Se o evento `p-additional-help` estiver definido, o tooltip não será exibido.
+   * **Como boa prática, indica-se utilizar um texto com até 140 caracteres.**
+   * > Requer um recuo mínimo de 8px se o componente estiver próximo à lateral da tela.
+   */
+  @Input('p-additional-help-tooltip') additionalHelpTooltip?: string;
+
   /**
    * @optional
    *
@@ -185,6 +199,15 @@ export abstract class PoMultiselectBaseComponent implements ControlValueAccessor
    *
    */
   @Input('p-field-error-message') fieldErrorMessage: string;
+
+  /**
+   * @optional
+   *
+   * @description
+   * Evento disparado ao clicar no ícone de ajuda adicional.
+   * Este evento ativa automaticamente a exibição do ícone de ajuda adicional ao `p-help`.
+   */
+  @Output('p-additional-help') additionalHelp = new EventEmitter<any>();
 
   /**
    * @optional

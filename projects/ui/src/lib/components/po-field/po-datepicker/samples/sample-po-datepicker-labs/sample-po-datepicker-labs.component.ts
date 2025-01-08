@@ -7,6 +7,7 @@ import { PoCheckboxGroupOption, PoDatepickerIsoFormat, PoRadioGroupOption } from
   templateUrl: './sample-po-datepicker-labs.component.html'
 })
 export class SamplePoDatepickerLabsComponent implements OnInit {
+  additionalHelpTooltip: string;
   datepicker: string | Date;
   maxDate: string | Date;
   errorPattern: string;
@@ -58,6 +59,7 @@ export class SamplePoDatepickerLabsComponent implements OnInit {
   }
 
   restore() {
+    this.additionalHelpTooltip = '';
     this.datepicker = undefined;
     this.maxDate = undefined;
     this.event = undefined;

@@ -1,7 +1,9 @@
 <po-checkbox
   name="checkbox"
   [(ngModel)]="checkbox"
+  [p-additional-help-tooltip]="additionalHelpTooltip"
   [p-disabled]="disabled"
+  [p-help]="help"
   [p-label]="label"
   [p-size]="size ? 'large' : 'medium'"
   (p-change)="changeEvent('p-change')"
@@ -21,6 +23,17 @@
 <form #f="ngForm">
   <div class="po-row">
     <po-input class="po-sm-6" name="label" [(ngModel)]="label" p-label="Label"> </po-input>
+
+    <po-input class="po-md-6" name="help" [(ngModel)]="help" p-clean p-label="Help"> </po-input>
+
+    <po-input
+      class="po-md-6"
+      name="additionalHelpTooltip"
+      [(ngModel)]="additionalHelpTooltip"
+      p-clean
+      p-label="Additional Help Tooltip"
+    >
+    </po-input>
 
     <po-switch class="po-sm-3" name="disabled" [(ngModel)]="disabled" p-label="Disabled"> </po-switch>
 

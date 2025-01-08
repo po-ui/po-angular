@@ -56,9 +56,12 @@
     </div>
   </div>
   <po-field-container-bottom
+    [p-additional-help-tooltip]="getAdditionalHelpTooltip()"
     [p-help]="help"
     [p-disabled]="disabled"
     [p-error-pattern]="getErrorPattern()"
+    [p-show-additional-help-icon]="showAdditionalHelpIcon()"
+    (p-additional-help)="emitAdditionalHelp()"
   ></po-field-container-bottom>
 </po-field-container>
 
