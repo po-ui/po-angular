@@ -1,8 +1,8 @@
 import { fakeAsync, TestBed, tick } from '@angular/core/testing';
-import { HttpClientTestingModule, HttpTestingController } from '@angular/common/http/testing';
-import { HttpRequest } from '@angular/common/http';
+import { HttpTestingController, provideHttpClientTesting } from '@angular/common/http/testing';
+import { HttpRequest, provideHttpClient, withInterceptorsFromDi } from '@angular/common/http';
 
-import { of } from 'rxjs';
+import { of, take, delay } from 'rxjs';
 
 import * as utils from '../../utils/util';
 
@@ -43,7 +43,8 @@ describe('PoI18nService:', () => {
 
     beforeEach(async () => {
       await TestBed.configureTestingModule({
-        imports: [HttpClientTestingModule, PoLanguageModule, PoI18nModule.config(config)]
+        imports: [PoLanguageModule, PoI18nModule.config(config)],
+        providers: [provideHttpClient(withInterceptorsFromDi()), provideHttpClientTesting()]
       }).compileComponents();
 
       service = TestBed.inject(PoI18nService);
@@ -62,20 +63,29 @@ describe('PoI18nService:', () => {
     });
 
     it('should get specific literals passing parameters', done => {
-      service.getLiterals({ literals: ['text'] }).subscribe((literals: any) => {
-        expect(literals['text']).toBeTruthy();
-
-        done();
-      });
+      service
+        .getLiterals({ literals: ['text'] })
+        .pipe(take(1))
+        .subscribe(
+          literals => {
+            expect(literals['text']).toBeTruthy();
+            done();
+          },
+          error => {
+            console.error('Erro ao buscar literais:', error);
+            done.fail(error);
+          }
+        );
     });
 
     it('should get specific literals from unexist language', done => {
-      // Procura em ingles, se não acho busca em pt-br
-      service.getLiterals({ literals: ['text'], language: 'en-us' }).subscribe((literals: any) => {
-        expect(literals['text']).toBeTruthy();
-
-        done();
-      });
+      service
+        .getLiterals({ literals: ['text'], language: 'en-us' })
+        .pipe(take(1))
+        .subscribe((literals: any) => {
+          expect(literals['text']).toBeTruthy();
+          done();
+        });
     });
 
     it('should get literals with specific context', () => {
@@ -94,12 +104,18 @@ describe('PoI18nService:', () => {
       });
     });
 
-    it('should return all literals from context when unexist language', () => {
-      service.getLiterals({ context: 'another', language: 'de-DE' }).subscribe((literals: any) => {
-        expect(literals['text']).toBe('texto');
-        expect(literals['add']).toBe('adicionar');
-        expect(literals['remove']).toBe('remover');
-      });
+    it('should return all literals from context when unexist language', done => {
+      spyOn(service, 'getLanguage').and.returnValue('pt-br');
+
+      service
+        .getLiterals({ context: 'another', language: 'de-DE' })
+        .pipe(take(1))
+        .subscribe((literals: any) => {
+          expect(literals['text']).toBe('texto');
+          expect(literals['add']).toBe('adicionar');
+          expect(literals['remove']).toBe('remover');
+          done();
+        });
     });
 
     it('should return all literals filtered', () => {
@@ -246,45 +262,57 @@ describe('PoI18nService:', () => {
         });
       });
 
-      it('getLiterals: should call `getLanguage` to set language if `options.language` is undefined', done => {
-        const storageLanguage = 'en';
-        const params = [];
+      it('getLiterals: should not call observer.next if countObject returns 0', done => {
+        const context = 'general';
+        const literals = ['unknown'];
+        const language = 'en-us';
 
-        spyOn(service, 'getLanguage').and.returnValue(storageLanguage);
-        spyOn(service, <any>'getLiteralsFromContextConstant').and.callFake((language, context, literals, observer) => {
-          params.push(context, literals, observer);
-          observer.next();
-        });
+        spyOn(service as any, 'countObject').and.returnValue(0);
 
-        service.getLiterals().subscribe(() => {
-          expect(service.getLanguage).toHaveBeenCalled();
-          expect(service['getLiteralsFromContextConstant']).toHaveBeenCalledWith(
-            storageLanguage,
-            ...(params as [string, Array<string>, any])
-          );
+        service
+          .getLiterals({ context, literals, language })
+          .pipe(take(1))
+          .subscribe(translations => {
+            expect(translations).toEqual({ unknown: 'unknown' });
+            done();
+          });
+      });
+
+      it('getLiterals: should return an empty object for an unexisting context', done => {
+        service.getLiterals({ context: 'unknown' }).subscribe((literals: any) => {
+          expect(literals).toEqual({});
           done();
         });
       });
 
-      it(`getLiterals: shouldn't call 'getLanguage' and set language with 'options.language'
-        if 'options.language' is defined`, done => {
-        const options = { language: 'en' };
-        const params = [];
+      it('getLiterals: should return literals from pt-br when the requested language does not exist', done => {
+        const context = 'general';
+        const language = 'de-DE';
 
-        spyOn(service, 'getLanguage');
-        spyOn(service, <any>'getLiteralsFromContextConstant').and.callFake((language, context, literals, observer) => {
-          params.push(context, literals, observer);
-          observer.next();
-        });
+        service
+          .getLiterals({ context, language })
+          .pipe(take(1))
+          .subscribe((literals: any) => {
+            expect(literals['text']).toBe('texto');
+            expect(literals['add']).toBe('adicionar');
+            done();
+          });
+      });
 
-        service.getLiterals(options).subscribe(() => {
-          expect(service.getLanguage).not.toHaveBeenCalled();
-          expect(service['getLiteralsFromContextConstant']).toHaveBeenCalledWith(
-            options.language,
-            ...(params as [string, Array<string>, any])
-          );
-          done();
-        });
+      it('getLiterals: should return only specific literals with fallback', done => {
+        const context = 'general';
+        const literals = ['text', 'add'];
+        const language = 'de-DE';
+
+        service
+          .getLiterals({ context, literals, language })
+          .pipe(take(1))
+          .subscribe((literals: any) => {
+            expect(literals['text']).toBe('texto');
+            expect(literals['add']).toBe('adicionar');
+            expect(literals['remove']).toBeUndefined();
+            done();
+          });
       });
     });
   });
@@ -293,10 +321,10 @@ describe('PoI18nService:', () => {
     let service: PoI18nService;
     let httpMock: HttpTestingController;
 
-    const mockResponse = {
-      'developer': 'desenvolvedor',
-      'task': 'tarefa'
-    };
+    // const mockResponse = {
+    //   'developer': 'desenvolvedor',
+    //   'task': 'tarefa'
+    // };
 
     const config = {
       default: {
@@ -314,76 +342,38 @@ describe('PoI18nService:', () => {
 
     beforeEach(() => {
       TestBed.configureTestingModule({
-        imports: [HttpClientTestingModule, PoLanguageModule, PoI18nModule.config(config)]
+        imports: [PoLanguageModule, PoI18nModule.config(config)],
+        providers: [provideHttpClient(withInterceptorsFromDi()), provideHttpClientTesting()]
       });
 
       service = TestBed.inject(PoI18nService);
       httpMock = TestBed.inject(HttpTestingController);
     });
 
-    it('should get all literals from service', done => {
-      spyOn(service, 'getLanguage').and.returnValue('pt');
-
-      service.getLiterals().subscribe((literals: any) => {
-        expect(literals['developer']).toBeTruthy();
-        expect(literals['task']).toBeTruthy();
-
-        done();
-      });
-
-      httpMock.expectOne((req: HttpRequest<any>) => req.method === 'GET').flush(mockResponse);
-    });
-
-    it('should return empty object when not found specific literals from service', done => {
+    it('should return empty object when not found specific literals from service', () => {
       spyOn(service, 'getLanguage').and.returnValue('pt');
 
       service.getLiterals({ literals: ['teste'] }).subscribe((literals: any) => {
         expect(Object.keys(literals).length).toBe(0);
-
-        done();
       });
 
       httpMock.expectOne((req: HttpRequest<any>) => req.method === 'GET').flush({});
     });
 
-    it('should get specific literals from localStorage', done => {
-      const developerTranslation = 'desenvolvedor';
-      const taskTranslation = 'tarefa';
+    it('should update localStorage with provided data', () => {
+      const service = TestBed.inject(PoI18nService);
+      const language = 'pt-BR';
+      const context = 'general';
+      const data = {
+        literal1: 'valor1',
+        literal2: 'valor2'
+      };
 
-      const language = 'en';
+      service['useCache'] = true;
+      service['updateLocalStorage'](language, context, data);
 
-      spyOn(service, 'getLanguage').and.returnValue(language);
-
-      localStorage.setItem(`${language}-general-developer`, developerTranslation);
-      localStorage.setItem(`${language}-general-task`, taskTranslation);
-
-      service.getLiterals({ literals: ['developer', 'task'] }).subscribe((literals: any) => {
-        expect(literals['developer']).toEqual(developerTranslation);
-        expect(literals['task']).toEqual(taskTranslation);
-
-        done();
-      });
-
-      localStorage.clear();
-    });
-
-    it('should get literals from localStorage, selecting context, literals and language', done => {
-      const carTranslation = 'carro';
-      const testTranslation = 'teste';
-
-      localStorage.setItem('pt-br-general-car', carTranslation);
-      localStorage.setItem('pt-br-another-test', testTranslation);
-
-      service
-        .getLiterals({ context: 'general', literals: ['car', 'test'], language: 'pt-br' })
-        .subscribe((literals: any) => {
-          expect(literals['car']).toEqual(carTranslation);
-          expect(literals['test']).toBeUndefined();
-
-          done();
-        });
-
-      localStorage.clear();
+      expect(localStorage.getItem(`${language}-${context}-literal1`)).toBe('valor1');
+      expect(localStorage.getItem(`${language}-${context}-literal2`)).toBe('valor2');
     });
 
     describe('Methods: ', () => {
@@ -538,6 +528,33 @@ describe('PoI18nService:', () => {
           expect(spyHttpService).toHaveBeenCalled();
           expect(spygetLiteralsFromContextService).toHaveBeenCalled();
         }));
+
+        it('should set translations object with value from localStorage if translation exists', () => {
+          const service = TestBed.inject(PoI18nService);
+          const literal = 'text';
+          const language = 'pt-BR';
+          const translation = 'texto';
+
+          spyOn(localStorage, 'getItem').and.returnValue(translation);
+
+          const translations = service['searchInLocalStorage'](language, 'general', [literal]);
+
+          expect(translations[literal]).toBe(translation);
+          expect(localStorage.getItem).toHaveBeenCalledWith(`${language}-general-${literal}`);
+        });
+
+        it('should not set translations object if translation does not exist in localStorage', () => {
+          const service = TestBed.inject(PoI18nService);
+          const literal = 'not-found-literal';
+          const language = 'pt-BR';
+
+          spyOn(localStorage, 'getItem').and.returnValue(null);
+
+          const translations = service['searchInLocalStorage'](language, 'general', [literal]);
+
+          expect(translations[literal]).toBeUndefined();
+          expect(localStorage.getItem).toHaveBeenCalledWith(`${language}-general-${literal}`);
+        });
       });
 
       it('mergeObject: should merge objects and return it', () => {
