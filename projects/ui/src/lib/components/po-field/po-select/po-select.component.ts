@@ -335,6 +335,10 @@ export class PoSelectComponent extends PoFieldValidateModel<any> implements OnCh
 
   onBlur() {
     this.onModelTouched?.();
+
+    if (this.getAdditionalHelpTooltip() && this.displayAdditionalHelp) {
+      this.showAdditionalHelp();
+    }
   }
 
   // Altera o valor ao selecionar um item.
@@ -396,8 +400,40 @@ export class PoSelectComponent extends PoFieldValidateModel<any> implements OnCh
     return false;
   }
 
+  onKeyDown(event: KeyboardEvent): void {
+    const isFieldFocused = document.activeElement === this.selectElement.nativeElement;
+
+    if (isFieldFocused) {
+      this.keydown.emit(event);
+    }
+  }
+
   registerOnTouched(fn: any): void {
     this.onModelTouched = fn;
+  }
+
+  /**
+   * Método que exibe `p-additionalHelpTooltip` ou executa a ação definida em `p-additionalHelp`.
+   * Para isso, será necessário configurar uma tecla de atalho utilizando o evento `p-keydown`.
+   *
+   * ```html
+   * <po-select
+   *  #select
+   *  ...
+   *  p-additional-help-tooltip="Mensagem de ajuda complementar"
+   *  (p-keydown)="onKeyDown($event, select)"
+   * ></po-select>
+   * ```
+   * ```typescript
+   * onKeyDown(event: KeyboardEvent, inp: PoSelectComponent): void {
+   *  if (event.code === 'F9') {
+   *    inp.showAdditionalHelp();
+   *  }
+   * }
+   * ```
+   */
+  override showAdditionalHelp(): boolean {
+    return super.showAdditionalHelp();
   }
 
   private isEqual(value: any, inputValue: any): boolean {

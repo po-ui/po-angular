@@ -1272,35 +1272,72 @@ describe('PoDecimalComponent:', () => {
       });
     });
 
-    it(`onBlur: should call 'setViewValue' with empty string and 'callOnChange' with undefined if 'target.value'
-      contains more than one comma`, () => {
-      fixture.detectChanges();
-      const fakeEvent = {
-        target: {
-          value: '1,200,50'
-        }
-      };
-      component['onTouched'] = () => {};
+    describe('onBlur:', () => {
+      let setupTest;
 
-      spyOn(component, <any>'setViewValue');
-      spyOn(component, <any>'callOnChange');
-      spyOn(component, <any>'onTouched');
+      beforeEach(() => {
+        setupTest = (tooltip: string, displayHelp: boolean, additionalHelpEvent: any) => {
+          component.additionalHelpTooltip = tooltip;
+          component.displayAdditionalHelp = displayHelp;
+          component.additionalHelp = additionalHelpEvent;
+          spyOn(component, 'showAdditionalHelp');
+        };
+      });
 
-      component.onBlur(fakeEvent);
+      it(`onBlur: should call 'setViewValue' with empty string and 'callOnChange' with undefined if 'target.value'
+        contains more than one comma`, () => {
+        fixture.detectChanges();
+        const fakeEvent = {
+          target: {
+            value: '1,200,50'
+          }
+        };
+        component['onTouched'] = () => {};
 
-      expect(component['onTouched']).toHaveBeenCalled();
-      expect(component['setViewValue']).toHaveBeenCalledWith('');
-      expect(component['callOnChange']).toHaveBeenCalledWith(undefined);
-    });
+        spyOn(component, <any>'setViewValue');
+        spyOn(component, <any>'callOnChange');
+        spyOn(component, <any>'onTouched');
 
-    it('onBlur: shouldn´t throw error if onTouched is falsy', () => {
-      const fakeEvent = { target: { value: '' } };
+        component.onBlur(fakeEvent);
 
-      component['onTouched'] = null;
+        expect(component['onTouched']).toHaveBeenCalled();
+        expect(component['setViewValue']).toHaveBeenCalledWith('');
+        expect(component['callOnChange']).toHaveBeenCalledWith(undefined);
+      });
 
-      const fnError = () => component.onBlur(fakeEvent);
+      it('onBlur: shouldn´t throw error if onTouched is falsy', () => {
+        const fakeEvent = { target: { value: '' } };
 
-      expect(fnError).not.toThrow();
+        component['onTouched'] = null;
+
+        const fnError = () => component.onBlur(fakeEvent);
+
+        expect(fnError).not.toThrow();
+      });
+
+      it('should call showAdditionalHelp when the tooltip is displayed', () => {
+        setupTest('Mensagem de apoio adicional.', true, { observed: false });
+        const fakeEvent = { target: { value: '' } };
+
+        component.onBlur(fakeEvent);
+        expect(component.showAdditionalHelp).toHaveBeenCalled();
+      });
+
+      it('should not call showAdditionalHelp when tooltip is not displayed', () => {
+        setupTest('Mensagem de apoio adicional.', false, { observed: false });
+        const fakeEvent = { target: { value: '' } };
+
+        component.onBlur(fakeEvent);
+        expect(component.showAdditionalHelp).not.toHaveBeenCalled();
+      });
+
+      it('should not call showAdditionalHelp when additionalHelp event is true', () => {
+        setupTest('Mensagem de apoio adicional.', true, { observed: true });
+        const fakeEvent = { target: { value: '' } };
+
+        component.onBlur(fakeEvent);
+        expect(component.showAdditionalHelp).not.toHaveBeenCalled();
+      });
     });
 
     describe('containsMoreThanOneDecimalSeparator:', () => {
@@ -1437,6 +1474,39 @@ describe('PoDecimalComponent:', () => {
 
       expect(component['setViewValue']).not.toHaveBeenCalled();
       expect(component['setCursorInput']).not.toHaveBeenCalled();
+    });
+
+    describe('onKeyDown:', () => {
+      it('should emit event when field is focused', () => {
+        const fakeEvent = new KeyboardEvent('keydown', { key: 'Enter' });
+        component.inputEl = {
+          nativeElement: {
+            focus: () => {}
+          }
+        };
+
+        spyOn(component.keydown, 'emit');
+        spyOnProperty(document, 'activeElement', 'get').and.returnValue(component.inputEl.nativeElement);
+
+        component.onKeyDown(fakeEvent);
+
+        expect(component.keydown.emit).toHaveBeenCalledWith(fakeEvent);
+      });
+
+      it('should not emit event when field is not focused', () => {
+        const fakeEvent = new KeyboardEvent('keydown', { key: 'Enter' });
+        component.inputEl = {
+          nativeElement: {
+            focus: () => {}
+          }
+        };
+
+        spyOn(component.keydown, 'emit');
+        spyOnProperty(document, 'activeElement', 'get').and.returnValue(document.createElement('div'));
+        component.onKeyDown(fakeEvent);
+
+        expect(component.keydown.emit).not.toHaveBeenCalled();
+      });
     });
 
     it('hasLetters: should return true with numbers.', () => {

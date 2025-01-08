@@ -220,6 +220,10 @@ export class PoSwitchComponent extends PoFieldModel<any> {
 
   onBlur() {
     this.onTouched?.();
+
+    if (this.getAdditionalHelpTooltip() && this.displayAdditionalHelp) {
+      this.showAdditionalHelp();
+    }
   }
 
   getLabelPosition() {
@@ -234,9 +238,15 @@ export class PoSwitchComponent extends PoFieldModel<any> {
   }
 
   onKeyDown(event) {
+    const isFieldFocused = document.activeElement === this.switchContainer.nativeElement;
+
     if (event.which === PoKeyCodeEnum.space || event.keyCode === PoKeyCodeEnum.space) {
       event.preventDefault();
       this.eventClick();
+    }
+
+    if (isFieldFocused) {
+      this.keydown.emit(event);
     }
   }
 

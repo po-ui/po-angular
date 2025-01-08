@@ -26,6 +26,7 @@
   [p-show-required]="properties.includes('showRequired')"
   [p-sort]="properties.includes('sort')"
   (p-change)="changeEvent('p-change')"
+  (p-keydown)="changeEvent('p-keydown')"
   [p-error-limit]="properties?.includes('errorLimit')"
 >
 </po-combo>

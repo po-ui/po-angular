@@ -1,4 +1,4 @@
-import { Component, OnInit } from '@angular/core';
+import { Component, OnInit, ViewChild } from '@angular/core';
 
 import {
   PoDynamicFormField,
@@ -6,7 +6,8 @@ import {
   PoDynamicFormValidation,
   PoNotificationService,
   ForceBooleanComponentEnum,
-  PoUploadFile
+  PoUploadFile,
+  PoDynamicFormComponent
 } from '@po-ui/ng-components';
 import { PoDynamicFormContainerService } from './sample-po-dynamic-form-container.service';
 
@@ -17,6 +18,7 @@ import { PoDynamicFormContainerService } from './sample-po-dynamic-form-containe
   standalone: false
 })
 export class SamplePoDynamicFormContainerComponent implements OnInit {
+  @ViewChild('dynamicForm', { static: true }) dynamicForm: PoDynamicFormComponent;
   person = {};
   validateFields: Array<string> = ['state'];
 
@@ -43,7 +45,8 @@ export class SamplePoDynamicFormContainerComponent implements OnInit {
       errorMessage: 'The date must be before the year 2010.',
       order: -1,
       help: 'Enter or select a valid date.',
-      additionalHelpTooltip: 'Please enter a valid date in the format MMDDYYYY.'
+      additionalHelpTooltip: 'Please enter a valid date in the format MMDDYYYY.',
+      keydown: this.onKeyDown.bind(this, 'birthday')
     },
     { property: 'cpf', label: 'CPF', mask: '999.999.999-99', gridColumns: 6, gridSmColumns: 12, visible: false },
     { property: 'cnpj', label: 'CNPJ', mask: '99.999.999/9999-99', gridColumns: 6, gridSmColumns: 12, visible: false },
@@ -65,7 +68,8 @@ export class SamplePoDynamicFormContainerComponent implements OnInit {
       errorMessage: 'At least 5 alphabetic and 3 numeric characters are required.',
       placeholder: 'Type your password',
       help: 'Password must include a combination of letters and numbers.',
-      additionalHelpTooltip: 'At least 5 alphabetic and 3 numeric characters are required.'
+      additionalHelpTooltip: 'At least 5 alphabetic and 3 numeric characters are required.',
+      keydown: this.onKeyDown.bind(this, 'secretKey')
     },
     {
       property: 'rememberSecretKey',
@@ -117,7 +121,8 @@ export class SamplePoDynamicFormContainerComponent implements OnInit {
       gridColumns: 5,
       gridSmColumns: 12,
       help: 'Enter or select a valid date range.',
-      additionalHelpTooltip: 'Ensure the start date is earlier than or equal to the end date.'
+      additionalHelpTooltip: 'Ensure the start date is earlier than or equal to the end date.',
+      keydown: this.onKeyDown.bind(this, 'vacation')
     },
     {
       property: 'entryTime',
@@ -237,6 +242,12 @@ export class SamplePoDynamicFormContainerComponent implements OnInit {
         }
       ]
     };
+  }
+
+  onKeyDown(property: string, event: KeyboardEvent): void {
+    if (event.code === 'F9') {
+      this.dynamicForm.showAdditionalHelp(property);
+    }
   }
 
   onLoadFields(value: any) {

@@ -40,6 +40,8 @@ export class PoRichTextBodyComponent implements OnInit, OnDestroy {
 
   @Output('p-commands') commands = new EventEmitter<any>();
 
+  @Output('p-keydown') keydown: EventEmitter<KeyboardEvent> = new EventEmitter<KeyboardEvent>();
+
   @Output('p-selected-link') selectedLink = new EventEmitter<any>();
 
   @Output('p-shortcut-command') shortcutCommand = new EventEmitter<any>();
@@ -123,6 +125,7 @@ export class PoRichTextBodyComponent implements OnInit, OnDestroy {
   onKeyDown(event) {
     const keyK = event.keyCode === PoKeyCodeEnum.keyK;
     const isLinkShortcut = (keyK && event.ctrlKey) || (keyK && event.metaKey);
+    const isFieldFocused = document.activeElement === this.bodyElement.nativeElement;
 
     if (isLinkShortcut) {
       event.preventDefault();
@@ -130,6 +133,10 @@ export class PoRichTextBodyComponent implements OnInit, OnDestroy {
     }
 
     this.toggleCursorOnLink(event, 'add');
+
+    if (isFieldFocused) {
+      this.keydown.emit(event);
+    }
   }
 
   onKeyUp(event: any) {

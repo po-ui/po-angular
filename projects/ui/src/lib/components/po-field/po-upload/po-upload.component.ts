@@ -76,7 +76,7 @@ import { PoUploadService } from './po-upload.service';
 export class PoUploadComponent extends PoUploadBaseComponent implements AfterViewInit {
   @ViewChild('inputFile', { read: ElementRef, static: true }) private inputFile: ElementRef;
   @ViewChild(PoUploadDragDropComponent) private poUploadDragDropComponent: PoUploadDragDropComponent;
-  @ViewChild('uploadButton') private uploadButton: PoButtonComponent;
+  @ViewChild('uploadButton') uploadButton: PoButtonComponent;
 
   id = `po-upload[${uuid()}]`;
 
@@ -245,6 +245,12 @@ export class PoUploadComponent extends PoUploadBaseComponent implements AfterVie
     return status !== PoUploadStatus.Uploaded;
   }
 
+  onBlur(): void {
+    if (!this.isUploadButtonFocused() && this.getAdditionalHelpTooltip() && this.displayAdditionalHelp) {
+      this.showAdditionalHelp();
+    }
+  }
+
   // Função disparada ao selecionar algum arquivo.
   onFileChange(event): void {
     // necessário este tratamento quando para IE, pois nele o change é disparado quando o campo é limpado também
@@ -261,6 +267,12 @@ export class PoUploadComponent extends PoUploadBaseComponent implements AfterVie
 
   onFileChangeDragDrop(files) {
     this.updateFiles(files);
+  }
+
+  onKeyDown(event: KeyboardEvent): void {
+    if (this.isUploadButtonFocused()) {
+      this.keydown.emit(event);
+    }
   }
 
   // Remove o arquivo passado por parâmetro da lista dos arquivos correntes.
@@ -314,6 +326,32 @@ export class PoUploadComponent extends PoUploadBaseComponent implements AfterVie
     } else {
       this.renderer.removeAttribute(this.inputFile.nativeElement, 'webkitdirectory');
     }
+  }
+
+  /**
+   * Método que exibe `p-additionalHelpTooltip` ou executa a ação definida em `p-additionalHelp`.
+   * Para isso, será necessário configurar uma tecla de atalho utilizando o evento `p-keydown`.
+   *
+   * ```
+   * <po-upload
+   *  #upload
+   *  ...
+   *  p-additional-help-tooltip="Mensagem de ajuda complementar"
+   *  (p-keydown)="onKeyDown($event, upload)"
+   * ></po-upload>
+   * ```
+   * ```
+   * ...
+   * onKeyDown(event: KeyboardEvent, inp: PoUploadComponent): void {
+   *  if (event.code === 'F9') {
+   *    inp.showAdditionalHelp();
+   *  }
+   * }
+   * ```
+   */
+  showAdditionalHelp(): boolean {
+    this.displayAdditionalHelp = !this.displayAdditionalHelp;
+    return this.displayAdditionalHelp;
   }
 
   showAdditionalHelpIcon() {
@@ -378,6 +416,10 @@ export class PoUploadComponent extends PoUploadBaseComponent implements AfterVie
       this.additionalHelpEventTrigger === 'event' ||
       (this.additionalHelpEventTrigger === undefined && this.additionalHelp.observed)
     );
+  }
+
+  private isUploadButtonFocused(): boolean {
+    return document.activeElement === this.uploadButton.buttonElement.nativeElement;
   }
 
   // função disparada na resposta do sucesso ou error

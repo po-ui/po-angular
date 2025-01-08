@@ -64,6 +64,9 @@ export class PoRadioComponent extends PoFieldModel<boolean> {
   /** Define o status do *radio* */
   @Input('p-checked') checked: boolean = false;
 
+  // Evento disparado ao sair do campo.
+  @Output('p-blur') blur: EventEmitter<any> = new EventEmitter();
+
   /** Emite evento para a tabela ao selecionar ou desselecionar */
   @Output('p-change-selected') changeSelected: EventEmitter<any> = new EventEmitter<any>();
 
@@ -102,6 +105,7 @@ export class PoRadioComponent extends PoFieldModel<boolean> {
 
   onBlur() {
     this.onTouched?.();
+    this.blur.emit();
   }
 
   onKeyDown(event: KeyboardEvent) {

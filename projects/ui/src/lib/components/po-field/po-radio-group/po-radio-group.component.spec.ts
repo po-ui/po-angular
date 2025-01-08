@@ -260,6 +260,51 @@ describe('PoRadioGroupComponent:', () => {
       });
     });
 
+    describe('onBlur', () => {
+      let setupTest;
+      let radioMock;
+
+      beforeEach(() => {
+        setupTest = (tooltip: string, displayHelp: boolean, additionalHelpEvent: any) => {
+          component.additionalHelpTooltip = tooltip;
+          component.displayAdditionalHelp = displayHelp;
+          component.additionalHelp = additionalHelpEvent;
+          spyOn(component, 'showAdditionalHelp');
+        };
+
+        radioMock = { radioInput: { nativeElement: document.createElement('input') } } as PoRadioComponent;
+      });
+      it('should call showAdditionalHelp when the tooltip is displayed', () => {
+        setupTest('Mensagem de apoio adicional.', true, { observed: false });
+        component.onBlur(radioMock);
+        expect(component.showAdditionalHelp).toHaveBeenCalled();
+      });
+
+      it('should not call showAdditionalHelp when tooltip is not displayed', () => {
+        setupTest('Mensagem de apoio adicional.', false, { observed: false });
+        component.onBlur(radioMock);
+        expect(component.showAdditionalHelp).not.toHaveBeenCalled();
+      });
+
+      it('should not call showAdditionalHelp when additionalHelp event is true', () => {
+        setupTest('Mensagem de apoio adicional.', true, { observed: true });
+        component.onBlur(radioMock);
+        expect(component.showAdditionalHelp).not.toHaveBeenCalled();
+      });
+    });
+
+    it('onKeyDown: should emit event when field is focused', () => {
+      const fakeEvent = new KeyboardEvent('keydown', { key: 'Enter' });
+      spyOn(component.keydown, 'emit');
+
+      const radioMock = { radioInput: { nativeElement: document.createElement('input') } } as PoRadioComponent;
+      spyOnProperty(document, 'activeElement', 'get').and.returnValue(radioMock.radioInput.nativeElement);
+
+      component.onKeyDown(fakeEvent, radioMock);
+
+      expect(component.keydown.emit).toHaveBeenCalledWith(fakeEvent);
+    });
+
     describe('onKeyUp:', () => {
       it('should call `changeValue` when `isArrowKey` is true.', () => {
         spyOn(component, 'changeValue');
@@ -307,6 +352,26 @@ describe('PoRadioGroupComponent:', () => {
     it('isArrowKey: should return false when key is not between 37 and 40.', () => {
       expect(component['isArrowKey'](36)).toBeFalsy();
       expect(component['isArrowKey'](41)).toBeFalsy();
+    });
+
+    describe('showAdditionalHelp:', () => {
+      it('should toggle `displayAdditionalHelp` from false to true', () => {
+        component.displayAdditionalHelp = false;
+
+        const result = component.showAdditionalHelp();
+
+        expect(result).toBeTrue();
+        expect(component.displayAdditionalHelp).toBeTrue();
+      });
+
+      it('should toggle `displayAdditionalHelp` from true to false', () => {
+        component.displayAdditionalHelp = true;
+
+        const result = component.showAdditionalHelp();
+
+        expect(result).toBeFalse();
+        expect(component.displayAdditionalHelp).toBeFalse();
+      });
     });
   });
 

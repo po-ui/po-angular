@@ -362,6 +362,15 @@ export abstract class PoUploadBaseComponent implements ControlValueAccessor, Val
    * @optional
    *
    * @description
+   * Evento disparado quando uma tecla é pressionada enquanto o foco está no componente.
+   * Retorna um objeto `KeyboardEvent` com informações sobre a tecla.
+   */
+  @Output('p-keydown') keydown: EventEmitter<KeyboardEvent> = new EventEmitter<KeyboardEvent>();
+
+  /**
+   * @optional
+   *
+   * @description
    *
    * Função que será executada no momento de realizar o envio do arquivo,
    * onde será possível adicionar informações ao parâmetro que será enviado na requisição.
@@ -422,6 +431,7 @@ export abstract class PoUploadBaseComponent implements ControlValueAccessor, Val
   currentFiles: Array<PoUploadFile>;
 
   canHandleDirectory: boolean;
+  displayAdditionalHelp: boolean = false;
   onModelChange: any;
 
   protected extensionNotAllowed = 0;

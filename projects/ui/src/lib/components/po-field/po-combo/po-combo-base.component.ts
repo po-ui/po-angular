@@ -302,6 +302,15 @@ export abstract class PoComboBaseComponent implements ControlValueAccessor, OnIn
    * @optional
    *
    * @description
+   * Evento disparado quando uma tecla é pressionada enquanto o foco está no componente.
+   * Retorna um objeto `KeyboardEvent` com informações sobre a tecla.
+   */
+  @Output('p-keydown') keydown: EventEmitter<KeyboardEvent> = new EventEmitter<KeyboardEvent>();
+
+  /**
+   * @optional
+   *
+   * @description
    *
    * Função para atualizar o ngModel do componente, necessário quando não for utilizado dentro da tag form.
    *
@@ -341,6 +350,7 @@ export abstract class PoComboBaseComponent implements ControlValueAccessor, OnIn
   page: number = 1;
   pageSize: number = 10;
   loading: boolean = false;
+  displayAdditionalHelp: boolean = false;
   dynamicLabel: string = 'label';
   dynamicValue: string = 'value';
   shouldApplyFocus: boolean = false;

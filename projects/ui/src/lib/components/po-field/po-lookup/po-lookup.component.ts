@@ -339,8 +339,17 @@ export class PoLookupComponent extends PoLookupBaseComponent implements AfterVie
     );
   }
 
-  searchEvent() {
+  onBlur(): void {
     this.onTouched?.();
+
+    if (this.getAdditionalHelpTooltip() && this.displayAdditionalHelp) {
+      this.showAdditionalHelp();
+    }
+  }
+
+  searchEvent() {
+    this.onBlur();
+
     const value = this.getViewValue();
 
     if (this.oldValue?.toString() !== value) {
@@ -430,6 +439,40 @@ export class PoLookupComponent extends PoLookupBaseComponent implements AfterVie
     }
 
     this.visibleDisclaimers = [...newDisclaimers];
+  }
+
+  onKeyDown(event: KeyboardEvent): void {
+    const isFieldFocused = document.activeElement === this.inputEl.nativeElement;
+
+    if (isFieldFocused) {
+      this.keydown.emit(event);
+    }
+  }
+
+  /**
+   * Método que exibe `p-additionalHelpTooltip` ou executa a ação definida em `p-additionalHelp`.
+   * Para isso, será necessário configurar uma tecla de atalho utilizando o evento `p-keydown`.
+   *
+   * ```
+   * <po-lookup
+   *  #lookup
+   *  ...
+   *  p-additional-help-tooltip="Mensagem de ajuda complementar"
+   *  (p-keydown)="onKeyDown($event, lookup)"
+   * ></po-lookup>
+   * ```
+   * ```
+   * ...
+   * onKeyDown(event: KeyboardEvent, inp: PoLookupComponent): void {
+   *  if (event.code === 'F9') {
+   *    inp.showAdditionalHelp();
+   *  }
+   * }
+   * ```
+   */
+  showAdditionalHelp(): boolean {
+    this.displayAdditionalHelp = !this.displayAdditionalHelp;
+    return this.displayAdditionalHelp;
   }
 
   showAdditionalHelpIcon() {
