@@ -39,10 +39,6 @@ export interface PoDynamicFormField extends PoDynamicField {
   /**
    * Evento disparado ao clicar no ícone de ajuda adicional.
    * Este evento ativa automaticamente a exibição do ícone de ajuda adicional ao `p-help`.
-   *
-   * **Componentes compatíveis:** `po-checkbox`, `po-checkbox-group`, `po-combo`, `po-datepicker`, `po-datepicker-range`,
-   * `po-decimal`, `po-email`, `po-input`, `po-login`, `po-lookup`, `po-multiselect`, `po-number`, `po-password`,
-   * `po-radio-group`, `po-rich-text`, `po-select`, `po-switch`, `po-textarea`, `po-upload`, `po-url`.
    */
   additionalHelp?: Function;
 
@@ -50,10 +46,6 @@ export interface PoDynamicFormField extends PoDynamicField {
    * Exibe um ícone de ajuda adicional ao `p-help`, com o texto desta propriedade no tooltip.
    * Se o evento `p-additional-help` estiver definido, o tooltip não será exibido.
    * **Como boa prática, indica-se utilizar um texto com até 140 caracteres.**
-   *
-   * **Componentes compatíveis:** `po-checkbox`, `po-checkbox-group`, `po-combo`, `po-datepicker`, `po-datepicker-range`,
-   * `po-decimal`, `po-email`, `po-input`, `po-login`, `po-lookup`, `po-multiselect`, `po-number`, `po-password`,
-   * `po-radio-group`, `po-rich-text`, `po-select`, `po-switch`, `po-textarea`, `po-upload`, `po-url`.
    */
   additionalHelpTooltip?: string;
 
@@ -64,10 +56,6 @@ export interface PoDynamicFormField extends PoDynamicField {
    *
    * > O uso dessa propriedade pode acarretar na perda sequencial da tabulação da página.
    * Quando utilizado com `p-additional-help-tooltip`, leitores de tela como o NVDA podem não ler o conteúdo do tooltip.
-   *
-   * **Componentes compatíveis:** `po-checkbox`, `po-checkbox-group`, `po-combo`, `po-datepicker`, `po-datepicker-range`,
-   * `po-decimal`, `po-email`, `po-input`, `po-login`, `po-lookup`, `po-multiselect`, `po-number`, `po-password`,
-   * `po-radio-group`, `po-rich-text`, `po-select`, `po-switch`, `po-textarea`, `po-upload`, `po-url`.
    */
   appendBox?: boolean;
 
@@ -81,6 +69,12 @@ export interface PoDynamicFormField extends PoDynamicField {
    * **Componentes compatíveis:** `po-radio-group`, `po-lookup`, `po-checkbox-group`.
    */
   columns?: Array<PoLookupColumn> | number;
+
+  /**
+   * Função executada quando uma tecla é pressionada enquanto o foco está no componente.
+   * Retorna um objeto `KeyboardEvent` com informações sobre a tecla.
+   */
+  keydown?: Function;
 
   /** Define a obrigatoriedade do campo. */
   required?: boolean;

@@ -294,19 +294,39 @@ describe('PoCheckboxGroupComponent:', () => {
       });
     });
 
-    describe('Templates:', () => {
-      it('shouldn`t set `po-clickable` class if `disabled` is true.', () => {
-        component.options = [
-          { value: '1', label: '1' },
-          { value: '2', label: '2' }
-        ];
-        component.disabled = true;
+    describe('showAdditionalHelp:', () => {
+      it('should toggle `displayAdditionalHelp` from false to true', () => {
+        component.displayAdditionalHelp = false;
 
-        changeDetector.detectChanges();
+        const result = component.showAdditionalHelp();
 
-        expect(nativeElement.querySelectorAll('label.po-checkbox-group-label.po-clickable')[0]).toBeFalsy();
-        expect(nativeElement.querySelectorAll('label.po-checkbox-group-label.po-clickable')[1]).toBeFalsy();
+        expect(result).toBeTrue();
+        expect(component.displayAdditionalHelp).toBeTrue();
       });
+
+      it('should toggle `displayAdditionalHelp` from true to false', () => {
+        component.displayAdditionalHelp = true;
+
+        const result = component.showAdditionalHelp();
+
+        expect(result).toBeFalse();
+        expect(component.displayAdditionalHelp).toBeFalse();
+      });
+    });
+  });
+
+  describe('Templates:', () => {
+    it('shouldn`t set `po-clickable` class if `disabled` is true.', () => {
+      component.options = [
+        { value: '1', label: '1' },
+        { value: '2', label: '2' }
+      ];
+      component.disabled = true;
+
+      changeDetector.detectChanges();
+
+      expect(nativeElement.querySelectorAll('label.po-checkbox-group-label.po-clickable')[0]).toBeFalsy();
+      expect(nativeElement.querySelectorAll('label.po-checkbox-group-label.po-clickable')[1]).toBeFalsy();
     });
   });
 });

@@ -31,6 +31,7 @@
       (click)="eventOnClick($event)"
       (focus)="eventOnFocus($event)"
       (input)="eventOnInput($event)"
+      (keydown)="onKeyDown($event)"
     />
 
     <div class="po-field-icon-container-right">
@@ -51,6 +52,7 @@
     [p-disabled]="disabled"
     [p-error-pattern]="getErrorPattern()"
     [p-error-limit]="errorLimit"
+    [p-show-additional-help]="displayAdditionalHelp"
     [p-show-additional-help-icon]="showAdditionalHelpIcon()"
     (p-additional-help)="emitAdditionalHelp()"
   >

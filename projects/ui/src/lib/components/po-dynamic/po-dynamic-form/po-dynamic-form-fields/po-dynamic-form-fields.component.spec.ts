@@ -364,6 +364,26 @@ describe('PoDynamicFormFieldsComponent: ', () => {
       });
     });
 
+    describe('showAdditionalHelp:', () => {
+      it('should call `showAdditionalHelp` if find component.', () => {
+        const fieldComponent = { showAdditionalHelp: jasmine.createSpy(), name: 'name' };
+        component.components = <any>[fieldComponent];
+
+        component.showAdditionalHelp('name');
+
+        expect(fieldComponent.showAdditionalHelp).toHaveBeenCalled();
+      });
+
+      it('should not call `showAdditionalHelp` if component is not found', () => {
+        const fieldComponent = { showAdditionalHelp: jasmine.createSpy(), name: 'name' };
+        component.components = <any>[fieldComponent];
+
+        component.showAdditionalHelp('nickname');
+
+        expect(fieldComponent.showAdditionalHelp).not.toHaveBeenCalled();
+      });
+    });
+
     it('applyFieldValidation: should merge fields and validatedFields and apply new value to `fields` and `value``', () => {
       const index = 1;
       const validatedField = { field: { property: 'test2', required: false, visible: true }, value: 'expected value' };

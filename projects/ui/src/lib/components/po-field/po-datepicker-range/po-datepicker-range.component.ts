@@ -281,6 +281,8 @@ export class PoDatepickerRangeComponent
     } else {
       this.poMaskObject.keydown(event);
     }
+
+    this.keydown.emit(event);
   }
 
   onKeyup(event: any) {
@@ -302,6 +304,32 @@ export class PoDatepickerRangeComponent
 
   showAdditionalHelpIcon() {
     return !!this.additionalHelpTooltip || this.isAdditionalHelpEventTriggered();
+  }
+
+  /**
+   * Método que exibe `p-additionalHelpTooltip` ou executa a ação definida em `p-additionalHelp`.
+   * Para isso, será necessário configurar uma tecla de atalho utilizando o evento `p-keydown`.
+   *
+   * ```
+   * <po-datepicker-range
+   *  #datepickerRange
+   *  ...
+   *  p-additional-help-tooltip="Mensagem de ajuda complementar"
+   *  (p-keydown)="onKeyDown($event, datepickerRange)"
+   * ></po-datepicker-range>
+   * ```
+   * ```
+   * ...
+   * onKeyDown(event: KeyboardEvent, inp: PoDatepickerRangeComponent): void {
+   *  if (event.code === 'F9') {
+   *    inp.showAdditionalHelp();
+   *  }
+   * }
+   * ```
+   */
+  showAdditionalHelp(): boolean {
+    this.displayAdditionalHelp = !this.displayAdditionalHelp;
+    return this.displayAdditionalHelp;
   }
 
   toggleCalendar() {

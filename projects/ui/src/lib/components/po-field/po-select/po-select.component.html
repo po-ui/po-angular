@@ -17,6 +17,7 @@
       [id]="id"
       [required]="required"
       (change)="onSelectChange($event.target.value)"
+      (keydown)="onKeyDown($event)"
     >
       <ng-container *ngIf="!isSafari">
         <option
@@ -60,6 +61,7 @@
     [p-disabled]="disabled"
     [p-error-pattern]="getErrorPattern()"
     [p-error-limit]="errorLimit"
+    [p-show-additional-help]="displayAdditionalHelp"
     [p-show-additional-help-icon]="showAdditionalHelpIcon()"
     (p-additional-help)="emitAdditionalHelp()"
   ></po-field-container-bottom>

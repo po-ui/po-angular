@@ -184,6 +184,16 @@ export abstract class PoRichTextBaseComponent implements ControlValueAccessor, V
    */
   @Output('p-change-model') changeModel: EventEmitter<any> = new EventEmitter();
 
+  /**
+   * @optional
+   *
+   * @description
+   * Evento disparado quando uma tecla é pressionada enquanto o foco está no componente.
+   * Retorna um objeto `KeyboardEvent` com informações sobre a tecla.
+   */
+  @Output('p-keydown') keydown: EventEmitter<KeyboardEvent> = new EventEmitter<KeyboardEvent>();
+
+  displayAdditionalHelp: boolean = false;
   invalid: boolean = false;
   onChangeModel: any = null;
   value: string;

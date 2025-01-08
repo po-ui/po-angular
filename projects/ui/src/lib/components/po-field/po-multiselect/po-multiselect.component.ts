@@ -379,6 +379,8 @@ export class PoMultiselectComponent
       this.toggleDropdownVisibility();
     }
     this.enterCloseTag = false;
+
+    this.keydown.emit(event);
   }
 
   toggleDropdownVisibility() {
@@ -463,6 +465,32 @@ export class PoMultiselectComponent
     setTimeout(() => {
       this.focusOnNextTag(index, event);
     }, 300);
+  }
+
+  /**
+   * Método que exibe `p-additionalHelpTooltip` ou executa a ação definida em `p-additionalHelp`.
+   * Para isso, será necessário configurar uma tecla de atalho utilizando o evento `p-keydown`.
+   *
+   * ```
+   * <po-multiselect
+   *  #multiselect
+   *  ...
+   *  p-additional-help-tooltip="Mensagem de ajuda complementar"
+   *  (p-keydown)="onKeyDown($event, multiselect)"
+   * ></po-multiselect>
+   * ```
+   * ```
+   * ...
+   * onKeyDown(event: KeyboardEvent, inp: PoMultiselectComponent): void {
+   *  if (event.code === 'F9') {
+   *    inp.showAdditionalHelp();
+   *  }
+   * }
+   * ```
+   */
+  showAdditionalHelp(): boolean {
+    this.displayAdditionalHelp = !this.displayAdditionalHelp;
+    return this.displayAdditionalHelp;
   }
 
   showAdditionalHelpIcon() {

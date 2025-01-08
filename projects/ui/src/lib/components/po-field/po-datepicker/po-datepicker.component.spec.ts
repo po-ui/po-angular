@@ -792,6 +792,26 @@ describe('PoDatepickerComponent:', () => {
       expect(component.formatToDate(value)).toBeUndefined();
     });
 
+    describe('showAdditionalHelp:', () => {
+      it('should toggle `displayAdditionalHelp` from false to true', () => {
+        component.displayAdditionalHelp = false;
+
+        const result = component.showAdditionalHelp();
+
+        expect(result).toBeTrue();
+        expect(component.displayAdditionalHelp).toBeTrue();
+      });
+
+      it('should toggle `displayAdditionalHelp` from true to false', () => {
+        component.displayAdditionalHelp = true;
+
+        const result = component.showAdditionalHelp();
+
+        expect(result).toBeFalse();
+        expect(component.displayAdditionalHelp).toBeFalse();
+      });
+    });
+
     it('writeValue: should call `setYearFrom0To100`', () => {
       const date = '0001-01-01T00:00:01-00:00';
       spyOn(UtilsFunctions, 'setYearFrom0To100');
