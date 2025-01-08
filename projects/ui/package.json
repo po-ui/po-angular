@@ -39,6 +39,7 @@
     "@angular-devkit/schematics": "^18",
     "@po-ui/style": "0.0.0-PLACEHOLDER",
     "rxjs": "~7.8.1",
-    "zone.js": "~0.14.4"
+    "zone.js": "~0.14.4",
+    "deepmerge": "^4.3.1"
   }
 }
