@@ -441,6 +441,15 @@ export abstract class PoLookupBaseComponent
    * @optional
    *
    * @description
+   * Evento disparado quando uma tecla é pressionada enquanto o foco está no componente.
+   * Retorna um objeto `KeyboardEvent` com informações sobre a tecla.
+   */
+  @Output('p-keydown') keydown: EventEmitter<KeyboardEvent> = new EventEmitter<KeyboardEvent>();
+
+  /**
+   * @optional
+   *
+   * @description
    *
    * Evento será disparado quando ocorrer alguma seleção.
    * Será passado por parâmetro o objeto com o valor selecionado.
@@ -479,6 +488,7 @@ export abstract class PoLookupBaseComponent
    */
   @Output('p-restore-column-manager') columnRestoreManager = new EventEmitter<Array<string>>();
 
+  displayAdditionalHelp: boolean = false;
   service: any;
 
   protected selectedOptions = [];

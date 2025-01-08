@@ -23,6 +23,7 @@
         [placeholder]="placeholder"
         [required]="required"
         (blur)="searchEvent()"
+        (keydown)="onKeyDown($event)"
       />
 
       <div class="po-field-icon-container-right po-lookup-buttons">
@@ -62,6 +63,7 @@
     [p-disabled]="disabled"
     [p-error-pattern]="getErrorPattern()"
     [p-error-limit]="errorLimit"
+    [p-show-additional-help]="displayAdditionalHelp"
     [p-show-additional-help-icon]="showAdditionalHelpIcon()"
     (p-additional-help)="emitAdditionalHelp()"
   ></po-field-container-bottom>
@@ -78,6 +80,8 @@
       [class.po-lookup-input-static]="!autoHeight"
       [class.po-lookup-input-padding-button-clean]="clean"
       [class.po-lookup-input-disabled]="disabled"
+      (blur)="onBlur()"
+      (keydown)="onKeyDown($event)"
     >
       <span *ngIf="placeholder && !disclaimers?.length" class="po-lookup-input-placeholder">
         {{ placeholder }}

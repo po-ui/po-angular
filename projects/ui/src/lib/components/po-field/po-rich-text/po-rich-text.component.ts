@@ -139,10 +139,44 @@ export class PoRichTextComponent
 
   onBlur() {
     this.onTouched?.();
+
+    if (this.additionalHelp.observed ? null : this.additionalHelpTooltip && this.displayAdditionalHelp) {
+      this.showAdditionalHelp();
+    }
   }
 
   onChangeValue(value: any) {
     this.change.emit(value);
+  }
+
+  onKeyDown(event: KeyboardEvent): void {
+    this.keydown.emit(event);
+  }
+
+  /**
+   * Método que exibe `p-additionalHelpTooltip` ou executa a ação definida em `p-additionalHelp`.
+   * Para isso, será necessário configurar uma tecla de atalho utilizando o evento `p-keydown`.
+   *
+   * ```
+   * <po-rich-text
+   *  #richtext
+   *  ...
+   *  p-additional-help-tooltip="Mensagem de ajuda complementar"
+   *  (p-keydown)="onKeyDown($event, richtext)"
+   * ></po-rich-text>
+   * ```
+   * ```
+   * ...
+   * onKeyDown(event: KeyboardEvent, inp: PoRichTextComponent): void {
+   *  if (event.code === 'F9') {
+   *    inp.showAdditionalHelp();
+   *  }
+   * }
+   * ```
+   */
+  showAdditionalHelp(): boolean {
+    this.displayAdditionalHelp = !this.displayAdditionalHelp;
+    return this.displayAdditionalHelp;
   }
 
   updateValue(value: string) {

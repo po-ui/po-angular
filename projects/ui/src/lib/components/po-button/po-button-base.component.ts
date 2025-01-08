@@ -117,6 +117,9 @@ export class PoButtonBaseComponent {
    */
   @Input('p-type') type?: PoButtonType = PoButtonType.Button;
 
+  // Evento disparado ao sair do campo.
+  @Output('p-blur') blur: EventEmitter<any> = new EventEmitter();
+
   /** Ação que será executada quando o usuário clicar sobre o `po-button`. */
   @Output('p-click') click = new EventEmitter<null>();
 

@@ -92,12 +92,43 @@ describe('PoTextareaComponent:', () => {
     expect(component.controlChangeEmitter).toHaveBeenCalled();
   });
 
-  it('eventOnBlur: shouldn´t throw error if onTouched is falsy', () => {
-    component['onTouched'] = null;
+  describe('eventOnBlur', () => {
+    let setupTest;
 
-    const fnError = () => component.eventOnBlur();
+    beforeEach(() => {
+      setupTest = (tooltip: string, displayHelp: boolean, additionalHelpEvent: any) => {
+        component.additionalHelpTooltip = tooltip;
+        component.displayAdditionalHelp = displayHelp;
+        component.additionalHelp = additionalHelpEvent;
+        spyOn(component, 'showAdditionalHelp');
+      };
+    });
 
-    expect(fnError).not.toThrow();
+    it('shouldn´t throw error if onTouched is falsy', () => {
+      component['onTouched'] = null;
+
+      const fnError = () => component.eventOnBlur();
+
+      expect(fnError).not.toThrow();
+    });
+
+    it('should call showAdditionalHelp when the tooltip is displayed', () => {
+      setupTest('Mensagem de apoio adicional.', true, { observed: false });
+      component.eventOnBlur();
+      expect(component.showAdditionalHelp).toHaveBeenCalled();
+    });
+
+    it('should not call showAdditionalHelp when tooltip is not displayed', () => {
+      setupTest('Mensagem de apoio adicional.', false, { observed: false });
+      component.eventOnBlur();
+      expect(component.showAdditionalHelp).not.toHaveBeenCalled();
+    });
+
+    it('should not call showAdditionalHelp when additionalHelp event is true', () => {
+      setupTest('Mensagem de apoio adicional.', true, { observed: true });
+      component.eventOnBlur();
+      expect(component.showAdditionalHelp).not.toHaveBeenCalled();
+    });
   });
 
   describe('Methods:', () => {
@@ -296,6 +327,80 @@ describe('PoTextareaComponent:', () => {
         component['el'].nativeElement.classList.add('ng-dirty');
         component.fieldErrorMessage = undefined;
         expect(component.getErrorPattern()).toBe('');
+      });
+    });
+
+    describe('onKeyDown:', () => {
+      it('should emit event when field is focused', () => {
+        const fakeEvent = new KeyboardEvent('keydown', { key: 'Enter' });
+        component.inputEl = {
+          nativeElement: {
+            focus: () => {}
+          }
+        };
+
+        spyOn(component.keydown, 'emit');
+        spyOnProperty(document, 'activeElement', 'get').and.returnValue(component.inputEl.nativeElement);
+
+        component.onKeyDown(fakeEvent);
+
+        expect(component.keydown.emit).toHaveBeenCalledWith(fakeEvent);
+      });
+
+      it('should not emit event when field is not focused', () => {
+        const fakeEvent = new KeyboardEvent('keydown', { key: 'Enter' });
+        component.inputEl = {
+          nativeElement: {
+            focus: () => {}
+          }
+        };
+
+        spyOn(component.keydown, 'emit');
+        spyOnProperty(document, 'activeElement', 'get').and.returnValue(document.createElement('div'));
+        component.onKeyDown(fakeEvent);
+
+        expect(component.keydown.emit).not.toHaveBeenCalled();
+      });
+    });
+
+    describe('showAdditionalHelp:', () => {
+      it('should toggle `displayAdditionalHelp` from false to true', () => {
+        component.displayAdditionalHelp = false;
+
+        const result = component.showAdditionalHelp();
+
+        expect(result).toBeTrue();
+        expect(component.displayAdditionalHelp).toBeTrue();
+      });
+
+      it('should toggle `displayAdditionalHelp` from true to false', () => {
+        component.displayAdditionalHelp = true;
+
+        const result = component.showAdditionalHelp();
+
+        expect(result).toBeFalse();
+        expect(component.displayAdditionalHelp).toBeFalse();
+      });
+    });
+
+    describe('isAdditionalHelpEventTriggered:', () => {
+      it('should return true when additionalHelpEventTrigger is "event"', () => {
+        component.additionalHelpEventTrigger = 'event';
+        expect((component as any).isAdditionalHelpEventTriggered()).toBeTrue();
+      });
+
+      it('should return true when additionalHelpEventTrigger is undefined and additionalHelp is observed', () => {
+        component.additionalHelpEventTrigger = undefined;
+        component.additionalHelp = {
+          observed: true
+        } as any;
+
+        expect((component as any).isAdditionalHelpEventTriggered()).toBeTrue();
+      });
+
+      it('should return false when additionalHelpEventTrigger is not "event" and additionalHelp is not observed', () => {
+        component.additionalHelpEventTrigger = 'noEvent';
+        expect((component as any).isAdditionalHelpEventTriggered()).toBeFalse();
       });
     });
   });

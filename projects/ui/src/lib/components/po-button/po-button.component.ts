@@ -35,6 +35,10 @@ import { PoButtonBaseComponent } from './po-button-base.component';
 export class PoButtonComponent extends PoButtonBaseComponent {
   @ViewChild('button', { static: true }) buttonElement: ElementRef;
 
+  onBlur(): void {
+    this.blur.emit();
+  }
+
   /**
    * Função que atribui foco ao componente.
    *

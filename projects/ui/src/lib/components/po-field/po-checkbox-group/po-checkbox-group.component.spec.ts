@@ -1,6 +1,7 @@
 import { ChangeDetectorRef, NO_ERRORS_SCHEMA } from '@angular/core';
 import { ComponentFixture, TestBed } from '@angular/core/testing';
 
+import { PoCheckboxComponent } from '../po-checkbox/po-checkbox.component';
 import { PoCheckboxGroupComponent } from './po-checkbox-group.component';
 import { PoFieldContainerBottomComponent } from './../po-field-container/po-field-container-bottom/po-field-container-bottom.component';
 import { PoFieldContainerComponent } from '../po-field-container/po-field-container.component';
@@ -79,6 +80,42 @@ describe('PoCheckboxGroupComponent:', () => {
       component.ngAfterViewInit();
 
       expect(spyFocus).not.toHaveBeenCalled();
+    });
+
+    describe('onBlur:', () => {
+      let setupTest;
+      let checkboxMock;
+
+      beforeEach(() => {
+        setupTest = (tooltip: string, displayHelp: boolean, additionalHelpEvent: any) => {
+          component.additionalHelpTooltip = tooltip;
+          component.displayAdditionalHelp = displayHelp;
+          component.additionalHelp = additionalHelpEvent;
+          spyOn(component, 'showAdditionalHelp');
+        };
+
+        checkboxMock = {
+          checkboxLabel: { nativeElement: document.createElement('input') }
+        } as PoCheckboxComponent;
+      });
+
+      it('should call showAdditionalHelp when the tooltip is displayed', () => {
+        setupTest('Mensagem de apoio adicional.', true, { observed: false });
+        component.onBlur(checkboxMock);
+        expect(component.showAdditionalHelp).toHaveBeenCalled();
+      });
+
+      it('should not call showAdditionalHelp when tooltip is not displayed', () => {
+        setupTest('Mensagem de apoio adicional.', false, { observed: false });
+        component.onBlur(checkboxMock);
+        expect(component.showAdditionalHelp).not.toHaveBeenCalled();
+      });
+
+      it('should not call showAdditionalHelp when additionalHelp event is true', () => {
+        setupTest('Mensagem de apoio adicional.', true, { observed: true });
+        component.onBlur(checkboxMock);
+        expect(component.showAdditionalHelp).not.toHaveBeenCalled();
+      });
     });
 
     describe('emitAdditionalHelp:', () => {
@@ -244,6 +281,7 @@ describe('PoCheckboxGroupComponent:', () => {
     describe('onKeyDown:', () => {
       let option;
       let fakeEvent: any;
+      let checkboxMock: PoCheckboxComponent;
 
       beforeEach(() => {
         option = {
@@ -256,13 +294,18 @@ describe('PoCheckboxGroupComponent:', () => {
           keyCode: 32,
           preventDefault: () => {}
         };
+
+        checkboxMock = {
+          checkboxLabel: { nativeElement: document.createElement('input') },
+          focus: jasmine.createSpy('focus')
+        } as unknown as PoCheckboxComponent;
       });
 
       it('should call `checkOption` and `preventDefault` when event which from spacebar', () => {
         spyOn(component, 'checkOption');
         spyOn(fakeEvent, 'preventDefault');
 
-        component.onKeyDown(fakeEvent, option);
+        component.onKeyDown(fakeEvent, option, checkboxMock);
 
         expect(fakeEvent.preventDefault).toHaveBeenCalled();
         expect(component.checkOption).toHaveBeenCalledWith(option);
@@ -275,7 +318,7 @@ describe('PoCheckboxGroupComponent:', () => {
         spyOn(component, 'checkOption');
         spyOn(fakeEvent, 'preventDefault');
 
-        component.onKeyDown(fakeEvent, option);
+        component.onKeyDown(fakeEvent, option, checkboxMock);
 
         expect(component.checkOption).not.toHaveBeenCalled();
         expect(fakeEvent.preventDefault).not.toHaveBeenCalled();
@@ -287,26 +330,55 @@ describe('PoCheckboxGroupComponent:', () => {
         spyOn(component, 'checkOption');
         spyOn(fakeEvent, 'preventDefault');
 
-        component.onKeyDown(fakeEvent, option);
+        component.onKeyDown(fakeEvent, option, checkboxMock);
 
         expect(fakeEvent.preventDefault).toHaveBeenCalled();
         expect(component.checkOption).toHaveBeenCalledWith(option);
       });
+
+      it('should emit event when field is focused', () => {
+        spyOn(component.keydown, 'emit');
+        spyOnProperty(document, 'activeElement', 'get').and.returnValue(checkboxMock.checkboxLabel.nativeElement);
+
+        component.onKeyDown(fakeEvent, option, checkboxMock);
+
+        expect(component.keydown.emit).toHaveBeenCalledWith(fakeEvent);
+      });
     });
 
-    describe('Templates:', () => {
-      it('shouldn`t set `po-clickable` class if `disabled` is true.', () => {
-        component.options = [
-          { value: '1', label: '1' },
-          { value: '2', label: '2' }
-        ];
-        component.disabled = true;
+    describe('showAdditionalHelp:', () => {
+      it('should toggle `displayAdditionalHelp` from false to true', () => {
+        component.displayAdditionalHelp = false;
 
-        changeDetector.detectChanges();
+        const result = component.showAdditionalHelp();
 
-        expect(nativeElement.querySelectorAll('label.po-checkbox-group-label.po-clickable')[0]).toBeFalsy();
-        expect(nativeElement.querySelectorAll('label.po-checkbox-group-label.po-clickable')[1]).toBeFalsy();
+        expect(result).toBeTrue();
+        expect(component.displayAdditionalHelp).toBeTrue();
       });
+
+      it('should toggle `displayAdditionalHelp` from true to false', () => {
+        component.displayAdditionalHelp = true;
+
+        const result = component.showAdditionalHelp();
+
+        expect(result).toBeFalse();
+        expect(component.displayAdditionalHelp).toBeFalse();
+      });
+    });
+  });
+
+  describe('Templates:', () => {
+    it('shouldn`t set `po-clickable` class if `disabled` is true.', () => {
+      component.options = [
+        { value: '1', label: '1' },
+        { value: '2', label: '2' }
+      ];
+      component.disabled = true;
+
+      changeDetector.detectChanges();
+
+      expect(nativeElement.querySelectorAll('label.po-checkbox-group-label.po-clickable')[0]).toBeFalsy();
+      expect(nativeElement.querySelectorAll('label.po-checkbox-group-label.po-clickable')[1]).toBeFalsy();
     });
   });
 });

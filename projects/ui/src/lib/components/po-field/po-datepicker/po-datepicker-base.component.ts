@@ -216,6 +216,15 @@ export abstract class PoDatepickerBaseComponent implements ControlValueAccessor,
    */
   @Output('p-change') onchange: EventEmitter<any> = new EventEmitter<any>();
 
+  /**
+   * @optional
+   *
+   * @description
+   * Evento disparado quando uma tecla é pressionada enquanto o foco está no componente.
+   * Retorna um objeto `KeyboardEvent` com informações sobre a tecla.
+   */
+  @Output('p-keydown') keydown: EventEmitter<KeyboardEvent> = new EventEmitter<KeyboardEvent>();
+
   offset: number;
   protected firstStart = true;
   protected hour: string = 'T00:00:00-00:00';

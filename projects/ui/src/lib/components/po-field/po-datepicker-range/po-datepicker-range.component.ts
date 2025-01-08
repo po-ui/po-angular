@@ -244,6 +244,10 @@ export class PoDatepickerRangeComponent
 
   onBlur(event: any) {
     this.onTouchedModel?.();
+    if (this.getAdditionalHelpTooltip() && this.displayAdditionalHelp) {
+      this.showAdditionalHelp();
+    }
+
     const isStartDateTargetEvent = event.target.name === this.startDateInputName;
 
     this.updateModelByScreen(isStartDateTargetEvent);
@@ -271,6 +275,9 @@ export class PoDatepickerRangeComponent
   }
 
   onKeydown(event?: any) {
+    const isStartDateFocused = document.activeElement === this.startDateInput.nativeElement;
+    const isEndDateFocused = document.activeElement === this.endDateInput.nativeElement;
+    const isFieldFocused = isStartDateFocused || isEndDateFocused;
     if (this.readonly) {
       return;
     }
@@ -280,6 +287,10 @@ export class PoDatepickerRangeComponent
       this.setFocusOnBackspace();
     } else {
       this.poMaskObject.keydown(event);
+    }
+
+    if (isFieldFocused) {
+      this.keydown.emit(event);
     }
   }
 
@@ -302,6 +313,32 @@ export class PoDatepickerRangeComponent
 
   showAdditionalHelpIcon() {
     return !!this.additionalHelpTooltip || this.isAdditionalHelpEventTriggered();
+  }
+
+  /**
+   * Método que exibe `p-additionalHelpTooltip` ou executa a ação definida em `p-additionalHelp`.
+   * Para isso, será necessário configurar uma tecla de atalho utilizando o evento `p-keydown`.
+   *
+   * ```
+   * <po-datepicker-range
+   *  #datepickerRange
+   *  ...
+   *  p-additional-help-tooltip="Mensagem de ajuda complementar"
+   *  (p-keydown)="onKeyDown($event, datepickerRange)"
+   * ></po-datepicker-range>
+   * ```
+   * ```
+   * ...
+   * onKeyDown(event: KeyboardEvent, inp: PoDatepickerRangeComponent): void {
+   *  if (event.code === 'F9') {
+   *    inp.showAdditionalHelp();
+   *  }
+   * }
+   * ```
+   */
+  showAdditionalHelp(): boolean {
+    this.displayAdditionalHelp = !this.displayAdditionalHelp;
+    return this.displayAdditionalHelp;
   }
 
   toggleCalendar() {

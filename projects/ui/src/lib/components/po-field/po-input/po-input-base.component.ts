@@ -295,13 +295,23 @@ export abstract class PoInputBaseComponent implements ControlValueAccessor, Vali
    */
   @Output('p-change-model') changeModel: EventEmitter<any> = new EventEmitter();
 
-  type: string;
+  /**
+   * @optional
+   *
+   * @description
+   * Evento disparado quando uma tecla é pressionada enquanto o foco está no componente.
+   * Retorna um objeto `KeyboardEvent` com informações sobre a tecla.
+   */
+  @Output('p-keydown') keydown: EventEmitter<KeyboardEvent> = new EventEmitter<KeyboardEvent>();
 
+  displayAdditionalHelp: boolean = false;
+  type: string;
   onChangePropagate: any = null;
   objMask: any;
   modelLastUpdate: any;
   isInvalid: boolean;
   hasValidatorRequired = false;
+
   private subscription: Subscription = new Subscription();
   protected onTouched: any = null;
 
@@ -563,6 +573,32 @@ export abstract class PoInputBaseComponent implements ControlValueAccessor, Vali
 
   showAdditionalHelpIcon() {
     return !!this.additionalHelpTooltip || this.isAdditionalHelpEventTriggered();
+  }
+
+  /**
+   * Método que exibe `p-additionalHelpTooltip` ou executa a ação definida em `p-additionalHelp`.
+   * Para isso, será necessário configurar uma tecla de atalho utilizando o evento `p-keydown`.
+   *
+   * ```
+   * <po-nome-component
+   *  #component
+   *  ...
+   *  p-additional-help-tooltip="Mensagem de ajuda complementar"
+   *  (p-keydown)="onKeyDown($event, component)"
+   * ></po-nome-component>
+   * ```
+   * ```
+   * ...
+   * onKeyDown(event: KeyboardEvent, inp: PoNomeDoComponente): void {
+   *  if (event.code === 'F9') {
+   *    inp.showAdditionalHelp();
+   *  }
+   * }
+   * ```
+   */
+  showAdditionalHelp(): boolean {
+    this.displayAdditionalHelp = !this.displayAdditionalHelp;
+    return this.displayAdditionalHelp;
   }
 
   updateModel(value: any) {

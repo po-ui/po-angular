@@ -171,21 +171,24 @@ describe('PoInputGeneric:', () => {
         valueToModel: ''
       },
       callOnChange: () => {},
-      eventOnBlur: e => {},
       errorAsyncProperties: {
         errorAsync: value => of(true),
         triggerMode: 'changeModel'
       },
       verifyErrorAsync: () => {}
     };
+    const fakeEventLocal = {
+      target: {
+        value: '',
+        keyCode: 13
+      }
+    };
 
     spyOn(fakeThis, 'callOnChange');
     spyOn(fakeThis.objMask, 'keyup');
-    spyOn(fakeThis, 'eventOnBlur');
-    component.onKeyup.call(fakeThis, fakeEvent);
+    component.onKeyup.call(fakeThis, fakeEventLocal);
     expect(fakeThis.callOnChange).toHaveBeenCalled();
     expect(fakeThis.objMask.keyup).toHaveBeenCalled();
-    expect(fakeThis.eventOnBlur).toHaveBeenCalled();
   });
 
   it('shouldn`t call keyup from mask with keyCode equal to 229', () => {
@@ -501,7 +504,8 @@ describe('PoInputGeneric:', () => {
         objMask: { blur: (value: any) => {} },
         blur: component.blur,
         controlChangeEmitter: () => {},
-        onTouched: () => {}
+        onTouched: () => {},
+        getAdditionalHelpTooltip: () => false
       };
     }
 
@@ -574,6 +578,37 @@ describe('PoInputGeneric:', () => {
       expect(fakeThis.objMask.keydown).not.toHaveBeenCalled();
     });
 
+    it('onKeydown: should emit event when field is focused', () => {
+      const fakeEvent = new KeyboardEvent('keydown', { key: 'Enter' });
+      component.inputEl = {
+        nativeElement: {
+          focus: () => {}
+        }
+      };
+
+      spyOn(component.keydown, 'emit');
+      spyOnProperty(document, 'activeElement', 'get').and.returnValue(component.inputEl.nativeElement);
+
+      component.onKeyDown(fakeEvent);
+
+      expect(component.keydown.emit).toHaveBeenCalledWith(fakeEvent);
+    });
+
+    it('onKeydown: should not emit event when field is not focused', () => {
+      const fakeEvent = new KeyboardEvent('keydown', { key: 'Enter' });
+      component.inputEl = {
+        nativeElement: {
+          focus: () => {}
+        }
+      };
+
+      spyOn(component.keydown, 'emit');
+      spyOnProperty(document, 'activeElement', 'get').and.returnValue(document.createElement('div'));
+      component.onKeyDown(fakeEvent);
+
+      expect(component.keydown.emit).not.toHaveBeenCalled();
+    });
+
     it('onKeyup: should not call keyup from mask with keyCode and readonly.', () => {
       const fakeThis = {
         mask: '(999)',
@@ -607,7 +642,8 @@ describe('PoInputGeneric:', () => {
     it('verifyAutoFocus: shouldn`t call `focus` if autofocus is false', () => {
       const fakeThis = {
         autofocus: false,
-        focus: () => {}
+        focus: () => {},
+        getAdditionalHelpTooltip: () => false
       };
 
       spyOn(fakeThis, 'focus');
@@ -617,64 +653,95 @@ describe('PoInputGeneric:', () => {
       expect(fakeThis.focus).not.toHaveBeenCalled();
     });
 
-    it('eventOnBlur: should call `objMask.blur` when exists a `mask`.', () => {
-      const fakeThis = createFakeThis(true);
+    describe('eventOnBlur:', () => {
+      let setupTest;
 
-      spyOn(fakeThis.objMask, 'blur');
-      spyOn(fakeThis, <any>'onTouched');
+      beforeEach(() => {
+        setupTest = (tooltip: string, displayHelp: boolean, additionalHelpEvent: any) => {
+          component.additionalHelpTooltip = tooltip;
+          component.displayAdditionalHelp = displayHelp;
+          component.additionalHelp = additionalHelpEvent;
+          spyOn(component, 'showAdditionalHelp');
+        };
+      });
 
-      component.eventOnBlur.call(fakeThis, fakeEvent);
+      it('should call showAdditionalHelp when the tooltip is displayed', () => {
+        setupTest('Mensagem de apoio adicional.', true, { observed: false });
+        component.eventOnBlur(fakeEvent);
+        expect(component.showAdditionalHelp).toHaveBeenCalled();
+      });
 
-      expect(fakeThis['onTouched']).toHaveBeenCalled();
-      expect(fakeThis.objMask.blur).toHaveBeenCalled();
-    });
+      it('should not call showAdditionalHelp when tooltip is not displayed', () => {
+        setupTest('Mensagem de apoio adicional.', false, { observed: false });
+        component.eventOnBlur(fakeEvent);
+        expect(component.showAdditionalHelp).not.toHaveBeenCalled();
+      });
 
-    it('eventOnBlur: shouldn´t call `objMask.blur` when not exists a `mask`.', () => {
-      const fakeThis = createFakeThis(false);
+      it('should not call showAdditionalHelp when additionalHelp event is true', () => {
+        setupTest('Mensagem de apoio adicional.', true, { observed: true });
+        component.eventOnBlur(fakeEvent);
+        expect(component.showAdditionalHelp).not.toHaveBeenCalled();
+      });
 
-      spyOn(fakeThis.objMask, 'blur');
-      spyOn(fakeThis, <any>'onTouched');
+      it('should call `objMask.blur` when exists a `mask`.', () => {
+        const fakeThis = createFakeThis(true);
 
-      component.eventOnBlur.call(fakeThis, fakeEvent);
+        spyOn(fakeThis.objMask, 'blur');
+        spyOn(fakeThis, <any>'onTouched');
 
-      expect(fakeThis['onTouched']).toHaveBeenCalled();
-      expect(fakeThis.objMask.blur).not.toHaveBeenCalled();
-    });
+        component.eventOnBlur.call(fakeThis, fakeEvent);
 
-    it('eventOnBlur: should call `blur.emit` and `controlChangeEmitter` when `event.type` is blur.', () => {
-      const fakeThis = createFakeThis(false);
+        expect(fakeThis['onTouched']).toHaveBeenCalled();
+        expect(fakeThis.objMask.blur).toHaveBeenCalled();
+      });
 
-      spyOn(fakeThis.blur, 'emit');
-      spyOn(fakeThis, 'controlChangeEmitter');
-      spyOn(fakeThis, <any>'onTouched');
+      it('shouldn´t call `objMask.blur` when not exists a `mask`.', () => {
+        const fakeThis = createFakeThis(false);
 
-      component.eventOnBlur.call(fakeThis, { type: 'blur' });
+        spyOn(fakeThis.objMask, 'blur');
+        spyOn(fakeThis, <any>'onTouched');
 
-      expect(fakeThis['onTouched']).toHaveBeenCalled();
-      expect(fakeThis.blur.emit).toHaveBeenCalled();
-      expect(fakeThis.controlChangeEmitter).toHaveBeenCalled();
-    });
+        component.eventOnBlur.call(fakeThis, fakeEvent);
 
-    it('eventOnBlur: shouldn`t call `blur.emit` and `controlChangeEmitter` when `event.type` is undefined.', () => {
-      const fakeThis = createFakeThis(false);
+        expect(fakeThis['onTouched']).toHaveBeenCalled();
+        expect(fakeThis.objMask.blur).not.toHaveBeenCalled();
+      });
 
-      spyOn(fakeThis.blur, 'emit');
-      spyOn(fakeThis, 'controlChangeEmitter');
-      spyOn(fakeThis, <any>'onTouched');
+      it('should call `blur.emit` and `controlChangeEmitter` when `event.type` is blur.', () => {
+        const fakeThis = createFakeThis(false);
 
-      component.eventOnBlur.call(fakeThis, fakeEvent);
+        spyOn(fakeThis.blur, 'emit');
+        spyOn(fakeThis, 'controlChangeEmitter');
+        spyOn(fakeThis, <any>'onTouched');
 
-      expect(fakeThis['onTouched']).toHaveBeenCalled();
-      expect(fakeThis.blur.emit).not.toHaveBeenCalled();
-      expect(fakeThis.controlChangeEmitter).not.toHaveBeenCalled();
-    });
+        component.eventOnBlur.call(fakeThis, { type: 'blur' });
 
-    it('eventOnBlur: shouldn´t throw error if onTouched is falsy', () => {
-      component['onTouched'] = null;
+        expect(fakeThis['onTouched']).toHaveBeenCalled();
+        expect(fakeThis.blur.emit).toHaveBeenCalled();
+        expect(fakeThis.controlChangeEmitter).toHaveBeenCalled();
+      });
 
-      const fnError = () => component.eventOnBlur(fakeEvent);
+      it('shouldn`t call `blur.emit` and `controlChangeEmitter` when `event.type` is undefined.', () => {
+        const fakeThis = createFakeThis(false);
 
-      expect(fnError).not.toThrow();
+        spyOn(fakeThis.blur, 'emit');
+        spyOn(fakeThis, 'controlChangeEmitter');
+        spyOn(fakeThis, <any>'onTouched');
+
+        component.eventOnBlur.call(fakeThis, fakeEvent);
+
+        expect(fakeThis['onTouched']).toHaveBeenCalled();
+        expect(fakeThis.blur.emit).not.toHaveBeenCalled();
+        expect(fakeThis.controlChangeEmitter).not.toHaveBeenCalled();
+      });
+
+      it('shouldn´t throw error if onTouched is falsy', () => {
+        component['onTouched'] = null;
+
+        const fnError = () => component.eventOnBlur(fakeEvent);
+
+        expect(fnError).not.toThrow();
+      });
     });
 
     it('validateClassesForPattern: should add invalid classes if pattern validation failed.', () => {

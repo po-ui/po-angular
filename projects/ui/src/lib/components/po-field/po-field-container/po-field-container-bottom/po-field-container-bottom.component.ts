@@ -1,5 +1,18 @@
-import { ChangeDetectionStrategy, Component, EventEmitter, Input, Output } from '@angular/core';
+import {
+  ChangeDetectionStrategy,
+  ChangeDetectorRef,
+  Component,
+  ElementRef,
+  EventEmitter,
+  HostListener,
+  Input,
+  OnChanges,
+  Output,
+  SimpleChanges,
+  ViewChild
+} from '@angular/core';
 import { convertToBoolean } from '../../../../utils/util';
+import { PoTooltipDirective } from '../../../../directives';
 
 /**
  * @docsPrivate
@@ -15,7 +28,9 @@ import { convertToBoolean } from '../../../../utils/util';
   changeDetection: ChangeDetectionStrategy.OnPush,
   standalone: false
 })
-export class PoFieldContainerBottomComponent {
+export class PoFieldContainerBottomComponent implements OnChanges {
+  @ViewChild(PoTooltipDirective) poTooltip: PoTooltipDirective;
+
   /** Texto exibido no tooltip do ícone de ajuda adicional. */
   @Input('p-additional-help-tooltip') additionalHelpTooltip?: string = '';
 
@@ -37,9 +52,28 @@ export class PoFieldContainerBottomComponent {
 
   @Input('p-help') help?: string;
 
+  /** Ativa a exibição da ajuda adicional. */
+  @Input('p-show-additional-help') showAdditionalHelp: boolean = false;
+
   /** Exibe o ícone de ajuda adicional. */
   @Input('p-show-additional-help-icon') showAdditionalHelpIcon: boolean = false;
 
   /** Evento disparado ao clicar no ícone de ajuda adicional. */
   @Output('p-additional-help') additionalHelp = new EventEmitter<any>();
+
+  private isInitialChange: boolean = true;
+
+  ngOnChanges(changes: SimpleChanges) {
+    if (changes.showAdditionalHelp) {
+      if (!this.isInitialChange) {
+        if (this.additionalHelpTooltip) {
+          this.poTooltip.toggleTooltipVisibility(this.showAdditionalHelp);
+        } else {
+          this.additionalHelp.emit();
+        }
+      } else {
+        this.isInitialChange = false;
+      }
+    }
+  }
 }

@@ -17,6 +17,8 @@
           [p-required]="required"
           [p-size]="size"
           [p-value]="option.value"
+          (p-blur)="onBlur(inputRadio)"
+          (keydown)="onKeyDown($event, inputRadio)"
           (keyup)="onKeyUp($event, option.value)"
           (click)="eventClick(option.value, option.disabled === true || disabled)"
         >
@@ -31,6 +33,7 @@
       [p-error-limit]="errorLimit"
       [p-error-pattern]="getErrorPattern()"
       [p-help]="help"
+      [p-show-additional-help]="displayAdditionalHelp"
       [p-show-additional-help-icon]="showAdditionalHelpIcon()"
       (p-additional-help)="emitAdditionalHelp()"
     ></po-field-container-bottom>

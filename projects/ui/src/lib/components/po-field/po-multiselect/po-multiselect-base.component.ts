@@ -204,15 +204,6 @@ export abstract class PoMultiselectBaseComponent implements ControlValueAccessor
    * @optional
    *
    * @description
-   * Evento disparado ao clicar no ícone de ajuda adicional.
-   * Este evento ativa automaticamente a exibição do ícone de ajuda adicional ao `p-help`.
-   */
-  @Output('p-additional-help') additionalHelp = new EventEmitter<any>();
-
-  /**
-   * @optional
-   *
-   * @description
    *
    * Limita a exibição da mensagem de erro a duas linhas e exibe um tooltip com o texto completo.
    *
@@ -227,10 +218,28 @@ export abstract class PoMultiselectBaseComponent implements ControlValueAccessor
    * @optional
    *
    * @description
+   * Evento disparado ao clicar no ícone de ajuda adicional.
+   * Este evento ativa automaticamente a exibição do ícone de ajuda adicional ao `p-help`.
+   */
+  @Output('p-additional-help') additionalHelp = new EventEmitter<any>();
+
+  /**
+   * @optional
+   *
+   * @description
    *
    * Pode ser informada uma função que será disparada quando houver alterações no ngModel.
    */
   @Output('p-change') change: EventEmitter<any> = new EventEmitter<any>();
+
+  /**
+   * @optional
+   *
+   * @description
+   * Evento disparado quando uma tecla é pressionada enquanto o foco está no componente.
+   * Retorna um objeto `KeyboardEvent` com informações sobre a tecla.
+   */
+  @Output('p-keydown') keydown: EventEmitter<KeyboardEvent> = new EventEmitter<KeyboardEvent>();
 
   /**
    * @optional
@@ -256,6 +265,7 @@ export abstract class PoMultiselectBaseComponent implements ControlValueAccessor
   filterSubject = new Subject();
   service: PoMultiselectFilterService;
   defaultService: PoMultiselectFilterService;
+  displayAdditionalHelp: boolean = false;
 
   // eslint-disable-next-line
   protected onModelTouched: any = null;

@@ -13,6 +13,7 @@
       (p-shortcut-command)="richTextToolbar?.shortcutTrigger()"
       (p-value)="updateValue($event)"
       (p-blur)="onBlur()"
+      (p-keydown)="onKeyDown($event)"
     >
     </po-rich-text-body>
 
@@ -34,6 +35,7 @@
     [p-help]="help"
     [p-error-limit]="errorLimit"
     [p-error-pattern]="errorMsg"
+    [p-show-additional-help]="displayAdditionalHelp"
     [p-show-additional-help-icon]="!!additionalHelpTooltip || additionalHelp.observed"
     (p-additional-help)="additionalHelp.emit()"
   ></po-field-container-bottom>

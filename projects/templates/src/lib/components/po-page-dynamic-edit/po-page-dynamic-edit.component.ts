@@ -510,6 +510,38 @@ export class PoPageDynamicEditComponent implements OnInit, OnDestroy {
     this.gridDetail.insertRow();
   }
 
+  /**
+   * Método que exibe `additionalHelpTooltip` ou executa a ação definida em `additionalHelp`.
+   * Para isso, será necessário configurar uma tecla de atalho utilizando o evento `keydown`.
+   *
+   * ```
+   * import { PoPageDynamicEditModule } from '@po-ui/ng-templates';
+   * ...
+   * @ViewChild('dynamicEdit', { static: true }) dynamicEdit: PoPageDynamicEditComponent;
+   *
+   * fields: Array<PoPageDynamicEditField> = [
+   *  {
+   *    property: 'name',
+   *    ...
+   *    help: 'Mensagem de ajuda.',
+   *    additionalHelpTooltip: 'Mensagem de ajuda complementar.',
+   *    keydown: this.onKeyDown.bind(this, 'name')
+   *  },
+   * ]
+   *
+   * onKeyDown(property: string, event: KeyboardEvent): void {
+   *  if (event.code === 'F9') {
+   *    this.dynamicEdit.showAdditionalHelp(property);
+   *  }
+   * }
+   * ```
+   *
+   * @param { string } property Identificador da coluna.
+   */
+  showAdditionalHelp(property: string) {
+    this.dynamicForm.showAdditionalHelp(property);
+  }
+
   get duplicates() {
     return [...this._duplicates];
   }

@@ -13,6 +13,7 @@
         [attr.p-size]="size"
         [tabindex]="disabled || disabladTabindex ? -1 : 0"
         [attr.aria-checked]="checkboxValue"
+        (blur)="onBlur()"
       >
         <span
           [attr.aria-checked]="checkboxValue"
@@ -42,6 +43,7 @@
     [p-append-in-body]="appendBox"
     [p-disabled]="disabled"
     [p-help]="help"
+    [p-show-additional-help]="displayAdditionalHelp"
     [p-show-additional-help-icon]="showAdditionalHelpIcon()"
     (p-additional-help)="emitAdditionalHelp()"
   ></po-field-container-bottom>

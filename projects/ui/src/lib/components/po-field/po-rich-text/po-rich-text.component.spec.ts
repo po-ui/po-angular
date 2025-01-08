@@ -148,22 +148,72 @@ describe('PoRichTextComponent:', () => {
 
       expect(component.bodyElement.focus).toHaveBeenCalled();
     });
+    describe('onBlur', () => {
+      let setupTest;
 
-    it('onBlur: should be called when `po-rich-text-body` emit blur event', () => {
-      component['onTouched'] = () => {};
-      spyOn(component, <any>'onTouched');
+      beforeEach(() => {
+        setupTest = (tooltip: string, displayHelp: boolean, additionalHelpEvent: any) => {
+          component.additionalHelpTooltip = tooltip;
+          component.displayAdditionalHelp = displayHelp;
+          component.additionalHelp = additionalHelpEvent;
+          spyOn(component, 'showAdditionalHelp');
+        };
+      });
 
-      component.onBlur();
+      it('should be called when `po-rich-text-body` emit blur event', () => {
+        component['onTouched'] = () => {};
+        spyOn(component, <any>'onTouched');
 
-      expect(component['onTouched']).toHaveBeenCalled();
+        component.onBlur();
+
+        expect(component['onTouched']).toHaveBeenCalled();
+      });
+
+      it('shouldn´t throw error if onTouched is falsy', () => {
+        component['onTouched'] = null;
+
+        const fnError = () => component.onBlur();
+
+        expect(fnError).not.toThrow();
+      });
+
+      it('should call showAdditionalHelp when the tooltip is displayed', () => {
+        setupTest('Mensagem de apoio adicional.', true, { observed: false });
+        component.onBlur();
+        expect(component.showAdditionalHelp).toHaveBeenCalled();
+      });
+
+      it('should not call showAdditionalHelp when tooltip is not displayed', () => {
+        setupTest('Mensagem de apoio adicional.', false, { observed: false });
+        component.onBlur();
+        expect(component.showAdditionalHelp).not.toHaveBeenCalled();
+      });
+
+      it('should not call showAdditionalHelp when additionalHelp event is true', () => {
+        setupTest('Mensagem de apoio adicional.', true, { observed: true });
+        component.onBlur();
+        expect(component.showAdditionalHelp).not.toHaveBeenCalled();
+      });
     });
 
-    it('onBlur: shouldn´t throw error if onTouched is falsy', () => {
-      component['onTouched'] = null;
+    describe('showAdditionalHelp:', () => {
+      it('should toggle `displayAdditionalHelp` from false to true', () => {
+        component.displayAdditionalHelp = false;
 
-      const fnError = () => component.onBlur();
+        const result = component.showAdditionalHelp();
 
-      expect(fnError).not.toThrow();
+        expect(result).toBeTrue();
+        expect(component.displayAdditionalHelp).toBeTrue();
+      });
+
+      it('should toggle `displayAdditionalHelp` from true to false', () => {
+        component.displayAdditionalHelp = true;
+
+        const result = component.showAdditionalHelp();
+
+        expect(result).toBeFalse();
+        expect(component.displayAdditionalHelp).toBeFalse();
+      });
     });
 
     it('updateValue: should apply values to value, invalid and call updateModel', () => {
@@ -215,6 +265,15 @@ describe('PoRichTextComponent:', () => {
       component.onChangeValue('value');
 
       expect(component.change.emit).toHaveBeenCalledWith('value');
+    });
+
+    it('p-keydown: should emit event', () => {
+      const fakeEvent = new KeyboardEvent('keydown', { key: 'Enter' });
+      spyOn(component.keydown, 'emit');
+
+      component.onKeyDown(fakeEvent);
+
+      expect(component.keydown.emit).toHaveBeenCalledWith(fakeEvent);
     });
 
     it('controlChangeModelEmitter: should emit changeModel and set modelLastUpdate value', () => {

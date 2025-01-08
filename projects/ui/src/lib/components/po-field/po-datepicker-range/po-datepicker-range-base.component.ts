@@ -63,6 +63,9 @@ export abstract class PoDatepickerRangeBaseComponent implements ControlValueAcce
   // Propriedade interna que define se o ícone de ajuda adicional terá cursor clicável (evento) ou padrão (tooltip).
   @Input() additionalHelpEventTrigger: string | undefined;
 
+  /* Nome do componente. */
+  @Input('name') name: string;
+
   /**
    * @optional
    *
@@ -179,8 +182,18 @@ export abstract class PoDatepickerRangeBaseComponent implements ControlValueAcce
    */
   @Output('p-change') onChange: EventEmitter<any> = new EventEmitter<any>();
 
+  /**
+   * @optional
+   *
+   * @description
+   * Evento disparado quando uma tecla é pressionada enquanto o foco está no componente.
+   * Retorna um objeto `KeyboardEvent` com informações sobre a tecla.
+   */
+  @Output('p-keydown') keydown: EventEmitter<KeyboardEvent> = new EventEmitter<any>();
+
   errorMessage: string = '';
   dateRange: PoDatepickerRange = { start: '', end: '' };
+  displayAdditionalHelp: boolean = false;
 
   protected format: any = 'dd/mm/yyyy';
   protected isDateRangeInputFormatValid: boolean = true;

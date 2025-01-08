@@ -40,9 +40,14 @@ import { PoDynamicFormValidationService } from './po-dynamic-form-validation/po-
   standalone: false
 })
 export class PoDynamicFormComponent extends PoDynamicFormBaseComponent implements OnInit, OnDestroy {
-  @ViewChild('fieldsComponent') fieldsComponent: { focus: (property: string) => void; updatePreviousValue: () => void };
+  @ViewChild('fieldsComponent') fieldsComponent: {
+    focus: (property: string) => void;
+    updatePreviousValue: () => void;
+    showAdditionalHelp: (property: string) => void;
+  };
 
   disabledForm: boolean;
+  displayAdditionalHelp: boolean = false;
 
   private _form: NgForm;
 
@@ -119,6 +124,38 @@ export class PoDynamicFormComponent extends PoDynamicFormBaseComponent implement
 
   sendObjectValue(objectValue: any) {
     this.comboOptionSubject.next(objectValue);
+  }
+
+  /**
+   * Método que exibe `additionalHelpTooltip` ou executa a ação definida em `additionalHelp`.
+   * Para isso, será necessário configurar uma tecla de atalho utilizando o evento `keydown`.
+   *
+   * ```
+   * import { PoDynamicModule } from '@po-ui/ng-components';
+   * ...
+   * @ViewChild('dynamicForm', { static: true }) dynamicForm: PoDynamicFormComponent;
+   *
+   * fields: Array<PoDynamicFormField> = [
+   *  {
+   *    property: 'name',
+   *    ...
+   *    help: 'Mensagem de ajuda.',
+   *    additionalHelpTooltip: 'Mensagem de ajuda complementar.',
+   *    keydown: this.onKeyDown.bind(this, 'name')
+   *  },
+   * ]
+   *
+   * onKeyDown(property: string, event: KeyboardEvent): void {
+   *  if (event.code === 'F9') {
+   *    this.dynamicForm.showAdditionalHelp(property);
+   *  }
+   * }
+   * ```
+   *
+   * @param { string } property Identificador da coluna.
+   */
+  showAdditionalHelp(property: string) {
+    this.fieldsComponent.showAdditionalHelp(property);
   }
 
   validateForm(field: PoDynamicFormField) {
