@@ -90,5 +90,12 @@
       ></po-button>
     </div>
   </div>
-  <po-field-container-bottom [p-help]="help" [p-disabled]="disabled"></po-field-container-bottom>
+  <po-field-container-bottom
+    [p-additional-help-tooltip]="getAdditionalHelpTooltip()"
+    [p-append-in-body]="appendBox"
+    [p-help]="help"
+    [p-disabled]="disabled"
+    [p-show-additional-help-icon]="showAdditionalHelpIcon()"
+    (p-additional-help)="emitAdditionalHelp()"
+  ></po-field-container-bottom>
 </po-field-container>

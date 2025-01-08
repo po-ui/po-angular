@@ -1,4 +1,4 @@
-import { ChangeDetectionStrategy, Component, Input } from '@angular/core';
+import { ChangeDetectionStrategy, Component, EventEmitter, Input, Output } from '@angular/core';
 import { convertToBoolean } from '../../../../utils/util';
 
 /**
@@ -16,6 +16,14 @@ import { convertToBoolean } from '../../../../utils/util';
   standalone: false
 })
 export class PoFieldContainerBottomComponent {
+  /** Texto exibido no tooltip do ícone de ajuda adicional. */
+  @Input('p-additional-help-tooltip') additionalHelpTooltip?: string = '';
+
+  /** Define se o tooltip será inserido no `body` em vez do componente. */
+  @Input({ alias: 'p-append-in-body', transform: convertToBoolean }) appendBox: boolean = false;
+
+  @Input('p-disabled') disabled: boolean = false;
+
   /**
    * Mensagem que será apresentada quando o pattern ou a máscara não for satisfeita.
    * Obs: Esta mensagem não é apresentada quando o campo estiver vazio, mesmo que ele seja requerido.
@@ -27,9 +35,11 @@ export class PoFieldContainerBottomComponent {
    */
   @Input('p-error-limit') errorLimit: boolean = false;
 
-  @Input('p-disabled') disabled: boolean = false;
-
   @Input('p-help') help?: string;
 
-  @Input({ alias: 'p-append-in-body', transform: convertToBoolean }) appendBox?: boolean = false;
+  /** Exibe o ícone de ajuda adicional. */
+  @Input('p-show-additional-help-icon') showAdditionalHelpIcon: boolean = false;
+
+  /** Evento disparado ao clicar no ícone de ajuda adicional. */
+  @Output('p-additional-help') additionalHelp = new EventEmitter<any>();
 }

@@ -15,6 +15,7 @@ import {
   standalone: false
 })
 export class SamplePoComboLabsComponent implements OnInit {
+  additionalHelpTooltip: string;
   combo: string;
   comboOptionGroupSwitch: boolean;
   customLiterals: PoComboLiterals;
@@ -92,6 +93,7 @@ export class SamplePoComboLabsComponent implements OnInit {
   }
 
   restore() {
+    this.additionalHelpTooltip = '';
     this.combo = undefined;
     this.comboOptionGroupSwitch = false;
     this.customLiterals = undefined;

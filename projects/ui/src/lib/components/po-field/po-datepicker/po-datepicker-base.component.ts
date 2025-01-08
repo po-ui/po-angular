@@ -95,6 +95,20 @@ const poDatepickerFormatDefault: string = 'dd/mm/yyyy';
  */
 @Directive()
 export abstract class PoDatepickerBaseComponent implements ControlValueAccessor, OnInit, OnDestroy, Validator {
+  // Propriedade interna que define se o ícone de ajuda adicional terá cursor clicável (evento) ou padrão (tooltip).
+  @Input() additionalHelpEventTrigger: string | undefined;
+
+  /**
+   * @optional
+   *
+   * @description
+   * Exibe um ícone de ajuda adicional ao `p-help`, com o texto desta propriedade no tooltip.
+   * Se o evento `p-additional-help` estiver definido, o tooltip não será exibido.
+   * **Como boa prática, indica-se utilizar um texto com até 140 caracteres.**
+   * > Requer um recuo mínimo de 8px se o componente estiver próximo à lateral da tela.
+   */
+  @Input('p-additional-help-tooltip') additionalHelpTooltip?: string;
+
   /**
    * @optional
    *
@@ -162,8 +176,6 @@ export abstract class PoDatepickerBaseComponent implements ControlValueAccessor,
    */
   @Input('p-error-limit') errorLimit: boolean = false;
 
-  @Input({ alias: 'p-error-append-in-body', transform: convertToBoolean }) errorAppendBox?: boolean = false;
-
   /**
    * @optional
    *
@@ -176,6 +188,15 @@ export abstract class PoDatepickerBaseComponent implements ControlValueAccessor,
    * @default `false`
    */
   @Input('p-required-field-error-message') showErrorMessageRequired: boolean = false;
+
+  /**
+   * @optional
+   *
+   * @description
+   * Evento disparado ao clicar no ícone de ajuda adicional.
+   * Este evento ativa automaticamente a exibição do ícone de ajuda adicional ao `p-help`.
+   */
+  @Output('p-additional-help') additionalHelp: EventEmitter<any> = new EventEmitter<any>();
 
   /**
    * @optional
@@ -439,11 +460,11 @@ export abstract class PoDatepickerBaseComponent implements ControlValueAccessor,
    *
    * @description
    *
-   * Define que o calendário do DatePicker será incluído no body da página, em vez de suspenso junto ao campo de entrada do componente.
-   * Essa opção é útil em cenários onde o DatePicker precisa ser renderizado fora do conteúdo principal da página,
-   * como em formulários que utilizam scroll ou containers com overflow escondido.
+   * Define que o `calendar` e/ou tooltip (`p-additional-help-tooltip` e/ou `p-error-limit`) serão incluídos no body da
+   * página e não dentro do componente. Essa opção pode ser necessária em cenários com containers que possuem scroll ou
+   * overflow escondido, garantindo o posicionamento correto de ambos próximo ao elemento.
    *
-   * > Obs: O uso dessa propriedade pode interferir na sequência de tabulação da página, especialmente em formulários longos.
+   * > Quando utilizado com `p-additional-help-tooltip`, leitores de tela como o NVDA podem não ler o conteúdo do tooltip.
    *
    * @default `false`
    */

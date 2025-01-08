@@ -1,36 +1,48 @@
-<div
-  class="container-po-checkbox"
-  [attr.checked]="checkboxValue"
-  (click)="checkOption(checkboxValue)"
-  (keydown)="onKeyDown($event, checkboxValue)"
->
-  <div
-    #checkboxLabel
-    role="checkbox"
-    class="po-checkbox-outline"
-    [attr.p-size]="size"
-    [tabindex]="disabled || disabladTabindex ? -1 : 0"
-    [attr.aria-checked]="checkboxValue"
-  >
-    <span
-      [attr.aria-checked]="checkboxValue"
-      aria-label=" "
-      [id]="id"
-      class="po-checkbox"
-      [ngClass]="iconNameLib === 'AnimaliaIcon' ? 'po-checkbox-phosphor' : 'po-checkbox-poicon'"
-      [attr.aria-disabled]="disabled"
-      [attr.required]="checkBoxRequired"
+<po-field-container [p-disabled]="disabled">
+  <div class="po-field-container-content">
+    <div
+      class="container-po-checkbox"
+      [attr.checked]="checkboxValue"
+      (click)="checkOption(checkboxValue)"
+      (keydown)="onKeyDown($event, checkboxValue)"
     >
-    </span>
+      <div
+        #checkboxLabel
+        role="checkbox"
+        class="po-checkbox-outline"
+        [attr.p-size]="size"
+        [tabindex]="disabled || disabladTabindex ? -1 : 0"
+        [attr.aria-checked]="checkboxValue"
+      >
+        <span
+          [attr.aria-checked]="checkboxValue"
+          aria-label=" "
+          [id]="id"
+          class="po-checkbox"
+          [ngClass]="iconNameLib === 'AnimaliaIcon' ? 'po-checkbox-phosphor' : 'po-checkbox-poicon'"
+          [attr.aria-disabled]="disabled"
+          [attr.required]="checkBoxRequired"
+        >
+        </span>
 
-    <po-label
-      *ngIf="label"
-      class="po-checkbox-label"
-      tabindex="-1"
-      [p-disabled]="disabled"
-      [p-for]="id"
-      [p-label]="label"
-    >
-    </po-label>
+        <po-label
+          *ngIf="label"
+          class="po-checkbox-label"
+          tabindex="-1"
+          [p-disabled]="disabled"
+          [p-for]="id"
+          [p-label]="label"
+        >
+        </po-label>
+      </div>
+    </div>
   </div>
-</div>
+  <po-field-container-bottom
+    [p-additional-help-tooltip]="getAdditionalHelpTooltip()"
+    [p-append-in-body]="appendBox"
+    [p-disabled]="disabled"
+    [p-help]="help"
+    [p-show-additional-help-icon]="showAdditionalHelpIcon()"
+    (p-additional-help)="emitAdditionalHelp()"
+  ></po-field-container-bottom>
+</po-field-container>

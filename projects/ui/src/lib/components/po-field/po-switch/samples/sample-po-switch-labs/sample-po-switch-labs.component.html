@@ -1,6 +1,7 @@
 <po-switch
   name="switch"
   [(ngModel)]="switch"
+  [p-additional-help-tooltip]="additionalHelpTooltip"
   [p-disabled]="properties.includes('disabled')"
   [p-help]="help"
   [p-label]="label"
@@ -16,61 +17,65 @@
 <hr />
 
 <div class="po-row">
-  <po-info class="po-lg-6" p-label="Model" [p-value]="switch"> </po-info>
+  <po-info class="po-md-6" p-label="Model" [p-value]="switch"> </po-info>
 
-  <po-info class="po-lg-6" p-label="Event" [p-value]="event"> </po-info>
+  <po-info class="po-md-6" p-label="Event" [p-value]="event"> </po-info>
 </div>
 
 <hr />
 
 <form #f="ngForm">
+  <po-input class="po-md-6" name="label" [(ngModel)]="label" p-label="Label"> </po-input>
+
+  <po-input class="po-md-6" name="help" [(ngModel)]="help" p-label="Help"> </po-input>
+
+  <po-input
+    class="po-md-6"
+    name="additionalHelpTooltip"
+    [(ngModel)]="additionalHelpTooltip"
+    p-clean
+    p-label="Additional Help Tooltip"
+  >
+  </po-input>
+
+  <po-input
+    class="po-md-6"
+    name="labelOff"
+    [(ngModel)]="labelOff"
+    p-help="Text displayed when PO Switch is set to 'false'"
+    p-label="Label Off"
+  >
+  </po-input>
+
+  <po-input
+    class="po-md-6"
+    name="labelOn"
+    [(ngModel)]="labelOn"
+    p-help="Text displayed when PO Switch is set to 'true'"
+    p-label="Label On"
+  >
+  </po-input>
+
+  <po-checkbox-group
+    class="po-lg-12"
+    name="properties"
+    [(ngModel)]="properties"
+    p-columns="4"
+    p-label="Properties"
+    [p-options]="propertiesOptions"
+  >
+  </po-checkbox-group>
+
+  <po-radio-group
+    class="po-lg-6"
+    name="labelPosition"
+    [(ngModel)]="labelPosition"
+    p-label="Label Position"
+    [p-options]="labelPositionOptions"
+  >
+  </po-radio-group>
+
   <div class="po-row">
-    <po-input class="po-lg-6" name="label" [(ngModel)]="label" p-label="Label"> </po-input>
-
-    <po-input class="po-lg-6" name="help" [(ngModel)]="help" p-label="Help"> </po-input>
-  </div>
-
-  <div class="po-row">
-    <po-input
-      class="po-lg-6"
-      name="labelOff"
-      [(ngModel)]="labelOff"
-      p-help="Text displayed when PO Switch is set to 'false'"
-      p-label="Label Off"
-    >
-    </po-input>
-
-    <po-input
-      class="po-lg-6"
-      name="labelOn"
-      [(ngModel)]="labelOn"
-      p-help="Text displayed when PO Switch is set to 'true'"
-      p-label="Label On"
-    >
-    </po-input>
-  </div>
-
-  <div class="po-row">
-    <po-radio-group
-      class="po-lg-6"
-      name="labelPosition"
-      [(ngModel)]="labelPosition"
-      p-label="Label Position"
-      [p-options]="labelPositionOptions"
-    >
-    </po-radio-group>
-
-    <po-checkbox-group
-      class="po-lg-6"
-      name="properties"
-      [(ngModel)]="properties"
-      p-label="Properties"
-      [p-options]="propertiesOptions"
-    >
-    </po-checkbox-group>
-  </div>
-
-  <div class="po-row">
-    <po-button class="po-md-3" p-label="Sample Restore" (p-click)="restore()"> </po-button>
+    <po-button class="po-lg-3 po-md-6" p-label="Sample Restore" (p-click)="restore()"> </po-button>
   </div>
 </form>

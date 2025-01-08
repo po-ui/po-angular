@@ -3,6 +3,7 @@
     class="po-md-12"
     name="PO Multiselect"
     [(ngModel)]="multiselect"
+    [p-additional-help-tooltip]="additionalHelpTooltip"
     [p-auto-height]="properties.includes('autoHeight')"
     [p-disabled]="properties.includes('disabled')"
     [p-field-label]="fieldLabel"
@@ -48,7 +49,7 @@
   </div>
 
   <div class="po-row">
-    <po-button class="po-md-6 po-lg-3" p-label="Add Option" [p-disabled]="fOption.form.invalid" (p-click)="addOption()">
+    <po-button class="po-md-4 po-lg-3" p-label="Add Option" [p-disabled]="fOption.form.invalid" (p-click)="addOption()">
     </po-button>
   </div>
 </form>
@@ -56,88 +57,85 @@
 <hr />
 
 <form #f="ngForm">
-  <div class="po-row">
-    <po-input class="po-md-6" name="label" [(ngModel)]="label" p-clean p-label="Label"> </po-input>
+  <po-input class="po-md-6" name="label" [(ngModel)]="label" p-clean p-label="Label"> </po-input>
 
-    <po-input class="po-md-6" name="help" [(ngModel)]="help" p-clean p-label="Help"> </po-input>
-  </div>
+  <po-input class="po-md-6" name="help" [(ngModel)]="help" p-clean p-label="Help"> </po-input>
 
-  <div class="po-row">
-    <po-input class="po-md-6" name="placeholder" [(ngModel)]="placeholder" p-clean p-label="Placeholder"> </po-input>
+  <po-input
+    class="po-md-6"
+    name="additionalHelpTooltip"
+    [(ngModel)]="additionalHelpTooltip"
+    p-clean
+    p-label="Additional Help Tooltip"
+  >
+  </po-input>
 
-    <po-input
-      class="po-md-6"
-      name="placeholderSearch"
-      [(ngModel)]="placeholderSearch"
-      p-clean
-      p-label="Placeholder Search"
-    >
-    </po-input>
-  </div>
+  <po-input class="po-md-6" name="placeholder" [(ngModel)]="placeholder" p-clean p-label="Placeholder"> </po-input>
 
-  <div class="po-row">
-    <po-input
-      class="po-md-6"
-      name="literals"
-      [(ngModel)]="literals"
-      p-help='Ex.: {"noData": "Sem dados a serem exibidos", "placeholderSearch": "Buscar"}'
-      p-label="Literals"
-      (p-change)="changeLiterals()"
-    >
-    </po-input>
+  <po-input
+    class="po-md-6"
+    name="placeholderSearch"
+    [(ngModel)]="placeholderSearch"
+    p-clean
+    p-label="Placeholder Search"
+  >
+  </po-input>
 
-    <po-input
-      class="po-md-6"
-      name="fieldErrorMessage"
-      [(ngModel)]="fieldErrorMessage"
-      p-clean
-      p-label="Field Error Message"
-    >
-    </po-input>
-  </div>
+  <po-input
+    class="po-md-6"
+    name="fieldErrorMessage"
+    [(ngModel)]="fieldErrorMessage"
+    p-clean
+    p-label="Field Error Message"
+  >
+  </po-input>
 
-  <div class="po-row">
-    <po-input
-      class="po-md-12"
-      name="filterService"
-      [(ngModel)]="filterService"
-      p-clean
-      p-help="https://po-sample-api.onrender.com/v1/heroes"
-      p-label="Filter Service"
-    >
-    </po-input>
-  </div>
+  <po-input
+    class="po-md-12 po-lg-6"
+    name="literals"
+    [(ngModel)]="literals"
+    p-help='Ex.: {"noData": "Sem dados a serem exibidos", "placeholderSearch": "Buscar"}'
+    p-label="Literals"
+    (p-change)="changeLiterals()"
+  >
+  </po-input>
 
-  <div class="po-row">
-    <po-input class="po-md-6" name="fieldValue" [(ngModel)]="fieldValue" p-clean p-label="Field Value"> </po-input>
+  <po-input
+    class="po-md-12"
+    name="filterService"
+    [(ngModel)]="filterService"
+    p-clean
+    p-help="https://po-sample-api.onrender.com/v1/heroes"
+    p-label="Filter Service"
+  >
+  </po-input>
 
-    <po-input class="po-md-6" name="fieldLabel" [(ngModel)]="fieldLabel" p-clean p-label="Field Label"> </po-input>
-  </div>
+  <po-input class="po-md-6" name="fieldValue" [(ngModel)]="fieldValue" p-clean p-label="Field Value"> </po-input>
 
-  <div class="po-row">
-    <po-checkbox-group
-      class="po-md-7"
-      name="properties"
-      [(ngModel)]="properties"
-      p-columns="3"
-      p-label="Properties"
-      [p-options]="propertiesOptions"
-    >
-    </po-checkbox-group>
+  <po-input class="po-md-6" name="fieldLabel" [(ngModel)]="fieldLabel" p-clean p-label="Field Label"> </po-input>
 
-    <po-radio-group
-      class="po-md-5"
-      name="filterMode"
-      [(ngModel)]="filterMode"
-      p-columns="3"
-      p-label="Filter mode"
-      [p-disabled]="properties.includes('hideSearch')"
-      [p-options]="filterModeOptions"
-    >
-    </po-radio-group>
-  </div>
+  <po-checkbox-group
+    class="po-md-12"
+    name="properties"
+    [(ngModel)]="properties"
+    p-columns="4"
+    p-label="Properties"
+    [p-options]="propertiesOptions"
+  >
+  </po-checkbox-group>
+
+  <po-radio-group
+    class="po-md-12"
+    name="filterMode"
+    [(ngModel)]="filterMode"
+    p-columns="4"
+    p-label="Filter mode"
+    [p-disabled]="properties.includes('hideSearch')"
+    [p-options]="filterModeOptions"
+  >
+  </po-radio-group>
 
   <div class="po-row">
-    <po-button class="po-md-3" p-label="Sample Restore" (p-click)="restore()"> </po-button>
+    <po-button class="po-lg-3 po-md-6" p-label="Sample Restore" (p-click)="restore()"> </po-button>
   </div>
 </form>
