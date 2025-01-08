@@ -14,6 +14,42 @@ import { PoI18nConfig } from './interfaces/po-i18n-config.interface';
 export class PoI18nService extends PoI18nBaseService {}
 
 // Função usada para retornar instância para o módulo po-i18n.module
-export function returnPoI18nService(config: PoI18nConfig, http: HttpClient, languageService: PoLanguageService) {
-  return new PoI18nService(config, http, languageService);
+export function returnPoI18nService(
+  configs: Array<PoI18nConfig>,
+  http: HttpClient,
+  languageService: PoLanguageService
+) {
+  const validatedConfigs = configs.map(config => ({
+    ...config,
+    contexts: config.contexts,
+    default: config.default
+  }));
+
+  const mergedObject = mergePoI18nConfigs(validatedConfigs);
+
+  return new PoI18nService(mergedObject, http, languageService);
+}
+
+export function mergePoI18nConfigs(objects: Array<any>): any {
+  return objects.reduce(
+    (acc, current) => {
+      if (!acc.default) {
+        acc.default = { ...current.default };
+      }
+
+      Object.entries(current.contexts || {}).forEach(([context, languages]) => {
+        acc.contexts[context] = acc.contexts[context] || {};
+
+        Object.entries(languages).forEach(([lang, translations]) => {
+          acc.contexts[context][lang] = {
+            ...acc.contexts[context][lang],
+            ...translations
+          };
+        });
+      });
+
+      return acc;
+    },
+    { contexts: {} }
+  );
 }
