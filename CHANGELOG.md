@@ -2,6 +2,14 @@
 
 All notable changes to this project will be documented in this file. See [standard-version](https://github.com/conventional-changelog/standard-version) for commit guidelines.
 
+## [18.23.0](https://github.com/po-ui/po-angular/compare/v18.22.0...v18.23.0) (2025-01-13)
+
+
+### Features
+
+* **fields:** adiciona limite na exibição de mensagens de erro ([e122d99](https://github.com/po-ui/po-angular/commit/e122d99326016f1febde97eb759dea8748d10248))
+* **progress:** adiciona suporte a ações customizadas ([e7b05a8](https://github.com/po-ui/po-angular/commit/e7b05a8ecc9587dc398ae444b542c1a93b761519))
+
 ### [18.22.0](https://github.com/po-ui/po-angular/compare/v18.21.0...v18.22.0) (2024-12-23)
 
 Compatibilidade com @totvs/thf-components@18.22.0
