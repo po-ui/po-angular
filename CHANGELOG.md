@@ -14,6 +14,32 @@ All notable changes to this project will be documented in this file. See [standa
 
 Compatibilidade com @totvs/thf-components@18.23.1
 
+## [19.0.0-next.0](https://github.com/po-ui/po-angular/compare/v18.23.0...v19.0.0-next.0) (2025-01-13)
+
+
+### ⚠ BREAKING CHANGES
+
+* **angular:** deve ser utilizado o Angular v19
+
+Atualize seu projeto para utilizar a versão 19 do Angular, acesse a documentação [Guia de Atualização do Angular](https://update.angular.io/) para fazer a migração completa.
+
+* **icon:** substitui o prefixo 'ph' por 'an'
+
+Substitui o prefixo 'ph' por 'an' seguindo as
+definições da atualização da lib
+@animaliads/animalia-icon
+
+Antes:
+<i class="ph ph-arrow-fat-line-down"></i>
+
+Depois:
+<i class="an an-arrow-fat-line-down"></i>
+
+### Features
+
+* **angular:** deve ser utilizado o Angular v19 ([9a456a0](https://github.com/po-ui/po-angular/commit/9a456a09ea40dd1ad073c792c6184e624f73359c))
+* **icon:** substitui a prefixo 'ph' por 'an' ([bfd7e7d](https://github.com/po-ui/po-angular/commit/bfd7e7d6d646b2baedc01ad44843418d009b313a))
+
 ## [18.23.0](https://github.com/po-ui/po-angular/compare/v18.22.0...v18.23.0) (2025-01-13)
 
 
