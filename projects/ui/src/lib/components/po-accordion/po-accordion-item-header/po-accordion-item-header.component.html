@@ -5,6 +5,7 @@
     [attr.aria-label]="label"
     [attr.aria-expanded]="expanded || false"
     class="po-accordion-item-header-button po-clickable"
+    type="button"
     (click)="onClick()"
   >
     <div class="po-accordion-item-header-button-content" [p-tooltip]="getTooltip()">
