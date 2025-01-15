@@ -25,6 +25,25 @@ describe('PoAccordionItemBodyComponent:', () => {
   it('should be created', () => {
     expect(component instanceof PoAccordionItemBodyComponent).toBeTruthy();
   });
+  describe('handleKeydown', () => {
+    it('should call preventDefault when "Enter" key is pressed', () => {
+      const event = new KeyboardEvent('keydown', { key: 'Enter' });
+      spyOn(event, 'preventDefault');
+
+      component.handleKeydown(event);
+
+      expect(event.preventDefault).toHaveBeenCalled();
+    });
+
+    it('should not call preventDefault for keys other than "Enter"', () => {
+      const event = new KeyboardEvent('keydown', { key: 'Space' });
+      spyOn(event, 'preventDefault');
+
+      component.handleKeydown(event);
+
+      expect(event.preventDefault).not.toHaveBeenCalled();
+    });
+  });
 
   describe('Templates:', () => {
     it('shouldn`t have `po-accordion-item-body` by default', () => {
