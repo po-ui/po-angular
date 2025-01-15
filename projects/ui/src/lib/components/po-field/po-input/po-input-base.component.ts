@@ -237,6 +237,15 @@ export abstract class PoInputBaseComponent implements ControlValueAccessor, Vali
    *
    * @description
    *
+   * Evento disparado ao pressionar tecla enter.
+   */
+  @Output('p-enter-click') enterClick: EventEmitter<any> = new EventEmitter();
+
+  /**
+   * @optional
+   *
+   * @description
+   *
    * Evento disparado ao entrar do campo.
    */
   @Output('p-enter') enter: EventEmitter<any> = new EventEmitter();
