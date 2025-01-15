@@ -262,7 +262,7 @@ export class PoDynamicViewBaseComponent extends PoDynamicSharedBase {
     if (field.isArrayOrObject && this.value[property]) {
       value = this.transformArrayValue(this.value[property], field);
     } else if (field.fieldLabel) {
-      value = this.transformFieldLabel(property, field);
+      value = this.transformFieldLabel(field);
     }
 
     if (!value) {
@@ -372,14 +372,10 @@ export class PoDynamicViewBaseComponent extends PoDynamicSharedBase {
     }
   }
 
-  private transformFieldLabel(property: string, field: PoDynamicViewField) {
+  private transformFieldLabel(field: PoDynamicViewField) {
     if (field.concatLabelValue && field.fieldLabel && field.fieldValue && !field.isArrayOrObject) {
       const transformedValue = this.transformValue(field.type, this.value[field.fieldLabel], field.format);
       return `${transformedValue} - ${this.value[field.fieldValue]}`;
-    }
-
-    if (field.fieldLabel && !field.concatLabelValue && !field.isArrayOrObject) {
-      this.value[property] = this.value[field.fieldLabel];
     }
     return undefined;
   }
