@@ -341,7 +341,7 @@ export class PoRichTextBodyComponent implements OnInit, OnDestroy {
   }
 
   private updateModel() {
-    this.modelValue = this.bodyElement.nativeElement.innerHTML;
+    this.modelValue = this.sanitizeHtmlContent(this.bodyElement.nativeElement.innerHTML);
 
     this.value.emit(this.modelValue);
   }
@@ -370,5 +370,23 @@ export class PoRichTextBodyComponent implements OnInit, OnDestroy {
     }
 
     return isLink;
+  }
+
+  private sanitizeHtmlContent(htmlContent: string): string {
+    const parser = new DOMParser();
+    const doc = parser.parseFromString(htmlContent, 'text/html');
+    return this.extractTextContent(doc.body);
+  }
+
+  private extractTextContent(node: Node): string {
+    let textContent = '';
+    node.childNodes.forEach(childNode => {
+      if (childNode.nodeType === Node.TEXT_NODE) {
+        textContent += childNode.textContent;
+      } else if (childNode.nodeType === Node.ELEMENT_NODE) {
+        textContent += this.extractTextContent(childNode);
+      }
+    });
+    return textContent;
   }
 }
