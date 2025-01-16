@@ -24,7 +24,7 @@ describe('PoDynamicFormFieldsComponent: ', () => {
 
     fixture = TestBed.createComponent(PoDynamicFormFieldsComponent);
     component = fixture.componentInstance;
-    component['form'] = <any>{ touched: true };
+    component['form'] = <any>{ dirty: true };
 
     fixture.detectChanges();
 
