@@ -68,8 +68,8 @@ export class PoDynamicFormFieldsComponent extends PoDynamicFormFieldsBaseCompone
       this.objectValue.emit(objectValue);
     }
 
-    // verifica se o formulario esta touched para não disparar o validate ao carregar a tela.
-    if ((this.form.touched || isBooleanType) && isChangedValueField) {
+    // verifica se o formulario esta dirty para não disparar o validate ao carregar a tela.
+    if ((this.form.dirty || isBooleanType) && isChangedValueField) {
       const { changedField, changedFieldIndex } = this.getField(property);
 
       if (changedField.validate) {
