@@ -1,6 +1,6 @@
 import { Component } from '@angular/core';
 
-import { PoChartType, PoChartOptions, PoChartSerie, PoDialogService } from '@po-ui/ng-components';
+import { PoChartType, PoChartOptions, PoChartSerie, PoDialogService, PoChartLabelFormat } from '@po-ui/ng-components';
 
 @Component({
   selector: 'sample-po-chart-coffee-ranking',
@@ -99,7 +99,8 @@ export class SamplePoChartCoffeeRankingComponent {
   consumptionPerCapitaOptions: PoChartOptions = {
     axis: {
       maxRange: 100,
-      gridLines: 2
+      gridLines: 2,
+      labelType: PoChartLabelFormat.Number
     }
   };
 
@@ -114,7 +115,8 @@ export class SamplePoChartCoffeeRankingComponent {
     axis: {
       minRange: 0,
       maxRange: 40,
-      gridLines: 5
+      gridLines: 5,
+      labelType: PoChartLabelFormat.Number
     }
   };
 

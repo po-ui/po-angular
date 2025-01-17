@@ -2,6 +2,9 @@ import { ComponentFixture, TestBed } from '@angular/core/testing';
 
 import { PoChartAxisLabelComponent } from './po-chart-axis-label.component';
 import { PoChartType } from '../../../enums/po-chart-type.enum';
+import { PoChartModule } from '../../../po-chart.module';
+import { PoChartLabelFormat } from '../../../enums/po-chart-label-format.enum';
+import { DEFAULT_CURRENCY_CODE } from '@angular/core';
 
 describe('PoChartAxisXLabelComponent', () => {
   let component: PoChartAxisLabelComponent;
@@ -10,7 +13,9 @@ describe('PoChartAxisXLabelComponent', () => {
 
   beforeEach(async () => {
     await TestBed.configureTestingModule({
-      declarations: [PoChartAxisLabelComponent]
+      imports: [PoChartModule],
+      declarations: [PoChartAxisLabelComponent],
+      providers: [{ provide: DEFAULT_CURRENCY_CODE, useValue: 'BRL' }]
     }).compileComponents();
   });
 
@@ -32,6 +37,51 @@ describe('PoChartAxisXLabelComponent', () => {
       const expectedValue = index;
 
       expect(component.trackBy(index)).toBe(expectedValue);
+    });
+
+    describe('formatValueAxis:', () => {
+      it('shouldn`t apply format to X axis if graphic type is bar', () => {
+        const value: string = '10000.00';
+
+        component.axisOptions = { labelType: PoChartLabelFormat.Number };
+        component.type = PoChartType.Bar;
+
+        expect(component.formatValueAxis(value, 'x')).toBe(value);
+      });
+
+      it('shouldn`t apply format to Y axis if graphic type is not bar', () => {
+        const value: string = '35000.00';
+
+        component.axisOptions = { labelType: PoChartLabelFormat.Number };
+        component.type = PoChartType.Column;
+
+        expect(component.formatValueAxis(value, 'y')).toBe(value);
+      });
+
+      it('should return original value', () => {
+        const value: string = '27000.00';
+        expect(component.formatValueAxis(value, 'x')).toBe(value);
+      });
+
+      it('should return formatted currency', () => {
+        const value = '10000.00';
+        const expectedValue: string = 'R$10,000.00';
+
+        component.axisOptions = { labelType: PoChartLabelFormat.Currency };
+        component.type = PoChartType.Column;
+
+        expect(component.formatValueAxis(value, 'x')).toBe(expectedValue);
+      });
+
+      it('should return formatted number', () => {
+        const value: string = '1291355450.00';
+        const expectedValue: string = '1,291,355,450.00';
+
+        component.axisOptions = { labelType: PoChartLabelFormat.Number };
+        component.type = PoChartType.Column;
+
+        expect(component.formatValueAxis(value, 'x')).toBe(expectedValue);
+      });
     });
   });
 
