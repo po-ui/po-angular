@@ -36,4 +36,31 @@ export interface PoChartAxisOptions {
    * > Esta definição não deve refletir na plotagem das séries. Os valores máximos e mínimos encontrados nas séries serão as bases para seus alcance.
    */
   minRange?: number;
+
+  /**
+   * @optional
+   *
+   * @description
+   *
+   * Define o tipo do label exibido no eixo de valor.
+   * Valores válidos:
+   * - `number`: valores numéricos.
+   * - `currency`: valores monetários.
+   */
+  labelType?: string;
+
+  /**
+   * @optional
+   *
+   * @description
+   *
+   * Define o formato do label exibido no eixo de valor.
+   * Formatos válidos:
+   * - Formato para moeda (currency). Exemplos: 'BRL', 'USD'.
+   * - Formato para números (number): aceita um valor seguindo o padrão [**DecimalPipe**](https://angular.io/api/common/DecimalPipe)
+   * para formatação, e caso não seja informado, o número será exibido na sua forma original. Exemplo:
+   *
+   *  +  Com o valor de entrada: `50` e a valor para formatação: `'1.2-5'` o resultado será: `50.00`
+   */
+  format?: string;
 }
