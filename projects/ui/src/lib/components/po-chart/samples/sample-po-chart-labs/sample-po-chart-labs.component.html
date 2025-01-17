@@ -137,6 +137,16 @@
     >
     </po-number>
 
+    <po-select
+      class="po-md-4"
+      name="labelType"
+      [(ngModel)]="options.axis.labelType"
+      p-label="labelType"
+      [p-options]="labelTypeOptions"
+      (p-change)="addOptions()"
+    >
+    </po-select>
+
     <po-checkbox-group
       class="po-md-4"
       name="propertiesOptions"
