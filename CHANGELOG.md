@@ -14,14 +14,10 @@ All notable changes to this project will be documented in this file. See [standa
 
 Compatibilidade com @totvs/thf-components@18.23.1
 
-## [19.0.0-next.0](https://github.com/po-ui/po-angular/compare/v18.23.0...v19.0.0-next.0) (2025-01-13)
+## [19.0.0-rc.0](https://github.com/po-ui/po-angular/compare/v19.0.0-next.0...v19.0.0-rc.0) (2025-01-20)
 
 
 ### ⚠ BREAKING CHANGES
-
-* **angular:** deve ser utilizado o Angular v19
-
-Atualize seu projeto para utilizar a versão 19 do Angular, acesse a documentação [Guia de Atualização do Angular](https://update.angular.io/) para fazer a migração completa.
 
 * **icon:** substitui o prefixo 'ph' por 'an'
 
@@ -37,8 +33,14 @@ Depois:
 
 ### Features
 
-* **angular:** deve ser utilizado o Angular v19 ([9a456a0](https://github.com/po-ui/po-angular/commit/9a456a09ea40dd1ad073c792c6184e624f73359c))
-* **icon:** substitui a prefixo 'ph' por 'an' ([bfd7e7d](https://github.com/po-ui/po-angular/commit/bfd7e7d6d646b2baedc01ad44843418d009b313a))
+* **angular:** deve ser utilizado o Angular v19 ([a370d7d](https://github.com/po-ui/po-angular/commit/a370d7d7a3bc1cfaf9a8775ab3ed65f99229c932))
+
+
+* **icon:** substitui a prefixo 'ph' por 'an' ([b0d8bce](https://github.com/po-ui/po-angular/commit/b0d8bceee7a433b97c3ad0a62fdf97a2dea8aa7e))
+
+### [18.23.1](https://github.com/po-ui/po-angular/compare/v18.23.0...v18.23.1) (2025-01-20)
+
+Compatibilidade com @totvs/thf-components@18.23.1
 
 ## [18.23.0](https://github.com/po-ui/po-angular/compare/v18.22.0...v18.23.0) (2025-01-13)
 
