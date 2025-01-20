@@ -1,4 +1,4 @@
-import { Component, Input } from '@angular/core';
+import { Component, HostListener, Input } from '@angular/core';
 import { animate, style, transition, trigger } from '@angular/animations';
 
 @Component({
@@ -13,4 +13,11 @@ import { animate, style, transition, trigger } from '@angular/animations';
 })
 export class PoAccordionItemBodyComponent {
   @Input('p-expanded') expanded: boolean = false;
+
+  @HostListener('keydown', ['$event'])
+  handleKeydown(event: KeyboardEvent) {
+    if (event.key === 'Enter') {
+      event.preventDefault();
+    }
+  }
 }
