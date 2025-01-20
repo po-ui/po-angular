@@ -31,6 +31,7 @@
       (focus)="onFocus($event)"
       (input)="onInput($event)"
       (keypress)="onKeyPress($event)"
+      (keydown)="onKeyDown($event)"
     />
 
     <div class="po-field-icon-container-right">
@@ -54,5 +55,6 @@
     [p-error-pattern]="getErrorPatternMessage()"
     [p-show-additional-help-icon]="showAdditionalHelpIcon()"
     (p-additional-help)="emitAdditionalHelp()"
+    [p-show-additional-help]="showAdditionalHelp"
   ></po-field-container-bottom>
 </po-field-container>

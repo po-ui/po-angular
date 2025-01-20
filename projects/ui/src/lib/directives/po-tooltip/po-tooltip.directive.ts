@@ -94,6 +94,19 @@ export class PoTooltipDirective extends PoTooltipBaseDirective implements OnInit
     }
   }
 
+  // Controla a visibilidade do tooltip
+  toggleTooltipVisibility(show: boolean) {
+    if (show) {
+      if (!this.displayTooltip) {
+        this.addTooltipAction();
+      }
+    } else {
+      if (!this.displayTooltip) {
+        this.removeTooltipAction();
+      }
+    }
+  }
+
   protected addTooltipAction() {
     setTimeout(() => {
       if (this.tooltip) {
