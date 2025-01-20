@@ -137,6 +137,25 @@
     >
     </po-number>
 
+    <po-input
+      class="po-md-4"
+      name="labelType"
+      [(ngModel)]="options.axis.labelType"
+      p-help="Example: 'currency'"
+      p-label="labelType"
+      (p-blur)="addOptions()"
+    >
+    </po-input>
+    <po-input
+      class="po-md-4"
+      name="format"
+      [(ngModel)]="options.axis.format"
+      p-help="Example: 'BRL'"
+      p-label="format"
+      (p-blur)="addOptions()"
+    >
+    </po-input>
+
     <po-checkbox-group
       class="po-md-4"
       name="propertiesOptions"
