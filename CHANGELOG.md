@@ -2,6 +2,14 @@
 
 All notable changes to this project will be documented in this file. See [standard-version](https://github.com/conventional-changelog/standard-version) for commit guidelines.
 
+### [17.26.12](https://github.com/po-ui/po-angular/compare/v17.26.11...v17.26.12) (2025-01-27)
+
+
+### Bug Fixes
+
+* **accordion:** ajusta tipo do botão para evitar envio de formulário ([6a98a70](https://github.com/po-ui/po-angular/commit/6a98a7018c6fcf2b44c390c3c4a8452cdad2e626))
+* **dynamic-form:** ajusta emissão de evento para p-validate ([f5be8a4](https://github.com/po-ui/po-angular/commit/f5be8a44ccb9f04ea82835ffb286e1347ce896ef))
+
 ### [17.26.11](https://github.com/po-ui/po-angular/compare/v17.26.10...v17.26.11) (2025-01-20)
 
 Compatibilidade com @totvs/thf-components@17.26.11
