@@ -1,4 +1,5 @@
 import { PoI18nConfigDefault } from './po-i18n-config-default.interface';
+import { PoI18nConfigContext } from './po-i18n-config-context.interface';
 
 /**
  * @description
@@ -76,5 +77,5 @@ export interface PoI18nConfig {
    * ```
    * > Caso a constante contenha alguma literal que o serviço não possua será utilizado a literal da constante.
    */
-  contexts: object;
+  contexts: PoI18nConfigContext;
 }
