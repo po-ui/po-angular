@@ -1,4 +1,4 @@
-import { Rule, SchematicContext, Tree, chain } from '@angular-devkit/schematics';
+import { chain, Rule, SchematicContext, Tree } from '@angular-devkit/schematics';
 import { NodePackageInstallTask } from '@angular-devkit/schematics/tasks';
 
 import { updatePackageJson } from '@po-ui/ng-schematics/package-config';
@@ -11,6 +11,8 @@ import {
 import { addProviderToModule } from '@schematics/angular/utility/ast-utils';
 import {
   iconsReplaced,
+  phIconHifenReplaces,
+  phIconReplaces,
   poIconInsideReplaces,
   poIconReplaces,
   ReplaceChanges,
@@ -253,6 +255,8 @@ function applyUpdateInContent(tree: Tree, path: string) {
           // Atualiza para as instâncias dos novos ícones
           updated = replaceWithChanges(poIconInsideReplaces, updated);
           updated = replaceWithChanges(poIconReplaces, updated);
+          updated = replaceWithChanges(phIconReplaces, updated);
+          updated = replaceWithChanges(phIconHifenReplaces, updated);
 
           const icons = iconsReplaced.filter((icon: any) => updated.includes(icon.replace));
 
