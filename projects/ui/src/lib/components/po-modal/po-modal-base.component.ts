@@ -86,7 +86,6 @@ export class PoModalBaseComponent {
    * > Quando informado `auto` a modal calculará automaticamente seu tamanho baseado em seu conteúdo.
    * Caso não seja informado um valor, a modal terá o tamanho definido como `md`.
    *
-   * > Todas as opções de tamanho possuem uma largura máxima de **768px**.
    */
   @Input('p-size') set size(value: string) {
     const sizes = ['sm', 'md', 'lg', 'xl', 'auto'];
