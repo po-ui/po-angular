@@ -2,7 +2,7 @@ name: PO-UI Publish Portal
 
 env:
   AZURE_WEBAPP_NAME: wa-po-ui
-  AZURE_WEBAPP_PACKAGE_PATH: /home/runner/work/po-angular/po-angular/po-angular/dist/portal
+  AZURE_WEBAPP_PACKAGE_PATH: /home/runner/work/po-angular/po-angular/po-angular/dist/portal/browser
   WORKING_DIR: /home/runner/work/po-angular/po-angular/po-angular
 
 on:
