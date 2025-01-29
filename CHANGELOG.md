@@ -14,10 +14,10 @@ definições da atualização da lib
 @animaliads/animalia-icon
 
 Antes:
-<i class="ph ph-arrow-fat-line-down"></i>
+`<i class="ph ph-arrow-fat-line-down"></i>`
 
 Depois:
-<i class="an an-arrow-fat-line-down"></i>
+`<i class="an an-arrow-fat-line-down"></i>`
 
 ### Features
 
