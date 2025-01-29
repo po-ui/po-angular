@@ -80,6 +80,7 @@
     "colors": "1.4.0",
     "core-js": "3.33.3",
     "custom-idle-queue": "3.0.1",
+    "deepmerge": "^4.3.1",
     "eslint-plugin-sonarjs": "^0.23.0",
     "gulp-clean": "^0.4.0",
     "gulp-run": "^1.7.1",

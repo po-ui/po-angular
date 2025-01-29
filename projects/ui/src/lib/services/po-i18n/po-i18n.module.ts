@@ -1,4 +1,4 @@
-import { APP_INITIALIZER, ModuleWithProviders, NgModule } from '@angular/core';
+import { APP_INITIALIZER, ModuleWithProviders, NgModule, Provider } from '@angular/core';
 import { HttpClient } from '@angular/common/http';
 
 import { PoLanguageService } from './../po-language/po-language.service';
@@ -162,8 +162,10 @@ export class PoI18nModule {
       providers: [
         {
           provide: I18N_CONFIG,
-          useValue: config
+          useValue: config,
+          multi: true
         },
+        provideI18nConfig(config),
         {
           provide: APP_INITIALIZER,
           useFactory: initializeLanguageDefault,
@@ -180,12 +182,27 @@ export class PoI18nModule {
   }
 }
 
-export function initializeLanguageDefault(config: PoI18nConfig, languageService: PoLanguageService) {
-  // eslint-disable-next-line sonarjs/prefer-immediate-return
-  const setDefaultLanguage = () => {
-    if (config.default.language) {
+export function provideI18nConfig(config: PoI18nConfig): Array<Provider> {
+  return [
+    {
+      provide: I18N_CONFIG,
+      useValue: config,
+      multi: true
+    },
+    {
+      provide: PoI18nService,
+      useFactory: returnPoI18nService,
+      deps: [I18N_CONFIG, HttpClient, PoLanguageService]
+    }
+  ];
+}
+
+export function initializeLanguageDefault(configs: Array<PoI18nConfig>, languageService: PoLanguageService) {
+  const config = configs.find(c => c.default); // Busca a configuração com `default`
+
+  return () => {
+    if (config?.default.language) {
       languageService.setLanguageDefault(config.default.language);
     }
   };
-  return setDefaultLanguage;
 }
