@@ -2,19 +2,7 @@
 
 All notable changes to this project will be documented in this file. See [standard-version](https://github.com/conventional-changelog/standard-version) for commit guidelines.
 
-### [18.24.0](https://github.com/po-ui/po-angular/compare/v18.23.1...v18.24.0) (2025-01-27)
-
-
-### Bug Fixes
-
-* **accordion:** ajusta tipo do botão para evitar envio de formulário ([b4e37a8](https://github.com/po-ui/po-angular/commit/b4e37a832cc77a7a69d033841f1550d78019ae6f))
-* **dynamic-form:** ajusta emissão de evento para p-validate ([6c64795](https://github.com/po-ui/po-angular/commit/6c64795f8d14d92a4db1c079353b81cadf1001b1))
-
-### [18.23.1](https://github.com/po-ui/po-angular/compare/v18.23.0...v18.23.1) (2025-01-20)
-
-Compatibilidade com @totvs/thf-components@18.23.1
-
-## [19.0.0-rc.0](https://github.com/po-ui/po-angular/compare/v19.0.0-next.0...v19.0.0-rc.0) (2025-01-20)
+## [19.0.0](https://github.com/po-ui/po-angular/compare/v18.24.0...v19.0.0) (2025-01-29)
 
 
 ### ⚠ BREAKING CHANGES
@@ -33,10 +21,23 @@ Depois:
 
 ### Features
 
-* **angular:** deve ser utilizado o Angular v19 ([a370d7d](https://github.com/po-ui/po-angular/commit/a370d7d7a3bc1cfaf9a8775ab3ed65f99229c932))
+* **angular:** deve ser utilizado o Angular v19 ([8335b5a](https://github.com/po-ui/po-angular/commit/8335b5ad29a4ae46e993e6ccc80a8dccff1243f1))
 
 
-* **icon:** substitui a prefixo 'ph' por 'an' ([b0d8bce](https://github.com/po-ui/po-angular/commit/b0d8bceee7a433b97c3ad0a62fdf97a2dea8aa7e))
+### Bug Fixes
+
+* **icons:** corrige migração dos ícones para v19 ([7d9c40e](https://github.com/po-ui/po-angular/commit/7d9c40e993d2833b09a2178b274da93daee9f438))
+
+
+* **icons:** substitui a prefixo 'ph' por 'an' ([a59001e](https://github.com/po-ui/po-angular/commit/a59001ea22a9b25dc0f122918290b407cfffe1e5))
+
+### [18.24.0](https://github.com/po-ui/po-angular/compare/v18.23.1...v18.24.0) (2025-01-27)
+
+
+### Bug Fixes
+
+* **accordion:** ajusta tipo do botão para evitar envio de formulário ([b4e37a8](https://github.com/po-ui/po-angular/commit/b4e37a832cc77a7a69d033841f1550d78019ae6f))
+* **dynamic-form:** ajusta emissão de evento para p-validate ([6c64795](https://github.com/po-ui/po-angular/commit/6c64795f8d14d92a4db1c079353b81cadf1001b1))
 
 ### [18.23.1](https://github.com/po-ui/po-angular/compare/v18.23.0...v18.23.1) (2025-01-20)
 
