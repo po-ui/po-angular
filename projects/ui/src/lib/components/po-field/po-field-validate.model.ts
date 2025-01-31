@@ -49,8 +49,6 @@ export abstract class PoFieldValidateModel<T> extends PoFieldModel<T> implements
    */
   @Input('p-field-error-message') fieldErrorMessage: string;
 
-  @Input({ alias: 'p-error-append-in-body', transform: convertToBoolean }) errorAppendBox?: boolean = false;
-
   /**
    * @optional
    *

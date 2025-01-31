@@ -47,6 +47,42 @@ import { PoCheckboxSize } from './po-checkbox-size.enum';
  */
 @Directive()
 export abstract class PoCheckboxBaseComponent implements ControlValueAccessor {
+  // Propriedade interna que define se o ícone de ajuda adicional terá cursor clicável (evento) ou padrão (tooltip).
+  @Input() additionalHelpEventTrigger: string | undefined;
+
+  /**
+   * @optional
+   *
+   * @description
+   * Exibe um ícone de ajuda adicional ao `p-help`, com o texto desta propriedade no tooltip.
+   * Se o evento `p-additional-help` estiver definido, o tooltip não será exibido.
+   * **Como boa prática, indica-se utilizar um texto com até 140 caracteres.**
+   * > Requer um recuo mínimo de 8px se o componente estiver próximo à lateral da tela.
+   */
+  @Input('p-additional-help-tooltip') additionalHelpTooltip?: string;
+
+  /**
+   * @optional
+   *
+   * @description
+   *
+   * Define que o tooltip (`p-additional-help-tooltip`) será incluído no body da página e não dentro do componente. Essa
+   * opção pode ser necessária em cenários com containers que possuem scroll ou overflow escondido, garantindo o
+   * posicionamento correto do tooltip próximo ao elemento.
+   *
+   * > Quando utilizado com `p-additional-help-tooltip`, leitores de tela como o NVDA podem não ler o conteúdo do tooltip.
+   *
+   * @default `false`
+   */
+  @Input({ alias: 'p-append-in-body', transform: convertToBoolean }) appendBox?: boolean = false;
+
+  /**
+   * @optional
+   *
+   * @description
+   * Texto de apoio do campo */
+  @Input('p-help') help?: string;
+
   /** Define o nome do *checkbox*. */
   @Input('name') name: string;
 
@@ -70,10 +106,28 @@ export abstract class PoCheckboxBaseComponent implements ControlValueAccessor {
    * @optional
    *
    * @description
+   * Evento disparado ao clicar no ícone de ajuda adicional.
+   * Este evento ativa automaticamente a exibição do ícone de ajuda adicional ao `p-help`.
+   */
+  @Output('p-additional-help') additionalHelp = new EventEmitter<any>();
+
+  /**
+   * @optional
+   *
+   * @description
    *
    * Evento disparado quando o valor do *checkbox* for alterado.
    */
   @Output('p-change') change: EventEmitter<any> = new EventEmitter<any>();
+
+  /**
+   * @optional
+   *
+   * @description
+   * Evento disparado quando uma tecla é pressionada enquanto o foco está no componente.
+   * Retorna um objeto `KeyboardEvent` com informações sobre a tecla.
+   */
+  @Output('p-keydown') keydown: EventEmitter<KeyboardEvent> = new EventEmitter<KeyboardEvent>();
 
   //propriedade interna recebida do checkbox-group para verificar se o checkbox está ativo, inativo ou indeterminate
   @Input('p-checkboxValue') checkboxValue: boolean | null | string;
@@ -84,6 +138,7 @@ export abstract class PoCheckboxBaseComponent implements ControlValueAccessor {
   //propriedade interna recebida para desabilitar o tabindex do checkbox na utilização dentro de um list-box
   @Input({ alias: 'p-disabled-tabindex', transform: convertToBoolean }) disabladTabindex: boolean = false;
 
+  displayAdditionalHelp: boolean = false;
   id = uuid();
   propagateChange: any;
   onTouched;

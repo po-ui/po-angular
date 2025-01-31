@@ -191,6 +191,12 @@ export class PoUploadComponent extends PoUploadBaseComponent implements AfterVie
     this.cleanInputValue();
   }
 
+  emitAdditionalHelp() {
+    if (this.isAdditionalHelpEventTriggered()) {
+      this.additionalHelp.emit();
+    }
+  }
+
   /**
    * Função que atribui foco ao componente.
    *
@@ -219,6 +225,10 @@ export class PoUploadComponent extends PoUploadBaseComponent implements AfterVie
         this.poUploadDragDropComponent.focus();
       }
     }
+  }
+
+  getAdditionalHelpTooltip() {
+    return this.isAdditionalHelpEventTriggered() ? null : this.additionalHelpTooltip;
   }
 
   // Verifica se existe algum arquivo sendo enviado ao serviço.
@@ -251,6 +261,10 @@ export class PoUploadComponent extends PoUploadBaseComponent implements AfterVie
 
   onFileChangeDragDrop(files) {
     this.updateFiles(files);
+  }
+
+  onKeyDown(event: KeyboardEvent): void {
+    this.keydown.emit(event);
   }
 
   // Remove o arquivo passado por parâmetro da lista dos arquivos correntes.
@@ -306,6 +320,36 @@ export class PoUploadComponent extends PoUploadBaseComponent implements AfterVie
     }
   }
 
+  /**
+   * Método que exibe `p-additionalHelpTooltip` ou executa a ação definida em `p-additionalHelp`.
+   * Para isso, será necessário configurar uma tecla de atalho utilizando o evento `p-keydown`.
+   *
+   * ```
+   * <po-upload
+   *  #upload
+   *  ...
+   *  p-additional-help-tooltip="Mensagem de ajuda complementar"
+   *  (p-keydown)="onKeyDown($event, upload)"
+   * ></po-upload>
+   * ```
+   * ```
+   * ...
+   * onKeyDown(event: KeyboardEvent, inp: PoUploadComponent): void {
+   *  if (event.code === 'F9') {
+   *    inp.showAdditionalHelp();
+   *  }
+   * }
+   * ```
+   */
+  showAdditionalHelp(): boolean {
+    this.displayAdditionalHelp = !this.displayAdditionalHelp;
+    return this.displayAdditionalHelp;
+  }
+
+  showAdditionalHelpIcon() {
+    return !!this.additionalHelpTooltip || this.isAdditionalHelpEventTriggered();
+  }
+
   // Caso o componente estiver no modo AutoUpload, o arquivo também será removido da lista.
   stopUpload(file: PoUploadFile) {
     this.uploadService.stopRequestByFile(file, () => {
@@ -357,6 +401,13 @@ export class PoUploadComponent extends PoUploadBaseComponent implements AfterVie
     this.calledByCleanInputValue = true;
     this.inputFile.nativeElement.value = '';
     this.cd.detectChanges();
+  }
+
+  private isAdditionalHelpEventTriggered(): boolean {
+    return (
+      this.additionalHelpEventTrigger === 'event' ||
+      (this.additionalHelpEventTrigger === undefined && this.additionalHelp.observed)
+    );
   }
 
   // função disparada na resposta do sucesso ou error

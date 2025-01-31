@@ -32,6 +32,7 @@
       (click)="eventOnClick($event)"
       (focus)="eventOnFocus($event)"
       (input)="eventOnInput($event)"
+      (keydown)="onKeyDown($event)"
     />
 
     <div class="po-field-icon-container-right">
@@ -46,10 +47,15 @@
   </div>
 
   <po-field-container-bottom
+    *ngIf="!readonly"
+    [p-additional-help-tooltip]="getAdditionalHelpTooltip()"
+    [p-append-in-body]="appendBox"
     [p-help]="help"
     [p-disabled]="disabled"
     [p-error-pattern]="getErrorPattern()"
     [p-error-limit]="errorLimit"
-    [p-append-in-body]="errorAppendBox"
+    [p-show-additional-help]="displayAdditionalHelp"
+    [p-show-additional-help-icon]="showAdditionalHelpIcon()"
+    (p-additional-help)="emitAdditionalHelp()"
   ></po-field-container-bottom>
 </po-field-container>

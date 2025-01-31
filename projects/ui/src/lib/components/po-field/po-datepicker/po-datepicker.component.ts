@@ -92,6 +92,7 @@ export class PoDatepickerComponent extends PoDatepickerBaseComponent implements 
   /** Texto de apoio do campo. */
   @Input('p-help') help?: string;
 
+  displayAdditionalHelp: boolean = false;
   el: ElementRef;
   declare hour: string;
   id = `po-datepicker[${uuid()}]`;
@@ -180,6 +181,12 @@ export class PoDatepickerComponent extends PoDatepickerBaseComponent implements 
     this.removeListeners();
   }
 
+  emitAdditionalHelp() {
+    if (this.isAdditionalHelpEventTriggered()) {
+      this.additionalHelp.emit();
+    }
+  }
+
   /**
    * Função que atribui foco ao componente.
    *
@@ -201,6 +208,10 @@ export class PoDatepickerComponent extends PoDatepickerBaseComponent implements 
     if (!this.disabled) {
       this.inputEl.nativeElement.focus();
     }
+  }
+
+  getAdditionalHelpTooltip() {
+    return this.isAdditionalHelpEventTriggered() ? null : this.additionalHelpTooltip;
   }
 
   togglePicker() {
@@ -300,6 +311,10 @@ export class PoDatepickerComponent extends PoDatepickerBaseComponent implements 
     }
   }
 
+  onKeyDown(event: KeyboardEvent): void {
+    this.keydown.emit(event);
+  }
+
   onKeyPress(event: any) {
     if (isKeyCodeEnter(event) || isKeyCodeSpace(event)) {
       this.togglePicker();
@@ -324,6 +339,32 @@ export class PoDatepickerComponent extends PoDatepickerBaseComponent implements 
     if (value) {
       this.inputEl.nativeElement.value = this.formatToDate(value);
     }
+  }
+
+  /**
+   * Método que exibe `p-additionalHelpTooltip` ou executa a ação definida em `p-additionalHelp`.
+   * Para isso, será necessário configurar uma tecla de atalho utilizando o evento `p-keydown`.
+   *
+   * ```
+   * <po-datepicker
+   *  #datepicker
+   *  ...
+   *  p-additional-help-tooltip="Mensagem de ajuda complementar"
+   *  (p-keydown)="onKeyDown($event, datepicker)"
+   * ></po-datepicker>
+   * ```
+   * ```
+   * ...
+   * onKeyDown(event: KeyboardEvent, inp: PoDatepickerComponent): void {
+   *  if (event.code === 'F9') {
+   *    inp.showAdditionalHelp();
+   *  }
+   * }
+   * ```
+   */
+  showAdditionalHelp(): boolean {
+    this.displayAdditionalHelp = !this.displayAdditionalHelp;
+    return this.displayAdditionalHelp;
   }
 
   // Função implementada do ControlValueAccessor
@@ -381,6 +422,10 @@ export class PoDatepickerComponent extends PoDatepickerBaseComponent implements 
 
   hasOverlayClass(element: any) {
     return element.classList.contains('po-datepicker-calendar-overlay');
+  }
+
+  showAdditionalHelpIcon() {
+    return !!this.additionalHelpTooltip || this.isAdditionalHelpEventTriggered();
   }
 
   verifyErrorAsync(value) {
@@ -456,6 +501,13 @@ export class PoDatepickerComponent extends PoDatepickerBaseComponent implements 
     });
 
     window.addEventListener('scroll', this.onScroll, true);
+  }
+
+  private isAdditionalHelpEventTriggered(): boolean {
+    return (
+      this.additionalHelpEventTrigger === 'event' ||
+      (this.additionalHelpEventTrigger === undefined && this.additionalHelp.observed)
+    );
   }
 
   private onScroll = (): void => {

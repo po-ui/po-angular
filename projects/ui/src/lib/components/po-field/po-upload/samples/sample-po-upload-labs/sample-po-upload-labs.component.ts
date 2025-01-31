@@ -15,6 +15,7 @@ import {
   standalone: false
 })
 export class SamplePoUploadLabsComponent implements OnInit {
+  additionalHelpTooltip: string;
   allowedExtensions: string;
   customLiterals: PoUploadLiterals;
   dragDropHeight: number;
@@ -126,6 +127,7 @@ export class SamplePoUploadLabsComponent implements OnInit {
   }
 
   restore() {
+    this.additionalHelpTooltip = '';
     this.allowedExtensions = undefined;
     this.customLiterals = undefined;
     this.dragDropHeight = undefined;

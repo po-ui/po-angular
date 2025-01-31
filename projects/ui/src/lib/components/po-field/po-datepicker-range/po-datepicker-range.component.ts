@@ -205,6 +205,12 @@ export class PoDatepickerRangeComponent
     this.updateModel(this.dateRange);
   }
 
+  emitAdditionalHelp() {
+    if (this.isAdditionalHelpEventTriggered()) {
+      this.additionalHelp.emit();
+    }
+  }
+
   eventOnClick($event: any) {
     this.poMaskObject.click($event);
   }
@@ -230,6 +236,10 @@ export class PoDatepickerRangeComponent
     if (!this.disabled) {
       this.startDateInput.nativeElement.focus();
     }
+  }
+
+  getAdditionalHelpTooltip() {
+    return this.isAdditionalHelpEventTriggered() ? null : this.additionalHelpTooltip;
   }
 
   onBlur(event: any) {
@@ -271,6 +281,8 @@ export class PoDatepickerRangeComponent
     } else {
       this.poMaskObject.keydown(event);
     }
+
+    this.keydown.emit(event);
   }
 
   onKeyup(event: any) {
@@ -288,6 +300,36 @@ export class PoDatepickerRangeComponent
   resetDateRangeInputValidation() {
     this.isStartDateRangeInputValid = true;
     this.isDateRangeInputFormatValid = true;
+  }
+
+  showAdditionalHelpIcon() {
+    return !!this.additionalHelpTooltip || this.isAdditionalHelpEventTriggered();
+  }
+
+  /**
+   * Método que exibe `p-additionalHelpTooltip` ou executa a ação definida em `p-additionalHelp`.
+   * Para isso, será necessário configurar uma tecla de atalho utilizando o evento `p-keydown`.
+   *
+   * ```
+   * <po-datepicker-range
+   *  #datepickerRange
+   *  ...
+   *  p-additional-help-tooltip="Mensagem de ajuda complementar"
+   *  (p-keydown)="onKeyDown($event, datepickerRange)"
+   * ></po-datepicker-range>
+   * ```
+   * ```
+   * ...
+   * onKeyDown(event: KeyboardEvent, inp: PoDatepickerRangeComponent): void {
+   *  if (event.code === 'F9') {
+   *    inp.showAdditionalHelp();
+   *  }
+   * }
+   * ```
+   */
+  showAdditionalHelp(): boolean {
+    this.displayAdditionalHelp = !this.displayAdditionalHelp;
+    return this.displayAdditionalHelp;
   }
 
   toggleCalendar() {
@@ -400,6 +442,13 @@ export class PoDatepickerRangeComponent
     });
 
     window.addEventListener('scroll', this.onScroll, true);
+  }
+
+  private isAdditionalHelpEventTriggered(): boolean {
+    return (
+      this.additionalHelpEventTrigger === 'event' ||
+      (this.additionalHelpEventTrigger === undefined && this.additionalHelp.observed)
+    );
   }
 
   private isEqualBeforeValue(startDate: string, endDate: string): boolean {

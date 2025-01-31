@@ -48,6 +48,8 @@ export abstract class PoNumberBaseComponent extends PoInputGeneric {
       event.stopPropagation();
       event.preventDefault();
     }
+
+    this.keydown.emit(event);
   }
 
   validMaxLength(maxlength: number, value: string) {

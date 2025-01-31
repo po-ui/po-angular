@@ -98,12 +98,54 @@ export class PoCheckboxComponent extends PoCheckboxBaseComponent implements Afte
     }
   }
 
+  emitAdditionalHelp() {
+    if (this.isAdditionalHelpEventTriggered()) {
+      this.additionalHelp.emit();
+    }
+  }
+
+  getAdditionalHelpTooltip() {
+    return this.isAdditionalHelpEventTriggered() ? null : this.additionalHelpTooltip;
+  }
+
   onKeyDown(event: KeyboardEvent, value: boolean | string) {
     if (event.which === PoKeyCodeEnum.space || event.keyCode === PoKeyCodeEnum.space) {
       this.checkOption(value);
 
       event.preventDefault();
     }
+
+    this.keydown.emit(event);
+  }
+
+  /**
+   * Método que exibe `p-additionalHelpTooltip` ou executa a ação definida em `p-additionalHelp`.
+   * Para isso, será necessário configurar uma tecla de atalho utilizando o evento `p-keydown`.
+   *
+   * ```
+   * <po-checkbox
+   *  #checkbox
+   *  ...
+   *  p-additional-help-tooltip="Mensagem de ajuda complementar"
+   *  (p-keydown)="onKeyDown($event, checkbox)"
+   * ></po-checkbox>
+   * ```
+   * ```
+   * ...
+   * onKeyDown(event: KeyboardEvent, inp: PoCheckboxComponent): void {
+   *  if (event.code === 'F9') {
+   *    inp.showAdditionalHelp();
+   *  }
+   * }
+   * ```
+   */
+  showAdditionalHelp(): boolean {
+    this.displayAdditionalHelp = !this.displayAdditionalHelp;
+    return this.displayAdditionalHelp;
+  }
+
+  showAdditionalHelpIcon() {
+    return !!this.additionalHelpTooltip || this.isAdditionalHelpEventTriggered();
   }
 
   protected changeModelValue(value: boolean | null | string) {
@@ -113,6 +155,13 @@ export class PoCheckboxComponent extends PoCheckboxBaseComponent implements Afte
       this.checkboxValue = typeof value === 'boolean' || value === null ? value : false;
     }
     this.changeDetector.detectChanges();
+  }
+
+  private isAdditionalHelpEventTriggered(): boolean {
+    return (
+      this.additionalHelpEventTrigger === 'event' ||
+      (this.additionalHelpEventTrigger === undefined && this.additionalHelp.observed)
+    );
   }
 
   get iconNameLib() {

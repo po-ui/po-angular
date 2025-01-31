@@ -100,6 +100,12 @@ export class PoRadioGroupComponent extends PoRadioGroupBaseComponent implements 
     this.cd.markForCheck();
   }
 
+  emitAdditionalHelp() {
+    if (this.isAdditionalHelpEventTriggered()) {
+      this.additionalHelp.emit();
+    }
+  }
+
   eventClick(value: any, disabled: any) {
     if (!disabled) {
       this.onTouched?.();
@@ -134,6 +140,10 @@ export class PoRadioGroupComponent extends PoRadioGroupBaseComponent implements 
     }
   }
 
+  getAdditionalHelpTooltip() {
+    return this.isAdditionalHelpEventTriggered() ? null : this.additionalHelpTooltip;
+  }
+
   getElementByValue(value) {
     return this.inputEl.nativeElement.querySelector(`input[value='${value}']`);
   }
@@ -148,12 +158,53 @@ export class PoRadioGroupComponent extends PoRadioGroupBaseComponent implements 
     );
   }
 
+  onKeyDown(event: KeyboardEvent): void {
+    this.keydown.emit(event);
+  }
+
   onKeyUp(event: KeyboardEvent, value) {
     const key = event.keyCode || event.which;
 
     if (this.isArrowKey(key)) {
       this.changeValue(value);
     }
+  }
+
+  /**
+   * Método que exibe `p-additionalHelpTooltip` ou executa a ação definida em `p-additionalHelp`.
+   * Para isso, será necessário configurar uma tecla de atalho utilizando o evento `p-keydown`.
+   *
+   * ```
+   * <po-radio-group
+   *  #radioGroup
+   *  ...
+   *  p-additional-help-tooltip="Mensagem de ajuda complementar"
+   *  (p-keydown)="onKeyDown($event, radioGroup)"
+   * ></po-radio-group>
+   * ```
+   * ```
+   * ...
+   * onKeyDown(event: KeyboardEvent, inp: PoRadioGroupComponent): void {
+   *  if (event.code === 'F9') {
+   *    inp.showAdditionalHelp();
+   *  }
+   * }
+   * ```
+   */
+  showAdditionalHelp(): boolean {
+    this.displayAdditionalHelp = !this.displayAdditionalHelp;
+    return this.displayAdditionalHelp;
+  }
+
+  showAdditionalHelpIcon() {
+    return !!this.additionalHelpTooltip || this.isAdditionalHelpEventTriggered();
+  }
+
+  private isAdditionalHelpEventTriggered(): boolean {
+    return (
+      this.additionalHelpEventTrigger === 'event' ||
+      (this.additionalHelpEventTrigger === undefined && this.additionalHelp.observed)
+    );
   }
 
   private isArrowKey(key: number) {

@@ -238,6 +238,8 @@ export class PoSwitchComponent extends PoFieldModel<any> {
       event.preventDefault();
       this.eventClick();
     }
+
+    this.keydown.emit(event);
   }
 
   changeValue(value: any) {

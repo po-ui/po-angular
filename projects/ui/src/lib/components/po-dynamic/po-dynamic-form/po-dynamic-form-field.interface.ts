@@ -37,6 +37,29 @@ import { PoDynamicField } from '../po-dynamic-field.interface';
  */
 export interface PoDynamicFormField extends PoDynamicField {
   /**
+   * Evento disparado ao clicar no ícone de ajuda adicional.
+   * Este evento ativa automaticamente a exibição do ícone de ajuda adicional ao `p-help`.
+   */
+  additionalHelp?: Function;
+
+  /**
+   * Exibe um ícone de ajuda adicional ao `p-help`, com o texto desta propriedade no tooltip.
+   * Se o evento `p-additional-help` estiver definido, o tooltip não será exibido.
+   * **Como boa prática, indica-se utilizar um texto com até 140 caracteres.**
+   */
+  additionalHelpTooltip?: string;
+
+  /**
+   * Define que o `listbox` e/ou tooltip (`p-additional-help-tooltip` e/ou `p-error-limit`) serão incluídos no body da
+   * página e não dentro do componente. Essa opção é necessária para cenários com containers que possuem scroll ou
+   * overflow escondido, garantindo o posicionamento correto de ambos próximo ao elemento.
+   *
+   * > O uso dessa propriedade pode acarretar na perda sequencial da tabulação da página.
+   * Quando utilizado com `p-additional-help-tooltip`, leitores de tela como o NVDA podem não ler o conteúdo do tooltip.
+   */
+  appendBox?: boolean;
+
+  /**
    * Define as colunas para utilização da busca avançada. Usada somente em conjunto com a propriedade `searchService`,
    * essa propriedade deve receber um array de objetos que implementam a interface [`PoLookupColumn`](/documentation/po-lookup).
    *
@@ -46,6 +69,12 @@ export interface PoDynamicFormField extends PoDynamicField {
    * **Componentes compatíveis:** `po-radio-group`, `po-lookup`, `po-checkbox-group`.
    */
   columns?: Array<PoLookupColumn> | number;
+
+  /**
+   * Função executada quando uma tecla é pressionada enquanto o foco está no componente.
+   * Retorna um objeto `KeyboardEvent` com informações sobre a tecla.
+   */
+  keydown?: Function;
 
   /** Define a obrigatoriedade do campo. */
   required?: boolean;
@@ -297,8 +326,6 @@ export interface PoDynamicFormField extends PoDynamicField {
    * @default `false`
    */
   errorLimit?: boolean;
-
-  errorAppendBox?: boolean;
 
   /**
    * Função executada para realizar a validação assíncrona personalizada.

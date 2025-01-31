@@ -50,10 +50,6 @@ describe('PoCheckboxGroupComponent:', () => {
     expect(component).toBeTruthy();
   });
 
-  it('should have help', () => {
-    expect(nativeElement.querySelector('.po-field-help').innerHTML).toContain('Help');
-  });
-
   it('should create 2 checkbox options', () => {
     expect(nativeElement.querySelectorAll('po-checkbox').length).toBe(2);
   });
@@ -83,6 +79,26 @@ describe('PoCheckboxGroupComponent:', () => {
       component.ngAfterViewInit();
 
       expect(spyFocus).not.toHaveBeenCalled();
+    });
+
+    describe('emitAdditionalHelp:', () => {
+      it('should emit additionalHelp when isAdditionalHelpEventTriggered returns true', () => {
+        spyOn(component.additionalHelp, 'emit');
+        spyOn(component as any, 'isAdditionalHelpEventTriggered').and.returnValue(true);
+
+        component.emitAdditionalHelp();
+
+        expect(component.additionalHelp.emit).toHaveBeenCalled();
+      });
+
+      it('should not emit additionalHelp when isAdditionalHelpEventTriggered returns false', () => {
+        spyOn(component.additionalHelp, 'emit');
+        spyOn(component as any, 'isAdditionalHelpEventTriggered').and.returnValue(false);
+
+        component.emitAdditionalHelp();
+
+        expect(component.additionalHelp.emit).not.toHaveBeenCalled();
+      });
     });
 
     describe('focus:', () => {
@@ -173,6 +189,35 @@ describe('PoCheckboxGroupComponent:', () => {
       });
     });
 
+    describe('getAdditionalHelpTooltip:', () => {
+      it('should return null when isAdditionalHelpEventTriggered returns true', () => {
+        spyOn(component as any, 'isAdditionalHelpEventTriggered').and.returnValue(true);
+
+        const result = component.getAdditionalHelpTooltip();
+
+        expect(result).toBeNull();
+      });
+
+      it('should return additionalHelpTooltip when isAdditionalHelpEventTriggered returns false', () => {
+        const tooltip = 'Test Tooltip';
+        component.additionalHelpTooltip = tooltip;
+        spyOn(component as any, 'isAdditionalHelpEventTriggered').and.returnValue(false);
+
+        const result = component.getAdditionalHelpTooltip();
+
+        expect(result).toBe(tooltip);
+      });
+
+      it('should return undefined when additionalHelpTooltip is undefined and isAdditionalHelpEventTriggered returns false', () => {
+        component.additionalHelpTooltip = undefined;
+        spyOn(component as any, 'isAdditionalHelpEventTriggered').and.returnValue(false);
+
+        const result = component.getAdditionalHelpTooltip();
+
+        expect(result).toBeUndefined();
+      });
+    });
+
     describe('getErrorPattern:', () => {
       it('should return true in hasInvalidClass if fieldErrorMessage', () => {
         component['el'].nativeElement.classList.add('ng-invalid');
@@ -249,19 +294,39 @@ describe('PoCheckboxGroupComponent:', () => {
       });
     });
 
-    describe('Templates:', () => {
-      it('shouldn`t set `po-clickable` class if `disabled` is true.', () => {
-        component.options = [
-          { value: '1', label: '1' },
-          { value: '2', label: '2' }
-        ];
-        component.disabled = true;
+    describe('showAdditionalHelp:', () => {
+      it('should toggle `displayAdditionalHelp` from false to true', () => {
+        component.displayAdditionalHelp = false;
 
-        changeDetector.detectChanges();
+        const result = component.showAdditionalHelp();
 
-        expect(nativeElement.querySelectorAll('label.po-checkbox-group-label.po-clickable')[0]).toBeFalsy();
-        expect(nativeElement.querySelectorAll('label.po-checkbox-group-label.po-clickable')[1]).toBeFalsy();
+        expect(result).toBeTrue();
+        expect(component.displayAdditionalHelp).toBeTrue();
       });
+
+      it('should toggle `displayAdditionalHelp` from true to false', () => {
+        component.displayAdditionalHelp = true;
+
+        const result = component.showAdditionalHelp();
+
+        expect(result).toBeFalse();
+        expect(component.displayAdditionalHelp).toBeFalse();
+      });
+    });
+  });
+
+  describe('Templates:', () => {
+    it('shouldn`t set `po-clickable` class if `disabled` is true.', () => {
+      component.options = [
+        { value: '1', label: '1' },
+        { value: '2', label: '2' }
+      ];
+      component.disabled = true;
+
+      changeDetector.detectChanges();
+
+      expect(nativeElement.querySelectorAll('label.po-checkbox-group-label.po-clickable')[0]).toBeFalsy();
+      expect(nativeElement.querySelectorAll('label.po-checkbox-group-label.po-clickable')[1]).toBeFalsy();
     });
   });
 });

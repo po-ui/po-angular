@@ -141,6 +141,35 @@ const poUploadMinFileSize = 0;
  */
 @Directive()
 export abstract class PoUploadBaseComponent implements ControlValueAccessor, Validator {
+  // Propriedade interna que define se o ícone de ajuda adicional terá cursor clicável (evento) ou padrão (tooltip).
+  @Input() additionalHelpEventTrigger: string | undefined;
+
+  /**
+   * @optional
+   *
+   * @description
+   * Exibe um ícone de ajuda adicional ao `p-help`, com o texto desta propriedade no tooltip.
+   * Se o evento `p-additional-help` estiver definido, o tooltip não será exibido.
+   * **Como boa prática, indica-se utilizar um texto com até 140 caracteres.**
+   * > Requer um recuo mínimo de 8px se o componente estiver próximo à lateral da tela.
+   */
+  @Input('p-additional-help-tooltip') additionalHelpTooltip?: string;
+
+  /**
+   * @optional
+   *
+   * @description
+   *
+   * Define que o tooltip (`p-additional-help-tooltip`) será incluído no body da página e não dentro do componente. Essa
+   * opção pode ser necessária em cenários com containers que possuem scroll ou overflow escondido, garantindo o
+   * posicionamento correto do tooltip próximo ao elemento.
+   *
+   * > Quando utilizado com `p-additional-help-tooltip`, leitores de tela como o NVDA podem não ler o conteúdo do tooltip.
+   *
+   * @default `false`
+   */
+  @Input({ alias: 'p-append-in-body', transform: convertToBoolean }) appendBox?: boolean = false;
+
   /**
    * @optional
    *
@@ -244,6 +273,15 @@ export abstract class PoUploadBaseComponent implements ControlValueAccessor, Val
    * @optional
    *
    * @description
+   * Evento disparado ao clicar no ícone de ajuda adicional.
+   * Este evento ativa automaticamente a exibição do ícone de ajuda adicional ao `p-help`.
+   */
+  @Output('p-additional-help') additionalHelp = new EventEmitter<any>();
+
+  /**
+   * @optional
+   *
+   * @description
    *
    * Define uma ação personalizada no componente `po-upload`, adicionando um botão no canto inferior direito
    * de cada barra de progresso associada aos arquivos enviados ou em envio.
@@ -324,6 +362,15 @@ export abstract class PoUploadBaseComponent implements ControlValueAccessor, Val
    * @optional
    *
    * @description
+   * Evento disparado quando uma tecla é pressionada enquanto o foco está no componente.
+   * Retorna um objeto `KeyboardEvent` com informações sobre a tecla.
+   */
+  @Output('p-keydown') keydown: EventEmitter<KeyboardEvent> = new EventEmitter<KeyboardEvent>();
+
+  /**
+   * @optional
+   *
+   * @description
    *
    * Função que será executada no momento de realizar o envio do arquivo,
    * onde será possível adicionar informações ao parâmetro que será enviado na requisição.
@@ -384,6 +431,7 @@ export abstract class PoUploadBaseComponent implements ControlValueAccessor, Val
   currentFiles: Array<PoUploadFile>;
 
   canHandleDirectory: boolean;
+  displayAdditionalHelp: boolean = false;
   onModelChange: any;
 
   protected extensionNotAllowed = 0;
