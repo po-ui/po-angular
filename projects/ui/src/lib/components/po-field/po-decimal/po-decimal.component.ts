@@ -85,7 +85,6 @@ export class PoDecimalComponent extends PoInputBaseComponent implements AfterVie
   @ViewChild('inp', { read: ElementRef, static: true }) inputEl: ElementRef;
 
   id = `po-decimal[${uuid()}]`;
-  showAdditionalHelp: boolean = false;
   private _decimalsLength?: number = poDecimalDefaultDecimalsLength;
   private _thousandMaxlength?: number = poDecimalDefaultThousandMaxlength;
   private _locale?: string;
@@ -810,10 +809,5 @@ export class PoDecimalComponent extends PoInputBaseComponent implements AfterVie
     return (
       this.isPositionAfterDecimalSeparator(selectionStart, value) && valueAfterSeparator.length >= this.decimalsLength
     );
-  }
-
-  onKeyDown(event: any) {
-    this.showAdditionalHelp = !this.showAdditionalHelp;
-    event.preventDefault();
   }
 }

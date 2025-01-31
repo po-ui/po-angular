@@ -263,6 +263,10 @@ export class PoUploadComponent extends PoUploadBaseComponent implements AfterVie
     this.updateFiles(files);
   }
 
+  onKeyDown(event: KeyboardEvent): void {
+    this.keydown.emit(event);
+  }
+
   // Remove o arquivo passado por parâmetro da lista dos arquivos correntes.
   removeFile(file): void {
     const index = this.currentFiles.indexOf(file);
@@ -314,6 +318,32 @@ export class PoUploadComponent extends PoUploadBaseComponent implements AfterVie
     } else {
       this.renderer.removeAttribute(this.inputFile.nativeElement, 'webkitdirectory');
     }
+  }
+
+  /**
+   * Método que exibe `p-additionalHelpTooltip` ou executa a ação definida em `p-additionalHelp`.
+   * Para isso, será necessário configurar uma tecla de atalho utilizando o evento `p-keydown`.
+   *
+   * ```
+   * <po-upload
+   *  #upload
+   *  ...
+   *  p-additional-help-tooltip="Mensagem de ajuda complementar"
+   *  (p-keydown)="onKeyDown($event, upload)"
+   * ></po-upload>
+   * ```
+   * ```
+   * ...
+   * onKeyDown(event: KeyboardEvent, inp: PoUploadComponent): void {
+   *  if (event.code === 'F9') {
+   *    inp.showAdditionalHelp();
+   *  }
+   * }
+   * ```
+   */
+  showAdditionalHelp(): boolean {
+    this.displayAdditionalHelp = !this.displayAdditionalHelp;
+    return this.displayAdditionalHelp;
   }
 
   showAdditionalHelpIcon() {

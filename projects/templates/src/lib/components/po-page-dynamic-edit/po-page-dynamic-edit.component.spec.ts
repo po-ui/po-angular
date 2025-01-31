@@ -465,6 +465,15 @@ describe('PoPageDynamicEditComponent: ', () => {
       expect(spy).toHaveBeenCalled();
     });
 
+    it('showAdditionalHelp: should call `fieldsComponent.showAdditionalHelp` with the given property', () => {
+      const property = 'name';
+      const dynamicFormMock = jasmine.createSpyObj('PoDynamicFormComponent', ['showAdditionalHelp']);
+      component.dynamicForm = dynamicFormMock;
+      component.showAdditionalHelp(property);
+
+      expect(dynamicFormMock.showAdditionalHelp).toHaveBeenCalledWith(property);
+    });
+
     describe('ngOnInit:', () => {
       it('should call `loadData` with `paramId` and `duplicate` if `activatedRoute.snapshot.data.serviceApi` is falsy', () => {
         const id = 1;

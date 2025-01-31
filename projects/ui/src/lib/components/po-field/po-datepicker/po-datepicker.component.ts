@@ -92,6 +92,7 @@ export class PoDatepickerComponent extends PoDatepickerBaseComponent implements 
   /** Texto de apoio do campo. */
   @Input('p-help') help?: string;
 
+  displayAdditionalHelp: boolean = false;
   el: ElementRef;
   declare hour: string;
   id = `po-datepicker[${uuid()}]`;
@@ -310,6 +311,10 @@ export class PoDatepickerComponent extends PoDatepickerBaseComponent implements 
     }
   }
 
+  onKeyDown(event: KeyboardEvent): void {
+    this.keydown.emit(event);
+  }
+
   onKeyPress(event: any) {
     if (isKeyCodeEnter(event) || isKeyCodeSpace(event)) {
       this.togglePicker();
@@ -334,6 +339,32 @@ export class PoDatepickerComponent extends PoDatepickerBaseComponent implements 
     if (value) {
       this.inputEl.nativeElement.value = this.formatToDate(value);
     }
+  }
+
+  /**
+   * Método que exibe `p-additionalHelpTooltip` ou executa a ação definida em `p-additionalHelp`.
+   * Para isso, será necessário configurar uma tecla de atalho utilizando o evento `p-keydown`.
+   *
+   * ```
+   * <po-datepicker
+   *  #datepicker
+   *  ...
+   *  p-additional-help-tooltip="Mensagem de ajuda complementar"
+   *  (p-keydown)="onKeyDown($event, datepicker)"
+   * ></po-datepicker>
+   * ```
+   * ```
+   * ...
+   * onKeyDown(event: KeyboardEvent, inp: PoDatepickerComponent): void {
+   *  if (event.code === 'F9') {
+   *    inp.showAdditionalHelp();
+   *  }
+   * }
+   * ```
+   */
+  showAdditionalHelp(): boolean {
+    this.displayAdditionalHelp = !this.displayAdditionalHelp;
+    return this.displayAdditionalHelp;
   }
 
   // Função implementada do ControlValueAccessor

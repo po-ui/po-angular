@@ -959,6 +959,35 @@ describe('PoLookupComponent:', () => {
       expect(fakeThis.isCalculateVisibleItems).toBeFalsy();
     });
 
+    it('p-keydown: should emit event', () => {
+      const fakeEvent = new KeyboardEvent('keydown', { key: 'Enter' });
+      spyOn(component.keydown, 'emit');
+
+      component.onKeyDown(fakeEvent);
+
+      expect(component.keydown.emit).toHaveBeenCalledWith(fakeEvent);
+    });
+
+    describe('showAdditionalHelp:', () => {
+      it('should toggle `displayAdditionalHelp` from false to true', () => {
+        component.displayAdditionalHelp = false;
+
+        const result = component.showAdditionalHelp();
+
+        expect(result).toBeTrue();
+        expect(component.displayAdditionalHelp).toBeTrue();
+      });
+
+      it('should toggle `displayAdditionalHelp` from true to false', () => {
+        component.displayAdditionalHelp = true;
+
+        const result = component.showAdditionalHelp();
+
+        expect(result).toBeFalse();
+        expect(component.displayAdditionalHelp).toBeFalse();
+      });
+    });
+
     it('setInputValueWipoieldFormat: should set `inputValue` and `oldValue` with value returned of `fieldFormat`', () => {
       fixture.detectChanges();
       component.fieldFormat = valueFormated => `${valueFormated.value} - ${valueFormated.label}`;

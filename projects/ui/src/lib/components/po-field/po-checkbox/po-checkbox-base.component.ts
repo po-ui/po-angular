@@ -120,6 +120,15 @@ export abstract class PoCheckboxBaseComponent implements ControlValueAccessor {
    */
   @Output('p-change') change: EventEmitter<any> = new EventEmitter<any>();
 
+  /**
+   * @optional
+   *
+   * @description
+   * Evento disparado quando uma tecla é pressionada enquanto o foco está no componente.
+   * Retorna um objeto `KeyboardEvent` com informações sobre a tecla.
+   */
+  @Output('p-keydown') keydown: EventEmitter<KeyboardEvent> = new EventEmitter<KeyboardEvent>();
+
   //propriedade interna recebida do checkbox-group para verificar se o checkbox está ativo, inativo ou indeterminate
   @Input('p-checkboxValue') checkboxValue: boolean | null | string;
 
@@ -129,6 +138,7 @@ export abstract class PoCheckboxBaseComponent implements ControlValueAccessor {
   //propriedade interna recebida para desabilitar o tabindex do checkbox na utilização dentro de um list-box
   @Input({ alias: 'p-disabled-tabindex', transform: convertToBoolean }) disabladTabindex: boolean = false;
 
+  displayAdditionalHelp: boolean = false;
   id = uuid();
   propagateChange: any;
   onTouched;

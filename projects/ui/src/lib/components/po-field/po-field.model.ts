@@ -72,6 +72,16 @@ export abstract class PoFieldModel<T> implements ControlValueAccessor {
    */
   @Output('p-change') change: EventEmitter<T> = new EventEmitter<T>();
 
+  /**
+   * @optional
+   *
+   * @description
+   * Evento disparado quando uma tecla é pressionada enquanto o foco está no componente.
+   * Retorna um objeto `KeyboardEvent` com informações sobre a tecla.
+   */
+  @Output('p-keydown') keydown: EventEmitter<KeyboardEvent> = new EventEmitter<KeyboardEvent>();
+
+  displayAdditionalHelp: boolean = false;
   value: T;
 
   protected onTouched;
@@ -109,6 +119,32 @@ export abstract class PoFieldModel<T> implements ControlValueAccessor {
 
   getAdditionalHelpTooltip() {
     return this.isAdditionalHelpEventTriggered() ? null : this.additionalHelpTooltip;
+  }
+
+  /**
+   * Método que exibe `p-additionalHelpTooltip` ou executa a ação definida em `p-additionalHelp`.
+   * Para isso, será necessário configurar uma tecla de atalho utilizando o evento `p-keydown`.
+   *
+   * ```
+   * <po-nome-component
+   *  #component
+   *  ...
+   *  p-additional-help-tooltip="Mensagem de ajuda complementar"
+   *  (p-keydown)="onKeyDown($event, component)"
+   * ></po-nome-component>
+   * ```
+   * ```
+   * ...
+   * onKeyDown(event: KeyboardEvent, inp: PoNomeDoComponente): void {
+   *  if (event.code === 'F9') {
+   *    inp.showAdditionalHelp();
+   *  }
+   * }
+   * ```
+   */
+  showAdditionalHelp(): boolean {
+    this.displayAdditionalHelp = !this.displayAdditionalHelp;
+    return this.displayAdditionalHelp;
   }
 
   showAdditionalHelpIcon() {

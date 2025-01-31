@@ -10,6 +10,7 @@ import { PoFieldContainerBottomComponent } from './../po-field-container/po-fiel
 import { PoSelectOptionGroup } from './po-select-option-group.interface';
 import { PoSelectOption } from './po-select-option.interface';
 import { PoSelectComponent } from './po-select.component';
+import { PoFieldValidateModel } from '../po-field-validate.model';
 
 describe('PoSelectComponent:', () => {
   let component: PoSelectComponent;
@@ -293,6 +294,15 @@ describe('PoSelectComponent:', () => {
       expect(component['onModelTouched']).toBe(fnTouched);
     });
 
+    it('showAdditionalHelp: should call `showAdditionalHelp` and return value', () => {
+      const spySuperMethod = spyOn(PoFieldValidateModel.prototype, 'showAdditionalHelp').and.returnValue(true);
+
+      const result = component.showAdditionalHelp();
+
+      expect(spySuperMethod).toHaveBeenCalled();
+      expect(result).toBe(true);
+    });
+
     it('ngOnChanges: should set `currentValue` in options', () => {
       const changes: any = {
         options: {
@@ -332,6 +342,15 @@ describe('PoSelectComponent:', () => {
       const item = { label: 'Item with options', options: { option1: 'value1', option2: 'value2' } };
 
       expect(component.isItemGroup(item)).toBeFalse();
+    });
+
+    it('p-keydown: should emit event', () => {
+      const fakeEvent = new KeyboardEvent('keydown', { key: 'Enter' });
+      spyOn(component.keydown, 'emit');
+
+      component.onKeyDown(fakeEvent);
+
+      expect(component.keydown.emit).toHaveBeenCalledWith(fakeEvent);
     });
 
     it('separateOptions: should separate options with groups and validate each group options', () => {

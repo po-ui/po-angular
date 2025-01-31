@@ -558,6 +558,15 @@ describe('PoUploadComponent:', () => {
       expect(component['updateFiles']).toHaveBeenCalledWith(files);
     });
 
+    it('p-keydown: should emit event', () => {
+      const fakeEvent = new KeyboardEvent('keydown', { key: 'Enter' });
+      spyOn(component.keydown, 'emit');
+
+      component.onKeyDown(fakeEvent);
+
+      expect(component.keydown.emit).toHaveBeenCalledWith(fakeEvent);
+    });
+
     it('removeFile: should be remove file from currentFiles', () => {
       const fakeThis = {
         currentFiles: [file],
@@ -1064,6 +1073,26 @@ describe('PoUploadComponent:', () => {
         'webkitdirectory'
       );
       expect(component.renderer.removeAttribute).toHaveBeenCalledTimes(1);
+    });
+
+    describe('showAdditionalHelp:', () => {
+      it('should toggle `displayAdditionalHelp` from false to true', () => {
+        component.displayAdditionalHelp = false;
+
+        const result = component.showAdditionalHelp();
+
+        expect(result).toBeTrue();
+        expect(component.displayAdditionalHelp).toBeTrue();
+      });
+
+      it('should toggle `displayAdditionalHelp` from true to false', () => {
+        component.displayAdditionalHelp = true;
+
+        const result = component.showAdditionalHelp();
+
+        expect(result).toBeFalse();
+        expect(component.displayAdditionalHelp).toBeFalse();
+      });
     });
 
     it('customClick: should emit customActionClick with the provided file if customAction is defined', () => {

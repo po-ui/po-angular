@@ -61,7 +61,7 @@ export class PoFieldContainerBottomComponent implements OnChanges {
   /** Evento disparado ao clicar no ícone de ajuda adicional. */
   @Output('p-additional-help') additionalHelp = new EventEmitter<any>();
 
-  private isInitialChange = true;
+  private isInitialChange: boolean = true;
 
   ngOnChanges(changes: SimpleChanges) {
     if (changes.showAdditionalHelp) {

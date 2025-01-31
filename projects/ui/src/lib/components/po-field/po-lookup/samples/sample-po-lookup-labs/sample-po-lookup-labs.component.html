@@ -28,6 +28,7 @@
   [p-virtual-scroll]="properties.includes('virtualScroll')"
   (p-change)="changeEvent('p-change')"
   (p-error)="changeEvent('p-error')"
+  (p-keydown)="changeEvent('p-keydown')"
   (p-selected)="changeEvent('p-selected')"
   [p-error-limit]="properties?.includes('errorLimit')"
 >

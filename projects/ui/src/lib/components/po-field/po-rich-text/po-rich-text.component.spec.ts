@@ -166,6 +166,26 @@ describe('PoRichTextComponent:', () => {
       expect(fnError).not.toThrow();
     });
 
+    describe('showAdditionalHelp:', () => {
+      it('should toggle `displayAdditionalHelp` from false to true', () => {
+        component.displayAdditionalHelp = false;
+
+        const result = component.showAdditionalHelp();
+
+        expect(result).toBeTrue();
+        expect(component.displayAdditionalHelp).toBeTrue();
+      });
+
+      it('should toggle `displayAdditionalHelp` from true to false', () => {
+        component.displayAdditionalHelp = true;
+
+        const result = component.showAdditionalHelp();
+
+        expect(result).toBeFalse();
+        expect(component.displayAdditionalHelp).toBeFalse();
+      });
+    });
+
     it('updateValue: should apply values to value, invalid and call updateModel', () => {
       spyOn(component, <any>'updateModel');
       spyOn(component, <any>'controlChangeModelEmitter');
@@ -215,6 +235,15 @@ describe('PoRichTextComponent:', () => {
       component.onChangeValue('value');
 
       expect(component.change.emit).toHaveBeenCalledWith('value');
+    });
+
+    it('p-keydown: should emit event', () => {
+      const fakeEvent = new KeyboardEvent('keydown', { key: 'Enter' });
+      spyOn(component.keydown, 'emit');
+
+      component.onKeyDown(fakeEvent);
+
+      expect(component.keydown.emit).toHaveBeenCalledWith(fakeEvent);
     });
 
     it('controlChangeModelEmitter: should emit changeModel and set modelLastUpdate value', () => {

@@ -116,15 +116,6 @@ export abstract class PoTextareaBaseComponent implements ControlValueAccessor, V
    * @optional
    *
    * @description
-   * Evento disparado ao clicar no ícone de ajuda adicional.
-   * Este evento ativa automaticamente a exibição do ícone de ajuda adicional ao `p-help`.
-   */
-  @Output('p-additional-help') additionalHelp = new EventEmitter<any>();
-
-  /**
-   * @optional
-   *
-   * @description
    *
    * Limita a exibição da mensagem de erro a duas linhas e exibe um tooltip com o texto completo.
    *
@@ -134,6 +125,15 @@ export abstract class PoTextareaBaseComponent implements ControlValueAccessor, V
    * @default `false`
    */
   @Input('p-error-limit') errorLimit: boolean = false;
+
+  /**
+   * @optional
+   *
+   * @description
+   * Evento disparado ao clicar no ícone de ajuda adicional.
+   * Este evento ativa automaticamente a exibição do ícone de ajuda adicional ao `p-help`.
+   */
+  @Output('p-additional-help') additionalHelp = new EventEmitter<any>();
 
   /**
    * @optional
@@ -170,6 +170,17 @@ export abstract class PoTextareaBaseComponent implements ControlValueAccessor, V
    * Evento disparado ao alterar valor do model.
    */
   @Output('p-change-model') changeModel: EventEmitter<any> = new EventEmitter<any>();
+
+  /**
+   * @optional
+   *
+   * @description
+   * Evento disparado quando uma tecla é pressionada enquanto o foco está no componente.
+   * Retorna um objeto `KeyboardEvent` com informações sobre a tecla.
+   */
+  @Output('p-keydown') keydown: EventEmitter<KeyboardEvent> = new EventEmitter<KeyboardEvent>();
+
+  displayAdditionalHelp: boolean = false;
 
   private _disabled: boolean = false;
   private _maxlength: number;
