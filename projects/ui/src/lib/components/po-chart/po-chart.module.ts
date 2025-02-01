@@ -1,4 +1,4 @@
-import { CommonModule } from '@angular/common';
+import { CommonModule, CurrencyPipe, DecimalPipe } from '@angular/common';
 import { NgModule } from '@angular/core';
 
 import { PoTooltipModule } from '../../directives/po-tooltip/po-tooltip.module';
@@ -51,6 +51,7 @@ import { PoResizeObserverDirective } from './directives/po-resize-observer.direc
     PoChartTooltipDirective,
     PoResizeObserverDirective
   ],
-  exports: [PoChartComponent]
+  exports: [PoChartComponent],
+  providers: [DecimalPipe, CurrencyPipe]
 })
 export class PoChartModule {}

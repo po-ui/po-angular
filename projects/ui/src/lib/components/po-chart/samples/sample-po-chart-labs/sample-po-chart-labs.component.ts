@@ -6,7 +6,8 @@ import {
   PoSelectOption,
   PoChartOptions,
   PoCheckboxGroupOption,
-  PoChartDataLabel
+  PoChartDataLabel,
+  PoChartLabelFormat
 } from '@po-ui/ng-components';
 
 @Component({
@@ -32,7 +33,8 @@ export class SamplePoChartLabsComponent implements OnInit {
     axis: {
       minRange: undefined,
       maxRange: undefined,
-      gridLines: undefined
+      gridLines: undefined,
+      labelType: undefined
     }
   };
   dataLabel: PoChartDataLabel;
@@ -49,6 +51,11 @@ export class SamplePoChartLabsComponent implements OnInit {
   ];
 
   readonly dataLabelOptions: Array<PoCheckboxGroupOption> = [{ value: 'fixed', label: 'Fixed' }];
+
+  readonly labelTypeOptions: Array<PoSelectOption> = [
+    { label: 'Number', value: PoChartLabelFormat.Number },
+    { label: 'Currency', value: PoChartLabelFormat.Currency }
+  ];
 
   ngOnInit() {
     this.restore();
@@ -115,7 +122,8 @@ export class SamplePoChartLabsComponent implements OnInit {
       axis: {
         minRange: undefined,
         maxRange: undefined,
-        gridLines: undefined
+        gridLines: undefined,
+        labelType: undefined
       }
     };
   }

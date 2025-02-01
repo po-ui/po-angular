@@ -1,3 +1,5 @@
+import { PoChartLabelFormat } from '../enums/po-chart-label-format.enum';
+
 /**
  * @usedBy PoChartComponent
  *
@@ -36,4 +38,13 @@ export interface PoChartAxisOptions {
    * > Esta definição não deve refletir na plotagem das séries. Os valores máximos e mínimos encontrados nas séries serão as bases para seus alcance.
    */
   minRange?: number;
+
+  /**
+   * @optional
+   *
+   * @description
+   *
+   * Define o tipo do label e a formatação exibida no eixo de valor.
+   */
+  labelType?: PoChartLabelFormat;
 }
