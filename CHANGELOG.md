@@ -2,6 +2,15 @@
 
 All notable changes to this project will be documented in this file. See [standard-version](https://github.com/conventional-changelog/standard-version) for commit guidelines.
 
+## [19.1.0](https://github.com/po-ui/po-angular/compare/v19.0.0...v19.1.0) (2025-02-03)
+
+
+### Features
+
+* **chart:** adiciona possibilidade de formatação do eixo de valor ([8709bc6](https://github.com/po-ui/po-angular/commit/8709bc6bf1e84b8b20db7102b20d9e87024d1b44)), closes [#2358](https://github.com/po-ui/po-angular/issues/2358)
+* **combo:** considera p-remove-initial-filter junto ao p-filter-service ([9eacf20](https://github.com/po-ui/po-angular/commit/9eacf204134b0e5f388e7b772fcf681ea895c165))
+* **components:** implementa help adicional ao p-help ([7d5d32a](https://github.com/po-ui/po-angular/commit/7d5d32adf74e1047afb164f5d6dfc383c5bd0b73))
+
 ## [19.0.0](https://github.com/po-ui/po-angular/compare/v18.24.0...v19.0.0) (2025-01-29)
 
 
