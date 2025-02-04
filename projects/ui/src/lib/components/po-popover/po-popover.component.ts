@@ -40,7 +40,7 @@ import { PoPopoverBaseComponent } from './po-popover-base.component';
   standalone: false
 })
 export class PoPopoverComponent extends PoPopoverBaseComponent implements AfterViewInit, OnDestroy {
-  @ViewChild('popoverElement', { read: ElementRef, static: true }) popoverElement: ElementRef;
+  @ViewChild('popoverElement', { read: ElementRef, static: false }) popoverElement: ElementRef;
 
   arrowDirection = 'left';
   timeoutResize;
