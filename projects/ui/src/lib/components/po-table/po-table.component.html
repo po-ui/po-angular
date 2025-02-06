@@ -139,7 +139,7 @@
         </th>
 
         <th
-          *ngIf="(hasMasterDetailColumn || hasRowTemplate) && !hasRowTemplateWithArrowDirectionRight"
+          *ngIf="(hasMasterDetailColumn || hasRowTemplate) && hasMainColumns && !hasRowTemplateWithArrowDirectionRight"
           class="po-table-header-column po-table-header-master-detail"
         ></th>
 
@@ -250,7 +250,7 @@
         </ng-template>
 
         <th
-          *ngIf="hasRowTemplateWithArrowDirectionRight && (hasVisibleActions || hideColumnsManager)"
+          *ngIf="hasRowTemplateWithArrowDirectionRight && (hasVisibleActions || hideColumnsManager) && hasMainColumns"
           class="po-table-header-column po-table-header-master-detail"
         ></th>
 
@@ -488,7 +488,9 @@
           </th>
 
           <th
-            *ngIf="(hasMasterDetailColumn || hasRowTemplate) && !hasRowTemplateWithArrowDirectionRight"
+            *ngIf="
+              (hasMasterDetailColumn || hasRowTemplate) && hasMainColumns && !hasRowTemplateWithArrowDirectionRight
+            "
             class="po-table-header-column po-table-header-master-detail"
           ></th>
 
@@ -597,7 +599,7 @@
           </ng-template>
 
           <th
-            *ngIf="hasRowTemplateWithArrowDirectionRight && (hasVisibleActions || hideColumnsManager)"
+            *ngIf="hasRowTemplateWithArrowDirectionRight && hasMainColumns && (hasVisibleActions || hideColumnsManager)"
             class="po-table-header-column po-table-header-master-detail"
           ></th>
 
