@@ -233,7 +233,8 @@ export class PoTableComponent extends PoTableBaseComponent implements AfterViewI
       this.mainColumns.length +
       (this.actions.length > 0 ? 1 : 0) +
       (this.selectable ? 1 : 0) +
-      (!this.hideDetail && this.columnMasterDetail !== undefined ? 1 : 0);
+      (!this.hideDetail && this.columnMasterDetail !== undefined ? 1 : 0) +
+      this.countExtraColumns();
 
     return columnCount || 1;
   }
@@ -796,6 +797,29 @@ export class PoTableComponent extends PoTableBaseComponent implements AfterViewI
       const columnLabel = this.getColumnLabel(row, column);
       return (this.tooltipText = columnLabel?.tooltip);
     }
+  }
+
+  private countExtraColumns(): number {
+    let extraColumns = 0;
+
+    if (!this.columnMasterDetail && this.hasItems) {
+      if (
+        (this.hasMasterDetailColumn || this.hasRowTemplate) &&
+        this.hasMainColumns &&
+        !this.hasRowTemplateWithArrowDirectionRight
+      ) {
+        extraColumns++;
+      }
+      if (
+        this.hasRowTemplateWithArrowDirectionRight &&
+        this.hasMainColumns &&
+        (this.hasVisibleActions || this.hideColumnsManager)
+      ) {
+        extraColumns++;
+      }
+    }
+
+    return extraColumns;
   }
 
   private debounceResize() {
