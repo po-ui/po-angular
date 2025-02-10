@@ -2,6 +2,13 @@
 
 All notable changes to this project will be documented in this file. See [standard-version](https://github.com/conventional-changelog/standard-version) for commit guidelines.
 
+### [17.26.13](https://github.com/po-ui/po-angular/compare/v17.26.12...v17.26.13) (2025-02-10)
+
+
+### Bug Fixes
+
+* **popover:** corrige posicionamento no po-table com virtual scroll ([03b02e5](https://github.com/po-ui/po-angular/commit/03b02e520f1f08a3e55683c497ef82f4d3412d6d))
+
 ### [17.26.12](https://github.com/po-ui/po-angular/compare/v17.26.11...v17.26.12) (2025-01-27)
 
 
