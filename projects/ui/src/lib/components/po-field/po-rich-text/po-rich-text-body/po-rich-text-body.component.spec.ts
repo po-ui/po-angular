@@ -1170,4 +1170,36 @@ describe('PoRichTextBodyComponent:', () => {
       expect(nativeElement.querySelector('.po-rich-text-body')).toBeTruthy();
     });
   });
+
+  it('sanitizeHtmlContent: should sanitize HTML content and extract text content', () => {
+    const htmlContent = '<div>Hello <a href="https://example.com">world</a>!</div>';
+    const sanitizedContent = component['sanitizeHtmlContent'](htmlContent);
+    expect(sanitizedContent).toBe('Hello world!');
+  });
+
+  it('extractTextContent: should extract text content from a node', () => {
+    const htmlContent = '<div>Hello <a href="https://example.com">world</a>!</div>';
+    const parser = new DOMParser();
+    const doc = parser.parseFromString(htmlContent, 'text/html');
+    const textContent = component['extractTextContent'](doc.body);
+    expect(textContent).toBe('Hello world!');
+  });
+
+  it('sanitizeHtmlContent: should handle nested HTML elements correctly', () => {
+    const htmlContent = '<div>Hello <div>beautiful <span>world</span></div>!</div>';
+    const sanitizedContent = component['sanitizeHtmlContent'](htmlContent);
+    expect(sanitizedContent).toBe('Hello beautiful world!');
+  });
+
+  it('sanitizeHtmlContent: should return empty string for empty HTML content', () => {
+    const htmlContent = '';
+    const sanitizedContent = component['sanitizeHtmlContent'](htmlContent);
+    expect(sanitizedContent).toBe('');
+  });
+
+  it('sanitizeHtmlContent: should return text content for text nodes only', () => {
+    const htmlContent = 'Just plain text';
+    const sanitizedContent = component['sanitizeHtmlContent'](htmlContent);
+    expect(sanitizedContent).toBe('Just plain text');
+  });
 });
