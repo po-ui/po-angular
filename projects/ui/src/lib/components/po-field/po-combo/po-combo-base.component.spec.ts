@@ -559,6 +559,48 @@ describe('PoComboBaseComponent:', () => {
       expect(component.callModelChange).not.toHaveBeenCalled();
       expect(component['fromWriteValue']).toBe(false);
     });
+
+    describe('controlValueWithLabel', () => {
+      it('should return the object when controlValueWithLabel is true', () => {
+        const selectedOption = { value: 1, label: 'Xpto' };
+
+        component.controlValueWithLabel = true;
+
+        expect(component['getValueUpdate'](1, selectedOption)).toEqual(selectedOption);
+      });
+
+      it('should only return the value when controlValueWithLabel is false', () => {
+        const selectedOption = { value: 1, label: 'Xpto' };
+
+        component.controlValueWithLabel = false;
+
+        expect(component['getValueUpdate'](1, selectedOption)).toEqual(1);
+      });
+
+      it('should return a {value: any, label: any} object when controlValueWithLabel is true and both fieldValue and fieldLabel are set', () => {
+        const selectedOption = { value: 1, label: 'Xpto' };
+
+        component.controlValueWithLabel = true;
+        component.fieldValue = 'id';
+        component.fieldLabel = 'name';
+
+        expect(component['getValueUpdate'](null, selectedOption)).toEqual({ value: 1, label: 'Xpto' });
+      });
+
+      it('should only return the value when calling getValueWrite when controlValueWithLabel is true', () => {
+        component.controlValueWithLabel = true;
+        const option = { value: 1, label: 'Xpto' };
+
+        expect(component['getValueWrite'](option)).toEqual(1);
+      });
+
+      it('should return when calling getValueWrite when controlValueWithLabel is true and the object structure does not contain the value property', () => {
+        component.controlValueWithLabel = true;
+        const data = 1;
+
+        expect(component['getValueWrite'](data)).toEqual(data);
+      });
+    });
   });
 
   describe('Methods:', () => {
