@@ -277,7 +277,8 @@ describe('PoMultiselectBaseComponent:', () => {
     const fakeThis = {
       onModelChange: v => {},
       eventChange: v => {},
-      getValuesFromOptions: v => []
+      getValuesFromOptions: v => [],
+      getValueUpdate: v => []
     };
 
     spyOn(fakeThis, 'onModelChange');
