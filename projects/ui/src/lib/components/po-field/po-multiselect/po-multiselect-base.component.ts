@@ -248,6 +248,13 @@ export abstract class PoMultiselectBaseComponent implements ControlValueAccessor
    */
   @Input({ alias: 'p-append-in-body', transform: convertToBoolean }) appendBox?: boolean = false;
 
+  /**
+   * @docsPrivate
+   *
+   * Determinar se o valor do compo deve retorna objeto do tipo {value: any, label: any}
+   */
+  @Input({ alias: 'p-control-value-with-label', transform: convertToBoolean }) controlValueWithLabel?: boolean = false;
+
   selectedOptions: Array<PoMultiselectOption | any> = [];
   visibleOptionsDropdown: Array<PoMultiselectOption | any> = [];
   visibleTags = [];
@@ -677,7 +684,7 @@ export abstract class PoMultiselectBaseComponent implements ControlValueAccessor
 
   callOnChange(selectedOptions: Array<PoMultiselectOption | any>) {
     if (this.onModelChange) {
-      this.onModelChange(this.getValuesFromOptions(selectedOptions));
+      this.onModelChange(this.getValueUpdate(selectedOptions));
       this.eventChange(selectedOptions);
     }
   }
@@ -770,7 +777,7 @@ export abstract class PoMultiselectBaseComponent implements ControlValueAccessor
   }
 
   writeValue(values: any): void {
-    values = values || [];
+    values = this.getValueWrite(values) || [];
 
     if (this.service && values.length) {
       this.getObjectsByValuesSubscription = this.service.getObjectsByValues(values).subscribe(options => {
@@ -803,6 +810,22 @@ export abstract class PoMultiselectBaseComponent implements ControlValueAccessor
 
   registerOnValidatorChange(fn: () => void) {
     this.validatorChange = fn;
+  }
+
+  private getValueUpdate(selectedOptions: Array<PoMultiselectOption | any>) {
+    if (this.controlValueWithLabel && selectedOptions?.length) {
+      return selectedOptions.map(option => ({ value: option[this.fieldValue], label: option[this.fieldLabel] }));
+    }
+
+    return this.getValuesFromOptions(selectedOptions);
+  }
+
+  private getValueWrite(data: any) {
+    if (this.controlValueWithLabel && data?.length && data.some(x => x.value)) {
+      return data.map(option => option.value || null);
+    }
+
+    return data;
   }
 
   private setLabelsAndValuesOptions() {
