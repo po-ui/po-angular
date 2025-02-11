@@ -274,6 +274,13 @@ export class PoSelectComponent extends PoFieldValidateModel<any> implements OnCh
     }
   }
 
+  /**
+   * @docsPrivate
+   *
+   * Determinar se o valor do compo deve retorna objeto do tipo {value: any, label: any}
+   */
+  @Input({ alias: 'p-control-value-with-label', transform: convertToBoolean }) controlValueWithLabel?: boolean = false;
+
   get fieldValue() {
     return this._fieldValue;
   }
@@ -364,7 +371,7 @@ export class PoSelectComponent extends PoFieldValidateModel<any> implements OnCh
     if (this.selectedValue !== option[this.fieldValue]) {
       this.selectedValue = option[this.fieldValue];
       this.selectElement.nativeElement.value = option[this.fieldValue];
-      this.updateModel(option[this.fieldValue]);
+      this.updateModel(this.getValueUpdate(option));
       this.displayValue = option[this.fieldLabel];
       this.emitChange(option[this.fieldValue]);
     }
@@ -372,6 +379,7 @@ export class PoSelectComponent extends PoFieldValidateModel<any> implements OnCh
 
   // Recebe as alterações do model
   onWriteValue(value: any) {
+    value = this.getValueWrite(value);
     const optionFound: any = this.findOptionValue(value);
 
     if (optionFound) {
@@ -452,6 +460,25 @@ export class PoSelectComponent extends PoFieldValidateModel<any> implements OnCh
     if (this.options) {
       return this.options.find(option => this.isEqual(option.value, value));
     }
+  }
+
+  private getValueUpdate(option: any) {
+    if (this.controlValueWithLabel) {
+      return {
+        value: option[this.fieldValue],
+        label: option[this.fieldLabel]
+      };
+    }
+
+    return option[this.fieldValue];
+  }
+
+  private getValueWrite(data: any) {
+    if (this.controlValueWithLabel && data?.value) {
+      return data?.value;
+    }
+
+    return data;
   }
 
   private transformInArray(objectWithArray: Array<any>): Array<PoSelectOptionGroup | any> {
