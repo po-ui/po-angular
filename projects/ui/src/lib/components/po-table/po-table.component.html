@@ -278,9 +278,12 @@
             </ng-container>
           </td>
 
-          <!-- Valida se a origem do detail é pelo input do po-table -->
+          <!-- Valida se a origem do detail é pelo input do po-table ou pela diretiva -->
           <td
-            *ngIf="columnMasterDetail && !hideDetail && !hasRowTemplate"
+            *ngIf="
+              (columnMasterDetail && !hideDetail && !hasRowTemplate) ||
+              (hasRowTemplate && !hasRowTemplateWithArrowDirectionRight)
+            "
             class="po-table-column-detail-toggle"
             (click)="toggleDetail(row)"
           >
@@ -298,19 +301,6 @@
             [ngTemplateOutletContext]="{ row: row, rowIndex: rowIndex }"
           >
           </ng-template>
-
-          <!-- Valida se a origem do detail é pela diretiva -->
-          <td
-            *ngIf="hasRowTemplate && !hasRowTemplateWithArrowDirectionRight"
-            class="po-table-column-detail-toggle"
-            (click)="toggleDetail(row)"
-          >
-            <ng-template
-              [ngTemplateOutlet]="poTableColumnDetail"
-              [ngTemplateOutletContext]="{ row: row, rowIndex: rowIndex }"
-            >
-            </ng-template>
-          </td>
 
           <td
             *ngFor="let column of mainColumns; let columnIndex = index; trackBy: trackBy"
@@ -633,9 +623,12 @@
               </ng-container>
             </td>
 
-            <!-- Valida se a origem do detail é pelo input do po-table -->
+            <!-- Valida se a origem do detail é pelo input do po-table ou pela diretiva -->
             <td
-              *ngIf="columnMasterDetail && !hideDetail && !hasRowTemplate"
+              *ngIf="
+                (columnMasterDetail && !hideDetail && !hasRowTemplate) ||
+                (hasRowTemplate && !hasRowTemplateWithArrowDirectionRight)
+              "
               class="po-table-column-detail-toggle"
               (click)="toggleDetail(row)"
             >
@@ -653,19 +646,6 @@
               [ngTemplateOutletContext]="{ row: row, rowIndex: rowIndex }"
             >
             </ng-template>
-
-            <!-- Valida se a origem do detail é pela diretiva -->
-            <td
-              *ngIf="hasRowTemplate && !hasRowTemplateWithArrowDirectionRight"
-              class="po-table-column-detail-toggle"
-              (click)="toggleDetail(row)"
-            >
-              <ng-template
-                [ngTemplateOutlet]="poTableColumnDetail"
-                [ngTemplateOutletContext]="{ row: row, rowIndex: rowIndex }"
-              >
-              </ng-template>
-            </td>
 
             <td
               *ngFor="let column of mainColumns; let columnIndex = index; trackBy: trackBy"
