@@ -158,12 +158,50 @@ export class PoRadioGroupComponent extends PoRadioGroupBaseComponent implements 
     );
   }
 
+  onBlur(radio: PoRadioComponent): void {
+    if (!this.isRadioOptionFocused(radio) && this.getAdditionalHelpTooltip() && this.displayAdditionalHelp) {
+      this.showAdditionalHelp();
+    }
+  }
+
+  onKeyDown(event: KeyboardEvent, radio?: PoRadioComponent): void {
+    if (this.isRadioOptionFocused(radio)) {
+      this.keydown.emit(event);
+    }
+  }
+
   onKeyUp(event: KeyboardEvent, value) {
     const key = event.keyCode || event.which;
 
     if (this.isArrowKey(key)) {
       this.changeValue(value);
     }
+  }
+
+  /**
+   * Método que exibe `p-additionalHelpTooltip` ou executa a ação definida em `p-additionalHelp`.
+   * Para isso, será necessário configurar uma tecla de atalho utilizando o evento `p-keydown`.
+   *
+   * ```
+   * <po-radio-group
+   *  #radioGroup
+   *  ...
+   *  p-additional-help-tooltip="Mensagem de ajuda complementar"
+   *  (p-keydown)="onKeyDown($event, radioGroup)"
+   * ></po-radio-group>
+   * ```
+   * ```
+   * ...
+   * onKeyDown(event: KeyboardEvent, inp: PoRadioGroupComponent): void {
+   *  if (event.code === 'F9') {
+   *    inp.showAdditionalHelp();
+   *  }
+   * }
+   * ```
+   */
+  showAdditionalHelp(): boolean {
+    this.displayAdditionalHelp = !this.displayAdditionalHelp;
+    return this.displayAdditionalHelp;
   }
 
   showAdditionalHelpIcon() {
@@ -179,5 +217,9 @@ export class PoRadioGroupComponent extends PoRadioGroupBaseComponent implements 
 
   private isArrowKey(key: number) {
     return key >= 37 && key <= 40;
+  }
+
+  private isRadioOptionFocused(radio: PoRadioComponent): boolean {
+    return document.activeElement === radio.radioInput.nativeElement;
   }
 }

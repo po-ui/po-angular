@@ -231,11 +231,15 @@ export class PoComboComponent extends PoComboBaseComponent implements AfterViewI
 
   onBlur() {
     this.onModelTouched?.();
+    if (this.getAdditionalHelpTooltip() && this.displayAdditionalHelp) {
+      this.showAdditionalHelp();
+    }
   }
 
   onKeyDown(event?: any) {
-    const key = event.keyCode;
-    const inputValue = event.target.value;
+    const key = event?.keyCode;
+    const inputValue = event?.target?.value;
+    const isFieldFocused = document.activeElement === this.inputEl.nativeElement;
 
     if (event.shiftKey && key === PoKeyCodeEnum.tab) {
       this.controlComboVisibility(false);
@@ -291,6 +295,10 @@ export class PoComboComponent extends PoComboBaseComponent implements AfterViewI
     }
 
     this.lastKey = event.keyCode;
+
+    if (isFieldFocused) {
+      this.keydown.emit(event);
+    }
   }
 
   onKeyUp(event?: any) {
@@ -534,6 +542,32 @@ export class PoComboComponent extends PoComboBaseComponent implements AfterViewI
     if (value === null) {
       this.cleanListbox();
     }
+  }
+
+  /**
+   * Método que exibe `p-additionalHelpTooltip` ou executa a ação definida em `p-additionalHelp`.
+   * Para isso, será necessário configurar uma tecla de atalho utilizando o evento `p-keydown`.
+   *
+   * ```
+   * <po-combo
+   *  #combo
+   *  ...
+   *  p-additional-help-tooltip="Mensagem de ajuda complementar"
+   *  (p-keydown)="onKeyDown($event, combo)"
+   * ></po-combo>
+   * ```
+   * ```
+   * ...
+   * onKeyDown(event: KeyboardEvent, inp: PoComboComponent): void {
+   *  if (event.code === 'F9') {
+   *    inp.showAdditionalHelp();
+   *  }
+   * }
+   * ```
+   */
+  showAdditionalHelp(): boolean {
+    this.displayAdditionalHelp = !this.displayAdditionalHelp;
+    return this.displayAdditionalHelp;
   }
 
   wasClickedOnToggle(event: MouseEvent): void {

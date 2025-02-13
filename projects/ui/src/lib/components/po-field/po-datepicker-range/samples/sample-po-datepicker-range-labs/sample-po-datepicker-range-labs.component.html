@@ -20,6 +20,7 @@
   [p-start-date]="startDate"
   [p-locale]="locale"
   (p-change)="changeEvent('p-change')"
+  (p-keydown)="changeEvent('p-keydown')"
   [p-error-limit]="properties?.includes('errorLimit')"
 >
 </po-datepicker-range>

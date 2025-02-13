@@ -16,8 +16,9 @@
           #checkboxLabel
           [p-label]="option.label"
           [p-disabled]="option.disabled || disabled"
+          (p-blur)="onBlur(checkboxLabel)"
           (click)="checkOption(option)"
-          (keydown)="onKeyDown($event, option)"
+          (keydown)="onKeyDown($event, option, checkboxLabel)"
           [p-checkboxValue]="checkedOptions[option.value] === null ? 'mixed' : checkedOptions[option.value]"
           [p-required]="required"
         >
@@ -33,6 +34,7 @@
     [p-disabled]="disabled"
     [p-error-limit]="errorLimit"
     [p-error-pattern]="getErrorPattern()"
+    [p-show-additional-help]="displayAdditionalHelp"
     [p-show-additional-help-icon]="showAdditionalHelpIcon()"
     (p-additional-help)="emitAdditionalHelp()"
   ></po-field-container-bottom>

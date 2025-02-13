@@ -59,6 +59,14 @@ describe('PoButtonComponent: ', () => {
     expect(nativeElement.querySelector('i.po-icon.po-icon-news')).toBeTruthy();
   });
 
+  it('should simulate button blur.', () => {
+    spyOn(component.blur, 'emit');
+
+    component.onBlur();
+
+    expect(component.blur.emit).toHaveBeenCalled();
+  });
+
   it('should simulate button click.', () => {
     spyOn(component.click, 'emit');
 

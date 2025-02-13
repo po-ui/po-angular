@@ -85,7 +85,6 @@ export class PoDecimalComponent extends PoInputBaseComponent implements AfterVie
   @ViewChild('inp', { read: ElementRef, static: true }) inputEl: ElementRef;
 
   id = `po-decimal[${uuid()}]`;
-
   private _decimalsLength?: number = poDecimalDefaultDecimalsLength;
   private _thousandMaxlength?: number = poDecimalDefaultThousandMaxlength;
   private _locale?: string;
@@ -354,9 +353,14 @@ export class PoDecimalComponent extends PoInputBaseComponent implements AfterVie
     return !this.hasLetters(keyValue) && this.hasNotSpace(keyValue) && validKey;
   }
 
-  // função responsável por adicionar os zeroes com as casa decimais ao sair do campo.
+  // função responsável por adicionar os zeros com as casa decimais ao sair do campo.
   onBlur(event: any) {
     this.onTouched?.();
+
+    if (this.getAdditionalHelpTooltip() && this.displayAdditionalHelp) {
+      this.showAdditionalHelp();
+    }
+
     const value = event.target.value;
 
     if (value) {
@@ -434,6 +438,14 @@ export class PoDecimalComponent extends PoInputBaseComponent implements AfterVie
       if (this.isValidKey(event, key)) {
         this.setViewValue(inputValue);
       }
+    }
+  }
+
+  onKeyDown(event: KeyboardEvent): void {
+    const isFieldFocused = document.activeElement === this.inputEl.nativeElement;
+
+    if (isFieldFocused) {
+      this.keydown.emit(event);
     }
   }
 

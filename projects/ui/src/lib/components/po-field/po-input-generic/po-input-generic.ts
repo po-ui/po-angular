@@ -36,7 +36,6 @@ export abstract class PoInputGeneric extends PoInputBaseComponent implements Aft
 
   @HostListener('keydown', ['$event']) onKeydown(e: any) {
     if (this.mask && !this.readonly && e.target.keyCode !== 229) {
-      this.eventOnBlur(e);
       this.objMask.keydown(e);
       if (this.passedWriteValue) {
         this.validateClassesForMask(true);
@@ -47,7 +46,6 @@ export abstract class PoInputGeneric extends PoInputBaseComponent implements Aft
   @HostListener('keyup', ['$event']) onKeyup(e: any) {
     if (this.mask && !this.readonly) {
       if (e.target.keyCode !== 229) {
-        this.eventOnBlur(e);
         this.objMask.keyup(e);
       }
       this.callOnChange(this.objMask.valueToModel);
@@ -75,6 +73,14 @@ export abstract class PoInputGeneric extends PoInputBaseComponent implements Aft
   focus() {
     if (!this.disabled) {
       this.inputEl.nativeElement.focus();
+    }
+  }
+
+  onKeyDown(event: KeyboardEvent): void {
+    const isFieldFocused = document.activeElement === this.inputEl.nativeElement;
+
+    if (isFieldFocused) {
+      this.keydown.emit(event);
     }
   }
 
@@ -134,6 +140,11 @@ export abstract class PoInputGeneric extends PoInputBaseComponent implements Aft
 
   eventOnBlur(e: any) {
     this.onTouched?.();
+
+    if (this.getAdditionalHelpTooltip() && this.displayAdditionalHelp) {
+      this.showAdditionalHelp();
+    }
+
     if (this.mask) {
       this.objMask.blur(e);
     }

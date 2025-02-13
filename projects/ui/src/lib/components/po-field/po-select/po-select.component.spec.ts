@@ -10,6 +10,7 @@ import { PoFieldContainerBottomComponent } from './../po-field-container/po-fiel
 import { PoSelectOptionGroup } from './po-select-option-group.interface';
 import { PoSelectOption } from './po-select-option.interface';
 import { PoSelectComponent } from './po-select.component';
+import { PoFieldValidateModel } from '../po-field-validate.model';
 
 describe('PoSelectComponent:', () => {
   let component: PoSelectComponent;
@@ -90,21 +91,52 @@ describe('PoSelectComponent:', () => {
       expect(component.selectElement.nativeElement.focus).not.toHaveBeenCalled();
     });
 
-    it('onBlur: should be called when blur event', () => {
-      component['onModelTouched'] = () => {};
-      spyOn(component, <any>'onModelTouched');
+    describe('onBlur', () => {
+      let setupTest;
 
-      component.onBlur();
+      beforeEach(() => {
+        setupTest = (tooltip: string, displayHelp: boolean, additionalHelpEvent: any) => {
+          component.additionalHelpTooltip = tooltip;
+          component.displayAdditionalHelp = displayHelp;
+          component.additionalHelp = additionalHelpEvent;
+          spyOn(component, 'showAdditionalHelp');
+        };
+      });
 
-      expect(component['onModelTouched']).toHaveBeenCalled();
-    });
+      it('should be called when blur event', () => {
+        component['onModelTouched'] = () => {};
+        spyOn(component, <any>'onModelTouched');
 
-    it('onBlur: shouldn´t throw error if onModelTouched is falsy', () => {
-      component['onModelTouched'] = null;
+        component.onBlur();
 
-      const fnError = () => component.onBlur();
+        expect(component['onModelTouched']).toHaveBeenCalled();
+      });
 
-      expect(fnError).not.toThrow();
+      it('shouldn´t throw error if onModelTouched is falsy', () => {
+        component['onModelTouched'] = null;
+
+        const fnError = () => component.onBlur();
+
+        expect(fnError).not.toThrow();
+      });
+
+      it('should call showAdditionalHelp when the tooltip is displayed', () => {
+        setupTest('Mensagem de apoio adicional.', true, { observed: false });
+        component.onBlur();
+        expect(component.showAdditionalHelp).toHaveBeenCalled();
+      });
+
+      it('should not call showAdditionalHelp when tooltip is not displayed', () => {
+        setupTest('Mensagem de apoio adicional.', false, { observed: false });
+        component.onBlur();
+        expect(component.showAdditionalHelp).not.toHaveBeenCalled();
+      });
+
+      it('should not call showAdditionalHelp when additionalHelp event is true', () => {
+        setupTest('Mensagem de apoio adicional.', true, { observed: true });
+        component.onBlur();
+        expect(component.showAdditionalHelp).not.toHaveBeenCalled();
+      });
     });
 
     it('extraValidation: should return null', () => {
@@ -293,6 +325,15 @@ describe('PoSelectComponent:', () => {
       expect(component['onModelTouched']).toBe(fnTouched);
     });
 
+    it('showAdditionalHelp: should call `showAdditionalHelp` and return value', () => {
+      const spySuperMethod = spyOn(PoFieldValidateModel.prototype, 'showAdditionalHelp').and.returnValue(true);
+
+      const result = component.showAdditionalHelp();
+
+      expect(spySuperMethod).toHaveBeenCalled();
+      expect(result).toBe(true);
+    });
+
     it('ngOnChanges: should set `currentValue` in options', () => {
       const changes: any = {
         options: {
@@ -332,6 +373,37 @@ describe('PoSelectComponent:', () => {
       const item = { label: 'Item with options', options: { option1: 'value1', option2: 'value2' } };
 
       expect(component.isItemGroup(item)).toBeFalse();
+    });
+
+    describe('onKeyDown:', () => {
+      it('should emit event when field is focused', () => {
+        const fakeEvent = new KeyboardEvent('keydown', { key: 'Enter' });
+        component.selectElement = {
+          nativeElement: {
+            focus: () => {}
+          }
+        };
+
+        spyOn(component.keydown, 'emit');
+        spyOnProperty(document, 'activeElement', 'get').and.returnValue(component.selectElement.nativeElement);
+
+        component.onKeyDown(fakeEvent);
+
+        expect(component.keydown.emit).toHaveBeenCalledWith(fakeEvent);
+      });
+
+      it('should not emit event when field is not focused', () => {
+        const fakeEvent = new KeyboardEvent('keydown', { key: 'Enter' });
+        component.selectElement = {
+          nativeElement: document.createElement('input')
+        };
+
+        spyOn(component.keydown, 'emit');
+        spyOnProperty(document, 'activeElement', 'get').and.returnValue(document.createElement('input'));
+        component.onKeyDown(fakeEvent);
+
+        expect(component.keydown.emit).not.toHaveBeenCalled();
+      });
     });
 
     it('separateOptions: should separate options with groups and validate each group options', () => {

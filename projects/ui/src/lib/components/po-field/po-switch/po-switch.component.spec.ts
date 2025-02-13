@@ -130,24 +130,86 @@ describe('PoSwitchComponent', () => {
         expect(component.eventClick).not.toHaveBeenCalled();
         expect(fakeEvent.preventDefault).not.toHaveBeenCalled();
       });
+
+      it('should emit event when field is focused', () => {
+        const fakeEvent = new KeyboardEvent('keydown', { key: 'Enter' });
+        component.switchContainer = {
+          nativeElement: {
+            focus: () => {}
+          }
+        };
+
+        spyOn(component.keydown, 'emit');
+        spyOnProperty(document, 'activeElement', 'get').and.returnValue(component.switchContainer.nativeElement);
+
+        component.onKeyDown(fakeEvent);
+
+        expect(component.keydown.emit).toHaveBeenCalledWith(fakeEvent);
+      });
+
+      it('should not emit event when field is not focused', () => {
+        const fakeEvent = new KeyboardEvent('keydown', { key: 'Enter' });
+        component.switchContainer = {
+          nativeElement: {
+            focus: () => {}
+          }
+        };
+
+        spyOn(component.keydown, 'emit');
+        spyOnProperty(document, 'activeElement', 'get').and.returnValue(document.createElement('div'));
+        component.onKeyDown(fakeEvent);
+
+        expect(component.keydown.emit).not.toHaveBeenCalled();
+      });
     });
 
-    it('onBlur: should call `onTouched` on blur', () => {
-      component['onTouched'] = value => {};
+    describe('onBlur', () => {
+      let setupTest;
 
-      spyOn(component, <any>'onTouched');
+      beforeEach(() => {
+        setupTest = (tooltip: string, displayHelp: boolean, additionalHelpEvent: any) => {
+          component.additionalHelpTooltip = tooltip;
+          component.displayAdditionalHelp = displayHelp;
+          component.additionalHelp = additionalHelpEvent;
+          spyOn(component, 'showAdditionalHelp');
+        };
+      });
 
-      component.onBlur();
+      it('should call `onTouched` on blur', () => {
+        component['onTouched'] = value => {};
 
-      expect(component['onTouched']).toHaveBeenCalledWith();
-    });
+        spyOn(component, <any>'onTouched');
 
-    it('onBlur: shouldn´t throw error if onTouched is falsy', () => {
-      component['onTouched'] = null;
+        component.onBlur();
 
-      const fnError = () => component.onBlur();
+        expect(component['onTouched']).toHaveBeenCalledWith();
+      });
 
-      expect(fnError).not.toThrow();
+      it('shouldn´t throw error if onTouched is falsy', () => {
+        component['onTouched'] = null;
+
+        const fnError = () => component.onBlur();
+
+        expect(fnError).not.toThrow();
+      });
+
+      it('should call showAdditionalHelp when the tooltip is displayed', () => {
+        setupTest('Mensagem de apoio adicional.', true, { observed: false });
+        component.onBlur();
+        expect(component.showAdditionalHelp).toHaveBeenCalled();
+      });
+
+      it('should not call showAdditionalHelp when tooltip is not displayed', () => {
+        setupTest('Mensagem de apoio adicional.', false, { observed: false });
+        component.onBlur();
+        expect(component.showAdditionalHelp).not.toHaveBeenCalled();
+      });
+
+      it('should not call showAdditionalHelp when additionalHelp event is true', () => {
+        setupTest('Mensagem de apoio adicional.', true, { observed: true });
+        component.onBlur();
+        expect(component.showAdditionalHelp).not.toHaveBeenCalled();
+      });
     });
 
     it('changeValue: shouldn`t call `change.emit` and `updateModel` if switch value is not changed', () => {

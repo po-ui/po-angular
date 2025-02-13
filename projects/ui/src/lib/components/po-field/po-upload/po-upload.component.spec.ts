@@ -21,6 +21,7 @@ import { PoUploadFileRestrictionsComponent } from './po-upload-file-restrictions
 import { PoUploadService } from './po-upload.service';
 import { PoUploadStatus } from './po-upload-status.enum';
 import { PoProgressAction } from '../../po-progress';
+import { PoButtonComponent } from '../../po-button';
 
 describe('PoUploadComponent:', () => {
   let component: PoUploadComponent;
@@ -558,6 +559,37 @@ describe('PoUploadComponent:', () => {
       expect(component['updateFiles']).toHaveBeenCalledWith(files);
     });
 
+    describe('onKeyDown:', () => {
+      beforeEach(() => {
+        component.uploadButton = {
+          buttonElement: {
+            nativeElement: document.createElement('button')
+          }
+        } as PoButtonComponent;
+      });
+
+      it('should emit event when field is focused', () => {
+        const fakeEvent = new KeyboardEvent('keydown', { key: 'Enter' });
+        spyOn(component.keydown, 'emit');
+        spyOnProperty(document, 'activeElement', 'get').and.returnValue(
+          component.uploadButton.buttonElement.nativeElement
+        );
+
+        component.onKeyDown(fakeEvent);
+
+        expect(component.keydown.emit).toHaveBeenCalledWith(fakeEvent);
+      });
+
+      it('should not emit event when field is not focused', () => {
+        const fakeEvent = new KeyboardEvent('keydown', { key: 'Enter' });
+        spyOn(component.keydown, 'emit');
+        spyOnProperty(document, 'activeElement', 'get').and.returnValue(document.createElement('div'));
+        component.onKeyDown(fakeEvent);
+
+        expect(component.keydown.emit).not.toHaveBeenCalled();
+      });
+    });
+
     it('removeFile: should be remove file from currentFiles', () => {
       const fakeThis = {
         currentFiles: [file],
@@ -761,6 +793,43 @@ describe('PoUploadComponent:', () => {
         component.uploadFiles.call(fakeThis, [file]);
 
         expect(fakeThis.responseHandler).toHaveBeenCalled();
+      });
+    });
+
+    describe('onBlur', () => {
+      let setupTest;
+
+      beforeEach(() => {
+        component.uploadButton = {
+          buttonElement: {
+            nativeElement: document.createElement('button')
+          }
+        } as PoButtonComponent;
+
+        setupTest = (tooltip: string, displayHelp: boolean, additionalHelpEvent: any) => {
+          component.additionalHelpTooltip = tooltip;
+          component.displayAdditionalHelp = displayHelp;
+          component.additionalHelp = additionalHelpEvent;
+          spyOn(component, 'showAdditionalHelp');
+        };
+      });
+
+      it('should call showAdditionalHelp when the tooltip is displayed', () => {
+        setupTest('Mensagem de apoio adicional.', true, { observed: false });
+        component.onBlur();
+        expect(component.showAdditionalHelp).toHaveBeenCalled();
+      });
+
+      it('should not call showAdditionalHelp when tooltip is not displayed', () => {
+        setupTest('Mensagem de apoio adicional.', false, { observed: false });
+        component.onBlur();
+        expect(component.showAdditionalHelp).not.toHaveBeenCalled();
+      });
+
+      it('should not call showAdditionalHelp when additionalHelp event is true', () => {
+        setupTest('Mensagem de apoio adicional.', true, { observed: true });
+        component.onBlur();
+        expect(component.showAdditionalHelp).not.toHaveBeenCalled();
       });
     });
 
@@ -1064,6 +1133,26 @@ describe('PoUploadComponent:', () => {
         'webkitdirectory'
       );
       expect(component.renderer.removeAttribute).toHaveBeenCalledTimes(1);
+    });
+
+    describe('showAdditionalHelp:', () => {
+      it('should toggle `displayAdditionalHelp` from false to true', () => {
+        component.displayAdditionalHelp = false;
+
+        const result = component.showAdditionalHelp();
+
+        expect(result).toBeTrue();
+        expect(component.displayAdditionalHelp).toBeTrue();
+      });
+
+      it('should toggle `displayAdditionalHelp` from true to false', () => {
+        component.displayAdditionalHelp = true;
+
+        const result = component.showAdditionalHelp();
+
+        expect(result).toBeFalse();
+        expect(component.displayAdditionalHelp).toBeFalse();
+      });
     });
 
     it('customClick: should emit customActionClick with the provided file if customAction is defined', () => {

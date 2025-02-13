@@ -22,7 +22,11 @@ import { PoDynamicFormFieldsBaseComponent } from './po-dynamic-form-fields-base.
   standalone: false
 })
 export class PoDynamicFormFieldsComponent extends PoDynamicFormFieldsBaseComponent implements OnChanges {
-  @ViewChildren('component') components: QueryList<{ name: string; focus: () => void }>;
+  @ViewChildren('component') components: QueryList<{
+    name: string;
+    focus: () => void;
+    showAdditionalHelp: () => void;
+  }>;
 
   private previousValue = {};
 
@@ -89,6 +93,13 @@ export class PoDynamicFormFieldsComponent extends PoDynamicFormFieldsBaseCompone
       const { property } = visibleField;
       const { changedFieldIndex } = this.getField(property);
       this.triggerValidationOnForm(changedFieldIndex);
+    }
+  }
+
+  showAdditionalHelp(property: string) {
+    const foundComponent = this.components.find(component => component.name === property);
+    if (foundComponent) {
+      foundComponent.showAdditionalHelp();
     }
   }
 

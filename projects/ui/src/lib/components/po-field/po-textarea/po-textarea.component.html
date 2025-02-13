@@ -13,6 +13,7 @@
       (blur)="eventOnBlur()"
       (focus)="eventOnFocus()"
       (input)="eventOnInput($event)"
+      (keydown)="onKeyDown($event)"
       [attr.name]="name"
       [disabled]="disabled"
       [id]="id"
@@ -31,6 +32,7 @@
     [p-disabled]="disabled"
     [p-error-pattern]="getErrorPattern()"
     [p-error-limit]="errorLimit"
+    [p-show-additional-help]="displayAdditionalHelp"
     [p-show-additional-help-icon]="showAdditionalHelpIcon()"
     (p-additional-help)="emitAdditionalHelp()"
   ></po-field-container-bottom>

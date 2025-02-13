@@ -9,6 +9,7 @@
       [name]="name ?? 'po-input-radio'"
       [required]="required"
       [value]="radioValue ?? ''"
+      (blur)="onBlur()"
     />
     <po-label *ngIf="label" [p-disabled]="disabled" [p-label]="label"></po-label>
   </label>

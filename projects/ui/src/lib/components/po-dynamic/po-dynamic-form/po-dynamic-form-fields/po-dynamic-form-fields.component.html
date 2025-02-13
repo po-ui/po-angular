@@ -40,6 +40,7 @@
       (p-change)="onChangeField(field)"
       [p-placeholder]="field.placeholder"
       (p-additional-help)="field.additionalHelp?.($event)"
+      (p-keydown)="field.keydown?.($event)"
     >
     </po-datepicker>
 
@@ -68,6 +69,7 @@
       [p-show-required]="field.showRequired"
       (p-additional-help)="field.additionalHelp?.($event)"
       (p-change)="onChangeField(field)"
+      (p-keydown)="field.keydown?.($event)"
     >
     </po-datepicker-range>
 
@@ -100,6 +102,7 @@
       (p-additional-help)="field.additionalHelp?.($event)"
       (p-change)="onChangeField(field)"
       (p-change-model)="onChangeFieldModel(field)"
+      (p-keydown)="field.keydown?.($event)"
       [p-icon]="field.icon"
       [p-placeholder]="field.placeholder"
       [p-readonly]="field.readonly"
@@ -136,6 +139,7 @@
       (p-additional-help)="field.additionalHelp?.($event)"
       (p-change)="onChangeField(field)"
       (p-change-model)="onChangeFieldModel(field)"
+      (p-keydown)="field.keydown?.($event)"
       [p-icon]="field.icon"
       [p-placeholder]="field.placeholder"
     >
@@ -174,6 +178,7 @@
       (p-additional-help)="field.additionalHelp?.($event)"
       (p-change)="onChangeField(field)"
       (p-change-model)="onChangeFieldModel(field)"
+      (p-keydown)="field.keydown?.($event)"
       [p-placeholder]="field.placeholder"
     >
     </po-decimal>
@@ -199,6 +204,7 @@
       [p-show-required]="field.showRequired"
       (p-additional-help)="field.additionalHelp?.($event)"
       (p-change)="onChangeField(field)"
+      (p-keydown)="field.keydown?.($event)"
       [p-placeholder]="field.placeholder"
       [p-readonly]="field.readonly"
     >
@@ -225,6 +231,7 @@
       [p-show-required]="field.showRequired"
       (p-additional-help)="field.additionalHelp?.($event)"
       (p-change)="onChangeField(field)"
+      (p-keydown)="field.keydown?.($event)"
     >
     </po-radio-group>
 
@@ -246,6 +253,7 @@
       [p-hide-label-status]="field.hideLabelStatus"
       (p-additional-help)="field.additionalHelp?.($event)"
       (p-change)="onChangeField(field)"
+      (p-keydown)="field.keydown?.($event)"
     >
     </po-switch>
 
@@ -263,6 +271,7 @@
       [p-size]="field.size"
       (p-additional-help)="field.additionalHelp?.($event)"
       (p-change)="onChangeField(field)"
+      (p-keydown)="field.keydown?.($event)"
     >
     </po-checkbox>
 
@@ -305,6 +314,7 @@
       [p-change-on-enter]="field.changeOnEnter"
       (p-additional-help)="field.additionalHelp?.($event)"
       [p-remove-initial-filter]="field.removeInitialFilter"
+      (p-keydown)="field.keydown?.($event)"
     >
     </po-combo>
 
@@ -344,6 +354,7 @@
       [p-advanced-filters]="field.advancedFilters"
       (p-additional-help)="field.additionalHelp?.($event)"
       (p-change-visible-columns)="field.changeVisibleColumns?.($event)"
+      (p-keydown)="field.keydown?.($event)"
       (p-restore-column-manager)="field.columnRestoreManager?.($event)"
     >
     </po-lookup>
@@ -369,6 +380,7 @@
       [p-error-limit]="field.errorLimit"
       (p-additional-help)="field.additionalHelp?.($event)"
       (p-change)="onChangeField(field)"
+      (p-keydown)="field.keydown?.($event)"
     >
     </po-checkbox-group>
 
@@ -404,6 +416,7 @@
       [p-hide-search]="field.hideSearch"
       [p-hide-select-all]="field.hideSelectAll"
       (p-additional-help)="field.additionalHelp?.($event)"
+      (p-keydown)="field.keydown?.($event)"
     >
     </po-multiselect>
 
@@ -431,6 +444,7 @@
       (p-additional-help)="field.additionalHelp?.($event)"
       (p-change)="onChangeField(field)"
       (p-change-model)="onChangeFieldModel(field)"
+      (p-keydown)="field.keydown?.($event)"
       [p-placeholder]="field.placeholder"
     >
     </po-textarea>
@@ -465,6 +479,7 @@
       (p-additional-help)="field.additionalHelp?.($event)"
       (p-change)="onChangeField(field)"
       (p-change-model)="onChangeFieldModel(field)"
+      (p-keydown)="field.keydown?.($event)"
       [p-placeholder]="field.placeholder"
     >
     </po-password>
@@ -503,6 +518,7 @@
       (p-additional-help)="field.additionalHelp?.($event)"
       (p-change)="onChangeField(field)"
       (p-change-model)="onChangeFieldModel(field)"
+      (p-keydown)="field.keydown?.($event)"
       [p-url]="field.url"
     >
     </po-upload>

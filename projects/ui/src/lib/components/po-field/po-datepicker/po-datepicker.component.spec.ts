@@ -601,6 +601,39 @@ describe('PoDatepickerComponent:', () => {
       expect(component['formatToDate']).toHaveBeenCalledWith(dateMock);
     });
 
+    describe('onKeyDown:', () => {
+      it('should emit event when field is focused', () => {
+        const fakeEvent = new KeyboardEvent('keydown', { key: 'Enter' });
+        component.inputEl = {
+          nativeElement: {
+            focus: () => {}
+          }
+        };
+
+        spyOn(component.keydown, 'emit');
+        spyOnProperty(document, 'activeElement', 'get').and.returnValue(component.inputEl.nativeElement);
+
+        component.onKeyDown(fakeEvent);
+
+        expect(component.keydown.emit).toHaveBeenCalledWith(fakeEvent);
+      });
+
+      it('should not emit event when field is not focused', () => {
+        const fakeEvent = new KeyboardEvent('keydown', { key: 'Enter' });
+        component.inputEl = {
+          nativeElement: {
+            focus: () => {}
+          }
+        };
+
+        spyOn(component.keydown, 'emit');
+        spyOnProperty(document, 'activeElement', 'get').and.returnValue(document.createElement('div'));
+        component.onKeyDown(fakeEvent);
+
+        expect(component.keydown.emit).not.toHaveBeenCalled();
+      });
+    });
+
     it('togglePicker: should keep the component invisible when `disabled` and `readonly` is true', () => {
       component.disabled = true;
       component.readonly = true;
@@ -622,20 +655,60 @@ describe('PoDatepickerComponent:', () => {
     });
 
     describe('eventOnBlur:', () => {
+      let setupTest;
+
+      beforeEach(() => {
+        setupTest = (tooltip: string, displayHelp: boolean, additionalHelpEvent: any) => {
+          component.additionalHelpTooltip = tooltip;
+          component.displayAdditionalHelp = displayHelp;
+          component.additionalHelp = additionalHelpEvent;
+          spyOn(component, 'showAdditionalHelp');
+        };
+      });
+
+      it('should call showAdditionalHelp when the tooltip is displayed', () => {
+        setupTest('Mensagem de apoio adicional.', true, { observed: false });
+        const fakeEvent = { target: { value: '' } };
+
+        component.eventOnBlur(fakeEvent);
+        expect(component.showAdditionalHelp).toHaveBeenCalled();
+      });
+
+      it('should not call showAdditionalHelp when tooltip is not displayed', () => {
+        setupTest('Mensagem de apoio adicional.', false, { observed: false });
+        const fakeEvent = { target: { value: '' } };
+
+        component.eventOnBlur(fakeEvent);
+        expect(component.showAdditionalHelp).not.toHaveBeenCalled();
+      });
+
+      it('should not call showAdditionalHelp when additionalHelp event is true', () => {
+        setupTest('Mensagem de apoio adicional.', true, { observed: true });
+        const fakeEvent = { target: { value: '' } };
+
+        component.eventOnBlur(fakeEvent);
+        expect(component.showAdditionalHelp).not.toHaveBeenCalled();
+      });
+
       it('should call `controlChangeEmitter`, `objMask.blur` and `onblur.emit`', () => {
         const fakeThis = {
-          objMask: { blur: () => {}, valueToMode: undefined },
+          objMask: { blur: () => {}, valueToModel: undefined },
           onblur: { emit: () => {} },
           controlChangeEmitter: () => {},
           callOnChange: () => {},
           inputEl: { nativeElement: { value: undefined } },
-          onTouchedModel: () => {}
+          onTouchedModel: () => {},
+          getAdditionalHelpTooltip: () => false,
+          displayAdditionalHelp: false,
+          showAdditionalHelp: () => {}
         };
 
         spyOn(fakeThis, <any>'controlChangeEmitter');
-        spyOn(fakeThis['objMask'], 'blur');
+        spyOn(fakeThis.objMask, 'blur');
         spyOn(fakeThis.onblur, 'emit');
         spyOn(fakeThis, 'onTouchedModel');
+        spyOn(fakeThis, 'getAdditionalHelpTooltip').and.returnValue(false);
+        spyOn(fakeThis, 'showAdditionalHelp');
 
         component.eventOnBlur.call(fakeThis, undefined);
 
@@ -790,6 +863,26 @@ describe('PoDatepickerComponent:', () => {
       const value = undefined;
 
       expect(component.formatToDate(value)).toBeUndefined();
+    });
+
+    describe('showAdditionalHelp:', () => {
+      it('should toggle `displayAdditionalHelp` from false to true', () => {
+        component.displayAdditionalHelp = false;
+
+        const result = component.showAdditionalHelp();
+
+        expect(result).toBeTrue();
+        expect(component.displayAdditionalHelp).toBeTrue();
+      });
+
+      it('should toggle `displayAdditionalHelp` from true to false', () => {
+        component.displayAdditionalHelp = true;
+
+        const result = component.showAdditionalHelp();
+
+        expect(result).toBeFalse();
+        expect(component.displayAdditionalHelp).toBeFalse();
+      });
     });
 
     it('writeValue: should call `setYearFrom0To100`', () => {

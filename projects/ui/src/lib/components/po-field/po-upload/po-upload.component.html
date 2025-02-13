@@ -37,9 +37,11 @@
         #uploadButton
         class="po-upload-button"
         for="file"
+        (p-blur)="onBlur()"
         [p-disabled]="isDisabled"
         [p-label]="selectFileButtonLabel"
         (p-click)="selectFiles()"
+        (keydown)="onKeyDown($event)"
       >
       </po-button>
 
@@ -95,6 +97,7 @@
     [p-append-in-body]="appendBox"
     [p-help]="help"
     [p-disabled]="disabled"
+    [p-show-additional-help]="displayAdditionalHelp"
     [p-show-additional-help-icon]="showAdditionalHelpIcon()"
     (p-additional-help)="emitAdditionalHelp()"
   ></po-field-container-bottom>

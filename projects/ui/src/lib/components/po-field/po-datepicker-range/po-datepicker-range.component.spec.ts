@@ -408,44 +408,81 @@ describe('PoDatepickerRangeComponent:', () => {
       });
     });
 
-    it('onBlur: should call `removeFocusFromDatePickerRangeField` and `updateModelByScreen` with `true`', () => {
-      component['onTouchedModel'] = () => {};
-      spyOn(component, <any>'removeFocusFromDatePickerRangeField');
-      spyOn(component, <any>'updateModelByScreen');
-      spyOn(component, <any>'onTouchedModel');
+    describe('onBlur:', () => {
+      let setupTest;
 
-      const eventMock = { target: { name: 'start-date' } };
+      beforeEach(() => {
+        setupTest = (tooltip: string, displayHelp: boolean, additionalHelpEvent: any) => {
+          component.additionalHelpTooltip = tooltip;
+          component.displayAdditionalHelp = displayHelp;
+          component.additionalHelp = additionalHelpEvent;
+          spyOn(component, 'showAdditionalHelp');
+        };
+      });
 
-      component.onBlur(eventMock);
+      it('onBlur: should call `removeFocusFromDatePickerRangeField` and `updateModelByScreen` with `true`', () => {
+        component['onTouchedModel'] = () => {};
+        spyOn(component, <any>'removeFocusFromDatePickerRangeField');
+        spyOn(component, <any>'updateModelByScreen');
+        spyOn(component, <any>'onTouchedModel');
 
-      expect(component['onTouchedModel']).toHaveBeenCalled();
-      expect(component['updateModelByScreen']).toHaveBeenCalledWith(true);
-      expect(component['removeFocusFromDatePickerRangeField']).toHaveBeenCalled();
-    });
+        const eventMock = { target: { name: 'start-date' } };
 
-    it('onBlur: should call `removeFocusFromDatePickerRangeField` and `updateModelByScreen` with `false`', () => {
-      component['onTouchedModel'] = () => {};
-      spyOn(component, <any>'removeFocusFromDatePickerRangeField');
-      spyOn(component, <any>'updateModelByScreen');
-      spyOn(component, <any>'onTouchedModel');
+        component.onBlur(eventMock);
 
-      const eventMock = { target: { name: 'end-date' } };
+        expect(component['onTouchedModel']).toHaveBeenCalled();
+        expect(component['updateModelByScreen']).toHaveBeenCalledWith(true);
+        expect(component['removeFocusFromDatePickerRangeField']).toHaveBeenCalled();
+      });
 
-      component.onBlur(eventMock);
+      it('onBlur: should call `removeFocusFromDatePickerRangeField` and `updateModelByScreen` with `false`', () => {
+        component['onTouchedModel'] = () => {};
+        spyOn(component, <any>'removeFocusFromDatePickerRangeField');
+        spyOn(component, <any>'updateModelByScreen');
+        spyOn(component, <any>'onTouchedModel');
 
-      expect(component['onTouchedModel']).toHaveBeenCalled();
-      expect(component['updateModelByScreen']).toHaveBeenCalledWith(false);
-      expect(component['removeFocusFromDatePickerRangeField']).toHaveBeenCalled();
-    });
+        const eventMock = { target: { name: 'end-date' } };
 
-    it('onBlur: shouldn´t throw error if onTouchedModel is falsy', () => {
-      const fakeEvent = { target: {} };
+        component.onBlur(eventMock);
 
-      component['onTouchedModel'] = null;
+        expect(component['onTouchedModel']).toHaveBeenCalled();
+        expect(component['updateModelByScreen']).toHaveBeenCalledWith(false);
+        expect(component['removeFocusFromDatePickerRangeField']).toHaveBeenCalled();
+      });
 
-      const fnError = () => component.onBlur(fakeEvent);
+      it('onBlur: shouldn´t throw error if onTouchedModel is falsy', () => {
+        const fakeEvent = { target: {} };
 
-      expect(fnError).not.toThrow();
+        component['onTouchedModel'] = null;
+
+        const fnError = () => component.onBlur(fakeEvent);
+
+        expect(fnError).not.toThrow();
+      });
+
+      it('should call showAdditionalHelp when the tooltip is displayed', () => {
+        setupTest('Mensagem de apoio adicional.', true, { observed: false });
+        const eventMock = { target: { name: 'start-date' } };
+
+        component.onBlur(eventMock);
+        expect(component.showAdditionalHelp).toHaveBeenCalled();
+      });
+
+      it('should not call showAdditionalHelp when tooltip is not displayed', () => {
+        setupTest('Mensagem de apoio adicional.', false, { observed: false });
+        const eventMock = { target: { name: 'start-date' } };
+
+        component.onBlur(eventMock);
+        expect(component.showAdditionalHelp).not.toHaveBeenCalled();
+      });
+
+      it('should not call showAdditionalHelp when additionalHelp event is true', () => {
+        setupTest('Mensagem de apoio adicional.', true, { observed: true });
+        const eventMock = { target: { name: 'start-date' } };
+
+        component.onBlur(eventMock);
+        expect(component.showAdditionalHelp).not.toHaveBeenCalled();
+      });
     });
 
     it('onFocus: should call `applyFocusOnDatePickerRangeField`', () => {
@@ -510,6 +547,29 @@ describe('PoDatepickerRangeComponent:', () => {
 
       expect(component['setFocusOnBackspace']).not.toHaveBeenCalled();
       expect(component['poMaskObject'].keydown).toHaveBeenCalled();
+    });
+
+    it('should emit event when field is focused', () => {
+      const eventMock = { target: { name: '' } };
+      const fakeEvent = new KeyboardEvent('keydown', { key: 'Enter' });
+      const combinedEvent = { ...fakeEvent, target: { ...fakeEvent.target, ...eventMock.target } };
+      component['poMaskObject'] = new PoMask('99/99/9999', true);
+
+      spyOn(component['poMaskObject'], 'keydown');
+      spyOn(component.keydown, 'emit');
+
+      component.startDateInput = {
+        nativeElement: {
+          focus: jasmine.createSpy('focus')
+        }
+      };
+
+      spyOnProperty(document, 'activeElement', 'get').and.returnValue(component.startDateInput.nativeElement);
+
+      component.onKeydown(combinedEvent);
+
+      expect(component['poMaskObject'].keydown).toHaveBeenCalledWith(combinedEvent);
+      expect(component.keydown.emit).toHaveBeenCalledWith(combinedEvent);
     });
 
     it('onKeyup: shouldn`t call `setFocus`, `updateModelWhenComplete` and `poMaskObject.keyup` if `readonly` is true', () => {
@@ -1656,6 +1716,26 @@ describe('PoDatepickerRangeComponent:', () => {
       expect(component['clickListener']).toHaveBeenCalled();
       expect(component['eventResizeListener']).toHaveBeenCalled();
       expect(window.removeEventListener).toHaveBeenCalled();
+    });
+
+    describe('showAdditionalHelp:', () => {
+      it('should toggle `displayAdditionalHelp` from false to true', () => {
+        component.displayAdditionalHelp = false;
+
+        const result = component.showAdditionalHelp();
+
+        expect(result).toBeTrue();
+        expect(component.displayAdditionalHelp).toBeTrue();
+      });
+
+      it('should toggle `displayAdditionalHelp` from true to false', () => {
+        component.displayAdditionalHelp = true;
+
+        const result = component.showAdditionalHelp();
+
+        expect(result).toBeFalse();
+        expect(component.displayAdditionalHelp).toBeFalse();
+      });
     });
 
     it('toggleCalendar: should not call initializeListeners if component.disabled is true', () => {

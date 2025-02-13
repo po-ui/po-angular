@@ -305,6 +305,37 @@ describe('PoRichTextBodyComponent:', () => {
       expect(component.shortcutCommand.emit).not.toHaveBeenCalled();
     });
 
+    it('onKeyDown: should emit event when field is focused', () => {
+      const fakeEvent = new KeyboardEvent('keydown', { key: 'Enter' });
+      component.bodyElement = {
+        nativeElement: {
+          focus: () => {}
+        }
+      };
+
+      spyOn(component.keydown, 'emit');
+      spyOnProperty(document, 'activeElement', 'get').and.returnValue(component.bodyElement.nativeElement);
+
+      component.onKeyDown(fakeEvent);
+
+      expect(component.keydown.emit).toHaveBeenCalledWith(fakeEvent);
+    });
+
+    it('onKeyDown: should not emit event when field is not focused', () => {
+      const fakeEvent = new KeyboardEvent('keydown', { key: 'Enter' });
+      component.bodyElement = {
+        nativeElement: {
+          focus: () => {}
+        }
+      };
+
+      spyOn(component.keydown, 'emit');
+      spyOnProperty(document, 'activeElement', 'get').and.returnValue(document.createElement('div'));
+      component.onKeyDown(fakeEvent);
+
+      expect(component.keydown.emit).not.toHaveBeenCalled();
+    });
+
     it('onKeyUp: should call `toggleCursorOnLink` with `event` and `remove` before `updateModel`', () => {
       spyOn(component, <any>'toggleCursorOnLink');
       const updateModelSpy = spyOn(component, <any>'updateModel');

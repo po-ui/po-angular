@@ -19,6 +19,7 @@ import { PoComboOption } from './interfaces/po-combo-option.interface';
 import { PoCleanComponent } from '../po-clean/po-clean.component';
 import { OverlayModule } from '@angular/cdk/overlay';
 import { PoControlPositionService } from '../../../services/po-control-position/po-control-position.service';
+import { ElementRef } from '@angular/core';
 
 const eventKeyBoard = document.createEvent('KeyboardEvent');
 eventKeyBoard.initEvent('keyup', true, true);
@@ -461,21 +462,55 @@ describe('PoComboComponent:', () => {
       });
     });
 
-    it('onBlur: should be called when blur event', () => {
-      component['onModelTouched'] = () => {};
-      spyOn(component, <any>'onModelTouched');
+    describe('onBlur:', () => {
+      let setupTest;
 
-      component.onBlur();
+      beforeEach(() => {
+        setupTest = (tooltip: string, displayHelp: boolean, additionalHelpEvent: any) => {
+          component.additionalHelpTooltip = tooltip;
+          component.displayAdditionalHelp = displayHelp;
+          component.additionalHelp = additionalHelpEvent;
+          spyOn(component, 'showAdditionalHelp');
+        };
+      });
 
-      expect(component['onModelTouched']).toHaveBeenCalled();
-    });
+      it('should be called when blur event', () => {
+        component['onModelTouched'] = () => {};
+        spyOn(component, <any>'onModelTouched');
 
-    it('onBlur: shouldn´t throw error if onModelTouched is falsy', () => {
-      component['onModelTouched'] = null;
+        component.onBlur();
 
-      const fnError = () => component.onBlur();
+        expect(component['onModelTouched']).toHaveBeenCalled();
+      });
 
-      expect(fnError).not.toThrow();
+      it('shouldn´t throw error if onModelTouched is falsy', () => {
+        component['onModelTouched'] = null;
+
+        const fnError = () => component.onBlur();
+
+        expect(fnError).not.toThrow();
+      });
+
+      it('should call showAdditionalHelp when the tooltip is displayed', () => {
+        setupTest('Mensagem de apoio adicional.', true, { observed: false });
+
+        component.onBlur();
+        expect(component.showAdditionalHelp).toHaveBeenCalled();
+      });
+
+      it('should not call showAdditionalHelp when tooltip is not displayed', () => {
+        setupTest('Mensagem de apoio adicional.', false, { observed: false });
+
+        component.onBlur();
+        expect(component.showAdditionalHelp).not.toHaveBeenCalled();
+      });
+
+      it('should not call showAdditionalHelp when additionalHelp event is true', () => {
+        setupTest('Mensagem de apoio adicional.', true, { observed: true });
+
+        component.onBlur();
+        expect(component.showAdditionalHelp).not.toHaveBeenCalled();
+      });
     });
 
     describe('onKeyUp:', () => {
@@ -693,6 +728,10 @@ describe('PoComboComponent:', () => {
     });
 
     describe('onKeyDown: ', () => {
+      beforeEach(() => {
+        component.inputEl = new ElementRef(document.createElement('input'));
+      });
+
       it('should call `controlComboVisibility` and set `isFiltering` with false if `changeOnEnter` is true', () => {
         const event = { ...fakeEvent, keyCode: 40 };
         component.contentElement = {
@@ -867,6 +906,27 @@ describe('PoComboComponent:', () => {
         component.onKeyDown(event);
 
         expect(spyControlComboVisibility).not.toHaveBeenCalled();
+      });
+
+      it('should emit event when field is focused', () => {
+        const fakeEvent = new KeyboardEvent('keydown', { key: 'Enter' });
+
+        spyOn(component.keydown, 'emit');
+        spyOnProperty(document, 'activeElement', 'get').and.returnValue(component.inputEl.nativeElement);
+
+        component.onKeyDown(fakeEvent);
+
+        expect(component.keydown.emit).toHaveBeenCalledWith(fakeEvent);
+      });
+
+      it('should not emit event when field is not focused', () => {
+        const fakeEvent = new KeyboardEvent('keydown', { key: 'Enter' });
+
+        spyOn(component.keydown, 'emit');
+        spyOnProperty(document, 'activeElement', 'get').and.returnValue(document.createElement('div'));
+        component.onKeyDown(fakeEvent);
+
+        expect(component.keydown.emit).not.toHaveBeenCalled();
       });
     });
 
@@ -1053,6 +1113,26 @@ describe('PoComboComponent:', () => {
       component.wasClickedOnToggle(eventClick);
 
       expect(SpyApplyFilter).toHaveBeenCalledWith('', false);
+    });
+
+    describe('showAdditionalHelp:', () => {
+      it('should toggle `displayAdditionalHelp` from false to true', () => {
+        component.displayAdditionalHelp = false;
+
+        const result = component.showAdditionalHelp();
+
+        expect(result).toBeTrue();
+        expect(component.displayAdditionalHelp).toBeTrue();
+      });
+
+      it('should toggle `displayAdditionalHelp` from true to false', () => {
+        component.displayAdditionalHelp = true;
+
+        const result = component.showAdditionalHelp();
+
+        expect(result).toBeFalse();
+        expect(component.displayAdditionalHelp).toBeFalse();
+      });
     });
 
     it('setContainerPosition: should call `controlPosition.setElements` and `adjustContainerPosition`', () => {
