@@ -3317,4 +3317,56 @@ describe('PoTableComponent:', () => {
 
     expect(fakeTable.headerWidth).toBe(300);
   });
+
+  it('should return 0 if columnMasterDetail is defined', () => {
+    component['columnMasterDetail'] = { property: 'detail' } as any;
+
+    const result = component['countExtraColumns']();
+
+    expect(result).toBe(0);
+  });
+
+  it('should return 1 if hasRowTemplate is true and hasRowTemplateWithArrowDirectionRight is false', () => {
+    component['columnMasterDetail'] = undefined;
+    spyOnProperty(component, 'hasRowTemplate').and.returnValue(true);
+    spyOnProperty(component, 'hasRowTemplateWithArrowDirectionRight').and.returnValue(false);
+
+    const result = component['countExtraColumns']();
+
+    expect(result).toBe(1);
+  });
+
+  it('should return 1 if hasRowTemplateWithArrowDirectionRight is true and hasVisibleActions is true', () => {
+    component['columnMasterDetail'] = undefined;
+    spyOnProperty(component, 'hasRowTemplate').and.returnValue(true);
+    spyOnProperty(component, 'hasRowTemplateWithArrowDirectionRight').and.returnValue(true);
+    spyOnProperty(component, 'hasVisibleActions').and.returnValue(true);
+
+    const result = component['countExtraColumns']();
+
+    expect(result).toBe(1);
+  });
+
+  it('should return 1 if hasRowTemplateWithArrowDirectionRight is true and hideColumnsManager is true', () => {
+    component['columnMasterDetail'] = undefined;
+    spyOnProperty(component, 'hasRowTemplate').and.returnValue(true);
+    spyOnProperty(component, 'hasRowTemplateWithArrowDirectionRight').and.returnValue(true);
+    component['hideColumnsManager'] = true;
+
+    const result = component['countExtraColumns']();
+
+    expect(result).toBe(1);
+  });
+
+  it('should return 0 if no conditions are met', () => {
+    component['columnMasterDetail'] = undefined;
+    spyOnProperty(component, 'hasRowTemplate').and.returnValue(false);
+    spyOnProperty(component, 'hasRowTemplateWithArrowDirectionRight').and.returnValue(false);
+    spyOnProperty(component, 'hasVisibleActions').and.returnValue(false);
+    component['hideColumnsManager'] = false;
+
+    const result = component['countExtraColumns']();
+
+    expect(result).toBe(0);
+  });
 });
