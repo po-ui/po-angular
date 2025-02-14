@@ -51,6 +51,7 @@ export class PoLookupModalComponent extends PoLookupModalBaseComponent implement
   ngOnInit() {
     super.ngOnInit();
     this.setTableHeight();
+    this.itensStorage = this.selectedItems;
   }
 
   // Seleciona um item na tabela
@@ -65,6 +66,7 @@ export class PoLookupModalComponent extends PoLookupModalBaseComponent implement
   // Remove a seleção de um item na tabela
   onUnselect(unselectedItem) {
     this.selecteds = this.selecteds.filter(itemSelected => itemSelected.value !== unselectedItem[this.fieldValue]);
+    this.selectedItems = this.selecteds;
   }
 
   onUnselectFromDisclaimer(removedDisclaimer) {

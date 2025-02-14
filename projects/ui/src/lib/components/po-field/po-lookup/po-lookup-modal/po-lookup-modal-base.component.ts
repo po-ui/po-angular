@@ -219,6 +219,7 @@ export abstract class PoLookupModalBaseComponent implements OnDestroy, OnInit {
   primaryActionAdvancedFilter!: PoModalAction;
   secondaryActionAdvancedFilter!: PoModalAction;
   selecteds: Array<any> = [];
+  itensStorage: any;
 
   protected sort: PoTableColumnSort;
 
@@ -253,7 +254,7 @@ export abstract class PoLookupModalBaseComponent implements OnDestroy, OnInit {
   // eslint-disable-next-line @typescript-eslint/member-ordering
   secondaryAction: PoModalAction = {
     action: () => {
-      this.model.emit(null);
+      this.model.emit(this.itensStorage);
       this.poModal.close();
     },
     label: this.literals.modalSecondaryActionLabel

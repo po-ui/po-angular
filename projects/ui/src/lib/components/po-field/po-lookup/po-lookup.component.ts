@@ -156,6 +156,7 @@ export class PoLookupComponent extends PoLookupBaseComponent implements AfterVie
 
   private modalSubscription: Subscription;
   private isCalculateVisibleItems: boolean = true;
+  itensStorage: any;
 
   get autocomplete() {
     return this.noAutocomplete ? 'off' : 'on';

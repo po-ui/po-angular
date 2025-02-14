@@ -9,6 +9,7 @@
   <div [hidden]="isAdvancedFilter">
     <po-field-container class="po-lookup-header po-pull-right" [p-optional]="false">
       <div class="po-lookup-filter-content">
+        {{ itensStorage | json }}
         <div class="po-field-icon-container-right">
           <po-icon #iconLookup p-icon="ICON_SEARCH" class="po-field-icon po-icon-input" (click)="search()"> </po-icon>
         </div>
