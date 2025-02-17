@@ -698,13 +698,16 @@ export class PoTableComponent extends PoTableBaseComponent implements AfterViewI
     const template: PoTableColumnTemplateDirective = this.tableColumnTemplates?.find(
       tableColumnTemplate => tableColumnTemplate.targetProperty === column.property
     );
-    if (!template) {
+    if (!this.initialized) return null;
+
+    if (template) {
+      return template.templateRef;
+    } else {
       console.warn(
         `Não foi possível encontrar o template para a coluna: ${column.property}, por gentileza informe a propriedade [p-property]`
       );
       return null;
     }
-    return template.templateRef;
   }
 
   public getWidthColumnManager() {
