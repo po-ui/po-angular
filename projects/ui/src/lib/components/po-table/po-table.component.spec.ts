@@ -2901,6 +2901,16 @@ describe('PoTableComponent:', () => {
 
       expect(res).toEqual(tableColumnTemplate.templateRef);
     });
+
+    it('getTemplate: should return null if component is not initialized', () => {
+      component.initialized = false;
+
+      const column: PoTableColumn = { property: 'status' };
+
+      const res = component.getTemplate(column);
+
+      expect(res).toBeNull();
+    });
   });
 
   it('hasRowTemplateWithArrowDirectionRight: should be false if tableRowTemplateArrowDirection is left', () => {
