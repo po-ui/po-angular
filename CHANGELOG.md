@@ -2,6 +2,15 @@
 
 All notable changes to this project will be documented in this file. See [standard-version](https://github.com/conventional-changelog/standard-version) for commit guidelines.
 
+### [17.26.14](https://github.com/po-ui/po-angular/compare/v17.26.13...v17.26.14) (2025-02-17)
+
+
+### Bug Fixes
+
+* **i18n:** habilita o I18N_CONFIG com multi: true ([f459aaf](https://github.com/po-ui/po-angular/commit/f459aaf707a0604c85bdd99ec07462119b4a39f0))
+* **table:** ajusta colunas extras na po-table ([f2b98f7](https://github.com/po-ui/po-angular/commit/f2b98f77b16ca9185e139e77a039b6f35043586c))
+* **table:** corrige posição do ícone arrow para coluna detalhe ([04f2432](https://github.com/po-ui/po-angular/commit/04f2432629e80dcef4622eff56e2af23d7b0c701))
+
 ### [17.26.13](https://github.com/po-ui/po-angular/compare/v17.26.12...v17.26.13) (2025-02-10)
 
 
