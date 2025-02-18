@@ -453,7 +453,7 @@ export class PoMultiselectComponent
   closeTag(value, event) {
     let index;
     this.enterCloseTag = true;
-    if (!value || (typeof value === 'string' && value.includes('+'))) {
+    if (value === null || value === undefined || (typeof value === 'string' && value.includes('+'))) {
       index = null;
       const itemsNotInVisibleTags = this.selectedOptions.filter(option => !this.visibleTags.includes(option));
       for (const option of this.visibleTags) {
