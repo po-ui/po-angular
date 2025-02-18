@@ -1,4 +1,10 @@
-<po-field-container [p-label]="label" [p-optional]="optional" [p-required]="required" [p-show-required]="showRequired">
+<po-field-container
+  [p-label]="label"
+  [p-optional]="optional"
+  [p-required]="required"
+  [p-show-required]="showRequired"
+  [p-size]="size"
+>
   <div class="po-field-container-content">
     <po-rich-text-body
       #richTextBody
@@ -7,6 +13,7 @@
       [p-model-value]="value"
       [p-placeholder]="placeholder"
       [p-readonly]="readonly"
+      [p-size]="size"
       (p-change)="onChangeValue($event)"
       (p-commands)="richTextToolbar?.setButtonsStates($event)"
       (p-selected-link)="richTextToolbar?.selectedLink($event)"
@@ -22,6 +29,7 @@
       *ngIf="!isAllActionsHidden()"
       [p-readonly]="readonly"
       [p-hide-toolbar-actions]="toolbarActions"
+      [p-size]="size"
       (p-link-editing)="richTextBody.linkEditing($event)"
       (p-command)="richTextBody.executeCommand($event)"
     >

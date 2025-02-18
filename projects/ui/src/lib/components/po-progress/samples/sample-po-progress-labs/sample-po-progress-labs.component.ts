@@ -23,13 +23,15 @@ export class SamplePoProgressLabsComponent implements OnInit {
   disabledCancel: boolean;
   indeterminate: boolean;
   showPercentage: boolean;
-  status: PoProgressStatus;
+  status: PoProgressStatus = PoProgressStatus.Default;
   size: PoProgressSize = PoProgressSize.large;
   text: string;
   value: number;
   action: PoProgressAction;
   actionForm: FormGroup;
   showAction: false;
+  properties: Array<string>;
+  sizeActions: string;
 
   infoIconsOptions: Array<PoRadioGroupOption> = [
     { label: 'an an-warning-circle', value: 'an an-warning-circle' },
@@ -49,6 +51,11 @@ export class SamplePoProgressLabsComponent implements OnInit {
     { label: 'Large', value: PoProgressSize.large }
   ];
 
+  sizeActionsOptions: Array<PoRadioGroupOption> = [
+    { label: 'small', value: 'small' },
+    { label: 'medium', value: 'medium' }
+  ];
+
   public readonly typeOptions: Array<PoSelectOption> = [
     { label: 'Danger', value: 'danger' },
     { label: 'Default', value: 'default' }
@@ -64,6 +71,12 @@ export class SamplePoProgressLabsComponent implements OnInit {
   public readonly actionOptions: Array<PoCheckboxGroupOption> = [
     { label: 'Disabled', value: 'disabled' },
     { label: 'Visible', value: 'visible' }
+  ];
+
+  public readonly propertiesOptions: Array<PoCheckboxGroupOption> = [
+    { value: 'disabledCancel', label: 'Disabled cancel' },
+    { value: 'indeterminate', label: 'Indeterminate' },
+    { value: 'showPercentage', label: 'Show percentage' }
   ];
 
   constructor(
@@ -105,12 +118,14 @@ export class SamplePoProgressLabsComponent implements OnInit {
     this.disabledCancel = false;
     this.indeterminate = false;
     this.showPercentage = false;
-    this.status = undefined;
+    this.status = PoProgressStatus.Default;
     this.text = undefined;
     this.value = undefined;
     this.size = PoProgressSize.large;
     this.actionForm.reset({ type: 'default', visible: true });
     this.action = { label: '', type: 'default' };
     this.showAction = false;
+    this.properties = [];
+    this.sizeActions = 'medium';
   }
 }

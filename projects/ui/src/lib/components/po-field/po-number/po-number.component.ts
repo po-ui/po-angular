@@ -1,18 +1,19 @@
-import { AbstractControl, NG_VALUE_ACCESSOR, NG_VALIDATORS } from '@angular/forms';
 import {
-  ChangeDetectorRef,
   ChangeDetectionStrategy,
+  ChangeDetectorRef,
   Component,
   ElementRef,
   forwardRef,
-  Input,
-  HostListener
+  HostListener,
+  Input
 } from '@angular/core';
+import { AbstractControl, NG_VALIDATORS, NG_VALUE_ACCESSOR } from '@angular/forms';
 
-import { minFailed, maxFailed } from '../validators';
+import { maxFailed, minFailed } from '../validators';
 
 import { PoNumberBaseComponent } from './po-number-base.component';
 
+import { PoThemeService } from '../../../services';
 import { uuid } from '../../../utils/util';
 
 /**
@@ -94,8 +95,12 @@ export class PoNumberComponent extends PoNumberBaseComponent {
   id = `po-number[${uuid()}]`;
 
   /* istanbul ignore next */
-  constructor(el: ElementRef, cd: ChangeDetectorRef) {
-    super(el, cd);
+  constructor(
+    el: ElementRef,
+    cd: ChangeDetectorRef,
+    protected poThemeService: PoThemeService
+  ) {
+    super(el, cd, poThemeService);
   }
 
   @HostListener('wheel', ['$event'])

@@ -1,11 +1,11 @@
 import { Directive, EventEmitter, HostBinding, Input, Output, TemplateRef } from '@angular/core';
-import { InputBoolean } from '../../../decorators';
 import { convertToBoolean } from '../../../utils/util';
+import { PoItemListFilterMode } from '../enums/po-item-list-filter-mode.enum';
+import { PoItemListSize } from '../enums/po-item-list-size.enum';
 import { PoItemListType } from '../enums/po-item-list-type.enum';
 import { PoItemListAction } from './interfaces/po-item-list-action.interface';
 import { PoItemListOptionGroup } from './interfaces/po-item-list-option-group.interface';
 import { PoItemListOption } from './interfaces/po-item-list-option.interface';
-import { PoItemListFilterMode } from '../enums/po-item-list-filter-mode.enum';
 
 /**
  * @description
@@ -57,6 +57,9 @@ export class PoItemListBaseComponent {
 
   /** Texto de exibição do item. */
   @Input('p-label') label: string;
+
+  /** Tamanho do texto exibido. */
+  @Input('p-size') size: PoItemListSize;
 
   /** Valor do item. */
   @Input('p-value') value: string;

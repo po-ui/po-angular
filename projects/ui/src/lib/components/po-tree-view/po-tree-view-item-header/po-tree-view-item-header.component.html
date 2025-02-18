@@ -25,10 +25,12 @@
   <po-checkbox
     class="po-tree-view-item-header-checkbox"
     [class.po-tree-view-item-header-padding]="!hasSubItems"
+    p-size="medium"
     [p-label]="item.label"
     [(ngModel)]="item.selected"
     (p-change)="selected.emit(item)"
     [p-disabled]="item.isSelectable === false"
+    [p-no-padding]="true"
   >
   </po-checkbox>
 </ng-template>
@@ -40,6 +42,7 @@
     #inputRadio
     [name]="idRadio"
     [(ngModel)]="item.selected"
+    p-size="medium"
     [p-label]="item.label"
     [p-value]="item.value"
     [p-checked]="item.value === selectedValue"

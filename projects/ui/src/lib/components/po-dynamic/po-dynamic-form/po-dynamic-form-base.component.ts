@@ -2,6 +2,8 @@ import { Directive, EventEmitter, Input, Output } from '@angular/core';
 import { NgForm } from '@angular/forms';
 import { convertToBoolean } from '../../../utils/util';
 
+import { PoThemeService } from '../../../services';
+import { PoDynamicFieldSize } from '../enums/po-dynamic-field-size.enum';
 import { PoDynamicFormField } from './po-dynamic-form-field.interface';
 
 /**
@@ -14,6 +16,8 @@ import { PoDynamicFormField } from './po-dynamic-form-field.interface';
  */
 @Directive()
 export class PoDynamicFormBaseComponent {
+  private _size?: string = undefined;
+
   /**
    * @optional
    *
@@ -235,6 +239,29 @@ export class PoDynamicFormBaseComponent {
    *
    * @description
    *
+   * Define o tamanho dos fields conforme os valores especificados no enum `PoDynamicFieldSize`:
+   * - small
+   * - medium
+   *
+   * > A medida `small` **só estará disponível** quando a acessibilidade AA estiver configurada. Caso contrário, mesmo
+   * que o tamanho seja definido como `small`, a medida padrão `medium` será mantida. Para mais informações sobre como
+   * configurar a acessibilidade AA, consulte a documentação do [po-theme](https://po-ui.io/documentation/po-theme).
+   *
+   * @default `medium`
+   */
+  @Input('p-size') set size(value: string) {
+    this._size = this.validateSize(value);
+  }
+
+  get size(): string {
+    return this._size ?? this.getDefaultSize();
+  }
+
+  /**
+   * @optional
+   *
+   * @description
+   *
    * Ao informar esta propriedade, o componente passará a emitir o valor a cada caractere digitado.
    *
    * Pode ser aplicado nos seguintes componentes:
@@ -249,4 +276,20 @@ export class PoDynamicFormBaseComponent {
    *
    */
   @Input({ alias: 'p-validate-on-input', transform: convertToBoolean }) validateOnInput: boolean = false;
+
+  constructor(protected poThemeService: PoThemeService) {}
+
+  private getDefaultSize(): string {
+    return this.poThemeService.getA11yDefaultSize() === 'small' ? PoDynamicFieldSize.small : PoDynamicFieldSize.medium;
+  }
+
+  private validateSize(value: string): string {
+    if (value && Object.values(PoDynamicFieldSize).includes(value as PoDynamicFieldSize)) {
+      if (value === PoDynamicFieldSize.small && this.poThemeService.getA11yLevel() !== 'AA') {
+        return PoDynamicFieldSize.medium;
+      }
+      return value;
+    }
+    return this.poThemeService.getA11yDefaultSize() === 'small' ? PoDynamicFieldSize.small : PoDynamicFieldSize.medium;
+  }
 }

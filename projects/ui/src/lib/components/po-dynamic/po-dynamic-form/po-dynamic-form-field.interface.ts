@@ -20,8 +20,8 @@ import { PoLookupAdvancedFilter } from '../../po-field/po-lookup/interfaces/po-l
 import { PoLookupColumn } from '../../po-field/po-lookup/interfaces/po-lookup-column.interface';
 import { PoMultiselectOption } from '../../po-field/po-multiselect/po-multiselect-option.interface';
 import { PoSelectOption } from '../../po-field/po-select/po-select-option.interface';
-import { ForceBooleanComponentEnum, ForceOptionComponentEnum } from '../po-dynamic-field-force-component.enum';
 import { PoProgressAction } from '../../po-progress/';
+import { ForceBooleanComponentEnum, ForceOptionComponentEnum } from '../enums/po-dynamic-field-force-component.enum';
 
 import { Observable } from 'rxjs';
 import { PoDynamicField } from '../po-dynamic-field.interface';
@@ -233,6 +233,13 @@ export interface PoDynamicFormField extends PoDynamicField {
    * **Componentes compatíveis:** `po-datepicker`, `po-datepicker-range`, `po-number`, `po-decimal`
    */
   minValue?: string | number;
+
+  /**
+   * Remove o espaçamento interno (padding) do componente.
+   *
+   * **Componentes compatíveis:** `po-checkbox`
+   */
+  noPadding?: boolean;
 
   /** Quantidade de linhas exibidas no `po-textarea`. */
   rows?: number;
@@ -819,4 +826,16 @@ export interface PoDynamicFormField extends PoDynamicField {
    * **Componente compatível**: `po-combo`
    */
   removeInitialFilter?: boolean;
+
+  /**
+   * Define o tamanho do componente, podendo ser `small` ou `medium`. Alguns componentes, como `po-checkbox` e
+   * `po-radio-group`, também possuem a opção `large`, conforme suas respectivas documentações.
+   *
+   * > O tamanho `small` **só estará disponível** quando a acessibilidade AA estiver configurada. Caso contrário, mesmo
+   * que o tamanho seja definido como `small`, a medida padrão `medium` será mantida. Para mais informações sobre como
+   * configurar a acessibilidade AA, consulte a documentação do [po-theme](https://po-ui.io/documentation/po-theme).
+   *
+   * @default `medium`
+   */
+  size?: string;
 }

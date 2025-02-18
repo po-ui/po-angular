@@ -10,6 +10,7 @@ import {
   SimpleChanges,
   ViewChild
 } from '@angular/core';
+import { PoThemeService } from '../../services';
 import { PoControlPositionService } from '../../services/po-control-position/po-control-position.service';
 import { PoLanguageService } from '../../services/po-language/po-language.service';
 import { PoDropdownAction } from '../po-dropdown';
@@ -19,6 +20,7 @@ import { PoSearchFilterMode } from './enum/po-search-filter-mode.enum';
 import { PoSearchFilterSelect } from './interfaces/po-search-filter-select.interface';
 import { PoSearchOption } from './interfaces/po-search-option.interface';
 import { PoSearchBaseComponent } from './po-search-base.component';
+
 const poSearchContainerOffset = 8;
 const poSearchContainerPositionDefault = 'bottom';
 /**
@@ -87,9 +89,10 @@ export class PoSearchComponent extends PoSearchBaseComponent implements OnInit, 
     public languageService: PoLanguageService,
     private renderer: Renderer2,
     private changeDetector: ChangeDetectorRef,
-    private controlPosition: PoControlPositionService
+    private controlPosition: PoControlPositionService,
+    protected poThemeService: PoThemeService
   ) {
-    super(languageService);
+    super(languageService, poThemeService);
   }
 
   ngOnInit(): void {

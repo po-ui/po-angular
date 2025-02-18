@@ -1,5 +1,5 @@
-import { Component, ViewChild, OnInit, OnDestroy } from '@angular/core';
-import { NgForm } from '@angular/forms';
+import { Component, ViewChild, OnInit, OnDestroy, ChangeDetectorRef } from '@angular/core';
+import { NgForm, UntypedFormBuilder, UntypedFormGroup, Validators } from '@angular/forms';
 
 import {
   PoBreadcrumb,
@@ -12,7 +12,8 @@ import {
   poThemeDefaultFeedback,
   poThemeDefaultFeedbackDark,
   poThemeDefaultLightValues,
-  poThemeDefaultNeutrals
+  poThemeDefaultNeutrals,
+  PoThemeA11yEnum
 } from '@po-ui/ng-components';
 
 import { PoModalAction, PoModalComponent } from '@po-ui/ng-components';
@@ -25,55 +26,34 @@ import { PoPageAction } from '@po-ui/ng-components';
   standalone: false
 })
 export class SamplePoThemeLabsComponent implements OnInit, OnDestroy {
-  @ViewChild('formShare', { static: true })
-  formShare!: NgForm;
-  @ViewChild(PoModalComponent, { static: true })
-  poModal!: PoModalComponent;
+  @ViewChild('reactiveFormData', { static: true }) reactiveFormModal: PoModalComponent;
 
-  email: string = '';
-  isSubscribed: boolean = false;
-
+  a11yLevel: PoThemeA11yEnum = PoThemeA11yEnum.AAA;
+  a11ySmallDefault: boolean = false;
+  a11yLevelStorage = 'po-a11y-AAA';
+  buttonVisible = true;
+  reactiveForm: UntypedFormGroup;
   theme: PoThemeTypeEnum = 0;
   themeStorage = 'po-theme-default';
+
+  private a11yChangeListenerAAA: any;
+  private a11yChangeListenerAA: any;
   private themeChangeListenerDark: any;
   private themeChangeListenerDefault: any;
+
+  readonly a11yLevelOptions: Array<PoRadioGroupOption> = [
+    { label: 'AA', value: 'AA' },
+    { label: 'AAA', value: 'AAA' }
+  ];
 
   readonly themeOptions: Array<PoRadioGroupOption> = [
     { label: 'Light', value: 0 },
     { label: 'Dark', value: 1 }
   ];
 
-  public readonly actions: Array<PoPageAction> = [
-    {
-      label: 'Share',
-      action: this.modalOpen.bind(this),
-      icon: 'po-icon-share'
-    },
-    { label: 'GitHub', url: 'https://github.com/po-ui/po-angular' },
-    { label: 'Components', url: '/documentation' },
-    {
-      label: 'Disable notification',
-      action: this.disableNotification.bind(this),
-      disabled: () => this.isSubscribed
-    }
-  ];
-
-  public readonly breadcrumb: PoBreadcrumb = {
-    items: [{ label: 'Home', link: '/' }, { label: 'Dashboard' }]
-  };
-
-  public readonly cancelAction: PoModalAction = {
-    action: () => {
-      this.modalClose();
-    },
-    label: 'Cancel'
-  };
-
-  public readonly shareAction: PoModalAction = {
-    action: () => {
-      this.share();
-    },
-    label: 'Share'
+  readonly modalPrimaryAction: PoModalAction = {
+    action: () => this.reactiveFormModal.close(),
+    label: 'Close'
   };
 
   poThemeSample = {
@@ -184,26 +164,18 @@ export class SamplePoThemeLabsComponent implements OnInit, OnDestroy {
   };
 
   constructor(
-    private poNotification: PoNotificationService,
+    private cdr: ChangeDetectorRef,
+    private fb: UntypedFormBuilder,
     private poTheme: PoThemeService
   ) {
     const _poTheme = this.poTheme.applyTheme();
     if (!_poTheme) {
-      this.poTheme.setTheme(this.poThemeSample, this.theme);
+      this.poTheme.setTheme(this.poThemeSample, this.theme, this.a11yLevel);
       this.theme = this.poThemeSample.active;
     } else {
       this.theme = _poTheme.active || 0;
     }
-  }
-
-  changeTheme(value: number, dispatchEvent = true) {
-    this.poTheme.setTheme(this.poThemeSample, value);
-    value === 1
-      ? localStorage.setItem('po-ui-theme', 'po-theme-dark')
-      : localStorage.setItem('po-ui-theme', 'po-theme-default');
-    if (dispatchEvent) {
-      window.dispatchEvent(new Event('po-sample-change-theme'));
-    }
+    this.createReactiveForm();
   }
 
   ngOnInit(): void {
@@ -213,6 +185,13 @@ export class SamplePoThemeLabsComponent implements OnInit, OnDestroy {
 
     this.theme = this.themeStorage === 'po-theme-default' ? 0 : 1;
     this.changeTheme(this.theme, false);
+
+    if (localStorage.getItem('po-ui-a11y')) {
+      this.a11yLevelStorage = localStorage.getItem('po-ui-a11y');
+    }
+
+    this.a11yLevel = this.a11yLevelStorage === 'po-a11y-AAA' ? PoThemeA11yEnum.AAA : PoThemeA11yEnum.AA;
+    this.changeA11yLevel(this.a11yLevel, false);
 
     this.themeChangeListenerDefault = () => {
       this.changeTheme(0, false);
@@ -224,34 +203,87 @@ export class SamplePoThemeLabsComponent implements OnInit, OnDestroy {
       this.theme = 1;
     };
 
+    this.a11yChangeListenerAAA = () => {
+      this.changeA11yLevel(PoThemeA11yEnum.AAA, false);
+      this.a11yLevel = PoThemeA11yEnum.AAA;
+    };
+
+    this.a11yChangeListenerAA = () => {
+      this.changeA11yLevel(PoThemeA11yEnum.AA, false);
+      this.a11yLevel = PoThemeA11yEnum.AA;
+    };
+
+    window.addEventListener('po-a11y-AA', this.a11yChangeListenerAA);
+    window.addEventListener('po-a11y-AAA', this.a11yChangeListenerAAA);
     window.addEventListener('po-theme-default', this.themeChangeListenerDefault);
     window.addEventListener('po-theme-dark', this.themeChangeListenerDark);
-  }
-
-  modalClose() {
-    this.poModal.close();
-    this.formShare.reset();
-  }
-
-  modalOpen() {
-    this.poModal.open();
-  }
-
-  share() {
-    if (this.formShare.valid) {
-      this.poNotification.success(`Webpage shared successfully to: ${this.email}.`);
-    } else {
-      this.poNotification.error(`Email invalid.`);
-    }
-    this.modalClose();
   }
 
   ngOnDestroy(): void {
     window.removeEventListener('po-theme-default', this.themeChangeListenerDefault);
     window.removeEventListener('po-theme-dark', this.themeChangeListenerDark);
+
+    window.removeEventListener('po-a11y-AA', this.a11yChangeListenerAA);
+    window.removeEventListener('po-a11y-AAA', this.a11yChangeListenerAAA);
   }
 
-  private disableNotification() {
-    this.isSubscribed = true;
+  changeA11yLevel(value: PoThemeA11yEnum, dispatchEvent = true) {
+    this.buttonVisible = false;
+    this.cdr.detectChanges();
+
+    this.poTheme.setCurrentThemeA11y(value);
+    value === 'AA'
+      ? localStorage.setItem('po-ui-a11y', 'po-a11y-AA')
+      : localStorage.setItem('po-ui-a11y', 'po-a11y-AAA');
+
+    if (dispatchEvent) {
+      window.dispatchEvent(new Event('po-sample-change-a11y'));
+    }
+
+    // força a atualização do form
+    this.a11ySmallDefault = false;
+    this.poTheme.setA11yDefaultSizeSmall(this.a11ySmallDefault);
+    this.createReactiveForm();
+
+    setTimeout(() => {
+      this.buttonVisible = true;
+      this.cdr.detectChanges();
+    });
+  }
+
+  changeA11ySmallDefault(): void {
+    this.poTheme.setA11yDefaultSizeSmall(this.a11ySmallDefault);
+
+    this.buttonVisible = false;
+    // força a atualização do form
+    setTimeout(() => {
+      this.createReactiveForm();
+      this.buttonVisible = true;
+      this.cdr.detectChanges();
+    }, 0);
+  }
+
+  changeTheme(value: number, dispatchEvent = true) {
+    this.poTheme.setTheme(this.poThemeSample, value, this.a11yLevel);
+    value === 1
+      ? localStorage.setItem('po-ui-theme', 'po-theme-dark')
+      : localStorage.setItem('po-ui-theme', 'po-theme-default');
+    if (dispatchEvent) {
+      window.dispatchEvent(new Event('po-sample-change-theme'));
+    }
+  }
+
+  createReactiveForm() {
+    this.reactiveForm = this.fb.group({
+      name: ['', Validators.compose([Validators.required, Validators.minLength(5), Validators.maxLength(30)])],
+      address: ['', Validators.compose([Validators.required, Validators.minLength(5), Validators.maxLength(50)])],
+      number: ['', Validators.compose([Validators.required, Validators.min(1), Validators.max(99999)])],
+      email: ['', Validators.required],
+      website: ['', Validators.required]
+    });
+  }
+
+  saveForm() {
+    this.reactiveFormModal.open();
   }
 }

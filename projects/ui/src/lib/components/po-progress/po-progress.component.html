@@ -1,5 +1,5 @@
 <div class="po-progress" [ngClass]="statusClass">
-  <div *ngIf="text" class="po-progress-description">
+  <div *ngIf="text" class="po-progress-description" [class.po-progress-description-aa]="sizeActions === 'small'">
     <po-label [p-label]="text"></po-label>
   </div>
 
@@ -14,9 +14,13 @@
     <div class="po-progress-info-left">
       <po-icon *ngIf="infoIcon" [p-icon]="infoIcon" [class.po-progress-info-icon-error]="status === 'error'"></po-icon>
       <po-icon *ngIf="isAllowInfoError" p-icon="ICON_EXCLAMATION" class="po-progress-info-icon-error"></po-icon>
-      <span *ngIf="info" class="po-progress-info-text" [class.po-progress-info-text-error]="status === 'error'">{{
-        info
-      }}</span>
+      <span
+        *ngIf="info"
+        class="po-progress-info-text"
+        [class.po-progress-info-text-error]="status === 'error'"
+        [class.po-progress-info-text-aa]="sizeActions === 'small'"
+        >{{ info }}</span
+      >
     </div>
     <div class="po-progress-info-right">
       <span *ngIf="showPercentage && !indeterminate">{{ value }}%</span>
@@ -27,6 +31,7 @@
         (p-click)="emitRetry()"
         [p-aria-label]="literals.retry"
         p-kind="tertiary"
+        [p-size]="sizeActions"
       ></po-button>
 
       <po-button
@@ -36,6 +41,7 @@
         [p-disabled]="actionIsDisabled(customAction)"
         [p-label]="customAction.label || ''"
         [p-icon]="customAction.icon"
+        [p-size]="sizeActions"
         (p-click)="callAction()"
       >
       </po-button>
@@ -48,6 +54,7 @@
         [p-disabled]="disabledCancel"
         [p-aria-label]="literals.cancel"
         [p-danger]="true"
+        [p-size]="sizeActions"
       ></po-button>
     </div>
   </div>

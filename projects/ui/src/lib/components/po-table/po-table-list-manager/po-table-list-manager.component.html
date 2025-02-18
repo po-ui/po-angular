@@ -27,6 +27,7 @@
     <div class="po-table-list-manager-item-switch">
       <po-switch
         name="switch"
+        p-size="medium"
         (p-change)="clickSwitch(option)"
         (keydown)="onKeyDown($event, option)"
         [p-disabled]="option.disabled || disabled || isFixed(option)"
@@ -42,6 +43,7 @@
     <div class="po-table-list-manager-item-buttons">
       <po-button
         *ngIf="!hideActionFixedColumns && iconNameLib === 'PoIcon'"
+        p-size="medium"
         [p-icon]="isFixed(option) ? templateIconFixed : templateIconNotFixed"
         (p-click)="emitFixed(option)"
         [p-disabled]="!option.visible || checksIfHasFiveFixed(option)"
@@ -50,6 +52,7 @@
 
       <po-button
         *ngIf="!hideActionFixedColumns && iconNameLib === 'AnimaliaIcon'"
+        p-size="medium"
         [p-icon]="isFixed(option) ? 'ICON_PUSH_PIN_SLASH' : 'ICON_PUSH_PIN'"
         (p-click)="emitFixed(option)"
         [p-disabled]="!option.visible || checksIfHasFiveFixed(option)"
@@ -60,6 +63,7 @@
         [p-tooltip]="literals.up"
         p-tooltip-position="left"
         p-icon="ICON_ARROW_UP"
+        p-size="medium"
         [p-disabled]="verifyArrowDisabled(option, 'up') || isFixed(option)"
         (p-click)="emitChangePosition(option, 'up')"
       >
@@ -69,6 +73,7 @@
         [p-tooltip]="literals.down"
         p-tooltip-position="top"
         p-icon="ICON_ARROW_DOWN"
+        p-size="medium"
         [p-disabled]="verifyArrowDisabled(option, 'down') || isFixed(option)"
         (p-click)="emitChangePosition(option, 'down')"
       >

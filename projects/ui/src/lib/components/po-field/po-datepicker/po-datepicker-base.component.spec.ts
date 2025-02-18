@@ -1,17 +1,18 @@
-import { ChangeDetectorRef, Directive } from '@angular/core';
-import { fakeAsync, TestBed, tick } from '@angular/core/testing';
+import { Directive } from '@angular/core';
+import { fakeAsync, tick } from '@angular/core/testing';
 import { FormControl, UntypedFormControl, Validators } from '@angular/forms';
 
+import { expectPropertiesValues, expectSettersMethod } from '../../../util-test/util-expect.spec';
 import * as UtilsFunctions from '../../../utils/util';
+import { convertDateToISOExtended, convertIsoToDate, formatYear, setYearFrom0To100 } from '../../../utils/util';
 import * as ValidatorsFunctions from './../validators';
-import { convertDateToISOExtended, formatYear, setYearFrom0To100, convertIsoToDate } from '../../../utils/util';
-import { expectSettersMethod, expectPropertiesValues } from '../../../util-test/util-expect.spec';
 
-import { PoDatepickerBaseComponent } from './po-datepicker-base.component';
-import { PoDatepickerIsoFormat } from './enums/po-datepicker-iso-format.enum';
-import { PoMask } from '../po-input/po-mask';
-import { PoLanguageService } from '../../../services/po-language/po-language.service';
 import { Subject } from 'rxjs';
+import { PoThemeA11yEnum, PoThemeService } from '../../../services';
+import { PoLanguageService } from '../../../services/po-language/po-language.service';
+import { PoMask } from '../po-input/po-mask';
+import { PoDatepickerIsoFormat } from './enums/po-datepicker-iso-format.enum';
+import { PoDatepickerBaseComponent } from './po-datepicker-base.component';
 
 @Directive()
 class PoDatepickerComponent extends PoDatepickerBaseComponent {
@@ -22,12 +23,16 @@ class PoDatepickerComponent extends PoDatepickerBaseComponent {
 
 describe('PoDatepickerBaseComponent:', () => {
   let component: PoDatepickerComponent;
+  let poThemeService: jasmine.SpyObj<PoThemeService>;
+
   const fakeSubscription = <any>{ unsubscribe: () => {} };
   const languageService: PoLanguageService = new PoLanguageService();
 
   beforeEach(() => {
     const changeDetector: any = { detectChanges: () => {} };
-    component = new PoDatepickerComponent(languageService, changeDetector);
+    poThemeService = jasmine.createSpyObj('PoThemeService', ['getA11yDefaultSize', 'getA11yLevel']);
+
+    component = new PoDatepickerComponent(languageService, changeDetector, poThemeService);
     component['shortLanguage'] = 'pt';
   });
 
@@ -669,6 +674,130 @@ describe('PoDatepickerBaseComponent:', () => {
       const invalidValues = [undefined, 0, 1, 3, 'valor', [], true, false];
 
       expectPropertiesValues(component, 'isoFormat', invalidValues, undefined);
+    });
+
+    describe('p-size:', () => {
+      it('should update size with valid values', () => {
+        const validValues = ['medium'];
+
+        expectPropertiesValues(component, 'size', validValues, validValues);
+      });
+
+      it('should update size to `medium` with invalid values', () => {
+        poThemeService.getA11yDefaultSize.and.returnValue('medium');
+
+        const invalidValues = ['extraSmall', 'extraLarge'];
+
+        expectPropertiesValues(component, 'size', invalidValues, 'medium');
+      });
+
+      it('should use default size when size is not set', () => {
+        poThemeService.getA11yDefaultSize.and.returnValue('small');
+
+        component.size = undefined;
+        expect(component.size).toBe('small');
+      });
+
+      it('should return `p-size` if it is defined', () => {
+        component['_size'] = 'large';
+        expect(component.size).toBe('large');
+      });
+
+      it('should call `getDefaultSize` and return its value if `p-size` is null or undefined', () => {
+        spyOn(component as any, 'getDefaultSize').and.returnValue('medium');
+
+        component['_size'] = null;
+        expect(component.size).toBe('medium');
+        expect(component['getDefaultSize']).toHaveBeenCalled();
+
+        component['_size'] = undefined;
+        expect(component.size).toBe('medium');
+        expect(component['getDefaultSize']).toHaveBeenCalledTimes(2);
+      });
+    });
+
+    describe('Methods: ', () => {
+      describe('validateSize:', () => {
+        it('should return the same size if valid and accessibility level allows it', () => {
+          poThemeService.getA11yLevel.and.returnValue(PoThemeA11yEnum.AA);
+
+          expect(component['validateSize']('small')).toBe('small');
+          expect(component['validateSize']('medium')).toBe('medium');
+        });
+
+        it('should return `medium` if p-size is `small` and accessibility level is not `AA`', () => {
+          poThemeService.getA11yLevel.and.returnValue(PoThemeA11yEnum.AAA);
+
+          expect(component['validateSize']('small')).toBe('medium');
+        });
+
+        it('should return default size from getA11yDefaultSize if value is invalid', () => {
+          poThemeService.getA11yDefaultSize.and.returnValue('small');
+
+          expect(component['validateSize']('invalid')).toBe('small');
+        });
+
+        it('should return `medium` if default size is `medium`', () => {
+          poThemeService.getA11yDefaultSize.and.returnValue('medium');
+
+          expect(component['validateSize']('invalid')).toBe('medium');
+        });
+      });
+
+      describe('getDefaultSize:', () => {
+        it('should return `small` if getA11yDefaultSize returns `small`', () => {
+          poThemeService.getA11yDefaultSize.and.returnValue('small');
+
+          expect(component['getDefaultSize']()).toBe('small');
+        });
+
+        it('should return `medium` if getA11yDefaultSize returns `medium`', () => {
+          poThemeService.getA11yDefaultSize.and.returnValue('medium');
+
+          expect(component['getDefaultSize']()).toBe('medium');
+        });
+      });
+
+      describe('validateSize:', () => {
+        it('should return the same size if valid and accessibility level allows it', () => {
+          poThemeService.getA11yLevel.and.returnValue(PoThemeA11yEnum.AA);
+
+          expect(component['validateSize']('small')).toBe('small');
+          expect(component['validateSize']('medium')).toBe('medium');
+        });
+
+        it('should return `medium` if p-size is `small` and accessibility level is not `AA`', () => {
+          poThemeService.getA11yLevel.and.returnValue(PoThemeA11yEnum.AAA);
+
+          expect(component['validateSize']('small')).toBe('medium');
+        });
+
+        it('should return default size from getA11yDefaultSize if value is invalid', () => {
+          poThemeService.getA11yDefaultSize.and.returnValue('small');
+
+          expect(component['validateSize']('invalid')).toBe('small');
+        });
+
+        it('should return `medium` if default size is `medium`', () => {
+          poThemeService.getA11yDefaultSize.and.returnValue('medium');
+
+          expect(component['validateSize']('invalid')).toBe('medium');
+        });
+      });
+
+      describe('getDefaultSize:', () => {
+        it('should return `small` if getA11yDefaultSize returns `small`', () => {
+          poThemeService.getA11yDefaultSize.and.returnValue('small');
+
+          expect(component['getDefaultSize']()).toBe('small');
+        });
+
+        it('should return `medium` if getA11yDefaultSize returns `medium`', () => {
+          poThemeService.getA11yDefaultSize.and.returnValue('medium');
+
+          expect(component['getDefaultSize']()).toBe('medium');
+        });
+      });
     });
   });
 });

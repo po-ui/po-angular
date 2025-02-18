@@ -1,9 +1,11 @@
 import { Directive, EventEmitter, Input, Output } from '@angular/core';
-import { AbstractControl, ControlValueAccessor, Validator, Validators } from '@angular/forms';
+import { AbstractControl, ControlValueAccessor, Validator } from '@angular/forms';
 
 import { convertToBoolean, convertToInt, removeDuplicatedOptions } from '../../../utils/util';
 import { requiredFailed } from '../validators';
 
+import { PoThemeService } from '../../../services';
+import { PoRadioSize } from '../po-radio/enums/po-radio-size.enum';
 import { PoRadioGroupOption } from './po-radio-group-option.interface';
 
 const poRadioGroupColumnsDefaultLength: number = 6;
@@ -183,7 +185,7 @@ export abstract class PoRadioGroupBaseComponent implements ControlValueAccessor,
   private _disabled?: boolean = false;
   private _options: Array<PoRadioGroupOption>;
   private _required?: boolean = false;
-
+  private _size?: string = undefined;
   private onChangePropagate: any = null;
   private validatorChange;
 
@@ -276,10 +278,27 @@ export abstract class PoRadioGroupBaseComponent implements ControlValueAccessor,
    *
    * @description
    *
-   * Define o tamanho do *radio*
+   * Define o tamanho dos rádios do componente conforme os valores especificados no enum `PoRadioSize`:
+   * - small
+   * - medium
+   * - large
+   *
+   * > A medida `small` **só estará disponível** quando a acessibilidade AA estiver configurada. Caso contrário, mesmo
+   * que o tamanho seja definido como `small`, a medida padrão `medium` será mantida. Para mais informações sobre como
+   * configurar a acessibilidade AA, consulte a documentação do [po-theme](https://po-ui.io/documentation/po-theme).
+   *
    * @default `medium`
+   *
    */
-  @Input('p-size') size: string;
+  @Input('p-size') set size(value: PoRadioSize) {
+    this._size = this.validateSize(value);
+  }
+
+  get size(): string {
+    return this._size ?? this.getDefaultSize();
+  }
+
+  constructor(protected poThemeService: PoThemeService) {}
 
   // Função que controla quando deve ser emitido onChange e atualiza o Model
   changeValue(changedValue: any) {
@@ -339,6 +358,10 @@ export abstract class PoRadioGroupBaseComponent implements ControlValueAccessor,
     return columns >= minColumns && columns <= maxColumns;
   }
 
+  private getDefaultSize(): string {
+    return this.poThemeService.getA11yDefaultSize() === 'small' ? PoRadioSize.Small : PoRadioSize.Medium;
+  }
+
   private getGridSystemColumns(columns: number, maxColumns: number): number {
     const gridSystemColumns = poRadioGroupColumnsTotalLength / columns;
 
@@ -351,6 +374,15 @@ export abstract class PoRadioGroupBaseComponent implements ControlValueAccessor,
     }
   }
 
+  private validateSize(value: string): string {
+    if (value && Object.values(PoRadioSize).includes(value as PoRadioSize)) {
+      if (value === PoRadioSize.Small && this.poThemeService.getA11yLevel() !== 'AA') {
+        return PoRadioSize.Medium;
+      }
+      return value;
+    }
+    return this.poThemeService.getA11yDefaultSize() === 'small' ? PoRadioSize.Small : PoRadioSize.Medium;
+  }
   // Deve retornar o valor elemento que contém o valor passado por parâmetro
   abstract getElementByValue(value: any): any;
 }

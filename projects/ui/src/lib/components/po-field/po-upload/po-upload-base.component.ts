@@ -4,14 +4,16 @@ import { AbstractControl, ControlValueAccessor, Validator } from '@angular/forms
 import { convertToBoolean, isEquals, isIE, isMobile } from '../../../utils/util';
 import { requiredFailed } from '../validators';
 
+import { PoThemeService } from '../../../services';
 import { poLocaleDefault } from '../../../services/po-language/po-language.constant';
 import { PoLanguageService } from '../../../services/po-language/po-language.service';
+import { PoProgressAction } from '../../po-progress';
+import { PoFieldSize } from '../enums/po-field-size.enum';
 import { PoUploadFileRestrictions } from './interfaces/po-upload-file-restriction.interface';
 import { PoUploadLiterals } from './interfaces/po-upload-literals.interface';
 import { PoUploadFile } from './po-upload-file';
 import { PoUploadStatus } from './po-upload-status.enum';
 import { PoUploadService } from './po-upload.service';
-import { PoProgressAction } from '../../po-progress';
 
 export const poUploadLiteralsDefault = {
   en: <PoUploadLiterals>{
@@ -450,6 +452,7 @@ export abstract class PoUploadBaseComponent implements ControlValueAccessor, Val
   private _isMultiple?: boolean;
   private _literals?: any;
   private _required?: boolean;
+  private _size?: string = undefined;
   private language: string;
   private validatorChange: any;
 
@@ -694,9 +697,33 @@ export abstract class PoUploadBaseComponent implements ControlValueAccessor, Val
    */
   @Input('p-show-required') showRequired: boolean = false;
 
+  /**
+   * @optional
+   *
+   * @description
+   *
+   * Define o tamanho do componente conforme os valores especificados no enum `PoFieldSize`:
+   * - small
+   * - medium
+   *
+   * > A medida `small` **só estará disponível** quando a acessibilidade AA estiver configurada. Caso contrário, mesmo
+   * que o tamanho seja definido como `small`, a medida padrão `medium` será mantida. Para mais informações sobre como
+   * configurar a acessibilidade AA, consulte a documentação do [po-theme](https://po-ui.io/documentation/po-theme).
+   *
+   * @default `medium`
+   */
+  @Input('p-size') set size(value: string) {
+    this._size = this.validateSize(value);
+  }
+
+  get size(): string {
+    return this._size ?? this.getDefaultSize();
+  }
+
   constructor(
     protected uploadService: PoUploadService,
-    languageService: PoLanguageService
+    languageService: PoLanguageService,
+    protected poThemeService: PoThemeService
   ) {
     this.language = languageService.getShortLanguage();
   }
@@ -800,6 +827,10 @@ export abstract class PoUploadBaseComponent implements ControlValueAccessor, Val
     return files.some(currentFile => file.name === currentFile.name);
   }
 
+  private getDefaultSize(): string {
+    return this.poThemeService.getA11yDefaultSize() === 'small' ? PoFieldSize.small : PoFieldSize.medium;
+  }
+
   private getUploadService(): PoUploadService {
     return this.uploadService;
   }
@@ -857,6 +888,16 @@ export abstract class PoUploadBaseComponent implements ControlValueAccessor, Val
     }
 
     return files;
+  }
+
+  private validateSize(value: string): string {
+    if (value && Object.values(PoFieldSize).includes(value as PoFieldSize)) {
+      if (value === PoFieldSize.small && this.poThemeService.getA11yLevel() !== 'AA') {
+        return PoFieldSize.medium;
+      }
+      return value;
+    }
+    return this.poThemeService.getA11yDefaultSize() === 'small' ? PoFieldSize.small : PoFieldSize.medium;
   }
 
   abstract sendFeedback(): void;

@@ -1,7 +1,9 @@
-import { Input, Directive } from '@angular/core';
+import { Directive, Input } from '@angular/core';
 
 import { convertToBoolean } from './../../utils/util';
 
+import { PoThemeService } from '../../services';
+import { PoDropdownSize } from './enums/po-drodown-size.enum';
 import { PoDropdownAction } from './po-dropdown-action.interface';
 
 /**
@@ -74,6 +76,7 @@ export class PoDropdownBaseComponent {
 
   private _actions: Array<PoDropdownAction>;
   private _disabled: boolean = false;
+  private _size?: string = undefined;
 
   /** Lista de ações que serão exibidas no componente. */
   @Input('p-actions') set actions(value: Array<PoDropdownAction>) {
@@ -99,5 +102,44 @@ export class PoDropdownBaseComponent {
 
   get disabled(): boolean {
     return this._disabled;
+  }
+
+  /**
+   * @optional
+   *
+   * @description
+   *
+   * Define o tamanho do componente conforme os valores especificados no enum `PoDropdownSize`:
+   * - small
+   * - medium
+   *
+   * > A medida `small` **só estará disponível** quando a acessibilidade AA estiver configurada. Caso contrário, mesmo
+   * que o tamanho seja definido como `small`, a medida padrão `medium` será mantida. Para mais informações sobre como
+   * configurar a acessibilidade AA, consulte a documentação do [po-theme](https://po-ui.io/documentation/po-theme).
+   *
+   * @default `medium`
+   */
+  @Input('p-size') set size(value: string) {
+    this._size = this.validateSize(value);
+  }
+
+  get size(): string {
+    return this._size ?? this.getDefaultSize();
+  }
+
+  constructor(protected poThemeService: PoThemeService) {}
+
+  private getDefaultSize(): string {
+    return this.poThemeService.getA11yDefaultSize() === 'small' ? PoDropdownSize.small : PoDropdownSize.medium;
+  }
+
+  private validateSize(value: string): string {
+    if (value && Object.values(PoDropdownSize).includes(value as PoDropdownSize)) {
+      if (value === PoDropdownSize.small && this.poThemeService.getA11yLevel() !== 'AA') {
+        return PoDropdownSize.medium;
+      }
+      return value;
+    }
+    return this.poThemeService.getA11yDefaultSize() === 'small' ? PoDropdownSize.small : PoDropdownSize.medium;
   }
 }

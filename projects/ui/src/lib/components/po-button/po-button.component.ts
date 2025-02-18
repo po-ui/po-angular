@@ -1,4 +1,4 @@
-import { AfterViewInit, ChangeDetectionStrategy, Component, ElementRef, ViewChild } from '@angular/core';
+import { ChangeDetectionStrategy, Component, ElementRef, ViewChild } from '@angular/core';
 
 import { PoButtonBaseComponent } from './po-button-base.component';
 
@@ -60,6 +60,15 @@ export class PoButtonComponent extends PoButtonBaseComponent {
     if (!this.disabled) {
       this.buttonElement.nativeElement.focus();
     }
+  }
+
+  mapSizeToIcon(size: string): string {
+    const sizeMap: { [key: string]: string } = {
+      small: 'xs',
+      medium: 'sm',
+      large: 'sm'
+    };
+    return sizeMap[size] || 'sm';
   }
 
   onClick() {

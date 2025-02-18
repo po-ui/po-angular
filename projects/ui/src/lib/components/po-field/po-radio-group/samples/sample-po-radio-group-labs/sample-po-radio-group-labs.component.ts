@@ -36,6 +36,7 @@ export class SamplePoRadioGroupLabsComponent implements OnInit {
   ];
 
   readonly sizesOptions: Array<PoRadioGroupOption> = [
+    { label: 'Small', value: 'small' },
     { label: 'Medium', value: 'medium' },
     { label: 'Large', value: 'large' }
   ];
