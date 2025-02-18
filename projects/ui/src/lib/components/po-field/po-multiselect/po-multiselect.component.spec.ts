@@ -415,6 +415,20 @@ describe('PoMultiselectComponent:', () => {
     expect(component.selectedOptions[0].value).toBe(1);
   });
 
+  it('closeTag: should handle value 0 correctly', () => {
+    component.visibleTags = [{ label: 'label0', value: 0 }];
+    component.selectedOptions = [{ label: 'label0', value: 0 }];
+
+    spyOn(component, 'updateVisibleItems');
+    spyOn(component, 'callOnChange');
+
+    component['closeTag'](0, 'click');
+
+    expect(component.updateVisibleItems).toHaveBeenCalled();
+    expect(component.callOnChange).toHaveBeenCalled();
+    expect(component.selectedOptions.some(opt => opt.value === 0)).toBeFalse();
+  });
+
   describe('showAdditionalHelp:', () => {
     it('should toggle `displayAdditionalHelp` from false to true', () => {
       component.displayAdditionalHelp = false;
