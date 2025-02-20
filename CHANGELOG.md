@@ -2,6 +2,13 @@
 
 All notable changes to this project will be documented in this file. See [standard-version](https://github.com/conventional-changelog/standard-version) for commit guidelines.
 
+### [19.3.1](https://github.com/po-ui/po-angular/compare/v19.3.0...v19.3.1) (2025-02-20)
+
+
+## Bug Fixes
+
+* **i18n:** corrige rotina para obter literals  ([cf4a38f](https://github.com/po-ui/po-angular/commit/cf4a38ff047189986d354f173bddfff685450041))
+
 ## [19.3.0](https://github.com/po-ui/po-angular/compare/v19.2.0...v19.3.0) (2025-02-17)
 
 
