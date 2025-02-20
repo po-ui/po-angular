@@ -140,7 +140,7 @@ export class PoDatepickerComponent extends PoDatepickerBaseComponent implements 
 
   @HostListener('keyup', ['$event'])
   onKeyup($event: any) {
-    if (this.readonly) {
+    if (this.readonly || $event?.target !== this.inputEl?.nativeElement) {
       return;
     }
 
