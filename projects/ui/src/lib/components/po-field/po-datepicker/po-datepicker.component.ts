@@ -148,12 +148,12 @@ export class PoDatepickerComponent extends PoDatepickerBaseComponent implements 
     // Controla a atualização do model, verificando se a data é valida
     if (this.objMask.valueToModel || this.objMask.valueToModel === '') {
       if (this.objMask.valueToModel.length >= 10) {
-        this.controlModel(this.getDateFromString(this.inputEl.nativeElement.value));
         this.date = this.getDateFromString(this.inputEl.nativeElement.value);
-      } else {
+      } else if (document.activeElement === this.inputEl.nativeElement) {
         this.date = undefined;
-        this.controlModel(this.date);
       }
+
+      this.controlModel(this.date);
     } else {
       this.date = undefined;
     }
