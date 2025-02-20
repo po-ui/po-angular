@@ -144,6 +144,7 @@ import { PoLanguageModule } from '../po-language/po-language.module';
  * Para aplicações que utilizem a abordagem de módulos com carregamento *lazy loading*, caso seja
  * definida outra configuração do `PoI18nModule`, deve-se atentar os seguintes detalhes:
  *
+ * - Caso existam literais comuns na aplicação, estas devem ser reimportadas;
  * - Não defina outra *default language* para este módulo. Caso for definida, será sobreposta para
  * toda a aplicação;
  * - Caso precise de módulos carregados via *lazy loading* com linguagens diferentes, utilize o
@@ -161,8 +162,7 @@ export class PoI18nModule {
       providers: [
         {
           provide: I18N_CONFIG,
-          useValue: config,
-          multi: true
+          useValue: config
         },
         {
           provide: APP_INITIALIZER,
@@ -180,12 +180,12 @@ export class PoI18nModule {
   }
 }
 
-export function initializeLanguageDefault(configs: Array<PoI18nConfig>, languageService: PoLanguageService) {
-  const config = configs.find(c => c.default); // Busca a configuração com `default`
-
-  return () => {
-    if (config?.default.language) {
+export function initializeLanguageDefault(config: PoI18nConfig, languageService: PoLanguageService) {
+  // eslint-disable-next-line sonarjs/prefer-immediate-return
+  const setDefaultLanguage = () => {
+    if (config.default.language) {
       languageService.setLanguageDefault(config.default.language);
     }
   };
+  return setDefaultLanguage;
 }
