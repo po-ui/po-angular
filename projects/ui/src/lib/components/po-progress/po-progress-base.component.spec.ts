@@ -1,10 +1,18 @@
+import { PoThemeA11yEnum, PoThemeService } from '../../services';
 import { expectPropertiesValues } from '../../util-test/util-expect.spec';
 import { convertToBoolean } from '../../utils/util';
 
 import { PoProgressBaseComponent } from './po-progress-base.component';
 
 describe('PoProgressBaseComponent:', () => {
-  const component = new PoProgressBaseComponent();
+  let component: PoProgressBaseComponent;
+  let poThemeService: jasmine.SpyObj<PoThemeService>;
+
+  beforeEach(() => {
+    poThemeService = jasmine.createSpyObj('PoThemeService', ['getA11yDefaultSize', 'getA11yLevel']);
+
+    component = new PoProgressBaseComponent(poThemeService);
+  });
 
   it('should be created', () => {
     expect(component instanceof PoProgressBaseComponent).toBeTruthy();
@@ -33,6 +41,46 @@ describe('PoProgressBaseComponent:', () => {
       const invalidValues = [10, 0.5, 'test', undefined];
 
       expectPropertiesValues(component, 'indeterminate', invalidValues, false);
+    });
+
+    describe('p-size-actions:', () => {
+      it('should update size with valid values', () => {
+        const validValues = ['medium'];
+
+        expectPropertiesValues(component, 'sizeActions', validValues, validValues);
+      });
+
+      it('should update size to `medium` with invalid values', () => {
+        poThemeService.getA11yDefaultSize.and.returnValue('medium');
+
+        const invalidValues = ['extraSmall', 'extraLarge'];
+
+        expectPropertiesValues(component, 'sizeActions', invalidValues, 'medium');
+      });
+
+      it('should use default size when size is not set', () => {
+        poThemeService.getA11yDefaultSize.and.returnValue('small');
+
+        component.sizeActions = undefined;
+        expect(component.sizeActions).toBe('small');
+      });
+
+      it('should return `p-size` if it is defined', () => {
+        component['_sizeActions'] = 'large';
+        expect(component.sizeActions).toBe('large');
+      });
+
+      it('should call `getDefaultSize` and return its value if `p-size` is null or undefined', () => {
+        spyOn(component as any, 'getDefaultSize').and.returnValue('medium');
+
+        component['_sizeActions'] = null;
+        expect(component.sizeActions).toBe('medium');
+        expect(component['getDefaultSize']).toHaveBeenCalled();
+
+        component['_sizeActions'] = undefined;
+        expect(component.sizeActions).toBe('medium');
+        expect(component['getDefaultSize']).toHaveBeenCalledTimes(2);
+      });
     });
 
     it('p-value: should update property with valid values', () => {
@@ -148,6 +196,47 @@ describe('PoProgressBaseComponent:', () => {
     it(`isProgressRangeValue: should be 'false' if 'value' is greater than 100`, () => {
       const value = 120;
       expect(component['isProgressRangeValue'](value)).toBeFalsy();
+    });
+
+    describe('validateSize:', () => {
+      it('should return the same size if valid and accessibility level allows it', () => {
+        poThemeService.getA11yLevel.and.returnValue(PoThemeA11yEnum.AA);
+
+        expect(component['validateSize']('small')).toBe('small');
+        expect(component['validateSize']('medium')).toBe('medium');
+      });
+
+      it('should return `medium` if p-size is `small` and accessibility level is not `AA`', () => {
+        poThemeService.getA11yLevel.and.returnValue(PoThemeA11yEnum.AAA);
+
+        expect(component['validateSize']('small')).toBe('medium');
+      });
+
+      it('should return default size from getA11yDefaultSize if value is invalid', () => {
+        poThemeService.getA11yDefaultSize.and.returnValue('small');
+
+        expect(component['validateSize']('invalid')).toBe('small');
+      });
+
+      it('should return `medium` if default size is `medium`', () => {
+        poThemeService.getA11yDefaultSize.and.returnValue('medium');
+
+        expect(component['validateSize']('invalid')).toBe('medium');
+      });
+    });
+
+    describe('getDefaultSize:', () => {
+      it('should return `small` if getA11yDefaultSize returns `small`', () => {
+        poThemeService.getA11yDefaultSize.and.returnValue('small');
+
+        expect(component['getDefaultSize']()).toBe('small');
+      });
+
+      it('should return `medium` if getA11yDefaultSize returns `medium`', () => {
+        poThemeService.getA11yDefaultSize.and.returnValue('medium');
+
+        expect(component['getDefaultSize']()).toBe('medium');
+      });
     });
   });
 });

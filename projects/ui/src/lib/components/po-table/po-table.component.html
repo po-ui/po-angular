@@ -15,6 +15,7 @@
     <div class="po-table-actions-batch-actions__buttons">
       <po-button
         p-icon="ICON_DELETE"
+        p-size="medium"
         [p-danger]="true"
         [p-disabled]="itemsSelected.length > 1 && serviceDeleteApi !== undefined"
         [p-label]="literals.delete"
@@ -28,6 +29,7 @@
       #columnManagerTarget
       p-icon="ICON_SETTINGS"
       p-kind="tertiary"
+      p-size="medium"
       p-tooltip-position="left"
       [p-aria-label]="literals.columnsManager"
       [p-tooltip]="literals.columnsManager"
@@ -37,6 +39,7 @@
 
   <div *ngIf="!hideTableSearch && hasValidColumns" class="po-table-search">
     <po-search
+      p-size="medium"
       [p-items]="items"
       [p-filter-keys]="filteredColumns"
       [p-filter-type]="filterType"
@@ -93,6 +96,7 @@
 >
   <po-button
     class="po-offset-xl-4 po-offset-lg-4 po-offset-md-3 po-lg-4 po-md-6"
+    p-size="medium"
     [p-disabled]="showMoreDisabled"
     [p-label]="literals.loadMoreData"
     [p-loading]="loadingShowMore"
@@ -132,6 +136,8 @@
             <po-checkbox
               name="selectAll"
               *ngIf="!hideSelectAll"
+              [p-no-padding]="true"
+              p-size="medium"
               (p-change)="selectAllRows()"
               [p-checkboxValue]="selectAll === null ? 'mixed' : selectAll"
             ></po-checkbox>
@@ -471,8 +477,10 @@
               <po-checkbox
                 name="selectAll"
                 *ngIf="!hideSelectAll"
+                p-size="medium"
                 (p-change)="selectAllRows()"
                 [p-checkboxValue]="selectAll === null ? 'mixed' : selectAll"
+                [p-no-padding]="true"
               ></po-checkbox>
             </div>
           </th>
@@ -797,14 +805,21 @@
 </ng-template>
 
 <ng-template #inputRadio let-row>
-  <po-radio [name]="idRadio" [p-checked]="row.$selected" (p-change-selected)="selectRow(row)"></po-radio>
+  <po-radio
+    p-size="medium"
+    [name]="idRadio"
+    [p-checked]="row.$selected"
+    (p-change-selected)="selectRow(row)"
+  ></po-radio>
 </ng-template>
 
 <ng-template #inputCheckbox let-row>
   <po-checkbox
     name="checkbox"
+    p-size="medium"
     (p-change)="selectable ? selectRow(row) : 'javascript:;'"
     [p-checkboxValue]="row.$selected === null ? 'mixed' : row.$selected"
+    [p-no-padding]="true"
   ></po-checkbox>
 </ng-template>
 

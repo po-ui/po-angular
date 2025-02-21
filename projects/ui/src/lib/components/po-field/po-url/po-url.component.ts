@@ -7,9 +7,10 @@ import {
   forwardRef,
   OnDestroy
 } from '@angular/core';
-import { AbstractControl, NG_VALUE_ACCESSOR, NG_VALIDATORS } from '@angular/forms';
+import { AbstractControl, NG_VALIDATORS, NG_VALUE_ACCESSOR } from '@angular/forms';
 import { uuid } from '../../../utils/util';
 
+import { PoThemeService } from '../../../services';
 import { PoInputGeneric } from '../po-input-generic/po-input-generic';
 
 /**
@@ -74,8 +75,12 @@ export class PoUrlComponent extends PoInputGeneric implements AfterViewInit, OnD
   private listener = this.validateClassesForPattern.bind(this);
 
   /* istanbul ignore next */
-  constructor(el: ElementRef, cd: ChangeDetectorRef) {
-    super(el, cd);
+  constructor(
+    el: ElementRef,
+    cd: ChangeDetectorRef,
+    protected poThemeService: PoThemeService
+  ) {
+    super(el, cd, poThemeService);
     this.maxlength = 254;
   }
 

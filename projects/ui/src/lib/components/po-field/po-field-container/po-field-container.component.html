@@ -1,5 +1,5 @@
 <div class="po-field-container">
-  <div class="po-field-container-title">
+  <div class="po-field-container-title" [class.po-field-container-title-aa]="size === 'small'">
     <po-label
       *ngIf="label || help"
       [p-disabled]="disabled"

@@ -20,6 +20,7 @@ export class SamplePoCheckboxGroupLabsComponent implements OnInit {
   options: Array<PoCheckboxGroupOption>;
   properties: Array<string>;
   fieldErrorMessage: string;
+  size: string;
 
   public readonly columnOptions: Array<PoRadioGroupOption> = [
     { label: '1 column', value: 1 },
@@ -35,6 +36,11 @@ export class SamplePoCheckboxGroupLabsComponent implements OnInit {
     { value: 'required', label: 'Required' },
     { value: 'showRequired', label: 'Show Required' },
     { value: 'errorLimit', label: 'Limit Error Message' }
+  ];
+
+  public readonly sizeOptions: Array<PoRadioGroupOption> = [
+    { label: 'small', value: 'small' },
+    { label: 'medium', value: 'medium' }
   ];
 
   ngOnInit() {
@@ -62,6 +68,7 @@ export class SamplePoCheckboxGroupLabsComponent implements OnInit {
     this.options = [];
     this.properties = [];
     this.fieldErrorMessage = '';
+    this.size = 'medium';
 
     this.clearOption();
   }

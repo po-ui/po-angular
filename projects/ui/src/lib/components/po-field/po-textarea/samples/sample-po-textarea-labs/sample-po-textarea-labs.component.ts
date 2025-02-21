@@ -1,6 +1,6 @@
 import { Component, OnInit } from '@angular/core';
 
-import { PoCheckboxGroupOption } from '@po-ui/ng-components';
+import { PoCheckboxGroupOption, PoRadioGroupOption } from '@po-ui/ng-components';
 
 @Component({
   selector: 'sample-po-textarea-labs',
@@ -18,6 +18,7 @@ export class SamplePoTextareaLabsComponent implements OnInit {
   properties: Array<string>;
   fieldErrorMessage: string;
   rows: string;
+  size: string;
   textarea: string;
 
   public readonly propertiesOptions: Array<PoCheckboxGroupOption> = [
@@ -27,6 +28,11 @@ export class SamplePoTextareaLabsComponent implements OnInit {
     { value: 'required', label: 'Required' },
     { value: 'showRequired', label: 'Show Required' },
     { value: 'errorLimit', label: 'Limit Error Message' }
+  ];
+
+  public readonly sizeOptions: Array<PoRadioGroupOption> = [
+    { label: 'small', value: 'small' },
+    { label: 'medium', value: 'medium' }
   ];
 
   ngOnInit() {
@@ -49,5 +55,6 @@ export class SamplePoTextareaLabsComponent implements OnInit {
     this.rows = undefined;
     this.placeholder = '';
     this.properties = [];
+    this.size = 'medium';
   }
 }

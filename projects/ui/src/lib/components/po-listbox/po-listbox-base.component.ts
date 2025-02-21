@@ -7,6 +7,7 @@ import { PoItemListAction } from './po-item-list/interfaces/po-item-list-action.
 
 import { convertToBoolean } from '../../utils/util';
 import { PoItemListFilterMode } from './enums/po-item-list-filter-mode.enum';
+import { PoItemListSize } from './enums/po-item-list-size.enum';
 import { PoListBoxLiterals } from './interfaces/po-listbox-literals.interface';
 import { PoItemListOptionGroup } from './po-item-list/interfaces/po-item-list-option-group.interface';
 import { PoItemListOption } from './po-item-list/interfaces/po-item-list-option.interface';
@@ -36,6 +37,7 @@ export class PoListBoxBaseComponent {
   private _type!: PoItemListType;
   private _literals: PoListBoxLiterals;
   private language: string = poLocaleDefault;
+  private _size?: string = PoItemListSize.medium;
 
   @Input({ alias: 'p-visible', transform: convertToBoolean }) visible: boolean = false;
 
@@ -148,6 +150,15 @@ export class PoListBoxBaseComponent {
   @Input('p-filtering') isFiltering: boolean = false;
 
   @Input('p-should-mark-letter') shouldMarkLetters: boolean = true;
+
+  // Define o font-size do componente.
+  @Input('p-size') set size(value: string) {
+    this._size = PoItemListSize[value] ? PoItemListSize[value] : PoItemListSize.medium;
+  }
+
+  get size(): string {
+    return this._size;
+  }
 
   @Input('p-compare-cache') compareCache: boolean = false;
 

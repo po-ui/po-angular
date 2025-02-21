@@ -1,5 +1,6 @@
 export * from './enums/po-progress-status.enum';
 export * from './enums/po-progress-size.enum';
+export * from './enums/po-progress-size-actions.enum';
 
 export * from './interfaces/';
 

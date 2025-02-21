@@ -1,9 +1,11 @@
 import { Directive, EventEmitter, Input, Output } from '@angular/core';
-import { AbstractControl, ControlValueAccessor, Validator, Validators } from '@angular/forms';
+import { AbstractControl, ControlValueAccessor, Validator } from '@angular/forms';
 
 import { requiredFailed } from '../validators';
 import { convertToBoolean, convertToInt, uuid } from './../../../utils/util';
 
+import { PoThemeService } from '../../../services';
+import { PoFieldSize } from '../enums/po-field-size.enum';
 import { PoCheckboxGroupOptionView } from './interfaces/po-checkbox-group-option-view.interface';
 import { PoCheckboxGroupOption } from './interfaces/po-checkbox-group-option.interface';
 
@@ -190,6 +192,7 @@ export class PoCheckboxGroupBaseComponent implements ControlValueAccessor, Valid
   private _indeterminate?: boolean = false;
   private _options?: Array<PoCheckboxGroupOption>;
   private _required?: boolean = false;
+  private _size?: string = undefined;
 
   /**
    * @optional
@@ -301,6 +304,32 @@ export class PoCheckboxGroupBaseComponent implements ControlValueAccessor, Valid
    */
   @Input('p-show-required') showRequired: boolean = false;
 
+  /**
+   * @optional
+   *
+   * @description
+   *
+   * Define o tamanho dos checkboxes do componente conforme os valores especificados no enum `PoFieldSize`:
+   * - small: 16px
+   * - medium: 24px
+   *
+   * > A medida `small` **só estará disponível** quando a acessibilidade AA estiver configurada. Caso contrário, mesmo
+   * que o tamanho seja definido como `small`, a medida padrão `medium` será mantida. Para mais informações sobre como
+   * configurar a acessibilidade AA, consulte a documentação do [po-theme](https://po-ui.io/documentation/po-theme).
+   *
+   * @default `medium`
+   *
+   */
+  @Input('p-size') set size(value: string) {
+    this._size = this.validateSize(value);
+  }
+
+  get size(): string {
+    return this._size ?? this.getDefaultSize();
+  }
+
+  constructor(protected poThemeService: PoThemeService) {}
+
   changeValue() {
     const value = this.checkIndeterminate();
 
@@ -405,6 +434,20 @@ export class PoCheckboxGroupBaseComponent implements ControlValueAccessor, Valid
     const gridSystemColumns = poCheckboxGroupColumnsTotalLength / columns;
 
     return this.checkColumnsRange(columns, maxColumns) ? gridSystemColumns : poCheckboxGroupColumnsDefaultLength;
+  }
+
+  private getDefaultSize(): string {
+    return this.poThemeService.getA11yDefaultSize() === 'small' ? PoFieldSize.small : PoFieldSize.medium;
+  }
+
+  private validateSize(value: string): string {
+    if (value && Object.values(PoFieldSize).includes(value as PoFieldSize)) {
+      if (value === PoFieldSize.small && this.poThemeService.getA11yLevel() !== 'AA') {
+        return PoFieldSize.medium;
+      }
+      return value;
+    }
+    return this.poThemeService.getA11yDefaultSize() === 'small' ? PoFieldSize.small : PoFieldSize.medium;
   }
 
   private isInvalidIndeterminate() {

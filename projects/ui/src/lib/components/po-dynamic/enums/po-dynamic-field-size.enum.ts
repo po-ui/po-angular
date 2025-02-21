@@ -1,0 +1,14 @@
+/**
+ * @usedBy PoDynamicFormComponent
+ *
+ * @description
+ *
+ * Enum para configurar o tamanho (`p-size`) dos fields no componente.
+ */
+export enum PoDynamicFieldSize {
+  /** Define o tamanho dos fields com altura de 32px, disponível para acessibilidade AA. */
+  small = 'small',
+
+  /** Define o tamanho dos fields com altura de 44px. */
+  medium = 'medium'
+}

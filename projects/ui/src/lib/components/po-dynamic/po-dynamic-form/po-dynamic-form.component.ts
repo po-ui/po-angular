@@ -1,8 +1,9 @@
-import { Component, ChangeDetectorRef, OnDestroy, OnInit, ViewChild } from '@angular/core';
+import { ChangeDetectorRef, Component, OnDestroy, OnInit, ViewChild } from '@angular/core';
 import { NgForm } from '@angular/forms';
 
 import { Observable, Subject, Subscription } from 'rxjs';
 
+import { PoThemeService } from '../../../services';
 import { PoDynamicFormBaseComponent } from './po-dynamic-form-base.component';
 import { PoDynamicFormField } from './po-dynamic-form-field.interface';
 import { PoDynamicFormLoad } from './po-dynamic-form-load/po-dynamic-form-load.interface';
@@ -71,9 +72,10 @@ export class PoDynamicFormComponent extends PoDynamicFormBaseComponent implement
   constructor(
     private changes: ChangeDetectorRef,
     private loadService: PoDynamicFormLoadService,
-    private validationService: PoDynamicFormValidationService
+    private validationService: PoDynamicFormValidationService,
+    protected poThemeService: PoThemeService
   ) {
-    super();
+    super(poThemeService);
   }
 
   ngOnDestroy() {
