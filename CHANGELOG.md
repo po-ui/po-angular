@@ -2,6 +2,14 @@
 
 All notable changes to this project will be documented in this file. See [standard-version](https://github.com/conventional-changelog/standard-version) for commit guidelines.
 
+### [17.26.16](https://github.com/po-ui/po-angular/compare/v17.26.15...v17.26.16) (2025-02-24)
+
+
+### Bug Fixes
+
+* **multiselect:** corrige remoção da tag para value 0 ([4d9ea82](https://github.com/po-ui/po-angular/commit/4d9ea82ecd23cd5427049054d8faa0e1c90826a4))
+* **table:** corrige warnings indesejados ao utilizar po-column-template ([70c46c9](https://github.com/po-ui/po-angular/commit/70c46c940a3e5e2ab4c1bc135ff370e6851e3a1f))
+
 ### [17.26.15](https://github.com/po-ui/po-angular/compare/v17.26.14...v17.26.15) (2025-02-20)
 
 
