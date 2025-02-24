@@ -102,7 +102,7 @@ import { ICONS_DICTIONARY, PoIconDictionary } from '../po-icon';
 @Component({
   selector: 'po-table',
   templateUrl: './po-table.component.html',
-  providers: [PoDateService]
+  providers: [PoDateService, PoTableService]
 })
 export class PoTableComponent extends PoTableBaseComponent implements AfterViewInit, DoCheck, OnDestroy, OnInit {
   @ContentChild(PoTableRowTemplateDirective, { static: true }) tableRowTemplate: PoTableRowTemplateDirective;
