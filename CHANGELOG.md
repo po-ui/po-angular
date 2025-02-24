@@ -9,6 +9,7 @@ All notable changes to this project will be documented in this file. See [standa
 
 * **multiselect:** corrige remoção da tag para value 0 ([e05d5d0](https://github.com/po-ui/po-angular/commit/e05d5d0c3a5e1519dd8df6a9f7938dd7b05a5468))
 * **table:** corrige warnings indesejados ao utilizar po-column-template ([0a20b6f](https://github.com/po-ui/po-angular/pull/2391/commits/0a20b6f27cfdfd602da3e55598384f18ab744e9f))
+* **stepper:** evita validação excessiva de canActiveNextStep ([98f2429](https://github.com/po-ui/po-angular/pull/2388/commits/98f2429769d919d6b8e9748b2aee6c611c307f4e))
 
 ### [19.3.1](https://github.com/po-ui/po-angular/compare/v19.3.0...v19.3.1) (2025-02-20)
 
