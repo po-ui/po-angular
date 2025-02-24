@@ -11,7 +11,7 @@ describe('PoTableService', () => {
   beforeEach(() => {
     TestBed.configureTestingModule({
       imports: [],
-      providers: [provideHttpClient(withInterceptorsFromDi()), provideHttpClientTesting()]
+      providers: [provideHttpClient(withInterceptorsFromDi()), provideHttpClientTesting(), PoTableService]
     });
     service = TestBed.inject(PoTableService);
   });
