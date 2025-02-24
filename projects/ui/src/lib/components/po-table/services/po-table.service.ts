@@ -6,9 +6,7 @@ import { isTypeof } from '../../../utils/util';
 import { PoTableFilter } from '../interfaces/po-table-filter.interface';
 import { PoTableFilteredItemsParams } from '../interfaces/po-table-filtered-items-params.interface';
 
-@Injectable({
-  providedIn: 'root'
-})
+@Injectable()
 export class PoTableService implements PoTableFilter {
   readonly headers: HttpHeaders = new HttpHeaders({
     'X-PO-No-Message': 'true'

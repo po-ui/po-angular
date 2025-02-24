@@ -67,7 +67,7 @@ describe('PoTableComponent:', () => {
   let tableHeaderElement;
   let tableElement;
   let tableFooterElement;
-  let poTableService: PoTableService;
+  const poTableService: jasmine.SpyObj<PoTableService> = jasmine.createSpyObj('PoTableService', ['scrollListener']);
 
   // mocks
   let actions: Array<PoTableAction>;
@@ -236,7 +236,7 @@ describe('PoTableComponent:', () => {
         PoDateService,
         DecimalPipe,
         PoColorPaletteService,
-        PoTableService,
+        { provide: PoTableService, useValue: poTableService },
         { provide: CdkVirtualScrollViewport, useValue: mockViewPort },
         { provide: changeDetector, useValue: changeDetector },
         provideHttpClient(withInterceptorsFromDi()),
@@ -256,8 +256,6 @@ describe('PoTableComponent:', () => {
     fixture.detectChanges();
 
     component.infiniteScroll = false;
-
-    poTableService = TestBed.inject(PoTableService);
 
     nativeElement = fixture.debugElement.nativeElement;
 
@@ -2933,7 +2931,7 @@ describe('PoTableComponent:', () => {
     component.height = 100;
     component.infiniteScroll = true;
 
-    component['subscriptionScrollEvent'] = poTableService.scrollListener(dummyElement).subscribe();
+    component['subscriptionScrollEvent'] = component['defaultService'].scrollListener(dummyElement).subscribe();
 
     component['removeListeners']();
 
@@ -3022,7 +3020,7 @@ describe('PoTableComponent:', () => {
 
     component.tableScrollable = new ElementRef(mockScrollableElement);
 
-    const spyScrollListener = spyOn(poTableService, 'scrollListener').and.returnValue(
+    const spyScrollListener = spyOn(component['defaultService'], 'scrollListener').and.returnValue(
       of({ target: { offsetHeight: 100, scrollTop: 100, scrollHeight: 1 } })
     );
 
@@ -3045,7 +3043,7 @@ describe('PoTableComponent:', () => {
 
     component.tableVirtualScroll = mockTableVirtualScroll;
 
-    const spyScrollListener = spyOn(poTableService, 'scrollListener').and.returnValue(
+    const spyScrollListener = spyOn(component['defaultService'], 'scrollListener').and.returnValue(
       of({ target: { offsetHeight: 100, scrollTop: 100, scrollHeight: 1 } })
     );
 
