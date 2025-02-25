@@ -2,7 +2,7 @@ import { ComponentFixture, TestBed } from '@angular/core/testing';
 import { FormsModule } from '@angular/forms';
 
 import * as UtilsFunctions from '../../../utils/util';
-import { configureTestSuite, expectPropertiesValues, expectSettersMethod } from './../../../util-test/util-expect.spec';
+import { configureTestSuite, expectSettersMethod } from './../../../util-test/util-expect.spec';
 
 import { removeDuplicatedOptions, removeUndefinedAndNullOptions } from '../../../utils/util';
 import { PoFieldContainerComponent } from '../po-field-container/po-field-container.component';
@@ -16,9 +16,6 @@ describe('PoSelectComponent:', () => {
   let component: PoSelectComponent;
   let fixture: ComponentFixture<PoSelectComponent>;
   let nativeElement;
-  const booleanValidFalseValues = [false, 'false'];
-  const booleanValidTrueValues = [true, 'true', ''];
-  const booleanInvalidValues = [undefined, null, 2, 'string'];
 
   const event = new MouseEvent('click', { 'bubbles': false, 'cancelable': true });
 
@@ -152,7 +149,8 @@ describe('PoSelectComponent:', () => {
         selectedValue: '',
         displayValue: label => {},
         updateModel: value => {},
-        emitChange: value => {}
+        emitChange: value => {},
+        getValueUpdate: value => {}
       };
 
       spyOn(fakeThis, 'emitChange');
@@ -496,6 +494,48 @@ describe('PoSelectComponent:', () => {
       const defaultLabel = 'label';
       expectSettersMethod(component, 'fieldLabel', '', 'fieldLabel', defaultLabel);
       expect(component.fieldLabel).toEqual(defaultLabel);
+    });
+  });
+
+  describe('controlValueWithLabel', () => {
+    it('should return the object when controlValueWithLabel is true', () => {
+      const option = { value: 1, label: 'Xpto' };
+
+      component.controlValueWithLabel = true;
+
+      expect(component['getValueUpdate'](option)).toEqual(option);
+    });
+
+    it('should only return the value when controlValueWithLabel is false', () => {
+      const option = { value: 1, label: 'Xpto' };
+
+      component.controlValueWithLabel = false;
+
+      expect(component['getValueUpdate'](option)).toEqual(1);
+    });
+
+    it('should return a {value: any, label: any} object when controlValueWithLabel is true and both fieldValue and fieldLabel are set', () => {
+      const option = { id: 1, name: 'Xpto' };
+
+      component.controlValueWithLabel = true;
+      component.fieldValue = 'id';
+      component.fieldLabel = 'name';
+
+      expect(component['getValueUpdate'](option)).toEqual({ value: 1, label: 'Xpto' });
+    });
+
+    it('should only return the value when calling getValueWrite when controlValueWithLabel is true', () => {
+      component.controlValueWithLabel = true;
+      const option = { value: 1, label: 'Xpto' };
+
+      expect(component['getValueWrite'](option)).toEqual(1);
+    });
+
+    it('should return when calling getValueWrite when controlValueWithLabel is true and the object structure does not contain the value property', () => {
+      component.controlValueWithLabel = true;
+      const data = 1;
+
+      expect(component['getValueWrite'](data)).toEqual(data);
     });
   });
 });

@@ -277,7 +277,8 @@ describe('PoMultiselectBaseComponent:', () => {
     const fakeThis = {
       onModelChange: v => {},
       eventChange: v => {},
-      getValuesFromOptions: v => []
+      getValuesFromOptions: v => [],
+      getValueUpdate: v => []
     };
 
     spyOn(fakeThis, 'onModelChange');
@@ -701,6 +702,49 @@ describe('PoMultiselectBaseComponent:', () => {
       component.debounceTime = 600;
 
       expect(component.debounceTime).toBe(600);
+    });
+  });
+
+  describe('controlValueWithLabel', () => {
+    it('should return the object when controlValueWithLabel is true', () => {
+      const selectedOptions = [{ value: 1, label: 'Xpto' }];
+
+      component.controlValueWithLabel = true;
+
+      expect(component['getValueUpdate'](selectedOptions)).toEqual(selectedOptions);
+    });
+
+    it('should only return the value when controlValueWithLabel is false', () => {
+      const selectedOptions = [{ value: 1, label: 'Xpto' }];
+
+      component.controlValueWithLabel = false;
+
+      expect(component['getValueUpdate'](selectedOptions)).toEqual([1]);
+    });
+
+    it('should return a {value: any, label: any} object when controlValueWithLabel is true and both fieldValue and fieldLabel are set', () => {
+      const selectedOptions = [{ id: 1, name: 'Xpto' }];
+
+      component.controlValueWithLabel = true;
+      component.fieldValue = 'id';
+      component.fieldLabel = 'name';
+
+      expect(component['getValueUpdate'](selectedOptions)).toEqual([{ value: 1, label: 'Xpto' }]);
+    });
+
+    it('should only return the value when calling getValueWrite when controlValueWithLabel is true', () => {
+      component.controlValueWithLabel = true;
+      const option = [{ value: 1, label: 'Xpto' }];
+
+      expect(component['getValueWrite'](option)).toEqual([1]);
+    });
+
+    it('should return when calling getValueWrite when controlValueWithLabel is true and the object structure does not contain the value property', () => {
+      const option = [{ id: 1, name: 'Xpto' }];
+
+      component.controlValueWithLabel = true;
+
+      expect(component['getValueWrite'](option)).toEqual(option);
     });
   });
 });

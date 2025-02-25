@@ -334,6 +334,13 @@ export abstract class PoComboBaseComponent implements ControlValueAccessor, OnIn
    */
   @Output('p-input-change') inputChange: EventEmitter<string> = new EventEmitter<string>();
 
+  /**
+   * @docsPrivate
+   *
+   * Determinar se o valor do compo deve retorna objeto do tipo {value: any, label: any}
+   */
+  @Input({ alias: 'p-control-value-with-label', transform: convertToBoolean }) controlValueWithLabel?: boolean = false;
+
   cacheOptions: Array<any> = [];
   defaultService: PoComboFilterService;
   firstInWriteValue: boolean = true;
@@ -936,6 +943,7 @@ export abstract class PoComboBaseComponent implements ControlValueAccessor, OnIn
 
   // Recebe as alterações do model
   writeValue(value: any) {
+    value = this.getValueWrite(value);
     this.fromWriteValue = true;
 
     if (validValue(value) && !this.service && this.comboOptionsList && this.comboOptionsList.length) {
@@ -1067,6 +1075,27 @@ export abstract class PoComboBaseComponent implements ControlValueAccessor, OnIn
     };
   }
 
+  private getValueUpdate(data: any, selectedOption: any) {
+    const { [this.dynamicValue]: value, [this.dynamicLabel]: label } = selectedOption || {};
+
+    if (this.controlValueWithLabel && value) {
+      return {
+        value,
+        label
+      };
+    }
+
+    return data;
+  }
+
+  private getValueWrite(data: any) {
+    if (this.controlValueWithLabel && data?.value) {
+      return data?.value;
+    }
+
+    return data;
+  }
+
   private hasDuplicatedOption(options: Array<any>, currentOption: string, accumulatedGroupOptions?: Array<any>) {
     if (accumulatedGroupOptions) {
       return accumulatedGroupOptions.some(option => option[this.dynamicLabel] === currentOption);
@@ -1180,7 +1209,7 @@ export abstract class PoComboBaseComponent implements ControlValueAccessor, OnIn
   private updateModel(value: any): void {
     if (value !== this.selectedValue) {
       if (!this.fromWriteValue) {
-        this.callModelChange(value);
+        this.callModelChange(this.getValueUpdate(value, this.selectedOption));
       }
 
       this.change.emit(this.emitObjectValue ? this.selectedOption : value);
