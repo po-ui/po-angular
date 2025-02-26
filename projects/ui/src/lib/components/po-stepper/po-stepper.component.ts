@@ -264,16 +264,12 @@ export class PoStepperComponent extends PoStepperBaseComponent implements AfterC
       return of(false);
     }
 
-    const isAllowNextStep$ = this.checkAllowNextStep(nextStepIndex, step);
+    const isAllowNextStep$ = this.checkAllowNextStep(nextStepIndex);
 
     return typeof isAllowNextStep$ === 'boolean' ? of(isAllowNextStep$) : isAllowNextStep$;
   }
 
-  private canActiveNextStep(
-    currentActiveStep = <PoStepComponent>{},
-    nextStepIndex?: number,
-    step?: PoStepComponent
-  ): Observable<boolean> {
+  private canActiveNextStep(currentActiveStep = <PoStepComponent>{}, nextStepIndex?: number): Observable<boolean> {
     const isCurrentStep = this.isCurrentStep(nextStepIndex);
 
     if (!currentActiveStep.canActiveNextStep) {
@@ -283,7 +279,7 @@ export class PoStepperComponent extends PoStepperBaseComponent implements AfterC
       return of(true);
     }
 
-    const canActiveNextStep$ = this.getCanActiveNextStepObservable(currentActiveStep, step);
+    const canActiveNextStep$ = this.getCanActiveNextStepObservable(currentActiveStep);
 
     return of(this.isBeforeStep(nextStepIndex)).pipe(
       mergeMap(isBefore => {
@@ -310,24 +306,14 @@ export class PoStepperComponent extends PoStepperBaseComponent implements AfterC
     );
   }
 
-  private checkAllowNextStep(nextStepIndex: number, step?: PoStepComponent): Observable<boolean> {
+  private checkAllowNextStep(nextStepIndex: number): Observable<boolean> {
     return this.usePoSteps
-      ? this.canActiveNextStep(this.currentActiveStep, nextStepIndex, step)
+      ? this.canActiveNextStep(this.currentActiveStep, nextStepIndex)
       : of(this.steps.slice(this.step, nextStepIndex).every(step => step.status === PoStepperStatus.Done));
   }
 
-  private getCanActiveNextStepObservable(
-    currentActiveStep: PoStepComponent,
-    step?: PoStepComponent
-  ): Observable<boolean> {
-    let canActiveNextStep: any;
-
-    if (step && step.status === PoStepperStatus.Done) {
-      canActiveNextStep = false;
-    } else {
-      canActiveNextStep = currentActiveStep.canActiveNextStep(currentActiveStep);
-    }
-
+  private getCanActiveNextStepObservable(currentActiveStep: PoStepComponent): Observable<boolean> {
+    const canActiveNextStep = currentActiveStep.canActiveNextStep(currentActiveStep);
     return canActiveNextStep instanceof Observable ? canActiveNextStep : of(canActiveNextStep);
   }
 

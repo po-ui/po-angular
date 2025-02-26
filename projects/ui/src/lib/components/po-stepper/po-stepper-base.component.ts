@@ -1,6 +1,6 @@
 import { EventEmitter, Input, Output, Directive, TemplateRef } from '@angular/core';
 
-import { convertToBoolean } from '../../utils/util';
+import { convertToBoolean, uuid } from '../../utils/util';
 
 import { PoStepComponent } from './po-step/po-step.component';
 import { PoStepperItem } from './po-stepper-item.interface';
@@ -195,7 +195,10 @@ export class PoStepperBaseComponent {
    */
   @Input('p-steps') set steps(steps: Array<PoStepperItem>) {
     this._steps = Array.isArray(steps) ? steps : [];
-    this._steps.forEach(step => (step.status = step.status ?? PoStepperStatus.Default));
+    this._steps.forEach(step => {
+      step.status = step.status ?? PoStepperStatus.Default;
+      step.id = step.id ?? uuid();
+    });
     this.initializeSteps();
   }
 
