@@ -551,7 +551,7 @@ describe('PoStepperComponent:', () => {
         done();
       });
 
-      expect(spyOnCanActiveNextStep).toHaveBeenCalledWith(component['currentActiveStep'], nextStepIndex, undefined);
+      expect(spyOnCanActiveNextStep).toHaveBeenCalledWith(component['currentActiveStep'], nextStepIndex);
     });
 
     it('allowNextStep: should return false if `isBeforeStep` and `canActiveNextStep` are false', (done: DoneFn) => {
@@ -632,7 +632,7 @@ describe('PoStepperComponent:', () => {
         done();
       });
 
-      expect(component['checkAllowNextStep']).toHaveBeenCalledWith(nextStepIndex, undefined);
+      expect(component['checkAllowNextStep']).toHaveBeenCalledWith(nextStepIndex);
     });
 
     it('canActiveNextStep: should return true if `currentActiveStep.canActiveNextStep` function return true', (done: DoneFn) => {
@@ -1068,16 +1068,17 @@ describe('PoStepperComponent:', () => {
     });
   });
 
-  it('getCanActiveNextStepObservable: should return false if step.status is Done', (done: DoneFn) => {
+  it('getCanActiveNextStepObservable: should return result of canActiveNextStep', (done: DoneFn) => {
+    const canActivateNextStepResult = true;
     const currentActiveStep = {
-      canActiveNextStep: jasmine.createSpy()
+      canActiveNextStep: jasmine.createSpy().and.returnValue(canActivateNextStepResult)
     } as unknown as PoStepComponent;
 
     const step = { status: PoStepperStatus.Done } as unknown as PoStepComponent;
 
-    component['getCanActiveNextStepObservable'](currentActiveStep, step).subscribe(result => {
-      expect(result).toBe(false);
-      expect(currentActiveStep.canActiveNextStep).not.toHaveBeenCalled();
+    component['getCanActiveNextStepObservable'](currentActiveStep).subscribe(result => {
+      expect(result).toBe(canActivateNextStepResult);
+      expect(currentActiveStep.canActiveNextStep).toHaveBeenCalled();
       done();
     });
   });
@@ -1094,7 +1095,7 @@ describe('PoStepperComponent:', () => {
 
     const step = { status: PoStepperStatus.Active } as PoStepComponent;
 
-    component['getCanActiveNextStepObservable'](currentActiveStep, step).subscribe(result => {
+    component['getCanActiveNextStepObservable'](currentActiveStep).subscribe(result => {
       expect(result).toBe(true);
       expect(currentActiveStep.canActiveNextStep).toHaveBeenCalledWith(currentActiveStep);
       done();
