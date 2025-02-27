@@ -161,6 +161,78 @@ describe('PoDatepickerComponent:', () => {
     expect(component.date).toBeUndefined();
   });
 
+  it('should set invalid value when pass invalid value in writevalue', () => {
+    component['objMask'] = {
+      keyup: jasmine.createSpy('keyup'),
+      valueToModel: ''
+    };
+    component.inputEl.nativeElement.value = '25/12/2018';
+
+    const input = fixture.debugElement.nativeElement.querySelector('input');
+
+    component.writeValue('1');
+
+    component.format = 'dd/mm/aaaa';
+    component['objMask'].valueToModel = '1';
+    component.errorPattern = 'Invalid Date';
+    component.hasInvalidClass = () => true;
+    fixture.detectChanges();
+
+    spyOn(component, 'callOnChange');
+
+    input.dispatchEvent(keyboardEvents('keypress', 9));
+    input.dispatchEvent(keyboardEvents('keydown', 9));
+    input.dispatchEvent(keyboardEvents('keyup', 9));
+    fixture.debugElement.nativeElement.querySelector('input').dispatchEvent(new Event('blur'));
+
+    expect(component.callOnChange).toHaveBeenCalled();
+
+    const errorElement = fixture.debugElement.nativeElement.querySelector('.po-field-container-bottom-text-error');
+
+    const content = errorElement.innerHTML.toString();
+    expect(content.includes('Invalid Date')).toBeTrue();
+  });
+
+  it('should return if readonly is true', () => {
+    component['objMask'] = {
+      keyup: jasmine.createSpy('keyup'),
+      valueToModel: ''
+    };
+    component.readonly = true;
+    const event = new KeyboardEvent('keyup', { key: 'A' });
+
+    component.onKeyup(event);
+
+    expect(component['objMask'].keyup).not.toHaveBeenCalled();
+  });
+
+  it('should return if key pressed is Tab', () => {
+    component['objMask'] = {
+      keyup: jasmine.createSpy('keyup'),
+      valueToModel: ''
+    };
+    component.readonly = false;
+    const event = new KeyboardEvent('keyup', { key: 'Tab' });
+
+    component.onKeyup(event);
+
+    expect(component['objMask'].keyup).not.toHaveBeenCalled();
+  });
+
+  it('should define undefined date if valueToModel contains less then 10 characters', () => {
+    component['objMask'] = {
+      keyup: jasmine.createSpy('keyup'),
+      valueToModel: ''
+    };
+    component['objMask'].valueToModel = '12/12/2';
+    spyOn(component, 'controlModel');
+
+    component.onKeyup(new KeyboardEvent('keyup', { key: '1' }));
+
+    expect(component.controlModel).toHaveBeenCalledWith(undefined);
+    expect(component.date).toBeUndefined();
+  });
+
   it('check if element has overlay class ', () => {
     const datepicker = fixture.nativeElement.querySelector('.po-input');
     datepicker.classList.add('po-datepicker-calendar-overlay');
