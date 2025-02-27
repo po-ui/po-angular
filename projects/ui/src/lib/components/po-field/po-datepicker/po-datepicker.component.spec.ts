@@ -1,5 +1,5 @@
 import { ComponentFixture, fakeAsync, TestBed, tick } from '@angular/core/testing';
-import { Component } from '@angular/core';
+import { Component, ElementRef } from '@angular/core';
 
 import * as UtilsFunctions from '../../../utils/util';
 import { formatYear, setYearFrom0To100 } from '../../../utils/util';
@@ -40,6 +40,8 @@ describe('PoDatepickerComponent:', () => {
     component.required = true;
     component.clean = true;
     component.date = new Date();
+    component.inputEl = new ElementRef(document.createElement('input'));
+    document.body.appendChild(component.inputEl.nativeElement);
   });
 
   it('should be created', () => {
@@ -161,6 +163,83 @@ describe('PoDatepickerComponent:', () => {
     expect(component.date).toBeUndefined();
   });
 
+  it('should set invalid value when pass invalid value in writevalue', () => {
+    component['objMask'] = {
+      keyup: jasmine.createSpy('keyup'),
+      valueToModel: ''
+    };
+    component.inputEl.nativeElement.value = '25/12/2018';
+
+    const input = fixture.debugElement.nativeElement.querySelector('input');
+
+    component.writeValue('1');
+
+    component.format = 'dd/mm/aaaa';
+    component['objMask'].valueToModel = '1';
+    component.errorPattern = 'Invalid Date';
+    component.hasInvalidClass = () => true;
+    fixture.detectChanges();
+
+    spyOn(component, 'callOnChange');
+
+    input.dispatchEvent(keyboardEvents('keypress', 9));
+    input.dispatchEvent(keyboardEvents('keydown', 9));
+    input.dispatchEvent(keyboardEvents('keyup', 9));
+    fixture.debugElement.nativeElement.querySelector('input').dispatchEvent(new Event('blur'));
+
+    expect(component.callOnChange).toHaveBeenCalled();
+
+    const errorElement = fixture.debugElement.nativeElement.querySelector('.po-field-container-bottom-text-error');
+
+    const content = errorElement.innerHTML.toString();
+    expect(content.includes('Invalid Date')).toBeTrue();
+  });
+
+  it('should return if readonly is true', () => {
+    component['objMask'] = {
+      keyup: jasmine.createSpy('keyup'),
+      valueToModel: ''
+    };
+    component.readonly = true;
+    const event = new KeyboardEvent('keyup', { key: 'A' });
+
+    component.onKeyup(event);
+
+    expect(component['objMask'].keyup).not.toHaveBeenCalled();
+  });
+
+  it('should return if event is not input element', () => {
+    const event = new KeyboardEvent('keyup', { key: 'Enter' });
+
+    spyOn(component, 'callOnChange');
+    component['objMask'] = {
+      keyup: jasmine.createSpy('keyup'),
+      valueToModel: '1'
+    };
+    component.readonly = false;
+    component.inputEl.nativeElement.focus();
+    component.onKeyup(event);
+
+    expect(component.callOnChange).not.toHaveBeenCalled();
+  });
+
+  it('should define this.date undefined', () => {
+    const input = fixture.debugElement.nativeElement.querySelector('input');
+    component.inputEl = {
+      nativeElement: input
+    };
+    component['objMask'] = {
+      keyup: jasmine.createSpy('keyup')
+    };
+    component.date = '1';
+    component.readonly = false;
+    component.inputEl.nativeElement.focus();
+    input.dispatchEvent(keyboardEvents('keyup', 13));
+    document.body.appendChild(component.inputEl.nativeElement);
+
+    expect(component.date).toBeUndefined();
+  });
+
   it('check if element has overlay class ', () => {
     const datepicker = fixture.nativeElement.querySelector('.po-input');
     datepicker.classList.add('po-datepicker-calendar-overlay');
@@ -172,12 +251,16 @@ describe('PoDatepickerComponent:', () => {
     const input = fixture.debugElement.nativeElement.querySelector('input');
     component.format = 'dd/mm/aaaa';
     component['objMask'].valueToModel = '';
+    component.inputEl = {
+      nativeElement: input
+    };
 
     spyOn(component, 'callOnChange');
 
     input.dispatchEvent(keyboardEvents('keypress', 13));
     input.dispatchEvent(keyboardEvents('keydown', 13));
     input.dispatchEvent(keyboardEvents('keyup', 13));
+    document.body.appendChild(component.inputEl.nativeElement);
 
     expect(component.callOnChange).toHaveBeenCalled();
   });
@@ -201,6 +284,10 @@ describe('PoDatepickerComponent:', () => {
     component.el.nativeElement.classList.add('ng-dirty');
     component.inputEl.nativeElement.value = 'teste';
     expect(component.hasInvalidClass()).toBe(true);
+  });
+
+  afterEach(() => {
+    document.body.removeChild(component.inputEl.nativeElement);
   });
 });
 
@@ -1027,7 +1114,7 @@ describe('PoDatepickerComponent:', () => {
       };
 
       spyOn(fakeThis, 'controlModel');
-      component.onKeyup.call(fakeThis, {});
+      component.onKeyup.call(fakeThis, { target: component.inputEl.nativeElement });
       expect(fakeThis.controlModel).toHaveBeenCalled();
     });
 
