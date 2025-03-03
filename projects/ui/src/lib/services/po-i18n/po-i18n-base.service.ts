@@ -36,6 +36,24 @@ import { I18N_CONFIG } from './po-i18n-config-injection-token';
  * porém, nenhuma das propriedades são obrigatórias. Caso nenhum parâmetro seja passado, serão buscadas
  * todas as literais do contexto definido com padrão, no idioma definido como padrão.
  *
+ * * ## Alterações a partir da versão 19
+ * A partir da versão 19, para evitar conflitos com bibliotecas de terceiros que também utilizam i18n,
+ * é necessário passar explicitamente o contexto ao chamar `getLiterals`, garantindo a correta exibição das literais.
+ * Caso `getLiterals` seja chamado sem parâmetros, o retorno pode vir das configurações da biblioteca de terceiros.
+ *
+ * **Exemplo de chamada com contexto explícito:**
+ * ```typescript
+ * poI18nService.getLiterals({ context: 'general' }).subscribe(literals => console.log(literals));
+ * ```
+ *
+ * **Cenário de Contextos Iguais:**
+ * Caso tanto a aplicação quanto uma biblioteca de terceiros utilizem o mesmo nome de contexto,
+ * o PO UI fará um merge das literais, priorizando os valores definidos na aplicação cliente.
+ *
+ * **Recomendações:**
+ * - Sempre informar o contexto ao chamar `getLiterals` para evitar conflitos de literais.
+ * - Caso a aplicação utilize `lazy loading`, utilizar `setLanguage()` para garantir a correta configuração de idioma.
+ *
  * Exemplos de requisição:
  * ```
  * literals = {};
@@ -144,6 +162,7 @@ import { I18N_CONFIG } from './po-i18n-config-injection-token';
  *   }));
  *
  * });
+ *
  * ```
  */
 
