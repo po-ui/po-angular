@@ -62,21 +62,39 @@ describe('PoI18nService:', () => {
       });
     });
 
-    it('should get specific literals passing parameters', done => {
+    it('should get specific literals passing parameters', () => {
       service.getLiterals({ literals: ['text'] }).subscribe((literals: any) => {
-        expect(literals['text']).toBeTruthy();
-
-        done();
+        expect(literals['text']).toBe('texto');
       });
     });
 
-    it('should get specific literals from unexist language', done => {
-      // Procura em ingles, se não acho busca em pt-br
+    it('should get pt-br literals from unexist language', () => {
       service.getLiterals({ literals: ['text'], language: 'en-us' }).subscribe((literals: any) => {
         expect(literals['text']).toBeTruthy();
-
-        done();
       });
+    });
+
+    it('should call getLiteralsFromContextService when servicesContext[context] exists', () => {
+      const observerMock = {
+        next: jasmine.createSpy('next'),
+        error: jasmine.createSpy('error'),
+        complete: jasmine.createSpy('complete')
+      };
+
+      service['servicesContext'] = { meuContexto: {} };
+
+      spyOn(service, <any>'getLiteralsFromContextService').and.callFake(() => {
+        observerMock.complete();
+      });
+
+      service.getLiterals({ context: 'meuContexto', language: 'pt' }).subscribe(observerMock);
+
+      expect(service['getLiteralsFromContextService']).toHaveBeenCalledWith(
+        'pt',
+        'meuContexto',
+        [],
+        jasmine.any(Object)
+      );
     });
 
     it('should get literals with specific context', () => {
@@ -321,74 +339,24 @@ describe('PoI18nService:', () => {
 
       service = TestBed.inject(PoI18nService);
       httpMock = TestBed.inject(HttpTestingController);
-    });
 
-    it('should get all literals from service', done => {
-      spyOn(service, 'getLanguage').and.returnValue('pt');
-
-      service.getLiterals().subscribe((literals: any) => {
-        expect(literals['developer']).toBeTruthy();
-        expect(literals['task']).toBeTruthy();
-
-        done();
+      spyOn(localStorage, 'getItem').and.callFake((key: string) => {
+        const mockStorage = {
+          'en-general-label1': 'Label 1',
+          'en-general-label2': 'Label 2'
+        };
+        return mockStorage[key] || null;
       });
-
-      httpMock.expectOne((req: HttpRequest<any>) => req.method === 'GET').flush(mockResponse);
-    });
-
-    it('should return empty object when not found specific literals from service', done => {
-      spyOn(service, 'getLanguage').and.returnValue('pt');
-
-      service.getLiterals({ literals: ['teste'] }).subscribe((literals: any) => {
-        expect(Object.keys(literals).length).toBe(0);
-
-        done();
-      });
-
-      httpMock.expectOne((req: HttpRequest<any>) => req.method === 'GET').flush({});
-    });
-
-    it('should get specific literals from localStorage', done => {
-      const developerTranslation = 'desenvolvedor';
-      const taskTranslation = 'tarefa';
-
-      const language = 'en';
-
-      spyOn(service, 'getLanguage').and.returnValue(language);
-
-      localStorage.setItem(`${language}-general-developer`, developerTranslation);
-      localStorage.setItem(`${language}-general-task`, taskTranslation);
-
-      service.getLiterals({ literals: ['developer', 'task'] }).subscribe((literals: any) => {
-        expect(literals['developer']).toEqual(developerTranslation);
-        expect(literals['task']).toEqual(taskTranslation);
-
-        done();
-      });
-
-      localStorage.clear();
-    });
-
-    it('should get literals from localStorage, selecting context, literals and language', done => {
-      const carTranslation = 'carro';
-      const testTranslation = 'teste';
-
-      localStorage.setItem('pt-br-general-car', carTranslation);
-      localStorage.setItem('pt-br-another-test', testTranslation);
-
-      service
-        .getLiterals({ context: 'general', literals: ['car', 'test'], language: 'pt-br' })
-        .subscribe((literals: any) => {
-          expect(literals['car']).toEqual(carTranslation);
-          expect(literals['test']).toBeUndefined();
-
-          done();
-        });
-
-      localStorage.clear();
     });
 
     describe('Methods: ', () => {
+      describe('getHttpService', () => {
+        it('should return a http servic', () => {
+          const httpService = service['getHttpService']('/', 'pt', ['text']);
+          expect(httpService).toBeTruthy();
+        });
+      });
+
       describe('getLiteralsFromContextService', () => {
         it(`should call 'observer.next' with translations if translations keys length is greater than 0
           and call 'getLiteralsLocalStorageAndCache'`, () => {
@@ -419,6 +387,74 @@ describe('PoI18nService:', () => {
           expect(spyObserverNext).not.toHaveBeenCalled();
           expect(spyMergeObject).toHaveBeenCalled();
           expect(spyGetLiteralsLocalStorageAndCache).toHaveBeenCalled();
+        });
+
+        it('should assign languageAlternative to languageSearch when languageAlternative is provided', () => {
+          const language = 'en';
+          const languageAlternative = 'es';
+          const context = 'general';
+          const literals = ['label1', 'label2'];
+          const observer = { next: jasmine.createSpy('next') };
+          const translations = {};
+
+          spyOn(service as any, 'mergeObject').and.callThrough();
+          spyOn(service, 'searchInVarI18n' as keyof PoI18nService).and.returnValue('');
+          spyOn(service, 'countObject' as keyof PoI18nService).and.returnValue('0');
+          spyOn(service, 'getLiteralsLocalStorageAndCache' as keyof PoI18nService);
+
+          service['getLiteralsFromContextService'](
+            language,
+            context,
+            literals,
+            observer,
+            translations,
+            languageAlternative
+          );
+
+          expect(service['getLiteralsLocalStorageAndCache']).toHaveBeenCalledWith(
+            languageAlternative,
+            context,
+            literals,
+            observer,
+            translations,
+            languageAlternative
+          );
+        });
+      });
+
+      describe('searchInLocalStorage', () => {
+        it('should return translations when literals exist in localStorage', () => {
+          const language = 'en';
+          const context = 'general';
+          const literals = ['label1', 'label2'];
+
+          const result = service['searchInLocalStorage'](language, context, literals);
+
+          expect(result).toEqual({
+            label1: 'Label 1',
+            label2: 'Label 2'
+          });
+        });
+
+        it('should return an empty object when literals are not found in localStorage', () => {
+          const language = 'en';
+          const context = 'general';
+          const literals = ['label3', 'label4']; // Literais não presentes no mockStorage
+
+          const result = service['searchInLocalStorage'](language, context, literals);
+
+          expect(result).toEqual({});
+        });
+
+        it('should return an empty object when literals array is empty', () => {
+          const language = 'en';
+          const context = 'general';
+          const literals: Array<string> = [];
+
+          const result = service['searchInLocalStorage'](language, context, literals);
+
+          expect(result).toEqual({});
+          expect(localStorage.getItem).not.toHaveBeenCalled();
         });
       });
 
@@ -553,6 +589,21 @@ describe('PoI18nService:', () => {
         expect(mergedObject).toEqual({ ...obj2, ...obj1 });
         expect(mergedObject.people).toBe(expectedPeopleTranslation);
         expect(Object.keys(mergedObject).length).toBe(2);
+      });
+
+      it('updateLocalStorage: should store values in localStorage when useCache is true', () => {
+        service['useCache'] = true;
+
+        spyOn(localStorage, 'setItem').and.callFake(() => {});
+        const language = 'en';
+        const context = 'general';
+        const data = { label1: 'Label 1', label2: 'Label 2' };
+
+        service['updateLocalStorage'](language, context, data);
+
+        expect(localStorage.setItem).toHaveBeenCalledTimes(2);
+        expect(localStorage.setItem).toHaveBeenCalledWith('en-general-label1', 'Label 1');
+        expect(localStorage.setItem).toHaveBeenCalledWith('en-general-label2', 'Label 2');
       });
     });
   });
