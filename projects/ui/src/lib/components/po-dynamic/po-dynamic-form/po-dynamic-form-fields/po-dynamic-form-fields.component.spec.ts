@@ -1,6 +1,6 @@
 import { ComponentFixture, TestBed } from '@angular/core/testing';
 import { FormsModule, NgForm, ReactiveFormsModule } from '@angular/forms';
-import { SimpleChange } from '@angular/core';
+import { SimpleChange, SimpleChanges } from '@angular/core';
 
 import { of } from 'rxjs';
 
@@ -82,6 +82,19 @@ describe('PoDynamicFormFieldsComponent: ', () => {
       component.ngOnChanges(fieldsChange);
 
       expect(component['hasChangeContainer']).toHaveBeenCalled();
+    });
+
+    it('ngOnChanges: should update `previousValue` with the changes in `p-value`', () => {
+      const value = { name: 'name' };
+      component.value = value;
+
+      const changes: SimpleChanges = {
+        value: new SimpleChange(null, value, true)
+      };
+
+      component.ngOnChanges(changes);
+
+      expect(component['previousValue']).toEqual(value);
     });
 
     it('trackBy: should return index', () => {
