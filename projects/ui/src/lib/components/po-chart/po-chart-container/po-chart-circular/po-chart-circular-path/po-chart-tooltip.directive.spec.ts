@@ -130,24 +130,30 @@ describe('PoChartTooltipDirective', () => {
     });
 
     it('hideTooltip: should set `hidden` in `visibility`', () => {
-      directive.tooltip = 'TEXT';
-
+      directive.tooltipElement = document.createElement('div');
+      const rendererSetStyleSpy = spyOn(directive['renderer'], 'setStyle');
       directive['hideTooltip']();
 
-      fixture.detectChanges();
-
-      expect(getComputedStyle(directive.tooltipElement).getPropertyValue('visibility')).toEqual('hidden');
+      expect(rendererSetStyleSpy).toHaveBeenCalledWith(directive.tooltipElement, 'visibility', 'hidden');
     });
 
-    it('showTooltip: should set `visible` in visibility', () => {
-      directive.tooltip = 'TEXT';
+    it('showTooltip: should set visibility to visible and update text content', () => {
+      directive.tooltipElement = document.createElement('div');
+      directive.tooltip = 'Novo Texto';
+      directive.lastTooltipText = 'Texto Antigo';
 
-      spyOn(directive, <any>'updatetooltipTextContent');
+      const rendererSetStyleSpy = spyOn(directive['renderer'], 'setStyle');
+      const rendererRemoveChildSpy = spyOn(directive['renderer'], 'removeChild');
+      const rendererCreateTextSpy = spyOn(directive['renderer'], 'createText');
+      const rendererAppendChildSpy = spyOn(directive['renderer'], 'appendChild');
 
       directive['showTooltip']();
 
-      expect(directive['updatetooltipTextContent']).toHaveBeenCalled();
-      expect(getComputedStyle(directive.tooltipElement).getPropertyValue('visibility')).toEqual('visible');
+      expect(rendererSetStyleSpy).toHaveBeenCalledWith(directive.tooltipElement, 'visibility', 'visible');
+      expect(rendererSetStyleSpy).toHaveBeenCalledWith(directive.tooltipElement, 'opacity', 0.9);
+      expect(rendererRemoveChildSpy).toHaveBeenCalled();
+      expect(rendererCreateTextSpy).toHaveBeenCalledWith('Novo Texto');
+      expect(rendererAppendChildSpy).toHaveBeenCalled();
     });
 
     it('tooltipPosition: should add class `po-invisible`', () => {
