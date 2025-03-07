@@ -47,4 +47,15 @@ export interface PoChartAxisOptions {
    * Define o tipo do label e a formatação exibida no eixo de valor.
    */
   labelType?: PoChartLabelFormat;
+
+  /**
+   * @optional
+   *
+   * @description
+   *
+   * Permite aumentar ou diminuir o espaço o espaço esquerdo do gráfico
+   *
+   * @default `48`
+   */
+  paddingLeft?: number;
 }
