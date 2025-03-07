@@ -1,0 +1,24 @@
+<div *ngIf="series.length" [class.expanded]="isExpanded" id="chart-container">
+  <div class="po-chart-header">
+    <div class="po-chart-header-title">
+      <strong> {{ title }} </strong>
+    </div>
+
+    <div class="po-chart-header-actions">
+      <po-button p-icon="ICON_LIST_BULLETS" p-kind="tertiary" (p-click)="openModal()"></po-button>
+      <po-button p-icon="ICON_EXPAND" p-kind="tertiary" (p-click)="toggleExpand()"></po-button>
+      <po-button #targetPopup p-icon="ICON_MORE_VERT" p-kind="tertiary" (p-click)="popup.toggle()"></po-button>
+    </div>
+  </div>
+  <div
+    id="chart-id"
+    class="po-chart"
+    [ngStyle]="headerHeight ? { height: height - headerHeight + 'px', 'margin-top': chartMarginTop } : null"
+  ></div>
+  <div #tooltipElement id="custom-tooltip" [p-tooltip]="tooltipText" style="position: absolute"></div>
+  <po-popup #popup [p-actions]="popupActions" p-position="bottom" [p-target]="targetRef"> </po-popup>
+</div>
+
+<po-modal #modalComponent [p-click-out]="true" [p-title]="title" [p-primary-action]="actionModal">
+  <po-table [p-hide-columns-manager]="true" [p-items]="itemsTable" [p-columns]="columnsTable"> </po-table>
+</po-modal>

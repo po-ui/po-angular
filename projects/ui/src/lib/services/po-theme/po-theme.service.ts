@@ -469,6 +469,8 @@ export class PoThemeService {
           Object.entries(values).flatMap(([tonality, tonalityValues]) => {
             if (type === 'action') {
               return [`--color-${type}-${tonality}: ${tonalityValues};`];
+            } else if (type === 'categorical') {
+              return [`--color-caption-${type}-${tonality}: ${tonalityValues};`];
             } else {
               return Object.entries(tonalityValues).map(
                 ([level, colorValue]) => `--color-${type}-${tonality}-${level}: ${colorValue};`
