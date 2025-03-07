@@ -38,7 +38,6 @@ import { PoChartSerie } from '../po-chart/interfaces/po-chart-serie.interface';
 @Component({
   selector: 'po-chart-new',
   templateUrl: './po-chart-new.component.html',
-  styleUrl: './po-chart-new.component.css',
   standalone: false
 })
 export class PoChartNewComponent extends PoChartNewBaseComponent implements AfterViewInit {
