@@ -51,6 +51,10 @@ export class PoDynamicFormFieldsComponent extends PoDynamicFormFieldsBaseCompone
         this.setContainerFields();
       }
     }
+
+    if (changes.value) {
+      this.updatePreviousValue();
+    }
   }
 
   focus(property: string) {
