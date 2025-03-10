@@ -2,6 +2,14 @@
 
 All notable changes to this project will be documented in this file. See [standard-version](https://github.com/conventional-changelog/standard-version) for commit guidelines.
 
+### [17.26.17](https://github.com/po-ui/po-angular/compare/v17.26.16...v17.26.17) (2025-03-10)
+
+
+### Bug Fixes
+
+* **dynamic-form:** ajusta emissão de evento para p-validate ([a012fb4](https://github.com/po-ui/po-angular/commit/a012fb4a3fcd56da5e11c526ee0196f0e61e3984))
+* **table:** corrige requisição de múltiplas tabelas ([dab1d5d](https://github.com/po-ui/po-angular/commit/dab1d5dcfeb7cdea935d766c03644f02138085a6))
+
 ### [17.26.16](https://github.com/po-ui/po-angular/compare/v17.26.15...v17.26.16) (2025-02-24)
 
 
