@@ -2,6 +2,20 @@
 
 All notable changes to this project will be documented in this file. See [standard-version](https://github.com/conventional-changelog/standard-version) for commit guidelines.
 
+## [19.5.0](https://github.com/po-ui/po-angular/compare/v19.4.0...v19.5.0) (2025-03-10)
+
+
+### Features
+
+* **components:** adiciona nova propriedade 'p-control-value-with-label' ([a31728d](https://github.com/po-ui/po-angular/commit/a31728d05732716a7f6d5ba703d2e282624e8bdb))
+
+
+### Bug Fixes
+
+* **dynamic-form:** ajusta emissão de evento para p-validate ([70f4b8d](https://github.com/po-ui/po-angular/commit/70f4b8d0d057c0d13670d48af76aeadf5c6b917c))
+* **stepper:** corrige navegação entre os steps ([6f26e9a](https://github.com/po-ui/po-angular/commit/6f26e9a964f58e6ba6f290ac50116968c2bb4ec8))
+* **table:** corrige requisição de múltiplas tabelas ([006bb7b](https://github.com/po-ui/po-angular/commit/006bb7b0d5e9058acd21ad8bd25c13e4df6be7e8))
+
 ### [19.4.0](https://github.com/po-ui/po-angular/compare/v19.3.1...v19.4.0) (2025-02-24)
 
 
