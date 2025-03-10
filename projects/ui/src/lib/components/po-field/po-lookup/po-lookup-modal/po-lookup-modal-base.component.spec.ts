@@ -723,8 +723,8 @@ describe('PoLookupModalBaseComponent:', () => {
       expect(component.selecteds).toEqual(expectSelecteds);
     });
 
-    it('setDisclaimersItems: should set selecteds with [{ value: component.selectedItems }] if selectedItems isnt array', () => {
-      const expectSelecteds = [{ value: 123456789 }];
+    it('setDisclaimersItems: should set selecteds with [component.selectedItems] if selectedItems isnt array', () => {
+      const expectSelecteds = [123456789];
       component.multiple = true;
       component.selectedItems = 123456789;
 
