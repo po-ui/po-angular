@@ -58,20 +58,32 @@ export class PoLookupModalComponent extends PoLookupModalBaseComponent implement
   }
 
   // Seleciona um item na tabela
-  onSelect(item) {
+  onSelect(selectedItem) {
     if (this.multiple) {
-      this.selecteds = [...this.selecteds, { value: item[this.fieldValue], label: item[this.fieldLabel], ...item }];
+      this.selectedItems = this.selectedItems ? [...this.selectedItems, selectedItem] : [selectedItem];
     } else {
-      this.selecteds = [{ value: item[this.fieldValue], label: item[this.fieldLabel], ...item }];
+      this.selectedItems = [selectedItem];
     }
+    this.selecteds = [...this.selectedItems];
   }
 
   // Remove a seleção de um item na tabela
   onUnselect(unselectedItem) {
-    this.selecteds = this.selecteds.filter(itemSelected => itemSelected.value !== unselectedItem[this.fieldValue]);
+    if (this.multiple) {
+      this.selectedItems = this.selectedItems.filter(item => item.value !== unselectedItem.value);
+    } else {
+      this.selectedItems = [];
+    }
+    this.selecteds = [...this.selectedItems];
   }
 
   onUnselectFromDisclaimer(removedDisclaimer) {
+    this.selectedItems = this.selectedItems.filter(item => item.value !== removedDisclaimer.value);
+    if (this.selectedItems.length === 0) {
+      this.selecteds = [];
+    } else {
+      this.selecteds = [...this.selectedItems];
+    }
     this.poTable.unselectRowItem(item => item[this.fieldValue] === removedDisclaimer.value);
   }
 
