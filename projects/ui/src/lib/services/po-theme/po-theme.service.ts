@@ -52,29 +52,7 @@ export class PoThemeService {
     this.renderer = rendererFactory.createRenderer(null, null);
     this._iconToken = value ?? AnimaliaIconDictionary;
 
-    // set triple A for all themes (its the base theme)
-    // result: html:root
-    this.setPerComponentAndOnRoot(undefined, poThemeDefaultAAA.perComponent, poThemeDefaultAAA.onRoot);
-
-    // set double A
-    // result: html[class*="-AA"]:root
-    this.setPerComponentAndOnRoot({ a11y: PoThemeA11yEnum.AA }, poThemeDefaultAA.perComponent, poThemeDefaultAA.onRoot);
-
-    // set Light mode values
-    // result: html[class*="-light"]:root
-    this.setPerComponentAndOnRoot(
-      { type: PoThemeTypeEnum.light },
-      poThemeDefaultLightValues.perComponent,
-      poThemeDefaultLightValues.onRoot
-    );
-
-    // set Dark mode values
-    // result: html[class*="-dark"]:root
-    this.setPerComponentAndOnRoot(
-      { type: PoThemeTypeEnum.dark },
-      poThemeDefaultDarkValues.perComponent,
-      poThemeDefaultDarkValues.onRoot
-    );
+    this.setDefaultBaseStyle();
   }
 
   /**
@@ -94,6 +72,9 @@ export class PoThemeService {
     a11yLevel: PoThemeA11yEnum = PoThemeA11yEnum.AAA,
     persistPreference: boolean = true
   ): void {
+    if (themeConfig === poThemeDefault) {
+      this.resetBaseTheme();
+    }
     // Change theme name, remove special characteres and number, replace space with dash
     this.formatTheme(themeConfig, themeType, a11yLevel);
 
@@ -549,5 +530,40 @@ export class PoThemeService {
   setCurrentThemeA11y(a11y: PoThemeA11yEnum = PoThemeA11yEnum.AAA) {
     const _theme = this.getThemeActive();
     this.setThemeA11y(_theme, a11y);
+  }
+
+  public resetBaseTheme() {
+    const styleElement = this.document.head.querySelector('#baseStyle');
+    if (styleElement) {
+      this.renderer.removeChild(this.document.head, styleElement);
+    }
+
+    this.setDefaultBaseStyle();
+  }
+
+  private setDefaultBaseStyle() {
+    // set triple A for all themes (its the base theme)
+    // result: html:root
+    this.setPerComponentAndOnRoot(undefined, poThemeDefaultAAA.perComponent, poThemeDefaultAAA.onRoot);
+
+    // set double A
+    // result: html[class*="-AA"]:root
+    this.setPerComponentAndOnRoot({ a11y: PoThemeA11yEnum.AA }, poThemeDefaultAA.perComponent, poThemeDefaultAA.onRoot);
+
+    // set Light mode values
+    // result: html[class*="-light"]:root
+    this.setPerComponentAndOnRoot(
+      { type: PoThemeTypeEnum.light },
+      poThemeDefaultLightValues.perComponent,
+      poThemeDefaultLightValues.onRoot
+    );
+
+    // set Dark mode values
+    // result: html[class*="-dark"]:root
+    this.setPerComponentAndOnRoot(
+      { type: PoThemeTypeEnum.dark },
+      poThemeDefaultDarkValues.perComponent,
+      poThemeDefaultDarkValues.onRoot
+    );
   }
 }
