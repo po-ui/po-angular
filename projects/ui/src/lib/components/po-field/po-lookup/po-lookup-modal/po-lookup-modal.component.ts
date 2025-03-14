@@ -55,30 +55,49 @@ export class PoLookupModalComponent extends PoLookupModalBaseComponent implement
 
   // Seleciona um item na tabela
   onSelect(item) {
+    const formattedItem = {
+      value: item[this.fieldValue],
+      label: item[this.fieldLabel],
+      ...item
+    };
     if (this.multiple) {
-      this.selecteds = [...this.selecteds, { value: item[this.fieldValue], label: item[this.fieldLabel], ...item }];
+      this.selectedItems = this.selectedItems ? [...this.selectedItems, formattedItem] : [formattedItem];
     } else {
-      this.selecteds = [{ value: item[this.fieldValue], label: item[this.fieldLabel], ...item }];
+      this.selectedItems = [formattedItem];
     }
+    this.selecteds = [...this.selectedItems];
   }
 
   // Remove a seleção de um item na tabela
   onUnselect(unselectedItem) {
-    this.selecteds = this.selecteds.filter(itemSelected => itemSelected.value !== unselectedItem[this.fieldValue]);
+    if (this.multiple) {
+      this.selectedItems = this.selectedItems.filter(item => item.value !== unselectedItem[this.fieldValue]);
+    } else {
+      this.selectedItems = [];
+    }
+    this.selecteds = [...this.selectedItems];
   }
 
   onUnselectFromDisclaimer(removedDisclaimer) {
+    this.selectedItems = this.selectedItems.filter(item => item.value !== removedDisclaimer.value);
+    if (this.selectedItems.length === 0) {
+      this.selecteds = [];
+    } else {
+      this.selecteds = [...this.selectedItems];
+    }
     this.poTable.unselectRowItem(item => item[this.fieldValue] === removedDisclaimer.value);
   }
 
   // Seleciona todos os itens visíveis na tabela
   onAllSelected(items) {
-    this.selecteds = items.map(item => ({ value: item[this.fieldValue], label: item[this.fieldLabel], ...item }));
+    this.selectedItems = items.map(item => ({ value: item[this.fieldValue], label: item[this.fieldLabel], ...item }));
+    this.selecteds = [...this.selectedItems];
   }
 
   // Remove a seleção de todos os itens visíveis na tabela
   onAllUnselected(items) {
     this.poTable.unselectRows();
+    this.selectedItems = [];
     this.selecteds = [];
   }
 
