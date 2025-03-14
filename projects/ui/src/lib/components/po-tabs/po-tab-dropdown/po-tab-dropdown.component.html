@@ -1,5 +1,12 @@
 <div class="po-tab-dropdown-content po-tab-button-default">
-  <po-button #button p-kind="tertiary" [p-aria-label]="label" p-icon="ICON_ARROW_DOWN" (p-click)="toggleDropdown()">
+  <po-button
+    #button
+    p-kind="tertiary"
+    [p-aria-label]="label"
+    p-icon="ICON_ARROW_DOWN"
+    [p-size]="size"
+    (p-click)="toggleDropdown()"
+  >
   </po-button>
 </div>
 
@@ -10,6 +17,7 @@
     p-type="action"
     [p-items]="tabs"
     [p-is-tabs]="true"
+    [p-size]="size"
     (p-activated-tabs)="activated.emit($event)"
     (p-change-state-tabs)="changeState.emit($event)"
     (p-click-tabs)="closeDropdown(); click.emit($event)"

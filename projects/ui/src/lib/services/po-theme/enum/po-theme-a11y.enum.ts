@@ -1,29 +1,33 @@
 /**
- * Enum para definir os níveis de acessibilidade suportados pelo serviço de temas.
- *
  * @usedBy PoThemeService
  *
- * @example
- *
- * Em um serviço de tema, você pode usar este enum de acessibilidade para alternar entre os níveis de temas suportados.
+ * @description
+ * Enum para configurar o nível de acessibilidade dos componentes através do serviço de tema.
  *
  * ```
  * import { PoThemeA11yEnum } from '@po-ui/theme';
  *
- * // Definindo o nível de acessibilidade ao setar o tema junto com o tipo
+ * // Definindo o nível de acessibilidade ao configurar as cores e o tipo do tema (light | dark)
  * themeService.setTheme(...theme, ...type, PoThemeA11yEnum.AA);
  *
- * // Definir o tema junto com o nível de acessibilidade
+ * // Definindo o nível de acessibilidade ao configurar apenas as cores do tema
  * themeService.setThemeA11y(...theme, PoThemeA11yEnum.AAA);
  *
- * // Definir o nível de acessibilidade de um tema já aplicado
+ * // Alterando o nível de acessibilidade com as cores do tema já definidas
  * themeService.setCurrentThemeA11y(PoThemeA11yEnum.AAA);
  * ```
  */
 export enum PoThemeA11yEnum {
-  /** Nível de acessibilidade duplo A (AA) */
+  /** Nível de acessibilidade AA.
+   * - Define a espessura do `outline` para **2px**.
+   * - Disponibiliza o tamanho `small` para componentes de formulário (buttons, inputs, checkboxes, radios e switches)
+   * conforme suas documentações.
+   */
   AA = 'AA',
 
-  /** Nível de acessibilidade triplo A (AAA) */
+  /** Nível de acessibilidade AAA.
+   * - Define a espessura do `outline` para **4px**.
+   * - Não disponibiliza o tamanho `small` para componentes de formulário.
+   */
   AAA = 'AAA'
 }

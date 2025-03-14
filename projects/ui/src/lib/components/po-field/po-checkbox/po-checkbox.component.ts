@@ -11,9 +11,10 @@ import {
 } from '@angular/core';
 import { NG_VALUE_ACCESSOR } from '@angular/forms';
 
-import { ICONS_DICTIONARY, AnimaliaIconDictionary } from '../../po-icon';
+import { AnimaliaIconDictionary, ICONS_DICTIONARY } from '../../po-icon';
 import { PoKeyCodeEnum } from './../../../enums/po-key-code.enum';
 
+import { PoThemeService } from '../../../services';
 import { PoCheckboxBaseComponent } from './po-checkbox-base.component';
 
 /**
@@ -56,9 +57,10 @@ export class PoCheckboxComponent extends PoCheckboxBaseComponent implements Afte
 
   constructor(
     @Optional() @Inject(ICONS_DICTIONARY) value: { [key: string]: string },
-    private changeDetector: ChangeDetectorRef
+    private changeDetector: ChangeDetectorRef,
+    protected poThemeService: PoThemeService
   ) {
-    super();
+    super(poThemeService);
 
     this._iconToken = value ?? AnimaliaIconDictionary;
   }

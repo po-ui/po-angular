@@ -1,5 +1,4 @@
 import { Observable } from 'rxjs';
-
 import { PoMultiselectOption } from './po-multiselect-option.interface';
 
 /**

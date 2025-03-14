@@ -5,6 +5,7 @@
         <po-tab-button
           #tabButton
           class="po-tab-button"
+          [class.po-tab-button-aa]="size === 'small'"
           [p-active]="tab.active"
           [p-disabled]="tab.disabled"
           [p-hide]="tab.hide"
@@ -27,6 +28,7 @@
         class="po-tab-dropdown"
         [class.po-tab-dropdown-device]="!tabsDefault?.length"
         [p-label]="literals.moreTabs"
+        [p-size]="size"
         [p-tabs]="overflowedTabs"
         (p-change-state)="onTabChangeState($event)"
         (p-click)="onTabActiveByDropdown($event)"

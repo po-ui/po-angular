@@ -9,9 +9,9 @@ export * from './po-page-list/po-page-list-literals.interface';
 export * from './po-page-list/po-page-list.component';
 export * from './po-page-slide/po-page-slide.component';
 
-export * from './po-page.interface';
-export * from './po-page-action.interface';
-export * from './po-page-filter.interface';
+export * from './interfaces/po-page.interface';
+export * from './interfaces/po-page-action.interface';
+export * from './interfaces/po-page-filter.interface';
 
 export * from './po-page-slide/po-page-slide.module';
 export * from './po-page.module';

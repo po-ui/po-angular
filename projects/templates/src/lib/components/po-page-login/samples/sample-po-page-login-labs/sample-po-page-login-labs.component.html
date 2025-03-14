@@ -1,5 +1,6 @@
 <po-page-login
   [p-background]="background"
+  [p-components-size]="componentsSize"
   [p-contact-email]="contactEmail"
   [p-custom-field]="customField"
   [p-environment]="environment"
@@ -27,7 +28,7 @@
 <form #f="ngForm">
   <div class="po-row">
     <po-input
-      class="po-lg-6"
+      class="po-md-6"
       name="literals"
       [(ngModel)]="literals"
       p-help='Ex.: {"submitLabel":"Access System", "highlightInfo": "Awesome, PO is beautiful!!!"}'
@@ -37,7 +38,7 @@
     </po-input>
 
     <po-input
-      class="po-lg-6"
+      class="po-md-6"
       name="productName"
       [(ngModel)]="productName"
       p-clean
@@ -117,6 +118,16 @@
       [p-options]="propertiesOptions"
     >
     </po-checkbox-group>
+
+    <po-radio-group
+      class="po-md-12 po-lg-6"
+      name="componentsSize"
+      [(ngModel)]="componentsSize"
+      p-label="Components size"
+      p-help="Para aplicar o tamanho small, configure o nível de acessibilidade para AA, ajustável no navbar ou serviço de tema (https://po-ui.io/documentation/po-theme)."
+      [p-options]="componentsSizeOptions"
+    >
+    </po-radio-group>
   </div>
 
   <po-divider p-label="Login Errors"></po-divider>
@@ -260,6 +271,6 @@
   <hr />
 
   <div class="po-row">
-    <po-button class="po-md-3" p-label="Sample Restore" (p-click)="restore()"> </po-button>
+    <po-button class="po-lg-3 po-md-6" p-label="Sample Restore" (p-click)="restore()"> </po-button>
   </div>
 </form>

@@ -1,8 +1,8 @@
-import { PoTableBoolean } from './po-table-boolean.interface';
 import { PoTableColumnIcon } from '../po-table-column-icon/po-table-column-icon.interface';
 import { PoTableColumnLabel } from '../po-table-column-label/po-table-column-label.interface';
 import { PoTableDetail } from '../po-table-detail/po-table-detail.interface';
 import { PoTableSubtitleColumn } from '../po-table-subtitle-footer/po-table-subtitle-column.interface';
+import { PoTableBoolean } from './po-table-boolean.interface';
 
 /**
  * @usedBy PoTableComponent

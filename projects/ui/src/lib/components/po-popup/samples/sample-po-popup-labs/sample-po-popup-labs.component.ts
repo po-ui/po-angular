@@ -1,6 +1,12 @@
 import { Component, ElementRef, OnInit, ViewChild } from '@angular/core';
 
-import { PoNotificationService, PoCheckboxGroupOption, PoSelectOption, PoPopupAction } from '@po-ui/ng-components';
+import {
+  PoCheckboxGroupOption,
+  PoNotificationService,
+  PoPopupAction,
+  PoRadioGroupOption,
+  PoSelectOption
+} from '@po-ui/ng-components';
 
 @Component({
   selector: 'sample-po-popup-labs',
@@ -24,6 +30,7 @@ export class SamplePoPopupLabsComponent implements OnInit {
   position: string;
   positions: string;
   properties: Array<string>;
+  size: string;
 
   public readonly actionOptions: Array<PoCheckboxGroupOption> = [
     { label: 'Disabled', value: 'disabled' },
@@ -57,6 +64,11 @@ export class SamplePoPopupLabsComponent implements OnInit {
 
   public readonly propertiesOptions: Array<PoCheckboxGroupOption> = [{ value: 'hideArrow', label: 'Hide arrow' }];
 
+  public readonly sizeOptions: Array<PoRadioGroupOption> = [
+    { label: 'small', value: 'small' },
+    { label: 'medium', value: 'medium' }
+  ];
+
   public readonly typeOptions: Array<PoSelectOption> = [
     { label: 'Danger', value: 'danger' },
     { label: 'Default', value: 'default' }
@@ -86,6 +98,7 @@ export class SamplePoPopupLabsComponent implements OnInit {
     this.position = undefined;
     this.positions = '';
     this.properties = [];
+    this.size = 'medium';
     this.restoreActionForm();
   }
 

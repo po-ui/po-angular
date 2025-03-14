@@ -12,15 +12,18 @@
         p-icon="ICON_USER"
         class="po-field-icon {{ disabled ? 'po-icon-input-disabled' : 'po-icon-input' }}"
         [class.po-field-icon-disabled]="disabled"
+        [class.po-field-icon-aa]="size === 'small'"
       ></po-icon>
     </div>
 
     <input
       #inp
-      class="po-input po-input-icon-left"
+      class="po-input {{ size === 'small' ? 'po-input-aa' : '' }} po-input-icon-left"
+      [class.po-input-icon-left-aa]="size === 'small'"
       [attr.name]="name"
       [autocomplete]="autocomplete"
       [class.po-input-icon-right]="clean"
+      [class.po-input-icon-right-aa]="clean && size === 'small'"
       [disabled]="disabled"
       [id]="id"
       [placeholder]="disabled ? '' : placeholder"
@@ -39,6 +42,7 @@
         class="po-icon-input"
         *ngIf="clean && !disabled && !readonly"
         [p-element-ref]="inputEl"
+        [p-size]="size"
         (p-change-event)="clear($event)"
       >
       </po-clean>
