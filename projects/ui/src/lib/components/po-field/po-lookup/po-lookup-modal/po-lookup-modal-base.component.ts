@@ -431,13 +431,12 @@ export abstract class PoLookupModalBaseComponent implements OnDestroy, OnInit {
 
   //Método responsável por criar os disclaimers quando abre o modal.
   setDisclaimersItems() {
-    if (this.selectedItems && !Array.isArray(this.selectedItems)) {
-      this.multiple ? (this.selecteds = [{ value: this.selectedItems }]) : (this.selecteds = [this.selectedItems]);
-      return;
-    }
-
-    if (this.selecteds.length === 0 && this.selectedItems && this.selectedItems.length) {
+    if (this.selectedItems && Array.isArray(this.selectedItems) && this.selectedItems.length > 0) {
       this.selecteds = [...this.selectedItems];
+    } else if (this.selectedItems && !Array.isArray(this.selectedItems)) {
+      this.selecteds = [this.selectedItems];
+    } else {
+      this.selecteds = [];
     }
   }
 

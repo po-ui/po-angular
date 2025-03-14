@@ -241,14 +241,15 @@ describe('PoLookupModalComponent', () => {
 
     it('onSelect: should concat table item in selecteds', () => {
       component.multiple = true;
-      component.selecteds = [{ value: 'Doe', label: 'Jane' }];
+      component.selectedItems = [{ value: 'Doe', label: 'Jane' }];
+      component.selecteds = [...component.selectedItems];
 
-      component.fieldLabel = 'name';
-      component.fieldValue = 'value';
       const item = {
         name: 'John',
-        value: 'Lenon'
+        value: 'Lenon',
+        label: 'John'
       };
+
       component.onSelect(item);
 
       expect(component.selecteds).toEqual([
@@ -259,17 +260,32 @@ describe('PoLookupModalComponent', () => {
 
     it('onSelect: should override table item in selecteds', () => {
       component.multiple = false;
-      component.selecteds = [{ value: 'Doe', label: 'Jane' }];
 
-      component.fieldLabel = 'name';
-      component.fieldValue = 'value';
+      component.selectedItems = [{ value: 'Doe', label: 'Jane' }];
+      component.selecteds = [...component.selectedItems];
+
       const item = {
         name: 'John',
-        value: 'Lenon'
+        value: 'Lenon',
+        label: 'John'
       };
+
       component.onSelect(item);
 
-      expect(component.selecteds).toEqual([{ value: 'Lenon', label: 'John', name: 'John' }]);
+      expect(component.selecteds).toEqual([{ name: 'John', value: 'Lenon', label: 'John' }]);
+    });
+
+    it('onSelect: should initialize selectedItems with [selectedItem] when selectedItems is null or undefined', () => {
+      component.multiple = true;
+      component.selectedItems = null;
+
+      const selectedItem = { label: 'John', value: 1 };
+
+      component.onSelect(selectedItem);
+
+      expect(component.selectedItems).toEqual([selectedItem]);
+
+      expect(component.selecteds).toEqual([selectedItem]);
     });
 
     it('onAllUnselected: should be called and clean all items on table', () => {
@@ -282,6 +298,13 @@ describe('PoLookupModalComponent', () => {
     });
 
     it('onUnselectFromDisclaimer: should be called and remove disclaimer', () => {
+      component.selectedItems = [
+        { label: 'John', value: 1 },
+        { label: 'Paul', value: 2 }
+      ];
+
+      component.selecteds = [...component.selectedItems];
+
       spyOn(component['poTable'], 'unselectRowItem').and.callThrough();
 
       component.fieldValue = 'value';
@@ -294,24 +317,84 @@ describe('PoLookupModalComponent', () => {
       expect(component['poTable'].unselectRowItem).toHaveBeenCalled();
     });
 
-    it('onUnselect: should be called and unselect item', () => {
+    it('onUnselectFromDisclaimer: should be called and remove disclaimer, setting selecteds to an empty array when selectedItems becomes empty', () => {
+      component.selectedItems = [{ label: 'John', value: 1 }];
+      component.selecteds = [...component.selectedItems];
+
+      spyOn(component['poTable'], 'unselectRowItem').and.callThrough();
+
       component.fieldValue = 'value';
-      component.selecteds = [
+      fixture.detectChanges();
+
+      const removedDisclaimer = { label: 'John', value: 1 };
+
+      component.onUnselectFromDisclaimer(removedDisclaimer);
+
+      expect(component.selectedItems).toEqual([]);
+      expect(component.selecteds).toEqual([]);
+      expect(component['poTable'].unselectRowItem).toHaveBeenCalled();
+    });
+
+    it('onUnselect: should be called and unselect item', () => {
+      component.multiple = true;
+      component.selectedItems = [
         { label: 'John', value: 1 },
         { label: 'Paul', value: 2 },
         { label: 'George', value: 3 },
         { label: 'Ringo', value: 4 }
       ];
+      component.fieldValue = 'value';
+
+      component.selecteds = [...component.selectedItems];
 
       const unselectedItem = { label: 'Paul', value: 2 };
-      const expected = [
+      component.onUnselect(unselectedItem);
+
+      expect(component.selectedItems.length).toBe(3);
+      expect(component.selectedItems).toEqual([
         { label: 'John', value: 1 },
         { label: 'George', value: 3 },
         { label: 'Ringo', value: 4 }
+      ]);
+      expect(component.selecteds).toEqual(component.selectedItems);
+    });
+
+    it('onUnselect: should set selectedItems to an empty array when multiple is false', () => {
+      component.multiple = false;
+
+      component.selectedItems = [
+        { label: 'John', value: 1 },
+        { label: 'Paul', value: 2 }
       ];
 
+      component.selecteds = [...component.selectedItems];
+
+      const unselectedItem = { label: 'John', value: 1 };
+
       component.onUnselect(unselectedItem);
-      expect(component.selecteds).toEqual(expected);
+
+      expect(component.selectedItems).toEqual([]);
+
+      expect(component.selecteds).toEqual([]);
+    });
+
+    it('onUnselect: should set selectedItems to an empty array when multiple is false', () => {
+      component.multiple = false;
+
+      component.selectedItems = [
+        { label: 'John', value: 1 },
+        { label: 'Paul', value: 2 }
+      ];
+
+      component.selecteds = [...component.selectedItems];
+
+      const unselectedItem = { label: 'John', value: 1 };
+
+      component.onUnselect(unselectedItem);
+
+      expect(component.selectedItems).toEqual([]);
+
+      expect(component.selecteds).toEqual([]);
     });
 
     it('onAllSelected: should be called and select all visible itens', () => {
