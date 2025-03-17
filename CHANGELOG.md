@@ -2,6 +2,14 @@
 
 All notable changes to this project will be documented in this file. See [standard-version](https://github.com/conventional-changelog/standard-version) for commit guidelines.
 
+### [19.5.1](https://github.com/po-ui/po-angular/compare/v19.5.0...v19.5.1) (2025-03-17)
+
+
+### Bug Fixes
+
+* **datapicker:** corrige validação do campo ([df1787e](https://github.com/po-ui/po-angular/commit/df1787e36bba891bd8ee3f35bd44ebda7f6d7123))
+* **lookup:** corrige seleção de registros no modo múltiplo ([6995606](https://github.com/po-ui/po-angular/commit/6995606a7ed11b5249750758efe4cb104970d550))
+
 ## [19.5.0](https://github.com/po-ui/po-angular/compare/v19.4.0...v19.5.0) (2025-03-10)
 
 
