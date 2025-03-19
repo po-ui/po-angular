@@ -214,14 +214,22 @@ export class PoDynamicViewBaseComponent extends PoDynamicSharedBase {
               this.service = field.optionsService as PoMultiselectFilterService;
             } else {
               this.service = this.multiselectFilterService;
-              this.service.configProperties(field.optionsService, field.fieldLabel, field.fieldValue);
+              this.service.configProperties(
+                field.optionsService,
+                field.fieldLabel || 'label',
+                field.fieldValue || 'value'
+              );
             }
           } else {
             if (typeof field.optionsService === 'object') {
               this.service = field.optionsService as PoComboFilterService;
             } else {
               this.service = this.comboFilterService;
-              this.service.configProperties(field.optionsService, field.fieldLabel, field.fieldValue);
+              this.service.configProperties(
+                field.optionsService,
+                field.fieldLabel || 'label',
+                field.fieldValue || 'value'
+              );
             }
           }
         }
@@ -282,6 +290,7 @@ export class PoDynamicViewBaseComponent extends PoDynamicSharedBase {
       const oldFieldIndex = newFields.indexOf(newFields.find(field => field === oldField));
       newFields.splice(oldFieldIndex, 1, allValues);
       sortFields(newFields);
+      this.setContainerFields();
     });
   }
 
