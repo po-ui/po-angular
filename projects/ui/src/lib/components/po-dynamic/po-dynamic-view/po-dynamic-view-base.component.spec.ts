@@ -582,7 +582,7 @@ describe('PoDynamicViewBaseComponent:', () => {
         expect(component.ensureFieldHasContainer).toHaveBeenCalled();
       });
 
-      it('should call createFieldWithService if the field has a container, even if the property value is null', () => {
+      it('should call searchById and update newFields when createFieldWithService is executed', fakeAsync(() => {
         component.fields = [
           {
             searchService: 'https://api/test',
@@ -592,17 +592,40 @@ describe('PoDynamicViewBaseComponent:', () => {
             label: 'Empresa'
           }
         ];
+        component.value = { empresa: null };
 
-        component.value = {
-          empresa: null
-        };
+        spyOn(component, <any>'searchById').and.returnValue(of('Test Value'));
+        spyOn(component, <any>'returnValues').and.callFake((field, value) => ({ ...field, value }));
+        spyOn(component, <any>'setContainerFields');
 
-        spyOn(component, <any>'createFieldWithService');
+        const newFields = [];
+        const oldField = { property: 'empresa' };
 
-        component['getConfiguredFields']();
+        component['createFieldWithService'](component.fields[0], newFields, oldField);
+        tick();
 
-        expect(component['createFieldWithService']).toHaveBeenCalled();
-      });
+        expect(component['searchById']).toHaveBeenCalledWith(null, component.fields[0]);
+        expect(component['returnValues']).toHaveBeenCalledWith(component.fields[0], 'Test Value');
+        expect(component['setContainerFields']).toHaveBeenCalled();
+      }));
+
+      it('should use default values "label" and "value" when fieldLabel and fieldValue are not defined', fakeAsync(
+        inject([PoComboFilterService], (comboService: PoComboFilterService) => {
+          component.service = comboService;
+
+          const fields: Array<PoDynamicViewField> = [{ property: 'test', optionsService: 'url.com' }];
+
+          component.value[fields[0].property] = '123';
+          component.fields = [...fields];
+
+          spyOn(component.service, 'configProperties');
+
+          component['getConfiguredFields']();
+          tick(500);
+
+          expect(component.service.configProperties).toHaveBeenCalledWith('url.com', 'label', 'value');
+        })
+      ));
     });
 
     it('searchById: should return null if value is empty', done => {
