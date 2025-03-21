@@ -22,11 +22,17 @@
         [class.po-multiselect-input-static]="!autoHeight"
         [class.po-multiselect-input-disabled]="disabled"
         [class.po-multiselect-input-font]="!disabled && !visibleTags?.length"
+        [class.po-multiselect-input-aa]="size === 'small'"
         (keydown)="onKeyDown($event)"
         (click)="toggleDropdownVisibility()"
         (blur)="onBlur()"
       >
-        <span *ngIf="!disabled && !visibleTags?.length" class="po-multiselect-input-placeholder" aria-hidden="true">
+        <span
+          *ngIf="!disabled && !visibleTags?.length"
+          class="po-multiselect-input-placeholder"
+          [class.po-multiselect-input-placeholder-aa]="size === 'small'"
+          ria-hidden="true"
+        >
           {{ placeholder ? placeholder : literals.selectItem }}
         </span>
 
@@ -45,6 +51,7 @@
             p-icon="{{ dropdownIcon }}"
             #iconElement
             class="po-field-icon {{ disabled ? 'po-icon-input-disabled' : 'po-icon-input' }}"
+            [class.po-field-icon-aa]="size === 'small'"
             [ngClass]="disabled ? 'po-field-icon-disabled' : ''"
           >
           </po-icon>
@@ -91,6 +98,7 @@
       [p-field-value]="fieldValue"
       [p-field-label]="fieldLabel"
       [p-multiselect-template]="multiselectOptionTemplate"
+      [p-size]="size"
       (p-change)="changeItems($event)"
       (p-change-search)="changeSearch($event)"
       (p-close-dropdown)="controlDropdownVisibility(false)"

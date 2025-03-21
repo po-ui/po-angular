@@ -8,6 +8,7 @@
         [p-icon]="hasEditOrRemoveFn('icon')"
         [p-label]="literals.back"
         [p-kind]="hasEditOrRemoveFn('type')"
+        [p-size]="componentsSize"
         (p-click)="back.emit()"
       >
       </po-button>
@@ -18,6 +19,7 @@
         [p-icon]="hasEditFn('icon')"
         [p-label]="literals.remove"
         [p-kind]="hasEditFn('type')"
+        [p-size]="componentsSize"
         (p-click)="remove.emit()"
       >
       </po-button>
@@ -27,6 +29,7 @@
         p-icon="ICON_EDIT"
         p-kind="primary"
         [p-label]="literals.edit"
+        [p-size]="componentsSize"
         (p-click)="edit.emit()"
       >
       </po-button>

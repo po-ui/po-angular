@@ -470,6 +470,10 @@ a,
 
 .show-me-the-code {
   float: right;
+}
+
+.show-me-the-code,
+.show-me-the-code .po-icon {
   font-size: 16px;
 }
 

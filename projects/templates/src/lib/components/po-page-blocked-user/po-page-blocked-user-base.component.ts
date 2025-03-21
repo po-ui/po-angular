@@ -1,5 +1,7 @@
-import { Input, Directive } from '@angular/core';
+import { Directive, Input } from '@angular/core';
 
+import { PoThemeService } from '@po-ui/ng-components';
+import { getDefaultSize, validateSize } from '../../utils/util';
 import { PoPageBlockedUserReason } from './enums/po-page-blocked-user-reason.enum';
 import { PoPageBlockedUserReasonParams } from './interfaces/po-page-blocked-user-reason-params.interface';
 
@@ -101,9 +103,32 @@ export class PoPageBlockedUserBaseComponent {
    */
   @Input('p-secondary-logo') secondaryLogo?: string;
 
+  private _componentsSize?: string = undefined;
   private _params: PoPageBlockedUserReasonParams = { ...PoPageBlockedUserParamsDefault };
   private _reason: PoPageBlockedUserReason = PoPageBlockedUserReason.None;
   private _urlBack: string = '/';
+
+  /**
+   * @optional
+   *
+   * @description
+   *
+   * Define o tamanho dos componentes de formulário no template:
+   * - `small`: aplica a medida small de cada componente (disponível apenas para acessibilidade AA).
+   * - `medium`: aplica a medida medium de cada componente.
+   *
+   * > Caso a acessibilidade AA não esteja configurada, o tamanho `medium` será mantido.
+   * Para mais detalhes, consulte a documentação do [po-theme](https://po-ui.io/documentation/po-theme).
+   *
+   * @default `medium`
+   */
+  @Input('p-components-size') set componentsSize(value: string) {
+    this._componentsSize = validateSize(value, this.poThemeService);
+  }
+
+  get componentsSize(): string {
+    return this._componentsSize ?? getDefaultSize(this.poThemeService);
+  }
 
   /**
    * @optional
@@ -182,4 +207,6 @@ export class PoPageBlockedUserBaseComponent {
   get urlBack() {
     return this._urlBack;
   }
+
+  constructor(protected poThemeService: PoThemeService) {}
 }

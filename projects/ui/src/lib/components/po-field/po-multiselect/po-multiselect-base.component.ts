@@ -8,18 +8,22 @@ import { poLocaleDefault } from '../../../services/po-language/po-language.const
 import { PoLanguageService } from '../../../services/po-language/po-language.service';
 import {
   convertToBoolean,
+  getDefaultSize,
   isTypeof,
   removeDuplicatedOptionsWithFieldValue,
   removeUndefinedAndNullOptionsWithFieldValue,
-  sortOptionsByProperty
+  sortOptionsByProperty,
+  validateSize
 } from '../../../utils/util';
 import { requiredFailed } from './../validators';
 
-import { PoMultiselectFilterMode } from './po-multiselect-filter-mode.enum';
-import { PoMultiselectFilter } from './po-multiselect-filter.interface';
+import { PoFieldSize } from '../../../enums/po-field-size.enum';
+import { PoThemeService } from '../../../services';
+import { PoMultiselectFilterMode } from './enums/po-multiselect-filter-mode.enum';
+import { PoMultiselectFilter } from './interfaces/po-multiselect-filter.interface';
+import { PoMultiselectLiterals } from './interfaces/po-multiselect-literals.interface';
+import { PoMultiselectOption } from './interfaces/po-multiselect-option.interface';
 import { PoMultiselectFilterService } from './po-multiselect-filter.service';
-import { PoMultiselectLiterals } from './po-multiselect-literals.interface';
-import { PoMultiselectOption } from './po-multiselect-option.interface';
 
 const PO_MULTISELECT_DEBOUNCE_TIME_DEFAULT = 400;
 const PO_MULTISELECT_FIELD_LABEL_DEFAULT = 'label';
@@ -293,6 +297,7 @@ export abstract class PoMultiselectBaseComponent implements ControlValueAccessor
   private _autoHeight: boolean = false;
   private _fieldLabel?: string = PO_MULTISELECT_FIELD_LABEL_DEFAULT;
   private _fieldValue?: string = PO_MULTISELECT_FIELD_VALUE_DEFAULT;
+  private _size?: string = undefined;
   private language: string;
 
   private lastLengthModel;
@@ -466,6 +471,28 @@ export abstract class PoMultiselectBaseComponent implements ControlValueAccessor
    *
    * @description
    *
+   * Define o tamanho do componente:
+   * - `small`: altura do input como 32px (disponível apenas para acessibilidade AA).
+   * - `medium`: altura do input como 44px.
+   *
+   * > Caso a acessibilidade AA não esteja configurada, o tamanho `medium` será mantido.
+   * Para mais detalhes, consulte a documentação do [po-theme](https://po-ui.io/documentation/po-theme).
+   *
+   * @default `medium`
+   */
+  @Input('p-size') set size(value: string) {
+    this._size = validateSize(value, this.poThemeService, PoFieldSize);
+  }
+
+  get size(): string {
+    return this._size ?? getDefaultSize(this.poThemeService, PoFieldSize);
+  }
+
+  /**
+   * @optional
+   *
+   * @description
+   *
    * Indica que o campo será desabilitado.
    *
    * @default `false`
@@ -631,7 +658,10 @@ export abstract class PoMultiselectBaseComponent implements ControlValueAccessor
     return this._fieldValue;
   }
 
-  constructor(languageService: PoLanguageService) {
+  constructor(
+    languageService: PoLanguageService,
+    protected poThemeService: PoThemeService
+  ) {
     this.language = languageService.getShortLanguage();
   }
 

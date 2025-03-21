@@ -16,8 +16,9 @@ import { NG_VALUE_ACCESSOR } from '@angular/forms';
 import { PoFieldModel } from '../po-field.model';
 import { PoKeyCodeEnum } from './../../../enums/po-key-code.enum';
 
-import { convertToBoolean } from '../../../utils/util';
-import { PoRadioSize } from './po-radio-size.enum';
+import { PoThemeService } from '../../../services';
+import { convertToBoolean, getDefaultSize, validateSize } from '../../../utils/util';
+import { PoRadioSize } from './enums/po-radio-size.enum';
 
 @Component({
   selector: 'po-radio',
@@ -37,26 +38,18 @@ export class PoRadioComponent extends PoFieldModel<boolean> {
   @ViewChild('radioInput', { static: true }) radioInput: ElementRef;
 
   value = false;
-
-  private _size: PoRadioSize = PoRadioSize.Medium;
+  private _size?: string = undefined;
 
   /** Define o valor do *radio* */
   @Input('p-value') radioValue: string;
 
-  /**
-   * @optional
-   *
-   * @description
-   *
-   * Define o tamanho do *radio*
-   * @default `medium`
-   */
-  @Input('p-size') set size(value: PoRadioSize) {
-    this._size = Object.values(PoRadioSize).includes(value) ? value : PoRadioSize.Medium;
+  /** Define o tamanho do radio. */
+  @Input('p-size') set size(value: string) {
+    this._size = validateSize(value, this.poThemeService, PoRadioSize);
   }
 
-  get size() {
-    return this._size;
+  get size(): string {
+    return this._size ?? getDefaultSize(this.poThemeService, PoRadioSize);
   }
 
   @Input({ alias: 'p-required', transform: convertToBoolean }) required?: boolean;
@@ -72,6 +65,7 @@ export class PoRadioComponent extends PoFieldModel<boolean> {
 
   constructor(
     private changeDetector: ChangeDetectorRef,
+    protected poThemeService: PoThemeService,
     private renderer: Renderer2
   ) {
     super();

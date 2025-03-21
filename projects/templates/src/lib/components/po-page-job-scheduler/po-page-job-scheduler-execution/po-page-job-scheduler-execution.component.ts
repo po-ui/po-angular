@@ -21,6 +21,8 @@ export class PoPageJobSchedulerExecutionComponent implements OnInit, AfterViewIn
   @ViewChild('monthlyTemplate', { static: true }) monthlyTemplate;
   @ViewChild('weeklyTemplate', { static: true }) weeklyTempalte;
 
+  @Input('p-components-size') componentsSize: string;
+
   @Input('p-is-edit') isEdit: boolean = false;
 
   @Input('p-literals') literals = <any>{};

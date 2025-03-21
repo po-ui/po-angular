@@ -1,4 +1,5 @@
 <po-page-blocked-user
+  [p-components-size]="componentsSize"
   [p-contact-email]="contactMail"
   [p-contact-phone]="contactPhone"
   [p-logo]="logo"
@@ -18,7 +19,7 @@
       name="contactPhone"
       [(ngModel)]="contactPhone"
       p-clean
-      p-help="Ex.: 11 99999 9999"
+      p-help="11 99999 9999"
       p-label="Contact Phone"
     >
     </po-input>
@@ -27,49 +28,68 @@
       class="po-md-6"
       name="contactMail"
       [(ngModel)]="contactMail"
-      p-help="Ex.: user@po-ui.com.br"
+      p-help="user@po-ui.com.br"
       p-label="Contact Mail"
     >
     </po-input>
 
     <po-radio-group
-      class="po-lg-12"
+      class="po-md-12"
       name="reason"
       [(ngModel)]="reason"
-      p-columns="3"
+      p-columns="4"
       p-label="Reason Screen Type"
       [p-options]="reasonOptions"
     >
     </po-radio-group>
 
     <po-input
-      class="po-lg-6"
+      class="po-md-6"
       name="params"
       [(ngModel)]="params"
       p-clean
-      p-help='Ex.: {"attempts": 20, "days": 20, "hours": 20}'
+      p-help='{"attempts": 20, "days": 20, "hours": 20}'
       p-label="Custom Params"
       (p-change)="changeLiterals()"
     >
     </po-input>
 
+    <po-input class="po-md-6" name="url" [(ngModel)]="url" p-clean p-help="https://po-ui.io/home" p-label="URL Link">
+    </po-input>
+
     <po-input
       class="po-md-6"
-      name="url"
-      [(ngModel)]="url"
+      name="logo"
+      [(ngModel)]="logo"
       p-clean
-      p-help="Ex.: https://po-ui.io/home"
-      p-label="URL Link"
+      p-help="https://po-ui.io/assets/po-logos/po_color.svg"
+      p-label="Logo"
     >
     </po-input>
 
-    <po-input class="po-lg-6" name="logo" [(ngModel)]="logo" p-clean p-label="Logo"> </po-input>
-
-    <po-input class="po-lg-6" name="secondaryLogo" [(ngModel)]="secondaryLogo" p-clean p-label="Secondary logo">
+    <po-input
+      class="po-md-6"
+      name="secondaryLogo"
+      [(ngModel)]="secondaryLogo"
+      p-clean
+      p-help="https://po-ui.io/assets/po-logos/po_color.svg"
+      p-label="Secondary logo"
+    >
     </po-input>
+
+    <po-radio-group
+      class="po-md-12"
+      name="size"
+      [(ngModel)]="componentsSize"
+      p-columns="4"
+      p-label="Components size"
+      p-help="Para aplicar o tamanho small, configure o nível de acessibilidade para AA, ajustável no navbar ou serviço de tema (https://po-ui.io/documentation/po-theme)."
+      [p-options]="componentsSizeOptions"
+    >
+    </po-radio-group>
   </div>
 
   <div class="po-row">
-    <po-button class="po-md-3" p-label="Sample Restore" (p-click)="restore()"> </po-button>
+    <po-button class="po-lg-3 po-md-6" p-label="Sample Restore" (p-click)="restore()"> </po-button>
   </div>
 </form>

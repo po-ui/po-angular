@@ -4,9 +4,18 @@ import { Observable, Subscription } from 'rxjs';
 import { PoDateService } from '../../services/po-date/po-date.service';
 import { poLocaleDefault } from '../../services/po-language/po-language.constant';
 import { PoLanguageService } from '../../services/po-language/po-language.service';
-import { capitalizeFirstLetter, convertToBoolean, isTypeof, sortValues } from '../../utils/util';
+import {
+  capitalizeFirstLetter,
+  convertToBoolean,
+  getDefaultSize,
+  isTypeof,
+  sortValues,
+  validateSize
+} from '../../utils/util';
 
-import { PoSearchFilterMode } from '../po-search/enum/po-search-filter-mode.enum';
+import { PoFieldSize } from '../../enums/po-field-size.enum';
+import { PoThemeService } from '../../services';
+import { PoSearchFilterMode } from '../po-search/enums/po-search-filter-mode.enum';
 import { PoTableColumnSortType } from './enums/po-table-column-sort-type.enum';
 import { PoTableColumnSpacing } from './enums/po-table-spacing.enum';
 import { PoTableAction } from './interfaces/po-table-action.interface';
@@ -482,6 +491,7 @@ export abstract class PoTableBaseComponent implements OnChanges, OnDestroy {
   initialized = false;
   fixedLayout: boolean = false;
   private initialVisibleColumns: boolean = false;
+  private _componentsSize?: string = undefined;
   private _spacing: PoTableColumnSpacing = PoTableColumnSpacing.Medium;
   private _filteredColumns: Array<string>;
   private _actions?: Array<PoTableAction> = [];
@@ -508,9 +518,32 @@ export abstract class PoTableBaseComponent implements OnChanges, OnDestroy {
   constructor(
     private poDate: PoDateService,
     languageService: PoLanguageService,
+    protected poThemeService: PoThemeService,
     private poTableService: PoTableService
   ) {
     this.language = languageService.getShortLanguage();
+  }
+
+  /**
+   * @optional
+   *
+   * @description
+   *
+   * Define o tamanho dos componentes de formulário no table:
+   * - `small`: aplica a medida small de cada componente (disponível apenas para acessibilidade AA).
+   * - `medium`: aplica a medida medium de cada componente.
+   *
+   * > Caso a acessibilidade AA não esteja configurada, o tamanho `medium` será mantido.
+   * Para mais detalhes, consulte a documentação do [po-theme](https://po-ui.io/documentation/po-theme).
+   *
+   * @default `medium`
+   */
+  @Input('p-components-size') set componentsSize(value: string) {
+    this._componentsSize = validateSize(value, this.poThemeService, PoFieldSize);
+  }
+
+  get componentsSize(): string {
+    return this._componentsSize ?? getDefaultSize(this.poThemeService, PoFieldSize);
   }
 
   /**

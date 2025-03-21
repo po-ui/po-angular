@@ -16,6 +16,7 @@ import { PoLanguageService } from '../../../services/po-language/po-language.ser
 import { maxFailed, maxlengpoailed, minFailed } from '../validators';
 
 import { isObservable, of, Subscription, switchMap } from 'rxjs';
+import { PoThemeService } from '../../../services';
 import { convertToInt, uuid } from '../../../utils/util';
 import { PoInputBaseComponent } from '../po-input/po-input-base.component';
 
@@ -243,9 +244,10 @@ export class PoDecimalComponent extends PoInputBaseComponent implements AfterVie
   constructor(
     private el: ElementRef,
     private poLanguageService: PoLanguageService,
-    cd: ChangeDetectorRef
+    cd: ChangeDetectorRef,
+    protected poThemeService: PoThemeService
   ) {
-    super(cd);
+    super(cd, poThemeService);
     this.isKeyboardAndroid = !!navigator.userAgent.match(/Android/i);
   }
 
@@ -265,7 +267,6 @@ export class PoDecimalComponent extends PoInputBaseComponent implements AfterVie
 
   ngAfterViewInit() {
     this.verifyAutoFocus();
-    this.setPaddingInput();
   }
 
   ngOnDestroy(): void {
@@ -451,19 +452,6 @@ export class PoDecimalComponent extends PoInputBaseComponent implements AfterVie
 
   onKeyPress(event: KeyboardEvent) {
     this.isValidKey(event);
-  }
-
-  setPaddingInput() {
-    setTimeout(() => {
-      const selectorIcons = '.po-field-icon-container:not(.po-field-icon-container-left) > .po-icon';
-      let icons = this.el.nativeElement.querySelectorAll(selectorIcons).length;
-      if (this.clean) {
-        icons++;
-      }
-      if (icons) {
-        this.inputEl.nativeElement.style.paddingRight = `${icons * 36}px`;
-      }
-    });
   }
 
   writeValueModel(value) {

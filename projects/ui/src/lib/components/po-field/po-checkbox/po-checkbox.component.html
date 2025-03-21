@@ -1,50 +1,64 @@
-<po-field-container [p-disabled]="disabled">
-  <div class="po-field-container-content">
-    <div
-      class="container-po-checkbox"
-      [attr.checked]="checkboxValue"
-      (click)="checkOption(checkboxValue)"
-      (keydown)="onKeyDown($event, checkboxValue)"
-    >
-      <div
-        #checkboxLabel
-        role="checkbox"
-        class="po-checkbox-outline"
-        [attr.p-size]="size"
-        [tabindex]="disabled || disabladTabindex ? -1 : 0"
-        [attr.aria-checked]="checkboxValue"
-        (blur)="onBlur()"
-      >
-        <span
-          [attr.aria-checked]="checkboxValue"
-          aria-label=" "
-          [id]="id"
-          class="po-checkbox"
-          [ngClass]="iconNameLib === 'AnimaliaIcon' ? 'po-checkbox-phosphor' : 'po-checkbox-poicon'"
-          [attr.aria-disabled]="disabled"
-          [attr.required]="checkBoxRequired"
-        >
-        </span>
+<ng-container *ngIf="help || showAdditionalHelpIcon(); else withoutFieldContainer">
+  <po-field-container [p-disabled]="disabled">
+    <div class="po-field-container-content">
+      <ng-container *ngTemplateOutlet="checkboxContent"></ng-container>
+    </div>
+    <po-field-container-bottom
+      [p-additional-help-tooltip]="getAdditionalHelpTooltip()"
+      [p-append-in-body]="appendBox"
+      [p-disabled]="disabled"
+      [p-help]="help"
+      [p-show-additional-help]="displayAdditionalHelp"
+      [p-show-additional-help-icon]="showAdditionalHelpIcon()"
+      (p-additional-help)="emitAdditionalHelp()"
+    ></po-field-container-bottom>
+  </po-field-container>
+</ng-container>
 
-        <po-label
-          *ngIf="label"
-          class="po-checkbox-label"
-          tabindex="-1"
-          [p-disabled]="disabled"
-          [p-for]="id"
-          [p-label]="label"
-        >
-        </po-label>
-      </div>
+<ng-template #withoutFieldContainer>
+  <ng-container *ngTemplateOutlet="checkboxContent"></ng-container>
+</ng-template>
+
+<ng-template #checkboxContent>
+  <div
+    class="container-po-checkbox"
+    [attr.checked]="checkboxValue"
+    (click)="checkOption(checkboxValue)"
+    (keydown)="onKeyDown($event, checkboxValue)"
+  >
+    <div
+      #checkboxLabel
+      role="checkbox"
+      class="po-checkbox-outline"
+      [class.po-checkbox-outline-aa]="size === 'small'"
+      [class.po-checkbox-outline-large]="size === 'large'"
+      [tabindex]="disabled || disabladTabindex ? -1 : 0"
+      [attr.aria-checked]="checkboxValue"
+      (blur)="onBlur()"
+    >
+      <span
+        [attr.aria-checked]="checkboxValue"
+        aria-label=" "
+        [id]="id"
+        class="po-checkbox"
+        [ngClass]="iconNameLib === 'AnimaliaIcon' ? 'po-checkbox-phosphor' : 'po-checkbox-poicon'"
+        [class.po-checkbox-aa]="size === 'small'"
+        [class.po-checkbox-large]="size === 'large'"
+        [attr.aria-disabled]="disabled"
+        [attr.required]="checkBoxRequired"
+      >
+      </span>
+
+      <po-label
+        *ngIf="label"
+        class="po-checkbox-label"
+        [class.po-checkbox-label-aa]="size === 'small'"
+        tabindex="-1"
+        [p-disabled]="disabled"
+        [p-for]="id"
+        [p-label]="label"
+      >
+      </po-label>
     </div>
   </div>
-  <po-field-container-bottom
-    [p-additional-help-tooltip]="getAdditionalHelpTooltip()"
-    [p-append-in-body]="appendBox"
-    [p-disabled]="disabled"
-    [p-help]="help"
-    [p-show-additional-help]="displayAdditionalHelp"
-    [p-show-additional-help-icon]="showAdditionalHelpIcon()"
-    (p-additional-help)="emitAdditionalHelp()"
-  ></po-field-container-bottom>
-</po-field-container>
+</ng-template>

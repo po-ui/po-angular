@@ -12,9 +12,14 @@
     <po-icon *ngIf="isAlert()" [p-icon]="getIcon()"></po-icon>
   </div>
 
-  <po-icon class="po-toaster-inline-icon" *ngIf="isInline()" [p-icon]="getIcon()"></po-icon>
+  <po-icon
+    class="po-toaster-inline-icon"
+    [class.po-toaster-inline-icon-aa]="sizeActions === 'small'"
+    *ngIf="isInline()"
+    [p-icon]="getIcon()"
+  ></po-icon>
 
-  <div class="po-toaster-actions">
+  <div class="po-toaster-actions" [class.po-toaster-actions-aa]="sizeActions === 'small'">
     <div class="po-toaster-message">
       {{ message }}
       <div *ngIf="supportMessage" class="po-toaster-support-message">{{ supportMessage }}</div>
@@ -26,6 +31,7 @@
         (p-click)="poToasterAction($event)"
         [p-label]="actionLabel"
         p-kind="tertiary"
+        [p-size]="sizeActions"
       ></po-button>
     </div>
   </div>
@@ -38,6 +44,7 @@
       (p-click)="onButtonClose($event)"
       p-icon="ICON_CLOSE"
       p-kind="tertiary"
+      [p-size]="sizeActions"
     ></po-button>
   </div>
 </div>
