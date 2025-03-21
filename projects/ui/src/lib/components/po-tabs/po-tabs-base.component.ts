@@ -38,7 +38,9 @@ import { convertToBoolean } from '../../utils/util';
  * | `--font-weight`                        | Peso da fonte                                                                   | `var(--font-weight-bold)`                         |
  * | `--margin-tabs-container-left`         | Margem lateral esquerda do componente quando usado dentro de um `page-default`  | `var(--spacing-md)`                               |
  * | `--margin-tabs-container-right`        | Margem lateral direita do componente quando usado dentro de um `page-default`   | `-16px`                                           |
- * | `--padding-tabs-header`                | Padding do valor lateral das abas                                               | `-16px`                                           |
+ * | `--padding-tabs-header`                | Padding do valor lateral das abas                                               | `var(--spacing-sm)`                               |
+ * | `--margin-tabs-first-child`            | Margem lateral da primeira aba                                                  | `var(--spacing-md)`                               |
+ * | `--margin-tabs-last-child`             | Margem lateral da ultima aba                                                    | `var(--spacing-md)`                               |
  * | **Disabled**                           |                                                                                 |                                                   |
  * | `--color-disabled`                     | Cor da fonte no estado disabilitado                                             | `var(--color-action-disabled)`                    |
  * | `--background-item-disabled`&nbsp;     | Cor de background do item desabilitado                                          | `var(--color-neutral-light-10)`                   |
