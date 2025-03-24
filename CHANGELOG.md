@@ -2,6 +2,13 @@
 
 All notable changes to this project will be documented in this file. See [standard-version](https://github.com/conventional-changelog/standard-version) for commit guidelines.
 
+### [17.26.19](https://github.com/po-ui/po-angular/compare/v17.26.18...v17.26.19) (2025-03-24)
+
+
+### Bug Fixes
+
+* **dynamic-view:** corrige utilização de optionsService em container ([824ca80](https://github.com/po-ui/po-angular/commit/824ca802c6c8bc7e47e6e83d827dbeec83ab4eaa))
+
 ### [17.26.18](https://github.com/po-ui/po-angular/compare/v17.26.17...v17.26.18) (2025-03-17)
 
 
