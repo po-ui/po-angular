@@ -2,6 +2,18 @@
 
 All notable changes to this project will be documented in this file. See [standard-version](https://github.com/conventional-changelog/standard-version) for commit guidelines.
 
+## [19.6.0](https://github.com/po-ui/po-angular/compare/v19.5.1...v19.6.0) (2025-03-24)
+
+
+### Features
+
+* **tabs:** adiciona tokens para customização de espaçamentos ([2e386f7](https://github.com/po-ui/po-angular/commit/2e386f767c137d5e68680bd76daecc802bcd8dbf))
+
+
+### Bug Fixes
+
+* **dynamic-view:** corrige utilização de optionsService em container ([7ba0bdb](https://github.com/po-ui/po-angular/commit/7ba0bdbe5495fe5d35412df2f7f80319979a957a))
+
 ### [19.5.1](https://github.com/po-ui/po-angular/compare/v19.5.0...v19.5.1) (2025-03-17)
 
 
