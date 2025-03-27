@@ -90,15 +90,37 @@ export class PoLookupModalComponent extends PoLookupModalBaseComponent implement
 
   // Seleciona todos os itens visíveis na tabela
   onAllSelected(items) {
-    this.selectedItems = items.map(item => ({ value: item[this.fieldValue], label: item[this.fieldLabel], ...item }));
+    const newItems = items
+      .filter(item => !this.selectedItems?.some(selected => selected[this.fieldValue] === item[this.fieldValue]))
+      .map(item => ({
+        value: item[this.fieldValue],
+        label: item[this.fieldLabel],
+        ...item
+      }));
+
+    this.selectedItems = [...this.selectedItems, ...newItems];
     this.selecteds = [...this.selectedItems];
   }
 
   // Remove a seleção de todos os itens visíveis na tabela
-  onAllUnselected(items) {
-    this.poTable.unselectRows();
-    this.selectedItems = [];
-    this.selecteds = [];
+  onAllUnselected(items, isTag?: boolean) {
+    if (isTag) {
+      this.poTable.unselectRows();
+      this.selectedItems = [];
+      this.selecteds = [];
+    } else {
+      const newItems = this.selectedItems?.filter(
+        item => !items.some(selected => selected[this.fieldValue] === item[this.fieldValue])
+      );
+
+      if (newItems?.length) {
+        this.selectedItems = [...newItems];
+        this.selecteds = [...this.selectedItems];
+      } else {
+        this.selectedItems = [];
+        this.selecteds = [];
+      }
+    }
   }
 
   openModal() {
