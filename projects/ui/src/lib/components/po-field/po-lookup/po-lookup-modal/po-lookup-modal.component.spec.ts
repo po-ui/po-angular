@@ -260,9 +260,36 @@ describe('PoLookupModalComponent', () => {
     it('onAllUnselected: should be called and clean all items on table', () => {
       spyOn(component['poTable'], 'unselectRows');
 
-      component.onAllUnselected('');
+      component.onAllUnselected([], true);
 
       expect(component['poTable'].unselectRows).toHaveBeenCalled();
+      expect(component.selecteds).toEqual([]);
+    });
+
+    it('onAllUnselected: should remove one item', () => {
+      component.selectedItems = [
+        { label: 'John', value: 1 },
+        { label: 'Paul', value: 2 }
+      ];
+      component.fieldValue = 'value';
+
+      const items = [{ label: 'John', value: 1 }];
+
+      const expectedSelecteds = [{ label: 'Paul', value: 2 }];
+
+      component.onAllUnselected(items);
+
+      expect(component.selectedItems).toEqual(expectedSelecteds);
+    });
+
+    it('onAllUnselected: should remove all items', () => {
+      spyOn(component['poTable'], 'unselectRows');
+      component.selectedItems = [{ label: 'John', value: 1 }];
+
+      const items = [{ label: 'John', value: 1 }];
+
+      component.onAllUnselected(items);
+
       expect(component.selecteds).toEqual([]);
     });
 
@@ -346,6 +373,7 @@ describe('PoLookupModalComponent', () => {
     });
 
     it('onAllSelected: should be called and select all visible itens', () => {
+      component.selectedItems = [];
       const items = [
         { label: 'John', value: 1 },
         { label: 'Paul', value: 2 },
@@ -358,6 +386,26 @@ describe('PoLookupModalComponent', () => {
         { label: 'Paul', value: 2 },
         { label: 'George', value: 3 },
         { label: 'Ringo', value: 4 }
+      ];
+
+      component.fieldValue = 'value';
+      component.fieldLabel = 'label';
+
+      component.onAllSelected(items);
+
+      expect(component.selecteds).toEqual(expectedSelecteds);
+    });
+
+    it('onAllSelected: should add a new item', () => {
+      component.selectedItems = [{ label: 'John', value: 1 }];
+      const items = [
+        { label: 'John', value: 1 },
+        { label: 'Paul', value: 2 }
+      ];
+
+      const expectedSelecteds = [
+        { label: 'John', value: 1 },
+        { label: 'Paul', value: 2 }
       ];
 
       component.fieldValue = 'value';

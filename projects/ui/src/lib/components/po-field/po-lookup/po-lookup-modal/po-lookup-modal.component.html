@@ -84,7 +84,7 @@
       class="po-md-12"
       [p-disclaimers]="selecteds"
       (p-remove)="onUnselectFromDisclaimer($event.removedDisclaimer)"
-      (p-remove-all)="onAllUnselected($event)"
+      (p-remove-all)="onAllUnselected($event, true)"
     >
     </po-disclaimer-group>
   </div>
