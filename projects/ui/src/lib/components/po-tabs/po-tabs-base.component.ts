@@ -30,8 +30,10 @@ import { convertToBoolean } from '../../utils/util';
  * | Propriedade                            | Descrição                                                                       | Valor Padrão                                      |
  * |----------------------------------------|---------------------------------------------------------------------------------|---------------------------------------------------|
  * | **Default Values**                     |                                                                                 |                                                   |
- * | `--background`                         | Cor de background                                                               | `var(--color-neutral-light-00)`                   |
+ * | `--background`                         | Cor de background                                                               | `var(--color-transparent)`                        |
+ * | `--background-item-default`            | Cor de background do item padrão                                                | `var(--color-transparent)`                        |
  * | `--border-radius`                      | Contém o valor do raio dos cantos do elemento&nbsp;                             | `var(--border-radius-md)`                         |
+ * | `--color`                              | Cor da fonte padrão                                                             | `var(--color-action-default)`                     |
  * | `--color-baseline`                     | Cor para box-shadow                                                             | `var(--color-neutral-light-20)`                   |
  * | `--font-family`                        | Família tipográfica usada                                                       | `var(--font-family-theme)`                        |
  * | `--font-size`                          | Tamanho da fonte                                                                | `var(--font-size-default)`                        |
@@ -50,7 +52,7 @@ import { convertToBoolean } from '../../utils/util';
  * | `--color-hover`                        | Cor principal no estado hover                                                   | `var(--color-brand-01-darkest)`                   |
  * | `--background-item-hover`              | Cor de background no estado de hover                                            | `var(--color-brand-01-lightest)`                  |
  * | **Selected**                           |                                                                                 |                                                   |
- * | `--background-item-selected`           | Cor de background do ítem selecionado                                           | `var(--color-neutral-light-10)`                   |
+ * | `--background-item-selected`           | Cor de background do item selecionado                                           | `var(--color-brand-01-lightest)`                  |
  *
  */
 @Directive()
