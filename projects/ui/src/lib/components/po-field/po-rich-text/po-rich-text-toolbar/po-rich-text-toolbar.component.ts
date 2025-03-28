@@ -100,6 +100,8 @@ export class PoRichTextToolbarComponent implements AfterViewInit {
     return isIE();
   }
 
+  @Input('p-size') size: string;
+
   constructor(private languageService: PoLanguageService) {
     this.literals = {
       ...poRichTextLiteralsDefault[this.languageService?.getShortLanguage()]

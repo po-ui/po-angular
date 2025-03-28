@@ -14,17 +14,18 @@ import {
   PoTableColumnSort,
   PoTableColumnSortType,
   PoTableColumnSpacing,
+  PoThemeService,
   poLocaleDefault
 } from '@po-ui/ng-components';
 
 import * as util from '../../utils/util';
-import { convertToBoolean } from '../../utils/util';
+import { convertToBoolean, getDefaultSize, validateSize } from '../../utils/util';
 
 import { PoPageDynamicDetailComponent } from '../po-page-dynamic-detail/po-page-dynamic-detail.component';
 
 import { PoPageDynamicService } from '../../services/po-page-dynamic/po-page-dynamic.service';
 import { isExternalLink, openExternalLink, removeDuplicateItemsWithArrayKey } from '../../utils/util';
-import { PoPageDynamicSearchLiterals } from '../po-page-dynamic-search/po-page-dynamic-search-literals.interface';
+import { PoPageDynamicSearchLiterals } from '../po-page-dynamic-search/interfaces/po-page-dynamic-search-literals.interface';
 import { PoPageCustomizationService } from './../../services/po-page-customization/po-page-customization.service';
 import { PoPageDynamicOptionsSchema } from './../../services/po-page-customization/po-page-dynamic-options.interface';
 import { PoPageDynamicTableActions } from './interfaces/po-page-dynamic-table-actions.interface';
@@ -291,6 +292,7 @@ export class PoPageDynamicTableComponent extends PoPageDynamicListBaseComponent 
   private subscriptions = new Subscription();
   private hasCustomActionWithSelectable = false;
 
+  private _componentsSize?: string = undefined;
   private _customPageListActions: Array<PoPageAction> = [];
   private _customTableActions: Array<PoTableAction> = [];
   private _defaultPageActions: Array<PoPageAction> = [];
@@ -338,6 +340,28 @@ export class PoPageDynamicTableComponent extends PoPageDynamicListBaseComponent 
 
   get actions(): PoPageDynamicTableActions {
     return this._actions;
+  }
+
+  /**
+   * @optional
+   *
+   * @description
+   *
+   * Define o tamanho dos componentes de formulário no template:
+   * - `small`: aplica a medida small de cada componente (disponível apenas para acessibilidade AA).
+   * - `medium`: aplica a medida medium de cada componente.
+   *
+   * > Caso a acessibilidade AA não esteja configurada, o tamanho `medium` será mantido.
+   * Para mais detalhes, consulte a documentação do [po-theme](https://po-ui.io/documentation/po-theme).
+   *
+   * @default `medium`
+   */
+  @Input('p-components-size') set componentsSize(value: string) {
+    this._componentsSize = validateSize(value, this.poThemeService);
+  }
+
+  get componentsSize(): string {
+    return this._componentsSize ?? getDefaultSize(this.poThemeService);
   }
 
   /**
@@ -616,7 +640,9 @@ export class PoPageDynamicTableComponent extends PoPageDynamicListBaseComponent 
    */
   @Input('p-visible-fixed-filters') visibleFixedFilters: boolean = true;
 
+  /* eslint-disable max-params */
   constructor(
+    protected poThemeService: PoThemeService,
     private router: Router,
     private activatedRoute: ActivatedRoute,
     private poDialogService: PoDialogService,
@@ -635,6 +661,7 @@ export class PoPageDynamicTableComponent extends PoPageDynamicListBaseComponent 
       ...poPageDynamicTableLiteralsDefault[language]
     };
   }
+  /* eslint-enable max-params */
 
   ngOnInit(): void {
     this.loadDataFromAPI();
@@ -767,6 +794,7 @@ export class PoPageDynamicTableComponent extends PoPageDynamicListBaseComponent 
     const confirmOptions: PoDialogConfirmOptions = {
       title: this.literals.confirmRemoveTitle,
       message: this.literals.confirmRemoveMessage,
+      componentsSize: this.componentsSize,
       confirm: this.remove.bind(this, item, actionRemove, actionBeforeRemove)
     };
 

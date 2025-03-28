@@ -1,6 +1,8 @@
 import { Directive, EventEmitter, Input, Output } from '@angular/core';
 
-import { convertToBoolean } from '../../../utils/util';
+import { PoFieldSize } from '../../../enums/po-field-size.enum';
+import { PoThemeService } from '../../../services';
+import { convertToBoolean, getDefaultSize, validateSize } from '../../../utils/util';
 
 /**
  * @description
@@ -149,6 +151,7 @@ export class PoPageSlideBaseComponent {
   // Controla se a página está ou não oculta, por padrão é oculto.
   public hidden = true;
 
+  private _componentsSize?: string = undefined;
   private _size = 'md';
 
   /**
@@ -177,6 +180,30 @@ export class PoPageSlideBaseComponent {
   get size() {
     return this._size;
   }
+
+  /**
+   * @optional
+   *
+   * @description
+   *
+   * Define o tamanho dos componentes de formulário no template:
+   * - `small`: aplica a medida small de cada componente (disponível apenas para acessibilidade AA).
+   * - `medium`: aplica a medida medium de cada componente.
+   *
+   * > Caso a acessibilidade AA não esteja configurada, o tamanho `medium` será mantido.
+   * Para mais detalhes, consulte a documentação do [po-theme](https://po-ui.io/documentation/po-theme).
+   *
+   * @default `medium`
+   */
+  @Input('p-components-size') set componentsSize(value: string) {
+    this._componentsSize = validateSize(value, this.poThemeService, PoFieldSize);
+  }
+
+  get componentsSize(): string {
+    return this._componentsSize ?? getDefaultSize(this.poThemeService, PoFieldSize);
+  }
+
+  constructor(protected poThemeService: PoThemeService) {}
 
   /**
    * Ativa a visualização da página.

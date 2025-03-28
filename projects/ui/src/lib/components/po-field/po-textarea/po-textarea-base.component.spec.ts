@@ -4,6 +4,8 @@ import { FormControl, UntypedFormControl, Validators } from '@angular/forms';
 import { expectPropertiesValues, expectSettersMethod } from '../../../util-test/util-expect.spec';
 import * as ValidatorsFunctions from '../validators';
 
+import { PoThemeA11yEnum } from '../../../services';
+import { PoThemeService } from '../../../services/po-theme/po-theme.service';
 import { PoTextareaBaseComponent } from './po-textarea-base.component';
 
 @Directive()
@@ -13,8 +15,13 @@ class PoTextareaComponent extends PoTextareaBaseComponent {
 
 describe('PoTextareaBase:', () => {
   const cd = <any>{ markForCheck: () => {} };
+  let component: PoTextareaComponent;
+  let poThemeServiceMock: jasmine.SpyObj<PoThemeService>;
 
-  const component = new PoTextareaComponent(cd);
+  beforeEach(() => {
+    poThemeServiceMock = jasmine.createSpyObj('PoThemeService', ['getA11yLevel', 'getA11yDefaultSize']);
+    component = new PoTextareaComponent(cd, poThemeServiceMock);
+  });
 
   it('should be created', () => {
     expect(component instanceof PoTextareaBaseComponent).toBeTruthy();
@@ -139,6 +146,50 @@ describe('PoTextareaBase:', () => {
     it('p-placeholder: should update property p-placeholder with empty value if set with invalid values.', () => {
       const invalidValues = [null, undefined, '', 0, false];
       expectPropertiesValues(component, 'placeholder', invalidValues, '');
+    });
+
+    describe('p-size', () => {
+      it('should set property with valid values for accessibility level is AA', () => {
+        poThemeServiceMock.getA11yLevel.and.returnValue(PoThemeA11yEnum.AA);
+
+        component.size = 'small';
+        expect(component.size).toBe('small');
+
+        component.size = 'medium';
+        expect(component.size).toBe('medium');
+      });
+
+      it('should set property with valid values for accessibility level is AAA', () => {
+        poThemeServiceMock.getA11yLevel.and.returnValue(PoThemeA11yEnum.AAA);
+
+        component.size = 'small';
+        expect(component.size).toBe('medium');
+
+        component.size = 'medium';
+        expect(component.size).toBe('medium');
+      });
+
+      it('should return small when accessibility is AA and getA11yDefaultSize is small', () => {
+        poThemeServiceMock.getA11yLevel.and.returnValue(PoThemeA11yEnum.AA);
+        poThemeServiceMock.getA11yDefaultSize.and.returnValue('small');
+
+        component['_size'] = undefined;
+        expect(component.size).toBe('small');
+      });
+
+      it('should return medium when accessibility is AA and getA11yDefaultSize is medium', () => {
+        poThemeServiceMock.getA11yLevel.and.returnValue(PoThemeA11yEnum.AA);
+        poThemeServiceMock.getA11yDefaultSize.and.returnValue('medium');
+
+        component['_size'] = undefined;
+        expect(component.size).toBe('medium');
+      });
+
+      it('should return medium when accessibility is AAA, regardless of getA11yDefaultSize', () => {
+        poThemeServiceMock.getA11yLevel.and.returnValue(PoThemeA11yEnum.AAA);
+        component['_size'] = undefined;
+        expect(component.size).toBe('medium');
+      });
     });
   });
 

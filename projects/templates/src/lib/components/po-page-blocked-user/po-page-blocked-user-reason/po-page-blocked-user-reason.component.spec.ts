@@ -1,9 +1,6 @@
-import { ComponentFixture, TestBed, waitForAsync } from '@angular/core/testing';
 import { SimpleChange } from '@angular/core';
-
-import { PoI18nModule } from './../../../../../../ui/src/lib/services/po-i18n/po-i18n.module';
-import { PoI18nPipe } from './../../../../../../ui/src/lib/services/po-i18n/po-i18n.pipe';
-
+import { ComponentFixture, TestBed, waitForAsync } from '@angular/core/testing';
+import { PoI18nModule, PoI18nPipe } from '@po-ui/ng-components';
 import { PoPageBlockedUserReason } from '../enums/po-page-blocked-user-reason.enum';
 import { PoPageBlockedUserReasonComponent } from './po-page-blocked-user-reason.component';
 

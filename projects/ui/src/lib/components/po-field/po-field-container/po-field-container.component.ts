@@ -1,7 +1,7 @@
 import { ChangeDetectionStrategy, Component, Input, OnChanges, OnInit, SimpleChanges } from '@angular/core';
 
-import { convertToBoolean } from '../../../utils/util';
 import { PoLanguageService } from '../../../services/po-language/po-language.service';
+import { convertToBoolean } from '../../../utils/util';
 import { poFieldContainerLiterals } from './po-field-container-literals';
 
 /**

@@ -1,5 +1,6 @@
 <div class="po-wrapper">
   <po-menu
+    [p-components-size]="componentsSize"
     [p-filter]="filter"
     [p-logo]="logo"
     [p-logo-link]="logoLink"
@@ -23,12 +24,8 @@
 
     <div class="po-row">
       <po-info p-label="Menu Item Selected" [p-value]="menuItemSelected"> </po-info>
-    </div>
 
-    <po-divider></po-divider>
-
-    <form #f="ngForm">
-      <div class="po-row">
+      <form #f="ngForm">
         <po-switch
           class="po-lg-6"
           name="filterMenu"
@@ -50,9 +47,7 @@
           [p-disabled]="!filter"
         >
         </po-switch>
-      </div>
 
-      <div class="po-row">
         <po-select
           class="po-md-4"
           name="parent"
@@ -67,9 +62,7 @@
 
         <po-input class="po-md-4" name="shortLabel" [(ngModel)]="shortLabel" p-label="Short Label" p-required>
         </po-input>
-      </div>
 
-      <div class="po-row">
         <po-url class="po-md-4" name="link" [(ngModel)]="link" p-label="External link" p-placeholder="http://">
         </po-url>
 
@@ -98,9 +91,7 @@
           [p-max]="maxBadgeValue"
         >
         </po-number>
-      </div>
 
-      <div class="po-row">
         <po-select
           class="po-md-4"
           name="icon"
@@ -110,15 +101,13 @@
           [p-options]="iconsOptions"
         >
         </po-select>
-      </div>
 
-      <div class="po-row">
-        <po-button class="po-xl-2 po-md-4" p-label="Add" (p-click)="addMenuItem()"> </po-button>
-      </div>
+        <div class="po-row">
+          <po-button class="po-xl-2 po-md-4" p-label="Add" (p-click)="addMenuItem()"> </po-button>
+        </div>
 
-      <hr />
+        <hr />
 
-      <div class="po-row">
         <po-input
           class="po-md-6"
           name="service"
@@ -139,9 +128,7 @@
           (p-change-model)="onChangeParams($event)"
         >
         </po-input>
-      </div>
 
-      <div class="po-row">
         <po-input
           class="po-md-6"
           name="logo"
@@ -161,9 +148,7 @@
           p-label="Short Logo"
         >
         </po-input>
-      </div>
 
-      <div class="po-row">
         <po-input
           class="po-md-12"
           name="logo link"
@@ -173,11 +158,22 @@
           p-label="Logo link"
         >
         </po-input>
-      </div>
 
-      <div class="po-row">
-        <po-button class="po-xl-3 po-md-5" p-label="Sample Restore" (p-click)="restore()"> </po-button>
-      </div>
-    </form>
+        <po-radio-group
+          class="po-md-12"
+          name="size"
+          [(ngModel)]="componentsSize"
+          p-columns="4"
+          p-label="Components size"
+          p-help="Para aplicar o tamanho small, configure o nível de acessibilidade para AA, ajustável no navbar ou serviço de tema (https://po-ui.io/documentation/po-theme)."
+          [p-options]="componentsSizeOptions"
+        >
+        </po-radio-group>
+
+        <div class="po-row">
+          <po-button class="po-xl-3 po-md-5" p-label="Sample Restore" (p-click)="restore()"> </po-button>
+        </div>
+      </form>
+    </div>
   </po-page-default>
 </div>

@@ -4,6 +4,7 @@ import {
   Component,
   ElementRef,
   EventEmitter,
+  forwardRef,
   Inject,
   Input,
   OnChanges,
@@ -11,21 +12,24 @@ import {
   Output,
   Renderer2,
   SimpleChanges,
-  ViewChild,
-  forwardRef
+  ViewChild
 } from '@angular/core';
 import { AbstractControl, NG_VALIDATORS, NG_VALUE_ACCESSOR } from '@angular/forms';
 
 import {
   convertToBoolean,
+  getDefaultSize,
   isSafari,
   removeDuplicatedOptions,
   removeUndefinedAndNullOptions,
   uuid,
+  validateSize,
   validValue
 } from '../../../utils/util';
 
-import { ICONS_DICTIONARY, AnimaliaIconDictionary } from '../../po-icon';
+import { PoFieldSize } from '../../../enums/po-field-size.enum';
+import { PoThemeService } from '../../../services';
+import { AnimaliaIconDictionary, ICONS_DICTIONARY } from '../../po-icon';
 import { PoFieldValidateModel } from '../po-field-validate.model';
 import { PoSelectOptionGroup } from './po-select-option-group.interface';
 import { PoSelectOption } from './po-select-option.interface';
@@ -170,6 +174,7 @@ export class PoSelectComponent extends PoFieldValidateModel<any> implements OnCh
   private _fieldLabel?: string = PO_SELECT_FIELD_LABEL_DEFAULT;
   private _fieldValue?: string = PO_SELECT_FIELD_VALUE_DEFAULT;
   private _options: Array<PoSelectOption> | Array<PoSelectOptionGroup> | Array<any>;
+  private _size?: string = undefined;
 
   /**
    * Nesta propriedade deve ser definido uma coleção de objetos que implementam a interface `PoSelectOption`,
@@ -289,12 +294,35 @@ export class PoSelectComponent extends PoFieldValidateModel<any> implements OnCh
     return this._iconToken.NAME_LIB;
   }
 
+  /**
+   * @optional
+   *
+   * @description
+   *
+   * Define o tamanho do componente:
+   * - `small`: altura do input como 32px (disponível apenas para acessibilidade AA).
+   * - `medium`: altura do input como 44px.
+   *
+   * > Caso a acessibilidade AA não esteja configurada, o tamanho `medium` será mantido.
+   * Para mais detalhes, consulte a documentação do [po-theme](https://po-ui.io/documentation/po-theme).
+   *
+   * @default `medium`
+   */
+  @Input('p-size') set size(value: string) {
+    this._size = validateSize(value, this.poThemeService, PoFieldSize);
+  }
+
+  get size(): string {
+    return this._size ?? getDefaultSize(this.poThemeService, PoFieldSize);
+  }
+
   /* istanbul ignore next */
   constructor(
     @Optional() @Inject(ICONS_DICTIONARY) value: { [key: string]: string },
     changeDetector: ChangeDetectorRef,
     private el: ElementRef,
-    public renderer: Renderer2
+    public renderer: Renderer2,
+    protected poThemeService: PoThemeService
   ) {
     super(changeDetector);
 

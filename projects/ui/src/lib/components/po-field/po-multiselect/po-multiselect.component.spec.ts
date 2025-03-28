@@ -13,10 +13,10 @@ import { PoTagComponent } from '../../po-tag/po-tag.component';
 import { PoFieldContainerComponent } from '../po-field-container/po-field-container.component';
 import { PoMultiselectBaseComponent } from '../po-multiselect/po-multiselect-base.component';
 import { PoFieldContainerBottomComponent } from './../po-field-container/po-field-container-bottom/po-field-container-bottom.component';
+import { PoMultiselectFilter } from './interfaces/po-multiselect-filter.interface';
+import { PoMultiselectOption } from './interfaces/po-multiselect-option.interface';
 import { PoMultiselectDropdownComponent } from './po-multiselect-dropdown/po-multiselect-dropdown.component';
-import { PoMultiselectFilter } from './po-multiselect-filter.interface';
 import { PoMultiselectFilterService } from './po-multiselect-filter.service';
-import { PoMultiselectOption } from './po-multiselect-option.interface';
 import { PoMultiselectComponent } from './po-multiselect.component';
 
 const poMultiselectFilterServiceStub: PoMultiselectFilter = {

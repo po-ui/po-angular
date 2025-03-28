@@ -1,10 +1,11 @@
-import { Directive } from '@angular/core';
+import { ChangeDetectorRef, Directive } from '@angular/core';
 import { fakeAsync, tick } from '@angular/core/testing';
 import { AbstractControl, FormControl, UntypedFormControl, Validators } from '@angular/forms';
 
 import { expectPropertiesValues, expectSettersMethod } from '../../../util-test/util-expect.spec';
 
 import { Subject } from 'rxjs';
+import { PoThemeA11yEnum, PoThemeService } from '../../../services';
 import { PoInputBaseComponent } from './po-input-base.component';
 import { PoMask } from './po-mask';
 
@@ -22,12 +23,17 @@ class PoInput extends PoInputBaseComponent {
   writeValueModel(value: string) {}
 }
 
-describe('PoInputBase:', () => {
+describe('PoInputBase:', async () => {
   let component: PoInput;
+  let changeDetectorRef: jasmine.SpyObj<ChangeDetectorRef>;
+  let poThemeServiceMock: jasmine.SpyObj<PoThemeService>;
   const fakeSubscription = <any>{ unsubscribe: () => {} };
 
   beforeEach(() => {
-    component = new PoInput();
+    changeDetectorRef = jasmine.createSpyObj('ChangeDetectorRef', ['markForCheck', 'detectChanges']);
+    poThemeServiceMock = jasmine.createSpyObj('PoThemeService', ['getA11yLevel', 'getA11yDefaultSize']);
+
+    component = new PoInput(changeDetectorRef, poThemeServiceMock);
   });
 
   it('should be created', () => {
@@ -336,6 +342,7 @@ describe('PoInputBase:', () => {
           expect(result).toBeNull();
         });
       });
+
       describe('with p-minlength:', () => {
         it('validate: should return minlength false when `maskNoLengthValidation` is false and value is below minlength', () => {
           component.minlength = 5;
@@ -409,6 +416,50 @@ describe('PoInputBase:', () => {
           result = component.validate(new FormControl(undefined));
           expect(result).toBeNull();
         });
+      });
+    });
+
+    describe('p-size', () => {
+      it('should set property with valid values for accessibility level is AA', () => {
+        poThemeServiceMock.getA11yLevel.and.returnValue(PoThemeA11yEnum.AA);
+
+        component.size = 'small';
+        expect(component.size).toBe('small');
+
+        component.size = 'medium';
+        expect(component.size).toBe('medium');
+      });
+
+      it('should set property with valid values for accessibility level is AAA', () => {
+        poThemeServiceMock.getA11yLevel.and.returnValue(PoThemeA11yEnum.AAA);
+
+        component.size = 'small';
+        expect(component.size).toBe('medium');
+
+        component.size = 'medium';
+        expect(component.size).toBe('medium');
+      });
+
+      it('should return small when accessibility is AA and getA11yDefaultSize is small', () => {
+        poThemeServiceMock.getA11yLevel.and.returnValue(PoThemeA11yEnum.AA);
+        poThemeServiceMock.getA11yDefaultSize.and.returnValue('small');
+
+        component['_size'] = undefined;
+        expect(component.size).toBe('small');
+      });
+
+      it('should return medium when accessibility is AA and getA11yDefaultSize is medium', () => {
+        poThemeServiceMock.getA11yLevel.and.returnValue(PoThemeA11yEnum.AA);
+        poThemeServiceMock.getA11yDefaultSize.and.returnValue('medium');
+
+        component['_size'] = undefined;
+        expect(component.size).toBe('medium');
+      });
+
+      it('should return medium when accessibility is AAA, regardless of getA11yDefaultSize', () => {
+        poThemeServiceMock.getA11yLevel.and.returnValue(PoThemeA11yEnum.AAA);
+        component['_size'] = undefined;
+        expect(component.size).toBe('medium');
       });
     });
   });

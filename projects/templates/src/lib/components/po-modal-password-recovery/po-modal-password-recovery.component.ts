@@ -8,16 +8,17 @@ import {
   PoLanguageService,
   PoModalAction,
   PoModalComponent,
-  PoRadioGroupOption
+  PoRadioGroupOption,
+  PoThemeService
 } from '@po-ui/ng-components';
 
 import { isExternalLink } from '../../utils/util';
 
+import { PoModalPasswordRecoveryModalContent } from './enums/po-modal-password-recovery-modal-content.enum';
+import { PoModalPasswordRecoveryType } from './enums/po-modal-password-recovery-type.enum';
 import { PoModalPasswordRecovery } from './interfaces/po-modal-password-recovery.interface';
 import { PoModalPasswordRecoveryBaseComponent } from './po-modal-password-recovery-base.component';
-import { PoModalPasswordRecoveryModalContent } from './enums/po-modal-password-recovery-modal-content.enum';
 import { PoModalPasswordRecoveryService } from './po-modal-password-recovery.service';
-import { PoModalPasswordRecoveryType } from './enums/po-modal-password-recovery-type.enum';
 
 /**
  * @docsExtends PoModalPasswordRecoveryBaseComponent
@@ -84,9 +85,10 @@ export class PoModalPasswordRecoveryComponent extends PoModalPasswordRecoveryBas
     private router: Router,
     private poI18nPipe: PoI18nPipe,
     private poModalPasswordRecoveryService: PoModalPasswordRecoveryService,
+    protected poThemeService: PoThemeService,
     poLanguageService: PoLanguageService
   ) {
-    super(poLanguageService);
+    super(poLanguageService, poThemeService);
   }
 
   ngOnDestroy() {
@@ -140,6 +142,7 @@ export class PoModalPasswordRecoveryComponent extends PoModalPasswordRecoveryBas
       this.literals.closeButton,
       this.submitAction,
       this.literals.resendEmailButton,
+      this.componentsSize,
       false
     );
   }
@@ -152,6 +155,7 @@ export class PoModalPasswordRecoveryComponent extends PoModalPasswordRecoveryBas
       this.literals.continueButton,
       this.cancelAction,
       this.literals.cancelButton,
+      this.componentsSize,
       true
     );
 
@@ -251,11 +255,12 @@ export class PoModalPasswordRecoveryComponent extends PoModalPasswordRecoveryBas
     this.smsCode = undefined;
   }
 
-  private setActions(primaryAction, primarylabel, secondaryAction, secondaryLabel, disabled) {
+  private setActions(primaryAction, primarylabel, secondaryAction, secondaryLabel, componentsSize, disabled) {
     this.primaryAction.action = () => primaryAction.call(this);
     this.primaryAction.label = primarylabel;
     this.secondaryAction.action = () => secondaryAction.call(this);
     this.secondaryAction.label = secondaryLabel;
+    this.componentsSize = componentsSize;
     this.primaryAction.disabled = disabled;
   }
 
@@ -263,7 +268,14 @@ export class PoModalPasswordRecoveryComponent extends PoModalPasswordRecoveryBas
     this.modalTitle = this.literals.forgotPasswordTitle;
     this.pipeModalPhrases();
     this.modalPasswordRecoveryTypeAll = this.type === PoModalPasswordRecoveryType.All;
-    this.setActions(this.submitAction, this.literals.sendButton, this.cancelAction, this.literals.cancelButton, true);
+    this.setActions(
+      this.submitAction,
+      this.literals.sendButton,
+      this.cancelAction,
+      this.literals.cancelButton,
+      this.componentsSize,
+      true
+    );
   }
 
   private setRequestEndpoint(urlValidationCode?: string) {

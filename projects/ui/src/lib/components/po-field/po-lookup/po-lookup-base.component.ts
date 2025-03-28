@@ -1,5 +1,3 @@
-import { PoLanguageService } from '../../../services/po-language/po-language.service';
-import { poLocaleDefault } from '../../../services/po-language/po-language.constant';
 import {
   AfterViewInit,
   Directive,
@@ -17,8 +15,13 @@ import {
 import { AbstractControl, ControlValueAccessor, NgControl, UntypedFormControl, Validator } from '@angular/forms';
 import { Subscription } from 'rxjs';
 import { finalize } from 'rxjs/operators';
+import { poLocaleDefault } from '../../../services/po-language/po-language.constant';
+import { PoLanguageService } from '../../../services/po-language/po-language.service';
 
-import { convertToBoolean, isTypeof } from '../../../utils/util';
+import { PoFieldSize } from '../../../enums/po-field-size.enum';
+import { PoThemeService } from '../../../services';
+import { convertToBoolean, getDefaultSize, isTypeof, validateSize } from '../../../utils/util';
+import { PoTableColumnSpacing } from '../../po-table/enums/po-table-spacing.enum';
 import { requiredFailed } from '../validators';
 import { PoLookupAdvancedFilter } from './interfaces/po-lookup-advanced-filter.interface';
 import { PoLookupColumn } from './interfaces/po-lookup-column.interface';
@@ -26,7 +29,6 @@ import { PoLookupFilter } from './interfaces/po-lookup-filter.interface';
 import { PoLookupLiterals } from './interfaces/po-lookup-literals.interface';
 import { PoLookupFilterService } from './services/po-lookup-filter.service';
 import { PoLookupModalService } from './services/po-lookup-modal.service';
-import { PoTableColumnSpacing } from '../../po-table/enums/po-table-spacing.enum';
 
 export const poLookupLiteralsDefault = {
   en: <PoLookupLiterals>{
@@ -69,6 +71,7 @@ export abstract class PoLookupBaseComponent
 {
   private _literals?: PoLookupLiterals;
   private language: string;
+  private _size?: string = undefined;
 
   // Propriedade interna que define se o ícone de ajuda adicional terá cursor clicável (evento) ou padrão (tooltip).
   @Input() additionalHelpEventTrigger: string | undefined;
@@ -383,6 +386,28 @@ export abstract class PoLookupBaseComponent
    *
    * @description
    *
+   * Define o tamanho do componente:
+   * - `small`: altura do input como 32px (disponível apenas para acessibilidade AA).
+   * - `medium`: altura do input como 44px.
+   *
+   * > Caso a acessibilidade AA não esteja configurada, o tamanho `medium` será mantido.
+   * Para mais detalhes, consulte a documentação do [po-theme](https://po-ui.io/documentation/po-theme).
+   *
+   * @default `medium`
+   */
+  @Input('p-size') set size(value: string) {
+    this._size = validateSize(value, this.poThemeService, PoFieldSize);
+  }
+
+  get size(): string {
+    return this._size ?? getDefaultSize(this.poThemeService, PoFieldSize);
+  }
+
+  /**
+   * @optional
+   *
+   * @description
+   *
    * Responsável por aplicar espaçamento nas colunas da tabela contida no lookup.
    *
    * Deve receber um dos valores do enum `PoTableColumnSpacing`.
@@ -649,7 +674,8 @@ export abstract class PoLookupBaseComponent
     private defaultService: PoLookupFilterService,
     @Inject(Injector) private injector: Injector,
     public poLookupModalService: PoLookupModalService,
-    languageService: PoLanguageService
+    languageService: PoLanguageService,
+    protected poThemeService: PoThemeService
   ) {
     this.language = languageService.getShortLanguage();
   }
@@ -880,5 +906,6 @@ export abstract class PoLookupBaseComponent
   abstract openLookup(): void;
 
   abstract setDisclaimers(a);
+
   abstract updateVisibleItems();
 }

@@ -1,22 +1,29 @@
 import { ComponentFixture, TestBed } from '@angular/core/testing';
 
-import { PoTableListManagerComponent } from './po-table-list-manager.component';
+import { NG_VALUE_ACCESSOR } from '@angular/forms';
+import { PoThemeA11yEnum, PoThemeService } from '../../../services';
 import { PoCheckboxGroupModule } from '../../po-field/po-checkbox-group/po-checkbox-group.module';
 import { PoFieldContainerModule } from '../../po-field/po-field-container/po-field-container.module';
 import { PoPopoverModule } from '../../po-popover/po-popover.module';
 import { PoTableModule } from '../po-table.module';
-import { NG_VALUE_ACCESSOR } from '@angular/forms';
+import { PoTableListManagerComponent } from './po-table-list-manager.component';
 
 describe('PoTableListManagerComponent:', () => {
   let component: PoTableListManagerComponent;
   let fixture: ComponentFixture<PoTableListManagerComponent>;
+  let poThemeServiceMock: jasmine.SpyObj<PoThemeService>;
 
   beforeEach(async () => {
+    poThemeServiceMock = jasmine.createSpyObj('PoThemeService', ['getA11yLevel', 'getA11yDefaultSize']);
+
     await TestBed.configureTestingModule({
       declarations: [],
-      imports: [PoCheckboxGroupModule, PoFieldContainerModule, PoPopoverModule, PoTableModule]
+      imports: [PoCheckboxGroupModule, PoFieldContainerModule, PoPopoverModule, PoTableModule],
+      providers: [{ provide: PoThemeService, useValue: poThemeServiceMock }]
     }).compileComponents();
+  });
 
+  beforeEach(() => {
     fixture = TestBed.createComponent(PoTableListManagerComponent);
     component = fixture.componentInstance;
     fixture.debugElement.injector.get(NG_VALUE_ACCESSOR);
@@ -27,6 +34,52 @@ describe('PoTableListManagerComponent:', () => {
 
   it('should create', () => {
     expect(component).toBeTruthy();
+  });
+
+  describe('Properties:', () => {
+    describe('p-components-size', () => {
+      it('should set property with valid values for accessibility level is AA', () => {
+        poThemeServiceMock.getA11yLevel.and.returnValue(PoThemeA11yEnum.AA);
+
+        component.componentsSize = 'small';
+        expect(component.componentsSize).toBe('small');
+
+        component.componentsSize = 'medium';
+        expect(component.componentsSize).toBe('medium');
+      });
+
+      it('should set property with valid values for accessibility level is AAA', () => {
+        poThemeServiceMock.getA11yLevel.and.returnValue(PoThemeA11yEnum.AAA);
+
+        component.componentsSize = 'small';
+        expect(component.componentsSize).toBe('medium');
+
+        component.componentsSize = 'medium';
+        expect(component.componentsSize).toBe('medium');
+      });
+
+      it('should return small when accessibility is AA and getA11yDefaultSize is small', () => {
+        poThemeServiceMock.getA11yLevel.and.returnValue(PoThemeA11yEnum.AA);
+        poThemeServiceMock.getA11yDefaultSize.and.returnValue('small');
+
+        component['_componentsSize'] = undefined;
+        expect(component.componentsSize).toBe('small');
+      });
+
+      it('should return medium when accessibility is AA and getA11yDefaultSize is medium', () => {
+        poThemeServiceMock.getA11yLevel.and.returnValue(PoThemeA11yEnum.AA);
+        poThemeServiceMock.getA11yDefaultSize.and.returnValue('medium');
+
+        component['_componentsSize'] = undefined;
+        expect(component.componentsSize).toBe('medium');
+      });
+
+      it('should return medium when accessibility is AAA, regardless of getA11yDefaultSize', () => {
+        poThemeServiceMock.getA11yLevel.and.returnValue(PoThemeA11yEnum.AAA);
+        component['_componentsSize'] = undefined;
+        expect(component.componentsSize).toBe('medium');
+      });
+    });
   });
 
   it(`verifyArrowDisabled: Should return true if it is the up arrow of the first column`, () => {

@@ -1,38 +1,47 @@
-import { ComponentFixture, fakeAsync, TestBed, tick, waitForAsync } from '@angular/core/testing';
-import { NO_ERRORS_SCHEMA } from '@angular/core';
-import { FormsModule } from '@angular/forms';
 import { provideHttpClientTesting } from '@angular/common/http/testing';
+import { NO_ERRORS_SCHEMA } from '@angular/core';
+import { ComponentFixture, fakeAsync, TestBed, tick, waitForAsync } from '@angular/core/testing';
+import { FormsModule } from '@angular/forms';
 import { RouterTestingModule } from '@angular/router/testing';
 
-import { of, EMPTY } from 'rxjs';
+import { EMPTY, of } from 'rxjs';
 
 import {
   PoDialogModule,
   PoNotificationModule,
   PoTableColumnSort,
   PoTableColumnSortType,
-  PoTableColumnSpacing
+  PoTableColumnSpacing,
+  PoThemeA11yEnum,
+  PoThemeService
 } from '@po-ui/ng-components';
 
-import * as utilsFunctions from '../../utils/util';
 import { expectPropertiesValues } from '../../util-test/util-expect.spec';
+import * as utilsFunctions from '../../utils/util';
 import { PoPageDynamicDetailComponent } from '../po-page-dynamic-detail/po-page-dynamic-detail.component';
 
-import { PoPageDynamicTableComponent } from './po-page-dynamic-table.component';
-import { PoPageDynamicTableBeforeRemove } from './interfaces/po-page-dynamic-table-before-remove.interface';
-import { PoPageDynamicTableBeforeRemoveAll } from './interfaces/po-page-dynamic-table-before-remove-all.interface';
 import { provideHttpClient, withInterceptorsFromDi } from '@angular/common/http';
+import { PoPageDynamicTableBeforeRemoveAll } from './interfaces/po-page-dynamic-table-before-remove-all.interface';
+import { PoPageDynamicTableBeforeRemove } from './interfaces/po-page-dynamic-table-before-remove.interface';
+import { PoPageDynamicTableComponent } from './po-page-dynamic-table.component';
 
 describe('PoPageDynamicTableComponent:', () => {
   let component: PoPageDynamicTableComponent;
   let fixture: ComponentFixture<PoPageDynamicTableComponent>;
+  let poThemeServiceMock: jasmine.SpyObj<PoThemeService>;
 
   beforeEach(waitForAsync(() => {
+    poThemeServiceMock = jasmine.createSpyObj('PoThemeService', ['getA11yLevel', 'getA11yDefaultSize']);
+
     TestBed.configureTestingModule({
       declarations: [PoPageDynamicTableComponent],
       schemas: [NO_ERRORS_SCHEMA],
       imports: [FormsModule, RouterTestingModule.withRoutes([]), PoNotificationModule, PoDialogModule],
-      providers: [provideHttpClient(withInterceptorsFromDi()), provideHttpClientTesting()]
+      providers: [
+        provideHttpClient(withInterceptorsFromDi()),
+        provideHttpClientTesting(),
+        { provide: PoThemeService, useValue: poThemeServiceMock }
+      ]
     }).compileComponents();
   }));
 
@@ -85,6 +94,50 @@ describe('PoPageDynamicTableComponent:', () => {
       component.actionRight = utilsFunctions.convertToBoolean(1);
 
       expect(component.actionRight).toBe(true);
+    });
+
+    describe('p-components-size', () => {
+      it('should set property with valid values for accessibility level is AA', () => {
+        poThemeServiceMock.getA11yLevel.and.returnValue(PoThemeA11yEnum.AA);
+
+        component.componentsSize = 'small';
+        expect(component.componentsSize).toBe('small');
+
+        component.componentsSize = 'medium';
+        expect(component.componentsSize).toBe('medium');
+      });
+
+      it('should set property with valid values for accessibility level is AAA', () => {
+        poThemeServiceMock.getA11yLevel.and.returnValue(PoThemeA11yEnum.AAA);
+
+        component.componentsSize = 'small';
+        expect(component.componentsSize).toBe('medium');
+
+        component.componentsSize = 'medium';
+        expect(component.componentsSize).toBe('medium');
+      });
+
+      it('should return small when accessibility is AA and getA11yDefaultSize is small', () => {
+        poThemeServiceMock.getA11yLevel.and.returnValue(PoThemeA11yEnum.AA);
+        poThemeServiceMock.getA11yDefaultSize.and.returnValue('small');
+
+        component['_componentsSize'] = undefined;
+        expect(component.componentsSize).toBe('small');
+      });
+
+      it('should return medium when accessibility is AA and getA11yDefaultSize is medium', () => {
+        poThemeServiceMock.getA11yLevel.and.returnValue(PoThemeA11yEnum.AA);
+        poThemeServiceMock.getA11yDefaultSize.and.returnValue('medium');
+
+        component['_componentsSize'] = undefined;
+        expect(component.componentsSize).toBe('medium');
+      });
+
+      it('should return medium when accessibility is AAA, regardless of getA11yDefaultSize', () => {
+        poThemeServiceMock.getA11yLevel.and.returnValue(PoThemeA11yEnum.AAA);
+        component['_componentsSize'] = undefined;
+        expect(component.componentsSize).toBe('medium');
+      });
     });
 
     it('p-quick-search-width: should update property p-quick-search-width with valid values.', () => {

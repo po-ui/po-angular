@@ -10,12 +10,18 @@ export class SamplePoPageSlideLabsComponent implements OnInit {
   @ViewChild('poPageSlide')
   private readonly poPageSlide: PoPageSlideComponent;
 
+  public componentsSize: string;
   public hideClose = false;
   public title: string;
   public subtitle: string;
   public content: string;
   public size: string;
   public properties: Array<string>;
+
+  public componentsSizeOptions: Array<PoRadioGroupOption> = [
+    { label: 'small', value: 'small' },
+    { label: 'medium', value: 'medium' }
+  ];
 
   public propertiesOptions: Array<PoCheckboxGroupOption> = [
     {
@@ -60,6 +66,7 @@ export class SamplePoPageSlideLabsComponent implements OnInit {
   }
 
   public restore() {
+    this.componentsSize = 'medium';
     this.hideClose = false;
     this.title = '';
     this.subtitle = '';

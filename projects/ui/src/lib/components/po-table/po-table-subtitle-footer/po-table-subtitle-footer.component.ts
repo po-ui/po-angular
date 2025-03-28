@@ -15,6 +15,9 @@ import { PoTableSubtitleColumn } from './po-table-subtitle-column.interface';
   standalone: false
 })
 export class PoTableSubtitleFooterComponent implements AfterViewInit, DoCheck, OnDestroy {
+  /** Define o tamanho dos elementos que possuem `p-size` dentro do componente. */
+  @Input('p-components-size') componentsSize: string;
+
   /** Propriedade que recebe as literais definidas no `po-table`. */
   @Input('p-literals') literals;
 

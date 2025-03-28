@@ -2,12 +2,14 @@
   #poPageList
   [p-actions]="actions"
   [p-breadcrumb]="breadcrumb"
+  [p-components-size]="componentsSize"
   [p-disclaimer-group]="disclaimerGroup"
   [p-filter]="filterSettings"
   [p-title]="title"
   [p-quick-search-value]="quickSearchValue"
 >
   <po-advanced-filter
+    [p-components-size]="componentsSize"
     [p-filters]="filters"
     [p-keep-filters]="keepFilters"
     [p-literals]="advancedFilterLiterals"

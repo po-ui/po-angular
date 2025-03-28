@@ -1,17 +1,18 @@
-import { ChangeDetectorRef, Directive } from '@angular/core';
-import { fakeAsync, TestBed, tick } from '@angular/core/testing';
+import { Directive } from '@angular/core';
+import { fakeAsync, tick } from '@angular/core/testing';
 import { FormControl, UntypedFormControl, Validators } from '@angular/forms';
 
+import { expectPropertiesValues, expectSettersMethod } from '../../../util-test/util-expect.spec';
 import * as UtilsFunctions from '../../../utils/util';
+import { convertDateToISOExtended, convertIsoToDate, formatYear, setYearFrom0To100 } from '../../../utils/util';
 import * as ValidatorsFunctions from './../validators';
-import { convertDateToISOExtended, formatYear, setYearFrom0To100, convertIsoToDate } from '../../../utils/util';
-import { expectSettersMethod, expectPropertiesValues } from '../../../util-test/util-expect.spec';
 
-import { PoDatepickerBaseComponent } from './po-datepicker-base.component';
-import { PoDatepickerIsoFormat } from './enums/po-datepicker-iso-format.enum';
-import { PoMask } from '../po-input/po-mask';
-import { PoLanguageService } from '../../../services/po-language/po-language.service';
 import { Subject } from 'rxjs';
+import { PoThemeA11yEnum, PoThemeService } from '../../../services';
+import { PoLanguageService } from '../../../services/po-language/po-language.service';
+import { PoMask } from '../po-input/po-mask';
+import { PoDatepickerIsoFormat } from './enums/po-datepicker-iso-format.enum';
+import { PoDatepickerBaseComponent } from './po-datepicker-base.component';
 
 @Directive()
 class PoDatepickerComponent extends PoDatepickerBaseComponent {
@@ -22,12 +23,16 @@ class PoDatepickerComponent extends PoDatepickerBaseComponent {
 
 describe('PoDatepickerBaseComponent:', () => {
   let component: PoDatepickerComponent;
+  let poThemeServiceMock: jasmine.SpyObj<PoThemeService>;
+
   const fakeSubscription = <any>{ unsubscribe: () => {} };
   const languageService: PoLanguageService = new PoLanguageService();
 
   beforeEach(() => {
     const changeDetector: any = { detectChanges: () => {} };
-    component = new PoDatepickerComponent(languageService, changeDetector);
+    poThemeServiceMock = jasmine.createSpyObj('PoThemeService', ['getA11yLevel', 'getA11yDefaultSize']);
+
+    component = new PoDatepickerComponent(languageService, changeDetector, poThemeServiceMock);
     component['shortLanguage'] = 'pt';
   });
 
@@ -669,6 +674,50 @@ describe('PoDatepickerBaseComponent:', () => {
       const invalidValues = [undefined, 0, 1, 3, 'valor', [], true, false];
 
       expectPropertiesValues(component, 'isoFormat', invalidValues, undefined);
+    });
+
+    describe('p-size', () => {
+      it('should set property with valid values for accessibility level is AA', () => {
+        poThemeServiceMock.getA11yLevel.and.returnValue(PoThemeA11yEnum.AA);
+
+        component.size = 'small';
+        expect(component.size).toBe('small');
+
+        component.size = 'medium';
+        expect(component.size).toBe('medium');
+      });
+
+      it('should set property with valid values for accessibility level is AAA', () => {
+        poThemeServiceMock.getA11yLevel.and.returnValue(PoThemeA11yEnum.AAA);
+
+        component.size = 'small';
+        expect(component.size).toBe('medium');
+
+        component.size = 'medium';
+        expect(component.size).toBe('medium');
+      });
+
+      it('should return small when accessibility is AA and getA11yDefaultSize is small', () => {
+        poThemeServiceMock.getA11yLevel.and.returnValue(PoThemeA11yEnum.AA);
+        poThemeServiceMock.getA11yDefaultSize.and.returnValue('small');
+
+        component['_size'] = undefined;
+        expect(component.size).toBe('small');
+      });
+
+      it('should return medium when accessibility is AA and getA11yDefaultSize is medium', () => {
+        poThemeServiceMock.getA11yLevel.and.returnValue(PoThemeA11yEnum.AA);
+        poThemeServiceMock.getA11yDefaultSize.and.returnValue('medium');
+
+        component['_size'] = undefined;
+        expect(component.size).toBe('medium');
+      });
+
+      it('should return medium when accessibility is AAA, regardless of getA11yDefaultSize', () => {
+        poThemeServiceMock.getA11yLevel.and.returnValue(PoThemeA11yEnum.AAA);
+        component['_size'] = undefined;
+        expect(component.size).toBe('medium');
+      });
     });
   });
 });

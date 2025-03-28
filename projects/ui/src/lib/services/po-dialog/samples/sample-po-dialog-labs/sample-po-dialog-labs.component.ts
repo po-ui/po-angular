@@ -12,6 +12,7 @@ import { PoDialogAlertLiterals, PoDialogConfirmLiterals, PoDialogService } from 
 export class SamplePoDialogLabsComponent implements OnInit {
   action: string;
   actionOptions: Array<string>;
+  componentsSize: string = 'medium';
   dialogMethod: string;
   help: string;
   literals: string;
@@ -19,6 +20,11 @@ export class SamplePoDialogLabsComponent implements OnInit {
   literalsConfirm: PoDialogConfirmLiterals;
   message: string;
   title: string;
+
+  public readonly componentsSizeOptions: Array<PoRadioGroupOption> = [
+    { label: 'small', value: 'small' },
+    { label: 'medium', value: 'medium' }
+  ];
 
   public readonly dialogActionOptions: Array<PoCheckboxGroupOption> = [
     { label: 'Ok', value: 'ok' },
@@ -40,6 +46,7 @@ export class SamplePoDialogLabsComponent implements OnInit {
 
   alertDialog() {
     this.poAlert.alert({
+      componentsSize: this.componentsSize,
       literals: this.literalsAlert,
       title: this.title,
       message: this.message,
@@ -72,6 +79,7 @@ export class SamplePoDialogLabsComponent implements OnInit {
 
   confirmDialog() {
     this.poAlert.confirm({
+      componentsSize: this.componentsSize,
       literals: this.literalsConfirm,
       title: this.title,
       message: this.message,
@@ -89,6 +97,7 @@ export class SamplePoDialogLabsComponent implements OnInit {
   restore() {
     this.action = undefined;
     this.actionOptions = [];
+    this.componentsSize = 'medium';
     this.title = 'PO Dialog';
     this.message = 'PO Dialog';
     this.dialogMethod = undefined;

@@ -1,17 +1,17 @@
 import { DOCUMENT } from '@angular/common';
 import { Inject, Injectable, Optional, Renderer2, RendererFactory2 } from '@angular/core';
-import { ICONS_DICTIONARY, AnimaliaIconDictionary } from '../../components/po-icon/index';
+import { AnimaliaIconDictionary, ICONS_DICTIONARY } from '../../components/po-icon/index';
 
-import { PoThemeColor } from './interfaces/po-theme-color.interface';
-import { PoThemeTokens } from './interfaces/po-theme-tokens.interface';
-import { PoTheme, PoThemeActive } from './interfaces/po-theme.interface';
 import { PoThemeA11yEnum } from './enum/po-theme-a11y.enum';
 import { PoThemeTypeEnum } from './enum/po-theme-type.enum';
 import { poThemeDefaultAA } from './helpers/accessibilities/po-theme-default-aa.constant';
 import { poThemeDefaultAAA } from './helpers/accessibilities/po-theme-default-aaa.constant';
-import { poThemeDefaultLightValues } from './helpers/types/po-theme-light-defaults.constant';
-import { poThemeDefaultDarkValues } from './helpers/types/po-theme-dark-defaults.constant';
 import { poThemeDefault } from './helpers/po-theme-poui.constant';
+import { poThemeDefaultDarkValues } from './helpers/types/po-theme-dark-defaults.constant';
+import { poThemeDefaultLightValues } from './helpers/types/po-theme-light-defaults.constant';
+import { PoThemeColor } from './interfaces/po-theme-color.interface';
+import { PoThemeTokens } from './interfaces/po-theme-tokens.interface';
+import { PoTheme, PoThemeActive } from './interfaces/po-theme.interface';
 
 /**
  * @description
@@ -85,7 +85,7 @@ export class PoThemeService {
    *
    * @param {PoTheme} themeConfig - Configuração de tema a ser aplicada ao componente.
    * @param {PoThemeTypeEnum} [themeType=PoThemeTypeEnum.light] - (Opcional) Tipo de tema, podendo ser 'light' (claro) ou 'dark' (escuro). O tema claro é o padrão.
-   * @param {PoThemeA11yEnum} [a11yLevel=PoThemeA11yEnum.AAA] - (Opcional) Nível de acessibilidade do tema, podendo ser AA ou AAA. Padrão é AAA.
+   * @param {PoThemeA11yEnum} [a11yLevel=PoThemeA11yEnum.AAA] - (Opcional) Nível de acessibilidade dos componentes, podendo ser AA ou AAA. Padrão é AAA.
    * @param {boolean} [persistPreference=true] - (Opcional) Define se a preferência de tema deve ser salva no localStorage para persistência. `true` para salvar, `false` para não salvar.
    */
   setTheme(
@@ -121,7 +121,62 @@ export class PoThemeService {
       }`;
 
     this.applyThemeStyles(combinedStyles);
+    document.documentElement.setAttribute('data-a11y', a11yLevel === PoThemeA11yEnum.AAA ? 'AAA' : 'AA');
     this.changeThemeType(themeConfig, persistPreference);
+  }
+
+  /**
+   * Retorna o nível de acessibilidade configurado no tema.
+   * Se não estiver configurado, retorna `AAA` como padrão.
+   * @returns {PoThemeA11yEnum} O nível de acessibilidade, que pode ser `AA` ou `AAA`.
+   */
+  getA11yLevel(): PoThemeA11yEnum {
+    const a11yLevel = document.documentElement.getAttribute('data-a11y');
+    if (a11yLevel !== 'AA' && a11yLevel !== 'AAA') {
+      return PoThemeA11yEnum.AAA;
+    }
+
+    return a11yLevel === 'AAA' ? PoThemeA11yEnum.AAA : PoThemeA11yEnum.AA;
+  }
+
+  /**
+   * Define o tamanho `small` como padrão para componentes de formulário que não possuem um tamanho definido.
+   * Essa configuração é aplicada globalmente apenas quando o nível de acessibilidade for `AA`.
+   * Caso contrário, o tamanho padrão será `medium`.
+   *
+   * @param {boolean} enable Habilita ou desabilita o tamanho `small` globalmente.
+   */
+  setA11yDefaultSizeSmall(enable: boolean): boolean {
+    const a11yLevel = document.documentElement.getAttribute('data-a11y');
+
+    if (!a11yLevel || (a11yLevel !== PoThemeA11yEnum.AA && a11yLevel !== PoThemeA11yEnum.AAA)) {
+      return false;
+    }
+
+    if (a11yLevel === PoThemeA11yEnum.AA && enable) {
+      const defaultSize = 'small';
+
+      if (localStorage.getItem('po-default-size') !== defaultSize) {
+        localStorage.setItem('po-default-size', defaultSize);
+      }
+      return true;
+    }
+
+    localStorage.removeItem('po-default-size');
+
+    return false;
+  }
+
+  /**
+   * @docsPrivate
+   * Retorna a preferência global de tamanho dos componentes.
+   *
+   * @returns `'small'` ou `'medium'`.
+   */
+  getA11yDefaultSize(): string {
+    const defaultSize = localStorage.getItem('po-default-size');
+    const a11yLevel = document.documentElement.getAttribute('data-a11y');
+    return defaultSize === 'small' && a11yLevel === 'AA' ? 'small' : 'medium';
   }
 
   /**
@@ -260,6 +315,8 @@ export class PoThemeService {
   persistThemeActive() {
     const _theme = this.getThemeActive();
     this.setTheme(_theme, this.getActiveTypeFromTheme(_theme.active), this.getActiveA11yFromTheme(_theme.active));
+    const defaultSize = this.getA11yDefaultSize();
+    localStorage.setItem('po-default-size', defaultSize);
     return _theme;
   }
 
@@ -269,6 +326,7 @@ export class PoThemeService {
       .replace(/[^a-zA-Z ]/g, '')
       .replace(/\s+/g, '-');
     themeConfig.active = { type: themeType, a11y: a11yLevel };
+    this.theme = themeConfig;
   }
 
   applyTheme(theme?: any): any {
@@ -354,7 +412,8 @@ export class PoThemeService {
   }
 
   /**
-   * Retorna o tema ativo como um observable.
+   * Retorna o tema ativo como um observable. Este método funcionará apenas se o tema estiver armazenado no `localStorage`.
+   *
    * @returns {PoTheme} Tema ativo.
    */
   getThemeActive(): PoTheme {
@@ -531,10 +590,11 @@ export class PoThemeService {
   }
 
   /**
-   * Define o nivel de acessibilidade quando um tema está sendo aplicado.
+   * Define o nível de acessibilidade quando um tema está sendo aplicado.
    *
    * @param {PoTheme} theme - Objeto contendo as definições de tema a serem aplicadas no componente.
-   * @param {PoThemeA11yEnum} [a11y=PoThemeA11yEnum.AAA] - (Opcional) Nível de acessibilidade a ser aplicado ao tema, como AA ou AAA. Se não for informado, por padrão a acessibilidade será AAA.
+   * @param {PoThemeA11yEnum} [a11y=PoThemeA11yEnum.AAA] - (Opcional) Nível de acessibilidade dos componentes podendo ser
+   * AA ou AAA. Por padrão a acessibilidade é AAA.
    */
   setThemeA11y(theme: PoTheme, a11y: PoThemeA11yEnum = PoThemeA11yEnum.AAA) {
     const _type = (typeof theme.active === 'object' ? theme.active.type : theme.active) || 0;
@@ -542,9 +602,10 @@ export class PoThemeService {
   }
 
   /**
-   * Define o nivel de acessibilidade para um tema já ativo.
+   * Define o nível de acessibilidade para um tema já ativo.
    *
-   * @param {PoThemeA11yEnum} [a11y=PoThemeA11yEnum.AAA] - (Opcional) Nível de acessibilidade a ser aplicado ao tema, como AA ou AAA. Se não for informado, por padrão a acessibilidade será AAA.
+   * @param {PoThemeA11yEnum} [a11y=PoThemeA11yEnum.AAA] - (Opcional) Nível de acessibilidade dos componentes podendo ser
+   * AA ou AAA. Por padrão a acessibilidade é AAA.
    */
   setCurrentThemeA11y(a11y: PoThemeA11yEnum = PoThemeA11yEnum.AAA) {
     const _theme = this.getThemeActive();

@@ -11,6 +11,7 @@ import { NG_VALIDATORS, NG_VALUE_ACCESSOR } from '@angular/forms';
 
 import { uuid } from '../../../utils/util';
 
+import { PoThemeService } from '../../../services';
 import { PoTextareaBaseComponent } from './po-textarea-base.component';
 
 /**
@@ -66,9 +67,10 @@ export class PoTextareaComponent extends PoTextareaBaseComponent implements Afte
 
   constructor(
     cd: ChangeDetectorRef,
-    private el: ElementRef
+    private el: ElementRef,
+    protected poThemeService: PoThemeService
   ) {
-    super(cd);
+    super(cd, poThemeService);
   }
 
   emitAdditionalHelp() {

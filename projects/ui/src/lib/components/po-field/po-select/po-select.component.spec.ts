@@ -2,31 +2,39 @@ import { ComponentFixture, TestBed } from '@angular/core/testing';
 import { FormsModule } from '@angular/forms';
 
 import * as UtilsFunctions from '../../../utils/util';
-import { configureTestSuite, expectSettersMethod } from './../../../util-test/util-expect.spec';
+import { expectSettersMethod } from './../../../util-test/util-expect.spec';
 
+import { PoThemeA11yEnum } from '../../../services';
+import { PoThemeService } from '../../../services/po-theme/po-theme.service';
 import { removeDuplicatedOptions, removeUndefinedAndNullOptions } from '../../../utils/util';
 import { PoFieldContainerComponent } from '../po-field-container/po-field-container.component';
+import { PoFieldValidateModel } from '../po-field-validate.model';
 import { PoFieldContainerBottomComponent } from './../po-field-container/po-field-container-bottom/po-field-container-bottom.component';
 import { PoSelectOptionGroup } from './po-select-option-group.interface';
 import { PoSelectOption } from './po-select-option.interface';
 import { PoSelectComponent } from './po-select.component';
-import { PoFieldValidateModel } from '../po-field-validate.model';
 
 describe('PoSelectComponent:', () => {
   let component: PoSelectComponent;
   let fixture: ComponentFixture<PoSelectComponent>;
   let nativeElement;
+  let poThemeServiceMock: jasmine.SpyObj<PoThemeService>;
+
+  const booleanValidFalseValues = [false, 'false'];
+  const booleanValidTrueValues = [true, 'true', ''];
+  const booleanInvalidValues = [undefined, null, 2, 'string'];
 
   const event = new MouseEvent('click', { 'bubbles': false, 'cancelable': true });
 
-  configureTestSuite(() => {
+  beforeEach(() => {
+    poThemeServiceMock = jasmine.createSpyObj('PoThemeService', ['getA11yLevel', 'getA11yDefaultSize']);
+
     TestBed.configureTestingModule({
       imports: [FormsModule],
-      declarations: [PoSelectComponent, PoFieldContainerComponent, PoFieldContainerBottomComponent]
+      declarations: [PoSelectComponent, PoFieldContainerComponent, PoFieldContainerBottomComponent],
+      providers: [{ provide: PoThemeService, useValue: poThemeServiceMock }]
     });
-  });
 
-  beforeEach(() => {
     fixture = TestBed.createComponent(PoSelectComponent);
     component = fixture.componentInstance;
     component.options = [{ value: 1, label: 'Teste2' }];
@@ -56,6 +64,50 @@ describe('PoSelectComponent:', () => {
   it('should execute isEqual when value is undefined and input have value', () => {
     const isEqual = component['isEqual'](undefined, 'teste');
     expect(isEqual).toBe(false);
+  });
+
+  describe('p-size', () => {
+    it('should set property with valid values for accessibility level is AA', () => {
+      poThemeServiceMock.getA11yLevel.and.returnValue(PoThemeA11yEnum.AA);
+
+      component.size = 'small';
+      expect(component.size).toBe('small');
+
+      component.size = 'medium';
+      expect(component.size).toBe('medium');
+    });
+
+    it('should set property with valid values for accessibility level is AAA', () => {
+      poThemeServiceMock.getA11yLevel.and.returnValue(PoThemeA11yEnum.AAA);
+
+      component.size = 'small';
+      expect(component.size).toBe('medium');
+
+      component.size = 'medium';
+      expect(component.size).toBe('medium');
+    });
+
+    it('should return small when accessibility is AA and getA11yDefaultSize is small', () => {
+      poThemeServiceMock.getA11yLevel.and.returnValue(PoThemeA11yEnum.AA);
+      poThemeServiceMock.getA11yDefaultSize.and.returnValue('small');
+
+      component['_size'] = undefined;
+      expect(component.size).toBe('small');
+    });
+
+    it('should return medium when accessibility is AA and getA11yDefaultSize is medium', () => {
+      poThemeServiceMock.getA11yLevel.and.returnValue(PoThemeA11yEnum.AA);
+      poThemeServiceMock.getA11yDefaultSize.and.returnValue('medium');
+
+      component['_size'] = undefined;
+      expect(component.size).toBe('medium');
+    });
+
+    it('should return medium when accessibility is AAA, regardless of getA11yDefaultSize', () => {
+      poThemeServiceMock.getA11yLevel.and.returnValue(PoThemeA11yEnum.AAA);
+      component['_size'] = undefined;
+      expect(component.size).toBe('medium');
+    });
   });
 
   describe('Methods:', () => {

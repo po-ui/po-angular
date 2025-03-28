@@ -7,7 +7,7 @@ import * as ValidatorsFunctions from '../validators';
 
 import { fakeAsync, tick } from '@angular/core/testing';
 import { Subject } from 'rxjs';
-import { PoLanguageService } from '../../../services';
+import { PoLanguageService, PoThemeA11yEnum, PoThemeService } from '../../../services';
 import { PoDatepickerRange } from './interfaces/po-datepicker-range.interface';
 import { PoDatepickerRangeBaseComponent } from './po-datepicker-range-base.component';
 import { poDatepickerRangeLiteralsDefault } from './po-datepicker-range.literals';
@@ -36,8 +36,19 @@ describe('PoDatepickerRangeBaseComponent:', () => {
   };
   const changeDetector: any = { detectChanges: () => {}, markForCheck: () => {} };
   const fakeSubscription = <any>{ unsubscribe: () => {} };
+  let component: PoDatepickerRangeComponent;
+  let poThemeServiceMock: jasmine.SpyObj<PoThemeService>;
 
-  const component = new PoDatepickerRangeComponent(mockedService, changeDetector, new PoLanguageService());
+  beforeEach(() => {
+    poThemeServiceMock = jasmine.createSpyObj('PoThemeService', ['getA11yLevel', 'getA11yDefaultSize']);
+
+    component = new PoDatepickerRangeComponent(
+      mockedService,
+      changeDetector,
+      poThemeServiceMock,
+      new PoLanguageService()
+    );
+  });
 
   it('should be created', () => {
     expect(component instanceof PoDatepickerRangeBaseComponent).toBeTruthy();
@@ -272,6 +283,50 @@ describe('PoDatepickerRangeBaseComponent:', () => {
       expect(component['convertPatternDateFormat']).toHaveBeenCalledWith(date);
       expect(component.updateScreenByModel).toHaveBeenCalledWith(start);
       expect(component['updateModel']).toHaveBeenCalledWith(start);
+    });
+
+    describe('p-size', () => {
+      it('should set property with valid values for accessibility level is AA', () => {
+        poThemeServiceMock.getA11yLevel.and.returnValue(PoThemeA11yEnum.AA);
+
+        component.size = 'small';
+        expect(component.size).toBe('small');
+
+        component.size = 'medium';
+        expect(component.size).toBe('medium');
+      });
+
+      it('should set property with valid values for accessibility level is AAA', () => {
+        poThemeServiceMock.getA11yLevel.and.returnValue(PoThemeA11yEnum.AAA);
+
+        component.size = 'small';
+        expect(component.size).toBe('medium');
+
+        component.size = 'medium';
+        expect(component.size).toBe('medium');
+      });
+
+      it('should return small when accessibility is AA and getA11yDefaultSize is small', () => {
+        poThemeServiceMock.getA11yLevel.and.returnValue(PoThemeA11yEnum.AA);
+        poThemeServiceMock.getA11yDefaultSize.and.returnValue('small');
+
+        component['_size'] = undefined;
+        expect(component.size).toBe('small');
+      });
+
+      it('should return medium when accessibility is AA and getA11yDefaultSize is medium', () => {
+        poThemeServiceMock.getA11yLevel.and.returnValue(PoThemeA11yEnum.AA);
+        poThemeServiceMock.getA11yDefaultSize.and.returnValue('medium');
+
+        component['_size'] = undefined;
+        expect(component.size).toBe('medium');
+      });
+
+      it('should return medium when accessibility is AAA, regardless of getA11yDefaultSize', () => {
+        poThemeServiceMock.getA11yLevel.and.returnValue(PoThemeA11yEnum.AAA);
+        component['_size'] = undefined;
+        expect(component.size).toBe('medium');
+      });
     });
   });
 

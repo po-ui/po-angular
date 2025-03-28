@@ -1,6 +1,12 @@
 import { Component, OnInit, ViewChild } from '@angular/core';
 
-import { PoDynamicFormField, PoNotificationService, PoTab, PoTabsComponent } from '@po-ui/ng-components';
+import {
+  PoDynamicFormField,
+  PoNotificationService,
+  PoRadioGroupOption,
+  PoTab,
+  PoTabsComponent
+} from '@po-ui/ng-components';
 
 @Component({
   selector: 'sample-po-tabs-labs',
@@ -11,20 +17,19 @@ export class SamplePoTabsLabsComponent implements OnInit {
   @ViewChild('poTab', { static: true }) poTab: PoTabsComponent;
 
   tabsFieldsForm: Array<PoDynamicFormField> = [
-    { property: 'label', divider: 'TABS', required: true, gridColumns: 6 },
+    { property: 'label', divider: 'TAB', required: true, gridColumns: 6 },
     { property: 'click', gridColumns: 6 },
     { property: 'active', type: 'boolean', gridColumns: 4 },
     { property: 'disabled', type: 'boolean', gridColumns: 4 },
     { property: 'hide', type: 'boolean', gridColumns: 4 }
   ];
-  propertiesFieldsForm: Array<PoDynamicFormField> = [
-    {
-      property: 'properties',
-      divider: 'PROPERTIES',
-      optionsMulti: true,
-      gridColumns: 4
-    }
+
+  public sizeOptions: Array<PoRadioGroupOption> = [
+    { label: 'small', value: 'small' },
+    { label: 'medium', value: 'medium' }
   ];
+
+  size: string = 'medium';
   tabs: Array<PoTab> = [];
   properties: Array<string> = [];
   pageWidth: number;
@@ -55,8 +60,8 @@ export class SamplePoTabsLabsComponent implements OnInit {
   }
 
   restore() {
+    this.size = 'medium';
     this.tabs = [];
-    this.properties = [];
     this.poTab.quantityTabsButton = 0;
   }
 

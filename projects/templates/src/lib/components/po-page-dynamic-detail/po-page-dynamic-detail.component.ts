@@ -1,8 +1,8 @@
-import { Component, Input, OnInit, OnDestroy } from '@angular/core';
-import { Route, Router, ActivatedRoute } from '@angular/router';
+import { Component, Input, OnDestroy, OnInit } from '@angular/core';
+import { ActivatedRoute, Route, Router } from '@angular/router';
 
-import { Subscription, concat, EMPTY, Observable, throwError, of } from 'rxjs';
-import { tap, catchError, map, switchMap } from 'rxjs/operators';
+import { EMPTY, Observable, Subscription, concat, of, throwError } from 'rxjs';
+import { catchError, map, switchMap, tap } from 'rxjs/operators';
 
 import {
   PoBreadcrumb,
@@ -11,22 +11,29 @@ import {
   PoLanguageService,
   PoNotificationService,
   PoPageAction,
+  PoThemeService,
   poLocaleDefault
 } from '@po-ui/ng-components';
 
-import { convertToBoolean, mapObjectByProperties, valuesFromObject } from '../../utils/util';
+import {
+  convertToBoolean,
+  getDefaultSize,
+  mapObjectByProperties,
+  validateSize,
+  valuesFromObject
+} from '../../utils/util';
 
-import { PoPageDynamicDetailActions } from './interfaces/po-page-dynamic-detail-actions.interface';
-import { PoPageDynamicDetailField } from './interfaces/po-page-dynamic-detail-field.interface';
 import { PoPageDynamicService } from '../../services/po-page-dynamic/po-page-dynamic.service';
-import { PoPageDynamicDetailActionsService } from './po-page-dynamic-detail-actions.service';
-import { PoPageDynamicDetailOptions } from './interfaces/po-page-dynamic-detail-options.interface';
 import { PoPageCustomizationService } from './../../services/po-page-customization/po-page-customization.service';
 import { PoPageDynamicOptionsSchema } from './../../services/po-page-customization/po-page-dynamic-options.interface';
-import { PoPageDynamicDetailMetaData } from './interfaces/po-page-dynamic-detail-metadata.interface';
+import { PoPageDynamicDetailActions } from './interfaces/po-page-dynamic-detail-actions.interface';
 import { PoPageDynamicDetailBeforeBack } from './interfaces/po-page-dynamic-detail-before-back.interface';
-import { PoPageDynamicDetailBeforeRemove } from './interfaces/po-page-dynamic-detail-before-remove.interface';
 import { PoPageDynamicDetailBeforeEdit } from './interfaces/po-page-dynamic-detail-before-edit.interface';
+import { PoPageDynamicDetailBeforeRemove } from './interfaces/po-page-dynamic-detail-before-remove.interface';
+import { PoPageDynamicDetailField } from './interfaces/po-page-dynamic-detail-field.interface';
+import { PoPageDynamicDetailMetaData } from './interfaces/po-page-dynamic-detail-metadata.interface';
+import { PoPageDynamicDetailOptions } from './interfaces/po-page-dynamic-detail-options.interface';
+import { PoPageDynamicDetailActionsService } from './po-page-dynamic-detail-actions.service';
 
 type UrlOrPoCustomizationFunction = string | (() => PoPageDynamicDetailOptions);
 
@@ -230,6 +237,7 @@ export class PoPageDynamicDetailComponent implements OnInit, OnDestroy {
 
   private _actions: PoPageDynamicDetailActions = {};
   private _autoRouter: boolean = false;
+  private _componentsSize?: string = undefined;
   private _duplicates: Array<any> = [];
   private _fields: Array<any> = [];
   private _keys: Array<any> = [];
@@ -274,6 +282,28 @@ export class PoPageDynamicDetailComponent implements OnInit, OnDestroy {
     return this._autoRouter;
   }
 
+  /**
+   * @optional
+   *
+   * @description
+   *
+   * Define o tamanho dos componentes de formulário no template:
+   * - `small`: aplica a medida small de cada componente (disponível apenas para acessibilidade AA).
+   * - `medium`: aplica a medida medium de cada componente.
+   *
+   * > Caso a acessibilidade AA não esteja configurada, o tamanho `medium` será mantido.
+   * Para mais detalhes, consulte a documentação do [po-theme](https://po-ui.io/documentation/po-theme).
+   *
+   * @default `medium`
+   */
+  @Input('p-components-size') set componentsSize(value: string) {
+    this._componentsSize = validateSize(value, this.poThemeService);
+  }
+
+  get componentsSize(): string {
+    return this._componentsSize ?? getDefaultSize(this.poThemeService);
+  }
+
   /** Lista dos campos exibidos na página. */
   @Input('p-fields') set fields(value: Array<PoPageDynamicDetailField>) {
     this._fields = Array.isArray(value) ? [...value] : [];
@@ -286,6 +316,7 @@ export class PoPageDynamicDetailComponent implements OnInit, OnDestroy {
     return this._fields;
   }
 
+  /* eslint-disable max-params */
   constructor(
     private router: Router,
     private activatedRoute: ActivatedRoute,
@@ -294,6 +325,7 @@ export class PoPageDynamicDetailComponent implements OnInit, OnDestroy {
     private poPageDynamicService: PoPageDynamicService,
     private poPageDynamicDetailActionsService: PoPageDynamicDetailActionsService,
     private poPageCustomizationService: PoPageCustomizationService,
+    private poThemeService: PoThemeService,
     languageService: PoLanguageService
   ) {
     const language = languageService.getShortLanguage();
@@ -303,6 +335,7 @@ export class PoPageDynamicDetailComponent implements OnInit, OnDestroy {
       ...poPageDynamicDetailLiteralsDefault[language]
     };
   }
+  /* eslint-enable max-params */
 
   ngOnInit(): void {
     this.loadDataFromAPI();

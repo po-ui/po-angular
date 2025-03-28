@@ -10,10 +10,11 @@ import { PoLanguageService } from '../../../services/po-language/po-language.ser
 import * as utilsFunctions from '../../../utils/util';
 import * as ValidatorsFunctions from '../validators';
 
+import { PoThemeA11yEnum, PoThemeService } from '../../../services';
+import { PoProgressAction } from '../../po-progress';
 import { PoUploadBaseComponent, poUploadLiteralsDefault } from './po-upload-base.component';
 import { PoUploadFile } from './po-upload-file';
 import { PoUploadService } from './po-upload.service';
-import { PoProgressAction } from '../../po-progress';
 
 @Component({
   selector: 'po-upload',
@@ -21,8 +22,8 @@ import { PoProgressAction } from '../../po-progress';
   standalone: false
 })
 class PoUploadComponent extends PoUploadBaseComponent {
-  constructor(uploadService: PoUploadService) {
-    super(uploadService, new PoLanguageService());
+  constructor(uploadService: PoUploadService, poThemeService: PoThemeService) {
+    super(poThemeService, uploadService, new PoLanguageService());
   }
 
   sendFeedback() {}
@@ -32,6 +33,7 @@ class PoUploadComponent extends PoUploadBaseComponent {
 describe('PoUploadBaseComponent:', () => {
   let component: PoUploadComponent;
   let fixture: ComponentFixture<PoUploadComponent>;
+  let poThemeServiceMock: jasmine.SpyObj<PoThemeService>;
 
   const fileMock: any = {
     lastModified: 1504558774471,
@@ -43,9 +45,17 @@ describe('PoUploadBaseComponent:', () => {
   };
 
   beforeEach(async () => {
+    poThemeServiceMock = jasmine.createSpyObj('PoThemeService', ['getA11yLevel', 'getA11yDefaultSize']);
+
     await TestBed.configureTestingModule({
       declarations: [PoUploadComponent],
-      providers: [HttpClient, HttpHandler, PoUploadService, PoLanguageService],
+      providers: [
+        HttpClient,
+        HttpHandler,
+        PoUploadService,
+        PoLanguageService,
+        { provide: PoThemeService, useValue: poThemeServiceMock }
+      ],
       imports: [FormsModule]
     }).compileComponents();
 
@@ -820,6 +830,50 @@ describe('PoUploadBaseComponent:', () => {
       component.customActionClick.emit(mockFile);
 
       expect(component.customActionClick.emit).toHaveBeenCalledWith(mockFile);
+    });
+
+    describe('p-size', () => {
+      it('should set property with valid values for accessibility level is AA', () => {
+        poThemeServiceMock.getA11yLevel.and.returnValue(PoThemeA11yEnum.AA);
+
+        component.size = 'small';
+        expect(component.size).toBe('small');
+
+        component.size = 'medium';
+        expect(component.size).toBe('medium');
+      });
+
+      it('should set property with valid values for accessibility level is AAA', () => {
+        poThemeServiceMock.getA11yLevel.and.returnValue(PoThemeA11yEnum.AAA);
+
+        component.size = 'small';
+        expect(component.size).toBe('medium');
+
+        component.size = 'medium';
+        expect(component.size).toBe('medium');
+      });
+
+      it('should return small when accessibility is AA and getA11yDefaultSize is small', () => {
+        poThemeServiceMock.getA11yLevel.and.returnValue(PoThemeA11yEnum.AA);
+        poThemeServiceMock.getA11yDefaultSize.and.returnValue('small');
+
+        component['_size'] = undefined;
+        expect(component.size).toBe('small');
+      });
+
+      it('should return medium when accessibility is AA and getA11yDefaultSize is medium', () => {
+        poThemeServiceMock.getA11yLevel.and.returnValue(PoThemeA11yEnum.AA);
+        poThemeServiceMock.getA11yDefaultSize.and.returnValue('medium');
+
+        component['_size'] = undefined;
+        expect(component.size).toBe('medium');
+      });
+
+      it('should return medium when accessibility is AAA, regardless of getA11yDefaultSize', () => {
+        poThemeServiceMock.getA11yLevel.and.returnValue(PoThemeA11yEnum.AAA);
+        component['_size'] = undefined;
+        expect(component.size).toBe('medium');
+      });
     });
   });
 });

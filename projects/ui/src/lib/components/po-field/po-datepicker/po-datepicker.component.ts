@@ -28,8 +28,10 @@ import { isObservable, of, Subscription, switchMap } from 'rxjs';
 import { PoLanguageService } from '../../../services/po-language/po-language.service';
 import { PoButtonComponent } from '../../po-button/po-button.component';
 import { PoCalendarComponent } from '../../po-calendar/po-calendar.component';
+import { PoFieldSize } from '../../../enums/po-field-size.enum';
 import { PoDatepickerBaseComponent } from './po-datepicker-base.component';
 import { PoDatepickerLiterals } from './po-datepicker.literals';
+import { PoThemeService } from '../../../services';
 
 const poCalendarContentOffset = 8;
 const poCalendarPositionDefault = 'bottom-left';
@@ -125,11 +127,12 @@ export class PoDatepickerComponent extends PoDatepickerBaseComponent implements 
   constructor(
     protected languageService: PoLanguageService,
     protected cd: ChangeDetectorRef,
+    protected poThemeService: PoThemeService,
     private controlPosition: PoControlPositionService,
     private renderer: Renderer2,
     el: ElementRef
   ) {
-    super(languageService, cd);
+    super(languageService, cd, poThemeService);
     this.shortLanguage = this.languageService.getShortLanguage();
     this.el = el;
     const language = languageService.getShortLanguage();
