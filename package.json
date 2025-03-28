@@ -145,6 +145,14 @@
     "typemoq": "^2.1.0",
     "typescript": "~5.2.2"
   },
+  "overrides": {
+    "custom-idle-queue": {
+      "@babel/runtime": "~7.26.10"
+    },
+    "@angular-devkit/build-angular": {
+      "@babel/runtime": "~7.26.10"
+    }
+  },
   "standard-version": {
     "skip": {
       "commit": true,
