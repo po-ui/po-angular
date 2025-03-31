@@ -2,6 +2,20 @@
 
 All notable changes to this project will be documented in this file. See [standard-version](https://github.com/conventional-changelog/standard-version) for commit guidelines.
 
+## [19.7.0](https://github.com/po-ui/po-angular/compare/v19.6.0...v19.7.0) (2025-03-31)
+
+
+### Features
+
+* **components:** ajusta buttons e fields conforme acessibilidade ([052ba28](https://github.com/po-ui/po-angular/commit/052ba28b5d54d02be2f11fca66dddc2560c7bb9b))
+* **tabs:** adiciona o token --background-item-default ([d28df84](https://github.com/po-ui/po-angular/commit/d28df84c63510643dce76b177ebb89f84d80938e))
+* **theme:** adiciona novo metodo para resetar tema ([c8d25d7](https://github.com/po-ui/po-angular/commit/c8d25d77b4c504a4d24ef915c7bcf2624a5789ad))
+
+
+### Bug Fixes
+
+* **lookup:** corrige seleção multipla ([86176f3](https://github.com/po-ui/po-angular/commit/86176f3aeabb00f86952134af47945179abb1640))
+
 ## [19.6.0](https://github.com/po-ui/po-angular/compare/v19.5.1...v19.6.0) (2025-03-24)
 
 
