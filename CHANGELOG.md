@@ -2,6 +2,13 @@
 
 All notable changes to this project will be documented in this file. See [standard-version](https://github.com/conventional-changelog/standard-version) for commit guidelines.
 
+### [17.26.20](https://github.com/po-ui/po-angular/compare/v17.26.19...v17.26.20) (2025-03-31)
+
+
+### Bug Fixes
+
+* **lookup:** corrige seleção multipla ([a9b0f23](https://github.com/po-ui/po-angular/commit/a9b0f23e6490be683e30b64735d88b83381d7ddc))
+
 ### [17.26.19](https://github.com/po-ui/po-angular/compare/v17.26.18...v17.26.19) (2025-03-24)
 
 
