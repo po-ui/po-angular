@@ -31,7 +31,6 @@ import { PoMultiselectFilterService } from './po-multiselect-filter.service';
 import { PoMultiselectOptionTemplateDirective } from './po-multiselect-option-template/po-multiselect-option-template.directive';
 
 const poMultiselectContainerOffset = 8;
-const poMultiselectContainerPositionDefault = 'bottom';
 const poMultiselectInputPaddingRight = 52;
 const poMultiselectSpaceBetweenTags = 8;
 
@@ -555,7 +554,27 @@ export class PoMultiselectComponent
   }
 
   private adjustContainerPosition(): void {
-    this.controlPosition.adjustPosition(poMultiselectContainerPositionDefault);
+    const dropdownContainer = this.dropdown?.container?.nativeElement;
+    const inputEl = this.inputElement?.nativeElement;
+
+    if (!dropdownContainer || !inputEl) return;
+
+    const rect = inputEl.getBoundingClientRect();
+    const viewportHeight = window.innerHeight;
+    const dropdownHeight = dropdownContainer.scrollHeight;
+
+    const spaceBelow = viewportHeight - rect.bottom - poMultiselectContainerOffset;
+    const spaceAbove = rect.top - poMultiselectContainerOffset;
+
+    const shouldOpenUpward = spaceBelow < dropdownHeight && spaceAbove > spaceBelow;
+    const availableSpace = shouldOpenUpward ? spaceAbove : spaceBelow;
+    const maxHeight = Math.max(120, availableSpace);
+
+    dropdownContainer.style.maxHeight = `${maxHeight}px`;
+    dropdownContainer.style.overflowY = 'auto';
+
+    const position = shouldOpenUpward ? 'top' : 'bottom';
+    this.controlPosition.adjustPosition(position);
   }
 
   private close(): void {

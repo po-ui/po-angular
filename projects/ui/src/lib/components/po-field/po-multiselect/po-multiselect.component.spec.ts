@@ -1054,16 +1054,6 @@ describe('PoMultiselectComponent:', () => {
       expect(adjustContainerPositionSpy).toHaveBeenCalled();
     }));
 
-    it(`adjustContainerPosition: should call 'controlPosition.adjustPosition' with 'poMultiselectContainerPositionDefault'.`, () => {
-      component['adjustContainerPosition'] = fnAdjustContainerPosition;
-      const poMultiselectContainerPositionDefault = 'bottom';
-      const adjustPositionSpy = spyOn(component['controlPosition'], 'adjustPosition');
-
-      component['adjustContainerPosition']();
-
-      expect(adjustPositionSpy).toHaveBeenCalledWith(poMultiselectContainerPositionDefault);
-    });
-
     it(`close: should set 'dropdownIcon' as 'ICON_ARROW_DOWN', 'dropdownOpen' as 'false',
       call 'dropdown.controlVisibility' with 'false', 'setVisibleOptionsDropdown' with 'options' and 'removeListeners'.`, () => {
       component.dropdownIcon = undefined;
@@ -1644,5 +1634,115 @@ describe('PoMultiselectComponent:', () => {
 
       expect(adjustContainerPositionSpy).toHaveBeenCalled();
     });
+  });
+});
+
+describe('PoMultiselectComponent - adjustContainerPosition', () => {
+  let component: PoMultiselectComponent;
+  let fixture: ComponentFixture<PoMultiselectComponent>;
+  let dropdownElement: any;
+  let inputElement: any;
+
+  beforeEach(async () => {
+    await TestBed.configureTestingModule({
+      declarations: [PoMultiselectComponent, PoMultiselectDropdownComponent],
+      imports: [OverlayModule],
+      providers: [
+        PoMultiselectFilterService,
+        PoControlPositionService,
+        provideHttpClient(withInterceptorsFromDi()),
+        provideHttpClientTesting()
+      ]
+    }).compileComponents();
+
+    fixture = TestBed.createComponent(PoMultiselectComponent);
+    component = fixture.componentInstance;
+
+    component.options = [{ label: 'label', value: 1 }];
+    component.autoHeight = true;
+
+    dropdownElement = {
+      style: { maxHeight: '', overflowY: '' } as Partial<CSSStyleDeclaration>
+    };
+
+    inputElement = {
+      getBoundingClientRect: () => ({
+        top: 100,
+        bottom: 200,
+        height: 100,
+        left: 0,
+        right: 0,
+        width: 100,
+        x: 0,
+        y: 0
+      })
+    };
+  });
+
+  it(`should adjust dropdown position to 'top' when there's enough space`, () => {
+    Object.defineProperty(dropdownElement, 'scrollHeight', { get: () => 200 });
+    spyOnProperty(window, 'innerHeight', 'get').and.returnValue(250);
+
+    component.dropdown = <any>{ container: { nativeElement: dropdownElement } };
+    component.inputElement = <any>{ nativeElement: inputElement };
+    const adjustPositionSpy = spyOn(component['controlPosition'], 'adjustPosition');
+
+    component['adjustContainerPosition']();
+
+    expect(dropdownElement.style.maxHeight).toBe('120px');
+    expect(dropdownElement.style.overflowY).toBe('auto');
+    expect(adjustPositionSpy).toHaveBeenCalledWith('top');
+  });
+
+  it(`should adjust dropdown position to 'bottom' when there's enough space`, () => {
+    Object.defineProperty(dropdownElement, 'scrollHeight', { get: () => 200 });
+    spyOnProperty(window, 'innerHeight', 'get').and.returnValue(800);
+
+    component.dropdown = <any>{ container: { nativeElement: dropdownElement } };
+    component.inputElement = <any>{ nativeElement: inputElement };
+    const adjustPositionSpy = spyOn(component['controlPosition'], 'adjustPosition');
+
+    component['adjustContainerPosition']();
+
+    expect(dropdownElement.style.maxHeight).toBe('592px');
+    expect(dropdownElement.style.overflowY).toBe('auto');
+    expect(adjustPositionSpy).toHaveBeenCalledWith('bottom');
+  });
+
+  it('adjustContainerPosition: should return if dropdown or inputElement is not defined', () => {
+    component.dropdown = undefined;
+    component.inputElement = <any>{ nativeElement: {} };
+
+    const adjustPositionSpy = spyOn(component['controlPosition'], 'adjustPosition');
+
+    component['adjustContainerPosition']();
+
+    expect(adjustPositionSpy).not.toHaveBeenCalled();
+  });
+
+  it('should still open to bottom if spaceAbove is smaller than spaceBelow', () => {
+    Object.defineProperty(dropdownElement, 'scrollHeight', { get: () => 300 });
+    spyOnProperty(window, 'innerHeight', 'get').and.returnValue(350);
+
+    inputElement.getBoundingClientRect = () => ({
+      top: 50,
+      bottom: 100,
+      height: 50,
+      left: 0,
+      right: 0,
+      width: 100,
+      x: 0,
+      y: 0
+    });
+
+    component.dropdown = <any>{ container: { nativeElement: dropdownElement } };
+    component.inputElement = <any>{ nativeElement: inputElement };
+    const adjustPositionSpy = spyOn(component['controlPosition'], 'adjustPosition');
+
+    component['adjustContainerPosition']();
+
+    expect(dropdownElement.style.maxHeight).toBe('242px');
+    expect(dropdownElement.style.overflowY).toBe('auto');
+    expect(adjustPositionSpy).toHaveBeenCalledWith('bottom');
   });
 });
