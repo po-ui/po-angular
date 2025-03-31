@@ -1,5 +1,5 @@
 import { ElementRef, NO_ERRORS_SCHEMA, SimpleChange } from '@angular/core';
-import { ComponentFixture, TestBed, fakeAsync, tick } from '@angular/core/testing';
+import { ComponentFixture, TestBed } from '@angular/core/testing';
 
 import { PoListBoxComponent } from './po-listbox.component';
 import * as UtilFunctions from './../../utils/util';

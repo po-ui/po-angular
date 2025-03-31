@@ -24,6 +24,7 @@
     [p-show-required]="properties.includes('showRequired')"
     [p-size]="size"
     [p-sort]="properties.includes('sort')"
+    [p-listbox-control-position]="listboxPosition"
     (p-change)="changeEvent('p-change')"
     (p-keydown)="changeEvent('p-keydown')"
     [p-error-limit]="properties?.includes('errorLimit')"
@@ -138,7 +139,7 @@
   </po-radio-group>
 
   <po-radio-group
-    class="po-md-12"
+    class="po-lg-6"
     name="size"
     [(ngModel)]="size"
     p-columns="4"
@@ -147,6 +148,14 @@
     [p-options]="sizeOptions"
   >
   </po-radio-group>
+
+  <po-radio-group
+    class="po-lg-6"
+    name="listboxPosition"
+    [(ngModel)]="listboxPosition"
+    p-label="Listbox Position"
+    [p-options]="listboxPositionOptions"
+  ></po-radio-group>
 
   <div class="po-row">
     <po-button class="po-lg-3 po-md-6" p-label="Sample Restore" (p-click)="restore()"> </po-button>

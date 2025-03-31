@@ -189,7 +189,7 @@ export class PoControlPositionService {
         innerWidth: window.innerWidth,
         innerHeight: window.innerHeight
       },
-      element: this.element.getBoundingClientRect(),
+      element: this.element?.getBoundingClientRect(),
       target: this.targetElement ? this.targetElement.getBoundingClientRect() : { top: 0, bottom: 0, right: 0, left: 0 }
     };
   }

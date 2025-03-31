@@ -20,6 +20,7 @@ import { PoComboFilterService } from './po-combo-filter.service';
 const PO_COMBO_DEBOUNCE_TIME_DEFAULT = 400;
 const PO_COMBO_FIELD_LABEL_DEFAULT = 'label';
 const PO_COMBO_FIELD_VALUE_DEFAULT = 'value';
+const poMultiselectContainerPositionDefault = 'bottom';
 
 /**
  * @description
@@ -342,6 +343,20 @@ export abstract class PoComboBaseComponent implements ControlValueAccessor, OnIn
    * Determinar se o valor do compo deve retorna objeto do tipo {value: any, label: any}
    */
   @Input({ alias: 'p-control-value-with-label', transform: convertToBoolean }) controlValueWithLabel?: boolean = false;
+
+  /**
+   * @optional
+   *
+   * @description
+   *
+   * Define a direção preferida para exibição do `listbox` em relação ao campo (`top` ou `bottom`).
+   * Útil em casos onde o posicionamento automático não se comporta como esperado, como quando o componente está próximo
+   * ao final do formulário ou do container visível. Na maioria dos casos, essa direção será respeitada; no entanto,
+   * pode ser ajustada automaticamente conforme o espaço disponível na tela.
+   *
+   * @default `bottom`
+   */
+  @Input('p-listbox-control-position') listboxControlPosition: 'top' | 'bottom' = poMultiselectContainerPositionDefault;
 
   cacheOptions: Array<any> = [];
   defaultService: PoComboFilterService;
