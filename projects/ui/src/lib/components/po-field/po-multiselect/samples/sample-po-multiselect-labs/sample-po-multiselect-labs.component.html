@@ -24,6 +24,8 @@
     [p-show-required]="properties.includes('showRequired')"
     [p-size]="size"
     [p-sort]="properties.includes('sort')"
+    [p-listbox-height]="listboxHeight"
+    [p-listbox-control-position]="listboxPosition"
     (p-change)="changeEvent('p-change')"
     (p-keydown)="changeEvent('p-keydown')"
     [p-error-limit]="properties?.includes('errorLimit')"
@@ -115,6 +117,18 @@
   <po-input class="po-md-6" name="fieldValue" [(ngModel)]="fieldValue" p-clean p-label="Field Value"> </po-input>
 
   <po-input class="po-md-6" name="fieldLabel" [(ngModel)]="fieldLabel" p-clean p-label="Field Label"> </po-input>
+
+  <po-widget p-label="Propriedade do Listbox">
+    <po-radio-group
+      class="po-md-6"
+      name="listboxPosition"
+      [(ngModel)]="listboxPosition"
+      p-label="Listbox Position"
+      [p-options]="listboxPositionOptions"
+    ></po-radio-group>
+    <po-number class="po-md-6" name="listboxHeight" [(ngModel)]="listboxHeight" p-clean p-label="Listbox Height">
+    </po-number>
+  </po-widget>
 
   <po-checkbox-group
     class="po-md-12"

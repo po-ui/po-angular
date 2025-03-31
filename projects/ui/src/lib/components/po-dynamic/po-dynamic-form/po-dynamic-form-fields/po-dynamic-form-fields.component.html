@@ -324,6 +324,8 @@
       [p-size]="field.size || componentsSize"
       (p-keydown)="field.keydown?.($event)"
       (p-additional-help)="field.additionalHelp?.($event)"
+      [p-listbox-control-position]="field.listboxControlPosition"
+      [p-listbox-height]="field.listboxHeight"
     >
     </po-combo>
 
@@ -429,6 +431,8 @@
       [p-size]="field.size || componentsSize"
       (p-additional-help)="field.additionalHelp?.($event)"
       (p-keydown)="field.keydown?.($event)"
+      [p-listbox-control-position]="field.listboxControlPosition"
+      [p-listbox-height]="field.listboxHeight"
     >
     </po-multiselect>
 

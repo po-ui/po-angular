@@ -26,9 +26,11 @@
   [p-show-required]="properties.includes('showRequired')"
   [p-sort]="properties.includes('sort')"
   [p-size]="size"
+  [p-error-limit]="properties?.includes('errorLimit')"
+  [p-listbox-height]="listboxHeight"
+  [p-listbox-control-position]="listboxPosition"
   (p-change)="changeEvent('p-change')"
   (p-keydown)="changeEvent('p-keydown')"
-  [p-error-limit]="properties?.includes('errorLimit')"
 >
 </po-combo>
 
@@ -118,6 +120,18 @@
     p-label="Field Error Message"
   >
   </po-input>
+
+  <po-widget p-label="Propriedade do Listbox">
+    <po-radio-group
+      class="po-md-6"
+      name="listboxPosition"
+      [(ngModel)]="listboxPosition"
+      p-label="Listbox Position"
+      [p-options]="listboxPositionOptions"
+    ></po-radio-group>
+    <po-number class="po-md-6" name="listboxHeight" [(ngModel)]="listboxHeight" p-clean p-label="Listbox Height">
+    </po-number>
+  </po-widget>
 
   <div class="po-row">
     <po-checkbox-group

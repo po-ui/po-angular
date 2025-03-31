@@ -43,10 +43,18 @@ export class SamplePoComboLabsComponent implements OnInit {
   selectedOptionsGroup: string;
   size: string;
 
+  listboxPosition: string;
+  listboxHeight: number;
+
   public readonly filterModeOptions: Array<PoRadioGroupOption> = [
     { label: 'Starts With', value: 'startsWith' },
     { label: 'Contains', value: 'contains' },
     { label: 'Ends With', value: 'endsWith' }
+  ];
+
+  public readonly listboxPositionOptions: Array<any> = [
+    { label: 'Top', value: 'top' },
+    { label: 'Bottom', value: 'bottom' }
   ];
 
   public readonly iconsOptions: Array<PoRadioGroupOption> = [

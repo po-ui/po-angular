@@ -166,6 +166,8 @@ export class PoListBoxBaseComponent {
 
   @Input('p-container-width') containerWidth: number;
 
+  @Input('p-height') height?: number;
+
   // Evento disparado quando uma tab é ativada
   @Output('p-activated-tabs') activatedTab = new EventEmitter();
 

@@ -33,7 +33,6 @@ import { PoComboFilterService } from './po-combo-filter.service';
 import { PoComboOptionTemplateDirective } from './po-combo-option-template/po-combo-option-template.directive';
 
 const poComboContainerOffset = 8;
-const poComboContainerPositionDefault = 'bottom';
 
 /**
  * @docsExtends PoComboBaseComponent
@@ -647,7 +646,7 @@ export class PoComboComponent extends PoComboBaseComponent implements AfterViewI
   }
 
   private adjustContainerPosition() {
-    this.controlPosition.adjustPosition(poComboContainerPositionDefault);
+    this.controlPosition.adjustPosition(this.listboxControlPosition);
   }
 
   private close(reset: boolean) {
