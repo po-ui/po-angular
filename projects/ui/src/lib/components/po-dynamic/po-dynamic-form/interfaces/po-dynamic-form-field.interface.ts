@@ -221,6 +221,18 @@ export interface PoDynamicFormField extends PoDynamicField {
   formatModel?: boolean;
 
   /**
+   * Define a direção preferida para exibição do `listbox` em relação ao campo (`top` ou `bottom`).
+   * Útil em casos onde o posicionamento automático não se comporta como esperado, como quando o componente está próximo
+   * ao final do formulário ou do container visível. Na maioria dos casos, essa direção será respeitada; no entanto,
+   * pode ser ajustada automaticamente conforme o espaço disponível na tela.
+   *
+   * **Componentes compatíveis:** `po-multiselect`, `po-combo`.
+   *
+   * @default `bottom`
+   */
+  listboxControlPosition?: 'top' | 'bottom';
+
+  /**
    * Valor máximo a ser informado no componente, podendo ser utilizado quando o tipo de dado por *number*, *date* ou *dateTime*.
    *
    * **Componentes compatíveis:** `po-datepicker`, `po-datepicker-range`, `po-number`, `po-decimal`

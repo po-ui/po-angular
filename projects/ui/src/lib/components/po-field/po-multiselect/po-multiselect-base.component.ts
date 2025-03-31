@@ -28,6 +28,7 @@ import { PoMultiselectFilterService } from './po-multiselect-filter.service';
 const PO_MULTISELECT_DEBOUNCE_TIME_DEFAULT = 400;
 const PO_MULTISELECT_FIELD_LABEL_DEFAULT = 'label';
 const PO_MULTISELECT_FIELD_VALUE_DEFAULT = 'value';
+const poMultiselectContainerPositionDefault = 'bottom';
 
 export const poMultiselectLiteralsDefault = {
   en: <PoMultiselectLiterals>{
@@ -267,6 +268,20 @@ export abstract class PoMultiselectBaseComponent implements ControlValueAccessor
    * Determinar se o valor do compo deve retorna objeto do tipo {value: any, label: any}
    */
   @Input({ alias: 'p-control-value-with-label', transform: convertToBoolean }) controlValueWithLabel?: boolean = false;
+
+  /**
+   * @optional
+   *
+   * @description
+   *
+   * Define a direção preferida para exibição do `listbox` em relação ao campo (`top` ou `bottom`).
+   * Útil em casos onde o posicionamento automático não se comporta como esperado, como quando o componente está próximo
+   * ao final do formulário ou do container visível. Na maioria dos casos, essa direção será respeitada; no entanto,
+   * pode ser ajustada automaticamente conforme o espaço disponível na tela.
+   *
+   * @default `bottom`
+   */
+  @Input('p-listbox-control-position') listboxControlPosition: 'top' | 'bottom' = poMultiselectContainerPositionDefault;
 
   selectedOptions: Array<PoMultiselectOption | any> = [];
   visibleOptionsDropdown: Array<PoMultiselectOption | any> = [];

@@ -1,13 +1,13 @@
 import { Component, OnInit, ViewChild } from '@angular/core';
 
 import {
+  ForceBooleanComponentEnum,
+  PoDynamicFormComponent,
   PoDynamicFormField,
   PoDynamicFormFieldChanged,
   PoDynamicFormValidation,
   PoNotificationService,
-  ForceBooleanComponentEnum,
-  PoUploadFile,
-  PoDynamicFormComponent
+  PoUploadFile
 } from '@po-ui/ng-components';
 import { PoDynamicFormContainerService } from './sample-po-dynamic-form-container.service';
 
@@ -148,7 +148,8 @@ export class SamplePoDynamicFormContainerComponent implements OnInit {
       gridSmColumns: 12,
       optional: true,
       options: ['Soccer', 'Basketball', 'Bike', 'Yoga', 'Travel', 'Run'],
-      optionsMulti: true
+      optionsMulti: true,
+      listboxControlPosition: 'top'
     },
     {
       property: 'favoriteHero',
@@ -172,7 +173,8 @@ export class SamplePoDynamicFormContainerComponent implements OnInit {
       optionsService: 'https://po-sample-api.onrender.com/v1/people',
       fieldLabel: 'name',
       fieldValue: 'id',
-      optional: true
+      optional: true,
+      listboxControlPosition: 'top'
     },
     {
       property: 'videogame',
@@ -190,7 +192,8 @@ export class SamplePoDynamicFormContainerComponent implements OnInit {
         { console: 'Playstation 5', code: 'PS5' },
         { console: 'Xbox Series S|X', code: 'XSSX' }
       ],
-      optionsMulti: true
+      optionsMulti: true,
+      listboxControlPosition: 'top'
     },
     {
       property: 'agree',

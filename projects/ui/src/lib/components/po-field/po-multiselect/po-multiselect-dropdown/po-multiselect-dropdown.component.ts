@@ -10,7 +10,6 @@ import {
   ViewChild
 } from '@angular/core';
 
-import { PoFieldSize } from '../../../../enums/po-field-size.enum';
 import { PoMultiselectLiterals } from '../../index';
 import { PoMultiselectOption } from '../interfaces/po-multiselect-option.interface';
 import { PoListBoxComponent } from './../../../po-listbox/po-listbox.component';
