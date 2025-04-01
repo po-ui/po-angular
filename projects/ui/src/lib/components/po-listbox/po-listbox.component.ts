@@ -230,12 +230,13 @@ export class PoListBoxComponent extends PoListBoxBaseComponent implements AfterV
   }
 
   private setListBoxMaxHeight(): void {
-    const itemsLength = this.items.length;
-    if (itemsLength > 6) {
-      if (this.type === 'check' && !this.hideSearch) {
-        this.renderer.setStyle(this.listbox.nativeElement, 'maxHeight', `${44 * 6 - 44 / 3 + 60}px`);
-      } else {
-        this.renderer.setStyle(this.listbox.nativeElement, 'maxHeight', `${44 * 6 - 44 / 3}px`);
+    if (this.maxHeight) {
+      this.renderer.setStyle(this.listbox.nativeElement, 'maxHeight', `${this.maxHeight}px`);
+    } else {
+      const itemsLength = this.items.length;
+      if (itemsLength > 6) {
+        const extra = this.type === 'check' && !this.hideSearch ? 60 : 0;
+        this.renderer.setStyle(this.listbox.nativeElement, 'maxHeight', `${44 * 6 - 44 / 3 + extra}px`);
       }
     }
   }

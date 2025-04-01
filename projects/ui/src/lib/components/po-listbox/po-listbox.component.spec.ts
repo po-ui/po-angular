@@ -511,6 +511,24 @@ describe('PoListBoxComponent', () => {
 
         expect(component['renderer'].setStyle).not.toHaveBeenCalled();
       });
+
+      it('should call `renderer.setStyle` with `this.maxHeight` when maxHeight is defined', () => {
+        component.maxHeight = 123;
+        component.items = [
+          { label: 'Item 1', value: 1 },
+          { label: 'Item 2', value: 2 },
+          { label: 'Item 3', value: 3 }
+        ];
+        component['listbox'] = {
+          nativeElement: document.createElement('div')
+        };
+
+        const rendererSpy = spyOn(component['renderer'], 'setStyle');
+
+        component['setListBoxMaxHeight']();
+
+        expect(rendererSpy).toHaveBeenCalledWith(component['listbox'].nativeElement, 'maxHeight', '123px');
+      });
     });
 
     describe('checkboxClicked:', () => {

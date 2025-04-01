@@ -178,6 +178,27 @@ export interface PoDynamicFormField extends PoDynamicField {
   formatModel?: boolean;
 
   /**
+   * Define a posição de abertura do `listbox`, permitindo forçar sua exibição acima (`top`) ou abaixo (`bottom`) do campo.
+   * Essa propriedade pode ser utilizada para garantir o posicionamento correto do dropdown em cenários com containers que possuem `scroll`,
+   * `overflow: hidden` ou `position: relative`, evitando que o conteúdo seja cortado.
+   *
+   * > Quando não definida, o componente calcula automaticamente a melhor posição com base no espaço disponível na tela.
+   *
+   * **Componentes compatíveis:** `po-multiselect`, `po-lookup`.
+   */
+  listboxControlPosition?: 'top' | 'bottom';
+
+  /**
+   * Define a altura máxima, em pixels, do dropdown (`po-listbox`).
+   * Essa propriedade permite limitar a altura da lista de opções, evitando que ocupe toda a tela.
+   *
+   * > Caso não seja informada, será considerado o comportamento padrão de altura baseado na quantidade de itens.
+   *
+   * **Componentes compatíveis:** `po-multiselect`, `po-combo`.
+   */
+  listboxMaxHeight?: number;
+
+  /**
    * Valor máximo a ser informado no componente, podendo ser utilizado quando o tipo de dado por *number*, *date* ou *dateTime*.
    *
    * **Componentes compatíveis:** `po-datepicker`, `po-datepicker-range`, `po-number`, `po-decimal`

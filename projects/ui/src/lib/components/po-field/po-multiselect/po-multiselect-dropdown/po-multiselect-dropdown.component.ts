@@ -59,6 +59,8 @@ export class PoMultiselectDropdownComponent {
 
   @Input('p-container-width') containerWidth: number;
 
+  @Input() listboxMaxHeight?: number;
+
   /** Evento disparado a cada tecla digitada na pesquisa. */
   @Output('p-change-search') changeSearch = new EventEmitter();
 

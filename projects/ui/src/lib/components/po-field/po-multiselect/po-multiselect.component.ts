@@ -30,7 +30,6 @@ import { PoMultiselectOptionTemplateDirective } from './po-multiselect-option-te
 import { PoMultiselectOption } from './po-multiselect-option.interface';
 
 const poMultiselectContainerOffset = 8;
-const poMultiselectContainerPositionDefault = 'bottom';
 const poMultiselectInputPaddingRight = 52;
 const poMultiselectSpaceBetweenTags = 8;
 
@@ -492,7 +491,7 @@ export class PoMultiselectComponent
   }
 
   private adjustContainerPosition(): void {
-    this.controlPosition.adjustPosition(poMultiselectContainerPositionDefault);
+    this.controlPosition.adjustPosition(this.listboxControlPosition);
   }
 
   private close(): void {

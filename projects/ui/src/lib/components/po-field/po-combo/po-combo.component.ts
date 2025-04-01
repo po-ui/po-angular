@@ -31,7 +31,6 @@ import { uuid } from '../../../utils/util';
 import { PoListBoxComponent } from './../../po-listbox/po-listbox.component';
 
 const poComboContainerOffset = 8;
-const poComboContainerPositionDefault = 'bottom';
 
 /**
  * @docsExtends PoComboBaseComponent
@@ -573,7 +572,7 @@ export class PoComboComponent extends PoComboBaseComponent implements AfterViewI
   }
 
   private adjustContainerPosition() {
-    this.controlPosition.adjustPosition(poComboContainerPositionDefault);
+    this.controlPosition.adjustPosition(this.listboxControlPosition);
   }
 
   private close(reset: boolean) {
