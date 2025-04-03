@@ -9,8 +9,8 @@ import { PoChartDataLabel } from '../po-chart/interfaces/po-chart-serie-data-lab
 import { PoChartSerie } from '../po-chart/interfaces/po-chart-serie.interface';
 import { PoPopupAction } from '../po-popup';
 
-const poChartDefaultHeight = 400;
 const poChartMinHeight = 200;
+const poChartDefaultHeight = 400;
 
 /**
  * @description
@@ -120,7 +120,16 @@ export abstract class PoChartNewBaseComponent {
    *
    * @default `400`
    */
-  @Input('p-height') height: number = poChartDefaultHeight;
+  @Input('p-height')
+  set height(value: number) {
+    this._height = Math.max(value ?? poChartDefaultHeight, poChartMinHeight);
+  }
+
+  get height(): number {
+    return this._height;
+  }
+
+  private _height: number = poChartDefaultHeight;
 
   /**
    * @optional

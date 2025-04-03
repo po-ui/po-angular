@@ -27,6 +27,19 @@ export interface PoChartOptions {
    *
    * @description
    *
+   * Define se os pontos do gráfico serão preenchidos.
+   * Quando true, os pontos são totalmente coloridos. Quando false, apenas a borda dos pontos será exibida, mantendo o interior transparente.
+   *
+   * > Esta propriedade é utilizável para os gráficos dos tipos `Area` e `Line`.
+   * @default `false`
+   */
+  fillPoints?: boolean;
+
+  /**
+   * @optional
+   *
+   * @description
+   *
    * Valor que permite customizar o nome da `TH` da primeira coluna da tabela descritiva.
    *
    * @default `Série`

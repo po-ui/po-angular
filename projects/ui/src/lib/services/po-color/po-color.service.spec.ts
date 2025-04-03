@@ -126,6 +126,88 @@ describe('PoColorService', () => {
 
         expect(getColor[12].color).toEqual('#000000');
       });
+
+      it('should return an array with up to 8 predefined CSS variables when length is 8 or less', () => {
+        spyOn(service as any, 'getCSSVariable').and.callFake((variable: string) => variable);
+
+        const colors = (service as any).getDefaultCategoricalColors(5);
+
+        expect(colors.length).toBe(5);
+        expect(colors).toEqual([
+          '--categorical-01',
+          '--categorical-02',
+          '--categorical-03',
+          '--categorical-04',
+          '--categorical-05'
+        ]);
+      });
+    });
+
+    it('should set defaultColors using getDefaultColors when categoricalColors is not provided', () => {
+      const data = [
+        { from: 0, to: 50 },
+        { from: 50, to: 100 }
+      ];
+
+      spyOn(service as any, 'getDefaultColors').and.callThrough();
+      spyOn(service as any, 'getDefaultCategoricalColors').and.callThrough();
+
+      (service as any).verifyIfHasColorProperty(data);
+
+      expect(service.defaultColors.length).toBeGreaterThan(0);
+      expect(service['getDefaultColors']).toHaveBeenCalledWith(data.length);
+      expect(service['getDefaultCategoricalColors']).not.toHaveBeenCalled();
+    });
+    it('should return an array with exactly 8 predefined CSS variables when length is 8', () => {
+      spyOn(service as any, 'getCSSVariable').and.callFake((variable: string) => variable);
+
+      const colors = (service as any).getDefaultCategoricalColors(8);
+
+      expect(colors.length).toBe(8);
+      expect(colors).toEqual([
+        '--categorical-01',
+        '--categorical-02',
+        '--categorical-03',
+        '--categorical-04',
+        '--categorical-05',
+        '--categorical-06',
+        '--categorical-07',
+        '--categorical-08'
+      ]);
+    });
+
+    it('should fill remaining colors with random colors when length is greater than 8', () => {
+      spyOn(service as any, 'getCSSVariable').and.callFake((variable: string) => variable);
+      spyOn(service as any, 'getRandomColor').and.returnValue('#123456');
+
+      const colors = (service as any).getDefaultCategoricalColors(10);
+
+      expect(colors.length).toBe(10);
+      expect(colors.slice(0, 8)).toEqual([
+        '--categorical-01',
+        '--categorical-02',
+        '--categorical-03',
+        '--categorical-04',
+        '--categorical-05',
+        '--categorical-06',
+        '--categorical-07',
+        '--categorical-08'
+      ]);
+      expect(colors.slice(8)).toEqual(['#123456', '#123456']);
+    });
+  });
+  describe('getRandomColor:', () => {
+    it('should return a valid hex color code', () => {
+      const color = (service as any).getRandomColor();
+
+      expect(color).toMatch(/^#[0-9A-Fa-f]{6}$/);
+    });
+
+    it('should return different colors on multiple calls', () => {
+      const color1 = (service as any).getRandomColor();
+      const color2 = (service as any).getRandomColor();
+
+      expect(color1).not.toEqual(color2);
     });
   });
 });

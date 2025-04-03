@@ -40,12 +40,20 @@ describe('PoChartNewBaseComponent', () => {
       expect(component.categories).toEqual(mockCategories);
     });
 
-    it('p-height: should set height correctly and respect minimum', () => {
+    it('p-height: should handle height correctly with default, valid and minimum values', () => {
+      expect(component.height).toBe(400);
+
       component.height = 300;
       expect(component.height).toBe(300);
 
       component.height = 100;
       expect(component.height).toBe(200);
+
+      component.height = null;
+      expect(component.height).toBe(400);
+
+      component.height = undefined;
+      expect(component.height).toBe(400);
     });
 
     it('p-type: should set type correctly', () => {
@@ -59,6 +67,23 @@ describe('PoChartNewBaseComponent', () => {
     });
 
     it('p-literals: should use default literals if not provided', () => {
+      expect(component.literals).toEqual(poChartLiteralsDefault[languageService.getShortLanguage()]);
+    });
+
+    it('p-literals: should use default literals if value is invalid', () => {
+      component.literals = null;
+      expect(component.literals).toEqual(poChartLiteralsDefault[languageService.getShortLanguage()]);
+
+      component.literals = undefined;
+      expect(component.literals).toEqual(poChartLiteralsDefault[languageService.getShortLanguage()]);
+
+      component.literals = 'invalid' as any;
+      expect(component.literals).toEqual(poChartLiteralsDefault[languageService.getShortLanguage()]);
+
+      component.literals = 123 as any;
+      expect(component.literals).toEqual(poChartLiteralsDefault[languageService.getShortLanguage()]);
+
+      component.literals = [] as any;
       expect(component.literals).toEqual(poChartLiteralsDefault[languageService.getShortLanguage()]);
     });
 

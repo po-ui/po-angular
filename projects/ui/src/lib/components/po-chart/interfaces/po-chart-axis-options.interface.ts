@@ -64,6 +64,20 @@ export interface PoChartAxisOptions {
    *
    * @description
    *
+   * Define o ângulo de rotação da legenda do gráfico.
+   * Aceita valores entre -90 e 90 graus, onde:
+   * - Valores negativos giram a legenda para a esquerda.
+   * - Valores positivos giram a legenda para a direita.
+   *
+   * Se não for definido, a legenda será exibida sem rotação.
+   */
+  rotateLegend?: number;
+
+  /**
+   * @optional
+   *
+   * @description
+   *
    * Exibe a linha do eixo X
    *
    * @default `false`

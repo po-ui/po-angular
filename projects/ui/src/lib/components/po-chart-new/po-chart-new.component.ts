@@ -86,7 +86,7 @@ export class PoChartNewComponent extends PoChartNewBaseComponent implements Afte
   private headerHeight: number;
 
   constructor(
-    private readonly el: ElementRef,
+    private el: ElementRef,
     private readonly currencyPipe: CurrencyPipe,
     private readonly decimalPipe: DecimalPipe,
     private readonly colorService: PoColorService,
@@ -180,7 +180,10 @@ export class PoChartNewComponent extends PoChartNewBaseComponent implements Afte
     this.currentRenderer = this.options?.rendererOption || 'canvas';
     this.chartInstance = echarts.init(echartsDiv, null, { renderer: this.options?.rendererOption || 'canvas' });
     this.setChartsProperties();
+    this.initEChartsEvents();
+  }
 
+  private initEChartsEvents() {
     this.chartInstance.on('click', params => {
       if (!params.value) return;
       this.seriesClick.emit({ label: params.seriesName, data: params.value, category: params.name });
@@ -239,7 +242,8 @@ export class PoChartNewComponent extends PoChartNewBaseComponent implements Afte
         axisLabel: {
           fontFamily: this.getCSSVariable('--font-family-grid', '.po-chart'),
           fontSize: tokenFontSizeGrid || 12,
-          fontWeight: Number(this.getCSSVariable('--font-weight-grid', '.po-chart'))
+          fontWeight: Number(this.getCSSVariable('--font-weight-grid', '.po-chart')),
+          rotate: this.options?.axis?.rotateLegend
         },
         splitLine: {
           show: this.options?.axis?.showXAxis || false,
@@ -314,7 +318,7 @@ export class PoChartNewComponent extends PoChartNewBaseComponent implements Afte
       {
         type: 'text',
         left: 'center',
-        bottom: 'calc(100% + 10px)', // Posiciona acima do grid
+        bottom: 'calc(100% + 10px)',
         style: {
           text: 'Use o scroll do mouse para dar zoom',
           fontFamily: this.getCSSVariable('--font-family-grid', '.po-chart'),
@@ -389,7 +393,8 @@ export class PoChartNewComponent extends PoChartNewBaseComponent implements Afte
         serie.symbol = 'circle';
       }
       serie.itemStyle = {
-        color: isTypeLine ? this.getCSSVariable('--color-neutral-light-00') : colorVariable,
+        color:
+          isTypeLine && !this.options?.fillPoints ? this.getCSSVariable('--color-neutral-light-00') : colorVariable,
         borderColor: colorVariable,
         borderWidth: tokenBorderWidthMd
       };
