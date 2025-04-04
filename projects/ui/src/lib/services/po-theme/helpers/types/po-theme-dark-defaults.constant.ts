@@ -1,6 +1,7 @@
 import {
   PoThemeColorAction,
   poThemeColorBrand,
+  PoThemeColorCategorical,
   PoThemeColorFeedback,
   PoThemeColorNeutral
 } from '../../interfaces/po-theme-color.interface';
@@ -111,6 +112,17 @@ const poThemeDefaultBrandsDark: poThemeColorBrand = {
   }
 };
 
+const poThemeDefaultCategoricalsDark: PoThemeColorCategorical = {
+  '01': '#2E67FF',
+  '02': '#F76D43',
+  '03': '#9654FF',
+  '04': '#00BF9C',
+  '05': '#F22CA6',
+  '06': '#FC501C',
+  '07': '#63A9EB',
+  '08': '#FA8E0A'
+};
+
 /**
  * Define estilos específicos por componente e onRoot para temas escuros.
  */
@@ -217,7 +229,16 @@ const poThemeDefaultDarkValues = {
     '--color-calendar-background-color-box-background-range': 'var(--color-brand-01-lightest)',
     /* STEPPER */
     '--color-stepper-circle-disabled': 'var(--color-neutral-mid-40)',
-    '--color-stepper-bar-disabled': 'var(--color-neutral-mid-40)'
+    '--color-stepper-bar-disabled': 'var(--color-neutral-mid-40)',
+    /* CATEGORICAL COLORS */
+    '--color-caption-categorical-01': '#2E67FF',
+    '--color-caption-categorical-02': '#F76D43',
+    '--color-caption-categorical-03': '#9654FF',
+    '--color-caption-categorical-04': '#00BF9C',
+    '--color-caption-categorical-05': '#F22CA6',
+    '--color-caption-categorical-06': '#FC501C',
+    '--color-caption-categorical-07': '#63A9EB',
+    '--color-caption-categorical-08': '#FA8E0A'
   }
 };
 
@@ -226,5 +247,6 @@ export {
   poThemeDefaultActionsDark,
   poThemeDefaultFeedbackDark,
   poThemeDefaultNeutralsDark,
-  poThemeDefaultDarkValues
+  poThemeDefaultDarkValues,
+  poThemeDefaultCategoricalsDark
 };
