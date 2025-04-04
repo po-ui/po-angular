@@ -1,4 +1,5 @@
 import { PoChartAxisOptions } from './po-chart-axis-options.interface';
+import { PoChartHeaderOptions } from './po-chart-header-options.interface';
 
 /**
  * @usedBy PoChartComponent
@@ -10,6 +11,9 @@ import { PoChartAxisOptions } from './po-chart-axis-options.interface';
 export interface PoChartOptions {
   /** Define um objeto do tipo `PoChartAxisOptions` para configuração dos eixos. */
   axis?: PoChartAxisOptions;
+
+  /** Define um objeto do tipo `PoChartAxisOptions` para configuração dos eixos. */
+  header?: PoChartHeaderOptions;
 
   /**
    * @optional
@@ -55,6 +59,17 @@ export interface PoChartOptions {
 
   /** Define a exibição da legenda do gráfico. Valor padrão é `true` */
   legend?: boolean;
+
+  /**
+   * @optional
+   *
+   * @description
+   *
+   * Altera posição da legenda abaixo do gráfico.
+   *
+   * @default `center`
+   */
+  legendPosition?: 'left' | 'center' | 'right';
 
   /**
    * @optional
