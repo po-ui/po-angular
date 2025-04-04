@@ -14,6 +14,7 @@ interface PoColorArgs {
 })
 export class PoColorService {
   defaultColors: Array<string> = [];
+  overlayColors: Array<string> = [];
   private readonly colorBlack = '#000000';
 
   /**
@@ -21,27 +22,43 @@ export class PoColorService {
    *
    * @param data
    */
-  getColors<T extends PoColorArgs>(data: Array<T>, categoricalColors = false): Array<T> {
-    this.verifyIfHasColorProperty<T>(data, categoricalColors);
+  getColors<T extends PoColorArgs>(data: Array<T>, categoricalColors = false, overlayColors = false): Array<T> {
+    this.verifyIfHasColorProperty<T>(data, categoricalColors, overlayColors);
 
     return data.map((dataItem, index) => {
       if (dataItem.color) {
         dataItem.color = this.verifyIfIsPoColorPalette(dataItem.color);
+        if (overlayColors) {
+          const overlayColor = this.verifyIfIsPoColorPalette(dataItem.color);
+          return { ...dataItem, overlayColor, isNotTokenColor: true };
+        }
 
         return dataItem;
       }
 
       const color = this.defaultColors[index] === undefined ? this.colorBlack : this.defaultColors[index];
+      if (overlayColors) {
+        const overlayColor = this.overlayColors[index];
+        return { ...dataItem, color, overlayColor };
+      }
+
       return { ...dataItem, color };
     });
   }
 
-  private verifyIfHasColorProperty<T extends PoColorArgs>(data: Array<T>, categoricalColors = false): void {
+  private verifyIfHasColorProperty<T extends PoColorArgs>(
+    data: Array<T>,
+    categoricalColors = false,
+    overlayColors = false
+  ): void {
     const hasColorProperty = data.every(dataItem => dataItem.hasOwnProperty('color') && dataItem.color?.length > 0);
     if (!hasColorProperty) {
       this.defaultColors = categoricalColors
         ? this.getDefaultCategoricalColors(data.length)
         : this.getDefaultColors(data.length);
+      if (overlayColors) {
+        this.overlayColors = this.getDefaultCategoricalColors(data.length, true);
+      }
     }
   }
 
@@ -73,16 +90,18 @@ export class PoColorService {
     return PoDefaultColors[length - 1];
   }
 
-  private getDefaultCategoricalColors(length: number): Array<string> {
+  private getDefaultCategoricalColors(length: number, isOverlay = false): Array<string> {
     const maxTokens = 8;
     const colors: Array<string> = [];
 
     for (let i = 1; i <= Math.min(length, maxTokens); i++) {
-      colors.push(this.getCSSVariable(`--categorical-0${i}`));
+      isOverlay
+        ? colors.push(this.getCSSVariable(`--categorical-overlay-0${i}`))
+        : colors.push(this.getCSSVariable(`--categorical-0${i}`));
     }
 
     while (colors.length < length) {
-      colors.push(this.getRandomColor());
+      isOverlay ? colors.push(this.defaultColors[length - 1]) : colors.push(this.getRandomColor());
     }
 
     return colors;

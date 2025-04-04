@@ -106,6 +106,22 @@ describe('PoColorService', () => {
         expect(service.getColors(data)).toEqual(expectedResult);
       });
 
+      it('should return a list of data with defaultColors, overlayColors, po-color and the passed color', () => {
+        spyOn(service as any, 'getCSSVariable').and.callFake((variable: string) => variable);
+        const data = [
+          { from: 0, to: 30 },
+          { from: 30, to: 60, color: 'red' },
+          { from: 60, to: 100, color: 'color-01' }
+        ];
+        const expectedResult = [
+          { from: 0, to: 30, color: '--categorical-01', overlayColor: '--categorical-overlay-01' },
+          { from: 30, to: 60, color: 'red', overlayColor: 'red', isNotTokenColor: true },
+          { from: 60, to: 100, color: 'po-color-01', overlayColor: 'po-color-01', isNotTokenColor: true }
+        ];
+
+        expect(service.getColors(data, true, true)).toEqual(expectedResult);
+      });
+
       it('the 13th item color should be black if no color is sent', () => {
         const data = [
           { label: '1', data: 8 },
@@ -176,6 +192,28 @@ describe('PoColorService', () => {
       ]);
     });
 
+    it('should fill remaining colors with random colors when length is greater than 8 and isOverlay is true', () => {
+      spyOn(service as any, 'getCSSVariable').and.callFake((variable: string) => variable);
+      service.defaultColors = [];
+      service.defaultColors[8] = '#123456';
+      service.defaultColors[9] = '#123456';
+
+      const colors = (service as any).getDefaultCategoricalColors(10, true);
+
+      expect(colors.length).toBe(10);
+      expect(colors.slice(0, 8)).toEqual([
+        '--categorical-overlay-01',
+        '--categorical-overlay-02',
+        '--categorical-overlay-03',
+        '--categorical-overlay-04',
+        '--categorical-overlay-05',
+        '--categorical-overlay-06',
+        '--categorical-overlay-07',
+        '--categorical-overlay-08'
+      ]);
+      expect(colors.slice(8)).toEqual(['#123456', '#123456']);
+    });
+
     it('should fill remaining colors with random colors when length is greater than 8', () => {
       spyOn(service as any, 'getCSSVariable').and.callFake((variable: string) => variable);
       spyOn(service as any, 'getRandomColor').and.returnValue('#123456');
@@ -196,6 +234,7 @@ describe('PoColorService', () => {
       expect(colors.slice(8)).toEqual(['#123456', '#123456']);
     });
   });
+
   describe('getRandomColor:', () => {
     it('should return a valid hex color code', () => {
       const color = (service as any).getRandomColor();

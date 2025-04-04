@@ -94,4 +94,15 @@ export interface PoChartAxisOptions {
    * @default `true`
    */
   showYAxis?: boolean;
+
+  /**
+   * @optional
+   *
+   * @description
+   *
+   * Exibe a linha de detalhes que acompanha o mouse
+   *
+   * @default `false`
+   */
+  showAxisDetails?: boolean;
 }

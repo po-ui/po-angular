@@ -78,6 +78,20 @@ export interface PoThemeColor {
    * ```
    */
   'categorical'?: PoThemeColorCategorical;
+
+  /**
+   * Cores da Categorical a serem aplicadas.
+   *
+   * Exemplo de uso:
+   * ```typescript
+   * PoThemeColor.categorical = {
+   *  01: string,
+   *  02: string,
+   *  03: string
+   * }
+   * ```
+   */
+  'categorical-overlay'?: PoThemeColorCategorical;
 }
 
 /**
