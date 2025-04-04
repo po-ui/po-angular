@@ -7,12 +7,14 @@ import {
   poThemeDefaultBrands,
   poThemeDefaultFeedback,
   poThemeDefaultNeutrals,
-  poThemeDefaultCategoricals
+  poThemeDefaultCategoricals,
+  poThemeDefaultOverlayCategoricals
 } from './types/po-theme-light-defaults.constant';
 import {
   poThemeDefaultActionsDark,
   poThemeDefaultBrandsDark,
   poThemeDefaultCategoricalsDark,
+  poThemeDefaultCategoricalsOverlayDark,
   poThemeDefaultFeedbackDark,
   poThemeDefaultNeutralsDark
 } from './types/po-theme-dark-defaults.constant';
@@ -26,7 +28,8 @@ const poThemeDefaultLight: PoThemeTokens = {
     action: poThemeDefaultActions,
     neutral: poThemeDefaultNeutrals,
     feedback: poThemeDefaultFeedback,
-    categorical: poThemeDefaultCategoricals
+    categorical: poThemeDefaultCategoricals,
+    'categorical-overlay': poThemeDefaultOverlayCategoricals
   }
 };
 
@@ -39,7 +42,8 @@ const poThemeDefaultDark: PoThemeTokens = {
     action: poThemeDefaultActionsDark,
     neutral: poThemeDefaultNeutralsDark,
     feedback: poThemeDefaultFeedbackDark,
-    categorical: poThemeDefaultCategoricalsDark
+    categorical: poThemeDefaultCategoricalsDark,
+    'categorical-overlay': poThemeDefaultCategoricalsOverlayDark
   }
 };
 
