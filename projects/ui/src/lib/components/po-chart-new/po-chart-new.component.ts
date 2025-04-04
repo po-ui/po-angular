@@ -12,16 +12,17 @@ import {
 import { CurrencyPipe, DecimalPipe } from '@angular/common';
 import { PoTooltipDirective } from '../../directives';
 import { PoColorService } from '../../services/po-color';
+import { PoLanguageService } from '../../services/po-language/po-language.service';
 import { PoChartLabelFormat } from '../po-chart/enums/po-chart-label-format.enum';
 import { PoChartSerie } from '../po-chart/interfaces/po-chart-serie.interface';
 import { PoModalAction, PoModalComponent } from '../po-modal';
 import { PoPopupAction } from '../po-popup';
 import { PoTableColumn } from '../po-table';
 import { PoChartNewBaseComponent } from './po-chart-new-base.component';
-import { PoLanguageService } from '../../services/po-language/po-language.service';
 
 import * as echarts from 'echarts/dist/echarts.esm';
 import { EChartsOption } from 'echarts/dist/echarts.esm';
+import { PoChartType } from '../po-chart/enums/po-chart-type.enum';
 
 /**
  * @docsExtends PoChartBaseComponent
@@ -74,13 +75,22 @@ export class PoChartNewComponent extends PoChartNewBaseComponent implements Afte
   protected popupActions: Array<PoPopupAction> = [
     {
       label: this.literals.exportCSV,
+      disabled: this.options?.header?.disabledExportCsv,
       action: () => {
         this.setTableProperties();
         this.downloadCsv();
       }
     },
-    { label: this.literals.exportPNG, action: this.exportImage.bind(this, 'png') },
-    { label: this.literals.exportJPG, action: this.exportImage.bind(this, 'jpeg') }
+    {
+      label: this.literals.exportPNG,
+      disabled: this.options?.header?.disabledExportImage,
+      action: this.exportImage.bind(this, 'png')
+    },
+    {
+      label: this.literals.exportJPG,
+      disabled: this.options?.header?.disabledExportImage,
+      action: this.exportImage.bind(this, 'jpeg')
+    }
   ];
   private chartInstance!: echarts.ECharts;
   private currentRenderer: 'svg' | 'canvas';
@@ -226,11 +236,12 @@ export class PoChartNewComponent extends PoChartNewBaseComponent implements Afte
     const tokenBorderWidthSm = this.resolvePx('--border-width-sm');
     const tokenFontSizeGrid = this.resolvePx('--font-size-grid', '.po-chart');
     const newSeries = this.setSeries();
+    const paddingTop = this.getPaddingTopGrid();
 
     const options: EChartsOption = {
       backgroundColor: this.getCSSVariable('--background-color-grid', '.po-chart'),
       grid: {
-        top: this.options?.dataZoom || (this.dataLabel?.fixed && !this.options?.axis?.maxRange) ? 20 : 8,
+        top: paddingTop,
         left: this.options?.axis?.paddingLeft || 48,
         right: 16,
         borderWidth: tokenBorderWidthSm
@@ -273,17 +284,8 @@ export class PoChartNewComponent extends PoChartNewBaseComponent implements Afte
       series: newSeries as any
     };
 
-    if (this.options?.axis && Object.keys(this.options.axis).length) {
-      options.yAxis['splitNumber'] = this.options.axis.gridLines || 5;
-      options.yAxis['min'] = this.options.axis.minRange;
-      options.yAxis['max'] = this.options.axis.maxRange;
-      if (this.options.axis.labelType) {
-        options.yAxis['axisLabel'].formatter =
-          this.options.axis.labelType === PoChartLabelFormat.Number
-            ? (value: number) => this.decimalPipe.transform(value, '1.2-2')
-            : (value: number) => this.currencyPipe.transform(value, null, 'symbol', '1.2-2');
-      }
-    }
+    this.formatLabelOption(options);
+    this.setShowAxisDetails(options);
 
     if (this.options.dataZoom) {
       this.setOptionDataZoom(options);
@@ -295,30 +297,36 @@ export class PoChartNewComponent extends PoChartNewBaseComponent implements Afte
     return options;
   }
 
+  private getPaddingTopGrid(): number {
+    if (this.options?.dataZoom) {
+      return 45;
+    } else if (this.dataLabel?.fixed && !this.options?.axis?.maxRange) {
+      return 20;
+    }
+    return 8;
+  }
+
   private setOptionDataZoom(options: EChartsOption) {
     options.dataZoom = [
       {
         show: true,
-        type: 'inside',
-        filterMode: 'none',
-        xAxisIndex: [0],
-        minValueSpan: 5,
-        maxValueSpan: 50
+        realtime: true,
+        bottom: 'calc(100%)',
+        height: 20,
+        right: 16,
+        xAxisIndex: [0]
       },
       {
-        show: true,
         type: 'inside',
-        filterMode: 'none',
-        yAxisIndex: [0],
-        minValueSpan: 5,
-        maxValueSpan: 50
+        realtime: true,
+        xAxisIndex: [0]
       }
     ];
     options.graphic = [
       {
         type: 'text',
         left: 'center',
-        bottom: 'calc(100% + 10px)',
+        top: 30,
         style: {
           text: 'Use o scroll do mouse para dar zoom',
           fontFamily: this.getCSSVariable('--font-family-grid', '.po-chart'),
@@ -329,11 +337,25 @@ export class PoChartNewComponent extends PoChartNewBaseComponent implements Afte
     ];
   }
 
+  private formatLabelOption(options: EChartsOption) {
+    if (this.options?.axis && Object.keys(this.options.axis).length) {
+      options.yAxis['splitNumber'] = this.options.axis.gridLines || 5;
+      options.yAxis['min'] = this.options.axis.minRange;
+      options.yAxis['max'] = this.options.axis.maxRange;
+      if (this.options.axis.labelType) {
+        options.yAxis['axisLabel'].formatter =
+          this.options.axis.labelType === PoChartLabelFormat.Number
+            ? (value: number) => this.decimalPipe.transform(value, '1.2-2')
+            : (value: number) => this.currencyPipe.transform(value, null, 'symbol', '1.2-2');
+      }
+    }
+  }
+
   private setOptionLegend(options: EChartsOption) {
     options.legend = {
       show: true,
       orient: 'horizontal',
-      left: 'left',
+      left: this.options?.legendPosition || 'center',
       bottom: 0,
       padding: [0, 16, 0, 16],
       itemWidth: 16,
@@ -347,45 +369,40 @@ export class PoChartNewComponent extends PoChartNewBaseComponent implements Afte
     };
   }
 
+  private setShowAxisDetails(options: EChartsOption) {
+    if (this.options?.axis?.showAxisDetails) {
+      options.tooltip = {
+        trigger: 'none',
+        axisPointer: {
+          type: 'cross',
+          label: {
+            backgroundColor: '#6a7985'
+          }
+        }
+      };
+    }
+  }
+
   private setSeries() {
-    const newSeries: Array<any> = [...this.colorService.getColors<PoChartSerie>(this.series, true)];
+    const hasArea = this.type === 'area' || this.series.some(serie => serie.type === 'area');
+    const newSeries: Array<any> = [...this.colorService.getColors<PoChartSerie>(this.series, true, hasArea)];
     const tokenBorderWidthMd = this.resolvePx('--border-width-md');
 
-    return newSeries.map(serie => {
+    return newSeries.map((serie, index) => {
       if (serie.label && typeof serie.label === 'string') {
         serie.name = serie.label;
       }
 
-      if (serie.type === 'column') {
-        serie.type = 'bar';
+      if (!serie.type || serie.type === 'area' || serie.type === 'column') {
+        !serie.type ? this.setTypeSerie(serie, this.type) : this.setTypeSerie(serie, serie.type);
       }
 
-      const colorVariable = serie.color.includes('color')
+      const colorVariable: string = serie.color?.includes('color')
         ? this.getCSSVariable(`--${serie.color.replace('po-', '')}`)
         : serie.color;
 
-      serie.emphasis = {
-        itemStyle: {
-          color: colorVariable,
-          borderWidth: tokenBorderWidthMd
-        },
-        scale: 1.5
-      };
-
-      if (this.dataLabel?.fixed) {
-        serie.label = {
-          show: true
-        };
-
-        serie.emphasis = {
-          focus: 'series',
-          itemStyle: {
-            color: colorVariable,
-            borderWidth: tokenBorderWidthMd
-          },
-          scale: 1.5
-        };
-      }
+      this.setSerieEmphasis(serie, colorVariable, tokenBorderWidthMd);
+      this.setSerieTypeArea(serie, index);
 
       const isTypeLine = this.type === 'line' || serie.type === 'line';
       if (isTypeLine) {
@@ -401,6 +418,69 @@ export class PoChartNewComponent extends PoChartNewBaseComponent implements Afte
       serie.lineStyle = { color: colorVariable, width: tokenBorderWidthMd };
       return serie;
     });
+  }
+
+  private setSerieTypeArea(serie, index: number) {
+    if (serie.isTypeArea) {
+      serie.areaStyle = {
+        color: serie.color?.includes('color')
+          ? this.getCSSVariable(`--${serie.color.replace('po-', '')}`)
+          : serie.overlayColor
+      };
+
+      if (index > 7 || serie.isNotTokenColor) {
+        serie.areaStyle.opacity = 0.5;
+      }
+    }
+  }
+
+  private setSerieEmphasis(serie, color: string, tokenBorder: number) {
+    serie.emphasis = {
+      itemStyle: {
+        color: color,
+        borderWidth: tokenBorder
+      },
+      scale: 1.5
+    };
+
+    if (this.dataLabel?.fixed) {
+      serie.label = {
+        show: true
+      };
+
+      serie.emphasis = {
+        focus: 'series',
+        itemStyle: {
+          color: color,
+          borderWidth: tokenBorder
+        },
+        scale: 1.5
+      };
+    }
+  }
+
+  private setTypeSerie(serie, type: PoChartType) {
+    switch (type) {
+      case PoChartType.Area:
+        serie.type = 'line';
+        serie.isTypeArea = true;
+        break;
+      case PoChartType.Bar:
+        serie.type = 'bar';
+        break;
+      case PoChartType.Column:
+        serie.type = 'bar';
+        break;
+      case PoChartType.Donut:
+        serie.type = 'donut';
+        break;
+      case PoChartType.Line:
+        serie.type = 'line';
+        break;
+      case PoChartType.Pie:
+        serie.type = 'pie';
+        break;
+    }
   }
 
   private setTableProperties() {
