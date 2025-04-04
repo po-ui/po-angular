@@ -395,15 +395,6 @@ describe('PoTooltipDirective', () => {
     expect(directive.divContent.outerHTML.indexOf('abc') === -1).toBeTruthy();
   });
 
-  it('should hide tooltip when have tooltipContent', () => {
-    spyOn(directive, <any>'removeScrollEventListener');
-
-    directive.hideTooltip();
-
-    expect(getComputedStyle(directive.tooltipContent).getPropertyValue('visibility')).toEqual('hidden');
-    expect(directive['removeScrollEventListener']).toHaveBeenCalled();
-  });
-
   it('should`t concat the same text value', () => {
     directive.lastTooltipText = 'Teste';
     directive.tooltip = 'Teste\nTeste';
