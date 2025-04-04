@@ -5,9 +5,27 @@
     </div>
 
     <div class="po-chart-header-actions">
-      <po-button p-icon="ICON_LIST_BULLETS" p-kind="tertiary" (p-click)="openModal()"></po-button>
-      <po-button p-icon="ICON_EXPAND" p-kind="tertiary" (p-click)="toggleExpand()"></po-button>
-      <po-button #targetPopup p-icon="ICON_MORE_VERT" p-kind="tertiary" (p-click)="popup.toggle()"></po-button>
+      <po-button
+        p-icon="ICON_LIST_BULLETS"
+        p-kind="tertiary"
+        [p-disabled]="options?.header?.disabledTableDetails"
+        (p-click)="openModal()"
+      ></po-button>
+      <po-button
+        p-icon="ICON_EXPAND"
+        p-kind="tertiary"
+        [p-disabled]="options?.header?.disabledExpand"
+        (p-click)="toggleExpand()"
+      ></po-button>
+      <po-button
+        #targetPopup
+        p-icon="ICON_MORE_VERT"
+        p-kind="tertiary"
+        [p-disabled]="
+          options?.header?.disabledExportCsv && options?.header?.disabledExportImage && !customActions?.length
+        "
+        (p-click)="popup.toggle()"
+      ></po-button>
     </div>
   </div>
   <div

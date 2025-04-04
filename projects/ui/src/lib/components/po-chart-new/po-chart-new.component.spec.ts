@@ -102,8 +102,11 @@ describe('PoChartNewComponent', () => {
     const headerElement = document.createElement('div');
     headerElement.style.height = '50px';
     const chartDiv = document.createElement('div');
-    chartDiv.style.width = '200px';
-    chartDiv.style.height = '200px';
+    chartDiv.id = 'chart-id';
+    Object.defineProperty(chartDiv, 'clientWidth', { value: 800 });
+    Object.defineProperty(chartDiv, 'clientHeight', { value: 400 });
+
+    fixture.nativeElement.appendChild(chartDiv);
     spyOn(component['el'].nativeElement, 'querySelector').and.callFake((selector: string) => {
       if (selector === '#chart-id') {
         return chartDiv;
@@ -529,7 +532,7 @@ describe('PoChartNewComponent', () => {
       component.options.dataZoom = true;
 
       const result = component['setOptionLine']();
-      expect(result.grid.top).toBe(20);
+      expect(result.grid.top).toBe(45);
     });
 
     it('should apply correct axis configurations', () => {
@@ -606,6 +609,30 @@ describe('PoChartNewComponent', () => {
     });
   });
 
+  describe('setShowAxisDetails: ', () => {
+    it('deve adicionar tooltip com axisPointer quando showAxisDetails for true', () => {
+      component['options'] = {
+        axis: {
+          showAxisDetails: true
+        }
+      };
+
+      const options: any = {};
+
+      component['setShowAxisDetails'](options);
+
+      expect(options.tooltip).toEqual({
+        trigger: 'none',
+        axisPointer: {
+          type: 'cross',
+          label: {
+            backgroundColor: '#6a7985'
+          }
+        }
+      });
+    });
+  });
+
   describe('setSeries:', () => {
     let mockSeriesWithColor: Array<PoChartSerie>;
 
@@ -644,7 +671,58 @@ describe('PoChartNewComponent', () => {
       expect(result[0].name).toBe('Serie 1');
       expect(result[0].itemStyle.color).toBe('#0000ff');
       expect(result[1].type).toBe('line');
-      expect(result[2].type).toBeUndefined();
+      expect(result[2].type).toBe('bar');
+    });
+
+    it('should return all types charts', () => {
+      component.series = [
+        { label: 'Serie 1', data: [1, 2, 3], type: PoChartType.Column, color: 'po-color-01' },
+        { label: 'Serie 2', data: [4, 5, 6], type: PoChartType.Line, color: 'po-color-02' },
+        { label: 'Serie 3', data: [7, 10, 9], type: PoChartType.Bar },
+        { label: 'Serie 4', data: [5, 11, 9] },
+        { label: 'Serie 5', data: [4, 12, 10] },
+        { label: 'Serie 6', data: [2, 7, 8] },
+        { label: 'Serie 7', data: [5, 10, 6] },
+        { label: 'Serie 8', data: [7, 8, 5] },
+        { label: 'Serie 9', data: [7, 8, 9], type: PoChartType.Area }
+      ];
+
+      const result = component['setSeries']();
+      expect(result[0].itemStyle.color).toBe('#0000ff');
+      expect(result[8].areaStyle.opacity).toBe(0.5);
+      expect(result[8].type).toBe('line');
+      expect(result[2].type).toBe('bar');
+      expect(result[1].symbolSize).toBe(8);
+    });
+
+    it('should return type area and type bar and color 01', () => {
+      component.type = PoChartType.Bar;
+      component.series = [
+        { label: 'Serie 1', data: [7, 8, 9], type: PoChartType.Area, color: 'po-color-01' },
+        { label: 'Serie 2', data: [5, 2, 1] }
+      ];
+
+      const result = component['setSeries']();
+      expect(result[0].areaStyle.color).toBe('#0000ff');
+      expect(result[0].areaStyle.opacity).toBeUndefined();
+      expect(result[0].type).toBe('line');
+      expect(result[1].type).toBe('bar');
+    });
+
+    it('should return type Donut', () => {
+      component.type = PoChartType.Donut;
+      component.series = [{ label: 'Serie 1', data: [7, 8, 9] }];
+
+      const result = component['setSeries']();
+      expect(result[0].type).toBe('donut');
+    });
+
+    it('should return type Pie', () => {
+      component.type = PoChartType.Pie;
+      component.series = [{ label: 'Serie 1', data: [7, 8, 9] }];
+
+      const result = component['setSeries']();
+      expect(result[0].type).toBe('pie');
     });
 
     it('should handle color variables and direct color values correctly', () => {
