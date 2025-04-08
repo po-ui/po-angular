@@ -64,6 +64,34 @@ export interface PoThemeColor {
   //  * ```
   //  */
   'feedback'?: PoThemeColorFeedback;
+
+  /**
+   * Cores da Categorical a serem aplicadas.
+   *
+   * Exemplo de uso:
+   * ```typescript
+   * PoThemeColor.categorical = {
+   *  01: string,
+   *  02: string,
+   *  03: string
+   * }
+   * ```
+   */
+  'categorical'?: PoThemeColorCategorical;
+
+  /**
+   * Cores da Categorical a serem aplicadas.
+   *
+   * Exemplo de uso:
+   * ```typescript
+   * PoThemeColor.categorical = {
+   *  01: string,
+   *  02: string,
+   *  03: string
+   * }
+   * ```
+   */
+  'categorical-overlay'?: PoThemeColorCategorical;
 }
 
 /**
@@ -415,4 +443,15 @@ export interface PoThemeColorNeutral {
     '90'?: string;
     '95'?: string;
   };
+}
+
+export interface PoThemeColorCategorical {
+  '01'?: string;
+  '02'?: string;
+  '03'?: string;
+  '04'?: string;
+  '05'?: string;
+  '06'?: string;
+  '07'?: string;
+  '08'?: string;
 }
