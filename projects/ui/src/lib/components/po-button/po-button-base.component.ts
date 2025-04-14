@@ -1,7 +1,6 @@
-import { Directive, EventEmitter, HostBinding, Input, Output, TemplateRef } from '@angular/core';
+import { ChangeDetectorRef, Directive, EventEmitter, HostBinding, Input, Output, TemplateRef } from '@angular/core';
 
-// import { convertToBoolean, getDefaultSize, validateSize } from '../../utils/util';
-import { convertToBoolean } from '../../utils/util';
+import { convertToBoolean, getDefaultSize, validateSize } from '../../utils/util';
 
 // import { PoThemeService } from '../../services';
 import { PoButtonKind } from './enums/po-button-kind.enum';
@@ -130,6 +129,7 @@ export class PoButtonBaseComponent {
   private _loading?: boolean = false;
   private _kind?: string = PoButtonKind.secondary;
   private _size?: string = undefined;
+  protected _originalSize?: string = null;
   protected hasSize?: boolean = false;
 
   /**
@@ -238,15 +238,18 @@ export class PoButtonBaseComponent {
    * @default `medium`
    */
   @Input('p-size') set size(value: string) {
-    // this._size = validateSize(value, this.poThemeService, PoButtonSize);
-    this._size = value;
+    if (this._originalSize === null) {
+      this._originalSize = value;
+    }
+
+    this._size = validateSize(value, undefined, PoButtonSize);
   }
 
   get size(): string {
-    // return this._size ?? getDefaultSize(this.poThemeService, PoButtonSize);
-    return this._size;
+    return this._size ?? getDefaultSize(undefined, PoButtonSize);
   }
 
-  constructor() // protected poThemeService: PoThemeService
-  {}
+  constructor(protected cd: ChangeDetectorRef) {
+    // protected poThemeService: PoThemeService
+  }
 }

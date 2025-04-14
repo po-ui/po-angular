@@ -1,16 +1,13 @@
-<!-- 
-   -->
-<!-- 
-  <br />
-  <br />
-  <br />
-  <br />
-  Size: {{size}}
-  <br />
-  Theme: {{theme}} -->
 <po-page-default>
-  <po-table [p-items]="[{ table: 'PO Table', angular: 'PO-UI' }]"> </po-table>
-  <po-button p-label="teste"></po-button>
+  <po-button p-label="Change Theme" p-size="small" (p-click)="toggleTheme()"></po-button>
+  <po-button p-label="Toggle Size" p-size="small" (p-click)="toggleSize()"></po-button>
+  <br />
+  <br />
   <po-checkbox name="checkbox" p-label="PO Checkbox"> </po-checkbox>
-  <po-loading-overlay></po-loading-overlay>
+  <br />
+  <br />
+  Size: {{ size }}
+  <br />
+  Theme: {{ theme }}
+  <po-table p-components-size="small" [p-items]="[{ table: 'PO Table', angular: 'PO-UI' }]"> </po-table>
 </po-page-default>

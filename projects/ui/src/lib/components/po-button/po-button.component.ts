@@ -1,7 +1,9 @@
-import { ChangeDetectionStrategy, Component, ElementRef, ViewChild } from '@angular/core';
+import { ChangeDetectionStrategy, ChangeDetectorRef, Component, ElementRef, ViewChild } from '@angular/core';
 
 // import { PoThemeService } from '../../services';
 import { PoButtonBaseComponent } from './po-button-base.component';
+import { validateSize } from '../../utils/util';
+import { PoButtonSize } from './enums/po-button-size.enum';
 
 /**
  * @docsExtends PoButtonBaseComponent
@@ -36,10 +38,25 @@ import { PoButtonBaseComponent } from './po-button-base.component';
 export class PoButtonComponent extends PoButtonBaseComponent {
   @ViewChild('button', { static: true }) buttonElement: ElementRef;
 
-  constructor() // protected poThemeService: PoThemeService
-  {
-    super();
+  constructor(protected cd: ChangeDetectorRef) {
+    // protected poThemeService: PoThemeService
+    super(cd);
     // poThemeService
+  }
+
+  ngAfterViewInit(): void {
+    window.addEventListener('po-change-a11y', this.themeChangeListener.bind(this));
+  }
+
+  ngOnDestroy(): void {
+    window.removeEventListener('po-change-a11y', this.themeChangeListener.bind(this));
+  }
+
+  themeChangeListener() {
+    const size = validateSize(this.size, undefined, PoButtonSize, this._originalSize);
+
+    this.size = size;
+    this.cd.detectChanges();
   }
 
   onBlur(): void {

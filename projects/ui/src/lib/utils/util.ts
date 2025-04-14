@@ -1,4 +1,5 @@
 // import { PoThemeA11yEnum, PoThemeService } from '../services';
+import { PoThemeA11yEnum } from '../services';
 import { poLocaleDefault, poLocales } from '../services/po-language/po-language.constant';
 
 /**
@@ -42,6 +43,7 @@ export function getBrowserLanguage(): string {
 function getA11yDefaultSize(): string {
   const defaultSize = localStorage.getItem('po-default-size');
   const a11yLevel = document.documentElement.getAttribute('data-a11y');
+
   return defaultSize === 'small' && a11yLevel === 'AA' ? 'small' : 'medium';
 }
 export function getDefaultSize<T>(poThemeService: any, sizeEnum: T): T[keyof T] {
@@ -679,23 +681,44 @@ export function sortArrayOfObjects(items, key, isAscendingOrder) {
 /**
  * Valida e retorna um tamanho permitido para os componentes, considerando a acessibilidade.
  */
-function getA11yLevel(): string {
+function getA11yLevel(): PoThemeA11yEnum {
   const a11yLevel = document.documentElement.getAttribute('data-a11y');
   if (a11yLevel !== 'AA' && a11yLevel !== 'AAA') {
-    return 'AAA';
+    return PoThemeA11yEnum.AAA;
   }
 
-  return a11yLevel === 'AAA' ? 'AAA' : 'AA';
+  return a11yLevel === 'AAA' ? PoThemeA11yEnum.AAA : PoThemeA11yEnum.AA;
 }
-export function validateSize<T>(value: string, poThemeService: any, sizeEnum: T): T[keyof T] {
-  const validSizes = Object.values(sizeEnum) as Array<string>;
 
-  if (value && validSizes.includes(value)) {
-    if (value === sizeEnum['Small'] && getA11yLevel() === 'AAA') {
-      return sizeEnum['Medium'];
-    }
-    return value as T[keyof T];
+export function validateSize<T>(value: string, poThemeService: any, sizeEnum: T, originalSize?: string): T[keyof T] {
+  const a11yLevel = getA11yLevel();
+
+  console.log('a11yLevel', a11yLevel);
+  console.log('value', value);
+  console.log('originalSize', originalSize);
+
+  // Valores definidos no originalSize
+  if (a11yLevel === PoThemeA11yEnum.AA && originalSize === sizeEnum['Small']) {
+    return sizeEnum['Small'];
   }
 
-  return getDefaultSize(poThemeService, sizeEnum);
+  if (a11yLevel === PoThemeA11yEnum.AA && originalSize === sizeEnum['Medium']) {
+    return sizeEnum['Medium'];
+  }
+
+  if (a11yLevel === PoThemeA11yEnum.AAA && originalSize === sizeEnum['Medium']) {
+    return sizeEnum['Medium'];
+  }
+
+  // Valores indefinidos no originalSize
+  if (a11yLevel === PoThemeA11yEnum.AA && !originalSize) {
+    // TODO: Adicionar validação do default small
+    return sizeEnum['Small'];
+  }
+
+  if (a11yLevel === PoThemeA11yEnum.AAA && !originalSize) {
+    return sizeEnum['Medium'];
+  }
+
+  return getDefaultSize(undefined, sizeEnum);
 }

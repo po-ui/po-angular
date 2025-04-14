@@ -104,6 +104,8 @@ export class PoThemeService {
     this.applyThemeStyles(combinedStyles);
     document.documentElement.setAttribute('data-a11y', a11yLevel === PoThemeA11yEnum.AAA ? 'AAA' : 'AA');
     this.changeThemeType(themeConfig, persistPreference);
+
+    window.dispatchEvent(new Event('po-change-a11y'));
   }
 
   /**
@@ -129,23 +131,19 @@ export class PoThemeService {
    */
   setA11yDefaultSizeSmall(enable: boolean): boolean {
     const a11yLevel = document.documentElement.getAttribute('data-a11y');
+    let defaultSize = '';
 
-    if (!a11yLevel || (a11yLevel !== PoThemeA11yEnum.AA && a11yLevel !== PoThemeA11yEnum.AAA)) {
-      return false;
+    if (a11yLevel !== PoThemeA11yEnum.AA) {
+      defaultSize = 'medium';
     }
 
     if (a11yLevel === PoThemeA11yEnum.AA && enable) {
-      const defaultSize = 'small';
-
-      if (localStorage.getItem('po-default-size') !== defaultSize) {
-        localStorage.setItem('po-default-size', defaultSize);
-      }
-      return true;
+      defaultSize = 'small';
     }
 
-    localStorage.removeItem('po-default-size');
+    localStorage.setItem('po-default-size', defaultSize);
 
-    return false;
+    return defaultSize === 'small';
   }
 
   /**
