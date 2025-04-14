@@ -1,8 +1,9 @@
 import { Directive, EventEmitter, HostBinding, Input, Output, TemplateRef } from '@angular/core';
 
-import { convertToBoolean, getDefaultSize, validateSize } from '../../utils/util';
+// import { convertToBoolean, getDefaultSize, validateSize } from '../../utils/util';
+import { convertToBoolean } from '../../utils/util';
 
-import { PoThemeService } from '../../services';
+// import { PoThemeService } from '../../services';
 import { PoButtonKind } from './enums/po-button-kind.enum';
 import { PoButtonSize } from './enums/po-button-size.enum';
 import { PoButtonType } from './enums/po-button-type.enum';
@@ -237,12 +238,15 @@ export class PoButtonBaseComponent {
    * @default `medium`
    */
   @Input('p-size') set size(value: string) {
-    this._size = validateSize(value, this.poThemeService, PoButtonSize);
+    // this._size = validateSize(value, this.poThemeService, PoButtonSize);
+    this._size = value;
   }
 
   get size(): string {
-    return this._size ?? getDefaultSize(this.poThemeService, PoButtonSize);
+    // return this._size ?? getDefaultSize(this.poThemeService, PoButtonSize);
+    return this._size;
   }
 
-  constructor(protected poThemeService: PoThemeService) {}
+  constructor() // protected poThemeService: PoThemeService
+  {}
 }

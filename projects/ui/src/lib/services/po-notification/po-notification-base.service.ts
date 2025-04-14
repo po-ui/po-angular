@@ -2,7 +2,7 @@ import { ComponentRef } from '@angular/core';
 
 import { PoToaster, PoToasterMode, PoToasterOrientation, PoToasterType } from '../../components/po-toaster';
 import { PoFieldSize } from '../../enums/po-field-size.enum';
-import { validateSize } from '../../utils/util';
+// import { validateSize } from '../../utils/util';
 import { PoThemeService } from '../po-theme';
 import { PoNotification } from './po-notification.interface';
 
@@ -108,7 +108,8 @@ export abstract class PoNotificationBaseService {
       orientation = PoToasterOrientation.Top;
     }
 
-    const sizeActions = validateSize((<PoNotification>notification).sizeActions, this.poThemeService, PoFieldSize);
+    // const sizeActions = validateSize((<PoNotification>notification).sizeActions, this.poThemeService, PoFieldSize);
+    const sizeActions = (<PoNotification>notification).sizeActions;
     const toaster: PoToaster = {
       componentRef: undefined,
       message: (<PoNotification>notification).message || <string>notification,

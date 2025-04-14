@@ -1,4 +1,4 @@
-import { PoThemeA11yEnum, PoThemeService } from '../services';
+// import { PoThemeA11yEnum, PoThemeService } from '../services';
 import { poLocaleDefault, poLocales } from '../services/po-language/po-language.constant';
 
 /**
@@ -39,8 +39,13 @@ export function getBrowserLanguage(): string {
 /**
  * Retorna o tamanho padrão dos componentes conforme o nível de acessibilidade.
  */
-export function getDefaultSize<T>(poThemeService: PoThemeService, sizeEnum: T): T[keyof T] {
-  return poThemeService.getA11yDefaultSize() === 'small' ? sizeEnum['Small'] : sizeEnum['Medium'];
+function getA11yDefaultSize(): string {
+  const defaultSize = localStorage.getItem('po-default-size');
+  const a11yLevel = document.documentElement.getAttribute('data-a11y');
+  return defaultSize === 'small' && a11yLevel === 'AA' ? 'small' : 'medium';
+}
+export function getDefaultSize<T>(poThemeService: any, sizeEnum: T): T[keyof T] {
+  return getA11yDefaultSize() === 'small' ? sizeEnum['Small'] : sizeEnum['Medium'];
 }
 
 /**
@@ -674,11 +679,19 @@ export function sortArrayOfObjects(items, key, isAscendingOrder) {
 /**
  * Valida e retorna um tamanho permitido para os componentes, considerando a acessibilidade.
  */
-export function validateSize<T>(value: string, poThemeService: PoThemeService, sizeEnum: T): T[keyof T] {
+function getA11yLevel(): string {
+  const a11yLevel = document.documentElement.getAttribute('data-a11y');
+  if (a11yLevel !== 'AA' && a11yLevel !== 'AAA') {
+    return 'AAA';
+  }
+
+  return a11yLevel === 'AAA' ? 'AAA' : 'AA';
+}
+export function validateSize<T>(value: string, poThemeService: any, sizeEnum: T): T[keyof T] {
   const validSizes = Object.values(sizeEnum) as Array<string>;
 
   if (value && validSizes.includes(value)) {
-    if (value === sizeEnum['Small'] && poThemeService.getA11yLevel() === PoThemeA11yEnum.AAA) {
+    if (value === sizeEnum['Small'] && getA11yLevel() === 'AAA') {
       return sizeEnum['Medium'];
     }
     return value as T[keyof T];

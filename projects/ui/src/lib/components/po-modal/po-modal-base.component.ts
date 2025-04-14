@@ -123,11 +123,13 @@ export class PoModalBaseComponent {
    * @default `medium`
    */
   @Input('p-components-size') set componentsSize(value: string) {
-    this._componentsSize = validateSize(value, this.poThemeService, PoFieldSize);
+    this._componentsSize = value;
+    // this._componentsSize = validateSize(value, this.poThemeService, PoFieldSize);
   }
 
   get componentsSize(): string {
-    return this._componentsSize ?? getDefaultSize(this.poThemeService, PoFieldSize);
+    return this._componentsSize;
+    // return this._componentsSize ?? getDefaultSize(this.poThemeService, PoFieldSize);
   }
 
   /**
@@ -175,8 +177,8 @@ export class PoModalBaseComponent {
   @Input('p-icon') icon?: string | TemplateRef<void>;
 
   constructor(
-    poLanguageService: PoLanguageService,
-    protected poThemeService: PoThemeService
+    poLanguageService: PoLanguageService
+    // protected poThemeService: PoThemeService
   ) {
     this.language = poLanguageService.getShortLanguage();
 

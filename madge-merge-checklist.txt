@@ -1,0 +1,49 @@
+Processed 1263 files (18.3s) (8 warnings)
+
+==== TIRADOS
+1) utils/util.ts > services/index.ts > services/po-date/index.ts > services/po-date/po-date.module.ts > services/po-date/po-date.service.ts X
+4) utils/util.ts > services/index.ts > services/po-dialog/index.ts > services/po-dialog/po-dialog.component.ts > components/po-modal/po-modal.component.ts > components/po-modal/po-modal-base.component.ts 
+5) services/index.ts > services/po-dialog/index.ts > services/po-dialog/po-dialog.component.ts > components/po-modal/po-modal.component.ts
+9) utils/util.ts > services/index.ts > services/po-dialog/index.ts > services/po-dialog/po-dialog.component.ts
+10) services/index.ts > services/po-dialog/index.ts > services/po-dialog/po-dialog.module.ts > components/po-modal/po-modal.module.ts > components/po-button/po-button.module.ts > components/po-button/po-button.component.ts > components/po-button/po-button-base.component.ts
+12) services/index.ts > services/po-dialog/index.ts > services/po-dialog/po-dialog.module.ts > components/po-modal/po-modal.module.ts > components/po-button/po-button.module.ts > components/po-button/po-button.component.ts
+
+
+==== DEIXADOS
+2) services/index.ts > services/po-dialog/index.ts > services/po-dialog/po-dialog.component.ts > components/po-modal/po-modal.component.ts > components/po-modal/po-modal-base.component.ts 
+3) services/po-language/po-language.service.ts > utils/util.ts > services/index.ts > services/po-dialog/index.ts > services/po-dialog/po-dialog.component.ts > components/po-modal/po-modal.component.ts > components/po-modal/po-modal-base.component.ts
+6) services/po-language/po-language.service.ts > utils/util.ts > services/index.ts > services/po-dialog/index.ts > services/po-dialog/po-dialog.component.ts > components/po-modal/po-modal.component.ts
+7) utils/util.ts > services/index.ts > services/po-dialog/index.ts > services/po-dialog/po-dialog.component.ts > components/po-modal/po-modal.component.ts
+8) services/po-language/po-language.service.ts > utils/util.ts > services/index.ts > services/po-dialog/index.ts > services/po-dialog/po-dialog.component.ts
+
+
+11) utils/util.ts > services/index.ts > services/po-dialog/index.ts > services/po-dialog/po-dialog.module.ts > components/po-modal/po-modal.module.ts > components/po-button/po-button.module.ts > components/po-button/po-button.component.ts > components/po-button/po-button-base.component.ts
+
+13) utils/util.ts > services/index.ts > services/po-dialog/index.ts > services/po-dialog/po-dialog.module.ts > components/po-modal/po-modal.module.ts > components/po-button/po-button.module.ts > components/po-loading/index.ts > components/po-loading/po-loading-icon/po-loading-icon.component.ts
+14) services/po-language/po-language.service.ts > utils/util.ts > services/index.ts > services/po-dialog/index.ts > services/po-dialog/po-dialog.module.ts > components/po-modal/po-modal.module.ts > components/po-button/po-button.module.ts > components/po-loading/index.ts > components/po-loading/po-loading-overlay/po-loading-overlay.component.ts > components/po-loading/po-loading-overlay/po-loading-overlay-base.component.ts
+15) utils/util.ts > services/index.ts > services/po-dialog/index.ts > services/po-dialog/po-dialog.module.ts > components/po-modal/po-modal.module.ts > components/po-button/po-button.module.ts > components/po-loading/index.ts > components/po-loading/po-loading-overlay/po-loading-overlay.component.ts > components/po-loading/po-loading-overlay/po-loading-overlay-base.component.ts
+16) services/po-language/po-language.service.ts > utils/util.ts > services/index.ts > services/po-dialog/index.ts > services/po-dialog/po-dialog.module.ts > components/po-modal/po-modal.module.ts > components/po-button/po-button.module.ts > components/po-loading/index.ts > components/po-loading/po-loading-overlay/po-loading-overlay.component.ts
+17) services/po-language/po-language.service.ts > utils/util.ts > services/index.ts > services/po-dialog/index.ts > services/po-dialog/po-dialog.module.ts > components/po-modal/po-modal.module.ts > components/po-button/po-button.module.ts > components/po-loading/index.ts > components/po-loading/po-loading.component.ts > components/po-loading/po-loading-base.component.ts
+18) utils/util.ts > services/index.ts > services/po-dialog/index.ts > services/po-dialog/po-dialog.module.ts > components/po-modal/po-modal.module.ts > components/po-button/po-button.module.ts > components/po-loading/index.ts > components/po-loading/po-loading.module.ts > components/po-overlay/po-overlay.module.ts > components/po-overlay/po-overlay.component.ts > components/po-overlay/po-overlay-base.component.ts
+19) services/po-language/po-language.module.ts > services/po-language/po-language.service.ts > utils/util.ts > services/index.ts > services/po-dialog/index.ts > services/po-dialog/po-dialog.module.ts > components/po-modal/po-modal.module.ts > components/po-button/po-button.module.ts > components/po-loading/index.ts > components/po-loading/po-loading.module.ts
+20) services/po-language/po-language.service.ts > utils/util.ts > services/index.ts > services/po-i18n/index.ts > services/po-i18n/po-i18n.module.ts > services/po-i18n/po-i18n.service.ts > services/po-i18n/po-i18n-base.service.ts
+21) utils/util.ts > services/index.ts > services/po-i18n/index.ts > services/po-i18n/po-i18n.module.ts > services/po-i18n/po-i18n.service.ts > services/po-i18n/po-i18n-base.service.ts
+22) services/po-language/po-language.service.ts > utils/util.ts > services/index.ts > services/po-i18n/index.ts > services/po-i18n/po-i18n.module.ts > services/po-i18n/po-i18n.service.ts
+23) services/po-language/po-language.module.ts > services/po-language/po-language.service.ts > utils/util.ts > services/index.ts > services/po-i18n/index.ts > services/po-i18n/po-i18n.module.ts
+24) services/po-language/po-language.service.ts > utils/util.ts > services/index.ts > services/po-i18n/index.ts > services/po-i18n/po-i18n.module.ts
+25) services/po-language/index.ts > services/po-language/po-language.module.ts > services/po-language/po-language.service.ts > utils/util.ts > services/index.ts
+26) services/po-notification/index.ts > services/po-notification/po-notification.interface.ts > components/po-toaster/index.ts > components/po-toaster/interface/po-toaster.interface.ts
+
+
+
+27) services/index.ts > services/po-notification/index.ts > services/po-notification/po-notification.interface.ts > components/po-toaster/index.ts > components/po-toaster/po-toaster.component.ts > components/po-toaster/po-toaster-base.component.ts
+28) utils/util.ts > services/index.ts > services/po-notification/index.ts > services/po-notification/po-notification.interface.ts > components/po-toaster/index.ts > components/po-toaster/po-toaster.component.ts > components/po-toaster/po-toaster-base.component.ts
+29) services/index.ts > services/po-notification/index.ts > services/po-notification/po-notification.interface.ts > components/po-toaster/index.ts > components/po-toaster/po-toaster.component.ts
+31) utils/util.ts > services/index.ts > services/po-notification/index.ts > services/po-notification/po-notification.service.ts > services/po-notification/po-notification-base.service.ts
+
+
+30) services/po-language/index.ts > services/po-language/po-language.module.ts > services/po-language/po-language.service.ts > utils/util.ts > services/index.ts > services/po-notification/index.ts > services/po-notification/po-notification.interface.ts > components/po-toaster/index.ts > components/po-toaster/po-toaster.component.ts
+
+
+32) services/po-language/po-language.module.ts > services/po-language/po-language.service.ts > utils/util.ts > services/index.ts > services/services.module.ts
+

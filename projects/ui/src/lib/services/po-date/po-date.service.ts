@@ -1,7 +1,5 @@
 import { Injectable } from '@angular/core';
 
-import { sortValues } from '../../utils/util';
-
 /**
  * @docsPrivate
  *

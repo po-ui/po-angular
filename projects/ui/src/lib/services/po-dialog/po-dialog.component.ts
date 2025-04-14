@@ -9,7 +9,6 @@ import { PoLanguageService } from '../po-language/po-language.service';
 import { PoModalAction } from '../../components/po-modal/po-modal-action.interface';
 import { PoModalComponent } from '../../components/po-modal/po-modal.component';
 import { PoFieldSize } from '../../enums/po-field-size.enum';
-import { getDefaultSize, validateSize } from '../../utils/util';
 import { PoThemeService } from '../po-theme/po-theme.service';
 import { PoDialogType } from './enums/po-dialog.enum';
 import { PoDialogAlertLiterals } from './interfaces/po-dialog-alert-literals.interface';
@@ -76,11 +75,13 @@ export class PoDialogComponent implements OnDestroy, OnInit {
 
   // Define o tamanho dos componentes de formulário no dialog.
   @Input('p-components-size') set componentsSize(value: string) {
-    this._componentsSize = validateSize(value, this.poThemeService, PoFieldSize);
+    // this._componentsSize = validateSize(value, this.poThemeService, PoFieldSize);
+    this._componentsSize = value;
   }
 
   get componentsSize(): string {
-    return this._componentsSize ?? getDefaultSize(this.poThemeService, PoFieldSize);
+    // return this._componentsSize ?? getDefaultSize(this.poThemeService, PoFieldSize);
+    return this._componentsSize;
   }
 
   constructor(
