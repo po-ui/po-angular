@@ -4,7 +4,7 @@ import { FormsModule } from '@angular/forms';
 import { NgModule } from '@angular/core';
 import { RouterModule } from '@angular/router';
 
-import { PoModule } from '@po-ui/ng-components';
+import { PoModule } from '../../../ui/src/public-api';
 import { AppComponent } from './app.component';
 
 @NgModule({

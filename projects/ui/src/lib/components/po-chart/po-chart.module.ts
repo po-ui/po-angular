@@ -22,6 +22,8 @@ import { PoChartCircularLabelComponent } from './po-chart-container/po-chart-cir
 import { PoChartCircularPathComponent } from './po-chart-container/po-chart-circular/po-chart-circular-path/po-chart-circular-path.component';
 import { PoChartTooltipDirective } from './po-chart-container/po-chart-circular/po-chart-circular-path/po-chart-tooltip.directive';
 import { PoResizeObserverDirective } from './directives/po-resize-observer.directive';
+import { PoChartNewModule } from '../po-chart-new/po-chart-new.module';
+import { PoChartSwitchComponent } from './po-chart-switch.component';
 
 /**
  * @description
@@ -29,7 +31,7 @@ import { PoResizeObserverDirective } from './directives/po-resize-observer.direc
  * Módulo do componente `po-chart`.
  */
 @NgModule({
-  imports: [CommonModule, PoTooltipModule],
+  imports: [CommonModule, PoTooltipModule, PoChartNewModule],
   declarations: [
     PoChartAreaComponent,
     PoChartAxisComponent,
@@ -49,9 +51,10 @@ import { PoResizeObserverDirective } from './directives/po-resize-observer.direc
     PoChartCircularPathComponent,
     PoChartCircularLabelComponent,
     PoChartTooltipDirective,
-    PoResizeObserverDirective
+    PoResizeObserverDirective,
+    PoChartSwitchComponent
   ],
-  exports: [PoChartComponent],
+  exports: [PoChartComponent, PoChartSwitchComponent],
   providers: [DecimalPipe, CurrencyPipe]
 })
 export class PoChartModule {}
