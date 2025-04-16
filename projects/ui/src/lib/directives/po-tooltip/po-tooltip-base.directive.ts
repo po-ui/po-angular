@@ -47,6 +47,28 @@ export abstract class PoTooltipBaseDirective {
    */
   @Input({ alias: 'p-append-in-body', transform: convertToBoolean }) appendInBody: boolean = false;
 
+  /**
+   * @optional
+   *
+   * @description
+   *
+   * Esconde
+   *
+   * @default `false`
+   */
+  @Input({ alias: 'p-hide-arrow', transform: convertToBoolean }) hideArrow: boolean = false;
+
+  /**
+   * @optional
+   *
+   * @description
+   *
+   *
+   *
+   * @default `false`
+   */
+  @Input({ alias: 'p-inner-html', transform: convertToBoolean }) innerHtml: boolean = false;
+
   protected _tooltipPosition?: string = 'bottom';
   protected tooltipContent;
 
