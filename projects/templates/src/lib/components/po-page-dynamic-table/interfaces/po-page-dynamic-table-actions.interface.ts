@@ -131,9 +131,9 @@ export interface PoPageDynamicTableActions {
    *
    * Por exemplo:
    * - Recursos com as propriedades id e name definidas como *key*:
-   * ```
-   * [{ id: 1, name: 'Mario' },{ id: 2, name: 'Gabriel' }]
-   * ```
+   *   ```
+   *   [{ id: 1, name: 'Mario' },{ id: 2, name: 'Gabriel' }]
+   *   ```
    *
    */
   removeAll?: boolean | ((resources: Array<any>) => Array<any>);

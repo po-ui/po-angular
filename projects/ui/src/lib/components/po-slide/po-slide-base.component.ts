@@ -74,17 +74,17 @@ export abstract class PoSlideBaseComponent {
    * Array de imagens ou dados para o slide, pode ser de três formas:
    *
    * - Array implementando objetos da interface `PoSlideItem`:
-   * ```
-   * [{ image: '/assets/image-1', action: 'imageClick.bind(this)'}, { image: '/assets/image-2' }]
-   * ```
+   *   ```
+   *   [{ image: '/assets/image-1', action: 'imageClick.bind(this)'}, { image: '/assets/image-2' }]
+   *   ```
    * - Array de `strings` com os caminhos das imagens:
-   * ```
-   * ['/assets/image-1', '/assets/image-2' ]
-   * ```
+   *   ```
+   *   ['/assets/image-1', '/assets/image-2' ]
+   *   ```
    * - Array com lista de itens (para utilizar template):
-   * ```
-   * [{ label: '1', img: '/assets/image-1' }, { label: '2', img: '/assets/image-1' }]
-   * ```
+   *   ```
+   *   [{ label: '1', img: '/assets/image-1' }, { label: '2', img: '/assets/image-1' }]
+   *   ```
    *
    * > As setas de navegação e o controle com círculos apenas serão renderizados caso possua mais de um slide.
    */

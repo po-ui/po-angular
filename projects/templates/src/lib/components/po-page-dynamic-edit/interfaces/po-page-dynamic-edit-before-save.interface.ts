@@ -24,19 +24,19 @@ export interface PoPageDynamicEditBeforeSave {
    * Por exemplo:
    *
    * - recurso anterior:
-   * ```
-   * { name: 'Ane' }
-   * ```
+   *   ```
+   *   { name: 'Ane' }
+   *   ```
    *
    * - recurso retornado no `beforeSave`:
-   * ```
-   * { age: 23 }
-   * ```
+   *   ```
+   *   { age: 23 }
+   *   ```
    *
    * - Mesclagem do recurso:
-   * ```
-   * { name: 'Ane', age: 23 }
-   * ```
+   *   ```
+   *   { name: 'Ane', age: 23 }
+   *   ```
    *
    * > Caso `allowAction` seja `false`, o recurso será atualizado apenas localmente, sem concluir
    * a ação de salvar (save).

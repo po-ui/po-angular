@@ -105,8 +105,7 @@ export interface PoTableColumn {
    * 'HH:mm:ss'. Exemplos: 'HH:mm', 'HH:mm:ss.ffffff', 'HH:mm:ss.ff', 'mm:ss.fff'.
    * - Formato para números (number): aceita um valor seguindo o padrão [**DecimalPipe**](https://angular.io/api/common/DecimalPipe)
    *  para formatação, e caso não seja informado, o número será exibido na sua forma original. Exemplo:
-   *
-   *  +  Com o valor de entrada: `50` e a valor para formatação: `'1.2-5'` o resultado será: `50.00`
+   *   - Com o valor de entrada: `50` e a valor para formatação: `'1.2-5'` o resultado será: `50.00`
    */
   format?: string;
 
@@ -216,15 +215,15 @@ export interface PoTableColumn {
    * - `currency`: valores monetários.
    *
    * - `date`: valor de datas.
-   *  + Aceita os tipos _string_ e _Date_ padrão do Javascript,
-   *  por exemplo: `'2017-11-28'` ou `new Date(2017, 10, 28)`.
+   *   + Aceita os tipos _string_ e _Date_ padrão do Javascript,
+   *   por exemplo: `'2017-11-28'` ou `new Date(2017, 10, 28)`.
    *
    * - `dateTime`: valor de data com horário.
-   *  + Aceita o tipo _string_ no formato **ISO-8601** extendido **'yyyy-mm-ddThh:mm:ss+|-hh:mm'**
-   * e o tipo _Date_ padrão do Javascript, por exemplo: `'2017-11-28T00:00:00-02:00'` ou `new Date(2017, 10, 28)`.
+   *   + Aceita o tipo _string_ no formato **ISO-8601** extendido **'yyyy-mm-ddThh:mm:ss+|-hh:mm'**
+   *   e o tipo _Date_ padrão do Javascript, por exemplo: `'2017-11-28T00:00:00-02:00'` ou `new Date(2017, 10, 28)`.
    *
    * - `detail`: array de objetos para o master-detail.
-   *  + Incompatível com `virtual-scroll`, que requer altura fixa nas linhas.
+   *   + Incompatível com `virtual-scroll`, que requer altura fixa nas linhas.
    * - `icon`: *array* de *string* ou objetos para a coluna de ícones.
    * - `label`: texto com destaque.
    * - `link`: habilita link na coluna para ação ou navegação.
@@ -233,7 +232,7 @@ export interface PoTableColumn {
    * - `subtitle`: array de objetos para a coluna de legenda.
    *
    * - `time`: valor de horário.
-   *  + Aceita o tipo _string_ nos formatos **'HH:mm:ss'** ou **'HH:mm:ss.ffffff'**, por exemplo: `'23:12:45'`.
+   *   + Aceita o tipo _string_ nos formatos **'HH:mm:ss'** ou **'HH:mm:ss.ffffff'**, por exemplo: `'23:12:45'`.
    * - `cellTemplate`: Indica que a coluna será utilizada como template, em conjunto com o
    * [PoTableCellTemplate](/documentation/po-table-cell-template).
    * - `columnTemplate`: Indica que a coluna será utilizada como template, em conjunto com o

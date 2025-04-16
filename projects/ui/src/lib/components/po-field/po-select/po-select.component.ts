@@ -56,8 +56,6 @@ const PO_SELECT_FIELD_VALUE_DEFAULT = 'value';
  *   <file name="sample-po-select-customer-registration/sample-po-select-customer-registration.component.html"> </file>
  *   <file name="sample-po-select-customer-registration/sample-po-select-customer-registration.component.ts"> </file>
  *   <file name="sample-po-select-customer-registration/sample-po-select-customer-registration.service.ts"> </file>
- *   <file name='sample-po-select-customer-registration/sample-po-select-customer-registration.component.e2e-spec.ts'> </file>
- *   <file name='sample-po-select-customer-registration/sample-po-select-customer-registration.component.po.ts'> </file>
  * </example>
  *
  * <example name="po-select-companies" title="PO Select Companies">

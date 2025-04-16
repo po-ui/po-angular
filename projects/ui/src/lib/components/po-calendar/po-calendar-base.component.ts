@@ -15,19 +15,19 @@ import { PoCalendarMode } from './po-calendar-mode.enum';
  * Este componente pode receber os seguintes formatos de data:
  *
  * - **Data e hora combinados (E8601DZw): yyyy-mm-ddThh:mm:ss+|-hh:mm**
- * ```
- * this.date = '2017-11-28T00:00:00-02:00';
- * ```
+ *   ```
+ *   this.date = '2017-11-28T00:00:00-02:00';
+ *   ```
  *
  * - **Data (E8601DAw.): yyyy-mm-dd**
- * ```
- * this.date = '2017-11-28';
- * ```
+ *   ```
+ *   this.date = '2017-11-28';
+ *   ```
  *
  * - **JavaScript Date Object:**
- * ```
- * this.date = new Date(2017, 10, 28);
- * ```
+ *   ```
+ *   this.date = new Date(2017, 10, 28);
+ *   ```
  *
  * > Independentemente do formato utilizado, o componente trata o valor do *model* internamente com o
  * formato **Data (E8601DAw.): yyyy-mm-dd**.
@@ -82,19 +82,19 @@ export class PoCalendarBaseComponent {
    * Pode receber os seguintes formatos de data:
    *
    * - **Data e hora combinados (E8601DZw): yyyy-mm-ddThh:mm:ss+|-hh:mm**
-   * ```
-   * this.date = '2017-11-28T00:00:00-02:00';
-   * ```
+   *   ```
+   *   this.date = '2017-11-28T00:00:00-02:00';
+   *   ```
    *
    * - **Data (E8601DAw.): yyyy-mm-dd**
-   * ```
-   * this.date = '2017-11-28';
-   * ```
+   *   ```
+   *   this.date = '2017-11-28';
+   *   ```
    *
    * - **JavaScript Date Object:**
-   * ```
-   * this.date = new Date(2017, 10, 28);
-   * ```
+   *   ```
+   *   this.date = new Date(2017, 10, 28);
+   *   ```
    */
   @Input('p-max-date') set maxDate(maxDate: any) {
     this._maxDate = this.poDate.getDateForDateRange(maxDate, false);
@@ -113,19 +113,19 @@ export class PoCalendarBaseComponent {
    * Pode receber os seguintes formatos de data:
    *
    * - **Data e hora combinados (E8601DZw): yyyy-mm-ddThh:mm:ss+|-hh:mm**
-   * ```
-   * this.date = '2017-11-28T00:00:00-02:00';
-   * ```
+   *   ```
+   *   this.date = '2017-11-28T00:00:00-02:00';
+   *   ```
    *
    * - **Data (E8601DAw.): yyyy-mm-dd**
-   * ```
-   * this.date = '2017-11-28';
-   * ```
+   *   ```
+   *   this.date = '2017-11-28';
+   *   ```
    *
    * - **JavaScript Date Object:**
-   * ```
-   * this.date = new Date(2017, 10, 28);
-   * ```
+   *   ```
+   *   this.date = new Date(2017, 10, 28);
+   *   ```
    */
   @Input('p-min-date') set minDate(minDate: any) {
     this._minDate = this.poDate.getDateForDateRange(minDate, true);
