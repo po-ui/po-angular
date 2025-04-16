@@ -64,6 +64,17 @@ export interface PoChartAxisOptions {
    *
    * @description
    *
+   * Permite aumentar ou diminuir o espaço o espaço direito do gráfico
+   *
+   * @default `32`
+   */
+  paddingRight?: number;
+
+  /**
+   * @optional
+   *
+   * @description
+   *
    * Define o ângulo de rotação da legenda do gráfico.
    * Aceita valores entre -90 e 90 graus, onde:
    * - Valores negativos giram a legenda para a esquerda.
