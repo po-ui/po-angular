@@ -19,7 +19,7 @@ import { PoLanguageService } from '../../services/po-language/po-language.servic
 import { isExternalLink, isTypeof, openExternalLink } from '../../utils/util';
 import { PoSearchListComponent } from './po-search-list/po-search-list.component';
 import { Observable, Subscription, debounceTime, fromEvent } from 'rxjs';
-import { PoThemeService } from '../../services';
+import { PoThemeService } from '../../services/po-theme/po-theme.service';
 
 @Component({
   selector: 'po-listbox',

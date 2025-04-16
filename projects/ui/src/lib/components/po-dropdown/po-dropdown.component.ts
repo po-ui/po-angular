@@ -2,7 +2,7 @@ import { ChangeDetectionStrategy, ChangeDetectorRef, Component, ElementRef, Rend
 
 import { isKeyCodeEnter } from './../../utils/util';
 
-import { PoThemeService } from '../../services';
+import { PoThemeService } from '../../services/po-theme/po-theme.service';
 import { PoDropdownBaseComponent } from './po-dropdown-base.component';
 
 /**

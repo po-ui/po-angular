@@ -11,7 +11,7 @@ import {
 } from '@angular/core';
 
 import { Subject } from 'rxjs';
-import { PoThemeService } from '../../services';
+import { PoThemeService } from '../../services/po-theme/po-theme.service';
 import { PoLanguageService } from '../../services/po-language';
 import { PoButtonComponent } from '../po-button';
 import { PoToasterMode } from './enum/po-toaster-mode.enum';

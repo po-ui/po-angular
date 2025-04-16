@@ -4,7 +4,7 @@ import { uuid } from '../../utils/util';
 import { PoModalBaseComponent } from './po-modal-base.component';
 import { PoModalFooterComponent } from './po-modal-footer/po-modal-footer.component';
 
-import { PoThemeService } from '../../services';
+import { PoThemeService } from '../../services/po-theme/po-theme.service';
 import { PoActiveOverlayService } from '../../services/po-active-overlay/po-active-overlay.service';
 import { PoLanguageService } from '../../services/po-language/po-language.service';
 

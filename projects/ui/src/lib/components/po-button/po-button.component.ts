@@ -1,6 +1,6 @@
 import { ChangeDetectionStrategy, Component, ElementRef, ViewChild } from '@angular/core';
 
-import { PoThemeService } from '../../services';
+import { PoThemeService } from '../../services/po-theme/po-theme.service';
 import { PoButtonBaseComponent } from './po-button-base.component';
 
 /**

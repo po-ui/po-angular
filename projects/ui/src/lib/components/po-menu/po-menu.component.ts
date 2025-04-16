@@ -17,7 +17,7 @@ import { map } from 'rxjs/operators';
 
 import { getFormattedLink, isMobile, openExternalLink, uuid } from '../../utils/util';
 
-import { PoThemeService } from '../../services';
+import { PoThemeService } from '../../services/po-theme/po-theme.service';
 import { PoLanguageService } from '../../services/po-language/po-language.service';
 import { PoMenuBaseComponent } from './po-menu-base.component';
 import { PoMenuHeaderTemplateDirective } from './po-menu-header-template/po-menu-header-template.directive';

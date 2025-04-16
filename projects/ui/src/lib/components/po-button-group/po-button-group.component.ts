@@ -1,6 +1,6 @@
 import { Component, ViewContainerRef } from '@angular/core';
 
-import { PoThemeService } from '../../services';
+import { PoThemeService } from '../../services/po-theme/po-theme.service';
 import { PoButtonGroupBaseComponent } from './po-button-group-base.component';
 
 /**

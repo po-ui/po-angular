@@ -32,7 +32,7 @@ import { PoModalAction, PoModalComponent } from '../po-modal';
 import { PoPopupComponent } from '../po-popup/po-popup.component';
 import { PoTableColumnLabel } from './po-table-column-label/po-table-column-label.interface';
 
-import { PoThemeService } from '../../services';
+import { PoThemeService } from '../../services/po-theme/po-theme.service';
 import { uuid } from '../../utils/util';
 import { AnimaliaIconDictionary, ICONS_DICTIONARY } from '../po-icon';
 import { PoTableRowTemplateArrowDirection } from './enums/po-table-row-template-arrow-direction.enum';
