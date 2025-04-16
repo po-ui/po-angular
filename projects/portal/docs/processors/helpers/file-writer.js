@@ -395,7 +395,7 @@ export class DocumentationRoutingModule { }
   },
 
   capitalizeDocName: function (docName) {
-    let capitalizedName = docName.split('po')[1].split('-');
+    let capitalizedName = docName.split('po-')[1].split('-');
 
     if (capitalizedName) {
       capitalizedName.forEach(function (part, index) {
