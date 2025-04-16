@@ -566,13 +566,13 @@ export abstract class PoUploadBaseComponent implements ControlValueAccessor, Val
    *
    * - passando um objeto implementando a interface `PoUploadLiterals` com todas as literais disponíveis;
    * - passando apenas as literais que deseja customizar:
-   * ```
-   *  const customLiterals: PoUploadLiterals = {
-   *    folders: 'Pastas',
-   *    selectFile: 'Buscar arquivo',
-   *    startSending: 'Enviar'
-   *  };
-   * ```
+   *   ```
+   *    const customLiterals: PoUploadLiterals = {
+   *      folders: 'Pastas',
+   *      selectFile: 'Buscar arquivo',
+   *      startSending: 'Enviar'
+   *    };
+   *   ```
    *
    * E para carregar as literais customizadas, basta apenas passar o objeto para o componente:
    *

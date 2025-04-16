@@ -44,8 +44,6 @@ const poCalendarPositionDefault = 'bottom-left';
  * <example name="po-datepicker-basic" title="PO Datepicker Basic">
  *  <file name="sample-po-datepicker-basic/sample-po-datepicker-basic.component.html"> </file>
  *  <file name="sample-po-datepicker-basic/sample-po-datepicker-basic.component.ts"> </file>
- *  <file name="sample-po-datepicker-basic/sample-po-datepicker-basic.component.po.ts"> </file>
- *  <file name="sample-po-datepicker-basic/sample-po-datepicker-basic.component.e2e-spec.ts"> </file>
  * </example>
  *
  * <example name="po-datepicker-labs" title="PO Datepicker Labs">

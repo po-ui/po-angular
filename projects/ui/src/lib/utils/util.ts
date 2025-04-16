@@ -1,4 +1,5 @@
-import { PoThemeA11yEnum, PoThemeService } from '../services';
+import { PoThemeService } from '../services/po-theme/po-theme.service';
+import { PoThemeA11yEnum } from '../services/po-theme/enum/po-theme-a11y.enum';
 import { poLocaleDefault, poLocales } from '../services/po-language/po-language.constant';
 
 /**

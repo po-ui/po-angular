@@ -4,7 +4,7 @@ import { Router } from '@angular/router';
 import { PoControlPositionService } from '../../services/po-control-position/po-control-position.service';
 import { isExternalLink, isTypeof, openExternalLink } from '../../utils/util';
 
-import { PoThemeService } from '../../services';
+import { PoThemeService } from '../../services/po-theme/po-theme.service';
 import { PoListBoxComponent } from '../po-listbox';
 import { PoPopupAction } from './po-popup-action.interface';
 import { PoPopupBaseComponent } from './po-popup-base.component';
