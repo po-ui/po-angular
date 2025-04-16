@@ -151,12 +151,19 @@ export class PoTooltipDirective extends PoTooltipBaseDirective implements OnInit
 
     this.divArrow = this.renderer.createElement('div');
     this.renderer.addClass(this.divArrow, 'po-tooltip-arrow');
+    if (this.hideArrow) {
+      this.renderer.setStyle(this.divArrow, 'display', 'none');
+    }
 
     this.divContent = this.renderer.createElement('div');
     this.renderer.addClass(this.divContent, 'po-tooltip-content');
 
     this.textContent = this.renderer.createText(this.tooltip);
 
+    if (this.innerHtml) {
+      this.textContent = this.renderer.createText('');
+      this.renderer.setProperty(this.divContent, 'innerHTML', this.tooltip);
+    }
     this.renderer.appendChild(this.divContent, this.textContent);
     this.renderer.appendChild(this.tooltipContent, this.divArrow);
     this.renderer.appendChild(this.tooltipContent, this.divContent);
@@ -216,6 +223,9 @@ export class PoTooltipDirective extends PoTooltipBaseDirective implements OnInit
       this.renderer.removeChild(this.divContent, this.textContent);
       this.textContent = this.renderer.createText(this.tooltip);
       this.renderer.appendChild(this.divContent, this.textContent);
+      if (this.innerHtml) {
+        this.renderer.setProperty(this.divContent, 'innerHTML', this.tooltip);
+      }
     }
   }
 

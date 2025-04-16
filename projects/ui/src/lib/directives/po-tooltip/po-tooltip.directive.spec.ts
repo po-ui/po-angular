@@ -1,4 +1,4 @@
-import { Component } from '@angular/core';
+import { Component, Renderer2 } from '@angular/core';
 import { ComponentFixture, fakeAsync, TestBed, tick } from '@angular/core/testing';
 import { By } from '@angular/platform-browser';
 
@@ -185,6 +185,33 @@ describe('PoTooltipDirective', () => {
     expect(directiveElement.nativeElement.querySelector('.po-tooltip')).toBeTruthy();
     expect(directiveElement.nativeElement.querySelector('.po-tooltip-arrow')).toBeTruthy();
     expect(directiveElement.nativeElement.querySelector('.po-tooltip-content')).toBeTruthy();
+  });
+
+  it('should create tooltip with proper configurations', () => {
+    const renderer = fixture.debugElement.injector.get(Renderer2);
+    spyOn(renderer, 'setStyle').and.callThrough();
+    spyOn(renderer, 'setProperty').and.callThrough();
+
+    directive.hideArrow = true;
+    directive.innerHtml = true;
+    directive.tooltip = '<b>HTML</b>';
+    directive.createTooltip();
+
+    expect(renderer.setStyle).toHaveBeenCalledWith(jasmine.any(Object), 'display', 'none');
+
+    expect(renderer.setProperty).toHaveBeenCalledWith(jasmine.any(Object), 'innerHTML', '<b>HTML</b>');
+
+    (renderer.setStyle as jasmine.Spy).calls.reset();
+    (renderer.setProperty as jasmine.Spy).calls.reset();
+
+    directive.hideArrow = false;
+    directive.innerHtml = false;
+    directive.tooltip = 'Plain text';
+    directive.createTooltip();
+
+    expect(renderer.setStyle).not.toHaveBeenCalledWith(jasmine.any(Object), 'display', 'none');
+
+    expect(renderer.setProperty).not.toHaveBeenCalledWith(jasmine.any(Object), 'innerHTML', jasmine.any(String));
   });
 
   it('onMouseEnter: should create tooltip ', fakeAsync(() => {
@@ -377,13 +404,13 @@ describe('PoTooltipDirective', () => {
     expect(directive.tooltipContent).toBe(undefined);
   }));
 
-  it('should call update Text', () => {
+  it('should call update Text and set innerHTML when innerHtml is true', () => {
     directive.lastTooltipText = 'abc';
-    directive.tooltip = 'def';
-
+    directive.tooltip = '<b>def</b>';
+    directive.innerHtml = true;
     directive.updateTextContent();
 
-    expect(directive.divContent.outerHTML.indexOf('def') > -1).toBeTruthy();
+    expect(directive.divContent.innerHTML).toBe('<b>def</b>');
   });
 
   it('should keep text without changes', () => {
