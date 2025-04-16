@@ -33,7 +33,14 @@
     class="po-chart"
     [ngStyle]="headerHeight ? { height: height - headerHeight + 'px', 'margin-top': chartMarginTop } : null"
   ></div>
-  <div #tooltipElement id="custom-tooltip" [p-tooltip]="tooltipText" style="position: absolute"></div>
+  <div
+    #tooltipElement
+    id="custom-tooltip"
+    [p-tooltip]="tooltipText"
+    [p-hide-arrow]="true"
+    [p-inner-html]="true"
+    [p-tooltip-position]="positionTooltip"
+  ></div>
   <po-popup #popup [p-actions]="popupActions" p-position="bottom" [p-target]="targetRef"> </po-popup>
 </div>
 
