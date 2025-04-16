@@ -1,8 +1,8 @@
 const { dest, series, task, src } = require('gulp');
 const fs = require('fs-extra');
 const argv = require('yargs').argv;
-const run = require('gulp-run');
 const clean = require('gulp-clean');
+const { exec } = require('child_process');
 
 task('copy-resources:schematics', done => {
   const lib = argv.lib;
@@ -14,14 +14,30 @@ task('copy-resources:schematics', done => {
   done();
 });
 
-task('tsc:schematics', () => {
+task('tsc:schematics', done => {
   const lib = argv.lib;
 
-  return run(`npm run tsc -- -p ./projects/${lib}/tsconfig.schematics.json`).exec();
+  exec(`npm run tsc -- -p ./projects/${lib}/tsconfig.schematics.json`, (err, stdout, stderr) => {
+    if (err) {
+      console.error(`exec error: ${err}`);
+      return done(err);
+    }
+    console.log(stdout);
+    console.log(stderr);
+    done();
+  });
 });
 
-task('tsc:schematics:lib', () => {
-  return run(`npm run tsc -- -p ./projects/schematics/tsconfig.json`).exec();
+task('tsc:schematics:lib', done => {
+  exec(`npm run tsc -- -p ./projects/schematics/tsconfig.json`, (err, stdout, stderr) => {
+    if (err) {
+      console.error(`exec error: ${err}`);
+      return done(err);
+    }
+    console.log(stdout);
+    console.error(stderr);
+    done();
+  });
 });
 
 task('copy-resources:schematics:lib', () => {

@@ -68,7 +68,7 @@ Antes de executar a instalação, é necessário que todas as dependências do p
     ...
   },
   "devDependencies": {
-    "@angular-devkit/build-angular": "~19.0.5",
+    "@angular-devkit/build-angular": "~19.2.3",
     "@angular-devkit/schematics": "~19.0.5",
     "@angular/cli": "~19.0.5",
     "@angular/compiler-cli": "~19.0.0",

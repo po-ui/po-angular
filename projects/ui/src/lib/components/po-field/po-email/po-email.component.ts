@@ -41,8 +41,6 @@ const providers = [
  * <example name="po-email-basic" title="PO Email Basic">
  *  <file name="sample-po-email-basic/sample-po-email-basic.component.html"> </file>
  *  <file name="sample-po-email-basic/sample-po-email-basic.component.ts"> </file>
- *  <file name="sample-po-email-basic/sample-po-email-basic.component.e2e-spec.ts"> </file>
- *  <file name="sample-po-email-basic/sample-po-email-basic.component.po.ts"> </file>
  * </example>
  *
  * <example name="po-email-labs" title="PO Email Labs">

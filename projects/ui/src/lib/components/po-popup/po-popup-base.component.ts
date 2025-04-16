@@ -4,7 +4,7 @@ import { convertToBoolean, getDefaultSize, validateSize } from '../../utils/util
 import { PO_CONTROL_POSITIONS } from './../../services/po-control-position/po-control-position.constants';
 
 import { PoFieldSize } from '../../enums/po-field-size.enum';
-import { PoThemeService } from '../../services';
+import { PoThemeService } from '../../services/po-theme/po-theme.service';
 import { PoPopupAction } from './po-popup-action.interface';
 
 const poPopupDefaultPosition = 'bottom-left';
