@@ -1,7 +1,7 @@
 import { ChangeDetectionStrategy, Component, OnInit, inject } from '@angular/core';
 
 import { Router } from '@angular/router';
-import { PoThemeService } from '../../services';
+import { PoThemeService } from '../../services/po-theme/po-theme.service';
 import { PoLanguageService } from '../../services/po-language/po-language.service';
 import { isTypeof } from '../../utils/util';
 import { PoProgressStatus } from './enums/po-progress-status.enum';

@@ -235,11 +235,11 @@ export abstract class PoPageChangePasswordBaseComponent {
    *
    * - **String**: informe uma url externa ou uma rota válida;
    * - **Function**: pode-se customizar a ação. Para esta possilidade basta atribuir:
-   * ```
-   * <po-page-change-password>
-   *      [recovery]="this.myFunc.bind(this)";
-   * </po-page-change-password>
-   * ```
+   *   ```
+   *   <po-page-change-password>
+   *     [recovery]="this.myFunc.bind(this)";
+   *   </po-page-change-password>
+   *   ```
    *
    * - **PoPageChangePasswordRecovery**: cria-se vínculo automático com o template **po-modal-password-recovery**.
    *   O objeto deve conter a **url** para requisição dos recursos e pode-se definir o **tipo** de modal para recuperação de senha,

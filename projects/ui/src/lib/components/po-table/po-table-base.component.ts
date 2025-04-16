@@ -14,7 +14,7 @@ import {
 } from '../../utils/util';
 
 import { PoFieldSize } from '../../enums/po-field-size.enum';
-import { PoThemeService } from '../../services';
+import { PoThemeService } from '../../services/po-theme/po-theme.service';
 import { PoSearchFilterMode } from '../po-search/enums/po-search-filter-mode.enum';
 import { PoTableColumnSortType } from './enums/po-table-column-sort-type.enum';
 import { PoTableColumnSpacing } from './enums/po-table-spacing.enum';
@@ -862,14 +862,14 @@ export abstract class PoTableBaseComponent implements OnChanges, OnDestroy {
    *
    * Caso utilizar ordenação, a coluna ordenada será enviada através do parâmetro `order`, por exemplo:
    * - Coluna decrescente:
-   * ```
-   *  url + ?page=1&pageSize=10&order=-name
-   * ```
+   *   ```
+   *    url + ?page=1&pageSize=10&order=-name
+   *   ```
    *
    * - Coluna ascendente:
-   * ```
-   *  url + ?page=1&pageSize=10&order=name
-   * ```
+   *   ```
+   *    url + ?page=1&pageSize=10&order=name
+   *   ```
    *
    * > Esta URL deve retornar e receber os dados no padrão de [API do PO UI](https://po-ui.io/guides/api).
    */
