@@ -6,7 +6,7 @@ import { PoIconModule } from './../po-icon';
 import { PoButtonBaseComponent } from './po-button-base.component';
 import { PoButtonComponent } from './po-button.component';
 
-import { PoThemeService } from '../../services';
+import { PoThemeService } from '../../services/po-theme/po-theme.service';
 import { expectPropertiesValues } from '../../util-test/util-expect.spec';
 import { PoButtonType } from './enums/po-button-type.enum';
 

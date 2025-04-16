@@ -32,7 +32,7 @@ import { PoModalAction, PoModalComponent } from '../po-modal';
 import { PoPopupComponent } from '../po-popup/po-popup.component';
 import { PoTableColumnLabel } from './po-table-column-label/po-table-column-label.interface';
 
-import { PoThemeService } from '../../services';
+import { PoThemeService } from '../../services/po-theme/po-theme.service';
 import { uuid } from '../../utils/util';
 import { AnimaliaIconDictionary, ICONS_DICTIONARY } from '../po-icon';
 import { PoTableRowTemplateArrowDirection } from './enums/po-table-row-template-arrow-direction.enum';
@@ -58,8 +58,6 @@ import { PoTableService } from './services/po-table.service';
  * <example name="po-table-labs" title="PO Table Labs">
  *  <file name="sample-po-table-labs/sample-po-table-labs.component.ts"> </file>
  *  <file name="sample-po-table-labs/sample-po-table-labs.component.html"> </file>
- *  <file name="sample-po-table-labs/sample-po-table-labs.component.e2e-spec.ts"> </file>
- *  <file name="sample-po-table-labs/sample-po-table-labs.component.po.ts"> </file>
  *  <file name="sample-po-table-labs/sample-po-table-labs.service.ts"> </file>
  * </example>
  *

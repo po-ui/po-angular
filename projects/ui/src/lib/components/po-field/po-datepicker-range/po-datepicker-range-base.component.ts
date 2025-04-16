@@ -37,19 +37,19 @@ import { poDatepickerRangeLiteralsDefault } from './po-datepicker-range.literals
  * Este componente pode receber os seguintes formatos de data:
  *
  * - **Data e hora combinados (E8601DZw): yyyy-mm-ddThh:mm:ss+|-hh:mm**
- * ```
- * '2017-11-28T00:00:00-02:00';
- * ```
+ *   ```
+ *   '2017-11-28T00:00:00-02:00';
+ *   ```
  *
  * - **Data (E8601DAw.): yyyy-mm-dd**
- * ```
- * '2017-11-28';
- * ```
+ *   ```
+ *   '2017-11-28';
+ *   ```
  *
  * - **JavaScript Date Object:**
- * ```
- * new Date(2017, 10, 28);
- * ```
+ *   ```
+ *   new Date(2017, 10, 28);
+ *   ```
  *
  * > O componente respeitará o formato passado para o *model* via codificação. Porém, caso seja feita alteração em algum
  * dos valores de data em tela, o componente atribuirá o formato **Data (E8601DAw.): yyyy-mm-dd** ao model.

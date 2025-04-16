@@ -10,8 +10,6 @@ import { PoAvatarBaseComponent } from './po-avatar-base.component';
  * <example name="po-avatar-basic" title="PO Avatar Basic" >
  *  <file name="sample-po-avatar-basic/sample-po-avatar-basic.component.html"> </file>
  *  <file name="sample-po-avatar-basic/sample-po-avatar-basic.component.ts"> </file>
- *  <file name="sample-po-avatar-basic/sample-po-avatar-basic.component.e2e-spec.ts"> </file>
- *  <file name="sample-po-avatar-basic/sample-po-avatar-basic.component.po.ts"> </file>
  * </example>
  *
  * <example name="po-avatar-labs" title="PO Avatar Labs" >

@@ -6,7 +6,7 @@ import { PoItemListType } from './enums/po-item-list-type.enum';
 import { PoItemListAction } from './po-item-list/interfaces/po-item-list-action.interface';
 
 import { PoFieldSize } from '../../enums/po-field-size.enum';
-import { PoThemeService } from '../../services';
+import { PoThemeService } from '../../services/po-theme/po-theme.service';
 import { convertToBoolean, getDefaultSize, validateSize } from '../../utils/util';
 import { PoItemListFilterMode } from './enums/po-item-list-filter-mode.enum';
 import { PoListBoxLiterals } from './interfaces/po-listbox-literals.interface';
