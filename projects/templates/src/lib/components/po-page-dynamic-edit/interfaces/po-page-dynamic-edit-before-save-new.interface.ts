@@ -25,19 +25,19 @@ export interface PoPageDynamicEditBeforeSaveNew {
    * Por exemplo:
    *
    * - recurso anterior com a propriedade id foi que definida como *key*:
-   * ```
-   * { id: 1, name: 'Ane' }
-   * ```
+   *   ```
+   *   { id: 1, name: 'Ane' }
+   *   ```
    *
    * - recurso retornado no `beforeSaveNew`:
-   * ```
-   * { id: 50, age: 23 }
-   * ```
+   *   ```
+   *   { id: 50, age: 23 }
+   *   ```
    *
    * - Mesclagem do recurso:
-   * ```
-   * { id: 1, name: 'Ane', age: 23 }
-   * ```
+   *   ```
+   *   { id: 1, name: 'Ane', age: 23 }
+   *   ```
    *
    * > Caso `allowAction` seja `false`, o recurso será atualizado apenas localmente, sem concluir
    * a ação de salvar (saveNew).

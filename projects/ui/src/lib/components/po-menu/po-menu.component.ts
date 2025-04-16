@@ -17,7 +17,7 @@ import { map } from 'rxjs/operators';
 
 import { getFormattedLink, isMobile, openExternalLink, uuid } from '../../utils/util';
 
-import { PoThemeService } from '../../services';
+import { PoThemeService } from '../../services/po-theme/po-theme.service';
 import { PoLanguageService } from '../../services/po-language/po-language.service';
 import { PoMenuBaseComponent } from './po-menu-base.component';
 import { PoMenuHeaderTemplateDirective } from './po-menu-header-template/po-menu-header-template.directive';
@@ -238,7 +238,7 @@ export class PoMenuComponent extends PoMenuBaseComponent implements AfterViewIni
   /**
    * <a id="colapseMethod"></a>
    *
-   * *Método para colapsar (retrair) o menu.
+   * Método para colapsar (retrair) o menu.
    */
   collapse() {
     this.validateToggleMenu(true);
@@ -255,7 +255,7 @@ export class PoMenuComponent extends PoMenuBaseComponent implements AfterViewIni
   /**
    * <a id="expandMethod"></a>
    *
-   * *Método para expandir (aumentar) o menu.
+   * Método para expandir (aumentar) o menu.
    */
   expand() {
     this.validateToggleMenu(false);
@@ -278,9 +278,9 @@ export class PoMenuComponent extends PoMenuBaseComponent implements AfterViewIni
 
   /**
    * <a id="toggleMethod"></a>
-   * *Método que colapsa e expande o menu alternadamente.
+   * Método que colapsa e expande o menu alternadamente.
    *
-   * > *Os métodos apenas vão colapsar/expandir o menu se:
+   * > Os métodos apenas vão colapsar/expandir o menu se:
    *  - Todos os itens de menu tiverem valor nas propriedades `icon` e `shortLabel`.
    */
   toggle() {
