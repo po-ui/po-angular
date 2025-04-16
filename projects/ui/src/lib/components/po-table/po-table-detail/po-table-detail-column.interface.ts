@@ -17,7 +17,7 @@ export interface PoTableDetailColumn {
    * - Formato para números (number): aceita um valor seguindo o padrão [**DecimalPipe**](https://angular.io/api/common/DecimalPipe)
    *  para formatação, e caso não seja informado, o número será exibido na sua forma original. Exemplo:
    *
-   *  +  Valor de entrada: `50` e valor para formatação: `'1.2-5'` o resultado será: `50.00`
+   *   + Valor de entrada: `50` e valor para formatação: `'1.2-5'` o resultado será: `50.00`
    */
   format?: string;
 
@@ -46,17 +46,16 @@ export interface PoTableDetailColumn {
    * - `currency`: valores monetários.
    *
    * - `date`: valor de datas.
-   *  + Aceita os tipos _string_ e _Date_ padrão do Javascript,
-   *  por exemplo: `'2017-11-28'` ou `new Date(2017, 10, 28)`.
+   *   + Aceita os tipos _string_ e _Date_ padrão do Javascript,
+   *   por exemplo: `'2017-11-28'` ou `new Date(2017, 10, 28)`.
    *
    * - `time`: valor de horário.
    * - `number`: valores numéricos.
    *
    * - `dateTime`: valor de data com horário.
-   *  + Aceita o tipo _string_ no formato **ISO-8601** extendido **'yyyy-mm-ddThh:mm:ss+|-hh:mm'**
+   *   + Aceita o tipo _string_ no formato **ISO-8601** extendido **'yyyy-mm-ddThh:mm:ss+|-hh:mm'**
    * e o tipo _Date_ padrão do Javascript, por exemplo: `'2017-11-28T00:00:00-02:00'` ou `new Date(2017, 10, 28)`.
-   *
-   *  + Aceita o tipo _string_ nos formatos **'HH:mm:ss'** ou **'HH:mm:ss.ffffff'**, por exemplo: `'23:12:45'`.
+   *   + Aceita o tipo _string_ nos formatos **'HH:mm:ss'** ou **'HH:mm:ss.ffffff'**, por exemplo: `'23:12:45'`.
    *
    * @default `string`
    */

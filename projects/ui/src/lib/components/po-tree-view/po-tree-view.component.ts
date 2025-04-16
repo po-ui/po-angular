@@ -1,6 +1,6 @@
 import { ChangeDetectionStrategy, Component, OnChanges, OnInit, SimpleChanges } from '@angular/core';
 
-import { PoThemeService } from '../../services';
+import { PoThemeService } from '../../services/po-theme/po-theme.service';
 import { PoTreeViewBaseComponent } from './po-tree-view-base.component';
 import { PoTreeViewItem } from './po-tree-view-item/po-tree-view-item.interface';
 import { PoTreeViewService } from './services/po-tree-view.service';

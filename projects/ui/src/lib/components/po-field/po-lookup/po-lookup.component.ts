@@ -59,12 +59,12 @@ const providers = [
  *
  * - Caso o po-lookup contenha o [(ngModel)] sem o atributo name, ocorrerá um erro de angular.
  * Então será necessário informar o atributo name ou o atributo [ngModelOptions]="{standalone: true}".
- * ```
- * <po-lookup
- *   [(ngModel)]="pessoa.nome"
- *   [ngModelOptions]="{standalone: true}">
- * </po-lookup>
- * ```
+ *   ```
+ *   <po-lookup
+ *     [(ngModel)]="pessoa.nome"
+ *     [ngModelOptions]="{standalone: true}">
+ *   </po-lookup>
+ *   ```
  *
  * #### Tokens customizáveis
  *

@@ -556,14 +556,14 @@ export abstract class PoLookupBaseComponent
    *
    * Caso utilizar ordenação, a coluna ordenada será enviada através do parâmetro `order`, por exemplo:
    * - Coluna decrescente:
-   * ```
-   *  url + ?page=1&pageSize=20&filter=Peter&order=-name
-   * ```
+   *   ```
+   *    url + ?page=1&pageSize=20&filter=Peter&order=-name
+   *   ```
    *
    * - Coluna ascendente:
-   * ```
-   *  url + ?page=1&pageSize=20&filter=Peter&order=name
-   * ```
+   *   ```
+   *    url + ?page=1&pageSize=20&filter=Peter&order=name
+   *   ```
    *
    * Se for definido a propriedade `p-filter-params`, o mesmo também será concatenado. Por exemplo, para o
    * parâmetro `{ age: 23 }` a URL ficaria:
