@@ -10,7 +10,7 @@ import {
   SimpleChanges,
   ViewChild
 } from '@angular/core';
-import { PoThemeService } from '../../services';
+import { PoThemeService } from '../../services/po-theme/po-theme.service';
 import { PoControlPositionService } from '../../services/po-control-position/po-control-position.service';
 import { PoLanguageService } from '../../services/po-language/po-language.service';
 import { PoDropdownAction } from '../po-dropdown';

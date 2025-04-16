@@ -15,7 +15,7 @@ import {
 import { PoLanguageService } from '../../services/po-language/po-language.service';
 
 import { Subscription, fromEvent } from 'rxjs';
-import { PoThemeService } from '../../services';
+import { PoThemeService } from '../../services/po-theme/po-theme.service';
 import { PoTabDropdownComponent } from './po-tab-dropdown/po-tab-dropdown.component';
 import { PoTabComponent } from './po-tab/po-tab.component';
 import { PoTabsBaseComponent } from './po-tabs-base.component';

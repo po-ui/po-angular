@@ -179,15 +179,15 @@ export interface PoDynamicField {
    * - `currency`: Valores monetários.
    * - `decimal`: Valores decimais.
    * - `date`: Valores de datas.
-   *  + Aceita os tipos **string** e **Date** padrão do Javascript,
-   *  por exemplo: `'2017-11-28'` ou `new Date(2017, 10, 28)`.
+   *   + Aceita os tipos **string** e **Date** padrão do Javascript,
+   *   por exemplo: `'2017-11-28'` ou `new Date(2017, 10, 28)`.
    * - `dateTime`: Valor de data com horário.
-   *  + Aceita o tipo _string_ no formato **ISO-8601** extendido **'yyyy-mm-ddThh:mm:ss+|-hh:mm'**
+   *   + Aceita o tipo _string_ no formato **ISO-8601** extendido **'yyyy-mm-ddThh:mm:ss+|-hh:mm'**
    * e o tipo **Date** padrão do Javascript, por exemplo: `'2017-11-28T00:00:00-02:00'` ou `new Date(2017, 10, 28)`.
    * - `number`: Valores numéricos.
    * - `string`: Textos.
    * - `time`: Valor do horário.
-   *  + Aceita o tipo **string** nos formatos **'HH:mm:ss'** ou **'HH:mm:ss.ffffff'**, por exemplo: `'23:12:45'`.
+   *   + Aceita o tipo **string** nos formatos **'HH:mm:ss'** ou **'HH:mm:ss.ffffff'**, por exemplo: `'23:12:45'`.
    *
    * @default `string`
    */

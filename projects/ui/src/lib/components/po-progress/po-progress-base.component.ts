@@ -3,7 +3,7 @@ import { Directive, EventEmitter, Input, Output, TemplateRef } from '@angular/co
 import { convertToBoolean, convertToInt, getDefaultSize, validateSize } from '../../utils/util';
 
 import { PoFieldSize } from '../../enums/po-field-size.enum';
-import { PoThemeService } from '../../services';
+import { PoThemeService } from '../../services/po-theme/po-theme.service';
 import { PoProgressSize } from './enums/po-progress-size.enum';
 import { PoProgressStatus } from './enums/po-progress-status.enum';
 import { PoProgressAction } from './interfaces';

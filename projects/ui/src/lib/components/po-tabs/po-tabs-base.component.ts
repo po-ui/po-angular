@@ -1,6 +1,6 @@
 import { Directive, Input } from '@angular/core';
 import { PoFieldSize } from '../../enums/po-field-size.enum';
-import { PoThemeService } from '../../services';
+import { PoThemeService } from '../../services/po-theme/po-theme.service';
 import { getDefaultSize, validateSize } from '../../utils/util';
 
 /**

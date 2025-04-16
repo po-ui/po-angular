@@ -2,7 +2,7 @@ import { ChangeDetectionStrategy, ChangeDetectorRef, Component, ElementRef, Rend
 
 import { isKeyCodeEnter } from './../../utils/util';
 
-import { PoThemeService } from '../../services';
+import { PoThemeService } from '../../services/po-theme/po-theme.service';
 import { PoDropdownBaseComponent } from './po-dropdown-base.component';
 
 /**
@@ -13,8 +13,6 @@ import { PoDropdownBaseComponent } from './po-dropdown-base.component';
  * <example name="po-dropdown-basic" title="PO Dropdown Basic" >
  *  <file name="sample-po-dropdown-basic/sample-po-dropdown-basic.component.html"> </file>
  *  <file name="sample-po-dropdown-basic/sample-po-dropdown-basic.component.ts"> </file>
- *  <file name="sample-po-dropdown-basic/sample-po-dropdown-basic.component.e2e-spec.ts"> </file>
- *  <file name="sample-po-dropdown-basic/sample-po-dropdown-basic.component.po.ts"> </file>
  * </example>
  *
  * <example name="po-dropdown-labs" title="PO Dropdown Labs" >

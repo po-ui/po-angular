@@ -13,7 +13,7 @@ import { PoLanguageService } from '../../services/po-language/po-language.servic
 import { isTypeof } from '../../utils/util';
 import { PoPopupComponent } from '../po-popup/po-popup.component';
 
-import { PoThemeService } from '../../services';
+import { PoThemeService } from '../../services/po-theme/po-theme.service';
 import { PoListViewAction } from './interfaces/po-list-view-action.interface';
 import { PoListViewBaseComponent } from './po-list-view-base.component';
 import { PoListViewContentTemplateDirective } from './po-list-view-content-template/po-list-view-content-template.directive';
