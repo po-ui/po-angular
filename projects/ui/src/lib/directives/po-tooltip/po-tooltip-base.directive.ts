@@ -52,7 +52,12 @@ export abstract class PoTooltipBaseDirective {
    *
    * @description
    *
-   * Esconde
+   * Controla a exibição da seta de indicação da tooltip.
+   *
+   * Quando `true`, a seta que aponta para o elemento alvo será ocultada.
+   * Quando `false`, a seta será exibida normalmente.
+   *
+   * Essa propriedade é útil em cenários onde a seta não é necessária ou pode interferir no layout da aplicação.
    *
    * @default `false`
    */
@@ -63,7 +68,11 @@ export abstract class PoTooltipBaseDirective {
    *
    * @description
    *
+   * Permite a renderização de conteúdo HTML dentro da tooltip.
    *
+   * Quando `true`, o valor da propriedade `tooltip` será interpretado como HTML,
+   * possibilitando a utilização de tags e elementos HTML dentro da tooltip.
+   * Caso `false`, o conteúdo será tratado como texto puro.
    *
    * @default `false`
    */

@@ -29,6 +29,31 @@ const poChartDefaultHeight = 400;
  *
  * > Veja nosso [guia de uso para gráficos](/guides/guide-charts) para auxiliar na construção do seu gráfico,
  * informando em qual caso utilizar, o que devemos evitar e boas práticas relacionada a cores.
+ *
+ * #### Tokens customizáveis
+ *
+ * É possível alterar o estilo do componente usando os seguintes tokens (CSS):
+ *
+ * > Para maiores informações, acesse o guia [Personalizando o Tema Padrão com Tokens CSS](https://po-ui.io/guides/theme-customization).
+ *
+ * | Propriedade                              | Descrição                                             | Valor Padrão                                      |
+ * |------------------------------------------|-------------------------------------------------------|---------------------------------------------------|
+ * | **Header (.po-chart-header )**           |                                                       |                                                   |
+ * | `--background-color`                     | Cor de background do cabeçalho                        | `var(--color-neutral-light-00)`                   |
+ * | `--color`                                | Cor da fonte do cabeçalho                             | `var(--color-neutral-dark-70)`                    |
+ * | `--font-family`                          | Família tipográfica usada                             | `var(--font-family-theme)`                        |
+ * | `--font-size-title`                      | Tamanho da fonte                                      | `var(--font-size-default)`                        |
+ * | `--font-size-icons`                      | Tamanho dos ícones                                    | `var(--font-size-md)`                             |
+ * | `--font-weight`                          | Peso da fonte                                         | `var(--font-weight-bold)`                         |
+ * | **Chart (.po-chart)**                    |                                                       |                                                   |
+ * | `--background-color-grid`                | Cor de background                                     | `var(--color-neutral-light-00)`                   |
+ * | `--color-grid`                           | Cor da fonte                                          | `var(--color-neutral-light-20)`                   |
+ * | `--font-family-grid`                     | Família tipográfica usada                             | `var(--font-family-theme)`                        |
+ * | `--font-size-grid`                       | Tamanho da fonte                                      | `var(--font-size-xs)`                             |
+ * | `--font-weight-grid`                     | Peso da fonte                                         | `var(--font-weight-normal)`                       |
+ * | `--color-legend`                         | Cor da fonte da legenda                               | `var(--color-neutral-dark-70)`                    |
+ * | `--border-radius-bar`                    | Contém o valor do raio dos cantos do elemento         | `var(--border-radius-none)`                       |
+ * | `--color-grid-hover`                     | Cor no estado hover                                   | `var(--color-neutral-mid-60)`                     |
  */
 @Directive()
 export abstract class PoChartNewBaseComponent {

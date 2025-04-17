@@ -322,7 +322,7 @@ export class PoChartNewComponent extends PoChartNewBaseComponent implements Afte
         realtime: true,
         bottom: 'calc(100%)',
         height: 20,
-        right: 16,
+        right: this.options?.axis?.paddingRight || 32,
         xAxisIndex: [0]
       },
       {
