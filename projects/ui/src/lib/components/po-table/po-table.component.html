@@ -122,9 +122,12 @@
       'po-table-data-fixed-columns': applyFixedColumns(),
       'po-table-text-wrap-enabled': textWrap
     }"
-    [attr.p-spacing]="componentsSize === 'small' ? 'small' : spacing"
+    [attr.p-spacing]="spacing"
   >
-    <thead [class.po-table-header-sticky]="height > 0 && !virtualScroll">
+    <thead
+      [class.po-table-header-sticky]="height > 0 && !virtualScroll"
+      [attr.p-spacing]="spacing ?? (componentsSize === 'small' ? 'extraSmall' : 'medium')"
+    >
       <tr
         [ngClass]="!height ? { 'no-hover': hideSelectAll, 'po-table-column-drag': this.isDraggable } : ''"
         [class.po-table-header]="!height"
@@ -464,9 +467,13 @@
         'po-table-data-fixed-columns': applyFixedColumns(),
         'po-table-text-wrap-enabled': textWrap
       }"
-      [attr.p-spacing]="componentsSize === 'small' ? 'small' : spacing"
+      [attr.p-spacing]="spacing"
     >
-      <thead class="po-table-header-sticky" [style.top]="inverseOfTranslation">
+      <thead
+        class="po-table-header-sticky"
+        [style.top]="inverseOfTranslation"
+        [attr.p-spacing]="spacing ?? (componentsSize === 'small' ? 'extraSmall' : 'medium')"
+      >
         <tr
           [class.po-table-header]="!height"
           cdkDropList
