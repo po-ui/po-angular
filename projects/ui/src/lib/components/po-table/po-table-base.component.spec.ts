@@ -1780,13 +1780,30 @@ describe('PoTableBaseComponent:', () => {
       expectPropertiesValues(component, 'serviceDeleteApi', 'https://po-ui.io', 'https://po-ui.io');
     });
 
-    it('p-spacing: should update property with valid values', () => {
-      expectPropertiesValues(component, 'spacing', 'small', 'small');
-    });
+    describe('p-spacing:', () => {
+      it('should update property with valid values', () => {
+        expectPropertiesValues(component, 'spacing', 'small', 'small');
+      });
 
-    it('p-spacing: should update property with `Medium` if values are invalid', () => {
-      const invalidValues = [undefined, null, true, false, 'qdqdsa', [], {}];
-      expectPropertiesValues(component, 'spacing', invalidValues, 'medium');
+      it('should update property with `Medium` if values are invalid', () => {
+        const invalidValues = [undefined, null, true, false, 'qdqdsa', [], {}];
+        expectPropertiesValues(component, 'spacing', invalidValues, 'medium');
+      });
+
+      it('should update property with `ExtraSmall` if values ​​are invalid, accessibility level is AA and getA11yDefaultSize is small', () => {
+        poThemeServiceMock.getA11yLevel.and.returnValue(PoThemeA11yEnum.AA);
+        poThemeServiceMock.getA11yDefaultSize.and.returnValue('small');
+        const invalidValues = [undefined, null, true, false, 'qdqdsa', [], {}];
+
+        expectPropertiesValues(component, 'spacing', invalidValues, 'extraSmall');
+      });
+
+      it('should return small by default when accessibility is AA and componentsSize is small', () => {
+        poThemeServiceMock.getA11yLevel.and.returnValue(PoThemeA11yEnum.AA);
+        component.componentsSize = 'small';
+
+        expect(component.spacing).toBe('extraSmall');
+      });
     });
 
     it('visibleActions: should be `false` if doesn`t have action.', () => {
