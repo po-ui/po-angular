@@ -13,7 +13,10 @@ import * as utilsFunctions from '../../utils/util';
 import { PoColorPaletteService } from './../../services/po-color-palette/po-color-palette.service';
 
 import { CdkVirtualScrollViewport } from '@angular/cdk/scrolling';
+import { provideHttpClient, withInterceptorsFromDi } from '@angular/common/http';
 import { NoopAnimationsModule } from '@angular/platform-browser/animations';
+import { PoFieldSize } from '../../enums/po-field-size.enum';
+import { PoThemeService } from '../../services/po-theme/po-theme.service';
 import { PoTableRowTemplateArrowDirection } from './enums/po-table-row-template-arrow-direction.enum';
 import { PoTableColumnSpacing } from './enums/po-table-spacing.enum';
 import { PoTableAction } from './interfaces/po-table-action.interface';
@@ -23,7 +26,6 @@ import { PoTableColumnTemplateDirective } from './po-table-column-template/po-ta
 import { PoTableComponent } from './po-table.component';
 import { PoTableModule } from './po-table.module';
 import { PoTableService } from './services/po-table.service';
-import { provideHttpClient, withInterceptorsFromDi } from '@angular/common/http';
 
 @Component({
   template: 'Search',
@@ -68,7 +70,7 @@ describe('PoTableComponent:', () => {
   let tableElement;
   let tableFooterElement;
   const poTableService: jasmine.SpyObj<PoTableService> = jasmine.createSpyObj('PoTableService', ['scrollListener']);
-
+  let poThemeServiceMock: jasmine.SpyObj<PoThemeService>;
   // mocks
   let actions: Array<PoTableAction>;
   let columns: Array<PoTableColumn>;
@@ -228,6 +230,9 @@ describe('PoTableComponent:', () => {
     });
 
     changeDetector = jasmine.createSpyObj('ChangeDetectorRef', ['detectChanges']);
+
+    poThemeServiceMock = jasmine.createSpyObj('PoThemeService', ['getA11yLevel', 'getA11yDefaultSize']);
+
     await TestBed.configureTestingModule({
       declarations: [TestMenuComponent, SearchComponent],
       imports: [RouterTestingModule.withRoutes(routes), PoTableModule, NoopAnimationsModule],
@@ -239,6 +244,7 @@ describe('PoTableComponent:', () => {
         { provide: PoTableService, useValue: poTableService },
         { provide: CdkVirtualScrollViewport, useValue: mockViewPort },
         { provide: changeDetector, useValue: changeDetector },
+        { provide: PoThemeService, useValue: poThemeServiceMock },
         provideHttpClient(withInterceptorsFromDi()),
         provideHttpClientTesting()
       ]
@@ -3308,6 +3314,29 @@ describe('PoTableComponent:', () => {
     component['changeSizeLoading'].call(fakeTable);
 
     expect(fakeTable.sizeLoading).toBe('lg');
+  });
+
+  describe('getDefaultSpacing:', () => {
+    it('should return ExtraSmall when componentSize is Small', () => {
+      poThemeServiceMock.getA11yDefaultSize.and.returnValue('small');
+
+      component.componentsSize = PoFieldSize.Small;
+      component.spacing = undefined;
+      expect(component['getDefaultSpacing']()).toBe(PoTableColumnSpacing.ExtraSmall);
+    });
+
+    it('should return ExtraSmall when accessibility size is Small', () => {
+      poThemeServiceMock.getA11yDefaultSize.and.returnValue('small');
+      component.componentsSize = PoFieldSize.Medium;
+      component.spacing = undefined;
+      expect(component['getDefaultSpacing']()).toBe(PoTableColumnSpacing.ExtraSmall);
+    });
+
+    it('should return Medium when accessibility size is Medium', () => {
+      poThemeServiceMock.getA11yDefaultSize.and.returnValue('medium');
+      component.spacing = PoTableColumnSpacing.ExtraSmall;
+      expect(component['getDefaultSpacing']()).toBe(PoTableColumnSpacing.Medium);
+    });
   });
 
   it('changeHeaderWidth: should set width if noColumnsHeader ', () => {

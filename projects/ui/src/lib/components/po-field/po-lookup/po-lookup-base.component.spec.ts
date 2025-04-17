@@ -32,6 +32,8 @@ class PoLookupComponent extends PoLookupBaseComponent {
   setDisclaimers() {}
 
   updateVisibleItems() {}
+
+  getDefaultSpacing() {}
 }
 
 describe('PoLookupBaseComponent:', () => {
@@ -970,10 +972,6 @@ describe('PoLookupBaseComponent:', () => {
     it('p-placeholder: should update property p-placeholder with empty value if set with invalid values.', () => {
       const invalidValues = [false, 0, null, undefined, NaN];
       expectPropertiesValues(component, 'placeholder', invalidValues, '');
-    });
-
-    it('p-spacing: should update property with valid values', () => {
-      expectPropertiesValues(component, 'spacing', 'small', 'small');
     });
 
     describe('p-size', () => {

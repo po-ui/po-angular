@@ -211,12 +211,6 @@ describe('PoPageDynamicTableComponent:', () => {
 
         expectPropertiesValues(component, 'spacing', validValues, validValues);
       });
-
-      it('should set spacing to PoTableColumnSpacing.Medium if the given value is invalid', () => {
-        const invalidValue = 'double-extra-large' as unknown as PoTableColumnSpacing;
-
-        expectPropertiesValues(component, 'spacing', [invalidValue], PoTableColumnSpacing.Medium);
-      });
     });
 
     it('p-virtual-scroll: should default virtualScroll to true when height is defined.', () => {
