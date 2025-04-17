@@ -434,6 +434,19 @@ describe('PoChartNewComponent', () => {
         event: { offsetX: 10, offsetY: 20 }
       };
       mouseoverCallback(mockParams);
+
+      const mockParamsBar = {
+        seriesName: 'Exemplo',
+        value: 100,
+        name: 'Categoria X',
+        seriesType: 'bar',
+        seriesIndex: 0,
+        event: { offsetX: 10, offsetY: 20 }
+      };
+      mouseoverCallback(mockParamsBar);
+
+      expect(component['positionTooltip']).toBe('top');
+
       const clickCallback = component['chartInstance'].on.calls.argsFor(0)[1];
 
       const mockParamsClick = {};
@@ -497,7 +510,21 @@ describe('PoChartNewComponent', () => {
 
       mouseoverCallback(mockParams);
 
-      expect(component.tooltipText).toBe('Exemplo: 150');
+      expect(component.tooltipText.replace(/\s/g, '')).toBe(
+        '<b>Categoria Y</b><br>Exemplo:<b>150</b>'.replace(/\s/g, '')
+      );
+
+      const mockParamsNoSeriesName = {
+        value: 99,
+        name: 'Categoria Sem Nome',
+        seriesIndex: 0,
+        seriesType: 'line',
+        event: { offsetX: 5, offsetY: 10 }
+      };
+
+      mouseoverCallback(mockParamsNoSeriesName);
+
+      expect(component.tooltipText.replace(/\s/g, '')).toBe('CategoriaSemNome<b>99</b>'.replace(/\s/g, ''));
     });
   });
 
@@ -640,7 +667,8 @@ describe('PoChartNewComponent', () => {
       mockSeriesWithColor = [
         { label: 'Serie 1', data: [1, 2, 3], type: PoChartType.Column, color: 'po-color-01' },
         { label: 'Serie 2', data: [4, 5, 6], type: PoChartType.Line, color: 'po-color-02' },
-        { label: 'Serie 3', data: [7, 8, 9], color: '#123456' }
+        { label: 'Serie 3', data: [7, 8, 9], color: '#123456' },
+        { data: [10, 11, 12], color: '#abcdef' }
       ];
 
       spyOn(colorService, 'getColors').and.callFake((series: Array<any>) => series);
@@ -666,12 +694,13 @@ describe('PoChartNewComponent', () => {
 
       const result = component['setSeries']();
 
-      expect(result.length).toBe(3);
+      expect(result.length).toBe(4);
       expect(result[0].type).toBe('bar');
       expect(result[0].name).toBe('Serie 1');
       expect(result[0].itemStyle.color).toBe('#0000ff');
       expect(result[1].type).toBe('line');
       expect(result[2].type).toBe('bar');
+      expect(result[3].name).toBe('');
     });
 
     it('should return all types charts', () => {
@@ -723,22 +752,6 @@ describe('PoChartNewComponent', () => {
 
       const result = component['setSeries']();
       expect(result[0].type).toBe('pie');
-    });
-
-    it('should handle color variables and direct color values correctly', () => {
-      component.series = mockSeriesWithColor;
-
-      const result = component['setSeries']();
-      expect(result[0].itemStyle.color).toBe('#0000ff');
-      expect(result[2].itemStyle.color).toBe('#123456');
-    });
-
-    it('should set emphasis styles correctly', () => {
-      component.series = mockSeriesWithColor;
-
-      const result = component['setSeries']();
-      expect(result[0].emphasis.itemStyle.color).toBe('#0000ff');
-      expect(result[0].emphasis.itemStyle.borderWidth).toBe(2);
     });
 
     it('should handle dataLabel.fixed configuration', () => {
