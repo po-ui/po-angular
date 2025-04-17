@@ -153,10 +153,10 @@ export abstract class PoLookupModalBaseComponent implements OnDestroy, OnInit {
   @Input('p-field-value') fieldValue: string;
 
   /**
-   * Responsável por aplicar espaçamento nas colunas da tabela contida no lookup.
-   * Deve receber um dos valores do enum `PoTableColumnSpacing`.
+   * Define o espaçamento interno das células, impactando diretamente na altura das linhas do table dentro do modal. Os
+   * valores permitidos são definidos pelo enum **PoTableColumnSpacing**.
    */
-  @Input('p-spacing') spacing: PoTableColumnSpacing = PoTableColumnSpacing.Medium;
+  @Input('p-spacing') spacing: PoTableColumnSpacing;
 
   /** Define o tamanho do componente. */
   @Input('p-size') size: string;

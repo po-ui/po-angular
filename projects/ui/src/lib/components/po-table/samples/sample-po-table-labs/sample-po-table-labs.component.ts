@@ -114,6 +114,7 @@ export class SamplePoTableLabsComponent implements OnInit {
   ];
 
   public readonly typeSpacing: Array<PoRadioGroupOption> = [
+    { label: 'ExtraSmall', value: 'extraSmall' },
     { label: 'Small', value: 'small' },
     { label: 'Medium', value: 'medium' },
     { label: 'Large', value: 'large' }
