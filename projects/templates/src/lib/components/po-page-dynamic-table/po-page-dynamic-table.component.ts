@@ -299,7 +299,6 @@ export class PoPageDynamicTableComponent extends PoPageDynamicListBaseComponent 
   private _defaultTableActions: Array<PoTableAction> = [];
   private _hideCloseDisclaimers: Array<string> = [];
   private _draggable = false;
-  private _spacing: PoTableColumnSpacing = PoTableColumnSpacing.Medium;
   private _virtualScroll?: boolean = true;
 
   private set defaultPageActions(value: Array<PoPageAction>) {
@@ -551,23 +550,18 @@ export class PoPageDynamicTableComponent extends PoPageDynamicListBaseComponent 
    *
    * @description
    *
-   * Responsável por aplicar espaçamento nas colunas.
+   * Define o espaçamento interno das células, impactando diretamente na altura das linhas do table. Os valores
+   * permitidos são definidos pelo enum **PoTableColumnSpacing**.
    *
-   * Deve receber um dos valores do enum `PoTableColumnSpacing`.
+   * > Em nível de acessibilidade **AA**, caso o valor de `p-spacing` não seja definido, o valor padrão será
+   * > `extraSmall` nos seguintes cenários:
+   * > - Quando o valor de `p-components-size` for `small`;
+   * > - Quando o valor padrão dos componentes for configurado como `small` no
+   * > [serviço de tema](https://po-ui.io/documentation/po-theme).
    *
    * @default `medium`
    */
-  @Input('p-spacing') set spacing(value: PoTableColumnSpacing) {
-    if (value === 'small' || value === 'medium' || value === 'large') {
-      this._spacing = value;
-    } else {
-      this._spacing = PoTableColumnSpacing.Medium;
-    }
-  }
-
-  get spacing() {
-    return this._spacing;
-  }
+  @Input('p-spacing') spacing: string;
 
   /**
    * @optional

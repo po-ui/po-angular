@@ -23,6 +23,7 @@ class PoTableComponent extends PoTableBaseComponent {
   calculateHeightTableContainer(height) {}
   changeSizeLoading() {}
   changeHeaderWidth() {}
+  getDefaultSpacing() {}
 }
 
 describe('PoTableBaseComponent:', () => {
@@ -1778,15 +1779,6 @@ describe('PoTableBaseComponent:', () => {
 
     it('p-service-delete: should update property with valid values', () => {
       expectPropertiesValues(component, 'serviceDeleteApi', 'https://po-ui.io', 'https://po-ui.io');
-    });
-
-    it('p-spacing: should update property with valid values', () => {
-      expectPropertiesValues(component, 'spacing', 'small', 'small');
-    });
-
-    it('p-spacing: should update property with `Medium` if values are invalid', () => {
-      const invalidValues = [undefined, null, true, false, 'qdqdsa', [], {}];
-      expectPropertiesValues(component, 'spacing', invalidValues, 'medium');
     });
 
     it('visibleActions: should be `false` if doesn`t have action.', () => {

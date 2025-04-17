@@ -1,21 +1,24 @@
-import { ComponentRef, EventEmitter, Injectable, Injector } from '@angular/core';
-import { ComponentFixture, inject, TestBed, fakeAsync, tick, flush } from '@angular/core/testing';
+import { ComponentRef, EventEmitter, Injector } from '@angular/core';
+import { ComponentFixture, fakeAsync, flush, inject, TestBed, tick } from '@angular/core/testing';
 import { Routes } from '@angular/router';
 import { RouterTestingModule } from '@angular/router/testing';
 
 import { Observable, of } from 'rxjs';
 
+import { PoFieldModule } from '../../../components/po-field';
 import { PoComponentInjectorService } from '../../../services/po-component-injector/po-component-injector.service';
 import { PoControlPositionService } from '../../../services/po-control-position/po-control-position.service';
-import { PoFieldModule } from '../../../components/po-field';
 
+import { provideHttpClient, withInterceptorsFromDi } from '@angular/common/http';
+import { provideHttpClientTesting } from '@angular/common/http/testing';
+import { NgControl } from '@angular/forms';
+import { PoFieldSize } from '../../../enums/po-field-size.enum';
+import { PoThemeService } from '../../../services/po-theme/po-theme.service';
+import { PoTableColumnSpacing } from '../../po-table';
+import { PoLookupFilter } from './interfaces/po-lookup-filter.interface';
 import { PoLookupBaseComponent } from './po-lookup-base.component';
 import { PoLookupComponent } from './po-lookup.component';
-import { PoLookupFilter } from './interfaces/po-lookup-filter.interface';
-import { NgControl } from '@angular/forms';
-import { provideHttpClientTesting } from '@angular/common/http/testing';
-import { PoTableColumnSpacing } from '../../po-table';
-import { provideHttpClient, withInterceptorsFromDi } from '@angular/common/http';
+
 class LookupFilterService implements PoLookupFilter {
   getFilteredItems(params: any): Observable<any> {
     return of({ items: [{ value: 123, label: 'teste' }] });
@@ -37,9 +40,12 @@ export const routes: Routes = [{ path: '', redirectTo: 'home', pathMatch: 'full'
 describe('PoLookupComponent:', () => {
   let component: PoLookupComponent;
   let fixture: ComponentFixture<PoLookupComponent>;
+  let poThemeServiceMock: jasmine.SpyObj<PoThemeService>;
   const fakeSubscription = <any>{ unsubscribe: () => {} };
 
   beforeEach(async () => {
+    poThemeServiceMock = jasmine.createSpyObj('PoThemeService', ['getA11yLevel', 'getA11yDefaultSize']);
+
     await TestBed.configureTestingModule({
       imports: [RouterTestingModule.withRoutes(routes), PoFieldModule],
       providers: [
@@ -48,6 +54,7 @@ describe('PoLookupComponent:', () => {
         PoControlPositionService,
         Injector,
         NgControl,
+        { provide: PoThemeService, useValue: poThemeServiceMock },
         provideHttpClient(withInterceptorsFromDi()),
         provideHttpClientTesting()
       ]
@@ -1123,6 +1130,29 @@ describe('PoLookupComponent:', () => {
 
         expect(result).toBeFalse();
         expect(component.displayAdditionalHelp).toBeFalse();
+      });
+    });
+
+    describe('getDefaultSpacing:', () => {
+      it('should return ExtraSmall when componentSize is Small', () => {
+        poThemeServiceMock.getA11yDefaultSize.and.returnValue('small');
+
+        component.size = PoFieldSize.Small;
+        component.spacing = undefined;
+        expect(component['getDefaultSpacing']()).toBe(PoTableColumnSpacing.ExtraSmall);
+      });
+
+      it('should return ExtraSmall when accessibility size is Small', () => {
+        poThemeServiceMock.getA11yDefaultSize.and.returnValue('small');
+        component.size = PoFieldSize.Medium;
+        component.spacing = undefined;
+        expect(component['getDefaultSpacing']()).toBe(PoTableColumnSpacing.ExtraSmall);
+      });
+
+      it('should return Medium when accessibility size is Medium', () => {
+        poThemeServiceMock.getA11yDefaultSize.and.returnValue('medium');
+        component.spacing = PoTableColumnSpacing.ExtraSmall;
+        expect(component['getDefaultSpacing']()).toBe(PoTableColumnSpacing.Medium);
       });
     });
 

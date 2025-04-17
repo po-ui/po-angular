@@ -122,9 +122,12 @@
       'po-table-data-fixed-columns': applyFixedColumns(),
       'po-table-text-wrap-enabled': textWrap
     }"
-    [attr.p-spacing]="componentsSize === 'small' ? 'small' : spacing"
+    [attr.p-spacing]="spacing"
   >
-    <thead [class.po-table-header-sticky]="height > 0 && !virtualScroll">
+    <thead
+      [class.po-table-header-sticky]="height > 0 && !virtualScroll"
+      [attr.p-spacing]="spacing ?? (componentsSize === 'small' ? 'extraSmall' : 'medium')"
+    >
       <tr
         [ngClass]="!height ? { 'no-hover': hideSelectAll, 'po-table-column-drag': this.isDraggable } : ''"
         [class.po-table-header]="!height"
@@ -464,9 +467,13 @@
         'po-table-data-fixed-columns': applyFixedColumns(),
         'po-table-text-wrap-enabled': textWrap
       }"
-      [attr.p-spacing]="componentsSize === 'small' ? 'small' : spacing"
+      [attr.p-spacing]="spacing"
     >
-      <thead class="po-table-header-sticky" [style.top]="inverseOfTranslation">
+      <thead
+        class="po-table-header-sticky"
+        [style.top]="inverseOfTranslation"
+        [attr.p-spacing]="spacing ?? (componentsSize === 'small' ? 'extraSmall' : 'medium')"
+      >
         <tr
           [class.po-table-header]="!height"
           cdkDropList
@@ -933,14 +940,18 @@
       [class.po-table-action-disabled]="firstAction.disabled ? validateTableAction(row, firstAction) : false"
       (click)="executeTableAction(row, firstAction)"
     >
-      <po-icon *ngIf="firstAction.icon" class="po-table-single-action-content" [p-icon]="firstAction.icon"></po-icon>
+      <po-icon
+        *ngIf="firstAction.icon"
+        class="po-table-single-action-content po-field-icon"
+        [p-icon]="firstAction.icon"
+      ></po-icon>
       {{ firstAction.label }}
     </div>
   </td>
 
   <td *ngIf="visibleActions.length > 1" class="po-table-column-actions">
     <div #popupTarget class="po-clickable" (click)="togglePopup(row, popupTarget)">
-      <po-icon p-icon="ICON_MORE"></po-icon>
+      <po-icon class="po-field-icon" p-icon="ICON_MORE"></po-icon>
     </div>
   </td>
 </ng-template>

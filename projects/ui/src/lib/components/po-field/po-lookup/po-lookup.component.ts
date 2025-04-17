@@ -15,10 +15,12 @@ import {
 import { NG_VALIDATORS, NG_VALUE_ACCESSOR, NgControl } from '@angular/forms';
 import { Subscription } from 'rxjs';
 
-import { uuid } from '../../../utils/util';
+import { getDefaultSize, uuid } from '../../../utils/util';
 
+import { PoFieldSize } from '../../../enums/po-field-size.enum';
 import { PoThemeService } from '../../../services';
 import { PoLanguageService } from '../../../services/po-language/po-language.service';
+import { PoTableColumnSpacing } from '../../po-table';
 import { PoLookupBaseComponent } from './po-lookup-base.component';
 import { PoLookupFilterService } from './services/po-lookup-filter.service';
 import { PoLookupModalService } from './services/po-lookup-modal.service';
@@ -481,6 +483,13 @@ export class PoLookupComponent extends PoLookupBaseComponent implements AfterVie
 
   showAdditionalHelpIcon() {
     return !!this.additionalHelpTooltip || this.isAdditionalHelpEventTriggered();
+  }
+
+  protected getDefaultSpacing(): PoTableColumnSpacing {
+    return this.size === PoFieldSize.Small ||
+      getDefaultSize(this.poThemeService, PoTableColumnSpacing) === PoTableColumnSpacing.Small
+      ? PoTableColumnSpacing.ExtraSmall
+      : PoTableColumnSpacing.Medium;
   }
 
   private isAdditionalHelpEventTriggered(): boolean {
