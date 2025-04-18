@@ -3,6 +3,8 @@
   class="po-listbox"
   [class.po-listbox-check]="type === 'check' || type === 'option'"
   [attr.data-type]="type"
+  [style.min-height]="getMinHeight()"
+  [style.height]="getHeight()"
   [hidden]="visible"
 >
   <ng-content select="[p-popup-header-template]"></ng-content>

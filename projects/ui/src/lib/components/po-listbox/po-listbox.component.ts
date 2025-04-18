@@ -187,16 +187,33 @@ export class PoListBoxComponent extends PoListBoxBaseComponent implements AfterV
     }
   }
 
-  protected getSizeLoading() {
+  /**
+   * Determina o tamanho do loading baseado nas dimensões do container
+   * Considera tanto a altura quanto a largura para melhor precisão
+   *
+   * @returns {'xs' | 'sm' | 'md'} - Tamanho do loading
+   */
+  protected getSizeLoading(): 'xs' | 'sm' | 'md' {
+    const height = this.listbox.nativeElement.offsetHeight;
     const width = this.listbox.nativeElement.offsetWidth || this.containerWidth;
 
-    if (width > 180) {
-      return 'md';
-    } else if (width >= 140) {
-      return 'sm';
-    } else {
+    if ((height && height < 88) || width < 140) {
       return 'xs';
     }
+
+    if (height && height >= 120 && width > 180) {
+      return 'md';
+    }
+
+    if ((height && height >= 112 && height && height < 120) || (width >= 140 && width <= 180)) {
+      return 'sm';
+    }
+
+    if (height && height >= 88 && height && height < 112) {
+      return 'sm';
+    }
+
+    return 'md';
   }
 
   protected getTextLoading() {
@@ -235,12 +252,78 @@ export class PoListBoxComponent extends PoListBoxBaseComponent implements AfterV
   private setListBoxMaxHeight(): void {
     const itemsLength = this.items.length;
     if (itemsLength > 6) {
-      if (this.type === 'check' && !this.hideSearch) {
-        this.renderer.setStyle(this.listbox.nativeElement, 'maxHeight', `${44 * 6 - 44 / 3 + 60}px`);
-      } else {
-        this.renderer.setStyle(this.listbox.nativeElement, 'maxHeight', `${44 * 6 - 44 / 3}px`);
-      }
+      const extra = this.type === 'check' && !this.hideSearch ? 60 : 0;
+      this.renderer.setStyle(this.listbox.nativeElement, 'maxHeight', `${44 * 6 - 44 / 3 + extra}px`);
     }
+  }
+
+  /**
+   * Retorna a altura máxima permitida para o container da lista,
+   * respeitando a propriedade `height` e calculando o espaço necessário para exibir os itens e o campo de busca.
+   * Se ocorrer algum erro durante o cálculo, retorna a altura como string com 'px' (fallback).
+   */
+  getHeight(): string | null {
+    if (!this.height) return null;
+
+    try {
+      const itemsCount = this.items.length + (this.type === 'check' ? 1 : 0);
+      const itemsTotalHeight = itemsCount * this.getItemHeight();
+      const contentHeight = itemsTotalHeight + this.getSearchHeight() + this.getContainerSpacing();
+
+      return Math.min(parseInt(this.height.toString(), 10), contentHeight) + 'px';
+    } catch {
+      return this.height + 'px'; // Fallback seguro
+    }
+  }
+
+  /**
+   * Retorna a altura mínima da lista:
+   * - 2 itens (caso possua mais de 1) (caso o campo de busca esteja oculto), ou
+   * - 1 item + campo de busca (caso visível), ou
+   * - mensagem de nenhum item + campo de busca (caso visível)
+   */
+  getMinHeight(): string {
+    let itemHeight = this.getItemHeight();
+
+    if (itemHeight === undefined && this.items.length <= 0) {
+      itemHeight = this.listbox?.nativeElement?.querySelector('po-listbox-container-no-data')?.offsetHeight || 0;
+    } else {
+      itemHeight = 44;
+    }
+
+    const minHeight =
+      !this.hideSearch && this.type === 'check'
+        ? itemHeight + this.getSearchHeight()
+        : itemHeight * (this.items.length > 1 ? 2 : 1);
+
+    return `${Math.min(minHeight + this.getContainerSpacing(), 88)}px`;
+  }
+
+  private getItemHeight(): number | undefined {
+    const listItem = this.listboxItemList?.nativeElement;
+    if (!listItem) return 0;
+    const liElement = listItem.querySelector('li');
+    return liElement?.offsetHeight ?? 0; // Retorna 0 se não encontrar o elemento
+  }
+
+  private getContainerSpacing(): number {
+    if (!this.listboxItemList?.nativeElement) return 2; // Fallback básico
+    try {
+      const container = this.listboxItemList.nativeElement;
+      const styles = window.getComputedStyle(container);
+
+      // Padding
+      const paddingTop = parseFloat(styles.paddingTop || '0');
+      const paddingBottom = parseFloat(styles.paddingBottom || '0');
+
+      return paddingTop + paddingBottom;
+    } catch {
+      return 2;
+    }
+  }
+
+  private getSearchHeight(): number {
+    return !this.hideSearch ? this.listbox.nativeElement.querySelector('po-search-list')?.offsetHeight || 0 : 0;
   }
 
   private openUrl(url: string) {

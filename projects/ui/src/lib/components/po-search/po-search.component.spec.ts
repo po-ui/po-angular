@@ -342,9 +342,16 @@ describe('PoSearchComponent', () => {
     });
 
     it('should focus the listbox if the input have a arrowdown keypress', () => {
+      // Mock completo do listboxItemList com querySelector
       component.poListbox.listboxItemList = {
-        nativeElement: { offsetHeight: 100, scrollTop: 100, scrollHeight: 200 }
+        nativeElement: {
+          offsetHeight: 100,
+          scrollTop: 100,
+          scrollHeight: 200,
+          querySelector: jasmine.createSpy('querySelector').and.returnValue({ offsetHeight: 40 }) // <-- Adicione esta linha
+        }
       };
+
       component.type = 'trigger';
       component.listboxOpen = true;
 

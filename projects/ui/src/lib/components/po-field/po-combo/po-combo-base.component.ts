@@ -20,6 +20,7 @@ import { PoComboFilterService } from './po-combo-filter.service';
 const PO_COMBO_DEBOUNCE_TIME_DEFAULT = 400;
 const PO_COMBO_FIELD_LABEL_DEFAULT = 'label';
 const PO_COMBO_FIELD_VALUE_DEFAULT = 'value';
+const poMultiselectContainerPositionDefault = 'bottom';
 
 /**
  * @description
@@ -342,6 +343,35 @@ export abstract class PoComboBaseComponent implements ControlValueAccessor, OnIn
    * Determinar se o valor do compo deve retorna objeto do tipo {value: any, label: any}
    */
   @Input({ alias: 'p-control-value-with-label', transform: convertToBoolean }) controlValueWithLabel?: boolean = false;
+
+  /**
+   * @optional
+   *
+   * @description
+   *
+   * Define se o `listbox` será aberto acima (`top`) ou abaixo (`bottom`) do campo.
+   * Essa propriedade é útil para controlar manualmente o posicionamento do dropdown em situações com espaço de tela limitado,
+   * como em modais ou containers com rolagem, permitindo exibi-lo acima quando não houver espaço suficiente abaixo, por exemplo.
+   *
+   * Quando não definida, o componente calcula automaticamente a melhor posição com base no espaço disponível na tela.
+   */
+  @Input('p-listbox-control-position') listboxControlPosition: 'top' | 'bottom' = poMultiselectContainerPositionDefault;
+
+  /**
+   * @optional
+   *
+   * @description
+   *
+   * Define a altura em pixels, do dropdown (`listbox`) exibido pelo componente.
+   * Essa propriedade permite limitar visualmente a altura da lista de opções, especialmente útil quando há muitos itens.
+   *
+   * Quando utilizada, o conteúdo excedente será rolável, preservando o espaço da interface e evitando que o dropdown ocupe
+   * toda a tela ou ultrapasse os limites visuais do container.
+   *
+   * > Se não for definida, a altura será ajustada automaticamente conforme a quantidade de itens disponíveis.
+   *
+   */
+  @Input('p-listbox-height') listboxHeight?: number;
 
   cacheOptions: Array<any> = [];
   defaultService: PoComboFilterService;

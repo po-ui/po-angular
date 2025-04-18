@@ -99,11 +99,12 @@
       [p-field-label]="fieldLabel"
       [p-multiselect-template]="multiselectOptionTemplate"
       [p-size]="size"
+      [p-container-width]="containerWidth"
+      [p-listbox-height]="listboxHeight"
       (p-change)="changeItems($event)"
       (p-change-search)="changeSearch($event)"
       (p-close-dropdown)="controlDropdownVisibility(false)"
       (keydown)="onKeyDownDropdown($event, 0)"
-      [p-container-width]="containerWidth"
     >
     </po-multiselect-dropdown>
   </ng-template>
