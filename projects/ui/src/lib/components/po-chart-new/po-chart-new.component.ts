@@ -72,6 +72,7 @@ export class PoChartNewComponent extends PoChartNewBaseComponent implements Afte
   protected isExpanded = false;
   protected legendData: Array<{ name: string; color: string }> = [];
   protected headerHeight: number;
+  protected positionTooltip = 'bottom';
   protected popupActions: Array<PoPopupAction> = [
     {
       label: this.literals.exportCSV,
@@ -94,6 +95,7 @@ export class PoChartNewComponent extends PoChartNewBaseComponent implements Afte
   ];
   private chartInstance!: echarts.ECharts;
   private currentRenderer: 'svg' | 'canvas';
+  private boundaryGap = false;
 
   constructor(
     private el: ElementRef,
@@ -201,13 +203,20 @@ export class PoChartNewComponent extends PoChartNewBaseComponent implements Afte
 
     this.chartInstance.on('mouseover', (params: any) => {
       if (!params.value) return;
-      if (params.seriesType === 'line') {
+      if (params.seriesType) {
         const divTooltipElement = this.el.nativeElement.querySelector('#custom-tooltip');
         if (divTooltipElement) {
           const chartElement = this.el.nativeElement.querySelector('#chart-id');
+          if (params.seriesType === 'bar') {
+            this.positionTooltip = 'top';
+          }
+          const customTooltipText = params.seriesName
+            ? `<b>${params.name}</b><br>
+            ${params.seriesName}: <b>${params.value}</b>`
+            : `${params.name}<b>${params.value}</b>`;
           this.tooltipText = this.series[params.seriesIndex].tooltip
             ? this.series[params.seriesIndex].tooltip
-            : `${params.seriesName}: ${params.value}`;
+            : customTooltipText;
           divTooltipElement.style.left = `${params.event.offsetX + chartElement.offsetLeft + 3}px`;
           divTooltipElement.style.top = `${chartElement.offsetTop + params.event.offsetY + 3}px`;
           this.poTooltip.toggleTooltipVisibility(true);
@@ -243,12 +252,12 @@ export class PoChartNewComponent extends PoChartNewBaseComponent implements Afte
       grid: {
         top: paddingTop,
         left: this.options?.axis?.paddingLeft || 48,
-        right: 16,
+        right: this.options?.axis?.paddingRight || 32,
         borderWidth: tokenBorderWidthSm
       },
       xAxis: {
         type: 'category',
-        boundaryGap: false,
+        boundaryGap: this.boundaryGap,
         data: this.categories,
         axisLabel: {
           fontFamily: this.getCSSVariable('--font-family-grid', '.po-chart'),
@@ -313,7 +322,7 @@ export class PoChartNewComponent extends PoChartNewBaseComponent implements Afte
         realtime: true,
         bottom: 'calc(100%)',
         height: 20,
-        right: 16,
+        right: this.options?.axis?.paddingRight || 32,
         xAxisIndex: [0]
       },
       {
@@ -387,11 +396,10 @@ export class PoChartNewComponent extends PoChartNewBaseComponent implements Afte
     const hasArea = this.type === 'area' || this.series.some(serie => serie.type === 'area');
     const newSeries: Array<any> = [...this.colorService.getColors<PoChartSerie>(this.series, true, hasArea)];
     const tokenBorderWidthMd = this.resolvePx('--border-width-md');
+    const widthTypeColumn = this.resolvePx('--spacing-sm', '.po-chart');
 
     return newSeries.map((serie, index) => {
-      if (serie.label && typeof serie.label === 'string') {
-        serie.name = serie.label;
-      }
+      serie.name = serie.label && typeof serie.label === 'string' ? serie.label : '';
 
       if (!serie.type || serie.type === 'area' || serie.type === 'column') {
         !serie.type ? this.setTypeSerie(serie, this.type) : this.setTypeSerie(serie, serie.type);
@@ -402,22 +410,25 @@ export class PoChartNewComponent extends PoChartNewBaseComponent implements Afte
         : serie.color;
 
       this.setSerieEmphasis(serie, colorVariable, tokenBorderWidthMd);
+      this.setSerieTypeLine(serie, tokenBorderWidthMd, colorVariable);
       this.setSerieTypeArea(serie, index);
+      this.setSerieTypeColumn(serie, widthTypeColumn, colorVariable);
 
-      const isTypeLine = this.type === 'line' || serie.type === 'line';
-      if (isTypeLine) {
-        serie.symbolSize = 8;
-        serie.symbol = 'circle';
-      }
-      serie.itemStyle = {
-        color:
-          isTypeLine && !this.options?.fillPoints ? this.getCSSVariable('--color-neutral-light-00') : colorVariable,
-        borderColor: colorVariable,
-        borderWidth: tokenBorderWidthMd
-      };
-      serie.lineStyle = { color: colorVariable, width: tokenBorderWidthMd };
       return serie;
     });
+  }
+
+  private setSerieTypeLine(serie, tokenBorderWidthMd: number, color: string) {
+    if (serie.type === 'line') {
+      serie.symbolSize = 8;
+      serie.symbol = 'circle';
+      serie.itemStyle = {
+        color: !this.options?.fillPoints ? this.getCSSVariable('--color-neutral-light-00') : color,
+        borderColor: color,
+        borderWidth: tokenBorderWidthMd
+      };
+      serie.lineStyle = { color: color, width: tokenBorderWidthMd };
+    }
   }
 
   private setSerieTypeArea(serie, index: number) {
@@ -431,6 +442,20 @@ export class PoChartNewComponent extends PoChartNewBaseComponent implements Afte
       if (index > 7 || serie.isNotTokenColor) {
         serie.areaStyle.opacity = 0.5;
       }
+    }
+  }
+
+  private setSerieTypeColumn(serie, width: number, color: string) {
+    if (serie.isTypeColumn) {
+      serie.barWidth = width;
+      serie.itemStyle = {
+        borderRadius: this.resolvePx('--border-radius-bar', '.po-chart'),
+        color: color
+      };
+      serie.emphasis = {
+        focus: 'series'
+      };
+      this.boundaryGap = true;
     }
   }
 
@@ -469,6 +494,7 @@ export class PoChartNewComponent extends PoChartNewBaseComponent implements Afte
         serie.type = 'bar';
         break;
       case PoChartType.Column:
+        serie.isTypeColumn = true;
         serie.type = 'bar';
         break;
       case PoChartType.Donut:

@@ -2,6 +2,13 @@
 
 All notable changes to this project will be documented in this file. See [standard-version](https://github.com/conventional-changelog/standard-version) for commit guidelines.
 
+### [19.8.0](https://github.com/po-ui/po-angular/compare/v19.7.0...v19.8.0) (2025-04-14)
+
+
+### Bug Fixes
+
+* **storage:** sobrescreve dependência vulnerável @babel/runtime ([235b5ed](https://github.com/po-ui/po-angular/commit/235b5ed00e24bccf8d2615808eb7cca2c5e8ba85))
+
 ## [19.7.0](https://github.com/po-ui/po-angular/compare/v19.6.0...v19.7.0) (2025-03-31)
 
 
