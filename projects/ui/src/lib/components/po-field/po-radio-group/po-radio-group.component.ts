@@ -27,8 +27,6 @@ import { PoRadioGroupBaseComponent } from './po-radio-group-base.component';
  * <example name="po-radio-group-basic" title="PO Radio Group Basic">
  *  <file name="sample-po-radio-group-basic/sample-po-radio-group-basic.component.html"> </file>
  *  <file name="sample-po-radio-group-basic/sample-po-radio-group-basic.component.ts"> </file>
- *  <file name="sample-po-radio-group-basic/sample-po-radio-group-basic.component.e2e-spec.ts"> </file>
- *  <file name="sample-po-radio-group-basic/sample-po-radio-group-basic.component.po.ts"> </file>
  * </example>
  *
  * <example name="po-radio-group-labs" title="PO Radio Group Labs">

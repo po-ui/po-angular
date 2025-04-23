@@ -28,7 +28,6 @@ import { PoPageLoginCustomField } from './interfaces/po-page-login-custom-field.
 import { PoPageLoginLiterals } from './interfaces/po-page-login-literals.interface';
 import { PoPageLoginService } from './po-page-login.service';
 import { OverlayModule } from '@angular/cdk/overlay';
-import { element } from 'protractor';
 
 describe('PoPageLoginComponent: ', () => {
   let component: PoPageLoginComponent;
