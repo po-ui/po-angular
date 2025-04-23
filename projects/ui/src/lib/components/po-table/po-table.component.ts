@@ -58,8 +58,6 @@ import { ICONS_DICTIONARY, PoIconDictionary } from '../po-icon';
  * <example name="po-table-labs" title="PO Table Labs">
  *  <file name="sample-po-table-labs/sample-po-table-labs.component.ts"> </file>
  *  <file name="sample-po-table-labs/sample-po-table-labs.component.html"> </file>
- *  <file name="sample-po-table-labs/sample-po-table-labs.component.e2e-spec.ts"> </file>
- *  <file name="sample-po-table-labs/sample-po-table-labs.component.po.ts"> </file>
  *  <file name="sample-po-table-labs/sample-po-table-labs.service.ts"> </file>
  * </example>
  *

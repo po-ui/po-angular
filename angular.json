@@ -120,18 +120,6 @@
             }
           }
         },
-        "e2e": {
-          "builder": "@angular-devkit/build-angular:protractor",
-          "options": {
-            "protractorConfig": "projects/app/e2e/protractor.conf.js",
-            "devServerTarget": "app:serve"
-          },
-          "configurations": {
-            "production": {
-              "devServerTarget": "app:serve:production"
-            }
-          }
-        },
         "lint": {
           "builder": "@angular-eslint/builder:lint",
           "options": {
@@ -368,18 +356,6 @@
           "builder": "@angular-eslint/builder:lint",
           "options": {
             "lintFilePatterns": ["projects/portal/**/*.ts", "projects/portal/**/*.html"]
-          }
-        },
-        "e2e": {
-          "builder": "@angular-devkit/build-angular:protractor",
-          "options": {
-            "protractorConfig": "projects/portal/e2e/protractor.conf.js",
-            "devServerTarget": "portal:serve"
-          },
-          "configurations": {
-            "production": {
-              "devServerTarget": "portal:serve:production"
-            }
           }
         }
       }
