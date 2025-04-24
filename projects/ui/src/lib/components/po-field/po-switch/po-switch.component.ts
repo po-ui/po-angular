@@ -76,8 +76,6 @@ import { PoSwitchLabelPosition } from './po-switch-label-position.enum';
  * <example name="po-switch-labs" title="PO Switch Labs">
  *   <file name="sample-po-switch-labs/sample-po-switch-labs.component.html"> </file>
  *   <file name="sample-po-switch-labs/sample-po-switch-labs.component.ts"> </file>
- *   <file name="sample-po-switch-labs/sample-po-switch-labs.component.e2e-spec.ts"> </file>
- *   <file name="sample-po-switch-labs/sample-po-switch-labs.component.po.ts"> </file>
  * </example>
  *
  * <example name="po-switch-order" title="PO Switch - Order Summary">

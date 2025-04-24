@@ -188,7 +188,11 @@ gulp.task('build:guides', () => {
   mkdir(GUIDE_DIR);
 
   poProjectsNames.forEach(project => {
-    sources.push(`${configuration.sourceFolder}/${project}/docs/guides/*.md`);
+    const projectPath = `${configuration.sourceFolder}/${project}`;
+
+    if (fs.existsSync(projectPath)) {
+      sources.push(`${projectPath}/docs/guides/*.md`);
+    }
   });
 
   return gulp

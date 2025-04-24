@@ -50,7 +50,7 @@ Veja abaixo a lista de dependências e as versões compatíveis, elas devem ser 
     ...
   },
   "devDependencies": {
-    "@angular-devkit/build-angular": "~17.2.3",
+    "@angular-devkit/build-angular": "~17.3.14",
     "@angular-devkit/schematics": "~17.2.3",
     "@angular/cli": "~17.2.3",
     "@angular/compiler-cli": "~17.2.4",
