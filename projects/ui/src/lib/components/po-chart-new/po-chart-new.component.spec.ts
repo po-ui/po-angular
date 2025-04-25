@@ -43,7 +43,7 @@ describe('PoChartNewComponent', () => {
       gridLines: 5,
       showXAxis: true,
       showYAxis: true,
-      paddingLeft: 48,
+      paddingLeft: 16,
       labelType: PoChartLabelFormat.Number
     },
     legend: true,
@@ -550,16 +550,16 @@ describe('PoChartNewComponent', () => {
 
       expect(result).toBeDefined();
       expect(result.backgroundColor).toBe('#ffffff');
-      expect(result.grid.top).toBe(8);
+      expect(result.grid.top).toBe(20);
       expect(result.xAxis.type).toBe('category');
       expect(result.yAxis.type).toBe('value');
     });
 
     it('should apply dataZoom configuration when enabled', () => {
-      component.options.dataZoom = true;
+      component.options = { dataZoom: true };
 
       const result = component['setOptionLine']();
-      expect(result.grid.top).toBe(45);
+      expect(result.grid.top).toBe(50);
     });
 
     it('should apply correct axis configurations', () => {
@@ -613,7 +613,7 @@ describe('PoChartNewComponent', () => {
       component.options = { axis: {} };
 
       const result = component['setOptionLine']();
-      expect(result.grid.top).toBe(20);
+      expect(result.grid.top).toBe(30);
     });
 
     it('should not adjust grid top when dataLabel.fixed is true but maxRange is set', () => {
@@ -621,7 +621,7 @@ describe('PoChartNewComponent', () => {
       component.options = { axis: { maxRange: 100 } };
 
       const result = component['setOptionLine']();
-      expect(result.grid.top).toBe(8);
+      expect(result.grid.top).toBe(20);
     });
 
     it('should set fontSize to 12 when --font-size-grid is not defined', () => {
@@ -780,6 +780,125 @@ describe('PoChartNewComponent', () => {
       const result = component['setSeries']();
       expect(result[1].itemStyle.color).toBe('#ffffff');
       expect(result[1].lineStyle.color).toBe('#00ff00');
+    });
+  });
+
+  describe('getPaddingBottomGrid', () => {
+    it('should return 50 and set bottomDataZoom to 8 when dataZoom is true, bottomDataZoom is true, and legend is false', () => {
+      component.options = {
+        dataZoom: true,
+        bottomDataZoom: true,
+        legend: false
+      };
+
+      const result = component['getPaddingBottomGrid']();
+
+      expect(result).toBe(50);
+      expect(component.options.bottomDataZoom).toBe(8);
+    });
+
+    it('should return 70 and set bottomDataZoom to 32 when dataZoom is true, bottomDataZoom is true and legendVerticalPosition is not "top"', () => {
+      component.options = {
+        dataZoom: true,
+        bottomDataZoom: true,
+        legendVerticalPosition: 'bottom'
+      };
+
+      const result = component['getPaddingBottomGrid']();
+
+      expect(result).toBe(70);
+      expect(component.options.bottomDataZoom).toBe(32);
+    });
+
+    it('should return 0 when dataZoom is false and legendVerticalPosition is top', () => {
+      component.options = {
+        dataZoom: false,
+        legendVerticalPosition: 'top'
+      };
+
+      const result = component['getPaddingBottomGrid']();
+
+      expect(result).toBe(0);
+    });
+
+    it('should return 50 when no condition matches (default case)', () => {
+      component.options = {
+        dataZoom: true,
+        bottomDataZoom: false,
+        legend: true,
+        legendVerticalPosition: 'bottom'
+      };
+
+      const result = component['getPaddingBottomGrid']();
+
+      expect(result).toBe(50);
+    });
+  });
+
+  describe('getPaddingTopGrid', () => {
+    it('should return 60 and set bottomDataZoom to 8 when fixed is true, no maxRange, and conditions of first if apply', () => {
+      component.options = {
+        dataZoom: true,
+        legendVerticalPosition: 'top',
+        bottomDataZoom: true,
+        axis: {}
+      };
+      component.dataLabel = { fixed: true };
+
+      const result = component['getPaddingTopGrid']();
+
+      expect(result).toBe(60);
+      expect(component.options.bottomDataZoom).toBe(8);
+    });
+
+    it('should return 50 when fixed is false and conditions of first if apply', () => {
+      component.options = {
+        dataZoom: true,
+        bottomDataZoom: false,
+        legendVerticalPosition: 'top',
+        axis: {}
+      };
+      component.dataLabel = { fixed: false };
+
+      const result = component['getPaddingTopGrid']();
+
+      expect(result).toBe(50);
+    });
+
+    it('should return 30 when fixed is true, no maxRange, and conditions of else if apply', () => {
+      component.options = {
+        dataZoom: true,
+        bottomDataZoom: true,
+        legendVerticalPosition: 'bottom',
+        axis: {}
+      };
+      component.dataLabel = { fixed: true };
+
+      const result = component['getPaddingTopGrid']();
+
+      expect(result).toBe(30);
+    });
+
+    it('should return 20 when fixed is false and conditions of else if apply', () => {
+      component.options = {
+        dataZoom: false,
+        legendVerticalPosition: 'bottom',
+        axis: {}
+      };
+      component.dataLabel = { fixed: false };
+
+      const result = component['getPaddingTopGrid']();
+
+      expect(result).toBe(20);
+    });
+
+    it('should return 20 when no conditions match (default case)', () => {
+      component.options = {};
+      component.dataLabel = {};
+
+      const result = component['getPaddingTopGrid']();
+
+      expect(result).toBe(20);
     });
   });
 

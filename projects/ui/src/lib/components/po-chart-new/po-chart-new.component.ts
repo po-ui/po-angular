@@ -246,13 +246,16 @@ export class PoChartNewComponent extends PoChartNewBaseComponent implements Afte
     const tokenFontSizeGrid = this.resolvePx('--font-size-grid', '.po-chart');
     const newSeries = this.setSeries();
     const paddingTop = this.getPaddingTopGrid();
+    const paddingBottom = this.getPaddingBottomGrid();
 
     const options: EChartsOption = {
       backgroundColor: this.getCSSVariable('--background-color-grid', '.po-chart'),
       grid: {
         top: paddingTop,
-        left: this.options?.axis?.paddingLeft || 48,
+        left: this.options?.axis?.paddingLeft || 16,
         right: this.options?.axis?.paddingRight || 32,
+        bottom: this.options?.axis?.paddingBottom || paddingBottom,
+        containLabel: true,
         borderWidth: tokenBorderWidthSm
       },
       xAxis: {
@@ -306,13 +309,53 @@ export class PoChartNewComponent extends PoChartNewBaseComponent implements Afte
     return options;
   }
 
-  private getPaddingTopGrid(): number {
-    if (this.options?.dataZoom) {
-      return 45;
-    } else if (this.dataLabel?.fixed && !this.options?.axis?.maxRange) {
-      return 20;
+  private getPaddingBottomGrid() {
+    if (
+      this.options?.dataZoom &&
+      this.options?.bottomDataZoom &&
+      (this.options?.legend === false || this.options?.legendVerticalPosition === 'top')
+    ) {
+      if (typeof this.options?.bottomDataZoom === 'boolean' && this.options?.bottomDataZoom === true) {
+        this.options.bottomDataZoom = 8;
+      }
+      return 50;
+    } else if (
+      this.options?.dataZoom &&
+      this.options?.bottomDataZoom &&
+      this.options?.legendVerticalPosition !== 'top'
+    ) {
+      if (typeof this.options?.bottomDataZoom === 'boolean' && this.options?.bottomDataZoom === true) {
+        this.options.bottomDataZoom = 32;
+      }
+      return 70;
+    } else if (
+      (this.options?.dataZoom && !this.options?.bottomDataZoom && this.options?.legend === false) ||
+      (!this.options?.dataZoom && this.options?.legend === false) ||
+      (!this.options?.dataZoom && this.options?.legendVerticalPosition === 'top')
+    ) {
+      return 0;
     }
-    return 8;
+    return 50;
+  }
+
+  private getPaddingTopGrid() {
+    if (
+      (this.options?.dataZoom && !this.options?.bottomDataZoom) ||
+      (this.options?.dataZoom && this.options?.bottomDataZoom && this.options?.legendVerticalPosition === 'top') ||
+      (!this.options?.dataZoom && this.options?.legendVerticalPosition === 'top')
+    ) {
+      if (typeof this.options?.bottomDataZoom === 'boolean' && this.options?.bottomDataZoom === true) {
+        this.options.bottomDataZoom = 8;
+      }
+      const fixed = this.dataLabel?.fixed && !this.options?.axis?.maxRange;
+      return fixed ? 60 : 50;
+    } else if (
+      (this.options?.dataZoom && this.options?.bottomDataZoom && this.options?.legendVerticalPosition !== 'top') ||
+      (!this.options?.dataZoom && this.options?.legendVerticalPosition !== 'top')
+    ) {
+      const fixed = this.dataLabel?.fixed && !this.options?.axis?.maxRange;
+      return fixed ? 30 : 20;
+    }
   }
 
   private setOptionDataZoom(options: EChartsOption) {
@@ -320,8 +363,8 @@ export class PoChartNewComponent extends PoChartNewBaseComponent implements Afte
       {
         show: true,
         realtime: true,
-        bottom: 'calc(100%)',
-        height: 20,
+        bottom: this.options?.bottomDataZoom || 'calc(100%)',
+        height: 25,
         right: this.options?.axis?.paddingRight || 32,
         xAxisIndex: [0]
       },
@@ -329,19 +372,6 @@ export class PoChartNewComponent extends PoChartNewBaseComponent implements Afte
         type: 'inside',
         realtime: true,
         xAxisIndex: [0]
-      }
-    ];
-    options.graphic = [
-      {
-        type: 'text',
-        left: 'center',
-        top: 30,
-        style: {
-          text: 'Use o scroll do mouse para dar zoom',
-          fontFamily: this.getCSSVariable('--font-family-grid', '.po-chart'),
-          fontSize: this.resolvePx('--font-size-sm'),
-          fill: this.getCSSVariable('--color-legend', '.po-chart')
-        }
       }
     ];
   }
@@ -365,6 +395,7 @@ export class PoChartNewComponent extends PoChartNewBaseComponent implements Afte
       show: true,
       orient: 'horizontal',
       left: this.options?.legendPosition || 'center',
+      top: this.options?.legendVerticalPosition || 'bottom',
       bottom: 0,
       padding: [0, 16, 0, 16],
       itemWidth: 16,
@@ -447,7 +478,6 @@ export class PoChartNewComponent extends PoChartNewBaseComponent implements Afte
 
   private setSerieTypeColumn(serie, width: number, color: string) {
     if (serie.isTypeColumn) {
-      serie.barWidth = width;
       serie.itemStyle = {
         borderRadius: this.resolvePx('--border-radius-bar', '.po-chart'),
         color: color
