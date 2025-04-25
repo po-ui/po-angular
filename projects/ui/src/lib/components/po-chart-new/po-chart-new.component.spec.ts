@@ -66,7 +66,7 @@ describe('PoChartNewComponent', () => {
 
     window['echarts'] = {
       init: () => new EChartsMock()
-    };
+    } as any;
 
     window.getComputedStyle = () =>
       ({
@@ -542,11 +542,11 @@ describe('PoChartNewComponent', () => {
     });
   });
 
-  describe('setOptionLine:', () => {
+  describe('setOptions:', () => {
     it('should return line chart options with correct default structure', () => {
       component.options = {};
 
-      const result = component['setOptionLine']();
+      const result = component['setOptions']();
 
       expect(result).toBeDefined();
       expect(result.backgroundColor).toBe('#ffffff');
@@ -558,7 +558,7 @@ describe('PoChartNewComponent', () => {
     it('should apply dataZoom configuration when enabled', () => {
       component.options = { dataZoom: true };
 
-      const result = component['setOptionLine']();
+      const result = component['setOptions']();
       expect(result.grid.top).toBe(50);
     });
 
@@ -572,11 +572,36 @@ describe('PoChartNewComponent', () => {
         paddingLeft: 60
       };
 
-      const result = component['setOptionLine']();
+      const result = component['setOptions']();
       expect(result.yAxis.min).toBe(10);
       expect(result.yAxis.max).toBe(100);
       expect(result.yAxis.splitNumber).toBe(7);
       expect(result.grid.left).toBe(60);
+      expect(result.xAxis.splitLine.show).toBeFalse();
+      expect(result.yAxis.splitLine.show).toBeTrue();
+    });
+
+    it('should apply correct axis configurations if type is Bar', () => {
+      const categories = ['Mon', 'Tue', 'Wed'];
+      component.isTypeBar = true;
+      component.options.axis = {
+        minRange: 10,
+        maxRange: 100,
+        gridLines: 7,
+        showXAxis: false,
+        showYAxis: true,
+        paddingLeft: 60
+      };
+      component.categories = categories;
+
+      const result = component['setOptions']();
+      expect(result.yAxis.min).toBe(10);
+      expect(result.yAxis.max).toBe(100);
+      expect(result.yAxis.splitNumber).toBe(7);
+      expect(result.yAxis.type).toBe('category');
+      expect(result.yAxis.data).toEqual(categories);
+      expect(result.grid.left).toBe(60);
+      expect(result.xAxis.type).toBe('value');
       expect(result.xAxis.splitLine.show).toBeFalse();
       expect(result.yAxis.splitLine.show).toBeTrue();
     });
@@ -586,7 +611,7 @@ describe('PoChartNewComponent', () => {
         labelType: PoChartLabelFormat.Number
       };
 
-      const result = component['setOptionLine']();
+      const result = component['setOptions']();
       expect(result.yAxis.axisLabel.formatter(100)).toBe('100.00');
     });
 
@@ -595,7 +620,7 @@ describe('PoChartNewComponent', () => {
         labelType: PoChartLabelFormat.Currency
       };
 
-      const result = component['setOptionLine']();
+      const result = component['setOptions']();
       expect(result.yAxis.axisLabel.formatter(100)).toBe('$100.00');
     });
 
@@ -604,7 +629,7 @@ describe('PoChartNewComponent', () => {
         rotateLegend: 45
       };
 
-      const result = component['setOptionLine']();
+      const result = component['setOptions']();
       expect(result.xAxis.axisLabel.rotate).toBe(45);
     });
 
@@ -612,7 +637,7 @@ describe('PoChartNewComponent', () => {
       component.dataLabel = { fixed: true };
       component.options = { axis: {} };
 
-      const result = component['setOptionLine']();
+      const result = component['setOptions']();
       expect(result.grid.top).toBe(30);
     });
 
@@ -620,16 +645,18 @@ describe('PoChartNewComponent', () => {
       component.dataLabel = { fixed: true };
       component.options = { axis: { maxRange: 100 } };
 
-      const result = component['setOptionLine']();
+      const result = component['setOptions']();
       expect(result.grid.top).toBe(20);
     });
 
     it('should set fontSize to 12 when --font-size-grid is not defined', () => {
-      spyOn<any>(component, 'resolvePx').and.callFake(variable => (variable === '--font-size-grid' ? undefined : 10));
+      spyOn<any>(component['chartGridUtils'], 'resolvePx').and.callFake(variable =>
+        variable === '--font-size-grid' ? undefined : 10
+      );
 
       spyOn<any>(component, 'getCSSVariable').and.returnValue('');
 
-      const options = (component as any).setOptionLine();
+      const options = (component as any).setOptions();
 
       expect(options.xAxis.axisLabel.fontSize).toBe(12);
       expect(options.yAxis.axisLabel.fontSize).toBe(12);
@@ -646,7 +673,7 @@ describe('PoChartNewComponent', () => {
 
       const options: any = {};
 
-      component['setShowAxisDetails'](options);
+      component['chartGridUtils']['setShowAxisDetails'](options);
 
       expect(options.tooltip).toEqual({
         trigger: 'none',
@@ -791,7 +818,7 @@ describe('PoChartNewComponent', () => {
         legend: false
       };
 
-      const result = component['getPaddingBottomGrid']();
+      const result = component['chartGridUtils']['getPaddingBottomGrid']();
 
       expect(result).toBe(50);
       expect(component.options.bottomDataZoom).toBe(8);
@@ -804,7 +831,7 @@ describe('PoChartNewComponent', () => {
         legendVerticalPosition: 'bottom'
       };
 
-      const result = component['getPaddingBottomGrid']();
+      const result = component['chartGridUtils']['getPaddingBottomGrid']();
 
       expect(result).toBe(70);
       expect(component.options.bottomDataZoom).toBe(32);
@@ -816,7 +843,7 @@ describe('PoChartNewComponent', () => {
         legendVerticalPosition: 'top'
       };
 
-      const result = component['getPaddingBottomGrid']();
+      const result = component['chartGridUtils']['getPaddingBottomGrid']();
 
       expect(result).toBe(0);
     });
@@ -829,7 +856,7 @@ describe('PoChartNewComponent', () => {
         legendVerticalPosition: 'bottom'
       };
 
-      const result = component['getPaddingBottomGrid']();
+      const result = component['chartGridUtils']['getPaddingBottomGrid']();
 
       expect(result).toBe(50);
     });
@@ -845,7 +872,7 @@ describe('PoChartNewComponent', () => {
       };
       component.dataLabel = { fixed: true };
 
-      const result = component['getPaddingTopGrid']();
+      const result = component['chartGridUtils']['getPaddingTopGrid']();
 
       expect(result).toBe(60);
       expect(component.options.bottomDataZoom).toBe(8);
@@ -860,7 +887,7 @@ describe('PoChartNewComponent', () => {
       };
       component.dataLabel = { fixed: false };
 
-      const result = component['getPaddingTopGrid']();
+      const result = component['chartGridUtils']['getPaddingTopGrid']();
 
       expect(result).toBe(50);
     });
@@ -874,7 +901,7 @@ describe('PoChartNewComponent', () => {
       };
       component.dataLabel = { fixed: true };
 
-      const result = component['getPaddingTopGrid']();
+      const result = component['chartGridUtils']['getPaddingTopGrid']();
 
       expect(result).toBe(30);
     });
@@ -887,7 +914,7 @@ describe('PoChartNewComponent', () => {
       };
       component.dataLabel = { fixed: false };
 
-      const result = component['getPaddingTopGrid']();
+      const result = component['chartGridUtils']['getPaddingTopGrid']();
 
       expect(result).toBe(20);
     });
@@ -896,7 +923,7 @@ describe('PoChartNewComponent', () => {
       component.options = {};
       component.dataLabel = {};
 
-      const result = component['getPaddingTopGrid']();
+      const result = component['chartGridUtils']['getPaddingTopGrid']();
 
       expect(result).toBe(20);
     });
@@ -915,6 +942,7 @@ describe('PoChartNewComponent', () => {
       } as any;
       spyOn(component as any, 'setTableColumns');
     });
+
     it('should correctly populate itemsTable with series data', () => {
       component['setTableProperties']();
 
@@ -922,7 +950,42 @@ describe('PoChartNewComponent', () => {
         { serie: 'Série 1', Jan: 10, Fev: 20, Mar: 30 },
         { serie: 'Série 2', Jan: 40, Fev: 50, Mar: 60 }
       ]);
-      expect((component as any).setTableColumns).toHaveBeenCalledWith(jasmine.any(Object));
+      expect((component as any).setTableColumns).toHaveBeenCalledWith(jasmine.any(Object), ['Jan', 'Fev', 'Mar']);
+    });
+  });
+
+  describe('setTableProperties', () => {
+    it('should rebuild categories with "-" when they do not exist and series[0].data is an array', () => {
+      component['chartInstance'] = {
+        getOption: jasmine.createSpy('getOption').and.returnValue({
+          xAxis: [{}],
+          yAxis: [{}],
+          series: [{ name: 'Série 1', data: [10, 20, 30] }]
+        })
+      } as any;
+      spyOn(component as any, 'setTableColumns');
+      component['isTypeBar'] = false;
+
+      component['setTableProperties']();
+
+      expect(component['itemsTable']).toEqual([{ serie: 'Série 1', '0': 10, '1': 20, '2': 30 }]);
+      expect(component['setTableColumns']).toHaveBeenCalled();
+    });
+
+    it('should call setTablePropertiesTypeBar when isTypeBar is true', () => {
+      component['chartInstance'] = {
+        getOption: jasmine.createSpy('getOption').and.returnValue({
+          xAxis: [{}],
+          yAxis: [{ data: ['A', 'B'] }],
+          series: [{ name: 'Série A', data: [1, 2] }]
+        })
+      } as any;
+      spyOn(component as any, 'setTableColumns');
+      component['isTypeBar'] = true;
+
+      component['setTableProperties']();
+
+      expect(component['setTableColumns']).not.toHaveBeenCalled();
     });
   });
 
@@ -931,7 +994,7 @@ describe('PoChartNewComponent', () => {
       const option = { xAxis: [{ data: ['Jan', 'Fev', 'Mar'] }] };
       component.options = {} as any;
 
-      (component as any).setTableColumns(option);
+      (component as any).setTableColumns(option, ['Jan', 'Fev', 'Mar']);
 
       expect(component['columnsTable']).toEqual([
         { property: 'serie', label: 'Série' },
@@ -970,7 +1033,22 @@ describe('PoChartNewComponent', () => {
 
       component['downloadCsv']();
 
-      const expectedCsv = '\ufeffSérie;valor1;valor2\nSérie 1;10;\nSérie 2;30;';
+      expect(URL.createObjectURL).toHaveBeenCalled();
+      expect(document.createElement).toHaveBeenCalledWith('a');
+      expect(document.body.appendChild).toHaveBeenCalled();
+      expect(document.body.removeChild).toHaveBeenCalled();
+      expect(URL.revokeObjectURL).toHaveBeenCalled();
+    });
+
+    it('should generate and download a CSV file correctly, using default values when necessary if typeBar is true', () => {
+      component.isTypeBar = true;
+      component['itemsTable'] = [
+        { serie: 'Série 1', valor1: 10, valor2: undefined },
+        { serie: 'Série 2', valor1: 30 }
+      ];
+      component.options = {} as any;
+
+      component['downloadCsv']();
 
       expect(URL.createObjectURL).toHaveBeenCalled();
       expect(document.createElement).toHaveBeenCalledWith('a');
@@ -991,14 +1069,23 @@ describe('PoChartNewComponent', () => {
       expect((component as any)['chartInstance']).toBeUndefined();
     });
 
-    it('should call createImage with correct parameters when chartInstance is defined', () => {
+    it('should call exportSvgAsImage if renderer mode is svg', () => {
+      spyOn<any>(component, 'exportSvgAsImage');
+
+      component['currentRenderer'] = 'svg';
+      (component as any)['exportImage']('png');
+
+      expect(component['exportSvgAsImage']).toHaveBeenCalled();
+    });
+
+    it('should call configureImageCanvas with correct parameters when chartInstance is defined', () => {
       const mockChartInstance = {
         getDataURL: jasmine.createSpy('getDataURL').and.returnValue('mockImageData')
       };
 
       const mockImage = new Image();
       spyOn(window, 'Image').and.returnValue(mockImage);
-      spyOn<any>(component, 'createImage');
+      spyOn<any>(component, 'configureImageCanvas');
 
       (component as any).chartInstance = mockChartInstance;
       (component as any).exportImage('jpeg');
@@ -1008,11 +1095,58 @@ describe('PoChartNewComponent', () => {
         pixelRatio: 2,
         backgroundColor: 'white'
       });
-      expect(component['createImage']).toHaveBeenCalledWith('jpeg', mockImage);
+      expect(component['configureImageCanvas']).toHaveBeenCalledWith('jpeg', mockImage);
     });
   });
 
-  describe('createImage:', () => {
+  it('exportSvgAsImage: should return early if svg element is not found', () => {
+    component['el'] = {
+      nativeElement: {
+        querySelector: jasmine.createSpy().and.returnValue(null)
+      }
+    } as any;
+
+    const configureSpy = spyOn(component as any, 'configureImageCanvas');
+    const serializerSpy = spyOn(XMLSerializer.prototype, 'serializeToString');
+
+    component['exportSvgAsImage']('png');
+
+    expect(component['el'].nativeElement.querySelector).toHaveBeenCalledWith('#chart-id svg');
+    expect(serializerSpy).not.toHaveBeenCalled();
+    expect(configureSpy).not.toHaveBeenCalled();
+  });
+
+  it('exportSvgAsImage: should serialize svg, create blob, url and call configureImageCanvas', () => {
+    component['el'] = {
+      nativeElement: {
+        querySelector: jasmine.createSpy()
+      }
+    } as any;
+
+    spyOn(component as any, 'configureImageCanvas');
+
+    const fakeSvg = document.createElementNS('http://www.w3.org/2000/svg', 'svg');
+    (component['el'].nativeElement.querySelector as jasmine.Spy).and.returnValue(fakeSvg);
+
+    const mockUrl = 'blob:http://localhost/fake-id';
+    spyOn(URL, 'createObjectURL').and.returnValue(mockUrl);
+
+    class FakeImage {
+      set src(value: string) {}
+    }
+
+    (window as any).Image = FakeImage;
+
+    const serializerSpy = spyOn(XMLSerializer.prototype, 'serializeToString').and.returnValue('<svg></svg>');
+
+    component['exportSvgAsImage']('jpeg');
+
+    expect(serializerSpy).toHaveBeenCalledWith(fakeSvg);
+    expect(URL.createObjectURL).toHaveBeenCalled();
+    expect(component['configureImageCanvas']).toHaveBeenCalledWith('jpeg', jasmine.any(FakeImage), mockUrl);
+  });
+
+  describe('configureImageCanvas:', () => {
     it('should stop execution if the canvas context is null', () => {
       const mockImage = new Image();
       const canvas = document.createElement('canvas');
@@ -1025,7 +1159,7 @@ describe('PoChartNewComponent', () => {
 
       spyOn<any>(component, 'setHeaderProperties');
 
-      component['createImage']('png', mockImage);
+      component['configureImageCanvas']('png', mockImage);
 
       mockImage.onload?.(new Event('load'));
 
@@ -1055,7 +1189,7 @@ describe('PoChartNewComponent', () => {
       spyOn(canvas, 'toDataURL').and.returnValue('data:image/png;base64,fakeImageData');
       spyOn(link, 'click');
 
-      component['createImage']('png', mockImage);
+      component['configureImageCanvas']('png', mockImage);
 
       setTimeout(() => {
         mockImage.onload?.(new Event('load'));
@@ -1064,7 +1198,7 @@ describe('PoChartNewComponent', () => {
       setTimeout(() => {
         try {
           expect(link.href).toBe('data:image/png;base64,fakeImageData');
-          expect(link.download).toBe('grafico_com_legenda.png');
+          expect(link.download).toBe('grafico-exportado.png');
           expect(link.click).toHaveBeenCalled();
           done();
         } catch (error) {
@@ -1109,7 +1243,7 @@ describe('PoChartNewComponent', () => {
     it('should return the numeric value when token ends with px', () => {
       spyOn<any>(component, 'getCSSVariable').and.returnValue('20px');
 
-      const result = (component as any).resolvePx('--border-width-sm');
+      const result = (component as any)['chartGridUtils'].resolvePx('--border-width-sm');
 
       expect(result).toBe(20);
     });
@@ -1117,7 +1251,7 @@ describe('PoChartNewComponent', () => {
     it('should convert rem to pixels correctly', () => {
       spyOn<any>(component, 'getCSSVariable').and.returnValue('2rem');
 
-      const result = (component as any).resolvePx('--font-size-grid');
+      const result = (component as any)['chartGridUtils'].resolvePx('--font-size-grid');
 
       expect(result).toBe(32);
     });
@@ -1127,7 +1261,7 @@ describe('PoChartNewComponent', () => {
       spyOn(document, 'querySelector').and.returnValue(null);
       spyOn(window, 'getComputedStyle').and.returnValue({ fontSize: '16px' } as CSSStyleDeclaration);
 
-      const result = (component as any).resolvePx('2em');
+      const result = (component as any)['chartGridUtils'].resolvePx('2em');
 
       expect(result).toBe(32);
     });
@@ -1140,7 +1274,7 @@ describe('PoChartNewComponent', () => {
       spyOn(document, 'querySelector').and.returnValue(mockParentElement);
       spyOn(window, 'getComputedStyle').and.returnValue({ fontSize: '18px' } as CSSStyleDeclaration);
 
-      const result = (component as any).resolvePx('--some-size', '.some-selector');
+      const result = (component as any)['chartGridUtils'].resolvePx('--some-size', '.some-selector');
 
       expect(result).toBe(27);
     });
@@ -1149,7 +1283,7 @@ describe('PoChartNewComponent', () => {
       spyOn<any>(component, 'getCSSVariable').and.returnValue('1.5em');
       spyOn(document, 'querySelector').and.returnValue(null);
 
-      const result = (component as any).resolvePx('--some-size');
+      const result = (component as any)['chartGridUtils'].resolvePx('--some-size');
 
       expect(result).toBe(24);
     });
@@ -1158,7 +1292,7 @@ describe('PoChartNewComponent', () => {
       spyOn<any>(component, 'getCSSVariable').and.returnValue('1.5em');
       spyOn(document, 'querySelector').and.returnValue(null);
 
-      const result = (component as any).resolvePx('--some-size', '.some-selector');
+      const result = (component as any)['chartGridUtils'].resolvePx('--some-size', '.some-selector');
       expect(result).toBe(24);
     });
   });
