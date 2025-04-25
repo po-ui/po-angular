@@ -65,11 +65,46 @@ export interface PoChartOptions {
    *
    * @description
    *
-   * Altera posição da legenda abaixo do gráfico.
+   * Define o alinhamento horizontal da legenda.
    *
    * @default `center`
    */
   legendPosition?: 'left' | 'center' | 'right';
+
+  /**
+   * @optional
+   *
+   * @description
+   *
+   * Define a posição vertical da legenda no gráfico.
+   * > Quando utilizada com o valor `top`, recomenda-se configurar também a propriedade `bottomDataZoom` caso o `dataZoom` esteja habilitado, para evitar sobreposição entre os elementos.
+   *
+   * @default `bottom`
+   */
+  legendVerticalPosition?: 'top' | 'bottom';
+
+  /**
+   * @optional
+   *
+   * @description
+   *
+   * Define a distância inferior do componente DataZoom.
+   *
+   * Esta propriedade aceita os seguintes valores:
+   *
+   * - `false` (padrão): não aplica ajustes.
+   *
+   * - `true`: aplica um valor automático com base no posicionamento da legenda:
+   *   - `8` pixels quando o DataZoom estiver habilitado e não houver legenda, ou quando a legenda estiver posicionada no topo.
+   *   - `32` pixels quando o DataZoom estiver habilitado e a legenda estiver posicionada na parte inferior.
+   *
+   * - `number`: aplica o valor numérico informado como distância inferior. Este valor tem prioridade sobre a configuração booleana.
+   *
+   * > Esta configuração é considerada apenas quando o DataZoom estiver habilitado (`dataZoom: true`).
+   *
+   * @default `false`
+   */
+  bottomDataZoom?: boolean | number;
 
   /**
    * @optional
