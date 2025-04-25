@@ -53,9 +53,19 @@ export interface PoChartAxisOptions {
    *
    * @description
    *
-   * Permite aumentar ou diminuir o espaço o espaço esquerdo do gráfico
+   * Permite aumentar ou diminuir o espaço inferior do gráfico.
    *
-   * @default `48`
+   */
+  paddingBottom?: number;
+
+  /**
+   * @optional
+   *
+   * @description
+   *
+   * Permite aumentar ou diminuir o espaço esquerdo do gráfico.
+   *
+   * @default `16`
    */
   paddingLeft?: number;
 
@@ -64,7 +74,7 @@ export interface PoChartAxisOptions {
    *
    * @description
    *
-   * Permite aumentar ou diminuir o espaço o espaço direito do gráfico
+   * Permite aumentar ou diminuir o espaço direito do gráfico.
    *
    * @default `32`
    */
