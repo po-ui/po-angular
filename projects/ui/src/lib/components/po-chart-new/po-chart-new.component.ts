@@ -5,6 +5,7 @@ import {
   ElementRef,
   HostListener,
   OnChanges,
+  OnInit,
   SimpleChanges,
   ViewChild
 } from '@angular/core';
@@ -23,6 +24,7 @@ import { PoChartNewBaseComponent } from './po-chart-new-base.component';
 import * as echarts from 'echarts/dist/echarts.esm';
 import { EChartsOption } from 'echarts/dist/echarts.esm';
 import { PoChartType } from '../po-chart/enums/po-chart-type.enum';
+import { PoChartGridUtils } from './po-chart-grid-utils';
 
 /**
  * @docsExtends PoChartBaseComponent
@@ -54,7 +56,7 @@ import { PoChartType } from '../po-chart/enums/po-chart-type.enum';
   templateUrl: './po-chart-new.component.html',
   standalone: false
 })
-export class PoChartNewComponent extends PoChartNewBaseComponent implements AfterViewInit, OnChanges {
+export class PoChartNewComponent extends PoChartNewBaseComponent implements OnInit, AfterViewInit, OnChanges {
   @ViewChild(PoTooltipDirective) poTooltip: PoTooltipDirective;
   @ViewChild('targetPopup', { read: ElementRef, static: false }) targetRef: ElementRef;
   @ViewChild('modalComponent') modal: PoModalComponent;
@@ -63,6 +65,8 @@ export class PoChartNewComponent extends PoChartNewBaseComponent implements Afte
 
   originalHeight: number;
   chartMarginTop = '0px';
+  isTypeBar = false;
+  boundaryGap = false;
   protected actionModal: PoModalAction = {
     action: this.downloadCsv.bind(this),
     label: this.literals.downloadCSV
@@ -73,6 +77,7 @@ export class PoChartNewComponent extends PoChartNewBaseComponent implements Afte
   protected legendData: Array<{ name: string; color: string }> = [];
   protected headerHeight: number;
   protected positionTooltip = 'bottom';
+  protected chartGridUtils: PoChartGridUtils;
   protected popupActions: Array<PoPopupAction> = [
     {
       label: this.literals.exportCSV,
@@ -95,7 +100,6 @@ export class PoChartNewComponent extends PoChartNewBaseComponent implements Afte
   ];
   private chartInstance!: echarts.ECharts;
   private currentRenderer: 'svg' | 'canvas';
-  private boundaryGap = false;
 
   constructor(
     private el: ElementRef,
@@ -114,6 +118,10 @@ export class PoChartNewComponent extends PoChartNewBaseComponent implements Afte
       this.chartInstance?.resize();
     }
   };
+
+  ngOnInit(): void {
+    this.chartGridUtils = new PoChartGridUtils(this);
+  }
 
   ngOnChanges(changes: SimpleChanges): void {
     if (changes['customActions']?.currentValue) {
@@ -148,6 +156,11 @@ export class PoChartNewComponent extends PoChartNewBaseComponent implements Afte
 
   ngAfterViewInit() {
     this.initECharts();
+  }
+
+  getCSSVariable(variable: string, selector?: string): string {
+    const element = selector ? document.querySelector(selector) : document.documentElement;
+    return element ? getComputedStyle(element).getPropertyValue(variable).trim() : '';
   }
 
   openModal() {
@@ -190,7 +203,7 @@ export class PoChartNewComponent extends PoChartNewBaseComponent implements Afte
       this.cdr.detectChanges();
     }
     this.currentRenderer = this.options?.rendererOption || 'canvas';
-    this.chartInstance = echarts.init(echartsDiv, null, { renderer: this.options?.rendererOption || 'canvas' });
+    this.chartInstance = echarts.init(echartsDiv, null, { renderer: this.currentRenderer });
     this.setChartsProperties();
     this.initEChartsEvents();
   }
@@ -230,120 +243,33 @@ export class PoChartNewComponent extends PoChartNewBaseComponent implements Afte
     });
   }
 
-  private getCSSVariable(variable: string, selector?: string): string {
-    const element = selector ? document.querySelector(selector) : document.documentElement;
-    return element ? getComputedStyle(element).getPropertyValue(variable).trim() : '';
-  }
-
   private setChartsProperties() {
     let option: EChartsOption = {};
-    option = this.setOptionLine();
+    option = this.setOptions();
     this.chartInstance.setOption(option);
   }
 
-  private setOptionLine() {
-    const tokenBorderWidthSm = this.resolvePx('--border-width-sm');
-    const tokenFontSizeGrid = this.resolvePx('--font-size-grid', '.po-chart');
+  private setOptions() {
     const newSeries = this.setSeries();
-    const paddingTop = this.getPaddingTopGrid();
 
     const options: EChartsOption = {
       backgroundColor: this.getCSSVariable('--background-color-grid', '.po-chart'),
-      grid: {
-        top: paddingTop,
-        left: this.options?.axis?.paddingLeft || 48,
-        right: this.options?.axis?.paddingRight || 32,
-        borderWidth: tokenBorderWidthSm
-      },
-      xAxis: {
-        type: 'category',
-        boundaryGap: this.boundaryGap,
-        data: this.categories,
-        axisLabel: {
-          fontFamily: this.getCSSVariable('--font-family-grid', '.po-chart'),
-          fontSize: tokenFontSizeGrid || 12,
-          fontWeight: Number(this.getCSSVariable('--font-weight-grid', '.po-chart')),
-          rotate: this.options?.axis?.rotateLegend
-        },
-        splitLine: {
-          show: this.options?.axis?.showXAxis || false,
-          lineStyle: {
-            type: 'solid',
-            width: tokenBorderWidthSm,
-            color: this.getCSSVariable('--color-grid', '.po-chart')
-          }
-        }
-      },
-      yAxis: {
-        type: 'value',
-        splitNumber: 5,
-        axisLabel: {
-          margin: 10,
-          fontFamily: this.getCSSVariable('--font-family-grid', '.po-chart'),
-          fontSize: tokenFontSizeGrid || 12,
-          fontWeight: Number(this.getCSSVariable('--font-weight-grid', '.po-chart'))
-        },
-        splitLine: {
-          show: this.options?.axis?.showYAxis ?? true,
-          lineStyle: {
-            color: this.getCSSVariable('--color-grid', '.po-chart')
-          }
-        }
-      },
       series: newSeries as any
     };
 
+    this.chartGridUtils.setGridOption(options);
+    this.chartGridUtils.setOptionsAxis(options);
     this.formatLabelOption(options);
-    this.setShowAxisDetails(options);
+    this.chartGridUtils.setShowAxisDetails(options);
 
-    if (this.options.dataZoom) {
-      this.setOptionDataZoom(options);
+    if (this.options?.dataZoom) {
+      this.chartGridUtils.setOptionDataZoom(options);
     }
 
     if (this.options?.legend !== false) {
       this.setOptionLegend(options);
     }
     return options;
-  }
-
-  private getPaddingTopGrid(): number {
-    if (this.options?.dataZoom) {
-      return 45;
-    } else if (this.dataLabel?.fixed && !this.options?.axis?.maxRange) {
-      return 20;
-    }
-    return 8;
-  }
-
-  private setOptionDataZoom(options: EChartsOption) {
-    options.dataZoom = [
-      {
-        show: true,
-        realtime: true,
-        bottom: 'calc(100%)',
-        height: 20,
-        right: this.options?.axis?.paddingRight || 32,
-        xAxisIndex: [0]
-      },
-      {
-        type: 'inside',
-        realtime: true,
-        xAxisIndex: [0]
-      }
-    ];
-    options.graphic = [
-      {
-        type: 'text',
-        left: 'center',
-        top: 30,
-        style: {
-          text: 'Use o scroll do mouse para dar zoom',
-          fontFamily: this.getCSSVariable('--font-family-grid', '.po-chart'),
-          fontSize: this.resolvePx('--font-size-sm'),
-          fill: this.getCSSVariable('--color-legend', '.po-chart')
-        }
-      }
-    ];
   }
 
   private formatLabelOption(options: EChartsOption) {
@@ -365,6 +291,7 @@ export class PoChartNewComponent extends PoChartNewBaseComponent implements Afte
       show: true,
       orient: 'horizontal',
       left: this.options?.legendPosition || 'center',
+      top: this.options?.legendVerticalPosition || 'bottom',
       bottom: 0,
       padding: [0, 16, 0, 16],
       itemWidth: 16,
@@ -378,85 +305,31 @@ export class PoChartNewComponent extends PoChartNewBaseComponent implements Afte
     };
   }
 
-  private setShowAxisDetails(options: EChartsOption) {
-    if (this.options?.axis?.showAxisDetails) {
-      options.tooltip = {
-        trigger: 'none',
-        axisPointer: {
-          type: 'cross',
-          label: {
-            backgroundColor: '#6a7985'
-          }
-        }
-      };
-    }
-  }
-
   private setSeries() {
     const hasArea = this.type === 'area' || this.series.some(serie => serie.type === 'area');
     const newSeries: Array<any> = [...this.colorService.getColors<PoChartSerie>(this.series, true, hasArea)];
-    const tokenBorderWidthMd = this.resolvePx('--border-width-md');
-    const widthTypeColumn = this.resolvePx('--spacing-sm', '.po-chart');
+    const tokenBorderWidthMd = this.chartGridUtils.resolvePx('--border-width-md');
+    const findType = this.series.find(serie => serie.type);
+    let typeDefault;
+    if (!findType && !this.type) {
+      typeDefault = Array.isArray(this.series[0].data) ? PoChartType.Column : PoChartType.Pie;
+    }
 
     return newSeries.map((serie, index) => {
       serie.name = serie.label && typeof serie.label === 'string' ? serie.label : '';
-
-      if (!serie.type || serie.type === 'area' || serie.type === 'column') {
-        !serie.type ? this.setTypeSerie(serie, this.type) : this.setTypeSerie(serie, serie.type);
-      }
+      !serie.type ? this.setTypeSerie(serie, this.type || typeDefault) : this.setTypeSerie(serie, serie.type);
 
       const colorVariable: string = serie.color?.includes('color')
         ? this.getCSSVariable(`--${serie.color.replace('po-', '')}`)
         : serie.color;
 
       this.setSerieEmphasis(serie, colorVariable, tokenBorderWidthMd);
-      this.setSerieTypeLine(serie, tokenBorderWidthMd, colorVariable);
-      this.setSerieTypeArea(serie, index);
-      this.setSerieTypeColumn(serie, widthTypeColumn, colorVariable);
+      this.chartGridUtils.setSerieTypeLine(serie, tokenBorderWidthMd, colorVariable);
+      this.chartGridUtils.setSerieTypeArea(serie, index);
+      this.chartGridUtils.setSerieTypeBarColumn(serie, colorVariable);
 
       return serie;
     });
-  }
-
-  private setSerieTypeLine(serie, tokenBorderWidthMd: number, color: string) {
-    if (serie.type === 'line') {
-      serie.symbolSize = 8;
-      serie.symbol = 'circle';
-      serie.itemStyle = {
-        color: !this.options?.fillPoints ? this.getCSSVariable('--color-neutral-light-00') : color,
-        borderColor: color,
-        borderWidth: tokenBorderWidthMd
-      };
-      serie.lineStyle = { color: color, width: tokenBorderWidthMd };
-    }
-  }
-
-  private setSerieTypeArea(serie, index: number) {
-    if (serie.isTypeArea) {
-      serie.areaStyle = {
-        color: serie.color?.includes('color')
-          ? this.getCSSVariable(`--${serie.color.replace('po-', '')}`)
-          : serie.overlayColor
-      };
-
-      if (index > 7 || serie.isNotTokenColor) {
-        serie.areaStyle.opacity = 0.5;
-      }
-    }
-  }
-
-  private setSerieTypeColumn(serie, width: number, color: string) {
-    if (serie.isTypeColumn) {
-      serie.barWidth = width;
-      serie.itemStyle = {
-        borderRadius: this.resolvePx('--border-radius-bar', '.po-chart'),
-        color: color
-      };
-      serie.emphasis = {
-        focus: 'series'
-      };
-      this.boundaryGap = true;
-    }
   }
 
   private setSerieEmphasis(serie, color: string, tokenBorder: number) {
@@ -491,6 +364,7 @@ export class PoChartNewComponent extends PoChartNewBaseComponent implements Afte
         serie.isTypeArea = true;
         break;
       case PoChartType.Bar:
+        this.isTypeBar = true;
         serie.type = 'bar';
         break;
       case PoChartType.Column:
@@ -511,8 +385,17 @@ export class PoChartNewComponent extends PoChartNewBaseComponent implements Afte
 
   private setTableProperties() {
     const option = this.chartInstance.getOption();
-    const categories = option.xAxis[0].data;
+    let categories: Array<any> = this.isTypeBar ? option.yAxis[0].data : option.xAxis[0].data;
+    if (!categories && Array.isArray(this.series[0]?.data)) {
+      categories = [];
+      this.series[0].data.forEach((data, index) => categories.push(String(index)));
+    }
     const series: any = option.series;
+
+    if (this.isTypeBar) {
+      this.setTablePropertiesTypeBar(categories, series);
+      return;
+    }
 
     this.itemsTable = series.map((serie: any) => {
       const rowData: any = { serie: serie.name };
@@ -523,11 +406,30 @@ export class PoChartNewComponent extends PoChartNewBaseComponent implements Afte
 
       return rowData;
     });
-    this.setTableColumns(option);
+    this.setTableColumns(option, categories);
   }
 
-  private setTableColumns(option) {
-    const categories = option.xAxis[0].data;
+  private setTablePropertiesTypeBar(categories: Array<any>, series: Array<any>) {
+    this.itemsTable = categories.map((category: string, index: number) => {
+      const rowData: any = { categoria: category };
+
+      series.forEach((serie: any) => {
+        rowData[serie.name] = serie.data[index];
+      });
+
+      return rowData;
+    });
+
+    this.columnsTable = [
+      { property: 'categoria', label: this.options?.firstColumnName || 'Categoria' },
+      ...series.map((serie: any) => ({
+        property: serie.name,
+        label: serie.name
+      }))
+    ];
+  }
+
+  private setTableColumns(option, categories) {
     this.columnsTable = [
       { property: 'serie', label: this.options?.firstColumnName || 'Série' },
       ...categories.map((category: string) => ({
@@ -539,7 +441,8 @@ export class PoChartNewComponent extends PoChartNewBaseComponent implements Afte
 
   private downloadCsv() {
     const headers = Object.keys(this.itemsTable[0]);
-    const firstColumnName = this.options?.firstColumnName || 'Série';
+    const columnNameDefault = this.isTypeBar ? 'Categoria' : 'Série';
+    const firstColumnName = this.options?.firstColumnName || columnNameDefault;
     const orderedHeaders = [firstColumnName, ...headers.filter(header => header !== 'serie')];
 
     const csvContent = [
@@ -566,17 +469,37 @@ export class PoChartNewComponent extends PoChartNewBaseComponent implements Afte
       return;
     }
 
-    const chartImage = new Image();
-    chartImage.src = this.chartInstance.getDataURL({
-      type: type,
-      pixelRatio: 2,
-      backgroundColor: 'white'
-    });
-
-    this.createImage(type, chartImage);
+    if (this.currentRenderer === 'svg') {
+      this.exportSvgAsImage(type);
+    } else {
+      const chartImage = new Image();
+      chartImage.src = this.chartInstance.getDataURL({
+        type: type,
+        pixelRatio: 2,
+        backgroundColor: 'white'
+      });
+      this.configureImageCanvas(type, chartImage);
+    }
   }
 
-  private createImage(type: 'png' | 'jpeg', chartImage: HTMLImageElement) {
+  private exportSvgAsImage(type: 'png' | 'jpeg') {
+    const svgEl = this.el.nativeElement.querySelector('#chart-id svg') as SVGSVGElement;
+
+    if (!svgEl) return;
+
+    const serializer = new XMLSerializer();
+    const svgString = serializer.serializeToString(svgEl);
+
+    const svgBlob = new Blob([svgString], { type: 'image/svg+xml;charset=utf-8' });
+    const url = URL.createObjectURL(svgBlob);
+
+    const image = new Image();
+    this.configureImageCanvas(type, image);
+
+    image.src = url;
+  }
+
+  private configureImageCanvas(type: 'png' | 'jpeg', chartImage: HTMLImageElement) {
     chartImage.onload = () => {
       const canvas = document.createElement('canvas');
       const ctx = canvas.getContext('2d');
@@ -601,7 +524,7 @@ export class PoChartNewComponent extends PoChartNewBaseComponent implements Afte
 
       const link = document.createElement('a');
       link.href = canvas.toDataURL(`image/${type}`);
-      link.download = `grafico_com_legenda.${type}`;
+      link.download = `grafico-exportado.${type}`;
       document.body.appendChild(link);
       link.click();
       document.body.removeChild(link);
@@ -619,19 +542,6 @@ export class PoChartNewComponent extends PoChartNewBaseComponent implements Afte
     ctx.font = 'bold 16px Arial';
     ctx.textAlign = 'left';
     ctx.fillText(title, 20, headerHeight / 2 + 5);
-  }
-
-  private resolvePx(size: string, selector?: string): number {
-    const token = this.getCSSVariable(size, selector);
-    if (token.endsWith('px')) {
-      return parseFloat(token);
-    } else if (token.endsWith('rem')) {
-      return parseFloat(token) * 16;
-    } else if (token.endsWith('em')) {
-      const parentElement = selector ? document.querySelector(selector) : document.documentElement;
-      const parentFontSize = parentElement ? parseFloat(getComputedStyle(parentElement).fontSize) : 16;
-      return parseFloat(token) * parentFontSize;
-    }
   }
 
   private setPopupActions(): void {
