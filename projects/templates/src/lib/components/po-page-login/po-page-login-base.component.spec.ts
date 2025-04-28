@@ -1,14 +1,20 @@
-import { Directive } from '@angular/core';
 import { TestBed, waitForAsync } from '@angular/core/testing';
 import { throwError } from 'rxjs';
 
 import { expectPropertiesValues, getObservable } from '../../util-test/util-expect.spec';
 import * as UtilFunctions from './../../utils/util';
 
-import { PoPageLoginBaseComponent, poPageLoginLiteralsDefault } from './po-page-login-base.component';
+import {
+  PoLanguage,
+  poLanguageDefault,
+  PoLanguageService,
+  poLocaleDefault,
+  PoThemeA11yEnum,
+  PoThemeService
+} from '@po-ui/ng-components';
 import { PoPageLoginCustomField } from './interfaces/po-page-login-custom-field.interface';
+import { PoPageLoginBaseComponent, poPageLoginLiteralsDefault } from './po-page-login-base.component';
 import { PoPageLoginService } from './po-page-login.service';
-import { PoLanguage, poLanguageDefault, PoLanguageService, poLocaleDefault } from '@po-ui/ng-components';
 
 const routerStub = {
   navigate: jasmine.createSpy('navigate')
@@ -24,11 +30,14 @@ describe('PoPageLoginBaseComponent: ', () => {
   let component: PoPageLoginBaseComponent;
   let servicePageLogin: PoPageLoginService;
   let languageService: PoLanguageService;
+  let poThemeServiceMock: jasmine.SpyObj<PoThemeService>;
 
   beforeEach(waitForAsync(() => {
+    poThemeServiceMock = jasmine.createSpyObj('PoThemeService', ['getA11yLevel', 'getA11yDefaultSize']);
+
     TestBed.configureTestingModule({
       declarations: [],
-      providers: [PoPageLoginService, PoLanguageService]
+      providers: [PoPageLoginService, PoLanguageService, { provide: PoThemeService, useValue: poThemeServiceMock }]
     }).compileComponents();
   }));
 
@@ -40,7 +49,7 @@ describe('PoPageLoginBaseComponent: ', () => {
     servicePageLogin = new PoPageLoginService(undefined);
     languageService = new PoLanguageService();
 
-    component = new PoPageLoginComponent(servicePageLogin, <any>routerStub, languageService);
+    component = new PoPageLoginComponent(poThemeServiceMock, servicePageLogin, <any>routerStub, languageService);
   });
 
   it('should be created', () => {
@@ -73,6 +82,50 @@ describe('PoPageLoginBaseComponent: ', () => {
   });
 
   describe('Properties: ', () => {
+    describe('p-components-size', () => {
+      it('should set property with valid values for accessibility level is AA', () => {
+        poThemeServiceMock.getA11yLevel.and.returnValue(PoThemeA11yEnum.AA);
+
+        component.componentsSize = 'small';
+        expect(component.componentsSize).toBe('small');
+
+        component.componentsSize = 'medium';
+        expect(component.componentsSize).toBe('medium');
+      });
+
+      it('should set property with valid values for accessibility level is AAA', () => {
+        poThemeServiceMock.getA11yLevel.and.returnValue(PoThemeA11yEnum.AAA);
+
+        component.componentsSize = 'small';
+        expect(component.componentsSize).toBe('medium');
+
+        component.componentsSize = 'medium';
+        expect(component.componentsSize).toBe('medium');
+      });
+
+      it('should return small when accessibility is AA and getA11yDefaultSize is small', () => {
+        poThemeServiceMock.getA11yLevel.and.returnValue(PoThemeA11yEnum.AA);
+        poThemeServiceMock.getA11yDefaultSize.and.returnValue('small');
+
+        component['_componentsSize'] = undefined;
+        expect(component.componentsSize).toBe('small');
+      });
+
+      it('should return medium when accessibility is AA and getA11yDefaultSize is medium', () => {
+        poThemeServiceMock.getA11yLevel.and.returnValue(PoThemeA11yEnum.AA);
+        poThemeServiceMock.getA11yDefaultSize.and.returnValue('medium');
+
+        component['_componentsSize'] = undefined;
+        expect(component.componentsSize).toBe('medium');
+      });
+
+      it('should return medium when accessibility is AAA, regardless of getA11yDefaultSize', () => {
+        poThemeServiceMock.getA11yLevel.and.returnValue(PoThemeA11yEnum.AAA);
+        component['_componentsSize'] = undefined;
+        expect(component.componentsSize).toBe('medium');
+      });
+    });
+
     it('p-custom-field: should update with string values', () => {
       const validValuesCustomField = ['customField', 'domain'];
 

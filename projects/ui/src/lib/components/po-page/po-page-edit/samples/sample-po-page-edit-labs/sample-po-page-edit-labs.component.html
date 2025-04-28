@@ -1,5 +1,6 @@
 <po-page-edit
   [p-breadcrumb]="breadcrumb"
+  [p-components-size]="componentsSize"
   [p-disable-submit]="properties.includes('disableSubmit')"
   [p-literals]="customLiterals"
   [p-title]="title"
@@ -17,16 +18,28 @@
   <form>
     <div class="po-row">
       <po-input class="po-md-6" name="title" [(ngModel)]="title" p-label="Title"> </po-input>
-      <po-input class="po-md-12" name="subtitle" [(ngModel)]="subtitle" p-label="Subtitle"> </po-input>
+      <po-input class="po-md-6" name="subtitle" [(ngModel)]="subtitle" p-label="Subtitle"> </po-input>
 
       <po-checkbox-group
-        class="po-md-6"
+        class="po-md-12"
         name="properties"
         [(ngModel)]="properties"
+        p-columns="4"
         p-label="Properties"
         [p-options]="propertiesOptions"
       >
       </po-checkbox-group>
+
+      <po-radio-group
+        class="po-md-12"
+        name="size"
+        [(ngModel)]="componentsSize"
+        p-columns="4"
+        p-label="Components size"
+        p-help="Para aplicar o tamanho small, configure o nível de acessibilidade para AA, ajustável no navbar ou serviço de tema (https://po-ui.io/documentation/po-theme)."
+        [p-options]="componentsSizeOptions"
+      >
+      </po-radio-group>
     </div>
 
     <hr />
@@ -34,7 +47,7 @@
     <form #formBreadcrumbFavorite="ngForm">
       <div class="po-row">
         <po-input
-          class="po-lg-6"
+          class="po-md-6"
           name="breadcrumbFavorite"
           [(ngModel)]="breadcrumb.favorite"
           p-clean
@@ -70,7 +83,7 @@
 
       <div class="po-row">
         <po-button
-          class="po-md-6 po-lg-4"
+          class="po-md-6 po-lg-3"
           p-label="Add breadcrumb item"
           [p-disabled]="formBreadcrumbItems.invalid"
           (p-click)="addBreadcrumbItem()"
@@ -106,7 +119,7 @@
 
       <div class="po-row">
         <po-button
-          class="po-md-6 po-lg-4"
+          class="po-md-6 po-lg-3"
           p-label="Add breadcrumb params"
           [p-disabled]="formBreadcrumbParams.invalid"
           (p-click)="addBreadcrumbParam()"
@@ -117,7 +130,7 @@
 
     <div class="po-row">
       <po-input
-        class="po-lg-12"
+        class="po-md-12 po-lg-6"
         name="literals"
         [(ngModel)]="literals"
         p-help='Ex.: {"cancel": "Voltar", "save": "Confirmar", "saveNew": "Confirmar e criar um novo"}'
@@ -128,7 +141,7 @@
     </div>
 
     <div class="po-row">
-      <po-button class="po-md-3" p-label="Sample Restore" (p-click)="restore()"> </po-button>
+      <po-button class="po-lg-3 po-md-6" p-label="Sample Restore" (p-click)="restore()"> </po-button>
     </div>
   </form>
 </po-page-edit>

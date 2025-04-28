@@ -1,25 +1,28 @@
 import { ComponentFixture, TestBed } from '@angular/core/testing';
 
-import { configureTestSuite, expectPropertiesValues, expectSettersMethod } from './../../../util-test/util-expect.spec';
+import { expectPropertiesValues, expectSettersMethod } from './../../../util-test/util-expect.spec';
 
-import { PoSwitchComponent } from './po-switch.component';
-import { PoSwitchLabelPosition } from './po-switch-label-position.enum';
+import { PoThemeA11yEnum, PoThemeService } from '../../../services';
 import { PoFieldContainerBottomComponent } from './../po-field-container/po-field-container-bottom/po-field-container-bottom.component';
 import { PoFieldContainerComponent } from './../po-field-container/po-field-container.component';
+import { PoSwitchLabelPosition } from './po-switch-label-position.enum';
+import { PoSwitchComponent } from './po-switch.component';
 
 describe('PoSwitchComponent', () => {
   let component: PoSwitchComponent;
   let fixture: ComponentFixture<PoSwitchComponent>;
   let nativeElement: any;
   let labelField: any;
-
-  configureTestSuite(() => {
-    TestBed.configureTestingModule({
-      declarations: [PoSwitchComponent, PoFieldContainerComponent, PoFieldContainerBottomComponent]
-    });
-  });
+  let poThemeServiceMock: jasmine.SpyObj<PoThemeService>;
 
   beforeEach(() => {
+    poThemeServiceMock = jasmine.createSpyObj('PoThemeService', ['getA11yLevel', 'getA11yDefaultSize']);
+
+    TestBed.configureTestingModule({
+      declarations: [PoSwitchComponent, PoFieldContainerComponent, PoFieldContainerBottomComponent],
+      providers: [{ provide: PoThemeService, useValue: poThemeServiceMock }]
+    });
+
     fixture = TestBed.createComponent(PoSwitchComponent);
     component = fixture.componentInstance;
     labelField = document.getElementsByClassName('po-label');
@@ -54,6 +57,50 @@ describe('PoSwitchComponent', () => {
         'labelPosition',
         PoSwitchLabelPosition.Left
       );
+    });
+
+    describe('p-size', () => {
+      it('should set property with valid values for accessibility level is AA', () => {
+        poThemeServiceMock.getA11yLevel.and.returnValue(PoThemeA11yEnum.AA);
+
+        component.size = 'small';
+        expect(component.size).toBe('small');
+
+        component.size = 'medium';
+        expect(component.size).toBe('medium');
+      });
+
+      it('should set property with valid values for accessibility level is AAA', () => {
+        poThemeServiceMock.getA11yLevel.and.returnValue(PoThemeA11yEnum.AAA);
+
+        component.size = 'small';
+        expect(component.size).toBe('medium');
+
+        component.size = 'medium';
+        expect(component.size).toBe('medium');
+      });
+
+      it('should return small when accessibility is AA and getA11yDefaultSize is small', () => {
+        poThemeServiceMock.getA11yLevel.and.returnValue(PoThemeA11yEnum.AA);
+        poThemeServiceMock.getA11yDefaultSize.and.returnValue('small');
+
+        component['_size'] = undefined;
+        expect(component.size).toBe('small');
+      });
+
+      it('should return medium when accessibility is AA and getA11yDefaultSize is medium', () => {
+        poThemeServiceMock.getA11yLevel.and.returnValue(PoThemeA11yEnum.AA);
+        poThemeServiceMock.getA11yDefaultSize.and.returnValue('medium');
+
+        component['_size'] = undefined;
+        expect(component.size).toBe('medium');
+      });
+
+      it('should return medium when accessibility is AAA, regardless of getA11yDefaultSize', () => {
+        poThemeServiceMock.getA11yLevel.and.returnValue(PoThemeA11yEnum.AAA);
+        component['_size'] = undefined;
+        expect(component.size).toBe('medium');
+      });
     });
   });
 
@@ -130,24 +177,86 @@ describe('PoSwitchComponent', () => {
         expect(component.eventClick).not.toHaveBeenCalled();
         expect(fakeEvent.preventDefault).not.toHaveBeenCalled();
       });
+
+      it('should emit event when field is focused', () => {
+        const fakeEvent = new KeyboardEvent('keydown', { key: 'Enter' });
+        component.switchContainer = {
+          nativeElement: {
+            focus: () => {}
+          }
+        };
+
+        spyOn(component.keydown, 'emit');
+        spyOnProperty(document, 'activeElement', 'get').and.returnValue(component.switchContainer.nativeElement);
+
+        component.onKeyDown(fakeEvent);
+
+        expect(component.keydown.emit).toHaveBeenCalledWith(fakeEvent);
+      });
+
+      it('should not emit event when field is not focused', () => {
+        const fakeEvent = new KeyboardEvent('keydown', { key: 'Enter' });
+        component.switchContainer = {
+          nativeElement: {
+            focus: () => {}
+          }
+        };
+
+        spyOn(component.keydown, 'emit');
+        spyOnProperty(document, 'activeElement', 'get').and.returnValue(document.createElement('div'));
+        component.onKeyDown(fakeEvent);
+
+        expect(component.keydown.emit).not.toHaveBeenCalled();
+      });
     });
 
-    it('onBlur: should call `onTouched` on blur', () => {
-      component['onTouched'] = value => {};
+    describe('onBlur', () => {
+      let setupTest;
 
-      spyOn(component, <any>'onTouched');
+      beforeEach(() => {
+        setupTest = (tooltip: string, displayHelp: boolean, additionalHelpEvent: any) => {
+          component.additionalHelpTooltip = tooltip;
+          component.displayAdditionalHelp = displayHelp;
+          component.additionalHelp = additionalHelpEvent;
+          spyOn(component, 'showAdditionalHelp');
+        };
+      });
 
-      component.onBlur();
+      it('should call `onTouched` on blur', () => {
+        component['onTouched'] = value => {};
 
-      expect(component['onTouched']).toHaveBeenCalledWith();
-    });
+        spyOn(component, <any>'onTouched');
 
-    it('onBlur: shouldn´t throw error if onTouched is falsy', () => {
-      component['onTouched'] = null;
+        component.onBlur();
 
-      const fnError = () => component.onBlur();
+        expect(component['onTouched']).toHaveBeenCalledWith();
+      });
 
-      expect(fnError).not.toThrow();
+      it('shouldn´t throw error if onTouched is falsy', () => {
+        component['onTouched'] = null;
+
+        const fnError = () => component.onBlur();
+
+        expect(fnError).not.toThrow();
+      });
+
+      it('should call showAdditionalHelp when the tooltip is displayed', () => {
+        setupTest('Mensagem de apoio adicional.', true, { observed: false });
+        component.onBlur();
+        expect(component.showAdditionalHelp).toHaveBeenCalled();
+      });
+
+      it('should not call showAdditionalHelp when tooltip is not displayed', () => {
+        setupTest('Mensagem de apoio adicional.', false, { observed: false });
+        component.onBlur();
+        expect(component.showAdditionalHelp).not.toHaveBeenCalled();
+      });
+
+      it('should not call showAdditionalHelp when additionalHelp event is true', () => {
+        setupTest('Mensagem de apoio adicional.', true, { observed: true });
+        component.onBlur();
+        expect(component.showAdditionalHelp).not.toHaveBeenCalled();
+      });
     });
 
     it('changeValue: shouldn`t call `change.emit` and `updateModel` if switch value is not changed', () => {

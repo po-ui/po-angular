@@ -1,9 +1,11 @@
 import { Directive, EventEmitter, Input, Output } from '@angular/core';
-import { AbstractControl, ControlValueAccessor, Validator, Validators } from '@angular/forms';
+import { AbstractControl, ControlValueAccessor, Validator } from '@angular/forms';
 
 import { requiredFailed } from '../validators';
-import { convertToBoolean, convertToInt, uuid } from './../../../utils/util';
+import { convertToBoolean, convertToInt, getDefaultSize, uuid, validateSize } from './../../../utils/util';
 
+import { PoFieldSize } from '../../../enums/po-field-size.enum';
+import { PoThemeService } from '../../../services';
 import { PoCheckboxGroupOptionView } from './interfaces/po-checkbox-group-option-view.interface';
 import { PoCheckboxGroupOption } from './interfaces/po-checkbox-group-option.interface';
 
@@ -41,6 +43,35 @@ const poCheckboxGroupColumnsTotalLength: number = 12;
  */
 @Directive()
 export class PoCheckboxGroupBaseComponent implements ControlValueAccessor, Validator {
+  // Propriedade interna que define se o ícone de ajuda adicional terá cursor clicável (evento) ou padrão (tooltip).
+  @Input() additionalHelpEventTrigger: string | undefined;
+
+  /**
+   * @optional
+   *
+   * @description
+   * Exibe um ícone de ajuda adicional ao `p-help`, com o texto desta propriedade no tooltip.
+   * Se o evento `p-additional-help` estiver definido, o tooltip não será exibido.
+   * **Como boa prática, indica-se utilizar um texto com até 140 caracteres.**
+   * > Requer um recuo mínimo de 8px se o componente estiver próximo à lateral da tela.
+   */
+  @Input('p-additional-help-tooltip') additionalHelpTooltip?: string;
+
+  /**
+   * @optional
+   *
+   * @description
+   *
+   * Define que o tooltip (`p-additional-help-tooltip` e/ou `p-error-limit`) será incluído no body da página e não
+   * dentro do componente. Essa opção pode ser necessária em cenários com containers que possuem scroll ou overflow
+   * escondido, garantindo o posicionamento correto do tooltip próximo ao elemento.
+   *
+   * > Quando utilizado com `p-additional-help-tooltip`, leitores de tela como o NVDA podem não ler o conteúdo do tooltip.
+   *
+   * @default `false`
+   */
+  @Input({ alias: 'p-append-in-body', transform: convertToBoolean }) appendBox?: boolean = false;
+
   /**
    * @optional
    *
@@ -95,6 +126,20 @@ export class PoCheckboxGroupBaseComponent implements ControlValueAccessor, Valid
    *
    * @description
    *
+   * Limita a exibição da mensagem de erro a duas linhas e exibe um tooltip com o texto completo.
+   *
+   * > Caso essa propriedade seja definida como `true`, a mensagem de erro será limitada a duas linhas
+   * e um tooltip será exibido ao passar o mouse sobre a mensagem para mostrar o conteúdo completo.
+   *
+   * @default `false`
+   */
+  @Input('p-error-limit') errorLimit: boolean = false;
+
+  /**
+   * @optional
+   *
+   * @description
+   *
    * Função para atualizar o `ngModel` do componente, necessário quando não for utilizado dentro da tag form.
    *
    * Na versão 12.2.0 do Angular a verificação `strictTemplates` vem true como default. Portanto, para utilizar
@@ -111,14 +156,33 @@ export class PoCheckboxGroupBaseComponent implements ControlValueAccessor, Valid
    * @optional
    *
    * @description
+   * Evento disparado ao clicar no ícone de ajuda adicional.
+   * Este evento ativa automaticamente a exibição do ícone de ajuda adicional ao `p-help`.
+   */
+  @Output('p-additional-help') additionalHelp = new EventEmitter<any>();
+
+  /**
+   * @optional
+   *
+   * @description
    *
    * Evento disparado ao alterar valor do campo
    */
   @Output('p-change') change: EventEmitter<any> = new EventEmitter<any>();
 
+  /**
+   * @optional
+   *
+   * @description
+   * Evento disparado quando uma tecla é pressionada enquanto o foco está no componente.
+   * Retorna um objeto `KeyboardEvent` com informações sobre a tecla.
+   */
+  @Output('p-keydown') keydown: EventEmitter<KeyboardEvent> = new EventEmitter<KeyboardEvent>();
+
   checkboxGroupOptionsView: Array<PoCheckboxGroupOptionView>;
   checkedOptions: any = {};
   checkedOptionsList: any = [];
+  displayAdditionalHelp: boolean = false;
   mdColumns: number = poCheckboxGroupColumnsDefaultLength;
   propagateChange: any;
   validatorChange: any;
@@ -128,6 +192,7 @@ export class PoCheckboxGroupBaseComponent implements ControlValueAccessor, Valid
   private _indeterminate?: boolean = false;
   private _options?: Array<PoCheckboxGroupOption>;
   private _required?: boolean = false;
+  private _size?: string = undefined;
 
   /**
    * @optional
@@ -238,6 +303,31 @@ export class PoCheckboxGroupBaseComponent implements ControlValueAccessor, Valid
    * - Não possuir `p-help` e/ou `p-label`.
    */
   @Input('p-show-required') showRequired: boolean = false;
+
+  /**
+   * @optional
+   *
+   * @description
+   *
+   * Define o tamanho dos checkboxes do componente:
+   * - `small`: 16x16 (disponível apenas para acessibilidade AA).
+   * - `medium`: 24x24.
+   *
+   * > Caso a acessibilidade AA não esteja configurada, o tamanho `medium` será mantido.
+   * Para mais detalhes, consulte a documentação do [po-theme](https://po-ui.io/documentation/po-theme).
+   *
+   * @default `medium`
+   *
+   */
+  @Input('p-size') set size(value: string) {
+    this._size = validateSize(value, this.poThemeService, PoFieldSize);
+  }
+
+  get size(): string {
+    return this._size ?? getDefaultSize(this.poThemeService, PoFieldSize);
+  }
+
+  constructor(protected poThemeService: PoThemeService) {}
 
   changeValue() {
     const value = this.checkIndeterminate();

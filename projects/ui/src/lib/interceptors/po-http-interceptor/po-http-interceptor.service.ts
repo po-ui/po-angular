@@ -15,7 +15,9 @@ import { PoHttpInterceptorBaseService } from './po-http-interceptor-base.service
  *  <file name='sample-po-http-interceptor-labs.component.html'> </file>
  * </example>
  */
-@Injectable()
+@Injectable({
+  providedIn: 'root'
+})
 export class PoHttpInterceptorService extends PoHttpInterceptorBaseService {
   constructor(
     notification: PoNotificationService,

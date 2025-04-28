@@ -4,9 +4,11 @@ import { PoCheckboxGroupOption, PoRadioGroupOption } from '@po-ui/ng-components'
 
 @Component({
   selector: 'sample-po-checkbox-group-labs',
-  templateUrl: './sample-po-checkbox-group-labs.component.html'
+  templateUrl: './sample-po-checkbox-group-labs.component.html',
+  standalone: false
 })
 export class SamplePoCheckboxGroupLabsComponent implements OnInit {
+  additionalHelpTooltip: string;
   checkboxGroup: object;
   columns: number;
   disabled: boolean;
@@ -18,6 +20,7 @@ export class SamplePoCheckboxGroupLabsComponent implements OnInit {
   options: Array<PoCheckboxGroupOption>;
   properties: Array<string>;
   fieldErrorMessage: string;
+  size: string;
 
   public readonly columnOptions: Array<PoRadioGroupOption> = [
     { label: '1 column', value: 1 },
@@ -31,7 +34,13 @@ export class SamplePoCheckboxGroupLabsComponent implements OnInit {
     { value: 'indeterminate', label: 'Indeterminate' },
     { value: 'optional', label: 'Optional' },
     { value: 'required', label: 'Required' },
-    { value: 'showRequired', label: 'Show Required' }
+    { value: 'showRequired', label: 'Show Required' },
+    { value: 'errorLimit', label: 'Limit Error Message' }
+  ];
+
+  public readonly sizeOptions: Array<PoRadioGroupOption> = [
+    { label: 'small', value: 'small' },
+    { label: 'medium', value: 'medium' }
   ];
 
   ngOnInit() {
@@ -48,6 +57,7 @@ export class SamplePoCheckboxGroupLabsComponent implements OnInit {
   }
 
   restore() {
+    this.additionalHelpTooltip = '';
     this.checkboxGroup = undefined;
     this.columns = undefined;
     this.disabled = false;
@@ -58,6 +68,7 @@ export class SamplePoCheckboxGroupLabsComponent implements OnInit {
     this.options = [];
     this.properties = [];
     this.fieldErrorMessage = '';
+    this.size = 'medium';
 
     this.clearOption();
   }

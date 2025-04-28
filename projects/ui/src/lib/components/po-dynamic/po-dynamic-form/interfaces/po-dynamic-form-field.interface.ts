@@ -12,17 +12,19 @@ import {
   PoMultiselectFilterMode,
   PoMultiselectLiterals,
   PoSwitchLabelPosition,
+  PoUploadFile,
   PoUploadFileRestrictions,
   PoUploadLiterals
-} from '../../po-field';
-import { PoLookupAdvancedFilter } from '../../po-field/po-lookup/interfaces/po-lookup-advanced-filter.interface';
-import { PoLookupColumn } from '../../po-field/po-lookup/interfaces/po-lookup-column.interface';
-import { PoMultiselectOption } from '../../po-field/po-multiselect/po-multiselect-option.interface';
-import { PoSelectOption } from '../../po-field/po-select/po-select-option.interface';
-import { ForceBooleanComponentEnum, ForceOptionComponentEnum } from '../po-dynamic-field-force-component.enum';
+} from '../../../po-field';
+import { PoLookupAdvancedFilter } from '../../../po-field/po-lookup/interfaces/po-lookup-advanced-filter.interface';
+import { PoLookupColumn } from '../../../po-field/po-lookup/interfaces/po-lookup-column.interface';
+import { PoMultiselectOption } from '../../../po-field/po-multiselect/interfaces/po-multiselect-option.interface';
+import { PoSelectOption } from '../../../po-field/po-select/po-select-option.interface';
+import { PoProgressAction } from '../../../po-progress';
+import { ForceBooleanComponentEnum, ForceOptionComponentEnum } from '../../enums/po-dynamic-field-force-component.enum';
 
 import { Observable } from 'rxjs';
-import { PoDynamicField } from '../po-dynamic-field.interface';
+import { PoDynamicField } from '../../po-dynamic-field.interface';
 
 /**
  * @usedBy PoDynamicFormComponent, PoAdvancedFilterComponent, PoPageDynamicSearchComponent
@@ -35,6 +37,29 @@ import { PoDynamicField } from '../po-dynamic-field.interface';
  */
 export interface PoDynamicFormField extends PoDynamicField {
   /**
+   * Evento disparado ao clicar no ícone de ajuda adicional.
+   * Este evento ativa automaticamente a exibição do ícone de ajuda adicional ao `p-help`.
+   */
+  additionalHelp?: Function;
+
+  /**
+   * Exibe um ícone de ajuda adicional ao `p-help`, com o texto desta propriedade no tooltip.
+   * Se o evento `p-additional-help` estiver definido, o tooltip não será exibido.
+   * **Como boa prática, indica-se utilizar um texto com até 140 caracteres.**
+   */
+  additionalHelpTooltip?: string;
+
+  /**
+   * Define que o `listbox` e/ou tooltip (`p-additional-help-tooltip` e/ou `p-error-limit`) serão incluídos no body da
+   * página e não dentro do componente. Essa opção é necessária para cenários com containers que possuem scroll ou
+   * overflow escondido, garantindo o posicionamento correto de ambos próximo ao elemento.
+   *
+   * > O uso dessa propriedade pode acarretar na perda sequencial da tabulação da página.
+   * Quando utilizado com `p-additional-help-tooltip`, leitores de tela como o NVDA podem não ler o conteúdo do tooltip.
+   */
+  appendBox?: boolean;
+
+  /**
    * Define as colunas para utilização da busca avançada. Usada somente em conjunto com a propriedade `searchService`,
    * essa propriedade deve receber um array de objetos que implementam a interface [`PoLookupColumn`](/documentation/po-lookup).
    *
@@ -44,6 +69,12 @@ export interface PoDynamicFormField extends PoDynamicField {
    * **Componentes compatíveis:** `po-radio-group`, `po-lookup`, `po-checkbox-group`.
    */
   columns?: Array<PoLookupColumn> | number;
+
+  /**
+   * Função executada quando uma tecla é pressionada enquanto o foco está no componente.
+   * Retorna um objeto `KeyboardEvent` com informações sobre a tecla.
+   */
+  keydown?: Function;
 
   /** Define a obrigatoriedade do campo. */
   required?: boolean;
@@ -278,6 +309,23 @@ export interface PoDynamicFormField extends PoDynamicField {
    *  `po-select`, `po-checkbox-group`, `po-radio-group`, `po-multiselect`, `po-combo`, `po-lookup`, `po-textarea`.
    */
   errorMessage?: string;
+
+  /**
+   * @optional
+   *
+   * @description
+   *
+   * Limita a exibição da mensagem de erro a duas linhas e exibe um tooltip com o texto completo.
+   *
+   * > Caso essa propriedade seja definida como `true`, a mensagem de erro será limitada a duas linhas
+   * e um tooltip será exibido ao passar o mouse sobre a mensagem para mostrar o conteúdo completo.
+   *
+   * **Componentes compatíveis:** `po-datepicker`, `po-input`, `po-number`, `po-decimal`, `po-password`, `po-datepicker-range`,
+   *  `po-select`, `po-checkbox-group`, `po-radio-group`, `po-multiselect`, `po-combo`, `po-lookup`, `po-textarea`.
+   *
+   * @default `false`
+   */
+  errorLimit?: boolean;
 
   /**
    * Função executada para realizar a validação assíncrona personalizada.
@@ -692,6 +740,46 @@ export interface PoDynamicFormField extends PoDynamicField {
   showRequired?: boolean;
 
   /**
+   * Define uma ação personalizada no componente `po-upload`, adicionando um botão no canto inferior direito
+   * de cada barra de progresso associada aos arquivos enviados ou em envio.
+   *
+   * **Componente compatível**: `po-upload`,
+   *
+   * **Exemplo de configuração**:
+   * ```typescript
+   * customAction: {
+   *   label: 'Baixar',
+   *   icon: 'an-download',
+   *   type: 'default',
+   *   visible: true,
+   *   disabled: false
+   * };
+   * ```
+   */
+  customAction?: PoProgressAction;
+
+  /**
+   * Evento emitido ao clicar na ação personalizada configurada no `p-custom-action`.
+   *
+   * **Componente compatível**: `po-upload`,
+   *
+   * Este evento é emitido quando o botão de ação personalizada é clicado na barra de progresso associada a um arquivo.
+   * O arquivo relacionado à barra de progresso será passado como parâmetro do evento, permitindo executar operações específicas para aquele arquivo.
+   *
+   * **Parâmetro do evento**:
+   * - `file`: O arquivo associado ao botão de ação. Este objeto é da classe `PoUploadFile` e contém informações sobre o arquivo, como nome, status e progresso.
+   *
+   * **Exemplo de uso**:
+   * ```typescript
+   * customActionClick: (file: PoUploadFile) => {
+   *   console.log('Ação personalizada clicada para o arquivo:', file.name);
+   *   // Lógica de download ou outra ação relacionada ao arquivo
+   * }
+   * ```
+   */
+  customActionClick?: (file: PoUploadFile) => void;
+
+  /**
    * Evento será disparado quando ocorrer algum erro no envio do arquivo.
    * > Por parâmetro será passado o objeto do retorno que é do tipo `HttpErrorResponse`.
    *
@@ -720,4 +808,27 @@ export interface PoDynamicFormField extends PoDynamicField {
    * **Componente compatível**: `po-upload`
    */
   onUpload?: Function;
+
+  /**
+   *
+   * Define que o filtro no primeiro clique será removido.
+   *
+   * > Caso o combo tenha um valor padrão de inicialização, o primeiro clique
+   * no componente retornará todos os itens da lista e não apenas o item inicialiazado.
+   *
+   * **Componente compatível**: `po-combo`
+   */
+  removeInitialFilter?: boolean;
+
+  /**
+   * Define o tamanho dos componentes de formulário no template conforme suas respectivas documentações:
+   * - `small`: aplica a medida small de cada componente (disponível apenas para acessibilidade AA).
+   * - `medium`: aplica a medida medium de cada componente.
+   * - `large`: aplica a medida large de cada componente (disponível para `po-checkbox` e `po-radio-group`).
+   * > Caso a acessibilidade AA não esteja configurada, o tamanho `medium` será mantido.
+   * Para mais detalhes, consulte a documentação do [po-theme](https://po-ui.io/documentation/po-theme).
+   *
+   * @default `medium`
+   */
+  size?: string;
 }

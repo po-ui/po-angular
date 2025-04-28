@@ -2,7 +2,9 @@ import { Injectable } from '@angular/core';
 
 import { PoColorPaletteEnum } from '../../enums/po-color-palette.enum';
 
-@Injectable()
+@Injectable({
+  providedIn: 'root'
+})
 export class PoColorPaletteService {
   getColor(value: { color?: string; type?: string }): string {
     return (<any>Object).values(PoColorPaletteEnum).includes(value.color)

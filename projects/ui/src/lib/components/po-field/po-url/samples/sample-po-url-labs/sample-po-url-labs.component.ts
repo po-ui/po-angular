@@ -1,12 +1,14 @@
 import { Component, OnInit } from '@angular/core';
 
-import { PoCheckboxGroupOption } from '@po-ui/ng-components';
+import { PoCheckboxGroupOption, PoRadioGroupOption } from '@po-ui/ng-components';
 
 @Component({
   selector: 'sample-po-url-labs',
-  templateUrl: './sample-po-url-labs.component.html'
+  templateUrl: './sample-po-url-labs.component.html',
+  standalone: false
 })
 export class SamplePoUrlLabsComponent implements OnInit {
+  additionalHelpTooltip: string;
   errorPattern: string;
   event: string;
   help: string;
@@ -15,6 +17,7 @@ export class SamplePoUrlLabsComponent implements OnInit {
   minlength: number;
   placeholder: string;
   properties: Array<string>;
+  size: string;
   url: string;
 
   public readonly propertiesOptions: Array<PoCheckboxGroupOption> = [
@@ -25,7 +28,13 @@ export class SamplePoUrlLabsComponent implements OnInit {
     { value: 'readonly', label: 'Read Only' },
     { value: 'showRequired', label: 'Show Required' },
     { value: 'requiredFieldErrorMessage', label: 'Required Field Error Message' },
-    { value: 'required', label: 'Required' }
+    { value: 'required', label: 'Required' },
+    { value: 'errorLimit', label: 'Limit Error Message' }
+  ];
+
+  public readonly sizeOptions: Array<PoRadioGroupOption> = [
+    { label: 'small', value: 'small' },
+    { label: 'medium', value: 'medium' }
   ];
 
   ngOnInit() {
@@ -37,6 +46,7 @@ export class SamplePoUrlLabsComponent implements OnInit {
   }
 
   restore() {
+    this.additionalHelpTooltip = '';
     this.properties = [];
 
     this.label = undefined;
@@ -46,7 +56,7 @@ export class SamplePoUrlLabsComponent implements OnInit {
 
     this.minlength = undefined;
     this.maxlength = undefined;
-
+    this.size = 'medium';
     this.url = '';
     this.event = '';
   }

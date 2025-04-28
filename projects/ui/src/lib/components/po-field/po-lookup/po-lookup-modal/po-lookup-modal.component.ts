@@ -26,7 +26,8 @@ import { sortArrayOfObjects } from '../../../../utils/util';
 @Component({
   selector: 'po-lookup-modal',
   templateUrl: './po-lookup-modal.component.html',
-  changeDetection: ChangeDetectionStrategy.OnPush
+  changeDetection: ChangeDetectionStrategy.OnPush,
+  standalone: false
 })
 export class PoLookupModalComponent extends PoLookupModalBaseComponent implements OnInit {
   @ViewChild('inpsearch') inputSearchEl: ElementRef;
@@ -54,31 +55,72 @@ export class PoLookupModalComponent extends PoLookupModalBaseComponent implement
 
   // Seleciona um item na tabela
   onSelect(item) {
+    const formattedItem = {
+      value: item[this.fieldValue],
+      label: item[this.fieldLabel],
+      ...item
+    };
     if (this.multiple) {
-      this.selecteds = [...this.selecteds, { value: item[this.fieldValue], label: item[this.fieldLabel], ...item }];
+      this.selectedItems = this.selectedItems ? [...this.selectedItems, formattedItem] : [formattedItem];
     } else {
-      this.selecteds = [{ value: item[this.fieldValue], label: item[this.fieldLabel], ...item }];
+      this.selectedItems = [formattedItem];
     }
+    this.selecteds = [...this.selectedItems];
   }
 
   // Remove a seleção de um item na tabela
   onUnselect(unselectedItem) {
-    this.selecteds = this.selecteds.filter(itemSelected => itemSelected.value !== unselectedItem[this.fieldValue]);
+    if (this.multiple) {
+      this.selectedItems = this.selectedItems.filter(item => item.value !== unselectedItem[this.fieldValue]);
+    } else {
+      this.selectedItems = [];
+    }
+    this.selecteds = [...this.selectedItems];
   }
 
   onUnselectFromDisclaimer(removedDisclaimer) {
+    this.selectedItems = this.selectedItems.filter(item => item.value !== removedDisclaimer.value);
+    if (this.selectedItems.length === 0) {
+      this.selecteds = [];
+    } else {
+      this.selecteds = [...this.selectedItems];
+    }
     this.poTable.unselectRowItem(item => item[this.fieldValue] === removedDisclaimer.value);
   }
 
   // Seleciona todos os itens visíveis na tabela
   onAllSelected(items) {
-    this.selecteds = items.map(item => ({ value: item[this.fieldValue], label: item[this.fieldLabel], ...item }));
+    const newItems = items
+      .filter(item => !this.selectedItems?.some(selected => selected[this.fieldValue] === item[this.fieldValue]))
+      .map(item => ({
+        value: item[this.fieldValue],
+        label: item[this.fieldLabel],
+        ...item
+      }));
+
+    this.selectedItems = [...this.selectedItems, ...newItems];
+    this.selecteds = [...this.selectedItems];
   }
 
   // Remove a seleção de todos os itens visíveis na tabela
-  onAllUnselected(items) {
-    this.poTable.unselectRows();
-    this.selecteds = [];
+  onAllUnselected(items, isTag?: boolean) {
+    if (isTag) {
+      this.poTable.unselectRows();
+      this.selectedItems = [];
+      this.selecteds = [];
+    } else {
+      const newItems = this.selectedItems?.filter(
+        item => !items.some(selected => selected[this.fieldValue] === item[this.fieldValue])
+      );
+
+      if (newItems?.length) {
+        this.selectedItems = [...newItems];
+        this.selecteds = [...this.selectedItems];
+      } else {
+        this.selectedItems = [];
+        this.selecteds = [];
+      }
+    }
   }
 
   openModal() {

@@ -1,10 +1,11 @@
-import { Component, ElementRef, EventEmitter, Input, OnInit, Output, ViewChild, OnDestroy } from '@angular/core';
+import { Component, ElementRef, EventEmitter, Input, OnDestroy, OnInit, Output, ViewChild } from '@angular/core';
 
 import { Subscription } from 'rxjs';
 
-import { isFirefox, isIE, isIEOrEdge, openExternalLink } from './../../../../utils/util';
-import { PoKeyCodeEnum } from './../../../../enums/po-key-code.enum';
+import { PoFieldSize } from '../../../../enums/po-field-size.enum';
 import { PoRichTextService } from '../po-rich-text.service';
+import { PoKeyCodeEnum } from './../../../../enums/po-key-code.enum';
+import { isFirefox, isIE, isIEOrEdge, openExternalLink } from './../../../../utils/util';
 
 const poRichTextBodyCommands = [
   'bold',
@@ -20,7 +21,8 @@ const poRichTextBodyCommands = [
 
 @Component({
   selector: 'po-rich-text-body',
-  templateUrl: './po-rich-text-body.component.html'
+  templateUrl: './po-rich-text-body.component.html',
+  standalone: false
 })
 export class PoRichTextBodyComponent implements OnInit, OnDestroy {
   @ViewChild('bodyElement', { static: true }) bodyElement: ElementRef;
@@ -35,9 +37,14 @@ export class PoRichTextBodyComponent implements OnInit, OnDestroy {
 
   @Input('p-readonly') readonly?: string;
 
+  /** Tamanho do fonte */
+  @Input('p-size') size?: string;
+
   @Output('p-change') change = new EventEmitter<any>();
 
   @Output('p-commands') commands = new EventEmitter<any>();
+
+  @Output('p-keydown') keydown: EventEmitter<KeyboardEvent> = new EventEmitter<KeyboardEvent>();
 
   @Output('p-selected-link') selectedLink = new EventEmitter<any>();
 
@@ -122,6 +129,7 @@ export class PoRichTextBodyComponent implements OnInit, OnDestroy {
   onKeyDown(event) {
     const keyK = event.keyCode === PoKeyCodeEnum.keyK;
     const isLinkShortcut = (keyK && event.ctrlKey) || (keyK && event.metaKey);
+    const isFieldFocused = document.activeElement === this.bodyElement.nativeElement;
 
     if (isLinkShortcut) {
       event.preventDefault();
@@ -129,6 +137,10 @@ export class PoRichTextBodyComponent implements OnInit, OnDestroy {
     }
 
     this.toggleCursorOnLink(event, 'add');
+
+    if (isFieldFocused) {
+      this.keydown.emit(event);
+    }
   }
 
   onKeyUp(event: any) {

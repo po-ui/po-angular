@@ -44,7 +44,8 @@ import { Directive, TemplateRef } from '@angular/core';
  * ```
  */
 @Directive({
-  selector: '[p-slide-content-template]'
+  selector: '[p-slide-content-template]',
+  standalone: false
 })
 export class PoSlideContentTemplateDirective {
   // Necessário manter templateRef para o funcionamento do row template.

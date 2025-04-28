@@ -50,6 +50,11 @@
       "version": "0.0.0-PLACEHOLDER",
       "description": "Atualiza @po-ui/ng-sync para v18",
       "factory": "./ng-update/v18/index"
+    },
+    "migration-v19": {
+      "version": "0.0.0-PLACEHOLDER",
+      "description": "Atualiza @po-ui/ng-sync para v19",
+      "factory": "./ng-update/v19/index"
     }
   }
 }

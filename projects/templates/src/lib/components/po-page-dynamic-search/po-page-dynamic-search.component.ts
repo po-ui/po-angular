@@ -1,33 +1,35 @@
 import {
-  Component,
-  ViewChild,
-  OnInit,
-  OnDestroy,
-  ChangeDetectorRef,
   AfterViewInit,
-  SimpleChanges
+  ChangeDetectorRef,
+  Component,
+  OnChanges,
+  OnDestroy,
+  OnInit,
+  SimpleChanges,
+  ViewChild
 } from '@angular/core';
 
-import { Observable, Subscription } from 'rxjs';
 import {
+  PoComboOption,
   PoDisclaimerGroup,
+  PoDisclaimerGroupRemoveAction,
   PoDynamicFieldType,
   PoDynamicFormField,
   PoLanguageService,
   PoPageFilter,
-  PoDisclaimerGroupRemoveAction,
-  PoComboOption,
-  PoPageListComponent
+  PoPageListComponent,
+  PoThemeService
 } from '@po-ui/ng-components';
+import { Observable, Subscription } from 'rxjs';
 
-import { capitalizeFirstLetter, getBrowserLanguage } from '../../utils/util';
 import { PoPageCustomizationService } from '../../services/po-page-customization/po-page-customization.service';
+import { capitalizeFirstLetter, getBrowserLanguage } from '../../utils/util';
 
+import { PoPageDynamicOptionsSchema } from '../../services';
+import { PoPageDynamicSearchFilters } from './interfaces/po-page-dynamic-search-filters.interface';
+import { PoPageDynamicSearchOptions } from './interfaces/po-page-dynamic-search-options.interface';
 import { PoAdvancedFilterComponent } from './po-advanced-filter/po-advanced-filter.component';
 import { PoPageDynamicSearchBaseComponent } from './po-page-dynamic-search-base.component';
-import { PoPageDynamicSearchOptions } from './po-page-dynamic-search-options.interface';
-import { PoPageDynamicOptionsSchema } from '../../services';
-import { PoPageDynamicSearchFilters } from './po-page-dynamic-search-filters.interface';
 
 type UrlOrPoCustomizationFunction = string | (() => PoPageDynamicSearchOptions);
 
@@ -49,11 +51,12 @@ type UrlOrPoCustomizationFunction = string | (() => PoPageDynamicSearchOptions);
  */
 @Component({
   selector: 'po-page-dynamic-search',
-  templateUrl: './po-page-dynamic-search.component.html'
+  templateUrl: './po-page-dynamic-search.component.html',
+  standalone: false
 })
 export class PoPageDynamicSearchComponent
   extends PoPageDynamicSearchBaseComponent
-  implements OnInit, OnDestroy, AfterViewInit
+  implements OnInit, OnDestroy, AfterViewInit, OnChanges
 {
   @ViewChild(PoAdvancedFilterComponent, { static: true }) poAdvancedFilter: PoAdvancedFilterComponent;
   @ViewChild(PoPageListComponent, { static: true }) poPageList: PoPageListComponent;
@@ -78,9 +81,10 @@ export class PoPageDynamicSearchComponent
   constructor(
     private languageService: PoLanguageService,
     private poPageCustomizationService: PoPageCustomizationService,
-    private changeDetector: ChangeDetectorRef
+    private changeDetector: ChangeDetectorRef,
+    protected poThemeService: PoThemeService
   ) {
-    super(languageService);
+    super(languageService, poThemeService);
   }
 
   get disclaimerGroup() {

@@ -1,9 +1,12 @@
 import { ChangeDetectionStrategy, Component, OnInit, inject } from '@angular/core';
 
-import { PoProgressBaseComponent } from './po-progress-base.component';
-import { PoProgressStatus } from './enums/po-progress-status.enum';
+import { Router } from '@angular/router';
+import { PoThemeService } from '../../services';
 import { PoLanguageService } from '../../services/po-language/po-language.service';
+import { isTypeof } from '../../utils/util';
+import { PoProgressStatus } from './enums/po-progress-status.enum';
 import { poProgressLiterals } from './literals/po-progress.literals';
+import { PoProgressBaseComponent } from './po-progress-base.component';
 
 /**
  * @docsExtends PoProgressBaseComponent
@@ -27,7 +30,8 @@ import { poProgressLiterals } from './literals/po-progress.literals';
 @Component({
   selector: 'po-progress',
   templateUrl: './po-progress.component.html',
-  changeDetection: ChangeDetectionStrategy.OnPush
+  changeDetection: ChangeDetectionStrategy.OnPush,
+  standalone: false
 })
 export class PoProgressComponent extends PoProgressBaseComponent implements OnInit {
   language;
@@ -58,6 +62,11 @@ export class PoProgressComponent extends PoProgressBaseComponent implements OnIn
   }
 
   private poLanguageService = inject(PoLanguageService);
+  private router = inject(Router);
+
+  constructor(protected poThemeService: PoThemeService) {
+    super(poThemeService);
+  }
 
   ngOnInit(): void {
     this.language = this.poLanguageService.getShortLanguage();
@@ -73,5 +82,23 @@ export class PoProgressComponent extends PoProgressBaseComponent implements OnIn
 
   emitRetry() {
     this.retry.emit();
+  }
+
+  actionIsDisabled(action: any) {
+    return isTypeof(action.disabled, 'function') ? action.disabled(action) : action.disabled;
+  }
+
+  callAction(): void {
+    this.customActionClick.emit();
+  }
+
+  isActionVisible(action: any) {
+    if (action && (action.label || action.icon)) {
+      return action.visible !== undefined
+        ? isTypeof(action.visible, 'function')
+          ? action.visible()
+          : !!action.visible
+        : true;
+    }
   }
 }

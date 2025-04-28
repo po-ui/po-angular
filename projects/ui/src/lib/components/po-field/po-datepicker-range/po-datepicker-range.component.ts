@@ -1,26 +1,27 @@
 import {
+  AfterViewInit,
+  ChangeDetectionStrategy,
   ChangeDetectorRef,
   Component,
   ElementRef,
   forwardRef,
-  OnInit,
-  ViewChild,
-  AfterViewInit,
-  Renderer2,
-  OnDestroy,
-  SimpleChanges,
   OnChanges,
-  ChangeDetectionStrategy
+  OnDestroy,
+  OnInit,
+  Renderer2,
+  SimpleChanges,
+  ViewChild
 } from '@angular/core';
 import { NG_VALIDATORS, NG_VALUE_ACCESSOR } from '@angular/forms';
 
 import { PoControlPositionService } from './../../../services/po-control-position/po-control-position.service';
 
+import { PoThemeService } from '../../../services';
+import { PoLanguageService } from '../../../services/po-language/po-language.service';
+import { PoDateService } from './../../../services/po-date/po-date.service';
+import { replaceFormatSeparator } from './../../../utils/util';
 import { PoDatepickerRange } from './interfaces/po-datepicker-range.interface';
 import { PoDatepickerRangeBaseComponent } from './po-datepicker-range-base.component';
-import { PoDateService } from './../../../services/po-date/po-date.service';
-import { PoLanguageService } from '../../../services/po-language/po-language.service';
-import { replaceFormatSeparator } from './../../../utils/util';
 
 const arrowLeftKey = 37;
 const arrowRightKey = 39;
@@ -76,8 +77,9 @@ const providers = [
 @Component({
   selector: 'po-datepicker-range',
   templateUrl: './po-datepicker-range.component.html',
+  changeDetection: ChangeDetectionStrategy.OnPush,
   providers,
-  changeDetection: ChangeDetectionStrategy.OnPush
+  standalone: false
 })
 export class PoDatepickerRangeComponent
   extends PoDatepickerRangeBaseComponent
@@ -144,9 +146,10 @@ export class PoDatepickerRangeComponent
     private cd: ChangeDetectorRef,
     private poLanguageService: PoLanguageService,
     poDateService: PoDateService,
-    poDatepickerRangeElement: ElementRef
+    poDatepickerRangeElement: ElementRef,
+    protected poThemeService: PoThemeService
   ) {
-    super(changeDetector, poDateService, poLanguageService);
+    super(changeDetector, poDateService, poThemeService, poLanguageService);
     this.poDatepickerRangeElement = poDatepickerRangeElement;
   }
 
@@ -204,6 +207,12 @@ export class PoDatepickerRangeComponent
     this.updateModel(this.dateRange);
   }
 
+  emitAdditionalHelp() {
+    if (this.isAdditionalHelpEventTriggered()) {
+      this.additionalHelp.emit();
+    }
+  }
+
   eventOnClick($event: any) {
     this.poMaskObject.click($event);
   }
@@ -231,8 +240,16 @@ export class PoDatepickerRangeComponent
     }
   }
 
+  getAdditionalHelpTooltip() {
+    return this.isAdditionalHelpEventTriggered() ? null : this.additionalHelpTooltip;
+  }
+
   onBlur(event: any) {
     this.onTouchedModel?.();
+    if (this.getAdditionalHelpTooltip() && this.displayAdditionalHelp) {
+      this.showAdditionalHelp();
+    }
+
     const isStartDateTargetEvent = event.target.name === this.startDateInputName;
 
     this.updateModelByScreen(isStartDateTargetEvent);
@@ -260,6 +277,9 @@ export class PoDatepickerRangeComponent
   }
 
   onKeydown(event?: any) {
+    const isStartDateFocused = document.activeElement === this.startDateInput.nativeElement;
+    const isEndDateFocused = document.activeElement === this.endDateInput.nativeElement;
+    const isFieldFocused = isStartDateFocused || isEndDateFocused;
     if (this.readonly) {
       return;
     }
@@ -269,6 +289,10 @@ export class PoDatepickerRangeComponent
       this.setFocusOnBackspace();
     } else {
       this.poMaskObject.keydown(event);
+    }
+
+    if (isFieldFocused) {
+      this.keydown.emit(event);
     }
   }
 
@@ -287,6 +311,36 @@ export class PoDatepickerRangeComponent
   resetDateRangeInputValidation() {
     this.isStartDateRangeInputValid = true;
     this.isDateRangeInputFormatValid = true;
+  }
+
+  showAdditionalHelpIcon() {
+    return !!this.additionalHelpTooltip || this.isAdditionalHelpEventTriggered();
+  }
+
+  /**
+   * Método que exibe `p-additionalHelpTooltip` ou executa a ação definida em `p-additionalHelp`.
+   * Para isso, será necessário configurar uma tecla de atalho utilizando o evento `p-keydown`.
+   *
+   * ```
+   * <po-datepicker-range
+   *  #datepickerRange
+   *  ...
+   *  p-additional-help-tooltip="Mensagem de ajuda complementar"
+   *  (p-keydown)="onKeyDown($event, datepickerRange)"
+   * ></po-datepicker-range>
+   * ```
+   * ```
+   * ...
+   * onKeyDown(event: KeyboardEvent, inp: PoDatepickerRangeComponent): void {
+   *  if (event.code === 'F9') {
+   *    inp.showAdditionalHelp();
+   *  }
+   * }
+   * ```
+   */
+  showAdditionalHelp(): boolean {
+    this.displayAdditionalHelp = !this.displayAdditionalHelp;
+    return this.displayAdditionalHelp;
   }
 
   toggleCalendar() {
@@ -399,6 +453,13 @@ export class PoDatepickerRangeComponent
     });
 
     window.addEventListener('scroll', this.onScroll, true);
+  }
+
+  private isAdditionalHelpEventTriggered(): boolean {
+    return (
+      this.additionalHelpEventTrigger === 'event' ||
+      (this.additionalHelpEventTrigger === undefined && this.additionalHelp.observed)
+    );
   }
 
   private isEqualBeforeValue(startDate: string, endDate: string): boolean {

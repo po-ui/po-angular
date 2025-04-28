@@ -5,7 +5,8 @@ import { PoPageAction, PoDynamicFormField } from '@po-ui/ng-components';
 @Component({
   selector: '<%= selector %>',
   templateUrl: './<%= dasherize(name) %>.component.html',
-  styleUrls: ['./<%= dasherize(name) %>.component.<%= style %>']
+  styleUrls: ['./<%= dasherize(name) %>.component.<%= style %>'],
+  standalone: false
 })
 export class <%= classify(name) %>Component implements OnInit {
 

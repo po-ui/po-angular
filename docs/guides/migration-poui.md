@@ -29,7 +29,7 @@ ng update @angular/cli@<version> @angular/core@<version> --force
 Por exemplo:
 
 ```
-ng update @angular/cli@18 @angular/core@18 --force
+ng update @angular/cli@19 @angular/core@19 --force
 ```
 
 > Para realizar a migração completa e avaliar se não precisa fazer alguma alteração veja o [**Guia de Upgrade do Angular**](https://update.angular.io/).
@@ -67,10 +67,10 @@ ng update @po-ui/ng-components --allow-dirty --force
 
 > Caso sua aplicação seja configurada com módulos, pode ser necessária a inclusão da seguinte `devDependencies`:
 
-```
+```json
   "devDependencies": {
     ...,
-    "@angular-devkit/schematics": "~18.0.2",
+    "@angular-devkit/schematics": "~19.0.5",
     ...
   }
 ```

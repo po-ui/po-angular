@@ -8,7 +8,8 @@ import { PoNavbarItemComponent } from './po-navbar-item/po-navbar-item.component
 
 @Component({
   selector: 'po-navbar-items',
-  templateUrl: './po-navbar-items.component.html'
+  templateUrl: './po-navbar-items.component.html',
+  standalone: false
 })
 export class PoNavbarItemsComponent implements OnInit, OnDestroy {
   @ViewChild('navbarItemsContainer', { read: ElementRef, static: true }) navbarItemsContainer: ElementRef;

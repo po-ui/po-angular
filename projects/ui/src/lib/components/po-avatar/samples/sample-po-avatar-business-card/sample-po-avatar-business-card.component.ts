@@ -10,7 +10,8 @@ import { Component } from '@angular/core';
       }
     `
   ],
-  templateUrl: './sample-po-avatar-business-card.component.html'
+  templateUrl: './sample-po-avatar-business-card.component.html',
+  standalone: false
 })
 export class SamplePoAvatarBusinessCardComponent {
   avatar = 'http://lorempixel.com/300/300/cats/';

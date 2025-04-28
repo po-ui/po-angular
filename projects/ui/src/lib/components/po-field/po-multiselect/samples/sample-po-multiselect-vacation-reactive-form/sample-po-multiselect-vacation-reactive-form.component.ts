@@ -5,7 +5,8 @@ import { PoMultiselectOption, PoRadioGroupOption } from '@po-ui/ng-components';
 
 @Component({
   selector: 'sample-po-multiselect-vacation-reactive-form',
-  templateUrl: './sample-po-multiselect-vacation-reactive-form.component.html'
+  templateUrl: './sample-po-multiselect-vacation-reactive-form.component.html',
+  standalone: false
 })
 export class SamplePoMultiselectVacationReactiveFormComponent implements OnInit {
   days: number;

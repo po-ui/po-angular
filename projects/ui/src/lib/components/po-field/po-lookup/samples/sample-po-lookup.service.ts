@@ -5,7 +5,9 @@ import { Observable } from 'rxjs';
 
 import { PoLookupFilter, PoLookupFilteredItemsParams } from '@po-ui/ng-components';
 
-@Injectable()
+@Injectable({
+  providedIn: 'root'
+})
 export class SamplePoLookupService implements PoLookupFilter {
   private url = 'https://po-sample-api.onrender.com/v1/heroes';
 

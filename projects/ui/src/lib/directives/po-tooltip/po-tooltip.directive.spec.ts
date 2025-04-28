@@ -12,7 +12,8 @@ import { PoControlPositionService } from '../../services/po-control-position/po-
     <div #tooltipContainer p-tooltip="Teste" p-tooltip-position="top">
       <po-button p-label="Passe o mouse"> </po-button>
     </div>
-  `
+  `,
+  standalone: false
 })
 export class TestComponent {}
 
@@ -122,6 +123,45 @@ describe('PoTooltipDirective', () => {
       directive.onFocusIn();
 
       expect(spyaddTooltipAction).not.toHaveBeenCalled();
+    });
+
+    describe('toggleTooltipVisibility', () => {
+      it('should call `removeTooltipAction` if `show` is false and `displayTooltip` is false', () => {
+        directive.displayTooltip = false;
+
+        const spyAddTooltipAction = spyOn(directive, <any>'addTooltipAction');
+        const spyRemoveTooltipAction = spyOn(directive, <any>'removeTooltipAction');
+
+        directive.toggleTooltipVisibility(false);
+
+        expect(spyRemoveTooltipAction).toHaveBeenCalled();
+        expect(spyAddTooltipAction).not.toHaveBeenCalled();
+      });
+
+      it('should call `addTooltipAction` if `show` is true and `displayTooltip` is false', () => {
+        directive.displayTooltip = false;
+
+        const spyAddTooltipAction = spyOn(directive, <any>'addTooltipAction');
+        const spyRemoveTooltipAction = spyOn(directive, <any>'removeTooltipAction');
+
+        directive.toggleTooltipVisibility(true);
+
+        expect(spyAddTooltipAction).toHaveBeenCalled();
+        expect(spyRemoveTooltipAction).not.toHaveBeenCalled();
+      });
+
+      it('should not call `addTooltipAction` or `removeTooltipAction` if `displayTooltip` is true', () => {
+        directive.displayTooltip = true;
+
+        const spyAddTooltipAction = spyOn(directive, <any>'addTooltipAction');
+        const spyRemoveTooltipAction = spyOn(directive, <any>'removeTooltipAction');
+
+        directive.toggleTooltipVisibility(true);
+        directive.toggleTooltipVisibility(false);
+
+        expect(spyAddTooltipAction).not.toHaveBeenCalled();
+        expect(spyRemoveTooltipAction).not.toHaveBeenCalled();
+      });
     });
   });
 

@@ -6,7 +6,7 @@ import { PoBreadcrumbItem } from './../po-breadcrumb-item.interface';
 import { PoBreadcrumbFavoriteService } from './po-breadcrumb-favorite.service';
 import { PoLanguageService } from '../../../services/po-language/po-language.service';
 
-export const PoBreadcrumbLiterals: Object = {
+export const PoBreadcrumbLiterals: object = {
   en: <any>{
     favorite: 'Favorite',
     unfavorite: 'Unfavorite'
@@ -36,7 +36,8 @@ export const PoBreadcrumbLiterals: Object = {
 @Component({
   selector: 'po-breadcrumb-favorite',
   templateUrl: './po-breadcrumb-favorite.component.html',
-  providers: [PoBreadcrumbFavoriteService]
+  providers: [PoBreadcrumbFavoriteService],
+  standalone: false
 })
 export class PoBreadcrumbFavoriteComponent implements OnInit, OnDestroy {
   // URL do serviço.

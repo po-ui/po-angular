@@ -17,6 +17,7 @@ import { Subscription } from 'rxjs';
 
 import { uuid } from '../../../utils/util';
 
+import { PoThemeService } from '../../../services';
 import { PoLanguageService } from '../../../services/po-language/po-language.service';
 import { PoLookupBaseComponent } from './po-lookup-base.component';
 import { PoLookupFilterService } from './services/po-lookup-filter.service';
@@ -138,7 +139,8 @@ const providers = [
   selector: 'po-lookup',
   templateUrl: './po-lookup.component.html',
   changeDetection: ChangeDetectionStrategy.OnPush,
-  providers
+  providers,
+  standalone: false
 })
 export class PoLookupComponent extends PoLookupBaseComponent implements AfterViewInit, OnDestroy, OnInit, DoCheck {
   @ViewChild('inp', { read: ElementRef, static: false }) inputEl: ElementRef;
@@ -167,9 +169,10 @@ export class PoLookupComponent extends PoLookupBaseComponent implements AfterVie
     poLookupModalService: PoLookupModalService,
     private cd: ChangeDetectorRef,
     private el: ElementRef,
-    injector: Injector
+    injector: Injector,
+    protected poThemeService: PoThemeService
   ) {
-    super(poLookupFilterService, injector, poLookupModalService, languageService);
+    super(poLookupFilterService, injector, poLookupModalService, languageService, poThemeService);
   }
 
   ngAfterViewInit() {
@@ -227,6 +230,16 @@ export class PoLookupComponent extends PoLookupBaseComponent implements AfterVie
     }
   }
 
+  emitAdditionalHelp() {
+    if (this.isAdditionalHelpEventTriggered()) {
+      this.additionalHelp.emit();
+    }
+  }
+
+  getAdditionalHelpTooltip() {
+    return this.isAdditionalHelpEventTriggered() ? null : this.additionalHelpTooltip;
+  }
+
   openLookup(): void {
     if (this.isAllowedOpenModal()) {
       const {
@@ -240,6 +253,7 @@ export class PoLookupComponent extends PoLookupBaseComponent implements AfterVie
         multiple,
         fieldLabel,
         fieldValue,
+        size,
         spacing,
         textWrap,
         virtualScroll,
@@ -262,6 +276,7 @@ export class PoLookupComponent extends PoLookupBaseComponent implements AfterVie
         selectedItems,
         fieldLabel,
         fieldValue,
+        size,
         spacing,
         textWrap,
         virtualScroll,
@@ -328,8 +343,17 @@ export class PoLookupComponent extends PoLookupBaseComponent implements AfterVie
     );
   }
 
-  searchEvent() {
+  onBlur(): void {
     this.onTouched?.();
+
+    if (this.getAdditionalHelpTooltip() && this.displayAdditionalHelp) {
+      this.showAdditionalHelp();
+    }
+  }
+
+  searchEvent() {
+    this.onBlur();
+
     const value = this.getViewValue();
 
     if (this.oldValue?.toString() !== value) {
@@ -419,6 +443,51 @@ export class PoLookupComponent extends PoLookupBaseComponent implements AfterVie
     }
 
     this.visibleDisclaimers = [...newDisclaimers];
+  }
+
+  onKeyDown(event: KeyboardEvent): void {
+    const isFieldFocused = document.activeElement === this.inputEl.nativeElement;
+
+    if (isFieldFocused) {
+      this.keydown.emit(event);
+    }
+  }
+
+  /**
+   * Método que exibe `p-additionalHelpTooltip` ou executa a ação definida em `p-additionalHelp`.
+   * Para isso, será necessário configurar uma tecla de atalho utilizando o evento `p-keydown`.
+   *
+   * ```
+   * <po-lookup
+   *  #lookup
+   *  ...
+   *  p-additional-help-tooltip="Mensagem de ajuda complementar"
+   *  (p-keydown)="onKeyDown($event, lookup)"
+   * ></po-lookup>
+   * ```
+   * ```
+   * ...
+   * onKeyDown(event: KeyboardEvent, inp: PoLookupComponent): void {
+   *  if (event.code === 'F9') {
+   *    inp.showAdditionalHelp();
+   *  }
+   * }
+   * ```
+   */
+  showAdditionalHelp(): boolean {
+    this.displayAdditionalHelp = !this.displayAdditionalHelp;
+    return this.displayAdditionalHelp;
+  }
+
+  showAdditionalHelpIcon() {
+    return !!this.additionalHelpTooltip || this.isAdditionalHelpEventTriggered();
+  }
+
+  private isAdditionalHelpEventTriggered(): boolean {
+    return (
+      this.additionalHelpEventTrigger === 'event' ||
+      (this.additionalHelpEventTrigger === undefined && this.additionalHelp.observed)
+    );
   }
 
   private isAllowedOpenModal(): boolean {

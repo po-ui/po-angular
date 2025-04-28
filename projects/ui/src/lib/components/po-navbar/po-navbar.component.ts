@@ -33,7 +33,8 @@ const poNavbarTiming = '250ms ease';
  */
 @Component({
   selector: 'po-navbar',
-  templateUrl: './po-navbar.component.html'
+  templateUrl: './po-navbar.component.html',
+  standalone: false
 })
 export class PoNavbarComponent extends PoNavbarBaseComponent implements AfterViewInit, OnDestroy, OnInit {
   @ViewChild(PoNavbarItemsComponent, { read: ElementRef, static: true }) navbarItemsElement: ElementRef;

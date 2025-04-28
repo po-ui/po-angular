@@ -8,7 +8,8 @@ import { PoItemListFilterMode } from '../enums/po-item-list-filter-mode.enum';
 
 @Component({
   selector: 'po-item-list',
-  templateUrl: './po-item-list.component.html'
+  templateUrl: './po-item-list.component.html',
+  standalone: false
 })
 export class PoItemListComponent extends PoItemListBaseComponent implements OnChanges {
   @ViewChild('itemList', { static: true }) itemList: ElementRef;
@@ -22,7 +23,14 @@ export class PoItemListComponent extends PoItemListBaseComponent implements OnCh
     super();
   }
 
+  private shouldUpdateSelected(changes: SimpleChanges): boolean {
+    return !!(changes.searchValue && changes.label && changes.searchValue.currentValue === changes.label.currentValue);
+  }
+
   ngOnChanges(changes: SimpleChanges): void {
+    if (this.shouldUpdateSelected(changes)) {
+      this.selected = true;
+    }
     if (this.isTabs) {
       if (changes.tabHide?.currentValue || changes.disabled?.currentValue) {
         this.tabsItem.emit(this.item);

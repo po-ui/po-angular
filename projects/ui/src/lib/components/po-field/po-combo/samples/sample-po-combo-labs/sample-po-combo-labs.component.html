@@ -2,6 +2,7 @@
   class="po-md-12"
   name="combo"
   [(ngModel)]="combo"
+  [p-additional-help-tooltip]="additionalHelpTooltip"
   [p-change-on-enter]="properties.includes('changeOnEnter')"
   [p-clean]="properties.includes('clean')"
   [p-debounce-time]="debounceTime"
@@ -24,7 +25,10 @@
   [p-field-error-message]="fieldErrorMessage"
   [p-show-required]="properties.includes('showRequired')"
   [p-sort]="properties.includes('sort')"
+  [p-size]="size"
   (p-change)="changeEvent('p-change')"
+  (p-keydown)="changeEvent('p-keydown')"
+  [p-error-limit]="properties?.includes('errorLimit')"
 >
 </po-combo>
 
@@ -43,7 +47,7 @@
 
   <div class="po-row">
     <po-switch
-      class="po-md-2"
+      class="po-lg-4 po-md-12"
       name="comboOptionGroupSwitch"
       [(ngModel)]="comboOptionGroupSwitch"
       p-label="Combo options group"
@@ -51,7 +55,7 @@
     </po-switch>
 
     <po-select
-      class="po-md-5"
+      class="po-lg-4 po-md-6"
       name="selectedsOptionsGroup"
       [(ngModel)]="selectedOptionsGroup"
       p-label="Options group list"
@@ -62,7 +66,7 @@
     </po-select>
 
     <po-input
-      class="po-md-5"
+      class="po-lg-4 po-md-6"
       name="optionsGroup"
       [(ngModel)]="optionsGroup"
       p-label="New Options Group"
@@ -83,7 +87,7 @@
   </div>
 
   <div class="po-row">
-    <po-button class="po-md-6 po-lg-3" p-label="Add Option" [p-disabled]="fOption.form.invalid" (p-click)="addOption()">
+    <po-button class="po-lg-2 po-md-4" p-label="Add Option" [p-disabled]="fOption.form.invalid" (p-click)="addOption()">
     </po-button>
   </div>
 </form>
@@ -91,59 +95,76 @@
 <hr />
 
 <form #f="ngForm">
-  <div class="po-row">
-    <po-input class="po-md-6" name="label" [(ngModel)]="label" p-clean p-label="Label"> </po-input>
+  <po-input class="po-md-6" name="label" [(ngModel)]="label" p-clean p-label="Label"> </po-input>
 
-    <po-input class="po-md-6" name="help" [(ngModel)]="help" p-clean p-label="Help"> </po-input>
-  </div>
-  <div class="po-row">
-    <po-input class="po-md-6" name="placeholder" [(ngModel)]="placeholder" p-clean p-label="Placeholder"> </po-input>
+  <po-input class="po-md-6" name="help" [(ngModel)]="help" p-clean p-label="Help"> </po-input>
 
-    <po-input
-      class="po-md-6"
-      name="fieldErrorMessage"
-      [(ngModel)]="fieldErrorMessage"
-      p-clean
-      p-label="Field Error Message"
-    >
-    </po-input>
-  </div>
+  <po-input
+    class="po-md-6"
+    name="additionalHelpTooltip"
+    [(ngModel)]="additionalHelpTooltip"
+    p-clean
+    p-label="Additional Help Tooltip"
+  >
+  </po-input>
+
+  <po-input class="po-md-6" name="placeholder" [(ngModel)]="placeholder" p-clean p-label="Placeholder"> </po-input>
+
+  <po-input
+    class="po-md-6"
+    name="fieldErrorMessage"
+    [(ngModel)]="fieldErrorMessage"
+    p-clean
+    p-label="Field Error Message"
+  >
+  </po-input>
 
   <div class="po-row">
     <po-checkbox-group
-      class="po-lg-4"
+      class="po-md-12"
       name="properties"
       [(ngModel)]="properties"
-      p-columns="2"
+      p-columns="4"
       p-label="Properties"
       [p-options]="propertiesOptions"
     >
     </po-checkbox-group>
 
     <po-radio-group
-      class="po-md-6 po-lg-4"
+      class="po-md-12"
       name="icon"
       [(ngModel)]="icon"
-      p-columns="1"
+      p-columns="4"
       p-label="Icon"
       [p-options]="iconsOptions"
     >
     </po-radio-group>
 
     <po-radio-group
-      class="po-md-6 po-lg-4"
+      class="po-md-12"
       name="filterMode"
       [(ngModel)]="filterMode"
-      p-columns="1"
+      p-columns="4"
       p-label="Filter Mode"
       [p-options]="filterModeOptions"
+    >
+    </po-radio-group>
+
+    <po-radio-group
+      class="po-md-12"
+      name="size"
+      [(ngModel)]="size"
+      p-columns="4"
+      p-label="Size"
+      p-help="Para aplicar o tamanho small, configure o nível de acessibilidade para AA, ajustável no navbar ou serviço de tema (https://po-ui.io/documentation/po-theme)."
+      [p-options]="sizeOptions"
     >
     </po-radio-group>
   </div>
 
   <div class="po-row">
     <po-input
-      class="po-md-6"
+      class="po-md-12 po-lg-6"
       name="filterService"
       [(ngModel)]="filterService"
       p-clean
@@ -153,7 +174,7 @@
     </po-input>
 
     <po-input
-      class="po-lg-6"
+      class="po-md-12 po-lg-6"
       name="literals"
       [(ngModel)]="literals"
       p-help='Ex.: {"noData": "Sem dados a serem exibidos"}'
@@ -178,6 +199,6 @@
   </div>
 
   <div class="po-row">
-    <po-button class="po-md-3" p-label="Sample Restore" (p-click)="restore()"> </po-button>
+    <po-button class="po-lg-3 po-md-6" p-label="Sample Restore" (p-click)="restore()"> </po-button>
   </div>
 </form>

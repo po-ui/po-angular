@@ -6,16 +6,16 @@ import { PoLanguageService } from '../../services/po-language/po-language.servic
 import { expectPropertiesValues, expectSettersMethod } from '../../util-test/util-expect.spec';
 import * as utilsFunctions from '../../utils/util';
 
+import { provideHttpClient, withInterceptorsFromDi } from '@angular/common/http';
 import { provideHttpClientTesting } from '@angular/common/http/testing';
 import { TestBed } from '@angular/core/testing';
 import { Observable, of } from 'rxjs';
+import { PoThemeA11yEnum, PoThemeService } from '../../services';
 import { PoTableColumnSortType } from './enums/po-table-column-sort-type.enum';
-import { PoTableColumnSpacing } from './enums/po-table-spacing.enum';
 import { PoTableAction } from './interfaces/po-table-action.interface';
 import { PoTableColumn } from './interfaces/po-table-column.interface';
 import { PoTableBaseComponent, poTableLiteralsDefault } from './po-table-base.component';
 import { PoTableService } from './services/po-table.service';
-import { provideHttpClient, withInterceptorsFromDi } from '@angular/common/http';
 
 @Directive()
 class PoTableComponent extends PoTableBaseComponent {
@@ -28,6 +28,7 @@ class PoTableComponent extends PoTableBaseComponent {
 describe('PoTableBaseComponent:', () => {
   let dateService: PoDateService;
   let languageService: PoLanguageService;
+  let poThemeServiceMock: jasmine.SpyObj<PoThemeService>;
   let tableService: PoTableService;
   let component: PoTableComponent;
   let actions: Array<PoTableAction>;
@@ -48,8 +49,9 @@ describe('PoTableBaseComponent:', () => {
 
     dateService = new PoDateService();
     languageService = new PoLanguageService();
+    poThemeServiceMock = jasmine.createSpyObj('PoThemeService', ['getA11yLevel', 'getA11yDefaultSize']);
     tableService = TestBed.inject(PoTableService);
-    component = new PoTableComponent(dateService, languageService, tableService);
+    component = new PoTableComponent(dateService, languageService, poThemeServiceMock, tableService);
 
     actions = [
       {
@@ -1670,6 +1672,50 @@ describe('PoTableBaseComponent:', () => {
 
     it('p-loading: should update property `p-loading` with valid values', () => {
       expectPropertiesValues(component, 'loading', booleanValidTrueValues, true);
+    });
+
+    describe('p-components-size', () => {
+      it('should set property with valid values for accessibility level is AA', () => {
+        poThemeServiceMock.getA11yLevel.and.returnValue(PoThemeA11yEnum.AA);
+
+        component.componentsSize = 'small';
+        expect(component.componentsSize).toBe('small');
+
+        component.componentsSize = 'medium';
+        expect(component.componentsSize).toBe('medium');
+      });
+
+      it('should set property with valid values for accessibility level is AAA', () => {
+        poThemeServiceMock.getA11yLevel.and.returnValue(PoThemeA11yEnum.AAA);
+
+        component.componentsSize = 'small';
+        expect(component.componentsSize).toBe('medium');
+
+        component.componentsSize = 'medium';
+        expect(component.componentsSize).toBe('medium');
+      });
+
+      it('should return small when accessibility is AA and getA11yDefaultSize is small', () => {
+        poThemeServiceMock.getA11yLevel.and.returnValue(PoThemeA11yEnum.AA);
+        poThemeServiceMock.getA11yDefaultSize.and.returnValue('small');
+
+        component['_componentsSize'] = undefined;
+        expect(component.componentsSize).toBe('small');
+      });
+
+      it('should return medium when accessibility is AA and getA11yDefaultSize is medium', () => {
+        poThemeServiceMock.getA11yLevel.and.returnValue(PoThemeA11yEnum.AA);
+        poThemeServiceMock.getA11yDefaultSize.and.returnValue('medium');
+
+        component['_componentsSize'] = undefined;
+        expect(component.componentsSize).toBe('medium');
+      });
+
+      it('should return medium when accessibility is AAA, regardless of getA11yDefaultSize', () => {
+        poThemeServiceMock.getA11yLevel.and.returnValue(PoThemeA11yEnum.AAA);
+        component['_componentsSize'] = undefined;
+        expect(component.componentsSize).toBe('medium');
+      });
     });
 
     it('p-columns: should call `setColumnLink` if has values', () => {

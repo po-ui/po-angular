@@ -6,10 +6,13 @@ import { PoTreeViewItem } from '../po-tree-view-item/po-tree-view-item.interface
 @Component({
   selector: 'po-tree-view-item-header',
   templateUrl: './po-tree-view-item-header.component.html',
-  changeDetection: ChangeDetectionStrategy.OnPush
+  changeDetection: ChangeDetectionStrategy.OnPush,
+  standalone: false
 })
 export class PoTreeViewItemHeaderComponent {
   @ViewChild('inputCheckbox') inputCheckbox;
+
+  @Input('p-components-size') componentsSize: string;
 
   @Input('p-item') item: PoTreeViewItem;
 

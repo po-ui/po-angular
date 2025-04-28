@@ -10,16 +10,17 @@ import * as ValidatorsFunctions from '../validators';
 import { poLocaleDefault } from '../../../services/po-language/po-language.constant';
 import { PoLanguageService } from '../../../services/po-language/po-language.service';
 
+import { PoThemeA11yEnum, PoThemeService } from '../../../services';
+import { PoComboFilterMode } from './enums/po-combo-filter-mode.enum';
 import { PoComboFilter } from './interfaces/po-combo-filter.interface';
 import { poComboLiteralsDefault } from './interfaces/po-combo-literals-default.interface';
 import { PoComboOption } from './interfaces/po-combo-option.interface';
 import { PoComboBaseComponent } from './po-combo-base.component';
-import { PoComboFilterMode } from './po-combo-filter-mode.enum';
 
 @Directive()
 class PoComboTest extends PoComboBaseComponent {
-  constructor() {
-    super(new PoLanguageService(), { detectChanges: () => {}, markForCheck: () => {} } as any);
+  constructor(poThemeService: PoThemeService) {
+    super(new PoLanguageService(), { detectChanges: () => {}, markForCheck: () => {} } as any, poThemeService);
   }
 
   getInputValue(): string {
@@ -37,6 +38,7 @@ class PoComboTest extends PoComboBaseComponent {
 
 describe('PoComboBaseComponent:', () => {
   let component: PoComboTest;
+  let poThemeService: jasmine.SpyObj<PoThemeService>;
 
   const defaultService: any = {
     url: '',
@@ -53,8 +55,9 @@ describe('PoComboBaseComponent:', () => {
   };
 
   beforeEach(() => {
-    component = new PoComboTest();
+    poThemeService = jasmine.createSpyObj('PoThemeService', ['getA11yDefaultSize', 'getA11yLevel']);
 
+    component = new PoComboTest(poThemeService);
     component.filterService = service;
     component.defaultService = defaultService;
   });
@@ -227,6 +230,50 @@ describe('PoComboBaseComponent:', () => {
       component['language'] = 'pt';
       const invalidValues = [null, undefined, '', 0, false];
       expectPropertiesValues(component, 'placeholder', invalidValues, 'Escolha uma opção');
+    });
+
+    describe('p-size', () => {
+      it('should set property with valid values for accessibility level is AA', () => {
+        poThemeService.getA11yLevel.and.returnValue(PoThemeA11yEnum.AA);
+
+        component.size = 'small';
+        expect(component.size).toBe('small');
+
+        component.size = 'medium';
+        expect(component.size).toBe('medium');
+      });
+
+      it('should set property with valid values for accessibility level is AAA', () => {
+        poThemeService.getA11yLevel.and.returnValue(PoThemeA11yEnum.AAA);
+
+        component.size = 'small';
+        expect(component.size).toBe('medium');
+
+        component.size = 'medium';
+        expect(component.size).toBe('medium');
+      });
+
+      it('should return small when accessibility is AA and getA11yDefaultSize is small', () => {
+        poThemeService.getA11yLevel.and.returnValue(PoThemeA11yEnum.AA);
+        poThemeService.getA11yDefaultSize.and.returnValue('small');
+
+        component['_size'] = undefined;
+        expect(component.size).toBe('small');
+      });
+
+      it('should return medium when accessibility is AA and getA11yDefaultSize is medium', () => {
+        poThemeService.getA11yLevel.and.returnValue(PoThemeA11yEnum.AA);
+        poThemeService.getA11yDefaultSize.and.returnValue('medium');
+
+        component['_size'] = undefined;
+        expect(component.size).toBe('medium');
+      });
+
+      it('should return medium when accessibility is AAA, regardless of getA11yDefaultSize', () => {
+        poThemeService.getA11yLevel.and.returnValue(PoThemeA11yEnum.AAA);
+        component['_size'] = undefined;
+        expect(component.size).toBe('medium');
+      });
     });
   });
 
@@ -558,6 +605,48 @@ describe('PoComboBaseComponent:', () => {
       expect(component.updateSelectedValue).toHaveBeenCalled();
       expect(component.callModelChange).not.toHaveBeenCalled();
       expect(component['fromWriteValue']).toBe(false);
+    });
+
+    describe('controlValueWithLabel', () => {
+      it('should return the object when controlValueWithLabel is true', () => {
+        const selectedOption = { value: 1, label: 'Xpto' };
+
+        component.controlValueWithLabel = true;
+
+        expect(component['getValueUpdate'](1, selectedOption)).toEqual(selectedOption);
+      });
+
+      it('should only return the value when controlValueWithLabel is false', () => {
+        const selectedOption = { value: 1, label: 'Xpto' };
+
+        component.controlValueWithLabel = false;
+
+        expect(component['getValueUpdate'](1, selectedOption)).toEqual(1);
+      });
+
+      it('should return a {value: any, label: any} object when controlValueWithLabel is true and both fieldValue and fieldLabel are set', () => {
+        const selectedOption = { value: 1, label: 'Xpto' };
+
+        component.controlValueWithLabel = true;
+        component.fieldValue = 'id';
+        component.fieldLabel = 'name';
+
+        expect(component['getValueUpdate'](null, selectedOption)).toEqual({ value: 1, label: 'Xpto' });
+      });
+
+      it('should only return the value when calling getValueWrite when controlValueWithLabel is true', () => {
+        component.controlValueWithLabel = true;
+        const option = { value: 1, label: 'Xpto' };
+
+        expect(component['getValueWrite'](option)).toEqual(1);
+      });
+
+      it('should return when calling getValueWrite when controlValueWithLabel is true and the object structure does not contain the value property', () => {
+        component.controlValueWithLabel = true;
+        const data = 1;
+
+        expect(component['getValueWrite'](data)).toEqual(data);
+      });
     });
   });
 
@@ -997,7 +1086,8 @@ describe('PoComboBaseComponent:', () => {
 
     describe('VisibleOptions:', () => {
       beforeEach(() => {
-        component = new PoComboTest();
+        poThemeService = jasmine.createSpyObj('PoThemeService', ['getA11yDefaultSize', 'getA11yLevel']);
+        component = new PoComboTest(poThemeService);
 
         component.filterService = null;
         component.defaultService = null;
@@ -1521,6 +1611,7 @@ describe('PoComboBaseComponent:', () => {
 
 describe('PoComboBaseComponent using Service', () => {
   let component: PoComboTest;
+  let poThemeService: jasmine.SpyObj<PoThemeService>;
 
   const defaultService: any = {
     url: '',
@@ -1537,7 +1628,8 @@ describe('PoComboBaseComponent using Service', () => {
   };
 
   beforeEach(() => {
-    component = new PoComboTest();
+    poThemeService = jasmine.createSpyObj('PoThemeService', ['getA11yDefaultSize', 'getA11yLevel']);
+    component = new PoComboTest(poThemeService);
 
     component.filterService = service;
     component.defaultService = defaultService;

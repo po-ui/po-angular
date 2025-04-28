@@ -2,10 +2,13 @@ import { ComponentFixture, TestBed } from '@angular/core/testing';
 import { FormsModule } from '@angular/forms';
 
 import * as UtilsFunctions from '../../../utils/util';
-import { configureTestSuite, expectPropertiesValues, expectSettersMethod } from './../../../util-test/util-expect.spec';
+import { expectSettersMethod } from './../../../util-test/util-expect.spec';
 
+import { PoThemeA11yEnum } from '../../../services';
+import { PoThemeService } from '../../../services/po-theme/po-theme.service';
 import { removeDuplicatedOptions, removeUndefinedAndNullOptions } from '../../../utils/util';
 import { PoFieldContainerComponent } from '../po-field-container/po-field-container.component';
+import { PoFieldValidateModel } from '../po-field-validate.model';
 import { PoFieldContainerBottomComponent } from './../po-field-container/po-field-container-bottom/po-field-container-bottom.component';
 import { PoSelectOptionGroup } from './po-select-option-group.interface';
 import { PoSelectOption } from './po-select-option.interface';
@@ -15,20 +18,23 @@ describe('PoSelectComponent:', () => {
   let component: PoSelectComponent;
   let fixture: ComponentFixture<PoSelectComponent>;
   let nativeElement;
+  let poThemeServiceMock: jasmine.SpyObj<PoThemeService>;
+
   const booleanValidFalseValues = [false, 'false'];
   const booleanValidTrueValues = [true, 'true', ''];
   const booleanInvalidValues = [undefined, null, 2, 'string'];
 
   const event = new MouseEvent('click', { 'bubbles': false, 'cancelable': true });
 
-  configureTestSuite(() => {
+  beforeEach(() => {
+    poThemeServiceMock = jasmine.createSpyObj('PoThemeService', ['getA11yLevel', 'getA11yDefaultSize']);
+
     TestBed.configureTestingModule({
       imports: [FormsModule],
-      declarations: [PoSelectComponent, PoFieldContainerComponent, PoFieldContainerBottomComponent]
+      declarations: [PoSelectComponent, PoFieldContainerComponent, PoFieldContainerBottomComponent],
+      providers: [{ provide: PoThemeService, useValue: poThemeServiceMock }]
     });
-  });
 
-  beforeEach(() => {
     fixture = TestBed.createComponent(PoSelectComponent);
     component = fixture.componentInstance;
     component.options = [{ value: 1, label: 'Teste2' }];
@@ -58,6 +64,50 @@ describe('PoSelectComponent:', () => {
   it('should execute isEqual when value is undefined and input have value', () => {
     const isEqual = component['isEqual'](undefined, 'teste');
     expect(isEqual).toBe(false);
+  });
+
+  describe('p-size', () => {
+    it('should set property with valid values for accessibility level is AA', () => {
+      poThemeServiceMock.getA11yLevel.and.returnValue(PoThemeA11yEnum.AA);
+
+      component.size = 'small';
+      expect(component.size).toBe('small');
+
+      component.size = 'medium';
+      expect(component.size).toBe('medium');
+    });
+
+    it('should set property with valid values for accessibility level is AAA', () => {
+      poThemeServiceMock.getA11yLevel.and.returnValue(PoThemeA11yEnum.AAA);
+
+      component.size = 'small';
+      expect(component.size).toBe('medium');
+
+      component.size = 'medium';
+      expect(component.size).toBe('medium');
+    });
+
+    it('should return small when accessibility is AA and getA11yDefaultSize is small', () => {
+      poThemeServiceMock.getA11yLevel.and.returnValue(PoThemeA11yEnum.AA);
+      poThemeServiceMock.getA11yDefaultSize.and.returnValue('small');
+
+      component['_size'] = undefined;
+      expect(component.size).toBe('small');
+    });
+
+    it('should return medium when accessibility is AA and getA11yDefaultSize is medium', () => {
+      poThemeServiceMock.getA11yLevel.and.returnValue(PoThemeA11yEnum.AA);
+      poThemeServiceMock.getA11yDefaultSize.and.returnValue('medium');
+
+      component['_size'] = undefined;
+      expect(component.size).toBe('medium');
+    });
+
+    it('should return medium when accessibility is AAA, regardless of getA11yDefaultSize', () => {
+      poThemeServiceMock.getA11yLevel.and.returnValue(PoThemeA11yEnum.AAA);
+      component['_size'] = undefined;
+      expect(component.size).toBe('medium');
+    });
   });
 
   describe('Methods:', () => {
@@ -90,21 +140,52 @@ describe('PoSelectComponent:', () => {
       expect(component.selectElement.nativeElement.focus).not.toHaveBeenCalled();
     });
 
-    it('onBlur: should be called when blur event', () => {
-      component['onModelTouched'] = () => {};
-      spyOn(component, <any>'onModelTouched');
+    describe('onBlur', () => {
+      let setupTest;
 
-      component.onBlur();
+      beforeEach(() => {
+        setupTest = (tooltip: string, displayHelp: boolean, additionalHelpEvent: any) => {
+          component.additionalHelpTooltip = tooltip;
+          component.displayAdditionalHelp = displayHelp;
+          component.additionalHelp = additionalHelpEvent;
+          spyOn(component, 'showAdditionalHelp');
+        };
+      });
 
-      expect(component['onModelTouched']).toHaveBeenCalled();
-    });
+      it('should be called when blur event', () => {
+        component['onModelTouched'] = () => {};
+        spyOn(component, <any>'onModelTouched');
 
-    it('onBlur: shouldn´t throw error if onModelTouched is falsy', () => {
-      component['onModelTouched'] = null;
+        component.onBlur();
 
-      const fnError = () => component.onBlur();
+        expect(component['onModelTouched']).toHaveBeenCalled();
+      });
 
-      expect(fnError).not.toThrow();
+      it('shouldn´t throw error if onModelTouched is falsy', () => {
+        component['onModelTouched'] = null;
+
+        const fnError = () => component.onBlur();
+
+        expect(fnError).not.toThrow();
+      });
+
+      it('should call showAdditionalHelp when the tooltip is displayed', () => {
+        setupTest('Mensagem de apoio adicional.', true, { observed: false });
+        component.onBlur();
+        expect(component.showAdditionalHelp).toHaveBeenCalled();
+      });
+
+      it('should not call showAdditionalHelp when tooltip is not displayed', () => {
+        setupTest('Mensagem de apoio adicional.', false, { observed: false });
+        component.onBlur();
+        expect(component.showAdditionalHelp).not.toHaveBeenCalled();
+      });
+
+      it('should not call showAdditionalHelp when additionalHelp event is true', () => {
+        setupTest('Mensagem de apoio adicional.', true, { observed: true });
+        component.onBlur();
+        expect(component.showAdditionalHelp).not.toHaveBeenCalled();
+      });
     });
 
     it('extraValidation: should return null', () => {
@@ -120,7 +201,8 @@ describe('PoSelectComponent:', () => {
         selectedValue: '',
         displayValue: label => {},
         updateModel: value => {},
-        emitChange: value => {}
+        emitChange: value => {},
+        getValueUpdate: value => {}
       };
 
       spyOn(fakeThis, 'emitChange');
@@ -293,6 +375,15 @@ describe('PoSelectComponent:', () => {
       expect(component['onModelTouched']).toBe(fnTouched);
     });
 
+    it('showAdditionalHelp: should call `showAdditionalHelp` and return value', () => {
+      const spySuperMethod = spyOn(PoFieldValidateModel.prototype, 'showAdditionalHelp').and.returnValue(true);
+
+      const result = component.showAdditionalHelp();
+
+      expect(spySuperMethod).toHaveBeenCalled();
+      expect(result).toBe(true);
+    });
+
     it('ngOnChanges: should set `currentValue` in options', () => {
       const changes: any = {
         options: {
@@ -332,6 +423,37 @@ describe('PoSelectComponent:', () => {
       const item = { label: 'Item with options', options: { option1: 'value1', option2: 'value2' } };
 
       expect(component.isItemGroup(item)).toBeFalse();
+    });
+
+    describe('onKeyDown:', () => {
+      it('should emit event when field is focused', () => {
+        const fakeEvent = new KeyboardEvent('keydown', { key: 'Enter' });
+        component.selectElement = {
+          nativeElement: {
+            focus: () => {}
+          }
+        };
+
+        spyOn(component.keydown, 'emit');
+        spyOnProperty(document, 'activeElement', 'get').and.returnValue(component.selectElement.nativeElement);
+
+        component.onKeyDown(fakeEvent);
+
+        expect(component.keydown.emit).toHaveBeenCalledWith(fakeEvent);
+      });
+
+      it('should not emit event when field is not focused', () => {
+        const fakeEvent = new KeyboardEvent('keydown', { key: 'Enter' });
+        component.selectElement = {
+          nativeElement: document.createElement('input')
+        };
+
+        spyOn(component.keydown, 'emit');
+        spyOnProperty(document, 'activeElement', 'get').and.returnValue(document.createElement('input'));
+        component.onKeyDown(fakeEvent);
+
+        expect(component.keydown.emit).not.toHaveBeenCalled();
+      });
     });
 
     it('separateOptions: should separate options with groups and validate each group options', () => {
@@ -424,6 +546,48 @@ describe('PoSelectComponent:', () => {
       const defaultLabel = 'label';
       expectSettersMethod(component, 'fieldLabel', '', 'fieldLabel', defaultLabel);
       expect(component.fieldLabel).toEqual(defaultLabel);
+    });
+  });
+
+  describe('controlValueWithLabel', () => {
+    it('should return the object when controlValueWithLabel is true', () => {
+      const option = { value: 1, label: 'Xpto' };
+
+      component.controlValueWithLabel = true;
+
+      expect(component['getValueUpdate'](option)).toEqual(option);
+    });
+
+    it('should only return the value when controlValueWithLabel is false', () => {
+      const option = { value: 1, label: 'Xpto' };
+
+      component.controlValueWithLabel = false;
+
+      expect(component['getValueUpdate'](option)).toEqual(1);
+    });
+
+    it('should return a {value: any, label: any} object when controlValueWithLabel is true and both fieldValue and fieldLabel are set', () => {
+      const option = { id: 1, name: 'Xpto' };
+
+      component.controlValueWithLabel = true;
+      component.fieldValue = 'id';
+      component.fieldLabel = 'name';
+
+      expect(component['getValueUpdate'](option)).toEqual({ value: 1, label: 'Xpto' });
+    });
+
+    it('should only return the value when calling getValueWrite when controlValueWithLabel is true', () => {
+      component.controlValueWithLabel = true;
+      const option = { value: 1, label: 'Xpto' };
+
+      expect(component['getValueWrite'](option)).toEqual(1);
+    });
+
+    it('should return when calling getValueWrite when controlValueWithLabel is true and the object structure does not contain the value property', () => {
+      component.controlValueWithLabel = true;
+      const data = 1;
+
+      expect(component['getValueWrite'](data)).toEqual(data);
     });
   });
 });

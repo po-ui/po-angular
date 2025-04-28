@@ -73,7 +73,8 @@ import { Directive, Input, TemplateRef } from '@angular/core';
  */
 
 @Directive({
-  selector: '[p-table-column-template]'
+  selector: '[p-table-column-template]',
+  standalone: false
 })
 export class PoTableColumnTemplateDirective {
   /**

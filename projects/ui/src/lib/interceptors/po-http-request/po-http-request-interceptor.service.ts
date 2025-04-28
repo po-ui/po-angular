@@ -58,7 +58,9 @@ const screenLock = 'X-PO-Screen-Lock';
  *
  * ...
  *
- * @Injectable()
+ * @Injectable({
+ *  providedIn: 'root'
+ * })
  * export class CustomersService {
  *
  *  headers = { 'X-PO-No-Count-Pending-Requests': true, 'X-PO-Screen-Lock': 'true' }

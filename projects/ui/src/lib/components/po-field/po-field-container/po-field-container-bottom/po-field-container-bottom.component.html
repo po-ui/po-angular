@@ -1,9 +1,36 @@
-<div class="po-field-container-bottom" [class.po-field-container-bottom-disabled]="disabled">
+<div
+  class="po-field-container-bottom"
+  [class.po-field-container-bottom-disabled]="disabled"
+  [attr.aria-label]="errorPattern && errorLimit ? errorPattern : null"
+  role="alert"
+  aria-live="assertive"
+  tabindex="-1"
+>
   <div *ngIf="errorPattern" class="po-field-container-bottom-text-error">
-    <po-icon p-icon="ph ph-warning-circle"></po-icon>
-    <span> {{ errorPattern }}</span>
+    <po-icon p-icon="an an-warning-circle"></po-icon>
+    <span
+      class="po-field-error-message"
+      [class.po-field-error-limit]="errorLimit"
+      [p-tooltip]="errorLimit ? errorPattern : null"
+      p-tooltip-position="top"
+      [p-append-in-body]="appendBox"
+    >
+      {{ errorPattern }}
+    </span>
   </div>
-  <span *ngIf="help && !errorPattern" class="po-field-container-bottom-help-text">
-    {{ help }}
-  </span>
+  <div *ngIf="!errorPattern && (help || showAdditionalHelpIcon)" class="po-field-container-bottom-help-text">
+    <span *ngIf="help">
+      {{ help }}
+    </span>
+    <div *ngIf="showAdditionalHelpIcon" class="po-icon-container">
+      <po-icon
+        class="po-icon-additional-help"
+        [class.po-clickable]="!additionalHelpTooltip"
+        p-icon="an an-fill an an-info"
+        [p-append-in-body]="appendBox"
+        [p-tooltip]="additionalHelpTooltip"
+        (click)="additionalHelp.emit()"
+      ></po-icon>
+    </div>
+  </div>
 </div>

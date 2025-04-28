@@ -19,6 +19,7 @@ import { PoComboOption } from './interfaces/po-combo-option.interface';
 import { PoCleanComponent } from '../po-clean/po-clean.component';
 import { OverlayModule } from '@angular/cdk/overlay';
 import { PoControlPositionService } from '../../../services/po-control-position/po-control-position.service';
+import { ElementRef } from '@angular/core';
 
 const eventKeyBoard = document.createEvent('KeyboardEvent');
 eventKeyBoard.initEvent('keyup', true, true);
@@ -171,6 +172,24 @@ describe('PoComboComponent:', () => {
     expect(fakeThis.applyFilter).toHaveBeenCalled();
   });
 
+  it('should reset filter and ensure hasNext is true when isFirstFilter and removeInitialFilter are true', () => {
+    const fakeThis = {
+      isFirstFilter: true,
+      removeInitialFilter: true,
+      selectedValue: true,
+      defaultService: component.defaultService,
+      applyFilter: component.applyFilter,
+      setScrollingControl: component['setScrollingControl']
+    };
+
+    spyOn(fakeThis, 'applyFilter');
+    spyOn(fakeThis, 'setScrollingControl');
+    component.applyFilterInFirstClick.call(fakeThis);
+
+    expect(component.options).toEqual([]);
+    expect(fakeThis.defaultService.hasNext).toBeTruthy();
+  });
+
   it('shouldn`t call applyFilter', () => {
     const fakeThis = {
       isFirstFilter: true,
@@ -181,6 +200,49 @@ describe('PoComboComponent:', () => {
     spyOn(fakeThis, 'applyFilter');
     component.applyFilterInFirstClick.call(fakeThis);
     expect(fakeThis.applyFilter).not.toHaveBeenCalled();
+  });
+
+  it('should update cacheOptions with selected item based on selectedValue', () => {
+    component.selectedValue = '0448093615904';
+
+    (component as any).comboOptionsList = [
+      { value: '0448093615903', name: 'Option 1' },
+      { value: '0448093615904', name: 'Option 2' },
+      { value: '0448093615905', name: 'Option 3' }
+    ];
+    component.updateCacheOptions();
+
+    expect(component.cacheOptions).toEqual([
+      { value: '0448093615903', name: 'Option 1' },
+      { value: '0448093615904', name: 'Option 2', selected: true },
+      { value: '0448093615905', name: 'Option 3' }
+    ]);
+  });
+
+  it('should not update cacheOptions on subsequent calls when isFirstFilter is false', () => {
+    const items = [...component['comboOptionsList']];
+    const value = 'Option 3';
+
+    component.isFirstFilter = false;
+    component.cacheOptions = [{ label: 'Option 1', selected: false }];
+
+    component.setOptionsByApplyFilter(value, items);
+
+    expect(component.cacheOptions).toEqual([{ label: 'Option 1', selected: false }]);
+  });
+
+  it('should call prepareOptions and controlComboVisibility with the correct parameters', () => {
+    const items = [...component['comboOptionsList']];
+    const value = 'Option 1';
+    const reset = true;
+
+    spyOn(component as any, 'prepareOptions').and.callThrough();
+    spyOn(component, 'controlComboVisibility').and.callThrough();
+
+    component.setOptionsByApplyFilter(value, items, reset);
+
+    expect(component['prepareOptions']).toHaveBeenCalledWith(items);
+    expect(component.controlComboVisibility).toHaveBeenCalledWith(true, reset);
   });
 
   it('should show combo and save the cache', () => {
@@ -371,21 +433,84 @@ describe('PoComboComponent:', () => {
       expect(component.inputEl.nativeElement.focus).toHaveBeenCalled();
     });
 
-    it('onBlur: should be called when blur event', () => {
-      component['onModelTouched'] = () => {};
-      spyOn(component, <any>'onModelTouched');
+    describe('getAdditionalHelpTooltip:', () => {
+      it('should return null when isAdditionalHelpEventTriggered returns true', () => {
+        spyOn(component as any, 'isAdditionalHelpEventTriggered').and.returnValue(true);
 
-      component.onBlur();
+        const result = component.getAdditionalHelpTooltip();
 
-      expect(component['onModelTouched']).toHaveBeenCalled();
+        expect(result).toBeNull();
+      });
+
+      it('should return additionalHelpTooltip when isAdditionalHelpEventTriggered returns false', () => {
+        const tooltip = 'Test Tooltip';
+        component.additionalHelpTooltip = tooltip;
+        spyOn(component as any, 'isAdditionalHelpEventTriggered').and.returnValue(false);
+
+        const result = component.getAdditionalHelpTooltip();
+
+        expect(result).toBe(tooltip);
+      });
+
+      it('should return undefined when additionalHelpTooltip is undefined and isAdditionalHelpEventTriggered returns false', () => {
+        component.additionalHelpTooltip = undefined;
+        spyOn(component as any, 'isAdditionalHelpEventTriggered').and.returnValue(false);
+
+        const result = component.getAdditionalHelpTooltip();
+
+        expect(result).toBeUndefined();
+      });
     });
 
-    it('onBlur: shouldn´t throw error if onModelTouched is falsy', () => {
-      component['onModelTouched'] = null;
+    describe('onBlur:', () => {
+      let setupTest;
 
-      const fnError = () => component.onBlur();
+      beforeEach(() => {
+        setupTest = (tooltip: string, displayHelp: boolean, additionalHelpEvent: any) => {
+          component.additionalHelpTooltip = tooltip;
+          component.displayAdditionalHelp = displayHelp;
+          component.additionalHelp = additionalHelpEvent;
+          spyOn(component, 'showAdditionalHelp');
+        };
+      });
 
-      expect(fnError).not.toThrow();
+      it('should be called when blur event', () => {
+        component['onModelTouched'] = () => {};
+        spyOn(component, <any>'onModelTouched');
+
+        component.onBlur();
+
+        expect(component['onModelTouched']).toHaveBeenCalled();
+      });
+
+      it('shouldn´t throw error if onModelTouched is falsy', () => {
+        component['onModelTouched'] = null;
+
+        const fnError = () => component.onBlur();
+
+        expect(fnError).not.toThrow();
+      });
+
+      it('should call showAdditionalHelp when the tooltip is displayed', () => {
+        setupTest('Mensagem de apoio adicional.', true, { observed: false });
+
+        component.onBlur();
+        expect(component.showAdditionalHelp).toHaveBeenCalled();
+      });
+
+      it('should not call showAdditionalHelp when tooltip is not displayed', () => {
+        setupTest('Mensagem de apoio adicional.', false, { observed: false });
+
+        component.onBlur();
+        expect(component.showAdditionalHelp).not.toHaveBeenCalled();
+      });
+
+      it('should not call showAdditionalHelp when additionalHelp event is true', () => {
+        setupTest('Mensagem de apoio adicional.', true, { observed: true });
+
+        component.onBlur();
+        expect(component.showAdditionalHelp).not.toHaveBeenCalled();
+      });
     });
 
     describe('onKeyUp:', () => {
@@ -603,6 +728,10 @@ describe('PoComboComponent:', () => {
     });
 
     describe('onKeyDown: ', () => {
+      beforeEach(() => {
+        component.inputEl = new ElementRef(document.createElement('input'));
+      });
+
       it('should call `controlComboVisibility` and set `isFiltering` with false if `changeOnEnter` is true', () => {
         const event = { ...fakeEvent, keyCode: 40 };
         component.contentElement = {
@@ -777,6 +906,27 @@ describe('PoComboComponent:', () => {
         component.onKeyDown(event);
 
         expect(spyControlComboVisibility).not.toHaveBeenCalled();
+      });
+
+      it('should emit event when field is focused', () => {
+        const fakeEvent = new KeyboardEvent('keydown', { key: 'Enter' });
+
+        spyOn(component.keydown, 'emit');
+        spyOnProperty(document, 'activeElement', 'get').and.returnValue(component.inputEl.nativeElement);
+
+        component.onKeyDown(fakeEvent);
+
+        expect(component.keydown.emit).toHaveBeenCalledWith(fakeEvent);
+      });
+
+      it('should not emit event when field is not focused', () => {
+        const fakeEvent = new KeyboardEvent('keydown', { key: 'Enter' });
+
+        spyOn(component.keydown, 'emit');
+        spyOnProperty(document, 'activeElement', 'get').and.returnValue(document.createElement('div'));
+        component.onKeyDown(fakeEvent);
+
+        expect(component.keydown.emit).not.toHaveBeenCalled();
       });
     });
 
@@ -963,6 +1113,26 @@ describe('PoComboComponent:', () => {
       component.wasClickedOnToggle(eventClick);
 
       expect(SpyApplyFilter).toHaveBeenCalledWith('', false);
+    });
+
+    describe('showAdditionalHelp:', () => {
+      it('should toggle `displayAdditionalHelp` from false to true', () => {
+        component.displayAdditionalHelp = false;
+
+        const result = component.showAdditionalHelp();
+
+        expect(result).toBeTrue();
+        expect(component.displayAdditionalHelp).toBeTrue();
+      });
+
+      it('should toggle `displayAdditionalHelp` from true to false', () => {
+        component.displayAdditionalHelp = true;
+
+        const result = component.showAdditionalHelp();
+
+        expect(result).toBeFalse();
+        expect(component.displayAdditionalHelp).toBeFalse();
+      });
     });
 
     it('setContainerPosition: should call `controlPosition.setElements` and `adjustContainerPosition`', () => {
@@ -1522,37 +1692,64 @@ describe('PoComboComponent - with service:', () => {
       expect(fakeThis.service.getFilteredData).not.toHaveBeenCalled();
     });
 
-    it('applyFilter: should call PoComboFilterService.getFilteredData() with correct parameters when hasNext is true has page and pageSize', () => {
+    it('applyFilter: should set hasNext true if removeInitialFilter is true', () => {
       const fakeThis: any = {
-        controlComboVisibility: () => {},
-        setOptionsByApplyFilter: () => {},
+        removeInitialFilter: true,
+        controlComboVisibility: jasmine.createSpy('controlComboVisibility'),
+        setOptionsByApplyFilter: jasmine.createSpy('setOptionsByApplyFilter'),
         fieldLabel: 'label',
-        filterParams: 'filterParams', // Replace with your filterParams value
+        filterParams: 'filterParams',
+        isServerSearching: false,
         service: {
-          getFilteredData: () => {}
+          getFilteredData: jasmine.createSpy('getFilteredData').and.returnValue({
+            subscribe: (success: Function, error: Function) => success([])
+          })
         },
         defaultService: {
-          hasNext: true
+          hasNext: false
         },
-        infiniteScroll: true,
-        page: 1,
-        pageSize: 10
+        focusItem: jasmine.createSpy('focusItem'),
+        onErrorFilteredData: jasmine.createSpy('onErrorFilteredData')
       };
 
-      spyOn(fakeThis.service, 'getFilteredData').and.returnValue(of()); // Using of() to create an empty observable
-      const applyFilterValue = 'applyFilterValue'; // Replace with your applyFilterValue
+      const applyFilterValue = 'applyFilterValue';
       component.applyFilter.apply(fakeThis, [applyFilterValue]);
 
-      const expectedParam = {
-        property: 'label',
-        value: applyFilterValue,
+      expect(fakeThis.service.getFilteredData).toHaveBeenCalledWith(
+        { property: 'label', value: applyFilterValue },
+        'filterParams'
+      );
+    });
+
+    it('applyFilter: Should call the service getFilteredData method with the correct parameters when removeInitialFilter is true and infiniteScroll is enabled.', () => {
+      const fakeThis: any = {
+        removeInitialFilter: true,
+        controlComboVisibility: jasmine.createSpy('controlComboVisibility'),
+        setOptionsByApplyFilter: jasmine.createSpy('setOptionsByApplyFilter'),
+        infiniteScroll: true,
         page: 1,
-        pageSize: 10
+        pageSize: 1,
+        fieldLabel: 'label',
+        filterParams: 'filterParams',
+        isServerSearching: false,
+        service: {
+          getFilteredData: jasmine.createSpy('getFilteredData').and.returnValue({
+            subscribe: (success: Function, error: Function) => success([])
+          })
+        },
+        defaultService: {
+          hasNext: false
+        },
+        focusItem: jasmine.createSpy('focusItem'),
+        onErrorFilteredData: jasmine.createSpy('onErrorFilteredData')
       };
 
+      const applyFilterValue = 'applyFilterValue';
+      component.applyFilter.apply(fakeThis, [applyFilterValue]);
+
       expect(fakeThis.service.getFilteredData).toHaveBeenCalledWith(
-        expectedParam,
-        'filterParams' // Replace with your filterParams value
+        { property: 'label', value: applyFilterValue, page: 1, pageSize: 1 },
+        'filterParams'
       );
     });
 
@@ -1698,6 +1895,26 @@ describe('PoComboComponent - with service:', () => {
 
       expect(component['unsubscribeKeyupObservable']).not.toHaveBeenCalled();
       expect(component['initInputObservable']).not.toHaveBeenCalled();
+    });
+
+    describe('emitAdditionalHelp:', () => {
+      it('should emit additionalHelp when isAdditionalHelpEventTriggered returns true', () => {
+        spyOn(component.additionalHelp, 'emit');
+        spyOn(component as any, 'isAdditionalHelpEventTriggered').and.returnValue(true);
+
+        component.emitAdditionalHelp();
+
+        expect(component.additionalHelp.emit).toHaveBeenCalled();
+      });
+
+      it('should not emit additionalHelp when isAdditionalHelpEventTriggered returns false', () => {
+        spyOn(component.additionalHelp, 'emit');
+        spyOn(component as any, 'isAdditionalHelpEventTriggered').and.returnValue(false);
+
+        component.emitAdditionalHelp();
+
+        expect(component.additionalHelp.emit).not.toHaveBeenCalled();
+      });
     });
 
     it(`searchOnEnterOrArrow: should call 'controlApplyFilter' if has a service,

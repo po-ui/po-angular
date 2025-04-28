@@ -260,12 +260,12 @@ describe('PoStepperCircleComponent:', () => {
 
     it('should apply `iconActive` from Phosphor library if `status` is `Active` and `iconActive` is set.', () => {
       component.status = PoStepperStatus.Active;
-      component.iconActive = 'ph ph-anchor';
+      component.iconActive = 'an an-anchor';
       fixture.detectChanges();
 
       const activeIcon = nativeElement.querySelector('po-icon')?.querySelector('i');
       expect(activeIcon).toBeTruthy();
-      expect(activeIcon.classList.contains('ph-anchor')).toBeTrue();
+      expect(activeIcon.classList.contains('an-anchor')).toBeTrue();
     });
 
     it('should apply `iconActive` from Icons library if `status` is `Active` and `iconActive` is set.', () => {
@@ -286,18 +286,18 @@ describe('PoStepperCircleComponent:', () => {
       const activeIcon = PoIconEdit();
 
       expect(activeIcon).toBeTruthy();
-      expect(activeIcon.classList.contains('ph-pencil-simple')).toBeTrue();
+      expect(activeIcon.classList.contains('an-pencil-simple')).toBeTrue();
     });
 
     it('should apply `iconDone` from Phosphor library if `status` is `Done` and `iconDone` is set.', () => {
       component.status = PoStepperStatus.Done;
-      component.iconDone = 'ph ph-check-circle';
+      component.iconDone = 'an an-check-circle';
       fixture.detectChanges();
 
       const doneIcon = nativeElement.querySelector('po-icon')?.querySelector('i');
 
       expect(doneIcon).toBeTruthy();
-      expect(doneIcon.classList.contains('ph-check-circle')).toBeTrue();
+      expect(doneIcon.classList.contains('an-check-circle')).toBeTrue();
     });
 
     it('should apply `iconDone` from Icons library if `status` is `Done` and `iconDone` is set.', () => {
@@ -321,19 +321,19 @@ describe('PoStepperCircleComponent:', () => {
 
     it('should apply `iconDefault` from Phosphor library if `status` is `Default` or `Disabled` and `iconDefault` is set.', () => {
       component.status = PoStepperStatus.Default;
-      component.iconDefault = 'ph ph-first-aid';
+      component.iconDefault = 'an an-first-aid';
       fixture.detectChanges();
 
       let defaultIcon = nativeElement.querySelector('po-icon')?.querySelector('i');
       expect(defaultIcon).toBeTruthy();
-      expect(defaultIcon.classList.contains('ph-first-aid')).toBeTrue();
+      expect(defaultIcon.classList.contains('an-first-aid')).toBeTrue();
 
       component.status = PoStepperStatus.Disabled;
       fixture.detectChanges();
 
       defaultIcon = nativeElement.querySelector('po-icon')?.querySelector('i');
       expect(defaultIcon).toBeTruthy();
-      expect(defaultIcon.classList.contains('ph-first-aid')).toBeTrue();
+      expect(defaultIcon.classList.contains('an-first-aid')).toBeTrue();
     });
 
     it('should apply `iconDefault` from Icons library if `status` is `Default` or `Disabled` and `iconDefault` is set.', () => {
@@ -361,14 +361,14 @@ describe('PoStepperCircleComponent:', () => {
 
       const defaultIcon = PoIconInfo();
       expect(defaultIcon).toBeTruthy();
-      expect(defaultIcon.classList.contains('ph-info')).toBeTrue();
+      expect(defaultIcon.classList.contains('an-info')).toBeTrue();
 
       component.status = PoStepperStatus.Disabled;
       fixture.detectChanges();
 
       const disabledIcon = PoIconInfo();
       expect(disabledIcon).toBeTruthy();
-      expect(disabledIcon.classList.contains('ph-info')).toBeTrue();
+      expect(disabledIcon.classList.contains('an-info')).toBeTrue();
     });
 
     it('should display an empty string if `status` is `Default` or `Disabled`, `iconDefault` is not set, and `icons` is false.', () => {
@@ -389,14 +389,14 @@ describe('PoStepperCircleComponent:', () => {
   });
 
   function PoIconInfo() {
-    return nativeElement.querySelector('po-icon')?.querySelector('i.ph.ph-info');
+    return nativeElement.querySelector('po-icon')?.querySelector('i.an.an-info');
   }
 
   function PoIconOk() {
-    return nativeElement.querySelector('.ph-check');
+    return nativeElement.querySelector('.an-check');
   }
 
   function PoIconEdit() {
-    return nativeElement.querySelector('po-icon')?.querySelector('i.ph-pencil-simple');
+    return nativeElement.querySelector('po-icon')?.querySelector('i.an-pencil-simple');
   }
 });

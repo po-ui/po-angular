@@ -11,9 +11,11 @@ import {
 
 @Component({
   selector: 'sample-po-combo-labs',
-  templateUrl: './sample-po-combo-labs.component.html'
+  templateUrl: './sample-po-combo-labs.component.html',
+  standalone: false
 })
 export class SamplePoComboLabsComponent implements OnInit {
+  additionalHelpTooltip: string;
   combo: string;
   comboOptionGroupSwitch: boolean;
   customLiterals: PoComboLiterals;
@@ -39,6 +41,7 @@ export class SamplePoComboLabsComponent implements OnInit {
   option: PoComboOption;
   options: Array<PoComboOption | PoComboOptionGroup>;
   selectedOptionsGroup: string;
+  size: string;
 
   public readonly filterModeOptions: Array<PoRadioGroupOption> = [
     { label: 'Starts With', value: 'startsWith' },
@@ -47,8 +50,8 @@ export class SamplePoComboLabsComponent implements OnInit {
   ];
 
   public readonly iconsOptions: Array<PoRadioGroupOption> = [
-    { label: 'ph ph-building-apartment', value: 'ph ph-building-apartment' },
-    { label: 'ph ph-gas-pump', value: 'ph ph-gas-pump' },
+    { label: 'an an-building-apartment', value: 'an an-building-apartment' },
+    { label: 'an an-gas-pump', value: 'an an-gas-pump' },
     { label: 'fa fa-calculator', value: 'fa fa-calculator' }
   ];
 
@@ -61,7 +64,13 @@ export class SamplePoComboLabsComponent implements OnInit {
     { value: 'showRequired', label: 'Show Required' },
     { value: 'sort', label: 'Sort' },
     { value: 'clean', label: 'Clean' },
-    { value: 'disabledTabFilter', label: 'Disabled Tab Filter' }
+    { value: 'disabledTabFilter', label: 'Disabled Tab Filter' },
+    { value: 'errorLimit', label: 'Limit Error Message' }
+  ];
+
+  public readonly sizeOptions: Array<PoRadioGroupOption> = [
+    { label: 'small', value: 'small' },
+    { label: 'medium', value: 'medium' }
   ];
 
   ngOnInit() {
@@ -90,6 +99,7 @@ export class SamplePoComboLabsComponent implements OnInit {
   }
 
   restore() {
+    this.additionalHelpTooltip = '';
     this.combo = undefined;
     this.comboOptionGroupSwitch = false;
     this.customLiterals = undefined;
@@ -115,6 +125,7 @@ export class SamplePoComboLabsComponent implements OnInit {
     this.properties = [];
     this.fieldErrorMessage = '';
     this.selectedOptionsGroup = undefined;
+    this.size = 'medium';
   }
 
   private insertGroupIntoSelectInput(value: string) {

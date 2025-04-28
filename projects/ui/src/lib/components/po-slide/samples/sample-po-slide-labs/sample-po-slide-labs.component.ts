@@ -4,7 +4,8 @@ import { PoNotificationService, PoSlideItem } from '@po-ui/ng-components';
 
 @Component({
   selector: 'sample-po-slide-labs',
-  templateUrl: './sample-po-slide-labs.component.html'
+  templateUrl: './sample-po-slide-labs.component.html',
+  standalone: false
 })
 export class SamplePoSlideLabsComponent implements OnInit {
   height: number;

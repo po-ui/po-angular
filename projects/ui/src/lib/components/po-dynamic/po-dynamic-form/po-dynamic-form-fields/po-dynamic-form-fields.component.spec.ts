@@ -1,15 +1,15 @@
+import { SimpleChange, SimpleChanges } from '@angular/core';
 import { ComponentFixture, TestBed } from '@angular/core/testing';
 import { FormsModule, NgForm, ReactiveFormsModule } from '@angular/forms';
-import { SimpleChange } from '@angular/core';
 
 import { of } from 'rxjs';
 
+import { provideHttpClient, withInterceptorsFromDi } from '@angular/common/http';
+import { provideHttpClientTesting } from '@angular/common/http/testing';
+import { PoDynamicModule } from '../../po-dynamic.module';
+import { PoDynamicFormField } from '../interfaces/po-dynamic-form-field.interface';
 import { PoDynamicFormFieldsBaseComponent } from './po-dynamic-form-fields-base.component';
 import { PoDynamicFormFieldsComponent } from './po-dynamic-form-fields.component';
-import { PoDynamicModule } from '../../po-dynamic.module';
-import { provideHttpClientTesting } from '@angular/common/http/testing';
-import { provideHttpClient, withInterceptorsFromDi } from '@angular/common/http';
-import { PoDynamicFormField } from '../po-dynamic-form-field.interface';
 
 describe('PoDynamicFormFieldsComponent: ', () => {
   let component: PoDynamicFormFieldsComponent;
@@ -29,7 +29,7 @@ describe('PoDynamicFormFieldsComponent: ', () => {
 
     fixture = TestBed.createComponent(PoDynamicFormFieldsComponent);
     component = fixture.componentInstance;
-    component['form'] = <any>{ touched: true };
+    component['form'] = <any>{ dirty: true };
 
     fixture.detectChanges();
 
@@ -82,6 +82,19 @@ describe('PoDynamicFormFieldsComponent: ', () => {
       component.ngOnChanges(fieldsChange);
 
       expect(component['hasChangeContainer']).toHaveBeenCalled();
+    });
+
+    it('ngOnChanges: should update `previousValue` with the changes in `p-value`', () => {
+      const value = { name: 'name' };
+      component.value = value;
+
+      const changes: SimpleChanges = {
+        value: new SimpleChange(null, value, true)
+      };
+
+      component.ngOnChanges(changes);
+
+      expect(component['previousValue']).toEqual(value);
     });
 
     it('trackBy: should return index', () => {
@@ -361,6 +374,26 @@ describe('PoDynamicFormFieldsComponent: ', () => {
         component.onChangeFieldModel(fakeVisibleField);
 
         expect(component['triggerValidationOnForm']).not.toHaveBeenCalled();
+      });
+    });
+
+    describe('showAdditionalHelp:', () => {
+      it('should call `showAdditionalHelp` if find component.', () => {
+        const fieldComponent = { showAdditionalHelp: jasmine.createSpy(), name: 'name' };
+        component.components = <any>[fieldComponent];
+
+        component.showAdditionalHelp('name');
+
+        expect(fieldComponent.showAdditionalHelp).toHaveBeenCalled();
+      });
+
+      it('should not call `showAdditionalHelp` if component is not found', () => {
+        const fieldComponent = { showAdditionalHelp: jasmine.createSpy(), name: 'name' };
+        component.components = <any>[fieldComponent];
+
+        component.showAdditionalHelp('nickname');
+
+        expect(fieldComponent.showAdditionalHelp).not.toHaveBeenCalled();
       });
     });
 

@@ -4,7 +4,8 @@ import { PoChartOptions, PoChartSerie, PoChartType } from '@po-ui/ng-components'
 
 @Component({
   selector: 'sample-po-chart-world-exports',
-  templateUrl: './sample-po-chart-world-exports.component.html'
+  templateUrl: './sample-po-chart-world-exports.component.html',
+  standalone: false
 })
 export class SamplePoChartWorldExportsComponent {
   participationByCountryInWorldExportsType: PoChartType = PoChartType.Line;

@@ -6,7 +6,8 @@ import { PoBreadcrumb, PoSelectOption } from '@po-ui/ng-components';
 
 @Component({
   selector: 'sample-po-page-change-password-modify',
-  templateUrl: './sample-po-page-change-password-modify.component.html'
+  templateUrl: './sample-po-page-change-password-modify.component.html',
+  standalone: false
 })
 export class SamplePoPageChangePasswordModifyComponent implements OnInit {
   @ViewChild(PoPageChangePasswordComponent) changePassword: PoPageChangePasswordComponent;

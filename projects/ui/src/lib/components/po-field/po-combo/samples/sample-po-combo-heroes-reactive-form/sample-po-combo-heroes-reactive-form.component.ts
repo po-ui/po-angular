@@ -6,7 +6,8 @@ import { Observable } from 'rxjs';
 
 @Component({
   selector: 'sample-po-combo-heroes-reactive-form',
-  templateUrl: './sample-po-combo-heroes-reactive-form.component.html'
+  templateUrl: './sample-po-combo-heroes-reactive-form.component.html',
+  standalone: false
 })
 export class SamplePoComboHeroesReactiveFormComponent implements OnInit {
   form: UntypedFormGroup;

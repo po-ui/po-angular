@@ -4,7 +4,9 @@ import { Observable } from 'rxjs';
 
 import { PoModalPasswordRecovery } from './interfaces/po-modal-password-recovery.interface';
 
-@Injectable()
+@Injectable({
+  providedIn: 'root'
+})
 export class PoModalPasswordRecoveryService {
   constructor(private http: HttpClient) {}
 
@@ -12,7 +14,7 @@ export class PoModalPasswordRecoveryService {
     urlRecovery: string,
     item: PoModalPasswordRecovery,
     params?: HttpParams | { [param: string]: string | Array<string> }
-  ): Observable<HttpResponse<Object>> {
+  ): Observable<HttpResponse<object>> {
     return this.http.post<any>(urlRecovery, item, { observe: 'response', params: params });
   }
 }

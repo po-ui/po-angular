@@ -12,7 +12,9 @@ import { PoUploadFile } from './po-upload-file';
 
 import { Observable, Subscription } from 'rxjs';
 
-@Injectable()
+@Injectable({
+  providedIn: 'root'
+})
 export class PoUploadBaseService {
   formField: string = 'files';
   requests: Array<any> = [];

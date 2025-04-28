@@ -1,15 +1,15 @@
 import { ComponentFixture, TestBed, waitForAsync } from '@angular/core/testing';
 
-import { configureTestSuite } from './../../util-test/util-expect.spec';
-
-import { poDialogAlertLiteralsDefault, PoDialogComponent, poDialogConfirmLiteralsDefault } from './po-dialog.component';
+import { PoThemeA11yEnum, PoThemeService } from '../po-theme';
+import { PoDialogType } from './enums/po-dialog.enum';
 import { PoDialogAlertOptions, PoDialogConfirmOptions } from './interfaces/po-dialog.interface';
+import { poDialogAlertLiteralsDefault, PoDialogComponent, poDialogConfirmLiteralsDefault } from './po-dialog.component';
 import { PoDialogModule } from './po-dialog.module';
-import { PoDialogType } from './po-dialog.enum';
 
 describe('PoDialogComponent:', () => {
   let component: PoDialogComponent;
   let fixture: ComponentFixture<PoDialogComponent>;
+  let poThemeServiceMock: jasmine.SpyObj<PoThemeService>;
 
   const alertOptions: PoDialogAlertOptions = {
     title: 'Title',
@@ -25,18 +25,18 @@ describe('PoDialogComponent:', () => {
     close: () => {}
   };
 
-  configureTestSuite(() => {
-    TestBed.configureTestingModule({
-      imports: [PoDialogModule]
-    });
-  });
-
   beforeEach(() => {
+    poThemeServiceMock = jasmine.createSpyObj('PoThemeService', ['getA11yLevel', 'getA11yDefaultSize']);
+
+    TestBed.configureTestingModule({
+      imports: [PoDialogModule], // Reintroduzindo o módulo
+      providers: [{ provide: PoThemeService, useValue: poThemeServiceMock }]
+    }).compileComponents();
+
     fixture = TestBed.createComponent(PoDialogComponent);
     component = fixture.componentInstance;
     fixture.detectChanges();
   });
-
   it('should be created', () => {
     expect(component instanceof PoDialogComponent).toBeTruthy();
   });
@@ -140,6 +140,50 @@ describe('PoDialogComponent:', () => {
     component.destroy();
 
     expect(sourceObject.componentRef.destroy).toHaveBeenCalled();
+  });
+
+  describe('p-components-size', () => {
+    it('should set property with valid values for accessibility level is AA', () => {
+      poThemeServiceMock.getA11yLevel.and.returnValue(PoThemeA11yEnum.AA);
+
+      component.componentsSize = 'small';
+      expect(component.componentsSize).toBe('small');
+
+      component.componentsSize = 'medium';
+      expect(component.componentsSize).toBe('medium');
+    });
+
+    it('should set property with valid values for accessibility level is AAA', () => {
+      poThemeServiceMock.getA11yLevel.and.returnValue(PoThemeA11yEnum.AAA);
+
+      component.componentsSize = 'small';
+      expect(component.componentsSize).toBe('medium');
+
+      component.componentsSize = 'medium';
+      expect(component.componentsSize).toBe('medium');
+    });
+
+    it('should return small when accessibility is AA and getA11yDefaultSize is small', () => {
+      poThemeServiceMock.getA11yLevel.and.returnValue(PoThemeA11yEnum.AA);
+      poThemeServiceMock.getA11yDefaultSize.and.returnValue('small');
+
+      component['_componentsSize'] = undefined;
+      expect(component.componentsSize).toBe('small');
+    });
+
+    it('should return medium when accessibility is AA and getA11yDefaultSize is medium', () => {
+      poThemeServiceMock.getA11yLevel.and.returnValue(PoThemeA11yEnum.AA);
+      poThemeServiceMock.getA11yDefaultSize.and.returnValue('medium');
+
+      component['_componentsSize'] = undefined;
+      expect(component.componentsSize).toBe('medium');
+    });
+
+    it('should return medium when accessibility is AAA, regardless of getA11yDefaultSize', () => {
+      poThemeServiceMock.getA11yLevel.and.returnValue(PoThemeA11yEnum.AAA);
+      component['_componentsSize'] = undefined;
+      expect(component.componentsSize).toBe('medium');
+    });
   });
 
   describe('Methods:', () => {

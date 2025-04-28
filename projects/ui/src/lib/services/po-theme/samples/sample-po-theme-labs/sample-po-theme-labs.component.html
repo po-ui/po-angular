@@ -1,61 +1,62 @@
-<po-container id="test">
-  <po-widget p-title="Theme Change">
-    <po-radio-group
-      class="po-lg-4 po-pl-2"
-      name="theme"
-      [(ngModel)]="theme"
-      [p-options]="themeOptions"
-      (p-change)="changeTheme($event)"
-    >
-    </po-radio-group>
-  </po-widget>
-  <po-widget p-title="Example">
-    <po-page-default p-title="Dashboard" [p-actions]="actions" [p-breadcrumb]="breadcrumb">
-      <div class="po-row">
-        <po-widget class="po-md-6 po-lg-4 po-mb-2" p-title="Daily visitors">
-          <div class="po-font-subtitle po-text-center">540</div>
-          <div class="po-text-center sample-widget-text-subtitle">www.po.com.br</div>
-        </po-widget>
+<po-widget p-title="Example">
+  <form [formGroup]="reactiveForm">
+    <po-input class="po-lg-6" formControlName="name" p-clean p-icon="an an-user" p-label="Customer name"> </po-input>
 
-        <po-widget class="po-md-6 po-lg-4 po-mb-2" p-title="Most viewed page">
-          <div class="po-font-subtitle po-text-center">300 views</div>
-          <div class="po-text-center sample-widget-text-subtitle">https://po-ui.io</div>
-        </po-widget>
+    <po-email class="po-lg-6" formControlName="email" p-label="Email" p-clean> </po-email>
 
-        <po-widget class="po-md-6 po-lg-4 po-mb-2" p-title="Website status">
-          <div class="po-font-subtitle po-text-center">Online</div>
-          <div class="po-text-center sample-widget-text-subtitle">28 days</div>
-        </po-widget>
+    <po-input class="po-lg-4 po-md-8" formControlName="address" p-clean p-icon="an an-map-pin" p-label="Address">
+    </po-input>
 
-        <po-widget class="po-md-6 po-lg-4 po-mb-2" p-title="NPM downloads">
-          <div class="po-font-subtitle po-text-center">266</div>
-          <div class="po-text-center sample-widget-text-subtitle">&#64;po-ui/ng-components - 1.10.1</div>
-        </po-widget>
+    <po-number class="po-lg-2 po-md-4" formControlName="number" p-label="Number" p-clean> </po-number>
 
-        <po-widget class="po-md-6 po-lg-4 po-mb-2" p-title="Devforum PO questions">
-          <div class="po-font-subtitle po-text-center">800 questions</div>
-          <div class="po-text-center sample-widget-text-subtitle">https://devforum.po.com.br</div>
-        </po-widget>
+    <po-url class="po-lg-6" formControlName="website" p-label="Website" p-clean> </po-url>
 
-        <po-widget class="po-md-6 po-lg-4 po-mb-2" p-title="Angular versions supported">
-          <div class="po-font-subtitle po-text-center">AngularJS - Angular 6</div>
-          <div class="po-text-center sample-widget-text-subtitle">Angular 6 most downloaded</div>
-        </po-widget>
-      </div>
-    </po-page-default>
-  </po-widget>
-</po-container>
-
-<po-modal p-title="Share webpage" [p-primary-action]="shareAction" [p-secondary-action]="cancelAction">
-  <form #formShare="ngForm">
-    <po-email
-      class="po-lg-12"
-      name="email"
-      [(ngModel)]="email"
-      p-clean
-      p-label="Type an e-mail for sharing webpage: http://www.po.com.br"
-      p-required
-    >
-    </po-email>
+    <div class="po-row">
+      <po-button class="po-md-3" p-label="Save" [p-disabled]="!reactiveForm.valid" (p-click)="saveForm()"> </po-button>
+    </div>
   </form>
-</po-modal>
+
+  <po-modal #reactiveFormData p-title="Save successful" [p-primary-action]="modalPrimaryAction">
+    <div class="po-row">
+      <po-info class="po-md-12" p-label="Name" [p-value]="reactiveForm.controls.name.value"> </po-info>
+    </div>
+
+    <hr />
+
+    <div class="po-row">
+      <po-info class="po-md-6" p-label="Address" [p-value]="reactiveForm.controls.address.value"> </po-info>
+
+      <po-info class="po-md-6" p-label="Number" [p-value]="reactiveForm.controls.number.value"> </po-info>
+    </div>
+
+    <hr />
+
+    <div class="po-row">
+      <po-info class="po-md-6" p-label="Email" [p-value]="reactiveForm.controls.email.value"> </po-info>
+
+      <po-info class="po-md-6" p-label="Website" [p-value]="reactiveForm.controls.website.value"> </po-info>
+    </div>
+  </po-modal>
+</po-widget>
+
+<div class="po-row po-mt-3">
+  <po-radio-group
+    class="po-md-6"
+    name="theme"
+    p-label="Theme Type"
+    [(ngModel)]="theme"
+    [p-options]="themeOptions"
+    (p-change)="changeTheme($event)"
+  >
+  </po-radio-group>
+
+  <po-radio-group
+    class="po-md-6"
+    name="a11ylevel"
+    p-label="Acessibility Level"
+    [(ngModel)]="a11yLevel"
+    [p-options]="a11yLevelOptions"
+    (p-change)="changeA11yLevel($event)"
+  >
+  </po-radio-group>
+</div>

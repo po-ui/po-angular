@@ -12,7 +12,8 @@ import { PoDynamicFormRegisterService } from './sample-po-dynamic-form-register.
 @Component({
   selector: 'sample-po-dynamic-form-register',
   templateUrl: './sample-po-dynamic-form-register.component.html',
-  providers: [PoDynamicFormRegisterService]
+  providers: [PoDynamicFormRegisterService],
+  standalone: false
 })
 export class SamplePoDynamicFormRegisterComponent implements OnInit {
   person = {};
@@ -79,7 +80,7 @@ export class SamplePoDynamicFormRegisterComponent implements OnInit {
       booleanFalse: 'Inactive',
       formatModel: true
     },
-    { property: 'email', divider: 'CONTACTS', gridColumns: 6, icon: 'ph ph-envelope' },
+    { property: 'email', divider: 'CONTACTS', gridColumns: 6, icon: 'an an-envelope' },
     { property: 'phone', mask: '(99) 99999-9999', gridColumns: 6 },
     { property: 'address', gridColumns: 6 },
     {
@@ -126,7 +127,7 @@ export class SamplePoDynamicFormRegisterComponent implements OnInit {
       gridSmColumns: 12,
       decimalsLength: 2,
       thousandMaxlength: 7,
-      icon: 'ph ph-currency-circle-dollar'
+      icon: 'an an-currency-circle-dollar'
     },
     {
       property: 'hobbies',

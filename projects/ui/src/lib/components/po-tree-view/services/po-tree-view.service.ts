@@ -4,7 +4,9 @@ import { Subject } from 'rxjs';
 
 import { PoTreeViewItem } from '../po-tree-view-item/po-tree-view-item.interface';
 
-@Injectable()
+@Injectable({
+  providedIn: 'root'
+})
 export class PoTreeViewService {
   private expandedEvent = new Subject<PoTreeViewItem>();
   private selectedEvent = new Subject<PoTreeViewItem>();

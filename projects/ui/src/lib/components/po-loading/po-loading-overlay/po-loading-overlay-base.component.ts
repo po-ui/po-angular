@@ -113,10 +113,10 @@ export class PoLoadingOverlayBaseComponent {
    * Define o tamanho do componente com base no tamanho do ícone de *loading*.
    *
    * Tamanhos disponíveis para o *loading*:
-   * - `xs`: 16px
-   * - `sm`: 24px
-   * - `md`: 48px
-   * - `lg`: 80px (valor padrão)
+   * - `xs`: 1rem
+   * - `sm`: 1.5rem
+   * - `md`: 3rem
+   * - `lg`: 5rem (valor padrão)
    *
    * @default `lg`
    */

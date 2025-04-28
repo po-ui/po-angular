@@ -151,6 +151,37 @@ describe('PoLookupComponent:', () => {
       });
     });
 
+    describe('onBlur:', () => {
+      let setupTest;
+
+      beforeEach(() => {
+        setupTest = (tooltip: string, displayHelp: boolean, additionalHelpEvent: any) => {
+          component.additionalHelpTooltip = tooltip;
+          component.displayAdditionalHelp = displayHelp;
+          component.additionalHelp = additionalHelpEvent;
+          spyOn(component, 'showAdditionalHelp');
+        };
+      });
+
+      it('should call showAdditionalHelp when the tooltip is displayed', () => {
+        setupTest('Mensagem de apoio adicional.', true, { observed: false });
+        component.onBlur();
+        expect(component.showAdditionalHelp).toHaveBeenCalled();
+      });
+
+      it('should not call showAdditionalHelp when tooltip is not displayed', () => {
+        setupTest('Mensagem de apoio adicional.', false, { observed: false });
+        component.onBlur();
+        expect(component.showAdditionalHelp).not.toHaveBeenCalled();
+      });
+
+      it('should not call showAdditionalHelp when additionalHelp event is true', () => {
+        setupTest('Mensagem de apoio adicional.', true, { observed: true });
+        component.onBlur();
+        expect(component.showAdditionalHelp).not.toHaveBeenCalled();
+      });
+    });
+
     it('searchEvent: should call `searchById` when the current value isn`t equal to the old value.', inject(
       [LookupFilterService],
       (lookupFilterService: LookupFilterService) => {
@@ -275,6 +306,55 @@ describe('PoLookupComponent:', () => {
       component.focus();
 
       expect(component.inputEl.nativeElement.focus).not.toHaveBeenCalled();
+    });
+
+    describe('emitAdditionalHelp:', () => {
+      it('should emit additionalHelp when isAdditionalHelpEventTriggered returns true', () => {
+        spyOn(component.additionalHelp, 'emit');
+        spyOn(component as any, 'isAdditionalHelpEventTriggered').and.returnValue(true);
+
+        component.emitAdditionalHelp();
+
+        expect(component.additionalHelp.emit).toHaveBeenCalled();
+      });
+
+      it('should not emit additionalHelp when isAdditionalHelpEventTriggered returns false', () => {
+        spyOn(component.additionalHelp, 'emit');
+        spyOn(component as any, 'isAdditionalHelpEventTriggered').and.returnValue(false);
+
+        component.emitAdditionalHelp();
+
+        expect(component.additionalHelp.emit).not.toHaveBeenCalled();
+      });
+    });
+
+    describe('getAdditionalHelpTooltip:', () => {
+      it('should return null when isAdditionalHelpEventTriggered returns true', () => {
+        spyOn(component as any, 'isAdditionalHelpEventTriggered').and.returnValue(true);
+
+        const result = component.getAdditionalHelpTooltip();
+
+        expect(result).toBeNull();
+      });
+
+      it('should return additionalHelpTooltip when isAdditionalHelpEventTriggered returns false', () => {
+        const tooltip = 'Test Tooltip';
+        component.additionalHelpTooltip = tooltip;
+        spyOn(component as any, 'isAdditionalHelpEventTriggered').and.returnValue(false);
+
+        const result = component.getAdditionalHelpTooltip();
+
+        expect(result).toBe(tooltip);
+      });
+
+      it('should return undefined when additionalHelpTooltip is undefined and isAdditionalHelpEventTriggered returns false', () => {
+        component.additionalHelpTooltip = undefined;
+        spyOn(component as any, 'isAdditionalHelpEventTriggered').and.returnValue(false);
+
+        const result = component.getAdditionalHelpTooltip();
+
+        expect(result).toBeUndefined();
+      });
     });
 
     it('openLookup: should call `openModal` if `isAllowedOpenModal` return true', inject(
@@ -704,7 +784,7 @@ describe('PoLookupComponent:', () => {
     });
 
     it(`calculateVisibleItems: should set 'visibleDisclaimers' with value and '+1' in input`, () => {
-      const arrayDisclaimers: Array<Number> = [116, 97];
+      const arrayDisclaimers: Array<number> = [116, 97];
       const spyGetDisclaimersWidth = spyOn(component, 'getDisclaimersWidth').and.returnValue(arrayDisclaimers);
       const spyGetInputWidth = spyOn(component, 'getInputWidth').and.returnValue(186);
       const expectValue = [
@@ -739,7 +819,7 @@ describe('PoLookupComponent:', () => {
     });
 
     it(`calculateVisibleItems: should set empty array in'visibleDisclaimers' if 'InputWidth' is less than 0`, () => {
-      const arrayDisclaimers: Array<Number> = [116, 97];
+      const arrayDisclaimers: Array<number> = [116, 97];
       const spyGetDisclaimersWidth = spyOn(component, 'getDisclaimersWidth').and.returnValue(arrayDisclaimers);
       const spyGetInputWidth = spyOn(component, 'getInputWidth').and.returnValue(0);
 
@@ -765,7 +845,7 @@ describe('PoLookupComponent:', () => {
     });
 
     it(`calculateVisibleItems: should set empty array in 'visibleDisclaimers' if 'disclaimers' are empty`, () => {
-      const arrayDisclaimers: Array<Number> = [116, 97];
+      const arrayDisclaimers: Array<number> = [116, 97];
       const spyGetDisclaimersWidth = spyOn(component, 'getDisclaimersWidth').and.returnValue(arrayDisclaimers);
       const spyGetInputWidth = spyOn(component, 'getInputWidth').and.returnValue(0);
 
@@ -782,7 +862,7 @@ describe('PoLookupComponent:', () => {
     });
 
     it(`calculateVisibleItems: set 'Object' in 'disclaimers' when 'visibleDisclaimers' is empty but 'disclaimers' contain item`, () => {
-      const arrayDisclaimers: Array<Number> = [90];
+      const arrayDisclaimers: Array<number> = [90];
       const spyGetDisclaimersWidth = spyOn(component, 'getDisclaimersWidth').and.returnValue(arrayDisclaimers);
       const spyGetInputWidth = spyOn(component, 'getInputWidth').and.returnValue(1);
       const expectValue = [
@@ -814,7 +894,7 @@ describe('PoLookupComponent:', () => {
     });
 
     it(`calculateVisibleItems: set object in 'visibleDisclaimers' if disclaimers is empty `, () => {
-      const arrayDisclaimers: Array<Number> = [90];
+      const arrayDisclaimers: Array<number> = [90];
       const spyGetDisclaimersWidth = spyOn(component, 'getDisclaimersWidth').and.returnValue(arrayDisclaimers);
       const spyGetInputWidth = spyOn(component, 'getInputWidth').and.returnValue(1);
 
@@ -910,6 +990,59 @@ describe('PoLookupComponent:', () => {
       expect(fakeThis.isCalculateVisibleItems).toBeFalsy();
     });
 
+    describe('onKeyDown:', () => {
+      it('should emit event when field is focused', () => {
+        const fakeEvent = new KeyboardEvent('keydown', { key: 'Enter' });
+        component.inputEl = {
+          nativeElement: {
+            focus: () => {}
+          }
+        };
+
+        spyOn(component.keydown, 'emit');
+        spyOnProperty(document, 'activeElement', 'get').and.returnValue(component.inputEl.nativeElement);
+
+        component.onKeyDown(fakeEvent);
+
+        expect(component.keydown.emit).toHaveBeenCalledWith(fakeEvent);
+      });
+
+      it('should not emit event when field is not focused', () => {
+        const fakeEvent = new KeyboardEvent('keydown', { key: 'Enter' });
+        component.inputEl = {
+          nativeElement: {
+            focus: () => {}
+          }
+        };
+
+        spyOn(component.keydown, 'emit');
+        spyOnProperty(document, 'activeElement', 'get').and.returnValue(document.createElement('div'));
+        component.onKeyDown(fakeEvent);
+
+        expect(component.keydown.emit).not.toHaveBeenCalled();
+      });
+    });
+
+    describe('showAdditionalHelp:', () => {
+      it('should toggle `displayAdditionalHelp` from false to true', () => {
+        component.displayAdditionalHelp = false;
+
+        const result = component.showAdditionalHelp();
+
+        expect(result).toBeTrue();
+        expect(component.displayAdditionalHelp).toBeTrue();
+      });
+
+      it('should toggle `displayAdditionalHelp` from true to false', () => {
+        component.displayAdditionalHelp = true;
+
+        const result = component.showAdditionalHelp();
+
+        expect(result).toBeFalse();
+        expect(component.displayAdditionalHelp).toBeFalse();
+      });
+    });
+
     it('setInputValueWipoieldFormat: should set `inputValue` and `oldValue` with value returned of `fieldFormat`', () => {
       fixture.detectChanges();
       component.fieldFormat = valueFormated => `${valueFormated.value} - ${valueFormated.label}`;
@@ -989,6 +1122,7 @@ describe('PoLookupComponent:', () => {
           multiple,
           fieldLabel,
           fieldValue,
+          size,
           spacing,
           textWrap,
           virtualScroll,
@@ -1011,6 +1145,7 @@ describe('PoLookupComponent:', () => {
           selectedItems,
           fieldLabel,
           fieldValue,
+          size,
           spacing,
           textWrap,
           virtualScroll,

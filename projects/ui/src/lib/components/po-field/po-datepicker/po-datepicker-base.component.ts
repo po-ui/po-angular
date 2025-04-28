@@ -7,15 +7,19 @@ import {
   convertIsoToDate,
   convertToBoolean,
   formatYear,
+  getDefaultSize,
   isTypeof,
   replaceFormatSeparator,
   setYearFrom0To100,
-  validateDateRange
+  validateDateRange,
+  validateSize
 } from '../../../utils/util';
 import { PoMask } from '../po-input/po-mask';
 import { dateFailed, requiredFailed } from './../validators';
 
 import { Observable, Subscription, switchMap } from 'rxjs';
+import { PoFieldSize } from '../../../enums/po-field-size.enum';
+import { PoThemeService } from '../../../services';
 import { poLocaleDefault } from '../../../services/po-language/po-language.constant';
 import { PoLanguageService } from '../../../services/po-language/po-language.service';
 import { PoDatepickerIsoFormat } from './enums/po-datepicker-iso-format.enum';
@@ -95,6 +99,20 @@ const poDatepickerFormatDefault: string = 'dd/mm/yyyy';
  */
 @Directive()
 export abstract class PoDatepickerBaseComponent implements ControlValueAccessor, OnInit, OnDestroy, Validator {
+  // Propriedade interna que define se o ícone de ajuda adicional terá cursor clicável (evento) ou padrão (tooltip).
+  @Input() additionalHelpEventTrigger: string | undefined;
+
+  /**
+   * @optional
+   *
+   * @description
+   * Exibe um ícone de ajuda adicional ao `p-help`, com o texto desta propriedade no tooltip.
+   * Se o evento `p-additional-help` estiver definido, o tooltip não será exibido.
+   * **Como boa prática, indica-se utilizar um texto com até 140 caracteres.**
+   * > Requer um recuo mínimo de 8px se o componente estiver próximo à lateral da tela.
+   */
+  @Input('p-additional-help-tooltip') additionalHelpTooltip?: string;
+
   /**
    * @optional
    *
@@ -153,6 +171,20 @@ export abstract class PoDatepickerBaseComponent implements ControlValueAccessor,
    *
    * @description
    *
+   * Limita a exibição da mensagem de erro a duas linhas e exibe um tooltip com o texto completo.
+   *
+   * > Caso essa propriedade seja definida como `true`, a mensagem de erro será limitada a duas linhas
+   * e um tooltip será exibido ao passar o mouse sobre a mensagem para mostrar o conteúdo completo.
+   *
+   * @default `false`
+   */
+  @Input('p-error-limit') errorLimit: boolean = false;
+
+  /**
+   * @optional
+   *
+   * @description
+   *
    * Exibe a mensagem setada na propriedade `p-error-pattern` se o campo estiver vazio e for requerido.
    *
    * > Necessário que a propriedade `p-required` esteja habilitada.
@@ -160,6 +192,15 @@ export abstract class PoDatepickerBaseComponent implements ControlValueAccessor,
    * @default `false`
    */
   @Input('p-required-field-error-message') showErrorMessageRequired: boolean = false;
+
+  /**
+   * @optional
+   *
+   * @description
+   * Evento disparado ao clicar no ícone de ajuda adicional.
+   * Este evento ativa automaticamente a exibição do ícone de ajuda adicional ao `p-help`.
+   */
+  @Output('p-additional-help') additionalHelp: EventEmitter<any> = new EventEmitter<any>();
 
   /**
    * @optional
@@ -178,6 +219,15 @@ export abstract class PoDatepickerBaseComponent implements ControlValueAccessor,
    * Evento disparado ao alterar valor do campo.
    */
   @Output('p-change') onchange: EventEmitter<any> = new EventEmitter<any>();
+
+  /**
+   * @optional
+   *
+   * @description
+   * Evento disparado quando uma tecla é pressionada enquanto o foco está no componente.
+   * Retorna um objeto `KeyboardEvent` com informações sobre a tecla.
+   */
+  @Output('p-keydown') keydown: EventEmitter<KeyboardEvent> = new EventEmitter<KeyboardEvent>();
 
   offset: number;
   protected firstStart = true;
@@ -198,6 +248,7 @@ export abstract class PoDatepickerBaseComponent implements ControlValueAccessor,
   private _noAutocomplete?: boolean = false;
   private _placeholder?: string = '';
   private previousValue: any;
+  private _size?: string = undefined;
   private subscription: Subscription = new Subscription();
   private _date: Date;
 
@@ -273,6 +324,28 @@ export abstract class PoDatepickerBaseComponent implements ControlValueAccessor,
    * - Não possuir `p-help` e/ou `p-label`.
    */
   @Input('p-show-required') showRequired: boolean = false;
+
+  /**
+   * @optional
+   *
+   * @description
+   *
+   * Define o tamanho do componente:
+   * - `small`: altura do input como 32px (disponível apenas para acessibilidade AA).
+   * - `medium`: altura do input como 44px.
+   *
+   * > Caso a acessibilidade AA não esteja configurada, o tamanho `medium` será mantido.
+   * Para mais detalhes, consulte a documentação do [po-theme](https://po-ui.io/documentation/po-theme).
+   *
+   * @default `medium`
+   */
+  @Input('p-size') set size(value: string) {
+    this._size = validateSize(value, this.poThemeService, PoFieldSize);
+  }
+
+  get size(): string {
+    return this._size ?? getDefaultSize(this.poThemeService, PoFieldSize);
+  }
 
   /** Habilita ação para limpar o campo. */
   // eslint-disable-next-line @typescript-eslint/member-ordering
@@ -423,11 +496,11 @@ export abstract class PoDatepickerBaseComponent implements ControlValueAccessor,
    *
    * @description
    *
-   * Define que o calendário do DatePicker será incluído no body da página, em vez de suspenso junto ao campo de entrada do componente.
-   * Essa opção é útil em cenários onde o DatePicker precisa ser renderizado fora do conteúdo principal da página,
-   * como em formulários que utilizam scroll ou containers com overflow escondido.
+   * Define que o `calendar` e/ou tooltip (`p-additional-help-tooltip` e/ou `p-error-limit`) serão incluídos no body da
+   * página e não dentro do componente. Essa opção pode ser necessária em cenários com containers que possuem scroll ou
+   * overflow escondido, garantindo o posicionamento correto de ambos próximo ao elemento.
    *
-   * > Obs: O uso dessa propriedade pode interferir na sequência de tabulação da página, especialmente em formulários longos.
+   * > Quando utilizado com `p-additional-help-tooltip`, leitores de tela como o NVDA podem não ler o conteúdo do tooltip.
    *
    * @default `false`
    */
@@ -435,7 +508,8 @@ export abstract class PoDatepickerBaseComponent implements ControlValueAccessor,
 
   constructor(
     protected languageService: PoLanguageService,
-    protected cd: ChangeDetectorRef
+    protected cd: ChangeDetectorRef,
+    protected poThemeService: PoThemeService
   ) {}
 
   set date(value: any) {

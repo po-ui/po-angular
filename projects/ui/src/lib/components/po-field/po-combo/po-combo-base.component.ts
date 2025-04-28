@@ -3,18 +3,19 @@ import { AbstractControl, ControlValueAccessor, Validator, Validators } from '@a
 
 import { poLocaleDefault } from '../../../services/po-language/po-language.constant';
 import { PoLanguageService } from '../../../services/po-language/po-language.service';
-import { convertToBoolean, isTypeof, validValue } from '../../../utils/util';
+import { convertToBoolean, getDefaultSize, isTypeof, validateSize, validValue } from '../../../utils/util';
 import { requiredFailed } from '../validators';
 
+import { PoFieldSize } from '../../../enums/po-field-size.enum';
+import { PoThemeService } from '../../../services';
+import { PoComboFilterMode } from './enums/po-combo-filter-mode.enum';
 import { PoComboFilter } from './interfaces/po-combo-filter.interface';
 import { PoComboGroup } from './interfaces/po-combo-group.interface';
 import { poComboLiteralsDefault } from './interfaces/po-combo-literals-default.interface';
 import { PoComboLiterals } from './interfaces/po-combo-literals.interface';
 import { PoComboOptionGroup } from './interfaces/po-combo-option-group.interface';
 import { PoComboOption } from './interfaces/po-combo-option.interface';
-import { PoComboFilterMode } from './po-combo-filter-mode.enum';
 import { PoComboFilterService } from './po-combo-filter.service';
-import { Subscription } from 'rxjs';
 
 const PO_COMBO_DEBOUNCE_TIME_DEFAULT = 400;
 const PO_COMBO_FIELD_LABEL_DEFAULT = 'label';
@@ -76,6 +77,20 @@ const PO_COMBO_FIELD_VALUE_DEFAULT = 'value';
  */
 @Directive()
 export abstract class PoComboBaseComponent implements ControlValueAccessor, OnInit, Validator {
+  // Propriedade interna que define se o ícone de ajuda adicional terá cursor clicável (evento) ou padrão (tooltip).
+  @Input() additionalHelpEventTrigger: string | undefined;
+
+  /**
+   * @optional
+   *
+   * @description
+   * Exibe um ícone de ajuda adicional ao `p-help`, com o texto desta propriedade no tooltip.
+   * Se o evento `p-additional-help` estiver definido, o tooltip não será exibido.
+   * **Como boa prática, indica-se utilizar um texto com até 140 caracteres.**
+   * > Requer um recuo mínimo de 8px se o componente estiver próximo à lateral da tela.
+   */
+  @Input('p-additional-help-tooltip') additionalHelpTooltip?: string;
+
   /**
    * @optional
    *
@@ -167,7 +182,7 @@ export abstract class PoComboBaseComponent implements ControlValueAccessor, OnIn
    *
    * É possível usar qualquer um dos ícones da [Biblioteca de ícones](https://po-ui.io/icons). conforme exemplo abaixo:
    * ```
-   * <po-combo p-icon="ph ph-user" p-label="PO combo"></po-combo>
+   * <po-combo p-icon="an an-user" p-label="PO combo"></po-combo>
    * ```
    * Também é possível utilizar outras fontes de ícones, por exemplo a biblioteca *Font Awesome*, da seguinte forma:
    * ```
@@ -255,12 +270,44 @@ export abstract class PoComboBaseComponent implements ControlValueAccessor, OnIn
    * @optional
    *
    * @description
+   * Evento disparado ao clicar no ícone de ajuda adicional.
+   * Este evento ativa automaticamente a exibição do ícone de ajuda adicional ao `p-help`.
+   */
+  @Output('p-additional-help') additionalHelp = new EventEmitter<any>();
+
+  /**
+   * @optional
+   *
+   * @description
+   *
+   * Limita a exibição da mensagem de erro a duas linhas e exibe um tooltip com o texto completo.
+   *
+   * > Caso essa propriedade seja definida como `true`, a mensagem de erro será limitada a duas linhas
+   * e um tooltip será exibido ao passar o mouse sobre a mensagem para mostrar o conteúdo completo.
+   *
+   * @default `false`
+   */
+  @Input('p-error-limit') errorLimit: boolean = false;
+
+  /**
+   * @optional
+   *
+   * @description
    *
    * Deve ser informada uma função que será disparada quando houver alterações no ngModel. A função receberá como argumento o model modificado.
    *
    * > Pode-se optar pelo recebimento do objeto selecionado ao invés do model através da propriedade `p-emit-object-value`.
    */
   @Output('p-change') change: EventEmitter<any> = new EventEmitter<any>();
+
+  /**
+   * @optional
+   *
+   * @description
+   * Evento disparado quando uma tecla é pressionada enquanto o foco está no componente.
+   * Retorna um objeto `KeyboardEvent` com informações sobre a tecla.
+   */
+  @Output('p-keydown') keydown: EventEmitter<KeyboardEvent> = new EventEmitter<KeyboardEvent>();
 
   /**
    * @optional
@@ -289,6 +336,13 @@ export abstract class PoComboBaseComponent implements ControlValueAccessor, OnIn
    */
   @Output('p-input-change') inputChange: EventEmitter<string> = new EventEmitter<string>();
 
+  /**
+   * @docsPrivate
+   *
+   * Determinar se o valor do compo deve retorna objeto do tipo {value: any, label: any}
+   */
+  @Input({ alias: 'p-control-value-with-label', transform: convertToBoolean }) controlValueWithLabel?: boolean = false;
+
   cacheOptions: Array<any> = [];
   defaultService: PoComboFilterService;
   firstInWriteValue: boolean = true;
@@ -305,6 +359,7 @@ export abstract class PoComboBaseComponent implements ControlValueAccessor, OnIn
   page: number = 1;
   pageSize: number = 10;
   loading: boolean = false;
+  displayAdditionalHelp: boolean = false;
   dynamicLabel: string = 'label';
   dynamicValue: string = 'value';
   shouldApplyFocus: boolean = false;
@@ -327,6 +382,7 @@ export abstract class PoComboBaseComponent implements ControlValueAccessor, OnIn
   private _options: Array<PoComboOption | PoComboOptionGroup | any> = [];
   private _placeholder: string = '';
   private _required?: boolean = false;
+  private _size?: string = undefined;
   private _sort?: boolean = false;
   private language: string;
   private _infiniteScrollDistance?: number = 100;
@@ -482,6 +538,28 @@ export abstract class PoComboBaseComponent implements ControlValueAccessor, OnIn
    * - Não possuir `p-help` e/ou `p-label`.
    */
   @Input('p-show-required') showRequired: boolean = false;
+
+  /**
+   * @optional
+   *
+   * @description
+   *
+   * Define o tamanho do componente:
+   * - `small`: altura do input como 32px (disponível apenas para acessibilidade AA).
+   * - `medium`: altura do input como 44px.
+   *
+   * > Caso a acessibilidade AA não esteja configurada, o tamanho `medium` será mantido.
+   * Para mais detalhes, consulte a documentação do [po-theme](https://po-ui.io/documentation/po-theme).
+   *
+   * @default `medium`
+   */
+  @Input('p-size') set size(value: string) {
+    this._size = validateSize(value, this.poThemeService, PoFieldSize);
+  }
+
+  get size(): string {
+    return this._size ?? getDefaultSize(this.poThemeService, PoFieldSize);
+  }
 
   /**
    * @optional
@@ -659,10 +737,12 @@ export abstract class PoComboBaseComponent implements ControlValueAccessor, OnIn
    *
    * @description
    *
-   * Define que o dropdown do combo será incluido no body da página e não suspenso com a caixa de texto do componente.
-   * Opção necessária para o caso de uso do componente em páginas que necessitam renderizar o combo fora do conteúdo principal.
+   * Define que o `listbox` e/ou tooltip (`p-additional-help-tooltip` e/ou `p-error-limit`) serão incluídos no body da
+   * página e não dentro do componente. Essa opção pode ser necessária em cenários com containers que possuem scroll ou
+   * overflow escondido,garantindo o posicionamento correto de ambos próximo ao elemento.
    *
-   * > Obs: O uso dessa propriedade pode acarretar na perda sequencial da tabulação da página
+   * > O uso dessa propriedade pode acarretar na perda sequencial da tabulação da página. Quando utilizado com
+   * `p-additional-help-tooltip`, leitores de tela como o NVDA podem não ler o conteúdo do tooltip.
    *
    * @default `false`
    */
@@ -670,7 +750,8 @@ export abstract class PoComboBaseComponent implements ControlValueAccessor, OnIn
 
   constructor(
     languageService: PoLanguageService,
-    protected changeDetector: ChangeDetectorRef
+    protected changeDetector: ChangeDetectorRef,
+    protected poThemeService: PoThemeService
   ) {
     this.language = languageService.getShortLanguage();
   }
@@ -888,11 +969,20 @@ export abstract class PoComboBaseComponent implements ControlValueAccessor, OnIn
 
   // Recebe as alterações do model
   writeValue(value: any) {
+    value = this.getValueWrite(value);
     this.fromWriteValue = true;
 
     if (validValue(value) && !this.service && this.comboOptionsList && this.comboOptionsList.length) {
       const option = this.getOptionFromValue(value, this.comboOptionsList);
       this.updateSelectedValue(option);
+
+      this.comboOptionsList = this.comboOptionsList.map((option: any) => {
+        if (this.isEqual(option[this.dynamicValue], value)) {
+          return { ...option, selected: true };
+        }
+        return option;
+      });
+
       this.updateComboList();
       this.removeInitialFilter = false;
       return;
@@ -1011,6 +1101,27 @@ export abstract class PoComboBaseComponent implements ControlValueAccessor, OnIn
     };
   }
 
+  private getValueUpdate(data: any, selectedOption: any) {
+    const { [this.dynamicValue]: value, [this.dynamicLabel]: label } = selectedOption || {};
+
+    if (this.controlValueWithLabel && value) {
+      return {
+        value,
+        label
+      };
+    }
+
+    return data;
+  }
+
+  private getValueWrite(data: any) {
+    if (this.controlValueWithLabel && data?.value) {
+      return data?.value;
+    }
+
+    return data;
+  }
+
   private hasDuplicatedOption(options: Array<any>, currentOption: string, accumulatedGroupOptions?: Array<any>) {
     if (accumulatedGroupOptions) {
       return accumulatedGroupOptions.some(option => option[this.dynamicLabel] === currentOption);
@@ -1124,7 +1235,7 @@ export abstract class PoComboBaseComponent implements ControlValueAccessor, OnIn
   private updateModel(value: any): void {
     if (value !== this.selectedValue) {
       if (!this.fromWriteValue) {
-        this.callModelChange(value);
+        this.callModelChange(this.getValueUpdate(value, this.selectedOption));
       }
 
       this.change.emit(this.emitObjectValue ? this.selectedOption : value);

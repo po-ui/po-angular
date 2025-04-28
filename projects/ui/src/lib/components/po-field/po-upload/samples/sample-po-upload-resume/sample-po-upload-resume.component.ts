@@ -5,7 +5,8 @@ import { PoNotificationService } from '@po-ui/ng-components';
 
 @Component({
   selector: 'sample-po-upload-resume',
-  templateUrl: 'sample-po-upload-resume.component.html'
+  templateUrl: 'sample-po-upload-resume.component.html',
+  standalone: false
 })
 export class SamplePoUploadResumeComponent implements OnInit {
   @ViewChild('formOpportunity', { static: true }) formOpportunity: UntypedFormControl;

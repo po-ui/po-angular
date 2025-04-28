@@ -11,7 +11,8 @@ import { PoTableSubtitleColumn } from '../po-table-subtitle-footer/po-table-subt
  */
 @Component({
   selector: 'po-table-show-subtitle',
-  templateUrl: './po-table-show-subtitle.component.html'
+  templateUrl: './po-table-show-subtitle.component.html',
+  standalone: false
 })
 export class PoTableShowSubtitleComponent {
   /** Objeto com os dados da legenda. */
@@ -19,4 +20,7 @@ export class PoTableShowSubtitleComponent {
 
   /** Propriedade que recebe as literais definidas no `po-table`. */
   @Input('p-literals') literals;
+
+  /** Define o tamanho dos elementos que possuem `p-size` dentro do componente. */
+  @Input('p-components-size') componentsSize: string;
 }

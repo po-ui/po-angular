@@ -2,7 +2,9 @@ import { HttpClient, HttpHeaders } from '@angular/common/http';
 import { Injectable } from '@angular/core';
 import { Observable, map } from 'rxjs';
 
-@Injectable()
+@Injectable({
+  providedIn: 'root'
+})
 export class SamplePoDynamicViewEmployeeOnLoadService {
   readonly headers: HttpHeaders = new HttpHeaders({
     'X-PO-No-Message': 'true'

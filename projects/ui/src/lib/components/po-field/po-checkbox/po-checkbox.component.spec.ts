@@ -1,8 +1,7 @@
 import { ChangeDetectorRef, ElementRef } from '@angular/core';
 import { ComponentFixture, TestBed } from '@angular/core/testing';
 
-import { configureTestSuite } from './../../../util-test/util-expect.spec';
-
+import { PoThemeA11yEnum, PoThemeService } from '../../../services';
 import { PoCheckboxComponent } from './po-checkbox.component';
 
 describe('PoCheckboxComponent:', () => {
@@ -11,14 +10,16 @@ describe('PoCheckboxComponent:', () => {
   let fixture: ComponentFixture<PoCheckboxComponent>;
   let nativeElement: any;
   let labelField: any;
-
-  configureTestSuite(() => {
-    TestBed.configureTestingModule({
-      declarations: [PoCheckboxComponent]
-    });
-  });
+  let poThemeServiceMock: jasmine.SpyObj<PoThemeService>;
 
   beforeEach(() => {
+    poThemeServiceMock = jasmine.createSpyObj('PoThemeService', ['getA11yLevel', 'getA11yDefaultSize']);
+
+    TestBed.configureTestingModule({
+      declarations: [PoCheckboxComponent],
+      providers: [{ provide: PoThemeService, useValue: poThemeServiceMock }]
+    });
+
     fixture = TestBed.createComponent(PoCheckboxComponent);
     component = fixture.componentInstance;
     nativeElement = fixture.debugElement.nativeElement;
@@ -78,6 +79,55 @@ describe('PoCheckboxComponent:', () => {
       });
     });
 
+    describe('emitAdditionalHelp:', () => {
+      it('should emit additionalHelp when isAdditionalHelpEventTriggered returns true', () => {
+        spyOn(component.additionalHelp, 'emit');
+        spyOn(component as any, 'isAdditionalHelpEventTriggered').and.returnValue(true);
+
+        component.emitAdditionalHelp();
+
+        expect(component.additionalHelp.emit).toHaveBeenCalled();
+      });
+
+      it('should not emit additionalHelp when isAdditionalHelpEventTriggered returns false', () => {
+        spyOn(component.additionalHelp, 'emit');
+        spyOn(component as any, 'isAdditionalHelpEventTriggered').and.returnValue(false);
+
+        component.emitAdditionalHelp();
+
+        expect(component.additionalHelp.emit).not.toHaveBeenCalled();
+      });
+    });
+
+    describe('getAdditionalHelpTooltip:', () => {
+      it('should return null when isAdditionalHelpEventTriggered returns true', () => {
+        spyOn(component as any, 'isAdditionalHelpEventTriggered').and.returnValue(true);
+
+        const result = component.getAdditionalHelpTooltip();
+
+        expect(result).toBeNull();
+      });
+
+      it('should return additionalHelpTooltip when isAdditionalHelpEventTriggered returns false', () => {
+        const tooltip = 'Test Tooltip';
+        component.additionalHelpTooltip = tooltip;
+        spyOn(component as any, 'isAdditionalHelpEventTriggered').and.returnValue(false);
+
+        const result = component.getAdditionalHelpTooltip();
+
+        expect(result).toBe(tooltip);
+      });
+
+      it('should return undefined when additionalHelpTooltip is undefined and isAdditionalHelpEventTriggered returns false', () => {
+        component.additionalHelpTooltip = undefined;
+        spyOn(component as any, 'isAdditionalHelpEventTriggered').and.returnValue(false);
+
+        const result = component.getAdditionalHelpTooltip();
+
+        expect(result).toBeUndefined();
+      });
+    });
+
     describe('onKeyDown:', () => {
       let fakeEvent: any;
 
@@ -123,6 +173,57 @@ describe('PoCheckboxComponent:', () => {
         expect(spyOnCheckOption).toHaveBeenCalledWith(component.checkboxValue);
         expect(spyOnPreventDefault).toHaveBeenCalled();
       });
+
+      it('should emit event when field is focused', () => {
+        const fakeEvent = new KeyboardEvent('keydown', { key: 'Enter' });
+        component.checkboxLabel = {
+          nativeElement: {
+            focus: () => {}
+          }
+        };
+
+        spyOn(component.keydown, 'emit');
+        spyOnProperty(document, 'activeElement', 'get').and.returnValue(component.checkboxLabel.nativeElement);
+
+        component.onKeyDown(fakeEvent, component.checkboxValue);
+
+        expect(component.keydown.emit).toHaveBeenCalledWith(fakeEvent);
+      });
+
+      it('should not emit event when field is not focused', () => {
+        const fakeEvent = new KeyboardEvent('keydown', { key: 'Enter' });
+        component.checkboxLabel = {
+          nativeElement: {
+            focus: () => {}
+          }
+        };
+
+        spyOn(component.keydown, 'emit');
+        spyOnProperty(document, 'activeElement', 'get').and.returnValue(document.createElement('div'));
+        component.onKeyDown(fakeEvent, component.checkboxValue);
+
+        expect(component.keydown.emit).not.toHaveBeenCalled();
+      });
+    });
+
+    describe('showAdditionalHelp:', () => {
+      it('should toggle `displayAdditionalHelp` from false to true', () => {
+        component.displayAdditionalHelp = false;
+
+        const result = component.showAdditionalHelp();
+
+        expect(result).toBeTrue();
+        expect(component.displayAdditionalHelp).toBeTrue();
+      });
+
+      it('should toggle `displayAdditionalHelp` from true to false', () => {
+        component.displayAdditionalHelp = true;
+
+        const result = component.showAdditionalHelp();
+
+        expect(result).toBeFalse();
+        expect(component.displayAdditionalHelp).toBeFalse();
+      });
     });
 
     it('changeModelValue: should update `changeModelValue` with property values', () => {
@@ -149,21 +250,131 @@ describe('PoCheckboxComponent:', () => {
       expect(component['changeDetector'].detectChanges).toHaveBeenCalled();
     });
 
-    it('onBlur: should call `onTouched` on blur', () => {
-      component.onTouched = value => {};
+    describe('size', () => {
+      it('should set the default value to small when an invalid value, accessibility level is AA and getA11yDefaultSize is small', () => {
+        poThemeServiceMock.getA11yLevel.and.returnValue(PoThemeA11yEnum.AA);
+        poThemeServiceMock.getA11yDefaultSize.and.returnValue('small');
 
-      spyOn(component, 'onTouched');
-      component.onBlur();
+        component.size = 'xxg';
+        expect(component['_size']).toBe('small');
+      });
 
-      expect(component.onTouched).toHaveBeenCalledWith();
+      it('should return small when accessibility is AA and getA11yDefaultSize is small', () => {
+        poThemeServiceMock.getA11yLevel.and.returnValue(PoThemeA11yEnum.AA);
+        poThemeServiceMock.getA11yDefaultSize.and.returnValue('small');
+
+        component['_size'] = undefined;
+        expect(component.size).toBe('small');
+      });
+
+      it('should return medium when accessibility is AA and getA11yDefaultSize is medium', () => {
+        poThemeServiceMock.getA11yLevel.and.returnValue(PoThemeA11yEnum.AA);
+        poThemeServiceMock.getA11yDefaultSize.and.returnValue('medium');
+
+        component['_size'] = undefined;
+        expect(component.size).toBe('medium');
+      });
+
+      it('should return medium when accessibility is AAA, regardless of getA11yDefaultSize', () => {
+        poThemeServiceMock.getA11yLevel.and.returnValue(PoThemeA11yEnum.AAA);
+        component['_size'] = undefined;
+        expect(component.size).toBe('medium');
+      });
+
+      it('should set property with valid values for accessibility level is AA', () => {
+        poThemeServiceMock.getA11yLevel.and.returnValue(PoThemeA11yEnum.AA);
+
+        component.size = 'small';
+        expect(component.size).toBe('small');
+
+        component.size = 'medium';
+        expect(component.size).toBe('medium');
+
+        component.size = 'large';
+        expect(component.size).toBe('large');
+      });
+
+      it('should set property with valid values for accessibility level is AAA', () => {
+        poThemeServiceMock.getA11yLevel.and.returnValue(PoThemeA11yEnum.AAA);
+
+        component.size = 'small';
+        expect(component.size).toBe('medium');
+
+        component.size = 'medium';
+        expect(component.size).toBe('medium');
+
+        component.size = 'large';
+        expect(component.size).toBe('large');
+      });
     });
 
-    it('onBlur: shouldn´t throw error if onTouched is falsy', () => {
-      component['onTouched'] = null;
+    describe('isAdditionalHelpEventTriggered:', () => {
+      it('should return true when additionalHelpEventTrigger is "event"', () => {
+        component.additionalHelpEventTrigger = 'event';
+        expect((component as any).isAdditionalHelpEventTriggered()).toBeTrue();
+      });
 
-      const fnError = () => component.onBlur();
+      it('should return true when additionalHelpEventTrigger is undefined and additionalHelp is observed', () => {
+        component.additionalHelpEventTrigger = undefined;
+        component.additionalHelp = {
+          observed: true
+        } as any;
 
-      expect(fnError).not.toThrow();
+        expect((component as any).isAdditionalHelpEventTriggered()).toBeTrue();
+      });
+
+      it('should return false when additionalHelpEventTrigger is not "event" and additionalHelp is not observed', () => {
+        component.additionalHelpEventTrigger = 'noEvent';
+        expect((component as any).isAdditionalHelpEventTriggered()).toBeFalse();
+      });
+    });
+
+    describe('onBlur:', () => {
+      let setupTest;
+
+      beforeEach(() => {
+        setupTest = (tooltip: string, displayHelp: boolean, additionalHelpEvent: any) => {
+          component.additionalHelpTooltip = tooltip;
+          component.displayAdditionalHelp = displayHelp;
+          component.additionalHelp = additionalHelpEvent;
+          spyOn(component, 'showAdditionalHelp');
+        };
+      });
+
+      it('should call `onTouched` on blur', () => {
+        component.onTouched = value => {};
+
+        spyOn(component, 'onTouched');
+        component.onBlur();
+
+        expect(component.onTouched).toHaveBeenCalledWith();
+      });
+
+      it('shouldn´t throw error if onTouched is falsy', () => {
+        component['onTouched'] = null;
+
+        const fnError = () => component.onBlur();
+
+        expect(fnError).not.toThrow();
+      });
+
+      it('should call showAdditionalHelp when the tooltip is displayed', () => {
+        setupTest('Mensagem de apoio adicional.', true, { observed: false });
+        component.onBlur();
+        expect(component.showAdditionalHelp).toHaveBeenCalled();
+      });
+
+      it('should not call showAdditionalHelp when tooltip is not displayed', () => {
+        setupTest('Mensagem de apoio adicional.', false, { observed: false });
+        component.onBlur();
+        expect(component.showAdditionalHelp).not.toHaveBeenCalled();
+      });
+
+      it('should not call showAdditionalHelp when additionalHelp event is true', () => {
+        setupTest('Mensagem de apoio adicional.', true, { observed: true });
+        component.onBlur();
+        expect(component.showAdditionalHelp).not.toHaveBeenCalled();
+      });
     });
   });
 

@@ -24,7 +24,9 @@ import { PoSyncSchema } from './interfaces/po-sync-schema.interface';
  * armazenadas *offline* vindas do servidor. Nele ocorre toda a preparação dos modelos de dados retornados por
  * cada consulta.
  */
-@Injectable()
+@Injectable({
+  providedIn: 'root'
+})
 export class PoSyncService {
   models: Array<PoEntity> = [];
 

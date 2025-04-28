@@ -5,7 +5,8 @@ import { PoDatepickerComponent, PoNotificationService, PoSelectOption } from '@p
 
 @Component({
   selector: 'sample-po-combo-hotels',
-  templateUrl: './sample-po-combo-hotels.component.html'
+  templateUrl: './sample-po-combo-hotels.component.html',
+  standalone: false
 })
 export class SamplePoComboHotelsComponent {
   @ViewChild('bookingForm', { static: true }) form: NgForm;

@@ -1,6 +1,6 @@
 import { Directive } from '@angular/core';
 
-import { PoLanguageService } from '@po-ui/ng-components';
+import { PoLanguageService, PoThemeA11yEnum, PoThemeService } from '@po-ui/ng-components';
 
 import { PoModalPasswordRecoveryBaseComponent } from './po-modal-password-recovery-base.component';
 
@@ -16,10 +16,14 @@ class PoModalPasswordRecoveryComponent extends PoModalPasswordRecoveryBaseCompon
 
 describe('PoModalPasswordRecoveryBaseComponent:', () => {
   const poLanguageService: PoLanguageService = new PoLanguageService();
+  let poThemeServiceMock: jasmine.SpyObj<PoThemeService>;
+
   let component: PoModalPasswordRecoveryComponent;
 
   beforeEach(() => {
-    component = new PoModalPasswordRecoveryComponent(poLanguageService);
+    poThemeServiceMock = jasmine.createSpyObj('PoThemeService', ['getA11yLevel', 'getA11yDefaultSize']);
+
+    component = new PoModalPasswordRecoveryComponent(poLanguageService, poThemeServiceMock);
   });
 
   it('should be created', () => {
@@ -45,6 +49,50 @@ describe('PoModalPasswordRecoveryBaseComponent:', () => {
       spyOn(component, <any>'concatenateSMSErrorMessage')(component.contactEmail);
 
       expect(component['concatenateSMSErrorMessage']).toHaveBeenCalledWith(component.contactEmail);
+    });
+
+    describe('p-components-size', () => {
+      it('should set property with valid values for accessibility level is AA', () => {
+        poThemeServiceMock.getA11yLevel.and.returnValue(PoThemeA11yEnum.AA);
+
+        component.componentsSize = 'small';
+        expect(component.componentsSize).toBe('small');
+
+        component.componentsSize = 'medium';
+        expect(component.componentsSize).toBe('medium');
+      });
+
+      it('should set property with valid values for accessibility level is AAA', () => {
+        poThemeServiceMock.getA11yLevel.and.returnValue(PoThemeA11yEnum.AAA);
+
+        component.componentsSize = 'small';
+        expect(component.componentsSize).toBe('medium');
+
+        component.componentsSize = 'medium';
+        expect(component.componentsSize).toBe('medium');
+      });
+
+      it('should return small when accessibility is AA and getA11yDefaultSize is small', () => {
+        poThemeServiceMock.getA11yLevel.and.returnValue(PoThemeA11yEnum.AA);
+        poThemeServiceMock.getA11yDefaultSize.and.returnValue('small');
+
+        component['_componentsSize'] = undefined;
+        expect(component.componentsSize).toBe('small');
+      });
+
+      it('should return medium when accessibility is AA and getA11yDefaultSize is medium', () => {
+        poThemeServiceMock.getA11yLevel.and.returnValue(PoThemeA11yEnum.AA);
+        poThemeServiceMock.getA11yDefaultSize.and.returnValue('medium');
+
+        component['_componentsSize'] = undefined;
+        expect(component.componentsSize).toBe('medium');
+      });
+
+      it('should return medium when accessibility is AAA, regardless of getA11yDefaultSize', () => {
+        poThemeServiceMock.getA11yLevel.and.returnValue(PoThemeA11yEnum.AAA);
+        component['_componentsSize'] = undefined;
+        expect(component.componentsSize).toBe('medium');
+      });
     });
 
     it('p-phone-mask: should update property `phoneMask` with valid values.', () => {

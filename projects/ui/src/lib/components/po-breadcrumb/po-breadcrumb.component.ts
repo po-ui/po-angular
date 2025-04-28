@@ -14,7 +14,7 @@ import { PoBreadcrumbItem } from './po-breadcrumb-item.interface';
 import { PoPopupComponent } from '../po-popup/po-popup.component';
 import { PoLanguageService } from '../../services/po-language/po-language.service';
 
-export const poBreadcrumbLiterals: Object = {
+export const poBreadcrumbLiterals: object = {
   en: <any>{
     literalButtonPopup: 'Menu pop up collapsed'
   },
@@ -46,7 +46,8 @@ export const poBreadcrumbLiterals: Object = {
  */
 @Component({
   selector: 'po-breadcrumb',
-  templateUrl: './po-breadcrumb.component.html'
+  templateUrl: './po-breadcrumb.component.html',
+  standalone: false
 })
 export class PoBreadcrumbComponent extends PoBreadcrumbBaseComponent implements AfterViewInit, DoCheck, OnDestroy {
   @ViewChild('breadcrumb', { read: ElementRef, static: true }) breadcrumbElement: ElementRef;

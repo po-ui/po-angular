@@ -5,11 +5,12 @@ import { delay, take } from 'rxjs/operators';
 
 import { getFocusableElements, uuid } from '../../../utils/util';
 
+import { PoThemeService } from '../../../services';
 import { PoActiveOverlayService } from '../../../services/po-active-overlay/po-active-overlay.service';
+import { PoLanguageService } from '../../../services/po-language/po-language.service';
+import { PoPageSlideLiterals } from './interfaces/po-page-slide-literals.interface';
 import { PoPageSlideBaseComponent } from './po-page-slide-base.component';
 import { PoPageSlideFooterComponent } from './po-page-slide-footer/po-page-slide-footer.component';
-import { PoPageSlideLiterals } from './interfaces/po-page-slide-literals.interface';
-import { PoLanguageService } from '../../../services/po-language/po-language.service';
 
 export const poPageSlideLiteralsDefault = {
   en: <PoPageSlideLiterals>{
@@ -65,7 +66,8 @@ export const poPageSlideLiteralsDefault = {
       ]),
       transition(':leave', [animate('150ms', style({ transform: 'translateX(50px)' }))])
     ])
-  ]
+  ],
+  standalone: false
 })
 export class PoPageSlideComponent extends PoPageSlideBaseComponent {
   private _pageContent: ElementRef;
@@ -94,10 +96,11 @@ export class PoPageSlideComponent extends PoPageSlideBaseComponent {
   }
 
   constructor(
+    protected poThemeService: PoThemeService,
     private poActiveOverlayService: PoActiveOverlayService,
     private languageService: PoLanguageService
   ) {
-    super();
+    super(poThemeService);
     this.setTimeFromCSS();
     this.buttonAriaLabel = this.getTextDefault();
   }

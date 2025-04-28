@@ -1,12 +1,14 @@
 import { Component, OnInit } from '@angular/core';
 
-import { PoCheckboxGroupOption, PoSelectOption } from '@po-ui/ng-components';
+import { PoCheckboxGroupOption, PoRadioGroupOption, PoSelectOption } from '@po-ui/ng-components';
 
 @Component({
   selector: 'sample-po-decimal-labs',
-  templateUrl: './sample-po-decimal-labs.component.html'
+  templateUrl: './sample-po-decimal-labs.component.html',
+  standalone: false
 })
 export class SamplePoDecimalLabsComponent implements OnInit {
+  additionalHelpTooltip: string;
   decimal: number;
   decimalsLength: number;
   event: string;
@@ -20,6 +22,7 @@ export class SamplePoDecimalLabsComponent implements OnInit {
   errorPattern: string;
   max: number;
   min: number;
+  size: string;
 
   public readonly localeOptions: Array<PoSelectOption> = [
     { value: 'pt', label: 'Portuguese' },
@@ -29,8 +32,8 @@ export class SamplePoDecimalLabsComponent implements OnInit {
   ];
 
   public readonly iconOptions: Array<PoSelectOption> = [
-    { value: 'ph ph-shopping-cart-simple', label: 'ph ph-shopping-cart-simple' },
-    { value: 'ph ph-currency-dollar-simple', label: 'ph ph-currency-dollar-simple' },
+    { value: 'an an-shopping-cart-simple', label: 'an an-shopping-cart-simple' },
+    { value: 'an an-currency-dollar-simple', label: 'an an-currency-dollar-simple' },
     { value: 'fa fa-calculator', label: 'fa fa-calculator' }
   ];
 
@@ -42,7 +45,13 @@ export class SamplePoDecimalLabsComponent implements OnInit {
     { value: 'readonly', label: 'Read Only' },
     { value: 'required', label: 'Required' },
     { value: 'requiredFieldErrorMessage', label: 'Required Field Error Message' },
-    { value: 'showRequired', label: 'Show Required' }
+    { value: 'showRequired', label: 'Show Required' },
+    { value: 'errorLimit', label: 'Limit Error Message' }
+  ];
+
+  public readonly sizeOptions: Array<PoRadioGroupOption> = [
+    { label: 'small', value: 'small' },
+    { label: 'medium', value: 'medium' }
   ];
 
   get maxDecimalsLength() {
@@ -62,6 +71,7 @@ export class SamplePoDecimalLabsComponent implements OnInit {
   }
 
   restore() {
+    this.additionalHelpTooltip = '';
     this.decimal = undefined;
     this.decimalsLength = undefined;
     this.event = '';
@@ -74,6 +84,7 @@ export class SamplePoDecimalLabsComponent implements OnInit {
     this.errorPattern = undefined;
     this.max = undefined;
     this.min = undefined;
+    this.size = 'medium';
 
     this.properties = [];
   }

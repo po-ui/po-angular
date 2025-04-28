@@ -4,7 +4,8 @@ import { PoDynamicFormField, PoDynamicViewField } from '@po-ui/ng-components';
 
 @Component({
   selector: 'sample-po-page-job-scheduler-directives',
-  templateUrl: './sample-po-page-job-scheduler-directives.component.html'
+  templateUrl: './sample-po-page-job-scheduler-directives.component.html',
+  standalone: false
 })
 export class SamplePoPageJobSchedulerDirectivesComponent {
   dynamicForm!: NgForm;

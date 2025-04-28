@@ -2,7 +2,8 @@ import { TitleCasePipe } from '@angular/common';
 import { ChangeDetectorRef, Component, OnChanges, QueryList, SimpleChanges, ViewChildren } from '@angular/core';
 import { ControlContainer, NgForm } from '@angular/forms';
 
-import { PoDynamicFormField } from '../po-dynamic-form-field.interface';
+import { PoThemeService } from '../../../../services';
+import { PoDynamicFormField } from '../interfaces/po-dynamic-form-field.interface';
 import { PoDynamicFormFieldValidation } from '../po-dynamic-form-validation/po-dynamic-form-field-validation.interface';
 import { PoDynamicFormValidationService } from '../po-dynamic-form-validation/po-dynamic-form-validation.service';
 import { PoDynamicFormFieldsBaseComponent } from './po-dynamic-form-fields-base.component';
@@ -18,20 +19,26 @@ import { PoDynamicFormFieldsBaseComponent } from './po-dynamic-form-fields-base.
   selector: 'po-dynamic-form-fields',
   templateUrl: 'po-dynamic-form-fields.component.html',
   viewProviders: [{ provide: ControlContainer, useExisting: NgForm }],
-  providers: [PoDynamicFormValidationService]
+  providers: [PoDynamicFormValidationService],
+  standalone: false
 })
 export class PoDynamicFormFieldsComponent extends PoDynamicFormFieldsBaseComponent implements OnChanges {
-  @ViewChildren('component') components: QueryList<{ name: string; focus: () => void }>;
+  @ViewChildren('component') components: QueryList<{
+    name: string;
+    focus: () => void;
+    showAdditionalHelp: () => void;
+  }>;
 
   private previousValue = {};
 
   constructor(
     titleCasePipe: TitleCasePipe,
+    protected poThemeService: PoThemeService,
     private validationService: PoDynamicFormValidationService,
     private changes: ChangeDetectorRef,
     private form: NgForm
   ) {
-    super(titleCasePipe);
+    super(poThemeService, titleCasePipe);
   }
 
   ngOnChanges(changes: SimpleChanges) {
@@ -45,6 +52,10 @@ export class PoDynamicFormFieldsComponent extends PoDynamicFormFieldsBaseCompone
       if (!changes.fields.previousValue || !changes.fields.currentValue) {
         this.setContainerFields();
       }
+    }
+
+    if (changes.value) {
+      this.updatePreviousValue();
     }
   }
 
@@ -68,8 +79,8 @@ export class PoDynamicFormFieldsComponent extends PoDynamicFormFieldsBaseCompone
       this.objectValue.emit(objectValue);
     }
 
-    // verifica se o formulario esta touched para não disparar o validate ao carregar a tela.
-    if ((this.form.touched || isBooleanType) && isChangedValueField) {
+    // verifica se o formulario esta dirty para não disparar o validate ao carregar a tela.
+    if ((this.form.dirty || isBooleanType) && isChangedValueField) {
       const { changedField, changedFieldIndex } = this.getField(property);
 
       if (changedField.validate) {
@@ -88,6 +99,13 @@ export class PoDynamicFormFieldsComponent extends PoDynamicFormFieldsBaseCompone
       const { property } = visibleField;
       const { changedFieldIndex } = this.getField(property);
       this.triggerValidationOnForm(changedFieldIndex);
+    }
+  }
+
+  showAdditionalHelp(property: string) {
+    const foundComponent = this.components.find(component => component.name === property);
+    if (foundComponent) {
+      foundComponent.showAdditionalHelp();
     }
   }
 

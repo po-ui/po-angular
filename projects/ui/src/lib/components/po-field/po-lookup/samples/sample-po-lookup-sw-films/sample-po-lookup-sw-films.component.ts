@@ -5,7 +5,8 @@ import { SamplePoLookupSwFilmsService } from './sample-po-lookup-sw-films.servic
 @Component({
   selector: 'sample-po-lookup-sw-films',
   templateUrl: './sample-po-lookup-sw-films.component.html',
-  providers: [SamplePoLookupSwFilmsService]
+  providers: [SamplePoLookupSwFilmsService],
+  standalone: false
 })
 export class SamplePoLookupSwFilmsComponent implements OnInit {
   entity;

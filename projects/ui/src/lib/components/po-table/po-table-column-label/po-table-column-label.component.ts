@@ -13,7 +13,8 @@ import { PoTableColumnLabel } from './po-table-column-label.interface';
 @Component({
   selector: 'po-table-column-label',
   templateUrl: './po-table-column-label.component.html',
-  changeDetection: ChangeDetectionStrategy.OnPush
+  changeDetection: ChangeDetectionStrategy.OnPush,
+  standalone: false
 })
 export class PoTableColumnLabelComponent implements OnInit {
   @Input('p-value') value: PoTableColumnLabel;

@@ -7,7 +7,8 @@ import { PoDialogService, PoNotificationService, PoPageAction, PoRadioGroupOptio
 
 @Component({
   selector: 'sample-po-dialog-cancel-credit-card',
-  templateUrl: './sample-po-dialog-cancel-credit-card.component.html'
+  templateUrl: './sample-po-dialog-cancel-credit-card.component.html',
+  standalone: false
 })
 export class SamplePoDialogCancelCreditCardComponent implements OnDestroy, OnInit {
   @ViewChild('form', { static: true }) form: UntypedFormControl;
@@ -66,7 +67,7 @@ export class SamplePoDialogCancelCreditCardComponent implements OnDestroy, OnIni
   openConfirmDialog() {
     this.poDialog.confirm({
       title: 'Confirm',
-      message: `<p>Hi <b>${this.name}</b>.</p> <p> Do you confirm the cancellation of the card number  <i class="po-icon ph ph-credit-card"></i> <b>${this.cardNumber}<b>? </p>`,
+      message: `<p>Hi <b>${this.name}</b>.</p> <p> Do you confirm the cancellation of the card number  <i class="po-icon an an-credit-card"></i> <b>${this.cardNumber}<b>? </p>`,
       confirm: () => this.confirmCancelation()
     });
   }

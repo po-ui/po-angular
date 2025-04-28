@@ -2,7 +2,9 @@ import { Injectable } from '@angular/core';
 
 const poCalendarServiceFirstWeekDayDefault: number = 0;
 
-@Injectable()
+@Injectable({
+  providedIn: 'root'
+})
 export class PoCalendarService {
   monthDates(year: any, month: any, dayFormatter: any = null, weekFormatter: any = null) {
     if (typeof month !== 'number' || month < 0 || month > 11) {

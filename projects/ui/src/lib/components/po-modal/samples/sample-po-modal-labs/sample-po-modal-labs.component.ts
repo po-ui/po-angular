@@ -1,20 +1,22 @@
 import { Component, OnInit, ViewChild } from '@angular/core';
 
 import {
+  PoCheckboxGroupOption,
   PoModalAction,
   PoModalComponent,
   PoRadioGroupOption,
-  PoCheckboxGroupOption,
   PoSelectOption
 } from '@po-ui/ng-components';
 
 @Component({
   selector: 'sample-po-modal-labs',
-  templateUrl: './sample-po-modal-labs.component.html'
+  templateUrl: './sample-po-modal-labs.component.html',
+  standalone: false
 })
 export class SamplePoModalLabsComponent implements OnInit {
   @ViewChild(PoModalComponent, { static: true }) poModal: PoModalComponent;
 
+  componentsSize: string;
   content;
   size;
   title;
@@ -34,9 +36,15 @@ export class SamplePoModalLabsComponent implements OnInit {
     { value: 'disabled', label: 'Disabled' },
     { value: 'loading', label: 'Loading' }
   ];
+
+  public readonly componentsSizeOptions: Array<PoRadioGroupOption> = [
+    { label: 'small', value: 'small' },
+    { label: 'medium', value: 'medium' }
+  ];
+
   public readonly iconOptions: Array<PoSelectOption> = [
-    { value: 'ph ph-newspaper', label: 'ph ph-newspaper' },
-    { value: 'ph ph-magnifying-glass', label: 'ph ph-magnifying-glass' },
+    { value: 'an an-newspaper', label: 'an an-newspaper' },
+    { value: 'an an-magnifying-glass', label: 'an an-magnifying-glass' },
     { value: 'fa fa-calculator', label: 'fa fa-calculator' }
   ];
 
@@ -97,6 +105,7 @@ export class SamplePoModalLabsComponent implements OnInit {
     this.primaryActionProperties = [];
     this.secondaryActionLabel = undefined;
     this.secondaryActionProperties = [];
+    this.componentsSize = 'medium';
     this.icon = undefined;
   }
 }

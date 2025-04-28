@@ -1,13 +1,14 @@
 import { ComponentRef, ElementRef, Injectable, ViewContainerRef } from '@angular/core';
 import { TestBed } from '@angular/core/testing';
 
-import { configureTestSuite } from './../../util-test/util-expect.spec';
-
 import { PoToaster, PoToasterOrientation, PoToasterType } from '../../components/po-toaster';
 import { PoToasterBaseComponent } from '../../components/po-toaster/po-toaster-base.component';
+import { PoThemeService } from '../po-theme';
 import { PoNotificationBaseService } from './po-notification-base.service';
 
-@Injectable()
+@Injectable({
+  providedIn: 'root'
+})
 class PoNotificationService extends PoNotificationBaseService {
   createToaster(toaster: PoToaster, viewContainerRef?: ViewContainerRef): void {
     const elementRef: ElementRef = {
@@ -42,16 +43,17 @@ class PoNotificationService extends PoNotificationBaseService {
 
 describe('PoNotificationService ', () => {
   let service: PoNotificationBaseService;
-
-  configureTestSuite(() => {
-    TestBed.configureTestingModule({
-      declarations: [],
-      providers: [PoNotificationBaseService]
-    });
-  });
+  let poThemeServiceMock: jasmine.SpyObj<PoThemeService>;
 
   beforeEach(() => {
-    service = new PoNotificationService();
+    poThemeServiceMock = jasmine.createSpyObj('PoThemeService', ['getA11yLevel', 'getA11yDefaultSize']);
+
+    TestBed.configureTestingModule({
+      declarations: [],
+      providers: [PoNotificationBaseService, { provide: PoThemeService, useValue: poThemeServiceMock }]
+    });
+
+    service = new PoNotificationService(poThemeServiceMock);
   });
 
   it('should have a `service` attribute that is a PoNotificationBaseService', () => {
@@ -193,6 +195,7 @@ function mockToaster(obj: any) {
     position: 0,
     mode: 'alert',
     showClose: true,
+    sizeActions: 'medium',
     supportMessage: undefined,
     duration: 9000
   };

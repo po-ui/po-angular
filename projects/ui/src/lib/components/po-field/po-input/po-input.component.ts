@@ -6,10 +6,11 @@ import {
   forwardRef,
   ViewChild
 } from '@angular/core';
-import { AbstractControl, NG_VALUE_ACCESSOR, NG_VALIDATORS } from '@angular/forms';
+import { AbstractControl, NG_VALIDATORS, NG_VALUE_ACCESSOR } from '@angular/forms';
 
 import { uuid } from '../../../utils/util';
 
+import { PoThemeService } from '../../../services';
 import { PoInputGeneric } from '../po-input-generic/po-input-generic';
 
 /**
@@ -47,7 +48,8 @@ import { PoInputGeneric } from '../po-input-generic/po-input-generic';
       multi: true
     }
   ],
-  changeDetection: ChangeDetectionStrategy.OnPush
+  changeDetection: ChangeDetectionStrategy.OnPush,
+  standalone: false
 })
 export class PoInputComponent extends PoInputGeneric {
   @ViewChild('inp', { static: true }) inp: ElementRef;
@@ -55,8 +57,12 @@ export class PoInputComponent extends PoInputGeneric {
   id = `po-input[${uuid()}]`;
 
   /* istanbul ignore next */
-  constructor(el: ElementRef, cd: ChangeDetectorRef) {
-    super(el, cd);
+  constructor(
+    el: ElementRef,
+    cd: ChangeDetectorRef,
+    protected poThemeService: PoThemeService
+  ) {
+    super(el, cd, poThemeService);
   }
 
   extraValidation(c: AbstractControl): { [key: string]: any } {

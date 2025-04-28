@@ -17,6 +17,7 @@ import { formatBytes, isMobile, uuid } from '../../../utils/util';
 import { PoProgressStatus } from '../../po-progress/enums/po-progress-status.enum';
 import { PoButtonComponent } from './../../po-button/po-button.component';
 
+import { PoThemeService } from '../../../services';
 import { PoUploadBaseComponent } from './po-upload-base.component';
 import { PoUploadDragDropComponent } from './po-upload-drag-drop/po-upload-drag-drop.component';
 import { PoUploadFile } from './po-upload-file';
@@ -47,6 +48,11 @@ import { PoUploadService } from './po-upload.service';
  *   <file name="sample-po-upload-rs/sample-po-upload-rs.component.html"> </file>
  *   <file name="sample-po-upload-rs/sample-po-upload-rs.component.ts"> </file>
  * </example>
+ *
+ * <example name="po-upload-download" title="PO Upload - with Download Button">
+ *   <file name="sample-po-upload-download/sample-po-upload-download.component.html"> </file>
+ *   <file name="sample-po-upload-download/sample-po-upload-download.component.ts"> </file>
+ * </example>
  */
 @Component({
   selector: 'po-upload',
@@ -65,12 +71,13 @@ import { PoUploadService } from './po-upload.service';
       useExisting: forwardRef(() => PoUploadComponent),
       multi: true
     }
-  ]
+  ],
+  standalone: false
 })
 export class PoUploadComponent extends PoUploadBaseComponent implements AfterViewInit {
   @ViewChild('inputFile', { read: ElementRef, static: true }) private inputFile: ElementRef;
   @ViewChild(PoUploadDragDropComponent) private poUploadDragDropComponent: PoUploadDragDropComponent;
-  @ViewChild('uploadButton') private uploadButton: PoButtonComponent;
+  @ViewChild('uploadButton') uploadButton: PoButtonComponent;
 
   id = `po-upload[${uuid()}]`;
 
@@ -100,9 +107,10 @@ export class PoUploadComponent extends PoUploadBaseComponent implements AfterVie
     private i18nPipe: PoI18nPipe,
     private notification: PoNotificationService,
     private cd: ChangeDetectorRef,
-    languageService: PoLanguageService
+    languageService: PoLanguageService,
+    protected poThemeService: PoThemeService
   ) {
-    super(uploadService, languageService);
+    super(poThemeService, uploadService, languageService);
   }
 
   get displayDragDrop(): boolean {
@@ -185,6 +193,12 @@ export class PoUploadComponent extends PoUploadBaseComponent implements AfterVie
     this.cleanInputValue();
   }
 
+  emitAdditionalHelp() {
+    if (this.isAdditionalHelpEventTriggered()) {
+      this.additionalHelp.emit();
+    }
+  }
+
   /**
    * Função que atribui foco ao componente.
    *
@@ -215,6 +229,10 @@ export class PoUploadComponent extends PoUploadBaseComponent implements AfterVie
     }
   }
 
+  getAdditionalHelpTooltip() {
+    return this.isAdditionalHelpEventTriggered() ? null : this.additionalHelpTooltip;
+  }
+
   // Verifica se existe algum arquivo sendo enviado ao serviço.
   hasAnyFileUploading(files: Array<PoUploadFile>) {
     if (files && files.length) {
@@ -227,6 +245,12 @@ export class PoUploadComponent extends PoUploadBaseComponent implements AfterVie
   // retorna se o status do arquivo é diferente de enviado
   isAllowCancelEvent(status: PoUploadStatus) {
     return status !== PoUploadStatus.Uploaded;
+  }
+
+  onBlur(): void {
+    if (!this.isUploadButtonFocused() && this.getAdditionalHelpTooltip() && this.displayAdditionalHelp) {
+      this.showAdditionalHelp();
+    }
   }
 
   // Função disparada ao selecionar algum arquivo.
@@ -245,6 +269,12 @@ export class PoUploadComponent extends PoUploadBaseComponent implements AfterVie
 
   onFileChangeDragDrop(files) {
     this.updateFiles(files);
+  }
+
+  onKeyDown(event: KeyboardEvent): void {
+    if (this.isUploadButtonFocused()) {
+      this.keydown.emit(event);
+    }
   }
 
   // Remove o arquivo passado por parâmetro da lista dos arquivos correntes.
@@ -300,6 +330,36 @@ export class PoUploadComponent extends PoUploadBaseComponent implements AfterVie
     }
   }
 
+  /**
+   * Método que exibe `p-additionalHelpTooltip` ou executa a ação definida em `p-additionalHelp`.
+   * Para isso, será necessário configurar uma tecla de atalho utilizando o evento `p-keydown`.
+   *
+   * ```
+   * <po-upload
+   *  #upload
+   *  ...
+   *  p-additional-help-tooltip="Mensagem de ajuda complementar"
+   *  (p-keydown)="onKeyDown($event, upload)"
+   * ></po-upload>
+   * ```
+   * ```
+   * ...
+   * onKeyDown(event: KeyboardEvent, inp: PoUploadComponent): void {
+   *  if (event.code === 'F9') {
+   *    inp.showAdditionalHelp();
+   *  }
+   * }
+   * ```
+   */
+  showAdditionalHelp(): boolean {
+    this.displayAdditionalHelp = !this.displayAdditionalHelp;
+    return this.displayAdditionalHelp;
+  }
+
+  showAdditionalHelpIcon() {
+    return !!this.additionalHelpTooltip || this.isAdditionalHelpEventTriggered();
+  }
+
   // Caso o componente estiver no modo AutoUpload, o arquivo também será removido da lista.
   stopUpload(file: PoUploadFile) {
     this.uploadService.stopRequestByFile(file, () => {
@@ -341,10 +401,27 @@ export class PoUploadComponent extends PoUploadBaseComponent implements AfterVie
     );
   }
 
+  customClick(file: PoUploadFile) {
+    if (this.customAction) {
+      this.customActionClick.emit(file);
+    }
+  }
+
   private cleanInputValue() {
     this.calledByCleanInputValue = true;
     this.inputFile.nativeElement.value = '';
     this.cd.detectChanges();
+  }
+
+  private isAdditionalHelpEventTriggered(): boolean {
+    return (
+      this.additionalHelpEventTrigger === 'event' ||
+      (this.additionalHelpEventTrigger === undefined && this.additionalHelp.observed)
+    );
+  }
+
+  private isUploadButtonFocused(): boolean {
+    return document.activeElement === this.uploadButton.buttonElement.nativeElement;
   }
 
   // função disparada na resposta do sucesso ou error

@@ -9,7 +9,8 @@ import { Component, EventEmitter, Input, Output } from '@angular/core';
  */
 @Component({
   selector: 'po-slide-circles',
-  templateUrl: './po-slide-circles.component.html'
+  templateUrl: './po-slide-circles.component.html',
+  standalone: false
 })
 export class PoSlideCirclesComponent {
   /** Index do slide atual. */

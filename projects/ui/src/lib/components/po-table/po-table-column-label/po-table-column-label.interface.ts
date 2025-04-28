@@ -70,14 +70,14 @@ export interface PoTableColumnLabel {
    * Define ou ativa um ícone que será exibido ao lado do valor da *tag*.
    *
    * Quando `p-type` estiver definida, basta informar um valor igual a `true` para que o ícone seja exibido conforme descrições abaixo:
-   * - <span class="ph check"></span> - `success`
-   * - <span class="ph ph-warning-circle"></span> - `warning`
-   * - <span class="ph ph-x"></span> - `danger`
-   * - <span class="ph ph-info"></span> - `info`
+   * - <span class="an an-check"></span> - `success`
+   * - <span class="an an-warning-circle"></span> - `warning`
+   * - <span class="an an-x"></span> - `danger`
+   * - <span class="an an-info"></span> - `info`
    *
    * Também É possível usar qualquer um dos ícones da [Biblioteca de ícones](https://po-ui.io/icons). conforme exemplo abaixo:
    * ```
-   * <po-tag p-icon="ph ph-user" p-value="PO Tag"></po-tag>
+   * <po-tag p-icon="an an-user" p-value="PO Tag"></po-tag>
    * ```
    * como também utilizar outras fontes de ícones, por exemplo a biblioteca *Font Awesome*, da seguinte forma:
    * ```

@@ -16,6 +16,7 @@ import { NG_VALIDATORS, NG_VALUE_ACCESSOR } from '@angular/forms';
 
 import { removeDuplicatedOptions } from '../../../utils/util';
 
+import { PoThemeService } from '../../../services';
 import { PoRadioComponent } from '../po-radio/po-radio.component';
 import { PoRadioGroupBaseComponent } from './po-radio-group-base.component';
 
@@ -62,7 +63,8 @@ import { PoRadioGroupBaseComponent } from './po-radio-group-base.component';
       useExisting: forwardRef(() => PoRadioGroupComponent),
       multi: true
     }
-  ]
+  ],
+  standalone: false
 })
 export class PoRadioGroupComponent extends PoRadioGroupBaseComponent implements AfterViewInit, DoCheck {
   /** Label do campo. */
@@ -78,10 +80,11 @@ export class PoRadioGroupComponent extends PoRadioGroupBaseComponent implements 
 
   constructor(
     differs: IterableDiffers,
+    protected poThemeService: PoThemeService,
     private el: ElementRef,
     private cd: ChangeDetectorRef
   ) {
-    super();
+    super(poThemeService);
     this.differ = differs.find([]).create(null);
   }
 
@@ -97,6 +100,12 @@ export class PoRadioGroupComponent extends PoRadioGroupBaseComponent implements 
       removeDuplicatedOptions(this.options);
     }
     this.cd.markForCheck();
+  }
+
+  emitAdditionalHelp() {
+    if (this.isAdditionalHelpEventTriggered()) {
+      this.additionalHelp.emit();
+    }
   }
 
   eventClick(value: any, disabled: any) {
@@ -133,6 +142,10 @@ export class PoRadioGroupComponent extends PoRadioGroupBaseComponent implements 
     }
   }
 
+  getAdditionalHelpTooltip() {
+    return this.isAdditionalHelpEventTriggered() ? null : this.additionalHelpTooltip;
+  }
+
   getElementByValue(value) {
     return this.inputEl.nativeElement.querySelector(`input[value='${value}']`);
   }
@@ -147,6 +160,18 @@ export class PoRadioGroupComponent extends PoRadioGroupBaseComponent implements 
     );
   }
 
+  onBlur(radio: PoRadioComponent): void {
+    if (!this.isRadioOptionFocused(radio) && this.getAdditionalHelpTooltip() && this.displayAdditionalHelp) {
+      this.showAdditionalHelp();
+    }
+  }
+
+  onKeyDown(event: KeyboardEvent, radio?: PoRadioComponent): void {
+    if (this.isRadioOptionFocused(radio)) {
+      this.keydown.emit(event);
+    }
+  }
+
   onKeyUp(event: KeyboardEvent, value) {
     const key = event.keyCode || event.which;
 
@@ -155,7 +180,48 @@ export class PoRadioGroupComponent extends PoRadioGroupBaseComponent implements 
     }
   }
 
+  /**
+   * Método que exibe `p-additionalHelpTooltip` ou executa a ação definida em `p-additionalHelp`.
+   * Para isso, será necessário configurar uma tecla de atalho utilizando o evento `p-keydown`.
+   *
+   * ```
+   * <po-radio-group
+   *  #radioGroup
+   *  ...
+   *  p-additional-help-tooltip="Mensagem de ajuda complementar"
+   *  (p-keydown)="onKeyDown($event, radioGroup)"
+   * ></po-radio-group>
+   * ```
+   * ```
+   * ...
+   * onKeyDown(event: KeyboardEvent, inp: PoRadioGroupComponent): void {
+   *  if (event.code === 'F9') {
+   *    inp.showAdditionalHelp();
+   *  }
+   * }
+   * ```
+   */
+  showAdditionalHelp(): boolean {
+    this.displayAdditionalHelp = !this.displayAdditionalHelp;
+    return this.displayAdditionalHelp;
+  }
+
+  showAdditionalHelpIcon() {
+    return !!this.additionalHelpTooltip || this.isAdditionalHelpEventTriggered();
+  }
+
+  private isAdditionalHelpEventTriggered(): boolean {
+    return (
+      this.additionalHelpEventTrigger === 'event' ||
+      (this.additionalHelpEventTrigger === undefined && this.additionalHelp.observed)
+    );
+  }
+
   private isArrowKey(key: number) {
     return key >= 37 && key <= 40;
+  }
+
+  private isRadioOptionFocused(radio: PoRadioComponent): boolean {
+    return document.activeElement === radio.radioInput.nativeElement;
   }
 }

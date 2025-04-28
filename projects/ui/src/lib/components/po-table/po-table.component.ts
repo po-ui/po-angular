@@ -32,8 +32,9 @@ import { PoModalAction, PoModalComponent } from '../po-modal';
 import { PoPopupComponent } from '../po-popup/po-popup.component';
 import { PoTableColumnLabel } from './po-table-column-label/po-table-column-label.interface';
 
+import { PoThemeService } from '../../services';
 import { uuid } from '../../utils/util';
-import { ICONS_DICTIONARY, PhosphorIconDictionary } from '../po-icon';
+import { AnimaliaIconDictionary, ICONS_DICTIONARY } from '../po-icon';
 import { PoTableRowTemplateArrowDirection } from './enums/po-table-row-template-arrow-direction.enum';
 import { PoTableAction } from './interfaces/po-table-action.interface';
 import { PoTableColumn } from './interfaces/po-table-column.interface';
@@ -101,7 +102,8 @@ import { PoTableService } from './services/po-table.service';
 @Component({
   selector: 'po-table',
   templateUrl: './po-table.component.html',
-  providers: [PoDateService]
+  providers: [PoDateService, PoTableService],
+  standalone: false
 })
 export class PoTableComponent extends PoTableBaseComponent implements AfterViewInit, DoCheck, OnDestroy, OnInit {
   @ContentChild(PoTableRowTemplateDirective, { static: true }) tableRowTemplate: PoTableRowTemplateDirective;
@@ -198,17 +200,20 @@ export class PoTableComponent extends PoTableBaseComponent implements AfterViewI
     return this._iconToken.NAME_LIB;
   }
 
+  /* eslint-disable max-params */
+
   constructor(
     poDate: PoDateService,
     differs: IterableDiffers,
     renderer: Renderer2,
     poLanguageService: PoLanguageService,
+    protected poThemeService: PoThemeService,
     private changeDetector: ChangeDetectorRef,
     private decimalPipe: DecimalPipe,
     private defaultService: PoTableService,
     @Optional() @Inject(ICONS_DICTIONARY) value: { [key: string]: string }
   ) {
-    super(poDate, poLanguageService, defaultService);
+    super(poDate, poLanguageService, poThemeService, defaultService);
     this.JSON = JSON;
     this.differ = differs.find([]).create(null);
 
@@ -220,8 +225,9 @@ export class PoTableComponent extends PoTableBaseComponent implements AfterViewI
       this.debounceResize();
     });
 
-    this._iconToken = value ?? PhosphorIconDictionary;
+    this._iconToken = value ?? AnimaliaIconDictionary;
   }
+  /* eslint-enable max-params */
 
   get hasRowTemplateWithArrowDirectionRight() {
     return this.tableRowTemplate?.tableRowTemplateArrowDirection === PoTableRowTemplateArrowDirection.Right;
@@ -232,7 +238,8 @@ export class PoTableComponent extends PoTableBaseComponent implements AfterViewI
       this.mainColumns.length +
       (this.actions.length > 0 ? 1 : 0) +
       (this.selectable ? 1 : 0) +
-      (!this.hideDetail && this.columnMasterDetail !== undefined ? 1 : 0);
+      (!this.hideDetail && this.columnMasterDetail !== undefined ? 1 : 0) +
+      this.countExtraColumns();
 
     return columnCount || 1;
   }
@@ -581,7 +588,7 @@ export class PoTableComponent extends PoTableBaseComponent implements AfterViewI
     this.changeVisibleColumns.emit(columns);
   }
 
-  onColumnRestoreManager(value: Array<String>) {
+  onColumnRestoreManager(value: Array<string>) {
     this.columnRestoreManager.emit(value);
   }
 
@@ -696,13 +703,16 @@ export class PoTableComponent extends PoTableBaseComponent implements AfterViewI
     const template: PoTableColumnTemplateDirective = this.tableColumnTemplates?.find(
       tableColumnTemplate => tableColumnTemplate.targetProperty === column.property
     );
-    if (!template) {
+    if (!this.initialized) return null;
+
+    if (template) {
+      return template.templateRef;
+    } else {
       console.warn(
         `Não foi possível encontrar o template para a coluna: ${column.property}, por gentileza informe a propriedade [p-property]`
       );
       return null;
     }
-    return template.templateRef;
   }
 
   public getWidthColumnManager() {
@@ -795,6 +805,29 @@ export class PoTableComponent extends PoTableBaseComponent implements AfterViewI
       const columnLabel = this.getColumnLabel(row, column);
       return (this.tooltipText = columnLabel?.tooltip);
     }
+  }
+
+  private countExtraColumns(): number {
+    let extraColumns = 0;
+
+    if (!this.columnMasterDetail && this.hasItems) {
+      if (
+        (this.hasMasterDetailColumn || this.hasRowTemplate) &&
+        this.hasMainColumns &&
+        !this.hasRowTemplateWithArrowDirectionRight
+      ) {
+        extraColumns++;
+      }
+      if (
+        this.hasRowTemplateWithArrowDirectionRight &&
+        this.hasMainColumns &&
+        (this.hasVisibleActions || this.hideColumnsManager)
+      ) {
+        extraColumns++;
+      }
+    }
+
+    return extraColumns;
   }
 
   private debounceResize() {

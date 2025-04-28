@@ -7,16 +7,19 @@ import { PoJobSchedulerInternal } from '../interfaces/po-job-scheduler-internal.
 
 @Component({
   selector: 'po-page-job-scheduler-summary',
-  templateUrl: 'po-page-job-scheduler-summary.component.html'
+  templateUrl: 'po-page-job-scheduler-summary.component.html',
+  standalone: false
 })
 export class PoPageJobSchedulerSummaryComponent implements OnInit {
+  @Input('p-components-size') componentsSize: string;
+
   @Input('p-literals') literals = <any>{};
 
   @Input('p-parameters') parameters: Array<PoDynamicViewField> = [];
 
   @Input('p-value') value: PoJobSchedulerInternal = <any>{};
 
-  @Input('p-no-parameters') noParameters: Boolean = true;
+  @Input('p-no-parameters') noParameters: boolean = true;
 
   @Input('p-summary-template') jobSchedulerSummaryTemplate;
 

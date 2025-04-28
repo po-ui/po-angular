@@ -36,7 +36,8 @@ const eventSubmit = document.createEvent('Event');
 eventSubmit.initEvent('submit', true, false);
 
 @Component({
-  template: ` <po-page-list p-title="Unit Test" [p-actions]="actions"> </po-page-list> `
+  template: ` <po-page-list p-title="Unit Test" [p-actions]="actions"> </po-page-list> `,
+  standalone: false
 })
 class MobileComponent {
   public actions: Array<{}> = [
@@ -120,7 +121,8 @@ describe('PoPageListComponent - Mobile:', () => {
 });
 
 @Component({
-  template: ` <po-page-list p-title="Unit Test" [p-filter]="filter" [p-actions]="actions"> </po-page-list> `
+  template: ` <po-page-list p-title="Unit Test" [p-filter]="filter" [p-actions]="actions"> </po-page-list> `,
+  standalone: false
 })
 class DesktopComponent {
   public model = '123';

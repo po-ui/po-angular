@@ -1,5 +1,3 @@
-import { PoLanguageService } from '../../../services/po-language/po-language.service';
-import { poLocaleDefault } from '../../../services/po-language/po-language.constant';
 import {
   AfterViewInit,
   Directive,
@@ -14,19 +12,16 @@ import {
   Output,
   SimpleChanges
 } from '@angular/core';
-import {
-  AbstractControl,
-  ControlValueAccessor,
-  NgControl,
-  UntypedFormControl,
-  Validator,
-  Validators
-} from '@angular/forms';
+import { AbstractControl, ControlValueAccessor, NgControl, UntypedFormControl, Validator } from '@angular/forms';
 import { Subscription } from 'rxjs';
 import { finalize } from 'rxjs/operators';
+import { poLocaleDefault } from '../../../services/po-language/po-language.constant';
+import { PoLanguageService } from '../../../services/po-language/po-language.service';
 
-import { InputBoolean } from '../../../decorators';
-import { convertToBoolean, isTypeof } from '../../../utils/util';
+import { PoFieldSize } from '../../../enums/po-field-size.enum';
+import { PoThemeService } from '../../../services';
+import { convertToBoolean, getDefaultSize, isTypeof, validateSize } from '../../../utils/util';
+import { PoTableColumnSpacing } from '../../po-table/enums/po-table-spacing.enum';
 import { requiredFailed } from '../validators';
 import { PoLookupAdvancedFilter } from './interfaces/po-lookup-advanced-filter.interface';
 import { PoLookupColumn } from './interfaces/po-lookup-column.interface';
@@ -34,7 +29,6 @@ import { PoLookupFilter } from './interfaces/po-lookup-filter.interface';
 import { PoLookupLiterals } from './interfaces/po-lookup-literals.interface';
 import { PoLookupFilterService } from './services/po-lookup-filter.service';
 import { PoLookupModalService } from './services/po-lookup-modal.service';
-import { PoTableColumnSpacing } from '../../po-table/enums/po-table-spacing.enum';
 
 export const poLookupLiteralsDefault = {
   en: <PoLookupLiterals>{
@@ -77,6 +71,37 @@ export abstract class PoLookupBaseComponent
 {
   private _literals?: PoLookupLiterals;
   private language: string;
+  private _size?: string = undefined;
+
+  // Propriedade interna que define se o ícone de ajuda adicional terá cursor clicável (evento) ou padrão (tooltip).
+  @Input() additionalHelpEventTrigger: string | undefined;
+
+  /**
+   * @optional
+   *
+   * @description
+   * Exibe um ícone de ajuda adicional ao `p-help`, com o texto desta propriedade no tooltip.
+   * Se o evento `p-additional-help` estiver definido, o tooltip não será exibido.
+   * **Como boa prática, indica-se utilizar um texto com até 140 caracteres.**
+   * > Requer um recuo mínimo de 8px se o componente estiver próximo à lateral da tela.
+   */
+  @Input('p-additional-help-tooltip') additionalHelpTooltip?: string;
+
+  /**
+   * @optional
+   *
+   * @description
+   *
+   * Define que o tooltip (`p-additional-help-tooltip` e/ou `p-error-limit`) será incluído no body da página e não
+   * dentro do componente. Essa opção pode ser necessária em cenários com containers que possuem scroll ou overflow
+   * escondido, garantindo o posicionamento correto do tooltip próximo ao elemento.
+   *
+   * > Quando utilizado com `p-additional-help-tooltip`, leitores de tela como o NVDA podem não ler o conteúdo do tooltip.
+   *
+   * @default `false`
+   */
+  @Input({ alias: 'p-append-in-body', transform: convertToBoolean }) appendBox?: boolean = false;
+
   /**
    * @optional
    *
@@ -347,6 +372,42 @@ export abstract class PoLookupBaseComponent
    *
    * @description
    *
+   * Limita a exibição da mensagem de erro a duas linhas e exibe um tooltip com o texto completo.
+   *
+   * > Caso essa propriedade seja definida como `true`, a mensagem de erro será limitada a duas linhas
+   * e um tooltip será exibido ao passar o mouse sobre a mensagem para mostrar o conteúdo completo.
+   *
+   * @default `false`
+   */
+  @Input('p-error-limit') errorLimit: boolean = false;
+
+  /**
+   * @optional
+   *
+   * @description
+   *
+   * Define o tamanho do componente:
+   * - `small`: altura do input como 32px (disponível apenas para acessibilidade AA).
+   * - `medium`: altura do input como 44px.
+   *
+   * > Caso a acessibilidade AA não esteja configurada, o tamanho `medium` será mantido.
+   * Para mais detalhes, consulte a documentação do [po-theme](https://po-ui.io/documentation/po-theme).
+   *
+   * @default `medium`
+   */
+  @Input('p-size') set size(value: string) {
+    this._size = validateSize(value, this.poThemeService, PoFieldSize);
+  }
+
+  get size(): string {
+    return this._size ?? getDefaultSize(this.poThemeService, PoFieldSize);
+  }
+
+  /**
+   * @optional
+   *
+   * @description
+   *
    * Responsável por aplicar espaçamento nas colunas da tabela contida no lookup.
    *
    * Deve receber um dos valores do enum `PoTableColumnSpacing`.
@@ -387,10 +448,28 @@ export abstract class PoLookupBaseComponent
   @Input({ alias: 'p-virtual-scroll', transform: convertToBoolean }) virtualScroll?: boolean = true;
 
   /**
+   * @optional
+   *
+   * @description
+   * Evento disparado ao clicar no ícone de ajuda adicional.
+   * Este evento ativa automaticamente a exibição do ícone de ajuda adicional ao `p-help`.
+   */
+  @Output('p-additional-help') additionalHelp = new EventEmitter<any>();
+
+  /**
    * Evento será disparado quando ocorrer algum erro na requisição de busca do item.
    * Será passado por parâmetro o objeto de erro retornado.
    */
   @Output('p-error') onError: EventEmitter<any> = new EventEmitter<any>();
+
+  /**
+   * @optional
+   *
+   * @description
+   * Evento disparado quando uma tecla é pressionada enquanto o foco está no componente.
+   * Retorna um objeto `KeyboardEvent` com informações sobre a tecla.
+   */
+  @Output('p-keydown') keydown: EventEmitter<KeyboardEvent> = new EventEmitter<KeyboardEvent>();
 
   /**
    * @optional
@@ -432,8 +511,9 @@ export abstract class PoLookupBaseComponent
    * O componente envia como parâmetro um array de string com as colunas configuradas inicialmente.
    * Por exemplo: ["idCard", "name", "hireStatus", "age"].
    */
-  @Output('p-restore-column-manager') columnRestoreManager = new EventEmitter<Array<String>>();
+  @Output('p-restore-column-manager') columnRestoreManager = new EventEmitter<Array<string>>();
 
+  displayAdditionalHelp: boolean = false;
   service: any;
 
   protected selectedOptions = [];
@@ -594,7 +674,8 @@ export abstract class PoLookupBaseComponent
     private defaultService: PoLookupFilterService,
     @Inject(Injector) private injector: Injector,
     public poLookupModalService: PoLookupModalService,
-    languageService: PoLanguageService
+    languageService: PoLanguageService,
+    protected poThemeService: PoThemeService
   ) {
     this.language = languageService.getShortLanguage();
   }
@@ -825,5 +906,6 @@ export abstract class PoLookupBaseComponent
   abstract openLookup(): void;
 
   abstract setDisclaimers(a);
+
   abstract updateVisibleItems();
 }

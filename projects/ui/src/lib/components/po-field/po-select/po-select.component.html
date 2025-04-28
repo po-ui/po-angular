@@ -10,13 +10,16 @@
     <select
       #select
       class="po-select"
-      [ngClass]="iconNameLib === 'PhosphorIcon' ? 'po-select-phosphor' : 'po-select-poicon'"
+      [class.po-select-aa]="size === 'small'"
+      [ngClass]="iconNameLib === 'AnimaliaIcon' ? 'po-select-phosphor' : 'po-select-poicon'"
       [attr.name]="name"
       [class.po-select-placeholder]="!selectedValue?.toString() && !!placeholder"
       [disabled]="disabled"
       [id]="id"
       [required]="required"
+      (blur)="onBlur()"
       (change)="onSelectChange($event.target.value)"
+      (keydown)="onKeyDown($event)"
     >
       <ng-container *ngIf="!isSafari">
         <option
@@ -53,8 +56,15 @@
   </div>
 
   <po-field-container-bottom
+    *ngIf="!readonly"
+    [p-additional-help-tooltip]="getAdditionalHelpTooltip()"
+    [p-append-in-body]="appendBox"
     [p-help]="help"
     [p-disabled]="disabled"
     [p-error-pattern]="getErrorPattern()"
+    [p-error-limit]="errorLimit"
+    [p-show-additional-help]="displayAdditionalHelp"
+    [p-show-additional-help-icon]="showAdditionalHelpIcon()"
+    (p-additional-help)="emitAdditionalHelp()"
   ></po-field-container-bottom>
 </po-field-container>

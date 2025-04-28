@@ -16,8 +16,9 @@ import { NG_VALUE_ACCESSOR } from '@angular/forms';
 import { PoFieldModel } from '../po-field.model';
 import { PoKeyCodeEnum } from './../../../enums/po-key-code.enum';
 
-import { convertToBoolean } from '../../../utils/util';
-import { PoRadioSize } from './po-radio-size.enum';
+import { PoThemeService } from '../../../services';
+import { convertToBoolean, getDefaultSize, validateSize } from '../../../utils/util';
+import { PoRadioSize } from './enums/po-radio-size.enum';
 
 @Component({
   selector: 'po-radio',
@@ -29,33 +30,26 @@ import { PoRadioSize } from './po-radio-size.enum';
       useExisting: forwardRef(() => PoRadioComponent),
       multi: true
     }
-  ]
+  ],
+  standalone: false
 })
 export class PoRadioComponent extends PoFieldModel<boolean> {
   @ViewChild('radio', { static: true }) radio: ElementRef;
   @ViewChild('radioInput', { static: true }) radioInput: ElementRef;
 
   value = false;
-
-  private _size: PoRadioSize = PoRadioSize.Medium;
+  private _size?: string = undefined;
 
   /** Define o valor do *radio* */
   @Input('p-value') radioValue: string;
 
-  /**
-   * @optional
-   *
-   * @description
-   *
-   * Define o tamanho do *radio*
-   * @default `medium`
-   */
-  @Input('p-size') set size(value: PoRadioSize) {
-    this._size = Object.values(PoRadioSize).includes(value) ? value : PoRadioSize.Medium;
+  /** Define o tamanho do radio. */
+  @Input('p-size') set size(value: string) {
+    this._size = validateSize(value, this.poThemeService, PoRadioSize);
   }
 
-  get size() {
-    return this._size;
+  get size(): string {
+    return this._size ?? getDefaultSize(this.poThemeService, PoRadioSize);
   }
 
   @Input({ alias: 'p-required', transform: convertToBoolean }) required?: boolean;
@@ -63,11 +57,15 @@ export class PoRadioComponent extends PoFieldModel<boolean> {
   /** Define o status do *radio* */
   @Input('p-checked') checked: boolean = false;
 
+  // Evento disparado ao sair do campo.
+  @Output('p-blur') blur: EventEmitter<any> = new EventEmitter();
+
   /** Emite evento para a tabela ao selecionar ou desselecionar */
   @Output('p-change-selected') changeSelected: EventEmitter<any> = new EventEmitter<any>();
 
   constructor(
     private changeDetector: ChangeDetectorRef,
+    protected poThemeService: PoThemeService,
     private renderer: Renderer2
   ) {
     super();
@@ -101,6 +99,7 @@ export class PoRadioComponent extends PoFieldModel<boolean> {
 
   onBlur() {
     this.onTouched?.();
+    this.blur.emit();
   }
 
   onKeyDown(event: KeyboardEvent) {

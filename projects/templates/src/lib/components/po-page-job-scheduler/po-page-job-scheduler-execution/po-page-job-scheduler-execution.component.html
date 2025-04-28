@@ -15,6 +15,7 @@
       [p-disabled]="isEdit"
       [p-label]="literals.day"
       [p-min-date]="startDateFirstExecution"
+      [p-size]="componentsSize"
     >
     </po-datepicker>
 
@@ -29,6 +30,7 @@
       [p-disabled]="isEdit"
       [p-label]="literals.time"
       [p-pattern]="timePattern"
+      [p-size]="componentsSize"
     >
     </po-input>
   </div>
@@ -44,6 +46,7 @@
       p-required
       [p-label]="literals.periodicity"
       [p-options]="periodicityOptions"
+      [p-size]="componentsSize"
       (p-change)="onChangePeriodicityOptions($event)"
     >
     </po-radio-group>
@@ -57,6 +60,7 @@
           [p-label]="literals.frequency"
           [p-label-off]="literals.no"
           [p-label-on]="literals.yes"
+          [p-size]="componentsSize"
           (p-change)="onChangeContainsFrequency($event)"
         >
         </po-switch>
@@ -68,11 +72,19 @@
             [(ngModel)]="value.frequency.type"
             [p-columns]="3"
             [p-options]="frequencyOptions"
+            [p-size]="componentsSize"
             (p-change)="onChangeFrequencyOptions()"
           >
           </po-radio-group>
 
-          <po-number class="po-md-2" name="frequencyValue" p-required [(ngModel)]="value.frequency.value"> </po-number>
+          <po-number
+            class="po-md-2"
+            name="frequencyValue"
+            p-required
+            [p-size]="componentsSize"
+            [(ngModel)]="value.frequency.value"
+          >
+          </po-number>
         </ng-container>
       </div>
 
@@ -90,6 +102,7 @@
           [p-label]="literals.recurrent"
           [p-label-off]="literals.no"
           [p-label-on]="literals.yes"
+          [p-size]="componentsSize"
         >
         </po-switch>
       </div>
@@ -109,6 +122,7 @@
       [p-filter-service]="poPageJobSchedulerLookup"
       [p-label]="literals.process"
       [p-placeholder]="literals.enterProcess"
+      [p-size]="componentsSize"
     >
     </po-lookup>
   </ng-template>
@@ -122,6 +136,7 @@
       [p-disabled]="isEdit"
       [p-label]="literals.process"
       [p-placeholder]="literals.enterProcess"
+      [p-size]="componentsSize"
     >
     </po-input>
   </ng-template>
@@ -143,6 +158,7 @@
       p-required
       [p-label]="literals.weekDays"
       [p-options]="weekDays"
+      [p-size]="componentsSize"
     >
     </po-checkbox-group>
   </ng-template>
@@ -157,6 +173,7 @@
       [p-label]="dayLabel"
       [p-max]="31"
       [p-pattern]="dayPattern"
+      [p-size]="componentsSize"
     >
     </po-number>
 
@@ -170,6 +187,7 @@
       [p-label]="literals.endDay"
       [p-max]="31"
       [p-pattern]="dayPattern"
+      [p-size]="componentsSize"
     >
     </po-number>
 
@@ -187,6 +205,7 @@
       p-required
       [p-label]="hourLabel"
       [p-pattern]="timePattern"
+      [p-size]="componentsSize"
     >
     </po-input>
 
@@ -201,6 +220,7 @@
       p-required
       [p-label]="literals.endTime"
       [p-pattern]="timePattern"
+      [p-size]="componentsSize"
     >
     </po-input>
   </ng-template>

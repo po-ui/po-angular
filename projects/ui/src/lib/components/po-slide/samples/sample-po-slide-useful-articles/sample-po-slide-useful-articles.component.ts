@@ -2,7 +2,8 @@ import { Component } from '@angular/core';
 
 @Component({
   selector: 'sample-po-slide-useful-articles',
-  templateUrl: './sample-po-slide-useful-articles.component.html'
+  templateUrl: './sample-po-slide-useful-articles.component.html',
+  standalone: false
 })
 export class SamplePoSlideUsefulArticlesComponent {
   sampleItems: Array<any> = [

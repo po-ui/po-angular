@@ -2,7 +2,9 @@ import { Injectable } from '@angular/core';
 
 import { PoComboOptionGroup } from '@po-ui/ng-components';
 
-@Injectable()
+@Injectable({
+  providedIn: 'root'
+})
 export class SamplePoComboSchedulingService {
   getcities(): Array<PoComboOptionGroup> {
     return [

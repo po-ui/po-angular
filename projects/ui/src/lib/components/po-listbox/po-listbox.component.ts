@@ -19,10 +19,12 @@ import { PoLanguageService } from '../../services/po-language/po-language.servic
 import { isExternalLink, isTypeof, openExternalLink } from '../../utils/util';
 import { PoSearchListComponent } from './po-search-list/po-search-list.component';
 import { Observable, Subscription, debounceTime, fromEvent } from 'rxjs';
+import { PoThemeService } from '../../services';
 
 @Component({
   selector: 'po-listbox',
-  templateUrl: './po-listbox.component.html'
+  templateUrl: './po-listbox.component.html',
+  standalone: false
 })
 export class PoListBoxComponent extends PoListBoxBaseComponent implements AfterViewInit, OnChanges, OnDestroy {
   @ViewChild('listbox', { static: true }) listbox: ElementRef;
@@ -36,10 +38,11 @@ export class PoListBoxComponent extends PoListBoxBaseComponent implements AfterV
     public element: ElementRef,
     private renderer: Renderer2,
     languageService: PoLanguageService,
+    protected poThemeService: PoThemeService,
     private router: Router,
     private changeDetector: ChangeDetectorRef
   ) {
-    super(languageService);
+    super(languageService, poThemeService);
   }
 
   ngAfterViewInit(): void {

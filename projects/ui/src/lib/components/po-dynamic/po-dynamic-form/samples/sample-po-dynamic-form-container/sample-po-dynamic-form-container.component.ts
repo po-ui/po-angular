@@ -1,20 +1,24 @@
-import { Component, OnInit } from '@angular/core';
+import { Component, OnInit, ViewChild } from '@angular/core';
 
 import {
   PoDynamicFormField,
   PoDynamicFormFieldChanged,
   PoDynamicFormValidation,
   PoNotificationService,
-  ForceBooleanComponentEnum
+  ForceBooleanComponentEnum,
+  PoUploadFile,
+  PoDynamicFormComponent
 } from '@po-ui/ng-components';
 import { PoDynamicFormContainerService } from './sample-po-dynamic-form-container.service';
 
 @Component({
   selector: 'sample-po-dynamic-form-container',
   templateUrl: './sample-po-dynamic-form-container.component.html',
-  providers: [PoDynamicFormContainerService]
+  providers: [PoDynamicFormContainerService],
+  standalone: false
 })
 export class SamplePoDynamicFormContainerComponent implements OnInit {
+  @ViewChild('dynamicForm', { static: true }) dynamicForm: PoDynamicFormComponent;
   person = {};
   validateFields: Array<string> = ['state'];
 
@@ -39,7 +43,10 @@ export class SamplePoDynamicFormContainerComponent implements OnInit {
       gridSmColumns: 12,
       maxValue: '2010-01-01',
       errorMessage: 'The date must be before the year 2010.',
-      order: -1
+      order: -1,
+      help: 'Enter or select a valid date.',
+      additionalHelpTooltip: 'Please enter a valid date in the format MMDDYYYY.',
+      keydown: this.onKeyDown.bind(this, 'birthday')
     },
     { property: 'cpf', label: 'CPF', mask: '999.999.999-99', gridColumns: 6, gridSmColumns: 12, visible: false },
     { property: 'cnpj', label: 'CNPJ', mask: '99.999.999/9999-99', gridColumns: 6, gridSmColumns: 12, visible: false },
@@ -59,7 +66,10 @@ export class SamplePoDynamicFormContainerComponent implements OnInit {
       secret: true,
       pattern: '[a-zA]{5}[Z0-9]{3}',
       errorMessage: 'At least 5 alphabetic and 3 numeric characters are required.',
-      placeholder: 'Type your password'
+      placeholder: 'Type your password',
+      help: 'Password must include a combination of letters and numbers.',
+      additionalHelpTooltip: 'At least 5 alphabetic and 3 numeric characters are required.',
+      keydown: this.onKeyDown.bind(this, 'secretKey')
     },
     {
       property: 'rememberSecretKey',
@@ -79,7 +89,7 @@ export class SamplePoDynamicFormContainerComponent implements OnInit {
       booleanFalse: 'Inactive',
       formatModel: true
     },
-    { property: 'email', container: 'CONTACTS', gridColumns: 6, icon: 'ph ph-envelope' },
+    { property: 'email', container: 'CONTACTS', gridColumns: 6, icon: 'an an-envelope' },
     { property: 'phone', mask: '(99) 99999-9999', gridColumns: 6 },
     { property: 'address', gridColumns: 6 },
     {
@@ -109,7 +119,10 @@ export class SamplePoDynamicFormContainerComponent implements OnInit {
       container: 'Work data',
       range: true,
       gridColumns: 5,
-      gridSmColumns: 12
+      gridSmColumns: 12,
+      help: 'Enter or select a valid date range.',
+      additionalHelpTooltip: 'Ensure the start date is earlier than or equal to the end date.',
+      keydown: this.onKeyDown.bind(this, 'vacation')
     },
     {
       property: 'entryTime',
@@ -126,7 +139,7 @@ export class SamplePoDynamicFormContainerComponent implements OnInit {
       gridSmColumns: 12,
       decimalsLength: 2,
       thousandMaxlength: 7,
-      icon: 'ph ph-currency-circle-dollar'
+      icon: 'an an-currency-circle-dollar'
     },
     {
       property: 'hobbies',
@@ -193,7 +206,11 @@ export class SamplePoDynamicFormContainerComponent implements OnInit {
       gridSmColumns: 12,
       label: 'Upload your background',
       optional: true,
-      url: 'https://po-sample-api.onrender.com/v1/uploads/addFile'
+      url: 'https://po-sample-api.onrender.com/v1/uploads/addFile',
+      customAction: { icon: 'an an-download', visible: true },
+      customActionClick: (file: PoUploadFile) => {
+        console.log('Iniciar download para o arquivo:', file.name);
+      }
     }
   ];
 
@@ -225,6 +242,12 @@ export class SamplePoDynamicFormContainerComponent implements OnInit {
         }
       ]
     };
+  }
+
+  onKeyDown(property: string, event: KeyboardEvent): void {
+    if (event.code === 'F9') {
+      this.dynamicForm.showAdditionalHelp(property);
+    }
   }
 
   onLoadFields(value: any) {

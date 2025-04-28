@@ -23,11 +23,12 @@ import { PoKeyCodeEnum } from './../../../enums/po-key-code.enum';
 import { PoControlPositionService } from './../../../services/po-control-position/po-control-position.service';
 import { isMobile } from './../../../utils/util';
 
+import { PoThemeService } from '../../../services';
 import { poLocaleDefault } from '../../../services/po-language/po-language.constant';
+import { PoMultiselectOption } from './interfaces/po-multiselect-option.interface';
 import { PoMultiselectBaseComponent } from './po-multiselect-base.component';
 import { PoMultiselectFilterService } from './po-multiselect-filter.service';
 import { PoMultiselectOptionTemplateDirective } from './po-multiselect-option-template/po-multiselect-option-template.directive';
-import { PoMultiselectOption } from './po-multiselect-option.interface';
 
 const poMultiselectContainerOffset = 8;
 const poMultiselectContainerPositionDefault = 'bottom';
@@ -113,7 +114,8 @@ const providers = [
   selector: 'po-multiselect',
   templateUrl: './po-multiselect.component.html',
   changeDetection: ChangeDetectionStrategy.OnPush,
-  providers
+  providers,
+  standalone: false
 })
 export class PoMultiselectComponent
   extends PoMultiselectBaseComponent
@@ -150,9 +152,10 @@ export class PoMultiselectComponent
     private el: ElementRef,
     private controlPosition: PoControlPositionService,
     public defaultService: PoMultiselectFilterService,
-    languageService: PoLanguageService
+    languageService: PoLanguageService,
+    protected poThemeService: PoThemeService
   ) {
-    super(languageService);
+    super(languageService, poThemeService);
     const language = languageService.getShortLanguage();
     this.literalsTag = {
       ...literalsTagRemoveOthers[poLocaleDefault],
@@ -190,6 +193,12 @@ export class PoMultiselectComponent
     this.subscription.unsubscribe();
   }
 
+  emitAdditionalHelp() {
+    if (this.isAdditionalHelpEventTriggered()) {
+      this.additionalHelp.emit();
+    }
+  }
+
   /**
    * Função que atribui foco ao componente.
    *
@@ -211,6 +220,10 @@ export class PoMultiselectComponent
     if (!this.disabled) {
       this.inputElement.nativeElement.focus();
     }
+  }
+
+  getAdditionalHelpTooltip() {
+    return this.isAdditionalHelpEventTriggered() ? null : this.additionalHelpTooltip;
   }
 
   getInputWidth() {
@@ -319,6 +332,10 @@ export class PoMultiselectComponent
   }
 
   onBlur() {
+    if (this.getAdditionalHelpTooltip() && this.displayAdditionalHelp) {
+      this.showAdditionalHelp();
+    }
+
     if (
       typeof this.inputElement.nativeElement.getAttribute('aria-label') === 'string' &&
       this.inputElement.nativeElement.getAttribute('aria-label').includes('Unselected')
@@ -329,6 +346,8 @@ export class PoMultiselectComponent
   }
 
   onKeyDown(event?: any) {
+    const isFieldFocused = document.activeElement === this.inputElement.nativeElement;
+
     if (event.shiftKey && event.keyCode === PoKeyCodeEnum.tab && !this.focusOnTag) {
       this.controlDropdownVisibility(false);
     }
@@ -368,6 +387,10 @@ export class PoMultiselectComponent
       this.toggleDropdownVisibility();
     }
     this.enterCloseTag = false;
+
+    if (isFieldFocused) {
+      this.keydown.emit(event);
+    }
   }
 
   toggleDropdownVisibility() {
@@ -432,7 +455,7 @@ export class PoMultiselectComponent
   closeTag(value, event) {
     let index;
     this.enterCloseTag = true;
-    if (!value || (typeof value === 'string' && value.includes('+'))) {
+    if (value === null || value === undefined || (typeof value === 'string' && value.includes('+'))) {
       index = null;
       const itemsNotInVisibleTags = this.selectedOptions.filter(option => !this.visibleTags.includes(option));
       for (const option of this.visibleTags) {
@@ -452,6 +475,36 @@ export class PoMultiselectComponent
     setTimeout(() => {
       this.focusOnNextTag(index, event);
     }, 300);
+  }
+
+  /**
+   * Método que exibe `p-additionalHelpTooltip` ou executa a ação definida em `p-additionalHelp`.
+   * Para isso, será necessário configurar uma tecla de atalho utilizando o evento `p-keydown`.
+   *
+   * ```
+   * <po-multiselect
+   *  #multiselect
+   *  ...
+   *  p-additional-help-tooltip="Mensagem de ajuda complementar"
+   *  (p-keydown)="onKeyDown($event, multiselect)"
+   * ></po-multiselect>
+   * ```
+   * ```
+   * ...
+   * onKeyDown(event: KeyboardEvent, inp: PoMultiselectComponent): void {
+   *  if (event.code === 'F9') {
+   *    inp.showAdditionalHelp();
+   *  }
+   * }
+   * ```
+   */
+  showAdditionalHelp(): boolean {
+    this.displayAdditionalHelp = !this.displayAdditionalHelp;
+    return this.displayAdditionalHelp;
+  }
+
+  showAdditionalHelpIcon() {
+    return !!this.additionalHelpTooltip || this.isAdditionalHelpEventTriggered();
   }
 
   wasClickedOnToggle(event: MouseEvent): void {
@@ -614,6 +667,13 @@ export class PoMultiselectComponent
     });
 
     window.addEventListener('scroll', this.onScroll, true);
+  }
+
+  private isAdditionalHelpEventTriggered(): boolean {
+    return (
+      this.additionalHelpEventTrigger === 'event' ||
+      (this.additionalHelpEventTrigger === undefined && this.additionalHelp.observed)
+    );
   }
 
   private onScroll = (): void => {

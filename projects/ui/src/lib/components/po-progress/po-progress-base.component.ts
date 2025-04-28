@@ -1,9 +1,12 @@
-import { EventEmitter, Input, Output, Directive, TemplateRef } from '@angular/core';
+import { Directive, EventEmitter, Input, Output, TemplateRef } from '@angular/core';
 
-import { convertToBoolean, convertToInt } from '../../utils/util';
+import { convertToBoolean, convertToInt, getDefaultSize, validateSize } from '../../utils/util';
 
-import { PoProgressStatus } from './enums/po-progress-status.enum';
+import { PoFieldSize } from '../../enums/po-field-size.enum';
+import { PoThemeService } from '../../services';
 import { PoProgressSize } from './enums/po-progress-size.enum';
+import { PoProgressStatus } from './enums/po-progress-status.enum';
+import { PoProgressAction } from './interfaces';
 
 const poProgressMaxValue = 100;
 const poProgressMinValue = 0;
@@ -66,7 +69,7 @@ export class PoProgressBaseComponent {
    *
    * Ícone que aparecerá ao lado do texto da propriedade `p-info`.
    *
-   * Exemplo: `ph ph-check`.
+   * Exemplo: `an an-check`.
    */
   @Input('p-info-icon') infoIcon?: string | TemplateRef<void>;
 
@@ -90,6 +93,87 @@ export class PoProgressBaseComponent {
    * Texto principal que aparecerá abaixo da barra de progresso no lado esquerdo.
    */
   @Input('p-text') text?: string;
+
+  /**
+   * @optional
+   *
+   * @description
+   *
+   * Permite definir uma ação personalizada no componente `po-progress`, exibindo um botão no canto inferior direito
+   * da barra de progresso. A ação deve implementar a interface **PoProgressAction**, possibilitando configurar:
+   *
+   * - **`label`**: Texto exibido no botão (opcional).
+   * - **`icon`**: Ícone exibido no botão (opcional).
+   * - **`type`**: Tipo do botão (`default` ou `danger`) para indicar a intenção da ação (opcional).
+   * - **`disabled`**: Indica se o botão deve estar desabilitado (opcional).
+   * - **`visible`**: Determina se o botão será exibido. Pode ser um valor booleano ou uma função que retorna um booleano (opcional).
+   *
+   * @example
+   * **Exemplo de uso:**
+   * ```html
+   * <po-progress
+   *  [p-value]="50"
+   *  [p-custom-action]="customAction"
+   *  (p-custom-action-click)="onCustomActionClick()"
+   * ></po-progress>
+   * ```
+   *
+   * ```typescript
+   * customAction: PoProgressAction = {
+   *   label: 'Baixar',
+   *   icon: 'an an-download',
+   *   type: 'default',
+   *   visible: () => true
+   * };
+   *
+   * onCustomActionClick() {
+   *   console.log('Custom action triggered!');
+   * }
+   * ```
+   *
+   * **Cenários comuns:**
+   * 1. **Download de Arquivos**: Exibir um botão para realizar o download de um arquivo associado à barra de progresso.
+   * 2. **Cancelamento Personalizado**: Adicionar uma ação para interromper ou reverter uma operação em andamento.
+   */
+  @Input('p-custom-action') customAction?: PoProgressAction;
+
+  /**
+   * @optional
+   *
+   * @description
+   *
+   * Evento emitido quando o botão definido em `p-custom-action` é clicado. Este evento retorna informações
+   * relacionadas à barra de progresso ou ao arquivo/processo associado, permitindo executar ações específicas.
+   *
+   * @example
+   * **Exemplo de uso:**
+   *
+   * ```html
+   * <po-progress
+   *  [p-value]="50"
+   *  [p-custom-action]="customAction"
+   *  (p-custom-action-click)="onCustomActionClick()"
+   * ></po-progress>
+   * ```
+   *
+   * ```typescript
+   * customAction: PoProgressAction = {
+   *   label: 'Cancelar',
+   *   icon: 'an an-x',
+   *   type: 'danger',
+   *   visible: true
+   * };
+   *
+   * onCustomActionClick() {
+   *   console.log('Custom action triggered!');
+   * }
+   * ```
+   *
+   * **Cenários comuns:**
+   * 1. **Botão de Download**: Disparar o download do arquivo associado à barra de progresso.
+   * 2. **Ação Condicional**: Realizar uma validação ou chamada de API antes de prosseguir com a ação.
+   */
+  @Output('p-custom-action-click') customActionClick: EventEmitter<any> = new EventEmitter();
 
   /**
    * @optional
@@ -120,6 +204,7 @@ export class PoProgressBaseComponent {
   private _indeterminate?: boolean;
   private _value?: number = 0;
   private _size: string = 'large';
+  private _sizeActions: string = undefined;
 
   /**
    * @optional
@@ -169,11 +254,11 @@ export class PoProgressBaseComponent {
    *
    * @description
    *
-   * Definição do tamanho da altura da barra de progresso.
+   * Define a expessura da barra de progresso.
    *
    * Valores válidos:
-   *  - `medium`: tamanho médio
-   *  - `large`: tamanho grande
+   *  - medium
+   *  - large
    *
    * @default `large`
    */
@@ -190,11 +275,35 @@ export class PoProgressBaseComponent {
    *
    * @description
    *
+   * Define o tamanho das ações no componente com excessão da barra de progresso que pode ser ajustada através da propriedade `p-size`:
+   * - `small`: aplica a medida small de cada componente (disponível apenas para acessibilidade AA).
+   * - `medium`: aplica a medida medium de cada componente.
+   *
+   * > Caso a acessibilidade AA não esteja configurada, o tamanho `medium` será mantido.
+   * Para mais detalhes, consulte a documentação do [po-theme](https://po-ui.io/documentation/po-theme).
+   *
+   * @default `medium`
+   */
+  @Input('p-size-actions') set sizeActions(value: string) {
+    this._sizeActions = validateSize(value, this.poThemeService, PoFieldSize);
+  }
+
+  get sizeActions(): string {
+    return this._sizeActions ?? getDefaultSize(this.poThemeService, PoFieldSize);
+  }
+
+  /**
+   * @optional
+   *
+   * @description
+   *
    * Ativa a exibição da porcentagem atual da barra de progresso.
    *
    * @default `false`
    */
   @Input({ alias: 'p-show-percentage', transform: convertToBoolean }) showPercentage: boolean = false;
+
+  constructor(protected poThemeService: PoThemeService) {}
 
   private isProgressRangeValue(value: number): boolean {
     return value >= poProgressMinValue && value <= poProgressMaxValue;

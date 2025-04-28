@@ -12,7 +12,9 @@ import { PoAccordionItemComponent } from '../po-accordion-item/po-accordion-item
  * Serviço para poder notificar o componente `po-accordion` quando um `po-accordion-item` for
  * expandido/colapsado.
  */
-@Injectable()
+@Injectable({
+  providedIn: 'root'
+})
 export class PoAccordionService {
   private subjectChild = new Subject<PoAccordionItemComponent>();
 

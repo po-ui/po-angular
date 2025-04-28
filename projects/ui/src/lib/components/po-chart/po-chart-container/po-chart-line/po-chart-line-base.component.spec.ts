@@ -12,7 +12,8 @@ import { expectPropertiesValues } from 'projects/ui/src/lib/util-test/util-expec
 
 @Component({
   selector: 'po-chart-line-test',
-  template: ` <svg:path></svg:path> `
+  template: ` <svg:path></svg:path> `,
+  standalone: false
 })
 class PoChartLineComponent extends PoChartLineBaseComponent {
   constructor(mathsService: PoChartMathsService, renderer: Renderer2, elementRef: ElementRef) {

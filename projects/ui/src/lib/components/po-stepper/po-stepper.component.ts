@@ -41,7 +41,8 @@ import { PoStepperItem } from './po-stepper-item.interface';
  */
 @Component({
   selector: 'po-stepper',
-  templateUrl: './po-stepper.component.html'
+  templateUrl: './po-stepper.component.html',
+  standalone: false
 })
 export class PoStepperComponent extends PoStepperBaseComponent implements AfterContentInit {
   @ContentChildren(PoStepComponent) poSteps: QueryList<PoStepComponent>;
@@ -164,7 +165,11 @@ export class PoStepperComponent extends PoStepperBaseComponent implements AfterC
   }
 
   changeStep(stepIndex: number, step?: PoStepComponent): void {
-    this.allowNextStep(stepIndex)
+    if (!step || (this.currentActiveStep && this.currentActiveStep.id === step.id)) {
+      return;
+    }
+
+    this.allowNextStep(stepIndex, step)
       .pipe(take(1))
       .subscribe(nextStepAllowed => {
         if (nextStepAllowed) {
@@ -174,7 +179,6 @@ export class PoStepperComponent extends PoStepperBaseComponent implements AfterC
             this.controlStepsStatus(step);
             this.onChangeStep.emit(step);
           } else if (!this.usePoSteps && stepIndex !== this.currentStepIndex) {
-            // if para tratamento do modelo antigo do po-stepper
             this.onChangeStep.emit(stepIndex + 1);
           }
         }
@@ -251,7 +255,7 @@ export class PoStepperComponent extends PoStepperBaseComponent implements AfterC
     }
   }
 
-  private allowNextStep(nextStepIndex: number): Observable<boolean> {
+  private allowNextStep(nextStepIndex: number, step?: PoStepComponent): Observable<boolean> {
     if (!this.sequential) {
       return of(true);
     }
@@ -378,7 +382,7 @@ export class PoStepperComponent extends PoStepperBaseComponent implements AfterC
   }
 
   private hasStepWithCanActiveNextStep(): boolean {
-    return this.getPoSteps().some(step => step.canActiveNextStep && step.canActiveNextStep(step));
+    return this.getPoSteps().some(step => step.canActiveNextStep);
   }
 
   private isBeforeStep(stepIndex: number): boolean {

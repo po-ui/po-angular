@@ -1,12 +1,14 @@
 import { ChangeDetectorRef, Component, OnInit } from '@angular/core';
 
-import { PoCheckboxGroupOption, PoSelectOption, PoSelectOptionGroup } from '@po-ui/ng-components';
+import { PoCheckboxGroupOption, PoRadioGroupOption, PoSelectOption, PoSelectOptionGroup } from '@po-ui/ng-components';
 
 @Component({
   selector: 'sample-po-select-labs',
-  templateUrl: './sample-po-select-labs.component.html'
+  templateUrl: './sample-po-select-labs.component.html',
+  standalone: false
 })
 export class SamplePoSelectLabsComponent implements OnInit {
+  additionalHelpTooltip: string;
   event: string;
   help: string;
   label: string;
@@ -20,13 +22,20 @@ export class SamplePoSelectLabsComponent implements OnInit {
   select: string;
   selectedOptionsGroup: string;
   selectOptionGroupSwitch: boolean;
+  size: string;
 
   readonly propertiesOptions: Array<PoCheckboxGroupOption> = [
     { value: 'disabled', label: 'Disabled' },
     { value: 'optional', label: 'Optional' },
     { value: 'required', label: 'Required' },
     { value: 'showRequired', label: 'Show Required' },
-    { value: 'readonly', label: 'Read Only' }
+    { value: 'readonly', label: 'Read Only' },
+    { value: 'errorLimit', label: 'Limit Error Message' }
+  ];
+
+  public readonly sizeOptions: Array<PoRadioGroupOption> = [
+    { label: 'small', value: 'small' },
+    { label: 'medium', value: 'medium' }
   ];
 
   constructor(private readonly cdr: ChangeDetectorRef) {}
@@ -50,6 +59,7 @@ export class SamplePoSelectLabsComponent implements OnInit {
   }
 
   restore() {
+    this.additionalHelpTooltip = '';
     this.event = '';
     this.help = undefined;
     this.label = undefined;
@@ -63,6 +73,7 @@ export class SamplePoSelectLabsComponent implements OnInit {
     this.select = '';
     this.selectOptionGroupSwitch = false;
     this.selectedOptionsGroup = undefined;
+    this.size = 'medium';
   }
 
   restoreSwitch(event: boolean) {

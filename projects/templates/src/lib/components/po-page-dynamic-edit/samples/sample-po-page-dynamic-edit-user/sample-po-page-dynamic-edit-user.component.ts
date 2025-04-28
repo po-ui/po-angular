@@ -1,14 +1,17 @@
-import { Component } from '@angular/core';
+import { Component, ViewChild } from '@angular/core';
 
 import { PoBreadcrumb, PoDynamicFormField } from '@po-ui/ng-components';
 
-import { PoPageDynamicEditActions, PoPageDynamicEditLiterals } from '@po-ui/ng-templates';
+import { PoPageDynamicEditActions, PoPageDynamicEditComponent, PoPageDynamicEditLiterals } from '@po-ui/ng-templates';
 
 @Component({
   selector: 'sample-po-page-dynamic-edit-user',
-  templateUrl: './sample-po-page-dynamic-edit-user.component.html'
+  templateUrl: './sample-po-page-dynamic-edit-user.component.html',
+  standalone: false
 })
 export class SamplePoPageDynamicEditUserComponent {
+  @ViewChild('dynamicEdit', { static: true }) dynamicEdit: PoPageDynamicEditComponent;
+
   public readonly serviceApi = 'https://po-sample-api.onrender.com/v1/people';
 
   public readonly actions: PoPageDynamicEditActions = {
@@ -36,7 +39,15 @@ export class SamplePoPageDynamicEditUserComponent {
     { property: 'name', divider: 'Personal data', required: true },
     { property: 'nickname' },
     { property: 'email', label: 'E-mail' },
-    { property: 'birthdate', label: 'Birth date', type: 'date' },
+    {
+      property: 'birthdate',
+      label: 'Birth date',
+      type: 'date',
+      errorMessage: 'Invalid date.',
+      help: 'Enter or select a valid date.',
+      additionalHelpTooltip: 'Please enter a valid date in the format MMDDYYYY.',
+      keydown: this.onKeyDown.bind(this, 'birthdate')
+    },
     { property: 'genre', options: ['female', 'male', 'others'], gridLgColumns: 6 },
     { property: 'nationality' },
     { property: 'birthPlace', label: 'Place of birth' },
@@ -68,4 +79,10 @@ export class SamplePoPageDynamicEditUserComponent {
       gridColumns: 4
     }
   ];
+
+  onKeyDown(property: string, event: KeyboardEvent): void {
+    if (event.code === 'F9') {
+      this.dynamicEdit.showAdditionalHelp(property);
+    }
+  }
 }

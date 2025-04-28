@@ -1,16 +1,17 @@
 import {
   AfterViewInit,
+  ChangeDetectorRef,
+  Directive,
   ElementRef,
   HostListener,
-  ViewChild,
-  Directive,
-  ChangeDetectorRef,
-  OnDestroy
+  OnDestroy,
+  ViewChild
 } from '@angular/core';
 import { AbstractControl } from '@angular/forms';
 
-import { PoInputBaseComponent } from '../po-input/po-input-base.component';
 import { isObservable, of, Subscription, switchMap } from 'rxjs';
+import { PoThemeService } from '../../../services';
+import { PoInputBaseComponent } from '../po-input/po-input-base.component';
 
 /* eslint-disable @angular-eslint/directive-class-suffix */
 @Directive()
@@ -28,15 +29,18 @@ export abstract class PoInputGeneric extends PoInputBaseComponent implements Aft
     return this.noAutocomplete ? 'off' : 'on';
   }
 
-  constructor(el: ElementRef, cd?: ChangeDetectorRef) {
-    super(cd);
+  constructor(
+    el: ElementRef,
+    cd?: ChangeDetectorRef,
+    protected poThemeService?: PoThemeService
+  ) {
+    super(cd, poThemeService);
 
     this.el = el;
   }
 
   @HostListener('keydown', ['$event']) onKeydown(e: any) {
     if (this.mask && !this.readonly && e.target.keyCode !== 229) {
-      this.eventOnBlur(e);
       this.objMask.keydown(e);
       if (this.passedWriteValue) {
         this.validateClassesForMask(true);
@@ -47,7 +51,6 @@ export abstract class PoInputGeneric extends PoInputBaseComponent implements Aft
   @HostListener('keyup', ['$event']) onKeyup(e: any) {
     if (this.mask && !this.readonly) {
       if (e.target.keyCode !== 229) {
-        this.eventOnBlur(e);
         this.objMask.keyup(e);
       }
       this.callOnChange(this.objMask.valueToModel);
@@ -63,9 +66,6 @@ export abstract class PoInputGeneric extends PoInputBaseComponent implements Aft
 
   afterViewInit() {
     this.verifyAutoFocus();
-    if (this.type !== 'password') {
-      this.setPaddingInput();
-    }
   }
 
   ngOnDestroy(): void {
@@ -78,17 +78,12 @@ export abstract class PoInputGeneric extends PoInputBaseComponent implements Aft
     }
   }
 
-  setPaddingInput() {
-    setTimeout(() => {
-      const selectorIcons = '.po-field-icon-container:not(.po-field-icon-container-left) > .po-icon';
-      let icons = this.el.nativeElement.querySelectorAll(selectorIcons).length;
-      if (this.clean) {
-        icons++;
-      }
-      if (icons) {
-        this.inputEl.nativeElement.style.paddingRight = `${icons * 36}px`;
-      }
-    });
+  onKeyDown(event: KeyboardEvent): void {
+    const isFieldFocused = document.activeElement === this.inputEl.nativeElement;
+
+    if (isFieldFocused) {
+      this.keydown.emit(event);
+    }
   }
 
   verifyAutoFocus() {
@@ -134,6 +129,11 @@ export abstract class PoInputGeneric extends PoInputBaseComponent implements Aft
 
   eventOnBlur(e: any) {
     this.onTouched?.();
+
+    if (this.getAdditionalHelpTooltip() && this.displayAdditionalHelp) {
+      this.showAdditionalHelp();
+    }
+
     if (this.mask) {
       this.objMask.blur(e);
     }

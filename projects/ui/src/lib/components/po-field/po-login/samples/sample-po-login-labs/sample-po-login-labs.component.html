@@ -1,6 +1,7 @@
 <po-login
   name="login"
   [(ngModel)]="login"
+  [p-additional-help-tooltip]="additionalHelpTooltip"
   [p-clean]="properties.includes('clean')"
   [p-disabled]="properties.includes('disabled')"
   [p-error-pattern]="errorPattern"
@@ -16,10 +17,13 @@
   [p-required]="properties.includes('required')"
   [p-required-field-error-message]="properties.includes('requiredFieldErrorMessage')"
   [p-show-required]="properties.includes('showRequired')"
+  [p-size]="size"
   (p-blur)="changeEvent('p-blur')"
   (p-change)="changeEvent('p-change')"
   (p-change-model)="changeEvent('p-change-model')"
   (p-enter)="changeEvent('p-enter')"
+  (p-keydown)="changeEvent('p-keydown')"
+  [p-error-limit]="properties?.includes('errorLimit')"
 >
 </po-login>
 
@@ -34,55 +38,68 @@
 <hr />
 
 <form #f="ngForm">
+  <po-input class="po-md-6 po-lg-4" name="label" [(ngModel)]="label" p-clean p-label="Label"> </po-input>
+
+  <po-input class="po-md-6 po-lg-4" name="help" [(ngModel)]="help" p-clean p-label="Help"> </po-input>
+
+  <po-input class="po-md-6 po-lg-4" name="placeholder" [(ngModel)]="placeholder" p-clean p-label="Placeholder">
+  </po-input>
+
+  <po-input
+    class="po-md-6"
+    name="additionalHelpTooltip"
+    [(ngModel)]="additionalHelpTooltip"
+    p-clean
+    p-label="Additional Help Tooltip"
+  >
+  </po-input>
+
+  <po-input
+    class="po-md-6"
+    name="pattern"
+    [(ngModel)]="pattern"
+    p-clean
+    p-help="Ex.: '[a-zA]{5}[Z0-9]{3}'"
+    p-label="Pattern (Regex)"
+  >
+  </po-input>
+
+  <po-input
+    class="po-md-6"
+    name="errorPattern"
+    [(ngModel)]="errorPattern"
+    p-clean
+    p-help="Ex.: Required field"
+    p-label="Error pattern"
+  >
+  </po-input>
+
+  <po-number class="po-md-6 po-lg-3" name="minlength" [(ngModel)]="minlength" p-clean p-label="Min length"> </po-number>
+
+  <po-number class="po-md-6 po-lg-3" name="maxlength" [(ngModel)]="maxlength" p-clean p-label="Max length"> </po-number>
+
+  <po-checkbox-group
+    class="po-md-12"
+    name="properties"
+    [(ngModel)]="properties"
+    p-columns="4"
+    p-label="Properties"
+    [p-options]="propertiesOptions"
+  >
+  </po-checkbox-group>
+
+  <po-radio-group
+    class="po-md-12"
+    name="size"
+    [(ngModel)]="size"
+    p-columns="4"
+    p-label="Size"
+    p-help="Para aplicar o tamanho small, configure o nível de acessibilidade para AA, ajustável no navbar ou serviço de tema (https://po-ui.io/documentation/po-theme)."
+    [p-options]="sizeOptions"
+  >
+  </po-radio-group>
+
   <div class="po-row">
-    <po-input class="po-md-4" name="label" [(ngModel)]="label" p-clean p-label="Label"> </po-input>
-
-    <po-input class="po-md-4" name="help" [(ngModel)]="help" p-clean p-label="Help"> </po-input>
-
-    <po-input class="po-md-4" name="placeholder" [(ngModel)]="placeholder" p-clean p-label="Placeholder"> </po-input>
-  </div>
-
-  <div class="po-row">
-    <po-input
-      class="po-md-6"
-      name="pattern"
-      [(ngModel)]="pattern"
-      p-clean
-      p-help="Ex.: '[a-zA]{5}[Z0-9]{3}'"
-      p-label="Pattern (Regex)"
-    >
-    </po-input>
-
-    <po-input
-      class="po-md-6"
-      name="errorPattern"
-      [(ngModel)]="errorPattern"
-      p-clean
-      p-help="Ex.: Required field"
-      p-label="Error pattern"
-    >
-    </po-input>
-  </div>
-
-  <div class="po-row">
-    <po-number class="po-md-6" name="minlength" [(ngModel)]="minlength" p-clean p-label="Min length"> </po-number>
-
-    <po-number class="po-md-6" name="maxlength" [(ngModel)]="maxlength" p-clean p-label="Max length"> </po-number>
-  </div>
-
-  <div class="po-row">
-    <po-checkbox-group
-      class="po-md-12"
-      name="properties"
-      [(ngModel)]="properties"
-      p-columns="4"
-      p-label="Properties"
-      [p-options]="propertiesOptions"
-    >
-    </po-checkbox-group>
-  </div>
-
-  <div class="po-row">
-    <po-button class="po-md-3" p-label="Sample Restore" (p-click)="restore()"> </po-button>
+    <po-button class="po-lg-3 po-md-6" p-label="Sample Restore" (p-click)="restore()"> </po-button>
   </div>
 </form>

@@ -60,14 +60,14 @@
       <div class="po-row po-pb-2">
         <div class="po-sm-12">
           <h3 class="po-pt-1">Como Usar?</h3>
-          <pre><code appCodeHighlight class="language-html">&lt;po-input p-icon=&quot;ph ph-user&quot; p-label=&quot;PO input&quot;&gt;&lt;/po-input&gt;</code></pre>
+          <pre><code appCodeHighlight class="language-html">&lt;po-input p-icon=&quot;an an-user&quot; p-label=&quot;PO input&quot;&gt;&lt;/po-input&gt;</code></pre>
           <p class="po-pt-2 po-pb-2">
             Outra opção seria a customização do ícone através do TemplateRef, conforme exemplo abaixo:
           </p>
           <pre><code appCodeHighlight class="language-html">&lt;po-input [p-icon]="template" p-label="input template"&gt;&lt;/po-input&gt;\n
 ...
 &lt;ng-template #template&gt;
-  &lt;i class="ph ph-arrow-fat-line-down"&gt;&lt;/i&gt;
+  &lt;i class="an an-arrow-fat-line-down"&gt;&lt;/i&gt;
 &lt;/ng-template&gt;</code></pre>
         </div>
       </div>
@@ -98,8 +98,6 @@
           </div>
         </div>
       </po-container>
-      <div class="ph pallet-full"></div>
-      <div class="ph-fill pallet-full"></div>
 
       <div class="grid grid-flow gap-16 po-pt-3 po-pb-3">
         <po-loading-overlay p-text="Carregando ícones" p-size="lg" *ngIf="loading; else content"> </po-loading-overlay>

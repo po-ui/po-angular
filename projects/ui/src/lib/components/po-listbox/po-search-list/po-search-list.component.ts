@@ -20,7 +20,8 @@ import { PoListBoxLiterals } from '../interfaces/po-listbox-literals.interface';
 @Component({
   selector: 'po-search-list',
   templateUrl: './po-search-list.component.html',
-  changeDetection: ChangeDetectionStrategy.OnPush
+  changeDetection: ChangeDetectionStrategy.OnPush,
+  standalone: false
 })
 export class PoSearchListComponent {
   @ViewChild('inputElement', { read: ElementRef, static: true }) inputElement: ElementRef;
@@ -29,6 +30,9 @@ export class PoSearchListComponent {
   @Input('p-literals') literals?: PoListBoxLiterals;
 
   @Input('p-field-value') fieldValue: string;
+
+  /** Tamanho do texto de exibido do item. */
+  @Input('p-size') size: string;
 
   /** Evento que será disparado a cada tecla digitada no campo de busca. */
   @Output('p-change') change = new EventEmitter();

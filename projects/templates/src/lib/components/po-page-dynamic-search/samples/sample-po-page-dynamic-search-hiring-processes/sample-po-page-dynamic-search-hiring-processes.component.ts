@@ -17,7 +17,8 @@ import { SamplePoPageDynamicSearchHiringProcessesService } from './sample-po-pag
 @Component({
   selector: 'sample-po-page-dynamic-search-hiring-processes',
   templateUrl: './sample-po-page-dynamic-search-hiring-processes.component.html',
-  providers: [SamplePoPageDynamicSearchHiringProcessesService]
+  providers: [SamplePoPageDynamicSearchHiringProcessesService],
+  standalone: false
 })
 export class SamplePoPageDynamicSearchHiringProcessesComponent implements OnInit {
   hiringProcesses: Array<object>;
@@ -33,25 +34,25 @@ export class SamplePoPageDynamicSearchHiringProcessesComponent implements OnInit
       label: 'Hide Remove All Disclaimer',
       action: this.onClickRemoveAllDisclaimer.bind(this),
       visible: this.isVisibleRemoveAllDisclaimer.bind(this),
-      icon: 'ph ph-eye-closed'
+      icon: 'an an-eye-closed'
     },
     {
       label: 'Show Remove All Disclaimer',
       action: this.onClickRemoveAllDisclaimer.bind(this),
       visible: this.isHideRemoveAllDisclaimer.bind(this),
-      icon: 'ph ph-eye-on'
+      icon: 'an an-eye-on'
     },
     {
       label: 'Hide Close City Disclaimer',
       action: this.onClickCloseCityDisclaimer.bind(this),
       visible: this.isVisibleCloseCityDisclaimer.bind(this),
-      icon: 'ph ph-eye-closed'
+      icon: 'an an-eye-closed'
     },
     {
       label: 'Show Close City Disclaimer',
       action: this.onClickCloseCityDisclaimer.bind(this),
       visible: this.isHideCloseCityDisclaimer.bind(this),
-      icon: 'ph ph-eye-on'
+      icon: 'an an-eye-on'
     }
   ];
 

@@ -24,7 +24,8 @@ import {
       }
     `
   ],
-  providers: [SampleDashboardService]
+  providers: [SampleDashboardService],
+  standalone: false
 })
 export class SamplePoContainerDashboardComponent implements AfterContentChecked, OnInit {
   @ViewChild('formShare', { static: true }) formShare: NgForm;
@@ -36,10 +37,10 @@ export class SamplePoContainerDashboardComponent implements AfterContentChecked,
   items: Array<object>;
 
   public readonly actions: Array<PoPageAction> = [
-    { label: 'Share', action: this.modalOpen.bind(this), icon: 'ph ph-share' },
+    { label: 'Share', action: this.modalOpen.bind(this), icon: 'an an-share' },
     {
       label: 'Disable notification',
-      icon: 'ph ph-bell',
+      icon: 'an an-bell',
       action: this.disableNotification.bind(this),
       disabled: () => this.isSubscribed
     }

@@ -31,7 +31,8 @@ const poTagTypeDefault = 'po-tag-' + PoTagType.Info;
 @Component({
   selector: 'po-tag',
   templateUrl: './po-tag.component.html',
-  changeDetection: ChangeDetectionStrategy.OnPush
+  changeDetection: ChangeDetectionStrategy.OnPush,
+  standalone: false
 })
 export class PoTagComponent extends PoTagBaseComponent implements OnInit {
   @ViewChild('tagContainer', { static: true }) tagContainer: ElementRef;

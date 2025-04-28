@@ -4,7 +4,8 @@ import { PoGaugeRanges } from '../interfaces/po-gauge-ranges.interface';
 
 @Component({
   selector: 'po-gauge-legend',
-  templateUrl: './po-gauge-legend.component.html'
+  templateUrl: './po-gauge-legend.component.html',
+  standalone: false
 })
 export class PoGaugeLegendComponent {
   private _ranges: Array<PoGaugeRanges>;

@@ -80,6 +80,15 @@ describe('PoDynamicFormComponent:', () => {
       expect(spyFieldsComponentFocus).toHaveBeenCalled();
     });
 
+    it('showAdditionalHelp: should call `fieldsComponent.showAdditionalHelp` with the given property', () => {
+      const property = 'name';
+      spyOn(component.fieldsComponent, 'showAdditionalHelp');
+
+      component.showAdditionalHelp(property);
+
+      expect(component.fieldsComponent.showAdditionalHelp).toHaveBeenCalledWith(property);
+    });
+
     it('validateForm: should call sendFormChange with validate, field and value', () => {
       const updatedField = { property: 'test', disabled: true };
       component.validate = 'http://fakeUrlPo.com';

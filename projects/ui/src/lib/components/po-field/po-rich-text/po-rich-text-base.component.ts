@@ -1,7 +1,9 @@
 import { Directive, EventEmitter, Input, Output } from '@angular/core';
 import { AbstractControl, ControlValueAccessor, Validator } from '@angular/forms';
 
-import { convertToBoolean } from '../../../utils/util';
+import { PoFieldSize } from '../../../enums/po-field-size.enum';
+import { PoThemeService } from '../../../services';
+import { convertToBoolean, getDefaultSize, validateSize } from '../../../utils/util';
 import { requiredFailed } from '../validators';
 import { PoRichTextToolbarActions } from './enum/po-rich-text-toolbar-actions.enum';
 import { PoRichTextService } from './po-rich-text.service';
@@ -17,6 +19,32 @@ import { PoRichTextService } from './po-rich-text.service';
  */
 @Directive()
 export abstract class PoRichTextBaseComponent implements ControlValueAccessor, Validator {
+  /**
+   * @optional
+   *
+   * @description
+   * Exibe um ícone de ajuda adicional ao `p-help`, com o texto desta propriedade no tooltip.
+   * Se o evento `p-additional-help` estiver definido, o tooltip não será exibido.
+   * **Como boa prática, indica-se utilizar um texto com até 140 caracteres.**
+   * > Requer um recuo mínimo de 8px se o componente estiver próximo à lateral da tela.
+   */
+  @Input('p-additional-help-tooltip') additionalHelpTooltip?: string;
+
+  /**
+   * @optional
+   *
+   * @description
+   *
+   * Define que o tooltip (`p-additional-help-tooltip` e/ou `p-error-limit`) será incluído no body da página e não
+   * dentro do componente. Essa opção pode ser necessária em cenários com containers que possuem scroll ou overflow
+   * escondido, garantindo o posicionamento correto do tooltip próximo ao elemento.
+   *
+   * > Quando utilizado com `p-additional-help-tooltip`, leitores de tela como o NVDA podem não ler o conteúdo do tooltip.
+   *
+   * @default `false`
+   */
+  @Input({ alias: 'p-append-in-body', transform: convertToBoolean }) appendBox?: boolean = false;
+
   /**
    * @optional
    *
@@ -47,6 +75,20 @@ export abstract class PoRichTextBaseComponent implements ControlValueAccessor, V
    * Mensagem que será apresentada quando a propriedade required estiver habilitada e o campo for limpo após algo ser digitado.
    */
   @Input('p-error-message') errorMessage?: string = '';
+
+  /**
+   * @optional
+   *
+   * @description
+   *
+   * Limita a exibição da mensagem de erro a duas linhas e exibe um tooltip com o texto completo.
+   *
+   * > Caso essa propriedade seja definida como `true`, a mensagem de erro será limitada a duas linhas
+   * e um tooltip será exibido ao passar o mouse sobre a mensagem para mostrar o conteúdo completo.
+   *
+   * @default `false`
+   */
+  @Input('p-error-limit') errorLimit: boolean = false;
 
   /**
    * @optional
@@ -121,6 +163,15 @@ export abstract class PoRichTextBaseComponent implements ControlValueAccessor, V
    * @optional
    *
    * @description
+   * Evento disparado ao clicar no ícone de ajuda adicional.
+   * Este evento ativa automaticamente a exibição do ícone de ajuda adicional ao `p-help`.
+   */
+  @Output('p-additional-help') additionalHelp = new EventEmitter<any>();
+
+  /**
+   * @optional
+   *
+   * @description
    *
    * Evento disparado ao deixar o campo e que recebe como parâmetro o valor alterado.
    */
@@ -135,6 +186,16 @@ export abstract class PoRichTextBaseComponent implements ControlValueAccessor, V
    */
   @Output('p-change-model') changeModel: EventEmitter<any> = new EventEmitter();
 
+  /**
+   * @optional
+   *
+   * @description
+   * Evento disparado quando uma tecla é pressionada enquanto o foco está no componente.
+   * Retorna um objeto `KeyboardEvent` com informações sobre a tecla.
+   */
+  @Output('p-keydown') keydown: EventEmitter<KeyboardEvent> = new EventEmitter<KeyboardEvent>();
+
+  displayAdditionalHelp: boolean = false;
   invalid: boolean = false;
   onChangeModel: any = null;
   value: string;
@@ -143,7 +204,7 @@ export abstract class PoRichTextBaseComponent implements ControlValueAccessor, V
   private _placeholder: string;
   private _readonly: boolean;
   private _required: boolean;
-
+  private _size?: string = undefined;
   private validatorChange: any;
   // eslint-disable-next-line
   protected onTouched: any = null;
@@ -219,6 +280,28 @@ export abstract class PoRichTextBaseComponent implements ControlValueAccessor, V
   }
 
   /**
+   * @optional
+   *
+   * @description
+   *
+   * Define o tamanho do componente:
+   * - `small`: altura dos buttons como 32px (disponível apenas para acessibilidade AA).
+   * - `medium`: altura dos buttons como 44px.
+   *
+   * > Caso a acessibilidade AA não esteja configurada, o tamanho `medium` será mantido.
+   * Para mais detalhes, consulte a documentação do [po-theme](https://po-ui.io/documentation/po-theme).
+   *
+   * @default `medium`
+   */
+  @Input('p-size') set size(value: string) {
+    this._size = validateSize(value, this.poThemeService, PoFieldSize);
+  }
+
+  get size(): string {
+    return this._size ?? getDefaultSize(this.poThemeService, PoFieldSize);
+  }
+
+  /**
    * Define se a indicação de campo obrigatório será exibida.
    *
    * > Não será exibida a indicação se:
@@ -226,7 +309,10 @@ export abstract class PoRichTextBaseComponent implements ControlValueAccessor, V
    */
   @Input('p-show-required') showRequired: boolean = false;
 
-  constructor(private richTextService: PoRichTextService) {}
+  constructor(
+    private richTextService: PoRichTextService,
+    protected poThemeService: PoThemeService
+  ) {}
 
   // Função implementada do ControlValueAccessor
   // Usada para interceptar as mudanças e não atualizar automaticamente o Model

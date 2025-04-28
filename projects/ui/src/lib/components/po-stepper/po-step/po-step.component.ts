@@ -44,7 +44,8 @@ import { PoStepperStatus } from '../enums/po-stepper-status.enum';
  */
 @Component({
   selector: 'po-step',
-  templateUrl: 'po-step.component.html'
+  templateUrl: 'po-step.component.html',
+  standalone: false
 })
 export class PoStepComponent implements AfterContentInit {
   /**
@@ -98,20 +99,11 @@ export class PoStepComponent implements AfterContentInit {
    *
    * @description
    * Define o ícone padrão do step em seu status *default*.
-   * Esta propriedade permite usar ícones da [Biblioteca de ícones](https://po-ui.io/icons) ou da biblioteca [Phosphor](https://phosphoricons.com/).
-   *
-   * Exemplo usando a biblioteca de ícones padrão:
+   * Esta propriedade permite usar ícones da [Biblioteca de ícones](https://po-ui.io/icons).
    * ```
    * <po-stepper>
    *    ...
-   *    <po-step p-icon-default="po-icon po-icon-pin"></po-step>
-   * </po-stepper>
-   * ```
-   * Exemplo usando a biblioteca *Phosphor*:
-   * ```
-   * <po-stepper>
-   *    ...
-   *    <po-step p-icon-default="ph ph-map-pin"></po-step>
+   *    <po-step p-icon-default="an an-map-pin"></po-step>
    * </po-stepper>
    * ```
    * Outra opção seria a customização do ícone através do `TemplateRef`, conforme exemplo abaixo:
@@ -122,7 +114,7 @@ export class PoStepComponent implements AfterContentInit {
    * </po-stepper>
    *
    * <ng-template #template>
-   *    <i class="ph ph-shopping-cart"></i>
+   *    <i class="an an-shopping-cart"></i>
    * </ng-template
    * ```
    * > Deve-se usar `font-size: inherit` para ajustar ícones que não se ajustam automaticamente.

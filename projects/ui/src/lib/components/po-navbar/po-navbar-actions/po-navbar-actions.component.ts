@@ -4,7 +4,8 @@ import { PoNavbarIconAction } from '../interfaces/po-navbar-icon-action.interfac
 
 @Component({
   selector: 'po-navbar-actions',
-  templateUrl: './po-navbar-actions.component.html'
+  templateUrl: './po-navbar-actions.component.html',
+  standalone: false
 })
 export class PoNavbarActionsComponent {
   private _iconActions: Array<PoNavbarIconAction>;

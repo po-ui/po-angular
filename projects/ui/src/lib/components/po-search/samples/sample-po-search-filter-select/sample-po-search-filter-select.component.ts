@@ -2,7 +2,8 @@ import { Component, OnInit } from '@angular/core';
 
 @Component({
   selector: 'sample-po-search-filter-select',
-  templateUrl: './sample-po-search-filter-select.component.html'
+  templateUrl: './sample-po-search-filter-select.component.html',
+  standalone: false
 })
 export class SamplePoSearchFilterSelectComponent implements OnInit {
   items: any;

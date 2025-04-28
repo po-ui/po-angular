@@ -1,14 +1,19 @@
 import { Component, OnInit } from '@angular/core';
 
-import { PoBreadcrumb, PoBreadcrumbItem } from '@po-ui/ng-components';
-import { PoCheckboxGroupOption, PoSelectOption } from '@po-ui/ng-components';
+import {
+  PoBreadcrumb,
+  PoBreadcrumbItem,
+  PoCheckboxGroupOption,
+  PoRadioGroupOption,
+  PoSelectOption
+} from '@po-ui/ng-components';
 
-import { PoNotificationService } from '@po-ui/ng-components';
-import { PoPageAction, PoPageDefaultLiterals } from '@po-ui/ng-components';
+import { PoNotificationService, PoPageAction, PoPageDefaultLiterals } from '@po-ui/ng-components';
 
 @Component({
   selector: 'sample-po-page-default-labs',
-  templateUrl: './sample-po-page-default-labs.component.html'
+  templateUrl: './sample-po-page-default-labs.component.html',
+  standalone: false
 })
 export class SamplePoPageDefaultLabsComponent implements OnInit {
   action: PoPageAction;
@@ -16,6 +21,7 @@ export class SamplePoPageDefaultLabsComponent implements OnInit {
   breadcrumb: PoBreadcrumb;
   breadcrumbItem: PoBreadcrumbItem;
   breadcrumbParams: any;
+  componentsSize: string;
   customLiterals: PoPageDefaultLiterals;
   literals: string;
   title: string;
@@ -28,10 +34,15 @@ export class SamplePoPageDefaultLabsComponent implements OnInit {
     { label: 'Visible', value: 'visible' }
   ];
 
+  public readonly componentsSizeOptions: Array<PoRadioGroupOption> = [
+    { label: 'small', value: 'small' },
+    { label: 'medium', value: 'medium' }
+  ];
+
   public readonly iconOptions: Array<PoSelectOption> = [
-    { value: 'ph ph-newspaper', label: 'ph ph-newspaper' },
-    { value: 'ph ph-magnifying-glass', label: 'ph ph-magnifying-glass' },
-    { value: 'ph ph-globe', label: 'ph ph-globe' },
+    { value: 'an an-newspaper', label: 'an an-newspaper' },
+    { value: 'an an-magnifying-glass', label: 'an an-magnifying-glass' },
+    { value: 'an an-globe', label: 'an an-globe' },
     { value: 'fa fa-podcast', label: 'fa fa-podcast' }
   ];
 
@@ -84,6 +95,7 @@ export class SamplePoPageDefaultLabsComponent implements OnInit {
     this.breadcrumb = { items: [] };
     this.breadcrumbItem = { label: undefined, link: undefined };
     this.breadcrumbParams = {};
+    this.componentsSize = 'medium';
     this.literals = '';
     this.title = 'PO Page Default';
     this.subtitle = '';

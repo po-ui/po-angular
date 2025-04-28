@@ -1,6 +1,12 @@
 import { ChangeDetectorRef, Component, OnInit, ViewChild } from '@angular/core';
 
-import { PoButtonGroupItem, PoMenuComponent, PoMenuItem, PoSelectOption } from '@po-ui/ng-components';
+import {
+  PoButtonGroupItem,
+  PoMenuComponent,
+  PoMenuItem,
+  PoRadioGroupOption,
+  PoSelectOption
+} from '@po-ui/ng-components';
 
 @Component({
   selector: 'sample-po-menu-labs',
@@ -18,7 +24,8 @@ import { PoButtonGroupItem, PoMenuComponent, PoMenuItem, PoSelectOption } from '
         vertical-align: middle;
       }
     `
-  ]
+  ],
+  standalone: false
 })
 export class SamplePoMenuLabsComponent implements OnInit {
   @ViewChild(PoMenuComponent, { static: true }) menu: PoMenuComponent;
@@ -30,6 +37,7 @@ export class SamplePoMenuLabsComponent implements OnInit {
     { label: 'Expand', action: this.expand.bind(this) },
     { label: 'Toggle', action: this.toggle.bind(this) }
   ];
+  componentsSize: string;
   filter: boolean;
   icon: string;
   label: string;
@@ -63,13 +71,18 @@ export class SamplePoMenuLabsComponent implements OnInit {
     { label: 'color-12', value: 'color-12' }
   ];
 
+  public readonly componentsSizeOptions: Array<PoRadioGroupOption> = [
+    { label: 'small', value: 'small' },
+    { label: 'medium', value: 'medium' }
+  ];
+
   public readonly iconsOptions: Array<PoSelectOption> = [
-    { label: 'ph ph-newspaper', value: 'ph ph-newspaper' },
-    { label: 'ph ph-camera', value: 'ph ph-camera' },
-    { label: 'ph ph-calendar-dots', value: 'ph ph-calendar-dots' },
-    { label: 'ph ph-user', value: 'ph ph-user' },
-    { label: 'ph ph-chat', value: 'ph ph-chat' },
-    { label: 'ph ph-package', value: 'ph ph-package' },
+    { label: 'an an-newspaper', value: 'an an-newspaper' },
+    { label: 'an an-camera', value: 'an an-camera' },
+    { label: 'an an-calendar-dots', value: 'an an-calendar-dots' },
+    { label: 'an an-user', value: 'an an-user' },
+    { label: 'an an-chat', value: 'an an-chat' },
+    { label: 'an an-package', value: 'an an-package' },
     { value: 'fa fa-calculator', label: 'fa fa-calculator' },
     { value: 'fa fa-podcast', label: 'fa fa-podcast' }
   ];
@@ -156,6 +169,7 @@ export class SamplePoMenuLabsComponent implements OnInit {
   private formReset() {
     this.badgeColor = undefined;
     this.badgeValue = undefined;
+    this.componentsSize = 'medium';
     this.icon = undefined;
     this.label = 'PO Menu';
     this.link = undefined;

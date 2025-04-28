@@ -18,7 +18,8 @@ import { Component, Input } from '@angular/core';
  */
 @Component({
   selector: 'po-modal-footer',
-  templateUrl: './po-modal-footer.component.html'
+  templateUrl: './po-modal-footer.component.html',
+  standalone: false
 })
 export class PoModalFooterComponent {
   /**

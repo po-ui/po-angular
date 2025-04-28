@@ -1,5 +1,6 @@
 import { Component, ViewChild } from '@angular/core';
 import {
+  PoCheckboxGroupOption,
   PoModalComponent,
   PoRadioGroupOption,
   PoToasterComponent,
@@ -9,7 +10,8 @@ import {
 
 @Component({
   selector: 'sample-po-toaster-labs',
-  templateUrl: './sample-po-toaster-labs.component.html'
+  templateUrl: './sample-po-toaster-labs.component.html',
+  standalone: false
 })
 export class SamplePoToasterLabsComponent {
   @ViewChild(PoModalComponent, { static: true }) poModal: PoModalComponent;
@@ -21,11 +23,21 @@ export class SamplePoToasterLabsComponent {
   actionLabel = 'action';
   type: PoToasterType = PoToasterType.Information;
   mode = PoToasterMode.Inline;
-  hide = false;
-  showClose = true;
   showIcon = true;
   hasAction = false;
   action = undefined;
+  properties: Array<string> = [];
+  sizeActions: string = 'medium';
+
+  public readonly propertiesOptions: Array<PoCheckboxGroupOption> = [
+    { value: 'hide', label: 'Hide' },
+    { value: 'showClose', label: 'Show close' }
+  ];
+
+  public readonly sizeActionsOptions: Array<PoRadioGroupOption> = [
+    { label: 'small', value: 'small' },
+    { label: 'medium', value: 'medium' }
+  ];
 
   public readonly typeOptions: Array<PoRadioGroupOption> = [
     { label: 'Success', value: PoToasterType.Success },
@@ -44,14 +56,6 @@ export class SamplePoToasterLabsComponent {
     }
   }
 
-  hideChange($event) {
-    this.changeHide($event);
-  }
-
-  changeHide(state?: boolean) {
-    this.hide = state || !this.hide;
-  }
-
   restore() {
     this.message = 'Title Message';
     this.supportMessage =
@@ -59,10 +63,10 @@ export class SamplePoToasterLabsComponent {
     this.actionLabel = 'action';
     this.type = PoToasterType.Information;
     this.mode = PoToasterMode.Inline;
-    this.hide = false;
-    this.showClose = true;
     this.showIcon = true;
     this.hasAction = false;
     this.action = undefined;
+    this.properties = [];
+    this.sizeActions = 'medium';
   }
 }

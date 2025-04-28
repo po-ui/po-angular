@@ -7,7 +7,8 @@ import { configureTestSuite } from './../../util-test/util-expect.spec';
 import { PoComponentInjectorService } from './po-component-injector.service';
 
 @Component({
-  template: ` <div class="test-component-class">test component</div> `
+  template: ` <div class="test-component-class">test component</div> `,
+  standalone: false
 })
 class TestComponent {
   constructor(poComponentInjectorService: PoComponentInjectorService) {}

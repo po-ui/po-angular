@@ -9,7 +9,8 @@ import { Component, EventEmitter, Input, Output } from '@angular/core';
  */
 @Component({
   selector: 'po-slide-control',
-  templateUrl: './po-slide-control.component.html'
+  templateUrl: './po-slide-control.component.html',
+  standalone: false
 })
 export class PoSlideControlComponent {
   /** Tipo de controle que aceita os valores: 'previous' e 'next'. */

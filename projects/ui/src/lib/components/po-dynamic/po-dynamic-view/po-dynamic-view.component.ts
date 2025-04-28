@@ -37,7 +37,8 @@ import { PoMultiselectFilterService } from '../../po-field/po-multiselect/po-mul
  */
 @Component({
   selector: 'po-dynamic-view',
-  templateUrl: './po-dynamic-view.component.html'
+  templateUrl: './po-dynamic-view.component.html',
+  standalone: false
 })
 export class PoDynamicViewComponent extends PoDynamicViewBaseComponent implements OnChanges, OnInit {
   initChanges;

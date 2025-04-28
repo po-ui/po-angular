@@ -21,6 +21,7 @@ import {
   PoPageAction,
   PoStepperItem,
   PoStepperStatus,
+  PoThemeService,
   poLocaleDefault
 } from '@po-ui/ng-components';
 
@@ -59,7 +60,8 @@ import { PoPageJobSchedulerService } from './po-page-job-scheduler.service';
         overflow-y: unset;
       }
     `
-  ]
+  ],
+  standalone: false
 })
 export class PoPageJobSchedulerComponent extends PoPageJobSchedulerBaseComponent implements OnInit, AfterContentInit {
   @ViewChild('schedulerExecution', { static: true }) schedulerExecution: { form: NgForm };
@@ -118,10 +120,11 @@ export class PoPageJobSchedulerComponent extends PoPageJobSchedulerBaseComponent
     private activatedRoute: ActivatedRoute,
     private poDialogService: PoDialogService,
     private poNotification: PoNotificationService,
+    protected poThemeService: PoThemeService,
     protected poPageJobSchedulerService: PoPageJobSchedulerService,
     languageService: PoLanguageService
   ) {
-    super(poPageJobSchedulerService);
+    super(poPageJobSchedulerService, poThemeService);
 
     const language = languageService.getShortLanguage();
 

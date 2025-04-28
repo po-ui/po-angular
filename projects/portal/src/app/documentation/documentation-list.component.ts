@@ -7,7 +7,8 @@ import { Documentation } from './documentation.class';
 import { DocumentationService } from '../documentation/documentation.service';
 
 @Component({
-  templateUrl: './documentation-list.component.html'
+  templateUrl: './documentation-list.component.html',
+  standalone: false
 })
 export class DocumentationListComponent implements OnInit {
   public filteredItems;

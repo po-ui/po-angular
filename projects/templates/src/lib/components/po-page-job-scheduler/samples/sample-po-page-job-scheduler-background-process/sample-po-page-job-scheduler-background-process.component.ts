@@ -4,7 +4,8 @@ import { PoBreadcrumb } from '@po-ui/ng-components';
 
 @Component({
   selector: 'sample-po-page-job-scheduler-background-process',
-  templateUrl: './sample-po-page-job-scheduler-background-process.component.html'
+  templateUrl: './sample-po-page-job-scheduler-background-process.component.html',
+  standalone: false
 })
 export class SamplePoPageJobSchedulerBackgroundProcessComponent {
   breadcrumb: PoBreadcrumb = {

@@ -38,7 +38,7 @@ export default function (options: any): Rule {
 }
 
 //insere um import no módulo sem adicionar na lista de importação
-export function addImportOnly(options: any, moduleNames: string | Array<String>, importPath: string) {
+export function addImportOnly(options: any, moduleNames: string | Array<string>, importPath: string) {
   return (host: Tree) => {
     const workspace = getWorkspaceConfigGracefully(host) ?? ({} as WorkspaceSchema);
     const project: any = getProjectFromWorkspace(workspace, options.project);

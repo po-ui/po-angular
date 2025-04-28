@@ -24,7 +24,8 @@ import { PoLinkBaseComponent } from './po-link-base.component';
  */
 @Component({
   selector: 'po-link',
-  templateUrl: './po-link.component.html'
+  templateUrl: './po-link.component.html',
+  standalone: false
 })
 export class PoLinkComponent extends PoLinkBaseComponent {
   onClick() {

@@ -63,12 +63,12 @@ describe('PoMenuFilterComponent:', () => {
   });
 
   describe('Templates:', () => {
-    it('should contain `ph-magnifying-glass` and not contain `po-loading-icon` if `loading` is false', () => {
+    it('should contain `an-magnifying-glass` and not contain `po-loading-icon` if `loading` is false', () => {
       component.loading = false;
 
       fixture.detectChanges();
 
-      const searchIcon = fixture.debugElement.nativeElement.querySelector('.ph-magnifying-glass');
+      const searchIcon = fixture.debugElement.nativeElement.querySelector('.an-magnifying-glass');
       const loadingIcon = fixture.debugElement.nativeElement.querySelector('.po-loading-icon');
 
       expect(searchIcon).toBeTruthy();

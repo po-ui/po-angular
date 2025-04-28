@@ -4,7 +4,8 @@ import { PoSelectOption } from '@po-ui/ng-components';
 
 @Component({
   selector: 'sample-po-number-calculate',
-  templateUrl: './sample-po-number-calculate.component.html'
+  templateUrl: './sample-po-number-calculate.component.html',
+  standalone: false
 })
 export class SamplePoNumberCalculateComponent {
   icms: number;

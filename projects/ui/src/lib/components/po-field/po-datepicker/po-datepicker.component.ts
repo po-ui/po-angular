@@ -28,8 +28,10 @@ import { isObservable, of, Subscription, switchMap } from 'rxjs';
 import { PoLanguageService } from '../../../services/po-language/po-language.service';
 import { PoButtonComponent } from '../../po-button/po-button.component';
 import { PoCalendarComponent } from '../../po-calendar/po-calendar.component';
+import { PoFieldSize } from '../../../enums/po-field-size.enum';
 import { PoDatepickerBaseComponent } from './po-datepicker-base.component';
 import { PoDatepickerLiterals } from './po-datepicker.literals';
+import { PoThemeService } from '../../../services';
 
 const poCalendarContentOffset = 8;
 const poCalendarPositionDefault = 'bottom-left';
@@ -77,7 +79,8 @@ const poCalendarPositionDefault = 'bottom-left';
     },
     PoControlPositionService
   ],
-  changeDetection: ChangeDetectionStrategy.OnPush
+  changeDetection: ChangeDetectionStrategy.OnPush,
+  standalone: false
 })
 export class PoDatepickerComponent extends PoDatepickerBaseComponent implements AfterViewInit, OnDestroy {
   @ViewChild('calendar', { static: true }) calendar: PoCalendarComponent;
@@ -91,6 +94,7 @@ export class PoDatepickerComponent extends PoDatepickerBaseComponent implements 
   /** Texto de apoio do campo. */
   @Input('p-help') help?: string;
 
+  displayAdditionalHelp: boolean = false;
   el: ElementRef;
   declare hour: string;
   id = `po-datepicker[${uuid()}]`;
@@ -123,11 +127,12 @@ export class PoDatepickerComponent extends PoDatepickerBaseComponent implements 
   constructor(
     protected languageService: PoLanguageService,
     protected cd: ChangeDetectorRef,
+    protected poThemeService: PoThemeService,
     private controlPosition: PoControlPositionService,
     private renderer: Renderer2,
     el: ElementRef
   ) {
-    super(languageService, cd);
+    super(languageService, cd, poThemeService);
     this.shortLanguage = this.languageService.getShortLanguage();
     this.el = el;
     const language = languageService.getShortLanguage();
@@ -138,7 +143,7 @@ export class PoDatepickerComponent extends PoDatepickerBaseComponent implements 
 
   @HostListener('keyup', ['$event'])
   onKeyup($event: any) {
-    if (this.readonly) {
+    if (this.readonly || $event?.target !== this.inputEl?.nativeElement) {
       return;
     }
 
@@ -179,6 +184,12 @@ export class PoDatepickerComponent extends PoDatepickerBaseComponent implements 
     this.removeListeners();
   }
 
+  emitAdditionalHelp() {
+    if (this.isAdditionalHelpEventTriggered()) {
+      this.additionalHelp.emit();
+    }
+  }
+
   /**
    * Função que atribui foco ao componente.
    *
@@ -200,6 +211,10 @@ export class PoDatepickerComponent extends PoDatepickerBaseComponent implements 
     if (!this.disabled) {
       this.inputEl.nativeElement.focus();
     }
+  }
+
+  getAdditionalHelpTooltip() {
+    return this.isAdditionalHelpEventTriggered() ? null : this.additionalHelpTooltip;
   }
 
   togglePicker() {
@@ -266,6 +281,11 @@ export class PoDatepickerComponent extends PoDatepickerBaseComponent implements 
 
   eventOnBlur($event: any) {
     this.onTouchedModel?.();
+
+    if (this.getAdditionalHelpTooltip() && this.displayAdditionalHelp) {
+      this.showAdditionalHelp();
+    }
+
     const date = this.inputEl.nativeElement.value;
     const newDate = date ? this.getDateFromString(date) : undefined;
     this.objMask.blur($event);
@@ -299,6 +319,14 @@ export class PoDatepickerComponent extends PoDatepickerBaseComponent implements 
     }
   }
 
+  onKeyDown(event: KeyboardEvent): void {
+    const isFieldFocused = document.activeElement === this.inputEl.nativeElement;
+
+    if (isFieldFocused) {
+      this.keydown.emit(event);
+    }
+  }
+
   onKeyPress(event: any) {
     if (isKeyCodeEnter(event) || isKeyCodeSpace(event)) {
       this.togglePicker();
@@ -323,6 +351,32 @@ export class PoDatepickerComponent extends PoDatepickerBaseComponent implements 
     if (value) {
       this.inputEl.nativeElement.value = this.formatToDate(value);
     }
+  }
+
+  /**
+   * Método que exibe `p-additionalHelpTooltip` ou executa a ação definida em `p-additionalHelp`.
+   * Para isso, será necessário configurar uma tecla de atalho utilizando o evento `p-keydown`.
+   *
+   * ```
+   * <po-datepicker
+   *  #datepicker
+   *  ...
+   *  p-additional-help-tooltip="Mensagem de ajuda complementar"
+   *  (p-keydown)="onKeyDown($event, datepicker)"
+   * ></po-datepicker>
+   * ```
+   * ```
+   * ...
+   * onKeyDown(event: KeyboardEvent, inp: PoDatepickerComponent): void {
+   *  if (event.code === 'F9') {
+   *    inp.showAdditionalHelp();
+   *  }
+   * }
+   * ```
+   */
+  showAdditionalHelp(): boolean {
+    this.displayAdditionalHelp = !this.displayAdditionalHelp;
+    return this.displayAdditionalHelp;
   }
 
   // Função implementada do ControlValueAccessor
@@ -380,6 +434,10 @@ export class PoDatepickerComponent extends PoDatepickerBaseComponent implements 
 
   hasOverlayClass(element: any) {
     return element.classList.contains('po-datepicker-calendar-overlay');
+  }
+
+  showAdditionalHelpIcon() {
+    return !!this.additionalHelpTooltip || this.isAdditionalHelpEventTriggered();
   }
 
   verifyErrorAsync(value) {
@@ -455,6 +513,13 @@ export class PoDatepickerComponent extends PoDatepickerBaseComponent implements 
     });
 
     window.addEventListener('scroll', this.onScroll, true);
+  }
+
+  private isAdditionalHelpEventTriggered(): boolean {
+    return (
+      this.additionalHelpEventTrigger === 'event' ||
+      (this.additionalHelpEventTrigger === undefined && this.additionalHelp.observed)
+    );
   }
 
   private onScroll = (): void => {

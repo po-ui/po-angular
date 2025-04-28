@@ -22,7 +22,8 @@ import { PoModalAction, PoModalComponent, PoPopupAction } from '@po-ui/ng-compon
         padding-top: 5%;
       }
     `
-  ]
+  ],
+  standalone: false
 })
 export class SamplePoPopupEmailComponent implements OnInit {
   @ViewChild('formEmail', { static: true }) formEmail: UntypedFormControl;
@@ -41,9 +42,9 @@ export class SamplePoPopupEmailComponent implements OnInit {
 
   ngOnInit() {
     this.popupActions = [
-      { icon: 'ph ph-plus', label: 'Upper Text', type: 'default', action: this.upper.bind(this) },
-      { icon: 'ph ph-minus', label: 'Lower Text', type: 'default', action: this.lower.bind(this) },
-      { icon: 'ph ph-x', label: 'Clear', type: 'danger', action: this.clear.bind(this), separator: true }
+      { icon: 'an an-plus', label: 'Upper Text', type: 'default', action: this.upper.bind(this) },
+      { icon: 'an an-minus', label: 'Lower Text', type: 'default', action: this.lower.bind(this) },
+      { icon: 'an an-x', label: 'Clear', type: 'danger', action: this.clear.bind(this), separator: true }
     ];
 
     this.primaryAction = {

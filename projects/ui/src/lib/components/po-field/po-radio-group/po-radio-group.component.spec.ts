@@ -3,6 +3,7 @@ import { ComponentFixture, TestBed } from '@angular/core/testing';
 import * as UtilsFunctions from '../../../utils/util';
 import { removeDuplicatedOptions } from '../../../utils/util';
 
+import { PoThemeA11yEnum, PoThemeService } from '../../../services';
 import { PoFieldContainerBottomComponent } from '../po-field-container/po-field-container-bottom/po-field-container-bottom.component';
 import { PoFieldContainerComponent } from '../po-field-container/po-field-container.component';
 import { PoRadioComponent } from '../po-radio/po-radio.component';
@@ -12,10 +13,12 @@ import { PoRadioGroupComponent } from './po-radio-group.component';
 describe('PoRadioGroupComponent:', () => {
   let component: PoRadioGroupComponent;
   let fixture: ComponentFixture<PoRadioGroupComponent>;
-
   let debugElement;
+  let poThemeServiceMock: jasmine.SpyObj<PoThemeService>;
 
   beforeEach(async () => {
+    poThemeServiceMock = jasmine.createSpyObj('PoThemeService', ['getA11yLevel', 'getA11yDefaultSize']);
+
     await TestBed.configureTestingModule({
       declarations: [
         PoRadioGroupComponent,
@@ -23,7 +26,7 @@ describe('PoRadioGroupComponent:', () => {
         PoFieldContainerBottomComponent,
         PoRadioComponent
       ],
-      providers: []
+      providers: [{ provide: PoThemeService, useValue: poThemeServiceMock }]
     }).compileComponents();
 
     fixture = TestBed.createComponent(PoRadioGroupComponent);
@@ -145,6 +148,26 @@ describe('PoRadioGroupComponent:', () => {
       });
     });
 
+    describe('emitAdditionalHelp:', () => {
+      it('should emit additionalHelp when isAdditionalHelpEventTriggered returns true', () => {
+        spyOn(component.additionalHelp, 'emit');
+        spyOn(component as any, 'isAdditionalHelpEventTriggered').and.returnValue(true);
+
+        component.emitAdditionalHelp();
+
+        expect(component.additionalHelp.emit).toHaveBeenCalled();
+      });
+
+      it('should not emit additionalHelp when isAdditionalHelpEventTriggered returns false', () => {
+        spyOn(component.additionalHelp, 'emit');
+        spyOn(component as any, 'isAdditionalHelpEventTriggered').and.returnValue(false);
+
+        component.emitAdditionalHelp();
+
+        expect(component.additionalHelp.emit).not.toHaveBeenCalled();
+      });
+    });
+
     describe('focus:', () => {
       it('should call `focus` of radio', () => {
         component.options = [
@@ -211,6 +234,80 @@ describe('PoRadioGroupComponent:', () => {
       });
     });
 
+    describe('getAdditionalHelpTooltip:', () => {
+      it('should return null when isAdditionalHelpEventTriggered returns true', () => {
+        spyOn(component as any, 'isAdditionalHelpEventTriggered').and.returnValue(true);
+
+        const result = component.getAdditionalHelpTooltip();
+
+        expect(result).toBeNull();
+      });
+
+      it('should return additionalHelpTooltip when isAdditionalHelpEventTriggered returns false', () => {
+        const tooltip = 'Test Tooltip';
+        component.additionalHelpTooltip = tooltip;
+        spyOn(component as any, 'isAdditionalHelpEventTriggered').and.returnValue(false);
+
+        const result = component.getAdditionalHelpTooltip();
+
+        expect(result).toBe(tooltip);
+      });
+
+      it('should return undefined when additionalHelpTooltip is undefined and isAdditionalHelpEventTriggered returns false', () => {
+        component.additionalHelpTooltip = undefined;
+        spyOn(component as any, 'isAdditionalHelpEventTriggered').and.returnValue(false);
+
+        const result = component.getAdditionalHelpTooltip();
+
+        expect(result).toBeUndefined();
+      });
+    });
+
+    describe('onBlur', () => {
+      let setupTest;
+      let radioMock;
+
+      beforeEach(() => {
+        setupTest = (tooltip: string, displayHelp: boolean, additionalHelpEvent: any) => {
+          component.additionalHelpTooltip = tooltip;
+          component.displayAdditionalHelp = displayHelp;
+          component.additionalHelp = additionalHelpEvent;
+          spyOn(component, 'showAdditionalHelp');
+        };
+
+        radioMock = { radioInput: { nativeElement: document.createElement('input') } } as PoRadioComponent;
+      });
+      it('should call showAdditionalHelp when the tooltip is displayed', () => {
+        setupTest('Mensagem de apoio adicional.', true, { observed: false });
+        component.onBlur(radioMock);
+        expect(component.showAdditionalHelp).toHaveBeenCalled();
+      });
+
+      it('should not call showAdditionalHelp when tooltip is not displayed', () => {
+        setupTest('Mensagem de apoio adicional.', false, { observed: false });
+        component.onBlur(radioMock);
+        expect(component.showAdditionalHelp).not.toHaveBeenCalled();
+      });
+
+      it('should not call showAdditionalHelp when additionalHelp event is true', () => {
+        setupTest('Mensagem de apoio adicional.', true, { observed: true });
+        component.onBlur(radioMock);
+        expect(component.showAdditionalHelp).not.toHaveBeenCalled();
+      });
+    });
+
+    it('onKeyDown: should emit event when field is focused', () => {
+      const fakeEvent = new KeyboardEvent('keydown', { key: 'Enter' });
+      spyOn(component.keydown, 'emit');
+
+      const radioMock = { radioInput: { nativeElement: document.createElement('input') } } as PoRadioComponent;
+      spyOnProperty(document, 'activeElement', 'get').and.returnValue(radioMock.radioInput.nativeElement);
+
+      component.onKeyDown(fakeEvent, radioMock);
+
+      expect(component.keydown.emit).toHaveBeenCalledWith(fakeEvent);
+    });
+
     describe('onKeyUp:', () => {
       it('should call `changeValue` when `isArrowKey` is true.', () => {
         spyOn(component, 'changeValue');
@@ -258,6 +355,84 @@ describe('PoRadioGroupComponent:', () => {
     it('isArrowKey: should return false when key is not between 37 and 40.', () => {
       expect(component['isArrowKey'](36)).toBeFalsy();
       expect(component['isArrowKey'](41)).toBeFalsy();
+    });
+
+    describe('showAdditionalHelp:', () => {
+      it('should toggle `displayAdditionalHelp` from false to true', () => {
+        component.displayAdditionalHelp = false;
+
+        const result = component.showAdditionalHelp();
+
+        expect(result).toBeTrue();
+        expect(component.displayAdditionalHelp).toBeTrue();
+      });
+
+      it('should toggle `displayAdditionalHelp` from true to false', () => {
+        component.displayAdditionalHelp = true;
+
+        const result = component.showAdditionalHelp();
+
+        expect(result).toBeFalse();
+        expect(component.displayAdditionalHelp).toBeFalse();
+      });
+    });
+
+    describe('size', () => {
+      it('should set the default value to small when an invalid value, accessibility level is AA and getA11yDefaultSize is small', () => {
+        poThemeServiceMock.getA11yLevel.and.returnValue(PoThemeA11yEnum.AA);
+        poThemeServiceMock.getA11yDefaultSize.and.returnValue('small');
+
+        component.size = 'xxg';
+        expect(component['_size']).toBe('small');
+      });
+
+      it('should return small when accessibility is AA and getA11yDefaultSize is small', () => {
+        poThemeServiceMock.getA11yLevel.and.returnValue(PoThemeA11yEnum.AA);
+        poThemeServiceMock.getA11yDefaultSize.and.returnValue('small');
+
+        component['_size'] = undefined;
+        expect(component.size).toBe('small');
+      });
+
+      it('should return medium when accessibility is AA and getA11yDefaultSize is medium', () => {
+        poThemeServiceMock.getA11yLevel.and.returnValue(PoThemeA11yEnum.AA);
+        poThemeServiceMock.getA11yDefaultSize.and.returnValue('medium');
+
+        component['_size'] = undefined;
+        expect(component.size).toBe('medium');
+      });
+
+      it('should return medium when accessibility is AAA, regardless of getA11yDefaultSize', () => {
+        poThemeServiceMock.getA11yLevel.and.returnValue(PoThemeA11yEnum.AAA);
+        component['_size'] = undefined;
+        expect(component.size).toBe('medium');
+      });
+
+      it('should set property with valid values for accessibility level is AA', () => {
+        poThemeServiceMock.getA11yLevel.and.returnValue(PoThemeA11yEnum.AA);
+
+        component.size = 'small';
+        expect(component.size).toBe('small');
+
+        component.size = 'medium';
+        expect(component.size).toBe('medium');
+
+        component.size = 'large';
+        expect(component.size).toBe('large');
+      });
+
+      it('should set property with valid values for accessibility level is AAA', () => {
+        poThemeServiceMock.getA11yLevel.and.returnValue(PoThemeA11yEnum.AAA);
+
+        component.size = 'small';
+        expect(component.size).toBe('medium');
+
+        component.size = 'medium';
+        expect(component.size).toBe('medium');
+
+        component.size = 'large';
+        expect(component.size).toBe('large');
+      });
     });
   });
 

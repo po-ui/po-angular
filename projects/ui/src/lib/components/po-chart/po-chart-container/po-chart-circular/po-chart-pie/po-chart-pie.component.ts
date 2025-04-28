@@ -4,7 +4,8 @@ import { PoChartCircularComponent } from '../po-chart-circular.component';
 
 @Component({
   selector: '[po-chart-pie]',
-  templateUrl: '../po-chart-circular.component.svg'
+  templateUrl: '../po-chart-circular.component.svg',
+  standalone: false
 })
 export class PoChartPieComponent extends PoChartCircularComponent implements OnChanges {
   /* istanbul ignore next */

@@ -2,19 +2,22 @@ import { Component, OnInit } from '@angular/core';
 
 import {
   PoCheckboxGroupOption,
-  PoSelectOption,
   PoListViewAction,
   PoListViewLiterals,
-  PoNotificationService
+  PoNotificationService,
+  PoRadioGroupOption,
+  PoSelectOption
 } from '@po-ui/ng-components';
 
 @Component({
   selector: 'sample-po-list-view-labs',
-  templateUrl: './sample-po-list-view-labs.component.html'
+  templateUrl: './sample-po-list-view-labs.component.html',
+  standalone: false
 })
 export class SamplePoListViewLabsComponent implements OnInit {
   action: PoListViewAction;
   actions: Array<PoListViewAction>;
+  componentsSize: string = 'medium';
   customLiterals: PoListViewLiterals;
   height: number;
   items: Array<any>;
@@ -38,10 +41,15 @@ export class SamplePoListViewLabsComponent implements OnInit {
     { label: 'Visible', value: 'visible' }
   ];
 
+  readonly componentsSizeOptions: Array<PoRadioGroupOption> = [
+    { label: 'small', value: 'small' },
+    { label: 'medium', value: 'medium' }
+  ];
+
   readonly iconOptions: Array<PoSelectOption> = [
-    { value: 'ph ph-newspaper', label: 'ph ph-newspaper' },
-    { value: 'ph ph-magnifying-glass', label: 'ph ph-magnifying-glass' },
-    { value: 'ph ph-globe', label: 'ph ph-globe' },
+    { value: 'an an-newspaper', label: 'an an-newspaper' },
+    { value: 'an an-magnifying-glass', label: 'an an-magnifying-glass' },
+    { value: 'an an-globe', label: 'an an-globe' },
     { value: 'fa fa-calculator', label: 'fa fa-calculator' },
     { value: 'fa fa-podcast', label: 'fa fa-podcast' }
   ];
@@ -100,6 +108,7 @@ export class SamplePoListViewLabsComponent implements OnInit {
 
   restore() {
     this.actions = [];
+    this.componentsSize = 'medium';
     this.items = [];
     this.height = undefined;
     this.literals = '';

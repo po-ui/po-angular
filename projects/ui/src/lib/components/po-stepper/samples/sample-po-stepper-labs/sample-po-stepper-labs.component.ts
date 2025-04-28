@@ -4,7 +4,8 @@ import { PoDynamicFormField, PoStepperItem } from '@po-ui/ng-components';
 
 @Component({
   selector: 'sample-po-stepper-labs',
-  templateUrl: './sample-po-stepper-labs.component.html'
+  templateUrl: './sample-po-stepper-labs.component.html',
+  standalone: false
 })
 export class SamplePoStepperLabsComponent implements OnInit {
   event: any;
@@ -44,13 +45,13 @@ export class SamplePoStepperLabsComponent implements OnInit {
     },
     {
       label: 'Step Icon Active Custom',
-      help: 'Ex.: ph ph-pencil-simple-line',
+      help: 'Ex.: an an-pencil-simple-line',
       gridLgColumns: 4,
       property: 'iconActive'
     },
     {
       label: 'Step Icon Done Custom',
-      help: 'Ex.: ph ph-check-fat',
+      help: 'Ex.: an an-check-fat',
       gridLgColumns: 4,
       property: 'iconDone'
     },
@@ -72,7 +73,7 @@ export class SamplePoStepperLabsComponent implements OnInit {
     {
       property: 'iconDefault',
       label: 'Step Icon Default Custom',
-      help: 'Ex.: ph ph-question',
+      help: 'Ex.: an an-question',
       gridMdColumns: 6,
       gridXlColumns: 6
     }

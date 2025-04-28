@@ -39,7 +39,10 @@
         for="file"
         [p-disabled]="isDisabled"
         [p-label]="selectFileButtonLabel"
+        [p-size]="size"
+        (p-blur)="onBlur()"
         (p-click)="selectFiles()"
+        (keydown)="onKeyDown($event)"
       >
       </po-button>
 
@@ -69,8 +72,11 @@
               [p-status]="progressStatusByFileStatus[file.status]"
               [p-text]="file.displayName"
               [p-value]="file.percent"
+              [p-custom-action]="customAction"
+              (p-custom-action-click)="customClick(file)"
               (p-cancel)="cancel(file)"
               (p-retry)="uploadFiles([file])"
+              [p-size-actions]="size"
             >
             </po-progress>
           </div>
@@ -84,9 +90,18 @@
         p-kind="primary"
         [p-disabled]="hasAnyFileUploading(currentFiles)"
         [p-label]="literals.startSending"
+        [p-size]="size"
         (p-click)="uploadFiles(currentFiles)"
       ></po-button>
     </div>
   </div>
-  <po-field-container-bottom [p-help]="help" [p-disabled]="disabled"></po-field-container-bottom>
+  <po-field-container-bottom
+    [p-additional-help-tooltip]="getAdditionalHelpTooltip()"
+    [p-append-in-body]="appendBox"
+    [p-help]="help"
+    [p-disabled]="disabled"
+    [p-show-additional-help]="displayAdditionalHelp"
+    [p-show-additional-help-icon]="showAdditionalHelpIcon()"
+    (p-additional-help)="emitAdditionalHelp()"
+  ></po-field-container-bottom>
 </po-field-container>

@@ -21,5 +21,5 @@ export interface PoSyncResponse {
   request: PoHttpRequestData;
 
   /** Resposta retornada após a tentativa de envio para o servidor. */
-  response: HttpResponse<Object> | HttpErrorResponse | PoEventSourcingErrorResponse;
+  response: HttpResponse<object> | HttpErrorResponse | PoEventSourcingErrorResponse;
 }

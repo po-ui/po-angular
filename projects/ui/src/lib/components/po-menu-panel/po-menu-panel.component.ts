@@ -81,7 +81,8 @@ import { PoMenuPanelItemsService } from './services/po-menu-panel-items.service'
 
 @Component({
   selector: 'po-menu-panel',
-  templateUrl: './po-menu-panel.component.html'
+  templateUrl: './po-menu-panel.component.html',
+  standalone: false
 })
 export class PoMenuPanelComponent extends PoMenuPanelBaseComponent implements OnDestroy, OnInit {
   activeMenuItem: PoMenuPanelItem;

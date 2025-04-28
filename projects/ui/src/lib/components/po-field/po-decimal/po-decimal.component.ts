@@ -16,6 +16,7 @@ import { PoLanguageService } from '../../../services/po-language/po-language.ser
 import { maxFailed, maxlengpoailed, minFailed } from '../validators';
 
 import { isObservable, of, Subscription, switchMap } from 'rxjs';
+import { PoThemeService } from '../../../services';
 import { convertToInt, uuid } from '../../../utils/util';
 import { PoInputBaseComponent } from '../po-input/po-input-base.component';
 
@@ -78,13 +79,13 @@ const poDecimalTotalLengthLimit = 16;
       useExisting: forwardRef(() => PoDecimalComponent),
       multi: true
     }
-  ]
+  ],
+  standalone: false
 })
 export class PoDecimalComponent extends PoInputBaseComponent implements AfterViewInit, OnInit, OnDestroy {
   @ViewChild('inp', { read: ElementRef, static: true }) inputEl: ElementRef;
 
   id = `po-decimal[${uuid()}]`;
-
   private _decimalsLength?: number = poDecimalDefaultDecimalsLength;
   private _thousandMaxlength?: number = poDecimalDefaultThousandMaxlength;
   private _locale?: string;
@@ -243,9 +244,10 @@ export class PoDecimalComponent extends PoInputBaseComponent implements AfterVie
   constructor(
     private el: ElementRef,
     private poLanguageService: PoLanguageService,
-    cd: ChangeDetectorRef
+    cd: ChangeDetectorRef,
+    protected poThemeService: PoThemeService
   ) {
-    super(cd);
+    super(cd, poThemeService);
     this.isKeyboardAndroid = !!navigator.userAgent.match(/Android/i);
   }
 
@@ -265,7 +267,6 @@ export class PoDecimalComponent extends PoInputBaseComponent implements AfterVie
 
   ngAfterViewInit() {
     this.verifyAutoFocus();
-    this.setPaddingInput();
   }
 
   ngOnDestroy(): void {
@@ -353,9 +354,14 @@ export class PoDecimalComponent extends PoInputBaseComponent implements AfterVie
     return !this.hasLetters(keyValue) && this.hasNotSpace(keyValue) && validKey;
   }
 
-  // função responsável por adicionar os zeroes com as casa decimais ao sair do campo.
+  // função responsável por adicionar os zeros com as casa decimais ao sair do campo.
   onBlur(event: any) {
     this.onTouched?.();
+
+    if (this.getAdditionalHelpTooltip() && this.displayAdditionalHelp) {
+      this.showAdditionalHelp();
+    }
+
     const value = event.target.value;
 
     if (value) {
@@ -436,21 +442,16 @@ export class PoDecimalComponent extends PoInputBaseComponent implements AfterVie
     }
   }
 
-  onKeyPress(event: KeyboardEvent) {
-    this.isValidKey(event);
+  onKeyDown(event: KeyboardEvent): void {
+    const isFieldFocused = document.activeElement === this.inputEl.nativeElement;
+
+    if (isFieldFocused) {
+      this.keydown.emit(event);
+    }
   }
 
-  setPaddingInput() {
-    setTimeout(() => {
-      const selectorIcons = '.po-field-icon-container:not(.po-field-icon-container-left) > .po-icon';
-      let icons = this.el.nativeElement.querySelectorAll(selectorIcons).length;
-      if (this.clean) {
-        icons++;
-      }
-      if (icons) {
-        this.inputEl.nativeElement.style.paddingRight = `${icons * 36}px`;
-      }
-    });
+  onKeyPress(event: KeyboardEvent) {
+    this.isValidKey(event);
   }
 
   writeValueModel(value) {

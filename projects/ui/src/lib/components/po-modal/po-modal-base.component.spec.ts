@@ -1,13 +1,15 @@
 import { PoModalBaseComponent } from './po-modal-base.component';
 
+import { PoLanguageService, PoThemeA11yEnum, PoThemeService } from '../../services';
 import { expectPropertiesValues, expectSettersMethod } from './../../util-test/util-expect.spec';
-import { PoLanguageService } from '../../services';
 
 describe('PoModalBaseComponent:', () => {
   let component: PoModalBaseComponent;
+  let poThemeServiceMock: jasmine.SpyObj<PoThemeService>;
 
   beforeEach(() => {
-    component = new PoModalBaseComponent(new PoLanguageService());
+    poThemeServiceMock = jasmine.createSpyObj('PoThemeService', ['getA11yLevel', 'getA11yDefaultSize']);
+    component = new PoModalBaseComponent(new PoLanguageService(), poThemeServiceMock);
   });
 
   it('should create component hidden', () => {
@@ -44,6 +46,50 @@ describe('PoModalBaseComponent:', () => {
     expectSettersMethod(component, 'setClickOut', true, 'clickOut', true);
     expectSettersMethod(component, 'setClickOut', 'true', 'clickOut', true);
     expectSettersMethod(component, 'setClickOut', 'false', 'clickOut', false);
+  });
+
+  describe('p-components-size', () => {
+    it('should set property with valid values for accessibility level is AA', () => {
+      poThemeServiceMock.getA11yLevel.and.returnValue(PoThemeA11yEnum.AA);
+
+      component.componentsSize = 'small';
+      expect(component.componentsSize).toBe('small');
+
+      component.componentsSize = 'medium';
+      expect(component.componentsSize).toBe('medium');
+    });
+
+    it('should set property with valid values for accessibility level is AAA', () => {
+      poThemeServiceMock.getA11yLevel.and.returnValue(PoThemeA11yEnum.AAA);
+
+      component.componentsSize = 'small';
+      expect(component.componentsSize).toBe('medium');
+
+      component.componentsSize = 'medium';
+      expect(component.componentsSize).toBe('medium');
+    });
+
+    it('should return small when accessibility is AA and getA11yDefaultSize is small', () => {
+      poThemeServiceMock.getA11yLevel.and.returnValue(PoThemeA11yEnum.AA);
+      poThemeServiceMock.getA11yDefaultSize.and.returnValue('small');
+
+      component['_componentsSize'] = undefined;
+      expect(component.componentsSize).toBe('small');
+    });
+
+    it('should return medium when accessibility is AA and getA11yDefaultSize is medium', () => {
+      poThemeServiceMock.getA11yLevel.and.returnValue(PoThemeA11yEnum.AA);
+      poThemeServiceMock.getA11yDefaultSize.and.returnValue('medium');
+
+      component['_componentsSize'] = undefined;
+      expect(component.componentsSize).toBe('medium');
+    });
+
+    it('should return medium when accessibility is AAA, regardless of getA11yDefaultSize', () => {
+      poThemeServiceMock.getA11yLevel.and.returnValue(PoThemeA11yEnum.AAA);
+      component['_componentsSize'] = undefined;
+      expect(component.componentsSize).toBe('medium');
+    });
   });
 
   it('should emit `onClosedX` if xClosed is true', () => {

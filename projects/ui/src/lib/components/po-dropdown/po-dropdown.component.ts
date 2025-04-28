@@ -2,6 +2,7 @@ import { ChangeDetectionStrategy, ChangeDetectorRef, Component, ElementRef, Rend
 
 import { isKeyCodeEnter } from './../../utils/util';
 
+import { PoThemeService } from '../../services';
 import { PoDropdownBaseComponent } from './po-dropdown-base.component';
 
 /**
@@ -29,7 +30,8 @@ import { PoDropdownBaseComponent } from './po-dropdown-base.component';
 @Component({
   selector: 'po-dropdown',
   templateUrl: './po-dropdown.component.html',
-  changeDetection: ChangeDetectionStrategy.OnPush
+  changeDetection: ChangeDetectionStrategy.OnPush,
+  standalone: false
 })
 export class PoDropdownComponent extends PoDropdownBaseComponent {
   @ViewChild('dropdownRef', { read: ElementRef, static: true }) dropdownRef: ElementRef;
@@ -39,10 +41,11 @@ export class PoDropdownComponent extends PoDropdownBaseComponent {
   private resizeListener: () => void;
 
   constructor(
+    protected poThemeService: PoThemeService,
     private renderer: Renderer2,
     private changeDetector: ChangeDetectorRef
   ) {
-    super();
+    super(poThemeService);
   }
 
   onKeyDown(event: any) {

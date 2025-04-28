@@ -4,9 +4,11 @@ import { PoCheckboxGroupOption, PoRadioGroupOption, PoSwitchLabelPosition } from
 
 @Component({
   selector: 'sample-po-switch-labs',
-  templateUrl: './sample-po-switch-labs.component.html'
+  templateUrl: './sample-po-switch-labs.component.html',
+  standalone: false
 })
 export class SamplePoSwitchLabsComponent implements OnInit {
+  additionalHelpTooltip: string;
   event: string;
   help: string;
   label: string;
@@ -14,6 +16,7 @@ export class SamplePoSwitchLabsComponent implements OnInit {
   labelOn: string;
   labelPosition: PoSwitchLabelPosition;
   properties: Array<string>;
+  size: string;
   switch: boolean;
 
   public readonly labelPositionOptions: Array<PoRadioGroupOption> = [
@@ -27,6 +30,11 @@ export class SamplePoSwitchLabsComponent implements OnInit {
     { value: 'hideLabelStatus', label: 'Hide label status' }
   ];
 
+  public readonly sizeOptions: Array<PoRadioGroupOption> = [
+    { label: 'small', value: 'small' },
+    { label: 'medium', value: 'medium' }
+  ];
+
   ngOnInit() {
     this.restore();
   }
@@ -36,6 +44,7 @@ export class SamplePoSwitchLabsComponent implements OnInit {
   }
 
   restore() {
+    this.additionalHelpTooltip = '';
     this.event = '';
     this.help = undefined;
     this.label = undefined;
@@ -43,6 +52,7 @@ export class SamplePoSwitchLabsComponent implements OnInit {
     this.labelOff = '';
     this.labelPosition = undefined;
     this.properties = [];
+    this.size = 'medium';
     this.switch = undefined;
   }
 }

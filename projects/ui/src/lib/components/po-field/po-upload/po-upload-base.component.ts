@@ -1,11 +1,14 @@
 import { Directive, EventEmitter, HostBinding, Input, Output } from '@angular/core';
 import { AbstractControl, ControlValueAccessor, Validator } from '@angular/forms';
 
-import { convertToBoolean, isEquals, isIE, isMobile } from '../../../utils/util';
+import { convertToBoolean, getDefaultSize, isEquals, isIE, isMobile, validateSize } from '../../../utils/util';
 import { requiredFailed } from '../validators';
 
+import { PoFieldSize } from '../../../enums/po-field-size.enum';
+import { PoThemeService } from '../../../services';
 import { poLocaleDefault } from '../../../services/po-language/po-language.constant';
 import { PoLanguageService } from '../../../services/po-language/po-language.service';
+import { PoProgressAction } from '../../po-progress';
 import { PoUploadFileRestrictions } from './interfaces/po-upload-file-restriction.interface';
 import { PoUploadLiterals } from './interfaces/po-upload-literals.interface';
 import { PoUploadFile } from './po-upload-file';
@@ -140,6 +143,35 @@ const poUploadMinFileSize = 0;
  */
 @Directive()
 export abstract class PoUploadBaseComponent implements ControlValueAccessor, Validator {
+  // Propriedade interna que define se o ícone de ajuda adicional terá cursor clicável (evento) ou padrão (tooltip).
+  @Input() additionalHelpEventTrigger: string | undefined;
+
+  /**
+   * @optional
+   *
+   * @description
+   * Exibe um ícone de ajuda adicional ao `p-help`, com o texto desta propriedade no tooltip.
+   * Se o evento `p-additional-help` estiver definido, o tooltip não será exibido.
+   * **Como boa prática, indica-se utilizar um texto com até 140 caracteres.**
+   * > Requer um recuo mínimo de 8px se o componente estiver próximo à lateral da tela.
+   */
+  @Input('p-additional-help-tooltip') additionalHelpTooltip?: string;
+
+  /**
+   * @optional
+   *
+   * @description
+   *
+   * Define que o tooltip (`p-additional-help-tooltip`) será incluído no body da página e não dentro do componente. Essa
+   * opção pode ser necessária em cenários com containers que possuem scroll ou overflow escondido, garantindo o
+   * posicionamento correto do tooltip próximo ao elemento.
+   *
+   * > Quando utilizado com `p-additional-help-tooltip`, leitores de tela como o NVDA podem não ler o conteúdo do tooltip.
+   *
+   * @default `false`
+   */
+  @Input({ alias: 'p-append-in-body', transform: convertToBoolean }) appendBox?: boolean = false;
+
   /**
    * @optional
    *
@@ -243,6 +275,104 @@ export abstract class PoUploadBaseComponent implements ControlValueAccessor, Val
    * @optional
    *
    * @description
+   * Evento disparado ao clicar no ícone de ajuda adicional.
+   * Este evento ativa automaticamente a exibição do ícone de ajuda adicional ao `p-help`.
+   */
+  @Output('p-additional-help') additionalHelp = new EventEmitter<any>();
+
+  /**
+   * @optional
+   *
+   * @description
+   *
+   * Define uma ação personalizada no componente `po-upload`, adicionando um botão no canto inferior direito
+   * de cada barra de progresso associada aos arquivos enviados ou em envio.
+   *
+   * A ação deve implementar a interface **PoProgressAction**, permitindo configurar propriedades como:
+   * - `label`: Texto do botão.
+   * - `icon`: Ícone a ser exibido no botão.
+   * - `type`: Tipo de botão (ex.: `danger` ou `default`).
+   * - `disabled`: Indica se o botão deve estar desabilitado.
+   * - `visible`: Indica se o botão deve estar visível.
+   *
+   * **Exemplo de uso:**
+   *
+   * ```html
+   * <po-upload
+   *  [p-custom-action]="customAction"
+   *  (p-custom-action-click)="onCustomActionClick($event)">
+   * </po-upload>
+   * ```
+   *
+   * ```typescript
+   * customAction: PoProgressAction = {
+   *   label: 'Baixar',
+   *   icon: 'an an-download',
+   *   type: 'default',
+   *   visible: true
+   * };
+   *
+   * onCustomActionClick(file: PoUploadFile) {
+   *   console.log(`Ação personalizada clicada para o arquivo: ${file.name}`);
+   * }
+   * ```
+   */
+  @Input('p-custom-action') customAction?: PoProgressAction;
+
+  /**
+   * @optional
+   *
+   * @description
+   *
+   * Evento emitido ao clicar na ação personalizada configurada no `p-custom-action`.
+   *
+   * O evento retorna o arquivo associado à barra de progresso onde a ação foi clicada,
+   * permitindo executar operações específicas para aquele arquivo.
+   *
+   * **Exemplo de uso:**
+   *
+   * ```html
+   * <po-upload
+   *  [p-custom-action]="customAction"
+   *  (p-custom-action-click)="onCustomActionClick($event)">
+   * </po-upload>
+   * ```
+   *
+   * ```typescript
+   * customAction: PoProgressAction = {
+   *   label: 'Baixar',
+   *   icon: 'an an-download',
+   *   type: 'default',
+   *   visible: true
+   * };
+   *
+   * onCustomActionClick(file: PoUploadFile) {
+   *   console.log(`Ação personalizada clicada para o arquivo: ${file.name}`);
+   *   // Lógica para download do arquivo
+   *   this.downloadFile(file);
+   * }
+   *
+   * downloadFile(file: PoUploadFile) {
+   *   // Exemplo de download
+   *   console.log(`Iniciando o download do arquivo: ${file.name}`);
+   * }
+   * ```
+   */
+  @Output('p-custom-action-click') customActionClick: EventEmitter<any> = new EventEmitter();
+
+  /**
+   * @optional
+   *
+   * @description
+   * Evento disparado quando uma tecla é pressionada enquanto o foco está no componente.
+   * Retorna um objeto `KeyboardEvent` com informações sobre a tecla.
+   */
+  @Output('p-keydown') keydown: EventEmitter<KeyboardEvent> = new EventEmitter<KeyboardEvent>();
+
+  /**
+   * @optional
+   *
+   * @description
    *
    * Função que será executada no momento de realizar o envio do arquivo,
    * onde será possível adicionar informações ao parâmetro que será enviado na requisição.
@@ -303,6 +433,7 @@ export abstract class PoUploadBaseComponent implements ControlValueAccessor, Val
   currentFiles: Array<PoUploadFile>;
 
   canHandleDirectory: boolean;
+  displayAdditionalHelp: boolean = false;
   onModelChange: any;
 
   protected extensionNotAllowed = 0;
@@ -321,6 +452,7 @@ export abstract class PoUploadBaseComponent implements ControlValueAccessor, Val
   private _isMultiple?: boolean;
   private _literals?: any;
   private _required?: boolean;
+  private _size?: string = undefined;
   private language: string;
   private validatorChange: any;
 
@@ -565,7 +697,30 @@ export abstract class PoUploadBaseComponent implements ControlValueAccessor, Val
    */
   @Input('p-show-required') showRequired: boolean = false;
 
+  /**
+   * @optional
+   *
+   * @description
+   *
+   * Define o tamanho e as ações do componente:
+   * - `small`: altura do button como 32px (disponível apenas para acessibilidade AA).
+   * - `medium`: altura do button como 44px.
+   *
+   * > Caso a acessibilidade AA não esteja configurada, o tamanho `medium` será mantido.
+   * Para mais detalhes, consulte a documentação do [po-theme](https://po-ui.io/documentation/po-theme).
+   *
+   * @default `medium`
+   */
+  @Input('p-size') set size(value: string) {
+    this._size = validateSize(value, this.poThemeService, PoFieldSize);
+  }
+
+  get size(): string {
+    return this._size ?? getDefaultSize(this.poThemeService, PoFieldSize);
+  }
+
   constructor(
+    protected poThemeService: PoThemeService,
     protected uploadService: PoUploadService,
     languageService: PoLanguageService
   ) {

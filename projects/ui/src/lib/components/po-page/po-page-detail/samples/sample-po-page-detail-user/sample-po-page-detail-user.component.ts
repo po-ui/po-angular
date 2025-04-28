@@ -5,7 +5,8 @@ import { PoBreadcrumb } from '@po-ui/ng-components';
 
 @Component({
   selector: 'sample-po-page-detail-user',
-  templateUrl: './sample-po-page-detail-user.component.html'
+  templateUrl: './sample-po-page-detail-user.component.html',
+  standalone: false
 })
 export class SamplePoPageDetailUserComponent {
   birthDate: string = '26/12/1978';

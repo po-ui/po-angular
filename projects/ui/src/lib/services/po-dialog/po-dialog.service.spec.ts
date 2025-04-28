@@ -17,7 +17,8 @@ class TestModule {}
 
 @Component({
   template: ` test component `,
-  providers: [PoComponentInjectorService, PoDialogService]
+  providers: [PoComponentInjectorService, PoDialogService],
+  standalone: false
 })
 class TestComponent {
   constructor(poDialog: PoDialogService) {}

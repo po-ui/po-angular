@@ -8,7 +8,9 @@ import { Observable, Subject } from 'rxjs';
  * Serviço responsável por efetuar o controle de interação com o serviço de interceptor `PoHttpRequestInterceptorService`
  * gerenciando o seu estado.
  */
-@Injectable()
+@Injectable({
+  providedIn: 'root'
+})
 export class PoHttpRequesControltService {
   controlHttpRequest: Subject<number> = new Subject<number>();
 

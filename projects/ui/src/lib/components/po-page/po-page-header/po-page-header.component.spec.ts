@@ -7,7 +7,10 @@ import { RouterTestingModule } from '@angular/router/testing';
 import { PoBreadcrumbModule } from '../../po-breadcrumb/po-breadcrumb.module';
 import { PoPageHeaderComponent } from './po-page-header.component';
 
-@Component({ template: 'Guides' })
+@Component({
+  template: 'Guides',
+  standalone: false
+})
 export class GuidesComponent {}
 
 export const routes: Routes = [{ path: 'guides', component: GuidesComponent }];

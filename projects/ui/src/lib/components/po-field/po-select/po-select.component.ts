@@ -4,6 +4,7 @@ import {
   Component,
   ElementRef,
   EventEmitter,
+  forwardRef,
   Inject,
   Input,
   OnChanges,
@@ -11,21 +12,24 @@ import {
   Output,
   Renderer2,
   SimpleChanges,
-  ViewChild,
-  forwardRef
+  ViewChild
 } from '@angular/core';
 import { AbstractControl, NG_VALIDATORS, NG_VALUE_ACCESSOR } from '@angular/forms';
 
 import {
   convertToBoolean,
+  getDefaultSize,
   isSafari,
   removeDuplicatedOptions,
   removeUndefinedAndNullOptions,
   uuid,
+  validateSize,
   validValue
 } from '../../../utils/util';
 
-import { ICONS_DICTIONARY, PhosphorIconDictionary } from '../../po-icon';
+import { PoFieldSize } from '../../../enums/po-field-size.enum';
+import { PoThemeService } from '../../../services';
+import { AnimaliaIconDictionary, ICONS_DICTIONARY } from '../../po-icon';
 import { PoFieldValidateModel } from '../po-field-validate.model';
 import { PoSelectOptionGroup } from './po-select-option-group.interface';
 import { PoSelectOption } from './po-select-option.interface';
@@ -118,7 +122,8 @@ const PO_SELECT_FIELD_VALUE_DEFAULT = 'value';
       useExisting: forwardRef(() => PoSelectComponent),
       multi: true
     }
-  ]
+  ],
+  standalone: false
 })
 export class PoSelectComponent extends PoFieldValidateModel<any> implements OnChanges {
   private _iconToken: { [key: string]: string };
@@ -169,6 +174,7 @@ export class PoSelectComponent extends PoFieldValidateModel<any> implements OnCh
   private _fieldLabel?: string = PO_SELECT_FIELD_LABEL_DEFAULT;
   private _fieldValue?: string = PO_SELECT_FIELD_VALUE_DEFAULT;
   private _options: Array<PoSelectOption> | Array<PoSelectOptionGroup> | Array<any>;
+  private _size?: string = undefined;
 
   /**
    * Nesta propriedade deve ser definido uma coleção de objetos que implementam a interface `PoSelectOption`,
@@ -273,6 +279,13 @@ export class PoSelectComponent extends PoFieldValidateModel<any> implements OnCh
     }
   }
 
+  /**
+   * @docsPrivate
+   *
+   * Determinar se o valor do compo deve retorna objeto do tipo {value: any, label: any}
+   */
+  @Input({ alias: 'p-control-value-with-label', transform: convertToBoolean }) controlValueWithLabel?: boolean = false;
+
   get fieldValue() {
     return this._fieldValue;
   }
@@ -281,16 +294,39 @@ export class PoSelectComponent extends PoFieldValidateModel<any> implements OnCh
     return this._iconToken.NAME_LIB;
   }
 
+  /**
+   * @optional
+   *
+   * @description
+   *
+   * Define o tamanho do componente:
+   * - `small`: altura do input como 32px (disponível apenas para acessibilidade AA).
+   * - `medium`: altura do input como 44px.
+   *
+   * > Caso a acessibilidade AA não esteja configurada, o tamanho `medium` será mantido.
+   * Para mais detalhes, consulte a documentação do [po-theme](https://po-ui.io/documentation/po-theme).
+   *
+   * @default `medium`
+   */
+  @Input('p-size') set size(value: string) {
+    this._size = validateSize(value, this.poThemeService, PoFieldSize);
+  }
+
+  get size(): string {
+    return this._size ?? getDefaultSize(this.poThemeService, PoFieldSize);
+  }
+
   /* istanbul ignore next */
   constructor(
     @Optional() @Inject(ICONS_DICTIONARY) value: { [key: string]: string },
     changeDetector: ChangeDetectorRef,
     private el: ElementRef,
-    public renderer: Renderer2
+    public renderer: Renderer2,
+    protected poThemeService: PoThemeService
   ) {
     super(changeDetector);
 
-    this._iconToken = value ?? PhosphorIconDictionary;
+    this._iconToken = value ?? AnimaliaIconDictionary;
   }
 
   ngOnChanges(changes: SimpleChanges): void {
@@ -334,6 +370,10 @@ export class PoSelectComponent extends PoFieldValidateModel<any> implements OnCh
 
   onBlur() {
     this.onModelTouched?.();
+
+    if (this.getAdditionalHelpTooltip() && this.displayAdditionalHelp) {
+      this.showAdditionalHelp();
+    }
   }
 
   // Altera o valor ao selecionar um item.
@@ -359,7 +399,7 @@ export class PoSelectComponent extends PoFieldValidateModel<any> implements OnCh
     if (this.selectedValue !== option[this.fieldValue]) {
       this.selectedValue = option[this.fieldValue];
       this.selectElement.nativeElement.value = option[this.fieldValue];
-      this.updateModel(option[this.fieldValue]);
+      this.updateModel(this.getValueUpdate(option));
       this.displayValue = option[this.fieldLabel];
       this.emitChange(option[this.fieldValue]);
     }
@@ -367,6 +407,7 @@ export class PoSelectComponent extends PoFieldValidateModel<any> implements OnCh
 
   // Recebe as alterações do model
   onWriteValue(value: any) {
+    value = this.getValueWrite(value);
     const optionFound: any = this.findOptionValue(value);
 
     if (optionFound) {
@@ -395,8 +436,40 @@ export class PoSelectComponent extends PoFieldValidateModel<any> implements OnCh
     return false;
   }
 
+  onKeyDown(event: KeyboardEvent): void {
+    const isFieldFocused = document.activeElement === this.selectElement.nativeElement;
+
+    if (isFieldFocused) {
+      this.keydown.emit(event);
+    }
+  }
+
   registerOnTouched(fn: any): void {
     this.onModelTouched = fn;
+  }
+
+  /**
+   * Método que exibe `p-additionalHelpTooltip` ou executa a ação definida em `p-additionalHelp`.
+   * Para isso, será necessário configurar uma tecla de atalho utilizando o evento `p-keydown`.
+   *
+   * ```html
+   * <po-select
+   *  #select
+   *  ...
+   *  p-additional-help-tooltip="Mensagem de ajuda complementar"
+   *  (p-keydown)="onKeyDown($event, select)"
+   * ></po-select>
+   * ```
+   * ```typescript
+   * onKeyDown(event: KeyboardEvent, inp: PoSelectComponent): void {
+   *  if (event.code === 'F9') {
+   *    inp.showAdditionalHelp();
+   *  }
+   * }
+   * ```
+   */
+  override showAdditionalHelp(): boolean {
+    return super.showAdditionalHelp();
   }
 
   private isEqual(value: any, inputValue: any): boolean {
@@ -415,6 +488,25 @@ export class PoSelectComponent extends PoFieldValidateModel<any> implements OnCh
     if (this.options) {
       return this.options.find(option => this.isEqual(option.value, value));
     }
+  }
+
+  private getValueUpdate(option: any) {
+    if (this.controlValueWithLabel) {
+      return {
+        value: option[this.fieldValue],
+        label: option[this.fieldLabel]
+      };
+    }
+
+    return option[this.fieldValue];
+  }
+
+  private getValueWrite(data: any) {
+    if (this.controlValueWithLabel && data?.value) {
+      return data?.value;
+    }
+
+    return data;
   }
 
   private transformInArray(objectWithArray: Array<any>): Array<PoSelectOptionGroup | any> {

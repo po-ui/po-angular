@@ -9,6 +9,7 @@ import { PoLoadingBaseComponent } from './po-loading-base.component';
  */
 @Component({
   selector: 'po-loading',
-  templateUrl: 'po-loading.component.html'
+  templateUrl: 'po-loading.component.html',
+  standalone: false
 })
 export class PoLoadingComponent extends PoLoadingBaseComponent {}

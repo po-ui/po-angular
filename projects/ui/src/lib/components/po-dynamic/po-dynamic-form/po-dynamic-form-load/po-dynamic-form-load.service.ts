@@ -3,10 +3,12 @@ import { Injectable } from '@angular/core';
 
 import { map } from 'rxjs/operators';
 
-import { PoDynamicFormField } from '../po-dynamic-form-field.interface';
+import { PoDynamicFormField } from '../interfaces/po-dynamic-form-field.interface';
 import { PoDynamicFormOperation } from '../po-dynamic-form-operation/po-dynamic-form-operation';
 
-@Injectable()
+@Injectable({
+  providedIn: 'root'
+})
 export class PoDynamicFormLoadService extends PoDynamicFormOperation {
   constructor(http: HttpClient) {
     super(http);

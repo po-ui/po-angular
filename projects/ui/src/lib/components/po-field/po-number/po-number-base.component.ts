@@ -1,5 +1,6 @@
-import { ChangeDetectorRef, ElementRef, Directive } from '@angular/core';
+import { ChangeDetectorRef, Directive, ElementRef } from '@angular/core';
 
+import { PoThemeService } from '../../../services';
 import { PoInputGeneric } from '../po-input-generic/po-input-generic';
 
 @Directive()
@@ -9,8 +10,12 @@ export abstract class PoNumberBaseComponent extends PoInputGeneric {
   protected invalidInputValueOnBlur = false;
 
   /* istanbul ignore next */
-  constructor(elementRef: ElementRef, cd: ChangeDetectorRef) {
-    super(elementRef, cd);
+  constructor(
+    elementRef: ElementRef,
+    cd: ChangeDetectorRef,
+    protected poThemeService: PoThemeService
+  ) {
+    super(elementRef, cd, poThemeService);
   }
 
   eventOnInput(e: any) {
@@ -36,6 +41,10 @@ export abstract class PoNumberBaseComponent extends PoInputGeneric {
     const target = event.target;
     this.invalidInputValueOnBlur = target.value === '' && !target.validity.valid;
 
+    if (this.getAdditionalHelpTooltip() && this.displayAdditionalHelp) {
+      this.showAdditionalHelp();
+    }
+
     if (this.invalidInputValueOnBlur) {
       this.callOnChange('Valor Inválido');
     }
@@ -44,9 +53,15 @@ export abstract class PoNumberBaseComponent extends PoInputGeneric {
   }
 
   onKeyDown(event) {
+    const isFieldFocused = document.activeElement === this.inputEl.nativeElement;
+
     if (!this.isKeyAllowed(event)) {
       event.stopPropagation();
       event.preventDefault();
+    }
+
+    if (isFieldFocused) {
+      this.keydown.emit(event);
     }
   }
 

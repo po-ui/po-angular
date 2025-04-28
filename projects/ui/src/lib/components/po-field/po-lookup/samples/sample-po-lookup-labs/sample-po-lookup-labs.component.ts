@@ -16,9 +16,11 @@ import { SamplePoLookupService } from '../sample-po-lookup.service';
 @Component({
   selector: 'sample-po-lookup-labs',
   templateUrl: './sample-po-lookup-labs.component.html',
-  providers: [SamplePoLookupService]
+  providers: [SamplePoLookupService],
+  standalone: false
 })
 export class SamplePoLookupLabsComponent implements OnInit {
+  additionalHelpTooltip: string;
   columns: Array<PoLookupColumn>;
   columnsName: Array<string>;
   customLiterals: PoLookupLiterals;
@@ -37,6 +39,7 @@ export class SamplePoLookupLabsComponent implements OnInit {
   fieldErrorMessage: string;
   advancedFilters: string;
   customAdvancedFilters: Array<PoDynamicFormField>;
+  size: string;
   spacing: PoTableColumnSpacing = PoTableColumnSpacing.Medium;
 
   public readonly columnsOptions: Array<PoCheckboxGroupOption> = [
@@ -67,7 +70,8 @@ export class SamplePoLookupLabsComponent implements OnInit {
     { value: 'autoHeight', label: 'Auto Height' },
     { value: 'hideColumnsManager', label: 'Hide Columns Manager' },
     { value: 'textWrap', label: 'Text Wrap' },
-    { value: 'virtualScroll', label: 'Virtual Sroll' }
+    { value: 'virtualScroll', label: 'Virtual Sroll' },
+    { value: 'errorLimit', label: 'Limit Error Message' }
   ];
 
   private readonly columnsDefinition = {
@@ -80,6 +84,11 @@ export class SamplePoLookupLabsComponent implements OnInit {
     { label: 'Small', value: 'small' },
     { label: 'Medium', value: 'medium' },
     { label: 'Large', value: 'large' }
+  ];
+
+  public readonly sizeOptions: Array<PoRadioGroupOption> = [
+    { label: 'small', value: 'small' },
+    { label: 'medium', value: 'medium' }
   ];
 
   constructor(public sampleFilterService: SamplePoLookupService) {}
@@ -117,6 +126,7 @@ export class SamplePoLookupLabsComponent implements OnInit {
   }
 
   restore() {
+    this.additionalHelpTooltip = '';
     this.columnsName = ['id', 'name'];
     this.customLiterals = undefined;
     this.updateColumns();
@@ -135,6 +145,7 @@ export class SamplePoLookupLabsComponent implements OnInit {
     this.properties = [];
     this.fieldErrorMessage = '';
     this.customAdvancedFilters = [];
+    this.size = 'medium';
   }
 
   updateColumns() {

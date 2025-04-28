@@ -5,3 +5,4 @@ export * from './module';
 export * from './project';
 export * from './package-config';
 export * from './utils';
+export * from './standalone';

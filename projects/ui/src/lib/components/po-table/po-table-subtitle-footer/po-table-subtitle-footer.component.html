@@ -3,6 +3,11 @@
     <po-table-subtitle-circle p-hide-title="true" [p-subtitle]="subtitle"> </po-table-subtitle-circle>
     <span class="po-table-subtitle-text">{{ subtitle.label }}</span>
   </div>
-  <po-table-show-subtitle *ngIf="showSubtitle" [p-literals]="literals" [p-subtitles]="subtitles">
+  <po-table-show-subtitle
+    *ngIf="showSubtitle"
+    [p-components-size]="componentsSize"
+    [p-literals]="literals"
+    [p-subtitles]="subtitles"
+  >
   </po-table-show-subtitle>
 </div>

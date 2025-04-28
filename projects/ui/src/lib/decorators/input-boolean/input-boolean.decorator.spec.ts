@@ -6,7 +6,8 @@ import { InputBoolean } from './input-boolean.decorator';
 
 @Component({
   selector: 'mock-component',
-  template: ''
+  template: '',
+  standalone: false
 })
 class PoMockComponent {
   @InputBoolean() myProperty: boolean;

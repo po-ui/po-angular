@@ -4,9 +4,11 @@ import { PoCheckboxGroupOption, PoRadioGroupOption } from '@po-ui/ng-components'
 
 @Component({
   selector: 'sample-po-radio-group-labs',
-  templateUrl: './sample-po-radio-group-labs.component.html'
+  templateUrl: './sample-po-radio-group-labs.component.html',
+  standalone: false
 })
 export class SamplePoRadioGroupLabsComponent implements OnInit {
+  additionalHelpTooltip: string;
   columns: number;
   event: string;
   help: string;
@@ -29,10 +31,12 @@ export class SamplePoRadioGroupLabsComponent implements OnInit {
     { value: 'disabled', label: 'Disabled' },
     { value: 'optional', label: 'Optional' },
     { value: 'required', label: 'Required' },
-    { value: 'showRequired', label: 'Show Required' }
+    { value: 'showRequired', label: 'Show Required' },
+    { value: 'errorLimit', label: 'Limit Error Message' }
   ];
 
   readonly sizesOptions: Array<PoRadioGroupOption> = [
+    { label: 'Small', value: 'small' },
     { label: 'Medium', value: 'medium' },
     { label: 'Large', value: 'large' }
   ];
@@ -51,11 +55,12 @@ export class SamplePoRadioGroupLabsComponent implements OnInit {
   }
 
   restore() {
+    this.additionalHelpTooltip = '';
     this.event = '';
     this.radioGroup = undefined;
     this.properties = [];
     this.fieldErrorMessage = '';
-
+    this.size = 'medium';
     this.option = this.getNewOption();
     this.options = [];
   }

@@ -83,7 +83,8 @@ import { Component } from '@angular/core';
 
 @Component({
   selector: 'sample-{{docName}}-doc',
-  templateUrl: './sample-{{docName}}-doc.component.html'
+  templateUrl: './sample-{{docName}}-doc.component.html',
+  standalone: false
 })
 export class Sample{{component}}DocComponent { }
 `;
@@ -112,17 +113,18 @@ import { Component } from '@angular/core';
 
 @Component({
   selector: 'sample-{{name}}-view',
-  templateUrl: './sample-{{name}}-view.component.html'
+  templateUrl: './sample-{{name}}-view.component.html',
+  standalone: false
 })
 export class Sample{{component}}ViewComponent {
   hideSampleCodeTabs = true;
   sampleCodeButtonLabel = 'Talk is cheap, show me the code!';
-  sampleCodeButtonIcon = 'ph ph-plus';
+  sampleCodeButtonIcon = 'an an-plus';
 
   toggleSampleCodeTabs() {
     this.hideSampleCodeTabs = !this.hideSampleCodeTabs;
     this.sampleCodeButtonLabel = this.hideSampleCodeTabs ? 'Talk is cheap, show me the code!' : 'Okay, hide the code';
-    this.sampleCodeButtonIcon = this.hideSampleCodeTabs ? 'ph ph-plus' : 'ph ph-minus';
+    this.sampleCodeButtonIcon = this.hideSampleCodeTabs ? 'an an-plus' : 'an an-minus';
   }
 }
 `;
@@ -192,7 +194,8 @@ import { ActivatedRoute, Router } from '@angular/router';
 import { Component, OnInit, OnDestroy } from '@angular/core';
 
 @Component({
-  templateUrl: './doc-{{docName}}.component.html'
+  templateUrl: './doc-{{docName}}.component.html',
+  standalone: false
 })
 export class Doc{{component}}Component implements OnInit, OnDestroy {
   sub: any;
@@ -203,7 +206,7 @@ export class Doc{{component}}Component implements OnInit, OnDestroy {
   activeTab = 'doc';
 
   actions: Array<{}> = [
-    { label: 'Documentação', action: this.goBack.bind(this), icon: 'ph ph-file-text' },
+    { label: 'Documentação', action: this.goBack.bind(this), icon: 'an an-file-text' },
     { label: 'Colabore', action: this.improveDocs.bind(this) },
   ];
 
@@ -227,8 +230,12 @@ export class Doc{{component}}Component implements OnInit, OnDestroy {
       this.activeTab = view || 'doc';
 
       this.hidePoWebSample = this.samplesLength === 0;
-
     });
+  }
+
+  changeTab(tab: string) {
+    this.router.navigate([], { queryParams: { view: tab }, queryParamsHandling: 'merge' });
+    this.activeTab = tab;
   }
 
   ngOnDestroy() {
@@ -319,10 +326,10 @@ export class Doc{{component}}Module { }
     const htmlSource = `
 <po-page-default p-title="{{title}}" [p-actions]="actions">
   <po-tabs p-size="1">
-    <po-tab p-label="Documentação" [p-active]="activeTab.includes('doc')">
+    <po-tab p-label="Documentação" [p-active]="activeTab === 'doc'" (p-click)="changeTab('doc')">
       <sample-{{docName}}-doc></sample-{{docName}}-doc>
     </po-tab>
-    <po-tab p-label="Exemplos" [p-hide]="hidePoWebSample" [p-active]="activeTab.includes('web')">
+    <po-tab p-label="Exemplos" [p-hide]="hidePoWebSample" [p-active]="activeTab === 'web'" (p-click)="changeTab('web')">
     {{#each samples}}
       <sample-{{name}}-view></sample-{{name}}-view>
     {{/each}}
@@ -333,24 +340,24 @@ export class Doc{{component}}Module { }
 
     const htmlTemplate = handlebars.compile(htmlSource);
     let htmlContent = htmlTemplate({
-      title: `${this.capitalizeDocName(docName)}`,
-      docName: docName,
-      samples: samples
+        title: `${this.capitalizeDocName(docName)}`,
+        docName: docName,
+        samples: samples
     });
 
     this.writeFile(
-      `${configuration.outputFolder}sample-${docName}/doc-${docName}.component.html`,
-      htmlContent,
-      result => {
-        if (result) {
-          console.error(
-            `error`.red + ':   ',
-            `Erro ao salvar arquivo sample-${docName}/doc-${docName}.component.html: ${result.message}`
-          );
+        `${configuration.outputFolder}sample-${docName}/doc-${docName}.component.html`,
+        htmlContent,
+        result => {
+            if (result) {
+                console.error(
+                    `error`.red + ':   ',
+                    `Erro ao salvar arquivo sample-${docName}/doc-${docName}.component.html: ${result.message}`
+                );
+            }
         }
-      }
     );
-  },
+},
   generateDocumentationRoutingModule: function (docs) {
     const routingModuleSource = `
 import { NgModule } from '@angular/core';

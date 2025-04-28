@@ -8,7 +8,8 @@ import { PoPageBlockedUserReasonParams } from '../interfaces/po-page-blocked-use
 
 @Component({
   selector: 'po-page-blocked-user-reason',
-  templateUrl: './po-page-blocked-user-reason.component.html'
+  templateUrl: './po-page-blocked-user-reason.component.html',
+  standalone: false
 })
 export class PoPageBlockedUserReasonComponent implements OnChanges, OnInit {
   @Input('p-params') params: PoPageBlockedUserReasonParams;

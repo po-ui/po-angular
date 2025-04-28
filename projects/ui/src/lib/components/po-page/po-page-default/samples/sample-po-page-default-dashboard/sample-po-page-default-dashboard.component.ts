@@ -22,7 +22,8 @@ import { SampleDashboardService } from './sample-po-page-default-dashboard.servi
       }
     `
   ],
-  providers: [SampleDashboardService]
+  providers: [SampleDashboardService],
+  standalone: false
 })
 export class SamplePoPageDefaultDashboardComponent implements OnInit {
   @ViewChild('formShare', { static: true }) formShare: NgForm;
@@ -34,7 +35,7 @@ export class SamplePoPageDefaultDashboardComponent implements OnInit {
   items: Array<object>;
 
   public readonly actions: Array<PoPageAction> = [
-    { label: 'Share', action: this.modalOpen.bind(this), icon: 'ph ph-share' },
+    { label: 'Share', action: this.modalOpen.bind(this), icon: 'an an-share' },
     { label: 'GitHub', url: 'https://github.com/po-ui/po-angular' },
     { label: 'Components', url: '/documentation' },
     { label: 'Disable notification', action: this.disableNotification.bind(this), disabled: () => this.isSubscribed }

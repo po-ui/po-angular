@@ -3,7 +3,8 @@ import { PoDynamicViewField } from '@po-ui/ng-components';
 
 @Component({
   selector: 'sample-po-dynamic-view-container',
-  templateUrl: './sample-po-dynamic-view-container.component.html'
+  templateUrl: './sample-po-dynamic-view-container.component.html',
+  standalone: false
 })
 export class SamplePoDynamicViewContainerComponent {
   fields: Array<PoDynamicViewField> = [
@@ -14,11 +15,11 @@ export class SamplePoDynamicViewContainerComponent {
     { property: 'rg', label: 'RG', gridColumns: 4, order: 3 },
     { property: 'graduation', label: 'Graduation', gridColumns: 4 },
     { property: 'company', label: 'Company', container: 'Work Data' },
-    { property: 'job', tag: true, icon: 'ph ph-copy' },
+    { property: 'job', tag: true, icon: 'an an-copy' },
     { property: 'admissionDate', label: 'Admission date', type: 'date' },
     { property: 'hoursPerDay', label: 'Hours per day', type: 'time' },
     { property: 'wage', label: 'Wage', type: 'currency' },
-    { property: 'availability', tag: true, color: '#C596E7', icon: 'ph ph-check' },
+    { property: 'availability', tag: true, color: '#C596E7', icon: 'an an-check' },
     { property: 'city', label: 'City', container: 'Address' },
     { property: 'addressStreet', label: 'Street' },
     { property: 'addressNumber', label: 'Number' },

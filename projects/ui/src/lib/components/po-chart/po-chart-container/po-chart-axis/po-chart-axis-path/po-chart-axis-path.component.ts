@@ -4,7 +4,8 @@ import { PoChartPathCoordinates } from '../../../interfaces/po-chart-path-coordi
 
 @Component({
   selector: '[po-chart-axis-path]',
-  templateUrl: './po-chart-axis-path.component.svg'
+  templateUrl: './po-chart-axis-path.component.svg',
+  standalone: false
 })
 export class PoChartAxisPathComponent {
   @Input('p-axis-x-coordinates') axisXCoordinates: Array<PoChartPathCoordinates>;

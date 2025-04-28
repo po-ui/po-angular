@@ -17,7 +17,9 @@ import { Observable } from 'rxjs';
  * junto com a requisição.
  *
  */
-@Injectable()
+@Injectable({
+  providedIn: 'root'
+})
 export class PoBreadcrumbFavoriteService {
   private _url: string;
   private _bodyParams: object;

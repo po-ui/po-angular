@@ -1,5 +1,5 @@
 import { Directive, EventEmitter, Input, OnInit, Output } from '@angular/core';
-import { AbstractControl, ControlValueAccessor, Validator, Validators } from '@angular/forms';
+import { AbstractControl, ControlValueAccessor, Validator } from '@angular/forms';
 
 import { Observable, Subject, Subscription } from 'rxjs';
 import { debounceTime, distinctUntilChanged, switchMap, tap } from 'rxjs/operators';
@@ -8,18 +8,22 @@ import { poLocaleDefault } from '../../../services/po-language/po-language.const
 import { PoLanguageService } from '../../../services/po-language/po-language.service';
 import {
   convertToBoolean,
+  getDefaultSize,
   isTypeof,
   removeDuplicatedOptionsWithFieldValue,
   removeUndefinedAndNullOptionsWithFieldValue,
-  sortOptionsByProperty
+  sortOptionsByProperty,
+  validateSize
 } from '../../../utils/util';
 import { requiredFailed } from './../validators';
 
-import { PoMultiselectFilterMode } from './po-multiselect-filter-mode.enum';
-import { PoMultiselectFilter } from './po-multiselect-filter.interface';
+import { PoFieldSize } from '../../../enums/po-field-size.enum';
+import { PoThemeService } from '../../../services';
+import { PoMultiselectFilterMode } from './enums/po-multiselect-filter-mode.enum';
+import { PoMultiselectFilter } from './interfaces/po-multiselect-filter.interface';
+import { PoMultiselectLiterals } from './interfaces/po-multiselect-literals.interface';
+import { PoMultiselectOption } from './interfaces/po-multiselect-option.interface';
 import { PoMultiselectFilterService } from './po-multiselect-filter.service';
-import { PoMultiselectLiterals } from './po-multiselect-literals.interface';
-import { PoMultiselectOption } from './po-multiselect-option.interface';
 
 const PO_MULTISELECT_DEBOUNCE_TIME_DEFAULT = 400;
 const PO_MULTISELECT_FIELD_LABEL_DEFAULT = 'label';
@@ -112,6 +116,20 @@ export const poMultiselectLiteralsDefault = {
  */
 @Directive()
 export abstract class PoMultiselectBaseComponent implements ControlValueAccessor, OnInit, Validator {
+  // Propriedade interna que define se o ícone de ajuda adicional terá cursor clicável (evento) ou padrão (tooltip).
+  @Input() additionalHelpEventTrigger: string | undefined;
+
+  /**
+   * @optional
+   *
+   * @description
+   * Exibe um ícone de ajuda adicional ao `p-help`, com o texto desta propriedade no tooltip.
+   * Se o evento `p-additional-help` estiver definido, o tooltip não será exibido.
+   * **Como boa prática, indica-se utilizar um texto com até 140 caracteres.**
+   * > Requer um recuo mínimo de 8px se o componente estiver próximo à lateral da tela.
+   */
+  @Input('p-additional-help-tooltip') additionalHelpTooltip?: string;
+
   /**
    * @optional
    *
@@ -191,6 +209,29 @@ export abstract class PoMultiselectBaseComponent implements ControlValueAccessor
    *
    * @description
    *
+   * Limita a exibição da mensagem de erro a duas linhas e exibe um tooltip com o texto completo.
+   *
+   * > Caso essa propriedade seja definida como `true`, a mensagem de erro será limitada a duas linhas
+   * e um tooltip será exibido ao passar o mouse sobre a mensagem para mostrar o conteúdo completo.
+   *
+   * @default `false`
+   */
+  @Input('p-error-limit') errorLimit: boolean = false;
+
+  /**
+   * @optional
+   *
+   * @description
+   * Evento disparado ao clicar no ícone de ajuda adicional.
+   * Este evento ativa automaticamente a exibição do ícone de ajuda adicional ao `p-help`.
+   */
+  @Output('p-additional-help') additionalHelp = new EventEmitter<any>();
+
+  /**
+   * @optional
+   *
+   * @description
+   *
    * Pode ser informada uma função que será disparada quando houver alterações no ngModel.
    */
   @Output('p-change') change: EventEmitter<any> = new EventEmitter<any>();
@@ -199,15 +240,33 @@ export abstract class PoMultiselectBaseComponent implements ControlValueAccessor
    * @optional
    *
    * @description
+   * Evento disparado quando uma tecla é pressionada enquanto o foco está no componente.
+   * Retorna um objeto `KeyboardEvent` com informações sobre a tecla.
+   */
+  @Output('p-keydown') keydown: EventEmitter<KeyboardEvent> = new EventEmitter<KeyboardEvent>();
+
+  /**
+   * @optional
    *
-   * Define que o dropdown do multiselect será incluido no body da página e não suspenso com a caixa de texto do componente.
-   * Opção necessária para o caso de uso do componente em páginas que necessitam renderizar o multiselect fora do conteúdo principal.
+   * @description
    *
-   * > Obs: O uso dessa propriedade pode acarretar na perda sequencial da tabulação da página
+   * Define que o `listbox` e/ou tooltip (`p-additional-help-tooltip` e/ou `p-error-limit`) serão incluídos no body da
+   * página e não dentro do componente. Essa opção pode ser necessária em cenários com containers que possuem scroll ou
+   * overflow escondido, garantindo o posicionamento correto de ambos próximo ao elemento.
+   *
+   * > O uso dessa propriedade pode interferir na sequência de tabulação da página. Quando utilizado com
+   * `p-additional-help-tooltip`, leitores de tela como o NVDA podem não ler o conteúdo do tooltip.
    *
    * @default `false`
    */
   @Input({ alias: 'p-append-in-body', transform: convertToBoolean }) appendBox?: boolean = false;
+
+  /**
+   * @docsPrivate
+   *
+   * Determinar se o valor do compo deve retorna objeto do tipo {value: any, label: any}
+   */
+  @Input({ alias: 'p-control-value-with-label', transform: convertToBoolean }) controlValueWithLabel?: boolean = false;
 
   selectedOptions: Array<PoMultiselectOption | any> = [];
   visibleOptionsDropdown: Array<PoMultiselectOption | any> = [];
@@ -217,6 +276,7 @@ export abstract class PoMultiselectBaseComponent implements ControlValueAccessor
   filterSubject = new Subject();
   service: PoMultiselectFilterService;
   defaultService: PoMultiselectFilterService;
+  displayAdditionalHelp: boolean = false;
 
   // eslint-disable-next-line
   protected onModelTouched: any = null;
@@ -237,6 +297,7 @@ export abstract class PoMultiselectBaseComponent implements ControlValueAccessor
   private _autoHeight: boolean = false;
   private _fieldLabel?: string = PO_MULTISELECT_FIELD_LABEL_DEFAULT;
   private _fieldValue?: string = PO_MULTISELECT_FIELD_VALUE_DEFAULT;
+  private _size?: string = undefined;
   private language: string;
 
   private lastLengthModel;
@@ -410,6 +471,28 @@ export abstract class PoMultiselectBaseComponent implements ControlValueAccessor
    *
    * @description
    *
+   * Define o tamanho do componente:
+   * - `small`: altura do input como 32px (disponível apenas para acessibilidade AA).
+   * - `medium`: altura do input como 44px.
+   *
+   * > Caso a acessibilidade AA não esteja configurada, o tamanho `medium` será mantido.
+   * Para mais detalhes, consulte a documentação do [po-theme](https://po-ui.io/documentation/po-theme).
+   *
+   * @default `medium`
+   */
+  @Input('p-size') set size(value: string) {
+    this._size = validateSize(value, this.poThemeService, PoFieldSize);
+  }
+
+  get size(): string {
+    return this._size ?? getDefaultSize(this.poThemeService, PoFieldSize);
+  }
+
+  /**
+   * @optional
+   *
+   * @description
+   *
    * Indica que o campo será desabilitado.
    *
    * @default `false`
@@ -575,7 +658,10 @@ export abstract class PoMultiselectBaseComponent implements ControlValueAccessor
     return this._fieldValue;
   }
 
-  constructor(languageService: PoLanguageService) {
+  constructor(
+    languageService: PoLanguageService,
+    protected poThemeService: PoThemeService
+  ) {
     this.language = languageService.getShortLanguage();
   }
 
@@ -638,7 +724,7 @@ export abstract class PoMultiselectBaseComponent implements ControlValueAccessor
 
   callOnChange(selectedOptions: Array<PoMultiselectOption | any>) {
     if (this.onModelChange) {
-      this.onModelChange(this.getValuesFromOptions(selectedOptions));
+      this.onModelChange(this.getValueUpdate(selectedOptions));
       this.eventChange(selectedOptions);
     }
   }
@@ -731,7 +817,7 @@ export abstract class PoMultiselectBaseComponent implements ControlValueAccessor
   }
 
   writeValue(values: any): void {
-    values = values || [];
+    values = this.getValueWrite(values) || [];
 
     if (this.service && values.length) {
       this.getObjectsByValuesSubscription = this.service.getObjectsByValues(values).subscribe(options => {
@@ -764,6 +850,22 @@ export abstract class PoMultiselectBaseComponent implements ControlValueAccessor
 
   registerOnValidatorChange(fn: () => void) {
     this.validatorChange = fn;
+  }
+
+  private getValueUpdate(selectedOptions: Array<PoMultiselectOption | any>) {
+    if (this.controlValueWithLabel && selectedOptions?.length) {
+      return selectedOptions.map(option => ({ value: option[this.fieldValue], label: option[this.fieldLabel] }));
+    }
+
+    return this.getValuesFromOptions(selectedOptions);
+  }
+
+  private getValueWrite(data: any) {
+    if (this.controlValueWithLabel && data?.length && data.every(x => x?.value !== undefined)) {
+      return data.map(option => option.value);
+    }
+
+    return data;
   }
 
   private setLabelsAndValuesOptions() {

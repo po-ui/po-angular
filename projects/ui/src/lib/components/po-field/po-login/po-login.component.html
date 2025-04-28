@@ -12,15 +12,18 @@
         p-icon="ICON_USER"
         class="po-field-icon {{ disabled ? 'po-icon-input-disabled' : 'po-icon-input' }}"
         [class.po-field-icon-disabled]="disabled"
+        [class.po-field-icon-aa]="size === 'small'"
       ></po-icon>
     </div>
 
     <input
       #inp
-      class="po-input po-input-icon-left"
+      class="po-input {{ size === 'small' ? 'po-input-aa' : '' }} po-input-icon-left"
+      [class.po-input-icon-left-aa]="size === 'small'"
       [attr.name]="name"
       [autocomplete]="autocomplete"
       [class.po-input-icon-right]="clean"
+      [class.po-input-icon-right-aa]="clean && size === 'small'"
       [disabled]="disabled"
       [id]="id"
       [placeholder]="disabled ? '' : placeholder"
@@ -31,6 +34,7 @@
       (click)="eventOnClick($event)"
       (focus)="eventOnFocus($event)"
       (input)="eventOnInput($event)"
+      (keydown)="onKeyDown($event)"
     />
 
     <div class="po-field-icon-container-right">
@@ -38,12 +42,23 @@
         class="po-icon-input"
         *ngIf="clean && !disabled && !readonly"
         [p-element-ref]="inputEl"
+        [p-size]="size"
         (p-change-event)="clear($event)"
       >
       </po-clean>
     </div>
   </div>
 
-  <po-field-container-bottom [p-help]="help" [p-disabled]="disabled" [p-error-pattern]="getErrorPattern()">
+  <po-field-container-bottom
+    *ngIf="!readonly"
+    [p-additional-help-tooltip]="getAdditionalHelpTooltip()"
+    [p-help]="help"
+    [p-disabled]="disabled"
+    [p-error-pattern]="getErrorPattern()"
+    [p-error-limit]="errorLimit"
+    [p-show-additional-help]="displayAdditionalHelp"
+    [p-show-additional-help-icon]="showAdditionalHelpIcon()"
+    (p-additional-help)="emitAdditionalHelp()"
+  >
   </po-field-container-bottom>
 </po-field-container>

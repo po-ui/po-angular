@@ -10,7 +10,8 @@ import { PoPageJobSchedulerService } from '../po-page-job-scheduler.service';
 
 @Component({
   selector: 'po-page-job-scheduler-execution',
-  templateUrl: 'po-page-job-scheduler-execution.component.html'
+  templateUrl: 'po-page-job-scheduler-execution.component.html',
+  standalone: false
 })
 export class PoPageJobSchedulerExecutionComponent implements OnInit, AfterViewInit {
   @ViewChild('formExecution', { static: true }) form: NgForm;
@@ -20,12 +21,14 @@ export class PoPageJobSchedulerExecutionComponent implements OnInit, AfterViewIn
   @ViewChild('monthlyTemplate', { static: true }) monthlyTemplate;
   @ViewChild('weeklyTemplate', { static: true }) weeklyTempalte;
 
+  @Input('p-components-size') componentsSize: string;
+
   @Input('p-is-edit') isEdit: boolean = false;
 
   @Input('p-literals') literals = <any>{};
 
-  @Input('p-no-parameters') noParameters: Boolean = true;
-  @Input('p-no-custom-params-component') noCustomParamsComponent: Boolean = true;
+  @Input('p-no-parameters') noParameters: boolean = true;
+  @Input('p-no-custom-params-component') noCustomParamsComponent: boolean = true;
 
   @Output('p-change-process') changeProcess: EventEmitter<any> = new EventEmitter<any>();
 

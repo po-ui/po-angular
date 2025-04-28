@@ -9,10 +9,11 @@ import {
   ViewChild
 } from '@angular/core';
 
-import { isTypeof } from '../../utils/util';
 import { PoLanguageService } from '../../services/po-language/po-language.service';
+import { isTypeof } from '../../utils/util';
 import { PoPopupComponent } from '../po-popup/po-popup.component';
 
+import { PoThemeService } from '../../services';
 import { PoListViewAction } from './interfaces/po-list-view-action.interface';
 import { PoListViewBaseComponent } from './po-list-view-base.component';
 import { PoListViewContentTemplateDirective } from './po-list-view-content-template/po-list-view-content-template.directive';
@@ -49,7 +50,8 @@ import { PoListViewDetailTemplateDirective } from './po-list-view-detail-templat
       transition('* => void', [style({ height: '*', 'overflow-y': 'hidden' }), animate(100, style({ height: 0 }))]),
       transition('void => *', [style({ height: '0' }), animate(100, style({ height: '*' }))])
     ])
-  ]
+  ],
+  standalone: false
 })
 export class PoListViewComponent extends PoListViewBaseComponent implements AfterContentInit, DoCheck {
   @ContentChild(PoListViewContentTemplateDirective, { static: true })
@@ -64,9 +66,10 @@ export class PoListViewComponent extends PoListViewBaseComponent implements Afte
   constructor(
     private changeDetector: ChangeDetectorRef,
     differs: IterableDiffers,
-    languageService: PoLanguageService
+    languageService: PoLanguageService,
+    protected poThemeService: PoThemeService
   ) {
-    super(languageService);
+    super(languageService, poThemeService);
     this.differ = differs.find([]).create(null);
   }
 

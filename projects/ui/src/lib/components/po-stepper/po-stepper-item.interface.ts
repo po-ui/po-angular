@@ -9,6 +9,9 @@ import { PoStepperStatus } from './enums/po-stepper-status.enum';
  * Interface para definição dos *steps* do componente `po-stepper` quando utilizada a propriedade `p-steps`.
  */
 export interface PoStepperItem {
+  /** Identificador único do step. */
+  id?: string;
+
   /** Define o ícone do *step* ativo. */
   iconActive?: string | TemplateRef<void>;
 

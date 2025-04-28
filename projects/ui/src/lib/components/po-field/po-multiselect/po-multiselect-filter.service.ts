@@ -1,12 +1,14 @@
-import { HttpClient, HttpHeaders } from '@angular/common/http';
+import { HttpClient } from '@angular/common/http';
 import { Injectable } from '@angular/core';
 
 import { Observable } from 'rxjs';
 import { map } from 'rxjs/operators';
-import { PoMultiselectFilter } from './po-multiselect-filter.interface';
-import { PoMultiselectOption } from './po-multiselect-option.interface';
+import { PoMultiselectFilter } from './interfaces/po-multiselect-filter.interface';
+import { PoMultiselectOption } from './interfaces/po-multiselect-option.interface';
 
-@Injectable()
+@Injectable({
+  providedIn: 'root'
+})
 export class PoMultiselectFilterService implements PoMultiselectFilter {
   fieldLabel: string = 'label';
   fieldValue: string = 'value';

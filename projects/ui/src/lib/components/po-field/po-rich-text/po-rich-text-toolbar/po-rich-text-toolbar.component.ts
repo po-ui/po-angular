@@ -14,7 +14,8 @@ const poRichTextDefaultColor = '#000000';
 
 @Component({
   selector: 'po-rich-text-toolbar',
-  templateUrl: './po-rich-text-toolbar.component.html'
+  templateUrl: './po-rich-text-toolbar.component.html',
+  standalone: false
 })
 export class PoRichTextToolbarComponent implements AfterViewInit {
   @ViewChild('colorPickerInput', { read: ElementRef }) colorPickerInput: ElementRef;
@@ -98,6 +99,8 @@ export class PoRichTextToolbarComponent implements AfterViewInit {
   get isInternetExplorer() {
     return isIE();
   }
+
+  @Input('p-size') size: string;
 
   constructor(private languageService: PoLanguageService) {
     this.literals = {

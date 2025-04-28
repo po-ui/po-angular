@@ -7,7 +7,8 @@ import { PoHttpRequestInterceptorService } from '@po-ui/ng-components';
 
 @Component({
   selector: 'sample-po-http-request-interceptor-labs',
-  templateUrl: './sample-po-http-request-interceptor-labs.component.html'
+  templateUrl: './sample-po-http-request-interceptor-labs.component.html',
+  standalone: false
 })
 export class SamplePoHttpRequestInterceptorLabsComponent implements OnInit, OnDestroy {
   countPendingRequestHeaderParam = false;

@@ -7,7 +7,8 @@ import { SamplePoComboSchedulingService } from './sample-po-combo-scheduling.ser
 @Component({
   selector: 'sample-po-combo-scheduling',
   templateUrl: './sample-po-combo-scheduling.component.html',
-  providers: [SamplePoComboSchedulingService]
+  providers: [SamplePoComboSchedulingService],
+  standalone: false
 })
 export class SamplePoComboSchedulingComponent implements OnInit {
   @ViewChild('schedulingForm', { static: true }) form: NgForm;

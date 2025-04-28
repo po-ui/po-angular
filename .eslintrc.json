@@ -90,7 +90,6 @@
           }
         ],
         "@typescript-eslint/no-empty-interface": "off",
-        "@typescript-eslint/no-extra-semi": "error",
         "@typescript-eslint/no-for-in-array": "error",
         "@typescript-eslint/no-inferrable-types": [
           "off",
@@ -272,7 +271,10 @@
         "sonarjs/no-useless-catch": "error",
         "sonarjs/prefer-immediate-return": "error",
         "space-before-function-paren": "off",
-        "space-in-parens": ["off", "never"]
+        "space-in-parens": ["off", "never"],
+        "@angular-eslint/prefer-standalone": "off",
+        "@typescript-eslint/no-unsafe-function-type": "off",
+        "@typescript-eslint/no-empty-object-type": "off"
       }
     },
     {

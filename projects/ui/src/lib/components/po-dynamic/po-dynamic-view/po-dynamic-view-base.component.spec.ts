@@ -6,16 +6,16 @@ import { PoTimePipe } from '../../../pipes/po-time/po-time.pipe';
 import { expectArraysSameOrdering, expectPropertiesValues } from '../../../util-test/util-expect.spec';
 
 import { Observable, mergeMap, of, timer } from 'rxjs';
+import { PoComboOption } from '../../po-field';
+import { PoComboFilter } from '../../po-field/po-combo/interfaces/po-combo-filter.interface';
+import { PoComboFilterService } from '../../po-field/po-combo/po-combo-filter.service';
+import { PoMultiselectFilter } from '../../po-field/po-multiselect/interfaces/po-multiselect-filter.interface';
+import { PoMultiselectFilterService } from '../../po-field/po-multiselect/po-multiselect-filter.service';
 import * as PoDynamicUtil from '../po-dynamic.util';
 import { PoDynamicViewRequest } from './interfaces/po-dynamic-view-request.interface';
 import { PoDynamicViewBaseComponent } from './po-dynamic-view-base.component';
 import { PoDynamicViewField } from './po-dynamic-view-field.interface';
 import { PoDynamicViewService } from './services/po-dynamic-view.service';
-import { PoComboFilterService } from '../../po-field/po-combo/po-combo-filter.service';
-import { PoMultiselectFilterService } from '../../po-field/po-multiselect/po-multiselect-filter.service';
-import { PoComboFilter } from '../../po-field/po-combo/interfaces/po-combo-filter.interface';
-import { PoMultiselectFilter } from '../../po-field/po-multiselect/po-multiselect-filter.interface';
-import { PoComboOption } from '../../po-field';
 
 class DynamicViewService implements PoDynamicViewRequest {
   getObjectByValue(id: string): Observable<any> {
@@ -582,7 +582,7 @@ describe('PoDynamicViewBaseComponent:', () => {
         expect(component.ensureFieldHasContainer).toHaveBeenCalled();
       });
 
-      it('should call createFieldWithService if the field has a container, even if the property value is null', () => {
+      it('should call searchById and update newFields when createFieldWithService is executed', fakeAsync(() => {
         component.fields = [
           {
             searchService: 'https://api/test',
@@ -592,17 +592,40 @@ describe('PoDynamicViewBaseComponent:', () => {
             label: 'Empresa'
           }
         ];
+        component.value = { empresa: null };
 
-        component.value = {
-          empresa: null
-        };
+        spyOn(component, <any>'searchById').and.returnValue(of('Test Value'));
+        spyOn(component, <any>'returnValues').and.callFake((field, value) => ({ ...field, value }));
+        spyOn(component, <any>'setContainerFields');
 
-        spyOn(component, <any>'createFieldWithService');
+        const newFields = [];
+        const oldField = { property: 'empresa' };
 
-        component['getConfiguredFields']();
+        component['createFieldWithService'](component.fields[0], newFields, oldField);
+        tick();
 
-        expect(component['createFieldWithService']).toHaveBeenCalled();
-      });
+        expect(component['searchById']).toHaveBeenCalledWith(null, component.fields[0]);
+        expect(component['returnValues']).toHaveBeenCalledWith(component.fields[0], 'Test Value');
+        expect(component['setContainerFields']).toHaveBeenCalled();
+      }));
+
+      it('should use default values "label" and "value" when fieldLabel and fieldValue are not defined', fakeAsync(
+        inject([PoComboFilterService], (comboService: PoComboFilterService) => {
+          component.service = comboService;
+
+          const fields: Array<PoDynamicViewField> = [{ property: 'test', optionsService: 'url.com' }];
+
+          component.value[fields[0].property] = '123';
+          component.fields = [...fields];
+
+          spyOn(component.service, 'configProperties');
+
+          component['getConfiguredFields']();
+          tick(500);
+
+          expect(component.service.configProperties).toHaveBeenCalledWith('url.com', 'label', 'value');
+        })
+      ));
     });
 
     it('searchById: should return null if value is empty', done => {

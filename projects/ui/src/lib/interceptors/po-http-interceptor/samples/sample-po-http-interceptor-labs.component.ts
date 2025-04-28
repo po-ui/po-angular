@@ -7,7 +7,8 @@ import { Subscription } from 'rxjs';
 
 @Component({
   selector: 'sample-po-http-interceptor-labs',
-  templateUrl: './sample-po-http-interceptor-labs.component.html'
+  templateUrl: './sample-po-http-interceptor-labs.component.html',
+  standalone: false
 })
 export class SamplePoHttpInterceptorLabsComponent implements OnDestroy, OnInit {
   headerParam: string;

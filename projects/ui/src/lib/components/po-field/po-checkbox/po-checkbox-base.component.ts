@@ -1,8 +1,9 @@
 import { Directive, EventEmitter, Input, Output } from '@angular/core';
 import { ControlValueAccessor } from '@angular/forms';
 
-import { convertToBoolean, uuid } from './../../../utils/util';
-import { PoCheckboxSize } from './po-checkbox-size.enum';
+import { PoThemeService } from '../../../services';
+import { convertToBoolean, getDefaultSize, uuid, validateSize } from './../../../utils/util';
+import { PoCheckboxSize } from './enums/po-checkbox-size.enum';
 
 /**
  * @description
@@ -47,6 +48,42 @@ import { PoCheckboxSize } from './po-checkbox-size.enum';
  */
 @Directive()
 export abstract class PoCheckboxBaseComponent implements ControlValueAccessor {
+  // Propriedade interna que define se o ícone de ajuda adicional terá cursor clicável (evento) ou padrão (tooltip).
+  @Input() additionalHelpEventTrigger: string | undefined;
+
+  /**
+   * @optional
+   *
+   * @description
+   * Exibe um ícone de ajuda adicional ao `p-help`, com o texto desta propriedade no tooltip.
+   * Se o evento `p-additional-help` estiver definido, o tooltip não será exibido.
+   * **Como boa prática, indica-se utilizar um texto com até 140 caracteres.**
+   * > Requer um recuo mínimo de 8px se o componente estiver próximo à lateral da tela.
+   */
+  @Input('p-additional-help-tooltip') additionalHelpTooltip?: string;
+
+  /**
+   * @optional
+   *
+   * @description
+   *
+   * Define que o tooltip (`p-additional-help-tooltip`) será incluído no body da página e não dentro do componente. Essa
+   * opção pode ser necessária em cenários com containers que possuem scroll ou overflow escondido, garantindo o
+   * posicionamento correto do tooltip próximo ao elemento.
+   *
+   * > Quando utilizado com `p-additional-help-tooltip`, leitores de tela como o NVDA podem não ler o conteúdo do tooltip.
+   *
+   * @default `false`
+   */
+  @Input({ alias: 'p-append-in-body', transform: convertToBoolean }) appendBox?: boolean = false;
+
+  /**
+   * @optional
+   *
+   * @description
+   * Texto de apoio do campo */
+  @Input('p-help') help?: string;
+
   /** Define o nome do *checkbox*. */
   @Input('name') name: string;
 
@@ -70,10 +107,31 @@ export abstract class PoCheckboxBaseComponent implements ControlValueAccessor {
    * @optional
    *
    * @description
+   * Evento disparado ao clicar no ícone de ajuda adicional.
+   * Este evento ativa automaticamente a exibição do ícone de ajuda adicional ao `p-help`.
+   */
+  @Output('p-additional-help') additionalHelp = new EventEmitter<any>();
+
+  // Evento disparado ao sair do campo.
+  @Output('p-blur') blur: EventEmitter<any> = new EventEmitter();
+
+  /**
+   * @optional
+   *
+   * @description
    *
    * Evento disparado quando o valor do *checkbox* for alterado.
    */
   @Output('p-change') change: EventEmitter<any> = new EventEmitter<any>();
+
+  /**
+   * @optional
+   *
+   * @description
+   * Evento disparado quando uma tecla é pressionada enquanto o foco está no componente.
+   * Retorna um objeto `KeyboardEvent` com informações sobre a tecla.
+   */
+  @Output('p-keydown') keydown: EventEmitter<KeyboardEvent> = new EventEmitter<KeyboardEvent>();
 
   //propriedade interna recebida do checkbox-group para verificar se o checkbox está ativo, inativo ou indeterminate
   @Input('p-checkboxValue') checkboxValue: boolean | null | string;
@@ -84,11 +142,13 @@ export abstract class PoCheckboxBaseComponent implements ControlValueAccessor {
   //propriedade interna recebida para desabilitar o tabindex do checkbox na utilização dentro de um list-box
   @Input({ alias: 'p-disabled-tabindex', transform: convertToBoolean }) disabladTabindex: boolean = false;
 
+  displayAdditionalHelp: boolean = false;
   id = uuid();
   propagateChange: any;
   onTouched;
 
   private _disabled?: boolean = false;
+  private _size?: string = undefined;
 
   /**
    * @optional
@@ -107,29 +167,31 @@ export abstract class PoCheckboxBaseComponent implements ControlValueAccessor {
     return this._disabled;
   }
 
-  private _size?: string = PoCheckboxSize.medium;
-
   /**
    * @optional
    *
    * @description
    *
-   * Define o tamanho do *checkbox*
+   * Define o tamanho da caixa de seleção do componente:
+   * - `small`: 16x16 (disponível apenas para acessibilidade AA).
+   * - `medium`: 24x24.
+   * - `large`: 32x32.
    *
-   * Valores válidos:
-   * - `medium`: o `po-checkbox` fica do tamanho padrão, com 24px de altura.;
-   * - `large`: o `po-checkbox` fica maior, com 32px de altura.;
+   * > Caso a acessibilidade AA não esteja configurada, o tamanho `medium` será mantido.
+   * Para mais detalhes, consulte a documentação do [po-theme](https://po-ui.io/documentation/po-theme).
    *
    * @default `medium`
    *
    */
   @Input('p-size') set size(value: string) {
-    this._size = PoCheckboxSize[value] ? PoCheckboxSize[value] : PoCheckboxSize.medium;
+    this._size = validateSize(value, this.poThemeService, PoCheckboxSize);
   }
 
   get size(): string {
-    return this._size;
+    return this._size ?? getDefaultSize(this.poThemeService, PoCheckboxSize);
   }
+
+  constructor(protected poThemeService: PoThemeService) {}
 
   changeValue() {
     if (this.propagateChange) {

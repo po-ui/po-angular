@@ -1,4 +1,4 @@
-import { Component, ElementRef, EventEmitter, Output, ViewChild, OnInit } from '@angular/core';
+import { Component, ElementRef, EventEmitter, Input, OnInit, Output, ViewChild } from '@angular/core';
 import { AbstractControl, NgForm } from '@angular/forms';
 
 import { isExternalLink, isIE } from '../../../../utils/util';
@@ -9,12 +9,15 @@ import { poRichTextLiteralsDefault } from '../po-rich-text-literals';
 
 @Component({
   selector: 'po-rich-text-link-modal',
-  templateUrl: './po-rich-text-link-modal.component.html'
+  templateUrl: './po-rich-text-link-modal.component.html',
+  standalone: false
 })
 export class PoRichTextLinkModalComponent implements OnInit {
   @ViewChild('modal', { static: true }) modal: PoModalComponent;
 
   @ViewChild('modalLinkForm') modalLinkForm: NgForm;
+
+  @Input('p-size') size: string;
 
   @Output('p-command') command = new EventEmitter<string | { command: string; value: string | any }>();
 

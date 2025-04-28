@@ -1,5 +1,6 @@
 import { ChangeDetectionStrategy, Component, OnChanges, OnInit, SimpleChanges } from '@angular/core';
 
+import { PoThemeService } from '../../services';
 import { PoTreeViewBaseComponent } from './po-tree-view-base.component';
 import { PoTreeViewItem } from './po-tree-view-item/po-tree-view-item.interface';
 import { PoTreeViewService } from './services/po-tree-view.service';
@@ -33,15 +34,19 @@ import { PoTreeViewService } from './services/po-tree-view.service';
   selector: 'po-tree-view',
   templateUrl: './po-tree-view.component.html',
   changeDetection: ChangeDetectionStrategy.OnPush,
-  providers: [PoTreeViewService]
+  providers: [PoTreeViewService],
+  standalone: false
 })
 export class PoTreeViewComponent extends PoTreeViewBaseComponent implements OnInit, OnChanges {
   get hasItems() {
     return !!(this.items && this.items.length);
   }
 
-  constructor(private treeViewService: PoTreeViewService) {
-    super();
+  constructor(
+    protected poThemeService: PoThemeService,
+    private treeViewService: PoTreeViewService
+  ) {
+    super(poThemeService);
   }
 
   ngOnInit() {

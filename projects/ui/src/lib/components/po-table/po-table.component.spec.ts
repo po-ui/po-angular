@@ -25,10 +25,16 @@ import { PoTableModule } from './po-table.module';
 import { PoTableService } from './services/po-table.service';
 import { provideHttpClient, withInterceptorsFromDi } from '@angular/common/http';
 
-@Component({ template: 'Search' })
+@Component({
+  template: 'Search',
+  standalone: false
+})
 export class SearchComponent {}
 
-@Component({ template: 'Home' })
+@Component({
+  template: 'Home',
+  standalone: false
+})
 export class TestMenuComponent {}
 
 export const routes: Routes = [
@@ -61,7 +67,7 @@ describe('PoTableComponent:', () => {
   let tableHeaderElement;
   let tableElement;
   let tableFooterElement;
-  let poTableService: PoTableService;
+  const poTableService: jasmine.SpyObj<PoTableService> = jasmine.createSpyObj('PoTableService', ['scrollListener']);
 
   // mocks
   let actions: Array<PoTableAction>;
@@ -230,7 +236,7 @@ describe('PoTableComponent:', () => {
         PoDateService,
         DecimalPipe,
         PoColorPaletteService,
-        PoTableService,
+        { provide: PoTableService, useValue: poTableService },
         { provide: CdkVirtualScrollViewport, useValue: mockViewPort },
         { provide: changeDetector, useValue: changeDetector },
         provideHttpClient(withInterceptorsFromDi()),
@@ -250,8 +256,6 @@ describe('PoTableComponent:', () => {
     fixture.detectChanges();
 
     component.infiniteScroll = false;
-
-    poTableService = TestBed.inject(PoTableService);
 
     nativeElement = fixture.debugElement.nativeElement;
 
@@ -2895,6 +2899,16 @@ describe('PoTableComponent:', () => {
 
       expect(res).toEqual(tableColumnTemplate.templateRef);
     });
+
+    it('getTemplate: should return null if component is not initialized', () => {
+      component.initialized = false;
+
+      const column: PoTableColumn = { property: 'status' };
+
+      const res = component.getTemplate(column);
+
+      expect(res).toBeNull();
+    });
   });
 
   it('hasRowTemplateWithArrowDirectionRight: should be false if tableRowTemplateArrowDirection is left', () => {
@@ -2917,7 +2931,7 @@ describe('PoTableComponent:', () => {
     component.height = 100;
     component.infiniteScroll = true;
 
-    component['subscriptionScrollEvent'] = poTableService.scrollListener(dummyElement).subscribe();
+    component['subscriptionScrollEvent'] = component['defaultService'].scrollListener(dummyElement).subscribe();
 
     component['removeListeners']();
 
@@ -3006,7 +3020,7 @@ describe('PoTableComponent:', () => {
 
     component.tableScrollable = new ElementRef(mockScrollableElement);
 
-    const spyScrollListener = spyOn(poTableService, 'scrollListener').and.returnValue(
+    const spyScrollListener = spyOn(component['defaultService'], 'scrollListener').and.returnValue(
       of({ target: { offsetHeight: 100, scrollTop: 100, scrollHeight: 1 } })
     );
 
@@ -3029,7 +3043,7 @@ describe('PoTableComponent:', () => {
 
     component.tableVirtualScroll = mockTableVirtualScroll;
 
-    const spyScrollListener = spyOn(poTableService, 'scrollListener').and.returnValue(
+    const spyScrollListener = spyOn(component['defaultService'], 'scrollListener').and.returnValue(
       of({ target: { offsetHeight: 100, scrollTop: 100, scrollHeight: 1 } })
     );
 
@@ -3310,5 +3324,75 @@ describe('PoTableComponent:', () => {
     component['changeHeaderWidth'].call(fakeTable);
 
     expect(fakeTable.headerWidth).toBe(300);
+  });
+
+  it('should return 0 if columnMasterDetail is defined', () => {
+    component['columnMasterDetail'] = { property: 'detail' } as any;
+    spyOnProperty(component, 'hasItems').and.returnValue(true);
+
+    const result = component['countExtraColumns']();
+
+    expect(result).toBe(0);
+  });
+
+  it('should return 1 if hasRowTemplate is true, hasRowTemplateWithArrowDirectionRight is false, and hasItems is true', () => {
+    component['columnMasterDetail'] = undefined;
+    spyOnProperty(component, 'hasRowTemplate').and.returnValue(true);
+    spyOnProperty(component, 'hasRowTemplateWithArrowDirectionRight').and.returnValue(false);
+    spyOnProperty(component, 'hasItems').and.returnValue(true);
+
+    const result = component['countExtraColumns']();
+
+    expect(result).toBe(1);
+  });
+
+  it('should return 1 if hasRowTemplateWithArrowDirectionRight is true, hasVisibleActions is true, and hasItems is true', () => {
+    component['columnMasterDetail'] = undefined;
+    spyOnProperty(component, 'hasRowTemplate').and.returnValue(true);
+    spyOnProperty(component, 'hasRowTemplateWithArrowDirectionRight').and.returnValue(true);
+    spyOnProperty(component, 'hasVisibleActions').and.returnValue(true);
+    spyOnProperty(component, 'hasItems').and.returnValue(true);
+
+    const result = component['countExtraColumns']();
+
+    expect(result).toBe(1);
+  });
+
+  it('should return 1 if hasRowTemplateWithArrowDirectionRight is true, hideColumnsManager is true, and hasItems is true', () => {
+    component['columnMasterDetail'] = undefined;
+    spyOnProperty(component, 'hasRowTemplate').and.returnValue(true);
+    spyOnProperty(component, 'hasRowTemplateWithArrowDirectionRight').and.returnValue(true);
+    component['hideColumnsManager'] = true;
+    spyOnProperty(component, 'hasItems').and.returnValue(true);
+
+    const result = component['countExtraColumns']();
+
+    expect(result).toBe(1);
+  });
+
+  it('should return 0 if no conditions are met and hasItems is true', () => {
+    component['columnMasterDetail'] = undefined;
+    spyOnProperty(component, 'hasRowTemplate').and.returnValue(false);
+    spyOnProperty(component, 'hasRowTemplateWithArrowDirectionRight').and.returnValue(false);
+    spyOnProperty(component, 'hasVisibleActions').and.returnValue(false);
+    component['hideColumnsManager'] = false;
+    spyOnProperty(component, 'hasItems').and.returnValue(true);
+
+    const result = component['countExtraColumns']();
+
+    expect(result).toBe(0);
+  });
+
+  it('should return 0 if hasItems is false, regardless of other conditions', () => {
+    component['columnMasterDetail'] = undefined;
+    spyOnProperty(component, 'hasRowTemplate').and.returnValue(true);
+    spyOnProperty(component, 'hasRowTemplateWithArrowDirectionRight').and.returnValue(true);
+    spyOnProperty(component, 'hasVisibleActions').and.returnValue(true);
+    component['hideColumnsManager'] = true;
+    spyOnProperty(component, 'hasItems').and.returnValue(false);
+
+    const result = component['countExtraColumns']();
+
+    expect(result).toBe(0);
   });
 });

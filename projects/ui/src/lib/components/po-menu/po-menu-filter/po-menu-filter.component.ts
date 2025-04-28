@@ -18,9 +18,12 @@ export const poMenuFilterLiteralsDefault = {
  */
 @Component({
   selector: 'po-menu-filter',
-  templateUrl: './po-menu-filter.component.html'
+  templateUrl: './po-menu-filter.component.html',
+  standalone: false
 })
 export class PoMenuFilterComponent {
+  @Input('p-components-size') componentsSize: string;
+
   @Input('p-loading') loading: boolean;
 
   @Input('p-enable-collapse') enableCollapse: boolean = false;

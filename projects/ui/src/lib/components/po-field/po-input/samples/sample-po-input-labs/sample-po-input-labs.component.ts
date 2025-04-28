@@ -1,12 +1,14 @@
 import { Component, OnInit } from '@angular/core';
 
-import { PoCheckboxGroupOption, PoSelectOption } from '@po-ui/ng-components';
+import { PoCheckboxGroupOption, PoRadioGroupOption, PoSelectOption } from '@po-ui/ng-components';
 
 @Component({
   selector: 'sample-po-input-labs',
-  templateUrl: './sample-po-input-labs.component.html'
+  templateUrl: './sample-po-input-labs.component.html',
+  standalone: false
 })
 export class SamplePoInputLabsComponent implements OnInit {
+  additionalHelpTooltip: string;
   input: string;
   errorPattern: string;
   event: string;
@@ -19,10 +21,11 @@ export class SamplePoInputLabsComponent implements OnInit {
   pattern: string;
   placeholder: string;
   properties: Array<string>;
+  size: string;
 
   public readonly iconOptions: Array<PoSelectOption> = [
-    { value: 'ph ph-newspaper', label: 'ph ph-newspaper' },
-    { value: 'ph ph-magnifying-glass', label: 'ph ph-magnifying-glass' },
+    { value: 'an an-newspaper', label: 'an an-newspaper' },
+    { value: 'an an-magnifying-glass', label: 'an an-magnifying-glass' },
     { value: 'fa fa-calculator', label: 'fa fa-calculator' }
   ];
 
@@ -37,7 +40,13 @@ export class SamplePoInputLabsComponent implements OnInit {
     { value: 'requiredFieldErrorMessage', label: 'Required Field Error Message' },
     { value: 'uppercase', label: 'Upper Case' },
     { value: 'showRequired', label: 'Show Required' },
-    { value: 'maskNoLengthValidation', label: 'Mask No Length Validation' }
+    { value: 'maskNoLengthValidation', label: 'Mask No Length Validation' },
+    { value: 'errorLimit', label: 'Limit Error Message' }
+  ];
+
+  public readonly sizeOptions: Array<PoRadioGroupOption> = [
+    { label: 'small', value: 'small' },
+    { label: 'medium', value: 'medium' }
   ];
 
   ngOnInit() {
@@ -49,6 +58,8 @@ export class SamplePoInputLabsComponent implements OnInit {
   }
 
   restore() {
+    this.additionalHelpTooltip = '';
     this.input = undefined;
+    this.size = 'medium';
   }
 }

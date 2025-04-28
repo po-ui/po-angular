@@ -9,9 +9,11 @@ import {
 
 @Component({
   selector: 'sample-po-multiselect-labs',
-  templateUrl: './sample-po-multiselect-labs.component.html'
+  templateUrl: './sample-po-multiselect-labs.component.html',
+  standalone: false
 })
 export class SamplePoMultiselectLabsComponent implements OnInit {
+  additionalHelpTooltip: string;
   customLiterals: PoMultiselectLiterals;
   event: string;
   filterMode: string;
@@ -28,6 +30,7 @@ export class SamplePoMultiselectLabsComponent implements OnInit {
   filterService: string;
   fieldLabel: string;
   fieldValue: string;
+  size: string;
 
   public readonly filterModeOptions: Array<PoRadioGroupOption> = [
     { label: 'Starts With', value: 'startsWith' },
@@ -43,7 +46,13 @@ export class SamplePoMultiselectLabsComponent implements OnInit {
     { value: 'hideSearch', label: 'Hide Search' },
     { value: 'autoHeight', label: 'Auto Height' },
     { value: 'sort', label: 'Sort' },
-    { value: 'hideSelectAll', label: 'Hide Select All' }
+    { value: 'hideSelectAll', label: 'Hide Select All' },
+    { value: 'errorLimit', label: 'Limit Error Message' }
+  ];
+
+  public readonly sizeOptions: Array<PoRadioGroupOption> = [
+    { label: 'small', value: 'small' },
+    { label: 'medium', value: 'medium' }
   ];
 
   ngOnInit() {
@@ -68,6 +77,7 @@ export class SamplePoMultiselectLabsComponent implements OnInit {
   }
 
   restore() {
+    this.additionalHelpTooltip = '';
     this.customLiterals = undefined;
     this.help = '';
     this.filterMode = undefined;
@@ -86,5 +96,6 @@ export class SamplePoMultiselectLabsComponent implements OnInit {
 
     this.event = '';
     this.multiselect = [];
+    this.size = 'medium';
   }
 }

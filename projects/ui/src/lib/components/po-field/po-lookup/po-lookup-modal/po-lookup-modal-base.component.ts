@@ -12,6 +12,7 @@ import { PoTableColumnSortType, PoTableColumnSpacing } from '../../../po-table';
 import { PoTableColumnSort } from '../../../po-table/interfaces/po-table-column-sort.interface';
 import { poTableLiteralsDefault } from '../../../po-table/po-table-base.component';
 
+import { PoFieldSize } from '../../../../enums/po-field-size.enum';
 import { PoLookupAdvancedFilter } from '../interfaces/po-lookup-advanced-filter.interface';
 import { PoLookupColumn } from '../interfaces/po-lookup-column.interface';
 import { PoLookupFilter } from '../interfaces/po-lookup-filter.interface';
@@ -157,6 +158,9 @@ export abstract class PoLookupModalBaseComponent implements OnDestroy, OnInit {
    */
   @Input('p-spacing') spacing: PoTableColumnSpacing = PoTableColumnSpacing.Medium;
 
+  /** Define o tamanho do componente. */
+  @Input('p-size') size: string;
+
   /**
    * Habilita ou desabilita a quebra automática de texto. Quando ativada, o texto que excede
    * o espaço disponível é transferido para a próxima linha em pontos apropriados para uma
@@ -201,7 +205,7 @@ export abstract class PoLookupModalBaseComponent implements OnDestroy, OnInit {
    * O componente envia como parâmetro um array de string com as colunas configuradas inicialmente.
    * Por exemplo: ["idCard", "name", "hireStatus", "age"].
    */
-  @Output('p-restore-column-manager') columnRestoreManager = new EventEmitter<Array<String>>();
+  @Output('p-restore-column-manager') columnRestoreManager = new EventEmitter<Array<string>>();
 
   hasNext = true;
   isLoading = false;
@@ -431,13 +435,12 @@ export abstract class PoLookupModalBaseComponent implements OnDestroy, OnInit {
 
   //Método responsável por criar os disclaimers quando abre o modal.
   setDisclaimersItems() {
-    if (this.selectedItems && !Array.isArray(this.selectedItems)) {
-      this.multiple ? (this.selecteds = [{ value: this.selectedItems }]) : (this.selecteds = [this.selectedItems]);
-      return;
-    }
-
-    if (this.selecteds.length === 0 && this.selectedItems && this.selectedItems.length) {
+    if (this.selectedItems && Array.isArray(this.selectedItems) && this.selectedItems.length > 0) {
       this.selecteds = [...this.selectedItems];
+    } else if (this.selectedItems && !Array.isArray(this.selectedItems)) {
+      this.selecteds = [this.selectedItems];
+    } else {
+      this.selecteds = [];
     }
   }
 
@@ -500,7 +503,7 @@ export abstract class PoLookupModalBaseComponent implements OnDestroy, OnInit {
 
   private getAdvancedFilters(advancedParams: any) {
     if (advancedParams && advancedParams.length > 0) {
-      const filters: Object = {};
+      const filters: object = {};
       let validatedAdvacendFilters: any;
 
       advancedParams.forEach((filter: any) => {

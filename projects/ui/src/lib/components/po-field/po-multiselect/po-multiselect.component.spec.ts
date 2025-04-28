@@ -13,10 +13,10 @@ import { PoTagComponent } from '../../po-tag/po-tag.component';
 import { PoFieldContainerComponent } from '../po-field-container/po-field-container.component';
 import { PoMultiselectBaseComponent } from '../po-multiselect/po-multiselect-base.component';
 import { PoFieldContainerBottomComponent } from './../po-field-container/po-field-container-bottom/po-field-container-bottom.component';
+import { PoMultiselectFilter } from './interfaces/po-multiselect-filter.interface';
+import { PoMultiselectOption } from './interfaces/po-multiselect-option.interface';
 import { PoMultiselectDropdownComponent } from './po-multiselect-dropdown/po-multiselect-dropdown.component';
-import { PoMultiselectFilter } from './po-multiselect-filter.interface';
 import { PoMultiselectFilterService } from './po-multiselect-filter.service';
-import { PoMultiselectOption } from './po-multiselect-option.interface';
 import { PoMultiselectComponent } from './po-multiselect.component';
 
 const poMultiselectFilterServiceStub: PoMultiselectFilter = {
@@ -194,22 +194,55 @@ describe('PoMultiselectComponent:', () => {
     expect(component.controlDropdownVisibility).toHaveBeenCalledWith(false);
   });
 
-  it('onKeyDown: should call controlDropdownVisibility arrow to down is pressed', () => {
-    const event = new KeyboardEvent('keydown', { keyCode: PoKeyCodeEnum.arrowDown });
-    const tagRemovable = document.createElement('span');
+  describe('onKeyDown:', () => {
+    it('should call controlDropdownVisibility arrow to down is pressed', () => {
+      const event = new KeyboardEvent('keydown', { keyCode: PoKeyCodeEnum.arrowDown });
+      const tagRemovable = document.createElement('span');
 
-    tagRemovable.setAttribute('class', 'po-tag-remove');
-    component.visibleTags = [tagRemovable, tagRemovable];
+      tagRemovable.setAttribute('class', 'po-tag-remove');
+      component.visibleTags = [tagRemovable, tagRemovable];
 
-    spyOn(component, 'controlDropdownVisibility');
-    spyOn(event, 'preventDefault');
+      spyOn(component, 'controlDropdownVisibility');
+      spyOn(event, 'preventDefault');
 
-    component.controlDropdownVisibility(true);
-    const onKeyDown = component.onKeyDown(event);
+      component.controlDropdownVisibility(true);
+      const onKeyDown = component.onKeyDown(event);
 
-    expect(onKeyDown).toBeUndefined();
-    expect(event.preventDefault).toHaveBeenCalled();
-    expect(component.controlDropdownVisibility).toHaveBeenCalledWith(true);
+      expect(onKeyDown).toBeUndefined();
+      expect(event.preventDefault).toHaveBeenCalled();
+      expect(component.controlDropdownVisibility).toHaveBeenCalledWith(true);
+    });
+
+    it('should emit event when field is focused', () => {
+      const fakeEvent = new KeyboardEvent('keydown', { key: 'Enter' });
+      component.inputElement = {
+        nativeElement: {
+          focus: () => {}
+        }
+      };
+
+      spyOn(component.keydown, 'emit');
+      spyOnProperty(document, 'activeElement', 'get').and.returnValue(component.inputElement.nativeElement);
+
+      component.onKeyDown(fakeEvent);
+
+      expect(component.keydown.emit).toHaveBeenCalledWith(fakeEvent);
+    });
+
+    it('should not emit event when field is not focused', () => {
+      const fakeEvent = new KeyboardEvent('keydown', { key: 'Enter' });
+      component.inputElement = {
+        nativeElement: {
+          focus: () => {}
+        }
+      };
+
+      spyOn(component.keydown, 'emit');
+      spyOnProperty(document, 'activeElement', 'get').and.returnValue(document.createElement('div'));
+      component.onKeyDown(fakeEvent);
+
+      expect(component.keydown.emit).not.toHaveBeenCalled();
+    });
   });
 
   it('should call controlDropdownVisibility when enabled', () => {
@@ -382,6 +415,40 @@ describe('PoMultiselectComponent:', () => {
     expect(component.selectedOptions[0].value).toBe(1);
   });
 
+  it('closeTag: should handle value 0 correctly', () => {
+    component.visibleTags = [{ label: 'label0', value: 0 }];
+    component.selectedOptions = [{ label: 'label0', value: 0 }];
+
+    spyOn(component, 'updateVisibleItems');
+    spyOn(component, 'callOnChange');
+
+    component['closeTag'](0, 'click');
+
+    expect(component.updateVisibleItems).toHaveBeenCalled();
+    expect(component.callOnChange).toHaveBeenCalled();
+    expect(component.selectedOptions.some(opt => opt.value === 0)).toBeFalse();
+  });
+
+  describe('showAdditionalHelp:', () => {
+    it('should toggle `displayAdditionalHelp` from false to true', () => {
+      component.displayAdditionalHelp = false;
+
+      const result = component.showAdditionalHelp();
+
+      expect(result).toBeTrue();
+      expect(component.displayAdditionalHelp).toBeTrue();
+    });
+
+    it('should toggle `displayAdditionalHelp` from true to false', () => {
+      component.displayAdditionalHelp = true;
+
+      const result = component.showAdditionalHelp();
+
+      expect(result).toBeFalse();
+      expect(component.displayAdditionalHelp).toBeFalse();
+    });
+  });
+
   it('should call controlDropdownVisibility in wasClickedOnToggle', () => {
     component.dropdownOpen = true;
     fixture.detectChanges();
@@ -514,6 +581,26 @@ describe('PoMultiselectComponent:', () => {
       expect(fnDestroy).not.toThrow();
     });
 
+    describe('emitAdditionalHelp:', () => {
+      it('should emit additionalHelp when isAdditionalHelpEventTriggered returns true', () => {
+        spyOn(component.additionalHelp, 'emit');
+        spyOn(component as any, 'isAdditionalHelpEventTriggered').and.returnValue(true);
+
+        component.emitAdditionalHelp();
+
+        expect(component.additionalHelp.emit).toHaveBeenCalled();
+      });
+
+      it('should not emit additionalHelp when isAdditionalHelpEventTriggered returns false', () => {
+        spyOn(component.additionalHelp, 'emit');
+        spyOn(component as any, 'isAdditionalHelpEventTriggered').and.returnValue(false);
+
+        component.emitAdditionalHelp();
+
+        expect(component.additionalHelp.emit).not.toHaveBeenCalled();
+      });
+    });
+
     it('Should call `setService` if a change occurs in `filterService` and contain `filterService`', () => {
       const changes = { filterService: 'filterServiceURL' };
       component.filterService = 'http://localhost:4200/test';
@@ -581,6 +668,35 @@ describe('PoMultiselectComponent:', () => {
       component.focus();
 
       expect(component.inputElement.nativeElement.focus).not.toHaveBeenCalled();
+    });
+
+    describe('getAdditionalHelpTooltip:', () => {
+      it('should return null when isAdditionalHelpEventTriggered returns true', () => {
+        spyOn(component as any, 'isAdditionalHelpEventTriggered').and.returnValue(true);
+
+        const result = component.getAdditionalHelpTooltip();
+
+        expect(result).toBeNull();
+      });
+
+      it('should return additionalHelpTooltip when isAdditionalHelpEventTriggered returns false', () => {
+        const tooltip = 'Test Tooltip';
+        component.additionalHelpTooltip = tooltip;
+        spyOn(component as any, 'isAdditionalHelpEventTriggered').and.returnValue(false);
+
+        const result = component.getAdditionalHelpTooltip();
+
+        expect(result).toBe(tooltip);
+      });
+
+      it('should return undefined when additionalHelpTooltip is undefined and isAdditionalHelpEventTriggered returns false', () => {
+        component.additionalHelpTooltip = undefined;
+        spyOn(component as any, 'isAdditionalHelpEventTriggered').and.returnValue(false);
+
+        const result = component.getAdditionalHelpTooltip();
+
+        expect(result).toBeUndefined();
+      });
     });
 
     it(`calculateVisibleItems: should calc visible items and not set 'isCalculateVisibleItems' to false when
@@ -723,39 +839,70 @@ describe('PoMultiselectComponent:', () => {
       expect(focusSpy).not.toHaveBeenCalled();
     });
 
-    it('onBlur: should update aria-label if it contains "Unselected"', () => {
-      const inputEl = component.inputElement.nativeElement;
-      inputEl.setAttribute('aria-label', 'Unselected');
-      component.label = 'New Label';
-      spyOn(component, <any>'onModelTouched');
+    describe('onBlur', () => {
+      let setupTest;
 
-      component.onBlur();
+      beforeEach(() => {
+        setupTest = (tooltip: string, displayHelp: boolean, additionalHelpEvent: any) => {
+          component.additionalHelpTooltip = tooltip;
+          component.displayAdditionalHelp = displayHelp;
+          component.additionalHelp = additionalHelpEvent;
+          spyOn(component, 'showAdditionalHelp');
+        };
+      });
 
-      expect(inputEl.getAttribute('aria-label')).toBe('New Label');
-      expect(component['onModelTouched']).toHaveBeenCalled();
-    });
+      it('should call showAdditionalHelp when the tooltip is displayed', () => {
+        setupTest('Mensagem de apoio adicional.', true, { observed: false });
+        component.onBlur();
+        expect(component.showAdditionalHelp).toHaveBeenCalled();
+      });
 
-    it('onBlur: should update aria-label if it contains "Unselected" and label is empty', () => {
-      const inputEl = component.inputElement.nativeElement;
-      inputEl.setAttribute('aria-label', 'Unselected');
-      component.label = '';
-      spyOn(component, <any>'onModelTouched');
+      it('should not call showAdditionalHelp when tooltip is not displayed', () => {
+        setupTest('Mensagem de apoio adicional.', false, { observed: false });
+        component.onBlur();
+        expect(component.showAdditionalHelp).not.toHaveBeenCalled();
+      });
 
-      component.onBlur();
+      it('should not call showAdditionalHelp when additionalHelp event is true', () => {
+        setupTest('Mensagem de apoio adicional.', true, { observed: true });
+        component.onBlur();
+        expect(component.showAdditionalHelp).not.toHaveBeenCalled();
+      });
 
-      expect(inputEl.getAttribute('aria-label')).toBe('');
-      expect(component['onModelTouched']).toHaveBeenCalled();
-    });
+      it('should update aria-label if it contains "Unselected"', () => {
+        const inputEl = component.inputElement.nativeElement;
+        inputEl.setAttribute('aria-label', 'Unselected');
+        component.label = 'New Label';
+        spyOn(component, <any>'onModelTouched');
 
-    it('onBlur: should not update aria-label if it does not contain "Unselected"', () => {
-      const inputElement = component.inputElement.nativeElement;
-      inputElement.setAttribute('aria-label', 'Something Selected');
-      component.label = 'New Label';
-      spyOn(component, <any>'onModelTouched');
+        component.onBlur();
 
-      component.onBlur();
+        expect(inputEl.getAttribute('aria-label')).toBe('New Label');
+        expect(component['onModelTouched']).toHaveBeenCalled();
+      });
 
-      expect(component['onModelTouched']).toHaveBeenCalled();
+      it('should update aria-label if it contains "Unselected" and label is empty', () => {
+        const inputEl = component.inputElement.nativeElement;
+        inputEl.setAttribute('aria-label', 'Unselected');
+        component.label = '';
+        spyOn(component, <any>'onModelTouched');
+
+        component.onBlur();
+
+        expect(inputEl.getAttribute('aria-label')).toBe('');
+        expect(component['onModelTouched']).toHaveBeenCalled();
+      });
+
+      it('should not update aria-label if it does not contain "Unselected"', () => {
+        const inputElement = component.inputElement.nativeElement;
+        inputElement.setAttribute('aria-label', 'Something Selected');
+        component.label = 'New Label';
+        spyOn(component, <any>'onModelTouched');
+
+        component.onBlur();
+
+        expect(component['onModelTouched']).toHaveBeenCalled();
+      });
     });
 
     it('debounceResize: should call `calculateVisibleItems` after 200 milliseconds', done => {

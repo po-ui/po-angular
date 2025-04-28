@@ -4,7 +4,8 @@ import { PoMultiselectOption, PoRadioGroupOption } from '@po-ui/ng-components';
 
 @Component({
   selector: 'sample-po-multiselect-vacation',
-  templateUrl: './sample-po-multiselect-vacation.component.html'
+  templateUrl: './sample-po-multiselect-vacation.component.html',
+  standalone: false
 })
 export class SamplePoMultiselectVacationComponent implements OnInit {
   days: number;

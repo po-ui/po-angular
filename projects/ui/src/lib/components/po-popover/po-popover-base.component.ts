@@ -29,6 +29,19 @@ const PO_POPOVER_TRIGGERS = ['click', 'hover'];
 @Directive()
 export class PoPopoverBaseComponent {
   /**
+   * @optional
+   *
+   * @description
+   *
+   * Define que o popover será inserido no body da página em vez do elemento definido em `p-target`. Essa opção pode
+   * ser necessária em cenários com containers que possuem scroll ou overflow escondido, garantindo o posicionamento
+   * correto do conteúdo próximo ao elemento.
+   *
+   * @default `false`
+   */
+
+  @Input({ alias: 'p-append-in-body', transform: convertToBoolean }) appendBox: boolean = false;
+  /**
    * @description
    *
    * ElementRef do componente de origem responsável por abrir o popover.

@@ -10,7 +10,8 @@ import { isTypeof } from '../../utils/util';
  * Pipe responsável por apresentar um horário baseado no formato de entrada definido na API do PO UI.
  */
 @Pipe({
-  name: 'po_time'
+  name: 'po_time',
+  standalone: false
 })
 export class PoTimePipe implements PipeTransform {
   transform(time: string, format?: string): string {

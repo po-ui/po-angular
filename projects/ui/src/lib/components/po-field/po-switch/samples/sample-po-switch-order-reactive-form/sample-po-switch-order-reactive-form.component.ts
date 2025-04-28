@@ -5,7 +5,8 @@ import { PoNotificationService, PoSwitchLabelPosition, PoTableColumn } from '@po
 
 @Component({
   selector: 'sample-po-switch-order-reactive-form',
-  templateUrl: './sample-po-switch-order-reactive-form.component.html'
+  templateUrl: './sample-po-switch-order-reactive-form.component.html',
+  standalone: false
 })
 export class SamplePoSwitchOrderReactiveFormComponent implements OnInit {
   formOrderSummary: UntypedFormGroup;

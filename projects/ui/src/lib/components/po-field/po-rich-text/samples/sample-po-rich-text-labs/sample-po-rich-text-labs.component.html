@@ -1,6 +1,7 @@
 <po-rich-text
   name="richText"
   [(ngModel)]="richText"
+  [p-additional-help-tooltip]="additionalHelpTooltip"
   [p-error-message]="errorMessage"
   [p-height]="height"
   [p-help]="help"
@@ -11,15 +12,19 @@
   [p-required]="properties.includes('required')"
   [p-hide-toolbar-actions]="toolbarHideActions"
   [p-show-required]="properties.includes('showRequired')"
+  [p-size]="size"
   (p-change)="changeEvent('p-change')"
   (p-change-model)="changeEvent('p-change-model')"
+  (p-keydown)="changeEvent('p-keydown')"
+  [p-error-limit]="properties?.includes('errorLimit')"
 >
 </po-rich-text>
 
 <po-divider></po-divider>
 
 <div class="po-row">
-  <po-textarea class="po-md-6" name="model" [(ngModel)]="richText" p-label="Model" p-readonly p-rows="8"> </po-textarea>
+  <po-textarea class="po-lg-6 po-md-12" name="model" [(ngModel)]="richText" p-label="Model" p-readonly p-rows="8">
+  </po-textarea>
 
   <po-info class="po-md-6" p-label="Event" [p-value]="event"> </po-info>
 </div>
@@ -27,44 +32,57 @@
 <po-divider p-label="Properties"></po-divider>
 
 <form #f="ngForm">
+  <po-input class="po-md-6" name="label" [(ngModel)]="label" p-clean p-label="Label"> </po-input>
+
+  <po-input class="po-md-6" name="help" [(ngModel)]="help" p-clean p-label="Help"> </po-input>
+
+  <po-input
+    class="po-md-6"
+    name="additionalHelpTooltip"
+    [(ngModel)]="additionalHelpTooltip"
+    p-clean
+    p-label="Additional Help Tooltip"
+  >
+  </po-input>
+
+  <po-input class="po-md-6" name="placeholder" [(ngModel)]="placeholder" p-clean p-label="Placeholder"> </po-input>
+
+  <po-input class="po-md-6" name="errorMessage" [(ngModel)]="errorMessage" p-clean p-label="Error Message"> </po-input>
+
+  <po-number class="po-md-6 po-lg-3" name="height" [(ngModel)]="height" p-label="Height"> </po-number>
+
+  <po-multiselect
+    class="po-md-6 po-lg-3"
+    name="multiselect"
+    p-label="Hide Toolbar Actions "
+    [p-options]="toolbarHideActionsOptions"
+    [(ngModel)]="toolbarHideActions"
+    p-placeholder="color"
+  >
+  </po-multiselect>
+
+  <po-checkbox-group
+    class="po-md-12"
+    name="properties"
+    [(ngModel)]="properties"
+    p-columns="4"
+    p-label="Properties"
+    [p-options]="propertiesOptions"
+  >
+  </po-checkbox-group>
+
+  <po-radio-group
+    class="po-md-12"
+    name="size"
+    [(ngModel)]="size"
+    p-columns="4"
+    p-label="Size"
+    p-help="Para aplicar o tamanho small, configure o nível de acessibilidade para AA, ajustável no navbar ou serviço de tema (https://po-ui.io/documentation/po-theme)."
+    [p-options]="sizeOptions"
+  >
+  </po-radio-group>
+
   <div class="po-row">
-    <po-input class="po-md-6" name="label" [(ngModel)]="label" p-clean p-label="Label"> </po-input>
-
-    <po-input class="po-md-6" name="help" [(ngModel)]="help" p-clean p-label="Help"> </po-input>
-  </div>
-
-  <div class="po-row">
-    <po-input class="po-md-6" name="placeholder" [(ngModel)]="placeholder" p-clean p-label="Placeholder"> </po-input>
-
-    <po-input class="po-md-6" name="errorMessage" [(ngModel)]="errorMessage" p-clean p-label="Error Message">
-    </po-input>
-  </div>
-
-  <div class="po-row">
-    <po-number class="po-md-1" name="height" [(ngModel)]="height" p-label="Height"> </po-number>
-
-    <po-checkbox-group
-      class="po-md-5"
-      name="properties"
-      [(ngModel)]="properties"
-      p-columns="4"
-      p-label="Properties"
-      [p-options]="propertiesOptions"
-    >
-    </po-checkbox-group>
-
-    <po-multiselect
-      class="po-md-6"
-      name="multiselect"
-      p-label="Hide Toolbar Actions "
-      [p-options]="toolbarHideActionsOptions"
-      [(ngModel)]="toolbarHideActions"
-      p-placeholder="color"
-    >
-    </po-multiselect>
-  </div>
-
-  <div class="po-row">
-    <po-button class="po-md-3" p-label="Sample Restore" (p-click)="restore()"> </po-button>
+    <po-button class="po-lg-3 po-md-6" p-label="Sample Restore" (p-click)="restore()"> </po-button>
   </div>
 </form>

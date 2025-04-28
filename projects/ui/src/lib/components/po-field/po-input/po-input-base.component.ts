@@ -2,7 +2,9 @@ import { ChangeDetectorRef, Directive, EventEmitter, Input, OnDestroy, Output, T
 import { AbstractControl, ControlValueAccessor, Validator, Validators } from '@angular/forms';
 
 import { Subscription, switchMap } from 'rxjs';
-import { convertToBoolean } from '../../../utils/util';
+import { PoFieldSize } from '../../../enums/po-field-size.enum';
+import { PoThemeService } from '../../../services';
+import { convertToBoolean, getDefaultSize, validateSize } from '../../../utils/util';
 import { ErrorAsyncProperties } from '../shared/interfaces/error-async-properties.interface';
 import { maxlengpoailed, minlengpoailed, patternFailed, requiredFailed } from './../validators';
 import { PoMask } from './po-mask';
@@ -56,6 +58,35 @@ import { PoMask } from './po-mask';
  */
 @Directive()
 export abstract class PoInputBaseComponent implements ControlValueAccessor, Validator, OnDestroy {
+  // Propriedade interna que define se o ícone de ajuda adicional terá cursor clicável (evento) ou padrão (tooltip).
+  @Input() additionalHelpEventTrigger: string | undefined;
+
+  /**
+   * @optional
+   *
+   * @description
+   * Exibe um ícone de ajuda adicional ao `p-help`, com o texto desta propriedade no tooltip.
+   * Se o evento `p-additional-help` estiver definido, o tooltip não será exibido.
+   * **Como boa prática, indica-se utilizar um texto com até 140 caracteres.**
+   * > Requer um recuo mínimo de 8px se o componente estiver próximo à lateral da tela.
+   */
+  @Input('p-additional-help-tooltip') additionalHelpTooltip?: string;
+
+  /**
+   * @optional
+   *
+   * @description
+   *
+   * Define que o tooltip (`p-additional-help-tooltip` e/ou `p-error-limit`) será incluído no body da página e não
+   * dentro do componente. Essa opção pode ser necessária em cenários com containers que possuem scroll ou overflow
+   * escondido, garantindo o posicionamento correto do tooltip próximo ao elemento.
+   *
+   * > Quando utilizado com `p-additional-help-tooltip`, leitores de tela como o NVDA podem não ler o conteúdo do tooltip.
+   *
+   * @default `false`
+   */
+  @Input({ alias: 'p-append-in-body', transform: convertToBoolean }) appendBox: boolean = false;
+
   /**
    * @optional
    *
@@ -78,7 +109,7 @@ export abstract class PoInputBaseComponent implements ControlValueAccessor, Vali
    *
    * É possível usar qualquer um dos ícones da [Biblioteca de ícones](https://po-ui.io/icons). conforme exemplo abaixo:
    * ```
-   * <po-input p-icon="ph ph-user" p-label="PO input"></po-input>
+   * <po-input p-icon="an an-user" p-label="PO input"></po-input>
    * ```
    * Também é possível utilizar outras fontes de ícones, por exemplo a biblioteca *Font Awesome*, da seguinte forma:
    * ```
@@ -136,6 +167,20 @@ export abstract class PoInputBaseComponent implements ControlValueAccessor, Vali
    * Para exibir a mensagem com o campo vazio, utilize a propriedade `p-required-field-error-message` em conjunto.
    */
   @Input('p-error-pattern') errorPattern?: string = '';
+
+  /**
+   * @optional
+   *
+   * @description
+   *
+   * Limita a exibição da mensagem de erro a duas linhas e exibe um tooltip com o texto completo.
+   *
+   * > Caso essa propriedade seja definida como `true`, a mensagem de erro será limitada a duas linhas
+   * e um tooltip será exibido ao passar o mouse sobre a mensagem para mostrar o conteúdo completo.
+   *
+   * @default `false`
+   */
+  @Input('p-error-limit') errorLimit: boolean = false;
 
   /**
    * @optional
@@ -211,6 +256,15 @@ export abstract class PoInputBaseComponent implements ControlValueAccessor, Vali
    * @optional
    *
    * @description
+   * Evento disparado ao clicar no ícone de ajuda adicional.
+   * Este evento ativa automaticamente a exibição do ícone de ajuda adicional ao `p-help`.
+   */
+  @Output('p-additional-help') additionalHelp = new EventEmitter<any>();
+
+  /**
+   * @optional
+   *
+   * @description
    *
    * Evento disparado ao sair do campo.
    */
@@ -243,13 +297,23 @@ export abstract class PoInputBaseComponent implements ControlValueAccessor, Vali
    */
   @Output('p-change-model') changeModel: EventEmitter<any> = new EventEmitter();
 
-  type: string;
+  /**
+   * @optional
+   *
+   * @description
+   * Evento disparado quando uma tecla é pressionada enquanto o foco está no componente.
+   * Retorna um objeto `KeyboardEvent` com informações sobre a tecla.
+   */
+  @Output('p-keydown') keydown: EventEmitter<KeyboardEvent> = new EventEmitter<KeyboardEvent>();
 
+  displayAdditionalHelp: boolean = false;
+  type: string;
   onChangePropagate: any = null;
   objMask: any;
   modelLastUpdate: any;
   isInvalid: boolean;
   hasValidatorRequired = false;
+
   private subscription: Subscription = new Subscription();
   protected onTouched: any = null;
 
@@ -260,6 +324,7 @@ export abstract class PoInputBaseComponent implements ControlValueAccessor, Vali
   private _minlength?: number;
   private _noAutocomplete?: boolean = false;
   private _placeholder?: string = '';
+  private _size?: string = undefined;
 
   /**
    * @optional
@@ -336,6 +401,28 @@ export abstract class PoInputBaseComponent implements ControlValueAccessor, Vali
     this.required = required === '' ? true : convertToBoolean(required);
 
     this.validateModel();
+  }
+
+  /**
+   * @optional
+   *
+   * @description
+   *
+   * Define o tamanho do componente:
+   * - `small`: altura do input como 32px (disponível apenas para acessibilidade AA).
+   * - `medium`: altura do input como 44px.
+   *
+   * > Caso a acessibilidade AA não esteja configurada, o tamanho `medium` será mantido.
+   * Para mais detalhes, consulte a documentação do [po-theme](https://po-ui.io/documentation/po-theme).
+   *
+   * @default `medium`
+   */
+  @Input('p-size') set size(value: string) {
+    this._size = validateSize(value, this.poThemeService, PoFieldSize);
+  }
+
+  get size(): string {
+    return this._size ?? getDefaultSize(this.poThemeService, PoFieldSize);
   }
 
   /**
@@ -451,7 +538,10 @@ export abstract class PoInputBaseComponent implements ControlValueAccessor, Vali
     }
   }
 
-  constructor(protected cd?: ChangeDetectorRef) {
+  constructor(
+    protected cd?: ChangeDetectorRef,
+    protected poThemeService?: PoThemeService
+  ) {
     this.objMask = new PoMask(this.mask, this.maskFormatModel);
   }
 
@@ -476,6 +566,16 @@ export abstract class PoInputBaseComponent implements ControlValueAccessor, Vali
     }
   }
 
+  emitAdditionalHelp() {
+    if (this.isAdditionalHelpEventTriggered()) {
+      this.additionalHelp.emit();
+    }
+  }
+
+  getAdditionalHelpTooltip() {
+    return this.isAdditionalHelpEventTriggered() ? null : this.additionalHelpTooltip;
+  }
+
   // Função implementada do ControlValueAccessor
   // Usada para interceptar os estados de habilitado via forms api
   setDisabledState(isDisabled: boolean) {
@@ -497,6 +597,36 @@ export abstract class PoInputBaseComponent implements ControlValueAccessor, Vali
 
   registerOnValidatorChange(fn: () => void) {
     this.validatorChange = fn;
+  }
+
+  showAdditionalHelpIcon() {
+    return !!this.additionalHelpTooltip || this.isAdditionalHelpEventTriggered();
+  }
+
+  /**
+   * Método que exibe `p-additionalHelpTooltip` ou executa a ação definida em `p-additionalHelp`.
+   * Para isso, será necessário configurar uma tecla de atalho utilizando o evento `p-keydown`.
+   *
+   * ```
+   * <po-nome-component
+   *  #component
+   *  ...
+   *  p-additional-help-tooltip="Mensagem de ajuda complementar"
+   *  (p-keydown)="onKeyDown($event, component)"
+   * ></po-nome-component>
+   * ```
+   * ```
+   * ...
+   * onKeyDown(event: KeyboardEvent, inp: PoNomeDoComponente): void {
+   *  if (event.code === 'F9') {
+   *    inp.showAdditionalHelp();
+   *  }
+   * }
+   * ```
+   */
+  showAdditionalHelp(): boolean {
+    this.displayAdditionalHelp = !this.displayAdditionalHelp;
+    return this.displayAdditionalHelp;
   }
 
   updateModel(value: any) {
@@ -581,6 +711,13 @@ export abstract class PoInputBaseComponent implements ControlValueAccessor, Vali
     if (this.validatorChange) {
       this.validatorChange();
     }
+  }
+
+  private isAdditionalHelpEventTriggered(): boolean {
+    return (
+      this.additionalHelpEventTrigger === 'event' ||
+      (this.additionalHelpEventTrigger === undefined && this.additionalHelp.observed)
+    );
   }
 
   // utilizado para validar o pattern na inicializacao, fazendo dessa forma o campo fica sujo (dirty).

@@ -1,12 +1,14 @@
 import { Component, OnInit } from '@angular/core';
 
-import { PoCheckboxGroupOption } from '@po-ui/ng-components';
+import { PoCheckboxGroupOption, PoRadioGroupOption } from '@po-ui/ng-components';
 
 @Component({
   selector: 'sample-po-textarea-labs',
-  templateUrl: './sample-po-textarea-labs.component.html'
+  templateUrl: './sample-po-textarea-labs.component.html',
+  standalone: false
 })
 export class SamplePoTextareaLabsComponent implements OnInit {
+  additionalHelpTooltip: string;
   event: string;
   help: string;
   label: string;
@@ -16,6 +18,7 @@ export class SamplePoTextareaLabsComponent implements OnInit {
   properties: Array<string>;
   fieldErrorMessage: string;
   rows: string;
+  size: string;
   textarea: string;
 
   public readonly propertiesOptions: Array<PoCheckboxGroupOption> = [
@@ -23,7 +26,13 @@ export class SamplePoTextareaLabsComponent implements OnInit {
     { value: 'optional', label: 'Optional' },
     { value: 'readonly', label: 'Read Only' },
     { value: 'required', label: 'Required' },
-    { value: 'showRequired', label: 'Show Required' }
+    { value: 'showRequired', label: 'Show Required' },
+    { value: 'errorLimit', label: 'Limit Error Message' }
+  ];
+
+  public readonly sizeOptions: Array<PoRadioGroupOption> = [
+    { label: 'small', value: 'small' },
+    { label: 'medium', value: 'medium' }
   ];
 
   ngOnInit() {
@@ -35,6 +44,7 @@ export class SamplePoTextareaLabsComponent implements OnInit {
   }
 
   restore() {
+    this.additionalHelpTooltip = '';
     this.textarea = undefined;
     this.label = undefined;
     this.help = undefined;
@@ -45,5 +55,6 @@ export class SamplePoTextareaLabsComponent implements OnInit {
     this.rows = undefined;
     this.placeholder = '';
     this.properties = [];
+    this.size = 'medium';
   }
 }

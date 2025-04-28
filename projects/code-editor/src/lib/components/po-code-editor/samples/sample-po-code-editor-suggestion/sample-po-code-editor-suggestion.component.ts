@@ -2,7 +2,8 @@ import { Component } from '@angular/core';
 
 @Component({
   selector: 'sample-po-code-editor-suggestion',
-  templateUrl: './sample-po-code-editor-suggestion.component.html'
+  templateUrl: './sample-po-code-editor-suggestion.component.html',
+  standalone: false
 })
 export class SamplePoCodeEditorSuggestionComponent {
   language = 'html';

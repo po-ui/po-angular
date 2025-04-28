@@ -2,7 +2,7 @@
 <% if(dataView === 'table') { %>
   <po-table
     [p-columns]="columns"
-    [p-container]="true"
+    p-container="border"
     [p-items]="items"
     [p-height]="400"
     [p-sort]="true"

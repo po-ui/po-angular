@@ -1,32 +1,43 @@
 import { Component, OnInit } from '@angular/core';
+import { FormGroup, FormBuilder } from '@angular/forms';
 
-import { PoCheckboxGroupOption, PoProgressStatus, PoRadioGroupOption, PoProgressSize } from '@po-ui/ng-components';
+import {
+  PoCheckboxGroupOption,
+  PoProgressStatus,
+  PoRadioGroupOption,
+  PoProgressSize,
+  PoProgressAction,
+  PoSelectOption,
+  PoNotificationService
+} from '@po-ui/ng-components';
 
 @Component({
   selector: 'sample-po-progress-labs',
-  templateUrl: './sample-po-progress-labs.component.html'
+  templateUrl: './sample-po-progress-labs.component.html',
+  standalone: false
 })
 export class SamplePoProgressLabsComponent implements OnInit {
   event: any;
   info: string;
   infoIcon: string;
-  properties: Array<string>;
-  status: PoProgressStatus;
+  disabledCancel: boolean;
+  indeterminate: boolean;
+  showPercentage: boolean;
+  status: PoProgressStatus = PoProgressStatus.Default;
   size: PoProgressSize = PoProgressSize.large;
   text: string;
   value: number;
+  action: PoProgressAction;
+  actionForm: FormGroup;
+  showAction: false;
+  properties: Array<string>;
+  sizeActions: string;
 
   infoIconsOptions: Array<PoRadioGroupOption> = [
-    { label: 'ph ph-warning-circle', value: 'ph ph-warning-circle' },
-    { label: 'ph ph-check', value: 'ph ph-check' },
-    { label: 'ph ph-user', value: 'ph ph-user' },
-    { label: 'ph ph-cloud-slash', value: 'ph ph-cloud-slash' }
-  ];
-
-  propertiesOptions: Array<PoCheckboxGroupOption> = [
-    { label: 'Disabled Cancel', value: 'disabledCancel' },
-    { label: 'Indeterminate', value: 'indeterminate' },
-    { label: 'Show percentage', value: 'showPercentage' }
+    { label: 'an an-warning-circle', value: 'an an-warning-circle' },
+    { label: 'an an-check', value: 'an an-check' },
+    { label: 'an an-user', value: 'an an-user' },
+    { label: 'an an-cloud-slash', value: 'an an-cloud-slash' }
   ];
 
   statusOptions: Array<PoRadioGroupOption> = [
@@ -40,8 +51,60 @@ export class SamplePoProgressLabsComponent implements OnInit {
     { label: 'Large', value: PoProgressSize.large }
   ];
 
+  sizeActionsOptions: Array<PoRadioGroupOption> = [
+    { label: 'small', value: 'small' },
+    { label: 'medium', value: 'medium' }
+  ];
+
+  public readonly typeOptions: Array<PoSelectOption> = [
+    { label: 'Danger', value: 'danger' },
+    { label: 'Default', value: 'default' }
+  ];
+
+  public readonly iconOptions: Array<PoSelectOption> = [
+    { value: 'an an-download', label: 'an an-download' },
+    { value: 'an an-Server', label: 'an an-Server' },
+    { value: 'an an-upload', label: 'an an-upload' },
+    { value: 'an an-share', label: 'an an-share' }
+  ];
+
+  public readonly actionOptions: Array<PoCheckboxGroupOption> = [
+    { label: 'Disabled', value: 'disabled' },
+    { label: 'Visible', value: 'visible' }
+  ];
+
+  public readonly propertiesOptions: Array<PoCheckboxGroupOption> = [
+    { value: 'disabledCancel', label: 'Disabled cancel' },
+    { value: 'indeterminate', label: 'Indeterminate' },
+    { value: 'showPercentage', label: 'Show percentage' }
+  ];
+
+  constructor(
+    private fb: FormBuilder,
+    private poNotification: PoNotificationService
+  ) {
+    this.initializeActionForm();
+  }
+
+  initializeActionForm() {
+    this.actionForm = this.fb.group({
+      label: [''],
+      icon: [''],
+      type: ['default'],
+      visible: [true],
+      disabled: [false]
+    });
+  }
+
   ngOnInit() {
     this.restore();
+    this.actionForm.valueChanges.subscribe(formValue => {
+      this.updateAction(formValue);
+    });
+  }
+
+  updateAction(formValue: any) {
+    this.action = formValue;
   }
 
   onEvent(event) {
@@ -52,10 +115,17 @@ export class SamplePoProgressLabsComponent implements OnInit {
     this.event = undefined;
     this.info = undefined;
     this.infoIcon = undefined;
-    this.properties = [];
-    this.status = undefined;
+    this.disabledCancel = false;
+    this.indeterminate = false;
+    this.showPercentage = false;
+    this.status = PoProgressStatus.Default;
     this.text = undefined;
     this.value = undefined;
     this.size = PoProgressSize.large;
+    this.actionForm.reset({ type: 'default', visible: true });
+    this.action = { label: '', type: 'default' };
+    this.showAction = false;
+    this.properties = [];
+    this.sizeActions = 'medium';
   }
 }

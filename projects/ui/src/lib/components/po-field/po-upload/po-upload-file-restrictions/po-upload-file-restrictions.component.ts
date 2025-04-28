@@ -9,7 +9,8 @@ import { poUploadLiteralsDefault } from '../po-upload-base.component';
 @Component({
   selector: 'po-upload-file-restrictions',
   templateUrl: './po-upload-file-restrictions.component.html',
-  changeDetection: ChangeDetectionStrategy.OnPush
+  changeDetection: ChangeDetectionStrategy.OnPush,
+  standalone: false
 })
 export class PoUploadFileRestrictionsComponent implements OnInit {
   @Input('p-max-files') maxFiles: number;

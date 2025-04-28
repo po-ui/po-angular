@@ -1,19 +1,20 @@
-import { Component, EventEmitter, Output, ViewChild } from '@angular/core';
-import { AbstractControl, NgForm } from '@angular/forms';
+import { Component, EventEmitter, Input, Output, ViewChild } from '@angular/core';
+import { NgForm } from '@angular/forms';
 
 import { convertImageToBase64 } from '../../../../utils/util';
 import { PoLanguageService } from './../../../../services/po-language/po-language.service';
 
 import { PoModalAction, PoModalComponent } from '../../../po-modal';
-import { poRichTextLiteralsDefault } from '../po-rich-text-literals';
-import { PoUploadComponent } from '../../po-upload/po-upload.component';
 import { PoUploadFileRestrictions } from '../../po-upload/interfaces/po-upload-file-restriction.interface';
+import { PoUploadComponent } from '../../po-upload/po-upload.component';
+import { poRichTextLiteralsDefault } from '../po-rich-text-literals';
 
 const uploadRestrictions = ['.apng', '.bmp', '.gif', '.ico', '.jpeg', '.jpg', '.png', '.svg'];
 
 @Component({
   selector: 'po-rich-text-image-modal',
-  templateUrl: './po-rich-text-image-modal.component.html'
+  templateUrl: './po-rich-text-image-modal.component.html',
+  standalone: false
 })
 export class PoRichTextImageModalComponent {
   @ViewChild('modal', { static: true }) modal: PoModalComponent;
@@ -21,6 +22,8 @@ export class PoRichTextImageModalComponent {
   @ViewChild('modalImageForm') modalImageForm: NgForm;
 
   @ViewChild('upload', { static: true }) upload: PoUploadComponent;
+
+  @Input('p-size') size: string;
 
   @Output('p-command') command = new EventEmitter<string | { command: string; value: string | any }>();
 

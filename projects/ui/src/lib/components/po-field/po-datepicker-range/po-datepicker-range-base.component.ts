@@ -1,5 +1,8 @@
 import { ChangeDetectorRef, Directive, EventEmitter, Input, OnDestroy, Output } from '@angular/core';
 import { AbstractControl, ControlValueAccessor, ValidationErrors, Validator, Validators } from '@angular/forms';
+import { Subscription, switchMap } from 'rxjs';
+import { PoFieldSize } from '../../../enums/po-field-size.enum';
+import { PoThemeService } from '../../../services';
 import { poLocaleDefault } from '../../../services/po-language/po-language.constant';
 import { PoLanguageService } from '../../../services/po-language/po-language.service';
 import { PoMask } from '../po-input/po-mask';
@@ -8,14 +11,15 @@ import { PoDateService } from './../../../services/po-date/po-date.service';
 import {
   convertIsoToDate,
   convertToBoolean,
+  getDefaultSize,
   replaceFormatSeparator,
   setYearFrom0To100,
-  validateDateRange
+  validateDateRange,
+  validateSize
 } from './../../../utils/util';
 import { PoDatepickerRangeLiterals } from './interfaces/po-datepicker-range-literals.interface';
 import { PoDatepickerRange } from './interfaces/po-datepicker-range.interface';
 import { poDatepickerRangeLiteralsDefault } from './po-datepicker-range.literals';
-import { Subscription, switchMap } from 'rxjs';
 
 /**
  * @description
@@ -60,6 +64,38 @@ import { Subscription, switchMap } from 'rxjs';
  */
 @Directive()
 export abstract class PoDatepickerRangeBaseComponent implements ControlValueAccessor, Validator, OnDestroy {
+  // Propriedade interna que define se o ícone de ajuda adicional terá cursor clicável (evento) ou padrão (tooltip).
+  @Input() additionalHelpEventTrigger: string | undefined;
+
+  /* Nome do componente. */
+  @Input('name') name: string;
+
+  /**
+   * @optional
+   *
+   * @description
+   * Exibe um ícone de ajuda adicional ao `p-help`, com o texto desta propriedade no tooltip.
+   * Se o evento `p-additional-help` estiver definido, o tooltip não será exibido.
+   * **Como boa prática, indica-se utilizar um texto com até 140 caracteres.**
+   * > Requer um recuo mínimo de 8px se o componente estiver próximo à lateral da tela.
+   */
+  @Input('p-additional-help-tooltip') additionalHelpTooltip?: string;
+
+  /**
+   * @optional
+   *
+   * @description
+   *
+   * Define que o `calendar` e/ou tooltip (`p-additional-help-tooltip` e/ou `p-error-limit`) serão incluídos no body da
+   * página e não dentro do componente. Essa opção pode ser necessária em cenários com containers que possuem scroll ou
+   * overflow escondido, garantindo o posicionamento correto de ambos próximo ao elemento.
+   *
+   * > Quando utilizado com `p-additional-help-tooltip`, leitores de tela como o NVDA podem não ler o conteúdo do tooltip.
+   *
+   * @default `false`
+   */
+  @Input({ alias: 'p-append-in-body', transform: convertToBoolean }) appendBox?: boolean = false;
+
   /**
    * @optional
    *
@@ -122,13 +158,46 @@ export abstract class PoDatepickerRangeBaseComponent implements ControlValueAcce
    * @optional
    *
    * @description
+   * Evento disparado ao clicar no ícone de ajuda adicional.
+   * Este evento ativa automaticamente a exibição do ícone de ajuda adicional ao `p-help`.
+   */
+  @Output('p-additional-help') additionalHelp = new EventEmitter<any>();
+
+  /**
+   * @optional
+   *
+   * @description
+   *
+   * Limita a exibição da mensagem de erro a duas linhas e exibe um tooltip com o texto completo.
+   *
+   * > Caso essa propriedade seja definida como `true`, a mensagem de erro será limitada a duas linhas
+   * e um tooltip será exibido ao passar o mouse sobre a mensagem para mostrar o conteúdo completo.
+   *
+   * @default `false`
+   */
+  @Input('p-error-limit') errorLimit: boolean = false;
+
+  /**
+   * @optional
+   *
+   * @description
    *
    * Evento disparado ao alterar valor do campo.
    */
   @Output('p-change') onChange: EventEmitter<any> = new EventEmitter<any>();
 
+  /**
+   * @optional
+   *
+   * @description
+   * Evento disparado quando uma tecla é pressionada enquanto o foco está no componente.
+   * Retorna um objeto `KeyboardEvent` com informações sobre a tecla.
+   */
+  @Output('p-keydown') keydown: EventEmitter<KeyboardEvent> = new EventEmitter<any>();
+
   errorMessage: string = '';
   dateRange: PoDatepickerRange = { start: '', end: '' };
+  displayAdditionalHelp: boolean = false;
 
   protected format: any = 'dd/mm/yyyy';
   protected isDateRangeInputFormatValid: boolean = true;
@@ -148,6 +217,7 @@ export abstract class PoDatepickerRangeBaseComponent implements ControlValueAcce
   private _required?: boolean = false;
   private _startDate?;
   private _locale?: string;
+  private _size?: string = undefined;
 
   private language;
   private onChangeModel: any;
@@ -380,6 +450,28 @@ export abstract class PoDatepickerRangeBaseComponent implements ControlValueAcce
    *
    * @description
    *
+   * Define o tamanho do componente:
+   * - `small`: altura do input como 32px (disponível apenas para acessibilidade AA).
+   * - `medium`: altura do input como 44px.
+   *
+   * > Caso a acessibilidade AA não esteja configurada, o tamanho `medium` será mantido.
+   * Para mais detalhes, consulte a documentação do [po-theme](https://po-ui.io/documentation/po-theme).
+   *
+   * @default `medium`
+   */
+  @Input('p-size') set size(value: string) {
+    this._size = validateSize(value, this.poThemeService, PoFieldSize);
+  }
+
+  get size(): string {
+    return this._size ?? getDefaultSize(this.poThemeService, PoFieldSize);
+  }
+
+  /**
+   * @optional
+   *
+   * @description
+   *
    * Data inicial.
    */
   @Input('p-start-date') set startDate(date: string | Date) {
@@ -424,6 +516,7 @@ export abstract class PoDatepickerRangeBaseComponent implements ControlValueAcce
   constructor(
     protected changeDetector: ChangeDetectorRef,
     protected poDateService: PoDateService,
+    protected poThemeService: PoThemeService,
     private languageService: PoLanguageService
   ) {
     this.language = languageService.getShortLanguage();

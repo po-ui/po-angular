@@ -3,8 +3,8 @@
     class="po-chart-axis-x-label" 
     dominant-baseline="middle"
     [attr.x]="item.xCoordinate"
-    [attr.y]="item.yCoordinate">
-    {{ item.label }}
+    [attr.y]="item.yCoordinate"> 
+    {{ formatValueAxis(item.label, "x") }}
   </svg:text> 
 </svg:g>
 
@@ -14,6 +14,6 @@
     [class.po-chart-centered-label]="!alignByTheCorners"
     [attr.x]="item.xCoordinate"
     [attr.y]="item.yCoordinate">
-    {{ item.label }}
+    {{ formatValueAxis(item.label, "y") }}
   </svg:text> 
 </svg:g>

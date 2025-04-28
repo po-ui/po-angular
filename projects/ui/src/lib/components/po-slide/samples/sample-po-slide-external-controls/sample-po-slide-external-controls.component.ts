@@ -4,7 +4,8 @@ import { PoSlideComponent } from '@po-ui/ng-components';
 
 @Component({
   selector: 'sample-po-slide-external-controls',
-  templateUrl: './sample-po-slide-external-controls.component.html'
+  templateUrl: './sample-po-slide-external-controls.component.html',
+  standalone: false
 })
 export class SamplePoSlideExternalControlsComponent {
   @ViewChild('slideComponent', { static: true }) slideComponent: PoSlideComponent;

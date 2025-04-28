@@ -4,7 +4,8 @@ import { PoModalPasswordRecoveryComponent, PoModalPasswordRecoveryType } from '@
 
 @Component({
   selector: 'sample-po-modal-password-recovery-request',
-  templateUrl: './sample-po-modal-password-recovery-request.component.html'
+  templateUrl: './sample-po-modal-password-recovery-request.component.html',
+  standalone: false
 })
 export class SamplePoModalPasswordRecoveryRequestComponent {
   @ViewChild(PoModalPasswordRecoveryComponent) poModalPasswordRecovery: PoModalPasswordRecoveryComponent;

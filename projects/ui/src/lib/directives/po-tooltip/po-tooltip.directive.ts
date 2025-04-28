@@ -28,7 +28,8 @@ const nativeElements = ['input', 'button'];
  */
 @Directive({
   selector: '[p-tooltip]',
-  providers: [PoTooltipControlPositionService]
+  providers: [PoTooltipControlPositionService],
+  standalone: false
 })
 export class PoTooltipDirective extends PoTooltipBaseDirective implements OnInit, OnDestroy {
   private arrowDirection: string;
@@ -90,6 +91,13 @@ export class PoTooltipDirective extends PoTooltipBaseDirective implements OnInit
   @HostListener('keydown', ['$event']) onKeyDown(event) {
     if (!this.displayTooltip && (event.code === 'Escape' || event.keyCode === 27)) {
       this.removeTooltipAction();
+    }
+  }
+
+  // Controla a visibilidade do tooltip, criado para auxiliar a propriedade `p-additional-help-tooltip`.
+  toggleTooltipVisibility(show: boolean) {
+    if (!this.displayTooltip) {
+      show ? this.addTooltipAction() : this.removeTooltipAction();
     }
   }
 

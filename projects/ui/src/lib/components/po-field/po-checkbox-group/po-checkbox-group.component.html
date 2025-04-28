@@ -1,31 +1,44 @@
 <po-field-container
   [p-disabled]="disabled"
-  [p-help]="help"
   [p-label]="label"
   [p-optional]="optional"
   [p-required]="required"
   [p-show-required]="showRequired"
 >
-  <div role="group" [attr.aria-label]="label" class="po-field-container-content po-checkbox-group-content">
-    <ul class="po-row po-pt-2 po-pb-1">
-      <li
-        *ngFor="let option of checkboxGroupOptionsView; trackBy: trackByFn"
-        class="po-checkbox-group-item po-md-{{ mdColumns }} po-lg-{{ columns }}"
-        [class.po-checkbox-group-item-disabled]="option.disabled || disabled"
-      >
-        <po-checkbox
-          #checkboxLabel
-          [p-label]="option.label"
-          [p-disabled]="option.disabled || disabled"
-          (click)="checkOption(option)"
-          (keydown)="onKeyDown($event, option)"
-          [p-checkboxValue]="checkedOptions[option.value] === null ? 'mixed' : checkedOptions[option.value]"
-          [p-required]="required"
+  <div class="po-field-container-content" [attr.name]="name">
+    <div role="group" [attr.aria-label]="label" class="po-checkbox-group-content">
+      <ul class="po-row">
+        <li
+          *ngFor="let option of checkboxGroupOptionsView; trackBy: trackByFn"
+          class="po-checkbox-group-item po-md-{{ mdColumns }} po-lg-{{ columns }}"
+          [class.po-checkbox-group-item-disabled]="option.disabled || disabled"
         >
-        </po-checkbox>
-      </li>
-    </ul>
-  </div>
+          <po-checkbox
+            #checkboxLabel
+            [p-label]="option.label"
+            [p-disabled]="option.disabled || disabled"
+            (p-blur)="onBlur(checkboxLabel)"
+            (click)="checkOption(option)"
+            (keydown)="onKeyDown($event, option, checkboxLabel)"
+            [p-checkboxValue]="checkedOptions[option.value] === null ? 'mixed' : checkedOptions[option.value]"
+            [p-required]="required"
+            [p-size]="size"
+          >
+          </po-checkbox>
+        </li>
+      </ul>
+    </div>
 
-  <po-field-container-bottom [p-error-pattern]="getErrorPattern()"></po-field-container-bottom>
+    <po-field-container-bottom
+      [p-additional-help-tooltip]="getAdditionalHelpTooltip()"
+      [p-append-in-body]="appendBox"
+      [p-help]="help"
+      [p-disabled]="disabled"
+      [p-error-limit]="errorLimit"
+      [p-error-pattern]="getErrorPattern()"
+      [p-show-additional-help]="displayAdditionalHelp"
+      [p-show-additional-help-icon]="showAdditionalHelpIcon()"
+      (p-additional-help)="emitAdditionalHelp()"
+    ></po-field-container-bottom>
+  </div>
 </po-field-container>

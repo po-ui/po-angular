@@ -13,7 +13,8 @@ import { PoTableSubtitleColumn } from './../po-table-subtitle-footer/po-table-su
 @Component({
   selector: 'po-table-subtitle-circle',
   templateUrl: './po-table-subtitle-circle.component.html',
-  changeDetection: ChangeDetectionStrategy.OnPush
+  changeDetection: ChangeDetectionStrategy.OnPush,
+  standalone: false
 })
 export class PoTableSubtitleCircleComponent {
   /** Esconde a tooltip. */

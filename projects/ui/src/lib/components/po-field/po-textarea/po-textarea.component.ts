@@ -11,6 +11,7 @@ import { NG_VALIDATORS, NG_VALUE_ACCESSOR } from '@angular/forms';
 
 import { uuid } from '../../../utils/util';
 
+import { PoThemeService } from '../../../services';
 import { PoTextareaBaseComponent } from './po-textarea-base.component';
 
 /**
@@ -54,7 +55,8 @@ import { PoTextareaBaseComponent } from './po-textarea-base.component';
       useExisting: forwardRef(() => PoTextareaComponent),
       multi: true
     }
-  ]
+  ],
+  standalone: false
 })
 export class PoTextareaComponent extends PoTextareaBaseComponent implements AfterViewInit {
   @ViewChild('inp', { read: ElementRef, static: true }) inputEl: ElementRef;
@@ -65,9 +67,16 @@ export class PoTextareaComponent extends PoTextareaBaseComponent implements Afte
 
   constructor(
     cd: ChangeDetectorRef,
-    private el: ElementRef
+    private el: ElementRef,
+    protected poThemeService: PoThemeService
   ) {
-    super(cd);
+    super(cd, poThemeService);
+  }
+
+  emitAdditionalHelp() {
+    if (this.isAdditionalHelpEventTriggered()) {
+      this.additionalHelp.emit();
+    }
   }
 
   /**
@@ -97,6 +106,10 @@ export class PoTextareaComponent extends PoTextareaBaseComponent implements Afte
     if (this.autoFocus) {
       this.focus();
     }
+  }
+
+  getAdditionalHelpTooltip() {
+    return this.isAdditionalHelpEventTriggered() ? null : this.additionalHelpTooltip;
   }
 
   getErrorPattern() {
@@ -151,6 +164,10 @@ export class PoTextareaComponent extends PoTextareaBaseComponent implements Afte
     this.onTouched?.();
     this.blur.emit();
     this.controlChangeEmitter();
+
+    if (this.getAdditionalHelpTooltip() && this.displayAdditionalHelp) {
+      this.showAdditionalHelp();
+    }
   }
 
   controlChangeEmitter() {
@@ -159,5 +176,50 @@ export class PoTextareaComponent extends PoTextareaBaseComponent implements Afte
     if (elementValue !== this.valueBeforeChange) {
       this.change.emit(elementValue);
     }
+  }
+
+  onKeyDown(event: KeyboardEvent): void {
+    const isFieldFocused = document.activeElement === this.inputEl.nativeElement;
+
+    if (isFieldFocused) {
+      this.keydown.emit(event);
+    }
+  }
+
+  /**
+   * Método que exibe `p-additionalHelpTooltip` ou executa a ação definida em `p-additionalHelp`.
+   * Para isso, será necessário configurar uma tecla de atalho utilizando o evento `p-keydown`.
+   *
+   * ```
+   * <po-textarea
+   *  #textarea
+   *  ...
+   *  p-additional-help-tooltip="Mensagem de ajuda complementar"
+   *  (p-keydown)="onKeyDown($event, textarea)"
+   * ></po-textarea>
+   * ```
+   * ```
+   * ...
+   * onKeyDown(event: KeyboardEvent, inp: PoTextareaComponent): void {
+   *  if (event.code === 'F9') {
+   *    inp.showAdditionalHelp();
+   *  }
+   * }
+   * ```
+   */
+  showAdditionalHelp(): boolean {
+    this.displayAdditionalHelp = !this.displayAdditionalHelp;
+    return this.displayAdditionalHelp;
+  }
+
+  showAdditionalHelpIcon() {
+    return !!this.additionalHelpTooltip || this.isAdditionalHelpEventTriggered();
+  }
+
+  private isAdditionalHelpEventTriggered(): boolean {
+    return (
+      this.additionalHelpEventTrigger === 'event' ||
+      (this.additionalHelpEventTrigger === undefined && this.additionalHelp.observed)
+    );
   }
 }

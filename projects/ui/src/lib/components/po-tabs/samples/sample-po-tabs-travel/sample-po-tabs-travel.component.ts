@@ -4,7 +4,8 @@ import { PoNotificationService, PoRadioGroupOption, PoSelectOption } from '@po-u
 
 @Component({
   selector: 'sample-po-tabs-travel',
-  templateUrl: './sample-po-tabs-travel.component.html'
+  templateUrl: './sample-po-tabs-travel.component.html',
+  standalone: false
 })
 export class SamplePoTabsTravelComponent {
   card: number;

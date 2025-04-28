@@ -1,16 +1,24 @@
 import { Component, OnInit } from '@angular/core';
 
-import { PoCheckboxGroupOption, PoSelectOption, PoDropdownAction, PoNotificationService } from '@po-ui/ng-components';
+import {
+  PoCheckboxGroupOption,
+  PoSelectOption,
+  PoDropdownAction,
+  PoRadioGroupOption,
+  PoNotificationService
+} from '@po-ui/ng-components';
 
 @Component({
   selector: 'sample-po-dropdown-labs',
-  templateUrl: './sample-po-dropdown-labs.component.html'
+  templateUrl: './sample-po-dropdown-labs.component.html',
+  standalone: false
 })
 export class SamplePoDropdownLabsComponent implements OnInit {
   action: PoDropdownAction;
   actions: Array<PoDropdownAction>;
   label: string;
   properties: Array<string>;
+  size: string;
 
   public readonly actionOptions: Array<PoCheckboxGroupOption> = [
     { label: 'Disabled', value: 'disabled' },
@@ -20,13 +28,18 @@ export class SamplePoDropdownLabsComponent implements OnInit {
   ];
 
   public readonly iconOptions: Array<PoSelectOption> = [
-    { value: 'ph ph-newspaper', label: 'ph ph-newspaper' },
-    { value: 'ph ph-magnifying-glass', label: 'ph ph-magnifying-glass' },
-    { value: 'ph ph-globe', label: 'ph ph-globe' },
+    { value: 'an an-newspaper', label: 'an an-newspaper' },
+    { value: 'an an-magnifying-glass', label: 'an an-magnifying-glass' },
+    { value: 'an an-globe', label: 'an an-globe' },
     { value: 'fa fa-podcast', label: 'fa fa-podcast' }
   ];
 
   public readonly propertiesOptions: Array<PoCheckboxGroupOption> = [{ value: 'disabled', label: 'Disabled' }];
+
+  public readonly sizeOptions: Array<PoRadioGroupOption> = [
+    { label: 'small', value: 'small' },
+    { label: 'medium', value: 'medium' }
+  ];
 
   public readonly typeOptions: Array<PoSelectOption> = [
     { label: 'Danger', value: 'danger' },
@@ -50,6 +63,7 @@ export class SamplePoDropdownLabsComponent implements OnInit {
   restore() {
     this.actions = [];
     this.label = 'PO Dropdown';
+    this.size = 'medium';
     this.properties = [];
     this.restoreActionForm();
   }

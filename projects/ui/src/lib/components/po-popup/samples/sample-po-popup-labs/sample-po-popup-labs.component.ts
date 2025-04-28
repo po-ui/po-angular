@@ -1,6 +1,12 @@
 import { Component, ElementRef, OnInit, ViewChild } from '@angular/core';
 
-import { PoNotificationService, PoCheckboxGroupOption, PoSelectOption, PoPopupAction } from '@po-ui/ng-components';
+import {
+  PoCheckboxGroupOption,
+  PoNotificationService,
+  PoPopupAction,
+  PoRadioGroupOption,
+  PoSelectOption
+} from '@po-ui/ng-components';
 
 @Component({
   selector: 'sample-po-popup-labs',
@@ -12,7 +18,8 @@ import { PoNotificationService, PoCheckboxGroupOption, PoSelectOption, PoPopupAc
         margin-bottom: 20px;
       }
     `
-  ]
+  ],
+  standalone: false
 })
 export class SamplePoPopupLabsComponent implements OnInit {
   @ViewChild('target', { read: ElementRef, static: true }) targetRef: ElementRef;
@@ -23,6 +30,7 @@ export class SamplePoPopupLabsComponent implements OnInit {
   position: string;
   positions: string;
   properties: Array<string>;
+  size: string;
 
   public readonly actionOptions: Array<PoCheckboxGroupOption> = [
     { label: 'Disabled', value: 'disabled' },
@@ -32,9 +40,9 @@ export class SamplePoPopupLabsComponent implements OnInit {
   ];
 
   public readonly iconOptions: Array<PoSelectOption> = [
-    { value: 'ph ph-newspaper', label: 'ph ph-newspaper' },
-    { value: 'ph ph-magnifying-glass', label: 'ph ph-magnifying-glass' },
-    { value: 'ph ph-globe', label: 'ph ph-globe' },
+    { value: 'an an-newspaper', label: 'an an-newspaper' },
+    { value: 'an an-magnifying-glass', label: 'an an-magnifying-glass' },
+    { value: 'an an-globe', label: 'an an-globe' },
     { label: 'fa fa-address-card', value: 'fa fa-address-card' },
     { label: 'fa fa-bell', value: 'fa fa-bell' }
   ];
@@ -55,6 +63,11 @@ export class SamplePoPopupLabsComponent implements OnInit {
   ];
 
   public readonly propertiesOptions: Array<PoCheckboxGroupOption> = [{ value: 'hideArrow', label: 'Hide arrow' }];
+
+  public readonly sizeOptions: Array<PoRadioGroupOption> = [
+    { label: 'small', value: 'small' },
+    { label: 'medium', value: 'medium' }
+  ];
 
   public readonly typeOptions: Array<PoSelectOption> = [
     { label: 'Danger', value: 'danger' },
@@ -85,6 +98,7 @@ export class SamplePoPopupLabsComponent implements OnInit {
     this.position = undefined;
     this.positions = '';
     this.properties = [];
+    this.size = 'medium';
     this.restoreActionForm();
   }
 

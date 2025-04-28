@@ -6,12 +6,13 @@ import {
   EventEmitter,
   Input,
   Output,
-  ViewChild,
-  TemplateRef
+  TemplateRef,
+  ViewChild
 } from '@angular/core';
 
+import { PoFieldSize } from '../../../../enums/po-field-size.enum';
 import { PoMultiselectLiterals } from '../../index';
-import { PoMultiselectOption } from '../po-multiselect-option.interface';
+import { PoMultiselectOption } from '../interfaces/po-multiselect-option.interface';
 import { PoListBoxComponent } from './../../../po-listbox/po-listbox.component';
 
 /**
@@ -24,7 +25,8 @@ import { PoListBoxComponent } from './../../../po-listbox/po-listbox.component';
 @Component({
   selector: 'po-multiselect-dropdown',
   templateUrl: './po-multiselect-dropdown.component.html',
-  changeDetection: ChangeDetectionStrategy.OnPush
+  changeDetection: ChangeDetectionStrategy.OnPush,
+  standalone: false
 })
 export class PoMultiselectDropdownComponent {
   /** Propriedade que indica se deve exibir o loading. */
@@ -58,6 +60,9 @@ export class PoMultiselectDropdownComponent {
   @Input('p-multiselect-template') multiselectTemplate: TemplateRef<any> | any;
 
   @Input('p-container-width') containerWidth: number;
+
+  /** Tamanho do componente. */
+  @Input('p-size') size: string;
 
   /** Evento disparado a cada tecla digitada na pesquisa. */
   @Output('p-change-search') changeSearch = new EventEmitter();

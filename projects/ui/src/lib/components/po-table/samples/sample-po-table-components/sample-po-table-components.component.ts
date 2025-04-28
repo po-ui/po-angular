@@ -10,7 +10,8 @@ import { SamplePoTableComponentsService } from './sample-po-table-components.ser
   selector: 'sample-po-table-components',
   templateUrl: './sample-po-table-components.component.html',
   styleUrls: ['./sample-po-table-components.component.css'],
-  providers: [SamplePoTableComponentsService]
+  providers: [SamplePoTableComponentsService],
+  standalone: false
 })
 export class SamplePoTableComponentsComponent implements OnInit {
   @ViewChild(PoModalComponent, { static: true }) poModal: PoModalComponent;
@@ -78,14 +79,14 @@ export class SamplePoTableComponentsComponent implements OnInit {
         {
           action: this.favorite.bind(this),
           color: this.isFavorite.bind(this),
-          icon: 'ph ph-star',
+          icon: 'an an-star',
           tooltip: 'Favorite',
           value: 'favorite'
         },
         {
           action: this.goToDocumentation.bind(this),
           disabled: this.canGoToDocumentation.bind(this),
-          icon: 'ph ph-arrow-square-out',
+          icon: 'an an-arrow-square-out',
           tooltip: 'Click to go to documentation',
           value: 'documentation'
         }

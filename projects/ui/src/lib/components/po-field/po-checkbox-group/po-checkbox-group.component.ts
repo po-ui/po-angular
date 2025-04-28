@@ -12,6 +12,7 @@ import {
 } from '@angular/core';
 import { NG_VALIDATORS, NG_VALUE_ACCESSOR } from '@angular/forms';
 
+import { PoThemeService } from '../../../services';
 import { PoCheckboxComponent } from '../po-checkbox/po-checkbox.component';
 import { PoCheckboxGroupOption } from './interfaces/po-checkbox-group-option.interface';
 import { PoCheckboxGroupBaseComponent } from './po-checkbox-group-base.component';
@@ -51,14 +52,18 @@ import { PoCheckboxGroupBaseComponent } from './po-checkbox-group-base.component
       useExisting: forwardRef(() => PoCheckboxGroupComponent),
       multi: true
     }
-  ]
+  ],
+  standalone: false
 })
 export class PoCheckboxGroupComponent extends PoCheckboxGroupBaseComponent implements AfterViewChecked, AfterViewInit {
   @ViewChildren('checkboxLabel') checkboxLabels: QueryList<PoCheckboxComponent>;
 
   private el: ElementRef = inject(ElementRef);
-  constructor(private changeDetector: ChangeDetectorRef) {
-    super();
+  constructor(
+    private changeDetector: ChangeDetectorRef,
+    protected poThemeService: PoThemeService
+  ) {
+    super(poThemeService);
   }
 
   ngAfterViewChecked(): void {
@@ -68,6 +73,18 @@ export class PoCheckboxGroupComponent extends PoCheckboxGroupBaseComponent imple
   ngAfterViewInit() {
     if (this.autoFocus) {
       this.focus();
+    }
+  }
+
+  onBlur(checkbox: PoCheckboxComponent) {
+    if (!this.isCheckboxOptionFocused(checkbox) && this.getAdditionalHelpTooltip() && this.displayAdditionalHelp) {
+      this.showAdditionalHelp();
+    }
+  }
+
+  emitAdditionalHelp() {
+    if (this.isAdditionalHelpEventTriggered()) {
+      this.additionalHelp.emit();
     }
   }
 
@@ -98,6 +115,10 @@ export class PoCheckboxGroupComponent extends PoCheckboxGroupBaseComponent imple
     }
   }
 
+  getAdditionalHelpTooltip() {
+    return this.isAdditionalHelpEventTriggered() ? null : this.additionalHelpTooltip;
+  }
+
   getErrorPattern() {
     return this.fieldErrorMessage && this.hasInvalidClass() ? this.fieldErrorMessage : '';
   }
@@ -108,7 +129,7 @@ export class PoCheckboxGroupComponent extends PoCheckboxGroupBaseComponent imple
     );
   }
 
-  onKeyDown(event: KeyboardEvent, option: PoCheckboxGroupOption) {
+  onKeyDown(event: KeyboardEvent, option: PoCheckboxGroupOption, checkbox?: PoCheckboxComponent) {
     const spaceBar = 32;
 
     if (event.which === spaceBar || event.keyCode === spaceBar) {
@@ -116,9 +137,54 @@ export class PoCheckboxGroupComponent extends PoCheckboxGroupBaseComponent imple
 
       event.preventDefault();
     }
+
+    if (this.isCheckboxOptionFocused(checkbox)) {
+      this.keydown.emit(event);
+    }
+  }
+
+  /**
+   * Método que exibe `p-additionalHelpTooltip` ou executa a ação definida em `p-additionalHelp`.
+   * Para isso, será necessário configurar uma tecla de atalho utilizando o evento `p-keydown`.
+   *
+   * ```
+   * <po-checkbox-group
+   *  #checkboxGroup
+   *  ...
+   *  p-additional-help-tooltip="Mensagem de ajuda complementar"
+   *  (p-keydown)="onKeyDown($event, checkboxGroup)"
+   * ></po-checkbox-group>
+   * ```
+   * ```
+   * ...
+   * onKeyDown(event: KeyboardEvent, inp: PoCheckboxGroupComponent): void {
+   *  if (event.code === 'F9') {
+   *    inp.showAdditionalHelp();
+   *  }
+   * }
+   * ```
+   */
+  showAdditionalHelp(): boolean {
+    this.displayAdditionalHelp = !this.displayAdditionalHelp;
+    return this.displayAdditionalHelp;
+  }
+
+  showAdditionalHelpIcon() {
+    return !!this.additionalHelpTooltip || this.isAdditionalHelpEventTriggered();
   }
 
   trackByFn(index) {
     return index;
+  }
+
+  private isAdditionalHelpEventTriggered(): boolean {
+    return (
+      this.additionalHelpEventTrigger === 'event' ||
+      (this.additionalHelpEventTrigger === undefined && this.additionalHelp.observed)
+    );
+  }
+
+  private isCheckboxOptionFocused(checkbox: PoCheckboxComponent): boolean {
+    return document.activeElement === checkbox.checkboxLabel.nativeElement;
   }
 }

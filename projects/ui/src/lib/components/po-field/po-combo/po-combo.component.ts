@@ -19,16 +19,18 @@ import { fromEvent, Subscription } from 'rxjs';
 import { debounceTime, distinctUntilChanged, filter, map, tap } from 'rxjs/operators';
 
 import { PoControlPositionService } from '../../../services/po-control-position/po-control-position.service';
-import { PoKeyCodeEnum } from './../../../enums/po-key-code.enum';
 import { PoLanguageService } from '../../../services/po-language/po-language.service';
+import { PoKeyCodeEnum } from './../../../enums/po-key-code.enum';
 
-import { PoComboBaseComponent } from './po-combo-base.component';
-import { PoComboFilterService } from './po-combo-filter.service';
+import { PoThemeService } from '../../../services/po-theme/po-theme.service';
+import { uuid } from '../../../utils/util';
+import { PoFieldSize } from '../../../enums/po-field-size.enum';
+import { PoListBoxComponent } from './../../po-listbox/po-listbox.component';
 import { PoComboGroup } from './interfaces/po-combo-group.interface';
 import { PoComboOption } from './interfaces/po-combo-option.interface';
+import { PoComboBaseComponent } from './po-combo-base.component';
+import { PoComboFilterService } from './po-combo-filter.service';
 import { PoComboOptionTemplateDirective } from './po-combo-option-template/po-combo-option-template.directive';
-import { uuid } from '../../../utils/util';
-import { PoListBoxComponent } from './../../po-listbox/po-listbox.component';
 
 const poComboContainerOffset = 8;
 const poComboContainerPositionDefault = 'bottom';
@@ -97,7 +99,8 @@ const poComboContainerPositionDefault = 'bottom';
       useExisting: forwardRef(() => PoComboComponent),
       multi: true
     }
-  ]
+  ],
+  standalone: false
 })
 export class PoComboComponent extends PoComboBaseComponent implements AfterViewInit, OnChanges, OnDestroy {
   @ContentChild(PoComboOptionTemplateDirective, { static: true }) comboOptionTemplate: PoComboOptionTemplateDirective;
@@ -136,9 +139,10 @@ export class PoComboComponent extends PoComboBaseComponent implements AfterViewI
     public renderer: Renderer2,
     private controlPosition: PoControlPositionService,
     protected changeDetector: ChangeDetectorRef,
+    protected poThemeService: PoThemeService,
     languageService: PoLanguageService
   ) {
-    super(languageService, changeDetector);
+    super(languageService, changeDetector, poThemeService);
 
     this.differ = differs.find([]).create(null);
   }
@@ -195,6 +199,12 @@ export class PoComboComponent extends PoComboBaseComponent implements AfterViewI
     }
   }
 
+  emitAdditionalHelp() {
+    if (this.isAdditionalHelpEventTriggered()) {
+      this.additionalHelp.emit();
+    }
+  }
+
   /**
    * Função que atribui foco ao componente.
    *
@@ -218,13 +228,21 @@ export class PoComboComponent extends PoComboBaseComponent implements AfterViewI
     }
   }
 
+  getAdditionalHelpTooltip() {
+    return this.isAdditionalHelpEventTriggered() ? null : this.additionalHelpTooltip;
+  }
+
   onBlur() {
     this.onModelTouched?.();
+    if (this.getAdditionalHelpTooltip() && this.displayAdditionalHelp) {
+      this.showAdditionalHelp();
+    }
   }
 
   onKeyDown(event?: any) {
-    const key = event.keyCode;
-    const inputValue = event.target.value;
+    const key = event?.keyCode;
+    const inputValue = event?.target?.value;
+    const isFieldFocused = document.activeElement === this.inputEl.nativeElement;
 
     if (event.shiftKey && key === PoKeyCodeEnum.tab) {
       this.controlComboVisibility(false);
@@ -280,6 +298,10 @@ export class PoComboComponent extends PoComboBaseComponent implements AfterViewI
     }
 
     this.lastKey = event.keyCode;
+
+    if (isFieldFocused) {
+      this.keydown.emit(event);
+    }
   }
 
   onKeyUp(event?: any) {
@@ -363,6 +385,10 @@ export class PoComboComponent extends PoComboBaseComponent implements AfterViewI
   }
 
   applyFilter(value: string, reset: boolean = false, isArrowDown?: boolean) {
+    if (this.removeInitialFilter) {
+      this.defaultService.hasNext = true;
+    }
+
     if (this.defaultService.hasNext) {
       this.controlComboVisibility(false, reset);
       this.isServerSearching = true;
@@ -397,8 +423,7 @@ export class PoComboComponent extends PoComboBaseComponent implements AfterViewI
 
     if (this.isFirstFilter) {
       this.isFirstFilter = !this.isFirstFilter;
-
-      this.cacheOptions = this.comboOptionsList;
+      this.updateCacheOptions();
     }
   }
 
@@ -456,7 +481,9 @@ export class PoComboComponent extends PoComboBaseComponent implements AfterViewI
   }
 
   applyFilterInFirstClick() {
-    if (this.isFirstFilter && !this.selectedValue) {
+    const isEmptyFirstFilter = this.isFirstFilter && !this.selectedValue;
+
+    if (this.removeInitialFilter || isEmptyFirstFilter) {
       this.options = [];
       const scrollingControl = this.setScrollingControl();
       this.applyFilter('', scrollingControl);
@@ -520,6 +547,32 @@ export class PoComboComponent extends PoComboBaseComponent implements AfterViewI
     }
   }
 
+  /**
+   * Método que exibe `p-additionalHelpTooltip` ou executa a ação definida em `p-additionalHelp`.
+   * Para isso, será necessário configurar uma tecla de atalho utilizando o evento `p-keydown`.
+   *
+   * ```
+   * <po-combo
+   *  #combo
+   *  ...
+   *  p-additional-help-tooltip="Mensagem de ajuda complementar"
+   *  (p-keydown)="onKeyDown($event, combo)"
+   * ></po-combo>
+   * ```
+   * ```
+   * ...
+   * onKeyDown(event: KeyboardEvent, inp: PoComboComponent): void {
+   *  if (event.code === 'F9') {
+   *    inp.showAdditionalHelp();
+   *  }
+   * }
+   * ```
+   */
+  showAdditionalHelp(): boolean {
+    this.displayAdditionalHelp = !this.displayAdditionalHelp;
+    return this.displayAdditionalHelp;
+  }
+
   wasClickedOnToggle(event: MouseEvent): void {
     if (
       this.comboOpen &&
@@ -570,6 +623,10 @@ export class PoComboComponent extends PoComboBaseComponent implements AfterViewI
     }
   }
 
+  showAdditionalHelpIcon() {
+    return !!this.additionalHelpTooltip || this.isAdditionalHelpEventTriggered();
+  }
+
   showMoreInfiniteScroll(): void {
     if (this.defaultService.hasNext) {
       this.infiniteLoading = true;
@@ -581,6 +638,12 @@ export class PoComboComponent extends PoComboBaseComponent implements AfterViewI
   clearAndFocus() {
     this.clear(null);
     this.inputEl.nativeElement.focus();
+  }
+
+  updateCacheOptions(): void {
+    this.cacheOptions = this.comboOptionsList.map(item =>
+      item.value === this.selectedValue ? { ...item, selected: true } : item
+    );
   }
 
   private adjustContainerPosition() {
@@ -624,6 +687,13 @@ export class PoComboComponent extends PoComboBaseComponent implements AfterViewI
     });
 
     window.addEventListener('scroll', this.onScroll, true);
+  }
+
+  private isAdditionalHelpEventTriggered(): boolean {
+    return (
+      this.additionalHelpEventTrigger === 'event' ||
+      (this.additionalHelpEventTrigger === undefined && this.additionalHelp.observed)
+    );
   }
 
   private onErrorGetObjectByValue() {

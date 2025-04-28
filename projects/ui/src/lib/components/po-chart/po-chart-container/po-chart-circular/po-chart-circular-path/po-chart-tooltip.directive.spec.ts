@@ -25,7 +25,8 @@ import { PoChartTooltipDirective } from './po-chart-tooltip.directive';
         ></path>
       </svg>
     </div>
-  `
+  `,
+  standalone: false
 })
 export class TestComponent {}
 

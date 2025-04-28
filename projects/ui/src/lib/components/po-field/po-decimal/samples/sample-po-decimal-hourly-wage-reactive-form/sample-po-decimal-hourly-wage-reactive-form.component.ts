@@ -3,7 +3,8 @@ import { UntypedFormBuilder, UntypedFormGroup, Validators } from '@angular/forms
 
 @Component({
   selector: 'sample-po-decimal-hourly-wage-reactive-form',
-  templateUrl: './sample-po-decimal-hourly-wage-reactive-form.component.html'
+  templateUrl: './sample-po-decimal-hourly-wage-reactive-form.component.html',
+  standalone: false
 })
 export class SamplePoDecimalHourlyWageReactiveFormComponent implements OnInit {
   formCalculateHourlyWage: UntypedFormGroup;

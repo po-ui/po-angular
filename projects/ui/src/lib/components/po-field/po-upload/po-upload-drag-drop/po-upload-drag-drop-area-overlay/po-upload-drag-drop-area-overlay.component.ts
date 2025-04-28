@@ -15,7 +15,8 @@ import { PoUploadLiterals } from '../../interfaces/po-upload-literals.interface'
 @Component({
   selector: 'po-upload-drag-drop-area-overlay',
   templateUrl: 'po-upload-drag-drop-area-overlay.component.html',
-  changeDetection: ChangeDetectionStrategy.OnPush
+  changeDetection: ChangeDetectionStrategy.OnPush,
+  standalone: false
 })
 export class PoUploadDragDropAreaOverlayComponent implements AfterViewInit {
   @ViewChild('DragDropAreaFixed', { read: ElementRef, static: true }) DragDropAreaFixed: ElementRef;

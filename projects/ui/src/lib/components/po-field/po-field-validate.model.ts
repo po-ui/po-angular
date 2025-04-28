@@ -50,6 +50,20 @@ export abstract class PoFieldValidateModel<T> extends PoFieldModel<T> implements
   @Input('p-field-error-message') fieldErrorMessage: string;
 
   /**
+   * @optional
+   *
+   * @description
+   *
+   * Limita a exibição da mensagem de erro a duas linhas e exibe um tooltip com o texto completo.
+   *
+   * > Caso essa propriedade seja definida como `true`, a mensagem de erro será limitada a duas linhas
+   * e um tooltip será exibido ao passar o mouse sobre a mensagem para mostrar o conteúdo completo.
+   *
+   * @default `false`
+   */
+  @Input('p-error-limit') errorLimit: boolean = false;
+
+  /**
    *  Define se a indicação de campo obrigatório será exibida.
    *
    * > Não será exibida a indicação se:

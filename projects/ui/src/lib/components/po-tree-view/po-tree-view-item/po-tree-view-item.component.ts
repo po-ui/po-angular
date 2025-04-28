@@ -1,8 +1,8 @@
-import { animate, state, style, transition, trigger } from '@angular/animations';
+import { animate, style, transition, trigger } from '@angular/animations';
 import { ChangeDetectionStrategy, Component, Input } from '@angular/core';
 
-import { PoTreeViewItem } from './po-tree-view-item.interface';
 import { PoTreeViewService } from '../services/po-tree-view.service';
+import { PoTreeViewItem } from './po-tree-view-item.interface';
 
 @Component({
   selector: 'po-tree-view-item',
@@ -31,9 +31,12 @@ import { PoTreeViewService } from '../services/po-tree-view.service';
         animate(100, style({ opacity: 0 }))
       ])
     ])
-  ]
+  ],
+  standalone: false
 })
 export class PoTreeViewItemComponent {
+  @Input('p-components-size') componentsSize: string;
+
   @Input('p-item') item: PoTreeViewItem;
 
   @Input('p-selectable') selectable: boolean;
