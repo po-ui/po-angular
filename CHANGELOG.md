@@ -2,6 +2,13 @@
 
 All notable changes to this project will be documented in this file. See [standard-version](https://github.com/conventional-changelog/standard-version) for commit guidelines.
 
+## [19.10.0](https://github.com/po-ui/po-angular/compare/v19.9.0...v19.10.0) (2025-05-02)
+
+
+### Features
+
+* **combo/multiselect:** adiciona propriedade para controle de posição ([6c99a2f](https://github.com/po-ui/po-angular/commit/6c99a2fb077f6007a39fb270caf81af41401c032))
+
 ### [19.9.0](https://github.com/po-ui/po-angular/compare/v19.8.0...v19.9.0) (2025-04-22)
 
 Compatibilidade com @totvs/thf-components@19.9.0
