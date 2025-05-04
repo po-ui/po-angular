@@ -22,7 +22,7 @@
           class="po-rich-text-toolbar-color-picker-input"
           type="color"
           [disabled]="readonly"
-          (change)="changeTextColor($event.target.value)"
+          (input)="changeTextColor($event.target.value)"
           [attr.aria-label]="literals.textColor"
         />
       </button>
