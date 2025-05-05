@@ -492,7 +492,7 @@ export abstract class PoTableBaseComponent implements OnChanges, OnDestroy {
   fixedLayout: boolean = false;
   private initialVisibleColumns: boolean = false;
   private _componentsSize?: string = undefined;
-  private _spacing: PoTableColumnSpacing = PoTableColumnSpacing.Medium;
+  private _spacing: PoTableColumnSpacing;
   private _filteredColumns: Array<string>;
   private _actions?: Array<PoTableAction> = [];
   private _columns: Array<PoTableColumn> = [];
@@ -912,22 +912,31 @@ export abstract class PoTableBaseComponent implements OnChanges, OnDestroy {
    *
    * @description
    *
-   * Responsável por aplicar espaçamento nas colunas.
+   * Define o espaçamento interno das células, impactando diretamente na altura das linhas do table. Os valores
+   * permitidos são definidos pelo enum **PoTableColumnSpacing**.
    *
-   * Deve receber um dos valores do enum `PoTableColumnSpacing`.
+   * > Em nível de acessibilidade **AA**, caso o valor de `p-spacing` não seja definido, o valor padrão será `extraSmall`
+   * > nos seguintes cenários:
+   * > - Quando o valor de `p-components-size` for `small`;
+   * > - Quando o valor padrão dos componentes for configurado como `small` no
+   * > [serviço de tema](https://po-ui.io/documentation/po-theme).
    *
    * @default `medium`
    */
   @Input('p-spacing') set spacing(value: PoTableColumnSpacing) {
-    if (value === 'small' || value === 'medium' || value === 'large') {
+    if (Object.values(PoTableColumnSpacing).includes(value)) {
       this._spacing = value;
     } else {
-      this._spacing = PoTableColumnSpacing.Medium;
+      this._spacing =
+        this.componentsSize === PoFieldSize.Small ? PoTableColumnSpacing.ExtraSmall : PoTableColumnSpacing.Medium;
     }
   }
 
   get spacing() {
-    return this._spacing;
+    return (
+      this._spacing ??
+      (this.componentsSize === PoFieldSize.Small ? PoTableColumnSpacing.ExtraSmall : PoTableColumnSpacing.Medium)
+    );
   }
 
   /**
