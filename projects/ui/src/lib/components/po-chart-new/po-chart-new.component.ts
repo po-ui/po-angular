@@ -6,8 +6,10 @@ import {
   HostListener,
   OnChanges,
   OnInit,
+  QueryList,
   SimpleChanges,
-  ViewChild
+  ViewChild,
+  ViewChildren
 } from '@angular/core';
 
 import { CurrencyPipe, DecimalPipe } from '@angular/common';
@@ -57,7 +59,7 @@ import { PoChartGridUtils } from './po-chart-grid-utils';
   standalone: false
 })
 export class PoChartNewComponent extends PoChartNewBaseComponent implements OnInit, AfterViewInit, OnChanges {
-  @ViewChild(PoTooltipDirective) poTooltip: PoTooltipDirective;
+  @ViewChildren(PoTooltipDirective) poTooltip: QueryList<PoTooltipDirective>;
   @ViewChild('targetPopup', { read: ElementRef, static: false }) targetRef: ElementRef;
   @ViewChild('modalComponent') modal: PoModalComponent;
 
@@ -67,6 +69,7 @@ export class PoChartNewComponent extends PoChartNewBaseComponent implements OnIn
   chartMarginTop = '0px';
   isTypeBar = false;
   boundaryGap = false;
+  listTypePie: Array<any>;
   protected actionModal: PoModalAction = {
     action: this.downloadCsv.bind(this),
     label: this.literals.downloadCSV
@@ -76,7 +79,8 @@ export class PoChartNewComponent extends PoChartNewBaseComponent implements OnIn
   protected isExpanded = false;
   protected legendData: Array<{ name: string; color: string }> = [];
   protected headerHeight: number;
-  protected positionTooltip = 'bottom';
+  protected positionTooltip = 'top';
+  protected tooltipTitle = undefined;
   protected chartGridUtils: PoChartGridUtils;
   protected popupActions: Array<PoPopupAction> = [
     {
@@ -158,6 +162,16 @@ export class PoChartNewComponent extends PoChartNewBaseComponent implements OnIn
     this.initECharts();
   }
 
+  showTooltipTitle(e: MouseEvent) {
+    const element = e.target as HTMLElement;
+
+    if (element.offsetWidth < element.scrollWidth) {
+      this.tooltipTitle = this.title;
+    } else {
+      this.tooltipTitle = undefined;
+    }
+  }
+
   getCSSVariable(variable: string, selector?: string): string {
     const element = selector ? document.querySelector(selector) : document.documentElement;
     return element ? getComputedStyle(element).getPropertyValue(variable).trim() : '';
@@ -211,7 +225,11 @@ export class PoChartNewComponent extends PoChartNewBaseComponent implements OnIn
   private initEChartsEvents() {
     this.chartInstance.on('click', params => {
       if (!params.value) return;
-      this.seriesClick.emit({ label: params.seriesName, data: params.value, category: params.name });
+      if (params.seriesName && !params.seriesName.includes('\u00000')) {
+        this.seriesClick.emit({ label: params.seriesName, data: params.value, category: params.name });
+      } else {
+        this.seriesClick.emit({ label: params.name, data: params.value });
+      }
     });
 
     this.chartInstance.on('mouseover', (params: any) => {
@@ -220,26 +238,28 @@ export class PoChartNewComponent extends PoChartNewBaseComponent implements OnIn
         const divTooltipElement = this.el.nativeElement.querySelector('#custom-tooltip');
         if (divTooltipElement) {
           const chartElement = this.el.nativeElement.querySelector('#chart-id');
-          if (params.seriesType === 'bar') {
-            this.positionTooltip = 'top';
-          }
-          const customTooltipText = params.seriesName
-            ? `<b>${params.name}</b><br>
+          const customTooltipText =
+            params.seriesName && !params.seriesName.includes('\u00000')
+              ? `<b>${params.name}</b><br>
             ${params.seriesName}: <b>${params.value}</b>`
-            : `${params.name}<b>${params.value}</b>`;
+              : `${params.name}: <b>${params.value}</b>`;
           this.tooltipText = this.series[params.seriesIndex].tooltip
             ? this.series[params.seriesIndex].tooltip
             : customTooltipText;
           divTooltipElement.style.left = `${params.event.offsetX + chartElement.offsetLeft + 3}px`;
           divTooltipElement.style.top = `${chartElement.offsetTop + params.event.offsetY + 3}px`;
-          this.poTooltip.toggleTooltipVisibility(true);
+          this.poTooltip.last.toggleTooltipVisibility(true);
         }
       }
-      this.seriesHover.emit({ label: params.seriesName, data: params.value, category: params.name });
+      if (params.seriesName && !params.seriesName.includes('\u00000')) {
+        this.seriesHover.emit({ label: params.seriesName, data: params.value, category: params.name });
+      } else {
+        this.seriesHover.emit({ label: params.name, data: params.value });
+      }
     });
 
     this.chartInstance.on('mouseout', () => {
-      this.poTooltip.toggleTooltipVisibility(false);
+      this.poTooltip.last.toggleTooltipVisibility(false);
     });
   }
 
@@ -257,13 +277,14 @@ export class PoChartNewComponent extends PoChartNewBaseComponent implements OnIn
       series: newSeries as any
     };
 
-    this.chartGridUtils.setGridOption(options);
-    this.chartGridUtils.setOptionsAxis(options);
-    this.formatLabelOption(options);
-    this.chartGridUtils.setShowAxisDetails(options);
-
-    if (this.options?.dataZoom) {
-      this.chartGridUtils.setOptionDataZoom(options);
+    if (!this.listTypePie?.length) {
+      this.chartGridUtils.setGridOption(options);
+      this.chartGridUtils.setOptionsAxis(options);
+      this.formatLabelOption(options);
+      this.chartGridUtils.setShowAxisDetails(options);
+      if (this.options?.dataZoom) {
+        this.chartGridUtils.setOptionDataZoom(options);
+      }
     }
 
     if (this.options?.legend !== false) {
@@ -309,13 +330,16 @@ export class PoChartNewComponent extends PoChartNewBaseComponent implements OnIn
     const hasArea = this.type === 'area' || this.series.some(serie => serie.type === 'area');
     const newSeries: Array<any> = [...this.colorService.getColors<PoChartSerie>(this.series, true, hasArea)];
     const tokenBorderWidthMd = this.chartGridUtils.resolvePx('--border-width-md');
-    const findType = this.series.find(serie => serie.type);
+    const findType = this.series.find(serie => serie.type)?.type;
     let typeDefault;
     if (!findType && !this.type) {
       typeDefault = Array.isArray(this.series[0].data) ? PoChartType.Column : PoChartType.Pie;
     }
+    if (findType === 'pie' || typeDefault === 'pie' || this.type === 'pie') {
+      this.chartGridUtils.setListTypePie();
+    }
 
-    return newSeries.map((serie, index) => {
+    const seriesUpdated = newSeries.map((serie, index) => {
       serie.name = serie.label && typeof serie.label === 'string' ? serie.label : '';
       !serie.type ? this.setTypeSerie(serie, this.type || typeDefault) : this.setTypeSerie(serie, serie.type);
 
@@ -323,6 +347,7 @@ export class PoChartNewComponent extends PoChartNewBaseComponent implements OnIn
         ? this.getCSSVariable(`--${serie.color.replace('po-', '')}`)
         : serie.color;
 
+      this.chartGridUtils.setSerieTypePie(serie, colorVariable);
       this.setSerieEmphasis(serie, colorVariable, tokenBorderWidthMd);
       this.chartGridUtils.setSerieTypeLine(serie, tokenBorderWidthMd, colorVariable);
       this.chartGridUtils.setSerieTypeArea(serie, index);
@@ -330,6 +355,11 @@ export class PoChartNewComponent extends PoChartNewBaseComponent implements OnIn
 
       return serie;
     });
+
+    if (this.listTypePie?.length) {
+      return this.listTypePie;
+    }
+    return seriesUpdated;
   }
 
   private setSerieEmphasis(serie, color: string, tokenBorder: number) {
@@ -385,10 +415,17 @@ export class PoChartNewComponent extends PoChartNewBaseComponent implements OnIn
 
   private setTableProperties() {
     const option = this.chartInstance.getOption();
-    let categories: Array<any> = this.isTypeBar ? option.yAxis[0].data : option.xAxis[0].data;
-    if (!categories && Array.isArray(this.series[0]?.data)) {
+    let categories: Array<any> = this.isTypeBar ? option.yAxis[0].data : option.xAxis?.[0].data;
+    if (!categories) {
       categories = [];
-      this.series[0].data.forEach((data, index) => categories.push(String(index)));
+      if (Array.isArray(this.series[0]?.data)) {
+        this.series[0].data.forEach((data, index) => categories.push(String(index)));
+      } else {
+        let items = { [this.options?.firstColumnName || 'Série']: '-' };
+        option.series[0].data.forEach(data => (items = { ...items, [data.name]: data.value }));
+        this.itemsTable = [items];
+        return;
+      }
     }
     const series: any = option.series;
 
@@ -443,7 +480,9 @@ export class PoChartNewComponent extends PoChartNewBaseComponent implements OnIn
     const headers = Object.keys(this.itemsTable[0]);
     const columnNameDefault = this.isTypeBar ? 'Categoria' : 'Série';
     const firstColumnName = this.options?.firstColumnName || columnNameDefault;
-    const orderedHeaders = [firstColumnName, ...headers.filter(header => header !== 'serie')];
+    const orderedHeaders = this.columnsTable?.length
+      ? [firstColumnName, ...headers.filter(header => header !== 'serie')]
+      : [...headers.filter(header => header !== 'serie')];
 
     const csvContent = [
       orderedHeaders.join(';'),
