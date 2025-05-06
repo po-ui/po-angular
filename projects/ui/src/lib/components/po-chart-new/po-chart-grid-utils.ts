@@ -1,6 +1,20 @@
 import { EChartsOption } from 'echarts/dist/echarts.esm';
 import { PoChartNewComponent } from './po-chart-new.component';
 
+const gridPaddingValues = {
+  paddingBottomWithTopLegend: 48,
+  paddingBottomWithBottomLegend: 72,
+  paddingBottomNoLegend: 0,
+
+  paddingTopWithDataLabelFixed: 64,
+  paddingTopDefaultWithTopLegend: 56,
+  paddingTopWithDataLabelFixedBottomLegend: 32,
+  paddingTopDefaultWithBottomLegend: 16,
+
+  bottomDataZoomValueTopLegend: 8,
+  bottomDataZoomValueBottomLegend: 32
+} as const;
+
 export class PoChartGridUtils {
   constructor(private readonly component: PoChartNewComponent) {}
 
@@ -28,6 +42,7 @@ export class PoChartGridUtils {
         fontFamily: this.component.getCSSVariable('--font-family-grid', '.po-chart'),
         fontSize: tokenFontSizeGrid || 12,
         fontWeight: Number(this.component.getCSSVariable('--font-weight-grid', '.po-chart')),
+        color: this.component.getCSSVariable('--color-legend', '.po-chart'),
         rotate: this.component.options?.axis?.rotateLegend,
         interval: 0,
         width: 72,
@@ -50,6 +65,7 @@ export class PoChartGridUtils {
         margin: 10,
         fontFamily: this.component.getCSSVariable('--font-family-grid', '.po-chart'),
         fontSize: tokenFontSizeGrid || 12,
+        color: this.component.getCSSVariable('--color-legend', '.po-chart'),
         fontWeight: Number(this.component.getCSSVariable('--font-weight-grid', '.po-chart'))
       },
       splitLine: {
@@ -134,7 +150,45 @@ export class PoChartGridUtils {
         color: color
       };
       serie.emphasis = { focus: 'series' };
+      serie.blur = {
+        itemStyle: { opacity: 0.4 }
+      };
       this.component.boundaryGap = true;
+    }
+  }
+
+  setListTypePie() {
+    let radius = '85%';
+    let positionHorizontal;
+    if (this.component.options?.legend === false) {
+      radius = '95%';
+      positionHorizontal = '50%';
+    } else {
+      positionHorizontal = this.component.options?.legendVerticalPosition === 'top' ? '54%' : '46%';
+    }
+    this.component.listTypePie = [
+      {
+        type: 'pie',
+        center: ['50%', positionHorizontal],
+        radius: radius,
+        emphasis: { focus: 'self' },
+        data: [],
+        blur: { itemStyle: { opacity: 0.4 } }
+      }
+    ];
+  }
+
+  setSerieTypePie(serie: any, color: string) {
+    if (this.component.listTypePie?.length) {
+      const borderWidth = this.resolvePx('--border-width-sm');
+      const borderColor = this.component.getCSSVariable('--border-color', '.po-chart');
+      const seriePie = {
+        name: serie.name,
+        value: serie.data,
+        itemStyle: { borderWidth: borderWidth, borderColor: borderColor, color: color },
+        label: { show: false }
+      };
+      this.component.listTypePie[0].data.push(seriePie);
     }
   }
 
@@ -159,42 +213,52 @@ export class PoChartGridUtils {
       (options.legend === false || options.legendVerticalPosition === 'top')
     ) {
       if (typeof options.bottomDataZoom === 'boolean' && options.bottomDataZoom === true) {
-        options.bottomDataZoom = 8;
+        options.bottomDataZoom = gridPaddingValues.bottomDataZoomValueTopLegend;
       }
-      return 50;
+      return gridPaddingValues.paddingBottomWithTopLegend;
     } else if (options?.dataZoom && options.bottomDataZoom && options.legendVerticalPosition !== 'top') {
       if (typeof options.bottomDataZoom === 'boolean' && options.bottomDataZoom === true) {
-        options.bottomDataZoom = 32;
+        options.bottomDataZoom = gridPaddingValues.bottomDataZoomValueBottomLegend;
       }
-      return 70;
+      return gridPaddingValues.paddingBottomWithBottomLegend;
     } else if (
       (options?.dataZoom && !options?.bottomDataZoom && options.legend === false) ||
       (!options?.dataZoom && options?.legend === false) ||
       (!options?.dataZoom && options?.legendVerticalPosition === 'top')
     ) {
-      return 0;
+      return gridPaddingValues.paddingBottomNoLegend;
     }
-    return 50;
+    return gridPaddingValues.paddingBottomWithTopLegend;
+  }
+
+  private hasTopLegendOrNoZoom(options): boolean {
+    return (
+      (options?.dataZoom && !options.bottomDataZoom) ||
+      (options?.dataZoom && options.bottomDataZoom && options.legendVerticalPosition === 'top') ||
+      (!options?.dataZoom && options?.legendVerticalPosition === 'top')
+    );
+  }
+
+  private hasBottomLegendWithZoom(options): boolean {
+    return (
+      (options?.dataZoom && options.bottomDataZoom && options.legendVerticalPosition !== 'top') ||
+      (!options?.dataZoom && options?.legendVerticalPosition !== 'top')
+    );
   }
 
   private getPaddingTopGrid() {
     const options = this.component.options;
-    if (
-      (options?.dataZoom && !options.bottomDataZoom) ||
-      (options?.dataZoom && options.bottomDataZoom && options.legendVerticalPosition === 'top') ||
-      (!options?.dataZoom && options?.legendVerticalPosition === 'top')
-    ) {
+    if (this.hasTopLegendOrNoZoom(options)) {
       if (typeof options.bottomDataZoom === 'boolean' && options.bottomDataZoom === true) {
-        options.bottomDataZoom = 8;
+        options.bottomDataZoom = gridPaddingValues.bottomDataZoomValueTopLegend;
       }
       const fixed = this.component.dataLabel?.fixed && !options?.axis?.maxRange;
-      return fixed ? 60 : 50;
-    } else if (
-      (options?.dataZoom && options.bottomDataZoom && options.legendVerticalPosition !== 'top') ||
-      (!options?.dataZoom && options?.legendVerticalPosition !== 'top')
-    ) {
+      return fixed ? gridPaddingValues.paddingTopWithDataLabelFixed : gridPaddingValues.paddingTopDefaultWithTopLegend;
+    } else if (this.hasBottomLegendWithZoom(options)) {
       const fixed = this.component.dataLabel?.fixed && !options?.axis?.maxRange;
-      return fixed ? 30 : 20;
+      return fixed
+        ? gridPaddingValues.paddingTopWithDataLabelFixedBottomLegend
+        : gridPaddingValues.paddingTopDefaultWithBottomLegend;
     }
   }
 }
