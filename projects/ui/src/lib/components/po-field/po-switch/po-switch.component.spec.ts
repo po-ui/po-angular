@@ -7,6 +7,7 @@ import { PoFieldContainerBottomComponent } from './../po-field-container/po-fiel
 import { PoFieldContainerComponent } from './../po-field-container/po-field-container.component';
 import { PoSwitchLabelPosition } from './po-switch-label-position.enum';
 import { PoSwitchComponent } from './po-switch.component';
+import { AbstractControl } from '@angular/forms';
 
 describe('PoSwitchComponent', () => {
   let component: PoSwitchComponent;
@@ -302,8 +303,7 @@ describe('PoSwitchComponent', () => {
 
       component.value = true;
 
-      component['changeDetector'] = <any>{ markForCheck: () => {} };
-      spyOn(component['changeDetector'], 'markForCheck');
+      spyOn(component['changeDetector'], 'markForCheck').and.callFake(() => {});
 
       component.onWriteValue(expectedValue);
 
@@ -317,8 +317,7 @@ describe('PoSwitchComponent', () => {
       component.value = false;
       component.formatModel = true;
 
-      component['changeDetector'] = <any>{ markForCheck: () => {} };
-      spyOn(component['changeDetector'], 'markForCheck');
+      spyOn(component['changeDetector'], 'markForCheck').and.callFake(() => {});
 
       component.onWriteValue(null);
 
@@ -332,8 +331,7 @@ describe('PoSwitchComponent', () => {
       component.value = false;
       component.formatModel = true;
 
-      component['changeDetector'] = <any>{ markForCheck: () => {} };
-      spyOn(component['changeDetector'], 'markForCheck');
+      spyOn(component['changeDetector'], 'markForCheck').and.callFake(() => {});
 
       component.onWriteValue('true');
 
@@ -346,9 +344,7 @@ describe('PoSwitchComponent', () => {
 
       component.value = expectedValue;
 
-      component['changeDetector'] = <any>{ markForCheck: () => {} };
-
-      spyOn(component['changeDetector'], 'markForCheck');
+      spyOn(component['changeDetector'], 'markForCheck').and.callFake(() => {});
 
       component.onWriteValue(expectedValue);
 
@@ -374,6 +370,150 @@ describe('PoSwitchComponent', () => {
       component.eventClick();
 
       expect(component.changeValue).toHaveBeenCalled();
+    });
+
+    describe('validate:', () => {
+      it('should return `{ required: true }` when `invalidValue` is false, `fieldErrorMessage` is set, and value matches `invalidValue`', () => {
+        component.invalidValue = false;
+        component.fieldErrorMessage = 'Required field';
+        component.value = false;
+
+        const result = component.validate({} as AbstractControl);
+
+        expect(result).toEqual({ required: true });
+      });
+
+      it('should return `null` when `invalidValue` is true, `fieldErrorMessage` is set, and value does not match `invalidValue`', () => {
+        component.invalidValue = false;
+        component.fieldErrorMessage = 'Required field';
+        component.value = true;
+
+        const result = component.validate({} as AbstractControl);
+
+        expect(result).toBeNull();
+      });
+
+      it('should return `null` when `fieldErrorMessage` is set and value is true', () => {
+        component.invalidValue = undefined;
+        component.fieldErrorMessage = 'Required field';
+        component.value = true;
+
+        const result = component.validate({} as AbstractControl);
+
+        expect(result).toBeNull();
+      });
+
+      it('should return `{ required: true }` when `fieldErrorMessage` is set and value is false', () => {
+        component.invalidValue = undefined;
+        component.fieldErrorMessage = 'Required field';
+        component.value = false;
+
+        const result = component.validate({} as AbstractControl);
+
+        expect(result).toEqual({ required: true });
+      });
+
+      it('should return `null` when no `fieldErrorMessage` is set', () => {
+        component.invalidValue = undefined;
+        component.fieldErrorMessage = undefined;
+        component.value = false;
+
+        const result = component.validate({} as AbstractControl);
+
+        expect(result).toBeNull();
+      });
+
+      it('should return `{ required: true }` when value equals `invalidValue` (true)', () => {
+        component.invalidValue = true;
+        component.fieldErrorMessage = 'Campo obrigatório';
+        component.value = true;
+
+        const result = component.validate({} as AbstractControl);
+
+        expect(result).toEqual({ required: true });
+      });
+
+      it('should return `null` when value does NOT equal `invalidValue` (true)', () => {
+        component.invalidValue = true;
+        component.fieldErrorMessage = 'Campo obrigatório';
+        component.value = false;
+
+        const result = component.validate({} as AbstractControl);
+
+        expect(result).toBeNull();
+      });
+
+      it('should return `fieldErrorMessage` when `fieldErrorMessage` is set and `hasInvalidClass` is true', () => {
+        component.fieldErrorMessage = 'Campo obrigatório';
+
+        spyOn(component, 'hasInvalidClass').and.returnValue(true);
+
+        const result = component.getErrorPattern();
+
+        expect(result).toBe('Campo obrigatório');
+      });
+
+      it('should return empty string when `fieldErrorMessage` is set but `hasInvalidClass` is false', () => {
+        component.fieldErrorMessage = 'Campo obrigatório';
+
+        spyOn(component, 'hasInvalidClass').and.returnValue(false);
+
+        const result = component.getErrorPattern();
+
+        expect(result).toBe('');
+      });
+
+      it('should return empty string when `fieldErrorMessage` is not set', () => {
+        component.fieldErrorMessage = undefined;
+
+        const result = component.getErrorPattern();
+
+        expect(result).toBe('');
+      });
+    });
+    describe('hasInvalidClass:', () => {
+      let nativeEl: HTMLElement;
+
+      beforeEach(() => {
+        fixture.detectChanges();
+        nativeEl = fixture.debugElement.nativeElement;
+      });
+
+      it('should return true when both `ng-invalid` and `ng-dirty` are present', () => {
+        nativeEl.classList.add('ng-invalid');
+        nativeEl.classList.add('ng-dirty');
+
+        const result = component.hasInvalidClass();
+
+        expect(result).toBeTrue();
+      });
+
+      it('should return false when only `ng-invalid` is present', () => {
+        nativeEl.classList.add('ng-invalid');
+        nativeEl.classList.remove('ng-dirty');
+
+        const result = component.hasInvalidClass();
+
+        expect(result).toBeFalse();
+      });
+
+      it('should return false when only `ng-dirty` is present', () => {
+        nativeEl.classList.remove('ng-invalid');
+        nativeEl.classList.add('ng-dirty');
+
+        const result = component.hasInvalidClass();
+
+        expect(result).toBeFalse();
+      });
+
+      it('should return false when neither `ng-invalid` nor `ng-dirty` are present', () => {
+        nativeEl.classList.remove('ng-invalid');
+        nativeEl.classList.remove('ng-dirty');
+
+        const result = component.hasInvalidClass();
+
+        expect(result).toBeFalse();
+      });
     });
   });
 

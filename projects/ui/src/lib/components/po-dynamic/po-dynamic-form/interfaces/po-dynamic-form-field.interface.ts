@@ -317,8 +317,8 @@ export interface PoDynamicFormField extends PoDynamicField {
    * `po-lookup` e `po-textarea` não é necessário passar a propriedade `requiredFieldErrorMessage`.
    *
    *
-   * **Componentes compatíveis:** `po-datepicker`, `po-input`, `po-number`, `po-decimal`, `po-password`, `po-datepicker-range`,
-   *  `po-select`, `po-checkbox-group`, `po-radio-group`, `po-multiselect`, `po-combo`, `po-lookup`, `po-textarea`.
+   * **Componentes compatíveis:**  `po-checkbox-group`, `po-combo`, `po-datepicker`, `po-datepicker-range`,
+   *  `po-decimal`, `po-input`, `po-lookup`, `po-multiselect`, `po-number`, `po-password`, `po-radio-group`, `po-select`, `po-switch`, `po-textarea`.
    */
   errorMessage?: string;
 
@@ -332,8 +332,8 @@ export interface PoDynamicFormField extends PoDynamicField {
    * > Caso essa propriedade seja definida como `true`, a mensagem de erro será limitada a duas linhas
    * e um tooltip será exibido ao passar o mouse sobre a mensagem para mostrar o conteúdo completo.
    *
-   * **Componentes compatíveis:** `po-datepicker`, `po-input`, `po-number`, `po-decimal`, `po-password`, `po-datepicker-range`,
-   *  `po-select`, `po-checkbox-group`, `po-radio-group`, `po-multiselect`, `po-combo`, `po-lookup`, `po-textarea`.
+   * **Componentes compatíveis:** `po-checkbox-group`, `po-combo`, `po-datepicker`, `po-datepicker-range`,
+   *  `po-decimal`, `po-input`, `po-lookup`, `po-multiselect`, `po-number`, `po-password`, `po-radio-group`, `po-select`, `po-switch`, `po-textarea`.
    *
    * @default `false`
    */
@@ -843,4 +843,15 @@ export interface PoDynamicFormField extends PoDynamicField {
    * @default `medium`
    */
   size?: string;
+
+  /**
+   * Define qual valor será considerado como inválido para exibir a mensagem da propriedade `p-field-error-message`.
+   *
+   * > Caso essa propriedade seja definida como `true`, a mensagem de erro será exibida quando o campo estiver ligado(on/true).
+   *
+   * **Componente compatível**: `po-switch`
+   *
+   * @default `false`
+   */
+  invalidValue?: boolean;
 }

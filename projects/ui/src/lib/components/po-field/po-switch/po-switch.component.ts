@@ -1,13 +1,27 @@
 import {
+  AfterViewInit,
   ChangeDetectionStrategy,
   ChangeDetectorRef,
   Component,
   ElementRef,
   forwardRef,
+  Inject,
+  inject,
+  InjectOptions,
+  Injector,
   Input,
-  ViewChild
+  ViewChild,
+  OnDestroy
 } from '@angular/core';
-import { NG_VALUE_ACCESSOR } from '@angular/forms';
+import {
+  AbstractControl,
+  NG_VALUE_ACCESSOR,
+  ValidationErrors,
+  Validator,
+  NgControl,
+  UntypedFormControl,
+  NG_VALIDATORS
+} from '@angular/forms';
 
 import { convertToBoolean, getDefaultSize, uuid, validateSize } from '../../../utils/util';
 
@@ -16,6 +30,7 @@ import { PoThemeService } from '../../../services';
 import { PoFieldModel } from '../po-field.model';
 import { PoKeyCodeEnum } from './../../../enums/po-key-code.enum';
 import { PoSwitchLabelPosition } from './po-switch-label-position.enum';
+import { Subscription } from 'rxjs';
 
 /**
  * @docsExtends PoFieldModel
@@ -101,11 +116,21 @@ import { PoSwitchLabelPosition } from './po-switch-label-position.enum';
       provide: NG_VALUE_ACCESSOR,
       useExisting: forwardRef(() => PoSwitchComponent),
       multi: true
+    },
+    {
+      provide: NG_VALIDATORS,
+      useExisting: forwardRef(() => PoSwitchComponent),
+      multi: true
+    },
+    {
+      provide: NgControl,
+      useExisting: forwardRef(() => PoSwitchComponent),
+      multi: false
     }
   ],
   standalone: false
 })
-export class PoSwitchComponent extends PoFieldModel<any> {
+export class PoSwitchComponent extends PoFieldModel<any> implements Validator, AfterViewInit, OnDestroy {
   @ViewChild('switchContainer', { static: true }) switchContainer: ElementRef;
 
   id = `po-switch[${uuid()}]`;
@@ -118,6 +143,7 @@ export class PoSwitchComponent extends PoFieldModel<any> {
   private _labelPosition: PoSwitchLabelPosition = PoSwitchLabelPosition.Right;
   private _formatModel: boolean = false;
   private _size?: string = undefined;
+  private statusChangesSubscription: Subscription;
 
   /**
    * @optional
@@ -199,6 +225,44 @@ export class PoSwitchComponent extends PoFieldModel<any> {
    *
    * @description
    *
+   * Exibe a mensagem de erro configurada quando o campo estiver desligado(off/false).
+   *
+   *
+   */
+  @Input('p-field-error-message') fieldErrorMessage: string;
+
+  /**
+   * @optional
+   *
+   * @description
+   *
+   * Limita a exibição da mensagem de erro a duas linhas e exibe um tooltip com o texto completo.
+   *
+   * > Caso essa propriedade seja definida como `true`, a mensagem de erro será limitada a duas linhas
+   * e um tooltip será exibido ao passar o mouse sobre a mensagem para mostrar o conteúdo completo.
+   *
+   * @default `false`
+   */
+  @Input('p-error-limit') errorLimit: boolean = false;
+
+  /**
+   * @optional
+   *
+   * @description
+   *
+   * Define qual valor será considerado como inválido para exibir a mensagem da propriedade `p-field-error-message`.
+   *
+   * > Caso essa propriedade seja definida como `true`, a mensagem de erro será exibida quando o campo estiver ligado(on/true).
+   *
+   * @default `false`
+   */
+  @Input('p-invalid-value') invalidValue: boolean = false;
+
+  /**
+   * @optional
+   *
+   * @description
+   *
    * Define o tamanho do componente:
    * - `small`: altura de 16px (disponível apenas para acessibilidade AA).
    * - `medium`: altura de 24px.
@@ -217,11 +281,21 @@ export class PoSwitchComponent extends PoFieldModel<any> {
     return this._size ?? getDefaultSize(this.poThemeService, PoFieldSize);
   }
 
+  private readonly el: ElementRef = inject(ElementRef);
+  private readonly injectOptions: InjectOptions = {
+    self: true
+  };
+  private control!: AbstractControl;
   constructor(
     protected poThemeService: PoThemeService,
-    private changeDetector: ChangeDetectorRef
+    private readonly changeDetector: ChangeDetectorRef,
+    @Inject(Injector) private readonly injector: Injector
   ) {
     super();
+  }
+
+  ngOnDestroy() {
+    this.statusChangesSubscription?.unsubscribe();
   }
 
   /**
@@ -310,5 +384,44 @@ export class PoSwitchComponent extends PoFieldModel<any> {
       }
       this.changeDetector.markForCheck();
     }
+  }
+
+  validate(control: AbstractControl): ValidationErrors | null {
+    const value = this.value as unknown as boolean;
+    const isRequired = { required: true };
+    if (this.invalidValue && this.fieldErrorMessage) {
+      return value === this.invalidValue ? isRequired : null;
+    } else if (this.fieldErrorMessage) {
+      return value === true ? null : isRequired;
+    }
+    return null;
+  }
+
+  ngAfterViewInit(): void {
+    this.setControl();
+  }
+
+  private setControl(): void {
+    const ngControl: NgControl = this.injector.get(NgControl, null, this.injectOptions);
+
+    if (ngControl) {
+      this.control = ngControl.control as UntypedFormControl;
+
+      if (this.control) {
+        this.statusChangesSubscription = this.control.statusChanges.subscribe(() => {
+          this.changeDetector.markForCheck();
+        });
+      }
+    }
+  }
+
+  getErrorPattern(): string {
+    return this.fieldErrorMessage && this.hasInvalidClass() ? this.fieldErrorMessage : '';
+  }
+
+  hasInvalidClass(): boolean {
+    return (
+      this.el.nativeElement.classList.contains('ng-invalid') && this.el.nativeElement.classList.contains('ng-dirty')
+    );
   }
 }
