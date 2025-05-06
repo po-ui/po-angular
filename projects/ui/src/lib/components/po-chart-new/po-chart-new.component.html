@@ -1,7 +1,11 @@
 <div *ngIf="series.length" [class.expanded]="isExpanded" id="chart-container">
   <div class="po-chart-header">
-    <div class="po-chart-header-title po-lg-9 po-md-8 po-sm-6" style="padding: 0">
-      <strong> {{ title }} </strong>
+    <div
+      class="po-chart-header-title po-lg-9 po-md-8 po-sm-6"
+      [p-tooltip]="tooltipTitle"
+      (mouseover)="showTooltipTitle($event)"
+    >
+      {{ title }}
     </div>
 
     <div class="po-chart-header-actions po-lg-3 po-md-4 po-sm-6">
