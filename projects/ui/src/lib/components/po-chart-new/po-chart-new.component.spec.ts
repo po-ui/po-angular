@@ -122,6 +122,29 @@ describe('PoChartNewComponent', () => {
     expect(component).toBeTruthy();
   });
 
+  it('should show tooltip only when content overflows', () => {
+    const event: any = {
+      target: document.createElement('div')
+    };
+
+    const element = event.target as HTMLElement;
+
+    // Simula overflow
+    Object.defineProperty(element, 'scrollWidth', { value: 150, configurable: true });
+    Object.defineProperty(element, 'offsetWidth', { value: 100, configurable: true });
+
+    component.title = 'Long Title';
+    component.showTooltipTitle(event);
+    expect(component['tooltipTitle']).toBe('Long Title');
+
+    // Simula conteúdo sem overflow
+    Object.defineProperty(element, 'scrollWidth', { value: 80 });
+    Object.defineProperty(element, 'offsetWidth', { value: 100 });
+
+    component.showTooltipTitle(event);
+    expect(component['tooltipTitle']).toBeUndefined();
+  });
+
   describe('Lifecycle hooks:', () => {
     it('ngAfterViewInit: should initialize echarts', () => {
       spyOn(component, <any>'initECharts');
@@ -399,6 +422,35 @@ describe('PoChartNewComponent', () => {
       expect(component.seriesHover.emit).not.toHaveBeenCalled();
     });
 
+    it('should emit seriesClick event when clicking on the chart if params.seriesName is undefined', () => {
+      component['chartInstance'] = {
+        on: jasmine.createSpy('on')
+      } as any;
+
+      spyOn(component.seriesClick, 'emit');
+      spyOn(component.seriesHover, 'emit');
+
+      component['initEChartsEvents']();
+
+      expect(component['chartInstance'].on).toHaveBeenCalledWith('click', jasmine.any(Function));
+
+      const clickCallback = component['chartInstance'].on.calls.argsFor(0)[1];
+
+      const mockParams = { value: 100, name: 'Name X' };
+      clickCallback(mockParams);
+
+      const mouseoverCallback = component['chartInstance'].on.calls.argsFor(1)[1];
+
+      const mockParamsMouse = {};
+      mouseoverCallback(mockParamsMouse);
+
+      expect(component.seriesClick.emit).toHaveBeenCalledWith({
+        label: 'Name X',
+        data: 100
+      });
+      expect(component.seriesHover.emit).not.toHaveBeenCalled();
+    });
+
     it('should emit seriesHover event when hovering over a series', () => {
       const tooltipElement = document.createElement('div');
       tooltipElement.id = 'custom-tooltip';
@@ -465,7 +517,7 @@ describe('PoChartNewComponent', () => {
         on: jasmine.createSpy('on')
       } as any;
 
-      spyOn(component.poTooltip, 'toggleTooltipVisibility');
+      spyOn(component.poTooltip.last, 'toggleTooltipVisibility');
 
       component['initEChartsEvents']();
 
@@ -475,7 +527,7 @@ describe('PoChartNewComponent', () => {
 
       mouseoutCallback();
 
-      expect(component.poTooltip.toggleTooltipVisibility).toHaveBeenCalledWith(false);
+      expect(component.poTooltip.last.toggleTooltipVisibility).toHaveBeenCalledWith(false);
     });
 
     it('should set tooltipText as "seriesName: value" when tooltip is not defined', () => {
@@ -524,7 +576,7 @@ describe('PoChartNewComponent', () => {
 
       mouseoverCallback(mockParamsNoSeriesName);
 
-      expect(component.tooltipText.replace(/\s/g, '')).toBe('CategoriaSemNome<b>99</b>'.replace(/\s/g, ''));
+      expect(component.tooltipText.replace(/\s/g, '')).toBe('CategoriaSemNome:<b>99</b>'.replace(/\s/g, ''));
     });
   });
 
@@ -550,7 +602,7 @@ describe('PoChartNewComponent', () => {
 
       expect(result).toBeDefined();
       expect(result.backgroundColor).toBe('#ffffff');
-      expect(result.grid.top).toBe(20);
+      expect(result.grid.top).toBe(16);
       expect(result.xAxis.type).toBe('category');
       expect(result.yAxis.type).toBe('value');
     });
@@ -559,7 +611,7 @@ describe('PoChartNewComponent', () => {
       component.options = { dataZoom: true };
 
       const result = component['setOptions']();
-      expect(result.grid.top).toBe(50);
+      expect(result.grid.top).toBe(56);
     });
 
     it('should apply correct axis configurations', () => {
@@ -638,7 +690,7 @@ describe('PoChartNewComponent', () => {
       component.options = { axis: {} };
 
       const result = component['setOptions']();
-      expect(result.grid.top).toBe(30);
+      expect(result.grid.top).toBe(32);
     });
 
     it('should not adjust grid top when dataLabel.fixed is true but maxRange is set', () => {
@@ -646,7 +698,7 @@ describe('PoChartNewComponent', () => {
       component.options = { axis: { maxRange: 100 } };
 
       const result = component['setOptions']();
-      expect(result.grid.top).toBe(20);
+      expect(result.grid.top).toBe(16);
     });
 
     it('should set fontSize to 12 when --font-size-grid is not defined', () => {
@@ -735,9 +787,11 @@ describe('PoChartNewComponent', () => {
 
       const result = component['setSeries']();
 
-      expect(result.length).toBe(2);
+      expect(result.length).toBe(1);
       expect(result[0].type).toBe('pie');
-      expect(result[0].name).toBe('Serie 1');
+      expect(result[0].data[0].name).toBe('Serie 1');
+      expect(result[0].data[1].name).toBe('Serie 2');
+      expect(result[0].data.length).toBe(2);
     });
 
     it('should transform series correctly with default configurations', () => {
@@ -837,7 +891,7 @@ describe('PoChartNewComponent', () => {
   });
 
   describe('getPaddingBottomGrid', () => {
-    it('should return 50 and set bottomDataZoom to 8 when dataZoom is true, bottomDataZoom is true, and legend is false', () => {
+    it('should return 48 and set bottomDataZoom to 8 when dataZoom is true, bottomDataZoom is true, and legend is false', () => {
       component.options = {
         dataZoom: true,
         bottomDataZoom: true,
@@ -846,11 +900,11 @@ describe('PoChartNewComponent', () => {
 
       const result = component['chartGridUtils']['getPaddingBottomGrid']();
 
-      expect(result).toBe(50);
+      expect(result).toBe(48);
       expect(component.options.bottomDataZoom).toBe(8);
     });
 
-    it('should return 70 and set bottomDataZoom to 32 when dataZoom is true, bottomDataZoom is true and legendVerticalPosition is not "top"', () => {
+    it('should return 72 and set bottomDataZoom to 32 when dataZoom is true, bottomDataZoom is true and legendVerticalPosition is not "top"', () => {
       component.options = {
         dataZoom: true,
         bottomDataZoom: true,
@@ -859,7 +913,7 @@ describe('PoChartNewComponent', () => {
 
       const result = component['chartGridUtils']['getPaddingBottomGrid']();
 
-      expect(result).toBe(70);
+      expect(result).toBe(72);
       expect(component.options.bottomDataZoom).toBe(32);
     });
 
@@ -874,7 +928,7 @@ describe('PoChartNewComponent', () => {
       expect(result).toBe(0);
     });
 
-    it('should return 50 when no condition matches (default case)', () => {
+    it('should return 48 when no condition matches (default case)', () => {
       component.options = {
         dataZoom: true,
         bottomDataZoom: false,
@@ -884,12 +938,12 @@ describe('PoChartNewComponent', () => {
 
       const result = component['chartGridUtils']['getPaddingBottomGrid']();
 
-      expect(result).toBe(50);
+      expect(result).toBe(48);
     });
   });
 
   describe('getPaddingTopGrid', () => {
-    it('should return 60 and set bottomDataZoom to 8 when fixed is true, no maxRange, and conditions of first if apply', () => {
+    it('should return 64 and set bottomDataZoom to 8 when fixed is true, no maxRange, and top legend conditions apply', () => {
       component.options = {
         dataZoom: true,
         legendVerticalPosition: 'top',
@@ -900,11 +954,11 @@ describe('PoChartNewComponent', () => {
 
       const result = component['chartGridUtils']['getPaddingTopGrid']();
 
-      expect(result).toBe(60);
+      expect(result).toBe(64);
       expect(component.options.bottomDataZoom).toBe(8);
     });
 
-    it('should return 50 when fixed is false and conditions of first if apply', () => {
+    it('should return 56 when fixed is false and top legend conditions apply', () => {
       component.options = {
         dataZoom: true,
         bottomDataZoom: false,
@@ -915,10 +969,10 @@ describe('PoChartNewComponent', () => {
 
       const result = component['chartGridUtils']['getPaddingTopGrid']();
 
-      expect(result).toBe(50);
+      expect(result).toBe(56);
     });
 
-    it('should return 30 when fixed is true, no maxRange, and conditions of else if apply', () => {
+    it('should return 32 when fixed is true, no maxRange, and bottom legend with zoom conditions apply', () => {
       component.options = {
         dataZoom: true,
         bottomDataZoom: true,
@@ -929,10 +983,10 @@ describe('PoChartNewComponent', () => {
 
       const result = component['chartGridUtils']['getPaddingTopGrid']();
 
-      expect(result).toBe(30);
+      expect(result).toBe(32);
     });
 
-    it('should return 20 when fixed is false and conditions of else if apply', () => {
+    it('should return 16 when fixed is false and bottom legend with zoom conditions apply', () => {
       component.options = {
         dataZoom: false,
         legendVerticalPosition: 'bottom',
@@ -942,16 +996,16 @@ describe('PoChartNewComponent', () => {
 
       const result = component['chartGridUtils']['getPaddingTopGrid']();
 
-      expect(result).toBe(20);
+      expect(result).toBe(16);
     });
 
-    it('should return 20 when no conditions match (default case)', () => {
+    it('should return 16 when no condition matches (default case)', () => {
       component.options = {};
       component.dataLabel = {};
 
       const result = component['chartGridUtils']['getPaddingTopGrid']();
 
-      expect(result).toBe(20);
+      expect(result).toBe(16);
     });
   });
 
@@ -1013,6 +1067,33 @@ describe('PoChartNewComponent', () => {
 
       expect(component['setTableColumns']).not.toHaveBeenCalled();
     });
+
+    it('should set Series if type is Pie', () => {
+      component.type = PoChartType.Pie;
+      component.series = [
+        { data: 80, label: 'Pie Value 1' },
+        { data: 20, label: 'Pie Value 2' }
+      ];
+      component['chartInstance'] = {
+        getOption: jasmine.createSpy('getOption').and.returnValue({
+          series: [
+            {
+              name: 'Série A',
+              data: [
+                { name: 'Pie Value 1', value: 80 },
+                { name: 'Pie Value 2', value: 20 }
+              ]
+            }
+          ]
+        })
+      } as any;
+      spyOn(component as any, 'setTableColumns');
+
+      component['setTableProperties']();
+
+      expect(component['setTableColumns']).not.toHaveBeenCalled();
+      expect(component['itemsTable']).toEqual([{ 'Série': '-', 'Pie Value 1': 80, 'Pie Value 2': 20 }]);
+    });
   });
 
   describe('setTableColumns:', () => {
@@ -1055,6 +1136,7 @@ describe('PoChartNewComponent', () => {
         { serie: 'Série 1', valor1: 10, valor2: undefined },
         { serie: 'Série 2', valor1: 30 }
       ];
+      component['columnsTable'] = [{ property: 'serie' }, { property: 'valor1' }, { property: 'valor2' }];
       component.options = {} as any;
 
       component['downloadCsv']();
@@ -1191,47 +1273,6 @@ describe('PoChartNewComponent', () => {
 
       expect(component['setHeaderProperties']).not.toHaveBeenCalled();
     });
-
-    // it('should create and download a PNG image correctly', done => {
-    //   const chartElement = document.createElement('div');
-    //   chartElement.style.width = '800px';
-    //   chartElement.style.height = '600px';
-
-    //   const headerElement = document.createElement('div');
-    //   headerElement.style.height = '50px';
-
-    //   const mockImage = new Image();
-    //   const canvas = document.createElement('canvas');
-    //   const ctx = canvas.getContext('2d');
-    //   spyOn(canvas, 'getContext').and.returnValue(ctx);
-
-    //   const link = document.createElement('a');
-    //   spyOn(document, 'createElement').and.callFake((tag: string) => {
-    //     if (tag === 'canvas') return canvas;
-    //     if (tag === 'a') return link;
-    //     return document.createElement(tag);
-    //   });
-
-    //   spyOn(canvas, 'toDataURL').and.returnValue('data:image/png;base64,fakeImageData');
-    //   spyOn(link, 'click');
-
-    //   component['configureImageCanvas']('png', mockImage);
-
-    //   setTimeout(() => {
-    //     mockImage.onload?.(new Event('load'));
-    //   }, 100);
-
-    //   setTimeout(() => {
-    //     try {
-    //       expect(link.href).toBe('data:image/png;base64,fakeImageData');
-    //       expect(link.download).toBe('grafico-exportado.png');
-    //       expect(link.click).toHaveBeenCalled();
-    //       done();
-    //     } catch (error) {
-    //       done.fail(error);
-    //     }
-    //   }, 300);
-    // });
 
     it('should create and download a PNG image correctly', done => {
       const chartElement = document.createElement('div');
