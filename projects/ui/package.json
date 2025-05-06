@@ -24,6 +24,7 @@
     "@angular/cdk": "~19.0.3",
     "@po-ui/style": "0.0.0-PLACEHOLDER",
     "@po-ui/ng-schematics": "0.0.0-PLACEHOLDER",
+    "echarts": "^5.6.0",
     "tslib": "^2.6.2"
   },
   "peerDependencies": {
