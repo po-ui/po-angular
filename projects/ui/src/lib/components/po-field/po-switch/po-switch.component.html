@@ -47,6 +47,8 @@
     [p-append-in-body]="appendBox"
     [p-help]="help"
     [p-disabled]="disabled"
+    [p-error-limit]="errorLimit"
+    [p-error-pattern]="getErrorPattern()"
     [p-show-additional-help]="displayAdditionalHelp"
     [p-show-additional-help-icon]="showAdditionalHelpIcon()"
     (p-additional-help)="emitAdditionalHelp()"
