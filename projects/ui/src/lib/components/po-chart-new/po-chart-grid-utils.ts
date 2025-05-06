@@ -28,6 +28,7 @@ export class PoChartGridUtils {
         fontFamily: this.component.getCSSVariable('--font-family-grid', '.po-chart'),
         fontSize: tokenFontSizeGrid || 12,
         fontWeight: Number(this.component.getCSSVariable('--font-weight-grid', '.po-chart')),
+        color: this.component.getCSSVariable('--color-legend', '.po-chart'),
         rotate: this.component.options?.axis?.rotateLegend,
         interval: 0,
         width: 72,
@@ -50,6 +51,7 @@ export class PoChartGridUtils {
         margin: 10,
         fontFamily: this.component.getCSSVariable('--font-family-grid', '.po-chart'),
         fontSize: tokenFontSizeGrid || 12,
+        color: this.component.getCSSVariable('--color-legend', '.po-chart'),
         fontWeight: Number(this.component.getCSSVariable('--font-weight-grid', '.po-chart'))
       },
       splitLine: {
@@ -134,7 +136,45 @@ export class PoChartGridUtils {
         color: color
       };
       serie.emphasis = { focus: 'series' };
+      serie.blur = {
+        itemStyle: { opacity: 0.4 }
+      };
       this.component.boundaryGap = true;
+    }
+  }
+
+  setListTypePie() {
+    let radius = '85%';
+    let positionHorizontal;
+    if (this.component.options?.legend === false) {
+      radius = '95%';
+      positionHorizontal = '50%';
+    } else {
+      positionHorizontal = this.component.options?.legendVerticalPosition === 'top' ? '54%' : '46%';
+    }
+    this.component.listTypePie = [
+      {
+        type: 'pie',
+        center: ['50%', positionHorizontal],
+        radius: radius,
+        emphasis: { focus: 'self' },
+        data: [],
+        blur: { itemStyle: { opacity: 0.4 } }
+      }
+    ];
+  }
+
+  setSerieTypePie(serie: any, color: string) {
+    if (this.component.listTypePie?.length) {
+      const borderWidth = this.resolvePx('--border-width-sm');
+      const borderColor = this.component.getCSSVariable('--border-color', '.po-chart');
+      const seriePie = {
+        name: serie.name,
+        value: serie.data,
+        itemStyle: { borderWidth: borderWidth, borderColor: borderColor, color: color },
+        label: { show: false }
+      };
+      this.component.listTypePie[0].data.push(seriePie);
     }
   }
 

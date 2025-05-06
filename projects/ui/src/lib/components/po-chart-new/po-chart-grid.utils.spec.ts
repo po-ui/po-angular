@@ -85,4 +85,57 @@ describe('PoChartGridUtils', () => {
       expect(option.xAxis['axisLabel'].overflow).toBe('break');
     });
   });
+
+  describe('setListPie', () => {
+    it('should set pie config with radius 95% and center 50% 50% when legend is false', () => {
+      utils['component'].options = { legend: false } as any;
+
+      utils.setListTypePie();
+
+      expect(utils['component'].listTypePie).toEqual([
+        {
+          type: 'pie',
+          center: ['50%', '50%'],
+          radius: '95%',
+          emphasis: { focus: 'self' },
+          data: [],
+          blur: { itemStyle: { opacity: 0.4 } }
+        }
+      ]);
+    });
+
+    it('should set pie config with center 50% 54% when legendVerticalPosition is top', () => {
+      utils['component'].options = { legend: true, legendVerticalPosition: 'top' } as any;
+
+      utils.setListTypePie();
+
+      expect(utils['component'].listTypePie).toEqual([
+        {
+          type: 'pie',
+          center: ['50%', '54%'],
+          radius: '85%',
+          emphasis: { focus: 'self' },
+          data: [],
+          blur: { itemStyle: { opacity: 0.4 } }
+        }
+      ]);
+    });
+
+    it('should set pie config with center 50% 46% when legendVerticalPosition is not top', () => {
+      utils['component'].options = { legend: true, legendVerticalPosition: 'bottom' } as any;
+
+      utils.setListTypePie();
+
+      expect(utils['component'].listTypePie).toEqual([
+        {
+          type: 'pie',
+          center: ['50%', '46%'],
+          radius: '85%',
+          emphasis: { focus: 'self' },
+          data: [],
+          blur: { itemStyle: { opacity: 0.4 } }
+        }
+      ]);
+    });
+  });
 });
