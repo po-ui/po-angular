@@ -1,6 +1,6 @@
 import { Directive, EventEmitter, Input, Output } from '@angular/core';
 import { PoFieldSize } from '../../enums/po-field-size.enum';
-import { PoThemeService } from '../../services';
+import { PoThemeService } from '../../services/po-theme/po-theme.service';
 import { convertToBoolean, getDefaultSize, validateSize } from '../../utils/util';
 import { PoToasterMode } from './enum/po-toaster-mode.enum';
 import { PoToasterOrientation } from './enum/po-toaster-orientation.enum';

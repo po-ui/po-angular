@@ -723,11 +723,11 @@ export abstract class PoPageLoginBaseComponent implements OnDestroy {
    *
    * - **String**: informe uma url externa ou uma rota válida;
    * - **Function**: pode-se customizar a ação. Para esta possilidade basta atribuir:
-   * ```
-   * <po-page-login>
-   *   [recovery]="this.myRecovery.bind(this)">
-   * </po-page-login>
-   * ```
+   *   ```
+   *   <po-page-login>
+   *     [recovery]="this.myRecovery.bind(this)">
+   *   </po-page-login>
+   *   ```
    *
    * - **PoPageLoginRecovery**: cria-se vínculo automático com o template **po-modal-password-recovery**.
    *   O objeto deve conter a **url** para requisição dos recursos e pode-se definir o **tipo** de modal para recuperação de senha,
@@ -952,11 +952,11 @@ export abstract class PoPageLoginBaseComponent implements OnDestroy {
    *
    * - **String**: URL externa ou uma rota válida;
    * - **Function**: Função a ser disparada ao clicar no botão de suporte;
-   * ```
-   * <po-page-login>
-   *   [p-support]="this.mySupport.bind(this)">
-   * </po-page-login>
-   * ```
+   *   ```
+   *   <po-page-login>
+   *     [p-support]="this.mySupport.bind(this)">
+   *   </po-page-login>
+   *   ```
    *
    */
   @Input('p-support') set support(value: string | Function) {

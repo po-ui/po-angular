@@ -79,10 +79,8 @@
     "capitalize": "^2.0.4",
     "colors": "1.4.0",
     "core-js": "3.33.3",
-    "custom-idle-queue": "3.0.1",
-    "eslint-plugin-sonarjs": "^0.23.0",
+    "custom-idle-queue": "file:custom-idle-queue-3.0.2.tgz",
     "gulp-clean": "^0.4.0",
-    "gulp-run": "^1.7.1",
     "highlight.js": "^11.9.0",
     "http-status-codes": "^2.3.0",
     "localforage": "1.10.0",
@@ -96,7 +94,7 @@
     "zone.js": "~0.15.0"
   },
   "devDependencies": {
-    "@angular-devkit/build-angular": "~19.0.4",
+    "@angular-devkit/build-angular": "~19.2.3",
     "@angular-eslint/builder": "^19.0.2",
     "@angular-eslint/eslint-plugin": "^19.0.2",
     "@angular-eslint/eslint-plugin-template": "^19.0.2",
@@ -118,15 +116,17 @@
     "@typescript-eslint/parser": "^8.18.0",
     "del": "^6.0.0",
     "dgeni": "^0.4.14",
-    "dgeni-packages": "0.30.0",
+    "dgeni-packages": "file:dgeni-packages-v0.30.1.tgz",
     "eslint": "^8.57.0",
     "eslint-plugin-import": "latest",
     "eslint-plugin-jsdoc": "latest",
     "eslint-plugin-prefer-arrow": "latest",
     "eslint-plugin-react": "latest",
-    "gulp": "^4.0.2",
+    "eslint-plugin-sonarjs": "^0.23.0",
+    "gulp": "^5.0.0",
     "gulp-tap": "^2.0.0",
     "husky": "^8.0.0",
+    "jasmine": "2.8.0",
     "jasmine-core": "5.1.1",
     "jasmine-spec-reporter": "7.0.0",
     "karma": "6.4.2",
@@ -136,24 +136,14 @@
     "karma-jasmine-html-reporter": "2.1.0",
     "lint-staged": "^15.1.0",
     "mkdirp": "3.0.1",
-    "ng-packagr": "~19.0.1",
+    "ng-packagr": "~19.2.0",
     "prettier": "^3.1.0",
-    "protractor": "~7.0.0",
     "rollup": "4.24.4",
-    "sonarjs": "latest",
     "sonarqube-scanner": "^4.2.2",
     "standard-version": "^9.5.0",
     "ts-node": "~10.9.1",
     "typemoq": "^2.1.0",
     "typescript": "~5.6.3"
-  },
-  "overrides": {
-    "custom-idle-queue": {
-      "@babel/runtime": "~7.26.10"
-    },
-    "@angular-devkit/build-angular": {
-      "@babel/runtime": "~7.26.10"
-    }
   },
   "standard-version": {
     "skip": {
