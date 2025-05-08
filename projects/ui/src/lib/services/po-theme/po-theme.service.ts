@@ -172,42 +172,60 @@ export class PoThemeService {
    * A classe do tema é aplicada no HTML e pode ser formatada como `html[class*="-light-AA"]` para personalizações
    * em temas específicos.
    *
-   * @param {PoThemeActive} active - Objeto que define o tema ativo, com `type` e `a11y`.
+   * @param {PoThemeActive} active - Configuração do tema ativo:
    * @param {any} perComponent - Objeto contendo os estilos específicos para componentes a serem aplicados.
    * @param {any} onRoot - Objeto contendo tokens de estilo que serão aplicados diretamente no seletor `:root` do HTML.
+   * @param {string | Array<string>} [classPrefix] - Prefixo(s) de classe para direcionamento preciso.
    *
    * @example
+   * #### 1. Com prefixo único
+   * ```typescript
+   * setPerComponentAndOnRoot(
+   *   { type: 'dark', a11y: 'AA' },
+   *   { 'po-input': { background: '#222' } },
+   *   { '--text-color': '#fff' },
+   *   'myTheme'
+   * );
+   * ```
+   * **Saída:**
+   * ```css
+   * :root[class*="-dark-AA"][class*="myTheme"] {
+   *   --text-color: #fff;
+   *   po-input { background: #222; }
+   * }
+   * ```
    *
-   * // Exemplo de utilização com um tema ativo e tokens de estilo
-   * const themeActive = { type: 'light', a11y: 'AA' };
-   * const perComponentStyles = {
-   *   'po-listbox [hidden]': {
-   *     'display': 'flex !important'
-   *   }
-   * };
-   * const onRootStyles = {
-   *   '--font-family': 'Roboto',
-   *   '--background-color': '#fff'
-   * };
+   * #### 2. Com múltiplos prefixos
+   * ```typescript
+   * setPerComponentAndOnRoot(
+   *   { type: 'light' },
+   *   null,
+   *   { '--primary': '#3e8ed0' },
+   *   ['myTheme', 'portal-v2']
+   * );
+   * ```
+   * **Saída:**
+   * ```css
+   * :root[class*="-light"][class*="myTheme"],
+   * :root[class*="-light"][class*="portal-v2"] {
+   *   --primary: #3e8ed0;
+   * }
+   * ```
    *
-   * this.setPerComponentAndOnRoot(themeActive, perComponentStyles, onRootStyles);
-   *
-   * // Resultado:
-   * // Gera e aplica os seguintes estilos no DOM
-   * // :root[class*="-light-AA"] {
-   * //   --font-family: 'Roboto';
-   * //   --background-color: '#fff';
-   * //   po-listbox [hidden] {
-   * //     display: flex !important;
-   * //   }
-   * // }
+   * - Quando usado com array, gera um seletor CSS com múltiplos targets (separados por vírgula).
+   * - Mantém a especificidade original do tema (`[class*="-type-a11y"]`) combinada com cada prefixo.
    *
    */
-  public setPerComponentAndOnRoot(active: PoThemeActive, perComponent: any, onRoot: any) {
+  public setPerComponentAndOnRoot(
+    active: PoThemeActive,
+    perComponent: any,
+    onRoot: any,
+    classPrefix?: string | Array<string>
+  ) {
     const perComponentStyles = perComponent ? this.generatePerComponentStyles(perComponent) : '';
     const onRootStyles = onRoot ? this.generateAdditionalStyles(onRoot) : '';
 
-    let selector = '';
+    let selector = ':root';
     const typeSelector = active?.type !== undefined ? `-${PoThemeTypeEnum[active.type]}` : '';
     const accessibilitySelector = active?.a11y !== undefined ? `-${PoThemeA11yEnum[active.a11y]}` : '';
 
@@ -219,8 +237,16 @@ export class PoThemeService {
       selector += `[class*="${typeSelector}"]`;
     }
 
+    if (classPrefix) {
+      if (Array.isArray(classPrefix)) {
+        selector = classPrefix.map(prefix => selector + `[class*="${prefix}"]`).join(', ');
+      } else {
+        selector += `[class*="${classPrefix}"]`;
+      }
+    }
+
     const styleCss = `
-      :root${selector} {
+      ${selector} { 
         ${perComponentStyles}
         ${onRootStyles}
       }
