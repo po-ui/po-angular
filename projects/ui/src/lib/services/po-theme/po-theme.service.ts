@@ -18,7 +18,7 @@ import { PoTheme, PoThemeActive } from './interfaces/po-theme.interface';
  *
  * O `PoThemeService` possibilita a personalização das cores do tema padrão do `PO-UI`, permitindo a alteração dos valores das variáveis de estilo usadas no CSS padrão.
  *
- * > Para saber mais sobre como customizar as cores do tema padrão verifique o item [Customizando cores do tema padrão](https://po-ui.io/guides/colors-customization) na aba `Guias`.
+ * > Para saber mais sobre como customizar o tema padrão verifique o item [Customização de Temas usando o serviço PO-UI](guides/theme-service) na aba `Guias`.
  *
  * > Obs.: Não está documentado aqui e não indicamos a customização das cores de 'feedback' por motivos de acessibilidade e usabilidade.
  */
@@ -94,7 +94,7 @@ export class PoThemeService {
     const additionalStyles = this.generateAdditionalStyles(_themeType);
 
     const combinedStyles = `
-      html.${themeConfig.name}-${PoThemeTypeEnum[themeType]}-${a11yLevel}:root {
+      :root.${themeConfig.name}-${PoThemeTypeEnum[themeType]}-${a11yLevel} {
         ${colorStyles}
         ${perComponentStyles}
         ${onRootStyles}
@@ -194,7 +194,7 @@ export class PoThemeService {
    *
    * // Resultado:
    * // Gera e aplica os seguintes estilos no DOM
-   * // html[class*="-light-AA"]:root {
+   * // :root[class*="-light-AA"] {
    * //   --font-family: 'Roboto';
    * //   --background-color: '#fff';
    * //   po-listbox [hidden] {
@@ -207,7 +207,7 @@ export class PoThemeService {
     const perComponentStyles = perComponent ? this.generatePerComponentStyles(perComponent) : '';
     const onRootStyles = onRoot ? this.generateAdditionalStyles(onRoot) : '';
 
-    let selector = 'html';
+    let selector = '';
     const typeSelector = active?.type !== undefined ? `-${PoThemeTypeEnum[active.type]}` : '';
     const accessibilitySelector = active?.a11y !== undefined ? `-${PoThemeA11yEnum[active.a11y]}` : '';
 
@@ -220,7 +220,7 @@ export class PoThemeService {
     }
 
     const styleCss = `
-      ${selector}:root {
+      :root${selector} {
         ${perComponentStyles}
         ${onRootStyles}
       }
@@ -231,7 +231,7 @@ export class PoThemeService {
       styleElement = this.renderer.createElement('style');
       styleElement.id = 'baseStyle';
       this.renderer.appendChild(styleElement, this.renderer.createText(styleCss));
-      this.renderer.appendChild(this.document.head, styleElement);
+      this.renderer.insertBefore(this.document.head, styleElement, this.document.head.firstChild);
     } else {
       if (!styleElement.textContent.includes(styleCss.trim())) {
         this.renderer.appendChild(styleElement, this.renderer.createText(styleCss));
@@ -267,7 +267,10 @@ export class PoThemeService {
       this.renderer.removeChild(document.head, existingStyleElement);
     }
 
-    this.renderer.appendChild(document.head, styleElement);
+    const existingBaseStyle = document.head.querySelector('#baseStyle');
+    const referenceNode = existingBaseStyle ? existingBaseStyle.nextSibling : document.head.firstChild;
+
+    this.renderer.insertBefore(document.head, styleElement, referenceNode);
   }
 
   private changeThemeType(theme: PoTheme, persistPreference: boolean = true) {
@@ -604,15 +607,15 @@ export class PoThemeService {
 
   private setDefaultBaseStyle() {
     // set triple A for all themes (its the base theme)
-    // result: html:root
+    // result: :root
     this.setPerComponentAndOnRoot(undefined, poThemeDefaultAAA.perComponent, poThemeDefaultAAA.onRoot);
 
     // set double A
-    // result: html[class*="-AA"]:root
+    // result: :root[class*="-AA"]
     this.setPerComponentAndOnRoot({ a11y: PoThemeA11yEnum.AA }, poThemeDefaultAA.perComponent, poThemeDefaultAA.onRoot);
 
     // set Light mode values
-    // result: html[class*="-light"]:root
+    // result: :root[class*="-light"]
     this.setPerComponentAndOnRoot(
       { type: PoThemeTypeEnum.light },
       poThemeDefaultLightValues.perComponent,
@@ -620,7 +623,7 @@ export class PoThemeService {
     );
 
     // set Dark mode values
-    // result: html[class*="-dark"]:root
+    // result: :root[class*="-dark"]
     this.setPerComponentAndOnRoot(
       { type: PoThemeTypeEnum.dark },
       poThemeDefaultDarkValues.perComponent,
