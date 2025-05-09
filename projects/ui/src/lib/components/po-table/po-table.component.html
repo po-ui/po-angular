@@ -40,8 +40,8 @@
   <div *ngIf="!hideTableSearch && hasValidColumns" class="po-table-search">
     <po-search
       [p-items]="items"
-      [p-filter-keys]="filteredColumns"
-      [p-filter-type]="filterType"
+      [p-filter-keys]="['detail[0].tour', 'country']"
+      [p-filter-type]="1"
       [p-size]="componentsSize"
       (p-filtered-items-change)="onFilteredItemsChange($event)"
     >

@@ -1,0 +1,23 @@
+<po-table
+  [p-container]="true"
+  [p-height]="400"
+  [p-hide-batch-actions]="false"
+  [p-hide-table-search]="false"
+  [p-selectable]="true"
+  [p-sort]="true"
+  [p-striped]="true"
+  [p-actions]="actions"
+  [p-columns]="columns"
+  [p-items]="items"
+  [p-max-columns]="7"
+  [p-filtered-columns]="['status']"
+  [p-virtual-scroll]="false"
+  (p-collapsed)="onCollapseDetail()"
+  (p-expanded)="onExpandDetail()"
+  (p-selected)="sumTotal($event)"
+  (p-unselected)="decreaseTotal($event)"
+  (p-change-visible-columns)="changeColumnVisible($event)"
+  (p-restore-column-manager)="restoreColumn()"
+  (p-delete-items)="deleteItems($event)"
+>
+</po-table>

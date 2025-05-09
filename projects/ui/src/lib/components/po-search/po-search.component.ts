@@ -176,12 +176,24 @@ export class PoSearchComponent extends PoSearchBaseComponent implements OnInit, 
     return this.items.filter(item => this.itemMatchesFilter(item, searchText));
   }
 
-  private itemMatchesFilter(item: any, searchText: string): boolean {
-    const valuesToSearch: Array<string> = this.filterKeys
-      .map(key => (typeof item[key] !== 'string' ? String(item[key]) : item[key]))
-      .map(value => (value ? value.toLowerCase() : ''));
+  private getValueByPath(obj: any, path: string): any {
+    const parts = path
+      .replace(/\[(\w+)\]/g, '.$1')
+      .split('.')
+      .filter(p => p.length);
 
-    return valuesToSearch.some(value => this.filterValue(value, searchText));
+    return parts.reduce((o, p) => (o != null ? o[p] : undefined), obj);
+  }
+
+  private itemMatchesFilter(item: any, searchText: string): boolean {
+    const lowerSearch = searchText.trim().toLowerCase();
+
+    const valuesToSearch: Array<string> = this.filterKeys.map(key => {
+      const val = this.getValueByPath(item, key);
+      return val != null && typeof val !== 'object' ? String(val).toLowerCase() : '';
+    });
+
+    return valuesToSearch.some(value => this.filterValue(value, lowerSearch));
   }
 
   getListboxFilteredItems(searchText) {
