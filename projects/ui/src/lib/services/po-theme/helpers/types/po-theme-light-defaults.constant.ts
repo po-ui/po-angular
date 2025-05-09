@@ -1,5 +1,6 @@
 import {
   PoThemeColorAction,
+  PoThemeColorCategorical,
   PoThemeColorFeedback,
   PoThemeColorNeutral,
   poThemeColorBrand
@@ -114,6 +115,28 @@ const poThemeDefaultBrands: poThemeColorBrand = {
   }
 };
 
+const poThemeDefaultCategoricals: PoThemeColorCategorical = {
+  '01': '#004CFF',
+  '02': '#C25534',
+  '03': '#792CC7',
+  '04': '#008768',
+  '05': '#D62793',
+  '06': '#D44317',
+  '07': '#4779A8',
+  '08': '#AD6207'
+};
+
+const poThemeDefaultOverlayCategoricals: PoThemeColorCategorical = {
+  '01': '#739CFD',
+  '02': '#F6B5A1',
+  '03': '#C6A8E6',
+  '04': '#69CAB8',
+  '05': '#F3AFD9',
+  '06': '#FCA58B',
+  '07': '#99BFE3',
+  '08': '#E8B16E'
+};
+
 /**
  * Define estilos específicos por componente e onRoot para temas claros para AAA.
  */
@@ -127,5 +150,7 @@ export {
   poThemeDefaultActions,
   poThemeDefaultFeedback,
   poThemeDefaultNeutrals,
-  poThemeDefaultLightValues
+  poThemeDefaultLightValues,
+  poThemeDefaultCategoricals,
+  poThemeDefaultOverlayCategoricals
 };
