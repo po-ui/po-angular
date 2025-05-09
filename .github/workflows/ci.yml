@@ -28,7 +28,7 @@ jobs:
           
   lint:
 
-    runs-on: ubuntu-20.04
+    runs-on: ubuntu-latest
 
     # As etapas do workflow são definidas nessa tag.
     steps:
@@ -57,7 +57,7 @@ jobs:
   build:
     name: Build packages
 
-    runs-on: ubuntu-20.04
+    runs-on: ubuntu-latest
 
     steps:
 
@@ -80,7 +80,7 @@ jobs:
   test-ui:
     name: Test ui
 
-    runs-on: ubuntu-20.04
+    runs-on: ubuntu-latest
 
     steps:
 
@@ -97,7 +97,7 @@ jobs:
   test-templates:
     name: Test templates
 
-    runs-on: ubuntu-20.04
+    runs-on: ubuntu-latest
 
     steps:
 
@@ -115,7 +115,7 @@ jobs:
   test-code-editor:
     name: Test code editor
 
-    runs-on: ubuntu-20.04
+    runs-on: ubuntu-latest
 
     steps:
 
@@ -132,7 +132,7 @@ jobs:
   test-storage:
     name: Test storage
 
-    runs-on: ubuntu-20.04
+    runs-on: ubuntu-latest
 
     steps:
 
@@ -149,7 +149,7 @@ jobs:
   test-sync:
     name: Test sync
 
-    runs-on: ubuntu-20.04
+    runs-on: ubuntu-latest
 
     steps:
 
