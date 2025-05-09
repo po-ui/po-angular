@@ -3,13 +3,16 @@
   [(ngModel)]="switch"
   [p-additional-help-tooltip]="additionalHelpTooltip"
   [p-disabled]="properties.includes('disabled')"
+  [p-error-limit]="properties?.includes('errorLimit')"
+  [p-field-error-message]="fieldErrorMessage"
+  [p-format-model]="properties.includes('formatModel')"
   [p-help]="help"
+  [p-hide-label-status]="properties.includes('hideLabelStatus')"
+  [p-invalid-value]="properties?.includes('invalidValue')"
   [p-label]="label"
   [p-label-off]="labelOff"
   [p-label-on]="labelOn"
   [p-label-position]="labelPosition"
-  [p-format-model]="properties.includes('formatModel')"
-  [p-hide-label-status]="properties.includes('hideLabelStatus')"
   [p-size]="size"
   (p-change)="changeEvent('p-change')"
   (p-keydown)="changeEvent('p-keydown')"
@@ -55,6 +58,14 @@
     [(ngModel)]="labelOn"
     p-help="Text displayed when PO Switch is set to 'true'"
     p-label="Label On"
+  >
+  </po-input>
+  <po-input
+    class="po-md-6"
+    name="fieldErrorMessage"
+    [(ngModel)]="fieldErrorMessage"
+    p-clean
+    p-label="Field Error Message"
   >
   </po-input>
 

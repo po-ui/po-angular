@@ -10,6 +10,7 @@ import { PoCheckboxGroupOption, PoRadioGroupOption, PoSwitchLabelPosition } from
 export class SamplePoSwitchLabsComponent implements OnInit {
   additionalHelpTooltip: string;
   event: string;
+  fieldErrorMessage: string;
   help: string;
   label: string;
   labelOff: string;
@@ -27,7 +28,9 @@ export class SamplePoSwitchLabsComponent implements OnInit {
   public readonly propertiesOptions: Array<PoCheckboxGroupOption> = [
     { value: 'disabled', label: 'Disabled' },
     { value: 'formatModel', label: 'Format Model' },
-    { value: 'hideLabelStatus', label: 'Hide label status' }
+    { value: 'hideLabelStatus', label: 'Hide label status' },
+    { value: 'errorLimit', label: 'Limit Error Message' },
+    { value: 'invalidValue', label: 'Invalid Value is On/True' }
   ];
 
   public readonly sizeOptions: Array<PoRadioGroupOption> = [
@@ -54,5 +57,6 @@ export class SamplePoSwitchLabsComponent implements OnInit {
     this.properties = [];
     this.size = 'medium';
     this.switch = undefined;
+    this.fieldErrorMessage = '';
   }
 }
