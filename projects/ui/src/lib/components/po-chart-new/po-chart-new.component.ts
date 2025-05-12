@@ -321,7 +321,8 @@ export class PoChartNewComponent extends PoChartNewBaseComponent implements OnIn
       textStyle: {
         color: this.getCSSVariable('--color-legend', '.po-chart'),
         fontSize: this.getCSSVariable('--font-size-grid', '.po-chart'),
-        fontFamily: this.getCSSVariable('--font-family-grid', '.po-chart')
+        fontFamily: this.getCSSVariable('--font-family-grid', '.po-chart'),
+        fontWeight: this.getCSSVariable('--font-weight-grid', '.po-chart')
       }
     };
   }

@@ -1,6 +1,20 @@
 import { EChartsOption } from 'echarts/dist/echarts.esm';
 import { PoChartNewComponent } from './po-chart-new.component';
 
+const gridPaddingValues = {
+  paddingBottomWithTopLegend: 48,
+  paddingBottomWithBottomLegend: 72,
+  paddingBottomNoLegend: 0,
+
+  paddingTopWithDataLabelFixed: 64,
+  paddingTopDefaultWithTopLegend: 56,
+  paddingTopWithDataLabelFixedBottomLegend: 32,
+  paddingTopDefaultWithBottomLegend: 16,
+
+  bottomDataZoomValueTopLegend: 8,
+  bottomDataZoomValueBottomLegend: 32
+} as const;
+
 export class PoChartGridUtils {
   constructor(private readonly component: PoChartNewComponent) {}
 
@@ -199,42 +213,52 @@ export class PoChartGridUtils {
       (options.legend === false || options.legendVerticalPosition === 'top')
     ) {
       if (typeof options.bottomDataZoom === 'boolean' && options.bottomDataZoom === true) {
-        options.bottomDataZoom = 8;
+        options.bottomDataZoom = gridPaddingValues.bottomDataZoomValueTopLegend;
       }
-      return 50;
+      return gridPaddingValues.paddingBottomWithTopLegend;
     } else if (options?.dataZoom && options.bottomDataZoom && options.legendVerticalPosition !== 'top') {
       if (typeof options.bottomDataZoom === 'boolean' && options.bottomDataZoom === true) {
-        options.bottomDataZoom = 32;
+        options.bottomDataZoom = gridPaddingValues.bottomDataZoomValueBottomLegend;
       }
-      return 70;
+      return gridPaddingValues.paddingBottomWithBottomLegend;
     } else if (
       (options?.dataZoom && !options?.bottomDataZoom && options.legend === false) ||
       (!options?.dataZoom && options?.legend === false) ||
       (!options?.dataZoom && options?.legendVerticalPosition === 'top')
     ) {
-      return 0;
+      return gridPaddingValues.paddingBottomNoLegend;
     }
-    return 50;
+    return gridPaddingValues.paddingBottomWithTopLegend;
+  }
+
+  private hasTopLegendOrNoZoom(options): boolean {
+    return (
+      (options?.dataZoom && !options.bottomDataZoom) ||
+      (options?.dataZoom && options.bottomDataZoom && options.legendVerticalPosition === 'top') ||
+      (!options?.dataZoom && options?.legendVerticalPosition === 'top')
+    );
+  }
+
+  private hasBottomLegendWithZoom(options): boolean {
+    return (
+      (options?.dataZoom && options.bottomDataZoom && options.legendVerticalPosition !== 'top') ||
+      (!options?.dataZoom && options?.legendVerticalPosition !== 'top')
+    );
   }
 
   private getPaddingTopGrid() {
     const options = this.component.options;
-    if (
-      (options?.dataZoom && !options.bottomDataZoom) ||
-      (options?.dataZoom && options.bottomDataZoom && options.legendVerticalPosition === 'top') ||
-      (!options?.dataZoom && options?.legendVerticalPosition === 'top')
-    ) {
+    if (this.hasTopLegendOrNoZoom(options)) {
       if (typeof options.bottomDataZoom === 'boolean' && options.bottomDataZoom === true) {
-        options.bottomDataZoom = 8;
+        options.bottomDataZoom = gridPaddingValues.bottomDataZoomValueTopLegend;
       }
       const fixed = this.component.dataLabel?.fixed && !options?.axis?.maxRange;
-      return fixed ? 60 : 50;
-    } else if (
-      (options?.dataZoom && options.bottomDataZoom && options.legendVerticalPosition !== 'top') ||
-      (!options?.dataZoom && options?.legendVerticalPosition !== 'top')
-    ) {
+      return fixed ? gridPaddingValues.paddingTopWithDataLabelFixed : gridPaddingValues.paddingTopDefaultWithTopLegend;
+    } else if (this.hasBottomLegendWithZoom(options)) {
       const fixed = this.component.dataLabel?.fixed && !options?.axis?.maxRange;
-      return fixed ? 30 : 20;
+      return fixed
+        ? gridPaddingValues.paddingTopWithDataLabelFixedBottomLegend
+        : gridPaddingValues.paddingTopDefaultWithBottomLegend;
     }
   }
 }
