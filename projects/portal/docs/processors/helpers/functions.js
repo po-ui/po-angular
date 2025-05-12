@@ -250,6 +250,7 @@ module.exports = {
       // Remove line-breaks in resolved selectors.
       return directiveSelectors
         .replace(/[\r\n]/g, '')
+        .replace("-old", "") // @Todo - Migração PO-CHART 
         .split(/\s*,\s*/)
         .filter(s => s !== '' && !s.includes('mat'));
     }
