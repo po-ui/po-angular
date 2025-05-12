@@ -57,6 +57,21 @@ export interface PoChartOptions {
    */
   innerRadius?: number;
 
+  /**
+   * Define borda entre os itens do gráfico. Válido para os gráficos `Donut`, `Pie` e `Gauge`.
+   * > Valores válidos entre 0 e 100,
+   *
+   * @default `0`
+   */
+  borderRadius?: number;
+
+  /**
+   * Aplica texto centralizado customizado nos gráficos de `Donut` e `Gauge`.
+   * > No `Gauge`, o valor `default` é a porcentagem total do Gráfico
+   *
+   */
+  textCenterGraph?: string;
+
   /** Define a exibição da legenda do gráfico. Valor padrão é `true` */
   legend?: boolean;
 
