@@ -52,7 +52,7 @@ import { PoChartMathsService } from './services/po-chart-maths.service';
  * </example>
  */
 @Component({
-  selector: 'po-chart',
+  selector: 'po-chart-old',
   templateUrl: './po-chart.component.html',
   standalone: false
 })
