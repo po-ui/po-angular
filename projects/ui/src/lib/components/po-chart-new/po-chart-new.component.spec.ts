@@ -512,6 +512,57 @@ describe('PoChartNewComponent', () => {
       expect(component.seriesClick.emit).not.toHaveBeenCalled();
     });
 
+    it('should emit seriesHover event when clicking on the chart if type is Donut', () => {
+      const tooltipElement = document.createElement('div');
+      tooltipElement.id = 'custom-tooltip';
+      document.body.appendChild(tooltipElement);
+      const chartElement = document.createElement('div');
+      chartElement.id = 'chart-id';
+      document.body.appendChild(chartElement);
+      component['el'] = {
+        nativeElement: document
+      };
+
+      component['chartInstance'] = {
+        on: jasmine.createSpy('on')
+      } as any;
+
+      spyOn(component.seriesHover, 'emit');
+      spyOn(component.seriesClick, 'emit');
+
+      component.series = [{ label: 'Colombia', data: 300, color: 'color-10' }];
+      component.itemsTypeDonut = [{ label: 'Colombia', data: 300, valuePercentage: '80%' }];
+
+      component['initEChartsEvents']();
+
+      expect(component['chartInstance'].on).toHaveBeenCalledWith('mouseover', jasmine.any(Function));
+
+      const mouseoverCallback = component['chartInstance'].on.calls.argsFor(1)[1];
+
+      const mockParams = {
+        value: 300,
+        name: 'Colombia',
+        seriesType: 'pie',
+        seriesIndex: 0,
+        event: { offsetX: 10, offsetY: 20 }
+      };
+      mouseoverCallback(mockParams);
+
+      expect(component['positionTooltip']).toBe('top');
+
+      const clickCallback = component['chartInstance'].on.calls.argsFor(0)[1];
+
+      const mockParamsClick = {};
+      clickCallback(mockParamsClick);
+
+      expect(component.tooltipText).toBe(`Colombia: <b>80%%</b>`);
+      expect(component.seriesHover.emit).toHaveBeenCalledWith({
+        label: 'Colombia',
+        data: 300
+      });
+      expect(component.seriesClick.emit).not.toHaveBeenCalled();
+    });
+
     it('should hide the tooltip when leaving the chart (mouseout)', () => {
       component['chartInstance'] = {
         on: jasmine.createSpy('on')
@@ -845,12 +896,23 @@ describe('PoChartNewComponent', () => {
       expect(result[1].type).toBe('bar');
     });
 
-    it('should return type Donut', () => {
+    it('should return type Donut if data is not valid', () => {
       component.type = PoChartType.Donut;
       component.series = [{ label: 'Serie 1', data: [7, 8, 9] }];
 
       const result = component['setSeries']();
-      expect(result[0].type).toBe('donut');
+      expect(result[0].type).toBe('pie');
+    });
+
+    it('should return type Donut', () => {
+      component.type = PoChartType.Donut;
+      component.series = [
+        { label: 'Serie 1', data: 10 },
+        { label: 'Serie 2', data: 30 }
+      ];
+
+      const result = component['setSeries']();
+      expect(result[0].type).toBe('pie');
     });
 
     it('should return type Pie', () => {
@@ -1201,7 +1263,7 @@ describe('PoChartNewComponent', () => {
       expect(mockChartInstance.getDataURL).toHaveBeenCalledWith({
         type: 'jpeg',
         pixelRatio: 2,
-        backgroundColor: 'white'
+        backgroundColor: '#ffffff'
       });
       expect(component['configureImageCanvas']).toHaveBeenCalledWith('jpeg', mockImage);
     });

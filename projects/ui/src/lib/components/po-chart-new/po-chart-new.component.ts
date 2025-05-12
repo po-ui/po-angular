@@ -69,7 +69,8 @@ export class PoChartNewComponent extends PoChartNewBaseComponent implements OnIn
   chartMarginTop = '0px';
   isTypeBar = false;
   boundaryGap = false;
-  listTypePie: Array<any>;
+  listTypePieDonut: Array<any>;
+  itemsTypeDonut: Array<any> = [];
   protected actionModal: PoModalAction = {
     action: this.downloadCsv.bind(this),
     label: this.literals.downloadCSV
@@ -237,18 +238,7 @@ export class PoChartNewComponent extends PoChartNewBaseComponent implements OnIn
       if (params.seriesType) {
         const divTooltipElement = this.el.nativeElement.querySelector('#custom-tooltip');
         if (divTooltipElement) {
-          const chartElement = this.el.nativeElement.querySelector('#chart-id');
-          const customTooltipText =
-            params.seriesName && !params.seriesName.includes('\u00000')
-              ? `<b>${params.name}</b><br>
-            ${params.seriesName}: <b>${params.value}</b>`
-              : `${params.name}: <b>${params.value}</b>`;
-          this.tooltipText = this.series[params.seriesIndex].tooltip
-            ? this.series[params.seriesIndex].tooltip
-            : customTooltipText;
-          divTooltipElement.style.left = `${params.event.offsetX + chartElement.offsetLeft + 3}px`;
-          divTooltipElement.style.top = `${chartElement.offsetTop + params.event.offsetY + 3}px`;
-          this.poTooltip.last.toggleTooltipVisibility(true);
+          this.setTooltipProperties(divTooltipElement, params);
         }
       }
       if (params.seriesName && !params.seriesName.includes('\u00000')) {
@@ -261,6 +251,28 @@ export class PoChartNewComponent extends PoChartNewBaseComponent implements OnIn
     this.chartInstance.on('mouseout', () => {
       this.poTooltip.last.toggleTooltipVisibility(false);
     });
+  }
+
+  private setTooltipProperties(divTooltipElement, params) {
+    const chartElement = this.el.nativeElement.querySelector('#chart-id');
+    let valueLabel = params.value;
+    if (this.itemsTypeDonut?.length) {
+      const findCurrentValue = this.itemsTypeDonut.find(
+        item => item.data === params.value && params.name === item.label
+      );
+      valueLabel = `${findCurrentValue.valuePercentage}%`;
+    }
+    const customTooltipText =
+      params.seriesName && !params.seriesName.includes('\u00000')
+        ? `<b>${params.name}</b><br>
+        ${params.seriesName}: <b>${valueLabel}</b>`
+        : `${params.name}: <b>${valueLabel}</b>`;
+    this.tooltipText = this.series[params.seriesIndex].tooltip
+      ? this.series[params.seriesIndex].tooltip
+      : customTooltipText;
+    divTooltipElement.style.left = `${params.event.offsetX + chartElement.offsetLeft + 3}px`;
+    divTooltipElement.style.top = `${chartElement.offsetTop + params.event.offsetY - 2}px`;
+    this.poTooltip.last.toggleTooltipVisibility(true);
   }
 
   private setChartsProperties() {
@@ -277,7 +289,7 @@ export class PoChartNewComponent extends PoChartNewBaseComponent implements OnIn
       series: newSeries as any
     };
 
-    if (!this.listTypePie?.length) {
+    if (!this.listTypePieDonut?.length) {
       this.chartGridUtils.setGridOption(options);
       this.chartGridUtils.setOptionsAxis(options);
       this.formatLabelOption(options);
@@ -336,8 +348,10 @@ export class PoChartNewComponent extends PoChartNewBaseComponent implements OnIn
     if (!findType && !this.type) {
       typeDefault = Array.isArray(this.series[0].data) ? PoChartType.Column : PoChartType.Pie;
     }
-    if (findType === 'pie' || typeDefault === 'pie' || this.type === 'pie') {
-      this.chartGridUtils.setListTypePie();
+
+    const verifyType = findType || this.type || typeDefault;
+    if (verifyType === 'donut' || verifyType === 'pie') {
+      this.chartGridUtils.setListTypeDonutPie(verifyType);
     }
 
     const seriesUpdated = newSeries.map((serie, index) => {
@@ -348,7 +362,7 @@ export class PoChartNewComponent extends PoChartNewBaseComponent implements OnIn
         ? this.getCSSVariable(`--${serie.color.replace('po-', '')}`)
         : serie.color;
 
-      this.chartGridUtils.setSerieTypePie(serie, colorVariable);
+      this.chartGridUtils.setSerieTypeDonutPie(serie, colorVariable);
       this.setSerieEmphasis(serie, colorVariable, tokenBorderWidthMd);
       this.chartGridUtils.setSerieTypeLine(serie, tokenBorderWidthMd, colorVariable);
       this.chartGridUtils.setSerieTypeArea(serie, index);
@@ -357,8 +371,8 @@ export class PoChartNewComponent extends PoChartNewBaseComponent implements OnIn
       return serie;
     });
 
-    if (this.listTypePie?.length) {
-      return this.listTypePie;
+    if (this.listTypePieDonut?.length) {
+      return this.listTypePieDonut;
     }
     return seriesUpdated;
   }
@@ -402,14 +416,8 @@ export class PoChartNewComponent extends PoChartNewBaseComponent implements OnIn
         serie.isTypeColumn = true;
         serie.type = 'bar';
         break;
-      case PoChartType.Donut:
-        serie.type = 'donut';
-        break;
       case PoChartType.Line:
         serie.type = 'line';
-        break;
-      case PoChartType.Pie:
-        serie.type = 'pie';
         break;
     }
   }
@@ -516,7 +524,7 @@ export class PoChartNewComponent extends PoChartNewBaseComponent implements OnIn
       chartImage.src = this.chartInstance.getDataURL({
         type: type,
         pixelRatio: 2,
-        backgroundColor: 'white'
+        backgroundColor: this.getCSSVariable('--color-neutral-light-00')
       });
       this.configureImageCanvas(type, chartImage);
     }
@@ -556,7 +564,7 @@ export class PoChartNewComponent extends PoChartNewBaseComponent implements OnIn
 
       canvas.width = chartWidth;
       canvas.height = headerHeight + chartHeight + 40;
-      ctx.fillStyle = 'white';
+      ctx.fillStyle = this.getCSSVariable('--color-neutral-light-00');
       ctx.fillRect(0, 0, canvas.width, canvas.height);
 
       this.setHeaderProperties(ctx, headerElement, chartWidth, headerHeight);
@@ -575,11 +583,11 @@ export class PoChartNewComponent extends PoChartNewBaseComponent implements OnIn
     ctx.fillStyle = this.getCSSVariable('--color-neutral-light-00');
     ctx.fillRect(0, 0, chartWidth, headerHeight);
 
-    const titleElement = headerElement.querySelector('.po-chart-header-title strong');
-    const title = titleElement?.innerText || 'Gráfico';
+    const titleElement = headerElement.querySelector('.po-chart-header-title');
+    const title = titleElement?.innerText ?? 'Gráfico';
 
-    ctx.fillStyle = '#000';
-    ctx.font = 'bold 16px Arial';
+    ctx.fillStyle = this.getCSSVariable('--color-neutral-dark-70');
+    ctx.font = 'bold 16px Roboto-Bold';
     ctx.textAlign = 'left';
     ctx.fillText(title, 20, headerHeight / 2 + 5);
   }
