@@ -48,82 +48,82 @@ export interface PoChartAxisOptions {
    */
   labelType?: PoChartLabelFormat;
 
-  /**
-   * @optional
-   *
-   * @description
-   *
-   * Permite aumentar ou diminuir o espaço inferior do gráfico.
-   *
-   */
+  // /**
+  //  * @optional
+  //  *
+  //  * @description
+  //  *
+  //  * Permite aumentar ou diminuir o espaço inferior do gráfico.
+  //  *
+  //  */
   paddingBottom?: number;
 
-  /**
-   * @optional
-   *
-   * @description
-   *
-   * Permite aumentar ou diminuir o espaço esquerdo do gráfico.
-   *
-   * @default `16`
-   */
+  // /**
+  //  * @optional
+  //  *
+  //  * @description
+  //  *
+  //  * Permite aumentar ou diminuir o espaço esquerdo do gráfico.
+  //  *
+  //  * @default `16`
+  //  */
   paddingLeft?: number;
 
-  /**
-   * @optional
-   *
-   * @description
-   *
-   * Permite aumentar ou diminuir o espaço direito do gráfico.
-   *
-   * @default `32`
-   */
+  // /**
+  //  * @optional
+  //  *
+  //  * @description
+  //  *
+  //  * Permite aumentar ou diminuir o espaço direito do gráfico.
+  //  *
+  //  * @default `32`
+  //  */
   paddingRight?: number;
 
-  /**
-   * @optional
-   *
-   * @description
-   *
-   * Define o ângulo de rotação da legenda do gráfico.
-   * Aceita valores entre -90 e 90 graus, onde:
-   * - Valores negativos giram a legenda para a esquerda.
-   * - Valores positivos giram a legenda para a direita.
-   *
-   * Se não for definido, a legenda será exibida sem rotação.
-   */
+  // /**
+  //  * @optional
+  //  *
+  //  * @description
+  //  *
+  //  * Define o ângulo de rotação da legenda do gráfico.
+  //  * Aceita valores entre -90 e 90 graus, onde:
+  //  * - Valores negativos giram a legenda para a esquerda.
+  //  * - Valores positivos giram a legenda para a direita.
+  //  *
+  //  * Se não for definido, a legenda será exibida sem rotação.
+  //  */
   rotateLegend?: number;
 
-  /**
-   * @optional
-   *
-   * @description
-   *
-   * Exibe a linha do eixo X
-   *
-   * @default `false`
-   */
+  // /**
+  //  * @optional
+  //  *
+  //  * @description
+  //  *
+  //  * Exibe a linha do eixo X
+  //  *
+  //  * @default `false`
+  //  */
   showXAxis?: boolean;
 
-  /**
-   * @optional
-   *
-   * @description
-   *
-   * Exibe a linha do eixo Y
-   *
-   * @default `true`
-   */
+  // /**
+  //  * @optional
+  //  *
+  //  * @description
+  //  *
+  //  * Exibe a linha do eixo Y
+  //  *
+  //  * @default `true`
+  //  */
   showYAxis?: boolean;
 
-  /**
-   * @optional
-   *
-   * @description
-   *
-   * Exibe a linha de detalhes que acompanha o mouse
-   *
-   * @default `false`
-   */
+  // /**
+  //  * @optional
+  //  *
+  //  * @description
+  //  *
+  //  * Exibe a linha de detalhes que acompanha o mouse
+  //  *
+  //  * @default `false`
+  //  */
   showAxisDetails?: boolean;
 }
