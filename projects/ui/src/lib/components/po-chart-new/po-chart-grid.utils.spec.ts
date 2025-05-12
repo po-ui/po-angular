@@ -1,3 +1,5 @@
+import { PoChartType } from '../po-chart/enums/po-chart-type.enum';
+import { PoChartOptions } from '../po-chart/interfaces/po-chart-options.interface';
 import { PoChartGridUtils } from './po-chart-grid-utils';
 import { EChartsOption } from 'echarts';
 
@@ -87,18 +89,29 @@ describe('PoChartGridUtils', () => {
   });
 
   describe('setListPie', () => {
+    const labelProperties = {
+      show: false,
+      position: 'center',
+      formatter: undefined,
+      fontFamily: '',
+      fontSize: undefined,
+      color: '',
+      fontWeight: 0
+    };
+
     it('should set pie config with radius 95% and center 50% 50% when legend is false', () => {
       utils['component'].options = { legend: false } as any;
 
-      utils.setListTypePie();
+      utils.setListTypeDonutPie(PoChartType.Pie);
 
-      expect(utils['component'].listTypePie).toEqual([
+      expect(utils['component'].listTypePieDonut).toEqual([
         {
           type: 'pie',
           center: ['50%', '50%'],
           radius: '95%',
           emphasis: { focus: 'self' },
           data: [],
+          label: labelProperties,
           blur: { itemStyle: { opacity: 0.4 } }
         }
       ]);
@@ -107,15 +120,16 @@ describe('PoChartGridUtils', () => {
     it('should set pie config with center 50% 54% when legendVerticalPosition is top', () => {
       utils['component'].options = { legend: true, legendVerticalPosition: 'top' } as any;
 
-      utils.setListTypePie();
+      utils.setListTypeDonutPie(PoChartType.Pie);
 
-      expect(utils['component'].listTypePie).toEqual([
+      expect(utils['component'].listTypePieDonut).toEqual([
         {
           type: 'pie',
           center: ['50%', '54%'],
           radius: '85%',
           emphasis: { focus: 'self' },
           data: [],
+          label: labelProperties,
           blur: { itemStyle: { opacity: 0.4 } }
         }
       ]);
@@ -124,15 +138,72 @@ describe('PoChartGridUtils', () => {
     it('should set pie config with center 50% 46% when legendVerticalPosition is not top', () => {
       utils['component'].options = { legend: true, legendVerticalPosition: 'bottom' } as any;
 
-      utils.setListTypePie();
+      utils.setListTypeDonutPie(PoChartType.Pie);
 
-      expect(utils['component'].listTypePie).toEqual([
+      expect(utils['component'].listTypePieDonut).toEqual([
         {
           type: 'pie',
           center: ['50%', '46%'],
           radius: '85%',
           emphasis: { focus: 'self' },
           data: [],
+          label: labelProperties,
+          blur: { itemStyle: { opacity: 0.4 } }
+        }
+      ]);
+    });
+  });
+
+  describe('setListDonut', () => {
+    const labelProperties = {
+      show: true,
+      position: 'center',
+      formatter: 'test',
+      fontFamily: '',
+      fontSize: undefined,
+      color: '',
+      fontWeight: 0
+    };
+
+    it('should set donut config if innerRadius is 100', () => {
+      utils['component'].options = { innerRadius: 100, textCenterGraph: 'test' } as PoChartOptions;
+      utils['component'].series = [
+        { label: 'Serie 1', data: 10 },
+        { label: 'Serie 2', data: 30 }
+      ];
+
+      utils.setListTypeDonutPie(PoChartType.Donut);
+
+      expect(utils['component'].listTypePieDonut).toEqual([
+        {
+          type: 'pie',
+          center: ['50%', '46%'],
+          radius: ['55%', '85%'],
+          emphasis: { focus: 'self' },
+          data: [],
+          label: labelProperties,
+          blur: { itemStyle: { opacity: 0.4 } }
+        }
+      ]);
+    });
+
+    it('should set donut config if innerRadius is 80', () => {
+      utils['component'].options = { innerRadius: 80, textCenterGraph: 'test' } as PoChartOptions;
+      utils['component'].series = [
+        { label: 'Serie 1', data: 10 },
+        { label: 'Serie 2', data: 30 }
+      ];
+
+      utils.setListTypeDonutPie(PoChartType.Donut);
+
+      expect(utils['component'].listTypePieDonut).toEqual([
+        {
+          type: 'pie',
+          center: ['50%', '46%'],
+          radius: ['44%', '85%'],
+          emphasis: { focus: 'self' },
+          data: [],
+          label: labelProperties,
           blur: { itemStyle: { opacity: 0.4 } }
         }
       ]);
