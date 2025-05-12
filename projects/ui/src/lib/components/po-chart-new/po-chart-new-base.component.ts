@@ -58,7 +58,7 @@ const poChartDefaultHeight = 400;
 @Directive()
 export abstract class PoChartNewBaseComponent {
   private _literals?: PoChartLiterals;
-  private language: string;
+  private readonly language: string;
 
   @Input('t-id') id: string = 'myChart';
 

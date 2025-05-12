@@ -1,5 +1,6 @@
-import { EChartsOption } from 'echarts/dist/echarts.esm';
 import { PoChartNewComponent } from './po-chart-new.component';
+import { PoChartSerie } from '../po-chart/interfaces/po-chart-serie.interface';
+import { PoChartType } from '../po-chart/enums/po-chart-type.enum';
 
 const gridPaddingValues = {
   paddingBottomWithTopLegend: 48,
@@ -16,9 +17,10 @@ const gridPaddingValues = {
 } as const;
 
 export class PoChartGridUtils {
+  private isTypeDonut = false;
   constructor(private readonly component: PoChartNewComponent) {}
 
-  setGridOption(options: EChartsOption) {
+  setGridOption(options) {
     const tokenBorderWidthSm = this.resolvePx('--border-width-sm');
     const paddingBottom = this.getPaddingBottomGrid();
     const paddingTop = this.getPaddingTopGrid();
@@ -32,7 +34,7 @@ export class PoChartGridUtils {
     };
   }
 
-  setOptionsAxis(options: EChartsOption) {
+  setOptionsAxis(options) {
     const tokenFontSizeGrid = this.resolvePx('--font-size-grid', '.po-chart');
     const tokenBorderWidthSm = this.resolvePx('--border-width-sm');
 
@@ -49,7 +51,9 @@ export class PoChartGridUtils {
         overflow: 'break'
       },
       splitLine: {
-        show: this.component.options?.axis?.showXAxis || false,
+        show: this.component.isTypeBar
+          ? (this.component.options?.axis?.showXAxis ?? true)
+          : this.component.options?.axis?.showXAxis || false,
         lineStyle: {
           type: 'solid',
           width: tokenBorderWidthSm,
@@ -69,7 +73,9 @@ export class PoChartGridUtils {
         fontWeight: Number(this.component.getCSSVariable('--font-weight-grid', '.po-chart'))
       },
       splitLine: {
-        show: this.component.options?.axis?.showYAxis ?? true,
+        show: this.component.isTypeBar
+          ? this.component.options?.axis?.showYAxis || false
+          : (this.component.options?.axis?.showYAxis ?? true),
         lineStyle: {
           color: this.component.getCSSVariable('--color-grid', '.po-chart')
         }
@@ -84,7 +90,7 @@ export class PoChartGridUtils {
     }
   }
 
-  setOptionDataZoom(options: EChartsOption) {
+  setOptionDataZoom(options) {
     options.dataZoom = [
       {
         show: true,
@@ -102,14 +108,14 @@ export class PoChartGridUtils {
     ];
   }
 
-  setShowAxisDetails(options: EChartsOption) {
+  setShowAxisDetails(options) {
     if (this.component.options?.axis?.showAxisDetails) {
       options.tooltip = {
         trigger: 'none',
         axisPointer: {
           type: 'cross',
           label: {
-            backgroundColor: '#6a7985'
+            backgroundColor: this.component.getCSSVariable('--color-neutral-dark-70')
           }
         }
       };
@@ -157,20 +163,59 @@ export class PoChartGridUtils {
     }
   }
 
-  setListTypePie() {
-    let radius = '85%';
+  setSerieTypeDonutPie(serie: any, color: string) {
+    if (this.component.listTypePieDonut?.length) {
+      const borderWidth = this.resolvePx('--border-width-sm');
+      const borderColor = this.component.getCSSVariable('--border-color', '.po-chart');
+      const seriePie = {
+        name: serie.name,
+        value: serie.data,
+        itemStyle: {
+          borderWidth: borderWidth,
+          borderColor: borderColor,
+          color: color,
+          borderRadius: this.component.options?.borderRadius
+        },
+        label: { show: this.isTypeDonut && this.component.options?.textCenterGraph }
+      };
+      this.component.listTypePieDonut[0].data.push(seriePie);
+    }
+  }
+
+  setListTypeDonutPie(type: PoChartType) {
+    if (type === PoChartType.Donut) {
+      this.isTypeDonut = true;
+      this.component.itemsTypeDonut = this.normalizeToPercentage(this.component.series);
+    }
+    let radiusHorizontal = '85%';
+    let radiusVertical = '55%';
     let positionHorizontal;
     if (this.component.options?.legend === false) {
-      radius = '95%';
+      radiusHorizontal = '95%';
+      radiusVertical = '65%';
       positionHorizontal = '50%';
     } else {
       positionHorizontal = this.component.options?.legendVerticalPosition === 'top' ? '54%' : '46%';
     }
-    this.component.listTypePie = [
+
+    if (this.component.options?.innerRadius) {
+      radiusVertical = this.getAdjustedRadius(radiusVertical, this.component.options.innerRadius);
+    }
+    const radius = this.isTypeDonut ? [radiusVertical, radiusHorizontal] : radiusHorizontal;
+    this.component.listTypePieDonut = [
       {
         type: 'pie',
         center: ['50%', positionHorizontal],
         radius: radius,
+        label: {
+          show: !!(this.isTypeDonut && this.component.options?.textCenterGraph),
+          position: 'center',
+          formatter: this.component.options?.textCenterGraph,
+          fontFamily: this.component.getCSSVariable('--font-family-hightlight-value', '.po-chart'),
+          fontSize: this.resolvePx('--font-size-hightlight-value', '.po-chart'),
+          color: this.component.getCSSVariable('--color-hightlight-value', '.po-chart'),
+          fontWeight: Number(this.component.getCSSVariable('--font-weight-hightlight-value', '.po-chart'))
+        },
         emphasis: { focus: 'self' },
         data: [],
         blur: { itemStyle: { opacity: 0.4 } }
@@ -178,18 +223,27 @@ export class PoChartGridUtils {
     ];
   }
 
-  setSerieTypePie(serie: any, color: string) {
-    if (this.component.listTypePie?.length) {
-      const borderWidth = this.resolvePx('--border-width-sm');
-      const borderColor = this.component.getCSSVariable('--border-color', '.po-chart');
-      const seriePie = {
-        name: serie.name,
-        value: serie.data,
-        itemStyle: { borderWidth: borderWidth, borderColor: borderColor, color: color },
-        label: { show: false }
-      };
-      this.component.listTypePie[0].data.push(seriePie);
+  private getAdjustedRadius(radius: string, innerRadius: number): string {
+    const radiusValue = parseFloat(radius);
+    if (innerRadius >= 100) {
+      return radius;
     }
+    const adjusted = radiusValue * (innerRadius / 100);
+    return `${adjusted}%`;
+  }
+
+  private normalizeToPercentage(series: Array<PoChartSerie>) {
+    const total =
+      series
+        .map(item => item.data)
+        .filter((value): value is number => typeof value === 'number')
+        .reduce((sum, value) => sum + value, 0) || 1;
+
+    return series.map(item => ({
+      label: item.label,
+      data: item.data,
+      valuePercentage: +(((item.data as number) / total) * 100).toFixed(2)
+    }));
   }
 
   resolvePx(size: string, selector?: string): number {
