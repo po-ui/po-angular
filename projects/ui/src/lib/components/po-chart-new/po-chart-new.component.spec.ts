@@ -602,7 +602,7 @@ describe('PoChartNewComponent', () => {
 
       expect(result).toBeDefined();
       expect(result.backgroundColor).toBe('#ffffff');
-      expect(result.grid.top).toBe(20);
+      expect(result.grid.top).toBe(16);
       expect(result.xAxis.type).toBe('category');
       expect(result.yAxis.type).toBe('value');
     });
@@ -611,7 +611,7 @@ describe('PoChartNewComponent', () => {
       component.options = { dataZoom: true };
 
       const result = component['setOptions']();
-      expect(result.grid.top).toBe(50);
+      expect(result.grid.top).toBe(56);
     });
 
     it('should apply correct axis configurations', () => {
@@ -690,7 +690,7 @@ describe('PoChartNewComponent', () => {
       component.options = { axis: {} };
 
       const result = component['setOptions']();
-      expect(result.grid.top).toBe(30);
+      expect(result.grid.top).toBe(32);
     });
 
     it('should not adjust grid top when dataLabel.fixed is true but maxRange is set', () => {
@@ -698,7 +698,7 @@ describe('PoChartNewComponent', () => {
       component.options = { axis: { maxRange: 100 } };
 
       const result = component['setOptions']();
-      expect(result.grid.top).toBe(20);
+      expect(result.grid.top).toBe(16);
     });
 
     it('should set fontSize to 12 when --font-size-grid is not defined', () => {
@@ -891,7 +891,7 @@ describe('PoChartNewComponent', () => {
   });
 
   describe('getPaddingBottomGrid', () => {
-    it('should return 50 and set bottomDataZoom to 8 when dataZoom is true, bottomDataZoom is true, and legend is false', () => {
+    it('should return 48 and set bottomDataZoom to 8 when dataZoom is true, bottomDataZoom is true, and legend is false', () => {
       component.options = {
         dataZoom: true,
         bottomDataZoom: true,
@@ -900,11 +900,11 @@ describe('PoChartNewComponent', () => {
 
       const result = component['chartGridUtils']['getPaddingBottomGrid']();
 
-      expect(result).toBe(50);
+      expect(result).toBe(48);
       expect(component.options.bottomDataZoom).toBe(8);
     });
 
-    it('should return 70 and set bottomDataZoom to 32 when dataZoom is true, bottomDataZoom is true and legendVerticalPosition is not "top"', () => {
+    it('should return 72 and set bottomDataZoom to 32 when dataZoom is true, bottomDataZoom is true and legendVerticalPosition is not "top"', () => {
       component.options = {
         dataZoom: true,
         bottomDataZoom: true,
@@ -913,7 +913,7 @@ describe('PoChartNewComponent', () => {
 
       const result = component['chartGridUtils']['getPaddingBottomGrid']();
 
-      expect(result).toBe(70);
+      expect(result).toBe(72);
       expect(component.options.bottomDataZoom).toBe(32);
     });
 
@@ -928,7 +928,7 @@ describe('PoChartNewComponent', () => {
       expect(result).toBe(0);
     });
 
-    it('should return 50 when no condition matches (default case)', () => {
+    it('should return 48 when no condition matches (default case)', () => {
       component.options = {
         dataZoom: true,
         bottomDataZoom: false,
@@ -938,12 +938,12 @@ describe('PoChartNewComponent', () => {
 
       const result = component['chartGridUtils']['getPaddingBottomGrid']();
 
-      expect(result).toBe(50);
+      expect(result).toBe(48);
     });
   });
 
   describe('getPaddingTopGrid', () => {
-    it('should return 60 and set bottomDataZoom to 8 when fixed is true, no maxRange, and conditions of first if apply', () => {
+    it('should return 64 and set bottomDataZoom to 8 when fixed is true, no maxRange, and top legend conditions apply', () => {
       component.options = {
         dataZoom: true,
         legendVerticalPosition: 'top',
@@ -954,11 +954,11 @@ describe('PoChartNewComponent', () => {
 
       const result = component['chartGridUtils']['getPaddingTopGrid']();
 
-      expect(result).toBe(60);
+      expect(result).toBe(64);
       expect(component.options.bottomDataZoom).toBe(8);
     });
 
-    it('should return 50 when fixed is false and conditions of first if apply', () => {
+    it('should return 56 when fixed is false and top legend conditions apply', () => {
       component.options = {
         dataZoom: true,
         bottomDataZoom: false,
@@ -969,10 +969,10 @@ describe('PoChartNewComponent', () => {
 
       const result = component['chartGridUtils']['getPaddingTopGrid']();
 
-      expect(result).toBe(50);
+      expect(result).toBe(56);
     });
 
-    it('should return 30 when fixed is true, no maxRange, and conditions of else if apply', () => {
+    it('should return 32 when fixed is true, no maxRange, and bottom legend with zoom conditions apply', () => {
       component.options = {
         dataZoom: true,
         bottomDataZoom: true,
@@ -983,10 +983,10 @@ describe('PoChartNewComponent', () => {
 
       const result = component['chartGridUtils']['getPaddingTopGrid']();
 
-      expect(result).toBe(30);
+      expect(result).toBe(32);
     });
 
-    it('should return 20 when fixed is false and conditions of else if apply', () => {
+    it('should return 16 when fixed is false and bottom legend with zoom conditions apply', () => {
       component.options = {
         dataZoom: false,
         legendVerticalPosition: 'bottom',
@@ -996,16 +996,16 @@ describe('PoChartNewComponent', () => {
 
       const result = component['chartGridUtils']['getPaddingTopGrid']();
 
-      expect(result).toBe(20);
+      expect(result).toBe(16);
     });
 
-    it('should return 20 when no conditions match (default case)', () => {
+    it('should return 16 when no condition matches (default case)', () => {
       component.options = {};
       component.dataLabel = {};
 
       const result = component['chartGridUtils']['getPaddingTopGrid']();
 
-      expect(result).toBe(20);
+      expect(result).toBe(16);
     });
   });
 
