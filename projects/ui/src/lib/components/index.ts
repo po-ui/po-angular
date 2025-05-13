@@ -8,7 +8,7 @@ export * from './po-button-group/index';
 export * from './po-button/index';
 export * from './po-calendar/index';
 export * from './po-chart/index';
-export * from './po-chart-new/index'; /*Deletar esta referência quando não for mais necessário.*/
+export * from './po-chart-new/index'; /* @ToDo - Deletar esta referência quando não for mais necessário.*/
 export * from './po-container/index';
 export * from './po-disclaimer-group/index';
 export * from './po-disclaimer/index';
