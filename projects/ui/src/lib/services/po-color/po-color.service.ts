@@ -107,10 +107,10 @@ export class PoColorService {
     return colors;
   }
 
-  // Uso seguro de Math.random(): este número aleatório é utilizado apenas para gerar uma cor aleatória para fins visuais (UI).
-  // Não está relacionado a lógica de autenticação, segurança ou qualquer processo sensível.
   private getRandomColor(): string {
-    return `#${Math.floor(Math.random() * 16777215).toString(16)}`;
+    const array = new Uint32Array(1);
+    crypto.getRandomValues(array);
+    return `#${(array[0] & 0x00ffffff).toString(16).padStart(6, '0')}`;
   }
 
   private getCSSVariable(variable: string): string {
