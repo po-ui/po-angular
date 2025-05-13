@@ -9,10 +9,22 @@ import { PoChartHeaderOptions } from './po-chart-header-options.interface';
  * *Interface* para configurações dos elementos do gráfico.
  */
 export interface PoChartOptions {
-  /** Define um objeto do tipo `PoChartAxisOptions` para configuração dos eixos. */
+  /**
+   * @optional
+   *
+   * @description
+   *
+   * Define um objeto do tipo `PoChartAxisOptions` para configuração dos eixos.
+   */
   axis?: PoChartAxisOptions;
 
-  /** Define um objeto do tipo `PoChartAxisOptions` para configuração dos eixos. */
+  /**
+   * @optional
+   *
+   * @description
+   *
+   * Define um objeto do tipo `PoChartHeaderOptions` para configurar a exibição de botões no cabeçalho do gráfico.
+   */
   header?: PoChartHeaderOptions;
 
   /**
@@ -35,6 +47,7 @@ export interface PoChartOptions {
    * Quando true, os pontos são totalmente coloridos. Quando false, apenas a borda dos pontos será exibida, mantendo o interior transparente.
    *
    * > Esta propriedade é utilizável para os gráficos dos tipos `Area` e `Line`.
+   *
    * @default `false`
    */
   fillPoints?: boolean;
@@ -51,6 +64,10 @@ export interface PoChartOptions {
   firstColumnName?: string;
 
   /**
+   * @optional
+   *
+   * @description
+   *
    * Define o diâmetro, em valor percentual entre `0` e `100`, da área central para gráficos do tipo `donut`.
    * Se passado um percentual que torne a espessura do gráfico menor do que `40px`,
    * os textos internos do gráficos serão ocultados para que não haja quebra de layout.
@@ -58,6 +75,10 @@ export interface PoChartOptions {
   innerRadius?: number;
 
   /**
+   * @optional
+   *
+   * @description
+   *
    * Define borda entre os itens do gráfico. Válido para os gráficos `Donut`, `Pie` e `Gauge`.
    * > Valores válidos entre 0 e 100,
    *
@@ -66,13 +87,22 @@ export interface PoChartOptions {
   borderRadius?: number;
 
   /**
+   * @optional
+   *
+   * @description
+   *
    * Aplica texto centralizado customizado nos gráficos de `Donut` e `Gauge`.
    * > No `Gauge`, o valor `default` é a porcentagem total do Gráfico
-   *
    */
   textCenterGraph?: string;
 
-  /** Define a exibição da legenda do gráfico. Valor padrão é `true` */
+  /**
+   * @optional
+   *
+   * @description
+   *
+   * Define a exibição da legenda do gráfico. Valor padrão é `true`
+   */
   legend?: boolean;
 
   /**
@@ -127,6 +157,8 @@ export interface PoChartOptions {
    * @description
    *
    * Define como o gráfico será renderizado.
+   *
+   * > Recomenda-se não modificar o valor da propriedade `rendererOption` após a inicialização da aplicação, uma vez que tal alteração pode ocasionar comportamentos inconsistentes na renderização do gráfico.
    *
    * @default `canvas`
    */
