@@ -5,6 +5,7 @@ import {
   ElementRef,
   HostListener,
   OnChanges,
+  OnDestroy,
   OnInit,
   QueryList,
   SimpleChanges,
@@ -23,42 +24,53 @@ import { PoPopupAction } from '../po-popup';
 import { PoTableColumn } from '../po-table';
 import { PoChartNewBaseComponent } from './po-chart-new-base.component';
 
-import * as echarts from 'echarts/dist/echarts.esm';
-import { EChartsOption } from 'echarts/dist/echarts.esm';
 import { PoChartType } from '../po-chart/enums/po-chart-type.enum';
 import { PoChartGridUtils } from './po-chart-grid-utils';
 
+import * as echarts from 'echarts/core';
+import { BarChart, CustomChart, GaugeChart, LineChart, PieChart } from 'echarts/charts';
+import { use } from 'echarts/core';
+import {
+  BrushComponent,
+  DataZoomComponent,
+  GridComponent,
+  LegendComponent,
+  MarkLineComponent,
+  ToolboxComponent,
+  TooltipComponent
+} from 'echarts/components';
+import { CanvasRenderer, SVGRenderer } from 'echarts/renderers';
+use([
+  BarChart,
+  CustomChart,
+  GaugeChart,
+  LineChart,
+  PieChart,
+  BrushComponent,
+  DataZoomComponent,
+  GridComponent,
+  LegendComponent,
+  MarkLineComponent,
+  ToolboxComponent,
+  TooltipComponent,
+  CanvasRenderer,
+  SVGRenderer
+]);
+
 /**
  * @docsExtends PoChartBaseComponent
- *
- * @example
- *
- * <example name="po-chart-basic" title="PO Chart Basic">
- *  <file name="sample-po-chart-basic/sample-po-chart-basic.component.html"> </file>
- *  <file name="sample-po-chart-basic/sample-po-chart-basic.component.ts"> </file>
- * </example>
- *
- * <example name="po-chart-labs" title="PO Chart Labs">
- *  <file name="sample-po-chart-labs/sample-po-chart-labs.component.html"> </file>
- *  <file name="sample-po-chart-labs/sample-po-chart-labs.component.ts"> </file>
- * </example>
- *
- * <example name="po-chart-coffee-ranking" title="PO Chart - Coffee Ranking">
- *  <file name="sample-po-chart-coffee-ranking/sample-po-chart-coffee-ranking.component.html"> </file>
- *  <file name="sample-po-chart-coffee-ranking/sample-po-chart-coffee-ranking.component.ts"> </file>
- * </example>
- *
- * <example name="po-chart-world-exports" title="PO Chart - World Exports">
- *  <file name="sample-po-chart-world-exports/sample-po-chart-world-exports.component.html"> </file>
- *  <file name="sample-po-chart-world-exports/sample-po-chart-world-exports.component.ts"> </file>
- * </example>
  */
+
+/* @ToDo - Foi retirado o exemplo do sample pois causava problema no build:package da pipe */
 @Component({
   selector: 'po-chart-new',
   templateUrl: './po-chart-new.component.html',
   standalone: false
 })
-export class PoChartNewComponent extends PoChartNewBaseComponent implements OnInit, AfterViewInit, OnChanges {
+export class PoChartNewComponent
+  extends PoChartNewBaseComponent
+  implements OnInit, AfterViewInit, OnChanges, OnDestroy
+{
   @ViewChildren(PoTooltipDirective) poTooltip: QueryList<PoTooltipDirective>;
   @ViewChild('targetPopup', { read: ElementRef, static: false }) targetRef: ElementRef;
   @ViewChild('modalComponent') modal: PoModalComponent;
@@ -105,6 +117,8 @@ export class PoChartNewComponent extends PoChartNewBaseComponent implements OnIn
   ];
   private chartInstance!: echarts.ECharts;
   private currentRenderer: 'svg' | 'canvas';
+  private intersectionObserver: IntersectionObserver;
+  private hideDomEchartsDiv = false;
 
   constructor(
     private el: ElementRef,
@@ -161,6 +175,11 @@ export class PoChartNewComponent extends PoChartNewBaseComponent implements OnIn
 
   ngAfterViewInit() {
     this.initECharts();
+    this.checkShowCEcharts();
+  }
+
+  ngOnDestroy(): void {
+    this.intersectionObserver?.disconnect();
   }
 
   showTooltipTitle(e: MouseEvent) {
@@ -205,10 +224,30 @@ export class PoChartNewComponent extends PoChartNewBaseComponent implements OnIn
     });
   }
 
+  private checkShowCEcharts() {
+    const chartElement = this.el.nativeElement.querySelector('#chart-id');
+    if (!chartElement || !this.hideDomEchartsDiv) return;
+
+    this.intersectionObserver = new IntersectionObserver(
+      entries => {
+        entries.forEach(entry => {
+          if (entry.isIntersecting) {
+            this.initECharts();
+            this.intersectionObserver.disconnect();
+          }
+        });
+      },
+      { threshold: 0.1 }
+    );
+
+    this.intersectionObserver.observe(chartElement);
+  }
+
   private initECharts() {
     this.cdr.detectChanges();
     const echartsDiv = this.el.nativeElement.querySelector('#chart-id');
-    if (!echartsDiv) {
+    if (!echartsDiv?.clientWidth) {
+      this.hideDomEchartsDiv = true;
       return;
     }
 
@@ -276,7 +315,7 @@ export class PoChartNewComponent extends PoChartNewBaseComponent implements OnIn
   }
 
   private setChartsProperties() {
-    let option: EChartsOption = {};
+    let option = {};
     option = this.setOptions();
     this.chartInstance.setOption(option);
   }
@@ -284,7 +323,7 @@ export class PoChartNewComponent extends PoChartNewBaseComponent implements OnIn
   private setOptions() {
     const newSeries = this.setSeries();
 
-    const options: EChartsOption = {
+    const options = {
       backgroundColor: this.getCSSVariable('--background-color-grid', '.po-chart'),
       series: newSeries as any
     };
@@ -305,7 +344,7 @@ export class PoChartNewComponent extends PoChartNewBaseComponent implements OnIn
     return options;
   }
 
-  private formatLabelOption(options: EChartsOption) {
+  private formatLabelOption(options) {
     if (this.options?.axis && Object.keys(this.options.axis).length) {
       options.yAxis['splitNumber'] = this.options.axis.gridLines || 5;
       options.yAxis['min'] = this.options.axis.minRange;
@@ -319,7 +358,7 @@ export class PoChartNewComponent extends PoChartNewBaseComponent implements OnIn
     }
   }
 
-  private setOptionLegend(options: EChartsOption) {
+  private setOptionLegend(options) {
     options.legend = {
       show: true,
       orient: 'horizontal',
