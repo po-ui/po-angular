@@ -5,6 +5,7 @@ import {
   ElementRef,
   HostListener,
   OnChanges,
+  OnDestroy,
   OnInit,
   QueryList,
   SimpleChanges,
@@ -23,42 +24,54 @@ import { PoPopupAction } from '../po-popup';
 import { PoTableColumn } from '../po-table';
 import { PoChartNewBaseComponent } from './po-chart-new-base.component';
 
-import * as echarts from 'echarts/dist/echarts.esm';
-import { EChartsOption } from 'echarts/dist/echarts.esm';
 import { PoChartType } from '../po-chart/enums/po-chart-type.enum';
 import { PoChartGridUtils } from './po-chart-grid-utils';
 
+import * as echarts from 'echarts/core';
+import { BarChart, CustomChart, GaugeChart, LineChart, PieChart } from 'echarts/charts';
+import { use } from 'echarts/core';
+import {
+  BrushComponent,
+  DataZoomComponent,
+  GridComponent,
+  LegendComponent,
+  MarkLineComponent,
+  ToolboxComponent,
+  TooltipComponent
+} from 'echarts/components';
+import { CanvasRenderer, SVGRenderer } from 'echarts/renderers';
+use([
+  BarChart,
+  CustomChart,
+  GaugeChart,
+  LineChart,
+  PieChart,
+  BrushComponent,
+  DataZoomComponent,
+  GridComponent,
+  LegendComponent,
+  MarkLineComponent,
+  ToolboxComponent,
+  TooltipComponent,
+  CanvasRenderer,
+  SVGRenderer
+]);
+
 /**
- * @docsExtends PoChartBaseComponent
+ * @docsPrivate
  *
- * @example
- *
- * <example name="po-chart-basic" title="PO Chart Basic">
- *  <file name="sample-po-chart-basic/sample-po-chart-basic.component.html"> </file>
- *  <file name="sample-po-chart-basic/sample-po-chart-basic.component.ts"> </file>
- * </example>
- *
- * <example name="po-chart-labs" title="PO Chart Labs">
- *  <file name="sample-po-chart-labs/sample-po-chart-labs.component.html"> </file>
- *  <file name="sample-po-chart-labs/sample-po-chart-labs.component.ts"> </file>
- * </example>
- *
- * <example name="po-chart-coffee-ranking" title="PO Chart - Coffee Ranking">
- *  <file name="sample-po-chart-coffee-ranking/sample-po-chart-coffee-ranking.component.html"> </file>
- *  <file name="sample-po-chart-coffee-ranking/sample-po-chart-coffee-ranking.component.ts"> </file>
- * </example>
- *
- * <example name="po-chart-world-exports" title="PO Chart - World Exports">
- *  <file name="sample-po-chart-world-exports/sample-po-chart-world-exports.component.html"> </file>
- *  <file name="sample-po-chart-world-exports/sample-po-chart-world-exports.component.ts"> </file>
- * </example>
+ * Componente de uso interno.
  */
+
 @Component({
   selector: 'po-chart-new',
   templateUrl: './po-chart-new.component.html',
   standalone: false
 })
-export class PoChartNewComponent extends PoChartNewBaseComponent implements OnInit, AfterViewInit, OnChanges {
+export class PoChartNewComponent
+  extends PoChartNewBaseComponent
+  implements OnInit, AfterViewInit, OnChanges, OnDestroy
+{
   @ViewChildren(PoTooltipDirective) poTooltip: QueryList<PoTooltipDirective>;
   @ViewChild('targetPopup', { read: ElementRef, static: false }) targetRef: ElementRef;
   @ViewChild('modalComponent') modal: PoModalComponent;
@@ -75,6 +88,7 @@ export class PoChartNewComponent extends PoChartNewBaseComponent implements OnIn
     action: this.downloadCsv.bind(this),
     label: this.literals.downloadCSV
   };
+  public showPopup = true;
   protected itemsTable = [];
   protected columnsTable: Array<PoTableColumn> = [];
   protected isExpanded = false;
@@ -83,31 +97,18 @@ export class PoChartNewComponent extends PoChartNewBaseComponent implements OnIn
   protected positionTooltip = 'top';
   protected tooltipTitle = undefined;
   protected chartGridUtils: PoChartGridUtils;
-  protected popupActions: Array<PoPopupAction> = [
-    {
-      label: this.literals.exportCSV,
-      disabled: this.options?.header?.disabledExportCsv,
-      action: () => {
-        this.setTableProperties();
-        this.downloadCsv();
-      }
-    },
-    {
-      label: this.literals.exportPNG,
-      disabled: this.options?.header?.disabledExportImage,
-      action: this.exportImage.bind(this, 'png')
-    },
-    {
-      label: this.literals.exportJPG,
-      disabled: this.options?.header?.disabledExportImage,
-      action: this.exportImage.bind(this, 'jpeg')
-    }
-  ];
+  protected popupActions: Array<PoPopupAction> = [];
   private chartInstance!: echarts.ECharts;
   private currentRenderer: 'svg' | 'canvas';
+  private intersectionObserver: IntersectionObserver;
+  private hideDomEchartsDiv = false;
+
+  get showHeader() {
+    return this.title || !this.options?.header?.hideTableDetails || !this.options?.header?.hideExpand || this.showPopup;
+  }
 
   constructor(
-    private el: ElementRef,
+    private readonly el: ElementRef,
     private readonly currencyPipe: CurrencyPipe,
     private readonly decimalPipe: DecimalPipe,
     private readonly colorService: PoColorService,
@@ -122,6 +123,14 @@ export class PoChartNewComponent extends PoChartNewBaseComponent implements OnIn
     if (this.chartInstance) {
       this.chartInstance?.resize();
     }
+  };
+
+  @HostListener('window:PoUiThemeChange', ['$event'])
+  changeTheme = (event: any) => {
+    this.chartInstance?.dispose();
+    this.chartInstance = undefined;
+    this.initECharts();
+    this.checkShowCEcharts();
   };
 
   ngOnInit(): void {
@@ -145,9 +154,11 @@ export class PoChartNewComponent extends PoChartNewBaseComponent implements OnIn
       ) {
         this.chartInstance?.dispose();
         this.chartInstance = undefined;
+        this.setInitialPopupActions();
         this.initECharts();
       } else {
         this.chartInstance?.clear();
+        this.setInitialPopupActions();
         this.setChartsProperties();
       }
     }
@@ -160,7 +171,13 @@ export class PoChartNewComponent extends PoChartNewBaseComponent implements OnIn
   }
 
   ngAfterViewInit() {
+    this.setInitialPopupActions();
     this.initECharts();
+    this.checkShowCEcharts();
+  }
+
+  ngOnDestroy(): void {
+    this.intersectionObserver?.disconnect();
   }
 
   showTooltipTitle(e: MouseEvent) {
@@ -205,17 +222,74 @@ export class PoChartNewComponent extends PoChartNewBaseComponent implements OnIn
     });
   }
 
+  private checkShowCEcharts() {
+    const chartElement = this.el.nativeElement.querySelector('#chart-id');
+    if (!chartElement || !this.hideDomEchartsDiv) return;
+
+    this.intersectionObserver = new IntersectionObserver(
+      entries => {
+        entries.forEach(entry => {
+          if (entry.isIntersecting) {
+            this.initECharts();
+            this.intersectionObserver.disconnect();
+          }
+        });
+      },
+      { threshold: 0.1 }
+    );
+
+    this.intersectionObserver.observe(chartElement);
+  }
+
+  private setInitialPopupActions(): void {
+    const hideExportCsv = this.options?.header?.hideExportCsv;
+    const hideExportImage = this.options?.header?.hideExportImage;
+
+    this.showPopup = !(hideExportCsv && hideExportImage && !this.customActions?.length);
+    this.cdr.detectChanges();
+
+    const headerElement = this.el.nativeElement.querySelector('.po-chart-header') as HTMLDivElement;
+    if (this.headerHeight !== headerElement?.clientHeight) {
+      this.headerHeight = headerElement?.clientHeight;
+      this.cdr.detectChanges();
+      this.chartInstance?.resize();
+    }
+
+    this.popupActions = [
+      {
+        label: this.literals.exportCSV,
+        visible: !hideExportCsv,
+        action: () => {
+          this.setTableProperties();
+          this.downloadCsv();
+        }
+      },
+      {
+        label: this.literals.exportPNG,
+        visible: !hideExportImage,
+        action: this.exportImage.bind(this, 'png')
+      },
+      {
+        label: this.literals.exportJPG,
+        visible: !hideExportImage,
+        action: this.exportImage.bind(this, 'jpeg')
+      }
+    ];
+
+    this.actionModal = {
+      ...this.actionModal,
+      disabled: hideExportCsv
+    };
+
+    this.setPopupActions();
+  }
+
   private initECharts() {
     this.cdr.detectChanges();
     const echartsDiv = this.el.nativeElement.querySelector('#chart-id');
-    if (!echartsDiv) {
+    if (!echartsDiv?.clientWidth) {
+      this.hideDomEchartsDiv = true;
       return;
-    }
-
-    if (!this.headerHeight) {
-      const headerElement = this.el.nativeElement.querySelector('.po-chart-header') as HTMLDivElement;
-      this.headerHeight = headerElement?.clientHeight;
-      this.cdr.detectChanges();
     }
     this.currentRenderer = this.options?.rendererOption || 'canvas';
     this.chartInstance = echarts.init(echartsDiv, null, { renderer: this.currentRenderer });
@@ -260,31 +334,40 @@ export class PoChartNewComponent extends PoChartNewBaseComponent implements OnIn
       const findCurrentValue = this.itemsTypeDonut.find(
         item => item.data === params.value && params.name === item.label
       );
-      valueLabel = `${findCurrentValue.valuePercentage}%`;
+      valueLabel = `${findCurrentValue?.valuePercentage ?? 0}%`;
     }
     const customTooltipText =
       params.seriesName && !params.seriesName.includes('\u00000')
         ? `<b>${params.name}</b><br>
         ${params.seriesName}: <b>${valueLabel}</b>`
         : `${params.name}: <b>${valueLabel}</b>`;
-    this.tooltipText = this.series[params.seriesIndex].tooltip
-      ? this.series[params.seriesIndex].tooltip
-      : customTooltipText;
+
+    const isPie = params.seriesType === 'pie';
+    if (isPie) {
+      this.tooltipText = this.series[params.dataIndex].tooltip
+        ? this.series[params.dataIndex].tooltip
+        : customTooltipText;
+    } else {
+      this.tooltipText = this.series[params.seriesIndex].tooltip
+        ? this.series[params.seriesIndex].tooltip
+        : customTooltipText;
+    }
     divTooltipElement.style.left = `${params.event.offsetX + chartElement.offsetLeft + 3}px`;
     divTooltipElement.style.top = `${chartElement.offsetTop + params.event.offsetY - 2}px`;
     this.poTooltip.last.toggleTooltipVisibility(true);
   }
 
   private setChartsProperties() {
-    let option: EChartsOption = {};
+    let option = {};
     option = this.setOptions();
     this.chartInstance.setOption(option);
+    this.cdr.detectChanges();
   }
 
   private setOptions() {
     const newSeries = this.setSeries();
 
-    const options: EChartsOption = {
+    const options = {
       backgroundColor: this.getCSSVariable('--background-color-grid', '.po-chart'),
       series: newSeries as any
     };
@@ -305,13 +388,14 @@ export class PoChartNewComponent extends PoChartNewBaseComponent implements OnIn
     return options;
   }
 
-  private formatLabelOption(options: EChartsOption) {
+  private formatLabelOption(options) {
     if (this.options?.axis && Object.keys(this.options.axis).length) {
-      options.yAxis['splitNumber'] = this.options.axis.gridLines || 5;
-      options.yAxis['min'] = this.options.axis.minRange;
-      options.yAxis['max'] = this.options.axis.maxRange;
+      const currentAxis = this.isTypeBar ? 'xAxis' : 'yAxis';
+      options[currentAxis]['splitNumber'] = this.options.axis.gridLines || 5;
+      options[currentAxis]['min'] = this.options.axis.minRange;
+      options[currentAxis]['max'] = this.options.axis.maxRange;
       if (this.options.axis.labelType) {
-        options.yAxis['axisLabel'].formatter =
+        options[currentAxis]['axisLabel'].formatter =
           this.options.axis.labelType === PoChartLabelFormat.Number
             ? (value: number) => this.decimalPipe.transform(value, '1.2-2')
             : (value: number) => this.currencyPipe.transform(value, null, 'symbol', '1.2-2');
@@ -319,7 +403,7 @@ export class PoChartNewComponent extends PoChartNewBaseComponent implements OnIn
     }
   }
 
-  private setOptionLegend(options: EChartsOption) {
+  private setOptionLegend(options) {
     options.legend = {
       show: true,
       orient: 'horizontal',
