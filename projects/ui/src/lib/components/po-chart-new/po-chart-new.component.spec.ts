@@ -12,7 +12,7 @@ import { CurrencyPipe, DecimalPipe } from '@angular/common';
 import { PoChartLabelFormat } from '../po-chart/enums/po-chart-label-format.enum';
 import { NoopAnimationsModule } from '@angular/platform-browser/animations';
 import { NO_ERRORS_SCHEMA, SimpleChanges } from '@angular/core';
-
+import type { EChartsType } from 'echarts/core';
 class EChartsMock {
   setOption = jasmine.createSpy('setOption');
   resize = jasmine.createSpy('resize');
@@ -281,7 +281,7 @@ describe('PoChartNewComponent', () => {
     it('should call setTableProperties when chartInstance exists', () => {
       const setTablePropertiesSpy = spyOn(component as any, 'setTableProperties');
 
-      component['chartInstance'] = new EChartsMock();
+      component['chartInstance'] = new EChartsMock() as Partial<EChartsType> as EChartsType;
       component.openModal();
 
       expect(setTablePropertiesSpy).toHaveBeenCalled();
@@ -302,7 +302,7 @@ describe('PoChartNewComponent', () => {
 
   describe('toggleExpand', () => {
     beforeEach(() => {
-      component['chartInstance'] = new EChartsMock();
+      component['chartInstance'] = new EChartsMock() as Partial<EChartsType> as EChartsType;
       component['headerHeight'] = 50;
       component.height = 400;
     });
@@ -313,7 +313,7 @@ describe('PoChartNewComponent', () => {
         dispose: jasmine.createSpy('dispose')
       };
 
-      component['chartInstance'] = mockChart;
+      component['chartInstance'] = mockChart as Partial<EChartsType> as EChartsType;
       component.height = 400;
       component['headerHeight'] = 50;
       component['isExpanded'] = false;
@@ -340,7 +340,7 @@ describe('PoChartNewComponent', () => {
         getDataURL: jasmine.createSpy('getDataURL'),
         on: jasmine.createSpy('on')
       };
-      component['chartInstance'] = mockChartInstance;
+      component['chartInstance'] = mockChartInstance as Partial<EChartsType> as EChartsType;
       component['isExpanded'] = true;
       component['originalHeight'] = 400;
       component.height = 800;
@@ -376,6 +376,54 @@ describe('PoChartNewComponent', () => {
     });
   });
 
+  describe('checkShowCEcharts', () => {
+    it('should call initECharts and disconnect observer when element is visible and hideDomEchartsDiv is true', () => {
+      const chartElement = document.createElement('div');
+      chartElement.id = 'chart-id';
+
+      (component['el'].nativeElement.querySelector as jasmine.Spy).and.returnValue(chartElement);
+      component['hideDomEchartsDiv'] = true;
+
+      spyOn(component as any, 'initECharts');
+
+      const observeSpy = jasmine.createSpy('observe');
+      const disconnectSpy = jasmine.createSpy('disconnect');
+
+      let callback: (entries: Array<IntersectionObserverEntry>) => void;
+
+      (window as any).IntersectionObserver = function (cb: any) {
+        callback = cb;
+        return {
+          observe: observeSpy,
+          disconnect: disconnectSpy
+        };
+      };
+
+      (component as any).checkShowCEcharts();
+
+      callback([{ isIntersecting: true }] as any);
+
+      expect((component as any).initECharts).toHaveBeenCalled();
+      expect(observeSpy).toHaveBeenCalledWith(chartElement);
+      expect(disconnectSpy).toHaveBeenCalled();
+    });
+  });
+
+  it('should set showPopup to false when hideExportCsv, hideExportImage are true and there are no customActions', () => {
+    component['options'] = {
+      header: {
+        hideExportCsv: true,
+        hideExportImage: true
+      }
+    };
+
+    component['customActions'] = [];
+
+    (component as any).setInitialPopupActions();
+
+    expect(component['showPopup']).toBeFalse();
+  });
+
   describe('initECHarts:', () => {
     it('should not initialize the chart if #chart-id is not found', () => {
       const originalQuerySelector = component['el'].nativeElement.querySelector;
@@ -393,8 +441,10 @@ describe('PoChartNewComponent', () => {
     });
 
     it('should emit seriesClick event when clicking on the chart', () => {
+      const onSpy = jasmine.createSpy('on');
+
       component['chartInstance'] = {
-        on: jasmine.createSpy('on')
+        on: onSpy
       } as any;
 
       spyOn(component.seriesClick, 'emit');
@@ -402,15 +452,42 @@ describe('PoChartNewComponent', () => {
 
       component['initEChartsEvents']();
 
-      expect(component['chartInstance'].on).toHaveBeenCalledWith('click', jasmine.any(Function));
+      expect(onSpy).toHaveBeenCalledWith('click', jasmine.any(Function));
 
-      const clickCallback = component['chartInstance'].on.calls.argsFor(0)[1];
+      const clickCallback = onSpy.calls.argsFor(0)[1];
 
       const mockParams = { seriesName: 'Exemplo', value: 100, name: 'Categoria X' };
       clickCallback(mockParams);
 
-      const mouseoverCallback = component['chartInstance'].on.calls.argsFor(1)[1];
+      const mouseoverCallback = onSpy.calls.argsFor(1)[1];
+      const mockParamsMouse = {};
+      mouseoverCallback(mockParamsMouse);
 
+      expect(component.seriesClick.emit).toHaveBeenCalledWith({
+        label: 'Exemplo',
+        data: 100,
+        category: 'Categoria X'
+      });
+
+      expect(component.seriesHover.emit).not.toHaveBeenCalled();
+    });
+
+    it('should emit seriesClick event when clicking on the chart', () => {
+      const onSpy = jasmine.createSpy('on');
+      component['chartInstance'] = { on: onSpy } as Partial<EChartsType> as EChartsType;
+
+      spyOn(component.seriesClick, 'emit');
+      spyOn(component.seriesHover, 'emit');
+
+      component['initEChartsEvents']();
+
+      expect(onSpy).toHaveBeenCalledWith('click', jasmine.any(Function));
+
+      const clickCallback = onSpy.calls.argsFor(0)[1];
+      const mockParams = { seriesName: 'Exemplo', value: 100, name: 'Categoria X' };
+      clickCallback(mockParams);
+
+      const mouseoverCallback = onSpy.calls.argsFor(1)[1];
       const mockParamsMouse = {};
       mouseoverCallback(mockParamsMouse);
 
@@ -423,24 +500,21 @@ describe('PoChartNewComponent', () => {
     });
 
     it('should emit seriesClick event when clicking on the chart if params.seriesName is undefined', () => {
-      component['chartInstance'] = {
-        on: jasmine.createSpy('on')
-      } as any;
+      const onSpy = jasmine.createSpy('on');
+      component['chartInstance'] = { on: onSpy } as Partial<EChartsType> as EChartsType;
 
       spyOn(component.seriesClick, 'emit');
       spyOn(component.seriesHover, 'emit');
 
       component['initEChartsEvents']();
 
-      expect(component['chartInstance'].on).toHaveBeenCalledWith('click', jasmine.any(Function));
+      expect(onSpy).toHaveBeenCalledWith('click', jasmine.any(Function));
 
-      const clickCallback = component['chartInstance'].on.calls.argsFor(0)[1];
-
+      const clickCallback = onSpy.calls.argsFor(0)[1];
       const mockParams = { value: 100, name: 'Name X' };
       clickCallback(mockParams);
 
-      const mouseoverCallback = component['chartInstance'].on.calls.argsFor(1)[1];
-
+      const mouseoverCallback = onSpy.calls.argsFor(1)[1];
       const mockParamsMouse = {};
       mouseoverCallback(mockParamsMouse);
 
@@ -455,16 +529,17 @@ describe('PoChartNewComponent', () => {
       const tooltipElement = document.createElement('div');
       tooltipElement.id = 'custom-tooltip';
       document.body.appendChild(tooltipElement);
+
       const chartElement = document.createElement('div');
       chartElement.id = 'chart-id';
       document.body.appendChild(chartElement);
+
       component['el'] = {
         nativeElement: document
       };
 
-      component['chartInstance'] = {
-        on: jasmine.createSpy('on')
-      } as any;
+      const onSpy = jasmine.createSpy('on');
+      component['chartInstance'] = { on: onSpy } as Partial<EChartsType> as EChartsType;
 
       spyOn(component.seriesHover, 'emit');
       spyOn(component.seriesClick, 'emit');
@@ -473,9 +548,9 @@ describe('PoChartNewComponent', () => {
 
       component['initEChartsEvents']();
 
-      expect(component['chartInstance'].on).toHaveBeenCalledWith('mouseover', jasmine.any(Function));
+      expect(onSpy).toHaveBeenCalledWith('mouseover', jasmine.any(Function));
 
-      const mouseoverCallback = component['chartInstance'].on.calls.argsFor(1)[1];
+      const mouseoverCallback = onSpy.calls.argsFor(1)[1];
 
       const mockParams = {
         seriesName: 'Exemplo',
@@ -499,8 +574,7 @@ describe('PoChartNewComponent', () => {
 
       expect(component['positionTooltip']).toBe('top');
 
-      const clickCallback = component['chartInstance'].on.calls.argsFor(0)[1];
-
+      const clickCallback = onSpy.calls.argsFor(0)[1];
       const mockParamsClick = {};
       clickCallback(mockParamsClick);
 
@@ -516,16 +590,15 @@ describe('PoChartNewComponent', () => {
       const tooltipElement = document.createElement('div');
       tooltipElement.id = 'custom-tooltip';
       document.body.appendChild(tooltipElement);
+
       const chartElement = document.createElement('div');
       chartElement.id = 'chart-id';
       document.body.appendChild(chartElement);
-      component['el'] = {
-        nativeElement: document
-      };
 
-      component['chartInstance'] = {
-        on: jasmine.createSpy('on')
-      } as any;
+      component['el'] = { nativeElement: document };
+
+      const onSpy = jasmine.createSpy('on');
+      component['chartInstance'] = { on: onSpy } as Partial<EChartsType> as EChartsType;
 
       spyOn(component.seriesHover, 'emit');
       spyOn(component.seriesClick, 'emit');
@@ -535,10 +608,9 @@ describe('PoChartNewComponent', () => {
 
       component['initEChartsEvents']();
 
-      expect(component['chartInstance'].on).toHaveBeenCalledWith('mouseover', jasmine.any(Function));
+      expect(onSpy).toHaveBeenCalledWith('mouseover', jasmine.any(Function));
 
-      const mouseoverCallback = component['chartInstance'].on.calls.argsFor(1)[1];
-
+      const mouseoverCallback = onSpy.calls.argsFor(1)[1];
       const mockParams = {
         value: 300,
         name: 'Colombia',
@@ -550,8 +622,7 @@ describe('PoChartNewComponent', () => {
 
       expect(component['positionTooltip']).toBe('top');
 
-      const clickCallback = component['chartInstance'].on.calls.argsFor(0)[1];
-
+      const clickCallback = onSpy.calls.argsFor(0)[1];
       const mockParamsClick = {};
       clickCallback(mockParamsClick);
 
@@ -564,18 +635,16 @@ describe('PoChartNewComponent', () => {
     });
 
     it('should hide the tooltip when leaving the chart (mouseout)', () => {
-      component['chartInstance'] = {
-        on: jasmine.createSpy('on')
-      } as any;
+      const onSpy = jasmine.createSpy('on');
+      component['chartInstance'] = { on: onSpy } as Partial<EChartsType> as EChartsType;
 
       spyOn(component.poTooltip.last, 'toggleTooltipVisibility');
 
       component['initEChartsEvents']();
 
-      expect(component['chartInstance'].on).toHaveBeenCalledWith('mouseout', jasmine.any(Function));
+      expect(onSpy).toHaveBeenCalledWith('mouseout', jasmine.any(Function));
 
-      const mouseoutCallback = component['chartInstance'].on.calls.argsFor(2)[1];
-
+      const mouseoutCallback = onSpy.calls.argsFor(2)[1];
       mouseoutCallback();
 
       expect(component.poTooltip.last.toggleTooltipVisibility).toHaveBeenCalledWith(false);
@@ -592,15 +661,14 @@ describe('PoChartNewComponent', () => {
 
       component['el'] = { nativeElement: document };
 
-      component['chartInstance'] = {
-        on: jasmine.createSpy('on')
-      } as any;
+      const onSpy = jasmine.createSpy('on');
+      component['chartInstance'] = { on: onSpy } as Partial<EChartsType> as EChartsType;
 
       component.series = [{ label: 'Brazil', data: [35, 32, 25, 29, 33, 33], color: 'color-10' }];
 
       component['initEChartsEvents']();
 
-      const mouseoverCallback = component['chartInstance'].on.calls.argsFor(1)[1];
+      const mouseoverCallback = onSpy.calls.argsFor(1)[1];
 
       const mockParams = {
         seriesName: 'Exemplo',
@@ -610,7 +678,6 @@ describe('PoChartNewComponent', () => {
         seriesIndex: 0,
         event: { offsetX: 10, offsetY: 20 }
       };
-
       mouseoverCallback(mockParams);
 
       expect(component.tooltipText.replace(/\s/g, '')).toBe(
@@ -624,7 +691,6 @@ describe('PoChartNewComponent', () => {
         seriesType: 'line',
         event: { offsetX: 5, offsetY: 10 }
       };
-
       mouseoverCallback(mockParamsNoSeriesName);
 
       expect(component.tooltipText.replace(/\s/g, '')).toBe('CategoriaSemNome:<b>99</b>'.replace(/\s/g, ''));
@@ -649,7 +715,7 @@ describe('PoChartNewComponent', () => {
     it('should return line chart options with correct default structure', () => {
       component.options = {};
 
-      const result = component['setOptions']();
+      const result = component['setOptions']() as any;
 
       expect(result).toBeDefined();
       expect(result.backgroundColor).toBe('#ffffff');
@@ -661,7 +727,7 @@ describe('PoChartNewComponent', () => {
     it('should apply dataZoom configuration when enabled', () => {
       component.options = { dataZoom: true };
 
-      const result = component['setOptions']();
+      const result = component['setOptions']() as any;
       expect(result.grid.top).toBe(56);
     });
 
@@ -675,7 +741,7 @@ describe('PoChartNewComponent', () => {
         paddingLeft: 60
       };
 
-      const result = component['setOptions']();
+      const result = component['setOptions']() as any;
       expect(result.yAxis.min).toBe(10);
       expect(result.yAxis.max).toBe(100);
       expect(result.yAxis.splitNumber).toBe(7);
@@ -684,29 +750,31 @@ describe('PoChartNewComponent', () => {
       expect(result.yAxis.splitLine.show).toBeTrue();
     });
 
-    it('should apply correct axis configurations if type is Bar', () => {
-      const categories = ['Mon', 'Tue', 'Wed'];
+    it('should configure axes correctly when isTypeBar is true', () => {
       component.isTypeBar = true;
-      component.options.axis = {
-        minRange: 10,
-        maxRange: 100,
-        gridLines: 7,
-        showXAxis: false,
-        showYAxis: true,
-        paddingLeft: 60
-      };
-      component.categories = categories;
 
-      const result = component['setOptions']();
-      expect(result.yAxis.min).toBe(10);
-      expect(result.yAxis.max).toBe(100);
-      expect(result.yAxis.splitNumber).toBe(7);
-      expect(result.yAxis.type).toBe('category');
-      expect(result.yAxis.data).toEqual(categories);
-      expect(result.grid.left).toBe(60);
-      expect(result.xAxis.type).toBe('value');
-      expect(result.xAxis.splitLine.show).toBeFalse();
-      expect(result.yAxis.splitLine.show).toBeTrue();
+      component.options = {
+        axis: {
+          showXAxis: undefined,
+          showYAxis: false
+        }
+      };
+
+      component.categories = ['Jan', 'Feb', 'Mar'];
+
+      const options: any = {};
+
+      component['chartGridUtils'].setOptionsAxis(options);
+
+      expect(options.xAxis.type).toBe('value');
+
+      expect(options.xAxis.splitLine.show).toBeTrue();
+
+      expect(options.yAxis.type).toBe('category');
+
+      expect(options.yAxis.splitLine.show).toBeFalse();
+
+      expect(options.yAxis.data).toEqual(['Jan', 'Feb', 'Mar']);
     });
 
     it('should apply number formatting when labelType is Number', () => {
@@ -714,7 +782,7 @@ describe('PoChartNewComponent', () => {
         labelType: PoChartLabelFormat.Number
       };
 
-      const result = component['setOptions']();
+      const result = component['setOptions']() as any;
       expect(result.yAxis.axisLabel.formatter(100)).toBe('100.00');
     });
 
@@ -723,7 +791,7 @@ describe('PoChartNewComponent', () => {
         labelType: PoChartLabelFormat.Currency
       };
 
-      const result = component['setOptions']();
+      const result = component['setOptions']() as any;
       expect(result.yAxis.axisLabel.formatter(100)).toBe('$100.00');
     });
 
@@ -732,7 +800,7 @@ describe('PoChartNewComponent', () => {
         rotateLegend: 45
       };
 
-      const result = component['setOptions']();
+      const result = component['setOptions']() as any;
       expect(result.xAxis.axisLabel.rotate).toBe(45);
     });
 
@@ -740,7 +808,7 @@ describe('PoChartNewComponent', () => {
       component.dataLabel = { fixed: true };
       component.options = { axis: {} };
 
-      const result = component['setOptions']();
+      const result = component['setOptions']() as any;
       expect(result.grid.top).toBe(32);
     });
 
@@ -748,7 +816,7 @@ describe('PoChartNewComponent', () => {
       component.dataLabel = { fixed: true };
       component.options = { axis: { maxRange: 100 } };
 
-      const result = component['setOptions']();
+      const result = component['setOptions']() as any;
       expect(result.grid.top).toBe(16);
     });
 
@@ -767,12 +835,13 @@ describe('PoChartNewComponent', () => {
   });
 
   describe('setShowAxisDetails: ', () => {
-    it('deve adicionar tooltip com axisPointer quando showAxisDetails for true', () => {
+    it('should add tooltip with axisPointer when showAxisDetails is true', () => {
       component['options'] = {
         axis: {
           showAxisDetails: true
         }
       };
+      spyOn(component, 'getCSSVariable').and.returnValue('#4a5c60');
 
       const options: any = {};
 
@@ -783,11 +852,32 @@ describe('PoChartNewComponent', () => {
         axisPointer: {
           type: 'cross',
           label: {
-            backgroundColor: '#6a7985'
+            backgroundColor: '#4a5c60'
           }
         }
       });
     });
+  });
+
+  it('should set splitNumber on xAxis when isTypeBar is true', () => {
+    component.isTypeBar = true;
+    component.options = {
+      axis: {
+        gridLines: 7,
+        minRange: 0,
+        maxRange: 100
+      }
+    };
+
+    const options: any = {
+      xAxis: {
+        axisLabel: {}
+      }
+    };
+
+    (component as any).formatLabelOption(options);
+
+    expect(options.xAxis.splitNumber).toBe(7);
   });
 
   describe('setSeries:', () => {
@@ -1354,7 +1444,7 @@ describe('PoChartNewComponent', () => {
       spyOn(document, 'createElement').and.callFake((tag: string) => {
         if (tag === 'canvas') return canvas;
         if (tag === 'a') return link;
-        return originalCreateElement.call(document, tag); // aqui corrigido
+        return originalCreateElement.call(document, tag);
       });
 
       spyOn(canvas, 'toDataURL').and.returnValue('data:image/png;base64,fakeImageData');

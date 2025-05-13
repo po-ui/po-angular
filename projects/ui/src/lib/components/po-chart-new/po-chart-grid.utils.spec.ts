@@ -1,7 +1,6 @@
 import { PoChartType } from '../po-chart/enums/po-chart-type.enum';
 import { PoChartOptions } from '../po-chart/interfaces/po-chart-options.interface';
 import { PoChartGridUtils } from './po-chart-grid-utils';
-import { EChartsOption } from 'echarts';
 
 describe('PoChartGridUtils', () => {
   let utils: PoChartGridUtils;
@@ -77,7 +76,7 @@ describe('PoChartGridUtils', () => {
 
   describe('setOptionsAxis', () => {
     it('should define xAxis and yAxis correctly', () => {
-      const option: EChartsOption = {};
+      const option: any = {};
 
       utils.setOptionsAxis(option);
 

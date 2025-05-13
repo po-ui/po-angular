@@ -1,4 +1,3 @@
-import { EChartsOption } from 'echarts/dist/echarts.esm';
 import { PoChartNewComponent } from './po-chart-new.component';
 import { PoChartSerie } from '../po-chart/interfaces/po-chart-serie.interface';
 import { PoChartType } from '../po-chart/enums/po-chart-type.enum';
@@ -21,7 +20,7 @@ export class PoChartGridUtils {
   private isTypeDonut = false;
   constructor(private readonly component: PoChartNewComponent) {}
 
-  setGridOption(options: EChartsOption) {
+  setGridOption(options) {
     const tokenBorderWidthSm = this.resolvePx('--border-width-sm');
     const paddingBottom = this.getPaddingBottomGrid();
     const paddingTop = this.getPaddingTopGrid();
@@ -35,7 +34,7 @@ export class PoChartGridUtils {
     };
   }
 
-  setOptionsAxis(options: EChartsOption) {
+  setOptionsAxis(options) {
     const tokenFontSizeGrid = this.resolvePx('--font-size-grid', '.po-chart');
     const tokenBorderWidthSm = this.resolvePx('--border-width-sm');
 
@@ -52,7 +51,9 @@ export class PoChartGridUtils {
         overflow: 'break'
       },
       splitLine: {
-        show: this.component.options?.axis?.showXAxis || false,
+        show: this.component.isTypeBar
+          ? (this.component.options?.axis?.showXAxis ?? true)
+          : this.component.options?.axis?.showXAxis || false,
         lineStyle: {
           type: 'solid',
           width: tokenBorderWidthSm,
@@ -72,7 +73,9 @@ export class PoChartGridUtils {
         fontWeight: Number(this.component.getCSSVariable('--font-weight-grid', '.po-chart'))
       },
       splitLine: {
-        show: this.component.options?.axis?.showYAxis ?? true,
+        show: this.component.isTypeBar
+          ? this.component.options?.axis?.showYAxis || false
+          : (this.component.options?.axis?.showYAxis ?? true),
         lineStyle: {
           color: this.component.getCSSVariable('--color-grid', '.po-chart')
         }
@@ -87,7 +90,7 @@ export class PoChartGridUtils {
     }
   }
 
-  setOptionDataZoom(options: EChartsOption) {
+  setOptionDataZoom(options) {
     options.dataZoom = [
       {
         show: true,
@@ -105,14 +108,14 @@ export class PoChartGridUtils {
     ];
   }
 
-  setShowAxisDetails(options: EChartsOption) {
+  setShowAxisDetails(options) {
     if (this.component.options?.axis?.showAxisDetails) {
       options.tooltip = {
         trigger: 'none',
         axisPointer: {
           type: 'cross',
           label: {
-            backgroundColor: '#6a7985'
+            backgroundColor: this.component.getCSSVariable('--color-neutral-dark-70')
           }
         }
       };

@@ -9,3 +9,5 @@ export * from './interfaces/po-chart-serie-data-label.interface';
 export * from './po-chart.component';
 
 export * from './po-chart.module';
+
+export * from './po-chart-switch.component'; /* @ToDo - Deletar esta referência quando não for mais necessário.*/
