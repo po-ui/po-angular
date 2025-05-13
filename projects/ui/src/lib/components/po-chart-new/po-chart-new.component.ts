@@ -30,29 +30,9 @@ import { PoChartGridUtils } from './po-chart-grid-utils';
 
 /**
  * @docsExtends PoChartBaseComponent
- *
- * @example
- *
- * <example name="po-chart-basic" title="PO Chart Basic">
- *  <file name="sample-po-chart-basic/sample-po-chart-basic.component.html"> </file>
- *  <file name="sample-po-chart-basic/sample-po-chart-basic.component.ts"> </file>
- * </example>
- *
- * <example name="po-chart-labs" title="PO Chart Labs">
- *  <file name="sample-po-chart-labs/sample-po-chart-labs.component.html"> </file>
- *  <file name="sample-po-chart-labs/sample-po-chart-labs.component.ts"> </file>
- * </example>
- *
- * <example name="po-chart-coffee-ranking" title="PO Chart - Coffee Ranking">
- *  <file name="sample-po-chart-coffee-ranking/sample-po-chart-coffee-ranking.component.html"> </file>
- *  <file name="sample-po-chart-coffee-ranking/sample-po-chart-coffee-ranking.component.ts"> </file>
- * </example>
- *
- * <example name="po-chart-world-exports" title="PO Chart - World Exports">
- *  <file name="sample-po-chart-world-exports/sample-po-chart-world-exports.component.html"> </file>
- *  <file name="sample-po-chart-world-exports/sample-po-chart-world-exports.component.ts"> </file>
- * </example>
  */
+
+/* @ToDo - Foi retirado o exemplo do sample pois causava problema no build:package da pipe */
 @Component({
   selector: 'po-chart-new',
   templateUrl: './po-chart-new.component.html',
