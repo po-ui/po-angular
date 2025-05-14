@@ -42,6 +42,5 @@ Passos para reproduzir:
 
 #### Observações
 
-Tempo de Resposta PO UI --> Em até 7 dias úteis.
-Tempo de Retorno Solicitante --> 35 dias corridos
-Issues sem retorno do solicitante por mais de 35 dias corridos serão encerradas.
+Issues sem interação do solicitante por mais de 15 dias corridos serão encerradas.
+Caso você seja TOTVER favor entrar em contato internamente procurando a space do THF no TDN.
