@@ -2,7 +2,7 @@ import { Directive, EventEmitter, HostBinding, Input, Output, TemplateRef } from
 
 import { convertToBoolean, getDefaultSize, validateSize } from '../../utils/util';
 
-import { PoThemeService } from '../../services';
+import { PoThemeService } from '../../services/po-theme/po-theme.service';
 import { PoButtonKind } from './enums/po-button-kind.enum';
 import { PoButtonSize } from './enums/po-button-size.enum';
 import { PoButtonType } from './enums/po-button-type.enum';
