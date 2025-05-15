@@ -10,24 +10,22 @@
 
     <div class="po-chart-header-actions po-lg-3 po-md-4 po-sm-6">
       <po-button
+        *ngIf="!options?.header?.hideTableDetails"
         p-icon="ICON_LIST_BULLETS"
         p-kind="tertiary"
-        [p-disabled]="options?.header?.disabledTableDetails"
         (p-click)="openModal()"
       ></po-button>
       <po-button
+        *ngIf="!options?.header?.hideExpand"
         p-icon="ICON_EXPAND"
         p-kind="tertiary"
-        [p-disabled]="options?.header?.disabledExpand"
         (p-click)="toggleExpand()"
       ></po-button>
       <po-button
+        *ngIf="showPopup"
         #targetPopup
         p-icon="ICON_MORE_VERT"
         p-kind="tertiary"
-        [p-disabled]="
-          options?.header?.disabledExportCsv && options?.header?.disabledExportImage && !customActions?.length
-        "
         (p-click)="popup.toggle()"
       ></po-button>
     </div>

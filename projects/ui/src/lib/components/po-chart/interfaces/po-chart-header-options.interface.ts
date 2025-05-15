@@ -3,7 +3,7 @@
  *
  * @description
  *
- * *Interface* que define os eixos do grid.
+ * *Interface* para configuração das ações disponíveis no cabeçalho.
  */
 export interface PoChartHeaderOptions {
   /**
@@ -11,42 +11,42 @@ export interface PoChartHeaderOptions {
    *
    * @description
    *
-   * Exibe a linha do eixo X
+   * Define se o botão responsável por expandir o gráfico deve ser ocultado.
    *
    * @default `false`
    */
-  disabledExpand?: boolean;
+  hideExpand?: boolean;
 
   /**
    * @optional
    *
    * @description
    *
-   * Exibe a linha do eixo Y
+   * Define se o botão responsável por exibir os detalhes do gráfico em formato de tabela deve ser ocultado.
    *
    * @default `false`
    */
-  disabledTableDetails?: boolean;
+  hideTableDetails?: boolean;
 
   /**
    * @optional
    *
    * @description
    *
-   * Exibe a linha do eixo Y
+   * Define se a opção de exportação do gráfico em formato CSV deve ser ocultada.
    *
    * @default `false`
    */
-  disabledExportCsv?: boolean;
+  hideExportCsv?: boolean;
 
   /**
    * @optional
    *
    * @description
    *
-   * Exibe a linha do eixo Y
+   * Define se a opção de exportação do gráfico nos formatos JPG e PNG deve ser ocultada.
    *
    * @default `false`
    */
-  disabledExportImage?: boolean;
+  hideExportImage?: boolean;
 }

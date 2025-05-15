@@ -111,7 +111,7 @@ export class PoChartGridUtils {
         axisPointer: {
           type: 'cross',
           label: {
-            backgroundColor: '#6a7985'
+            backgroundColor: this.component.getCSSVariable('--color-neutral-dark-70')
           }
         }
       };

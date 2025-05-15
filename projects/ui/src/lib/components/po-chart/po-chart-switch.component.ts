@@ -31,6 +31,7 @@ export class PoChartSwitchComponent implements OnInit, OnChanges {
   @Input('p-categories') categories: any;
   @Input('p-height') height: any;
   @Input('p-data-label') dataLabel: any;
+  @Input('p-custom-actions') customActions: any;
   @Output('p-series-hover') seriesHover = new EventEmitter<any>();
   @Output('p-series-click') seriesClick = new EventEmitter<any>();
 
@@ -50,6 +51,7 @@ export class PoChartSwitchComponent implements OnInit, OnChanges {
     this.componentRef.instance.type = this.type;
     this.componentRef.instance.height = this.height;
     this.componentRef.instance.dataLabel = this.dataLabel;
+    this.componentRef.instance.customActions = this.customActions;
 
     this.componentRef.instance.ngOnChanges(changes);
   }
@@ -72,6 +74,7 @@ export class PoChartSwitchComponent implements OnInit, OnChanges {
     this.componentRef.instance.type = this.type;
     this.componentRef.instance.height = this.height;
     this.componentRef.instance.dataLabel = this.dataLabel;
+    this.componentRef.instance.customActions = this.customActions;
 
     this.componentRef.instance.seriesHover.subscribe((event: any) => {
       this.seriesHover.emit(event);
@@ -108,6 +111,10 @@ export class PoChartSwitchComponent implements OnInit, OnChanges {
       },
       dataLabel: {
         currentValue: this.dataLabel,
+        firstChange: true
+      },
+      customActions: {
+        currentValue: this.customActions,
         firstChange: true
       }
     };

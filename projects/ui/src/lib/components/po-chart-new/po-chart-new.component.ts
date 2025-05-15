@@ -87,6 +87,7 @@ export class PoChartNewComponent
     action: this.downloadCsv.bind(this),
     label: this.literals.downloadCSV
   };
+  public showPopup = true;
   protected itemsTable = [];
   protected columnsTable: Array<PoTableColumn> = [];
   protected isExpanded = false;
@@ -95,26 +96,7 @@ export class PoChartNewComponent
   protected positionTooltip = 'top';
   protected tooltipTitle = undefined;
   protected chartGridUtils: PoChartGridUtils;
-  protected popupActions: Array<PoPopupAction> = [
-    {
-      label: this.literals.exportCSV,
-      disabled: this.options?.header?.disabledExportCsv,
-      action: () => {
-        this.setTableProperties();
-        this.downloadCsv();
-      }
-    },
-    {
-      label: this.literals.exportPNG,
-      disabled: this.options?.header?.disabledExportImage,
-      action: this.exportImage.bind(this, 'png')
-    },
-    {
-      label: this.literals.exportJPG,
-      disabled: this.options?.header?.disabledExportImage,
-      action: this.exportImage.bind(this, 'jpeg')
-    }
-  ];
+  protected popupActions: Array<PoPopupAction> = [];
   private chartInstance!: echarts.ECharts;
   private currentRenderer: 'svg' | 'canvas';
   private intersectionObserver: IntersectionObserver;
@@ -243,6 +225,44 @@ export class PoChartNewComponent
     this.intersectionObserver.observe(chartElement);
   }
 
+  private setInitialPopupActions(): void {
+    const hideExportCsv = this.options?.header?.hideExportCsv;
+    const hideExportImage = this.options?.header?.hideExportImage;
+
+    if (hideExportCsv && hideExportImage && !this.customActions?.length) {
+      this.showPopup = false;
+      this.cdr.detectChanges();
+    }
+
+    this.popupActions = [
+      {
+        label: this.literals.exportCSV,
+        visible: !hideExportCsv,
+        action: () => {
+          this.setTableProperties();
+          this.downloadCsv();
+        }
+      },
+      {
+        label: this.literals.exportPNG,
+        visible: !hideExportImage,
+        action: this.exportImage.bind(this, 'png')
+      },
+      {
+        label: this.literals.exportJPG,
+        visible: !hideExportImage,
+        action: this.exportImage.bind(this, 'jpeg')
+      }
+    ];
+
+    this.actionModal = {
+      ...this.actionModal,
+      disabled: hideExportCsv
+    };
+
+    this.setPopupActions();
+  }
+
   private initECharts() {
     this.cdr.detectChanges();
     const echartsDiv = this.el.nativeElement.querySelector('#chart-id');
@@ -318,6 +338,8 @@ export class PoChartNewComponent
     let option = {};
     option = this.setOptions();
     this.chartInstance.setOption(option);
+    this.setInitialPopupActions();
+    this.cdr.detectChanges();
   }
 
   private setOptions() {
