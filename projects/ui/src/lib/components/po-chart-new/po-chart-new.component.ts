@@ -368,11 +368,12 @@ export class PoChartNewComponent
 
   private formatLabelOption(options) {
     if (this.options?.axis && Object.keys(this.options.axis).length) {
-      options.yAxis['splitNumber'] = this.options.axis.gridLines || 5;
-      options.yAxis['min'] = this.options.axis.minRange;
-      options.yAxis['max'] = this.options.axis.maxRange;
+      const currentAxis = this.isTypeBar ? 'xAxis' : 'yAxis';
+      options[currentAxis]['splitNumber'] = this.options.axis.gridLines || 5;
+      options[currentAxis]['min'] = this.options.axis.minRange;
+      options[currentAxis]['max'] = this.options.axis.maxRange;
       if (this.options.axis.labelType) {
-        options.yAxis['axisLabel'].formatter =
+        options[currentAxis]['axisLabel'].formatter =
           this.options.axis.labelType === PoChartLabelFormat.Number
             ? (value: number) => this.decimalPipe.transform(value, '1.2-2')
             : (value: number) => this.currencyPipe.transform(value, null, 'symbol', '1.2-2');

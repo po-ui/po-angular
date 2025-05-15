@@ -51,7 +51,9 @@ export class PoChartGridUtils {
         overflow: 'break'
       },
       splitLine: {
-        show: this.component.options?.axis?.showXAxis || false,
+        show: this.component.isTypeBar
+          ? (this.component.options?.axis?.showXAxis ?? true)
+          : this.component.options?.axis?.showXAxis || false,
         lineStyle: {
           type: 'solid',
           width: tokenBorderWidthSm,
@@ -71,7 +73,9 @@ export class PoChartGridUtils {
         fontWeight: Number(this.component.getCSSVariable('--font-weight-grid', '.po-chart'))
       },
       splitLine: {
-        show: this.component.options?.axis?.showYAxis ?? true,
+        show: this.component.isTypeBar
+          ? this.component.options?.axis?.showYAxis || false
+          : (this.component.options?.axis?.showYAxis ?? true),
         lineStyle: {
           color: this.component.getCSSVariable('--color-grid', '.po-chart')
         }
