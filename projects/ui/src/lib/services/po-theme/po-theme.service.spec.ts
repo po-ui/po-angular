@@ -670,7 +670,7 @@ describe('PoThemeService:', () => {
         service.setPerComponentAndOnRoot(active, perComponent, onRoot);
 
         const expectedCss = `
-          html[class*="-light-AAA"]:root {
+          :root[class*="-light-AAA"] {
             po-listbox {display: flex;};
             --font-family: Roboto;
           }
@@ -684,7 +684,7 @@ describe('PoThemeService:', () => {
         service.setPerComponentAndOnRoot(active, perComponent, onRoot);
 
         const expectedCss = `
-          html[class$="-AAA"]:root {
+          :root[class$="-AAA"] {
             po-listbox {display: flex;};
             --font-family: Roboto;
           }
@@ -700,7 +700,7 @@ describe('PoThemeService:', () => {
         service.setPerComponentAndOnRoot(active, perComponent, onRoot);
 
         const expectedCss = `
-          html[class*="-dark"]:root {
+          :root[class*="-dark"] {
             po-listbox {display: flex;};
             --font-family: Arial;
           }
@@ -716,7 +716,7 @@ describe('PoThemeService:', () => {
         service.setPerComponentAndOnRoot(active, perComponent, onRoot);
 
         const expectedCss = `
-          html:root {
+          :root {
             po-listbox {display: none;};
             --font-family: Helvetica;
           }
@@ -733,7 +733,7 @@ describe('PoThemeService:', () => {
         service.setPerComponentAndOnRoot(active, perComponent, onRoot);
 
         const expectedCss = `
-          html[class*="-light-AAA"]:root {
+          :root[class*="-light-AAA"] {
             po-listbox {display: flex;};
             --font-family: Roboto;
           }
@@ -748,7 +748,7 @@ describe('PoThemeService:', () => {
         service.setPerComponentAndOnRoot(active, perComponent, onRoot);
 
         const expectedCss = `
-          html[class*="-light-AAA"]:root {
+          :root[class*="-light-AAA"] {
 
           }
         `;
@@ -761,7 +761,7 @@ describe('PoThemeService:', () => {
         service.setPerComponentAndOnRoot(active, perComponent, onRoot);
 
         const expectedCss = `
-          html[class*="-light-AAA"]:root {
+          :root[class*="-light-AAA"] {
             --font-family: Roboto;
           }
         `;
@@ -774,12 +774,78 @@ describe('PoThemeService:', () => {
         service.setPerComponentAndOnRoot(active, perComponent, onRoot);
 
         const expectedCss = `
-          html[class*="-light-AAA"]:root {
+          :root[class*="-light-AAA"] {
             po-listbox {display: flex;};
           }
         `;
         validateStyleContent(expectedCss);
       });
+
+      it('should apply type and accessibility and a single prefix', () => {
+        service.setPerComponentAndOnRoot(active, perComponent, onRoot, 'myTheme');
+
+        const expectedCss = `
+          :root[class*="-light-AAA"][class*="myTheme"] {
+            po-listbox {display: flex;};
+            --font-family: Roboto;
+          }
+        `;
+        validateStyleContent(expectedCss);
+      });
+
+      it('should apply type and accessibility and a multiple prefix', () => {
+        service.setPerComponentAndOnRoot(active, perComponent, onRoot, ['myTheme', 'portal-v2']);
+
+        const expectedCss = `
+          :root[class*="-light-AAA"][class*="myTheme"], :root[class*="-light-AAA"][class*="portal-v2"] {
+            po-listbox {display: flex;};
+            --font-family: Roboto;
+          }
+        `;
+        validateStyleContent(expectedCss);
+      });
+    });
+
+    it('applyThemeStyles: should use document.head.firstChild as reference when baseStyle does not exist', () => {
+      const testCss = '.test { color: red; }';
+
+      // Remove o baseStyle se já existir
+      const existingBaseStyle = document.getElementById('baseStyle');
+      if (existingBaseStyle) {
+        document.head.removeChild(existingBaseStyle);
+      }
+
+      // Cria e adiciona nosso nó de referência
+      const mockFirstChild = document.createElement('meta');
+      document.head.insertBefore(mockFirstChild, document.head.firstChild);
+
+      // Configura spies para os seletores
+      spyOn(document, 'querySelector')
+        .withArgs('#theme')
+        .and.returnValue(null)
+        .withArgs('#baseStyle')
+        .and.returnValue(null);
+
+      // Chama o método
+      service['applyThemeStyles'](testCss);
+
+      // Verifica se o novo style foi inserido antes do mockFirstChild
+      const insertedStyle = document.getElementById('theme');
+      expect(insertedStyle).toBeTruthy();
+      expect(insertedStyle.innerHTML).toBe(testCss);
+
+      // Verifica a ordem dos nós
+      const nodes = Array.from(document.head.childNodes);
+      expect(nodes.indexOf(insertedStyle)).toBeLessThan(nodes.indexOf(mockFirstChild));
+
+      // Limpeza
+      document.head.removeChild(insertedStyle);
+      document.head.removeChild(mockFirstChild);
+
+      // Restaura o baseStyle se necessário
+      if (existingBaseStyle) {
+        document.head.appendChild(existingBaseStyle);
+      }
     });
   });
 });

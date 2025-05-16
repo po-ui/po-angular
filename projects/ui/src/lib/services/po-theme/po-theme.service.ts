@@ -18,7 +18,7 @@ import { PoTheme, PoThemeActive } from './interfaces/po-theme.interface';
  *
  * O `PoThemeService` possibilita a personalização das cores do tema padrão do `PO-UI`, permitindo a alteração dos valores das variáveis de estilo usadas no CSS padrão.
  *
- * > Para saber mais sobre como customizar as cores do tema padrão verifique o item [Customizando cores do tema padrão](https://po-ui.io/guides/colors-customization) na aba `Guias`.
+ * > Para saber mais sobre como customizar o tema padrão verifique o item [Customização de Temas usando o serviço PO-UI](guides/theme-service) na aba `Guias`.
  *
  * > Obs.: Não está documentado aqui e não indicamos a customização das cores de 'feedback' por motivos de acessibilidade e usabilidade.
  */
@@ -94,7 +94,7 @@ export class PoThemeService {
     const additionalStyles = this.generateAdditionalStyles(_themeType);
 
     const combinedStyles = `
-      html.${themeConfig.name}-${PoThemeTypeEnum[themeType]}-${a11yLevel}:root {
+      :root.${themeConfig.name}-${PoThemeTypeEnum[themeType]}-${a11yLevel} {
         ${colorStyles}
         ${perComponentStyles}
         ${onRootStyles}
@@ -172,42 +172,60 @@ export class PoThemeService {
    * A classe do tema é aplicada no HTML e pode ser formatada como `html[class*="-light-AA"]` para personalizações
    * em temas específicos.
    *
-   * @param {PoThemeActive} active - Objeto que define o tema ativo, com `type` e `a11y`.
+   * @param {PoThemeActive} active - Configuração do tema ativo:
    * @param {any} perComponent - Objeto contendo os estilos específicos para componentes a serem aplicados.
    * @param {any} onRoot - Objeto contendo tokens de estilo que serão aplicados diretamente no seletor `:root` do HTML.
+   * @param {string | Array<string>} [classPrefix] - Prefixo(s) de classe para direcionamento preciso.
    *
    * @example
+   * #### 1. Com prefixo único
+   * ```typescript
+   * setPerComponentAndOnRoot(
+   *   { type: 'dark', a11y: 'AA' },
+   *   { 'po-input': { background: '#222' } },
+   *   { '--text-color': '#fff' },
+   *   'myTheme'
+   * );
+   * ```
+   * **Saída:**
+   * ```css
+   * :root[class*="-dark-AA"][class*="myTheme"] {
+   *   --text-color: #fff;
+   *   po-input { background: #222; }
+   * }
+   * ```
    *
-   * // Exemplo de utilização com um tema ativo e tokens de estilo
-   * const themeActive = { type: 'light', a11y: 'AA' };
-   * const perComponentStyles = {
-   *   'po-listbox [hidden]': {
-   *     'display': 'flex !important'
-   *   }
-   * };
-   * const onRootStyles = {
-   *   '--font-family': 'Roboto',
-   *   '--background-color': '#fff'
-   * };
+   * #### 2. Com múltiplos prefixos
+   * ```typescript
+   * setPerComponentAndOnRoot(
+   *   { type: 'light' },
+   *   null,
+   *   { '--primary': '#3e8ed0' },
+   *   ['myTheme', 'portal-v2']
+   * );
+   * ```
+   * **Saída:**
+   * ```css
+   * :root[class*="-light"][class*="myTheme"],
+   * :root[class*="-light"][class*="portal-v2"] {
+   *   --primary: #3e8ed0;
+   * }
+   * ```
    *
-   * this.setPerComponentAndOnRoot(themeActive, perComponentStyles, onRootStyles);
-   *
-   * // Resultado:
-   * // Gera e aplica os seguintes estilos no DOM
-   * // html[class*="-light-AA"]:root {
-   * //   --font-family: 'Roboto';
-   * //   --background-color: '#fff';
-   * //   po-listbox [hidden] {
-   * //     display: flex !important;
-   * //   }
-   * // }
+   * - Quando usado com array, gera um seletor CSS com múltiplos targets (separados por vírgula).
+   * - Mantém a especificidade original do tema (`[class*="-type-a11y"]`) combinada com cada prefixo.
    *
    */
-  public setPerComponentAndOnRoot(active: PoThemeActive, perComponent: any, onRoot: any) {
+  public setPerComponentAndOnRoot(
+    active: PoThemeActive,
+    perComponent: any,
+    onRoot: any,
+    classPrefix?: string | Array<string>
+  ) {
     const perComponentStyles = perComponent ? this.generatePerComponentStyles(perComponent) : '';
     const onRootStyles = onRoot ? this.generateAdditionalStyles(onRoot) : '';
 
-    let selector = 'html';
+    let selector = ':root';
     const typeSelector = active?.type !== undefined ? `-${PoThemeTypeEnum[active.type]}` : '';
     const accessibilitySelector = active?.a11y !== undefined ? `-${PoThemeA11yEnum[active.a11y]}` : '';
 
@@ -219,8 +237,16 @@ export class PoThemeService {
       selector += `[class*="${typeSelector}"]`;
     }
 
+    if (classPrefix) {
+      if (Array.isArray(classPrefix)) {
+        selector = classPrefix.map(prefix => selector + `[class*="${prefix}"]`).join(', ');
+      } else {
+        selector += `[class*="${classPrefix}"]`;
+      }
+    }
+
     const styleCss = `
-      ${selector}:root {
+      ${selector} {
         ${perComponentStyles}
         ${onRootStyles}
       }
@@ -231,7 +257,7 @@ export class PoThemeService {
       styleElement = this.renderer.createElement('style');
       styleElement.id = 'baseStyle';
       this.renderer.appendChild(styleElement, this.renderer.createText(styleCss));
-      this.renderer.appendChild(this.document.head, styleElement);
+      this.renderer.insertBefore(this.document.head, styleElement, this.document.head.firstChild);
     } else {
       if (!styleElement.textContent.includes(styleCss.trim())) {
         this.renderer.appendChild(styleElement, this.renderer.createText(styleCss));
@@ -267,7 +293,10 @@ export class PoThemeService {
       this.renderer.removeChild(document.head, existingStyleElement);
     }
 
-    this.renderer.appendChild(document.head, styleElement);
+    const existingBaseStyle = document.head.querySelector('#baseStyle');
+    const referenceNode = existingBaseStyle ? existingBaseStyle.nextSibling : document.head.firstChild;
+
+    this.renderer.insertBefore(document.head, styleElement, referenceNode);
   }
 
   private changeThemeType(theme: PoTheme, persistPreference: boolean = true) {
@@ -604,15 +633,15 @@ export class PoThemeService {
 
   private setDefaultBaseStyle() {
     // set triple A for all themes (its the base theme)
-    // result: html:root
+    // result: :root
     this.setPerComponentAndOnRoot(undefined, poThemeDefaultAAA.perComponent, poThemeDefaultAAA.onRoot);
 
     // set double A
-    // result: html[class*="-AA"]:root
+    // result: :root[class*="-AA"]
     this.setPerComponentAndOnRoot({ a11y: PoThemeA11yEnum.AA }, poThemeDefaultAA.perComponent, poThemeDefaultAA.onRoot);
 
     // set Light mode values
-    // result: html[class*="-light"]:root
+    // result: :root[class*="-light"]
     this.setPerComponentAndOnRoot(
       { type: PoThemeTypeEnum.light },
       poThemeDefaultLightValues.perComponent,
@@ -620,7 +649,7 @@ export class PoThemeService {
     );
 
     // set Dark mode values
-    // result: html[class*="-dark"]:root
+    // result: :root[class*="-dark"]
     this.setPerComponentAndOnRoot(
       { type: PoThemeTypeEnum.dark },
       poThemeDefaultDarkValues.perComponent,
