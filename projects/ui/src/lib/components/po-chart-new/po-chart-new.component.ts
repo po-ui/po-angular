@@ -58,7 +58,9 @@ use([
 ]);
 
 /**
- * @docsExtends PoChartBaseComponent
+ * @docsPrivate
+ *
+ * Componente de uso interno.
  */
 
 /* @ToDo - Foi retirado o exemplo do sample pois causava problema no build:package da pipe */
@@ -229,10 +231,7 @@ export class PoChartNewComponent
     const hideExportCsv = this.options?.header?.hideExportCsv;
     const hideExportImage = this.options?.header?.hideExportImage;
 
-    if (hideExportCsv && hideExportImage && !this.customActions?.length) {
-      this.showPopup = false;
-      this.cdr.detectChanges();
-    }
+    this.showPopup = !(hideExportCsv && hideExportImage && !this.customActions?.length);
 
     this.popupActions = [
       {
