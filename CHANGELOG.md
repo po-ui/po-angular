@@ -2,6 +2,18 @@
 
 All notable changes to this project will be documented in this file. See [standard-version](https://github.com/conventional-changelog/standard-version) for commit guidelines.
 
+## [19.12.0](https://github.com/po-ui/po-angular/compare/v19.11.0...v19.12.0) (2025-05-19)
+
+
+### Features
+
+* **switch:** adiciona propriedades para validação de erros ([32840ad](https://github.com/po-ui/po-angular/commit/32840ad4c60356475976a8665b32609149a37009))
+
+
+### Bug Fixes
+
+* **theme:** ajusta ordem de inserção de estilos no DOM ([9db6759](https://github.com/po-ui/po-angular/commit/9db67596f5407fcf71b88bcb59d59e1a4d671c32))
+
 ## [19.11.0](https://github.com/po-ui/po-angular/compare/v19.10.0...v19.11.0) (2025-05-09)
 
 
