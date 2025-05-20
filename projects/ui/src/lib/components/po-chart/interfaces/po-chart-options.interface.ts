@@ -158,6 +158,8 @@ export interface PoChartOptions {
    *
    * Define como o gráfico será renderizado.
    *
+   * > Recomenda-se não modificar o valor da propriedade `rendererOption` após a inicialização da aplicação, uma vez que tal alteração pode ocasionar comportamentos inconsistentes na renderização do gráfico.
+   *
    * @default `canvas`
    */
   rendererOption?: 'canvas' | 'svg';

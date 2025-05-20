@@ -104,8 +104,12 @@ export class PoChartNewComponent
   private intersectionObserver: IntersectionObserver;
   private hideDomEchartsDiv = false;
 
+  get showHeader() {
+    return this.title || !this.options?.header?.hideTableDetails || !this.options?.header?.hideExpand || this.showPopup;
+  }
+
   constructor(
-    private el: ElementRef,
+    private readonly el: ElementRef,
     private readonly currencyPipe: CurrencyPipe,
     private readonly decimalPipe: DecimalPipe,
     private readonly colorService: PoColorService,
@@ -120,6 +124,14 @@ export class PoChartNewComponent
     if (this.chartInstance) {
       this.chartInstance?.resize();
     }
+  };
+
+  @HostListener('window:PoUiThemeChange', ['$event'])
+  changeTheme = (event: any) => {
+    this.chartInstance?.dispose();
+    this.chartInstance = undefined;
+    this.initECharts();
+    this.checkShowCEcharts();
   };
 
   ngOnInit(): void {
@@ -143,9 +155,11 @@ export class PoChartNewComponent
       ) {
         this.chartInstance?.dispose();
         this.chartInstance = undefined;
+        this.setInitialPopupActions();
         this.initECharts();
       } else {
         this.chartInstance?.clear();
+        this.setInitialPopupActions();
         this.setChartsProperties();
       }
     }
@@ -158,6 +172,7 @@ export class PoChartNewComponent
   }
 
   ngAfterViewInit() {
+    this.setInitialPopupActions();
     this.initECharts();
     this.checkShowCEcharts();
   }
@@ -232,6 +247,14 @@ export class PoChartNewComponent
     const hideExportImage = this.options?.header?.hideExportImage;
 
     this.showPopup = !(hideExportCsv && hideExportImage && !this.customActions?.length);
+    this.cdr.detectChanges();
+
+    const headerElement = this.el.nativeElement.querySelector('.po-chart-header') as HTMLDivElement;
+    if (this.headerHeight !== headerElement?.clientHeight) {
+      this.headerHeight = headerElement?.clientHeight;
+      this.cdr.detectChanges();
+      this.chartInstance?.resize();
+    }
 
     this.popupActions = [
       {
@@ -268,12 +291,6 @@ export class PoChartNewComponent
     if (!echartsDiv?.clientWidth) {
       this.hideDomEchartsDiv = true;
       return;
-    }
-
-    if (!this.headerHeight) {
-      const headerElement = this.el.nativeElement.querySelector('.po-chart-header') as HTMLDivElement;
-      this.headerHeight = headerElement?.clientHeight;
-      this.cdr.detectChanges();
     }
     this.currentRenderer = this.options?.rendererOption || 'canvas';
     this.chartInstance = echarts.init(echartsDiv, null, { renderer: this.currentRenderer });
@@ -337,7 +354,6 @@ export class PoChartNewComponent
     let option = {};
     option = this.setOptions();
     this.chartInstance.setOption(option);
-    this.setInitialPopupActions();
     this.cdr.detectChanges();
   }
 
