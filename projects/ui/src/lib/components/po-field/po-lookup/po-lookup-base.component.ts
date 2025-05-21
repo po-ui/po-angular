@@ -766,7 +766,7 @@ export abstract class PoLookupBaseComponent
       checkedValue = checkedValue.trim();
     }
 
-    if (checkedValue !== '') {
+    if (checkedValue !== '' && checkedValue !== '.') {
       const oldDisable = this.disabled;
       this.disabled = true;
 
