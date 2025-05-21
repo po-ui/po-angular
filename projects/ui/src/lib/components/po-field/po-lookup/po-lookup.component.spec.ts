@@ -180,6 +180,23 @@ describe('PoLookupComponent:', () => {
     flush();
   }));
 
+  it('should not set value after searching "."', fakeAsync(() => {
+    fixture.detectChanges();
+    const serviceResponse = { id: 1234, name: 'Peter Parker', email: 'peterP@mail.com' };
+    component.fieldValue = 'id';
+    component.fieldLabel = 'name';
+    spyOn(component.service, 'getObjectByValue').and.returnValue(of(serviceResponse));
+
+    component.searchById('.');
+
+    tick();
+    fixture.detectChanges();
+
+    expect(component.inputEl.nativeElement.value).not.toBe('Peter Parker');
+    expect(component['selectedOptions']).toEqual([]);
+    flush();
+  }));
+
   describe('Properties:', () => {
     it('autocomplete: should return `off` if `noAutocomplete` is true', () => {
       component.noAutocomplete = true;
