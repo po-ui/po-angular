@@ -654,7 +654,7 @@ export abstract class PoLookupBaseComponent
                 this.updateVisibleItems();
               }
 
-              this.selectModel(this.multiple ? element : [element]);
+              this.selectModel(Array.isArray(element) ? element : [element]);
             } else {
               this.cleanModel();
             }
