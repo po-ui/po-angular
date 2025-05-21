@@ -34,9 +34,9 @@ export class PoDynamicFormFieldsComponent extends PoDynamicFormFieldsBaseCompone
   constructor(
     titleCasePipe: TitleCasePipe,
     protected poThemeService: PoThemeService,
-    private validationService: PoDynamicFormValidationService,
-    private changes: ChangeDetectorRef,
-    private form: NgForm
+    private readonly validationService: PoDynamicFormValidationService,
+    private readonly changes: ChangeDetectorRef,
+    private readonly form: NgForm
   ) {
     super(poThemeService, titleCasePipe);
   }
@@ -113,8 +113,8 @@ export class PoDynamicFormFieldsComponent extends PoDynamicFormFieldsBaseCompone
     this.previousValue = JSON.parse(JSON.stringify(this.value));
   }
 
-  trackBy(index) {
-    return index;
+  trackBy(index: number, field: PoDynamicFormField) {
+    return field.property;
   }
 
   private applyFieldValidation(index: number, validatedField: PoDynamicFormFieldValidation) {
@@ -299,7 +299,7 @@ export class PoDynamicFormFieldsComponent extends PoDynamicFormFieldsBaseCompone
   }
 
   private hasContainer() {
-    return this.visibleFields && this.visibleFields.some(field => field.container);
+    return this.visibleFields?.some(field => field.container) ?? false;
   }
 
   private handleChangesContainer(prevContainers, currContainers, key) {
