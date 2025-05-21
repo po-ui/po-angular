@@ -70,7 +70,7 @@ export abstract class PoLookupBaseComponent
   implements ControlValueAccessor, OnDestroy, OnInit, Validator, AfterViewInit, OnChanges
 {
   private _literals?: PoLookupLiterals;
-  private language: string;
+  private readonly language: string;
   private _size?: string = undefined;
 
   // Propriedade interna que define se o ícone de ajuda adicional terá cursor clicável (evento) ou padrão (tooltip).
@@ -532,15 +532,15 @@ export abstract class PoLookupBaseComponent
   private _noAutocomplete: boolean;
   private _placeholder: string = '';
   private _required?: boolean = false;
-  private _autoHeight: boolean = false;
+  private readonly _autoHeight: boolean = false;
 
-  private autoHeightInitialValue: boolean;
+  private readonly autoHeightInitialValue: boolean;
   private onChangePropagate: any = null;
   private validatorChange: any;
 
   private control!: AbstractControl;
 
-  private injectOptions: InjectOptions = {
+  private readonly injectOptions: InjectOptions = {
     self: true
   };
 
@@ -671,8 +671,8 @@ export abstract class PoLookupBaseComponent
   }
 
   constructor(
-    private defaultService: PoLookupFilterService,
-    @Inject(Injector) private injector: Injector,
+    private readonly defaultService: PoLookupFilterService,
+    @Inject(Injector) private readonly injector: Injector,
     public poLookupModalService: PoLookupModalService,
     languageService: PoLanguageService,
     protected poThemeService: PoThemeService
@@ -735,11 +735,13 @@ export abstract class PoLookupBaseComponent
   // Seleciona o valor do model.
   selectValue(valueSelected: any) {
     this.valueToModel = valueSelected;
-    this.multiple
-      ? this.callOnChange(this.valueToModel)
-      : this.valueToModel
-        ? this.callOnChange(this.valueToModel[this.fieldValue])
-        : this.callOnChange(undefined);
+    if (this.multiple) {
+      this.callOnChange(this.valueToModel);
+    } else if (this.valueToModel) {
+      this.callOnChange(this.valueToModel[this.fieldValue]);
+    } else {
+      this.callOnChange(undefined);
+    }
     this.selected.emit(valueSelected);
   }
 
@@ -794,7 +796,7 @@ export abstract class PoLookupBaseComponent
                 this.updateVisibleItems();
               }
 
-              this.selectModel(this.multiple ? element : [element]);
+              this.selectModel(Array.isArray(element) ? element : [element]);
             } else {
               this.cleanModel();
             }
