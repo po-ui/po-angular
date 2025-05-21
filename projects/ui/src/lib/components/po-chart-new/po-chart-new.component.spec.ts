@@ -1,4 +1,8 @@
 import { ComponentFixture, fakeAsync, flush, TestBed, tick, waitForAsync } from '@angular/core/testing';
+import { NoopAnimationsModule } from '@angular/platform-browser/animations';
+import { NO_ERRORS_SCHEMA, SimpleChanges, ElementRef } from '@angular/core';
+import { CurrencyPipe, DecimalPipe } from '@angular/common';
+
 import { PoChartNewBaseComponent } from './po-chart-new-base.component';
 import { PoChartNewComponent } from './po-chart-new.component';
 import { PoLanguageService } from '../../services/po-language/po-language.service';
@@ -8,10 +12,7 @@ import { PoChartType } from '../po-chart/enums/po-chart-type.enum';
 import { PoChartOptions } from '../po-chart/interfaces/po-chart-options.interface';
 import { PoTooltipDirective } from '../../directives';
 import { PoModalComponent } from '../po-modal';
-import { CurrencyPipe, DecimalPipe } from '@angular/common';
 import { PoChartLabelFormat } from '../po-chart/enums/po-chart-label-format.enum';
-import { NoopAnimationsModule } from '@angular/platform-browser/animations';
-import { NO_ERRORS_SCHEMA, SimpleChanges } from '@angular/core';
 import type { EChartsType } from 'echarts/core';
 class EChartsMock {
   setOption = jasmine.createSpy('setOption');
@@ -24,6 +25,13 @@ class EChartsMock {
     series: [{ name: 'Serie 1', data: [1, 2, 3] }]
   });
   on = jasmine.createSpy('on');
+}
+export function createMockElementRef(querySelectorFn?: (selector: string) => any): ElementRef {
+  return {
+    nativeElement: {
+      querySelector: querySelectorFn || (() => null)
+    }
+  } as ElementRef;
 }
 describe('PoChartNewComponent', () => {
   let component: PoChartNewComponent;
@@ -59,7 +67,8 @@ describe('PoChartNewComponent', () => {
         DecimalPipe,
         PoColorService,
         PoLanguageService,
-        { provide: PoChartNewBaseComponent, useValue: {} }
+        { provide: PoChartNewBaseComponent, useValue: {} },
+        { provide: ElementRef, useValue: createMockElementRef }
       ],
       schemas: [NO_ERRORS_SCHEMA]
     }).compileComponents();
@@ -88,11 +97,12 @@ describe('PoChartNewComponent', () => {
       }) as CSSStyleDeclaration;
   }));
 
+  let querySelectorSpy: jasmine.Spy;
+
   beforeEach(() => {
     fixture = TestBed.createComponent(PoChartNewComponent);
     component = fixture.componentInstance;
     colorService = TestBed.inject(PoColorService);
-    languageService = TestBed.inject(PoLanguageService);
 
     component.series = mockSeries;
     component.categories = mockCategories;
@@ -107,15 +117,27 @@ describe('PoChartNewComponent', () => {
     Object.defineProperty(chartDiv, 'clientHeight', { value: 400 });
 
     fixture.nativeElement.appendChild(chartDiv);
-    spyOn(component['el'].nativeElement, 'querySelector').and.callFake((selector: string) => {
+
+    querySelectorSpy = spyOn(component['el'].nativeElement, 'querySelector').and.callFake((selector: string) => {
       if (selector === '#chart-id') {
         return chartDiv;
       }
-      if (selector === '.po-chart-header') return headerElement;
+      if (selector === '.po-chart-header') {
+        return headerElement;
+      }
+      if (selector === '.po-chart-container') {
+        return { offsetLeft: 0, offsetTop: 0 };
+      }
       return null;
     });
 
     fixture.detectChanges();
+  });
+
+  afterEach(() => {
+    if (querySelectorSpy) {
+      querySelectorSpy.and.callThrough();
+    }
   });
 
   it('should create', () => {
@@ -143,6 +165,66 @@ describe('PoChartNewComponent', () => {
 
     component.showTooltipTitle(event);
     expect(component['tooltipTitle']).toBeUndefined();
+  });
+
+  describe('showHeader', () => {
+    const testCases = [
+      {
+        title: 'Título definido',
+        input: {
+          title: 'Meu título',
+          options: { header: { hideTableDetails: true, hideExpand: true } },
+          showPopup: false
+        },
+        expected: true
+      },
+      {
+        title: 'hideTableDetails = false',
+        input: {
+          title: undefined,
+          options: { header: { hideTableDetails: false, hideExpand: true } },
+          showPopup: false
+        },
+        expected: true
+      },
+      {
+        title: 'hideExpand = false',
+        input: {
+          title: undefined,
+          options: { header: { hideTableDetails: true, hideExpand: false } },
+          showPopup: false
+        },
+        expected: true
+      },
+      {
+        title: 'showPopup = true',
+        input: {
+          title: undefined,
+          options: { header: { hideTableDetails: true, hideExpand: true } },
+          showPopup: true
+        },
+        expected: true
+      },
+      {
+        title: 'Todos falsos',
+        input: {
+          title: undefined,
+          options: { header: { hideTableDetails: true, hideExpand: true } },
+          showPopup: false
+        },
+        expected: false
+      }
+    ];
+
+    testCases.forEach(({ title, input, expected }) => {
+      it(`should return ${expected} when ${title}`, () => {
+        component.title = input.title;
+        component.options = input.options;
+        component.showPopup = input.showPopup;
+
+        expect(!!component.showHeader).toBe(expected);
+      });
+    });
   });
 
   describe('Lifecycle hooks:', () => {
@@ -175,12 +257,32 @@ describe('PoChartNewComponent', () => {
         expect(mockChartInstance.resize).toHaveBeenCalled();
       });
 
+      function callOnResize() {
+        component.onResize();
+      }
+
       it('should not throw errors when chartInstance is undefined', () => {
         component['chartInstance'] = undefined;
 
-        expect(() => component.onResize()).not.toThrow();
+        expect(callOnResize).not.toThrow();
       });
     });
+
+    it('should handle PoUiThemeChange event by disposing and reinitializing the chart', () => {
+      const disposeSpy = jasmine.createSpy('dispose');
+      const initEChartsSpy = spyOn(component as any, 'initECharts');
+      const checkShowCEchartsSpy = spyOn(component as any, 'checkShowCEcharts');
+
+      component['chartInstance'] = { dispose: disposeSpy } as any;
+
+      window.dispatchEvent(new CustomEvent('PoUiThemeChange'));
+
+      expect(disposeSpy).toHaveBeenCalled();
+      expect(component['chartInstance']).toBeUndefined();
+      expect(initEChartsSpy).toHaveBeenCalled();
+      expect(checkShowCEchartsSpy).toHaveBeenCalled();
+    });
+
     it('ngOnChanges: should handle series changes', () => {
       const newSeries = [...mockSeries, { label: 'New Serie', data: [7, 8, 9], type: PoChartType.Line }];
       spyOn(component, <any>'setChartsProperties');
@@ -472,6 +574,40 @@ describe('PoChartNewComponent', () => {
       expect(component.seriesHover.emit).not.toHaveBeenCalled();
     });
 
+    it('should call setTooltipProperties and emit seriesHover with name as label when seriesName is not present or contains \\u00000', () => {
+      const tooltipElement = document.createElement('div');
+      tooltipElement.id = 'custom-tooltip';
+      document.body.appendChild(tooltipElement);
+
+      (component['el'].nativeElement.querySelector as jasmine.Spy).and.callFake(selector =>
+        selector === '#custom-tooltip' ? tooltipElement : null
+      );
+
+      const setTooltipSpy = spyOn<any>(component, 'setTooltipProperties');
+
+      const seriesHoverSpy = spyOn(component.seriesHover, 'emit');
+
+      const chartMock = new EChartsMock();
+      component['chartInstance'] = chartMock as any;
+
+      component['initEChartsEvents']();
+
+      const mouseoverCallback = chartMock.on.calls.allArgs().find(([event]) => event === 'mouseover')[1];
+
+      const params = {
+        value: 123,
+        name: 'Categoria Y',
+        seriesType: 'line',
+        seriesName: '\u00000 Serie inválida',
+        event: { offsetX: 0, offsetY: 0 }
+      };
+
+      mouseoverCallback(params);
+
+      expect(setTooltipSpy).toHaveBeenCalledWith(tooltipElement, params);
+      expect(seriesHoverSpy).toHaveBeenCalledWith({ label: 'Categoria Y', data: 123 });
+    });
+
     it('should emit seriesClick event when clicking on the chart', () => {
       const onSpy = jasmine.createSpy('on');
       component['chartInstance'] = { on: onSpy } as Partial<EChartsType> as EChartsType;
@@ -534,10 +670,6 @@ describe('PoChartNewComponent', () => {
       chartElement.id = 'chart-id';
       document.body.appendChild(chartElement);
 
-      component['el'] = {
-        nativeElement: document
-      };
-
       const onSpy = jasmine.createSpy('on');
       component['chartInstance'] = { on: onSpy } as Partial<EChartsType> as EChartsType;
 
@@ -586,54 +718,6 @@ describe('PoChartNewComponent', () => {
       expect(component.seriesClick.emit).not.toHaveBeenCalled();
     });
 
-    it('should emit seriesHover event when clicking on the chart if type is Donut', () => {
-      const tooltipElement = document.createElement('div');
-      tooltipElement.id = 'custom-tooltip';
-      document.body.appendChild(tooltipElement);
-
-      const chartElement = document.createElement('div');
-      chartElement.id = 'chart-id';
-      document.body.appendChild(chartElement);
-
-      component['el'] = { nativeElement: document };
-
-      const onSpy = jasmine.createSpy('on');
-      component['chartInstance'] = { on: onSpy } as Partial<EChartsType> as EChartsType;
-
-      spyOn(component.seriesHover, 'emit');
-      spyOn(component.seriesClick, 'emit');
-
-      component.series = [{ label: 'Colombia', data: 300, color: 'color-10' }];
-      component.itemsTypeDonut = [{ label: 'Colombia', data: 300, valuePercentage: '80%' }];
-
-      component['initEChartsEvents']();
-
-      expect(onSpy).toHaveBeenCalledWith('mouseover', jasmine.any(Function));
-
-      const mouseoverCallback = onSpy.calls.argsFor(1)[1];
-      const mockParams = {
-        value: 300,
-        name: 'Colombia',
-        seriesType: 'pie',
-        seriesIndex: 0,
-        event: { offsetX: 10, offsetY: 20 }
-      };
-      mouseoverCallback(mockParams);
-
-      expect(component['positionTooltip']).toBe('top');
-
-      const clickCallback = onSpy.calls.argsFor(0)[1];
-      const mockParamsClick = {};
-      clickCallback(mockParamsClick);
-
-      expect(component.tooltipText).toBe(`Colombia: <b>80%%</b>`);
-      expect(component.seriesHover.emit).toHaveBeenCalledWith({
-        label: 'Colombia',
-        data: 300
-      });
-      expect(component.seriesClick.emit).not.toHaveBeenCalled();
-    });
-
     it('should hide the tooltip when leaving the chart (mouseout)', () => {
       const onSpy = jasmine.createSpy('on');
       component['chartInstance'] = { on: onSpy } as Partial<EChartsType> as EChartsType;
@@ -649,51 +733,79 @@ describe('PoChartNewComponent', () => {
 
       expect(component.poTooltip.last.toggleTooltipVisibility).toHaveBeenCalledWith(false);
     });
+  });
 
-    it('should set tooltipText as "seriesName: value" when tooltip is not defined', () => {
-      const tooltipElement = document.createElement('div');
-      tooltipElement.id = 'custom-tooltip';
-      document.body.appendChild(tooltipElement);
+  describe('setTooltipProperties', () => {
+    const divTooltipElement = document.createElement('div');
 
-      const chartElement = document.createElement('div');
-      chartElement.id = 'chart-id';
-      document.body.appendChild(chartElement);
+    it('should handle donut chart and custom tooltip cases', () => {
+      component.series = [{}];
 
-      component['el'] = { nativeElement: document };
+      component['itemsTypeDonut'] = [{ label: 'Jan', data: 1, valuePercentage: 20 }];
 
-      const onSpy = jasmine.createSpy('on');
-      component['chartInstance'] = { on: onSpy } as Partial<EChartsType> as EChartsType;
-
-      component.series = [{ label: 'Brazil', data: [35, 32, 25, 29, 33, 33], color: 'color-10' }];
-
-      component['initEChartsEvents']();
-
-      const mouseoverCallback = onSpy.calls.argsFor(1)[1];
-
-      const mockParams = {
-        seriesName: 'Exemplo',
-        value: 150,
-        name: 'Categoria Y',
-        seriesType: 'line',
+      const params = {
+        value: 1,
+        name: 'Jan',
+        seriesName: 'Serie 1',
         seriesIndex: 0,
-        event: { offsetX: 10, offsetY: 20 }
+        dataIndex: 0,
+        seriesType: 'pie',
+        event: { offsetX: 150, offsetY: 250 }
       };
-      mouseoverCallback(mockParams);
 
-      expect(component.tooltipText.replace(/\s/g, '')).toBe(
-        '<b>Categoria Y</b><br>Exemplo:<b>150</b>'.replace(/\s/g, '')
-      );
+      component['setTooltipProperties'](divTooltipElement, params);
+      expect(component['tooltipText']).toBe('<b>Jan</b><br>\n        Serie 1: <b>20%</b>');
 
-      const mockParamsNoSeriesName = {
-        value: 99,
-        name: 'Categoria Sem Nome',
+      component.series[0].tooltip = 'Custom tooltip';
+      component['itemsTypeDonut'] = undefined;
+      component['setTooltipProperties'](divTooltipElement, params);
+      expect(component['tooltipText']).toBe('Custom tooltip');
+    });
+
+    it('should handle edge cases correctly', () => {
+      component.series = [{}];
+
+      component['setTooltipProperties'](divTooltipElement, {
+        value: 2,
+        name: 'Fev',
+        seriesName: 'Serie\u00000',
         seriesIndex: 0,
-        seriesType: 'line',
-        event: { offsetX: 5, offsetY: 10 }
-      };
-      mouseoverCallback(mockParamsNoSeriesName);
+        seriesType: 'bar',
+        event: { offsetX: 50, offsetY: 75 }
+      });
+      expect(component['tooltipText'].replace(/\s+/g, '')).toBe('Fev:<b>2</b>');
 
-      expect(component.tooltipText.replace(/\s/g, '')).toBe('CategoriaSemNome:<b>99</b>'.replace(/\s/g, ''));
+      component['setTooltipProperties'](divTooltipElement, {
+        value: 3,
+        name: 'Mar',
+        seriesName: undefined,
+        seriesIndex: 0,
+        seriesType: 'bar',
+        event: { offsetX: 80, offsetY: 90 }
+      });
+      expect(component['tooltipText'].replace(/\s+/g, '')).toBe('Mar:<b>3</b>');
+
+      component['itemsTypeDonut'] = [{ label: 'Other', data: 99, valuePercentage: 50 }];
+      component['setTooltipProperties'](divTooltipElement, {
+        value: 4,
+        name: 'Jan',
+        seriesName: 'Serie 1',
+        seriesIndex: 0,
+        seriesType: 'bar',
+        event: { offsetX: 120, offsetY: 180 }
+      });
+      expect(component['tooltipText'].replace(/\s+/g, '')).toBe('<b>Jan</b><br>Serie1:<b>0%</b>');
+
+      component.series[0].tooltip = 'Custom tooltip para bar';
+      component['setTooltipProperties'](divTooltipElement, {
+        value: 10,
+        name: 'Abr',
+        seriesName: 'Serie 2',
+        seriesIndex: 0,
+        seriesType: 'bar',
+        event: { offsetX: 100, offsetY: 100 }
+      });
+      expect(component['tooltipText']).toBe('Custom tooltip para bar');
     });
   });
 
@@ -883,6 +995,22 @@ describe('PoChartNewComponent', () => {
   describe('setSeries:', () => {
     let mockSeriesWithColor: Array<PoChartSerie>;
 
+    function mockGetPropertyValue(prop: string): string {
+      const values: { [key: string]: string } = {
+        '--color-01': '#0000ff',
+        '--color-02': '#00ff00',
+        '--color-neutral-light-00': '#ffffff',
+        '--border-width-md': '2px'
+      };
+      return values[prop] || '';
+    }
+
+    function mockGetComputedStyle(): CSSStyleDeclaration {
+      return {
+        getPropertyValue: mockGetPropertyValue
+      } as CSSStyleDeclaration;
+    }
+
     beforeEach(() => {
       mockSeriesWithColor = [
         { label: 'Serie 1', data: [1, 2, 3], type: PoChartType.Column, color: 'po-color-01' },
@@ -893,18 +1021,7 @@ describe('PoChartNewComponent', () => {
 
       spyOn(colorService, 'getColors').and.callFake((series: Array<any>) => series);
 
-      window.getComputedStyle = () =>
-        ({
-          getPropertyValue: (prop: string) => {
-            const values: { [key: string]: string } = {
-              '--color-01': '#0000ff',
-              '--color-02': '#00ff00',
-              '--color-neutral-light-00': '#ffffff',
-              '--border-width-md': '2px'
-            };
-            return values[prop] || '';
-          }
-        }) as CSSStyleDeclaration;
+      window.getComputedStyle = mockGetComputedStyle;
     });
 
     it('should transform series correctly with default configurations if not set type and data is Array', () => {
@@ -1359,42 +1476,17 @@ describe('PoChartNewComponent', () => {
     });
   });
 
-  it('exportSvgAsImage: should return early if svg element is not found', () => {
-    component['el'] = {
-      nativeElement: {
-        querySelector: jasmine.createSpy().and.returnValue(null)
-      }
-    } as any;
-
-    const configureSpy = spyOn(component as any, 'configureImageCanvas');
-    const serializerSpy = spyOn(XMLSerializer.prototype, 'serializeToString');
-
-    component['exportSvgAsImage']('png');
-
-    expect(component['el'].nativeElement.querySelector).toHaveBeenCalledWith('#chart-id svg');
-    expect(serializerSpy).not.toHaveBeenCalled();
-    expect(configureSpy).not.toHaveBeenCalled();
-  });
-
   it('exportSvgAsImage: should serialize svg, create blob, url and call configureImageCanvas', () => {
-    component['el'] = {
-      nativeElement: {
-        querySelector: jasmine.createSpy()
-      }
-    } as any;
+    const fakeSvg = document.createElementNS('http://www.w3.org/2000/svg', 'svg');
+    (component['el'].nativeElement.querySelector as jasmine.Spy) = jasmine.createSpy().and.returnValue(fakeSvg);
 
     spyOn(component as any, 'configureImageCanvas');
-
-    const fakeSvg = document.createElementNS('http://www.w3.org/2000/svg', 'svg');
-    (component['el'].nativeElement.querySelector as jasmine.Spy).and.returnValue(fakeSvg);
-
     const mockUrl = 'blob:http://localhost/fake-id';
     spyOn(URL, 'createObjectURL').and.returnValue(mockUrl);
 
     class FakeImage {
       set src(value: string) {}
     }
-
     (window as any).Image = FakeImage;
 
     const serializerSpy = spyOn(XMLSerializer.prototype, 'serializeToString').and.returnValue('<svg></svg>');
@@ -1404,6 +1496,20 @@ describe('PoChartNewComponent', () => {
     expect(serializerSpy).toHaveBeenCalledWith(fakeSvg);
     expect(URL.createObjectURL).toHaveBeenCalled();
     expect(component['configureImageCanvas']).toHaveBeenCalledWith('jpeg', jasmine.any(FakeImage));
+  });
+
+  it('exportSvgAsImage: should return if svg element is not found', () => {
+    (component['el'].nativeElement.querySelector as jasmine.Spy) = jasmine.createSpy().and.returnValue(null);
+
+    const serializerSpy = spyOn(XMLSerializer.prototype, 'serializeToString');
+    const configureCanvasSpy = spyOn(component as any, 'configureImageCanvas');
+    const urlSpy = spyOn(URL, 'createObjectURL');
+
+    component['exportSvgAsImage']('png');
+
+    expect(serializerSpy).not.toHaveBeenCalled();
+    expect(configureCanvasSpy).not.toHaveBeenCalled();
+    expect(urlSpy).not.toHaveBeenCalled();
   });
 
   describe('configureImageCanvas:', () => {
@@ -1453,16 +1559,6 @@ describe('PoChartNewComponent', () => {
       const mockImage = document.createElement('img');
       Object.defineProperty(mockImage, 'width', { value: 800 });
       Object.defineProperty(mockImage, 'height', { value: 600 });
-
-      component['el'] = {
-        nativeElement: {
-          querySelector: (selector: string) => {
-            if (selector === '#chart-id') return chartElement;
-            if (selector === '.po-chart-header') return headerElement;
-            return null;
-          }
-        }
-      } as any;
 
       component['configureImageCanvas']('png', mockImage);
 

@@ -335,16 +335,24 @@ export class PoChartNewComponent
       const findCurrentValue = this.itemsTypeDonut.find(
         item => item.data === params.value && params.name === item.label
       );
-      valueLabel = `${findCurrentValue.valuePercentage}%`;
+      valueLabel = `${findCurrentValue?.valuePercentage ?? 0}%`;
     }
     const customTooltipText =
       params.seriesName && !params.seriesName.includes('\u00000')
         ? `<b>${params.name}</b><br>
         ${params.seriesName}: <b>${valueLabel}</b>`
         : `${params.name}: <b>${valueLabel}</b>`;
-    this.tooltipText = this.series[params.seriesIndex].tooltip
-      ? this.series[params.seriesIndex].tooltip
-      : customTooltipText;
+
+    const isPie = params.seriesType === 'pie';
+    if (isPie) {
+      this.tooltipText = this.series[params.dataIndex].tooltip
+        ? this.series[params.dataIndex].tooltip
+        : customTooltipText;
+    } else {
+      this.tooltipText = this.series[params.seriesIndex].tooltip
+        ? this.series[params.seriesIndex].tooltip
+        : customTooltipText;
+    }
     divTooltipElement.style.left = `${params.event.offsetX + chartElement.offsetLeft + 3}px`;
     divTooltipElement.style.top = `${chartElement.offsetTop + params.event.offsetY - 2}px`;
     this.poTooltip.last.toggleTooltipVisibility(true);
