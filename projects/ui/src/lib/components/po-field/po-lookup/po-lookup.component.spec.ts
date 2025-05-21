@@ -100,6 +100,72 @@ describe('PoLookupComponent:', () => {
     }
   ));
 
+  it('should define the initial value with a object response from the service', fakeAsync(() => {
+    fixture.detectChanges();
+    const serviceResponse = { 'id': 'SIM', 'name': 'Sim' };
+    component.fieldValue = 'id';
+    component.fieldLabel = 'name';
+
+    spyOn(component.service, 'getObjectByValue').and.returnValue(of(serviceResponse));
+    spyOn(component, 'selectModel' as any).and.callThrough();
+
+    component.searchById(serviceResponse.id);
+
+    tick();
+    fixture.detectChanges();
+
+    expect(component['selectModel']).toHaveBeenCalled();
+    expect(component.inputEl.nativeElement.value).toBe('Sim');
+    expect(component['selectedOptions']).toEqual([serviceResponse]);
+    flush();
+  }));
+
+  it('should define the initial value with a array response with a single item from the service', fakeAsync(() => {
+    fixture.detectChanges();
+    const serviceResponse = [{ 'id': 'SIM', 'name': 'Sim' }];
+    component.fieldValue = 'id';
+    component.fieldLabel = 'name';
+
+    spyOn(component.service, 'getObjectByValue').and.returnValue(of(serviceResponse));
+    spyOn(component, 'selectModel' as any).and.callThrough();
+
+    component.searchById(serviceResponse.map(item => item.id));
+
+    tick();
+    fixture.detectChanges();
+
+    expect(component['selectModel']).toHaveBeenCalled();
+    expect(component.inputEl.nativeElement.value).toBe('Sim');
+    expect(component['selectedOptions']).toEqual(serviceResponse);
+    flush();
+  }));
+
+  it('should define the initial value with a array response with multiple items from the service', fakeAsync(() => {
+    fixture.detectChanges();
+    const serviceResponse = [
+      { 'id': 'SIM', 'name': 'Sim' },
+      { 'id': 'NAO', 'name': 'Não' }
+    ];
+    component.fieldValue = 'id';
+    component.fieldLabel = 'name';
+
+    spyOn(component.service, 'getObjectByValue').and.returnValue(of(serviceResponse));
+    spyOn(component, 'selectModel' as any).and.callThrough();
+
+    component.searchById(serviceResponse.map(item => item.id));
+
+    tick();
+    fixture.detectChanges();
+
+    expect(component['selectModel']).toHaveBeenCalled();
+    expect(component['selectedOptions']).toEqual(serviceResponse);
+    expect(component.disclaimers).toEqual([
+      { 'id': 'SIM', 'name': 'Sim', 'label': 'Sim', 'value': 'SIM' },
+      { 'id': 'NAO', 'name': 'Não', 'label': 'Não', 'value': 'NAO' }
+    ]);
+    flush();
+  }));
+
   describe('Properties:', () => {
     it('autocomplete: should return `off` if `noAutocomplete` is true', () => {
       component.noAutocomplete = true;
