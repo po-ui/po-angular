@@ -72,6 +72,7 @@ export abstract class PoLookupBaseComponent
   private _literals?: PoLookupLiterals;
   private language: string;
   private _size?: string = undefined;
+  private _spacing: PoTableColumnSpacing;
 
   // Propriedade interna que define se o ícone de ajuda adicional terá cursor clicável (evento) ou padrão (tooltip).
   @Input() additionalHelpEventTrigger: string | undefined;
@@ -408,13 +409,30 @@ export abstract class PoLookupBaseComponent
    *
    * @description
    *
-   * Responsável por aplicar espaçamento nas colunas da tabela contida no lookup.
+   * Define o espaçamento interno das células, impactando diretamente na altura das linhas do table dentro do modal. Os
+   * valores permitidos são definidos pelo enum **PoTableColumnSpacing**.
    *
-   * Deve receber um dos valores do enum `PoTableColumnSpacing`.
+   * > Em nível de acessibilidade **AA**, caso o valor de `p-spacing` não seja definido, o valor padrão será `extraSmall`
+   * > nos seguintes cenários:
+   * > - Quando o valor de `p-size` for `small`;
+   * > - Quando o valor padrão dos componentes for configurado como `small` no
+   * > [serviço de tema](https://po-ui.io/documentation/po-theme).
    *
    * @default `medium`
    */
-  @Input('p-spacing') spacing: PoTableColumnSpacing = PoTableColumnSpacing.Medium;
+  @Input('p-spacing') set spacing(value: PoTableColumnSpacing) {
+    if (Object.values(PoTableColumnSpacing).includes(value)) {
+      this._spacing = value;
+    } else {
+      this._spacing = this.size === PoFieldSize.Small ? PoTableColumnSpacing.ExtraSmall : PoTableColumnSpacing.Medium;
+    }
+  }
+
+  get spacing() {
+    return (
+      this._spacing ?? (this.size === PoFieldSize.Small ? PoTableColumnSpacing.ExtraSmall : PoTableColumnSpacing.Medium)
+    );
+  }
 
   /**
    * @optional

@@ -27,7 +27,7 @@ import { Observable, Subscription } from 'rxjs';
 import { PoDateService } from '../../services/po-date/po-date.service';
 import { PoLanguageService } from '../../services/po-language/po-language.service';
 import { PoNotificationService } from '../../services/po-notification/po-notification.service';
-import { convertToBoolean } from '../../utils/util';
+import { convertToBoolean, getDefaultSize } from '../../utils/util';
 import { PoModalAction, PoModalComponent } from '../po-modal';
 import { PoPopupComponent } from '../po-popup/po-popup.component';
 import { PoTableColumnLabel } from './po-table-column-label/po-table-column-label.interface';
@@ -44,6 +44,8 @@ import { PoTableColumnTemplateDirective } from './po-table-column-template/po-ta
 import { PoTableRowTemplateDirective } from './po-table-row-template/po-table-row-template.directive';
 import { PoTableSubtitleColumn } from './po-table-subtitle-footer/po-table-subtitle-column.interface';
 import { PoTableService } from './services/po-table.service';
+import { PoTableColumnSpacing } from './enums/po-table-spacing.enum';
+import { PoFieldSize } from '../../enums/po-field-size.enum';
 
 /**
  * @docsExtends PoTableBaseComponent
@@ -780,6 +782,13 @@ export class PoTableComponent extends PoTableBaseComponent implements AfterViewI
     }
 
     this.changeDetector.detectChanges();
+  }
+
+  protected getDefaultSpacing(): PoTableColumnSpacing {
+    return this.componentsSize === PoFieldSize.Small ||
+      getDefaultSize(this.poThemeService, PoTableColumnSpacing) === PoTableColumnSpacing.Small
+      ? PoTableColumnSpacing.ExtraSmall
+      : PoTableColumnSpacing.Medium;
   }
 
   private checkChangesItems() {
