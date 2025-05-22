@@ -63,7 +63,6 @@ use([
  * Componente de uso interno.
  */
 
-/* @ToDo - Foi retirado o exemplo do sample pois causava problema no build:package da pipe */
 @Component({
   selector: 'po-chart-new',
   templateUrl: './po-chart-new.component.html',

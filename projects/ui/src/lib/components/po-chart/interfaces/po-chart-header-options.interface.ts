@@ -1,4 +1,6 @@
 /**
+ * @docsPrivate
+ *
  * @usedBy PoChartComponent
  *
  * @description
