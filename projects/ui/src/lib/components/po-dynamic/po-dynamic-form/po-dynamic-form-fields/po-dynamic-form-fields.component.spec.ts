@@ -29,7 +29,10 @@ describe('PoDynamicFormFieldsComponent: ', () => {
 
     fixture = TestBed.createComponent(PoDynamicFormFieldsComponent);
     component = fixture.componentInstance;
-    component['form'] = <any>{ dirty: true };
+
+    Object.defineProperty(component, 'form', {
+      get: () => ({ dirty: true })
+    });
 
     fixture.detectChanges();
 
@@ -97,9 +100,11 @@ describe('PoDynamicFormFieldsComponent: ', () => {
       expect(component['previousValue']).toEqual(value);
     });
 
-    it('trackBy: should return index', () => {
+    it('trackBy: should return field.property', () => {
       const index = 1;
-      expect(component.trackBy(index)).toBe(index);
+      const field = { property: 'field' };
+
+      expect(component.trackBy(index, field)).toBe('field');
     });
 
     it('focus: should call `fieldComponent.focus` if find field by property param.', () => {
@@ -132,7 +137,10 @@ describe('PoDynamicFormFieldsComponent: ', () => {
         component['value']['test1'] = 'new value';
 
         const field = { changedField: fakeVisibleField, changedFieldIndex };
-        component['form'] = <any>{ touched: false };
+
+        Object.defineProperty(component, 'form', {
+          get: () => ({ touched: false })
+        });
 
         spyOn(component, <any>'getField').and.returnValue(field);
         component.onChangeField(fakeVisibleField);
@@ -147,7 +155,10 @@ describe('PoDynamicFormFieldsComponent: ', () => {
         component['value']['test1'] = 'new value';
 
         const field = { changedField: fakeVisibleField, changedFieldIndex };
-        component['form'] = <any>{ touched: false };
+
+        Object.defineProperty(component, 'form', {
+          get: () => ({ touched: false })
+        });
 
         spyOn(component, <any>'getField').and.returnValue(field);
         component.onChangeField(fakeVisibleField);
@@ -339,7 +350,10 @@ describe('PoDynamicFormFieldsComponent: ', () => {
 
         component['previousValue']['test1'] = undefined;
         component['value']['test1'] = 'value';
-        component['form'] = <any>{ touched: false };
+
+        Object.defineProperty(component, 'form', {
+          get: () => ({ touched: false })
+        });
 
         spyOn(component, <any>'triggerValidationOnForm');
 
@@ -847,6 +861,16 @@ describe('PoDynamicFormFieldsComponent: ', () => {
       component.visibleFields = [{ property: 'test 1' }, { property: 'test 2' }];
 
       expect(component['hasContainer']()).toBeFalsy();
+    });
+
+    it('hasContainer: should return false if visibleFields is undefined', () => {
+      component.visibleFields = undefined;
+      expect(component['hasContainer']()).toBeFalse();
+    });
+
+    it('hasContainer: should return false if visibleFields is null', () => {
+      component.visibleFields = null;
+      expect(component['hasContainer']()).toBeFalse();
     });
   });
 
