@@ -22,6 +22,7 @@ import { PoChartCircularLabelComponent } from './po-chart-container/po-chart-cir
 import { PoChartCircularPathComponent } from './po-chart-container/po-chart-circular/po-chart-circular-path/po-chart-circular-path.component';
 import { PoChartTooltipDirective } from './po-chart-container/po-chart-circular/po-chart-circular-path/po-chart-tooltip.directive';
 import { PoResizeObserverDirective } from './directives/po-resize-observer.directive';
+import { PoChartSwitchComponent } from './po-chart-switch.component';
 
 /**
  * @description
@@ -49,9 +50,10 @@ import { PoResizeObserverDirective } from './directives/po-resize-observer.direc
     PoChartCircularPathComponent,
     PoChartCircularLabelComponent,
     PoChartTooltipDirective,
-    PoResizeObserverDirective
+    PoResizeObserverDirective,
+    PoChartSwitchComponent
   ],
-  exports: [PoChartComponent],
+  exports: [PoChartComponent, PoChartSwitchComponent],
   providers: [DecimalPipe, CurrencyPipe]
 })
 export class PoChartModule {}

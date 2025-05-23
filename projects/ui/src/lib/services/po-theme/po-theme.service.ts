@@ -104,6 +104,7 @@ export class PoThemeService {
     this.applyThemeStyles(combinedStyles);
     document.documentElement.setAttribute('data-a11y', a11yLevel === PoThemeA11yEnum.AAA ? 'AAA' : 'AA');
     this.changeThemeType(themeConfig, persistPreference);
+    this.dispatchEvent(themeConfig);
   }
 
   /**
@@ -374,6 +375,7 @@ export class PoThemeService {
     const _theme = this.getThemeActive();
     typeof _theme.active === 'object' ? (_theme.active.type = type) : (_theme.active = type);
     this.changeThemeType(_theme);
+    this.dispatchEvent(_theme);
   }
 
   /**
@@ -469,6 +471,8 @@ export class PoThemeService {
           Object.entries(values).flatMap(([tonality, tonalityValues]) => {
             if (type === 'action') {
               return [`--color-${type}-${tonality}: ${tonalityValues};`];
+            } else if (type === 'categorical' || type === 'categorical-overlay') {
+              return [`--color-caption-${type}-${tonality}: ${tonalityValues};`];
             } else {
               return Object.entries(tonalityValues).map(
                 ([level, colorValue]) => `--color-${type}-${tonality}-${level}: ${colorValue};`
@@ -576,6 +580,11 @@ export class PoThemeService {
     svg = svg.concat(`%3E%3C/path%3E%3C/svg%3E");`);
 
     return svg;
+  }
+
+  private dispatchEvent(theme: any) {
+    const evento = new CustomEvent('PoUiThemeChange', { detail: theme });
+    window.dispatchEvent(evento);
   }
 
   /**
