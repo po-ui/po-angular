@@ -2,6 +2,30 @@
 
 All notable changes to this project will be documented in this file. See [standard-version](https://github.com/conventional-changelog/standard-version) for commit guidelines.
 
+## [19.13.0](https://github.com/po-ui/po-angular/compare/v19.12.0...v19.13.0) (2025-05-26)
+
+
+### Features
+
+* **table:** adiciona tamanho extraSmall ao p-spacing ([8bb30c2](https://github.com/po-ui/po-angular/commit/8bb30c2a1fad2ac0e989eb25491f80f9a9968eb4))
+* **chart:** implementa Animalia DS no  chart tipo column ([89edf6d](https://github.com/po-ui/po-angular/commit/89edf6dfd1ed244d74b72880f1afac48cadcb91a)) - feature toggle
+* **chart:** implementa Animalia DS no chart tipo area ([fdc4ff4](https://github.com/po-ui/po-angular/commit/fdc4ff472abbe9d5b796c66ff5a3883e26728883)) - feature toggle
+* **chart:** implementa Animalia DS no chart tipo bar ([2fea61b](https://github.com/po-ui/po-angular/commit/2fea61bb6250217c12796e8f30faaac8674bee5b)) - feature toggle
+* **chart:** implementa Animalia DS no chart tipo donut ([2a93eab](https://github.com/po-ui/po-angular/commit/2a93eabfb0572509815eedd6c405838565adaba0)) - feature toggle
+* **chart:** implementa Animalia DS no chart tipo line ([ba9b87d](https://github.com/po-ui/po-angular/commit/ba9b87d6c186d984895b2a3aa8dee2cf23c5e2b7)) - feature toggle
+* **chart:** implementa Animalia DS no chart tipo pie ([d835f23](https://github.com/po-ui/po-angular/commit/d835f2312bc9acb37c6fad87bd238a35faec2e5a)) - feature toggle
+
+**Feature Toggle**: Adicione a chave `newChart` com o valor `true` no localStorage do navegador para ativar a nova versão dos gráficos.
+
+A nova versão será habilitada por padrão em breve.
+
+
+### Bug Fixes
+
+* **lookup:** corrige o preenchimento do valor do componente ([17df3e1](https://github.com/po-ui/po-angular/commit/17df3e109ca2fb17819dadd1f43bde42f2ed20d2))
+* **lookup:** corrige preenchimento múltiplo ao pesquisar "." ([fd6ba99](https://github.com/po-ui/po-angular/commit/fd6ba990b45b821f133fc4a1f5edeac87040b4e3)), closes [#2430](https://github.com/po-ui/po-angular/issues/2430)
+* **security:** corrige dependências com vulnerabilidades reportadas ([b208098](https://github.com/po-ui/po-angular/commit/b20809892b7827c209c2fc3a64ef500018b2c17c))
+
 ## [19.12.0](https://github.com/po-ui/po-angular/compare/v19.11.0...v19.12.0) (2025-05-19)
 
 
