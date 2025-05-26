@@ -2,6 +2,15 @@
 
 All notable changes to this project will be documented in this file. See [standard-version](https://github.com/conventional-changelog/standard-version) for commit guidelines.
 
+### [17.26.23](https://github.com/po-ui/po-angular/compare/v17.26.22...v17.26.23) (2025-05-26)
+
+
+### Bug Fixes
+
+* **lookup:** corrige o preenchimento do valor do componente ([d06d4cd](https://github.com/po-ui/po-angular/commit/d06d4cd0fc8fb0614a34ebbc4a7d77f2c5684fa1))
+* **lookup:** corrige preenchimento múltiplo ao pesquisar "." ([5342121](https://github.com/po-ui/po-angular/commit/534212175399460036a885a255d1e4d972ab95b3)), closes [#2430](https://github.com/po-ui/po-angular/issues/2430)
+* **security:** corrige dependências com vulnerabilidades reportadas ([cdb3ee0](https://github.com/po-ui/po-angular/commit/cdb3ee07b332f4c748be84f5c16ff5a7f9296ce1))
+
 ### [17.26.22](https://github.com/po-ui/po-angular/compare/v17.26.21...v17.26.22) (2025-05-09)
 
 Compatibilidade com @totvs/thf-components@17.26.22
