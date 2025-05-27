@@ -10,7 +10,7 @@ import {
   ViewChild
 } from '@angular/core';
 
-import { PoMultiselectLiterals } from '../../index';
+import { PoMultiselectLiterals } from '../interfaces/po-multiselect-literals.interface';
 import { PoMultiselectOption } from '../interfaces/po-multiselect-option.interface';
 import { PoListBoxComponent } from './../../../po-listbox/po-listbox.component';
 
