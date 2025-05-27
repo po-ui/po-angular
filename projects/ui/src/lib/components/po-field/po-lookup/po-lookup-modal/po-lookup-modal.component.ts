@@ -2,7 +2,6 @@ import {
   ChangeDetectionStrategy,
   ChangeDetectorRef,
   Component,
-  ComponentFactoryResolver,
   ComponentRef,
   ElementRef,
   OnInit,
@@ -10,12 +9,12 @@ import {
   ViewContainerRef
 } from '@angular/core';
 import { NgForm } from '@angular/forms';
-import { fromEvent, Observable } from 'rxjs';
-import { debounceTime, filter, switchMap, tap } from 'rxjs/operators';
-import { PoTableColumnSort } from '../../../po-table/interfaces/po-table-column-sort.interface';
-import { PoLookupModalBaseComponent } from '../po-lookup-modal/po-lookup-modal-base.component';
+import { Observable } from 'rxjs';
+import { switchMap, tap } from 'rxjs/operators';
+
 import { PoLanguageService } from './../../../../services/po-language/po-language.service';
-import { PoDynamicFormComponent } from './../../../po-dynamic/po-dynamic-form/po-dynamic-form.component';
+import { PoLookupModalBaseComponent } from '../po-lookup-modal/po-lookup-modal-base.component';
+import { PoTableColumnSort } from '../../../po-table/interfaces/po-table-column-sort.interface';
 import { sortArrayOfObjects } from '../../../../utils/util';
 
 /**
@@ -37,14 +36,10 @@ export class PoLookupModalComponent extends PoLookupModalBaseComponent implement
 
   tableHeight: number;
 
-  componentRef: ComponentRef<PoDynamicFormComponent>;
+  componentRef: ComponentRef<any>;
   dynamicForm: NgForm;
 
-  constructor(
-    private componentFactory: ComponentFactoryResolver,
-    poLanguage: PoLanguageService,
-    changeDetector: ChangeDetectorRef
-  ) {
+  constructor(poLanguage: PoLanguageService, changeDetector: ChangeDetectorRef) {
     super(poLanguage, changeDetector);
   }
 
@@ -103,24 +98,24 @@ export class PoLookupModalComponent extends PoLookupModalBaseComponent implement
   }
 
   // Remove a seleção de todos os itens visíveis na tabela
-  onAllUnselected(items, isTag?: boolean) {
-    if (isTag) {
-      this.poTable.unselectRows();
+  onAllUnselected(items) {
+    const newItems = this.selectedItems?.filter(
+      item => !items.some(selected => selected[this.fieldValue] === item[this.fieldValue])
+    );
+
+    if (newItems?.length) {
+      this.selectedItems = [...newItems];
+      this.selecteds = [...this.selectedItems];
+    } else {
       this.selectedItems = [];
       this.selecteds = [];
-    } else {
-      const newItems = this.selectedItems?.filter(
-        item => !items.some(selected => selected[this.fieldValue] === item[this.fieldValue])
-      );
-
-      if (newItems?.length) {
-        this.selectedItems = [...newItems];
-        this.selecteds = [...this.selectedItems];
-      } else {
-        this.selectedItems = [];
-        this.selecteds = [];
-      }
     }
+  }
+
+  onAllUnselectedTag(items) {
+    this.poTable.unselectRows();
+    this.selectedItems = [];
+    this.selecteds = [];
   }
 
   openModal() {
@@ -128,7 +123,7 @@ export class PoLookupModalComponent extends PoLookupModalBaseComponent implement
   }
 
   sortBy(sort: PoTableColumnSort) {
-    const order = sort.type === 'ascending' ? true : false;
+    const order = sort.type === 'ascending';
     sortArrayOfObjects(this.items, sort.column.property, order);
 
     this.sort = sort;
@@ -155,23 +150,24 @@ export class PoLookupModalComponent extends PoLookupModalBaseComponent implement
   }
 
   private createDynamicForm() {
-    const component = this.componentFactory.resolveComponentFactory(PoDynamicFormComponent);
+    // eslint-disable-next-line @typescript-eslint/naming-convention
+    import('./../../../po-dynamic/po-dynamic-form/po-dynamic-form.component').then(({ PoDynamicFormComponent }) => {
+      this.componentRef = this.container.createComponent(PoDynamicFormComponent);
+      this.componentRef.instance.fields = this.advancedFilters;
+      this.componentRef.instance.value = this.dynamicFormValue;
 
-    this.componentRef = this.container.createComponent<PoDynamicFormComponent>(component);
-    this.componentRef.instance.fields = this.advancedFilters;
-    this.componentRef.instance.value = this.dynamicFormValue;
-
-    this.componentRef.instance.formOutput
-      .pipe(
-        tap(form => {
-          this.dynamicForm = form;
+      this.componentRef.instance.formOutput
+        .pipe(
+          tap((form: NgForm) => {
+            this.dynamicForm = form;
+            this.primaryActionAdvancedFilter.disabled = this.dynamicForm.invalid;
+          }),
+          switchMap((form: NgForm) => form.valueChanges)
+        )
+        .subscribe(() => {
           this.primaryActionAdvancedFilter.disabled = this.dynamicForm.invalid;
-        }),
-        switchMap(form => form.valueChanges)
-      )
-      .subscribe(() => {
-        this.primaryActionAdvancedFilter.disabled = this.dynamicForm.invalid;
-      });
-    this.changeDetector.markForCheck();
+        });
+      this.changeDetector.markForCheck();
+    });
   }
 }
