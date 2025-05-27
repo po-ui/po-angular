@@ -17,7 +17,7 @@
       [disabled]="disabled"
       [id]="id"
       [required]="required"
-      (blur)="onBlur()"
+      (blur)="onBlur($event)"
       (change)="onSelectChange($event.target.value)"
       (keydown)="onKeyDown($event)"
     >

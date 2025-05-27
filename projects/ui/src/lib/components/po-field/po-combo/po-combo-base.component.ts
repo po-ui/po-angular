@@ -97,6 +97,15 @@ export abstract class PoComboBaseComponent implements ControlValueAccessor, OnIn
    *
    * @description
    *
+   * Evento disparado ao sair do campo.
+   */
+  @Output('p-blur') blur: EventEmitter<any> = new EventEmitter();
+
+  /**
+   * @optional
+   *
+   * @description
+   *
    * Aplica foco no elemento ao ser iniciado.
    *
    * > Caso mais de um elemento seja configurado com essa propriedade, apenas o último elemento declarado com ela terá o foco.

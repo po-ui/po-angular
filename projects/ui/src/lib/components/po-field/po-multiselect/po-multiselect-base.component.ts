@@ -144,6 +144,15 @@ export abstract class PoMultiselectBaseComponent implements ControlValueAccessor
    */
   @Input({ alias: 'p-auto-focus', transform: convertToBoolean }) autoFocus: boolean = false;
 
+  /**
+   * @optional
+   *
+   * @description
+   *
+   * Evento disparado ao sair do campo.
+   */
+  @Output('p-blur') blur: EventEmitter<any> = new EventEmitter();
+
   /** Label no componente. */
   @Input('p-label') label?: string;
 
