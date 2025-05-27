@@ -330,7 +330,7 @@ export class PoMultiselectComponent
     this.changeDetector.markForCheck();
   }
 
-  onBlur() {
+  onBlur(event: any) {
     if (this.getAdditionalHelpTooltip() && this.displayAdditionalHelp) {
       this.showAdditionalHelp();
     }
@@ -342,6 +342,10 @@ export class PoMultiselectComponent
       this.inputElement.nativeElement.setAttribute('aria-label', this.label ? this.label : '');
     }
     this.onModelTouched?.();
+
+    if (event.type === 'blur') {
+      this.blur.emit();
+    }
   }
 
   onKeyDown(event?: any) {

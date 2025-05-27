@@ -464,7 +464,7 @@ describe('PoComboComponent:', () => {
 
     describe('onBlur:', () => {
       let setupTest;
-
+      const fakeEvent = { target: { value: '' } };
       beforeEach(() => {
         setupTest = (tooltip: string, displayHelp: boolean, additionalHelpEvent: any) => {
           component.additionalHelpTooltip = tooltip;
@@ -478,7 +478,7 @@ describe('PoComboComponent:', () => {
         component['onModelTouched'] = () => {};
         spyOn(component, <any>'onModelTouched');
 
-        component.onBlur();
+        component.onBlur(fakeEvent);
 
         expect(component['onModelTouched']).toHaveBeenCalled();
       });
@@ -486,7 +486,7 @@ describe('PoComboComponent:', () => {
       it('shouldn´t throw error if onModelTouched is falsy', () => {
         component['onModelTouched'] = null;
 
-        const fnError = () => component.onBlur();
+        const fnError = () => component.onBlur(fakeEvent);
 
         expect(fnError).not.toThrow();
       });
@@ -494,22 +494,38 @@ describe('PoComboComponent:', () => {
       it('should call showAdditionalHelp when the tooltip is displayed', () => {
         setupTest('Mensagem de apoio adicional.', true, { observed: false });
 
-        component.onBlur();
+        component.onBlur(fakeEvent);
         expect(component.showAdditionalHelp).toHaveBeenCalled();
       });
 
       it('should not call showAdditionalHelp when tooltip is not displayed', () => {
         setupTest('Mensagem de apoio adicional.', false, { observed: false });
 
-        component.onBlur();
+        component.onBlur(fakeEvent);
         expect(component.showAdditionalHelp).not.toHaveBeenCalled();
       });
 
       it('should not call showAdditionalHelp when additionalHelp event is true', () => {
         setupTest('Mensagem de apoio adicional.', true, { observed: true });
 
-        component.onBlur();
+        component.onBlur(fakeEvent);
         expect(component.showAdditionalHelp).not.toHaveBeenCalled();
+      });
+
+      it('should emit blur event when event.type is "blur"', () => {
+        spyOn(component.blur, 'emit');
+
+        component.onBlur({ type: 'blur' });
+
+        expect(component.blur.emit).toHaveBeenCalled();
+      });
+
+      it('should not emit blur event when event.type is different from "blur"', () => {
+        spyOn(component.blur, 'emit');
+
+        component.onBlur({ type: 'focus' });
+
+        expect(component.blur.emit).not.toHaveBeenCalled();
       });
     });
 
