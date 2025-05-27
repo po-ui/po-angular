@@ -231,10 +231,14 @@ export class PoComboComponent extends PoComboBaseComponent implements AfterViewI
     return this.isAdditionalHelpEventTriggered() ? null : this.additionalHelpTooltip;
   }
 
-  onBlur() {
+  onBlur(event: any) {
     this.onModelTouched?.();
     if (this.getAdditionalHelpTooltip() && this.displayAdditionalHelp) {
       this.showAdditionalHelp();
+    }
+
+    if (event.type === 'blur') {
+      this.blur.emit();
     }
   }
 
