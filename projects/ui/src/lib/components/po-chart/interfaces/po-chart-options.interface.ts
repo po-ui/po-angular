@@ -74,26 +74,25 @@ export interface PoChartOptions {
    */
   innerRadius?: number;
 
-  // /**
-  //  * @optional
-  //  *
-  //  * @description
-  //  *
-  //  * Define borda entre os itens do gráfico. Válido para os gráficos `Donut`, `Pie` e `Gauge`.
-  //  * > Valores válidos entre 0 e 100,
-  //  *
-  //  * @default `0`
-  //  */
+  /**
+   * @optional
+   *
+   * @description
+   *
+   * Define borda entre os itens do gráfico. Válido para os gráficos `Donut`, `Pie`.
+   * > Valores válidos entre 0 e 100,
+   *
+   * @default `0`
+   */
   borderRadius?: number;
 
-  // /**
-  //  * @optional
-  //  *
-  //  * @description
-  //  *
-  //  * Aplica texto centralizado customizado nos gráficos de `Donut` e `Gauge`.
-  //  * > No `Gauge`, o valor `default` é a porcentagem total do Gráfico
-  //  */
+  /**
+   * @optional
+   *
+   * @description
+   *
+   * Aplica texto centralizado customizado nos gráficos de `Donut`.
+   */
   textCenterGraph?: string;
 
   /**
@@ -105,27 +104,30 @@ export interface PoChartOptions {
    */
   legend?: boolean;
 
-  // /**
-  //  * @optional
-  //  *
-  //  * @description
-  //  *
-  //  * Define o alinhamento horizontal da legenda.
-  //  *
-  //  * @default `center`
-  //  */
+  /**
+   * @optional
+   *
+   * @description
+   *
+   * Define o alinhamento horizontal da legenda.
+   *
+   * > Propriedade inválida para o gráfico do tipo `Gauge`.
+   *
+   * @default `center`
+   */
   legendPosition?: 'left' | 'center' | 'right';
 
-  // /**
-  //  * @optional
-  //  *
-  //  * @description
-  //  *
-  //  * Define a posição vertical da legenda no gráfico.
-  //  * > Quando utilizada com o valor `top`, recomenda-se configurar também a propriedade `bottomDataZoom` caso o `dataZoom` esteja habilitado, para evitar sobreposição entre os elementos.
-  //  *
-  //  * @default `bottom`
-  //  */
+  /**
+   * @optional
+   *
+   * @description
+   *
+   * Define a posição vertical da legenda no gráfico.
+   * > Quando utilizada com o valor `top`, recomenda-se configurar também a propriedade `bottomDataZoom` caso o `dataZoom` esteja habilitado, para evitar sobreposição entre os elementos.
+   * > Propriedade inválida para o gráfico do tipo `Gauge`.
+   *
+   * @default `bottom`
+   */
   legendVerticalPosition?: 'top' | 'bottom';
 
   // /**
@@ -163,4 +165,52 @@ export interface PoChartOptions {
   //  * @default `canvas`
   //  */
   rendererOption?: 'canvas' | 'svg';
+
+  /**
+   * @optional
+   *
+   * @description
+   *
+   * Exibe os valores das propriedades `from` e `to` no gráfico do  no texto da legenda entre parênteses.
+   *
+   * > Válido para os gráficos `Gauge`
+   *
+   */
+  dynamicDonutPie?: boolean;
+
+  /**
+   * @optional
+   *
+   * @description
+   *
+   * Exibe os valores das propriedades `from` e `to` no gráfico do  no texto da legenda entre parênteses.
+   *
+   * > Válido para os gráficos `Gauge`
+   *
+   */
+  showFromToLegend?: boolean;
+
+  /**
+   * @optional
+   *
+   * @description
+   *
+   * Define a exibição do ponteiro.
+   *
+   * > Válido para gráfico do tipo `Gauge`.
+   *
+   * @default `true`
+   */
+  pointer?: boolean;
+
+  /**
+   * @optional
+   *
+   * @description
+   *
+   * Define a descrição do gráfico do tipo `Gauge`.
+   * Caso seja um gráfico com `from` `to`, a descrição será exibida acima, se não será exibido dentro do arco abaixo do valor.
+   *
+   */
+  descriptionGauge?: string;
 }

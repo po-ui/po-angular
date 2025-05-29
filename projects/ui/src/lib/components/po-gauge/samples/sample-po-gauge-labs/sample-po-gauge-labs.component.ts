@@ -1,6 +1,6 @@
 import { Component, OnInit } from '@angular/core';
 
-import { PoGaugeRanges } from '@po-ui/ng-components';
+import { PoCheckboxGroupOption, PoGaugeRanges } from '@po-ui/ng-components';
 
 @Component({
   selector: 'sample-po-gauge-labs',
@@ -12,8 +12,14 @@ export class SamplePoGaugeLabsComponent implements OnInit {
   gaugeValue: number;
   height: number;
   options: PoGaugeRanges = {};
+  properties: Array<string>;
   ranges: Array<PoGaugeRanges> = [];
   title: string;
+
+  public readonly propertiesOptions: Array<PoCheckboxGroupOption> = [
+    { value: 'showFromToLegend', label: 'Show From To Legend' },
+    { value: 'showPointer', label: 'Show Pointer' }
+  ];
 
   get isEmptyObject() {
     return Object.keys(this.options).length === 0;
@@ -35,5 +41,6 @@ export class SamplePoGaugeLabsComponent implements OnInit {
     this.options = {};
     this.ranges = [];
     this.title = undefined;
+    this.properties = ['showPointer'];
   }
 }

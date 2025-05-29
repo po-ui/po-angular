@@ -43,4 +43,8 @@ export interface PoChartLiterals {
    * Texto do botão para exportar o gráfico como imagem PNG.
    */
   exportPNG?: string;
+  value?: string;
+  itemOne?: string;
+  serie?: string;
+  category?: string;
 }
