@@ -6,7 +6,9 @@ export * from './interfaces/po-theme-color.interface';
 export * from './interfaces/po-theme.interface';
 
 export * from './helpers/types/po-theme-light-defaults.constant';
+export * from './helpers/types/po-theme-light-defaults-AA.constant';
 export * from './helpers/types/po-theme-dark-defaults.constant';
+export * from './helpers/types/po-theme-dark-defaults-AA.constant';
 export * from './helpers/accessibilities/po-theme-default-aaa.constant';
 export * from './helpers/accessibilities/po-theme-default-aa.constant';
 export * from './helpers/po-theme-poui.constant';
