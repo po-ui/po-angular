@@ -3,14 +3,14 @@ import { NgModule } from '@angular/core';
 
 import { PoGaugeComponent } from './po-gauge.component';
 
-import { PoChartNewModule } from '../po-chart-new';
+import { PoChartModule } from '../po-chart';
 
 /**
  * @description
  * Módulo do componente po-gauge.
  */
 @NgModule({
-  imports: [CommonModule, PoChartNewModule],
+  imports: [CommonModule, PoChartModule],
   declarations: [PoGaugeComponent],
   exports: [PoGaugeComponent]
 })
