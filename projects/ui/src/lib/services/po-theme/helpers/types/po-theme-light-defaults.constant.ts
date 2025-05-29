@@ -142,7 +142,26 @@ const poThemeDefaultOverlayCategoricals: PoThemeColorCategorical = {
  */
 const poThemeDefaultLightValues = {
   perComponent: {},
-  onRoot: {}
+  onRoot: {
+    /* CATEGORICAL COLORS */
+    '--color-caption-categorical-01': '#004CFF',
+    '--color-caption-categorical-02': '#C25534',
+    '--color-caption-categorical-03': '#792CC7',
+    '--color-caption-categorical-04': '#008768',
+    '--color-caption-categorical-05': '#D62793',
+    '--color-caption-categorical-06': '#D44317',
+    '--color-caption-categorical-07': '#4779A8',
+    '--color-caption-categorical-08': '#AD6207',
+    /* CATEGORICAL OVERLAY COLORS */
+    '--color-caption-categorical-overlay-01': '#739CFD',
+    '--color-caption-categorical-overlay-02': '#F6B5A1',
+    '--color-caption-categorical-overlay-03': '#C6A8E6',
+    '--color-caption-categorical-overlay-04': '#69CAB8',
+    '--color-caption-categorical-overlay-05': '#F3AFD9',
+    '--color-caption-categorical-overlay-06': '#FCA58B',
+    '--color-caption-categorical-overlay-07': '#99BFE3',
+    '--color-caption-categorical-overlay-08': '#E8B16E'
+  }
 };
 
 export {

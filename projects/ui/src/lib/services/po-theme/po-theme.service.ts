@@ -8,10 +8,12 @@ import { poThemeDefaultAA } from './helpers/accessibilities/po-theme-default-aa.
 import { poThemeDefaultAAA } from './helpers/accessibilities/po-theme-default-aaa.constant';
 import { poThemeDefault } from './helpers/po-theme-poui.constant';
 import { poThemeDefaultDarkValues } from './helpers/types/po-theme-dark-defaults.constant';
+import { poThemeDefaultDarkValuesAA } from './helpers/types/po-theme-dark-defaults-AA.constant';
 import { poThemeDefaultLightValues } from './helpers/types/po-theme-light-defaults.constant';
 import { PoThemeColor } from './interfaces/po-theme-color.interface';
 import { PoThemeTokens } from './interfaces/po-theme-tokens.interface';
 import { PoTheme, PoThemeActive } from './interfaces/po-theme.interface';
+import { poThemeDefaultLightValuesAA } from './helpers/types/po-theme-light-defaults-AA.constant';
 
 /**
  * @description
@@ -657,12 +659,28 @@ export class PoThemeService {
       poThemeDefaultLightValues.onRoot
     );
 
+    // set Light mode values AA
+    // result: :root[class*="-light-AA"]
+    this.setPerComponentAndOnRoot(
+      { type: PoThemeTypeEnum.light, a11y: PoThemeA11yEnum.AA },
+      poThemeDefaultLightValuesAA.perComponent,
+      poThemeDefaultLightValuesAA.onRoot
+    );
+
     // set Dark mode values
     // result: :root[class*="-dark"]
     this.setPerComponentAndOnRoot(
       { type: PoThemeTypeEnum.dark },
       poThemeDefaultDarkValues.perComponent,
       poThemeDefaultDarkValues.onRoot
+    );
+
+    // set Dark mode values
+    // result: :root[class*="-dark-AA"]Add commentMore actions
+    this.setPerComponentAndOnRoot(
+      { type: PoThemeTypeEnum.dark, a11y: PoThemeA11yEnum.AA },
+      poThemeDefaultDarkValuesAA.perComponent,
+      poThemeDefaultDarkValuesAA.onRoot
     );
   }
 }

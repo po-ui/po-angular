@@ -196,16 +196,16 @@ describe('PoDropdownComponent: ', () => {
     it('isDropdownClosed: check dropdown menu visibility correctly', () => {
       const dropdownTop = 50;
       const dropdownHeight = 30;
+
       spyOn(component.dropdownRef.nativeElement, 'getBoundingClientRect').and.returnValue({
         top: dropdownTop,
         bottom: dropdownTop + dropdownHeight
       });
-      const windowSpy = jasmine.createSpyObj('window', ['getComputedStyle']);
-      windowSpy.getComputedStyle.and.returnValue({ height: '500px' });
 
-      spyOnProperty(window, 'innerHeight', 'get').and.returnValue(500);
-
-      Object.defineProperty(component, 'window', { value: windowSpy });
+      Object.defineProperty(window, 'innerHeight', {
+        configurable: true,
+        get: () => 500
+      });
 
       const isVisible = component['isDropdownClosed']();
 

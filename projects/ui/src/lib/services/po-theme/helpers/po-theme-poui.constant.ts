@@ -18,6 +18,14 @@ import {
   poThemeDefaultFeedbackDark,
   poThemeDefaultNeutralsDark
 } from './types/po-theme-dark-defaults.constant';
+import {
+  poThemeDefaultCategoricalsDarkAA,
+  poThemeDefaultCategoricalsOverlayDarkAA
+} from './types/po-theme-dark-defaults-AA.constant';
+import {
+  poThemeDefaultCategoricalsAA,
+  poThemeDefaultOverlayCategoricalsAA
+} from './types/po-theme-light-defaults-AA.constant';
 
 /**
  * Tokens de tema padrão para temas claros.
@@ -30,6 +38,17 @@ const poThemeDefaultLight: PoThemeTokens = {
     feedback: poThemeDefaultFeedback,
     categorical: poThemeDefaultCategoricals,
     'categorical-overlay': poThemeDefaultOverlayCategoricals
+  }
+};
+
+/**
+ * Tokens de tema padrão para temas claros.
+ */
+const poThemeDefaultLightAA: PoThemeTokens = {
+  color: {
+    ...poThemeDefaultLight.color,
+    categorical: poThemeDefaultCategoricalsAA,
+    'categorical-overlay': poThemeDefaultOverlayCategoricalsAA
   }
 };
 
@@ -48,6 +67,17 @@ const poThemeDefaultDark: PoThemeTokens = {
 };
 
 /**
+ * Tokens de tema padrão para o tema escuro.
+ */
+const poThemeDefaultDarkAA: PoThemeTokens = {
+  color: {
+    ...poThemeDefaultDark.color,
+    categorical: poThemeDefaultCategoricalsDarkAA,
+    'categorical-overlay': poThemeDefaultCategoricalsOverlayDarkAA
+  }
+};
+
+/**
  * Tema padrão.
  */
 const poThemeDefault: PoTheme = {
@@ -59,8 +89,8 @@ const poThemeDefault: PoTheme = {
       a11y: PoThemeA11yEnum.AAA
     },
     {
-      light: poThemeDefaultLight,
-      dark: poThemeDefaultDark,
+      light: poThemeDefaultLightAA,
+      dark: poThemeDefaultDarkAA,
       a11y: PoThemeA11yEnum.AA
     }
   ],

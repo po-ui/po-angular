@@ -143,10 +143,6 @@ const poThemeDefaultDarkValues = {
     '.po-tab-border-active': {
       'background-color': 'var(--color)'
     },
-    /** GAUGE */
-    '.po-gauge-wrapper': {
-      'background-color': 'var(--color-neutral-light-00)'
-    },
     /** OVERLAY */
     'po-overlay': {
       '--color-overlay': 'var(--color-neutral-light-20)'
@@ -166,10 +162,6 @@ const poThemeDefaultDarkValues = {
     },
     'po-badge[p-status=warning]': {
       '--color': 'var(--color-neutral-light-00)'
-    },
-    // CHART: AXIS LABEL
-    'po-chart po-chart-container > svg .po-chart-axis-x-label, .po-chart-axis-y-label': {
-      'fill': 'var(--color-neutral-dark-95)'
     },
     // LINK: item visitado
     'po-link': {

@@ -44,7 +44,7 @@ export class AppComponent implements OnInit, OnDestroy {
     this.a11yLevel = this.poTheme.getA11yLevel();
 
     if (!_poTheme) {
-      this.theme = poThemeConstant.active;
+      this.theme = poThemeConstant.active.type;
       this.poTheme.setTheme(poThemeConstant, this.theme, this.a11yLevel);
     } else {
       this.theme = typeof _poTheme.active === 'object' ? _poTheme.active.type : _poTheme.active;
