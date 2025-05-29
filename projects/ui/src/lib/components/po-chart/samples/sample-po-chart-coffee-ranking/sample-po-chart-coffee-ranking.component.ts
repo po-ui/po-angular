@@ -32,8 +32,7 @@ export class SamplePoChartCoffeeRankingComponent {
     'Sodas',
     'Beer 0% A.',
     'Wheat Beer',
-    'Milk Shakes',
-    'Icetea'
+    'Milk Shakes'
   ];
 
   chartAreaSeries: Array<PoChartSerie> = [
@@ -43,8 +42,7 @@ export class SamplePoChartCoffeeRankingComponent {
     {
       label: 'Coffee Arabica Price',
       data: [550, 612, 525, 373, 342, 297, 282],
-      type: PoChartType.Line,
-      color: 'po-color-07'
+      type: PoChartType.Line
     }
   ];
 
@@ -77,7 +75,7 @@ export class SamplePoChartCoffeeRankingComponent {
   ];
 
   coffeeProduction: Array<PoChartSerie> = [
-    { label: 'Brazil', data: 2796, tooltip: 'Brazil (South America)', color: 'color-10' },
+    { label: 'Brazil', data: 1796, tooltip: 'Brazil (South America)', color: 'color-10' },
     { label: 'Vietnam', data: 1076, tooltip: 'Vietnam (Asia)' },
     { label: 'Colombia', data: 688, tooltip: 'Colombia (South America)' },
     { label: 'Indonesia', data: 682, tooltip: 'Indonesia (Asia/Oceania)' },
@@ -97,19 +95,27 @@ export class SamplePoChartCoffeeRankingComponent {
     { position: '10', company: 'Coffee Beanery', location: 'Flushing, Michigan, US', foundation: '1976' }
   ];
 
+  coffeeProductionOptions: PoChartOptions = {
+    roseType: true,
+    borderRadius: 8
+  };
+
   consumptionPerCapitaOptions: PoChartOptions = {
     axis: {
       maxRange: 100,
       gridLines: 2,
-      labelType: PoChartLabelFormat.Number
-    }
+      labelType: PoChartLabelFormat.Number,
+      rotateLegend: 45
+    },
+    legendVerticalPosition: 'top'
   };
 
   chartAreaOptions: PoChartOptions = {
     axis: {
       maxRange: 700,
       gridLines: 8
-    }
+    },
+    fillPoints: true
   };
 
   options: PoChartOptions = {
@@ -118,14 +124,16 @@ export class SamplePoChartCoffeeRankingComponent {
       maxRange: 40,
       gridLines: 5,
       labelType: PoChartLabelFormat.Number
-    }
+    },
+    dataZoom: true
   };
 
   optionsColumn: PoChartOptions = {
     axis: {
       minRange: -20,
       maxRange: 100,
-      gridLines: 7
+      gridLines: 7,
+      showXAxis: true
     }
   };
 

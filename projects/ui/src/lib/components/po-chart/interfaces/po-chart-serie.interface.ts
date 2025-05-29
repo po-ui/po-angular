@@ -80,4 +80,18 @@ export interface PoChartSerie {
    * > O componente só exibirá as séries que tiverem o mesmo `type` definido, exceto para mesclagem para tipos `column` e `line`.
    */
   type?: PoChartType;
+
+  /**
+   * Alcance inicial da cor.
+   *
+   * > Propriedade válida para gráfico do tipo `Gauge`.
+   */
+  from?: number;
+
+  /**
+   * Alcance final da cor.
+   *
+   * > Propriedade válida para gráfico do tipo `Gauge`.
+   */
+  to?: number;
 }

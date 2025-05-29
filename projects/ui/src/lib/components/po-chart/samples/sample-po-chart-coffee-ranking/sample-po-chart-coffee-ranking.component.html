@@ -39,6 +39,7 @@
     <po-chart
       class="po-lg-6 po-mt-2"
       p-title="Top 5 coffee producing countries (in tons)"
+      [p-options]="coffeeProductionOptions"
       [p-series]="coffeeProduction"
       (p-series-click)="searchMore($event)"
     >
