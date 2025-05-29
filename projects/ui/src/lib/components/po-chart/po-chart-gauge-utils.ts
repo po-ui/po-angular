@@ -1,8 +1,8 @@
 import { PoChartSerie } from '../po-chart/interfaces/po-chart-serie.interface';
-import { PoChartNewComponent } from './po-chart-new.component';
+import { PoChartComponent } from './po-chart.component';
 
 export class PoChartGaugeUtils {
-  constructor(private readonly component: PoChartNewComponent) {}
+  constructor(private readonly component: PoChartComponent) {}
 
   setGaugeOptions(options, fontSizeText) {
     const series = this.component.series;

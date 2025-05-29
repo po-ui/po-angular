@@ -1,4 +1,4 @@
-import { PoChartNewComponent } from './po-chart-new.component';
+import { PoChartComponent } from './po-chart.component';
 import { PoChartSerie } from '../po-chart/interfaces/po-chart-serie.interface';
 import { PoChartType } from '../po-chart/enums/po-chart-type.enum';
 
@@ -18,7 +18,7 @@ const gridPaddingValues = {
 
 export class PoChartGridUtils {
   private isTypeDonut = false;
-  constructor(private readonly component: PoChartNewComponent) {}
+  constructor(private readonly component: PoChartComponent) {}
 
   setGridOption(options) {
     const tokenBorderWidthSm = this.resolvePx('--border-width-sm');
