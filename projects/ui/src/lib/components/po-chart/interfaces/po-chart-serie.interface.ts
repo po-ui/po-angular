@@ -82,4 +82,8 @@ export interface PoChartSerie {
    * > O componente só exibirá as séries que tiverem o mesmo `type` definido, exceto para mesclagem para tipos `column` e `line`.
    */
   type?: PoChartType;
+
+  from?: number;
+
+  to?: number;
 }

@@ -33,6 +33,7 @@ import { use } from 'echarts/core';
 import {
   BrushComponent,
   DataZoomComponent,
+  GraphicComponent,
   GridComponent,
   LegendComponent,
   MarkLineComponent,
@@ -40,10 +41,12 @@ import {
   TooltipComponent
 } from 'echarts/components';
 import { CanvasRenderer, SVGRenderer } from 'echarts/renderers';
+import { PoChartGaugeUtils } from './po-chart-gauge-utils';
 use([
   BarChart,
   CustomChart,
   GaugeChart,
+  GraphicComponent,
   LineChart,
   PieChart,
   BrushComponent,
@@ -78,11 +81,15 @@ export class PoChartNewComponent
   tooltipText = ``;
 
   originalHeight: number;
+  originalRadiusGauge;
   chartMarginTop = '0px';
   isTypeBar = false;
   boundaryGap = false;
   listTypePieDonut: Array<any>;
   itemsTypeDonut: Array<any> = [];
+  isGaugeSingle: boolean;
+  itemsTypeGauge: Array<any> = [];
+  itemsColorTypeGauge = [];
   protected actionModal: PoModalAction = {
     action: this.downloadCsv.bind(this),
     label: this.literals.downloadCSV
@@ -96,14 +103,16 @@ export class PoChartNewComponent
   protected positionTooltip = 'top';
   protected tooltipTitle = undefined;
   protected chartGridUtils: PoChartGridUtils;
+  protected chartGaugeUtils: PoChartGaugeUtils;
   protected popupActions: Array<PoPopupAction> = [];
   private chartInstance!: echarts.ECharts;
   private currentRenderer: 'svg' | 'canvas';
   private intersectionObserver: IntersectionObserver;
+  private isTypeGauge = false;
   private hideDomEchartsDiv = false;
 
   constructor(
-    private el: ElementRef,
+    public el: ElementRef,
     private readonly currencyPipe: CurrencyPipe,
     private readonly decimalPipe: DecimalPipe,
     private readonly colorService: PoColorService,
@@ -122,6 +131,8 @@ export class PoChartNewComponent
 
   ngOnInit(): void {
     this.chartGridUtils = new PoChartGridUtils(this);
+    this.chartGaugeUtils = new PoChartGaugeUtils(this);
+    super.ngOnInit();
   }
 
   ngOnChanges(changes: SimpleChanges): void {
@@ -192,6 +203,7 @@ export class PoChartNewComponent
     if (!this.isExpanded) {
       this.originalHeight = this.height;
       this.height = window.innerHeight;
+      this.originalRadiusGauge = this.chartInstance?.getOption()?.series?.[0]?.radius;
 
       this.chartMarginTop = this.headerHeight + 'px';
     } else {
@@ -199,6 +211,11 @@ export class PoChartNewComponent
       this.chartMarginTop = '0px';
     }
 
+    if (this.isTypeGauge && innerWidth < 1366) {
+      this.chartInstance?.setOption({
+        series: [{ radius: this.isExpanded ? this.originalRadiusGauge : '100%' }]
+      });
+    }
     this.isExpanded = !this.isExpanded;
 
     setTimeout(() => {
@@ -284,7 +301,7 @@ export class PoChartNewComponent
 
   private initEChartsEvents() {
     this.chartInstance.on('click', params => {
-      if (!params.value) return;
+      if (!params.value || params?.seriesType === 'gauge') return;
       if (params.seriesName && !params.seriesName.includes('\u00000')) {
         this.seriesClick.emit({ label: params.seriesName, data: params.value, category: params.name });
       } else {
@@ -293,7 +310,7 @@ export class PoChartNewComponent
     });
 
     this.chartInstance.on('mouseover', (params: any) => {
-      if (!params.value) return;
+      if (!params.value || params?.seriesType === 'gauge') return;
       if (params.seriesType) {
         const divTooltipElement = this.el.nativeElement.querySelector('#custom-tooltip');
         if (divTooltipElement) {
@@ -335,7 +352,15 @@ export class PoChartNewComponent
   }
 
   private setChartsProperties() {
+    this.isTypeBar = false;
+    this.isTypeGauge = false;
+    this.itemsColorTypeGauge = [];
     let option = {};
+    if (!this.series?.length) {
+      this.chartInstance?.dispose();
+      this.chartInstance = undefined;
+      return;
+    }
     option = this.setOptions();
     this.chartInstance.setOption(option);
     this.setInitialPopupActions();
@@ -345,12 +370,12 @@ export class PoChartNewComponent
   private setOptions() {
     const newSeries = this.setSeries();
 
-    const options = {
+    const options: any = {
       backgroundColor: this.getCSSVariable('--background-color-grid', '.po-chart'),
       series: newSeries as any
     };
 
-    if (!this.listTypePieDonut?.length) {
+    if (!this.listTypePieDonut?.length && !this.isTypeGauge) {
       this.chartGridUtils.setGridOption(options);
       this.chartGridUtils.setOptionsAxis(options);
       this.formatLabelOption(options);
@@ -362,6 +387,10 @@ export class PoChartNewComponent
 
     if (this.options?.legend !== false) {
       this.setOptionLegend(options);
+    }
+
+    if (this.isTypeGauge) {
+      this.chartGaugeUtils.setGaugeOptions(options, this.chartGridUtils.resolvePx('--font-size-grid', '.po-chart'));
     }
     return options;
   }
@@ -384,6 +413,7 @@ export class PoChartNewComponent
   private setOptionLegend(options) {
     options.legend = {
       show: true,
+      selectedMode: !this.isTypeGauge,
       orient: 'horizontal',
       left: this.options?.legendPosition || 'center',
       top: this.options?.legendVerticalPosition || 'bottom',
@@ -406,6 +436,7 @@ export class PoChartNewComponent
     const newSeries: Array<any> = [...this.colorService.getColors<PoChartSerie>(this.series, true, hasArea)];
     const tokenBorderWidthMd = this.chartGridUtils.resolvePx('--border-width-md');
     const findType = this.series.find(serie => serie.type)?.type;
+    let serieGauge = {};
     let typeDefault;
     if (!findType && !this.type) {
       typeDefault = Array.isArray(this.series[0].data) ? PoChartType.Column : PoChartType.Pie;
@@ -414,6 +445,14 @@ export class PoChartNewComponent
     const verifyType = findType || this.type || typeDefault;
     if (verifyType === 'donut' || verifyType === 'pie') {
       this.chartGridUtils.setListTypeDonutPie(verifyType);
+    } else if (verifyType === 'gauge') {
+      const serie = {};
+      const fontSizes = {
+        fontSizeMd: this.chartGridUtils.resolvePx('--font-size-md'),
+        fontSizeLg: this.chartGridUtils.resolvePx('--font-size-lg'),
+        fontSizeSubtitle: this.chartGridUtils.resolvePx('--font-size-subtitle-gauge', '.po-chart')
+      };
+      serieGauge = this.chartGaugeUtils.setListTypeGauge(serie, fontSizes);
     }
 
     const seriesUpdated = newSeries.map((serie, index) => {
@@ -423,8 +462,8 @@ export class PoChartNewComponent
       const colorVariable: string = serie.color?.includes('color')
         ? this.getCSSVariable(`--${serie.color.replace('po-', '')}`)
         : serie.color;
-
       this.chartGridUtils.setSerieTypeDonutPie(serie, colorVariable);
+      this.chartGaugeUtils.setSerieTypeGauge(serie, colorVariable);
       this.setSerieEmphasis(serie, colorVariable, tokenBorderWidthMd);
       this.chartGridUtils.setSerieTypeLine(serie, tokenBorderWidthMd, colorVariable);
       this.chartGridUtils.setSerieTypeArea(serie, index);
@@ -435,6 +474,8 @@ export class PoChartNewComponent
 
     if (this.listTypePieDonut?.length) {
       return this.listTypePieDonut;
+    } else if (verifyType === 'gauge') {
+      return this.chartGaugeUtils.finalizeSerieTypeGauge(serieGauge);
     }
     return seriesUpdated;
   }
@@ -481,18 +522,22 @@ export class PoChartNewComponent
       case PoChartType.Line:
         serie.type = 'line';
         break;
+      case PoChartType.Gauge:
+        this.isTypeGauge = true;
+        serie.type = 'gauge';
+        break;
     }
   }
 
   private setTableProperties() {
     const option = this.chartInstance.getOption();
     let categories: Array<any> = this.isTypeBar ? option.yAxis[0].data : option.xAxis?.[0].data;
-    if (!categories) {
+    if (!categories && !this.isTypeGauge) {
       categories = [];
       if (Array.isArray(this.series[0]?.data)) {
         this.series[0].data.forEach((data, index) => categories.push(String(index)));
       } else {
-        let items = { [this.options?.firstColumnName || 'Série']: '-' };
+        let items = { [this.options?.firstColumnName || this.literals.serie]: '-' };
         option.series[0].data.forEach(data => (items = { ...items, [data.name]: data.value }));
         this.itemsTable = [items];
         return;
@@ -502,6 +547,9 @@ export class PoChartNewComponent
 
     if (this.isTypeBar) {
       this.setTablePropertiesTypeBar(categories, series);
+      return;
+    } else if (this.isTypeGauge) {
+      this.setTablePropertiesTypeGauge();
       return;
     }
 
@@ -529,7 +577,7 @@ export class PoChartNewComponent
     });
 
     this.columnsTable = [
-      { property: 'categoria', label: this.options?.firstColumnName || 'Categoria' },
+      { property: 'categoria', label: this.options?.firstColumnName || this.literals.category },
       ...series.map((serie: any) => ({
         property: serie.name,
         label: serie.name
@@ -537,9 +585,21 @@ export class PoChartNewComponent
     ];
   }
 
+  private setTablePropertiesTypeGauge() {
+    this.itemsTable = [
+      { [this.literals.value]: this.isGaugeSingle ? this.series[0].data : this.valueGaugeMultiple || '-' }
+    ];
+    if (!this.isGaugeSingle) {
+      this.series.forEach(serie => {
+        const item = { ...this.itemsTable[0], [serie.label || this.literals.itemOne]: `${serie.from} - ${serie.to}` };
+        this.itemsTable = [{ ...item }];
+      });
+    }
+  }
+
   private setTableColumns(option, categories) {
     this.columnsTable = [
-      { property: 'serie', label: this.options?.firstColumnName || 'Série' },
+      { property: 'serie', label: this.options?.firstColumnName || this.literals.serie },
       ...categories.map((category: string) => ({
         property: category,
         label: category
@@ -549,7 +609,7 @@ export class PoChartNewComponent
 
   private downloadCsv() {
     const headers = Object.keys(this.itemsTable[0]);
-    const columnNameDefault = this.isTypeBar ? 'Categoria' : 'Série';
+    const columnNameDefault = this.isTypeBar ? 'Categoria' : this.literals.serie;
     const firstColumnName = this.options?.firstColumnName || columnNameDefault;
     const orderedHeaders = this.columnsTable?.length
       ? [firstColumnName, ...headers.filter(header => header !== 'serie')]

@@ -44,7 +44,7 @@ export class PoChartGridUtils {
         fontFamily: this.component.getCSSVariable('--font-family-grid', '.po-chart'),
         fontSize: tokenFontSizeGrid || 12,
         fontWeight: Number(this.component.getCSSVariable('--font-weight-grid', '.po-chart')),
-        color: this.component.getCSSVariable('--color-legend', '.po-chart'),
+        color: this.component.getCSSVariable('--text-color-grid', '.po-chart'),
         rotate: this.component.options?.axis?.rotateLegend,
         interval: 0,
         width: 72,
@@ -69,7 +69,7 @@ export class PoChartGridUtils {
         margin: 10,
         fontFamily: this.component.getCSSVariable('--font-family-grid', '.po-chart'),
         fontSize: tokenFontSizeGrid || 12,
-        color: this.component.getCSSVariable('--color-legend', '.po-chart'),
+        color: this.component.getCSSVariable('--text-color-grid', '.po-chart'),
         fontWeight: Number(this.component.getCSSVariable('--font-weight-grid', '.po-chart'))
       },
       splitLine: {
@@ -127,7 +127,9 @@ export class PoChartGridUtils {
       serie.symbolSize = 8;
       serie.symbol = 'circle';
       serie.itemStyle = {
-        color: !this.component.options?.fillPoints ? this.component.getCSSVariable('--color-neutral-light-00') : color,
+        color: !this.component.options?.fillPoints
+          ? this.component.getCSSVariable('--color-chart-line-point-fill', '.po-chart')
+          : color,
         borderColor: color,
         borderWidth: tokenBorderWidthMd
       };
@@ -207,6 +209,7 @@ export class PoChartGridUtils {
         type: 'pie',
         center: ['50%', positionHorizontal],
         radius: radius,
+        roseType: this.component.options?.dynamicDonutPie ? 'area' : undefined,
         label: {
           show: !!(this.isTypeDonut && this.component.options?.textCenterGraph),
           position: 'center',

@@ -1,4 +1,4 @@
-import { Directive, EventEmitter, Input, Output } from '@angular/core';
+import { Directive, EventEmitter, Input, OnInit, Output } from '@angular/core';
 import { poLocaleDefault } from '../../services/po-language/po-language.constant';
 import { PoLanguageService } from '../../services/po-language/po-language.service';
 import { PoChartType } from '../po-chart/enums/po-chart-type.enum';
@@ -56,8 +56,9 @@ const poChartDefaultHeight = 400;
  * | `--color-grid-hover`                     | Cor no estado hover                                   | `var(--color-neutral-mid-60)`                     |
  */
 @Directive()
-export abstract class PoChartNewBaseComponent {
+export abstract class PoChartNewBaseComponent implements OnInit {
   private _literals?: PoChartLiterals;
+  private setHeightGauge = false;
   private language: string;
 
   @Input('t-id') id: string = 'myChart';
@@ -71,6 +72,13 @@ export abstract class PoChartNewBaseComponent {
    * Define os elementos do gráfico que serão criados dinamicamente.
    */
   @Input('p-series') series: Array<PoChartSerie>;
+
+  /**
+   * @description
+   *
+   * Define o valor do gráfico do tipo `Gauge`.
+   */
+  @Input('p-value-gauge-multiple') valueGaugeMultiple?: number;
 
   /**
    * @optional
@@ -141,13 +149,18 @@ export abstract class PoChartNewBaseComponent {
    *
    * Define a altura do gráfico em px.
    *
-   * > O valor mínimo aceito nesta propriedade é 200.
+   * > No caso do tipo `Gauge`, o valor padrão é `300` e esse é seu valor minimo aceito. Nos outros tipos, o valor mínimo aceito nesta propriedade é 200.
    *
    * @default `400`
    */
   @Input('p-height')
   set height(value: number) {
-    this._height = Math.max(value ?? poChartDefaultHeight, poChartMinHeight);
+    let heightGauge = null;
+    this.setHeightGauge = true;
+    if (this.type === PoChartType.Gauge) {
+      heightGauge = 300;
+    }
+    this._height = Math.max(value ?? heightGauge ?? poChartDefaultHeight, poChartMinHeight);
   }
 
   get height(): number {
@@ -247,5 +260,11 @@ export abstract class PoChartNewBaseComponent {
 
   constructor(languageService: PoLanguageService) {
     this.language = languageService.getShortLanguage();
+  }
+
+  ngOnInit(): void {
+    if (this.type === PoChartType.Gauge && !this.setHeightGauge) {
+      this._height = 300;
+    }
   }
 }

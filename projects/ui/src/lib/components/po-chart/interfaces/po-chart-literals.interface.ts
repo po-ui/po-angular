@@ -10,4 +10,8 @@ export interface PoChartLiterals {
   exportCSV?: string;
   exportJPG?: string;
   exportPNG?: string;
+  value?: string;
+  itemOne?: string;
+  serie?: string;
+  category?: string;
 }
