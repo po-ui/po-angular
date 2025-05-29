@@ -13,14 +13,10 @@ class PoGaugeComponent extends PoGaugeBaseComponent {
 }
 
 describe('PoGaugeBaseComponent:', () => {
-  let colorService: PoColorService;
-
   let component: PoGaugeComponent;
 
   beforeEach(() => {
-    colorService = new PoColorService();
-
-    component = new PoGaugeComponent(colorService);
+    component = new PoGaugeComponent();
   });
 
   it('should be create', () => {

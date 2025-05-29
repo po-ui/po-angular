@@ -37,5 +37,10 @@ export enum PoChartType {
   /**
    * Gráfico que exibe os dados em forma de barras horizontais e sua extensão varia de acordo com seus valores. É comumente usado como comparativo de séries e categorias.
    */
-  Bar = 'bar'
+  Bar = 'bar',
+
+  /**
+   * Gráfico que exibe os dados em forma de barras horizontais e sua extensão varia de acordo com seus valores. É comumente usado como comparativo de séries e categorias.
+   */
+  Gauge = 'gauge'
 }
