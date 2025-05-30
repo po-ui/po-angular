@@ -1,7 +1,7 @@
 import { provideHttpClientTesting } from '@angular/common/http/testing';
 import { NO_ERRORS_SCHEMA } from '@angular/core';
 import { ComponentFixture, discardPeriodicTasks, fakeAsync, flush, TestBed, tick } from '@angular/core/testing';
-import { RouterTestingModule } from '@angular/router/testing';
+import { provideRouter } from '@angular/router';
 import { Observable, of } from 'rxjs';
 import { PoLookupFilter } from '../../../../components/po-field/po-lookup/interfaces/po-lookup-filter.interface';
 import { PoLookupModalComponent } from '../../../../components/po-field/po-lookup/po-lookup-modal/po-lookup-modal.component';
@@ -31,12 +31,13 @@ describe('PoLookupModalComponent', () => {
     TestBed.configureTestingModule({
       declarations: [PoLookupModalComponent],
       schemas: [NO_ERRORS_SCHEMA],
-      imports: [PoModalModule, PoDynamicModule, RouterTestingModule],
+      imports: [PoModalModule, PoDynamicModule],
       providers: [
         LookupFilterService,
         PoComponentInjectorService,
         provideHttpClient(withInterceptorsFromDi()),
-        provideHttpClientTesting()
+        provideHttpClientTesting(),
+        provideRouter([])
       ]
     }).compileComponents();
 
@@ -257,10 +258,10 @@ describe('PoLookupModalComponent', () => {
       expect(component.selecteds).toEqual([selectedItem]);
     });
 
-    it('onAllUnselected: should be called and clean all items on table', () => {
+    it('onAllUnselectedTag: should be called and clean all items on table', () => {
       spyOn(component['poTable'], 'unselectRows');
 
-      component.onAllUnselected([], true);
+      component.onAllUnselectedTag([]);
 
       expect(component['poTable'].unselectRows).toHaveBeenCalled();
       expect(component.selecteds).toEqual([]);

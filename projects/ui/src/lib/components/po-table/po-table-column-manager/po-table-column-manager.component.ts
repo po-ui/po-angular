@@ -24,7 +24,7 @@ import {
   validateSize
 } from '../../../utils/util';
 import { PoCheckboxGroupOption } from '../../po-field/po-checkbox-group/interfaces/po-checkbox-group-option.interface';
-import { PoPageSlideComponent } from '../../po-page';
+import { PoPageSlideComponent } from '../../po-page/po-page-slide';
 import { PoPopoverComponent } from '../../po-popover/po-popover.component';
 import { PoTableColumn } from '../interfaces/po-table-column.interface';
 
