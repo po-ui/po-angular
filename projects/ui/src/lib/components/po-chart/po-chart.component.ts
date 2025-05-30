@@ -126,9 +126,11 @@ export class PoChartComponent extends PoChartBaseComponent implements OnInit, Af
 
   @HostListener('window:resize')
   onResize = () => {
-    if (this.chartInstance) {
-      this.chartInstance?.resize();
-    }
+    setTimeout(() => {
+      if (this.chartInstance) {
+        this.chartInstance?.resize();
+      }
+    }, 100);
   };
 
   @HostListener('window:PoUiThemeChange', ['$event'])
@@ -217,8 +219,6 @@ export class PoChartComponent extends PoChartBaseComponent implements OnInit, Af
       this.originalHeight = this.height;
       this.height = window.innerHeight;
       this.originalRadiusGauge = this.chartInstance?.getOption()?.series?.[0]?.radius;
-
-      this.chartMarginTop = this.headerHeight + 'px';
     } else {
       this.height = this.originalHeight;
       this.chartMarginTop = '0px';
