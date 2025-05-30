@@ -325,7 +325,7 @@ export class PoChartComponent extends PoChartBaseComponent implements OnInit, Af
       if (!params.value || params?.seriesType === 'gauge') return;
       if (params.seriesType) {
         const divTooltipElement = this.el.nativeElement.querySelector('#custom-tooltip');
-        if (divTooltipElement) {
+        if (divTooltipElement && this.dataLabel?.fixed !== true) {
           this.setTooltipProperties(divTooltipElement, params);
         }
       }
@@ -376,6 +376,9 @@ export class PoChartComponent extends PoChartBaseComponent implements OnInit, Af
     this.isTypeGauge = false;
     this.itemsColorTypeGauge = [];
     let option = {};
+    if (!this.categories?.length && this.categories !== undefined) {
+      this.categories = undefined;
+    }
     if (!this.series?.length) {
       this.chartInstance?.dispose();
       this.chartInstance = undefined;
@@ -475,7 +478,7 @@ export class PoChartComponent extends PoChartBaseComponent implements OnInit, Af
     }
 
     const seriesUpdated = newSeries.map((serie, index) => {
-      serie.name = serie.label && typeof serie.label === 'string' ? serie.label : '';
+      serie.name = serie.name || (serie.label && typeof serie.label === 'string') ? (serie.name ?? serie.label) : ' ';
       !serie.type ? this.setTypeSerie(serie, this.type || typeDefault) : this.setTypeSerie(serie, serie.type);
 
       const colorVariable: string = serie.color?.includes('color')
