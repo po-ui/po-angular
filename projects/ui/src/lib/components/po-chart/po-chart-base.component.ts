@@ -54,6 +54,11 @@ const poChartDefaultHeight = 400;
  * | `--color-legend`                         | Cor da fonte da legenda                               | `var(--color-neutral-dark-70)`                    |
  * | `--border-radius-bar`                    | Contém o valor do raio dos cantos do elemento         | `var(--border-radius-none)`                       |
  * | `--color-grid-hover`                     | Cor no estado hover                                   | `var(--color-neutral-mid-60)`                     |
+ * | `--border-color`                         | Cor da borda do gráfico                               | `var(--color-neutral-light-00)`                   |
+ * | `--color-hightlight-value`               | Cor do valor de destaque                              | `var(--color-neutral-dark-70)`                    |
+ * | `--font-size-hightlight-value`           | Tamanho da fonte do valor de destaque                 | `var(--font-size-md)`                             |
+ * | `--font-family-hightlight-value`         | Família tipográfica do valor de destaque              | `var(--font-family-theme)`                        |
+ * | `--font-weight-hightlight-value`         | Peso da fonte do valor de destaque                    | `var(--font-weight-bold)`                         |
  */
 @Directive()
 export abstract class PoChartBaseComponent implements OnInit {
@@ -93,6 +98,13 @@ export abstract class PoChartBaseComponent implements OnInit {
    */
   @Input('p-categories') categories?: Array<string>;
 
+  /**
+   * @optional
+   *
+   * @description
+   *
+   * Essa propriedade permite que o desenvolvedor adicione ações customizadas no popup do header, oferecendo mais flexibilidade e controle sobre as interações do componente.
+   */
   @Input('p-custom-actions') customActions?: Array<PoPopupAction>;
 
   /**

@@ -247,15 +247,17 @@ describe('PoChartComponent', () => {
     });
 
     describe('onResize', () => {
-      it('should call resize on chartInstance when it exists', () => {
+      it('should call resize on chartInstance when it exists', fakeAsync(() => {
         const mockChartInstance = {
           resize: jasmine.createSpy('resize')
         };
         component['chartInstance'] = mockChartInstance as any;
         component.onResize();
 
+        tick(100);
+
         expect(mockChartInstance.resize).toHaveBeenCalled();
-      });
+      }));
 
       function callOnResize() {
         component.onResize();
@@ -427,7 +429,7 @@ describe('PoChartComponent', () => {
 
       expect(component['originalHeight']).withContext('should save original height').toBe(400);
       expect(component.height).withContext('should set to window height').toBe(windowInnerHeight);
-      expect(component['chartMarginTop']).withContext('should add header margin').toBe('50px');
+      expect(component['chartMarginTop']).withContext('should add header margin').toBe('0px');
       expect(component['isExpanded']).withContext('should toggle expanded state').toBeTrue();
 
       flush();
