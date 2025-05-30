@@ -1,5 +1,3 @@
-import { PoChartType } from '../enums/po-chart-type.enum';
-
 /**
  * @usedBy PoChartComponent
  *

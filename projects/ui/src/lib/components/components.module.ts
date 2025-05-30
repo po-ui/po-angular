@@ -47,7 +47,6 @@ import { PoToolbarModule } from './po-toolbar/po-toolbar.module';
 import { PoTreeViewModule } from './po-tree-view/po-tree-view.module';
 import { PoWidgetModule } from './po-widget/po-widget.module';
 import { PoToasterModule } from './po-toaster';
-import { PoChartNewModule } from './po-chart-new/po-chart-new.module';
 @NgModule({
   imports: [
     PoAccordionModule,
@@ -57,7 +56,6 @@ import { PoChartNewModule } from './po-chart-new/po-chart-new.module';
     PoButtonGroupModule,
     PoCalendarModule,
     PoChartModule,
-    PoChartNewModule,
     PoContainerModule,
     PoDisclaimerGroupModule,
     PoDisclaimerModule,
@@ -107,7 +105,6 @@ import { PoChartNewModule } from './po-chart-new/po-chart-new.module';
     PoButtonGroupModule,
     PoCalendarModule,
     PoChartModule,
-    PoChartNewModule,
     PoContainerModule,
     PoDisclaimerGroupModule,
     PoDisclaimerModule,

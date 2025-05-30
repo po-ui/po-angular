@@ -5,7 +5,6 @@ import {
   PoChartType,
   PoSelectOption,
   PoChartOptions,
-  PoCheckboxGroupOption,
   PoChartDataLabel,
   PoChartLabelFormat
 } from '@po-ui/ng-components';
@@ -16,46 +15,188 @@ import {
   standalone: false
 })
 export class SamplePoChartLabsComponent implements OnInit {
-  allCategories: Array<string> = [];
-  categories: string;
   color: string;
   data;
-  event: string;
-  height: number;
   label: string;
-  optionsActions: PoChartOptions;
-  series: Array<PoChartSerie>;
-  serieType: PoChartType;
-  title: string;
   tooltip: string;
   type: PoChartType;
+  serieType: PoChartType;
+  allCategories: Array<string> = [];
+  categories: string;
+  event: string;
+  height: number;
+  series: Array<PoChartSerie>;
+  title: string;
+  dataLabel: PoChartDataLabel;
   options: PoChartOptions = {
     axis: {
       minRange: undefined,
       maxRange: undefined,
       gridLines: undefined,
-      labelType: undefined
-    }
+      labelType: undefined,
+      paddingBottom: undefined,
+      paddingLeft: undefined,
+      paddingRight: undefined,
+      rotateLegend: undefined,
+      showXAxis: undefined,
+      showYAxis: undefined,
+      showAxisDetails: undefined
+    },
+    header: {
+      hideExpand: undefined,
+      hideExportCsv: undefined,
+      hideExportImage: undefined,
+      hideTableDetails: undefined
+    },
+    dataZoom: undefined,
+    fillPoints: undefined,
+    firstColumnName: undefined,
+    innerRadius: undefined,
+    borderRadius: undefined,
+    textCenterGraph: undefined,
+    legend: undefined,
+    legendPosition: undefined,
+    legendVerticalPosition: undefined,
+    bottomDataZoom: undefined,
+    rendererOption: undefined
   };
-  dataLabel: PoChartDataLabel;
 
-  readonly propertiesOptions: Array<PoCheckboxGroupOption> = [{ value: 'legend', label: 'Legend' }];
+  selectedValuesDataLabel: Array<string> = [];
+  selectedValuesAxis: Array<string> = [];
+  selectedValuesHeader: Array<string> = [];
+  selectedValuesDataZoom: Array<string> = [];
+  selectedValuesFillPoints: Array<string> = [];
+  selectedValuesLegend: Array<string> = ['legend'];
+  selectedLegendVerticalPosition: PoChartOptions['legendVerticalPosition'] = 'bottom';
+  selectedLegendPosition: PoChartOptions['legendPosition'] = 'center';
+  selectedRendererOption: PoChartOptions['rendererOption'] = 'canvas';
 
-  readonly typeOptions: Array<PoSelectOption> = [
-    { label: 'Donut', value: PoChartType.Donut },
-    { label: 'Pie', value: PoChartType.Pie },
-    { label: 'Area', value: PoChartType.Area },
-    { label: 'Line', value: PoChartType.Line },
-    { label: 'Column', value: PoChartType.Column },
-    { label: 'Bar', value: PoChartType.Bar }
+  optionsAxis = [
+    { value: 'showXAxis', label: 'showXAxis' },
+    { value: 'showYAxis', label: 'showYAxis' },
+    { value: 'showAxisDetails', label: 'showAxisDetails' }
   ];
 
-  readonly dataLabelOptions: Array<PoCheckboxGroupOption> = [{ value: 'fixed', label: 'Fixed' }];
+  optionsHeader = [
+    { value: 'hideTableDetails', label: 'hideTableDetails' },
+    { value: 'hideExpand', label: 'hideExpand' },
+    { value: 'hideExportCsv', label: 'hideExportCsv' },
+    { value: 'hideExportImage', label: 'hideExportImage' }
+  ];
+
+  optionsDataZoom = [
+    { value: 'dataZoom', label: 'dataZoom' },
+    { value: 'bottomDataZoom', label: 'bottomDataZoom' }
+  ];
+
+  optionsLegendVerticalPosition = [
+    { value: 'top', label: 'top' },
+    { value: 'bottom', label: 'bottom' }
+  ];
+
+  optionsLegendPosition = [
+    { value: 'left', label: 'left' },
+    { value: 'center', label: 'center' },
+    { value: 'right', label: 'right' }
+  ];
+
+  optionsRendererOption = [
+    { value: 'canvas', label: 'canvas' },
+    { value: 'svg', label: 'svg' }
+  ];
+
+  readonly typeOptions: Array<PoSelectOption> = [
+    { label: 'Line', value: PoChartType.Line },
+    { label: 'Area', value: PoChartType.Area },
+    { label: 'Bar', value: PoChartType.Bar },
+    { label: 'Column', value: PoChartType.Column },
+    { label: 'Donut', value: PoChartType.Donut },
+    { label: 'Pie', value: PoChartType.Pie }
+  ];
 
   readonly labelTypeOptions: Array<PoSelectOption> = [
     { label: 'Number', value: PoChartLabelFormat.Number },
     { label: 'Currency', value: PoChartLabelFormat.Currency }
   ];
+
+  changeDataLabelOptions() {
+    this.dataLabel = {
+      ...this.dataLabel,
+      fixed: this.selectedValuesDataLabel.includes('fixed')
+    };
+  }
+
+  changeAxisOptions() {
+    const newAxis = {
+      showXAxis: this.selectedValuesAxis.includes('showXAxis'),
+      showYAxis: this.selectedValuesAxis.includes('showYAxis'),
+      showAxisDetails: this.selectedValuesAxis.includes('showAxisDetails')
+    };
+
+    this.options = {
+      ...this.options,
+      axis: newAxis
+    };
+  }
+
+  changeHeaderOptions() {
+    const newHeader = {
+      hideExpand: this.selectedValuesHeader.includes('hideExpand'),
+      hideExportCsv: this.selectedValuesHeader.includes('hideExportCsv'),
+      hideExportImage: this.selectedValuesHeader.includes('hideExportImage'),
+      hideTableDetails: this.selectedValuesHeader.includes('hideTableDetails')
+    };
+
+    this.options = {
+      ...this.options,
+      header: newHeader
+    };
+  }
+
+  changeDataZoomOptions() {
+    this.options = {
+      ...this.options,
+      dataZoom: this.selectedValuesDataZoom.includes('dataZoom'),
+      bottomDataZoom: this.selectedValuesDataZoom.includes('bottomDataZoom')
+    };
+
+    this.options = { ...this.options };
+  }
+
+  changeFillPointsOptions() {
+    this.options = {
+      ...this.options,
+      fillPoints: this.selectedValuesFillPoints.includes('fillPoints')
+    };
+  }
+
+  changeLegendOptions() {
+    this.options = {
+      ...this.options,
+      legend: this.selectedValuesLegend.includes('legend')
+    };
+  }
+
+  changeLegendVerticalPosition() {
+    this.options = {
+      ...this.options,
+      legendVerticalPosition: this.selectedLegendVerticalPosition
+    };
+  }
+
+  changeLegendPosition() {
+    this.options = {
+      ...this.options,
+      legendPosition: this.selectedLegendPosition
+    };
+  }
+
+  changeRendererOption() {
+    this.options = {
+      ...this.options,
+      rendererOption: this.selectedRendererOption
+    };
+  }
 
   ngOnInit() {
     this.restore();
@@ -80,18 +221,8 @@ export class SamplePoChartLabsComponent implements OnInit {
     ];
   }
 
-  changeActionOptions() {
-    const legend = this.optionsActions.legend;
-
-    this.addOptions({ legend });
-  }
-
   isLineType(): boolean {
     return this.type === PoChartType.Line;
-  }
-
-  changeDataLabelOptions() {
-    const fixed = this.dataLabel.fixed;
   }
 
   changeEvent(eventName: string, serieEvent: PoChartSerie): void {
@@ -100,31 +231,52 @@ export class SamplePoChartLabsComponent implements OnInit {
 
   restore() {
     this.color = undefined;
+    this.data = undefined;
+    this.label = undefined;
+    this.tooltip = undefined;
     this.type = undefined;
     this.serieType = undefined;
-    this.label = undefined;
+    this.allCategories = [];
     this.categories = undefined;
     this.event = undefined;
     this.height = undefined;
     this.series = [];
     this.title = undefined;
-    this.tooltip = undefined;
-    this.data = undefined;
-    this.allCategories = [];
-    this.optionsActions = {
-      legend: null
-    };
     this.dataLabel = {
       fixed: false
     };
     this.options = {
-      ...this.optionsActions,
+      ...this.options,
       axis: {
         minRange: undefined,
         maxRange: undefined,
         gridLines: undefined,
-        labelType: undefined
-      }
+        labelType: undefined,
+        paddingBottom: undefined,
+        paddingLeft: undefined,
+        paddingRight: undefined,
+        rotateLegend: undefined,
+        showXAxis: undefined,
+        showYAxis: undefined,
+        showAxisDetails: undefined
+      },
+      header: {
+        hideExpand: undefined,
+        hideExportCsv: undefined,
+        hideExportImage: undefined,
+        hideTableDetails: undefined
+      },
+      dataZoom: undefined,
+      fillPoints: undefined,
+      firstColumnName: undefined,
+      innerRadius: undefined,
+      borderRadius: undefined,
+      textCenterGraph: undefined,
+      legend: undefined,
+      legendPosition: undefined,
+      legendVerticalPosition: undefined,
+      bottomDataZoom: undefined,
+      rendererOption: undefined
     };
   }
 
