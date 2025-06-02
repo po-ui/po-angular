@@ -1473,6 +1473,9 @@ describe('PoChartComponent', () => {
         { data: 80, label: 'Pie Value 1' },
         { data: 20, label: 'Pie Value 2' }
       ];
+
+      component['literals'] = { serie: 'Série' };
+
       component['chartInstance'] = {
         getOption: jasmine.createSpy('getOption').and.returnValue({
           series: [
@@ -1486,6 +1489,7 @@ describe('PoChartComponent', () => {
           ]
         })
       } as any;
+
       spyOn(component as any, 'setTableColumns');
 
       component['setTableProperties']();
@@ -1594,6 +1598,7 @@ describe('PoChartComponent', () => {
     it('should correctly set columnsTable based on categories and use default label when firstColumnName is undefined', () => {
       const option = { xAxis: [{ data: ['Jan', 'Fev', 'Mar'] }] };
       component.options = {} as any;
+      component['literals'] = { serie: 'Série' };
 
       (component as any).setTableColumns(option, ['Jan', 'Fev', 'Mar']);
 
