@@ -2,6 +2,14 @@
 
 All notable changes to this project will be documented in this file. See [standard-version](https://github.com/conventional-changelog/standard-version) for commit guidelines.
 
+### [17.26.24](https://github.com/po-ui/po-angular/compare/v17.26.23...v17.26.24) (2025-06-02)
+
+
+### Bug Fixes
+
+* **dynamic-form:** corrige visible dinâmico dos campos ([b0e3483](https://github.com/po-ui/po-angular/commit/b0e3483af0b9d97f0cb685ff6bc4e25b45cb493c))
+* **rich-text:** corrige indicativo de direção nos literais ([0195c9f](https://github.com/po-ui/po-angular/commit/0195c9f145ed2c433a54db7cbf45ad936319acd5))
+
 ### [17.26.23](https://github.com/po-ui/po-angular/compare/v17.26.22...v17.26.23) (2025-05-26)
 
 
