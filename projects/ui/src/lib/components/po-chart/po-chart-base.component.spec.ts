@@ -92,6 +92,13 @@ describe('PoChartBaseComponent', () => {
       component.id = testId;
       expect(component.id).toBe(testId);
     });
+
+    it('should assign heightGauge = 300 in height setter when type is Gauge', () => {
+      component.type = PoChartType.Gauge;
+      component.height = undefined;
+
+      expect(component['_height']).toBeGreaterThanOrEqual(300);
+    });
   });
 
   describe('Outputs:', () => {
@@ -116,6 +123,17 @@ describe('PoChartBaseComponent', () => {
     it('should set language based on languageService', () => {
       const shortLanguage = languageService.getShortLanguage();
       expect(component['language']).toBe(shortLanguage);
+    });
+  });
+
+  describe('ngOnInit', () => {
+    it('should set _height to 300 in ngOnInit if type is Gauge and setHeightGauge is false', () => {
+      component.type = PoChartType.Gauge;
+      component['setHeightGauge'] = false;
+
+      component.ngOnInit();
+
+      expect(component['_height']).toBe(300);
     });
   });
 });

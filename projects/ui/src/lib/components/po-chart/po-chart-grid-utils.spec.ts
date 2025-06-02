@@ -23,7 +23,7 @@ describe('PoChartGridUtils', () => {
           '--font-family-grid': 'Arial',
           '--font-weight-grid': '400'
         };
-        return vars[key] || '';
+        return vars[key] ?? '';
       })
     };
 
@@ -108,6 +108,7 @@ describe('PoChartGridUtils', () => {
           type: 'pie',
           center: ['50%', '50%'],
           radius: '95%',
+          roseType: undefined,
           emphasis: { focus: 'self' },
           data: [],
           label: labelProperties,
@@ -126,6 +127,7 @@ describe('PoChartGridUtils', () => {
           type: 'pie',
           center: ['50%', '54%'],
           radius: '85%',
+          roseType: undefined,
           emphasis: { focus: 'self' },
           data: [],
           label: labelProperties,
@@ -144,6 +146,7 @@ describe('PoChartGridUtils', () => {
           type: 'pie',
           center: ['50%', '46%'],
           radius: '85%',
+          roseType: undefined,
           emphasis: { focus: 'self' },
           data: [],
           label: labelProperties,
@@ -164,8 +167,13 @@ describe('PoChartGridUtils', () => {
       fontWeight: 0
     };
 
-    it('should set donut config if innerRadius is 100', () => {
-      utils['component'].options = { innerRadius: 100, textCenterGraph: 'test' } as PoChartOptions;
+    it('should set donut config if innerRadius is 100 and dynamicDonutPie is true', () => {
+      utils['component'].options = {
+        innerRadius: 100,
+        textCenterGraph: 'test',
+        dynamicDonutPie: true // <-- cobre o ternário!
+      } as PoChartOptions;
+
       utils['component'].series = [
         { label: 'Serie 1', data: 10 },
         { label: 'Serie 2', data: 30 }
@@ -178,9 +186,18 @@ describe('PoChartGridUtils', () => {
           type: 'pie',
           center: ['50%', '46%'],
           radius: ['55%', '85%'],
+          roseType: 'area', // <-- agora será 'area'
           emphasis: { focus: 'self' },
           data: [],
-          label: labelProperties,
+          label: {
+            show: true,
+            position: 'center',
+            formatter: 'test',
+            fontFamily: '',
+            fontSize: undefined,
+            color: '',
+            fontWeight: 0
+          },
           blur: { itemStyle: { opacity: 0.4 } }
         }
       ]);
@@ -200,6 +217,7 @@ describe('PoChartGridUtils', () => {
           type: 'pie',
           center: ['50%', '46%'],
           radius: ['44%', '85%'],
+          roseType: undefined,
           emphasis: { focus: 'self' },
           data: [],
           label: labelProperties,
