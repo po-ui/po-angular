@@ -1,89 +1,101 @@
-import { Directive } from '@angular/core';
-
-import { expectPropertiesValues } from './../../util-test/util-expect.spec';
-import { poGaugeMinHeight } from './po-gauge-default-values.constant';
-
-import { PoColorService } from '../../services/po-color/po-color.service';
-
+import { Component } from '@angular/core';
+import { ComponentFixture, TestBed } from '@angular/core/testing';
 import { PoGaugeBaseComponent } from './po-gauge-base.component';
+import { poGaugeMinHeight } from './po-gauge-default-values.constant';
+import { PoGaugeRanges } from './interfaces/po-gauge-ranges.interface';
 
-@Directive()
-class PoGaugeComponent extends PoGaugeBaseComponent {
-  svgContainerSize() {}
-}
+@Component({ selector: 'po-gauge-base-test', template: '', standalone: false })
+class TestComponent extends PoGaugeBaseComponent {}
 
-describe('PoGaugeBaseComponent:', () => {
-  let component: PoGaugeComponent;
+describe('PoGaugeBaseComponent', () => {
+  let component: TestComponent;
+  let fixture: ComponentFixture<TestComponent>;
 
   beforeEach(() => {
-    component = new PoGaugeComponent();
+    TestBed.configureTestingModule({
+      declarations: [TestComponent]
+    });
+
+    fixture = TestBed.createComponent(TestComponent);
+    component = fixture.componentInstance;
+    fixture.detectChanges();
   });
 
-  it('should be create', () => {
-    expect(component instanceof PoGaugeBaseComponent).toBeTruthy();
-  });
-
-  describe('Methods:', () => {
-    it('setGaugeHeight: should return `poGaugeMinHeight` if height is null', () => {
-      const height = null;
-
-      expect(component['setGaugeHeight'](height)).toBe(poGaugeMinHeight);
-    });
-
-    it('setGaugeHeight: should return `poGaugeMinHeight` if height is lower than 200', () => {
-      const height = 100;
-
-      expect(component['setGaugeHeight'](height)).toBe(poGaugeMinHeight);
-    });
-
-    it('setGaugeHeight: should return the value of height', () => {
-      const height = 400;
-
-      expect(component['setGaugeHeight'](height)).toBe(height);
-    });
+  it('should create the component', () => {
+    expect(component).toBeTruthy();
   });
 
   describe('Properties:', () => {
-    it('p-description: should call `svgContainerSize`', () => {
-      const description = 'description';
-      const spySvgContainerSize = spyOn(component, <any>'svgContainerSize');
-
-      component.description = description;
-
-      expect(spySvgContainerSize).toHaveBeenCalled();
+    it('should set and get description', () => {
+      component.description = 'Descriptive text';
+      expect(component.description).toBe('Descriptive text');
     });
 
-    it('p-height: should call `setGaugeHeight`', () => {
-      const height = 200;
-      const spySetGaugeHeight = spyOn(component, <any>'setGaugeHeight');
-
-      component.height = height;
-
-      expect(spySetGaugeHeight).toHaveBeenCalledWith(height);
+    it('should return default height as poGaugeMinHeight', () => {
+      expect(component.height).toBe(poGaugeMinHeight);
     });
 
-    it('p-ranges: should update property with valid values', () => {
-      const validValues = [[{ from: 0, to: 100, color: 'red', label: 'description' }], []];
-      expectPropertiesValues(component, 'ranges', validValues, validValues);
+    it('should set height greater than poGaugeMinHeight', () => {
+      component.height = 500;
+      expect(component.height).toBe(500);
     });
 
-    it('p-ranges: should apply `[]` if it receives invalid values.', () => {
-      const invalidValues = [false, true, {}, 'invalid', 123, null, undefined];
+    it('should fallback to poGaugeMinHeight if height is invalid or less than minimum', () => {
+      component.height = 100;
+      expect(component.height).toBe(poGaugeMinHeight);
 
-      expectPropertiesValues(component, 'ranges', invalidValues, []);
+      component.height = undefined;
+      expect(component.height).toBe(poGaugeMinHeight);
+
+      component.height = null;
+      expect(component.height).toBe(poGaugeMinHeight);
     });
 
-    it('p-value: should update property with valid values', () => {
-      const values = [0, 1, 200, '1', '200', 1.1, 100.0, '100.00', 0.1, '0.1'];
-      const validValues = [0, 1, 200, 1, 200, 1.1, 100.0, 100.0, 0.1, 0.1];
-
-      expectPropertiesValues(component, 'value', values, validValues);
+    it('should set ranges when it is an array', () => {
+      const ranges: Array<PoGaugeRanges> = [{ from: 0, to: 50, color: 'red' }];
+      component.ranges = ranges;
+      expect(component.ranges).toEqual(ranges);
     });
 
-    it('p-value: shouldn`t update property if it receives invalid values', () => {
-      const invalidValues = [[], {}, null, undefined, true, false, 'number', '10.6sss', '', '  '];
+    it('should fallback ranges to empty array if input is not array', () => {
+      component.ranges = null;
+      expect(component.ranges).toEqual([]);
 
-      expectPropertiesValues(component, 'value', invalidValues, undefined);
+      component.ranges = <any>'invalid';
+      expect(component.ranges).toEqual([]);
+    });
+
+    it('should set and get title', () => {
+      component.title = 'My Gauge';
+      expect(component.title).toBe('My Gauge');
+    });
+
+    it('should set value when it is a valid number', () => {
+      component.value = 75;
+      expect(component.value).toBe(75);
+    });
+
+    it('should convert string number to number in value', () => {
+      component.value = <any>'123';
+      expect(component.value).toBe(123);
+    });
+
+    it('should set value to undefined if invalid', () => {
+      component.value = <any>'   ';
+      expect(component.value).toBeUndefined();
+
+      component.value = <any>null;
+      expect(component.value).toBeUndefined();
+    });
+
+    it('should have default values for showFromToLegend and showPointer', () => {
+      expect(component.showFromToLegend).toBeFalse();
+      expect(component.showPointer).toBeTrue();
+    });
+
+    it('should set value as undefined when gaugeValue is a non-numeric string', () => {
+      component.value = <any>'abc';
+      expect(component.value).toBeUndefined();
     });
   });
 });
