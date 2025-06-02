@@ -55,7 +55,7 @@ describe('PoChartGridUtils', () => {
         overlayColor: 'rgba(255,255,255,0.5)'
       };
 
-      utils.setSerieTypeArea(serie, 8); // index > 7
+      utils.setSerieTypeArea(serie, 8);
 
       expect(serie.areaStyle.opacity).toBe(0.5);
     });
@@ -171,7 +171,7 @@ describe('PoChartGridUtils', () => {
       utils['component'].options = {
         innerRadius: 100,
         textCenterGraph: 'test',
-        dynamicDonutPie: true // <-- cobre o ternário!
+        dynamicDonutPie: true
       } as PoChartOptions;
 
       utils['component'].series = [
@@ -186,7 +186,7 @@ describe('PoChartGridUtils', () => {
           type: 'pie',
           center: ['50%', '46%'],
           radius: ['55%', '85%'],
-          roseType: 'area', // <-- agora será 'area'
+          roseType: 'area',
           emphasis: { focus: 'self' },
           data: [],
           label: {
