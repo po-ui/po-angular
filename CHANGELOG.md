@@ -2,6 +2,19 @@
 
 All notable changes to this project will be documented in this file. See [standard-version](https://github.com/conventional-changelog/standard-version) for commit guidelines.
 
+## [19.14.0](https://github.com/po-ui/po-angular/compare/v19.13.0...v19.14.0) (2025-06-02)
+
+
+### Features
+
+* **components:** adiciona emissão de evento blur ([cb70803](https://github.com/po-ui/po-angular/commit/cb70803a55f84175f28fcfb869bc1b3f16b4c6ea))
+
+
+### Bug Fixes
+
+* **dynamic-form:** corrige visible dinâmico dos campos ([80fb8c8](https://github.com/po-ui/po-angular/commit/80fb8c8a69416c4871ed958ae5178f451b9d413c))
+* **rich-text:** corrige indicativo de direção nos literais ([4aeb103](https://github.com/po-ui/po-angular/commit/4aeb1038e0d61e7737b8cec1756490ddcd13b243))
+
 ## [19.13.0](https://github.com/po-ui/po-angular/compare/v19.12.0...v19.13.0) (2025-05-26)
 
 
