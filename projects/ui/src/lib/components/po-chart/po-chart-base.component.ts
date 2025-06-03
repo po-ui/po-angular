@@ -36,29 +36,35 @@ const poChartDefaultHeight = 400;
  *
  * > Para maiores informações, acesse o guia [Personalizando o Tema Padrão com Tokens CSS](https://po-ui.io/guides/theme-customization).
  *
- * | Propriedade                              | Descrição                                             | Valor Padrão                                      |
- * |------------------------------------------|-------------------------------------------------------|---------------------------------------------------|
- * | **Header (.po-chart-header )**           |                                                       |                                                   |
- * | `--background-color`                     | Cor de background do cabeçalho                        | `var(--color-neutral-light-00)`                   |
- * | `--color`                                | Cor da fonte do cabeçalho                             | `var(--color-neutral-dark-70)`                    |
- * | `--font-family`                          | Família tipográfica usada                             | `var(--font-family-theme)`                        |
- * | `--font-size-title`                      | Tamanho da fonte                                      | `var(--font-size-default)`                        |
- * | `--font-size-icons`                      | Tamanho dos ícones                                    | `var(--font-size-md)`                             |
- * | `--font-weight`                          | Peso da fonte                                         | `var(--font-weight-bold)`                         |
- * | **Chart (.po-chart)**                    |                                                       |                                                   |
- * | `--background-color-grid`                | Cor de background                                     | `var(--color-neutral-light-00)`                   |
- * | `--color-grid`                           | Cor da fonte                                          | `var(--color-neutral-light-20)`                   |
- * | `--font-family-grid`                     | Família tipográfica usada                             | `var(--font-family-theme)`                        |
- * | `--font-size-grid`                       | Tamanho da fonte                                      | `var(--font-size-xs)`                             |
- * | `--font-weight-grid`                     | Peso da fonte                                         | `var(--font-weight-normal)`                       |
- * | `--color-legend`                         | Cor da fonte da legenda                               | `var(--color-neutral-dark-70)`                    |
- * | `--border-radius-bar`                    | Contém o valor do raio dos cantos do elemento         | `var(--border-radius-none)`                       |
- * | `--color-grid-hover`                     | Cor no estado hover                                   | `var(--color-neutral-mid-60)`                     |
- * | `--border-color`                         | Cor da borda do gráfico                               | `var(--color-neutral-light-00)`                   |
- * | `--color-hightlight-value`               | Cor do valor de destaque                              | `var(--color-neutral-dark-70)`                    |
- * | `--font-size-hightlight-value`           | Tamanho da fonte do valor de destaque                 | `var(--font-size-md)`                             |
- * | `--font-family-hightlight-value`         | Família tipográfica do valor de destaque              | `var(--font-family-theme)`                        |
- * | `--font-weight-hightlight-value`         | Peso da fonte do valor de destaque                    | `var(--font-weight-bold)`                         |
+ * | Propriedade                              | Descrição                                                               | Valor Padrão                                      |
+ * |------------------------------------------|-------------------------------------------------------------------------|---------------------------------------------------|
+ * | **Header (.po-chart-header )**           |                                                                         |                                                   |
+ * | `--background-color`                     | Cor de background do cabeçalho                                          | `var(--color-neutral-light-00)`                   |
+ * | `--color`                                | Cor da fonte do cabeçalho                                               | `var(--color-neutral-dark-70)`                    |
+ * | `--font-family`                          | Família tipográfica usada                                               | `var(--font-family-theme)`                        |
+ * | `--font-size-title`                      | Tamanho da fonte                                                        | `var(--font-size-default)`                        |
+ * | `--font-size-icons`                      | Tamanho dos ícones                                                      | `var(--font-size-md)`                             |
+ * | `--font-weight`                          | Peso da fonte                                                           | `var(--font-weight-bold)`                         |
+ * | **Chart (.po-chart)**                    |                                                                         |                                                   |
+ * | `--background-color-grid`                | Cor de background dos gráficos                                          | `var(--color-neutral-light-00)`                   |
+ * | `--color-grid`                           | Cor da linha dos gráficos que possuem eixo                              | `var(--color-neutral-light-20)`                   |
+ * | `--font-family-grid`                     | Família tipográfica usada nos valores dos eixos                         | `var(--font-family-theme)`                        |
+ * | `--font-size-grid`                       | Tamanho da fonte usada nos valores dos eixos                            | `var(--font-size-xs)`                             |
+ * | `--font-weight-grid`                     | Peso da fonte usada nos valores dos eixos                               | `var(--font-weight-normal)`                       |
+ * | `--color-legend`                         | Cor da fonte da legenda                                                 | `var(--color-neutral-dark-70)`                    |
+ * | `--border-radius-bar`                    | Tamanho da borda nos graficos `Bar` e `Column`                          | `var(--border-radius-none)`                       |
+ * | `--border-color`                         | Cor da borda do gráfico nos Gráficos `Donut` e `Pie`                    | `var(--color-neutral-light-00)`                   |
+ * | `--color-hightlight-value`               | Cor do valor de destaque nos Gráficos `Donut` e `Gauge`                 | `var(--color-neutral-dark-70)`                    |
+ * | `--font-size-hightlight-value`           | Tamanho da fonte do valor de destaque nos Gráficos `Donut` e `Gauge`    | `var(--font-size-md)`                             |
+ * | `--font-family-hightlight-value`         | Família tipográfica do valor de destaque nos Gráficos `Donut` e `Gauge` | `var(--font-family-theme)`                        |
+ * | `--font-weight-hightlight-value`         | Peso da fonte do valor de destaque nos Gráficos `Donut` e `Gauge`       | `var(--font-weight-bold)`                         |
+ * | `--color-base-gauge`                     | Cor da base do gráfico `Gauge`                                          | `var(--color-neutral-light-20)`                   |
+ * | `--color-subtitle-gauge`                 | Cor da descrição do gráfico `Gauge`                                     | `var(--color-neutral-dark-70)`                    |
+ * | `--font-family-subtitle-gauge`           | Fonte da descrição do gráfico `Gauge`                                   | `var(--font-family-theme)`                        |
+ * | `--font-size-subtitle-gauge`             | Tamanho da fonte da descrição do gráfico `Gauge`                        | `var(--font-size-sm)`                             |
+ * | `--font-weight-subtitle-gauge`           | Peso da fonte da descrição do gráfico `Gauge`                           | `var(--font-weight-normal)`                       |
+ * | `--color-gauge-pointer-color`            | Cor do ponteiro do gráfico `Gauge`                                      | `var(--color-neutral-dark-70)`                    |
+ * | `--color-chart-line-point-fill`          | Cor de dentro do círculo dos gráficos `Line` e `Area`                   | `var(--color-neutral-light-00)`                   |
  */
 @Directive()
 export abstract class PoChartBaseComponent implements OnInit {
@@ -172,7 +178,7 @@ export abstract class PoChartBaseComponent implements OnInit {
     if (this.type === PoChartType.Gauge) {
       heightGauge = 300;
     }
-    this._height = Math.max(value ?? heightGauge ?? poChartDefaultHeight, poChartMinHeight);
+    this._height = Math.max(value ?? heightGauge ?? poChartDefaultHeight, heightGauge ?? poChartMinHeight);
   }
 
   get height(): number {

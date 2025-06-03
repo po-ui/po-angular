@@ -80,6 +80,11 @@ use([
  *  <file name="sample-po-chart-coffee-ranking/sample-po-chart-coffee-ranking.component.ts"> </file>
  * </example>
  *
+ * <example name="po-chart-summary" title="PO Chart - Summary">
+ *  <file name="sample-po-chart-summary/sample-po-chart-summary.component.html"> </file>
+ *  <file name="sample-po-chart-summary/sample-po-chart-summary.component.ts"> </file>
+ * </example>
+ *
  * <example name="po-chart-world-exports" title="PO Chart - World Exports">
  *  <file name="sample-po-chart-world-exports/sample-po-chart-world-exports.component.html"> </file>
  *  <file name="sample-po-chart-world-exports/sample-po-chart-world-exports.component.ts"> </file>
@@ -176,8 +181,8 @@ export class PoChartComponent extends PoChartBaseComponent implements OnInit, Af
       return;
     }
 
-    const { options, series, dataLabel, categories, height } = changes;
-    if (options || series || dataLabel || categories) {
+    const { options, series, dataLabel, categories, height, valueGaugeMultiple } = changes;
+    if (options || series || dataLabel || categories || valueGaugeMultiple) {
       if (
         !this.chartInstance ||
         (options?.currentValue?.rendererOption && this.currentRenderer !== options.currentValue.rendererOption)
@@ -370,11 +375,13 @@ export class PoChartComponent extends PoChartBaseComponent implements OnInit, Af
       );
       valueLabel = `${findCurrentValue?.valuePercentage ?? 0}%`;
     }
+    const name = params.name === ' ' ? this.literals.item : params.name;
+    const seriesName = params.seriesName === ' ' ? this.literals.item : params.seriesName;
     const customTooltipText =
-      params.seriesName && !params.seriesName.includes('\u00000')
-        ? `<b>${params.name}</b><br>
-        ${params.seriesName}: <b>${valueLabel}</b>`
-        : `${params.name}: <b>${valueLabel}</b>`;
+      seriesName && !seriesName.includes('\u00000')
+        ? `<b>${name}</b><br>
+        ${seriesName}: <b>${valueLabel}</b>`
+        : `${name}: <b>${valueLabel}</b>`;
 
     const isPie = params.seriesType === 'pie';
     if (isPie) {
@@ -395,6 +402,8 @@ export class PoChartComponent extends PoChartBaseComponent implements OnInit, Af
     this.isTypeBar = false;
     this.isTypeGauge = false;
     this.itemsColorTypeGauge = [];
+    this.listTypePieDonut = [];
+    this.itemsTypeDonut = [];
     let option = {};
     if (!this.categories?.length && this.categories !== undefined) {
       this.categories = undefined;
@@ -480,7 +489,7 @@ export class PoChartComponent extends PoChartBaseComponent implements OnInit, Af
     const findType = this.series.find(serie => serie.type)?.type;
     let serieGauge = {};
     let typeDefault;
-    if (!findType && !this.type) {
+    if (!this.type) {
       typeDefault = Array.isArray(this.series[0].data) ? PoChartType.Column : PoChartType.Pie;
     }
 
@@ -632,8 +641,11 @@ export class PoChartComponent extends PoChartBaseComponent implements OnInit, Af
       { [this.literals.value]: this.isGaugeSingle ? this.series[0].data : this.valueGaugeMultiple || '-' }
     ];
     if (!this.isGaugeSingle) {
-      this.series.forEach(serie => {
-        const item = { ...this.itemsTable[0], [serie.label || this.literals.itemOne]: `${serie.from} - ${serie.to}` };
+      this.series.forEach((serie, index) => {
+        const item = {
+          ...this.itemsTable[0],
+          [serie.label || `${this.literals.item} ${index + 1}`]: `${serie.from} - ${serie.to}`
+        };
         this.itemsTable = [{ ...item }];
       });
     }

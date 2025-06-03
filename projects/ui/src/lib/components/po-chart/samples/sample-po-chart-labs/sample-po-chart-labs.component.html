@@ -6,6 +6,7 @@
   [p-series]="series"
   [p-title]="title"
   [p-type]="type"
+  [p-value-gauge-multiple]="valueGauge"
   (p-series-click)="changeEvent('p-series-click', $event)"
   (p-series-hover)="changeEvent('p-series-hover', $event)"
 >
@@ -20,7 +21,16 @@
 <po-divider class="po-md-12" p-label="Properties"></po-divider>
 
 <form>
-  <po-select class="po-md-3" name="type" [(ngModel)]="type" p-columns="3" p-label="Type" [p-options]="typeOptions">
+  <po-select
+    class="po-md-3"
+    name="type"
+    [(ngModel)]="type"
+    p-columns="3"
+    p-label="Type"
+    [p-disabled]="disabledType"
+    [p-options]="typeOptions"
+    (p-change)="changeType($event)"
+  >
   </po-select>
 
   <po-number class="po-md-3" name="height" p-label="Height" [(ngModel)]="height"> </po-number>
@@ -39,13 +49,39 @@
   </po-checkbox-group>
 </form>
 
-<form #chartSeries="ngForm">
-  <po-divider class="po-md-12" p-label="Chart series"></po-divider>
+<po-divider class="po-md-12" p-label="Chart series"></po-divider>
 
+<form #chartSeries="ngForm">
+  <div class="po-row">
+    <po-switch
+      class="po-md-4"
+      name="switch"
+      p-label="Gauge Type"
+      [(ngModel)]="isTypeGauge"
+      (p-change)="changeSwitchGauge($event)"
+    >
+    </po-switch>
+
+    <po-number
+      *ngIf="isTypeGauge"
+      class="po-md-4"
+      p-label="Value Gauge"
+      name="valueGauge"
+      [(ngModel)]="valueGauge"
+      (p-change)="changeValueGauge($event)"
+    ></po-number>
+  </div>
   <div class="po-row">
     <po-input class="po-md-4" name="label" p-label="Label" [(ngModel)]="label"></po-input>
 
-    <po-input class="po-md-4" name="data" p-label="Data" p-help="Example: [25, 58, 83, 66] or 25" [(ngModel)]="data">
+    <po-input
+      *ngIf="!isTypeGauge"
+      class="po-md-4"
+      name="data"
+      p-label="Data"
+      p-help="Example: [25, 58, 83, 66] or 25"
+      [(ngModel)]="data"
+    >
     </po-input>
 
     <po-select
@@ -54,16 +90,28 @@
       [(ngModel)]="serieType"
       p-help="Serie Type"
       p-label="Type"
+      [p-disabled]="disabledType"
       [p-options]="typeOptions"
     >
     </po-select>
 
-    <po-input class="po-md-4" name="tooltip" p-label="Tooltip" p-help="Custom Tooltip" [(ngModel)]="tooltip"></po-input>
+    <po-input
+      class="po-md-4"
+      name="tooltip"
+      p-label="Tooltip"
+      p-help="Custom Tooltip"
+      [p-disabled]="disabledTooltip"
+      [(ngModel)]="tooltip"
+    ></po-input>
 
     <po-input class="po-md-4" name="color" p-label="Color" p-help="Custom Color" [(ngModel)]="color"></po-input>
 
+    <po-number *ngIf="isTypeGauge" class="po-md-4" p-label="From" name="from" [(ngModel)]="fromGauge"></po-number>
+
+    <po-number *ngIf="isTypeGauge" class="po-md-4" p-label="To" name="from" [(ngModel)]="toGauge"></po-number>
+
     <div class="po-row">
-      <po-button class="po-md-4" p-label="Add Serie" (p-click)="addData(); chartSeries.reset()"> </po-button>
+      <po-button class="po-md-4" p-label="Add Serie" (p-click)="addData()"> </po-button>
     </div>
   </div>
 </form>
@@ -192,6 +240,16 @@
     >
     </po-input>
 
+    <po-input
+      class="po-md-4"
+      name="descriptionGauge"
+      p-label="descriptionGauge"
+      [(ngModel)]="options.descriptionGauge"
+      (p-blur)="addOptions()"
+    >
+    </po-input>
+  </div>
+  <div class="po-row">
     <po-checkbox-group
       class="po-md-4"
       name="headerGroup"
@@ -243,6 +301,36 @@
       [p-options]="[{ label: 'legend', value: 'legend' }]"
       [(ngModel)]="selectedValuesLegend"
       (p-change)="changeLegendOptions()"
+    >
+    </po-checkbox-group>
+
+    <po-checkbox-group
+      class="po-md-4"
+      name="roseType"
+      p-label="RoseType"
+      [p-options]="[{ label: 'roseType', value: 'roseType' }]"
+      [(ngModel)]="selectedRoseType"
+      (p-change)="changeRoseTypeOptions()"
+    >
+    </po-checkbox-group>
+
+    <po-checkbox-group
+      class="po-md-4"
+      name="showFromToLegend"
+      p-label="ShowFromToLegend"
+      [p-options]="[{ label: 'showFromToLegend', value: 'showFromToLegend' }]"
+      [(ngModel)]="selectedFromToLegend"
+      (p-change)="changeShowFromToLegend()"
+    >
+    </po-checkbox-group>
+
+    <po-checkbox-group
+      class="po-md-4"
+      name="pointer"
+      p-label="Pointer"
+      [p-options]="[{ label: 'pointer', value: 'pointer' }]"
+      [(ngModel)]="selectedFromToLegend"
+      (p-change)="changePointer()"
     >
     </po-checkbox-group>
 
