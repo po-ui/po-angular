@@ -167,11 +167,11 @@ describe('PoChartGridUtils', () => {
       fontWeight: 0
     };
 
-    it('should set donut config if innerRadius is 100 and dynamicDonutPie is true', () => {
+    it('should set donut config if innerRadius is 100 and roseType is true', () => {
       utils['component'].options = {
         innerRadius: 100,
         textCenterGraph: 'test',
-        dynamicDonutPie: true
+        roseType: true
       } as PoChartOptions;
 
       utils['component'].series = [
