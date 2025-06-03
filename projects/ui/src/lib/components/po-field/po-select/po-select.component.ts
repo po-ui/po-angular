@@ -133,6 +133,15 @@ export class PoSelectComponent extends PoFieldValidateModel<any> implements OnCh
    *
    * @description
    *
+   * Evento disparado ao sair do campo.
+   */
+  @Output('p-blur') blur: EventEmitter<any> = new EventEmitter();
+
+  /**
+   * @optional
+   *
+   * @description
+   *
    * Função para atualizar o ngModel do componente, necessário quando não for utilizado dentro da tag form.
    *
    * Na versão 12.2.0 do Angular a verificação `strictTemplates` vem true como default. Portanto, para utilizar
@@ -366,11 +375,15 @@ export class PoSelectComponent extends PoFieldValidateModel<any> implements OnCh
     );
   }
 
-  onBlur() {
+  onBlur(event: any) {
     this.onModelTouched?.();
 
     if (this.getAdditionalHelpTooltip() && this.displayAdditionalHelp) {
       this.showAdditionalHelp();
+    }
+
+    if (event.type === 'blur') {
+      this.blur.emit();
     }
   }
 

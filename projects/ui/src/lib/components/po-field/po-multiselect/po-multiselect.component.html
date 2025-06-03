@@ -25,7 +25,7 @@
         [class.po-multiselect-input-aa]="size === 'small'"
         (keydown)="onKeyDown($event)"
         (click)="toggleDropdownVisibility()"
-        (blur)="onBlur()"
+        (blur)="onBlur($event)"
       >
         <span
           *ngIf="!disabled && !visibleTags?.length"

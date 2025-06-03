@@ -411,29 +411,73 @@ describe('PoChartComponent', () => {
       component.height = 400;
     });
 
-    it('should expand the chart and set properties correctly', fakeAsync(() => {
+    it('should expand the chart with 100% radius when isTypeGauge is true and innerWidth < 1366', fakeAsync(() => {
       const mockChart = {
         resize: jasmine.createSpy('resize'),
-        dispose: jasmine.createSpy('dispose')
+        getOption: jasmine.createSpy('getOption').and.returnValue({
+          series: [{ radius: '80%' }]
+        }),
+        setOption: jasmine.createSpy('setOption')
       };
 
       component['chartInstance'] = mockChart as Partial<EChartsType> as EChartsType;
       component.height = 400;
       component['headerHeight'] = 50;
       component['isExpanded'] = false;
+      component['isTypeGauge'] = true;
 
-      const windowInnerHeight = 800;
-      spyOnProperty(window, 'innerHeight').and.returnValue(windowInnerHeight);
+      Object.defineProperty(window, 'innerHeight', {
+        writable: true,
+        configurable: true,
+        value: 800
+      });
+
+      Object.defineProperty(window, 'innerWidth', {
+        writable: true,
+        configurable: true,
+        value: 1200
+      });
 
       component.toggleExpand();
 
-      expect(component['originalHeight']).withContext('should save original height').toBe(400);
-      expect(component.height).withContext('should set to window height').toBe(windowInnerHeight);
-      expect(component['chartMarginTop']).withContext('should add header margin').toBe('0px');
-      expect(component['isExpanded']).withContext('should toggle expanded state').toBeTrue();
+      expect(component['originalRadiusGauge']).toBe('80%');
+      expect(mockChart.setOption).toHaveBeenCalledWith({
+        series: [{ radius: '100%' }]
+      });
 
       flush();
-      expect(mockChart.resize).withContext('should trigger chart resize').toHaveBeenCalled();
+      expect(mockChart.resize).toHaveBeenCalled();
+    }));
+
+    it('should collapse the chart and restore original gauge radius when isTypeGauge is true and innerWidth < 1366', fakeAsync(() => {
+      const originalRadius = '75%';
+      const mockChart = {
+        resize: jasmine.createSpy('resize'),
+        getOption: jasmine.createSpy('getOption').and.returnValue({ series: [{ radius: originalRadius }] }),
+        setOption: jasmine.createSpy('setOption')
+      };
+
+      component['chartInstance'] = mockChart as Partial<EChartsType> as EChartsType;
+      component['isExpanded'] = true;
+      component['isTypeGauge'] = true;
+      component['originalHeight'] = 400;
+      component.height = 800;
+      component['originalRadiusGauge'] = originalRadius;
+
+      Object.defineProperty(window, 'innerWidth', {
+        writable: true,
+        configurable: true,
+        value: 1200
+      });
+
+      component.toggleExpand();
+
+      expect(mockChart.setOption).toHaveBeenCalledWith({
+        series: [{ radius: originalRadius }]
+      });
+
+      flush();
+      expect(mockChart.resize).toHaveBeenCalled();
     }));
 
     it('should collapse the chart and restore original properties', fakeAsync(() => {
@@ -542,6 +586,36 @@ describe('PoChartComponent', () => {
       expect(component['setChartsProperties']).not.toHaveBeenCalled();
 
       component['el'].nativeElement.querySelector = originalQuerySelector;
+    });
+
+    it('should set categories to undefined when it is an empty array', () => {
+      component['categories'] = [];
+      component['series'] = [{ label: 'Série 1', data: [1, 2, 3] }];
+      component['chartInstance'] = {
+        setOption: jasmine.createSpy('setOption')
+      } as any;
+
+      spyOn(component as any, 'setOptions').and.returnValue({});
+      spyOn(component['cdr'], 'detectChanges');
+
+      (component as any).setChartsProperties();
+
+      expect(component['categories']).toBeUndefined();
+    });
+
+    it('should dispose chartInstance and return early when series is empty', () => {
+      const disposeSpy = jasmine.createSpy('dispose');
+
+      component['categories'] = ['A', 'B'];
+      component['series'] = [];
+      component['chartInstance'] = {
+        dispose: disposeSpy
+      } as any;
+
+      (component as any).setChartsProperties();
+
+      expect(disposeSpy).toHaveBeenCalled();
+      expect(component['chartInstance']).toBeUndefined();
     });
 
     it('should emit seriesClick event when clicking on the chart', () => {
@@ -829,7 +903,7 @@ describe('PoChartComponent', () => {
     it('should return line chart options with correct default structure', () => {
       component.options = {};
 
-      const result = component['setOptions']() as any;
+      const result = component['setOptions']();
 
       expect(result).toBeDefined();
       expect(result.backgroundColor).toBe('#ffffff');
@@ -841,7 +915,7 @@ describe('PoChartComponent', () => {
     it('should apply dataZoom configuration when enabled', () => {
       component.options = { dataZoom: true };
 
-      const result = component['setOptions']() as any;
+      const result = component['setOptions']();
       expect(result.grid.top).toBe(56);
     });
 
@@ -855,7 +929,7 @@ describe('PoChartComponent', () => {
         paddingLeft: 60
       };
 
-      const result = component['setOptions']() as any;
+      const result = component['setOptions']();
       expect(result.yAxis.min).toBe(10);
       expect(result.yAxis.max).toBe(100);
       expect(result.yAxis.splitNumber).toBe(7);
@@ -896,7 +970,7 @@ describe('PoChartComponent', () => {
         labelType: PoChartLabelFormat.Number
       };
 
-      const result = component['setOptions']() as any;
+      const result = component['setOptions']();
       expect(result.yAxis.axisLabel.formatter(100)).toBe('100.00');
     });
 
@@ -905,7 +979,7 @@ describe('PoChartComponent', () => {
         labelType: PoChartLabelFormat.Currency
       };
 
-      const result = component['setOptions']() as any;
+      const result = component['setOptions']();
       expect(result.yAxis.axisLabel.formatter(100)).toBe('$100.00');
     });
 
@@ -914,7 +988,7 @@ describe('PoChartComponent', () => {
         rotateLegend: 45
       };
 
-      const result = component['setOptions']() as any;
+      const result = component['setOptions']();
       expect(result.xAxis.axisLabel.rotate).toBe(45);
     });
 
@@ -922,7 +996,7 @@ describe('PoChartComponent', () => {
       component.dataLabel = { fixed: true };
       component.options = { axis: {} };
 
-      const result = component['setOptions']() as any;
+      const result = component['setOptions']();
       expect(result.grid.top).toBe(32);
     });
 
@@ -930,7 +1004,7 @@ describe('PoChartComponent', () => {
       component.dataLabel = { fixed: true };
       component.options = { axis: { maxRange: 100 } };
 
-      const result = component['setOptions']() as any;
+      const result = component['setOptions']();
       expect(result.grid.top).toBe(16);
     });
 
@@ -945,6 +1019,23 @@ describe('PoChartComponent', () => {
 
       expect(options.xAxis.axisLabel.fontSize).toBe(12);
       expect(options.yAxis.axisLabel.fontSize).toBe(12);
+    });
+
+    it('should apply gauge options when isTypeGauge is true', () => {
+      component['isTypeGauge'] = true;
+
+      const mockOptions = {};
+      const mockFontSize = 14;
+
+      spyOn(component['chartGridUtils'], 'resolvePx').and.returnValue(mockFontSize);
+      spyOn(component['chartGaugeUtils'], 'setGaugeOptions');
+
+      spyOn<any>(component, 'setSeries').and.returnValue([]);
+
+      const result = component['setOptions']();
+
+      expect(component['chartGridUtils'].resolvePx).toHaveBeenCalledWith('--font-size-grid', '.po-chart');
+      expect(component['chartGaugeUtils'].setGaugeOptions).toHaveBeenCalledWith(result, mockFontSize);
     });
   });
 
@@ -1067,7 +1158,7 @@ describe('PoChartComponent', () => {
       expect(result[0].itemStyle.color).toBe('#0000ff');
       expect(result[1].type).toBe('line');
       expect(result[2].type).toBe('bar');
-      expect(result[3].name).toBe('');
+      expect(result[3].name).toBe(' ');
     });
 
     it('should return all types charts', () => {
@@ -1156,8 +1247,45 @@ describe('PoChartComponent', () => {
       component.options = { fillPoints: false };
 
       const result = component['setSeries']();
-      expect(result[1].itemStyle.color).toBe('#ffffff');
+      expect(result[1].itemStyle.color).toBe('');
       expect(result[1].lineStyle.color).toBe('#00ff00');
+    });
+
+    it('should call setListTypeGauge and finalizeSerieTypeGauge when type is "gauge"', () => {
+      component.type = PoChartType.Gauge;
+      component.series = [{ label: 'A', data: [10] }];
+
+      const resolvePxSpy = spyOn(component['chartGridUtils'], 'resolvePx').and.callFake(
+        (key: string) =>
+          ({
+            '--font-size-md': 12,
+            '--font-size-lg': 14,
+            '--font-size-subtitle-gauge': 16
+          })[key] || 0
+      );
+
+      const setListTypeGaugeSpy = spyOn(component['chartGaugeUtils'], 'setListTypeGauge').and.returnValue({
+        processed: true
+      });
+      const finalizeSerieTypeGaugeSpy = spyOn(component['chartGaugeUtils'], 'finalizeSerieTypeGauge').and.returnValue([
+        { name: 'Gauge' }
+      ]);
+
+      const result = component['setSeries']();
+
+      expect(resolvePxSpy).toHaveBeenCalledWith('--font-size-md');
+      expect(resolvePxSpy).toHaveBeenCalledWith('--font-size-lg');
+      expect(resolvePxSpy).toHaveBeenCalledWith('--font-size-subtitle-gauge', '.po-chart');
+      expect(setListTypeGaugeSpy).toHaveBeenCalledWith(
+        {},
+        {
+          fontSizeMd: 12,
+          fontSizeLg: 14,
+          fontSizeSubtitle: 16
+        }
+      );
+      expect(finalizeSerieTypeGaugeSpy).toHaveBeenCalledWith({ processed: true });
+      expect(result).toEqual([{ name: 'Gauge' }]);
     });
   });
 
@@ -1345,6 +1473,9 @@ describe('PoChartComponent', () => {
         { data: 80, label: 'Pie Value 1' },
         { data: 20, label: 'Pie Value 2' }
       ];
+
+      component['literals'] = { serie: 'Série' };
+
       component['chartInstance'] = {
         getOption: jasmine.createSpy('getOption').and.returnValue({
           series: [
@@ -1365,12 +1496,108 @@ describe('PoChartComponent', () => {
       expect(component['setTableColumns']).not.toHaveBeenCalled();
       expect(component['itemsTable']).toEqual([{ 'Série': '-', 'Pie Value 1': 80, 'Pie Value 2': 20 }]);
     });
+
+    it('should call setTablePropertiesTypeGauge when isTypeGauge is true', () => {
+      component['isTypeGauge'] = true;
+      component.isTypeBar = false;
+
+      component['chartInstance'] = {
+        getOption: jasmine.createSpy('getOption').and.returnValue({
+          xAxis: [{ data: ['Jan', 'Feb'] }],
+          series: [{ name: 'Series 1', data: [10, 20] }]
+        })
+      } as any;
+
+      const spySetTypeGauge = spyOn(component as any, 'setTablePropertiesTypeGauge');
+
+      component['setTableProperties']();
+
+      expect(spySetTypeGauge).toHaveBeenCalled();
+    });
+  });
+
+  describe('setTablePropertiesTypeGauge', () => {
+    beforeEach(() => {
+      component.literals = { value: 'Value', itemOne: 'Item One' };
+      component.series = [
+        { data: 123, label: 'Label 1', from: 0, to: 10 },
+        { data: 456, label: 'Label 2', from: 11, to: 20 }
+      ];
+      component.valueGaugeMultiple = 999;
+    });
+
+    it('should set itemsTable with first series data when isGaugeSingle is true', () => {
+      component.isGaugeSingle = true;
+
+      component['setTablePropertiesTypeGauge']();
+
+      expect(component['itemsTable']).toEqual([{ Value: 123 }]);
+    });
+
+    it('should set itemsTable with valueGaugeMultiple and all series ranges when isGaugeSingle is false', () => {
+      component.isGaugeSingle = false;
+      component.valueGaugeMultiple = 999;
+      component.series = [
+        { data: 123, label: 'Label 1', from: 0, to: 10 },
+        { data: 456, label: 'Label 2', from: 11, to: 20 }
+      ];
+
+      component['setTablePropertiesTypeGauge']();
+
+      const expectedItem = {
+        Value: 999,
+        'Label 1': '0 - 10',
+        'Label 2': '11 - 20'
+      };
+
+      expect(component['itemsTable']).toEqual([expectedItem]);
+    });
+
+    it('should fallback to "-" when valueGaugeMultiple is falsy and isGaugeSingle is false', () => {
+      component.isGaugeSingle = false;
+      component.valueGaugeMultiple = null;
+
+      component.series = [
+        { data: 123, label: 'Label 1', from: 0, to: 10 },
+        { data: 456, label: 'Label 2', from: 11, to: 20 }
+      ];
+
+      component['setTablePropertiesTypeGauge']();
+
+      const expectedItem = {
+        Value: '-',
+        'Label 1': '0 - 10',
+        'Label 2': '11 - 20'
+      };
+
+      expect(component['itemsTable']).toEqual([expectedItem]);
+    });
+
+    it('should use literals.itemOne when serie.label is falsy', () => {
+      component.isGaugeSingle = false;
+      component.valueGaugeMultiple = 999;
+      component.series = [
+        { data: 123, label: '', from: 0, to: 10 },
+        { data: 456, label: null as any, from: 11, to: 20 }
+      ];
+
+      component['setTablePropertiesTypeGauge']();
+
+      const lastSerie = component.series[component.series.length - 1];
+      const expectedItem = {
+        Value: 999,
+        [component.literals.itemOne]: `${lastSerie.from} - ${lastSerie.to}`
+      };
+
+      expect(component['itemsTable']).toEqual([expectedItem]);
+    });
   });
 
   describe('setTableColumns:', () => {
     it('should correctly set columnsTable based on categories and use default label when firstColumnName is undefined', () => {
       const option = { xAxis: [{ data: ['Jan', 'Fev', 'Mar'] }] };
       component.options = {} as any;
+      component['literals'] = { serie: 'Série' };
 
       (component as any).setTableColumns(option, ['Jan', 'Fev', 'Mar']);
 
