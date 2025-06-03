@@ -1,0 +1,23 @@
+<po-container>
+  <div class="po-font-title po-mb-3">Sales Performance</div>
+  <div class="po-row">
+    <div class="po-lg-6">
+      <po-chart
+        p-title="Employee turnover rate"
+        p-value="25"
+        [p-type]="type"
+        [p-options]="optionsSingle"
+        [p-series]="turnover"
+      ></po-chart>
+    </div>
+    <div class="po-lg-6">
+      <po-chart
+        p-title="Sales performance"
+        [p-type]="type"
+        [p-options]="optionsRange"
+        [p-value-gauge-multiple]="50"
+        [p-series]="salesRanges"
+      ></po-chart>
+    </div>
+  </div>
+</po-container>

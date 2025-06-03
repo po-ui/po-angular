@@ -81,7 +81,17 @@ export interface PoChartSerie {
    */
   type?: PoChartType;
 
+  /**
+   * Alcance inicial da cor.
+   *
+   * > Propriedade válida para gráfico do tipo `Gauge`.
+   */
   from?: number;
 
+  /**
+   * Alcance final da cor.
+   *
+   * > Propriedade válida para gráfico do tipo `Gauge`.
+   */
   to?: number;
 }
