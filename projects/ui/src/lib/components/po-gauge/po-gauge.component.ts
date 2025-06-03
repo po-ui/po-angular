@@ -20,6 +20,9 @@ import { PoChartOptions, PoChartSerie } from '../po-chart';
  *  <file name="sample-po-gauge-summary/sample-po-gauge-summary.component.html"> </file>
  *  <file name="sample-po-gauge-summary/sample-po-gauge-summary.component.ts"> </file>
  * </example>
+ *
+ * @deprecated v22.x.x
+ * Utilize o `po-chart` com `type="gauge"` como alternativa recomendada.
  */
 @Component({
   selector: 'po-gauge',
