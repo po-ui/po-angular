@@ -32,8 +32,7 @@ export class SamplePoChartCoffeeRankingComponent {
     'Sodas',
     'Beer 0% A.',
     'Wheat Beer',
-    'Milk Shakes',
-    'Icetea'
+    'Milk Shakes'
   ];
 
   chartAreaSeries: Array<PoChartSerie> = [
@@ -43,8 +42,7 @@ export class SamplePoChartCoffeeRankingComponent {
     {
       label: 'Coffee Arabica Price',
       data: [550, 612, 525, 373, 342, 297, 282],
-      type: PoChartType.Line,
-      color: 'po-color-07'
+      type: PoChartType.Line
     }
   ];
 

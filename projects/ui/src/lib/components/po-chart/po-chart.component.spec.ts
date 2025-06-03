@@ -843,13 +843,13 @@ describe('PoChartComponent', () => {
 
       component['setTooltipProperties'](divTooltipElement, {
         value: 2,
-        name: 'Fev',
+        name: ' ',
         seriesName: 'Serie\u00000',
         seriesIndex: 0,
         seriesType: 'bar',
         event: { offsetX: 50, offsetY: 75 }
       });
-      expect(component['tooltipText'].replace(/\s+/g, '')).toBe('Fev:<b>2</b>');
+      expect(component['tooltipText'].replace(/\s+/g, '')).toBe(`${component.literals.item}:<b>2</b>`);
 
       component['setTooltipProperties'](divTooltipElement, {
         value: 3,
@@ -860,6 +860,16 @@ describe('PoChartComponent', () => {
         event: { offsetX: 80, offsetY: 90 }
       });
       expect(component['tooltipText'].replace(/\s+/g, '')).toBe('Mar:<b>3</b>');
+
+      component['setTooltipProperties'](divTooltipElement, {
+        value: 4,
+        name: '2',
+        seriesName: ' ',
+        seriesIndex: 0,
+        seriesType: 'bar',
+        event: { offsetX: 120, offsetY: 180 }
+      });
+      expect(component['tooltipText'].replace(/\s+/g, '')).toBe(`<b>2</b><br>${component.literals.item}:<b>4</b>`);
 
       component['itemsTypeDonut'] = [{ label: 'Other', data: 99, valuePercentage: 50 }];
       component['setTooltipProperties'](divTooltipElement, {
@@ -1489,7 +1499,6 @@ describe('PoChartComponent', () => {
           ]
         })
       } as any;
-
       spyOn(component as any, 'setTableColumns');
 
       component['setTableProperties']();
@@ -1519,7 +1528,7 @@ describe('PoChartComponent', () => {
 
   describe('setTablePropertiesTypeGauge', () => {
     beforeEach(() => {
-      component.literals = { value: 'Value', itemOne: 'Item One' };
+      component.literals = { value: 'Value', item: 'Item One' };
       component.series = [
         { data: 123, label: 'Label 1', from: 0, to: 10 },
         { data: 456, label: 'Label 2', from: 11, to: 20 }
@@ -1574,7 +1583,7 @@ describe('PoChartComponent', () => {
       expect(component['itemsTable']).toEqual([expectedItem]);
     });
 
-    it('should use literals.itemOne when serie.label is falsy', () => {
+    it('should use literals.item when serie.label is falsy', () => {
       component.isGaugeSingle = false;
       component.valueGaugeMultiple = 999;
       component.series = [
@@ -1584,10 +1593,12 @@ describe('PoChartComponent', () => {
 
       component['setTablePropertiesTypeGauge']();
 
+      const firstSerie = component.series[0];
       const lastSerie = component.series[component.series.length - 1];
       const expectedItem = {
         Value: 999,
-        [component.literals.itemOne]: `${lastSerie.from} - ${lastSerie.to}`
+        [`${component.literals.item} 1`]: `${firstSerie.from} - ${firstSerie.to}`,
+        [`${component.literals.item} 2`]: `${lastSerie.from} - ${lastSerie.to}`
       };
 
       expect(component['itemsTable']).toEqual([expectedItem]);

@@ -171,12 +171,13 @@ export interface PoChartOptions {
    *
    * @description
    *
-   * Exibe os valores das propriedades `from` e `to` no gráfico do  no texto da legenda entre parênteses.
+   * Transforma os gráficos do tipo `Donut` ou `Pie` num gráfico de área polar.
    *
-   * > Válido para os gráficos `Gauge`
+   * > Válido para os gráficos `Donut` e `Pie`.
    *
+   * @default `false`
    */
-  dynamicDonutPie?: boolean;
+  roseType?: boolean;
 
   /**
    * @optional

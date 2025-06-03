@@ -7,7 +7,7 @@ export const poChartLiteralsDefault = {
     exportJPG: 'Export JPG',
     exportPNG: 'Export PNG',
     value: 'Value',
-    itemOne: 'Item 1',
+    item: 'Item',
     serie: 'Series',
     category: 'Category'
   },
@@ -17,7 +17,7 @@ export const poChartLiteralsDefault = {
     exportJPG: 'Exportar JPG',
     exportPNG: 'Exportar PNG',
     value: 'Valor',
-    itemOne: 'Artículo 1',
+    item: 'Artículo',
     serie: 'Serie',
     category: 'Categoría'
   },
@@ -27,7 +27,7 @@ export const poChartLiteralsDefault = {
     exportJPG: 'Exportar JPG',
     exportPNG: 'Exportar PNG',
     value: 'Valor',
-    itemOne: 'Item 1',
+    item: 'Item',
     serie: 'Série',
     category: 'Categoria'
   },
@@ -37,7 +37,7 @@ export const poChartLiteralsDefault = {
     exportJPG: 'Экспортировать JPG',
     exportPNG: 'Экспортировать PNG',
     value: 'Ценить',
-    itemOne: 'Пункт 1',
+    item: 'Пункт',
     serie: 'Ряд',
     category: 'Категория'
   }

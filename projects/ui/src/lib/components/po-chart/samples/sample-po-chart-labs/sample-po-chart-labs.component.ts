@@ -21,6 +21,9 @@ export class SamplePoChartLabsComponent implements OnInit {
   tooltip: string;
   type: PoChartType;
   serieType: PoChartType;
+  valueGauge: number;
+  fromGauge: number;
+  toGauge: number;
   allCategories: Array<string> = [];
   categories: string;
   event: string;
@@ -28,6 +31,9 @@ export class SamplePoChartLabsComponent implements OnInit {
   series: Array<PoChartSerie>;
   title: string;
   dataLabel: PoChartDataLabel;
+  isTypeGauge = false;
+  disabledTooltip = false;
+  disabledType = false;
   options: PoChartOptions = {
     axis: {
       minRange: undefined,
@@ -54,11 +60,15 @@ export class SamplePoChartLabsComponent implements OnInit {
     innerRadius: undefined,
     borderRadius: undefined,
     textCenterGraph: undefined,
+    descriptionGauge: undefined,
     legend: undefined,
     legendPosition: undefined,
     legendVerticalPosition: undefined,
     bottomDataZoom: undefined,
-    rendererOption: undefined
+    rendererOption: undefined,
+    pointer: undefined,
+    roseType: undefined,
+    showFromToLegend: undefined
   };
 
   selectedValuesDataLabel: Array<string> = [];
@@ -66,6 +76,9 @@ export class SamplePoChartLabsComponent implements OnInit {
   selectedValuesHeader: Array<string> = [];
   selectedValuesDataZoom: Array<string> = [];
   selectedValuesFillPoints: Array<string> = [];
+  selectedRoseType: Array<string> = [];
+  selectedFromToLegend: Array<string> = [];
+  selectedPointer: Array<string> = [];
   selectedValuesLegend: Array<string> = ['legend'];
   selectedLegendVerticalPosition: PoChartOptions['legendVerticalPosition'] = 'bottom';
   selectedLegendPosition: PoChartOptions['legendPosition'] = 'center';
@@ -111,7 +124,8 @@ export class SamplePoChartLabsComponent implements OnInit {
     { label: 'Bar', value: PoChartType.Bar },
     { label: 'Column', value: PoChartType.Column },
     { label: 'Donut', value: PoChartType.Donut },
-    { label: 'Pie', value: PoChartType.Pie }
+    { label: 'Pie', value: PoChartType.Pie },
+    { label: 'Gauge', value: PoChartType.Gauge }
   ];
 
   readonly labelTypeOptions: Array<PoSelectOption> = [
@@ -177,6 +191,27 @@ export class SamplePoChartLabsComponent implements OnInit {
     };
   }
 
+  changeRoseTypeOptions() {
+    this.options = {
+      ...this.options,
+      roseType: this.selectedRoseType.includes('roseType')
+    };
+  }
+
+  changeShowFromToLegend() {
+    this.options = {
+      ...this.options,
+      showFromToLegend: this.selectedFromToLegend.includes('showFromToLegend')
+    };
+  }
+
+  changePointer() {
+    this.options = {
+      ...this.options,
+      pointer: this.selectedPointer.includes('pointer')
+    };
+  }
+
   changeLegendVerticalPosition() {
     this.options = {
       ...this.options,
@@ -198,6 +233,34 @@ export class SamplePoChartLabsComponent implements OnInit {
     };
   }
 
+  changeType(event) {
+    if (event === PoChartType.Gauge) {
+      this.isTypeGauge = true;
+      this.changeSwitchGauge(true);
+    }
+  }
+
+  changeSwitchGauge(event) {
+    this.restore(true);
+    this.disabledTooltip = event;
+    this.disabledType = event;
+    if (event) {
+      this.serieType = PoChartType.Gauge;
+      this.type = PoChartType.Gauge;
+    } else {
+      this.serieType = undefined;
+      this.type = undefined;
+    }
+    console.log('event: ', event);
+  }
+
+  changeValueGauge(event) {
+    if (this.series?.length === 1 && !this.toGauge) {
+      this.series[0].data = event;
+      this.series = [...this.series];
+    }
+  }
+
   ngOnInit() {
     this.restore();
   }
@@ -211,14 +274,35 @@ export class SamplePoChartLabsComponent implements OnInit {
   }
 
   addData() {
-    const data = isNaN(this.data) ? this.convertToArray(this.data) : Math.floor(this.data);
+    let data = isNaN(this.data) ? this.convertToArray(this.data) : Math.floor(this.data);
     const type = this.serieType ?? this.type;
     const color = this.color;
+    if (this.isTypeGauge && !this.series?.length && !this.toGauge) {
+      data = this.valueGauge;
+    }
 
     this.series = [
       ...this.series,
-      { label: this.label, data, tooltip: this.tooltip, ...(color ? { color } : {}), type }
+      {
+        label: this.label,
+        data,
+        tooltip: this.tooltip,
+        ...(color ? { color } : {}),
+        type,
+        from: this.fromGauge,
+        to: this.toGauge
+      }
     ];
+
+    this.label = undefined;
+    this.color = undefined;
+    this.data = undefined;
+    this.tooltip = undefined;
+    this.fromGauge = undefined;
+    this.toGauge = undefined;
+    if (!this.isTypeGauge) {
+      this.type = undefined;
+    }
   }
 
   isLineType(): boolean {
@@ -229,19 +313,24 @@ export class SamplePoChartLabsComponent implements OnInit {
     this.event = `${eventName}: ${JSON.stringify(serieEvent)}`;
   }
 
-  restore() {
+  restore(fromGauge = false) {
     this.color = undefined;
     this.data = undefined;
     this.label = undefined;
     this.tooltip = undefined;
     this.type = undefined;
     this.serieType = undefined;
+    this.fromGauge = undefined;
+    this.toGauge = undefined;
+    this.valueGauge = undefined;
     this.allCategories = [];
     this.categories = undefined;
     this.event = undefined;
     this.height = undefined;
     this.series = [];
     this.title = undefined;
+    this.disabledTooltip = false;
+    this.disabledType = false;
     this.dataLabel = {
       fixed: false
     };
@@ -272,12 +361,29 @@ export class SamplePoChartLabsComponent implements OnInit {
       innerRadius: undefined,
       borderRadius: undefined,
       textCenterGraph: undefined,
+      descriptionGauge: undefined,
       legend: undefined,
       legendPosition: undefined,
       legendVerticalPosition: undefined,
       bottomDataZoom: undefined,
-      rendererOption: undefined
+      rendererOption: undefined,
+      pointer: undefined,
+      roseType: undefined,
+      showFromToLegend: undefined
     };
+    this.selectedValuesDataLabel = [];
+    this.selectedValuesAxis = [];
+    this.selectedValuesHeader = [];
+    this.selectedValuesDataZoom = [];
+    this.selectedValuesFillPoints = [];
+    this.selectedValuesLegend = [];
+    this.selectedRoseType = [];
+
+    if (!fromGauge) {
+      this.selectedFromToLegend = [];
+      this.selectedPointer = [];
+      this.isTypeGauge = false;
+    }
   }
 
   private convertToArray(value: string): Array<any> {

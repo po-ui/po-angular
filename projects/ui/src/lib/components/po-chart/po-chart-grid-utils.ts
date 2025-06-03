@@ -209,15 +209,15 @@ export class PoChartGridUtils {
         type: 'pie',
         center: ['50%', positionHorizontal],
         radius: radius,
-        roseType: this.component.options?.dynamicDonutPie ? 'area' : undefined,
+        roseType: this.component.options?.roseType ? 'area' : undefined,
         label: {
           show: !!(this.isTypeDonut && this.component.options?.textCenterGraph),
           position: 'center',
           formatter: this.component.options?.textCenterGraph,
+          fontSize: this.resolvePx('--font-size-md'),
+          fontWeight: Number(this.component.getCSSVariable('--font-weight-hightlight-value', '.po-chart')),
           fontFamily: this.component.getCSSVariable('--font-family-hightlight-value', '.po-chart'),
-          fontSize: this.resolvePx('--font-size-hightlight-value', '.po-chart'),
-          color: this.component.getCSSVariable('--color-hightlight-value', '.po-chart'),
-          fontWeight: Number(this.component.getCSSVariable('--font-weight-hightlight-value', '.po-chart'))
+          color: this.component.getCSSVariable('--color-hightlight-value', '.po-chart')
         },
         emphasis: { focus: 'self' },
         data: [],
