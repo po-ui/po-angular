@@ -154,7 +154,7 @@ export class PoMultiselectComponent
     languageService: PoLanguageService,
     protected poThemeService: PoThemeService
   ) {
-    super(languageService, poThemeService);
+    super(languageService, poThemeService, changeDetector);
     const language = languageService.getShortLanguage();
     this.literalsTag = {
       ...literalsTagRemoveOthers[poLocaleDefault],
