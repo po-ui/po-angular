@@ -613,6 +613,7 @@ export abstract class PoDatepickerBaseComponent implements ControlValueAccessor,
     if (dateFailed(c.value)) {
       this.errorPattern = this.errorPattern || 'Data inválida';
 
+      this.cd?.markForCheck();
       return {
         date: {
           valid: false
@@ -621,6 +622,7 @@ export abstract class PoDatepickerBaseComponent implements ControlValueAccessor,
     }
 
     if (requiredFailed(this.required, this.disabled, c.value)) {
+      this.cd?.markForCheck();
       return {
         required: {
           valid: false
@@ -631,6 +633,7 @@ export abstract class PoDatepickerBaseComponent implements ControlValueAccessor,
     if (this.date && !validateDateRange(this.date, this._minDate, this._maxDate)) {
       this.errorPattern = this.errorPattern || 'Data fora do período';
 
+      this.cd?.markForCheck();
       return {
         date: {
           valid: false
@@ -644,7 +647,7 @@ export abstract class PoDatepickerBaseComponent implements ControlValueAccessor,
         .pipe(
           switchMap(status => {
             if (status === 'INVALID') {
-              this.cd.markForCheck();
+              this.cd?.markForCheck();
             }
             return [];
           })
