@@ -1,4 +1,4 @@
-import { Directive, EventEmitter, Input, OnInit, Output } from '@angular/core';
+import { ChangeDetectorRef, Directive, EventEmitter, Input, OnInit, Output } from '@angular/core';
 import { AbstractControl, ControlValueAccessor, Validator } from '@angular/forms';
 
 import { Observable, Subject, Subscription } from 'rxjs';
@@ -684,7 +684,8 @@ export abstract class PoMultiselectBaseComponent implements ControlValueAccessor
 
   constructor(
     languageService: PoLanguageService,
-    protected poThemeService: PoThemeService
+    protected poThemeService: PoThemeService,
+    protected cd?: ChangeDetectorRef
   ) {
     this.language = languageService.getShortLanguage();
   }
@@ -808,6 +809,7 @@ export abstract class PoMultiselectBaseComponent implements ControlValueAccessor
 
   validate(c: AbstractControl): { [key: string]: any } {
     if (requiredFailed(this.required, this.disabled, c.value)) {
+      this.cd?.markForCheck();
       return {
         required: {
           valid: false

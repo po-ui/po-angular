@@ -130,11 +130,11 @@ export class PoMultiselectDropdownComponent {
   }
 
   everyVisibleOptionsSelected(selectedValues) {
-    return this.visibleOptions.every(visibleOption => selectedValues.includes(visibleOption[this.fieldValue]));
+    return this.visibleOptions?.every(visibleOption => selectedValues.includes(visibleOption[this.fieldValue]));
   }
 
   someVisibleOptionsSelected(selectedValues) {
-    return this.visibleOptions.some(visibleOption => selectedValues.includes(visibleOption[this.fieldValue]));
+    return this.visibleOptions?.some(visibleOption => selectedValues.includes(visibleOption[this.fieldValue]));
   }
 
   getStateSelectAll() {

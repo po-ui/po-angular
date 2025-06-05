@@ -363,15 +363,17 @@ describe('PoDatepickerBaseComponent:', () => {
       it(`should invalidate form and set errorPattern with errorPattern value
         when has an errorPattern value and date is invalid`, () => {
         component.errorPattern = 'errorPattern';
-
+        component['cd'] = { markForCheck: () => {} } as any;
+        spyOn(component['cd'], 'markForCheck');
         expect(component.validate(new UntypedFormControl([]))).toEqual(invalidDateError);
         expect(component.errorPattern).toBe('errorPattern');
       });
 
       it(`should invalidate form and set errorPattern 'Data inválida' when
         doesn't have an errorPattern value and date is invalid`, () => {
+        component['cd'] = { markForCheck: () => {} } as any;
         component.errorPattern = '';
-
+        spyOn(component['cd'], 'markForCheck');
         expect(component.validate(new UntypedFormControl([]))).toEqual(invalidDateError);
         expect(component.errorPattern).toBe('Data inválida');
       });
@@ -379,7 +381,8 @@ describe('PoDatepickerBaseComponent:', () => {
       it(`should invalidate form and set errorPattern 'Data inválida' when
         errorPattern is equal to 'Data fora do período' and date is invalid`, () => {
         component.errorPattern = 'Data fora do período';
-
+        component['cd'] = { markForCheck: () => {} } as any;
+        spyOn(component['cd'], 'markForCheck');
         expect(component.validate(new UntypedFormControl([]))).toEqual(invalidDateError);
         expect(component.errorPattern).toBe('Data inválida');
       });
@@ -391,7 +394,8 @@ describe('PoDatepickerBaseComponent:', () => {
           }
         };
         spyOn(ValidatorsFunctions, 'requiredFailed').and.returnValue(true);
-
+        component['cd'] = { markForCheck: () => {} } as any;
+        spyOn(component['cd'], 'markForCheck');
         expect(component.validate(new UntypedFormControl(undefined))).toEqual(invalidRequiredError);
         expect(component.errorPattern).toBe('');
       });
@@ -400,15 +404,17 @@ describe('PoDatepickerBaseComponent:', () => {
         spyOn(UtilsFunctions, 'validateDateRange').and.returnValue(false);
 
         component['date'] = new Date(2018, 5, 5);
-
+        component['cd'] = { markForCheck: () => {} } as any;
+        spyOn(component['cd'], 'markForCheck');
         expect(component.validate(new UntypedFormControl('Tue Jun 05 2018 00:00:00'))).toEqual(invalidDateError);
         expect(component.errorPattern).toBe('Data fora do período');
       });
 
       it(`should invalidate form and set errorPattern 'Data fora do período' when
         has a date out of range and errorPattern is 'Data inválida'`, () => {
+        component['cd'] = { markForCheck: () => {} } as any;
         spyOn(UtilsFunctions, 'validateDateRange').and.returnValue(false);
-
+        spyOn(component['cd'], 'markForCheck');
         component.errorPattern = 'Data inválida';
         component['date'] = new Date(2018, 5, 5);
 

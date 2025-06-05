@@ -644,6 +644,7 @@ export abstract class PoInputBaseComponent implements ControlValueAccessor, Vali
 
     if (requiredFailed(this.required, this.disabled, this.getScreenValue())) {
       this.isInvalid = true;
+      this.cd?.markForCheck();
       return {
         required: {
           valid: false
@@ -655,6 +656,7 @@ export abstract class PoInputBaseComponent implements ControlValueAccessor, Vali
       maxlengpoailed(this.maxlength, this.getScreenValue(), this.maskFormatModel ? false : this.maskNoLengthValidation)
     ) {
       this.isInvalid = true;
+      this.cd?.markForCheck();
       return {
         maxlength: {
           valid: false
@@ -666,6 +668,7 @@ export abstract class PoInputBaseComponent implements ControlValueAccessor, Vali
       minlengpoailed(this.minlength, this.getScreenValue(), this.maskFormatModel ? false : this.maskNoLengthValidation)
     ) {
       this.isInvalid = true;
+      this.cd?.markForCheck();
       return {
         minlength: {
           valid: false
@@ -675,6 +678,7 @@ export abstract class PoInputBaseComponent implements ControlValueAccessor, Vali
 
     if (patternFailed(this.pattern, c.value)) {
       this.isInvalid = true;
+      this.cd?.markForCheck();
       this.validatePatternOnWriteValue(c.value);
       return {
         pattern: {
@@ -689,7 +693,7 @@ export abstract class PoInputBaseComponent implements ControlValueAccessor, Vali
           switchMap(status => {
             if (status === 'INVALID') {
               this.isInvalid = true;
-              this.cd.markForCheck();
+              this.cd?.markForCheck();
             }
             return [];
           })
