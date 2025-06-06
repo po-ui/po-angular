@@ -37,5 +37,12 @@ export enum PoChartType {
   /**
    * Gráfico que exibe os dados em forma de barras horizontais e sua extensão varia de acordo com seus valores. É comumente usado como comparativo de séries e categorias.
    */
-  Bar = 'bar'
+  Bar = 'bar',
+
+  /**
+   * Gráfico que provê a representação de um valor através de um arco. Possui dois tipos de tratamentos:
+   * - É possível demonstrar um dado percentual simples em conjunto com uma descrição resumida em seu interior;
+   * - Para um demonstrativo mais elaborado, consegue-se definir alcances em cores, um breve texto descritivo e um ponteiro indicando o valor desejado.
+   */
+  Gauge = 'gauge'
 }

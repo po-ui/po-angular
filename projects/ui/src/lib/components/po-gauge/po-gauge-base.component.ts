@@ -1,9 +1,7 @@
-import { Input, Directive } from '@angular/core';
+import { Directive, Input } from '@angular/core';
 
 import { convertToInt } from '../../utils/util';
 import { poGaugeMinHeight } from './po-gauge-default-values.constant';
-
-import { PoColorService } from '../../services/po-color/po-color.service';
 
 import { PoGaugeRanges } from './interfaces/po-gauge-ranges.interface';
 
@@ -33,21 +31,37 @@ export abstract class PoGaugeBaseComponent {
    *
    * @description
    *
+   * Define a exibição dos valores de `from` - `to` entre parênteses caso haja definição de `p-ranges`.
+   *
+   * @default `false`
+   */
+  @Input('p-show-from-to-legend') showFromToLegend: boolean = false;
+
+  /**
+   * @optional
+   *
+   * @description
+   *
+   * Define a exibição do ponteiro caso haja definição de `p-ranges`.
+   *
+   * @default `true`
+   */
+  @Input('p-show-pointer') showPointer: boolean = true;
+
+  /**
+   * @optional
+   *
+   * @description
+   *
    * Define o texto que será exibido no gauge.
    * Há dois posicionamentos para ele:
    * - Se houver definição para `p-ranges`, o descritivo será exibido no topo do container, ficando acima do gauge;
    * - Na ausência de `p-ranges`, será incorporado dentro do arco do gauge, e abaixo de `p-value`.
    *
-   * Para ambos os casos, se o conteúdo ultrapassar a área designada, serão geradas automaticamente reticências.
-   * No entanto, será possível visualizar a mensagem através de um tooltip no passar do mouse sobre o texto.
-   *
    * > Para uma melhor experiência do usuário, é recomendado um descritivo breve e com poucas palavras.
-   * Desta forma evita-se o *overflow* do texto.
    */
   @Input('p-description') set description(value: string) {
     this._description = value;
-
-    this.svgContainerSize();
   }
 
   get description() {
@@ -67,7 +81,6 @@ export abstract class PoGaugeBaseComponent {
    */
   @Input('p-height') set height(value: number) {
     this._height = this.setGaugeHeight(value);
-    this.svgContainerSize();
   }
 
   get height(): number {
@@ -85,8 +98,7 @@ export abstract class PoGaugeBaseComponent {
    * A mesma regra prevalece para valores máximos.
    */
   @Input('p-ranges') set ranges(value: Array<PoGaugeRanges>) {
-    this._ranges = Array.isArray(value) ? this.verifyColors(value) : [];
-    this.svgContainerSize();
+    this._ranges = Array.isArray(value) ? value : [];
   }
 
   get ranges(): Array<PoGaugeRanges> {
@@ -102,8 +114,6 @@ export abstract class PoGaugeBaseComponent {
    */
   @Input('p-title') set title(value: string) {
     this._title = value;
-
-    this.svgContainerSize();
   }
 
   get title() {
@@ -141,17 +151,9 @@ export abstract class PoGaugeBaseComponent {
     return this._value;
   }
 
-  constructor(protected colorService: PoColorService) {}
-
-  private verifyColors(ranges: Array<PoGaugeRanges>) {
-    return this.colorService.getColors<PoGaugeRanges>(ranges);
-  }
-
   private setGaugeHeight(height: number): number {
     const gaugeHeight = convertToInt(height);
 
     return gaugeHeight && gaugeHeight > poGaugeMinHeight ? gaugeHeight : poGaugeMinHeight;
   }
-
-  protected abstract svgContainerSize(): void;
 }

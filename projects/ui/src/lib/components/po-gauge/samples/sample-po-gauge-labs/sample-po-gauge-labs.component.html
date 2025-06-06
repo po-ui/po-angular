@@ -4,6 +4,8 @@
   [p-ranges]="ranges"
   [p-title]="title"
   [p-value]="gaugeValue"
+  [p-show-from-to-legend]="properties.includes('showFromToLegend')"
+  [p-show-pointer]="properties.includes('showPointer')"
 >
 </po-gauge>
 
@@ -18,14 +20,25 @@
   </div>
 
   <form #rangesForm="ngForm">
-    <div class="row">
+    <div class="po-row">
       <po-divider class="po-md-12" p-label="Ranges"></po-divider>
       <po-number class="po-md-3" name="from" [(ngModel)]="options.from" p-label="from"></po-number>
       <po-number class="po-md-3" name="from" [(ngModel)]="options.to" p-label="to"></po-number>
       <po-input class="po-md-3" name="label" [(ngModel)]="options.label" p-label="label"></po-input>
       <po-input class="po-md-3" name="color" [(ngModel)]="options.color" p-label="color"></po-input>
     </div>
-    <div class="row">
+    <div class="po-row">
+      <po-checkbox-group
+        class="po-md-12"
+        name="properties"
+        [(ngModel)]="properties"
+        p-columns="4"
+        p-label="Properties"
+        [p-options]="propertiesOptions"
+      >
+      </po-checkbox-group>
+    </div>
+    <div class="po-row">
       <po-button
         class="po-md-3"
         p-label="Add Range"
