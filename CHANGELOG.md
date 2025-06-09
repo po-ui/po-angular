@@ -2,6 +2,13 @@
 
 All notable changes to this project will be documented in this file. See [standard-version](https://github.com/conventional-changelog/standard-version) for commit guidelines.
 
+### [19.15.0](https://github.com/po-ui/po-angular/compare/v19.14.0...v19.15.0) (2025-06-09)
+
+
+### Bug Fixes
+
+* **fields:** atualiza renderização de mensagens ao manipular forms ([5c0d9e7](https://github.com/po-ui/po-angular/commit/5c0d9e7fac889397b92b899724788d208e923394))
+
 ## [19.14.0](https://github.com/po-ui/po-angular/compare/v19.13.0...v19.14.0) (2025-06-02)
 
 
