@@ -32,7 +32,13 @@
         >
         </po-icon>
 
-        <div #tagContainer class="po-tag-value" [p-tooltip]="getWidthTag() ? value : ''" p-tooltip-position="top">
+        <div
+          #tagContainer
+          class="po-tag-value"
+          [p-append-in-body]="appendInBody"
+          [p-tooltip]="getWidthTag() ? value : ''"
+          p-tooltip-position="top"
+        >
           <span [ngStyle]="!type && customTextColor && !removable ? { 'color': customTextColor } : ''">{{
             value
           }}</span>
@@ -44,6 +50,7 @@
           p-icon="ICON_CLOSE"
           p-tooltip-position="top"
           [p-tooltip]="literals.remove"
+          [p-append-in-body]="appendInBody"
           [attr.aria-label]="setAriaLabel()"
           class="po-tag-remove"
           [class.po-clickable]="!disabled"
