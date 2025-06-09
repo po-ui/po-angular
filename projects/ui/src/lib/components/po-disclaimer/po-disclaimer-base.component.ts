@@ -35,6 +35,8 @@ export class PoDisclaimerBaseComponent {
 
   @Input('p-last-disclaimer') lastDisclaimer: boolean = false;
 
+  @Input('p-append-in-body') appendInBody: boolean = false;
+
   @Input('p-tooltip-position') tooltipPosition: string = 'bottom';
 
   /**
