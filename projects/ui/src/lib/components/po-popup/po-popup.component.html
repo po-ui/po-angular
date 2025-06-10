@@ -11,9 +11,7 @@
       [p-size]="size"
       (p-close)="close()"
     >
-      <div p-popup-header-template>
-        <ng-content select="[p-popup-header-template]"></ng-content>
-      </div>
+      <ng-content p-popup-header-template select="[p-popup-header-template]"></ng-content>
     </po-listbox>
   </div>
 </div>
