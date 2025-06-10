@@ -511,6 +511,61 @@ describe('PoListBoxComponent', () => {
 
         expect(component['renderer'].setStyle).not.toHaveBeenCalled();
       });
+
+      it('should call `renderer.setStyle` and `renderer.removeStyle` when has more than 6 items and popupHeaderContainer contains children', () => {
+        spyOn<any>(component['renderer'], 'setStyle');
+        spyOn<any>(component['renderer'], 'removeStyle');
+        component.items = [
+          { label: 'Item 1', value: 1 },
+          { label: 'Item 2', value: 2 },
+          { label: 'Item 3', value: 3 },
+          { label: 'Item 4', value: 4 },
+          { label: 'Item 5', value: 5 },
+          { label: 'Item 6', value: 6 },
+          { label: 'Item 7', value: 7 }
+        ];
+
+        component.type = 'action';
+        component.popupHeaderContainer = new ElementRef(document.createElement('div'));
+        component.popupHeaderContainer.nativeElement.appendChild(document.createElement('div'));
+
+        component['setListBoxMaxHeight']();
+
+        expect(component['renderer'].setStyle).toHaveBeenCalledWith(
+          component.listbox.nativeElement.querySelector('ul[role=listbox]'),
+          'maxHeight',
+          `${44 * 6 - 44 / 3}px`
+        );
+        expect(component['renderer'].removeStyle).toHaveBeenCalledWith(component.listbox.nativeElement, 'maxHeight');
+      });
+
+      it(`should'n call 'renderer.removeStyle' when has more than 6 items and popupHeaderContainer is undefined`, () => {
+        spyOn<any>(component['renderer'], 'setStyle');
+        spyOn<any>(component['renderer'], 'removeStyle');
+        component.items = [
+          { label: 'Item 1', value: 1 },
+          { label: 'Item 2', value: 2 },
+          { label: 'Item 3', value: 3 },
+          { label: 'Item 4', value: 4 },
+          { label: 'Item 5', value: 5 },
+          { label: 'Item 6', value: 6 },
+          { label: 'Item 7', value: 7 }
+        ];
+
+        component.type = 'action';
+
+        component['setListBoxMaxHeight']();
+
+        expect(component['renderer'].setStyle).toHaveBeenCalledWith(
+          component.listbox.nativeElement,
+          'maxHeight',
+          `${44 * 6 - 44 / 3}px`
+        );
+        expect(component['renderer'].removeStyle).not.toHaveBeenCalledWith(
+          component.listbox.nativeElement,
+          'maxHeight'
+        );
+      });
     });
 
     describe('checkboxClicked:', () => {
