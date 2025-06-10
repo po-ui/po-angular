@@ -12,6 +12,7 @@ import { poThemeDefaultLightValues } from './helpers/types/po-theme-light-defaul
 import { PoThemeColor } from './interfaces/po-theme-color.interface';
 import { PoThemeTokens } from './interfaces/po-theme-tokens.interface';
 import { PoTheme, PoThemeActive } from './interfaces/po-theme.interface';
+import { poThemeDefaultDarkValuesAA } from './helpers/types/po-theme-dark-defaults-AA.constant';
 
 /**
  * @description
@@ -663,6 +664,14 @@ export class PoThemeService {
       { type: PoThemeTypeEnum.dark },
       poThemeDefaultDarkValues.perComponent,
       poThemeDefaultDarkValues.onRoot
+    );
+
+    // set Dark mode values
+    // result: :root[class*="-dark-AA"]
+    this.setPerComponentAndOnRoot(
+      { type: PoThemeTypeEnum.dark, a11y: PoThemeA11yEnum.AA },
+      poThemeDefaultDarkValuesAA.perComponent,
+      poThemeDefaultDarkValuesAA.onRoot
     );
   }
 }

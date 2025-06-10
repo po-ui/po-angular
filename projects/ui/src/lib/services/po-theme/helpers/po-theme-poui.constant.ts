@@ -18,6 +18,10 @@ import {
   poThemeDefaultFeedbackDark,
   poThemeDefaultNeutralsDark
 } from './types/po-theme-dark-defaults.constant';
+import {
+  poThemeDefaultCategoricalsDarkAA,
+  poThemeDefaultCategoricalsOverlayDarkAA
+} from './types/po-theme-dark-defaults-AA.constant';
 
 /**
  * Tokens de tema padrão para temas claros.
@@ -48,6 +52,17 @@ const poThemeDefaultDark: PoThemeTokens = {
 };
 
 /**
+ * Tokens de tema padrão para o tema escuro.
+ */
+const poThemeDefaultDarkAA: PoThemeTokens = {
+  color: {
+    ...poThemeDefaultDark.color,
+    categorical: poThemeDefaultCategoricalsDarkAA,
+    'categorical-overlay': poThemeDefaultCategoricalsOverlayDarkAA
+  }
+};
+
+/**
  * Tema padrão.
  */
 const poThemeDefault: PoTheme = {
@@ -60,7 +75,7 @@ const poThemeDefault: PoTheme = {
     },
     {
       light: poThemeDefaultLight,
-      dark: poThemeDefaultDark,
+      dark: poThemeDefaultDarkAA,
       a11y: PoThemeA11yEnum.AA
     }
   ],
