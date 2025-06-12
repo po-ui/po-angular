@@ -75,8 +75,6 @@ export const poMultiselectLiteralsDefault = {
  *
  * - Caso a lista apresente menos de 5 itens, considere utilizar outro componente;
  * - Não utilize o multiselect caso o usuário possa selecionar apenas uma opção. Para esse caso, opte por utilizar po-radio ou po-select;
- * - Sempre que possível, agrupe as opções e use labels curtas para descrever o conteúdo. Exemplo: em uma combinação de alimentos,
- * as opções podem ser agrupadas por Vegetais, Frutas, etc;
  *
  * #### Acessibilidade tratada no componente
  *
