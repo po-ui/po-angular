@@ -1,0 +1,38 @@
+name: Notificar Discord ao Criar Issue ou Discussão
+
+# Define em quais situações esse workflow será executado
+on:
+  issues:
+    types:
+      - opened
+  discussion:
+    types:
+      - created
+
+# Os jobs são conjuntos de actions que são executados na mesma máquina virtual.
+# É possível ter mais de um job e assim executar ações paralelamente.
+jobs:
+  discord_notification_on_issue_or_discussion:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Notify Discord on Issue or Discussion
+        env:
+          DISCORD_WEBHOOK_URL_ISSUES: ${{ secrets.DISCORD_WEBHOOK_URL_ISSUES }}
+        run: |
+          if [ "${{ github.event_name }}" == "issues" ]; then
+            AUTHOR="${{ github.event.issue.user.login }}"
+            TITLE="${{ github.event.issue.title }}"
+            URL="${{ github.event.issue.html_url }}"
+            TYPE="Issue"
+            ICON="📋"
+          else
+            AUTHOR="${{ github.event.discussion.user.login }}"
+            TITLE="${{ github.event.discussion.title }}"
+            URL="${{ github.event.discussion.html_url }}"
+            TYPE="Discussão"
+            ICON="💬"
+          fi
+          
+          curl -X POST -H "Content-Type: application/json" \
+          -d "{\"content\": \"$ICON **Nova $TYPE Criada $ICON**\\n- Autor: $AUTHOR\\n- Título: $TITLE\\n- Link: $URL\"}" \
+          $DISCORD_WEBHOOK_URL_ISSUES

@@ -5,7 +5,9 @@
   [attr.data-type]="type"
   [hidden]="visible"
 >
-  <ng-content select="[p-popup-header-template]"></ng-content>
+  <div #popupHeaderContainer>
+    <ng-content select="[p-popup-header-template]"></ng-content>
+  </div>
 
   <po-search-list
     #searchElement

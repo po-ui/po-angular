@@ -30,17 +30,18 @@ export class PoListBoxComponent extends PoListBoxBaseComponent implements AfterV
   @ViewChild('listbox', { static: true }) listbox: ElementRef;
   @ViewChild('listboxItemList', { static: false }) listboxItemList: ElementRef;
   @ViewChild('searchElement') searchElement: PoSearchListComponent;
+  @ViewChild('popupHeaderContainer') popupHeaderContainer: ElementRef;
 
   private scrollEvent$: Observable<any>;
   private subscriptionScrollEvent: Subscription;
 
   constructor(
     public element: ElementRef,
-    private renderer: Renderer2,
+    private readonly renderer: Renderer2,
     languageService: PoLanguageService,
     protected poThemeService: PoThemeService,
-    private router: Router,
-    private changeDetector: ChangeDetectorRef
+    private readonly router: Router,
+    private readonly changeDetector: ChangeDetectorRef
   ) {
     super(languageService, poThemeService);
   }
@@ -62,7 +63,7 @@ export class PoListBoxComponent extends PoListBoxBaseComponent implements AfterV
   }
 
   ngOnDestroy() {
-    if (this.subscriptionScrollEvent && this.subscriptionScrollEvent.unsubscribe) {
+    if (this.subscriptionScrollEvent?.unsubscribe) {
       this.subscriptionScrollEvent.unsubscribe();
     }
   }
@@ -234,9 +235,18 @@ export class PoListBoxComponent extends PoListBoxBaseComponent implements AfterV
 
   private setListBoxMaxHeight(): void {
     const itemsLength = this.items.length;
+    const hasPopupHeaderContainer = this.popupHeaderContainer?.nativeElement?.children?.length > 0;
+
     if (itemsLength > 6) {
       if (this.type === 'check' && !this.hideSearch) {
         this.renderer.setStyle(this.listbox.nativeElement, 'maxHeight', `${44 * 6 - 44 / 3 + 60}px`);
+      } else if (hasPopupHeaderContainer) {
+        this.renderer.setStyle(
+          this.listbox.nativeElement.querySelector('ul[role=listbox]'),
+          'maxHeight',
+          `${44 * 6 - 44 / 3}px`
+        );
+        this.renderer.removeStyle(this.listbox.nativeElement, 'maxHeight');
       } else {
         this.renderer.setStyle(this.listbox.nativeElement, 'maxHeight', `${44 * 6 - 44 / 3}px`);
       }
