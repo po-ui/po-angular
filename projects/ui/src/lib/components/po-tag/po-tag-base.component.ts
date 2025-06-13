@@ -119,6 +119,9 @@ export class PoTagBaseComponent {
   /** Texto da tag. */
   @Input('p-value') value: string;
 
+  //input interno para o multiselect
+  @Input('p-append-in-body') appendInBody: boolean;
+
   /**
    * @optional
    *

@@ -5,6 +5,7 @@
     [class.po-disclaimer-remove-all]="hideClose"
     [class.po-disclaimer-danger]="type === 'danger'"
     [p-tooltip]="getWidthDisclaimer() ? getLabel() : ''"
+    [p-append-in-body]="appendInBody"
     [p-tooltip-position]="tooltipPosition"
     [tabindex]="hideClose ? '0' : '-1'"
     (click)="emitLastDisclaimer(lastDisclaimer)"

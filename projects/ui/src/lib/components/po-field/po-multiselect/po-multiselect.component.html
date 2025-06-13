@@ -44,6 +44,7 @@
           [class.po-clickable]="tag[fieldValue] === '' && !disabled"
           [p-disabled]="disabled"
           (p-close)="closeTag(tag[fieldValue], $event)"
+          [p-append-in-body]="appendBox"
         ></po-tag>
 
         <div class="po-field-icon-container-right">
