@@ -2,6 +2,24 @@
 
 All notable changes to this project will be documented in this file. See [standard-version](https://github.com/conventional-changelog/standard-version) for commit guidelines.
 
+## [19.16.0](https://github.com/po-ui/po-angular/compare/v19.15.0...v19.16.0) (2025-06-13)
+
+
+### ⚠ BREAKING CHANGES
+
+* **gauge:** marca componente `po-gauge` como @deprecated
+
+O componente `po-gauge` não será mais mantido e
+será removido em versões futuras.
+A alternativa recomendada é utilizar o `po-chart` com `type="gauge"`.
+
+### Features
+
+* **chart:** implementa Animalia DS no tipo gauge ([232fe75](https://github.com/po-ui/po-angular/commit/232fe75030570a91a48221608ed1d42df079d97c))
+
+
+* **gauge:** marca componente po-gauge como depreciado ([1a74f7e](https://github.com/po-ui/po-angular/commit/1a74f7e474f6e691a0a591446978f593200230b6))
+
 ### [19.15.0](https://github.com/po-ui/po-angular/compare/v19.14.0...v19.15.0) (2025-06-09)
 
 
