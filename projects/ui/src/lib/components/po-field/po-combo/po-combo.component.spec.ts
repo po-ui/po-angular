@@ -20,6 +20,7 @@ import { PoCleanComponent } from '../po-clean/po-clean.component';
 import { OverlayModule } from '@angular/cdk/overlay';
 import { PoControlPositionService } from '../../../services/po-control-position/po-control-position.service';
 import { ElementRef } from '@angular/core';
+import { PoKeyCodeEnum } from '../../../enums/po-key-code.enum';
 
 const eventKeyBoard = document.createEvent('KeyboardEvent');
 eventKeyBoard.initEvent('keyup', true, true);
@@ -1394,12 +1395,361 @@ describe('PoComboComponent:', () => {
       expect(controlPositionMock.adjustPosition).toHaveBeenCalledWith(poComboContainerPositionDefault);
     });
 
-    it('onScroll: should call `adjustContainerPosition` when triggered', () => {
-      const spy = spyOn(component as any, 'adjustContainerPosition');
+    it('handleCleanKeyboardTab: should not call focusItem when appendBox is false', () => {
+      const event = new KeyboardEvent('keydown', { shiftKey: false });
+      component.comboOpen = true;
+      component.appendBox = false;
 
-      component['onScroll']();
+      spyOn(component as any, 'focusItem');
 
-      expect(spy).toHaveBeenCalled();
+      component['handleCleanKeyboardTab'](event);
+
+      expect((component as any).focusItem).not.toHaveBeenCalled();
+    });
+
+    it('handleCleanKeyboardTab: should not call focusItem when comboOpen is false', () => {
+      const event = new KeyboardEvent('keydown', { shiftKey: false });
+      component.comboOpen = false;
+      component.appendBox = true;
+
+      spyOn(component as any, 'focusItem');
+
+      component['handleCleanKeyboardTab'](event);
+
+      expect((component as any).focusItem).not.toHaveBeenCalled();
+    });
+
+    it('handleCleanKeyboardTab: should not call focusItem when shouldHandleTab returns false', () => {
+      const event = new KeyboardEvent('keydown', { shiftKey: false });
+      component.comboOpen = true;
+      component.appendBox = true;
+
+      spyOn(component as any, 'shouldHandleTab').and.returnValue(false);
+      spyOn(component as any, 'focusItem');
+
+      component['handleCleanKeyboardTab'](event);
+
+      expect((component as any).focusItem).not.toHaveBeenCalled();
+    });
+
+    it('focusInput: should focus input element and not throw if event is undefined', () => {
+      spyOn(component.inputEl.nativeElement, 'focus');
+      expect(() => component['focusInput']()).not.toThrow();
+      expect(component.inputEl.nativeElement.focus).toHaveBeenCalled();
+    });
+
+    it('focusInput: should call preventDefault if event is provided', () => {
+      const event = new KeyboardEvent('keydown');
+      spyOn(event, 'preventDefault' as any);
+      spyOn(component.inputEl.nativeElement, 'focus');
+
+      component['focusInput'](event);
+
+      expect(event.preventDefault as jasmine.Spy).toHaveBeenCalled();
+      expect(component.inputEl.nativeElement.focus).toHaveBeenCalled();
+    });
+
+    it('shouldHandleTab: should return false if comboOpen is false', () => {
+      const event = new KeyboardEvent('keydown', { shiftKey: false });
+      component.comboOpen = false;
+      component.appendBox = true;
+
+      expect((component as any).shouldHandleTab(event)).toBeFalse();
+    });
+
+    it('shouldHandleTab: should return false if appendBox is false', () => {
+      const event = new KeyboardEvent('keydown', { shiftKey: false });
+      component.comboOpen = true;
+      component.appendBox = false;
+
+      expect((component as any).shouldHandleTab(event)).toBeFalse();
+    });
+
+    it('shouldHandleTab: should return false if shiftKey is true', () => {
+      const event = new KeyboardEvent('keydown', { shiftKey: true });
+      component.comboOpen = true;
+      component.appendBox = true;
+
+      expect((component as any).shouldHandleTab(event)).toBeFalse();
+    });
+
+    it('shouldHandleTab: should return true if comboOpen and appendBox are true and shiftKey is false', () => {
+      const event = new KeyboardEvent('keydown', { shiftKey: false });
+      component.comboOpen = true;
+      component.appendBox = true;
+
+      expect((component as any).shouldHandleTab(event)).toBeTrue();
+    });
+
+    it('onListboxKeyDown: should not call focusInput for Tab without shift', () => {
+      const event = new KeyboardEvent('keydown', { key: 'Tab', shiftKey: false });
+      spyOn(component as any, 'focusInput');
+      spyOn(event, 'preventDefault' as any);
+
+      component.onListboxKeyDown(event);
+
+      expect((component as any).focusInput).not.toHaveBeenCalled();
+    });
+
+    it('onListboxKeyDown: should not call focusInput for non-Tab keys', () => {
+      const event = new KeyboardEvent('keydown', { key: 'Enter', shiftKey: true });
+      spyOn(component as any, 'focusInput');
+      spyOn(event, 'preventDefault' as any);
+
+      component.onListboxKeyDown(event);
+
+      expect((component as any).focusInput).not.toHaveBeenCalled();
+    });
+
+    it('should not call focusItem when combo is closed', () => {
+      const event = { shiftKey: false };
+      component.comboOpen = false;
+      spyOn(component, <any>'focusItem');
+
+      component['handleCleanKeyboardTab'](event as any);
+
+      expect(component['focusItem']).not.toHaveBeenCalled();
+    });
+
+    describe('focusInput', () => {
+      it('should focus on input element', () => {
+        const event = new KeyboardEvent('keydown');
+        spyOn(component.inputEl.nativeElement, 'focus');
+        spyOn(event, 'preventDefault' as any);
+
+        component['focusInput'](event);
+
+        expect(component.inputEl.nativeElement.focus).toHaveBeenCalled();
+        expect(event.preventDefault as jasmine.Spy).toHaveBeenCalled();
+      });
+
+      it('should work without event parameter', () => {
+        spyOn(component.inputEl.nativeElement, 'focus');
+
+        component['focusInput']();
+
+        expect(component.inputEl.nativeElement.focus).toHaveBeenCalled();
+      });
+
+      it('should focus on first listbox item when no item is selected and items exist', fakeAsync(() => {
+        component.selectedValue = undefined;
+        const mockListbox = {
+          listboxItemList: {
+            nativeElement: {
+              focus: jasmine.createSpy('focus')
+            }
+          }
+        };
+        component.poListbox = mockListbox as any;
+        const mockFirstItem = {
+          focus: jasmine.createSpy('focus')
+        };
+        const mockNodeList = {
+          length: 1,
+          item: (index: number) => (index === 0 ? mockFirstItem : null),
+          0: mockFirstItem
+        } as unknown as NodeListOf<HTMLElement>;
+        spyOn(document, 'querySelector').and.returnValue(null);
+        spyOn(document, 'querySelectorAll').and.returnValue(mockNodeList);
+
+        component['focusItem']();
+        tick();
+
+        expect(mockListbox.listboxItemList.nativeElement.focus).toHaveBeenCalled();
+        expect(document.querySelectorAll).toHaveBeenCalledWith('.po-listbox-item');
+        expect(mockFirstItem.focus).toHaveBeenCalled();
+      }));
+
+      it('should select first item using ternary operator when no item is selected', fakeAsync(() => {
+        const mockFirstItem = { focus: jasmine.createSpy('focus') } as any;
+        const mockItems = {
+          length: 1,
+          item: (index: number) => (index === 0 ? mockFirstItem : null),
+          0: mockFirstItem
+        } as unknown as NodeListOf<HTMLElement>;
+        const mockListbox = {
+          listboxItemList: {
+            nativeElement: {
+              focus: jasmine.createSpy('focus')
+            }
+          }
+        };
+        component['poListbox'] = mockListbox as any;
+        component.selectedValue = undefined; // Nenhum item selecionado
+        spyOn(document, 'querySelectorAll').and.returnValue(mockItems);
+
+        // Act
+        component['focusItem']();
+        tick(); // Executa o setTimeout
+
+        // Assert
+        expect(mockListbox.listboxItemList.nativeElement.focus).toHaveBeenCalled();
+        expect(document.querySelectorAll).toHaveBeenCalledWith('.po-listbox-item');
+        expect(mockFirstItem.focus).toHaveBeenCalled();
+      }));
+    });
+
+    describe('shouldHandleTab', () => {
+      it('should return true when combo is open, appendBox is true and not shiftKey', () => {
+        const event = new KeyboardEvent('keydown', { shiftKey: false });
+        component.comboOpen = true;
+        component.appendBox = true;
+
+        expect(component['shouldHandleTab'](event)).toBeTrue();
+      });
+
+      it('should return false when combo is closed', () => {
+        const event = new KeyboardEvent('keydown', { shiftKey: false });
+        component.comboOpen = false;
+        component.appendBox = true;
+
+        expect(component['shouldHandleTab'](event)).toBeFalse();
+      });
+
+      it('should return false when appendBox is false', () => {
+        const event = new KeyboardEvent('keydown', { shiftKey: false });
+        component.comboOpen = true;
+        component.appendBox = false;
+
+        expect(component['shouldHandleTab'](event)).toBeFalse();
+      });
+
+      it('should return false when shiftKey is true', () => {
+        const event = new KeyboardEvent('keydown', { shiftKey: true });
+        component.comboOpen = true;
+        component.appendBox = true;
+
+        expect(component['shouldHandleTab'](event)).toBeFalse();
+      });
+    });
+
+    describe('onListboxKeyDown', () => {
+      it('should call focusInput when Shift+Tab is pressed', () => {
+        const event = {
+          key: 'Tab',
+          shiftKey: true,
+          preventDefault: jasmine.createSpy('preventDefault')
+        };
+        spyOn(component, <any>'focusInput');
+
+        component.onListboxKeyDown(event as any);
+
+        expect(component['focusInput']).toHaveBeenCalled();
+        expect(event.preventDefault).toHaveBeenCalled();
+      });
+
+      it('should not call focusInput for other key combinations', () => {
+        const event = new KeyboardEvent('keydown', { key: 'Tab', shiftKey: false });
+        spyOn(component, <any>'focusInput');
+        spyOn(event, 'preventDefault' as any);
+
+        component.onListboxKeyDown(event);
+
+        expect(component['focusInput']).not.toHaveBeenCalled();
+      });
+
+      it('should not call focusInput for non-Tab keys', () => {
+        const event = new KeyboardEvent('keydown', { key: 'Enter', shiftKey: true });
+        spyOn(component, <any>'focusInput');
+        spyOn(event, 'preventDefault' as any);
+
+        component.onListboxKeyDown(event);
+
+        expect(component['focusInput']).not.toHaveBeenCalled();
+      });
+    });
+
+    describe('onKeyDown: Tab key handling', () => {
+      it('should call focusItem when Tab is pressed, shouldHandleTab returns true and clean is not visible', () => {
+        const event = {
+          keyCode: PoKeyCodeEnum.tab,
+          shiftKey: false,
+          preventDefault: jasmine.createSpy('preventDefault')
+        };
+
+        // Configurar condições para o if ser verdadeiro
+        spyOn(component, <any>'shouldHandleTab').and.returnValue(true);
+        spyOn(component, <any>'isCleanVisible').and.returnValue(false);
+        spyOn(component, <any>'focusItem');
+
+        component.onKeyDown(event);
+
+        expect(component['isCleanVisible']).toHaveBeenCalled();
+        expect(component['focusItem']).toHaveBeenCalled();
+        expect(event.preventDefault).toHaveBeenCalled();
+      });
+
+      it('should not call focusItem when shouldHandleTab returns false', () => {
+        const event = {
+          keyCode: PoKeyCodeEnum.tab,
+          shiftKey: false,
+          preventDefault: jasmine.createSpy('preventDefault')
+        };
+
+        spyOn(component, <any>'shouldHandleTab').and.returnValue(false);
+        spyOn(component, <any>'focusItem');
+
+        component.onKeyDown(event);
+
+        expect(component['focusItem']).not.toHaveBeenCalled();
+      });
+
+      it('should not call focusItem when clean is visible', () => {
+        const event = {
+          keyCode: PoKeyCodeEnum.tab,
+          shiftKey: false,
+          preventDefault: jasmine.createSpy('preventDefault')
+        };
+
+        spyOn(component, <any>'shouldHandleTab').and.returnValue(true);
+        spyOn(component, <any>'isCleanVisible').and.returnValue(true);
+        spyOn(component, <any>'focusItem');
+
+        component.onKeyDown(event);
+
+        expect(component['focusItem']).not.toHaveBeenCalled();
+      });
+    });
+
+    describe('handleCleanKeyboardTab', () => {
+      it('should call focusItem and preventDefault when shouldHandleTab returns true', () => {
+        const event = {
+          preventDefault: jasmine.createSpy('preventDefault')
+        } as any;
+
+        spyOn(component, <any>'shouldHandleTab').and.returnValue(true);
+        spyOn(component, <any>'focusItem');
+
+        component.handleCleanKeyboardTab(event);
+
+        expect(component['shouldHandleTab']).toHaveBeenCalledWith(event);
+        expect(component['focusItem']).toHaveBeenCalled();
+        expect(event.preventDefault).toHaveBeenCalled();
+      });
+
+      it('should not call focusItem when shouldHandleTab returns false', () => {
+        const event = {
+          preventDefault: jasmine.createSpy('preventDefault')
+        } as any;
+
+        spyOn(component, <any>'shouldHandleTab').and.returnValue(false);
+        spyOn(component, <any>'focusItem');
+
+        component.handleCleanKeyboardTab(event);
+
+        expect(component['focusItem']).not.toHaveBeenCalled();
+        expect(event.preventDefault).not.toHaveBeenCalled();
+      });
+    });
+
+    describe('onScroll', () => {
+      it('should call adjustContainerPosition when triggered', () => {
+        const spyAdjustContainerPosition = spyOn(component as any, 'adjustContainerPosition');
+
+        component['onScroll']();
+
+        expect(spyAdjustContainerPosition).toHaveBeenCalled();
+      });
     });
   });
 
