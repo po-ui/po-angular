@@ -2,12 +2,9 @@
   [class.po-list-view-main-container-header]="showHeader"
   [class.po-list-view-main-container]="!showHeader"
   [style.height.px]="height"
+  [attr.p-components-size]="componentsSize"
 >
-  <div
-    *ngIf="showHeader"
-    class="po-list-view-main-header po-pt-1 po-pb-1"
-    [class.po-list-view-main-header-aa]="componentsSize"
-  >
+  <div *ngIf="showHeader" class="po-list-view-main-header">
     <div class="po-checkbox-group-item">
       <div class="po-list-view-main-select">
         <po-checkbox
