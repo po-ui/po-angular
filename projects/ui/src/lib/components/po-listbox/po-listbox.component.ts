@@ -195,7 +195,7 @@ export class PoListBoxComponent extends PoListBoxBaseComponent implements AfterV
   protected getSizeLoading() {
     const width = this.listbox.nativeElement.offsetWidth || this.containerWidth;
 
-    if (width > 180) {
+    if (width > 180 && this.size) {
       return 'md';
     } else if (width >= 140) {
       return 'sm';
