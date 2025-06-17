@@ -19,7 +19,7 @@ import { poLocaleDefault } from '../../../services/po-language/po-language.const
 import { PoLanguageService } from '../../../services/po-language/po-language.service';
 
 import { PoFieldSize } from '../../../enums/po-field-size.enum';
-import { PoThemeService } from '../../../services';
+import { PoThemeA11yEnum, PoThemeService } from '../../../services';
 import { convertToBoolean, getDefaultSize, isTypeof, validateSize } from '../../../utils/util';
 import { PoTableColumnSpacing } from '../../po-table/enums/po-table-spacing.enum';
 import { requiredFailed } from '../validators';
@@ -421,8 +421,15 @@ export abstract class PoLookupBaseComponent
    * @default `medium`
    */
   @Input('p-spacing') set spacing(value: string) {
+    const isExtraSmall = value === PoTableColumnSpacing.ExtraSmall;
+    const isA11yAAA = this.poThemeService.getA11yLevel() === PoThemeA11yEnum.AAA;
+
     if (Object.values(PoTableColumnSpacing).includes(value as PoTableColumnSpacing)) {
-      this._spacing = value as PoTableColumnSpacing;
+      if (isA11yAAA && isExtraSmall) {
+        this._spacing = PoTableColumnSpacing.Medium;
+      } else {
+        this._spacing = value as PoTableColumnSpacing;
+      }
     } else {
       this._spacing = this.getDefaultSpacing();
     }
