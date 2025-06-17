@@ -20,6 +20,7 @@ import { isExternalLink, isTypeof, openExternalLink } from '../../utils/util';
 import { PoSearchListComponent } from './po-search-list/po-search-list.component';
 import { Observable, Subscription, debounceTime, fromEvent } from 'rxjs';
 import { PoThemeService } from '../../services/po-theme/po-theme.service';
+import { PoFieldSize } from '../../enums/po-field-size.enum';
 
 @Component({
   selector: 'po-listbox',
@@ -191,9 +192,9 @@ export class PoListBoxComponent extends PoListBoxBaseComponent implements AfterV
   protected getSizeLoading() {
     const width = this.listbox.nativeElement.offsetWidth || this.containerWidth;
 
-    if (width > 180) {
+    if (width > 180 && this.size !== PoFieldSize.Small) {
       return 'md';
-    } else if (width >= 140) {
+    } else if (width >= 140 || this.size === PoFieldSize.Small) {
       return 'sm';
     } else {
       return 'xs';
