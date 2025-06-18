@@ -2,6 +2,14 @@
 
 All notable changes to this project will be documented in this file. See [standard-version](https://github.com/conventional-changelog/standard-version) for commit guidelines.
 
+### [17.26.25](https://github.com/po-ui/po-angular/compare/v17.26.24...v17.26.25) (2025-06-18)
+
+
+### Bug Fixes
+
+* **rich-text:** corrige alteração de cor parcial ([32ec18f](https://github.com/po-ui/po-angular/commit/32ec18f2b414079a5b113a9b788f835bc85fd0a8))
+* **toolbar:** corrige exibição do profile ao renderizar scroll ([00bd707](https://github.com/po-ui/po-angular/commit/00bd7075353b389036a7af83233f0d51fc8552c3))
+
 ### [17.26.24](https://github.com/po-ui/po-angular/compare/v17.26.23...v17.26.24) (2025-06-02)
 
 
