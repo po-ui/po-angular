@@ -2,6 +2,19 @@
 
 All notable changes to this project will be documented in this file. See [standard-version](https://github.com/conventional-changelog/standard-version) for commit guidelines.
 
+### [19.17.0](https://github.com/po-ui/po-angular/compare/v19.16.0...v19.17.0) (2025-06-18)
+
+### Features
+
+* **combo:** adiciona espaçamento e bold no no item agrupador ([a067628](https://github.com/po-ui/po-style/commit/a067628b24b54ac05c3b4d7260073d75be0ff6a3))
+
+
+### Bug Fixes
+
+* **rich-text:** corrige alteração de cor parcial ([e3c531a](https://github.com/po-ui/po-angular/commit/e3c531a4f154254d91d695427bf7ab621bc34389))
+* **tag:** cria propriedade interna ([191e212](https://github.com/po-ui/po-angular/commit/191e2127ebf0f55fe09e4038bab7cc63f24527d4))
+* **toolbar:** corrige exibição do profile ao renderizar scroll ([f0719a1](https://github.com/po-ui/po-angular/commit/f0719a1304e124edced493ba8a32eddb4727956e))
+
 ## [19.16.0](https://github.com/po-ui/po-angular/compare/v19.15.0...v19.16.0) (2025-06-13)
 
 
