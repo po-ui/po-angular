@@ -35,14 +35,15 @@ export const poPageDefaultLiteralsDefault = {
  *
  * > Para maiores informações, acesse o guia [Personalizando o Tema Padrão com Tokens CSS](https://po-ui.io/guides/theme-customization).
  *
- * | Propriedade                            | Descrição                                             | Valor Padrão                                    |
- * |----------------------------------------|-------------------------------------------------------|-------------------------------------------------|
- * | **Default Values**                     |                                                       |                                                 |
- * | `--padding`                            | Espaçamento do componente                             | `var(--spacing-xs) var(--spacing-md)`           |
- * | `--gap`                                | Gap entre o header e o conteúdo                       | `var(--spacing-md)`                             |
- * | `--padding-top-header`                 | Espaçamento do topo do header                         | `var(--color-neutral-light-30)`                 |
- * | `--gap-actions`                        | Gap entre os botões de action                         | `var(--spacing-xs)`                             |
- * | `--padding-content`                    | Espaçamento do conteúdo                               | `var(--spacing-xs) var(--spacing-sm)`           |
+ * | Propriedade         | Descrição                                                                        | Valor Padrão                         |                      |
+ * |---------------------|--------------------------------------------------------------------------------- |--------------------------------------|----------------------|
+ * | **Header**          |                                                                                  |                                      |                      |
+ * | `--padding`         | Espaçamento (top `@deprecated 20.x.x`, right, bottom `@deprecated 20.x.x`, left) | `0.5rem (@deprecated 20.x.x) 1.5rem` |                      |
+ * | `--gap`             | Espaçamento entre os breadcrumbs e o título                                      | `1.5rem`                             | `@deprecated 20.x.x` |
+ * | `--gap-actions`     | Espaçamento entre as ações                                                       | `0.5rem`                             |                      |
+ * | `--font-family`     | Família tipográfica do título                                                    | `--font-family-theme`                |                      |
+ * | **Content**         |                                                                                  |                                      |                      |
+ * | `--padding-content` | Espaçamento (top, right, bottom, left)                                           | `0.5rem 1.5rem`                      | `@deprecated 20.x.x` |
  */
 @Directive()
 export abstract class PoPageDefaultBaseComponent {
