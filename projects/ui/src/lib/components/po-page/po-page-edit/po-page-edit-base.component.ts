@@ -42,6 +42,20 @@ export const poPageEditLiteralsDefault = {
  * Os botões "Salvar" e "Salvar e Novo" podem ser habilitados/desabilitados utilizando a propriedade `p-disable-submit`.
  * Esta propriedade pode ser utilizada para desabilitar os botões caso exista um formulário inválido na página ou alguma
  * regra de negócio não tenha sido atendida.
+ *
+ * #### Tokens customizáveis
+ *
+ * > Para maiores informações, acesse o guia [Personalizando o Tema Padrão com Tokens CSS](https://po-ui.io/guides/theme-customization).
+ *
+ * | Propriedade         | Descrição                                                                        | Valor Padrão                         |                      |
+ * |---------------------|--------------------------------------------------------------------------------- |--------------------------------------|----------------------|
+ * | **Header**          |                                                                                  |                                      |                      |
+ * | `--padding`         | Espaçamento (top `@deprecated 20.x.x`, right, bottom `@deprecated 20.x.x`, left) | `0.5rem (@deprecated 20.x.x) 1.5rem` |                      |
+ * | `--gap`             | Espaçamento entre os breadcrumbs e o título                                      | `1.5rem`                             | `@deprecated 20.x.x` |
+ * | `--gap-actions`     | Espaçamento entre as ações                                                       | `0.5rem`                             |                      |
+ * | `--font-family`     | Família tipográfica do título                                                    | `--font-family-theme`                |                      |
+ * | **Content**         |                                                                                  |                                      |                      |
+ * | `--padding-content` | Espaçamento (top, right, bottom, left)                                           | `0.5rem 1.5rem`                      | `@deprecated 20.x.x` |
  */
 @Directive()
 export class PoPageEditBaseComponent {
