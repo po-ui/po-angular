@@ -300,6 +300,11 @@ export class PoComboComponent extends PoComboBaseComponent implements AfterViewI
       }
     }
 
+    if (key === PoKeyCodeEnum.tab && this.shouldHandleTab(event) && !this.isCleanVisible()) {
+      event.preventDefault();
+      this.focusItem();
+    }
+
     this.lastKey = event.keyCode;
 
     if (isFieldFocused) {
@@ -649,6 +654,24 @@ export class PoComboComponent extends PoComboBaseComponent implements AfterViewI
     );
   }
 
+  isCleanVisible(): boolean {
+    return this.clean && !this.disabled && !!this.inputEl.nativeElement.value;
+  }
+
+  handleCleanKeyboardTab(event: KeyboardEvent) {
+    if (this.shouldHandleTab(event)) {
+      event.preventDefault();
+      this.focusItem();
+    }
+  }
+
+  onListboxKeyDown(event: KeyboardEvent) {
+    if (event.key === 'Tab' && event.shiftKey) {
+      event.preventDefault();
+      this.focusInput();
+    }
+  }
+
   private adjustContainerPosition() {
     this.controlPosition.adjustPosition(this.listboxControlPosition);
   }
@@ -753,8 +776,8 @@ export class PoComboComponent extends PoComboBaseComponent implements AfterViewI
   }
 
   private setContainerPosition() {
-    this.controlPosition.setElements(
-      this.containerElement.nativeElement,
+    this.controlPosition?.setElements(
+      this.containerElement?.nativeElement,
       poComboContainerOffset,
       this.inputEl,
       ['top', 'bottom'],
@@ -786,18 +809,53 @@ export class PoComboComponent extends PoComboBaseComponent implements AfterViewI
     return this.infiniteScroll ? true : false;
   }
 
+  /**
+   * Define o foco no item apropriado do listbox.
+   *
+   * 1. Primeiro foca no container do listbox
+   * 2. Busca por um item selecionado (se houver valor selecionado)
+   * 3. Caso não encontre, foca no primeiro item da lista
+   */
   private focusItem() {
     this.poListbox?.listboxItemList?.nativeElement.focus();
     setTimeout(() => {
-      let item;
+      let item: HTMLElement | null = null;
       if (this.selectedValue) {
         item = document.querySelector('.po-listbox-item[aria-selected="true"]');
-      } else {
-        item = document.querySelectorAll('.po-listbox-item')[0] as HTMLElement;
       }
-      this.poListbox?.listboxItemList?.nativeElement.focus();
-
-      item?.focus();
+      if (!item) {
+        const items = document.querySelectorAll('.po-listbox-item');
+        item = items.length > 0 ? (items[0] as HTMLElement) : null;
+      }
+      if (item) {
+        item.focus();
+      }
     });
+  }
+
+  /**
+   * Define o foco no elemento input do combobox.
+   *
+   * @param {KeyboardEvent} [event] - Opcional: Objeto de evento do teclado
+   * @returns {void}
+   */
+  private focusInput(event?: KeyboardEvent) {
+    event?.preventDefault();
+    this.inputEl.nativeElement.focus();
+  }
+
+  /**
+   * Determina se o tab deve abrir o listbox.
+   *
+   * Considera:
+   * - Se o combobox está aberto
+   * - Se está no modo appendBox
+   * - Se não está usando Shift+Tab (navegação reversa)
+   *
+   * @param {KeyboardEvent} event - Objeto de evento do teclado
+   * @returns {boolean} True se o componente deve tratar o tab par abrir o listbox
+   */
+  private shouldHandleTab(event: KeyboardEvent): boolean {
+    return this.comboOpen && this.appendBox && !event.shiftKey;
   }
 }
