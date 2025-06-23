@@ -5,7 +5,7 @@
   [p-required]="required"
   [p-show-required]="showRequired"
 >
-  <div class="po-field-container-content" [attr.name]="name">
+  <div class="po-field-container-content" [attr.name]="name" [attr.p-size]="size">
     <div role="group" [attr.aria-label]="label" class="po-checkbox-group-content">
       <ul class="po-row">
         @for (option of checkboxGroupOptionsView; track trackByFn($index)) {
@@ -39,6 +39,7 @@
       [p-error-pattern]="getErrorPattern()"
       [p-show-additional-help]="displayAdditionalHelp"
       [p-show-additional-help-icon]="showAdditionalHelpIcon()"
+      [p-size]="size"
       (p-additional-help)="emitAdditionalHelp()"
     ></po-field-container-bottom>
   </div>

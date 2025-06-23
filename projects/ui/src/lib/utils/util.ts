@@ -1,6 +1,7 @@
-import { PoThemeService } from '../services/po-theme/po-theme.service';
-import { PoThemeA11yEnum } from '../services/po-theme/enum/po-theme-a11y.enum';
+import { PoDensityMode } from '../enums/po-density-mode.enum';
 import { poLocaleDefault, poLocales } from '../services/po-language/po-language.constant';
+import { PoThemeA11yEnum } from '../services/po-theme/enum/po-theme-a11y.enum';
+import { PoThemeService } from '../services/po-theme/po-theme.service';
 
 /**
  * Converte e formata os bytes em formato mais legível para o usuário.
@@ -736,4 +737,19 @@ export function getA11yLevel(): PoThemeA11yEnum {
   const a11yLevel = document.documentElement.getAttribute('data-a11y');
 
   return a11yLevel === 'AA' ? PoThemeA11yEnum.AA : PoThemeA11yEnum.AAA;
+}
+
+/**
+ * Retorna o modo de adensamento dos componentes agrupadores.
+ * Se não estiver configurado, retorna `medium` como padrão.
+ * @returns {PoDensityMode} O modo de adensamento, que pode ser `small` ou `medium`.
+ */
+export function getDensityMode(): PoDensityMode {
+  const densityMode = document.documentElement.getAttribute('po-density-mode');
+
+  if (densityMode === PoDensityMode.Small) {
+    return PoDensityMode.Small;
+  }
+
+  return PoDensityMode.Medium;
 }

@@ -81,7 +81,7 @@
           <div class="po-sm-12 po-md-12 po-lg-10">
             <div class="container-item iconFilter po-row">
               <po-select
-                class="po-sm-12 po-md-4"
+                class="po-sm-12 po-md-4 po-pt-1"
                 [(ngModel)]="iconType"
                 [p-options]="iconTypeOptions"
                 (p-change)="onTypeChange()"
@@ -101,7 +101,7 @@
 
       <div class="grid grid-flow gap-16 po-pt-3 po-pb-3">
         @if (loading) {
-          <po-loading-overlay p-text="Carregando ícones" p-size="lg"> </po-loading-overlay>
+          <po-loading-overlay p-text="Carregando ícones"> </po-loading-overlay>
         } @else {
           @for (icon of filteredItems; track icon) {
             <div class="icon-list" (click)="copyClipboard(icon.code)">

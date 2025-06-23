@@ -1,7 +1,10 @@
 import { Directive, Input } from '@angular/core';
+import { PoFieldSize } from '../../enums/po-field-size.enum';
 import { PoLanguageService } from '../../services/po-language/po-language.service';
+import { getDefaultSizeFn } from '../../utils/util';
 import { PoLoadingIconSize } from './enums/po-loading-icon-size-enum';
 import { PoLoadingLiterals } from './interfaces/po-loading-literals.interface';
+
 export const poLoadingLiteralsDefault = {
   en: <PoLoadingLiterals>{
     loading: 'Loading'
@@ -43,24 +46,32 @@ export class PoLoadingBaseComponent {
 
   /**
    * Define o tamanho do ícone.
-   *
-   * @default `lg`
-   *
    * Valores válidos:
    *  - `xs`: 16px
    *  - `sm`: 24px
    *  - `md`: 32px
    *  - `lg`: 80px
+   *
+   * > Em nível de acessibilidade **AA**, caso o valor de `p-size` não seja definido, o valor padrão será `sm`
+   * > quando o valor padrão dos componentes for configurado como `small` no
+   * > [serviço de tema](https://po-ui.io/documentation/po-theme).
+   *
+   * @default `lg`
    */
   @Input('p-size') set size(value: string) {
-    this._size = PoLoadingIconSize[value] ? PoLoadingIconSize[value] : PoLoadingIconSize.lg;
+    if (value && PoLoadingIconSize[value]) {
+      this._size = PoLoadingIconSize[value];
+    } else {
+      const a11yPref = getDefaultSizeFn(PoFieldSize);
+      this._size = a11yPref === PoFieldSize.Small ? PoLoadingIconSize.sm : PoLoadingIconSize.lg;
+    }
   }
 
   get size(): string {
     return this._size;
   }
 
-  constructor(private languageService: PoLanguageService) {
+  constructor(protected languageService: PoLanguageService) {
     this.text = this.getTextDefault();
   }
 
