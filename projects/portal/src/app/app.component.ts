@@ -52,6 +52,7 @@ export class AppComponent implements OnInit, OnDestroy {
 
     if (this.a11yLevel === 'AA') {
       this.poTheme.setA11yDefaultSizeSmall(true);
+      this.poTheme.setA11yDensityMode('small');
     }
   }
 
@@ -130,6 +131,7 @@ export class AppComponent implements OnInit, OnDestroy {
 
     if (this.a11yLevel === 'AA') {
       this.poTheme.setA11yDefaultSizeSmall(true);
+      this.poTheme.setA11yDensityMode('small');
     }
 
     if (dispatchEvent) {
