@@ -199,7 +199,12 @@ export const corporateTheme: PoTheme = {
         },
         onRoot: {
           '--font-family': "'Inter', sans-serif",
-          '--border-radius': '6px'
+          '--border-radius': '6px',
+          '--po-density-header-padding': '2rem'; /* Padding em headers (inclui pages, page slide, modal, widget) */
+          '--po-density-content-padding': '1rem'; /* Padding em contents (inclui pages, container, list view, page slide, widget, stepper, disclaimer-group) */
+          '--po-density-footer-padding': '1rem'; /* Padding em footers (inclui modal e page slide) */
+          '--po-density-gap-header-content': '1rem'; /* Espaço interno entre o header e o content (inclui pages, tabs e stepper) */
+          '--po-density-gap-spacing': '1rem'; /* Espaço interno entre blocos de conteúdo presentes no header e content (inclui dividers e gaps) */
         },
         perComponent: {
           'po-button': {
@@ -270,8 +275,13 @@ setAcessibilidade(nivel: PoThemeA11yEnum) {
 
 ```css
 /* styles.scss */
-:root.override-theme {
+:root .override-theme {
   --color-brand-01-base: #FF0000;
+  --po-density-header-padding: 2rem; /* Padding em headers (inclui pages, page slide, modal, widget) */
+  --po-density-content-padding: 1rem; /* Padding em contents (inclui pages, container, list view, page slide, widget, stepper, disclaimer-group) */
+  --po-density-footer-padding: 1rem; /* Padding em footers (inclui modal e page slide) */
+  --po-density-gap-header-content: 1rem; /* Espaço interno entre o header e o content (inclui pages, tabs e stepper) */
+  --po-density-gap-spacing: 1rem; /* Espaço interno entre blocos de conteúdo presentes no header e content (inclui dividers e gaps) */
 }
 ```
 
