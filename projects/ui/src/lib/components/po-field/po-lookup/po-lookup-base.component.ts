@@ -426,6 +426,20 @@ export abstract class PoLookupBaseComponent
       this._spacing = this.getDefaultSpacing();
     }
   }
+  // @Input('p-spacing') set spacing(value: string) {
+  //   const isExtraSmall = value === PoTableColumnSpacing.ExtraSmall;
+  //   const isA11yAAA = this.poThemeService.getA11yLevel() === PoThemeA11yEnum.AAA;
+
+  //   if (Object.values(PoTableColumnSpacing).includes(value as PoTableColumnSpacing)) {
+  //     if (isA11yAAA && isExtraSmall) {
+  //       this._spacing = PoTableColumnSpacing.Medium;
+  //     } else {
+  //       this._spacing = value as PoTableColumnSpacing;
+  //     }
+  //   } else {
+  //     this._spacing = this.getDefaultSpacing();
+  //   }
+  // }
 
   get spacing() {
     return this._spacing ?? this.getDefaultSpacing();

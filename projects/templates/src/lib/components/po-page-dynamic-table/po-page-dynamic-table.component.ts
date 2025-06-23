@@ -115,6 +115,20 @@ type UrlOrPoCustomizationFunction = string | (() => PoPageDynamicTableOptions);
  * GET {end-point}/metadata?type=list&version={version}
  * ```
  *
+ * #### Tokens customizáveis
+ *
+ * > Para maiores informações, acesse o guia [Personalizando o Tema Padrão com Tokens CSS](https://po-ui.io/guides/theme-customization).
+ *
+ * | Propriedade         | Descrição                                   | Valor Padrão                          |
+ * |---------------------|---------------------------------------------|---------------------------------------|
+ * | **Header**          |                                             |                                       |
+ * | `--padding`         | Espaçamento do header                       | `var(--spacing-xs) var(--spacing-md)` |
+ * | `--gap`             | Espaçamento entre os breadcrumbs e o título | `var(--spacing-md)`                   |
+ * | `--gap-actions`     | Espaçamento entre as ações                  | `var(--spacing-xs)`                   |
+ * | `--font-family`     | Família tipográfica do título               | `var(--font-family-theme)`            |
+ * | **Content**         |                                             |                                       |
+ * | `--padding-content` | Espaçamento do conteúdo                     | `var(--spacing-xs) var(--spacing-sm)` |
+ *
  * @example
  *
  * <example name="po-page-dynamic-table-basic" title="PO Page Dynamic Table Basic">
