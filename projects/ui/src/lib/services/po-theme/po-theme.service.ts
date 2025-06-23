@@ -4,7 +4,7 @@ import { AnimaliaIconDictionary, ICONS_DICTIONARY } from '../../components/po-ic
 
 import { PoThemeA11yEnum } from './enum/po-theme-a11y.enum';
 import { PoThemeTypeEnum } from './enum/po-theme-type.enum';
-import { poThemeDefaultAA } from './helpers/accessibilities/po-theme-default-aa.constant';
+import { poThemeDefaultAA, poThemeDensityAA } from './helpers/accessibilities/po-theme-default-aa.constant';
 import { poThemeDefaultAAA } from './helpers/accessibilities/po-theme-default-aaa.constant';
 import { poThemeDefault } from './helpers/po-theme-poui.constant';
 import { poThemeDefaultDarkValues } from './helpers/types/po-theme-dark-defaults.constant';
@@ -116,39 +116,52 @@ export class PoThemeService {
    */
   getA11yLevel(): PoThemeA11yEnum {
     const a11yLevel = document.documentElement.getAttribute('data-a11y');
-    if (a11yLevel !== 'AA' && a11yLevel !== 'AAA') {
+
+    if (a11yLevel === PoThemeA11yEnum.AAA || (a11yLevel !== PoThemeA11yEnum.AA && a11yLevel !== PoThemeA11yEnum.AAA)) {
+      this.setDefaultSize('medium');
       return PoThemeA11yEnum.AAA;
     }
 
-    return a11yLevel === 'AAA' ? PoThemeA11yEnum.AAA : PoThemeA11yEnum.AA;
+    return a11yLevel === PoThemeA11yEnum.AA ? PoThemeA11yEnum.AA : PoThemeA11yEnum.AAA;
   }
 
   /**
-   * Define o tamanho `small` como padrão para componentes de formulário que não possuem um tamanho definido.
+   * Define o tamanho `small` como padrão para componentes de formulário que não possuem um tamanho definido,
+   * e aplica adensamento compacto nos componentes agrupadores.
    * Essa configuração é aplicada globalmente apenas quando o nível de acessibilidade for `AA`.
-   * Caso contrário, o tamanho padrão será `medium`.
+   * Caso contrário, o tamanho padrão será `medium` e o adensamento será desabilitado.
    *
    * @param {boolean} enable Habilita ou desabilita o tamanho `small` globalmente.
    */
   setA11yDefaultSizeSmall(enable: boolean): boolean {
-    const a11yLevel = document.documentElement.getAttribute('data-a11y');
+    const a11yLevel = this.getA11yLevel();
 
-    if (!a11yLevel || (a11yLevel !== PoThemeA11yEnum.AA && a11yLevel !== PoThemeA11yEnum.AAA)) {
-      return false;
-    }
+    if (!this.isValidA11yLevel(a11yLevel)) return false;
 
     if (a11yLevel === PoThemeA11yEnum.AA && enable) {
-      const defaultSize = 'small';
-
-      if (localStorage.getItem('po-default-size') !== defaultSize) {
-        localStorage.setItem('po-default-size', defaultSize);
-      }
-      return true;
+      this.setDefaultSize('small');
+      this.setA11yDensityMode('small');
+    } else {
+      this.setDefaultSize('medium');
+      this.setA11yDensityMode('medium');
     }
 
-    localStorage.removeItem('po-default-size');
+    return a11yLevel === PoThemeA11yEnum.AA && enable;
+  }
 
-    return false;
+  /**
+   * Aplica o modo de adensamento compacto (`small`) ou espaçoso (`medium`) para os componentes agrupadores,
+   * independentemente do nível de acessibilidade.
+   *
+   * @param {'small' | 'medium'} mode Define o modo de densidade: `small` para compacto, `medium` para espaçoso.
+   */
+  setA11yDensityMode(mode: 'small' | 'medium'): any {
+    const densityTokens = mode === 'small' ? poThemeDensityAA.small : {};
+    const onRootTokens = {
+      ...poThemeDefaultAA.onRoot,
+      ...densityTokens
+    };
+    this.setPerComponentAndOnRoot(undefined, poThemeDefaultAA.perComponent, onRootTokens);
   }
 
   /**
@@ -160,7 +173,7 @@ export class PoThemeService {
   getA11yDefaultSize(): string {
     const defaultSize = localStorage.getItem('po-default-size');
     const a11yLevel = document.documentElement.getAttribute('data-a11y');
-    return defaultSize === 'small' && a11yLevel === 'AA' ? 'small' : 'medium';
+    return defaultSize === 'small' && a11yLevel === PoThemeA11yEnum.AA ? 'small' : 'medium';
   }
 
   /**
@@ -410,6 +423,14 @@ export class PoThemeService {
 
   private getActiveA11yFromTheme(active): PoThemeA11yEnum {
     return typeof active === 'object' ? active.a11y : PoThemeA11yEnum.AAA;
+  }
+
+  private isValidA11yLevel(level: string | null): boolean {
+    return level === PoThemeA11yEnum.AA || level === PoThemeA11yEnum.AAA;
+  }
+
+  private setDefaultSize(size: string): void {
+    localStorage.setItem('po-default-size', size);
   }
 
   /**
