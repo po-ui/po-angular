@@ -38,7 +38,7 @@
   <po-input class="po-md-3" name="title" p-label="Title" [(ngModel)]="title"> </po-input>
 
   <po-checkbox-group
-    *ngIf="isLineType()"
+    *ngIf="isTypeGrid()"
     class="po-md-3"
     name="dataLabel"
     p-label="DataLabel"
@@ -105,6 +105,15 @@
     ></po-input>
 
     <po-input class="po-md-4" name="color" p-label="Color" p-help="Custom Color" [(ngModel)]="color"></po-input>
+
+    <po-input
+      *ngIf="type === 'bar' || serieType === 'bar' || type === 'column' || serieType === 'column'"
+      class="po-md-4"
+      name="stackGroupName"
+      p-label="Stack Group Name"
+      p-help="Custom Group Name"
+      [(ngModel)]="stackGroupName"
+    ></po-input>
 
     <po-number *ngIf="isTypeGauge" class="po-md-4" p-label="From" name="from" [(ngModel)]="fromGauge"></po-number>
 
@@ -339,6 +348,16 @@
       [p-options]="[{ label: 'pointer', value: 'pointer' }]"
       [(ngModel)]="selectedPointer"
       (p-change)="changePointer()"
+    >
+    </po-checkbox-group>
+
+    <po-checkbox-group
+      class="po-md-4"
+      name="stacked"
+      p-label="Stacked"
+      [p-options]="[{ label: 'stacked', value: 'stacked' }]"
+      [(ngModel)]="selectedStacked"
+      (p-change)="changeStacked()"
     >
     </po-checkbox-group>
 
