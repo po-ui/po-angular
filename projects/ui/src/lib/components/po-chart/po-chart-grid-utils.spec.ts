@@ -63,13 +63,27 @@ describe('PoChartGridUtils', () => {
 
   describe('setSerieTypeBarColumn', () => {
     it('should set itemStyle and emphasis when type is bar', () => {
-      const serie: any = { type: 'bar' };
+      const serie: any = { type: 'bar', data: [200] };
+      const color = '#f00';
+      utils['component'].options.stacked = true;
+
+      utils.setSerieTypeBarColumn(serie, color);
+
+      expect(serie.itemStyle.color).toBe(color);
+      expect(serie.emphasis.focus).toBe('series');
+      expect(serie.stack).toBe('total');
+      expect(mockCtx.boundaryGap).toBe(true);
+    });
+
+    it('should set itemStyle and emphasis when type is bar', () => {
+      const serie: any = { type: 'bar', stackGroupName: 'group1', data: [200] };
       const color = '#f00';
 
       utils.setSerieTypeBarColumn(serie, color);
 
       expect(serie.itemStyle.color).toBe(color);
       expect(serie.emphasis.focus).toBe('series');
+      expect(serie.stack).toBe('group1');
       expect(mockCtx.boundaryGap).toBe(true);
     });
   });
@@ -89,13 +103,7 @@ describe('PoChartGridUtils', () => {
 
   describe('setListPie', () => {
     const labelProperties = {
-      show: false,
-      position: 'center',
-      formatter: undefined,
-      fontFamily: '',
-      fontSize: undefined,
-      color: '',
-      fontWeight: 0
+      show: false
     };
 
     it('should set pie config with radius 95% and center 50% 50% when legend is false', () => {
@@ -158,13 +166,17 @@ describe('PoChartGridUtils', () => {
 
   describe('setListDonut', () => {
     const labelProperties = {
-      show: true,
-      position: 'center',
-      formatter: 'test',
-      fontFamily: '',
-      fontSize: undefined,
-      color: '',
-      fontWeight: 0
+      type: 'text',
+      left: 'center',
+      top: '44%',
+      style: {
+        text: 'test',
+        fontSize: undefined,
+        fontWeight: 0,
+        fontFamily: '',
+        fill: ''
+      },
+      silent: true
     };
 
     it('should set donut config if innerRadius is 100 and roseType is true', () => {
@@ -190,40 +202,43 @@ describe('PoChartGridUtils', () => {
           emphasis: { focus: 'self' },
           data: [],
           label: {
-            show: true,
-            position: 'center',
-            formatter: 'test',
-            fontFamily: '',
-            fontSize: undefined,
-            color: '',
-            fontWeight: 0
+            show: false
           },
           blur: { itemStyle: { opacity: 0.4 } }
         }
       ]);
+      expect(utils.textCenterDonut).toEqual(labelProperties);
     });
 
     it('should set donut config if innerRadius is 80', () => {
-      utils['component'].options = { innerRadius: 80, textCenterGraph: 'test' } as PoChartOptions;
+      utils['component'].options = {
+        innerRadius: 80,
+        textCenterGraph: 'test',
+        legendVerticalPosition: 'top'
+      } as PoChartOptions;
       utils['component'].series = [
         { label: 'Serie 1', data: 10 },
         { label: 'Serie 2', data: 30 }
       ];
+      const labelText = { ...labelProperties, top: '52%' };
 
       utils.setListTypeDonutPie(PoChartType.Donut);
 
       expect(utils['component'].listTypePieDonut).toEqual([
         {
           type: 'pie',
-          center: ['50%', '46%'],
+          center: ['50%', '54%'],
           radius: ['44%', '80%'],
           roseType: undefined,
           emphasis: { focus: 'self' },
           data: [],
-          label: labelProperties,
+          label: {
+            show: false
+          },
           blur: { itemStyle: { opacity: 0.4 } }
         }
       ]);
+      expect(utils.textCenterDonut).toEqual(labelText);
     });
   });
 });

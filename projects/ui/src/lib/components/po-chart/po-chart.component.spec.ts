@@ -1051,6 +1051,40 @@ describe('PoChartComponent', () => {
       expect(result.grid.top).toBe(56);
     });
 
+    it('should apply text center in donut type when enabled', () => {
+      component.listTypePieDonut = [
+        {
+          type: 'pie',
+          center: ['50%', '46%'],
+          radius: ['50%'],
+          roseType: undefined,
+          label: { show: false },
+          emphasis: { focus: 'self' },
+          data: [],
+          blur: { itemStyle: { opacity: 0.4 } }
+        }
+      ];
+      component['isTypeGauge'] = false;
+      component['chartGridUtils'].textCenterDonut = {
+        type: 'text',
+        left: 'center',
+        top: '44%',
+        style: {
+          text: 'test',
+          fontSize: undefined,
+          fontWeight: 0,
+          fontFamily: '',
+          fill: ''
+        },
+        silent: true
+      };
+      component['chartGridUtils'].isTypeDonut = true;
+      component.options.textCenterGraph = 'test';
+
+      const result = component['setOptions']();
+      expect(result.graphic).toEqual(component['chartGridUtils'].textCenterDonut);
+    });
+
     it('should apply correct axis configurations', () => {
       component.options.axis = {
         minRange: 10,

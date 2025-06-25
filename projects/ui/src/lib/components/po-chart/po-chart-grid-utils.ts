@@ -17,7 +17,8 @@ const gridPaddingValues = {
 } as const;
 
 export class PoChartGridUtils {
-  private isTypeDonut = false;
+  isTypeDonut = false;
+  textCenterDonut = {};
   constructor(private readonly component: PoChartComponent) {}
 
   setGridOption(options) {
@@ -162,6 +163,14 @@ export class PoChartGridUtils {
         itemStyle: { opacity: 0.4 }
       };
       this.component.boundaryGap = true;
+
+      if (this.component.options?.stacked || serie.stackGroupName) {
+        serie.stack = this.component.options?.stacked ? 'total' : serie.stackGroupName;
+        if (this.component.dataLabel?.fixed !== false) {
+          this.component.dataLabel = { fixed: true };
+          serie.label = { show: true };
+        }
+      }
     }
   }
 
@@ -177,8 +186,7 @@ export class PoChartGridUtils {
           borderColor: borderColor,
           color: color,
           borderRadius: this.component.options?.borderRadius
-        },
-        label: { show: this.isTypeDonut && this.component.options?.textCenterGraph }
+        }
       };
       this.component.listTypePieDonut[0].data.push(seriePie);
     }
@@ -210,20 +218,32 @@ export class PoChartGridUtils {
         center: ['50%', positionHorizontal],
         radius: radius,
         roseType: this.component.options?.roseType ? 'area' : undefined,
-        label: {
-          show: !!(this.isTypeDonut && this.component.options?.textCenterGraph),
-          position: 'center',
-          formatter: this.component.options?.textCenterGraph,
-          fontSize: this.resolvePx('--font-size-md'),
-          fontWeight: Number(this.component.getCSSVariable('--font-weight-hightlight-value', '.po-chart')),
-          fontFamily: this.component.getCSSVariable('--font-family-hightlight-value', '.po-chart'),
-          color: this.component.getCSSVariable('--color-hightlight-value', '.po-chart')
-        },
+        label: { show: false },
         emphasis: { focus: 'self' },
         data: [],
         blur: { itemStyle: { opacity: 0.4 } }
       }
     ];
+
+    this.setTextCenterDonut();
+  }
+
+  private setTextCenterDonut() {
+    if (this.isTypeDonut && this.component.options?.textCenterGraph) {
+      this.textCenterDonut = {
+        type: 'text',
+        left: 'center',
+        top: this.component.options?.legendVerticalPosition === 'top' ? '52%' : '44%',
+        style: {
+          text: this.component.options?.textCenterGraph,
+          fontSize: this.resolvePx('--font-size-md'),
+          fontWeight: Number(this.component.getCSSVariable('--font-weight-hightlight-value', '.po-chart')),
+          fontFamily: this.component.getCSSVariable('--font-family-hightlight-value', '.po-chart'),
+          fill: this.component.getCSSVariable('--color-hightlight-value', '.po-chart')
+        },
+        silent: true
+      };
+    }
   }
 
   private getAdjustedRadius(radius: string, innerRadius: number): string {
