@@ -16,6 +16,7 @@ import {
 })
 export class SamplePoChartLabsComponent implements OnInit {
   color: string;
+  stackGroupName: string;
   data;
   label: string;
   tooltip: string;
@@ -68,6 +69,7 @@ export class SamplePoChartLabsComponent implements OnInit {
     bottomDataZoom: undefined,
     rendererOption: undefined,
     pointer: undefined,
+    stacked: undefined,
     roseType: undefined,
     showFromToLegend: undefined
   };
@@ -80,6 +82,7 @@ export class SamplePoChartLabsComponent implements OnInit {
   selectedRoseType: Array<string> = [];
   selectedFromToLegend: Array<string> = [];
   selectedPointer: Array<string> = [];
+  selectedStacked: Array<string> = [];
   selectedValuesLegend: Array<string> = ['legend'];
   selectedLegendVerticalPosition: PoChartOptions['legendVerticalPosition'] = 'bottom';
   selectedLegendPosition: PoChartOptions['legendPosition'] = 'center';
@@ -213,6 +216,13 @@ export class SamplePoChartLabsComponent implements OnInit {
     };
   }
 
+  changeStacked() {
+    this.options = {
+      ...this.options,
+      stacked: this.selectedStacked.includes('stacked')
+    };
+  }
+
   changeLegendVerticalPosition() {
     this.options = {
       ...this.options,
@@ -277,6 +287,7 @@ export class SamplePoChartLabsComponent implements OnInit {
     let data = isNaN(this.data) ? this.convertToArray(this.data) : Math.floor(this.data);
     const type = this.serieType ?? this.type;
     const color = this.color;
+    const stackGroupName = this.stackGroupName;
     if (this.isTypeGauge && !this.series?.length && !this.toGauge) {
       data = this.valueGauge;
     }
@@ -289,6 +300,7 @@ export class SamplePoChartLabsComponent implements OnInit {
         tooltip: this.tooltip,
         ...(color ? { color } : {}),
         type,
+        stackGroupName,
         from: this.fromGauge,
         to: this.toGauge
       }
@@ -300,13 +312,19 @@ export class SamplePoChartLabsComponent implements OnInit {
     this.tooltip = undefined;
     this.fromGauge = undefined;
     this.toGauge = undefined;
+    this.stackGroupName = undefined;
     if (!this.isTypeGauge) {
       this.type = undefined;
     }
   }
 
-  isLineType(): boolean {
-    return this.type === PoChartType.Line;
+  isTypeGrid(): boolean {
+    return (
+      this.type === PoChartType.Line ||
+      this.type === PoChartType.Area ||
+      this.type === PoChartType.Column ||
+      this.type === PoChartType.Bar
+    );
   }
 
   changeEvent(eventName: string, serieEvent: PoChartSerie): void {
@@ -369,6 +387,7 @@ export class SamplePoChartLabsComponent implements OnInit {
       bottomDataZoom: undefined,
       rendererOption: undefined,
       pointer: undefined,
+      stacked: undefined,
       roseType: undefined,
       showFromToLegend: undefined
     };

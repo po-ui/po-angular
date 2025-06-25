@@ -1,0 +1,25 @@
+<po-container>
+  <div class="po-font-title po-mb-3">Energy and Climate Analysis</div>
+  <div class="po-row">
+    <po-chart
+      class="po-lg-6"
+      p-title="Average Temperature by Region"
+      [p-height]="500"
+      [p-options]="optionsColumn"
+      [p-categories]="categoriesColumn"
+      [p-series]="seriesColumn"
+    >
+    </po-chart>
+
+    <po-chart
+      class="po-lg-6"
+      p-title="Energy Consumption by Region"
+      [p-type]="typeBar"
+      [p-height]="500"
+      [p-options]="optionsBar"
+      [p-categories]="categoriesBar"
+      [p-series]="seriesBar"
+    >
+    </po-chart>
+  </div>
+</po-container>

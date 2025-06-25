@@ -94,4 +94,23 @@ export interface PoChartSerie {
    * > Propriedade válida para gráfico do tipo `Gauge`.
    */
   to?: number;
+
+  /**
+   * @optional
+   *
+   * @description
+   *
+   * Agrupa as séries em barras ou colunas que receberem o mesmo `stackGroupName`. Exemplo:
+   * - Serie A: `{ data: 500, stackGroupName: 'group1' ... }`;
+   * - Série B: `{ data: 200, stackGroupName: 'group1' ... }`.
+   * - Série C: `{ data: 100, stackGroupName: 'group2' ... }`.
+   * - Série D: `{ data: 400, stackGroupName: 'group2' ... }`.
+   *
+   * Nesse caso será criado duas barras ou colunas com duas series agrupadas em cada uma por categoria.
+   * > Válido para gráfico do tipo `Column` e `Bar`. Essa propriedade é ignorada caso a propriedade `stacked` da interface `PoChartOptions` esteja como `true`.
+   *
+   * > Essa propriedade habilita a propriedade `p-data-label` por padrão, podendo ser desabilitada passando `[p-data-label]={ fixed: false }`.
+   *
+   */
+  stackGroupName?: string;
 }

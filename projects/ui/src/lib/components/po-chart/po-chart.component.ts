@@ -82,6 +82,11 @@ use([
  *  <file name="sample-po-chart-coffee-ranking/sample-po-chart-coffee-ranking.component.ts"> </file>
  * </example>
  *
+ * <example name="po-chart-stacked" title="PO Chart - Stacked">
+ *  <file name="sample-po-chart-stacked/sample-po-chart-stacked.component.html"> </file>
+ *  <file name="sample-po-chart-stacked/sample-po-chart-stacked.component.ts"> </file>
+ * </example>
+ *
  * <example name="po-chart-summary" title="PO Chart - Summary">
  *  <file name="sample-po-chart-summary/sample-po-chart-summary.component.html"> </file>
  *  <file name="sample-po-chart-summary/sample-po-chart-summary.component.ts"> </file>
@@ -484,6 +489,8 @@ export class PoChartComponent extends PoChartBaseComponent implements OnInit, Af
       if (this.options?.dataZoom) {
         this.chartGridUtils.setOptionDataZoom(options);
       }
+    } else if (this.chartGridUtils.isTypeDonut && this.options?.textCenterGraph) {
+      options.graphic = this.chartGridUtils.textCenterDonut;
     }
 
     if (this.options?.legend !== false) {

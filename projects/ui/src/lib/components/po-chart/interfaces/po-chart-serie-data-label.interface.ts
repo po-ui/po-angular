@@ -19,7 +19,7 @@ export interface PoChartDataLabel {
    *   - O *tooltip* não será exibido.
    *   - As outras séries ficarão com opacidade reduzida ao passar o mouse sobre a série ativa.
    *
-   * > Disponível apenas para o tipo de gráfico `PoChartType.Line`.
+   * > Disponível para os tipo de gráfico `PoChartType.Line`, `PoChartType.Area`, `PoChartType.Column` e `PoChartType.Bar`.
    */
   fixed?: boolean;
 }
