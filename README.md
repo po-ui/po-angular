@@ -114,6 +114,23 @@ Abra o *browser* e acesse a url http://localhost:4200. Pronto!
 
 ----
 
+### MCP? Sim!
+
+Temos uma ótima notícia para a comunidade de desenvolvedores! Nossa biblioteca Angular agora faz parte do [Context7](https://context7.com/po-ui/po-angular), uma plataforma que fornece documentação e trechos de código sempre atualizados para LLMs e editores de código com suporte a IA.
+
+#### O que isso significa para você?
+
+- **Acesso Rápido à Documentação:** Obtenha a documentação mais recente e exemplos de uso da nossa biblioteca diretamente em seu ambiente de desenvolvimento, como Cursor, Claude e outros LLMs.
+- **Desenvolvimento Acelerado com IA:** Ao usar um editor de código com IA, você pode instruí-lo a utilizar nossa biblioteca e ele terá acesso a todo o contexto necessário para gerar código preciso e funcional.
+
+#### Suporte ao Protocolo de Contexto de Modelo (MCP)
+
+Nossa biblioteca está disponível através de um servidor MCP do Context7. O MCP é um padrão aberto projetado para conectar de forma inteligente assistentes de IA a fontes de dados, como a documentação da nossa biblioteca. Isso garante que a IA tenha o contexto correto para responder às suas solicitações de programação com maior precisão.
+
+Para começar, basta mencionar o nome da nossa biblioteca em suas interações com um LLM que suporte o Context7.
+
+----
+
 ### E agora?
 
 Agora é só abrir seu **editor / IDE** favorito e começar a trabalhar no seu projeto.
