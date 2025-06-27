@@ -45,6 +45,7 @@
           [id]="id"
           [placeholder]="disabled ? '' : placeholder"
           [required]="required"
+          [attr.data-append-in-body]="appendBox"
           (click)="toggleComboVisibility()"
           (keyup)="onKeyUp($event)"
           (blur)="onBlur($event)"
@@ -59,12 +60,13 @@
             [attr.aria-label]="literals.clean"
             class="po-combo-clean po-icon-input"
             [class.po-combo-clean-aa]="size === 'small'"
-            *ngIf="clean && !disabled && inp.value"
+            *ngIf="isCleanVisible()"
             [p-element-ref]="inputEl"
             [p-size]="size"
             (p-change-event)="clear($event)"
             (click)="clear(null); $event.preventDefault()"
             (keydown.enter)="clearAndFocus(); $event.preventDefault()"
+            (keydown.tab)="handleCleanKeyboardTab($event)"
           >
           </po-clean>
 
@@ -94,7 +96,12 @@
     </ng-template>
 
     <ng-template #dropdownCDK>
-      <ng-template cdkConnectedOverlay [cdkConnectedOverlayOrigin]="trigger" [cdkConnectedOverlayOpen]="true">
+      <ng-template
+        cdkConnectedOverlay
+        [cdkConnectedOverlayOrigin]="trigger"
+        [cdkConnectedOverlayOpen]="true"
+        [cdkConnectedOverlayDisableClose]="true"
+      >
         <ng-container *ngTemplateOutlet="dropdownListbox"></ng-container>
       </ng-template>
     </ng-template>
@@ -127,7 +134,6 @@
         [p-infinite-scroll]="infiniteScroll"
         [p-filtering]="isFiltering"
         [p-cache]="cache"
-        (p-selectcombo-item)="onOptionClick($event, $event.event)"
         [p-filter-mode]="filterMode"
         [p-visible]="comboOpen"
         [p-is-searching]="isServerSearching"
@@ -136,9 +142,11 @@
         [p-combo-service]="service"
         [p-infinite-scroll-distance]="infiniteScrollDistance"
         [p-size]="size"
+        [p-container-width]="containerWidth"
+        (p-selectcombo-item)="onOptionClick($event, $event.event)"
         (p-update-infinite-scroll)="showMoreInfiniteScroll()"
         (p-close)="onCloseCombo()"
-        [p-container-width]="containerWidth"
+        (keydown)="onListboxKeyDown($event)"
       ></po-listbox>
     </div>
   </ng-template>

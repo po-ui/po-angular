@@ -264,12 +264,15 @@ export class PoComboComponent extends PoComboBaseComponent implements AfterViewI
         this.focusItem();
       }
 
-      this.controlComboVisibility(true);
+      if (this.comboOpen) {
+        this.controlComboVisibility(true);
+      } else {
+        this.toggleComboVisibility();
+      }
+
       this.isFiltering = this.changeOnEnter ? this.isFiltering : false;
-      return;
     }
 
-    // Tecla "enter"
     if (key === PoKeyCodeEnum.enter && this.selectedView && this.comboOpen) {
       const isUpdateModel = this.selectedView.value !== this.selectedValue || inputValue !== this.selectedView.label;
 
@@ -285,7 +288,8 @@ export class PoComboComponent extends PoComboBaseComponent implements AfterViewI
     }
 
     if (key === PoKeyCodeEnum.enter) {
-      this.controlComboVisibility(true);
+      event.preventDefault();
+      this.toggleComboVisibility();
     }
 
     if (key === PoKeyCodeEnum.esc) {
@@ -298,6 +302,11 @@ export class PoComboComponent extends PoComboBaseComponent implements AfterViewI
       } else {
         this.onCloseCombo();
       }
+    }
+
+    if (key === PoKeyCodeEnum.tab && this.shouldHandleTab(event) && !this.isCleanVisible()) {
+      event.preventDefault();
+      this.focusItem();
     }
 
     this.lastKey = event.keyCode;
@@ -649,6 +658,30 @@ export class PoComboComponent extends PoComboBaseComponent implements AfterViewI
     );
   }
 
+  isCleanVisible(): boolean {
+    return this.clean && !this.disabled && !!this.inputEl.nativeElement.value;
+  }
+
+  handleCleanKeyboardTab(event: KeyboardEvent) {
+    if (this.shouldHandleTab(event)) {
+      event.preventDefault();
+      this.focusItem();
+    }
+  }
+
+  onListboxKeyDown(event: any) {
+    const key = event?.keyCode;
+
+    if (key === PoKeyCodeEnum.tab && event.shiftKey) {
+      this.focusInput();
+      event.preventDefault();
+    }
+
+    if (key === PoKeyCodeEnum.esc) {
+      event.stopPropagation();
+    }
+  }
+
   private adjustContainerPosition() {
     this.controlPosition.adjustPosition(this.listboxControlPosition);
   }
@@ -753,8 +786,8 @@ export class PoComboComponent extends PoComboBaseComponent implements AfterViewI
   }
 
   private setContainerPosition() {
-    this.controlPosition.setElements(
-      this.containerElement.nativeElement,
+    this.controlPosition?.setElements(
+      this.containerElement?.nativeElement,
       poComboContainerOffset,
       this.inputEl,
       ['top', 'bottom'],
@@ -786,18 +819,32 @@ export class PoComboComponent extends PoComboBaseComponent implements AfterViewI
     return this.infiniteScroll ? true : false;
   }
 
+  // Define o foco no item apropriado do listbox.
   private focusItem() {
     this.poListbox?.listboxItemList?.nativeElement.focus();
     setTimeout(() => {
-      let item;
+      let item: HTMLElement | null = null;
       if (this.selectedValue) {
         item = document.querySelector('.po-listbox-item[aria-selected="true"]');
-      } else {
-        item = document.querySelectorAll('.po-listbox-item')[0] as HTMLElement;
       }
-      this.poListbox?.listboxItemList?.nativeElement.focus();
-
-      item?.focus();
+      if (!item) {
+        const items = document.querySelectorAll('.po-listbox-item');
+        item = items.length > 0 ? (items[0] as HTMLElement) : null;
+      }
+      if (item) {
+        item.focus();
+      }
     });
+  }
+
+  // Define o foco no elemento input do combobox.
+  private focusInput(event?: KeyboardEvent) {
+    event?.preventDefault();
+    this.inputEl.nativeElement.focus();
+  }
+
+  // Determina se o tab deve abrir o listbox.
+  private shouldHandleTab(event: KeyboardEvent): boolean {
+    return this.comboOpen && this.appendBox && !event.shiftKey;
   }
 }
