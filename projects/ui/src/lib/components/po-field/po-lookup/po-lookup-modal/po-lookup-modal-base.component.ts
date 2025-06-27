@@ -212,6 +212,7 @@ export abstract class PoLookupModalBaseComponent implements OnDestroy, OnInit {
   page = 1;
   pageSize = 10;
   searchValue: string = '';
+  appliedSearchValue: string = '';
   tableLiterals: any;
 
   // Propriedade da modal de busca avançada:
@@ -325,6 +326,7 @@ export abstract class PoLookupModalBaseComponent implements OnDestroy, OnInit {
   createDisclaimer() {
     this.disclaimerGroup.disclaimers = [];
     this.searchValue = '';
+    this.appliedSearchValue = '';
 
     for (const [key, value] of Object.entries(this.dynamicFormValue)) {
       this.addDisclaimer(value, key);
@@ -363,9 +365,10 @@ export abstract class PoLookupModalBaseComponent implements OnDestroy, OnInit {
   }
 
   onChangeDisclaimerGroup() {
-    if (!this.searchValue) {
+    if (!this.appliedSearchValue) {
       this.isLoading = true;
       this.searchValue = '';
+      this.appliedSearchValue = '';
 
       this.searchFilteredItems();
     }
@@ -374,7 +377,9 @@ export abstract class PoLookupModalBaseComponent implements OnDestroy, OnInit {
   search(): void {
     this.page = 1;
 
-    if (this.searchValue) {
+    this.appliedSearchValue = this.searchValue;
+
+    if (this.appliedSearchValue) {
       this.isLoading = true;
       this.disclaimerGroup.disclaimers = [];
 
@@ -385,7 +390,7 @@ export abstract class PoLookupModalBaseComponent implements OnDestroy, OnInit {
   }
 
   searchFilteredItems(): void {
-    this.searchSubscription = this.getFilteredItems(this.searchValue)
+    this.searchSubscription = this.getFilteredItems(this.appliedSearchValue)
       .pipe(
         catchError(error => {
           this.setLookupResponseProperties();
@@ -402,7 +407,11 @@ export abstract class PoLookupModalBaseComponent implements OnDestroy, OnInit {
     this.page++;
     this.isLoading = true;
 
-    this.showMoreSubscription = this.getFilteredItems(this.searchValue)
+    if (this.searchValue !== this.appliedSearchValue) {
+      this.searchValue = this.appliedSearchValue;
+    }
+
+    this.showMoreSubscription = this.getFilteredItems(this.appliedSearchValue)
       .pipe(
         catchError(error => {
           this.hasNext = false;

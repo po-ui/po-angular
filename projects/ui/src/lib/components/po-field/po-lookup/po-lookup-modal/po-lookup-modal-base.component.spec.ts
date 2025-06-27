@@ -281,6 +281,7 @@ describe('PoLookupModalBaseComponent:', () => {
 
       component.search();
 
+      expect(component.appliedSearchValue).toBe('Suco');
       expect(component['getFilteredItems']).toHaveBeenCalledWith('Suco');
       expect(component.items.length).toBe(2);
       expect(component.hasNext).toBeTruthy();
@@ -291,7 +292,7 @@ describe('PoLookupModalBaseComponent:', () => {
         items: [{ value: 1, label: 'Suco' }],
         hasNext: false
       };
-      component.searchValue = 'Suco';
+      component.appliedSearchValue = 'Suco';
 
       spyOn(component, <any>'getFilteredItems').and.returnValue(of(data));
       const spySetLookupResponseProperties = spyOn(component, <any>'setLookupResponseProperties');
@@ -304,16 +305,19 @@ describe('PoLookupModalBaseComponent:', () => {
     it('search: should call `setLookupResponseProperties` without param if the service returns with an error', () => {
       component.searchValue = 'Suco';
 
-      spyOn(component, <any>'getFilteredItems').and.returnValue(throwError(''));
+      spyOn(component, <any>'getFilteredItems').and.returnValue(throwError(() => new Error('')));
+      const spySearchFilteredItems = spyOn(component, <any>'searchFilteredItems').and.callThrough();
       const spySetLookupResponseProperties = spyOn(component, <any>'setLookupResponseProperties');
 
       component.search();
 
+      expect(component.appliedSearchValue).toBe('Suco');
+      expect(spySearchFilteredItems).toHaveBeenCalled();
       expect(spySetLookupResponseProperties).toHaveBeenCalled();
     });
 
     it('search: should call `initializeData` if `searchValue` is falsy.', () => {
-      component.searchValue = undefined;
+      component.appliedSearchValue = undefined;
 
       spyOn(component, <any>'initializeData');
 
@@ -323,7 +327,7 @@ describe('PoLookupModalBaseComponent:', () => {
     });
 
     it('showMoreEvent: should apply false to `hasNext` and `isLoading` if the service returns with an error', () => {
-      component.searchValue = 'Suco';
+      component.appliedSearchValue = 'Suco';
       component.hasNext = true;
       component.isLoading = true;
 
@@ -340,7 +344,7 @@ describe('PoLookupModalBaseComponent:', () => {
       const returnedItems = [{ value: 6, label: 'Chocolate quente' }];
       component.page = 1;
       component.items = [].concat(items);
-      component.searchValue = searchValue;
+      component.appliedSearchValue = searchValue;
 
       spyOn(component, <any>'getFilteredItems').and.returnValue(of({ items: returnedItems }));
 
@@ -481,7 +485,7 @@ describe('PoLookupModalBaseComponent:', () => {
     });
 
     it('onChangeDisclaimerGroup: should call searchFilteredItems if searchValue is empty', () => {
-      component.searchValue = undefined;
+      component.appliedSearchValue = undefined;
       const spySearch = spyOn(component, <any>'searchFilteredItems');
 
       component.onChangeDisclaimerGroup();
@@ -490,7 +494,7 @@ describe('PoLookupModalBaseComponent:', () => {
     });
 
     it('onChangeDisclaimerGroup: should not call searchFilteredItems if searchValue is not empty', () => {
-      component.searchValue = 'hasValue';
+      component.appliedSearchValue = 'hasValue';
       const spySearch = spyOn(component, <any>'searchFilteredItems');
 
       component.onChangeDisclaimerGroup();
