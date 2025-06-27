@@ -484,6 +484,8 @@ export class PoChartComponent extends PoChartBaseComponent implements OnInit, Af
       if (this.options?.dataZoom) {
         this.chartGridUtils.setOptionDataZoom(options);
       }
+    } else if (this.chartGridUtils.isTypeDonut && this.options?.textCenterGraph) {
+      options.graphic = this.chartGridUtils.textCenterDonut;
     }
 
     if (this.options?.legend !== false) {

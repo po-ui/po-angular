@@ -219,6 +219,21 @@ export interface PoChartOptions {
    *
    * @description
    *
+   * Agrupa todas as séries numa única coluna ou barra por categoria. Essa propriedade sobrescreve a propriedade `stackGroupName` da interface `PoChartSerie`
+   *
+   * > Válido para gráfico do tipo `Column` e `Bar`.
+   *
+   * > Essa propriedade habilita a propriedade `p-data-label` por padrão, podendo ser desabilitada passando `[p-data-label]={ fixed: false }`.
+   *
+   * @default `false`
+   */
+  stacked?: boolean;
+
+  /**
+   * @optional
+   *
+   * @description
+   *
    * Define um subtítulo para o Gauge. Indicamos um subtítulo pequeno, com uma quantidade máxima de 32 caracteres na altura padrão.
    *
    * > Válido para gráfico do tipo `Gauge`.
