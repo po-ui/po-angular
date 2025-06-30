@@ -2,6 +2,12 @@
 
 All notable changes to this project will be documented in this file. See [standard-version](https://github.com/conventional-changelog/standard-version) for commit guidelines.
 
+## [19.18.0](https://github.com/po-ui/po-angular/compare/v19.17.1...v19.18.0) (2025-06-30)
+
+### Features
+
+* **combo:** implementar acessibilidade com append-in-body ([b9f4ee2](https://github.com/po-ui/po-angular/commit/b9f4ee203ad569586f79c21865b47400d4e2fafc))
+
 ### [19.17.1](https://github.com/po-ui/po-angular/compare/v19.17.0...v19.17.1) (2025-06-26)
 
 Compatibilidade com @totvs/thf-components@19.17.1
