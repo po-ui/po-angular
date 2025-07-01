@@ -1,3 +1,4 @@
+import { provideNgReflectAttributes } from '@angular/core';
 import { ComponentFixture, TestBed, waitForAsync } from '@angular/core/testing';
 import { NavigationCancel, NavigationEnd, RouterModule } from '@angular/router';
 
@@ -14,7 +15,8 @@ describe('PoNavbarItemsComponent:', () => {
   beforeEach(waitForAsync(() => {
     TestBed.configureTestingModule({
       declarations: [PoNavbarItemsComponent, PoNavbarItemComponent],
-      imports: [RouterModule.forRoot([], {})]
+      imports: [RouterModule.forRoot([], {})],
+      providers: [provideNgReflectAttributes()]
     }).compileComponents();
   }));
 
