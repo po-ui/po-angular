@@ -3,7 +3,7 @@ import { UntypedFormControl } from '@angular/forms';
 
 import { expectPropertiesValues } from '../../../util-test/util-expect.spec';
 
-import { ElementRef, EventEmitter } from '@angular/core';
+import { ElementRef, provideNgReflectAttributes } from '@angular/core';
 import { of, Subscription } from 'rxjs';
 import { PoLanguageService } from '../../../services';
 import { PoIconModule } from '../../po-icon';
@@ -24,7 +24,7 @@ describe('PoDecimalComponent:', () => {
     TestBed.configureTestingModule({
       imports: [PoIconModule],
       declarations: [PoDecimalComponent, PoFieldContainerComponent, PoCleanComponent, PoFieldContainerBottomComponent],
-      providers: [PoLanguageService]
+      providers: [PoLanguageService, provideNgReflectAttributes()]
     }).compileComponents();
   }));
 

@@ -26,8 +26,8 @@
     "tslib": "^2.3.0"
   },
   "peerDependencies": {
-    "@angular/core": "^19",
-    "@angular-devkit/schematics": "^19",
+    "@angular/core": "^20",
+    "@angular-devkit/schematics": "^20",
     "@capacitor/core": "^6.2.0",
     "@capacitor/network": "^6.0.1",
     "@po-ui/ng-storage": "0.0.0-PLACEHOLDER",

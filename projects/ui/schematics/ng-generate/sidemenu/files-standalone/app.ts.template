@@ -16,10 +16,10 @@ import {
     PoMenuModule,
     PoPageModule
   ],
-  templateUrl: './app.component.html',
-  styleUrls: ['./app.component.css'],
+  templateUrl: './app.html',
+  styleUrls: ['./app.<%= style %>'],
 })
-export class AppComponent {
+export class App {
   readonly menus: Array<PoMenuItem> = [
     { label: 'Home', action: this.onClick.bind(this) },
   ];
