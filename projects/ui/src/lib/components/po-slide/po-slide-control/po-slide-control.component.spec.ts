@@ -1,3 +1,4 @@
+import { provideNgReflectAttributes } from '@angular/core';
 import { ComponentFixture, TestBed } from '@angular/core/testing';
 
 import { PoIconModule } from '../../po-icon';
@@ -11,7 +12,8 @@ describe('PoSlideControlComponent:', () => {
   beforeEach(async () => {
     await TestBed.configureTestingModule({
       declarations: [PoSlideControlComponent],
-      imports: [PoIconModule]
+      imports: [PoIconModule],
+      providers: [provideNgReflectAttributes()]
     }).compileComponents();
 
     fixture = TestBed.createComponent(PoSlideControlComponent);

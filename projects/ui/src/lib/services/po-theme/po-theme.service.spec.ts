@@ -1,5 +1,4 @@
-import { DOCUMENT } from '@angular/common';
-import { Renderer2, RendererFactory2, RendererStyleFlags2 } from '@angular/core';
+import { Renderer2, RendererFactory2, RendererStyleFlags2, DOCUMENT } from '@angular/core';
 import { TestBed } from '@angular/core/testing';
 import { ICONS_DICTIONARY, PoIconDictionary } from '../../components/po-icon';
 import { PoThemeA11yEnum } from './enum/po-theme-a11y.enum';
