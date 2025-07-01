@@ -274,7 +274,8 @@
         "space-in-parens": ["off", "never"],
         "@angular-eslint/prefer-standalone": "off",
         "@typescript-eslint/no-unsafe-function-type": "off",
-        "@typescript-eslint/no-empty-object-type": "off"
+        "@typescript-eslint/no-empty-object-type": "off",
+        "@angular-eslint/prefer-inject": "off"
       }
     },
     {
