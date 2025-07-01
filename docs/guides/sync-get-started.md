@@ -9,9 +9,9 @@ Para maiores detalhes sobre os serviços e métodos utilizados neste tutorial, c
 ### Pré-requisitos
 
 - [Node.js e NPM](https://nodejs.org/en/)
-- [Angular CLI](https://cli.angular.io/) (~19.0.0):
+- [Angular CLI](https://cli.angular.io/) (~20.0.0):
   - ```shell
-    npm install -g @angular/cli@19
+    npm install -g @angular/cli@20
     ```
 - [Ionic](https://ionicframework.com/docs/cli/) (^7.2.0):
   - ```shell
@@ -49,32 +49,37 @@ Antes de executar a instalação, é necessário que todas as dependências do p
 ```json
   ...
   "dependencies": {
-    "@angular/animations": "~19.0.0",
-    "@angular/common": "~19.0.0",
-    "@angular/compiler": "~19.0.0",
-    "@angular/core": "~19.0.0",
-    "@angular/forms": "~19.0.0",
-    "@angular/platform-browser": "~19.0.0",
-    "@angular/platform-browser-dynamic": "~19.0.0",
-    "@angular/router": "~19.0.0",
-    "@angular/service-worker": "~19.0.0",
-    "@ionic/angular": "^8.0.0",
-    "@capacitor/network": "^6.0.1",
-    "@capacitor/splash-screen": "^6.0.1",
-    "@capacitor/status-bar": "6.0.0",
+    "@angular/animations": "~20.0.0",
+    "@angular/common": "~20.0.0",
+    "@angular/compiler": "~20.0.0",
+    "@angular/core": "~20.0.0",
+    "@angular/forms": "~20.0.0",
+    "@angular/platform-browser": "~20.0.0",
+    "@angular/platform-browser-dynamic": "~20.0.0",
+    "@angular/router": "~20.0.0",
+    "@capacitor/app": "7.0.2",
+    "@capacitor/core": "7.4.2",
+    "@capacitor/haptics": "7.0.2",
+    "@capacitor/keyboard": "7.0.2",
+    "@capacitor/splash-screen": "^7.0.2",
+    "@capacitor/status-bar": "7.0.2",
+    "@ionic/angular": "~8.0.0",
+    "ionicons": "^7.0.0",
     "rxjs": "~7.8.0",
     "tslib": "^2.3.0",
     "zone.js": "~0.15.0"
-    ...
   },
   "devDependencies": {
-    "@angular-devkit/build-angular": "~19.2.3",
-    "@angular-devkit/schematics": "~19.0.5",
-    "@angular/cli": "~19.0.5",
-    "@angular/compiler-cli": "~19.0.0",
-    "@angular/language-service": "~19.0.0",
-    "@ionic/angular-toolkit": "^11.0.1",
-    "typescript": "~5.6.2"
+    "@angular-devkit/build-angular": "~20.0.0",
+    "@angular-devkit/schematics": "~20.0.0",
+    ...
+    "@angular/cli": "~20.0.0",
+    "@angular/compiler-cli": "~20.0.0",
+    "@angular/language-service": "~20.0.0",
+    "@capacitor/cli": "7.4.2",
+    "@ionic/angular-toolkit": "^12.0.0",
+    ...
+    "typescript": "~5.8.0"
   },
   ...
 ```
@@ -85,12 +90,6 @@ Execute o seguinte comando para instalar as dependências:
 
 ```shell
 npm install
-```
-
-Após realizar a instalação, execute o seguinte comando:
-
-```shell
-ionic cap sync
 ```
 
 ### Passo 3 - Instalando o po-sync
@@ -387,6 +386,8 @@ No arquivo `src/app/home/home.page.html` crie a seguinte estrutura:
 Execute o comando `ionic serve` e verifique o funcionamento do aplicativo Ionic com `po-sync`.
 
 > Pode ocorrer o seguinte erro `TS2320: Interface 'HTMLIonIconElement' cannot simultaneously extend types 'IonIcon' and 'HTMLStencilElement'` por conta da versão do TypeScript (5.2.x) conforme esta [issue](https://github.com/ionic-team/ionicons/issues/1011), neste caso adicione no arquivo **tsconfig.json** `"skipLibCheck": true`.
+
+> Ao executar um projeto standalone, pode ocorrer o seguinte erro: `[ERROR] Invalid project type: angular-standalone (project config: ./ionic.config.json).`. Para corrigir, edite o arquivo `ionic.config.json` e ajuste a propriedade `type` para o valor `angular`.
 
 #### Passo 8.1 - Entendendo o funcionamento do `po-sync`
 
