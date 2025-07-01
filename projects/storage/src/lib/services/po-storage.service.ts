@@ -88,7 +88,7 @@ export const PO_STORAGE_CONFIG_TOKEN = new InjectionToken('PO_STORAGE_CONFIG_TOK
 export class PoStorageService {
   private driver: string = null;
   private idleQueue = new IdleQueue();
-  private storagePromise: Promise<LocalForage>;
+  private storagePromise: Promise<any>;
   private lokijsDriver: PoLokiDriver;
 
   constructor(@Inject(PO_STORAGE_CONFIG_TOKEN) config?: PoStorageConfig) {
@@ -351,10 +351,10 @@ export class PoStorageService {
   /**
    * Determina se o processo de inicialização do *driver* assíncrono foi concluído.
    *
-   * @returns {Promise<LocalForage>} Promessa que é resolvida quando o processo de inicialização do *driver* assíncrono
+   * @returns {Promise<any>} Promessa que é resolvida quando o processo de inicialização do *driver* assíncrono
    * for concluído.
    */
-  ready(): Promise<LocalForage> {
+  ready(): Promise<any> {
     return this.storagePromise;
   }
 
