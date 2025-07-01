@@ -1,0 +1,11 @@
+{
+  "extends": "./tsconfig.lib.json",
+  "compilerOptions": {
+    "declaration": true,
+    "declarationMap": false,
+    "emitDeclarationOnly": true,
+    "outDir": "../../dist/ng-components"
+  },
+  "include": ["src/**/*.ts"],
+  "exclude": ["test.ts", "**/*.spec.ts", "**/*.e2e-spec.ts", "**/*.po.ts", "./node_modules/", "**/samples/**"]
+}

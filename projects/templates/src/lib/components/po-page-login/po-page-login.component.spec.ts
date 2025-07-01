@@ -1,7 +1,7 @@
 import { ComponentFixture, fakeAsync, TestBed, tick, waitForAsync } from '@angular/core/testing';
 import { FormsModule } from '@angular/forms';
 import { HttpClient, HttpHandler } from '@angular/common/http';
-import { NO_ERRORS_SCHEMA } from '@angular/core';
+import { NO_ERRORS_SCHEMA, provideNgReflectAttributes } from '@angular/core';
 import { RouterTestingModule } from '@angular/router/testing';
 
 import {
@@ -48,7 +48,7 @@ describe('PoPageLoginComponent: ', () => {
         PoSelectComponent,
         PoSwitchComponent
       ],
-      providers: [HttpClient, HttpHandler, PoPageLoginService],
+      providers: [HttpClient, HttpHandler, PoPageLoginService, provideNgReflectAttributes()],
       schemas: [NO_ERRORS_SCHEMA]
     }).compileComponents();
   }));
