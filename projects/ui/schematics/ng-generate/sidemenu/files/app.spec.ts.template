@@ -8,9 +8,9 @@ import {
   PoToolbarModule,
 } from '@po-ui/ng-components';
 
-import { AppComponent } from './app.component';
+import { App } from './app';
 
-describe('AppComponent', () => {
+describe('App', () => {
   beforeEach(waitForAsync(() => {
     TestBed.configureTestingModule({
       imports: [
@@ -20,15 +20,14 @@ describe('AppComponent', () => {
         HttpClientTestingModule,
         RouterTestingModule,
       ],
-      declarations: [AppComponent],
+      declarations: [App],
     }).compileComponents();
   }));
 
   it('should create the app', () => {
-    const fixture = TestBed.createComponent(AppComponent);
+    const fixture = TestBed.createComponent(App);
     fixture.detectChanges();
     const app = fixture.componentInstance;
-
     expect(app).toBeTruthy();
   });
 });

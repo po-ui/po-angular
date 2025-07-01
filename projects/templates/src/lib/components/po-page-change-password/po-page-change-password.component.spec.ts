@@ -1,5 +1,5 @@
 import { ComponentFixture, fakeAsync, TestBed, tick, waitForAsync } from '@angular/core/testing';
-import { EventEmitter, NO_ERRORS_SCHEMA } from '@angular/core';
+import { EventEmitter, NO_ERRORS_SCHEMA, provideNgReflectAttributes } from '@angular/core';
 import { FormsModule } from '@angular/forms';
 import { HttpClient, HttpHandler } from '@angular/common/http';
 import { RouterTestingModule } from '@angular/router/testing';
@@ -25,7 +25,7 @@ describe('PoPageChangePasswordComponent:', () => {
     TestBed.configureTestingModule({
       imports: [FormsModule, RouterTestingModule.withRoutes([]), PoModule, PoPageBackgroundModule],
       declarations: [PoPageChangePasswordComponent],
-      providers: [HttpClient, HttpHandler, PoPageChangePasswordService]
+      providers: [HttpClient, HttpHandler, PoPageChangePasswordService, provideNgReflectAttributes()]
     }).compileComponents();
   }));
 
