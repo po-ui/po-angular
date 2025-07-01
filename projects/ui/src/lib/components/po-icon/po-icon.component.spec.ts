@@ -5,7 +5,7 @@ import { PoIconComponent } from './po-icon.component';
 import { ICONS_DICTIONARY, PoIconDictionary } from './po-icon-dictionary';
 
 class TemplateA extends TemplateRef<void> {
-  elementRef;
+  declare elementRef;
   createEmbeddedView(context) {
     return <any>null;
   }
