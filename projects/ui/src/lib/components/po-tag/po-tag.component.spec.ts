@@ -1,4 +1,4 @@
-import { Component } from '@angular/core';
+import { Component, provideNgReflectAttributes } from '@angular/core';
 import { ComponentFixture, fakeAsync, TestBed, tick } from '@angular/core/testing';
 import { By } from '@angular/platform-browser';
 
@@ -35,7 +35,8 @@ describe('PoTagComponent:', () => {
   beforeEach(async () => {
     await TestBed.configureTestingModule({
       declarations: [PoTagComponent, PoTagClickableComponent],
-      imports: [PoIconModule, PoTooltipModule]
+      imports: [PoIconModule, PoTooltipModule],
+      providers: [provideNgReflectAttributes()]
     }).compileComponents();
 
     fixture = TestBed.createComponent(PoTagComponent);
