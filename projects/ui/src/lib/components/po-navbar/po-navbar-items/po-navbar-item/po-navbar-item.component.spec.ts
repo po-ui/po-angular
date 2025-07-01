@@ -1,3 +1,4 @@
+import { provideNgReflectAttributes } from '@angular/core';
 import { ComponentFixture, TestBed } from '@angular/core/testing';
 import { RouterModule } from '@angular/router';
 
@@ -11,7 +12,8 @@ describe('PoNavbarItemComponent:', () => {
   beforeEach(async () => {
     await TestBed.configureTestingModule({
       declarations: [PoNavbarItemComponent],
-      imports: [RouterModule.forRoot([], {})]
+      imports: [RouterModule.forRoot([], {})],
+      providers: [provideNgReflectAttributes()]
     }).compileComponents();
 
     fixture = TestBed.createComponent(PoNavbarItemComponent);

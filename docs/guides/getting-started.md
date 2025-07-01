@@ -3,16 +3,16 @@
 
 ### Pré-requisitos
 
-Para começar a utilizar o **PO UI** é pré-requisito ter o `Node.js` instalado (versão 18.19.x ou acima) e o seu gerenciador de pacote favorito na versão mais atual. Caso você ainda não tenha instalado o pacote `@angular/cli`, instale-o via `npm` ou `yarn`.
+Para começar a utilizar o **PO UI** é pré-requisito ter o `Node.js` instalado (versão 20.11.x ou acima) e o seu gerenciador de pacote favorito na versão mais atual. Caso você ainda não tenha instalado o pacote `@angular/cli`, instale-o via `npm` ou `yarn`.
 
 Instalando com npm:
 ```
-npm i -g @angular/cli@19
+npm i -g @angular/cli@20
 ```
 
 Caso prefira instalar com o yarn:
 ```
-yarn global add @angular/cli@19
+yarn global add @angular/cli@20
 ```
 
 ### Passo 1 - Crie o seu primeiro projeto
@@ -36,26 +36,26 @@ Veja abaixo a lista de dependências e as versões compatíveis, elas devem ser 
 
 ```json
   "dependencies": {
-    "@angular/animations": "~19.0.0",
-    "@angular/common": "~19.0.0",
-    "@angular/compiler": "~19.0.0",
-    "@angular/core": "~19.0.0",
-    "@angular/forms": "~19.0.0",
-    "@angular/platform-browser": "~19.0.0",
-    "@angular/platform-browser-dynamic": "~19.0.0",
-    "@angular/router": "~19.0.0",
+    "@angular/animations": "~20.0.0",
+    "@angular/common": "~20.0.0",
+    "@angular/compiler": "~20.0.0",
+    "@angular/core": "~20.0.0",
+    "@angular/forms": "~20.0.0",
+    "@angular/platform-browser": "~20.0.0",
+    "@angular/platform-browser-dynamic": "~20.0.0",
+    "@angular/router": "~20.0.0",
     "rxjs": "~7.8.0",
     "tslib": "^2.3.0",
     "zone.js": "~0.15.0"
     ...
   },
   "devDependencies": {
-    "@angular-devkit/build-angular": "~19.2.3",
-    "@angular-devkit/schematics": "~19.0.5",
-    "@angular/cli": "~19.0.5",
-    "@angular/compiler-cli": "~19.0.0",
+    "@angular/build": "~20.0.6",
+    "@angular-devkit/schematics": "~20.0.0",
+    "@angular/cli": "~20.0.6",
+    "@angular/compiler-cli": "~20.0.0",
     ...
-    "typescript": "~5.6.2"
+    "typescript": "~5.8.2"
   }
 ```
 
