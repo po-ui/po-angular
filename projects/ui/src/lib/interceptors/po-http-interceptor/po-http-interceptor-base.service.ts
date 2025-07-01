@@ -31,11 +31,13 @@ const NO_MESSAGE_HEADER_PARAM = 'X-PO-No-Message';
  * ## Configuração
  *
  * Para o correto funcionamento do interceptor `po-http-interceptor`, deve ser importado o `BrowserAnimationsModule` no
- * módulo principal da sua aplicação.
+ * módulo principal da sua aplicação. Além disso, é necessário configurar o `HttpClient` para utilizar os interceptors
+ * registrados no Dependency Injection (DI) por meio da função `provideHttpClient(withInterceptorsFromDi())`.
  *
  * Módulo da aplicação:
  * ```
  * import { BrowserAnimationsModule } from '@angular/platform-browser/animations';
+ * import { provideHttpClient, withInterceptorsFromDi } from '@angular/common/http';
  * import { PoModule } from '@po-ui/ng-components';
  * ...
  *
@@ -50,7 +52,10 @@ const NO_MESSAGE_HEADER_PARAM = 'X-PO-No-Message';
  *     AppComponent,
  *     ...
  *   ],
- *   providers: [],
+ *   providers: [
+ *     provideHttpClient(withInterceptorsFromDi()),
+ *     ...
+ *   ],
  *   bootstrap: [AppComponent]
  * })
  * export class AppModule { }
