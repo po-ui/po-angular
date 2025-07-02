@@ -81,6 +81,7 @@ export class PoModalPasswordRecoveryComponent extends PoModalPasswordRecoveryBas
   private smsBodyResponse;
   private smsCodeSubscription: Subscription;
 
+  /* eslint-disable @angular-eslint/prefer-inject */
   constructor(
     private router: Router,
     private poI18nPipe: PoI18nPipe,

@@ -35,6 +35,7 @@ import { PoButtonGroupBaseComponent } from './po-button-group-base.component';
   standalone: false
 })
 export class PoButtonGroupComponent extends PoButtonGroupBaseComponent {
+  /* eslint-disable @angular-eslint/prefer-inject */
   constructor(
     viewRef: ViewContainerRef,
     protected poThemeService: PoThemeService

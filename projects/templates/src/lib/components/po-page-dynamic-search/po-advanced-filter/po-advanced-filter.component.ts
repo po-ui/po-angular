@@ -28,6 +28,7 @@ export class PoAdvancedFilterComponent extends PoAdvancedFilterBaseComponent imp
 
   private subscription = new Subscription();
 
+  /* eslint-disable @angular-eslint/prefer-inject */
   constructor(
     languageService: PoLanguageService,
     protected poThemeService: PoThemeService

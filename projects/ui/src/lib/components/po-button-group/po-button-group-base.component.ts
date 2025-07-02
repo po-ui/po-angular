@@ -114,6 +114,7 @@ export class PoButtonGroupBaseComponent {
     return this._size ?? getDefaultSize(this.poThemeService, PoFieldSize);
   }
 
+  /* eslint-disable @angular-eslint/prefer-inject */
   constructor(protected poThemeService: PoThemeService) {}
 
   onButtonClick(buttonClicked: PoButtonGroupItem, buttonIndex: number) {

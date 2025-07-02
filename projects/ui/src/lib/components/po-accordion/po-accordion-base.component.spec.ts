@@ -1,3 +1,4 @@
+import { TestBed } from '@angular/core/testing';
 import { poLocaleDefault } from '../../services';
 import { PoLanguageService } from '../../services/po-language/po-language.service';
 import { expectPropertiesValues } from '../../util-test/util-expect.spec';
@@ -5,11 +6,12 @@ import { convertToBoolean } from '../../utils/util';
 import { PoAccordionBaseComponent, poAccordionLiteralsDefault } from './po-accordion-base.component';
 
 describe('PoAccordionBaseComponent:', () => {
-  const languageService: PoLanguageService = new PoLanguageService();
   let component: PoAccordionBaseComponent;
 
   beforeEach(() => {
-    component = new PoAccordionBaseComponent(languageService);
+    TestBed.runInInjectionContext(() => {
+      component = new PoAccordionBaseComponent();
+    });
   });
 
   describe('Properties:', () => {

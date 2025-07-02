@@ -1,11 +1,11 @@
-import { Injectable } from '@angular/core';
+import { inject, Injectable } from '@angular/core';
 import { HttpClient } from '@angular/common/http';
 
 @Injectable({
   providedIn: 'root'
 })
 export class SamplePoPageDynamicTableUsersService {
-  constructor(public http: HttpClient) {}
+  public http = inject(HttpClient);
 
   downloadCsv(endpoint: any) {
     this.http.get(endpoint).subscribe((data: any) => {

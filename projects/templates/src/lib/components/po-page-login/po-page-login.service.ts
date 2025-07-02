@@ -10,6 +10,7 @@ import { PoPageLoginAuthenticationType } from './enums/po-page-login-authenticat
   providedIn: 'root'
 })
 export class PoPageLoginService {
+  /* eslint-disable @angular-eslint/prefer-inject */
   constructor(private http: HttpClient) {}
 
   onLogin(url: string, type: PoPageLoginAuthenticationType, loginForm: PoPageLogin): Observable<object> {

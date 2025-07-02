@@ -115,6 +115,7 @@ export class PoPageJobSchedulerComponent extends PoPageJobSchedulerBaseComponent
   protected stepSummary = 3;
   protected _stepExecutionLast: boolean;
 
+  /* eslint-disable @angular-eslint/prefer-inject */
   constructor(
     public poPageDynamicLookupService: PoPageJobSchedulerLookupService,
     private activatedRoute: ActivatedRoute,

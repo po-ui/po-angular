@@ -1,3 +1,4 @@
+import { TestBed } from '@angular/core/testing';
 import { PoChartBaseComponent } from './po-chart-base.component';
 import { PoLanguageService } from '../../services/po-language/po-language.service';
 import { PoChartLiterals } from '../po-chart/interfaces/po-chart-literals.interface';
@@ -16,7 +17,9 @@ describe('PoChartBaseComponent', () => {
 
   beforeEach(() => {
     languageService = new PoLanguageService();
-    component = new PoChartBaseComponentMock(languageService);
+    TestBed.runInInjectionContext(() => {
+      component = new PoChartBaseComponentMock();
+    });
   });
 
   it('should be created', () => {

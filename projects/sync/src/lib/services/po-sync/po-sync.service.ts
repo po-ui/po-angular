@@ -40,6 +40,7 @@ export class PoSyncService {
   private syncing: boolean = false;
   private timer: Observable<number>;
 
+  /* eslint-disable @angular-eslint/prefer-inject */
   constructor(
     private poEventSourcingService: PoEventSourcingService,
     private poHttpClient: PoHttpClientService,

@@ -1,4 +1,14 @@
-import { AfterViewInit, Component, DoCheck, ElementRef, forwardRef, NgZone, ViewChild, Provider } from '@angular/core';
+import {
+  AfterViewInit,
+  Component,
+  DoCheck,
+  ElementRef,
+  forwardRef,
+  NgZone,
+  ViewChild,
+  Provider,
+  inject
+} from '@angular/core';
 import { NG_VALUE_ACCESSOR } from '@angular/forms';
 
 import { PoCodeEditorBaseComponent } from './po-code-editor-base.component';
@@ -63,18 +73,14 @@ const providers: Array<Provider> = [
   standalone: false
 })
 export class PoCodeEditorComponent extends PoCodeEditorBaseComponent implements AfterViewInit, DoCheck {
+  private zone = inject(NgZone);
+  private el = inject(ElementRef);
+  private poCodeEditorSuggestionService = inject(PoCodeEditorSuggestionService);
+  private codeEditorRegister = inject(PoCodeEditorRegister);
+
   @ViewChild('editorContainer', { static: true }) editorContainer: ElementRef;
 
   canLoad = false;
-
-  constructor(
-    private zone: NgZone,
-    private el: ElementRef,
-    private poCodeEditorSuggestionService: PoCodeEditorSuggestionService,
-    private codeEditorRegister?: PoCodeEditorRegister
-  ) {
-    super();
-  }
 
   /* istanbul ignore next */
   ngAfterViewInit(): void {

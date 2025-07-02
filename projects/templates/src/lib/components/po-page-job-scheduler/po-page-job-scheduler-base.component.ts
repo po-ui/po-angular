@@ -279,6 +279,7 @@ export class PoPageJobSchedulerBaseComponent implements OnDestroy {
   private _subscription = new Subscription();
   private _orientation;
 
+  /* eslint-disable @angular-eslint/prefer-inject */
   constructor(
     protected poPageJobSchedulerService: PoPageJobSchedulerService,
     protected poThemeService: PoThemeService

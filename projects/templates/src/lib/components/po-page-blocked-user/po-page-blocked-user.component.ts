@@ -56,6 +56,7 @@ export const poPageBlockedUserButtonLiterals: object = {
 export class PoPageBlockedUserComponent extends PoPageBlockedUserBaseComponent implements OnInit {
   literals;
 
+  /* eslint-disable @angular-eslint/prefer-inject */
   constructor(
     private activatedRoute: ActivatedRoute,
     private router: Router,

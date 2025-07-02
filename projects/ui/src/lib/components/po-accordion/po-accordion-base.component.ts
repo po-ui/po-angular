@@ -1,4 +1,4 @@
-import { Directive, EventEmitter, Input, Output } from '@angular/core';
+import { Directive, EventEmitter, Input, Output, inject } from '@angular/core';
 import { poLocaleDefault } from '../../services/po-language/po-language.constant';
 import { PoLanguageService } from '../../services/po-language/po-language.service';
 import { convertToBoolean } from '../../utils/util';
@@ -193,7 +193,9 @@ export class PoAccordionBaseComponent {
    */
   @Output('p-collapse-all') collapseAllEvent = new EventEmitter<void>();
 
-  constructor(languageService: PoLanguageService) {
+  constructor() {
+    const languageService = inject(PoLanguageService);
+
     this.language = languageService.getShortLanguage();
   }
 }

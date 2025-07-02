@@ -320,6 +320,7 @@ export abstract class PoModalPasswordRecoveryBaseComponent {
     return this._type;
   }
 
+  /* eslint-disable @angular-eslint/prefer-inject */
   constructor(
     languageService: PoLanguageService,
     protected poThemeService: PoThemeService

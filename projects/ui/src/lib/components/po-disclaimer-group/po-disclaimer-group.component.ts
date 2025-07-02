@@ -49,6 +49,7 @@ export class PoDisclaimerGroupComponent extends PoDisclaimerGroupBaseComponent i
 
   private el = inject(ElementRef);
 
+  /* eslint-disable @angular-eslint/prefer-inject */
   constructor(
     differs: IterableDiffers,
     languageService: PoLanguageService,

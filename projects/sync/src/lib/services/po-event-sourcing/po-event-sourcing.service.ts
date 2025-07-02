@@ -51,6 +51,7 @@ export class PoEventSourcingService {
 
   private schemasSyncConfig = {};
 
+  /* eslint-disable @angular-eslint/prefer-inject */
   constructor(
     private poSchemaDefinition: PoSchemaDefinitionService,
     private poSchemaService: PoSchemaService,

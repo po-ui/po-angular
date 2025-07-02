@@ -106,6 +106,7 @@ export class PoPageBackgroundComponent implements OnInit {
     return this._showSelectLanguage;
   }
 
+  /* eslint-disable @angular-eslint/prefer-inject */
   constructor(
     public poLanguageService: PoLanguageService,
     protected poThemeService: PoThemeService

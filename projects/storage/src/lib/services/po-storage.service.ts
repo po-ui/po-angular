@@ -91,6 +91,7 @@ export class PoStorageService {
   private storagePromise: Promise<LocalForage>;
   private lokijsDriver: PoLokiDriver;
 
+  // eslint-disable-next-line @angular-eslint/prefer-inject
   constructor(@Inject(PO_STORAGE_CONFIG_TOKEN) config?: PoStorageConfig) {
     this.lokijsDriver = new PoLokiDriver();
     this.setStoragePromise(config);

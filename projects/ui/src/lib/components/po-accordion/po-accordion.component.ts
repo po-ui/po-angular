@@ -1,4 +1,4 @@
-import { Component, ContentChildren, OnDestroy, QueryList, ViewChildren } from '@angular/core';
+import { Component, ContentChildren, OnDestroy, QueryList, ViewChildren, inject } from '@angular/core';
 
 import { Subscription } from 'rxjs';
 
@@ -35,6 +35,8 @@ import { PoAccordionService } from './services/po-accordion.service';
   standalone: false
 })
 export class PoAccordionComponent extends PoAccordionBaseComponent implements OnDestroy {
+  private accordionService = inject(PoAccordionService);
+
   @ViewChildren(PoAccordionItemHeaderComponent) accordionsHeader: QueryList<PoAccordionItemHeaderComponent>;
   @ContentChildren(PoAccordionItemComponent) poAccordionItems: QueryList<PoAccordionItemComponent>;
 
@@ -43,11 +45,8 @@ export class PoAccordionComponent extends PoAccordionBaseComponent implements On
   private accordionServiceSubscription: Subscription;
   private expandedActiveAccordionItem: PoAccordionItemComponent;
 
-  constructor(
-    private accordionService: PoAccordionService,
-    languageService: PoLanguageService
-  ) {
-    super(languageService);
+  constructor() {
+    super();
     this.receiveFromChildAccordionSubscription();
   }
 

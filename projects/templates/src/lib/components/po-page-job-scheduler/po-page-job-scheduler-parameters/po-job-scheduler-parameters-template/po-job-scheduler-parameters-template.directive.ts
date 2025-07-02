@@ -74,5 +74,6 @@ export class PoJobSchedulerParametersTemplateDirective {
   @Input('p-label-step') title: string;
 
   // Necessário manter templateRef para o funcionamento do row template.
+  /* eslint-disable @angular-eslint/prefer-inject */
   constructor(public templateRef: TemplateRef<any>) {}
 }

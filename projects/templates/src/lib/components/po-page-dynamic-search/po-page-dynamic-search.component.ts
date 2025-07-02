@@ -78,6 +78,7 @@ export class PoPageDynamicSearchComponent
     width: this.quickSearchWidth
   };
 
+  /* eslint-disable @angular-eslint/prefer-inject */
   constructor(
     private languageService: PoLanguageService,
     private poPageCustomizationService: PoPageCustomizationService,

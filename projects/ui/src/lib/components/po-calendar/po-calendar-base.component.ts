@@ -1,4 +1,4 @@
-import { EventEmitter, Input, Output, Directive } from '@angular/core';
+import { EventEmitter, Input, Output, Directive, inject } from '@angular/core';
 
 import { PoDateService } from '../../services/po-date';
 import { PoLanguageService } from '../../services/po-language/po-language.service';
@@ -40,6 +40,9 @@ import { PoCalendarMode } from './po-calendar-mode.enum';
  */
 @Directive()
 export class PoCalendarBaseComponent {
+  poDate = inject(PoDateService);
+  private languageService = inject(PoLanguageService);
+
   /** Evento disparado ao selecionar um dia do calendário. */
   @Output('p-change') change = new EventEmitter<string | { start; end }>();
 
@@ -153,10 +156,9 @@ export class PoCalendarBaseComponent {
     return this.mode === PoCalendarMode.Range;
   }
 
-  constructor(
-    public poDate: PoDateService,
-    private languageService: PoLanguageService
-  ) {
+  constructor() {
+    const languageService = this.languageService;
+
     this.shortLanguage = languageService.getShortLanguage();
     this._locale = this.languageService.getShortLanguage();
   }

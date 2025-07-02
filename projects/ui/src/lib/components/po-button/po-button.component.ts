@@ -32,6 +32,7 @@ import { PoButtonBaseComponent } from './po-button-base.component';
 export class PoButtonComponent extends PoButtonBaseComponent {
   @ViewChild('button', { static: true }) buttonElement: ElementRef;
 
+  /* eslint-disable @angular-eslint/prefer-inject */
   constructor(protected poThemeService: PoThemeService) {
     super(poThemeService);
   }

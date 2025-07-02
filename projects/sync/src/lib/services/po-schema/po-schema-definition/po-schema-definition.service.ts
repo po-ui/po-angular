@@ -16,6 +16,7 @@ import { PoSyncSchema } from './../../po-sync/interfaces/po-sync-schema.interfac
   providedIn: 'root'
 })
 export class PoSchemaDefinitionService {
+  /* eslint-disable @angular-eslint/prefer-inject */
   constructor(private poStorage: PoStorageService) {}
 
   /**

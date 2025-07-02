@@ -137,6 +137,7 @@ export class PoAdvancedFilterBaseComponent {
     return this._literals || poAdvancedFiltersLiteralsDefault[this.language];
   }
 
+  /* eslint-disable @angular-eslint/prefer-inject */
   constructor(
     languageService: PoLanguageService,
     protected poThemeService: PoThemeService

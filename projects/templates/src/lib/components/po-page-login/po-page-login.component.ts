@@ -68,6 +68,7 @@ export class PoPageLoginComponent extends PoPageLoginBaseComponent implements Af
   private differ: any;
   private readonly customPasswordError = { custom: false };
 
+  /* eslint-disable @angular-eslint/prefer-inject */
   constructor(
     protected poThemeService: PoThemeService,
     public changeDetector: ChangeDetectorRef,

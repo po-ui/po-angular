@@ -208,5 +208,6 @@ export class PoPageBlockedUserBaseComponent {
     return this._urlBack;
   }
 
+  /* eslint-disable @angular-eslint/prefer-inject */
   constructor(protected poThemeService: PoThemeService) {}
 }

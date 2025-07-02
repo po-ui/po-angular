@@ -121,6 +121,7 @@ export class PoDisclaimerGroupBaseComponent implements DoCheck {
     return this._hideRemoveAll;
   }
 
+  /* eslint-disable @angular-eslint/prefer-inject */
   constructor(
     differs: IterableDiffers,
     languageService: PoLanguageService,

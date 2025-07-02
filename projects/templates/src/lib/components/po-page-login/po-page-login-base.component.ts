@@ -1022,6 +1022,7 @@ export abstract class PoPageLoginBaseComponent implements OnDestroy {
     };
   }
 
+  /* eslint-disable @angular-eslint/prefer-inject */
   constructor(
     protected poThemeService: PoThemeService,
     private loginService: PoPageLoginService,

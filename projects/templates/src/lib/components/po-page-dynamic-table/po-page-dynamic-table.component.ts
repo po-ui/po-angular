@@ -13,7 +13,6 @@ import {
   PoTableAction,
   PoTableColumnSort,
   PoTableColumnSortType,
-  PoTableColumnSpacing,
   PoThemeService,
   poLocaleDefault
 } from '@po-ui/ng-components';
@@ -635,6 +634,7 @@ export class PoPageDynamicTableComponent extends PoPageDynamicListBaseComponent 
   @Input('p-visible-fixed-filters') visibleFixedFilters: boolean = true;
 
   /* eslint-disable max-params */
+  /* eslint-disable @angular-eslint/prefer-inject */
   constructor(
     protected poThemeService: PoThemeService,
     private router: Router,

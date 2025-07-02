@@ -18,6 +18,7 @@ import { PoHttpRequestType } from './po-http-request-type.enum';
   providedIn: 'root'
 })
 export class PoHttpClientService {
+  /* eslint-disable @angular-eslint/prefer-inject */
   constructor(private httpClient: HttpClient) {}
 
   /**

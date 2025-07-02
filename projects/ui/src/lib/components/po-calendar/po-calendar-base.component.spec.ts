@@ -5,6 +5,7 @@ import { PoCalendarMode } from './po-calendar-mode.enum';
 import { PoCalendarBaseComponent } from './po-calendar-base.component';
 import { PoCalendarLangService } from './services/po-calendar.lang.service';
 import { PoLanguageService } from '../../services/po-language/po-language.service';
+import { TestBed } from '@angular/core/testing';
 
 describe('PoCalendarBaseComponent:', () => {
   let component: PoCalendarBaseComponent;
@@ -14,7 +15,9 @@ describe('PoCalendarBaseComponent:', () => {
   beforeEach(() => {
     poDate = new PoDateService();
     languageService = new PoLanguageService();
-    component = new PoCalendarBaseComponent(poDate, languageService);
+    TestBed.runInInjectionContext(() => {
+      component = new PoCalendarBaseComponent();
+    });
     component['shortLanguage'] = 'pt';
   });
 

@@ -1,4 +1,4 @@
-import { Directive, EventEmitter, Input, OnInit, Output } from '@angular/core';
+import { Directive, EventEmitter, inject, Input, OnInit, Output } from '@angular/core';
 import { poLocaleDefault } from '../../services/po-language/po-language.constant';
 import { PoLanguageService } from '../../services/po-language/po-language.service';
 import { PoChartType } from '../po-chart/enums/po-chart-type.enum';
@@ -278,7 +278,8 @@ export abstract class PoChartBaseComponent implements OnInit {
   @Output('p-series-hover')
   seriesHover: EventEmitter<any> = new EventEmitter<any>();
 
-  constructor(languageService: PoLanguageService) {
+  constructor() {
+    const languageService = inject(PoLanguageService);
     this.language = languageService.getShortLanguage();
   }
 

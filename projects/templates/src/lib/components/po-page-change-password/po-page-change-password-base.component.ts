@@ -305,6 +305,7 @@ export abstract class PoPageChangePasswordBaseComponent {
    */
   @Input('p-no-autocomplete-password') noAutocompletePassword: boolean = true;
 
+  /* eslint-disable @angular-eslint/prefer-inject */
   constructor(protected poThemeService: PoThemeService) {}
 
   abstract navigateTo(url: string): void;

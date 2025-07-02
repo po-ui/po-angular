@@ -95,6 +95,7 @@ export class PoPageChangePasswordComponent
   private newPasswordSubscription: Subscription;
   private componentRef: ComponentRef<any> = null;
 
+  /* eslint-disable @angular-eslint/prefer-inject */
   constructor(
     private activatedRoute: ActivatedRoute,
     private route: ActivatedRoute,

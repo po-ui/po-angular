@@ -354,6 +354,7 @@ export abstract class PoPageDynamicSearchBaseComponent {
     return this._hideCloseDisclaimers;
   }
 
+  /* eslint-disable @angular-eslint/prefer-inject */
   constructor(
     languageService: PoLanguageService,
     protected poThemeService: PoThemeService

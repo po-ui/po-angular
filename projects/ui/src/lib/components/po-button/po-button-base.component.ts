@@ -244,5 +244,6 @@ export class PoButtonBaseComponent {
     return this._size ?? getDefaultSize(this.poThemeService, PoButtonSize);
   }
 
+  /* eslint-disable @angular-eslint/prefer-inject */
   constructor(protected poThemeService: PoThemeService) {}
 }

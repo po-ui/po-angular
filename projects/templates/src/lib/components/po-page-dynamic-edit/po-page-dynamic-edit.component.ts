@@ -513,6 +513,7 @@ export class PoPageDynamicEditComponent implements OnInit, OnDestroy {
   }
 
   /* eslint-disable max-params */
+  /* eslint-disable @angular-eslint/prefer-inject */
   constructor(
     private router: Router,
     private activatedRoute: ActivatedRoute,
