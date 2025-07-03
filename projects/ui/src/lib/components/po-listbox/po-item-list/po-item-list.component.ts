@@ -1,10 +1,10 @@
 import { Component, ElementRef, OnChanges, SimpleChanges, ViewChild } from '@angular/core';
 import { DomSanitizer, SafeHtml } from '@angular/platform-browser';
 
-import { PoItemListOptionGroup } from './interfaces/po-item-list-option-group.interface';
+import { PoFieldSize } from '../../../enums/po-field-size.enum';
+import { PoItemListFilterMode } from '../enums/po-item-list-filter-mode.enum';
 import { PoItemListOption } from './interfaces/po-item-list-option.interface';
 import { PoItemListBaseComponent } from './po-item-list-base.component';
-import { PoItemListFilterMode } from '../enums/po-item-list-filter-mode.enum';
 
 @Component({
   selector: 'po-item-list',
@@ -19,7 +19,7 @@ export class PoItemListComponent extends PoItemListBaseComponent implements OnCh
   protected param;
   protected clickListener: () => void;
 
-  constructor(private sanitized: DomSanitizer) {
+  constructor(protected sanitized: DomSanitizer) {
     super();
   }
 
@@ -70,7 +70,8 @@ export class PoItemListComponent extends PoItemListBaseComponent implements OnCh
       const labelInput = this.sanitizeTagHTML(this.searchValue.toString().toLowerCase());
       const labelLowerCase = sanitizedLabel.toLowerCase();
 
-      const openTagBold = '<span class="po-font-text-large-bold">';
+      const highlightClass = this.size === PoFieldSize.Small ? 'po-font-text-bold' : 'po-font-text-large-bold';
+      const openTagBold = `<span class="${highlightClass}">`;
       const closeTagBold = '</span>';
 
       let startString;
@@ -79,7 +80,7 @@ export class PoItemListComponent extends PoItemListBaseComponent implements OnCh
 
       switch (this.filterMode) {
         case PoItemListFilterMode.startsWith:
-        case PoItemListFilterMode.contains:
+        case PoItemListFilterMode.contains: {
           const indexOfLabelInput = labelLowerCase.indexOf(labelInput);
 
           if (indexOfLabelInput > -1) {
@@ -92,7 +93,8 @@ export class PoItemListComponent extends PoItemListBaseComponent implements OnCh
           }
 
           break;
-        case PoItemListFilterMode.endsWith:
+        }
+        case PoItemListFilterMode.endsWith: {
           const lastIndexOfLabelInput = labelLowerCase.lastIndexOf(labelInput);
 
           if (lastIndexOfLabelInput > -1) {
@@ -102,6 +104,7 @@ export class PoItemListComponent extends PoItemListBaseComponent implements OnCh
             format = startString + openTagBold + middleString + closeTagBold;
           }
           break;
+        }
       }
     }
 
@@ -117,6 +120,6 @@ export class PoItemListComponent extends PoItemListBaseComponent implements OnCh
   }
 
   private sanitizeTagHTML(value: string = '') {
-    return value.replace(/\</gm, '&lt;').replace(/\>/g, '&gt;');
+    return value.replace(/</g, '&lt;').replace(/>/g, '&gt;');
   }
 }

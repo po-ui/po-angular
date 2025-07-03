@@ -46,6 +46,142 @@ describe('PoSearchComponent', () => {
     expect(component).toBeTruthy();
   });
 
+  describe('showNoResults', () => {
+    it('should return true when filterLocate is true and locateSummary.total is 0 and input has value', () => {
+      component.filterLocate = true;
+      component.locateSummary = { currentIndex: 0, total: 0 };
+      component.poSearchInput = { nativeElement: { value: 'abc' } } as any;
+
+      expect(component.showNoResults).toBeTrue();
+    });
+
+    it('should return false when filterLocate is true and locateSummary.total is greater than 0', () => {
+      component.filterLocate = true;
+      component.locateSummary = { currentIndex: 1, total: 2 };
+      component.poSearchInput = { nativeElement: { value: 'abc' } } as any;
+
+      expect(component.showNoResults).toBeFalse();
+    });
+
+    it('should return true when filterLocate is false and listboxFilteredItems is empty and input has value', () => {
+      component.filterLocate = false;
+      component.showListbox = true;
+      component.listboxFilteredItems = [];
+      component.poSearchInput = { nativeElement: { value: 'abc' } } as any;
+
+      expect(component.showNoResults).toBeTrue();
+    });
+
+    it('should return false when filterLocate is false and listboxFilteredItems has items', () => {
+      component.filterLocate = false;
+      component.showListbox = true;
+      component.listboxFilteredItems = [{ label: 'a', value: 'a' }];
+      component.poSearchInput = { nativeElement: { value: 'abc' } } as any;
+
+      expect(component.showNoResults).toBeFalse();
+    });
+
+    it('should return true when listboxFilteredItems is undefined and input has value', () => {
+      component.filterLocate = false;
+      component.showListbox = true;
+      component.listboxFilteredItems = undefined;
+      component.poSearchInput = { nativeElement: { value: 'abc' } } as any;
+
+      expect(component.showNoResults).toBeTrue();
+    });
+
+    it('should return true when listboxFilteredItems is null and input has value', () => {
+      component.filterLocate = false;
+      component.showListbox = true;
+      component.listboxFilteredItems = null;
+      component.poSearchInput = { nativeElement: { value: 'abc' } } as any;
+
+      expect(component.showNoResults).toBeTrue();
+    });
+
+    it('should return true when filteredItems is undefined and input has value', () => {
+      component.filterLocate = false;
+      component.showListbox = false;
+      component.filteredItems = undefined;
+      component.poSearchInput = { nativeElement: { value: 'abc' } } as any;
+
+      expect(component.showNoResults).toBeTrue();
+    });
+
+    it('should return true when filteredItems is null and input has value', () => {
+      component.filterLocate = false;
+      component.showListbox = false;
+      component.filteredItems = null;
+      component.poSearchInput = { nativeElement: { value: 'abc' } } as any;
+
+      expect(component.showNoResults).toBeTrue();
+    });
+
+    it('should return false when input is empty', () => {
+      component.poSearchInput = { nativeElement: { value: '' } } as any;
+
+      expect(component.showNoResults).toBeFalse();
+    });
+  });
+
+  describe('showSearchLocateControls', () => {
+    beforeEach(() => {
+      component.poSearchInput = { nativeElement: { value: '' } } as any;
+    });
+
+    it('should return true when filterLocate is true, input is focused and not disabled', () => {
+      component.filterLocate = true;
+      component.isInputFocused = true;
+      component.disabled = false;
+
+      expect(component.showSearchLocateControls).toBeTrue();
+    });
+
+    it('should return true when filterLocate is true, input has value and not disabled', () => {
+      component.filterLocate = true;
+      component.isInputFocused = false;
+      component.disabled = false;
+      component.poSearchInput = { nativeElement: { value: 'abc' } } as any;
+
+      expect(component.showSearchLocateControls).toBeTrue();
+    });
+
+    it('should return false when filterLocate is false', () => {
+      component.filterLocate = false;
+      component.isInputFocused = true;
+      component.disabled = false;
+      component.poSearchInput = { nativeElement: { value: 'abc' } } as any;
+
+      expect(component.showSearchLocateControls).toBeFalse();
+    });
+
+    it('should return false when input is not focused and has no value', () => {
+      component.filterLocate = true;
+      component.isInputFocused = false;
+      component.disabled = false;
+      component.poSearchInput = { nativeElement: { value: '' } } as any;
+
+      expect(component.showSearchLocateControls).toBeFalse();
+    });
+
+    it('should return false when component is disabled', () => {
+      component.filterLocate = true;
+      component.isInputFocused = true;
+      component.disabled = true;
+
+      expect(component.showSearchLocateControls).toBeFalse();
+    });
+
+    it('should handle missing poSearchInput gracefully', () => {
+      component.filterLocate = true;
+      component.isInputFocused = false;
+      component.disabled = false;
+      component.poSearchInput = undefined;
+
+      expect(component.showSearchLocateControls).toBeFalse();
+    });
+  });
+
   it('clearSearch: should clear the search', () => {
     const inputElement = document.createElement('input');
     document.body.appendChild(inputElement);
@@ -59,99 +195,302 @@ describe('PoSearchComponent', () => {
     document.body.removeChild(inputElement);
   });
 
-  it('onSearchChange: should filter items based on search text and emit filtered items', () => {
-    component.onSearchChange('text', true);
+  describe('onCleanKeydown', () => {
+    it('should clear search, focus input, prevent default and stop propagation when escape is pressed and filterLocate is true', () => {
+      component.filterLocate = true;
+      spyOn(component, 'clearSearch');
+      const focusSpy = jasmine.createSpy('focus');
+      const event = {
+        key: 'Escape',
+        preventDefault: jasmine.createSpy('preventDefault'),
+        stopPropagation: jasmine.createSpy('stopPropagation')
+      } as any;
+      component.poSearchInput = { nativeElement: { focus: focusSpy } } as any;
 
-    expect(component.filteredItems).toEqual([{ text: 'Text 1' }, { text: 'Text 2' }]);
-    expect(component.filteredItemsChange.emit).toHaveBeenCalledWith([{ text: 'Text 1' }, { text: 'Text 2' }]);
+      component.onCleanKeydown(event);
+
+      expect(component.clearSearch).toHaveBeenCalled();
+      expect(focusSpy).toHaveBeenCalled();
+      expect(event.preventDefault).toHaveBeenCalled();
+      expect(event.stopPropagation).toHaveBeenCalled();
+    });
+
+    it('should do nothing if escape is pressed and filterLocate is false', () => {
+      component.filterLocate = false;
+      spyOn(component, 'clearSearch');
+      const focusSpy = jasmine.createSpy('focus');
+      const event = {
+        key: 'Escape',
+        preventDefault: jasmine.createSpy('preventDefault'),
+        stopPropagation: jasmine.createSpy('stopPropagation')
+      } as any;
+      component.poSearchInput = { nativeElement: { focus: focusSpy } } as any;
+
+      component.onCleanKeydown(event);
+
+      expect(component.clearSearch).not.toHaveBeenCalled();
+      expect(focusSpy).not.toHaveBeenCalled();
+      expect(event.preventDefault).not.toHaveBeenCalled();
+      expect(event.stopPropagation).not.toHaveBeenCalled();
+    });
   });
 
-  it('onSearchChange: should filter items based on search text using startsWith', () => {
-    component.filterType = PoSearchFilterMode.startsWith;
+  describe('onEnterKey', () => {
+    let event: any;
 
-    component.onSearchChange('Text', true);
+    beforeEach(() => {
+      event = { target: { value: 'test' } };
+      spyOn(component, 'closeListbox');
+      spyOn(component, 'onSearchChange');
+    });
 
-    expect(component.filteredItems).toEqual([{ text: 'Text 1' }, { text: 'Text 2' }]);
-    expect(component.filteredItemsChange.emit).toHaveBeenCalledWith([{ text: 'Text 1' }, { text: 'Text 2' }]);
+    it('should do nothing if filterLocate is true', () => {
+      component.filterLocate = true;
+      component.listboxOpen = true;
+
+      component.onEnterKey(event);
+
+      expect(component.closeListbox).not.toHaveBeenCalled();
+      expect(component.onSearchChange).not.toHaveBeenCalled();
+    });
+
+    it('should close listbox if listboxOpen is true and filterLocate is false', () => {
+      component.filterLocate = false;
+      component.listboxOpen = true;
+
+      component.onEnterKey(event);
+
+      expect(component.closeListbox).toHaveBeenCalledTimes(1);
+      expect(component.onSearchChange).not.toHaveBeenCalled();
+    });
+
+    it('should call onSearchChange and closeListbox if listboxOpen is false and filterLocate is false', () => {
+      component.filterLocate = false;
+      component.listboxOpen = false;
+      component.type = 'trigger';
+
+      component.onEnterKey(event);
+
+      expect(component.onSearchChange).toHaveBeenCalledWith('test', true, true);
+      expect(component.closeListbox).toHaveBeenCalledTimes(1);
+    });
+
+    it('should call onSearchChange with false if type is not "trigger"', () => {
+      component.filterLocate = false;
+      component.listboxOpen = false;
+      component.type = 'action';
+
+      component.onEnterKey(event);
+
+      expect(component.onSearchChange).toHaveBeenCalledWith('test', false, true);
+      expect(component.closeListbox).toHaveBeenCalledTimes(1);
+    });
   });
 
-  it('onSearchChange: should filter items based on search text using endsWith', () => {
-    component.filterType = PoSearchFilterMode.endsWith;
+  describe('onSearchChange', () => {
+    it('should emit changeModel and return if filterLocate is true and changeModel is observed', () => {
+      component.filterLocate = true;
+      spyOnProperty(component.changeModel, 'observed', 'get').and.returnValue(true);
+      spyOn(component.changeModel, 'emit');
 
-    component.onSearchChange('2', true);
+      component.onSearchChange('abc', true);
 
-    expect(component.filteredItems).toEqual([{ text: 'Text 2' }]);
-    expect(component.filteredItemsChange.emit).toHaveBeenCalledWith([{ text: 'Text 2' }]);
+      expect(component.changeModel.emit).toHaveBeenCalledWith('abc');
+    });
+
+    it('should filter items based on search text and emit filtered items', () => {
+      component.onSearchChange('text', true);
+
+      expect(component.filteredItems).toEqual([{ text: 'Text 1' }, { text: 'Text 2' }]);
+      expect(component.filteredItemsChange.emit).toHaveBeenCalledWith([{ text: 'Text 1' }, { text: 'Text 2' }]);
+    });
+
+    it('should filter items based on search text using startsWith', () => {
+      component.filterType = PoSearchFilterMode.startsWith;
+
+      component.onSearchChange('Text', true);
+
+      expect(component.filteredItems).toEqual([{ text: 'Text 1' }, { text: 'Text 2' }]);
+      expect(component.filteredItemsChange.emit).toHaveBeenCalledWith([{ text: 'Text 1' }, { text: 'Text 2' }]);
+    });
+
+    it('should filter items based on search text using endsWith', () => {
+      component.filterType = PoSearchFilterMode.endsWith;
+
+      component.onSearchChange('2', true);
+
+      expect(component.filteredItems).toEqual([{ text: 'Text 2' }]);
+      expect(component.filteredItemsChange.emit).toHaveBeenCalledWith([{ text: 'Text 2' }]);
+    });
+
+    it('should not filter items if search text is empty', () => {
+      component.onSearchChange('', true);
+
+      expect(component.filteredItems).toEqual([{ text: 'Text 1' }, { text: 'Text 2' }, { text: 'Other Text' }]);
+      expect(component.filteredItemsChange.emit).toHaveBeenCalledWith(component.items);
+    });
+
+    it('should not add value if it is null or undefined', () => {
+      component.items = [{ text: '' }, { text: null }, { text: undefined }, { text: 'Text' }];
+
+      component.onSearchChange('Text', true);
+      expect(component.filteredItems).toEqual([{ text: 'Text' }]);
+      expect(component.filteredItemsChange.emit).toHaveBeenCalledWith([{ text: 'Text' }]);
+    });
+
+    it('should return false if filter mode is not recognized', () => {
+      component.filterType = 'invalidMode' as unknown as PoSearchFilterMode;
+
+      const result = component.onSearchChange('text', true);
+
+      expect(result).toBeFalsy();
+      expect(component.filteredItems).toEqual([]);
+      expect(component.filteredItemsChange.emit).toHaveBeenCalledWith([]);
+    });
+
+    it('should convert non-string values to string', () => {
+      const item = { value: 42 };
+      component.items = [item];
+      component.filterKeys = ['value'];
+
+      component.onSearchChange('42', true);
+
+      expect(component.filteredItems).toEqual([item]);
+      expect(component.filteredItemsChange.emit).toHaveBeenCalledWith([item]);
+    });
+
+    it('should filter items based on search text using contains', () => {
+      component.filterType = PoSearchFilterMode.contains;
+
+      component.onSearchChange('ext', true);
+
+      expect(component.filteredItems).toEqual([{ text: 'Text 1' }, { text: 'Text 2' }, { text: 'Other Text' }]);
+
+      expect(component.filteredItemsChange.emit).toHaveBeenCalledWith([
+        { text: 'Text 1' },
+        { text: 'Text 2' },
+        { text: 'Other Text' }
+      ]);
+    });
+
+    it('should handle null value', () => {
+      const searchText = 'example';
+      component.filterKeys = ['name'];
+      component.filterType = PoSearchFilterMode.contains;
+      component.items = [{ name: null }];
+
+      component.onSearchChange(searchText, true);
+
+      expect(component.filteredItems.length).toBe(0);
+    });
+
+    it('should reset filteredItems and emit empty array', () => {
+      component.items = [];
+      component.filterKeys = ['name'];
+      component.onSearchChange('item', true);
+
+      expect(component.filteredItems).toEqual([]);
+      expect(component.filteredItemsChange.emit).toHaveBeenCalledWith([]);
+    });
   });
 
-  it('onSearchChange: should not filter items if search text is empty', () => {
-    component.onSearchChange('', true);
+  it('onFocus: should set isInputFocused to true', () => {
+    component.isInputFocused = false;
 
-    expect(component.filteredItems).toEqual([{ text: 'Text 1' }, { text: 'Text 2' }, { text: 'Other Text' }]);
-    expect(component.filteredItemsChange.emit).toHaveBeenCalledWith(component.items);
+    component.onFocus();
+
+    expect(component.isInputFocused).toBeTrue();
   });
 
-  it('onSearchChange: should not add value if it is null or undefined', () => {
-    component.items = [{ text: '' }, { text: null }, { text: undefined }, { text: 'Text' }];
+  describe('onInputHandler', () => {
+    it('should call onSearchChange once with (value, false) if filterLocate is true', () => {
+      component.filterLocate = true;
+      const spy = spyOn(component, 'onSearchChange');
 
-    component.onSearchChange('Text', true);
-    expect(component.filteredItems).toEqual([{ text: 'Text' }]);
-    expect(component.filteredItemsChange.emit).toHaveBeenCalledWith([{ text: 'Text' }]);
+      component.onInputHandler('abc');
+
+      expect(spy).toHaveBeenCalledTimes(1);
+      expect(spy).toHaveBeenCalledWith('abc', false);
+    });
+
+    it('should call onSearchChange twice if filterLocate is false and type is "action"', () => {
+      component.filterLocate = false;
+      component.type = 'action';
+      const spy = spyOn(component, 'onSearchChange');
+
+      component.onInputHandler('abc');
+
+      expect(spy).toHaveBeenCalledTimes(2);
+      expect(spy.calls.argsFor(0)).toEqual(['abc', false]);
+      expect(spy.calls.argsFor(1)).toEqual(['abc', true]);
+    });
+
+    it('should call onSearchChange twice if filterLocate is false and type is not "action"', () => {
+      component.filterLocate = false;
+      component.type = 'trigger';
+      const spy = spyOn(component, 'onSearchChange');
+
+      component.onInputHandler('abc');
+
+      expect(spy).toHaveBeenCalledTimes(2);
+      expect(spy.calls.argsFor(0)).toEqual(['abc', false]);
+      expect(spy.calls.argsFor(1)).toEqual(['abc', false]);
+    });
   });
 
-  it('onSearchChange: should return false if filter mode is not recognized', () => {
-    component.filterType = 'invalidMode' as unknown as PoSearchFilterMode;
+  describe('onBlur', () => {
+    it('should emit blur event if observed', () => {
+      spyOnProperty(component.blur, 'observed', 'get').and.returnValue(true);
+      spyOn(component.blur, 'emit');
+      component.isInputFocused = true;
 
-    const result = component.onSearchChange('text', true);
+      component.onBlur();
 
-    expect(result).toBeFalsy();
-    expect(component.filteredItems).toEqual([]);
-    expect(component.filteredItemsChange.emit).toHaveBeenCalledWith([]);
+      expect(component.blur.emit).toHaveBeenCalled();
+      expect(component.isInputFocused).toBeFalse();
+    });
+
+    it('should not emit blur event if not observed', () => {
+      spyOnProperty(component.blur, 'observed', 'get').and.returnValue(false);
+      spyOn(component.blur, 'emit');
+      component.isInputFocused = true;
+
+      component.onBlur();
+
+      expect(component.blur.emit).not.toHaveBeenCalled();
+      expect(component.isInputFocused).toBeFalse();
+    });
+
+    it('should set isInputFocused to false', () => {
+      component.isInputFocused = true;
+      component.listboxOpen = false;
+
+      component.onBlur();
+
+      expect(component.isInputFocused).toBeFalse();
+    });
   });
 
-  it('onSearchChange: should convert non-string values to string', () => {
-    const item = { value: 42 };
-    component.items = [item];
-    component.filterKeys = ['value'];
+  describe('onKeyDown', () => {
+    it('should emit keydown event if observed', () => {
+      spyOnProperty(component.keydown, 'observed', 'get').and.returnValue(true);
+      spyOn(component.keydown, 'emit');
 
-    component.onSearchChange('42', true);
+      const event = new KeyboardEvent('keydown', { key: 'a', keyCode: 65 });
+      component.onKeyDown(event);
 
-    expect(component.filteredItems).toEqual([item]);
-    expect(component.filteredItemsChange.emit).toHaveBeenCalledWith([item]);
-  });
+      expect(component.keydown.emit).toHaveBeenCalledWith(event);
+    });
 
-  it('onSearchChange: should filter items based on search text using contains', () => {
-    component.filterType = PoSearchFilterMode.contains;
+    it('should not emit keydown event if not observed', () => {
+      spyOnProperty(component.keydown, 'observed', 'get').and.returnValue(false);
+      spyOn(component.keydown, 'emit');
 
-    component.onSearchChange('ext', true);
+      const event = new KeyboardEvent('keydown', { key: 'a', keyCode: 65 });
+      component.onKeyDown(event);
 
-    expect(component.filteredItems).toEqual([{ text: 'Text 1' }, { text: 'Text 2' }, { text: 'Other Text' }]);
-
-    expect(component.filteredItemsChange.emit).toHaveBeenCalledWith([
-      { text: 'Text 1' },
-      { text: 'Text 2' },
-      { text: 'Other Text' }
-    ]);
-  });
-
-  it('onSearchChange: should handle null value', () => {
-    const searchText = 'example';
-    component.filterKeys = ['name'];
-    component.filterType = PoSearchFilterMode.contains;
-    component.items = [{ name: null }];
-
-    component.onSearchChange(searchText, true);
-
-    expect(component.filteredItems.length).toBe(0);
-  });
-
-  it('onSearchChange: should reset filteredItems and emit empty array', () => {
-    component.items = [];
-    component.filterKeys = ['name'];
-    component.onSearchChange('item', true);
-
-    expect(component.filteredItems).toEqual([]);
-    expect(component.filteredItemsChange.emit).toHaveBeenCalledWith([]);
+      expect(component.keydown.emit).not.toHaveBeenCalled();
+    });
   });
 
   describe('showListbox: when searching with listbox', () => {
@@ -301,17 +640,17 @@ describe('PoSearchComponent', () => {
     it('should hide the listbox when was click out of the input', () => {
       component.listboxOpen = true;
 
-      spyOn(component, 'controlListboxVisibility');
+      spyOn(component, 'closeListbox');
       component.clickedOutsideInput(eventClick);
-      expect(component.controlListboxVisibility).toHaveBeenCalled();
+      expect(component.closeListbox).toHaveBeenCalled();
     });
 
     it('should not hide listbox when was click in input', () => {
       component.poSearchInput.nativeElement.dispatchEvent(eventClick);
 
-      spyOn(component, 'controlListboxVisibility');
+      spyOn(component, 'closeListbox');
       component.clickedOutsideInput(eventClick);
-      expect(component.controlListboxVisibility).not.toHaveBeenCalled();
+      expect(component.closeListbox).not.toHaveBeenCalled();
     });
 
     it('should initialize all Listeners correctly', fakeAsync(() => {
@@ -369,29 +708,29 @@ describe('PoSearchComponent', () => {
     });
 
     it('should hide the listbox if the input has a shift+tab keypress', () => {
-      spyOn(component, 'controlListboxVisibility');
+      spyOn(component, 'closeListbox');
       component.type = 'trigger';
 
       const event = new KeyboardEvent('keydown', { keyCode: 9, code: 'Tab', shiftKey: true });
 
       component.onKeyDown(event);
 
-      expect(component.controlListboxVisibility).toHaveBeenCalledWith(false);
+      expect(component.closeListbox).toHaveBeenCalled();
     });
 
     it('should hide the listbox if the input has a tab keypress', () => {
-      spyOn(component, 'controlListboxVisibility');
+      spyOn(component, 'closeListbox');
       component.type = 'trigger';
 
       const event = new KeyboardEvent('keydown', { keyCode: 9, code: 'Tab' });
 
       component.onKeyDown(event);
 
-      expect(component.controlListboxVisibility).toHaveBeenCalledWith(false);
+      expect(component.closeListbox).toHaveBeenCalled();
     });
 
     it('should close the listbox if the input has a esc keypress', () => {
-      spyOn(component, 'controlListboxVisibility');
+      spyOn(component, 'closeListbox');
       component.type = 'trigger';
       component.listboxOpen = true;
 
@@ -399,11 +738,11 @@ describe('PoSearchComponent', () => {
 
       component.onKeyDown(event);
 
-      expect(component.controlListboxVisibility).toHaveBeenCalledWith(false);
+      expect(component.closeListbox).toHaveBeenCalled();
     });
 
     it('should close the listbox and focus the search input if the input has a keydown event with the Escape key', () => {
-      spyOn(component, 'controlListboxVisibility');
+      spyOn(component, 'closeListbox');
       const focusSpy = spyOn(component.poSearchInput.nativeElement, 'focus');
 
       component.listboxOpen = true;
@@ -411,27 +750,27 @@ describe('PoSearchComponent', () => {
       const event = new KeyboardEvent('keydown', { keyCode: 27, code: 'Escape' });
       component.onKeyDown(event);
 
-      expect(component.controlListboxVisibility).toHaveBeenCalledWith(false);
+      expect(component.closeListbox).toHaveBeenCalled();
       expect(focusSpy).toHaveBeenCalled();
     });
 
     it('should close the listbox if the input has a keydown event with the Enter key and the listbox is open', () => {
-      spyOn(component, 'controlListboxVisibility');
+      spyOn(component, 'closeListbox');
       component.listboxOpen = true;
 
       const event = new KeyboardEvent('keydown', { keyCode: 13, code: 'Enter' });
       component.onKeyDown(event);
 
-      expect(component.controlListboxVisibility).toHaveBeenCalledWith(false);
+      expect(component.closeListbox).toHaveBeenCalled();
     });
 
     it('should call controlListboxVisibility(false) when the input loses focus and the listbox is open and poListbox.items is empty', () => {
-      spyOn(component, 'controlListboxVisibility');
+      spyOn(component, 'closeListbox');
       component.listboxOpen = true;
       component.poListbox.items = [];
 
       component.onBlur();
-      expect(component.controlListboxVisibility).toHaveBeenCalledWith(false);
+      expect(component.closeListbox).toHaveBeenCalled();
     });
 
     it('should call focusItem() when the input loses focus and the listbox is open and poListbox.items is not empty', () => {
