@@ -4,6 +4,7 @@ import { RouterTestingModule } from '@angular/router/testing';
 
 import { PoItemListComponent } from './po-item-list.component';
 import { PoItemListFilterMode } from '../enums/po-item-list-filter-mode.enum';
+import { PoFieldSize } from '../../../enums/po-field-size.enum';
 
 describe('PoItemListComponent', () => {
   let component: PoItemListComponent;
@@ -267,6 +268,46 @@ describe('PoItemListComponent', () => {
       component.searchValue = 'lues';
 
       expect(component.getLabelFormatted('values')).toBe('values');
+    });
+
+    it('getLabelFormatted: should apply small size class for startsWith', () => {
+      component.isFiltering = true;
+      component.filterMode = PoItemListFilterMode.startsWith;
+      component.size = PoFieldSize.Small;
+      component.safeHtml = (value: any) => value;
+      component.searchValue = 'val';
+
+      expect(component.getLabelFormatted('values')).toBe('<span class="po-font-text-bold">val</span>ues');
+    });
+
+    it('getLabelFormatted: should apply small size class for contains', () => {
+      component.isFiltering = true;
+      component.filterMode = PoItemListFilterMode.contains;
+      component.size = PoFieldSize.Small;
+      component.safeHtml = (value: any) => value;
+      component.searchValue = 'lue';
+
+      expect(component.getLabelFormatted('values')).toBe('va<span class="po-font-text-bold">lue</span>s');
+    });
+
+    it('getLabelFormatted: should apply small size class for endsWith', () => {
+      component.isFiltering = true;
+      component.filterMode = PoItemListFilterMode.endsWith;
+      component.size = PoFieldSize.Small;
+      component.safeHtml = (value: any) => value;
+      component.searchValue = 'lues';
+
+      expect(component.getLabelFormatted('values')).toBe('va<span class="po-font-text-bold">lues</span>');
+    });
+
+    it('getLabelFormatted: should apply large size class when size is not small', () => {
+      component.isFiltering = true;
+      component.filterMode = PoItemListFilterMode.startsWith;
+      component.size = PoFieldSize.Medium;
+      component.safeHtml = (value: any) => value;
+      component.searchValue = 'val';
+
+      expect(component.getLabelFormatted('values')).toBe('<span class="po-font-text-large-bold">val</span>ues');
     });
 
     it('should format label when conditions are met', () => {
