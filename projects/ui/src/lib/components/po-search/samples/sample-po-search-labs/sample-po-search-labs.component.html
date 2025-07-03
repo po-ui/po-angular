@@ -2,26 +2,30 @@
   <po-search
     #poSearch
     class="po-md-12"
-    name="Po Search"
-    [p-icon]="icon"
-    [p-items]="items"
+    [p-aria-label]="ariaLabel"
     [p-disabled]="properties.includes('disabled')"
     [p-filter-keys]="fieldKeys"
-    [p-filter-select]="fieldSelect"
-    [p-literals]="customLiterals"
     [p-filter-type]="filterMode"
+    [p-filter-select]="fieldSelect"
+    [p-icon]="icon"
+    [p-items]="items"
+    [p-literals]="customLiterals"
+    [p-locate-summary]="customLocateSummary"
     [p-search-type]="searchMode"
-    [p-show-listbox]="showListbox"
+    [p-show-listbox]="properties.includes('showListbox')"
     [p-size]="size"
-    (p-filtered-items-change)="filter($event)"
-    (p-change-model)="changeModel($event)"
+    (p-blur)="changeEvent('p-blur')"
+    (p-change-model)="changeEvent('p-change-model')"
+    (p-filtered-items-change)="changeEvent('p-filtered-items-change')"
+    (p-locate-next)="changeEvent('p-locate-next')"
+    (p-locate-previous)="changeEvent('p-locate-previous')"
   ></po-search>
 </div>
 
-<hr />
+<po-divider />
 <div class="po-row">
   <po-accordion class="po-md-12">
-    <po-accordion-item p-label="Itens encontrados: {{ filteredItems.length }}">
+    <po-accordion-item p-label="Itens encontrados: {{ filteredItems?.length }}">
       <po-widget class="po-md-12">
         <ul class="sample-list-search po-md-12 row">
           <li *ngFor="let item of filteredItems">
@@ -36,7 +40,7 @@
     </po-accordion-item>
   </po-accordion>
 </div>
-<hr />
+<po-divider />
 
 <div class="po-row">
   <po-info class="po-md-6" p-label="Model" [p-value]="search"> </po-info>
@@ -44,28 +48,36 @@
   <po-info class="po-md-6" p-label="Events" [p-value]="event"> </po-info>
 </div>
 
-<hr />
+<po-divider />
 
 <!-- Properties -->
 <form #f="ngForm">
+  <po-input class="po-lg-6" name="ariaLabel" p-label="Aria label" [(ngModel)]="ariaLabel"></po-input>
+
+  <po-input
+    class="po-lg-6 po-md-12"
+    name="items"
+    [(ngModel)]="itemsModel"
+    p-label="Items"
+    p-help='Ex.: [{ "cidade": "São Paulo", "pais": "Brasil" }, { "cidade": "Rio de Janeiro", "pais": "Brasil" }, { "cidade": "Tóquio", "pais": "Japão" }]'
+    (p-change-model)="changeItems($event)"
+  >
+  </po-input>
+
   <po-checkbox-group
-    class="po-lg-3 po-md-6"
+    class="po-lg-6 po-md-12"
     name="properties"
     [(ngModel)]="properties"
-    p-columns="4"
     p-label="Properties"
     [p-options]="propertiesOptions"
-    (p-change)="propertiesChange($event)"
   >
   </po-checkbox-group>
 
-  <po-switch class="po-lg-3 po-md-6" name="switch" p-label="showListbox" [(ngModel)]="showListbox"> </po-switch>
-
-  <po-radio-group class="po-md-12 po-lg-6" name="icon" [(ngModel)]="icon" p-label="Icon" [p-options]="iconsOptions">
+  <po-radio-group class="po-lg-6 po-md-12" name="icon" [(ngModel)]="icon" p-label="Icon" [p-options]="iconsOptions">
   </po-radio-group>
 
   <po-radio-group
-    class="po-md-12 po-lg-6"
+    class="po-lg-6 po-md-12"
     name="searchMode"
     [(ngModel)]="searchMode"
     p-label="Search Mode"
@@ -74,7 +86,16 @@
   </po-radio-group>
 
   <po-radio-group
-    class="po-md-12 po-lg-6"
+    class="po-lg-6 po-md-12"
+    name="filterMode"
+    [(ngModel)]="filterMode"
+    p-label="Filter Mode"
+    [p-options]="filterModeOptions"
+  >
+  </po-radio-group>
+
+  <po-radio-group
+    class="po-lg-6 po-md-12"
     name="size"
     [(ngModel)]="size"
     p-label="Size"
@@ -83,27 +104,18 @@
   >
   </po-radio-group>
 
-  <po-radio-group
-    class="po-md-12"
-    name="filterMode"
-    [(ngModel)]="filterMode"
-    p-columns="4"
-    p-label="Filter Mode"
-    [p-options]="filterModeOptions"
-  >
-  </po-radio-group>
-
   <po-input
-    class="po-md-12"
-    name="items"
-    [(ngModel)]="itemsModel"
-    p-label="Items"
-    p-help='Ex.: [ { "cidade": "São Paulo", "pais": "Brasil" }, { "cidade": "Rio de Janeiro", "pais": "Brasil" }, { "cidade": "Tóquio", "pais": "Japão" }]'
-    (p-change-model)="changeItems($event)"
+    class="po-lg-6 po-md-12"
+    name="locateSummary"
+    [(ngModel)]="locateSummary"
+    p-help='{ "currentIndex": 1000, "total": 1000 }'
+    p-label="Locate Summary"
+    (p-change)="changeLocateSummary()"
   >
   </po-input>
+
   <po-input
-    class="po-md-6"
+    class="po-lg-6 po-md-12"
     name="literals"
     [(ngModel)]="literals"
     p-help='Ex.: {"search": "Search people"}'
@@ -113,7 +125,7 @@
   </po-input>
 
   <po-input
-    class="po-md-6"
+    class="po-lg-6 po-md-12"
     name="Filter Keys"
     [(ngModel)]="filterModel"
     p-label="Filter Keys"
@@ -121,6 +133,7 @@
     (p-change-model)="updateFilterKeys($event)"
   >
   </po-input>
+
   <po-input
     class="po-lg-6 po-md-12"
     name="Filter Select"
@@ -131,7 +144,7 @@
   >
   </po-input>
 
-  <hr />
+  <po-divider />
 
   <div class="po-row">
     <po-button class="po-lg-3 po-md-6" p-label="Sample Restore" (p-click)="restore()"> </po-button>

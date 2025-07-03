@@ -10,9 +10,10 @@ import {
   SimpleChanges,
   ViewChild
 } from '@angular/core';
-import { PoThemeService } from '../../services/po-theme/po-theme.service';
+import { PoFieldSize } from '../../enums/po-field-size.enum';
 import { PoControlPositionService } from '../../services/po-control-position/po-control-position.service';
 import { PoLanguageService } from '../../services/po-language/po-language.service';
+import { PoThemeService } from '../../services/po-theme/po-theme.service';
 import { PoDropdownAction } from '../po-dropdown';
 import { PoListBoxComponent } from '../po-listbox';
 import { PoKeyCodeEnum } from './../../enums/po-key-code.enum';
@@ -56,6 +57,11 @@ const poSearchContainerPositionDefault = 'bottom';
  *  <file name="sample-po-search-filter-select/sample-po-search-filter-select.component.ts"> </file>
  * </example>
  *
+ * <example name="po-search-fields-locate" title="PO Search Form Fields with Locate">
+ *  <file name="sample-po-search-fields-locate/sample-po-search-fields-locate.component.html"> </file>
+ *  <file name="sample-po-search-fields-locate/sample-po-search-fields-locate.component.ts"> </file>
+ * </example>
+ *
  */
 @Component({
   selector: 'po-search',
@@ -67,19 +73,42 @@ const poSearchContainerPositionDefault = 'bottom';
 export class PoSearchComponent extends PoSearchBaseComponent implements OnInit, OnDestroy, OnChanges {
   private clickoutListener: () => void;
   private eventResizeListener: () => void;
+  private _locateCounter: ElementRef;
+
+  @ViewChild('locateCounter', { static: false }) set locateCounter(element: ElementRef) {
+    this._locateCounter = element;
+
+    this.locateCounterResize = new ResizeObserver(() => {
+      this.updatePaddingRightLocate(false);
+    });
+
+    if (this._locateCounter) {
+      this.locateCounterResize.observe(this._locateCounter.nativeElement);
+    }
+  }
+
+  get locateCounter() {
+    return this._locateCounter;
+  }
 
   @ViewChild('poSearchInput', { read: ElementRef, static: true }) poSearchInput: ElementRef;
   @ViewChild('poListboxContainerElement', { read: ElementRef }) poListboxContainerElement: ElementRef;
   @ViewChild('poListboxElement', { read: ElementRef }) poListboxElement: ElementRef;
   @ViewChild('poListbox') poListbox: PoListBoxComponent;
 
+  basePaddingRightSmall: number = 122;
+  basePaddingRightMedium: number = 158;
+  dynamicPaddingRight: number;
   listboxFilteredItems: Array<any> = [];
   filteredItems: Array<any> = [];
   listboxOpen: boolean = false;
   shouldMarkLetters: boolean = true;
   isFiltering: boolean = false;
+  isInputFocused: boolean = false;
   listboxItemclicked: boolean = false;
-
+  showSearchLocateControls: boolean = false;
+  showNoResults: boolean = false;
+  locateCounterResize: ResizeObserver;
   searchFilter = {};
 
   searchFilterSelectLabel: string;
@@ -88,9 +117,9 @@ export class PoSearchComponent extends PoSearchBaseComponent implements OnInit, 
   constructor(
     public languageService: PoLanguageService,
     protected poThemeService: PoThemeService,
-    private renderer: Renderer2,
-    private changeDetector: ChangeDetectorRef,
-    private controlPosition: PoControlPositionService
+    protected renderer: Renderer2,
+    protected changeDetector: ChangeDetectorRef,
+    protected controlPosition: PoControlPositionService
   ) {
     super(languageService, poThemeService);
   }
@@ -106,13 +135,19 @@ export class PoSearchComponent extends PoSearchBaseComponent implements OnInit, 
   }
 
   ngOnChanges(changes: SimpleChanges): void {
-    if (changes.filterSelect && changes.filterSelect.currentValue) {
+    if (changes.filterSelect?.currentValue) {
       this.createDropdownFilterSelect();
+    }
+
+    if (changes.type || changes.disabled) {
+      this.updateShowSearchLocateControls();
+      this.updatePaddingRightLocate(true);
     }
   }
 
   ngOnDestroy() {
     this.removeListeners();
+    this.locateCounterResize.disconnect();
   }
 
   clearSearch(): void {
@@ -122,20 +157,47 @@ export class PoSearchComponent extends PoSearchBaseComponent implements OnInit, 
     this.onCloseListbox();
   }
 
+  onCleanKeydown(event: KeyboardEvent) {
+    const isEsc = event.key === 'Escape';
+
+    if (isEsc && this.type === 'locate') {
+      this.clearSearch();
+      this.poSearchInput.nativeElement.focus();
+      event.preventDefault();
+      event.stopPropagation();
+    }
+  }
+
+  onEnterKey(event: any) {
+    if (this.type !== 'locate') {
+      if (this.listboxOpen) {
+        this.closeListbox();
+      } else {
+        this.onSearchChange(event.target.value, this.type === 'trigger', true);
+        this.closeListbox();
+      }
+    }
+  }
+
   onSearchChange(searchText: string, activated: boolean, buttonClick?: boolean): void {
     const searchTextInitial = searchText;
+
+    if (this.type === 'locate' && this.changeModel.observed) {
+      this.changeModel.emit(searchTextInitial);
+      return;
+    }
+
     if (searchText !== undefined) {
       searchText = searchText.toLowerCase();
     }
     this.isFiltering = true;
 
     if (this.showListbox && !buttonClick && searchText.length > 0) {
-      this.controlListboxVisibility(true);
+      this.openListbox();
       this.listboxFilteredItems = this.getListboxFilteredItems(searchText);
-    } else {
-      if (searchText.length === 0) {
-        this.listboxFilteredItems = this.listboxItems;
-      }
+    }
+    if (searchText.length === 0) {
+      this.listboxFilteredItems = this.listboxItems;
     }
 
     if (activated && !this.listboxItemclicked) {
@@ -212,7 +274,7 @@ export class PoSearchComponent extends PoSearchBaseComponent implements OnInit, 
 
   onCloseListbox() {
     this.poSearchInput.nativeElement.focus();
-    this.controlListboxVisibility(false);
+    this.closeListbox();
     this.isFiltering = false;
   }
 
@@ -236,25 +298,56 @@ export class PoSearchComponent extends PoSearchBaseComponent implements OnInit, 
   }
 
   onBlur() {
+    this.isInputFocused = false;
+
+    if (this.type === 'locate') {
+      this.updateShowSearchLocateControls();
+      this.updatePaddingRightLocate(true);
+    }
+
+    if (this.blur.observed) {
+      this.blur.emit();
+    }
+
     if (this.listboxOpen) {
       if (!this.poListbox.items.length) {
-        this.controlListboxVisibility(false);
+        this.closeListbox();
       } else {
         this.focusItem();
       }
     }
   }
 
-  onKeyDown(event?: any) {
+  onFocus() {
+    this.isInputFocused = true;
+
+    if (this.type === 'locate') {
+      this.updateShowSearchLocateControls();
+      this.updatePaddingRightLocate(false);
+    }
+  }
+
+  onInputHandler(value: string) {
+    if (this.type === 'locate') {
+      this.onSearchChange(value, false);
+      this.updateShowSearchLocateControls();
+      this.updatePaddingRightLocate(false);
+    } else {
+      this.onSearchChange(value, false);
+      this.onSearchChange(value, this.type === 'action');
+    }
+  }
+
+  onKeyDown(event?: KeyboardEvent) {
     const key = event.keyCode;
 
     if (event.shiftKey && key === PoKeyCodeEnum.tab) {
-      this.controlListboxVisibility(false);
+      this.closeListbox();
       return;
     }
 
     if (key === PoKeyCodeEnum.tab) {
-      this.controlListboxVisibility(false);
+      this.closeListbox();
       return;
     }
 
@@ -266,17 +359,18 @@ export class PoSearchComponent extends PoSearchBaseComponent implements OnInit, 
       }
 
       this.focusItem();
-      this.controlListboxVisibility(true);
+      this.openListbox();
       return;
     }
 
     if (key === PoKeyCodeEnum.esc) {
-      this.controlListboxVisibility(false);
+      this.closeListbox();
       this.poSearchInput.nativeElement.focus();
+      return;
     }
 
     if (key === PoKeyCodeEnum.enter && this.listboxOpen) {
-      this.controlListboxVisibility(false);
+      this.closeListbox();
       this.isFiltering = false;
     }
   }
@@ -315,10 +409,6 @@ export class PoSearchComponent extends PoSearchBaseComponent implements OnInit, 
     }
   }
 
-  controlListboxVisibility(toOpen: boolean) {
-    toOpen ? this.openListbox() : this.closeListbox();
-  }
-
   private openListbox() {
     this.listboxOpen = true;
     this.changeDetector.detectChanges();
@@ -336,10 +426,10 @@ export class PoSearchComponent extends PoSearchBaseComponent implements OnInit, 
   clickedOutsideInput(event: MouseEvent): void {
     if (
       this.listboxOpen &&
-      !this.poSearchInput.nativeElement.contains(event.target) &&
-      (!this.poListboxElement || !this.poListboxElement.nativeElement.contains(event.target))
+      !this.poSearchInput?.nativeElement?.contains(event.target) &&
+      !this.poListboxElement?.nativeElement?.contains(event.target)
     ) {
-      this.controlListboxVisibility(false);
+      this.closeListbox();
     }
   }
 
@@ -369,12 +459,39 @@ export class PoSearchComponent extends PoSearchBaseComponent implements OnInit, 
     window.removeEventListener('scroll', this.onScroll, true);
   }
 
-  private onScroll = (): void => {
+  private updatePaddingRightLocate(noValue: boolean) {
+    const basePadding = this.size === PoFieldSize.Medium ? this.basePaddingRightMedium : this.basePaddingRightSmall;
+    const hasValue = !!this.poSearchInput.nativeElement.value;
+
+    if (this.type === 'locate') {
+      if (hasValue && this.locateCounter?.nativeElement) {
+        const counterWidth = this.locateCounter.nativeElement.offsetWidth;
+        const extraSpace = 8;
+        this.dynamicPaddingRight = basePadding + counterWidth + extraSpace;
+      } else {
+        this.dynamicPaddingRight = noValue || this.disabled ? null : basePadding;
+      }
+    } else {
+      this.dynamicPaddingRight = null;
+    }
+
+    this.changeDetector.detectChanges();
+  }
+
+  private updateShowSearchLocateControls() {
+    this.showSearchLocateControls = !!(
+      this.type === 'locate' &&
+      (this.isInputFocused || this.poSearchInput?.nativeElement?.value) &&
+      !this.disabled
+    );
+  }
+
+  private readonly onScroll = (): void => {
     this.adjustContainerPosition();
   };
 
   getInputValue() {
-    return this.poSearchInput.nativeElement.value;
+    return this.poSearchInput?.nativeElement?.value ?? '';
   }
 
   createDropdownFilterSelect(): void {
@@ -406,7 +523,7 @@ export class PoSearchComponent extends PoSearchBaseComponent implements OnInit, 
       return;
     }
 
-    this.searchFilterSelectActions.map(action => (action.selected = false));
+    this.searchFilterSelectActions.forEach(action => (action.selected = false));
     const selectAction = this.searchFilterSelectActions.find(action => action.label === this.searchFilterSelectLabel);
     selectAction.selected = true;
 
@@ -414,7 +531,9 @@ export class PoSearchComponent extends PoSearchBaseComponent implements OnInit, 
       filter: filterOption.label === this.literals.all ? ['all'] : filterOption.value
     };
 
-    this.poSearchInput.nativeElement.focus();
+    if (this.poSearchInput?.nativeElement) {
+      this.poSearchInput.nativeElement.focus();
+    }
     if (this.type === 'action') {
       this.onSearchChange(this.getInputValue(), true);
     }

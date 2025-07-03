@@ -1,0 +1,63 @@
+<div class="po-row">
+  <div class="po-ml-1 po-mr-1">
+    <po-search
+      p-search-type="locate"
+      [p-literals]="searchLiterals"
+      [p-locate-summary]="locateSummary"
+      (p-change-model)="updateSearchTerm($event)"
+      (p-locate-next)="onNextOccurrenceClick()"
+      (p-locate-previous)="onPreviousOccurrenceClick()"
+    />
+  </div>
+</div>
+<po-divider></po-divider>
+
+<form [formGroup]="reactiveForm">
+  <div class="po-row">
+    <po-input #nameInput class="po-lg-9" formControlName="name" p-clean p-icon="an an-user" p-label="Customer name">
+    </po-input>
+
+    <po-input #cpfInput class="po-lg-3" formControlName="cpf" p-label="CPF" p-mask="999.999.999-99" p-clean> </po-input>
+  </div>
+
+  <div class="po-row">
+    <po-input #addressInput class="po-lg-9" formControlName="address" p-clean p-icon="an an-map-pin" p-label="Address">
+    </po-input>
+
+    <po-number #numberInput class="po-lg-3" formControlName="number" p-label="Number" p-clean> </po-number>
+  </div>
+
+  <div class="po-row">
+    <po-email #emailInput class="po-lg-6" formControlName="email" p-label="Email" p-clean> </po-email>
+
+    <po-url #websiteInput class="po-lg-6" formControlName="website" p-label="Website" p-clean> </po-url>
+  </div>
+
+  <div class="po-row">
+    <po-button class="po-md-3" p-label="Save" [p-disabled]="!reactiveForm.valid" (p-click)="saveForm()"> </po-button>
+  </div>
+</form>
+
+<po-modal #reactiveFormData p-title="Save successful" [p-primary-action]="modalPrimaryAction">
+  <div class="po-row">
+    <po-info class="po-lg-6" p-label="Name" [p-value]="reactiveForm.controls.name.value"> </po-info>
+
+    <po-info class="po-lg-6" p-label="CPF" [p-value]="reactiveForm.controls.cpf.value"> </po-info>
+  </div>
+
+  <po-divider></po-divider>
+
+  <div class="po-row">
+    <po-info class="po-lg-6" p-label="Address" [p-value]="reactiveForm.controls.address.value"> </po-info>
+
+    <po-info class="po-lg-6" p-label="Number" [p-value]="reactiveForm.controls.number.value"> </po-info>
+  </div>
+
+  <po-divider></po-divider>
+
+  <div class="po-row">
+    <po-info class="po-lg-6" p-label="Email" [p-value]="reactiveForm.controls.email.value"> </po-info>
+
+    <po-info class="po-lg-6" p-label="Website" [p-value]="reactiveForm.controls.website.value"> </po-info>
+  </div>
+</po-modal>
