@@ -1,5 +1,5 @@
 <div class="po-dynamic-container">
-  <ng-template ngFor let-fieldsInContainer [ngForOf]="fields">
+  @for (fieldsInContainer of fields; track fieldsInContainer) {
     <div>
       <po-container [p-title]="fieldsInContainer[0].container">
         <div class="po-row">
@@ -7,5 +7,5 @@
         </div>
       </po-container>
     </div>
-  </ng-template>
+  }
 </div>

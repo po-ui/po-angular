@@ -1,65 +1,57 @@
 <div class="po-rich-text-toolbar" [class.po-rich-text-toolbar-aa]="size === 'small'" #toolbarElement>
-  <div
-    class="po-rich-text-toolbar-button-align"
-    data-rich-text-toolbar="format"
-    *ngIf="!isActionHidden(formatToolbarAction)"
-  >
-    <po-button-group p-toggle="multiple" [p-buttons]="formatButtons" [p-size]="size"> </po-button-group>
-  </div>
-
-  <div *ngIf="showColor()" class="po-rich-text-toolbar-button-align" data-rich-text-toolbar="color">
-    <div class="po-rich-text-toolbar-color-picker-container">
-      <button
-        type="button"
-        class="po-button po-button-default po-rich-text-toolbar-color-picker-button"
-        [class.po-rich-text-toolbar-color-picker-button-aa]="size === 'small'"
-        [disabled]="readonly"
-        [p-tooltip]="literals.textColor"
-        [attr.aria-label]="literals.textColor"
-      >
-        <input
-          #colorPickerInput
-          class="po-rich-text-toolbar-color-picker-input"
-          type="color"
-          [disabled]="readonly"
-          (input)="changeTextColor($event.target.value)"
-          [attr.aria-label]="literals.textColor"
-        />
-      </button>
+  @if (!isActionHidden(formatToolbarAction)) {
+    <div class="po-rich-text-toolbar-button-align" data-rich-text-toolbar="format">
+      <po-button-group p-toggle="multiple" [p-buttons]="formatButtons" [p-size]="size"> </po-button-group>
     </div>
-  </div>
+  }
 
-  <div
-    class="po-rich-text-toolbar-button-align"
-    data-rich-text-toolbar="align"
-    *ngIf="!isActionHidden(alignToolbarAction)"
-  >
-    <po-button-group p-toggle="single" [p-buttons]="alignButtons" [p-size]="size"> </po-button-group>
-  </div>
+  @if (showColor()) {
+    <div class="po-rich-text-toolbar-button-align" data-rich-text-toolbar="color">
+      <div class="po-rich-text-toolbar-color-picker-container">
+        <button
+          type="button"
+          class="po-button po-button-default po-rich-text-toolbar-color-picker-button"
+          [class.po-rich-text-toolbar-color-picker-button-aa]="size === 'small'"
+          [disabled]="readonly"
+          [p-tooltip]="literals.textColor"
+          [attr.aria-label]="literals.textColor"
+        >
+          <input
+            #colorPickerInput
+            class="po-rich-text-toolbar-color-picker-input"
+            type="color"
+            [disabled]="readonly"
+            (input)="changeTextColor($event.target.value)"
+            [attr.aria-label]="literals.textColor"
+          />
+        </button>
+      </div>
+    </div>
+  }
 
-  <div
-    class="po-rich-text-toolbar-button-align"
-    data-rich-text-toolbar="list"
-    *ngIf="!isActionHidden(listToolbarAction)"
-  >
-    <po-button-group p-toggle="single" [p-buttons]="listButtons" [p-size]="size"> </po-button-group>
-  </div>
+  @if (!isActionHidden(alignToolbarAction)) {
+    <div class="po-rich-text-toolbar-button-align" data-rich-text-toolbar="align">
+      <po-button-group p-toggle="single" [p-buttons]="alignButtons" [p-size]="size"> </po-button-group>
+    </div>
+  }
 
-  <div
-    class="po-rich-text-toolbar-button-align"
-    data-rich-text-toolbar="link"
-    *ngIf="!isActionHidden(linkToolbarAction)"
-  >
-    <po-button-group [p-buttons]="linkButtons" [p-size]="size"> </po-button-group>
-  </div>
+  @if (!isActionHidden(listToolbarAction)) {
+    <div class="po-rich-text-toolbar-button-align" data-rich-text-toolbar="list">
+      <po-button-group p-toggle="single" [p-buttons]="listButtons" [p-size]="size"> </po-button-group>
+    </div>
+  }
 
-  <div
-    class="po-rich-text-toolbar-button-align"
-    data-rich-text-toolbar="media"
-    *ngIf="!isActionHidden(mediaToolbarAction)"
-  >
-    <po-button-group [p-buttons]="mediaButtons" [p-size]="size"> </po-button-group>
-  </div>
+  @if (!isActionHidden(linkToolbarAction)) {
+    <div class="po-rich-text-toolbar-button-align" data-rich-text-toolbar="link">
+      <po-button-group [p-buttons]="linkButtons" [p-size]="size"> </po-button-group>
+    </div>
+  }
+
+  @if (!isActionHidden(mediaToolbarAction)) {
+    <div class="po-rich-text-toolbar-button-align" data-rich-text-toolbar="media">
+      <po-button-group [p-buttons]="mediaButtons" [p-size]="size"> </po-button-group>
+    </div>
+  }
 </div>
 
 <po-rich-text-image-modal #richTextImageModal [p-size]="size" (p-command)="emitCommand($event)">
