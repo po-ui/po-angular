@@ -11,11 +11,8 @@
       [value]="radioValue ?? ''"
       (blur)="onBlur()"
     />
-    <po-label
-      [class.line-height-aa]="size === 'small'"
-      *ngIf="label"
-      [p-disabled]="disabled"
-      [p-label]="label"
-    ></po-label>
+    @if (label) {
+      <po-label [class.line-height-aa]="size === 'small'" [p-disabled]="disabled" [p-label]="label"></po-label>
+    }
   </label>
 </div>

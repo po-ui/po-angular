@@ -1,125 +1,123 @@
 <po-page>
   <!-- HEADER -->
-  <po-page-header
-    *ngIf="hasPageHeader()"
-    [class.po-page-list-header-padding]="filter && !visibleActions.length"
-    [p-breadcrumb]="breadcrumb"
-    [p-title]="title"
-    [p-subtitle]="subtitle"
-  >
-    <div class="po-page-list-container">
-      <!-- OPERATIONS -->
-      <div class="po-page-list-operations">
-        <div class="po-page-list-actions" [class.po-page-list-actions-padding]="filter">
-          <po-button
-            *ngIf="visibleActions[0]"
-            p-kind="primary"
-            [p-danger]="visibleActions[0].type === 'danger'"
-            [p-disabled]="actionIsDisabled(actions[0])"
-            [p-icon]="visibleActions[0].icon"
-            [p-label]="visibleActions[0].label"
-            [p-size]="componentsSize"
-            (p-click)="callAction(visibleActions[0])"
-          >
-          </po-button>
-
-          <po-button
-            *ngIf="visibleActions[1] && (visibleActions.length === 2 || !isMobile)"
-            [p-danger]="visibleActions[1].type === 'danger'"
-            [p-disabled]="actionIsDisabled(actions[1])"
-            [p-label]="visibleActions[1].label"
-            [p-size]="componentsSize"
-            (p-click)="callAction(visibleActions[1])"
-          >
-          </po-button>
-
-          <po-button
-            *ngIf="visibleActions.length === 3 && visibleActions[2] && !isMobile"
-            [p-danger]="visibleActions[2].type === 'danger'"
-            [p-disabled]="actionIsDisabled(visibleActions[2])"
-            [p-label]="visibleActions[2].label"
-            [p-size]="componentsSize"
-            (p-click)="callAction(visibleActions[2])"
-          >
-          </po-button>
-
-          <po-dropdown
-            *ngIf="visibleActions.length > limitPrimaryActions"
-            [p-actions]="dropdownActions"
-            [p-label]="literals.otherActions"
-            [p-size]="componentsSize"
-          >
-          </po-dropdown>
-        </div>
-
-        <!-- FILTER -->
-        <div
-          class="po-page-list-filter-wrapper"
-          [class.po-page-list-filter-wrapper-aa]="componentsSize === 'small'"
-          *ngIf="filter"
-          [ngClass]="hasCustomFilterSize() ? filterSizeClass(filter.width) : ''"
-        >
-          <div
-            class="po-field-container-content po-page-filter-content"
-            [ngClass]="[
-              hasCustomFilterSize()
-                ? filter.advancedAction
-                  ? 'po-page-filter-input-variable-size'
-                  : 'po-page-filter-input-variable-size-wo-adv-search'
-                : '',
-              componentsSize === 'small' ? 'po-page-filter-content-aa' : ''
-            ]"
-          >
-            <div class="po-field-icon-container-right">
-              <po-icon
-                p-icon="ICON_SEARCH"
-                class="po-field-icon po-icon-input"
-                [class.po-field-icon-aa]="componentsSize === 'small'"
-                (click)="callActionFilter('action')"
+  @if (hasPageHeader()) {
+    <po-page-header
+      [class.po-page-list-header-padding]="filter && !visibleActions.length"
+      [p-breadcrumb]="breadcrumb"
+      [p-title]="title"
+      [p-subtitle]="subtitle"
+    >
+      <div class="po-page-list-container">
+        <!-- OPERATIONS -->
+        <div class="po-page-list-operations">
+          <div class="po-page-list-actions" [class.po-page-list-actions-padding]="filter">
+            @if (visibleActions[0]) {
+              <po-button
+                p-kind="primary"
+                [p-danger]="visibleActions[0].type === 'danger'"
+                [p-disabled]="actionIsDisabled(actions[0])"
+                [p-icon]="visibleActions[0].icon"
+                [p-label]="visibleActions[0].label"
+                [p-size]="componentsSize"
+                (p-click)="callAction(visibleActions[0])"
               >
-              </po-icon>
-            </div>
-
-            <input
-              #filterInput
-              class="po-input po-input-icon-right"
-              [class.po-input-aa]="componentsSize === 'small'"
-              [class.po-input-icon-right-aa]="componentsSize === 'small'"
-              name="model"
-              type="text"
-              [placeholder]="filter.placeholder || ''"
-              (keypress)="onkeypress($event.keyCode)"
-              [value]="quickSearchValue || ''"
-            />
+              </po-button>
+            }
+            @if (visibleActions[1] && (visibleActions.length === 2 || !isMobile)) {
+              <po-button
+                [p-danger]="visibleActions[1].type === 'danger'"
+                [p-disabled]="actionIsDisabled(actions[1])"
+                [p-label]="visibleActions[1].label"
+                [p-size]="componentsSize"
+                (p-click)="callAction(visibleActions[1])"
+              >
+              </po-button>
+            }
+            @if (visibleActions.length === 3 && visibleActions[2] && !isMobile) {
+              <po-button
+                [p-danger]="visibleActions[2].type === 'danger'"
+                [p-disabled]="actionIsDisabled(visibleActions[2])"
+                [p-label]="visibleActions[2].label"
+                [p-size]="componentsSize"
+                (p-click)="callAction(visibleActions[2])"
+              >
+              </po-button>
+            }
+            @if (visibleActions.length > limitPrimaryActions) {
+              <po-dropdown [p-actions]="dropdownActions" [p-label]="literals.otherActions" [p-size]="componentsSize">
+              </po-dropdown>
+            }
           </div>
-
-          <div class="po-page-list-filter-search" *ngIf="filter.advancedAction">
-            <span
-              class="po-page-list-filter-search-link"
-              tabindex="0"
-              (click)="callActionFilter('advancedAction')"
-              (keydown.enter)="callActionFilter('advancedAction')"
+          <!-- FILTER -->
+          @if (filter) {
+            <div
+              class="po-page-list-filter-wrapper"
+              [class.po-page-list-filter-wrapper-aa]="componentsSize === 'small'"
+              [ngClass]="hasCustomFilterSize() ? filterSizeClass(filter.width) : ''"
             >
-              {{ advancedSearch }}
-            </span>
-          </div>
+              <div
+                class="po-field-container-content po-page-filter-content"
+                [ngClass]="[
+                  hasCustomFilterSize()
+                    ? filter.advancedAction
+                      ? 'po-page-filter-input-variable-size'
+                      : 'po-page-filter-input-variable-size-wo-adv-search'
+                    : '',
+                  componentsSize === 'small' ? 'po-page-filter-content-aa' : ''
+                ]"
+              >
+                <div class="po-field-icon-container-right">
+                  <po-icon
+                    p-icon="ICON_SEARCH"
+                    class="po-field-icon po-icon-input"
+                    [class.po-field-icon-aa]="componentsSize === 'small'"
+                    (click)="callActionFilter('action')"
+                  >
+                  </po-icon>
+                </div>
+                <input
+                  #filterInput
+                  class="po-input po-input-icon-right"
+                  [class.po-input-aa]="componentsSize === 'small'"
+                  [class.po-input-icon-right-aa]="componentsSize === 'small'"
+                  name="model"
+                  type="text"
+                  [placeholder]="filter.placeholder || ''"
+                  (keypress)="onkeypress($event.keyCode)"
+                  [value]="quickSearchValue || ''"
+                />
+              </div>
+              @if (filter.advancedAction) {
+                <div class="po-page-list-filter-search">
+                  <span
+                    class="po-page-list-filter-search-link"
+                    tabindex="0"
+                    (click)="callActionFilter('advancedAction')"
+                    (keydown.enter)="callActionFilter('advancedAction')"
+                  >
+                    {{ advancedSearch }}
+                  </span>
+                </div>
+              }
+            </div>
+          }
         </div>
+        <!-- DISCLAIMER -->
+        @if (!!disclaimerGroup) {
+          <po-disclaimer-group
+            [class.po-page-list-disclaimer-group]="!!disclaimerGroup?.disclaimers?.length"
+            [p-disclaimers]="disclaimerGroup?.disclaimers"
+            [p-hide-remove-all]="disclaimerGroup?.hideRemoveAll"
+            [p-title]="disclaimerGroup?.title"
+            (p-change)="onChangeDisclaimerGroup($event)"
+            (p-remove)="onRemoveDisclaimer($event)"
+            (p-remove-all)="onRemoveAllDisclaimers($event)"
+          >
+          </po-disclaimer-group>
+        }
       </div>
-
-      <!-- DISCLAIMER -->
-      <po-disclaimer-group
-        *ngIf="!!disclaimerGroup"
-        [class.po-page-list-disclaimer-group]="!!disclaimerGroup?.disclaimers?.length"
-        [p-disclaimers]="disclaimerGroup?.disclaimers"
-        [p-hide-remove-all]="disclaimerGroup?.hideRemoveAll"
-        [p-title]="disclaimerGroup?.title"
-        (p-change)="onChangeDisclaimerGroup($event)"
-        (p-remove)="onRemoveDisclaimer($event)"
-        (p-remove-all)="onRemoveAllDisclaimers($event)"
-      >
-      </po-disclaimer-group>
-    </div>
-  </po-page-header>
+    </po-page-header>
+  }
 
   <!-- CONTENT -->
   <po-page-content>

@@ -1,18 +1,13 @@
-<ng-container *ngIf="parameters && parameters.length; then formFieldsTemplate; else parametersNotFoundTemplate">
-</ng-container>
-
-<ng-template #parametersNotFoundTemplate>
+@if (parameters && parameters.length) {
+  <form #parametersForm="ngForm">
+    <po-dynamic-form p-group-form [p-components-size]="componentsSize" [p-fields]="parameters" [p-value]="value">
+    </po-dynamic-form>
+  </form>
+} @else {
   <div class="po-text-center">
     <po-icon p-icon="ICON_INFO"></po-icon>
     <span class="po-font-text-large">
       {{ literals.parametersNotFound }}
     </span>
   </div>
-</ng-template>
-
-<ng-template #formFieldsTemplate>
-  <form #parametersForm="ngForm">
-    <po-dynamic-form p-group-form [p-components-size]="componentsSize" [p-fields]="parameters" [p-value]="value">
-    </po-dynamic-form>
-  </form>
-</ng-template>
+}

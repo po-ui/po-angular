@@ -1,14 +1,15 @@
 <po-tabs #poTab [p-size]="size">
-  <po-tab
-    *ngFor="let tab of tabs; let i = index"
-    [p-active]="tab.active"
-    [p-disabled]="tab.disabled"
-    [p-hide]="tab.hide"
-    [p-label]="tab.label"
-    (p-click)="onClick(tab)"
-  >
-    <div class="po-font-subtitle">Tab Content {{ i }}</div>
-  </po-tab>
+  @for (tab of tabs; track tab; let i = $index) {
+    <po-tab
+      [p-active]="tab.active"
+      [p-disabled]="tab.disabled"
+      [p-hide]="tab.hide"
+      [p-label]="tab.label"
+      (p-click)="onClick(tab)"
+    >
+      <div class="po-font-subtitle">Tab Content {{ i }}</div>
+    </po-tab>
+  }
 </po-tabs>
 
 <po-dynamic-form #tabsForm [p-fields]="tabsFieldsForm" [p-value]="tabs"> </po-dynamic-form>

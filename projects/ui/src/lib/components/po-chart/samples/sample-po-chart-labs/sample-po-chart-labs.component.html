@@ -37,16 +37,17 @@
 
   <po-input class="po-md-3" name="title" p-label="Title" [(ngModel)]="title"> </po-input>
 
-  <po-checkbox-group
-    *ngIf="isTypeGrid()"
-    class="po-md-3"
-    name="dataLabel"
-    p-label="DataLabel"
-    [p-options]="[{ value: 'fixed', label: 'Fixed' }]"
-    [(ngModel)]="selectedValuesDataLabel"
-    (p-change)="changeDataLabelOptions()"
-  >
-  </po-checkbox-group>
+  @if (isTypeGrid()) {
+    <po-checkbox-group
+      class="po-md-3"
+      name="dataLabel"
+      p-label="DataLabel"
+      [p-options]="[{ value: 'fixed', label: 'Fixed' }]"
+      [(ngModel)]="selectedValuesDataLabel"
+      (p-change)="changeDataLabelOptions()"
+    >
+    </po-checkbox-group>
+  }
 </form>
 
 <po-divider class="po-md-12" p-label="Chart series"></po-divider>
@@ -62,27 +63,23 @@
     >
     </po-switch>
 
-    <po-number
-      *ngIf="isTypeGauge"
-      class="po-md-4"
-      p-label="Value Gauge"
-      name="valueGauge"
-      [(ngModel)]="valueGauge"
-      (p-change)="changeValueGauge($event)"
-    ></po-number>
+    @if (isTypeGauge) {
+      <po-number
+        class="po-md-4"
+        p-label="Value Gauge"
+        name="valueGauge"
+        [(ngModel)]="valueGauge"
+        (p-change)="changeValueGauge($event)"
+      ></po-number>
+    }
   </div>
   <div class="po-row">
     <po-input class="po-md-4" name="label" p-label="Label" [(ngModel)]="label"></po-input>
 
-    <po-input
-      *ngIf="!isTypeGauge"
-      class="po-md-4"
-      name="data"
-      p-label="Data"
-      p-help="Example: [25, 58, 83, 66] or 25"
-      [(ngModel)]="data"
-    >
-    </po-input>
+    @if (!isTypeGauge) {
+      <po-input class="po-md-4" name="data" p-label="Data" p-help="Example: [25, 58, 83, 66] or 25" [(ngModel)]="data">
+      </po-input>
+    }
 
     <po-select
       class="po-md-4"
@@ -106,18 +103,23 @@
 
     <po-input class="po-md-4" name="color" p-label="Color" p-help="Custom Color" [(ngModel)]="color"></po-input>
 
-    <po-input
-      *ngIf="type === 'bar' || serieType === 'bar' || type === 'column' || serieType === 'column'"
-      class="po-md-4"
-      name="stackGroupName"
-      p-label="Stack Group Name"
-      p-help="Custom Group Name"
-      [(ngModel)]="stackGroupName"
-    ></po-input>
+    @if (type === 'bar' || serieType === 'bar' || type === 'column' || serieType === 'column') {
+      <po-input
+        class="po-md-4"
+        name="stackGroupName"
+        p-label="Stack Group Name"
+        p-help="Custom Group Name"
+        [(ngModel)]="stackGroupName"
+      ></po-input>
+    }
 
-    <po-number *ngIf="isTypeGauge" class="po-md-4" p-label="From" name="from" [(ngModel)]="fromGauge"></po-number>
+    @if (isTypeGauge) {
+      <po-number class="po-md-4" p-label="From" name="from" [(ngModel)]="fromGauge"></po-number>
+    }
 
-    <po-number *ngIf="isTypeGauge" class="po-md-4" p-label="To" name="from" [(ngModel)]="toGauge"></po-number>
+    @if (isTypeGauge) {
+      <po-number class="po-md-4" p-label="To" name="from" [(ngModel)]="toGauge"></po-number>
+    }
 
     <div class="po-row">
       <po-button class="po-md-4" p-label="Add Serie" (p-click)="addData()"> </po-button>

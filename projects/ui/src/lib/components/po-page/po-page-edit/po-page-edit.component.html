@@ -1,41 +1,46 @@
 <po-page>
   <!-- HEADER -->
-  <po-page-header *ngIf="hasPageHeader()" [p-breadcrumb]="breadcrumb" [p-title]="title" [p-subtitle]="subtitle">
-    <!-- OPERATIONS -->
-    <div *ngIf="hasAnyAction()" class="po-page-header-actions">
-      <po-button
-        *ngIf="hasEvent('cancel')"
-        [p-icon]="getIcon('cancel')"
-        [p-label]="literals.cancel"
-        [p-kind]="getType('cancel')"
-        [p-size]="componentsSize"
-        (p-click)="cancel.emit()"
-      >
-      </po-button>
-
-      <po-button
-        *ngIf="hasEvent('saveNew')"
-        [p-disabled]="disableSubmit"
-        [p-icon]="getIcon('saveNew')"
-        [p-label]="literals.saveNew"
-        [p-kind]="getType('saveNew')"
-        [p-size]="componentsSize"
-        (p-click)="saveNew.emit()"
-      >
-      </po-button>
-
-      <po-button
-        *ngIf="hasEvent('save')"
-        p-icon="ICON_OK"
-        p-kind="primary"
-        [p-disabled]="disableSubmit"
-        [p-label]="literals.save"
-        [p-size]="componentsSize"
-        (p-click)="save.emit()"
-      >
-      </po-button>
-    </div>
-  </po-page-header>
+  @if (hasPageHeader()) {
+    <po-page-header [p-breadcrumb]="breadcrumb" [p-title]="title" [p-subtitle]="subtitle">
+      <!-- OPERATIONS -->
+      @if (hasAnyAction()) {
+        <div class="po-page-header-actions">
+          @if (hasEvent('cancel')) {
+            <po-button
+              [p-icon]="getIcon('cancel')"
+              [p-label]="literals.cancel"
+              [p-kind]="getType('cancel')"
+              [p-size]="componentsSize"
+              (p-click)="cancel.emit()"
+            >
+            </po-button>
+          }
+          @if (hasEvent('saveNew')) {
+            <po-button
+              [p-disabled]="disableSubmit"
+              [p-icon]="getIcon('saveNew')"
+              [p-label]="literals.saveNew"
+              [p-kind]="getType('saveNew')"
+              [p-size]="componentsSize"
+              (p-click)="saveNew.emit()"
+            >
+            </po-button>
+          }
+          @if (hasEvent('save')) {
+            <po-button
+              p-icon="ICON_OK"
+              p-kind="primary"
+              [p-disabled]="disableSubmit"
+              [p-label]="literals.save"
+              [p-size]="componentsSize"
+              (p-click)="save.emit()"
+            >
+            </po-button>
+          }
+        </div>
+      }
+    </po-page-header>
+  }
 
   <!-- CONTENT -->
   <po-page-content>
