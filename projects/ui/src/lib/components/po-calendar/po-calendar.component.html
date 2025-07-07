@@ -1,18 +1,15 @@
-<ng-container *ngIf="isRange; then rangeTemplate; else calendarTemplate"></ng-container>
-
-<ng-template #rangeTemplate>
+@if (isRange) {
   <div class="po-calendar-range">
     <ng-container *ngTemplateOutlet="calendarWrapper; context: { partType: 'start' }"></ng-container>
-    <ng-container *ngIf="!isResponsive">
+    @if (!isResponsive) {
       <ng-container *ngTemplateOutlet="calendarWrapper; context: { partType: 'end' }"></ng-container>
-    </ng-container>
+    }
   </div>
-</ng-template>
-<ng-template #calendarTemplate>
+} @else {
   <div class="po-calendar">
     <ng-template [ngTemplateOutlet]="calendarWrapper"></ng-template>
   </div>
-</ng-template>
+}
 
 <ng-template #calendarWrapper let-partType="partType">
   <po-calendar-wrapper

@@ -8,6 +8,8 @@
       {{ literals?.firstPhrase | poI18n: literalParams }}
     </div>
     <div class="po-mb-sm-2 po-mb-md-3 po-md-12">{{ literals?.secondPhrase }}</div>
-    <div class="po-mb-sm-2 po-mb-md-3 po-md-12" *ngIf="literals?.thirdPhrase">{{ literals?.thirdPhrase }}</div>
+    @if (literals?.thirdPhrase) {
+      <div class="po-mb-sm-2 po-mb-md-3 po-md-12">{{ literals?.thirdPhrase }}</div>
+    }
   </div>
 </div>

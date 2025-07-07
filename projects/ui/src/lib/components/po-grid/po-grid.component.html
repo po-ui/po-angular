@@ -1,12 +1,14 @@
 <div class="po-grid-wrapper po-grid-row-wrapper" #wrapper>
-  <div *ngIf="logger">
-    lastCell: {{ lastCell }} | currencyCell: {{ currencyCell }} <br />
-    lastRow: {{ lastRow }} | currencyRow: {{ currencyRow }} <br />
-    lastColumn: {{ lastColumn }} | currencyColumn: {{ currencyColumn }} <br />
-    <hr />
-    currencyObj: {{ currencyObj | json }}
-    <hr />
-  </div>
+  @if (logger) {
+    <div>
+      lastCell: {{ lastCell }} | currencyCell: {{ currencyCell }} <br />
+      lastRow: {{ lastRow }} | currencyRow: {{ currencyRow }} <br />
+      lastColumn: {{ lastColumn }} | currencyColumn: {{ currencyColumn }} <br />
+      <hr />
+      currencyObj: {{ currencyObj | json }}
+      <hr />
+    </div>
+  }
 
   <div class="po-grid">
     <div class="po-grid-body">
@@ -23,9 +25,11 @@
         (contextmenu)="tableClick($event)"
         (dblclick)="tableClick($event)"
       >
-        <div class="po-grid-cell po-grid-cell-freeze" *ngIf="freezeColumns.length > 0">
-          <ng-container *ngTemplateOutlet="divFreezeColumns"></ng-container>
-        </div>
+        @if (freezeColumns.length > 0) {
+          <div class="po-grid-cell po-grid-cell-freeze">
+            <ng-container *ngTemplateOutlet="divFreezeColumns"></ng-container>
+          </div>
+        }
 
         <div
           class="po-grid-cell po-grid-cell-normal"
@@ -36,9 +40,11 @@
           <ng-container *ngTemplateOutlet="divColumns"></ng-container>
         </div>
 
-        <div class="po-grid-cell po-grid-cell-action" *ngIf="actionColumns.length > 0">
-          <ng-container *ngTemplateOutlet="divActionColumns"></ng-container>
-        </div>
+        @if (actionColumns.length > 0) {
+          <div class="po-grid-cell po-grid-cell-action">
+            <ng-container *ngTemplateOutlet="divActionColumns"></ng-container>
+          </div>
+        }
       </div>
     </div>
   </div>
@@ -49,45 +55,48 @@
   <div class="po-grid po-grid-freeze">
     <div class="po-grid-header-group">
       <div class="po-grid-row">
-        <po-grid-head
-          *ngFor="let column of freezeColumns; index as i"
-          class="po-grid-title"
-          [style.width]="column.cssWidth"
-          [style.max-width]="column.cssWidth"
-          [style.min-width]="column.cssWidth"
-          p-freeze="true"
-          p-position="{{ '0-' + i }}"
-          [p-width]="column.width"
-          [p-align]="column.align"
-          [p-title]="column.label"
-        >
-        </po-grid-head>
+        @for (column of freezeColumns; track column; let i = $index) {
+          <po-grid-head
+            class="po-grid-title"
+            [style.width]="column.cssWidth"
+            [style.max-width]="column.cssWidth"
+            [style.min-width]="column.cssWidth"
+            p-freeze="true"
+            p-position="{{ '0-' + i }}"
+            [p-width]="column.width"
+            [p-align]="column.align"
+            [p-title]="column.label"
+          >
+          </po-grid-head>
+        }
       </div>
     </div>
 
     <div class="po-grid-body">
-      <div
-        class="po-grid-row"
-        *ngFor="let row of data; index as j"
-        (keydown.control.delete)="removeRow($event, row)"
-        (keydown.esc)="cancelRow($event, row)"
-      >
-        <po-grid-cell
-          *ngFor="let column of freezeColumns; index as i"
-          class="po-grid-cell"
-          [style.width]="column.cssWidth"
-          [style.max-width]="column.cssWidth"
-          [style.min-width]="column.cssWidth"
-          p-freeze="true"
-          [p-align]="column.align"
-          [p-readonly]="column.readonly"
-          [p-required]="column.required"
-          p-position="{{ j + 1 + '-' + i }}"
-          [p-width]="column.width"
-          [(p-value)]="row[column.property]"
+      @for (row of data; track row; let j = $index) {
+        <div
+          class="po-grid-row"
+          (keydown.control.delete)="removeRow($event, row)"
+          (keydown.esc)="cancelRow($event, row)"
         >
-        </po-grid-cell>
-      </div>
+          @for (column of freezeColumns; track column; let i = $index) {
+            <po-grid-cell
+              class="po-grid-cell"
+              [style.width]="column.cssWidth"
+              [style.max-width]="column.cssWidth"
+              [style.min-width]="column.cssWidth"
+              p-freeze="true"
+              [p-align]="column.align"
+              [p-readonly]="column.readonly"
+              [p-required]="column.required"
+              p-position="{{ j + 1 + '-' + i }}"
+              [p-width]="column.width"
+              [(p-value)]="row[column.property]"
+            >
+            </po-grid-cell>
+          }
+        </div>
+      }
     </div>
   </div>
 </ng-template>
@@ -98,43 +107,46 @@
   <div class="po-grid po-grid-normal">
     <div class="po-grid-header-group">
       <div class="po-grid-row">
-        <po-grid-head
-          *ngFor="let column of columns; index as i"
-          class="po-grid-title"
-          [style.width]="column.cssWidth"
-          [style.max-width]="column.cssWidth"
-          [style.min-width]="column.cssWidth"
-          [p-align]="column.align"
-          p-position="{{ '0-' + (i + freezeColumns.length) }}"
-          [p-title]="column.label"
-          [p-width]="column.width"
-        >
-        </po-grid-head>
+        @for (column of columns; track column; let i = $index) {
+          <po-grid-head
+            class="po-grid-title"
+            [style.width]="column.cssWidth"
+            [style.max-width]="column.cssWidth"
+            [style.min-width]="column.cssWidth"
+            [p-align]="column.align"
+            p-position="{{ '0-' + (i + freezeColumns.length) }}"
+            [p-title]="column.label"
+            [p-width]="column.width"
+          >
+          </po-grid-head>
+        }
       </div>
     </div>
 
     <div class="po-grid-body">
-      <div
-        class="po-grid-row"
-        *ngFor="let row of data; index as j"
-        (keydown.control.delete)="removeRow($event, row)"
-        (keydown.esc)="cancelRow($event, row)"
-      >
-        <po-grid-cell
-          *ngFor="let column of columns; index as i"
-          class="po-grid-cell"
-          [style.width]="column.cssWidth"
-          [style.max-width]="column.cssWidth"
-          [style.min-width]="column.cssWidth"
-          [p-align]="column.align"
-          [p-readonly]="column.readonly"
-          [p-required]="column.required"
-          p-position="{{ j + 1 + '-' + (i + freezeColumns.length) }}"
-          [(p-value)]="row[column.property]"
-          [p-width]="column.width"
+      @for (row of data; track row; let j = $index) {
+        <div
+          class="po-grid-row"
+          (keydown.control.delete)="removeRow($event, row)"
+          (keydown.esc)="cancelRow($event, row)"
         >
-        </po-grid-cell>
-      </div>
+          @for (column of columns; track column; let i = $index) {
+            <po-grid-cell
+              class="po-grid-cell"
+              [style.width]="column.cssWidth"
+              [style.max-width]="column.cssWidth"
+              [style.min-width]="column.cssWidth"
+              [p-align]="column.align"
+              [p-readonly]="column.readonly"
+              [p-required]="column.required"
+              p-position="{{ j + 1 + '-' + (i + freezeColumns.length) }}"
+              [(p-value)]="row[column.property]"
+              [p-width]="column.width"
+            >
+            </po-grid-cell>
+          }
+        </div>
+      }
     </div>
   </div>
 </ng-template>
@@ -145,32 +157,35 @@
   <div class="po-grid po-grid-actions">
     <div class="po-grid-header-group">
       <div class="po-grid-row">
-        <po-grid-head
-          *ngFor="let column of actionColumns; index as i"
-          class="po-grid-title"
-          p-position="{{ '0-' + (i + freezeColumns.length + columns.length) }}"
-          [p-title]="column.label"
-          [p-align]="column.align"
-        >
-        </po-grid-head>
+        @for (column of actionColumns; track column; let i = $index) {
+          <po-grid-head
+            class="po-grid-title"
+            p-position="{{ '0-' + (i + freezeColumns.length + columns.length) }}"
+            [p-title]="column.label"
+            [p-align]="column.align"
+          >
+          </po-grid-head>
+        }
       </div>
     </div>
 
     <div class="po-grid-body">
-      <div
-        class="po-grid-row"
-        *ngFor="let row of data; index as j"
-        (keydown.control.delete)="removeRow($event, row)"
-        (keydown.esc)="cancelRow($event, row)"
-      >
-        <po-grid-cell-action
-          *ngFor="let column of actionColumns; index as i"
-          class="po-grid-cell"
-          p-position="{{ j + 1 + '-' + (i + freezeColumns.length + columns.length) }}"
-          [p-value]="row[column.property]"
+      @for (row of data; track row; let j = $index) {
+        <div
+          class="po-grid-row"
+          (keydown.control.delete)="removeRow($event, row)"
+          (keydown.esc)="cancelRow($event, row)"
         >
-        </po-grid-cell-action>
-      </div>
+          @for (column of actionColumns; track column; let i = $index) {
+            <po-grid-cell-action
+              class="po-grid-cell"
+              p-position="{{ j + 1 + '-' + (i + freezeColumns.length + columns.length) }}"
+              [p-value]="row[column.property]"
+            >
+            </po-grid-cell-action>
+          }
+        </div>
+      }
     </div>
   </div>
 </ng-template>

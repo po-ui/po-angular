@@ -1,6 +1,4 @@
-<ng-container *ngIf="groupForm; then reuseFormTemplate; else uniqueFormTemplate"></ng-container>
-
-<ng-template #reuseFormTemplate>
+@if (groupForm) {
   <po-dynamic-form-fields
     #fieldsComponent
     [p-auto-focus]="autoFocus"
@@ -9,9 +7,7 @@
     [p-value]="value"
   >
   </po-dynamic-form-fields>
-</ng-template>
-
-<ng-template #uniqueFormTemplate>
+} @else {
   <form #dynamicForm="ngForm">
     <po-dynamic-form-fields
       #fieldsComponent
@@ -28,4 +24,4 @@
     >
     </po-dynamic-form-fields>
   </form>
-</ng-template>
+}

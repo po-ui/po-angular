@@ -4,30 +4,25 @@
   [style.height.px]="height"
 >
   <div class="po-upload-drag-drop-area-container">
-    <ng-container *ngIf="overlay && !disabled; then overlayTemplate; else defaultTemplate"> </ng-container>
+    @if (overlay && !disabled) {
+      <po-icon p-icon="ICON_UPLOAD_CLOUD" class="po-upload-drag-drop-area-overlay-icon"></po-icon>
+      <div class="po-upload-drag-drop-area-overlay-label">
+        {{ directoryCompatible ? literals?.dropFoldersHere : literals?.dropFilesHere }}
+      </div>
+    } @else {
+      <po-icon p-icon="ICON_UPLOAD_CLOUD" class="po-upload-drag-drop-area-icon"></po-icon>
+      <div class="po-upload-drag-drop-area-label">
+        {{ directoryCompatible ? literals?.dragFoldersHere : literals?.dragFilesHere }}
+      </div>
+      <button
+        #selectFilesLink
+        class="po-upload-drag-drop-area-select-files"
+        [disabled]="disabled"
+        [ngClass]="{ 'po-clickable': !disabled }"
+        (click)="selectFiles.emit()"
+      >
+        {{ directoryCompatible ? literals?.selectFolderOnComputer : literals?.selectFilesOnComputer }}
+      </button>
+    }
   </div>
 </div>
-
-<ng-template #overlayTemplate>
-  <po-icon p-icon="ICON_UPLOAD_CLOUD" class="po-upload-drag-drop-area-overlay-icon"></po-icon>
-  <div class="po-upload-drag-drop-area-overlay-label">
-    {{ directoryCompatible ? literals?.dropFoldersHere : literals?.dropFilesHere }}
-  </div>
-</ng-template>
-
-<ng-template #defaultTemplate>
-  <po-icon p-icon="ICON_UPLOAD_CLOUD" class="po-upload-drag-drop-area-icon"></po-icon>
-  <div class="po-upload-drag-drop-area-label">
-    {{ directoryCompatible ? literals?.dragFoldersHere : literals?.dragFilesHere }}
-  </div>
-
-  <button
-    #selectFilesLink
-    class="po-upload-drag-drop-area-select-files"
-    [disabled]="disabled"
-    [ngClass]="{ 'po-clickable': !disabled }"
-    (click)="selectFiles.emit()"
-  >
-    {{ directoryCompatible ? literals?.selectFolderOnComputer : literals?.selectFilesOnComputer }}
-  </button>
-</ng-template>

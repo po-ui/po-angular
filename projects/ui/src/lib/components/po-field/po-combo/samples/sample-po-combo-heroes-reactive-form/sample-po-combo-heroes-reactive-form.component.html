@@ -14,14 +14,12 @@
       </po-combo>
     </div>
 
-    <ng-container *ngIf="hero$ | async as hero">
+    @if (hero$ | async; as hero) {
       <div class="po-row">
         <po-info class="po-md-4" p-label="Name" [p-value]="hero.name"> </po-info>
-
         <po-info class="po-md-4" p-label="Nickname" [p-value]="hero.nickname"> </po-info>
-
         <po-info class="po-md-4" p-label="Email" [p-value]="hero.email"> </po-info>
       </div>
-    </ng-container>
+    }
   </po-widget>
 </div>

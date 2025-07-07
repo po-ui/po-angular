@@ -1,7 +1,9 @@
 <div class="po-progress" [ngClass]="statusClass">
-  <div *ngIf="text" class="po-progress-description">
-    <po-label [p-label]="text"></po-label>
-  </div>
+  @if (text) {
+    <div class="po-progress-description">
+      <po-label [p-label]="text"></po-label>
+    </div>
+  }
 
   <po-progress-bar
     class="po-progress-bar po-progress-bar-{{ size }}"
@@ -12,46 +14,55 @@
 
   <div class="po-progress-info">
     <div class="po-progress-info-left">
-      <po-icon *ngIf="infoIcon" [p-icon]="infoIcon" [class.po-progress-info-icon-error]="status === 'error'"></po-icon>
-      <po-icon *ngIf="isAllowInfoError" p-icon="ICON_EXCLAMATION" class="po-progress-info-icon-error"></po-icon>
-      <span *ngIf="info" class="po-progress-info-text" [class.po-progress-info-text-error]="status === 'error'">{{
-        info
-      }}</span>
+      @if (infoIcon) {
+        <po-icon [p-icon]="infoIcon" [class.po-progress-info-icon-error]="status === 'error'"></po-icon>
+      }
+      @if (isAllowInfoError) {
+        <po-icon p-icon="ICON_EXCLAMATION" class="po-progress-info-icon-error"></po-icon>
+      }
+      @if (info) {
+        <span class="po-progress-info-text" [class.po-progress-info-text-error]="status === 'error'">{{ info }}</span>
+      }
     </div>
     <div class="po-progress-info-right">
-      <span *ngIf="showPercentage && !indeterminate">{{ value }}%</span>
+      @if (showPercentage && !indeterminate) {
+        <span>{{ value }}%</span>
+      }
 
-      <po-button
-        *ngIf="isAllowRetry"
-        p-icon="ICON_REFRESH"
-        (p-click)="emitRetry()"
-        [p-aria-label]="literals.retry"
-        p-kind="tertiary"
-        [p-size]="sizeActions"
-      ></po-button>
+      @if (isAllowRetry) {
+        <po-button
+          p-icon="ICON_REFRESH"
+          (p-click)="emitRetry()"
+          [p-aria-label]="literals.retry"
+          p-kind="tertiary"
+          [p-size]="sizeActions"
+        ></po-button>
+      }
 
-      <po-button
-        *ngIf="isActionVisible(customAction)"
-        class="po-progress-custom-button"
-        [p-danger]="customAction.type === 'danger'"
-        [p-disabled]="actionIsDisabled(customAction)"
-        [p-label]="customAction.label || ''"
-        [p-icon]="customAction.icon"
-        [p-size]="sizeActions"
-        (p-click)="callAction()"
-      >
-      </po-button>
+      @if (isActionVisible(customAction)) {
+        <po-button
+          class="po-progress-custom-button"
+          [p-danger]="customAction.type === 'danger'"
+          [p-disabled]="actionIsDisabled(customAction)"
+          [p-label]="customAction.label || ''"
+          [p-icon]="customAction.icon"
+          [p-size]="sizeActions"
+          (p-click)="callAction()"
+        >
+        </po-button>
+      }
 
-      <po-button
-        *ngIf="isAllowCancel"
-        p-icon="ICON_CLOSE"
-        (p-click)="emitCancellation()"
-        p-kind="secondary"
-        [p-disabled]="disabledCancel"
-        [p-aria-label]="literals.cancel"
-        [p-danger]="true"
-        [p-size]="sizeActions"
-      ></po-button>
+      @if (isAllowCancel) {
+        <po-button
+          p-icon="ICON_CLOSE"
+          (p-click)="emitCancellation()"
+          p-kind="secondary"
+          [p-disabled]="disabledCancel"
+          [p-aria-label]="literals.cancel"
+          [p-danger]="true"
+          [p-size]="sizeActions"
+        ></po-button>
+      }
     </div>
   </div>
 </div>

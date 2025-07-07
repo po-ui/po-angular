@@ -10,18 +10,20 @@
   </po-button>
 </div>
 
-<div class="po-tab-dropdown-container" *ngIf="isDropdownOpen" [ngStyle]="dropdownStyles">
-  <po-listbox
-    #listbox
-    #poListBoxRef
-    p-type="action"
-    [p-items]="tabs"
-    [p-is-tabs]="true"
-    [p-size]="size"
-    (p-activated-tabs)="activated.emit($event)"
-    (p-change-state-tabs)="changeState.emit($event)"
-    (p-click-tabs)="closeDropdown(); click.emit($event)"
-    (p-close)="closeAndReturnToButtom()"
-  >
-  </po-listbox>
-</div>
+@if (isDropdownOpen) {
+  <div class="po-tab-dropdown-container" [ngStyle]="dropdownStyles">
+    <po-listbox
+      #listbox
+      #poListBoxRef
+      p-type="action"
+      [p-items]="tabs"
+      [p-is-tabs]="true"
+      [p-size]="size"
+      (p-activated-tabs)="activated.emit($event)"
+      (p-change-state-tabs)="changeState.emit($event)"
+      (p-click-tabs)="closeDropdown(); click.emit($event)"
+      (p-close)="closeAndReturnToButtom()"
+    >
+    </po-listbox>
+  </div>
+}

@@ -25,16 +25,17 @@
     ></textarea>
   </div>
 
-  <po-field-container-bottom
-    *ngIf="!readonly"
-    [p-additional-help-tooltip]="getAdditionalHelpTooltip()"
-    [p-append-in-body]="appendBox"
-    [p-help]="help"
-    [p-disabled]="disabled"
-    [p-error-pattern]="getErrorPattern()"
-    [p-error-limit]="errorLimit"
-    [p-show-additional-help]="displayAdditionalHelp"
-    [p-show-additional-help-icon]="showAdditionalHelpIcon()"
-    (p-additional-help)="emitAdditionalHelp()"
-  ></po-field-container-bottom>
+  @if (!readonly) {
+    <po-field-container-bottom
+      [p-additional-help-tooltip]="getAdditionalHelpTooltip()"
+      [p-append-in-body]="appendBox"
+      [p-help]="help"
+      [p-disabled]="disabled"
+      [p-error-pattern]="getErrorPattern()"
+      [p-error-limit]="errorLimit"
+      [p-show-additional-help]="displayAdditionalHelp"
+      [p-show-additional-help-icon]="showAdditionalHelpIcon()"
+      (p-additional-help)="emitAdditionalHelp()"
+    ></po-field-container-bottom>
+  }
 </po-field-container>

@@ -1,7 +1,7 @@
 <div class="po-tabs-container">
   <div #containerTabs class="po-tabs-header">
     <div class="po-tabs-button-wrapper" role="tablist">
-      <ng-container *ngFor="let tab of tabs; trackBy: trackByFn">
+      @for (tab of tabs; track trackByFn($index, tab)) {
         <po-tab-button
           #tabButton
           class="po-tab-button"
@@ -20,20 +20,21 @@
           (p-click)="selectedTab(tab)"
         >
         </po-tab-button>
-      </ng-container>
+      }
 
-      <po-tab-dropdown
-        #tabDropdown
-        *ngIf="isShowTabDropdown"
-        class="po-tab-dropdown"
-        [class.po-tab-dropdown-device]="!tabsDefault?.length"
-        [p-label]="literals.moreTabs"
-        [p-size]="size"
-        [p-tabs]="overflowedTabs"
-        (p-change-state)="onTabChangeState($event)"
-        (p-click)="onTabActiveByDropdown($event)"
-      >
-      </po-tab-dropdown>
+      @if (isShowTabDropdown) {
+        <po-tab-dropdown
+          #tabDropdown
+          class="po-tab-dropdown"
+          [class.po-tab-dropdown-device]="!tabsDefault?.length"
+          [p-label]="literals.moreTabs"
+          [p-size]="size"
+          [p-tabs]="overflowedTabs"
+          (p-change-state)="onTabChangeState($event)"
+          (p-click)="onTabActiveByDropdown($event)"
+        >
+        </po-tab-dropdown>
+      }
     </div>
   </div>
 </div>

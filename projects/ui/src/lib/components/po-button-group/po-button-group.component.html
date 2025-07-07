@@ -1,16 +1,17 @@
 <div class="po-button-group-container">
-  <po-button
-    *ngFor="let button of buttons; index as i"
-    class="po-sm-12 po-button-group"
-    [class.po-button-group-button-selected]="button.selected"
-    [class.po-button-group-disabled]="button.disabled"
-    p-tooltip-position="bottom"
-    [p-disabled]="button.disabled"
-    [p-icon]="button.icon"
-    [p-label]="button.label"
-    [p-size]="size"
-    [p-tooltip]="!button.disabled ? button.tooltip : undefined"
-    (p-click)="onButtonClick(button, i); button.action(button)"
-  >
-  </po-button>
+  @for (button of buttons; track button; let i = $index) {
+    <po-button
+      class="po-sm-12 po-button-group"
+      [class.po-button-group-button-selected]="button.selected"
+      [class.po-button-group-disabled]="button.disabled"
+      p-tooltip-position="bottom"
+      [p-disabled]="button.disabled"
+      [p-icon]="button.icon"
+      [p-label]="button.label"
+      [p-size]="size"
+      [p-tooltip]="!button.disabled ? button.tooltip : undefined"
+      (p-click)="onButtonClick(button, i); button.action(button)"
+    >
+    </po-button>
+  }
 </div>

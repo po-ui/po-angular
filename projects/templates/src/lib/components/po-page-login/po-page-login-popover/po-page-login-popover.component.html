@@ -18,17 +18,25 @@
       <p class="po-font-text">
         {{ literals?.createANewPasswordNow }}
       </p>
-      <div *ngIf="recovery" class="po-font-text-bold po-mt-1 po-page-login-popover-link-container">
-        <a *ngIf="recoveryType === 'internalLink'" class="po-page-login-popover-link" [routerLink]="recovery">
-          {{ literals?.iForgotMyPassword }}
-        </a>
-        <a *ngIf="recoveryType === 'externalLink'" class="po-page-login-popover-link" [href]="recovery" target="_blank">
-          {{ literals?.iForgotMyPassword }}
-        </a>
-        <a *ngIf="!recoveryType" class="po-page-login-popover-link" (click)="onForgotPasswordClick(recovery)">
-          {{ literals?.iForgotMyPassword }}
-        </a>
-      </div>
+      @if (recovery) {
+        <div class="po-font-text-bold po-mt-1 po-page-login-popover-link-container">
+          @if (recoveryType === 'internalLink') {
+            <a class="po-page-login-popover-link" [routerLink]="recovery">
+              {{ literals?.iForgotMyPassword }}
+            </a>
+          }
+          @if (recoveryType === 'externalLink') {
+            <a class="po-page-login-popover-link" [href]="recovery" target="_blank">
+              {{ literals?.iForgotMyPassword }}
+            </a>
+          }
+          @if (!recoveryType) {
+            <a class="po-page-login-popover-link" (click)="onForgotPasswordClick(recovery)">
+              {{ literals?.iForgotMyPassword }}
+            </a>
+          }
+        </div>
+      }
     </div>
   </div>
 </div>

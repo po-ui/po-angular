@@ -11,11 +11,13 @@
   ></po-search>
 </div>
 
-<div class="po-row" *ngFor="let people of filteredItems">
-  <po-container class="po-row po-mt-2">
-    <po-info class="po-md-3" p-label="Name" [p-value]="people.name"> </po-info>
-    <po-info class="po-md-3" p-label="Gender" [p-value]="people.gender"> </po-info>
-    <po-info class="po-md-3" p-label="Planet" [p-value]="people.planet"> </po-info>
-    <po-info class="po-md-3" p-label="Father" [p-value]="people.father"> </po-info>
-  </po-container>
-</div>
+@for (people of filteredItems; track people) {
+  <div class="po-row">
+    <po-container class="po-row po-mt-2">
+      <po-info class="po-md-3" p-label="Name" [p-value]="people.name"> </po-info>
+      <po-info class="po-md-3" p-label="Gender" [p-value]="people.gender"> </po-info>
+      <po-info class="po-md-3" p-label="Planet" [p-value]="people.planet"> </po-info>
+      <po-info class="po-md-3" p-label="Father" [p-value]="people.father"> </po-info>
+    </po-container>
+  </div>
+}

@@ -12,13 +12,16 @@
     class="po-menu-filter-search-icon-container"
     [class.po-menu-filter-search-icon-container-aa]="componentsSize === 'small'"
   >
-    <po-icon
-      p-icon="ICON_SEARCH"
-      *ngIf="!loading"
-      class="po-menu-filter-icon po-field-icon"
-      [class.po-field-icon-aa]="componentsSize === 'small'"
-    ></po-icon>
-    <po-loading-icon *ngIf="loading" [p-size]="componentsSize === 'small' ? 'xs' : 'sm'"></po-loading-icon>
+    @if (!loading) {
+      <po-icon
+        p-icon="ICON_SEARCH"
+        class="po-menu-filter-icon po-field-icon"
+        [class.po-field-icon-aa]="componentsSize === 'small'"
+      ></po-icon>
+    }
+    @if (loading) {
+      <po-loading-icon [p-size]="componentsSize === 'small' ? 'xs' : 'sm'"></po-loading-icon>
+    }
   </div>
   <div class="po-field-icon-container-right">
     <po-clean

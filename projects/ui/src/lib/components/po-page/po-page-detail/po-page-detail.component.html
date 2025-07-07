@@ -1,40 +1,45 @@
 <po-page>
   <!-- HEADER -->
-  <po-page-header *ngIf="hasPageHeader()" [p-breadcrumb]="breadcrumb" [p-title]="title" [p-subtitle]="subtitle">
-    <!-- OPERATIONS -->
-    <div *ngIf="hasAnyAction()" class="po-page-header-actions">
-      <po-button
-        *ngIf="hasEvent('back')"
-        [p-icon]="hasEditOrRemoveFn('icon')"
-        [p-label]="literals.back"
-        [p-kind]="hasEditOrRemoveFn('type')"
-        [p-size]="componentsSize"
-        (p-click)="back.emit()"
-      >
-      </po-button>
-
-      <po-button
-        *ngIf="hasEvent('remove')"
-        p-danger
-        [p-icon]="hasEditFn('icon')"
-        [p-label]="literals.remove"
-        [p-kind]="hasEditFn('type')"
-        [p-size]="componentsSize"
-        (p-click)="remove.emit()"
-      >
-      </po-button>
-
-      <po-button
-        *ngIf="hasEvent('edit')"
-        p-icon="ICON_EDIT"
-        p-kind="primary"
-        [p-label]="literals.edit"
-        [p-size]="componentsSize"
-        (p-click)="edit.emit()"
-      >
-      </po-button>
-    </div>
-  </po-page-header>
+  @if (hasPageHeader()) {
+    <po-page-header [p-breadcrumb]="breadcrumb" [p-title]="title" [p-subtitle]="subtitle">
+      <!-- OPERATIONS -->
+      @if (hasAnyAction()) {
+        <div class="po-page-header-actions">
+          @if (hasEvent('back')) {
+            <po-button
+              [p-icon]="hasEditOrRemoveFn('icon')"
+              [p-label]="literals.back"
+              [p-kind]="hasEditOrRemoveFn('type')"
+              [p-size]="componentsSize"
+              (p-click)="back.emit()"
+            >
+            </po-button>
+          }
+          @if (hasEvent('remove')) {
+            <po-button
+              p-danger
+              [p-icon]="hasEditFn('icon')"
+              [p-label]="literals.remove"
+              [p-kind]="hasEditFn('type')"
+              [p-size]="componentsSize"
+              (p-click)="remove.emit()"
+            >
+            </po-button>
+          }
+          @if (hasEvent('edit')) {
+            <po-button
+              p-icon="ICON_EDIT"
+              p-kind="primary"
+              [p-label]="literals.edit"
+              [p-size]="componentsSize"
+              (p-click)="edit.emit()"
+            >
+            </po-button>
+          }
+        </div>
+      }
+    </po-page-header>
+  }
 
   <!-- CONTENT -->
   <po-page-content>

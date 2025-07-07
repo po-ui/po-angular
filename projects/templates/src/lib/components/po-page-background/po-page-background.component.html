@@ -1,13 +1,14 @@
 <div class="po-page-login-container">
   <div class="po-page-login-panel">
     <div class="po-page-background-main-logo" [class.po-page-background-hide-logo]="hideLogo">
-      <po-logo
-        *ngIf="logo"
-        p-class="po-page-background-main-logo-image"
-        [p-link]="false"
-        [p-logo]="logo"
-        [p-logo-alt]="logoAlt"
-      ></po-logo>
+      @if (logo) {
+        <po-logo
+          p-class="po-page-background-main-logo-image"
+          [p-link]="false"
+          [p-logo]="logo"
+          [p-logo-alt]="logoAlt"
+        ></po-logo>
+      }
     </div>
 
     <div class="po-page-login-body">
@@ -19,15 +20,17 @@
       <po-divider class="po-page-background-footer-mobile-only"></po-divider>
 
       <div class="po-page-background-footer-content">
-        <div *ngIf="showSelectLanguage" class="po-page-background-footer-select">
-          <po-select
-            name="selectedLanguageOption"
-            [(ngModel)]="selectedLanguageOption"
-            [p-options]="selectLanguageOptions"
-            [p-size]="componentsSize"
-            (p-change)="onChangeLanguage()"
-          ></po-select>
-        </div>
+        @if (showSelectLanguage) {
+          <div class="po-page-background-footer-select">
+            <po-select
+              name="selectedLanguageOption"
+              [(ngModel)]="selectedLanguageOption"
+              [p-options]="selectLanguageOptions"
+              [p-size]="componentsSize"
+              (p-change)="onChangeLanguage()"
+            ></po-select>
+          </div>
+        }
 
         <div
           class="po-page-background-secondary-logo"
@@ -37,25 +40,27 @@
               : 'po-page-background-secondary-logo-centered'
           "
         >
-          <po-logo
-            *ngIf="secondaryLogo"
-            p-class="po-page-background-secondary-logo-image"
-            [p-link]="false"
-            [p-logo]="secondaryLogo"
-            p-logo-alt="secondary-logomarca"
-          ></po-logo>
+          @if (secondaryLogo) {
+            <po-logo
+              p-class="po-page-background-secondary-logo-image"
+              [p-link]="false"
+              [p-logo]="secondaryLogo"
+              p-logo-alt="secondary-logomarca"
+            ></po-logo>
+          }
         </div>
       </div>
     </div>
   </div>
 
-  <div
-    *ngIf="background"
-    [ngClass]="background ? 'po-page-login-highlight-image' : 'po-page-login-highlight-image-off'"
-    [style.background-image]="'url(' + background + ')'"
-  >
-    <div class="po-page-login-highlight-text">
-      <div class="po-font-display">{{ highlightInfo }}</div>
+  @if (background) {
+    <div
+      [ngClass]="background ? 'po-page-login-highlight-image' : 'po-page-login-highlight-image-off'"
+      [style.background-image]="'url(' + background + ')'"
+    >
+      <div class="po-page-login-highlight-text">
+        <div class="po-font-display">{{ highlightInfo }}</div>
+      </div>
     </div>
-  </div>
+  }
 </div>

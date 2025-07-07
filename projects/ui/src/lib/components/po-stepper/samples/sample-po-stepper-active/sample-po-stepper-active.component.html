@@ -99,14 +99,18 @@
           ></po-button>
         </div>
       </form>
-      <div class="po-row" *ngIf="professionalExperiences">
-        <po-divider class="po-md-12"> </po-divider>
-        <div class="po-md-12" *ngFor="let experience of professionalExperiences">
-          <po-widget class="po-md-12" [p-title]="experience.title">
-            <p>{{ experience.description }}</p>
-          </po-widget>
+      @if (professionalExperiences) {
+        <div class="po-row">
+          <po-divider class="po-md-12"> </po-divider>
+          @for (experience of professionalExperiences; track experience) {
+            <div class="po-md-12">
+              <po-widget class="po-md-12" [p-title]="experience.title">
+                <p>{{ experience.description }}</p>
+              </po-widget>
+            </div>
+          }
         </div>
-      </div>
+      }
     </po-step>
   </po-stepper>
 </po-container>

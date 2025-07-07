@@ -1,22 +1,22 @@
-<ng-container *ngIf="appendBox; then popoverCDK; else popoverDefault"> </ng-container>
-
-<ng-template #sharedPopoverContent>
-  <div [hidden]="isHidden" class="po-popover" #popoverElement>
-    <div *ngIf="!hideArrow" class="po-popover-arrow po-arrow-{{ arrowDirection }}"></div>
-
-    <div class="po-popover-content">
-      <span *ngIf="title" class="po-popover-title">{{ title }}</span>
-      <ng-content></ng-content>
-    </div>
-  </div>
-</ng-template>
-
-<ng-template #popoverDefault>
-  <ng-container *ngTemplateOutlet="sharedPopoverContent"></ng-container>
-</ng-template>
-
-<ng-template #popoverCDK>
+@if (appendBox) {
   <ng-template cdkConnectedOverlay [cdkConnectedOverlayOrigin]="target" [cdkConnectedOverlayOpen]="true">
     <ng-container *ngTemplateOutlet="sharedPopoverContent"></ng-container>
   </ng-template>
+} @else {
+  <ng-container *ngTemplateOutlet="sharedPopoverContent"></ng-container>
+}
+
+<ng-template #sharedPopoverContent>
+  <div [hidden]="isHidden" class="po-popover" #popoverElement>
+    @if (!hideArrow) {
+      <div class="po-popover-arrow po-arrow-{{ arrowDirection }}"></div>
+    }
+
+    <div class="po-popover-content">
+      @if (title) {
+        <span class="po-popover-title">{{ title }}</span>
+      }
+      <ng-content></ng-content>
+    </div>
+  </div>
 </ng-template>

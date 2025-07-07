@@ -1,17 +1,23 @@
 <!-- menu com link interno -->
-<a *ngIf="menuItemInternal.type === 'internalLink'" [routerLink]="menuItemInternal.link">
-  <ng-container *ngTemplateOutlet="menuItemTemplate"></ng-container>
-</a>
+@if (menuItemInternal.type === 'internalLink') {
+  <a [routerLink]="menuItemInternal.link">
+    <ng-container *ngTemplateOutlet="menuItemTemplate"></ng-container>
+  </a>
+}
 
 <!-- menu com link externo -->
-<a *ngIf="menuItemInternal.type === 'externalLink'" [href]="menuItemInternal.link">
-  <ng-container *ngTemplateOutlet="menuItemTemplate"></ng-container>
-</a>
+@if (menuItemInternal.type === 'externalLink') {
+  <a [href]="menuItemInternal.link">
+    <ng-container *ngTemplateOutlet="menuItemTemplate"></ng-container>
+  </a>
+}
 
 <!-- menu sem link -->
-<a *ngIf="menuItemInternal.type === 'noLink'" href="javascript:;">
-  <ng-container *ngTemplateOutlet="menuItemTemplate"></ng-container>
-</a>
+@if (menuItemInternal.type === 'noLink') {
+  <a href="javascript:;">
+    <ng-container *ngTemplateOutlet="menuItemTemplate"></ng-container>
+  </a>
+}
 
 <ng-template #menuItemTemplate>
   <div

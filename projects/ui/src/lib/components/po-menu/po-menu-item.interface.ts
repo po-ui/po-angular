@@ -84,4 +84,10 @@ export interface PoMenuItem {
 
   // Identificador do Item;
   id?: string;
+
+  level?: any;
+
+  badgeAlert?: any;
+
+  type?: any;
 }
