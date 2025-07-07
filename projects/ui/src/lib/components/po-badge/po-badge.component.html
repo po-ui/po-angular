@@ -6,9 +6,10 @@
   [ariaLabel]="notificationLabel"
   [ngStyle]="customColor && !status ? { 'background-color': customColor } : {}"
 >
-  <po-icon
-    *ngIf="!isNotification && size !== 'small' && badgeIcon && status !== 'disabled'"
-    [p-icon]="badgeIcon"
-  ></po-icon>
-  <span *ngIf="value > 1" class="po-badge-value" aria-hidden="true">{{ badgeValue }}</span>
+  @if (!isNotification && size !== 'small' && badgeIcon && status !== 'disabled') {
+    <po-icon [p-icon]="badgeIcon"></po-icon>
+  }
+  @if (value > 1) {
+    <span class="po-badge-value" aria-hidden="true">{{ badgeValue }}</span>
+  }
 </div>

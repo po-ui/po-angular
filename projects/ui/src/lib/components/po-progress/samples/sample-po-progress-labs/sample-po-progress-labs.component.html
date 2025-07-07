@@ -76,17 +76,19 @@
     </form>
   </po-widget>
 
-  <div *ngIf="showAction">
-    <po-widget p-title="Action Button">
-      <form [formGroup]="actionForm" class="po-row">
-        <po-input class="po-md-6 po-lg-4" formControlName="label" p-label="Label" />
-        <po-select class="po-md-6 po-lg-3" formControlName="icon" p-label="Icon" [p-options]="iconOptions" />
-        <po-select class="po-md-6 po-lg-3" formControlName="type" p-label="Type" [p-options]="typeOptions" />
-        <po-switch class="po-md-3 po-lg-2" formControlName="disabled" p-label="Disabled" />
-        <po-switch class="po-md-3 po-lg-2" formControlName="visible" p-label="Visible" />
-      </form>
-    </po-widget>
-  </div>
+  @if (showAction) {
+    <div>
+      <po-widget p-title="Action Button">
+        <form [formGroup]="actionForm" class="po-row">
+          <po-input class="po-md-6 po-lg-4" formControlName="label" p-label="Label" />
+          <po-select class="po-md-6 po-lg-3" formControlName="icon" p-label="Icon" [p-options]="iconOptions" />
+          <po-select class="po-md-6 po-lg-3" formControlName="type" p-label="Type" [p-options]="typeOptions" />
+          <po-switch class="po-md-3 po-lg-2" formControlName="disabled" p-label="Disabled" />
+          <po-switch class="po-md-3 po-lg-2" formControlName="visible" p-label="Visible" />
+        </form>
+      </po-widget>
+    </div>
+  }
 
   <div class="po-row">
     <po-button class="po-lg-3 po-md-6" p-label="Sample Restore" (p-click)="restore()"> </po-button>

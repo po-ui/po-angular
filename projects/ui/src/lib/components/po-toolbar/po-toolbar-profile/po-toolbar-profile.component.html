@@ -3,17 +3,19 @@
 </div>
 
 <po-popup #popup [p-actions]="profileActions" [p-target]="profileElement">
-  <div p-popup-header-template *ngIf="profile?.title" class="po-toolbar-profile-item-header">
-    <po-avatar class="po-toolbar-profile-item-avatar" p-size="sm" [p-src]="profileAvatar"> </po-avatar>
-
-    <div>
-      <div class="po-toolbar-profile-item-header-title">
-        {{ profile.title }}
-      </div>
-
-      <div *ngIf="profile.subtitle" class="po-toolbar-profile-item-header-subtitle">
-        {{ profile.subtitle }}
+  @if (profile?.title) {
+    <div p-popup-header-template class="po-toolbar-profile-item-header">
+      <po-avatar class="po-toolbar-profile-item-avatar" p-size="sm" [p-src]="profileAvatar"> </po-avatar>
+      <div>
+        <div class="po-toolbar-profile-item-header-title">
+          {{ profile.title }}
+        </div>
+        @if (profile.subtitle) {
+          <div class="po-toolbar-profile-item-header-subtitle">
+            {{ profile.subtitle }}
+          </div>
+        }
       </div>
     </div>
-  </div>
+  }
 </po-popup>

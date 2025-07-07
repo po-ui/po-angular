@@ -1,49 +1,48 @@
 <po-page>
   <!-- HEADER -->
-  <po-page-header *ngIf="hasPageHeader()" [p-breadcrumb]="breadcrumb" [p-title]="title" [p-subtitle]="subtitle">
-    <!-- OPERATIONS -->
-    <div class="po-page-header-actions">
-      <po-dropdown
-        *ngIf="visibleActions.length > limitPrimaryActions"
-        [p-label]="literals.otherActions"
-        [p-actions]="dropdownActions"
-        [p-size]="componentsSize"
-      >
-      </po-dropdown>
-
-      <po-button
-        *ngIf="visibleActions.length === 3 && visibleActions[2] && !isMobile"
-        [p-danger]="visibleActions[2].type === 'danger'"
-        [p-disabled]="actionIsDisabled(visibleActions[2])"
-        [p-label]="visibleActions[2].label"
-        [p-size]="componentsSize"
-        (p-click)="callAction(visibleActions[2])"
-      >
-      </po-button>
-
-      <po-button
-        *ngIf="visibleActions[1] && (visibleActions.length === 2 || !isMobile)"
-        [p-disabled]="actionIsDisabled(visibleActions[1])"
-        [p-label]="visibleActions[1].label"
-        [p-danger]="visibleActions[1].type === 'danger'"
-        [p-size]="componentsSize"
-        (p-click)="callAction(visibleActions[1])"
-      >
-      </po-button>
-
-      <po-button
-        *ngIf="visibleActions[0]"
-        p-kind="primary"
-        [p-danger]="visibleActions[0].type === 'danger'"
-        [p-disabled]="actionIsDisabled(visibleActions[0])"
-        [p-icon]="visibleActions[0].icon"
-        [p-label]="visibleActions[0].label"
-        [p-size]="componentsSize"
-        (p-click)="callAction(visibleActions[0])"
-      >
-      </po-button>
-    </div>
-  </po-page-header>
+  @if (hasPageHeader()) {
+    <po-page-header [p-breadcrumb]="breadcrumb" [p-title]="title" [p-subtitle]="subtitle">
+      <!-- OPERATIONS -->
+      <div class="po-page-header-actions">
+        @if (visibleActions.length > limitPrimaryActions) {
+          <po-dropdown [p-label]="literals.otherActions" [p-actions]="dropdownActions" [p-size]="componentsSize">
+          </po-dropdown>
+        }
+        @if (visibleActions.length === 3 && visibleActions[2] && !isMobile) {
+          <po-button
+            [p-danger]="visibleActions[2].type === 'danger'"
+            [p-disabled]="actionIsDisabled(visibleActions[2])"
+            [p-label]="visibleActions[2].label"
+            [p-size]="componentsSize"
+            (p-click)="callAction(visibleActions[2])"
+          >
+          </po-button>
+        }
+        @if (visibleActions[1] && (visibleActions.length === 2 || !isMobile)) {
+          <po-button
+            [p-disabled]="actionIsDisabled(visibleActions[1])"
+            [p-label]="visibleActions[1].label"
+            [p-danger]="visibleActions[1].type === 'danger'"
+            [p-size]="componentsSize"
+            (p-click)="callAction(visibleActions[1])"
+          >
+          </po-button>
+        }
+        @if (visibleActions[0]) {
+          <po-button
+            p-kind="primary"
+            [p-danger]="visibleActions[0].type === 'danger'"
+            [p-disabled]="actionIsDisabled(visibleActions[0])"
+            [p-icon]="visibleActions[0].icon"
+            [p-label]="visibleActions[0].label"
+            [p-size]="componentsSize"
+            (p-click)="callAction(visibleActions[0])"
+          >
+          </po-button>
+        }
+      </div>
+    </po-page-header>
+  }
 
   <!-- CONTENT -->
   <po-page-content>

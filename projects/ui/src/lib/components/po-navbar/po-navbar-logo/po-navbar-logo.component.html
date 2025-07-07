@@ -1,1 +1,3 @@
-<po-logo *ngIf="logo" p-class="po-navbar-logo-image" [p-logo]="logo" [p-logo-alt]="logoAlt"></po-logo>
+@if (logo) {
+  <po-logo p-class="po-navbar-logo-image" [p-logo]="logo" [p-logo-alt]="logoAlt"></po-logo>
+}

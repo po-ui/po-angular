@@ -1,79 +1,72 @@
-<div
-  *ngIf="series.length"
-  [class.expanded]="isExpanded"
-  [class.po-chart-container-gauge]="isTypeGauge && !isExpanded && options?.showContainerGauge"
-  id="chart-container"
->
-  <div *ngIf="showHeader" class="po-chart-header">
+@if (series.length) {
+  <div
+    [class.expanded]="isExpanded"
+    [class.po-chart-container-gauge]="isTypeGauge && !isExpanded && options?.showContainerGauge"
+    id="chart-container"
+  >
+    @if (showHeader) {
+      <div class="po-chart-header">
+        <div
+          class="po-chart-header-title"
+          [ngClass]="
+            !showPopup && options?.header?.hideTableDetails && options?.header?.hideExpand
+              ? 'po-md-12'
+              : 'po-lg-9 po-md-8 po-sm-6'
+          "
+          [p-tooltip]="tooltipTitle"
+          (mouseover)="showTooltipTitle($event)"
+          (focus)="showTooltipTitle($event)"
+        >
+          {{ title }}
+        </div>
+        @if (showPopup || !options?.header?.hideTableDetails || !options?.header?.hideExpand) {
+          <div class="po-chart-header-actions po-lg-3 po-md-4 po-sm-6">
+            @if (!options?.header?.hideTableDetails) {
+              <po-button p-icon="ICON_LIST_BULLETS" p-kind="tertiary" (p-click)="openModal()"></po-button>
+            }
+            @if (!options?.header?.hideExpand) {
+              <po-button p-icon="ICON_EXPAND" p-kind="tertiary" (p-click)="toggleExpand()"></po-button>
+            }
+            @if (showPopup) {
+              <po-button #targetPopup p-icon="ICON_MORE_VERT" p-kind="tertiary" (p-click)="popup.toggle()"></po-button>
+            }
+          </div>
+        }
+      </div>
+    }
+    @if (options?.descriptionChart) {
+      <div class="description-chart">
+        <div
+          class="po-md-12 description-text"
+          [p-tooltip]="tooltipDescriptionGauge"
+          (mouseover)="showTooltipDescription($event)"
+          (focus)="showTooltipDescription($event)"
+        >
+          {{ options.descriptionChart }}
+        </div>
+      </div>
+    }
     <div
-      class="po-chart-header-title"
-      [ngClass]="
-        !showPopup && options?.header?.hideTableDetails && options?.header?.hideExpand
-          ? 'po-md-12'
-          : 'po-lg-9 po-md-8 po-sm-6'
+      #chartContainer
+      id="chart-id"
+      class="po-chart"
+      [ngStyle]="
+        showHeader
+          ? {
+              height: height - headerHeight - paddingContainerGauge - descriptionHeight + 'px',
+              'margin-top': chartMarginTop
+            }
+          : { height: height - paddingContainerGauge - descriptionHeight + 'px', 'margin-top': chartMarginTop }
       "
-      [p-tooltip]="tooltipTitle"
-      (mouseover)="showTooltipTitle($event)"
-      (focus)="showTooltipTitle($event)"
-    >
-      {{ title }}
-    </div>
-
+    ></div>
     <div
-      *ngIf="showPopup || !options?.header?.hideTableDetails || !options?.header?.hideExpand"
-      class="po-chart-header-actions po-lg-3 po-md-4 po-sm-6"
-    >
-      <po-button
-        *ngIf="!options?.header?.hideTableDetails"
-        p-icon="ICON_LIST_BULLETS"
-        p-kind="tertiary"
-        (p-click)="openModal()"
-      ></po-button>
-      <po-button
-        *ngIf="!options?.header?.hideExpand"
-        p-icon="ICON_EXPAND"
-        p-kind="tertiary"
-        (p-click)="toggleExpand()"
-      ></po-button>
-      <po-button
-        *ngIf="showPopup"
-        #targetPopup
-        p-icon="ICON_MORE_VERT"
-        p-kind="tertiary"
-        (p-click)="popup.toggle()"
-      ></po-button>
-    </div>
+      #tooltipElement
+      id="custom-tooltip"
+      [p-tooltip]="tooltipText"
+      [p-hide-arrow]="true"
+      [p-inner-html]="true"
+      [p-tooltip-position]="positionTooltip"
+    ></div>
+    <po-popup #popup [p-actions]="popupActions" p-position="bottom" [p-target]="targetRef"> </po-popup>
   </div>
-  <div *ngIf="options?.descriptionChart" class="description-chart">
-    <div
-      class="po-md-12 description-text"
-      [p-tooltip]="tooltipDescriptionGauge"
-      (mouseover)="showTooltipDescription($event)"
-      (focus)="showTooltipDescription($event)"
-    >
-      {{ options.descriptionChart }}
-    </div>
-  </div>
-  <div
-    #chartContainer
-    id="chart-id"
-    class="po-chart"
-    [ngStyle]="
-      showHeader
-        ? {
-            height: height - headerHeight - paddingContainerGauge - descriptionHeight + 'px',
-            'margin-top': chartMarginTop
-          }
-        : { height: height - paddingContainerGauge - descriptionHeight + 'px', 'margin-top': chartMarginTop }
-    "
-  ></div>
-  <div
-    #tooltipElement
-    id="custom-tooltip"
-    [p-tooltip]="tooltipText"
-    [p-hide-arrow]="true"
-    [p-inner-html]="true"
-    [p-tooltip-position]="positionTooltip"
-  ></div>
-  <po-popup #popup [p-actions]="popupActions" p-position="bottom" [p-target]="targetRef"> </po-popup>
-</div>
+}

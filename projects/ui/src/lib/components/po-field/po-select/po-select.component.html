@@ -21,50 +21,58 @@
       (change)="onSelectChange($event.target.value)"
       (keydown)="onKeyDown($event)"
     >
-      <ng-container *ngIf="!isSafari">
-        <option
-          *ngIf="!selectedValue?.toString() || !!placeholder"
-          [disabled]="!!placeholder"
-          [hidden]="!selectedValue?.toString() && !placeholder"
-          [selected]="!selectedValue?.toString()"
-          [value]="placeholder ?? ''"
-        >
-          {{ placeholder }}
-        </option>
+      @if (!isSafari) {
+        @if (!selectedValue?.toString() || !!placeholder) {
+          <option
+            [disabled]="!!placeholder"
+            [hidden]="!selectedValue?.toString() && !placeholder"
+            [selected]="!selectedValue?.toString()"
+            [value]="placeholder ?? ''"
+          >
+            {{ placeholder }}
+          </option>
+        }
         <option [hidden]="true">{{ displayValue }}</option>
-      </ng-container>
+      }
 
-      <ng-container *ngIf="isSafari">
+      @if (isSafari) {
         <option>{{ displayValue || placeholder }}</option>
-      </ng-container>
+      }
 
-      <ng-container *ngIf="optionWithoutGroup.length > 0">
-        <option *ngFor="let item of optionWithoutGroup" [disabled]="readonly" [value]="item?.[this.fieldValue]">
-          {{ item?.[this.fieldLabel] }}
-        </option>
-      </ng-container>
-      <ng-container *ngIf="listGroupOptions.length > 0">
-        <ng-container *ngFor="let item of listGroupOptions">
-          <optgroup *ngIf="item?.options.length > 0" label="{{ item?.label }}" [disabled]="readonly">
-            <option *ngFor="let subItem of item.options" [value]="subItem?.[this.fieldValue]" [disabled]="readonly">
-              {{ subItem?.[this.fieldLabel] }}
-            </option>
-          </optgroup>
-        </ng-container>
-      </ng-container>
+      @if (optionWithoutGroup.length > 0) {
+        @for (item of optionWithoutGroup; track item) {
+          <option [disabled]="readonly" [value]="item?.[this.fieldValue]">
+            {{ item?.[this.fieldLabel] }}
+          </option>
+        }
+      }
+      @if (listGroupOptions.length > 0) {
+        @for (item of listGroupOptions; track item) {
+          @if (item?.options.length > 0) {
+            <optgroup label="{{ item?.label }}" [disabled]="readonly">
+              @for (subItem of item.options; track subItem) {
+                <option [value]="subItem?.[this.fieldValue]" [disabled]="readonly">
+                  {{ subItem?.[this.fieldLabel] }}
+                </option>
+              }
+            </optgroup>
+          }
+        }
+      }
     </select>
   </div>
 
-  <po-field-container-bottom
-    *ngIf="!readonly"
-    [p-additional-help-tooltip]="getAdditionalHelpTooltip()"
-    [p-append-in-body]="appendBox"
-    [p-help]="help"
-    [p-disabled]="disabled"
-    [p-error-pattern]="getErrorPattern()"
-    [p-error-limit]="errorLimit"
-    [p-show-additional-help]="displayAdditionalHelp"
-    [p-show-additional-help-icon]="showAdditionalHelpIcon()"
-    (p-additional-help)="emitAdditionalHelp()"
-  ></po-field-container-bottom>
+  @if (!readonly) {
+    <po-field-container-bottom
+      [p-additional-help-tooltip]="getAdditionalHelpTooltip()"
+      [p-append-in-body]="appendBox"
+      [p-help]="help"
+      [p-disabled]="disabled"
+      [p-error-pattern]="getErrorPattern()"
+      [p-error-limit]="errorLimit"
+      [p-show-additional-help]="displayAdditionalHelp"
+      [p-show-additional-help-icon]="showAdditionalHelpIcon()"
+      (p-additional-help)="emitAdditionalHelp()"
+    ></po-field-container-bottom>
+  }
 </po-field-container>

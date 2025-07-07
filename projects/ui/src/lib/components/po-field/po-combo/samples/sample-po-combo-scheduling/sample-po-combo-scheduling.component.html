@@ -56,8 +56,7 @@
       [p-options]="citiesOptions"
     >
       <ng-template p-combo-option-template let-option>
-        <ng-container *ngIf="option.options; then OptionsGroupTitle; else optionsGroup"></ng-container>
-        <ng-template #OptionsGroupTitle>
+        @if (option.options) {
           <div class="po-row">
             <po-avatar
               class="po-sm-2 po-md-3 po-lg-1"
@@ -68,10 +67,9 @@
             </po-avatar>
             <p class="po-sm-10 po-md-9 po-lg-11">{{ option.label }}</p>
           </div>
-        </ng-template>
-        <ng-template #optionsGroup>
+        } @else {
           <div class="po-sm-10 po-md-9 po-lg-11">{{ option.label }}</div>
-        </ng-template>
+        }
       </ng-template>
     </po-combo>
 

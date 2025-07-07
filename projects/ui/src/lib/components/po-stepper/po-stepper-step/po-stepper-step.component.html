@@ -28,16 +28,17 @@
     >
     </po-stepper-circle>
 
-    <po-stepper-label
-      *ngIf="label"
-      class="po-stepper-step-label-position"
-      [p-align-center]="alignCenter"
-      [p-content]="label"
-      [p-status]="status"
-      [p-vertical-orientation]="isVerticalOrientation"
-      [attr.aria-label]="label"
-      [p-disable-click]="disabledClick"
-    >
-    </po-stepper-label>
+    @if (label) {
+      <po-stepper-label
+        class="po-stepper-step-label-position"
+        [p-align-center]="alignCenter"
+        [p-content]="label"
+        [p-status]="status"
+        [p-vertical-orientation]="isVerticalOrientation"
+        [attr.aria-label]="label"
+        [p-disable-click]="disabledClick"
+      >
+      </po-stepper-label>
+    }
   </div>
 </div>

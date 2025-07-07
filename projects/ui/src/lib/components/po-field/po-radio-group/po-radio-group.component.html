@@ -7,23 +7,25 @@
 >
   <div class="po-field-container-content" [attr.name]="name">
     <div #inp class="po-radio-group" role="radiogroup" [attr.aria-label]="label" [attr.data-options]="options.length">
-      <div *ngFor="let option of options" class="po-radio-group-item po-md-{{ mdColumns }} po-lg-{{ columns }}">
-        <po-radio
-          #inputRadio
-          [name]="name"
-          [p-checked]="value === option.value"
-          [p-disabled]="option.disabled === true || disabled"
-          [p-label]="option.label"
-          [p-required]="required"
-          [p-size]="size"
-          [p-value]="option.value"
-          (p-blur)="onBlur(inputRadio)"
-          (keydown)="onKeyDown($event, inputRadio)"
-          (keyup)="onKeyUp($event, option.value)"
-          (click)="eventClick(option.value, option.disabled === true || disabled)"
-        >
-        </po-radio>
-      </div>
+      @for (option of options; track option) {
+        <div class="po-radio-group-item po-md-{{ mdColumns }} po-lg-{{ columns }}">
+          <po-radio
+            #inputRadio
+            [name]="name"
+            [p-checked]="value === option.value"
+            [p-disabled]="option.disabled === true || disabled"
+            [p-label]="option.label"
+            [p-required]="required"
+            [p-size]="size"
+            [p-value]="option.value"
+            (p-blur)="onBlur(inputRadio)"
+            (keydown)="onKeyDown($event, inputRadio)"
+            (keyup)="onKeyUp($event, option.value)"
+            (click)="eventClick(option.value, option.disabled === true || disabled)"
+          >
+          </po-radio>
+        </div>
+      }
     </div>
 
     <po-field-container-bottom

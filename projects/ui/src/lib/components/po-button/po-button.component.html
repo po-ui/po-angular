@@ -12,12 +12,18 @@
   (blur)="onBlur()"
   (click)="onClick()"
 >
-  <div *ngIf="loading" class="po-button-loading-icon">
-    <po-loading-icon p-neutral-color [p-size]="mapSizeToIcon(size)"></po-loading-icon>
-  </div>
+  @if (loading) {
+    <div class="po-button-loading-icon">
+      <po-loading-icon p-neutral-color [p-size]="mapSizeToIcon(size)"></po-loading-icon>
+    </div>
+  }
 
   <div class="po-button-container">
-    <po-icon *ngIf="icon" class="po-button-icon" [class.po-button-icon-aa]="size === 'small'" [p-icon]="icon"></po-icon>
-    <span *ngIf="label" class="po-button-label">{{ label }}</span>
+    @if (icon) {
+      <po-icon class="po-button-icon" [class.po-button-icon-aa]="size === 'small'" [p-icon]="icon"></po-icon>
+    }
+    @if (label) {
+      <span class="po-button-label">{{ label }}</span>
+    }
   </div>
 </button>

@@ -1,9 +1,10 @@
-<po-tag
-  *ngIf="checkValueHasLabel()"
-  [p-color]="value?.color"
-  [p-value]="value?.label"
-  [p-text-color]="value?.textColor"
-  [p-icon]="value?.icon"
-  [p-type]="value?.type"
->
-</po-tag>
+@if (checkValueHasLabel()) {
+  <po-tag
+    [p-color]="value?.color"
+    [p-value]="value?.label"
+    [p-text-color]="value?.textColor"
+    [p-icon]="value?.icon"
+    [p-type]="value?.type"
+  >
+  </po-tag>
+}

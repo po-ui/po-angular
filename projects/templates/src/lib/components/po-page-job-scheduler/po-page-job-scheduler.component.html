@@ -32,37 +32,39 @@
           >
           </po-page-job-scheduler-execution>
 
-          <po-page-job-scheduler-parameters
-            *ngIf="stepParametersInitialized && !parametersTemplate.length"
-            [hidden]="step !== stepParameters"
-            #schedulerParameters
-            class="po-md-12"
-            [p-components-size]="componentsSize"
-            [p-literals]="literals"
-            [p-parameters]="parameters || []"
-            [(p-value)]="model.executionParameter"
-          >
-          </po-page-job-scheduler-parameters>
+          @if (stepParametersInitialized && !parametersTemplate.length) {
+            <po-page-job-scheduler-parameters
+              [hidden]="step !== stepParameters"
+              #schedulerParameters
+              class="po-md-12"
+              [p-components-size]="componentsSize"
+              [p-literals]="literals"
+              [p-parameters]="parameters || []"
+              [(p-value)]="model.executionParameter"
+            >
+            </po-page-job-scheduler-parameters>
+          }
 
-          <po-page-job-scheduler-summary
-            *ngIf="step === stepSummary"
-            [p-no-parameters]="!parameters.length"
-            [p-summary-template]="jobSchedulerSummaryTemplate"
-            class="po-md-12"
-            [p-components-size]="componentsSize"
-            [p-literals]="literals"
-            [p-parameters]="parameters"
-            [p-value]="publicValues"
-          >
-          </po-page-job-scheduler-summary>
+          @if (step === stepSummary) {
+            <po-page-job-scheduler-summary
+              [p-no-parameters]="!parameters.length"
+              [p-summary-template]="jobSchedulerSummaryTemplate"
+              class="po-md-12"
+              [p-components-size]="componentsSize"
+              [p-literals]="literals"
+              [p-parameters]="parameters"
+              [p-value]="publicValues"
+            >
+            </po-page-job-scheduler-summary>
+          }
         </div>
       </form>
 
-      <ng-container *ngFor="let template of parametersTemplate; index as index">
+      @for (template of parametersTemplate; track template; let index = $index) {
         <div [hidden]="step !== index + (_stepExecutionLast ? 1 : 2)">
           <ng-template [ngTemplateOutlet]="template?.templateRef"></ng-template>
         </div>
-      </ng-container>
+      }
     </po-container>
   </div>
 </po-page-default>

@@ -9,42 +9,50 @@
   [hidden]="isHide"
 >
   <div class="po-toaster-icon" [ngClass]="isAlert() ? 'po-toaster-icon-default' : 'po-toaster-decoration'">
-    <po-icon *ngIf="isAlert()" [p-icon]="getIcon()"></po-icon>
+    @if (isAlert()) {
+      <po-icon [p-icon]="getIcon()"></po-icon>
+    }
   </div>
 
-  <po-icon
-    class="po-toaster-inline-icon"
-    [class.po-toaster-inline-icon-aa]="sizeActions === 'small'"
-    *ngIf="isInline()"
-    [p-icon]="getIcon()"
-  ></po-icon>
+  @if (isInline()) {
+    <po-icon
+      class="po-toaster-inline-icon"
+      [class.po-toaster-inline-icon-aa]="sizeActions === 'small'"
+      [p-icon]="getIcon()"
+    ></po-icon>
+  }
 
   <div class="po-toaster-actions" [class.po-toaster-actions-aa]="sizeActions === 'small'">
     <div class="po-toaster-message">
       {{ message }}
-      <div *ngIf="supportMessage" class="po-toaster-support-message">{{ supportMessage }}</div>
+      @if (supportMessage) {
+        <div class="po-toaster-support-message">{{ supportMessage }}</div>
+      }
     </div>
 
     <div class="po-toaster-action">
+      @if (action && actionLabel) {
+        <po-button
+          (p-click)="poToasterAction($event)"
+          [p-label]="actionLabel"
+          p-kind="tertiary"
+          [p-size]="sizeActions"
+        ></po-button>
+      }
+    </div>
+  </div>
+
+  @if (hasClose()) {
+    <div class="po-toaster-close">
+      <div class="po-toaster-divider"></div>
       <po-button
-        *ngIf="action && actionLabel"
-        (p-click)="poToasterAction($event)"
-        [p-label]="actionLabel"
+        #buttonClose
+        class="po-toaster-button-close"
+        (p-click)="onButtonClose($event)"
+        p-icon="ICON_CLOSE"
         p-kind="tertiary"
         [p-size]="sizeActions"
       ></po-button>
     </div>
-  </div>
-
-  <div *ngIf="hasClose()" class="po-toaster-close">
-    <div class="po-toaster-divider"></div>
-    <po-button
-      #buttonClose
-      class="po-toaster-button-close"
-      (p-click)="onButtonClose($event)"
-      p-icon="ICON_CLOSE"
-      p-kind="tertiary"
-      [p-size]="sizeActions"
-    ></po-button>
-  </div>
+  }
 </div>

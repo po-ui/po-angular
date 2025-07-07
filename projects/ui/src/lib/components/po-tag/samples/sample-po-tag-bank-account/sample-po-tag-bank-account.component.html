@@ -19,41 +19,46 @@
 
     <po-widget class="po-md-12 po-sm-mt-1 po-mt-1 po-lg-mt-1" p-title="My Investiments">
       <div class="po-row">
-        <po-tag
-          *ngFor="let investiment of investiments"
-          class="po-md-6 po-lg-3"
-          [p-label]="investiment.label"
-          [p-type]="investiment.type"
-          [p-value]="investiment.value"
-        >
-        </po-tag>
+        @for (investiment of investiments; track investiment) {
+          <po-tag
+            class="po-md-6 po-lg-3"
+            [p-label]="investiment.label"
+            [p-type]="investiment.type"
+            [p-value]="investiment.value"
+          >
+          </po-tag>
+        }
       </div>
     </po-widget>
   </div>
   <po-widget p-title="Last three month operations" class="po-mt-1 po-lg-5">
     <po-tabs>
-      <po-tab *ngFor="let item of items" p-active p-label="{{ item.month }}">
-        <po-widget class="po-lg-12 po-sm-mb-1 po-mb-1 po-lg-mb-1" *ngFor="let item of item.details">
-          <div class="po-row">
-            <po-info
-              class="po-lg-9 po-md-8"
-              p-label-size="6"
-              p-orientation="horizontal"
-              [p-label]="item.label"
-              [p-value]="item.value"
-            >
-            </po-info>
-            <po-tag
-              class="po-lg-3 po-md-4"
-              p-icon
-              p-orientation="horizontal"
-              [p-type]="item.type"
-              [p-value]="item.text"
-            >
-            </po-tag>
-          </div>
-        </po-widget>
-      </po-tab>
+      @for (item of items; track item) {
+        <po-tab p-active p-label="{{ item.month }}">
+          @for (item of item.details; track item) {
+            <po-widget class="po-lg-12 po-sm-mb-1 po-mb-1 po-lg-mb-1">
+              <div class="po-row">
+                <po-info
+                  class="po-lg-9 po-md-8"
+                  p-label-size="6"
+                  p-orientation="horizontal"
+                  [p-label]="item.label"
+                  [p-value]="item.value"
+                >
+                </po-info>
+                <po-tag
+                  class="po-lg-3 po-md-4"
+                  p-icon
+                  p-orientation="horizontal"
+                  [p-type]="item.type"
+                  [p-value]="item.text"
+                >
+                </po-tag>
+              </div>
+            </po-widget>
+          }
+        </po-tab>
+      }
     </po-tabs>
   </po-widget>
 </po-page-default>

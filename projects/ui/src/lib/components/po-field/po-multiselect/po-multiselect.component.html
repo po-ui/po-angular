@@ -27,25 +27,27 @@
         (click)="toggleDropdownVisibility()"
         (blur)="onBlur($event)"
       >
-        <span
-          *ngIf="!disabled && !visibleTags?.length"
-          class="po-multiselect-input-placeholder"
-          [class.po-multiselect-input-placeholder-aa]="size === 'small'"
-          ria-hidden="true"
-        >
-          {{ placeholder ? placeholder : literals.selectItem }}
-        </span>
+        @if (!disabled && !visibleTags?.length) {
+          <span
+            class="po-multiselect-input-placeholder"
+            [class.po-multiselect-input-placeholder-aa]="size === 'small'"
+            ria-hidden="true"
+          >
+            {{ placeholder ? placeholder : literals.selectItem }}
+          </span>
+        }
 
-        <po-tag
-          *ngFor="let tag of visibleTags; index as i"
-          [p-value]="tag[fieldLabel]"
-          [p-literals]="i + 1 === visibleTags.length && hasMoreTag ? literalsTag : undefined"
-          [p-removable]="true"
-          [class.po-clickable]="tag[fieldValue] === '' && !disabled"
-          [p-disabled]="disabled"
-          (p-close)="closeTag(tag[fieldValue], $event)"
-          [p-append-in-body]="appendBox"
-        ></po-tag>
+        @for (tag of visibleTags; track tag; let i = $index) {
+          <po-tag
+            [p-value]="tag[fieldLabel]"
+            [p-literals]="i + 1 === visibleTags.length && hasMoreTag ? literalsTag : undefined"
+            [p-removable]="true"
+            [class.po-clickable]="tag[fieldValue] === '' && !disabled"
+            [p-disabled]="disabled"
+            (p-close)="closeTag(tag[fieldValue], $event)"
+            [p-append-in-body]="appendBox"
+          ></po-tag>
+        }
 
         <div class="po-field-icon-container-right">
           <po-icon
@@ -60,13 +62,7 @@
       </div>
     </div>
 
-    <ng-container *ngIf="appendBox; then dropdownCDK; else dropdownDefault"> </ng-container>
-
-    <ng-template #dropdownDefault>
-      <ng-container *ngTemplateOutlet="dropdownListbox"> </ng-container>
-    </ng-template>
-
-    <ng-template #dropdownCDK>
+    @if (appendBox) {
       <ng-template
         cdkConnectedOverlay
         [cdkConnectedOverlayOrigin]="trigger"
@@ -75,7 +71,9 @@
       >
         <ng-container *ngTemplateOutlet="dropdownListbox"></ng-container>
       </ng-template>
-    </ng-template>
+    } @else {
+      <ng-container *ngTemplateOutlet="dropdownListbox"> </ng-container>
+    }
 
     <po-field-container-bottom
       [p-additional-help-tooltip]="getAdditionalHelpTooltip()"

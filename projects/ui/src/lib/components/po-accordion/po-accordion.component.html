@@ -1,30 +1,29 @@
 <div class="po-accordion">
-  <div *ngIf="showManagerAccordion && poAccordionItems.length > 1" class="po-accordion-manager">
-    <po-accordion-manager
-      [p-expanded-all-items]="expandedAllItems"
-      [p-literals]="literals"
-      (p-click)="changeVisibleAllItems(expandedAllItems)"
-    ></po-accordion-manager>
-  </div>
+  @if (showManagerAccordion && poAccordionItems.length > 1) {
+    <div class="po-accordion-manager">
+      <po-accordion-manager
+        [p-expanded-all-items]="expandedAllItems"
+        [p-literals]="literals"
+        (p-click)="changeVisibleAllItems(expandedAllItems)"
+      ></po-accordion-manager>
+    </div>
+  }
   <ul>
-    <li
-      *ngFor="let poAccordionItem of poAccordionItems"
-      class="po-accordion-item"
-      [class.po-accordion-item-active]="poAccordionItem.expanded"
-    >
-      <po-accordion-item-header
-        [p-disabled]="poAccordionItem.disabledItem"
-        [p-expanded]="poAccordionItem.expanded"
-        [p-label]="poAccordionItem.label"
-        [p-label-tag]="poAccordionItem.labelTag"
-        [p-type-tag]="poAccordionItem.typeTag"
-        (p-toggle)="headerToggle($event, poAccordionItem)"
-      >
-      </po-accordion-item-header>
-
-      <po-accordion-item-body [p-expanded]="poAccordionItem.expanded">
-        <ng-container *ngTemplateOutlet="poAccordionItem.templateRef"></ng-container>
-      </po-accordion-item-body>
-    </li>
+    @for (poAccordionItem of poAccordionItems; track poAccordionItem) {
+      <li class="po-accordion-item" [class.po-accordion-item-active]="poAccordionItem.expanded">
+        <po-accordion-item-header
+          [p-disabled]="poAccordionItem.disabledItem"
+          [p-expanded]="poAccordionItem.expanded"
+          [p-label]="poAccordionItem.label"
+          [p-label-tag]="poAccordionItem.labelTag"
+          [p-type-tag]="poAccordionItem.typeTag"
+          (p-toggle)="headerToggle($event, poAccordionItem)"
+        >
+        </po-accordion-item-header>
+        <po-accordion-item-body [p-expanded]="poAccordionItem.expanded">
+          <ng-container *ngTemplateOutlet="poAccordionItem.templateRef"></ng-container>
+        </po-accordion-item-body>
+      </li>
+    }
   </ul>
 </div>

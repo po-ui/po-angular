@@ -6,72 +6,142 @@
   [p-required]="required"
   [p-show-required]="showRequired"
 >
-  <div
-    class="po-field-container-content po-lookup"
-    [class.po-lookup-disabled]="disabled"
-    *ngIf="!disclaimers.length; else disclaimersTemplate"
-  >
-    <div class="po-search-container-wrapper">
-      <input
-        #inp
-        class="po-lookup-input po-lookup-input-trigger"
-        [class.po-lookup-input-aa]="size === 'small'"
-        [class.po-lookup-input-trigger-aa]="size === 'small'"
-        [ngClass]="
-          clean && inp.value
-            ? size === 'small'
-              ? 'po-input-double-icon-right-aa'
-              : 'po-input-double-icon-right'
-            : size === 'small'
-              ? 'po-input-icon-right-aa'
-              : 'po-input-icon-right'
-        "
-        [id]="id"
-        type="text"
-        [autocomplete]="autocomplete"
-        [disabled]="disabled"
-        [placeholder]="placeholder"
-        [required]="required"
-        (blur)="searchEvent()"
-        (keydown)="onKeyDown($event)"
-      />
-
-      <div class="po-field-icon-container-right po-lookup-buttons">
-        <po-clean
-          *ngIf="clean && !disabled && !!inp.value"
-          tabindex="0"
-          role="button"
-          [attr.aria-label]="literals.clean"
-          class="po-lookup-button po-lookup-button-clean"
-          [class.po-lookup-button-aa]="size === 'small'"
-          [p-element-ref]="inp"
-          [p-size]="size"
-          (p-change-event)="cleanModel()"
-          (click)="cleanModel(); $event.preventDefault()"
-          (keydown.enter)="cleanModel(); $event.preventDefault()"
-        >
-        </po-clean>
-        <div
-          #iconLookup
-          tabindex="0"
-          role="button"
-          class="po-lookup-button po-lookup-button-trigger po-field-icon"
-          [class.po-field-icon-disabled]="disabled"
-          [class.po-lookup-button-aa]="size === 'small'"
-          [ariaLabel]="literals.search"
-          (p-change-event)="openLookup()"
-          (click)="openLookup(); $event.preventDefault()"
-          (keydown.enter)="openLookup(); $event.preventDefault()"
-        >
-          <po-icon
-            p-icon="ICON_SEARCH"
-            [class.po-field-icon]="!disabled"
-            [class.po-field-icon-aa]="!disabled && size === 'small'"
-          ></po-icon>
+  @if (!disclaimers.length) {
+    <div class="po-field-container-content po-lookup" [class.po-lookup-disabled]="disabled">
+      <div class="po-search-container-wrapper">
+        <input
+          #inp
+          class="po-lookup-input po-lookup-input-trigger"
+          [class.po-lookup-input-aa]="size === 'small'"
+          [class.po-lookup-input-trigger-aa]="size === 'small'"
+          [ngClass]="
+            clean && inp.value
+              ? size === 'small'
+                ? 'po-input-double-icon-right-aa'
+                : 'po-input-double-icon-right'
+              : size === 'small'
+                ? 'po-input-icon-right-aa'
+                : 'po-input-icon-right'
+          "
+          [id]="id"
+          type="text"
+          [autocomplete]="autocomplete"
+          [disabled]="disabled"
+          [placeholder]="placeholder"
+          [required]="required"
+          (blur)="searchEvent()"
+          (keydown)="onKeyDown($event)"
+        />
+        <div class="po-field-icon-container-right po-lookup-buttons">
+          @if (clean && !disabled && !!inp.value) {
+            <po-clean
+              tabindex="0"
+              role="button"
+              [attr.aria-label]="literals.clean"
+              class="po-lookup-button po-lookup-button-clean"
+              [class.po-lookup-button-aa]="size === 'small'"
+              [p-element-ref]="inp"
+              [p-size]="size"
+              (p-change-event)="cleanModel()"
+              (click)="cleanModel(); $event.preventDefault()"
+              (keydown.enter)="cleanModel(); $event.preventDefault()"
+            >
+            </po-clean>
+          }
+          <div
+            #iconLookup
+            tabindex="0"
+            role="button"
+            class="po-lookup-button po-lookup-button-trigger po-field-icon"
+            [class.po-field-icon-disabled]="disabled"
+            [class.po-lookup-button-aa]="size === 'small'"
+            [ariaLabel]="literals.search"
+            (p-change-event)="openLookup()"
+            (click)="openLookup(); $event.preventDefault()"
+            (keydown.enter)="openLookup(); $event.preventDefault()"
+          >
+            <po-icon
+              p-icon="ICON_SEARCH"
+              [class.po-field-icon]="!disabled"
+              [class.po-field-icon-aa]="!disabled && size === 'small'"
+            ></po-icon>
+          </div>
         </div>
       </div>
     </div>
-  </div>
+  } @else {
+    <div class="po-field-container-content po-lookup" [class.po-lookup-disabled]="disabled">
+      <div class="po-search-container-wrapper">
+        <div
+          #inp
+          [tabindex]="disabled ? -1 : 0"
+          class="po-lookup-input po-input-icon-right po-icon-input"
+          [ngClass]="clean && inp.value ? 'po-input-double-icon-right' : 'po-input-icon-right'"
+          [class.po-lookup-input-auto]="autoHeight"
+          [class.po-lookup-input-auto-aa]="autoHeight && size === 'small'"
+          [class.po-lookup-input-static]="!autoHeight"
+          [class.po-lookup-input-static-aa]="!autoHeight && size === 'small'"
+          [class.po-lookup-input-padding-button-clean]="clean"
+          [class.po-lookup-input-padding-button-clean-aa]="clean && size === 'small'"
+          [class.po-lookup-input-disabled]="disabled"
+          [class.po-lookup-input-aa]="size === 'small'"
+          (blur)="onBlur()"
+          (keydown)="onKeyDown($event)"
+        >
+          @if (placeholder && !disclaimers?.length) {
+            <span class="po-lookup-input-placeholder">
+              {{ placeholder }}
+            </span>
+          }
+          @for (disclaimer of visibleDisclaimers; track disclaimer) {
+            <po-disclaimer
+              class="po-lookup-input-disclaimer"
+              [p-label]="disclaimer.label"
+              [p-value]="disclaimer.value"
+              [p-hide-close]="disclaimer.value === '' || disabled"
+              [class.po-clickable]="disclaimer.value === '' && !disabled"
+              (p-close-action)="closeDisclaimer(disclaimer.value)"
+            >
+            </po-disclaimer>
+          }
+        </div>
+        <div class="po-field-icon-container-right po-lookup-buttons">
+          @if (clean && !disabled && !!inp.value) {
+            <po-clean
+              tabindex="0"
+              role="button"
+              [attr.aria-label]="literals.clean"
+              class="po-lookup-button po-lookup-button-clean"
+              [p-element-ref]="inp"
+              [p-size]="size"
+              (p-change-event)="cleanModel()"
+              (click)="cleanModel(); $event.preventDefault()"
+              (keydown.enter)="cleanModel(); $event.preventDefault()"
+            >
+            </po-clean>
+          }
+          <div
+            #iconLookup
+            tabindex="0"
+            role="button"
+            class="po-lookup-button po-lookup-button-trigger po-field-icon"
+            [class.po-field-icon-disabled]="disabled"
+            [class.po-lookup-button-aa]="size === 'small'"
+            [ariaLabel]="literals.search"
+            (p-change-event)="openLookup()"
+            (click)="openLookup(); $event.preventDefault()"
+            (keydown.enter)="openLookup(); $event.preventDefault()"
+          >
+            <po-icon
+              p-icon="ICON_SEARCH"
+              [class.po-field-icon]="!disabled"
+              [class.po-field-icon-aa]="!disabled && size === 'small'"
+            ></po-icon>
+          </div>
+        </div>
+      </div>
+    </div>
+  }
   <po-field-container-bottom
     [p-additional-help-tooltip]="getAdditionalHelpTooltip()"
     [p-append-in-body]="appendBox"
@@ -84,74 +154,3 @@
     (p-additional-help)="emitAdditionalHelp()"
   ></po-field-container-bottom>
 </po-field-container>
-
-<ng-template #disclaimersTemplate>
-  <div class="po-field-container-content po-lookup" [class.po-lookup-disabled]="disabled">
-    <div class="po-search-container-wrapper">
-      <div
-        #inp
-        [tabindex]="disabled ? -1 : 0"
-        class="po-lookup-input po-input-icon-right po-icon-input"
-        [ngClass]="clean && inp.value ? 'po-input-double-icon-right' : 'po-input-icon-right'"
-        [class.po-lookup-input-auto]="autoHeight"
-        [class.po-lookup-input-auto-aa]="autoHeight && size === 'small'"
-        [class.po-lookup-input-static]="!autoHeight"
-        [class.po-lookup-input-static-aa]="!autoHeight && size === 'small'"
-        [class.po-lookup-input-padding-button-clean]="clean"
-        [class.po-lookup-input-padding-button-clean-aa]="clean && size === 'small'"
-        [class.po-lookup-input-disabled]="disabled"
-        [class.po-lookup-input-aa]="size === 'small'"
-        (blur)="onBlur()"
-        (keydown)="onKeyDown($event)"
-      >
-        <span *ngIf="placeholder && !disclaimers?.length" class="po-lookup-input-placeholder">
-          {{ placeholder }}
-        </span>
-
-        <po-disclaimer
-          *ngFor="let disclaimer of visibleDisclaimers"
-          class="po-lookup-input-disclaimer"
-          [p-label]="disclaimer.label"
-          [p-value]="disclaimer.value"
-          [p-hide-close]="disclaimer.value === '' || disabled"
-          [class.po-clickable]="disclaimer.value === '' && !disabled"
-          (p-close-action)="closeDisclaimer(disclaimer.value)"
-        >
-        </po-disclaimer>
-      </div>
-      <div class="po-field-icon-container-right po-lookup-buttons">
-        <po-clean
-          *ngIf="clean && !disabled && !!inp.value"
-          tabindex="0"
-          role="button"
-          [attr.aria-label]="literals.clean"
-          class="po-lookup-button po-lookup-button-clean"
-          [p-element-ref]="inp"
-          [p-size]="size"
-          (p-change-event)="cleanModel()"
-          (click)="cleanModel(); $event.preventDefault()"
-          (keydown.enter)="cleanModel(); $event.preventDefault()"
-        >
-        </po-clean>
-        <div
-          #iconLookup
-          tabindex="0"
-          role="button"
-          class="po-lookup-button po-lookup-button-trigger po-field-icon"
-          [class.po-field-icon-disabled]="disabled"
-          [class.po-lookup-button-aa]="size === 'small'"
-          [ariaLabel]="literals.search"
-          (p-change-event)="openLookup()"
-          (click)="openLookup(); $event.preventDefault()"
-          (keydown.enter)="openLookup(); $event.preventDefault()"
-        >
-          <po-icon
-            p-icon="ICON_SEARCH"
-            [class.po-field-icon]="!disabled"
-            [class.po-field-icon-aa]="!disabled && size === 'small'"
-          ></po-icon>
-        </div>
-      </div>
-    </div>
-  </div>
-</ng-template>

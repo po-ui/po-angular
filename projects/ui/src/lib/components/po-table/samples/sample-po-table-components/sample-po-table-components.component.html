@@ -18,8 +18,10 @@
 </po-table>
 
 <po-modal p-click-out="true" p-size="sm" p-title="{{ title }} - {{ extraInformation?.component }}">
-  <ul *ngFor="let extra of extraInformation?.extras">
-    <li class="po-font-text">{{ extra }}</li>
-    <hr />
-  </ul>
+  @for (extra of extraInformation?.extras; track extra) {
+    <ul>
+      <li class="po-font-text">{{ extra }}</li>
+      <hr />
+    </ul>
+  }
 </po-modal>

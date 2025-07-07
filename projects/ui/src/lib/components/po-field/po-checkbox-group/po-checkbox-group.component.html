@@ -8,24 +8,25 @@
   <div class="po-field-container-content" [attr.name]="name">
     <div role="group" [attr.aria-label]="label" class="po-checkbox-group-content">
       <ul class="po-row">
-        <li
-          *ngFor="let option of checkboxGroupOptionsView; trackBy: trackByFn"
-          class="po-checkbox-group-item po-md-{{ mdColumns }} po-lg-{{ columns }}"
-          [class.po-checkbox-group-item-disabled]="option.disabled || disabled"
-        >
-          <po-checkbox
-            #checkboxLabel
-            [p-label]="option.label"
-            [p-disabled]="option.disabled || disabled"
-            (p-blur)="onBlur(checkboxLabel)"
-            (click)="checkOption(option)"
-            (keydown)="onKeyDown($event, option, checkboxLabel)"
-            [p-checkboxValue]="checkedOptions[option.value] === null ? 'mixed' : checkedOptions[option.value]"
-            [p-required]="required"
-            [p-size]="size"
+        @for (option of checkboxGroupOptionsView; track trackByFn($index)) {
+          <li
+            class="po-checkbox-group-item po-md-{{ mdColumns }} po-lg-{{ columns }}"
+            [class.po-checkbox-group-item-disabled]="option.disabled || disabled"
           >
-          </po-checkbox>
-        </li>
+            <po-checkbox
+              #checkboxLabel
+              [p-label]="option.label"
+              [p-disabled]="option.disabled || disabled"
+              (p-blur)="onBlur(checkboxLabel)"
+              (click)="checkOption(option)"
+              (keydown)="onKeyDown($event, option, checkboxLabel)"
+              [p-checkboxValue]="checkedOptions[option.value] === null ? 'mixed' : checkedOptions[option.value]"
+              [p-required]="required"
+              [p-size]="size"
+            >
+            </po-checkbox>
+          </li>
+        }
       </ul>
     </div>
 

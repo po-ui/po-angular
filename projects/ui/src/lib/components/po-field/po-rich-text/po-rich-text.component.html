@@ -18,27 +18,29 @@
     >
     </po-rich-text-body>
 
-    <po-rich-text-toolbar
-      #richTextToolbar
-      *ngIf="!isAllActionsHidden()"
-      [p-readonly]="readonly"
-      [p-hide-toolbar-actions]="toolbarActions"
-      [p-size]="size"
-      (p-link-editing)="richTextBody.linkEditing($event)"
-      (p-command)="richTextBody.executeCommand($event)"
-    >
-    </po-rich-text-toolbar>
+    @if (!isAllActionsHidden()) {
+      <po-rich-text-toolbar
+        #richTextToolbar
+        [p-readonly]="readonly"
+        [p-hide-toolbar-actions]="toolbarActions"
+        [p-size]="size"
+        (p-link-editing)="richTextBody.linkEditing($event)"
+        (p-command)="richTextBody.executeCommand($event)"
+      >
+      </po-rich-text-toolbar>
+    }
   </div>
 
-  <po-field-container-bottom
-    *ngIf="!readonly"
-    [p-additional-help-tooltip]="additionalHelp.observed ? null : additionalHelpTooltip"
-    [p-append-in-body]="appendBox"
-    [p-help]="help"
-    [p-error-limit]="errorLimit"
-    [p-error-pattern]="errorMsg"
-    [p-show-additional-help]="displayAdditionalHelp"
-    [p-show-additional-help-icon]="!!additionalHelpTooltip || additionalHelp.observed"
-    (p-additional-help)="additionalHelp.emit()"
-  ></po-field-container-bottom>
+  @if (!readonly) {
+    <po-field-container-bottom
+      [p-additional-help-tooltip]="additionalHelp.observed ? null : additionalHelpTooltip"
+      [p-append-in-body]="appendBox"
+      [p-help]="help"
+      [p-error-limit]="errorLimit"
+      [p-error-pattern]="errorMsg"
+      [p-show-additional-help]="displayAdditionalHelp"
+      [p-show-additional-help-icon]="!!additionalHelpTooltip || additionalHelp.observed"
+      (p-additional-help)="additionalHelp.emit()"
+    ></po-field-container-bottom>
+  }
 </po-field-container>

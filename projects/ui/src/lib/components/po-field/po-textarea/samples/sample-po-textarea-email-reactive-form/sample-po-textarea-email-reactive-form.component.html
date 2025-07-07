@@ -23,12 +23,14 @@
 
   <hr />
 
-  <div *ngIf="formEmail.get('cc').value">
-    <div class="po-row">
-      <po-info class="po-md-12" p-label="CC:" [p-value]="formEmail.get('cc').value"> </po-info>
+  @if (formEmail.get('cc').value) {
+    <div>
+      <div class="po-row">
+        <po-info class="po-md-12" p-label="CC:" [p-value]="formEmail.get('cc').value"> </po-info>
+      </div>
+      <hr />
     </div>
-    <hr />
-  </div>
+  }
 
   <div class="po-row">
     <po-info class="po-md-12" p-label="Subject:" [p-value]="formEmail.get('subject').value"> </po-info>
