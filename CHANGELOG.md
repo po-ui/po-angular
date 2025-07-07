@@ -2,6 +2,19 @@
 
 All notable changes to this project will be documented in this file. See [standard-version](https://github.com/conventional-changelog/standard-version) for commit guidelines.
 
+## [19.19.0](https://github.com/po-ui/po-angular/compare/v19.18.0...v19.19.0) (2025-07-07)
+
+
+### Features
+
+* **chart:** implementa nova funcionalidade stacked ([f83a733](https://github.com/po-ui/po-angular/commit/f83a733d11b286a213dae47e07492c5ee0829512))
+
+
+### Bug Fixes
+
+* **lookup:** corrige filtro aplicado indevidamente ao carregar itens ([3756412](https://github.com/po-ui/po-angular/commit/37564128ad0244a653b00dbf7a5a02fee3bae34c))
+* **multiselect:** adiciona max-height ao input ([5d51c6a](https://github.com/po-ui/po-style/commit/5d51c6a734eb8de42ee778262a18435b28bf0d64))
+
 ## [19.18.0](https://github.com/po-ui/po-angular/compare/v19.17.1...v19.18.0) (2025-06-30)
 
 ### Features
