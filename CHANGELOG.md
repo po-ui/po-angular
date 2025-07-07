@@ -2,6 +2,13 @@
 
 All notable changes to this project will be documented in this file. See [standard-version](https://github.com/conventional-changelog/standard-version) for commit guidelines.
 
+### [17.26.26](https://github.com/po-ui/po-angular/compare/v17.26.25...v17.26.26) (2025-07-07)
+
+
+### Bug Fixes
+
+* **lookup:** corrige filtro aplicado indevidamente ao carregar itens ([81e1520](https://github.com/po-ui/po-angular/commit/81e15202b927fc1975b9b2926a26e9b8eda981a6))
+
 ### [17.26.25](https://github.com/po-ui/po-angular/compare/v17.26.24...v17.26.25) (2025-06-18)
 
 
