@@ -34,14 +34,10 @@
           (keydown.tab)="handleCleanKeyboardTab($event)"
         />
         <div class="po-field-icon-container-right">
-          <po-clean
-            class="po-icon-input"
-            *ngIf="clean && !disabled && !readonly"
-            [p-element-ref]="inputEl"
-            [p-size]="size"
-            (p-change-event)="clear()"
-          >
-          </po-clean>
+          @if (clean && !disabled && !readonly) {
+            <po-clean class="po-icon-input" [p-element-ref]="inputEl" [p-size]="size" (p-change-event)="clear()">
+            </po-clean>
+          }
         </div>
       </div>
       <po-button
@@ -59,11 +55,24 @@
       </po-button>
     </div>
 
-    <ng-container *ngIf="appendBox; then dropdownCDK; else dropdownDefault"> </ng-container>
+    @if (appendBox) {
+      <ng-template
+        cdkConnectedOverlay
+        [cdkConnectedOverlayOrigin]="trigger"
+        [cdkConnectedOverlayOpen]="true"
+        [cdkConnectedOverlayDisableClose]="true"
+      >
+        <ng-container *ngTemplateOutlet="sharedCalendarContent"></ng-container>
+      </ng-template>
+    } @else {
+      <ng-container *ngTemplateOutlet="sharedCalendarContent"></ng-container>
+    }
 
     <ng-template #sharedCalendarContent>
       <div #dialogPicker [class.po-datepicker-popup-calendar]="!verifyMobile()" tabindex="-1">
-        <div *ngIf="verifyMobile()" class="po-datepicker-calendar-overlay"></div>
+        @if (verifyMobile()) {
+          <div class="po-datepicker-calendar-overlay"></div>
+        }
         <po-calendar
           #calendar
           [class.po-datepicker-calendar-mobile]="verifyMobile()"
@@ -76,33 +85,19 @@
         ></po-calendar>
       </div>
     </ng-template>
-
-    <ng-template #dropdownDefault>
-      <ng-container *ngTemplateOutlet="sharedCalendarContent"></ng-container>
-    </ng-template>
-
-    <ng-template #dropdownCDK>
-      <ng-template
-        cdkConnectedOverlay
-        [cdkConnectedOverlayOrigin]="trigger"
-        [cdkConnectedOverlayOpen]="true"
-        [cdkConnectedOverlayDisableClose]="true"
-      >
-        <ng-container *ngTemplateOutlet="sharedCalendarContent"></ng-container>
-      </ng-template>
-    </ng-template>
   </div>
 
-  <po-field-container-bottom
-    *ngIf="!readonly"
-    [p-additional-help-tooltip]="getAdditionalHelpTooltip()"
-    [p-append-in-body]="appendBox"
-    [p-help]="help"
-    [p-disabled]="disabled"
-    [p-error-pattern]="getErrorPattern()"
-    [p-error-limit]="errorLimit"
-    [p-show-additional-help]="displayAdditionalHelp"
-    [p-show-additional-help-icon]="showAdditionalHelpIcon()"
-    (p-additional-help)="emitAdditionalHelp()"
-  ></po-field-container-bottom>
+  @if (!readonly) {
+    <po-field-container-bottom
+      [p-additional-help-tooltip]="getAdditionalHelpTooltip()"
+      [p-append-in-body]="appendBox"
+      [p-help]="help"
+      [p-disabled]="disabled"
+      [p-error-pattern]="getErrorPattern()"
+      [p-error-limit]="errorLimit"
+      [p-show-additional-help]="displayAdditionalHelp"
+      [p-show-additional-help-icon]="showAdditionalHelpIcon()"
+      (p-additional-help)="emitAdditionalHelp()"
+    ></po-field-container-bottom>
+  }
 </po-field-container>
