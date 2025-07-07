@@ -2,7 +2,6 @@ import { NgModule } from '@angular/core';
 
 import { PoAccordionModule } from './po-accordion/po-accordion.module';
 import { PoAvatarModule } from './po-avatar/po-avatar.module';
-import { PoBadgeModule } from './po-badge/po-badge.module';
 import { PoBreadcrumbModule } from './po-breadcrumb/po-breadcrumb.module';
 import { PoButtonGroupModule } from './po-button-group/po-button-group.module';
 import { PoButtonModule } from './po-button/po-button.module';
@@ -37,7 +36,6 @@ import { PoPageModule } from './po-page/po-page.module';
 import { PoPopoverModule } from './po-popover/po-popover.module';
 import { PoPopupModule } from './po-popup/po-popup.module';
 import { PoProgressModule } from './po-progress/po-progress.module';
-import { PoSearchModule } from './po-search';
 import { PoSlideModule } from './po-slide/po-slide.module';
 import { PoStepperModule } from './po-stepper/po-stepper.module';
 import { PoTableModule } from './po-table/po-table.module';
@@ -47,6 +45,10 @@ import { PoToolbarModule } from './po-toolbar/po-toolbar.module';
 import { PoTreeViewModule } from './po-tree-view/po-tree-view.module';
 import { PoWidgetModule } from './po-widget/po-widget.module';
 import { PoToasterModule } from './po-toaster';
+import { PoSearchModule } from './po-search';
+import { PoBadgeModule } from './po-badge/po-badge.module';
+import { PoMessageHourModule } from './po-message-hour';
+
 @NgModule({
   imports: [
     PoAccordionModule,
@@ -95,7 +97,8 @@ import { PoToasterModule } from './po-toaster';
     PoSwitchModule,
     PoSearchModule,
     PoBadgeModule,
-    PoToasterModule
+    PoToasterModule,
+    PoMessageHourModule
   ],
   exports: [
     PoAccordionModule,
@@ -144,7 +147,8 @@ import { PoToasterModule } from './po-toaster';
     PoSwitchModule,
     PoSearchModule,
     PoBadgeModule,
-    PoToasterModule
+    PoToasterModule,
+    PoMessageHourModule
   ],
   providers: [],
   bootstrap: [],
