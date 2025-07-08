@@ -61,7 +61,7 @@ export class SamplePoTableComponentsComponent implements OnInit {
     {
       property: 'component.extra',
       label: 'Extras',
-      width: '10px',
+      width: '10%',
       type: 'link',
       tooltip: 'Additional details',
       action: (value, row) => {

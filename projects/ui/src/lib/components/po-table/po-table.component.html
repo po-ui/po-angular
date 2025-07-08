@@ -146,12 +146,17 @@
         <!-- Coluna criada para caso as ações fiquem no lado esquerdo -->
         <th
           #columnActionLeft
-          *ngIf="!actionRight && (visibleActions.length > 1 || isSingleAction)"
+          *ngIf="!actionRight && hasItems && hasMainColumns && (visibleActions.length > 1 || isSingleAction)"
           [class.po-table-header-master-detail]="!isSingleAction"
           [class.po-table-header-single-action]="isSingleAction"
         ></th>
 
-        <th *ngIf="!hasMainColumns" #noColumnsHeader class="po-table-header-column po-text-center">
+        <th
+          *ngIf="!hasMainColumns"
+          #noColumnsHeader
+          class="po-table-header-column po-text-center"
+          [attr.colspan]="columnCount"
+        >
           <ng-container *ngIf="height; then noColumnsWithHeight; else noColumnsWithoutHeight"> </ng-container>
         </th>
 
@@ -255,7 +260,13 @@
         ></th>
 
         <th
-          *ngIf="hasVisibleActions && actionRight && (visibleActions.length > 1 || isSingleAction)"
+          *ngIf="
+            hasVisibleActions &&
+            actionRight &&
+            hasItems &&
+            hasMainColumns &&
+            (visibleActions.length > 1 || isSingleAction)
+          "
           [class.po-table-header-single-action]="isSingleAction"
           [class.po-table-header-actions]="!isSingleAction"
         ></th>
@@ -487,12 +498,17 @@
           <!-- Coluna criada para caso as ações fiquem no lado esquerdo -->
           <th
             #columnActionLeft
-            *ngIf="!actionRight && (visibleActions.length > 1 || isSingleAction)"
+            *ngIf="!actionRight && hasItems && hasMainColumns && (visibleActions.length > 1 || isSingleAction)"
             [class.po-table-header-master-detail]="!isSingleAction"
             [class.po-table-header-single-action]="isSingleAction"
           ></th>
 
-          <th *ngIf="!hasMainColumns" #noColumnsHeader class="po-table-header-column po-text-center">
+          <th
+            *ngIf="!hasMainColumns"
+            #noColumnsHeader
+            class="po-table-header-column po-text-center"
+            [attr.colspan]="columnCount"
+          >
             <ng-container *ngIf="height; then noColumnsWithHeight; else noColumnsWithoutHeight"> </ng-container>
           </th>
 
@@ -594,7 +610,13 @@
           ></th>
 
           <th
-            *ngIf="hasVisibleActions && actionRight && (visibleActions.length > 1 || isSingleAction)"
+            *ngIf="
+              hasVisibleActions &&
+              actionRight &&
+              hasItems &&
+              hasMainColumns &&
+              (visibleActions.length > 1 || isSingleAction)
+            "
             [class.po-table-header-single-action]="isSingleAction"
             [class.po-table-header-actions]="!isSingleAction"
           ></th>
@@ -890,7 +912,7 @@
 </ng-template>
 
 <ng-template #noColumnsWithHeight>
-  <div class="po-table-header-fixed-inner" [style.width.px]="headerWidth">
+  <div class="po-table-header-fixed-inner" [style.width.px]="hasValidColumns ? headerWidth : null">
     {{ hasValidColumns ? literals.noVisibleColumn : literals.noColumns }}
   </div>
 </ng-template>
