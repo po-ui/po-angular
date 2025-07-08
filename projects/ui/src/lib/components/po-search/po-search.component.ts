@@ -10,7 +10,6 @@ import {
   SimpleChanges,
   ViewChild
 } from '@angular/core';
-import { PoThemeService } from '../../services/po-theme/po-theme.service';
 import { PoControlPositionService } from '../../services/po-control-position/po-control-position.service';
 import { PoLanguageService } from '../../services/po-language/po-language.service';
 import { PoDropdownAction } from '../po-dropdown';
@@ -87,12 +86,11 @@ export class PoSearchComponent extends PoSearchBaseComponent implements OnInit, 
 
   constructor(
     public languageService: PoLanguageService,
-    protected poThemeService: PoThemeService,
     private renderer: Renderer2,
     private changeDetector: ChangeDetectorRef,
     private controlPosition: PoControlPositionService
   ) {
-    super(languageService, poThemeService);
+    super(languageService);
   }
 
   ngOnInit(): void {

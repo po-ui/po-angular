@@ -6,7 +6,6 @@ import { PoLanguageService } from './../../../services/po-language/po-language.s
 import { isExternalLink, isTypeof, openExternalLink } from '../../../utils/util';
 import { PoPageAction } from '../interfaces/po-page-action.interface';
 
-import { PoThemeService } from '../../../services';
 import { PoPageDefaultBaseComponent } from './po-page-default-base.component';
 
 /**
@@ -45,11 +44,10 @@ export class PoPageDefaultComponent extends PoPageDefaultBaseComponent implement
   constructor(
     viewRef: ViewContainerRef,
     languageService: PoLanguageService,
-    protected poThemeService: PoThemeService,
     private renderer: Renderer2,
     private router: Router
   ) {
-    super(languageService, poThemeService);
+    super(languageService);
   }
 
   public ngAfterContentInit(): void {

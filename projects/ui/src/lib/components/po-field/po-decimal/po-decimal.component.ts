@@ -16,7 +16,6 @@ import { PoLanguageService } from '../../../services/po-language/po-language.ser
 import { maxFailed, maxlengpoailed, minFailed } from '../validators';
 
 import { isObservable, of, Subscription, switchMap } from 'rxjs';
-import { PoThemeService } from '../../../services';
 import { convertToInt, uuid } from '../../../utils/util';
 import { PoInputBaseComponent } from '../po-input/po-input-base.component';
 
@@ -244,10 +243,9 @@ export class PoDecimalComponent extends PoInputBaseComponent implements AfterVie
   constructor(
     private el: ElementRef,
     private poLanguageService: PoLanguageService,
-    cd: ChangeDetectorRef,
-    protected poThemeService: PoThemeService
+    cd: ChangeDetectorRef
   ) {
-    super(cd, poThemeService);
+    super(cd);
     this.isKeyboardAndroid = !!navigator.userAgent.match(/Android/i);
   }
 

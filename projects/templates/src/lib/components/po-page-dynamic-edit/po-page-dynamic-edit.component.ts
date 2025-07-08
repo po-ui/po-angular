@@ -13,16 +13,15 @@ import {
   PoLanguageService,
   poLocaleDefault,
   PoNotificationService,
-  PoPageAction,
-  PoThemeService
+  PoPageAction
 } from '@po-ui/ng-components';
 
 import {
   convertToBoolean,
-  getDefaultSize,
+  getDefaultSizeFn,
   mapObjectByProperties,
   removeKeysProperties,
-  validateSize,
+  validateSizeFn,
   valuesFromObject
 } from './../../utils/util';
 
@@ -505,11 +504,11 @@ export class PoPageDynamicEditComponent implements OnInit, OnDestroy {
    * @default `medium`
    */
   @Input('p-components-size') set componentsSize(value: string) {
-    this._componentsSize = validateSize(value, this.poThemeService);
+    this._componentsSize = validateSizeFn(value);
   }
 
   get componentsSize(): string {
-    return this._componentsSize ?? getDefaultSize(this.poThemeService);
+    return this._componentsSize ?? getDefaultSizeFn();
   }
 
   /* eslint-disable max-params */
@@ -521,7 +520,6 @@ export class PoPageDynamicEditComponent implements OnInit, OnDestroy {
     private poPageDynamicService: PoPageDynamicService,
     private poPageCustomizationService: PoPageCustomizationService,
     private poPageDynamicEditActionsService: PoPageDynamicEditActionsService,
-    private poThemeService: PoThemeService,
     languageService: PoLanguageService
   ) {
     this.language = languageService.getShortLanguage();
