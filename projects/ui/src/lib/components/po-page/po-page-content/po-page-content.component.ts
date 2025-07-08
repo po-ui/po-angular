@@ -33,15 +33,18 @@ export class PoPageContentComponent extends PoPageContentBaseComponent implement
   recalculateHeaderSize() {
     setTimeout(() => {
       const pageHeaderElement: HTMLElement = document.querySelector('div.po-page-header');
+      const pageElement: HTMLElement = document.querySelector('div.po-page');
+      const pageComputedStyle = window.getComputedStyle(pageElement);
+      const gap = pageComputedStyle.gap ? parseFloat(pageComputedStyle.gap) : 0;
 
-      this.setHeightContent(pageHeaderElement);
+      this.setHeightContent(pageHeaderElement, gap);
       this.contentOpacity = 1;
     });
   }
 
-  setHeightContent(poPageHeader: HTMLElement) {
+  setHeightContent(poPageHeader: HTMLElement, gap: number) {
     const bodyHeight = document.body.clientHeight;
-    const pageHeaderHeight = poPageHeader ? poPageHeader.offsetTop + poPageHeader.offsetHeight : 0;
+    const pageHeaderHeight = poPageHeader ? poPageHeader.offsetTop + poPageHeader.offsetHeight + gap : 0;
     const newHeight = bodyHeight - pageHeaderHeight;
 
     this.height = `${newHeight}px`;
