@@ -1,7 +1,7 @@
 import { Component, OnDestroy, OnInit, ViewChild } from '@angular/core';
 import { Subscription } from 'rxjs';
 
-import { PoComboOption, PoDynamicFormComponent, PoLanguageService, PoThemeService } from '@po-ui/ng-components';
+import { PoComboOption, PoDynamicFormComponent, PoLanguageService } from '@po-ui/ng-components';
 
 import { PoPageDynamicSearchFilters } from '../interfaces/po-page-dynamic-search-filters.interface';
 import { PoAdvancedFilterBaseComponent } from './po-advanced-filter-base.component';
@@ -28,11 +28,8 @@ export class PoAdvancedFilterComponent extends PoAdvancedFilterBaseComponent imp
 
   private subscription = new Subscription();
 
-  constructor(
-    languageService: PoLanguageService,
-    protected poThemeService: PoThemeService
-  ) {
-    super(languageService, poThemeService);
+  constructor(languageService: PoLanguageService) {
+    super(languageService);
   }
 
   ngOnInit() {

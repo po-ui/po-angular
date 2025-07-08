@@ -1,10 +1,9 @@
 import { Directive, EventEmitter, Input, Output, TemplateRef } from '@angular/core';
 
-import { convertToBoolean, getDefaultSize, validateSize } from './../../utils/util';
+import { convertToBoolean, getDefaultSizeFn, validateSizeFn } from './../../utils/util';
 import { PoModalAction } from './po-modal-action.interface';
 
 import { PoFieldSize } from '../../enums/po-field-size.enum';
-import { PoThemeService } from '../../services/po-theme/po-theme.service';
 import { PoLanguageService } from '../../services/po-language/po-language.service';
 import { poModalLiterals } from './po-modal.literals';
 
@@ -123,11 +122,11 @@ export class PoModalBaseComponent {
    * @default `medium`
    */
   @Input('p-components-size') set componentsSize(value: string) {
-    this._componentsSize = validateSize(value, this.poThemeService, PoFieldSize);
+    this._componentsSize = validateSizeFn(value, PoFieldSize);
   }
 
   get componentsSize(): string {
-    return this._componentsSize ?? getDefaultSize(this.poThemeService, PoFieldSize);
+    return this._componentsSize ?? getDefaultSizeFn(PoFieldSize);
   }
 
   /**
@@ -174,10 +173,7 @@ export class PoModalBaseComponent {
    */
   @Input('p-icon') icon?: string | TemplateRef<void>;
 
-  constructor(
-    poLanguageService: PoLanguageService,
-    protected poThemeService: PoThemeService
-  ) {
+  constructor(poLanguageService: PoLanguageService) {
     this.language = poLanguageService.getShortLanguage();
 
     this.literals = {

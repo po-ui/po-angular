@@ -20,7 +20,6 @@ import { PoDisclaimerGroupRemoveAction } from '../../po-disclaimer-group/po-disc
 import { PoDisclaimer } from '../../po-disclaimer/po-disclaimer.interface';
 import { PoPageAction } from '../interfaces/po-page-action.interface';
 
-import { PoThemeService } from '../../../services';
 import { PoPageListBaseComponent } from './po-page-list-base.component';
 
 /**
@@ -70,11 +69,10 @@ export class PoPageListComponent
     viewRef: ViewContainerRef,
     languageService: PoLanguageService,
     public renderer: Renderer2,
-    protected poThemeService: PoThemeService,
     private router: Router,
     private changeDetector: ChangeDetectorRef
   ) {
-    super(languageService, poThemeService);
+    super(languageService);
     this.initializeListeners();
   }
 

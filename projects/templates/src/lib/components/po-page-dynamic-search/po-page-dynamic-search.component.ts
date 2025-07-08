@@ -17,8 +17,7 @@ import {
   PoDynamicFormField,
   PoLanguageService,
   PoPageFilter,
-  PoPageListComponent,
-  PoThemeService
+  PoPageListComponent
 } from '@po-ui/ng-components';
 import { Observable, Subscription } from 'rxjs';
 
@@ -81,10 +80,9 @@ export class PoPageDynamicSearchComponent
   constructor(
     private languageService: PoLanguageService,
     private poPageCustomizationService: PoPageCustomizationService,
-    private changeDetector: ChangeDetectorRef,
-    protected poThemeService: PoThemeService
+    private changeDetector: ChangeDetectorRef
   ) {
-    super(languageService, poThemeService);
+    super(languageService);
   }
 
   get disclaimerGroup() {

@@ -23,7 +23,6 @@ import { PoKeyCodeEnum } from './../../../enums/po-key-code.enum';
 import { PoControlPositionService } from './../../../services/po-control-position/po-control-position.service';
 import { isMobile } from './../../../utils/util';
 
-import { PoThemeService } from '../../../services';
 import { poLocaleDefault } from '../../../services/po-language/po-language.constant';
 import { PoMultiselectOption } from './interfaces/po-multiselect-option.interface';
 import { PoMultiselectBaseComponent } from './po-multiselect-base.component';
@@ -151,10 +150,9 @@ export class PoMultiselectComponent
     private el: ElementRef,
     private controlPosition: PoControlPositionService,
     public defaultService: PoMultiselectFilterService,
-    languageService: PoLanguageService,
-    protected poThemeService: PoThemeService
+    languageService: PoLanguageService
   ) {
-    super(languageService, poThemeService, changeDetector);
+    super(languageService, changeDetector);
     const language = languageService.getShortLanguage();
     this.literalsTag = {
       ...literalsTagRemoveOthers[poLocaleDefault],

@@ -1,8 +1,7 @@
 import { Directive, EventEmitter, Input, Output } from '@angular/core';
 import { NgForm } from '@angular/forms';
 import { PoFieldSize } from '../../../enums/po-field-size.enum';
-import { PoThemeService } from '../../../services';
-import { convertToBoolean, getDefaultSize, validateSize } from '../../../utils/util';
+import { convertToBoolean, getDefaultSizeFn, validateSizeFn } from '../../../utils/util';
 import { PoDynamicFormField } from './interfaces/po-dynamic-form-field.interface';
 
 /**
@@ -220,11 +219,11 @@ export class PoDynamicFormBaseComponent {
    * @default `medium`
    */
   @Input('p-components-size') set componentsSize(value: string) {
-    this._componentsSize = validateSize(value, this.poThemeService, PoFieldSize);
+    this._componentsSize = validateSizeFn(value, PoFieldSize);
   }
 
   get componentsSize(): string {
-    return this._componentsSize ?? getDefaultSize(this.poThemeService, PoFieldSize);
+    return this._componentsSize ?? getDefaultSizeFn(PoFieldSize);
   }
 
   /**
@@ -270,6 +269,4 @@ export class PoDynamicFormBaseComponent {
    *
    */
   @Input({ alias: 'p-validate-on-input', transform: convertToBoolean }) validateOnInput: boolean = false;
-
-  constructor(protected poThemeService: PoThemeService) {}
 }

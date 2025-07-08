@@ -11,15 +11,14 @@ import {
   PoLanguageService,
   PoNotificationService,
   PoPageAction,
-  PoThemeService,
   poLocaleDefault
 } from '@po-ui/ng-components';
 
 import {
   convertToBoolean,
-  getDefaultSize,
+  getDefaultSizeFn,
   mapObjectByProperties,
-  validateSize,
+  validateSizeFn,
   valuesFromObject
 } from '../../utils/util';
 
@@ -297,11 +296,11 @@ export class PoPageDynamicDetailComponent implements OnInit, OnDestroy {
    * @default `medium`
    */
   @Input('p-components-size') set componentsSize(value: string) {
-    this._componentsSize = validateSize(value, this.poThemeService);
+    this._componentsSize = validateSizeFn(value);
   }
 
   get componentsSize(): string {
-    return this._componentsSize ?? getDefaultSize(this.poThemeService);
+    return this._componentsSize ?? getDefaultSizeFn();
   }
 
   /** Lista dos campos exibidos na página. */
@@ -325,7 +324,6 @@ export class PoPageDynamicDetailComponent implements OnInit, OnDestroy {
     private poPageDynamicService: PoPageDynamicService,
     private poPageDynamicDetailActionsService: PoPageDynamicDetailActionsService,
     private poPageCustomizationService: PoPageCustomizationService,
-    private poThemeService: PoThemeService,
     languageService: PoLanguageService
   ) {
     const language = languageService.getShortLanguage();

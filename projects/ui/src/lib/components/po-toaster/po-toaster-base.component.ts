@@ -1,7 +1,6 @@
 import { Directive, EventEmitter, Input, Output } from '@angular/core';
 import { PoFieldSize } from '../../enums/po-field-size.enum';
-import { PoThemeService } from '../../services/po-theme/po-theme.service';
-import { convertToBoolean, getDefaultSize, validateSize } from '../../utils/util';
+import { convertToBoolean, getDefaultSizeFn, validateSizeFn } from '../../utils/util';
 import { PoToasterMode } from './enum/po-toaster-mode.enum';
 import { PoToasterOrientation } from './enum/po-toaster-orientation.enum';
 import { PoToasterType } from './enum/po-toaster-type.enum';
@@ -133,11 +132,11 @@ export abstract class PoToasterBaseComponent {
    * @default `medium`
    */
   @Input('p-size-actions') set sizeActions(value: string) {
-    this._sizeActions = validateSize(value, this.poThemeService, PoFieldSize);
+    this._sizeActions = validateSizeFn(value, PoFieldSize);
   }
 
   get sizeActions(): string {
-    return this._sizeActions ?? getDefaultSize(this.poThemeService, PoFieldSize);
+    return this._sizeActions ?? getDefaultSizeFn(PoFieldSize);
   }
 
   /**
@@ -174,8 +173,6 @@ export abstract class PoToasterBaseComponent {
 
   // Posição para notificação aparecer na tela.
   position: number;
-
-  constructor(protected poThemeService: PoThemeService) {}
 
   // Fecha a notificação.
   abstract close(): void;

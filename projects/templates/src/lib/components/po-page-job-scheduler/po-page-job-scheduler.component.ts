@@ -21,7 +21,6 @@ import {
   PoPageAction,
   PoStepperItem,
   PoStepperStatus,
-  PoThemeService,
   poLocaleDefault
 } from '@po-ui/ng-components';
 
@@ -120,11 +119,10 @@ export class PoPageJobSchedulerComponent extends PoPageJobSchedulerBaseComponent
     private activatedRoute: ActivatedRoute,
     private poDialogService: PoDialogService,
     private poNotification: PoNotificationService,
-    protected poThemeService: PoThemeService,
     protected poPageJobSchedulerService: PoPageJobSchedulerService,
     languageService: PoLanguageService
   ) {
-    super(poPageJobSchedulerService, poThemeService);
+    super(poPageJobSchedulerService);
 
     const language = languageService.getShortLanguage();
 

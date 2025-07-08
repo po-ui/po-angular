@@ -1,8 +1,8 @@
 import { Directive, EventEmitter, Input, Output } from '@angular/core';
 
-import { PoLanguageService, poLocaleDefault, PoThemeService } from '@po-ui/ng-components';
+import { PoLanguageService, poLocaleDefault } from '@po-ui/ng-components';
 
-import { getDefaultSize, validateSize } from '../../utils/util';
+import { getDefaultSizeFn, validateSizeFn } from '../../utils/util';
 import { PoModalPasswordRecoveryType } from './enums/po-modal-password-recovery-type.enum';
 import { poModalPasswordRecoveryLiterals } from './literals/i18n/po-modal-password-recovery-literals';
 
@@ -258,11 +258,11 @@ export abstract class PoModalPasswordRecoveryBaseComponent {
    * @default `medium`
    */
   @Input('p-components-size') set componentsSize(value: string) {
-    this._componentsSize = validateSize(value, this.poThemeService);
+    this._componentsSize = validateSizeFn(value);
   }
 
   get componentsSize(): string {
-    return this._componentsSize ?? getDefaultSize(this.poThemeService);
+    return this._componentsSize ?? getDefaultSizeFn();
   }
 
   /**
@@ -320,10 +320,7 @@ export abstract class PoModalPasswordRecoveryBaseComponent {
     return this._type;
   }
 
-  constructor(
-    languageService: PoLanguageService,
-    protected poThemeService: PoThemeService
-  ) {
+  constructor(languageService: PoLanguageService) {
     this.literals = {
       ...this.literals,
       ...poModalPasswordRecoveryLiterals[languageService.getShortLanguage()]

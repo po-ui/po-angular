@@ -8,8 +8,7 @@ import {
   PoLanguageService,
   PoModalAction,
   PoModalComponent,
-  PoRadioGroupOption,
-  PoThemeService
+  PoRadioGroupOption
 } from '@po-ui/ng-components';
 
 import { isExternalLink } from '../../utils/util';
@@ -85,10 +84,9 @@ export class PoModalPasswordRecoveryComponent extends PoModalPasswordRecoveryBas
     private router: Router,
     private poI18nPipe: PoI18nPipe,
     private poModalPasswordRecoveryService: PoModalPasswordRecoveryService,
-    protected poThemeService: PoThemeService,
     poLanguageService: PoLanguageService
   ) {
-    super(poLanguageService, poThemeService);
+    super(poLanguageService);
   }
 
   ngOnDestroy() {

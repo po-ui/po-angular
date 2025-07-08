@@ -14,12 +14,11 @@ import {
   PoTableColumnSort,
   PoTableColumnSortType,
   PoTableColumnSpacing,
-  PoThemeService,
   poLocaleDefault
 } from '@po-ui/ng-components';
 
 import * as util from '../../utils/util';
-import { convertToBoolean, getDefaultSize, validateSize } from '../../utils/util';
+import { convertToBoolean, getDefaultSizeFn, validateSizeFn } from '../../utils/util';
 
 import { PoPageDynamicDetailComponent } from '../po-page-dynamic-detail/po-page-dynamic-detail.component';
 
@@ -356,11 +355,11 @@ export class PoPageDynamicTableComponent extends PoPageDynamicListBaseComponent 
    * @default `medium`
    */
   @Input('p-components-size') set componentsSize(value: string) {
-    this._componentsSize = validateSize(value, this.poThemeService);
+    this._componentsSize = validateSizeFn(value);
   }
 
   get componentsSize(): string {
-    return this._componentsSize ?? getDefaultSize(this.poThemeService);
+    return this._componentsSize ?? getDefaultSizeFn();
   }
 
   /**
@@ -636,7 +635,6 @@ export class PoPageDynamicTableComponent extends PoPageDynamicListBaseComponent 
 
   /* eslint-disable max-params */
   constructor(
-    protected poThemeService: PoThemeService,
     private router: Router,
     private activatedRoute: ActivatedRoute,
     private poDialogService: PoDialogService,

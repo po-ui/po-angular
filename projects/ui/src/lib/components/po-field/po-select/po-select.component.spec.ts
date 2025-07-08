@@ -5,7 +5,6 @@ import * as UtilsFunctions from '../../../utils/util';
 import { expectSettersMethod } from './../../../util-test/util-expect.spec';
 
 import { PoThemeA11yEnum } from '../../../services';
-import { PoThemeService } from '../../../services/po-theme/po-theme.service';
 import { removeDuplicatedOptions, removeUndefinedAndNullOptions } from '../../../utils/util';
 import { PoFieldContainerComponent } from '../po-field-container/po-field-container.component';
 import { PoFieldValidateModel } from '../po-field-validate.model';
@@ -18,7 +17,6 @@ describe('PoSelectComponent:', () => {
   let component: PoSelectComponent;
   let fixture: ComponentFixture<PoSelectComponent>;
   let nativeElement;
-  let poThemeServiceMock: jasmine.SpyObj<PoThemeService>;
 
   const booleanValidFalseValues = [false, 'false'];
   const booleanValidTrueValues = [true, 'true', ''];
@@ -27,12 +25,9 @@ describe('PoSelectComponent:', () => {
   const event = new MouseEvent('click', { 'bubbles': false, 'cancelable': true });
 
   beforeEach(() => {
-    poThemeServiceMock = jasmine.createSpyObj('PoThemeService', ['getA11yLevel', 'getA11yDefaultSize']);
-
     TestBed.configureTestingModule({
       imports: [FormsModule],
-      declarations: [PoSelectComponent, PoFieldContainerComponent, PoFieldContainerBottomComponent],
-      providers: [{ provide: PoThemeService, useValue: poThemeServiceMock }]
+      declarations: [PoSelectComponent, PoFieldContainerComponent, PoFieldContainerBottomComponent]
     });
 
     fixture = TestBed.createComponent(PoSelectComponent);
@@ -67,8 +62,18 @@ describe('PoSelectComponent:', () => {
   });
 
   describe('p-size', () => {
+    beforeEach(() => {
+      document.documentElement.removeAttribute('data-a11y');
+      localStorage.removeItem('po-default-size');
+    });
+
+    afterEach(() => {
+      document.documentElement.removeAttribute('data-a11y');
+      localStorage.removeItem('po-default-size');
+    });
+
     it('should set property with valid values for accessibility level is AA', () => {
-      poThemeServiceMock.getA11yLevel.and.returnValue(PoThemeA11yEnum.AA);
+      document.documentElement.setAttribute('data-a11y', PoThemeA11yEnum.AA);
 
       component.size = 'small';
       expect(component.size).toBe('small');
@@ -78,7 +83,7 @@ describe('PoSelectComponent:', () => {
     });
 
     it('should set property with valid values for accessibility level is AAA', () => {
-      poThemeServiceMock.getA11yLevel.and.returnValue(PoThemeA11yEnum.AAA);
+      document.documentElement.setAttribute('data-a11y', PoThemeA11yEnum.AAA);
 
       component.size = 'small';
       expect(component.size).toBe('medium');
@@ -88,23 +93,23 @@ describe('PoSelectComponent:', () => {
     });
 
     it('should return small when accessibility is AA and getA11yDefaultSize is small', () => {
-      poThemeServiceMock.getA11yLevel.and.returnValue(PoThemeA11yEnum.AA);
-      poThemeServiceMock.getA11yDefaultSize.and.returnValue('small');
+      document.documentElement.setAttribute('data-a11y', PoThemeA11yEnum.AA);
+      localStorage.setItem('po-default-size', 'small');
 
       component['_size'] = undefined;
       expect(component.size).toBe('small');
     });
 
     it('should return medium when accessibility is AA and getA11yDefaultSize is medium', () => {
-      poThemeServiceMock.getA11yLevel.and.returnValue(PoThemeA11yEnum.AA);
-      poThemeServiceMock.getA11yDefaultSize.and.returnValue('medium');
+      document.documentElement.setAttribute('data-a11y', PoThemeA11yEnum.AA);
+      localStorage.setItem('po-default-size', 'medium');
 
       component['_size'] = undefined;
       expect(component.size).toBe('medium');
     });
 
     it('should return medium when accessibility is AAA, regardless of getA11yDefaultSize', () => {
-      poThemeServiceMock.getA11yLevel.and.returnValue(PoThemeA11yEnum.AAA);
+      document.documentElement.setAttribute('data-a11y', PoThemeA11yEnum.AAA);
       component['_size'] = undefined;
       expect(component.size).toBe('medium');
     });

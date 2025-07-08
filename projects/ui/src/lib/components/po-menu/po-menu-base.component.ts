@@ -3,16 +3,15 @@ import { Directive, Input } from '@angular/core';
 import {
   convertToBoolean,
   convertToInt,
-  getDefaultSize,
+  getDefaultSizeFn,
   isExternalLink,
   isTypeof,
   uuid,
-  validateSize,
+  validateSizeFn,
   validValue
 } from '../../utils/util';
 
 import { PoFieldSize } from '../../enums/po-field-size.enum';
-import { PoThemeService } from '../../services/po-theme/po-theme.service';
 import { PoLanguageService } from '../../services/po-language/po-language.service';
 import { PoMenuFilter } from './po-menu-filter/po-menu-filter.interface';
 import { PoMenuItem } from './po-menu-item.interface';
@@ -173,11 +172,11 @@ export abstract class PoMenuBaseComponent {
    * @default `medium`
    */
   @Input('p-components-size') set componentsSize(value: string) {
-    this._componentsSize = validateSize(value, this.poThemeService, PoFieldSize);
+    this._componentsSize = validateSizeFn(value, PoFieldSize);
   }
 
   get componentsSize(): string {
-    return this._componentsSize ?? getDefaultSize(this.poThemeService, PoFieldSize);
+    return this._componentsSize ?? getDefaultSizeFn(PoFieldSize);
   }
 
   /** Lista dos itens do menu. Se o valor estiver indefinido ou inválido, será inicializado como um array vazio. */
@@ -386,8 +385,7 @@ export abstract class PoMenuBaseComponent {
   constructor(
     public menuGlobalService: PoMenuGlobalService,
     public menuService: PoMenuService,
-    public languageService: PoLanguageService,
-    protected poThemeService: PoThemeService
+    public languageService: PoLanguageService
   ) {
     this.literals = {
       ...poMenuLiteralsDefault[this.languageService?.getLanguageDefault()],
