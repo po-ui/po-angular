@@ -12,7 +12,6 @@ import {
 } from '@angular/core';
 import { NG_VALIDATORS, NG_VALUE_ACCESSOR } from '@angular/forms';
 
-import { PoThemeService } from '../../../services';
 import { PoCheckboxComponent } from '../po-checkbox/po-checkbox.component';
 import { PoCheckboxGroupOption } from './interfaces/po-checkbox-group-option.interface';
 import { PoCheckboxGroupBaseComponent } from './po-checkbox-group-base.component';
@@ -59,11 +58,8 @@ export class PoCheckboxGroupComponent extends PoCheckboxGroupBaseComponent imple
   @ViewChildren('checkboxLabel') checkboxLabels: QueryList<PoCheckboxComponent>;
 
   private el: ElementRef = inject(ElementRef);
-  constructor(
-    private changeDetector: ChangeDetectorRef,
-    protected poThemeService: PoThemeService
-  ) {
-    super(poThemeService);
+  constructor(private changeDetector: ChangeDetectorRef) {
+    super();
   }
 
   ngAfterViewChecked(): void {

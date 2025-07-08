@@ -39,11 +39,10 @@ export class PoDropdownComponent extends PoDropdownBaseComponent {
   private resizeListener: () => void;
 
   constructor(
-    protected poThemeService: PoThemeService,
     private renderer: Renderer2,
     private changeDetector: ChangeDetectorRef
   ) {
-    super(poThemeService);
+    super();
   }
 
   onKeyDown(event: any) {

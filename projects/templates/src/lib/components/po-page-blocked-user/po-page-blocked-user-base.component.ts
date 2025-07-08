@@ -1,7 +1,6 @@
 import { Directive, Input } from '@angular/core';
 
-import { PoThemeService } from '@po-ui/ng-components';
-import { getDefaultSize, validateSize } from '../../utils/util';
+import { getDefaultSizeFn, validateSizeFn } from '../../utils/util';
 import { PoPageBlockedUserReason } from './enums/po-page-blocked-user-reason.enum';
 import { PoPageBlockedUserReasonParams } from './interfaces/po-page-blocked-user-reason-params.interface';
 
@@ -123,11 +122,11 @@ export class PoPageBlockedUserBaseComponent {
    * @default `medium`
    */
   @Input('p-components-size') set componentsSize(value: string) {
-    this._componentsSize = validateSize(value, this.poThemeService);
+    this._componentsSize = validateSizeFn(value);
   }
 
   get componentsSize(): string {
-    return this._componentsSize ?? getDefaultSize(this.poThemeService);
+    return this._componentsSize ?? getDefaultSizeFn();
   }
 
   /**
@@ -207,6 +206,4 @@ export class PoPageBlockedUserBaseComponent {
   get urlBack() {
     return this._urlBack;
   }
-
-  constructor(protected poThemeService: PoThemeService) {}
 }

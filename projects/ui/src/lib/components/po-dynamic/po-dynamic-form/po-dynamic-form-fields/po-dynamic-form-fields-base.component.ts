@@ -1,10 +1,9 @@
 import { TitleCasePipe } from '@angular/common';
 import { Directive, EventEmitter, Input, Output } from '@angular/core';
 
-import { getDefaultSize, isTypeof, sortFields, validateSize } from '../../../../utils/util';
+import { getDefaultSizeFn, isTypeof, sortFields, validateSizeFn } from '../../../../utils/util';
 
 import { PoFieldSize } from '../../../../enums/po-field-size.enum';
-import { PoThemeService } from '../../../../services';
 import { PoComboFilter } from '../../../po-field/po-combo/interfaces/po-combo-filter.interface';
 import { PoLookupFilter } from '../../../po-field/po-lookup/interfaces/po-lookup-filter.interface';
 import { PoDynamicFieldType } from '../../enums/po-dynamic-field-type.enum';
@@ -37,11 +36,11 @@ export class PoDynamicFormFieldsBaseComponent extends PoDynamicSharedBase {
 
   // Define o tamanho dos componentes de formulário.
   @Input('p-components-size') set componentsSize(value: string) {
-    this._componentsSize = validateSize(value, this.poThemeService, PoFieldSize);
+    this._componentsSize = validateSizeFn(value, PoFieldSize);
   }
 
   get componentsSize(): string {
-    return this._componentsSize ?? getDefaultSize(this.poThemeService, PoFieldSize);
+    return this._componentsSize ?? getDefaultSizeFn(PoFieldSize);
   }
 
   // array de objetos que implementam a interface PoDynamicFormField, que serão exibidos no componente.
@@ -70,10 +69,7 @@ export class PoDynamicFormFieldsBaseComponent extends PoDynamicSharedBase {
     return this._validateFields;
   }
 
-  constructor(
-    protected poThemeService: PoThemeService,
-    private titleCasePipe: TitleCasePipe
-  ) {
+  constructor(private titleCasePipe: TitleCasePipe) {
     super();
   }
 

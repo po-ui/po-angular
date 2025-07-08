@@ -22,7 +22,6 @@ import { PoControlPositionService } from '../../../services/po-control-position/
 import { PoLanguageService } from '../../../services/po-language/po-language.service';
 import { PoKeyCodeEnum } from './../../../enums/po-key-code.enum';
 
-import { PoThemeService } from '../../../services/po-theme/po-theme.service';
 import { uuid } from '../../../utils/util';
 import { PoFieldSize } from '../../../enums/po-field-size.enum';
 import { PoListBoxComponent } from './../../po-listbox/po-listbox.component';
@@ -138,10 +137,9 @@ export class PoComboComponent extends PoComboBaseComponent implements AfterViewI
     public renderer: Renderer2,
     private controlPosition: PoControlPositionService,
     protected changeDetector: ChangeDetectorRef,
-    protected poThemeService: PoThemeService,
     languageService: PoLanguageService
   ) {
-    super(languageService, changeDetector, poThemeService);
+    super(languageService, changeDetector);
 
     this.differ = differs.find([]).create(null);
   }

@@ -124,12 +124,11 @@ export class PoDatepickerComponent extends PoDatepickerBaseComponent implements 
   constructor(
     protected languageService: PoLanguageService,
     protected cd: ChangeDetectorRef,
-    protected poThemeService: PoThemeService,
     private controlPosition: PoControlPositionService,
     private renderer: Renderer2,
     el: ElementRef
   ) {
-    super(languageService, cd, poThemeService);
+    super(languageService, cd);
     this.shortLanguage = this.languageService.getShortLanguage();
     this.el = el;
     const language = languageService.getShortLanguage();

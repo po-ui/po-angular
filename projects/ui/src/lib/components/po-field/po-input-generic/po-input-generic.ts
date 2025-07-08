@@ -10,7 +10,6 @@ import {
 import { AbstractControl } from '@angular/forms';
 
 import { isObservable, of, Subscription, switchMap } from 'rxjs';
-import { PoThemeService } from '../../../services';
 import { PoInputBaseComponent } from '../po-input/po-input-base.component';
 
 /* eslint-disable @angular-eslint/directive-class-suffix */
@@ -29,12 +28,8 @@ export abstract class PoInputGeneric extends PoInputBaseComponent implements Aft
     return this.noAutocomplete ? 'off' : 'on';
   }
 
-  constructor(
-    el: ElementRef,
-    cd?: ChangeDetectorRef,
-    protected poThemeService?: PoThemeService
-  ) {
-    super(cd, poThemeService);
+  constructor(el: ElementRef, cd?: ChangeDetectorRef) {
+    super(cd);
 
     this.el = el;
   }

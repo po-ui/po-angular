@@ -10,7 +10,7 @@ import * as ValidatorsFunctions from '../validators';
 import { poLocaleDefault } from '../../../services/po-language/po-language.constant';
 import { PoLanguageService } from '../../../services/po-language/po-language.service';
 
-import { PoThemeA11yEnum, PoThemeService } from '../../../services';
+import { PoThemeA11yEnum } from '../../../services';
 import { PoComboFilterMode } from './enums/po-combo-filter-mode.enum';
 import { PoComboFilter } from './interfaces/po-combo-filter.interface';
 import { poComboLiteralsDefault } from './interfaces/po-combo-literals-default.interface';
@@ -19,8 +19,8 @@ import { PoComboBaseComponent } from './po-combo-base.component';
 
 @Directive()
 class PoComboTest extends PoComboBaseComponent {
-  constructor(poThemeService: PoThemeService) {
-    super(new PoLanguageService(), { detectChanges: () => {}, markForCheck: () => {} } as any, poThemeService);
+  constructor() {
+    super(new PoLanguageService(), { detectChanges: () => {}, markForCheck: () => {} } as any);
   }
 
   getInputValue(): string {
@@ -38,7 +38,6 @@ class PoComboTest extends PoComboBaseComponent {
 
 describe('PoComboBaseComponent:', () => {
   let component: PoComboTest;
-  let poThemeService: jasmine.SpyObj<PoThemeService>;
 
   const defaultService: any = {
     url: '',
@@ -55,9 +54,7 @@ describe('PoComboBaseComponent:', () => {
   };
 
   beforeEach(() => {
-    poThemeService = jasmine.createSpyObj('PoThemeService', ['getA11yDefaultSize', 'getA11yLevel']);
-
-    component = new PoComboTest(poThemeService);
+    component = new PoComboTest();
     component.filterService = service;
     component.defaultService = defaultService;
   });
@@ -233,8 +230,18 @@ describe('PoComboBaseComponent:', () => {
     });
 
     describe('p-size', () => {
+      beforeEach(() => {
+        document.documentElement.removeAttribute('data-a11y');
+        localStorage.removeItem('po-default-size');
+      });
+
+      afterEach(() => {
+        document.documentElement.removeAttribute('data-a11y');
+        localStorage.removeItem('po-default-size');
+      });
+
       it('should set property with valid values for accessibility level is AA', () => {
-        poThemeService.getA11yLevel.and.returnValue(PoThemeA11yEnum.AA);
+        document.documentElement.setAttribute('data-a11y', PoThemeA11yEnum.AA);
 
         component.size = 'small';
         expect(component.size).toBe('small');
@@ -244,7 +251,7 @@ describe('PoComboBaseComponent:', () => {
       });
 
       it('should set property with valid values for accessibility level is AAA', () => {
-        poThemeService.getA11yLevel.and.returnValue(PoThemeA11yEnum.AAA);
+        document.documentElement.setAttribute('data-a11y', PoThemeA11yEnum.AAA);
 
         component.size = 'small';
         expect(component.size).toBe('medium');
@@ -254,23 +261,23 @@ describe('PoComboBaseComponent:', () => {
       });
 
       it('should return small when accessibility is AA and getA11yDefaultSize is small', () => {
-        poThemeService.getA11yLevel.and.returnValue(PoThemeA11yEnum.AA);
-        poThemeService.getA11yDefaultSize.and.returnValue('small');
+        document.documentElement.setAttribute('data-a11y', PoThemeA11yEnum.AA);
+        localStorage.setItem('po-default-size', 'small');
 
         component['_size'] = undefined;
         expect(component.size).toBe('small');
       });
 
       it('should return medium when accessibility is AA and getA11yDefaultSize is medium', () => {
-        poThemeService.getA11yLevel.and.returnValue(PoThemeA11yEnum.AA);
-        poThemeService.getA11yDefaultSize.and.returnValue('medium');
+        document.documentElement.setAttribute('data-a11y', PoThemeA11yEnum.AA);
+        localStorage.setItem('po-default-size', 'medium');
 
         component['_size'] = undefined;
         expect(component.size).toBe('medium');
       });
 
       it('should return medium when accessibility is AAA, regardless of getA11yDefaultSize', () => {
-        poThemeService.getA11yLevel.and.returnValue(PoThemeA11yEnum.AAA);
+        document.documentElement.setAttribute('data-a11y', PoThemeA11yEnum.AAA);
         component['_size'] = undefined;
         expect(component.size).toBe('medium');
       });
@@ -1086,8 +1093,7 @@ describe('PoComboBaseComponent:', () => {
 
     describe('VisibleOptions:', () => {
       beforeEach(() => {
-        poThemeService = jasmine.createSpyObj('PoThemeService', ['getA11yDefaultSize', 'getA11yLevel']);
-        component = new PoComboTest(poThemeService);
+        component = new PoComboTest();
 
         component.filterService = null;
         component.defaultService = null;
@@ -1611,7 +1617,6 @@ describe('PoComboBaseComponent:', () => {
 
 describe('PoComboBaseComponent using Service', () => {
   let component: PoComboTest;
-  let poThemeService: jasmine.SpyObj<PoThemeService>;
 
   const defaultService: any = {
     url: '',
@@ -1628,8 +1633,7 @@ describe('PoComboBaseComponent using Service', () => {
   };
 
   beforeEach(() => {
-    poThemeService = jasmine.createSpyObj('PoThemeService', ['getA11yDefaultSize', 'getA11yLevel']);
-    component = new PoComboTest(poThemeService);
+    component = new PoComboTest();
 
     component.filterService = service;
     component.defaultService = defaultService;

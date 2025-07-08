@@ -7,7 +7,7 @@ import { RouterTestingModule } from '@angular/router/testing';
 
 import { of, throwError } from 'rxjs';
 
-import { PoDialogModule, PoThemeA11yEnum, PoThemeService } from '@po-ui/ng-components';
+import { PoDialogModule, PoThemeA11yEnum } from '@po-ui/ng-components';
 
 import { expectPropertiesValues } from './../../util-test/util-expect.spec';
 import * as util from './../../utils/util';
@@ -23,20 +23,13 @@ import { PoDynamicFormStubComponent } from './test/po-dynamic-form-stub-componen
 describe('PoPageDynamicEditComponent: ', () => {
   let component: PoPageDynamicEditComponent;
   let fixture: ComponentFixture<PoPageDynamicEditComponent>;
-  let poThemeServiceMock: jasmine.SpyObj<PoThemeService>;
 
   beforeEach(waitForAsync(() => {
-    poThemeServiceMock = jasmine.createSpyObj('PoThemeService', ['getA11yLevel', 'getA11yDefaultSize']);
-
     TestBed.configureTestingModule({
       declarations: [PoPageDynamicEditComponent, PoDynamicFormStubComponent],
       schemas: [NO_ERRORS_SCHEMA],
       imports: [FormsModule, RouterTestingModule.withRoutes([]), PoDialogModule],
-      providers: [
-        { provide: PoThemeService, useValue: poThemeServiceMock },
-        provideHttpClient(withInterceptorsFromDi()),
-        provideHttpClientTesting()
-      ]
+      providers: [provideHttpClient(withInterceptorsFromDi()), provideHttpClientTesting()]
     }).compileComponents();
   }));
 
@@ -89,8 +82,18 @@ describe('PoPageDynamicEditComponent: ', () => {
     });
 
     describe('p-components-size', () => {
+      beforeEach(() => {
+        document.documentElement.removeAttribute('data-a11y');
+        localStorage.removeItem('po-default-size');
+      });
+
+      afterEach(() => {
+        document.documentElement.removeAttribute('data-a11y');
+        localStorage.removeItem('po-default-size');
+      });
+
       it('should set property with valid values for accessibility level is AA', () => {
-        poThemeServiceMock.getA11yLevel.and.returnValue(PoThemeA11yEnum.AA);
+        document.documentElement.setAttribute('data-a11y', PoThemeA11yEnum.AA);
 
         component.componentsSize = 'small';
         expect(component.componentsSize).toBe('small');
@@ -100,7 +103,7 @@ describe('PoPageDynamicEditComponent: ', () => {
       });
 
       it('should set property with valid values for accessibility level is AAA', () => {
-        poThemeServiceMock.getA11yLevel.and.returnValue(PoThemeA11yEnum.AAA);
+        document.documentElement.setAttribute('data-a11y', PoThemeA11yEnum.AAA);
 
         component.componentsSize = 'small';
         expect(component.componentsSize).toBe('medium');
@@ -110,23 +113,23 @@ describe('PoPageDynamicEditComponent: ', () => {
       });
 
       it('should return small when accessibility is AA and getA11yDefaultSize is small', () => {
-        poThemeServiceMock.getA11yLevel.and.returnValue(PoThemeA11yEnum.AA);
-        poThemeServiceMock.getA11yDefaultSize.and.returnValue('small');
+        document.documentElement.setAttribute('data-a11y', PoThemeA11yEnum.AA);
+        localStorage.setItem('po-default-size', 'small');
 
         component['_componentsSize'] = undefined;
         expect(component.componentsSize).toBe('small');
       });
 
       it('should return medium when accessibility is AA and getA11yDefaultSize is medium', () => {
-        poThemeServiceMock.getA11yLevel.and.returnValue(PoThemeA11yEnum.AA);
-        poThemeServiceMock.getA11yDefaultSize.and.returnValue('medium');
+        document.documentElement.setAttribute('data-a11y', PoThemeA11yEnum.AA);
+        localStorage.setItem('po-default-size', 'medium');
 
         component['_componentsSize'] = undefined;
         expect(component.componentsSize).toBe('medium');
       });
 
       it('should return medium when accessibility is AAA, regardless of getA11yDefaultSize', () => {
-        poThemeServiceMock.getA11yLevel.and.returnValue(PoThemeA11yEnum.AAA);
+        document.documentElement.setAttribute('data-a11y', PoThemeA11yEnum.AAA);
         component['_componentsSize'] = undefined;
         expect(component.componentsSize).toBe('medium');
       });
