@@ -2859,6 +2859,33 @@ describe('PoTableComponent:', () => {
       expect(component.columnCount).toBe(7);
     });
 
+    it('columnCount: should not count selectable column when there are no items', () => {
+      component.columns = [...columns];
+      component.items = [];
+      component.selectable = true;
+      component.actions = [];
+
+      expect(component.columnCount).toBe(columns.length);
+    });
+
+    it('columnCount: should not count actions column when there are no items', () => {
+      component.columns = [...columns];
+      component.items = [];
+      component.selectable = false;
+      component.actions = actions;
+
+      expect(component.columnCount).toBe(columns.length);
+    });
+
+    it('columnCount: should not count actions or selectable columns when there are no items', () => {
+      component.columns = [...columns];
+      component.items = [];
+      component.selectable = true;
+      component.actions = actions;
+
+      expect(component.columnCount).toBe(columns.length);
+    });
+
     it('getTemplate: should be return null by column property', () => {
       const column: PoTableColumn = {};
       column.property = 'status3';
