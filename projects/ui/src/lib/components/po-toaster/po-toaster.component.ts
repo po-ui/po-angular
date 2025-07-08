@@ -11,7 +11,6 @@ import {
 } from '@angular/core';
 
 import { Subject } from 'rxjs';
-import { PoThemeService } from '../../services/po-theme/po-theme.service';
 import { PoLanguageService } from '../../services/po-language';
 import { PoButtonComponent } from '../po-button';
 import { PoToasterMode } from './enum/po-toaster-mode.enum';
@@ -66,10 +65,9 @@ export class PoToasterComponent extends PoToasterBaseComponent implements AfterV
   constructor(
     poLanguageService: PoLanguageService,
     public changeDetector: ChangeDetectorRef,
-    protected poThemeService: PoThemeService,
     private renderer?: Renderer2
   ) {
-    super(poThemeService);
+    super();
     this.language = poLanguageService.getShortLanguage();
     this.literals = {
       ...poToasterLiterals[this.language]

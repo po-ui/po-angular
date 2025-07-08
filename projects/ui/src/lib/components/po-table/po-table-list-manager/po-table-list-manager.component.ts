@@ -2,10 +2,9 @@ import { ChangeDetectorRef, Component, EventEmitter, Inject, Input, Optional, Ou
 import { NG_VALUE_ACCESSOR } from '@angular/forms';
 
 import { PoFieldSize } from '../../../enums/po-field-size.enum';
-import { PoThemeService } from '../../../services';
 import { poLocaleDefault } from '../../../services/po-language/po-language.constant';
 import { PoLanguageService } from '../../../services/po-language/po-language.service';
-import { convertToBoolean, getDefaultSize, validateSize } from '../../../utils/util';
+import { convertToBoolean, getDefaultSizeFn, validateSizeFn } from '../../../utils/util';
 import { PoCheckboxGroupComponent } from '../../po-field/po-checkbox-group/po-checkbox-group.component';
 import { AnimaliaIconDictionary, ICONS_DICTIONARY } from '../../po-icon';
 import { PoTableColumn } from '../interfaces/po-table-column.interface';
@@ -78,11 +77,11 @@ export class PoTableListManagerComponent extends PoCheckboxGroupComponent {
    * @default `medium`
    */
   @Input('p-components-size') set componentsSize(value: string) {
-    this._componentsSize = validateSize(value, this.poThemeService, PoFieldSize);
+    this._componentsSize = validateSizeFn(value, PoFieldSize);
   }
 
   get componentsSize(): string {
-    return this._componentsSize ?? getDefaultSize(this.poThemeService, PoFieldSize);
+    return this._componentsSize ?? getDefaultSizeFn(PoFieldSize);
   }
 
   @Input({ alias: 'p-hide-action-fixed-columns', transform: convertToBoolean }) hideActionFixedColumns: boolean = false;
@@ -96,10 +95,9 @@ export class PoTableListManagerComponent extends PoCheckboxGroupComponent {
   constructor(
     languageService: PoLanguageService,
     changeDetector: ChangeDetectorRef,
-    @Optional() @Inject(ICONS_DICTIONARY) value: { [key: string]: string },
-    protected poThemeService: PoThemeService
+    @Optional() @Inject(ICONS_DICTIONARY) value: { [key: string]: string }
   ) {
-    super(changeDetector, poThemeService);
+    super(changeDetector);
 
     const language = languageService.getShortLanguage();
 

@@ -7,19 +7,18 @@ import {
   convertIsoToDate,
   convertToBoolean,
   formatYear,
-  getDefaultSize,
+  getDefaultSizeFn,
   isTypeof,
   replaceFormatSeparator,
   setYearFrom0To100,
   validateDateRange,
-  validateSize
+  validateSizeFn
 } from '../../../utils/util';
 import { PoMask } from '../po-input/po-mask';
 import { dateFailed, requiredFailed } from './../validators';
 
 import { Observable, Subscription, switchMap } from 'rxjs';
 import { PoFieldSize } from '../../../enums/po-field-size.enum';
-import { PoThemeService } from '../../../services';
 import { poLocaleDefault } from '../../../services/po-language/po-language.constant';
 import { PoLanguageService } from '../../../services/po-language/po-language.service';
 import { PoDatepickerIsoFormat } from './enums/po-datepicker-iso-format.enum';
@@ -340,11 +339,11 @@ export abstract class PoDatepickerBaseComponent implements ControlValueAccessor,
    * @default `medium`
    */
   @Input('p-size') set size(value: string) {
-    this._size = validateSize(value, this.poThemeService, PoFieldSize);
+    this._size = validateSizeFn(value, PoFieldSize);
   }
 
   get size(): string {
-    return this._size ?? getDefaultSize(this.poThemeService, PoFieldSize);
+    return this._size ?? getDefaultSizeFn(PoFieldSize);
   }
 
   /** Habilita ação para limpar o campo. */
@@ -508,8 +507,7 @@ export abstract class PoDatepickerBaseComponent implements ControlValueAccessor,
 
   constructor(
     protected languageService: PoLanguageService,
-    protected cd: ChangeDetectorRef,
-    protected poThemeService: PoThemeService
+    protected cd: ChangeDetectorRef
   ) {}
 
   set date(value: any) {

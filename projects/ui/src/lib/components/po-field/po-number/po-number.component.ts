@@ -13,7 +13,6 @@ import { maxFailed, minFailed } from '../validators';
 
 import { PoNumberBaseComponent } from './po-number-base.component';
 
-import { PoThemeService } from '../../../services';
 import { uuid } from '../../../utils/util';
 
 /**
@@ -95,12 +94,8 @@ export class PoNumberComponent extends PoNumberBaseComponent {
   id = `po-number[${uuid()}]`;
 
   /* istanbul ignore next */
-  constructor(
-    el: ElementRef,
-    cd: ChangeDetectorRef,
-    protected poThemeService: PoThemeService
-  ) {
-    super(el, cd, poThemeService);
+  constructor(el: ElementRef, cd: ChangeDetectorRef) {
+    super(el, cd);
   }
 
   @HostListener('wheel', ['$event'])

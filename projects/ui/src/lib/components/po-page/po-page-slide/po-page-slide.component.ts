@@ -5,7 +5,6 @@ import { delay, take } from 'rxjs/operators';
 
 import { getFocusableElements, uuid } from '../../../utils/util';
 
-import { PoThemeService } from '../../../services';
 import { PoActiveOverlayService } from '../../../services/po-active-overlay/po-active-overlay.service';
 import { PoLanguageService } from '../../../services/po-language/po-language.service';
 import { PoPageSlideLiterals } from './interfaces/po-page-slide-literals.interface';
@@ -96,11 +95,10 @@ export class PoPageSlideComponent extends PoPageSlideBaseComponent {
   }
 
   constructor(
-    protected poThemeService: PoThemeService,
     private poActiveOverlayService: PoActiveOverlayService,
     private languageService: PoLanguageService
   ) {
-    super(poThemeService);
+    super();
     this.setTimeFromCSS();
     this.buttonAriaLabel = this.getTextDefault();
   }

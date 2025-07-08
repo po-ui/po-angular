@@ -6,7 +6,6 @@ import { PoIconModule } from './../po-icon';
 import { PoButtonBaseComponent } from './po-button-base.component';
 import { PoButtonComponent } from './po-button.component';
 
-import { PoThemeService } from '../../services/po-theme/po-theme.service';
 import { expectPropertiesValues } from '../../util-test/util-expect.spec';
 import { PoButtonType } from './enums/po-button-type.enum';
 
@@ -14,15 +13,11 @@ describe('PoButtonComponent: ', () => {
   let component: PoButtonComponent;
   let fixture: ComponentFixture<PoButtonComponent>;
   let nativeElement: any;
-  let poThemeServiceMock: jasmine.SpyObj<PoThemeService>;
 
   beforeEach(() => {
-    poThemeServiceMock = jasmine.createSpyObj('PoThemeService', ['getA11yLevel', 'getA11yDefaultSize']);
-
     TestBed.configureTestingModule({
       imports: [PoLoadingModule, PoIconModule],
-      declarations: [PoButtonComponent],
-      providers: [{ provide: PoThemeService, useValue: poThemeServiceMock }]
+      declarations: [PoButtonComponent]
     });
 
     fixture = TestBed.createComponent(PoButtonComponent);

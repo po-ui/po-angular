@@ -17,10 +17,9 @@ import { PoNumberBaseComponent } from './po-number-base.component';
 })
 class ContentProjectionComponent extends PoNumberBaseComponent {
   constructor(el: ElementRef, cd: ChangeDetectorRef) {
-    const poThemeServiceMock = jasmine.createSpyObj('PoThemeService', ['getA11yDefaultSize']);
-    poThemeServiceMock.getA11yDefaultSize.and.returnValue('medium');
+    localStorage.setItem('po-default-size', 'medium');
 
-    super(el, cd, poThemeServiceMock);
+    super(el, cd);
   }
 
   extraValidation(c: AbstractControl): { [key: string]: any } {

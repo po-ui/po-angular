@@ -2,7 +2,6 @@ import { TitleCasePipe } from '@angular/common';
 import { ChangeDetectorRef, Component, OnChanges, QueryList, SimpleChanges, ViewChildren } from '@angular/core';
 import { ControlContainer, NgForm } from '@angular/forms';
 
-import { PoThemeService } from '../../../../services';
 import { PoDynamicFormField } from '../interfaces/po-dynamic-form-field.interface';
 import { PoDynamicFormFieldValidation } from '../po-dynamic-form-validation/po-dynamic-form-field-validation.interface';
 import { PoDynamicFormValidationService } from '../po-dynamic-form-validation/po-dynamic-form-validation.service';
@@ -33,12 +32,11 @@ export class PoDynamicFormFieldsComponent extends PoDynamicFormFieldsBaseCompone
 
   constructor(
     titleCasePipe: TitleCasePipe,
-    protected poThemeService: PoThemeService,
     private readonly validationService: PoDynamicFormValidationService,
     private readonly changes: ChangeDetectorRef,
     private readonly form: NgForm
   ) {
-    super(poThemeService, titleCasePipe);
+    super(titleCasePipe);
   }
 
   ngOnChanges(changes: SimpleChanges) {

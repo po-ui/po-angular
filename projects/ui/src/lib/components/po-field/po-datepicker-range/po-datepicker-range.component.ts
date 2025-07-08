@@ -16,7 +16,6 @@ import { NG_VALIDATORS, NG_VALUE_ACCESSOR } from '@angular/forms';
 
 import { PoControlPositionService } from './../../../services/po-control-position/po-control-position.service';
 
-import { PoThemeService } from '../../../services';
 import { PoLanguageService } from '../../../services/po-language/po-language.service';
 import { PoDateService } from './../../../services/po-date/po-date.service';
 import { replaceFormatSeparator } from './../../../utils/util';
@@ -146,10 +145,9 @@ export class PoDatepickerRangeComponent
     private cd: ChangeDetectorRef,
     private poLanguageService: PoLanguageService,
     poDateService: PoDateService,
-    poDatepickerRangeElement: ElementRef,
-    protected poThemeService: PoThemeService
+    poDatepickerRangeElement: ElementRef
   ) {
-    super(changeDetector, poDateService, poThemeService, poLanguageService);
+    super(changeDetector, poDateService, poLanguageService);
     this.poDatepickerRangeElement = poDatepickerRangeElement;
   }
 

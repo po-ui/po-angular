@@ -9,7 +9,6 @@ import {
   PoLanguageService,
   PoModalAction,
   PoModalComponent,
-  PoThemeService,
   poLocaleDefault
 } from '@po-ui/ng-components';
 
@@ -101,11 +100,10 @@ export class PoPageChangePasswordComponent
     private router: Router,
     private service: PoPageChangePasswordService,
     private poComponentInjector: PoComponentInjectorService,
-    protected poThemeService: PoThemeService,
     languageService: PoLanguageService,
     viewRef: ViewContainerRef
   ) {
-    super(poThemeService);
+    super();
 
     const language = languageService.getShortLanguage();
 
