@@ -3,8 +3,7 @@ import { PoLanguageService } from '../../services/po-language/po-language.servic
 
 import { Directive, EventEmitter, Input, Output, TemplateRef } from '@angular/core';
 import { PoFieldSize } from '../../enums/po-field-size.enum';
-import { PoThemeService } from '../../services/po-theme/po-theme.service';
-import { convertToBoolean, getDefaultSize, validateSize } from '../../utils/util';
+import { convertToBoolean, getDefaultSizeFn, validateSizeFn } from '../../utils/util';
 import { PoSearchFilterMode } from './enums/po-search-filter-mode.enum';
 import { PoSearchFilterSelect } from './interfaces/po-search-filter-select.interface';
 import { PoSearchLiterals } from './literals/po-search-literals.interface';
@@ -332,11 +331,11 @@ export class PoSearchBaseComponent {
    * @default `medium`
    */
   @Input('p-size') set size(value: string) {
-    this._size = validateSize(value, this.poThemeService, PoFieldSize);
+    this._size = validateSizeFn(value, PoFieldSize);
   }
 
   get size(): string {
-    return this._size ?? getDefaultSize(this.poThemeService, PoFieldSize);
+    return this._size ?? getDefaultSizeFn(PoFieldSize);
   }
 
   /**
@@ -412,10 +411,7 @@ export class PoSearchBaseComponent {
    */
   @Output('p-locate-previous') locatePrevious = new EventEmitter<void>();
 
-  constructor(
-    languageService: PoLanguageService,
-    protected poThemeService: PoThemeService
-  ) {
+  constructor(languageService: PoLanguageService) {
     this.language = languageService.getShortLanguage();
   }
 

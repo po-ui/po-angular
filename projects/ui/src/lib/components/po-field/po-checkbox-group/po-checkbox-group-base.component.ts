@@ -2,10 +2,9 @@ import { Directive, EventEmitter, Input, Output } from '@angular/core';
 import { AbstractControl, ControlValueAccessor, Validator } from '@angular/forms';
 
 import { requiredFailed } from '../validators';
-import { convertToBoolean, convertToInt, getDefaultSize, uuid, validateSize } from './../../../utils/util';
+import { convertToBoolean, convertToInt, getDefaultSizeFn, uuid, validateSizeFn } from './../../../utils/util';
 
 import { PoFieldSize } from '../../../enums/po-field-size.enum';
-import { PoThemeService } from '../../../services';
 import { PoCheckboxGroupOptionView } from './interfaces/po-checkbox-group-option-view.interface';
 import { PoCheckboxGroupOption } from './interfaces/po-checkbox-group-option.interface';
 
@@ -320,14 +319,12 @@ export class PoCheckboxGroupBaseComponent implements ControlValueAccessor, Valid
    *
    */
   @Input('p-size') set size(value: string) {
-    this._size = validateSize(value, this.poThemeService, PoFieldSize);
+    this._size = validateSizeFn(value, PoFieldSize);
   }
 
   get size(): string {
-    return this._size ?? getDefaultSize(this.poThemeService, PoFieldSize);
+    return this._size ?? getDefaultSizeFn(PoFieldSize);
   }
-
-  constructor(protected poThemeService: PoThemeService) {}
 
   changeValue() {
     const value = this.checkIndeterminate();

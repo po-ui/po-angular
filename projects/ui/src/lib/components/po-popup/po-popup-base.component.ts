@@ -1,10 +1,9 @@
 import { Directive, ElementRef, EventEmitter, Input, Output } from '@angular/core';
 
-import { convertToBoolean, getDefaultSize, validateSize } from '../../utils/util';
+import { convertToBoolean, getDefaultSizeFn, validateSizeFn } from '../../utils/util';
 import { PO_CONTROL_POSITIONS } from './../../services/po-control-position/po-control-position.constants';
 
 import { PoFieldSize } from '../../enums/po-field-size.enum';
-import { PoThemeService } from '../../services/po-theme/po-theme.service';
 import { PoPopupAction } from './po-popup-action.interface';
 
 const poPopupDefaultPosition = 'bottom-left';
@@ -207,11 +206,11 @@ export class PoPopupBaseComponent {
    * @default `medium`
    */
   @Input('p-size') set size(value: string) {
-    this._size = validateSize(value, this.poThemeService, PoFieldSize);
+    this._size = validateSizeFn(value, PoFieldSize);
   }
 
   get size(): string {
-    return this._size ?? getDefaultSize(this.poThemeService, PoFieldSize);
+    return this._size ?? getDefaultSizeFn(PoFieldSize);
   }
 
   /**
@@ -262,6 +261,4 @@ export class PoPopupBaseComponent {
   @Output('p-close') closeEvent: EventEmitter<any> = new EventEmitter();
 
   @Output('p-click-item') clickItem: EventEmitter<any> = new EventEmitter();
-
-  constructor(protected poThemeService: PoThemeService) {}
 }

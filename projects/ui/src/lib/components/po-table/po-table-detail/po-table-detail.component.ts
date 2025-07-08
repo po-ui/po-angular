@@ -1,10 +1,9 @@
 import { DecimalPipe } from '@angular/common';
 import { Component, EventEmitter, Input, Output } from '@angular/core';
 
-import { capitalizeFirstLetter, getDefaultSize, isTypeof, validateSize } from '../../../utils/util';
+import { capitalizeFirstLetter, getDefaultSizeFn, isTypeof, validateSizeFn } from '../../../utils/util';
 
 import { PoFieldSize } from '../../../enums/po-field-size.enum';
-import { PoThemeService } from '../../../services';
 import { PoTableDetailColumn } from './po-table-detail-column.interface';
 import { PoTableDetail } from './po-table-detail.interface';
 
@@ -38,11 +37,11 @@ export class PoTableDetailComponent {
    * @default `medium`
    */
   @Input('p-components-size') set componentsSize(value: string) {
-    this._componentsSize = validateSize(value, this.poThemeService, PoFieldSize);
+    this._componentsSize = validateSizeFn(value, PoFieldSize);
   }
 
   get componentsSize(): string {
-    return this._componentsSize ?? getDefaultSize(this.poThemeService, PoFieldSize);
+    return this._componentsSize ?? getDefaultSizeFn(PoFieldSize);
   }
 
   /**
@@ -83,10 +82,7 @@ export class PoTableDetailComponent {
     return this._detail;
   }
 
-  constructor(
-    protected poThemeService: PoThemeService,
-    private decimalPipe: DecimalPipe
-  ) {}
+  constructor(private decimalPipe: DecimalPipe) {}
 
   get detailColumns(): Array<PoTableDetailColumn> {
     return this.detail?.columns || [];

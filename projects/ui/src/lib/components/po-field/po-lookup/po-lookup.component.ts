@@ -15,10 +15,9 @@ import {
 import { NG_VALIDATORS, NG_VALUE_ACCESSOR, NgControl } from '@angular/forms';
 import { Subscription } from 'rxjs';
 
-import { getDefaultSize, uuid } from '../../../utils/util';
+import { getDefaultSizeFn, uuid } from '../../../utils/util';
 
 import { PoFieldSize } from '../../../enums/po-field-size.enum';
-import { PoThemeService } from '../../../services';
 import { PoLanguageService } from '../../../services/po-language/po-language.service';
 import { PoTableColumnSpacing } from '../../po-table';
 import { PoLookupBaseComponent } from './po-lookup-base.component';
@@ -171,10 +170,9 @@ export class PoLookupComponent extends PoLookupBaseComponent implements AfterVie
     poLookupModalService: PoLookupModalService,
     private cd: ChangeDetectorRef,
     private el: ElementRef,
-    injector: Injector,
-    protected poThemeService: PoThemeService
+    injector: Injector
   ) {
-    super(poLookupFilterService, injector, poLookupModalService, languageService, poThemeService);
+    super(poLookupFilterService, injector, poLookupModalService, languageService);
   }
 
   ngAfterViewInit() {
@@ -486,8 +484,7 @@ export class PoLookupComponent extends PoLookupBaseComponent implements AfterVie
   }
 
   protected getDefaultSpacing(): PoTableColumnSpacing {
-    return this.size === PoFieldSize.Small ||
-      getDefaultSize(this.poThemeService, PoTableColumnSpacing) === PoTableColumnSpacing.Small
+    return this.size === PoFieldSize.Small || getDefaultSizeFn(PoTableColumnSpacing) === PoTableColumnSpacing.Small
       ? PoTableColumnSpacing.ExtraSmall
       : PoTableColumnSpacing.Medium;
   }

@@ -1,8 +1,7 @@
 import { Directive, Input } from '@angular/core';
 
 import { PoFieldSize } from '../../enums/po-field-size.enum';
-import { PoThemeService } from '../../services/po-theme/po-theme.service';
-import { getDefaultSize, validateSize } from '../../utils/util';
+import { getDefaultSizeFn, validateSizeFn } from '../../utils/util';
 import { PoButtonGroupToggle } from './enums/po-button-group-toggle.enum';
 import { PoButtonGroupItem } from './po-button-group-item.interface';
 
@@ -107,14 +106,12 @@ export class PoButtonGroupBaseComponent {
    * @default `medium`
    */
   @Input('p-size') set size(value: string) {
-    this._size = validateSize(value, this.poThemeService, PoFieldSize);
+    this._size = validateSizeFn(value, PoFieldSize);
   }
 
   get size(): string {
-    return this._size ?? getDefaultSize(this.poThemeService, PoFieldSize);
+    return this._size ?? getDefaultSizeFn(PoFieldSize);
   }
-
-  constructor(protected poThemeService: PoThemeService) {}
 
   onButtonClick(buttonClicked: PoButtonGroupItem, buttonIndex: number) {
     if (this.toggle === PoButtonGroupToggle.Single) {

@@ -3,7 +3,6 @@ import { ComponentRef, Injectable } from '@angular/core';
 import { timer } from 'rxjs';
 import { takeWhile } from 'rxjs/operators';
 import { PoToaster, PoToasterComponent, PoToasterOrientation, PoToasterType } from '../../components/po-toaster';
-import { PoThemeService } from '../po-theme';
 import { PoComponentInjectorService } from './../po-component-injector/po-component-injector.service';
 import { PoNotificationBaseService } from './po-notification-base.service';
 
@@ -35,11 +34,8 @@ const PoNotificationFadeTime = 200;
   providedIn: 'root'
 })
 export class PoNotificationService extends PoNotificationBaseService {
-  constructor(
-    private poComponentInjector: PoComponentInjectorService,
-    protected poThemeService: PoThemeService
-  ) {
-    super(poThemeService);
+  constructor(private poComponentInjector: PoComponentInjectorService) {
+    super();
   }
 
   createToaster(toaster: PoToaster): void {

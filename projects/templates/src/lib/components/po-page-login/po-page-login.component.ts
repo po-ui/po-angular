@@ -11,7 +11,7 @@ import {
 import { AbstractControl, NgForm } from '@angular/forms';
 import { ActivatedRoute, Router } from '@angular/router';
 
-import { PoLanguageService, PoThemeService } from '@po-ui/ng-components';
+import { PoLanguageService } from '@po-ui/ng-components';
 
 import { PoComponentInjectorService } from '@po-ui/ng-components';
 import { isExternalLink } from '../../utils/util';
@@ -69,7 +69,6 @@ export class PoPageLoginComponent extends PoPageLoginBaseComponent implements Af
   private readonly customPasswordError = { custom: false };
 
   constructor(
-    protected poThemeService: PoThemeService,
     public changeDetector: ChangeDetectorRef,
     private activatedRoute: ActivatedRoute,
     private poComponentInjector: PoComponentInjectorService,
@@ -78,7 +77,7 @@ export class PoPageLoginComponent extends PoPageLoginBaseComponent implements Af
     router: Router,
     poLanguageService: PoLanguageService
   ) {
-    super(poThemeService, loginService, router, poLanguageService);
+    super(loginService, router, poLanguageService);
     this.differ = differs.find([]).create(null);
   }
 

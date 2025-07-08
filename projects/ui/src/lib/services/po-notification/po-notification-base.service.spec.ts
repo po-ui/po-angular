@@ -3,7 +3,6 @@ import { TestBed } from '@angular/core/testing';
 
 import { PoToaster, PoToasterOrientation, PoToasterType } from '../../components/po-toaster';
 import { PoToasterBaseComponent } from '../../components/po-toaster/po-toaster-base.component';
-import { PoThemeService } from '../po-theme';
 import { PoNotificationBaseService } from './po-notification-base.service';
 
 @Injectable({
@@ -43,17 +42,14 @@ class PoNotificationService extends PoNotificationBaseService {
 
 describe('PoNotificationService ', () => {
   let service: PoNotificationBaseService;
-  let poThemeServiceMock: jasmine.SpyObj<PoThemeService>;
 
   beforeEach(() => {
-    poThemeServiceMock = jasmine.createSpyObj('PoThemeService', ['getA11yLevel', 'getA11yDefaultSize']);
-
     TestBed.configureTestingModule({
       declarations: [],
-      providers: [PoNotificationBaseService, { provide: PoThemeService, useValue: poThemeServiceMock }]
+      providers: [PoNotificationBaseService]
     });
 
-    service = new PoNotificationService(poThemeServiceMock);
+    service = new PoNotificationService();
   });
 
   it('should have a `service` attribute that is a PoNotificationBaseService', () => {

@@ -1,11 +1,10 @@
 import { Directive, EventEmitter, HostBinding, Input, Output } from '@angular/core';
 import { AbstractControl, ControlValueAccessor, Validator } from '@angular/forms';
 
-import { convertToBoolean, getDefaultSize, isEquals, isIE, isMobile, validateSize } from '../../../utils/util';
+import { convertToBoolean, getDefaultSizeFn, isEquals, isIE, isMobile, validateSizeFn } from '../../../utils/util';
 import { requiredFailed } from '../validators';
 
 import { PoFieldSize } from '../../../enums/po-field-size.enum';
-import { PoThemeService } from '../../../services';
 import { poLocaleDefault } from '../../../services/po-language/po-language.constant';
 import { PoLanguageService } from '../../../services/po-language/po-language.service';
 import { PoProgressAction } from '../../po-progress';
@@ -712,15 +711,14 @@ export abstract class PoUploadBaseComponent implements ControlValueAccessor, Val
    * @default `medium`
    */
   @Input('p-size') set size(value: string) {
-    this._size = validateSize(value, this.poThemeService, PoFieldSize);
+    this._size = validateSizeFn(value, PoFieldSize);
   }
 
   get size(): string {
-    return this._size ?? getDefaultSize(this.poThemeService, PoFieldSize);
+    return this._size ?? getDefaultSizeFn(PoFieldSize);
   }
 
   constructor(
-    protected poThemeService: PoThemeService,
     protected uploadService: PoUploadService,
     languageService: PoLanguageService
   ) {

@@ -71,7 +71,7 @@ export class PoWidgetComponent extends PoWidgetBaseComponent implements OnInit, 
     protected cd: ChangeDetectorRef,
     protected poTheme: PoThemeService
   ) {
-    super(poTheme);
+    super();
     const language = languageService.getShortLanguage();
     this.literals = {
       ...poWidgetLiteralsDefault[poLocaleDefault],

@@ -3,7 +3,6 @@ import { NgForm } from '@angular/forms';
 
 import { Observable, Subject, Subscription } from 'rxjs';
 
-import { PoThemeService } from '../../../services';
 import { PoDynamicFormField } from './interfaces/po-dynamic-form-field.interface';
 import { PoDynamicFormBaseComponent } from './po-dynamic-form-base.component';
 import { PoDynamicFormLoad } from './po-dynamic-form-load/po-dynamic-form-load.interface';
@@ -70,12 +69,11 @@ export class PoDynamicFormComponent extends PoDynamicFormBaseComponent implement
   }
 
   constructor(
-    protected poThemeService: PoThemeService,
     private changes: ChangeDetectorRef,
     private loadService: PoDynamicFormLoadService,
     private validationService: PoDynamicFormValidationService
   ) {
-    super(poThemeService);
+    super();
   }
 
   ngOnDestroy() {

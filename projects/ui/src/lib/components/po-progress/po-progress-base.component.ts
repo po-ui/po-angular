@@ -1,9 +1,8 @@
 import { Directive, EventEmitter, Input, Output, TemplateRef } from '@angular/core';
 
-import { convertToBoolean, convertToInt, getDefaultSize, validateSize } from '../../utils/util';
+import { convertToBoolean, convertToInt, getDefaultSizeFn, validateSizeFn } from '../../utils/util';
 
 import { PoFieldSize } from '../../enums/po-field-size.enum';
-import { PoThemeService } from '../../services/po-theme/po-theme.service';
 import { PoProgressSize } from './enums/po-progress-size.enum';
 import { PoProgressStatus } from './enums/po-progress-status.enum';
 import { PoProgressAction } from './interfaces';
@@ -285,11 +284,11 @@ export class PoProgressBaseComponent {
    * @default `medium`
    */
   @Input('p-size-actions') set sizeActions(value: string) {
-    this._sizeActions = validateSize(value, this.poThemeService, PoFieldSize);
+    this._sizeActions = validateSizeFn(value, PoFieldSize);
   }
 
   get sizeActions(): string {
-    return this._sizeActions ?? getDefaultSize(this.poThemeService, PoFieldSize);
+    return this._sizeActions ?? getDefaultSizeFn(PoFieldSize);
   }
 
   /**
@@ -302,8 +301,6 @@ export class PoProgressBaseComponent {
    * @default `false`
    */
   @Input({ alias: 'p-show-percentage', transform: convertToBoolean }) showPercentage: boolean = false;
-
-  constructor(protected poThemeService: PoThemeService) {}
 
   private isProgressRangeValue(value: number): boolean {
     return value >= poProgressMinValue && value <= poProgressMaxValue;

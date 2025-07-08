@@ -2,7 +2,6 @@ import { ChangeDetectorRef, Directive, EventEmitter, Input, OnDestroy, Output } 
 import { AbstractControl, ControlValueAccessor, ValidationErrors, Validator, Validators } from '@angular/forms';
 import { Subscription, switchMap } from 'rxjs';
 import { PoFieldSize } from '../../../enums/po-field-size.enum';
-import { PoThemeService } from '../../../services';
 import { poLocaleDefault } from '../../../services/po-language/po-language.constant';
 import { PoLanguageService } from '../../../services/po-language/po-language.service';
 import { PoMask } from '../po-input/po-mask';
@@ -11,11 +10,11 @@ import { PoDateService } from './../../../services/po-date/po-date.service';
 import {
   convertIsoToDate,
   convertToBoolean,
-  getDefaultSize,
+  getDefaultSizeFn,
   replaceFormatSeparator,
   setYearFrom0To100,
   validateDateRange,
-  validateSize
+  validateSizeFn
 } from './../../../utils/util';
 import { PoDatepickerRangeLiterals } from './interfaces/po-datepicker-range-literals.interface';
 import { PoDatepickerRange } from './interfaces/po-datepicker-range.interface';
@@ -460,11 +459,11 @@ export abstract class PoDatepickerRangeBaseComponent implements ControlValueAcce
    * @default `medium`
    */
   @Input('p-size') set size(value: string) {
-    this._size = validateSize(value, this.poThemeService, PoFieldSize);
+    this._size = validateSizeFn(value, PoFieldSize);
   }
 
   get size(): string {
-    return this._size ?? getDefaultSize(this.poThemeService, PoFieldSize);
+    return this._size ?? getDefaultSizeFn(PoFieldSize);
   }
 
   /**
@@ -516,7 +515,6 @@ export abstract class PoDatepickerRangeBaseComponent implements ControlValueAcce
   constructor(
     protected changeDetector: ChangeDetectorRef,
     protected poDateService: PoDateService,
-    protected poThemeService: PoThemeService,
     private languageService: PoLanguageService
   ) {
     this.language = languageService.getShortLanguage();

@@ -27,12 +27,11 @@ import { Observable, Subscription } from 'rxjs';
 import { PoDateService } from '../../services/po-date/po-date.service';
 import { PoLanguageService } from '../../services/po-language/po-language.service';
 import { PoNotificationService } from '../../services/po-notification/po-notification.service';
-import { convertToBoolean, getDefaultSize } from '../../utils/util';
+import { convertToBoolean, getDefaultSizeFn } from '../../utils/util';
 import { PoModalAction, PoModalComponent } from '../po-modal';
 import { PoPopupComponent } from '../po-popup/po-popup.component';
 import { PoTableColumnLabel } from './po-table-column-label/po-table-column-label.interface';
 
-import { PoThemeService } from '../../services/po-theme/po-theme.service';
 import { uuid } from '../../utils/util';
 import { AnimaliaIconDictionary, ICONS_DICTIONARY } from '../po-icon';
 import { PoTableRowTemplateArrowDirection } from './enums/po-table-row-template-arrow-direction.enum';
@@ -207,13 +206,12 @@ export class PoTableComponent extends PoTableBaseComponent implements AfterViewI
     differs: IterableDiffers,
     renderer: Renderer2,
     poLanguageService: PoLanguageService,
-    protected poThemeService: PoThemeService,
     private changeDetector: ChangeDetectorRef,
     private decimalPipe: DecimalPipe,
     private defaultService: PoTableService,
     @Optional() @Inject(ICONS_DICTIONARY) value: { [key: string]: string }
   ) {
-    super(poDate, poLanguageService, poThemeService, defaultService);
+    super(poDate, poLanguageService, defaultService);
     this.JSON = JSON;
     this.differ = differs.find([]).create(null);
 
@@ -786,7 +784,7 @@ export class PoTableComponent extends PoTableBaseComponent implements AfterViewI
 
   protected getDefaultSpacing(): PoTableColumnSpacing {
     return this.componentsSize === PoFieldSize.Small ||
-      getDefaultSize(this.poThemeService, PoTableColumnSpacing) === PoTableColumnSpacing.Small
+      getDefaultSizeFn(PoTableColumnSpacing) === PoTableColumnSpacing.Small
       ? PoTableColumnSpacing.ExtraSmall
       : PoTableColumnSpacing.Medium;
   }

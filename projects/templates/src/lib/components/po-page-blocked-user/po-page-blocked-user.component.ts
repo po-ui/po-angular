@@ -1,7 +1,7 @@
 import { Component, OnInit } from '@angular/core';
 import { ActivatedRoute, Router } from '@angular/router';
 
-import { PoLanguageService, poLocaleDefault, PoThemeService } from '@po-ui/ng-components';
+import { PoLanguageService, poLocaleDefault } from '@po-ui/ng-components';
 
 import { isExternalLink } from '../../utils/util';
 
@@ -59,10 +59,9 @@ export class PoPageBlockedUserComponent extends PoPageBlockedUserBaseComponent i
   constructor(
     private activatedRoute: ActivatedRoute,
     private router: Router,
-    protected poThemeService: PoThemeService,
     languageService: PoLanguageService
   ) {
-    super(poThemeService);
+    super();
 
     const language = languageService.getShortLanguage();
 

@@ -1,10 +1,9 @@
 import { Directive, EventEmitter, Input, Output } from '@angular/core';
 
 import { PoFieldSize } from '../../enums/po-field-size.enum';
-import { PoThemeService } from '../../services/po-theme/po-theme.service';
 import { poLocaleDefault } from '../../services/po-language/po-language.constant';
 import { PoLanguageService } from '../../services/po-language/po-language.service';
-import { convertToBoolean, getDefaultSize, validateSize } from '../../utils/util';
+import { convertToBoolean, getDefaultSizeFn, validateSizeFn } from '../../utils/util';
 import { PoListViewAction } from './interfaces/po-list-view-action.interface';
 import { PoListViewLiterals } from './interfaces/po-list-view-literals.interface';
 
@@ -135,11 +134,11 @@ export class PoListViewBaseComponent {
    * @default `medium`
    */
   @Input('p-components-size') set componentsSize(value: string) {
-    this._componentsSize = validateSize(value, this.poThemeService, PoFieldSize);
+    this._componentsSize = validateSizeFn(value, PoFieldSize);
   }
 
   get componentsSize(): string {
-    return this._componentsSize ?? getDefaultSize(this.poThemeService, PoFieldSize);
+    return this._componentsSize ?? getDefaultSizeFn(PoFieldSize);
   }
 
   /**
@@ -277,10 +276,7 @@ export class PoListViewBaseComponent {
     return this._showMoreDisabled;
   }
 
-  constructor(
-    languageService: PoLanguageService,
-    protected poThemeService: PoThemeService
-  ) {
+  constructor(languageService: PoLanguageService) {
     this.language = languageService.getShortLanguage();
   }
 

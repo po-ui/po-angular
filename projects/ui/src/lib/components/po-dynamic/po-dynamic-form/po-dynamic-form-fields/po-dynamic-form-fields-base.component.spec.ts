@@ -8,11 +8,9 @@ import { PoDynamicFieldType } from '../../enums/po-dynamic-field-type.enum';
 import * as PoDynamicUtil from '../../po-dynamic.util';
 import { PoDynamicFormField } from '../interfaces/po-dynamic-form-field.interface';
 import { PoDynamicFormFieldsBaseComponent } from './po-dynamic-form-fields-base.component';
-import { PoThemeService } from 'projects/ui/src/lib/services';
 
 describe('PoDynamicFormFieldsBaseComponent:', () => {
   let component: PoDynamicFormFieldsBaseComponent;
-  let poThemeService: jasmine.SpyObj<PoThemeService>;
   let titleCase;
 
   beforeEach(() => {
@@ -22,7 +20,7 @@ describe('PoDynamicFormFieldsBaseComponent:', () => {
 
     titleCase = TestBed.inject(TitleCasePipe);
 
-    component = new PoDynamicFormFieldsBaseComponent(poThemeService, titleCase);
+    component = new PoDynamicFormFieldsBaseComponent(titleCase);
   });
 
   it('should be created', () => {

@@ -1,7 +1,7 @@
 import { Renderer2, SimpleChange, SimpleChanges } from '@angular/core';
 import { ComponentFixture, fakeAsync, TestBed, tick } from '@angular/core/testing';
 import { By } from '@angular/platform-browser';
-import { PoThemeA11yEnum, PoThemeService } from '../../services';
+import { PoThemeA11yEnum } from '../../services';
 import { PoButtonModule } from '../po-button';
 import { PoIconModule } from '../po-icon';
 import { PoToasterMode } from './enum/po-toaster-mode.enum';
@@ -13,7 +13,6 @@ import { PoToasterComponent } from './po-toaster.component';
 describe('PoToasterComponent', () => {
   let component: PoToasterComponent;
   let fixture: ComponentFixture<PoToasterComponent>;
-  let poThemeServiceMock: jasmine.SpyObj<PoThemeService>;
   let renderer: Renderer2;
 
   const toasterErrorWithAction: PoToaster = {
@@ -83,12 +82,9 @@ describe('PoToasterComponent', () => {
   };
 
   beforeEach(() => {
-    poThemeServiceMock = jasmine.createSpyObj('PoThemeService', ['getA11yLevel', 'getA11yDefaultSize']);
-
     TestBed.configureTestingModule({
       imports: [PoButtonModule, PoIconModule],
-      declarations: [PoToasterComponent],
-      providers: [Renderer2, { provide: PoThemeService, useValue: poThemeServiceMock }]
+      declarations: [PoToasterComponent]
     });
 
     fixture = TestBed.createComponent(PoToasterComponent);
@@ -496,8 +492,18 @@ describe('PoToasterComponent', () => {
     });
 
     describe('p-size-actions', () => {
+      beforeEach(() => {
+        document.documentElement.removeAttribute('data-a11y');
+        localStorage.removeItem('po-default-size');
+      });
+
+      afterEach(() => {
+        document.documentElement.removeAttribute('data-a11y');
+        localStorage.removeItem('po-default-size');
+      });
+
       it('should set property with valid values for accessibility level is AA', () => {
-        poThemeServiceMock.getA11yLevel.and.returnValue(PoThemeA11yEnum.AA);
+        document.documentElement.setAttribute('data-a11y', PoThemeA11yEnum.AA);
 
         component.sizeActions = 'small';
         expect(component.sizeActions).toBe('small');
@@ -507,7 +513,7 @@ describe('PoToasterComponent', () => {
       });
 
       it('should set property with valid values for accessibility level is AAA', () => {
-        poThemeServiceMock.getA11yLevel.and.returnValue(PoThemeA11yEnum.AAA);
+        document.documentElement.setAttribute('data-a11y', PoThemeA11yEnum.AAA);
 
         component.sizeActions = 'small';
         expect(component.sizeActions).toBe('medium');
@@ -517,23 +523,23 @@ describe('PoToasterComponent', () => {
       });
 
       it('should return small when accessibility is AA and getA11yDefaultSize is small', () => {
-        poThemeServiceMock.getA11yLevel.and.returnValue(PoThemeA11yEnum.AA);
-        poThemeServiceMock.getA11yDefaultSize.and.returnValue('small');
+        document.documentElement.setAttribute('data-a11y', PoThemeA11yEnum.AA);
+        localStorage.setItem('po-default-size', 'small');
 
         component['_sizeActions'] = undefined;
         expect(component.sizeActions).toBe('small');
       });
 
       it('should return medium when accessibility is AA and getA11yDefaultSize is medium', () => {
-        poThemeServiceMock.getA11yLevel.and.returnValue(PoThemeA11yEnum.AA);
-        poThemeServiceMock.getA11yDefaultSize.and.returnValue('medium');
+        document.documentElement.setAttribute('data-a11y', PoThemeA11yEnum.AA);
+        localStorage.setItem('po-default-size', 'medium');
 
         component['_sizeActions'] = undefined;
         expect(component.sizeActions).toBe('medium');
       });
 
       it('should return medium when accessibility is AAA, regardless of getA11yDefaultSize', () => {
-        poThemeServiceMock.getA11yLevel.and.returnValue(PoThemeA11yEnum.AAA);
+        document.documentElement.setAttribute('data-a11y', PoThemeA11yEnum.AAA);
         component['_sizeActions'] = undefined;
         expect(component.sizeActions).toBe('medium');
       });

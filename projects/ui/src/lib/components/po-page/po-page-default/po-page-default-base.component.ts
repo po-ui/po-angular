@@ -4,8 +4,7 @@ import { poLocaleDefault } from './../../../services/po-language/po-language.con
 import { PoLanguageService } from './../../../services/po-language/po-language.service';
 
 import { PoFieldSize } from '../../../enums/po-field-size.enum';
-import { PoThemeService } from '../../../services';
-import { getDefaultSize, validateSize } from '../../../utils/util';
+import { getDefaultSizeFn, validateSizeFn } from '../../../utils/util';
 import { PoBreadcrumb } from '../../po-breadcrumb/po-breadcrumb.interface';
 import { PoPageAction } from '../interfaces/po-page-action.interface';
 import { PoPageContentComponent } from '../po-page-content/po-page-content.component';
@@ -93,11 +92,11 @@ export abstract class PoPageDefaultBaseComponent {
    * @default `medium`
    */
   @Input('p-components-size') set componentsSize(value: string) {
-    this._componentsSize = validateSize(value, this.poThemeService, PoFieldSize);
+    this._componentsSize = validateSizeFn(value, PoFieldSize);
   }
 
   get componentsSize(): string {
-    return this._componentsSize ?? getDefaultSize(this.poThemeService, PoFieldSize);
+    return this._componentsSize ?? getDefaultSizeFn(PoFieldSize);
   }
 
   /**
@@ -168,10 +167,7 @@ export abstract class PoPageDefaultBaseComponent {
    */
   @Input('p-subtitle') subtitle: string;
 
-  constructor(
-    languageService: PoLanguageService,
-    protected poThemeService: PoThemeService
-  ) {
+  constructor(languageService: PoLanguageService) {
     this.language = languageService.getShortLanguage();
   }
 

@@ -13,7 +13,6 @@ import {
 
 import { NG_VALIDATORS, NG_VALUE_ACCESSOR } from '@angular/forms';
 
-import { PoThemeService } from '../../../services';
 import { PoRichTextToolbarActions } from './enum/po-rich-text-toolbar-actions.enum';
 import { PoRichTextBaseComponent } from './po-rich-text-base.component';
 import { PoRichTextBodyComponent } from './po-rich-text-body/po-rich-text-body.component';
@@ -84,10 +83,9 @@ export class PoRichTextComponent
 
   constructor(
     private element: ElementRef,
-    richTextService: PoRichTextService,
-    protected poThemeService: PoThemeService
+    richTextService: PoRichTextService
   ) {
-    super(richTextService, poThemeService);
+    super(richTextService);
   }
 
   ngOnInit(): void {

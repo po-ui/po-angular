@@ -10,7 +10,7 @@ import { PoLanguageService } from '../../../services/po-language/po-language.ser
 import * as utilsFunctions from '../../../utils/util';
 import * as ValidatorsFunctions from '../validators';
 
-import { PoThemeA11yEnum, PoThemeService } from '../../../services';
+import { PoThemeA11yEnum } from '../../../services';
 import { PoProgressAction } from '../../po-progress';
 import { PoUploadBaseComponent, poUploadLiteralsDefault } from './po-upload-base.component';
 import { PoUploadFile } from './po-upload-file';
@@ -22,8 +22,8 @@ import { PoUploadService } from './po-upload.service';
   standalone: false
 })
 class PoUploadComponent extends PoUploadBaseComponent {
-  constructor(uploadService: PoUploadService, poThemeService: PoThemeService) {
-    super(poThemeService, uploadService, new PoLanguageService());
+  constructor(uploadService: PoUploadService) {
+    super(uploadService, new PoLanguageService());
   }
 
   sendFeedback() {}
@@ -33,7 +33,6 @@ class PoUploadComponent extends PoUploadBaseComponent {
 describe('PoUploadBaseComponent:', () => {
   let component: PoUploadComponent;
   let fixture: ComponentFixture<PoUploadComponent>;
-  let poThemeServiceMock: jasmine.SpyObj<PoThemeService>;
 
   const fileMock: any = {
     lastModified: 1504558774471,
@@ -45,17 +44,9 @@ describe('PoUploadBaseComponent:', () => {
   };
 
   beforeEach(async () => {
-    poThemeServiceMock = jasmine.createSpyObj('PoThemeService', ['getA11yLevel', 'getA11yDefaultSize']);
-
     await TestBed.configureTestingModule({
       declarations: [PoUploadComponent],
-      providers: [
-        HttpClient,
-        HttpHandler,
-        PoUploadService,
-        PoLanguageService,
-        { provide: PoThemeService, useValue: poThemeServiceMock }
-      ],
+      providers: [HttpClient, HttpHandler, PoUploadService, PoLanguageService],
       imports: [FormsModule]
     }).compileComponents();
 
@@ -833,8 +824,18 @@ describe('PoUploadBaseComponent:', () => {
     });
 
     describe('p-size', () => {
+      beforeEach(() => {
+        document.documentElement.removeAttribute('data-a11y');
+        localStorage.removeItem('po-default-size');
+      });
+
+      afterEach(() => {
+        document.documentElement.removeAttribute('data-a11y');
+        localStorage.removeItem('po-default-size');
+      });
+
       it('should set property with valid values for accessibility level is AA', () => {
-        poThemeServiceMock.getA11yLevel.and.returnValue(PoThemeA11yEnum.AA);
+        document.documentElement.setAttribute('data-a11y', PoThemeA11yEnum.AA);
 
         component.size = 'small';
         expect(component.size).toBe('small');
@@ -844,7 +845,7 @@ describe('PoUploadBaseComponent:', () => {
       });
 
       it('should set property with valid values for accessibility level is AAA', () => {
-        poThemeServiceMock.getA11yLevel.and.returnValue(PoThemeA11yEnum.AAA);
+        document.documentElement.setAttribute('data-a11y', PoThemeA11yEnum.AAA);
 
         component.size = 'small';
         expect(component.size).toBe('medium');
@@ -854,23 +855,23 @@ describe('PoUploadBaseComponent:', () => {
       });
 
       it('should return small when accessibility is AA and getA11yDefaultSize is small', () => {
-        poThemeServiceMock.getA11yLevel.and.returnValue(PoThemeA11yEnum.AA);
-        poThemeServiceMock.getA11yDefaultSize.and.returnValue('small');
+        document.documentElement.setAttribute('data-a11y', PoThemeA11yEnum.AA);
+        localStorage.setItem('po-default-size', 'small');
 
         component['_size'] = undefined;
         expect(component.size).toBe('small');
       });
 
       it('should return medium when accessibility is AA and getA11yDefaultSize is medium', () => {
-        poThemeServiceMock.getA11yLevel.and.returnValue(PoThemeA11yEnum.AA);
-        poThemeServiceMock.getA11yDefaultSize.and.returnValue('medium');
+        document.documentElement.setAttribute('data-a11y', PoThemeA11yEnum.AA);
+        localStorage.setItem('po-default-size', 'medium');
 
         component['_size'] = undefined;
         expect(component.size).toBe('medium');
       });
 
       it('should return medium when accessibility is AAA, regardless of getA11yDefaultSize', () => {
-        poThemeServiceMock.getA11yLevel.and.returnValue(PoThemeA11yEnum.AAA);
+        document.documentElement.setAttribute('data-a11y', PoThemeA11yEnum.AAA);
         component['_size'] = undefined;
         expect(component.size).toBe('medium');
       });

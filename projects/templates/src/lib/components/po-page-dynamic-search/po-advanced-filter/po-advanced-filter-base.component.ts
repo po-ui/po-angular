@@ -6,11 +6,10 @@ import {
   PoLanguageService,
   PoModalAction,
   PoModalComponent,
-  PoThemeService,
   poLocaleDefault
 } from '@po-ui/ng-components';
 
-import { convertToBoolean, getDefaultSize, validateSize } from '../../../utils/util';
+import { convertToBoolean, getDefaultSizeFn, validateSizeFn } from '../../../utils/util';
 import { PoPageDynamicSearchFilters } from '../interfaces/po-page-dynamic-search-filters.interface';
 import { PoAdvancedFilterLiterals } from './po-advanced-filter-literals.interface';
 
@@ -98,11 +97,11 @@ export class PoAdvancedFilterBaseComponent {
    * @default `medium`
    */
   @Input('p-components-size') set componentsSize(value: string) {
-    this._componentsSize = validateSize(value, this.poThemeService);
+    this._componentsSize = validateSizeFn(value);
   }
 
   get componentsSize(): string {
-    return this._componentsSize ?? getDefaultSize(this.poThemeService);
+    return this._componentsSize ?? getDefaultSizeFn();
   }
 
   /**
@@ -137,10 +136,7 @@ export class PoAdvancedFilterBaseComponent {
     return this._literals || poAdvancedFiltersLiteralsDefault[this.language];
   }
 
-  constructor(
-    languageService: PoLanguageService,
-    protected poThemeService: PoThemeService
-  ) {
+  constructor(languageService: PoLanguageService) {
     this.language = languageService.getShortLanguage();
   }
 

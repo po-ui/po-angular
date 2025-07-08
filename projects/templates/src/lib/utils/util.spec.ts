@@ -28,9 +28,15 @@ import {
   valuesFromObject,
   removeDuplicateItems,
   removeDuplicateItemsWithArrayKey,
-  sortArrayOfObjects
+  sortArrayOfObjects,
+  getDefaultSize,
+  getDefaultSizeFn,
+  validateSize,
+  validateSizeFn
 } from './util';
 import { changeChromeProperties } from '../util-test/util-expect.spec';
+import { PoThemeA11yEnum, PoThemeService } from '@po-ui/ng-components';
+import { PoFieldSize } from 'projects/ui/src/lib/enums/po-field-size.enum';
 
 describe('Language:', () => {
   let navigatorLanguageSpy;
@@ -1203,5 +1209,118 @@ describe('Function sortArrayOfObjects:', () => {
       { country: 'china', id: 2 },
       { country: 'japao', id: 1 }
     ]);
+  });
+});
+
+describe('accessibility level: ', () => {
+  describe('getDefaultSize', () => {
+    let poThemeServiceMock: jasmine.SpyObj<PoThemeService>;
+
+    beforeEach(() => {
+      poThemeServiceMock = jasmine.createSpyObj('PoThemeService', ['getA11yLevel', 'getA11yDefaultSize']);
+    });
+
+    beforeEach(() => {
+      document.documentElement.removeAttribute('data-a11y');
+      localStorage.removeItem('po-default-size');
+    });
+
+    afterEach(() => {
+      document.documentElement.removeAttribute('data-a11y');
+      localStorage.removeItem('po-default-size');
+    });
+
+    it('should return `small` when the default component size is `small` in accessibility level AA (Service)', () => {
+      poThemeServiceMock.getA11yLevel.and.returnValue(PoThemeA11yEnum.AA);
+      poThemeServiceMock.getA11yDefaultSize.and.returnValue('small');
+
+      expect(getDefaultSize(poThemeServiceMock)).toBe(PoFieldSize.Small);
+    });
+
+    it('should return `small` when the default component size is `small` in accessibility level AA', () => {
+      document.documentElement.setAttribute('data-a11y', PoThemeA11yEnum.AA);
+      localStorage.setItem('po-default-size', 'small');
+
+      expect(getDefaultSizeFn()).toBe(PoFieldSize.Small);
+    });
+
+    it('should return `medium` if accessibility AA and default size is not set (Service)', () => {
+      poThemeServiceMock.getA11yLevel.and.returnValue(PoThemeA11yEnum.AA);
+
+      expect(getDefaultSize(poThemeServiceMock)).toBe(PoFieldSize.Medium);
+    });
+
+    it('should return `medium` if accessibility AA and default size is not set', () => {
+      document.documentElement.setAttribute('data-a11y', PoThemeA11yEnum.AA);
+      localStorage.removeItem('po-default-size');
+
+      expect(getDefaultSizeFn()).toBe(PoFieldSize.Medium);
+    });
+
+    it('should return `medium` when the accessibility level is AAA (Service)', () => {
+      poThemeServiceMock.getA11yLevel.and.returnValue(PoThemeA11yEnum.AAA);
+
+      expect(getDefaultSize(poThemeServiceMock)).toBe(PoFieldSize.Medium);
+    });
+
+    it('should return `medium` when the accessibility level is AAA', () => {
+      document.documentElement.setAttribute('data-a11y', PoThemeA11yEnum.AAA);
+
+      expect(getDefaultSizeFn()).toBe(PoFieldSize.Medium);
+    });
+  });
+
+  describe('validateSize', () => {
+    let poThemeServiceMock: jasmine.SpyObj<PoThemeService>;
+
+    beforeEach(() => {
+      poThemeServiceMock = jasmine.createSpyObj('PoThemeService', ['getA11yLevel', 'getA11yDefaultSize']);
+    });
+
+    beforeEach(() => {
+      document.documentElement.removeAttribute('data-a11y');
+      localStorage.removeItem('po-default-size');
+    });
+
+    afterEach(() => {
+      document.documentElement.removeAttribute('data-a11y');
+      localStorage.removeItem('po-default-size');
+    });
+
+    it('should return valid values based on accessibility level (Service)', () => {
+      poThemeServiceMock.getA11yLevel.and.returnValue(PoThemeA11yEnum.AA);
+
+      expect(validateSize(PoFieldSize.Small, poThemeServiceMock)).toBe(PoFieldSize.Small);
+      expect(validateSize(PoFieldSize.Medium, poThemeServiceMock)).toBe(PoFieldSize.Medium);
+    });
+
+    it('should return valid values based on accessibility level', () => {
+      document.documentElement.setAttribute('data-a11y', PoThemeA11yEnum.AA);
+
+      expect(validateSizeFn(PoFieldSize.Small)).toBe(PoFieldSize.Small);
+      expect(validateSizeFn(PoFieldSize.Medium)).toBe(PoFieldSize.Medium);
+    });
+
+    it('should return `medium` when the value is `small` but the accessibility level is not AA (Service)', () => {
+      poThemeServiceMock.getA11yLevel.and.returnValue(PoThemeA11yEnum.AAA);
+
+      expect(validateSize(PoFieldSize.Small, poThemeServiceMock)).toBe(PoFieldSize.Medium);
+    });
+
+    it('should return `medium` when the value is `small` but the accessibility level is not AA', () => {
+      document.documentElement.setAttribute('data-a11y', PoThemeA11yEnum.AAA);
+
+      expect(validateSizeFn(PoFieldSize.Small)).toBe(PoFieldSize.Medium);
+    });
+
+    it('should return the default size when an invalid value is provided (Service)', () => {
+      poThemeServiceMock.getA11yLevel.and.returnValue(PoThemeA11yEnum.AA);
+
+      expect(validateSize('xxg', poThemeServiceMock)).toBe(PoFieldSize.Medium);
+    });
+
+    it('should return the default size when an invalid value is provided', () => {
+      expect(validateSizeFn('xxg')).toBe(PoFieldSize.Medium);
+    });
   });
 });

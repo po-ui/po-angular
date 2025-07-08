@@ -3,11 +3,10 @@ import { AbstractControl, ControlValueAccessor, Validator, Validators } from '@a
 
 import { poLocaleDefault } from '../../../services/po-language/po-language.constant';
 import { PoLanguageService } from '../../../services/po-language/po-language.service';
-import { convertToBoolean, getDefaultSize, isTypeof, validateSize, validValue } from '../../../utils/util';
+import { convertToBoolean, getDefaultSizeFn, isTypeof, validateSizeFn, validValue } from '../../../utils/util';
 import { requiredFailed } from '../validators';
 
 import { PoFieldSize } from '../../../enums/po-field-size.enum';
-import { PoThemeService } from '../../../services';
 import { PoComboFilterMode } from './enums/po-combo-filter-mode.enum';
 import { PoComboFilter } from './interfaces/po-combo-filter.interface';
 import { PoComboGroup } from './interfaces/po-combo-group.interface';
@@ -578,11 +577,11 @@ export abstract class PoComboBaseComponent implements ControlValueAccessor, OnIn
    * @default `medium`
    */
   @Input('p-size') set size(value: string) {
-    this._size = validateSize(value, this.poThemeService, PoFieldSize);
+    this._size = validateSizeFn(value, PoFieldSize);
   }
 
   get size(): string {
-    return this._size ?? getDefaultSize(this.poThemeService, PoFieldSize);
+    return this._size ?? getDefaultSizeFn(PoFieldSize);
   }
 
   /**
@@ -773,8 +772,7 @@ export abstract class PoComboBaseComponent implements ControlValueAccessor, OnIn
 
   constructor(
     languageService: PoLanguageService,
-    protected changeDetector: ChangeDetectorRef,
-    protected poThemeService: PoThemeService
+    protected changeDetector: ChangeDetectorRef
   ) {
     this.language = languageService.getShortLanguage();
   }

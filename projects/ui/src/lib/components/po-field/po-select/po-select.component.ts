@@ -18,17 +18,16 @@ import { AbstractControl, NG_VALIDATORS, NG_VALUE_ACCESSOR } from '@angular/form
 
 import {
   convertToBoolean,
-  getDefaultSize,
+  getDefaultSizeFn,
   isSafari,
   removeDuplicatedOptions,
   removeUndefinedAndNullOptions,
   uuid,
-  validateSize,
+  validateSizeFn,
   validValue
 } from '../../../utils/util';
 
 import { PoFieldSize } from '../../../enums/po-field-size.enum';
-import { PoThemeService } from '../../../services';
 import { AnimaliaIconDictionary, ICONS_DICTIONARY } from '../../po-icon';
 import { PoFieldValidateModel } from '../po-field-validate.model';
 import { PoSelectOptionGroup } from './po-select-option-group.interface';
@@ -316,11 +315,11 @@ export class PoSelectComponent extends PoFieldValidateModel<any> implements OnCh
    * @default `medium`
    */
   @Input('p-size') set size(value: string) {
-    this._size = validateSize(value, this.poThemeService, PoFieldSize);
+    this._size = validateSizeFn(value, PoFieldSize);
   }
 
   get size(): string {
-    return this._size ?? getDefaultSize(this.poThemeService, PoFieldSize);
+    return this._size ?? getDefaultSizeFn(PoFieldSize);
   }
 
   /* istanbul ignore next */
@@ -328,8 +327,7 @@ export class PoSelectComponent extends PoFieldValidateModel<any> implements OnCh
     @Optional() @Inject(ICONS_DICTIONARY) value: { [key: string]: string },
     changeDetector: ChangeDetectorRef,
     private el: ElementRef,
-    public renderer: Renderer2,
-    protected poThemeService: PoThemeService
+    public renderer: Renderer2
   ) {
     super(changeDetector);
 

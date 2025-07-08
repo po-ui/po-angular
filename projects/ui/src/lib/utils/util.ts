@@ -38,10 +38,19 @@ export function getBrowserLanguage(): string {
 }
 
 /**
+ * @deprecated use getDefaultSizeFn
+ *
  * Retorna o tamanho padrão dos componentes conforme o nível de acessibilidade.
  */
 export function getDefaultSize<T>(poThemeService: PoThemeService, sizeEnum: T): T[keyof T] {
   return poThemeService.getA11yDefaultSize() === 'small' ? sizeEnum['Small'] : sizeEnum['Medium'];
+}
+
+/**
+ * Retorna o tamanho padrão dos componentes conforme o nível de acessibilidade.
+ */
+export function getDefaultSizeFn<T>(sizeEnum: T): T[keyof T] {
+  return getA11yDefaultSize() === 'small' ? sizeEnum['Small'] : sizeEnum['Medium'];
 }
 
 /**
@@ -673,6 +682,8 @@ export function sortArrayOfObjects(items, key, isAscendingOrder) {
 }
 
 /**
+ * @deprecated use validateSizeFn
+ *
  * Valida e retorna um tamanho permitido para os componentes, considerando a acessibilidade.
  */
 export function validateSize<T>(value: string, poThemeService: PoThemeService, sizeEnum: T): T[keyof T] {
@@ -686,4 +697,43 @@ export function validateSize<T>(value: string, poThemeService: PoThemeService, s
   }
 
   return getDefaultSize(poThemeService, sizeEnum);
+}
+
+/**
+ * Valida e retorna um tamanho permitido para os componentes, considerando a acessibilidade.
+ */
+export function validateSizeFn<T>(value: string, sizeEnum: T): T[keyof T] {
+  const validSizes = Object.values(sizeEnum) as Array<string>;
+
+  if (value && validSizes.includes(value)) {
+    if (value === sizeEnum['Small'] && getA11yLevel() === PoThemeA11yEnum.AAA) {
+      return sizeEnum['Medium'];
+    }
+    return value as T[keyof T];
+  }
+
+  return getDefaultSizeFn(sizeEnum);
+}
+
+/**
+ * Retorna a preferência global de tamanho dos componentes.
+ *
+ * @returns `'small'` ou `'medium'`.
+ */
+export function getA11yDefaultSize(): string {
+  const defaultSize = localStorage.getItem('po-default-size');
+  const a11yLevel = document.documentElement.getAttribute('data-a11y');
+
+  return defaultSize === 'small' && a11yLevel === 'AA' ? 'small' : 'medium';
+}
+
+/**
+ * Retorna o nível de acessibilidade configurado no tema.
+ * Se não estiver configurado, retorna `AAA` como padrão.
+ * @returns {PoThemeA11yEnum} O nível de acessibilidade, que pode ser `AA` ou `AAA`.
+ */
+export function getA11yLevel(): PoThemeA11yEnum {
+  const a11yLevel = document.documentElement.getAttribute('data-a11y');
+
+  return a11yLevel === 'AA' ? PoThemeA11yEnum.AA : PoThemeA11yEnum.AAA;
 }

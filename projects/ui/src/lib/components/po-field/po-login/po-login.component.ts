@@ -3,7 +3,6 @@ import { AbstractControl, NG_VALIDATORS, NG_VALUE_ACCESSOR } from '@angular/form
 
 import { convertToBoolean, uuid } from '../../../utils/util';
 
-import { PoThemeService } from '../../../services';
 import { PoInputGeneric } from '../po-input-generic/po-input-generic';
 
 /* istanbul ignore next */
@@ -71,12 +70,8 @@ export class PoLoginComponent extends PoInputGeneric {
   }
 
   /* istanbul ignore next */
-  constructor(
-    el: ElementRef,
-    cd: ChangeDetectorRef,
-    protected poThemeService: PoThemeService
-  ) {
-    super(el, cd, poThemeService);
+  constructor(el: ElementRef, cd: ChangeDetectorRef) {
+    super(el, cd);
   }
 
   extraValidation(c: AbstractControl): { [key: string]: any } {

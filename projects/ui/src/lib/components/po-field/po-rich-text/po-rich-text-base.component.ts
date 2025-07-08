@@ -2,8 +2,7 @@ import { Directive, EventEmitter, Input, Output } from '@angular/core';
 import { AbstractControl, ControlValueAccessor, Validator } from '@angular/forms';
 
 import { PoFieldSize } from '../../../enums/po-field-size.enum';
-import { PoThemeService } from '../../../services';
-import { convertToBoolean, getDefaultSize, validateSize } from '../../../utils/util';
+import { convertToBoolean, getDefaultSizeFn, validateSizeFn } from '../../../utils/util';
 import { requiredFailed } from '../validators';
 import { PoRichTextToolbarActions } from './enum/po-rich-text-toolbar-actions.enum';
 import { PoRichTextService } from './po-rich-text.service';
@@ -294,11 +293,11 @@ export abstract class PoRichTextBaseComponent implements ControlValueAccessor, V
    * @default `medium`
    */
   @Input('p-size') set size(value: string) {
-    this._size = validateSize(value, this.poThemeService, PoFieldSize);
+    this._size = validateSizeFn(value, PoFieldSize);
   }
 
   get size(): string {
-    return this._size ?? getDefaultSize(this.poThemeService, PoFieldSize);
+    return this._size ?? getDefaultSizeFn(PoFieldSize);
   }
 
   /**
@@ -309,10 +308,7 @@ export abstract class PoRichTextBaseComponent implements ControlValueAccessor, V
    */
   @Input('p-show-required') showRequired: boolean = false;
 
-  constructor(
-    private richTextService: PoRichTextService,
-    protected poThemeService: PoThemeService
-  ) {}
+  constructor(private richTextService: PoRichTextService) {}
 
   // Função implementada do ControlValueAccessor
   // Usada para interceptar as mudanças e não atualizar automaticamente o Model

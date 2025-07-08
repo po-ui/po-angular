@@ -1,9 +1,8 @@
 import { Directive, Input } from '@angular/core';
 
-import { convertToBoolean, getDefaultSize, validateSize } from './../../utils/util';
+import { convertToBoolean, getDefaultSizeFn, validateSizeFn } from './../../utils/util';
 
 import { PoFieldSize } from '../../enums/po-field-size.enum';
-import { PoThemeService } from '../../services/po-theme/po-theme.service';
 import { PoDropdownAction } from './po-dropdown-action.interface';
 
 /**
@@ -119,12 +118,10 @@ export class PoDropdownBaseComponent {
    * @default `medium`
    */
   @Input('p-size') set size(value: string) {
-    this._size = validateSize(value, this.poThemeService, PoFieldSize);
+    this._size = validateSizeFn(value, PoFieldSize);
   }
 
   get size(): string {
-    return this._size ?? getDefaultSize(this.poThemeService, PoFieldSize);
+    return this._size ?? getDefaultSizeFn(PoFieldSize);
   }
-
-  constructor(protected poThemeService: PoThemeService) {}
 }
