@@ -945,7 +945,7 @@
         class="po-table-single-action-content po-field-icon"
         [p-icon]="firstAction.icon"
       ></po-icon>
-      {{ firstAction.label }}
+      <span *ngIf="firstAction.label">{{ firstAction.label }}</span>
     </div>
   </td>
 
