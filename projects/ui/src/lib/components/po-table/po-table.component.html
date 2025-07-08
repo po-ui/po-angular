@@ -940,12 +940,8 @@
       [class.po-table-action-disabled]="firstAction.disabled ? validateTableAction(row, firstAction) : false"
       (click)="executeTableAction(row, firstAction)"
     >
-      <po-icon
-        *ngIf="firstAction.icon"
-        class="po-table-single-action-content po-field-icon"
-        [p-icon]="firstAction.icon"
-      ></po-icon>
-      {{ firstAction.label }}
+      <po-icon *ngIf="firstAction.icon" class="po-table-single-action-content" [p-icon]="firstAction.icon"></po-icon>
+      <span *ngIf="firstAction.label">{{ firstAction.label }}</span>
     </div>
   </td>
 
