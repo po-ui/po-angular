@@ -99,6 +99,8 @@
           type="button"
           class="po-calendar-footer-today-button"
           (click)="onSelectDate(today)"
+          (keydown.enter)="onSelectDate(today)"
+          (keydown.space)="onSelectDate(today)"
           [disabled]="isTodayUnavailable()"
         >
           {{ displayToday }}
