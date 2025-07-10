@@ -25,13 +25,12 @@ import {
 import { PoControlPositionService } from './../../../services/po-control-position/po-control-position.service';
 
 import { isObservable, of, Subscription, switchMap } from 'rxjs';
+import { PoThemeService } from '../../../services';
 import { PoLanguageService } from '../../../services/po-language/po-language.service';
 import { PoButtonComponent } from '../../po-button/po-button.component';
 import { PoCalendarComponent } from '../../po-calendar/po-calendar.component';
-import { PoFieldSize } from '../../../enums/po-field-size.enum';
 import { PoDatepickerBaseComponent } from './po-datepicker-base.component';
 import { PoDatepickerLiterals } from './po-datepicker.literals';
-import { PoThemeService } from '../../../services';
 
 const poCalendarContentOffset = 8;
 const poCalendarPositionDefault = 'bottom-left';
@@ -166,6 +165,17 @@ export class PoDatepickerComponent extends PoDatepickerBaseComponent implements 
       return;
     }
 
+    if ($event.key === 'Escape' && this.visible) {
+      this.togglePicker(false);
+
+      $event.preventDefault();
+      $event.stopPropagation();
+    }
+
+    if ($event.key === 'Tab' && $event.shiftKey && $event.target instanceof HTMLInputElement && this.visible) {
+      this.togglePicker();
+    }
+
     this.objMask.keydown($event);
   }
 
@@ -206,7 +216,7 @@ export class PoDatepickerComponent extends PoDatepickerBaseComponent implements 
    * ```
    */
   focus(): void {
-    if (!this.disabled) {
+    if (!this.disabled && this.inputEl?.nativeElement) {
       this.inputEl.nativeElement.focus();
     }
   }
@@ -215,8 +225,8 @@ export class PoDatepickerComponent extends PoDatepickerBaseComponent implements 
     return this.isAdditionalHelpEventTriggered() ? null : this.additionalHelpTooltip;
   }
 
-  togglePicker() {
-    if (this.disabled || this.readonly) {
+  togglePicker(focusInput = true) {
+    if (this.disabled || this.readonly || !this.iconDatepicker?.buttonElement?.nativeElement) {
       return;
     }
 
@@ -224,9 +234,15 @@ export class PoDatepickerComponent extends PoDatepickerBaseComponent implements 
       this.setCalendarPosition();
       this.initializeListeners();
       this.visible = true;
+
+      this.renderer.setAttribute(this.inputEl.nativeElement, 'aria-expanded', 'true');
+      this.renderer.setAttribute(this.iconDatepicker.buttonElement.nativeElement, 'aria-expanded', 'true');
     } else {
       this.inputEl.nativeElement.disabled = false;
-      this.closeCalendar();
+      this.closeCalendar(focusInput);
+
+      this.renderer.removeAttribute(this.inputEl.nativeElement, 'aria-expanded');
+      this.renderer.removeAttribute(this.iconDatepicker.buttonElement.nativeElement, 'aria-expanded');
     }
   }
 
@@ -239,7 +255,7 @@ export class PoDatepickerComponent extends PoDatepickerBaseComponent implements 
     this.inputEl.nativeElement.value = this.formatToDate(this.date);
     this.controlModel(this.date);
     this.controlChangeEmitter();
-    this.closeCalendar();
+    this.togglePicker();
   }
 
   // Esconde Picker quando for clicado fora
@@ -327,7 +343,13 @@ export class PoDatepickerComponent extends PoDatepickerBaseComponent implements 
 
   onKeyPress(event: any) {
     if (isKeyCodeEnter(event) || isKeyCodeSpace(event)) {
-      this.togglePicker();
+      this.togglePicker(false);
+    }
+
+    if (event.key === 'Tab' && event.shiftKey && !this.visible) {
+      this.focus();
+      event.preventDefault();
+      event.stopPropagation();
     }
   }
 
@@ -472,10 +494,14 @@ export class PoDatepickerComponent extends PoDatepickerBaseComponent implements 
     return isMobile();
   }
 
-  private closeCalendar() {
+  private closeCalendar(focusInput = true) {
     this.visible = false;
     this.removeListeners();
     this.setDialogPickerStyleDisplay('none');
+
+    if (!this.verifyMobile() && focusInput) {
+      this.focus();
+    }
   }
 
   private controlChangeEmitter() {
@@ -555,5 +581,45 @@ export class PoDatepickerComponent extends PoDatepickerBaseComponent implements 
       );
       this.controlPosition.adjustPosition(poCalendarPositionDefault);
     }
+  }
+
+  handleCleanKeyboardTab(event: KeyboardEvent) {
+    if (this.shouldHandleTab(event)) {
+      this.focusCalendar(event);
+    }
+  }
+
+  // Determina se o tab deve abrir o listbox.
+  private shouldHandleTab(event: KeyboardEvent): boolean {
+    return this.visible && !event.shiftKey;
+  }
+
+  private focusCalendar(event: KeyboardEvent): void {
+    if (!this.dialogPicker?.nativeElement) {
+      return;
+    }
+
+    const focusableElements = ['button:not([disabled])', '[tabindex]:not([tabindex="-1"])'].join(', ');
+    const focusableElement = this.dialogPicker.nativeElement.querySelector(focusableElements);
+
+    if (focusableElement) {
+      event.preventDefault();
+      focusableElement?.focus();
+    } else {
+      this.togglePicker(false);
+    }
+  }
+
+  onCalendarKeyDown(event: KeyboardEvent): void {
+    const keysToHandle = new Set(['Tab', 'Escape']);
+
+    if (!keysToHandle.has(event.key)) {
+      return;
+    }
+
+    this.togglePicker();
+
+    event.preventDefault();
+    event.stopPropagation();
   }
 }

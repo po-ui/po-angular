@@ -149,7 +149,6 @@ export class PoPageSlideComponent extends PoPageSlideBaseComponent {
     // O foco não pode sair da página.
     this.focusEvent = (event: Event) => {
       const isCdkOverlayListbox = event.target['closest']('.cdk-overlay-container') !== null;
-
       if (
         !this.pageContent.nativeElement.contains(event.target) &&
         !isCdkOverlayListbox &&
