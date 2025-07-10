@@ -262,8 +262,7 @@ export abstract class PoMultiselectBaseComponent implements ControlValueAccessor
    * página e não dentro do componente. Essa opção pode ser necessária em cenários com containers que possuem scroll ou
    * overflow escondido, garantindo o posicionamento correto de ambos próximo ao elemento.
    *
-   * > O uso dessa propriedade pode interferir na sequência de tabulação da página. Quando utilizado com
-   * `p-additional-help-tooltip`, leitores de tela como o NVDA podem não ler o conteúdo do tooltip.
+   * > Quando utilizado com `p-additional-help-tooltip`, leitores de tela como o NVDA podem não ler o conteúdo do tooltip.
    *
    * @default `false`
    */
