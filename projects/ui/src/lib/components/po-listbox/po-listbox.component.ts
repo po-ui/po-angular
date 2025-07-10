@@ -179,7 +179,7 @@ export class PoListBoxComponent extends PoListBoxBaseComponent implements AfterV
   }
 
   setFocus() {
-    this.listboxItemList.nativeElement.focus();
+    this.listboxItemList?.nativeElement?.focus();
   }
 
   protected checkInfiniteScroll(): void {

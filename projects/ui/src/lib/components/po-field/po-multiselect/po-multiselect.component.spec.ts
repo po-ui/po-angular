@@ -322,6 +322,19 @@ describe('PoMultiselectComponent:', () => {
     expect(component.controlDropdownVisibility).toHaveBeenCalledWith(true);
   });
 
+  it('should call focusOnFirstItem when pressed Tab with list box open', () => {
+    const event = { preventDefault: jasmine.createSpy(), keyCode: 9 };
+    component.visibleTags = [];
+    component.appendBox = true;
+    component.dropdownOpen = true;
+
+    spyOn(component, 'focusOnFirstItem');
+
+    component.onKeyDown(event);
+
+    expect(component.focusOnFirstItem).toHaveBeenCalled();
+  });
+
   it('should call focus and controlDropdownVisibility(true) when keyCode enter is pressed', () => {
     const event = { preventDefault: jasmine.createSpy(), keyCode: 13 };
     component.visibleTags = [];
@@ -817,13 +830,31 @@ describe('PoMultiselectComponent:', () => {
       expect(closeSpy).toHaveBeenCalled();
     });
 
-    it('onKeyDownDropdown: should control dropdown visibility', () => {
+    it('onKeyDownDropdown: should control dropdown visibility', fakeAsync(() => {
       const event = new KeyboardEvent('keydown', { key: 'Escape' });
       const controlDropdownVisibilitySpy = spyOn(component, 'controlDropdownVisibility');
+      const inputFocus = spyOn(component.inputElement.nativeElement, 'focus');
 
       component.onKeyDownDropdown(event, 0);
 
       expect(controlDropdownVisibilitySpy).toHaveBeenCalledWith(false);
+      tick(60);
+
+      expect(inputFocus).toHaveBeenCalled();
+    }));
+
+    it('onKeyDownDropdown: should focus on the input', () => {
+      const event = {
+        key: 'Tab',
+        target: { className: 'po-listbox-item-type-check' },
+        preventDefault: () => {}
+      } as any;
+
+      const inputFocus = spyOn(component.inputElement.nativeElement, 'focus');
+
+      component.onKeyDownDropdown(event, 0);
+
+      expect(inputFocus).toHaveBeenCalled();
     });
 
     it('onKeyDownDropdown: should do nothing for non-Escape key', () => {
@@ -1033,7 +1064,7 @@ describe('PoMultiselectComponent:', () => {
 
     it(`changeSearch: should call 'searchByLabel' with 'event.value', 'options' and 'filterMode' if 'event.value' is 'valid'
       and call 'adjustContainerPosition'.`, fakeAsync(() => {
-      const event = { value: '1' };
+      const event = { value: '1', event: { keyCode: '1' } };
       const searchByLabelSpy = spyOn(component, 'searchByLabel');
       const adjustContainerPositionSpy = spyOn(component, <any>'adjustContainerPosition');
 
@@ -1046,7 +1077,7 @@ describe('PoMultiselectComponent:', () => {
     }));
 
     it('changeSearch: should call `filterSubject.next` with `event.value`', () => {
-      const event = { value: 'abc' };
+      const event = { value: 'abc', event: { keyCode: '1' } };
       component.filterService = <any>{};
 
       spyOn(component.filterSubject, 'next');
@@ -1056,9 +1087,22 @@ describe('PoMultiselectComponent:', () => {
       expect(component.filterSubject.next).toHaveBeenCalledWith(event.value);
     });
 
+    it('changeSearch: should call focusOnFirstItem', () => {
+      const event = { value: 'abc', event: { keyCode: 40 } };
+      component.filterService = <any>{};
+
+      spyOn(component.filterSubject, 'next');
+      spyOn(component, 'focusOnFirstItem');
+
+      component.changeSearch(event);
+
+      expect(component.filterSubject.next).toHaveBeenCalledWith(event.value);
+      expect(component.focusOnFirstItem).toHaveBeenCalled();
+    });
+
     it(`changeSearch: should call 'setVisibleOptionsDropdown' with 'options' if 'event.value' is 'invalid'
       and call 'adjustContainerPosition'.`, fakeAsync(() => {
-      const event = {};
+      const event = { event: { keyCode: '1' } };
       const setVisibleOptionsDropdownSpy = spyOn(component, 'setVisibleOptionsDropdown');
       const adjustContainerPositionSpy = spyOn(component, <any>'adjustContainerPosition');
 
@@ -1138,6 +1182,58 @@ describe('PoMultiselectComponent:', () => {
       expect(closeSpy).toHaveBeenCalled();
       expect(listenSpy).toHaveBeenCalled();
       expect(addEventListenerSpy).toHaveBeenCalled();
+    });
+
+    it('should focus on the first item if items exist', () => {
+      component.dropdown = {
+        listbox: {
+          element: {
+            nativeElement: document.createElement('div')
+          }
+        }
+      };
+
+      component.inputElement = {
+        nativeElement: document.createElement('input')
+      };
+
+      const firstItem = document.createElement('div');
+      firstItem.classList.add('po-listbox-item-type-check');
+      spyOn(firstItem, 'focus');
+
+      const secondItem = document.createElement('div');
+      secondItem.classList.add('po-listbox-item-type-check');
+
+      component.dropdown.listbox.element.nativeElement.appendChild(firstItem);
+      component.dropdown.listbox.element.nativeElement.appendChild(secondItem);
+
+      component.focusOnFirstItem();
+
+      expect(firstItem.focus).toHaveBeenCalled();
+    });
+
+    it('should close and focus input if no items exist', () => {
+      component.dropdown = {
+        listbox: {
+          element: {
+            nativeElement: document.createElement('div')
+          }
+        }
+      };
+
+      component.inputElement = {
+        nativeElement: document.createElement('input')
+      };
+
+      const inputFocusSpy = spyOn(component.inputElement.nativeElement, 'focus');
+      const closeSpy = spyOn(component, <any>'close');
+
+      component.dropdown.listbox.element.nativeElement.innerHTML = '';
+
+      component.focusOnFirstItem();
+
+      expect(closeSpy).toHaveBeenCalled();
+      expect(inputFocusSpy).toHaveBeenCalled();
     });
 
     it('onScroll: should call `adjustContainerPosition`.', () => {

@@ -356,7 +356,9 @@ export class PoMultiselectComponent
     }
     this.focusOnTag = false;
 
-    if (event.keyCode === PoKeyCodeEnum.tab) {
+    if (event.keyCode === PoKeyCodeEnum.tab && this.appendBox && this.dropdownOpen) {
+      event.preventDefault();
+      this.focusOnFirstItem();
       return;
     }
 
@@ -366,7 +368,7 @@ export class PoMultiselectComponent
       return;
     }
 
-    if (event.keyCode === PoKeyCodeEnum.arrowDown && this.visibleTags.length > 0) {
+    if (event.keyCode === PoKeyCodeEnum.arrowDown) {
       event.preventDefault();
       this.controlDropdownVisibility(true);
       this.dropdown?.listbox?.setFocus();
@@ -409,10 +411,17 @@ export class PoMultiselectComponent
   }
 
   onKeyDownDropdown(event: KeyboardEvent, index: number) {
+    if (event.key === 'Tab' && event.target['className'].includes('po-listbox-item-type-check')) {
+      event.preventDefault();
+      this.inputElement.nativeElement.focus();
+    }
+
     if (event.key === 'Escape') {
       event.preventDefault();
       this.controlDropdownVisibility(false);
-      this.inputElement.nativeElement.focus();
+      setTimeout(() => {
+        this.inputElement.nativeElement.focus();
+      }, 50);
     }
   }
 
@@ -441,6 +450,10 @@ export class PoMultiselectComponent
   }
 
   changeSearch(event) {
+    if (event.event.keyCode === PoKeyCodeEnum.arrowDown || event.event.keyCode === PoKeyCodeEnum.tab) {
+      this.focusOnFirstItem();
+    }
+
     if (event && event[this.fieldValue] !== undefined) {
       if (this.filterService) {
         this.filterSubject.next(event[this.fieldValue]);
@@ -453,6 +466,17 @@ export class PoMultiselectComponent
 
     // timeout necessário para reposicionar corretamente quando dropdown estiver pra cima do input e realizar busca no input
     setTimeout(() => this.adjustContainerPosition());
+  }
+
+  focusOnFirstItem() {
+    const items = this.dropdown.listbox.element.nativeElement.querySelectorAll('.po-listbox-item-type-check');
+    const item = items.length > 0 ? (items[0] as HTMLElement) : null;
+    if (item) {
+      item.focus();
+    } else {
+      this.close();
+      this.inputElement.nativeElement.focus();
+    }
   }
 
   closeTag(value, event) {
@@ -563,9 +587,10 @@ export class PoMultiselectComponent
 
   private close(): void {
     this.dropdownIcon = 'ICON_ARROW_DOWN';
+    this.dropdown?.listbox?.searchElement?.resetKeys();
     this.dropdownOpen = false;
 
-    this.dropdown.controlVisibility(false);
+    this.dropdown?.controlVisibility(false);
     this.setVisibleOptionsDropdown(this.options);
 
     this.removeListeners();
