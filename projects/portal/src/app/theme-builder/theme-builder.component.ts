@@ -1007,42 +1007,37 @@ export class ThemeBuilderComponent implements AfterViewInit, OnInit {
 
     this.datepickerForm.reset();
     Object.keys(this.formPropertyDictDatepicker).forEach((fieldName: string) => {
-      this.datepickerComponent.inputEl.nativeElement.style.setProperty(
-        this.formPropertyDictDatepicker[fieldName],
-        null
-      );
+      this.datepickerComponent
+        .inputEl()
+        .nativeElement.style.setProperty(this.formPropertyDictDatepicker[fieldName], null);
       if (this.itemSelected === 'datepicker') {
-        this.datepickerDefault.inputEl.nativeElement.style.setProperty(
-          this.formPropertyDictDatepicker[fieldName],
-          null
-        );
-        this.datepickerHover.inputEl.nativeElement.style.setProperty(this.formPropertyDictDatepicker[fieldName], null);
-        this.datepickerDisabled.inputEl.nativeElement.style.setProperty(
-          this.formPropertyDictDatepicker[fieldName],
-          null
-        );
+        this.datepickerDefault
+          .inputEl()
+          .nativeElement.style.setProperty(this.formPropertyDictDatepicker[fieldName], null);
+        this.datepickerHover
+          .inputEl()
+          .nativeElement.style.setProperty(this.formPropertyDictDatepicker[fieldName], null);
+        this.datepickerDisabled
+          .inputEl()
+          .nativeElement.style.setProperty(this.formPropertyDictDatepicker[fieldName], null);
       }
     });
 
     this.datepickerButtonForm.reset();
     Object.keys(this.formPropertyDictDatepickerButton).forEach((fieldName: string) => {
-      this.datepickerComponent.iconDatepicker.buttonElement.nativeElement.style.setProperty(
-        this.formPropertyDictDatepickerButton[fieldName],
-        null
-      );
+      this.datepickerComponent
+        .iconDatepicker()
+        .buttonElement.nativeElement.style.setProperty(this.formPropertyDictDatepickerButton[fieldName], null);
       if (this.itemSelected === 'datepicker') {
-        this.datepickerDefault.iconDatepicker.buttonElement.nativeElement.style.setProperty(
-          this.formPropertyDictDatepickerButton[fieldName],
-          null
-        );
-        this.datepickerHover.iconDatepicker.buttonElement.nativeElement.style.setProperty(
-          this.formPropertyDictDatepickerButton[fieldName],
-          null
-        );
-        this.datepickerDisabled.iconDatepicker.buttonElement.nativeElement.style.setProperty(
-          this.formPropertyDictDatepickerButton[fieldName],
-          null
-        );
+        this.datepickerDefault
+          .iconDatepicker()
+          .buttonElement.nativeElement.style.setProperty(this.formPropertyDictDatepickerButton[fieldName], null);
+        this.datepickerHover
+          .iconDatepicker()
+          .buttonElement.nativeElement.style.setProperty(this.formPropertyDictDatepickerButton[fieldName], null);
+        this.datepickerDisabled
+          .iconDatepicker()
+          .buttonElement.nativeElement.style.setProperty(this.formPropertyDictDatepickerButton[fieldName], null);
       }
     });
 
@@ -1403,7 +1398,7 @@ export class ThemeBuilderComponent implements AfterViewInit, OnInit {
       this.setColorsBackAndText(this.textareaDefault.nativeElement, this.ratioTextarea);
     }
     if (item === 'datepicker') {
-      this.setColorsBackAndText(this.datepickerDefault.inputEl.nativeElement, this.ratioDatepicker);
+      this.setColorsBackAndText(this.datepickerDefault.inputEl().nativeElement, this.ratioDatepicker);
     }
     if (item === 'tooltip') {
       const tooltip = this.tooltip.buttonElement.nativeElement.nextElementSibling;
@@ -2024,22 +2019,18 @@ export class ThemeBuilderComponent implements AfterViewInit, OnInit {
           value = /color/i.test(fieldName) ? changes[fieldName] : `var(--${changes[fieldName]})`;
         }
         if (changes[fieldName]) {
-          this.datepickerComponent.inputEl.nativeElement.style.setProperty(
-            this.formPropertyDictDatepicker[fieldName],
-            value
-          );
-          this.datepickerDefault.inputEl.nativeElement.style.setProperty(
-            this.formPropertyDictDatepicker[fieldName],
-            value
-          );
-          this.datepickerHover.inputEl.nativeElement.style.setProperty(
-            this.formPropertyDictDatepicker[fieldName],
-            value
-          );
-          this.datepickerDisabled.inputEl.nativeElement.style.setProperty(
-            this.formPropertyDictDatepicker[fieldName],
-            value
-          );
+          this.datepickerComponent
+            .inputEl()
+            .nativeElement.style.setProperty(this.formPropertyDictDatepicker[fieldName], value);
+          this.datepickerDefault
+            .inputEl()
+            .nativeElement.style.setProperty(this.formPropertyDictDatepicker[fieldName], value);
+          this.datepickerHover
+            .inputEl()
+            .nativeElement.style.setProperty(this.formPropertyDictDatepicker[fieldName], value);
+          this.datepickerDisabled
+            .inputEl()
+            .nativeElement.style.setProperty(this.formPropertyDictDatepicker[fieldName], value);
 
           this.resultDatepicker['nativeElement'].innerHTML +=
             `${this.formPropertyDictDatepicker[fieldName]}: ${value};<br>`;
@@ -2070,22 +2061,18 @@ export class ThemeBuilderComponent implements AfterViewInit, OnInit {
           value = /color/i.test(fieldName) ? changes[fieldName] : `var(--${changes[fieldName]})`;
         }
         if (changes[fieldName]) {
-          this.datepickerComponent.iconDatepicker.buttonElement.nativeElement.style.setProperty(
-            this.formPropertyDictDatepickerButton[fieldName],
-            value
-          );
-          this.datepickerDefault.iconDatepicker.buttonElement.nativeElement.style.setProperty(
-            this.formPropertyDictDatepickerButton[fieldName],
-            value
-          );
-          this.datepickerHover.iconDatepicker.buttonElement.nativeElement.style.setProperty(
-            this.formPropertyDictDatepickerButton[fieldName],
-            value
-          );
-          this.datepickerDisabled.iconDatepicker.buttonElement.nativeElement.style.setProperty(
-            this.formPropertyDictDatepickerButton[fieldName],
-            value
-          );
+          this.datepickerComponent
+            .iconDatepicker()
+            .buttonElement.nativeElement.style.setProperty(this.formPropertyDictDatepickerButton[fieldName], value);
+          this.datepickerDefault
+            .iconDatepicker()
+            .buttonElement.nativeElement.style.setProperty(this.formPropertyDictDatepickerButton[fieldName], value);
+          this.datepickerHover
+            .iconDatepicker()
+            .buttonElement.nativeElement.style.setProperty(this.formPropertyDictDatepickerButton[fieldName], value);
+          this.datepickerDisabled
+            .iconDatepicker()
+            .buttonElement.nativeElement.style.setProperty(this.formPropertyDictDatepickerButton[fieldName], value);
 
           this.resultDatepickerButton['nativeElement'].innerHTML +=
             `${this.formPropertyDictDatepickerButton[fieldName]}: ${value};<br>`;

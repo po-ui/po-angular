@@ -1,4 +1,4 @@
-import { ChangeDetectorRef, Directive, EventEmitter, Input, OnDestroy, OnInit, Output } from '@angular/core';
+import { ChangeDetectorRef, Directive, EventEmitter, input, Input, OnDestroy, OnInit, Output } from '@angular/core';
 import { AbstractControl, ControlValueAccessor, Validator, Validators } from '@angular/forms';
 
 import {
@@ -492,6 +492,8 @@ export abstract class PoDatepickerBaseComponent implements ControlValueAccessor,
   }
 
   /**
+   * @Input p-append-in-body
+   *
    * @optional
    *
    * @description
@@ -504,7 +506,10 @@ export abstract class PoDatepickerBaseComponent implements ControlValueAccessor,
    *
    * @default `false`
    */
-  @Input({ alias: 'p-append-in-body', transform: convertToBoolean }) appendBox: boolean = false;
+  appendBox = input<boolean, boolean>(false, {
+    alias: 'p-append-in-body',
+    transform: convertToBoolean
+  });
 
   constructor(
     protected languageService: PoLanguageService,

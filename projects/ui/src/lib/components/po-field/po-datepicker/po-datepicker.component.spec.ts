@@ -1,5 +1,5 @@
 import { ComponentFixture, fakeAsync, TestBed, tick } from '@angular/core/testing';
-import { Component, ElementRef } from '@angular/core';
+import { Component, ElementRef, InputSignal, Signal, WritableSignal } from '@angular/core';
 
 import * as UtilsFunctions from '../../../utils/util';
 import { formatYear, setYearFrom0To100 } from '../../../utils/util';
@@ -23,6 +23,14 @@ function keyboardEvents(event: string, keyCode: number) {
   return eventKeyBoard;
 }
 
+function asWritableInput<T>(input: InputSignal<T>): WritableSignal<T> {
+  return input as unknown as WritableSignal<T>;
+}
+
+export function asWriteableSignal<T>(signal: Signal<T>): WritableSignal<T> {
+  return signal as WritableSignal<T>;
+}
+
 describe('PoDatepickerComponent:', () => {
   let component: PoDatepickerComponent;
   let fixture: ComponentFixture<PoDatepickerComponent>;
@@ -43,15 +51,13 @@ describe('PoDatepickerComponent:', () => {
     component.required = true;
     component.clean = true;
     component.date = new Date();
-    component.inputEl = new ElementRef(document.createElement('input'));
 
-    component.iconDatepicker = {
-      buttonElement: {
-        nativeElement: document.createElement('button')
-      }
-    } as PoButtonComponent;
+    asWriteableSignal(component.inputEl).set(new ElementRef(document.createElement('input')));
+    asWriteableSignal(component.iconDatepicker).set({
+      buttonElement: new ElementRef(document.createElement('button'))
+    } as PoButtonComponent);
 
-    document.body.appendChild(component.inputEl.nativeElement);
+    document.body.appendChild(component.inputEl().nativeElement);
   });
 
   it('should be created', () => {
@@ -165,11 +171,11 @@ describe('PoDatepickerComponent:', () => {
   });
 
   it('should set null value when pass null value in writevalue', () => {
-    component.inputEl.nativeElement.value = '25/12/2018';
+    component.inputEl().nativeElement.value = '25/12/2018';
 
     component.writeValue('');
 
-    expect(component.inputEl.nativeElement.value).toBe('');
+    expect(component.inputEl().nativeElement.value).toBe('');
     expect(component.date).toBeUndefined();
   });
 
@@ -178,7 +184,7 @@ describe('PoDatepickerComponent:', () => {
       keyup: jasmine.createSpy('keyup'),
       valueToModel: ''
     };
-    component.inputEl.nativeElement.value = '25/12/2018';
+    component.inputEl().nativeElement.value = '25/12/2018';
 
     const input = fixture.debugElement.nativeElement.querySelector('input');
 
@@ -226,7 +232,7 @@ describe('PoDatepickerComponent:', () => {
       valueToModel: '1'
     };
     component.readonly = false;
-    component.inputEl.nativeElement.focus();
+    component.inputEl().nativeElement.focus();
     component.onKeyup(event);
 
     expect(component.callOnChange).not.toHaveBeenCalled();
@@ -234,17 +240,16 @@ describe('PoDatepickerComponent:', () => {
 
   it('should define this.date undefined', () => {
     const input = fixture.debugElement.nativeElement.querySelector('input');
-    component.inputEl = {
-      nativeElement: input
-    };
+    asWriteableSignal(component.inputEl).set({ nativeElement: input });
+
     component['objMask'] = {
       keyup: jasmine.createSpy('keyup')
     };
     component.date = '1';
     component.readonly = false;
-    component.inputEl.nativeElement.focus();
+    component.inputEl().nativeElement.focus();
     input.dispatchEvent(keyboardEvents('keyup', 13));
-    document.body.appendChild(component.inputEl.nativeElement);
+    document.body.appendChild(component.inputEl().nativeElement);
 
     expect(component.date).toBeUndefined();
   });
@@ -260,16 +265,15 @@ describe('PoDatepickerComponent:', () => {
     const input = fixture.debugElement.nativeElement.querySelector('input');
     component.format = 'dd/mm/aaaa';
     component['objMask'].valueToModel = '';
-    component.inputEl = {
-      nativeElement: input
-    };
+
+    asWriteableSignal(component.inputEl).set({ nativeElement: input });
 
     spyOn(component, 'callOnChange');
 
     input.dispatchEvent(keyboardEvents('keypress', 13));
     input.dispatchEvent(keyboardEvents('keydown', 13));
     input.dispatchEvent(keyboardEvents('keyup', 13));
-    document.body.appendChild(component.inputEl.nativeElement);
+    document.body.appendChild(component.inputEl().nativeElement);
 
     expect(component.callOnChange).toHaveBeenCalled();
   });
@@ -291,14 +295,14 @@ describe('PoDatepickerComponent:', () => {
   it('should return true in hasInvalidClass()', () => {
     component.el.nativeElement.classList.add('ng-invalid');
     component.el.nativeElement.classList.add('ng-dirty');
-    component.inputEl.nativeElement.value = 'teste';
+    component.inputEl().nativeElement.value = 'teste';
     expect(component.hasInvalidClass()).toBe(true);
   });
 
   it('should return true in hasInvalidClass if showErrorMessageRequired and required is true', () => {
     component.el.nativeElement.classList.add('ng-invalid');
     component.el.nativeElement.classList.add('ng-dirty');
-    component.inputEl.nativeElement.value = '';
+    component.inputEl().nativeElement.value = '';
     component.showErrorMessageRequired = true;
     component.required = true;
     expect(component.hasInvalidClass()).toBeTruthy();
@@ -307,7 +311,7 @@ describe('PoDatepickerComponent:', () => {
   it('should return true in hasInvalidClass if showErrorMessageRequired and hasValidatorRequired is true', () => {
     component.el.nativeElement.classList.add('ng-invalid');
     component.el.nativeElement.classList.add('ng-dirty');
-    component.inputEl.nativeElement.value = '';
+    component.inputEl().nativeElement.value = '';
     component.showErrorMessageRequired = true;
     component.required = false;
     component['hasValidatorRequired'] = true;
@@ -315,7 +319,7 @@ describe('PoDatepickerComponent:', () => {
   });
 
   afterEach(() => {
-    document.body.removeChild(component.inputEl.nativeElement);
+    document.body.removeChild(component.inputEl().nativeElement);
   });
 });
 
@@ -411,7 +415,7 @@ describe('PoDatepickerComponent:', () => {
   });
 
   it('should set `` to Date in WriteValue, because it`s an invalid value', () => {
-    component.inputEl.nativeElement.value = '12/12/2000';
+    component.inputEl().nativeElement.value = '12/12/2000';
 
     component.writeValue('2017-ABC-15T00:00:00-03:00');
     expect(component.date).toBeUndefined();
@@ -423,7 +427,7 @@ describe('PoDatepickerComponent:', () => {
     expect(component.date).toBeUndefined();
 
     fixture.detectChanges();
-    expect(component.inputEl.nativeElement.value).toBe('');
+    expect(component.inputEl().nativeElement.value).toBe('');
   });
 
   it('should be pass the date when you are within the period', () => {
@@ -608,32 +612,24 @@ describe('PoDatepickerComponent:', () => {
     });
 
     it('focus: should call `focus` of datepicker', () => {
-      component.inputEl = {
-        nativeElement: {
-          focus: () => {}
-        }
-      };
+      asWriteableSignal(component.inputEl).set({ nativeElement: { focus: () => {} } });
 
-      spyOn(component.inputEl.nativeElement, 'focus');
+      spyOn(component.inputEl().nativeElement, 'focus');
 
       component.focus();
 
-      expect(component.inputEl.nativeElement.focus).toHaveBeenCalled();
+      expect(component.inputEl().nativeElement.focus).toHaveBeenCalled();
     });
 
     it('focus: should`t call `focus` of datepicker if `disabled`', () => {
-      component.inputEl = {
-        nativeElement: {
-          focus: () => {}
-        }
-      };
+      asWriteableSignal(component.inputEl).set({ nativeElement: { focus: () => {} } });
       component.disabled = true;
 
-      spyOn(component.inputEl.nativeElement, 'focus');
+      spyOn(component.inputEl().nativeElement, 'focus');
 
       component.focus();
 
-      expect(component.inputEl.nativeElement.focus).not.toHaveBeenCalled();
+      expect(component.inputEl().nativeElement.focus).not.toHaveBeenCalled();
     });
 
     describe('getAdditionalHelpTooltip:', () => {
@@ -666,13 +662,11 @@ describe('PoDatepickerComponent:', () => {
     });
 
     it('addListener: should call wasClickedOnPicker when click in document', () => {
-      component.visible = false;
+      component.visible.set(false);
 
-      component.iconDatepicker = {
-        buttonElement: {
-          nativeElement: document.createElement('button')
-        }
-      } as PoButtonComponent;
+      asWriteableSignal(component.iconDatepicker).set({
+        buttonElement: { nativeElement: document.createElement('button') }
+      } as PoButtonComponent);
 
       component.togglePicker();
       const documentBody = document.body;
@@ -706,14 +700,10 @@ describe('PoDatepickerComponent:', () => {
     describe('onKeyDown:', () => {
       it('should emit event when field is focused', () => {
         const fakeEvent = new KeyboardEvent('keydown', { key: 'Enter' });
-        component.inputEl = {
-          nativeElement: {
-            focus: () => {}
-          }
-        };
+        asWriteableSignal(component.inputEl).set({ nativeElement: { focus: () => {} } });
 
         spyOn(component.keydown, 'emit');
-        spyOnProperty(document, 'activeElement', 'get').and.returnValue(component.inputEl.nativeElement);
+        spyOnProperty(document, 'activeElement', 'get').and.returnValue(component.inputEl().nativeElement);
 
         component.onKeyDown(fakeEvent);
 
@@ -722,11 +712,7 @@ describe('PoDatepickerComponent:', () => {
 
       it('should not emit event when field is not focused', () => {
         const fakeEvent = new KeyboardEvent('keydown', { key: 'Enter' });
-        component.inputEl = {
-          nativeElement: {
-            focus: () => {}
-          }
-        };
+        asWriteableSignal(component.inputEl).set({ nativeElement: { focus: () => {} } });
 
         spyOn(component.keydown, 'emit');
         spyOnProperty(document, 'activeElement', 'get').and.returnValue(document.createElement('div'));
@@ -748,13 +734,11 @@ describe('PoDatepickerComponent:', () => {
     it('togglePicker: should call `closeCalendar` when `disabled`, `readonly` is false and `visible` is true', () => {
       component.disabled = false;
       component.readonly = false;
-      component.visible = true;
+      component.visible.set(true);
 
-      component.iconDatepicker = {
-        buttonElement: {
-          nativeElement: document.createElement('button')
-        }
-      } as PoButtonComponent;
+      asWriteableSignal(component.iconDatepicker).set({
+        buttonElement: { nativeElement: { value: 'test' } }
+      } as PoButtonComponent);
 
       spyOn(component, <any>'closeCalendar');
       component.togglePicker();
@@ -829,7 +813,7 @@ describe('PoDatepickerComponent:', () => {
       it('should call `controlModel` if have a `objMask.valueToModel equal or greater than 10`', () => {
         fakeEvent.target.value = '06/11/2019';
         component.date = new Date(2017, 5, 2);
-        component.inputEl.nativeElement.value = '06/11/2019';
+        component.inputEl().nativeElement.value = '06/11/2019';
         component['onTouchedModel'] = () => {};
         fixture.detectChanges();
         spyOn(component, <any>'verifyMobile').and.returnValue(false);
@@ -847,7 +831,7 @@ describe('PoDatepickerComponent:', () => {
       it('shouldn`t call `controlModel` if not have a `objMask.valueToModel`', () => {
         fakeEvent.target.value = undefined;
         component.date = new Date(2017, 5, 2);
-        component.inputEl.nativeElement.value = '06/11/2019';
+        component.inputEl().nativeElement.value = '06/11/2019';
         component['onTouchedModel'] = () => {};
         fixture.detectChanges();
 
@@ -864,7 +848,7 @@ describe('PoDatepickerComponent:', () => {
       it(`should call 'controlModel' with null if 'objMask.valueToModel.length' is lower than 10`, () => {
         fakeEvent.target.value = '05/02/20';
         component.date = new Date(2017, 5, 2);
-        component.inputEl.nativeElement.value = '06/11/2019';
+        component.inputEl().nativeElement.value = '06/11/2019';
         component['onTouchedModel'] = () => {};
         fixture.detectChanges();
         spyOn(component, <any>'verifyMobile').and.returnValue(false);
@@ -905,7 +889,7 @@ describe('PoDatepickerComponent:', () => {
 
     describe('dateSelected:', () => {
       it('should set `calendar.visible` to false', () => {
-        component.visible = true;
+        component.visible.set(true);
         component['onTouchedModel'] = () => {};
 
         spyOn(component, <any>'onTouchedModel');
@@ -929,7 +913,7 @@ describe('PoDatepickerComponent:', () => {
 
       it('should call ´focus´ if ´verifyMobile´ returns ´false´.', () => {
         spyOn(component, 'verifyMobile').and.returnValue(<any>false);
-        const spyInputFocus = spyOn(component.inputEl.nativeElement, 'focus');
+        const spyInputFocus = spyOn(component.inputEl().nativeElement, 'focus');
 
         component.dateSelected();
 
@@ -938,7 +922,7 @@ describe('PoDatepickerComponent:', () => {
 
       it('shouldn´t call ´focus´ if ´verifyMobile´ returns ´true´.', () => {
         spyOn(component, 'verifyMobile').and.returnValue(<any>true);
-        const spyInputFocus = spyOn(component.inputEl.nativeElement, 'focus');
+        const spyInputFocus = spyOn(component.inputEl().nativeElement, 'focus');
 
         component.dateSelected();
 
@@ -1215,9 +1199,9 @@ describe('PoDatepickerComponent:', () => {
     });
 
     it(`setCalendarPosition: should call 'controlPosition.setElements' and 'controlPosition.adjustPosition'.`, () => {
-      component.dialogPicker = {
+      asWriteableSignal(component.dialogPicker).set({
         nativeElement: document.createElement('div')
-      };
+      });
 
       const setDialogPickerStyleDisplay = spyOn(component, <any>'setDialogPickerStyleDisplay');
       const setElements = spyOn(component['controlPosition'], 'setElements');
@@ -1228,9 +1212,9 @@ describe('PoDatepickerComponent:', () => {
       expect(setDialogPickerStyleDisplay).toHaveBeenCalled();
       expect(adjustPosition).toHaveBeenCalled();
       expect(setElements).toHaveBeenCalledWith(
-        component.dialogPicker.nativeElement,
+        component.dialogPicker().nativeElement,
         poCalendarContentOffset,
-        component['inputEl'],
+        component.inputEl().nativeElement,
         ['top-left', 'top-right', 'bottom-left', 'bottom-right'],
         false,
         true
@@ -1246,15 +1230,15 @@ describe('PoDatepickerComponent:', () => {
     });
 
     it('setDialogPickerStyleDisplay: should change style display.', () => {
-      component.dialogPicker = {
+      asWriteableSignal(component.dialogPicker).set({
         nativeElement: document.createElement('div')
-      };
+      });
 
       component['setDialogPickerStyleDisplay']('none');
-      expect(component.dialogPicker.nativeElement.style.display).toBe('none');
+      expect(component.dialogPicker().nativeElement.style.display).toBe('none');
 
       component['setDialogPickerStyleDisplay']('block');
-      expect(component.dialogPicker.nativeElement.style.display).toBe('block');
+      expect(component.dialogPicker().nativeElement.style.display).toBe('block');
     });
 
     it('writeValue: should set `isExtendedISO` with `false` if `isoFormat` is `undefined` and `isValidExtendedIso` is `false`', () => {
@@ -1311,7 +1295,7 @@ describe('PoDatepickerComponent:', () => {
       };
 
       spyOn(fakeThis, 'controlModel');
-      component.onKeyup.call(fakeThis, { target: component.inputEl.nativeElement });
+      component.onKeyup.call(fakeThis, { target: component.inputEl().nativeElement });
       expect(fakeThis.controlModel).toHaveBeenCalled();
     });
 
@@ -1363,11 +1347,11 @@ describe('PoDatepickerComponent:', () => {
       component.readonly = false;
       component.disabled = false;
 
-      component.iconDatepicker = {
+      asWriteableSignal(component.iconDatepicker).set({
         buttonElement: {
           nativeElement: document.createElement('button')
         }
-      } as PoButtonComponent;
+      } as PoButtonComponent);
 
       spyOn(component, <any>'setCalendarPosition');
       spyOn(component, <any>'initializeListeners');
@@ -1379,15 +1363,15 @@ describe('PoDatepickerComponent:', () => {
     });
 
     it('togglePicker: should call removeListeners if component.visible is truthy', () => {
-      component.visible = true;
+      component.visible.set(true);
       component.readonly = false;
       component.disabled = false;
 
-      component.iconDatepicker = {
+      asWriteableSignal(component.iconDatepicker).set({
         buttonElement: {
           nativeElement: document.createElement('button')
         }
-      } as PoButtonComponent;
+      } as PoButtonComponent);
 
       spyOn(component, <any>'removeListeners');
 
@@ -1398,8 +1382,8 @@ describe('PoDatepickerComponent:', () => {
 
     describe('verifyErrorAsync', () => {
       beforeEach(() => {
+        asWriteableSignal(component.inputEl).set({ nativeElement: { value: 'test' } } as ElementRef);
         component['cd'] = { detectChanges: () => {} } as any;
-        component['inputEl'] = { nativeElement: { value: 'test' } } as ElementRef;
         component['el'] = { nativeElement: document.createElement('div') } as ElementRef;
 
         component.errorPattern = 'Erro de exemplo';
@@ -1447,32 +1431,32 @@ describe('PoDatepickerComponent:', () => {
 
     describe('shouldHandleTab:', () => {
       it('should return true when visible, appendBox are true and not shiftKey', () => {
-        component.visible = true;
-        component.appendBox = true;
+        component.visible.set(true);
+        asWritableInput(component.appendBox).set(true);
         const event = { shiftKey: false } as KeyboardEvent;
 
         expect(component['shouldHandleTab'](event)).toBeTrue();
       });
 
       it('should return false when visible is false', () => {
-        component.visible = false;
-        component.appendBox = true;
+        component.visible.set(false);
+        asWritableInput(component.appendBox).set(true);
         const event = { shiftKey: false } as KeyboardEvent;
 
         expect(component['shouldHandleTab'](event)).toBeFalse();
       });
 
       it('should return false when appendBox is false', () => {
-        component.visible = true;
-        component.appendBox = false;
+        component.visible.set(true);
+        asWritableInput(component.appendBox).set(false);
         const event = { shiftKey: false } as KeyboardEvent;
 
         expect(component['shouldHandleTab'](event)).toBeFalse();
       });
 
       it('should return false when shiftKey is pressed', () => {
-        component.visible = true;
-        component.appendBox = true;
+        component.visible.set(true);
+        asWritableInput(component.appendBox).set(true);
         const event = { shiftKey: true } as KeyboardEvent;
 
         expect(component['shouldHandleTab'](event)).toBeFalse();
@@ -1482,8 +1466,8 @@ describe('PoDatepickerComponent:', () => {
     describe('handleCleanKeyboardTab:', () => {
       it('should call preventDefault and focusCalendar when shouldHandleTab returns true', () => {
         const event = { preventDefault: jasmine.createSpy(), shiftKey: false } as unknown as KeyboardEvent;
-        component.visible = true;
-        component.appendBox = true;
+        component.visible.set(true);
+        asWritableInput(component.appendBox).set(true);
 
         spyOn(component as any, 'shouldHandleTab').and.returnValue(true);
         spyOn(component as any, 'focusCalendar');
@@ -1496,7 +1480,7 @@ describe('PoDatepickerComponent:', () => {
 
       it('should not call preventDefault when shouldHandleTab returns false', () => {
         const event = { preventDefault: jasmine.createSpy(), shiftKey: false } as unknown as KeyboardEvent;
-        component.visible = false;
+        component.visible.set(false);
 
         spyOn(component as any, 'shouldHandleTab').and.returnValue(false);
         spyOn(component as any, 'focusCalendar');
@@ -1513,11 +1497,9 @@ describe('PoDatepickerComponent:', () => {
         const mockElement = document.createElement('button');
         spyOn(mockElement, 'focus');
 
-        component.dialogPicker = {
-          nativeElement: {
-            querySelector: () => mockElement
-          }
-        } as ElementRef;
+        asWriteableSignal(component.dialogPicker).set({
+          nativeElement: { querySelector: () => mockElement }
+        } as ElementRef);
 
         component['focusCalendar']();
 
@@ -1531,11 +1513,7 @@ describe('PoDatepickerComponent:', () => {
       });
 
       it('should not throw error when no focusable element is found', () => {
-        component.dialogPicker = {
-          nativeElement: {
-            querySelector: () => null
-          }
-        } as ElementRef;
+        asWriteableSignal(component.dialogPicker).set({ nativeElement: { querySelector: () => null } } as ElementRef);
 
         expect(() => component['focusCalendar']()).not.toThrow();
       });

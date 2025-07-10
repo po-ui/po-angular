@@ -72,11 +72,21 @@ module.exports = {
   processPropertyDoc: function (propertyDoc) {
     this.processPublicDoc(propertyDoc);
 
-    propertyDoc.isDirectiveInput = this.isDirectiveInput(propertyDoc);
-    propertyDoc.directiveInputAlias = this.getDirectiveInputAlias(propertyDoc);
+    if (propertyDoc.Input != undefined) {
+      propertyDoc.isDirectiveInput = true;
+      propertyDoc.directiveInputAlias = propertyDoc.Input;
+    } else {
+      propertyDoc.isDirectiveInput = this.isDirectiveInput(propertyDoc);
+      propertyDoc.directiveInputAlias = this.getDirectiveInputAlias(propertyDoc);
+    }
 
-    propertyDoc.isDirectiveOutput = this.isDirectiveOutput(propertyDoc);
-    propertyDoc.directiveOutputAlias = this.getDirectiveOutputAlias(propertyDoc);
+    if (propertyDoc.Output != undefined) {
+      propertyDoc.isDirectiveOutput = true;
+      propertyDoc.directiveOutputAlias = propertyDoc.Output;
+    } else {
+      propertyDoc.isDirectiveOutput = this.isDirectiveOutput(propertyDoc);
+      propertyDoc.directiveOutputAlias = this.getDirectiveOutputAlias(propertyDoc);
+    }
   },
 
   /**

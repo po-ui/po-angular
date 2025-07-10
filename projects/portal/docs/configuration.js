@@ -55,7 +55,9 @@ module.exports = {
     { name: 'ignoreExtendedDescription' },
     { name: 'usedBy' },
     { name: 'optional' },
-    { name: 'default' }
+    { name: 'default' },
+    { name: "Output" },
+    { name: "Input" },
   ],
 
   protractorWebBaseUrl: `browser.baseUrl + '/documentation/{component}?view=web'`

@@ -3,13 +3,15 @@ import {
   ChangeDetectionStrategy,
   ChangeDetectorRef,
   Component,
+  computed,
   ElementRef,
   forwardRef,
   HostListener,
   Input,
   OnDestroy,
   Renderer2,
-  ViewChild
+  signal,
+  viewChild
 } from '@angular/core';
 import { NG_VALIDATORS, NG_VALUE_ACCESSOR } from '@angular/forms';
 
@@ -81,10 +83,10 @@ const poCalendarPositionDefault = 'bottom-left';
   standalone: false
 })
 export class PoDatepickerComponent extends PoDatepickerBaseComponent implements AfterViewInit, OnDestroy {
-  @ViewChild('calendar', { static: true }) calendar: PoCalendarComponent;
-  @ViewChild('dialogPicker', { read: ElementRef, static: false }) dialogPicker: ElementRef;
-  @ViewChild('iconDatepicker') iconDatepicker: PoButtonComponent;
-  @ViewChild('inp', { read: ElementRef, static: true }) inputEl: ElementRef;
+  calendar = viewChild<PoCalendarComponent>('calendar');
+  dialogPicker = viewChild<ElementRef>('dialogPicker');
+  iconDatepicker = viewChild<PoButtonComponent>('iconDatepicker');
+  inputEl = viewChild<ElementRef>('inp');
 
   /** Rótulo do campo. */
   @Input('p-label') label?: string;
@@ -96,8 +98,9 @@ export class PoDatepickerComponent extends PoDatepickerBaseComponent implements 
   el: ElementRef;
   declare hour: string;
   id = `po-datepicker[${uuid()}]`;
-  visible: boolean = false;
   literals: any;
+
+  visible = signal<boolean>(false);
 
   eventListenerFunction: () => void;
   eventResizeListener: () => void;
@@ -122,6 +125,8 @@ export class PoDatepickerComponent extends PoDatepickerBaseComponent implements 
     return this.noAutocomplete ? 'off' : 'on';
   }
 
+  private readonly canHandleTab = computed(() => this.visible() && this.appendBox());
+
   constructor(
     protected languageService: PoLanguageService,
     protected cd: ChangeDetectorRef,
@@ -141,7 +146,7 @@ export class PoDatepickerComponent extends PoDatepickerBaseComponent implements 
 
   @HostListener('keyup', ['$event'])
   onKeyup($event: any) {
-    if (this.readonly || $event?.target !== this.inputEl?.nativeElement) {
+    if (this.readonly || $event?.target !== this.inputEl()?.nativeElement) {
       return;
     }
 
@@ -149,8 +154,8 @@ export class PoDatepickerComponent extends PoDatepickerBaseComponent implements 
     // Controla a atualização do model, verificando se a data é valida
     if (this.objMask.valueToModel || this.objMask.valueToModel === '') {
       if (this.objMask.valueToModel.length >= 10) {
-        this.controlModel(this.getDateFromString(this.inputEl.nativeElement.value));
-        this.date = this.getDateFromString(this.inputEl.nativeElement.value);
+        this.controlModel(this.getDateFromString(this.inputEl().nativeElement.value));
+        this.date = this.getDateFromString(this.inputEl().nativeElement.value);
       } else {
         this.date = undefined;
         this.controlModel(this.date);
@@ -174,7 +179,7 @@ export class PoDatepickerComponent extends PoDatepickerBaseComponent implements 
     if (this.autoFocus) {
       this.focus();
     }
-    this.renderer.setAttribute(this.iconDatepicker.buttonElement.nativeElement, 'aria-label', this.literals.open);
+    this.renderer.setAttribute(this.iconDatepicker().buttonElement.nativeElement, 'aria-label', this.literals.open);
   }
 
   ngOnDestroy() {
@@ -206,8 +211,8 @@ export class PoDatepickerComponent extends PoDatepickerBaseComponent implements 
    * ```
    */
   focus(): void {
-    if (!this.disabled && this.inputEl?.nativeElement) {
-      this.inputEl.nativeElement.focus();
+    if (!this.disabled && this.inputEl()?.nativeElement) {
+      this.inputEl().nativeElement.focus();
     }
   }
 
@@ -216,33 +221,33 @@ export class PoDatepickerComponent extends PoDatepickerBaseComponent implements 
   }
 
   togglePicker() {
-    if (this.disabled || this.readonly || !this.iconDatepicker?.buttonElement?.nativeElement) {
+    if (this.disabled || this.readonly || !this.iconDatepicker()?.buttonElement?.nativeElement) {
       return;
     }
 
-    if (!this.visible) {
+    if (!this.visible()) {
       this.setCalendarPosition();
       this.initializeListeners();
-      this.visible = true;
+      this.visible.set(true);
 
-      this.renderer.setAttribute(this.inputEl.nativeElement, 'aria-expanded', 'true');
-      this.renderer.setAttribute(this.iconDatepicker.buttonElement.nativeElement, 'aria-expanded', 'true');
+      this.renderer.setAttribute(this.inputEl().nativeElement, 'aria-expanded', 'true');
+      this.renderer.setAttribute(this.iconDatepicker().buttonElement.nativeElement, 'aria-expanded', 'true');
     } else {
-      this.inputEl.nativeElement.disabled = false;
+      this.inputEl().nativeElement.disabled = false;
       this.closeCalendar();
 
-      this.renderer.removeAttribute(this.inputEl.nativeElement, 'aria-expanded');
-      this.renderer.removeAttribute(this.iconDatepicker.buttonElement.nativeElement, 'aria-expanded');
+      this.renderer.removeAttribute(this.inputEl().nativeElement, 'aria-expanded');
+      this.renderer.removeAttribute(this.iconDatepicker().buttonElement.nativeElement, 'aria-expanded');
     }
   }
 
   dateSelected() {
     this.onTouchedModel?.();
     if (!this.verifyMobile()) {
-      this.inputEl.nativeElement.focus();
+      this.inputEl().nativeElement.focus();
     }
 
-    this.inputEl.nativeElement.value = this.formatToDate(this.date);
+    this.inputEl().nativeElement.value = this.formatToDate(this.date);
     this.controlModel(this.date);
     this.controlChangeEmitter();
     this.closeCalendar();
@@ -254,8 +259,8 @@ export class PoDatepickerComponent extends PoDatepickerBaseComponent implements 
       return;
     }
     if (
-      (!this.dialogPicker.nativeElement.contains(event.target) || this.hasOverlayClass(event.target)) &&
-      !this.iconDatepicker.buttonElement.nativeElement.contains(event.target) &&
+      (!this.dialogPicker()?.nativeElement.contains(event.target) || this.hasOverlayClass(event.target)) &&
+      !this.iconDatepicker().buttonElement.nativeElement.contains(event.target) &&
       !this.hasAttrCalendar(event.target)
     ) {
       this.closeCalendar();
@@ -266,7 +271,7 @@ export class PoDatepickerComponent extends PoDatepickerBaseComponent implements 
     return (
       this.el.nativeElement.classList.contains('ng-invalid') &&
       this.el.nativeElement.classList.contains('ng-dirty') &&
-      (this.inputEl.nativeElement.value !== '' ||
+      (this.inputEl().nativeElement.value !== '' ||
         (this.showErrorMessageRequired && (this.required || this.hasValidatorRequired)))
     );
   }
@@ -290,7 +295,7 @@ export class PoDatepickerComponent extends PoDatepickerBaseComponent implements 
       this.showAdditionalHelp();
     }
 
-    const date = this.inputEl.nativeElement.value;
+    const date = this.inputEl().nativeElement.value;
     const newDate = date ? this.getDateFromString(date) : undefined;
     this.objMask.blur($event);
     this.onblur.emit();
@@ -324,7 +329,7 @@ export class PoDatepickerComponent extends PoDatepickerBaseComponent implements 
   }
 
   onKeyDown(event: KeyboardEvent): void {
-    const isFieldFocused = document.activeElement === this.inputEl.nativeElement;
+    const isFieldFocused = document.activeElement === this.inputEl().nativeElement;
 
     if (isFieldFocused) {
       this.keydown.emit(event);
@@ -353,7 +358,7 @@ export class PoDatepickerComponent extends PoDatepickerBaseComponent implements 
 
   refreshValue(value: Date) {
     if (value) {
-      this.inputEl.nativeElement.value = this.formatToDate(value);
+      this.inputEl().nativeElement.value = this.formatToDate(value);
     }
   }
 
@@ -391,7 +396,7 @@ export class PoDatepickerComponent extends PoDatepickerBaseComponent implements 
         this.hour =
           'T' + dateString.substring(16, 24) + dateString.substring(28, 31) + ':' + dateString.substring(31, 33);
         this.date = value;
-        this.inputEl.nativeElement.value = this.formatToDate(value);
+        this.inputEl().nativeElement.value = this.formatToDate(value);
       } else if (this.isValidDateIso(value) || this.isValidExtendedIso(value)) {
         if (this.isValidExtendedIso(value)) {
           this.hour = value.substring(10, 25);
@@ -410,9 +415,9 @@ export class PoDatepickerComponent extends PoDatepickerBaseComponent implements 
         setYearFrom0To100(dateTemp, year);
 
         this.date = dateTemp;
-        this.inputEl.nativeElement.value = this.formatToDate(dateTemp);
+        this.inputEl().nativeElement.value = this.formatToDate(dateTemp);
       } else {
-        this.inputEl.nativeElement.value = '';
+        this.inputEl().nativeElement.value = '';
         this.date = undefined;
       }
 
@@ -420,7 +425,7 @@ export class PoDatepickerComponent extends PoDatepickerBaseComponent implements 
       const dateModelFormatted = this.formatToDate(this.date);
       this.verifyErrorAsync(dateModelFormatted);
     } else if (this.inputEl) {
-      this.inputEl.nativeElement.value = '';
+      this.inputEl().nativeElement.value = '';
       this.date = undefined;
       this.callOnChange(this.date, false);
     }
@@ -479,7 +484,7 @@ export class PoDatepickerComponent extends PoDatepickerBaseComponent implements 
   }
 
   private closeCalendar() {
-    this.visible = false;
+    this.visible.set(false);
     this.removeListeners();
     this.setDialogPickerStyleDisplay('none');
 
@@ -547,18 +552,19 @@ export class PoDatepickerComponent extends PoDatepickerBaseComponent implements 
   }
 
   private setDialogPickerStyleDisplay(value: string): void {
-    if (this.dialogPicker && this.dialogPicker.nativeElement) {
-      this.dialogPicker.nativeElement.style.display = value;
+    const dialogPickerElement = this.dialogPicker()?.nativeElement;
+    if (dialogPickerElement) {
+      dialogPickerElement.style.display = value;
     }
   }
 
   private setCalendarPosition(): void {
     this.setDialogPickerStyleDisplay('block');
-    if (this.dialogPicker && this.dialogPicker.nativeElement) {
+    if (this.dialogPicker()?.nativeElement) {
       this.controlPosition.setElements(
-        this.dialogPicker.nativeElement,
+        this.dialogPicker().nativeElement,
         poCalendarContentOffset,
-        this.inputEl,
+        this.inputEl(),
         ['top-left', 'top-right', 'bottom-left', 'bottom-right'],
         false,
         true
@@ -568,19 +574,14 @@ export class PoDatepickerComponent extends PoDatepickerBaseComponent implements 
   }
 
   handleCleanKeyboardTab(event: KeyboardEvent) {
-    if (this.shouldHandleTab(event)) {
+    if (this.canHandleTab() && !event.shiftKey) {
       event.preventDefault();
       this.focusCalendar();
     }
   }
 
-  // Determina se o tab deve abrir o listbox.
-  private shouldHandleTab(event: KeyboardEvent): boolean {
-    return this.visible && this.appendBox && !event.shiftKey;
-  }
-
   private focusCalendar() {
-    const focusableElement = this.dialogPicker?.nativeElement?.querySelector(
+    const focusableElement = this.dialogPicker()?.nativeElement?.querySelector(
       'button:not([disabled]), [tabindex]:not([tabindex="-1"])'
     );
 
@@ -594,7 +595,6 @@ export class PoDatepickerComponent extends PoDatepickerBaseComponent implements 
 
     if (key === PoKeyCodeEnum.tab || key === PoKeyCodeEnum.esc) {
       this.togglePicker();
-
       this.focus();
       event.preventDefault();
       event.stopPropagation();

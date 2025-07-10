@@ -27,7 +27,7 @@
           [placeholder]="disabled ? '' : placeholder"
           [readonly]="readonly"
           [required]="required"
-          [attr.data-append-in-body]="appendBox"
+          [attr.data-append-in-body]="appendBox()"
           (blur)="eventOnBlur($event)"
           (click)="eventOnClick($event)"
           (keydown)="onKeyDown($event)"
