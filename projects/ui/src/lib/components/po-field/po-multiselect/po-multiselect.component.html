@@ -67,7 +67,12 @@
     </ng-template>
 
     <ng-template #dropdownCDK>
-      <ng-template cdkConnectedOverlay [cdkConnectedOverlayOrigin]="trigger" [cdkConnectedOverlayOpen]="true">
+      <ng-template
+        cdkConnectedOverlay
+        [cdkConnectedOverlayOrigin]="trigger"
+        [cdkConnectedOverlayOpen]="true"
+        [cdkConnectedOverlayDisableClose]="true"
+      >
         <ng-container *ngTemplateOutlet="dropdownListbox"></ng-container>
       </ng-template>
     </ng-template>

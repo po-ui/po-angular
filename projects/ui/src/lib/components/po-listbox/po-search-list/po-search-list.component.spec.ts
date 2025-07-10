@@ -30,8 +30,28 @@ describe('PoMultiselectSearchComponent:', () => {
 
   it('should emit onChange', () => {
     spyOn(component.change, 'emit');
-    component.onChange({});
+    component.initUp = true;
+    component.initDown = true;
+    component.onChange({ key: 'Tab', preventDefault: () => {} });
     expect(component.change.emit).toHaveBeenCalled();
+  });
+
+  it('should reset initUp and initDown', () => {
+    component.initUp = true;
+    component.initDown = true;
+
+    component.resetKeys();
+
+    expect(component.initUp).toBeFalsy();
+    expect(component.initDown).toBeFalsy();
+  });
+
+  it('should set initDown to true', () => {
+    component.initDown = false;
+
+    component.changeInitSearch({ key: 'Tab', preventDefault: () => {} });
+
+    expect(component.initDown).toBeTruthy();
   });
 
   it('should set focus on input', () => {

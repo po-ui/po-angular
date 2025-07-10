@@ -38,6 +38,8 @@ export class PoSearchListComponent {
   @Output('p-change') change = new EventEmitter();
 
   private _placeholder?: string;
+  public initUp = false;
+  public initDown = false;
 
   constructor(private cd: ChangeDetectorRef) {}
 
@@ -66,7 +68,13 @@ export class PoSearchListComponent {
   }
 
   onChange(event) {
-    this.change.emit({ event: event, [this.fieldValue]: this.inputElement.nativeElement.value });
+    if (event.key === 'Tab') {
+      event.preventDefault();
+    }
+    this.initUp = true;
+    if (this.initDown === this.initUp) {
+      this.change.emit({ event: event, [this.fieldValue]: this.inputElement.nativeElement.value });
+    }
   }
 
   setFocus() {
@@ -78,7 +86,19 @@ export class PoSearchListComponent {
     this.cd.markForCheck();
   }
 
+  resetKeys() {
+    this.initUp = false;
+    this.initDown = false;
+  }
+
   isTypeof(object: any, type: any) {
     return typeof object === type;
+  }
+
+  changeInitSearch(event) {
+    if (event.key === 'Tab') {
+      event.preventDefault();
+    }
+    this.initDown = true;
   }
 }
