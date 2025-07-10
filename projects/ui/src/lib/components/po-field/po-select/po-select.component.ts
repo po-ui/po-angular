@@ -286,13 +286,6 @@ export class PoSelectComponent extends PoFieldValidateModel<any> implements OnCh
     }
   }
 
-  /**
-   * @docsPrivate
-   *
-   * Determinar se o valor do compo deve retorna objeto do tipo {value: any, label: any}
-   */
-  @Input({ alias: 'p-control-value-with-label', transform: convertToBoolean }) controlValueWithLabel?: boolean = false;
-
   get fieldValue() {
     return this._fieldValue;
   }

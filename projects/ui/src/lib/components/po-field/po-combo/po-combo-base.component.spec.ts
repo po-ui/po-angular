@@ -896,8 +896,31 @@ describe('PoComboBaseComponent:', () => {
       expect(ValidatorsFunctions.requiredFailed).toHaveBeenCalled();
     });
 
+    it('validate: should return required obj when `requiredFailed` and `controlValeuWithLabel` is true.', () => {
+      const validObj = {
+        required: {
+          valid: false
+        }
+      };
+
+      spyOn(ValidatorsFunctions, 'requiredFailed').and.returnValue(true);
+      component.controlValueWithLabel = true;
+
+      expect(component.validate(new FormControl({ value: 1, label: 'Label1' }))).toEqual(validObj);
+      expect(ValidatorsFunctions.requiredFailed).toHaveBeenCalled();
+    });
+
     it('validate: should return undefined when `requiredFailed` is false', () => {
       spyOn(ValidatorsFunctions, 'requiredFailed').and.returnValue(false);
+
+      expect(component.validate(new UntypedFormControl(null))).toBeUndefined();
+      expect(ValidatorsFunctions.requiredFailed).toHaveBeenCalled();
+    });
+
+    it('validate: should return undefined when `requiredFailed` is false and `controlValueWithLabel` is true', () => {
+      spyOn(ValidatorsFunctions, 'requiredFailed').and.returnValue(false);
+
+      component.controlValueWithLabel = true;
 
       expect(component.validate(new UntypedFormControl(null))).toBeUndefined();
       expect(ValidatorsFunctions.requiredFailed).toHaveBeenCalled();

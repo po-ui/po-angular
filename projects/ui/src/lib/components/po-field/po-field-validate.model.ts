@@ -12,6 +12,13 @@ import { requiredFailed } from './validators';
 @Directive()
 export abstract class PoFieldValidateModel<T> extends PoFieldModel<T> implements Validator {
   /**
+   * @docsPrivate
+   *
+   * Determinar se o valor do compo deve retorna objeto do tipo {value: any, label: any}
+   */
+  @Input({ alias: 'p-control-value-with-label', transform: convertToBoolean }) controlValueWithLabel?: boolean = false;
+
+  /**
    * @optional
    *
    * @description
@@ -79,11 +86,16 @@ export abstract class PoFieldValidateModel<T> extends PoFieldModel<T> implements
   }
 
   validate(abstractControl: AbstractControl): ValidationErrors {
+    let { value } = abstractControl;
+    if (this.controlValueWithLabel && value?.value) {
+      value = value.value;
+    }
+
     if (!this.hasValidatorRequired && this.fieldErrorMessage && abstractControl.hasValidator(Validators.required)) {
       this.hasValidatorRequired = true;
     }
 
-    if (requiredFailed(this.required || this.hasValidatorRequired, this.disabled, abstractControl.value)) {
+    if (requiredFailed(this.required || this.hasValidatorRequired, this.disabled, value)) {
       this.changeDetector.markForCheck();
       return {
         required: {
