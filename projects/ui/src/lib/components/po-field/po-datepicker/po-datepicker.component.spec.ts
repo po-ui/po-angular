@@ -13,6 +13,8 @@ import { PoDatepickerIsoFormat } from './enums/po-datepicker-iso-format.enum';
 
 import { PoDatepickerModule } from './po-datepicker.module';
 import { of, Subscription } from 'rxjs';
+import { PoKeyCodeEnum } from '../../../enums/po-key-code.enum';
+import { PoButtonComponent } from '../../po-button';
 
 function keyboardEvents(event: string, keyCode: number) {
   const eventKeyBoard = document.createEvent('KeyboardEvent');
@@ -42,6 +44,13 @@ describe('PoDatepickerComponent:', () => {
     component.clean = true;
     component.date = new Date();
     component.inputEl = new ElementRef(document.createElement('input'));
+
+    component.iconDatepicker = {
+      buttonElement: {
+        nativeElement: document.createElement('button')
+      }
+    } as PoButtonComponent;
+
     document.body.appendChild(component.inputEl.nativeElement);
   });
 
@@ -658,6 +667,13 @@ describe('PoDatepickerComponent:', () => {
 
     it('addListener: should call wasClickedOnPicker when click in document', () => {
       component.visible = false;
+
+      component.iconDatepicker = {
+        buttonElement: {
+          nativeElement: document.createElement('button')
+        }
+      } as PoButtonComponent;
+
       component.togglePicker();
       const documentBody = document.body;
       const event = document.createEvent('MouseEvents');
@@ -687,36 +703,72 @@ describe('PoDatepickerComponent:', () => {
       expect(component['formatToDate']).toHaveBeenCalledWith(dateMock);
     });
 
-    describe('onKeyDown:', () => {
-      it('should emit event when field is focused', () => {
-        const fakeEvent = new KeyboardEvent('keydown', { key: 'Enter' });
-        component.inputEl = {
-          nativeElement: {
-            focus: () => {}
-          }
-        };
+    describe('onKeydown', () => {
+      let fakeEvent: KeyboardEvent;
+      let mockObjMask: { keydown: jasmine.Spy };
 
-        spyOn(component.keydown, 'emit');
-        spyOnProperty(document, 'activeElement', 'get').and.returnValue(component.inputEl.nativeElement);
-
-        component.onKeyDown(fakeEvent);
-
-        expect(component.keydown.emit).toHaveBeenCalledWith(fakeEvent);
+      beforeEach(() => {
+        fakeEvent = new KeyboardEvent('keydown', { key: 'Enter' });
+        mockObjMask = { keydown: jasmine.createSpy() };
+        component['objMask'] = mockObjMask;
       });
 
-      it('should not emit event when field is not focused', () => {
-        const fakeEvent = new KeyboardEvent('keydown', { key: 'Enter' });
-        component.inputEl = {
-          nativeElement: {
-            focus: () => {}
-          }
-        };
+      it('should do nothing if readonly is true', () => {
+        component.readonly = true;
+        spyOn(component, 'togglePicker');
 
-        spyOn(component.keydown, 'emit');
-        spyOnProperty(document, 'activeElement', 'get').and.returnValue(document.createElement('div'));
-        component.onKeyDown(fakeEvent);
+        component.onKeydown(fakeEvent);
 
-        expect(component.keydown.emit).not.toHaveBeenCalled();
+        expect(component.togglePicker).not.toHaveBeenCalled();
+        expect(mockObjMask.keydown).not.toHaveBeenCalled();
+      });
+
+      describe('when Escape key is pressed and visible is true', () => {
+        beforeEach(() => {
+          component.visible = true;
+          const mockTarget = document.createElement('div');
+          fakeEvent = new KeyboardEvent('keydown', { key: 'Escape' });
+          Object.defineProperty(fakeEvent, 'target', { value: mockTarget });
+        });
+
+        it('should call togglePicker(false)', () => {
+          spyOn(component, 'togglePicker');
+          component.onKeydown(fakeEvent);
+          expect(component.togglePicker).toHaveBeenCalledWith(false);
+        });
+
+        it('should prevent default if inside po-modal or po-slide', () => {
+          spyOn(fakeEvent.target, <any>'closest').and.returnValue(true);
+          spyOn(fakeEvent, 'preventDefault');
+          spyOn(fakeEvent, 'stopPropagation');
+
+          component.onKeydown(fakeEvent);
+
+          expect(fakeEvent.preventDefault).toHaveBeenCalled();
+          expect(fakeEvent.stopPropagation).toHaveBeenCalled();
+        });
+
+        it('should not prevent default if outside po-modal or po-slide', () => {
+          spyOn(fakeEvent.target, <any>'closest').and.returnValue(false);
+          spyOn(fakeEvent, 'preventDefault');
+
+          component.onKeydown(fakeEvent);
+
+          expect(fakeEvent.preventDefault).not.toHaveBeenCalled();
+        });
+      });
+
+      it('should call togglePicker() on Tab + Shift in an input element', () => {
+        component.visible = true;
+        fakeEvent = new KeyboardEvent('keydown', { key: 'Tab', shiftKey: true });
+        const mockInputElement = document.createElement('input');
+        spyOn(component, 'togglePicker');
+
+        Object.defineProperty(fakeEvent, 'target', { value: mockInputElement });
+
+        component.onKeydown(fakeEvent);
+
+        expect(component.togglePicker).toHaveBeenCalled();
       });
     });
 
@@ -733,6 +785,12 @@ describe('PoDatepickerComponent:', () => {
       component.disabled = false;
       component.readonly = false;
       component.visible = true;
+
+      component.iconDatepicker = {
+        buttonElement: {
+          nativeElement: document.createElement('button')
+        }
+      } as PoButtonComponent;
 
       spyOn(component, <any>'closeCalendar');
       component.togglePicker();
@@ -887,12 +945,12 @@ describe('PoDatepickerComponent:', () => {
         component['onTouchedModel'] = () => {};
 
         spyOn(component, <any>'onTouchedModel');
-        spyOn(component, <any>'closeCalendar');
+        spyOn(component, <any>'togglePicker');
 
         component.dateSelected();
 
         expect(component['onTouchedModel']).toHaveBeenCalled();
-        expect(component['closeCalendar']).toHaveBeenCalled();
+        expect(component['togglePicker']).toHaveBeenCalled();
       });
 
       it('should call `controlModel` and `controlChangeEmitter`', () => {
@@ -1341,6 +1399,12 @@ describe('PoDatepickerComponent:', () => {
       component.readonly = false;
       component.disabled = false;
 
+      component.iconDatepicker = {
+        buttonElement: {
+          nativeElement: document.createElement('button')
+        }
+      } as PoButtonComponent;
+
       spyOn(component, <any>'setCalendarPosition');
       spyOn(component, <any>'initializeListeners');
 
@@ -1354,6 +1418,12 @@ describe('PoDatepickerComponent:', () => {
       component.visible = true;
       component.readonly = false;
       component.disabled = false;
+
+      component.iconDatepicker = {
+        buttonElement: {
+          nativeElement: document.createElement('button')
+        }
+      } as PoButtonComponent;
 
       spyOn(component, <any>'removeListeners');
 
@@ -1408,6 +1478,226 @@ describe('PoDatepickerComponent:', () => {
         component['verifyErrorAsync']('value');
 
         expect(unsubscribeSpy).toHaveBeenCalled();
+      });
+    });
+
+    describe('shouldHandleTab:', () => {
+      it('should return true when visible, appendBox are true and not shiftKey', () => {
+        component.visible = true;
+        component.appendBox = true;
+        const event = { shiftKey: false } as KeyboardEvent;
+
+        expect(component['shouldHandleTab'](event)).toBeTrue();
+      });
+
+      it('should return false when visible is false', () => {
+        component.visible = false;
+        component.appendBox = true;
+        const event = { shiftKey: false } as KeyboardEvent;
+
+        expect(component['shouldHandleTab'](event)).toBeFalse();
+      });
+
+      it('should return false when appendBox is false', () => {
+        component.visible = true;
+        component.appendBox = false;
+        const event = { shiftKey: false } as KeyboardEvent;
+
+        expect(component['shouldHandleTab'](event)).toBeFalse();
+      });
+
+      it('should return false when shiftKey is pressed', () => {
+        component.visible = true;
+        component.appendBox = true;
+        const event = { shiftKey: true } as KeyboardEvent;
+
+        expect(component['shouldHandleTab'](event)).toBeFalse();
+      });
+    });
+
+    describe('handleCleanKeyboardTab:', () => {
+      it('should call preventDefault and focusCalendar when shouldHandleTab returns true', () => {
+        const event = { preventDefault: jasmine.createSpy(), shiftKey: false } as unknown as KeyboardEvent;
+        component.visible = true;
+        component.appendBox = true;
+
+        spyOn(component as any, 'shouldHandleTab').and.returnValue(true);
+        spyOn(component as any, 'focusCalendar');
+
+        component.handleCleanKeyboardTab(event);
+
+        expect(event.preventDefault).toHaveBeenCalled();
+        expect(component['focusCalendar']).toHaveBeenCalled();
+      });
+
+      it('should not call preventDefault when shouldHandleTab returns false', () => {
+        const event = { preventDefault: jasmine.createSpy(), shiftKey: false } as unknown as KeyboardEvent;
+        component.visible = false;
+
+        spyOn(component as any, 'shouldHandleTab').and.returnValue(false);
+        spyOn(component as any, 'focusCalendar');
+
+        component.handleCleanKeyboardTab(event);
+
+        expect(event.preventDefault).not.toHaveBeenCalled();
+        expect(component['focusCalendar']).not.toHaveBeenCalled();
+      });
+    });
+
+    describe('focusCalendar:', () => {
+      it('should focus on first focusable element when dialogPicker exists', () => {
+        const mockElement = document.createElement('button');
+        spyOn(mockElement, 'focus');
+
+        component.dialogPicker = {
+          nativeElement: {
+            querySelector: () => mockElement
+          }
+        } as ElementRef;
+
+        component['focusCalendar']();
+
+        expect(mockElement.focus).toHaveBeenCalled();
+      });
+
+      it('should not throw error when dialogPicker is undefined', () => {
+        component.dialogPicker = undefined;
+
+        expect(() => component['focusCalendar']()).not.toThrow();
+      });
+
+      it('should not throw error when no focusable element is found', () => {
+        component.dialogPicker = {
+          nativeElement: {
+            querySelector: () => null
+          }
+        } as ElementRef;
+
+        expect(() => component['focusCalendar']()).not.toThrow();
+      });
+    });
+
+    describe('onCalendarKeyDown:', () => {
+      it('should handle Tab key - toggle picker and focus input', () => {
+        const event = {
+          key: 'Tab',
+          keyCode: PoKeyCodeEnum.tab,
+          preventDefault: jasmine.createSpy(),
+          stopPropagation: jasmine.createSpy()
+        } as unknown as KeyboardEvent;
+
+        spyOn(component, 'togglePicker');
+
+        component.onCalendarKeyDown(event);
+
+        expect(component.togglePicker).toHaveBeenCalled();
+        expect(event.preventDefault).toHaveBeenCalled();
+        expect(event.stopPropagation).toHaveBeenCalled();
+      });
+
+      it('should handle Shift+Tab - toggle picker and focus input', () => {
+        const event = {
+          key: 'Tab',
+          keyCode: PoKeyCodeEnum.tab,
+          shiftKey: true,
+          preventDefault: jasmine.createSpy(),
+          stopPropagation: jasmine.createSpy()
+        } as unknown as KeyboardEvent;
+
+        spyOn(component, 'togglePicker');
+
+        component.onCalendarKeyDown(event);
+
+        expect(component.togglePicker).toHaveBeenCalled();
+        expect(event.preventDefault).toHaveBeenCalled();
+        expect(event.stopPropagation).toHaveBeenCalled();
+      });
+
+      it('should handle Escape key - toggle picker and focus input', () => {
+        const event = {
+          key: 'Escape',
+          keyCode: PoKeyCodeEnum.esc,
+          preventDefault: jasmine.createSpy(),
+          stopPropagation: jasmine.createSpy()
+        } as unknown as KeyboardEvent;
+
+        spyOn(component, 'togglePicker');
+
+        component.onCalendarKeyDown(event);
+
+        expect(component.togglePicker).toHaveBeenCalled();
+        expect(event.preventDefault).toHaveBeenCalled();
+        expect(event.stopPropagation).toHaveBeenCalled();
+      });
+
+      it('should not handle other keys', () => {
+        const event = {
+          key: 'Enter',
+          keyCode: PoKeyCodeEnum.enter,
+          preventDefault: jasmine.createSpy(),
+          stopPropagation: jasmine.createSpy()
+        } as unknown as KeyboardEvent;
+
+        spyOn(component, 'togglePicker');
+
+        component.onCalendarKeyDown(event);
+
+        expect(component.togglePicker).not.toHaveBeenCalled();
+        expect(event.preventDefault).not.toHaveBeenCalled();
+        expect(event.stopPropagation).not.toHaveBeenCalled();
+      });
+    });
+
+    describe('closeCalendar', () => {
+      beforeEach(() => {
+        spyOn(component, <any>'removeListeners');
+        spyOn(component, <any>'setDialogPickerStyleDisplay');
+        spyOn(component, 'focus');
+      });
+
+      describe('when focusInput is true (default) and not mobile', () => {
+        beforeEach(() => {
+          spyOn(component, <any>'verifyMobile').and.returnValue(false);
+          component['closeCalendar']();
+        });
+
+        it('should set visible to false', () => {
+          expect(component.visible).toBeFalse();
+        });
+
+        it('should call removeListeners', () => {
+          expect(component['removeListeners']).toHaveBeenCalled();
+        });
+
+        it('should hide the dialog', () => {
+          expect(component['setDialogPickerStyleDisplay']).toHaveBeenCalledWith('none');
+        });
+
+        it('should call focus()', () => {
+          expect(component.focus).toHaveBeenCalled();
+        });
+      });
+
+      describe('when focusInput is false and not mobile', () => {
+        beforeEach(() => {
+          spyOn(component, <any>'verifyMobile').and.returnValue(false);
+          component['closeCalendar'](false);
+        });
+
+        it('should NOT call focus()', () => {
+          expect(component.focus).not.toHaveBeenCalled();
+        });
+      });
+
+      describe('when focusInput is true but is mobile', () => {
+        beforeEach(() => {
+          spyOn(component, <any>'verifyMobile').and.returnValue(true);
+          component['closeCalendar'](true);
+        });
+
+        it('should NOT call focus() even if focusInput is true', () => {
+          expect(component.focus).not.toHaveBeenCalled();
+        });
       });
     });
   });

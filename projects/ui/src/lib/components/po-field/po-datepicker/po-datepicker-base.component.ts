@@ -531,6 +531,8 @@ export abstract class PoDatepickerBaseComponent implements ControlValueAccessor,
 
   ngOnDestroy(): void {
     this.subscription?.unsubscribe();
+
+    console.log('teste');
   }
 
   // Converte um objeto string em Date
