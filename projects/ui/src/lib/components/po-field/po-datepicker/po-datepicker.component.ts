@@ -25,13 +25,13 @@ import {
 import { PoControlPositionService } from './../../../services/po-control-position/po-control-position.service';
 
 import { isObservable, of, Subscription, switchMap } from 'rxjs';
+import { PoKeyCodeEnum } from '../../../enums/po-key-code.enum';
+import { PoThemeService } from '../../../services';
 import { PoLanguageService } from '../../../services/po-language/po-language.service';
 import { PoButtonComponent } from '../../po-button/po-button.component';
 import { PoCalendarComponent } from '../../po-calendar/po-calendar.component';
-import { PoFieldSize } from '../../../enums/po-field-size.enum';
 import { PoDatepickerBaseComponent } from './po-datepicker-base.component';
 import { PoDatepickerLiterals } from './po-datepicker.literals';
-import { PoThemeService } from '../../../services';
 
 const poCalendarContentOffset = 8;
 const poCalendarPositionDefault = 'bottom-left';
@@ -206,7 +206,7 @@ export class PoDatepickerComponent extends PoDatepickerBaseComponent implements 
    * ```
    */
   focus(): void {
-    if (!this.disabled) {
+    if (!this.disabled && this.inputEl?.nativeElement) {
       this.inputEl.nativeElement.focus();
     }
   }
@@ -216,7 +216,7 @@ export class PoDatepickerComponent extends PoDatepickerBaseComponent implements 
   }
 
   togglePicker() {
-    if (this.disabled || this.readonly) {
+    if (this.disabled || this.readonly || !this.iconDatepicker?.buttonElement?.nativeElement) {
       return;
     }
 
@@ -224,9 +224,15 @@ export class PoDatepickerComponent extends PoDatepickerBaseComponent implements 
       this.setCalendarPosition();
       this.initializeListeners();
       this.visible = true;
+
+      this.renderer.setAttribute(this.inputEl.nativeElement, 'aria-expanded', 'true');
+      this.renderer.setAttribute(this.iconDatepicker.buttonElement.nativeElement, 'aria-expanded', 'true');
     } else {
       this.inputEl.nativeElement.disabled = false;
       this.closeCalendar();
+
+      this.renderer.removeAttribute(this.inputEl.nativeElement, 'aria-expanded');
+      this.renderer.removeAttribute(this.iconDatepicker.buttonElement.nativeElement, 'aria-expanded');
     }
   }
 
@@ -476,6 +482,10 @@ export class PoDatepickerComponent extends PoDatepickerBaseComponent implements 
     this.visible = false;
     this.removeListeners();
     this.setDialogPickerStyleDisplay('none');
+
+    if (!this.verifyMobile()) {
+      this.focus();
+    }
   }
 
   private controlChangeEmitter() {
@@ -554,6 +564,40 @@ export class PoDatepickerComponent extends PoDatepickerBaseComponent implements 
         true
       );
       this.controlPosition.adjustPosition(poCalendarPositionDefault);
+    }
+  }
+
+  handleCleanKeyboardTab(event: KeyboardEvent) {
+    if (this.shouldHandleTab(event)) {
+      event.preventDefault();
+      this.focusCalendar();
+    }
+  }
+
+  // Determina se o tab deve abrir o listbox.
+  private shouldHandleTab(event: KeyboardEvent): boolean {
+    return this.visible && this.appendBox && !event.shiftKey;
+  }
+
+  private focusCalendar() {
+    const focusableElement = this.dialogPicker?.nativeElement?.querySelector(
+      'button:not([disabled]), [tabindex]:not([tabindex="-1"])'
+    );
+
+    if (focusableElement) {
+      focusableElement.focus();
+    }
+  }
+
+  onCalendarKeyDown(event: KeyboardEvent) {
+    const key = event.keyCode;
+
+    if (key === PoKeyCodeEnum.tab || key === PoKeyCodeEnum.esc) {
+      this.togglePicker();
+
+      this.focus();
+      event.preventDefault();
+      event.stopPropagation();
     }
   }
 }
