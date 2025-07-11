@@ -64,6 +64,8 @@ export class PoTableColumnFrozenDirective implements AfterViewInit, OnChanges {
           prev &&
           !prev.classList.contains('po-table-column-selectable') &&
           !prev.classList.contains('po-table-column-actions') &&
+          !prev.classList.contains('po-table-header-single-action') &&
+          !prev.classList.contains('po-table-column-single-action') &&
           !prev.classList.contains('po-table-column-detail-toggle') &&
           !prev.classList.contains('po-table-header-master-detail')
         ) {
