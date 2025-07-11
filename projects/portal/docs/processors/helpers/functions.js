@@ -17,7 +17,7 @@ module.exports = {
       properties = properties.concat(this.resolveProperties(classDoc));
 
       return properties;
-    }
+    };
 
     if (classDoc.docsExtends) {
       let extendedDoc = allDocs.filter(doc => doc.name == classDoc.docsExtends)[0];
@@ -33,7 +33,6 @@ module.exports = {
         } else {
           classDoc.description = `${description}`;
         }
-
       } else {
         console.warn(`Classe ${classDoc.docsExtends} extended by ${classDoc.name} não encontrada!`.red);
       }
@@ -107,12 +106,36 @@ module.exports = {
   resolveProperties: function (classDoc) {
     let properties = classDoc.members.filter(member => !member.hasOwnProperty('parameters'));
 
+    const inferTypeFromInput = codeLine => {
+      const regex = /input(?:<[^>]*>)?\(\s*([^,\)]*)/;
+      const match = codeLine.match(regex);
+
+      if (!match) return 'unknown';
+
+      const param = match[1].trim();
+
+      if (param === 'true' || param === 'false') {
+        return 'boolean';
+      } else if (param.startsWith('"') || param.startsWith("'")) {
+        return 'string';
+      } else if (!isNaN(Number(param))) {
+        return 'number';
+      } else {
+        return 'unknown';
+      }
+    };
+
     properties.forEach(function (property, index) {
       if (property.type.includes('EventEmitter')) {
         properties[index].type = property.type = 'EventEmitter';
       }
+
       if (property.optional !== undefined) {
         property.isOptional = true;
+      }
+
+      if (property.type.includes('input') && property.Input !== undefined) {
+        properties[index].type = inferTypeFromInput(property.type);
       }
     });
 
@@ -241,9 +264,9 @@ module.exports = {
   getDirectiveInputAlias: function (doc) {
     if (this.isDirectiveInput(doc)) {
       if (typeof doc.decorators.find(d => d?.name == 'Input').argumentInfo[0] === 'object') {
-        return doc.decorators.find(d => d?.name == 'Input').argumentInfo[0].alias
+        return doc.decorators.find(d => d?.name == 'Input').argumentInfo[0].alias;
       } else {
-        return doc.decorators.find(d => d?.name == 'Input').arguments[0]
+        return doc.decorators.find(d => d?.name == 'Input').arguments[0];
       }
     }
     return '';
