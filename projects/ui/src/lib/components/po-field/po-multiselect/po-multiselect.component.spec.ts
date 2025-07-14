@@ -322,6 +322,19 @@ describe('PoMultiselectComponent:', () => {
     expect(component.controlDropdownVisibility).toHaveBeenCalledWith(true);
   });
 
+  it('should call focusOnFirstItem when pressed Tab with list box open', () => {
+    const event = { preventDefault: jasmine.createSpy(), keyCode: 9 };
+    component.visibleTags = [];
+    component.appendBox = true;
+    component.dropdownOpen = true;
+
+    spyOn(component, 'focusOnFirstItem');
+
+    component.onKeyDown(event);
+
+    expect(component.focusOnFirstItem).toHaveBeenCalled();
+  });
+
   it('should call focus and controlDropdownVisibility(true) when keyCode enter is pressed', () => {
     const event = { preventDefault: jasmine.createSpy(), keyCode: 13 };
     component.visibleTags = [];
