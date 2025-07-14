@@ -356,7 +356,9 @@ export class PoMultiselectComponent
     }
     this.focusOnTag = false;
 
-    if (event.keyCode === PoKeyCodeEnum.tab) {
+    if (event.keyCode === PoKeyCodeEnum.tab && this.appendBox && this.dropdownOpen) {
+      event.preventDefault();
+      this.focusOnFirstItem();
       return;
     }
 
