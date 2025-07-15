@@ -94,6 +94,19 @@ describe('PoPageSlideComponent', () => {
 
       expect(component['poActiveOverlayService'].activeOverlay).toEqual([]);
     });
+
+    it('close: should remove id value from `poActiveOverlayService.activeOverlay` list when last element', () => {
+      component['id'] = '2';
+      component['poActiveOverlayService'].activeOverlay = ['1', '2'];
+
+      component.open();
+      fixture.detectChanges();
+
+      component.close();
+      fixture.detectChanges();
+
+      expect(component['poActiveOverlayService'].activeOverlay).toEqual(['1']);
+    });
   });
 
   it('should open() and close() methods includes and removes component on DOM', () => {

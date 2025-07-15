@@ -51,7 +51,12 @@ export class PoModalComponent extends PoModalBaseComponent {
   }
 
   close(xClosed = false) {
-    this.poActiveOverlayService.activeOverlay.pop();
+    if (
+      this.poActiveOverlayService.activeOverlay.length > 0 &&
+      this.poActiveOverlayService.activeOverlay[this.poActiveOverlayService.activeOverlay.length - 1] === this.id
+    ) {
+      this.poActiveOverlayService.activeOverlay.pop();
+    }
 
     super.close(xClosed);
 

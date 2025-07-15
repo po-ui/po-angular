@@ -1,6 +1,5 @@
 import { NgModule } from '@angular/core';
 
-import { PoActiveOverlayModule } from './po-active-overlay/po-active-overlay.module';
 import { PoColorPaletteModule } from './po-color-palette/po-color-palette.module';
 import { PoComponentInjectorModule } from './po-component-injector/po-component-injector.module';
 import { PoControlPositionModule } from './po-control-position/po-control-position.module';
@@ -14,7 +13,6 @@ import { PoThemeModule } from './po-theme/po-theme.module';
 @NgModule({
   declarations: [PoI18nPipe],
   imports: [
-    PoActiveOverlayModule,
     PoColorPaletteModule,
     PoComponentInjectorModule,
     PoControlPositionModule,
@@ -25,7 +23,6 @@ import { PoThemeModule } from './po-theme/po-theme.module';
     PoThemeModule
   ],
   exports: [
-    PoActiveOverlayModule,
     PoColorPaletteModule,
     PoComponentInjectorModule,
     PoControlPositionModule,
