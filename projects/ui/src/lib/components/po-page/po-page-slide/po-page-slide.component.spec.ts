@@ -69,7 +69,12 @@ describe('PoPageSlideComponent', () => {
 
   describe('Methods:', () => {
     it('focusEvent: should call `stopPropagation` if `activeOverlay` is equal to id', () => {
-      const fakeEvent = { target: 'click', stopPropagation: () => {} };
+      const fakeEvent = {
+        target: {
+          closest: () => null
+        },
+        stopPropagation: () => {}
+      };
 
       component['firstElement'] = <any>{ focus: () => {} };
       component['id'] = '1';

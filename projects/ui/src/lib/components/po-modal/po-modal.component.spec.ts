@@ -232,7 +232,9 @@ describe('PoModalComponent:', () => {
 
   it(`focusFunction: should call 'stopPropagation' if 'activeOverlay' is equal to id`, () => {
     const fakeEvent = {
-      target: 'click',
+      target: {
+        closest: () => null
+      },
       stopPropagation: () => {}
     };
 
