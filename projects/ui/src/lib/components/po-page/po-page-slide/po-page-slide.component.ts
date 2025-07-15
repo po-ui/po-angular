@@ -112,7 +112,13 @@ export class PoPageSlideComponent extends PoPageSlideBaseComponent {
   }
 
   public close(): void {
-    this.poActiveOverlayService.activeOverlay.pop();
+    if (
+      this.poActiveOverlayService.activeOverlay.length > 0 &&
+      this.poActiveOverlayService.activeOverlay[this.poActiveOverlayService.activeOverlay.length - 1] === this.id
+    ) {
+      this.poActiveOverlayService.activeOverlay.pop();
+    }
+
     super.close();
 
     this.removeEventListeners();
