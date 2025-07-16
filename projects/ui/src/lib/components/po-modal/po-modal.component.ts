@@ -102,10 +102,13 @@ export class PoModalComponent extends PoModalBaseComponent {
 
   private initFocus() {
     this.focusFunction = (event: any) => {
+      const isCdkOverlayListbox = event.target.closest('.cdk-overlay-container') !== null;
+
       const modalElement = this.modalContent.nativeElement;
 
       if (
         !modalElement.contains(event.target) &&
+        !isCdkOverlayListbox &&
         this.poActiveOverlayService.activeOverlay[this.poActiveOverlayService.activeOverlay.length - 1] === this.id
       ) {
         event.stopPropagation();
