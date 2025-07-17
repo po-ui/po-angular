@@ -1,5 +1,5 @@
 import { HttpClient, HttpHeaders } from '@angular/common/http';
-import { Injectable } from '@angular/core';
+import { Injectable, inject } from '@angular/core';
 import { Observable, of } from 'rxjs';
 
 import { PoPageDynamicDetailActions } from './interfaces/po-page-dynamic-detail-actions.interface';
@@ -17,11 +17,11 @@ interface ExecuteActionParameter {
   providedIn: 'root'
 })
 export class PoPageDynamicDetailActionsService {
+  private http = inject(HttpClient);
+
   readonly headers: HttpHeaders = new HttpHeaders({
     'X-PO-SCREEN-LOCK': 'true'
   });
-
-  constructor(private http: HttpClient) {}
 
   beforeBack(action?: PoPageDynamicDetailActions['beforeBack']): Observable<PoPageDynamicDetailBeforeBack> {
     return this.executeAction({ action });

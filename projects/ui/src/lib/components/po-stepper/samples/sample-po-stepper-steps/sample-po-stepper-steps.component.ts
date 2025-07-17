@@ -1,4 +1,4 @@
-import { AfterViewInit, ChangeDetectorRef, Component } from '@angular/core';
+import { AfterViewInit, ChangeDetectorRef, Component, inject } from '@angular/core';
 import { PoStepperItem, PoStepperStatus } from '@po-ui/ng-components';
 
 @Component({
@@ -7,6 +7,8 @@ import { PoStepperItem, PoStepperStatus } from '@po-ui/ng-components';
   standalone: false
 })
 export class SamplePoStepperStepsComponent implements AfterViewInit {
+  private changeDetector = inject(ChangeDetectorRef);
+
   currentStep: number;
   stepsWithStatus: Array<PoStepperItem> = [
     { label: 'Step 1', status: PoStepperStatus.Done },
@@ -14,8 +16,6 @@ export class SamplePoStepperStepsComponent implements AfterViewInit {
     { label: 'Step 3', status: PoStepperStatus.Default },
     { label: 'Step 4', status: PoStepperStatus.Disabled }
   ];
-
-  constructor(private changeDetector: ChangeDetectorRef) {}
 
   ngAfterViewInit(): void {
     this.currentStep = 2;

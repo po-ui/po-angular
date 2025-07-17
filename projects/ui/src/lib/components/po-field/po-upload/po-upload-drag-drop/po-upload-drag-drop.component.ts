@@ -6,7 +6,8 @@ import {
   EventEmitter,
   Input,
   Output,
-  ViewChild
+  ViewChild,
+  inject
 } from '@angular/core';
 
 import { convertToInt } from '../../../../utils/util';
@@ -24,6 +25,8 @@ const PoUploadDragDropHeightMin = 160;
   standalone: false
 })
 export class PoUploadDragDropComponent {
+  private changeDetector = inject(ChangeDetectorRef);
+
   @ViewChild('dragDropOverlay', { read: ElementRef }) dragDropOverlayElement: ElementRef;
   @ViewChild(PoUploadDragDropAreaComponent, { static: true }) dragDropAreaComponent: PoUploadDragDropAreaComponent;
 
@@ -51,8 +54,6 @@ export class PoUploadDragDropComponent {
   get dragDropHeight() {
     return this._dragDropHeight;
   }
-
-  constructor(private changeDetector: ChangeDetectorRef) {}
 
   focus() {
     this.dragDropAreaComponent.focus();

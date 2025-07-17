@@ -6,7 +6,8 @@ import {
   IterableDiffers,
   OnDestroy,
   Renderer2,
-  ViewChild
+  ViewChild,
+  inject
 } from '@angular/core';
 
 import { PoBreadcrumbBaseComponent } from './po-breadcrumb-base.component';
@@ -50,6 +51,10 @@ export const poBreadcrumbLiterals: object = {
   standalone: false
 })
 export class PoBreadcrumbComponent extends PoBreadcrumbBaseComponent implements AfterViewInit, DoCheck, OnDestroy {
+  private element = inject(ElementRef);
+  renderer = inject(Renderer2);
+  languageService = inject(PoLanguageService);
+
   @ViewChild('breadcrumb', { read: ElementRef, static: true }) breadcrumbElement: ElementRef;
   @ViewChild('dropdownIcon', { read: ElementRef }) dropdownIcon: ElementRef;
   @ViewChild('target', { read: ElementRef }) svgTarget: ElementRef;
@@ -68,13 +73,12 @@ export class PoBreadcrumbComponent extends PoBreadcrumbBaseComponent implements 
   private initialized = false;
   private timeoutResize;
 
-  constructor(
-    differs: IterableDiffers,
-    private element: ElementRef,
-    public renderer: Renderer2,
-    public languageService: PoLanguageService
-  ) {
+  constructor() {
+    const differs = inject(IterableDiffers);
+
     super();
+    const languageService = this.languageService;
+
     this.differ = differs.find([]).create(null);
     const language = languageService.getShortLanguage();
 

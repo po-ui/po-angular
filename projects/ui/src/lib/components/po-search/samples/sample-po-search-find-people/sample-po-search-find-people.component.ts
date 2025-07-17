@@ -1,4 +1,4 @@
-import { Component, OnInit } from '@angular/core';
+import { Component, OnInit, inject } from '@angular/core';
 import { SamplePoSearchFindPeopleService } from './sample-po-search-find-people.service';
 
 @Component({
@@ -26,11 +26,11 @@ import { SamplePoSearchFindPeopleService } from './sample-po-search-find-people.
   standalone: false
 })
 export class SamplePoSearchFindPeopleComponent implements OnInit {
+  private service = inject(SamplePoSearchFindPeopleService);
+
   items: any;
   filterKeys: Array<string> = ['name', 'nickname', 'email'];
   peopleFiltered: Array<any> = [];
-
-  constructor(private service: SamplePoSearchFindPeopleService) {}
 
   ngOnInit() {
     this.items = this.service.getItems();

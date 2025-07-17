@@ -1,4 +1,4 @@
-import { Component, OnDestroy, OnInit } from '@angular/core';
+import { Component, OnDestroy, OnInit, inject } from '@angular/core';
 
 import { Subscription } from 'rxjs';
 
@@ -17,6 +17,9 @@ import {
   standalone: false
 })
 export class SamplePoPageLoginHumanResourcesComponent implements OnDestroy, OnInit {
+  private poI18nService = inject(PoI18nService);
+  private poDialog = inject(PoDialogService);
+
   customField: PoPageLoginCustomField = {
     property: 'domain',
     placeholder: 'Enter your domain'
@@ -37,11 +40,6 @@ export class SamplePoPageLoginHumanResourcesComponent implements OnDestroy, OnIn
   showPageBlocked: boolean = false;
 
   private i18nSubscription: Subscription;
-
-  constructor(
-    private poI18nService: PoI18nService,
-    private poDialog: PoDialogService
-  ) {}
 
   ngOnDestroy() {
     this.i18nSubscription.unsubscribe();

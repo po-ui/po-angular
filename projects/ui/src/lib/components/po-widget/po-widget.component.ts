@@ -7,7 +7,7 @@ import {
   OnInit,
   SimpleChanges,
   ViewChild,
-  ViewContainerRef
+  inject
 } from '@angular/core';
 
 import { PoLanguageService, poLocaleDefault, PoThemeService } from '../../services';
@@ -49,6 +49,9 @@ import { PoWidgetBaseComponent } from './po-widget-base.component';
   standalone: false
 })
 export class PoWidgetComponent extends PoWidgetBaseComponent implements OnInit, OnChanges, AfterViewInit {
+  protected cd = inject(ChangeDetectorRef);
+  protected poTheme = inject(PoThemeService);
+
   popupTarget: any;
   literals;
   hasContent = false;
@@ -65,12 +68,9 @@ export class PoWidgetComponent extends PoWidgetBaseComponent implements OnInit, 
     return !!this.titleAction.observers[0];
   }
 
-  constructor(
-    viewRef: ViewContainerRef,
-    languageService: PoLanguageService,
-    protected cd: ChangeDetectorRef,
-    protected poTheme: PoThemeService
-  ) {
+  constructor() {
+    const languageService = inject(PoLanguageService);
+
     super();
     const language = languageService.getShortLanguage();
     this.literals = {

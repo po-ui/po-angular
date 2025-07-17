@@ -5,7 +5,8 @@ import {
   forwardRef,
   OnChanges,
   OnInit,
-  SimpleChanges
+  SimpleChanges,
+  inject
 } from '@angular/core';
 import { AbstractControl, NG_VALIDATORS, NG_VALUE_ACCESSOR } from '@angular/forms';
 
@@ -60,13 +61,14 @@ const poCalendarRangeWidth = 600;
   standalone: false
 })
 export class PoCalendarComponent extends PoCalendarBaseComponent implements OnInit, OnChanges {
+  private changeDetector = inject(ChangeDetectorRef);
+
   hoverValue: Date;
 
-  constructor(
-    private changeDetector: ChangeDetectorRef,
-    poDate: PoDateService,
-    languageService: PoLanguageService
-  ) {
+  constructor() {
+    const poDate = inject(PoDateService);
+    const languageService = inject(PoLanguageService);
+
     super(poDate, languageService);
   }
 

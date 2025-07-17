@@ -6,7 +6,8 @@ import {
   OnDestroy,
   OnInit,
   Renderer2,
-  ViewChild
+  ViewChild,
+  inject
 } from '@angular/core';
 import { animate, AnimationBuilder, AnimationFactory, AnimationPlayer, keyframes, style } from '@angular/animations';
 
@@ -37,6 +38,11 @@ const poNavbarTiming = '250ms ease';
   standalone: false
 })
 export class PoNavbarComponent extends PoNavbarBaseComponent implements AfterViewInit, OnDestroy, OnInit {
+  private renderer = inject(Renderer2);
+  private builder = inject(AnimationBuilder);
+  private changeDetector = inject(ChangeDetectorRef);
+  private menuGlobalService = inject(PoMenuGlobalService);
+
   @ViewChild(PoNavbarItemsComponent, { read: ElementRef, static: true }) navbarItemsElement: ElementRef;
 
   @ViewChild(PoNavbarItemsComponent, { static: true }) navbarItems: PoNavbarItemsComponent;
@@ -79,13 +85,9 @@ export class PoNavbarComponent extends PoNavbarBaseComponent implements AfterVie
     return window.innerWidth < poNavbarMenuMedia;
   }
 
-  constructor(
-    poLanguageService: PoLanguageService,
-    private renderer: Renderer2,
-    private builder: AnimationBuilder,
-    private changeDetector: ChangeDetectorRef,
-    private menuGlobalService: PoMenuGlobalService
-  ) {
+  constructor() {
+    const poLanguageService = inject(PoLanguageService);
+
     super(poLanguageService);
     this.windowResizeListener = this.renderer.listen(window, 'resize', this.displayItemsNavigation.bind(this));
   }

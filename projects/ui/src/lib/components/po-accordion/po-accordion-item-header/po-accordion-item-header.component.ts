@@ -1,4 +1,13 @@
-import { ChangeDetectionStrategy, Component, ElementRef, EventEmitter, Input, Output, ViewChild } from '@angular/core';
+import {
+  ChangeDetectionStrategy,
+  Component,
+  ElementRef,
+  EventEmitter,
+  Input,
+  Output,
+  ViewChild,
+  inject
+} from '@angular/core';
 import { PoLanguageService } from '../../../services/po-language';
 import { poLocaleDefault } from '../../../services/po-language/po-language.constant';
 
@@ -26,7 +35,9 @@ export class PoAccordionItemHeaderComponent {
 
   @Output('p-toggle') toggle = new EventEmitter<boolean>();
 
-  constructor(languageService: PoLanguageService) {
+  constructor() {
+    const languageService = inject(PoLanguageService);
+
     this.language = languageService.getShortLanguage();
   }
 

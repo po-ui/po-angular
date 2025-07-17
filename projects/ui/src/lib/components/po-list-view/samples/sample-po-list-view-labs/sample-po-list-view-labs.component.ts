@@ -1,4 +1,4 @@
-import { Component, OnInit } from '@angular/core';
+import { Component, OnInit, inject } from '@angular/core';
 
 import {
   PoCheckboxGroupOption,
@@ -15,6 +15,8 @@ import {
   standalone: false
 })
 export class SamplePoListViewLabsComponent implements OnInit {
+  private poNotification = inject(PoNotificationService);
+
   action: PoListViewAction;
   actions: Array<PoListViewAction>;
   componentsSize: string = 'medium';
@@ -65,8 +67,6 @@ export class SamplePoListViewLabsComponent implements OnInit {
     { label: 'Default', value: 'default' },
     { label: 'Danger', value: 'danger' }
   ];
-
-  constructor(private poNotification: PoNotificationService) {}
 
   ngOnInit() {
     this.restore();

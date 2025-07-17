@@ -1,4 +1,4 @@
-import { Component, ViewChild } from '@angular/core';
+import { Component, ViewChild, inject } from '@angular/core';
 import { NgForm } from '@angular/forms';
 
 import { PoDatepickerComponent, PoNotificationService, PoSelectOption } from '@po-ui/ng-components';
@@ -9,6 +9,8 @@ import { PoDatepickerComponent, PoNotificationService, PoSelectOption } from '@p
   standalone: false
 })
 export class SamplePoComboHotelsComponent {
+  private poNotification = inject(PoNotificationService);
+
   @ViewChild('bookingForm', { static: true }) form: NgForm;
   @ViewChild('datepicker', { static: true }) datepickerComponent: PoDatepickerComponent;
 
@@ -39,8 +41,6 @@ export class SamplePoComboHotelsComponent {
     { label: '2 Rooms', value: 2 },
     { label: '3 Rooms', value: 3 }
   ];
-
-  constructor(private poNotification: PoNotificationService) {}
 
   booking() {
     this.poNotification.success('Hotel booked successfully');

@@ -1,4 +1,4 @@
-import { Component, OnInit, ViewChild } from '@angular/core';
+import { Component, OnInit, ViewChild, inject } from '@angular/core';
 
 import { PoDialogService, PoRadioGroupOption, PoSelectOption } from '@po-ui/ng-components';
 import {
@@ -13,6 +13,8 @@ import {
   standalone: false
 })
 export class SamplePoModalPasswordRecoveryLabsComponent implements OnInit {
+  private poDialog = inject(PoDialogService);
+
   @ViewChild(PoModalPasswordRecoveryComponent) poModalPasswordRecovery: PoModalPasswordRecoveryComponent;
 
   codeError: string;
@@ -35,8 +37,6 @@ export class SamplePoModalPasswordRecoveryLabsComponent implements OnInit {
     { label: 'Email', value: PoModalPasswordRecoveryType.Email },
     { label: 'SMS', value: PoModalPasswordRecoveryType.SMS }
   ];
-
-  constructor(private poDialog: PoDialogService) {}
 
   ngOnInit() {
     this.restore();

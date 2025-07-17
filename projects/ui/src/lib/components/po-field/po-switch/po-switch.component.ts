@@ -5,7 +5,6 @@ import {
   Component,
   ElementRef,
   forwardRef,
-  Inject,
   inject,
   InjectOptions,
   Injector,
@@ -128,6 +127,9 @@ import { Subscription } from 'rxjs';
   standalone: false
 })
 export class PoSwitchComponent extends PoFieldModel<any> implements Validator, AfterViewInit, OnDestroy {
+  private readonly changeDetector = inject(ChangeDetectorRef);
+  private readonly injector = inject<Injector>(Injector);
+
   @ViewChild('switchContainer', { static: true }) switchContainer: ElementRef;
 
   id = `po-switch[${uuid()}]`;
@@ -283,12 +285,6 @@ export class PoSwitchComponent extends PoFieldModel<any> implements Validator, A
     self: true
   };
   private control!: AbstractControl;
-  constructor(
-    private readonly changeDetector: ChangeDetectorRef,
-    @Inject(Injector) private readonly injector: Injector
-  ) {
-    super();
-  }
 
   ngOnDestroy() {
     this.statusChangesSubscription?.unsubscribe();

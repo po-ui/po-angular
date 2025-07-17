@@ -1,4 +1,4 @@
-import { Component, OnInit } from '@angular/core';
+import { Component, OnInit, inject } from '@angular/core';
 
 import { PoCheckboxGroupOption, PoDialogService, PoRadioGroupOption, PoSelectOption } from '@po-ui/ng-components';
 
@@ -10,6 +10,8 @@ import { PoPageLogin, PoPageLoginCustomField, PoPageLoginLiterals } from '@po-ui
   standalone: false
 })
 export class SamplePoPageLoginLabsComponent implements OnInit {
+  private poDialog = inject(PoDialogService);
+
   background: string;
   componentsSize: string;
   contactEmail: string;
@@ -44,8 +46,6 @@ export class SamplePoPageLoginLabsComponent implements OnInit {
     { value: 'hideRememberUser', label: 'Hide remember user' },
     { value: 'loading', label: 'Loading' }
   ];
-
-  constructor(private poDialog: PoDialogService) {}
 
   ngOnInit() {
     this.restore();

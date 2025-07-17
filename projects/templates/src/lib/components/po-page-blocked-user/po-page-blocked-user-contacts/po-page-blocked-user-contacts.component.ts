@@ -1,4 +1,12 @@
-import { ChangeDetectionStrategy, ChangeDetectorRef, Component, ElementRef, Input, ViewChild } from '@angular/core';
+import {
+  ChangeDetectionStrategy,
+  ChangeDetectorRef,
+  Component,
+  ElementRef,
+  Input,
+  ViewChild,
+  inject
+} from '@angular/core';
 
 const poPageBlockedUserContactItemMargin = 16;
 
@@ -9,6 +17,8 @@ const poPageBlockedUserContactItemMargin = 16;
   standalone: false
 })
 export class PoPageBlockedUserContactsComponent {
+  private changeDetector = inject(ChangeDetectorRef);
+
   @ViewChild('contactGroup', { static: true }) contactGroup: ElementRef;
 
   @ViewChild('mailItem', { static: true }) mailItem: ElementRef;
@@ -39,8 +49,6 @@ export class PoPageBlockedUserContactsComponent {
   get phone() {
     return this._phone;
   }
-
-  constructor(private changeDetector: ChangeDetectorRef) {}
 
   private checkContactItemWidth() {
     this.overflowItem = true;

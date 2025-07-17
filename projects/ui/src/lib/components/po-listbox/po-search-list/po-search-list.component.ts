@@ -6,7 +6,8 @@ import {
   EventEmitter,
   Input,
   Output,
-  ViewChild
+  ViewChild,
+  inject
 } from '@angular/core';
 import { PoListBoxLiterals } from '../interfaces/po-listbox-literals.interface';
 
@@ -24,6 +25,8 @@ import { PoListBoxLiterals } from '../interfaces/po-listbox-literals.interface';
   standalone: false
 })
 export class PoSearchListComponent {
+  private cd = inject(ChangeDetectorRef);
+
   @ViewChild('inputElement', { read: ElementRef, static: true }) inputElement: ElementRef;
 
   /** Propriedade que recebe as literais definidas no `po-listbox`. */
@@ -40,8 +43,6 @@ export class PoSearchListComponent {
   private _placeholder?: string;
   public initUp = false;
   public initDown = false;
-
-  constructor(private cd: ChangeDetectorRef) {}
 
   /**
    * @optional

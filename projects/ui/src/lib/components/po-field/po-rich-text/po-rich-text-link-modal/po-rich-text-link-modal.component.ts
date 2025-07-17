@@ -1,4 +1,4 @@
-import { Component, ElementRef, EventEmitter, Input, OnInit, Output, ViewChild } from '@angular/core';
+import { Component, ElementRef, EventEmitter, Input, OnInit, Output, ViewChild, inject } from '@angular/core';
 import { AbstractControl, NgForm } from '@angular/forms';
 
 import { isExternalLink, isIE } from '../../../../utils/util';
@@ -13,6 +13,8 @@ import { poRichTextLiteralsDefault } from '../po-rich-text-literals';
   standalone: false
 })
 export class PoRichTextLinkModalComponent implements OnInit {
+  private languageService = inject(PoLanguageService);
+
   @ViewChild('modal', { static: true }) modal: PoModalComponent;
 
   @ViewChild('modalLinkForm') modalLinkForm: NgForm;
@@ -38,7 +40,7 @@ export class PoRichTextLinkModalComponent implements OnInit {
   private linkElement: any;
   private savedSelection: Range | null;
 
-  constructor(private languageService: PoLanguageService) {
+  constructor() {
     this.literals = {
       ...poRichTextLiteralsDefault[this.languageService?.getShortLanguage()]
     };

@@ -1,4 +1,4 @@
-import { Component, OnInit } from '@angular/core';
+import { Component, OnInit, inject } from '@angular/core';
 import { UntypedFormBuilder, UntypedFormGroup, Validators } from '@angular/forms';
 
 @Component({
@@ -7,9 +7,9 @@ import { UntypedFormBuilder, UntypedFormGroup, Validators } from '@angular/forms
   standalone: false
 })
 export class SamplePoDecimalHourlyWageReactiveFormComponent implements OnInit {
-  formCalculateHourlyWage: UntypedFormGroup;
+  private formBuilder = inject(UntypedFormBuilder);
 
-  constructor(private formBuilder: UntypedFormBuilder) {}
+  formCalculateHourlyWage: UntypedFormGroup;
 
   ngOnInit() {
     this.formCalculateHourlyWage = this.formBuilder.group({

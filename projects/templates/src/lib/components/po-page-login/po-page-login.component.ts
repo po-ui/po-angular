@@ -6,7 +6,8 @@ import {
   IterableDiffers,
   OnInit,
   ViewChild,
-  ViewContainerRef
+  ViewContainerRef,
+  inject
 } from '@angular/core';
 import { AbstractControl, NgForm } from '@angular/forms';
 import { ActivatedRoute, Router } from '@angular/router';
@@ -59,6 +60,10 @@ import { PoPageLoginService } from './po-page-login.service';
   standalone: false
 })
 export class PoPageLoginComponent extends PoPageLoginBaseComponent implements AfterViewChecked, OnInit {
+  changeDetector = inject(ChangeDetectorRef);
+  private activatedRoute = inject(ActivatedRoute);
+  private poComponentInjector = inject(PoComponentInjectorService);
+
   @ViewChild('loginForm', { read: NgForm, static: true }) loginForm: NgForm;
   @ViewChild('pageLogin', { read: ViewContainerRef, static: true }) pageLogin: ViewContainerRef;
 
@@ -68,15 +73,12 @@ export class PoPageLoginComponent extends PoPageLoginBaseComponent implements Af
   private differ: any;
   private readonly customPasswordError = { custom: false };
 
-  constructor(
-    public changeDetector: ChangeDetectorRef,
-    private activatedRoute: ActivatedRoute,
-    private poComponentInjector: PoComponentInjectorService,
-    differs: IterableDiffers,
-    loginService: PoPageLoginService,
-    router: Router,
-    poLanguageService: PoLanguageService
-  ) {
+  constructor() {
+    const differs = inject(IterableDiffers);
+    const loginService = inject(PoPageLoginService);
+    const router = inject(Router);
+    const poLanguageService = inject(PoLanguageService);
+
     super(loginService, router, poLanguageService);
     this.differ = differs.find([]).create(null);
   }

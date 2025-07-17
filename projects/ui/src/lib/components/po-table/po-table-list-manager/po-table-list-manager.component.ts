@@ -97,7 +97,7 @@ export class PoTableListManagerComponent extends PoCheckboxGroupComponent {
     changeDetector: ChangeDetectorRef,
     @Optional() @Inject(ICONS_DICTIONARY) value: { [key: string]: string }
   ) {
-    super(changeDetector);
+    super();
 
     const language = languageService.getShortLanguage();
 

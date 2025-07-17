@@ -1,5 +1,5 @@
 import { HttpClient } from '@angular/common/http';
-import { Injectable } from '@angular/core';
+import { Injectable, inject } from '@angular/core';
 
 import { Observable } from 'rxjs';
 import { map } from 'rxjs/operators';
@@ -10,7 +10,7 @@ import { PoMultiselectFilter, PoMultiselectOption } from '@po-ui/ng-components';
   providedIn: 'root'
 })
 export class SamplePoMultiselectHeroesService implements PoMultiselectFilter {
-  constructor(private http: HttpClient) {}
+  private http = inject(HttpClient);
 
   getFilteredData({ value }): Observable<Array<PoMultiselectOption>> {
     const params = { filter: value };

@@ -1,4 +1,4 @@
-import { Component, OnInit, ViewChild } from '@angular/core';
+import { Component, OnInit, ViewChild, inject } from '@angular/core';
 
 import {
   ForceBooleanComponentEnum,
@@ -18,6 +18,9 @@ import { PoDynamicFormContainerService } from './sample-po-dynamic-form-containe
   standalone: false
 })
 export class SamplePoDynamicFormContainerComponent implements OnInit {
+  poNotification = inject(PoNotificationService);
+  private registerService = inject(PoDynamicFormContainerService);
+
   @ViewChild('dynamicForm', { static: true }) dynamicForm: PoDynamicFormComponent;
   person = {};
   validateFields: Array<string> = ['state'];
@@ -216,11 +219,6 @@ export class SamplePoDynamicFormContainerComponent implements OnInit {
       }
     }
   ];
-
-  constructor(
-    public poNotification: PoNotificationService,
-    private registerService: PoDynamicFormContainerService
-  ) {}
 
   ngOnInit() {
     this.person = {

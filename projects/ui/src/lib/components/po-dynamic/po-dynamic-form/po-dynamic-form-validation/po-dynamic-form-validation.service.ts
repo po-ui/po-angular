@@ -1,5 +1,5 @@
 import { HttpClient } from '@angular/common/http';
-import { Injectable } from '@angular/core';
+import { Injectable, inject } from '@angular/core';
 
 import { map } from 'rxjs/operators';
 import { Observable } from 'rxjs';
@@ -13,7 +13,9 @@ import { PoDynamicFormValidation } from './po-dynamic-form-validation.interface'
   providedIn: 'root'
 })
 export class PoDynamicFormValidationService extends PoDynamicFormOperation {
-  constructor(http: HttpClient) {
+  constructor() {
+    const http = inject(HttpClient);
+
     super(http);
   }
 

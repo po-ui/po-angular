@@ -1,4 +1,4 @@
-import { AfterViewInit, Component, ViewChild } from '@angular/core';
+import { AfterViewInit, Component, ViewChild, inject } from '@angular/core';
 import { UntypedFormBuilder, UntypedFormGroup, Validators } from '@angular/forms';
 import {
   PoEmailComponent,
@@ -17,6 +17,8 @@ import {
   standalone: false
 })
 export class SamplePoSearchFieldsLocateComponent implements AfterViewInit {
+  protected fb = inject(UntypedFormBuilder);
+
   @ViewChild('nameInput', { static: true }) nameInput!: PoInputComponent;
   @ViewChild('cpfInput', { static: true }) cpfInput!: PoInputComponent;
   @ViewChild('addressInput', { static: true }) addressInput!: PoInputComponent;
@@ -40,7 +42,7 @@ export class SamplePoSearchFieldsLocateComponent implements AfterViewInit {
     action: () => this.reactiveFormModal.close()
   };
 
-  constructor(protected fb: UntypedFormBuilder) {
+  constructor() {
     this.createForm();
   }
 

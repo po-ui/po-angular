@@ -1,4 +1,4 @@
-import { AfterViewInit, Component, OnDestroy, Renderer2 } from '@angular/core';
+import { AfterViewInit, Component, OnDestroy, Renderer2, inject } from '@angular/core';
 
 import { PoPageContentBaseComponent } from './po-page-content-base.component';
 
@@ -13,11 +13,13 @@ import { PoPageContentBaseComponent } from './po-page-content-base.component';
   standalone: false
 })
 export class PoPageContentComponent extends PoPageContentBaseComponent implements AfterViewInit, OnDestroy {
+  renderer = inject(Renderer2);
+
   contentOpacity: number = 0;
   height: string = '90%';
   overflowY: string = 'none';
 
-  constructor(public renderer: Renderer2) {
+  constructor() {
     super();
     this.initializeListeners();
   }

@@ -1,4 +1,13 @@
-import { ChangeDetectionStrategy, Component, Input, OnChanges, OnInit, Output, EventEmitter } from '@angular/core';
+import {
+  ChangeDetectionStrategy,
+  Component,
+  Input,
+  OnChanges,
+  OnInit,
+  Output,
+  EventEmitter,
+  inject
+} from '@angular/core';
 
 import { Subject } from 'rxjs';
 import { debounceTime } from 'rxjs/operators';
@@ -15,6 +24,10 @@ import { PoDateService } from '../../../services/po-date/po-date.service';
   standalone: false
 })
 export class PoCalendarWrapperComponent implements OnInit, OnChanges {
+  private poCalendarService = inject(PoCalendarService);
+  private poCalendarLangService = inject(PoCalendarLangService);
+  private poDate = inject(PoDateService);
+
   @Input('p-value') value;
 
   @Input('p-mode') mode: 'day' | 'month' | 'year' = 'day';
@@ -96,12 +109,6 @@ export class PoCalendarWrapperComponent implements OnInit, OnChanges {
   get isEndPart() {
     return this.partType === 'end';
   }
-
-  constructor(
-    private poCalendarService: PoCalendarService,
-    private poCalendarLangService: PoCalendarLangService,
-    private poDate: PoDateService
-  ) {}
 
   ngOnInit() {
     this.init();

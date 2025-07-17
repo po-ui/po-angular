@@ -1,4 +1,4 @@
-import { Component, OnInit, ViewChild } from '@angular/core';
+import { Component, OnInit, ViewChild, inject } from '@angular/core';
 
 import { PoBreadcrumb, PoDynamicViewField, PoModalComponent } from '@po-ui/ng-components';
 
@@ -18,6 +18,8 @@ import { SamplePoPageDynamicTableUsersService } from './sample-po-page-dynamic-t
   standalone: false
 })
 export class SamplePoPageDynamicTableUsersComponent implements OnInit {
+  private usersService = inject(SamplePoPageDynamicTableUsersService);
+
   @ViewChild('userDetailModal') userDetailModal!: PoModalComponent;
   @ViewChild('dependentsModal') dependentsModal!: PoModalComponent;
 
@@ -118,8 +120,6 @@ export class SamplePoPageDynamicTableUsersComponent implements OnInit {
       icon: 'an an-user'
     }
   ];
-
-  constructor(private usersService: SamplePoPageDynamicTableUsersService) {}
 
   ngOnInit(): void {
     this.pageCustomActions = [

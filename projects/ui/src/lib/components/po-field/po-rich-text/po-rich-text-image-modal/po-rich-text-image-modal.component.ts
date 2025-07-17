@@ -1,4 +1,4 @@
-import { Component, EventEmitter, Input, Output, ViewChild } from '@angular/core';
+import { Component, EventEmitter, Input, Output, ViewChild, inject } from '@angular/core';
 import { NgForm } from '@angular/forms';
 
 import { convertImageToBase64 } from '../../../../utils/util';
@@ -17,6 +17,8 @@ const uploadRestrictions = ['.apng', '.bmp', '.gif', '.ico', '.jpeg', '.jpg', '.
   standalone: false
 })
 export class PoRichTextImageModalComponent {
+  private languageService = inject(PoLanguageService);
+
   @ViewChild('modal', { static: true }) modal: PoModalComponent;
 
   @ViewChild('modalImageForm') modalImageForm: NgForm;
@@ -49,7 +51,7 @@ export class PoRichTextImageModalComponent {
     return !!this.urlImage && this.modalImageForm && this.modalImageForm.valid;
   }
 
-  constructor(private languageService: PoLanguageService) {
+  constructor() {
     this.literals = {
       ...poRichTextLiteralsDefault[this.languageService.getShortLanguage()]
     };

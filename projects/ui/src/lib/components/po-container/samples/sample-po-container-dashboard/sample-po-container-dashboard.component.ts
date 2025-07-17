@@ -1,4 +1,4 @@
-import { AfterContentChecked, Component, ViewChild, OnInit } from '@angular/core';
+import { AfterContentChecked, Component, ViewChild, OnInit, inject } from '@angular/core';
 import { NgForm } from '@angular/forms';
 
 import { SampleDashboardService } from './sample-po-container-dashboard.service';
@@ -28,6 +28,9 @@ import {
   standalone: false
 })
 export class SamplePoContainerDashboardComponent implements AfterContentChecked, OnInit {
+  private poNotification = inject(PoNotificationService);
+  private sampleDashboardService = inject(SampleDashboardService);
+
   @ViewChild('formShare', { static: true }) formShare: NgForm;
   @ViewChild(PoModalComponent) poModal: PoModalComponent;
 
@@ -63,11 +66,6 @@ export class SamplePoContainerDashboardComponent implements AfterContentChecked,
     },
     label: 'Share'
   };
-
-  constructor(
-    private poNotification: PoNotificationService,
-    private sampleDashboardService: SampleDashboardService
-  ) {}
 
   ngOnInit() {
     this.columns = this.sampleDashboardService.getColumns();

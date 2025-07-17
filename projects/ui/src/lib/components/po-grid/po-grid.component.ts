@@ -1,4 +1,13 @@
-import { ChangeDetectorRef, Component, ElementRef, Input, OnDestroy, Renderer2, ViewChild } from '@angular/core';
+import {
+  ChangeDetectorRef,
+  Component,
+  ElementRef,
+  Input,
+  OnDestroy,
+  Renderer2,
+  ViewChild,
+  inject
+} from '@angular/core';
 
 import { PoGridRowActions } from './po-grid-row-actions.interface';
 
@@ -37,6 +46,9 @@ import { PoGridRowActions } from './po-grid-row-actions.interface';
   standalone: false
 })
 export class PoGridComponent implements OnDestroy {
+  private changeDetectorRef = inject(ChangeDetectorRef);
+  private elRef = inject(ElementRef);
+
   @ViewChild('table', { static: true }) tableElement: ElementRef;
   @ViewChild('wrapper', { static: true }) tableWrapper: ElementRef;
 
@@ -91,11 +103,9 @@ export class PoGridComponent implements OnDestroy {
     return this._columns.filter(column => column.freeze !== true && column.action !== true);
   }
 
-  constructor(
-    private changeDetectorRef: ChangeDetectorRef,
-    private elRef: ElementRef,
-    renderer: Renderer2
-  ) {
+  constructor() {
+    const renderer = inject(Renderer2);
+
     this.debounceResize();
 
     this.resizeListener = renderer.listen('window', 'resize', (event: any) => {

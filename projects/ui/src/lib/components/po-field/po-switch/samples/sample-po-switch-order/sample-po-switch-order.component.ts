@@ -1,4 +1,4 @@
-import { Component } from '@angular/core';
+import { Component, inject } from '@angular/core';
 
 import { PoNotificationService, PoSwitchLabelPosition, PoTableColumn } from '@po-ui/ng-components';
 
@@ -8,6 +8,8 @@ import { PoNotificationService, PoSwitchLabelPosition, PoTableColumn } from '@po
   standalone: false
 })
 export class SamplePoSwitchOrderComponent {
+  private poNotification = inject(PoNotificationService);
+
   labelPosition: PoSwitchLabelPosition = PoSwitchLabelPosition.Left;
   serviceFee: boolean = false;
   totalAmount: number = 43;
@@ -30,8 +32,6 @@ export class SamplePoSwitchOrderComponent {
     { page: 'Soft Drink', value: '6' },
     { page: 'French Fries', value: '17' }
   ];
-
-  constructor(private poNotification: PoNotificationService) {}
 
   addServiceFee() {
     const percentage: number = 1.1;

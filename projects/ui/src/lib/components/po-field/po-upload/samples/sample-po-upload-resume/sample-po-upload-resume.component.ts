@@ -1,4 +1,4 @@
-import { Component, OnInit, ViewChild } from '@angular/core';
+import { Component, OnInit, ViewChild, inject } from '@angular/core';
 import { UntypedFormControl } from '@angular/forms';
 
 import { PoNotificationService } from '@po-ui/ng-components';
@@ -9,6 +9,8 @@ import { PoNotificationService } from '@po-ui/ng-components';
   standalone: false
 })
 export class SamplePoUploadResumeComponent implements OnInit {
+  private poNotification = inject(PoNotificationService);
+
   @ViewChild('formOpportunity', { static: true }) formOpportunity: UntypedFormControl;
 
   biograph: string;
@@ -16,8 +18,6 @@ export class SamplePoUploadResumeComponent implements OnInit {
   name: string;
   resume: string;
   uploadedResume: boolean;
-
-  constructor(private poNotification: PoNotificationService) {}
 
   ngOnInit() {
     this.uploadedResume = false;

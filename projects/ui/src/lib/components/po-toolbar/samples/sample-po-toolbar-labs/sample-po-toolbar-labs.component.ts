@@ -1,4 +1,4 @@
-import { Component, OnInit } from '@angular/core';
+import { Component, OnInit, inject } from '@angular/core';
 import { NgForm } from '@angular/forms';
 
 import {
@@ -15,6 +15,8 @@ import {
   standalone: false
 })
 export class SamplePoToolbarLabsComponent implements OnInit {
+  private poNotification = inject(PoNotificationService);
+
   action: PoToolbarAction;
   actions: Array<PoToolbarAction>;
   actionsIcon: string;
@@ -53,8 +55,6 @@ export class SamplePoToolbarLabsComponent implements OnInit {
     { label: 'Profile', value: 'profile' },
     { label: 'Notification', value: 'notification' }
   ];
-
-  constructor(private poNotification: PoNotificationService) {}
 
   ngOnInit() {
     this.restore();

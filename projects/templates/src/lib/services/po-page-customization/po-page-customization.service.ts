@@ -1,5 +1,5 @@
 import { HttpClient } from '@angular/common/http';
-import { Injectable } from '@angular/core';
+import { Injectable, inject } from '@angular/core';
 
 import { Observable, from } from 'rxjs';
 import { map } from 'rxjs/operators';
@@ -12,7 +12,7 @@ type urlOrFunction = string | Function;
   providedIn: 'root'
 })
 export class PoPageCustomizationService {
-  constructor(private http: HttpClient) {}
+  private http = inject(HttpClient);
 
   getCustomOptions<T>(
     origin: urlOrFunction,

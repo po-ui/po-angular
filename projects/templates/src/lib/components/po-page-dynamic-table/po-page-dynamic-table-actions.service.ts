@@ -1,5 +1,5 @@
 import { HttpClient, HttpHeaders } from '@angular/common/http';
-import { Injectable } from '@angular/core';
+import { Injectable, inject } from '@angular/core';
 
 import { Observable, of } from 'rxjs';
 
@@ -22,11 +22,11 @@ interface ExecuteActionParameter {
   providedIn: 'root'
 })
 export class PoPageDynamicTableActionsService {
+  private http = inject(HttpClient);
+
   readonly headers: HttpHeaders = new HttpHeaders({
     'X-PO-SCREEN-LOCK': 'true'
   });
-
-  constructor(private http: HttpClient) {}
 
   beforeDuplicate(
     action: PoPageDynamicTableActions['beforeDuplicate'],

@@ -1,4 +1,4 @@
-import { Component, EventEmitter, Input, OnInit, Output } from '@angular/core';
+import { Component, EventEmitter, Input, OnInit, Output, inject } from '@angular/core';
 
 import { PoLanguage, poLanguageDefault, PoLanguageService, PoSelectOption } from '@po-ui/ng-components';
 
@@ -19,6 +19,8 @@ import { convertToBoolean, getDefaultSizeFn, validateSizeFn } from './../../util
  * de `po-page-login` e demais templates de login.
  */
 export class PoPageBackgroundComponent implements OnInit {
+  poLanguageService = inject(PoLanguageService);
+
   /** Insere uma imagem de destaque ao lado direito do container. */
   @Input('p-background') background?: string;
 
@@ -105,8 +107,6 @@ export class PoPageBackgroundComponent implements OnInit {
   get showSelectLanguage() {
     return this._showSelectLanguage;
   }
-
-  constructor(public poLanguageService: PoLanguageService) {}
 
   ngOnInit() {
     this.selectedLanguageOption = this.initialSelectLanguage || this.poLanguageService.getShortLanguage();

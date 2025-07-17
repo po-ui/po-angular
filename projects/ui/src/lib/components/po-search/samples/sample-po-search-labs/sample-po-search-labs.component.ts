@@ -1,5 +1,5 @@
 import { HttpClient } from '@angular/common/http';
-import { Component, OnChanges, OnInit, SimpleChanges, ViewChild } from '@angular/core';
+import { Component, OnChanges, OnInit, SimpleChanges, ViewChild, inject } from '@angular/core';
 import {
   PoCheckboxGroupOption,
   PoRadioGroupOption,
@@ -29,6 +29,8 @@ import { PoSearchLocateSummary } from '@po-ui/ng-components/lib/components/po-se
   standalone: false
 })
 export class SamplePoSearchLabsComponent implements OnInit, OnChanges {
+  protected http = inject(HttpClient);
+
   @ViewChild('poSearch', { static: true }) poSearch!: PoSearchComponent;
 
   ariaLabel?: any;
@@ -81,8 +83,6 @@ export class SamplePoSearchLabsComponent implements OnInit, OnChanges {
     { label: 'small', value: 'small' },
     { label: 'medium', value: 'medium' }
   ];
-
-  constructor(protected http: HttpClient) {}
 
   ngOnInit() {
     this.restore();

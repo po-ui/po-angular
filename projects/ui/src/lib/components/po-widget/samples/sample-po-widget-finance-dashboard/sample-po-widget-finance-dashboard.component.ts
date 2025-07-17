@@ -1,4 +1,4 @@
-import { Component, ViewChild } from '@angular/core';
+import { Component, ViewChild, inject } from '@angular/core';
 
 import {
   PoModalComponent,
@@ -14,6 +14,9 @@ import {
   standalone: false
 })
 export class SamplePoWidgetFinanceDashboardComponent {
+  private poNotification = inject(PoNotificationService);
+  private poTheme = inject(PoThemeService);
+
   @ViewChild('detailsModal', { static: true }) detailsModalElement: PoModalComponent;
 
   paymentLink: string = 'https://www.google.com.br/search?q=days+to+payment';
@@ -49,11 +52,6 @@ export class SamplePoWidgetFinanceDashboardComponent {
     { dateUpdate: '02-05-2018', statement: '-200' },
     { dateUpdate: '12-05-2017', statement: '2000' }
   ];
-
-  constructor(
-    private poNotification: PoNotificationService,
-    private poTheme: PoThemeService
-  ) {}
 
   get a11Level() {
     return this.poTheme.getA11yLevel();

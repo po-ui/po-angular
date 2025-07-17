@@ -1,4 +1,4 @@
-import { Injectable } from '@angular/core';
+import { Injectable, inject } from '@angular/core';
 import { HttpClient, HttpErrorResponse, HttpHeaders, HttpParams } from '@angular/common/http';
 
 import { merge, Observable, of, throwError } from 'rxjs';
@@ -31,6 +31,9 @@ export const poPageDynamicLiterals: { [key: string]: PoPageDynamicLiterals } = {
   providedIn: 'root'
 })
 export class PoPageDynamicService {
+  private http = inject(HttpClient);
+  private notification = inject(PoNotificationService);
+
   readonly headers: HttpHeaders = new HttpHeaders({
     'X-PO-SCREEN-LOCK': 'true'
   });
@@ -39,11 +42,9 @@ export class PoPageDynamicService {
   private language: string;
   private metadata: string;
 
-  constructor(
-    private http: HttpClient,
-    private notification: PoNotificationService,
-    languageService: PoLanguageService
-  ) {
+  constructor() {
+    const languageService = inject(PoLanguageService);
+
     this.language = languageService.getShortLanguage();
   }
 
