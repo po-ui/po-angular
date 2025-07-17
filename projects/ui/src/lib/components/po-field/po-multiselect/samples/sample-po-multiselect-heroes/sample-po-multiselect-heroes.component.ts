@@ -1,4 +1,4 @@
-import { Component } from '@angular/core';
+import { Component, inject } from '@angular/core';
 import { PoTableColumn, PoMultiselectFilter } from '@po-ui/ng-components';
 
 import { SamplePoMultiselectHeroesService } from './sample-po-multiselect-heroes.service';
@@ -10,6 +10,8 @@ import { SamplePoMultiselectHeroesService } from './sample-po-multiselect-heroes
   standalone: false
 })
 export class SamplePoMultiselectHeroesComponent {
+  samplePoMultiselectHeroesService = inject(SamplePoMultiselectHeroesService);
+
   debounce = 500;
   filterService: PoMultiselectFilter;
   heroes: Array<any>;
@@ -26,7 +28,9 @@ export class SamplePoMultiselectHeroesComponent {
     }
   ];
 
-  constructor(public samplePoMultiselectHeroesService: SamplePoMultiselectHeroesService) {
+  constructor() {
+    const samplePoMultiselectHeroesService = this.samplePoMultiselectHeroesService;
+
     this.filterService = samplePoMultiselectHeroesService;
   }
 

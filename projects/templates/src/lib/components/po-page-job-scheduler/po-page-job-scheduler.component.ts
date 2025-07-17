@@ -6,7 +6,8 @@ import {
   OnInit,
   QueryList,
   ViewChild,
-  ViewEncapsulation
+  ViewEncapsulation,
+  inject
 } from '@angular/core';
 import { NgForm } from '@angular/forms';
 import { ActivatedRoute } from '@angular/router';
@@ -63,6 +64,11 @@ import { PoPageJobSchedulerService } from './po-page-job-scheduler.service';
   standalone: false
 })
 export class PoPageJobSchedulerComponent extends PoPageJobSchedulerBaseComponent implements OnInit, AfterContentInit {
+  poPageDynamicLookupService = inject(PoPageJobSchedulerLookupService);
+  private activatedRoute = inject(ActivatedRoute);
+  private poDialogService = inject(PoDialogService);
+  private poNotification = inject(PoNotificationService);
+
   @ViewChild('schedulerExecution', { static: true }) schedulerExecution: { form: NgForm };
   @ViewChild('schedulerParameters') schedulerParameters: { form: NgForm };
   @ContentChildren(PoJobSchedulerParametersTemplateDirective)
@@ -114,15 +120,12 @@ export class PoPageJobSchedulerComponent extends PoPageJobSchedulerBaseComponent
   protected stepSummary = 3;
   protected _stepExecutionLast: boolean;
 
-  constructor(
-    public poPageDynamicLookupService: PoPageJobSchedulerLookupService,
-    private activatedRoute: ActivatedRoute,
-    private poDialogService: PoDialogService,
-    private poNotification: PoNotificationService,
-    protected poPageJobSchedulerService: PoPageJobSchedulerService,
-    languageService: PoLanguageService
-  ) {
+  constructor() {
+    const poPageJobSchedulerService = inject(PoPageJobSchedulerService);
+    const languageService = inject(PoLanguageService);
+
     super(poPageJobSchedulerService);
+    this.poPageJobSchedulerService = poPageJobSchedulerService;
 
     const language = languageService.getShortLanguage();
 

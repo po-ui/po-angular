@@ -1,4 +1,4 @@
-import { Component, EventEmitter, Input, OnDestroy, Output, TemplateRef, ViewChild } from '@angular/core';
+import { Component, EventEmitter, Input, OnDestroy, Output, TemplateRef, ViewChild, inject } from '@angular/core';
 import { Subscription, filter } from 'rxjs';
 
 import { convertToBoolean } from '../../../utils/util';
@@ -42,6 +42,8 @@ import { PoAccordionService } from '../services/po-accordion.service';
   standalone: false
 })
 export class PoAccordionItemComponent implements OnDestroy {
+  private accordionService = inject(PoAccordionService);
+
   private _type?: PoTagType;
 
   /** Título do item. */
@@ -105,7 +107,7 @@ export class PoAccordionItemComponent implements OnDestroy {
   private expandSubscription: Subscription;
   private collapseSubscription: Subscription;
 
-  constructor(private accordionService: PoAccordionService) {
+  constructor() {
     this.expandSubscription = this.accordionService
       .receiveFromChildAccordionClicked()
       .pipe(filter(poAccordionItem => poAccordionItem === this && poAccordionItem.expanded))

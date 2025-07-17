@@ -6,7 +6,8 @@ import {
   OnDestroy,
   OnInit,
   SimpleChanges,
-  ViewChild
+  ViewChild,
+  inject
 } from '@angular/core';
 
 import {
@@ -57,6 +58,10 @@ export class PoPageDynamicSearchComponent
   extends PoPageDynamicSearchBaseComponent
   implements OnInit, OnDestroy, AfterViewInit, OnChanges
 {
+  private languageService: PoLanguageService;
+  private poPageCustomizationService = inject(PoPageCustomizationService);
+  private changeDetector = inject(ChangeDetectorRef);
+
   @ViewChild(PoAdvancedFilterComponent, { static: true }) poAdvancedFilter: PoAdvancedFilterComponent;
   @ViewChild(PoPageListComponent, { static: true }) poPageList: PoPageListComponent;
 
@@ -77,12 +82,12 @@ export class PoPageDynamicSearchComponent
     width: this.quickSearchWidth
   };
 
-  constructor(
-    private languageService: PoLanguageService,
-    private poPageCustomizationService: PoPageCustomizationService,
-    private changeDetector: ChangeDetectorRef
-  ) {
+  constructor() {
+    const languageService = inject(PoLanguageService);
+
     super(languageService);
+
+    this.languageService = languageService;
   }
 
   get disclaimerGroup() {

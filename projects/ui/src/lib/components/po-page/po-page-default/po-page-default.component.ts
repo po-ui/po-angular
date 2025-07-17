@@ -1,4 +1,12 @@
-import { AfterContentInit, Component, OnChanges, Renderer2, SimpleChange, ViewContainerRef } from '@angular/core';
+import {
+  AfterContentInit,
+  Component,
+  OnChanges,
+  Renderer2,
+  SimpleChange,
+  ViewContainerRef,
+  inject
+} from '@angular/core';
 import { Router } from '@angular/router';
 
 import { PoLanguageService } from './../../../services/po-language/po-language.service';
@@ -35,18 +43,18 @@ import { PoPageDefaultBaseComponent } from './po-page-default-base.component';
   standalone: false
 })
 export class PoPageDefaultComponent extends PoPageDefaultBaseComponent implements AfterContentInit, OnChanges {
+  private renderer = inject(Renderer2);
+  private router = inject(Router);
+
   limitPrimaryActions: number = 3;
   dropdownActions: Array<PoPageAction>;
   isMobile: boolean;
 
   private maxWidthMobile: number = 480;
 
-  constructor(
-    viewRef: ViewContainerRef,
-    languageService: PoLanguageService,
-    private renderer: Renderer2,
-    private router: Router
-  ) {
+  constructor() {
+    const languageService = inject(PoLanguageService);
+
     super(languageService);
   }
 

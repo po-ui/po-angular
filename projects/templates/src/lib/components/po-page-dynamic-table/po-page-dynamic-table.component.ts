@@ -1,4 +1,4 @@
-import { Component, Input, OnDestroy, OnInit } from '@angular/core';
+import { Component, Input, OnDestroy, OnInit, inject } from '@angular/core';
 import { ActivatedRoute, Route, Router } from '@angular/router';
 
 import { EMPTY, Observable, Subscription, of } from 'rxjs';
@@ -150,6 +150,14 @@ type UrlOrPoCustomizationFunction = string | (() => PoPageDynamicTableOptions);
   standalone: false
 })
 export class PoPageDynamicTableComponent extends PoPageDynamicListBaseComponent implements OnInit, OnDestroy {
+  private router = inject(Router);
+  private activatedRoute = inject(ActivatedRoute);
+  private poDialogService = inject(PoDialogService);
+  private poNotification = inject(PoNotificationService);
+  private poPageDynamicService = inject(PoPageDynamicService);
+  private poPageCustomizationService = inject(PoPageCustomizationService);
+  private poPageDynamicTableActionsService = inject(PoPageDynamicTableActionsService);
+
   /**
    * Função ou serviço que será executado na inicialização do componente.
    *
@@ -634,16 +642,9 @@ export class PoPageDynamicTableComponent extends PoPageDynamicListBaseComponent 
   @Input('p-visible-fixed-filters') visibleFixedFilters: boolean = true;
 
   /* eslint-disable max-params */
-  constructor(
-    private router: Router,
-    private activatedRoute: ActivatedRoute,
-    private poDialogService: PoDialogService,
-    private poNotification: PoNotificationService,
-    private poPageDynamicService: PoPageDynamicService,
-    private poPageCustomizationService: PoPageCustomizationService,
-    private poPageDynamicTableActionsService: PoPageDynamicTableActionsService,
-    languageService: PoLanguageService
-  ) {
+  constructor() {
+    const languageService = inject(PoLanguageService);
+
     super();
 
     const language = languageService.getShortLanguage();

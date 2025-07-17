@@ -1,4 +1,4 @@
-import { ChangeDetectorRef, Component, ElementRef } from '@angular/core';
+import { ChangeDetectorRef, Component, ElementRef, inject } from '@angular/core';
 import { ComponentFixture, TestBed } from '@angular/core/testing';
 import { AbstractControl } from '@angular/forms';
 
@@ -16,7 +16,10 @@ import { PoNumberBaseComponent } from './po-number-base.component';
   standalone: false
 })
 class ContentProjectionComponent extends PoNumberBaseComponent {
-  constructor(el: ElementRef, cd: ChangeDetectorRef) {
+  constructor() {
+    const el = inject(ElementRef);
+    const cd = inject(ChangeDetectorRef);
+
     localStorage.setItem('po-default-size', 'medium');
 
     super(el, cd);

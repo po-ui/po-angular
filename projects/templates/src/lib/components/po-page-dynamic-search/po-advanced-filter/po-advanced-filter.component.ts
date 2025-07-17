@@ -1,4 +1,4 @@
-import { Component, OnDestroy, OnInit, ViewChild } from '@angular/core';
+import { Component, OnDestroy, OnInit, ViewChild, inject } from '@angular/core';
 import { Subscription } from 'rxjs';
 
 import { PoComboOption, PoDynamicFormComponent, PoLanguageService } from '@po-ui/ng-components';
@@ -28,7 +28,9 @@ export class PoAdvancedFilterComponent extends PoAdvancedFilterBaseComponent imp
 
   private subscription = new Subscription();
 
-  constructor(languageService: PoLanguageService) {
+  constructor() {
+    const languageService = inject(PoLanguageService);
+
     super(languageService);
   }
 

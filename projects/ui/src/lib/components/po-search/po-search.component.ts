@@ -8,7 +8,8 @@ import {
   OnInit,
   Renderer2,
   SimpleChanges,
-  ViewChild
+  ViewChild,
+  inject
 } from '@angular/core';
 import { PoControlPositionService } from '../../services/po-control-position/po-control-position.service';
 import { PoLanguageService } from '../../services/po-language/po-language.service';
@@ -64,6 +65,11 @@ const poSearchContainerPositionDefault = 'bottom';
   standalone: false
 })
 export class PoSearchComponent extends PoSearchBaseComponent implements OnInit, OnDestroy, OnChanges {
+  languageService: PoLanguageService;
+  private renderer = inject(Renderer2);
+  private changeDetector = inject(ChangeDetectorRef);
+  private controlPosition = inject(PoControlPositionService);
+
   private clickoutListener: () => void;
   private eventResizeListener: () => void;
 
@@ -84,13 +90,12 @@ export class PoSearchComponent extends PoSearchBaseComponent implements OnInit, 
   searchFilterSelectLabel: string;
   searchFilterSelectActions: Array<PoDropdownAction>;
 
-  constructor(
-    public languageService: PoLanguageService,
-    private renderer: Renderer2,
-    private changeDetector: ChangeDetectorRef,
-    private controlPosition: PoControlPositionService
-  ) {
+  constructor() {
+    const languageService = inject(PoLanguageService);
+
     super(languageService);
+
+    this.languageService = languageService;
   }
 
   ngOnInit(): void {

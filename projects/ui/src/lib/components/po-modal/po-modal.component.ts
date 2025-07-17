@@ -1,4 +1,4 @@
-import { Component, ContentChild, ElementRef, ViewChild } from '@angular/core';
+import { Component, ContentChild, ElementRef, ViewChild, inject } from '@angular/core';
 
 import { uuid } from '../../utils/util';
 import { PoModalBaseComponent } from './po-modal-base.component';
@@ -34,6 +34,8 @@ import { PoLanguageService } from '../../services/po-language/po-language.servic
   standalone: false
 })
 export class PoModalComponent extends PoModalBaseComponent {
+  private poActiveOverlayService = inject(PoActiveOverlayService);
+
   @ViewChild('modalContent', { read: ElementRef }) modalContent: ElementRef;
   @ViewChild('modalContainer', { read: ElementRef }) modalContainer: ElementRef;
   @ContentChild(PoModalFooterComponent) modalFooter: PoModalFooterComponent;
@@ -44,10 +46,9 @@ export class PoModalComponent extends PoModalBaseComponent {
   private id: string = uuid();
   private sourceElement;
 
-  constructor(
-    private poActiveOverlayService: PoActiveOverlayService,
-    poLanguageService: PoLanguageService
-  ) {
+  constructor() {
+    const poLanguageService = inject(PoLanguageService);
+
     super(poLanguageService);
   }
 

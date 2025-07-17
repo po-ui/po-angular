@@ -10,7 +10,8 @@ import {
   OnInit,
   Renderer2,
   SimpleChanges,
-  ViewChild
+  ViewChild,
+  inject
 } from '@angular/core';
 import { NG_VALIDATORS, NG_VALUE_ACCESSOR } from '@angular/forms';
 
@@ -84,6 +85,11 @@ export class PoDatepickerRangeComponent
   extends PoDatepickerRangeBaseComponent
   implements AfterViewInit, OnInit, OnDestroy, OnChanges
 {
+  private controlPosition = inject(PoControlPositionService);
+  private renderer = inject(Renderer2);
+  private cd = inject(ChangeDetectorRef);
+  private poLanguageService: PoLanguageService;
+
   @ViewChild('dateRangeField', { read: ElementRef, static: true }) dateRangeField: ElementRef;
   @ViewChild('endDateInput', { read: ElementRef, static: true }) endDateInput: ElementRef;
   @ViewChild('startDateInput', { read: ElementRef, static: true }) startDateInput: ElementRef;
@@ -138,16 +144,16 @@ export class PoDatepickerRangeComponent
     return this.startDateInput.nativeElement.value;
   }
 
-  constructor(
-    protected changeDetector: ChangeDetectorRef,
-    private controlPosition: PoControlPositionService,
-    private renderer: Renderer2,
-    private cd: ChangeDetectorRef,
-    private poLanguageService: PoLanguageService,
-    poDateService: PoDateService,
-    poDatepickerRangeElement: ElementRef
-  ) {
+  constructor() {
+    const changeDetector = inject(ChangeDetectorRef);
+    const poLanguageService = inject(PoLanguageService);
+    const poDateService = inject(PoDateService);
+    const poDatepickerRangeElement = inject(ElementRef);
+
     super(changeDetector, poDateService, poLanguageService);
+    this.changeDetector = changeDetector;
+    this.poLanguageService = poLanguageService;
+
     this.poDatepickerRangeElement = poDatepickerRangeElement;
   }
 

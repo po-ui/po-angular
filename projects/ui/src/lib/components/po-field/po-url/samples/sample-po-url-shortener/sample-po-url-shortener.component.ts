@@ -1,4 +1,4 @@
-import { Component, ElementRef, ViewChild } from '@angular/core';
+import { Component, ElementRef, ViewChild, inject } from '@angular/core';
 
 import { PoNotificationService, PoTableColumn } from '@po-ui/ng-components';
 
@@ -8,6 +8,8 @@ import { PoNotificationService, PoTableColumn } from '@po-ui/ng-components';
   standalone: false
 })
 export class SamplePoUrlShortenerComponent {
+  private poNotification = inject(PoNotificationService);
+
   @ViewChild('boxUrl', { read: ElementRef, static: true }) boxUrlElement;
 
   baseUrls: Array<any> = [];
@@ -18,8 +20,6 @@ export class SamplePoUrlShortenerComponent {
     { property: 'url', label: 'Long URL' },
     { property: 'short', label: 'Shortened URL' }
   ];
-
-  constructor(private poNotification: PoNotificationService) {}
 
   copyToClipboard() {
     this.boxUrlElement.nativeElement.querySelector('input').select();
