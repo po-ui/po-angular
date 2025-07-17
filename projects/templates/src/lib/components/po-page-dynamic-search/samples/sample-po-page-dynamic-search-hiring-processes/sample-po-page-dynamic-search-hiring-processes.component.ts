@@ -1,4 +1,4 @@
-import { Component, OnInit } from '@angular/core';
+import { Component, OnInit, inject } from '@angular/core';
 import { Router } from '@angular/router';
 
 import { PoPageDynamicSearchLiterals, PoPageDynamicSearchFilters } from '@po-ui/ng-templates';
@@ -21,6 +21,11 @@ import { SamplePoPageDynamicSearchHiringProcessesService } from './sample-po-pag
   standalone: false
 })
 export class SamplePoPageDynamicSearchHiringProcessesComponent implements OnInit {
+  private sampleHiringProcessesService = inject(SamplePoPageDynamicSearchHiringProcessesService);
+  private poNotification = inject(PoNotificationService);
+  private poDialog = inject(PoDialogService);
+  private router = inject(Router);
+
   hiringProcesses: Array<object>;
   hiringProcessesColumns: Array<PoTableColumn>;
   quickSearchWidth: number = 6;
@@ -76,13 +81,6 @@ export class SamplePoPageDynamicSearchHiringProcessesComponent implements OnInit
     { property: 'city', gridColumns: 6 },
     { property: 'job', label: 'Job Description', options: this.jobDescriptionOptions, gridColumns: 6 }
   ];
-
-  constructor(
-    private sampleHiringProcessesService: SamplePoPageDynamicSearchHiringProcessesService,
-    private poNotification: PoNotificationService,
-    private poDialog: PoDialogService,
-    private router: Router
-  ) {}
 
   ngOnInit() {
     this.hiringProcesses = this.sampleHiringProcessesService.getItems();

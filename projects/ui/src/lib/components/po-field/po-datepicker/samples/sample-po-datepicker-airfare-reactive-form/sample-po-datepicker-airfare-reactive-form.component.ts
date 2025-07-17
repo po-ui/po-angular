@@ -1,4 +1,4 @@
-import { Component, OnInit } from '@angular/core';
+import { Component, OnInit, inject } from '@angular/core';
 import { UntypedFormBuilder, UntypedFormGroup, Validators } from '@angular/forms';
 
 import { PoDialogService, PoNotificationService, PoSelectOption } from '@po-ui/ng-components';
@@ -9,6 +9,10 @@ import { PoDialogService, PoNotificationService, PoSelectOption } from '@po-ui/n
   standalone: false
 })
 export class SamplePoDatepickerAirfareReactiveFormComponent implements OnInit {
+  private formBuilder = inject(UntypedFormBuilder);
+  private poDialog = inject(PoDialogService);
+  private poNotification = inject(PoNotificationService);
+
   formAirfare: UntypedFormGroup;
 
   readonly accompanyNumber: Array<PoSelectOption> = [
@@ -29,12 +33,6 @@ export class SamplePoDatepickerAirfareReactiveFormComponent implements OnInit {
     { value: 'Business', label: 'Business' },
     { value: 'First', label: 'First' }
   ];
-
-  constructor(
-    private formBuilder: UntypedFormBuilder,
-    private poDialog: PoDialogService,
-    private poNotification: PoNotificationService
-  ) {}
 
   ngOnInit() {
     this.formAirfare = this.formBuilder.group({

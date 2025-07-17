@@ -1,4 +1,4 @@
-import { ChangeDetectorRef, Component, OnInit, ViewChild } from '@angular/core';
+import { ChangeDetectorRef, Component, OnInit, ViewChild, inject } from '@angular/core';
 
 import {
   PoButtonGroupItem,
@@ -28,6 +28,8 @@ import {
   standalone: false
 })
 export class SamplePoMenuLabsComponent implements OnInit {
+  private changeDetector = inject(ChangeDetectorRef);
+
   @ViewChild(PoMenuComponent, { static: true }) menu: PoMenuComponent;
 
   badgeColor: string;
@@ -86,8 +88,6 @@ export class SamplePoMenuLabsComponent implements OnInit {
     { value: 'fa fa-calculator', label: 'fa fa-calculator' },
     { value: 'fa fa-podcast', label: 'fa fa-podcast' }
   ];
-
-  constructor(private changeDetector: ChangeDetectorRef) {}
 
   ngOnInit(): void {
     this.restore();

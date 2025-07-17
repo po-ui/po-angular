@@ -1,4 +1,4 @@
-import { Component, Input, OnDestroy, OnInit } from '@angular/core';
+import { Component, Input, OnDestroy, OnInit, inject } from '@angular/core';
 
 import { Subscription } from 'rxjs';
 
@@ -40,6 +40,9 @@ export const PoBreadcrumbLiterals: object = {
   standalone: false
 })
 export class PoBreadcrumbFavoriteComponent implements OnInit, OnDestroy {
+  private service = inject(PoBreadcrumbFavoriteService);
+  private languageService = inject(PoLanguageService);
+
   // URL do serviço.
   @Input('p-favorite-service') favoriteService: string;
 
@@ -58,10 +61,9 @@ export class PoBreadcrumbFavoriteComponent implements OnInit, OnDestroy {
   private getSubscription: Subscription;
   private setSubscription: Subscription;
 
-  constructor(
-    private service: PoBreadcrumbFavoriteService,
-    private languageService: PoLanguageService
-  ) {
+  constructor() {
+    const languageService = this.languageService;
+
     const language = languageService.getShortLanguage();
 
     this.literals = {

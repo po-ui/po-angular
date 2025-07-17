@@ -1,4 +1,4 @@
-import { Component, ChangeDetectorRef } from '@angular/core';
+import { Component, ChangeDetectorRef, inject } from '@angular/core';
 
 import { PoLanguageService } from './../../../services/po-language/po-language.service';
 
@@ -31,10 +31,11 @@ import { PoLoadingOverlayBaseComponent } from './po-loading-overlay-base.compone
   standalone: false
 })
 export class PoLoadingOverlayComponent extends PoLoadingOverlayBaseComponent {
-  constructor(
-    public changeDetector: ChangeDetectorRef,
-    languageService: PoLanguageService
-  ) {
+  changeDetector = inject(ChangeDetectorRef);
+
+  constructor() {
+    const languageService = inject(PoLanguageService);
+
     super(languageService);
   }
 }

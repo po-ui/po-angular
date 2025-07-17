@@ -11,7 +11,8 @@ import {
   Renderer2,
   SimpleChanges,
   ViewChild,
-  forwardRef
+  forwardRef,
+  inject
 } from '@angular/core';
 import { NG_VALIDATORS, NG_VALUE_ACCESSOR } from '@angular/forms';
 
@@ -119,6 +120,12 @@ export class PoMultiselectComponent
   extends PoMultiselectBaseComponent
   implements AfterViewInit, DoCheck, OnDestroy, OnChanges
 {
+  private renderer = inject(Renderer2);
+  private changeDetector: ChangeDetectorRef;
+  private el = inject(ElementRef);
+  private controlPosition = inject(PoControlPositionService);
+  defaultService = inject(PoMultiselectFilterService);
+
   @ContentChild(PoMultiselectOptionTemplateDirective, { static: true })
   multiselectOptionTemplate: PoMultiselectOptionTemplateDirective;
 
@@ -144,15 +151,13 @@ export class PoMultiselectComponent
   private cacheOptions: Array<PoMultiselectOption | any>;
   private focusOnTag = false;
 
-  constructor(
-    private renderer: Renderer2,
-    private changeDetector: ChangeDetectorRef,
-    private el: ElementRef,
-    private controlPosition: PoControlPositionService,
-    public defaultService: PoMultiselectFilterService,
-    languageService: PoLanguageService
-  ) {
+  constructor() {
+    const changeDetector = inject(ChangeDetectorRef);
+    const languageService = inject(PoLanguageService);
+
     super(languageService, changeDetector);
+    this.changeDetector = changeDetector;
+
     const language = languageService.getShortLanguage();
     this.literalsTag = {
       ...literalsTagRemoveOthers[poLocaleDefault],

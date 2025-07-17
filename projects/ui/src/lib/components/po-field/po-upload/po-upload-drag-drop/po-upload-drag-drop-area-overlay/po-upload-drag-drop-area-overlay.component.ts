@@ -7,7 +7,8 @@ import {
   Input,
   Output,
   Renderer2,
-  ViewChild
+  ViewChild,
+  inject
 } from '@angular/core';
 
 import { PoUploadLiterals } from '../../interfaces/po-upload-literals.interface';
@@ -19,6 +20,8 @@ import { PoUploadLiterals } from '../../interfaces/po-upload-literals.interface'
   standalone: false
 })
 export class PoUploadDragDropAreaOverlayComponent implements AfterViewInit {
+  private renderer = inject(Renderer2);
+
   @ViewChild('DragDropAreaFixed', { read: ElementRef, static: true }) DragDropAreaFixed: ElementRef;
 
   @Input('p-directory-compatible') directoryCompatible: boolean;
@@ -30,8 +33,6 @@ export class PoUploadDragDropAreaOverlayComponent implements AfterViewInit {
   @Input('p-target') target: ElementRef;
 
   @Output('p-area-element') areaElement: EventEmitter<any> = new EventEmitter<any>();
-
-  constructor(private renderer: Renderer2) {}
 
   ngAfterViewInit() {
     if (this.target) {

@@ -1,19 +1,19 @@
 import { HttpClient, HttpHeaders } from '@angular/common/http';
-import { Injectable } from '@angular/core';
+import { Injectable, inject } from '@angular/core';
 import { Observable, map } from 'rxjs';
 
 @Injectable({
   providedIn: 'root'
 })
 export class SamplePoDynamicViewEmployeeOnLoadService {
+  private httpClient = inject(HttpClient);
+
   readonly headers: HttpHeaders = new HttpHeaders({
     'X-PO-No-Message': 'true'
   });
 
   url: string;
   filterParams;
-
-  constructor(private httpClient: HttpClient) {}
 
   getObjectByValue(value: string | Array<any>, filterParams?: any): Observable<Array<any> | { [key: string]: any }> {
     return this.httpClient

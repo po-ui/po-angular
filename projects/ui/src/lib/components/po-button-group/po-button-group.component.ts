@@ -1,4 +1,4 @@
-import { Component, ViewContainerRef } from '@angular/core';
+import { Component, ViewContainerRef, inject } from '@angular/core';
 
 import { PoButtonGroupBaseComponent } from './po-button-group-base.component';
 
@@ -33,8 +33,4 @@ import { PoButtonGroupBaseComponent } from './po-button-group-base.component';
   templateUrl: './po-button-group.component.html',
   standalone: false
 })
-export class PoButtonGroupComponent extends PoButtonGroupBaseComponent {
-  constructor(viewRef: ViewContainerRef) {
-    super();
-  }
-}
+export class PoButtonGroupComponent extends PoButtonGroupBaseComponent {}

@@ -8,7 +8,8 @@ import {
   OnInit,
   Renderer2,
   SimpleChanges,
-  ViewChild
+  ViewChild,
+  inject
 } from '@angular/core';
 import { PoFieldSize } from '../../enums/po-field-size.enum';
 import { PoControlPositionService } from '../../services/po-control-position/po-control-position.service';
@@ -70,6 +71,11 @@ const poSearchContainerPositionDefault = 'bottom';
   standalone: false
 })
 export class PoSearchComponent extends PoSearchBaseComponent implements OnInit, OnDestroy, OnChanges {
+  languageService: PoLanguageService;
+  protected renderer = inject(Renderer2);
+  protected changeDetector = inject(ChangeDetectorRef);
+  protected controlPosition = inject(PoControlPositionService);
+
   private clickoutListener: () => void;
   private eventResizeListener: () => void;
   private _locateCounter: ElementRef;
@@ -113,13 +119,10 @@ export class PoSearchComponent extends PoSearchBaseComponent implements OnInit, 
   searchFilterSelectLabel: string;
   searchFilterSelectActions: Array<PoDropdownAction>;
 
-  constructor(
-    public languageService: PoLanguageService,
-    protected renderer: Renderer2,
-    protected changeDetector: ChangeDetectorRef,
-    protected controlPosition: PoControlPositionService
-  ) {
+  constructor() {
+    const languageService = inject(PoLanguageService);
     super(languageService);
+    this.languageService = languageService;
   }
 
   ngOnInit(): void {
@@ -145,7 +148,9 @@ export class PoSearchComponent extends PoSearchBaseComponent implements OnInit, 
 
   ngOnDestroy() {
     this.removeListeners();
-    this.locateCounterResize.disconnect();
+    if (this.locateCounterResize?.disconnect) {
+      this.locateCounterResize.disconnect();
+    }
   }
 
   clearSearch(): void {

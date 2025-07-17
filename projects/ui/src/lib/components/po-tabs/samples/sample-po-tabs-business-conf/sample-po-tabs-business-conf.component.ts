@@ -1,4 +1,4 @@
-import { Component, OnInit, ViewChild } from '@angular/core';
+import { Component, OnInit, ViewChild, inject } from '@angular/core';
 
 import { PoNotificationService, PoTabsComponent } from '@po-ui/ng-components';
 
@@ -8,13 +8,13 @@ import { PoNotificationService, PoTabsComponent } from '@po-ui/ng-components';
   standalone: false
 })
 export class SamplePoTabsBusinessConfComponent implements OnInit {
+  private poNotification = inject(PoNotificationService);
+
   @ViewChild('poTab', { static: true }) poTab: PoTabsComponent;
 
   disableRestoreBtn: boolean = true;
   speakers: Array<any>;
   pageWidth: number;
-
-  constructor(private poNotification: PoNotificationService) {}
 
   ngOnInit() {
     this.speakers = this.getSpeakers();

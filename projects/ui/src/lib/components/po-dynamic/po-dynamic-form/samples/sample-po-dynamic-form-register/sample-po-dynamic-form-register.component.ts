@@ -1,4 +1,4 @@
-import { Component, OnInit } from '@angular/core';
+import { Component, OnInit, inject } from '@angular/core';
 
 import {
   PoDynamicFormField,
@@ -16,6 +16,9 @@ import { PoDynamicFormRegisterService } from './sample-po-dynamic-form-register.
   standalone: false
 })
 export class SamplePoDynamicFormRegisterComponent implements OnInit {
+  poNotification = inject(PoNotificationService);
+  private registerService = inject(PoDynamicFormRegisterService);
+
   person = {};
   validateFields: Array<string> = ['state'];
 
@@ -197,11 +200,6 @@ export class SamplePoDynamicFormRegisterComponent implements OnInit {
       url: 'https://po-sample-api.onrender.com/v1/uploads/addFile'
     }
   ];
-
-  constructor(
-    public poNotification: PoNotificationService,
-    private registerService: PoDynamicFormRegisterService
-  ) {}
 
   ngOnInit() {
     this.person = {

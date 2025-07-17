@@ -1,5 +1,5 @@
 import { HttpClient } from '@angular/common/http';
-import { Injectable } from '@angular/core';
+import { Injectable, inject } from '@angular/core';
 
 import { Observable } from 'rxjs';
 import { map } from 'rxjs/operators';
@@ -10,6 +10,8 @@ import { PoMultiselectOption } from './interfaces/po-multiselect-option.interfac
   providedIn: 'root'
 })
 export class PoMultiselectFilterService implements PoMultiselectFilter {
+  private http = inject(HttpClient);
+
   fieldLabel: string = 'label';
   fieldValue: string = 'value';
 
@@ -19,8 +21,6 @@ export class PoMultiselectFilterService implements PoMultiselectFilter {
   get url(): string {
     return this._url;
   }
-
-  constructor(private http: HttpClient) {}
 
   getFilteredData({ value }: any): Observable<Array<PoMultiselectOption | any>> {
     const params = value ? { filter: value } : {};

@@ -1,5 +1,5 @@
 import { HttpClient } from '@angular/common/http';
-import { Injectable } from '@angular/core';
+import { Injectable, inject } from '@angular/core';
 
 import { Observable } from 'rxjs';
 
@@ -21,6 +21,8 @@ import { Observable } from 'rxjs';
   providedIn: 'root'
 })
 export class PoBreadcrumbFavoriteService {
+  private http = inject(HttpClient);
+
   private _url: string;
   private _bodyParams: object;
 
@@ -31,8 +33,6 @@ export class PoBreadcrumbFavoriteService {
   get bodyParams(): object {
     return this._bodyParams;
   }
-
-  constructor(private http: HttpClient) {}
 
   configService(url, params, item) {
     this._url = url;

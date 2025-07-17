@@ -1,5 +1,5 @@
 import { HttpClient, HttpParams, HttpResponse } from '@angular/common/http';
-import { Injectable } from '@angular/core';
+import { Injectable, inject } from '@angular/core';
 import { Observable } from 'rxjs';
 
 import { PoModalPasswordRecovery } from './interfaces/po-modal-password-recovery.interface';
@@ -8,7 +8,7 @@ import { PoModalPasswordRecovery } from './interfaces/po-modal-password-recovery
   providedIn: 'root'
 })
 export class PoModalPasswordRecoveryService {
-  constructor(private http: HttpClient) {}
+  private http = inject(HttpClient);
 
   post(
     urlRecovery: string,

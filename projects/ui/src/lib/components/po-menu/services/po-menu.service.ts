@@ -1,5 +1,5 @@
 import { HttpClient } from '@angular/common/http';
-import { Injectable } from '@angular/core';
+import { Injectable, inject } from '@angular/core';
 
 import { map } from 'rxjs/operators';
 import { Observable } from 'rxjs';
@@ -19,13 +19,13 @@ import { PoMenuFilter } from '../po-menu-filter/po-menu-filter.interface';
   providedIn: 'root'
 })
 export class PoMenuService implements PoMenuFilter {
+  private http = inject(HttpClient);
+
   private _url: string;
 
   get url(): string {
     return this._url;
   }
-
-  constructor(private http: HttpClient) {}
 
   configProperties(url: string) {
     this._url = url;

@@ -1,4 +1,4 @@
-import { Component, OnInit } from '@angular/core';
+import { Component, OnInit, inject } from '@angular/core';
 import { FormBuilder, FormGroup } from '@angular/forms';
 
 import {
@@ -16,6 +16,8 @@ import {
   standalone: false
 })
 export class SamplePoUploadLabsComponent implements OnInit {
+  private fb = inject(FormBuilder);
+
   additionalHelpTooltip: string;
   allowedExtensions: string;
   customLiterals: PoUploadLiterals;
@@ -72,7 +74,7 @@ export class SamplePoUploadLabsComponent implements OnInit {
     { value: 'an an-share', label: 'an an-share' }
   ];
 
-  constructor(private fb: FormBuilder) {
+  constructor() {
     this.initializeActionForm();
   }
 

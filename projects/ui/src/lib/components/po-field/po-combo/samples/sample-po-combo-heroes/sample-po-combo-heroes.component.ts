@@ -1,5 +1,5 @@
 import { HttpClient } from '@angular/common/http';
-import { Component } from '@angular/core';
+import { Component, inject } from '@angular/core';
 
 import { Observable } from 'rxjs';
 
@@ -9,10 +9,10 @@ import { Observable } from 'rxjs';
   standalone: false
 })
 export class SamplePoComboHeroesComponent {
+  private http = inject(HttpClient);
+
   hero$: Observable<any>;
   heroName: string;
-
-  constructor(private http: HttpClient) {}
 
   get knowMoreLabel() {
     return this.heroName ? 'Know more' : undefined;

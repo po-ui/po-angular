@@ -1,5 +1,5 @@
 import { HttpClient, HttpHeaders } from '@angular/common/http';
-import { Injectable } from '@angular/core';
+import { Injectable, inject } from '@angular/core';
 
 import { fromEvent, Observable } from 'rxjs';
 import { debounceTime, map, tap } from 'rxjs/operators';
@@ -20,6 +20,8 @@ import { validateObjectType } from '../../../utils/util';
   providedIn: 'root'
 })
 export class PoComboFilterService implements PoComboFilter {
+  private http = inject(HttpClient);
+
   fieldLabel: string = 'label';
   fieldValue: string = 'value';
   hasNext: boolean = true;
@@ -34,8 +36,6 @@ export class PoComboFilterService implements PoComboFilter {
   get url(): string {
     return this._url;
   }
-
-  constructor(private http: HttpClient) {}
 
   getFilteredData(param: any, filterParams?: any): Observable<Array<PoComboOption>> {
     const params = this.prepareParams(param, filterParams);

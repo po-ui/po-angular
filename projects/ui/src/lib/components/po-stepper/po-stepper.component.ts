@@ -1,4 +1,4 @@
-import { AfterContentInit, ChangeDetectorRef, Component, ContentChildren, QueryList } from '@angular/core';
+import { AfterContentInit, ChangeDetectorRef, Component, ContentChildren, QueryList, inject } from '@angular/core';
 
 import { Observable, of, throwError } from 'rxjs';
 import { take, tap, catchError, map, mergeMap } from 'rxjs/operators';
@@ -45,6 +45,8 @@ import { PoStepperItem } from './po-stepper-item.interface';
   standalone: false
 })
 export class PoStepperComponent extends PoStepperBaseComponent implements AfterContentInit {
+  private changeDetector = inject(ChangeDetectorRef);
+
   @ContentChildren(PoStepComponent) poSteps: QueryList<PoStepComponent>;
 
   private currentActiveStep: PoStepComponent;
@@ -68,10 +70,6 @@ export class PoStepperComponent extends PoStepperBaseComponent implements AfterC
 
   get usePoSteps(): boolean {
     return !!this.poSteps.length;
-  }
-
-  constructor(private changeDetector: ChangeDetectorRef) {
-    super();
   }
 
   ngAfterContentInit() {

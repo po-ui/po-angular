@@ -1,5 +1,5 @@
 import { HttpClient } from '@angular/common/http';
-import { Injectable } from '@angular/core';
+import { Injectable, inject } from '@angular/core';
 import { Observable } from 'rxjs';
 import { pluck } from 'rxjs/operators';
 
@@ -7,7 +7,7 @@ import { pluck } from 'rxjs/operators';
   providedIn: 'root'
 })
 export class SamplePoLookupMultipleService {
-  constructor(public http: HttpClient) {}
+  http = inject(HttpClient);
 
   getHeroes(data): Observable<any> {
     const values = data?.length ? data.toString() : data;

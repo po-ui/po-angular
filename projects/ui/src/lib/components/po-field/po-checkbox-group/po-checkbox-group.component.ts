@@ -55,12 +55,11 @@ import { PoCheckboxGroupBaseComponent } from './po-checkbox-group-base.component
   standalone: false
 })
 export class PoCheckboxGroupComponent extends PoCheckboxGroupBaseComponent implements AfterViewChecked, AfterViewInit {
+  private changeDetector = inject(ChangeDetectorRef);
+
   @ViewChildren('checkboxLabel') checkboxLabels: QueryList<PoCheckboxComponent>;
 
   private el: ElementRef = inject(ElementRef);
-  constructor(private changeDetector: ChangeDetectorRef) {
-    super();
-  }
 
   ngAfterViewChecked(): void {
     this.changeDetector.detectChanges();

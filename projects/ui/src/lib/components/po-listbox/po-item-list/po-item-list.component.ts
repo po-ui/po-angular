@@ -1,4 +1,4 @@
-import { Component, ElementRef, OnChanges, SimpleChanges, ViewChild } from '@angular/core';
+import { Component, ElementRef, OnChanges, SimpleChanges, ViewChild, inject } from '@angular/core';
 import { DomSanitizer, SafeHtml } from '@angular/platform-browser';
 
 import { PoFieldSize } from '../../../enums/po-field-size.enum';
@@ -12,16 +12,14 @@ import { PoItemListBaseComponent } from './po-item-list-base.component';
   standalone: false
 })
 export class PoItemListComponent extends PoItemListBaseComponent implements OnChanges {
+  protected sanitized = inject(DomSanitizer);
+
   @ViewChild('itemList', { static: true }) itemList: ElementRef;
 
   selectedView: PoItemListOption;
 
   protected param;
   protected clickListener: () => void;
-
-  constructor(protected sanitized: DomSanitizer) {
-    super();
-  }
 
   private shouldUpdateSelected(changes: SimpleChanges): boolean {
     return !!(changes.searchValue && changes.label && changes.searchValue.currentValue === changes.label.currentValue);

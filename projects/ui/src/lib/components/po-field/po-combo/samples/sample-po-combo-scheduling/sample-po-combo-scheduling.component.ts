@@ -1,4 +1,4 @@
-import { Component, OnInit, ViewChild } from '@angular/core';
+import { Component, OnInit, ViewChild, inject } from '@angular/core';
 import { NgForm } from '@angular/forms';
 
 import { PoComboOption, PoComboOptionGroup, PoNotificationService, PoSelectOption } from '@po-ui/ng-components';
@@ -11,6 +11,9 @@ import { SamplePoComboSchedulingService } from './sample-po-combo-scheduling.ser
   standalone: false
 })
 export class SamplePoComboSchedulingComponent implements OnInit {
+  private poNotification = inject(PoNotificationService);
+  private schedulingService = inject(SamplePoComboSchedulingService);
+
   @ViewChild('schedulingForm', { static: true }) form: NgForm;
 
   birthday: string;
@@ -28,11 +31,6 @@ export class SamplePoComboSchedulingComponent implements OnInit {
     { label: 'Particular', value: 'particular' },
     { label: 'Health Insurance', value: 'healthInsurance' }
   ];
-
-  constructor(
-    private poNotification: PoNotificationService,
-    private schedulingService: SamplePoComboSchedulingService
-  ) {}
 
   ngOnInit() {
     this.citiesOptions = this.schedulingService.getcities();

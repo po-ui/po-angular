@@ -1,6 +1,6 @@
 import { AbstractControl } from '@angular/forms';
 import { ComponentFixture, fakeAsync, TestBed, tick } from '@angular/core/testing';
-import { ChangeDetectorRef, Component, ElementRef } from '@angular/core';
+import { ChangeDetectorRef, Component, ElementRef, inject } from '@angular/core';
 
 import { configureTestSuite } from './../../../util-test/util-expect.spec';
 
@@ -16,7 +16,9 @@ import { of, Subscription } from 'rxjs';
   standalone: false
 })
 class ContentProjectionComponent extends PoInputGeneric {
-  constructor(el: ElementRef) {
+  constructor() {
+    const el = inject(ElementRef);
+
     super(el);
   }
 

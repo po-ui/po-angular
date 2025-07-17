@@ -1,4 +1,4 @@
-import { Component, OnInit } from '@angular/core';
+import { Component, OnInit, inject } from '@angular/core';
 
 import { PoCheckboxGroupOption, PoRadioGroupOption, PoDialogService, PoButtonType } from '@po-ui/ng-components';
 
@@ -8,6 +8,8 @@ import { PoCheckboxGroupOption, PoRadioGroupOption, PoDialogService, PoButtonTyp
   standalone: false
 })
 export class SamplePoButtonLabsComponent implements OnInit {
+  private poDialog = inject(PoDialogService);
+
   label: string;
   kind: string;
   icon: string;
@@ -45,8 +47,6 @@ export class SamplePoButtonLabsComponent implements OnInit {
     { label: 'submit', value: PoButtonType.Submit },
     { label: 'reset', value: PoButtonType.Reset }
   ];
-
-  constructor(private poDialog: PoDialogService) {}
 
   ngOnInit() {
     this.restore();

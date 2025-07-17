@@ -1,4 +1,4 @@
-import { AfterViewInit, ChangeDetectorRef, Component, OnDestroy, OnInit, ViewChild } from '@angular/core';
+import { AfterViewInit, ChangeDetectorRef, Component, OnDestroy, OnInit, ViewChild, inject } from '@angular/core';
 import { NgForm } from '@angular/forms';
 import { Subscription } from 'rxjs';
 import { PoSelectOption, PoStepperComponent } from '@po-ui/ng-components';
@@ -10,6 +10,9 @@ import { SamplePoStepperActiveService } from './sample-po-stepper-active.service
   standalone: false
 })
 export class SamplePoStepperActiveComponent implements OnInit, AfterViewInit, OnDestroy {
+  sampleService = inject(SamplePoStepperActiveService);
+  private changeDetector = inject(ChangeDetectorRef);
+
   @ViewChild('basicInformation', { static: true }) basicInformationForm: NgForm;
   @ViewChild('academicFormation', { static: true }) academicFormationForm: NgForm;
   @ViewChild('professionalExperiences', { static: true }) professionalExperiencesForm: NgForm;
@@ -27,11 +30,6 @@ export class SamplePoStepperActiveComponent implements OnInit, AfterViewInit, On
 
   private citiesSubscription: Subscription;
   private statesSubscription: Subscription;
-
-  constructor(
-    public sampleService: SamplePoStepperActiveService,
-    private changeDetector: ChangeDetectorRef
-  ) {}
 
   ngAfterViewInit(): void {
     setTimeout(() => this.activeStep());

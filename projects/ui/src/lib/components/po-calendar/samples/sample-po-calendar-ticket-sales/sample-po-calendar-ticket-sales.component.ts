@@ -1,4 +1,4 @@
-import { Component } from '@angular/core';
+import { Component, inject } from '@angular/core';
 
 import { PoNotificationService, PoPageAction, PoSelectOption } from '@po-ui/ng-components';
 
@@ -8,6 +8,8 @@ import { PoNotificationService, PoPageAction, PoSelectOption } from '@po-ui/ng-c
   standalone: false
 })
 export class SamplePoCalendarTicketSalesComponent {
+  private poNotification = inject(PoNotificationService);
+
   date: string;
   halfPriceTicketQuantity: number;
   tickets: number;
@@ -23,8 +25,6 @@ export class SamplePoCalendarTicketSalesComponent {
     { label: '3', value: 3 },
     { label: '4', value: 4 }
   ];
-
-  constructor(private poNotification: PoNotificationService) {}
 
   private buyTickets() {
     this.poNotification.success(`Tickets purchased to ${this.getDate(this.date)} successfully!`);

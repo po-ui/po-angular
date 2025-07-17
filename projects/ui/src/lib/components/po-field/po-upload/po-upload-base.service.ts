@@ -1,4 +1,4 @@
-import { Injectable, EventEmitter } from '@angular/core';
+import { Injectable, EventEmitter, inject } from '@angular/core';
 import {
   HttpClient,
   HttpEventType,
@@ -16,10 +16,10 @@ import { Observable, Subscription } from 'rxjs';
   providedIn: 'root'
 })
 export class PoUploadBaseService {
+  private http = inject(HttpClient);
+
   formField: string = 'files';
   requests: Array<any> = [];
-
-  constructor(private http: HttpClient) {}
 
   /**
    * Método responsável por enviar os arquivos ao servidor, conforme o parâmetro URL.

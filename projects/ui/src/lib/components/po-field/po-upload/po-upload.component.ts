@@ -6,7 +6,8 @@ import {
   ElementRef,
   Renderer2,
   ViewChild,
-  forwardRef
+  forwardRef,
+  inject
 } from '@angular/core';
 import { NG_VALIDATORS, NG_VALUE_ACCESSOR } from '@angular/forms';
 
@@ -74,6 +75,11 @@ import { PoUploadService } from './po-upload.service';
   standalone: false
 })
 export class PoUploadComponent extends PoUploadBaseComponent implements AfterViewInit {
+  renderer = inject(Renderer2);
+  private i18nPipe = inject(PoI18nPipe);
+  private notification = inject(PoNotificationService);
+  private cd = inject(ChangeDetectorRef);
+
   @ViewChild('inputFile', { read: ElementRef, static: true }) private inputFile: ElementRef;
   @ViewChild(PoUploadDragDropComponent) private poUploadDragDropComponent: PoUploadDragDropComponent;
   @ViewChild('uploadButton') uploadButton: PoButtonComponent;
@@ -100,14 +106,10 @@ export class PoUploadComponent extends PoUploadBaseComponent implements AfterVie
 
   private calledByCleanInputValue: boolean = false;
 
-  constructor(
-    uploadService: PoUploadService,
-    public renderer: Renderer2,
-    private i18nPipe: PoI18nPipe,
-    private notification: PoNotificationService,
-    private cd: ChangeDetectorRef,
-    languageService: PoLanguageService
-  ) {
+  constructor() {
+    const uploadService = inject(PoUploadService);
+    const languageService = inject(PoLanguageService);
+
     super(uploadService, languageService);
   }
 

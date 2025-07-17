@@ -1,4 +1,4 @@
-import { Injectable } from '@angular/core';
+import { Injectable, inject } from '@angular/core';
 import { HttpClient } from '@angular/common/http';
 
 import { Observable } from 'rxjs';
@@ -10,7 +10,7 @@ import { PoComboOption, PoTableColumn } from '@po-ui/ng-components';
   providedIn: 'root'
 })
 export class SamplePoDisclaimerGroupSwPlanetsService {
-  constructor(private http: HttpClient) {}
+  private http = inject(HttpClient);
 
   getClimates(): Array<PoComboOption> {
     return [

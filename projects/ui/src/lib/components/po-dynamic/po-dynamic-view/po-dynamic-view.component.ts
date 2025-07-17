@@ -1,5 +1,5 @@
 import { CurrencyPipe, DatePipe, DecimalPipe, TitleCasePipe } from '@angular/common';
-import { Component, OnChanges, OnInit, SimpleChanges } from '@angular/core';
+import { Component, OnChanges, OnInit, SimpleChanges, inject } from '@angular/core';
 
 import { PoTimePipe } from '../../../pipes/po-time/po-time.pipe';
 
@@ -42,16 +42,16 @@ import { PoMultiselectFilterService } from '../../po-field/po-multiselect/po-mul
 })
 export class PoDynamicViewComponent extends PoDynamicViewBaseComponent implements OnChanges, OnInit {
   initChanges;
-  constructor(
-    currencyPipe: CurrencyPipe,
-    datePipe: DatePipe,
-    decimalPipe: DecimalPipe,
-    timePipe: PoTimePipe,
-    titleCasePipe: TitleCasePipe,
-    dynamicViewService: PoDynamicViewService,
-    comboFilterService: PoComboFilterService,
-    multiselectFilterService: PoMultiselectFilterService
-  ) {
+  constructor() {
+    const currencyPipe = inject(CurrencyPipe);
+    const datePipe = inject(DatePipe);
+    const decimalPipe = inject(DecimalPipe);
+    const timePipe = inject(PoTimePipe);
+    const titleCasePipe = inject(TitleCasePipe);
+    const dynamicViewService = inject(PoDynamicViewService);
+    const comboFilterService = inject(PoComboFilterService);
+    const multiselectFilterService = inject(PoMultiselectFilterService);
+
     super(
       currencyPipe,
       datePipe,

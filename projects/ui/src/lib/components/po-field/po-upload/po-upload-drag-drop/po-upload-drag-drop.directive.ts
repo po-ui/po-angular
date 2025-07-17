@@ -1,4 +1,4 @@
-import { Directive, EventEmitter, HostListener, Input, Output } from '@angular/core';
+import { Directive, EventEmitter, HostListener, Input, Output, inject } from '@angular/core';
 
 import { PoI18nPipe } from '../../../../services/po-i18n/po-i18n.pipe';
 import { PoNotificationService } from '../../../../services/po-notification/po-notification.service';
@@ -10,6 +10,9 @@ import { PoUploadLiterals } from '../interfaces/po-upload-literals.interface';
   standalone: false
 })
 export class PoUploadDragDropDirective {
+  private i18nPipe = inject(PoI18nPipe);
+  private notification = inject(PoNotificationService);
+
   @Input('p-area-element') areaElement: HTMLElement;
 
   @Input('p-directory-compatible') directoryCompatible: boolean;
@@ -28,11 +31,6 @@ export class PoUploadDragDropDirective {
 
   private files: Array<File>;
   private invalidFileType: number;
-
-  constructor(
-    private i18nPipe: PoI18nPipe,
-    private notification: PoNotificationService
-  ) {}
 
   @HostListener('document:dragleave', ['$event']) onDragLeave(event) {
     event.preventDefault();

@@ -1,5 +1,5 @@
 import { HttpClient } from '@angular/common/http';
-import { Injectable } from '@angular/core';
+import { Injectable, inject } from '@angular/core';
 
 import { map } from 'rxjs/operators';
 
@@ -10,7 +10,9 @@ import { PoDynamicFormOperation } from '../po-dynamic-form-operation/po-dynamic-
   providedIn: 'root'
 })
 export class PoDynamicFormLoadService extends PoDynamicFormOperation {
-  constructor(http: HttpClient) {
+  constructor() {
+    const http = inject(HttpClient);
+
     super(http);
   }
 
