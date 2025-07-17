@@ -5,7 +5,8 @@ import {
   ElementRef,
   forwardRef,
   HostListener,
-  Input
+  Input,
+  inject
 } from '@angular/core';
 import { AbstractControl, NG_VALIDATORS, NG_VALUE_ACCESSOR } from '@angular/forms';
 
@@ -94,7 +95,10 @@ export class PoNumberComponent extends PoNumberBaseComponent {
   id = `po-number[${uuid()}]`;
 
   /* istanbul ignore next */
-  constructor(el: ElementRef, cd: ChangeDetectorRef) {
+  constructor() {
+    const el = inject(ElementRef);
+    const cd = inject(ChangeDetectorRef);
+
     super(el, cd);
   }
 

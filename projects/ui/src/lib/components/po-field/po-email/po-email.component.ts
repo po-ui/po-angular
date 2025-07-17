@@ -5,7 +5,8 @@ import {
   Component,
   ElementRef,
   forwardRef,
-  OnDestroy
+  OnDestroy,
+  inject
 } from '@angular/core';
 import { AbstractControl, NG_VALIDATORS, NG_VALUE_ACCESSOR } from '@angular/forms';
 import { uuid } from '../../../utils/util';
@@ -92,7 +93,10 @@ export class PoEmailComponent extends PoInputGeneric implements AfterViewInit, O
   private listener = this.validateClassesForPattern.bind(this);
 
   /* istanbul ignore next */
-  constructor(el: ElementRef, cd: ChangeDetectorRef) {
+  constructor() {
+    const el = inject(ElementRef);
+    const cd = inject(ChangeDetectorRef);
+
     super(el, cd);
     this.maxlength = 254;
   }

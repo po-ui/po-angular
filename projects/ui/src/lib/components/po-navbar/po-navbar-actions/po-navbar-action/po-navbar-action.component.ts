@@ -1,4 +1,4 @@
-import { Component, Input, TemplateRef, ViewContainerRef } from '@angular/core';
+import { Component, Input, TemplateRef, ViewContainerRef, inject } from '@angular/core';
 import { Router } from '@angular/router';
 
 import { callFunction, isExternalLink, openExternalLink } from '../../../../utils/util';
@@ -9,6 +9,8 @@ import { callFunction, isExternalLink, openExternalLink } from '../../../../util
   standalone: false
 })
 export class PoNavbarActionComponent {
+  private router = inject(Router);
+
   @Input('p-action') action?: Function;
 
   @Input('p-icon') icon: string | TemplateRef<void>;
@@ -18,11 +20,6 @@ export class PoNavbarActionComponent {
   @Input('p-link') link?: string;
 
   @Input('p-tooltip-text') tooltip?: string;
-
-  constructor(
-    viewContainerRef: ViewContainerRef,
-    private router: Router
-  ) {}
 
   click() {
     if (this.action) {

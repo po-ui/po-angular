@@ -1,4 +1,4 @@
-import { Component, Input, OnDestroy, OnInit, ViewChild } from '@angular/core';
+import { Component, Input, OnDestroy, OnInit, ViewChild, inject } from '@angular/core';
 import { ActivatedRoute, Router } from '@angular/router';
 
 import { concat, EMPTY, Observable, of, Subscription, throwError } from 'rxjs';
@@ -195,6 +195,14 @@ export const poPageDynamicEditLiteralsDefault = {
   standalone: false
 })
 export class PoPageDynamicEditComponent implements OnInit, OnDestroy {
+  private router = inject(Router);
+  private activatedRoute = inject(ActivatedRoute);
+  private poNotification = inject(PoNotificationService);
+  private poDialogService = inject(PoDialogService);
+  private poPageDynamicService = inject(PoPageDynamicService);
+  private poPageCustomizationService = inject(PoPageCustomizationService);
+  private poPageDynamicEditActionsService = inject(PoPageDynamicEditActionsService);
+
   @ViewChild('dynamicForm') dynamicForm: PoDynamicFormComponent;
   @ViewChild('gridDetail') gridDetail: PoGridComponent;
 
@@ -512,16 +520,9 @@ export class PoPageDynamicEditComponent implements OnInit, OnDestroy {
   }
 
   /* eslint-disable max-params */
-  constructor(
-    private router: Router,
-    private activatedRoute: ActivatedRoute,
-    private poNotification: PoNotificationService,
-    private poDialogService: PoDialogService,
-    private poPageDynamicService: PoPageDynamicService,
-    private poPageCustomizationService: PoPageCustomizationService,
-    private poPageDynamicEditActionsService: PoPageDynamicEditActionsService,
-    languageService: PoLanguageService
-  ) {
+  constructor() {
+    const languageService = inject(PoLanguageService);
+
     this.language = languageService.getShortLanguage();
   }
   /* eslint-enable max-params */

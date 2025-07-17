@@ -1,4 +1,4 @@
-import { Component, OnInit, ViewChild } from '@angular/core';
+import { Component, OnInit, ViewChild, inject } from '@angular/core';
 import { NgForm } from '@angular/forms';
 import { Router } from '@angular/router';
 
@@ -12,6 +12,10 @@ import { PoNotificationService } from '@po-ui/ng-components';
   standalone: false
 })
 export class SamplePoPageEditUserComponent implements OnInit {
+  private route = inject(Router);
+  private poDialog = inject(PoDialogService);
+  private poNotification = inject(PoNotificationService);
+
   @ViewChild('formEditUser', { static: true }) formEditUser: NgForm;
 
   birthDate: Date;
@@ -29,12 +33,6 @@ export class SamplePoPageEditUserComponent implements OnInit {
   public readonly breadcrumb: PoBreadcrumb = {
     items: [{ label: 'Home', action: this.beforeRedirect.bind(this) }, { label: 'User Edit' }]
   };
-
-  constructor(
-    private route: Router,
-    private poDialog: PoDialogService,
-    private poNotification: PoNotificationService
-  ) {}
 
   ngOnInit() {
     this.initialize();

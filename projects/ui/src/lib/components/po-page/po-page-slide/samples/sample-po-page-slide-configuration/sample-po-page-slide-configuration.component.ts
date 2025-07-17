@@ -1,4 +1,4 @@
-import { Component } from '@angular/core';
+import { Component, inject } from '@angular/core';
 import { Router } from '@angular/router';
 
 @Component({
@@ -7,14 +7,14 @@ import { Router } from '@angular/router';
   standalone: false
 })
 export class SamplePoPageSlideConfigurationComponent {
+  private router = inject(Router);
+
   public bluetooth = true;
   public locked = false;
   public microphone = true;
   public notification = true;
   public favorited = false;
   public localization = true;
-
-  constructor(private router: Router) {}
 
   openPageSlideFooterDocumentation() {
     this.router.navigate(['documentation', 'po-page-slide-footer']);

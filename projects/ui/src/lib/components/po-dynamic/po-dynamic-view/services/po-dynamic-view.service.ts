@@ -1,5 +1,5 @@
 import { HttpClient, HttpHeaders } from '@angular/common/http';
-import { Injectable } from '@angular/core';
+import { Injectable, inject } from '@angular/core';
 import { Observable, map } from 'rxjs';
 import { isTypeof } from '../../../../utils/util';
 import { PoDynamicViewField } from '../po-dynamic-view-field.interface';
@@ -15,12 +15,12 @@ import { PoDynamicViewField } from '../po-dynamic-view-field.interface';
   providedIn: 'root'
 })
 export class PoDynamicViewService {
+  private httpClient = inject(HttpClient);
+
   readonly headers: HttpHeaders = new HttpHeaders({
     'X-PO-No-Message': 'true'
   });
   url: string;
-
-  constructor(private httpClient: HttpClient) {}
 
   getObjectByValue(value: any, filterParams?: any): Observable<Array<any> | { [key: string]: any }> {
     const validatedFilterParams = this.validateParams(filterParams);

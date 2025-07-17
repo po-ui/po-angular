@@ -1,4 +1,4 @@
-import { ChangeDetectionStrategy, Component, Input, OnChanges, OnInit, SimpleChanges } from '@angular/core';
+import { ChangeDetectionStrategy, Component, Input, OnChanges, OnInit, SimpleChanges, inject } from '@angular/core';
 
 import { PoLanguageService } from '../../../services/po-language/po-language.service';
 import { convertToBoolean } from '../../../utils/util';
@@ -55,7 +55,9 @@ export class PoFieldContainerComponent implements OnInit, OnChanges {
   /** Define se a indicação de campo obrigatório será exibida. */
   @Input('p-show-required') showRequired: boolean = false;
 
-  constructor(languageService: PoLanguageService) {
+  constructor() {
+    const languageService = inject(PoLanguageService);
+
     const language = languageService.getShortLanguage();
 
     this.literals = {

@@ -1,4 +1,4 @@
-import { Component, OnInit } from '@angular/core';
+import { Component, OnInit, inject } from '@angular/core';
 import { ActivatedRoute, Router } from '@angular/router';
 
 import { PoLanguageService, poLocaleDefault } from '@po-ui/ng-components';
@@ -54,13 +54,14 @@ export const poPageBlockedUserButtonLiterals: object = {
   standalone: false
 })
 export class PoPageBlockedUserComponent extends PoPageBlockedUserBaseComponent implements OnInit {
+  private activatedRoute = inject(ActivatedRoute);
+  private router = inject(Router);
+
   literals;
 
-  constructor(
-    private activatedRoute: ActivatedRoute,
-    private router: Router,
-    languageService: PoLanguageService
-  ) {
+  constructor() {
+    const languageService = inject(PoLanguageService);
+
     super();
 
     const language = languageService.getShortLanguage();

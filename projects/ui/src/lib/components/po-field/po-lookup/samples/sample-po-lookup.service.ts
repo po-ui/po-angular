@@ -1,5 +1,5 @@
 import { HttpClient } from '@angular/common/http';
-import { Injectable } from '@angular/core';
+import { Injectable, inject } from '@angular/core';
 
 import { Observable } from 'rxjs';
 
@@ -9,9 +9,9 @@ import { PoLookupFilter, PoLookupFilteredItemsParams } from '@po-ui/ng-component
   providedIn: 'root'
 })
 export class SamplePoLookupService implements PoLookupFilter {
-  private url = 'https://po-sample-api.onrender.com/v1/heroes';
+  private httpClient = inject(HttpClient);
 
-  constructor(private httpClient: HttpClient) {}
+  private url = 'https://po-sample-api.onrender.com/v1/heroes';
 
   getFilteredItems(filteredParams: PoLookupFilteredItemsParams): Observable<any> {
     const { filterParams, advancedFilters, ...restFilteredItemsParams } = filteredParams;

@@ -1,5 +1,5 @@
 import { TitleCasePipe } from '@angular/common';
-import { ChangeDetectorRef, Component, OnChanges, QueryList, SimpleChanges, ViewChildren } from '@angular/core';
+import { ChangeDetectorRef, Component, OnChanges, QueryList, SimpleChanges, ViewChildren, inject } from '@angular/core';
 import { ControlContainer, NgForm } from '@angular/forms';
 
 import { PoDynamicFormField } from '../interfaces/po-dynamic-form-field.interface';
@@ -22,6 +22,10 @@ import { PoDynamicFormFieldsBaseComponent } from './po-dynamic-form-fields-base.
   standalone: false
 })
 export class PoDynamicFormFieldsComponent extends PoDynamicFormFieldsBaseComponent implements OnChanges {
+  private readonly validationService = inject(PoDynamicFormValidationService);
+  private readonly changes = inject(ChangeDetectorRef);
+  private readonly form = inject(NgForm);
+
   @ViewChildren('component') components: QueryList<{
     name: string;
     focus: () => void;
@@ -30,12 +34,9 @@ export class PoDynamicFormFieldsComponent extends PoDynamicFormFieldsBaseCompone
 
   private previousValue = {};
 
-  constructor(
-    titleCasePipe: TitleCasePipe,
-    private readonly validationService: PoDynamicFormValidationService,
-    private readonly changes: ChangeDetectorRef,
-    private readonly form: NgForm
-  ) {
+  constructor() {
+    const titleCasePipe = inject(TitleCasePipe);
+
     super(titleCasePipe);
   }
 

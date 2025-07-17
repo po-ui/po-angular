@@ -1,4 +1,4 @@
-import { Component } from '@angular/core';
+import { Component, inject } from '@angular/core';
 import { PoTableColumn } from '@po-ui/ng-components';
 
 import { SamplePoLookupMultipleService } from './sample-po-lookup-multiple.service';
@@ -10,6 +10,8 @@ import { SamplePoLookupMultipleService } from './sample-po-lookup-multiple.servi
   standalone: false
 })
 export class SamplePoLookupMultipleComponent {
+  service = inject(SamplePoLookupMultipleService);
+
   loading: boolean = false;
   heroes: Array<any>;
   multiLookup: Array<any> = [1495831666871, 1405833068599];
@@ -20,7 +22,6 @@ export class SamplePoLookupMultipleComponent {
       label: 'Name'
     }
   ];
-  constructor(public service: SamplePoLookupMultipleService) {}
 
   changeOptions(event): void {
     this.loading = true;
