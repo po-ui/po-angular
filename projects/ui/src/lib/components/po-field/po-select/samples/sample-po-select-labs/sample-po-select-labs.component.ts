@@ -1,4 +1,4 @@
-import { ChangeDetectorRef, Component, OnInit } from '@angular/core';
+import { ChangeDetectorRef, Component, OnInit, inject } from '@angular/core';
 
 import { PoCheckboxGroupOption, PoRadioGroupOption, PoSelectOption, PoSelectOptionGroup } from '@po-ui/ng-components';
 
@@ -8,6 +8,8 @@ import { PoCheckboxGroupOption, PoRadioGroupOption, PoSelectOption, PoSelectOpti
   standalone: false
 })
 export class SamplePoSelectLabsComponent implements OnInit {
+  private readonly cdr = inject(ChangeDetectorRef);
+
   additionalHelpTooltip: string;
   event: string;
   help: string;
@@ -37,8 +39,6 @@ export class SamplePoSelectLabsComponent implements OnInit {
     { label: 'small', value: 'small' },
     { label: 'medium', value: 'medium' }
   ];
-
-  constructor(private readonly cdr: ChangeDetectorRef) {}
 
   ngOnInit() {
     this.restore();

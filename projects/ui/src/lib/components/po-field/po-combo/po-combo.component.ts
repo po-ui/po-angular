@@ -11,7 +11,8 @@ import {
   OnDestroy,
   Renderer2,
   SimpleChanges,
-  ViewChild
+  ViewChild,
+  inject
 } from '@angular/core';
 import { NG_VALIDATORS, NG_VALUE_ACCESSOR } from '@angular/forms';
 
@@ -101,6 +102,12 @@ const poComboContainerOffset = 8;
   standalone: false
 })
 export class PoComboComponent extends PoComboBaseComponent implements AfterViewInit, OnChanges, OnDestroy {
+  element = inject(ElementRef);
+  differs = inject(IterableDiffers);
+  defaultService = inject(PoComboFilterService);
+  renderer = inject(Renderer2);
+  private controlPosition = inject(PoControlPositionService);
+
   @ContentChild(PoComboOptionTemplateDirective, { static: true }) comboOptionTemplate: PoComboOptionTemplateDirective;
   @ViewChild('outerContainer ', { read: ElementRef }) outerContainer: ElementRef;
   @ViewChild('containerElement', { read: ElementRef }) containerElement: ElementRef;
@@ -130,16 +137,13 @@ export class PoComboComponent extends PoComboBaseComponent implements AfterViewI
 
   private subscriptionScrollEvent: Subscription;
 
-  constructor(
-    public element: ElementRef,
-    public differs: IterableDiffers,
-    public defaultService: PoComboFilterService,
-    public renderer: Renderer2,
-    private controlPosition: PoControlPositionService,
-    protected changeDetector: ChangeDetectorRef,
-    languageService: PoLanguageService
-  ) {
+  constructor() {
+    const changeDetector = inject(ChangeDetectorRef);
+    const languageService = inject(PoLanguageService);
+
     super(languageService, changeDetector);
+    const differs = this.differs;
+    this.changeDetector = changeDetector;
 
     this.differ = differs.find([]).create(null);
   }

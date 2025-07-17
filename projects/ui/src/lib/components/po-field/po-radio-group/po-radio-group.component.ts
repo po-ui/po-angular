@@ -10,7 +10,8 @@ import {
   IterableDiffers,
   QueryList,
   ViewChild,
-  ViewChildren
+  ViewChildren,
+  inject
 } from '@angular/core';
 import { NG_VALIDATORS, NG_VALUE_ACCESSOR } from '@angular/forms';
 
@@ -64,6 +65,9 @@ import { PoRadioGroupBaseComponent } from './po-radio-group-base.component';
   standalone: false
 })
 export class PoRadioGroupComponent extends PoRadioGroupBaseComponent implements AfterViewInit, DoCheck {
+  private el = inject(ElementRef);
+  private cd = inject(ChangeDetectorRef);
+
   /** Label do campo. */
   @Input('p-label') label?: string;
 
@@ -75,11 +79,9 @@ export class PoRadioGroupComponent extends PoRadioGroupBaseComponent implements 
 
   differ: any;
 
-  constructor(
-    differs: IterableDiffers,
-    private el: ElementRef,
-    private cd: ChangeDetectorRef
-  ) {
+  constructor() {
+    const differs = inject(IterableDiffers);
+
     super();
     this.differ = differs.find([]).create(null);
   }

@@ -1,4 +1,12 @@
-import { ChangeDetectionStrategy, ChangeDetectorRef, Component, ElementRef, forwardRef, Input } from '@angular/core';
+import {
+  ChangeDetectionStrategy,
+  ChangeDetectorRef,
+  Component,
+  ElementRef,
+  forwardRef,
+  Input,
+  inject
+} from '@angular/core';
 import { AbstractControl, NG_VALIDATORS, NG_VALUE_ACCESSOR } from '@angular/forms';
 
 import { convertToBoolean, uuid } from '../../../utils/util';
@@ -70,7 +78,10 @@ export class PoLoginComponent extends PoInputGeneric {
   }
 
   /* istanbul ignore next */
-  constructor(el: ElementRef, cd: ChangeDetectorRef) {
+  constructor() {
+    const el = inject(ElementRef);
+    const cd = inject(ChangeDetectorRef);
+
     super(el, cd);
   }
 

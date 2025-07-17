@@ -1,4 +1,4 @@
-import { Component, OnInit } from '@angular/core';
+import { Component, OnInit, inject } from '@angular/core';
 
 import {
   PoCheckboxGroupOption,
@@ -14,6 +14,8 @@ import {
   standalone: false
 })
 export class SamplePoDropdownLabsComponent implements OnInit {
+  private poNotification = inject(PoNotificationService);
+
   action: PoDropdownAction;
   actions: Array<PoDropdownAction>;
   label: string;
@@ -45,8 +47,6 @@ export class SamplePoDropdownLabsComponent implements OnInit {
     { label: 'Danger', value: 'danger' },
     { label: 'Default', value: 'default' }
   ];
-
-  constructor(private poNotification: PoNotificationService) {}
 
   ngOnInit() {
     this.restore();

@@ -9,7 +9,8 @@ import {
   OnInit,
   QueryList,
   ViewChild,
-  ViewChildren
+  ViewChildren,
+  inject
 } from '@angular/core';
 
 import { PoLanguageService } from '../../services/po-language/po-language.service';
@@ -68,6 +69,10 @@ const poTabsMaxNumberOfTabs = 5;
   standalone: false
 })
 export class PoTabsComponent extends PoTabsBaseComponent implements OnInit, AfterViewInit, OnDestroy, AfterContentInit {
+  private changeDetector = inject(ChangeDetectorRef);
+  private languageService = inject(PoLanguageService);
+  private tabsService = inject(PoTabsService);
+
   // Tabs utilizados no ng-content
   @ContentChildren(PoTabComponent) tabsChildren: QueryList<PoTabComponent>;
   @ViewChildren('tabButton', { read: ElementRef }) tabButton: QueryList<any>;
@@ -89,12 +94,10 @@ export class PoTabsComponent extends PoTabsBaseComponent implements OnInit, Afte
   private subscription: Subscription = new Subscription();
   private subscriptionTabsService: Subscription = new Subscription();
   private subscriptionTabActive: Subscription = new Subscription();
-  constructor(
-    private changeDetector: ChangeDetectorRef,
-    private languageService: PoLanguageService,
-    private tabsService: PoTabsService
-  ) {
+  constructor() {
     super();
+    const languageService = this.languageService;
+
     const language = languageService.getShortLanguage();
 
     this.literals = {

@@ -1,13 +1,13 @@
 import { HttpClient } from '@angular/common/http';
-import { Injectable } from '@angular/core';
+import { Injectable, inject } from '@angular/core';
 
 @Injectable({
   providedIn: 'root'
 })
 export class SamplePoSelectCustomerRegistrationService {
-  private url: string = 'https://po-sample-api.onrender.com/v1/sampleSelect';
+  private http = inject(HttpClient);
 
-  constructor(private http: HttpClient) {}
+  private url: string = 'https://po-sample-api.onrender.com/v1/sampleSelect';
 
   getCitiesByState(uf: string) {
     return this.http.get(`${this.url}/getCities/${uf}`);

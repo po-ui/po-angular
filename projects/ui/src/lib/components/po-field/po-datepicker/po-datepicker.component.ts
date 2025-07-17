@@ -9,7 +9,8 @@ import {
   Input,
   OnDestroy,
   Renderer2,
-  ViewChild
+  ViewChild,
+  inject
 } from '@angular/core';
 import { NG_VALIDATORS, NG_VALUE_ACCESSOR } from '@angular/forms';
 
@@ -79,6 +80,9 @@ const poCalendarPositionDefault = 'bottom-left';
   standalone: false
 })
 export class PoDatepickerComponent extends PoDatepickerBaseComponent implements AfterViewInit, OnDestroy {
+  private controlPosition = inject(PoControlPositionService);
+  private renderer = inject(Renderer2);
+
   @ViewChild('calendar', { static: true }) calendar: PoCalendarComponent;
   @ViewChild('dialogPicker', { read: ElementRef, static: false }) dialogPicker: ElementRef;
   @ViewChild('iconDatepicker') iconDatepicker: PoButtonComponent;
@@ -120,14 +124,15 @@ export class PoDatepickerComponent extends PoDatepickerBaseComponent implements 
     return this.noAutocomplete ? 'off' : 'on';
   }
 
-  constructor(
-    protected languageService: PoLanguageService,
-    protected cd: ChangeDetectorRef,
-    private controlPosition: PoControlPositionService,
-    private renderer: Renderer2,
-    el: ElementRef
-  ) {
+  constructor() {
+    const languageService = inject(PoLanguageService);
+    const cd = inject(ChangeDetectorRef);
+    const el = inject(ElementRef);
+
     super(languageService, cd);
+    this.languageService = languageService;
+    this.cd = cd;
+
     this.shortLanguage = this.languageService.getShortLanguage();
     this.el = el;
     const language = languageService.getShortLanguage();

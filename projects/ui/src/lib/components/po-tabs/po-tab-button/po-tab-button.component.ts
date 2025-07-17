@@ -8,7 +8,8 @@ import {
   OnChanges,
   Output,
   SimpleChanges,
-  ViewChild
+  ViewChild,
+  inject
 } from '@angular/core';
 
 import { convertToBoolean } from '../../../utils/util';
@@ -26,6 +27,9 @@ import { convertToBoolean } from '../../../utils/util';
   standalone: false
 })
 export class PoTabButtonComponent implements OnChanges, AfterViewInit {
+  private elementRef = inject(ElementRef);
+  private changeDetector = inject(ChangeDetectorRef);
+
   @ViewChild('tabButtom', { static: true }) tabButtom: ElementRef;
 
   // Desabilita o botão
@@ -71,11 +75,6 @@ export class PoTabButtonComponent implements OnChanges, AfterViewInit {
   get hide(): boolean {
     return this._hide;
   }
-
-  constructor(
-    private elementRef: ElementRef,
-    private changeDetector: ChangeDetectorRef
-  ) {}
 
   ngAfterViewInit(): void {
     this.widthButton = this.tabButtom.nativeElement.offsetWidth;

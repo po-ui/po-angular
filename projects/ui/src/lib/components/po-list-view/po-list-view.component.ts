@@ -6,7 +6,8 @@ import {
   ContentChild,
   DoCheck,
   IterableDiffers,
-  ViewChild
+  ViewChild,
+  inject
 } from '@angular/core';
 
 import { PoLanguageService } from '../../services/po-language/po-language.service';
@@ -53,6 +54,8 @@ import { PoListViewDetailTemplateDirective } from './po-list-view-detail-templat
   standalone: false
 })
 export class PoListViewComponent extends PoListViewBaseComponent implements AfterContentInit, DoCheck {
+  private changeDetector = inject(ChangeDetectorRef);
+
   @ContentChild(PoListViewContentTemplateDirective, { static: true })
   listViewContentTemplate: PoListViewContentTemplateDirective;
   @ContentChild(PoListViewDetailTemplateDirective, { static: true })
@@ -62,11 +65,10 @@ export class PoListViewComponent extends PoListViewBaseComponent implements Afte
 
   private differ;
 
-  constructor(
-    private changeDetector: ChangeDetectorRef,
-    differs: IterableDiffers,
-    languageService: PoLanguageService
-  ) {
+  constructor() {
+    const differs = inject(IterableDiffers);
+    const languageService = inject(PoLanguageService);
+
     super(languageService);
     this.differ = differs.find([]).create(null);
   }

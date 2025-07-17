@@ -1,5 +1,5 @@
 import { animate, animateChild, group, query, style, transition, trigger } from '@angular/animations';
-import { Component, ContentChild, ElementRef, ViewChild } from '@angular/core';
+import { Component, ContentChild, ElementRef, ViewChild, inject } from '@angular/core';
 import { ReplaySubject } from 'rxjs';
 import { delay, take } from 'rxjs/operators';
 
@@ -69,6 +69,9 @@ export const poPageSlideLiteralsDefault = {
   standalone: false
 })
 export class PoPageSlideComponent extends PoPageSlideBaseComponent {
+  private poActiveOverlayService = inject(PoActiveOverlayService);
+  private languageService = inject(PoLanguageService);
+
   private _pageContent: ElementRef;
 
   private firstElement: any;
@@ -94,10 +97,7 @@ export class PoPageSlideComponent extends PoPageSlideBaseComponent {
     return this._pageContent;
   }
 
-  constructor(
-    private poActiveOverlayService: PoActiveOverlayService,
-    private languageService: PoLanguageService
-  ) {
+  constructor() {
     super();
     this.setTimeFromCSS();
     this.buttonAriaLabel = this.getTextDefault();

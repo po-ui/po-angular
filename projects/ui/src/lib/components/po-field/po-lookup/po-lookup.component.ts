@@ -10,7 +10,8 @@ import {
   OnDestroy,
   OnInit,
   Renderer2,
-  ViewChild
+  ViewChild,
+  inject
 } from '@angular/core';
 import { NG_VALIDATORS, NG_VALUE_ACCESSOR, NgControl } from '@angular/forms';
 import { Subscription } from 'rxjs';
@@ -144,6 +145,10 @@ const providers = [
   standalone: false
 })
 export class PoLookupComponent extends PoLookupBaseComponent implements AfterViewInit, OnDestroy, OnInit, DoCheck {
+  private renderer = inject(Renderer2);
+  private cd = inject(ChangeDetectorRef);
+  private el = inject(ElementRef);
+
   @ViewChild('inp', { read: ElementRef, static: false }) inputEl: ElementRef;
 
   initialized = false;
@@ -163,15 +168,12 @@ export class PoLookupComponent extends PoLookupBaseComponent implements AfterVie
     return this.noAutocomplete ? 'off' : 'on';
   }
 
-  constructor(
-    languageService: PoLanguageService,
-    private renderer: Renderer2,
-    poLookupFilterService: PoLookupFilterService,
-    poLookupModalService: PoLookupModalService,
-    private cd: ChangeDetectorRef,
-    private el: ElementRef,
-    injector: Injector
-  ) {
+  constructor() {
+    const languageService = inject(PoLanguageService);
+    const poLookupFilterService = inject(PoLookupFilterService);
+    const poLookupModalService = inject(PoLookupModalService);
+    const injector = inject(Injector);
+
     super(poLookupFilterService, injector, poLookupModalService, languageService);
   }
 

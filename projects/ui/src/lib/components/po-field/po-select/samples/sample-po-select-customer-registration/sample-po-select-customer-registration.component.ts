@@ -1,4 +1,4 @@
-import { Component, OnDestroy, OnInit } from '@angular/core';
+import { Component, OnDestroy, OnInit, inject } from '@angular/core';
 
 import { Subscription } from 'rxjs';
 
@@ -35,6 +35,8 @@ import { SamplePoSelectCustomerRegistrationService } from './sample-po-select-cu
   standalone: false
 })
 export class SamplePoSelectCustomerRegistrationComponent implements OnDestroy, OnInit {
+  private sampleService = inject(SamplePoSelectCustomerRegistrationService);
+
   address: string;
   city: number;
   cityOptions: Array<PoSelectOption>;
@@ -55,8 +57,6 @@ export class SamplePoSelectCustomerRegistrationComponent implements OnDestroy, O
 
   private citiesSubscription: Subscription;
   private statesSubscription: Subscription;
-
-  constructor(private sampleService: SamplePoSelectCustomerRegistrationService) {}
 
   ngOnDestroy() {
     this.citiesSubscription?.unsubscribe();

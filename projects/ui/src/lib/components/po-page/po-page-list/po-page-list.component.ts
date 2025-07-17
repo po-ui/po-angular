@@ -9,7 +9,8 @@ import {
   Renderer2,
   SimpleChange,
   ViewChild,
-  ViewContainerRef
+  ViewContainerRef,
+  inject
 } from '@angular/core';
 import { Router } from '@angular/router';
 
@@ -52,6 +53,10 @@ export class PoPageListComponent
   extends PoPageListBaseComponent
   implements AfterContentInit, OnChanges, OnDestroy, OnInit
 {
+  renderer = inject(Renderer2);
+  private router = inject(Router);
+  private changeDetector = inject(ChangeDetectorRef);
+
   @ViewChild('filterInput') filterInput: ElementRef;
 
   advancedSearch: string;
@@ -65,13 +70,9 @@ export class PoPageListComponent
   private maxWidthMobile: number = 480;
 
   /* istanbul ignore next */
-  constructor(
-    viewRef: ViewContainerRef,
-    languageService: PoLanguageService,
-    public renderer: Renderer2,
-    private router: Router,
-    private changeDetector: ChangeDetectorRef
-  ) {
+  constructor() {
+    const languageService = inject(PoLanguageService);
+
     super(languageService);
     this.initializeListeners();
   }

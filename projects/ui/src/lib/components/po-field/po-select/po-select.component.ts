@@ -5,14 +5,13 @@ import {
   ElementRef,
   EventEmitter,
   forwardRef,
-  Inject,
   Input,
   OnChanges,
-  Optional,
   Output,
   Renderer2,
   SimpleChanges,
-  ViewChild
+  ViewChild,
+  inject
 } from '@angular/core';
 import { AbstractControl, NG_VALIDATORS, NG_VALUE_ACCESSOR } from '@angular/forms';
 
@@ -123,6 +122,9 @@ const PO_SELECT_FIELD_VALUE_DEFAULT = 'value';
   standalone: false
 })
 export class PoSelectComponent extends PoFieldValidateModel<any> implements OnChanges {
+  private el = inject(ElementRef);
+  renderer = inject(Renderer2);
+
   private _iconToken: { [key: string]: string };
 
   @ViewChild('select', { read: ElementRef, static: true }) selectElement: ElementRef;
@@ -323,12 +325,12 @@ export class PoSelectComponent extends PoFieldValidateModel<any> implements OnCh
   }
 
   /* istanbul ignore next */
-  constructor(
-    @Optional() @Inject(ICONS_DICTIONARY) value: { [key: string]: string },
-    changeDetector: ChangeDetectorRef,
-    private el: ElementRef,
-    public renderer: Renderer2
-  ) {
+  constructor() {
+    const value = inject<{
+      [key: string]: string;
+    }>(ICONS_DICTIONARY, { optional: true });
+    const changeDetector = inject(ChangeDetectorRef);
+
     super(changeDetector);
 
     this._iconToken = value ?? AnimaliaIconDictionary;

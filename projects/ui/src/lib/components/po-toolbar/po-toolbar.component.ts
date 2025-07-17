@@ -1,4 +1,4 @@
-import { Component, OnInit, ViewContainerRef } from '@angular/core';
+import { Component, OnInit, ViewContainerRef, inject } from '@angular/core';
 import { Title } from '@angular/platform-browser';
 
 import { PoToolbarBaseComponent } from './po-toolbar-base.component';
@@ -29,12 +29,7 @@ import { PoToolbarBaseComponent } from './po-toolbar-base.component';
   standalone: false
 })
 export class PoToolbarComponent extends PoToolbarBaseComponent implements OnInit {
-  constructor(
-    private titleService: Title,
-    viewRef: ViewContainerRef
-  ) {
-    super();
-  }
+  private titleService = inject(Title);
 
   ngOnInit(): void {
     this.setTitle(this.title);

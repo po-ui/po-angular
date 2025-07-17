@@ -9,7 +9,8 @@ import {
   Input,
   Output,
   Renderer2,
-  ViewChild
+  ViewChild,
+  inject
 } from '@angular/core';
 import { NG_VALUE_ACCESSOR } from '@angular/forms';
 
@@ -33,6 +34,9 @@ import { PoRadioSize } from './enums/po-radio-size.enum';
   standalone: false
 })
 export class PoRadioComponent extends PoFieldModel<boolean> {
+  private changeDetector = inject(ChangeDetectorRef);
+  private renderer = inject(Renderer2);
+
   @ViewChild('radio', { static: true }) radio: ElementRef;
   @ViewChild('radioInput', { static: true }) radioInput: ElementRef;
 
@@ -61,13 +65,6 @@ export class PoRadioComponent extends PoFieldModel<boolean> {
 
   /** Emite evento para a tabela ao selecionar ou desselecionar */
   @Output('p-change-selected') changeSelected: EventEmitter<any> = new EventEmitter<any>();
-
-  constructor(
-    private changeDetector: ChangeDetectorRef,
-    private renderer: Renderer2
-  ) {
-    super();
-  }
 
   /**
    * Função que atribui foco ao *radio*.
