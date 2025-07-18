@@ -1,7 +1,7 @@
-<ng-container *ngIf="class; then fontTemplate; else icon"></ng-container>
-
-<ng-template #fontTemplate>
+@if (class) {
   <i [class]="class" aria-hidden="true">
     <ng-content></ng-content>
   </i>
-</ng-template>
+} @else {
+  <ng-template [ngTemplateOutlet]="icon"></ng-template>
+}

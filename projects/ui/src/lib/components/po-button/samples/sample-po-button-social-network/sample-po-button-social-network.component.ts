@@ -1,4 +1,4 @@
-import { Component, OnInit } from '@angular/core';
+import { Component, OnInit, inject } from '@angular/core';
 
 import { PoNotificationService } from '@po-ui/ng-components';
 
@@ -8,6 +8,8 @@ import { PoNotificationService } from '@po-ui/ng-components';
   standalone: false
 })
 export class SamplePoButtonSocialNetworkComponent implements OnInit {
+  private poNotification = inject(PoNotificationService);
+
   currentFriend: object;
   userAvatar: string = 'https://lorempixel.com/144/144/';
 
@@ -18,8 +20,6 @@ export class SamplePoButtonSocialNetworkComponent implements OnInit {
   ];
 
   private indexFriend: number = 0;
-
-  constructor(private poNotification: PoNotificationService) {}
 
   ngOnInit() {
     this.setCurrentFriend(0);

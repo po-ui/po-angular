@@ -1,4 +1,4 @@
-import { Component } from '@angular/core';
+import { Component, inject } from '@angular/core';
 
 import { PoMenuItem } from '@po-ui/ng-components';
 
@@ -18,6 +18,8 @@ import { SamplePoMenuHumanResourcesService } from './sample-po-menu-human-resour
   standalone: false
 })
 export class SamplePoMenuHumanResourcesComponent {
+  samplePoMenuHumanResourcesService = inject(SamplePoMenuHumanResourcesService);
+
   menuItemSelected: string;
 
   menus: Array<PoMenuItem> = [
@@ -61,8 +63,6 @@ export class SamplePoMenuHumanResourcesComponent {
       ]
     }
   ];
-
-  constructor(public samplePoMenuHumanResourcesService: SamplePoMenuHumanResourcesService) {}
 
   printMenuAction(menu: PoMenuItem) {
     this.menuItemSelected = menu.label;

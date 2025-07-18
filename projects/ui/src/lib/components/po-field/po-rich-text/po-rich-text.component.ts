@@ -8,12 +8,12 @@ import {
   OnDestroy,
   OnInit,
   SimpleChanges,
-  ViewChild
+  ViewChild,
+  inject
 } from '@angular/core';
 
 import { NG_VALIDATORS, NG_VALUE_ACCESSOR } from '@angular/forms';
 
-import { PoThemeService } from '../../../services';
 import { PoRichTextToolbarActions } from './enum/po-rich-text-toolbar-actions.enum';
 import { PoRichTextBaseComponent } from './po-rich-text-base.component';
 import { PoRichTextBodyComponent } from './po-rich-text-body/po-rich-text-body.component';
@@ -71,6 +71,8 @@ export class PoRichTextComponent
   extends PoRichTextBaseComponent
   implements AfterViewInit, OnDestroy, OnInit, OnChanges
 {
+  private element = inject(ElementRef);
+
   @ViewChild(PoRichTextBodyComponent, { static: true }) bodyElement: PoRichTextBodyComponent;
   @ViewChild(PoRichTextToolbarComponent, { static: false }) richTextToolbar: PoRichTextToolbarComponent;
 
@@ -82,12 +84,10 @@ export class PoRichTextComponent
     return this.errorMessage !== '' && !this.value && this.required && this.invalid ? this.errorMessage : '';
   }
 
-  constructor(
-    private element: ElementRef,
-    richTextService: PoRichTextService,
-    protected poThemeService: PoThemeService
-  ) {
-    super(richTextService, poThemeService);
+  constructor() {
+    const richTextService = inject(PoRichTextService);
+
+    super(richTextService);
   }
 
   ngOnInit(): void {

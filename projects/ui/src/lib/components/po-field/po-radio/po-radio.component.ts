@@ -9,15 +9,15 @@ import {
   Input,
   Output,
   Renderer2,
-  ViewChild
+  ViewChild,
+  inject
 } from '@angular/core';
 import { NG_VALUE_ACCESSOR } from '@angular/forms';
 
 import { PoFieldModel } from '../po-field.model';
 import { PoKeyCodeEnum } from './../../../enums/po-key-code.enum';
 
-import { PoThemeService } from '../../../services';
-import { convertToBoolean, getDefaultSize, validateSize } from '../../../utils/util';
+import { convertToBoolean, getDefaultSizeFn, validateSizeFn } from '../../../utils/util';
 import { PoRadioSize } from './enums/po-radio-size.enum';
 
 @Component({
@@ -34,6 +34,9 @@ import { PoRadioSize } from './enums/po-radio-size.enum';
   standalone: false
 })
 export class PoRadioComponent extends PoFieldModel<boolean> {
+  private changeDetector = inject(ChangeDetectorRef);
+  private renderer = inject(Renderer2);
+
   @ViewChild('radio', { static: true }) radio: ElementRef;
   @ViewChild('radioInput', { static: true }) radioInput: ElementRef;
 
@@ -45,11 +48,11 @@ export class PoRadioComponent extends PoFieldModel<boolean> {
 
   /** Define o tamanho do radio. */
   @Input('p-size') set size(value: string) {
-    this._size = validateSize(value, this.poThemeService, PoRadioSize);
+    this._size = validateSizeFn(value, PoRadioSize);
   }
 
   get size(): string {
-    return this._size ?? getDefaultSize(this.poThemeService, PoRadioSize);
+    return this._size ?? getDefaultSizeFn(PoRadioSize);
   }
 
   @Input({ alias: 'p-required', transform: convertToBoolean }) required?: boolean;
@@ -62,14 +65,6 @@ export class PoRadioComponent extends PoFieldModel<boolean> {
 
   /** Emite evento para a tabela ao selecionar ou desselecionar */
   @Output('p-change-selected') changeSelected: EventEmitter<any> = new EventEmitter<any>();
-
-  constructor(
-    private changeDetector: ChangeDetectorRef,
-    protected poThemeService: PoThemeService,
-    private renderer: Renderer2
-  ) {
-    super();
-  }
 
   /**
    * Função que atribui foco ao *radio*.

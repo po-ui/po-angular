@@ -5,11 +5,10 @@ import {
   PoDynamicFormField,
   PoLanguageService,
   PoPageAction,
-  PoThemeService,
   poLocaleDefault
 } from '@po-ui/ng-components';
 
-import { convertToBoolean, convertToInt, getDefaultSize, validateSize } from '../../utils/util';
+import { convertToBoolean, convertToInt, getDefaultSizeFn, validateSizeFn } from '../../utils/util';
 
 import { PoPageDynamicSearchFilters } from './interfaces/po-page-dynamic-search-filters.interface';
 import { PoPageDynamicSearchLiterals } from './interfaces/po-page-dynamic-search-literals.interface';
@@ -238,11 +237,11 @@ export abstract class PoPageDynamicSearchBaseComponent {
    * @default `medium`
    */
   @Input('p-components-size') set componentsSize(value: string) {
-    this._componentsSize = validateSize(value, this.poThemeService);
+    this._componentsSize = validateSizeFn(value);
   }
 
   get componentsSize(): string {
-    return this._componentsSize ?? getDefaultSize(this.poThemeService);
+    return this._componentsSize ?? getDefaultSizeFn();
   }
 
   /**
@@ -354,10 +353,7 @@ export abstract class PoPageDynamicSearchBaseComponent {
     return this._hideCloseDisclaimers;
   }
 
-  constructor(
-    languageService: PoLanguageService,
-    protected poThemeService: PoThemeService
-  ) {
+  constructor(languageService: PoLanguageService) {
     this.language = languageService.getShortLanguage();
   }
 

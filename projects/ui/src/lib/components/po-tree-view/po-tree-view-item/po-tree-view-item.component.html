@@ -10,17 +10,22 @@
   >
   </po-tree-view-item-header>
 
-  <ul *ngIf="hasSubItems" class="po-tree-view-item-group">
-    <div *ngIf="item.expanded" @toggleBody>
-      <po-tree-view-item
-        *ngFor="let subItem of item.subItems; trackBy: trackByFunction"
-        [p-components-size]="componentsSize"
-        [p-item]="subItem"
-        [p-selectable]="selectable"
-        [p-single-select]="singleSelect"
-        [p-selected-value]="selectedValue"
-      >
-      </po-tree-view-item>
-    </div>
-  </ul>
+  @if (hasSubItems) {
+    <ul class="po-tree-view-item-group">
+      @if (item.expanded) {
+        <div @toggleBody>
+          @for (subItem of item.subItems; track trackByFunction($index)) {
+            <po-tree-view-item
+              [p-components-size]="componentsSize"
+              [p-item]="subItem"
+              [p-selectable]="selectable"
+              [p-single-select]="singleSelect"
+              [p-selected-value]="selectedValue"
+            >
+            </po-tree-view-item>
+          }
+        </div>
+      }
+    </ul>
+  }
 </li>

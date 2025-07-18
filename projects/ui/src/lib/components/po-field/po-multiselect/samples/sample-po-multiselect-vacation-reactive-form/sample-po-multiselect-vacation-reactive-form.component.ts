@@ -1,4 +1,4 @@
-import { Component, OnInit } from '@angular/core';
+import { Component, OnInit, inject } from '@angular/core';
 import { UntypedFormBuilder, UntypedFormGroup, Validators } from '@angular/forms';
 
 import { PoMultiselectOption, PoRadioGroupOption } from '@po-ui/ng-components';
@@ -9,6 +9,8 @@ import { PoMultiselectOption, PoRadioGroupOption } from '@po-ui/ng-components';
   standalone: false
 })
 export class SamplePoMultiselectVacationReactiveFormComponent implements OnInit {
+  private formBuilder = inject(UntypedFormBuilder);
+
   days: number;
   employeesVacations: Array<string> = [];
   finalPeriod: Date;
@@ -33,8 +35,6 @@ export class SamplePoMultiselectVacationReactiveFormComponent implements OnInit 
     { value: 20, label: '20' },
     { value: 30, label: '30' }
   ];
-
-  constructor(private formBuilder: UntypedFormBuilder) {}
 
   ngOnInit() {
     this.formCollectiveVacations = this.formBuilder.group({

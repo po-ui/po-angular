@@ -4,13 +4,12 @@ import { AbstractControl, ControlValueAccessor, Validator } from '@angular/forms
 import {
   convertToBoolean,
   convertToInt,
-  getDefaultSize,
+  getDefaultSizeFn,
   removeDuplicatedOptions,
-  validateSize
+  validateSizeFn
 } from '../../../utils/util';
 import { requiredFailed } from '../validators';
 
-import { PoThemeService } from '../../../services';
 import { PoRadioSize } from '../po-radio/enums/po-radio-size.enum';
 import { PoRadioGroupOption } from './po-radio-group-option.interface';
 
@@ -295,14 +294,12 @@ export abstract class PoRadioGroupBaseComponent implements ControlValueAccessor,
    *
    */
   @Input('p-size') set size(value: string) {
-    this._size = validateSize(value, this.poThemeService, PoRadioSize);
+    this._size = validateSizeFn(value, PoRadioSize);
   }
 
   get size(): string {
-    return this._size ?? getDefaultSize(this.poThemeService, PoRadioSize);
+    return this._size ?? getDefaultSizeFn(PoRadioSize);
   }
-
-  constructor(protected poThemeService: PoThemeService) {}
 
   // Função que controla quando deve ser emitido onChange e atualiza o Model
   changeValue(changedValue: any) {

@@ -1,4 +1,4 @@
-import { AfterContentInit, Component, ElementRef, OnChanges, SimpleChanges } from '@angular/core';
+import { AfterContentInit, Component, ElementRef, OnChanges, SimpleChanges, inject } from '@angular/core';
 
 import { PoTabBaseComponent } from './po-tab-base.component';
 import { PoTabsService } from '../po-tabs.service';
@@ -12,12 +12,8 @@ import { PoTabsService } from '../po-tabs.service';
   standalone: false
 })
 export class PoTabComponent extends PoTabBaseComponent implements AfterContentInit, OnChanges {
-  constructor(
-    private elementRef: ElementRef,
-    private tabsService: PoTabsService
-  ) {
-    super();
-  }
+  private elementRef = inject(ElementRef);
+  private tabsService = inject(PoTabsService);
 
   ngAfterContentInit() {
     this.setDisplayOnActive();

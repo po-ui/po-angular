@@ -5,13 +5,13 @@ import {
   Component,
   ElementRef,
   forwardRef,
-  ViewChild
+  ViewChild,
+  inject
 } from '@angular/core';
 import { NG_VALIDATORS, NG_VALUE_ACCESSOR } from '@angular/forms';
 
 import { uuid } from '../../../utils/util';
 
-import { PoThemeService } from '../../../services';
 import { PoTextareaBaseComponent } from './po-textarea-base.component';
 
 /**
@@ -59,18 +59,18 @@ import { PoTextareaBaseComponent } from './po-textarea-base.component';
   standalone: false
 })
 export class PoTextareaComponent extends PoTextareaBaseComponent implements AfterViewInit {
+  private el = inject(ElementRef);
+
   @ViewChild('inp', { read: ElementRef, static: true }) inputEl: ElementRef;
 
   id = `po-textarea[${uuid()}]`;
   valueBeforeChange: any;
   fireChange: boolean = false;
 
-  constructor(
-    cd: ChangeDetectorRef,
-    private el: ElementRef,
-    protected poThemeService: PoThemeService
-  ) {
-    super(cd, poThemeService);
+  constructor() {
+    const cd = inject(ChangeDetectorRef);
+
+    super(cd);
   }
 
   emitAdditionalHelp() {

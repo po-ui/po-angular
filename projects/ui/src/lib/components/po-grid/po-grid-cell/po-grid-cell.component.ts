@@ -1,4 +1,13 @@
-import { Component, Input, ViewChild, ElementRef, ChangeDetectorRef, Output, EventEmitter } from '@angular/core';
+import {
+  Component,
+  Input,
+  ViewChild,
+  ElementRef,
+  ChangeDetectorRef,
+  Output,
+  EventEmitter,
+  inject
+} from '@angular/core';
 
 @Component({
   selector: 'po-grid-cell',
@@ -6,6 +15,8 @@ import { Component, Input, ViewChild, ElementRef, ChangeDetectorRef, Output, Eve
   standalone: false
 })
 export class PoGridCellComponent {
+  private changeDetectorRef = inject(ChangeDetectorRef);
+
   @Input('p-align') align?: string = 'left';
 
   @Input('p-freeze') freeze?: boolean = false;
@@ -47,8 +58,6 @@ export class PoGridCellComponent {
   get value(): any {
     return this._value;
   }
-
-  constructor(private changeDetectorRef: ChangeDetectorRef) {}
 
   onKeyDownContent(event: any) {
     // BACKSPACE / DELETE

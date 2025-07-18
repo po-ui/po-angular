@@ -6,7 +6,8 @@ import {
   HostListener,
   Input,
   Output,
-  ViewChild
+  ViewChild,
+  inject
 } from '@angular/core';
 
 import { PoButtonComponent } from '../../po-button/po-button.component';
@@ -27,6 +28,8 @@ import { PoTabComponent } from '../po-tab/po-tab.component';
   standalone: false
 })
 export class PoTabDropdownComponent implements AfterViewInit {
+  private elementRef = inject(ElementRef);
+
   @ViewChild('popover', { static: true }) popover: PoPopoverComponent;
 
   @ViewChild(PoButtonComponent, { static: true }) button: PoButtonComponent;
@@ -50,8 +53,6 @@ export class PoTabDropdownComponent implements AfterViewInit {
 
   isDropdownOpen: boolean = false;
   dropdownStyles: any = {};
-
-  constructor(private elementRef: ElementRef) {}
 
   ngAfterViewInit(): void {
     this.setDropdownPosition();

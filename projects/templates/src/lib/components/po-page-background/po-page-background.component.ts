@@ -1,8 +1,8 @@
-import { Component, EventEmitter, Input, OnInit, Output } from '@angular/core';
+import { Component, EventEmitter, Input, OnInit, Output, inject } from '@angular/core';
 
-import { PoLanguage, poLanguageDefault, PoLanguageService, PoSelectOption, PoThemeService } from '@po-ui/ng-components';
+import { PoLanguage, poLanguageDefault, PoLanguageService, PoSelectOption } from '@po-ui/ng-components';
 
-import { convertToBoolean, getDefaultSize, validateSize } from './../../utils/util';
+import { convertToBoolean, getDefaultSizeFn, validateSizeFn } from './../../utils/util';
 
 @Component({
   selector: 'po-page-background',
@@ -19,6 +19,8 @@ import { convertToBoolean, getDefaultSize, validateSize } from './../../utils/ut
  * de `po-page-login` e demais templates de login.
  */
 export class PoPageBackgroundComponent implements OnInit {
+  poLanguageService = inject(PoLanguageService);
+
   /** Insere uma imagem de destaque ao lado direito do container. */
   @Input('p-background') background?: string;
 
@@ -63,11 +65,11 @@ export class PoPageBackgroundComponent implements OnInit {
    * @default `medium`
    */
   @Input('p-components-size') set componentsSize(value: string) {
-    this._componentsSize = validateSize(value, this.poThemeService);
+    this._componentsSize = validateSizeFn(value);
   }
 
   get componentsSize(): string {
-    return this._componentsSize ?? getDefaultSize(this.poThemeService);
+    return this._componentsSize ?? getDefaultSizeFn();
   }
 
   /** Lista de idiomas para o combo box */
@@ -105,11 +107,6 @@ export class PoPageBackgroundComponent implements OnInit {
   get showSelectLanguage() {
     return this._showSelectLanguage;
   }
-
-  constructor(
-    public poLanguageService: PoLanguageService,
-    protected poThemeService: PoThemeService
-  ) {}
 
   ngOnInit() {
     this.selectedLanguageOption = this.initialSelectLanguage || this.poLanguageService.getShortLanguage();

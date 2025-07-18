@@ -1,4 +1,4 @@
-<ng-container *ngIf="help || showAdditionalHelpIcon(); else withoutFieldContainer">
+@if (help || showAdditionalHelpIcon()) {
   <po-field-container [p-disabled]="disabled">
     <div class="po-field-container-content">
       <ng-container *ngTemplateOutlet="checkboxContent"></ng-container>
@@ -13,11 +13,9 @@
       (p-additional-help)="emitAdditionalHelp()"
     ></po-field-container-bottom>
   </po-field-container>
-</ng-container>
-
-<ng-template #withoutFieldContainer>
+} @else {
   <ng-container *ngTemplateOutlet="checkboxContent"></ng-container>
-</ng-template>
+}
 
 <ng-template #checkboxContent>
   <div
@@ -49,16 +47,17 @@
       >
       </span>
 
-      <po-label
-        *ngIf="label"
-        class="po-checkbox-label"
-        [class.po-checkbox-label-aa]="size === 'small'"
-        tabindex="-1"
-        [p-disabled]="disabled"
-        [p-for]="id"
-        [p-label]="label"
-      >
-      </po-label>
+      @if (label) {
+        <po-label
+          class="po-checkbox-label"
+          [class.po-checkbox-label-aa]="size === 'small'"
+          tabindex="-1"
+          [p-disabled]="disabled"
+          [p-for]="id"
+          [p-label]="label"
+        >
+        </po-label>
+      }
     </div>
   </div>
 </ng-template>

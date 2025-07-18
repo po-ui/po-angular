@@ -1,8 +1,7 @@
 import { TitleCasePipe } from '@angular/common';
-import { ChangeDetectorRef, Component, OnChanges, QueryList, SimpleChanges, ViewChildren } from '@angular/core';
+import { ChangeDetectorRef, Component, OnChanges, QueryList, SimpleChanges, ViewChildren, inject } from '@angular/core';
 import { ControlContainer, NgForm } from '@angular/forms';
 
-import { PoThemeService } from '../../../../services';
 import { PoDynamicFormField } from '../interfaces/po-dynamic-form-field.interface';
 import { PoDynamicFormFieldValidation } from '../po-dynamic-form-validation/po-dynamic-form-field-validation.interface';
 import { PoDynamicFormValidationService } from '../po-dynamic-form-validation/po-dynamic-form-validation.service';
@@ -23,6 +22,10 @@ import { PoDynamicFormFieldsBaseComponent } from './po-dynamic-form-fields-base.
   standalone: false
 })
 export class PoDynamicFormFieldsComponent extends PoDynamicFormFieldsBaseComponent implements OnChanges {
+  private readonly validationService = inject(PoDynamicFormValidationService);
+  private readonly changes = inject(ChangeDetectorRef);
+  private readonly form = inject(NgForm);
+
   @ViewChildren('component') components: QueryList<{
     name: string;
     focus: () => void;
@@ -31,14 +34,10 @@ export class PoDynamicFormFieldsComponent extends PoDynamicFormFieldsBaseCompone
 
   private previousValue = {};
 
-  constructor(
-    titleCasePipe: TitleCasePipe,
-    protected poThemeService: PoThemeService,
-    private readonly validationService: PoDynamicFormValidationService,
-    private readonly changes: ChangeDetectorRef,
-    private readonly form: NgForm
-  ) {
-    super(poThemeService, titleCasePipe);
+  constructor() {
+    const titleCasePipe = inject(TitleCasePipe);
+
+    super(titleCasePipe);
   }
 
   ngOnChanges(changes: SimpleChanges) {

@@ -1,4 +1,4 @@
-import { ComponentRef, EventEmitter, Injectable } from '@angular/core';
+import { ComponentRef, EventEmitter, Injectable, inject } from '@angular/core';
 
 import { PoLookupColumn } from '../../../../components/po-field/po-lookup/interfaces/po-lookup-column.interface';
 import { PoLookupFilter } from '../../../../components/po-field/po-lookup/interfaces/po-lookup-filter.interface';
@@ -16,11 +16,11 @@ import { PoLookupModalComponent } from '../po-lookup-modal/po-lookup-modal.compo
   providedIn: 'root'
 })
 export class PoLookupModalService {
+  private poComponentInjector = inject(PoComponentInjectorService);
+
   selectValueEvent: EventEmitter<any> = new EventEmitter<any>();
 
   private componentRef: ComponentRef<any> = null;
-
-  constructor(private poComponentInjector: PoComponentInjectorService) {}
 
   /**
    * Método responsável por abrir a modal de busca das informações.

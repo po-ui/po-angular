@@ -1,42 +1,30 @@
 <div class="po-md-12">
-  <po-info
-    *ngIf="!noParameters"
-    [p-label]="literals.process"
-    [p-orientation]="infoOrientation"
-    [p-value]="value.processID"
-  >
-  </po-info>
+  @if (!noParameters) {
+    <po-info [p-label]="literals.process" [p-orientation]="infoOrientation" [p-value]="value.processID"> </po-info>
+  }
 
   <po-info [p-label]="literals.periodicity" [p-orientation]="infoOrientation" [p-value]="periodicityValue"> </po-info>
 
-  <po-info
-    *ngIf="frequencyValue !== ''"
-    [p-label]="literals.frequency"
-    [p-orientation]="infoOrientation"
-    [p-value]="frequencyValue"
-  >
-  </po-info>
+  @if (frequencyValue !== '') {
+    <po-info [p-label]="literals.frequency" [p-orientation]="infoOrientation" [p-value]="frequencyValue"> </po-info>
+  }
 
-  <po-info
-    *ngIf="value.periodicity !== 'single'"
-    [p-label]="literals.execution"
-    [p-orientation]="infoOrientation"
-    [p-value]="executionValue"
-  >
-  </po-info>
+  @if (value.periodicity !== 'single') {
+    <po-info [p-label]="literals.execution" [p-orientation]="infoOrientation" [p-value]="executionValue"> </po-info>
+  }
 
   <po-info [p-label]="literals.recurrent" [p-orientation]="infoOrientation" [p-value]="recurrentValue"> </po-info>
 
   <po-info [p-label]="literals.firstExecution" [p-orientation]="infoOrientation" [p-value]="firstExecutionValue">
   </po-info>
 </div>
-<po-widget
-  *ngIf="parameters && parameters.length && !jobSchedulerSummaryTemplate"
-  class="po-pt-1 po-pb-1 po-md-12"
-  [p-title]="literals.parameters"
->
-  <po-dynamic-view [p-fields]="parameters" [p-value]="value.executionParameter"> </po-dynamic-view>
-</po-widget>
-<div *ngIf="jobSchedulerSummaryTemplate" class="po-pt-1 po-pb-1 po-md-12">
-  <ng-template [ngTemplateOutlet]="jobSchedulerSummaryTemplate?.templateRef"></ng-template>
-</div>
+@if (parameters && parameters.length && !jobSchedulerSummaryTemplate) {
+  <po-widget class="po-pt-1 po-pb-1 po-md-12" [p-title]="literals.parameters">
+    <po-dynamic-view [p-fields]="parameters" [p-value]="value.executionParameter"> </po-dynamic-view>
+  </po-widget>
+}
+@if (jobSchedulerSummaryTemplate) {
+  <div class="po-pt-1 po-pb-1 po-md-12">
+    <ng-template [ngTemplateOutlet]="jobSchedulerSummaryTemplate?.templateRef"></ng-template>
+  </div>
+}
