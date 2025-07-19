@@ -26,7 +26,9 @@
 <hr />
 
 <div style="position: relative">
-  <po-loading-overlay *ngIf="isLoadingPayment" p-text="Loading"> </po-loading-overlay>
+  @if (isLoadingPayment) {
+    <po-loading-overlay p-text="Loading"> </po-loading-overlay>
+  }
 
   <po-stepper #stepper p-align-center="false" p-orientation="vertical" p-step-icons p-step-size="32">
     <po-step p-label="Personal" [p-can-active-next-step]="canActiveNextStep.bind(this, personalForm)">

@@ -5,7 +5,7 @@
   [style.height.px]="size"
   [style.width.px]="size"
 >
-  <ng-container *ngIf="isActive || isError; else defaultContent">
+  @if (isActive || isError) {
     <div class="po-stepper-circle-active">
       <po-icon
         class="po-stepper-circle-content"
@@ -15,17 +15,17 @@
         [class.po-stepper-circle-content-md]="isMediumStep"
       ></po-icon>
     </div>
-  </ng-container>
-  <ng-template #defaultContent>
-    <po-icon
-      *ngIf="!isActive"
-      class="po-stepper-circle-content"
-      [class.po-icon]="icons || isDone"
-      [p-icon]="isDone ? iconDone || 'ICON_OK' : iconDefault ? iconDefault : icons ? 'ICON_INFO' : ''"
-      [class.po-stepper-circle-content-lg]="isLargeStep"
-      [class.po-stepper-circle-content-md]="isMediumStep"
-    >
-      {{ !icons && !isDone && !iconDefault ? content : '' }}
-    </po-icon>
-  </ng-template>
+  } @else {
+    @if (!isActive) {
+      <po-icon
+        class="po-stepper-circle-content"
+        [class.po-icon]="icons || isDone"
+        [p-icon]="isDone ? iconDone || 'ICON_OK' : iconDefault ? iconDefault : icons ? 'ICON_INFO' : ''"
+        [class.po-stepper-circle-content-lg]="isLargeStep"
+        [class.po-stepper-circle-content-md]="isMediumStep"
+      >
+        {{ !icons && !isDone && !iconDefault ? content : '' }}
+      </po-icon>
+    }
+  }
 </div>

@@ -1,4 +1,4 @@
-import { ChangeDetectorRef, Component, ElementRef } from '@angular/core';
+import { ChangeDetectorRef, Component, ElementRef, inject } from '@angular/core';
 import { ComponentFixture, TestBed } from '@angular/core/testing';
 import { AbstractControl } from '@angular/forms';
 
@@ -16,11 +16,13 @@ import { PoNumberBaseComponent } from './po-number-base.component';
   standalone: false
 })
 class ContentProjectionComponent extends PoNumberBaseComponent {
-  constructor(el: ElementRef, cd: ChangeDetectorRef) {
-    const poThemeServiceMock = jasmine.createSpyObj('PoThemeService', ['getA11yDefaultSize']);
-    poThemeServiceMock.getA11yDefaultSize.and.returnValue('medium');
+  constructor() {
+    const el = inject(ElementRef);
+    const cd = inject(ChangeDetectorRef);
 
-    super(el, cd, poThemeServiceMock);
+    localStorage.setItem('po-default-size', 'medium');
+
+    super(el, cd);
   }
 
   extraValidation(c: AbstractControl): { [key: string]: any } {

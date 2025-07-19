@@ -1,4 +1,4 @@
-import { Component, ViewChild } from '@angular/core';
+import { Component, ViewChild, inject } from '@angular/core';
 
 import { PoModalAction, PoModalComponent } from '@po-ui/ng-components';
 import { PoNotificationService } from '@po-ui/ng-components';
@@ -9,6 +9,8 @@ import { PoNotificationService } from '@po-ui/ng-components';
   standalone: false
 })
 export class SamplePoLoginConfirmComponent {
+  private poNotification = inject(PoNotificationService);
+
   @ViewChild(PoModalComponent, { static: true }) poModal: PoModalComponent;
 
   userLogin: string;
@@ -20,8 +22,6 @@ export class SamplePoLoginConfirmComponent {
       this.confirmAction();
     }
   };
-
-  constructor(private poNotification: PoNotificationService) {}
 
   openModal() {
     this.poModal.open();

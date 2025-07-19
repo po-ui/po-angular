@@ -64,7 +64,7 @@ describe('PoTabDropdownComponent:', () => {
     poThemeService = jasmine.createSpyObj('PoThemeService', ['getA11yDefaultSize', 'getA11yLevel']);
 
     component.tabs = tabs;
-    component.button = new PoButtonComponent(poThemeService);
+    component.button = new PoButtonComponent();
     component.button.buttonElement = buttonElementRefMock as ElementRef;
     component.popover = new PoPopoverComponent(null, null);
     fixture.detectChanges();

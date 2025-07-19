@@ -6,7 +6,8 @@ import {
   ElementRef,
   OnInit,
   ViewChild,
-  ViewContainerRef
+  ViewContainerRef,
+  inject
 } from '@angular/core';
 import { NgForm } from '@angular/forms';
 import { Observable } from 'rxjs';
@@ -39,7 +40,10 @@ export class PoLookupModalComponent extends PoLookupModalBaseComponent implement
   componentRef: ComponentRef<any>;
   dynamicForm: NgForm;
 
-  constructor(poLanguage: PoLanguageService, changeDetector: ChangeDetectorRef) {
+  constructor() {
+    const poLanguage = inject(PoLanguageService);
+    const changeDetector = inject(ChangeDetectorRef);
+
     super(poLanguage, changeDetector);
   }
 

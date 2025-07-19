@@ -1,4 +1,4 @@
-import { Component, Input, OnDestroy, OnInit } from '@angular/core';
+import { Component, Input, OnDestroy, OnInit, inject } from '@angular/core';
 import { ActivatedRoute, Route, Router } from '@angular/router';
 
 import { EMPTY, Observable, Subscription, concat, of, throwError } from 'rxjs';
@@ -11,15 +11,14 @@ import {
   PoLanguageService,
   PoNotificationService,
   PoPageAction,
-  PoThemeService,
   poLocaleDefault
 } from '@po-ui/ng-components';
 
 import {
   convertToBoolean,
-  getDefaultSize,
+  getDefaultSizeFn,
   mapObjectByProperties,
-  validateSize,
+  validateSizeFn,
   valuesFromObject
 } from '../../utils/util';
 
@@ -157,6 +156,14 @@ export const poPageDynamicDetailLiteralsDefault = {
   standalone: false
 })
 export class PoPageDynamicDetailComponent implements OnInit, OnDestroy {
+  private router = inject(Router);
+  private activatedRoute = inject(ActivatedRoute);
+  private poNotification = inject(PoNotificationService);
+  private poDialogService = inject(PoDialogService);
+  private poPageDynamicService = inject(PoPageDynamicService);
+  private poPageDynamicDetailActionsService = inject(PoPageDynamicDetailActionsService);
+  private poPageCustomizationService = inject(PoPageCustomizationService);
+
   /** Objeto com propriedades do breadcrumb. */
   @Input('p-breadcrumb') breadcrumb?: PoBreadcrumb = { items: [] };
 
@@ -297,11 +304,11 @@ export class PoPageDynamicDetailComponent implements OnInit, OnDestroy {
    * @default `medium`
    */
   @Input('p-components-size') set componentsSize(value: string) {
-    this._componentsSize = validateSize(value, this.poThemeService);
+    this._componentsSize = validateSizeFn(value);
   }
 
   get componentsSize(): string {
-    return this._componentsSize ?? getDefaultSize(this.poThemeService);
+    return this._componentsSize ?? getDefaultSizeFn();
   }
 
   /** Lista dos campos exibidos na página. */
@@ -317,17 +324,9 @@ export class PoPageDynamicDetailComponent implements OnInit, OnDestroy {
   }
 
   /* eslint-disable max-params */
-  constructor(
-    private router: Router,
-    private activatedRoute: ActivatedRoute,
-    private poNotification: PoNotificationService,
-    private poDialogService: PoDialogService,
-    private poPageDynamicService: PoPageDynamicService,
-    private poPageDynamicDetailActionsService: PoPageDynamicDetailActionsService,
-    private poPageCustomizationService: PoPageCustomizationService,
-    private poThemeService: PoThemeService,
-    languageService: PoLanguageService
-  ) {
+  constructor() {
+    const languageService = inject(PoLanguageService);
+
     const language = languageService.getShortLanguage();
 
     this.literals = {

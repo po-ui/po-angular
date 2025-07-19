@@ -1,61 +1,73 @@
-<ng-container [ngSwitch]="type" (keydown)="onCheckboxItemEmit($event)">
-  <div
-    *ngSwitchDefault
-    #itemList
-    [class.po-item-list__separator]="separator"
-    [class.po-item-list__disabled]="disabled || !visible"
-    [class.po-item-list__selected]="(selected || activeTabs) && !disabled"
-    [class.po-item-list__hidden]="tabHide"
-    [class.po-item-list-aa]="size === 'small'"
-    [attr.aria-disabled]="disabled || !visible"
-    [attr.aria-label]="label"
-    [class.po-item-list__danger]="danger"
-    class="po-item-list po-item-list__action"
-  >
-    <po-icon *ngIf="icon" class="po-popup-icon-item" [p-icon]="icon"></po-icon>
-    <span class="po-item-list-label">{{ label }}</span>
-  </div>
-
-  <div
-    *ngSwitchCase="'option'"
-    #itemList
-    class="po-item-list po-item-list__option"
-    [class.po-item-list__separator]="separator"
-    [class.po-item-list__selected]="selected && !disabled"
-    [class.po-item-list-aa]="size === 'small'"
-    [attr.aria-disabled]="disabled"
-    [attr.aria-label]="label"
-    (click)="onComboItem(item, $event)"
-  >
-    <span *ngIf="!template" class="po-item-list-label" [innerHTML]="getLabelFormatted(label)"></span>
-
-    <ng-template [ngTemplateOutlet]="template?.templateRef" [ngTemplateOutletContext]="{ $implicit: templateContext }">
-    </ng-template>
-  </div>
-
-  <div
-    *ngSwitchCase="'check'"
-    class="po-item-list po-item-list__check"
-    [class.po-item-list__separator]="separator"
-    [class.po-item-list__selected]="selected && !disabled"
-    [class.po-item-list__disabled]="disabled"
-    [class.po-item-list-aa]="size === 'small'"
-    [attr.aria-disabled]="disabled"
-    [attr.aria-label]="label"
-    (click)="onCheckboxItem()"
-    (keydown)="onCheckboxItemEmit($event)"
-    (keyup)="onCheckboxItemEmit($event)"
-  >
-    <po-checkbox
-      [p-disabled-tabindex]="true"
-      [p-checkboxValue]="checkboxValue === null ? 'mixed' : checkboxValue"
-      [p-disabled]="disabled"
-      [p-size]="size"
-    ></po-checkbox>
-
-    <span class="po-item-list__label" *ngIf="!template">{{ label }}</span>
-
-    <ng-template [ngTemplateOutlet]="template?.templateRef" [ngTemplateOutletContext]="{ $implicit: templateContext }">
-    </ng-template>
-  </div>
+<ng-container (keydown)="onCheckboxItemEmit($event)">
+  @switch (type) {
+    @default {
+      <div
+        #itemList
+        [class.po-item-list__separator]="separator"
+        [class.po-item-list__disabled]="disabled || !visible"
+        [class.po-item-list__selected]="(selected || activeTabs) && !disabled"
+        [class.po-item-list__hidden]="tabHide"
+        [class.po-item-list-aa]="size === 'small'"
+        [attr.aria-disabled]="disabled || !visible"
+        [attr.aria-label]="label"
+        [class.po-item-list__danger]="danger"
+        class="po-item-list po-item-list__action"
+      >
+        @if (icon) {
+          <po-icon class="po-popup-icon-item" [p-icon]="icon"></po-icon>
+        }
+        <span class="po-item-list-label">{{ label }}</span>
+      </div>
+    }
+    @case ('option') {
+      <div
+        #itemList
+        class="po-item-list po-item-list__option"
+        [class.po-item-list__separator]="separator"
+        [class.po-item-list__selected]="selected && !disabled"
+        [class.po-item-list-aa]="size === 'small'"
+        [attr.aria-disabled]="disabled"
+        [attr.aria-label]="label"
+        (click)="onComboItem(item, $event)"
+      >
+        @if (!template) {
+          <span class="po-item-list-label" [innerHTML]="getLabelFormatted(label)"></span>
+        }
+        <ng-template
+          [ngTemplateOutlet]="template?.templateRef"
+          [ngTemplateOutletContext]="{ $implicit: templateContext }"
+        >
+        </ng-template>
+      </div>
+    }
+    @case ('check') {
+      <div
+        class="po-item-list po-item-list__check"
+        [class.po-item-list__separator]="separator"
+        [class.po-item-list__selected]="selected && !disabled"
+        [class.po-item-list__disabled]="disabled"
+        [class.po-item-list-aa]="size === 'small'"
+        [attr.aria-disabled]="disabled"
+        [attr.aria-label]="label"
+        (click)="onCheckboxItem()"
+        (keydown)="onCheckboxItemEmit($event)"
+        (keyup)="onCheckboxItemEmit($event)"
+      >
+        <po-checkbox
+          [p-disabled-tabindex]="true"
+          [p-checkboxValue]="checkboxValue === null ? 'mixed' : checkboxValue"
+          [p-disabled]="disabled"
+          [p-size]="size"
+        ></po-checkbox>
+        @if (!template) {
+          <span class="po-item-list__label">{{ label }}</span>
+        }
+        <ng-template
+          [ngTemplateOutlet]="template?.templateRef"
+          [ngTemplateOutletContext]="{ $implicit: templateContext }"
+        >
+        </ng-template>
+      </div>
+    }
+  }
 </ng-container>

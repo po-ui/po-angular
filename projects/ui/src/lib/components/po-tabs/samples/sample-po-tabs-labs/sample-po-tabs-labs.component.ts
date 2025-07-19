@@ -1,4 +1,4 @@
-import { Component, OnInit, ViewChild } from '@angular/core';
+import { Component, OnInit, ViewChild, inject } from '@angular/core';
 
 import {
   PoDynamicFormField,
@@ -14,6 +14,8 @@ import {
   standalone: false
 })
 export class SamplePoTabsLabsComponent implements OnInit {
+  private poNotification = inject(PoNotificationService);
+
   @ViewChild('poTab', { static: true }) poTab: PoTabsComponent;
 
   tabsFieldsForm: Array<PoDynamicFormField> = [
@@ -33,8 +35,6 @@ export class SamplePoTabsLabsComponent implements OnInit {
   tabs: Array<PoTab> = [];
   properties: Array<string> = [];
   pageWidth: number;
-
-  constructor(private poNotification: PoNotificationService) {}
 
   ngOnInit() {
     this.restore();

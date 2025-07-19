@@ -1,7 +1,9 @@
 <po-disclaimer p-label="Disclaimer com 'Close'" p-value="withClose" (p-close-action)="disclaimerClosed($event)">
 </po-disclaimer>
 
-<span *ngIf="exclude !== undefined"> Excluído: {{ exclude | json }} </span>
+@if (exclude !== undefined) {
+  <span> Excluído: {{ exclude | json }} </span>
+}
 
 <br /><br />
 

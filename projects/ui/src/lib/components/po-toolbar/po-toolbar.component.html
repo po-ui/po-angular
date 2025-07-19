@@ -2,17 +2,20 @@
   <div class="po-toolbar-title">{{ title }}</div>
 
   <div class="po-toolbar-group-icon">
-    <po-toolbar-actions *ngIf="actions && actions.length" [p-actions]="actions" [p-actions-icon]="actionsIcon">
-    </po-toolbar-actions>
+    @if (actions && actions.length) {
+      <po-toolbar-actions [p-actions]="actions" [p-actions-icon]="actionsIcon"> </po-toolbar-actions>
+    }
 
-    <po-toolbar-notification
-      *ngIf="showNotification && notificationActions"
-      [p-notification-actions]="notificationActions"
-      [p-notification-number]="notificationNumber"
-    >
-    </po-toolbar-notification>
+    @if (showNotification && notificationActions) {
+      <po-toolbar-notification
+        [p-notification-actions]="notificationActions"
+        [p-notification-number]="notificationNumber"
+      >
+      </po-toolbar-notification>
+    }
 
-    <po-toolbar-profile *ngIf="isShowProfile" [p-profile]="profile" [p-profile-actions]="profileActions">
-    </po-toolbar-profile>
+    @if (isShowProfile) {
+      <po-toolbar-profile [p-profile]="profile" [p-profile-actions]="profileActions"> </po-toolbar-profile>
+    }
   </div>
 </div>

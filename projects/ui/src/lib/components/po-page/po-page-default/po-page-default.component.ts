@@ -1,4 +1,12 @@
-import { AfterContentInit, Component, OnChanges, Renderer2, SimpleChange, ViewContainerRef } from '@angular/core';
+import {
+  AfterContentInit,
+  Component,
+  OnChanges,
+  Renderer2,
+  SimpleChange,
+  ViewContainerRef,
+  inject
+} from '@angular/core';
 import { Router } from '@angular/router';
 
 import { PoLanguageService } from './../../../services/po-language/po-language.service';
@@ -6,7 +14,6 @@ import { PoLanguageService } from './../../../services/po-language/po-language.s
 import { isExternalLink, isTypeof, openExternalLink } from '../../../utils/util';
 import { PoPageAction } from '../interfaces/po-page-action.interface';
 
-import { PoThemeService } from '../../../services';
 import { PoPageDefaultBaseComponent } from './po-page-default-base.component';
 
 /**
@@ -36,20 +43,19 @@ import { PoPageDefaultBaseComponent } from './po-page-default-base.component';
   standalone: false
 })
 export class PoPageDefaultComponent extends PoPageDefaultBaseComponent implements AfterContentInit, OnChanges {
+  private renderer = inject(Renderer2);
+  private router = inject(Router);
+
   limitPrimaryActions: number = 3;
   dropdownActions: Array<PoPageAction>;
   isMobile: boolean;
 
   private maxWidthMobile: number = 480;
 
-  constructor(
-    viewRef: ViewContainerRef,
-    languageService: PoLanguageService,
-    protected poThemeService: PoThemeService,
-    private renderer: Renderer2,
-    private router: Router
-  ) {
-    super(languageService, poThemeService);
+  constructor() {
+    const languageService = inject(PoLanguageService);
+
+    super(languageService);
   }
 
   public ngAfterContentInit(): void {

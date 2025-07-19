@@ -1,4 +1,4 @@
-import { AfterViewInit, Component, ElementRef, EventEmitter, Input, Output, ViewChild } from '@angular/core';
+import { AfterViewInit, Component, ElementRef, EventEmitter, Input, Output, ViewChild, inject } from '@angular/core';
 
 import { PoLanguageService } from '../../../../services/po-language/po-language.service';
 import { isIE } from '../../../../utils/util';
@@ -18,6 +18,8 @@ const poRichTextDefaultColor = '#000000';
   standalone: false
 })
 export class PoRichTextToolbarComponent implements AfterViewInit {
+  private languageService = inject(PoLanguageService);
+
   @ViewChild('colorPickerInput', { read: ElementRef }) colorPickerInput: ElementRef;
 
   @ViewChild('toolbarElement', { static: true }) toolbarElement: ElementRef;
@@ -102,7 +104,7 @@ export class PoRichTextToolbarComponent implements AfterViewInit {
 
   @Input('p-size') size: string;
 
-  constructor(private languageService: PoLanguageService) {
+  constructor() {
     this.literals = {
       ...poRichTextLiteralsDefault[this.languageService?.getShortLanguage()]
     };

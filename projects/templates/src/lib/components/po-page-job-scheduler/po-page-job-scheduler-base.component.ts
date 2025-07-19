@@ -1,10 +1,10 @@
 import { Directive, EventEmitter, Input, OnDestroy, Output } from '@angular/core';
 import { AbstractControl } from '@angular/forms';
 
-import { PoBreadcrumb, PoDynamicFormField, PoStepperOrientation, PoThemeService } from '@po-ui/ng-components';
+import { PoBreadcrumb, PoDynamicFormField, PoStepperOrientation } from '@po-ui/ng-components';
 
 import { Subscription } from 'rxjs';
-import { getDefaultSize, validateSize } from '../../utils/util';
+import { getDefaultSizeFn, validateSizeFn } from '../../utils/util';
 import { PoJobSchedulerInternal } from './interfaces/po-job-scheduler-internal.interface';
 import { PoPageJobSchedulerInternal } from './po-page-job-scheduler-internal';
 import { PoPageJobSchedulerService } from './po-page-job-scheduler.service';
@@ -42,11 +42,11 @@ export class PoPageJobSchedulerBaseComponent implements OnDestroy {
    * @default `medium`
    */
   @Input('p-components-size') set componentsSize(value: string) {
-    this._componentsSize = validateSize(value, this.poThemeService);
+    this._componentsSize = validateSizeFn(value);
   }
 
   get componentsSize(): string {
-    return this._componentsSize ?? getDefaultSize(this.poThemeService);
+    return this._componentsSize ?? getDefaultSizeFn();
   }
 
   /**
@@ -279,10 +279,7 @@ export class PoPageJobSchedulerBaseComponent implements OnDestroy {
   private _subscription = new Subscription();
   private _orientation;
 
-  constructor(
-    protected poPageJobSchedulerService: PoPageJobSchedulerService,
-    protected poThemeService: PoThemeService
-  ) {}
+  constructor(protected poPageJobSchedulerService: PoPageJobSchedulerService) {}
 
   ngOnDestroy() {
     this._subscription.unsubscribe();

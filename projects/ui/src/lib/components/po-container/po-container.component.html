@@ -1,7 +1,9 @@
 <div class="po-container">
-  <div class="po-container-title" *ngIf="title">
-    {{ title }}
-  </div>
+  @if (title) {
+    <div class="po-container-title">
+      {{ title }}
+    </div>
+  }
   <div
     class="po-container-content"
     [class.po-container-no-border]="noBorder"

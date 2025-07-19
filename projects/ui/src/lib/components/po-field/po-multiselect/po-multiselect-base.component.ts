@@ -8,17 +8,16 @@ import { poLocaleDefault } from '../../../services/po-language/po-language.const
 import { PoLanguageService } from '../../../services/po-language/po-language.service';
 import {
   convertToBoolean,
-  getDefaultSize,
+  getDefaultSizeFn,
   isTypeof,
   removeDuplicatedOptionsWithFieldValue,
   removeUndefinedAndNullOptionsWithFieldValue,
   sortOptionsByProperty,
-  validateSize
+  validateSizeFn
 } from '../../../utils/util';
 import { requiredFailed } from './../validators';
 
 import { PoFieldSize } from '../../../enums/po-field-size.enum';
-import { PoThemeService } from '../../../services';
 import { PoMultiselectFilterMode } from './enums/po-multiselect-filter-mode.enum';
 import { PoMultiselectFilter } from './interfaces/po-multiselect-filter.interface';
 import { PoMultiselectLiterals } from './interfaces/po-multiselect-literals.interface';
@@ -502,11 +501,11 @@ export abstract class PoMultiselectBaseComponent implements ControlValueAccessor
    * @default `medium`
    */
   @Input('p-size') set size(value: string) {
-    this._size = validateSize(value, this.poThemeService, PoFieldSize);
+    this._size = validateSizeFn(value, PoFieldSize);
   }
 
   get size(): string {
-    return this._size ?? getDefaultSize(this.poThemeService, PoFieldSize);
+    return this._size ?? getDefaultSizeFn(PoFieldSize);
   }
 
   /**
@@ -681,7 +680,6 @@ export abstract class PoMultiselectBaseComponent implements ControlValueAccessor
 
   constructor(
     languageService: PoLanguageService,
-    protected poThemeService: PoThemeService,
     protected cd?: ChangeDetectorRef
   ) {
     this.language = languageService.getShortLanguage();

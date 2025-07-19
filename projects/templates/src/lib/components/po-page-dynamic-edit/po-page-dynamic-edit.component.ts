@@ -1,4 +1,4 @@
-import { Component, Input, OnDestroy, OnInit, ViewChild } from '@angular/core';
+import { Component, Input, OnDestroy, OnInit, ViewChild, inject } from '@angular/core';
 import { ActivatedRoute, Router } from '@angular/router';
 
 import { concat, EMPTY, Observable, of, Subscription, throwError } from 'rxjs';
@@ -13,16 +13,15 @@ import {
   PoLanguageService,
   poLocaleDefault,
   PoNotificationService,
-  PoPageAction,
-  PoThemeService
+  PoPageAction
 } from '@po-ui/ng-components';
 
 import {
   convertToBoolean,
-  getDefaultSize,
+  getDefaultSizeFn,
   mapObjectByProperties,
   removeKeysProperties,
-  validateSize,
+  validateSizeFn,
   valuesFromObject
 } from './../../utils/util';
 
@@ -196,6 +195,14 @@ export const poPageDynamicEditLiteralsDefault = {
   standalone: false
 })
 export class PoPageDynamicEditComponent implements OnInit, OnDestroy {
+  private router = inject(Router);
+  private activatedRoute = inject(ActivatedRoute);
+  private poNotification = inject(PoNotificationService);
+  private poDialogService = inject(PoDialogService);
+  private poPageDynamicService = inject(PoPageDynamicService);
+  private poPageCustomizationService = inject(PoPageCustomizationService);
+  private poPageDynamicEditActionsService = inject(PoPageDynamicEditActionsService);
+
   @ViewChild('dynamicForm') dynamicForm: PoDynamicFormComponent;
   @ViewChild('gridDetail') gridDetail: PoGridComponent;
 
@@ -505,25 +512,17 @@ export class PoPageDynamicEditComponent implements OnInit, OnDestroy {
    * @default `medium`
    */
   @Input('p-components-size') set componentsSize(value: string) {
-    this._componentsSize = validateSize(value, this.poThemeService);
+    this._componentsSize = validateSizeFn(value);
   }
 
   get componentsSize(): string {
-    return this._componentsSize ?? getDefaultSize(this.poThemeService);
+    return this._componentsSize ?? getDefaultSizeFn();
   }
 
   /* eslint-disable max-params */
-  constructor(
-    private router: Router,
-    private activatedRoute: ActivatedRoute,
-    private poNotification: PoNotificationService,
-    private poDialogService: PoDialogService,
-    private poPageDynamicService: PoPageDynamicService,
-    private poPageCustomizationService: PoPageCustomizationService,
-    private poPageDynamicEditActionsService: PoPageDynamicEditActionsService,
-    private poThemeService: PoThemeService,
-    languageService: PoLanguageService
-  ) {
+  constructor() {
+    const languageService = inject(PoLanguageService);
+
     this.language = languageService.getShortLanguage();
   }
   /* eslint-enable max-params */

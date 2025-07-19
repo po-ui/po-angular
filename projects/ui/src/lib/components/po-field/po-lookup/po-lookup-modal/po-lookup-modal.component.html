@@ -33,27 +33,30 @@
         />
       </div>
 
-      <div *ngIf="advancedFilters && advancedFilters.length > 0" class="po-lookup-advanced-search">
-        <span
-          class="po-lookup-advanced-search-link"
-          tabindex="0"
-          (click)="onAdvancedFilter()"
-          (keydown.enter)="onAdvancedFilter()"
-        >
-          {{ literals.modalAdvancedSearch }}
-        </span>
-      </div>
+      @if (advancedFilters && advancedFilters.length > 0) {
+        <div class="po-lookup-advanced-search">
+          <span
+            class="po-lookup-advanced-search-link"
+            tabindex="0"
+            (click)="onAdvancedFilter()"
+            (keydown.enter)="onAdvancedFilter()"
+          >
+            {{ literals.modalAdvancedSearch }}
+          </span>
+        </div>
+      }
     </po-field-container>
 
     <!-- DISCLAIMER -->
-    <po-disclaimer-group
-      *ngIf="!!disclaimerGroup"
-      class="po-md-12"
-      [p-disclaimers]="disclaimerGroup?.disclaimers"
-      [p-title]="disclaimerGroup?.title"
-      (p-change)="onChangeDisclaimerGroup()"
-    >
-    </po-disclaimer-group>
+    @if (!!disclaimerGroup) {
+      <po-disclaimer-group
+        class="po-md-12"
+        [p-disclaimers]="disclaimerGroup?.disclaimers"
+        [p-title]="disclaimerGroup?.title"
+        (p-change)="onChangeDisclaimerGroup()"
+      >
+      </po-disclaimer-group>
+    }
 
     <div class="po-row po-lookup-container-table" [attr.data-multiple]="multiple">
       <po-table
@@ -89,14 +92,15 @@
     </div>
 
     <!-- DISCLAIMER -->
-    <po-disclaimer-group
-      *ngIf="multiple"
-      class="po-md-12"
-      [p-disclaimers]="selecteds"
-      (p-remove)="onUnselectFromDisclaimer($event.removedDisclaimer)"
-      (p-remove-all)="onAllUnselectedTag($event)"
-    >
-    </po-disclaimer-group>
+    @if (multiple) {
+      <po-disclaimer-group
+        class="po-md-12"
+        [p-disclaimers]="selecteds"
+        (p-remove)="onUnselectFromDisclaimer($event.removedDisclaimer)"
+        (p-remove-all)="onAllUnselectedTag($event)"
+      >
+      </po-disclaimer-group>
+    }
   </div>
   <div [hidden]="!isAdvancedFilter">
     <ng-container #container> </ng-container>

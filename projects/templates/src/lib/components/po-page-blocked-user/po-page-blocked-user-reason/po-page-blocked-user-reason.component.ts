@@ -1,4 +1,4 @@
-import { ChangeDetectorRef, Component, Input, OnChanges, OnInit, SimpleChanges } from '@angular/core';
+import { ChangeDetectorRef, Component, Input, OnChanges, OnInit, SimpleChanges, inject } from '@angular/core';
 
 import { PoLanguageService, poLocaleDefault } from '@po-ui/ng-components';
 
@@ -12,6 +12,8 @@ import { PoPageBlockedUserReasonParams } from '../interfaces/po-page-blocked-use
   standalone: false
 })
 export class PoPageBlockedUserReasonComponent implements OnChanges, OnInit {
+  private changeDetector = inject(ChangeDetectorRef);
+
   @Input('p-params') params: PoPageBlockedUserReasonParams;
 
   @Input('p-reason') reason: PoPageBlockedUserReason;
@@ -21,10 +23,9 @@ export class PoPageBlockedUserReasonComponent implements OnChanges, OnInit {
 
   private language: string;
 
-  constructor(
-    private changeDetector: ChangeDetectorRef,
-    languageService: PoLanguageService
-  ) {
+  constructor() {
+    const languageService = inject(PoLanguageService);
+
     this.language = languageService.getShortLanguage();
   }
 
