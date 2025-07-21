@@ -2,6 +2,25 @@
 
 All notable changes to this project will be documented in this file. See [standard-version](https://github.com/conventional-changelog/standard-version) for commit guidelines.
 
+## [19.20.0](https://github.com/po-ui/po-angular/compare/v19.19.0...v19.20.0) (2025-07-21)
+
+
+### Features
+
+* **datepicker:** implementa acessibilidade com append-in-body ([ab96205](https://github.com/po-ui/po-angular/commit/ab9620523b3bb9d5caaccf0796db9a5d2ffe53b5))
+* **i18n:** garante merge correto de literais no PO UI e THF-Components ([fd51277](https://github.com/po-ui/po-angular/commit/fd5127729fe4374e4f2a0010f2c914147436b374))
+* **multiselect:** implementa acessibilidade com append-in-body ([0cdfc02](https://github.com/po-ui/po-angular/commit/0cdfc0232b23d9650da4d53f8b9a524f93fab7c9))
+
+
+### Bug Fixes
+
+* **overlay:** evita múltiplas instâncias do PoActiveOverlayService ([6a61998](https://github.com/po-ui/po-angular/commit/6a61998eb5dcafecfc47cd4de6d6edb6be5a0289))
+* **table:** ajusta alinhamento de coluna fixa com ação única à esquerda ([c1c6681](https://github.com/po-ui/po-angular/commit/c1c66810ee9a5a86b1f870e514ae5e0fb08a6168))
+* **table:** corrige alinhamento das colunas e mensagens sem itens ([f8cab4b](https://github.com/po-ui/po-angular/commit/f8cab4bcab75db72c879ed924ece81899ab0829d))
+* **table:** corrige alinhamento do ícone e label da ação única ([aa83a75](https://github.com/po-ui/po-angular/commit/aa83a75cad8dc368858b05da72ef530c45869b5b))
+* **table:** corrige sobreposição de colunas fixas com template cell
+
+
 ## [19.19.0](https://github.com/po-ui/po-angular/compare/v19.18.0...v19.19.0) (2025-07-07)
 
 
