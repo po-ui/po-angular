@@ -2,6 +2,15 @@
 
 All notable changes to this project will be documented in this file. See [standard-version](https://github.com/conventional-changelog/standard-version) for commit guidelines.
 
+### [17.26.27](https://github.com/po-ui/po-angular/compare/v17.26.26...v17.26.27) (2025-07-21)
+
+
+### Bug Fixes
+
+* **overlay:** evita múltiplas instâncias do PoActiveOverlayService ([19b24e9](https://github.com/po-ui/po-angular/commit/19b24e9d8015b17ef2522dc2ba962079697a0fcd))
+* **table:** ajusta alinhamento de coluna fixa com ação única à esquerda ([170d3d9](https://github.com/po-ui/po-angular/commit/170d3d9f281be6f43ee287897f68a18b64aa6a13))
+* **table:** corrige alinhamento das colunas e mensagens sem itens ([726fbf7](https://github.com/po-ui/po-angular/commit/726fbf78360ecf68d2f7affd3fd1dfcd7c690a0d))
+
 ### [17.26.26](https://github.com/po-ui/po-angular/compare/v17.26.25...v17.26.26) (2025-07-07)
 
 
