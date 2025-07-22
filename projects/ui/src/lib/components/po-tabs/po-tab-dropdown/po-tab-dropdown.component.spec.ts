@@ -60,8 +60,9 @@ describe('PoTabDropdownComponent:', () => {
     nativeElement = fixture.debugElement.nativeElement;
     Object.defineProperty(window, 'scrollY', { value: 50, writable: true });
 
+    const buttom = TestBed.createComponent(PoButtonComponent);
     component.tabs = tabs;
-    component.button = new PoButtonComponent();
+    component.button = buttom.componentInstance;
     component.button.buttonElement = buttonElementRefMock as ElementRef;
     component.popover = new PoPopoverComponent(null, null);
     fixture.detectChanges();

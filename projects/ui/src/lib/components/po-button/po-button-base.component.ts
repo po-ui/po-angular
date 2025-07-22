@@ -1,4 +1,4 @@
-import { Directive, EventEmitter, HostBinding, Input, Output, TemplateRef } from '@angular/core';
+import { Component, EventEmitter, HostBinding, Input, Output, TemplateRef, input } from '@angular/core';
 
 import { convertToBoolean, getDefaultSizeFn, validateSizeFn } from '../../utils/util';
 
@@ -70,18 +70,26 @@ import { PoButtonType } from './enums/po-button-type.enum';
  * | `--background-color-disabled`            | Cor de background no estado disabled                  | `var(--color-transparent)`                        |
  *
  */
-@Directive()
+@Component({
+  selector: 'po-button-base',
+  template: '',
+  standalone: false
+})
 export class PoButtonBaseComponent {
   /**
+   * @Input
+   *
    * @optional
    *
    * @description
    *
    * Label do botão.
    */
-  @Input('p-label') label?: string;
+  readonly label = input<string>(undefined, { alias: 'p-label' });
 
   /**
+   * @Input
+   *
    * @optional
    *
    * @description
@@ -105,9 +113,11 @@ export class PoButtonBaseComponent {
    * ```
    * > Para o ícone enquadrar corretamente, deve-se utilizar `font-size: inherit` caso o ícone utilizado não aplique-o.
    */
-  @Input('p-icon') icon?: string | TemplateRef<void>;
+  readonly icon = input<string | TemplateRef<void>>(undefined, { alias: 'p-icon' });
 
   /**
+   * @Input
+   *
    * @optional
    *
    * @description
@@ -115,7 +125,7 @@ export class PoButtonBaseComponent {
    *
    * @default `PoButtonType.Button`
    */
-  @Input('p-type') type?: PoButtonType = PoButtonType.Button;
+  readonly type = input<PoButtonType>(PoButtonType.Button, { alias: 'p-type' });
 
   // Evento disparado ao sair do campo.
   @Output('p-blur') blur: EventEmitter<any> = new EventEmitter();
@@ -208,6 +218,8 @@ export class PoButtonBaseComponent {
   }
 
   /**
+   * @Input
+   *
    * @optional
    *
    * @description
@@ -218,7 +230,7 @@ export class PoButtonBaseComponent {
    *
    * > Em caso de botões com apenas ícone a atribuição de valor à esta propriedade é muito importante para acessibilidade.
    */
-  @Input('p-aria-label') ariaLabel?: string;
+  readonly ariaLabel = input<string>(undefined, { alias: 'p-aria-label' });
 
   @Input('p-aria-expanded') ariaExpanded?: boolean = null;
 
