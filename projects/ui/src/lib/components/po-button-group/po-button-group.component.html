@@ -1,5 +1,5 @@
 <div class="po-button-group-container">
-  @for (button of buttons; track button; let i = $index) {
+  @for (button of buttons(); track button; let i = $index) {
     <po-button
       class="po-sm-12 po-button-group"
       [class.po-button-group-button-selected]="button.selected"
