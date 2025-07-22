@@ -1,3 +1,4 @@
+import { ComponentFixture, TestBed } from '@angular/core/testing';
 import { PoButtonBaseComponent } from './po-button-base.component';
 
 import { PoThemeA11yEnum } from '../../services';
@@ -6,9 +7,15 @@ import { PoButtonKind } from './enums/po-button-kind.enum';
 
 describe('PoButtonBaseComponent', () => {
   let component: PoButtonBaseComponent;
+  let fixture: ComponentFixture<PoButtonBaseComponent>;
 
   beforeEach(() => {
-    component = new PoButtonBaseComponent();
+    TestBed.configureTestingModule({
+      declarations: [PoButtonBaseComponent]
+    });
+
+    fixture = TestBed.createComponent(PoButtonBaseComponent);
+    component = fixture.componentInstance;
   });
 
   beforeEach(() => {
