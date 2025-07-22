@@ -1,4 +1,4 @@
-import { Directive, Input } from '@angular/core';
+import { Component, Input, input } from '@angular/core';
 
 import { PoFieldSize } from '../../enums/po-field-size.enum';
 import { getDefaultSizeFn, validateSizeFn } from '../../utils/util';
@@ -60,10 +60,20 @@ const PO_TOGGLE_TYPE_DEFAULT = 'none';
  * | `--background-color-disabled` &nbsp;   | Cor de background no estado disabled                  | `var(--color-transparent)`                      |
  *
  */
-@Directive()
+@Component({
+  selector: 'po-button-group-base',
+  template: '',
+  standalone: false
+})
 export class PoButtonGroupBaseComponent {
-  /** Lista de botões. */
-  @Input('p-buttons') buttons: Array<PoButtonGroupItem> = [];
+  /**
+   * @Input
+   *
+   * @description
+   *
+   * Lista de botões.
+   */
+  readonly buttons = input<Array<PoButtonGroupItem>>([], { alias: 'p-buttons' });
 
   private _size?: string = undefined;
 
@@ -115,7 +125,7 @@ export class PoButtonGroupBaseComponent {
 
   onButtonClick(buttonClicked: PoButtonGroupItem, buttonIndex: number) {
     if (this.toggle === PoButtonGroupToggle.Single) {
-      this.buttons.forEach(
+      this.buttons().forEach(
         (button, index) => (button.selected = index === buttonIndex ? !buttonClicked.selected : false)
       );
     } else if (this.toggle === PoButtonGroupToggle.Multiple) {
@@ -127,7 +137,7 @@ export class PoButtonGroupBaseComponent {
     if (toggleMode === PoButtonGroupToggle.None) {
       this.deselectAllButtons();
     } else if (toggleMode === PoButtonGroupToggle.Single) {
-      const hasMoreOneSelected = this.buttons.filter(button => button.selected).length > 1;
+      const hasMoreOneSelected = this.buttons().filter(button => button.selected).length > 1;
       if (hasMoreOneSelected) {
         this.deselectAllButtons();
       }
@@ -135,6 +145,6 @@ export class PoButtonGroupBaseComponent {
   }
 
   private deselectAllButtons() {
-    this.buttons.forEach(button => (button.selected = false));
+    this.buttons().forEach(button => (button.selected = false));
   }
 }

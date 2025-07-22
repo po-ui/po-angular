@@ -41,14 +41,14 @@ describe('PoButtonComponent: ', () => {
   });
 
   it('should update `p-label`', () => {
-    component.label = 'Po Button';
+    fixture.componentRef.setInput('p-label', 'Po Button');
     fixture.detectChanges();
 
     expect(nativeElement.querySelector('.po-button-label').innerHTML).toContain('Po Button');
   });
 
   it('should add i with an icon when `p-icon` is defined', () => {
-    component.icon = 'po-icon-news';
+    fixture.componentRef.setInput('p-icon', 'po-icon-news');
     fixture.detectChanges();
 
     expect(nativeElement.querySelector('i.po-icon.po-icon-news')).toBeTruthy();
@@ -76,14 +76,14 @@ describe('PoButtonComponent: ', () => {
   });
 
   it('should set type to `submit`.', () => {
-    component.type = PoButtonType.Submit;
+    fixture.componentRef.setInput('p-type', PoButtonType.Submit);
     fixture.detectChanges();
 
     expect(nativeElement.querySelector('button').getAttribute('type')).toBe(PoButtonType.Submit);
   });
 
   it('should set type to `reset`.', () => {
-    component.type = PoButtonType.Reset;
+    fixture.componentRef.setInput('p-type', PoButtonType.Reset);
     fixture.detectChanges();
 
     expect(nativeElement.querySelector('button').getAttribute('type')).toBe(PoButtonType.Reset);
@@ -101,14 +101,14 @@ describe('PoButtonComponent: ', () => {
     });
 
     it('p-label: should add span with an label if `p-label` is defined', () => {
-      component.label = 'Po Button';
+      fixture.componentRef.setInput('p-label', 'Po Button');
       fixture.detectChanges();
 
       expect(nativeElement.querySelector('span.po-button-label')).toBeTruthy();
     });
 
     it('p-label: should not add i tag if `p-label` has not been declared', () => {
-      component.label = undefined;
+      fixture.componentRef.setInput('p-label', undefined);
       fixture.detectChanges();
 
       expect(nativeElement.querySelector('i.po-button-label')).toBeFalsy();
