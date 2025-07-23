@@ -1,4 +1,4 @@
-import { Component, OnInit } from '@angular/core';
+import { Component, OnInit, inject } from '@angular/core';
 import { SamplePoSearchListboxService } from './sample-po-search-listbox.service';
 
 @Component({
@@ -8,11 +8,11 @@ import { SamplePoSearchListboxService } from './sample-po-search-listbox.service
   standalone: false
 })
 export class SamplePoSearchListboxComponent implements OnInit {
+  private service = inject(SamplePoSearchListboxService);
+
   items: any;
   filterKeys: Array<string> = ['name', 'nickname', 'email'];
   peopleFiltered: Array<any> = [];
-
-  constructor(private service: SamplePoSearchListboxService) {}
 
   ngOnInit() {
     this.items = this.service.getItems();

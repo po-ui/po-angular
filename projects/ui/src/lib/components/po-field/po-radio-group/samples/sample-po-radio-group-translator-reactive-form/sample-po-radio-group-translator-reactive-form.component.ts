@@ -1,4 +1,4 @@
-import { Component, OnInit } from '@angular/core';
+import { Component, OnInit, inject } from '@angular/core';
 import { UntypedFormBuilder, UntypedFormGroup, Validators } from '@angular/forms';
 
 import { PoRadioGroupOption, PoSelectOption } from '@po-ui/ng-components';
@@ -9,6 +9,8 @@ import { PoRadioGroupOption, PoSelectOption } from '@po-ui/ng-components';
   standalone: false
 })
 export class SamplePoRadioGroupTranslatorReactiveFormComponent implements OnInit {
+  private formBuilder = inject(UntypedFormBuilder);
+
   translatorForm: UntypedFormGroup;
 
   readonly languageOptions: Array<PoRadioGroupOption> = [
@@ -33,8 +35,6 @@ export class SamplePoRadioGroupTranslatorReactiveFormComponent implements OnInit
     { id: '5', en: 'Vision', es: 'Vista' },
     { id: '6', en: 'Book', es: 'Libro' }
   ];
-
-  constructor(private formBuilder: UntypedFormBuilder) {}
 
   ngOnInit() {
     this.translatorForm = this.formBuilder.group({

@@ -48,15 +48,10 @@
     >
     </po-input>
 
-    <po-select
-      *ngIf="!type"
-      class="po-md-6 po-mt-2"
-      name="icon"
-      [(ngModel)]="icon"
-      p-label="Icon"
-      [p-options]="iconList"
-    >
-    </po-select>
+    @if (!type) {
+      <po-select class="po-md-6 po-mt-2" name="icon" [(ngModel)]="icon" p-label="Icon" [p-options]="iconList">
+      </po-select>
+    }
 
     <po-checkbox-group
       class="po-md-6 po-mt-2"
@@ -68,7 +63,9 @@
     >
     </po-checkbox-group>
 
-    <po-switch *ngIf="type" class="po-md-6" name="icon" [(ngModel)]="icon" p-label="Icon"> </po-switch>
+    @if (type) {
+      <po-switch class="po-md-6" name="icon" [(ngModel)]="icon" p-label="Icon"> </po-switch>
+    }
   </div>
 
   <div class="po-row">

@@ -1,4 +1,4 @@
-import { Component, ElementRef, OnInit, ViewChild } from '@angular/core';
+import { Component, ElementRef, OnInit, ViewChild, inject } from '@angular/core';
 
 import {
   PoCheckboxGroupOption,
@@ -22,6 +22,8 @@ import {
   standalone: false
 })
 export class SamplePoPopupLabsComponent implements OnInit {
+  private poNotification = inject(PoNotificationService);
+
   @ViewChild('target', { read: ElementRef, static: true }) targetRef: ElementRef;
 
   action: PoPopupAction;
@@ -73,8 +75,6 @@ export class SamplePoPopupLabsComponent implements OnInit {
     { label: 'Danger', value: 'danger' },
     { label: 'Default', value: 'default' }
   ];
-
-  constructor(private poNotification: PoNotificationService) {}
 
   ngOnInit() {
     this.restore();

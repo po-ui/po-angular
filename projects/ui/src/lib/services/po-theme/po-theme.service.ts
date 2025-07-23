@@ -1,5 +1,4 @@
-import { DOCUMENT } from '@angular/common';
-import { Inject, Injectable, Optional, Renderer2, RendererFactory2 } from '@angular/core';
+import { Inject, Injectable, Optional, Renderer2, RendererFactory2, DOCUMENT } from '@angular/core';
 import { AnimaliaIconDictionary, ICONS_DICTIONARY } from '../../components/po-icon/index';
 
 import { PoThemeA11yEnum } from './enum/po-theme-a11y.enum';
@@ -14,6 +13,7 @@ import { PoThemeColor } from './interfaces/po-theme-color.interface';
 import { PoThemeTokens } from './interfaces/po-theme-tokens.interface';
 import { PoTheme, PoThemeActive } from './interfaces/po-theme.interface';
 import { poThemeDefaultLightValuesAA } from './helpers/types/po-theme-light-defaults-AA.constant';
+import { getA11yDefaultSize, getA11yLevel } from '../../utils/util';
 
 /**
  * @description
@@ -115,12 +115,7 @@ export class PoThemeService {
    * @returns {PoThemeA11yEnum} O nível de acessibilidade, que pode ser `AA` ou `AAA`.
    */
   getA11yLevel(): PoThemeA11yEnum {
-    const a11yLevel = document.documentElement.getAttribute('data-a11y');
-    if (a11yLevel !== 'AA' && a11yLevel !== 'AAA') {
-      return PoThemeA11yEnum.AAA;
-    }
-
-    return a11yLevel === 'AAA' ? PoThemeA11yEnum.AAA : PoThemeA11yEnum.AA;
+    return getA11yLevel();
   }
 
   /**
@@ -158,9 +153,7 @@ export class PoThemeService {
    * @returns `'small'` ou `'medium'`.
    */
   getA11yDefaultSize(): string {
-    const defaultSize = localStorage.getItem('po-default-size');
-    const a11yLevel = document.documentElement.getAttribute('data-a11y');
-    return defaultSize === 'small' && a11yLevel === 'AA' ? 'small' : 'medium';
+    return getA11yDefaultSize();
   }
 
   /**

@@ -20,7 +20,9 @@
 
   <div class="po-ml-3">
     <ul>
-      <li *ngFor="let technology of technologies">{{ technology }}</li>
+      @for (technology of technologies; track technology) {
+        <li>{{ technology }}</li>
+      }
     </ul>
   </div>
 </po-modal>

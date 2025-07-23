@@ -10,7 +10,8 @@ import {
   OnChanges,
   OnDestroy,
   OnInit,
-  SimpleChanges
+  SimpleChanges,
+  inject
 } from '@angular/core';
 
 import { animate, AnimationBuilder, AnimationFactory, AnimationPlayer, keyframes, style } from '@angular/animations';
@@ -63,6 +64,8 @@ const poSlideTiming = '250ms ease';
   standalone: false
 })
 export class PoSlideComponent extends PoSlideBaseComponent implements OnInit, DoCheck, OnChanges, OnDestroy {
+  private builder = inject(AnimationBuilder);
+
   @ContentChild(PoSlideContentTemplateDirective, { static: true })
   slideContentTemplate: PoSlideContentTemplateDirective;
 
@@ -95,10 +98,6 @@ export class PoSlideComponent extends PoSlideBaseComponent implements OnInit, Do
 
   get hasSlides() {
     return !!this.slides && !!this.slides.length;
-  }
-
-  constructor(private builder: AnimationBuilder) {
-    super();
   }
 
   @HostListener('window:resize') onResize() {

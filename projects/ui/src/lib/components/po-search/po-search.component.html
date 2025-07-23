@@ -1,17 +1,21 @@
 <div class="po-search" [class.po-search-disabled]="disabled">
-  <div class="po-search-select" *ngIf="filterSelect">
-    <po-dropdown
-      [p-label]="searchFilterSelectLabel"
-      [p-disabled]="disabled"
-      [p-actions]="searchFilterSelectActions"
-      [p-size]="size"
-    >
-    </po-dropdown>
-  </div>
+  @if (filterSelect) {
+    <div class="po-search-select">
+      <po-dropdown
+        [p-label]="searchFilterSelectLabel"
+        [p-disabled]="disabled"
+        [p-actions]="searchFilterSelectActions"
+        [p-size]="size"
+      >
+      </po-dropdown>
+    </div>
+  }
 
-  <div *ngIf="type === 'action'" class="po-search-icon" [class.po-search-icon-aa]="size === 'small'">
-    <po-icon [p-icon]="icon ? icon : 'ICON_SEARCH'"></po-icon>
-  </div>
+  @if (type === 'action') {
+    <div class="po-search-icon" [class.po-search-icon-aa]="size === 'small'">
+      <po-icon [p-icon]="icon ? icon : 'ICON_SEARCH'"></po-icon>
+    </div>
+  }
 
   <input
     #poSearchInput
@@ -37,30 +41,32 @@
   />
 
   <div class="po-search-buttons">
-    <button
-      *ngIf="!!poSearchInput.value && !disabled"
-      class="po-search-button po-search-button-clean"
-      [class.po-search-button-aa]="size === 'small'"
-      type="button"
-      [ariaLabel]="literals.clean"
-      (click)="clearSearch()"
-      (keydown.enter)="clearSearch()"
-    >
-      <po-clean class="po-icon-input" [p-size]="size"></po-clean>
-    </button>
+    @if (!!poSearchInput.value && !disabled) {
+      <button
+        class="po-search-button po-search-button-clean"
+        [class.po-search-button-aa]="size === 'small'"
+        type="button"
+        [ariaLabel]="literals.clean"
+        (click)="clearSearch()"
+        (keydown.enter)="clearSearch()"
+      >
+        <po-clean class="po-icon-input" [p-size]="size"></po-clean>
+      </button>
+    }
 
-    <button
-      *ngIf="type === 'trigger'"
-      class="po-search-button po-search-button-trigger"
-      [class.po-search-button-aa]="size === 'small'"
-      type="button"
-      [ariaLabel]="literals.search"
-      (click)="onSearchChange(poSearchInput.value, true, true)"
-      (keydown.enter)="onSearchChange(poSearchInput.value, true, true)"
-      [disabled]="disabled"
-    >
-      <po-icon [p-icon]="icon ? icon : 'ICON_SEARCH'"> </po-icon>
-    </button>
+    @if (type === 'trigger') {
+      <button
+        class="po-search-button po-search-button-trigger"
+        [class.po-search-button-aa]="size === 'small'"
+        type="button"
+        [ariaLabel]="literals.search"
+        (click)="onSearchChange(poSearchInput.value, true, true)"
+        (keydown.enter)="onSearchChange(poSearchInput.value, true, true)"
+        [disabled]="disabled"
+      >
+        <po-icon [p-icon]="icon ? icon : 'ICON_SEARCH'"> </po-icon>
+      </button>
+    }
   </div>
 </div>
 

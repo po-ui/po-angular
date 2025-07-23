@@ -19,7 +19,7 @@ import { PoComboOption } from './interfaces/po-combo-option.interface';
 import { PoCleanComponent } from '../po-clean/po-clean.component';
 import { OverlayModule } from '@angular/cdk/overlay';
 import { PoControlPositionService } from '../../../services/po-control-position/po-control-position.service';
-import { ElementRef } from '@angular/core';
+import { ElementRef, provideNgReflectAttributes } from '@angular/core';
 import { PoKeyCodeEnum } from '../../../enums/po-key-code.enum';
 
 const eventKeyBoard = document.createEvent('KeyboardEvent');
@@ -39,7 +39,7 @@ describe('PoComboComponent:', () => {
     await TestBed.configureTestingModule({
       imports: [PoLoadingModule, PoIconModule, OverlayModule],
       declarations: [PoComboComponent, PoFieldContainerComponent, PoFieldContainerBottomComponent, PoCleanComponent],
-      providers: [HttpClient, HttpHandler, PoControlPositionService]
+      providers: [HttpClient, HttpHandler, PoControlPositionService, provideNgReflectAttributes()]
     }).compileComponents();
 
     fixture = TestBed.createComponent(PoComboComponent);

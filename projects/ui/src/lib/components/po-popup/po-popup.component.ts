@@ -1,10 +1,17 @@
-import { ChangeDetectorRef, Component, ElementRef, Renderer2, ViewChild, ViewContainerRef } from '@angular/core';
+import {
+  ChangeDetectorRef,
+  Component,
+  ElementRef,
+  Renderer2,
+  ViewChild,
+  ViewContainerRef,
+  inject
+} from '@angular/core';
 import { Router } from '@angular/router';
 
 import { PoControlPositionService } from '../../services/po-control-position/po-control-position.service';
 import { isExternalLink, isTypeof, openExternalLink } from '../../utils/util';
 
-import { PoThemeService } from '../../services/po-theme/po-theme.service';
 import { PoListBoxComponent } from '../po-listbox';
 import { PoPopupAction } from './po-popup-action.interface';
 import { PoPopupBaseComponent } from './po-popup-base.component';
@@ -38,22 +45,16 @@ import { PoPopupBaseComponent } from './po-popup-base.component';
   standalone: false
 })
 export class PoPopupComponent extends PoPopupBaseComponent {
+  private renderer = inject(Renderer2);
+  private router = inject(Router);
+  private poControlPosition = inject(PoControlPositionService);
+  changeDetector = inject(ChangeDetectorRef);
+
   @ViewChild('popupRef', { read: ElementRef }) popupRef: ElementRef;
   @ViewChild('listbox', { read: ElementRef }) listbox: ElementRef;
 
   //utilizado apenas no theme builder
   @ViewChild('poListBoxRef') poListBoxRef: PoListBoxComponent;
-
-  constructor(
-    viewContainerRef: ViewContainerRef,
-    protected poThemeService: PoThemeService,
-    private renderer: Renderer2,
-    private router: Router,
-    private poControlPosition: PoControlPositionService,
-    public changeDetector: ChangeDetectorRef
-  ) {
-    super(poThemeService);
-  }
 
   /**
    * Fecha o componente *popup*.

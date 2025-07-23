@@ -1,5 +1,5 @@
 import { HttpClient } from '@angular/common/http';
-import { Component } from '@angular/core';
+import { Component, inject } from '@angular/core';
 import { Observable } from 'rxjs';
 
 @Component({
@@ -8,10 +8,10 @@ import { Observable } from 'rxjs';
   standalone: false
 })
 export class SamplePoComboInfinityScrollComponent {
+  private http = inject(HttpClient);
+
   peopleName: string;
   people$: Observable<any>;
-
-  constructor(private http: HttpClient) {}
 
   onChangePeople(peopleId: string) {
     this.people$ = this.getPeople(peopleId);

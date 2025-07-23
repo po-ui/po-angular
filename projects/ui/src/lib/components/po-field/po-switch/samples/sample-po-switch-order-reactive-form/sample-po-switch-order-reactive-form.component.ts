@@ -1,4 +1,4 @@
-import { Component, OnInit } from '@angular/core';
+import { Component, OnInit, inject } from '@angular/core';
 import { UntypedFormBuilder, UntypedFormGroup } from '@angular/forms';
 
 import { PoNotificationService, PoSwitchLabelPosition, PoTableColumn } from '@po-ui/ng-components';
@@ -9,6 +9,9 @@ import { PoNotificationService, PoSwitchLabelPosition, PoTableColumn } from '@po
   standalone: false
 })
 export class SamplePoSwitchOrderReactiveFormComponent implements OnInit {
+  private poNotification = inject(PoNotificationService);
+  private formBuilder = inject(UntypedFormBuilder);
+
   formOrderSummary: UntypedFormGroup;
   labelPosition: PoSwitchLabelPosition = PoSwitchLabelPosition.Left;
   totalAmount: number = 43;
@@ -31,11 +34,6 @@ export class SamplePoSwitchOrderReactiveFormComponent implements OnInit {
     { page: 'Soft Drink', value: '6' },
     { page: 'French Fries', value: '17' }
   ];
-
-  constructor(
-    private poNotification: PoNotificationService,
-    private formBuilder: UntypedFormBuilder
-  ) {}
 
   ngOnInit() {
     this.formOrderSummary = this.formBuilder.group({ serviceFee: [false] });

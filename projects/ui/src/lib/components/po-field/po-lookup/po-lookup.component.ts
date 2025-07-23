@@ -10,15 +10,15 @@ import {
   OnDestroy,
   OnInit,
   Renderer2,
-  ViewChild
+  ViewChild,
+  inject
 } from '@angular/core';
 import { NG_VALIDATORS, NG_VALUE_ACCESSOR, NgControl } from '@angular/forms';
 import { Subscription } from 'rxjs';
 
-import { getDefaultSize, uuid } from '../../../utils/util';
+import { getDefaultSizeFn, uuid } from '../../../utils/util';
 
 import { PoFieldSize } from '../../../enums/po-field-size.enum';
-import { PoThemeService } from '../../../services';
 import { PoLanguageService } from '../../../services/po-language/po-language.service';
 import { PoTableColumnSpacing } from '../../po-table';
 import { PoLookupBaseComponent } from './po-lookup-base.component';
@@ -145,6 +145,10 @@ const providers = [
   standalone: false
 })
 export class PoLookupComponent extends PoLookupBaseComponent implements AfterViewInit, OnDestroy, OnInit, DoCheck {
+  private renderer = inject(Renderer2);
+  private cd = inject(ChangeDetectorRef);
+  private el = inject(ElementRef);
+
   @ViewChild('inp', { read: ElementRef, static: false }) inputEl: ElementRef;
 
   initialized = false;
@@ -164,17 +168,13 @@ export class PoLookupComponent extends PoLookupBaseComponent implements AfterVie
     return this.noAutocomplete ? 'off' : 'on';
   }
 
-  constructor(
-    languageService: PoLanguageService,
-    private renderer: Renderer2,
-    poLookupFilterService: PoLookupFilterService,
-    poLookupModalService: PoLookupModalService,
-    private cd: ChangeDetectorRef,
-    private el: ElementRef,
-    injector: Injector,
-    protected poThemeService: PoThemeService
-  ) {
-    super(poLookupFilterService, injector, poLookupModalService, languageService, poThemeService);
+  constructor() {
+    const languageService = inject(PoLanguageService);
+    const poLookupFilterService = inject(PoLookupFilterService);
+    const poLookupModalService = inject(PoLookupModalService);
+    const injector = inject(Injector);
+
+    super(poLookupFilterService, injector, poLookupModalService, languageService);
   }
 
   ngAfterViewInit() {
@@ -486,8 +486,7 @@ export class PoLookupComponent extends PoLookupBaseComponent implements AfterVie
   }
 
   protected getDefaultSpacing(): PoTableColumnSpacing {
-    return this.size === PoFieldSize.Small ||
-      getDefaultSize(this.poThemeService, PoTableColumnSpacing) === PoTableColumnSpacing.Small
+    return this.size === PoFieldSize.Small || getDefaultSizeFn(PoTableColumnSpacing) === PoTableColumnSpacing.Small
       ? PoTableColumnSpacing.ExtraSmall
       : PoTableColumnSpacing.Medium;
   }

@@ -6,14 +6,14 @@ import {
   ContentChild,
   DoCheck,
   IterableDiffers,
-  ViewChild
+  ViewChild,
+  inject
 } from '@angular/core';
 
 import { PoLanguageService } from '../../services/po-language/po-language.service';
 import { isTypeof } from '../../utils/util';
 import { PoPopupComponent } from '../po-popup/po-popup.component';
 
-import { PoThemeService } from '../../services/po-theme/po-theme.service';
 import { PoListViewAction } from './interfaces/po-list-view-action.interface';
 import { PoListViewBaseComponent } from './po-list-view-base.component';
 import { PoListViewContentTemplateDirective } from './po-list-view-content-template/po-list-view-content-template.directive';
@@ -54,6 +54,8 @@ import { PoListViewDetailTemplateDirective } from './po-list-view-detail-templat
   standalone: false
 })
 export class PoListViewComponent extends PoListViewBaseComponent implements AfterContentInit, DoCheck {
+  private changeDetector = inject(ChangeDetectorRef);
+
   @ContentChild(PoListViewContentTemplateDirective, { static: true })
   listViewContentTemplate: PoListViewContentTemplateDirective;
   @ContentChild(PoListViewDetailTemplateDirective, { static: true })
@@ -63,13 +65,11 @@ export class PoListViewComponent extends PoListViewBaseComponent implements Afte
 
   private differ;
 
-  constructor(
-    private changeDetector: ChangeDetectorRef,
-    differs: IterableDiffers,
-    languageService: PoLanguageService,
-    protected poThemeService: PoThemeService
-  ) {
-    super(languageService, poThemeService);
+  constructor() {
+    const differs = inject(IterableDiffers);
+    const languageService = inject(PoLanguageService);
+
+    super(languageService);
     this.differ = differs.find([]).create(null);
   }
 
