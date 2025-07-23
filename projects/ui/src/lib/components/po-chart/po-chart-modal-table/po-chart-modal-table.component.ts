@@ -1,11 +1,11 @@
 import { Component, Input, ViewChild } from '@angular/core';
-import { CommonModule } from '@angular/common';
+
 import { PoModalComponent, PoModalModule } from '../../po-modal';
 import { PoTableModule } from '../../po-table';
 
 @Component({
   standalone: true,
-  imports: [CommonModule, PoModalModule, PoTableModule],
+  imports: [PoModalModule, PoTableModule],
   selector: 'po-chart-modal-table',
   template: `
     <po-modal #modalComponent [p-click-out]="true" [p-title]="title" [p-primary-action]="actionModal">

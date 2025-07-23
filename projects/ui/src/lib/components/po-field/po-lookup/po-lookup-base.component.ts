@@ -19,8 +19,7 @@ import { poLocaleDefault } from '../../../services/po-language/po-language.const
 import { PoLanguageService } from '../../../services/po-language/po-language.service';
 
 import { PoFieldSize } from '../../../enums/po-field-size.enum';
-import { PoThemeService } from '../../../services';
-import { convertToBoolean, getDefaultSize, isTypeof, validateSize } from '../../../utils/util';
+import { convertToBoolean, getDefaultSizeFn, isTypeof, validateSizeFn } from '../../../utils/util';
 import { PoTableColumnSpacing } from '../../po-table/enums/po-table-spacing.enum';
 import { requiredFailed } from '../validators';
 import { PoLookupAdvancedFilter } from './interfaces/po-lookup-advanced-filter.interface';
@@ -397,11 +396,11 @@ export abstract class PoLookupBaseComponent
    * @default `medium`
    */
   @Input('p-size') set size(value: string) {
-    this._size = validateSize(value, this.poThemeService, PoFieldSize);
+    this._size = validateSizeFn(value, PoFieldSize);
   }
 
   get size(): string {
-    return this._size ?? getDefaultSize(this.poThemeService, PoFieldSize);
+    return this._size ?? getDefaultSizeFn(PoFieldSize);
   }
 
   /**
@@ -690,8 +689,7 @@ export abstract class PoLookupBaseComponent
     private readonly defaultService: PoLookupFilterService,
     @Inject(Injector) private readonly injector: Injector,
     public poLookupModalService: PoLookupModalService,
-    languageService: PoLanguageService,
-    protected poThemeService: PoThemeService
+    languageService: PoLanguageService
   ) {
     this.language = languageService.getShortLanguage();
   }

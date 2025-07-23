@@ -1,4 +1,4 @@
-import { Component, ElementRef, EventEmitter, Input, Output, ViewChild } from '@angular/core';
+import { Component, ElementRef, EventEmitter, Input, Output, ViewChild, inject } from '@angular/core';
 import { PoLanguageService } from '../../../services/po-language/po-language.service';
 import { PoMenuFilterLiterals } from './po-menu-filter-literals.interface';
 
@@ -22,6 +22,8 @@ export const poMenuFilterLiteralsDefault = {
   standalone: false
 })
 export class PoMenuFilterComponent {
+  languageService = inject(PoLanguageService);
+
   @Input('p-components-size') componentsSize: string;
 
   @Input('p-loading') loading: boolean;
@@ -35,7 +37,7 @@ export class PoMenuFilterComponent {
 
   public literals: any;
 
-  constructor(public languageService: PoLanguageService) {
+  constructor() {
     this.literals = {
       ...poMenuFilterLiteralsDefault[this.languageService?.getLanguageDefault()],
       ...poMenuFilterLiteralsDefault[this.languageService?.getShortLanguage()]

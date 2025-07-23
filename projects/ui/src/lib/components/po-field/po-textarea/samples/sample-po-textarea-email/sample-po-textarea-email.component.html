@@ -22,12 +22,14 @@
 
   <hr />
 
-  <div *ngIf="cc !== ''">
-    <div class="po-row">
-      <po-info class="po-md-12" p-label="CC:" [p-value]="cc"> </po-info>
+  @if (cc !== '') {
+    <div>
+      <div class="po-row">
+        <po-info class="po-md-12" p-label="CC:" [p-value]="cc"> </po-info>
+      </div>
+      <hr />
     </div>
-    <hr />
-  </div>
+  }
 
   <div class="po-row">
     <po-info class="po-md-12" p-label="Subject:" [p-value]="subject"> </po-info>

@@ -55,7 +55,9 @@
         </div>
 
         <div class="po-datepicker-range-icon">
-          <po-clean *ngIf="enableCleaner" [p-size]="size" (p-change-event)="clear()"></po-clean>
+          @if (enableCleaner) {
+            <po-clean [p-size]="size" (p-change-event)="clear()"></po-clean>
+          }
         </div>
 
         <div class="po-datepicker-range-icon">
@@ -73,21 +75,22 @@
     </div>
   </div>
 
-  <po-field-container-bottom
-    *ngIf="!readonly"
-    [p-additional-help-tooltip]="getAdditionalHelpTooltip()"
-    [p-append-in-body]="appendBox"
-    [p-help]="help"
-    [p-disabled]="disabled"
-    [p-error-pattern]="getErrorMessage"
-    [p-error-limit]="errorLimit"
-    [p-show-additional-help]="displayAdditionalHelp"
-    [p-show-additional-help-icon]="showAdditionalHelpIcon()"
-    (p-additional-help)="emitAdditionalHelp()"
-  ></po-field-container-bottom>
+  @if (!readonly) {
+    <po-field-container-bottom
+      [p-additional-help-tooltip]="getAdditionalHelpTooltip()"
+      [p-append-in-body]="appendBox"
+      [p-help]="help"
+      [p-disabled]="disabled"
+      [p-error-pattern]="getErrorMessage"
+      [p-error-limit]="errorLimit"
+      [p-show-additional-help]="displayAdditionalHelp"
+      [p-show-additional-help-icon]="showAdditionalHelpIcon()"
+      (p-additional-help)="emitAdditionalHelp()"
+    ></po-field-container-bottom>
+  }
 </po-field-container>
 
-<ng-container *ngIf="isCalendarVisible">
+@if (isCalendarVisible) {
   <div #calendarPicker class="po-calendar-range-picker">
     <po-calendar
       p-mode="range"
@@ -98,4 +101,4 @@
       (ngModelChange)="onCalendarChange($event)"
     ></po-calendar>
   </div>
-</ng-container>
+}

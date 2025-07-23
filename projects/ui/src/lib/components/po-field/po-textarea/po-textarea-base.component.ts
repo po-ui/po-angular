@@ -2,8 +2,7 @@ import { ChangeDetectorRef, Directive, EventEmitter, Input, Output } from '@angu
 import { AbstractControl, ControlValueAccessor, Validator, Validators } from '@angular/forms';
 
 import { PoFieldSize } from '../../../enums/po-field-size.enum';
-import { PoThemeService } from '../../../services';
-import { convertToBoolean, convertToInt, getDefaultSize, validateSize } from '../../../utils/util';
+import { convertToBoolean, convertToInt, getDefaultSizeFn, validateSizeFn } from '../../../utils/util';
 import { maxlengpoailed, minlengpoailed, requiredFailed } from '../validators';
 
 /**
@@ -350,17 +349,14 @@ export abstract class PoTextareaBaseComponent implements ControlValueAccessor, V
    * @default `medium`
    */
   @Input('p-size') set size(value: string) {
-    this._size = validateSize(value, this.poThemeService, PoFieldSize);
+    this._size = validateSizeFn(value, PoFieldSize);
   }
 
   get size(): string {
-    return this._size ?? getDefaultSize(this.poThemeService, PoFieldSize);
+    return this._size ?? getDefaultSizeFn(PoFieldSize);
   }
 
-  constructor(
-    public cd: ChangeDetectorRef,
-    protected poThemeService: PoThemeService
-  ) {}
+  constructor(public cd: ChangeDetectorRef) {}
 
   callOnChange(value: any) {
     // Quando o input não possui um formulário, então esta função não é registrada

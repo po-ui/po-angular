@@ -1,8 +1,15 @@
-import { ChangeDetectionStrategy, ChangeDetectorRef, Component, ElementRef, Renderer2, ViewChild } from '@angular/core';
+import {
+  ChangeDetectionStrategy,
+  ChangeDetectorRef,
+  Component,
+  ElementRef,
+  Renderer2,
+  ViewChild,
+  inject
+} from '@angular/core';
 
 import { isKeyCodeEnter } from './../../utils/util';
 
-import { PoThemeService } from '../../services/po-theme/po-theme.service';
 import { PoDropdownBaseComponent } from './po-dropdown-base.component';
 
 /**
@@ -32,19 +39,14 @@ import { PoDropdownBaseComponent } from './po-dropdown-base.component';
   standalone: false
 })
 export class PoDropdownComponent extends PoDropdownBaseComponent {
+  private renderer = inject(Renderer2);
+  private changeDetector = inject(ChangeDetectorRef);
+
   @ViewChild('dropdownRef', { read: ElementRef, static: true }) dropdownRef: ElementRef;
   @ViewChild('popupRef') popupRef: any;
 
   private clickoutListener: () => void;
   private resizeListener: () => void;
-
-  constructor(
-    protected poThemeService: PoThemeService,
-    private renderer: Renderer2,
-    private changeDetector: ChangeDetectorRef
-  ) {
-    super(poThemeService);
-  }
 
   onKeyDown(event: any) {
     if (isKeyCodeEnter(event)) {

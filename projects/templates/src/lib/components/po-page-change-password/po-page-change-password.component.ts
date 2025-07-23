@@ -1,4 +1,13 @@
-import { AfterViewInit, Component, ComponentRef, OnDestroy, OnInit, ViewChild, ViewContainerRef } from '@angular/core';
+import {
+  AfterViewInit,
+  Component,
+  ComponentRef,
+  OnDestroy,
+  OnInit,
+  ViewChild,
+  ViewContainerRef,
+  inject
+} from '@angular/core';
 import { NgForm } from '@angular/forms';
 import { ActivatedRoute, Router } from '@angular/router';
 
@@ -9,7 +18,6 @@ import {
   PoLanguageService,
   PoModalAction,
   PoModalComponent,
-  PoThemeService,
   poLocaleDefault
 } from '@po-ui/ng-components';
 
@@ -63,6 +71,12 @@ export class PoPageChangePasswordComponent
   extends PoPageChangePasswordBaseComponent
   implements AfterViewInit, OnDestroy, OnInit
 {
+  private activatedRoute = inject(ActivatedRoute);
+  private route = inject(ActivatedRoute);
+  private router = inject(Router);
+  private service = inject(PoPageChangePasswordService);
+  private poComponentInjector = inject(PoComponentInjectorService);
+
   @ViewChild(PoModalComponent, { static: true }) modal: PoModalComponent;
   @ViewChild('pageChangePassword', { read: ViewContainerRef, static: true }) pageChangePassword: ViewContainerRef;
   @ViewChild('passwordForm', { read: NgForm, static: true }) passwordForm: NgForm;
@@ -95,17 +109,10 @@ export class PoPageChangePasswordComponent
   private newPasswordSubscription: Subscription;
   private componentRef: ComponentRef<any> = null;
 
-  constructor(
-    private activatedRoute: ActivatedRoute,
-    private route: ActivatedRoute,
-    private router: Router,
-    private service: PoPageChangePasswordService,
-    private poComponentInjector: PoComponentInjectorService,
-    protected poThemeService: PoThemeService,
-    languageService: PoLanguageService,
-    viewRef: ViewContainerRef
-  ) {
-    super(poThemeService);
+  constructor() {
+    const languageService = inject(PoLanguageService);
+
+    super();
 
     const language = languageService.getShortLanguage();
 

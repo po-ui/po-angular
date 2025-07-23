@@ -1,4 +1,4 @@
-import { Component, OnInit, ViewContainerRef } from '@angular/core';
+import { Component, OnInit, ViewContainerRef, inject } from '@angular/core';
 
 import { PoWidgetBaseComponent } from './po-widget-base.component';
 import { PoKeyCodeEnum } from './../../enums/po-key-code.enum';
@@ -37,10 +37,6 @@ import { PoKeyCodeEnum } from './../../enums/po-key-code.enum';
 export class PoWidgetComponent extends PoWidgetBaseComponent implements OnInit {
   get showTitleAction(): boolean {
     return !!this.titleAction.observers[0];
-  }
-
-  constructor(viewRef: ViewContainerRef) {
-    super();
   }
 
   ngOnInit() {

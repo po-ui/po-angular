@@ -1,31 +1,33 @@
 <div #disclaimerContainer class="disclaimer-container">
-  <div
-    *ngIf="showDisclaimer === true"
-    class="po-disclaimer"
-    [class.po-disclaimer-remove-all]="hideClose"
-    [class.po-disclaimer-danger]="type === 'danger'"
-    [p-tooltip]="getWidthDisclaimer() ? getLabel() : ''"
-    [p-append-in-body]="appendInBody"
-    [p-tooltip-position]="tooltipPosition"
-    [tabindex]="hideClose ? '0' : '-1'"
-    (click)="emitLastDisclaimer(lastDisclaimer)"
-    (keydown.enter)="emitLastDisclaimer(lastDisclaimer)"
-  >
-    <div class="po-disclaimer-label" [class.show-close]="!hideClose">
-      <span class="label">
-        {{ getLabel() }}
-      </span>
+  @if (showDisclaimer === true) {
+    <div
+      class="po-disclaimer"
+      [class.po-disclaimer-remove-all]="hideClose"
+      [class.po-disclaimer-danger]="type === 'danger'"
+      [p-tooltip]="getWidthDisclaimer() ? getLabel() : ''"
+      [p-append-in-body]="appendInBody"
+      [p-tooltip-position]="tooltipPosition"
+      [tabindex]="hideClose ? '0' : '-1'"
+      (click)="emitLastDisclaimer(lastDisclaimer)"
+      (keydown.enter)="emitLastDisclaimer(lastDisclaimer)"
+    >
+      <div class="po-disclaimer-label" [class.show-close]="!hideClose">
+        <span class="label">
+          {{ getLabel() }}
+        </span>
+      </div>
+      @if (hideClose === false) {
+        <po-icon
+          p-icon="ICON_CLOSE"
+          [attr.aria-label]="setAriaLabel()"
+          [attr.role]="!hideClose ? 'button' : ''"
+          class="po-disclaimer-remove po-clickable"
+          tabindex="0"
+          [class.po-disclaimer-remove-danger]="type === 'danger'"
+          (click)="close()"
+          (keydown)="onKeyPress($event)"
+        ></po-icon>
+      }
     </div>
-    <po-icon
-      p-icon="ICON_CLOSE"
-      *ngIf="hideClose === false"
-      [attr.aria-label]="setAriaLabel()"
-      [attr.role]="!hideClose ? 'button' : ''"
-      class="po-disclaimer-remove po-clickable"
-      tabindex="0"
-      [class.po-disclaimer-remove-danger]="type === 'danger'"
-      (click)="close()"
-      (keydown)="onKeyPress($event)"
-    ></po-icon>
-  </div>
+  }
 </div>

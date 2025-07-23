@@ -9,7 +9,8 @@ import {
   Renderer2,
   SimpleChange,
   ViewChild,
-  ViewContainerRef
+  ViewContainerRef,
+  inject
 } from '@angular/core';
 import { Router } from '@angular/router';
 
@@ -20,7 +21,6 @@ import { PoDisclaimerGroupRemoveAction } from '../../po-disclaimer-group/po-disc
 import { PoDisclaimer } from '../../po-disclaimer/po-disclaimer.interface';
 import { PoPageAction } from '../interfaces/po-page-action.interface';
 
-import { PoThemeService } from '../../../services';
 import { PoPageListBaseComponent } from './po-page-list-base.component';
 
 /**
@@ -53,6 +53,10 @@ export class PoPageListComponent
   extends PoPageListBaseComponent
   implements AfterContentInit, OnChanges, OnDestroy, OnInit
 {
+  renderer = inject(Renderer2);
+  private router = inject(Router);
+  private changeDetector = inject(ChangeDetectorRef);
+
   @ViewChild('filterInput') filterInput: ElementRef;
 
   advancedSearch: string;
@@ -66,15 +70,10 @@ export class PoPageListComponent
   private maxWidthMobile: number = 480;
 
   /* istanbul ignore next */
-  constructor(
-    viewRef: ViewContainerRef,
-    languageService: PoLanguageService,
-    public renderer: Renderer2,
-    protected poThemeService: PoThemeService,
-    private router: Router,
-    private changeDetector: ChangeDetectorRef
-  ) {
-    super(languageService, poThemeService);
+  constructor() {
+    const languageService = inject(PoLanguageService);
+
+    super(languageService);
     this.initializeListeners();
   }
 

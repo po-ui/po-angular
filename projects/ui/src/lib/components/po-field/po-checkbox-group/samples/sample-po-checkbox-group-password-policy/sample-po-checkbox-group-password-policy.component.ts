@@ -1,4 +1,4 @@
-import { Component } from '@angular/core';
+import { Component, inject } from '@angular/core';
 
 import { PoCheckboxGroupOption } from '@po-ui/ng-components';
 
@@ -10,6 +10,8 @@ import { PoNotificationService } from '@po-ui/ng-components';
   standalone: false
 })
 export class SamplePoCheckboxGroupPasswordPolicyComponent {
+  private poNotification = inject(PoNotificationService);
+
   attempts: number;
   expiration: number;
   maxAttempts: boolean;
@@ -30,8 +32,6 @@ export class SamplePoCheckboxGroupPasswordPolicyComponent {
     { value: '3', label: 'Audit authentication / access' },
     { value: '4', label: 'Audit rejection of access to resources' }
   ];
-
-  constructor(private poNotification: PoNotificationService) {}
 
   confirm() {
     this.poNotification.success('Settings saved successfully!');

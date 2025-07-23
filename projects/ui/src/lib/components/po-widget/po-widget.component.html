@@ -9,25 +9,34 @@
   (keydown)="onKeyDown($event)"
   [tabindex]="disabled || !click.observers.length ? -1 : 0"
 >
-  <div *ngIf="hasTitleHelpOrSetting()" class="po-widget-header">
-    <span *ngIf="showTitleAction; else noTitleAction" class="po-widget-title-action" (click)="runTitleAction($event)">
-      {{ title }}
-    </span>
-    <ng-template #noTitleAction>{{ title }}</ng-template>
-
-    <div *ngIf="setting.observers[0] || help" class="po-pull-right">
-      <po-icon
-        id="settingAction-{{ id }}"
-        *ngIf="setting.observers[0]"
-        p-icon="ICON_SETTINGS"
-        class="po-clickable"
-        (click)="settingOutput($event)"
-      >
-      </po-icon>
-      <po-icon id="helpLink-{{ id }}" *ngIf="help" p-icon="ICON_HELP" (click)="openHelp($event)" class="po-clickable">
-      </po-icon>
+  @if (hasTitleHelpOrSetting()) {
+    <div class="po-widget-header">
+      @if (showTitleAction) {
+        <span class="po-widget-title-action" (click)="runTitleAction($event)">
+          {{ title }}
+        </span>
+      } @else {
+        {{ title }}
+      }
+      @if (setting.observers[0] || help) {
+        <div class="po-pull-right">
+          @if (setting.observers[0]) {
+            <po-icon
+              id="settingAction-{{ id }}"
+              p-icon="ICON_SETTINGS"
+              class="po-clickable"
+              (click)="settingOutput($event)"
+            >
+            </po-icon>
+          }
+          @if (help) {
+            <po-icon id="helpLink-{{ id }}" p-icon="ICON_HELP" (click)="openHelp($event)" class="po-clickable">
+            </po-icon>
+          }
+        </div>
+      }
     </div>
-  </div>
+  }
 
   <po-container p-no-border [p-height]="containerHeight">
     <div class="po-widget-body">
@@ -35,18 +44,25 @@
     </div>
   </po-container>
 
-  <div *ngIf="primaryLabel" class="po-widget-footer">
-    <div class="po-widget-xl" *ngIf="!secondaryLabel">
-      <a class="po-widget-action" id="primaryAct-{{ id }}" (click)="runPrimaryAction($event)">{{ primaryLabel }}</a>
+  @if (primaryLabel) {
+    <div class="po-widget-footer">
+      @if (!secondaryLabel) {
+        <div class="po-widget-xl">
+          <a class="po-widget-action" id="primaryAct-{{ id }}" (click)="runPrimaryAction($event)">{{ primaryLabel }}</a>
+        </div>
+      }
+      @if (secondaryLabel) {
+        <div class="po-widget-md">
+          <a class="po-widget-action" id="primaryAct-{{ id }}" (click)="runPrimaryAction($event)">{{ primaryLabel }}</a>
+        </div>
+      }
+      @if (secondaryLabel) {
+        <div class="po-widget-md">
+          <a class="po-widget-action" id="secondaryAct-{{ id }}" (click)="runSecondaryAction($event)">{{
+            secondaryLabel
+          }}</a>
+        </div>
+      }
     </div>
-
-    <div class="po-widget-md" *ngIf="secondaryLabel">
-      <a class="po-widget-action" id="primaryAct-{{ id }}" (click)="runPrimaryAction($event)">{{ primaryLabel }}</a>
-    </div>
-    <div class="po-widget-md" *ngIf="secondaryLabel">
-      <a class="po-widget-action" id="secondaryAct-{{ id }}" (click)="runSecondaryAction($event)">{{
-        secondaryLabel
-      }}</a>
-    </div>
-  </div>
+  }
 </div>

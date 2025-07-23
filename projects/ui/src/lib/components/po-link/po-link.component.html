@@ -1,11 +1,14 @@
-<ng-container [ngSwitch]="type">
-  <button *ngSwitchCase="'action'" class="po-link" type="button" (click)="onClick()">{{ label }}</button>
-
-  <a *ngSwitchCase="'externalLink'" class="po-link" [href]="url" [target]="openNewTab ? '_blank' : '_self'">{{
-    label
-  }}</a>
-
-  <a *ngSwitchCase="'internalLink'" class="po-link" [routerLink]="url">{{ label }}</a>
-
-  <a *ngSwitchDefault class="po-link" [href]="url">{{ label }}</a>
-</ng-container>
+@switch (type) {
+  @case ('action') {
+    <button class="po-link" type="button" (click)="onClick()">{{ label }}</button>
+  }
+  @case ('externalLink') {
+    <a class="po-link" [href]="url" [target]="openNewTab ? '_blank' : '_self'">{{ label }}</a>
+  }
+  @case ('internalLink') {
+    <a class="po-link" [routerLink]="url">{{ label }}</a>
+  }
+  @default {
+    <a class="po-link" [href]="url">{{ label }}</a>
+  }
+}
