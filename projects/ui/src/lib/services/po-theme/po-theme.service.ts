@@ -128,6 +128,11 @@ export class PoThemeService {
    * Essa configuração é aplicada globalmente apenas quando o nível de acessibilidade for `AA`.
    * Caso contrário, o tamanho padrão será `medium`.
    *
+   * > Para garantir que o tamanho `small` seja aplicado corretamente a todos os componentes, recomendamos
+   * definir esta configuração **junto com o nível de acessibilidade `AA` na inicialização da aplicação**.
+   * Se for aplicada em tempo de execução, será necessário recarregar a aplicação (`reload`)
+   * para que os estilos sejam aplicados corretamente.
+   *
    * @param {boolean} enable Habilita ou desabilita o tamanho `small` globalmente.
    */
   setA11yDefaultSizeSmall(enable: boolean): boolean {
