@@ -104,4 +104,7 @@ export interface PoPopupAction {
    *
    */
   visible?: boolean | Function;
+
+  // id interno
+  $id?: string;
 }

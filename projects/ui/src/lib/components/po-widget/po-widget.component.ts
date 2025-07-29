@@ -1,7 +1,20 @@
-import { Component, OnInit, ViewContainerRef } from '@angular/core';
+import {
+  ChangeDetectorRef,
+  Component,
+  ElementRef,
+  OnChanges,
+  OnInit,
+  SimpleChanges,
+  ViewChild,
+  ViewContainerRef
+} from '@angular/core';
 
-import { PoWidgetBaseComponent } from './po-widget-base.component';
+import { PoPopupComponent } from '../po-popup';
 import { PoKeyCodeEnum } from './../../enums/po-key-code.enum';
+import { PoWidgetBaseComponent } from './po-widget-base.component';
+import { PoLanguageService, poLocaleDefault } from '../../services';
+import { poWidgetLiteralsDefault } from './literals/po-widget-language';
+import { PoButtonComponent } from '../po-button';
 
 /**
  * @docsExtends PoWidgetBaseComponent
@@ -34,21 +47,47 @@ import { PoKeyCodeEnum } from './../../enums/po-key-code.enum';
   templateUrl: './po-widget.component.html',
   standalone: false
 })
-export class PoWidgetComponent extends PoWidgetBaseComponent implements OnInit {
+export class PoWidgetComponent extends PoWidgetBaseComponent implements OnInit, OnChanges {
+  popupTarget: any;
+  literals;
+  @ViewChild('popup', { static: true }) poPopupComponent: PoPopupComponent;
+  @ViewChild('buttonPopUp') buttonPopUp: PoButtonComponent;
+
+  @ViewChild('wrapperInfo') wrapperInfo!: ElementRef;
+  @ViewChild('wrapperTitle') wrapperTitle!: ElementRef;
+
   get showTitleAction(): boolean {
     return !!this.titleAction.observers[0];
   }
 
-  constructor(viewRef: ViewContainerRef) {
+  constructor(
+    viewRef: ViewContainerRef,
+    languageService: PoLanguageService,
+    private cd: ChangeDetectorRef
+  ) {
     super();
+    const language = languageService.getShortLanguage();
+    this.literals = {
+      ...poWidgetLiteralsDefault[poLocaleDefault],
+      ...poWidgetLiteralsDefault[language]
+    };
+  }
+
+  ngOnChanges(changes: SimpleChanges): void {
+    if (changes['help'] || changes['actions']) {
+      this.checkDefaultActions();
+    }
   }
 
   ngOnInit() {
     this.setHeight(this.height);
+    this.checkDefaultActions();
+    this.showTooltip();
+    this.cd.detectChanges();
   }
 
   hasTitleHelpOrSetting(): boolean {
-    return !!this.title || !!this.help || !!this.setting.observers[0];
+    return !!this.title || !!this.help || !!this.setting.observers[0] || !!this.tagLabel || !!this?.actions.length;
   }
 
   onClick(event: MouseEvent) {
@@ -69,23 +108,20 @@ export class PoWidgetComponent extends PoWidgetBaseComponent implements OnInit {
     }
   }
 
-  openHelp(event: MouseEvent) {
+  openHelp() {
     if (!this.disabled) {
-      event.stopPropagation();
       window.open(this.help, '_blank');
     }
   }
 
-  runPrimaryAction(event: MouseEvent) {
+  runPrimaryAction() {
     if (!this.disabled) {
-      event.stopPropagation();
       this.primaryAction.emit();
     }
   }
 
-  runSecondaryAction(event: MouseEvent) {
+  runSecondaryAction() {
     if (!this.disabled) {
-      event.stopPropagation();
       this.secondaryAction.emit();
     }
   }
@@ -129,10 +165,57 @@ export class PoWidgetComponent extends PoWidgetBaseComponent implements OnInit {
     }
   }
 
-  settingOutput(event: MouseEvent) {
+  settingOutput() {
     if (!this.disabled) {
-      event.stopPropagation();
       this.setting.emit();
+    }
+  }
+
+  togglePopup(targetRef) {
+    this.popupTarget = targetRef;
+    this.cd.detectChanges();
+    this.poPopupComponent.toggle();
+  }
+
+  showTooltip() {
+    return (
+      this.title && this.wrapperTitle?.nativeElement.offsetWidth + 6 >= this.wrapperInfo?.nativeElement.offsetWidth
+    );
+  }
+
+  closePopUp() {
+    this.buttonPopUp?.focus();
+  }
+
+  private checkDefaultActions() {
+    if (this.setting.observed && !this.actions.some(action => action.$id === 'widget_configuration')) {
+      this.actions = [
+        ...this.actions,
+        {
+          icon: 'ICON_SETTINGS',
+          label: this.literals.configuration,
+          type: 'default',
+          action: this.settingOutput.bind(this),
+          $id: 'widget_configuration'
+        }
+      ];
+    }
+
+    if (this.help && !this.actions.some(action => action.$id === 'widget_help')) {
+      this.actions = [
+        ...this.actions,
+        {
+          icon: 'ICON_HELP',
+          label: this.literals.help,
+          type: 'default',
+          action: this.openHelp.bind(this),
+          $id: 'widget_help'
+        }
+      ];
+    }
+
+    if (!this.help) {
+      this.actions = this.actions.filter(action => action.$id !== 'widget_help');
     }
   }
 }
