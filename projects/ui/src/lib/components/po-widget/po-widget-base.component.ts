@@ -1,6 +1,10 @@
-import { Input, Output, EventEmitter, Directive } from '@angular/core';
+import { Directive, EventEmitter, Input, Output, TemplateRef } from '@angular/core';
 
-import { convertToBoolean, isTypeof, uuid } from '../../utils/util';
+import { PoFieldSize } from '../../enums/po-field-size.enum';
+import { PoThemeService } from '../../services';
+import { convertToBoolean, getDefaultSize, isTypeof, uuid, validateSize } from '../../utils/util';
+import { PoPopupAction } from '../po-popup';
+import { PoTagType } from '../po-tag';
 
 /**
  *
@@ -14,6 +18,10 @@ import { convertToBoolean, isTypeof, uuid } from '../../utils/util';
  *
  * Para controlar sua largura, é possível utilizar o [Grid System](/guides/grid-system) para um maior
  * controle de seu redimensionamento, assim possibilitando o tratamento para diferentes resoluções.
+ *
+ * #### Boas práticas
+ *
+ * Utilize um tamanho mínimo de largura de aproximadamente `18.75rem` no componente.
  *
  * #### Acessibilidade tratada no componente
  *
@@ -29,29 +37,41 @@ import { convertToBoolean, isTypeof, uuid } from '../../utils/util';
  *
  * > Para maiores informações, acesse o guia [Personalizando o Tema Padrão com Tokens CSS](https://po-ui.io/guides/theme-customization).
  *
- * | Propriedade                                  | Descrição                                                        | Valor Padrão                                     |
- * |----------------------------------------------|------------------------------------------------------------------|--------------------------------------------------|
- * | **Default Values**                           |                                                                  |                                                  |
- * | `--padding`                                  | Preenchimento                                                    | `1rem`                                           |
- * | `--border-radius`                            | Contém o valor do raio dos cantos do elemento&nbsp;              | `var(--border-radius-md)`                        |
- * | `--border-width`                             | Contém o valor da largura dos cantos do elemento&nbsp;           | `var(--border-width-sm)`                         |
- * | `--border-color`                             | Cor da borda                                                     | `var(--color-neutral-light-20)`                  |
- * | `--background`                               | Cor de background                                                | `var(--color-neutral-light-00)`                  |
- * | `--shadow`                                   | Contém o valor da sombra do elemento                             | `var(--shadow-md)`                               |
- * | **Selected**                                 |                                                                  |                                                  |
- * | `--background-selected` &nbsp;               | Cor de background no estado selecionado &nbsp;                   | `var(--color-brand-01-lightest)`                 |
- * | `--border-color-selected` &nbsp;             | Cor da borda no estado selecionado                               | `var(--color-action-default)`                    |
- * | **Hover**                                    |                                                                  |                                                  |
- * | `--border-color-hover`                       | Cor da borda no estado hover                                     | `var(--color-brand-01-dark)`                     |
- * | `--shadow-hover`                             | Contém o valor da sombra do elemento no estado hover  &nbsp;     | `var(--shadow-lg)`                               |
- * | **Focused**                                  |                                                                  |                                                  |
- * | `--color-focused`                            | Cor principal no estado de focus                                 | `var(--color-action-default)`                    |
- * | `--outline-color-focused` &nbsp;             | Cor do outline do estado de focus                                | `var(--color-action-focus)`                      |
+ * | Propriedade                                  | Descrição                                                        | Valor Padrão                                                                |
+ * |----------------------------------------------|------------------------------------------------------------------|-----------------------------------------------------------------------------|
+ * | **Default Values**                           |                                                                  |                                                                             |
+ * | `--font-family`                              | Família tipográfica usada                                        | `var(--font-family-theme) `                                                 |
+ * | `--font-size`                                | Tamanho da fonte                                                 | `var(--font-size-sm)`                                                       |
+ * | `--font-weight`                              | Peso da fonte                                                    | `var(--font-weight-bold)`                                                   |
+ * | `--font-color`                               | Cor da fonte                                                     | `var(--color-neutral-dark-95)`                                              |
+ * | `--padding-header`                           | Preenchimento do header                                          | `var(--spacing-sm) var(--spacing-sm) var(--spacing-xs) var(--spacing-sm)`   |
+ * | `--padding-body`                             | Preenchimento do body                                            | `var(--spacing-xs) var(--spacing-sm) var(--spacing-xs) var(--spacing-sm)`   |
+ * | `--padding-footer`                           | Preenchimento do footer                                          | `var(--spacing-xs) var(--spacing-sm) var(--spacing-sm) var(--spacing-sm)`   |
+ * | `--border-radius`                            | Contém o valor do raio dos cantos do elemento&nbsp;              | `var(--border-radius-md)`                                                   |
+ * | `--border-width`                             | Contém o valor da largura dos cantos do elemento&nbsp;           | `var(--border-width-sm)`                                                    |
+ * | `--border-color`                             | Cor da borda                                                     | `var(--color-neutral-light-20)`                                             |
+ * | `--background`                               | Cor de background                                                | `var(--color-neutral-light-00)`                                             |
+ * | `--shadow`                                   | Contém o valor da sombra do elemento                             | `var(--shadow-md)`                                                          |
+ * | **Hover**                                    |                                                                  |                                                                             |
+ * | `--border-color-hover`                       | Cor da borda no estado hover                                     | `var(--color-brand-01-dark)`                                                |
+ * | **Focused**                                  |                                                                  |                                                                             |
+ * | `--color-focused`                            | Cor principal no estado de focus                                 | `var(--color-action-default)`                                               |
+ * | `--outline-color-focused` &nbsp;             | Cor do outline do estado de focus                                | `var(--color-action-focus)`                                                 |
  *
  */
 @Directive()
 export abstract class PoWidgetBaseComponent {
+  private _size?: string = undefined;
+
   /** Descrição da segunda ação. */
+  /**
+   * @optional
+   *
+   * @description
+   * Define o label e exibe a ação secundária no footer do componente.
+   *
+   * > Exibida apenas quando `p-primary-label` estiver definida.
+   */
   @Input('p-secondary-label') secondaryLabel?: string;
 
   /**
@@ -59,7 +79,147 @@ export abstract class PoWidgetBaseComponent {
    *
    * @description
    *
-   * Ação que será executada quando o usuário clicar sobre a área total do `po-widget`.
+   * Caso verdadeiro o botão da ação `p-primary-label` ativará o modo `danger`.
+   *
+   * > Incompatível com o tipo **tertiary** da propriedade `p-kind-primary-action`.
+   *
+   * @default `false`
+   */
+  @Input({ alias: 'p-danger-primary-action', transform: convertToBoolean }) dangerPrimaryAction = false;
+
+  /**
+   * @optional
+   *
+   * @description
+   *
+   * Caso verdadeiro o botão da ação `p-secondary-label` ativará o modo `danger`.
+   *
+   * > Incompatível com o tipo **tertiary** da propriedade `p-kind-primary-action`.
+   *
+   * @default `false`
+   */
+  @Input({ alias: 'p-danger-secondary-action', transform: convertToBoolean }) dangerSecondaryAction = false;
+
+  /**
+   * @optional
+   *
+   * @description
+   *
+   * Define o estilo do botão da ação `p-primary-label`, conforme o enum `PoButtonKind`.
+   *
+   * @default `tertiary`
+   */
+  @Input('p-kind-primary-action') kindPrimaryAction?: string;
+
+  /**
+   * @optional
+   *
+   * @description
+   *
+   * Define o estilo do botão da ação `p-secondary-label`, conforme o enum `PoButtonKind`.
+   *
+   * @default `tertiary`
+   */
+  @Input('p-kind-secondary-action') kindSecondaryAction?: string;
+
+  /**
+   * @optional
+   *
+   * @description
+   *
+   * Label da tag exibida no header.
+   *
+   * > Quando a tag atingir uma largura máxima de 15rem (240px), será truncado com reticências.
+   * O conteúdo completo poderá ser visualizado ao passar o mouse sobre a tag, por meio do tooltip.
+   */
+  @Input('p-tag') tagLabel?: string;
+
+  /**
+   * @optional
+   *
+   * @description
+   *
+   * Define o tipo da `p-tag`, conforme o enum **PoTagType**.
+   *
+   * Valores válidos:
+   *  - `success`: cor verde utilizada para simbolizar sucesso ou êxito.
+   *  - `warning`: cor amarela que representa aviso ou advertência.
+   *  - `danger`: cor vermelha para erro ou aviso crítico.
+   *  - `info`: cor azul claro que caracteriza conteúdo informativo.
+   *  - `neutral`: cor cinza claro para uso geral.
+   *
+   * @default `success`
+   */
+  @Input('p-tag-type') tagType: PoTagType | string;
+
+  /**
+   * @optional
+   *
+   * @description
+   *
+   * Define o ícone exibido ao lado do label da `p-tag`.
+   *
+   * É possível usar qualquer um dos ícones da [Biblioteca de ícones PO UI](https://po-ui.io/icons), conforme exemplo:
+   * ```
+   * <po-widget p-tag-icon="an an-user"></po-widget>
+   * ```
+   * Também é possível utilizar outras fontes de ícones, por exemplo a biblioteca *Font Awesome*, desde que a biblioteca
+   * esteja carregada no projeto:
+   * ```
+   * <po-widget p-tag-icon="fa fa-podcast"></po-widget>
+   * ```
+   *
+   * Outra opção seria a customização do ícone através do `TemplateRef`, conforme exemplo abaixo:
+   * ```
+   * <po-widget [p-tag-icon]="template"></po-widget>
+   *
+   * <ng-template #template>
+   *   <i class="fa fa-podcast" style="font-size: inherit;"></i>
+   * </ng-template>
+   * ```
+   * > Para o ícone enquadrar corretamente, deve-se utilizar `font-size: inherit` caso o ícone utilizado não aplique-o.
+   */
+  @Input('p-tag-icon') tagIcon: string | TemplateRef<void>;
+
+  /**
+   * @optional
+   *
+   * @description
+   *
+   * Lista de ações exibidas no header do componente.
+   * As propriedades das ações seguem a interface `PoPopupAction`.
+   */
+  @Input('p-actions') actions: Array<PoPopupAction> = [];
+
+  /**
+   * @optional
+   *
+   * @description
+   *
+   * Define o tamanho dos botões do componente:
+   * - `small`: altura de 32px (disponível apenas para acessibilidade AA).
+   * - `medium`: altura de 44px.
+   *
+   * > Caso a acessibilidade AA não esteja configurada, o tamanho `medium` será mantido.
+   * Para mais detalhes, consulte a documentação do [po-theme](https://po-ui.io/documentation/po-theme).
+   *
+   * @default `medium`
+   */
+  @Input({ alias: 'p-size' }) set size(value: string) {
+    this._size = validateSize(value, this.poThemeService, PoFieldSize);
+  }
+
+  get size(): string {
+    return this._size ?? getDefaultSize(this.poThemeService, PoFieldSize);
+  }
+
+  /**
+   * @optional
+   *
+   * @description
+   *
+   * Evento disparado quando o usuário clicar no componente.
+   * > Quando este evento está em uso, uma sombra (shadow) é aplicada automaticamente ao componente.
    */
   @Output('p-click') click: EventEmitter<MouseEvent | KeyboardEvent> = new EventEmitter<MouseEvent | KeyboardEvent>();
 
@@ -68,7 +228,7 @@ export abstract class PoWidgetBaseComponent {
    *
    * @description
    *
-   * Função que será disparada com o valor do `p-disabled` quando esta propriedade for alterada.
+   * Evento disparado quando a propriedade `p-disabled` for alterada.
    */
   @Output('p-on-disabled') onDisabled: EventEmitter<any> = new EventEmitter<any>();
 
@@ -77,7 +237,7 @@ export abstract class PoWidgetBaseComponent {
    *
    * @description
    *
-   * Função que será chamada na primeira ação.
+   * Evento disparado ao clicar na ação `p-primary-label`.
    */
   @Output('p-primary-action') primaryAction: EventEmitter<any> = new EventEmitter<any>();
 
@@ -86,7 +246,7 @@ export abstract class PoWidgetBaseComponent {
    *
    * @description
    *
-   * Função que será chamada na segunda ação.
+   * Evento disparado ao clicar na ação `p-secondary-label`.
    */
   @Output('p-secondary-action') secondaryAction: EventEmitter<any> = new EventEmitter<any>();
 
@@ -94,7 +254,7 @@ export abstract class PoWidgetBaseComponent {
    * @optional
    *
    * @description
-   * Função chamada ao clicar no ícone de configuração
+   * Evento disparado ao clicar em **Configurações** incluído no menu de ações do header.
    */
   @Output('p-setting') setting: EventEmitter<any> = new EventEmitter<any>();
 
@@ -102,7 +262,7 @@ export abstract class PoWidgetBaseComponent {
    * @optional
    *
    * @description
-   * Função que será chamada ao clicar no título.
+   * Evento disparado ao clicar no título definido em `p-title`.
    */
   @Output('p-title-action') titleAction: EventEmitter<any> = new EventEmitter<any>();
 
@@ -123,7 +283,7 @@ export abstract class PoWidgetBaseComponent {
    *
    * @description
    *
-   * Aplicação de imagem de fundo.
+   * Define uma imagem de fundo.
    * > Se a imagem escolhida intervir na legibilidade do texto contido no `p-widget`,
    * pode-se utilizar a propriedade `p-primary` em conjunto para que os textos fiquem na cor branca.
    *
@@ -141,7 +301,7 @@ export abstract class PoWidgetBaseComponent {
    *
    * @description
    *
-   * Desabilita todas as ações do componente.
+   * Desabilita o componente.
    *
    * @default `false`
    */
@@ -160,9 +320,7 @@ export abstract class PoWidgetBaseComponent {
    *
    * @description
    *
-   * Define a altura do `po-widget`.
-   * A altura mínima para o `po-widget` depende do que será exibido através das propriedades `p-primary-label`,
-   * `p-setting`, `p-help` e `p-title`.
+   * Define a altura do componente.
    * > Caso não seja informado valor, a propriedade irá assumir o tamanho do conteúdo.
    */
   @Input('p-height') set height(value: number) {
@@ -179,7 +337,7 @@ export abstract class PoWidgetBaseComponent {
    *
    * @description
    *
-   * Link de ajuda
+   * Link de ajuda incluído no menu de ações do header.
    */
   @Input('p-help') set help(value: string) {
     this._help = isTypeof(value, 'string') ? value : '';
@@ -196,7 +354,8 @@ export abstract class PoWidgetBaseComponent {
    *
    * @description
    *
-   * Desabilita a sombra do `po-widget` quando o mesmo for clicável.
+   * Desabilita a sombra do componente quando o mesmo for clicável.
+   * > A sombra é exibida por padrão apenas quando o evento `p-click` está definido.
    *
    * @default `true`
    */
@@ -231,9 +390,8 @@ export abstract class PoWidgetBaseComponent {
    *
    * @description
    *
-   * Descrição da primeira ação.
+   * Define o label e exibe a ação primária no footer do componente.
    *
-   * @default `false`
    */
   @Input('p-primary-label') set primaryLabel(value: string) {
     this._primaryLabel = isTypeof(value, 'string') ? value : '';
@@ -249,9 +407,10 @@ export abstract class PoWidgetBaseComponent {
    *
    * @description
    *
-   * Título do `po-widget`.
+   * Título do componente.
    *
-   * @default `false`
+   * > Quando o conteúdo exceder o espaço disponível, o texto será truncado com reticências.  O conteúdo completo poderá
+   * ser visualizado ao passar o mouse sobre a tag, por meio do tooltip.
    */
   @Input('p-title') set title(value: string) {
     this._title = isTypeof(value, 'string') ? value : '';
@@ -261,6 +420,8 @@ export abstract class PoWidgetBaseComponent {
   get title(): string {
     return this._title;
   }
+
+  constructor(protected poThemeService: PoThemeService) {}
 
   abstract setHeight(height: number);
 }
