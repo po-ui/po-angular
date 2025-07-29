@@ -146,9 +146,9 @@ export class PoThemeService {
     if (!this.isValidA11yLevel(a11yLevel)) return false;
 
     if (a11yLevel === PoThemeA11yEnum.AA && enable) {
-      this.setDefaultSize(PoFieldSize.Small);
+      localStorage.setItem('po-default-size', PoFieldSize.Small);
     } else {
-      this.setDefaultSize(PoFieldSize.Medium);
+      localStorage.setItem('po-default-size', PoFieldSize.Medium);
     }
 
     return a11yLevel === PoThemeA11yEnum.AA && enable;
@@ -464,10 +464,6 @@ export class PoThemeService {
 
   private isValidA11yLevel(level: string | null): boolean {
     return level === PoThemeA11yEnum.AA || level === PoThemeA11yEnum.AAA;
-  }
-
-  private setDefaultSize(size: string): void {
-    localStorage.setItem('po-default-size', size);
   }
 
   /**
