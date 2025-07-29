@@ -13,6 +13,7 @@ import { PoLookupBaseComponent, poLookupLiteralsDefault } from './po-lookup-base
 import { PoLookupFilterService } from './services/po-lookup-filter.service';
 import { PoLookupModalService } from './services/po-lookup-modal.service';
 import { PoTableColumnSpacing } from '../../po-table/enums/po-table-spacing.enum';
+import * as functions from '../../../utils/util';
 class LookupFilterService implements PoLookupFilter {
   getObjectByValue(id: string): Observable<any> {
     return of({ value: 123, label: 'teste' });
@@ -1021,7 +1022,7 @@ describe('PoLookupBaseComponent:', () => {
 
     describe('p-spacing', () => {
       it('should set property with valid value when accessibility is AA', () => {
-        poThemeServiceMock.getA11yLevel.and.returnValue(PoThemeA11yEnum.AA);
+        spyOn(functions as any, 'getA11yLevel').and.returnValue(PoThemeA11yEnum.AA);
 
         component.spacing = PoTableColumnSpacing.ExtraSmall;
         expect(component.spacing).toBe(PoTableColumnSpacing.ExtraSmall);
@@ -1031,14 +1032,14 @@ describe('PoLookupBaseComponent:', () => {
       });
 
       it('should set spacing to "medium" if value is "extra-small" and accessibility is AAA', () => {
-        poThemeServiceMock.getA11yLevel.and.returnValue(PoThemeA11yEnum.AAA);
+        spyOn(functions as any, 'getA11yLevel').and.returnValue(PoThemeA11yEnum.AAA);
 
         component.spacing = PoTableColumnSpacing.ExtraSmall;
         expect(component.spacing).toBe(PoTableColumnSpacing.Medium);
       });
 
       it('should set spacing with other valid values when accessibility is AAA', () => {
-        poThemeServiceMock.getA11yLevel.and.returnValue(PoThemeA11yEnum.AAA);
+        spyOn(functions, 'getA11yLevel').and.returnValue(PoThemeA11yEnum.AAA);
 
         component.spacing = PoTableColumnSpacing.Small;
         expect(component.spacing).toBe(PoTableColumnSpacing.Small);
