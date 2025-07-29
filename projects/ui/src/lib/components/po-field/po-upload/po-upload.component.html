@@ -8,7 +8,7 @@
   [attr.p-size]="size"
 >
   <div class="po-field-container-content">
-    <div class="po-upload">
+    <div class="po-upload" [attr.p-size]="size">
       <input
         #inputFile
         class="po-upload-input"
@@ -103,6 +103,7 @@
     [p-disabled]="disabled"
     [p-show-additional-help]="displayAdditionalHelp"
     [p-show-additional-help-icon]="showAdditionalHelpIcon()"
+    [p-size]="size"
     (p-additional-help)="emitAdditionalHelp()"
   ></po-field-container-bottom>
 </po-field-container>
