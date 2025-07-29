@@ -1,7 +1,7 @@
 import { TemplateRef } from '@angular/core';
 
 /**
- * @usedBy PoPopupComponent
+ * @usedBy PoPopupComponent, PoWidgetComponent
  *
  * @description
  *
@@ -104,4 +104,7 @@ export interface PoPopupAction {
    *
    */
   visible?: boolean | Function;
+
+  // id interno
+  $id?: string;
 }
