@@ -1,9 +1,9 @@
 /**
- * @usedBy PoButtonComponent
+ * @usedBy PoButtonComponent, PoWidgetComponent
  *
  * @description
  *
- * Estilos (`p-kind`) disponíveis do componente.
+ * Estilos disponíveis do button.
  */
 export enum PoButtonKind {
   /** Estilo primário, usado para ações principais que requerem maior destaque. */
