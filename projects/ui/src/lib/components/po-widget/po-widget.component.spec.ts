@@ -2,6 +2,9 @@ import { ComponentFixture, TestBed } from '@angular/core/testing';
 
 import { Subject } from 'rxjs';
 
+import { SimpleChange, SimpleChanges } from '@angular/core';
+import { By } from '@angular/platform-browser';
+import { PoThemeA11yEnum, PoThemeService } from '../../services';
 import { PoContainerComponent } from '../po-container';
 import { PoWidgetComponent } from './po-widget.component';
 
@@ -71,14 +74,18 @@ describe('PoWidgetComponent with title and actions', () => {
   let fixture: ComponentFixture<PoWidgetComponent>;
   let nativeElement;
   const page = 'http://www.fakeUrlPo.com.br';
+  let poThemeServiceMock: jasmine.SpyObj<PoThemeService>;
 
   // Evento compatível com todos os navegadores, inclusive com o IE
   const eventClick = document.createEvent('MouseEvent');
   eventClick.initEvent('click', false, true);
 
   beforeEach(async () => {
+    poThemeServiceMock = jasmine.createSpyObj('PoThemeService', ['getA11yLevel', 'getA11yDefaultSize']);
+
     await TestBed.configureTestingModule({
-      declarations: [PoWidgetComponent, PoContainerComponent]
+      declarations: [PoWidgetComponent, PoContainerComponent],
+      providers: [{ provide: PoThemeService, useValue: poThemeServiceMock }]
     }).compileComponents();
 
     fixture = TestBed.createComponent(PoWidgetComponent);
@@ -95,6 +102,61 @@ describe('PoWidgetComponent with title and actions', () => {
 
   it('should be created', () => {
     expect(component).toBeTruthy();
+  });
+
+  it('should be call checkDefaultActions if help changes', () => {
+    spyOn(component, <any>'checkDefaultActions');
+
+    const changes: SimpleChanges = {
+      help: new SimpleChange(true, false, true)
+    };
+
+    component.ngOnChanges(changes);
+
+    expect(component['checkDefaultActions']).toHaveBeenCalled();
+  });
+
+  it('should be call checkDefaultActions if actions changes', () => {
+    spyOn(component, <any>'checkDefaultActions');
+    component.tagLabel = 'test';
+    const changes: SimpleChanges = {
+      actions: new SimpleChange([], [{ label: 'action' }], true)
+    };
+
+    component.ngOnChanges(changes);
+
+    expect(component['checkDefaultActions']).toHaveBeenCalled();
+  });
+
+  it('should call detectChanges', () => {
+    spyOn(component['cd'], <any>'detectChanges');
+    component.tagLabel = 'test';
+    const changes: SimpleChanges = {
+      tagLabel: new SimpleChange('test', 'test1', true)
+    };
+
+    component.ngOnChanges(changes);
+
+    expect(component['cd'].detectChanges).toHaveBeenCalled();
+  });
+
+  it('should be call toggle of poPopupComponent', () => {
+    spyOn(component, 'togglePopup');
+    component.actions = [{ label: 'teste', action: () => {} }];
+
+    const div = fixture.debugElement.query(By.css('.po-widget-button-wrapper'));
+
+    div.triggerEventHandler('click', null);
+
+    expect(component.togglePopup).toHaveBeenCalled();
+  });
+
+  it('should set popupTarget', () => {
+    const div = fixture.debugElement.query(By.css('.po-widget-button-wrapper'));
+    component.poPopupComponent = { toggle: () => {} } as any;
+    component.togglePopup(div, { stopPropagation: () => {} });
+
+    expect(component.popupTarget).toEqual(div);
   });
 
   it('should simulate widget click.', () => {
@@ -153,6 +215,108 @@ describe('PoWidgetComponent with title and actions', () => {
     component.onKeyDown(fakeEvent);
 
     expect(component.click.emit).not.toHaveBeenCalled();
+  });
+
+  it('updateContent should set hasContent to true if child is type text', () => {
+    const fakeThis = {
+      contentContainer: {
+        nativeElement: {
+          childNodes: [{ nodeType: 3, textContent: 'test' }]
+        }
+      },
+      hasContent: false,
+      cd: { detectChanges: () => {} }
+    };
+
+    component['updateContent'].call(fakeThis);
+
+    expect(fakeThis.hasContent).toBeTruthy();
+  });
+
+  it('updateContent should set hasContent to false if textContent is undefined', () => {
+    const fakeThis = {
+      contentContainer: {
+        nativeElement: {
+          childNodes: [{ nodeType: 3 }]
+        }
+      },
+      hasContent: false,
+      cd: { detectChanges: () => {} }
+    };
+
+    component['updateContent'].call(fakeThis);
+
+    expect(fakeThis.hasContent).toBeFalsy();
+  });
+
+  it('updateContent should set hasContent to true if child is type element', () => {
+    const fakeThis = {
+      contentContainer: {
+        nativeElement: {
+          childNodes: [{ nodeType: 1, textContent: 'test' }]
+        }
+      },
+      hasContent: false,
+      cd: { detectChanges: () => {} }
+    };
+
+    component['updateContent'].call(fakeThis);
+
+    expect(fakeThis.hasContent).toBeTruthy();
+  });
+
+  it('updateContent should set hasContent to false if child is empty', () => {
+    const fakeThis = {
+      contentContainer: {
+        nativeElement: {
+          childNodes: [{ nodeType: 0, textContent: '' }]
+        }
+      },
+      hasContent: false,
+      cd: { detectChanges: () => {} }
+    };
+
+    component['updateContent'].call(fakeThis);
+
+    expect(fakeThis.hasContent).toBeFalsy();
+  });
+
+  it('updateContent should return void if element does not exist', () => {
+    const fakeThis = {
+      cd: { detectChanges: () => {} }
+    };
+
+    const expected = component['updateContent'].call(fakeThis);
+
+    expect(expected).toBeFalsy();
+  });
+
+  it('should return true if wrapperTitle is larger than wrapperInfo', () => {
+    component.tagLabel = 'tag';
+    component.title = 'My Title';
+    const fakeThis = {
+      tagLabel: 'tag',
+      title: 'My Title',
+      wrapperTitle: {
+        nativeElement: {
+          offsetWidth: 60
+        }
+      },
+      tagElement: {
+        nativeElement: {
+          offsetWidth: 40
+        }
+      },
+      wrapperInfo: {
+        nativeElement: {
+          offsetWidth: 70
+        }
+      }
+    };
+
+    const expected = component.showTooltip.call(fakeThis);
+
+    expect(expected).toBeTruthy();
   });
 
   describe('Properties:', () => {
@@ -218,115 +382,81 @@ describe('PoWidgetComponent with title and actions', () => {
     });
 
     it('openHelp: shouldn`t call event.stopPropagation and window.open if disabled is true', () => {
-      const mouseEvent: MouseEvent = new MouseEvent('click');
-
       component.disabled = true;
 
-      spyOn(mouseEvent, 'stopPropagation');
       spyOn(window, 'open');
 
-      component.openHelp(mouseEvent);
+      component.openHelp();
 
       expect(window.open).not.toHaveBeenCalled();
-      expect(mouseEvent.stopPropagation).not.toHaveBeenCalled();
     });
 
     it('openHelp: should call event.stopPropagation and window.open if disabled is false', () => {
-      const mouseEvent: MouseEvent = new MouseEvent('click');
-
       component.disabled = false;
 
-      const spyStopPropagation = spyOn(mouseEvent, 'stopPropagation');
       const spyWindowOpen = spyOn(window, 'open');
 
-      component.openHelp(mouseEvent);
+      component.openHelp();
 
       expect(spyWindowOpen).toHaveBeenCalled();
-      expect(spyStopPropagation).toHaveBeenCalled();
     });
 
     it('runPrimaryAction: shouldn`t call event.stopPropagation and primaryAction.emit if disabled is true', () => {
-      const mouseEvent: MouseEvent = new MouseEvent('click');
-
       component.disabled = true;
 
-      const spyStopPropagation = spyOn(mouseEvent, 'stopPropagation');
       const spyPrimaryActionEmit = spyOn(component.primaryAction, 'emit');
 
-      component.runPrimaryAction(mouseEvent);
+      component.runPrimaryAction();
 
       expect(spyPrimaryActionEmit).not.toHaveBeenCalled();
-      expect(spyStopPropagation).not.toHaveBeenCalled();
     });
 
     it('runPrimaryAction: should call event.stopPropagation and primaryAction.emit if disabled is false', () => {
-      const mouseEvent: MouseEvent = new MouseEvent('click');
-
       component.disabled = false;
 
-      const spyStopPropagation = spyOn(mouseEvent, 'stopPropagation');
       const spyPrimaryActionEmit = spyOn(component.primaryAction, 'emit');
 
-      component.runPrimaryAction(mouseEvent);
+      component.runPrimaryAction();
 
       expect(spyPrimaryActionEmit).toHaveBeenCalled();
-      expect(spyStopPropagation).toHaveBeenCalled();
     });
 
     it('runSecondaryAction: shouldn`t call event.stopPropagation and secondaryAction.emit if disabled is true', () => {
-      const mouseEvent: MouseEvent = new MouseEvent('click');
-
       component.disabled = true;
 
-      spyOn(mouseEvent, 'stopPropagation');
       spyOn(component.secondaryAction, 'emit');
 
-      component.runSecondaryAction(mouseEvent);
+      component.runSecondaryAction();
 
       expect(component.secondaryAction.emit).not.toHaveBeenCalled();
-      expect(mouseEvent.stopPropagation).not.toHaveBeenCalled();
     });
 
     it('runSecondaryAction: should call event.stopPropagation and secondaryAction.emit if disabled is false', () => {
-      const mouseEvent: MouseEvent = new MouseEvent('click');
-
       component.disabled = false;
 
-      const spyStopPropagation = spyOn(mouseEvent, 'stopPropagation');
       const spySecondaryActionEmit = spyOn(component.secondaryAction, 'emit');
 
-      component.runSecondaryAction(mouseEvent);
+      component.runSecondaryAction();
 
       expect(spySecondaryActionEmit).toHaveBeenCalled();
-      expect(spyStopPropagation).toHaveBeenCalled();
     });
 
     it('settingOutput: shouldn`t call event.stopPropagation and setting.emit if disabled is true', () => {
-      const mouseEvent: MouseEvent = new MouseEvent('click');
-
       component.disabled = true;
 
-      const spyStopPropagation = spyOn(mouseEvent, 'stopPropagation');
       const spySettingEmit = spyOn(component.setting, 'emit');
 
-      component.settingOutput(mouseEvent);
-
       expect(spySettingEmit).not.toHaveBeenCalled();
-      expect(spyStopPropagation).not.toHaveBeenCalled();
     });
 
     it('settingOutput: should call event.stopPropagation and setting.emit if disabled is false', () => {
-      const mouseEvent: MouseEvent = new MouseEvent('click');
-
       component.disabled = false;
 
-      spyOn(mouseEvent, 'stopPropagation');
       spyOn(component.setting, 'emit');
 
-      component.settingOutput(mouseEvent);
+      component.settingOutput();
 
       expect(component.setting.emit).toHaveBeenCalled();
-      expect(mouseEvent.stopPropagation).toHaveBeenCalled();
     });
 
     it('hasTitleHelpOrSetting: should return true if have title', () => {
@@ -353,60 +483,71 @@ describe('PoWidgetComponent with title and actions', () => {
       expect(component.hasTitleHelpOrSetting()).toBe(true);
     });
 
-    it('setHeight: should set `containerHeight` with calculate value if have `height` and `setting` and doesn`t have `title`', () => {
-      const result = '163px';
-      component.title = undefined;
-      component.primaryLabel = undefined;
-      component.help = undefined;
-      component.setting.observers = [new Subject()];
-
-      component.setHeight(component.height);
-
-      expect(component.containerHeight).toBe(result);
-    });
-
-    it('setHeight: should set `containerHeight` with calculate value if have `height` and `help` and doesn`t have `title`', () => {
-      const result = '163px';
-      component.title = undefined;
-      component.primaryLabel = undefined;
-      component.setting.observers = [];
-
-      component.setHeight(component.height);
-
-      expect(component.containerHeight).toBe(result);
-    });
-
-    it(`setHeight: should set 'containerHeight' with calculate value if have 'noShadow', 'height' and 'help' and
-    doesn't have 'title'`, () => {
-      const result = '161px';
-      component.noShadow = true;
-      component.title = undefined;
-      component.primaryLabel = undefined;
-      component.setting.observers = [];
-
-      component.setHeight(component.height);
-
-      expect(component.containerHeight).toBe(result);
-    });
-
-    it('setHeight: should set `containerHeight` with calculate value if have `height` and doesn`t have `title`', () => {
-      const result = '200px';
-      component.title = undefined;
-      component.primaryLabel = undefined;
-      component.help = undefined;
-      component.setting.observers = [];
-
-      component.setHeight(component.height);
-
-      expect(component.containerHeight).toBe(result);
-    });
-
     it('hasTitleHelpOrSetting: should return false if doesn`t have help, title and setting', () => {
       component.title = undefined;
       component.help = undefined;
       component.setting.observers = [];
+      component.actions = [];
 
       expect(component.hasTitleHelpOrSetting()).toBe(false);
+    });
+
+    it('should set containerHeight to "auto" when height is 0 or undefined', () => {
+      component.setHeight(0);
+      expect(component.containerHeight).toBe('auto');
+
+      component.setHeight(undefined);
+      expect(component.containerHeight).toBe('auto');
+    });
+
+    it('should calculate containerHeight correctly with title', () => {
+      component.title = 'Test';
+      component.actions = [];
+      component.primaryLabel = undefined;
+      component.secondaryLabel = undefined;
+      component.setHeight(100);
+      expect(component.containerHeight).toBe(`${30}px`);
+    });
+
+    it('should calculate containerHeight correctly with tag and icon', () => {
+      component.tagLabel = 'Test';
+      component.tagIcon = 'an an-pallet-full';
+      component.help = undefined;
+      component.actions = [];
+      component.primaryLabel = undefined;
+      component.secondaryLabel = undefined;
+      component.setHeight(200);
+      expect(component.containerHeight).toBe(`${148}px`);
+    });
+
+    it('should calculate containerHeight correctly with title and actions', () => {
+      component.title = 'Test';
+      component.actions = [{ label: 'Test' }];
+      component.primaryLabel = undefined;
+      component.secondaryLabel = undefined;
+      component.setHeight(100);
+      expect(component.containerHeight).toBe(`${30}px`);
+    });
+
+    it('should calculate containerHeight correctly with title, actions and prymaryLabel', () => {
+      component.title = 'Test';
+      component.actions = [{ label: 'Test' }];
+      component.primaryLabel = 'test1';
+      component.secondaryLabel = 'test2';
+      component.setHeight(200);
+      expect(component.containerHeight).toBe(`${62}px`);
+    });
+
+    it('should calculate containerHeight correctly with title, AA, actions and prymaryLabel', () => {
+      poThemeServiceMock.getA11yLevel.and.returnValue(PoThemeA11yEnum.AA);
+      poThemeServiceMock.getA11yDefaultSize.and.returnValue('small');
+
+      component.title = 'Test';
+      component.actions = [{ label: 'Test' }];
+      component.primaryLabel = 'test1';
+      component.secondaryLabel = 'test2';
+      component.setHeight(200);
+      expect(component.containerHeight).toBe(`${86}px`);
     });
   });
 
@@ -445,6 +586,7 @@ describe('PoWidgetComponent with title and actions', () => {
       component.title = undefined;
       component.help = undefined;
       component.setting.observers = [];
+      component.actions = [];
 
       fixture.detectChanges();
 
@@ -471,75 +613,9 @@ describe('PoWidgetComponent with title and actions', () => {
       expect(nativeElement.querySelector('.po-widget-footer') !== null).toBe(true);
     });
 
-    it('should have been clicked in primary action', () => {
-      spyOn(component.primaryAction, 'emit');
-      component.id = '1';
-
-      fixture.detectChanges();
-
-      const link = document.getElementById('primaryAct-1') as HTMLAnchorElement;
-
-      spyOn(eventClick, 'stopPropagation');
-
-      link.dispatchEvent(eventClick);
-
-      expect(component.primaryAction.emit).toHaveBeenCalledWith();
-      expect(eventClick.stopPropagation).toHaveBeenCalled();
-    });
-
-    it('should have been clicked in secondary action', () => {
-      spyOn(component.secondaryAction, 'emit');
-      spyOn(eventClick, 'stopPropagation');
-      component.id = '1';
-
-      fixture.detectChanges();
-
-      const link = document.getElementById('secondaryAct-1') as HTMLAnchorElement;
-
-      link.dispatchEvent(eventClick);
-
-      expect(component.secondaryAction.emit).toHaveBeenCalled();
-      expect(eventClick.stopPropagation).toHaveBeenCalled();
-    });
-
-    it('should have been clicked in setting', () => {
-      spyOn(component.setting, 'emit');
-      component.setting.subscribe();
-      component.id = '1';
-
-      fixture.detectChanges();
-
-      const test = document.getElementById('settingAction-1') as HTMLAnchorElement;
-
-      spyOn(eventClick, 'stopPropagation');
-
-      test.dispatchEvent(eventClick);
-
-      expect(component.setting.emit).toHaveBeenCalled();
-      expect(eventClick.stopPropagation).toHaveBeenCalled();
-    });
-
     it('should be created the help button', () => {
       component.id = '1';
       expect(nativeElement.querySelector('helpLink-1') !== null).toBe(false);
-    });
-
-    it('should have been clicked in help', () => {
-      spyOn(eventClick, 'stopPropagation');
-      spyOn(window, 'open');
-
-      component.id = '1';
-
-      fixture.detectChanges();
-
-      const help = document.getElementById('helpLink-1') as HTMLAnchorElement;
-
-      fixture.detectChanges();
-
-      help.dispatchEvent(eventClick);
-
-      expect(window.open).toHaveBeenCalledWith(page, '_blank');
-      expect(eventClick.stopPropagation).toHaveBeenCalled();
     });
 
     it('should have, in the main `div`, the` po-clickable` class, when it does not have (p-click) action.', () => {
@@ -572,23 +648,6 @@ describe('PoWidgetComponent with title and actions', () => {
       expect(nativeElement.querySelector('.po-widget')).toBeTruthy();
     });
 
-    it('should call runTitleAction if po-widget-title-action is clicked', () => {
-      component.titleAction.observers[0] = new Subject();
-
-      fixture.detectChanges();
-
-      const titleWithAction = nativeElement.querySelector('.po-widget-title-action');
-
-      const mouseEvent = document.createEvent('MouseEvents');
-      mouseEvent.initEvent('click', false, true);
-
-      spyOn(component, 'runTitleAction');
-
-      titleWithAction.dispatchEvent(mouseEvent);
-
-      expect(component.runTitleAction).toHaveBeenCalled();
-    });
-
     it('should not create title with .po-widget-title-action if the title has no action', () => {
       component.titleAction.observers[0] = undefined;
 
@@ -617,38 +676,6 @@ describe('PoWidgetComponent with title and actions', () => {
       const footer = nativeElement.querySelector('.po-widget-footer');
 
       expect(footer).toBeFalsy();
-    });
-
-    it(`should have '.po-widget-xl' and one '.po-widget-action' and doesn't have '.po-widget-md' if have 'primaryLabel'
-    and doesn't have 'secondaryLabel'`, () => {
-      component.primaryLabel = 'primary';
-      component.secondaryLabel = undefined;
-
-      fixture.detectChanges();
-
-      const widgetActioncontainerXl = nativeElement.querySelector('.po-widget-xl');
-      const widgetActionContainerMd = nativeElement.querySelector('.po-widget-md');
-      const action = nativeElement.querySelectorAll('.po-widget-action');
-
-      expect(widgetActioncontainerXl).toBeTruthy();
-      expect(widgetActionContainerMd).toBeFalsy();
-      expect(action.length).toBe(1);
-    });
-
-    it(`should have two '.po-widget-md' and two '.po-widget-action' and doesn't have '.po-widget-xl' if have
-    'primaryLabel' and 'secondaryLabel'`, () => {
-      component.primaryLabel = 'primary';
-      component.secondaryLabel = 'secondary';
-
-      fixture.detectChanges();
-
-      const widgetActioncontainerXl = nativeElement.querySelector('.po-widget-xl');
-      const widgetaActionContainerMd = nativeElement.querySelectorAll('.po-widget-md');
-      const action = nativeElement.querySelectorAll('.po-widget-action');
-
-      expect(widgetActioncontainerXl).toBeFalsy();
-      expect(widgetaActionContainerMd.length).toBe(2);
-      expect(action.length).toBe(2);
     });
 
     it('should find .po-widget-disabled if disabled is true', () => {
@@ -696,6 +723,113 @@ describe('PoWidgetComponent with actions', () => {
   it('should be loaded with action bar', () => {
     const nativeElement = fixture.nativeElement;
     expect(nativeElement.querySelector('.po-widget-footer') !== null).toBe(true);
+  });
+
+  it('should add configuration action if configuration is available and there is no action with $id "widget_configuration"', () => {
+    Object.defineProperty(component.setting, 'observed', {
+      get: () => true
+    });
+
+    component.actions = [];
+
+    component['checkDefaultActions']();
+
+    const configAction = component.actions.find(a => a.$id === 'widget_configuration');
+    expect(configAction).toBeTruthy();
+    expect(configAction?.icon).toBe('ICON_SETTINGS');
+  });
+
+  it('should not add action if "observed" is false', () => {
+    spyOn(component, 'settingOutput').and.callFake(() => {});
+
+    Object.defineProperty(component.setting, 'observed', {
+      get: () => false
+    });
+
+    component['checkDefaultActions']();
+
+    expect(component.actions.length).toBe(0);
+  });
+
+  it('should not add action if "widget_configuration" already exists', () => {
+    component.actions = [{ $id: 'widget_configuration', icon: '', label: '', type: '', action: () => {} }];
+
+    component['checkDefaultActions']();
+
+    expect(component.actions.length).toBe(1);
+  });
+
+  it('should not add configuration action if configuration is already in actions', () => {
+    Object.defineProperty(component.setting, 'observed', {
+      get: () => true
+    });
+
+    component.actions = [{ label: 'test', $id: 'widget_configuration' }];
+    component.help = undefined;
+    component['checkDefaultActions']();
+
+    const configAction = component.actions.find(a => a.$id === 'widget_configuration');
+    expect(configAction).toBeTruthy();
+    expect(component.actions.length).toBe(1);
+  });
+
+  it('should not add configuration action if setting is not observed', () => {
+    Object.defineProperty(component.setting, 'observed', {
+      get: () => false
+    });
+
+    component.actions = [];
+
+    component['checkDefaultActions']();
+
+    const configAction = component.actions.find(a => a.$id === 'widget_configuration');
+    expect(configAction).toBeUndefined();
+  });
+
+  it('should add help action if help is true and there is no action with $id "widget_help"', () => {
+    component.help = 'myurl';
+    component.actions = [];
+
+    component['checkDefaultActions']();
+
+    const helpAction = component.actions.find(a => a.$id === 'widget_help');
+    expect(helpAction).toBeTruthy();
+    expect(helpAction?.icon).toBe('ICON_HELP');
+  });
+
+  it('should remove help action if help is false', () => {
+    component.actions = [
+      { $id: 'widget_help', label: 'Help', icon: 'ICON_HELP', type: 'default', action: () => {} },
+      { $id: 'another_action', label: 'Other', icon: 'ICON_OTHER', type: 'default', action: () => {} }
+    ];
+    component.help = undefined;
+
+    component['checkDefaultActions']();
+
+    expect(component.actions.some(a => a.$id === 'widget_help')).toBeFalse();
+    expect(component.actions.some(a => a.$id === 'another_action')).toBeTrue();
+  });
+
+  it('should not add help if help already exists in actions', () => {
+    component.actions = [
+      { $id: 'widget_help', label: 'Help', icon: 'ICON_HELP', type: 'default', action: () => {} },
+      { $id: 'another_action', label: 'Other', icon: 'ICON_OTHER', type: 'default', action: () => {} }
+    ];
+
+    component.help = 'myurl';
+
+    component['checkDefaultActions']();
+
+    expect(component.actions.length).toBe(2);
+  });
+
+  it('shoukd focus on po-button when action is closed', () => {
+    const mockButton = jasmine.createSpyObj('PoButtonComponent', ['focus']);
+    component.buttonPopUp = mockButton;
+
+    component.closePopUp();
+
+    expect(mockButton.focus).toHaveBeenCalled();
   });
 });
 

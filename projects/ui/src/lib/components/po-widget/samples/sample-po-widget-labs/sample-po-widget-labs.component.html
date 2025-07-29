@@ -2,12 +2,16 @@
   class="po-sm-12"
   [p-background]="background"
   [p-disabled]="properties.includes('disabled')"
+  [p-size]="properties.includes('small') ? 'small' : 'medium'"
   [p-height]="height"
   [p-help]="help"
   [p-primary]="properties.includes('primaryWidget')"
   [p-primary-label]="primaryLabel"
   [p-secondary-label]="secondaryLabel"
+  [p-tag]="tagLabel"
+  [p-tag-icon]="tagIcon"
   [p-title]="title"
+  [p-actions]="myActions"
   (p-on-disabled)="changeAction('p-on-disabled')"
   (p-primary-action)="changeAction('p-primary-action')"
   (p-secondary-action)="changeAction('p-secondary-action')"
@@ -28,9 +32,25 @@
 <form #f="ngForm">
   <po-input class="po-md-4" name="title" [(ngModel)]="title" p-label="Title"> </po-input>
 
-  <po-input class="po-md-4" name="help" [(ngModel)]="help" p-label="Help"> </po-input>
+  <po-input class="po-md-4" name="help" [(ngModel)]="help" p-label="Help" p-clean> </po-input>
 
   <po-number class="po-md-4" name="height" [(ngModel)]="height" p-label="Height"> </po-number>
+
+  <div class="po-row">
+    <po-input class="po-md-6" name="actionAction" [(ngModel)]="actionPopup.action" p-clean p-label="Action"> </po-input>
+
+    <po-input class="po-md-6" name="actionLabel" [(ngModel)]="actionPopup.label" p-label="Label" p-required> </po-input>
+  </div>
+
+  <div class="po-row">
+    <po-button
+      class="po-lg-2 po-md-4"
+      p-label="Add Action"
+      [p-disabled]="!actionPopup.action || !actionPopup.label"
+      (p-click)="addAction(actionPopup)"
+    >
+    </po-button>
+  </div>
 
   <po-input
     class="po-md-12"
@@ -45,7 +65,12 @@
   <po-input class="po-md-6" name="primaryLabel" [(ngModel)]="primaryLabel" p-label="Primary Label"> </po-input>
 
   <po-input class="po-md-6" name="secondaryLabel" [(ngModel)]="secondaryLabel" p-label="Secondary Label"> </po-input>
+  <div class="po-row" style="align-items: flex-end">
+    <po-input class="po-md-6" name="tagLabel" [(ngModel)]="tagLabel" p-label="Label tag"> </po-input>
 
+    <po-select class="po-md-6 po-mt-2" name="icon" [(ngModel)]="tagIcon" p-label="Icon" [p-options]="iconList">
+    </po-select>
+  </div>
   <div class="po-row">
     <po-checkbox-group
       class="po-md-12"

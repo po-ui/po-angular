@@ -265,7 +265,7 @@ export class PoTagBaseComponent {
    * @default `false`
    */
   @Input('p-icon') set icon(value: boolean | string | TemplateRef<void>) {
-    if (this.type) {
+    if (this.type && !this.forceIcon) {
       this._icon = convertToBoolean(value);
     } else {
       this._icon = value;
@@ -320,6 +320,9 @@ export class PoTagBaseComponent {
   get type(): PoTagType {
     return this._type;
   }
+
+  //propriedade interna para forçar icone mesmo com tipo definido
+  @Input({ alias: 'p-force-icon', transform: convertToBoolean }) forceIcon = false;
 
   /**
    * @optional
