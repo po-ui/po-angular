@@ -112,7 +112,13 @@ export abstract class PoCheckboxBaseComponent implements ControlValueAccessor {
    */
   @Output('p-additional-help') additionalHelp = new EventEmitter<any>();
 
-  // Evento disparado ao sair do campo.
+  /**
+   * @optional
+   *
+   * @description
+   *
+   * Evento disparado ao sair do campo.
+   */
   @Output('p-blur') blur: EventEmitter<any> = new EventEmitter();
 
   /**
