@@ -5,7 +5,7 @@ import {
   PoSearchFilterMode,
   PoSearchLiterals
 } from '@po-ui/ng-components';
-import { Component, OnChanges, OnInit, SimpleChanges, ViewChild } from '@angular/core';
+import { Component, OnChanges, OnInit, SimpleChanges, ViewChild, inject } from '@angular/core';
 import { HttpClient } from '@angular/common/http';
 
 @Component({
@@ -28,6 +28,8 @@ import { HttpClient } from '@angular/common/http';
   standalone: false
 })
 export class SamplePoSearchLabsComponent implements OnInit, OnChanges {
+  private http = inject(HttpClient);
+
   @ViewChild('poSearch', { static: true }) PoSearch: PoSearchComponent;
 
   customLiterals: PoSearchLiterals;
@@ -74,8 +76,6 @@ export class SamplePoSearchLabsComponent implements OnInit, OnChanges {
     { label: 'small', value: 'small' },
     { label: 'medium', value: 'medium' }
   ];
-
-  constructor(private http: HttpClient) {}
 
   ngOnInit() {
     this.restore();

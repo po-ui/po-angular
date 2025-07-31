@@ -1,4 +1,4 @@
-import { Component, OnInit } from '@angular/core';
+import { Component, OnInit, inject } from '@angular/core';
 
 import { PoComboOption, PoDisclaimer, PoTableColumn } from '@po-ui/ng-components';
 
@@ -11,6 +11,8 @@ import { SamplePoDisclaimerGroupSwPlanetsService } from './sample-po-disclaimer-
   standalone: false
 })
 export class SamplePoDisclaimerGroupSwPlanetsComponent implements OnInit {
+  disclaimerGroupSwPlanetsService = inject(SamplePoDisclaimerGroupSwPlanetsService);
+
   climate: string;
   columns: Array<PoTableColumn>;
   filteredItems: Array<any> = [];
@@ -21,8 +23,6 @@ export class SamplePoDisclaimerGroupSwPlanetsComponent implements OnInit {
 
   public climates: Array<PoComboOption>;
   public terrains: Array<PoComboOption>;
-
-  constructor(public disclaimerGroupSwPlanetsService: SamplePoDisclaimerGroupSwPlanetsService) {}
 
   ngOnInit() {
     this.disclaimerGroupSwPlanetsService.getItems().subscribe(items => {

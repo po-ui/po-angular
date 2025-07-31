@@ -1,4 +1,4 @@
-import { Component, OnInit } from '@angular/core';
+import { Component, OnInit, inject } from '@angular/core';
 
 import {
   PoBreadcrumb,
@@ -16,6 +16,8 @@ import { PoNotificationService, PoPageAction, PoPageDefaultLiterals } from '@po-
   standalone: false
 })
 export class SamplePoPageDefaultLabsComponent implements OnInit {
+  private poNotification = inject(PoNotificationService);
+
   action: PoPageAction;
   actions: Array<PoPageAction>;
   breadcrumb: PoBreadcrumb;
@@ -50,8 +52,6 @@ export class SamplePoPageDefaultLabsComponent implements OnInit {
     { label: 'Danger', value: 'danger' },
     { label: 'Default', value: 'default' }
   ];
-
-  constructor(private poNotification: PoNotificationService) {}
 
   ngOnInit() {
     this.restore();

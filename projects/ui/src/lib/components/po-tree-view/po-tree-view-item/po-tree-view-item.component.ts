@@ -1,5 +1,5 @@
 import { animate, style, transition, trigger } from '@angular/animations';
-import { ChangeDetectionStrategy, Component, Input } from '@angular/core';
+import { ChangeDetectionStrategy, Component, Input, inject } from '@angular/core';
 
 import { PoTreeViewService } from '../services/po-tree-view.service';
 import { PoTreeViewItem } from './po-tree-view-item.interface';
@@ -35,6 +35,8 @@ import { PoTreeViewItem } from './po-tree-view-item.interface';
   standalone: false
 })
 export class PoTreeViewItemComponent {
+  private treeViewService = inject(PoTreeViewService);
+
   @Input('p-components-size') componentsSize: string;
 
   @Input('p-item') item: PoTreeViewItem;
@@ -48,8 +50,6 @@ export class PoTreeViewItemComponent {
   get hasSubItems() {
     return !!(this.item.subItems && this.item.subItems.length);
   }
-
-  constructor(private treeViewService: PoTreeViewService) {}
 
   onClick(event: MouseEvent) {
     event.preventDefault();

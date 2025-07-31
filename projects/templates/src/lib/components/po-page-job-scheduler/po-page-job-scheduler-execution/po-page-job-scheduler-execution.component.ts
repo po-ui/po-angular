@@ -1,4 +1,14 @@
-import { AfterViewInit, Component, EventEmitter, Input, OnInit, Output, TemplateRef, ViewChild } from '@angular/core';
+import {
+  AfterViewInit,
+  Component,
+  EventEmitter,
+  Input,
+  OnInit,
+  Output,
+  TemplateRef,
+  ViewChild,
+  inject
+} from '@angular/core';
 import { NgForm } from '@angular/forms';
 
 import { PoCheckboxGroupOption, PoRadioGroupOption } from '@po-ui/ng-components';
@@ -14,6 +24,9 @@ import { PoPageJobSchedulerService } from '../po-page-job-scheduler.service';
   standalone: false
 })
 export class PoPageJobSchedulerExecutionComponent implements OnInit, AfterViewInit {
+  private poPageJobSchedulerService = inject(PoPageJobSchedulerService);
+  poPageJobSchedulerLookup = inject(PoPageJobSchedulerLookupService);
+
   @ViewChild('formExecution', { static: true }) form: NgForm;
 
   // templates
@@ -55,11 +68,6 @@ export class PoPageJobSchedulerExecutionComponent implements OnInit, AfterViewIn
   get value() {
     return this._value;
   }
-
-  constructor(
-    private poPageJobSchedulerService: PoPageJobSchedulerService,
-    public poPageJobSchedulerLookup: PoPageJobSchedulerLookupService
-  ) {}
 
   get startDateFirstExecution() {
     return this.isEdit ? undefined : this.minDateFirstExecution;

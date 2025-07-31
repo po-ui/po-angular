@@ -7,14 +7,13 @@ import { PoLanguageService } from '../../services/po-language/po-language.servic
 import {
   capitalizeFirstLetter,
   convertToBoolean,
-  getDefaultSize,
+  getDefaultSizeFn,
   isTypeof,
   sortValues,
-  validateSize
+  validateSizeFn
 } from '../../utils/util';
 
 import { PoFieldSize } from '../../enums/po-field-size.enum';
-import { PoThemeService } from '../../services/po-theme/po-theme.service';
 import { PoSearchFilterMode } from '../po-search/enums/po-search-filter-mode.enum';
 import { PoTableColumnSortType } from './enums/po-table-column-sort-type.enum';
 import { PoTableColumnSpacing } from './enums/po-table-spacing.enum';
@@ -518,7 +517,6 @@ export abstract class PoTableBaseComponent implements OnChanges, OnDestroy {
   constructor(
     private poDate: PoDateService,
     languageService: PoLanguageService,
-    protected poThemeService: PoThemeService,
     private poTableService: PoTableService
   ) {
     this.language = languageService.getShortLanguage();
@@ -539,11 +537,11 @@ export abstract class PoTableBaseComponent implements OnChanges, OnDestroy {
    * @default `medium`
    */
   @Input('p-components-size') set componentsSize(value: string) {
-    this._componentsSize = validateSize(value, this.poThemeService, PoFieldSize);
+    this._componentsSize = validateSizeFn(value, PoFieldSize);
   }
 
   get componentsSize(): string {
-    return this._componentsSize ?? getDefaultSize(this.poThemeService, PoFieldSize);
+    return this._componentsSize ?? getDefaultSizeFn(PoFieldSize);
   }
 
   /**

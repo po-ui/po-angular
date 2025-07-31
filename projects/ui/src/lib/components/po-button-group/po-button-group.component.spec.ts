@@ -47,7 +47,7 @@ describe('PoButtonGroupComponent:', () => {
     fixture = TestBed.createComponent(PoButtonGroupComponent);
     component = fixture.componentInstance;
 
-    component.buttons = fakeButtons;
+    fixture.componentRef.setInput('p-buttons', fakeButtons);
 
     fixture.detectChanges();
 

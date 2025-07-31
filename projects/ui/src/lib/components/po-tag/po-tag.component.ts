@@ -1,4 +1,4 @@
-import { ChangeDetectionStrategy, Component, ElementRef, OnInit, ViewChild } from '@angular/core';
+import { ChangeDetectionStrategy, Component, ElementRef, OnInit, ViewChild, inject } from '@angular/core';
 import { PoLanguageService } from './../../services/po-language/po-language.service';
 
 import { PoTagIcon } from './enums/po-tag-icon.enum';
@@ -35,16 +35,17 @@ const poTagTypeDefault = 'po-tag-' + PoTagType.Info;
   standalone: false
 })
 export class PoTagComponent extends PoTagBaseComponent implements OnInit {
+  private el = inject(ElementRef);
+
   @ViewChild('tagContainer', { static: true }) tagContainer: ElementRef;
   @ViewChild('tagClose', { static: true }) tagClose: ElementRef;
   @ViewChild('poTag', { static: true }) poTag: ElementRef;
 
   isClickable: boolean;
 
-  constructor(
-    private el: ElementRef,
-    languageService: PoLanguageService
-  ) {
+  constructor() {
+    const languageService = inject(PoLanguageService);
+
     super(languageService);
   }
 

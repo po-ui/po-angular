@@ -11,10 +11,10 @@
     [class.po-breadcrumb-favorite-star-active]="favorite"
   >
   </po-icon>
-  <span class="po-hidden-sm po-breadcrumb-favorite-label" *ngIf="favorite && !hiddenLiteral">{{
-    literals?.unfavorite
-  }}</span>
-  <span class="po-hidden-sm po-breadcrumb-favorite-label" *ngIf="!favorite && !hiddenLiteral">{{
-    literals?.favorite
-  }}</span>
+  @if (favorite && !hiddenLiteral) {
+    <span class="po-hidden-sm po-breadcrumb-favorite-label">{{ literals?.unfavorite }}</span>
+  }
+  @if (!favorite && !hiddenLiteral) {
+    <span class="po-hidden-sm po-breadcrumb-favorite-label">{{ literals?.favorite }}</span>
+  }
 </div>

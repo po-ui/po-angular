@@ -1,9 +1,8 @@
 import { Directive, EventEmitter, Input, Output } from '@angular/core';
 
-import { convertToBoolean, convertToInt, getDefaultSize, validateSize } from '../../utils/util';
+import { convertToBoolean, convertToInt, getDefaultSizeFn, validateSizeFn } from '../../utils/util';
 
 import { PoFieldSize } from '../../enums/po-field-size.enum';
-import { PoThemeService } from '../../services/po-theme/po-theme.service';
 import { PoTreeViewItem } from './po-tree-view-item/po-tree-view-item.interface';
 
 const poTreeViewMaxLevel = 4;
@@ -91,11 +90,11 @@ export class PoTreeViewBaseComponent {
    * @default `medium`
    */
   @Input('p-components-size') set componentsSize(value: string) {
-    this._componentsSize = validateSize(value, this.poThemeService, PoFieldSize);
+    this._componentsSize = validateSizeFn(value, PoFieldSize);
   }
 
   get componentsSize(): string {
-    return this._componentsSize ?? getDefaultSize(this.poThemeService, PoFieldSize);
+    return this._componentsSize ?? getDefaultSizeFn(PoFieldSize);
   }
   /**
    * Lista de itens do tipo `PoTreeViewItem` que será renderizada pelo componente.
@@ -162,8 +161,6 @@ export class PoTreeViewBaseComponent {
   get maxLevel() {
     return this._maxLevel;
   }
-
-  constructor(protected poThemeService: PoThemeService) {}
 
   protected emitExpanded(treeViewItem: PoTreeViewItem) {
     const event = treeViewItem.expanded ? 'expanded' : 'collapsed';

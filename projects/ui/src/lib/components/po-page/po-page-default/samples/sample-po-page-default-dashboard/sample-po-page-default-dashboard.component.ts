@@ -1,4 +1,4 @@
-import { Component, ViewChild, OnInit } from '@angular/core';
+import { Component, ViewChild, OnInit, inject } from '@angular/core';
 import { NgForm } from '@angular/forms';
 
 import { PoBreadcrumb } from '@po-ui/ng-components';
@@ -26,6 +26,9 @@ import { SampleDashboardService } from './sample-po-page-default-dashboard.servi
   standalone: false
 })
 export class SamplePoPageDefaultDashboardComponent implements OnInit {
+  private poNotification = inject(PoNotificationService);
+  private sampleDashboardService = inject(SampleDashboardService);
+
   @ViewChild('formShare', { static: true }) formShare: NgForm;
   @ViewChild(PoModalComponent, { static: true }) poModal: PoModalComponent;
 
@@ -58,11 +61,6 @@ export class SamplePoPageDefaultDashboardComponent implements OnInit {
     },
     label: 'Share'
   };
-
-  constructor(
-    private poNotification: PoNotificationService,
-    private sampleDashboardService: SampleDashboardService
-  ) {}
 
   ngOnInit(): void {
     this.columns = this.sampleDashboardService.getColumns();

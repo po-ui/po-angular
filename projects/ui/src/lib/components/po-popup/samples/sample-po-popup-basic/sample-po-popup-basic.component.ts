@@ -1,4 +1,4 @@
-import { AfterViewInit, ChangeDetectorRef, Component, ElementRef, ViewChild } from '@angular/core';
+import { AfterViewInit, ChangeDetectorRef, Component, ElementRef, ViewChild, inject } from '@angular/core';
 
 @Component({
   selector: 'sample-po-popup-basic',
@@ -6,9 +6,9 @@ import { AfterViewInit, ChangeDetectorRef, Component, ElementRef, ViewChild } fr
   standalone: false
 })
 export class SamplePoPopupBasicComponent implements AfterViewInit {
-  @ViewChild('target', { read: ElementRef }) targetRef: ElementRef;
+  private cdr = inject(ChangeDetectorRef);
 
-  constructor(private cdr: ChangeDetectorRef) {}
+  @ViewChild('target', { read: ElementRef }) targetRef: ElementRef;
 
   ngAfterViewInit() {
     this.cdr.detectChanges();

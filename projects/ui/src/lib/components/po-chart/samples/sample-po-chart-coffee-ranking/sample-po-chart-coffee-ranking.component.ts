@@ -1,4 +1,4 @@
-import { Component } from '@angular/core';
+import { Component, inject } from '@angular/core';
 
 import { PoChartType, PoChartOptions, PoChartSerie, PoDialogService, PoChartLabelFormat } from '@po-ui/ng-components';
 
@@ -9,6 +9,8 @@ import { PoChartType, PoChartOptions, PoChartSerie, PoDialogService, PoChartLabe
   standalone: false
 })
 export class SamplePoChartCoffeeRankingComponent {
+  private poAlert = inject(PoDialogService);
+
   participationByCountryInWorldExportsType: PoChartType = PoChartType.Line;
   evolutionOfCoffeeAndSomeCompetitorsType: PoChartType = PoChartType.Column;
   coffeConsumingChartType: PoChartType = PoChartType.Donut;
@@ -136,8 +138,6 @@ export class SamplePoChartCoffeeRankingComponent {
       showXAxis: true
     }
   };
-
-  constructor(private poAlert: PoDialogService) {}
 
   searchMore(event: any) {
     window.open(`http://google.com/search?q=coffee+producing+${event.label}`, '_blank');

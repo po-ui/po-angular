@@ -13,11 +13,11 @@ import { provideHttpClient, withInterceptorsFromDi } from '@angular/common/http'
 import { provideHttpClientTesting } from '@angular/common/http/testing';
 import { NgControl } from '@angular/forms';
 import { PoFieldSize } from '../../../enums/po-field-size.enum';
-import { PoThemeService } from '../../../services/po-theme/po-theme.service';
 import { PoTableColumnSpacing } from '../../po-table';
 import { PoLookupFilter } from './interfaces/po-lookup-filter.interface';
 import { PoLookupBaseComponent } from './po-lookup-base.component';
 import { PoLookupComponent } from './po-lookup.component';
+import { PoThemeA11yEnum } from '../../../services/po-theme/enum/po-theme-a11y.enum';
 
 class LookupFilterService implements PoLookupFilter {
   getFilteredItems(params: any): Observable<any> {
@@ -40,12 +40,9 @@ export const routes: Routes = [{ path: '', redirectTo: 'home', pathMatch: 'full'
 describe('PoLookupComponent:', () => {
   let component: PoLookupComponent;
   let fixture: ComponentFixture<PoLookupComponent>;
-  let poThemeServiceMock: jasmine.SpyObj<PoThemeService>;
   const fakeSubscription = <any>{ unsubscribe: () => {} };
 
   beforeEach(async () => {
-    poThemeServiceMock = jasmine.createSpyObj('PoThemeService', ['getA11yLevel', 'getA11yDefaultSize']);
-
     await TestBed.configureTestingModule({
       imports: [RouterTestingModule.withRoutes(routes), PoFieldModule],
       providers: [
@@ -54,7 +51,6 @@ describe('PoLookupComponent:', () => {
         PoControlPositionService,
         Injector,
         NgControl,
-        { provide: PoThemeService, useValue: poThemeServiceMock },
         provideHttpClient(withInterceptorsFromDi()),
         provideHttpClientTesting()
       ]
@@ -1134,8 +1130,18 @@ describe('PoLookupComponent:', () => {
     });
 
     describe('getDefaultSpacing:', () => {
+      beforeEach(() => {
+        document.documentElement.removeAttribute('data-a11y');
+        localStorage.removeItem('po-default-size');
+      });
+
+      afterEach(() => {
+        document.documentElement.removeAttribute('data-a11y');
+        localStorage.removeItem('po-default-size');
+      });
+
       it('should return ExtraSmall when componentSize is Small', () => {
-        poThemeServiceMock.getA11yDefaultSize.and.returnValue('small');
+        document.documentElement.setAttribute('data-a11y', PoThemeA11yEnum.AA);
 
         component.size = PoFieldSize.Small;
         component.spacing = undefined;
@@ -1143,14 +1149,14 @@ describe('PoLookupComponent:', () => {
       });
 
       it('should return ExtraSmall when accessibility size is Small', () => {
-        poThemeServiceMock.getA11yDefaultSize.and.returnValue('small');
+        document.documentElement.setAttribute('data-a11y', PoThemeA11yEnum.AA);
+        localStorage.setItem('po-default-size', 'small');
         component.size = PoFieldSize.Medium;
         component.spacing = undefined;
         expect(component['getDefaultSpacing']()).toBe(PoTableColumnSpacing.ExtraSmall);
       });
 
       it('should return Medium when accessibility size is Medium', () => {
-        poThemeServiceMock.getA11yDefaultSize.and.returnValue('medium');
         component.spacing = PoTableColumnSpacing.ExtraSmall;
         expect(component['getDefaultSpacing']()).toBe(PoTableColumnSpacing.Medium);
       });
@@ -1348,6 +1354,7 @@ describe('PoLookupComponent:', () => {
       fixture.detectChanges();
       component.clean = true;
       component.inputEl.nativeElement.value = 'abc';
+      component.size = PoFieldSize.Medium;
 
       fixture.detectChanges();
 
@@ -1358,6 +1365,7 @@ describe('PoLookupComponent:', () => {
       fixture.detectChanges();
       component.clean = false;
       component.inputEl.nativeElement.value = '';
+      component.size = PoFieldSize.Medium;
 
       fixture.detectChanges();
 

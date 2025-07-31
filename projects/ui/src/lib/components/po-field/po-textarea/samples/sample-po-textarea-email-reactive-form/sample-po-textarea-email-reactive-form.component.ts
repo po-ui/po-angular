@@ -1,4 +1,4 @@
-import { Component, OnInit, ViewChild } from '@angular/core';
+import { Component, OnInit, ViewChild, inject } from '@angular/core';
 import { UntypedFormBuilder, UntypedFormGroup, Validators } from '@angular/forms';
 
 import { PoModalAction, PoModalComponent } from '@po-ui/ng-components';
@@ -10,6 +10,8 @@ import { PoPageAction } from '@po-ui/ng-components';
   standalone: false
 })
 export class SamplePoTextareaEmailReactiveFormComponent implements OnInit {
+  private formBuilder = inject(UntypedFormBuilder);
+
   @ViewChild(PoModalComponent, { static: true }) poModal: PoModalComponent;
 
   formEmail: UntypedFormGroup;
@@ -21,8 +23,6 @@ export class SamplePoTextareaEmailReactiveFormComponent implements OnInit {
     },
     label: 'Ok'
   };
-
-  constructor(private formBuilder: UntypedFormBuilder) {}
 
   ngOnInit() {
     this.formEmail = this.formBuilder.group({

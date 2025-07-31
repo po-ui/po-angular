@@ -1,4 +1,4 @@
-import { Component, OnDestroy, ViewChild } from '@angular/core';
+import { Component, OnDestroy, ViewChild, inject } from '@angular/core';
 import { AbstractControl, NgForm } from '@angular/forms';
 import { Router } from '@angular/router';
 import { Subscription } from 'rxjs';
@@ -8,8 +8,7 @@ import {
   PoLanguageService,
   PoModalAction,
   PoModalComponent,
-  PoRadioGroupOption,
-  PoThemeService
+  PoRadioGroupOption
 } from '@po-ui/ng-components';
 
 import { isExternalLink } from '../../utils/util';
@@ -47,6 +46,10 @@ import { PoModalPasswordRecoveryService } from './po-modal-password-recovery.ser
   standalone: false
 })
 export class PoModalPasswordRecoveryComponent extends PoModalPasswordRecoveryBaseComponent implements OnDestroy {
+  private router = inject(Router);
+  private poI18nPipe = inject(PoI18nPipe);
+  private poModalPasswordRecoveryService = inject(PoModalPasswordRecoveryService);
+
   @ViewChild('emailForm') emailForm: NgForm;
 
   @ViewChild('recoveryModal', { static: true }) recoveryModalElement: PoModalComponent;
@@ -81,14 +84,10 @@ export class PoModalPasswordRecoveryComponent extends PoModalPasswordRecoveryBas
   private smsBodyResponse;
   private smsCodeSubscription: Subscription;
 
-  constructor(
-    private router: Router,
-    private poI18nPipe: PoI18nPipe,
-    private poModalPasswordRecoveryService: PoModalPasswordRecoveryService,
-    protected poThemeService: PoThemeService,
-    poLanguageService: PoLanguageService
-  ) {
-    super(poLanguageService, poThemeService);
+  constructor() {
+    const poLanguageService = inject(PoLanguageService);
+
+    super(poLanguageService);
   }
 
   ngOnDestroy() {

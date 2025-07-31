@@ -1,4 +1,4 @@
-import { Component, ElementRef, OnChanges, SimpleChanges, ViewChild } from '@angular/core';
+import { Component, ElementRef, OnChanges, SimpleChanges, ViewChild, inject } from '@angular/core';
 import { DomSanitizer, SafeHtml } from '@angular/platform-browser';
 
 import { PoItemListOptionGroup } from './interfaces/po-item-list-option-group.interface';
@@ -12,16 +12,14 @@ import { PoItemListFilterMode } from '../enums/po-item-list-filter-mode.enum';
   standalone: false
 })
 export class PoItemListComponent extends PoItemListBaseComponent implements OnChanges {
+  private sanitized = inject(DomSanitizer);
+
   @ViewChild('itemList', { static: true }) itemList: ElementRef;
 
   selectedView: PoItemListOption;
 
   protected param;
   protected clickListener: () => void;
-
-  constructor(private sanitized: DomSanitizer) {
-    super();
-  }
 
   private shouldUpdateSelected(changes: SimpleChanges): boolean {
     return !!(changes.searchValue && changes.label && changes.searchValue.currentValue === changes.label.currentValue);
