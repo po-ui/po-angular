@@ -1,6 +1,8 @@
-import { Input, Output, EventEmitter, Directive } from '@angular/core';
+import { Input, Output, EventEmitter, Directive, TemplateRef } from '@angular/core';
 
 import { convertToBoolean, isTypeof, uuid } from '../../utils/util';
+import { PoPopupAction } from '../po-popup';
+import { PoTagType } from '../po-tag';
 
 /**
  *
@@ -14,6 +16,10 @@ import { convertToBoolean, isTypeof, uuid } from '../../utils/util';
  *
  * Para controlar sua largura, é possível utilizar o [Grid System](/guides/grid-system) para um maior
  * controle de seu redimensionamento, assim possibilitando o tratamento para diferentes resoluções.
+ *
+ * #### Boas práticas
+ *
+ * Utilize um tamanho mínimo de largura de aproximadamente `18.75rem` no componente.
  *
  * #### Acessibilidade tratada no componente
  *
@@ -32,6 +38,10 @@ import { convertToBoolean, isTypeof, uuid } from '../../utils/util';
  * | Propriedade                                  | Descrição                                                        | Valor Padrão                                     |
  * |----------------------------------------------|------------------------------------------------------------------|--------------------------------------------------|
  * | **Default Values**                           |                                                                  |                                                  |
+ * | `--font-family`                              | Família tipográfica usada                                        | var(--font-family-theme)                         |
+ * | `--font-size`                                | Tamanho da fonte                                                 | var(--font-size-sm)                              |
+ * | `--font-weight`                              | Peso da fonte                                                    | var(--font-weight-bold);                         |
+ * | `--font-color`                               | Cor da fonte                                                     | var(--color-neutral-dark-95);                    |
  * | `--padding`                                  | Preenchimento                                                    | `1rem`                                           |
  * | `--border-radius`                            | Contém o valor do raio dos cantos do elemento&nbsp;              | `var(--border-radius-md)`                        |
  * | `--border-width`                             | Contém o valor da largura dos cantos do elemento&nbsp;           | `var(--border-width-sm)`                         |
@@ -53,6 +63,125 @@ import { convertToBoolean, isTypeof, uuid } from '../../utils/util';
 export abstract class PoWidgetBaseComponent {
   /** Descrição da segunda ação. */
   @Input('p-secondary-label') secondaryLabel?: string;
+
+  /**
+   * @optional
+   *
+   * @description
+   *
+   * Caso verdadeiro o botão da ação principal ativará o modo `danger`
+   *
+   */
+  @Input({ alias: 'p-danger-primary-action', transform: convertToBoolean }) dangerPrimaryAction = false;
+
+  /**
+   * @optional
+   *
+   * @description
+   *
+   * Caso verdadeiro o botão da ação secundária ativará o modo `danger`
+   *
+   */
+  @Input({ alias: 'p-danger-secondary-action', transform: convertToBoolean }) dangerSecondaryAction = false;
+
+  /**
+   * @optional
+   *
+   * @description
+   *
+   * Define o tipo do botão da ação primária
+   *
+   */
+  @Input('p-kind-primary-action') kindPrimaryAction?: string;
+
+  /**
+   * @optional
+   *
+   * @description
+   *
+   * Define o tipo do botão da ação secundária
+   *
+   */
+  @Input('p-kind-secondary-action') kindSecondaryAction?: string;
+
+  /**
+   * @optional
+   *
+   * @description
+   *
+   * Label da tag.
+   */
+  @Input('p-tag') tagLabel?: string;
+
+  /**
+   * @optional
+   *
+   * @description
+   *
+   * Define o tipo da *tag*.
+   *
+   * Valores válidos:
+   *  - `success`: cor verde utilizada para simbolizar sucesso ou êxito.
+   *  - `warning`: cor amarela que representa aviso ou advertência.
+   *  - `danger`: cor vermelha para erro ou aviso crítico.
+   *  - `info`: cor azul claro que caracteriza conteúdo informativo.
+   *  - `neutral`: cor cinza claro para uso geral.
+   *
+   * @default `success`
+   */
+  @Input('p-tag-type') tagType: PoTagType;
+
+  /**
+   * @optional
+   *
+   * @description
+   *
+   * Define ou ativa um ícone que será exibido ao lado do valor da *tag*.
+   *
+   * Quando `p-type` estiver definida, basta informar um valor igual a `true` para que o ícone seja exibido conforme descrições abaixo:
+   * - <span class="an an-check"></span> - `success`
+   * - <span class="an an-warning-circle"></span> - `warning`
+   * - <span class="an an-x"></span> - `danger`
+   * - <span class="an an-info"></span> - `info`
+   *
+   * Também É possível usar qualquer um dos ícones da [Biblioteca de ícones](https://po-ui.io/icons). conforme exemplo abaixo:
+   * ```
+   * <po-tag p-icon="an an-user" p-value="PO Tag"></po-tag>
+   * ```
+   * como também utilizar outras fontes de ícones, por exemplo a biblioteca *Font Awesome*, da seguinte forma:
+   * ```
+   * <po-tag p-icon="fa fa-podcast" p-value="PO Tag"></po-button>
+   * ```
+   * Outra opção seria a customização do ícone através do `TemplateRef`, conforme exemplo abaixo:
+   * ```
+   * <po-tag [p-icon]="template" p-value="Tag template ionic"></po-button>
+   *
+   * <ng-template #template>
+   *  <ion-icon style="font-size: inherit" name="heart"></ion-icon>
+   * </ng-template>
+   * ```
+   * > Para o ícone enquadrar corretamente, deve-se utilizar `font-size: inherit` caso o ícone utilizado não aplique-o.
+   *
+   * @default `false`
+   */
+  @Input('p-tag-icon') tagIcon: string | TemplateRef<void>;
+
+  /** Lista de ações que serão exibidas no componente. */
+  @Input('p-actions') actions: Array<PoPopupAction> = [];
+
+  /**
+   * @optional
+   *
+   * @description
+   *
+   * Define o tamanho do botão como `small`':
+   *
+   * > Caso a acessibilidade AA não esteja configurada, o tamanho `medium` será mantido.
+   * Para mais detalhes, consulte a documentação do [po-theme](https://po-ui.io/documentation/po-theme).
+   *
+   * @default `false`
+   */
+  @Input({ alias: 'p-small', transform: convertToBoolean }) small: boolean = false;
 
   /**
    * @optional

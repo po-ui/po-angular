@@ -1,6 +1,12 @@
 import { Component, ViewChild } from '@angular/core';
 
-import { PoModalComponent, PoTableColumn } from '@po-ui/ng-components';
+import {
+  PoModalComponent,
+  PoMultiselectOption,
+  PoNotificationService,
+  PoTableColumn,
+  PoThemeService
+} from '@po-ui/ng-components';
 
 @Component({
   selector: 'sample-po-widget-finance-dashboard',
@@ -14,6 +20,15 @@ export class SamplePoWidgetFinanceDashboardComponent {
   itemsDetails: Array<any>;
   titleDetailsModal: string;
   typeChart: string = 'line';
+  myActions = [
+    { label: 'Detail', icon: 'an an-align-top', action: this.showAction.bind(this) },
+    { label: 'Remove', icon: 'an an-trash', type: 'danger', action: this.showAction.bind(this) }
+  ];
+
+  options: Array<PoMultiselectOption> = [
+    { value: 'poMultiselect1', label: 'Admin' },
+    { value: 'poMultiselect2', label: 'User' }
+  ];
 
   public readonly columnsDetails: Array<PoTableColumn> = [
     { property: 'dateUpdate', label: 'Date update', type: 'date' },
@@ -35,8 +50,13 @@ export class SamplePoWidgetFinanceDashboardComponent {
     { dateUpdate: '12-05-2017', statement: '2000' }
   ];
 
-  daysPayment() {
-    window.open(this.paymentLink, '_blank');
+  constructor(
+    private poNotification: PoNotificationService,
+    private poTheme: PoThemeService
+  ) {}
+
+  get a11Level() {
+    return this.poTheme.getA11yLevel();
   }
 
   openModal(type) {
@@ -52,5 +72,13 @@ export class SamplePoWidgetFinanceDashboardComponent {
         this.detailsModalElement.open();
         break;
     }
+  }
+
+  openExternalLink(url) {
+    window.open(url, '_blank');
+  }
+
+  private showAction(): any {
+    this.poNotification.success(`Action clicked`);
   }
 }

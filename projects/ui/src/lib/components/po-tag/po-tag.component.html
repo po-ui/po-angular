@@ -27,7 +27,7 @@
         <po-icon
           *ngIf="icon && !removable"
           class="po-tag-icon"
-          [p-icon]="!type ? icon : iconFromType"
+          [p-icon]="!type || forceIcon ? icon : iconFromType"
           [ngStyle]="!type && customTextColor ? { 'color': customTextColor } : ''"
         >
         </po-icon>
