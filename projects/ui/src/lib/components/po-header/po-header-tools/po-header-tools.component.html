@@ -1,0 +1,46 @@
+<style>
+  /* 
+    .po-header-nav-tools {
+    list-style: none;
+    display: flex;
+    align-items: center;
+    gap: 0.5rem;
+    margin-left: auto;
+  }
+
+  .po-nav-icon {
+    font-size: 1rem;
+    margin-left: 0.3rem;
+    display: flex;
+  }
+
+  .po-nav-bell {
+    position: relative;
+  }
+  .po-nav-status {
+    position: absolute;
+    top: -5px;
+    right: -5px;
+    font-size: initial;
+  } */
+</style>
+
+<div class="po-header-nav-tools">
+  <li class="po-header-nav-item-small">
+    <po-button #buttonFirstAction p-icon="an an-dots-nine" p-kind="tertiary"> </po-button>
+  </li>
+
+  <li class="po-header-nav-item-small">
+    <po-button p-icon="an-fill an-dots-three-outline-vertical" p-kind="tertiary"> </po-button>
+  </li>
+
+  <li>
+    <po-button p-kind="tertiary" [p-icon]="bell"></po-button>
+
+    <ng-template #bell>
+      <i class="an an-bell po-nav-bell">
+        <po-badge class="po-nav-status" [p-value]="10"></po-badge>
+      </i>
+    </ng-template>
+  </li>
+</div>

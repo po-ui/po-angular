@@ -1,0 +1,34 @@
+<style>
+  /* .po-header-nav-brand {
+    display: flex;
+    align-items: center;
+    gap: 1rem;
+    font-family: var(--font-family);
+    font-weight: bold;
+    font-size: 16px;
+    color: var(--color-neutral-dark-70);
+  }
+
+  .po-header-nav-brand-logo {
+    height: 44px;
+    width: 110px;
+  }
+
+  .po-header-nav-brand-logo img {
+    height: 100%;
+    width: 100%;
+    object-fit: cover;
+  }
+
+  .po-header-nav-brand-text {
+    white-space: nowrap;
+  } */
+</style>
+
+<div class="po-header-nav-brand">
+  <po-button class="po-nav-header-medium" p-icon="an an-list" p-kind="tertiary"> </po-button>
+  <div class="po-header-nav-brand-logo" (click)="brand.action?.()">
+    <img [src]="brand.logo" alt="Logo" />
+  </div>
+  <span class="po-header-nav-brand-text">{{ brand.title }}</span>
+</div>
