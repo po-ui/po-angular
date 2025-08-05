@@ -1,7 +1,5 @@
 import { TestBed } from '@angular/core/testing';
 
-import { Observable } from 'rxjs';
-
 import { PoMenuModule } from '../po-menu.module';
 import { PoMenuGlobalService } from './po-menu-global.service';
 
@@ -24,6 +22,16 @@ describe('PoMenuGlobalService', () => {
     menuGlobalService.sendApplicationMenu(menu);
 
     expect(menuGlobalService['applicationMenu'].next).toHaveBeenCalledWith(menu);
+  });
+
+  it('sendChanges: should call menuChanges.next ', () => {
+    const menus = [{ label: 'Item', link: '/item' }];
+
+    spyOn(menuGlobalService['menuChanges'], 'next');
+
+    menuGlobalService.sendChanges(menus);
+
+    expect(menuGlobalService['menuChanges'].next).toHaveBeenCalledWith(menus);
   });
 
   it('sendMenus: should call menus.next with menuItem', () => {

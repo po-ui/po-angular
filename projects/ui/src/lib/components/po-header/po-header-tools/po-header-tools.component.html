@@ -1,0 +1,48 @@
+<div class="po-header-nav-tools">
+  @if (headerTemplate) {
+    <ng-container *ngTemplateOutlet="headerTemplate"></ng-container>
+  }
+  @for (action of actionTools; track action?.label; let i = $index) {
+    <li [class.po-header-nav-item-small]="i !== actionTools.length - 1">
+      <po-button
+        #buttonActionElement
+        [p-tooltip]="action?.tooltip"
+        [p-icon]="action?.badge ? badge : action?.icon || 'an an-dots-nine'"
+        p-kind="tertiary"
+        (p-click)="onClickAction(i)"
+        [class.po-header-selected-tool]="checkSelected(i)"
+        [p-aria-expanded]="checkSelected(i)"
+        [p-aria-label]="getAriaLabel(action)"
+        p-size="medium"
+      >
+      </po-button>
+
+      <ng-template #badge>
+        <i class="po-header-badge" [class]="action?.icon || 'an an-bell'">
+          <po-badge class="po-header-status" [p-value]="action?.badge"></po-badge>
+        </i>
+      </ng-template>
+
+      <po-popup
+        #poPopupAction
+        [p-actions]="action?.items"
+        [p-target]="buttonActionElements?.get(i)"
+        [p-hide-arrow]="true"
+        (p-close)="onClosePopup(i)"
+        p-size="medium"
+      >
+      </po-popup>
+
+      @if (action?.popover) {
+        <po-popover
+          #poPopoverAction
+          [p-target]="buttonActionElements?.get(i)"
+          p-position="bottom-left"
+          [p-hide-arrow]="true"
+        >
+          <ng-container *ngTemplateOutlet="action.popover?.content"></ng-container>
+        </po-popover>
+      }
+    </li>
+  }
+</div>

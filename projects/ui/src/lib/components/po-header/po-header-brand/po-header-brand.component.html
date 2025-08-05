@@ -1,0 +1,30 @@
+<div class="po-header-nav-brand">
+  @if (externalMenu) {
+    <po-button
+      #target
+      class="po-nav-header-medium"
+      p-size="medium"
+      p-icon="an an-list"
+      p-kind="tertiary"
+      (p-click)="clickMenu.emit()"
+    >
+    </po-button>
+  } @else if (menuCollapse.length && !hideButtonMenu) {
+    <po-button p-size="medium" #target p-icon="an an-list" p-kind="tertiary" (p-click)="clickMenu.emit()"> </po-button>
+  }
+
+  @if (brand?.logo && !smallLogo) {
+    <div class="po-header-nav-brand-logo" (click)="onClickLogo()">
+      <img [src]="brand.logo" alt="Logo" />
+    </div>
+  }
+
+  @if ((brand?.logo || brand?.smallLogo) && smallLogo) {
+    <div class="po-header-nav-brand-logo-small" (click)="onClickLogo()">
+      <img [src]="brand?.smallLogo || brand?.logo" alt="Logo" />
+    </div>
+  }
+  <span #titleBrand [p-tooltip]="showTooltip ? brand?.title : ''" class="po-header-nav-brand-text">{{
+    brand?.title
+  }}</span>
+</div>

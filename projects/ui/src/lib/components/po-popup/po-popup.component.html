@@ -10,6 +10,7 @@
       [p-param]="param"
       [p-size]="size"
       (p-close)="close()"
+      (p-click-item)="onClickItem($event)"
     >
       <ng-content p-popup-header-template select="[p-popup-header-template]"></ng-content>
     </po-listbox>

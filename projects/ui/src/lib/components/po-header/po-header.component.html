@@ -1,0 +1,59 @@
+<nav #navElement class="po-header-nav">
+  <div #menuWrapperBrand>
+    <po-header-brand
+      [p-brand]="brand"
+      (p-click-menu)="onClickMenu()"
+      [p-menus]="menuCollapseJoin"
+      [p-external]="applicationMenu"
+      [p-hide-button-menu]="hideButtonMenu"
+    ></po-header-brand>
+  </div>
+
+  <ul #menuWrapperItens class="po-header-nav-submenus-wrapper">
+    @for (item of visibleMenuItems; track item.id) {
+      <po-header-menu-item #menusubmenuitem [p-item]="item" (p-item-click)="onSelected($event)"></po-header-menu-item>
+    }
+  </ul>
+
+  @if (showOverflow && overflowItems.length) {
+    <po-header-menu-item
+      #overflowButton
+      #menusubmenuitem
+      [p-button-overflow]="true"
+      [p-item-overflow]="overflowItems"
+      (p-item-click)="onSelected($event)"
+    ></po-header-menu-item>
+  }
+
+  <ul #menuWrapperTools class="po-header-tools-wrapper">
+    <po-header-tools
+      [p-force-actions-tools]="forceActionTools"
+      [p-actions-tools]="actionsTools"
+      [p-header-template]="headerTemplate"
+      [p-literals]="literals"
+    ></po-header-tools>
+
+    @if (headerUser?.customerBrand && headerUser?.avatar) {
+      <po-header-customer [p-header-user]="headerUser"></po-header-customer>
+    }
+  </ul>
+</nav>
+
+@if (!sideMenuOnlyAction && !applicationMenu && menuCollapseJoin.length) {
+  <div class="po-header-overlay" [class.show]="showMenu" (click)="onCloseMenu()"></div>
+
+  <aside class="po-header-side-menu" [class.open]="showMenu">
+    <div class="po-header-sidemenu-outer">
+      <po-menu
+        [p-only-menu-item]="true"
+        [p-menus]="menuCollapseJoin"
+        [p-filter]="filterMenu"
+        p-menu-id="po-header-nav-bar"
+      >
+        <div *p-menu-header-template>
+          <ng-template *ngTemplateOutlet="menuHeaderTemplate?.templateRef"></ng-template>
+        </div>
+      </po-menu>
+    </div>
+  </aside>
+}

@@ -261,5 +261,7 @@ export class PoPopupBaseComponent {
 
   @Output('p-close') closeEvent: EventEmitter<any> = new EventEmitter();
 
+  @Output('p-click-item') clickItem: EventEmitter<any> = new EventEmitter();
+
   constructor(protected poThemeService: PoThemeService) {}
 }

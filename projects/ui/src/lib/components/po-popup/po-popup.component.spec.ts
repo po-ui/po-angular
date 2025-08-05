@@ -448,6 +448,14 @@ describe('PoPopupComponent:', () => {
       expect(component['elementContains'](element, 'po-popup-item-disabled')).toBeFalsy();
     });
 
+    it('onClickItem: should emit clickItem', () => {
+      spyOn(component.clickItem, 'emit');
+
+      component.onClickItem({ label: 'test' });
+
+      expect(component.clickItem.emit).toHaveBeenCalled();
+    });
+
     describe('checkBooleanValue:', () => {
       it('checkBooleanValue: should return `true` if `action.disabled` is `true`.', () => {
         const action = { label: 'PO ', disabled: true };

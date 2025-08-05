@@ -20,7 +20,8 @@ describe('PoMenuBaseComponent:', () => {
   let poThemeServiceMock: jasmine.SpyObj<PoThemeService>;
 
   const menuGlobalService: any = {
-    sendMenus: menus => {}
+    sendMenus: menus => {},
+    sendId: menus => {}
   };
 
   const languageService: any = {
@@ -444,6 +445,13 @@ describe('PoMenuBaseComponent:', () => {
       const expectedValue = undefined;
 
       expectPropertiesValues(component, 'params', invalidValues, expectedValue);
+    });
+
+    it('menuid: should call sendId', () => {
+      spyOn(component['menuGlobalService'], 'sendId');
+      component.menuid = 'my-id';
+
+      expect(component['menuGlobalService'].sendId).toHaveBeenCalled();
     });
 
     it('params: should set property with valid values', () => {
