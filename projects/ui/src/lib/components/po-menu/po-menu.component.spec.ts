@@ -13,13 +13,13 @@ import { PoCleanComponent } from './../po-field/po-clean/po-clean.component';
 import { PoIconModule } from '../po-icon/po-icon.module';
 import { PoLoadingModule } from '../po-loading/po-loading.module';
 
+import { provideHttpClient, withInterceptorsFromDi } from '@angular/common/http';
 import { PoBadgeComponent } from '../po-badge';
 import { PoMenuFilterComponent } from './po-menu-filter/po-menu-filter.component';
 import { PoMenuItemComponent } from './po-menu-item/po-menu-item.component';
 import { PoMenuComponent } from './po-menu.component';
 import { PoMenuItemsService } from './services/po-menu-items.service';
 import { PoMenuService } from './services/po-menu.service';
-import { provideHttpClient, withInterceptorsFromDi } from '@angular/common/http';
 
 @Component({
   template: 'Search',
@@ -148,6 +148,23 @@ describe('PoMenuComponent:', () => {
 
   it('should be created', () => {
     expect(component).toBeTruthy();
+  });
+
+  it('should call sendChanges of global service if menus has chages and afterViewInitWasCalled is true', () => {
+    spyOn(component['menuGlobalService'], <any>'sendChanges');
+    component.afterViewInitWasCalled = true;
+    component.menuid = 'my-id';
+
+    component.ngOnChanges({
+      menus: {
+        currentValue: [{ label: 'label' }],
+        previousValue: [],
+        firstChange: true,
+        isFirstChange: () => true
+      }
+    });
+
+    expect(component['menuGlobalService'].sendChanges).toHaveBeenCalled();
   });
 
   it('should create menu items', () => {

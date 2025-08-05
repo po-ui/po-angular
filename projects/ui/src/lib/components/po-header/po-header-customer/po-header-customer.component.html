@@ -1,0 +1,52 @@
+<div class="po-header-nav-tools" (click)="onClickUserSection()" (keydown)="onKeyDownCustomer($event)">
+  <li
+    #targetRef
+    tabindex="0"
+    class="po-header-nav-customer-container"
+    (click)="onClickPopup()"
+    role="menu"
+    [attr.aria-label]="literals.labelUser"
+  >
+    <div class="po-header-nav-customer-brand">
+      <img [src]="headerUser?.customerBrand" alt="User" />
+    </div>
+
+    <div class="po-header-nav-customer-divider"></div>
+
+    <div class="po-header-nav-customer-avatar-wrapper">
+      <div class="po-header-nav-customer-avatar">
+        <img [src]="headerUser?.avatar" alt="Avatar" />
+      </div>
+      @if (headerUser?.status) {
+        <po-badge class="po-header-nav-avatar-status" p-size="small" [p-status]="headerUser.status"></po-badge>
+      }
+    </div>
+  </li>
+
+  <li class="po-header-nav-customer-avatar-wrapper po-header-icon-small">
+    <div class="po-header-nav-customer-avatar">
+      <img [src]="headerUser?.avatar" alt="Avatar" />
+    </div>
+    @if (headerUser?.status) {
+      <po-badge class="po-header-nav-avatar-status" p-size="small" [p-status]="headerUser.status"></po-badge>
+    }
+  </li>
+</div>
+
+@if (headerUser?.items?.length) {
+  <po-popup
+    #poPopupAction
+    [p-actions]="headerUser.items"
+    [p-target]="targetRef"
+    [p-hide-arrow]="true"
+    p-position="bottom-left"
+    p-size="medium"
+  >
+  </po-popup>
+}
+
+@if (headerUser?.popover) {
+  <po-popover #poPopoverAction [p-target]="targetRef" p-position="bottom-left" [p-hide-arrow]="true">
+    <ng-container *ngTemplateOutlet="headerUser.popover.content"></ng-container>
+  </po-popover>
+}

@@ -5,9 +5,11 @@ import {
   ContentChild,
   DoCheck,
   ElementRef,
+  OnChanges,
   OnDestroy,
   OnInit,
-  Renderer2
+  Renderer2,
+  SimpleChanges
 } from '@angular/core';
 
 import { NavigationCancel, NavigationEnd, Router } from '@angular/router';
@@ -119,7 +121,10 @@ const poMenuRootLevel = 1;
   providers: [PoMenuItemsService, PoMenuService],
   standalone: false
 })
-export class PoMenuComponent extends PoMenuBaseComponent implements AfterViewInit, OnDestroy, OnInit, DoCheck {
+export class PoMenuComponent
+  extends PoMenuBaseComponent
+  implements AfterViewInit, OnDestroy, OnInit, DoCheck, OnChanges
+{
   @ContentChild(PoMenuHeaderTemplateDirective, { static: true }) menuHeaderTemplate: PoMenuHeaderTemplateDirective;
 
   activeMenuItem: PoMenuItem;
@@ -131,6 +136,7 @@ export class PoMenuComponent extends PoMenuBaseComponent implements AfterViewIni
   mobileOpened: boolean = false;
   noData: boolean = false;
   timeoutFilter: any;
+  afterViewInitWasCalled = false;
 
   private filteringItems: boolean = false;
   private menuInitialized: boolean = false;
@@ -203,10 +209,19 @@ export class PoMenuComponent extends PoMenuBaseComponent implements AfterViewIni
   ngOnInit() {
     this.subscribeToMenuItem();
     this.subscribeToRoute();
+    this.menuGlobalService.sendId(this.menuid);
+  }
+
+  ngOnChanges(changes: SimpleChanges): void {
+    if (changes['menus'] && this.afterViewInitWasCalled) {
+      this.menuGlobalService.sendChanges(changes['menus'].currentValue);
+      this.changeDetector.detectChanges();
+    }
   }
 
   ngAfterViewInit() {
     this.menuGlobalService.sendApplicationMenu(this);
+    this.afterViewInitWasCalled = true;
   }
 
   activateMenuByUrl(urlPath: string, menus: Array<PoMenuItem>) {

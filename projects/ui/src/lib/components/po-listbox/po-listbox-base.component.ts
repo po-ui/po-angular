@@ -174,6 +174,8 @@ export class PoListBoxBaseComponent {
 
   @Output('p-change-state-tabs') changeStateTabs = new EventEmitter();
 
+  @Output('p-click-item') clickItem = new EventEmitter();
+
   constructor(
     languageService: PoLanguageService,
     protected poThemeService: PoThemeService

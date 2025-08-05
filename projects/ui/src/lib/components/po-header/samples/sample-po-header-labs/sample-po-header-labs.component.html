@@ -1,0 +1,71 @@
+<po-header
+  [p-side-menu-only-action]="true"
+  [p-brand]="headerBrand"
+  [p-menu-items]="menuActions"
+  [p-actions-tools]="actionTools"
+  [p-header-user]="actionUser"
+></po-header>
+
+<div class="po-row po-mt-4">
+  <po-input class="po-lg-6 po-md-6" [(ngModel)]="headerBrandTitle" p-clean p-label="Título da marca"> </po-input>
+  <po-input class="po-lg-6 po-md-6" [(ngModel)]="headerBrandLogo" p-clean p-label="Logo da marca"> </po-input>
+  <po-input class="po-lg-6 po-md-6" [(ngModel)]="headerBrandSmallLogo" p-clean p-label="Logo da marca - small">
+  </po-input>
+  <div class="po-row po-mt-1">
+    <po-button class="po-lg-6 po-md-6" p-label="Add Brand" (p-click)="addBrand()"></po-button>
+  </div>
+</div>
+<hr />
+<div class="po-row po-mt-2">
+  <h3 class="po-lg-12 po-mb-2">Ações dos itens de menu</h3>
+  <po-input class="po-lg-6 po-md-6" [(ngModel)]="menuActionLabel" p-clean p-label="Action"> </po-input>
+  <po-input class="po-lg-6 po-md-6" [(ngModel)]="menuActionEvent" p-clean p-label="label"> </po-input>
+  <po-button [p-disabled]="!menuActionLabel" class="po-md-3" p-label="Add Action" (p-click)="addAction()"></po-button>
+</div>
+<hr />
+<h3 class="po-lg-12 po-mb-2">Ações das configurações</h3>
+<form #formAction="ngForm" class="po-row po-mt-2">
+  <po-input class="po-lg-6 po-md-6" name="icon" [(ngModel)]="actionNewTool.icon" p-clean p-label="Icon"> </po-input>
+  <po-input class="po-lg-6 po-md-6" name="tooltip" [(ngModel)]="actionNewTool.tooltip" p-clean p-label="Tooltip">
+  </po-input>
+  <po-number class="po-lg-6 po-md-6" name="badge" [(ngModel)]="actionNewTool.badge" p-clean p-label="Badge">
+  </po-number>
+  <po-switch class="po-lg-6 po-md-6" name="switch" [(ngModel)]="actionNewToolEvent" name="action" p-label="Action">
+  </po-switch>
+  <po-button
+    [p-disabled]="actionTools.length > 2"
+    class="po-md-3"
+    p-label="Add settings"
+    (p-click)="addTool(actionNewTool)"
+  ></po-button>
+</form>
+<hr />
+<h3 class="po-lg-12 po-mb-2">Ações do Usuário</h3>
+<form #formAction="ngForm" class="po-row po-mt-2">
+  <po-input class="po-lg-6 po-md-6" name="brand" [(ngModel)]="newActionUser.customerBrand" p-clean p-label="Logo Brand">
+  </po-input>
+  <po-input class="po-lg-6 po-md-6" name="avatar" [(ngModel)]="newActionUser.avatar" p-clean p-label="Avatar">
+  </po-input>
+
+  <po-radio-group
+    name="radioGroupBasic"
+    class="po-lg-12"
+    p-label="Status"
+    [(ngModel)]="newActionUser.status"
+    [p-options]="[
+      { label: 'Positive', value: 'positive' },
+      { label: 'Negative', value: 'negative' },
+      { label: 'Warning', value: 'warning' },
+      { label: 'Disabled', value: 'disabled' }
+    ]"
+  >
+  </po-radio-group>
+  <po-button
+    [p-disabled]="!newActionUser.avatar || newActionUser.customerBrand"
+    class="po-md-3"
+    p-label="Add settings"
+    (p-click)="addUser()"
+  ></po-button>
+  <hr />
+  <po-button class="po-md-3" p-label="Reset" (p-click)="reset()"></po-button>
+</form>

@@ -221,6 +221,8 @@ export class PoButtonBaseComponent {
    */
   @Input('p-aria-label') ariaLabel?: string;
 
+  @Input('p-aria-expanded') ariaExpanded?: boolean = null;
+
   /**
    * @optional
    *

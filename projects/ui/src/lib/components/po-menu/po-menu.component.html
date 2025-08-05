@@ -1,90 +1,118 @@
-<div *ngIf="mobileOpened" class="po-menu-overlay" (click)="toggleMenuMobile()"></div>
+<ng-container *ngIf="onlyMenuItem; else fullMenu">
+  <ng-container *ngTemplateOutlet="menuItemsTemplate; context: { showFilter: true, showTemplate: true }"></ng-container>
+</ng-container>
 
-<div>
-  <div class="po-menu-mobile po-clickable" (click)="toggleMenuMobile()">
-    <po-icon p-icon="ICON_MENU"></po-icon>
-  </div>
+<ng-template #fullMenu>
+  <div *ngIf="mobileOpened" class="po-menu-overlay" (click)="toggleMenuMobile()"></div>
 
-  <div class="po-menu" [attr.aria-expanded]="!collapsed" [ngClass]="{ 'po-menu-animation': mobileOpened }">
-    <div class="po-menu-container" (mouseenter)="onMouseEnter()" (mouseleave)="onMouseLeave()">
-      <div class="po-menu-header">
-        <div *ngIf="logo || (shortLogo && enableCollapse)" class="po-menu-header-container-logo">
-          <po-logo
-            [p-class]="enableCollapse ? 'po-menu-short-logo' : 'po-menu-logo'"
-            [p-logo]="enableCollapse ? shortLogo || logo : logo"
-            [p-logo-alt]="logoAlt"
-            [p-link]="logoLink"
-          ></po-logo>
+  <div>
+    <div class="po-menu-mobile po-clickable" (click)="toggleMenuMobile()">
+      <po-icon p-icon="ICON_MENU"></po-icon>
+    </div>
+
+    <div class="po-menu" [attr.aria-expanded]="!collapsed" [ngClass]="{ 'po-menu-animation': mobileOpened }">
+      <div class="po-menu-container" (mouseenter)="onMouseEnter()" (mouseleave)="onMouseLeave()">
+        <div class="po-menu-header">
+          <div *ngIf="logo || (shortLogo && enableCollapse)" class="po-menu-header-container-logo">
+            <po-logo
+              [p-class]="enableCollapse ? 'po-menu-short-logo' : 'po-menu-logo'"
+              [p-logo]="enableCollapse ? shortLogo || logo : logo"
+              [p-logo-alt]="logoAlt"
+              [p-link]="logoLink"
+            ></po-logo>
+          </div>
+
+          <div *ngIf="!enableCollapse && menuHeaderTemplate" class="po-menu-header-template">
+            <ng-container *ngTemplateOutlet="menuCustomTemplate"></ng-container>
+          </div>
+
+          <ng-container *ngIf="filter">
+            <ng-container *ngTemplateOutlet="menuFilterTemplate"></ng-container>
+          </ng-container>
         </div>
 
-        <div *ngIf="!enableCollapse && menuHeaderTemplate" class="po-menu-header-template">
-          <ng-container *ngTemplateOutlet="menuHeaderTemplate.templateRef"></ng-container>
-        </div>
-
-        <po-menu-filter
-          *ngIf="filter"
-          [p-enable-collapse]="enableCollapse"
-          [p-loading]="filterLoading"
-          [p-components-size]="componentsSize"
-          (p-filter)="debounceFilter($event)"
-        ></po-menu-filter>
-      </div>
-
-      <div class="po-menu-body">
-        <div class="po-menu-outer">
-          <div class="po-menu-inner">
-            <nav class="po-menu-nav">
-              <ul class="po-menu-list" role="menu">
-                <li *ngIf="noData" class="po-menu-list-item" role="presentation">
-                  <po-menu-item
-                    p-icon="ICON_INFO"
-                    p-type="noData"
-                    [p-level]="1"
-                    [p-label]="literals.itemNotFound"
-                    [p-short-label]="literals.itemNotFound"
-                  ></po-menu-item>
-                </li>
-                <li
-                  *ngFor="let menu of filteredItems; let menuIndex = index"
-                  class="po-menu-list-item"
-                  role="presentation"
-                  [attr.aria-level]="menu.level"
-                  [class.po-menu-item-first]="menuIndex === 0"
-                >
-                  <po-menu-item
-                    [p-action]="menu.action"
-                    [p-badge-alert]="menu.badgeAlert"
-                    [p-badge-color]="menu.badge ? menu.badge.color : undefined"
-                    [p-badge-value]="menu.badge ? menu.badge.value : undefined"
-                    [p-collapsed-menu]="enableCollapse"
-                    [p-icon]="allowIcons ? menu.icon : null"
-                    [p-id]="menu.id"
-                    [p-label]="menu.label"
-                    [p-level]="menu.level"
-                    [p-link]="menu.link"
-                    [p-short-label]="menu.shortLabel"
-                    [p-sub-items]="menu.subItems"
-                    [p-type]="menu.type"
-                  ></po-menu-item>
-                </li>
-              </ul>
-            </nav>
+        <div class="po-menu-body">
+          <div class="po-menu-outer">
+            <div class="po-menu-inner">
+              <nav class="po-menu-nav">
+                <ng-container
+                  *ngTemplateOutlet="menuItemsTemplate; context: { showFilter: false, showTemplate: false }"
+                ></ng-container>
+              </nav>
+            </div>
           </div>
         </div>
       </div>
-    </div>
 
-    <div *ngIf="hasFooter" class="po-menu-footer">
-      <button
-        class="po-menu-collapse-button-icon"
-        type="button"
-        [attr.aria-label]="enableCollapseButton ? literals.close : literals.open"
-        (click)="toggle()"
-      >
-        <span *ngIf="enableCollapseButton" aria-hidden="true">{{ literals.close }}</span>
-
-        <po-icon [p-icon]="enableCollapse ? 'ICON_MENU_OPEN' : 'ICON_MENU_CLOSE'"></po-icon>
-      </button>
+      <div *ngIf="hasFooter" class="po-menu-footer">
+        <button
+          class="po-menu-collapse-button-icon"
+          type="button"
+          [attr.aria-label]="enableCollapseButton ? literals.close : literals.open"
+          (click)="toggle()"
+        >
+          <span *ngIf="enableCollapseButton" aria-hidden="true">{{ literals.close }}</span>
+          <po-icon [p-icon]="enableCollapse ? 'ICON_MENU_OPEN' : 'ICON_MENU_CLOSE'"></po-icon>
+        </button>
+      </div>
     </div>
   </div>
-</div>
+</ng-template>
+
+<ng-template #menuCustomTemplate>
+  <ng-container *ngTemplateOutlet="menuHeaderTemplate.templateRef"></ng-container>
+</ng-template>
+
+<ng-template #menuFilterTemplate>
+  <po-menu-filter
+    [p-enable-collapse]="enableCollapse"
+    [p-loading]="filterLoading"
+    [p-components-size]="componentsSize"
+    (p-filter)="debounceFilter($event)"
+  ></po-menu-filter>
+</ng-template>
+
+<ng-template #menuItemsTemplate let-showFilter="showFilter" let-showTemplate="showTemplate">
+  <ng-container *ngIf="menuHeaderTemplate && showTemplate">
+    <ng-container *ngTemplateOutlet="menuCustomTemplate"></ng-container>
+  </ng-container>
+
+  <ng-container *ngIf="filter && showFilter">
+    <ng-container *ngTemplateOutlet="menuFilterTemplate"></ng-container>
+  </ng-container>
+
+  <ul class="po-menu-list" role="menu">
+    <li *ngIf="noData" class="po-menu-list-item" role="presentation">
+      <po-menu-item
+        p-icon="ICON_INFO"
+        p-type="noData"
+        [p-level]="1"
+        [p-label]="literals.itemNotFound"
+        [p-short-label]="literals.itemNotFound"
+      ></po-menu-item>
+    </li>
+    <li
+      *ngFor="let menu of filteredItems; let menuIndex = index"
+      class="po-menu-list-item"
+      role="presentation"
+      [attr.aria-level]="menu.level"
+      [class.po-menu-item-first]="menuIndex === 0"
+    >
+      <po-menu-item
+        [p-action]="menu.action"
+        [p-badge-alert]="menu.badgeAlert"
+        [p-badge-color]="menu.badge?.color"
+        [p-badge-value]="menu.badge?.value"
+        [p-collapsed-menu]="enableCollapse"
+        [p-icon]="allowIcons ? menu.icon : null"
+        [p-id]="menu.id"
+        [p-label]="menu.label"
+        [p-level]="menu.level"
+        [p-link]="menu.link"
+        [p-short-label]="menu.shortLabel"
+        [p-sub-items]="menu.subItems"
+        [p-type]="menu.type"
+      ></po-menu-item>
+    </li>
+  </ul>
+</ng-template>
