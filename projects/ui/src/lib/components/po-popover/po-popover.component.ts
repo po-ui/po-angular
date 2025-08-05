@@ -3,9 +3,11 @@ import {
   Component,
   ElementRef,
   EventEmitter,
+  OnChanges,
   OnDestroy,
   Output,
   Renderer2,
+  SimpleChanges,
   ViewChild
 } from '@angular/core';
 
@@ -39,12 +41,13 @@ import { PoPopoverBaseComponent } from './po-popover-base.component';
   providers: [PoControlPositionService],
   standalone: false
 })
-export class PoPopoverComponent extends PoPopoverBaseComponent implements AfterViewInit, OnDestroy {
+export class PoPopoverComponent extends PoPopoverBaseComponent implements AfterViewInit, OnDestroy, OnChanges {
   @ViewChild('popoverElement', { read: ElementRef, static: false }) popoverElement: ElementRef;
 
   arrowDirection = 'left';
   timeoutResize;
   targetElement;
+  afterViewInitWasCalled = false;
   eventListenerFunction: () => void;
 
   constructor(
@@ -54,7 +57,19 @@ export class PoPopoverComponent extends PoPopoverBaseComponent implements AfterV
     super();
   }
 
+  ngOnChanges(changes: SimpleChanges): void {
+    if (this.afterViewInitWasCalled && changes['target']) {
+      this.removeListeners();
+      this.initEvents();
+    }
+  }
+
   ngAfterViewInit(): void {
+    this.initEvents();
+    this.afterViewInitWasCalled = true;
+  }
+
+  initEvents() {
     this.targetElement = this.target instanceof ElementRef ? this.target.nativeElement : this.target;
     this.initEventListenerFunction();
 

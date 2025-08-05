@@ -1,0 +1,125 @@
+<style>
+  /* .po-header-nav-customer-container {
+    display: flex;
+    align-items: center;
+    gap: 0.5rem;
+    background: #ffffff;
+    border: 1px solid var(--color-neutral-light-10);
+    height: var(--spacing-2xl);
+    border-radius: var(--border-radius-md);
+    padding-inline: var(--spacing-xs);
+  }
+
+    .po-header-nav-tools {
+    list-style: none;
+    display: flex;
+    align-items: center;
+    gap: 0.5rem;
+    margin-left: auto;
+  }
+
+  .po-nav-icon {
+    font-size: 1rem;
+    margin-left: 0.3rem;
+    display: flex;
+  } */
+
+  /* .po-nav-icon i.an {
+    font-weight: bold !important;
+  } */
+
+  /* .po-nav-bell {
+    position: relative;
+  }
+  .po-nav-status {
+    position: absolute;
+    top: -5px;
+    right: -5px;
+    font-size: initial;
+  }
+
+  .po-header-nav-customer-brand {
+    height: 44px;
+    width: 56px;
+  }
+
+  .po-header-nav-customer-brand img {
+    height: 100%;
+    width: 100%;
+    object-fit: contain;
+  } */
+
+  /* .po-header-nav-customer-avatar-wrapper {
+    position: relative;
+  }
+
+  .po-header-nav-customer-avatar {
+    height: 44px;
+    width: 44px;
+    border-radius: 50%;
+    overflow: hidden; 
+  }
+
+  .po-header-nav-avatar-status {
+    position: absolute;
+    bottom: 0px;
+    right: 5px;
+  }
+
+  .po-header-nav-customer-avatar img {
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+  } */
+
+  /* .po-header-nav-customer-divider {
+    width: 1px;
+    height: 30px;
+    background: #d0d0d7;
+  }
+
+  .po-nav-icon-small {
+    display: none;
+  }
+
+  @media screen and (max-width: 800px) {
+    .po-header-nav-customer-container {
+      display: none;
+    }
+
+    .po-nav-icon-small {
+      display: block;
+    }
+
+    .po-header-nav-item-small {
+      display: none;
+    }
+  } */
+</style>
+
+<div class="po-header-nav-tools">
+  <li tabindex="0" class="po-header-nav-customer-container">
+    <div class="po-header-nav-customer-brand">
+      <img src="https://logodownload.org/wp-content/uploads/2014/02/vivo-logo-0.png" alt="User" />
+    </div>
+
+    <div class="po-header-nav-customer-divider"></div>
+
+    <div class="po-header-nav-customer-avatar-wrapper">
+      <div class="po-header-nav-customer-avatar">
+        <img src="https://pbs.twimg.com/profile_images/1613553278029012994/9BlkFbe1_400x400.jpg" alt="Avatar" />
+      </div>
+      <po-badge class="po-header-nav-avatar-status" p-size="small" p-status="positive"></po-badge>
+    </div>
+  </li>
+
+  <li class="po-header-nav-customer-avatar-wrapper po-nav-icon-small">
+    <div class="po-header-nav-customer-avatar">
+      <img
+        src="https://www.pica-ai.com/_next/image/?url=https%3A%2F%2Fstatic.staticspic.com%2F_next%2Fstatic%2Fmedia%2FRectangle-1.9e8fb857.png&w=640&q=75"
+        alt="Avatar"
+      />
+    </div>
+    <po-badge class="po-header-nav-avatar-status" p-size="small" p-status="positive"></po-badge>
+  </li>
+</div>
