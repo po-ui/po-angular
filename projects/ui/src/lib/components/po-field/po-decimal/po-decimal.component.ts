@@ -8,7 +8,8 @@ import {
   Input,
   OnDestroy,
   OnInit,
-  ViewChild
+  ViewChild,
+  inject
 } from '@angular/core';
 import { AbstractControl, NG_VALIDATORS, NG_VALUE_ACCESSOR } from '@angular/forms';
 import { PoLanguageService } from '../../../services/po-language/po-language.service';
@@ -16,7 +17,6 @@ import { PoLanguageService } from '../../../services/po-language/po-language.ser
 import { maxFailed, maxlengpoailed, minFailed } from '../validators';
 
 import { isObservable, of, Subscription, switchMap } from 'rxjs';
-import { PoThemeService } from '../../../services';
 import { convertToInt, uuid } from '../../../utils/util';
 import { PoInputBaseComponent } from '../po-input/po-input-base.component';
 
@@ -83,6 +83,9 @@ const poDecimalTotalLengthLimit = 16;
   standalone: false
 })
 export class PoDecimalComponent extends PoInputBaseComponent implements AfterViewInit, OnInit, OnDestroy {
+  private el = inject(ElementRef);
+  private poLanguageService = inject(PoLanguageService);
+
   @ViewChild('inp', { read: ElementRef, static: true }) inputEl: ElementRef;
 
   id = `po-decimal[${uuid()}]`;
@@ -241,13 +244,10 @@ export class PoDecimalComponent extends PoInputBaseComponent implements AfterVie
     return this._max;
   }
 
-  constructor(
-    private el: ElementRef,
-    private poLanguageService: PoLanguageService,
-    cd: ChangeDetectorRef,
-    protected poThemeService: PoThemeService
-  ) {
-    super(cd, poThemeService);
+  constructor() {
+    const cd = inject(ChangeDetectorRef);
+
+    super(cd);
     this.isKeyboardAndroid = !!navigator.userAgent.match(/Android/i);
   }
 

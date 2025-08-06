@@ -1,5 +1,5 @@
 import { HttpClient, HttpHeaders } from '@angular/common/http';
-import { Injectable } from '@angular/core';
+import { Injectable, inject } from '@angular/core';
 
 import { Observable } from 'rxjs';
 import { map } from 'rxjs/operators';
@@ -14,13 +14,13 @@ import { PoJobSchedulerInternal } from './interfaces/po-job-scheduler-internal.i
   providedIn: 'root'
 })
 export class PoPageJobSchedulerService {
+  private http = inject(HttpClient);
+
   readonly headers: HttpHeaders = new HttpHeaders({
     'X-PO-SCREEN-LOCK': 'true'
   });
 
   private endpoint = '/';
-
-  constructor(private http: HttpClient) {}
 
   configServiceApi(config: { endpoint?: string } = {}) {
     this.endpoint = config.endpoint;

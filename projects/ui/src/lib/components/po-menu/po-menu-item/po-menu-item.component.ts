@@ -1,4 +1,4 @@
-import { Component, ElementRef, Input, OnDestroy, OnInit, TemplateRef, ViewChild } from '@angular/core';
+import { Component, ElementRef, Input, OnDestroy, OnInit, TemplateRef, ViewChild, inject } from '@angular/core';
 
 import { Subscription } from 'rxjs';
 
@@ -23,6 +23,8 @@ const poMenuItemSubItemSize = 98;
   standalone: false
 })
 export class PoMenuItemComponent implements OnDestroy, OnInit {
+  private menuItemsService = inject(PoMenuItemsService);
+
   // Ação que será chamada ao clicar no item.
   @Input('p-action') action: Function;
 
@@ -113,8 +115,6 @@ export class PoMenuItemComponent implements OnDestroy, OnInit {
   get canShowBadge() {
     return this.type !== 'subItems' && (this.badgeValue || this.badgeValue === 0) && this.badgeValue >= 0;
   }
-
-  constructor(private menuItemsService: PoMenuItemsService) {}
 
   ngOnDestroy(): void {
     this.itemSubscription.unsubscribe();

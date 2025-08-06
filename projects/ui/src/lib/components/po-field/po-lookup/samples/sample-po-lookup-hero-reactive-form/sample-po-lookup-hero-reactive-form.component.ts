@@ -1,4 +1,4 @@
-import { Component, OnInit } from '@angular/core';
+import { Component, OnInit, inject } from '@angular/core';
 import { UntypedFormBuilder, UntypedFormGroup, Validators } from '@angular/forms';
 
 import { PoLookupColumn, PoSelectOption } from '@po-ui/ng-components';
@@ -14,6 +14,10 @@ import { SamplePoLookupService } from '../sample-po-lookup.service';
   standalone: false
 })
 export class SamplePoLookupHeroReactiveFormComponent implements OnInit {
+  service = inject(SamplePoLookupService);
+  notification = inject(PoNotificationService);
+  private formBuilder = inject(UntypedFormBuilder);
+
   formMission: UntypedFormGroup;
 
   public readonly columns: Array<PoLookupColumn> = [
@@ -32,12 +36,6 @@ export class SamplePoLookupHeroReactiveFormComponent implements OnInit {
     { label: 'Submarine', value: 'submarine' },
     { label: 'Truck', value: 'truck' }
   ];
-
-  constructor(
-    public service: SamplePoLookupService,
-    public notification: PoNotificationService,
-    private formBuilder: UntypedFormBuilder
-  ) {}
 
   ngOnInit(): void {
     this.formMission = this.formBuilder.group({

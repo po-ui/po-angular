@@ -6,7 +6,7 @@ import { poLocaleDefault } from './../../../services/po-language/po-language.con
 import { PoLanguageService } from './../../../services/po-language/po-language.service';
 import * as UtilFunctions from './../../../utils/util';
 
-import { PoThemeA11yEnum, PoThemeService } from '../../../services';
+import { PoThemeA11yEnum } from '../../../services';
 import { PoPageDefaultBaseComponent, poPageDefaultLiteralsDefault } from './po-page-default-base.component';
 
 @Directive()
@@ -19,13 +19,11 @@ class PoPageDefaultComponent extends PoPageDefaultBaseComponent {
 describe('PoPageDefaultBaseComponent:', () => {
   let languageService: PoLanguageService;
   let component: PoPageDefaultComponent;
-  let poThemeServiceMock: jasmine.SpyObj<PoThemeService>;
 
   beforeEach(() => {
     languageService = new PoLanguageService();
-    poThemeServiceMock = jasmine.createSpyObj('PoThemeService', ['getA11yLevel', 'getA11yDefaultSize']);
 
-    component = new PoPageDefaultComponent(languageService, poThemeServiceMock);
+    component = new PoPageDefaultComponent(languageService);
   });
 
   it('should be created', () => {
@@ -124,8 +122,18 @@ describe('PoPageDefaultBaseComponent:', () => {
     });
 
     describe('p-components-size', () => {
+      beforeEach(() => {
+        document.documentElement.removeAttribute('data-a11y');
+        localStorage.removeItem('po-default-size');
+      });
+
+      afterEach(() => {
+        document.documentElement.removeAttribute('data-a11y');
+        localStorage.removeItem('po-default-size');
+      });
+
       it('should set property with valid values for accessibility level is AA', () => {
-        poThemeServiceMock.getA11yLevel.and.returnValue(PoThemeA11yEnum.AA);
+        document.documentElement.setAttribute('data-a11y', PoThemeA11yEnum.AA);
 
         component.componentsSize = 'small';
         expect(component.componentsSize).toBe('small');
@@ -135,7 +143,7 @@ describe('PoPageDefaultBaseComponent:', () => {
       });
 
       it('should set property with valid values for accessibility level is AAA', () => {
-        poThemeServiceMock.getA11yLevel.and.returnValue(PoThemeA11yEnum.AAA);
+        document.documentElement.setAttribute('data-a11y', PoThemeA11yEnum.AAA);
 
         component.componentsSize = 'small';
         expect(component.componentsSize).toBe('medium');
@@ -145,23 +153,23 @@ describe('PoPageDefaultBaseComponent:', () => {
       });
 
       it('should return small when accessibility is AA and getA11yDefaultSize is small', () => {
-        poThemeServiceMock.getA11yLevel.and.returnValue(PoThemeA11yEnum.AA);
-        poThemeServiceMock.getA11yDefaultSize.and.returnValue('small');
+        document.documentElement.setAttribute('data-a11y', PoThemeA11yEnum.AA);
+        localStorage.setItem('po-default-size', 'small');
 
         component['_componentsSize'] = undefined;
         expect(component.componentsSize).toBe('small');
       });
 
       it('should return medium when accessibility is AA and getA11yDefaultSize is medium', () => {
-        poThemeServiceMock.getA11yLevel.and.returnValue(PoThemeA11yEnum.AA);
-        poThemeServiceMock.getA11yDefaultSize.and.returnValue('medium');
+        document.documentElement.setAttribute('data-a11y', PoThemeA11yEnum.AA);
+        localStorage.setItem('po-default-size', 'medium');
 
         component['_componentsSize'] = undefined;
         expect(component.componentsSize).toBe('medium');
       });
 
       it('should return medium when accessibility is AAA, regardless of getA11yDefaultSize', () => {
-        poThemeServiceMock.getA11yLevel.and.returnValue(PoThemeA11yEnum.AAA);
+        document.documentElement.setAttribute('data-a11y', PoThemeA11yEnum.AAA);
         component['_componentsSize'] = undefined;
         expect(component.componentsSize).toBe('medium');
       });

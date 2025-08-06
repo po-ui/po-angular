@@ -1,34 +1,40 @@
-<div class="po-page-slide" tabindex="0" (keydown.esc)="close()" *ngIf="!hidden" [@fade]="fadeParams">
-  <div class="po-page-slide-overlay" (mousedown)="onClickOut($event)"></div>
-  <div
-    class="po-page-slide-container po-page-slide-right po-page-slide-{{ size }}"
-    [@slide]="slideParams"
-    [ngStyle]="{ 'width': flexibleWidth ? '' : size === 'auto' ? 'auto' : '' }"
-  >
-    <div class="po-page-slide-content" tabindex="-1" #pageContent>
-      <div class="po-page-slide-header">
-        <div class="po-page-slide-title">
-          <span>{{ title }}</span>
-          <div class="po-page-slide-subtitle" *ngIf="subtitle">{{ subtitle }}</div>
+@if (!hidden) {
+  <div class="po-page-slide" tabindex="0" (keydown.esc)="close()" [@fade]="fadeParams">
+    <div class="po-page-slide-overlay" (mousedown)="onClickOut($event)"></div>
+    <div
+      class="po-page-slide-container po-page-slide-right po-page-slide-{{ size }}"
+      [@slide]="slideParams"
+      [ngStyle]="{ 'width': flexibleWidth ? '' : size === 'auto' ? 'auto' : '' }"
+    >
+      <div class="po-page-slide-content" tabindex="-1" #pageContent>
+        <div class="po-page-slide-header">
+          <div class="po-page-slide-title">
+            <span>{{ title }}</span>
+            @if (subtitle) {
+              <div class="po-page-slide-subtitle">{{ subtitle }}</div>
+            }
+          </div>
+          @if (!hideClose) {
+            <po-button
+              p-icon="ICON_CLOSE"
+              p-kind="tertiary"
+              (p-click)="close()"
+              [p-aria-label]="buttonAriaLabel"
+              [p-size]="componentsSize"
+            >
+            </po-button>
+          }
         </div>
-        <po-button
-          *ngIf="!hideClose"
-          p-icon="ICON_CLOSE"
-          p-kind="tertiary"
-          (p-click)="close()"
-          [p-aria-label]="buttonAriaLabel"
-          [p-size]="componentsSize"
-        >
-        </po-button>
-      </div>
-      <div class="po-page-slide-body">
-        <ng-content></ng-content>
-      </div>
-
-      <div class="po-page-slide-footer-content" *ngIf="pageSlideFooter">
-        <po-divider></po-divider>
-        <ng-content select="po-page-slide-footer"></ng-content>
+        <div class="po-page-slide-body">
+          <ng-content></ng-content>
+        </div>
+        @if (pageSlideFooter) {
+          <div class="po-page-slide-footer-content">
+            <po-divider></po-divider>
+            <ng-content select="po-page-slide-footer"></ng-content>
+          </div>
+        }
       </div>
     </div>
   </div>
-</div>
+}

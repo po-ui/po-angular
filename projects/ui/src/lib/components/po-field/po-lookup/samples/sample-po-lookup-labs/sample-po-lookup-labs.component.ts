@@ -1,4 +1,4 @@
-import { Component, OnInit } from '@angular/core';
+import { Component, OnInit, inject } from '@angular/core';
 
 import {
   PoCheckboxGroupOption,
@@ -20,6 +20,8 @@ import { SamplePoLookupService } from '../sample-po-lookup.service';
   standalone: false
 })
 export class SamplePoLookupLabsComponent implements OnInit {
+  sampleFilterService = inject(SamplePoLookupService);
+
   additionalHelpTooltip: string;
   columns: Array<PoLookupColumn>;
   columnsName: Array<string>;
@@ -91,8 +93,6 @@ export class SamplePoLookupLabsComponent implements OnInit {
     { label: 'small', value: 'small' },
     { label: 'medium', value: 'medium' }
   ];
-
-  constructor(public sampleFilterService: SamplePoLookupService) {}
 
   ngOnInit(): void {
     this.restore();

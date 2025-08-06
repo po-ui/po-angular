@@ -11,7 +11,8 @@ import {
   Renderer2,
   SimpleChanges,
   ViewChild,
-  forwardRef
+  forwardRef,
+  inject
 } from '@angular/core';
 import { NG_VALIDATORS, NG_VALUE_ACCESSOR } from '@angular/forms';
 
@@ -23,7 +24,6 @@ import { PoKeyCodeEnum } from './../../../enums/po-key-code.enum';
 import { PoControlPositionService } from './../../../services/po-control-position/po-control-position.service';
 import { isMobile } from './../../../utils/util';
 
-import { PoThemeService } from '../../../services';
 import { poLocaleDefault } from '../../../services/po-language/po-language.constant';
 import { PoMultiselectOption } from './interfaces/po-multiselect-option.interface';
 import { PoMultiselectBaseComponent } from './po-multiselect-base.component';
@@ -120,6 +120,12 @@ export class PoMultiselectComponent
   extends PoMultiselectBaseComponent
   implements AfterViewInit, DoCheck, OnDestroy, OnChanges
 {
+  private renderer = inject(Renderer2);
+  private changeDetector: ChangeDetectorRef;
+  private el = inject(ElementRef);
+  private controlPosition = inject(PoControlPositionService);
+  defaultService = inject(PoMultiselectFilterService);
+
   @ContentChild(PoMultiselectOptionTemplateDirective, { static: true })
   multiselectOptionTemplate: PoMultiselectOptionTemplateDirective;
 
@@ -145,16 +151,13 @@ export class PoMultiselectComponent
   private cacheOptions: Array<PoMultiselectOption | any>;
   private focusOnTag = false;
 
-  constructor(
-    private renderer: Renderer2,
-    private changeDetector: ChangeDetectorRef,
-    private el: ElementRef,
-    private controlPosition: PoControlPositionService,
-    public defaultService: PoMultiselectFilterService,
-    languageService: PoLanguageService,
-    protected poThemeService: PoThemeService
-  ) {
-    super(languageService, poThemeService, changeDetector);
+  constructor() {
+    const changeDetector = inject(ChangeDetectorRef);
+    const languageService = inject(PoLanguageService);
+
+    super(languageService, changeDetector);
+    this.changeDetector = changeDetector;
+
     const language = languageService.getShortLanguage();
     this.literalsTag = {
       ...literalsTagRemoveOthers[poLocaleDefault],

@@ -56,10 +56,12 @@
             >
             </po-textarea>
 
-            <div *ngIf="displayMessageError" class="msg-danger">
-              <po-icon p-icon="ICON_INFO"></po-icon> Formato inválido, informe no seguinte padrão:
-              {{ '{"property": "value"}' }}.
-            </div>
+            @if (displayMessageError) {
+              <div class="msg-danger">
+                <po-icon p-icon="ICON_INFO"></po-icon> Formato inválido, informe no seguinte padrão:
+                {{ '{"property": "value"}' }}.
+              </div>
+            }
           </po-widget>
         </div>
       </po-tab>

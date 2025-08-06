@@ -7,7 +7,8 @@ import {
   ElementRef,
   OnDestroy,
   OnInit,
-  Renderer2
+  Renderer2,
+  inject
 } from '@angular/core';
 
 import { NavigationCancel, NavigationEnd, Router } from '@angular/router';
@@ -17,7 +18,6 @@ import { map } from 'rxjs/operators';
 
 import { getFormattedLink, isMobile, openExternalLink, uuid } from '../../utils/util';
 
-import { PoThemeService } from '../../services/po-theme/po-theme.service';
 import { PoLanguageService } from '../../services/po-language/po-language.service';
 import { PoMenuBaseComponent } from './po-menu-base.component';
 import { PoMenuHeaderTemplateDirective } from './po-menu-header-template/po-menu-header-template.directive';
@@ -120,6 +120,12 @@ const poMenuRootLevel = 1;
   standalone: false
 })
 export class PoMenuComponent extends PoMenuBaseComponent implements AfterViewInit, OnDestroy, OnInit, DoCheck {
+  changeDetector = inject(ChangeDetectorRef);
+  private element = inject(ElementRef);
+  private renderer = inject(Renderer2);
+  private router = inject(Router);
+  private menuItemsService = inject(PoMenuItemsService);
+
   @ContentChild(PoMenuHeaderTemplateDirective, { static: true }) menuHeaderTemplate: PoMenuHeaderTemplateDirective;
 
   activeMenuItem: PoMenuItem;
@@ -141,18 +147,12 @@ export class PoMenuComponent extends PoMenuBaseComponent implements AfterViewIni
   private routeSubscription: Subscription;
 
   /* eslint-disable max-params */
-  constructor(
-    public changeDetector: ChangeDetectorRef,
-    private element: ElementRef,
-    private renderer: Renderer2,
-    private router: Router,
-    private menuItemsService: PoMenuItemsService,
-    menuGlobalService: PoMenuGlobalService,
-    menuService: PoMenuService,
-    languageService: PoLanguageService,
-    protected poThemeService: PoThemeService
-  ) {
-    super(menuGlobalService, menuService, languageService, poThemeService);
+  constructor() {
+    const menuGlobalService = inject(PoMenuGlobalService);
+    const menuService = inject(PoMenuService);
+    const languageService = inject(PoLanguageService);
+
+    super(menuGlobalService, menuService, languageService);
   }
   /* eslint-enable max-params */
 

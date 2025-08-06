@@ -1,7 +1,14 @@
-import { ChangeDetectionStrategy, ChangeDetectorRef, Component, ElementRef, forwardRef, Input } from '@angular/core';
+import {
+  ChangeDetectionStrategy,
+  ChangeDetectorRef,
+  Component,
+  ElementRef,
+  forwardRef,
+  Input,
+  inject
+} from '@angular/core';
 import { AbstractControl, NG_VALIDATORS, NG_VALUE_ACCESSOR } from '@angular/forms';
 
-import { PoThemeService } from '../../../services';
 import { convertToBoolean, uuid } from '../../../utils/util';
 import { PoInputGeneric } from '../po-input-generic/po-input-generic';
 
@@ -88,12 +95,11 @@ export class PoPasswordComponent extends PoInputGeneric {
   }
 
   /* istanbul ignore next */
-  constructor(
-    el: ElementRef,
-    cd: ChangeDetectorRef,
-    protected poThemeService: PoThemeService
-  ) {
-    super(el, cd, poThemeService);
+  constructor() {
+    const el = inject(ElementRef);
+    const cd = inject(ChangeDetectorRef);
+
+    super(el, cd);
   }
 
   extraValidation(c: AbstractControl): { [key: string]: any } {

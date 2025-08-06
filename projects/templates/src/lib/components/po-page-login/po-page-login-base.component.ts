@@ -5,20 +5,14 @@ import { Subscription } from 'rxjs';
 import {
   convertToBoolean,
   convertToInt,
-  getDefaultSize,
+  getDefaultSizeFn,
   getShortBrowserLanguage,
   isExternalLink,
   isTypeof,
-  validateSize
+  validateSizeFn
 } from './../../utils/util';
 
-import {
-  PoLanguage,
-  poLanguageDefault,
-  PoLanguageService,
-  poLocaleDefault,
-  PoThemeService
-} from '@po-ui/ng-components';
+import { PoLanguage, poLanguageDefault, PoLanguageService, poLocaleDefault } from '@po-ui/ng-components';
 
 import { PoPageLoginAuthenticationType } from './enums/po-page-login-authentication-type.enum';
 import { PoPageLoginCustomField } from './interfaces/po-page-login-custom-field.interface';
@@ -392,11 +386,11 @@ export abstract class PoPageLoginBaseComponent implements OnDestroy {
    * @default `medium`
    */
   @Input('p-components-size') set componentsSize(value: string) {
-    this._componentsSize = validateSize(value, this.poThemeService);
+    this._componentsSize = validateSizeFn(value);
   }
 
   get componentsSize(): string {
-    return this._componentsSize ?? getDefaultSize(this.poThemeService);
+    return this._componentsSize ?? getDefaultSizeFn();
   }
 
   /**
@@ -1023,7 +1017,6 @@ export abstract class PoPageLoginBaseComponent implements OnDestroy {
   }
 
   constructor(
-    protected poThemeService: PoThemeService,
     private loginService: PoPageLoginService,
     public router: Router,
     public poLanguageService: PoLanguageService

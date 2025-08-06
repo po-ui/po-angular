@@ -3,7 +3,7 @@ import { ComponentFixture, TestBed } from '@angular/core/testing';
 import * as UtilsFunctions from '../../../utils/util';
 import { removeDuplicatedOptions } from '../../../utils/util';
 
-import { PoThemeA11yEnum, PoThemeService } from '../../../services';
+import { PoThemeA11yEnum } from '../../../services';
 import { PoFieldContainerBottomComponent } from '../po-field-container/po-field-container-bottom/po-field-container-bottom.component';
 import { PoFieldContainerComponent } from '../po-field-container/po-field-container.component';
 import { PoRadioComponent } from '../po-radio/po-radio.component';
@@ -14,19 +14,15 @@ describe('PoRadioGroupComponent:', () => {
   let component: PoRadioGroupComponent;
   let fixture: ComponentFixture<PoRadioGroupComponent>;
   let debugElement;
-  let poThemeServiceMock: jasmine.SpyObj<PoThemeService>;
 
   beforeEach(async () => {
-    poThemeServiceMock = jasmine.createSpyObj('PoThemeService', ['getA11yLevel', 'getA11yDefaultSize']);
-
     await TestBed.configureTestingModule({
       declarations: [
         PoRadioGroupComponent,
         PoFieldContainerComponent,
         PoFieldContainerBottomComponent,
         PoRadioComponent
-      ],
-      providers: [{ provide: PoThemeService, useValue: poThemeServiceMock }]
+      ]
     }).compileComponents();
 
     fixture = TestBed.createComponent(PoRadioGroupComponent);
@@ -378,38 +374,48 @@ describe('PoRadioGroupComponent:', () => {
     });
 
     describe('size', () => {
+      beforeEach(() => {
+        document.documentElement.removeAttribute('data-a11y');
+        localStorage.removeItem('po-default-size');
+      });
+
+      afterEach(() => {
+        document.documentElement.removeAttribute('data-a11y');
+        localStorage.removeItem('po-default-size');
+      });
+
       it('should set the default value to small when an invalid value, accessibility level is AA and getA11yDefaultSize is small', () => {
-        poThemeServiceMock.getA11yLevel.and.returnValue(PoThemeA11yEnum.AA);
-        poThemeServiceMock.getA11yDefaultSize.and.returnValue('small');
+        document.documentElement.setAttribute('data-a11y', PoThemeA11yEnum.AA);
+        localStorage.setItem('po-default-size', 'small');
 
         component.size = 'xxg';
         expect(component['_size']).toBe('small');
       });
 
       it('should return small when accessibility is AA and getA11yDefaultSize is small', () => {
-        poThemeServiceMock.getA11yLevel.and.returnValue(PoThemeA11yEnum.AA);
-        poThemeServiceMock.getA11yDefaultSize.and.returnValue('small');
+        document.documentElement.setAttribute('data-a11y', PoThemeA11yEnum.AA);
+        localStorage.setItem('po-default-size', 'small');
 
         component['_size'] = undefined;
         expect(component.size).toBe('small');
       });
 
       it('should return medium when accessibility is AA and getA11yDefaultSize is medium', () => {
-        poThemeServiceMock.getA11yLevel.and.returnValue(PoThemeA11yEnum.AA);
-        poThemeServiceMock.getA11yDefaultSize.and.returnValue('medium');
+        document.documentElement.setAttribute('data-a11y', PoThemeA11yEnum.AA);
+        localStorage.setItem('po-default-size', 'medium');
 
         component['_size'] = undefined;
         expect(component.size).toBe('medium');
       });
 
       it('should return medium when accessibility is AAA, regardless of getA11yDefaultSize', () => {
-        poThemeServiceMock.getA11yLevel.and.returnValue(PoThemeA11yEnum.AAA);
+        document.documentElement.setAttribute('data-a11y', PoThemeA11yEnum.AAA);
         component['_size'] = undefined;
         expect(component.size).toBe('medium');
       });
 
       it('should set property with valid values for accessibility level is AA', () => {
-        poThemeServiceMock.getA11yLevel.and.returnValue(PoThemeA11yEnum.AA);
+        document.documentElement.setAttribute('data-a11y', PoThemeA11yEnum.AA);
 
         component.size = 'small';
         expect(component.size).toBe('small');
@@ -422,7 +428,7 @@ describe('PoRadioGroupComponent:', () => {
       });
 
       it('should set property with valid values for accessibility level is AAA', () => {
-        poThemeServiceMock.getA11yLevel.and.returnValue(PoThemeA11yEnum.AAA);
+        document.documentElement.setAttribute('data-a11y', PoThemeA11yEnum.AAA);
 
         component.size = 'small';
         expect(component.size).toBe('medium');

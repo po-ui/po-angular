@@ -1,4 +1,4 @@
-import { Component, OnInit } from '@angular/core';
+import { Component, OnInit, inject } from '@angular/core';
 
 import {
   PoButtonGroupItem,
@@ -14,6 +14,8 @@ import {
   standalone: false
 })
 export class SamplePoButtonGroupLabsComponent implements OnInit {
+  private poNotification = inject(PoNotificationService);
+
   button: any;
   buttons: Array<PoButtonGroupItem>;
   size: string;
@@ -36,8 +38,6 @@ export class SamplePoButtonGroupLabsComponent implements OnInit {
     { label: 'single', value: PoButtonGroupToggle.Single },
     { label: 'multiple', value: PoButtonGroupToggle.Multiple }
   ];
-
-  constructor(private poNotification: PoNotificationService) {}
 
   ngOnInit() {
     this.restore();

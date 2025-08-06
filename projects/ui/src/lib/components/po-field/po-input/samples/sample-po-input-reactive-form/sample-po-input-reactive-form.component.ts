@@ -1,4 +1,4 @@
-import { Component, ViewChild } from '@angular/core';
+import { Component, ViewChild, inject } from '@angular/core';
 import { UntypedFormBuilder, UntypedFormGroup, Validators } from '@angular/forms';
 
 import { PoModalAction, PoModalComponent } from '@po-ui/ng-components';
@@ -9,6 +9,8 @@ import { PoModalAction, PoModalComponent } from '@po-ui/ng-components';
   standalone: false
 })
 export class SamplePoInputReactiveFormComponent {
+  private fb = inject(UntypedFormBuilder);
+
   @ViewChild('reactiveFormData', { static: true }) reactiveFormModal: PoModalComponent;
 
   reactiveForm: UntypedFormGroup;
@@ -18,7 +20,7 @@ export class SamplePoInputReactiveFormComponent {
     label: 'Close'
   };
 
-  constructor(private fb: UntypedFormBuilder) {
+  constructor() {
     this.createReactiveForm();
   }
 

@@ -72,11 +72,21 @@ module.exports = {
   processPropertyDoc: function (propertyDoc) {
     this.processPublicDoc(propertyDoc);
 
-    propertyDoc.isDirectiveInput = this.isDirectiveInput(propertyDoc);
-    propertyDoc.directiveInputAlias = this.getDirectiveInputAlias(propertyDoc);
+    if (propertyDoc.Input != undefined) {
+      propertyDoc.isDirectiveInput = true;
+      propertyDoc.directiveInputAlias = propertyDoc.directiveInputAlias || propertyDoc.Input;
+    } else {
+      propertyDoc.isDirectiveInput = this.isDirectiveInput(propertyDoc);
+      propertyDoc.directiveInputAlias = this.getDirectiveInputAlias(propertyDoc);
+    }
 
-    propertyDoc.isDirectiveOutput = this.isDirectiveOutput(propertyDoc);
-    propertyDoc.directiveOutputAlias = this.getDirectiveOutputAlias(propertyDoc);
+    if (propertyDoc.Output != undefined) {
+      propertyDoc.isDirectiveOutput = true;
+      propertyDoc.directiveOutputAlias = propertyDoc.Output;
+    } else {
+      propertyDoc.isDirectiveOutput = this.isDirectiveOutput(propertyDoc);
+      propertyDoc.directiveOutputAlias = this.getDirectiveOutputAlias(propertyDoc);
+    }
   },
 
   /**
@@ -97,12 +107,47 @@ module.exports = {
   resolveProperties: function (classDoc) {
     let properties = classDoc.members.filter(member => !member.hasOwnProperty('parameters'));
 
+    const inferTypeFromInput = codeLine => {
+      // Extrai tipo genérico
+      const genericMatch = codeLine.match(/input<([^>]+)>/);
+      const genericRaw = genericMatch ? genericMatch[1].trim() : null;
+
+      // Extrai valor passado como primeiro argumento
+      const valueMatch = codeLine.match(/input(?:<[^>]+>)?\(\s*([^,)]*)/);
+      const value = valueMatch ? valueMatch[1].trim() : '';
+
+      // Extrai alias (entre aspas simples ou duplas)
+      const aliasMatch = codeLine.match(/alias\s*:\s*['"]([^'"]+)['"]/);
+      const alias = aliasMatch ? aliasMatch[1] : null;
+
+      // Tipo via tipo genérico
+      if (genericRaw) {
+        const firstGenericType = genericRaw.split(',')[0].trim();
+        return { type: firstGenericType, alias };
+      }
+
+      // Tipo inferido por valor literal
+      if (value === 'true' || value === 'false') return { type: 'boolean', alias };
+      if (value.startsWith('"') || value.startsWith("'")) return { type: 'string', alias };
+      if (!isNaN(Number(value))) return { type: 'number', alias };
+
+      // Fallback
+      return { type: 'unknown', alias };
+    };
+
     properties.forEach(function (property, index) {
       if (property.type.includes('EventEmitter')) {
         properties[index].type = property.type = 'EventEmitter';
       }
+
       if (property.optional !== undefined) {
         property.isOptional = true;
+      }
+
+      if (property.type.includes('input') && property.Input !== undefined) {
+        const { type, alias } = inferTypeFromInput(property.type);
+        properties[index].type = type;
+        properties[index].directiveInputAlias = alias;
       }
     });
 

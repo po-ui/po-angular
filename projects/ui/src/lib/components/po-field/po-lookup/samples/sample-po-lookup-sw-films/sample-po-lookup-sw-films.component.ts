@@ -1,4 +1,4 @@
-import { Component, OnInit } from '@angular/core';
+import { Component, OnInit, inject } from '@angular/core';
 import { PoRadioGroupOption } from '@po-ui/ng-components';
 import { SamplePoLookupSwFilmsService } from './sample-po-lookup-sw-films.service';
 
@@ -9,6 +9,8 @@ import { SamplePoLookupSwFilmsService } from './sample-po-lookup-sw-films.servic
   standalone: false
 })
 export class SamplePoLookupSwFilmsComponent implements OnInit {
+  filterService = inject(SamplePoLookupSwFilmsService);
+
   entity;
   filmItemsFiltered;
   filterParams = 'people';
@@ -49,8 +51,6 @@ export class SamplePoLookupSwFilmsComponent implements OnInit {
   ];
 
   private filmItems;
-
-  constructor(public filterService: SamplePoLookupSwFilmsService) {}
 
   get entityColumns() {
     return this.getEntityColumns(this.filterParams);

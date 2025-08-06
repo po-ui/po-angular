@@ -1,4 +1,4 @@
-import { Component } from '@angular/core';
+import { Component, inject } from '@angular/core';
 
 import { PoNotificationService } from '@po-ui/ng-components';
 
@@ -8,6 +8,8 @@ import { PoNotificationService } from '@po-ui/ng-components';
   standalone: false
 })
 export class SamplePoLoadingOverlayConnectionTestComponent {
+  private poNotification = inject(PoNotificationService);
+
   environment = {
     urlServer: '',
     urlDB: '',
@@ -16,8 +18,6 @@ export class SamplePoLoadingOverlayConnectionTestComponent {
   };
 
   isHideLoading = true;
-
-  constructor(private poNotification: PoNotificationService) {}
 
   connectionTest() {
     const message = 'Connection ok';
