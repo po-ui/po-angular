@@ -6,7 +6,6 @@
     [p-disabled]="properties.includes('disabled')"
     [p-filter-keys]="fieldKeys"
     [p-filter-type]="filterMode"
-    [p-filter-locate]="properties.includes('filterLocate')"
     [p-filter-select]="fieldSelect"
     [p-icon]="icon"
     [p-items]="items"
@@ -19,8 +18,8 @@
     (p-change-model)="changeEvent('p-change-model')"
     (p-filtered-items-change)="changeEvent('p-filtered-items-change')"
     (p-keydown)="changeEvent('p-keydown')"
-    (p-next-occurrence)="changeEvent('p-next-occurrence')"
-    (p-previous-occurrence)="changeEvent('p-previous-occurrence')"
+    (p-locate-next)="changeEvent('p-locate-next')"
+    (p-locate-previous)="changeEvent('p-locate-previous')"
   ></po-search>
 </div>
 

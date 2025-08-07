@@ -47,24 +47,23 @@ describe('PoSearchComponent', () => {
   });
 
   describe('showNoResults', () => {
-    it('should return true when filterLocate is true and locateSummary.total is 0 and input has value', () => {
-      component.filterLocate = true;
+    it('should return true when type is locate and locateSummary.total is 0 and input has value', () => {
+      component.type = 'locate';
       component.locateSummary = { currentIndex: 0, total: 0 };
       component.poSearchInput = { nativeElement: { value: 'abc' } } as any;
 
       expect(component.showNoResults).toBeTrue();
     });
 
-    it('should return false when filterLocate is true and locateSummary.total is greater than 0', () => {
-      component.filterLocate = true;
+    it('should return false when type is locate and locateSummary.total is greater than 0', () => {
+      component.type = 'locate';
       component.locateSummary = { currentIndex: 1, total: 2 };
       component.poSearchInput = { nativeElement: { value: 'abc' } } as any;
 
       expect(component.showNoResults).toBeFalse();
     });
 
-    it('should return true when filterLocate is false and listboxFilteredItems is empty and input has value', () => {
-      component.filterLocate = false;
+    it('should return true when type is not locate and listboxFilteredItems is empty and input has value', () => {
       component.showListbox = true;
       component.listboxFilteredItems = [];
       component.poSearchInput = { nativeElement: { value: 'abc' } } as any;
@@ -72,8 +71,7 @@ describe('PoSearchComponent', () => {
       expect(component.showNoResults).toBeTrue();
     });
 
-    it('should return false when filterLocate is false and listboxFilteredItems has items', () => {
-      component.filterLocate = false;
+    it('should return false when type is not locate and listboxFilteredItems has items', () => {
       component.showListbox = true;
       component.listboxFilteredItems = [{ label: 'a', value: 'a' }];
       component.poSearchInput = { nativeElement: { value: 'abc' } } as any;
@@ -82,7 +80,6 @@ describe('PoSearchComponent', () => {
     });
 
     it('should return true when listboxFilteredItems is undefined and input has value', () => {
-      component.filterLocate = false;
       component.showListbox = true;
       component.listboxFilteredItems = undefined;
       component.poSearchInput = { nativeElement: { value: 'abc' } } as any;
@@ -91,7 +88,6 @@ describe('PoSearchComponent', () => {
     });
 
     it('should return true when listboxFilteredItems is null and input has value', () => {
-      component.filterLocate = false;
       component.showListbox = true;
       component.listboxFilteredItems = null;
       component.poSearchInput = { nativeElement: { value: 'abc' } } as any;
@@ -100,7 +96,6 @@ describe('PoSearchComponent', () => {
     });
 
     it('should return true when filteredItems is undefined and input has value', () => {
-      component.filterLocate = false;
       component.showListbox = false;
       component.filteredItems = undefined;
       component.poSearchInput = { nativeElement: { value: 'abc' } } as any;
@@ -109,7 +104,6 @@ describe('PoSearchComponent', () => {
     });
 
     it('should return true when filteredItems is null and input has value', () => {
-      component.filterLocate = false;
       component.showListbox = false;
       component.filteredItems = null;
       component.poSearchInput = { nativeElement: { value: 'abc' } } as any;
@@ -129,16 +123,16 @@ describe('PoSearchComponent', () => {
       component.poSearchInput = { nativeElement: { value: '' } } as any;
     });
 
-    it('should return true when filterLocate is true, input is focused and not disabled', () => {
-      component.filterLocate = true;
+    it('should return true when type is locate, input is focused and not disabled', () => {
+      component.type = 'locate';
       component.isInputFocused = true;
       component.disabled = false;
 
       expect(component.showSearchLocateControls).toBeTrue();
     });
 
-    it('should return true when filterLocate is true, input has value and not disabled', () => {
-      component.filterLocate = true;
+    it('should return true when type is locate, input has value and not disabled', () => {
+      component.type = 'locate';
       component.isInputFocused = false;
       component.disabled = false;
       component.poSearchInput = { nativeElement: { value: 'abc' } } as any;
@@ -146,8 +140,7 @@ describe('PoSearchComponent', () => {
       expect(component.showSearchLocateControls).toBeTrue();
     });
 
-    it('should return false when filterLocate is false', () => {
-      component.filterLocate = false;
+    it('should return false when type is not locate', () => {
       component.isInputFocused = true;
       component.disabled = false;
       component.poSearchInput = { nativeElement: { value: 'abc' } } as any;
@@ -156,7 +149,7 @@ describe('PoSearchComponent', () => {
     });
 
     it('should return false when input is not focused and has no value', () => {
-      component.filterLocate = true;
+      component.type = 'locate';
       component.isInputFocused = false;
       component.disabled = false;
       component.poSearchInput = { nativeElement: { value: '' } } as any;
@@ -165,7 +158,7 @@ describe('PoSearchComponent', () => {
     });
 
     it('should return false when component is disabled', () => {
-      component.filterLocate = true;
+      component.type = 'locate';
       component.isInputFocused = true;
       component.disabled = true;
 
@@ -173,7 +166,7 @@ describe('PoSearchComponent', () => {
     });
 
     it('should handle missing poSearchInput gracefully', () => {
-      component.filterLocate = true;
+      component.type = 'locate';
       component.isInputFocused = false;
       component.disabled = false;
       component.poSearchInput = undefined;
@@ -196,8 +189,8 @@ describe('PoSearchComponent', () => {
   });
 
   describe('onCleanKeydown', () => {
-    it('should clear search, focus input, prevent default and stop propagation when escape is pressed and filterLocate is true', () => {
-      component.filterLocate = true;
+    it('should clear search, focus input, prevent default and stop propagation when escape is pressed and type is locate', () => {
+      component.type = 'locate';
       spyOn(component, 'clearSearch');
       const focusSpy = jasmine.createSpy('focus');
       const event = {
@@ -215,8 +208,7 @@ describe('PoSearchComponent', () => {
       expect(event.stopPropagation).toHaveBeenCalled();
     });
 
-    it('should do nothing if escape is pressed and filterLocate is false', () => {
-      component.filterLocate = false;
+    it('should do nothing if escape is pressed and type is not locate', () => {
       spyOn(component, 'clearSearch');
       const focusSpy = jasmine.createSpy('focus');
       const event = {
@@ -244,8 +236,8 @@ describe('PoSearchComponent', () => {
       spyOn(component, 'onSearchChange');
     });
 
-    it('should do nothing if filterLocate is true', () => {
-      component.filterLocate = true;
+    it('should do nothing if type is locate', () => {
+      component.type = 'locate';
       component.listboxOpen = true;
 
       component.onEnterKey(event);
@@ -254,8 +246,7 @@ describe('PoSearchComponent', () => {
       expect(component.onSearchChange).not.toHaveBeenCalled();
     });
 
-    it('should close listbox if listboxOpen is true and filterLocate is false', () => {
-      component.filterLocate = false;
+    it('should close listbox if listboxOpen is true and type is not locate', () => {
       component.listboxOpen = true;
 
       component.onEnterKey(event);
@@ -264,8 +255,7 @@ describe('PoSearchComponent', () => {
       expect(component.onSearchChange).not.toHaveBeenCalled();
     });
 
-    it('should call onSearchChange and closeListbox if listboxOpen is false and filterLocate is false', () => {
-      component.filterLocate = false;
+    it('should call onSearchChange and closeListbox if listboxOpen is false and type is not locate', () => {
       component.listboxOpen = false;
       component.type = 'trigger';
 
@@ -276,7 +266,6 @@ describe('PoSearchComponent', () => {
     });
 
     it('should call onSearchChange with false if type is not "trigger"', () => {
-      component.filterLocate = false;
       component.listboxOpen = false;
       component.type = 'action';
 
@@ -288,8 +277,8 @@ describe('PoSearchComponent', () => {
   });
 
   describe('onSearchChange', () => {
-    it('should emit changeModel and return if filterLocate is true and changeModel is observed', () => {
-      component.filterLocate = true;
+    it('should emit changeModel and return if type is locate and changeModel is observed', () => {
+      component.type = 'locate';
       spyOnProperty(component.changeModel, 'observed', 'get').and.returnValue(true);
       spyOn(component.changeModel, 'emit');
 
@@ -403,8 +392,8 @@ describe('PoSearchComponent', () => {
   });
 
   describe('onInputHandler', () => {
-    it('should call onSearchChange once with (value, false) if filterLocate is true', () => {
-      component.filterLocate = true;
+    it('should call onSearchChange once with (value, false) if type is locate', () => {
+      component.type = 'locate';
       const spy = spyOn(component, 'onSearchChange');
 
       component.onInputHandler('abc');
@@ -413,8 +402,7 @@ describe('PoSearchComponent', () => {
       expect(spy).toHaveBeenCalledWith('abc', false);
     });
 
-    it('should call onSearchChange twice if filterLocate is false and type is "action"', () => {
-      component.filterLocate = false;
+    it('should call onSearchChange twice if type is not locate and type is "action"', () => {
       component.type = 'action';
       const spy = spyOn(component, 'onSearchChange');
 
@@ -425,8 +413,7 @@ describe('PoSearchComponent', () => {
       expect(spy.calls.argsFor(1)).toEqual(['abc', true]);
     });
 
-    it('should call onSearchChange twice if filterLocate is false and type is not "action"', () => {
-      component.filterLocate = false;
+    it('should call onSearchChange twice if type is not locate and type is not "action"', () => {
       component.type = 'trigger';
       const spy = spyOn(component, 'onSearchChange');
 

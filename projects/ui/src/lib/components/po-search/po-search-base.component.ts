@@ -11,7 +11,7 @@ import { PoSearchLiterals } from './literals/po-search-literals.interface';
 import { poSearchLiteralsDefault } from './literals/po-search-literals-default';
 import { PoSearchLocateSummary } from './interfaces/po-search-locate-summary.interface';
 
-export type searchMode = 'action' | 'trigger';
+export type searchMode = 'action' | 'trigger' | 'locate';
 /**
  * @description
  *
@@ -63,7 +63,10 @@ export type searchMode = 'action' | 'trigger';
  * | `--background`                         | Cor de background                                     | `var(--color-neutral-light-05)`                   |
  * | `--text-color`                         | Cor do texto editável                                 | `var(--color-neutral-dark-90)`                    |
  * | `--color-clear`                        | Cor do ícone close                                    | `var(--color-action-default)`                     |
- * | `--color-controls`                     | Cor dos ícones de controle do tipo locate             | `var(--color-action-default)`                     |
+ * | `--color-controls`                     | Cor dos ícones de controle do mode location           | `var(--color-action-default)`                     |
+ * | `--transition-property`                | Atributo da transição                                 | `var(--color-action-default)`                     |
+ * | `--transition-duration`                | Duração da transição                                  | `var(--color-action-default)`                     |
+ * | `--transition-timing`                  | Duração da transição com o tipo de transição          | `var(--color-action-default)`                     |
  * | **Icon**                               |                                                       |                                                   |
  * | `--color-icon-read`                    | Cor do ícone de busca no modo action                  | `var(--color-neutral-dark-70)`                    |
  * | `--color-icon`                         | Cor do ícone de busca no modo trigger                 | `var(--color-action-default)`                     |
@@ -130,27 +133,9 @@ export class PoSearchBaseComponent {
    * ```
    *
    * > Esta propriedade é ignorada quando utilizado com `p-filter-select` e incompatível com a propriedade
-   * `p-filter-locate`.
+   * `p-search-type` do tipo `locate`.
    */
   @Input('p-filter-keys') filterKeys: Array<any> = [];
-
-  /**
-   * @optional
-   *
-   * @description
-   *
-   * Ativa o modo de localização navegável, onde o filtro e a navegação entre os resultados fica sob responsabilidade do
-   * desenvolvedor. Exibe contador e botões para navegar entre as ocorrências encontradas.
-   *
-   * > Ao ser habilitada, as propriedades `p-items`, `p-filter-keys`, `p-filter-select`, `p-filter`, `p-show-listbox`, e
-   * `p-filtered-items-change` são ignoradas.
-   * >
-   * > Propriedades e outputs para auxiliar no controle da navegação: `p-locate-summary`, `p-change-model`,
-   * `p-next-occurrence`, `p-previous-occurrence`, `p-keydown` e `p-blur`.
-   *
-   * @default `false`
-   */
-  @Input({ alias: 'p-filter-locate', transform: convertToBoolean }) filterLocate: boolean = false;
 
   /**
    * @description
@@ -168,7 +153,7 @@ export class PoSearchBaseComponent {
    * ```
    *
    * > Ao ser habilitada, a propriedade `p-filter-keys` será ignorada. Esta propriedade é incompatível com a propriedade
-   * `p-filter-locate`.
+   * `p-search-type` do tipo `locate`.
    */
   @Input('p-filter-select') set filterSelect(values: Array<PoSearchFilterSelect>) {
     if (!Array.isArray(values) || values.length === 0 || values.every(value => Object.keys(value).length === 0)) {
@@ -200,7 +185,7 @@ export class PoSearchBaseComponent {
    * Define o modo de pesquisa utilizado no campo de busca. Os valores permitidos são definidos pelo enum
    * **PoSearchFilterMode**.
    *
-   * > Incompatível com a propriedade `p-filter-locate`.
+   * > Incompatível com a propriedade `p-search-type` do tipo `locate`.
    *
    * @default `startsWith`
    */
@@ -218,8 +203,7 @@ export class PoSearchBaseComponent {
    * <po-search p-icon="an an-user"></po-search>
    * ```
    * Também é possível utilizar outras fontes de ícones, por exemplo a biblioteca *Font Awesome*, desde que a biblioteca
-   * esteja carregada no projeto.
-   * Por exemplo:
+   * esteja carregada no projeto:
    * ```
    * <po-search p-icon="fa fa-podcast"></po-search>
    * ```
@@ -242,7 +226,7 @@ export class PoSearchBaseComponent {
    *
    * Lista de itens que serão utilizados para pesquisa.
    *
-   * > Incompatível com a propriedade `p-filter-locate`.
+   * > Incompatível com a propriedade `p-search-type` do tipo `locate`.
    */
   @Input('p-items') items: Array<any> = [];
 
@@ -294,14 +278,14 @@ export class PoSearchBaseComponent {
    *
    * @description
    *
-   * Define os valores do contador exibido ao usar `p-filter-locate`, indicando a posição atual e o total de ocorrências
-   * encontradas.
+   * Define os valores do contador exibido ao usar a propriedade `p-search-type` do tipo `locate`, indicando a posição
+   * atual e o total de ocorrências encontradas.
    * Exemplo de uso:
    * ```ts
    * locateSummary: PoSearchLocateSummary = { currentIndex: 0, total: 5 }; // Exibe: "1 / 5"
    * ```
    *
-   * > Compatível com a propriedade `p-filter-locate`.
+   * > Compatível com a propriedade `p-search-type` do tipo `locate`.
    */
   @Input('p-locate-summary') locateSummary: PoSearchLocateSummary = { currentIndex: 0, total: 0 };
 
@@ -313,8 +297,7 @@ export class PoSearchBaseComponent {
    * Determina a forma de realizar a pesquisa no componente. Valores aceitos:
    * - `action`: Realiza a busca a cada caractere digitado.
    * - `trigger`: Realiza a busca ao pressionar `enter` ou clicar no ícone de busca.
-   *
-   * > Incompatível com a propriedade `p-filter-locate`.
+   * - `locate`: Modo manual. Exibe botões e contador, mas não executa buscas — controle é do desenvolvedor.
    *
    * @default `action`
    */
@@ -328,7 +311,7 @@ export class PoSearchBaseComponent {
    * Exibe uma lista (auto-complete) com as opções definidas em `p-filter-keys` ou `p-filter-select` enquanto realiza
    * uma busca, respeitando o `p-filter-type` como modo de pesquisa.
    *
-   * > Incompatível com a propriedade `p-filter-locate`.
+   * > Incompatível com a propriedade `p-search-type` do tipo `locate`.
    *
    * @default `false`
    */
@@ -381,7 +364,7 @@ export class PoSearchBaseComponent {
    *
    * Pode ser informada uma função que será disparada quando houver alterações nos filtros.
    *
-   * > Incompatível com a propriedade `p-filter-locate`.
+   * > Incompatível com a propriedade `p-search-type` do tipo `locate`.
    */
   @Output('p-filter') filter: EventEmitter<any> = new EventEmitter<any>();
 
@@ -392,7 +375,7 @@ export class PoSearchBaseComponent {
    *
    * Pode ser informada uma função que será disparada quando houver alterações no input.
    *
-   * > Incompatível com a propriedade `p-filter-locate`.
+   * > Incompatível com a propriedade `p-search-type` do tipo `locate`.
    */
   @Output('p-filtered-items-change') filteredItemsChange = new EventEmitter<Array<any>>();
 
@@ -412,7 +395,7 @@ export class PoSearchBaseComponent {
    *
    * Pode ser informada uma função que será disparada quando houver click no listbox.
    *
-   * > Incompatível com a propriedade `p-filter-locate`.
+   * > Incompatível com a propriedade `p-search-type` do tipo `locate`.
    */
   @Output('p-listbox-onclick') listboxOnClick = new EventEmitter<any>();
 
@@ -423,9 +406,9 @@ export class PoSearchBaseComponent {
    *
    * Evento disparado ao clicar no controle "Próximo resultado".
    *
-   * > Compatível com a propriedade `p-filter-locate`.
+   * > Compatível com a propriedade `p-search-type` do tipo `locate`.
    */
-  @Output('p-next-occurrence') nextOccurrence = new EventEmitter<void>();
+  @Output('p-locate-next') locateNext = new EventEmitter<void>();
 
   /**
    * @optional
@@ -434,9 +417,9 @@ export class PoSearchBaseComponent {
    *
    * Evento disparado ao clicar no controle "Resultado anterior".
    *
-   * > Compatível com a propriedade `p-filter-locate`.
+   * > Compatível com a propriedade `p-search-type` do tipo `locate`.
    */
-  @Output('p-previous-occurrence') previousOccurrence = new EventEmitter<void>();
+  @Output('p-locate-previous') locatePrevious = new EventEmitter<void>();
 
   constructor(
     languageService: PoLanguageService,

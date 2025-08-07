@@ -1,12 +1,12 @@
 <po-search
-  [p-filter-locate]="true"
+  p-search-type="locate"
   [p-literals]="searchLiterals"
   [p-locate-summary]="locateSummary"
   (p-blur)="onSearchBlur()"
   (p-change-model)="updateSearchTerm($event)"
   (p-keydown)="onSearchKeydown($event)"
-  (p-next-occurrence)="onNextOccurrenceClick()"
-  (p-previous-occurrence)="onPreviousOccurrenceClick()"
+  (p-locate-next)="onNextOccurrenceClick()"
+  (p-locate-previous)="onPreviousOccurrenceClick()"
 >
 </po-search>
 

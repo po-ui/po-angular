@@ -102,7 +102,7 @@ export class PoSearchComponent extends PoSearchBaseComponent implements OnInit, 
   }
 
   get showNoResults(): boolean {
-    if (this.filterLocate) {
+    if (this.type === 'locate') {
       return !!this.poSearchInput?.nativeElement?.value && this.locateSummary?.total === 0;
     }
     if (this.showListbox) {
@@ -112,7 +112,11 @@ export class PoSearchComponent extends PoSearchBaseComponent implements OnInit, 
   }
 
   get showSearchLocateControls(): boolean {
-    return !!(this.filterLocate && (this.isInputFocused || this.poSearchInput?.nativeElement?.value) && !this.disabled);
+    return !!(
+      this.type === 'locate' &&
+      (this.isInputFocused || this.poSearchInput?.nativeElement?.value) &&
+      !this.disabled
+    );
   }
 
   ngOnInit(): void {
@@ -145,7 +149,7 @@ export class PoSearchComponent extends PoSearchBaseComponent implements OnInit, 
   onCleanKeydown(event: KeyboardEvent) {
     const isEsc = event.key === 'Escape';
 
-    if (isEsc && this.filterLocate) {
+    if (isEsc && this.type === 'locate') {
       this.clearSearch();
       this.poSearchInput.nativeElement.focus();
       event.preventDefault();
@@ -154,7 +158,7 @@ export class PoSearchComponent extends PoSearchBaseComponent implements OnInit, 
   }
 
   onEnterKey(event: any) {
-    if (!this.filterLocate) {
+    if (this.type !== 'locate') {
       if (this.listboxOpen) {
         this.closeListbox();
       } else {
@@ -167,7 +171,7 @@ export class PoSearchComponent extends PoSearchBaseComponent implements OnInit, 
   onSearchChange(searchText: string, activated: boolean, buttonClick?: boolean): void {
     const searchTextInitial = searchText;
 
-    if (this.filterLocate && this.changeModel.observed) {
+    if (this.type === 'locate' && this.changeModel.observed) {
       this.changeModel.emit(searchTextInitial);
       return;
     }
@@ -302,7 +306,7 @@ export class PoSearchComponent extends PoSearchBaseComponent implements OnInit, 
   }
 
   onInputHandler(value: string) {
-    if (this.filterLocate) {
+    if (this.type === 'locate') {
       this.onSearchChange(value, false);
     } else {
       this.onSearchChange(value, false);

@@ -1,14 +1,11 @@
 <div
   class="po-search"
   [class.po-search-disabled]="disabled"
-  [class.po-search-filter-locate]="filterLocate"
-  [ngStyle]="{
-    'min-width.px': filterLocate ? (showSearchLocateControls ? 327 : 227) : null
-  }"
-  [attr.p-filter-locate]="filterLocate"
+  [class.po-search-filter-locate]="type === 'locate'"
+  [attr.p-search-type]="type === 'locate'"
   [attr.p-size]="size"
 >
-  @if (filterSelect && !filterLocate) {
+  @if (filterSelect && type !== 'locate') {
     <div class="po-search-select">
       <po-dropdown
         [p-label]="searchFilterSelectLabel"
@@ -20,7 +17,7 @@
     </div>
   }
 
-  @if (type === 'action' || filterLocate) {
+  @if (type === 'action' || type === 'locate') {
     <div class="po-search-icon">
       <po-icon [p-icon]="icon ? icon : 'ICON_SEARCH'"></po-icon>
     </div>
@@ -31,11 +28,12 @@
     class="po-search-input"
     type="text"
     [ariaLabel]="ariaLabel"
-    [class.po-search-input-clean]="!!poSearchInput.value && !disabled"
-    [class.po-search-input-trigger]="type === 'trigger' && !filterLocate"
+    [class.po-search-input-clean]="!!poSearchInput.value && !disabled && type !== 'locate'"
+    [class.po-search-input-locate-padding]="type === 'locate' && showSearchLocateControls"
+    [class.po-search-input-trigger]="type === 'trigger'"
     [disabled]="disabled"
     [placeholder]="literals.search"
-    [attr.aria-describedby]="showNoResults ? 'no-results' : filterLocate && poSearchInput.value ? 'summary' : null"
+    [attr.aria-describedby]="showNoResults ? 'no-results' : type === 'locate' && poSearchInput.value ? 'summary' : null"
     (input)="onInputHandler($event.target.value)"
     (keyup.enter)="onEnterKey($event)"
     (keydown)="onKeyDown($event)"
@@ -50,7 +48,7 @@
       </span>
     }
 
-    @if (filterLocate && poSearchInput.value && !disabled) {
+    @if (type === 'locate' && poSearchInput.value && !disabled) {
       <span
         class="po-search-locate-counter"
         id="summary"
@@ -81,7 +79,7 @@
       </button>
     }
 
-    @if (type === 'trigger' && !filterLocate) {
+    @if (type === 'trigger') {
       <button
         class="po-search-button po-search-button-trigger"
         type="button"
@@ -102,7 +100,7 @@
           class="po-search-button"
           [ariaLabel]="literals.next"
           [disabled]="disabled || !locateSummary?.total"
-          (click)="nextOccurrence.emit()"
+          (click)="locateNext.emit()"
         >
           <po-icon p-icon="ICON_ARROW_DOWN"> </po-icon>
         </button>
@@ -112,7 +110,7 @@
           class="po-search-button"
           [ariaLabel]="literals.previous"
           [disabled]="disabled || !locateSummary?.total"
-          (click)="previousOccurrence.emit()"
+          (click)="locatePrevious.emit()"
         >
           <po-icon p-icon="ICON_ARROW_UP"> </po-icon>
         </button>
@@ -121,7 +119,7 @@
   </div>
 </div>
 
-@if (!filterLocate) {
+@if (type !== 'locate') {
   <div #poListboxContainerElement class="po-search-listbox-container" [hidden]="!listboxOpen">
     <po-listbox
       #poListbox
