@@ -1,0 +1,337 @@
+<style>
+  img {
+    /* height: 100%;
+    width: 100%; */
+  }
+
+  /* .overflow {
+    display: none;
+  }
+
+  .po-header-nav {
+    display: flex;
+    flex-direction: row;
+    align-items: center;
+    height: 3.5rem;
+    padding-inline: 1rem;
+    justify-content: space-between;
+    background: var(--color-neutral-light-05);
+    gap: 1.5rem;
+    border-bottom-left-radius: var(--border-radius-md);
+    border-bottom-right-radius: var(--border-radius-md);
+    box-shadow: 0 1px 8px rgba(0, 0, 0, 0.1);
+  } */
+
+  /* .po-header-nav-brand {
+    display: flex;
+    align-items: center;
+    gap: 1rem;
+    font-family: var(--font-family);
+    font-weight: bold;
+    font-size: 16px;
+    color: var(--color-neutral-dark-70);
+  }
+
+  .po-header-nav-brand-logo {
+    height: 44px;
+    width: 110px;
+  }
+
+  .po-header-nav-brand-logo img {
+    height: 100%;
+    width: 100%;
+    object-fit: cover;
+  }
+
+  .po-header-nav-brand-text {
+    white-space: nowrap;
+  } */
+
+  /*
+  .po-header-nav-submenu-more,
+  .po-header-nav-submenu {
+    font-family: var(--font-family);
+    font-size: 16px;
+    font-weight: bold;
+    cursor: pointer;
+    text-align: center;
+    vertical-align: middle;
+    list-style: none;
+  }
+
+  .po-header-nav-customer-container:focus,
+  .po-header-nav-submenu-more:focus,
+  .po-header-nav-submenu:focus {
+    outline-color: var(--outline-color-focused);
+    outline-width: var(--outline-width);
+    outline-style: solid;
+    outline-offset: 2px;
+    border-radius: 4px;
+  }
+
+  .po-header-nav-submenu-button-more,
+  .po-header-nav-submenu-button {
+    align-items: center;
+    display: inline-flex;
+    height: 2.75rem;
+    text-align: center;
+    width: 100%;
+    background-color: var(--color-brand-01-lightest);
+    color: var(--color-brand-01-dark);
+    border-radius: 4px;
+  }
+
+  .po-header-nav-submenu-button-more:hover,
+  .po-header-nav-submenu-button:hover {
+    background: var(--color-brand-01-lighter);
+    color: var(--color-brand-01-darkest);
+  }
+
+  .po-header-nav-submenu-more:active .po-header-nav-submenu-button-more,
+  .po-header-nav-submenu:active .po-header-nav-submenu-button {
+    background: var(--color-brand-01-light);
+    color: var(--color-brand-01-darkest);
+  }
+
+  .po-header-nav-submenu-button {
+    max-width: 15em;
+  }
+
+  .po-header-nav-submenu-button-more {
+    padding: 0 1rem;
+    gap: 0.5rem;
+  }
+
+  .po-header-nav-submenu-button span {
+    padding: 0 1rem;
+    user-select: none;
+    text-overflow: ellipsis;
+    overflow: hidden;
+    max-width: 100%;
+    white-space: nowrap;
+  } */
+
+  /* .po-header-nav-tools {
+    list-style: none;
+    display: flex;
+    align-items: center;
+    gap: 0.5rem;
+    margin-left: auto;
+  }
+
+  .po-nav-icon {
+    font-size: 1rem;
+    margin-left: 0.3rem;
+    display: flex;
+  } */
+
+  /* .po-nav-icon i.an {
+    font-weight: bold !important;
+  } */
+
+  /* .po-nav-bell {
+    position: relative;
+  }
+  .po-nav-status {
+    position: absolute;
+    top: -5px;
+    right: -5px;
+    font-size: initial;
+  }
+
+  .po-header-nav-customer-container {
+    display: flex;
+    align-items: center;
+    gap: 0.5rem;
+    background: #ffffff;
+    border: 1px solid var(--color-neutral-light-10);
+    height: var(--spacing-2xl);
+    border-radius: var(--border-radius-md);
+    padding-inline: var(--spacing-xs);
+  }
+
+  .po-header-nav-customer-brand {
+    height: 44px;
+    width: 56px;
+  } */
+
+  /* .po-header-nav-customer-brand img {
+    height: 100%;
+    width: 100%;
+    object-fit: contain;
+  }
+
+  .po-header-nav-customer-avatar-wrapper {
+    position: relative;
+  }
+
+  .po-header-nav-customer-avatar {
+    height: 44px;
+    width: 44px;
+    border-radius: 50%; 
+    overflow: hidden; 
+  }
+
+  .po-header-nav-avatar-status {
+    position: absolute;
+    bottom: 0px;
+    right: 5px;
+  } */
+
+  /* .po-header-nav-customer-avatar img {
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+  }
+
+  .po-header-nav-customer-divider {
+    width: 1px;
+    height: 30px;
+    background: #d0d0d7;
+  }
+
+  .po-nav-header-medium {
+    display: none;
+  }
+
+  .po-nav-icon-small {
+    display: none;
+  } */
+
+  /* .po-header-nav-submenus-wrapper {
+    list-style: none;
+    display: flex;
+    align-items: center;
+    gap: var(--spacing-sm);
+  }
+
+  .po-nav-tools-wrapper {
+    display: flex;
+    gap: 1rem;
+    align-items: center;
+    margin-left: auto;
+  }
+  @media screen and (max-width: 960px) {
+    .po-nav-header-medium {
+      display: initial;
+    }
+
+    .po-header-nav-submenus-wrapper,
+    .po-header-nav-submenu-more {
+      display: none;
+    }
+  }
+
+  @media screen and (max-width: 800px) {
+    .po-header-nav-customer-container {
+      display: none;
+    }
+
+    .po-nav-icon-small {
+      display: block;
+    }
+
+    .po-header-nav-item-small {
+      display: none;
+    }
+  } */
+</style>
+
+<nav #navElement class="po-header-nav">
+  <div #menuWrapperBrand>
+    <!-- <po-button class="po-nav-header-medium" p-icon="an an-list" p-kind="tertiary"> </po-button>
+    <div class="po-header-nav-brand-logo">
+      <img src="https://totvs.com/imagens/image-share.jpg" alt="Logo" />
+    </div>
+    <span class="po-header-nav-brand-text">Minha Empresa</span> -->
+    <po-header-brand [p-brand]="brand"></po-header-brand>
+  </div>
+
+  <ul #menuWrapperItens class="po-header-nav-submenus-wrapper">
+    @for (item of visibleMenuItems; track item.id) {
+      <po-header-menu-item #menusubmenuitem [p-item]="item"></po-header-menu-item>
+    }
+    <!-- <li #menusubmenuitem *ngFor="let item of visibleMenuItems" tabindex="0" class="po-header-nav-submenu">
+      <div class="po-header-nav-submenu-button">
+        <span>{{ item.label }}</span>
+      </div>
+    </li> -->
+  </ul>
+
+  @if (showOverflow && overflowItems.length) {
+    <po-header-menu-item
+      #overflowButton
+      #menusubmenuitem
+      [p-button-overflow]="true"
+      [p-item-overflow]="overflowItems"
+    ></po-header-menu-item>
+  }
+  <!-- <li  *ngIf="showOverflow && overflowItems.length" class="po-header-nav-submenu-more" tabindex="0">
+    <div class="po-header-nav-submenu-button-more">
+      <span>More</span>
+      <po-icon class="po-nav-icon" p-icon="ICON_ARROW_DOWN"></po-icon>
+    </div>
+  </li> -->
+
+  <ul #menuWrapperTools class="po-nav-tools-wrapper">
+    <po-header-tools [p-actions-tools]="actionsTools"></po-header-tools>
+    <po-header-customer [p-header-user]="headerUser"></po-header-customer>
+    <!-- <li class="po-header-nav-item-small">
+      <po-button
+        *ngIf="afterViewInitWascalled"
+        #buttonFirstAction
+        p-icon="an an-dots-nine"
+        p-kind="tertiary"
+        (p-click)="clickFirstAction()"
+      >
+      </po-button>
+    </li>
+    <li class="po-header-nav-item-small">
+      <po-button p-icon="an-fill an-dots-three-outline-vertical" p-kind="tertiary"> </po-button>
+    </li>
+    <li>
+      <po-button p-kind="tertiary" [p-icon]="bell"></po-button>
+
+      <ng-template #bell>
+        <i class="an an-bell po-nav-bell">
+          <po-badge class="po-nav-status" [p-value]="10"></po-badge>
+        </i>
+      </ng-template>
+    </li> -->
+
+    <!-- <li tabindex="0" class="po-header-nav-customer-container">
+      <div class="po-header-nav-customer-brand">
+        <img src="https://logodownload.org/wp-content/uploads/2014/02/vivo-logo-0.png" alt="User" />
+      </div>
+
+      <div class="po-header-nav-customer-divider"></div>
+
+      <div class="po-header-nav-customer-avatar-wrapper">
+        <div class="po-header-nav-customer-avatar">
+          <img src="https://pbs.twimg.com/profile_images/1613553278029012994/9BlkFbe1_400x400.jpg" alt="Avatar" />
+        </div>
+        <po-badge class="po-header-nav-avatar-status" p-size="small" p-status="positive"></po-badge>
+      </div>
+    </li>
+
+    <li class="po-header-nav-customer-avatar-wrapper po-nav-icon-small">
+      <div class="po-header-nav-customer-avatar">
+        <img
+          src="https://www.pica-ai.com/_next/image/?url=https%3A%2F%2Fstatic.staticspic.com%2F_next%2Fstatic%2Fmedia%2FRectangle-1.9e8fb857.png&w=640&q=75"
+          alt="Avatar"
+        />
+      </div>
+      <po-badge class="po-header-nav-avatar-status" p-size="small" p-status="positive"></po-badge>
+    </li> -->
+  </ul>
+</nav>
+<div style="margin-top: 30px"></div>
+<p>overflowItems: {{ overflowItems | json }}</p>
+<br />
+<p>visibleMenuItems: {{ visibleMenuItems | json }}</p>
+<br />
+<p>menuItems: {{ menuItems | json }}</p>
+
+<ng-container *ngIf="template">
+  <ng-container *ngTemplateOutlet="template"></ng-container>
+</ng-container>
