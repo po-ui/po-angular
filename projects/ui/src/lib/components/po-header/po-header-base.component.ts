@@ -1,6 +1,8 @@
 import { Directive, Input, TemplateRef } from '@angular/core';
 import { PoHeaderActions } from './interfaces/po-header-actions.interface';
-import { PoHeaderBrand } from './interfaces/po-header-logo.interface';
+import { PoHeaderBrand } from './interfaces/po-header-brand.interface';
+import { PoHeaderActionTool } from './interfaces/po-header-action-tool.interface';
+import { PoHeaderUser } from './interfaces/po-header-user.interface';
 
 @Directive()
 export abstract class PoHeaderBaseComponent {
@@ -19,6 +21,10 @@ export abstract class PoHeaderBaseComponent {
   @Input('p-template') template!: TemplateRef<any>;
 
   @Input('p-brand') brand: PoHeaderBrand;
+
+  @Input('p-actions-tools') actionsTools: Array<PoHeaderActionTool> = [];
+
+  @Input('p-header-user') headerUser: PoHeaderUser;
 
   @Input('p-menu-items') set menuItems(items: Array<PoHeaderActions>) {
     this._menuItems = (items || []).map(item => ({

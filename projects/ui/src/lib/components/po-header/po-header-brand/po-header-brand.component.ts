@@ -1,5 +1,5 @@
 import { Component, Input } from '@angular/core';
-import { PoHeaderBrand } from '../interfaces/po-header-logo.interface';
+import { PoHeaderBrand } from '../interfaces/po-header-brand.interface';
 
 @Component({
   selector: 'po-header-brand',

@@ -237,7 +237,7 @@
   } */
 </style>
 
-<nav class="po-header-nav">
+<nav #navElement class="po-header-nav">
   <div #menuWrapperBrand>
     <!-- <po-button class="po-nav-header-medium" p-icon="an an-list" p-kind="tertiary"> </po-button>
     <div class="po-header-nav-brand-logo">
@@ -274,8 +274,8 @@
   </li> -->
 
   <ul #menuWrapperTools class="po-nav-tools-wrapper">
-    <po-header-tools></po-header-tools>
-    <po-header-customer></po-header-customer>
+    <po-header-tools [p-actions-tools]="actionsTools"></po-header-tools>
+    <po-header-customer [p-header-user]="headerUser"></po-header-customer>
     <!-- <li class="po-header-nav-item-small">
       <po-button
         *ngIf="afterViewInitWascalled"
@@ -335,5 +335,3 @@
 <ng-container *ngIf="template">
   <ng-container *ngTemplateOutlet="template"></ng-container>
 </ng-container>
-
-<po-header-customer></po-header-customer>

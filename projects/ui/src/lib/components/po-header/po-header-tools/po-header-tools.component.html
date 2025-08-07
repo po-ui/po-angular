@@ -23,24 +23,59 @@
     right: -5px;
     font-size: initial;
   } */
+
+  /* .po-header-popover-main {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    padding-block: 0.5rem;
+    padding-inline: 1rem;
+    font-size: 1rem;
+    font-weight: bold;
+    border-bottom: 1px solid #b0c1e8;
+  } */
 </style>
 
 <div class="po-header-nav-tools">
-  <li class="po-header-nav-item-small">
-    <po-button #buttonFirstAction p-icon="an an-dots-nine" p-kind="tertiary"> </po-button>
-  </li>
+  @for (action of actionTools; track action.title; let i = $index) {
+    <li class="po-header-nav-item-small">
+      <po-button
+        #buttonActionElement
+        [p-tooltip]="action.tooltip"
+        [p-icon]="action.badge ? badge : action.icon || 'an an-dots-nine'"
+        p-kind="tertiary"
+        (p-click)="onClickFirstAction(i)"
+      >
+      </po-button>
 
-  <li class="po-header-nav-item-small">
-    <po-button p-icon="an-fill an-dots-three-outline-vertical" p-kind="tertiary"> </po-button>
-  </li>
+      <ng-template #badge>
+        <i class="an an-bell po-nav-bell">
+          <po-badge class="po-nav-status" [p-value]="action.badge"></po-badge>
+        </i>
+      </ng-template>
 
-  <li>
-    <po-button p-kind="tertiary" [p-icon]="bell"></po-button>
+      <po-popup
+        #poPopupAction
+        [p-actions]="action.items"
+        [p-target]="buttonActionElements?.get(i)"
+        [p-hide-arrow]="true"
+      >
+      </po-popup>
 
-    <ng-template #bell>
-      <i class="an an-bell po-nav-bell">
-        <po-badge class="po-nav-status" [p-value]="10"></po-badge>
-      </i>
-    </ng-template>
-  </li>
+      @if (action.popover) {
+        <po-popover
+          #poPopoverAction
+          [p-target]="buttonActionElements?.get(i)"
+          p-position="bottom-left"
+          [p-hide-arrow]="true"
+        >
+          <div class="po-header-popover-main">
+            <span>{{ action.title }}</span>
+            <po-button p-kind="tertiary" p-icon="ICON_CLOSE" (p-click)="onClickFirstActionClosePopover(i)"></po-button>
+          </div>
+          <ng-container *ngTemplateOutlet="action.popover.content"></ng-container>
+        </po-popover>
+      }
+    </li>
+  }
 </div>
