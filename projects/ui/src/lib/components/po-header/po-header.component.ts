@@ -29,6 +29,7 @@ export class PoHeaderComponent extends PoHeaderBaseComponent implements AfterVie
   @ViewChild('buttonFirstAction', { read: ElementRef }) buttonFirstAction: ElementRef;
   buttonFirstActionRef: ElementRef;
 
+  @ViewChild('navElement', { read: ElementRef }) navElement: ElementRef;
   @ViewChild('menuWrapperBrand') menuWrapperBrand!: ElementRef<HTMLElement>;
   @ViewChild('menuWrapperTools') menuWrapperTools!: ElementRef<HTMLElement>;
   @ViewChild('overflowButton', { static: true }) overflowButton!: ElementRef<HTMLElement>;
@@ -36,7 +37,8 @@ export class PoHeaderComponent extends PoHeaderBaseComponent implements AfterVie
 
   constructor(
     private renderer: Renderer2,
-    private cd: ChangeDetectorRef
+    private cd: ChangeDetectorRef,
+    private elRef: ElementRef
   ) {
     super();
   }
@@ -59,6 +61,7 @@ export class PoHeaderComponent extends PoHeaderBaseComponent implements AfterVie
       .pipe(debounceTime(300)) // espera 300ms após o último evento
       .subscribe(() => {
         const largura = document.documentElement.clientWidth;
+
         console.log('Redimensionado para:', largura);
         this.updateMenu();
       });
@@ -76,7 +79,15 @@ export class PoHeaderComponent extends PoHeaderBaseComponent implements AfterVie
       return;
     }
     console.log('chamou');
-    const larguraTela = document.documentElement.clientWidth;
+    const hostElement = this.elRef.nativeElement; // <po-header>
+    const parent = hostElement.parentElement;
+    let larguraTela;
+    if (parent?.getBoundingClientRect().width) {
+      larguraTela = parent.getBoundingClientRect().width;
+    } else {
+      larguraTela = document.documentElement.clientWidth;
+    }
+
     const larguraBrand = this.menuWrapperBrand.nativeElement.offsetWidth;
     const larguraTool = this.menuWrapperTools.nativeElement.offsetWidth;
     const spacingAndMoreButton = 170;

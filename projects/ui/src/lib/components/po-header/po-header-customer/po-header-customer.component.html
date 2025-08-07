@@ -95,31 +95,44 @@
       display: none;
     }
   } */
+
+  /* .po-header-nav-customer-container, .po-header-nav-customer-avatar-wrapper {
+    cursor: pointer;
+  }
+
+  .po-header-nav-customer-container:hover {
+    background: var(--color-brand-01-lighter);
+  }
+
+  .po-header-nav-customer-container:active {
+    background: var(--color-brand-01-light);
+  } */
 </style>
 
-<div class="po-header-nav-tools">
+<div class="po-header-nav-tools" (click)="onClickUserSection()">
   <li tabindex="0" class="po-header-nav-customer-container">
     <div class="po-header-nav-customer-brand">
-      <img src="https://logodownload.org/wp-content/uploads/2014/02/vivo-logo-0.png" alt="User" />
+      <img [src]="headerUser.customerBrand" alt="User" />
     </div>
 
     <div class="po-header-nav-customer-divider"></div>
 
     <div class="po-header-nav-customer-avatar-wrapper">
       <div class="po-header-nav-customer-avatar">
-        <img src="https://pbs.twimg.com/profile_images/1613553278029012994/9BlkFbe1_400x400.jpg" alt="Avatar" />
+        <img [src]="headerUser.avatar" alt="Avatar" />
       </div>
-      <po-badge class="po-header-nav-avatar-status" p-size="small" p-status="positive"></po-badge>
+      @if (headerUser.status) {
+        <po-badge class="po-header-nav-avatar-status" p-size="small" [p-status]="headerUser.status"></po-badge>
+      }
     </div>
   </li>
 
   <li class="po-header-nav-customer-avatar-wrapper po-nav-icon-small">
     <div class="po-header-nav-customer-avatar">
-      <img
-        src="https://www.pica-ai.com/_next/image/?url=https%3A%2F%2Fstatic.staticspic.com%2F_next%2Fstatic%2Fmedia%2FRectangle-1.9e8fb857.png&w=640&q=75"
-        alt="Avatar"
-      />
+      <img [src]="headerUser.avatar" alt="Avatar" />
     </div>
-    <po-badge class="po-header-nav-avatar-status" p-size="small" p-status="positive"></po-badge>
+    @if (headerUser.status) {
+      <po-badge class="po-header-nav-avatar-status" p-size="small" [p-status]="headerUser.status"></po-badge>
+    }
   </li>
 </div>
