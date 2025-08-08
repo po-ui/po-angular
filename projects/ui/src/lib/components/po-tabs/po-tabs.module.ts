@@ -20,7 +20,7 @@ import { PoTabsService } from './po-tabs.service';
 @NgModule({
   imports: [CommonModule, PoPopoverModule, PoDropdownModule, PoTooltipModule, PoButtonModule, PoListBoxModule],
   declarations: [PoTabButtonComponent, PoTabComponent, PoTabDropdownComponent, PoTabsComponent],
-  exports: [PoTabComponent, PoTabsComponent],
+  exports: [PoTabComponent, PoTabsComponent, PoTabButtonComponent, PoTabDropdownComponent],
   providers: [PoTabsService]
 })
 export class PoTabsModule {}

@@ -10,15 +10,40 @@ import { convertToBoolean, uuid } from '../../../utils/util';
  * Com este componente é possível atribuir um rótulo para auxiliar na identificação do conteúdo, ativar para que o mesmo seja exibido,
  * desabilitar para impossibilitar o acesso, bem como ocultar para indisponibilizar a aba.
  *
- * > Para controlar a navegação entre diversas abas, utilizar o componente [`po-tabs`](/documentation/po-tabs).
+ * > Para controlar a navegação entre diversas abas, utilizar o componente [`po-tabs`](/documentation/po-tabs) ou [`po-context-tabs`](/documentation/po-context-tabs).
  */
 @Directive()
 export abstract class PoTabBaseComponent {
   /** Rótulo da aba. */
   @Input('p-label') label: string;
 
+  /**
+   * @optional
+   *
+   * @description
+   *
+   * Esconde o botão de fechar a aba.
+   *
+   * > Atenção: Propriedade disponível somente no `po-context-tabs`.
+   *
+   * @default `false`
+   */
+  @Input({ alias: 'p-hide-close', transform: convertToBoolean }) hideClose: boolean = false;
+
   /** Método disparado ao clicar na aba. */
   @Output('p-click') click = new EventEmitter();
+
+  /**
+   * @optional
+   *
+   * @description
+   *
+   * Evento disparado ao clicar no botão de fechar a aba.
+   *
+   * > Atenção: Propriedade disponível somente no `po-context-tabs`.
+   *
+   */
+  @Output('p-close-tab') closeTab = new EventEmitter();
 
   // ID da aba
   id?: string = uuid();
@@ -71,6 +96,8 @@ export abstract class PoTabBaseComponent {
    * @description
    *
    * Oculta a aba.
+   *
+   * > Atenção: Para correto funcionamento do componente, indicamos essa propriedade para esconder e exibir e não *ngIf.
    *
    * @default `false`
    */
