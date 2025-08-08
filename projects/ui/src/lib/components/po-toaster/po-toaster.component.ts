@@ -7,11 +7,11 @@ import {
   OnDestroy,
   Renderer2,
   SimpleChanges,
-  ViewChild
+  ViewChild,
+  inject
 } from '@angular/core';
 
 import { Subject } from 'rxjs';
-import { PoThemeService } from '../../services/po-theme/po-theme.service';
 import { PoLanguageService } from '../../services/po-language';
 import { PoButtonComponent } from '../po-button';
 import { PoToasterMode } from './enum/po-toaster-mode.enum';
@@ -44,6 +44,9 @@ const SPACE_BETWEEN_TOASTERS = 8;
   standalone: false
 })
 export class PoToasterComponent extends PoToasterBaseComponent implements AfterViewInit, OnDestroy, OnChanges {
+  changeDetector = inject(ChangeDetectorRef);
+  private renderer = inject(Renderer2);
+
   /* Componente toaster */
   @ViewChild('toaster') toaster: ElementRef;
   @ViewChild('buttonClose') buttonClose: PoButtonComponent;
@@ -63,13 +66,10 @@ export class PoToasterComponent extends PoToasterBaseComponent implements AfterV
   /* Tipo do Toaster */
   toasterType: string;
 
-  constructor(
-    poLanguageService: PoLanguageService,
-    public changeDetector: ChangeDetectorRef,
-    protected poThemeService: PoThemeService,
-    private renderer?: Renderer2
-  ) {
-    super(poThemeService);
+  constructor() {
+    const poLanguageService = inject(PoLanguageService);
+
+    super();
     this.language = poLanguageService.getShortLanguage();
     this.literals = {
       ...poToasterLiterals[this.language]

@@ -21,7 +21,9 @@
     </div>
 
     <div class="po-page-login-header-product-environment po-mb-md-4 po-mb-sm-1">
-      <po-tag *ngIf="environment" p-type="warning" [p-value]="environment"> </po-tag>
+      @if (environment) {
+        <po-tag p-type="warning" [p-value]="environment"> </po-tag>
+      }
     </div>
     <div class="po-page-login-header-welcome po-mb-md-4 po-mb-sm-2">{{ pageLoginLiterals.welcome }}</div>
   </header>
@@ -50,31 +52,32 @@
           >
           </po-login>
 
-          <div
-            *ngIf="pageLoginLiterals.loginHint || pageLoginLiterals.rememberUserHint"
-            class="po-page-login-info-icon-container"
-            [class.po-page-login-info-icon-container-dynamic]="
-              !pageLoginLiterals.loginHint && !pageLoginLiterals.rememberUserHint
-            "
-          >
-            <po-icon
-              p-icon="ICON_INFO po-field-icon"
-              *ngIf="pageLoginLiterals.loginHint"
-              p-tooltip-position="right"
-              [p-tooltip]="pageLoginLiterals.loginHint"
+          @if (pageLoginLiterals.loginHint || pageLoginLiterals.rememberUserHint) {
+            <div
+              class="po-page-login-info-icon-container"
+              [class.po-page-login-info-icon-container-dynamic]="
+                !pageLoginLiterals.loginHint && !pageLoginLiterals.rememberUserHint
+              "
             >
-            </po-icon>
-          </div>
+              @if (pageLoginLiterals.loginHint) {
+                <po-icon
+                  p-icon="ICON_INFO po-field-icon"
+                  p-tooltip-position="right"
+                  [p-tooltip]="pageLoginLiterals.loginHint"
+                >
+                </po-icon>
+              }
+            </div>
+          }
         </div>
 
         <div class="po-field-container-bottom po-field-container-error-container">
-          <div
-            *ngFor="let error of allLoginErrors"
-            class="po-field-container-bottom-text-error po-field-container-error-item"
-          >
-            <po-icon p-icon="ICON_EXCLAMATION"></po-icon>
-            <span class="po-field-container-error-text">{{ error }}</span>
-          </div>
+          @for (error of allLoginErrors; track error) {
+            <div class="po-field-container-bottom-text-error po-field-container-error-item">
+              <po-icon p-icon="ICON_EXCLAMATION"></po-icon>
+              <span class="po-field-container-error-text">{{ error }}</span>
+            </div>
+          }
         </div>
       </div>
 
@@ -99,102 +102,107 @@
             (p-change-model)="changePasswordModel()"
           >
           </po-password>
-          <div
-            *ngIf="pageLoginLiterals.loginHint || pageLoginLiterals.rememberUserHint"
-            class="po-page-login-password-item po-page-login-password-popover-container"
-          >
-            <po-page-login-popover
-              *ngIf="showExceededAttemptsWarning && exceededAttemptsWarning"
-              [p-literals]="pageLoginLiterals"
-              [p-recovery]="recovery"
-              [p-remaining-attempts]="exceededAttemptsWarning"
-              (p-forgot-password)="openUrl($event)"
-            >
-            </po-page-login-popover>
-          </div>
+          @if (pageLoginLiterals.loginHint || pageLoginLiterals.rememberUserHint) {
+            <div class="po-page-login-password-item po-page-login-password-popover-container">
+              @if (showExceededAttemptsWarning && exceededAttemptsWarning) {
+                <po-page-login-popover
+                  [p-literals]="pageLoginLiterals"
+                  [p-recovery]="recovery"
+                  [p-remaining-attempts]="exceededAttemptsWarning"
+                  (p-forgot-password)="openUrl($event)"
+                >
+                </po-page-login-popover>
+              }
+            </div>
+          }
         </div>
         <div class="po-field-container-bottom po-field-container-error-container">
-          <div
-            *ngFor="let error of allPasswordErrors"
-            class="po-field-container-bottom-text-error po-field-container-error-item"
-          >
-            <po-icon p-icon="ICON_EXCLAMATION"></po-icon>
-            <span class="po-field-container-error-text">{{ error }}</span>
-          </div>
+          @for (error of allPasswordErrors; track error) {
+            <div class="po-field-container-bottom-text-error po-field-container-error-item">
+              <po-icon p-icon="ICON_EXCLAMATION"></po-icon>
+              <span class="po-field-container-error-text">{{ error }}</span>
+            </div>
+          }
         </div>
       </div>
 
-      <po-input
-        *ngIf="customField && customFieldType === 'input'"
-        [class.po-page-login-field-size-dynamic]="!pageLoginLiterals.loginHint && !pageLoginLiterals.rememberUserHint"
-        class="po-page-login-field-size po-lg-12"
-        name="customFieldInput"
-        [(ngModel)]="customFieldObject.value"
-        p-required
-        [p-error-pattern]="customFieldObject.errorPattern || pageLoginLiterals.customFieldErrorPattern"
-        [p-pattern]="customFieldObject.pattern"
-        [p-placeholder]="customFieldObject.placeholder || pageLoginLiterals.customFieldPlaceholder"
-        [p-size]="componentsSize"
-        (keyup.enter)="loginForm.valid && onLoginSubmit()"
-      >
-      </po-input>
+      @if (customField && customFieldType === 'input') {
+        <po-input
+          [class.po-page-login-field-size-dynamic]="!pageLoginLiterals.loginHint && !pageLoginLiterals.rememberUserHint"
+          class="po-page-login-field-size po-lg-12"
+          name="customFieldInput"
+          [(ngModel)]="customFieldObject.value"
+          p-required
+          [p-error-pattern]="customFieldObject.errorPattern || pageLoginLiterals.customFieldErrorPattern"
+          [p-pattern]="customFieldObject.pattern"
+          [p-placeholder]="customFieldObject.placeholder || pageLoginLiterals.customFieldPlaceholder"
+          [p-size]="componentsSize"
+          (keyup.enter)="loginForm.valid && onLoginSubmit()"
+        >
+        </po-input>
+      }
 
-      <po-combo
-        *ngIf="customField && customFieldType === 'combo'"
-        [class.po-page-login-field-size-dynamic]="!pageLoginLiterals.loginHint && !pageLoginLiterals.rememberUserHint"
-        class="po-page-login-field-size po-lg-12"
-        name="customFieldCombo"
-        [(ngModel)]="customFieldObject.value"
-        p-required
-        [p-field-value]="customFieldObject.fieldValue"
-        [p-filter-service]="customFieldObject.url"
-        [p-placeholder]="customFieldObject.placeholder || pageLoginLiterals.customFieldPlaceholder"
-        [p-size]="componentsSize"
-      >
-      </po-combo>
+      @if (customField && customFieldType === 'combo') {
+        <po-combo
+          [class.po-page-login-field-size-dynamic]="!pageLoginLiterals.loginHint && !pageLoginLiterals.rememberUserHint"
+          class="po-page-login-field-size po-lg-12"
+          name="customFieldCombo"
+          [(ngModel)]="customFieldObject.value"
+          p-required
+          [p-field-value]="customFieldObject.fieldValue"
+          [p-filter-service]="customFieldObject.url"
+          [p-placeholder]="customFieldObject.placeholder || pageLoginLiterals.customFieldPlaceholder"
+          [p-size]="componentsSize"
+        >
+        </po-combo>
+      }
 
-      <po-select
-        *ngIf="customField && customFieldType === 'select'"
-        [class.po-page-login-field-size-dynamic]="!pageLoginLiterals.loginHint && !pageLoginLiterals.rememberUserHint"
-        class="po-page-login-field-size po-lg-12"
-        name="customFieldSelect"
-        [(ngModel)]="customFieldObject.value"
-        p-required
-        [p-placeholder]="customFieldObject.placeholder || pageLoginLiterals.customFieldPlaceholder"
-        [p-options]="customFieldObject.options"
-        [p-size]="componentsSize"
-      >
-      </po-select>
+      @if (customField && customFieldType === 'select') {
+        <po-select
+          [class.po-page-login-field-size-dynamic]="!pageLoginLiterals.loginHint && !pageLoginLiterals.rememberUserHint"
+          class="po-page-login-field-size po-lg-12"
+          name="customFieldSelect"
+          [(ngModel)]="customFieldObject.value"
+          p-required
+          [p-placeholder]="customFieldObject.placeholder || pageLoginLiterals.customFieldPlaceholder"
+          [p-options]="customFieldObject.options"
+          [p-size]="componentsSize"
+        >
+        </po-select>
+      }
 
       <div class="po-lg-12">
-        <div *ngIf="!hideRememberUser" class="po-page-login-hint po-page-login-info-container">
-          <po-switch
-            class="po-page-login-info-field po-lg-7 po-offset-lg-5 po-offset-xl-5"
-            name="rememberUser"
-            [(ngModel)]="rememberUser"
-            p-label-position="1"
-            [p-label-off]="pageLoginLiterals.rememberUser"
-            [p-label-on]="pageLoginLiterals.rememberUser"
-            [p-size]="componentsSize"
-            (keyup.enter)="loginForm.valid && onLoginSubmit()"
-            [p-hide-label-status]="hideLabelStatus"
-          >
-          </po-switch>
-
-          <div
-            *ngIf="pageLoginLiterals.loginHint || pageLoginLiterals.rememberUserHint"
-            class="po-page-login-info-icon-container po-page-login-info-icon-remember-user"
-            [class.po-page-login-info-icon-container-dynamic]="!pageLoginLiterals.rememberUserHint"
-          >
-            <po-icon
-              p-icon="ICON_INFO po-field-icon"
-              *ngIf="pageLoginLiterals.rememberUserHint"
-              p-tooltip-position="right"
-              [p-tooltip]="pageLoginLiterals.rememberUserHint"
+        @if (!hideRememberUser) {
+          <div class="po-page-login-hint po-page-login-info-container">
+            <po-switch
+              class="po-page-login-info-field po-lg-7 po-offset-lg-5 po-offset-xl-5"
+              name="rememberUser"
+              [(ngModel)]="rememberUser"
+              p-label-position="1"
+              [p-label-off]="pageLoginLiterals.rememberUser"
+              [p-label-on]="pageLoginLiterals.rememberUser"
+              [p-size]="componentsSize"
+              (keyup.enter)="loginForm.valid && onLoginSubmit()"
+              [p-hide-label-status]="hideLabelStatus"
             >
-            </po-icon>
+            </po-switch>
+            @if (pageLoginLiterals.loginHint || pageLoginLiterals.rememberUserHint) {
+              <div
+                class="po-page-login-info-icon-container po-page-login-info-icon-remember-user"
+                [class.po-page-login-info-icon-container-dynamic]="!pageLoginLiterals.rememberUserHint"
+              >
+                @if (pageLoginLiterals.rememberUserHint) {
+                  <po-icon
+                    p-icon="ICON_INFO po-field-icon"
+                    p-tooltip-position="right"
+                    [p-tooltip]="pageLoginLiterals.rememberUserHint"
+                  >
+                  </po-icon>
+                }
+              </div>
+            }
           </div>
-        </div>
+        }
       </div>
 
       <po-button
@@ -209,13 +217,17 @@
       >
       </po-button>
 
-      <div *ngIf="recovery" class="po-page-login-recovery-link">
-        <a class="po-font-text-large-bold" (click)="openUrl(recovery)">{{ pageLoginLiterals.forgotPassword }}</a>
-      </div>
+      @if (recovery) {
+        <div class="po-page-login-recovery-link">
+          <a class="po-font-text-large-bold" (click)="openUrl(recovery)">{{ pageLoginLiterals.forgotPassword }}</a>
+        </div>
+      }
 
-      <div *ngIf="registerUrl" class="po-page-login-register-link">
-        <a class="po-font-text-large-bold" (click)="openUrl(registerUrl)">{{ pageLoginLiterals.registerUrl }}</a>
-      </div>
+      @if (registerUrl) {
+        <div class="po-page-login-register-link">
+          <a class="po-font-text-large-bold" (click)="openUrl(registerUrl)">{{ pageLoginLiterals.registerUrl }}</a>
+        </div>
+      }
     </div>
   </form>
 </po-page-background>

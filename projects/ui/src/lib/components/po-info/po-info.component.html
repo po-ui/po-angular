@@ -15,22 +15,14 @@
     [class.po-info-container-content]="orientation !== poInfoOrientation.Horizontal"
     [class.po-info-value-horizontal]="orientation === poInfoOrientation.Horizontal"
   >
-    <ng-container *ngIf="url; then infoLink; else infoValue"></ng-container>
+    @if (url) {
+      @if (isExternalLink) {
+        <po-link [p-label]="value" [p-url]="url" [p-open-new-tab]="true"></po-link>
+      } @else {
+        <po-link [p-label]="value" [p-url]="url" [p-open-new-tab]="false"></po-link>
+      }
+    } @else {
+      <span class="po-info-value">{{ value }}</span>
+    }
   </div>
 </div>
-
-<ng-template #infoLink>
-  <ng-container *ngIf="isExternalLink; then externalLink; else internalLink"> </ng-container>
-</ng-template>
-
-<ng-template #infoValue>
-  <span class="po-info-value">{{ value }}</span>
-</ng-template>
-
-<ng-template #externalLink>
-  <po-link [p-label]="value" [p-url]="url" [p-open-new-tab]="true"></po-link>
-</ng-template>
-
-<ng-template #internalLink>
-  <po-link [p-label]="value" [p-url]="url" [p-open-new-tab]="false"></po-link>
-</ng-template>

@@ -49,12 +49,14 @@ export class PoDisclaimerGroupComponent extends PoDisclaimerGroupBaseComponent i
 
   private el = inject(ElementRef);
 
-  constructor(
-    differs: IterableDiffers,
-    languageService: PoLanguageService,
-    protected changeDetector: ChangeDetectorRef
-  ) {
+  constructor() {
+    const differs = inject(IterableDiffers);
+    const languageService = inject(PoLanguageService);
+    const changeDetector = inject(ChangeDetectorRef);
+
     super(differs, languageService, changeDetector);
+
+    this.changeDetector = changeDetector;
   }
 
   ngAfterViewInit(): void {

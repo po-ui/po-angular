@@ -1,13 +1,14 @@
-<po-upload-drag-drop-area-overlay
-  #dragDropOverlay
-  *ngIf="isDragOver"
-  [p-directory-compatible]="directoryCompatible"
-  [p-disabled]="disabled"
-  [p-literals]="literals"
-  [p-target]="dragDropAreaComponent.elementRef"
-  (p-area-element)="onAreaElement($event)"
->
-</po-upload-drag-drop-area-overlay>
+@if (isDragOver) {
+  <po-upload-drag-drop-area-overlay
+    #dragDropOverlay
+    [p-directory-compatible]="directoryCompatible"
+    [p-disabled]="disabled"
+    [p-literals]="literals"
+    [p-target]="dragDropAreaComponent.elementRef"
+    (p-area-element)="onAreaElement($event)"
+  >
+  </po-upload-drag-drop-area-overlay>
+}
 
 <po-upload-drag-drop-area
   p-upload-drag-drop

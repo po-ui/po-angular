@@ -11,14 +11,12 @@
       p-field-value="id"
     ></po-combo>
 
-    <ng-container *ngIf="people$ | async as people">
+    @if (people$ | async; as people) {
       <div class="po-row">
         <po-info class="po-md-4" p-label="Name" [p-value]="people.name"> </po-info>
-
         <po-info class="po-md-4" p-label="Nickname" [p-value]="people.nickname"> </po-info>
-
         <po-info class="po-md-4" p-label="Email" [p-value]="people.email"> </po-info>
       </div>
-    </ng-container>
+    }
   </po-widget>
 </div>

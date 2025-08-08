@@ -1,5 +1,5 @@
 import { Location } from '@angular/common';
-import { Component, OnDestroy, OnInit, ViewContainerRef } from '@angular/core';
+import { Component, OnDestroy, OnInit, ViewContainerRef, inject } from '@angular/core';
 import { NavigationEnd, Router } from '@angular/router';
 
 import { Subscription } from 'rxjs';
@@ -85,20 +85,15 @@ import { PoMenuPanelItemsService } from './services/po-menu-panel-items.service'
   standalone: false
 })
 export class PoMenuPanelComponent extends PoMenuPanelBaseComponent implements OnDestroy, OnInit {
+  private location = inject(Location);
+  private menuItemsService = inject(PoMenuPanelItemsService);
+  private router = inject(Router);
+
   activeMenuItem: PoMenuPanelItem;
   linkActive: string;
 
   private routeSubscription: Subscription;
   private itemSubscription: Subscription;
-
-  constructor(
-    viewRef: ViewContainerRef,
-    private location: Location,
-    private menuItemsService: PoMenuPanelItemsService,
-    private router: Router
-  ) {
-    super();
-  }
 
   ngOnDestroy() {
     this.itemSubscription.unsubscribe();

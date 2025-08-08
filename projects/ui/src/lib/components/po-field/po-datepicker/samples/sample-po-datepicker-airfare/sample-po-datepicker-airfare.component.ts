@@ -1,4 +1,4 @@
-import { Component, ViewChild } from '@angular/core';
+import { Component, ViewChild, inject } from '@angular/core';
 import { UntypedFormControl } from '@angular/forms';
 
 import { PoDialogService, PoNotificationService, PoSelectOption } from '@po-ui/ng-components';
@@ -9,6 +9,9 @@ import { PoDialogService, PoNotificationService, PoSelectOption } from '@po-ui/n
   standalone: false
 })
 export class SamplePoDatepickerAirfareComponent {
+  private poDialog = inject(PoDialogService);
+  private poNotification = inject(PoNotificationService);
+
   @ViewChild('formAirfare', { static: true }) formAirfare: UntypedFormControl;
 
   accompany: number = 0;
@@ -36,11 +39,6 @@ export class SamplePoDatepickerAirfareComponent {
     { value: 'Business', label: 'Business' },
     { value: 'First', label: 'First' }
   ];
-
-  constructor(
-    private poDialog: PoDialogService,
-    private poNotification: PoNotificationService
-  ) {}
 
   apply() {
     const message = `Would you like to confirm the ticket from ${this.origin} to ${

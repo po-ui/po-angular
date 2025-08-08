@@ -1,6 +1,35 @@
 <form #formExecution="ngForm">
   <div class="po-row">
-    <ng-container *ngIf="existProcessAPI; then lookupProcessesID; else inputProcessesID"></ng-container>
+    @if (existProcessAPI) {
+      @if (noParameters && noCustomParamsComponent) {
+        <po-lookup
+          class="po-md-12"
+          name="processID"
+          [(ngModel)]="value.processID"
+          p-field-label="description"
+          p-field-value="processID"
+          p-required
+          [p-disabled]="isEdit"
+          [p-filter-service]="poPageJobSchedulerLookup"
+          [p-label]="literals.process"
+          [p-placeholder]="literals.enterProcess"
+          [p-size]="componentsSize"
+        >
+        </po-lookup>
+      }
+    } @else {
+      <po-input
+        class="po-md-12"
+        name="processID"
+        [(ngModel)]="value.processID"
+        p-required
+        [p-disabled]="isEdit"
+        [p-label]="literals.process"
+        [p-placeholder]="literals.enterProcess"
+        [p-size]="componentsSize"
+      >
+      </po-input>
+    }
   </div>
 
   <div class="po-row">
@@ -51,7 +80,7 @@
     >
     </po-radio-group>
 
-    <ng-container *ngIf="value.periodicity !== 'single'">
+    @if (value.periodicity !== 'single') {
       <div class="po-row">
         <po-switch
           class="po-md-12"
@@ -64,7 +93,7 @@
           (p-change)="onChangeContainsFrequency($event)"
         >
         </po-switch>
-        <ng-container *ngIf="containsFrequency">
+        @if (containsFrequency) {
           <po-radio-group
             class="po-md-10"
             name="frequencyType"
@@ -76,7 +105,6 @@
             (p-change)="onChangeFrequencyOptions()"
           >
           </po-radio-group>
-
           <po-number
             class="po-md-2"
             name="frequencyValue"
@@ -85,15 +113,12 @@
             [(ngModel)]="value.frequency.value"
           >
           </po-number>
-        </ng-container>
+        }
       </div>
-
       <div class="po-row">
         <po-divider class="po-md-12" [p-label]="literals.periodicityData"> </po-divider>
-
         <ng-container *ngTemplateOutlet="periodicityTemplates[value.periodicity]"> </ng-container>
       </div>
-
       <div class="po-row">
         <po-switch
           class="po-md-3"
@@ -106,40 +131,8 @@
         >
         </po-switch>
       </div>
-    </ng-container>
+    }
   </div>
-
-  <ng-template #lookupProcessesID>
-    <po-lookup
-      *ngIf="noParameters && noCustomParamsComponent"
-      class="po-md-12"
-      name="processID"
-      [(ngModel)]="value.processID"
-      p-field-label="description"
-      p-field-value="processID"
-      p-required
-      [p-disabled]="isEdit"
-      [p-filter-service]="poPageJobSchedulerLookup"
-      [p-label]="literals.process"
-      [p-placeholder]="literals.enterProcess"
-      [p-size]="componentsSize"
-    >
-    </po-lookup>
-  </ng-template>
-
-  <ng-template #inputProcessesID>
-    <po-input
-      class="po-md-12"
-      name="processID"
-      [(ngModel)]="value.processID"
-      p-required
-      [p-disabled]="isEdit"
-      [p-label]="literals.process"
-      [p-placeholder]="literals.enterProcess"
-      [p-size]="componentsSize"
-    >
-    </po-input>
-  </ng-template>
 
   <ng-template #dailyTemplate>
     <ng-container *ngTemplateOutlet="inputHourTemplate"> </ng-container>
@@ -177,19 +170,20 @@
     >
     </po-number>
 
-    <po-number
-      *ngIf="containsFrequency"
-      class="po-md-3"
-      name="rangeLimitDay"
-      [(ngModel)]="value.rangeLimitDay"
-      p-required
-      [p-error-pattern]="'Dia inválido'"
-      [p-label]="literals.endDay"
-      [p-max]="31"
-      [p-pattern]="dayPattern"
-      [p-size]="componentsSize"
-    >
-    </po-number>
+    @if (containsFrequency) {
+      <po-number
+        class="po-md-3"
+        name="rangeLimitDay"
+        [(ngModel)]="value.rangeLimitDay"
+        p-required
+        [p-error-pattern]="'Dia inválido'"
+        [p-label]="literals.endDay"
+        [p-max]="31"
+        [p-pattern]="dayPattern"
+        [p-size]="componentsSize"
+      >
+      </po-number>
+    }
 
     <ng-container *ngTemplateOutlet="inputHourTemplate"> </ng-container>
   </ng-template>
@@ -209,19 +203,20 @@
     >
     </po-input>
 
-    <po-input
-      *ngIf="containsFrequency && value.frequency.type !== 'day'"
-      class="po-md-2"
-      name="rangeLimitHour"
-      [(ngModel)]="value.rangeLimitHour"
-      p-mask="99:99"
-      p-mask-format-model
-      p-placeholder="HH:mm"
-      p-required
-      [p-label]="literals.endTime"
-      [p-pattern]="timePattern"
-      [p-size]="componentsSize"
-    >
-    </po-input>
+    @if (containsFrequency && value.frequency.type !== 'day') {
+      <po-input
+        class="po-md-2"
+        name="rangeLimitHour"
+        [(ngModel)]="value.rangeLimitHour"
+        p-mask="99:99"
+        p-mask-format-model
+        p-placeholder="HH:mm"
+        p-required
+        [p-label]="literals.endTime"
+        [p-pattern]="timePattern"
+        [p-size]="componentsSize"
+      >
+      </po-input>
+    }
   </ng-template>
 </form>

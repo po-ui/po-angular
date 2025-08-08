@@ -1,4 +1,4 @@
-import { Component, OnInit, ViewChild } from '@angular/core';
+import { Component, OnInit, ViewChild, inject } from '@angular/core';
 import { Router } from '@angular/router';
 
 import { PoBreadcrumb } from '@po-ui/ng-components';
@@ -20,6 +20,11 @@ import { SamplePoPageListHiringProcessesService } from './sample-po-page-list-hi
   standalone: false
 })
 export class SamplePoPageListHiringProcessesComponent implements OnInit {
+  private sampleHiringProcessesService = inject(SamplePoPageListHiringProcessesService);
+  private poNotification = inject(PoNotificationService);
+  private poDialog = inject(PoDialogService);
+  private router = inject(Router);
+
   @ViewChild('advancedFilterModal', { static: true }) advancedFilterModal: PoModalComponent;
   @ViewChild('poPageList', { static: true }) poPageList: PoPageListComponent;
 
@@ -59,13 +64,6 @@ export class SamplePoPageListHiringProcessesComponent implements OnInit {
   };
 
   private disclaimers = [];
-
-  constructor(
-    private sampleHiringProcessesService: SamplePoPageListHiringProcessesService,
-    private poNotification: PoNotificationService,
-    private poDialog: PoDialogService,
-    private router: Router
-  ) {}
 
   ngOnInit() {
     this.disclaimerGroup = {

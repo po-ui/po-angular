@@ -1,4 +1,4 @@
-import { Component, ViewChild } from '@angular/core';
+import { Component, ViewChild, inject } from '@angular/core';
 import { NgForm } from '@angular/forms';
 
 import { PoCheckboxGroupOption, PoComboOption } from '@po-ui/ng-components';
@@ -13,6 +13,8 @@ import { PoModalComponent } from '@po-ui/ng-components';
   standalone: false
 })
 export class SamplePoModalFruitsSaladComponent {
+  private poNotification = inject(PoNotificationService);
+
   @ViewChild('optionsForm', { static: true }) form: NgForm;
   @ViewChild(PoModalComponent, { static: true }) poModal: PoModalComponent;
 
@@ -48,8 +50,6 @@ export class SamplePoModalFruitsSaladComponent {
     { value: 'graple', label: 'Grape' },
     { value: 'strawberry', label: 'Strawberry' }
   ];
-
-  constructor(private poNotification: PoNotificationService) {}
 
   closeModal() {
     this.form.reset();

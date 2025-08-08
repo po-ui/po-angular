@@ -1,4 +1,4 @@
-import { Component } from '@angular/core';
+import { Component, inject } from '@angular/core';
 
 import { PoDialogService, PoNotificationService, PoToolbarAction, PoToolbarProfile } from '@po-ui/ng-components';
 
@@ -9,6 +9,9 @@ import { PoDialogService, PoNotificationService, PoToolbarAction, PoToolbarProfi
   standalone: false
 })
 export class SamplePoToolbarLoggedComponent {
+  private poDialog = inject(PoDialogService);
+  private poNotification = inject(PoNotificationService);
+
   notificationActions: Array<PoToolbarAction> = [
     {
       icon: 'an an-newspaper',
@@ -39,11 +42,6 @@ export class SamplePoToolbarLoggedComponent {
   ];
 
   title: string = 'PO Toolbar Logged';
-
-  constructor(
-    private poDialog: PoDialogService,
-    private poNotification: PoNotificationService
-  ) {}
 
   getNotificationNumber() {
     return this.notificationActions.filter(not => not.type === 'danger').length;

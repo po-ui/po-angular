@@ -104,19 +104,17 @@
 
     <po-step p-label="Confirm">
       <po-widget class="po-lg-8 po-mt-2" p-title="Realize & Show">
-        <div class="tht-row" *ngIf="canSubmitProject()">
-          <div class="po-sm-12">
-            <p class="po-font-text-large">Confirm informations</p>
+        @if (canSubmitProject()) {
+          <div class="tht-row">
+            <div class="po-sm-12">
+              <p class="po-font-text-large">Confirm informations</p>
+            </div>
+            <po-info class="po-md-4" p-label="File name" [p-value]="project[0].name || 'N/D'"> </po-info>
+            <po-info class="po-md-4" p-label="Title" [p-value]="title || 'N/D'"> </po-info>
+            <po-info class="po-md-4" p-label="Description" [p-value]="description || 'N/D'"> </po-info>
+            <po-button class="po-sm-12 po-mt-2 po-mb-2" p-label="Confirm" (p-click)="confirmSubmit()"> </po-button>
           </div>
-
-          <po-info class="po-md-4" p-label="File name" [p-value]="project[0].name || 'N/D'"> </po-info>
-
-          <po-info class="po-md-4" p-label="Title" [p-value]="title || 'N/D'"> </po-info>
-
-          <po-info class="po-md-4" p-label="Description" [p-value]="description || 'N/D'"> </po-info>
-
-          <po-button class="po-sm-12 po-mt-2 po-mb-2" p-label="Confirm" (p-click)="confirmSubmit()"> </po-button>
-        </div>
+        }
       </po-widget>
     </po-step>
   </po-stepper>

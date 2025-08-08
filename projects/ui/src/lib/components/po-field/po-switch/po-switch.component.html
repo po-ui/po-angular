@@ -20,25 +20,23 @@
             [class.po-switch-toggle-aa]="size === 'small'"
             [attr.aria-label]="value === true ? labelOn : labelOff"
           >
-            <po-icon
-              *ngIf="value === true"
-              class="po-switch-icon"
-              [class.po-switch-icon-aa]="size === 'small'"
-              p-icon="ICON_OK"
-            ></po-icon>
+            @if (value === true) {
+              <po-icon class="po-switch-icon" [class.po-switch-icon-aa]="size === 'small'" p-icon="ICON_OK"></po-icon>
+            }
           </div>
         </div>
       </div>
 
-      <po-label
-        *ngIf="!hideLabelStatus"
-        class="po-switch-label"
-        [class.po-switch-label-aa]="size === 'small'"
-        [p-disabled]="disabled"
-        [p-label]="value === true ? labelOn : labelOff"
-        (click)="eventClick()"
-      >
-      </po-label>
+      @if (!hideLabelStatus) {
+        <po-label
+          class="po-switch-label"
+          [class.po-switch-label-aa]="size === 'small'"
+          [p-disabled]="disabled"
+          [p-label]="value === true ? labelOn : labelOff"
+          (click)="eventClick()"
+        >
+        </po-label>
+      }
     </div>
   </div>
 
