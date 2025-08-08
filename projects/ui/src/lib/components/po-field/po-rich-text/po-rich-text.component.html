@@ -1,5 +1,5 @@
 <po-field-container [p-label]="label" [p-optional]="optional" [p-required]="required" [p-show-required]="showRequired">
-  <div class="po-field-container-content">
+  <div class="po-field-container-content" [attr.p-size]="size">
     <po-rich-text-body
       #richTextBody
       [p-height]="height"
@@ -7,7 +7,6 @@
       [p-model-value]="value"
       [p-placeholder]="placeholder"
       [p-readonly]="readonly"
-      [p-size]="size"
       (p-change)="onChangeValue($event)"
       (p-commands)="richTextToolbar?.setButtonsStates($event)"
       (p-selected-link)="richTextToolbar?.selectedLink($event)"
@@ -39,6 +38,7 @@
     [p-error-pattern]="errorMsg"
     [p-show-additional-help]="displayAdditionalHelp"
     [p-show-additional-help-icon]="!!additionalHelpTooltip || additionalHelp.observed"
+    [p-size]="size"
     (p-additional-help)="additionalHelp.emit()"
   ></po-field-container-bottom>
 </po-field-container>

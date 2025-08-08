@@ -4,6 +4,8 @@ import { TestBed } from '@angular/core/testing';
 import { ICONS_DICTIONARY, PoIconDictionary } from '../../components/po-icon';
 import { PoThemeA11yEnum } from './enum/po-theme-a11y.enum';
 import { PoThemeTypeEnum } from './enum/po-theme-type.enum';
+import { poThemeDefaultAA } from './helpers/accessibilities/po-theme-default-aa.constant';
+import { poThemeDensity } from './helpers/accessibilities/po-theme-density.constant';
 import { poThemeDefault } from './helpers/po-theme-poui.constant';
 import { PoTheme } from './interfaces/po-theme.interface';
 import { PoThemeService } from './po-theme.service';
@@ -369,6 +371,14 @@ describe('PoThemeService:', () => {
         spyOn(document.documentElement, 'getAttribute').and.callThrough();
       });
 
+      it('should return false when isValidA11yLevel returns false', () => {
+        spyOn(service as any, 'isValidA11yLevel').and.returnValue(false);
+
+        const result = service.setA11yDefaultSizeSmall(true);
+
+        expect(result).toBeFalse();
+      });
+
       it('should set enableSmallSizeForComponents to false if data-a11y is not AA or not set', () => {
         (document.documentElement.getAttribute as jasmine.Spy).and.returnValue(null);
         const resultNull = service.setA11yDefaultSizeSmall(true);
@@ -395,6 +405,40 @@ describe('PoThemeService:', () => {
         (document.documentElement.getAttribute as jasmine.Spy).and.returnValue('AAA');
         expect(service.setA11yDefaultSizeSmall(true)).toBeFalse();
         expect(service.setA11yDefaultSizeSmall(false)).toBeFalse();
+      });
+    });
+
+    describe('setA11yDensityMode:', () => {
+      beforeEach(() => {
+        spyOn(service as any, 'setPerComponentAndOnRoot');
+      });
+
+      it('should apply small mode when "small" is passed', () => {
+        service.setA11yDensityMode('small');
+
+        expect((service as any).setPerComponentAndOnRoot).toHaveBeenCalledWith(
+          undefined,
+          poThemeDefaultAA.perComponent,
+          jasmine.objectContaining(poThemeDensity.small)
+        );
+      });
+
+      it('should apply medium mode when "medium" is passed', () => {
+        service.setA11yDensityMode('medium');
+
+        const args = (service as any).setPerComponentAndOnRoot.calls.mostRecent().args;
+        const onRootTokens = args[2];
+
+        expect(onRootTokens).not.toEqual(jasmine.objectContaining(poThemeDensity.small));
+      });
+
+      it('should fallback to "medium" when invalid value is passed', () => {
+        service.setA11yDensityMode('invalid');
+
+        const args = (service as any).setPerComponentAndOnRoot.calls.mostRecent().args;
+        const onRootTokens = args[2];
+
+        expect(onRootTokens).not.toEqual(jasmine.objectContaining(poThemeDensity.small));
       });
     });
 

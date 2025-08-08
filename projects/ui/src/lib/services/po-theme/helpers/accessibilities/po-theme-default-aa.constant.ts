@@ -4,9 +4,7 @@
 export const poThemeDefaultAA = {
   perComponent: {},
   onRoot: {
-    /*------------------------------------*\
-    COMMON
-    \*------------------------------------*/
+    // #region COMMON
     '--outline-width': 'var(--border-width-md)',
     '--outline-width-focus-visible': 'var(--border-width-md)'
   }
