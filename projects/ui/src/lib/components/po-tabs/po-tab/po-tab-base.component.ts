@@ -17,8 +17,33 @@ export abstract class PoTabBaseComponent {
   /** Rótulo da aba. */
   @Input('p-label') label: string;
 
+  /**
+   * @optional
+   *
+   * @description
+   *
+   * Esconde o botão de fechar a aba.
+   *
+   * > Atenção: Propriedade disponível somente no `po-context-tabs`.
+   *
+   * @default `false`
+   */
+  @Input('p-hide-close') hideClose: boolean = false;
+
   /** Método disparado ao clicar na aba. */
   @Output('p-click') click = new EventEmitter();
+
+  /**
+   * @optional
+   *
+   * @description
+   *
+   * Evento disparado ao clicar no botão de fechar a aba.
+   *
+   * > Atenção: Propriedade disponível somente no `po-context-tabs`.
+   *
+   */
+  @Output('p-close-tab') closeTab = new EventEmitter();
 
   // ID da aba
   id?: string = uuid();

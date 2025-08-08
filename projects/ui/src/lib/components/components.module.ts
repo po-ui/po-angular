@@ -41,6 +41,7 @@ import { PoSearchModule } from './po-search';
 import { PoSlideModule } from './po-slide/po-slide.module';
 import { PoStepperModule } from './po-stepper/po-stepper.module';
 import { PoTableModule } from './po-table/po-table.module';
+import { PoContextTabsModule } from './po-context-tabs/po-context-tabs.module';
 import { PoTabsModule } from './po-tabs/po-tabs.module';
 import { PoTagModule } from './po-tag/po-tag.module';
 import { PoToolbarModule } from './po-toolbar/po-toolbar.module';
@@ -84,6 +85,7 @@ import { PoToasterModule } from './po-toaster';
     PoStepperModule,
     PoTableModule,
     PoTabsModule,
+    PoContextTabsModule,
     PoTagModule,
     PoToolbarModule,
     PoTreeViewModule,
@@ -132,6 +134,7 @@ import { PoToasterModule } from './po-toaster';
     PoSlideModule,
     PoStepperModule,
     PoTableModule,
+    PoContextTabsModule,
     PoTabsModule,
     PoTagModule,
     PoToolbarModule,
