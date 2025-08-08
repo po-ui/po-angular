@@ -73,8 +73,8 @@ export class PoTabButtonComponent implements OnChanges, AfterViewInit {
   }
 
   constructor(
-    private elementRef: ElementRef,
-    private changeDetector: ChangeDetectorRef
+    public changeDetector: ChangeDetectorRef,
+    private elementRef: ElementRef
   ) {}
 
   ngAfterViewInit(): void {
