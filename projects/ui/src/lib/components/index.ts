@@ -39,6 +39,7 @@ export * from './po-progress/index';
 export * from './po-slide/index';
 export * from './po-stepper/index';
 export * from './po-table/index';
+export * from './po-context-tabs/index';
 export * from './po-tabs/index';
 export * from './po-tag/index';
 export * from './po-toolbar/index';

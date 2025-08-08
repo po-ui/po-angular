@@ -23,16 +23,20 @@ import { PoTabsService } from './po-tabs.service';
 
 export const poTabsLiterals: object = {
   en: <any>{
-    moreTabs: 'More'
+    moreTabs: 'More',
+    close: 'Close Tab'
   },
   es: <any>{
-    moreTabs: 'Más'
+    moreTabs: 'Más',
+    close: 'Cerrar pestaña'
   },
   pt: <any>{
-    moreTabs: 'Mais'
+    moreTabs: 'Mais',
+    close: 'Fechar Aba'
   },
   ru: <any>{
-    moreTabs: 'Ещё'
+    moreTabs: 'Ещё',
+    close: 'Закрыть вкладку'
   }
 };
 
@@ -40,6 +44,25 @@ const poTabsMaxNumberOfTabs = 5;
 
 /**
  * @docsExtends PoTabsBaseComponent
+ *
+ * @description
+ *
+ * O componente `po-tabs` é responsável por agrupar [abas](/documentation/po-tab) dispostas numa linha horizontal,
+ * ideal para facilitar a organização de conteúdos.
+ *
+ * O componente exibirá as abas enquanto houver espaço na tela, caso a aba ultrapasse o limite da tela a mesma será agrupada em um dropdown.
+ *
+ * > As abas que estiverem agrupadas serão dispostas numa cascata suspensa que será exibida ao clicar no botão.
+ *
+ * É possível realizar a navegação entre as abas através da tecla SETAS(direita e esquerda) do teclado.
+ * Caso uma aba estiver desabilitada, não receberá foco de navegação.
+ *
+ * #### Boas práticas
+ *
+ * - Evite utilizar um `po-tabs` dentro de outro `po-tabs`;
+ * - Evite utilizar uma quantidade excessiva de abas, pois irá gerar um *scroll* muito longo no `dropdown`;
+ * - Evite `labels` extensos para as `tabs` pois podem quebrar seu *layout*, use `labels` diretas, curtas e intuitivas.
+ *
  *
  * @example
  *
@@ -82,6 +105,7 @@ export class PoTabsComponent extends PoTabsBaseComponent implements OnInit, Afte
   tabsDropdown = [];
   initializeCalculation = true;
   initializeComponent = false;
+  initCheckChangesTab = false;
 
   quantityTabsButton;
   defaultLastTabWidth!: number;
@@ -92,7 +116,7 @@ export class PoTabsComponent extends PoTabsBaseComponent implements OnInit, Afte
   private subscriptionTabActive: Subscription = new Subscription();
   constructor(
     protected poThemeService: PoThemeService,
-    private changeDetector: ChangeDetectorRef,
+    public changeDetector: ChangeDetectorRef,
     private languageService: PoLanguageService,
     private tabsService: PoTabsService
   ) {
@@ -105,8 +129,8 @@ export class PoTabsComponent extends PoTabsBaseComponent implements OnInit, Afte
   }
 
   ngOnInit(): void {
-    this.subscriptionTabsService = this.tabsService.onChangesTriggered$.subscribe(() => {
-      this.updateTabsState();
+    this.subscriptionTabsService = this.tabsService.onChangesTriggered$.subscribe((tab?) => {
+      this.updateTabsState(false, tab);
       if (this.initializeComponent) {
         this.handleKeyboardNavigationTab();
       }
@@ -128,6 +152,10 @@ export class PoTabsComponent extends PoTabsBaseComponent implements OnInit, Afte
     this.changeDetector.detectChanges();
     this.handleKeyboardNavigationTab();
     this.initializeComponent = true;
+
+    setTimeout(() => {
+      this.initCheckChangesTab = true;
+    }, 500);
   }
 
   ngAfterContentInit() {
@@ -201,12 +229,18 @@ export class PoTabsComponent extends PoTabsBaseComponent implements OnInit, Afte
     }
   }
 
-  reorderTabs(tabToReorder: PoTabComponent): void {
+  reorderTabs(tabToReorder: PoTabComponent, lastTab?): void {
     const tabsArray = this.tabsChildrenArray;
     const tabIndex = tabsArray.findIndex(item => item.id === tabToReorder.id);
     if (tabIndex !== -1) {
-      const [tab] = tabsArray.splice(tabIndex, 1);
-      tabsArray.splice(this.quantityTabsButton - 1, 0, tab);
+      if (lastTab) {
+        const lastTabShowed = tabsArray.findIndex(item => item.id === lastTab.id);
+        const [tab] = tabsArray.splice(tabIndex, 1);
+        tabsArray.splice(lastTabShowed, 0, tab);
+      } else {
+        const [tab] = tabsArray.splice(tabIndex, 1);
+        tabsArray.splice(this.quantityTabsButton - 1, 0, tab);
+      }
     }
     this.tabsChildren.reset(tabsArray);
     this.changeDetector.detectChanges();
@@ -252,9 +286,17 @@ export class PoTabsComponent extends PoTabsBaseComponent implements OnInit, Afte
   }
 
   // Movimenta a tab da visão de tabs para o dropdown, e vice-versa.
-  private changeTabPositionByDropdown(tabToActivate: PoTabComponent): void {
-    const lastTab = this.tabsDefault[this.tabsDefault.length - 1];
-    this.tabsDefault = this.tabsDefault.filter(tab => tab.id !== lastTab.id);
+  public changeTabPositionByDropdown(tabToActivate: PoTabComponent, byContextsTabs = false): void {
+    let lastTab;
+    if (byContextsTabs) {
+      const tabsDefault = this.tabButton.filter(tab => !tab.nativeElement.hidden);
+      lastTab = tabsDefault[tabsDefault.length - 1];
+      this.tabsDefault = this.tabsDefault.filter(tab => tab.id !== lastTab.nativeElement.id);
+      lastTab = { id: lastTab.nativeElement.id };
+    } else {
+      lastTab = this.tabsDefault[this.tabsDefault.length - 1];
+      this.tabsDefault = this.tabsDefault.filter(tab => tab.id !== lastTab.id);
+    }
     this.tabsDefault.push(tabToActivate);
 
     const _tabsDropdown = this.tabsDropdown.filter(tab => tab.id !== tabToActivate.id);
@@ -274,13 +316,23 @@ export class PoTabsComponent extends PoTabsBaseComponent implements OnInit, Afte
     }
   }
 
-  private updateTabsState(initialState: boolean = false): void {
+  public updateTabsState(initialState: boolean = false, tab?: PoTabComponent): void {
     this.defaultLastTabWidth = this.tabButton?.last?.nativeElement?.getBoundingClientRect().width;
     if (this.defaultLastTabWidth <= 0) {
       return;
     }
 
-    const lastTabChildren: PoTabComponent = this.tabsChildrenArray[this.quantityTabsButton - 1];
+    this.executeTabsState(initialState);
+  }
+
+  executeTabsState(initialState, idByContextTabs?: string) {
+    let lastTabChildren: PoTabComponent;
+    if (idByContextTabs) {
+      lastTabChildren = this.tabsChildrenArray?.find(tab => tab.id === idByContextTabs);
+    } else {
+      lastTabChildren = this.tabsChildrenArray[this.quantityTabsButton - 1];
+    }
+
     if (lastTabChildren) {
       lastTabChildren.widthButton = this.defaultLastTabWidth;
     }
