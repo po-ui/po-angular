@@ -1,10 +1,9 @@
 import { ComponentFixture, TestBed } from '@angular/core/testing';
-import { By } from '@angular/platform-browser';
 
+import { EventEmitter, QueryList } from '@angular/core';
+import { PoTabComponent } from './po-tab/po-tab.component';
 import { PoTabsComponent } from './po-tabs.component';
 import { PoTabsService } from './po-tabs.service';
-import { PoTabComponent } from './po-tab/po-tab.component';
-import { EventEmitter, QueryList } from '@angular/core';
 
 describe('PoTabsComponent:', () => {
   let component: PoTabsComponent;
@@ -540,6 +539,29 @@ describe('PoTabsComponent:', () => {
       expect(component.tabsDropdown.length).toBe(1);
     });
 
+    it('reorderTabs: should reorder tab to position of lastTab and call reset and detectChanges', () => {
+      const tabToReorder = { id: 'tab4' } as any;
+      const lastTab = { id: 'tab3' } as any;
+
+      component.tabsChildren = {
+        toArray: () => [{ id: 'tab1' }, { id: 'tab2' }, { id: 'tab3' }, { id: 'tab4' }] as any,
+        reset: tabs => tabs
+      } as any;
+
+      spyOn(component.tabsChildren, 'reset');
+      spyOn(component.changeDetector, 'detectChanges');
+
+      component.reorderTabs(tabToReorder, lastTab);
+
+      expect(component.tabsChildren.reset).toHaveBeenCalledWith([
+        { id: 'tab1' },
+        { id: 'tab2' },
+        { id: 'tab4' },
+        { id: 'tab3' }
+      ] as any);
+      expect(component.changeDetector.detectChanges).toHaveBeenCalled();
+    });
+
     it('reorderTabs: should reorder tabs if tabIndex is not -1', () => {
       const tabMock = jasmine.createSpyObj('PoTabComponent', ['id'], { id: 'tab4', widthButton: '130' });
       tabMock.click = { emit: () => {} };
@@ -576,6 +598,39 @@ describe('PoTabsComponent:', () => {
       expect(tabMock.click.emit).toHaveBeenCalledWith(tabMock);
       expect(reorderedTabs.map(tab => tab.id)).toEqual(['tab1', 'tab2', 'tab4', 'tab3']);
       expect(component.tabButton.last.nativeElement.style.width).toBe('130px');
+    });
+
+    it('changeTabPositionByDropdown: should change tab position by dropdown when byContextsTabs is true', () => {
+      const tabToActivate = { id: 'tab-5', active: false } as any;
+
+      const lastTabMock = {
+        id: 'tab-2',
+        nativeElement: { hidden: false, id: 'tab-2' }
+      };
+
+      component['tabButton'] = [
+        { nativeElement: { hidden: true } },
+        { nativeElement: { hidden: false, id: 'tab-2' } },
+        { nativeElement: { hidden: false, id: 'tab-3' } },
+        { nativeElement: { hidden: false, id: 'tab-4' } },
+        { nativeElement: { hidden: true, id: 'tab-5' } },
+        { nativeElement: { hidden: true, id: 'tab-6' } }
+      ] as any;
+
+      component['tabsDefault'] = [{ id: 'tab-2' }, { id: 'tab-3' }, { id: 'tab-4' }];
+
+      component['tabsDropdown'] = [{ id: 'tab-5' }, { id: 'tab-6' }];
+
+      spyOn(component as any, 'onTabActive');
+
+      component.changeTabPositionByDropdown(tabToActivate, true);
+
+      expect(component['tabsDefault']).toEqual([{ id: 'tab-2' }, { id: 'tab-3' }, { id: 'tab-5', active: true }]);
+
+      expect(component['tabsDropdown']).toEqual([{ id: 'tab-4' }, { id: 'tab-6' }]);
+
+      expect(tabToActivate.active).toBeTrue();
+      expect(component['onTabActive']).toHaveBeenCalled();
     });
 
     it('updateTabsState: should update tabs state correctly', () => {
@@ -639,6 +694,17 @@ describe('PoTabsComponent:', () => {
       (component as any).updateTabsState();
 
       expect(component.defaultLastTabWidth).toBe(0);
+    });
+
+    it('executeTabsState: should set lastTabChildren widthButton if call by context-tabs', () => {
+      const lastTabs = { id: 'tab-5', widthButton: undefined };
+      component['tabsChildren'] = {
+        toArray: () => [{ id: 'tab-1', hide: false, showTooltip: true }, lastTabs]
+      } as any;
+      component.defaultLastTabWidth = 200;
+      component.executeTabsState(false, 'tab-5');
+
+      expect(lastTabs.widthButton).toBe(200);
     });
   });
 });
