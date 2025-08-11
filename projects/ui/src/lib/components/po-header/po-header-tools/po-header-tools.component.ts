@@ -16,7 +16,7 @@ export class PoHeaderToolsComponent {
   @ViewChildren('poPopoverAction') poPopoverActions: QueryList<PoPopoverComponent>;
 
   @Input('p-actions-tools') set actionTools(value: Array<PoHeaderActionTool>) {
-    this._actionTools = value;
+    this._actionTools = value.slice(0, 3);
   }
 
   get actionTools(): Array<PoHeaderActionTool> {

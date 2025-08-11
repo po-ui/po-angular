@@ -13,6 +13,18 @@ import {
 import { debounceTime, fromEvent, Subscription } from 'rxjs';
 import { PoHeaderBaseComponent } from './po-header-base.component';
 
+/**
+ * @docsExtends PoHeaderBaseComponent
+ *
+ * @example
+ *
+ * <example name="po-header-basic" title="PO Header Basic">
+ *  <file name="sample-po-header-basic/sample-po-header-basic.component.html"> </file>
+ *  <file name="sample-po-header-basic/sample-po-header-basic.component.ts"> </file>
+ * </example>
+ *
+ */
+
 @Component({
   selector: 'po-header',
   templateUrl: './po-header.component.html',
@@ -20,6 +32,7 @@ import { PoHeaderBaseComponent } from './po-header-base.component';
 })
 export class PoHeaderComponent extends PoHeaderBaseComponent implements AfterViewInit, OnChanges {
   afterViewInitWascalled = false;
+  showMenu = false;
   visibleMenuItems: Array<any> = [...this.menuItems];
 
   overflowItems: Array<any> = [];
@@ -50,6 +63,7 @@ export class PoHeaderComponent extends PoHeaderBaseComponent implements AfterVie
 
     if (changes['menuItems'] && this.afterViewInitWascalled) {
       this.updateMenu();
+      this.combineItems();
     }
   }
 
@@ -66,6 +80,7 @@ export class PoHeaderComponent extends PoHeaderBaseComponent implements AfterVie
         this.updateMenu();
       });
 
+    this.combineItems();
     this.afterViewInitWascalled = true;
   }
 
@@ -151,5 +166,23 @@ export class PoHeaderComponent extends PoHeaderBaseComponent implements AfterVie
 
   clickFirstAction() {
     this.buttonFirstActionRef = this.buttonFirstAction;
+  }
+
+  onClickMenu() {
+    this.showMenu = !this.showMenu;
+    console.log('menu clicked');
+  }
+
+  onCloseMenu() {
+    this.showMenu = false;
+  }
+
+  testandoClique() {
+    console.log('cliquei dentro do menu');
+  }
+
+  private combineItems() {
+    const toolActions = this.actionsTools.map(item => ({ label: item.title, action: item.action }));
+    this.menuSmallItems = [...this.menuItems, ...toolActions];
   }
 }

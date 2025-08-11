@@ -235,6 +235,12 @@
       display: none;
     }
   } */
+
+  /* .po-header-nav {
+    position: fixed;
+    top: 0;
+    width: 100%;
+  } */
 </style>
 
 <nav #navElement class="po-header-nav">
@@ -244,7 +250,11 @@
       <img src="https://totvs.com/imagens/image-share.jpg" alt="Logo" />
     </div>
     <span class="po-header-nav-brand-text">Minha Empresa</span> -->
-    <po-header-brand [p-brand]="brand"></po-header-brand>
+    <po-header-brand
+      [p-brand]="brand"
+      [p-actions-menu]="menuSmallItems"
+      (p-click-menu)="onClickMenu()"
+    ></po-header-brand>
   </div>
 
   <ul #menuWrapperItens class="po-header-nav-submenus-wrapper">
@@ -275,7 +285,10 @@
 
   <ul #menuWrapperTools class="po-nav-tools-wrapper">
     <po-header-tools [p-actions-tools]="actionsTools"></po-header-tools>
-    <po-header-customer [p-header-user]="headerUser"></po-header-customer>
+
+    @if (headerUser?.customerBrand && headerUser?.avatar) {
+      <po-header-customer [p-header-user]="headerUser"></po-header-customer>
+    }
     <!-- <li class="po-header-nav-item-small">
       <po-button
         *ngIf="afterViewInitWascalled"
@@ -325,13 +338,29 @@
     </li> -->
   </ul>
 </nav>
-<div style="margin-top: 30px"></div>
+
+<div class="po-header-overlay" [class.show]="showMenu" (click)="onCloseMenu()"></div>
+
+<aside class="po-header-side-menu" [class.open]="showMenu">
+  <div class=""></div>
+  <po-button (p-click)="onCloseMenu()" p-icon="an an-x"></po-button>
+  <ul>
+    <li (click)="testandoClique()">Dashboard</li>
+    <li>Configurações</li>
+    <li>Perfil</li>
+    <li>Sair</li>
+  </ul>
+</aside>
+
+<!-- <div style="margin-top: 30px"></div>
 <p>overflowItems: {{ overflowItems | json }}</p>
 <br />
 <p>visibleMenuItems: {{ visibleMenuItems | json }}</p>
 <br />
 <p>menuItems: {{ menuItems | json }}</p>
+<br />
+<p>menuSmallItems: {{menuSmallItems | json}}</p>
 
 <ng-container *ngIf="template">
   <ng-container *ngTemplateOutlet="template"></ng-container>
-</ng-container>
+</ng-container> -->

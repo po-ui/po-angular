@@ -14,6 +14,12 @@ import { PoHeaderCustomerComponent } from './po-header-customer/po-header-custom
 import { PoTooltipModule } from '../../directives';
 import { PoPopupModule } from '../po-popup';
 
+/**
+ * @description
+ *
+ * Módulo do componente `po-header`.
+ */
+
 @NgModule({
   imports: [
     CommonModule,

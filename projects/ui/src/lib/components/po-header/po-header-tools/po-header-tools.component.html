@@ -38,7 +38,7 @@
 
 <div class="po-header-nav-tools">
   @for (action of actionTools; track action.title; let i = $index) {
-    <li class="po-header-nav-item-small">
+    <li [class.po-header-nav-item-small]="i !== actionTools.length - 1">
       <po-button
         #buttonActionElement
         [p-tooltip]="action.tooltip"

@@ -110,7 +110,7 @@
 </style>
 
 <div class="po-header-nav-tools" (click)="onClickUserSection()">
-  <li tabindex="0" class="po-header-nav-customer-container">
+  <li #targetRef tabindex="0" class="po-header-nav-customer-container" (click)="onClickPopup()">
     <div class="po-header-nav-customer-brand">
       <img [src]="headerUser.customerBrand" alt="User" />
     </div>
@@ -136,3 +136,24 @@
     }
   </li>
 </div>
+
+@if (headerUser?.items?.length) {
+  <po-popup
+    #poPopupAction
+    [p-actions]="headerUser.items"
+    [p-target]="targetRef"
+    [p-hide-arrow]="true"
+    p-position="bottom-left"
+  >
+  </po-popup>
+}
+
+@if (headerUser?.popover) {
+  <po-popover #poPopoverAction [p-target]="targetRef" p-position="bottom-left" [p-hide-arrow]="true">
+    <div class="po-header-popover-main">
+      <span>{{ headerUser.popover.title }}</span>
+      <po-button p-kind="tertiary" p-icon="ICON_CLOSE" (p-click)="onClickClosePopover()"></po-button>
+    </div>
+    <ng-container *ngTemplateOutlet="headerUser.popover.content"></ng-container>
+  </po-popover>
+}
