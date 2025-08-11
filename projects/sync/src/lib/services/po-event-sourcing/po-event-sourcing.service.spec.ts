@@ -815,6 +815,26 @@ describe('PoEventSourcingService:', () => {
       expect(result).toEqual(expectedValue);
     });
 
+    it('createPoHttpRequestData: should return body as empty object when record is undefined', async () => {
+      const url = 'http://url.com/customers';
+      const method = PoHttpRequestType.POST;
+      const headers = [{ name: 'test', value: 'teste1' }];
+
+      const poHttpRequestData: PoHttpRequestData = {
+        url,
+        method,
+        body: {},
+        headers
+      };
+
+      spyOn(eventSourcingService, <any>'createFormData');
+
+      const result = await eventSourcingService['createPoHttpRequestData'](url, method, undefined, headers);
+
+      expect(result).toEqual(poHttpRequestData);
+      expect(eventSourcingService['createFormData']).not.toHaveBeenCalled();
+    });
+
     it('createFormData: should return a FormData', async () => {
       const file = new File([''], 'filename', { type: 'text/html' });
       const body = 'Data: ';
