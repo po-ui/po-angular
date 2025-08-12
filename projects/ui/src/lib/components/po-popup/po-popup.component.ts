@@ -111,6 +111,10 @@ export class PoPopupComponent extends PoPopupBaseComponent {
     this.showPopup && this.oldTarget === this.target ? this.close() : this.open(param);
   }
 
+  onClickItem(item: any) {
+    this.clickItem.emit(item);
+  }
+
   protected checkAllActionIsInvisible() {
     if (this.actions.every(item => item.visible === false)) {
       return true;

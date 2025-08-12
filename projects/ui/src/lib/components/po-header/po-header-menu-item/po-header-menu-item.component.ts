@@ -1,4 +1,14 @@
-import { ChangeDetectorRef, Component, ElementRef, Input, OnChanges, SimpleChanges, ViewChild } from '@angular/core';
+import {
+  ChangeDetectorRef,
+  Component,
+  ElementRef,
+  EventEmitter,
+  Input,
+  OnChanges,
+  Output,
+  SimpleChanges,
+  ViewChild
+} from '@angular/core';
 import { PoPopupComponent } from '../../po-popup';
 import { PoHeaderActions } from '../interfaces/po-header-actions.interface';
 
@@ -18,6 +28,8 @@ export class PoHeaderMenuItemComponent implements OnChanges {
   @Input('p-item-overflow') itemOverFlow: Array<PoHeaderActions>;
 
   @Input('p-button-overflow') overflowButton: boolean = false;
+
+  @Output('p-item-click') itemClick = new EventEmitter<PoHeaderActions>();
 
   constructor(private cd: ChangeDetectorRef) {}
 
@@ -40,10 +52,17 @@ export class PoHeaderMenuItemComponent implements OnChanges {
     }
   }
 
-  onKeyDownButtonList(event) {
+  onKeyDownButtonList(event, item: PoHeaderActions) {
     if (event.code === 'Space' || event.code === 'Enter') {
       event.preventDefault();
       this.item.action?.();
+      this.itemClick.emit(item);
     }
+  }
+
+  onAction(item: PoHeaderActions) {
+    console.log('oi', item);
+    item.action?.();
+    this.itemClick.emit(item);
   }
 }

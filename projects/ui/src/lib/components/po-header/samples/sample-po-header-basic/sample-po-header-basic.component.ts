@@ -71,9 +71,9 @@ export class SamplePoHeaderBasicComponent implements AfterViewInit {
       }
     },
     {
-      title: 'Outro teste',
+      title: 'Notificações',
       icon: 'an an-chat-circle-dots',
-      tooltip: 'Verificar teste do cinema',
+      tooltip: 'Notificações do usuário',
       badge: 5,
       items: this.listItem
     }

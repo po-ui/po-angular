@@ -27,4 +27,11 @@ export class PoHeaderCustomerComponent {
   onClickClosePopover() {
     this.poPopoverAction.close();
   }
+
+  onKeyDownCustomer(event) {
+    if (event.code === 'Space' || event.code === 'Enter') {
+      this.headerUser.action?.();
+      this.poPopupAction.toggle();
+    }
+  }
 }

@@ -42,4 +42,22 @@ export class PoHeaderToolsComponent {
     const popover = this.poPopoverActions.get(realPopoverIndex);
     popover?.close();
   }
+
+  checkSelected(index: number) {
+    if (this.actionTools[index].items && !this.actionTools[index].popover) {
+      const popup = this.poPopupActions?.get(index);
+      if (popup?.showPopup) {
+        return true;
+      }
+      return false;
+    } else {
+      const realPopoverIndex = this.popoverIndexes.indexOf(index);
+      const popover = this.poPopoverActions?.get(realPopoverIndex);
+
+      if (popover && !popover?.isHidden) {
+        return true;
+      }
+      return false;
+    }
+  }
 }

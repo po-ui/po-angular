@@ -60,7 +60,11 @@
     overflow: hidden;
     max-width: 100%;
     white-space: nowrap;
-  } */
+  } 
+
+   .forcee {
+    background: red;
+   }*/
 </style>
 
 @if (overflowButton) {
@@ -86,15 +90,22 @@
     tabindex="0"
     [p-tooltip]="item.label"
     class="po-header-nav-submenu"
-    (click)="item.action?.()"
-    (keydown)="onKeyDownButtonList($event)"
+    (click)="onAction(item)"
+    (keydown)="onKeyDownButtonList($event, item)"
   >
-    <div class="po-header-nav-submenu-button">
+    <div class="po-header-nav-submenu-button" [class.submenu-item-selected]="item.$selected">
       <span>{{ item.label }}</span>
     </div>
   </li>
 }
 
 @if (overflowButton) {
-  <po-popup #popup [p-actions]="itemOverFlow" [p-target]="buttonMoreElement" [p-hide-arrow]="true"> </po-popup>
+  <po-popup
+    #popup
+    [p-actions]="itemOverFlow"
+    [p-target]="buttonMoreElement"
+    [p-hide-arrow]="true"
+    (p-click-item)="onAction($event)"
+  >
+  </po-popup>
 }

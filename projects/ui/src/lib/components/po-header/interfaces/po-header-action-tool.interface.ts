@@ -81,6 +81,9 @@ export interface PoHeaderActionTool {
    *
    */
   badge?: number;
+
+  //interno
+  $selected?;
 }
 
 /**

@@ -45,6 +45,7 @@
         [p-icon]="action.badge ? badge : action.icon || 'an an-dots-nine'"
         p-kind="tertiary"
         (p-click)="onClickFirstAction(i)"
+        [class.po-header-selected-tool]="checkSelected(i)"
       >
       </po-button>
 

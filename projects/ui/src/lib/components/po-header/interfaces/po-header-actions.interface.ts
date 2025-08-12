@@ -37,4 +37,7 @@ export interface PoHeaderActions {
    * Identificador da ação
    */
   id?: string;
+
+  // propriedade interna
+  $selected?: boolean;
 }

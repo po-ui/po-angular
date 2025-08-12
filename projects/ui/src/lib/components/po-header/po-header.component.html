@@ -259,7 +259,7 @@
 
   <ul #menuWrapperItens class="po-header-nav-submenus-wrapper">
     @for (item of visibleMenuItems; track item.id) {
-      <po-header-menu-item #menusubmenuitem [p-item]="item"></po-header-menu-item>
+      <po-header-menu-item #menusubmenuitem [p-item]="item" (p-item-click)="onSelected($event)"></po-header-menu-item>
     }
     <!-- <li #menusubmenuitem *ngFor="let item of visibleMenuItems" tabindex="0" class="po-header-nav-submenu">
       <div class="po-header-nav-submenu-button">
@@ -274,6 +274,7 @@
       #menusubmenuitem
       [p-button-overflow]="true"
       [p-item-overflow]="overflowItems"
+      (p-item-click)="onSelected($event)"
     ></po-header-menu-item>
   }
   <!-- <li  *ngIf="showOverflow && overflowItems.length" class="po-header-nav-submenu-more" tabindex="0">
@@ -352,6 +353,13 @@
   </ul>
 </aside>
 
+<!-- 
+
+
+<ng-container *ngIf="template">
+  <ng-container *ngTemplateOutlet="template"></ng-container>
+</ng-container> -->
+
 <!-- <div style="margin-top: 30px"></div>
 <p>overflowItems: {{ overflowItems | json }}</p>
 <br />
@@ -359,8 +367,4 @@
 <br />
 <p>menuItems: {{ menuItems | json }}</p>
 <br />
-<p>menuSmallItems: {{menuSmallItems | json}}</p>
-
-<ng-container *ngIf="template">
-  <ng-container *ngTemplateOutlet="template"></ng-container>
-</ng-container> -->
+<p>menuSmallItems: {{ menuSmallItems | json }}</p> -->

@@ -93,6 +93,10 @@ export class PoListBoxComponent extends PoListBoxBaseComponent implements AfterV
     if (itemListAction && itemListAction.url && !isDisabled && isVisible) {
       return this.openUrl(itemListAction.url);
     }
+
+    if (!isDisabled) {
+      this.clickItem.emit(itemListAction);
+    }
   }
 
   onSelectAllCheckboxKeyDown(event: KeyboardEvent) {

@@ -109,7 +109,7 @@
   } */
 </style>
 
-<div class="po-header-nav-tools" (click)="onClickUserSection()">
+<div class="po-header-nav-tools" (click)="onClickUserSection()" (keydown)="onKeyDownCustomer($event)">
   <li #targetRef tabindex="0" class="po-header-nav-customer-container" (click)="onClickPopup()">
     <div class="po-header-nav-customer-brand">
       <img [src]="headerUser.customerBrand" alt="User" />

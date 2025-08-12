@@ -11,6 +11,7 @@ import {
   ViewChildren
 } from '@angular/core';
 import { debounceTime, fromEvent, Subscription } from 'rxjs';
+import { PoHeaderActions } from './interfaces/po-header-actions.interface';
 import { PoHeaderBaseComponent } from './po-header-base.component';
 
 /**
@@ -184,5 +185,15 @@ export class PoHeaderComponent extends PoHeaderBaseComponent implements AfterVie
   private combineItems() {
     const toolActions = this.actionsTools.map(item => ({ label: item.title, action: item.action }));
     this.menuSmallItems = [...this.menuItems, ...toolActions];
+  }
+
+  onSelected(item: PoHeaderActions) {
+    console.log('@@', item);
+    this.menuItems = this.menuItems.map(menuItem => ({
+      ...menuItem,
+      $selected: menuItem.id === item.id
+    }));
+    this.updateMenu();
+    this.combineItems();
   }
 }
