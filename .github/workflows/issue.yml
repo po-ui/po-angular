@@ -9,6 +9,10 @@ on:
     types:
       - created
 
+permissions:
+  issues: read
+  discussions: read
+
 # Os jobs são conjuntos de actions que são executados na mesma máquina virtual.
 # É possível ter mais de um job e assim executar ações paralelamente.
 jobs:
@@ -19,7 +23,9 @@ jobs:
         env:
           DISCORD_WEBHOOK_URL_ISSUES: ${{ secrets.DISCORD_WEBHOOK_URL_ISSUES }}
         run: |
-          if [ "${{ github.event_name }}" == "issues" ]; then
+          set -euo pipefail
+
+          if [ "${{ github.event_name }}" = "issues" ]; then
             AUTHOR="${{ github.event.issue.user.login }}"
             TITLE="${{ github.event.issue.title }}"
             URL="${{ github.event.issue.html_url }}"
@@ -32,7 +38,21 @@ jobs:
             TYPE="Discussão"
             ICON="💬"
           fi
-          
+
+          TITLE=$(echo "$TITLE" | tr -d '\n\r')
+          AUTHOR=$(echo "$AUTHOR" | tr -d '\n\r')
+          URL=$(echo "$URL" | tr -d '\n\r')
+
+          PAYLOAD=$(jq -n \
+            --arg icon "$ICON" \
+            --arg type "$TYPE" \
+            --arg author "$AUTHOR" \
+            --arg title "$TITLE" \
+            --arg url "$URL" \
+            '{content: "\($icon) **Nova \($type) Criada \($icon)**\n- Autor: \($author)\n- Título: \($title)\n- Link: \($url)"}'
+          )
+
           curl -X POST -H "Content-Type: application/json" \
-          -d "{\"content\": \"$ICON **Nova $TYPE Criada $ICON**\\n- Autor: $AUTHOR\\n- Título: $TITLE\\n- Link: $URL\"}" \
-          $DISCORD_WEBHOOK_URL_ISSUES
+            -d "$PAYLOAD" \
+            "$DISCORD_WEBHOOK_URL_ISSUES"
+        shell: bash
