@@ -350,6 +350,9 @@ export abstract class PoMenuBaseComponent {
    */
   @Input('p-short-logo') shortLogo: string;
 
+  // propriedade interna
+  @Input('p-only-menu-item') onlyMenuItem: boolean = false;
+
   /**
    * @optional
    *

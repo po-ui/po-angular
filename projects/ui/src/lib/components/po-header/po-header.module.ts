@@ -13,6 +13,8 @@ import { PoHeaderToolsComponent } from './po-header-tools/po-header-tools.compon
 import { PoHeaderCustomerComponent } from './po-header-customer/po-header-customer.component';
 import { PoTooltipModule } from '../../directives';
 import { PoPopupModule } from '../po-popup';
+import { PoMenuModule } from '../po-menu';
+import { RouterModule } from '@angular/router';
 
 /**
  * @description
@@ -30,7 +32,9 @@ import { PoPopupModule } from '../po-popup';
     PoAvatarModule,
     PoPopoverModule,
     PoTooltipModule,
-    PoPopupModule
+    PoPopupModule,
+    PoMenuModule,
+    RouterModule
   ],
   declarations: [
     PoHeaderComponent,

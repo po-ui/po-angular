@@ -171,6 +171,7 @@ export class PoHeaderComponent extends PoHeaderBaseComponent implements AfterVie
 
   onClickMenu() {
     this.showMenu = !this.showMenu;
+    this.colapsedMenuEvent.emit();
     console.log('menu clicked');
   }
 

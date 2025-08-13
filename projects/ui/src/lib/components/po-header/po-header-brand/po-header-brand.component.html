@@ -1,43 +1,18 @@
-<style>
-  /* .po-header-nav-brand {
-    display: flex;
-    align-items: center;
-    gap: 1rem;
-    font-family: var(--font-family);
-    font-weight: bold;
-    font-size: 16px;
-    color: var(--color-neutral-dark-70);
-  }
-
-  .po-header-nav-brand-logo {
-    height: 44px;
-    width: 110px;
-  }
-
-  .po-header-nav-brand-logo img {
-    height: 100%;
-    width: 100%;
-    object-fit: cover;
-  }
-
-  .po-header-nav-brand-text {
-    white-space: nowrap;
-  } */
-
-  /* .po-header-nav-brand {
-    cursor: pointer;
-   } */
-</style>
+<style></style>
 
 <div class="po-header-nav-brand">
-  <po-button #target class="po-nav-header-medium" p-icon="an an-list" p-kind="tertiary" (p-click)="clickMenu.emit()">
-  </po-button>
+  @if (!hideButtonMenu) {
+    <po-button #target class="po-nav-header-medium" p-icon="an an-list" p-kind="tertiary" (p-click)="clickMenu.emit()">
+    </po-button>
+  }
   @if (brand?.logo) {
     <div class="po-header-nav-brand-logo" (click)="brand?.action?.()">
       <img [src]="brand.logo" alt="Logo" />
     </div>
   }
-  <span class="po-header-nav-brand-text">{{ brand?.title }}</span>
+  <span #titleBrand [p-tooltip]="showTooltip ? brand?.title : ''" class="po-header-nav-brand-text">{{
+    brand?.title
+  }}</span>
 </div>
 
 <po-popup #popup [p-actions]="actionsMenu" [p-target]="targetRef" [p-hide-arrow]="true"> </po-popup>

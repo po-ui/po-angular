@@ -1,7 +1,8 @@
-import { Directive, Input, TemplateRef } from '@angular/core';
+import { Directive, EventEmitter, Input, Output } from '@angular/core';
+import { PoMenuItem } from '../po-menu';
+import { PoHeaderActionTool } from './interfaces/po-header-action-tool.interface';
 import { PoHeaderActions } from './interfaces/po-header-actions.interface';
 import { PoHeaderBrand } from './interfaces/po-header-brand.interface';
-import { PoHeaderActionTool } from './interfaces/po-header-action-tool.interface';
 import { PoHeaderUser } from './interfaces/po-header-user.interface';
 
 /**
@@ -83,6 +84,16 @@ export abstract class PoHeaderBaseComponent {
    *
    * @description
    *
+   * Esconde o botão de menu colapsado. O botão de menu aparece quando o tamanho da tela é inferior a 960px.
+   *
+   */
+  @Input('p-hide-button-menu') hideButtonMenu?: boolean;
+
+  /**
+   * @optional
+   *
+   * @description
+   *
    * Propriedade para configurar a seção de brand do `po-header`
    *
    */
@@ -118,6 +129,8 @@ export abstract class PoHeaderBaseComponent {
    * Propriedade para configurar a seção de menu do `po-header`.
    * Cada item pode receber uma label e uma ação
    *
+   * > Os itens irão ficar visíveis em uma tela de até 960px
+   *
    */
   @Input('p-menu-items') set menuItems(items: Array<PoHeaderActions>) {
     this._menuItems = (items || []).map(item => ({
@@ -125,6 +138,28 @@ export abstract class PoHeaderBaseComponent {
       id: item.id || this.generateRandomId()
     }));
   }
+
+  /**
+   * @optional
+   *
+   * @description
+   *
+   * Lista dos itens do menu. Se o valor estiver indefinido ou inválido, será inicializado como um array vazio.
+   *
+   * > O menu poderá ser aberto via botão hamburguer quando a tela tiver menos que 960px
+   *
+   */
+  @Input('p-menus') menuCollapse: Array<PoMenuItem> = [];
+
+  /**
+   * @optional
+   *
+   * @description
+   *
+   * Evento emitido ao clicar no botão para colapsar ou expandir menu.
+   *
+   */
+  @Output('p-colapsed-menu') colapsedMenuEvent = new EventEmitter();
 
   get menuItems(): Array<PoHeaderActions> {
     return this._menuItems;

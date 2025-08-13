@@ -55,13 +55,11 @@ export class PoHeaderMenuItemComponent implements OnChanges {
   onKeyDownButtonList(event, item: PoHeaderActions) {
     if (event.code === 'Space' || event.code === 'Enter') {
       event.preventDefault();
-      this.item.action?.();
-      this.itemClick.emit(item);
+      this.onAction(item);
     }
   }
 
   onAction(item: PoHeaderActions) {
-    console.log('oi', item);
     item.action?.();
     this.itemClick.emit(item);
   }
