@@ -1,4 +1,4 @@
-import { Component, ViewChild } from '@angular/core';
+import { Component, ViewChild, inject } from '@angular/core';
 import { NgForm } from '@angular/forms';
 
 import { PoModalAction, PoModalComponent, PoNotificationService, PoSelectOption } from '@po-ui/ng-components';
@@ -9,6 +9,8 @@ import { PoModalAction, PoModalComponent, PoNotificationService, PoSelectOption 
   standalone: false
 })
 export class SamplePoComboTransferComponent {
+  private poNotification = inject(PoNotificationService);
+
   @ViewChild('transferForm', { static: true }) form: NgForm;
   @ViewChild(PoModalComponent, { static: true }) poModal: PoModalComponent;
 
@@ -31,8 +33,6 @@ export class SamplePoComboTransferComponent {
     { label: 'Checking Account', value: 'Checking Account' },
     { label: 'Savings Account', value: 'Savings Account' }
   ];
-
-  constructor(private poNotification: PoNotificationService) {}
 
   confirmTransfer() {
     this.poModal.close();

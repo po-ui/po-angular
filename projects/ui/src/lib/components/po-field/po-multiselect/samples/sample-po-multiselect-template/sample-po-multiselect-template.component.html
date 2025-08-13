@@ -30,10 +30,15 @@
 
         <div class="po-md-10">
           <div class="containerFlexTag">
-            <po-tag *ngIf="option.admin" p-value="Admin" p-type="success" [p-icon]="true"> </po-tag>
-            <po-tag *ngIf="option.access" p-value="Normal" p-type="info" [p-icon]="true"> </po-tag>
-            <po-tag *ngIf="!option.admin && !option.access" p-value="Sem acesso" p-type="danger" [p-icon]="true">
-            </po-tag>
+            @if (option.admin) {
+              <po-tag p-value="Admin" p-type="success" [p-icon]="true"> </po-tag>
+            }
+            @if (option.access) {
+              <po-tag p-value="Normal" p-type="info" [p-icon]="true"> </po-tag>
+            }
+            @if (!option.admin && !option.access) {
+              <po-tag p-value="Sem acesso" p-type="danger" [p-icon]="true"> </po-tag>
+            }
           </div>
         </div>
       </div>

@@ -29,13 +29,15 @@
   </po-lookup>
 </div>
 
-<div class="po-row" *ngIf="filmItemsFiltered && entity">
-  <po-table
-    class="po-sm-12"
-    [p-columns]="filmColumns"
-    [p-items]="filmItemsFiltered"
-    [p-sort]="true"
-    [p-hide-table-search]="false"
-  >
-  </po-table>
-</div>
+@if (filmItemsFiltered && entity) {
+  <div class="po-row">
+    <po-table
+      class="po-sm-12"
+      [p-columns]="filmColumns"
+      [p-items]="filmItemsFiltered"
+      [p-sort]="true"
+      [p-hide-table-search]="false"
+    >
+    </po-table>
+  </div>
+}

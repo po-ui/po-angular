@@ -1,4 +1,4 @@
-import { poLocaleDefault, poLocales, PoThemeService } from '@po-ui/ng-components';
+import { poLocaleDefault, poLocales, PoThemeA11yEnum, PoThemeService } from '@po-ui/ng-components';
 import { PoPageComponentsSize } from '../components/enums/po-page-components-size.enum';
 
 /**
@@ -144,10 +144,19 @@ export function formatYear(year: number) {
 }
 
 /**
+ * @deprecated use getDefaultSizeFn
+ *
  * Retorna o tamanho padrão dos componentes conforme o nível de acessibilidade.
  */
 export function getDefaultSize(poThemeService: PoThemeService): string {
   return poThemeService.getA11yDefaultSize() === 'small' ? PoPageComponentsSize.Small : PoPageComponentsSize.Medium;
+}
+
+/**
+ * Retorna o tamanho padrão dos componentes conforme o nível de acessibilidade.
+ */
+export function getDefaultSizeFn(): string {
+  return getA11yDefaultSize() === 'small' ? PoPageComponentsSize.Small : PoPageComponentsSize.Medium;
 }
 
 export function isEquals(value, comparedValue) {
@@ -477,6 +486,8 @@ export function sortArrayOfObjects(items, key, isAscendingOrder) {
 }
 
 /**
+ * @deprecated use validateSizeFn
+ *
  * Valida e retorna um tamanho permitido para os componentes, considerando a acessibilidade.
  */
 export function validateSize(value: string, poThemeService: PoThemeService): string {
@@ -487,4 +498,40 @@ export function validateSize(value: string, poThemeService: PoThemeService): str
     return value;
   }
   return getDefaultSize(poThemeService);
+}
+
+/**
+ * Valida e retorna um tamanho permitido para os componentes, considerando a acessibilidade.
+ */
+export function validateSizeFn(value: string): string {
+  if (value && Object.values(PoPageComponentsSize).includes(value as PoPageComponentsSize)) {
+    if (value === PoPageComponentsSize.Small && getA11yLevel() !== 'AA') {
+      return PoPageComponentsSize.Medium;
+    }
+    return value;
+  }
+  return getDefaultSizeFn();
+}
+
+/**
+ * Retorna a preferência global de tamanho dos componentes.
+ *
+ * @returns `'small'` ou `'medium'`.
+ */
+export function getA11yDefaultSize(): string {
+  const defaultSize = localStorage.getItem('po-default-size');
+  const a11yLevel = document.documentElement.getAttribute('data-a11y');
+
+  return defaultSize === 'small' && a11yLevel === 'AA' ? 'small' : 'medium';
+}
+
+/**
+ * Retorna o nível de acessibilidade configurado no tema.
+ * Se não estiver configurado, retorna `AAA` como padrão.
+ * @returns {PoThemeA11yEnum} O nível de acessibilidade, que pode ser `AA` ou `AAA`.
+ */
+export function getA11yLevel(): PoThemeA11yEnum {
+  const a11yLevel = document.documentElement.getAttribute('data-a11y');
+
+  return a11yLevel === 'AA' ? PoThemeA11yEnum.AA : PoThemeA11yEnum.AAA;
 }

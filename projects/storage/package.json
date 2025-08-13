@@ -15,10 +15,10 @@
     "custom-idle-queue": "3.0.1",
     "localforage": "1.10.0",
     "lokijs": "1.5.12",
-    "tslib": "^2.6.2"
+    "tslib": "^2.3.0"
   },
   "peerDependencies": {
-    "@angular/core": "^19",
+    "@angular/core": "^20",
     "custom-idle-queue": "3.0.1",
     "localforage": "1.10.0",
     "lokijs": "1.5.12",

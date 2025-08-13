@@ -1,8 +1,8 @@
 import { Directive, EventEmitter, Input, Output } from '@angular/core';
 
-import { PoModalAction, PoThemeService } from '@po-ui/ng-components';
+import { PoModalAction } from '@po-ui/ng-components';
 
-import { convertToBoolean, getDefaultSize, isExternalLink, isTypeof, validateSize } from '../../utils/util';
+import { convertToBoolean, getDefaultSizeFn, isExternalLink, isTypeof, validateSizeFn } from '../../utils/util';
 
 import { PoPageChangePasswordRecovery } from './interfaces/po-page-change-password-recovery.interface';
 import { PoPageChangePasswordRequirement } from './interfaces/po-page-change-password-requirement.interface';
@@ -200,11 +200,11 @@ export abstract class PoPageChangePasswordBaseComponent {
    * @default `medium`
    */
   @Input('p-components-size') set componentsSize(value: string) {
-    this._componentsSize = validateSize(value, this.poThemeService);
+    this._componentsSize = validateSizeFn(value);
   }
 
   get componentsSize(): string {
-    return this._componentsSize ?? getDefaultSize(this.poThemeService);
+    return this._componentsSize ?? getDefaultSizeFn();
   }
 
   /**
@@ -304,8 +304,6 @@ export abstract class PoPageChangePasswordBaseComponent {
    * @default `true`
    */
   @Input('p-no-autocomplete-password') noAutocompletePassword: boolean = true;
-
-  constructor(protected poThemeService: PoThemeService) {}
 
   abstract navigateTo(url: string): void;
 }

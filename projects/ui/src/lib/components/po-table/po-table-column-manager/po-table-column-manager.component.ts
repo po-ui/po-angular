@@ -13,15 +13,14 @@ import {
 } from '@angular/core';
 
 import { PoFieldSize } from '../../../enums/po-field-size.enum';
-import { PoThemeService } from '../../../services';
 import { poLocaleDefault } from '../../../services/po-language/po-language.constant';
 import { PoLanguageService } from '../../../services/po-language/po-language.service';
 import {
   capitalizeFirstLetter,
   convertToBoolean,
   convertToInt,
-  getDefaultSize,
-  validateSize
+  getDefaultSizeFn,
+  validateSizeFn
 } from '../../../utils/util';
 import { PoCheckboxGroupOption } from '../../po-field/po-checkbox-group/interfaces/po-checkbox-group-option.interface';
 import { PoPageSlideComponent } from '../../po-page/po-page-slide';
@@ -106,11 +105,11 @@ export class PoTableColumnManagerComponent implements OnChanges, OnDestroy {
    * @default `medium`
    */
   @Input('p-components-size') set componentsSize(value: string) {
-    this._componentsSize = validateSize(value, this.poThemeService, PoFieldSize);
+    this._componentsSize = validateSizeFn(value, PoFieldSize);
   }
 
   get componentsSize(): string {
-    return this._componentsSize ?? getDefaultSize(this.poThemeService, PoFieldSize);
+    return this._componentsSize ?? getDefaultSizeFn(PoFieldSize);
   }
 
   @Input('p-max-columns') set maxColumns(value: number) {
@@ -122,7 +121,6 @@ export class PoTableColumnManagerComponent implements OnChanges, OnDestroy {
   }
 
   constructor(
-    protected poThemeService: PoThemeService,
     private renderer: Renderer2,
     languageService: PoLanguageService
   ) {

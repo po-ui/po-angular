@@ -9,9 +9,9 @@ Para maiores detalhes sobre os serviços e métodos utilizados neste tutorial, c
 ### Pré-requisitos
 
 - [Node.js e NPM](https://nodejs.org/en/)
-- [Angular CLI](https://cli.angular.io/) (~19.0.0):
+- [Angular CLI](https://cli.angular.io/) (~20.0.0):
   - ```shell
-    npm install -g @angular/cli@19
+    npm install -g @angular/cli@20
     ```
 - [Ionic](https://ionicframework.com/docs/cli/) (^7.2.0):
   - ```shell
@@ -49,15 +49,15 @@ Antes de executar a instalação, é necessário que todas as dependências do p
 ```json
   ...
   "dependencies": {
-    "@angular/animations": "~19.0.0",
-    "@angular/common": "~19.0.0",
-    "@angular/compiler": "~19.0.0",
-    "@angular/core": "~19.0.0",
-    "@angular/forms": "~19.0.0",
-    "@angular/platform-browser": "~19.0.0",
-    "@angular/platform-browser-dynamic": "~19.0.0",
-    "@angular/router": "~19.0.0",
-    "@angular/service-worker": "~19.0.0",
+    "@angular/animations": "~20.0.0",
+    "@angular/common": "~20.0.0",
+    "@angular/compiler": "~20.0.0",
+    "@angular/core": "~20.0.0",
+    "@angular/forms": "~20.0.0",
+    "@angular/platform-browser": "~20.0.0",
+    "@angular/platform-browser-dynamic": "~20.0.0",
+    "@angular/router": "~20.0.0",
+    "@angular/service-worker": "~20.0.0",
     "@ionic/angular": "^8.0.0",
     "@capacitor/network": "^6.0.1",
     "@capacitor/splash-screen": "^6.0.1",
@@ -68,13 +68,13 @@ Antes de executar a instalação, é necessário que todas as dependências do p
     ...
   },
   "devDependencies": {
-    "@angular-devkit/build-angular": "~19.2.3",
-    "@angular-devkit/schematics": "~19.0.5",
-    "@angular/cli": "~19.0.5",
-    "@angular/compiler-cli": "~19.0.0",
-    "@angular/language-service": "~19.0.0",
+    "@angular-devkit/build-angular": "~20.0.0",
+    "@angular-devkit/schematics": "~20.0.0",
+    "@angular/cli": "~20.0.0",
+    "@angular/compiler-cli": "~20.0.0",
+    "@angular/language-service": "~20.0.0",
     "@ionic/angular-toolkit": "^11.0.1",
-    "typescript": "~5.6.2"
+    "typescript": "~5.8.2"
   },
   ...
 ```

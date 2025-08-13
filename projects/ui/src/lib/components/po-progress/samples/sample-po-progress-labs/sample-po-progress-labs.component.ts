@@ -1,4 +1,4 @@
-import { Component, OnInit } from '@angular/core';
+import { Component, OnInit, inject } from '@angular/core';
 import { FormGroup, FormBuilder } from '@angular/forms';
 
 import {
@@ -17,6 +17,9 @@ import {
   standalone: false
 })
 export class SamplePoProgressLabsComponent implements OnInit {
+  private fb = inject(FormBuilder);
+  private poNotification = inject(PoNotificationService);
+
   event: any;
   info: string;
   infoIcon: string;
@@ -79,10 +82,7 @@ export class SamplePoProgressLabsComponent implements OnInit {
     { value: 'showPercentage', label: 'Show percentage' }
   ];
 
-  constructor(
-    private fb: FormBuilder,
-    private poNotification: PoNotificationService
-  ) {
+  constructor() {
     this.initializeActionForm();
   }
 

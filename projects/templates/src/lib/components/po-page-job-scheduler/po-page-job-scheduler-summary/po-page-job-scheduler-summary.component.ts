@@ -1,5 +1,5 @@
 import { DatePipe } from '@angular/common';
-import { Component, Input, OnInit } from '@angular/core';
+import { Component, Input, OnInit, inject } from '@angular/core';
 
 import { PoDynamicViewField, PoInfoOrientation } from '@po-ui/ng-components';
 
@@ -11,6 +11,8 @@ import { PoJobSchedulerInternal } from '../interfaces/po-job-scheduler-internal.
   standalone: false
 })
 export class PoPageJobSchedulerSummaryComponent implements OnInit {
+  private datePipe = inject(DatePipe);
+
   @Input('p-components-size') componentsSize: string;
 
   @Input('p-literals') literals = <any>{};
@@ -31,8 +33,6 @@ export class PoPageJobSchedulerSummaryComponent implements OnInit {
   rangeLimitHour = '';
   rangeLimitDay = '';
   recurrentValue = '';
-
-  constructor(private datePipe: DatePipe) {}
 
   ngOnInit() {
     const {

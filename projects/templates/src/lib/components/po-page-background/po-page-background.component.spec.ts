@@ -3,7 +3,7 @@ import { ComponentFixture, TestBed, waitForAsync } from '@angular/core/testing';
 
 import { expectPropertiesValues } from './../../util-test/util-expect.spec';
 
-import { PoLanguage, poLanguageDefault, PoLanguageService, PoThemeService } from '@po-ui/ng-components';
+import { PoLanguage, poLanguageDefault, PoLanguageService } from '@po-ui/ng-components';
 import { PoPageBackgroundComponent } from './po-page-background.component';
 
 describe('PoPageBackgroundComponent:', () => {
@@ -11,7 +11,6 @@ describe('PoPageBackgroundComponent:', () => {
   let fixture: ComponentFixture<PoPageBackgroundComponent>;
   let debugElement;
   let languageService: PoLanguageService;
-  let poThemeServiceMock: jasmine.SpyObj<PoThemeService>;
   let spyService: jasmine.Spy;
 
   beforeEach(waitForAsync(() => {

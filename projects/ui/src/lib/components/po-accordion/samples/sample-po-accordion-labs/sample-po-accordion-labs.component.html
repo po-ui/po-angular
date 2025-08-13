@@ -3,15 +3,16 @@
   [p-show-manager-accordion]="propertiesAccordion.includes('showManager')"
   [p-allow-expand-all-items]="propertiesAccordion.includes('expandItems')"
 >
-  <po-accordion-item
-    *ngFor="let accordionItem of accordionItems; let i = index"
-    [p-label]="accordionItem.label"
-    [p-disabled]="accordionItem.disabledItem"
-    [p-label-tag]="accordionItem.labelTag"
-    [p-type-tag]="accordionItem.typeTag"
-  >
-    Accordion Item Content {{ i }}
-  </po-accordion-item>
+  @for (accordionItem of accordionItems; track accordionItem; let i = $index) {
+    <po-accordion-item
+      [p-label]="accordionItem.label"
+      [p-disabled]="accordionItem.disabledItem"
+      [p-label-tag]="accordionItem.labelTag"
+      [p-type-tag]="accordionItem.typeTag"
+    >
+      Accordion Item Content {{ i }}
+    </po-accordion-item>
+  }
 </po-accordion>
 
 <po-divider p-label="ACCORDION"></po-divider>

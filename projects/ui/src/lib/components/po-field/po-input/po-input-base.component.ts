@@ -3,8 +3,7 @@ import { AbstractControl, ControlValueAccessor, Validator, Validators } from '@a
 
 import { Subscription, switchMap } from 'rxjs';
 import { PoFieldSize } from '../../../enums/po-field-size.enum';
-import { PoThemeService } from '../../../services';
-import { convertToBoolean, getDefaultSize, validateSize } from '../../../utils/util';
+import { convertToBoolean, getDefaultSizeFn, validateSizeFn } from '../../../utils/util';
 import { ErrorAsyncProperties } from '../shared/interfaces/error-async-properties.interface';
 import { maxlengpoailed, minlengpoailed, patternFailed, requiredFailed } from './../validators';
 import { PoMask } from './po-mask';
@@ -418,11 +417,11 @@ export abstract class PoInputBaseComponent implements ControlValueAccessor, Vali
    * @default `medium`
    */
   @Input('p-size') set size(value: string) {
-    this._size = validateSize(value, this.poThemeService, PoFieldSize);
+    this._size = validateSizeFn(value, PoFieldSize);
   }
 
   get size(): string {
-    return this._size ?? getDefaultSize(this.poThemeService, PoFieldSize);
+    return this._size ?? getDefaultSizeFn(PoFieldSize);
   }
 
   /**
@@ -538,10 +537,7 @@ export abstract class PoInputBaseComponent implements ControlValueAccessor, Vali
     }
   }
 
-  constructor(
-    protected cd?: ChangeDetectorRef,
-    protected poThemeService?: PoThemeService
-  ) {
+  constructor(protected cd?: ChangeDetectorRef) {
     this.objMask = new PoMask(this.mask, this.maskFormatModel);
   }
 

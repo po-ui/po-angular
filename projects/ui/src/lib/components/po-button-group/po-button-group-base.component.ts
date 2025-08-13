@@ -1,8 +1,7 @@
-import { Directive, Input } from '@angular/core';
+import { Component, Input, input } from '@angular/core';
 
 import { PoFieldSize } from '../../enums/po-field-size.enum';
-import { PoThemeService } from '../../services/po-theme/po-theme.service';
-import { getDefaultSize, validateSize } from '../../utils/util';
+import { getDefaultSizeFn, validateSizeFn } from '../../utils/util';
 import { PoButtonGroupToggle } from './enums/po-button-group-toggle.enum';
 import { PoButtonGroupItem } from './po-button-group-item.interface';
 
@@ -61,10 +60,20 @@ const PO_TOGGLE_TYPE_DEFAULT = 'none';
  * | `--background-color-disabled` &nbsp;   | Cor de background no estado disabled                  | `var(--color-transparent)`                      |
  *
  */
-@Directive()
+@Component({
+  selector: 'po-button-group-base',
+  template: '',
+  standalone: false
+})
 export class PoButtonGroupBaseComponent {
-  /** Lista de botões. */
-  @Input('p-buttons') buttons: Array<PoButtonGroupItem> = [];
+  /**
+   * @Input
+   *
+   * @description
+   *
+   * Lista de botões.
+   */
+  readonly buttons = input<Array<PoButtonGroupItem>>([], { alias: 'p-buttons' });
 
   private _size?: string = undefined;
 
@@ -107,18 +116,16 @@ export class PoButtonGroupBaseComponent {
    * @default `medium`
    */
   @Input('p-size') set size(value: string) {
-    this._size = validateSize(value, this.poThemeService, PoFieldSize);
+    this._size = validateSizeFn(value, PoFieldSize);
   }
 
   get size(): string {
-    return this._size ?? getDefaultSize(this.poThemeService, PoFieldSize);
+    return this._size ?? getDefaultSizeFn(PoFieldSize);
   }
-
-  constructor(protected poThemeService: PoThemeService) {}
 
   onButtonClick(buttonClicked: PoButtonGroupItem, buttonIndex: number) {
     if (this.toggle === PoButtonGroupToggle.Single) {
-      this.buttons.forEach(
+      this.buttons().forEach(
         (button, index) => (button.selected = index === buttonIndex ? !buttonClicked.selected : false)
       );
     } else if (this.toggle === PoButtonGroupToggle.Multiple) {
@@ -130,7 +137,7 @@ export class PoButtonGroupBaseComponent {
     if (toggleMode === PoButtonGroupToggle.None) {
       this.deselectAllButtons();
     } else if (toggleMode === PoButtonGroupToggle.Single) {
-      const hasMoreOneSelected = this.buttons.filter(button => button.selected).length > 1;
+      const hasMoreOneSelected = this.buttons().filter(button => button.selected).length > 1;
       if (hasMoreOneSelected) {
         this.deselectAllButtons();
       }
@@ -138,6 +145,6 @@ export class PoButtonGroupBaseComponent {
   }
 
   private deselectAllButtons() {
-    this.buttons.forEach(button => (button.selected = false));
+    this.buttons().forEach(button => (button.selected = false));
   }
 }

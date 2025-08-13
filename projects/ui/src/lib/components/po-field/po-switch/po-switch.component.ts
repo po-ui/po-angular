@@ -5,7 +5,6 @@ import {
   Component,
   ElementRef,
   forwardRef,
-  Inject,
   inject,
   InjectOptions,
   Injector,
@@ -23,10 +22,9 @@ import {
   NG_VALIDATORS
 } from '@angular/forms';
 
-import { convertToBoolean, getDefaultSize, uuid, validateSize } from '../../../utils/util';
+import { convertToBoolean, getDefaultSizeFn, uuid, validateSizeFn } from '../../../utils/util';
 
 import { PoFieldSize } from '../../../enums/po-field-size.enum';
-import { PoThemeService } from '../../../services';
 import { PoFieldModel } from '../po-field.model';
 import { PoKeyCodeEnum } from './../../../enums/po-key-code.enum';
 import { PoSwitchLabelPosition } from './po-switch-label-position.enum';
@@ -129,6 +127,9 @@ import { Subscription } from 'rxjs';
   standalone: false
 })
 export class PoSwitchComponent extends PoFieldModel<any> implements Validator, AfterViewInit, OnDestroy {
+  private readonly changeDetector = inject(ChangeDetectorRef);
+  private readonly injector = inject<Injector>(Injector);
+
   @ViewChild('switchContainer', { static: true }) switchContainer: ElementRef;
 
   id = `po-switch[${uuid()}]`;
@@ -272,11 +273,11 @@ export class PoSwitchComponent extends PoFieldModel<any> implements Validator, A
    *
    */
   @Input('p-size') set size(value: string) {
-    this._size = validateSize(value, this.poThemeService, PoFieldSize);
+    this._size = validateSizeFn(value, PoFieldSize);
   }
 
   get size(): string {
-    return this._size ?? getDefaultSize(this.poThemeService, PoFieldSize);
+    return this._size ?? getDefaultSizeFn(PoFieldSize);
   }
 
   private readonly el: ElementRef = inject(ElementRef);
@@ -284,13 +285,6 @@ export class PoSwitchComponent extends PoFieldModel<any> implements Validator, A
     self: true
   };
   private control!: AbstractControl;
-  constructor(
-    protected poThemeService: PoThemeService,
-    private readonly changeDetector: ChangeDetectorRef,
-    @Inject(Injector) private readonly injector: Injector
-  ) {
-    super();
-  }
 
   ngOnDestroy() {
     this.statusChangesSubscription?.unsubscribe();
