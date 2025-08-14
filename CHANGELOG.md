@@ -2,6 +2,13 @@
 
 All notable changes to this project will be documented in this file. See [standard-version](https://github.com/conventional-changelog/standard-version) for commit guidelines.
 
+### [17.26.28](https://github.com/po-ui/po-angular/compare/v17.26.27...v17.26.28) (2025-08-14)
+
+
+### Bug Fixes
+
+* **sync:** adiciona fallback para body undefined ou null ([3101faa](https://github.com/po-ui/po-angular/commit/3101faa348a3118aa1224cfdb9717561d434b2d5))
+
 ### [17.26.27](https://github.com/po-ui/po-angular/compare/v17.26.26...v17.26.27) (2025-07-21)
 
 
