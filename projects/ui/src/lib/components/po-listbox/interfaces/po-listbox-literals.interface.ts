@@ -14,4 +14,7 @@ export interface PoListBoxLiterals {
 
   /** Texto do checkbox para selecionar todos os itens. */
   selectAll?: string;
+
+  // Texto exibido na ação do rodapé da lista de resultados.
+  footerActionListbox?: string;
 }

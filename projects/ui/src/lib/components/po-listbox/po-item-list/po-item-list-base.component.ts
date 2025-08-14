@@ -177,6 +177,9 @@ export class PoItemListBaseComponent {
     return this._activeTabs;
   }
 
+  // Define os nomes das propriedades do objeto que serão exibidos como rótulos (labels)
+  @Input('p-keys-label') keysLabel?: Array<string> = [];
+
   protected emitActiveTabs(tab) {
     if (tab?.active) {
       this.activatedTab.emit(tab);
