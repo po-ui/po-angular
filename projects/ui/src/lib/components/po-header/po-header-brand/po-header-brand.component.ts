@@ -26,8 +26,6 @@ export class PoHeaderbrandComponent implements AfterViewInit, OnChanges {
 
   @Input('p-brand') brand: PoHeaderBrand;
 
-  @Input('p-actions-menu') actionsMenu = [];
-
   @Output('p-click-menu') clickMenu = new EventEmitter<any>();
 
   @Input('p-hide-button-menu') hideButtonMenu?: boolean;
@@ -46,6 +44,6 @@ export class PoHeaderbrandComponent implements AfterViewInit, OnChanges {
   }
 
   get showTooltip() {
-    return this.titleBrand?.nativeElement.offsetWidth >= 149;
+    return this.titleBrand?.nativeElement.offsetWidth >= 151;
   }
 }

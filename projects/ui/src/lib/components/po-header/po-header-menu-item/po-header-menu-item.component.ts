@@ -59,8 +59,10 @@ export class PoHeaderMenuItemComponent implements OnChanges {
     }
   }
 
-  onAction(item: PoHeaderActions) {
-    item.action?.();
+  onAction(item: PoHeaderActions, itemDefault: boolean = true) {
+    if (itemDefault) {
+      item.action?.();
+    }
     this.itemClick.emit(item);
   }
 }

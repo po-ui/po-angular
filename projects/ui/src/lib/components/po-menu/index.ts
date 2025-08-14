@@ -7,7 +7,6 @@ export * from './po-menu-header-template/po-menu-header-template.directive';
 
 export * from './services/po-menu-global.service';
 
-export * from './po-menu-item/po-menu-item.component';
 export * from './po-menu.component';
 
 export * from './po-menu.module';

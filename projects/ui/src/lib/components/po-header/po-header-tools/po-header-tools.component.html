@@ -1,6 +1,9 @@
 <style></style>
 
 <div class="po-header-nav-tools">
+  @if (headerTemplate) {
+    <ng-container *ngTemplateOutlet="headerTemplate"></ng-container>
+  }
   @for (action of actionTools; track action?.title; let i = $index) {
     <li [class.po-header-nav-item-small]="i !== actionTools.length - 1">
       <po-button

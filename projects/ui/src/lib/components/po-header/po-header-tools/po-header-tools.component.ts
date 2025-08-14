@@ -1,4 +1,4 @@
-import { Component, ElementRef, Input, QueryList, ViewChild, ViewChildren } from '@angular/core';
+import { Component, ElementRef, Input, QueryList, TemplateRef, ViewChild, ViewChildren } from '@angular/core';
 import { PoHeaderActionTool } from '../interfaces/po-header-action-tool.interface';
 import { PoPopupComponent } from '../../po-popup';
 import { PoPopoverComponent } from '../../po-popover';
@@ -26,6 +26,8 @@ export class PoHeaderToolsComponent {
   get popoverIndexes(): Array<number> {
     return this.actionTools.map((action, index) => (action.popover ? index : -1)).filter(index => index !== -1);
   }
+
+  @Input('p-header-template') headerTemplate: TemplateRef<any>;
 
   onClickFirstAction(index: number) {
     const action = this.actionTools[index];

@@ -13,6 +13,7 @@ import {
 import { debounceTime, fromEvent, Subscription } from 'rxjs';
 import { PoHeaderActions } from './interfaces/po-header-actions.interface';
 import { PoHeaderBaseComponent } from './po-header-base.component';
+import { PoMenuGlobalService } from '../po-menu';
 
 /**
  * @docsExtends PoHeaderBaseComponent
@@ -52,7 +53,8 @@ export class PoHeaderComponent extends PoHeaderBaseComponent implements AfterVie
   constructor(
     private renderer: Renderer2,
     private cd: ChangeDetectorRef,
-    private elRef: ElementRef
+    private elRef: ElementRef,
+    private menuGlobalService: PoMenuGlobalService
   ) {
     super();
   }
@@ -62,7 +64,7 @@ export class PoHeaderComponent extends PoHeaderBaseComponent implements AfterVie
       this.updateButtonMore();
     }
 
-    if (changes['menuItems'] && this.afterViewInitWascalled) {
+    if ((changes['menuItems'] || changes['menuCollapse']) && this.afterViewInitWascalled) {
       this.updateMenu();
       this.combineItems();
     }
@@ -73,11 +75,8 @@ export class PoHeaderComponent extends PoHeaderBaseComponent implements AfterVie
     this.cd.detectChanges();
 
     this.resizeSubscription = fromEvent(window, 'resize')
-      .pipe(debounceTime(300)) // espera 300ms após o último evento
+      .pipe(debounceTime(300))
       .subscribe(() => {
-        const largura = document.documentElement.clientWidth;
-
-        console.log('Redimensionado para:', largura);
         this.updateMenu();
       });
 
@@ -94,25 +93,21 @@ export class PoHeaderComponent extends PoHeaderBaseComponent implements AfterVie
       this.updateButtonMore();
       return;
     }
-    console.log('chamou');
-    const hostElement = this.elRef.nativeElement; // <po-header>
+
+    const hostElement = this.elRef.nativeElement;
     const parent = hostElement.parentElement;
-    let larguraTela;
+    let screenWidth;
     if (parent?.getBoundingClientRect().width) {
-      larguraTela = parent.getBoundingClientRect().width;
+      screenWidth = parent.getBoundingClientRect().width;
     } else {
-      larguraTela = document.documentElement.clientWidth;
+      screenWidth = document.documentElement.clientWidth;
     }
 
-    const larguraBrand = this.menuWrapperBrand.nativeElement.offsetWidth;
-    const larguraTool = this.menuWrapperTools.nativeElement.offsetWidth;
+    const brandWidth = this.menuWrapperBrand.nativeElement.offsetWidth;
+    const toolWidth = this.menuWrapperTools.nativeElement.offsetWidth;
     const spacingAndMoreButton = 170;
 
-    console.log('larguraTela: ' + larguraTela);
-    console.log('larguraBrand: ' + larguraBrand);
-    console.log('larguraTool: ' + larguraTool);
-
-    const quantoSobrou = larguraTela - larguraBrand - larguraTool - spacingAndMoreButton;
+    const remaining = screenWidth - brandWidth - toolWidth - spacingAndMoreButton;
     const temp = [...this.visibleMenuItems];
     this.visibleMenuItems = [...this.menuItems];
     this.overflowItems = [];
@@ -123,7 +118,7 @@ export class PoHeaderComponent extends PoHeaderBaseComponent implements AfterVie
     for (let i = 0; i < this.menuItems.length; i++) {
       const itemWidth = itemWidths[i];
 
-      if (usedWidth + itemWidth >= quantoSobrou) {
+      if (usedWidth + itemWidth >= remaining) {
         this.overflowItems = [...this.overflowItems, this.menuItems[i]];
       }
       usedWidth += itemWidths[i];
@@ -172,24 +167,26 @@ export class PoHeaderComponent extends PoHeaderBaseComponent implements AfterVie
   onClickMenu() {
     this.showMenu = !this.showMenu;
     this.colapsedMenuEvent.emit();
-    console.log('menu clicked');
   }
 
   onCloseMenu() {
     this.showMenu = false;
   }
 
-  testandoClique() {
-    console.log('cliquei dentro do menu');
-  }
-
   private combineItems() {
     const toolActions = this.actionsTools.map(item => ({ label: item.title, action: item.action }));
-    this.menuSmallItems = [...this.menuItems, ...toolActions];
+    const menuActions = this.menuItems.map(item => ({ label: item.label, action: item.action }));
+
+    const joinMenu = {
+      label: 'Others',
+      subItems: [...toolActions, ...menuActions]
+    };
+
+    this.menuCollapseJoin = [...this.menuCollapse, joinMenu];
+    this.cd.detectChanges();
   }
 
   onSelected(item: PoHeaderActions) {
-    console.log('@@', item);
     this.menuItems = this.menuItems.map(menuItem => ({
       ...menuItem,
       $selected: menuItem.id === item.id

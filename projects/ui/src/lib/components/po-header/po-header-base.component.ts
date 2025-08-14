@@ -1,4 +1,4 @@
-import { Directive, EventEmitter, Input, Output } from '@angular/core';
+import { Directive, EventEmitter, Input, Output, TemplateRef } from '@angular/core';
 import { PoMenuItem } from '../po-menu';
 import { PoHeaderActionTool } from './interfaces/po-header-action-tool.interface';
 import { PoHeaderActions } from './interfaces/po-header-actions.interface';
@@ -64,7 +64,7 @@ import { PoHeaderUser } from './interfaces/po-header-user.interface';
 @Directive()
 export abstract class PoHeaderBaseComponent {
   private _menuItems: Array<PoHeaderActions> = [];
-  public menuSmallItems = [];
+  public menuCollapseJoin = [];
 
   /**
    * @optional
@@ -88,6 +88,16 @@ export abstract class PoHeaderBaseComponent {
    *
    */
   @Input('p-hide-button-menu') hideButtonMenu?: boolean;
+
+  /**
+   * @optional
+   *
+   * @description
+   *
+   * Habilita apenas o evento ao clicar no menu hamburguer desabilitando o side-menu lateral
+   *
+   */
+  @Input('p-side-menu-only-action') sideMenuOnlyAction?: boolean = false;
 
   /**
    * @optional
@@ -150,6 +160,16 @@ export abstract class PoHeaderBaseComponent {
    *
    */
   @Input('p-menus') menuCollapse: Array<PoMenuItem> = [];
+
+  /**
+   * @optional
+   *
+   * @description
+   *
+   * Template customiado que será renderizado após os itens definidos na propriedade `p-menu-items`
+   *
+   */
+  @Input('p-header-template') headerTemplate: TemplateRef<any>;
 
   /**
    * @optional

@@ -1,5 +1,5 @@
 <ng-container *ngIf="onlyMenuItem; else fullMenu">
-  <ng-container *ngTemplateOutlet="menuItemsTemplate"></ng-container>
+  <ng-container *ngTemplateOutlet="menuItemsTemplate; context: { showFilter: true }"></ng-container>
 </ng-container>
 
 <ng-template #fullMenu>
@@ -35,19 +35,7 @@
           <div class="po-menu-outer">
             <div class="po-menu-inner">
               <nav class="po-menu-nav">
-                <ul class="po-menu-list" role="menu">
-                  <li *ngIf="noData" class="po-menu-list-item" role="presentation">
-                    <po-menu-item
-                      p-icon="ICON_INFO"
-                      p-type="noData"
-                      [p-level]="1"
-                      [p-label]="literals.itemNotFound"
-                      [p-short-label]="literals.itemNotFound"
-                    ></po-menu-item>
-                  </li>
-
-                  <ng-container *ngTemplateOutlet="menuItemsTemplate"></ng-container>
-                </ul>
+                <ng-container *ngTemplateOutlet="menuItemsTemplate; context: { showFilter: false }"></ng-container>
               </nav>
             </div>
           </div>
@@ -78,32 +66,43 @@
   ></po-menu-filter>
 </ng-template>
 
-<ng-template #menuItemsTemplate>
-  <ng-container *ngIf="filter">
+<ng-template #menuItemsTemplate let-showFilter="showFilter">
+  <ng-container *ngIf="filter && showFilter">
     <ng-container *ngTemplateOutlet="menuFilterTemplate"></ng-container>
   </ng-container>
 
-  <li
-    *ngFor="let menu of filteredItems; let menuIndex = index"
-    class="po-menu-list-item"
-    role="presentation"
-    [attr.aria-level]="menu.level"
-    [class.po-menu-item-first]="menuIndex === 0"
-  >
-    <po-menu-item
-      [p-action]="menu.action"
-      [p-badge-alert]="menu.badgeAlert"
-      [p-badge-color]="menu.badge?.color"
-      [p-badge-value]="menu.badge?.value"
-      [p-collapsed-menu]="enableCollapse"
-      [p-icon]="allowIcons ? menu.icon : null"
-      [p-id]="menu.id"
-      [p-label]="menu.label"
-      [p-level]="menu.level"
-      [p-link]="menu.link"
-      [p-short-label]="menu.shortLabel"
-      [p-sub-items]="menu.subItems"
-      [p-type]="menu.type"
-    ></po-menu-item>
-  </li>
+  <ul class="po-menu-list" role="menu">
+    <li *ngIf="noData" class="po-menu-list-item" role="presentation">
+      <po-menu-item
+        p-icon="ICON_INFO"
+        p-type="noData"
+        [p-level]="1"
+        [p-label]="literals.itemNotFound"
+        [p-short-label]="literals.itemNotFound"
+      ></po-menu-item>
+    </li>
+    <li
+      *ngFor="let menu of filteredItems; let menuIndex = index"
+      class="po-menu-list-item"
+      role="presentation"
+      [attr.aria-level]="menu.level"
+      [class.po-menu-item-first]="menuIndex === 0"
+    >
+      <po-menu-item
+        [p-action]="menu.action"
+        [p-badge-alert]="menu.badgeAlert"
+        [p-badge-color]="menu.badge?.color"
+        [p-badge-value]="menu.badge?.value"
+        [p-collapsed-menu]="enableCollapse"
+        [p-icon]="allowIcons ? menu.icon : null"
+        [p-id]="menu.id"
+        [p-label]="menu.label"
+        [p-level]="menu.level"
+        [p-link]="menu.link"
+        [p-short-label]="menu.shortLabel"
+        [p-sub-items]="menu.subItems"
+        [p-type]="menu.type"
+      ></po-menu-item>
+    </li>
+  </ul>
 </ng-template>

@@ -31,6 +31,6 @@ import { PoTooltipModule } from '../../directives/po-tooltip/po-tooltip.module';
     PoTooltipModule
   ],
   declarations: [PoMenuComponent, PoMenuFilterComponent, PoMenuHeaderTemplateDirective, PoMenuItemComponent],
-  exports: [PoMenuComponent, PoMenuItemComponent, PoMenuHeaderTemplateDirective]
+  exports: [PoMenuComponent, PoMenuHeaderTemplateDirective]
 })
 export class PoMenuModule {}

@@ -4,15 +4,16 @@
     justify-content: flex-end;
     padding: 0.5rem;
   }
+
+  .po-header-side-menu {
+    padding-top: 0.5rem;
+    overflow-y: auto;
+  }
 </style>
 
 <nav #navElement class="po-header-nav">
   <div #menuWrapperBrand>
-    <po-header-brand
-      [p-brand]="brand"
-      [p-actions-menu]="menuSmallItems"
-      (p-click-menu)="onClickMenu()"
-    ></po-header-brand>
+    <po-header-brand [p-brand]="brand" (p-click-menu)="onClickMenu()"></po-header-brand>
   </div>
 
   <ul #menuWrapperItens class="po-header-nav-submenus-wrapper">
@@ -32,7 +33,7 @@
   }
 
   <ul #menuWrapperTools class="po-nav-tools-wrapper">
-    <po-header-tools [p-actions-tools]="actionsTools"></po-header-tools>
+    <po-header-tools [p-actions-tools]="actionsTools" [p-header-template]="headerTemplate"></po-header-tools>
 
     @if (headerUser?.customerBrand && headerUser?.avatar) {
       <po-header-customer [p-header-user]="headerUser"></po-header-customer>
@@ -40,14 +41,18 @@
   </ul>
 </nav>
 
-<div class="po-header-overlay" [class.show]="showMenu" (click)="onCloseMenu()"></div>
+@if (!sideMenuOnlyAction) {
+  <div class="po-header-overlay" [class.show]="showMenu" (click)="onCloseMenu()"></div>
 
-<aside class="po-header-side-menu" [class.open]="showMenu">
-  <div class="po-heder-side-menu-close">
-    <po-button (p-click)="onCloseMenu()" p-icon="an an-x" p-kind="tertiary"></po-button>
-  </div>
-  <po-menu [p-only-menu-item]="true" [p-menus]="menuCollapse" p-filter></po-menu>
-</aside>
+  <aside class="po-header-side-menu" [class.open]="showMenu">
+    <div class="po-header-sidemenu-outer">
+      <!-- <div class="po-heder-side-menu-close">
+        <po-button (p-click)="onCloseMenu()" p-icon="an an-x" p-kind="tertiary"></po-button>
+      </div> -->
+      <po-menu [p-only-menu-item]="true" [p-menus]="menuCollapseJoin" p-filter></po-menu>
+    </div>
+  </aside>
+}
 
 <!-- 
 
@@ -63,4 +68,5 @@
 <br />
 <p>menuItems: {{ menuItems | json }}</p>
 <br />
-<p>menuSmallItems: {{ menuSmallItems | json }}</p> -->
+<p>menuSmallItems: {{ menuCollapseJoin | json }}</p>
+ -->
