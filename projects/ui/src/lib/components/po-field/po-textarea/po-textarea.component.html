@@ -10,12 +10,12 @@
     <textarea
       #inp
       class="po-textarea"
-      [class.po-textarea-aa]="size === 'small'"
       (blur)="eventOnBlur()"
       (focus)="eventOnFocus()"
       (input)="eventOnInput($event)"
       (keydown)="onKeyDown($event)"
       [attr.name]="name"
+      [attr.p-size]="size"
       [disabled]="disabled"
       [id]="id"
       [placeholder]="disabled ? '' : placeholder"
@@ -35,6 +35,7 @@
     [p-error-limit]="errorLimit"
     [p-show-additional-help]="displayAdditionalHelp"
     [p-show-additional-help-icon]="showAdditionalHelpIcon()"
+    [p-size]="size"
     (p-additional-help)="emitAdditionalHelp()"
   ></po-field-container-bottom>
 </po-field-container>

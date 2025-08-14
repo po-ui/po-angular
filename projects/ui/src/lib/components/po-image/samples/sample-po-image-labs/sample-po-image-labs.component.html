@@ -1,6 +1,6 @@
 <po-image [p-src]="src" [p-alt]="alt" [p-height]="height"> </po-image>
 
-<hr />
+<po-divider />
 <form #f="ngForm">
   <div class="po-row">
     <po-input
@@ -21,7 +21,7 @@
     ></po-input>
     <po-input class="po-md-6" name="height" [(ngModel)]="height" p-clean p-label="Height"></po-input>
   </div>
-  <hr />
+  <po-divider />
   <div class="po-row">
     <po-button class="po-md-3" p-label="Sample Restore" (p-click)="restore()"></po-button>
   </div>

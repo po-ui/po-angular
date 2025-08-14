@@ -1,6 +1,6 @@
 <div class="po-font-text-large po-text-color-neutral-dark-40">PO UI Library</div>
 
-<hr />
+<po-divider />
 
 <po-table
   p-container="shadow"
@@ -20,6 +20,6 @@
 <po-modal p-click-out="true" p-size="sm" p-title="{{ title }} - {{ extraInformation?.component }}">
   <ul *ngFor="let extra of extraInformation?.extras">
     <li class="po-font-text">{{ extra }}</li>
-    <hr />
+    <po-divider />
   </ul>
 </po-modal>
