@@ -2,6 +2,27 @@
 
 All notable changes to this project will be documented in this file. See [standard-version](https://github.com/conventional-changelog/standard-version) for commit guidelines.
 
+## [19.23.0](https://github.com/po-ui/po-angular/compare/v19.22.0...v19.23.0) (2025-08-14)
+
+
+### ⚠ BREAKING CHANGES
+
+* **widget:** deprecia variável --padding ([aef995c](https://github.com/po-ui/po-style/commit/aef995c89213556e7e709e1e2aa128b446642bb2))
+
+A variável --padding está depreciada e será removida na v21 da biblioteca.
+
+Utilizar --padding-header, --padding-body, e --padding-footer.
+
+
+### Features
+
+* **widget:** implementa definições do AnimaliaDS ([f09e8c2](https://github.com/po-ui/po-angular/commit/f09e8c208c6dd0d88c9b1a17b61b0caf8b5c16f8))
+
+
+### Bug Fixes
+
+* **sync:** adiciona fallback para body undefined ou null ([b017ded](https://github.com/po-ui/po-angular/commit/b017ded9582555a71e01edb3c6d1ebcf3776648e))
+
 ### [19.22.0](https://github.com/po-ui/po-angular/compare/v19.21.0...v19.22.0) (2025-08-04)
 
 Compatibilidade com @totvs/thf-components@19.22.0
