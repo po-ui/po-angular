@@ -69,7 +69,7 @@
               [p-value]="item[fieldValue]"
               [p-selected]="isSelectedItem(item) || item.selected"
               [p-active-tabs]="item.active"
-              [p-separator]="item.separator"
+              [p-separator]="item.separator || separator"
               [p-danger]="item.danger || item.type === 'danger'"
               [p-icon]="item.icon"
               [p-type]="type"
@@ -91,13 +91,37 @@
               [p-should-mark-letter]="shouldMarkLetters"
               [p-compare-cache]="compareCache"
               [p-combo-service]="comboService"
+              [p-keys-label]="keysLabel"
             ></po-item-list>
           }
         </li>
       }
+
+      @if (footerActionListbox) {
+        @if (placeholderListbox) {
+          <div class="po-item-list" [class.po-item-list-aa]="size === 'small'" aria-hidden="true">
+            <span>{{ placeholderListbox }}</span>
+          </div>
+        }
+
+        @if (!placeholderListbox && !items.length) {
+          <div class="po-item-list" [class.po-item-list-aa]="size === 'small'" aria-hidden="true">
+            <span>{{ literals.noItems }}</span>
+          </div>
+        }
+
+        <li
+          class="po-listbox-item"
+          (click)="handleFooterActionListbox()"
+          (keydown)="onKeyDown({ type: 'footerAction' }, $event)"
+          cdkOption="footerActionListbox"
+        >
+          <po-item-list [p-label]="literals.footerActionListbox" p-separator [p-size]="size" />
+        </li>
+      }
     </ul>
   } @else {
-    @if (!items.length && !isServerSearching && type !== 'action') {
+    @if (!items.length && !isServerSearching && type !== 'action' && !footerActionListbox) {
       <div class="po-listbox-container-no-data po-text-center">
         <span> {{ literals.noItems }}</span>
       </div>

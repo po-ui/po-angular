@@ -8,7 +8,9 @@ export const poSearchLiteralsDefault = {
     of: 'of',
     next: 'Next result',
     previous: 'Previous result',
-    result: 'Result'
+    result: 'Result',
+    footerActionListbox: 'See all results',
+    placeholderListbox: 'Search'
   },
   es: <PoSearchLiterals>{
     search: 'Buscar',
@@ -17,7 +19,9 @@ export const poSearchLiteralsDefault = {
     of: 'de',
     next: 'Siguiente resultado',
     previous: 'Resultado anterior',
-    result: 'Resultado'
+    result: 'Resultado',
+    footerActionListbox: 'Ver todos los resultados',
+    placeholderListbox: 'Buscar'
   },
   pt: <PoSearchLiterals>{
     search: 'Pesquisar',
@@ -26,7 +30,9 @@ export const poSearchLiteralsDefault = {
     of: 'de',
     next: 'Próximo resultado',
     previous: 'Resultado anterior',
-    result: 'Resultado'
+    result: 'Resultado',
+    footerActionListbox: 'Ver todos os resultados',
+    placeholderListbox: 'Pesquisar'
   },
   ru: <PoSearchLiterals>{
     search: 'Поиск',
@@ -35,6 +41,27 @@ export const poSearchLiteralsDefault = {
     of: 'из',
     next: 'Следующий результат',
     previous: 'Предыдущий результат',
-    result: 'Результат'
+    result: 'Результат',
+    footerActionListbox: 'Посмотреть все результаты',
+    placeholderListbox: 'Поиск'
+  }
+};
+
+export const poSearchLiteralsDefaultExecute = {
+  en: <PoSearchLiterals>{
+    search: 'Search and Execute',
+    placeholderListbox: 'Search and Execute'
+  },
+  es: <PoSearchLiterals>{
+    search: 'Buscar y ejecutar',
+    placeholderListbox: 'Buscar y ejecutar'
+  },
+  pt: <PoSearchLiterals>{
+    search: 'Pesquisar e Executar ',
+    placeholderListbox: 'Pesquisar e Executar '
+  },
+  ru: <PoSearchLiterals>{
+    search: 'Поиск и выполнение',
+    placeholderListbox: 'Поиск и выполнение'
   }
 };

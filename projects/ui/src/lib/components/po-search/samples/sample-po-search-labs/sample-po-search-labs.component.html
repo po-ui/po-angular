@@ -16,7 +16,7 @@
     [p-size]="size"
     (p-blur)="changeEvent('p-blur')"
     (p-change-model)="changeEvent('p-change-model')"
-    (p-filtered-items-change)="changeEvent('p-filtered-items-change')"
+    (p-filtered-items-change)="filter($event)"
     (p-locate-next)="changeEvent('p-locate-next')"
     (p-locate-previous)="changeEvent('p-locate-previous')"
   ></po-search>

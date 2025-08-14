@@ -252,6 +252,48 @@ describe('PoSearchComponent', () => {
       expect(component.filteredItems).toEqual([]);
       expect(component.filteredItemsChange.emit).toHaveBeenCalledWith([]);
     });
+
+    describe('showFooterActionListbox', () => {
+      const items = [{ name: 'Robert Bruce Banner' }, { name: 'Tony Stark' }];
+
+      beforeEach(() => {
+        component.keysLabel = ['name'];
+        component.filterKeys = ['name'];
+        component.showListbox = true;
+        component['showFooterActionListbox'] = true;
+
+        component.poSearchInput = { nativeElement: { focus: () => {} } };
+      });
+
+      it(`should not have any items in 'listboxFilteredItems'`, () => {
+        component.items = items;
+
+        component.onSearchChange('', true);
+
+        expect(component.listboxFilteredItems).toEqual([]);
+      });
+
+      it(`should have only one item in 'listboxFilteredItems' after search`, () => {
+        const expected = [{ name: 'Robert Bruce Banner' }];
+        component.items = items;
+
+        component.onSearchChange('R', true);
+
+        expect(component.listboxFilteredItems).toEqual(expected);
+      });
+
+      it(`should display the same values ​​of 'items' in 'listboxFilteredItems' after search`, () => {
+        const items = [{ name: 'Robert Bruce Banner' }];
+
+        component.items = items;
+        component.showListbox = false;
+        component['showFooterActionListbox'] = false;
+
+        component.onSearchChange('', true);
+
+        expect(component.listboxFilteredItems).toEqual(items);
+      });
+    });
   });
 
   describe('onFocus', () => {
@@ -440,6 +482,15 @@ describe('PoSearchComponent', () => {
       expect(component.poSearchInput.nativeElement.value).toBe('Text 1');
     });
 
+    it(`should set value when clicking list item when setting 'p-keys-label'`, () => {
+      const option = { name: 'Tony Stark', email: 'irnman@marvel.com' };
+      component.keysLabel = ['name', 'email'];
+
+      component.onListboxClick(option, new Event('click'));
+
+      expect(component.poSearchInput.nativeElement.value).toBe('Tony Stark');
+    });
+
     it('should set the value on keypress enter into list item and if the `p-search-type` is trigger, should not search', () => {
       const option: PoSearchOption = { value: 'Text 1', label: 'Text 1' };
       component.type = 'trigger';
@@ -537,6 +588,28 @@ describe('PoSearchComponent', () => {
       spyOn(component, 'closeListbox');
       component.clickedOutsideInput(eventClick);
       expect(component.closeListbox).not.toHaveBeenCalled();
+    });
+
+    it('should not hide the list box when the clear button is clicked', () => {
+      const container = document.createElement('div');
+      container.id = 'search-button-clean';
+      const buttonElement = document.createElement('button');
+      container.appendChild(buttonElement);
+      document.body.appendChild(container);
+
+      const event = new MouseEvent('click', { bubbles: true });
+      Object.defineProperty(event, 'target', { value: buttonElement });
+
+      component.listboxOpen = true;
+      component['showFooterActionListbox'] = true;
+
+      spyOn(component, 'closeListbox');
+
+      component.clickedOutsideInput(event);
+
+      expect(component.closeListbox).not.toHaveBeenCalled();
+
+      document.body.removeChild(container);
     });
 
     it('should initialize all Listeners correctly', fakeAsync(() => {
@@ -669,13 +742,17 @@ describe('PoSearchComponent', () => {
     });
 
     it('should focus the first option in the listbox and set its class to cdk-option-active', fakeAsync(() => {
+      const container = document.createElement('div');
+
       const mockListboxItem = document.createElement('div');
       mockListboxItem.classList.add('po-listbox-item');
-      document.body.appendChild(mockListboxItem);
+      container.appendChild(mockListboxItem);
 
       const mockListboxItem2 = document.createElement('div');
       mockListboxItem2.classList.add('po-listbox-item');
-      document.body.appendChild(mockListboxItem2);
+      container.appendChild(mockListboxItem2);
+
+      (component as any).poListboxElement = { nativeElement: container };
 
       spyOn(mockListboxItem, 'focus');
 
@@ -685,10 +762,21 @@ describe('PoSearchComponent', () => {
 
       expect(mockListboxItem.focus).toHaveBeenCalled();
       expect(mockListboxItem2.classList.contains('cdk-option-active')).toBeFalse();
-
-      document.body.removeChild(mockListboxItem);
-      document.body.removeChild(mockListboxItem2);
+      expect(mockListboxItem2.classList.contains('cdk-option-active')).toBeFalse();
     }));
+
+    it('should consider the items received', () => {
+      const items = [
+        { name: 'Robert Bruce Banner', nickname: 'Hulk', email: 'hulksmash@marvel.com' },
+        { name: 'Peter Parker', nickname: 'Homem Aranha', email: 'spvalueerman@marvel.com' }
+      ];
+      component.keysLabel = ['name', 'email'];
+      component.items = items;
+
+      component['ngOnInit']();
+
+      expect(component['listboxFilteredItems']).toEqual(items);
+    });
   });
 
   describe('filterSelect', () => {
@@ -1078,6 +1166,120 @@ describe('PoSearchComponent', () => {
 
       expect(updateShowSpy).toHaveBeenCalled();
       expect(updatePaddingSpy).toHaveBeenCalledWith(true);
+    });
+
+    it(`should have the separator between items when there is more than one 'keysLabel'`, () => {
+      const changes: SimpleChanges = {
+        keysLabel: new SimpleChange(null, ['name', 'nickname'], false)
+      };
+
+      component.keysLabel = ['name', 'nickname'];
+      component['ngOnChanges'](changes);
+
+      expect(component['showSeparator']).toBeTrue();
+    });
+  });
+
+  describe('configureSearchModeExecute', () => {
+    beforeEach(() => {
+      component.showListbox = false;
+      component.keysLabel = [];
+      component.filterKeys = [];
+    });
+
+    it('should set showListbox to true when type is "execute"', () => {
+      const changes: SimpleChanges = {
+        type: { currentValue: 'execute', previousValue: 'action', firstChange: false, isFirstChange: () => false }
+      };
+
+      component.ngOnChanges(changes);
+
+      expect(component.showListbox).toBeTrue();
+    });
+
+    it('should set keysLabel with up to 3 items from filterKeys when keysLabel is empty', () => {
+      component.filterKeys = ['col1', 'col2', 'col3', 'col4'];
+
+      const changes: SimpleChanges = {
+        type: { currentValue: 'execute', previousValue: 'action', firstChange: false, isFirstChange: () => false }
+      };
+
+      component.ngOnChanges(changes);
+
+      expect(component.keysLabel).toEqual(['col1', 'col2', 'col3']);
+    });
+
+    it('should not overwrite keysLabel if it already has values', () => {
+      component.keysLabel = ['already'];
+      component.filterKeys = ['col1', 'col2'];
+
+      const changes: SimpleChanges = {
+        type: { currentValue: 'execute', previousValue: 'action', firstChange: false, isFirstChange: () => false }
+      };
+
+      component.ngOnChanges(changes);
+
+      expect(component.keysLabel).toEqual(['already']);
+    });
+
+    it('should not change anything if type is not "execute"', () => {
+      component.filterKeys = ['col1', 'col2'];
+
+      const changes: SimpleChanges = {
+        type: { currentValue: 'action', previousValue: 'execute', firstChange: false, isFirstChange: () => false }
+      };
+
+      component.ngOnChanges(changes);
+
+      expect(component.showListbox).toBeFalse();
+      expect(component.keysLabel).toEqual([]);
+    });
+  });
+
+  it('should emit footerAction and call closeListbox', () => {
+    spyOn(component.footerAction, 'emit');
+    spyOn(component, 'closeListbox');
+
+    component.handlerFooterActionListbox();
+
+    expect(component.footerAction.emit).toHaveBeenCalled();
+    expect(component.closeListbox).toHaveBeenCalled();
+  });
+
+  describe('openListboxFooterAction', () => {
+    beforeEach(() => {
+      component.poSearchInput = { nativeElement: { focus: () => {} } };
+    });
+
+    it('should reset listboxFilteredItems, call handlerPlaceholderListbox and openListbox when conditions are met', () => {
+      const literals = { placeholderListbox: 'Oxi' };
+      component['showFooterActionListbox'] = true;
+      component.showListbox = true;
+      component['modelSelected'] = null;
+      component.literals = literals;
+
+      component.listboxFilteredItems = ['item1', 'item2'];
+
+      component['openListboxFooterAction']();
+
+      expect(component.listboxFilteredItems).toEqual([]);
+      expect(component['placeholderListbox']).toEqual(literals.placeholderListbox);
+      expect(component.listboxOpen).toBeTrue();
+    });
+
+    it('should do nothing if conditions are not met', () => {
+      component.listboxOpen = false;
+      component['showFooterActionListbox'] = false;
+      component.showListbox = true;
+      component['modelSelected'] = null;
+
+      component.listboxFilteredItems = ['item1'];
+
+      component['openListboxFooterAction']();
+
+      expect(component.listboxFilteredItems).toEqual(['item1']);
+      expect(component['placeholderListbox']).toBeUndefined();
+      expect(component.listboxOpen).toBeFalse();
     });
   });
 });
