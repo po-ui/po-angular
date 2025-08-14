@@ -7,10 +7,10 @@ import { convertToBoolean, getDefaultSizeFn, validateSizeFn } from '../../utils/
 import { PoSearchFilterMode } from './enums/po-search-filter-mode.enum';
 import { PoSearchFilterSelect } from './interfaces/po-search-filter-select.interface';
 import { PoSearchLiterals } from './literals/po-search-literals.interface';
-import { poSearchLiteralsDefault } from './literals/po-search-literals-default';
+import { poSearchLiteralsDefault, poSearchLiteralsDefaultExecute } from './literals/po-search-literals-default';
 import { PoSearchLocateSummary } from './interfaces/po-search-locate-summary.interface';
 
-export type searchMode = 'action' | 'trigger' | 'locate';
+export type searchMode = 'action' | 'trigger' | 'locate' | 'execute';
 /**
  * @description
  *
@@ -87,6 +87,7 @@ export class PoSearchBaseComponent {
   protected language: string;
   private _filterSelect?: Array<PoSearchFilterSelect>;
   private _size?: string = undefined;
+  private _keysLabel? = [];
 
   /**
    * @optional
@@ -261,15 +262,24 @@ export class PoSearchBaseComponent {
       this._literals = {
         ...poSearchLiteralsDefault[poLocaleDefault],
         ...poSearchLiteralsDefault[this.language],
+        ...(this.type === 'execute' ? poSearchLiteralsDefaultExecute[this.language] : {}),
         ...value
       };
     } else {
-      this._literals = poSearchLiteralsDefault[this.language];
+      this._literals = {
+        ...poSearchLiteralsDefault[this.language],
+        ...(this.type === 'execute' ? poSearchLiteralsDefaultExecute[this.language] : {})
+      };
     }
   }
 
   get literals() {
-    return this._literals || poSearchLiteralsDefault[this.language];
+    return (
+      this._literals || {
+        ...poSearchLiteralsDefault[this.language],
+        ...(this.type === 'execute' ? poSearchLiteralsDefaultExecute[this.language] : {})
+      }
+    );
   }
 
   /**
@@ -297,6 +307,8 @@ export class PoSearchBaseComponent {
    * - `action`: Realiza a busca a cada caractere digitado.
    * - `trigger`: Realiza a busca ao pressionar `enter` ou clicar no ícone de busca.
    * - `locate`: Modo manual. Exibe botões e contador, mas não executa buscas — controle é do desenvolvedor.
+   * - `execute`: Executa uma ação ou realiza um redirecionamento ao selecionar um item no `listbox`.
+   *    Para este tipo, é necessário informar as propriedades `action` ou `url` nos itens definidos em `p-items`.
    *
    * @default `action`
    */
@@ -336,6 +348,33 @@ export class PoSearchBaseComponent {
 
   get size(): string {
     return this._size ?? getDefaultSizeFn(PoFieldSize);
+  }
+
+  /**
+   * @optional
+   *
+   * @description
+   *
+   * Define os nomes das propriedades do objeto que serão exibidos como rótulos (labels) no `listbox` quando a propriedade
+   * `p-show-listbox` estiver habilitada.
+   *
+   * Deve ser informado um array de strings contendo até **3 propriedades**.
+   *
+   * Exemplo de uso:
+   * ```ts
+   * keysLabel: Array<string> = ['nome', 'email', 'country'];
+   * ```
+   */
+  @Input('p-keys-label') set keysLabel(value: Array<string>) {
+    if (value && value.length > 3) {
+      this._keysLabel = value.slice(0, 3);
+    } else {
+      this._keysLabel = value;
+    }
+  }
+
+  get keysLabel(): Array<string> {
+    return this._keysLabel;
   }
 
   /**
@@ -410,6 +449,16 @@ export class PoSearchBaseComponent {
    * > Compatível com a propriedade `p-search-type` do tipo `locate`.
    */
   @Output('p-locate-previous') locatePrevious = new EventEmitter<void>();
+
+  /**
+   * @optional
+   *
+   * @description
+   *
+   * Evento disparado ao clicar no botão de ação exibido no rodapé do `listbox`.
+   * O texto exibido pode ser configurado por meio do literal `footerActionListbox`.
+   */
+  @Output('p-footer-action-listbox') footerAction = new EventEmitter<any>();
 
   constructor(languageService: PoLanguageService) {
     this.language = languageService.getShortLanguage();

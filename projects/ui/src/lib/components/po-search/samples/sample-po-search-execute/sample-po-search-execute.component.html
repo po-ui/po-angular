@@ -1,0 +1,28 @@
+<div class="po-row">
+  <po-widget
+    class="po-lg-6 po-mt-2"
+    p-title="Pesquisar e executar"
+    p-help="https://github.com/po-ui/po-angular/stargazers"
+    [p-height]="180"
+  >
+    <div class="po-row">
+      <span>Entre com o nome ou código da rotina</span>
+    </div>
+    <div class="po-row">
+      <po-search
+        class="po-mt-2 full"
+        name="Po Search"
+        [p-search-type]="'execute'"
+        [p-items]="itemsAction"
+        [p-filter-type]="filterType"
+        [p-filter-keys]="filterKeysAction"
+        [p-keys-label]="keysLabel"
+        (p-footer-action-listbox)="footerAction()"
+      />
+    </div>
+  </po-widget>
+</div>
+
+<po-modal #modal p-title="Rotinas">
+  <po-table [p-columns]="columns" [p-items]="itemsAction" [p-hide-columns-manager]="true"> </po-table>
+</po-modal>

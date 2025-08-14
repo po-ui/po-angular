@@ -165,6 +165,18 @@ export class PoListBoxBaseComponent {
 
   @Input('p-container-width') containerWidth: number;
 
+  // Define os nomes das propriedades do objeto que serão exibidos como rótulos (labels) no `listbox`
+  @Input('p-keys-label') keysLabel: Array<string> = [];
+
+  // Habilita a ação no rodapé do list box
+  @Input('p-footer-action-listbox') footerActionListbox: boolean = false;
+
+  // Cria um item no listbox que será utilizado como um "placeholder"
+  @Input('p-placeholder-listbox') placeholderListbox: string;
+
+  // Define se haverá ou não um separador entre todos os itens do listbox
+  @Input('p-separator') separator: boolean = false;
+
   // Evento disparado quando uma tab é ativada
   @Output('p-activated-tabs') activatedTab = new EventEmitter();
 
@@ -174,6 +186,9 @@ export class PoListBoxBaseComponent {
   @Output('p-change-state-tabs') changeStateTabs = new EventEmitter();
 
   @Output('p-click-item') clickItem = new EventEmitter();
+
+  // Evento disparado ao clicar na ação do rodapé do listbox
+  @Output('p-footer-action-listbox-event') footerActionListboxEvent = new EventEmitter();
 
   constructor(languageService: PoLanguageService) {
     this.language = languageService.getShortLanguage();

@@ -17,7 +17,7 @@
     </div>
   }
 
-  @if (type === 'action' || type === 'locate') {
+  @if (type === 'action' || type === 'locate' || type === 'execute') {
     <div class="po-search-icon">
       <po-icon [p-icon]="icon ? icon : 'ICON_SEARCH'"></po-icon>
     </div>
@@ -61,16 +61,18 @@
     }
 
     @if (!!poSearchInput.value && !disabled) {
-      <button
-        class="po-search-button po-search-button-clean"
-        type="button"
-        [ariaLabel]="literals.clean"
-        (click)="clearSearch()"
-        (keydown.enter)="clearSearch()"
-        (keydown)="onCleanKeydown($event)"
-      >
-        <po-clean class="po-icon-input" [p-size]="size"></po-clean>
-      </button>
+      <div [id]="idSearchButtonClean">
+        <button
+          class="po-search-button po-search-button-clean"
+          type="button"
+          [ariaLabel]="literals.clean"
+          (click)="clearSearch()"
+          (keydown.enter)="clearSearch()"
+          (keydown)="onCleanKeydown($event)"
+        >
+          <po-clean class="po-icon-input" [p-size]="size"></po-clean>
+        </button>
+      </div>
     }
 
     @if (type === 'trigger') {
@@ -128,6 +130,12 @@
       [p-search-value]="getInputValue()"
       [p-size]="size"
       (p-close)="onCloseListbox()"
+      [p-literals]="literals"
+      [p-separator]="showSeparator"
+      [p-keys-label]="keysLabel"
+      [p-footer-action-listbox]="showFooterActionListbox"
+      (p-footer-action-listbox-event)="handlerFooterActionListbox()"
+      [p-placeholder-listbox]="placeholderListbox"
     ></po-listbox>
   </div>
 }

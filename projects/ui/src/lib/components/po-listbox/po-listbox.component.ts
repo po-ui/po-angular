@@ -109,6 +109,18 @@ export class PoListBoxComponent extends PoListBoxBaseComponent implements AfterV
     event.preventDefault();
 
     if ((event && event.code === 'Enter') || event.code === 'Space') {
+      if (itemListAction.type === 'footerAction') {
+        this.handleFooterActionListbox();
+        return;
+      }
+
+      // Cenário em que o `Po-Search` (com listbox) tem nos items ação ou url
+      if (this.type === 'option' && (itemListAction?.action || itemListAction?.url)) {
+        this.onSelectItem(itemListAction);
+        this.optionClicked(itemListAction);
+        return;
+      }
+
       switch (this.type) {
         case 'check':
           this.onSelectCheckBoxItem(itemListAction);
@@ -218,6 +230,8 @@ export class PoListBoxComponent extends PoListBoxBaseComponent implements AfterV
   checkTemplate() {
     if (this.cache || this.infiniteScroll) {
       return this.items.length;
+    } else if (!this.items.length && this.footerActionListbox) {
+      return true;
     } else {
       return !this.isServerSearching && this.items.length;
     }
@@ -283,5 +297,10 @@ export class PoListBoxComponent extends PoListBoxBaseComponent implements AfterV
         return item;
       }
     }
+  }
+
+  handleFooterActionListbox() {
+    this.footerActionListboxEvent.emit();
+    this.closeEvent.emit();
   }
 }

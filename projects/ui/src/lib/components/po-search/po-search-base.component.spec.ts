@@ -2,7 +2,7 @@ import { PoThemeA11yEnum } from '../../services';
 import { poLocaleDefault } from '../../services/po-language/po-language.constant';
 import { PoLanguageService } from '../../services/po-language/po-language.service';
 import * as Utils from '../../utils/util';
-import { poSearchLiteralsDefault } from './literals/po-search-literals-default';
+import { poSearchLiteralsDefault, poSearchLiteralsDefaultExecute } from './literals/po-search-literals-default';
 import { PoSearchBaseComponent } from './po-search-base.component';
 
 describe('PoSearchBaseComponent', () => {
@@ -51,6 +51,34 @@ describe('PoSearchBaseComponent', () => {
       component.literals = {};
 
       expect(component.literals).toEqual(poSearchLiteralsDefault.en);
+    });
+
+    describe('literals with type execute', () => {
+      const expected = {
+        ...poSearchLiteralsDefault.en,
+        ...poSearchLiteralsDefaultExecute.en
+      };
+
+      beforeEach(() => {
+        component.type = 'execute';
+        component['language'] = 'en';
+      });
+
+      it('should be in english if browser is set with `en`', () => {
+        component.literals = {};
+
+        expect(component.literals).toEqual(expected);
+      });
+
+      it('should be set `literals` with browser language if `literals` is `undefined`', () => {
+        component.literals = undefined;
+
+        expect(component.literals).toEqual(expected);
+      });
+
+      it('should return the literal when not set', () => {
+        expect(component.literals).toEqual(expected);
+      });
     });
 
     describe('p-size', () => {
@@ -104,6 +132,13 @@ describe('PoSearchBaseComponent', () => {
         document.documentElement.setAttribute('data-a11y', PoThemeA11yEnum.AAA);
         component['_size'] = undefined;
         expect(component.size).toBe('medium');
+      });
+    });
+
+    describe('keysLabel', () => {
+      it('should slice the array if it has more than 3 elements', () => {
+        component.keysLabel = ['a', 'b', 'c', 'd', 'e'];
+        expect(component.keysLabel).toEqual(['a', 'b', 'c']);
       });
     });
   });

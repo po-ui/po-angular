@@ -31,8 +31,31 @@
         (click)="onComboItem(item, $event)"
       >
         @if (!template) {
-          <span class="po-item-list-label" [innerHTML]="getLabelFormatted(label)"></span>
+          @switch (keysLabel.length) {
+            @case (0) {
+              <span class="po-item-list-label" [innerHTML]="getLabelFormatted(label)"></span>
+            }
+
+            @case (1) {
+              <span class="po-item-list-label">{{ item[keysLabel[0]] }}</span>
+            }
+
+            @case (2) {
+              <div class="po-item-list-label po-item-list-label-group">
+                <span class="po-item-list-label">{{ item[keysLabel[0]] }}</span>
+                <span class="po-item-list-sublabel">{{ item[keysLabel[1]] }}</span>
+              </div>
+            }
+
+            @default {
+              <div class="po-item-list-label po-item-list-label-group">
+                <span class="po-item-list-label">{{ item[keysLabel[0]] }}</span>
+                <span class="po-item-list-sublabel">{{ item[keysLabel[1]] }} - {{ item[keysLabel[2]] }}</span>
+              </div>
+            }
+          }
         }
+
         <ng-template
           [ngTemplateOutlet]="template?.templateRef"
           [ngTemplateOutletContext]="{ $implicit: templateContext }"

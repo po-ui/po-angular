@@ -769,6 +769,33 @@ describe('PoListBoxComponent', () => {
         component.onSelectAllCheckboxKeyDown(mockEvent);
         expect(component.closeEvent.emit).toHaveBeenCalled();
       });
+
+      it('should call footerActionListboxEvent when keyboard enter', () => {
+        const item = { type: 'footerAction' };
+        const eventEnterKey = new KeyboardEvent('keydown', { 'code': 'Enter' });
+
+        spyOn(component.footerActionListboxEvent, 'emit');
+
+        component.onKeyDown(item, eventEnterKey);
+
+        expect(component.footerActionListboxEvent.emit).toHaveBeenCalled();
+      });
+
+      it('should call selectCombo when keyboard enter', () => {
+        const item = {
+          action: () => {
+            console.log('action listbox search');
+          }
+        };
+        const eventEnterKey = new KeyboardEvent('keydown', { 'code': 'Enter' });
+
+        spyOn(component.selectCombo, 'emit');
+
+        component.type = 'option';
+        component.onKeyDown(item, eventEnterKey);
+
+        expect(component.selectCombo.emit).toHaveBeenCalled();
+      });
     });
 
     describe('getSizeLoading', () => {
@@ -929,6 +956,15 @@ describe('PoListBoxComponent', () => {
       component.items = [];
 
       expect(component.checkTemplate()).toBeFalsy();
+    });
+
+    it('check Template: should return true if footerActionListbox is true', () => {
+      component.cache = false;
+      component.isServerSearching = false;
+      component.items = [];
+      component.footerActionListbox = true;
+
+      expect(component.checkTemplate()).toBeTruthy();
     });
   });
 

@@ -46,4 +46,14 @@ export interface PoSearchLiterals {
    * > Exibido apenas quando a propriedade `p-filter-locate` estiver habilitada.
    */
   result?: string;
+
+  /**
+   * Texto exibido na ação do rodapé da lista de resultados.
+   */
+  footerActionListbox?: string;
+
+  /**
+   * Texto exibido como *placeholder* na lista de resultados.
+   */
+  placeholderListbox?: string;
 }

@@ -216,6 +216,7 @@ export class PoChartComponent extends PoChartBaseComponent implements OnInit, Af
   }
 
   ngOnDestroy(): void {
+    /* istanbul ignore next */
     if (this.resizeObserver?.disconnect) {
       this.resizeObserver?.disconnect();
     }
@@ -292,7 +293,7 @@ export class PoChartComponent extends PoChartBaseComponent implements OnInit, Af
   private observeContainerResize(): void {
     if (!this.series?.length) return;
 
-    if (this.resizeObserver) {
+    if (this.resizeObserver?.disconnect) {
       this.resizeObserver.disconnect();
       this.resizeObserver = undefined;
     }
