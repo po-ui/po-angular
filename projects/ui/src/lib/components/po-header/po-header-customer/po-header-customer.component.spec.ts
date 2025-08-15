@@ -59,7 +59,6 @@ describe('PoHeaderCustomerComponent', () => {
       customerBrand: 'brand.jpg',
       action: () => {},
       popover: {
-        title: 'popover',
         content: null
       }
     };
@@ -75,7 +74,6 @@ describe('PoHeaderCustomerComponent', () => {
       customerBrand: 'brand.jpg',
       action: () => {},
       popover: {
-        title: 'popover',
         content: null
       }
     };
@@ -93,7 +91,6 @@ describe('PoHeaderCustomerComponent', () => {
       customerBrand: 'brand.jpg',
       action: () => {},
       popover: {
-        title: 'popover',
         content: null
       }
     };

@@ -11,6 +11,7 @@ import {
   ViewChild
 } from '@angular/core';
 import { PoHeaderBrand } from '../interfaces/po-header-brand.interface';
+import { PoMenuItem } from '../../po-menu';
 
 @Component({
   selector: 'po-header-brand',
@@ -29,6 +30,11 @@ export class PoHeaderbrandComponent implements AfterViewInit, OnChanges {
   @Output('p-click-menu') clickMenu = new EventEmitter<any>();
 
   @Input('p-hide-button-menu') hideButtonMenu?: boolean;
+
+  // itens do menu caso não seja enviado um menu externo pelo usuário
+  @Input('p-menus') menuCollapse: Array<PoMenuItem> = [];
+
+  @Input('p-external') externalMenu: boolean;
 
   constructor(private cd: ChangeDetectorRef) {}
 

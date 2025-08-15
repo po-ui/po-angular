@@ -2,6 +2,8 @@ import { Component, ElementRef, Input, QueryList, TemplateRef, ViewChild, ViewCh
 import { PoHeaderActionTool } from '../interfaces/po-header-action-tool.interface';
 import { PoPopupComponent } from '../../po-popup';
 import { PoPopoverComponent } from '../../po-popover';
+import { isExternalLink } from '../../../utils/util';
+import { Router } from '@angular/router';
 
 @Component({
   selector: 'po-header-tools',
@@ -29,6 +31,8 @@ export class PoHeaderToolsComponent {
 
   @Input('p-header-template') headerTemplate: TemplateRef<any>;
 
+  constructor(private router: Router) {}
+
   onClickFirstAction(index: number) {
     const action = this.actionTools[index];
     action.action?.();
@@ -37,6 +41,8 @@ export class PoHeaderToolsComponent {
       const popup = this.poPopupActions.get(index);
       popup?.toggle();
     }
+
+    this.checkLink(action);
   }
 
   onClickFirstActionClosePopover(index: number) {
@@ -60,6 +66,16 @@ export class PoHeaderToolsComponent {
         return true;
       }
       return false;
+    }
+  }
+
+  private checkLink(item: PoHeaderActionTool) {
+    if (item.link) {
+      if (isExternalLink(item.link)) {
+        window.open(item.link, '_blank');
+      } else {
+        this.router.navigateByUrl(item.link);
+      }
     }
   }
 }

@@ -14,7 +14,7 @@ export interface PoHeaderBrand {
    * Título da marca
    *
    */
-  title: string;
+  title?: string;
 
   /**
    *

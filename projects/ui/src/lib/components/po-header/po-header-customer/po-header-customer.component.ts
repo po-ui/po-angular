@@ -1,7 +1,7 @@
 import { Component, Input, ViewChild } from '@angular/core';
-import { PoHeaderUser } from '../interfaces/po-header-user.interface';
-import { PoPopupComponent } from '../../po-popup';
 import { PoPopoverComponent } from '../../po-popover';
+import { PoPopupComponent } from '../../po-popup';
+import { PoHeaderUser } from '../interfaces/po-header-user.interface';
 
 @Component({
   selector: 'po-header-customer',
@@ -31,7 +31,13 @@ export class PoHeaderCustomerComponent {
   onKeyDownCustomer(event) {
     if (event.code === 'Space' || event.code === 'Enter') {
       this.headerUser.action?.();
-      this.poPopupAction.toggle();
+      if (!this.headerUser.popover) {
+        this.poPopupAction.toggle();
+      } else if (this.poPopoverAction.isHidden) {
+        this.poPopoverAction.open();
+      } else {
+        this.poPopoverAction.close();
+      }
     }
   }
 }

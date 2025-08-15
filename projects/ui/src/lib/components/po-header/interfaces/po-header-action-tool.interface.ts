@@ -19,7 +19,7 @@ export interface PoHeaderActionTool {
    *
    * Título da ação
    */
-  title?: string;
+  label?: string;
   /**
    *
    * @optional
@@ -82,6 +82,16 @@ export interface PoHeaderActionTool {
    */
   badge?: number;
 
+  /**
+   *
+   *
+   * @description
+   *
+   * link utilizado no redirecionamento das páginas.
+   *
+   */
+  link?: string;
+
   //interno
   $selected?;
 }
@@ -95,14 +105,6 @@ export interface PoHeaderActionTool {
  *
  */
 export interface PoHeaderActionPopoverAction {
-  /**
-   *
-   * @description
-   *
-   * Título do cabeçalho do template
-   */
-  title: string;
-
   /**
    *
    * @description

@@ -30,6 +30,16 @@ export interface PoHeaderActions {
 
   /**
    *
+   *
+   * @description
+   *
+   * link utilizado no redirecionamento das páginas.
+   *
+   */
+  link?: string;
+
+  /**
+   *
    * @optional
    *
    * @description

@@ -65,6 +65,8 @@ import { PoHeaderUser } from './interfaces/po-header-user.interface';
 export abstract class PoHeaderBaseComponent {
   private _menuItems: Array<PoHeaderActions> = [];
   public menuCollapseJoin = [];
+  public menuCollapseJoinExternal = [];
+  private _brand: PoHeaderBrand;
 
   /**
    * @optional
@@ -106,8 +108,21 @@ export abstract class PoHeaderBaseComponent {
    *
    * Propriedade para configurar a seção de brand do `po-header`
    *
+   * Caso seja enviada uma string apenas o logo sera mostrado com o valor da string passada.
+   *
    */
-  @Input('p-brand') brand: PoHeaderBrand;
+  @Input('p-brand')
+  set brand(value: PoHeaderBrand | string) {
+    if (typeof value === 'string') {
+      this._brand = { logo: value };
+    } else {
+      this._brand = value;
+    }
+  }
+
+  get brand(): PoHeaderBrand {
+    return this._brand;
+  }
 
   /**
    * @optional

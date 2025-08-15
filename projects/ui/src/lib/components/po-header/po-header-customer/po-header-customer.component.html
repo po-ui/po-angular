@@ -41,10 +41,10 @@
 
 @if (headerUser?.popover) {
   <po-popover #poPopoverAction [p-target]="targetRef" p-position="bottom-left" [p-hide-arrow]="true">
-    <div class="po-header-popover-main">
+    <!-- <div class="po-header-popover-main">
       <span>{{ headerUser.popover.title }}</span>
       <po-button p-kind="tertiary" p-icon="ICON_CLOSE" (p-click)="onClickClosePopover()"></po-button>
-    </div>
+    </div> -->
     <ng-container *ngTemplateOutlet="headerUser.popover.content"></ng-container>
   </po-popover>
 }

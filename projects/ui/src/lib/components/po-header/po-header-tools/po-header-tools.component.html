@@ -4,7 +4,7 @@
   @if (headerTemplate) {
     <ng-container *ngTemplateOutlet="headerTemplate"></ng-container>
   }
-  @for (action of actionTools; track action?.title; let i = $index) {
+  @for (action of actionTools; track action?.label; let i = $index) {
     <li [class.po-header-nav-item-small]="i !== actionTools.length - 1">
       <po-button
         #buttonActionElement
@@ -37,10 +37,10 @@
           p-position="bottom-left"
           [p-hide-arrow]="true"
         >
-          <div class="po-header-popover-main">
+          <!-- <div class="po-header-popover-main">
             <span>{{ action?.title }}</span>
             <po-button p-kind="tertiary" p-icon="ICON_CLOSE" (p-click)="onClickFirstActionClosePopover(i)"></po-button>
-          </div>
+          </div> -->
           <ng-container *ngTemplateOutlet="action.popover?.content"></ng-container>
         </po-popover>
       }

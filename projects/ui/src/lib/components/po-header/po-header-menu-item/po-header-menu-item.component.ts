@@ -11,6 +11,8 @@ import {
 } from '@angular/core';
 import { PoPopupComponent } from '../../po-popup';
 import { PoHeaderActions } from '../interfaces/po-header-actions.interface';
+import { isExternalLink } from '../../../utils/util';
+import { Router } from '@angular/router';
 
 @Component({
   selector: 'po-header-menu-item',
@@ -31,7 +33,10 @@ export class PoHeaderMenuItemComponent implements OnChanges {
 
   @Output('p-item-click') itemClick = new EventEmitter<PoHeaderActions>();
 
-  constructor(private cd: ChangeDetectorRef) {}
+  constructor(
+    private cd: ChangeDetectorRef,
+    private router: Router
+  ) {}
 
   ngOnChanges(changes: SimpleChanges): void {
     if (changes['itemOverFlow']) {
@@ -64,5 +69,12 @@ export class PoHeaderMenuItemComponent implements OnChanges {
       item.action?.();
     }
     this.itemClick.emit(item);
+    if (item.link) {
+      if (isExternalLink(item.link)) {
+        window.open(item.link, '_blank');
+      } else {
+        this.router.navigateByUrl(item.link);
+      }
+    }
   }
 }

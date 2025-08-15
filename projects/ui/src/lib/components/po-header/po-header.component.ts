@@ -4,16 +4,19 @@ import {
   Component,
   ElementRef,
   OnChanges,
+  OnDestroy,
+  OnInit,
   QueryList,
   Renderer2,
   SimpleChanges,
   ViewChild,
   ViewChildren
 } from '@angular/core';
-import { debounceTime, fromEvent, Subscription } from 'rxjs';
+import { debounceTime, delay, fromEvent, map, startWith, Subscription } from 'rxjs';
+import { uuid } from '../../utils/util';
+import { PoMenuComponent, PoMenuGlobalService } from '../po-menu';
 import { PoHeaderActions } from './interfaces/po-header-actions.interface';
 import { PoHeaderBaseComponent } from './po-header-base.component';
-import { PoMenuGlobalService } from '../po-menu';
 
 /**
  * @docsExtends PoHeaderBaseComponent
@@ -32,7 +35,7 @@ import { PoMenuGlobalService } from '../po-menu';
   templateUrl: './po-header.component.html',
   standalone: false
 })
-export class PoHeaderComponent extends PoHeaderBaseComponent implements AfterViewInit, OnChanges {
+export class PoHeaderComponent extends PoHeaderBaseComponent implements AfterViewInit, OnChanges, OnInit, OnDestroy {
   afterViewInitWascalled = false;
   showMenu = false;
   visibleMenuItems: Array<any> = [...this.menuItems];
@@ -40,6 +43,19 @@ export class PoHeaderComponent extends PoHeaderBaseComponent implements AfterVie
   overflowItems: Array<any> = [];
   showOverflow = false;
   resizeSubscription!: Subscription;
+  private menusSubscription: Subscription;
+  private applicationMenuSubscription: Subscription;
+  private menuIdSubscription: Subscription;
+  private menuonChangesSubscription: Subscription;
+  private resizeSub!: Subscription;
+
+  menuExternal = [];
+  existMenuExternal = false;
+  applicationMenu: PoMenuComponent;
+  private id = uuid();
+  private currentWidth = 0;
+
+  private previousMenusItems = [];
 
   @ViewChild('buttonFirstAction', { read: ElementRef }) buttonFirstAction: ElementRef;
   buttonFirstActionRef: ElementRef;
@@ -59,14 +75,81 @@ export class PoHeaderComponent extends PoHeaderBaseComponent implements AfterVie
     super();
   }
 
+  ngOnInit(): void {
+    this.menuonChangesSubscription = this.menuGlobalService.receiveOnChange$.subscribe(newMenus => {
+      if (!this.applicationMenu) return;
+      if (this.currentWidth <= 960) {
+        this.menorIgualQue960();
+      } else {
+        this.maior();
+      }
+      // this.applicationMenu.menus = [];
+    });
+
+    this.menusSubscription = this.menuGlobalService.receiveMenus$.subscribe(newMenus => {
+      this.previousMenusItems = [...newMenus].filter(item => item.id !== this.id);
+    });
+
+    this.menuIdSubscription = this.menuGlobalService.receiveId$.subscribe(id => {
+      if (id !== 'po-header-nav-bar') {
+        this.existMenuExternal = true;
+      }
+    });
+
+    this.applicationMenuSubscription = this.menuGlobalService.receiveApplicationMenu$
+      .pipe(delay(100))
+      .subscribe(newMenu => {
+        if (this.existMenuExternal && newMenu.menuid !== 'po-header-nav-bar') {
+          this.applicationMenu = newMenu;
+          if (this.applicationMenu) {
+            this.updateMenu();
+            this.combineItemsExternal();
+            if (this.currentWidth <= 960) {
+              this.menorIgualQue960();
+            }
+          }
+          this.cd.detectChanges();
+        }
+      });
+
+    this.resizeSub = fromEvent(window, 'resize')
+      .pipe(
+        debounceTime(200),
+        map(() => window.innerWidth),
+        startWith(window.innerWidth)
+      )
+      .subscribe(width => {
+        this.currentWidth = width;
+        console.log('oieeeeeeeeee', this.currentWidth);
+        if (width <= 960) {
+          this.menorIgualQue960();
+        } else {
+          this.maior();
+        }
+      });
+  }
+
   ngOnChanges(changes: SimpleChanges): void {
     if (changes['amountMore']) {
       this.updateButtonMore();
     }
 
-    if ((changes['menuItems'] || changes['menuCollapse']) && this.afterViewInitWascalled) {
+    if (changes['menuCollapse'] && this.afterViewInitWascalled) {
+      if (this.currentWidth <= 960) {
+        this.menorIgualQue960();
+      } else {
+        this.maior();
+      }
+    }
+
+    if (changes['menuItems'] && this.afterViewInitWascalled) {
+      console.log(changes);
       this.updateMenu();
-      this.combineItems();
+      this.combineItemsExternal();
+      if (this.currentWidth <= 960) {
+        this.menorIgualQue960();
+      }
+      // this.combineItems();
     }
   }
 
@@ -81,7 +164,14 @@ export class PoHeaderComponent extends PoHeaderBaseComponent implements AfterVie
       });
 
     this.combineItems();
+    this.combineItemsExternal();
     this.afterViewInitWascalled = true;
+  }
+
+  ngOnDestroy(): void {
+    if (this.resizeSub) {
+      this.resizeSub.unsubscribe();
+    }
   }
 
   toggleOverflowDropdown() {
@@ -165,7 +255,12 @@ export class PoHeaderComponent extends PoHeaderBaseComponent implements AfterVie
   }
 
   onClickMenu() {
-    this.showMenu = !this.showMenu;
+    if (this.menuCollapseJoin.length) {
+      this.showMenu = !this.showMenu;
+    }
+    if (this.existMenuExternal) {
+      this.applicationMenu.toggleMenuMobile();
+    }
     this.colapsedMenuEvent.emit();
   }
 
@@ -173,17 +268,45 @@ export class PoHeaderComponent extends PoHeaderBaseComponent implements AfterVie
     this.showMenu = false;
   }
 
+  menorIgualQue960() {
+    if (this.applicationMenu) {
+      this.applicationMenu.menus = [
+        { label: 'others', subItems: [...this.menuCollapseJoinExternal], id: this.id },
+        ...this.previousMenusItems
+      ];
+    } else {
+      this.menuCollapseJoin = this.combineItems();
+    }
+    this.cd.detectChanges();
+  }
+
+  maior() {
+    if (this.applicationMenu) {
+      this.applicationMenu.menus = [...this.previousMenusItems];
+    } else {
+      this.menuCollapseJoin = [...this.menuCollapse];
+    }
+    this.cd.detectChanges();
+  }
+
   private combineItems() {
-    const toolActions = this.actionsTools.map(item => ({ label: item.title, action: item.action }));
+    const toolActions = this.actionsTools.map(item => ({ label: item.label, action: item.action }));
     const menuActions = this.menuItems.map(item => ({ label: item.label, action: item.action }));
 
     const joinMenu = {
       label: 'Others',
-      subItems: [...toolActions, ...menuActions]
+      subItems: [...toolActions, ...menuActions],
+      id: this.id
     };
 
-    this.menuCollapseJoin = [...this.menuCollapse, joinMenu];
-    this.cd.detectChanges();
+    return [...this.menuCollapse, joinMenu];
+  }
+
+  private combineItemsExternal() {
+    const toolActions = this.actionsTools.map(item => ({ label: item.label, action: item.action }));
+    const menuActions = this.menuItems.map(item => ({ label: item.label, action: item.action }));
+
+    this.menuCollapseJoinExternal = [...toolActions, ...menuActions];
   }
 
   onSelected(item: PoHeaderActions) {
@@ -193,5 +316,6 @@ export class PoHeaderComponent extends PoHeaderBaseComponent implements AfterVie
     }));
     this.updateMenu();
     this.combineItems();
+    this.combineItemsExternal();
   }
 }

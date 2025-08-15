@@ -1,10 +1,11 @@
-<style></style>
-
 <div class="po-header-nav-brand">
-  @if (!hideButtonMenu) {
+  @if (externalMenu) {
     <po-button #target class="po-nav-header-medium" p-icon="an an-list" p-kind="tertiary" (p-click)="clickMenu.emit()">
     </po-button>
+  } @else if (menuCollapse.length && !hideButtonMenu) {
+    <po-button #target p-icon="an an-list" p-kind="tertiary" (p-click)="clickMenu.emit()"> </po-button>
   }
+
   @if (brand?.logo) {
     <div class="po-header-nav-brand-logo" (click)="brand?.action?.()">
       <img [src]="brand.logo" alt="Logo" />
