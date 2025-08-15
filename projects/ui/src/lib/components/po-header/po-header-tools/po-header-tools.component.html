@@ -1,0 +1,49 @@
+<style></style>
+
+<div class="po-header-nav-tools">
+  @if (headerTemplate) {
+    <ng-container *ngTemplateOutlet="headerTemplate"></ng-container>
+  }
+  @for (action of actionTools; track action?.label; let i = $index) {
+    <li [class.po-header-nav-item-small]="i !== actionTools.length - 1">
+      <po-button
+        #buttonActionElement
+        [p-tooltip]="action?.tooltip"
+        [p-icon]="action?.badge ? badge : action?.icon || 'an an-dots-nine'"
+        p-kind="tertiary"
+        (p-click)="onClickFirstAction(i)"
+        [class.po-header-selected-tool]="checkSelected(i)"
+      >
+      </po-button>
+
+      <ng-template #badge>
+        <i class="an an-bell po-nav-bell">
+          <po-badge class="po-nav-status" [p-value]="action?.badge"></po-badge>
+        </i>
+      </ng-template>
+
+      <po-popup
+        #poPopupAction
+        [p-actions]="action?.items"
+        [p-target]="buttonActionElements?.get(i)"
+        [p-hide-arrow]="true"
+      >
+      </po-popup>
+
+      @if (action?.popover) {
+        <po-popover
+          #poPopoverAction
+          [p-target]="buttonActionElements?.get(i)"
+          p-position="bottom-left"
+          [p-hide-arrow]="true"
+        >
+          <!-- <div class="po-header-popover-main">
+            <span>{{ action?.title }}</span>
+            <po-button p-kind="tertiary" p-icon="ICON_CLOSE" (p-click)="onClickFirstActionClosePopover(i)"></po-button>
+          </div> -->
+          <ng-container *ngTemplateOutlet="action.popover?.content"></ng-container>
+        </po-popover>
+      }
+    </li>
+  }
+</div>

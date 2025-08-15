@@ -34,6 +34,25 @@ describe('PoPopoverComponent:', () => {
     expect(component).toBeTruthy();
   });
 
+  it('ngOnChanges: should call removeListeners and initEvents when target is changed', () => {
+    spyOn(component, <any>'removeListeners');
+    spyOn(component, 'initEvents');
+
+    component.afterViewInitWasCalled = true;
+
+    component.ngOnChanges({
+      target: {
+        currentValue: 'value',
+        previousValue: undefined,
+        firstChange: true,
+        isFirstChange: () => true
+      }
+    });
+
+    expect(component['removeListeners']).toHaveBeenCalled();
+    expect(component['initEvents']).toHaveBeenCalled();
+  });
+
   it('should call setElement and setRendererListenInit in ngAfterViewInit', () => {
     spyOn(component['poControlPosition'], 'setElements');
     spyOn(component, 'setRendererListenInit');

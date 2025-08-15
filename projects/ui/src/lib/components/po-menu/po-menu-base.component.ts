@@ -116,6 +116,7 @@ export abstract class PoMenuBaseComponent {
   private _params: any;
   private _service: string | PoMenuFilter;
   private _logoLink: boolean | string = true;
+  private _menuId: string;
 
   /**
    * @optional
@@ -320,6 +321,15 @@ export abstract class PoMenuBaseComponent {
    */
   @Input('p-logo') logo?: string;
 
+  @Input('p-menu-id') set menuid(id: string) {
+    this.menuGlobalService.sendId(id);
+    this._menuId = id;
+  }
+
+  get menuid() {
+    return this._menuId;
+  }
+
   /**
    * @optional
    *
@@ -349,6 +359,9 @@ export abstract class PoMenuBaseComponent {
    * - Caso não informar um valor, esta propriedade passa a assumir o valor informado na propriedade `p-logo`.
    */
   @Input('p-short-logo') shortLogo: string;
+
+  // propriedade interna
+  @Input('p-only-menu-item') onlyMenuItem: boolean = false;
 
   /**
    * @optional

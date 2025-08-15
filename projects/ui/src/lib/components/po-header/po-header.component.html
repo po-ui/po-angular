@@ -1,0 +1,88 @@
+<style>
+  .po-heder-side-menu-close {
+    display: flex;
+    justify-content: flex-end;
+    padding: 0.5rem;
+  }
+
+  .po-header-side-menu {
+    padding-top: 0.5rem;
+    overflow-y: auto;
+  }
+</style>
+
+<nav #navElement class="po-header-nav">
+  <div #menuWrapperBrand>
+    <po-header-brand
+      [p-brand]="brand"
+      (p-click-menu)="onClickMenu()"
+      [p-menus]="menuCollapseJoin"
+      [p-external]="applicationMenu"
+      [p-hide-button-menu]="hideButtonMenu"
+    ></po-header-brand>
+  </div>
+
+  <ul #menuWrapperItens class="po-header-nav-submenus-wrapper">
+    @for (item of visibleMenuItems; track item.id) {
+      <po-header-menu-item #menusubmenuitem [p-item]="item" (p-item-click)="onSelected($event)"></po-header-menu-item>
+    }
+  </ul>
+
+  @if (showOverflow && overflowItems.length) {
+    <po-header-menu-item
+      #overflowButton
+      #menusubmenuitem
+      [p-button-overflow]="true"
+      [p-item-overflow]="overflowItems"
+      (p-item-click)="onSelected($event)"
+    ></po-header-menu-item>
+  }
+
+  <ul #menuWrapperTools class="po-nav-tools-wrapper">
+    <po-header-tools [p-actions-tools]="actionsTools" [p-header-template]="headerTemplate"></po-header-tools>
+
+    @if (headerUser?.customerBrand && headerUser?.avatar) {
+      <po-header-customer [p-header-user]="headerUser"></po-header-customer>
+    }
+  </ul>
+</nav>
+
+@if (!sideMenuOnlyAction && !existMenuExternal && menuCollapseJoin.length) {
+  <div class="po-header-overlay" [class.show]="showMenu" (click)="onCloseMenu()"></div>
+
+  <aside class="po-header-side-menu" [class.open]="showMenu">
+    <div class="po-header-sidemenu-outer">
+      <!-- <div class="po-heder-side-menu-close">
+        <po-button (p-click)="onCloseMenu()" p-icon="an an-x" p-kind="tertiary"></po-button>
+      </div> -->
+
+      <po-menu [p-only-menu-item]="true" [p-menus]="menuCollapseJoin" p-filter p-menu-id="po-header-nav-bar"></po-menu>
+    </div>
+  </aside>
+}
+
+<!-- 
+
+
+<ng-container *ngIf="template">
+  <ng-container *ngTemplateOutlet="template"></ng-container>
+</ng-container> -->
+
+<!-- <div style="margin-top: 30px"></div>
+<p>overflowItems: {{ overflowItems | json }}</p>
+<br />
+<p>visibleMenuItems: {{ visibleMenuItems | json }}</p>
+<br />
+<p>menuItems: {{ menuItems | json }}</p>
+<br />
+-->
+
+<!-- <div style="margin-top: 300px">
+
+   <p>menuSmallItems: {{ menuCollapseJoin | json }}</p>
+ </div> -->
+<!--<br />
+<br />
+<br />
+<br />
+<p>menuExternal: {{ menuExternal | json }}</p> -->

@@ -1,0 +1,16 @@
+<po-header
+  [p-brand]="headerBrand"
+  [p-menu-items]="menuItems"
+  [p-actions-tools]="actionTools"
+  [p-header-user]="headerUser"
+></po-header>
+
+<ng-template #meuTemplate>
+  <div class="meu-template" style="color: red">
+    <div class="app-wrapper">
+      @for (app of systemApps; track app.icon) {
+        <po-button [p-icon]="app.icon"></po-button>
+      }
+    </div>
+  </div>
+</ng-template>
