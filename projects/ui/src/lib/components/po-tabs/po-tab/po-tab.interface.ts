@@ -31,6 +31,18 @@ export interface PoTab {
    *
    * @description
    *
+   * Método disparado ao clicar no botão de fechar a aba.
+   *
+   * > Atenção: Propriedade disponível somente no `po-context-tabs`.
+   *
+   */
+  closeTab?: Function;
+
+  /**
+   * @optional
+   *
+   * @description
+   *
    * Desabilita a aba impossibilitando que fique ativa.
    */
   disabled?: boolean;
@@ -43,6 +55,19 @@ export interface PoTab {
    * Oculta a aba.
    */
   hide?: boolean;
+
+  /**
+   * @optional
+   *
+   * @description
+   *
+   * Esconde o botão de fechar a aba.
+   *
+   * > Atenção: Propriedade disponível somente no `po-context-tabs`.
+   *
+   * @default `false`
+   */
+  hideClose?: boolean;
 
   /** Rótulo da aba. */
   label: string;
