@@ -1,24 +1,40 @@
-import { PoSearchLiterals } from './po-search-literals';
+import { PoSearchLiterals } from './po-search-literals.interface';
 
 export const poSearchLiteralsDefault = {
   en: <PoSearchLiterals>{
     search: 'Search',
-    clean: 'Clean',
-    all: 'All'
+    clean: 'Clear search',
+    all: 'All',
+    of: 'of',
+    next: 'Next result',
+    previous: 'Previous result',
+    result: 'Result'
   },
   es: <PoSearchLiterals>{
     search: 'Buscar',
-    clean: 'limpiar',
-    all: 'Todo'
+    clean: 'Borrar búsqueda',
+    all: 'Todo',
+    of: 'de',
+    next: 'Siguiente resultado',
+    previous: 'Resultado anterior',
+    result: 'Resultado'
   },
   pt: <PoSearchLiterals>{
     search: 'Pesquisar',
-    clean: 'Apagar',
-    all: 'Todos'
+    clean: 'Limpar busca',
+    all: 'Todos',
+    of: 'de',
+    next: 'Próximo resultado',
+    previous: 'Resultado anterior',
+    result: 'Resultado'
   },
   ru: <PoSearchLiterals>{
     search: 'Поиск',
-    clean: 'чистый',
-    all: 'Все'
+    clean: 'Очистить поиск',
+    all: 'Все',
+    of: 'из',
+    next: 'Следующий результат',
+    previous: 'Предыдущий результат',
+    result: 'Результат'
   }
 };

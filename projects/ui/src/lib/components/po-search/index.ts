@@ -6,4 +6,4 @@ export * from './enums/po-search-filter-mode.enum';
 export * from './interfaces/po-search-filter-select.interface';
 export * from './interfaces/po-search-option.interface';
 
-export * from './literals/po-search-literals';
+export * from './literals/po-search-literals.interface';

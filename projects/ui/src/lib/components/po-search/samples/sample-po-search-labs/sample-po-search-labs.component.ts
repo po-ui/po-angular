@@ -1,3 +1,5 @@
+import { HttpClient } from '@angular/common/http';
+import { Component, OnChanges, OnInit, SimpleChanges, ViewChild } from '@angular/core';
 import {
   PoCheckboxGroupOption,
   PoRadioGroupOption,
@@ -5,8 +7,7 @@ import {
   PoSearchFilterMode,
   PoSearchLiterals
 } from '@po-ui/ng-components';
-import { Component, OnChanges, OnInit, SimpleChanges, ViewChild } from '@angular/core';
-import { HttpClient } from '@angular/common/http';
+import { PoSearchLocateSummary } from '@po-ui/ng-components/lib/components/po-search/interfaces/po-search-locate-summary.interface';
 
 @Component({
   selector: 'sample-po-search-labs',
@@ -28,30 +29,35 @@ import { HttpClient } from '@angular/common/http';
   standalone: false
 })
 export class SamplePoSearchLabsComponent implements OnInit, OnChanges {
-  @ViewChild('poSearch', { static: true }) PoSearch: PoSearchComponent;
+  @ViewChild('poSearch', { static: true }) poSearch!: PoSearchComponent;
 
-  customLiterals: PoSearchLiterals;
-  literals: any;
-  properties: Array<string>;
-  showListbox: boolean;
-  search: string;
-  event: string;
+  ariaLabel?: any;
+  customLiterals?: PoSearchLiterals;
+  literals?: string;
+  properties: Array<string> = [];
+  search: string = '';
+  event: string = '';
   service: string = 'https://po-sample-api.onrender.com/v1/heroes';
   items: Array<any> = [];
   filteredItems: Array<any> = [];
-  fieldKeys: Array<any> = [];
-  fieldSelect: Array<any> = [];
-  tooltip: string;
-  icon: string;
-  filterMode: PoSearchFilterMode;
-  searchMode = 'action';
-  fieldKey: any;
-  itemsModel: any;
-  filterModel: any;
-  filterSelectModel: any;
-  size: string;
+  fieldKeys?: Array<any> = [];
+  fieldSelect?: Array<any> = [];
+  tooltip?: string;
+  icon?: string;
+  filterMode: PoSearchFilterMode = PoSearchFilterMode.startsWith;
+  searchMode: 'action' | 'trigger' | 'locate' = 'action';
+  fieldKey?: any;
+  itemsModel?: any;
+  filterModel: any = '["name"]';
+  filterSelectModel?: any;
+  size: string = 'medium';
+  customLocateSummary?: PoSearchLocateSummary;
+  locateSummary?: string;
 
-  public readonly propertiesOptions: Array<PoCheckboxGroupOption> = [{ value: 'disabled', label: 'Disabled' }];
+  public readonly propertiesOptions: Array<PoCheckboxGroupOption> = [
+    { value: 'disabled', label: 'Disabled' },
+    { value: 'showListbox', label: 'Show Listbox' }
+  ];
 
   public readonly iconsOptions: Array<PoRadioGroupOption> = [
     { label: 'fa-search', value: 'fa fa-search' },
@@ -67,7 +73,8 @@ export class SamplePoSearchLabsComponent implements OnInit, OnChanges {
 
   public readonly searchModeOptions: Array<PoRadioGroupOption> = [
     { label: 'Action', value: 'action' },
-    { label: 'Trigger', value: 'trigger' }
+    { label: 'Trigger', value: 'trigger' },
+    { label: 'Locate', value: 'locate' }
   ];
 
   public readonly sizeOptions: Array<PoRadioGroupOption> = [
@@ -75,7 +82,7 @@ export class SamplePoSearchLabsComponent implements OnInit, OnChanges {
     { label: 'medium', value: 'medium' }
   ];
 
-  constructor(private http: HttpClient) {}
+  constructor(protected http: HttpClient) {}
 
   ngOnInit() {
     this.restore();
@@ -94,7 +101,7 @@ export class SamplePoSearchLabsComponent implements OnInit, OnChanges {
   onChangeService() {
     this.http.get(this.service).subscribe((response: any) => {
       const items = response.items;
-      if (items && items.length > 0) {
+      if (Array.isArray(items) && items.length > 0) {
         this.items = items;
         this.filteredItems = items;
         this.fieldKeys = ['name'];
@@ -102,67 +109,60 @@ export class SamplePoSearchLabsComponent implements OnInit, OnChanges {
     });
   }
 
-  updateFilterKeys(event: string) {
+  updateFilterKeys(event: string): void {
     this.fieldKeys = this.convertToArray(event);
   }
 
-  updateFilterSelect(event: string) {
+  updateFilterSelect(event: string): void {
     this.fieldSelect = this.convertToArray(event);
   }
 
   filter(event: Array<any>) {
     this.filteredItems = event;
 
-    if (event.length === 0) {
-      this.event = 'p-change-model';
-      return;
-    }
-
-    this.event = 'p-filtered-items-change';
+    this.event = event.length === 0 ? 'p-change-model' : 'p-filtered-items-change';
   }
 
-  changeItems(items: any) {
+  changeItems(items: string): void {
     try {
-      const new_items: Array<{}> = JSON.parse(items);
-
-      if (Array.isArray(new_items)) {
-        this.filteredItems = new_items;
-        this.items = new_items;
+      const newItems = JSON.parse(items);
+      if (Array.isArray(newItems)) {
+        this.filteredItems = newItems;
+        this.items = newItems;
       }
-    } catch (error) {}
+    } catch {}
   }
 
-  propertiesChange(event) {
-    this.properties = event;
-  }
-
-  changeLiterals() {
+  changeLiterals(): void {
     try {
-      this.customLiterals = JSON.parse(this.literals);
+      this.customLiterals = JSON.parse(this.literals ?? '');
     } catch {
       this.customLiterals = undefined;
     }
   }
 
-  changeModel(event: string) {
-    this.search = event;
-    if (this.event.length === 0) {
-      this.event = 'p-change-model';
-    }
+  changeEvent(event: string): void {
+    setTimeout(() => {
+      this.event = event;
+    });
+  }
 
-    if (event.length === 0) {
-      this.search = '';
-      this.event = '';
+  changeLocateSummary(): void {
+    try {
+      this.customLocateSummary = JSON.parse(this.locateSummary ?? '');
+    } catch {
+      this.customLocateSummary = undefined;
     }
   }
 
-  restore() {
+  restore(): void {
+    this.ariaLabel = '';
     this.search = '';
     this.event = '';
     this.icon = undefined;
     this.customLiterals = undefined;
+    this.customLocateSummary = undefined;
     this.properties = [];
-    this.showListbox = false;
     this.filteredItems = undefined;
     this.items = undefined;
     this.itemsModel = undefined;
@@ -173,18 +173,19 @@ export class SamplePoSearchLabsComponent implements OnInit, OnChanges {
     this.filterMode = PoSearchFilterMode.startsWith;
     this.searchMode = 'action';
     this.literals = undefined;
+    this.locateSummary = undefined;
     this.size = 'medium';
     this.cleanInput();
     this.onChangeService();
   }
 
-  cleanInput() {
+  cleanInput(): void {
     try {
-      this.PoSearch.clearSearch();
-    } catch (error) {}
+      this.poSearch.clearSearch();
+    } catch {}
   }
 
-  private convertToArray(value: string): Array<any> {
+  private convertToArray(value: string): Array<any> | undefined {
     try {
       return JSON.parse(value);
     } catch {
