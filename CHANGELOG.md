@@ -2,6 +2,13 @@
 
 All notable changes to this project will be documented in this file. See [standard-version](https://github.com/conventional-changelog/standard-version) for commit guidelines.
 
+## [19.24.0](https://github.com/po-ui/po-angular/compare/v19.23.0...v19.24.0) (2025-08-18)
+
+
+### Features
+
+* **context-tabs:** novo componente ([c725f07](https://github.com/po-ui/po-angular/commit/c725f07f4d9a831f127c561f7973989afd12ad49))
+
 ## [19.23.0](https://github.com/po-ui/po-angular/compare/v19.22.0...v19.23.0) (2025-08-14)
 
 
