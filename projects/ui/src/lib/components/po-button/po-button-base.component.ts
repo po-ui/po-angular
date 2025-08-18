@@ -95,11 +95,12 @@ export class PoButtonBaseComponent {
    * @description
    * Ícone exibido ao lado esquerdo do label do botão.
    *
-   * É possível usar qualquer um dos ícones da [Biblioteca de ícones](https://po-ui.io/icons). conforme exemplo abaixo:
+   * É possível usar qualquer um dos ícones da [Biblioteca de ícones](https://po-ui.io/icons), conforme exemplo:
    * ```
    * <po-button p-icon="an an-user" p-label="PO button"></po-button>
    * ```
-   * Também é possível utilizar outras fontes de ícones, por exemplo a biblioteca *Font Awesome*, da seguinte forma:
+   * Também é possível utilizar outras fontes de ícones, por exemplo a biblioteca *Font Awesome*, desde que a biblioteca
+   * esteja carregada no projeto:
    * ```
    * <po-button p-icon="fa fa-podcast" p-label="PO button"></po-button>
    * ```
