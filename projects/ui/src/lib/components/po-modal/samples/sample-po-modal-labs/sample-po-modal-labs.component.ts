@@ -30,6 +30,7 @@ export class SamplePoModalLabsComponent implements OnInit {
   };
 
   primaryActionLabel: string;
+  primaryActionIcon: string;
   primaryActionProperties: Array<string>;
   primaryActionOptions: Array<PoCheckboxGroupOption> = [
     { value: 'danger', label: 'Danger' },
@@ -56,11 +57,12 @@ export class SamplePoModalLabsComponent implements OnInit {
   };
 
   secondaryActionLabel: string;
+  secondaryActionIcon: string;
   secondaryActionProperties: Array<string>;
   secondaryActionOptions: Array<PoCheckboxGroupOption> = [
+    { value: 'danger', label: 'Danger' },
     { value: 'disabled', label: 'Disabled' },
-    { value: 'loading', label: 'Loading' },
-    { value: 'danger', label: 'Danger' }
+    { value: 'loading', label: 'Loading' }
   ];
 
   propertiesOptions: Array<PoCheckboxGroupOption> = [
@@ -81,11 +83,13 @@ export class SamplePoModalLabsComponent implements OnInit {
   openModal() {
     this.primaryAction.disabled = this.primaryActionProperties.includes('disabled');
     this.primaryAction.label = this.primaryActionLabel;
+    this.primaryAction.icon = this.primaryActionIcon;
     this.primaryAction.loading = this.primaryActionProperties.includes('loading');
     this.primaryAction.danger = this.primaryActionProperties.includes('danger');
 
     this.secondaryAction.disabled = this.secondaryActionProperties.includes('disabled');
     this.secondaryAction.label = this.secondaryActionLabel;
+    this.secondaryAction.icon = this.secondaryActionIcon;
     this.secondaryAction.loading = this.secondaryActionProperties.includes('loading');
     this.secondaryAction.danger = this.secondaryActionProperties.includes('danger');
 
@@ -102,8 +106,10 @@ export class SamplePoModalLabsComponent implements OnInit {
     this.title = 'PO Modal';
     this.properties = [];
     this.primaryActionLabel = undefined;
+    this.primaryActionIcon = undefined;
     this.primaryActionProperties = [];
     this.secondaryActionLabel = undefined;
+    this.secondaryActionIcon = undefined;
     this.secondaryActionProperties = [];
     this.componentsSize = 'medium';
     this.icon = undefined;
