@@ -27,7 +27,7 @@
       [p-options]="iconOptions"
     ></po-select>
 
-    <po-input class="po-md-6" name="Content" [(ngModel)]="content" p-clean p-label="Content" p-maxlength="200">
+    <po-input class="po-md-12 po-lg-6" name="Content" [(ngModel)]="content" p-clean p-label="Content" p-maxlength="200">
     </po-input>
 
     <po-input
@@ -36,12 +36,22 @@
       [(ngModel)]="primaryActionLabel"
       p-clean
       p-label="Primary action label"
-      p-maxlength="30"
+      p-maxlength="50"
+    >
+    </po-input>
+
+    <po-input
+      class="po-md-6 po-lg-3"
+      name="primaryActionIcon"
+      [(ngModel)]="primaryActionIcon"
+      p-clean
+      p-label="Primary action icon"
+      p-maxlength="50"
     >
     </po-input>
 
     <po-checkbox-group
-      class="po-md-12 po-lg-9"
+      class="po-md-12 po-lg-6"
       name="primaryActionProperties"
       [(ngModel)]="primaryActionProperties"
       p-columns="3"
@@ -56,12 +66,22 @@
       [(ngModel)]="secondaryActionLabel"
       p-clean
       p-label="Secondary action label"
-      p-maxlength="100"
+      p-maxlength="50"
+    >
+    </po-input>
+
+    <po-input
+      class="po-md-6 po-lg-3"
+      name="secondaryActionIcon"
+      [(ngModel)]="secondaryActionIcon"
+      p-clean
+      p-label="Secondary action icon"
+      p-maxlength="50"
     >
     </po-input>
 
     <po-checkbox-group
-      class="po-md-12 po-lg-9"
+      class="po-md-12 po-lg-6"
       name="secondaryActionProperties"
       [(ngModel)]="secondaryActionProperties"
       p-columns="3"
