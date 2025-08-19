@@ -150,11 +150,14 @@ export class PoPageDynamicSearchComponent extends PoPageDynamicSearchBaseCompone
   }
 
   onAdvancedSearch(filteredItems, isAdvancedSearch?) {
-    const { filter, optionsService } = filteredItems;
+    const { optionsService } = filteredItems;
+    let { filter } = filteredItems;
 
     this._disclaimerGroup.disclaimers = this.setDisclaimers(filter, optionsService);
 
     this.setFilters(filter);
+
+    filter = this.addComplexFilter(filter);
 
     this.advancedSearch.emit(filter);
 
@@ -359,5 +362,23 @@ export class PoPageDynamicSearchComponent extends PoPageDynamicSearchBaseCompone
     };
 
     return this.poPageCustomizationService.getCustomOptions(onLoad, originalOption, pageOptionSchema);
+  }
+
+  private addComplexFilter(filter: object): object {
+    let complexFilter;
+
+    Object.keys(filter).forEach(property => {
+      if (filter[property].start && filter[property].end) {
+        complexFilter = !complexFilter ? '' : (complexFilter += ' and ');
+        complexFilter += `${property} ge ${filter[property].start} and ${property} le ${filter[property].end}`;
+        delete filter[property];
+      }
+    });
+
+    if (complexFilter) {
+      filter = Object.assign(filter, { $filter: complexFilter });
+    }
+
+    return filter;
   }
 }
