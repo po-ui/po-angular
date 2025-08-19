@@ -18,7 +18,7 @@
   ></po-search>
 </div>
 
-<hr />
+<po-divider />
 <div class="po-row">
   <po-accordion class="po-md-12">
     <po-accordion-item p-label="Itens encontrados: {{ filteredItems.length }}">
@@ -36,7 +36,7 @@
     </po-accordion-item>
   </po-accordion>
 </div>
-<hr />
+<po-divider />
 
 <div class="po-row">
   <po-info class="po-md-6" p-label="Model" [p-value]="search"> </po-info>
@@ -44,7 +44,7 @@
   <po-info class="po-md-6" p-label="Events" [p-value]="event"> </po-info>
 </div>
 
-<hr />
+<po-divider />
 
 <!-- Properties -->
 <form #f="ngForm">
@@ -131,7 +131,7 @@
   >
   </po-input>
 
-  <hr />
+  <po-divider />
 
   <div class="po-row">
     <po-button class="po-lg-3 po-md-6" p-label="Sample Restore" (p-click)="restore()"> </po-button>

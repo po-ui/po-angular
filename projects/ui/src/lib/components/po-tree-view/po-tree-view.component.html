@@ -1,5 +1,5 @@
 <po-container *ngIf="hasItems" p-no-padding>
-  <ul class="po-tree-view">
+  <ul class="po-tree-view" [attr.p-components-size]="componentsSize">
     <po-tree-view-item
       *ngFor="let item of items; trackBy: trackByFunction"
       [p-components-size]="componentsSize"

@@ -58,6 +58,8 @@ export class PoFieldContainerBottomComponent implements OnChanges {
   /** Exibe o ícone de ajuda adicional. */
   @Input('p-show-additional-help-icon') showAdditionalHelpIcon: boolean = false;
 
+  @Input('p-size') size?: string;
+
   /** Evento disparado ao clicar no ícone de ajuda adicional. */
   @Output('p-additional-help') additionalHelp = new EventEmitter<any>();
 
