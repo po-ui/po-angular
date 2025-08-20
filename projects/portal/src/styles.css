@@ -13,6 +13,16 @@ body {
   color: #333;
 }
 
+html.potheme-dark-AA #logo-totvs,
+html.potheme-dark-AAA #logo-totvs {
+  content: url('./assets/graphics/logo-totvs-branco.png');
+}
+
+html.potheme-light-AA #logo-totvs,
+html.potheme-light-AAA #logo-totvs {
+  content: url('./assets/graphics/logo-totvs-preto.png');
+}
+
 .dot {
   border-radius: 50%;
   display: inline-block;

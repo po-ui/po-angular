@@ -1,5 +1,5 @@
 import { Directive } from '@angular/core';
-import { fakeAsync, tick } from '@angular/core/testing';
+import { fakeAsync, TestBed, tick } from '@angular/core/testing';
 import { UntypedFormControl } from '@angular/forms';
 
 import { Observable, of } from 'rxjs';
@@ -54,8 +54,9 @@ class PoMultiselectTestComponent extends PoMultiselectBaseComponent {
 describe('PoMultiselectBaseComponent:', () => {
   let component;
 
-  beforeEach(() => {
-    component = new PoMultiselectTestComponent();
+  beforeEach(async () => {
+    await TestBed.configureTestingModule({}).compileComponents();
+    component = TestBed.runInInjectionContext(() => new PoMultiselectTestComponent());
   });
 
   it('should be created', () => {

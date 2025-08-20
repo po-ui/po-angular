@@ -29,7 +29,8 @@ export class SamplePoUrlLabsComponent implements OnInit {
     { value: 'showRequired', label: 'Show Required' },
     { value: 'requiredFieldErrorMessage', label: 'Required Field Error Message' },
     { value: 'required', label: 'Required' },
-    { value: 'errorLimit', label: 'Limit Error Message' }
+    { value: 'errorLimit', label: 'Limit Error Message' },
+    { value: 'labelTextWrap', label: 'Label Text Wrap' }
   ];
 
   public readonly sizeOptions: Array<PoRadioGroupOption> = [

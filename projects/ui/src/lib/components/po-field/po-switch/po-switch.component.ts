@@ -10,7 +10,8 @@ import {
   Injector,
   Input,
   ViewChild,
-  OnDestroy
+  OnDestroy,
+  input
 } from '@angular/core';
 import {
   AbstractControl,
@@ -22,13 +23,14 @@ import {
   NG_VALIDATORS
 } from '@angular/forms';
 
-import { convertToBoolean, getDefaultSizeFn, uuid, validateSizeFn } from '../../../utils/util';
+import { convertToBoolean, getDefaultSizeFn, setHelperSettings, uuid, validateSizeFn } from '../../../utils/util';
 
 import { PoFieldSize } from '../../../enums/po-field-size.enum';
 import { PoFieldModel } from '../po-field.model';
 import { PoKeyCodeEnum } from './../../../enums/po-key-code.enum';
 import { PoSwitchLabelPosition } from './po-switch-label-position.enum';
 import { Subscription } from 'rxjs';
+import { PoHelperOptions } from '../../po-helper';
 
 /**
  * @docsExtends PoFieldModel
@@ -280,6 +282,34 @@ export class PoSwitchComponent extends PoFieldModel<any> implements Validator, A
     return this._size ?? getDefaultSizeFn(PoFieldSize);
   }
 
+  /**
+   * @Input
+   *
+   * @optional
+   *
+   * @description
+   *
+   * Define as opções do componente de ajuda (po-helper) que será exibido ao lado do label.
+   *
+   * > Caso o `p-label` não esteja definido, o componente po-helper não será exibido.
+   * Ao configurar esta propriedade, o antigo ícone de ajuda adicional (`p-additional-help-tooltip` e `p-additional-help`) será ignorado.
+   */
+  poHelperComponent = input<PoHelperOptions | string>(undefined, { alias: 'p-helper' });
+
+  /**
+   * @Input
+   *
+   * @optional
+   *
+   * @description
+   * Habilita a quebra automática do texto da propriedade `p-label`. Quando `p-label-text-wrap` for verdadeiro, o texto que excede
+   * o espaço disponível é transferido para a próxima linha em pontos apropriados para uma
+   * leitura clara.
+   *
+   * @default `false`
+   */
+  labelTextWrap = input<boolean>(false, { alias: 'p-label-text-wrap' });
+
   private readonly el: ElementRef = inject(ElementRef);
   private readonly injectOptions: InjectOptions = {
     self: true
@@ -420,6 +450,16 @@ export class PoSwitchComponent extends PoFieldModel<any> implements Validator, A
   hasInvalidClass(): boolean {
     return (
       this.el.nativeElement.classList.contains('ng-invalid') && this.el.nativeElement.classList.contains('ng-dirty')
+    );
+  }
+
+  setHelper(label?: string, additionalHelpTooltip?: string) {
+    return setHelperSettings(
+      label,
+      additionalHelpTooltip,
+      this.poHelperComponent(),
+      this.size,
+      this.isAdditionalHelpEventTriggered() ? this.additionalHelp : undefined
     );
   }
 }

@@ -1,5 +1,5 @@
-import { ChangeDetectorRef, ElementRef } from '@angular/core';
 import { ComponentFixture, fakeAsync, TestBed, tick } from '@angular/core/testing';
+import { ChangeDetectorRef, ElementRef, EventEmitter } from '@angular/core';
 
 import { PoThemeA11yEnum } from '../../../services';
 import { PoCheckboxComponent } from './po-checkbox.component';
@@ -137,6 +137,15 @@ describe('PoCheckboxComponent:', () => {
 
         expect(result).toBeUndefined();
       });
+
+      it('should include additionalHelp when event is triggered', () => {
+        spyOn(component as any, 'isAdditionalHelpEventTriggered').and.returnValue(true);
+        component.additionalHelp = new EventEmitter<any>();
+
+        const result = component.setHelper('label', 'tooltip');
+
+        expect(result).toBeDefined();
+      });
     });
 
     describe('onKeyDown:', () => {
@@ -156,7 +165,7 @@ describe('PoCheckboxComponent:', () => {
 
         component.onKeyDown(fakeEvent, component.checkboxValue);
 
-        expect(spyOnCheckOption).toHaveBeenCalledWith(component.checkboxValue);
+        expect(spyOnCheckOption).toHaveBeenCalledWith(fakeEvent, component.checkboxValue);
         expect(spyOnPreventDefault).toHaveBeenCalled();
       });
 
@@ -181,7 +190,7 @@ describe('PoCheckboxComponent:', () => {
 
         component.onKeyDown(fakeEvent, component.checkboxValue);
 
-        expect(spyOnCheckOption).toHaveBeenCalledWith(component.checkboxValue);
+        expect(spyOnCheckOption).toHaveBeenCalledWith(fakeEvent, component.checkboxValue);
         expect(spyOnPreventDefault).toHaveBeenCalled();
       });
 
@@ -232,6 +241,96 @@ describe('PoCheckboxComponent:', () => {
 
         const result = component.showAdditionalHelp();
 
+        expect(result).toBeFalse();
+        expect(component.displayAdditionalHelp).toBeFalse();
+      });
+
+      it('should call `openHelperPopover` when `displayAdditionalHelp` becomes true and `helperEl` exists', () => {
+        component.displayAdditionalHelp = false;
+        component.helperEl = { openHelperPopover: jasmine.createSpy(), closeHelperPopover: jasmine.createSpy() } as any;
+
+        component.showAdditionalHelp();
+
+        expect(component.helperEl.openHelperPopover).toHaveBeenCalled();
+        expect(component.helperEl.closeHelperPopover).not.toHaveBeenCalled();
+      });
+
+      it('should call `closeHelperPopover` when `displayAdditionalHelp` becomes false and `helperEl` exists', () => {
+        component.displayAdditionalHelp = true;
+        component.helperEl = { openHelperPopover: jasmine.createSpy(), closeHelperPopover: jasmine.createSpy() } as any;
+
+        component.showAdditionalHelp();
+
+        expect(component.helperEl.closeHelperPopover).toHaveBeenCalled();
+        expect(component.helperEl.openHelperPopover).not.toHaveBeenCalled();
+      });
+      it('should call helper.eventOnClick and return early when poHelperComponent() returns an object with eventOnClick', () => {
+        component.displayAdditionalHelp = false;
+        component.helperEl = {
+          openHelperPopover: jasmine.createSpy('openHelperPopover'),
+          closeHelperPopover: jasmine.createSpy('closeHelperPopover')
+        } as any;
+
+        const helperMock = { eventOnClick: jasmine.createSpy('eventOnClick') };
+        spyOn(component as any, 'poHelperComponent').and.returnValue(helperMock);
+
+        const result = component.showAdditionalHelp();
+
+        expect(helperMock.eventOnClick).toHaveBeenCalledTimes(1);
+        expect(component.helperEl.openHelperPopover).not.toHaveBeenCalled();
+        expect(component.helperEl.closeHelperPopover).not.toHaveBeenCalled();
+        expect(result).toBeUndefined();
+        expect(component.displayAdditionalHelp).toBeTrue();
+      });
+
+      it('should proceed and openHelperPopover when poHelperComponent() returns a string (ignores early return)', () => {
+        component.displayAdditionalHelp = false;
+        component.helperEl = {
+          openHelperPopover: jasmine.createSpy('openHelperPopover'),
+          closeHelperPopover: jasmine.createSpy('closeHelperPopover')
+        } as any;
+
+        spyOn(component as any, 'poHelperComponent').and.returnValue('qualquer texto');
+
+        const result = component.showAdditionalHelp();
+
+        expect(component.helperEl.openHelperPopover).toHaveBeenCalledTimes(1);
+        expect(component.helperEl.closeHelperPopover).not.toHaveBeenCalled();
+        expect(result).toBeTrue();
+        expect(component.displayAdditionalHelp).toBeTrue();
+      });
+
+      it('should proceed and openHelperPopover when poHelperComponent() returns an object without eventOnClick', () => {
+        component.displayAdditionalHelp = false;
+        component.helperEl = {
+          openHelperPopover: jasmine.createSpy('openHelperPopover'),
+          closeHelperPopover: jasmine.createSpy('closeHelperPopover')
+        } as any;
+
+        spyOn(component as any, 'poHelperComponent').and.returnValue({});
+
+        const result = component.showAdditionalHelp();
+
+        expect(component.helperEl.openHelperPopover).toHaveBeenCalledTimes(1);
+        expect(component.helperEl.closeHelperPopover).not.toHaveBeenCalled();
+        expect(result).toBeTrue();
+        expect(component.displayAdditionalHelp).toBeTrue();
+      });
+
+      it('should not call poHelperComponent when toggling to false (closing path)', () => {
+        component.displayAdditionalHelp = true;
+        component.helperEl = {
+          openHelperPopover: jasmine.createSpy('openHelperPopover'),
+          closeHelperPopover: jasmine.createSpy('closeHelperPopover')
+        } as any;
+
+        const spyGetter = spyOn(component as any, 'poHelperComponent');
+
+        const result = component.showAdditionalHelp();
+
+        expect(spyGetter).not.toHaveBeenCalled();
+        expect(component.helperEl.closeHelperPopover).toHaveBeenCalledTimes(1);
+        expect(component.helperEl.openHelperPopover).not.toHaveBeenCalled();
         expect(result).toBeFalse();
         expect(component.displayAdditionalHelp).toBeFalse();
       });

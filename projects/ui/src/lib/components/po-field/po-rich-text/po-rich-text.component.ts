@@ -19,6 +19,7 @@ import { PoRichTextBaseComponent } from './po-rich-text-base.component';
 import { PoRichTextBodyComponent } from './po-rich-text-body/po-rich-text-body.component';
 import { PoRichTextToolbarComponent } from './po-rich-text-toolbar/po-rich-text-toolbar.component';
 import { PoRichTextService } from './po-rich-text.service';
+import { setHelperSettings } from '../../../utils/util';
 
 /* istanbul ignore next */
 const providers = [
@@ -159,11 +160,23 @@ export class PoRichTextComponent
    * Método que exibe `p-additionalHelpTooltip` ou executa a ação definida em `p-additionalHelp`.
    * Para isso, será necessário configurar uma tecla de atalho utilizando o evento `p-keydown`.
    *
+   * > Exibe ou oculta o conteúdo do componente `po-helper` quando o componente estiver com foco e com label visível.
+   *
    * ```
    * <po-rich-text
    *  #richtext
    *  ...
    *  p-additional-help-tooltip="Mensagem de ajuda complementar"
+   *  (p-keydown)="onKeyDown($event, richtext)"
+   * ></po-rich-text>
+   * ```
+   * ```
+   * // Exemplo com p-label e p-helper
+   * <po-rich-text
+   *  #richtext
+   *  ...
+   *  p-label="Label do richtext"
+   *  [p-helper]="helperOptions"
    *  (p-keydown)="onKeyDown($event, richtext)"
    * ></po-rich-text>
    * ```
@@ -232,5 +245,15 @@ export class PoRichTextComponent
     if (this.disabledTextAlign && !this.toolbarActions.includes(PoRichTextToolbarActions.Align)) {
       this.toolbarActions.push(PoRichTextToolbarActions.Align);
     }
+  }
+
+  setHelper(label?: string, additionalHelpTooltip?: string) {
+    return setHelperSettings(
+      label,
+      additionalHelpTooltip,
+      this.poHelperComponent(),
+      this.size,
+      this.additionalHelp.observed ? this.additionalHelp : undefined
+    );
   }
 }

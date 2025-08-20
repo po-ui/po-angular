@@ -53,7 +53,8 @@ export class SamplePoMultiselectLabsComponent implements OnInit {
     { value: 'autoHeight', label: 'Auto Height' },
     { value: 'sort', label: 'Sort' },
     { value: 'hideSelectAll', label: 'Hide Select All' },
-    { value: 'errorLimit', label: 'Limit Error Message' }
+    { value: 'errorLimit', label: 'Limit Error Message' },
+    { value: 'labelTextWrap', label: 'Label Text Wrap' }
   ];
 
   public readonly sizeOptions: Array<PoRadioGroupOption> = [

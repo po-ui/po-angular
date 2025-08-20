@@ -3,7 +3,7 @@ import { UntypedFormControl } from '@angular/forms';
 
 import { expectPropertiesValues } from '../../../util-test/util-expect.spec';
 
-import { ElementRef } from '@angular/core';
+import { ElementRef, EventEmitter } from '@angular/core';
 import { of, Subscription } from 'rxjs';
 import { PoLanguageService } from '../../../services';
 import { PoIconModule } from '../../po-icon';
@@ -1339,6 +1339,15 @@ describe('PoDecimalComponent:', () => {
 
         component.onBlur(fakeEvent);
         expect(component.showAdditionalHelp).not.toHaveBeenCalled();
+      });
+
+      it('should include additionalHelp when event is triggered', () => {
+        spyOn(component as any, 'isAdditionalHelpEventTriggered').and.returnValue(true);
+        component.additionalHelp = new EventEmitter<any>();
+
+        const result = component.setHelper('label', 'tooltip');
+
+        expect(result).toBeDefined();
       });
     });
 

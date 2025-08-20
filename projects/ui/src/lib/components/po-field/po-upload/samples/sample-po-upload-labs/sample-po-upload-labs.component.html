@@ -25,6 +25,7 @@
   [p-url]="url"
   [p-headers]="headers"
   [p-custom-action]="action"
+  [p-label-text-wrap]="properties?.includes('labelTextWrap')"
   (p-custom-action-click)="changeEvent('p-custom-action-click')"
   (p-error)="changeEvent('p-error')"
   (p-keydown)="changeEvent('p-keydown')"
@@ -111,7 +112,7 @@
       name="additionalHelpTooltip"
       [(ngModel)]="additionalHelpTooltip"
       p-clean
-      p-label="Additional Help Tooltip"
+      p-label="Additional Help"
     >
     </po-input>
 

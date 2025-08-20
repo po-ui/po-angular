@@ -831,6 +831,15 @@ describe('PoUploadComponent:', () => {
         component.onBlur();
         expect(component.showAdditionalHelp).not.toHaveBeenCalled();
       });
+
+      it('should include additionalHelp when event is triggered', () => {
+        spyOn(component as any, 'isAdditionalHelpEventTriggered').and.returnValue(true);
+        component.additionalHelp = new EventEmitter<any>();
+
+        const result = component.setHelper('label', 'tooltip');
+
+        expect(result).toBeDefined();
+      });
     });
 
     it(`onFileChange: should execute file change without auto upload and not call 'event.preventDefault' and

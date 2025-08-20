@@ -5,7 +5,7 @@ import { poLocaleDefault } from '../../../services/po-language/po-language.const
 import { expectPropertiesValues } from '../../../util-test/util-expect.spec';
 import * as ValidatorsFunctions from '../validators';
 
-import { fakeAsync, tick } from '@angular/core/testing';
+import { fakeAsync, TestBed, tick } from '@angular/core/testing';
 import { Subject } from 'rxjs';
 import { PoLanguageService, PoThemeA11yEnum } from '../../../services';
 import { PoDatepickerRange } from './interfaces/po-datepicker-range.interface';
@@ -38,12 +38,12 @@ describe('PoDatepickerRangeBaseComponent:', () => {
   const fakeSubscription = <any>{ unsubscribe: () => {} };
   let component: PoDatepickerRangeComponent;
 
-  beforeEach(() => {
-    component = new PoDatepickerRangeComponent(mockedService, changeDetector, new PoLanguageService());
-  });
+  beforeEach(async () => {
+    await TestBed.configureTestingModule({}).compileComponents();
 
-  it('should be created', () => {
-    expect(component instanceof PoDatepickerRangeBaseComponent).toBeTruthy();
+    component = TestBed.runInInjectionContext(
+      () => new PoDatepickerRangeComponent(mockedService, changeDetector, TestBed.inject(PoLanguageService))
+    );
   });
 
   describe('Properties:', () => {

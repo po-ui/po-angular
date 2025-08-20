@@ -1,4 +1,4 @@
-import { Directive } from '@angular/core';
+import { Component } from '@angular/core';
 import { UntypedFormControl } from '@angular/forms';
 
 import { expectPropertiesValues } from '../../../util-test/util-expect.spec';
@@ -8,16 +8,29 @@ import { PoThemeA11yEnum } from '../../../services';
 import { PoRichTextToolbarActions } from './enum/po-rich-text-toolbar-actions.enum';
 import { PoRichTextBaseComponent } from './po-rich-text-base.component';
 import { PoRichTextService } from './po-rich-text.service';
+import { ComponentFixture, TestBed } from '@angular/core/testing';
 
-@Directive()
-class PoRichTextComponent extends PoRichTextBaseComponent {}
+@Component({
+  selector: 'po-rich-texts-base-host',
+  template: '',
+  standalone: false
+})
+class PoRichTextHostComponent extends PoRichTextBaseComponent {}
 
 describe('PoRichTextBaseComponent:', () => {
-  const poRichTextService: PoRichTextService = new PoRichTextService();
-  let component: PoRichTextComponent;
+  let poRichTextService: PoRichTextService;
+  let component: PoRichTextHostComponent;
+  let fixture: ComponentFixture<PoRichTextHostComponent>;
 
   beforeEach(() => {
-    component = new PoRichTextComponent(poRichTextService);
+    TestBed.configureTestingModule({
+      declarations: [PoRichTextHostComponent],
+      providers: [PoRichTextService]
+    });
+
+    fixture = TestBed.createComponent(PoRichTextHostComponent);
+    component = fixture.componentInstance;
+    poRichTextService = TestBed.inject(PoRichTextService);
   });
 
   it('should be created', () => {

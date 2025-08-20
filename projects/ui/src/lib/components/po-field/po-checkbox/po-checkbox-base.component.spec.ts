@@ -1,22 +1,31 @@
-import { Directive } from '@angular/core';
+import { Component, Directive } from '@angular/core';
 
 import { expectPropertiesValues } from '../../../util-test/util-expect.spec';
 
 import { PoThemeA11yEnum } from '../../../services';
 import { PoCheckboxBaseComponent } from './po-checkbox-base.component';
+import { ComponentFixture, TestBed } from '@angular/core/testing';
 
-@Directive()
-class PoCheckboxComponent extends PoCheckboxBaseComponent {
+@Component({
+  selector: 'po-checkbox-base-host',
+  template: '',
+  standalone: false
+})
+class PoCheckboxBaseHostComponent extends PoCheckboxBaseComponent {
   protected changeModelValue(value: boolean | null) {}
 }
 
 describe('PoCheckboxBaseComponent:', () => {
-  let component: PoCheckboxBaseComponent;
+  let component: PoCheckboxBaseHostComponent;
+  let fixture: ComponentFixture<PoCheckboxBaseHostComponent>;
 
   beforeEach(() => {
-    const changeDetector: any = { markForCheck: () => {} };
-    component = new PoCheckboxComponent(changeDetector);
-    component.propagateChange = (value: any) => {};
+    TestBed.configureTestingModule({
+      declarations: [PoCheckboxBaseHostComponent]
+    });
+
+    fixture = TestBed.createComponent(PoCheckboxBaseHostComponent);
+    component = fixture.componentInstance;
   });
 
   it('should be created', () => {
@@ -137,10 +146,15 @@ describe('PoCheckboxBaseComponent:', () => {
 
     it('checkOption: should call `changeModelValue` and `changeValue` if `disabled` is false.', () => {
       component.disabled = false;
+      const event: any = {
+        target: {
+          closest: (sel: string) => null
+        }
+      };
       const spyOnChangeValue = spyOn(component, 'changeValue');
       const spyOnChangeModelValue = spyOn(component, <any>'changeModelValue');
 
-      component.checkOption(true);
+      component.checkOption(event, true);
 
       expect(spyOnChangeValue).toHaveBeenCalled();
       expect(spyOnChangeModelValue).toHaveBeenCalled();
@@ -148,23 +162,67 @@ describe('PoCheckboxBaseComponent:', () => {
 
     it('checkOption: shouldn`t call `changeModelValue` and `changeValue` if `disabled` is true.', () => {
       component.disabled = true;
+      const event: any = {
+        target: {
+          closest: (sel: string) => null
+        }
+      };
       const spyOnChangeValue = spyOn(component, 'changeValue');
       const spyOnChangeModelValue = spyOn(component, <any>'changeModelValue');
 
-      component.checkOption(true);
+      component.checkOption(event, true);
 
       expect(spyOnChangeValue).not.toHaveBeenCalled();
       expect(spyOnChangeModelValue).not.toHaveBeenCalled();
     });
 
     it('checkOption: should call `changeModelValue` with true if value is mixed', () => {
+      const event: any = {
+        target: {
+          closest: (sel: string) => null
+        }
+      };
       const spyOnChangeValue = spyOn(component, 'changeValue');
       const spyOnChangeModelValue = spyOn(component, <any>'changeModelValue');
 
-      component.checkOption('mixed');
+      component.checkOption(event, 'mixed');
 
       expect(spyOnChangeValue).toHaveBeenCalled();
       expect(spyOnChangeModelValue).toHaveBeenCalledWith(true);
+    });
+
+    it('checkOption: should return early when event target is inside `po-helper` (no calls)', () => {
+      component.disabled = false;
+      const event: any = {
+        target: {
+          closest: (sel: string) => (sel === 'po-helper' ? {} : null) // truthy
+        }
+      };
+
+      const spyOnChangeValue = spyOn(component, 'changeValue');
+      const spyOnChangeModelValue = spyOn(component as any, 'changeModelValue');
+
+      component.checkOption(event, true);
+
+      expect(spyOnChangeValue).not.toHaveBeenCalled();
+      expect(spyOnChangeModelValue).not.toHaveBeenCalled();
+    });
+
+    it('checkOption: should return early for `mixed` value when target is inside `po-helper` (no calls)', () => {
+      component.disabled = false;
+      const event: any = {
+        target: {
+          closest: () => ({})
+        }
+      };
+
+      const spyOnChangeValue = spyOn(component, 'changeValue');
+      const spyOnChangeModelValue = spyOn(component as any, 'changeModelValue');
+
+      component.checkOption(event, 'mixed');
+
+      expect(spyOnChangeValue).not.toHaveBeenCalled();
+      expect(spyOnChangeModelValue).not.toHaveBeenCalled();
     });
 
     it('registerOnChange: should set `propagateChange` with value of `fnParam`', () => {

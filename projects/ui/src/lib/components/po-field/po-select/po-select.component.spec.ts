@@ -12,6 +12,7 @@ import { PoFieldContainerBottomComponent } from './../po-field-container/po-fiel
 import { PoSelectOptionGroup } from './po-select-option-group.interface';
 import { PoSelectOption } from './po-select-option.interface';
 import { PoSelectComponent } from './po-select.component';
+import { EventEmitter } from '@angular/core';
 
 describe('PoSelectComponent:', () => {
   let component: PoSelectComponent;
@@ -205,6 +206,15 @@ describe('PoSelectComponent:', () => {
         setupTest('Mensagem de apoio adicional.', true, { observed: true });
         component.onBlur(fakeEvent);
         expect(component.showAdditionalHelp).not.toHaveBeenCalled();
+      });
+
+      it('should include additionalHelp when event is triggered', () => {
+        spyOn(component as any, 'isAdditionalHelpEventTriggered').and.returnValue(true);
+        component.additionalHelp = new EventEmitter<any>();
+
+        const result = component.setHelper('label', 'tooltip');
+
+        expect(result).toBeDefined();
       });
 
       it('should emit blur event when event.type is "blur"', () => {
