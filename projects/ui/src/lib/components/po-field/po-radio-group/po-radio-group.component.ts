@@ -15,7 +15,7 @@ import {
 } from '@angular/core';
 import { NG_VALIDATORS, NG_VALUE_ACCESSOR } from '@angular/forms';
 
-import { removeDuplicatedOptions } from '../../../utils/util';
+import { removeDuplicatedOptions, setHelperSettings } from '../../../utils/util';
 
 import { PoRadioComponent } from '../po-radio/po-radio.component';
 import { PoRadioGroupBaseComponent } from './po-radio-group-base.component';
@@ -179,14 +179,27 @@ export class PoRadioGroupComponent extends PoRadioGroupBaseComponent implements 
   }
 
   /**
+   *
    * Método que exibe `p-additionalHelpTooltip` ou executa a ação definida em `p-additionalHelp`.
    * Para isso, será necessário configurar uma tecla de atalho utilizando o evento `p-keydown`.
+   *
+   * > Exibe ou oculta o conteúdo do componente `po-helper` quando o componente estiver com foco e com label visível.
    *
    * ```
    * <po-radio-group
    *  #radioGroup
    *  ...
    *  p-additional-help-tooltip="Mensagem de ajuda complementar"
+   *  (p-keydown)="onKeyDown($event, radioGroup)"
+   * ></po-radio-group>
+   * ```
+   * ```
+   * // Exemplo com p-label e p-helper
+   * <po-radio-group
+   *  #radioGroup
+   *  ...
+   *  p-label="Label do radioGroup"
+   *  [p-helper]="helperOptions"
    *  (p-keydown)="onKeyDown($event, radioGroup)"
    * ></po-radio-group>
    * ```
@@ -206,6 +219,16 @@ export class PoRadioGroupComponent extends PoRadioGroupBaseComponent implements 
 
   showAdditionalHelpIcon() {
     return !!this.additionalHelpTooltip || this.isAdditionalHelpEventTriggered();
+  }
+
+  setHelper(label?: string, additionalHelpTooltip?: string) {
+    return setHelperSettings(
+      label,
+      additionalHelpTooltip,
+      this.poHelperComponent(),
+      this.size,
+      this.isAdditionalHelpEventTriggered() ? this.additionalHelp : undefined
+    );
   }
 
   private isAdditionalHelpEventTriggered(): boolean {

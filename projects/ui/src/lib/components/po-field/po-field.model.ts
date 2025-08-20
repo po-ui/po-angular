@@ -9,6 +9,9 @@ export abstract class PoFieldModel<T> implements ControlValueAccessor {
   @Input() additionalHelpEventTrigger: string | undefined;
 
   /**
+   *
+   * @deprecated v23.x.x use `p-helper`
+   *
    * @optional
    *
    * @description
@@ -16,6 +19,8 @@ export abstract class PoFieldModel<T> implements ControlValueAccessor {
    * Se o evento `p-additional-help` estiver definido, o tooltip não será exibido.
    * **Como boa prática, indica-se utilizar um texto com até 140 caracteres.**
    * > Requer um recuo mínimo de 8px se o componente estiver próximo à lateral da tela.
+   *
+   * > Essa propriedade está **depreciada** e será removida na versão `23.x.x`. Recomendamos utilizar a propriedade `p-helper` que oferece mais recursos e flexibilidade.
    */
   @Input('p-additional-help-tooltip') additionalHelpTooltip?: string;
 
@@ -55,11 +60,16 @@ export abstract class PoFieldModel<T> implements ControlValueAccessor {
   @Input({ alias: 'p-disabled', transform: convertToBoolean }) disabled: boolean = false;
 
   /**
+   *
+   * @deprecated v23.x.x use `p-helper`
+   *
    * @optional
    *
    * @description
    * Evento disparado ao clicar no ícone de ajuda adicional.
    * Este evento ativa automaticamente a exibição do ícone de ajuda adicional ao `p-help`.
+   *
+   * > Essa propriedade está **depreciada** e será removida na versão `23.x.x`. Recomendamos utilizar a propriedade `p-helper` que oferece mais recursos e flexibilidade.
    */
   @Output('p-additional-help') additionalHelp = new EventEmitter<any>();
 
@@ -126,11 +136,23 @@ export abstract class PoFieldModel<T> implements ControlValueAccessor {
    * Método que exibe `p-additionalHelpTooltip` ou executa a ação definida em `p-additionalHelp`.
    * Para isso, será necessário configurar uma tecla de atalho utilizando o evento `p-keydown`.
    *
+   * > Exibe ou oculta o conteúdo do componente `po-helper` quando o componente estiver com foco e com label visível.
+   *
    * ```
    * <po-nome-component
    *  #component
    *  ...
    *  p-additional-help-tooltip="Mensagem de ajuda complementar"
+   *  (p-keydown)="onKeyDown($event, component)"
+   * ></po-nome-component>
+   * ```
+   * ```
+   * // Exemplo com p-label e p-helper
+   * <po-nome-component
+   *  #component
+   *  ...
+   *  p-label="Label do component"
+   *  [p-helper]="helperOptions"
    *  (p-keydown)="onKeyDown($event, component)"
    * ></po-nome-component>
    * ```
@@ -152,7 +174,7 @@ export abstract class PoFieldModel<T> implements ControlValueAccessor {
     return !!this.additionalHelpTooltip || this.isAdditionalHelpEventTriggered();
   }
 
-  private isAdditionalHelpEventTriggered(): boolean {
+  protected isAdditionalHelpEventTriggered(): boolean {
     return (
       this.additionalHelpEventTrigger === 'event' ||
       (this.additionalHelpEventTrigger === undefined && this.additionalHelp.observed)

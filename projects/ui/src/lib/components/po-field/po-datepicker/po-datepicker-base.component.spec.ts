@@ -1,5 +1,5 @@
 import { Directive } from '@angular/core';
-import { fakeAsync, tick } from '@angular/core/testing';
+import { fakeAsync, TestBed, tick } from '@angular/core/testing';
 import { FormControl, UntypedFormControl, Validators } from '@angular/forms';
 
 import { expectPropertiesValues, expectSettersMethod } from '../../../util-test/util-expect.spec';
@@ -25,13 +25,16 @@ describe('PoDatepickerBaseComponent:', () => {
   let component: PoDatepickerComponent;
 
   const fakeSubscription = <any>{ unsubscribe: () => {} };
-  const languageService: PoLanguageService = new PoLanguageService();
 
-  beforeEach(() => {
-    const changeDetector: any = { detectChanges: () => {}, markForCheck: () => {} };
+  beforeEach(async () => {
+    await TestBed.configureTestingModule({}).compileComponents();
 
-    component = new PoDatepickerComponent(languageService, changeDetector);
-    component['shortLanguage'] = 'pt';
+    const languageService = TestBed.inject(PoLanguageService);
+    const changeDetector = { detectChanges: () => {}, markForCheck: () => {} } as any;
+
+    component = TestBed.runInInjectionContext(() => new PoDatepickerComponent(languageService, changeDetector));
+
+    (component as any)['shortLanguage'] = 'pt';
   });
 
   it('should be created', () => {

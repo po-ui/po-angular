@@ -879,3 +879,40 @@ describe(`PoThemeService with 'AnimaliaIconDictionary':`, () => {
     expect(typeof theme.active === 'object' ? theme.active.type : theme.active).toEqual(PoThemeTypeEnum.light);
   });
 });
+
+describe('PoThemeService private setDataDefaultSizeHTML:', () => {
+  let service: PoThemeService;
+
+  beforeEach(() => {
+    TestBed.configureTestingModule({
+      providers: [
+        PoThemeService,
+        { provide: DOCUMENT, useValue: document },
+        { provide: RendererFactory2, useClass: MockRendererFactory2 },
+        { provide: 'poThemeDefault', useValue: poThemeDefault },
+        { provide: ICONS_DICTIONARY, useValue: PoIconDictionary }
+      ]
+    });
+    service = TestBed.inject(PoThemeService);
+    document.documentElement.removeAttribute('data-default-size');
+  });
+
+  afterEach(() => {
+    document.documentElement.removeAttribute('data-default-size');
+  });
+
+  it('should set data-default-size when size is "small" and a11yLevel is AA', () => {
+    (service as any).setDataDefaultSizeHTML('small', PoThemeA11yEnum.AA);
+    expect(document.documentElement.getAttribute('data-default-size')).toBe('small');
+  });
+
+  it('should not set data-default-size when size is not "small"', () => {
+    (service as any).setDataDefaultSizeHTML('medium', PoThemeA11yEnum.AA);
+    expect(document.documentElement.getAttribute('data-default-size')).toBeNull();
+  });
+
+  it('should not set data-default-size when a11yLevel is not AA', () => {
+    (service as any).setDataDefaultSizeHTML('small', PoThemeA11yEnum.AAA);
+    expect(document.documentElement.getAttribute('data-default-size')).toBeNull();
+  });
+});

@@ -14,7 +14,7 @@ import { NG_VALIDATORS, NG_VALUE_ACCESSOR } from '@angular/forms';
 import { PoI18nPipe } from '../../../services/po-i18n/po-i18n.pipe';
 import { PoLanguageService } from '../../../services/po-language/po-language.service';
 import { PoNotificationService } from '../../../services/po-notification/po-notification.service';
-import { formatBytes, isMobile, uuid } from '../../../utils/util';
+import { formatBytes, isMobile, setHelperSettings, uuid } from '../../../utils/util';
 import { PoProgressStatus } from '../../po-progress/enums/po-progress-status.enum';
 import { PoButtonComponent } from './../../po-button/po-button.component';
 
@@ -331,11 +331,22 @@ export class PoUploadComponent extends PoUploadBaseComponent implements AfterVie
    * Método que exibe `p-additionalHelpTooltip` ou executa a ação definida em `p-additionalHelp`.
    * Para isso, será necessário configurar uma tecla de atalho utilizando o evento `p-keydown`.
    *
+   * > Exibe ou oculta o conteúdo do componente `po-helper` quando o componente estiver com foco e com label visível.
    * ```
    * <po-upload
    *  #upload
    *  ...
    *  p-additional-help-tooltip="Mensagem de ajuda complementar"
+   *  (p-keydown)="onKeyDown($event, upload)"
+   * ></po-upload>
+   * ```
+   * ```
+   * //Exemplo com p-label e p-helper
+   * <po-upload
+   *  #upload
+   *  ...
+   *  p-label="Label do upload"
+   *  [p-helper]="helperOptions"
    *  (p-keydown)="onKeyDown($event, upload)"
    * ></po-upload>
    * ```
@@ -400,6 +411,16 @@ export class PoUploadComponent extends PoUploadBaseComponent implements AfterVie
     if (this.customAction) {
       this.customActionClick.emit(file);
     }
+  }
+
+  setHelper(label?: string, additionalHelpTooltip?: string) {
+    return setHelperSettings(
+      label,
+      additionalHelpTooltip,
+      this.poHelperComponent(),
+      this.size,
+      this.isAdditionalHelpEventTriggered() ? this.additionalHelp : undefined
+    );
   }
 
   private cleanInputValue() {

@@ -7,20 +7,38 @@ import { expectPropertiesValues } from './../../../util-test/util-expect.spec';
 import { PoThemeA11yEnum } from '../../../services';
 import { PoCheckboxGroupOption } from './interfaces/po-checkbox-group-option.interface';
 import { PoCheckboxGroupBaseComponent } from './po-checkbox-group-base.component';
+import { Component } from '@angular/core';
+import { ComponentFixture, TestBed } from '@angular/core/testing';
+
+@Component({
+  selector: 'po-checkbox-group-base-host',
+  template: '',
+  standalone: false
+})
+class PoCheckboxGroupBaseHostComponent extends PoCheckboxGroupBaseComponent {}
 
 describe('PoCheckboxGroupBaseComponent: ', () => {
-  let component: PoCheckboxGroupBaseComponent;
-  let valuesList: Array<any>;
-  let valuesObject;
-  let options: Array<PoCheckboxGroupOption>;
-  let fakeInstance;
+  let component: PoCheckboxGroupBaseHostComponent;
+  let fixture: ComponentFixture<PoCheckboxGroupBaseHostComponent>;
 
-  beforeEach(() => {
-    component = new PoCheckboxGroupBaseComponent();
-    component.propagateChange = (value: any) => {};
+  let valuesList: Array<any>;
+  let valuesObject: any;
+  let options: Array<PoCheckboxGroupOption>;
+  let fakeInstance: any;
+
+  beforeEach(async () => {
+    await TestBed.configureTestingModule({
+      declarations: [PoCheckboxGroupBaseHostComponent]
+    }).compileComponents();
+
+    fixture = TestBed.createComponent(PoCheckboxGroupBaseHostComponent);
+    component = fixture.componentInstance;
+
+    component.propagateChange = (_: any) => {};
 
     valuesList = ['1'];
-    valuesObject = { 1: true, 3: <any>null };
+    valuesObject = { 1: true, 3: null as any };
+
     options = [
       { value: '1', label: '1' },
       { value: '2', label: '2' },
@@ -29,17 +47,17 @@ describe('PoCheckboxGroupBaseComponent: ', () => {
 
     fakeInstance = {
       required: false,
-      changeValue: (value: any) => {},
-      checkOptionModel: (value: any) => {},
-      changeDetector: {
-        detectChanges: () => {}
-      },
-      ngControl: {
-        control: {
-          setValidators: ([]) => {}
-        }
-      }
+      changeValue: (_value: any) => {},
+      checkOptionModel: (_value: any) => {},
+      changeDetector: { detectChanges: () => {} },
+      ngControl: { control: { setValidators: (_: Array<any>) => {} } }
     };
+
+    (component as any).items = [fakeInstance];
+
+    (component as any).options = options;
+
+    fixture.detectChanges();
   });
 
   it('should be created', () => {

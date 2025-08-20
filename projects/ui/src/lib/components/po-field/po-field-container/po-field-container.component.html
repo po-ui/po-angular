@@ -1,13 +1,24 @@
-<div class="po-field-container">
+<div class="po-field-container" (mouseenter)="handleLabelTooltip()">
   <div class="po-field-container-title">
     @if (label || help) {
       <po-label
+        #labelEl
         [p-disabled]="disabled"
         p-field="true"
         [p-for]="id"
         [p-label]="label"
         [p-requirement]="requirement"
+        [p-text-wrap]="textWrap()"
+        [p-tooltip]="showTip ? label : null"
       ></po-label>
+      @if (poHelperComponent()) {
+        <po-helper
+          #helperEl
+          [p-disabled]="disabled"
+          [p-helper]="poHelperComponent()"
+          [p-size]="poHelperComponent().size ? poHelperComponent().size : null"
+        ></po-helper>
+      }
     }
   </div>
 

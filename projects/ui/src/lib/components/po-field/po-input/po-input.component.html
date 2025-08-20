@@ -1,10 +1,14 @@
 <po-field-container
+  #fieldContainer
   [p-disabled]="disabled"
   [p-id]="id"
   [p-label]="label"
   [p-optional]="optional"
   [p-required]="required"
   [p-show-required]="showRequired"
+  [p-helper]="setHelper(this.label, this.additionalHelpTooltip).helperSettings"
+  [p-show-helper]="displayAdditionalHelp"
+  [p-text-wrap]="labelTextWrap()"
 >
   <div class="po-field-container-content">
     @if (icon) {
@@ -58,12 +62,13 @@
 
   @if (!readonly) {
     <po-field-container-bottom
-      [p-additional-help-tooltip]="getAdditionalHelpTooltip()"
       [p-append-in-body]="appendBox"
       [p-help]="help"
       [p-disabled]="disabled"
       [p-error-pattern]="getErrorPattern()"
       [p-error-limit]="errorLimit"
+      [p-hide-additional-help-by-label]="setHelper(this.label, this.additionalHelpTooltip).hideAdditionalHelp"
+      [p-additional-help-tooltip]="getAdditionalHelpTooltip()"
       [p-show-additional-help]="displayAdditionalHelp"
       [p-show-additional-help-icon]="showAdditionalHelpIcon()"
       (p-additional-help)="emitAdditionalHelp()"

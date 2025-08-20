@@ -23,7 +23,7 @@ import { PoControlPositionService } from '../../../services/po-control-position/
 import { PoLanguageService } from '../../../services/po-language/po-language.service';
 import { PoKeyCodeEnum } from './../../../enums/po-key-code.enum';
 
-import { uuid } from '../../../utils/util';
+import { setHelperSettings, uuid } from '../../../utils/util';
 import { PoFieldSize } from '../../../enums/po-field-size.enum';
 import { PoListBoxComponent } from './../../po-listbox/po-listbox.component';
 import { PoComboGroup } from './interfaces/po-combo-group.interface';
@@ -31,6 +31,7 @@ import { PoComboOption } from './interfaces/po-combo-option.interface';
 import { PoComboBaseComponent } from './po-combo-base.component';
 import { PoComboFilterService } from './po-combo-filter.service';
 import { PoComboOptionTemplateDirective } from './po-combo-option-template/po-combo-option-template.directive';
+import { PoHelperOptions } from '../../po-helper';
 
 const poComboContainerOffset = 8;
 
@@ -125,6 +126,7 @@ export class PoComboComponent extends PoComboBaseComponent implements AfterViewI
   shouldMarkLetters: boolean = true;
   infiniteLoading: boolean = false;
   containerWidth: number;
+  helperSettings: PoHelperOptions;
 
   private _isServerSearching: boolean = false;
   private lastKey;
@@ -166,6 +168,7 @@ export class PoComboComponent extends PoComboBaseComponent implements AfterViewI
   }
 
   ngAfterViewInit() {
+    this.helperSettings = this.setHelper(this.label, this.additionalHelpTooltip).helperSettings;
     if (this.autoFocus) {
       this.focus();
     }
@@ -572,11 +575,22 @@ export class PoComboComponent extends PoComboBaseComponent implements AfterViewI
    * Método que exibe `p-additionalHelpTooltip` ou executa a ação definida em `p-additionalHelp`.
    * Para isso, será necessário configurar uma tecla de atalho utilizando o evento `p-keydown`.
    *
+   * > Exibe ou oculta o conteúdo do componente `po-helper` quando o componente estiver com foco e com label visível.
    * ```
    * <po-combo
    *  #combo
    *  ...
    *  p-additional-help-tooltip="Mensagem de ajuda complementar"
+   *  (p-keydown)="onKeyDown($event, combo)"
+   * ></po-combo>
+   * ```
+   * ```
+   * // Exemplo com p-label e p-helper
+   * <po-combo
+   *  #combo
+   *  ...
+   *  p-label="Label do combo"
+   *  [p-helper]="helperOptions"
    *  (p-keydown)="onKeyDown($event, combo)"
    * ></po-combo>
    * ```
@@ -852,5 +866,15 @@ export class PoComboComponent extends PoComboBaseComponent implements AfterViewI
 
   private shouldHandleTab(event: KeyboardEvent): boolean {
     return this.comboOpen && this.appendBox && !event.shiftKey;
+  }
+
+  setHelper(label?: string, additionalHelpTooltip?: string) {
+    return setHelperSettings(
+      label,
+      additionalHelpTooltip,
+      this.poHelperComponent(),
+      this.size,
+      this.isAdditionalHelpEventTriggered() ? this.additionalHelp : undefined
+    );
   }
 }

@@ -8,6 +8,7 @@
       [p-append-in-body]="appendBox"
       [p-disabled]="disabled"
       [p-help]="help"
+      [p-hide-additional-help-by-label]="setHelper(this.label, this.additionalHelpTooltip).hideAdditionalHelp"
       [p-show-additional-help]="displayAdditionalHelp"
       [p-show-additional-help-icon]="showAdditionalHelpIcon()"
       (p-additional-help)="emitAdditionalHelp()"
@@ -21,7 +22,7 @@
   <div
     class="container-po-checkbox"
     [attr.checked]="checkboxValue"
-    (click)="checkOption(checkboxValue)"
+    (click)="checkOption($event, checkboxValue)"
     (keydown)="onKeyDown($event, checkboxValue)"
   >
     <div
@@ -51,14 +52,29 @@
 
       @if (label) {
         <po-label
+          #labelEl
           class="po-checkbox-label"
           [class.po-checkbox-label-aa]="size === 'small'"
           tabindex="-1"
           [p-disabled]="disabled"
           [p-for]="id"
           [p-label]="label"
+          [p-text-wrap]="labelTextWrap()"
+          [p-tooltip]="showTip ? label : null"
+          (mouseenter)="handleLabelTooltip()"
+          (focus)="handleLabelTooltip()"
         >
         </po-label>
+        @if (helperSettings) {
+          <po-helper
+            #helperEl
+            class="po-checkbox-helper"
+            [p-helper]="helperSettings"
+            [p-disabled]="disabled"
+            [p-size]="size === 'large' ? 'medium' : size"
+          >
+          </po-helper>
+        }
       }
     </div>
   </div>

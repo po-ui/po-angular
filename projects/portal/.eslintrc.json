@@ -5,11 +5,7 @@
     {
       "files": ["*.ts"],
       "parserOptions": {
-        "project": [
-          "projects/portal/tsconfig.app.json",
-          "projects/portal/tsconfig.spec.json",
-          "projects/portal/e2e/tsconfig.json"
-        ],
+        "project": ["projects/portal/tsconfig.app.json", "projects/portal/tsconfig.spec.json"],
         "createDefaultProgram": true
       },
       "plugins": ["sonarjs", "eslint-plugin-react"],

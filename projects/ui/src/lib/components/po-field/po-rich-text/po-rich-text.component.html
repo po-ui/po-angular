@@ -1,4 +1,12 @@
-<po-field-container [p-label]="label" [p-optional]="optional" [p-required]="required" [p-show-required]="showRequired">
+<po-field-container
+  [p-label]="label"
+  [p-optional]="optional"
+  [p-required]="required"
+  [p-show-required]="showRequired"
+  [p-helper]="setHelper(this.label, this.additionalHelpTooltip).helperSettings"
+  [p-show-helper]="displayAdditionalHelp"
+  [p-text-wrap]="labelTextWrap()"
+>
   <div class="po-field-container-content">
     <po-rich-text-body
       #richTextBody
@@ -38,6 +46,7 @@
       [p-help]="help"
       [p-error-limit]="errorLimit"
       [p-error-pattern]="errorMsg"
+      [p-hide-additional-help-by-label]="setHelper(this.label, this.additionalHelpTooltip).hideAdditionalHelp"
       [p-show-additional-help]="displayAdditionalHelp"
       [p-show-additional-help-icon]="!!additionalHelpTooltip || additionalHelp.observed"
       (p-additional-help)="additionalHelp.emit()"

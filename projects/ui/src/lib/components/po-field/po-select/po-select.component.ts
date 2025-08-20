@@ -12,7 +12,8 @@ import {
   SimpleChanges,
   ViewChild,
   inject,
-  AfterViewInit
+  AfterViewInit,
+  input
 } from '@angular/core';
 import { AbstractControl, NG_VALIDATORS, NG_VALUE_ACCESSOR } from '@angular/forms';
 
@@ -22,6 +23,7 @@ import {
   isSafari,
   removeDuplicatedOptions,
   removeUndefinedAndNullOptions,
+  setHelperSettings,
   uuid,
   validateSizeFn,
   validValue
@@ -32,6 +34,7 @@ import { AnimaliaIconDictionary, ICONS_DICTIONARY } from '../../po-icon';
 import { PoFieldValidateModel } from '../po-field-validate.model';
 import { PoSelectOptionGroup } from './po-select-option-group.interface';
 import { PoSelectOption } from './po-select-option.interface';
+import { PoHelperOptions } from '../../po-helper';
 
 const PO_SELECT_FIELD_LABEL_DEFAULT = 'label';
 const PO_SELECT_FIELD_VALUE_DEFAULT = 'value';
@@ -325,6 +328,35 @@ export class PoSelectComponent extends PoFieldValidateModel<any> implements Afte
     return this._size ?? getDefaultSizeFn(PoFieldSize);
   }
 
+  /**
+   * @Input
+   *
+   * @optional
+   *
+   * @description
+   *
+   * Define as opções do componente de ajuda (po-helper) que será exibido ao lado do label.
+   *
+   * > Caso o `p-label` não esteja definido, o componente po-helper não será exibido.
+   * Ao configurar esta propriedade, o antigo ícone de ajuda adicional (`p-additional-help-tooltip` e `p-additional-help`) será ignorado.
+   */
+  poHelperComponent = input<PoHelperOptions | string>(undefined, { alias: 'p-helper' });
+
+  /**
+   * @Input
+   *
+   * @optional
+   *
+   * @description
+   *
+   * Habilita a quebra automática do texto da propriedade `p-label`. Quando `p-label-text-wrap` for verdadeiro, o texto que excede
+   * o espaço disponível é transferido para a próxima linha em pontos apropriados para uma
+   * leitura clara.
+   *
+   * @default `false`
+   */
+  labelTextWrap = input<boolean>(false, { alias: 'p-label-text-wrap' });
+
   /* istanbul ignore next */
   constructor() {
     const value = inject<{
@@ -472,11 +504,23 @@ export class PoSelectComponent extends PoFieldValidateModel<any> implements Afte
    * Método que exibe `p-additionalHelpTooltip` ou executa a ação definida em `p-additionalHelp`.
    * Para isso, será necessário configurar uma tecla de atalho utilizando o evento `p-keydown`.
    *
+   * > Exibe ou oculta o conteúdo do componente `po-helper` quando o componente estiver com foco e com label visível.
+   *
    * ```html
    * <po-select
    *  #select
    *  ...
    *  p-additional-help-tooltip="Mensagem de ajuda complementar"
+   *  (p-keydown)="onKeyDown($event, select)"
+   * ></po-select>
+   * ```
+   * ```
+   * //Exemplo com p-label e p-helper
+   * <po-select
+   *  #select
+   *  ...
+   *  p-label="Label do select"
+   *  [p-helper]="helperOptions"
    *  (p-keydown)="onKeyDown($event, select)"
    * ></po-select>
    * ```
@@ -490,6 +534,16 @@ export class PoSelectComponent extends PoFieldValidateModel<any> implements Afte
    */
   override showAdditionalHelp(): boolean {
     return super.showAdditionalHelp();
+  }
+
+  setHelper(label?: string, additionalHelpTooltip?: string) {
+    return setHelperSettings(
+      label,
+      additionalHelpTooltip,
+      this.poHelperComponent(),
+      this.size,
+      this.isAdditionalHelpEventTriggered() ? this.additionalHelp : undefined
+    );
   }
 
   private isEqual(value: any, inputValue: any): boolean {

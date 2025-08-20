@@ -1,0 +1,63 @@
+<po-helper [p-helper]="helperOptions" [p-size]="helperSize"></po-helper>
+
+<div class="po-row">
+  <po-input class="po-lg-6 po-md-6" name="title" [(ngModel)]="helperOptions.title" p-clean p-label="Título do Helper">
+  </po-input>
+  <po-input
+    class="po-lg-6 po-md-6"
+    name="type"
+    [(ngModel)]="helperOptions.content"
+    p-clean
+    p-label="Conteúdo do Helper"
+  >
+  </po-input>
+</div>
+
+<div class="po-row">
+  @if (helperOptions.type === 'help') {
+    <po-input
+      class="po-lg-6 po-md-6"
+      name="footerTitle"
+      [(ngModel)]="footerTitle"
+      (ngModelChange)="setFooterTitle($event)"
+      p-clean
+      p-label="Título do Footer"
+    >
+    </po-input>
+  }
+</div>
+<po-divider></po-divider>
+<div class="po-row">
+  <po-radio-group
+    name="type"
+    class="po-md-12 po-lg-12"
+    p-columns="4"
+    p-label="Type"
+    [(ngModel)]="helperOptions.type"
+    [p-options]="[
+      { label: 'Help', value: 'help' },
+      { label: 'Info', value: 'info' }
+    ]"
+  >
+  </po-radio-group>
+</div>
+
+<div class="po-row">
+  <po-radio-group
+    class="po-md-12 po-lg-12"
+    name="size"
+    [(ngModel)]="helperSize"
+    p-columns="4"
+    p-label="Size"
+    p-help="Para aplicar o tamanho small, configure o nível de acessibilidade para AA, ajustável no navbar ou serviço de tema (https://po-ui.io/documentation/po-theme)."
+    [p-options]="[
+      { label: 'Medium', value: 'medium' },
+      { label: 'Small', value: 'small' }
+    ]"
+  >
+  </po-radio-group>
+</div>
+<po-divider></po-divider>
+<div class="po-row">
+  <po-button class="po-md-12 po-md-12" p-label="Reset" (p-click)="reset()"></po-button>
+</div>

@@ -22,13 +22,14 @@ import { catchError, tap } from 'rxjs/operators';
 import { PoLanguageService } from '../../../services/po-language/po-language.service';
 import { PoKeyCodeEnum } from './../../../enums/po-key-code.enum';
 import { PoControlPositionService } from './../../../services/po-control-position/po-control-position.service';
-import { isMobile } from './../../../utils/util';
+import { isMobile, setHelperSettings } from './../../../utils/util';
 
 import { poLocaleDefault } from '../../../services/po-language/po-language.constant';
 import { PoMultiselectOption } from './interfaces/po-multiselect-option.interface';
 import { PoMultiselectBaseComponent } from './po-multiselect-base.component';
 import { PoMultiselectFilterService } from './po-multiselect-filter.service';
 import { PoMultiselectOptionTemplateDirective } from './po-multiselect-option-template/po-multiselect-option-template.directive';
+import { PoHelperOptions } from '../../po-helper';
 
 const poMultiselectContainerOffset = 8;
 const poMultiselectInputPaddingRight = 52;
@@ -143,6 +144,7 @@ export class PoMultiselectComponent
   timeoutResize;
   visibleElement = false;
   containerWidth: number;
+  helperSettings: PoHelperOptions;
 
   private subscription: Subscription = new Subscription();
   private enterCloseTag = false;
@@ -166,6 +168,7 @@ export class PoMultiselectComponent
   }
 
   ngAfterViewInit() {
+    this.helperSettings = this.setHelper(this.label, this.additionalHelpTooltip).helperSettings;
     if (this.autoFocus) {
       this.focus();
     }
@@ -518,11 +521,23 @@ export class PoMultiselectComponent
    * Método que exibe `p-additionalHelpTooltip` ou executa a ação definida em `p-additionalHelp`.
    * Para isso, será necessário configurar uma tecla de atalho utilizando o evento `p-keydown`.
    *
+   * > Exibe ou oculta o conteúdo do componente `po-helper` quando o componente estiver com foco e com label visível.
+   *
    * ```
    * <po-multiselect
    *  #multiselect
    *  ...
    *  p-additional-help-tooltip="Mensagem de ajuda complementar"
+   *  (p-keydown)="onKeyDown($event, multiselect)"
+   * ></po-multiselect>
+   * ```
+   * ```
+   * // Exemplo com p-label e p-helper
+   * <po-multiselect
+   *  #multiselect
+   *  ...
+   *  p-label="Label do multiselect"
+   *  [p-helper]="helperOptions"
    *  (p-keydown)="onKeyDown($event, multiselect)"
    * ></po-multiselect>
    * ```
@@ -565,6 +580,16 @@ export class PoMultiselectComponent
       tap((options: Array<PoMultiselectOption | any>) => {
         this.setOptionsByApplyFilter(options);
       })
+    );
+  }
+
+  setHelper(label?: string, additionalHelpTooltip?: string) {
+    return setHelperSettings(
+      label,
+      additionalHelpTooltip,
+      this.poHelperComponent(),
+      this.size,
+      this.isAdditionalHelpEventTriggered() ? this.additionalHelp : undefined
     );
   }
 
