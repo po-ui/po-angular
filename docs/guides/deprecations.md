@@ -213,6 +213,12 @@ export class AppModule { }
           <td class="po-table-column" style="text-align: center;">v23</td>
         </tr>
         <tr class="po-table-row">
+          <th class="po-table-column"><a href="documentation/po-input">Campos de formulários</a></th>
+          <td class="po-table-column">p-additional-help-tooltip</td>
+          <td class="po-table-column">p-helper</td>
+          <td class="po-table-column" style="text-align: center;">v23</td>
+        </tr>
+        <tr class="po-table-row">
           <th class="po-table-column"><a href="documentation/po-tabs">PoTabs</a></th>
           <td class="po-table-column">p-small</td>
           <td class="po-table-column">-</td>

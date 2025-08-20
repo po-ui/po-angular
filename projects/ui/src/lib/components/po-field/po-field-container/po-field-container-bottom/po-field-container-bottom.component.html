@@ -27,7 +27,7 @@
           {{ help }}
         </span>
       }
-      @if (showAdditionalHelpIcon) {
+      @if (showAdditionalHelpIcon && !hideAdditionalHelpByLabel()) {
         <div class="po-icon-container">
           <po-icon
             class="po-icon-additional-help"
