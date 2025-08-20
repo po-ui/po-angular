@@ -1,1 +1,12 @@
 /* You can add global styles to this file, and also import other style files */
+.po-helper-container .po-popover {
+  min-height: unset !important;
+}
+
+/* Constrain content width without forcing the container's max-width */
+.po-helper-container .po-popover .po-popover-content {
+  max-width: 386px;
+  white-space: normal;
+  overflow-wrap: anywhere;
+  word-break: break-word;
+}
