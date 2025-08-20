@@ -4,6 +4,8 @@ import {
   ChangeDetectorRef,
   Component,
   ElementRef,
+  OnChanges,
+  SimpleChanges,
   ViewChild,
   forwardRef,
   inject
@@ -14,6 +16,8 @@ import { AnimaliaIconDictionary, ICONS_DICTIONARY } from '../../po-icon';
 import { PoKeyCodeEnum } from './../../../enums/po-key-code.enum';
 
 import { PoCheckboxBaseComponent } from './po-checkbox-base.component';
+import { setHelperSettings } from '../../../utils/util';
+import { PoHelperOptions } from '../../po-helper';
 
 /**
  * @docsExtends PoCheckboxBaseComponent
@@ -48,10 +52,12 @@ import { PoCheckboxBaseComponent } from './po-checkbox-base.component';
   ],
   standalone: false
 })
-export class PoCheckboxComponent extends PoCheckboxBaseComponent implements AfterViewInit {
+export class PoCheckboxComponent extends PoCheckboxBaseComponent implements AfterViewInit, OnChanges {
   private changeDetector = inject(ChangeDetectorRef);
 
   private _iconToken: { [key: string]: string };
+
+  helperSettings: PoHelperOptions;
 
   @ViewChild('checkboxLabel', { static: false }) checkboxLabel: ElementRef;
 
@@ -99,8 +105,16 @@ export class PoCheckboxComponent extends PoCheckboxBaseComponent implements Afte
   }
 
   ngAfterViewInit() {
+    this.helperSettings = this.setHelper(this.label, this.additionalHelpTooltip).helperSettings;
     if (this.autoFocus) {
       this.focus();
+    }
+  }
+
+  ngOnChanges(changes: SimpleChanges): void {
+    if (changes.label || changes.additionalHelpTooltip) {
+      this.helperSettings = this.setHelper(this.label, this.additionalHelpTooltip).helperSettings;
+      this.changeDetector.detectChanges();
     }
   }
 
@@ -118,7 +132,7 @@ export class PoCheckboxComponent extends PoCheckboxBaseComponent implements Afte
     const isFieldFocused = document.activeElement === this.checkboxLabel.nativeElement;
 
     if (event.which === PoKeyCodeEnum.space || event.keyCode === PoKeyCodeEnum.space) {
-      this.checkOption(value);
+      this.checkOption(event, value);
 
       event.preventDefault();
     }
@@ -129,6 +143,8 @@ export class PoCheckboxComponent extends PoCheckboxBaseComponent implements Afte
   }
 
   /**
+   * @deprecated v23.x.x
+   *
    * Método que exibe `p-additionalHelpTooltip` ou executa a ação definida em `p-additionalHelp`.
    * Para isso, será necessário configurar uma tecla de atalho utilizando o evento `p-keydown`.
    *
@@ -156,6 +172,10 @@ export class PoCheckboxComponent extends PoCheckboxBaseComponent implements Afte
 
   showAdditionalHelpIcon() {
     return !!this.additionalHelpTooltip || this.isAdditionalHelpEventTriggered();
+  }
+
+  setHelper(label?: string, additionalHelpTooltip?: string) {
+    return setHelperSettings(label, additionalHelpTooltip, this.poHelperComponent(), this.size);
   }
 
   protected changeModelValue(value: boolean | null | string) {

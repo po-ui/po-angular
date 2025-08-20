@@ -10,7 +10,7 @@ import {
 } from '@angular/core';
 import { NG_VALIDATORS, NG_VALUE_ACCESSOR } from '@angular/forms';
 
-import { uuid } from '../../../utils/util';
+import { setHelperSettings, uuid } from '../../../utils/util';
 
 import { PoTextareaBaseComponent } from './po-textarea-base.component';
 
@@ -187,6 +187,8 @@ export class PoTextareaComponent extends PoTextareaBaseComponent implements Afte
   }
 
   /**
+   * @deprecated v23.x.x
+   *
    * Método que exibe `p-additionalHelpTooltip` ou executa a ação definida em `p-additionalHelp`.
    * Para isso, será necessário configurar uma tecla de atalho utilizando o evento `p-keydown`.
    *
@@ -221,5 +223,9 @@ export class PoTextareaComponent extends PoTextareaBaseComponent implements Afte
       this.additionalHelpEventTrigger === 'event' ||
       (this.additionalHelpEventTrigger === undefined && this.additionalHelp.observed)
     );
+  }
+
+  setHelper(label?: string, additionalHelpTooltip?: string) {
+    return setHelperSettings(label, additionalHelpTooltip, this.poHelperComponent(), this.size);
   }
 }

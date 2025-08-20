@@ -14,7 +14,7 @@ import { NG_VALIDATORS, NG_VALUE_ACCESSOR } from '@angular/forms';
 import { PoI18nPipe } from '../../../services/po-i18n/po-i18n.pipe';
 import { PoLanguageService } from '../../../services/po-language/po-language.service';
 import { PoNotificationService } from '../../../services/po-notification/po-notification.service';
-import { formatBytes, isMobile, uuid } from '../../../utils/util';
+import { formatBytes, isMobile, setHelperSettings, uuid } from '../../../utils/util';
 import { PoProgressStatus } from '../../po-progress/enums/po-progress-status.enum';
 import { PoButtonComponent } from './../../po-button/po-button.component';
 
@@ -331,6 +331,8 @@ export class PoUploadComponent extends PoUploadBaseComponent implements AfterVie
   }
 
   /**
+   * @deprecated v23.x.x
+   *
    * Método que exibe `p-additionalHelpTooltip` ou executa a ação definida em `p-additionalHelp`.
    * Para isso, será necessário configurar uma tecla de atalho utilizando o evento `p-keydown`.
    *
@@ -405,6 +407,10 @@ export class PoUploadComponent extends PoUploadBaseComponent implements AfterVie
     if (this.customAction) {
       this.customActionClick.emit(file);
     }
+  }
+
+  setHelper(label?: string, additionalHelpTooltip?: string) {
+    return setHelperSettings(label, additionalHelpTooltip, this.poHelperComponent(), this.size);
   }
 
   private cleanInputValue() {

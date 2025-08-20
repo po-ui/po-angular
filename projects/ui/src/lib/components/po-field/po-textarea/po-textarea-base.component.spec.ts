@@ -1,4 +1,4 @@
-import { Directive } from '@angular/core';
+import { Component } from '@angular/core';
 import { FormControl, UntypedFormControl, Validators } from '@angular/forms';
 
 import { expectPropertiesValues, expectSettersMethod } from '../../../util-test/util-expect.spec';
@@ -6,18 +6,30 @@ import * as ValidatorsFunctions from '../validators';
 
 import { PoThemeA11yEnum } from '../../../services';
 import { PoTextareaBaseComponent } from './po-textarea-base.component';
+import { ComponentFixture, TestBed } from '@angular/core/testing';
 
-@Directive()
-class PoTextareaComponent extends PoTextareaBaseComponent {
+@Component({
+  selector: 'po-textarea-base-host',
+  template: '',
+  standalone: false
+})
+class PoTextareaHostComponent extends PoTextareaBaseComponent {
   writeValueModel(value: any): void {}
 }
 
 describe('PoTextareaBase:', () => {
   const cd = <any>{ markForCheck: () => {} };
-  let component: PoTextareaComponent;
+
+  let component: PoTextareaHostComponent;
+  let fixture: ComponentFixture<PoTextareaHostComponent>;
 
   beforeEach(() => {
-    component = new PoTextareaComponent(cd);
+    TestBed.configureTestingModule({
+      declarations: [PoTextareaHostComponent]
+    });
+
+    fixture = TestBed.createComponent(PoTextareaHostComponent);
+    component = fixture.componentInstance;
   });
 
   it('should be created', () => {

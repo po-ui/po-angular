@@ -73,7 +73,8 @@ export class SamplePoLookupLabsComponent implements OnInit {
     { value: 'hideColumnsManager', label: 'Hide Columns Manager' },
     { value: 'textWrap', label: 'Text Wrap' },
     { value: 'virtualScroll', label: 'Virtual Sroll' },
-    { value: 'errorLimit', label: 'Limit Error Message' }
+    { value: 'errorLimit', label: 'Limit Error Message' },
+    { value: 'labelTextWrap', label: 'Label Text Wrap' }
   ];
 
   private readonly columnsDefinition = {
