@@ -16,6 +16,7 @@ import { PoComboFilter } from './interfaces/po-combo-filter.interface';
 import { poComboLiteralsDefault } from './interfaces/po-combo-literals-default.interface';
 import { PoComboOption } from './interfaces/po-combo-option.interface';
 import { PoComboBaseComponent } from './po-combo-base.component';
+import { TestBed } from '@angular/core/testing';
 
 @Directive()
 class PoComboTest extends PoComboBaseComponent {
@@ -53,8 +54,9 @@ describe('PoComboBaseComponent:', () => {
     getObjectByValue: (value: string | number) => new Observable()
   };
 
-  beforeEach(() => {
-    component = new PoComboTest();
+  beforeEach(async () => {
+    await TestBed.configureTestingModule({}).compileComponents();
+    component = TestBed.runInInjectionContext(() => new PoComboTest());
     component.filterService = service;
     component.defaultService = defaultService;
   });
@@ -1092,11 +1094,10 @@ describe('PoComboBaseComponent:', () => {
     });
 
     describe('VisibleOptions:', () => {
-      beforeEach(() => {
-        component = new PoComboTest();
-
-        component.filterService = null;
-        component.defaultService = null;
+      beforeEach(async () => {
+        component = TestBed.runInInjectionContext(() => new PoComboTest());
+        component.filterService = null as any;
+        component.defaultService = null as any;
       });
 
       it(`should set 'visibleOptions' with 'options' with 'value' and 'label' dynamic`, () => {
@@ -1633,8 +1634,7 @@ describe('PoComboBaseComponent using Service', () => {
   };
 
   beforeEach(() => {
-    component = new PoComboTest();
-
+    component = TestBed.runInInjectionContext(() => new PoComboTest());
     component.filterService = service;
     component.defaultService = defaultService;
   });

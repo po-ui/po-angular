@@ -19,6 +19,7 @@ import { PoRichTextBaseComponent } from './po-rich-text-base.component';
 import { PoRichTextBodyComponent } from './po-rich-text-body/po-rich-text-body.component';
 import { PoRichTextToolbarComponent } from './po-rich-text-toolbar/po-rich-text-toolbar.component';
 import { PoRichTextService } from './po-rich-text.service';
+import { setHelperSettings } from '../../../utils/util';
 
 /* istanbul ignore next */
 const providers = [
@@ -156,6 +157,8 @@ export class PoRichTextComponent
   }
 
   /**
+   * @deprecated v23.x.x
+   *
    * Método que exibe `p-additionalHelpTooltip` ou executa a ação definida em `p-additionalHelp`.
    * Para isso, será necessário configurar uma tecla de atalho utilizando o evento `p-keydown`.
    *
@@ -232,5 +235,9 @@ export class PoRichTextComponent
     if (this.disabledTextAlign && !this.toolbarActions.includes(PoRichTextToolbarActions.Align)) {
       this.toolbarActions.push(PoRichTextToolbarActions.Align);
     }
+  }
+
+  setHelper(label?: string, additionalHelpTooltip?: string) {
+    return setHelperSettings(label, additionalHelpTooltip, this.poHelperComponent(), this.size);
   }
 }

@@ -15,6 +15,7 @@ import { NG_VALIDATORS, NG_VALUE_ACCESSOR } from '@angular/forms';
 import { PoCheckboxComponent } from '../po-checkbox/po-checkbox.component';
 import { PoCheckboxGroupOption } from './interfaces/po-checkbox-group-option.interface';
 import { PoCheckboxGroupBaseComponent } from './po-checkbox-group-base.component';
+import { setHelperSettings } from '../../../utils/util';
 
 /**
  * @docsExtends PoCheckboxGroupBaseComponent
@@ -139,6 +140,8 @@ export class PoCheckboxGroupComponent extends PoCheckboxGroupBaseComponent imple
   }
 
   /**
+   * @deprecated v23.x.x
+   *
    * Método que exibe `p-additionalHelpTooltip` ou executa a ação definida em `p-additionalHelp`.
    * Para isso, será necessário configurar uma tecla de atalho utilizando o evento `p-keydown`.
    *
@@ -170,6 +173,10 @@ export class PoCheckboxGroupComponent extends PoCheckboxGroupBaseComponent imple
 
   trackByFn(index) {
     return index;
+  }
+
+  setHelper(label?: string, additionalHelpTooltip?: string) {
+    return setHelperSettings(label, additionalHelpTooltip, this.poHelperComponent(), this.size);
   }
 
   private isAdditionalHelpEventTriggered(): boolean {

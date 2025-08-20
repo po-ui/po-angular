@@ -16,7 +16,7 @@ import {
 import { NG_VALIDATORS, NG_VALUE_ACCESSOR, NgControl } from '@angular/forms';
 import { Subscription } from 'rxjs';
 
-import { getDefaultSizeFn, uuid } from '../../../utils/util';
+import { getDefaultSizeFn, setHelperSettings, uuid } from '../../../utils/util';
 
 import { PoFieldSize } from '../../../enums/po-field-size.enum';
 import { PoLanguageService } from '../../../services/po-language/po-language.service';
@@ -24,6 +24,7 @@ import { PoTableColumnSpacing } from '../../po-table';
 import { PoLookupBaseComponent } from './po-lookup-base.component';
 import { PoLookupFilterService } from './services/po-lookup-filter.service';
 import { PoLookupModalService } from './services/po-lookup-modal.service';
+import { PoHelperOptions } from '../../po-helper';
 
 /* istanbul ignore next */
 const providers = [
@@ -161,6 +162,8 @@ export class PoLookupComponent extends PoLookupBaseComponent implements AfterVie
 
   id = `po-lookup[${uuid()}]`;
 
+  helperSettings: PoHelperOptions;
+
   private modalSubscription: Subscription;
   private isCalculateVisibleItems: boolean = true;
 
@@ -179,11 +182,11 @@ export class PoLookupComponent extends PoLookupBaseComponent implements AfterVie
 
   ngAfterViewInit() {
     super.ngAfterViewInit();
+    this.helperSettings = this.setHelper(this.label, this.additionalHelpTooltip).helperSettings;
 
     if (this.autoFocus) {
       this.focus();
     }
-
     this.initialized = true;
   }
 
@@ -456,6 +459,8 @@ export class PoLookupComponent extends PoLookupBaseComponent implements AfterVie
   }
 
   /**
+   * @deprecated v23.x.x
+   *
    * Método que exibe `p-additionalHelpTooltip` ou executa a ação definida em `p-additionalHelp`.
    * Para isso, será necessário configurar uma tecla de atalho utilizando o evento `p-keydown`.
    *
@@ -483,6 +488,10 @@ export class PoLookupComponent extends PoLookupBaseComponent implements AfterVie
 
   showAdditionalHelpIcon() {
     return !!this.additionalHelpTooltip || this.isAdditionalHelpEventTriggered();
+  }
+
+  setHelper(label?: string, additionalHelpTooltip?: string) {
+    return setHelperSettings(label, additionalHelpTooltip, this.poHelperComponent(), this.size);
   }
 
   protected getDefaultSpacing(): PoTableColumnSpacing {

@@ -105,9 +105,19 @@ export class PoThemeService {
       }`;
 
     this.applyThemeStyles(combinedStyles);
+
+    const defaultSize = localStorage.getItem('po-default-size');
+    this.setDataDefaultSizeHTML(defaultSize, a11yLevel);
+
     document.documentElement.setAttribute('data-a11y', a11yLevel === PoThemeA11yEnum.AAA ? 'AAA' : 'AA');
     this.changeThemeType(themeConfig, persistPreference);
     this.dispatchEvent(themeConfig);
+  }
+
+  private setDataDefaultSizeHTML(size: string, a11yLevel: string): void {
+    if (size === 'small' && a11yLevel === PoThemeA11yEnum.AA) {
+      document.documentElement.setAttribute('data-default-size', size);
+    }
   }
 
   /**
@@ -141,6 +151,7 @@ export class PoThemeService {
     if (a11yLevel === PoThemeA11yEnum.AA && enable) {
       const defaultSize = 'small';
 
+      document.documentElement.setAttribute('data-default-size', defaultSize);
       if (localStorage.getItem('po-default-size') !== defaultSize) {
         localStorage.setItem('po-default-size', defaultSize);
       }
@@ -148,6 +159,7 @@ export class PoThemeService {
     }
 
     localStorage.removeItem('po-default-size');
+    document.documentElement.removeAttribute('data-default-size');
 
     return false;
   }
@@ -326,9 +338,11 @@ export class PoThemeService {
    */
   persistThemeActive() {
     const _theme = this.getThemeActive();
-    this.setTheme(_theme, this.getActiveTypeFromTheme(_theme.active), this.getActiveA11yFromTheme(_theme.active));
+    const activeA11y = this.getActiveA11yFromTheme(_theme.active);
+    this.setTheme(_theme, this.getActiveTypeFromTheme(_theme.active), activeA11y);
     const defaultSize = this.getA11yDefaultSize();
     localStorage.setItem('po-default-size', defaultSize);
+    this.setDataDefaultSizeHTML(defaultSize, activeA11y);
     return _theme;
   }
 

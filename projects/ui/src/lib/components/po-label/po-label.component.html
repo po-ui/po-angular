@@ -1,6 +1,7 @@
 @if (label) {
   <label
     class="po-label"
+    [class.po-label-wrap]="textWrap()"
     [attr.for]="field && for ? for : undefined"
     [attr.p-field]="field"
     [class.po-label-disabled]="disabled"
@@ -8,5 +9,5 @@
   >
 }
 @if (field && requirement) {
-  <span class="po-label-requirement">{{ requirement }}</span>
+  <span class="po-label-requirement" [class.po-label-required]="isRequiredLiteral(requirement)">{{ requirement }}</span>
 }
