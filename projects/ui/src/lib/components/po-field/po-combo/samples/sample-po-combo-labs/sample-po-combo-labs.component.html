@@ -27,6 +27,7 @@
   [p-sort]="properties.includes('sort')"
   [p-size]="size"
   [p-error-limit]="properties?.includes('errorLimit')"
+  [p-label-text-wrap]="properties?.includes('labelTextWrap')"
   [p-listbox-control-position]="listboxPosition"
   (p-change)="changeEvent('p-change')"
   (p-keydown)="changeEvent('p-keydown')"
@@ -105,7 +106,7 @@
     name="additionalHelpTooltip"
     [(ngModel)]="additionalHelpTooltip"
     p-clean
-    p-label="Additional Help Tooltip"
+    p-label="Additional Help"
   >
   </po-input>
 

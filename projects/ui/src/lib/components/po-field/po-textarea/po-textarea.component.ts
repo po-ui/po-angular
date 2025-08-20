@@ -10,7 +10,7 @@ import {
 } from '@angular/core';
 import { NG_VALIDATORS, NG_VALUE_ACCESSOR } from '@angular/forms';
 
-import { uuid } from '../../../utils/util';
+import { setHelperSettings, uuid } from '../../../utils/util';
 
 import { PoTextareaBaseComponent } from './po-textarea-base.component';
 
@@ -190,11 +190,23 @@ export class PoTextareaComponent extends PoTextareaBaseComponent implements Afte
    * Método que exibe `p-additionalHelpTooltip` ou executa a ação definida em `p-additionalHelp`.
    * Para isso, será necessário configurar uma tecla de atalho utilizando o evento `p-keydown`.
    *
+   * > Exibe ou oculta o conteúdo do componente `po-helper` quando o componente estiver com foco e com label visível.
+   *
    * ```
    * <po-textarea
    *  #textarea
    *  ...
    *  p-additional-help-tooltip="Mensagem de ajuda complementar"
+   *  (p-keydown)="onKeyDown($event, textarea)"
+   * ></po-textarea>
+   * ```
+   * ```
+   * //Exemplo com p-label e p-helper
+   * <po-textarea
+   *  #textarea
+   *  ...
+   *  p-label="Label do textarea"
+   *  [p-helper]="helperOptions"
    *  (p-keydown)="onKeyDown($event, textarea)"
    * ></po-textarea>
    * ```
@@ -220,6 +232,16 @@ export class PoTextareaComponent extends PoTextareaBaseComponent implements Afte
     return (
       this.additionalHelpEventTrigger === 'event' ||
       (this.additionalHelpEventTrigger === undefined && this.additionalHelp.observed)
+    );
+  }
+
+  setHelper(label?: string, additionalHelpTooltip?: string) {
+    return setHelperSettings(
+      label,
+      additionalHelpTooltip,
+      this.poHelperComponent(),
+      this.size,
+      this.isAdditionalHelpEventTriggered() ? this.additionalHelp : undefined
     );
   }
 }

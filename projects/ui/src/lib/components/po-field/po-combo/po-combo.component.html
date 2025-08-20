@@ -6,6 +6,9 @@
     [p-optional]="optional"
     [p-required]="required"
     [p-show-required]="showRequired"
+    [p-helper]="setHelper(this.label, this.additionalHelpTooltip).helperSettings"
+    [p-show-helper]="displayAdditionalHelp"
+    [p-text-wrap]="labelTextWrap()"
   >
     <div
       #searchContainer
@@ -112,6 +115,7 @@
       [p-disabled]="disabled"
       [p-error-pattern]="getErrorPattern()"
       [p-error-limit]="errorLimit"
+      [p-hide-additional-help-by-label]="setHelper(this.label, this.additionalHelpTooltip).hideAdditionalHelp"
       [p-show-additional-help]="displayAdditionalHelp"
       [p-show-additional-help-icon]="showAdditionalHelpIcon()"
       (p-additional-help)="emitAdditionalHelp()"

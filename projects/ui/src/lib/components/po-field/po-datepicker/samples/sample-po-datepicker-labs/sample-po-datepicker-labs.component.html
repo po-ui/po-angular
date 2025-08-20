@@ -20,6 +20,7 @@
   [p-required]="properties.includes('required')"
   [p-required-field-error-message]="properties.includes('requiredFieldErrorMessage')"
   [p-show-required]="properties.includes('showRequired')"
+  [p-label-text-wrap]="properties?.includes('labelTextWrap')"
   [p-size]="size"
   (p-blur)="changeEvent('p-blur')"
   (p-change)="changeEvent('p-change')"
@@ -48,7 +49,7 @@
     name="additionalHelpTooltip"
     [(ngModel)]="additionalHelpTooltip"
     p-clean
-    p-label="Additional Help Tooltip"
+    p-label="Additional Help"
   >
   </po-input>
 

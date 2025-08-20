@@ -170,4 +170,99 @@ describe('PoFieldContainerComponent:', () => {
       expect(requirement.innerHTML).toBe(component.literals['required']);
     });
   });
+
+  describe('ngOnChanges (helper popover):', () => {
+    it('should call `openHelperPopover` when `showHelperComponent` changes and `showHelperComponent()` returns true', () => {
+      component['helperEl'] = {
+        openHelperPopover: jasmine.createSpy('openHelperPopover'),
+        closeHelperPopover: jasmine.createSpy('closeHelperPopover')
+      } as any;
+
+      spyOn(component as any, 'showHelperComponent').and.returnValue(true);
+
+      const changes: any = {
+        showHelperComponent: {
+          previousValue: false,
+          currentValue: true,
+          firstChange: false,
+          isFirstChange: () => false
+        }
+      };
+
+      component.ngOnChanges(changes);
+
+      expect(component['helperEl'].openHelperPopover).toHaveBeenCalled();
+      expect(component['helperEl'].closeHelperPopover).not.toHaveBeenCalled();
+    });
+
+    it('should call `closeHelperPopover` when `showHelperComponent` changes and `showHelperComponent()` returns false', () => {
+      component['helperEl'] = {
+        openHelperPopover: jasmine.createSpy('openHelperPopover'),
+        closeHelperPopover: jasmine.createSpy('closeHelperPopover')
+      } as any;
+
+      spyOn(component as any, 'showHelperComponent').and.returnValue(false);
+
+      const changes: any = {
+        showHelperComponent: {
+          previousValue: true,
+          currentValue: false,
+          firstChange: false,
+          isFirstChange: () => false
+        }
+      };
+
+      component.ngOnChanges(changes);
+
+      expect(component['helperEl'].closeHelperPopover).toHaveBeenCalled();
+      expect(component['helperEl'].openHelperPopover).not.toHaveBeenCalled();
+    });
+
+    it('should call `poHelperComponent.eventOnClick` and not open/close popover when it is a function', () => {
+      const openSpy = jasmine.createSpy('openHelperPopover');
+      const closeSpy = jasmine.createSpy('closeHelperPopover');
+      component['helperEl'] = { openHelperPopover: openSpy, closeHelperPopover: closeSpy } as any;
+
+      const eventOnClickSpy = jasmine.createSpy('eventOnClick');
+
+      spyOn(component as any, 'showHelperComponent').and.returnValue(true);
+      spyOn(component as any, 'poHelperComponent').and.returnValue({ eventOnClick: eventOnClickSpy });
+
+      const changes: any = {
+        showHelperComponent: {
+          previousValue: false,
+          currentValue: true,
+          firstChange: false,
+          isFirstChange: () => false
+        }
+      };
+
+      component.ngOnChanges(changes);
+
+      expect(eventOnClickSpy).toHaveBeenCalled();
+      expect(openSpy).not.toHaveBeenCalled();
+      expect(closeSpy).not.toHaveBeenCalled();
+    });
+
+    it('should open popover when `eventOnClick` is not a function', () => {
+      const openSpy = jasmine.createSpy('openHelperPopover');
+      const closeSpy = jasmine.createSpy('closeHelperPopover');
+      component['helperEl'] = { openHelperPopover: openSpy, closeHelperPopover: closeSpy } as any;
+
+      spyOn(component as any, 'showHelperComponent').and.returnValue(true);
+      spyOn(component as any, 'poHelperComponent').and.returnValue({ eventOnClick: undefined });
+
+      const changes: any = {
+        showHelperComponent: {
+          previousValue: false,
+          currentValue: true,
+          firstChange: false,
+          isFirstChange: () => false
+        }
+      };
+      component.ngOnChanges(changes);
+      expect(openSpy).toHaveBeenCalled();
+      expect(closeSpy).not.toHaveBeenCalled();
+    });
+  });
 });

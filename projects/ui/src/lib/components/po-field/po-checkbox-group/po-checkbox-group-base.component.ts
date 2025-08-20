@@ -1,4 +1,4 @@
-import { Directive, EventEmitter, Input, Output } from '@angular/core';
+import { Directive, EventEmitter, input, Input, Output } from '@angular/core';
 import { AbstractControl, ControlValueAccessor, Validator } from '@angular/forms';
 
 import { requiredFailed } from '../validators';
@@ -7,6 +7,7 @@ import { convertToBoolean, convertToInt, getDefaultSizeFn, uuid, validateSizeFn 
 import { PoFieldSize } from '../../../enums/po-field-size.enum';
 import { PoCheckboxGroupOptionView } from './interfaces/po-checkbox-group-option-view.interface';
 import { PoCheckboxGroupOption } from './interfaces/po-checkbox-group-option.interface';
+import { PoHelperOptions } from '../../po-helper';
 
 const poCheckboxGroupColumnsDefaultLength: number = 6;
 const poCheckboxGroupColumnsTotalLength: number = 12;
@@ -46,6 +47,9 @@ export class PoCheckboxGroupBaseComponent implements ControlValueAccessor, Valid
   @Input() additionalHelpEventTrigger: string | undefined;
 
   /**
+   *
+   * @deprecated v23.x.x use `p-helper`
+   *
    * @optional
    *
    * @description
@@ -53,6 +57,8 @@ export class PoCheckboxGroupBaseComponent implements ControlValueAccessor, Valid
    * Se o evento `p-additional-help` estiver definido, o tooltip não será exibido.
    * **Como boa prática, indica-se utilizar um texto com até 140 caracteres.**
    * > Requer um recuo mínimo de 8px se o componente estiver próximo à lateral da tela.
+   *
+   * > Essa propriedade está **depreciada** e será removida na versão `23.x.x`. Recomendamos utilizar a propriedade `p-helper` que oferece mais recursos e flexibilidade.
    */
   @Input('p-additional-help-tooltip') additionalHelpTooltip?: string;
 
@@ -135,6 +141,34 @@ export class PoCheckboxGroupBaseComponent implements ControlValueAccessor, Valid
   @Input('p-error-limit') errorLimit: boolean = false;
 
   /**
+   * @Input
+   *
+   * @optional
+   *
+   * @description
+   *
+   * Define as opções do componente de ajuda (po-helper) que será exibido ao lado do label.
+   *
+   * > Caso o `p-label` não esteja definido, o componente po-helper não será exibido.
+   * Ao configurar esta propriedade, o antigo ícone de ajuda adicional (`p-additional-help-tooltip` e `p-additional-help`) será ignorado.
+   */
+  poHelperComponent = input<PoHelperOptions | string>(undefined, { alias: 'p-helper' });
+
+  /**
+   * @Input
+   *
+   * @optional
+   *
+   * @description
+   * Habilita a quebra automática do texto da propriedade `p-label`. Quando `p-label-text-wrap` for verdadeiro, o texto que excede
+   * o espaço disponível é transferido para a próxima linha em pontos apropriados para uma
+   * leitura clara.
+   *
+   * @default `false`
+   */
+  labelTextWrap = input<boolean>(false, { alias: 'p-label-text-wrap' });
+
+  /**
    * @optional
    *
    * @description
@@ -152,11 +186,15 @@ export class PoCheckboxGroupBaseComponent implements ControlValueAccessor, Valid
   @Output('ngModelChange') ngModelChange: EventEmitter<any> = new EventEmitter<any>();
 
   /**
+   * @deprecated v23.x.x use `p-helper`
+   *
    * @optional
    *
    * @description
    * Evento disparado ao clicar no ícone de ajuda adicional.
    * Este evento ativa automaticamente a exibição do ícone de ajuda adicional ao `p-help`.
+   *
+   * > Essa propriedade está **depreciada** e será removida na versão `23.x.x`. Recomendamos utilizar a propriedade `p-helper` que oferece mais recursos e flexibilidade.
    */
   @Output('p-additional-help') additionalHelp = new EventEmitter<any>();
 

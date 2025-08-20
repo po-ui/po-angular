@@ -5,7 +5,8 @@ import {
   ElementRef,
   forwardRef,
   ViewChild,
-  inject
+  inject,
+  OnInit
 } from '@angular/core';
 import { AbstractControl, NG_VALIDATORS, NG_VALUE_ACCESSOR } from '@angular/forms';
 
@@ -51,7 +52,7 @@ import { PoInputGeneric } from '../po-input-generic/po-input-generic';
   changeDetection: ChangeDetectionStrategy.OnPush,
   standalone: false
 })
-export class PoInputComponent extends PoInputGeneric {
+export class PoInputComponent extends PoInputGeneric implements OnInit {
   @ViewChild('inp', { static: true }) inp: ElementRef;
 
   id = `po-input[${uuid()}]`;
@@ -62,6 +63,10 @@ export class PoInputComponent extends PoInputGeneric {
     const cd = inject(ChangeDetectorRef);
 
     super(el, cd);
+  }
+
+  ngOnInit() {
+    this.helperSettings = this.setHelper(this.label, this.additionalHelpTooltip).helperSettings;
   }
 
   extraValidation(c: AbstractControl): { [key: string]: any } {

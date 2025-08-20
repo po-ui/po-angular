@@ -5,10 +5,12 @@ import { CommonModule } from '@angular/common';
 import { PoCheckboxComponent } from './po-checkbox.component';
 import { PoLabelModule } from '../../po-label/po-label.module';
 import { PoFieldContainerModule } from '../po-field-container/po-field-container.module';
+import { PoHelperModule } from '../../po-helper';
+import { PoTooltipModule } from '../../../directives';
 
 @NgModule({
   declarations: [PoCheckboxComponent],
   exports: [PoCheckboxComponent],
-  imports: [CommonModule, FormsModule, PoLabelModule, PoFieldContainerModule]
+  imports: [CommonModule, FormsModule, PoLabelModule, PoFieldContainerModule, PoHelperModule, PoTooltipModule]
 })
 export class PoCheckboxModule {}

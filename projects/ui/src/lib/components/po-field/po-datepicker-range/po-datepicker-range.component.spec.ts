@@ -11,6 +11,7 @@ import { PoDateService } from './../../../services/po-date/po-date.service';
 import { PoFieldContainerBottomComponent } from '../po-field-container/po-field-container-bottom/po-field-container-bottom.component';
 import { PoFieldContainerComponent } from '../po-field-container/po-field-container.component';
 import { PoMask } from './../po-input/po-mask';
+import { EventEmitter } from '@angular/core';
 
 describe('PoDatepickerRangeComponent:', () => {
   let component: PoDatepickerRangeComponent;
@@ -228,6 +229,15 @@ describe('PoDatepickerRangeComponent:', () => {
         component.emitAdditionalHelp();
 
         expect(component.additionalHelp.emit).not.toHaveBeenCalled();
+      });
+
+      it('should include additionalHelp when event is triggered', () => {
+        spyOn(component as any, 'isAdditionalHelpEventTriggered').and.returnValue(true);
+        component.additionalHelp = new EventEmitter<any>();
+
+        const result = component.setHelper('label', 'tooltip');
+
+        expect(result).toBeDefined();
       });
     });
 

@@ -1,4 +1,5 @@
 import {
+  booleanAttribute,
   ChangeDetectionStrategy,
   ChangeDetectorRef,
   Component,
@@ -6,6 +7,7 @@ import {
   EventEmitter,
   HostListener,
   Input,
+  input,
   OnChanges,
   Output,
   SimpleChanges,
@@ -32,6 +34,7 @@ export class PoFieldContainerBottomComponent implements OnChanges {
   @ViewChild(PoTooltipDirective) poTooltip: PoTooltipDirective;
 
   /** Texto exibido no tooltip do ícone de ajuda adicional. */
+  /** @deprecated v23.x.x */
   @Input('p-additional-help-tooltip') additionalHelpTooltip?: string = '';
 
   /** Define se o tooltip será inserido no `body` em vez do componente. */
@@ -59,14 +62,20 @@ export class PoFieldContainerBottomComponent implements OnChanges {
   @Input('p-show-additional-help-icon') showAdditionalHelpIcon: boolean = false;
 
   /** Evento disparado ao clicar no ícone de ajuda adicional. */
+  /** @deprecated v23.x.x */
   @Output('p-additional-help') additionalHelp = new EventEmitter<any>();
+
+  /** Propriedade para controlar a visibilidade do additionalHelp de acordo com a visibilidade do p-label do field.
+   * Caso o p-label esteja visível, o additionalHelp não será exibido.
+   **/
+  hideAdditionalHelpByLabel = input(false, { transform: booleanAttribute, alias: 'p-hide-additional-help-by-label' });
 
   private isInitialChange: boolean = true;
 
   ngOnChanges(changes: SimpleChanges) {
     if (changes.showAdditionalHelp) {
       if (!this.isInitialChange) {
-        if (this.additionalHelpTooltip) {
+        if (this.additionalHelpTooltip && this.poTooltip) {
           this.poTooltip.toggleTooltipVisibility(this.showAdditionalHelp);
         } else {
           this.additionalHelp.emit();

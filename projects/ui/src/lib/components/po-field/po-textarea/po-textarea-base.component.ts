@@ -1,9 +1,10 @@
-import { ChangeDetectorRef, Directive, EventEmitter, Input, Output } from '@angular/core';
+import { ChangeDetectorRef, Directive, EventEmitter, input, Input, Output } from '@angular/core';
 import { AbstractControl, ControlValueAccessor, Validator, Validators } from '@angular/forms';
 
 import { PoFieldSize } from '../../../enums/po-field-size.enum';
 import { convertToBoolean, convertToInt, getDefaultSizeFn, validateSizeFn } from '../../../utils/util';
 import { maxlengpoailed, minlengpoailed, requiredFailed } from '../validators';
+import { PoHelperOptions } from '../../po-helper';
 
 /**
  * @description
@@ -55,6 +56,9 @@ export abstract class PoTextareaBaseComponent implements ControlValueAccessor, V
   @Input() additionalHelpEventTrigger: string | undefined;
 
   /**
+   *
+   * @deprecated v23.x.x use `p-helper`
+   *
    * @optional
    *
    * @description
@@ -62,6 +66,8 @@ export abstract class PoTextareaBaseComponent implements ControlValueAccessor, V
    * Se o evento `p-additional-help` estiver definido, o tooltip não será exibido.
    * **Como boa prática, indica-se utilizar um texto com até 140 caracteres.**
    * > Requer um recuo mínimo de 8px se o componente estiver próximo à lateral da tela.
+   *
+   * > Essa propriedade está **depreciada** e será removida na versão `23.x.x`. Recomendamos utilizar a propriedade `p-helper` que oferece mais recursos e flexibilidade.
    */
   @Input('p-additional-help-tooltip') additionalHelpTooltip?: string;
 
@@ -144,11 +150,45 @@ export abstract class PoTextareaBaseComponent implements ControlValueAccessor, V
   @Input('p-error-limit') errorLimit: boolean = false;
 
   /**
+   * @Input
+   *
+   * @optional
+   *
+   * @description
+   *
+   * Define as opções do componente de ajuda (po-helper) que será exibido ao lado do label.
+   *
+   * > Caso o `p-label` não esteja definido, o componente po-helper não será exibido.
+   * Ao configurar esta propriedade, o antigo ícone de ajuda adicional (`p-additional-help-tooltip` e `p-additional-help`) será ignorado.
+   */
+  poHelperComponent = input<PoHelperOptions | string>(undefined, { alias: 'p-helper' });
+
+  /**
+   * @Input
+   *
+   * @optional
+   *
+   * @description
+   *
+   * Habilita a quebra automática do texto da propriedade `p-label`. Quando `p-label-text-wrap` for verdadeiro, o texto que excede
+   * o espaço disponível é transferido para a próxima linha em pontos apropriados para uma
+   * leitura clara.
+   *
+   * @default `false`
+   */
+  labelTextWrap = input<boolean>(false, { alias: 'p-label-text-wrap' });
+
+  /**
+   *
+   * @deprecated v23.x.x use `p-helper`
+   *
    * @optional
    *
    * @description
    * Evento disparado ao clicar no ícone de ajuda adicional.
    * Este evento ativa automaticamente a exibição do ícone de ajuda adicional ao `p-help`.
+   *
+   * > Essa propriedade está **depreciada** e será removida na versão `23.x.x`. Recomendamos utilizar a propriedade `p-helper` que oferece mais recursos e flexibilidade.
    */
   @Output('p-additional-help') additionalHelp = new EventEmitter<any>();
 

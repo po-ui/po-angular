@@ -1,6 +1,6 @@
 import { AbstractControl } from '@angular/forms';
 import { ComponentFixture, fakeAsync, TestBed, tick } from '@angular/core/testing';
-import { ChangeDetectorRef, Component, ElementRef, inject } from '@angular/core';
+import { ChangeDetectorRef, Component, ElementRef, EventEmitter, inject } from '@angular/core';
 
 import { configureTestSuite } from './../../../util-test/util-expect.spec';
 
@@ -639,6 +639,15 @@ describe('PoInputGeneric:', () => {
         setupTest('Mensagem de apoio adicional.', true, { observed: true });
         component.eventOnBlur(fakeEvent);
         expect(component.showAdditionalHelp).not.toHaveBeenCalled();
+      });
+
+      it('should include additionalHelp when event is triggered', () => {
+        spyOn(component as any, 'isAdditionalHelpEventTriggered').and.returnValue(true);
+        component.additionalHelp = new EventEmitter<any>();
+
+        const result = component.setHelper('label', 'tooltip');
+
+        expect(result).toBeDefined();
       });
 
       it('should call `objMask.blur` when exists a `mask`.', () => {

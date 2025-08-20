@@ -72,7 +72,8 @@ export class SamplePoComboLabsComponent implements OnInit {
     { value: 'sort', label: 'Sort' },
     { value: 'clean', label: 'Clean' },
     { value: 'disabledTabFilter', label: 'Disabled Tab Filter' },
-    { value: 'errorLimit', label: 'Limit Error Message' }
+    { value: 'errorLimit', label: 'Limit Error Message' },
+    { value: 'labelTextWrap', label: 'Label Text Wrap' }
   ];
 
   public readonly sizeOptions: Array<PoRadioGroupOption> = [

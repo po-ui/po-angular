@@ -8,6 +8,7 @@
   [p-size]="size"
   (p-change)="changeEvent('p-change')"
   (p-keydown)="changeEvent('p-keydown')"
+  [p-label-text-wrap]="labelTextWrap"
 >
 </po-checkbox>
 
@@ -32,11 +33,12 @@
       name="additionalHelpTooltip"
       [(ngModel)]="additionalHelpTooltip"
       p-clean
-      p-label="Additional Help Tooltip"
+      p-label="Additional Help"
     >
     </po-input>
 
     <po-switch class="po-sm-3" name="disabled" [(ngModel)]="disabled" p-label="Disabled"> </po-switch>
+    <po-switch class="po-sm-3" name="labelTextWrap" [(ngModel)]="labelTextWrap" p-label="Label Text Wrap"> </po-switch>
 
     <po-radio-group
       class="po-md-12"

@@ -235,6 +235,15 @@ describe('PoLookupComponent:', () => {
         component.ngAfterViewInit();
         expect(inputFocus).not.toHaveBeenCalled();
       });
+
+      it('should include additionalHelp when event is triggered', () => {
+        spyOn(component as any, 'isAdditionalHelpEventTriggered').and.returnValue(true);
+        component.additionalHelp = new EventEmitter<any>();
+
+        const result = component.setHelper('label', 'tooltip');
+
+        expect(result).toBeDefined();
+      });
     });
 
     describe('onBlur:', () => {

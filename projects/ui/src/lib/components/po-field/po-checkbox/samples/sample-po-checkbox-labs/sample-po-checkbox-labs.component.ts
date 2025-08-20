@@ -13,6 +13,7 @@ export class SamplePoCheckboxLabsComponent implements OnInit {
   size: string;
   event: string;
   label: string;
+  labelTextWrap: boolean;
 
   sizeOptions: Array<PoRadioGroupOption> = [
     { label: 'small', value: 'small' },

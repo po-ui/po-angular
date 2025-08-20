@@ -1,4 +1,4 @@
-import { NO_ERRORS_SCHEMA, SimpleChange, SimpleChanges } from '@angular/core';
+import { EventEmitter, NO_ERRORS_SCHEMA, SimpleChange, SimpleChanges } from '@angular/core';
 import { ComponentFixture, fakeAsync, TestBed, tick } from '@angular/core/testing';
 import { FormsModule } from '@angular/forms';
 import { BrowserAnimationsModule } from '@angular/platform-browser/animations';
@@ -76,6 +76,24 @@ describe('PoRichTextComponent:', () => {
 
       beforeEach(() => {
         inputFocus = spyOn(component, 'focus');
+      });
+
+      it('should include additionalHelp when observed is true', () => {
+        component.additionalHelp = new EventEmitter<any>();
+        const sub = component.additionalHelp.subscribe(() => {});
+
+        const result = component.setHelper('label', 'tooltip');
+
+        expect(result).toBeDefined();
+        sub.unsubscribe();
+      });
+
+      it('should not include additionalHelp when observed is false', () => {
+        component.additionalHelp = new EventEmitter<any>();
+
+        const result = component.setHelper('label', 'tooltip');
+
+        expect(result).toBeDefined();
       });
 
       it('should apply eventListeners if onChangeModel is null', fakeAsync(() => {
