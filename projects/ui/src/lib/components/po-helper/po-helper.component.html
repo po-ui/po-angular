@@ -1,0 +1,17 @@
+<div class="po-helper-container">
+  <span #target>
+    <po-icon p-icon="an an-question" [class.po-datepicker-button-aa]="this._size === 'small'"></po-icon>
+  </span>
+  <po-popover
+    p-position="right-bottom"
+    [p-target]="target"
+    [p-title]="typeof helper() === 'string' ? '' : helper()?.title"
+    [p-trigger]="typeof helper() === 'string' ? 'click' : helper()?.popoverTrigger || 'click'"
+  >
+    {{ typeof helper() === 'string' ? helper() : helper()?.content }}
+    @if (typeof helper() !== 'string' && helper()?.footerAction) {
+      <po-divider></po-divider>
+      <po-link (p-action)="helper().footerAction.action()" [p-label]="helper().footerAction.label"> </po-link>
+    }
+  </po-popover>
+</div>
