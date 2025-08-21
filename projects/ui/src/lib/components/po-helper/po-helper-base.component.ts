@@ -1,11 +1,11 @@
 import { Directive, input } from '@angular/core';
 import { PoHelperOptions } from './interfaces/po-helper.interface';
 import { PoThemeService } from '../../services';
-import { validateSize } from '../../utils/util';
+import { PoHelperSize } from './enums/po-helper-size.enum';
+import { getDefaultSize, validateSize } from '../../utils/util';
 
 @Directive()
 export class PoHelperBaseComponent {
-  // Accepts either a structured object or a shorthand string (used as content)
   helper = input<PoHelperOptions | string>(undefined, { alias: 'p-helper' });
 
   /**
@@ -23,20 +23,4 @@ export class PoHelperBaseComponent {
    * @default `medium`
    */
   size = input<'small' | 'medium'>('medium', { alias: 'p-size' });
-  protected _size: 'small' | 'medium' = 'medium';
-
-  constructor(private poThemeService: PoThemeService) {}
-
-  ngOnInit() {
-    this.sizeChanged(this.size());
-  }
-
-  private sizeChanged(value: 'small' | 'medium') {
-    const validated = validateSize(value, this.poThemeService, ['small', 'medium']);
-    if (validated === 'small' || validated === 'medium') {
-      this._size = validated;
-    } else {
-      this._size = 'medium'; // fallback to default
-    }
-  }
 }
