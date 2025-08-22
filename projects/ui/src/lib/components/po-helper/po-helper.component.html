@@ -1,23 +1,23 @@
-<div class="po-helper-container">
+<div class="po-helper-container" [attr.p-size]="this.size()">
   <span
     #target
     class="po-helper-target"
     tabindex="0"
     role="button"
-    aria-label="Ajuda"
+    [attr.aria-label]="helper()?.type === 'info' ? 'Info' : 'Helper'"
     (keydown.space)="onSpace($event)"
   >
-    <po-icon p-icon="ICON_HELP"></po-icon>
+    <po-icon [p-icon]="helper()?.type === 'info' ? 'ICON_INFO' : 'ICON_HELP'"></po-icon>
   </span>
   <po-popover
     #popover
     p-position="right-bottom"
     [p-target]="target"
-    [p-title]="typeof helper() === 'string' ? '' : helper()?.title"
-    [p-trigger]="typeof helper() === 'string' ? 'click' : helper()?.popoverTrigger || 'click'"
+    [p-title]="helper()?.title"
+    [p-trigger]="helper()?.popoverTrigger || 'click'"
   >
-    {{ typeof helper() === 'string' ? helper() : helper()?.content }}
-    @if (typeof helper() !== 'string' && helper()?.footerAction) {
+    {{ helper()?.content }}
+    @if (helper()?.footerAction) {
       <po-divider></po-divider>
       <po-link (p-action)="helper().footerAction.action()" [p-label]="helper().footerAction.label"> </po-link>
     }
