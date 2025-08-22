@@ -1,12 +1,12 @@
 import { Directive, input } from '@angular/core';
 import { PoHelperOptions } from './interfaces/po-helper.interface';
-import { PoThemeService } from '../../services';
-import { PoHelperSize } from './enums/po-helper-size.enum';
-import { getDefaultSize, validateSize } from '../../utils/util';
 
 @Directive()
 export class PoHelperBaseComponent {
-  helper = input<PoHelperOptions | string>(undefined, { alias: 'p-helper' });
+  helper = input<PoHelperOptions | string>(undefined, {
+    alias: 'p-helper',
+    transform: this.transformHelper.bind(this)
+  });
 
   /**
    * @optional
@@ -23,4 +23,15 @@ export class PoHelperBaseComponent {
    * @default `medium`
    */
   size = input<'small' | 'medium'>('medium', { alias: 'p-size' });
+
+  private transformHelper(value: PoHelperOptions | string): PoHelperOptions {
+    if (typeof value === 'string') {
+      return {
+        title: '',
+        content: value,
+        type: 'help'
+      };
+    }
+    return value;
+  }
 }
