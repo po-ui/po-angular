@@ -5,7 +5,12 @@
     tabindex="0"
     role="button"
     [attr.aria-label]="helper()?.type === 'info' ? 'Info' : 'Helper'"
-    (keydown.space)="onSpace($event)"
+    [attr.aria-haspopup]="'dialog'"
+    [attr.aria-expanded]="!popover.isHidden"
+    [attr.aria-controls]="'popover-content-' + id"
+    [attr.aria-describedby]="'popover-content-' + id"
+    (keydown)="onKeyDown($event)"
+    (click)="emitClick()"
   >
     <po-icon [p-icon]="helper()?.type === 'info' ? 'ICON_INFO' : 'ICON_HELP'"></po-icon>
   </span>
@@ -14,12 +19,14 @@
     p-position="right-bottom"
     [p-target]="target"
     [p-title]="helper()?.title"
-    [p-trigger]="helper()?.popoverTrigger || 'click'"
+    [p-trigger]="helper()?.popoverTrigger || 'hover'"
   >
-    {{ helper()?.content }}
-    @if (helper()?.footerAction) {
-      <po-divider></po-divider>
-      <po-link (p-action)="helper().footerAction.action()" [p-label]="helper().footerAction.label"> </po-link>
-    }
+    <div [id]="'popover-content-' + id" role="dialog" aria-modal="false" tabindex="-1">
+      {{ helper()?.content }}
+      @if (helper()?.footerAction) {
+        <po-divider></po-divider>
+        <po-link (p-action)="helper().footerAction.action()" [p-label]="helper().footerAction.label"> </po-link>
+      }
+    </div>
   </po-popover>
 </div>

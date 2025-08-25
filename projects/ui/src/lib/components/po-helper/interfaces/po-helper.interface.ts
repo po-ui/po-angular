@@ -11,7 +11,5 @@ export interface PoHelperOptions {
 
   popoverPosition?: 'top' | 'bottom' | 'left' | 'right';
 
-  eventOnClick?: (event: Event) => void;
-
-  eventOnHover?: (event: Event) => void;
+  eventOnClick?: Function;
 }

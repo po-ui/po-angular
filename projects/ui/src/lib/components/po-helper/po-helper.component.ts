@@ -1,6 +1,5 @@
 import { Component, ElementRef, OnInit, ViewChild, AfterViewInit, OnDestroy } from '@angular/core';
 import { PoHelperBaseComponent } from './po-helper-base.component';
-
 import { PoPopoverComponent } from '../po-popover/po-popover.component';
 
 @Component({
@@ -14,7 +13,21 @@ export class PoHelperComponent extends PoHelperBaseComponent implements OnInit, 
   @ViewChild('popover', { static: false }) popover: PoPopoverComponent;
 
   private static instances: Array<PoHelperComponent> = [];
+  private static idCounter = 0;
+  public id: string;
   private boundFocusIn: (e: FocusEvent) => void;
+
+  constructor() {
+    super();
+    this.id = 'po-helper-' + PoHelperComponent.idCounter++;
+  }
+
+  emitClick() {
+    const helper = this.helper();
+    if (helper && typeof helper !== 'string' && typeof helper.eventOnClick === 'function') {
+      helper.eventOnClick(helper);
+    }
+  }
 
   ngOnInit() {
     console.log('this.helper', this.helper());
@@ -44,22 +57,24 @@ export class PoHelperComponent extends PoHelperBaseComponent implements OnInit, 
     }
   }
 
-  onSpace(event: KeyboardEvent) {
-    event.preventDefault();
-    if (!this.popover) {
-      return;
-    }
-
-    PoHelperComponent.instances.forEach(instance => {
-      if (instance !== this && instance.popover && !instance.popover.isHidden) {
-        instance.popover.close();
+  onKeyDown(event: KeyboardEvent) {
+    if (event?.code === 'Space' || event?.code === 'Enter') {
+      event.preventDefault();
+      if (!this.popover) {
+        return;
       }
-    });
 
-    if (this.popover.isHidden) {
-      this.popover.open();
-    } else {
-      this.popover.close();
+      PoHelperComponent.instances.forEach(instance => {
+        if (instance !== this && instance.popover && !instance.popover.isHidden) {
+          instance.popover.close();
+        }
+      });
+
+      if (this.popover.isHidden) {
+        this.popover.open();
+      } else {
+        this.popover.close();
+      }
     }
   }
 }
