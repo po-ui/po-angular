@@ -2,6 +2,14 @@
 
 All notable changes to this project will be documented in this file. See [standard-version](https://github.com/conventional-changelog/standard-version) for commit guidelines.
 
+## [19.25.0](https://github.com/po-ui/po-angular/compare/v19.24.0...v19.25.0) (2025-08-25)
+
+
+### Features
+
+* **header:** cria novo componente header ([5e90bdb](https://github.com/po-ui/po-angular/commit/5e90bdb3c19dfe0874418d1b0e33a379a4c7c802))
+* **search:** adiciona modo locate ao p-search-type ([f585cf4](https://github.com/po-ui/po-angular/commit/f585cf4a7e67ace57524ae839b5361515661ec32))
+
 ## [19.24.0](https://github.com/po-ui/po-angular/compare/v19.23.0...v19.24.0) (2025-08-18)
 
 
