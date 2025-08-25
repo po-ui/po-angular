@@ -1,89 +1,92 @@
 <!-- menu com link interno -->
-<a
-  *ngIf="type === 'internalLink'"
-  class="po-menu-item-link"
-  role="menuitem"
-  [attr.aria-label]="label"
-  [routerLink]="link"
-  (keydown.enter)="clickMenuItem($event)"
-  (keydown.space)="clickMenuItem($event)"
-  p-tooltip-position="right"
-  [p-tooltip]="collapsedMenu && shortLabel ? shortLabel : undefined"
-  [p-append-in-body]="true"
->
-  <ng-container *ngTemplateOutlet="menuItemTemplate"></ng-container>
-</a>
-<!-- menu com link externo -->
-<a
-  *ngIf="type === 'externalLink'"
-  class="po-menu-item-link"
-  role="menuitem"
-  [attr.aria-label]="label"
-  [href]="link"
-  (keydown.enter)="clickMenuItem($event)"
-  (keydown.space)="clickMenuItem($event)"
-  p-tooltip-position="right"
-  [p-tooltip]="collapsedMenu && shortLabel ? shortLabel : undefined"
-  [p-append-in-body]="true"
->
-  <ng-container *ngTemplateOutlet="menuItemTemplate"></ng-container>
-</a>
-<!-- menu sem link -->
-<a
-  *ngIf="type === 'noLink'"
-  class="po-menu-item-link"
-  href="javascript:;"
-  role="menuitem"
-  [attr.aria-label]="label"
-  (keydown.enter)="clickMenuItem($event)"
-  (keydown.space)="clickMenuItem($event)"
-  p-tooltip-position="right"
-  [p-tooltip]="collapsedMenu && shortLabel ? shortLabel : undefined"
-  [p-append-in-body]="true"
->
-  <ng-container *ngTemplateOutlet="menuItemTemplate"></ng-container>
-</a>
-<!-- menu sem dados -->
-<div *ngIf="type === 'noData'" class="po-menu-item-link" role="none">
-  <ng-container *ngTemplateOutlet="menuItemTemplate"></ng-container>
-</div>
-<!-- menu com sub itens -->
-<div
-  *ngIf="type === 'subItems'"
-  class="po-menu-item-link po-clickable"
-  role="menuitem"
-  [attr.aria-expanded]="isOpened ? true : false"
->
-  <ng-container *ngTemplateOutlet="menuItemTemplate"></ng-container>
-
-  <div
-    #menuSubItems
-    class="po-menu-sub-items"
-    [hidden]="collapsedMenu || !isOpened"
-    [attr.aria-expanded]="isOpened ? true : false"
-    [attr.aria-hidden]="!isOpened ? true : false"
-    role="group"
-    [style.maxHeight.px]="maxHeight"
+@if (type === 'internalLink') {
+  <a
+    class="po-menu-item-link"
+    role="menuitem"
+    [attr.aria-label]="label"
+    [routerLink]="link"
+    (keydown.enter)="clickMenuItem($event)"
+    (keydown.space)="clickMenuItem($event)"
+    p-tooltip-position="right"
+    [p-tooltip]="collapsedMenu && shortLabel ? shortLabel : undefined"
+    [p-append-in-body]="true"
   >
-    <ul class="po-menu-sub-items-list">
-      <li class="po-menu-sub-items-list-item" *ngFor="let subItem of subItems" [attr.aria-level]="subItem.level">
-        <po-menu-item
-          p-is-sub-item
-          [p-action]="subItem.action"
-          [p-badge-alert]="subItem.badgeAlert"
-          [p-badge-color]="subItem.badge ? subItem.badge.color : undefined"
-          [p-badge-value]="subItem.badge ? subItem.badge.value : undefined"
-          [p-id]="subItem.id"
-          [p-label]="subItem.label"
-          [p-level]="subItem.level"
-          [p-link]="subItem.link"
-          [p-sub-items]="subItem.subItems"
-          [p-type]="subItem.type"
-        ></po-menu-item>
-      </li>
-    </ul>
+    <ng-container *ngTemplateOutlet="menuItemTemplate"></ng-container>
+  </a>
+}
+<!-- menu com link externo -->
+@if (type === 'externalLink') {
+  <a
+    class="po-menu-item-link"
+    role="menuitem"
+    [attr.aria-label]="label"
+    [href]="link"
+    (keydown.enter)="clickMenuItem($event)"
+    (keydown.space)="clickMenuItem($event)"
+    p-tooltip-position="right"
+    [p-tooltip]="collapsedMenu && shortLabel ? shortLabel : undefined"
+    [p-append-in-body]="true"
+  >
+    <ng-container *ngTemplateOutlet="menuItemTemplate"></ng-container>
+  </a>
+}
+<!-- menu sem link -->
+@if (type === 'noLink') {
+  <a
+    class="po-menu-item-link"
+    href="javascript:;"
+    role="menuitem"
+    [attr.aria-label]="label"
+    (keydown.enter)="clickMenuItem($event)"
+    (keydown.space)="clickMenuItem($event)"
+    p-tooltip-position="right"
+    [p-tooltip]="collapsedMenu && shortLabel ? shortLabel : undefined"
+    [p-append-in-body]="true"
+  >
+    <ng-container *ngTemplateOutlet="menuItemTemplate"></ng-container>
+  </a>
+}
+<!-- menu sem dados -->
+@if (type === 'noData') {
+  <div class="po-menu-item-link" role="none">
+    <ng-container *ngTemplateOutlet="menuItemTemplate"></ng-container>
   </div>
-</div>
+}
+<!-- menu com sub itens -->
+@if (type === 'subItems') {
+  <div class="po-menu-item-link po-clickable" role="menuitem" [attr.aria-expanded]="isOpened ? true : false">
+    <ng-container *ngTemplateOutlet="menuItemTemplate"></ng-container>
+    <div
+      #menuSubItems
+      class="po-menu-sub-items"
+      [hidden]="collapsedMenu || !isOpened"
+      [attr.aria-expanded]="isOpened ? true : false"
+      [attr.aria-hidden]="!isOpened ? true : false"
+      role="group"
+      [style.maxHeight.px]="maxHeight"
+    >
+      <ul class="po-menu-sub-items-list">
+        @for (subItem of subItems; track subItem) {
+          <li class="po-menu-sub-items-list-item" [attr.aria-level]="subItem.level">
+            <po-menu-item
+              p-is-sub-item
+              [p-action]="subItem.action"
+              [p-badge-alert]="subItem.badgeAlert"
+              [p-badge-color]="subItem.badge ? subItem.badge.color : undefined"
+              [p-badge-value]="subItem.badge ? subItem.badge.value : undefined"
+              [p-id]="subItem.id"
+              [p-label]="subItem.label"
+              [p-level]="subItem.level"
+              [p-link]="subItem.link"
+              [p-sub-items]="subItem.subItems"
+              [p-type]="subItem.type"
+            ></po-menu-item>
+          </li>
+        }
+      </ul>
+    </div>
+  </div>
+}
 
 <ng-template #menuItemTemplate>
   <div
@@ -108,31 +111,36 @@
     (keydown.enter)="clickMenuItem($event)"
     (keydown.space)="clickMenuItem($event)"
   >
-    <po-icon *ngIf="level === 1 && icon" aria-hidden="true" class="po-menu-icon-item" [p-icon]="icon"></po-icon>
+    @if (level === 1 && icon) {
+      <po-icon aria-hidden="true" class="po-menu-icon-item" [p-icon]="icon"></po-icon>
+    }
 
-    <po-icon
-      *ngIf="type === 'subItems' && !collapsedMenu"
-      class="po-menu-group-icon"
-      [p-icon]="isOpened ? 'ICON_ARROW_UP po-field-icon' : 'ICON_ARROW_DOWN po-field-icon'"
-    ></po-icon>
+    @if (type === 'subItems' && !collapsedMenu) {
+      <po-icon
+        class="po-menu-group-icon"
+        [p-icon]="isOpened ? 'ICON_ARROW_UP po-field-icon' : 'ICON_ARROW_DOWN po-field-icon'"
+      ></po-icon>
+    }
 
     <span [class.po-menu-icon-label]="level === 1 && icon">
       {{ label }}
     </span>
 
-    <po-badge
-      *ngIf="canShowBadge"
-      aria-hidden="true"
-      [ngClass]="!collapsedMenu ? 'po-menu-badge-align' : 'po-menu-badge-align-collapsed'"
-      [p-color]="badgeColor"
-      [p-value]="badgeValue"
-    ></po-badge>
+    @if (canShowBadge) {
+      <po-badge
+        aria-hidden="true"
+        [ngClass]="!collapsedMenu ? 'po-menu-badge-align' : 'po-menu-badge-align-collapsed'"
+        [p-color]="badgeColor"
+        [p-value]="badgeValue"
+      ></po-badge>
+    }
 
-    <span
-      *ngIf="badgeAlert"
-      aria-hidden="true"
-      class="po-color-07"
-      [ngClass]="!collapsedMenu ? 'po-menu-badge-alert' : 'po-menu-badge-alert-collapsed'"
-    ></span>
+    @if (badgeAlert) {
+      <span
+        aria-hidden="true"
+        class="po-color-07"
+        [ngClass]="!collapsedMenu ? 'po-menu-badge-alert' : 'po-menu-badge-alert-collapsed'"
+      ></span>
+    }
   </div>
 </ng-template>

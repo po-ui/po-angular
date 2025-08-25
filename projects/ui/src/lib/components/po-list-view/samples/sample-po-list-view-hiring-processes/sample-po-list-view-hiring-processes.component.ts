@@ -1,4 +1,4 @@
-import { Component, OnInit, ViewChild } from '@angular/core';
+import { Component, OnInit, ViewChild, inject } from '@angular/core';
 
 import {
   PoListViewAction,
@@ -17,6 +17,9 @@ import { SamplePoListViewHiringProcessesService } from './sample-po-list-view-hi
   standalone: false
 })
 export class SamplePoListViewHiringProcessesComponent implements OnInit {
+  private poNotification = inject(PoNotificationService);
+  private hiringProcessesService = inject(SamplePoListViewHiringProcessesService);
+
   @ViewChild('detailsModal', { static: true }) detailsModalElement: PoModalComponent;
 
   hiringProcesses: Array<any>;
@@ -61,11 +64,6 @@ export class SamplePoListViewHiringProcessesComponent implements OnInit {
     action: this.hiringProcessesFilter.bind(this),
     placeholder: 'Search'
   };
-
-  constructor(
-    private poNotification: PoNotificationService,
-    private hiringProcessesService: SamplePoListViewHiringProcessesService
-  ) {}
 
   ngOnInit() {
     this.hiringProcesses = this.hiringProcessesService.getItems();

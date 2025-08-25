@@ -1,7 +1,9 @@
 <div class="po-tag-container" [class.po-tag-container-horizontal]="tagOrientation">
-  <div *ngIf="label" class="po-tag-title po-text-nowrap">
-    <span class="po-tag-label">{{ tagOrientation ? label + ':' : label }}</span>
-  </div>
+  @if (label) {
+    <div class="po-tag-title po-text-nowrap">
+      <span class="po-tag-label">{{ tagOrientation ? label + ':' : label }}</span>
+    </div>
+  }
 
   <div class="po-tag-sub-container">
     <div
@@ -24,13 +26,14 @@
         [ngClass]="tagColor"
         [ngStyle]="styleTag()"
       >
-        <po-icon
-          *ngIf="icon && !removable"
-          class="po-tag-icon"
-          [p-icon]="!type || forceIcon ? icon : iconFromType"
-          [ngStyle]="!type && customTextColor ? { 'color': customTextColor } : ''"
-        >
-        </po-icon>
+        @if (icon && !removable) {
+          <po-icon
+            class="po-tag-icon"
+            [p-icon]="!type || forceIcon ? icon : iconFromType"
+            [ngStyle]="!type && customTextColor ? { 'color': customTextColor } : ''"
+          >
+          </po-icon>
+        }
 
         <div
           #tagContainer
@@ -44,22 +47,23 @@
           }}</span>
         </div>
 
-        <po-icon
-          #tagClose
-          *ngIf="removable"
-          p-icon="ICON_CLOSE"
-          p-tooltip-position="top"
-          [p-tooltip]="literals.remove"
-          [p-append-in-body]="appendInBody"
-          [attr.aria-label]="setAriaLabel()"
-          class="po-tag-remove"
-          [class.po-clickable]="!disabled"
-          [tabindex]="!disabled ? 0 : -1"
-          [attr.role]="!disabled ? 'button' : ''"
-          (click)="onClose()"
-          (keydown.enter)="onClose('enter')"
-        >
-        </po-icon>
+        @if (removable) {
+          <po-icon
+            #tagClose
+            p-icon="ICON_CLOSE"
+            p-tooltip-position="top"
+            [p-tooltip]="literals.remove"
+            [p-append-in-body]="appendInBody"
+            [attr.aria-label]="setAriaLabel()"
+            class="po-tag-remove"
+            [class.po-clickable]="!disabled"
+            [tabindex]="!disabled ? 0 : -1"
+            [attr.role]="!disabled ? 'button' : ''"
+            (click)="onClose()"
+            (keydown.enter)="onClose('enter')"
+          >
+          </po-icon>
+        }
       </div>
     </div>
   </div>

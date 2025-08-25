@@ -7,7 +7,8 @@ import {
   OnDestroy,
   Renderer2,
   SimpleChanges,
-  ViewChild
+  ViewChild,
+  inject
 } from '@angular/core';
 import { Router } from '@angular/router';
 
@@ -19,7 +20,6 @@ import { PoLanguageService } from '../../services/po-language/po-language.servic
 import { isExternalLink, isTypeof, openExternalLink } from '../../utils/util';
 import { PoSearchListComponent } from './po-search-list/po-search-list.component';
 import { Observable, Subscription, debounceTime, fromEvent } from 'rxjs';
-import { PoThemeService } from '../../services/po-theme/po-theme.service';
 
 @Component({
   selector: 'po-listbox',
@@ -27,6 +27,11 @@ import { PoThemeService } from '../../services/po-theme/po-theme.service';
   standalone: false
 })
 export class PoListBoxComponent extends PoListBoxBaseComponent implements AfterViewInit, OnChanges, OnDestroy {
+  element = inject(ElementRef);
+  private readonly renderer = inject(Renderer2);
+  private readonly router = inject(Router);
+  private readonly changeDetector = inject(ChangeDetectorRef);
+
   @ViewChild('listbox', { static: true }) listbox: ElementRef;
   @ViewChild('listboxItemList', { static: false }) listboxItemList: ElementRef;
   @ViewChild('searchElement') searchElement: PoSearchListComponent;
@@ -35,15 +40,10 @@ export class PoListBoxComponent extends PoListBoxBaseComponent implements AfterV
   private scrollEvent$: Observable<any>;
   private subscriptionScrollEvent: Subscription;
 
-  constructor(
-    public element: ElementRef,
-    private readonly renderer: Renderer2,
-    languageService: PoLanguageService,
-    protected poThemeService: PoThemeService,
-    private readonly router: Router,
-    private readonly changeDetector: ChangeDetectorRef
-  ) {
-    super(languageService, poThemeService);
+  constructor() {
+    const languageService = inject(PoLanguageService);
+
+    super(languageService);
   }
 
   ngAfterViewInit(): void {

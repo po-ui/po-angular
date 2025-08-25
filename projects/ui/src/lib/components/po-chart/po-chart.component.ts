@@ -104,6 +104,12 @@ use([
   standalone: false
 })
 export class PoChartComponent extends PoChartBaseComponent implements OnInit, AfterViewInit, OnChanges, OnDestroy {
+  el = inject(ElementRef);
+  private readonly currencyPipe = inject(CurrencyPipe);
+  private readonly decimalPipe = inject(DecimalPipe);
+  private readonly colorService = inject(PoColorService);
+  private readonly cdr = inject(ChangeDetectorRef);
+
   @ViewChildren(PoTooltipDirective) poTooltip: QueryList<PoTooltipDirective>;
   @ViewChild('targetPopup', { read: ElementRef, static: false }) targetRef: ElementRef;
   @ViewChild('chartContainer') chartContainer: ElementRef;
@@ -150,14 +156,9 @@ export class PoChartComponent extends PoChartBaseComponent implements OnInit, Af
     return this.title || !this.options?.header?.hideTableDetails || !this.options?.header?.hideExpand || this.showPopup;
   }
 
-  constructor(
-    public el: ElementRef,
-    private readonly currencyPipe: CurrencyPipe,
-    private readonly decimalPipe: DecimalPipe,
-    private readonly colorService: PoColorService,
-    private readonly cdr: ChangeDetectorRef,
-    languageService: PoLanguageService
-  ) {
+  constructor() {
+    const languageService = inject(PoLanguageService);
+
     super(languageService);
   }
 
@@ -215,7 +216,9 @@ export class PoChartComponent extends PoChartBaseComponent implements OnInit, Af
   }
 
   ngOnDestroy(): void {
-    this.resizeObserver?.disconnect();
+    if (this.resizeObserver?.disconnect) {
+      this.resizeObserver?.disconnect();
+    }
     this.intersectionObserver?.disconnect();
   }
 

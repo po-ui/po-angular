@@ -1,8 +1,7 @@
 import { Directive, EventEmitter, Input, Output, TemplateRef } from '@angular/core';
 
 import { PoFieldSize } from '../../enums/po-field-size.enum';
-import { PoThemeService } from '../../services';
-import { convertToBoolean, getDefaultSize, isTypeof, uuid, validateSize } from '../../utils/util';
+import { convertToBoolean, getDefaultSizeFn, isTypeof, uuid, validateSizeFn } from '../../utils/util';
 import { PoPopupAction } from '../po-popup';
 import { PoTagType } from '../po-tag';
 
@@ -207,11 +206,11 @@ export abstract class PoWidgetBaseComponent {
    * @default `medium`
    */
   @Input({ alias: 'p-size' }) set size(value: string) {
-    this._size = validateSize(value, this.poThemeService, PoFieldSize);
+    this._size = validateSizeFn(value, PoFieldSize);
   }
 
   get size(): string {
-    return this._size ?? getDefaultSize(this.poThemeService, PoFieldSize);
+    return this._size ?? getDefaultSizeFn(PoFieldSize);
   }
 
   /**
@@ -421,8 +420,6 @@ export abstract class PoWidgetBaseComponent {
   get title(): string {
     return this._title;
   }
-
-  constructor(protected poThemeService: PoThemeService) {}
 
   abstract setHeight(height: number);
 }

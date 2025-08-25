@@ -1,4 +1,4 @@
-import { AfterContentInit, Component, ElementRef, Input, TemplateRef } from '@angular/core';
+import { AfterContentInit, Component, ElementRef, Input, TemplateRef, inject } from '@angular/core';
 import { Observable } from 'rxjs';
 
 import { uuid } from '../../../utils/util';
@@ -48,6 +48,8 @@ import { PoStepperStatus } from '../enums/po-stepper-status.enum';
   standalone: false
 })
 export class PoStepComponent implements AfterContentInit {
+  private elementRef = inject(ElementRef);
+
   /**
    * @optional
    *
@@ -120,8 +122,6 @@ export class PoStepComponent implements AfterContentInit {
    * > Deve-se usar `font-size: inherit` para ajustar ícones que não se ajustam automaticamente.
    */
   @Input('p-icon-default') iconDefault?: string | TemplateRef<void>;
-
-  constructor(private elementRef: ElementRef) {}
 
   ngAfterContentInit() {
     this.setDisplayOnActiveOrError();

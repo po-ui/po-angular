@@ -10,13 +10,13 @@
 
 <hr />
 
-<div class="po-row" *ngFor="let people of peopleFiltered">
-  <po-info class="po-md-4" p-label="Name" [p-value]="people.name"> </po-info>
-
-  <po-info class="po-md-4" p-label="Nickname" [p-value]="people.nickname"> </po-info>
-
-  <po-info class="po-md-4" p-label="Email" [p-value]="people.email"> </po-info>
-</div>
+@for (people of peopleFiltered; track people) {
+  <div class="po-row">
+    <po-info class="po-md-4" p-label="Name" [p-value]="people.name"> </po-info>
+    <po-info class="po-md-4" p-label="Nickname" [p-value]="people.nickname"> </po-info>
+    <po-info class="po-md-4" p-label="Email" [p-value]="people.email"> </po-info>
+  </div>
+}
 
 <hr />
 
@@ -24,7 +24,9 @@
   <ng-template p-list-view-content-template let-item>
     <li class="po-md-12 po-text-color-neutral-dark-40">
       Nickname: {{ item.nickname }}
-      <div *ngIf="compareObjects(item)"></div>
+      @if (compareObjects(item)) {
+        <div></div>
+      }
     </li>
     <li class="po-md-12 po-text-color-neutral-dark-40">Email: {{ item.email }}</li>
   </ng-template>

@@ -7,7 +7,8 @@ import {
   Input,
   Output,
   TemplateRef,
-  ViewChild
+  ViewChild,
+  inject
 } from '@angular/core';
 
 import { PoMultiselectLiterals } from '../interfaces/po-multiselect-literals.interface';
@@ -28,6 +29,8 @@ import { PoListBoxComponent } from './../../../po-listbox/po-listbox.component';
   standalone: false
 })
 export class PoMultiselectDropdownComponent {
+  private cd = inject(ChangeDetectorRef);
+
   /** Propriedade que indica se deve exibir o loading. */
   @Input('p-searching') isServerSearching?: boolean = false;
 
@@ -82,8 +85,6 @@ export class PoMultiselectDropdownComponent {
 
   scrollTop = 0;
   show: boolean = false;
-
-  constructor(private cd: ChangeDetectorRef) {}
 
   get hasOptions() {
     return !!this.options?.length;

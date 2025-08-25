@@ -10,9 +10,11 @@
   ></po-search>
 </div>
 
-<div class="po-row" *ngFor="let people of peopleFiltered">
-  <hr />
-  <po-info class="po-md-4" p-label="Name" [p-value]="people.name"> </po-info>
-  <po-info class="po-md-4" p-label="Nickname" [p-value]="people.nickname"> </po-info>
-  <po-info class="po-md-4" p-label="Email" [p-value]="people.email"> </po-info>
-</div>
+@for (people of peopleFiltered; track people) {
+  <div class="po-row">
+    <hr />
+    <po-info class="po-md-4" p-label="Name" [p-value]="people.name"> </po-info>
+    <po-info class="po-md-4" p-label="Nickname" [p-value]="people.nickname"> </po-info>
+    <po-info class="po-md-4" p-label="Email" [p-value]="people.email"> </po-info>
+  </div>
+}

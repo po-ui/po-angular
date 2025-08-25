@@ -1,18 +1,21 @@
-<div #popupRef class="po-popup" *ngIf="showPopup && actions.length && !checkAllActionIsInvisible()">
-  <div *ngIf="!hideArrow" class="po-popup-arrow po-arrow-{{ arrowDirection }}"></div>
-
-  <div class="po-popup-container">
-    <po-listbox
-      #listbox
-      #poListBoxRef
-      p-type="action"
-      [p-items]="actions"
-      [p-param]="param"
-      [p-size]="size"
-      (p-close)="close()"
-      (p-click-item)="onClickItem($event)"
-    >
-      <ng-content p-popup-header-template select="[p-popup-header-template]"></ng-content>
-    </po-listbox>
+@if (showPopup && actions.length && !checkAllActionIsInvisible()) {
+  <div #popupRef class="po-popup">
+    @if (!hideArrow) {
+      <div class="po-popup-arrow po-arrow-{{ arrowDirection }}"></div>
+    }
+    <div class="po-popup-container">
+      <po-listbox
+        #listbox
+        #poListBoxRef
+        p-type="action"
+        [p-items]="actions"
+        [p-param]="param"
+        [p-size]="size"
+        (p-close)="close()"
+        (p-click-item)="onClickItem($event)"
+      >
+        <ng-content p-popup-header-template select="[p-popup-header-template]"></ng-content>
+      </po-listbox>
+    </div>
   </div>
-</div>
+}

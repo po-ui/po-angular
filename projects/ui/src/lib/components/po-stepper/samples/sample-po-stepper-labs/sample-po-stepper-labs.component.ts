@@ -1,4 +1,4 @@
-import { ChangeDetectorRef, Component, OnInit } from '@angular/core';
+import { ChangeDetectorRef, Component, OnInit, inject } from '@angular/core';
 
 import { PoDynamicFormField, PoStepperItem } from '@po-ui/ng-components';
 
@@ -8,6 +8,8 @@ import { PoDynamicFormField, PoStepperItem } from '@po-ui/ng-components';
   standalone: false
 })
 export class SamplePoStepperLabsComponent implements OnInit {
+  private changeDetector = inject(ChangeDetectorRef);
+
   event: any;
   properties: any = {};
   stepItem: PoStepperItem = <any>{};
@@ -78,8 +80,6 @@ export class SamplePoStepperLabsComponent implements OnInit {
       gridXlColumns: 6
     }
   ];
-
-  constructor(private changeDetector: ChangeDetectorRef) {}
 
   ngOnInit() {
     this.restore();

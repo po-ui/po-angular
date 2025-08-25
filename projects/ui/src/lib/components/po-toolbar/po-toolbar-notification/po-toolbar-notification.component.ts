@@ -1,4 +1,4 @@
-import { AfterViewInit, ChangeDetectorRef, Component, ElementRef, Input, ViewChild } from '@angular/core';
+import { AfterViewInit, ChangeDetectorRef, Component, ElementRef, Input, ViewChild, inject } from '@angular/core';
 
 import { PoControlPositionService } from '../../../services/po-control-position/po-control-position.service';
 
@@ -24,6 +24,8 @@ import { PoToolbarAction } from '../po-toolbar-action.interface';
   standalone: false
 })
 export class PoToolbarNotificationComponent implements AfterViewInit {
+  private cdr = inject(ChangeDetectorRef);
+
   @ViewChild('notification', { read: ElementRef }) notificationRef: ElementRef;
 
   @Input('p-notification-actions') notificationActions?: Array<PoToolbarAction>;
@@ -37,8 +39,6 @@ export class PoToolbarNotificationComponent implements AfterViewInit {
   get notificationNumber() {
     return this._notificationNumber;
   }
-
-  constructor(private cdr: ChangeDetectorRef) {}
 
   ngAfterViewInit() {
     this.cdr.detectChanges();

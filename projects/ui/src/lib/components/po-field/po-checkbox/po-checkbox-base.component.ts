@@ -1,8 +1,7 @@
 import { Directive, EventEmitter, Input, Output } from '@angular/core';
 import { ControlValueAccessor } from '@angular/forms';
 
-import { PoThemeService } from '../../../services';
-import { convertToBoolean, getDefaultSize, uuid, validateSize } from './../../../utils/util';
+import { convertToBoolean, getDefaultSizeFn, uuid, validateSizeFn } from './../../../utils/util';
 import { PoCheckboxSize } from './enums/po-checkbox-size.enum';
 
 /**
@@ -190,14 +189,12 @@ export abstract class PoCheckboxBaseComponent implements ControlValueAccessor {
    *
    */
   @Input('p-size') set size(value: string) {
-    this._size = validateSize(value, this.poThemeService, PoCheckboxSize);
+    this._size = validateSizeFn(value, PoCheckboxSize);
   }
 
   get size(): string {
-    return this._size ?? getDefaultSize(this.poThemeService, PoCheckboxSize);
+    return this._size ?? getDefaultSizeFn(PoCheckboxSize);
   }
-
-  constructor(protected poThemeService: PoThemeService) {}
 
   changeValue() {
     if (this.propagateChange) {

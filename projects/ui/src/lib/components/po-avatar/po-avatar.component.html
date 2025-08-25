@@ -1,11 +1,7 @@
 <div class="po-avatar po-avatar-{{ size }}" [class.po-clickable]="hasClickEvent" (click)="click.emit()">
-  <ng-container *ngIf="src; then sourceImage; else defaultIcon"></ng-container>
+  @if (src) {
+    <img class="po-avatar-image" [src]="src" alt="" [attr.loading]="loading" (error)="onError()" />
+  } @else {
+    <po-icon p-icon="ICON_USER" class="po-avatar-default-icon"></po-icon>
+  }
 </div>
-
-<ng-template #sourceImage>
-  <img class="po-avatar-image" [src]="src" alt="" [attr.loading]="loading" (error)="onError()" />
-</ng-template>
-
-<ng-template #defaultIcon>
-  <po-icon p-icon="ICON_USER" class="po-avatar-default-icon"></po-icon>
-</ng-template>

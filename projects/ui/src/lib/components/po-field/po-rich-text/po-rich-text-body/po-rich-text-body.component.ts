@@ -1,4 +1,14 @@
-import { Component, ElementRef, EventEmitter, Input, OnDestroy, OnInit, Output, ViewChild } from '@angular/core';
+import {
+  Component,
+  ElementRef,
+  EventEmitter,
+  Input,
+  OnDestroy,
+  OnInit,
+  Output,
+  ViewChild,
+  inject
+} from '@angular/core';
 
 import { Subscription } from 'rxjs';
 
@@ -25,6 +35,8 @@ const poRichTextBodyCommands = [
   standalone: false
 })
 export class PoRichTextBodyComponent implements OnInit, OnDestroy {
+  private richTextService = inject(PoRichTextService);
+
   @ViewChild('bodyElement', { static: true }) bodyElement: ElementRef;
 
   @Input('p-height') height?: string;
@@ -59,8 +71,6 @@ export class PoRichTextBodyComponent implements OnInit, OnDestroy {
   private timeoutChange: any;
   private valueBeforeChange: any;
   private modelSubscription: Subscription;
-
-  constructor(private richTextService: PoRichTextService) {}
 
   ngOnInit() {
     this.bodyElement.nativeElement.designMode = 'on';

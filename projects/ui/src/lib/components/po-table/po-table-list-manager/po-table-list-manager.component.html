@@ -1,25 +1,30 @@
-<section class="po-table-list-manager-section" *ngIf="existedFixedItem()">
-  <p class="po-table-list-manager-title-group-items">{{ literals.fixedColumns }}</p>
-  <ng-container *ngFor="let option of checkboxGroupOptionsView; trackBy: trackByFn">
-    <ng-container *ngIf="isFixed(option)">
-      <li class="po-table-list-manager-container" [class.po-checkbox-group-item-disabled]="option.disabled || disabled">
-        <ng-container *ngTemplateOutlet="listItemsManagerDefault; context: { $implicit: option }"></ng-container>
-      </li>
-    </ng-container>
-  </ng-container>
-</section>
+@if (existedFixedItem()) {
+  <section class="po-table-list-manager-section">
+    <p class="po-table-list-manager-title-group-items">{{ literals.fixedColumns }}</p>
+    @for (option of checkboxGroupOptionsView; track trackByFn($index)) {
+      @if (isFixed(option)) {
+        <li
+          class="po-table-list-manager-container"
+          [class.po-checkbox-group-item-disabled]="option.disabled || disabled"
+        >
+          <ng-container *ngTemplateOutlet="listItemsManagerDefault; context: { $implicit: option }"></ng-container>
+        </li>
+      }
+    }
+  </section>
+}
 
 <section class="po-table-list-manager-section">
   <p class="po-table-list-manager-title-group-items">{{ literals.otherColumns }}</p>
-  <ng-container *ngFor="let option of checkboxGroupOptionsView; trackBy: trackByFn">
-    <ng-container *ngIf="!isFixed(option)">
+  @for (option of checkboxGroupOptionsView; track trackByFn($index)) {
+    @if (!isFixed(option)) {
       <li class="po-table-list-manager-container" [class.po-checkbox-group-item-disabled]="option.disabled || disabled">
-        <ng-container *ngIf="!isFixed(option)">
+        @if (!isFixed(option)) {
           <ng-container *ngTemplateOutlet="listItemsManagerDefault; context: { $implicit: option }"></ng-container>
-        </ng-container>
+        }
       </li>
-    </ng-container>
-  </ng-container>
+    }
+  }
 </section>
 
 <ng-template #listItemsManagerDefault let-option>
@@ -44,23 +49,25 @@
     </div>
 
     <div class="po-table-list-manager-item-buttons">
-      <po-button
-        *ngIf="!hideActionFixedColumns && iconNameLib === 'PoIcon'"
-        [p-icon]="isFixed(option) ? templateIconFixed : templateIconNotFixed"
-        (p-click)="emitFixed(option)"
-        [p-disabled]="!option.visible || checksIfHasFiveFixed(option)"
-        [p-size]="componentsSize"
-      >
-      </po-button>
+      @if (!hideActionFixedColumns && iconNameLib === 'PoIcon') {
+        <po-button
+          [p-icon]="isFixed(option) ? templateIconFixed : templateIconNotFixed"
+          (p-click)="emitFixed(option)"
+          [p-disabled]="!option.visible || checksIfHasFiveFixed(option)"
+          [p-size]="componentsSize"
+        >
+        </po-button>
+      }
 
-      <po-button
-        *ngIf="!hideActionFixedColumns && iconNameLib === 'AnimaliaIcon'"
-        [p-icon]="isFixed(option) ? 'ICON_PUSH_PIN_SLASH' : 'ICON_PUSH_PIN'"
-        (p-click)="emitFixed(option)"
-        [p-disabled]="!option.visible || checksIfHasFiveFixed(option)"
-        [p-size]="componentsSize"
-      >
-      </po-button>
+      @if (!hideActionFixedColumns && iconNameLib === 'AnimaliaIcon') {
+        <po-button
+          [p-icon]="isFixed(option) ? 'ICON_PUSH_PIN_SLASH' : 'ICON_PUSH_PIN'"
+          (p-click)="emitFixed(option)"
+          [p-disabled]="!option.visible || checksIfHasFiveFixed(option)"
+          [p-size]="componentsSize"
+        >
+        </po-button>
+      }
 
       <po-button
         [p-tooltip]="literals.up"

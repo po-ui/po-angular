@@ -1,4 +1,4 @@
-import { Component, OnInit } from '@angular/core';
+import { Component, OnInit, inject } from '@angular/core';
 
 import { PoCheckboxGroupOption, PoNotificationService, PoPopupAction, PoSelectOption } from '@po-ui/ng-components';
 
@@ -8,6 +8,8 @@ import { PoCheckboxGroupOption, PoNotificationService, PoPopupAction, PoSelectOp
   standalone: false
 })
 export class SamplePoWidgetLabsComponent implements OnInit {
+  private poNotification = inject(PoNotificationService);
+
   action: string;
   background: string;
   content: string;
@@ -38,8 +40,6 @@ export class SamplePoWidgetLabsComponent implements OnInit {
     { label: 'fa fa-address-card', value: 'fa fa-address-card' },
     { label: 'fa fa-bell', value: 'fa fa-bell' }
   ];
-
-  constructor(private poNotification: PoNotificationService) {}
 
   ngOnInit() {
     this.restore();

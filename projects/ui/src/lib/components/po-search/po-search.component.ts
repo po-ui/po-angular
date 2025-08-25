@@ -8,12 +8,12 @@ import {
   OnInit,
   Renderer2,
   SimpleChanges,
-  ViewChild
+  ViewChild,
+  inject
 } from '@angular/core';
 import { PoFieldSize } from '../../enums/po-field-size.enum';
 import { PoControlPositionService } from '../../services/po-control-position/po-control-position.service';
 import { PoLanguageService } from '../../services/po-language/po-language.service';
-import { PoThemeService } from '../../services/po-theme/po-theme.service';
 import { PoDropdownAction } from '../po-dropdown';
 import { PoListBoxComponent } from '../po-listbox';
 import { PoKeyCodeEnum } from './../../enums/po-key-code.enum';
@@ -71,6 +71,11 @@ const poSearchContainerPositionDefault = 'bottom';
   standalone: false
 })
 export class PoSearchComponent extends PoSearchBaseComponent implements OnInit, OnDestroy, OnChanges {
+  languageService: PoLanguageService;
+  protected renderer = inject(Renderer2);
+  protected changeDetector = inject(ChangeDetectorRef);
+  protected controlPosition = inject(PoControlPositionService);
+
   private clickoutListener: () => void;
   private eventResizeListener: () => void;
   private _locateCounter: ElementRef;
@@ -114,14 +119,10 @@ export class PoSearchComponent extends PoSearchBaseComponent implements OnInit, 
   searchFilterSelectLabel: string;
   searchFilterSelectActions: Array<PoDropdownAction>;
 
-  constructor(
-    public languageService: PoLanguageService,
-    protected poThemeService: PoThemeService,
-    protected renderer: Renderer2,
-    protected changeDetector: ChangeDetectorRef,
-    protected controlPosition: PoControlPositionService
-  ) {
-    super(languageService, poThemeService);
+  constructor() {
+    const languageService = inject(PoLanguageService);
+    super(languageService);
+    this.languageService = languageService;
   }
 
   ngOnInit(): void {
@@ -147,7 +148,9 @@ export class PoSearchComponent extends PoSearchBaseComponent implements OnInit, 
 
   ngOnDestroy() {
     this.removeListeners();
-    this.locateCounterResize.disconnect();
+    if (this.locateCounterResize?.disconnect) {
+      this.locateCounterResize.disconnect();
+    }
   }
 
   clearSearch(): void {

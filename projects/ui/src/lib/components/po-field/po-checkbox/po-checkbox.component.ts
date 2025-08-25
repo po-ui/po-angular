@@ -4,17 +4,15 @@ import {
   ChangeDetectorRef,
   Component,
   ElementRef,
-  Inject,
-  Optional,
   ViewChild,
-  forwardRef
+  forwardRef,
+  inject
 } from '@angular/core';
 import { NG_VALUE_ACCESSOR } from '@angular/forms';
 
 import { AnimaliaIconDictionary, ICONS_DICTIONARY } from '../../po-icon';
 import { PoKeyCodeEnum } from './../../../enums/po-key-code.enum';
 
-import { PoThemeService } from '../../../services';
 import { PoCheckboxBaseComponent } from './po-checkbox-base.component';
 
 /**
@@ -51,16 +49,18 @@ import { PoCheckboxBaseComponent } from './po-checkbox-base.component';
   standalone: false
 })
 export class PoCheckboxComponent extends PoCheckboxBaseComponent implements AfterViewInit {
+  private changeDetector = inject(ChangeDetectorRef);
+
   private _iconToken: { [key: string]: string };
 
   @ViewChild('checkboxLabel', { static: false }) checkboxLabel: ElementRef;
 
-  constructor(
-    @Optional() @Inject(ICONS_DICTIONARY) value: { [key: string]: string },
-    private changeDetector: ChangeDetectorRef,
-    protected poThemeService: PoThemeService
-  ) {
-    super(poThemeService);
+  constructor() {
+    const value = inject<{
+      [key: string]: string;
+    }>(ICONS_DICTIONARY, { optional: true });
+
+    super();
 
     this._iconToken = value ?? AnimaliaIconDictionary;
   }

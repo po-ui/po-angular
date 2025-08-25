@@ -28,13 +28,15 @@
     <po-accordion-item p-label="Itens encontrados: {{ filteredItems?.length }}">
       <po-widget class="po-md-12">
         <ul class="sample-list-search po-md-12 row">
-          <li *ngFor="let item of filteredItems">
-            <ng-container *ngFor="let key of changeFilter(item)">
-              <div>
-                <strong>{{ key }}: </strong> {{ item[key] }} &nbsp;
-              </div>
-            </ng-container>
-          </li>
+          @for (item of filteredItems; track item) {
+            <li>
+              @for (key of changeFilter(item); track key) {
+                <div>
+                  <strong>{{ key }}: </strong> {{ item[key] }} &nbsp;
+                </div>
+              }
+            </li>
+          }
         </ul>
       </po-widget>
     </po-accordion-item>

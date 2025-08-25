@@ -6,8 +6,7 @@ import { PoItemListType } from './enums/po-item-list-type.enum';
 import { PoItemListAction } from './po-item-list/interfaces/po-item-list-action.interface';
 
 import { PoFieldSize } from '../../enums/po-field-size.enum';
-import { PoThemeService } from '../../services/po-theme/po-theme.service';
-import { convertToBoolean, getDefaultSize, validateSize } from '../../utils/util';
+import { convertToBoolean, getDefaultSizeFn, validateSizeFn } from '../../utils/util';
 import { PoItemListFilterMode } from './enums/po-item-list-filter-mode.enum';
 import { PoListBoxLiterals } from './interfaces/po-listbox-literals.interface';
 import { PoItemListOptionGroup } from './po-item-list/interfaces/po-item-list-option-group.interface';
@@ -153,11 +152,11 @@ export class PoListBoxBaseComponent {
   @Input('p-should-mark-letter') shouldMarkLetters: boolean = true;
 
   @Input('p-size') set size(value: string) {
-    this._size = validateSize(value, this.poThemeService, PoFieldSize);
+    this._size = validateSizeFn(value, PoFieldSize);
   }
 
   get size(): string {
-    return this._size ?? getDefaultSize(this.poThemeService, PoFieldSize);
+    return this._size ?? getDefaultSizeFn(PoFieldSize);
   }
 
   @Input('p-compare-cache') compareCache: boolean = false;
@@ -176,10 +175,7 @@ export class PoListBoxBaseComponent {
 
   @Output('p-click-item') clickItem = new EventEmitter();
 
-  constructor(
-    languageService: PoLanguageService,
-    protected poThemeService: PoThemeService
-  ) {
+  constructor(languageService: PoLanguageService) {
     this.language = languageService.getShortLanguage();
   }
 }

@@ -74,18 +74,14 @@ describe('PoWidgetComponent with title and actions', () => {
   let fixture: ComponentFixture<PoWidgetComponent>;
   let nativeElement;
   const page = 'http://www.fakeUrlPo.com.br';
-  let poThemeServiceMock: jasmine.SpyObj<PoThemeService>;
 
   // Evento compatível com todos os navegadores, inclusive com o IE
   const eventClick = document.createEvent('MouseEvent');
   eventClick.initEvent('click', false, true);
 
   beforeEach(async () => {
-    poThemeServiceMock = jasmine.createSpyObj('PoThemeService', ['getA11yLevel', 'getA11yDefaultSize']);
-
     await TestBed.configureTestingModule({
-      declarations: [PoWidgetComponent, PoContainerComponent],
-      providers: [{ provide: PoThemeService, useValue: poThemeServiceMock }]
+      declarations: [PoWidgetComponent, PoContainerComponent]
     }).compileComponents();
 
     fixture = TestBed.createComponent(PoWidgetComponent);
@@ -334,6 +330,16 @@ describe('PoWidgetComponent with title and actions', () => {
   });
 
   describe('Methods:', () => {
+    beforeEach(() => {
+      document.documentElement.removeAttribute('data-a11y');
+      localStorage.removeItem('po-default-size');
+    });
+
+    afterEach(() => {
+      document.documentElement.removeAttribute('data-a11y');
+      localStorage.removeItem('po-default-size');
+    });
+
     it('runTitleAction: should call event.stopPropagation and titleAction.emit', () => {
       spyOn(eventClick, 'stopPropagation');
       spyOn(component.titleAction, 'emit');
@@ -539,8 +545,8 @@ describe('PoWidgetComponent with title and actions', () => {
     });
 
     it('should calculate containerHeight correctly with title, AA, actions and prymaryLabel', () => {
-      poThemeServiceMock.getA11yLevel.and.returnValue(PoThemeA11yEnum.AA);
-      poThemeServiceMock.getA11yDefaultSize.and.returnValue('small');
+      document.documentElement.setAttribute('data-a11y', PoThemeA11yEnum.AA);
+      localStorage.setItem('po-default-size', 'small');
 
       component.title = 'Test';
       component.actions = [{ label: 'Test' }];
