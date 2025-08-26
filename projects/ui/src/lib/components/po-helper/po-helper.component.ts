@@ -1,14 +1,34 @@
 import { Component, ElementRef, OnInit, ViewChild, AfterViewInit, OnDestroy } from '@angular/core';
 import { PoHelperBaseComponent } from './po-helper-base.component';
 import { PoPopoverComponent } from '../po-popover/po-popover.component';
+/**
+ * @docsExtends PoHelperBaseComponent
+ *
+ * @example
+ *
+ * <example name="po-helper-basic" title="PO Helper Basic">
+ *  <file name="sample-po-helper-basic/sample-po-helper-basic.component.html"> </file>
+ *  <file name="sample-po-helper-basic/sample-po-helper-basic.component.ts"> </file>
+ * </example>
+ *
+ * <example name="po-helper-labs" title="PO Helper Labs">
+ *  <file name="sample-po-helper-labs/sample-po-helper-labs.component.html"> </file>
+ *  <file name="sample-po-helper-labs/sample-po-helper-labs.component.ts"> </file>
+ * </example>
+ *
+ * <example name="po-helper-sales-performance" title="PO Helper Sales Performance">
+ *  <file name="sample-po-helper-sales-performance/sample-po-helper-sales-performance.component.html"> </file>
+ *  <file name="sample-po-helper-sales-performance/sample-po-helper-sales-performance.component.ts"> </file>
+ * </example>
+ *
+ */
 
 @Component({
   selector: 'po-helper',
   standalone: false,
-  templateUrl: './po-helper.component.html',
-  styleUrls: ['./po-helper.component.css']
+  templateUrl: './po-helper.component.html'
 })
-export class PoHelperComponent extends PoHelperBaseComponent implements OnInit, AfterViewInit, OnDestroy {
+export class PoHelperComponent extends PoHelperBaseComponent implements AfterViewInit, OnDestroy {
   @ViewChild('target', { read: ElementRef, static: true }) target: ElementRef;
   @ViewChild('popover', { static: false }) popover: PoPopoverComponent;
 
@@ -27,11 +47,6 @@ export class PoHelperComponent extends PoHelperBaseComponent implements OnInit, 
     if (helper && typeof helper !== 'string' && typeof helper.eventOnClick === 'function') {
       helper.eventOnClick(helper);
     }
-  }
-
-  ngOnInit() {
-    console.log('this.helper', this.helper());
-    console.log('Initial size:', this.size());
   }
 
   ngAfterViewInit(): void {
