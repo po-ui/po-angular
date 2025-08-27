@@ -13,7 +13,6 @@ export class SamplePoHelperBasicComponent {
     content:
       'Este é um helper de exemplo. Você pode colocar qualquer informação que desejar aqui, como dicas de uso, explicações sobre funcionalidades, ou qualquer outro conteúdo relevante para ajudar o usuário.',
     type: 'help',
-    popoverTrigger: 'click',
     eventOnClick: this.emitClick.bind(this),
     footerAction: {
       label: 'Clique aqui para saber mais',

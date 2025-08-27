@@ -1,6 +1,7 @@
 import { Component, ElementRef, OnInit, ViewChild, AfterViewInit, OnDestroy } from '@angular/core';
 import { PoHelperBaseComponent } from './po-helper-base.component';
 import { PoPopoverComponent } from '../po-popover/po-popover.component';
+import { PoButtonComponent } from '../po-button';
 /**
  * @docsExtends PoHelperBaseComponent
  *
@@ -31,22 +32,34 @@ import { PoPopoverComponent } from '../po-popover/po-popover.component';
 export class PoHelperComponent extends PoHelperBaseComponent implements AfterViewInit, OnDestroy {
   @ViewChild('target', { read: ElementRef, static: true }) target: ElementRef;
   @ViewChild('popover', { static: false }) popover: PoPopoverComponent;
+  @ViewChild(PoButtonComponent, { read: ElementRef, static: true }) poButton: PoButtonComponent;
 
   private static instances: Array<PoHelperComponent> = [];
   private static idCounter = 0;
   public id: string;
   private boundFocusIn: (e: FocusEvent) => void;
+  private poHelperLiterals = {
+    en: {
+      info: 'Show Information',
+      help: 'Show Help'
+    },
+    pt: {
+      info: 'Exibe informação',
+      help: 'Exibe ajuda'
+    },
+    es: {
+      info: 'Muestra información',
+      help: 'Muestra ayuda'
+    },
+    ru: {
+      info: 'Показать информацию',
+      help: 'Показать справку'
+    }
+  };
 
   constructor() {
     super();
     this.id = 'po-helper-' + PoHelperComponent.idCounter++;
-  }
-
-  emitClick() {
-    const helper = this.helper();
-    if (helper && typeof helper !== 'string' && typeof helper.eventOnClick === 'function') {
-      helper.eventOnClick(helper);
-    }
   }
 
   ngAfterViewInit(): void {
@@ -72,6 +85,25 @@ export class PoHelperComponent extends PoHelperBaseComponent implements AfterVie
     }
   }
 
+  emitClick(event) {
+    console.log('emitClick', this.popover);
+    event.stopPropagation();
+    PoHelperComponent.instances.forEach(instance => {
+      if (instance !== this && instance.popover && !instance.popover.isHidden) {
+        instance.popover.close();
+      }
+    });
+    if (this.popover.isHidden) {
+      this.popover.open();
+    } else {
+      this.popover.close();
+    }
+    const helper = this.helper();
+    if (helper && typeof helper !== 'string' && typeof helper.eventOnClick === 'function') {
+      helper.eventOnClick(helper);
+    }
+  }
+
   onKeyDown(event: KeyboardEvent) {
     if (event?.code === 'Space' || event?.code === 'Enter') {
       event.preventDefault();
@@ -91,5 +123,13 @@ export class PoHelperComponent extends PoHelperBaseComponent implements AfterVie
         this.popover.close();
       }
     }
+  }
+
+  protected ariaLabel(): string {
+    const helper = this.helper();
+    const type = typeof helper !== 'string' && helper?.type === 'info' ? 'info' : 'help';
+    const lang = (navigator.language || 'en').substring(0, 2).toLowerCase();
+    const literals = this.poHelperLiterals[lang] || this.poHelperLiterals['en'];
+    return literals[type];
   }
 }

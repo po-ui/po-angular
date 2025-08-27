@@ -12,8 +12,7 @@ export class SamplePoHelperSalesPerformanceComponent {
     title: 'Sales Performance Overview',
     content:
       'This section provides insights into employee turnover rate and sales performance. Hover over the chart for more details.',
-    type: 'info',
-    popoverTrigger: 'hover'
+    type: 'info'
   };
 
   type = PoChartType.Gauge;

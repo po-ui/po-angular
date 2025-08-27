@@ -11,13 +11,12 @@ import { PoHelperSize } from './enums/po-helper-size.enum';
  * - Permite definir título, conteúdo e ações no popover via propriedade `p-helper`.
  * - Suporte a acessibilidade: navegação por teclado, atributos ARIA e leitura do conteúdo por leitores de tela.
  * - Controle do tamanho do componente via propriedade `p-size` (`small` ou `medium`).
- * - Suporte a diferentes triggers para abrir o popover: `hover` ou `click`.
  * - Permite customizar ações no rodapé do popover.
  *
  * Exemplo de uso:
  * ```html
  * <po-helper
- *   [p-helper]="{ title: 'Ajuda', content: 'Texto explicativo', type: 'help', popoverTrigger: 'click' }"
+ *   [p-helper]="{ title: 'Ajuda', content: 'Texto explicativo', type: 'help' }"
  *   [p-size]="'medium'"
  * ></po-helper>
  * ```
@@ -33,7 +32,6 @@ import { PoHelperSize } from './enums/po-helper-size.enum';
  *   title?: string;
  *   content: string;
  *   type?: 'help' | 'info';
- *   popoverTrigger?: 'hover' | 'click';
  *   eventOnClick?: Function;
  *   footerAction?: { label: string; action: Function };
  * }
@@ -66,14 +64,13 @@ export class PoHelperBaseComponent {
    * - `title`: Título do popover.
    * - `content`: Conteúdo explicativo exibido no popover.
    * - `type`: Tipo do ícone (`help` ou `info`).
-   * - `popoverTrigger`: Modo de abertura do popover (`hover` ou `click`).
    * - `eventOnClick`: Função chamada ao clicar no ícone.
    * - `footerAction`: Objeto com `label` e `action` para ação customizada no rodapé do popover.
    *
    * Exemplo de uso:
    * ```html
    * <po-helper p-helper="Texto explicativo"></po-helper>
-   * <po-helper [p-helper]="{ title: 'Ajuda', content: 'Texto', type: 'info', popoverTrigger: 'click' }"></po-helper>
+   * <po-helper [p-helper]="{ title: 'Ajuda', content: 'Texto', type: 'info' }"></po-helper>
    * ```
    *
    */

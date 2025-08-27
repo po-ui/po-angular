@@ -1,26 +1,19 @@
-<div class="po-helper-container" [attr.p-size]="this.size()">
-  <span
-    #target
-    class="po-helper-target"
-    tabindex="0"
-    role="button"
-    [attr.aria-label]="helper()?.type === 'info' ? 'Info' : 'Helper'"
-    [attr.aria-haspopup]="'dialog'"
-    [attr.aria-expanded]="!popover.isHidden"
-    [attr.aria-controls]="'popover-content-' + id"
-    [attr.aria-describedby]="'popover-content-' + id"
-    (keydown)="onKeyDown($event)"
-    (click)="emitClick()"
-  >
-    <po-icon [p-icon]="helper()?.type === 'info' ? 'ICON_INFO' : 'ICON_HELP'"></po-icon>
-  </span>
-  <po-popover
-    #popover
-    p-position="right-bottom"
-    [p-target]="target"
-    [p-title]="helper()?.title"
-    [p-trigger]="helper()?.popoverTrigger || 'hover'"
-  >
+<div
+  class="po-helper-container po-helper-target"
+  [attr.p-size]="this.size()"
+  #target
+  tabindex="0"
+  role="button"
+  [attr.aria-label]="ariaLabel()"
+  [attr.aria-haspopup]="'dialog'"
+  [attr.aria-expanded]="!popover.isHidden"
+  [attr.aria-controls]="'popover-content-' + id"
+  [attr.aria-describedby]="!popover.isHidden ? 'popover-content-' + id : null"
+  (keydown)="onKeyDown($event)"
+  (click)="emitClick($event)"
+>
+  <po-icon [p-icon]="helper()?.type === 'info' ? 'ICON_INFO' : 'ICON_HELP'"></po-icon>
+  <po-popover #popover p-position="right-bottom" [p-target]="target" [p-title]="helper()?.title" p-trigger="click">
     <div [id]="'popover-content-' + id" role="dialog" aria-modal="false" tabindex="-1">
       {{ helper()?.content }}
       @if (helper()?.footerAction) {

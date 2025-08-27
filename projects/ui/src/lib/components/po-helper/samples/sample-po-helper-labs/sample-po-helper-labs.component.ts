@@ -14,7 +14,6 @@ export class SamplePoHelperLabsComponent {
     title: '',
     content: '',
     type: 'help',
-    popoverTrigger: 'click',
     eventOnClick: this.emitClick.bind(this)
   };
 

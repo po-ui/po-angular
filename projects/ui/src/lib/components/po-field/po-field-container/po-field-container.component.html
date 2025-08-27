@@ -1,13 +1,18 @@
 <div class="po-field-container">
   <div class="po-field-container-title">
     @if (label || help) {
-      <po-label
-        [p-disabled]="disabled"
-        p-field="true"
-        [p-for]="id"
-        [p-label]="label"
-        [p-requirement]="requirement"
-      ></po-label>
+      <div class="po-label-wrapper" [attr.title]="label">
+        <po-label
+          [p-disabled]="disabled"
+          p-field="true"
+          [p-for]="id"
+          [p-label]="label"
+          [p-requirement]="requirement"
+        ></po-label>
+      </div>
+      <div class="po-label-helper">
+        <po-helper p-helper="isso é um teste"></po-helper>
+      </div>
     }
   </div>
 

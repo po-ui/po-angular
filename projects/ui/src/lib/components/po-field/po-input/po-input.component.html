@@ -56,15 +56,15 @@
 
   @if (!readonly) {
     <po-field-container-bottom
-      [p-additional-help-tooltip]="getAdditionalHelpTooltip()"
       [p-append-in-body]="appendBox"
       [p-help]="help"
       [p-disabled]="disabled"
       [p-error-pattern]="getErrorPattern()"
       [p-error-limit]="errorLimit"
-      [p-show-additional-help]="displayAdditionalHelp"
-      [p-show-additional-help-icon]="showAdditionalHelpIcon()"
-      (p-additional-help)="emitAdditionalHelp()"
+      [p-additional-help-tooltip]="!label && additionalHelpTooltip ? getAdditionalHelpTooltip() : null"
+      [p-show-additional-help]="!label && additionalHelpTooltip ? displayAdditionalHelp : null"
+      [p-show-additional-help-icon]="!label && additionalHelpTooltip ? showAdditionalHelpIcon() : null"
+      (p-additional-help)="!label && additionalHelpTooltip ? emitAdditionalHelp() : null"
     ></po-field-container-bottom>
   }
 </po-field-container>

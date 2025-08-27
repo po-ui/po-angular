@@ -61,18 +61,6 @@ export interface PoHelperOptions {
   footerAction?: { label: string; action: Function };
 
   /**
-   *
-   * @optional
-   *
-   * @description
-   *
-   * Modo de abertura do popover: `hover` ou `click`.
-   *
-   * @default `hover`
-   */
-  popoverTrigger?: 'hover' | 'click';
-
-  /**
    * @optional
    *
    * @description
