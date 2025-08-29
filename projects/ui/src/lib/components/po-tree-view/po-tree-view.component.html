@@ -1,6 +1,6 @@
 @if (hasItems) {
   <po-container p-no-padding>
-    <ul class="po-tree-view">
+    <ul class="po-tree-view" [attr.p-components-size]="componentsSize">
       @for (item of items; track trackByFunction($index)) {
         <po-tree-view-item
           [p-components-size]="componentsSize"

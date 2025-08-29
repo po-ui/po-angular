@@ -21,14 +21,14 @@
     <po-info class="po-md-6" p-label="To:" [p-value]="formEmail.get('to').value"> </po-info>
   </div>
 
-  <hr />
+  <po-divider />
 
   @if (formEmail.get('cc').value) {
     <div>
       <div class="po-row">
         <po-info class="po-md-12" p-label="CC:" [p-value]="formEmail.get('cc').value"> </po-info>
       </div>
-      <hr />
+      <po-divider />
     </div>
   }
 
@@ -36,7 +36,7 @@
     <po-info class="po-md-12" p-label="Subject:" [p-value]="formEmail.get('subject').value"> </po-info>
   </div>
 
-  <hr />
+  <po-divider />
 
   <div class="po-row">
     <po-textarea

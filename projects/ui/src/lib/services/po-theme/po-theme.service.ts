@@ -2,18 +2,21 @@ import { DOCUMENT } from '@angular/common';
 import { Inject, Injectable, Optional, Renderer2, RendererFactory2 } from '@angular/core';
 import { AnimaliaIconDictionary, ICONS_DICTIONARY } from '../../components/po-icon/index';
 
+import { PoDensityMode } from '../../enums/po-density-mode.enum';
+import { PoFieldSize } from '../../enums/po-field-size.enum';
 import { PoThemeA11yEnum } from './enum/po-theme-a11y.enum';
 import { PoThemeTypeEnum } from './enum/po-theme-type.enum';
 import { poThemeDefaultAA } from './helpers/accessibilities/po-theme-default-aa.constant';
 import { poThemeDefaultAAA } from './helpers/accessibilities/po-theme-default-aaa.constant';
+import { poThemeDensity } from './helpers/accessibilities/po-theme-density.constant';
 import { poThemeDefault } from './helpers/po-theme-poui.constant';
-import { poThemeDefaultDarkValues } from './helpers/types/po-theme-dark-defaults.constant';
 import { poThemeDefaultDarkValuesAA } from './helpers/types/po-theme-dark-defaults-AA.constant';
+import { poThemeDefaultDarkValues } from './helpers/types/po-theme-dark-defaults.constant';
+import { poThemeDefaultLightValuesAA } from './helpers/types/po-theme-light-defaults-AA.constant';
 import { poThemeDefaultLightValues } from './helpers/types/po-theme-light-defaults.constant';
 import { PoThemeColor } from './interfaces/po-theme-color.interface';
 import { PoThemeTokens } from './interfaces/po-theme-tokens.interface';
 import { PoTheme, PoThemeActive } from './interfaces/po-theme.interface';
-import { poThemeDefaultLightValuesAA } from './helpers/types/po-theme-light-defaults-AA.constant';
 import { getA11yDefaultSize, getA11yLevel } from '../../utils/util';
 
 /**
@@ -122,34 +125,52 @@ export class PoThemeService {
   /**
    * Define o tamanho `small` como padrão para componentes de formulário que não possuem um tamanho definido.
    * Essa configuração é aplicada globalmente apenas quando o nível de acessibilidade for `AA`.
-   * Caso contrário, o tamanho padrão será `medium`.
    *
    * > Para garantir que o tamanho `small` seja aplicado corretamente a todos os componentes, recomendamos
    * definir esta configuração **junto com o nível de acessibilidade `AA` na inicialização da aplicação**.
    * Se for aplicada em tempo de execução, será necessário recarregar a aplicação (`reload`)
    * para que os estilos sejam aplicados corretamente.
+   * > Para ajustar a densidade visual dos componentes agrupadores (como pages, container, etc.), utilize também
+   * o método `setA11yDensityMode` conforme necessário.”
    *
    * @param {boolean} enable Habilita ou desabilita o tamanho `small` globalmente.
    */
   setA11yDefaultSizeSmall(enable: boolean): boolean {
-    const a11yLevel = document.documentElement.getAttribute('data-a11y');
+    const a11yLevel = this.getA11yLevel();
 
-    if (!a11yLevel || (a11yLevel !== PoThemeA11yEnum.AA && a11yLevel !== PoThemeA11yEnum.AAA)) {
-      return false;
-    }
+    if (!this.isValidA11yLevel(a11yLevel)) return false;
 
     if (a11yLevel === PoThemeA11yEnum.AA && enable) {
-      const defaultSize = 'small';
-
-      if (localStorage.getItem('po-default-size') !== defaultSize) {
-        localStorage.setItem('po-default-size', defaultSize);
-      }
-      return true;
+      localStorage.setItem('po-default-size', PoFieldSize.Small);
+    } else {
+      localStorage.setItem('po-default-size', PoFieldSize.Medium);
     }
 
-    localStorage.removeItem('po-default-size');
+    return a11yLevel === PoThemeA11yEnum.AA && enable;
+  }
 
-    return false;
+  /**
+   * Aplica o modo de adensamento compacto (`small`) ou espaçoso (`medium`) para os componentes agrupadores,
+   * independentemente do nível de acessibilidade.
+   *
+   * > Para garantir que o adensamento seja aplicado corretamente, recomendamos definir esta configuração
+   * **durante a inicialização da aplicação**. Se for aplicada em tempo de execução, será necessário recarregar a
+   * aplicação (`reload`) para que os estilos sejam aplicados corretamente.
+   *
+   * @param {'small' | 'medium'} mode Define o modo de densidade: `small` para compacto, `medium` para espaçoso.
+   * O valor padrão é `medium`.
+   */
+  setA11yDensityMode(mode: string): any {
+    if (!Object.values(PoDensityMode).includes(mode as PoDensityMode)) {
+      mode = PoDensityMode.Medium;
+    }
+
+    const densityTokens = mode === PoDensityMode.Small ? poThemeDensity.small : {};
+    const onRootTokens = {
+      ...poThemeDefaultAA.onRoot,
+      ...densityTokens
+    };
+    this.setPerComponentAndOnRoot(undefined, poThemeDefaultAA.perComponent, onRootTokens);
   }
 
   /**
@@ -409,6 +430,10 @@ export class PoThemeService {
 
   private getActiveA11yFromTheme(active): PoThemeA11yEnum {
     return typeof active === 'object' ? active.a11y : PoThemeA11yEnum.AAA;
+  }
+
+  private isValidA11yLevel(level: string | null): boolean {
+    return level === PoThemeA11yEnum.AA || level === PoThemeA11yEnum.AAA;
   }
 
   /**

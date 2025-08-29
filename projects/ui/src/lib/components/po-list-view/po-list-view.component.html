@@ -2,47 +2,51 @@
   [class.po-list-view-main-container-header]="showHeader"
   [class.po-list-view-main-container]="!showHeader"
   [style.height.px]="height"
+  [attr.p-components-size]="componentsSize"
 >
-  <div
-    *ngIf="showHeader"
-    class="po-list-view-main-header po-pt-1 po-pb-1"
-    [class.po-list-view-main-header-aa]="componentsSize"
-  >
-    <div class="po-checkbox-group-item">
-      <div class="po-list-view-main-select">
-        <po-checkbox
-          name="selectAll"
-          [(ngModel)]="selectAll"
-          [p-label]="literals.selectAll"
-          [p-size]="componentsSize"
-          (p-change)="selectAllListItems()"
-          (click)="selectAllListItems()"
-        ></po-checkbox>
+  @if (showHeader) {
+    <div class="po-list-view-main-header">
+      <div class="po-checkbox-group-item">
+        <div class="po-list-view-main-select">
+          <po-checkbox
+            name="selectAll"
+            [(ngModel)]="selectAll"
+            [p-label]="literals.selectAll"
+            [p-size]="componentsSize"
+            (p-change)="selectAllListItems()"
+            (click)="selectAllListItems()"
+          ></po-checkbox>
+        </div>
       </div>
     </div>
-  </div>
+  }
 
   <div class="po-list-view-main-content">
-    <po-container [p-no-padding]="true" *ngIf="!hasItems()">
-      <div class="po-list-view-container-no-data po-text-center">
-        <span> {{ literals.noData }} </span>
-      </div>
-    </po-container>
+    @if (!hasItems()) {
+      <po-container [p-no-padding]="true">
+        <div class="po-list-view-container-no-data po-text-center">
+          <span> {{ literals.noData }} </span>
+        </div>
+      </po-container>
+    }
 
-    <ng-container *ngFor="let item of items; let index = index; trackBy: trackBy">
+    @for (item of items; track trackBy; let index = $index) {
       <po-container [p-no-padding]="true">
         <div class="po-list-view-container">
           <div class="po-list-view-header">
             <div class="po-list-view-title" [ngSwitch]="checkTitleType(item)">
-              <div *ngIf="select" class="po-list-view-select">
-                <po-checkbox
-                  [(ngModel)]="item.$selected"
-                  name="checkbox"
-                  [p-size]="componentsSize"
-                  (p-change)="selectListItem(item)"
-                  (click)="selectListItem(item)"
-                ></po-checkbox>
-              </div>
+              @if (select) {
+                <div class="po-list-view-select">
+                  <po-checkbox
+                    [(ngModel)]="item.$selected"
+                    name="checkbox"
+                    [p-size]="componentsSize"
+                    (p-change)="selectListItem(item)"
+                    (click)="selectListItem(item)"
+                  ></po-checkbox>
+                </div>
+              }
+
               <a
                 *ngSwitchCase="'externalLink'"
                 class="po-list-view-title-link"
@@ -70,70 +74,82 @@
               </span>
             </div>
 
-            <div *ngIf="showButtonsActions" class="po-list-view-actions">
-              <po-button
-                *ngFor="let action of visibleActions"
-                [p-disabled]="returnBooleanValue(action, item, 'disabled')"
-                [p-icon]="action.icon"
-                [p-label]="action.label"
-                [p-danger]="action.type === 'danger'"
-                [p-size]="componentsSize"
-                (p-click)="onClickAction(action, item)"
-              >
-              </po-button>
-            </div>
-
-            <div *ngIf="showPopupActions" class="po-list-view-more-actions">
-              <div #popupTarget class="po-list-view-more-icon po-clickable" (click)="togglePopup(item, popupTarget)">
-                <po-icon p-icon="ICON_MORE"></po-icon>
+            @if (showButtonsActions) {
+              <div class="po-list-view-actions">
+                @for (action of visibleActions; track action) {
+                  <po-button
+                    [p-disabled]="returnBooleanValue(action, item, 'disabled')"
+                    [p-icon]="action.icon"
+                    [p-label]="action.label"
+                    [p-danger]="action.type === 'danger'"
+                    [p-size]="componentsSize"
+                    (p-click)="onClickAction(action, item)"
+                  >
+                  </po-button>
+                }
               </div>
+            }
+
+            @if (showPopupActions) {
+              <div class="po-list-view-more-actions">
+                <div #popupTarget class="po-list-view-more-icon po-clickable" (click)="togglePopup(item, popupTarget)">
+                  <po-icon p-icon="ICON_MORE"></po-icon>
+                </div>
+              </div>
+            }
+          </div>
+
+          @if (hasContentTemplate) {
+            <div class="po-list-view-content">
+              <ng-template
+                [ngTemplateOutlet]="listViewContentTemplate.templateRef"
+                [ngTemplateOutletContext]="{ $implicit: item, index: index }"
+              >
+              </ng-template>
             </div>
-          </div>
+          }
 
-          <div *ngIf="hasContentTemplate" class="po-list-view-content">
-            <ng-template
-              [ngTemplateOutlet]="listViewContentTemplate.templateRef"
-              [ngTemplateOutletContext]="{ $implicit: item, index: index }"
+          @if (hasDetailTemplate && item.$showDetail) {
+            <div
+              @showHideDetail
+              (@showHideDetail.start)="item.$showDetail ? onAnimationEvent($event, item) : 'undefined'"
+              class="po-list-view-detail"
             >
-            </ng-template>
-          </div>
-
-          <div
-            @showHideDetail
-            (@showHideDetail.start)="item.$showDetail ? onAnimationEvent($event, item) : 'undefined'"
-            *ngIf="hasDetailTemplate && item.$showDetail"
-            class="po-list-view-detail"
-          >
-            <ng-template
-              [ngTemplateOutlet]="listViewDetailTemplate.templateRef"
-              [ngTemplateOutletContext]="{ $implicit: item, index: index }"
-            >
-            </ng-template>
-          </div>
+              <ng-template
+                [ngTemplateOutlet]="listViewDetailTemplate.templateRef"
+                [ngTemplateOutletContext]="{ $implicit: item, index: index }"
+              >
+              </ng-template>
+            </div>
+          }
         </div>
 
-        <div *ngIf="hasDetailTemplate" class="po-list-view-detail-button">
-          <po-button
-            p-kind="tertiary"
-            [p-label]="item.$showDetail ? literals.hideDetails : literals.showDetails"
-            [p-size]="componentsSize"
-            (p-click)="item.$showDetail = !item.$showDetail"
-          >
-          </po-button>
-        </div>
+        @if (hasDetailTemplate) {
+          <div class="po-list-view-detail-button">
+            <po-button
+              p-kind="tertiary"
+              [p-label]="item.$showDetail ? literals.hideDetails : literals.showDetails"
+              [p-size]="componentsSize"
+              (p-click)="item.$showDetail = !item.$showDetail"
+            >
+            </po-button>
+          </div>
+        }
       </po-container>
-    </ng-container>
+    }
   </div>
 </div>
 
-<div *ngIf="displayShowMoreButton" class="po-mb-2 po-text-center">
-  <po-button
-    [p-disabled]="showMoreDisabled"
-    [p-label]="literals.loadMoreData"
-    [p-size]="componentsSize"
-    (p-click)="onShowMore()"
-  >
-  </po-button>
-</div>
+@if (displayShowMoreButton) {
+  <div class="po-mb-2 po-text-center">
+    <po-button
+      [p-disabled]="showMoreDisabled"
+      [p-label]="literals.loadMoreData"
+      [p-size]="componentsSize"
+      (p-click)="onShowMore()"
+    >
+    </po-button>
+  </div>
+}
 
 <po-popup #popup [p-actions]="actions" [p-size]="componentsSize" [p-target]="popupTarget"> </po-popup>

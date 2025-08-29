@@ -6,7 +6,7 @@
   [p-required]="required"
   [p-show-required]="showRequired"
 >
-  <div class="po-field-container-content">
+  <div class="po-field-container-content po-field-container-input">
     @if (icon) {
       <div class="po-field-icon-container-left">
         <po-icon
@@ -67,6 +67,7 @@
       [p-error-pattern]="getErrorPatternMessage()"
       [p-show-additional-help]="displayAdditionalHelp"
       [p-show-additional-help-icon]="showAdditionalHelpIcon()"
+      [p-size]="size"
       (p-additional-help)="emitAdditionalHelp()"
     >
     </po-field-container-bottom>
