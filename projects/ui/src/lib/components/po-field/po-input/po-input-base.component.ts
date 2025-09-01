@@ -1,4 +1,13 @@
-import { ChangeDetectorRef, Directive, EventEmitter, Input, OnDestroy, Output, TemplateRef } from '@angular/core';
+import {
+  ChangeDetectorRef,
+  Directive,
+  EventEmitter,
+  input,
+  Input,
+  OnDestroy,
+  Output,
+  TemplateRef
+} from '@angular/core';
 import { AbstractControl, ControlValueAccessor, Validator, Validators } from '@angular/forms';
 
 import { Subscription, switchMap } from 'rxjs';
@@ -7,6 +16,7 @@ import { convertToBoolean, getDefaultSizeFn, validateSizeFn } from '../../../uti
 import { ErrorAsyncProperties } from '../shared/interfaces/error-async-properties.interface';
 import { maxlengpoailed, minlengpoailed, patternFailed, requiredFailed } from './../validators';
 import { PoMask } from './po-mask';
+import { PoHelperOptions } from '../../po-helper';
 
 /**
  * @description
@@ -536,6 +546,20 @@ export abstract class PoInputBaseComponent implements ControlValueAccessor, Vali
       this.validateModel();
     }
   }
+
+  /**
+   * @Input
+   *
+   * @optional
+   *
+   * @description
+   *
+   * Define as opções do componente de ajuda (po-helper) que será exibido ao lado do label.
+   *
+   * > Caso o `p-label` não esteja definido, o componente não será exibido.
+   * Ao configurar esta propriedade, o antigo ícone de ajuda adicional (`p-additional-help-tooltip` e `p-additional-help`) será ignorado.
+   */
+  poHelperComponent = input<PoHelperOptions>(undefined, { alias: 'p-helper' });
 
   constructor(protected cd?: ChangeDetectorRef) {
     this.objMask = new PoMask(this.mask, this.maskFormatModel);

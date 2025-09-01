@@ -1,5 +1,6 @@
 import {
   AfterViewInit,
+  ChangeDetectorRef,
   Component,
   ElementRef,
   EventEmitter,
@@ -52,7 +53,8 @@ export class PoPopoverComponent extends PoPopoverBaseComponent implements AfterV
 
   constructor(
     private renderer: Renderer2,
-    private poControlPosition: PoControlPositionService
+    private poControlPosition: PoControlPositionService,
+    private cd: ChangeDetectorRef
   ) {
     super();
   }
@@ -85,6 +87,7 @@ export class PoPopoverComponent extends PoPopoverBaseComponent implements AfterV
   close(): void {
     this.isHidden = true;
     this.closePopover.emit();
+    this.cd.detectChanges();
   }
 
   debounceResize() {
@@ -104,7 +107,9 @@ export class PoPopoverComponent extends PoPopoverBaseComponent implements AfterV
       this.setElementsControlPosition();
       this.setPopoverPosition();
       this.setOpacity(1);
+      this.cd.detectChanges();
     });
+    this.cd.detectChanges();
   }
 
   setOpacity(value: number): void {

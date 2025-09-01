@@ -6,7 +6,8 @@ import {
   ElementRef,
   forwardRef,
   OnDestroy,
-  inject
+  inject,
+  OnInit
 } from '@angular/core';
 import { AbstractControl, NG_VALIDATORS, NG_VALUE_ACCESSOR } from '@angular/forms';
 import { uuid } from '../../../utils/util';
@@ -60,7 +61,7 @@ const providers = [
   providers,
   standalone: false
 })
-export class PoEmailComponent extends PoInputGeneric implements AfterViewInit, OnDestroy {
+export class PoEmailComponent extends PoInputGeneric implements AfterViewInit, OnDestroy, OnInit {
   id = `po-email[${uuid()}]`;
   icon = 'ICON_MAIL';
 
@@ -90,6 +91,11 @@ export class PoEmailComponent extends PoInputGeneric implements AfterViewInit, O
 
   mask = '';
 
+  /** Propriedade para controlar a visibilidade do additionalHelp de acordo com a visibilidade do p-label do field.
+   * > Caso o p-label esteja visível, o additionalHelp não será exibido.
+   **/
+  hideAdditionalHelp: boolean = false;
+
   private listener = this.validateClassesForPattern.bind(this);
 
   /* istanbul ignore next */
@@ -99,6 +105,12 @@ export class PoEmailComponent extends PoInputGeneric implements AfterViewInit, O
 
     super(el, cd);
     this.maxlength = 254;
+  }
+
+  ngOnInit() {
+    if ((this.label && this.additionalHelpTooltip) || this.poHelperComponent) {
+      this.helperHandler();
+    }
   }
 
   ngAfterViewInit() {
@@ -119,5 +131,21 @@ export class PoEmailComponent extends PoInputGeneric implements AfterViewInit, O
 
   extraValidation(c: AbstractControl): { [key: string]: any } {
     return null;
+  }
+
+  helperHandler() {
+    if (this.label && this.additionalHelpTooltip && !this.poHelperComponent()) {
+      this.hideAdditionalHelp = true;
+      this.helperSettings = {
+        content: this.additionalHelpTooltip,
+        type: 'info'
+      };
+    } else if (this.label && this.poHelperComponent()) {
+      this.hideAdditionalHelp = true;
+      this.helperSettings = this.poHelperComponent();
+    } else {
+      this.hideAdditionalHelp = false;
+    }
+    return this.hideAdditionalHelp;
   }
 }

@@ -13,7 +13,6 @@ import { AbstractControl, NG_VALIDATORS, NG_VALUE_ACCESSOR } from '@angular/form
 import { uuid } from '../../../utils/util';
 
 import { PoInputGeneric } from '../po-input-generic/po-input-generic';
-import { PoHelperOptions } from '../../po-helper';
 
 /**
  * @docsExtends PoInputBaseComponent
@@ -58,6 +57,11 @@ export class PoInputComponent extends PoInputGeneric implements OnInit {
 
   id = `po-input[${uuid()}]`;
 
+  /** Propriedade para controlar a visibilidade do additionalHelp de acordo com a visibilidade do p-label do field.
+   * > Caso o p-label esteja visível, o additionalHelp não será exibido.
+   **/
+  hideAdditionalHelp: boolean = false;
+
   /* istanbul ignore next */
   constructor() {
     const el = inject(ElementRef);
@@ -67,17 +71,23 @@ export class PoInputComponent extends PoInputGeneric implements OnInit {
   }
 
   ngOnInit() {
-    if (this.label && this.additionalHelpTooltip) {
-      this.helperHandler();
-    }
+    this.helperHandler();
   }
 
   helperHandler() {
-    const helperSettings: PoHelperOptions = {
-      content: this.additionalHelpTooltip,
-      type: 'help'
-    };
-    // this.additionalHelpTooltip = null;
+    if (this.label && this.additionalHelpTooltip && !this.poHelperComponent()) {
+      this.hideAdditionalHelp = true;
+      this.helperSettings = {
+        content: this.additionalHelpTooltip,
+        type: 'info'
+      };
+    } else if (this.label && this.poHelperComponent()) {
+      this.hideAdditionalHelp = true;
+      this.helperSettings = this.poHelperComponent();
+    } else {
+      this.hideAdditionalHelp = false;
+    }
+    return this.hideAdditionalHelp;
   }
 
   extraValidation(c: AbstractControl): { [key: string]: any } {

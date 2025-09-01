@@ -1,8 +1,18 @@
-import { ChangeDetectionStrategy, Component, Input, OnChanges, OnInit, SimpleChanges, inject } from '@angular/core';
+import {
+  ChangeDetectionStrategy,
+  Component,
+  Input,
+  OnChanges,
+  OnInit,
+  SimpleChanges,
+  inject,
+  input
+} from '@angular/core';
 
 import { PoLanguageService } from '../../../services/po-language/po-language.service';
 import { convertToBoolean } from '../../../utils/util';
 import { poFieldContainerLiterals } from './po-field-container-literals';
+import { PoHelperOptions } from '../../po-helper';
 
 /**
  * @docsPrivate
@@ -27,6 +37,9 @@ export class PoFieldContainerComponent implements OnInit, OnChanges {
 
   /** Texto de apoio do campo. */
   @Input('p-help') help: string;
+
+  /** Configurações do ícone de ajuda adicional vínculado ao label. */
+  poHelperComponent = input<PoHelperOptions>(undefined, { alias: 'p-helper' });
 
   literals: object;
   requirement: string;

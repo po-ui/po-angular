@@ -72,6 +72,8 @@ export class PoUrlComponent extends PoInputGeneric implements AfterViewInit, OnD
 
   mask = '';
 
+  hideAdditionalHelp: boolean = false;
+
   private listener = this.validateClassesForPattern.bind(this);
 
   /* istanbul ignore next */
@@ -101,5 +103,21 @@ export class PoUrlComponent extends PoInputGeneric implements AfterViewInit, OnD
 
   extraValidation(c: AbstractControl): { [key: string]: any } {
     return null;
+  }
+
+  helperHandler() {
+    if (this.label && this.additionalHelpTooltip && !this.poHelperComponent()) {
+      this.hideAdditionalHelp = true;
+      this.helperSettings = {
+        content: this.additionalHelpTooltip,
+        type: 'info'
+      };
+    } else if (this.label && this.poHelperComponent()) {
+      this.hideAdditionalHelp = true;
+      this.helperSettings = this.poHelperComponent();
+    } else {
+      this.hideAdditionalHelp = false;
+    }
+    return this.hideAdditionalHelp;
   }
 }

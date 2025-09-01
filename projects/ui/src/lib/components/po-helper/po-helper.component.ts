@@ -85,19 +85,7 @@ export class PoHelperComponent extends PoHelperBaseComponent implements AfterVie
     }
   }
 
-  emitClick(event) {
-    console.log('emitClick', this.popover);
-    event.stopPropagation();
-    PoHelperComponent.instances.forEach(instance => {
-      if (instance !== this && instance.popover && !instance.popover.isHidden) {
-        instance.popover.close();
-      }
-    });
-    if (this.popover.isHidden) {
-      this.popover.open();
-    } else {
-      this.popover.close();
-    }
+  emitClick() {
     const helper = this.helper();
     if (helper && typeof helper !== 'string' && typeof helper.eventOnClick === 'function') {
       helper.eventOnClick(helper);

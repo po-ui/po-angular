@@ -11,6 +11,7 @@ import { AbstractControl } from '@angular/forms';
 
 import { isObservable, of, Subscription, switchMap } from 'rxjs';
 import { PoInputBaseComponent } from '../po-input/po-input-base.component';
+import { PoHelperOptions } from '../../po-helper';
 
 /* eslint-disable @angular-eslint/directive-class-suffix */
 @Directive()
@@ -22,6 +23,7 @@ export abstract class PoInputGeneric extends PoInputBaseComponent implements Aft
   el: ElementRef;
   valueBeforeChange: any;
   timeoutChange: any;
+  helperSettings: PoHelperOptions;
   private subscriptionValidator: Subscription = new Subscription();
 
   get autocomplete(): string {

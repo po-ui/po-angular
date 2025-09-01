@@ -10,7 +10,7 @@
   [attr.aria-controls]="'popover-content-' + id"
   [attr.aria-describedby]="!popover.isHidden ? 'popover-content-' + id : null"
   (keydown)="onKeyDown($event)"
-  (click)="emitClick($event)"
+  (click)="emitClick()"
 >
   <po-icon [p-icon]="helper()?.type === 'info' ? 'ICON_INFO' : 'ICON_HELP'"></po-icon>
   <po-popover #popover p-position="right-bottom" [p-target]="target" [p-title]="helper()?.title" p-trigger="click">

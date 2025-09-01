@@ -1,14 +1,12 @@
-<div class="po-row">
-  @if (label) {
-    <label
-      class="po-label po-md-3"
-      [attr.for]="field && for ? for : undefined"
-      [attr.p-field]="field"
-      [class.po-label-disabled]="disabled"
-      >{{ label }}</label
-    >
-  }
-  @if (field && requirement) {
-    <span class="po md-1 po-label-requirement">{{ requirement }}</span>
-  }
-</div>
+@if (label) {
+  <label
+    class="po-label"
+    [attr.for]="field && for ? for : undefined"
+    [attr.p-field]="field"
+    [class.po-label-disabled]="disabled"
+    >{{ label }}</label
+  >
+}
+@if (field && requirement) {
+  <span class="po-label-requirement">{{ requirement }}</span>
+}

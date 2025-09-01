@@ -1,4 +1,5 @@
 import {
+  booleanAttribute,
   ChangeDetectionStrategy,
   ChangeDetectorRef,
   Component,
@@ -6,6 +7,7 @@ import {
   EventEmitter,
   HostListener,
   Input,
+  input,
   OnChanges,
   Output,
   SimpleChanges,
@@ -60,6 +62,11 @@ export class PoFieldContainerBottomComponent implements OnChanges {
 
   /** Evento disparado ao clicar no ícone de ajuda adicional. */
   @Output('p-additional-help') additionalHelp = new EventEmitter<any>();
+
+  /** Propriedade para controlar a visibilidade do additionalHelp de acordo com a visibilidade do p-label do field.
+   * Caso o p-label esteja visível, o additionalHelp não será exibido.
+   **/
+  hideAdditionalHelpByLabel = input(false, { transform: booleanAttribute, alias: 'p-hide-additional-help-by-label' });
 
   private isInitialChange: boolean = true;
 

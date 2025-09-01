@@ -5,6 +5,7 @@
   [p-optional]="optional"
   [p-required]="required"
   [p-show-required]="showRequired"
+  [p-helper]="helperSettings"
 >
   <div class="po-field-container-content">
     @if (icon) {
@@ -61,10 +62,11 @@
       [p-disabled]="disabled"
       [p-error-pattern]="getErrorPattern()"
       [p-error-limit]="errorLimit"
-      [p-additional-help-tooltip]="!label && additionalHelpTooltip ? getAdditionalHelpTooltip() : null"
-      [p-show-additional-help]="!label && additionalHelpTooltip ? displayAdditionalHelp : null"
-      [p-show-additional-help-icon]="!label && additionalHelpTooltip ? showAdditionalHelpIcon() : null"
-      (p-additional-help)="!label && additionalHelpTooltip ? emitAdditionalHelp() : null"
+      [p-hide-additional-help-by-label]="helperHandler()"
+      [p-additional-help-tooltip]="getAdditionalHelpTooltip()"
+      [p-show-additional-help]="displayAdditionalHelp"
+      [p-show-additional-help-icon]="showAdditionalHelpIcon()"
+      (p-additional-help)="emitAdditionalHelp()"
     ></po-field-container-bottom>
   }
 </po-field-container>
