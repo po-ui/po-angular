@@ -2,6 +2,13 @@
 
 All notable changes to this project will be documented in this file. See [standard-version](https://github.com/conventional-changelog/standard-version) for commit guidelines.
 
+## [19.26.0](https://github.com/po-ui/po-angular/compare/v19.25.0...v19.26.0) (2025-09-01)
+
+
+### Features
+
+* **search:** adiciona modo execute ao p-search-type ([5a4d321](https://github.com/po-ui/po-angular/commit/5a4d321909ab86548429fa4a4d91a1a3c065ec3e))
+
 ## [19.25.0](https://github.com/po-ui/po-angular/compare/v19.24.0...v19.25.0) (2025-08-25)
 
 
