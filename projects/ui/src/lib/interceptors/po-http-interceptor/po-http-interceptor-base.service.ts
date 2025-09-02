@@ -30,11 +30,15 @@ const NO_MESSAGE_HEADER_PARAM = 'X-PO-No-Message';
  *
  * ## Configuração
  *
- * Para o correto funcionamento do interceptor `po-http-interceptor`, deve ser importado o `BrowserAnimationsModule` no
- * módulo principal da sua aplicação. Além disso, é necessário configurar o `HttpClient` para utilizar os interceptors
- * registrados no Dependency Injection (DI) por meio da função `provideHttpClient(withInterceptorsFromDi())`.
+ * Para o correto funcionamento do interceptor `po-http-interceptor`, deve ser importado o `BrowserAnimationsModule` na
+ * aplicação. Além disso, é necessário configurar o `HttpClient` para utilizar os interceptors registrados via Dependency
+ * Injection (DI) por meio da função `provideHttpClient(withInterceptorsFromDi())`.
  *
- * Módulo da aplicação:
+ * ### 1) NgModule
+ *
+ * No módulo principal da aplicação (geralmente `AppModule`), importe o `BrowserAnimationsModule` e configure o `HttpClient`,
+ * como no exemplo abaixo:
+ *
  * ```
  * import { BrowserAnimationsModule } from '@angular/platform-browser/animations';
  * import { provideHttpClient, withInterceptorsFromDi } from '@angular/common/http';
@@ -64,6 +68,32 @@ const NO_MESSAGE_HEADER_PARAM = 'X-PO-No-Message';
  * Ao importar o módulo `PoModule` na aplicação, o `po-http-interceptor` é automaticamente configurado sem a necessidade
  * de qualquer configuração extra.
  *
+ * ### 2) Standalone
+ *
+ * No arquivo contendo a configuração da aplicação (geralmente `src/app/app.config.ts`), adicione os providers e configure o `HttpClient`,
+ * como no exemplo abaixo:
+ *
+ * ```
+ * import { ApplicationConfig, importProvidersFrom } from '@angular/core';
+ * import { provideHttpClient, withInterceptorsFromDi } from '@angular/common/http';
+ * import { provideAnimations } from '@angular/platform-browser/animations';
+ * import { PoHttpInterceptorModule } from '@po-ui/ng-components';
+ *
+ * export const appConfig: ApplicationConfig = {
+ *   providers: [
+ *     ...
+ *     provideAnimations(),
+ *     provideHttpClient(withInterceptorsFromDi()),
+ *     importProvidersFrom([
+ *       PoHttpInterceptorModule
+ *     ]),
+ *     ...
+ *   ]
+ * };
+ * ```
+ *
+ * ## Como usar
+ *
  * Ao realizar requisições utilize o `HttpClient`, conforme exemplo abaixo:
  *
  * ```
@@ -86,8 +116,6 @@ const NO_MESSAGE_HEADER_PARAM = 'X-PO-No-Message';
  *
  * }
  * ```
- *
- * ## Como usar
  *
  * Para exibir as noticações é necessário informar a mensagem no retorno da requisição. A estrutura da mensagem
  * é feita com base no status da resposta, conforme será apresentado nos próximos tópicos.

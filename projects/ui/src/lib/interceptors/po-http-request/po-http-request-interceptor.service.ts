@@ -47,9 +47,63 @@ const screenLock = 'X-PO-Screen-Lock';
  * ```
  * > Após a validação no interceptor, o parâmetro será removido do cabeçalho da requisição.
  *
+ * ## Configuração
+ *
+ * É necessário configurar o `HttpClient` para utilizar os interceptors registrados via Dependency Injection (DI)
+ * por meio da função `provideHttpClient(withInterceptorsFromDi())`.
+ *
+ * ### 1) NgModule
+ *
+ * ```
+ * import { provideHttpClient, withInterceptorsFromDi } from '@angular/common/http';
+ * import { PoModule } from '@po-ui/ng-components';
+ * ...
+ *
+ * @NgModule({
+ *   imports: [
+ *     ...
+ *     PoModule
+ *   ],
+ *   declarations: [
+ *     AppComponent,
+ *     ...
+ *   ],
+ *   providers: [
+ *     provideHttpClient(withInterceptorsFromDi()),
+ *     ...
+ *   ],
+ *   bootstrap: [AppComponent]
+ * })
+ * export class AppModule { }
+ * ```
+ *
  * Ao importar o módulo `PoModule` na aplicação, o `po-http-request-interceptor` é automaticamente configurado sem a necessidade
  * de qualquer configuração extra.
  *
+ * ### 2) Standalone
+ *
+ * No arquivo contendo a configuração da aplicação (geralmente `src/app/app.config.ts`), adicione os providers e configure o `HttpClient`,
+ * como no exemplo abaixo:
+ *
+ * ```
+ * import { ApplicationConfig, importProvidersFrom } from '@angular/core';
+ * import { provideHttpClient, withInterceptorsFromDi } from '@angular/common/http';
+ * import { provideAnimations } from '@angular/platform-browser/animations';
+ * import { PoHttpRequestModule } from '@po-ui/ng-components';
+ *
+ * export const appConfig: ApplicationConfig = {
+ *   providers: [
+ *     ...
+ *     provideHttpClient(withInterceptorsFromDi()),
+ *     importProvidersFrom([
+ *       PoHttpRequestModule
+ *     ]),
+ *     ...
+ *   ]
+ * };
+ * ```
+ *
+ * ## Como usar
  *
  * Segue abaixo um exemplo de uso:
  *
