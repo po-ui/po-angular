@@ -31,6 +31,7 @@ import { PoButtonComponent } from '../../po-button/po-button.component';
 import { PoCalendarComponent } from '../../po-calendar/po-calendar.component';
 import { PoDatepickerBaseComponent } from './po-datepicker-base.component';
 import { PoDatepickerLiterals } from './po-datepicker.literals';
+import { PoHelperOptions } from '../../po-helper';
 
 const poCalendarContentOffset = 8;
 const poCalendarPositionDefault = 'bottom-left';
@@ -100,6 +101,7 @@ export class PoDatepickerComponent extends PoDatepickerBaseComponent implements 
   id = `po-datepicker[${uuid()}]`;
   visible: boolean = false;
   literals: any;
+  helperSettings: PoHelperOptions;
 
   eventListenerFunction: () => void;
   eventResizeListener: () => void;
@@ -119,6 +121,11 @@ export class PoDatepickerComponent extends PoDatepickerBaseComponent implements 
   private timeoutChange: any;
   private valueBeforeChange: string;
   private subscriptionValidator: Subscription = new Subscription();
+
+  /** Propriedade para controlar a visibilidade do additionalHelp de acordo com a visibilidade do p-label do field.
+   * > Caso o p-label esteja visível, o additionalHelp não será exibido.
+   **/
+  private hideAdditionalHelp: boolean = false;
 
   get autocomplete() {
     return this.noAutocomplete ? 'off' : 'on';
@@ -188,6 +195,7 @@ export class PoDatepickerComponent extends PoDatepickerBaseComponent implements 
       this.focus();
     }
     this.renderer.setAttribute(this.iconDatepicker.buttonElement.nativeElement, 'aria-label', this.literals.open);
+    this.helperHandler();
   }
 
   ngOnDestroy() {
@@ -624,5 +632,21 @@ export class PoDatepickerComponent extends PoDatepickerBaseComponent implements 
 
     event.preventDefault();
     event.stopPropagation();
+  }
+
+  helperHandler() {
+    if (this.label && this.additionalHelpTooltip && !this.poHelperComponent()) {
+      this.hideAdditionalHelp = true;
+      this.helperSettings = {
+        content: this.additionalHelpTooltip,
+        type: 'info'
+      };
+    } else if (this.label && this.poHelperComponent()) {
+      this.hideAdditionalHelp = true;
+      this.helperSettings = this.poHelperComponent();
+    } else {
+      this.hideAdditionalHelp = false;
+    }
+    return this.hideAdditionalHelp;
   }
 }

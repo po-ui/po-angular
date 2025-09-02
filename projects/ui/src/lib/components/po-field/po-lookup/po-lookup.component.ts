@@ -24,6 +24,7 @@ import { PoTableColumnSpacing } from '../../po-table';
 import { PoLookupBaseComponent } from './po-lookup-base.component';
 import { PoLookupFilterService } from './services/po-lookup-filter.service';
 import { PoLookupModalService } from './services/po-lookup-modal.service';
+import { PoHelperOptions } from '../../po-helper';
 
 /* istanbul ignore next */
 const providers = [
@@ -161,6 +162,13 @@ export class PoLookupComponent extends PoLookupBaseComponent implements AfterVie
 
   id = `po-lookup[${uuid()}]`;
 
+  helperSettings: PoHelperOptions;
+
+  /** Propriedade para controlar a visibilidade do additionalHelp de acordo com a visibilidade do p-label do field.
+   * > Caso o p-label esteja visível, o additionalHelp não será exibido.
+   **/
+  private hideAdditionalHelp: boolean = false;
+
   private modalSubscription: Subscription;
   private isCalculateVisibleItems: boolean = true;
 
@@ -183,7 +191,7 @@ export class PoLookupComponent extends PoLookupBaseComponent implements AfterVie
     if (this.autoFocus) {
       this.focus();
     }
-
+    this.helperHandler();
     this.initialized = true;
   }
 
@@ -483,6 +491,22 @@ export class PoLookupComponent extends PoLookupBaseComponent implements AfterVie
 
   showAdditionalHelpIcon() {
     return !!this.additionalHelpTooltip || this.isAdditionalHelpEventTriggered();
+  }
+
+  helperHandler() {
+    if (this.label && this.additionalHelpTooltip && !this.poHelperComponent()) {
+      this.hideAdditionalHelp = true;
+      this.helperSettings = {
+        content: this.additionalHelpTooltip,
+        type: 'info'
+      };
+    } else if (this.label && this.poHelperComponent()) {
+      this.hideAdditionalHelp = true;
+      this.helperSettings = this.poHelperComponent();
+    } else {
+      this.hideAdditionalHelp = false;
+    }
+    return this.hideAdditionalHelp;
   }
 
   protected getDefaultSpacing(): PoTableColumnSpacing {

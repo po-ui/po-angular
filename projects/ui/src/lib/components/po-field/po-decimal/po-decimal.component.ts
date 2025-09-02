@@ -9,7 +9,8 @@ import {
   OnDestroy,
   OnInit,
   ViewChild,
-  inject
+  inject,
+  input
 } from '@angular/core';
 import { AbstractControl, NG_VALIDATORS, NG_VALUE_ACCESSOR } from '@angular/forms';
 import { PoLanguageService } from '../../../services/po-language/po-language.service';
@@ -19,6 +20,7 @@ import { maxFailed, maxlengpoailed, minFailed } from '../validators';
 import { isObservable, of, Subscription, switchMap } from 'rxjs';
 import { convertToInt, uuid } from '../../../utils/util';
 import { PoInputBaseComponent } from '../po-input/po-input-base.component';
+import { PoHelperOptions } from '../../po-helper';
 
 const poDecimalDefaultDecimalsLength = 2;
 const poDecimalDefaultThousandMaxlength = 13;
@@ -103,6 +105,13 @@ export class PoDecimalComponent extends PoInputBaseComponent implements AfterVie
   private thousandSeparator: string;
   private valueBeforeChange: any;
   private subscriptionValidator: Subscription = new Subscription();
+
+  /** Propriedade para controlar a visibilidade do additionalHelp de acordo com a visibilidade do p-label do field.
+   * > Caso o p-label esteja visível, o additionalHelp não será exibido.
+   **/
+  private hideAdditionalHelp: boolean = false;
+
+  helperSettings: PoHelperOptions;
 
   private regex = {
     thousand: new RegExp('\\' + ',', 'g'),
@@ -244,6 +253,20 @@ export class PoDecimalComponent extends PoInputBaseComponent implements AfterVie
     return this._max;
   }
 
+  /**
+   * @Input
+   *
+   * @optional
+   *
+   * @description
+   *
+   * Define as opções do componente de ajuda (po-helper) que será exibido ao lado do label.
+   *
+   * > Caso o `p-label` não esteja definido, o componente po-helper não será exibido.
+   * Ao configurar esta propriedade, o antigo ícone de ajuda adicional (`p-additional-help-tooltip` e `p-additional-help`) será ignorado.
+   */
+  poHelperComponent = input<PoHelperOptions>(undefined, { alias: 'p-helper' });
+
   constructor() {
     const cd = inject(ChangeDetectorRef);
 
@@ -267,6 +290,7 @@ export class PoDecimalComponent extends PoInputBaseComponent implements AfterVie
 
   ngAfterViewInit() {
     this.verifyAutoFocus();
+    this.helperHandler();
   }
 
   ngOnDestroy(): void {
@@ -480,6 +504,22 @@ export class PoDecimalComponent extends PoInputBaseComponent implements AfterVie
     const isDecimalSeparator = value === this.decimalSeparator;
 
     return isDecimalSeparator ? `0${value}` : value;
+  }
+
+  helperHandler() {
+    if (this.label && this.additionalHelpTooltip && !this.poHelperComponent()) {
+      this.hideAdditionalHelp = true;
+      this.helperSettings = {
+        content: this.additionalHelpTooltip,
+        type: 'info'
+      };
+    } else if (this.label && this.poHelperComponent()) {
+      this.hideAdditionalHelp = true;
+      this.helperSettings = this.poHelperComponent();
+    } else {
+      this.hideAdditionalHelp = false;
+    }
+    return this.hideAdditionalHelp;
   }
 
   private containsComma(value) {

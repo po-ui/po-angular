@@ -5,6 +5,7 @@ import {
   Inject,
   InjectOptions,
   Injector,
+  input,
   Input,
   OnChanges,
   OnDestroy,
@@ -28,6 +29,7 @@ import { PoLookupFilter } from './interfaces/po-lookup-filter.interface';
 import { PoLookupLiterals } from './interfaces/po-lookup-literals.interface';
 import { PoLookupFilterService } from './services/po-lookup-filter.service';
 import { PoLookupModalService } from './services/po-lookup-modal.service';
+import { PoHelperOptions } from '../../po-helper';
 
 export const poLookupLiteralsDefault = {
   en: <PoLookupLiterals>{
@@ -461,6 +463,20 @@ export abstract class PoLookupBaseComponent
    * @default `true`
    */
   @Input({ alias: 'p-virtual-scroll', transform: convertToBoolean }) virtualScroll?: boolean = true;
+
+  /**
+   * @Input
+   *
+   * @optional
+   *
+   * @description
+   *
+   * Define as opções do componente de ajuda (po-helper) que será exibido ao lado do label.
+   *
+   * > Caso o `p-label` não esteja definido, o componente po-helper não será exibido.
+   * Ao configurar esta propriedade, o antigo ícone de ajuda adicional (`p-additional-help-tooltip` e `p-additional-help`) será ignorado.
+   */
+  poHelperComponent = input<PoHelperOptions>(undefined, { alias: 'p-helper' });
 
   /**
    * @optional

@@ -31,6 +31,7 @@ import { PoComboOption } from './interfaces/po-combo-option.interface';
 import { PoComboBaseComponent } from './po-combo-base.component';
 import { PoComboFilterService } from './po-combo-filter.service';
 import { PoComboOptionTemplateDirective } from './po-combo-option-template/po-combo-option-template.directive';
+import { PoHelperOptions } from '../../po-helper';
 
 const poComboContainerOffset = 8;
 
@@ -125,6 +126,7 @@ export class PoComboComponent extends PoComboBaseComponent implements AfterViewI
   shouldMarkLetters: boolean = true;
   infiniteLoading: boolean = false;
   containerWidth: number;
+  helperSettings: PoHelperOptions;
 
   private _isServerSearching: boolean = false;
   private lastKey;
@@ -136,6 +138,11 @@ export class PoComboComponent extends PoComboBaseComponent implements AfterViewI
   private getSubscription: Subscription;
 
   private subscriptionScrollEvent: Subscription;
+
+  /** Propriedade para controlar a visibilidade do additionalHelp de acordo com a visibilidade do p-label do field.
+   * > Caso o p-label esteja visível, o additionalHelp não será exibido.
+   **/
+  private hideAdditionalHelp: boolean = false;
 
   constructor() {
     const changeDetector = inject(ChangeDetectorRef);
@@ -171,6 +178,7 @@ export class PoComboComponent extends PoComboBaseComponent implements AfterViewI
     }
 
     this.setContainerWidth();
+    this.helperHandler();
   }
 
   ngOnChanges(changes: SimpleChanges) {
@@ -848,5 +856,21 @@ export class PoComboComponent extends PoComboBaseComponent implements AfterViewI
   // Determina se o tab deve abrir o listbox.
   private shouldHandleTab(event: KeyboardEvent): boolean {
     return this.comboOpen && this.appendBox && !event.shiftKey;
+  }
+
+  helperHandler() {
+    if (this.label && this.additionalHelpTooltip && !this.poHelperComponent()) {
+      this.hideAdditionalHelp = true;
+      this.helperSettings = {
+        content: this.additionalHelpTooltip,
+        type: 'info'
+      };
+    } else if (this.label && this.poHelperComponent()) {
+      this.hideAdditionalHelp = true;
+      this.helperSettings = this.poHelperComponent();
+    } else {
+      this.hideAdditionalHelp = false;
+    }
+    return this.hideAdditionalHelp;
   }
 }

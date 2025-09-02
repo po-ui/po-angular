@@ -556,7 +556,7 @@ export abstract class PoInputBaseComponent implements ControlValueAccessor, Vali
    *
    * Define as opções do componente de ajuda (po-helper) que será exibido ao lado do label.
    *
-   * > Caso o `p-label` não esteja definido, o componente não será exibido.
+   * > Caso o `p-label` não esteja definido, o componente po-helper não será exibido.
    * Ao configurar esta propriedade, o antigo ícone de ajuda adicional (`p-additional-help-tooltip` e `p-additional-help`) será ignorado.
    */
   poHelperComponent = input<PoHelperOptions>(undefined, { alias: 'p-helper' });

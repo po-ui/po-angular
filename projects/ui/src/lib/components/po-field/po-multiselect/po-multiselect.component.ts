@@ -29,6 +29,7 @@ import { PoMultiselectOption } from './interfaces/po-multiselect-option.interfac
 import { PoMultiselectBaseComponent } from './po-multiselect-base.component';
 import { PoMultiselectFilterService } from './po-multiselect-filter.service';
 import { PoMultiselectOptionTemplateDirective } from './po-multiselect-option-template/po-multiselect-option-template.directive';
+import { PoHelperOptions } from '../../po-helper';
 
 const poMultiselectContainerOffset = 8;
 const poMultiselectInputPaddingRight = 52;
@@ -143,6 +144,7 @@ export class PoMultiselectComponent
   timeoutResize;
   visibleElement = false;
   containerWidth: number;
+  helperSettings: PoHelperOptions;
 
   private subscription: Subscription = new Subscription();
   private enterCloseTag = false;
@@ -150,6 +152,11 @@ export class PoMultiselectComponent
   private isCalculateVisibleItems: boolean = true;
   private cacheOptions: Array<PoMultiselectOption | any>;
   private focusOnTag = false;
+
+  /** Propriedade para controlar a visibilidade do additionalHelp de acordo com a visibilidade do p-label do field.
+   * > Caso o p-label esteja visível, o additionalHelp não será exibido.
+   **/
+  private hideAdditionalHelp: boolean = false;
 
   constructor() {
     const changeDetector = inject(ChangeDetectorRef);
@@ -169,6 +176,7 @@ export class PoMultiselectComponent
     if (this.autoFocus) {
       this.focus();
     }
+    this.helperHandler();
     this.initialized = true;
   }
 
@@ -559,6 +567,22 @@ export class PoMultiselectComponent
         this.setOptionsByApplyFilter(options);
       })
     );
+  }
+
+  helperHandler() {
+    if (this.label && this.additionalHelpTooltip && !this.poHelperComponent()) {
+      this.hideAdditionalHelp = true;
+      this.helperSettings = {
+        content: this.additionalHelpTooltip,
+        type: 'info'
+      };
+    } else if (this.label && this.poHelperComponent()) {
+      this.hideAdditionalHelp = true;
+      this.helperSettings = this.poHelperComponent();
+    } else {
+      this.hideAdditionalHelp = false;
+    }
+    return this.hideAdditionalHelp;
   }
 
   private applyFilterInFirstClick() {

@@ -22,6 +22,7 @@ import { PoDateService } from './../../../services/po-date/po-date.service';
 import { replaceFormatSeparator } from './../../../utils/util';
 import { PoDatepickerRange } from './interfaces/po-datepicker-range.interface';
 import { PoDatepickerRangeBaseComponent } from './po-datepicker-range-base.component';
+import { PoHelperOptions } from '../../po-helper';
 
 const arrowLeftKey = 37;
 const arrowRightKey = 39;
@@ -97,10 +98,16 @@ export class PoDatepickerRangeComponent
   @ViewChild('calendarPicker', { read: ElementRef }) calendarPicker: ElementRef;
 
   isCalendarVisible = false;
+  helperSettings: PoHelperOptions;
 
   private clickListener;
   private eventResizeListener;
   private poDatepickerRangeElement: ElementRef<any>;
+
+  /** Propriedade para controlar a visibilidade do additionalHelp de acordo com a visibilidade do p-label do field.
+   * > Caso o p-label esteja visível, o additionalHelp não será exibido.
+   **/
+  private hideAdditionalHelp: boolean = false;
 
   get autocomplete() {
     return this.noAutocomplete ? 'off' : 'on';
@@ -176,6 +183,7 @@ export class PoDatepickerRangeComponent
     if (this.autoFocus) {
       this.focus();
     }
+    this.helperHandler();
   }
 
   ngOnInit() {
@@ -374,6 +382,22 @@ export class PoDatepickerRangeComponent
     this.endDateInput.nativeElement.value = endDateFormated;
     this.startDateInput.nativeElement.value = startDateFormated;
     this.changeDetector.detectChanges();
+  }
+
+  helperHandler() {
+    if (this.label && this.additionalHelpTooltip && !this.poHelperComponent()) {
+      this.hideAdditionalHelp = true;
+      this.helperSettings = {
+        content: this.additionalHelpTooltip,
+        type: 'info'
+      };
+    } else if (this.label && this.poHelperComponent()) {
+      this.hideAdditionalHelp = true;
+      this.helperSettings = this.poHelperComponent();
+    } else {
+      this.hideAdditionalHelp = false;
+    }
+    return this.hideAdditionalHelp;
   }
 
   private applyFocusOnDatePickerRangeField() {

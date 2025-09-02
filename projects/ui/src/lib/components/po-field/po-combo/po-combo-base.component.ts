@@ -1,4 +1,4 @@
-import { ChangeDetectorRef, Directive, EventEmitter, Input, OnInit, Output, TemplateRef } from '@angular/core';
+import { ChangeDetectorRef, Directive, EventEmitter, input, Input, OnInit, Output, TemplateRef } from '@angular/core';
 import { AbstractControl, ControlValueAccessor, Validator, Validators } from '@angular/forms';
 
 import { poLocaleDefault } from '../../../services/po-language/po-language.constant';
@@ -15,6 +15,7 @@ import { PoComboLiterals } from './interfaces/po-combo-literals.interface';
 import { PoComboOptionGroup } from './interfaces/po-combo-option-group.interface';
 import { PoComboOption } from './interfaces/po-combo-option.interface';
 import { PoComboFilterService } from './po-combo-filter.service';
+import { PoHelperOptions } from '../../po-helper';
 
 const PO_COMBO_DEBOUNCE_TIME_DEFAULT = 400;
 const PO_COMBO_FIELD_LABEL_DEFAULT = 'label';
@@ -365,6 +366,20 @@ export abstract class PoComboBaseComponent implements ControlValueAccessor, OnIn
    * @default `bottom`
    */
   @Input('p-listbox-control-position') listboxControlPosition: 'top' | 'bottom' = poMultiselectContainerPositionDefault;
+
+  /**
+   * @Input
+   *
+   * @optional
+   *
+   * @description
+   *
+   * Define as opções do componente de ajuda (po-helper) que será exibido ao lado do label.
+   *
+   * > Caso o `p-label` não esteja definido, o componente po-helper não será exibido.
+   * Ao configurar esta propriedade, o antigo ícone de ajuda adicional (`p-additional-help-tooltip` e `p-additional-help`) será ignorado.
+   */
+  poHelperComponent = input<PoHelperOptions>(undefined, { alias: 'p-helper' });
 
   cacheOptions: Array<any> = [];
   defaultService: PoComboFilterService;
