@@ -70,11 +70,6 @@ export class PoPasswordComponent extends PoInputGeneric {
    *
    * @default `false`
    */
-
-  /** Propriedade para controlar a visibilidade do additionalHelp de acordo com a visibilidade do p-label do field.
-   * > Caso o p-label esteja visível, o additionalHelp não será exibido.
-   **/
-  hideAdditionalHelp: boolean = false;
   @Input('p-hide-password-peek') set hidePasswordPeek(value: boolean) {
     this._hidePasswordPeek = convertToBoolean(value);
     if (value) {
@@ -114,21 +109,5 @@ export class PoPasswordComponent extends PoInputGeneric {
   showPassword() {
     this.visiblePassword = !this.visiblePassword;
     this.type = this.type === 'password' ? 'text' : 'password';
-  }
-
-  helperHandler() {
-    if (this.label && this.additionalHelpTooltip && !this.poHelperComponent()) {
-      this.hideAdditionalHelp = true;
-      this.helperSettings = {
-        content: this.additionalHelpTooltip,
-        type: 'info'
-      };
-    } else if (this.label && this.poHelperComponent()) {
-      this.hideAdditionalHelp = true;
-      this.helperSettings = this.poHelperComponent();
-    } else {
-      this.hideAdditionalHelp = false;
-    }
-    return this.hideAdditionalHelp;
   }
 }

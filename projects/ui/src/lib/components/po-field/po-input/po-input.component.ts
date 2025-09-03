@@ -57,11 +57,6 @@ export class PoInputComponent extends PoInputGeneric implements OnInit {
 
   id = `po-input[${uuid()}]`;
 
-  /** Propriedade para controlar a visibilidade do additionalHelp de acordo com a visibilidade do p-label do field.
-   * > Caso o p-label esteja visível, o additionalHelp não será exibido.
-   **/
-  hideAdditionalHelp: boolean = false;
-
   /* istanbul ignore next */
   constructor() {
     const el = inject(ElementRef);
@@ -72,22 +67,6 @@ export class PoInputComponent extends PoInputGeneric implements OnInit {
 
   ngOnInit() {
     this.helperHandler();
-  }
-
-  helperHandler() {
-    if (this.label && this.additionalHelpTooltip && !this.poHelperComponent()) {
-      this.hideAdditionalHelp = true;
-      this.helperSettings = {
-        content: this.additionalHelpTooltip,
-        type: 'info'
-      };
-    } else if (this.label && this.poHelperComponent()) {
-      this.hideAdditionalHelp = true;
-      this.helperSettings = this.poHelperComponent();
-    } else {
-      this.hideAdditionalHelp = false;
-    }
-    return this.hideAdditionalHelp;
   }
 
   extraValidation(c: AbstractControl): { [key: string]: any } {

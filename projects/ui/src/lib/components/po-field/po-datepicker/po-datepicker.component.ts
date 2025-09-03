@@ -20,6 +20,7 @@ import {
   isKeyCodeSpace,
   isMobile,
   replaceFormatSeparator,
+  setHelperSettings,
   setYearFrom0To100,
   uuid
 } from '../../../utils/util';
@@ -122,11 +123,6 @@ export class PoDatepickerComponent extends PoDatepickerBaseComponent implements 
   private valueBeforeChange: string;
   private subscriptionValidator: Subscription = new Subscription();
 
-  /** Propriedade para controlar a visibilidade do additionalHelp de acordo com a visibilidade do p-label do field.
-   * > Caso o p-label esteja visível, o additionalHelp não será exibido.
-   **/
-  private hideAdditionalHelp: boolean = false;
-
   get autocomplete() {
     return this.noAutocomplete ? 'off' : 'on';
   }
@@ -190,12 +186,12 @@ export class PoDatepickerComponent extends PoDatepickerBaseComponent implements 
   }
 
   ngAfterViewInit() {
+    this.helperSettings = this.setHelper(this.label, this.additionalHelpTooltip).helperSettings;
     this.setDialogPickerStyleDisplay('none');
     if (this.autoFocus) {
       this.focus();
     }
     this.renderer.setAttribute(this.iconDatepicker.buttonElement.nativeElement, 'aria-label', this.literals.open);
-    this.helperHandler();
   }
 
   ngOnDestroy() {
@@ -634,19 +630,7 @@ export class PoDatepickerComponent extends PoDatepickerBaseComponent implements 
     event.stopPropagation();
   }
 
-  helperHandler() {
-    if (this.label && this.additionalHelpTooltip && !this.poHelperComponent()) {
-      this.hideAdditionalHelp = true;
-      this.helperSettings = {
-        content: this.additionalHelpTooltip,
-        type: 'info'
-      };
-    } else if (this.label && this.poHelperComponent()) {
-      this.hideAdditionalHelp = true;
-      this.helperSettings = this.poHelperComponent();
-    } else {
-      this.hideAdditionalHelp = false;
-    }
-    return this.hideAdditionalHelp;
+  setHelper(label?: string, additionalHelpTooltip?: string) {
+    return setHelperSettings(label, additionalHelpTooltip, this.poHelperComponent());
   }
 }

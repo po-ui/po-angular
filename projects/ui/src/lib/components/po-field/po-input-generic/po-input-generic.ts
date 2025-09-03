@@ -24,7 +24,13 @@ export abstract class PoInputGeneric extends PoInputBaseComponent implements Aft
   valueBeforeChange: any;
   timeoutChange: any;
   helperSettings: PoHelperOptions;
+
   private subscriptionValidator: Subscription = new Subscription();
+
+  /** Propriedade para controlar a visibilidade do additionalHelp de acordo com a visibilidade do p-label do field.
+   * > Caso o p-label esteja visível, o additionalHelp não será exibido.
+   **/
+  hideAdditionalHelp: boolean = false;
 
   get autocomplete(): string {
     return this.noAutocomplete ? 'off' : 'on';
@@ -289,4 +295,20 @@ export abstract class PoInputGeneric extends PoInputBaseComponent implements Aft
   }
 
   abstract extraValidation(c: AbstractControl): { [key: string]: any };
+
+  helperHandler() {
+    if (this.label && this.additionalHelpTooltip && !this.poHelperComponent()) {
+      this.hideAdditionalHelp = true;
+      this.helperSettings = {
+        content: this.additionalHelpTooltip,
+        type: 'info'
+      };
+    } else if (this.label && this.poHelperComponent()) {
+      this.hideAdditionalHelp = true;
+      this.helperSettings = this.poHelperComponent();
+    } else {
+      this.hideAdditionalHelp = false;
+    }
+    return this.hideAdditionalHelp;
+  }
 }

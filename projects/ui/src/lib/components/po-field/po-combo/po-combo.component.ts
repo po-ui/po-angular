@@ -23,7 +23,7 @@ import { PoControlPositionService } from '../../../services/po-control-position/
 import { PoLanguageService } from '../../../services/po-language/po-language.service';
 import { PoKeyCodeEnum } from './../../../enums/po-key-code.enum';
 
-import { uuid } from '../../../utils/util';
+import { setHelperSettings, uuid } from '../../../utils/util';
 import { PoFieldSize } from '../../../enums/po-field-size.enum';
 import { PoListBoxComponent } from './../../po-listbox/po-listbox.component';
 import { PoComboGroup } from './interfaces/po-combo-group.interface';
@@ -139,11 +139,6 @@ export class PoComboComponent extends PoComboBaseComponent implements AfterViewI
 
   private subscriptionScrollEvent: Subscription;
 
-  /** Propriedade para controlar a visibilidade do additionalHelp de acordo com a visibilidade do p-label do field.
-   * > Caso o p-label esteja visível, o additionalHelp não será exibido.
-   **/
-  private hideAdditionalHelp: boolean = false;
-
   constructor() {
     const changeDetector = inject(ChangeDetectorRef);
     const languageService = inject(PoLanguageService);
@@ -173,12 +168,12 @@ export class PoComboComponent extends PoComboBaseComponent implements AfterViewI
   }
 
   ngAfterViewInit() {
+    this.helperSettings = this.setHelper(this.label, this.additionalHelpTooltip).helperSettings;
     if (this.autoFocus) {
       this.focus();
     }
 
     this.setContainerWidth();
-    this.helperHandler();
   }
 
   ngOnChanges(changes: SimpleChanges) {
@@ -858,19 +853,7 @@ export class PoComboComponent extends PoComboBaseComponent implements AfterViewI
     return this.comboOpen && this.appendBox && !event.shiftKey;
   }
 
-  helperHandler() {
-    if (this.label && this.additionalHelpTooltip && !this.poHelperComponent()) {
-      this.hideAdditionalHelp = true;
-      this.helperSettings = {
-        content: this.additionalHelpTooltip,
-        type: 'info'
-      };
-    } else if (this.label && this.poHelperComponent()) {
-      this.hideAdditionalHelp = true;
-      this.helperSettings = this.poHelperComponent();
-    } else {
-      this.hideAdditionalHelp = false;
-    }
-    return this.hideAdditionalHelp;
+  setHelper(label?: string, additionalHelpTooltip?: string) {
+    return setHelperSettings(label, additionalHelpTooltip, this.poHelperComponent());
   }
 }

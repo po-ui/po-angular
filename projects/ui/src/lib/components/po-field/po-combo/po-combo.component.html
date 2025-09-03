@@ -6,7 +6,7 @@
     [p-optional]="optional"
     [p-required]="required"
     [p-show-required]="showRequired"
-    [p-helper]="helperSettings"
+    [p-helper]="setHelper(this.label, this.additionalHelpTooltip).helperSettings"
   >
     <div
       #searchContainer
@@ -113,7 +113,7 @@
       [p-disabled]="disabled"
       [p-error-pattern]="getErrorPattern()"
       [p-error-limit]="errorLimit"
-      [p-hide-additional-help-by-label]="helperHandler()"
+      [p-hide-additional-help-by-label]="setHelper(this.label, this.additionalHelpTooltip).hideAdditionalHelp"
       [p-show-additional-help]="displayAdditionalHelp"
       [p-show-additional-help-icon]="showAdditionalHelpIcon()"
       (p-additional-help)="emitAdditionalHelp()"

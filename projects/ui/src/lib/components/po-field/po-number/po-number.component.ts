@@ -94,11 +94,6 @@ export class PoNumberComponent extends PoNumberBaseComponent {
 
   id = `po-number[${uuid()}]`;
 
-  /** Propriedade para controlar a visibilidade do additionalHelp de acordo com a visibilidade do p-label do field.
-   * > Caso o p-label esteja visível, o additionalHelp não será exibido.
-   **/
-  private hideAdditionalHelp: boolean = false;
-
   /* istanbul ignore next */
   constructor() {
     const el = inject(ElementRef);
@@ -157,21 +152,5 @@ export class PoNumberComponent extends PoNumberBaseComponent {
           (this.showErrorMessageRequired && (this.required || this.hasValidatorRequired)))) ||
       this.invalidInputValueOnBlur
     );
-  }
-
-  helperHandler() {
-    if (this.label && this.additionalHelpTooltip && !this.poHelperComponent()) {
-      this.hideAdditionalHelp = true;
-      this.helperSettings = {
-        content: this.additionalHelpTooltip,
-        type: 'info'
-      };
-    } else if (this.label && this.poHelperComponent()) {
-      this.hideAdditionalHelp = true;
-      this.helperSettings = this.poHelperComponent();
-    } else {
-      this.hideAdditionalHelp = false;
-    }
-    return this.hideAdditionalHelp;
   }
 }
