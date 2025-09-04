@@ -1,4 +1,6 @@
 /**
+ * @deprecated v23.x.x
+ *
  * @usedBy PoNavbarComponent
  *
  * @description

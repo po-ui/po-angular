@@ -48,6 +48,8 @@ export abstract class PoNavbarBaseComponent {
   private language: string = poLocaleDefault;
 
   /**
+   * @deprecated v23.x.x
+   *
    * @optional
    *
    * @description
@@ -63,6 +65,8 @@ export abstract class PoNavbarBaseComponent {
   }
 
   /**
+   * @deprecated v23.x.x
+   *
    * @optional
    *
    * @description
@@ -78,6 +82,8 @@ export abstract class PoNavbarBaseComponent {
   }
 
   /**
+   * @deprecated v23.x.x
+   *
    * @optional
    *
    * @description
@@ -119,6 +125,8 @@ export abstract class PoNavbarBaseComponent {
   }
 
   /**
+   * @deprecated v23.x.x
+   *
    * @optional
    *
    * @description
@@ -137,6 +145,8 @@ export abstract class PoNavbarBaseComponent {
   }
 
   /**
+   * @deprecated v23.x.x
+   *
    * @optional
    *
    * @description
@@ -151,6 +161,8 @@ export abstract class PoNavbarBaseComponent {
   @Input('p-logo-alt') logoAlt?: string;
 
   /**
+   * @deprecated v23.x.x
+   *
    * @optional
    *
    * @description

@@ -30,6 +30,8 @@ const poNavbarMatchMedia = `(max-width: ${poNavbarMenuMedia}px)`;
 const poNavbarTiming = '250ms ease';
 
 /**
+ * @deprecated v23.x.x use `po-header`
+ *
  * @docsExtends PoNavbarBaseComponent
  */
 @Component({

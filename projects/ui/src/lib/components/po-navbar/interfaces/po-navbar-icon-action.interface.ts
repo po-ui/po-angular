@@ -1,6 +1,8 @@
 import { TemplateRef } from '@angular/core';
 
 /**
+ * @deprecated v23.x.x
+ *
  * @usedBy PoNavbarComponent
  *
  * @description
