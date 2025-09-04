@@ -1,7 +1,8 @@
-import { Directive, ElementRef, HostListener, OnInit, Renderer2, OnDestroy } from '@angular/core';
+import { Directive, ElementRef, HostListener, OnInit, Renderer2, OnDestroy, SecurityContext } from '@angular/core';
 
 import { PoTooltipBaseDirective } from './po-tooltip-base.directive';
 import { PoTooltipControlPositionService } from './po-tooltip-control-position.service';
+import { DomSanitizer } from '@angular/platform-browser';
 
 const nativeElements = ['input', 'button'];
 
@@ -45,7 +46,8 @@ export class PoTooltipDirective extends PoTooltipBaseDirective implements OnInit
   constructor(
     private elementRef: ElementRef,
     private renderer: Renderer2,
-    private poControlPosition: PoTooltipControlPositionService
+    private poControlPosition: PoTooltipControlPositionService,
+    private readonly sanitizer: DomSanitizer
   ) {
     super();
   }
@@ -162,7 +164,8 @@ export class PoTooltipDirective extends PoTooltipBaseDirective implements OnInit
 
     if (this.innerHtml) {
       this.textContent = this.renderer.createText('');
-      this.renderer.setProperty(this.divContent, 'innerHTML', this.tooltip);
+      const securityContent = this.sanitizer.sanitize(SecurityContext.HTML, this.tooltip) || '';
+      this.renderer.setProperty(this.divContent, 'innerHTML', securityContent);
     }
     this.renderer.appendChild(this.divContent, this.textContent);
     this.renderer.appendChild(this.tooltipContent, this.divArrow);
@@ -224,7 +227,9 @@ export class PoTooltipDirective extends PoTooltipBaseDirective implements OnInit
       this.textContent = this.renderer.createText(this.tooltip);
       this.renderer.appendChild(this.divContent, this.textContent);
       if (this.innerHtml) {
-        this.renderer.setProperty(this.divContent, 'innerHTML', this.tooltip);
+        this.textContent = this.renderer.createText('');
+        const securityContent = this.sanitizer.sanitize(SecurityContext.HTML, this.tooltip) || '';
+        this.renderer.setProperty(this.divContent, 'innerHTML', securityContent);
       }
     }
   }

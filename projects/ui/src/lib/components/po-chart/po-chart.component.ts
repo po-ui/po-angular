@@ -290,6 +290,13 @@ export class PoChartComponent extends PoChartBaseComponent implements OnInit, Af
     });
   }
 
+  private applyStringFormatter(template: string, context: { name: string; seriesName: string; value: any }): string {
+    return template
+      .replace('{name}', context.name)
+      .replace('{seriesName}', context.seriesName)
+      .replace('{value}', context.value);
+  }
+
   private observeContainerResize(): void {
     if (!this.series?.length) return;
 
@@ -425,6 +432,38 @@ export class PoChartComponent extends PoChartBaseComponent implements OnInit, Af
     });
   }
 
+  private parseTooltipText(text: string): string {
+    if (!text) return text;
+
+    return text
+      .replace(/\n/g, '<br>')
+      .replace(/\*\*(.*?)\*\*/g, '<b>$1</b>')
+      .replace(/__(.*?)__/g, '<i>$1</i>');
+  }
+
+  private resolveCustomTooltip(params: any, name: string, seriesName: string, valueLabel: string): string {
+    let text: string | undefined;
+
+    const serie = params.seriesType === 'pie' ? this.series[params.dataIndex] : this.series[params.seriesIndex];
+
+    if (serie?.tooltip) {
+      if (typeof serie.tooltip === 'function') {
+        text = serie.tooltip(params);
+      } else {
+        text = this.applyStringFormatter(serie.tooltip, { name, seriesName, value: valueLabel });
+      }
+    }
+
+    if (!text) {
+      text =
+        seriesName && !seriesName.includes('\u00000')
+          ? `<b>${name}</b><br>${seriesName}: <b>${valueLabel}</b>`
+          : `${name}: <b>${valueLabel}</b>`;
+    }
+
+    return this.parseTooltipText(text);
+  }
+
   private setTooltipProperties(divTooltipElement, params) {
     const chartElement = this.el.nativeElement.querySelector('#chart-id');
     let valueLabel = params.value;
@@ -436,22 +475,9 @@ export class PoChartComponent extends PoChartBaseComponent implements OnInit, Af
     }
     const name = params.name === ' ' ? this.literals.item : params.name;
     const seriesName = params.seriesName === ' ' ? this.literals.item : params.seriesName;
-    const customTooltipText =
-      seriesName && !seriesName.includes('\u00000')
-        ? `<b>${name}</b><br>
-        ${seriesName}: <b>${valueLabel}</b>`
-        : `${name}: <b>${valueLabel}</b>`;
 
-    const isPie = params.seriesType === 'pie';
-    if (isPie) {
-      this.tooltipText = this.series[params.dataIndex].tooltip
-        ? this.series[params.dataIndex].tooltip
-        : customTooltipText;
-    } else {
-      this.tooltipText = this.series[params.seriesIndex].tooltip
-        ? this.series[params.seriesIndex].tooltip
-        : customTooltipText;
-    }
+    this.tooltipText = this.resolveCustomTooltip(params, name, seriesName, valueLabel);
+
     divTooltipElement.style.left = `${params.event.offsetX + chartElement.offsetLeft + 3}px`;
     divTooltipElement.style.top = `${chartElement.offsetTop + params.event.offsetY - 2}px`;
     this.poTooltip.last.toggleTooltipVisibility(true);
