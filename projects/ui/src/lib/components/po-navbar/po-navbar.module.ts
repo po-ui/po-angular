@@ -11,12 +11,17 @@ import { PoNavbarLogoComponent } from './po-navbar-logo/po-navbar-logo.component
 import { PoNavbarComponent } from './po-navbar.component';
 
 /**
+ * @deprecated v23.x.x use `po-header`
+ *
  * @description
  *
  * Módulo do componente `po-navbar`.
- *
+ * > Esse componente está **depreciado** e será removido na `v23.x.x`. Recomendamos utilizar o componente
+ * [po-header](https://po-ui.io/documentation/po-header), que oferece compatibilidade com todas as funcionalidades do
+ * `po-navbar`, além de maior flexibilidade, usabilidade e acessibilidade.
+ * >
  * > Para o correto funcionamento do componente `po-navbar`, deve ser importado o módulo `BrowserAnimationsModule` no
- * > módulo principal da sua aplicação.
+ * módulo principal da sua aplicação.
  *
  * Módulo da aplicação:
  * ```

@@ -25,6 +25,11 @@ A tabela a seguir lista todos os recursos depreciados, organizados pelo release 
         </tr>
       </thead>
       <tbody>
+      <tr class="po-table-row">
+        <th class="po-table-column"><a href="documentation/po-navbar">PoNavbar</a></th>
+          <td class="po-table-column">Componente descontinuado</td>
+          <td class="po-table-column" style="text-align: center;">v23</td>
+        </tr>
         <tr class="po-table-row">
           <th class="po-table-column"><a href="documentation/po-tabs">PoTabs</a></th>
           <td class="po-table-column">p-small</td>
@@ -201,7 +206,13 @@ export class AppModule { }
         </tr>
       </thead>
       <tbody>
-      <tr class="po-table-row">
+        <tr class="po-table-row">
+          <th class="po-table-column"><a href="documentation/po-navbar">PoNavbar</a></th>
+          <td class="po-table-column">Componente descontinuado</td>
+          <td class="po-table-column"><a href="documentation/po-header">PoHeader</a></td>
+          <td class="po-table-column" style="text-align: center;">v23</td>
+        </tr>
+        <tr class="po-table-row">
           <th class="po-table-column"><a href="documentation/po-tabs">PoTabs</a></th>
           <td class="po-table-column">p-small</td>
           <td class="po-table-column">-</td>
