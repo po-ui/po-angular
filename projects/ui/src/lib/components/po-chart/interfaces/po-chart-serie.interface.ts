@@ -54,13 +54,44 @@ export interface PoChartSerie {
    *
    * @description
    *
-   * Define o texto que será exibido ao passar o mouse por cima das séries do *chart*.
+   * Define o texto que será exibido na tooltip ao passar o mouse por cima das séries do *chart*.
+   *
+   * Formatos aceitos:
+   *
+   * - **string**: pode conter marcadores dinâmicos e HTML simples.
+   *  - Marcadores disponíveis:
+   *   - `{name}` → Nome do item/categoria.
+   *   - `{seriesName}` → Nome da série.
+   *   - `{value}` → Valor correspondente.
+   *
+   * - **function**: função que recebe o objeto `params` e deve retornar uma *string* com o conteúdo da tooltip.
+   *
+   * > É possível utilizar marcação HTML simples (`<b>`, `<i>`, `<br>`, `<hr>`, etc.) que será interpretada via `innerHTML`.
+   *
+   * > Formatação customizada (será convertido internamente para HTML):
+   * - `\n` → quebra de linha (`<br>`).
+   * - `**texto**` → negrito (`<b>`).
+   * - `__texto__` → itálico (`<i>`).
    *
    * > Caso não seja informado um valor para o *tooltip*, será exibido da seguinte forma:
    * - `donut`: `label`: valor proporcional ao total em porcentagem.
    * - `area`, `bar`, `column`, `line` e `pie`: `label`: `data`.
+   *
+   * ### Exemplos:
+   *
+   * **Usando string com placeholders:**
+   * ```ts
+   * tooltip: 'Ano: {name}<br>Série: {seriesName}<br>Valor: <b>{value}</b>'
+   * ```
+   *
+   * **Usando função de callback:**
+   * ```ts
+   * tooltip = (params) => {
+   *   return `Ano: ${params.name}<br><i>Valor:</i> ${params.value}`;
+   * }
+   * ```
    */
-  tooltip?: string;
+  tooltip?: string | ((params: any) => string);
 
   /**
    * @optional

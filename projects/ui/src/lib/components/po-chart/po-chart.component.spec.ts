@@ -934,6 +934,61 @@ describe('PoChartComponent', () => {
     });
   });
 
+  describe('parseTooltipText', () => {
+    it('should return the same value when text is undefined', () => {
+      const result = (component as any).parseTooltipText(undefined);
+      expect(result).toBeUndefined();
+    });
+
+    it('should return the same value when text is null', () => {
+      const result = (component as any).parseTooltipText(null);
+      expect(result).toBeNull();
+    });
+
+    it('should return the same value when text is empty string', () => {
+      const result = (component as any).parseTooltipText('');
+      expect(result).toBe('');
+    });
+
+    it('should parse \\n into <br>', () => {
+      const result = (component as any).parseTooltipText('linha1\nlinha2');
+      expect(result).toBe('linha1<br>linha2');
+    });
+
+    it('should parse ** into <b>', () => {
+      const result = (component as any).parseTooltipText('valor **negrito** aqui');
+      expect(result).toBe('valor <b>negrito</b> aqui');
+    });
+
+    it('should parse __ into <i>', () => {
+      const result = (component as any).parseTooltipText('um __itálico__ aqui');
+      expect(result).toBe('um <i>itálico</i> aqui');
+    });
+  });
+
+  describe('resolveCustomTooltip', () => {
+    it('should call tooltip function when serie.tooltip is a function', () => {
+      const params = {
+        name: 'Jan',
+        seriesName: 'Serie 1',
+        value: 100,
+        seriesIndex: 0,
+        dataIndex: 0,
+        seriesType: 'line'
+      };
+
+      const tooltipFn = jasmine.createSpy().and.returnValue('Custom **tooltip**\nValue: __100__');
+
+      component.series = [{ label: 'Serie 1', data: [100], tooltip: tooltipFn }];
+
+      const result = (component as any).resolveCustomTooltip(params, params.name, params.seriesName, params.value);
+
+      expect(tooltipFn).toHaveBeenCalledWith(params);
+
+      expect(result).toBe('Custom <b>tooltip</b><br>Value: <i>100</i>');
+    });
+  });
+
   describe('setTooltipProperties', () => {
     const divTooltipElement = document.createElement('div');
 
@@ -953,7 +1008,7 @@ describe('PoChartComponent', () => {
       };
 
       component['setTooltipProperties'](divTooltipElement, params);
-      expect(component['tooltipText']).toBe('<b>Jan</b><br>\n        Serie 1: <b>20%</b>');
+      expect(component['tooltipText']).toBe('<b>Jan</b><br>Serie 1: <b>20%</b>');
 
       component.series[0].tooltip = 'Custom tooltip';
       component['itemsTypeDonut'] = undefined;

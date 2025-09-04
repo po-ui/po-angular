@@ -214,6 +214,17 @@ describe('PoTooltipDirective', () => {
     expect(renderer.setProperty).not.toHaveBeenCalledWith(jasmine.any(Object), 'innerHTML', jasmine.any(String));
   });
 
+  it('should sanitize tooltip and fallback to empty string when sanitize returns null', () => {
+    directive.tooltip = '<b>test</b>';
+    directive.innerHtml = true;
+
+    spyOn(directive['sanitizer'], 'sanitize').and.returnValue(null as any);
+
+    directive['createTooltip']();
+
+    expect(directive.divContent.innerHTML).toBe('');
+  });
+
   it('onMouseEnter: should create tooltip ', fakeAsync(() => {
     directive.tooltip = 'TEXT';
     directive.tooltipContent = false;
@@ -404,13 +415,16 @@ describe('PoTooltipDirective', () => {
     expect(directive.tooltipContent).toBe(undefined);
   }));
 
-  it('should call update Text and set innerHTML when innerHtml is true', () => {
+  it('should call update Text and set innerHTML as empty string when sanitizer returns null', () => {
     directive.lastTooltipText = 'abc';
-    directive.tooltip = '<b>def</b>';
+    directive.tooltip = '<b>ghi</b>';
     directive.innerHtml = true;
+
+    spyOn(directive['sanitizer'], 'sanitize').and.returnValue(null);
+
     directive.updateTextContent();
 
-    expect(directive.divContent.innerHTML).toBe('<b>def</b>');
+    expect(directive.divContent.innerHTML).toBe('');
   });
 
   it('should keep text without changes', () => {

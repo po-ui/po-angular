@@ -62,9 +62,23 @@ export class SamplePoChartCoffeeRankingComponent {
   ];
 
   participationByCountryInWorldExports: Array<PoChartSerie> = [
-    { label: 'Brazil', data: [35, 32, 25, 29, 33, 33], color: 'color-10' },
-    { label: 'Vietnam', data: [15, 17, 23, 19, 22, 18] },
-    { label: 'Colombia', data: [8, 7, 6, 9, 10, 11] },
+    {
+      label: 'Brazil',
+      data: [35, 32, 25, 29, 33, 33],
+      color: 'color-10',
+      tooltip: params =>
+        `País: ${params.seriesName}<br><b>Ano:</b> ${params.name}<br><b>Exportações:</b> ${params.value}%`
+    },
+    {
+      label: 'Vietnam',
+      data: [15, 17, 23, 19, 22, 18],
+      tooltip: 'Exportações de <b>{seriesName}</b><br><i>Ano:</i> {name}<br>Participação: {value}%'
+    },
+    {
+      label: 'Colombia',
+      data: [8, 7, 6, 9, 10, 11],
+      tooltip: 'País: {seriesName}\nAno: {name}\nParticipação: {value}%'
+    },
     { label: 'India', data: [5, 6, 5, 4, 5, 5] },
     { label: 'Indonesia', data: [7, 6, 10, 10, 4, 6] }
   ];
