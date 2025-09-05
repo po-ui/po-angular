@@ -103,7 +103,7 @@ export class PoEmailComponent extends PoInputGeneric implements AfterViewInit, O
   }
 
   ngOnInit() {
-    this.helperHandler();
+    this.helperSettings = this.setHelper(this.label, this.additionalHelpTooltip).helperSettings;
   }
 
   ngAfterViewInit() {

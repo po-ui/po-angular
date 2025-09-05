@@ -22,7 +22,7 @@ import { catchError, tap } from 'rxjs/operators';
 import { PoLanguageService } from '../../../services/po-language/po-language.service';
 import { PoKeyCodeEnum } from './../../../enums/po-key-code.enum';
 import { PoControlPositionService } from './../../../services/po-control-position/po-control-position.service';
-import { isMobile } from './../../../utils/util';
+import { isMobile, setHelperSettings } from './../../../utils/util';
 
 import { poLocaleDefault } from '../../../services/po-language/po-language.constant';
 import { PoMultiselectOption } from './interfaces/po-multiselect-option.interface';
@@ -153,11 +153,6 @@ export class PoMultiselectComponent
   private cacheOptions: Array<PoMultiselectOption | any>;
   private focusOnTag = false;
 
-  /** Propriedade para controlar a visibilidade do additionalHelp de acordo com a visibilidade do p-label do field.
-   * > Caso o p-label esteja visível, o additionalHelp não será exibido.
-   **/
-  private hideAdditionalHelp: boolean = false;
-
   constructor() {
     const changeDetector = inject(ChangeDetectorRef);
     const languageService = inject(PoLanguageService);
@@ -173,10 +168,10 @@ export class PoMultiselectComponent
   }
 
   ngAfterViewInit() {
+    this.helperSettings = this.setHelper(this.label, this.additionalHelpTooltip).helperSettings;
     if (this.autoFocus) {
       this.focus();
     }
-    this.helperHandler();
     this.initialized = true;
   }
 
@@ -569,20 +564,8 @@ export class PoMultiselectComponent
     );
   }
 
-  helperHandler() {
-    if (this.label && this.additionalHelpTooltip && !this.poHelperComponent()) {
-      this.hideAdditionalHelp = true;
-      this.helperSettings = {
-        content: this.additionalHelpTooltip,
-        type: 'info'
-      };
-    } else if (this.label && this.poHelperComponent()) {
-      this.hideAdditionalHelp = true;
-      this.helperSettings = this.poHelperComponent();
-    } else {
-      this.hideAdditionalHelp = false;
-    }
-    return this.hideAdditionalHelp;
+  setHelper(label?: string, additionalHelpTooltip?: string) {
+    return setHelperSettings(label, additionalHelpTooltip, this.poHelperComponent());
   }
 
   private applyFilterInFirstClick() {

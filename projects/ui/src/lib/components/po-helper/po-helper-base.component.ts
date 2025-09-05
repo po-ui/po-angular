@@ -97,6 +97,19 @@ export class PoHelperBaseComponent {
    */
   size = input<PoHelperSize>(PoHelperSize.Medium, { alias: 'p-size' });
 
+  /**
+   * @Input
+   *
+   * @optional
+   *
+   * @description
+   *
+   * Indica se o helper está desativado.
+   *
+   * @default `false`
+   */
+  disabled = input<boolean>(false, { alias: 'p-disabled' });
+
   private transformHelper(value: PoHelperOptions | string): PoHelperOptions {
     if (typeof value === 'string') {
       return {

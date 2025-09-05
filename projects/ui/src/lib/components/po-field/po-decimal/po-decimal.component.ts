@@ -18,7 +18,7 @@ import { PoLanguageService } from '../../../services/po-language/po-language.ser
 import { maxFailed, maxlengpoailed, minFailed } from '../validators';
 
 import { isObservable, of, Subscription, switchMap } from 'rxjs';
-import { convertToInt, uuid } from '../../../utils/util';
+import { convertToInt, setHelperSettings, uuid } from '../../../utils/util';
 import { PoInputBaseComponent } from '../po-input/po-input-base.component';
 import { PoHelperOptions } from '../../po-helper';
 
@@ -105,11 +105,6 @@ export class PoDecimalComponent extends PoInputBaseComponent implements AfterVie
   private thousandSeparator: string;
   private valueBeforeChange: any;
   private subscriptionValidator: Subscription = new Subscription();
-
-  /** Propriedade para controlar a visibilidade do additionalHelp de acordo com a visibilidade do p-label do field.
-   * > Caso o p-label esteja visível, o additionalHelp não será exibido.
-   **/
-  private hideAdditionalHelp: boolean = false;
 
   helperSettings: PoHelperOptions;
 
@@ -275,8 +270,8 @@ export class PoDecimalComponent extends PoInputBaseComponent implements AfterVie
   }
 
   ngAfterViewInit() {
+    this.helperSettings = this.setHelper(this.label, this.additionalHelpTooltip).helperSettings;
     this.verifyAutoFocus();
-    this.helperHandler();
   }
 
   ngOnDestroy(): void {
@@ -492,20 +487,8 @@ export class PoDecimalComponent extends PoInputBaseComponent implements AfterVie
     return isDecimalSeparator ? `0${value}` : value;
   }
 
-  helperHandler() {
-    if (this.label && this.additionalHelpTooltip && !this.poHelperComponent()) {
-      this.hideAdditionalHelp = true;
-      this.helperSettings = {
-        content: this.additionalHelpTooltip,
-        type: 'info'
-      };
-    } else if (this.label && this.poHelperComponent()) {
-      this.hideAdditionalHelp = true;
-      this.helperSettings = this.poHelperComponent();
-    } else {
-      this.hideAdditionalHelp = false;
-    }
-    return this.hideAdditionalHelp;
+  setHelper(label?: string, additionalHelpTooltip?: string) {
+    return setHelperSettings(label, additionalHelpTooltip, this.poHelperComponent());
   }
 
   private containsComma(value) {

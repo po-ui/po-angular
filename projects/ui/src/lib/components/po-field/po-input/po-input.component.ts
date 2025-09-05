@@ -66,7 +66,7 @@ export class PoInputComponent extends PoInputGeneric implements OnInit {
   }
 
   ngOnInit() {
-    this.helperHandler();
+    this.helperSettings = this.setHelper(this.label, this.additionalHelpTooltip).helperSettings;
   }
 
   extraValidation(c: AbstractControl): { [key: string]: any } {

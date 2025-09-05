@@ -1,19 +1,15 @@
 <div class="po-field-container">
   <div class="po-field-container-title">
     @if (label || help) {
-      <div class="po-label-wrapper" [attr.title]="label">
-        <po-label
-          [p-disabled]="disabled"
-          p-field="true"
-          [p-for]="id"
-          [p-label]="label"
-          [p-requirement]="requirement"
-        ></po-label>
-      </div>
+      <po-label
+        [p-disabled]="disabled"
+        p-field="true"
+        [p-for]="id"
+        [p-label]="label"
+        [p-requirement]="requirement"
+      ></po-label>
       @if (poHelperComponent()) {
-        <div class="po-label-helper">
-          <po-helper [p-helper]="poHelperComponent()"></po-helper>
-        </div>
+        <po-helper [p-disabled]="disabled" [p-helper]="poHelperComponent()"></po-helper>
       }
     }
   </div>

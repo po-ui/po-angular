@@ -19,7 +19,7 @@ import { PoControlPositionService } from './../../../services/po-control-positio
 
 import { PoLanguageService } from '../../../services/po-language/po-language.service';
 import { PoDateService } from './../../../services/po-date/po-date.service';
-import { replaceFormatSeparator } from './../../../utils/util';
+import { replaceFormatSeparator, setHelperSettings } from './../../../utils/util';
 import { PoDatepickerRange } from './interfaces/po-datepicker-range.interface';
 import { PoDatepickerRangeBaseComponent } from './po-datepicker-range-base.component';
 import { PoHelperOptions } from '../../po-helper';
@@ -104,11 +104,6 @@ export class PoDatepickerRangeComponent
   private eventResizeListener;
   private poDatepickerRangeElement: ElementRef<any>;
 
-  /** Propriedade para controlar a visibilidade do additionalHelp de acordo com a visibilidade do p-label do field.
-   * > Caso o p-label esteja visível, o additionalHelp não será exibido.
-   **/
-  private hideAdditionalHelp: boolean = false;
-
   get autocomplete() {
     return this.noAutocomplete ? 'off' : 'on';
   }
@@ -180,10 +175,10 @@ export class PoDatepickerRangeComponent
   }
 
   ngAfterViewInit() {
+    this.helperSettings = this.setHelper(this.label, this.additionalHelpTooltip).helperSettings;
     if (this.autoFocus) {
       this.focus();
     }
-    this.helperHandler();
   }
 
   ngOnInit() {
@@ -384,20 +379,8 @@ export class PoDatepickerRangeComponent
     this.changeDetector.detectChanges();
   }
 
-  helperHandler() {
-    if (this.label && this.additionalHelpTooltip && !this.poHelperComponent()) {
-      this.hideAdditionalHelp = true;
-      this.helperSettings = {
-        content: this.additionalHelpTooltip,
-        type: 'info'
-      };
-    } else if (this.label && this.poHelperComponent()) {
-      this.hideAdditionalHelp = true;
-      this.helperSettings = this.poHelperComponent();
-    } else {
-      this.hideAdditionalHelp = false;
-    }
-    return this.hideAdditionalHelp;
+  setHelper(label?: string, additionalHelpTooltip?: string) {
+    return setHelperSettings(label, additionalHelpTooltip, this.poHelperComponent());
   }
 
   private applyFocusOnDatePickerRangeField() {

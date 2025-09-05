@@ -9,6 +9,7 @@
   [attr.aria-expanded]="!popover.isHidden"
   [attr.aria-controls]="'popover-content-' + id"
   [attr.aria-describedby]="!popover.isHidden ? 'popover-content-' + id : null"
+  [class.po-helper-disabled]="disabled()"
   (keydown)="onKeyDown($event)"
   (click)="emitClick()"
 >
