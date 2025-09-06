@@ -74,18 +74,20 @@ export class PoHelperComponent extends PoHelperBaseComponent implements AfterVie
 
   ngAfterViewInit(): void {
     PoHelperComponent.instances.push(this);
-    this.boundFocusIn = (event: FocusEvent) => {
-      if (!this.popover || this.popover.isHidden) {
-        return;
-      }
-      const targetEl = this.target?.nativeElement;
-      const popEl = (this.popover as any).popoverElement?.nativeElement;
-      const focusNode = event.target as Node;
-      if (focusNode && !targetEl.contains(focusNode) && !(popEl && popEl.contains(focusNode))) {
-        this.popover.close();
-      }
-    };
+    this.boundFocusIn = this.closePopoverOnFocusOut.bind(this);
     window.addEventListener('focusin', this.boundFocusIn, true);
+  }
+
+  closePopoverOnFocusOut(event: FocusEvent) {
+    if (!this.popover || this.popover.isHidden) {
+      return;
+    }
+    const targetEl = this.target?.nativeElement;
+    const popEl = (this.popover as any).popoverElement?.nativeElement;
+    const focusNode = event.target as Node;
+    if (focusNode && !targetEl.contains(focusNode) && !(popEl && popEl.contains(focusNode))) {
+      this.popover.close();
+    }
   }
 
   ngOnDestroy(): void {
@@ -108,6 +110,8 @@ export class PoHelperComponent extends PoHelperBaseComponent implements AfterVie
 
   onKeyDown(event: KeyboardEvent) {
     if (this.disabled()) {
+      event?.preventDefault?.();
+      event?.stopPropagation?.();
       return;
     }
     if (event?.code === 'Space' || event?.code === 'Enter') {

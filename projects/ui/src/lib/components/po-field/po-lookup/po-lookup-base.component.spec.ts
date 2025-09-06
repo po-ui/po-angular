@@ -56,7 +56,9 @@ describe('PoLookupBaseComponent:', () => {
     spyService = spyOn(languageService, 'getShortLanguage').and.returnValue('pt');
     injector = TestBed.inject(Injector);
     poLookupModalService = TestBed.inject(PoLookupModalService);
-    component = new PoLookupComponent(defaultService, injector, poLookupModalService, languageService);
+    component = TestBed.runInInjectionContext(
+      () => new PoLookupComponent(defaultService, injector, poLookupModalService, languageService)
+    );
     component['keysDescription'] = ['label'];
   });
 

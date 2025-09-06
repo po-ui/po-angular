@@ -64,7 +64,7 @@ describe('PoTabDropdownComponent:', () => {
     component.tabs = tabs;
     component.button = buttom.componentInstance;
     component.button.buttonElement = buttonElementRefMock as ElementRef;
-    component.popover = new PoPopoverComponent(null, null);
+    component.popover = new PoPopoverComponent(null, null, null);
     fixture.detectChanges();
   });
 

@@ -50,7 +50,7 @@ import { PoHelperSize } from './enums/po-helper-size.enum';
  *
  */
 @Directive()
-export class PoHelperBaseComponent {
+export abstract class PoHelperBaseComponent {
   /**
    * @Input
    *

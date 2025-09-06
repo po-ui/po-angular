@@ -170,4 +170,62 @@ describe('PoFieldContainerComponent:', () => {
       expect(requirement.innerHTML).toBe(component.literals['required']);
     });
   });
+
+  describe('updateTooltip:', () => {
+    it('should set showTip to true if text is ellipsed', () => {
+      const mockEl = {
+        scrollWidth: 120,
+        clientWidth: 100
+      } as any;
+      spyOn<any>(component, 'getMeasurableEl').and.returnValue(mockEl);
+      component.showTip = false;
+      spyOn(component['cdr'], 'markForCheck');
+
+      component.updateTooltip();
+
+      expect(component.showTip).toBeTrue();
+      expect(component['cdr'].markForCheck).toHaveBeenCalled();
+    });
+
+    it('should set showTip to false if text is not ellipsed', () => {
+      const mockEl = {
+        scrollWidth: 100,
+        clientWidth: 120
+      } as any;
+      spyOn<any>(component, 'getMeasurableEl').and.returnValue(mockEl);
+      component.showTip = true;
+      spyOn(component['cdr'], 'markForCheck');
+
+      component.updateTooltip();
+
+      expect(component.showTip).toBeFalse();
+      expect(component['cdr'].markForCheck).toHaveBeenCalled();
+    });
+
+    it('should not change showTip if isEllipsed equals showTip', () => {
+      const mockEl = {
+        scrollWidth: 100,
+        clientWidth: 120
+      } as any;
+      spyOn<any>(component, 'getMeasurableEl').and.returnValue(mockEl);
+      component.showTip = false;
+      spyOn(component['cdr'], 'markForCheck');
+
+      component.updateTooltip();
+
+      expect(component.showTip).toBeFalse();
+      expect(component['cdr'].markForCheck).toHaveBeenCalled();
+    });
+
+    it('should return if getMeasurableEl returns null', () => {
+      spyOn<any>(component, 'getMeasurableEl').and.returnValue(null);
+      component.showTip = false;
+      const markForCheckSpy = spyOn(component['cdr'], 'markForCheck');
+
+      component.updateTooltip();
+
+      expect(component.showTip).toBeFalse();
+      expect(markForCheckSpy).not.toHaveBeenCalled();
+    });
+  });
 });
