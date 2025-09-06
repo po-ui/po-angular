@@ -83,7 +83,7 @@ describe('PoPageContentComponent:', () => {
     });
 
     it('setHeightContent: should calculate height without pageHeader', () => {
-      component.setHeightContent(undefined);
+      component.setHeightContent(undefined,undefined);
 
       const bodyHeight = document.body.clientHeight;
       const valueExpected = bodyHeight;
@@ -93,11 +93,15 @@ describe('PoPageContentComponent:', () => {
 
     it('setHeightContent: should calculate height with bottom actions', () => {
       const pageHeaderElement = fixtureDiv.debugElement.nativeElement.querySelector('.po-page-header') as HTMLElement;
-      const pageHeaderHeight = pageHeaderElement.offsetTop + pageHeaderElement.offsetHeight;
+      const pageElement = fixtureDiv.debugElement.nativeElement.querySelector('div.po-page') as HTMLElement;
+      const pageComputedStyle = window.getComputedStyle(pageElement);
+      const gap = pageComputedStyle.gap ? parseFloat(pageComputedStyle.gap) : 0;
+
+      const pageHeaderHeight = pageHeaderElement.offsetTop + pageHeaderElement.offsetHeight + gap;
       const bodyHeight = document.body.clientHeight;
       const valueExpected = bodyHeight - pageHeaderHeight;
 
-      component.setHeightContent(pageHeaderElement);
+      component.setHeightContent(pageHeaderElement,gap);
 
       expect(component.height).toBe(`${valueExpected}px`);
     });
