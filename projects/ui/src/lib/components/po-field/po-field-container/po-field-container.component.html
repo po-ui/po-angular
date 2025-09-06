@@ -2,14 +2,20 @@
   <div class="po-field-container-title">
     @if (label || help) {
       <po-label
+        #labelEl
         [p-disabled]="disabled"
         p-field="true"
         [p-for]="id"
         [p-label]="label"
         [p-requirement]="requirement"
+        [p-tooltip]="showTip ? label : null"
       ></po-label>
       @if (poHelperComponent()) {
-        <po-helper [p-disabled]="disabled" [p-helper]="poHelperComponent()"></po-helper>
+        <po-helper
+          [p-disabled]="disabled"
+          [p-helper]="poHelperComponent()"
+          [p-size]="poHelperComponent().size ? poHelperComponent().size : null"
+        ></po-helper>
       }
     }
   </div>

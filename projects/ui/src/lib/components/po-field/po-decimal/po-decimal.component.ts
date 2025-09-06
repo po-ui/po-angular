@@ -488,7 +488,7 @@ export class PoDecimalComponent extends PoInputBaseComponent implements AfterVie
   }
 
   setHelper(label?: string, additionalHelpTooltip?: string) {
-    return setHelperSettings(label, additionalHelpTooltip, this.poHelperComponent());
+    return setHelperSettings(label, additionalHelpTooltip, this.poHelperComponent(), this.size);
   }
 
   private containsComma(value) {

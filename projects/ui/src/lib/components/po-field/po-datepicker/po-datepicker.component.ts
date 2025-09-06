@@ -631,6 +631,6 @@ export class PoDatepickerComponent extends PoDatepickerBaseComponent implements 
   }
 
   setHelper(label?: string, additionalHelpTooltip?: string) {
-    return setHelperSettings(label, additionalHelpTooltip, this.poHelperComponent());
+    return setHelperSettings(label, additionalHelpTooltip, this.poHelperComponent(), this.size);
   }
 }

@@ -1,10 +1,13 @@
 import {
   ChangeDetectionStrategy,
+  ChangeDetectorRef,
   Component,
+  ElementRef,
   Input,
   OnChanges,
   OnInit,
   SimpleChanges,
+  ViewChild,
   inject,
   input
 } from '@angular/core';
@@ -26,6 +29,7 @@ import { PoHelperOptions } from '../../po-helper';
   standalone: false
 })
 export class PoFieldContainerComponent implements OnInit, OnChanges {
+  @ViewChild('labelEl', { read: ElementRef }) labelEl!: ElementRef<HTMLElement>;
   /** Indica se o campo será desabilitado. */
   @Input('p-disabled') disabled: boolean;
 
@@ -43,6 +47,7 @@ export class PoFieldContainerComponent implements OnInit, OnChanges {
 
   literals: object;
   requirement: string;
+  showTip = false;
 
   private _optional: boolean = false;
   private _required: boolean = false;
@@ -68,7 +73,7 @@ export class PoFieldContainerComponent implements OnInit, OnChanges {
   /** Define se a indicação de campo obrigatório será exibida. */
   @Input('p-show-required') showRequired: boolean = false;
 
-  constructor() {
+  constructor(private cdr: ChangeDetectorRef) {
     const languageService = inject(PoLanguageService);
 
     const language = languageService.getShortLanguage();
@@ -80,12 +85,26 @@ export class PoFieldContainerComponent implements OnInit, OnChanges {
 
   ngOnInit(): void {
     this.setRequirement();
+    this.updateTooltip();
   }
 
   ngOnChanges(changes: SimpleChanges): void {
     if (changes.help || changes.label || changes.optional || changes.required || changes.showRequired) {
       this.setRequirement();
+      queueMicrotask(() => this.updateTooltip());
+      this.cdr.detectChanges();
     }
+  }
+
+  updateTooltip(): void {
+    const el = this.getMeasurableEl();
+    if (!el) return;
+
+    const isEllipsed = el.scrollWidth > el.clientWidth;
+    if (this.showTip !== isEllipsed) {
+      this.showTip = isEllipsed;
+    }
+    this.cdr.markForCheck();
   }
 
   private setRequirement(): void {
@@ -98,5 +117,13 @@ export class PoFieldContainerComponent implements OnInit, OnChanges {
         this.requirement = undefined;
       }
     }
+  }
+
+  private getMeasurableEl() {
+    const host = this.labelEl?.nativeElement;
+    if (!host) return null;
+    const inner = host.querySelector('.po-label, label, .po-label-title, .po-field-title');
+
+    return inner ?? host;
   }
 }

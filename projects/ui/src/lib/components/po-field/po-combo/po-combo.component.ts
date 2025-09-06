@@ -854,6 +854,6 @@ export class PoComboComponent extends PoComboBaseComponent implements AfterViewI
   }
 
   setHelper(label?: string, additionalHelpTooltip?: string) {
-    return setHelperSettings(label, additionalHelpTooltip, this.poHelperComponent());
+    return setHelperSettings(label, additionalHelpTooltip, this.poHelperComponent(), this.size);
   }
 }

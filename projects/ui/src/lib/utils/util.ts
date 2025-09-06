@@ -741,14 +741,16 @@ export function getA11yLevel(): PoThemeA11yEnum {
 export function setHelperSettings(
   label: string,
   additionalHelpTooltip: string,
-  poHelperComponent?: any
+  poHelperComponent?: any,
+  size?: string
 ): { hideAdditionalHelp: boolean; helperSettings?: any } {
   if (label && additionalHelpTooltip && !poHelperComponent) {
     return {
       hideAdditionalHelp: true,
       helperSettings: {
         content: additionalHelpTooltip,
-        type: 'info'
+        type: 'info',
+        size: size
       }
     };
   } else if (label && poHelperComponent) {

@@ -1,4 +1,14 @@
-import { Component, ElementRef, OnInit, ViewChild, AfterViewInit, OnDestroy } from '@angular/core';
+import {
+  Component,
+  ElementRef,
+  OnInit,
+  ViewChild,
+  AfterViewInit,
+  OnDestroy,
+  OnChanges,
+  SimpleChanges,
+  ChangeDetectorRef
+} from '@angular/core';
 import { PoHelperBaseComponent } from './po-helper-base.component';
 import { PoPopoverComponent } from '../po-popover/po-popover.component';
 import { PoButtonComponent } from '../po-button';
@@ -29,7 +39,7 @@ import { PoButtonComponent } from '../po-button';
   standalone: false,
   templateUrl: './po-helper.component.html'
 })
-export class PoHelperComponent extends PoHelperBaseComponent implements AfterViewInit, OnDestroy {
+export class PoHelperComponent extends PoHelperBaseComponent implements AfterViewInit, OnDestroy, OnChanges {
   @ViewChild('target', { read: ElementRef, static: true }) target: ElementRef;
   @ViewChild('popover', { static: false }) popover: PoPopoverComponent;
   @ViewChild(PoButtonComponent, { read: ElementRef, static: true }) poButton: PoButtonComponent;
@@ -57,7 +67,7 @@ export class PoHelperComponent extends PoHelperBaseComponent implements AfterVie
     }
   };
 
-  constructor() {
+  constructor(private cdr: ChangeDetectorRef) {
     super();
     this.id = 'po-helper-' + PoHelperComponent.idCounter++;
   }
@@ -85,7 +95,11 @@ export class PoHelperComponent extends PoHelperBaseComponent implements AfterVie
     }
   }
 
-  emitClick() {
+  emitClick(event) {
+    if (this.disabled()) {
+      event.preventDefault();
+      return;
+    }
     const helper = this.helper();
     if (helper && typeof helper !== 'string' && typeof helper.eventOnClick === 'function') {
       helper.eventOnClick(helper);
@@ -93,6 +107,9 @@ export class PoHelperComponent extends PoHelperBaseComponent implements AfterVie
   }
 
   onKeyDown(event: KeyboardEvent) {
+    if (this.disabled()) {
+      return;
+    }
     if (event?.code === 'Space' || event?.code === 'Enter') {
       event.preventDefault();
       if (!this.popover) {
@@ -110,6 +127,12 @@ export class PoHelperComponent extends PoHelperBaseComponent implements AfterVie
       } else {
         this.popover.close();
       }
+    }
+  }
+
+  ngOnChanges(changes: SimpleChanges): void {
+    if (changes.size) {
+      this.cdr.detectChanges();
     }
   }
 

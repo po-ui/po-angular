@@ -489,7 +489,7 @@ export class PoLookupComponent extends PoLookupBaseComponent implements AfterVie
   }
 
   setHelper(label?: string, additionalHelpTooltip?: string) {
-    return setHelperSettings(label, additionalHelpTooltip, this.poHelperComponent());
+    return setHelperSettings(label, additionalHelpTooltip, this.poHelperComponent(), this.size);
   }
 
   protected getDefaultSpacing(): PoTableColumnSpacing {

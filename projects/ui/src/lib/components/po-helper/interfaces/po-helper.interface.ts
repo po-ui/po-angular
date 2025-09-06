@@ -67,4 +67,14 @@ export interface PoHelperOptions {
    * Evento disparado ao clicar no ícone do helper.
    */
   eventOnClick?: Function;
+
+  /**
+   *
+   * @optional
+   *
+   * @description
+   *
+   * Tamanho do componente definido dinamicamente.
+   */
+  size?: string;
 }
