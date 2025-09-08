@@ -2,6 +2,28 @@
 
 All notable changes to this project will be documented in this file. See [standard-version](https://github.com/conventional-changelog/standard-version) for commit guidelines.
 
+## [19.27.0](https://github.com/po-ui/po-angular/compare/v19.26.0...v19.27.0) (2025-09-08)
+
+
+### Code Refactoring
+
+* **navbar:** marca componente po-navbar como depreciado ([05a8b5a](https://github.com/po-ui/po-angular/commit/05a8b5a93dcf5387d6f94858fe4f061d552b7d4d))
+
+
+### ⚠ BREAKING CHANGES
+
+* **navbar:** marca componente `po-navbar` como @deprecated
+
+O componente `po-navbar` não será mais mantido e
+será removido em versões futuras.
+A alternativa recomendada é utilizar o `po-header`.
+
+
+### Features
+
+* **chart:** adiciona customização da tooltip via innerHtml ([44a26b5](https://github.com/po-ui/po-angular/commit/44a26b50e8b5a023f2bf0fd62a11b682a41ee3b3))
+
+
 ## [19.26.0](https://github.com/po-ui/po-angular/compare/v19.25.0...v19.26.0) (2025-09-01)
 
 
