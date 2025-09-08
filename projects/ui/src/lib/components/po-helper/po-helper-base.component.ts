@@ -1,4 +1,4 @@
-import { Directive, input } from '@angular/core';
+import { Component, input } from '@angular/core';
 import { PoHelperOptions } from './interfaces/po-helper.interface';
 import { PoHelperSize } from './enums/po-helper-size.enum';
 /**
@@ -47,10 +47,18 @@ import { PoHelperSize } from './enums/po-helper-size.enum';
  * |--------------------------------------------|---------------------------------------------------------------|---------------------------------------------------|
  * | `--color`                                  | Cor principal do ícone                                        | `var(--color-action-default)`                     |
  * | `--color-hover`                            | Cor principal do ícone no estado hover                        | `var(--color-action-hover)`                       |
+ * | `--background-hover`                       | Cor de background no estado hover                             | `var(--color-brand-01-lighter)`                   |
+ * | `--border-color-hover`                     | Cor da borda no estado hover                                  | `var(--color-brand-01-darkest)`                   |
+ * | `--background-pressed`                     | Cor de background no estado de pressionado&nbsp;              | `var(--color-brand-01-light)`                     |
+ * | `--color-disabled`                         | Cor principal no estado disabled                              | `var(--color-action-disabled)`                    |
  *
  */
-@Directive()
-export abstract class PoHelperBaseComponent {
+@Component({
+  selector: 'po-helper-base',
+  template: '',
+  standalone: false
+})
+export class PoHelperBaseComponent {
   /**
    * @Input
    *

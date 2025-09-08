@@ -2,6 +2,8 @@ import { ComponentFixture, TestBed } from '@angular/core/testing';
 import { CUSTOM_ELEMENTS_SCHEMA, ChangeDetectorRef } from '@angular/core';
 
 import { PoHelperComponent } from './po-helper.component';
+import { PoHelperOptions } from './interfaces/po-helper.interface';
+import { PoPopoverComponent } from '../po-popover';
 
 describe('PoHelperComponent', () => {
   let component: PoHelperComponent;
@@ -47,8 +49,14 @@ describe('PoHelperComponent', () => {
       spyOn(component, 'disabled').and.returnValue(false);
       const event = { preventDefault: jasmine.createSpy() };
       const eventOnClick = jasmine.createSpy();
-      // @ts-ignore
-      component.helper = () => ({ content: 'c', eventOnClick });
+      const options: PoHelperOptions = {
+        title: 'Ajuda',
+        content: 'Conteúdo',
+        type: 'info',
+        eventOnClick: eventOnClick,
+        footerAction: { label: 'Ação', action: () => {} }
+      };
+      fixture.componentRef.setInput('p-helper', options);
       component.emitClick(event);
       expect(eventOnClick).toHaveBeenCalled();
     });
@@ -56,20 +64,20 @@ describe('PoHelperComponent', () => {
     it('should not throw if helper is string', () => {
       spyOn(component, 'disabled').and.returnValue(false);
       const event = { preventDefault: jasmine.createSpy() };
-      // @ts-ignore
-      component.helper = () => 'some string';
+      const text = 'Texto explicativo';
+      fixture.componentRef.setInput('p-helper', text);
       expect(() => component.emitClick(event)).not.toThrow();
     });
   });
 
   describe('onKeyDown', () => {
+    let popover: jasmine.SpyObj<PoPopoverComponent>;
+
     beforeEach(() => {
-      // @ts-ignore
-      component.popover = {
-        isHidden: true,
-        open: jasmine.createSpy(),
-        close: jasmine.createSpy()
-      };
+      popover = jasmine.createSpyObj<PoPopoverComponent>('Popover', ['open', 'close']);
+      (popover as any).isHidden = true;
+      component.popover = popover as any;
+      (component as any).disabled = () => false;
     });
 
     it('should prevent default and stop propagation if disabled', () => {
@@ -117,10 +125,19 @@ describe('PoHelperComponent', () => {
     });
 
     it('should close popover if already open', () => {
-      component.popover.isHidden = false;
-      const event = new KeyboardEvent('keydown', { code: 'Enter' });
+      (component.popover as any).isHidden = false;
+      const event = {
+        key: 'Enter',
+        code: 'Enter',
+        keyCode: 13,
+        preventDefault: () => {},
+        stopPropagation: () => {}
+      } as any;
+
       component.onKeyDown(event);
+
       expect(component.popover.close).toHaveBeenCalled();
+      expect(component.popover.open).not.toHaveBeenCalled();
     });
 
     it('should close other open popovers', () => {
@@ -143,24 +160,65 @@ describe('PoHelperComponent', () => {
   });
 
   it('should return correct ariaLabel for info type', () => {
-    // @ts-ignore
-    component.helper = () => ({ type: 'info', content: 'c' });
+    const options: PoHelperOptions = {
+      title: 'Ajuda',
+      content: 'Conteúdo',
+      type: 'info',
+      eventOnClick: () => {},
+      footerAction: { label: 'Ação', action: () => {} }
+    };
+    fixture.componentRef.setInput('p-helper', options);
     spyOnProperty(navigator, 'language', 'get').and.returnValue('en-US');
     expect(component['ariaLabel']()).toBe('Show Information');
   });
 
   it('should return correct ariaLabel for help type', () => {
-    // @ts-ignore
-    component.helper = () => ({ type: 'help', content: 'c' });
+    const options: PoHelperOptions = {
+      title: 'Ajuda',
+      content: 'Conteúdo',
+      type: 'help',
+      eventOnClick: () => {},
+      footerAction: { label: 'Ação', action: () => {} }
+    };
+    fixture.componentRef.setInput('p-helper', options);
     spyOnProperty(navigator, 'language', 'get').and.returnValue('pt-BR');
     expect(component['ariaLabel']()).toBe('Exibe ajuda');
   });
 
   it('should return correct ariaLabel for string helper', () => {
-    // @ts-ignore
-    component.helper = () => 'some string';
+    const text = 'Texto explicativo';
+    fixture.componentRef.setInput('p-helper', text);
     spyOnProperty(navigator, 'language', 'get').and.returnValue('es-ES');
     expect(component['ariaLabel']()).toBe('Muestra ayuda');
+  });
+
+  it('should fallback to EN when navigator.language is falsy', () => {
+    const options: PoHelperOptions = {
+      title: 'Ajuda',
+      content: 'Conteúdo',
+      type: 'info',
+      eventOnClick: () => {},
+      footerAction: { label: 'Ação', action: () => {} }
+    };
+
+    fixture.componentRef.setInput('p-helper', options);
+    spyOnProperty(navigator, 'language', 'get').and.returnValue(undefined as any);
+    expect(component['ariaLabel']()).toBe('Show Information');
+  });
+
+  it('should fallback to EN literals when lang is unsupported', () => {
+    const options: PoHelperOptions = {
+      title: 'Ajuda',
+      content: 'Conteúdo',
+      type: 'info',
+      eventOnClick: () => {},
+      footerAction: { label: 'Ação', action: () => {} }
+    };
+
+    fixture.componentRef.setInput('p-helper', options);
+    spyOnProperty(navigator, 'language', 'get').and.returnValue('fr-FR');
+
+    expect(component['ariaLabel']()).toBe('Show Information');
   });
 
   describe('closePopoverOnFocusOut', () => {
@@ -174,25 +232,21 @@ describe('PoHelperComponent', () => {
       targetEl = { contains: jasmine.createSpy() };
       popEl = { contains: jasmine.createSpy() };
 
-      // @ts-ignore
       component.target = { nativeElement: targetEl };
-      // @ts-ignore
-      component.popover = {
+      const popover = jasmine.createSpyObj<PoPopoverComponent>('Popover', ['close'], {
         isHidden: false,
-        close: jasmine.createSpy(),
         popoverElement: { nativeElement: popEl }
-      };
+      });
+      component.popover = popover;
     });
 
     it('should not call close if popover is undefined', () => {
-      // @ts-ignore
       component.popover = undefined;
       event = new FocusEvent('focusin', { relatedTarget: focusNode });
       expect(() => component.closePopoverOnFocusOut(event)).not.toThrow();
     });
 
     it('should not call close if popover isHidden', () => {
-      // @ts-ignore
       component.popover.isHidden = true;
       event = new FocusEvent('focusin', { relatedTarget: focusNode });
       component.closePopoverOnFocusOut(event);

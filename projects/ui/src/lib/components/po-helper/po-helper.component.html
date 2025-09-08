@@ -19,7 +19,13 @@
       {{ helper()?.content }}
       @if (helper()?.footerAction) {
         <po-divider></po-divider>
-        <po-link (p-action)="helper()?.footerAction?.action()" [p-label]="helper()?.footerAction?.label"> </po-link>
+        <po-link
+          (keydown.enter)="$event.stopPropagation()"
+          (keydown.space)="$event.stopPropagation()"
+          (p-action)="helper()?.footerAction?.action()"
+          [p-label]="helper()?.footerAction?.label"
+        >
+        </po-link>
       }
     </div>
   </po-popover>

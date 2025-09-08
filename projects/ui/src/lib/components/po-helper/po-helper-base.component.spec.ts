@@ -1,25 +1,26 @@
-import { Directive } from '@angular/core';
-import { TestBed } from '@angular/core/testing';
+import { ComponentFixture, TestBed } from '@angular/core/testing';
 import { PoHelperBaseComponent } from './po-helper-base.component';
 import { PoHelperOptions } from './interfaces/po-helper.interface';
 
-@Directive()
-class PoHelperTestComponent extends PoHelperBaseComponent {}
-
 describe('PoHelperBaseComponent:', () => {
-  let component: PoHelperTestComponent;
+  let component: PoHelperBaseComponent;
+  let fixture: ComponentFixture<PoHelperBaseComponent>;
 
   beforeEach(() => {
-    component = TestBed.runInInjectionContext(() => new PoHelperTestComponent());
+    TestBed.configureTestingModule({
+      declarations: [PoHelperBaseComponent]
+    });
+
+    fixture = TestBed.createComponent(PoHelperBaseComponent);
+    component = fixture.componentInstance;
+    fixture.detectChanges();
   });
 
   describe('Properties:', () => {
     it('helper: should accept a string and transform to PoHelperOptions', () => {
       const text = 'Texto explicativo';
-      // eslint-disable-next-line @typescript-eslint/ban-ts-comment
-      // @ts-expect-error
-      component.helper = text;
-      expect(component.helper).toEqual(text);
+      fixture.componentRef.setInput('p-helper', text);
+      expect(component.helper()).toEqual({ title: '', content: text, type: 'help' });
     });
 
     it('helper: should accept a PoHelperOptions object', () => {
@@ -30,10 +31,8 @@ describe('PoHelperBaseComponent:', () => {
         eventOnClick: () => {},
         footerAction: { label: 'Ação', action: () => {} }
       };
-      // eslint-disable-next-line @typescript-eslint/ban-ts-comment
-      // @ts-expect-error
-      component.helper = options;
-      expect(component.helper).toEqual(options);
+      fixture.componentRef.setInput('p-helper', options);
+      expect(component.helper()).toEqual(options);
     });
   });
 

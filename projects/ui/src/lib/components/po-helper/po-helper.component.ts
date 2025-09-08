@@ -128,8 +128,10 @@ export class PoHelperComponent extends PoHelperBaseComponent implements AfterVie
 
       if (this.popover.isHidden) {
         this.popover.open();
+        return;
       } else {
         this.popover.close();
+        return;
       }
     }
   }
