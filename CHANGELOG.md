@@ -2,34 +2,14 @@
 
 All notable changes to this project will be documented in this file. See [standard-version](https://github.com/conventional-changelog/standard-version) for commit guidelines.
 
-### [19.28.0](https://github.com/po-ui/po-angular/compare/v19.27.0...v19.28.0) (2025-09-15)
+## [20.0.0](https://github.com/po-ui/po-angular/compare/v19.26.0...v20.0.0) (2025-09-03)
 
+### BREAKING CHANGES
 
-### Bug Fixes
+* **angular:** deve ser utilizado o Angular v20
 
-* **input-generic:** reseta modelLastUpdate ([ceba0b0](https://github.com/po-ui/po-angular/commit/ceba0b0f305baf84e0cdb177c3a2582094361c3e))
-* **page-dynamic-search:** ajusta o GET request com atributo `range` ([6d97f4d](https://github.com/po-ui/po-angular/commit/6d97f4d9151fac4e17d607e8a6ffbcdc0279b11b)), closes [#1211](https://github.com/po-ui/po-angular/issues/1211)
+Atualize seu projeto para utilizar a versão 20 do Angular, acesse a documentação [Guia de Atualização do Angular](https://update.angular.io/) para fazer a migração completa.
 
-## [19.27.0](https://github.com/po-ui/po-angular/compare/v19.26.0...v19.27.0) (2025-09-08)
-
-
-### Code Refactoring
-
-* **navbar:** marca componente po-navbar como depreciado ([05a8b5a](https://github.com/po-ui/po-angular/commit/05a8b5a93dcf5387d6f94858fe4f061d552b7d4d))
-
-
-### ⚠ BREAKING CHANGES
-
-* **navbar:** marca componente `po-navbar` como @deprecated
-
-O componente `po-navbar` não será mais mantido e
-será removido em versões futuras.
-A alternativa recomendada é utilizar o `po-header`.
-
-
-### Features
-
-* **chart:** adiciona customização da tooltip via innerHtml ([44a26b5](https://github.com/po-ui/po-angular/commit/44a26b50e8b5a023f2bf0fd62a11b682a41ee3b3))
 
 
 ## [19.26.0](https://github.com/po-ui/po-angular/compare/v19.25.0...v19.26.0) (2025-09-01)
