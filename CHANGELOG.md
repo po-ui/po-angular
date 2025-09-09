@@ -2,6 +2,15 @@
 
 All notable changes to this project will be documented in this file. See [standard-version](https://github.com/conventional-changelog/standard-version) for commit guidelines.
 
+## [20.0.0](https://github.com/po-ui/po-angular/compare/v19.27.0...v20.0.0) (2025-09-03)
+
+### BREAKING CHANGES
+
+* **angular:** deve ser utilizado o Angular v20
+
+Atualize seu projeto para utilizar a versão 20 do Angular, acesse a documentação [Guia de Atualização do Angular](https://update.angular.io/) para fazer a migração completa.
+
+
 ## [19.27.0](https://github.com/po-ui/po-angular/compare/v19.26.0...v19.27.0) (2025-09-08)
 
 
