@@ -2,61 +2,14 @@
 
 All notable changes to this project will be documented in this file. See [standard-version](https://github.com/conventional-changelog/standard-version) for commit guidelines.
 
-## [19.30.0](https://github.com/po-ui/po-angular/compare/v19.29.0...v19.30.0) (2025-10-06)
+## [20.0.0](https://github.com/po-ui/po-angular/compare/v19.26.0...v20.0.0) (2025-09-03)
 
+### BREAKING CHANGES
 
-### Features
+* **angular:** deve ser utilizado o Angular v20
 
-* **components:** cria atributos para compatibilidade com edição fluída ([f783554](https://github.com/po-ui/po-angular/commit/f783554493194c53082facb36ade92a331326c65))
-* **helper:** implementa novo componente de ajuda ([cbbe272](https://github.com/po-ui/po-angular/commit/cbbe272e695f3269243bdb604bd1803d7d448a8a))
+Atualize seu projeto para utilizar a versão 20 do Angular, acesse a documentação [Guia de Atualização do Angular](https://update.angular.io/) para fazer a migração completa.
 
-## [19.29.0](https://github.com/po-ui/po-angular/compare/v19.28.1...v19.29.0) (2025-09-30)
-
-
-### Features
-
-* **scroll:** implementa definições do AnimaliaDS ([2f82142](https://github.com/po-ui/po-angular/commit/2f82142303dcaa00580bfcf7610c7f8bbe27d142))
-
-
-### Bug Fixes
-
-* **components:** ajusta detecção do estado disable via `FormControl` ([34bbb55](https://github.com/po-ui/po-angular/commit/34bbb557f5c6b2546087d41617dbc7cbbd5ed349))
-
-### [19.28.1](https://github.com/po-ui/po-angular/compare/v19.28.0...v19.28.1) (2025-09-22)
-
-
-### Bug Fixes
-
-* **context-tabs:** ajusta adição dinâmica de tabs ([1eb2085](https://github.com/po-ui/po-angular/commit/1eb20857b5dc3108067a131ff23f79b4ffc638af))
-
-### [19.28.0](https://github.com/po-ui/po-angular/compare/v19.27.0...v19.28.0) (2025-09-15)
-
-
-### Bug Fixes
-
-* **input-generic:** reseta modelLastUpdate ([ceba0b0](https://github.com/po-ui/po-angular/commit/ceba0b0f305baf84e0cdb177c3a2582094361c3e))
-* **page-dynamic-search:** ajusta o GET request com atributo `range` ([6d97f4d](https://github.com/po-ui/po-angular/commit/6d97f4d9151fac4e17d607e8a6ffbcdc0279b11b)), closes [#1211](https://github.com/po-ui/po-angular/issues/1211)
-
-## [19.27.0](https://github.com/po-ui/po-angular/compare/v19.26.0...v19.27.0) (2025-09-08)
-
-
-### Code Refactoring
-
-* **navbar:** marca componente po-navbar como depreciado ([05a8b5a](https://github.com/po-ui/po-angular/commit/05a8b5a93dcf5387d6f94858fe4f061d552b7d4d))
-
-
-### ⚠ BREAKING CHANGES
-
-* **navbar:** marca componente `po-navbar` como @deprecated
-
-O componente `po-navbar` não será mais mantido e
-será removido em versões futuras.
-A alternativa recomendada é utilizar o `po-header`.
-
-
-### Features
-
-* **chart:** adiciona customização da tooltip via innerHtml ([44a26b5](https://github.com/po-ui/po-angular/commit/44a26b50e8b5a023f2bf0fd62a11b682a41ee3b3))
 
 
 ## [19.26.0](https://github.com/po-ui/po-angular/compare/v19.25.0...v19.26.0) (2025-09-01)
