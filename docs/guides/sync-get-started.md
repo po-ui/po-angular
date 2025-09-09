@@ -97,7 +97,7 @@ npm install
 Para instalar o `po-sync` no aplicativo execute o seguinte comando:
 
 ```shell
-ng add @po-ui/ng-sync
+ng add @po-ui/ng-sync@v20-ng
 ```
 
 ### Passo 4 - Utilizando o po-sync
