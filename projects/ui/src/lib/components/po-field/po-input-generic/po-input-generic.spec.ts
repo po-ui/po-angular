@@ -416,10 +416,14 @@ describe('PoInputGeneric:', () => {
         _formatModel: false
       },
       change: component.change,
-      passedWriteValue: false
+      passedWriteValue: false,
+      modelLastUpdate: 'oldValue'
     };
+
     component.writeValueModel.call(fakeThis, '');
+
     expect(component.inputEl.nativeElement.value).toBe('');
+    expect(fakeThis.modelLastUpdate).toBe('');
     expect(fakeThis.passedWriteValue).toBeTruthy();
   });
 

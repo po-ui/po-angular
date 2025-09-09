@@ -258,6 +258,7 @@ export abstract class PoInputGeneric extends PoInputBaseComponent implements Aft
       } else {
         // Se o valor for indefinido, deve limpar o campo.
         this.inputEl.nativeElement.value = '';
+        this.modelLastUpdate = '';
       }
     }
 

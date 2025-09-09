@@ -46,9 +46,9 @@ import { PoModalPasswordRecoveryService } from './po-modal-password-recovery.ser
   standalone: false
 })
 export class PoModalPasswordRecoveryComponent extends PoModalPasswordRecoveryBaseComponent implements OnDestroy {
-  private router = inject(Router);
-  private poI18nPipe = inject(PoI18nPipe);
-  private poModalPasswordRecoveryService = inject(PoModalPasswordRecoveryService);
+  private readonly router = inject(Router);
+  private readonly poI18nPipe = inject(PoI18nPipe);
+  private readonly poModalPasswordRecoveryService = inject(PoModalPasswordRecoveryService);
 
   @ViewChild('emailForm') emailForm: NgForm;
 
