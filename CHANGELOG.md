@@ -2,6 +2,14 @@
 
 All notable changes to this project will be documented in this file. See [standard-version](https://github.com/conventional-changelog/standard-version) for commit guidelines.
 
+### [19.28.0](https://github.com/po-ui/po-angular/compare/v19.27.0...v19.28.0) (2025-09-15)
+
+
+### Bug Fixes
+
+* **input-generic:** reseta modelLastUpdate ([ceba0b0](https://github.com/po-ui/po-angular/commit/ceba0b0f305baf84e0cdb177c3a2582094361c3e))
+* **page-dynamic-search:** ajusta o GET request com atributo `range` ([6d97f4d](https://github.com/po-ui/po-angular/commit/6d97f4d9151fac4e17d607e8a6ffbcdc0279b11b)), closes [#1211](https://github.com/po-ui/po-angular/issues/1211)
+
 ## [19.27.0](https://github.com/po-ui/po-angular/compare/v19.26.0...v19.27.0) (2025-09-08)
 
 
