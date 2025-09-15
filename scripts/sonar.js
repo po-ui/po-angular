@@ -14,6 +14,24 @@ task('sonarqube', callback => {
     const token = validateArgument(argv.token, 'token');
     const url = validateArgument(argv.url, 'url');
     const projectKey = validateArgument(argv.projectKey, 'projectKey');
+    const branchName = validateArgument(argv.branchName, 'branchName');
+
+    let conditionalOptions = {};
+
+    if (argv.pullRequestId) {
+      const pullRequestId = validateArgument(argv.pullRequestId, 'pullRequestId');
+      const pullRequestBase = validateArgument(argv.pullRequestBase, 'pullRequestBase');
+
+      conditionalOptions = {
+        'sonar.pullrequest.key': pullRequestId,
+        'sonar.pullrequest.base': pullRequestBase,
+        'sonar.pullrequest.branch': branchName
+      };
+    } else {
+      conditionalOptions = {
+        'sonar.branch.name': branchName
+      };
+    }
 
     const exclusions = [
       '**/node_modules/**',
@@ -37,14 +55,16 @@ task('sonarqube', callback => {
     scanner(
       {
         serverUrl: url,
-        token: token,
+        token,
         options: {
           'sonar.projectKey': projectKey,
-          'sonar.login': token,
+          'sonar.token': token,
           'sonar.projectName': projectKey,
           'sonar.sources': 'projects',
           'sonar.exclusions': exclusions,
-          'sonar.typescript.lcov.reportPaths': lcovReportPaths
+          'sonar.typescript.lcov.reportPaths': lcovReportPaths,
+          'sonar.sourceEncoding': 'UTF-8',
+          ...conditionalOptions
         }
       },
       callback
