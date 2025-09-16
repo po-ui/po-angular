@@ -528,6 +528,7 @@ export abstract class PoDatepickerRangeBaseComponent implements ControlValueAcce
   // Usada para interceptar os estados de habilitado via forms api
   setDisabledState(isDisabled: boolean) {
     this.disabled = isDisabled;
+    this.changeDetector.markForCheck();
   }
 
   // Função implementada do ControlValueAccessor

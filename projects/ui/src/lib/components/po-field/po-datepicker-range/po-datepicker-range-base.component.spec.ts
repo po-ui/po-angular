@@ -411,9 +411,14 @@ describe('PoDatepickerRangeBaseComponent:', () => {
       });
 
       it('setDisabledState: should set `component.disabled` with boolean parameter', () => {
+        component['changeDetector'] = { markForCheck: () => {} } as any;
         const expectedValue = true;
+        const markForCheck = spyOn(component['changeDetector'], 'markForCheck');
+
         component.setDisabledState(expectedValue);
+
         expect(component.disabled).toBe(expectedValue);
+        expect(markForCheck).toHaveBeenCalled();
       });
 
       it(`should call 'dateRangeFormatFailed', set 'errorMessage' as 'literals.invalidFormat'

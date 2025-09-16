@@ -75,7 +75,7 @@ export abstract class PoFieldValidateModel<T> extends PoFieldModel<T> implements
   private onValidatorChange;
 
   constructor(public changeDetector: ChangeDetectorRef) {
-    super();
+    super(changeDetector);
   }
 
   validate(abstractControl: AbstractControl): ValidationErrors {

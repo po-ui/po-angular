@@ -1,4 +1,4 @@
-import { Directive, EventEmitter, Input, Output } from '@angular/core';
+import { ChangeDetectorRef, Directive, EventEmitter, Input, Output } from '@angular/core';
 import { ControlValueAccessor } from '@angular/forms';
 
 import { convertToBoolean, getDefaultSizeFn, uuid, validateSizeFn } from './../../../utils/util';
@@ -196,6 +196,8 @@ export abstract class PoCheckboxBaseComponent implements ControlValueAccessor {
     return this._size ?? getDefaultSizeFn(PoCheckboxSize);
   }
 
+  constructor(private readonly cd: ChangeDetectorRef) {}
+
   changeValue() {
     if (this.propagateChange) {
       this.propagateChange(this.checkboxValue);
@@ -215,6 +217,7 @@ export abstract class PoCheckboxBaseComponent implements ControlValueAccessor {
   // Usada para interceptar os estados de habilitado via forms api
   setDisabledState(isDisabled: boolean) {
     this.disabled = isDisabled;
+    this.cd.markForCheck();
   }
 
   registerOnChange(fn: any): void {

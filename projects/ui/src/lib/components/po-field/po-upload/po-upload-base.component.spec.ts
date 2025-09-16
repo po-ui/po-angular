@@ -1,5 +1,5 @@
 import { HttpClient, HttpHandler } from '@angular/common/http';
-import { Component, inject } from '@angular/core';
+import { ChangeDetectorRef, Component, inject } from '@angular/core';
 import { ComponentFixture, TestBed } from '@angular/core/testing';
 import { FormsModule, UntypedFormControl } from '@angular/forms';
 
@@ -24,8 +24,9 @@ import { PoUploadService } from './po-upload.service';
 class PoUploadComponent extends PoUploadBaseComponent {
   constructor() {
     const uploadService = inject(PoUploadService);
+    const cd = inject(ChangeDetectorRef);
 
-    super(uploadService, new PoLanguageService());
+    super(uploadService, new PoLanguageService(), cd);
   }
 
   sendFeedback() {}
