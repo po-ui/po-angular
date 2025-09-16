@@ -49,7 +49,7 @@ import { PoCheckboxBaseComponent } from './po-checkbox-base.component';
   standalone: false
 })
 export class PoCheckboxComponent extends PoCheckboxBaseComponent implements AfterViewInit {
-  private changeDetector = inject(ChangeDetectorRef);
+  private readonly changeDetector: ChangeDetectorRef;
 
   private _iconToken: { [key: string]: string };
 
@@ -60,7 +60,9 @@ export class PoCheckboxComponent extends PoCheckboxBaseComponent implements Afte
       [key: string]: string;
     }>(ICONS_DICTIONARY, { optional: true });
 
-    super();
+    const changeDetector = inject(ChangeDetectorRef);
+    super(changeDetector);
+    this.changeDetector = changeDetector;
 
     this._iconToken = value ?? AnimaliaIconDictionary;
   }

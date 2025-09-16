@@ -1,4 +1,4 @@
-import { Directive, EventEmitter, Input, Output } from '@angular/core';
+import { ChangeDetectorRef, Directive, EventEmitter, Input, Output } from '@angular/core';
 import { ControlValueAccessor } from '@angular/forms';
 
 import { convertToBoolean } from '../../utils/util';
@@ -88,12 +88,13 @@ export abstract class PoFieldModel<T> implements ControlValueAccessor {
 
   private propagateChange: any;
 
-  constructor() {}
+  constructor(private readonly cd: ChangeDetectorRef) {}
 
   // Função implementada do ControlValueAccessor
   // Usada para interceptar os estados de habilitado via forms api
   setDisabledState(isDisabled: boolean) {
     this.disabled = isDisabled;
+    this.cd?.markForCheck();
   }
 
   registerOnChange(fn: any): void {
