@@ -78,7 +78,6 @@ export class PoUploadComponent extends PoUploadBaseComponent implements AfterVie
   renderer = inject(Renderer2);
   private i18nPipe = inject(PoI18nPipe);
   private notification = inject(PoNotificationService);
-  private cd = inject(ChangeDetectorRef);
 
   @ViewChild('inputFile', { read: ElementRef, static: true }) private inputFile: ElementRef;
   @ViewChild(PoUploadDragDropComponent) private poUploadDragDropComponent: PoUploadDragDropComponent;
@@ -109,8 +108,9 @@ export class PoUploadComponent extends PoUploadBaseComponent implements AfterVie
   constructor() {
     const uploadService = inject(PoUploadService);
     const languageService = inject(PoLanguageService);
+    const cd = inject(ChangeDetectorRef);
 
-    super(uploadService, languageService);
+    super(uploadService, languageService, cd);
   }
 
   get displayDragDrop(): boolean {

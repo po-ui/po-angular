@@ -28,7 +28,7 @@ describe('PoDatepickerBaseComponent:', () => {
   const languageService: PoLanguageService = new PoLanguageService();
 
   beforeEach(() => {
-    const changeDetector: any = { detectChanges: () => {} };
+    const changeDetector: any = { detectChanges: () => {}, markForCheck: () => {} };
 
     component = new PoDatepickerComponent(languageService, changeDetector);
     component['shortLanguage'] = 'pt';
@@ -193,8 +193,12 @@ describe('PoDatepickerBaseComponent:', () => {
 
   it('setDisabledState: should set `component.disabled` with boolean parameter', () => {
     const expectedValue = true;
+    const markForCheck = spyOn(component['cd'], 'markForCheck');
+
     component.setDisabledState(expectedValue);
+
     expect(component.disabled).toBe(expectedValue);
+    expect(markForCheck).toHaveBeenCalled();
   });
 
   it('should be call callOnChange with minDate', () => {

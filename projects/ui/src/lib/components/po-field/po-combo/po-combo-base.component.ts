@@ -1023,6 +1023,7 @@ export abstract class PoComboBaseComponent implements ControlValueAccessor, OnIn
   // Usada para interceptar os estados de habilitado via forms api
   setDisabledState(isDisabled: boolean) {
     this.disabled = isDisabled;
+    this.changeDetector.markForCheck();
   }
 
   registerOnChange(fn: any): void {

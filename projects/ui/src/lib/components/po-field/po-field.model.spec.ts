@@ -8,7 +8,8 @@ describe('PoFieldModel', () => {
   let component: Field;
 
   beforeEach(() => {
-    component = new Field();
+    const changeDetector: any = { markForCheck: () => {} };
+    component = new Field(changeDetector);
   });
 
   it('should be created', () => {
@@ -54,10 +55,12 @@ describe('PoFieldModel', () => {
 
   it('setDisabledState: should set disabled property', () => {
     const isDisabled = true;
+    const markForCheck = spyOn(component['cd'], 'markForCheck');
 
     component.setDisabledState(isDisabled);
 
     expect(component.disabled).toBe(true);
+    expect(markForCheck).toHaveBeenCalled();
   });
 
   it('writeValue: should call onWriteValue with value', () => {
