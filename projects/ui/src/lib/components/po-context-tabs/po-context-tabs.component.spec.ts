@@ -12,8 +12,6 @@ describe('PoContextTabsComponent:', () => {
       declarations: [PoContextTabsComponent]
     }).compileComponents();
 
-    tabElements = [document.createElement('div'), document.createElement('div'), document.createElement('div')];
-
     fixture = TestBed.createComponent(PoContextTabsComponent);
     component = fixture.componentInstance;
     fixture.detectChanges();
@@ -386,10 +384,10 @@ describe('PoContextTabsComponent:', () => {
       expect(afterMethod).toHaveBeenCalledWith(200);
     });
 
-    it('updateTabsState: should update tabs state and call calculateTabs and executeTabsState', () => {
+    it('updateTabsState: should correctly update tabs state considering checkChangesTabs logic', () => {
       component.initCheckChangesTab = true;
       component.quantityTabsButton = 2;
-      component.byQuantityFunction = undefined; // ou um número qualquer, se quiser simular
+      component.byQuantityFunction = undefined;
       component.initialTabsWidth = [
         { id: 'tab-1', width: 100 },
         { id: 'tab-2-hide', width: 120 },
@@ -402,59 +400,66 @@ describe('PoContextTabsComponent:', () => {
           { id: 'tab-other', removed: true, hide: true },
           { id: 'tab-2-hide', hide: true },
           { id: 'tab-2', hide: false, showTooltip: true },
-          { id: 'tab-3' }
+          { id: 'tab-3', hide: false }
         ]
       } as any;
 
-      const mockTab1 = {
-        nativeElement: {
-          id: 'tab-1',
-          style: { display: '' },
-          hidden: false
-        }
-      };
-
-      const mockTab2Hidden = {
-        nativeElement: {
-          id: 'tab-2-hide',
-          style: { display: '' },
-          hidden: true
-        }
-      };
-
-      const mockTab2 = {
-        nativeElement: {
-          id: 'tab-2',
-          style: { display: '' },
-          hidden: false
-        }
-      };
-
-      const mockTab3 = {
-        nativeElement: {
-          id: 'tab-3',
-          style: { display: '' },
-          hidden: true
-        }
-      };
+      const mockTab1 = { nativeElement: { id: 'tab-1', style: { display: '' }, hidden: false } };
+      const mockTab2Hidden = { nativeElement: { id: 'tab-2-hide', style: { display: '' }, hidden: true } };
+      const mockTab2 = { nativeElement: { id: 'tab-2', style: { display: '' }, hidden: false } };
+      const mockTab3 = { nativeElement: { id: 'tab-3', style: { display: 'none' }, hidden: true } };
 
       component.tabButton = [mockTab1, mockTab2Hidden, mockTab2, mockTab3] as any;
 
       spyOn(component as any, 'calculateTabs');
       spyOn(component as any, 'executeTabsState');
 
-      component.updateTabsState(false, {
-        id: 'tab-2',
-        hide: true,
-        widthButton: undefined
-      } as any);
+      component.updateTabsState(false, { id: 'tab-2', hide: true, widthButton: undefined } as any);
 
-      expect(mockTab3.nativeElement.style.display).toBe('none');
-      expect(mockTab3.nativeElement.hidden).toBeTrue();
+      expect(mockTab3.nativeElement.hidden).toBeFalse();
+      expect(mockTab3.nativeElement.style.display).toBe('inline-block');
+
+      expect(mockTab2Hidden.nativeElement.hidden).toBeTrue();
+      expect(mockTab2Hidden.nativeElement.style.display).toBe('');
+
+      expect(mockTab1.nativeElement.hidden).toBeFalse();
+      expect(mockTab2.nativeElement.hidden).toBeFalse();
 
       expect((component as any).calculateTabs).toHaveBeenCalled();
-      expect(component.initialTabsWidth.length).toBe(4);
       expect((component as any).executeTabsState).not.toHaveBeenCalled();
+      expect(component.initialTabsWidth.length).toBe(4);
+    });
+
+    it('checkChangesTabs: should hide tabs exceeding quantityTabs', () => {
+      component.quantityTabsButton = 2;
+
+      const mockTab1 = { nativeElement: { id: 'tab-1', style: { display: '' }, hidden: false, offsetWidth: 100 } };
+      const mockTab2 = { nativeElement: { id: 'tab-2', style: { display: '' }, hidden: false, offsetWidth: 100 } };
+      const mockTab3 = { nativeElement: { id: 'tab-3', style: { display: '' }, hidden: false, offsetWidth: 100 } };
+      const mockTab4 = { nativeElement: { id: 'tab-4', style: { display: '' }, hidden: false, offsetWidth: 100 } };
+
+      component.tabButton = [mockTab1, mockTab2, mockTab3, mockTab4] as any;
+
+      component['tabsChildren'] = {
+        _results: [
+          { id: 'tab-1', hide: false },
+          { id: 'tab-2', hide: false },
+          { id: 'tab-3', hide: false },
+          { id: 'tab-4', hide: false }
+        ]
+      } as any;
+
+      spyOn(component as any, 'calculateTabs');
+
+      component['checkChangesTabs']();
+
+      expect(mockTab4.nativeElement.hidden).toBeTrue();
+      expect(mockTab4.nativeElement.style.display).toBe('none');
+
+      expect(mockTab1.nativeElement.hidden).toBeFalse();
+      expect(mockTab2.nativeElement.hidden).toBeFalse();
+
+      expect((component as any).calculateTabs).toHaveBeenCalled();
     });
 
     it('updateTabsState: should return defaultLastTabWidth is valid', () => {
@@ -498,6 +503,70 @@ describe('PoContextTabsComponent:', () => {
       expect((component as any).calculateTabs).not.toHaveBeenCalled();
       expect(component.defaultLastTabWidth).toBe(120);
       expect((component as any).executeTabsState).toHaveBeenCalled();
+    });
+
+    it('updateTabsState: should keep newly added tab visible when there is space available (no dropdown)', () => {
+      component.initCheckChangesTab = true;
+      component.quantityTabsButton = 3;
+      component.byQuantityFunction = undefined;
+      component.initialTabsWidth = [
+        { id: 'tab-1', width: 100 },
+        { id: 'tab-2', width: 120 }
+      ];
+
+      const mockTabsChildren = [
+        { id: 'tab-1', hide: false, showTooltip: true },
+        { id: 'tab-2', hide: false, showTooltip: true },
+        { id: 'tab-3', hide: false, showTooltip: true }
+      ];
+
+      component['tabsChildren'] = {
+        _results: mockTabsChildren,
+        toArray: () => mockTabsChildren
+      } as any;
+
+      const mockTab1 = {
+        nativeElement: {
+          id: 'tab-1',
+          style: { display: '' },
+          hidden: false,
+          offsetWidth: 100
+        }
+      };
+
+      const mockTab2 = {
+        nativeElement: {
+          id: 'tab-2',
+          style: { display: '' },
+          hidden: false,
+          offsetWidth: 120
+        }
+      };
+
+      const mockTab3 = {
+        nativeElement: {
+          id: 'tab-3',
+          style: { display: '' },
+          hidden: false,
+          offsetWidth: 110
+        }
+      };
+
+      component['containerTabs'] = {
+        nativeElement: { offsetWidth: 600 }
+      } as any;
+
+      component.tabButton = [mockTab1, mockTab2, mockTab3] as any;
+
+      spyOn(component as any, 'calculateTabs').and.callThrough();
+
+      component.updateTabsState(false, { id: 'tab-3', hide: false } as any);
+
+      expect(mockTab3.nativeElement.hidden).toBeFalse();
+      expect(component.tabsDefault.some(t => t.id === 'tab-3')).toBeTrue();
+      expect(component.overflowedTabs.some(t => t.id === 'tab-3')).toBeFalse();
+
+      expect((component as any).calculateTabs).toHaveBeenCalled();
     });
 
     it('setQuantityTabsButton: should values valid', () => {

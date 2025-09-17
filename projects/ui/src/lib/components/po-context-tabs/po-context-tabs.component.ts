@@ -207,13 +207,13 @@ export class PoContextTabsComponent extends PoTabsComponent {
 
       if (!currentTab) {
         this.initialTabsWidth.push({ id: tab.nativeElement.id, width: tab.nativeElement.offsetWidth });
-        if (index > quantityTabs - 1) {
+        if (index > quantityTabs) {
           tab.nativeElement.style.display = 'none';
           tab.nativeElement.hidden = true;
         }
         this.tabsChildren['_results'] = this.tabsChildren['_results'].filter(item => !item.removed);
       }
-      if (tab.nativeElement.hidden && index <= quantityTabs - 1) return;
+      if (tab.nativeElement.hidden && index <= quantityTabs) return;
       index++;
     });
     this.calculateTabs(true);
