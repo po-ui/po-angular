@@ -625,23 +625,6 @@ p {
   cursor: not-allowed;
 }
 
-/* width */
-::-webkit-scrollbar {
-  width: 6px;
-  border-radius: 2px;
-}
-
-/* Track */
-::-webkit-scrollbar-track {
-  background: white;
-}
-
-/* Handle */
-::-webkit-scrollbar-thumb {
-  background: #753399;
-  border-radius: 4px;
-}
-
 input[type='range'] {
   accent-color: #753399;
 }
