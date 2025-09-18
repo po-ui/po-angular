@@ -57,14 +57,6 @@ pre {
   word-wrap: break-word;
 }
 
-pre::-webkit-scrollbar {
-  height: 10px;
-}
-
-pre::-webkit-scrollbar-thumb {
-  background-color: #1d242630;
-}
-
 .docs-api h1,
 .docs-api h2,
 .docs-api h3,
