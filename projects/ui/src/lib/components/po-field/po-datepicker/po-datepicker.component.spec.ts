@@ -754,6 +754,17 @@ describe('PoDatepickerComponent:', () => {
 
         expect(component.togglePicker).toHaveBeenCalled();
       });
+
+      it('should emit event when field is focused', () => {
+        const fakeEvent = new KeyboardEvent('keydown', { key: 'Enter' });
+
+        spyOn(component.keydown, 'emit');
+        spyOnProperty(document, 'activeElement', 'get').and.returnValue(component.inputEl.nativeElement);
+
+        component.onKeyDown(fakeEvent);
+
+        expect(component.keydown.emit).toHaveBeenCalled();
+      });
     });
 
     it('togglePicker: should keep the component invisible when `disabled` and `readonly` is true', () => {

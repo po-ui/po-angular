@@ -1,4 +1,4 @@
-import { Directive, EventEmitter, HostBinding, Input, Output } from '@angular/core';
+import { ChangeDetectorRef, Directive, EventEmitter, HostBinding, Input, Output } from '@angular/core';
 import { AbstractControl, ControlValueAccessor, Validator } from '@angular/forms';
 
 import { convertToBoolean, getDefaultSizeFn, isEquals, isIE, isMobile, validateSizeFn } from '../../../utils/util';
@@ -720,7 +720,8 @@ export abstract class PoUploadBaseComponent implements ControlValueAccessor, Val
 
   constructor(
     protected uploadService: PoUploadService,
-    languageService: PoLanguageService
+    languageService: PoLanguageService,
+    protected cd: ChangeDetectorRef
   ) {
     this.language = languageService.getShortLanguage();
   }
@@ -729,6 +730,7 @@ export abstract class PoUploadBaseComponent implements ControlValueAccessor, Val
   // Usada para interceptar os estados de habilitado via forms api
   setDisabledState(isDisabled: boolean) {
     this.disabled = isDisabled;
+    this.cd.markForCheck();
   }
 
   registerOnChange(fn: any): void {

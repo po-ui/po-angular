@@ -14,7 +14,8 @@ describe('PoCheckboxBaseComponent:', () => {
   let component: PoCheckboxBaseComponent;
 
   beforeEach(() => {
-    component = new PoCheckboxComponent();
+    const changeDetector: any = { markForCheck: () => {} };
+    component = new PoCheckboxComponent(changeDetector);
     component.propagateChange = (value: any) => {};
   });
 
@@ -115,8 +116,12 @@ describe('PoCheckboxBaseComponent:', () => {
 
     it('setDisabledState: should set `component.disabled` with boolean parameter', () => {
       const expectedValue = true;
+      const markForCheck = spyOn(component['cd'], 'markForCheck');
+
       component.setDisabledState(expectedValue);
+
       expect(component.disabled).toBe(expectedValue);
+      expect(markForCheck).toHaveBeenCalled();
     });
 
     it('changeValue: should call only `change.emit` with `checkboxValue` if propagateChange is `null`', () => {
