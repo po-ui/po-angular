@@ -1,6 +1,5 @@
 const { task } = require('gulp');
 const scanner = require('sonarqube-scanner').default;
-const argv = require('yargs').argv;
 
 const validateArgument = (value, name) => {
   if (!value) {
@@ -11,9 +10,27 @@ const validateArgument = (value, name) => {
 
 task('sonarqube', callback => {
   try {
-    const token = validateArgument(argv.token, 'token');
-    const url = validateArgument(argv.url, 'url');
-    const projectKey = validateArgument(argv.projectKey, 'projectKey');
+    const token = validateArgument(process.env.SONAR_TOKEN, 'token');
+    const url = validateArgument(process.env.SONAR_URL, 'url');
+    const projectKey = validateArgument(process.env.SONAR_PROJECT_KEY, 'projectKey');
+    const branchName = validateArgument(process.env.SONAR_BRANCH_NAME, 'branchName');
+
+    let conditionalOptions = {};
+
+    if (process.env.SONAR_PULL_REQUEST_ID) {
+      const pullRequestId = validateArgument(process.env.SONAR_PULL_REQUEST_ID, 'pullRequestId');
+      const pullRequestBase = validateArgument(process.env.SONAR_PULL_REQUEST_BASE, 'pullRequestBase');
+
+      conditionalOptions = {
+        'sonar.pullrequest.key': pullRequestId,
+        'sonar.pullrequest.base': pullRequestBase,
+        'sonar.pullrequest.branch': branchName
+      };
+    } else {
+      conditionalOptions = {
+        'sonar.branch.name': branchName
+      };
+    }
 
     const exclusions = [
       '**/node_modules/**',
@@ -37,14 +54,16 @@ task('sonarqube', callback => {
     scanner(
       {
         serverUrl: url,
-        token: token,
+        token,
         options: {
           'sonar.projectKey': projectKey,
-          'sonar.login': token,
+          'sonar.token': token,
           'sonar.projectName': projectKey,
           'sonar.sources': 'projects',
           'sonar.exclusions': exclusions,
-          'sonar.typescript.lcov.reportPaths': lcovReportPaths
+          'sonar.typescript.lcov.reportPaths': lcovReportPaths,
+          'sonar.sourceEncoding': 'UTF-8',
+          ...conditionalOptions
         }
       },
       callback
