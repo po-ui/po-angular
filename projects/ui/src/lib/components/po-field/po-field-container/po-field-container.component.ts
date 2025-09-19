@@ -1,8 +1,21 @@
-import { ChangeDetectionStrategy, Component, Input, OnChanges, OnInit, SimpleChanges, inject } from '@angular/core';
+import {
+  ChangeDetectionStrategy,
+  ChangeDetectorRef,
+  Component,
+  ElementRef,
+  Input,
+  OnChanges,
+  OnInit,
+  SimpleChanges,
+  ViewChild,
+  inject,
+  input
+} from '@angular/core';
 
 import { PoLanguageService } from '../../../services/po-language/po-language.service';
 import { convertToBoolean } from '../../../utils/util';
 import { poFieldContainerLiterals } from './po-field-container-literals';
+import { PoHelperComponent, PoHelperOptions } from '../../po-helper';
 
 /**
  * @docsPrivate
@@ -16,6 +29,9 @@ import { poFieldContainerLiterals } from './po-field-container-literals';
   standalone: false
 })
 export class PoFieldContainerComponent implements OnInit, OnChanges {
+  @ViewChild('labelEl', { read: ElementRef }) labelEl!: ElementRef<HTMLElement>;
+  @ViewChild('helperEl', { read: PoHelperComponent, static: false }) helperEl?: PoHelperComponent;
+
   /** Indica se o campo será desabilitado. */
   @Input('p-disabled') disabled: boolean;
 
@@ -28,8 +44,26 @@ export class PoFieldContainerComponent implements OnInit, OnChanges {
   /** Texto de apoio do campo. */
   @Input('p-help') help: string;
 
+  /** Configurações do ícone de ajuda adicional vínculado ao label. */
+  poHelperComponent = input<PoHelperOptions>(undefined, { alias: 'p-helper' });
+
+  /** Define se o componente helper estará visível através das ações customizadas */
+  showHelperComponent = input<boolean>(false, { alias: 'p-show-helper' });
+
+  /**
+   * @optional
+   *
+   * Habilita a quebra automática do texto do componente po-label. Quando ativada, o texto que excede
+   * o espaço disponível é transferido para a próxima linha em pontos apropriados para uma
+   * leitura clara.
+   *
+   * @default `false`
+   */
+  textWrap = input<boolean>(false, { alias: 'p-text-wrap' });
+
   literals: object;
   requirement: string;
+  showTip = false;
 
   private _optional: boolean = false;
   private _required: boolean = false;
@@ -55,7 +89,7 @@ export class PoFieldContainerComponent implements OnInit, OnChanges {
   /** Define se a indicação de campo obrigatório será exibida. */
   @Input('p-show-required') showRequired: boolean = false;
 
-  constructor() {
+  constructor(private cdr: ChangeDetectorRef) {
     const languageService = inject(PoLanguageService);
 
     const language = languageService.getShortLanguage();
@@ -67,12 +101,39 @@ export class PoFieldContainerComponent implements OnInit, OnChanges {
 
   ngOnInit(): void {
     this.setRequirement();
+    this.updateTooltip();
   }
 
   ngOnChanges(changes: SimpleChanges): void {
-    if (changes.help || changes.label || changes.optional || changes.required || changes.showRequired) {
+    if (
+      changes.help ||
+      changes.label ||
+      changes.optional ||
+      changes.required ||
+      changes.showRequired ||
+      changes.textWrap
+    ) {
       this.setRequirement();
+      queueMicrotask(() => this.updateTooltip());
+      this.cdr.detectChanges();
     }
+
+    if (changes.showHelperComponent && this.showHelperComponent()) {
+      this.helperEl?.openHelperPopover();
+    } else if (changes.showHelperComponent && !this.showHelperComponent()) {
+      this.helperEl?.closeHelperPopover();
+    }
+  }
+
+  updateTooltip(): void {
+    const el = this.getMeasurableEl();
+    if (!el) return;
+
+    const isEllipsed = el.scrollWidth > el.clientWidth;
+    if (this.showTip !== isEllipsed) {
+      this.showTip = isEllipsed;
+    }
+    this.cdr.markForCheck();
   }
 
   private setRequirement(): void {
@@ -85,5 +146,13 @@ export class PoFieldContainerComponent implements OnInit, OnChanges {
         this.requirement = undefined;
       }
     }
+  }
+
+  private getMeasurableEl() {
+    const host = this.labelEl?.nativeElement;
+    if (!host) return null;
+    const inner = host.querySelector('.po-label, label, .po-label-title, .po-field-title');
+
+    return inner ?? host;
   }
 }

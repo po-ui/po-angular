@@ -11,6 +11,8 @@ import { AbstractControl } from '@angular/forms';
 
 import { isObservable, of, Subscription, switchMap } from 'rxjs';
 import { PoInputBaseComponent } from '../po-input/po-input-base.component';
+import { PoHelperOptions } from '../../po-helper';
+import { setHelperSettings } from '../../../utils/util';
 
 /* eslint-disable @angular-eslint/directive-class-suffix */
 @Directive()
@@ -22,6 +24,8 @@ export abstract class PoInputGeneric extends PoInputBaseComponent implements Aft
   el: ElementRef;
   valueBeforeChange: any;
   timeoutChange: any;
+  helperSettings: PoHelperOptions;
+
   private subscriptionValidator: Subscription = new Subscription();
 
   get autocomplete(): string {
@@ -60,6 +64,7 @@ export abstract class PoInputGeneric extends PoInputBaseComponent implements Aft
   }
 
   afterViewInit() {
+    this.helperSettings = this.setHelper(this.label, this.additionalHelpTooltip).helperSettings;
     this.verifyAutoFocus();
   }
 
@@ -288,4 +293,8 @@ export abstract class PoInputGeneric extends PoInputBaseComponent implements Aft
   }
 
   abstract extraValidation(c: AbstractControl): { [key: string]: any };
+
+  setHelper(label?: string, additionalHelpTooltip?: string) {
+    return setHelperSettings(label, additionalHelpTooltip, this.poHelperComponent(), this.size);
+  }
 }

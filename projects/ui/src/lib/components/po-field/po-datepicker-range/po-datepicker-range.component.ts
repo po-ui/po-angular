@@ -19,9 +19,10 @@ import { PoControlPositionService } from './../../../services/po-control-positio
 
 import { PoLanguageService } from '../../../services/po-language/po-language.service';
 import { PoDateService } from './../../../services/po-date/po-date.service';
-import { replaceFormatSeparator } from './../../../utils/util';
+import { replaceFormatSeparator, setHelperSettings } from './../../../utils/util';
 import { PoDatepickerRange } from './interfaces/po-datepicker-range.interface';
 import { PoDatepickerRangeBaseComponent } from './po-datepicker-range-base.component';
+import { PoHelperOptions } from '../../po-helper';
 
 const arrowLeftKey = 37;
 const arrowRightKey = 39;
@@ -97,6 +98,7 @@ export class PoDatepickerRangeComponent
   @ViewChild('calendarPicker', { read: ElementRef }) calendarPicker: ElementRef;
 
   isCalendarVisible = false;
+  helperSettings: PoHelperOptions;
 
   private clickListener;
   private eventResizeListener;
@@ -173,6 +175,7 @@ export class PoDatepickerRangeComponent
   }
 
   ngAfterViewInit() {
+    this.helperSettings = this.setHelper(this.label, this.additionalHelpTooltip).helperSettings;
     if (this.autoFocus) {
       this.focus();
     }
@@ -322,6 +325,8 @@ export class PoDatepickerRangeComponent
   }
 
   /**
+   * @deprecated v23.x.x
+   *
    * Método que exibe `p-additionalHelpTooltip` ou executa a ação definida em `p-additionalHelp`.
    * Para isso, será necessário configurar uma tecla de atalho utilizando o evento `p-keydown`.
    *
@@ -374,6 +379,10 @@ export class PoDatepickerRangeComponent
     this.endDateInput.nativeElement.value = endDateFormated;
     this.startDateInput.nativeElement.value = startDateFormated;
     this.changeDetector.detectChanges();
+  }
+
+  setHelper(label?: string, additionalHelpTooltip?: string) {
+    return setHelperSettings(label, additionalHelpTooltip, this.poHelperComponent(), this.size);
   }
 
   private applyFocusOnDatePickerRangeField() {

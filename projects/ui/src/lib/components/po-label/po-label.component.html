@@ -1,6 +1,7 @@
 @if (label) {
   <label
     class="po-label"
+    [class.po-label-wrap]="textWrap()"
     [attr.for]="field && for ? for : undefined"
     [attr.p-field]="field"
     [class.po-label-disabled]="disabled"

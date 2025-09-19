@@ -32,7 +32,8 @@ export class SamplePoSelectLabsComponent implements OnInit {
     { value: 'required', label: 'Required' },
     { value: 'showRequired', label: 'Show Required' },
     { value: 'readonly', label: 'Read Only' },
-    { value: 'errorLimit', label: 'Limit Error Message' }
+    { value: 'errorLimit', label: 'Limit Error Message' },
+    { value: 'labelTextWrap', label: 'Label Text Wrap' }
   ];
 
   public readonly sizeOptions: Array<PoRadioGroupOption> = [

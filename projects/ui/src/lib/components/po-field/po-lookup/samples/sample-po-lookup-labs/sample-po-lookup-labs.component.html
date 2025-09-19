@@ -26,6 +26,7 @@
   [p-size]="size"
   [p-spacing]="spacing"
   [p-text-wrap]="properties.includes('textWrap')"
+  [p-label-text-wrap]="properties?.includes('labelTextWrap')"
   [p-virtual-scroll]="properties.includes('virtualScroll')"
   (p-change)="changeEvent('p-change')"
   (p-error)="changeEvent('p-error')"

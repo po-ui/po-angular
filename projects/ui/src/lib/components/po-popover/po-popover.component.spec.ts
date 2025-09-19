@@ -216,12 +216,14 @@ describe('PoPopoverComponent:', () => {
       position: 'top',
       setPopoverPosition: () => {},
       setElementsControlPosition: () => {},
-      setOpacity: arg => {}
+      setOpacity: arg => {},
+      cd: { detectChanges: () => {} }
     };
 
     spyOn(fakeThis, 'addScrollEventListener');
     spyOn(fakeThis, 'setOpacity');
     spyOn(fakeThis, 'setElementsControlPosition');
+    spyOn(fakeThis.cd, 'detectChanges');
     component.open.call(fakeThis);
 
     tick(300);
@@ -230,6 +232,7 @@ describe('PoPopoverComponent:', () => {
     expect(fakeThis.addScrollEventListener).toHaveBeenCalled();
     expect(fakeThis.setOpacity).toHaveBeenCalledWith(1);
     expect(fakeThis.setElementsControlPosition).toHaveBeenCalled();
+    expect(fakeThis.cd.detectChanges).toHaveBeenCalled();
   }));
 
   it('should close popover and call `closePopover.emit`', () => {

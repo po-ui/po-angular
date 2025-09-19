@@ -1,4 +1,4 @@
-import { Component, Input } from '@angular/core';
+import { Component, input, Input } from '@angular/core';
 import { convertToBoolean } from '../../utils/util';
 
 /**
@@ -57,4 +57,17 @@ export class PoLabelComponent {
 
   /** Indica o tipo do campo vinculado ao label */
   @Input('p-requirement') requirement?: string;
+
+  /**
+   * @optional
+   *
+   * @description
+   *
+   * Habilita a quebra automática do texto. Quando ativada, o texto que excede
+   * o espaço disponível é transferido para a próxima linha em pontos apropriados para uma
+   * leitura clara.
+   *
+   * @default `false`
+   */
+  textWrap = input<boolean>(false, { alias: 'p-text-wrap' });
 }

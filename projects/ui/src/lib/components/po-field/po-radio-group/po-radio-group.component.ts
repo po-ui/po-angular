@@ -15,7 +15,7 @@ import {
 } from '@angular/core';
 import { NG_VALIDATORS, NG_VALUE_ACCESSOR } from '@angular/forms';
 
-import { removeDuplicatedOptions } from '../../../utils/util';
+import { removeDuplicatedOptions, setHelperSettings } from '../../../utils/util';
 
 import { PoRadioComponent } from '../po-radio/po-radio.component';
 import { PoRadioGroupBaseComponent } from './po-radio-group-base.component';
@@ -179,6 +179,8 @@ export class PoRadioGroupComponent extends PoRadioGroupBaseComponent implements 
   }
 
   /**
+   * @deprecated v23.x.x
+   *
    * Método que exibe `p-additionalHelpTooltip` ou executa a ação definida em `p-additionalHelp`.
    * Para isso, será necessário configurar uma tecla de atalho utilizando o evento `p-keydown`.
    *
@@ -206,6 +208,10 @@ export class PoRadioGroupComponent extends PoRadioGroupBaseComponent implements 
 
   showAdditionalHelpIcon() {
     return !!this.additionalHelpTooltip || this.isAdditionalHelpEventTriggered();
+  }
+
+  setHelper(label?: string, additionalHelpTooltip?: string) {
+    return setHelperSettings(label, additionalHelpTooltip, this.poHelperComponent(), this.size);
   }
 
   private isAdditionalHelpEventTriggered(): boolean {

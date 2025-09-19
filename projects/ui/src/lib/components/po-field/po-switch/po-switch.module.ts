@@ -6,9 +6,10 @@ import { PoIconModule } from '../../po-icon';
 import { PoLabelModule } from '../../po-label';
 
 import { PoFieldContainerModule } from './../po-field-container/po-field-container.module';
+import { PoHelperModule } from '../../po-helper';
 @NgModule({
   declarations: [PoSwitchComponent],
   exports: [PoSwitchComponent],
-  imports: [CommonModule, FormsModule, PoFieldContainerModule, PoLabelModule, PoIconModule]
+  imports: [CommonModule, FormsModule, PoFieldContainerModule, PoLabelModule, PoIconModule, PoHelperModule]
 })
 export class PoSwitchModule {}

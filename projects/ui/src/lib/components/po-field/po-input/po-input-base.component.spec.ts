@@ -1,5 +1,5 @@
 import { ChangeDetectorRef, Directive } from '@angular/core';
-import { fakeAsync, tick } from '@angular/core/testing';
+import { fakeAsync, TestBed, tick } from '@angular/core/testing';
 import { AbstractControl, FormControl, UntypedFormControl, Validators } from '@angular/forms';
 
 import { expectPropertiesValues, expectSettersMethod } from '../../../util-test/util-expect.spec';
@@ -28,10 +28,12 @@ describe('PoInputBase:', async () => {
   let changeDetectorRef: jasmine.SpyObj<ChangeDetectorRef>;
   const fakeSubscription = <any>{ unsubscribe: () => {} };
 
-  beforeEach(() => {
+  beforeEach(async () => {
+    await TestBed.configureTestingModule({}).compileComponents();
+
     changeDetectorRef = jasmine.createSpyObj('ChangeDetectorRef', ['markForCheck', 'detectChanges']);
 
-    component = new PoInput(changeDetectorRef);
+    component = TestBed.runInInjectionContext(() => new PoInput(changeDetectorRef as any));
   });
 
   it('should be created', () => {

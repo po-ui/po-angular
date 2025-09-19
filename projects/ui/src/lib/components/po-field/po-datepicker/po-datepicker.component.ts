@@ -20,6 +20,7 @@ import {
   isKeyCodeSpace,
   isMobile,
   replaceFormatSeparator,
+  setHelperSettings,
   setYearFrom0To100,
   uuid
 } from '../../../utils/util';
@@ -31,6 +32,7 @@ import { PoButtonComponent } from '../../po-button/po-button.component';
 import { PoCalendarComponent } from '../../po-calendar/po-calendar.component';
 import { PoDatepickerBaseComponent } from './po-datepicker-base.component';
 import { PoDatepickerLiterals } from './po-datepicker.literals';
+import { PoHelperOptions } from '../../po-helper';
 
 const poCalendarContentOffset = 8;
 const poCalendarPositionDefault = 'bottom-left';
@@ -100,6 +102,7 @@ export class PoDatepickerComponent extends PoDatepickerBaseComponent implements 
   id = `po-datepicker[${uuid()}]`;
   visible: boolean = false;
   literals: any;
+  helperSettings: PoHelperOptions;
 
   eventListenerFunction: () => void;
   eventResizeListener: () => void;
@@ -183,6 +186,7 @@ export class PoDatepickerComponent extends PoDatepickerBaseComponent implements 
   }
 
   ngAfterViewInit() {
+    this.helperSettings = this.setHelper(this.label, this.additionalHelpTooltip).helperSettings;
     this.setDialogPickerStyleDisplay('none');
     if (this.autoFocus) {
       this.focus();
@@ -377,6 +381,8 @@ export class PoDatepickerComponent extends PoDatepickerBaseComponent implements 
   }
 
   /**
+   * @deprecated v23.x.x
+   *
    * Método que exibe `p-additionalHelpTooltip` ou executa a ação definida em `p-additionalHelp`.
    * Para isso, será necessário configurar uma tecla de atalho utilizando o evento `p-keydown`.
    *
@@ -624,5 +630,9 @@ export class PoDatepickerComponent extends PoDatepickerBaseComponent implements 
 
     event.preventDefault();
     event.stopPropagation();
+  }
+
+  setHelper(label?: string, additionalHelpTooltip?: string) {
+    return setHelperSettings(label, additionalHelpTooltip, this.poHelperComponent(), this.size);
   }
 }

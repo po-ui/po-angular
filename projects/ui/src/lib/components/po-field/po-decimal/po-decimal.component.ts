@@ -9,7 +9,8 @@ import {
   OnDestroy,
   OnInit,
   ViewChild,
-  inject
+  inject,
+  input
 } from '@angular/core';
 import { AbstractControl, NG_VALIDATORS, NG_VALUE_ACCESSOR } from '@angular/forms';
 import { PoLanguageService } from '../../../services/po-language/po-language.service';
@@ -17,8 +18,9 @@ import { PoLanguageService } from '../../../services/po-language/po-language.ser
 import { maxFailed, maxlengpoailed, minFailed } from '../validators';
 
 import { isObservable, of, Subscription, switchMap } from 'rxjs';
-import { convertToInt, uuid } from '../../../utils/util';
+import { convertToInt, setHelperSettings, uuid } from '../../../utils/util';
 import { PoInputBaseComponent } from '../po-input/po-input-base.component';
+import { PoHelperOptions } from '../../po-helper';
 
 const poDecimalDefaultDecimalsLength = 2;
 const poDecimalDefaultThousandMaxlength = 13;
@@ -103,6 +105,8 @@ export class PoDecimalComponent extends PoInputBaseComponent implements AfterVie
   private thousandSeparator: string;
   private valueBeforeChange: any;
   private subscriptionValidator: Subscription = new Subscription();
+
+  helperSettings: PoHelperOptions;
 
   private regex = {
     thousand: new RegExp('\\' + ',', 'g'),
@@ -266,6 +270,7 @@ export class PoDecimalComponent extends PoInputBaseComponent implements AfterVie
   }
 
   ngAfterViewInit() {
+    this.helperSettings = this.setHelper(this.label, this.additionalHelpTooltip).helperSettings;
     this.verifyAutoFocus();
   }
 
@@ -480,6 +485,10 @@ export class PoDecimalComponent extends PoInputBaseComponent implements AfterVie
     const isDecimalSeparator = value === this.decimalSeparator;
 
     return isDecimalSeparator ? `0${value}` : value;
+  }
+
+  setHelper(label?: string, additionalHelpTooltip?: string) {
+    return setHelperSettings(label, additionalHelpTooltip, this.poHelperComponent(), this.size);
   }
 
   private containsComma(value) {

@@ -1,4 +1,4 @@
-import { Directive } from '@angular/core';
+import { Component } from '@angular/core';
 import { UntypedFormControl } from '@angular/forms';
 
 import { expectPropertiesValues } from '../../../util-test/util-expect.spec';
@@ -7,9 +7,14 @@ import * as ValidatorsFunctions from '../validators';
 
 import { PoThemeA11yEnum } from '../../../services';
 import { PoRadioGroupBaseComponent } from './po-radio-group-base.component';
+import { ComponentFixture, TestBed } from '@angular/core/testing';
 
-@Directive()
-class PoRadioGroup extends PoRadioGroupBaseComponent {
+@Component({
+  selector: 'po-radio-group-base-host',
+  template: '',
+  standalone: false
+})
+class PoRadioHostGroupComponent extends PoRadioGroupBaseComponent {
   inputEl = {
     checked: false,
     value: ''
@@ -21,10 +26,16 @@ class PoRadioGroup extends PoRadioGroupBaseComponent {
 }
 
 describe('PoRadioGroupBase: ', () => {
-  let component: PoRadioGroup;
+  let component: PoRadioHostGroupComponent;
+  let fixture: ComponentFixture<PoRadioHostGroupComponent>;
 
   beforeEach(() => {
-    component = new PoRadioGroup();
+    TestBed.configureTestingModule({
+      declarations: [PoRadioHostGroupComponent]
+    });
+
+    fixture = TestBed.createComponent(PoRadioHostGroupComponent);
+    component = fixture.componentInstance;
   });
 
   it('should be instance of PoRadioGroupBaseComponent', () => {

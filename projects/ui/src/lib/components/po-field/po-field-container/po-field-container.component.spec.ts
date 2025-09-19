@@ -170,4 +170,109 @@ describe('PoFieldContainerComponent:', () => {
       expect(requirement.innerHTML).toBe(component.literals['required']);
     });
   });
+
+  describe('updateTooltip:', () => {
+    it('should set showTip to true if text is ellipsed', () => {
+      const mockEl = {
+        scrollWidth: 120,
+        clientWidth: 100
+      } as any;
+      spyOn<any>(component, 'getMeasurableEl').and.returnValue(mockEl);
+      component.showTip = false;
+      spyOn(component['cdr'], 'markForCheck');
+
+      component.updateTooltip();
+
+      expect(component.showTip).toBeTrue();
+      expect(component['cdr'].markForCheck).toHaveBeenCalled();
+    });
+
+    it('should set showTip to false if text is not ellipsed', () => {
+      const mockEl = {
+        scrollWidth: 100,
+        clientWidth: 120
+      } as any;
+      spyOn<any>(component, 'getMeasurableEl').and.returnValue(mockEl);
+      component.showTip = true;
+      spyOn(component['cdr'], 'markForCheck');
+
+      component.updateTooltip();
+
+      expect(component.showTip).toBeFalse();
+      expect(component['cdr'].markForCheck).toHaveBeenCalled();
+    });
+
+    it('should not change showTip if isEllipsed equals showTip', () => {
+      const mockEl = {
+        scrollWidth: 100,
+        clientWidth: 120
+      } as any;
+      spyOn<any>(component, 'getMeasurableEl').and.returnValue(mockEl);
+      component.showTip = false;
+      spyOn(component['cdr'], 'markForCheck');
+
+      component.updateTooltip();
+
+      expect(component.showTip).toBeFalse();
+      expect(component['cdr'].markForCheck).toHaveBeenCalled();
+    });
+
+    it('should return if getMeasurableEl returns null', () => {
+      spyOn<any>(component, 'getMeasurableEl').and.returnValue(null);
+      component.showTip = false;
+      const markForCheckSpy = spyOn(component['cdr'], 'markForCheck');
+
+      component.updateTooltip();
+
+      expect(component.showTip).toBeFalse();
+      expect(markForCheckSpy).not.toHaveBeenCalled();
+    });
+  });
+  describe('ngOnChanges (helper popover):', () => {
+    it('should call `openHelperPopover` when `showHelperComponent` changes and `showHelperComponent()` returns true', () => {
+      component['helperEl'] = {
+        openHelperPopover: jasmine.createSpy('openHelperPopover'),
+        closeHelperPopover: jasmine.createSpy('closeHelperPopover')
+      } as any;
+
+      spyOn(component as any, 'showHelperComponent').and.returnValue(true);
+
+      const changes: any = {
+        showHelperComponent: {
+          previousValue: false,
+          currentValue: true,
+          firstChange: false,
+          isFirstChange: () => false
+        }
+      };
+
+      component.ngOnChanges(changes);
+
+      expect(component['helperEl'].openHelperPopover).toHaveBeenCalled();
+      expect(component['helperEl'].closeHelperPopover).not.toHaveBeenCalled();
+    });
+
+    it('should call `closeHelperPopover` when `showHelperComponent` changes and `showHelperComponent()` returns false', () => {
+      component['helperEl'] = {
+        openHelperPopover: jasmine.createSpy('openHelperPopover'),
+        closeHelperPopover: jasmine.createSpy('closeHelperPopover')
+      } as any;
+
+      spyOn(component as any, 'showHelperComponent').and.returnValue(false);
+
+      const changes: any = {
+        showHelperComponent: {
+          previousValue: true,
+          currentValue: false,
+          firstChange: false,
+          isFirstChange: () => false
+        }
+      };
+
+      component.ngOnChanges(changes);
+
+      expect(component['helperEl'].closeHelperPopover).toHaveBeenCalled();
+      expect(component['helperEl'].openHelperPopover).not.toHaveBeenCalled();
+    });
+  });
 });

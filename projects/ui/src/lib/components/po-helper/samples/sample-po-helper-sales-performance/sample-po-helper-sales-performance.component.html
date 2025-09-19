@@ -1,0 +1,17 @@
+<po-container>
+  <div class="po-row">
+    <div class="po-font-title po-mb-3">Sales Performance</div>
+    <po-helper [p-helper]="helperOptions"></po-helper>
+  </div>
+  <div class="po-row">
+    <div class="po-lg-12">
+      <po-chart
+        p-title="Employee turnover rate"
+        p-value="25"
+        [p-type]="type"
+        [p-options]="optionsSingle"
+        [p-series]="turnover"
+      ></po-chart>
+    </div>
+  </div>
+</po-container>
