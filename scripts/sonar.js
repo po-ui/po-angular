@@ -1,6 +1,5 @@
 const { task } = require('gulp');
 const scanner = require('sonarqube-scanner').default;
-const argv = require('yargs').argv;
 
 const validateArgument = (value, name) => {
   if (!value) {
@@ -11,16 +10,16 @@ const validateArgument = (value, name) => {
 
 task('sonarqube', callback => {
   try {
-    const token = validateArgument(argv.token, 'token');
-    const url = validateArgument(argv.url, 'url');
-    const projectKey = validateArgument(argv.projectKey, 'projectKey');
-    const branchName = validateArgument(argv.branchName, 'branchName');
+    const token = validateArgument(process.env.SONAR_TOKEN, 'token');
+    const url = validateArgument(process.env.SONAR_URL, 'url');
+    const projectKey = validateArgument(process.env.SONAR_PROJECT_KEY, 'projectKey');
+    const branchName = validateArgument(process.env.SONAR_BRANCH_NAME, 'branchName');
 
     let conditionalOptions = {};
 
-    if (argv.pullRequestId) {
-      const pullRequestId = validateArgument(argv.pullRequestId, 'pullRequestId');
-      const pullRequestBase = validateArgument(argv.pullRequestBase, 'pullRequestBase');
+    if (process.env.SONAR_PULL_REQUEST_ID) {
+      const pullRequestId = validateArgument(process.env.SONAR_PULL_REQUEST_ID, 'pullRequestId');
+      const pullRequestBase = validateArgument(process.env.SONAR_PULL_REQUEST_BASE, 'pullRequestBase');
 
       conditionalOptions = {
         'sonar.pullrequest.key': pullRequestId,
