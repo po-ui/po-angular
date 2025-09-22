@@ -34,14 +34,15 @@ export const poPageDefaultLiteralsDefault = {
  *
  * > Para maiores informações, acesse o guia [Personalizando o Tema Padrão com Tokens CSS](https://po-ui.io/guides/theme-customization).
  *
- * | Propriedade                            | Descrição                                             | Valor Padrão                                    |
- * |----------------------------------------|-------------------------------------------------------|-------------------------------------------------|
- * | **Default Values**                     |                                                       |                                                 |
- * | `--padding`                            | Espaçamento do componente                             | `var(--spacing-xs) var(--spacing-md)`           |
- * | `--gap`                                | Gap entre o header e o conteúdo                       | `var(--spacing-md)`                             |
- * | `--padding-top-header`                 | Espaçamento do topo do header                         | `var(--color-neutral-light-30)`                 |
- * | `--gap-actions`                        | Gap entre os botões de action                         | `var(--spacing-xs)`                             |
- * | `--padding-content`                    | Espaçamento do conteúdo                               | `var(--spacing-xs) var(--spacing-sm)`           |
+ * | Propriedade         | Descrição                                   | Valor Padrão                          |
+ * |---------------------|---------------------------------------------|---------------------------------------|
+ * | **Header**          |                                             |                                       |
+ * | `--padding`         | Espaçamento do header                       | `var(--spacing-xs) var(--spacing-md)` |
+ * | `--gap`             | Espaçamento entre os breadcrumbs e o título | `var(--spacing-md)`                   |
+ * | `--gap-actions`     | Espaçamento entre as ações                  | `var(--spacing-xs)`                   |
+ * | `--font-family`     | Família tipográfica do título               | `var(--font-family-theme)`            |
+ * | **Content**         |                                             |                                       |
+ * | `--padding-content` | Espaçamento do conteúdo                     | `var(--spacing-xs) var(--spacing-sm)` |
  */
 @Directive()
 export abstract class PoPageDefaultBaseComponent {
