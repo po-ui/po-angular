@@ -1,3 +1,4 @@
+import { PoDensityMode } from '../enums/po-density-mode.enum';
 import { PoFieldSize } from '../enums/po-field-size.enum';
 import { PoThemeA11yEnum, PoThemeService } from '../services';
 import { handleThrowError } from './../util-test/util-expect.spec';
@@ -14,6 +15,7 @@ import {
   convertToBoolean,
   convertToInt,
   formatYear,
+  getDensityMode,
   getFormattedLink,
   isEquals,
   isExternalLink,
@@ -1774,5 +1776,33 @@ describe('accessibility level: ', () => {
     it('should return the default size when an invalid value is provided', () => {
       expect(UtilFunctions.validateSizeFn('xxg', PoFieldSize)).toBe(PoFieldSize.Medium);
     });
+  });
+});
+
+describe('density mode: ', () => {
+  afterEach(() => {
+    document.documentElement.removeAttribute('po-density-mode');
+  });
+
+  it('should return `small` when density mode is set to `small`', () => {
+    document.documentElement.setAttribute('po-density-mode', PoDensityMode.Small);
+
+    expect(getDensityMode()).toBe(PoDensityMode.Small);
+  });
+
+  it('should return `medium` when density mode is set to `medium`', () => {
+    document.documentElement.setAttribute('po-density-mode', PoDensityMode.Medium);
+
+    expect(getDensityMode()).toBe(PoDensityMode.Medium);
+  });
+
+  it('should return `medium` when density mode is not set', () => {
+    expect(getDensityMode()).toBe(PoDensityMode.Medium);
+  });
+
+  it('should return `medium` when density mode has an invalid value', () => {
+    document.documentElement.setAttribute('po-density-mode', 'invalid');
+
+    expect(getDensityMode()).toBe(PoDensityMode.Medium);
   });
 });
