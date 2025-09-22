@@ -9,9 +9,10 @@
   [p-helper]="label ? poHelper.helperSettings : undefined"
   [p-show-helper]="label ? displayAdditionalHelp : undefined"
   [p-text-wrap]="labelTextWrap()"
+  [attr.p-size]="size"
 >
   <div class="po-field-container-content">
-    <div class="po-upload">
+    <div class="po-upload" [attr.p-size]="size">
       <input
         #inputFile
         class="po-upload-input"

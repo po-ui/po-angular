@@ -56,7 +56,7 @@ export class SamplePoToolbarLoggedComponent {
   openDialog(item: PoToolbarAction) {
     this.poDialog.alert({
       title: 'Welcome',
-      message: `Hello Mr. Dev! Congratulations, you are a TOTVER!`,
+      message: `Hello Mr. Dev! Congratulations, you are a TOTVS!`,
       ok: undefined
     });
 

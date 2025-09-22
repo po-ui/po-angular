@@ -12,6 +12,8 @@ import { PoLookupLiterals } from './interfaces/po-lookup-literals.interface';
 import { PoLookupBaseComponent, poLookupLiteralsDefault } from './po-lookup-base.component';
 import { PoLookupFilterService } from './services/po-lookup-filter.service';
 import { PoLookupModalService } from './services/po-lookup-modal.service';
+import { PoTableColumnSpacing } from '../../po-table/enums/po-table-spacing.enum';
+import * as functions from '../../../utils/util';
 class LookupFilterService implements PoLookupFilter {
   getObjectByValue(id: string): Observable<any> {
     return of({ value: 123, label: 'teste' });
@@ -1017,6 +1019,44 @@ describe('PoLookupBaseComponent:', () => {
         document.documentElement.setAttribute('data-a11y', PoThemeA11yEnum.AAA);
         component['_size'] = undefined;
         expect(component.size).toBe('medium');
+      });
+    });
+
+    describe('p-spacing', () => {
+      it('should set property with valid value when accessibility is AA', () => {
+        spyOn(functions as any, 'getA11yLevel').and.returnValue(PoThemeA11yEnum.AA);
+
+        component.spacing = PoTableColumnSpacing.ExtraSmall;
+        expect(component.spacing).toBe(PoTableColumnSpacing.ExtraSmall);
+
+        component.spacing = PoTableColumnSpacing.Small;
+        expect(component.spacing).toBe(PoTableColumnSpacing.Small);
+      });
+
+      it('should set spacing to "medium" if value is "extra-small" and accessibility is AAA', () => {
+        spyOn(functions as any, 'getA11yLevel').and.returnValue(PoThemeA11yEnum.AAA);
+
+        component.spacing = PoTableColumnSpacing.ExtraSmall;
+        expect(component.spacing).toBe(PoTableColumnSpacing.Medium);
+      });
+
+      it('should set spacing with other valid values when accessibility is AAA', () => {
+        spyOn(functions, 'getA11yLevel').and.returnValue(PoThemeA11yEnum.AAA);
+
+        component.spacing = PoTableColumnSpacing.Small;
+        expect(component.spacing).toBe(PoTableColumnSpacing.Small);
+
+        component.spacing = PoTableColumnSpacing.Medium;
+        expect(component.spacing).toBe(PoTableColumnSpacing.Medium);
+      });
+
+      it('should set spacing with default value when value is invalid', () => {
+        const defaultSpacing = PoTableColumnSpacing.Small;
+        spyOn(component as any, 'getDefaultSpacing').and.returnValue(defaultSpacing);
+
+        component.spacing = 'invalid-spacing' as any;
+
+        expect(component.spacing).toBe(defaultSpacing);
       });
     });
   });

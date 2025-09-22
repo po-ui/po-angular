@@ -8,7 +8,7 @@
   [p-show-helper]="label ? displayAdditionalHelp : undefined"
   [p-text-wrap]="labelTextWrap()"
 >
-  <div class="po-field-container-content">
+  <div class="po-field-container-content" [attr.p-size]="size">
     <po-rich-text-body
       #richTextBody
       [p-height]="height"
@@ -16,7 +16,6 @@
       [p-model-value]="value"
       [p-placeholder]="placeholder"
       [p-readonly]="readonly"
-      [p-size]="size"
       (p-change)="onChangeValue($event)"
       (p-commands)="richTextToolbar?.setButtonsStates($event)"
       (p-selected-link)="richTextToolbar?.selectedLink($event)"

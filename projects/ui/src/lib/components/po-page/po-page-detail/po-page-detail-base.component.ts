@@ -37,6 +37,20 @@ export const poPageDetailLiteralsDefault = {
  *
  * O componente **po-page-detail** é utilizado como container principal para a tela de
  * detalhamento de um registro, tendo a possibilidade de usar as ações de "Voltar", "Editar" e "Remover".
+ *
+ * #### Tokens customizáveis
+ *
+ * > Para maiores informações, acesse o guia [Personalizando o Tema Padrão com Tokens CSS](https://po-ui.io/guides/theme-customization).
+ *
+ * | Propriedade         | Descrição                                   | Valor Padrão                          |
+ * |---------------------|---------------------------------------------|---------------------------------------|
+ * | **Header**          |                                             |                                       |
+ * | `--padding`         | Espaçamento do header                       | `var(--spacing-xs) var(--spacing-md)` |
+ * | `--gap`             | Espaçamento entre os breadcrumbs e o título | `var(--spacing-md)`                   |
+ * | `--gap-actions`     | Espaçamento entre as ações                  | `var(--spacing-xs)`                   |
+ * | `--font-family`     | Família tipográfica do título               | `var(--font-family-theme)`            |
+ * | **Content**         |                                             |                                       |
+ * | `--padding-content` | Espaçamento do conteúdo                     | `var(--spacing-xs) var(--spacing-sm)` |
  */
 @Directive()
 export class PoPageDetailBaseComponent {

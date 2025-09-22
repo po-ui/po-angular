@@ -488,8 +488,7 @@ a,
 
 .docs-api p,
 .app-portal p,
-.app-portal ul:not(.po-listbox-list),
-.app-portal li:not(.po-listbox-item) {
+.app-portal ul:not(.po-listbox-list) {
   margin-bottom: 10px;
   color: var(--color-neutral-dark-80);
 }

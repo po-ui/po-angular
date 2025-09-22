@@ -1,5 +1,6 @@
-import { PoLoadingBaseComponent } from './po-loading-base.component';
+import { PoThemeA11yEnum } from '../../services';
 import { PoLanguageService } from './../../services/po-language/po-language.service';
+import { PoLoadingBaseComponent } from './po-loading-base.component';
 
 describe('PoLoadingBaseComponent', () => {
   let component: PoLoadingBaseComponent;
@@ -20,6 +21,58 @@ describe('PoLoadingBaseComponent', () => {
 
     expect(component.text).toBe(defaultText);
   });
+
+  describe('p-size', () => {
+    beforeEach(() => {
+      document.documentElement.removeAttribute('data-a11y');
+      localStorage.removeItem('po-default-size');
+    });
+
+    afterEach(() => {
+      document.documentElement.removeAttribute('data-a11y');
+      localStorage.removeItem('po-default-size');
+    });
+
+    it('should set property with valid values', () => {
+      component.size = 'xs';
+      expect(component.size).toBe('xs');
+
+      component.size = 'sm';
+      expect(component.size).toBe('sm');
+
+      component.size = 'md';
+      expect(component.size).toBe('md');
+
+      component.size = 'lg';
+      expect(component.size).toBe('lg');
+    });
+
+    it('should return sm when a11y is AA and default size is small', () => {
+      document.documentElement.setAttribute('data-a11y', PoThemeA11yEnum.AA);
+      localStorage.setItem('po-default-size', 'small');
+
+      component['_size'] = undefined;
+      component.size = undefined;
+      expect(component.size).toBe('sm');
+    });
+
+    it('should return lg when a11y is AA regardless of default size', () => {
+      document.documentElement.setAttribute('data-a11y', PoThemeA11yEnum.AA);
+
+      component['_size'] = undefined;
+      component.size = undefined;
+      expect(component.size).toBe('lg');
+    });
+
+    it('should return lg when a11y is AAA regardless of default size', () => {
+      document.documentElement.setAttribute('data-a11y', PoThemeA11yEnum.AAA);
+
+      component['_size'] = undefined;
+      component.size = undefined;
+      expect(component.size).toBe('lg');
+    });
+  });
+
   describe('Methods:', () => {
     it('getTextDefault: should return `Carregando` if `getShortLanguage` returns `pt`', () => {
       const fakeThis = {

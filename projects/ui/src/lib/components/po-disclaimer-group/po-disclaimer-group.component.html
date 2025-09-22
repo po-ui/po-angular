@@ -1,6 +1,8 @@
 @if (disclaimers.length > 0) {
   <div class="po-disclaimer-group">
-    <div class="po-disclaimer-group-title">{{ title }}</div>
+    @if (title) {
+      <div class="po-disclaimer-group-title">{{ title }}</div>
+    }
     @if (isRemoveAll()) {
       <po-disclaimer-remove
         class="po-disclaimer-group-disclaimer-align"
