@@ -12,7 +12,6 @@ import {
 
 import { Subscription } from 'rxjs';
 
-import { PoFieldSize } from '../../../../enums/po-field-size.enum';
 import { PoRichTextService } from '../po-rich-text.service';
 import { PoKeyCodeEnum } from './../../../../enums/po-key-code.enum';
 import { isFirefox, isIE, isIEOrEdge, openExternalLink } from './../../../../utils/util';
@@ -48,9 +47,6 @@ export class PoRichTextBodyComponent implements OnInit, OnDestroy {
   @Input('p-placeholder') placeholder?: string;
 
   @Input('p-readonly') readonly?: string;
-
-  /** Tamanho do fonte */
-  @Input('p-size') size?: string;
 
   @Output('p-change') change = new EventEmitter<any>();
 

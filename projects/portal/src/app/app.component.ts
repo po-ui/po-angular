@@ -1,19 +1,13 @@
 import { Component, OnDestroy, OnInit } from '@angular/core';
 import { Router } from '@angular/router';
 
-import {
-  PoMenuItem,
-  PoNavbarIconAction,
-  PoNavbarItem,
-  PoNotificationService,
-  PoThemeA11yEnum
-} from '@po-ui/ng-components';
+import { PoMenuItem, PoNavbarIconAction, PoNavbarItem, PoThemeA11yEnum } from '@po-ui/ng-components';
 
+import { PoDensityMode } from 'projects/ui/src/lib/enums/po-density-mode.enum';
+import { firstValueFrom } from 'rxjs';
 import { PoThemeService, PoThemeTypeEnum } from '../../../ui/src/lib';
 import { poThemeConstant } from './shared/po-theme.constant';
 import { VersionService } from './shared/version.service';
-
-const KEY_STORAGE_REVIEW_SURVEY = 'review_survey_po_ui';
 
 @Component({
   selector: 'app-root',
@@ -30,14 +24,12 @@ export class AppComponent implements OnInit, OnDestroy {
   theme: PoThemeTypeEnum = 0;
   a11yLevel: PoThemeA11yEnum;
 
-  private location;
   private themeChangeListener: any;
   private a11yChangeListener: any;
 
   constructor(
-    private versionService: VersionService,
-    private notification: PoNotificationService,
-    private poTheme: PoThemeService,
+    protected versionService: VersionService,
+    protected poTheme: PoThemeService,
     public router: Router
   ) {
     const _poTheme = this.poTheme.applyTheme();
@@ -50,12 +42,15 @@ export class AppComponent implements OnInit, OnDestroy {
       this.theme = typeof _poTheme.active === 'object' ? _poTheme.active.type : _poTheme.active;
     }
 
-    if (this.a11yLevel === 'AA') {
+    if (this.a11yLevel === PoThemeA11yEnum.AA) {
       this.poTheme.setA11yDefaultSizeSmall(true);
+      this.poTheme.setDensityMode(PoDensityMode.Small);
+    } else {
+      this.poTheme.setDensityMode(PoDensityMode.Medium);
     }
   }
 
-  async ngOnInit() {
+  ngOnInit() {
     if (localStorage.getItem('po-ui-theme')) {
       this.themeStorage = localStorage.getItem('po-ui-theme');
     }
@@ -64,20 +59,20 @@ export class AppComponent implements OnInit, OnDestroy {
       this.a11yStorage = localStorage.getItem('po-ui-a11y');
     }
 
-    const version = await this.versionService.getCurrentVersion().toPromise();
-
-    this.items = [
-      { label: 'Iniciar', link: '/' },
-      { label: 'Componentes', link: '/documentation' },
-      { label: 'Guias', link: '/guides' },
-      { label: 'Ícones', link: '/icons' },
-      { label: 'Ferramentas', link: '/tools' },
-      { label: 'Construtor de temas', link: '/construtor-de-temas' },
-      { label: 'Como contribuir', link: 'https://github.com/po-ui/po-angular/blob/master/CONTRIBUTING.md' },
-      { label: 'Licença', link: 'https://github.com/po-ui/po-angular/blob/master/LICENSE' },
-      { label: 'Core Team', link: 'https://github.com/orgs/po-ui/people' },
-      { label: `v${version}`, link: 'https://github.com/po-ui/po-angular/blob/master/CHANGELOG.md' }
-    ];
+    firstValueFrom(this.versionService.getCurrentVersion()).then(version => {
+      this.items = [
+        { label: 'Iniciar', link: '/' },
+        { label: 'Componentes', link: '/documentation' },
+        { label: 'Guias', link: '/guides' },
+        { label: 'Ícones', link: '/icons' },
+        { label: 'Ferramentas', link: '/tools' },
+        { label: 'Construtor de temas', link: '/construtor-de-temas' },
+        { label: 'Como contribuir', link: 'https://github.com/po-ui/po-angular/blob/master/CONTRIBUTING.md' },
+        { label: 'Licença', link: 'https://github.com/po-ui/po-angular/blob/master/LICENSE' },
+        { label: 'Core Team', link: 'https://github.com/orgs/po-ui/people' },
+        { label: `v${version}`, link: 'https://github.com/po-ui/po-angular/blob/master/CHANGELOG.md' }
+      ];
+    });
 
     this.iconActions = this.actions;
     this.logoPoUI =
@@ -111,7 +106,7 @@ export class AppComponent implements OnInit, OnDestroy {
 
     this.poTheme.setTheme(poThemeConstant, this.theme, this.a11yLevel);
 
-    if (this.a11yLevel === 'AA') {
+    if (this.a11yLevel === PoThemeA11yEnum.AA) {
       this.poTheme.setA11yDefaultSizeSmall(true);
     }
 
@@ -128,8 +123,11 @@ export class AppComponent implements OnInit, OnDestroy {
 
     this.poTheme.setTheme(poThemeConstant, this.theme, this.a11yLevel);
 
-    if (this.a11yLevel === 'AA') {
+    if (this.a11yLevel === PoThemeA11yEnum.AA) {
       this.poTheme.setA11yDefaultSizeSmall(true);
+      this.poTheme.setDensityMode(PoDensityMode.Small);
+    } else {
+      this.poTheme.setDensityMode(PoDensityMode.Medium);
     }
 
     if (dispatchEvent) {
@@ -156,8 +154,8 @@ export class AppComponent implements OnInit, OnDestroy {
       },
       {
         icon: `${this.a11yStorage === 'po-a11y-AAA' ? 'an-fill an-text-aa' : 'an an-text-aa'}`,
-        label: `Accessibility level ${this.a11yStorage === 'po-a11y-AAA' ? 'AA' : 'AAA'}`,
-        tooltip: `Accessibility level ${this.a11yStorage === 'po-a11y-AAA' ? 'AAA' : 'AA'}`,
+        label: `Accessibility level ${this.a11yStorage === 'po-a11y-AAA' ? PoThemeA11yEnum.AA : PoThemeA11yEnum.AAA}`,
+        tooltip: `Accessibility level ${this.a11yStorage === 'po-a11y-AAA' ? PoThemeA11yEnum.AAA : PoThemeA11yEnum.AA}`,
         action: this.changeA11yLevel.bind(this)
       }
     ];

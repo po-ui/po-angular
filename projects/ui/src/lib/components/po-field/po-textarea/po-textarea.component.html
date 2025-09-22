@@ -14,12 +14,12 @@
     <textarea
       #inp
       class="po-textarea"
-      [class.po-textarea-aa]="size === 'small'"
       (blur)="eventOnBlur()"
       (focus)="eventOnFocus()"
       (input)="eventOnInput($event)"
       (keydown)="onKeyDown($event)"
       [attr.name]="name"
+      [attr.p-size]="size"
       [disabled]="disabled"
       [id]="id"
       [placeholder]="disabled ? '' : placeholder"

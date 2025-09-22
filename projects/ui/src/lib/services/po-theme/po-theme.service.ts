@@ -2,28 +2,40 @@ import { DOCUMENT } from '@angular/common';
 import { Inject, Injectable, Optional, Renderer2, RendererFactory2 } from '@angular/core';
 import { AnimaliaIconDictionary, ICONS_DICTIONARY } from '../../components/po-icon/index';
 
+import { PoDensityMode } from '../../enums/po-density-mode.enum';
+import { PoFieldSize } from '../../enums/po-field-size.enum';
+import { getA11yDefaultSize, getDensityMode, getA11yLevel } from '../../utils/util';
 import { PoThemeA11yEnum } from './enum/po-theme-a11y.enum';
 import { PoThemeTypeEnum } from './enum/po-theme-type.enum';
 import { poThemeDefaultAA } from './helpers/accessibilities/po-theme-default-aa.constant';
 import { poThemeDefaultAAA } from './helpers/accessibilities/po-theme-default-aaa.constant';
+import { poThemeDensity } from './helpers/accessibilities/po-theme-density.constant';
 import { poThemeDefault } from './helpers/po-theme-poui.constant';
-import { poThemeDefaultDarkValues } from './helpers/types/po-theme-dark-defaults.constant';
 import { poThemeDefaultDarkValuesAA } from './helpers/types/po-theme-dark-defaults-AA.constant';
+import { poThemeDefaultDarkValues } from './helpers/types/po-theme-dark-defaults.constant';
+import { poThemeDefaultLightValuesAA } from './helpers/types/po-theme-light-defaults-AA.constant';
 import { poThemeDefaultLightValues } from './helpers/types/po-theme-light-defaults.constant';
 import { PoThemeColor } from './interfaces/po-theme-color.interface';
 import { PoThemeTokens } from './interfaces/po-theme-tokens.interface';
 import { PoTheme, PoThemeActive } from './interfaces/po-theme.interface';
-import { poThemeDefaultLightValuesAA } from './helpers/types/po-theme-light-defaults-AA.constant';
-import { getA11yDefaultSize, getA11yLevel } from '../../utils/util';
 
 /**
  * @description
  *
- * O `PoThemeService` possibilita a personalização das cores do tema padrão do `PO-UI`, permitindo a alteração dos valores das variáveis de estilo usadas no CSS padrão.
+ * O serviço `PoThemeService` permite customizar as cores do tema padrão do `PO-UI` e definir o nível de acessibilidade
+ * mais adequado ao projeto.
  *
- * > Para saber mais sobre como customizar o tema padrão verifique o item [Customização de Temas usando o serviço PO-UI](guides/theme-service) na aba `Guias`.
+ * O nível **AAA** (padrão) garante maior contraste, áreas clicáveis amplas e espaçamentos maiores entre os elementos,
+ * enquanto o nível **AA** mantém a conformidade com as diretrizes de acessibilidade, mas com proporções mais equilibradas
+ * e contornos mais sutis.
  *
- * > Obs.: Não está documentado aqui e não indicamos a customização das cores de 'feedback' por motivos de acessibilidade e usabilidade.
+ * O serviço também possibilita configurar a **densidade de espaçamentos**, permitindo ajustar o espaço entre e dentro dos
+ * componentes. Essa configuração pode ser utilizada com qualquer nível de acessibilidade.
+ *
+ * > Observação: a customização das cores de `feedback` não é recomendada por motivos de acessibilidade e usabilidade.
+ *
+ * > Para saber mais sobre como customizar o tema padrão, consulte o item
+ * [Customização de Temas usando o serviço PO-UI](guides/theme-service) na aba `Guias`.
  */
 
 /**
@@ -67,7 +79,8 @@ export class PoThemeService {
    * @param {PoTheme} themeConfig - Configuração de tema a ser aplicada ao componente.
    * @param {PoThemeTypeEnum} [themeType=PoThemeTypeEnum.light] - (Opcional) Tipo de tema, podendo ser 'light' (claro) ou 'dark' (escuro). O tema claro é o padrão.
    * @param {PoThemeA11yEnum} [a11yLevel=PoThemeA11yEnum.AAA] - (Opcional) Nível de acessibilidade dos componentes, podendo ser AA ou AAA. Padrão é AAA.
-   * @param {boolean} [persistPreference=true] - (Opcional) Define se a preferência de tema deve ser salva no localStorage para persistência. `true` para salvar, `false` para não salvar.
+   * @param {boolean} [persistPreference=true] - (Opcional) Define se a preferência de tema deve ser salva no
+   * localStorage para persistência. Por padrão é `true`, ou seja, a preferência será salva automaticamente.
    */
   setTheme(
     themeConfig: PoTheme,
@@ -112,6 +125,9 @@ export class PoThemeService {
     document.documentElement.setAttribute('data-a11y', a11yLevel === PoThemeA11yEnum.AAA ? 'AAA' : 'AA');
     this.changeThemeType(themeConfig, persistPreference);
     this.dispatchEvent(themeConfig);
+
+    const densityMode = localStorage.getItem('po-density-mode');
+    this.setDensityMode(densityMode);
   }
 
   private setDataDefaultSizeHTML(size: string, a11yLevel: string): void {
@@ -130,23 +146,23 @@ export class PoThemeService {
   }
 
   /**
-   * Define o tamanho `small` como padrão para componentes de formulário que não possuem um tamanho definido.
-   * Essa configuração é aplicada globalmente apenas quando o nível de acessibilidade for `AA`.
-   * Caso contrário, o tamanho padrão será `medium`.
+   * Define o tamanho `small` como padrão para componentes de formulário que não possuem um tamanho definido. Essa
+   * configuração é aplicada globalmente apenas quando o nível de acessibilidade for `AA`. O valor definido é salvo no
+   * `localStorage` sob a chave `po-default-size`.
    *
    * > Para garantir que o tamanho `small` seja aplicado corretamente a todos os componentes, recomendamos
    * definir esta configuração **junto com o nível de acessibilidade `AA` na inicialização da aplicação**.
    * Se for aplicada em tempo de execução, será necessário recarregar a aplicação (`reload`)
    * para que os estilos sejam aplicados corretamente.
+   * > Para ajustar a densidade visual dos componentes agrupadores (como pages, container, etc.), utilize também
+   * o método `setDensityMode` conforme necessário.
    *
    * @param {boolean} enable Habilita ou desabilita o tamanho `small` globalmente.
    */
   setA11yDefaultSizeSmall(enable: boolean): boolean {
-    const a11yLevel = document.documentElement.getAttribute('data-a11y');
+    const a11yLevel = this.getA11yLevel();
 
-    if (!a11yLevel || (a11yLevel !== PoThemeA11yEnum.AA && a11yLevel !== PoThemeA11yEnum.AAA)) {
-      return false;
-    }
+    if (!this.isValidA11yLevel(a11yLevel)) return false;
 
     if (a11yLevel === PoThemeA11yEnum.AA && enable) {
       const defaultSize = 'small';
@@ -160,8 +176,57 @@ export class PoThemeService {
 
     localStorage.removeItem('po-default-size');
     document.documentElement.removeAttribute('data-default-size');
+    //   localStorage.setItem('po-default-size', PoFieldSize.Small);
+    // } else {
+    //   localStorage.setItem('po-default-size', PoFieldSize.Medium);
+    // }
 
-    return false;
+    // return a11yLevel === PoThemeA11yEnum.AA && enable;
+  }
+
+  /**
+   * Retorna o modo de adensamento dos componentes agrupadores.
+   * Se não estiver configurado, retorna `medium` como padrão.
+   * @returns {PoDensityMode} O modo de adensamento, que pode ser `small` ou `medium`.
+   */
+  getDensityMode(): PoDensityMode {
+    return getDensityMode();
+  }
+
+  /**
+   * Aplica o modo de adensamento compacto (`small`) ou espaçoso (`medium`) para os componentes agrupadores,
+   * independentemente do nível de acessibilidade. O valor definido é salvo no `localStorage` sob a chave
+   * `po-density-mode`.
+   *
+   * @param {'small' | 'medium'} mode Define o modo de densidade: `small` para compacto, `medium` para espaçoso.
+   * O valor padrão é `medium`.
+   */
+  setDensityMode(mode: string): void {
+    if (!Object.values(PoDensityMode).includes(mode as PoDensityMode)) {
+      mode = PoDensityMode.Medium;
+    }
+
+    localStorage.setItem('po-density-mode', mode);
+
+    const styleElement = document.head.querySelector('#baseStyle');
+
+    if (mode === PoDensityMode.Small) {
+      const onRootTokens = {
+        ...poThemeDefaultAA.onRoot,
+        ...poThemeDensity.small
+      };
+      this.setPerComponentAndOnRoot(undefined, poThemeDefaultAA.perComponent, onRootTokens);
+    } else {
+      if (styleElement) {
+        let css = styleElement.textContent;
+        Object.keys(poThemeDensity.small).forEach(token => {
+          const regex = new RegExp(`${token}:\\s*[^;]+;`, 'g');
+          css = css.replace(regex, '');
+        });
+        styleElement.textContent = css;
+      }
+      this.setDefaultBaseStyle();
+    }
   }
 
   /**
@@ -330,11 +395,10 @@ export class PoThemeService {
   }
 
   /**
-   * Persiste e define o tema do aplicativo com base nos dados armazenados.
+   * Restaura e aplica as preferências visuais do usuário para o tema da aplicação, garantindo que essas preferências
+   * sejam persistidas no `localStorage` para uso em recarregamentos futuros.
    *
-   * Este método recupera os dados do tema armazenados e os aplica ao aplicativo.
-   *
-   * @returns {PoTheme} Recupera o tema armazenado.
+   * @returns {PoTheme} O tema atualmente aplicado.
    */
   persistThemeActive() {
     const _theme = this.getThemeActive();
@@ -343,6 +407,14 @@ export class PoThemeService {
     const defaultSize = this.getA11yDefaultSize();
     localStorage.setItem('po-default-size', defaultSize);
     this.setDataDefaultSizeHTML(defaultSize, activeA11y);
+    // this.setTheme(_theme, this.getActiveTypeFromTheme(_theme.active), this.getActiveA11yFromTheme(_theme.active));
+
+    // const defaultSize = this.getA11yDefaultSize();
+    // localStorage.setItem('po-default-size', defaultSize);
+
+    // const densityMode = localStorage.getItem('po-density-mode');
+    // localStorage.setItem('po-density-mode', densityMode);
+
     return _theme;
   }
 
@@ -423,6 +495,10 @@ export class PoThemeService {
 
   private getActiveA11yFromTheme(active): PoThemeA11yEnum {
     return typeof active === 'object' ? active.a11y : PoThemeA11yEnum.AAA;
+  }
+
+  private isValidA11yLevel(level: string | null): boolean {
+    return level === PoThemeA11yEnum.AA || level === PoThemeA11yEnum.AAA;
   }
 
   /**

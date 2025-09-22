@@ -176,6 +176,18 @@ export const poPageDynamicEditLiteralsDefault = {
  * GET {end-point}/metadata?type=edit&version={version}
  * ```
  *
+ * #### Tokens customizáveis
+ *
+ * | Propriedade         | Descrição                                   | Valor Padrão                          |
+ * |---------------------|---------------------------------------------|---------------------------------------|
+ * | **Header**          |                                             |                                       |
+ * | `--padding`         | Espaçamento do header                       | `var(--spacing-xs) var(--spacing-md)` |
+ * | `--gap`             | Espaçamento entre os breadcrumbs e o título | `var(--spacing-md)`                   |
+ * | `--gap-actions`     | Espaçamento entre as ações                  | `var(--spacing-xs)`                   |
+ * | `--font-family`     | Família tipográfica do título               | `var(--font-family-theme)`            |
+ * | **Content**         |                                             |                                       |
+ * | `--padding-content` | Espaçamento do conteúdo                     | `var(--spacing-xs) var(--spacing-sm)` |
+ *
  * @example
  *
  * <example name="po-page-dynamic-edit-basic" title="PO Page Dynamic Edit Basic">

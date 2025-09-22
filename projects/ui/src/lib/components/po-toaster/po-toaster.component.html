@@ -7,6 +7,7 @@
   "
   [class.po-toaster-inline]="isInline()"
   [hidden]="isHide"
+  [attr.p-size-actions]="sizeActions"
 >
   <div class="po-toaster-icon" [ngClass]="isAlert() ? 'po-toaster-icon-default' : 'po-toaster-decoration'">
     @if (isAlert()) {
@@ -15,14 +16,10 @@
   </div>
 
   @if (isInline()) {
-    <po-icon
-      class="po-toaster-inline-icon"
-      [class.po-toaster-inline-icon-aa]="sizeActions === 'small'"
-      [p-icon]="getIcon()"
-    ></po-icon>
+    <po-icon class="po-toaster-inline-icon" [p-icon]="getIcon()"></po-icon>
   }
 
-  <div class="po-toaster-actions" [class.po-toaster-actions-aa]="sizeActions === 'small'">
+  <div class="po-toaster-actions">
     <div class="po-toaster-message">
       {{ message }}
       @if (supportMessage) {

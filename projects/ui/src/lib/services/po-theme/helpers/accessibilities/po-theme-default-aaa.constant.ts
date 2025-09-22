@@ -4,9 +4,7 @@
 export const poThemeDefaultAAA = {
   perComponent: {},
   onRoot: {
-    /*------------------------------------*\
-   FONT
-   \*------------------------------------*/
+    // #region FONT
     '--font-family': 'Roboto',
     '--font-family-theme': 'Roboto',
     '--font-family-theme-bold': 'Roboto-Bold',

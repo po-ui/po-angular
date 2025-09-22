@@ -471,7 +471,8 @@ describe('PoChartComponent', () => {
         rendererOption: 'svg' as const
       };
 
-      spyOn(component['chartInstance'], 'dispose');
+      const disposeSpy = jasmine.createSpy('dispose');
+      component['chartInstance'] = { dispose: disposeSpy } as any;
 
       component.options = newOptions;
       component.ngOnChanges({
@@ -482,7 +483,7 @@ describe('PoChartComponent', () => {
         }
       } as any);
 
-      expect(component['chartInstance'].dispose).toHaveBeenCalled();
+      expect(disposeSpy).toHaveBeenCalled();
     });
   });
 

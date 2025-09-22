@@ -50,7 +50,7 @@ describe('PoTextareaComponent:', () => {
     component.maxlength = 10;
     const fakeEvent = {
       target: {
-        value: 'Somos TOTVERS'
+        value: 'Somos TOTVS'
       }
     };
 
@@ -63,13 +63,13 @@ describe('PoTextareaComponent:', () => {
     component.maxlength = 20;
     const fakeEvent = {
       target: {
-        value: 'Somos TOTVERS'
+        value: 'Somos TOTVS'
       }
     };
 
     component.eventOnInput(fakeEvent);
 
-    expect(component['inputEl'].nativeElement.value).toBe('Somos TOTVERS');
+    expect(component['inputEl'].nativeElement.value).toBe('Somos TOTVS');
   });
 
   it('enter event must be called', () => {
@@ -131,10 +131,10 @@ describe('PoTextareaComponent:', () => {
       const fakeThis = {
         inputEl: {
           nativeElement: {
-            value: 'Somos TOTVERS'
+            value: 'Somos TOTVS'
           }
         },
-        valueBeforeChange: 'Somos TOTVERS',
+        valueBeforeChange: 'Somos TOTVS',
         change: {
           emit: () => {}
         }
@@ -149,10 +149,10 @@ describe('PoTextareaComponent:', () => {
       const fakeThis = {
         inputEl: {
           nativeElement: {
-            value: 'Somos TOTVERS'
+            value: 'Somos TOTVS'
           }
         },
-        valueBeforeChange: 'TOTVERS',
+        valueBeforeChange: 'TOTVS',
         change: {
           emit: arg => {}
         }
