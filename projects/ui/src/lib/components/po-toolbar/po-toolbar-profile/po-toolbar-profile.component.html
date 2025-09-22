@@ -2,7 +2,7 @@
   <po-avatar p-size="xs" [p-src]="profileAvatar"></po-avatar>
 </div>
 
-<po-popup #popup [p-actions]="profileActions" [p-target]="profileElement">
+<po-popup #popup p-size="medium" [p-actions]="profileActions" [p-target]="profileElement">
   @if (profile?.title) {
     <div p-popup-header-template class="po-toolbar-profile-item-header">
       <po-avatar class="po-toolbar-profile-item-avatar" p-size="sm" [p-src]="profileAvatar"> </po-avatar>
