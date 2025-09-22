@@ -1,12 +1,12 @@
 <po-button name="openDialog" p-label="Open Dialog" [p-disabled]="f.invalid" (p-click)="openDialog()"> </po-button>
 
-<hr />
+<po-divider />
 
 <div class="po-row">
   <po-info class="po-md-12" p-label="Action clicked" [p-value]="action"> </po-info>
 </div>
 
-<hr />
+<po-divider />
 
 <form #f="ngForm">
   <po-input class="po-md-6" name="title" [(ngModel)]="title" p-clean p-label="Title" p-required> </po-input>

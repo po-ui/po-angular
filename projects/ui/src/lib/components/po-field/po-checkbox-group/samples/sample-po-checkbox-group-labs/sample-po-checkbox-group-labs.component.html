@@ -20,7 +20,7 @@
 >
 </po-checkbox-group>
 
-<hr />
+<po-divider />
 
 <div class="po-row">
   <po-info class="po-md-6" p-label="Model" [p-value]="checkboxGroup | json"> </po-info>
@@ -28,7 +28,7 @@
   <po-info class="po-md-6" p-label="Event" [p-value]="event"> </po-info>
 </div>
 
-<hr />
+<po-divider />
 
 <form #fOption="ngForm">
   <po-input class="po-md-6" name="optionValue" [(ngModel)]="option.value" p-clean p-label="Option Value" p-required>
@@ -45,7 +45,7 @@
   </div>
 </form>
 
-<hr />
+<po-divider />
 
 <form #f="ngForm">
   <po-input class="po-md-6" name="label" [(ngModel)]="label" p-clean p-label="Label"> </po-input>
