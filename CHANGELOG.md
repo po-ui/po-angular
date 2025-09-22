@@ -2,6 +2,13 @@
 
 All notable changes to this project will be documented in this file. See [standard-version](https://github.com/conventional-changelog/standard-version) for commit guidelines.
 
+### [19.28.1](https://github.com/po-ui/po-angular/compare/v19.28.0...v19.28.1) (2025-09-22)
+
+
+### Bug Fixes
+
+* **context-tabs:** ajusta adição dinâmica de tabs ([1eb2085](https://github.com/po-ui/po-angular/commit/1eb20857b5dc3108067a131ff23f79b4ffc638af))
+
 ### [19.28.0](https://github.com/po-ui/po-angular/compare/v19.27.0...v19.28.0) (2025-09-15)
 
 
