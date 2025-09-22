@@ -1,7 +1,9 @@
-import { PoThemeService } from '../services/po-theme/po-theme.service';
-import { PoThemeA11yEnum } from '../services/po-theme/enum/po-theme-a11y.enum';
+import { PoDensityMode } from '../enums/po-density-mode.enum';
+import { PoFieldSize } from '../enums/po-field-size.enum';
 import { poLocaleDefault, poLocales } from '../services/po-language/po-language.constant';
 import { ElementRef } from '@angular/core';
+import { PoThemeA11yEnum } from '../services/po-theme/enum/po-theme-a11y.enum';
+import { PoThemeService } from '../services/po-theme/po-theme.service';
 
 /**
  * Converte e formata os bytes em formato mais legível para o usuário.
@@ -724,8 +726,7 @@ export function validateSizeFn<T>(value: string, sizeEnum: T): T[keyof T] {
 export function getA11yDefaultSize(): string {
   const defaultSize = localStorage.getItem('po-default-size');
   const a11yLevel = document.documentElement.getAttribute('data-a11y');
-
-  return defaultSize === 'small' && a11yLevel === 'AA' ? 'small' : 'medium';
+  return defaultSize === PoFieldSize.Small && a11yLevel === PoThemeA11yEnum.AA ? PoFieldSize.Small : PoFieldSize.Medium;
 }
 
 /**
@@ -736,7 +737,27 @@ export function getA11yDefaultSize(): string {
 export function getA11yLevel(): PoThemeA11yEnum {
   const a11yLevel = document.documentElement.getAttribute('data-a11y');
 
-  return a11yLevel === 'AA' ? PoThemeA11yEnum.AA : PoThemeA11yEnum.AAA;
+  if (a11yLevel === PoThemeA11yEnum.AA) {
+    return PoThemeA11yEnum.AA;
+  }
+
+  localStorage.setItem('po-default-size', PoFieldSize.Medium);
+  return PoThemeA11yEnum.AAA;
+}
+
+/**
+ * Retorna o modo de adensamento dos componentes agrupadores.
+ * Se não estiver configurado, retorna `medium` como padrão.
+ * @returns {PoDensityMode} O modo de adensamento, que pode ser `small` ou `medium`.
+ */
+export function getDensityMode(): PoDensityMode {
+  const densityMode = document.documentElement.getAttribute('po-density-mode');
+
+  if (densityMode === PoDensityMode.Small) {
+    return PoDensityMode.Small;
+  }
+
+  return PoDensityMode.Medium;
 }
 
 /**
