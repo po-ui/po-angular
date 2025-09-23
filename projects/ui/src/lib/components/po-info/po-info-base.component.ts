@@ -21,7 +21,7 @@ export class PoInfoBaseComponent {
   /** Valor do conteúdo a ser exibido. */
   @Input('p-value') value?: string;
 
-  public readonly poInfoOrientation = PoInfoOrientation;
+  public poInfoOrientation = PoInfoOrientation;
 
   private _labelSize: number;
   private _orientation: PoInfoOrientation = poInfoOrientationDefault;

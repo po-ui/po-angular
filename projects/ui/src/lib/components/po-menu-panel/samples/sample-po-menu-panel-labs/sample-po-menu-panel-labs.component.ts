@@ -13,7 +13,7 @@ export class SamplePoMenuPanelLabsComponent implements OnInit {
   menuItemSelected: string;
   logo: string;
 
-  public readonly iconsOptions: Array<PoRadioGroupOption> = [
+  public iconsOptions: Array<PoRadioGroupOption> = [
     { label: 'an an-newspaper', value: 'an an-newspaper' },
     { label: 'an an-camera', value: 'an an-camera' },
     { label: 'an an-calendar-dots', value: 'an an-calendar-dots' },
