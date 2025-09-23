@@ -206,9 +206,9 @@ export class PoTableComponent extends PoTableBaseComponent implements AfterViewI
     differs: IterableDiffers,
     renderer: Renderer2,
     poLanguageService: PoLanguageService,
-    private changeDetector: ChangeDetectorRef,
-    private decimalPipe: DecimalPipe,
-    private defaultService: PoTableService,
+    private readonly changeDetector: ChangeDetectorRef,
+    private readonly decimalPipe: DecimalPipe,
+    private readonly defaultService: PoTableService,
     @Optional() @Inject(ICONS_DICTIONARY) value: { [key: string]: string }
   ) {
     super(poDate, poLanguageService, defaultService);
