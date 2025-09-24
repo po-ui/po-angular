@@ -129,7 +129,6 @@ export class PoHelperBaseComponent {
       };
     }
     if (value.type === 'info' && value.footerAction) {
-      console.log('A propriedade footerAction não pode ser utilizada quando o tipo do helper for info.');
       delete value.footerAction;
     }
     return value;
