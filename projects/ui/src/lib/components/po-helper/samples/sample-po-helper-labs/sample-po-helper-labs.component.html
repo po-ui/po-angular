@@ -14,15 +14,17 @@
 </div>
 
 <div class="po-row">
-  <po-input
-    class="po-lg-6 po-md-6"
-    name="footerTitle"
-    [(ngModel)]="footerTitle"
-    (ngModelChange)="setFooterTitle($event)"
-    p-clean
-    p-label="Título do Footer"
-  >
-  </po-input>
+  @if (helperOptions.type === 'help') {
+    <po-input
+      class="po-lg-6 po-md-6"
+      name="footerTitle"
+      [(ngModel)]="footerTitle"
+      (ngModelChange)="setFooterTitle($event)"
+      p-clean
+      p-label="Título do Footer"
+    >
+    </po-input>
+  }
 </div>
 <po-divider></po-divider>
 <div class="po-row">

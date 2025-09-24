@@ -2,7 +2,7 @@
   class="po-helper-container po-helper-target"
   [attr.p-size]="this.size()"
   #target
-  tabindex="0"
+  [attr.tabindex]="disabled() ? null : 0"
   role="button"
   [attr.aria-label]="ariaLabel()"
   [attr.aria-haspopup]="'dialog'"
@@ -17,7 +17,7 @@
   <po-popover #popover p-position="right" [p-target]="target" [p-title]="helper()?.title" p-trigger="click">
     <div [id]="'popover-content-' + id" role="dialog" aria-modal="false" tabindex="-1">
       {{ helper()?.content }}
-      @if (helper()?.footerAction) {
+      @if (helper()?.type === 'help' && helper()?.footerAction) {
         <po-divider></po-divider>
         <po-link
           (keydown.enter)="$event.stopPropagation()"

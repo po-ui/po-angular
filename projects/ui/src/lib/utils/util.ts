@@ -750,7 +750,7 @@ export function setHelperSettings(
       hideAdditionalHelp: true,
       helperSettings: {
         content: additionalHelpTooltip,
-        type: 'info',
+        type: 'help',
         size: size
       }
     };

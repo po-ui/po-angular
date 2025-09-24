@@ -37,6 +37,8 @@ import { PoHelperSize } from './enums/po-helper-size.enum';
  * }
  * ```
  *
+ * > **Importante:** A propriedade `footerAction` não pode ser utilizada quando o tipo do helper for `info`, pois o ícone de informação é destinado apenas para exibir informações estáticas sem ações adicionais.
+ *
  * #### Tokens customizáveis
  *
  * É possível alterar o estilo do componente usando os seguintes tokens (CSS):
@@ -78,7 +80,7 @@ export class PoHelperBaseComponent {
    * Exemplo de uso:
    * ```html
    * <po-helper p-helper="Texto explicativo"></po-helper>
-   * <po-helper [p-helper]="{ title: 'Ajuda', content: 'Texto', type: 'info' }"></po-helper>
+   * <po-helper [p-helper]="{ title: 'Ajuda', content: 'Texto', type: 'help' }"></po-helper>
    * ```
    *
    */
@@ -103,7 +105,7 @@ export class PoHelperBaseComponent {
    *
    * @default `PoHelperSize.Medium`
    */
-  size = input<PoHelperSize>(undefined, { alias: 'p-size' });
+  size = input<PoHelperSize | string>(undefined, { alias: 'p-size' });
 
   /**
    * @Input
@@ -112,7 +114,7 @@ export class PoHelperBaseComponent {
    *
    * @description
    *
-   * Indica se o helper está desativado.
+   * Indica se o helper deve ser exibido no estado desativado, desabilitando interações do usuário.
    *
    * @default `false`
    */
@@ -125,6 +127,10 @@ export class PoHelperBaseComponent {
         content: value,
         type: 'help'
       };
+    }
+    if (value.type === 'info' && value.footerAction) {
+      console.log('A propriedade footerAction não pode ser utilizada quando o tipo do helper for info.');
+      delete value.footerAction;
     }
     return value;
   }

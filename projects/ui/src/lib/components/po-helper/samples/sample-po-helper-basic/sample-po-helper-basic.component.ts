@@ -11,20 +11,6 @@ export class SamplePoHelperBasicComponent {
   poHelper: PoHelperOptions = {
     title: 'PO Helper Basic',
     content:
-      'Este é um helper de exemplo. Você pode colocar qualquer informação que desejar aqui, como dicas de uso, explicações sobre funcionalidades, ou qualquer outro conteúdo relevante para ajudar o usuário.',
-    type: 'help',
-    eventOnClick: this.emitClick.bind(this),
-    footerAction: {
-      label: 'Clique aqui para saber mais',
-      action: this.footerAction.bind(this)
-    }
+      'Este é um helper de exemplo. Você pode colocar qualquer informação que desejar aqui, como dicas de uso, explicações sobre funcionalidades, ou qualquer outro conteúdo relevante para ajudar o usuário.'
   };
-
-  footerAction() {
-    alert(`Footer action clicked`);
-  }
-
-  emitClick(event: Event) {
-    console.log('Helper clicked', event);
-  }
 }

@@ -1787,7 +1787,7 @@ describe('accessibility level: ', () => {
       expect(result.hideAdditionalHelp).toBeTrue();
       expect(result.helperSettings).toEqual({
         content: tooltip,
-        type: 'info',
+        type: 'help',
         size: size
       });
     });
@@ -1831,7 +1831,7 @@ describe('accessibility level: ', () => {
       expect(result.hideAdditionalHelp).toBeTrue();
       expect(result.helperSettings).toEqual({
         content: tooltip,
-        type: 'info',
+        type: 'help',
         size: 'medium'
       });
     });

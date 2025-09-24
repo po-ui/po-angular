@@ -9,5 +9,5 @@
   >
 }
 @if (field && requirement) {
-  <span class="po-label-requirement">{{ requirement }}</span>
+  <span class="po-label-requirement" [class.po-label-required]="isRequiredLiteral(requirement)">{{ requirement }}</span>
 }

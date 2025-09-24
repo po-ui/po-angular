@@ -1,5 +1,6 @@
 import { Component, input, Input } from '@angular/core';
 import { convertToBoolean } from '../../utils/util';
+import { poFieldContainerLiterals } from '../po-field/po-field-container/po-field-container-literals';
 
 /**
  * @docsPrivate
@@ -70,4 +71,10 @@ export class PoLabelComponent {
    * @default `false`
    */
   textWrap = input<boolean>(false, { alias: 'p-text-wrap' });
+
+  isRequiredLiteral(value: string): boolean {
+    return Object.values(poFieldContainerLiterals).some(
+      literals => literals.required.toLowerCase() === value.toLowerCase()
+    );
+  }
 }
