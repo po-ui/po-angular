@@ -8,6 +8,8 @@
         role="switch"
         [attr.aria-checked]="value"
         [attr.aria-disabled]="disabled"
+        [attr.data-focused-element]="!disabled"
+        [attr.data-inactive-component]="disabled"
         [id]="id"
         [tabindex]="disabled ? -1 : 0"
         (blur)="onBlur()"

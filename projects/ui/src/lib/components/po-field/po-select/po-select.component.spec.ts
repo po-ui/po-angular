@@ -1,4 +1,4 @@
-import { ComponentFixture, TestBed } from '@angular/core/testing';
+import { ComponentFixture, fakeAsync, TestBed, tick } from '@angular/core/testing';
 import { FormsModule } from '@angular/forms';
 
 import * as UtilsFunctions from '../../../utils/util';
@@ -40,6 +40,21 @@ describe('PoSelectComponent:', () => {
   it('should be created', () => {
     expect(component).toBeTruthy();
   });
+
+  it("ngAfterViewInit: should set appendBox true if contains class 'enable-append-box'", fakeAsync(() => {
+    component.selectElement = {
+      nativeElement: {
+        classList: {
+          contains: (cls: string) => cls === 'enable-append-box'
+        }
+      }
+    };
+    component.ngAfterViewInit();
+
+    tick(300);
+
+    expect(component.appendBox).toBeTrue();
+  }));
 
   it('should click in document', () => {
     const documentBody = document.body;

@@ -102,6 +102,12 @@ export class PoCheckboxComponent extends PoCheckboxBaseComponent implements Afte
     if (this.autoFocus) {
       this.focus();
     }
+
+    setTimeout(() => {
+      if (this.checkboxLabel?.nativeElement?.classList?.contains('enable-append-box')) {
+        this.appendBox = true;
+      }
+    }, 300);
   }
 
   emitAdditionalHelp() {
