@@ -78,6 +78,21 @@ describe('PoInputGeneric:', () => {
     expect(component.afterViewInit).toHaveBeenCalled();
   });
 
+  it("ngAfterViewInit: should set appendBox true if contains class 'enable-append-box'", fakeAsync(() => {
+    component.inputEl = {
+      nativeElement: {
+        classList: {
+          contains: (cls: string) => cls === 'enable-append-box'
+        }
+      }
+    };
+    component.ngAfterViewInit();
+
+    tick(300);
+
+    expect(component.appendBox).toBeTrue();
+  }));
+
   it('should call keydown from mask with keyCode different 229', () => {
     const fakeThis = {
       mask: '(999)',

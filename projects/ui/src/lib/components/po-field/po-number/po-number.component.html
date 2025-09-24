@@ -21,6 +21,8 @@
       #inp
       class="po-input"
       type="number"
+      [attr.data-focused-element]="!disabled"
+      [attr.data-inactive-component]="disabled || readonly"
       [attr.max]="max"
       [attr.min]="min"
       [attr.name]="name"

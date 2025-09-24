@@ -42,6 +42,8 @@
           [class.po-input-icon-left-aa]="icon && size === 'small'"
           autocomplete="off"
           type="text"
+          [attr.data-focused-element]="!disabled"
+          [attr.data-inactive-component]="disabled"
           [attr.name]="name"
           [disabled]="disabled"
           [id]="id"

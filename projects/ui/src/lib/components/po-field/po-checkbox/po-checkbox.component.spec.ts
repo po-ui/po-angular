@@ -1,5 +1,5 @@
 import { ChangeDetectorRef, ElementRef } from '@angular/core';
-import { ComponentFixture, TestBed } from '@angular/core/testing';
+import { ComponentFixture, fakeAsync, TestBed, tick } from '@angular/core/testing';
 
 import { PoThemeA11yEnum } from '../../../services';
 import { PoCheckboxComponent } from './po-checkbox.component';
@@ -33,6 +33,21 @@ describe('PoCheckboxComponent:', () => {
   it('should create a po-label for po-checkbox', () => {
     expect(labelField).toBeTruthy();
   });
+
+  it("ngAfterViewInit: should set appendBox true if contains class 'enable-append-box'", fakeAsync(() => {
+    component.checkboxLabel = {
+      nativeElement: {
+        classList: {
+          contains: (cls: string) => cls === 'enable-append-box'
+        }
+      }
+    };
+    component.ngAfterViewInit();
+
+    tick(300);
+
+    expect(component.appendBox).toBeTrue();
+  }));
 
   describe('Methods:', () => {
     it('focus: should call `focus` of checkbox.', () => {

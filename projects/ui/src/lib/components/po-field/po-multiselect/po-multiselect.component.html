@@ -17,6 +17,8 @@
         [tabindex]="disabled ? -1 : 0"
         [attr.disabled]="disabled"
         [attr.aria-label]="label"
+        [attr.data-focused-element]="!disabled"
+        [attr.data-inactive-component]="disabled"
         class="po-input-icon-right po-multiselect-input"
         [class.po-multiselect-input-auto]="autoHeight"
         [class.po-multiselect-input-static]="!autoHeight"
