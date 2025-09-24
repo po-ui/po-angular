@@ -6,7 +6,8 @@ import {
   forwardRef,
   HostListener,
   Input,
-  inject
+  inject,
+  AfterViewInit
 } from '@angular/core';
 import { AbstractControl, NG_VALIDATORS, NG_VALUE_ACCESSOR } from '@angular/forms';
 
@@ -60,7 +61,7 @@ import { uuid } from '../../../utils/util';
   ],
   standalone: false
 })
-export class PoNumberComponent extends PoNumberBaseComponent {
+export class PoNumberComponent extends PoNumberBaseComponent implements AfterViewInit {
   /**
    * @optional
    *
@@ -105,6 +106,14 @@ export class PoNumberComponent extends PoNumberBaseComponent {
   @HostListener('wheel', ['$event'])
   onWheel(event: Event) {
     event.preventDefault();
+  }
+
+  ngAfterViewInit() {
+    setTimeout(() => {
+      if (this.inputEl?.nativeElement?.classList?.contains('enable-append-box')) {
+        this.appendBox = true;
+      }
+    }, 300);
   }
 
   extraValidation(abstractControl: AbstractControl): { [key: string]: any } {

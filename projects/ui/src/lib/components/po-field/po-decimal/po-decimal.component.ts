@@ -267,6 +267,12 @@ export class PoDecimalComponent extends PoInputBaseComponent implements AfterVie
 
   ngAfterViewInit() {
     this.verifyAutoFocus();
+
+    setTimeout(() => {
+      if (this.inputEl?.nativeElement?.classList?.contains('enable-append-box')) {
+        this.appendBox = true;
+      }
+    }, 300);
   }
 
   ngOnDestroy(): void {

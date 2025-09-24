@@ -11,7 +11,8 @@ import {
   Renderer2,
   SimpleChanges,
   ViewChild,
-  inject
+  inject,
+  AfterViewInit
 } from '@angular/core';
 import { AbstractControl, NG_VALIDATORS, NG_VALUE_ACCESSOR } from '@angular/forms';
 
@@ -121,7 +122,7 @@ const PO_SELECT_FIELD_VALUE_DEFAULT = 'value';
   ],
   standalone: false
 })
-export class PoSelectComponent extends PoFieldValidateModel<any> implements OnChanges {
+export class PoSelectComponent extends PoFieldValidateModel<any> implements AfterViewInit, OnChanges {
   private el = inject(ElementRef);
   renderer = inject(Renderer2);
 
@@ -340,6 +341,14 @@ export class PoSelectComponent extends PoFieldValidateModel<any> implements OnCh
     if (changes.options?.currentValue) {
       this.options = changes.options.currentValue;
     }
+  }
+
+  ngAfterViewInit(): void {
+    setTimeout(() => {
+      if (this.selectElement?.nativeElement?.classList?.contains('enable-append-box')) {
+        this.appendBox = true;
+      }
+    }, 300);
   }
 
   /**

@@ -12,6 +12,8 @@
       class="po-select"
       [class.po-select-aa]="size === 'small'"
       [ngClass]="iconNameLib === 'AnimaliaIcon' ? 'po-select-phosphor' : 'po-select-poicon'"
+      [attr.data-focused-element]="!disabled"
+      [attr.data-inactive-component]="disabled || readonly"
       [attr.name]="name"
       [class.po-select-placeholder]="!selectedValue?.toString() && !!placeholder"
       [disabled]="disabled"

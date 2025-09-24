@@ -21,6 +21,8 @@
     <input
       #inp
       class="po-input"
+      [attr.data-focused-element]="!disabled"
+      [attr.data-inactive-component]="disabled || readonly"
       [attr.max]="max"
       [attr.min]="min"
       [attr.name]="name"

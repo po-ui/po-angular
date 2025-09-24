@@ -1720,6 +1720,26 @@ describe('PoDatepickerComponent:', () => {
           expect(component.focus).not.toHaveBeenCalled();
         });
       });
+
+      it("ngAfterViewInit: should set appendBox true if contains class 'enable-append-box'", fakeAsync(() => {
+        component.inputEl = {
+          nativeElement: {
+            classList: {
+              contains: (cls: string) => cls === 'enable-append-box'
+            }
+          }
+        };
+        component.iconDatepicker = {
+          buttonElement: {
+            nativeElement: document.createElement('button')
+          }
+        } as PoButtonComponent;
+        component.ngAfterViewInit();
+
+        tick(300);
+
+        expect(component.appendBox).toBeTrue();
+      }));
     });
   });
 

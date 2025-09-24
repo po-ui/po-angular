@@ -49,6 +49,21 @@ describe('PoDecimalComponent:', () => {
     expect(component).toBeTruthy();
   });
 
+  it("ngAfterViewInit: should set appendBox true if contains class 'enable-append-box'", fakeAsync(() => {
+    component.inputEl = {
+      nativeElement: {
+        classList: {
+          contains: (cls: string) => cls === 'enable-append-box'
+        }
+      }
+    };
+    component.ngAfterViewInit();
+
+    tick(300);
+
+    expect(component.appendBox).toBeTrue();
+  }));
+
   describe('Properties:', () => {
     it('locale: should set decimal and thousand separator', () => {
       component.locale = 'ru';
