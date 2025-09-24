@@ -22,6 +22,8 @@
       #inp
       class="po-input"
       [attr.name]="name"
+      [attr.data-focused-element]="!disabled"
+      [attr.data-inactive-component]="disabled || readonly"
       [autocomplete]="autocomplete"
       [class.po-input-icon-left]="icon"
       [class.po-input-icon-left-aa]="icon && size === 'small'"

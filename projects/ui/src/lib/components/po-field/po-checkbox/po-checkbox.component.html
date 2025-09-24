@@ -32,6 +32,8 @@
       [class.po-checkbox-outline-large]="size === 'large'"
       [tabindex]="disabled || disabladTabindex ? -1 : 0"
       [attr.aria-checked]="checkboxValue"
+      [attr.data-focused-element]="!disabled"
+      [attr.data-inactive-component]="disabled"
       (blur)="onBlur()"
     >
       <span

@@ -505,6 +505,21 @@ describe('PoMultiselectComponent:', () => {
         component.ngAfterViewInit();
         expect(inputFocus).not.toHaveBeenCalled();
       });
+
+      it("should set appendBox true if contains class 'enable-append-box'", fakeAsync(() => {
+        component.inputElement = {
+          nativeElement: {
+            classList: {
+              contains: (cls: string) => cls === 'enable-append-box'
+            }
+          }
+        };
+        component.ngAfterViewInit();
+
+        tick(300);
+
+        expect(component.appendBox).toBeTrue();
+      }));
     });
 
     it('ngDoCheck: should call debounceResize', () => {

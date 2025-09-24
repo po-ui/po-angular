@@ -1,4 +1,4 @@
-import { ComponentFixture, TestBed } from '@angular/core/testing';
+import { ComponentFixture, fakeAsync, TestBed, tick } from '@angular/core/testing';
 import { UntypedFormControl } from '@angular/forms';
 
 import { expectSettersMethod, configureTestSuite } from '../../../util-test/util-expect.spec';
@@ -32,6 +32,21 @@ describe('PoNumberComponent:', () => {
   it('should be created', () => {
     expect(component).toBeTruthy();
   });
+
+  it("ngAfterViewInit: should set appendBox true if contains class 'enable-append-box'", fakeAsync(() => {
+    component.inputEl = {
+      nativeElement: {
+        classList: {
+          contains: (cls: string) => cls === 'enable-append-box'
+        }
+      }
+    };
+    component.ngAfterViewInit();
+
+    tick(300);
+
+    expect(component.appendBox).toBeTrue();
+  }));
 
   it('should create button clean', () => {
     fixture.detectChanges();
