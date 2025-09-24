@@ -5,6 +5,8 @@
   [p-optional]="optional"
   [p-required]="required"
   [p-show-required]="showRequired"
+  [p-helper]="setHelper(this.label, this.additionalHelpTooltip).helperSettings"
+  [p-text-wrap]="labelTextWrap()"
 >
   <div class="po-field-container-content">
     <select
@@ -70,6 +72,7 @@
       [p-disabled]="disabled"
       [p-error-pattern]="getErrorPattern()"
       [p-error-limit]="errorLimit"
+      [p-hide-additional-help-by-label]="setHelper(this.label, this.additionalHelpTooltip).hideAdditionalHelp"
       [p-show-additional-help]="displayAdditionalHelp"
       [p-show-additional-help-icon]="showAdditionalHelpIcon()"
       (p-additional-help)="emitAdditionalHelp()"

@@ -12,7 +12,6 @@
       "excludedFiles": [
         "test.ts",
         "**/*.spec.ts",
-        "**/*.e2e-spec.ts",
         "**/*.po.ts",
         "./node_modules/",
         "./projects/ui/src/lib/util-test/util-expect.spec.ts"

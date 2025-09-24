@@ -1,4 +1,4 @@
-import { ChangeDetectorRef, Directive, EventEmitter, Input, OnInit, Output } from '@angular/core';
+import { ChangeDetectorRef, Directive, EventEmitter, input, Input, OnInit, Output } from '@angular/core';
 import { AbstractControl, ControlValueAccessor, Validator } from '@angular/forms';
 
 import { Observable, Subject, Subscription } from 'rxjs';
@@ -23,6 +23,7 @@ import { PoMultiselectFilter } from './interfaces/po-multiselect-filter.interfac
 import { PoMultiselectLiterals } from './interfaces/po-multiselect-literals.interface';
 import { PoMultiselectOption } from './interfaces/po-multiselect-option.interface';
 import { PoMultiselectFilterService } from './po-multiselect-filter.service';
+import { PoHelperOptions } from '../../po-helper';
 
 const PO_MULTISELECT_DEBOUNCE_TIME_DEFAULT = 400;
 const PO_MULTISELECT_FIELD_LABEL_DEFAULT = 'label';
@@ -118,6 +119,9 @@ export abstract class PoMultiselectBaseComponent implements ControlValueAccessor
   @Input() additionalHelpEventTrigger: string | undefined;
 
   /**
+   *
+   * @deprecated v23.x.x
+   *
    * @optional
    *
    * @description
@@ -226,6 +230,9 @@ export abstract class PoMultiselectBaseComponent implements ControlValueAccessor
   @Input('p-error-limit') errorLimit: boolean = false;
 
   /**
+   *
+   * @deprecated v23.x.x
+   *
    * @optional
    *
    * @description
@@ -287,6 +294,35 @@ export abstract class PoMultiselectBaseComponent implements ControlValueAccessor
    * @default `bottom`
    */
   @Input('p-listbox-control-position') listboxControlPosition: 'top' | 'bottom' = poMultiselectContainerPositionDefault;
+
+  /**
+   * @Input
+   *
+   * @optional
+   *
+   * @description
+   *
+   * Define as opções do componente de ajuda (po-helper) que será exibido ao lado do label.
+   *
+   * > Caso o `p-label` não esteja definido, o componente po-helper não será exibido.
+   * Ao configurar esta propriedade, o antigo ícone de ajuda adicional (`p-additional-help-tooltip` e `p-additional-help`) será ignorado.
+   */
+  poHelperComponent = input<PoHelperOptions>(undefined, { alias: 'p-helper' });
+
+  /**
+   * @Input
+   *
+   * @optional
+   *
+   * @description
+   *
+   * Habilita a quebra automática do texto da propriedade `p-label`. Quando `p-label-text-wrap` for verdadeiro, o texto que excede
+   * o espaço disponível é transferido para a próxima linha em pontos apropriados para uma
+   * leitura clara.
+   *
+   * @default `false`
+   */
+  labelTextWrap = input<boolean>(false, { alias: 'p-label-text-wrap' });
 
   selectedOptions: Array<PoMultiselectOption | any> = [];
   visibleOptionsDropdown: Array<PoMultiselectOption | any> = [];

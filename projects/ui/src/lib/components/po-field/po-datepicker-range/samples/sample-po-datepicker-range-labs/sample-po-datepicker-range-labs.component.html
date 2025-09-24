@@ -20,6 +20,7 @@
   [p-start-date]="startDate"
   [p-locale]="locale"
   [p-size]="size"
+  [p-label-text-wrap]="properties?.includes('labelTextWrap')"
   (p-change)="changeEvent('p-change')"
   (p-keydown)="changeEvent('p-keydown')"
   [p-error-limit]="properties?.includes('errorLimit')"
@@ -46,7 +47,7 @@
     name="additionalHelpTooltip"
     [(ngModel)]="additionalHelpTooltip"
     p-clean
-    p-label="Additional Help Tooltip"
+    p-label="Additional Help"
   >
   </po-input>
 

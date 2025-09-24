@@ -737,3 +737,29 @@ export function getA11yLevel(): PoThemeA11yEnum {
 
   return a11yLevel === 'AA' ? PoThemeA11yEnum.AA : PoThemeA11yEnum.AAA;
 }
+
+export function setHelperSettings(
+  label: string,
+  additionalHelpTooltip: string,
+  poHelperComponent?: any,
+  size?: string
+): { hideAdditionalHelp: boolean; helperSettings?: any } {
+  if (label && additionalHelpTooltip && !poHelperComponent) {
+    size = size === 'large' ? 'medium' : size;
+    return {
+      hideAdditionalHelp: true,
+      helperSettings: {
+        content: additionalHelpTooltip,
+        type: 'help',
+        size: size
+      }
+    };
+  } else if (label && poHelperComponent) {
+    return {
+      hideAdditionalHelp: true,
+      helperSettings: poHelperComponent
+    };
+  } else {
+    return { hideAdditionalHelp: false };
+  }
+}

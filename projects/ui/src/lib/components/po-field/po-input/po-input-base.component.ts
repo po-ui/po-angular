@@ -1,4 +1,14 @@
-import { ChangeDetectorRef, Directive, EventEmitter, Input, OnDestroy, Output, TemplateRef } from '@angular/core';
+import {
+  ChangeDetectorRef,
+  Directive,
+  EventEmitter,
+  input,
+  Input,
+  OnDestroy,
+  Output,
+  TemplateRef,
+  ViewChild
+} from '@angular/core';
 import { AbstractControl, ControlValueAccessor, Validator, Validators } from '@angular/forms';
 
 import { Subscription, switchMap } from 'rxjs';
@@ -7,6 +17,8 @@ import { convertToBoolean, getDefaultSizeFn, validateSizeFn } from '../../../uti
 import { ErrorAsyncProperties } from '../shared/interfaces/error-async-properties.interface';
 import { maxlengpoailed, minlengpoailed, patternFailed, requiredFailed } from './../validators';
 import { PoMask } from './po-mask';
+import { PoHelperOptions } from '../../po-helper';
+import { PoFieldContainerComponent } from '../po-field-container';
 
 /**
  * @description
@@ -57,10 +69,15 @@ import { PoMask } from './po-mask';
  */
 @Directive()
 export abstract class PoInputBaseComponent implements ControlValueAccessor, Validator, OnDestroy {
+  @ViewChild('fieldContainer', { read: PoFieldContainerComponent, static: false })
+  fieldContainer?: PoFieldContainerComponent;
   // Propriedade interna que define se o ícone de ajuda adicional terá cursor clicável (evento) ou padrão (tooltip).
   @Input() additionalHelpEventTrigger: string | undefined;
 
   /**
+   *
+   * @deprecated v23.x.x
+   *
    * @optional
    *
    * @description
@@ -252,6 +269,9 @@ export abstract class PoInputBaseComponent implements ControlValueAccessor, Vali
   }
 
   /**
+   *
+   * @deprecated v23.x.x
+   *
    * @optional
    *
    * @description
@@ -537,6 +557,35 @@ export abstract class PoInputBaseComponent implements ControlValueAccessor, Vali
     }
   }
 
+  /**
+   * @Input
+   *
+   * @optional
+   *
+   * @description
+   *
+   * Define as opções do componente de ajuda (po-helper) que será exibido ao lado do label.
+   *
+   * > Caso o `p-label` não esteja definido, o componente po-helper não será exibido.
+   * Ao configurar esta propriedade, o antigo ícone de ajuda adicional (`p-additional-help-tooltip` e `p-additional-help`) será ignorado.
+   */
+  poHelperComponent = input<PoHelperOptions>(undefined, { alias: 'p-helper' });
+
+  /**
+   * @Input
+   *
+   * @optional
+   *
+   * @description
+   *
+   * Habilita a quebra automática do texto da propriedade `p-label`. Quando `p-label-text-wrap` for verdadeiro, o texto que excede
+   * o espaço disponível é transferido para a próxima linha em pontos apropriados para uma
+   * leitura clara.
+   *
+   * @default `false`
+   */
+  labelTextWrap = input<boolean>(false, { alias: 'p-label-text-wrap' });
+
   constructor(protected cd?: ChangeDetectorRef) {
     this.objMask = new PoMask(this.mask, this.maskFormatModel);
   }
@@ -600,6 +649,8 @@ export abstract class PoInputBaseComponent implements ControlValueAccessor, Vali
   }
 
   /**
+   * @deprecated v23.x.x
+   *
    * Método que exibe `p-additionalHelpTooltip` ou executa a ação definida em `p-additionalHelp`.
    * Para isso, será necessário configurar uma tecla de atalho utilizando o evento `p-keydown`.
    *

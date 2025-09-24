@@ -1,0 +1,35 @@
+import { Component } from '@angular/core';
+
+import { PoHelperOptions, PoChartType, PoChartOptions, PoChartSerie } from '@po-ui/ng-components';
+
+@Component({
+  selector: 'sample-po-helper-sales-performance',
+  templateUrl: './sample-po-helper-sales-performance.component.html',
+  standalone: false
+})
+export class SamplePoHelperSalesPerformanceComponent {
+  helperOptions: PoHelperOptions = {
+    title: 'Sales Performance Overview',
+    content:
+      'This section provides insights into employee turnover rate and sales performance. Hover over the chart for more details.',
+    type: 'info'
+  };
+
+  type = PoChartType.Gauge;
+  optionsSingle: PoChartOptions = {
+    descriptionChart: '25% of turnover'
+  };
+
+  optionsRange: PoChartOptions = {
+    descriptionChart: 'The sales increased in 82% in the first bimester of 2020',
+    showFromToLegend: true
+  };
+
+  turnover: Array<PoChartSerie> = [{ data: 25, label: 'Low rate' }];
+
+  salesRanges: Array<PoChartSerie> = [
+    { from: 0, to: 50, label: 'Sales reduction' },
+    { from: 50, to: 75, label: 'Average sales' },
+    { from: 75, to: 100, label: 'Sales soared' }
+  ];
+}

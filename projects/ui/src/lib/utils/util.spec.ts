@@ -1775,4 +1775,65 @@ describe('accessibility level: ', () => {
       expect(UtilFunctions.validateSizeFn('xxg', PoFieldSize)).toBe(PoFieldSize.Medium);
     });
   });
+
+  describe('setHelperSettings', () => {
+    it('should return helperSettings with tooltip when label and additionalHelpTooltip are provided and poHelperComponent is not', () => {
+      const label = 'Label';
+      const tooltip = 'Tooltip';
+      const size = 'small';
+
+      const result = UtilFunctions.setHelperSettings(label, tooltip, undefined, size);
+
+      expect(result.hideAdditionalHelp).toBeTrue();
+      expect(result.helperSettings).toEqual({
+        content: tooltip,
+        type: 'help',
+        size: size
+      });
+    });
+
+    it('should return helperSettings with poHelperComponent when label and poHelperComponent are provided', () => {
+      const label = 'Label';
+      const tooltip = 'Tooltip';
+      const poHelperComponent = { content: 'custom', type: 'custom' };
+
+      const result = UtilFunctions.setHelperSettings(label, tooltip, poHelperComponent);
+
+      expect(result.hideAdditionalHelp).toBeTrue();
+      expect(result.helperSettings).toBe(poHelperComponent);
+    });
+
+    it('should return hideAdditionalHelp false when label is missing', () => {
+      const result = UtilFunctions.setHelperSettings(undefined, 'Tooltip');
+      expect(result.hideAdditionalHelp).toBeFalse();
+      expect(result.helperSettings).toBeUndefined();
+    });
+
+    it('should return hideAdditionalHelp false when additionalHelpTooltip is missing', () => {
+      const result = UtilFunctions.setHelperSettings('Label', undefined);
+      expect(result.hideAdditionalHelp).toBeFalse();
+      expect(result.helperSettings).toBeUndefined();
+    });
+
+    it('should return hideAdditionalHelp false when neither label nor additionalHelpTooltip nor poHelperComponent are provided', () => {
+      const result = UtilFunctions.setHelperSettings(undefined, undefined);
+      expect(result.hideAdditionalHelp).toBeFalse();
+      expect(result.helperSettings).toBeUndefined();
+    });
+
+    it('should replace size "large" with "medium"', () => {
+      const label = 'Label';
+      const tooltip = 'Tooltip';
+      const size = 'large';
+
+      const result = UtilFunctions.setHelperSettings(label, tooltip, undefined, size);
+
+      expect(result.hideAdditionalHelp).toBeTrue();
+      expect(result.helperSettings).toEqual({
+        content: tooltip,
+        type: 'help',
+        size: 'medium'
+      });
+    });
+  });
 });

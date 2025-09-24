@@ -10,7 +10,8 @@ import {
   Injector,
   Input,
   ViewChild,
-  OnDestroy
+  OnDestroy,
+  input
 } from '@angular/core';
 import {
   AbstractControl,
@@ -22,13 +23,14 @@ import {
   NG_VALIDATORS
 } from '@angular/forms';
 
-import { convertToBoolean, getDefaultSizeFn, uuid, validateSizeFn } from '../../../utils/util';
+import { convertToBoolean, getDefaultSizeFn, setHelperSettings, uuid, validateSizeFn } from '../../../utils/util';
 
 import { PoFieldSize } from '../../../enums/po-field-size.enum';
 import { PoFieldModel } from '../po-field.model';
 import { PoKeyCodeEnum } from './../../../enums/po-key-code.enum';
 import { PoSwitchLabelPosition } from './po-switch-label-position.enum';
 import { Subscription } from 'rxjs';
+import { PoHelperOptions } from '../../po-helper';
 
 /**
  * @docsExtends PoFieldModel
@@ -280,6 +282,20 @@ export class PoSwitchComponent extends PoFieldModel<any> implements Validator, A
     return this._size ?? getDefaultSizeFn(PoFieldSize);
   }
 
+  /**
+   * @Input
+   *
+   * @optional
+   *
+   * @description
+   *
+   * Define as opções do componente de ajuda (po-helper) que será exibido ao lado do label.
+   *
+   * > Caso o `p-label` não esteja definido, o componente po-helper não será exibido.
+   * Ao configurar esta propriedade, o antigo ícone de ajuda adicional (`p-additional-help-tooltip` e `p-additional-help`) será ignorado.
+   */
+  poHelperComponent = input<PoHelperOptions>(undefined, { alias: 'p-helper' });
+
   private readonly el: ElementRef = inject(ElementRef);
   private readonly injectOptions: InjectOptions = {
     self: true
@@ -415,5 +431,9 @@ export class PoSwitchComponent extends PoFieldModel<any> implements Validator, A
     return (
       this.el.nativeElement.classList.contains('ng-invalid') && this.el.nativeElement.classList.contains('ng-dirty')
     );
+  }
+
+  setHelper(label?: string, additionalHelpTooltip?: string) {
+    return setHelperSettings(label, additionalHelpTooltip, this.poHelperComponent(), this.size);
   }
 }

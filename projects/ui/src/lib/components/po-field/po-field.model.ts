@@ -9,6 +9,9 @@ export abstract class PoFieldModel<T> implements ControlValueAccessor {
   @Input() additionalHelpEventTrigger: string | undefined;
 
   /**
+   *
+   * @deprecated v23.x.x
+   *
    * @optional
    *
    * @description
@@ -55,6 +58,9 @@ export abstract class PoFieldModel<T> implements ControlValueAccessor {
   @Input({ alias: 'p-disabled', transform: convertToBoolean }) disabled: boolean = false;
 
   /**
+   *
+   * @deprecated v23.x.x
+   *
    * @optional
    *
    * @description

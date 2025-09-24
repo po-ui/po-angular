@@ -1,4 +1,4 @@
-import { Directive, EventEmitter, HostBinding, Input, Output } from '@angular/core';
+import { Directive, EventEmitter, HostBinding, input, Input, Output } from '@angular/core';
 import { AbstractControl, ControlValueAccessor, Validator } from '@angular/forms';
 
 import { convertToBoolean, getDefaultSizeFn, isEquals, isIE, isMobile, validateSizeFn } from '../../../utils/util';
@@ -13,6 +13,7 @@ import { PoUploadLiterals } from './interfaces/po-upload-literals.interface';
 import { PoUploadFile } from './po-upload-file';
 import { PoUploadStatus } from './po-upload-status.enum';
 import { PoUploadService } from './po-upload.service';
+import { PoHelperOptions } from '../../po-helper';
 
 export const poUploadLiteralsDefault = {
   en: <PoUploadLiterals>{
@@ -146,6 +147,9 @@ export abstract class PoUploadBaseComponent implements ControlValueAccessor, Val
   @Input() additionalHelpEventTrigger: string | undefined;
 
   /**
+   *
+   * @deprecated v23.x.x
+   *
    * @optional
    *
    * @description
@@ -271,6 +275,38 @@ export abstract class PoUploadBaseComponent implements ControlValueAccessor, Val
   requiredUrl: boolean = true;
 
   /**
+   * @Input
+   *
+   * @optional
+   *
+   * @description
+   *
+   * Define as opções do componente de ajuda (po-helper) que será exibido ao lado do label.
+   *
+   * > Caso o `p-label` não esteja definido, o componente po-helper não será exibido.
+   * Ao configurar esta propriedade, o antigo ícone de ajuda adicional (`p-additional-help-tooltip` e `p-additional-help`) será ignorado.
+   */
+  poHelperComponent = input<PoHelperOptions>(undefined, { alias: 'p-helper' });
+
+  /**
+   * @Input
+   *
+   * @optional
+   *
+   * @description
+   *
+   * Habilita a quebra automática do texto da propriedade `p-label`. Quando `p-label-text-wrap` for verdadeiro, o texto que excede
+   * o espaço disponível é transferido para a próxima linha em pontos apropriados para uma
+   * leitura clara.
+   *
+   * @default `false`
+   */
+  labelTextWrap = input<boolean>(false, { alias: 'p-label-text-wrap' });
+
+  /**
+   *
+   * @deprecated v23.x.x
+   *
    * @optional
    *
    * @description

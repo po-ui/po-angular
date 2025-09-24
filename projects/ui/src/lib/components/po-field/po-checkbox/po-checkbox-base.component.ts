@@ -1,8 +1,9 @@
-import { Directive, EventEmitter, Input, Output } from '@angular/core';
+import { Component, EventEmitter, input, Input, Output } from '@angular/core';
 import { ControlValueAccessor } from '@angular/forms';
 
 import { convertToBoolean, getDefaultSizeFn, uuid, validateSizeFn } from './../../../utils/util';
 import { PoCheckboxSize } from './enums/po-checkbox-size.enum';
+import { PoHelperOptions } from '../../po-helper';
 
 /**
  * @description
@@ -45,12 +46,19 @@ import { PoCheckboxSize } from './enums/po-checkbox-size.enum';
  * | `--color-checked-disabled` &nbsp;      | Cor pricipal quando selecionado no estado disabled           | `var(--color-neutral-dark-70)`                  |
  *
  */
-@Directive()
+@Component({
+  selector: 'po-checkbox-base',
+  template: '',
+  standalone: false
+})
 export abstract class PoCheckboxBaseComponent implements ControlValueAccessor {
   // Propriedade interna que define se o ícone de ajuda adicional terá cursor clicável (evento) ou padrão (tooltip).
   @Input() additionalHelpEventTrigger: string | undefined;
 
   /**
+   *
+   * @deprecated v23.x.x
+   *
    * @optional
    *
    * @description
@@ -192,6 +200,20 @@ export abstract class PoCheckboxBaseComponent implements ControlValueAccessor {
     this._size = validateSizeFn(value, PoCheckboxSize);
   }
 
+  /**
+   * @Input
+   *
+   * @optional
+   *
+   * @description
+   *
+   * Define as opções do componente de ajuda (po-helper) que será exibido ao lado do label.
+   *
+   * > Caso o `p-label` não esteja definido, o componente po-helper não será exibido.
+   * Ao configurar esta propriedade, o antigo ícone de ajuda adicional (`p-additional-help-tooltip` e `p-additional-help`) será ignorado.
+   */
+  poHelperComponent = input<PoHelperOptions>(undefined, { alias: 'p-helper' });
+
   get size(): string {
     return this._size ?? getDefaultSizeFn(PoCheckboxSize);
   }
@@ -204,7 +226,13 @@ export abstract class PoCheckboxBaseComponent implements ControlValueAccessor {
     this.change.emit(this.checkboxValue);
   }
 
-  checkOption(value: boolean | null | string) {
+  checkOption(event: any, value: boolean | null | string) {
+    const target = event.target as HTMLElement;
+
+    if (target.closest('po-helper')) {
+      return;
+    }
+
     if (!this.disabled) {
       value === 'mixed' ? this.changeModelValue(true) : this.changeModelValue(!value);
       this.changeValue();

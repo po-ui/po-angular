@@ -56,6 +56,7 @@ import { PoCheckboxModule } from './po-checkbox/po-checkbox.module';
 import { PoSwitchModule } from './po-switch/po-switch.module';
 import { PoLabelModule } from '../po-label';
 import { PoTagModule } from '../po-tag';
+import { PoHelperModule } from '../po-helper';
 
 /**
  * @description
@@ -98,7 +99,8 @@ import { PoTagModule } from '../po-tag';
     PoLabelModule,
     PoListBoxModule,
     PoSwitchModule,
-    PoTagModule
+    PoTagModule,
+    PoHelperModule
   ],
   exports: [
     PoCheckboxGroupModule,

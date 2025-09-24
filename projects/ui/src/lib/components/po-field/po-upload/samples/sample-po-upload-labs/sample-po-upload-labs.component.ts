@@ -54,7 +54,8 @@ export class SamplePoUploadLabsComponent implements OnInit {
     { value: 'restrictionsInfo', label: 'Hide Restrictions Info' },
     { value: 'selectButton', label: 'Hide Select Files Button' },
     { value: 'sendButton', label: 'Hide Send Files Button' },
-    { value: 'showCustomAction', label: 'Add Custom Action to Progress' }
+    { value: 'showCustomAction', label: 'Add Custom Action to Progress' },
+    { value: 'labelTextWrap', label: 'Label Text Wrap' }
   ];
 
   public readonly sizeOptions: Array<PoRadioGroupOption> = [

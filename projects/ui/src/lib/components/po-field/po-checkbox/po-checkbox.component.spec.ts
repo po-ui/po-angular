@@ -141,7 +141,7 @@ describe('PoCheckboxComponent:', () => {
 
         component.onKeyDown(fakeEvent, component.checkboxValue);
 
-        expect(spyOnCheckOption).toHaveBeenCalledWith(component.checkboxValue);
+        expect(spyOnCheckOption).toHaveBeenCalledWith(fakeEvent, component.checkboxValue);
         expect(spyOnPreventDefault).toHaveBeenCalled();
       });
 
@@ -166,7 +166,7 @@ describe('PoCheckboxComponent:', () => {
 
         component.onKeyDown(fakeEvent, component.checkboxValue);
 
-        expect(spyOnCheckOption).toHaveBeenCalledWith(component.checkboxValue);
+        expect(spyOnCheckOption).toHaveBeenCalledWith(fakeEvent, component.checkboxValue);
         expect(spyOnPreventDefault).toHaveBeenCalled();
       });
 
