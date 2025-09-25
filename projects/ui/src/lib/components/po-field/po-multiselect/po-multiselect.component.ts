@@ -170,6 +170,13 @@ export class PoMultiselectComponent
       this.focus();
     }
     this.initialized = true;
+
+    // Necessário para edição fluída
+    setTimeout(() => {
+      if (this.inputElement?.nativeElement?.classList?.contains('enable-append-box')) {
+        this.appendBox = true;
+      }
+    }, 300);
   }
 
   ngOnChanges(changes: SimpleChanges) {

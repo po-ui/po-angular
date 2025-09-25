@@ -20,6 +20,8 @@
           [class.po-input-icon-right-aa]="clean && inp.value && size === 'small'"
           [class.po-input-aa]="size === 'small'"
           type="text"
+          [attr.data-focused-element]="!disabled"
+          [attr.data-inactive-component]="disabled || readonly"
           [attr.name]="name"
           [autocomplete]="autocomplete"
           [disabled]="disabled"
