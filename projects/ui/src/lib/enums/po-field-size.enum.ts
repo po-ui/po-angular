@@ -3,12 +3,13 @@
  *
  * @description
  *
- * Tamanhos da propriedade `p-size`. A medida `small` está disponível apenas para acessibilidade AA.
+ * Define o tamanho padrão utilizado em componentes interativos. Este enum também é usado pelo serviço de tema para
+ * definir a preferência global de tamanho dos componentes. Por padrão, os componentes utilizam o tamanho `medium` por
+ * ser mais acessível (conforme diretrizes WCAG nível AAA).
+ *
+ * > O tamanho `small` está disponível apenas em contextos com acessibilidade AA.
  */
 export enum PoFieldSize {
-  /** Define a altura do input como 32px. */
   Small = 'small',
-
-  /** Define a altura do input como 44px. */
   Medium = 'medium'
 }

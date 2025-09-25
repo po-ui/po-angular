@@ -5,7 +5,7 @@
  * Tipos de espaçamento interno (padding) das células (**p-spacing**) do po-table.
  */
 export enum PoTableColumnSpacing {
-  /** Espaçamento extra pequeno: 0.25rem (vertical) x 1rem (horizontal). */
+  /** Espaçamento extra pequeno: 0.25rem (vertical) x 0.5rem (horizontal). */
   ExtraSmall = 'extraSmall',
 
   /** Espaçamento pequeno: 0.5rem (vertical) x 1rem (horizontal). */
