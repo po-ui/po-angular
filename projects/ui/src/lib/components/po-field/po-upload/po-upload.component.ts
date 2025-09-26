@@ -242,7 +242,6 @@ export class PoUploadComponent extends PoUploadBaseComponent implements AfterVie
     return false;
   }
 
-  // retorna se o status do arquivo é diferente de enviado
   isAllowCancelEvent(status: PoUploadStatus) {
     return status !== PoUploadStatus.Uploaded;
   }
@@ -253,7 +252,6 @@ export class PoUploadComponent extends PoUploadBaseComponent implements AfterVie
     }
   }
 
-  // Função disparada ao selecionar algum arquivo.
   onFileChange(event): void {
     // necessário este tratamento quando para IE, pois nele o change é disparado quando o campo é limpado também
     if (this.calledByCleanInputValue) {
@@ -277,7 +275,6 @@ export class PoUploadComponent extends PoUploadBaseComponent implements AfterVie
     }
   }
 
-  // Remove o arquivo passado por parâmetro da lista dos arquivos correntes.
   removeFile(file): void {
     const index = this.currentFiles.indexOf(file);
     this.currentFiles.splice(index, 1);
@@ -360,7 +357,6 @@ export class PoUploadComponent extends PoUploadBaseComponent implements AfterVie
     return !!this.additionalHelpTooltip || this.isAdditionalHelpEventTriggered();
   }
 
-  // Caso o componente estiver no modo AutoUpload, o arquivo também será removido da lista.
   stopUpload(file: PoUploadFile) {
     this.uploadService.stopRequestByFile(file, () => {
       if (this.autoUpload) {
@@ -376,7 +372,6 @@ export class PoUploadComponent extends PoUploadBaseComponent implements AfterVie
     return file.uid;
   }
 
-  // Envia os arquivos passados por parâmetro, exceto os que já foram enviados ao serviço.
   uploadFiles(files: Array<PoUploadFile>) {
     const filesFiltered = files.filter(file => file.status !== PoUploadStatus.Uploaded);
     this.uploadService.upload(
@@ -424,20 +419,17 @@ export class PoUploadComponent extends PoUploadBaseComponent implements AfterVie
     return document.activeElement === this.uploadButton.buttonElement.nativeElement;
   }
 
-  // função disparada na resposta do sucesso ou error
   private responseHandler(file: PoUploadFile, status: PoUploadStatus) {
     file.status = status;
     file.percent = 100;
     this.cd.markForCheck();
   }
 
-  // método responsável por setar os argumentos do i18nPipe de acordo com a restrição.
   private setPipeArguments(literalAttributes: string, literalArguments?) {
     const pipeArguments = this.i18nPipe.transform(this.literals[literalAttributes], literalArguments);
     this.notification.information(pipeArguments);
   }
 
-  // Função disparada ao parar um envio de arquivo.
   private stopUploadHandler(file: PoUploadFile) {
     file.status = PoUploadStatus.None;
     file.percent = 0;
@@ -454,20 +446,17 @@ export class PoUploadComponent extends PoUploadBaseComponent implements AfterVie
     }
   }
 
-  // Atualiza o ngModel para os arquivos passados por parâmetro.
   private updateModel(files: Array<PoUploadFile>) {
     const modelFiles: Array<PoUploadFile> = this.mapCleanUploadFiles(files);
     this.onModelChange ? this.onModelChange(modelFiles) : this.ngModelChange.emit(modelFiles);
   }
 
-  // Função disparada enquanto o arquivo está sendo enviado ao serviço.
   private uploadingHandler(file: any, percent: number) {
     file.status = PoUploadStatus.Uploading;
     file.percent = percent;
     this.cd.markForCheck();
   }
 
-  // retorna os objetos do array sem as propriedades: percent e displayName
   private mapCleanUploadFiles(files: Array<PoUploadFile>): Array<PoUploadFile> {
     const mapedByUploadFile = progressFile => {
       const { percent, displayName, ...uploadFile } = progressFile;
