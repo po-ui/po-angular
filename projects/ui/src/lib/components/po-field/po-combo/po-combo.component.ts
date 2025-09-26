@@ -599,7 +599,6 @@ export class PoComboComponent extends PoComboBaseComponent implements AfterViewI
 
       this.verifyValidOption();
 
-      // caso for changeOnEnter deve limpar o selectedView para reinicia-lo
       this.selectedView = this.changeOnEnter && !this.selectedValue ? undefined : this.selectedView;
     } else {
       if (this.service && !this.getInputValue() && !this.isFirstFilter) {
@@ -821,7 +820,6 @@ export class PoComboComponent extends PoComboBaseComponent implements AfterViewI
     return this.infiniteScroll ? true : false;
   }
 
-  // Define o foco no item apropriado do listbox.
   private focusItem() {
     this.poListbox?.listboxItemList?.nativeElement.focus();
     setTimeout(() => {
@@ -845,7 +843,6 @@ export class PoComboComponent extends PoComboBaseComponent implements AfterViewI
     this.inputEl.nativeElement.focus();
   }
 
-  // Determina se o tab deve abrir o listbox.
   private shouldHandleTab(event: KeyboardEvent): boolean {
     return this.comboOpen && this.appendBox && !event.shiftKey;
   }
