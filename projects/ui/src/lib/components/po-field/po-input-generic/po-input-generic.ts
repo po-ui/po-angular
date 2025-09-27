@@ -295,6 +295,12 @@ export abstract class PoInputGeneric extends PoInputBaseComponent implements Aft
   abstract extraValidation(c: AbstractControl): { [key: string]: any };
 
   setHelper(label?: string, additionalHelpTooltip?: string) {
-    return setHelperSettings(label, additionalHelpTooltip, this.poHelperComponent(), this.size);
+    return setHelperSettings(
+      label,
+      additionalHelpTooltip,
+      this.poHelperComponent(),
+      this.size,
+      this.isAdditionalHelpEventTriggered() ? this.additionalHelp : undefined
+    );
   }
 }

@@ -220,6 +220,26 @@ describe('PoCheckboxComponent:', () => {
         expect(result).toBeFalse();
         expect(component.displayAdditionalHelp).toBeFalse();
       });
+
+      it('should call `openHelperPopover` when `displayAdditionalHelp` becomes true and `helperEl` exists', () => {
+        component.displayAdditionalHelp = false;
+        component.helperEl = { openHelperPopover: jasmine.createSpy(), closeHelperPopover: jasmine.createSpy() } as any;
+
+        component.showAdditionalHelp();
+
+        expect(component.helperEl.openHelperPopover).toHaveBeenCalled();
+        expect(component.helperEl.closeHelperPopover).not.toHaveBeenCalled();
+      });
+
+      it('should call `closeHelperPopover` when `displayAdditionalHelp` becomes false and `helperEl` exists', () => {
+        component.displayAdditionalHelp = true;
+        component.helperEl = { openHelperPopover: jasmine.createSpy(), closeHelperPopover: jasmine.createSpy() } as any;
+
+        component.showAdditionalHelp();
+
+        expect(component.helperEl.closeHelperPopover).toHaveBeenCalled();
+        expect(component.helperEl.openHelperPopover).not.toHaveBeenCalled();
+      });
     });
 
     it('changeModelValue: should update `changeModelValue` with property values', () => {

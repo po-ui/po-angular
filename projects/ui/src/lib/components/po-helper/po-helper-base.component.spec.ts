@@ -47,5 +47,51 @@ describe('PoHelperBaseComponent:', () => {
       const result = (component as any).transformHelper(options);
       expect(result).toBe(options);
     });
+
+    it('should set type to "help" when PoHelperOptions has no type', () => {
+      const options: any = { title: 'T', content: 'C' };
+      const result = (component as any).transformHelper(options);
+
+      expect(result).toBe(options);
+      expect(options.type).toBe('help');
+    });
+
+    it('should set type to "help" when PoHelperOptions has an empty type', () => {
+      const options: any = { title: 'T', content: 'C', type: '' };
+      const result = (component as any).transformHelper(options);
+
+      expect(result).toBe(options);
+      expect(options.type).toBe('help');
+    });
+
+    it('should delete footerAction when type is "info"', () => {
+      const options: any = {
+        title: 'T',
+        content: 'C',
+        type: 'info',
+        footerAction: jasmine.createSpy('footerAction')
+      };
+
+      const result = (component as any).transformHelper(options);
+
+      expect(result).toBe(options);
+      expect('footerAction' in options).toBeFalse();
+      expect(options.footerAction).toBeUndefined();
+    });
+
+    it('should keep footerAction when type is not "info"', () => {
+      const options: any = {
+        title: 'T',
+        content: 'C',
+        type: 'warning',
+        footerAction: jasmine.createSpy('footerAction')
+      };
+
+      const result = (component as any).transformHelper(options);
+
+      expect(result).toBe(options);
+      expect('footerAction' in options).toBeTrue();
+      expect(typeof options.footerAction).toBe('function');
+    });
   });
 });

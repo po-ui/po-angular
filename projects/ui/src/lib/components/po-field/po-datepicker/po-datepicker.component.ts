@@ -381,16 +381,26 @@ export class PoDatepickerComponent extends PoDatepickerBaseComponent implements 
   }
 
   /**
-   * @deprecated v23.x.x
-   *
    * Método que exibe `p-additionalHelpTooltip` ou executa a ação definida em `p-additionalHelp`.
    * Para isso, será necessário configurar uma tecla de atalho utilizando o evento `p-keydown`.
+   *
+   * > Exibe ou oculta o conteúdo do componente `po-helper` quando o componente estiver com foco e com label visível.
    *
    * ```
    * <po-datepicker
    *  #datepicker
    *  ...
    *  p-additional-help-tooltip="Mensagem de ajuda complementar"
+   *  (p-keydown)="onKeyDown($event, datepicker)"
+   * ></po-datepicker>
+   * ```
+   * ```
+   * // Exemplo com p-label e p-helper
+   * <po-datepicker
+   *  #datepicker
+   *  ...
+   *  p-label="Label do datepicker"
+   *  [p-helper]="helperOptions"
    *  (p-keydown)="onKeyDown($event, datepicker)"
    * ></po-datepicker>
    * ```
@@ -633,6 +643,12 @@ export class PoDatepickerComponent extends PoDatepickerBaseComponent implements 
   }
 
   setHelper(label?: string, additionalHelpTooltip?: string) {
-    return setHelperSettings(label, additionalHelpTooltip, this.poHelperComponent(), this.size);
+    return setHelperSettings(
+      label,
+      additionalHelpTooltip,
+      this.poHelperComponent(),
+      this.size,
+      this.isAdditionalHelpEventTriggered() ? this.additionalHelp : undefined
+    );
   }
 }

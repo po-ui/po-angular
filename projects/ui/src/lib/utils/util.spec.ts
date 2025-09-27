@@ -1,3 +1,4 @@
+import { ElementRef } from '@angular/core';
 import { PoFieldSize } from '../enums/po-field-size.enum';
 import { PoThemeA11yEnum, PoThemeService } from '../services';
 import { handleThrowError } from './../util-test/util-expect.spec';
@@ -1775,65 +1776,178 @@ describe('accessibility level: ', () => {
       expect(UtilFunctions.validateSizeFn('xxg', PoFieldSize)).toBe(PoFieldSize.Medium);
     });
   });
+});
 
-  describe('setHelperSettings', () => {
-    it('should return helperSettings with tooltip when label and additionalHelpTooltip are provided and poHelperComponent is not', () => {
-      const label = 'Label';
-      const tooltip = 'Tooltip';
-      const size = 'small';
+describe('setHelperSettings', () => {
+  it('should return helperSettings with tooltip when label and additionalHelpTooltip are provided and poHelperComponent is not', () => {
+    const label = 'Label';
+    const tooltip = 'Tooltip';
+    const size = 'small';
 
-      const result = UtilFunctions.setHelperSettings(label, tooltip, undefined, size);
+    const result = UtilFunctions.setHelperSettings(label, tooltip, undefined, size);
 
-      expect(result.hideAdditionalHelp).toBeTrue();
-      expect(result.helperSettings).toEqual({
-        content: tooltip,
-        type: 'help',
-        size: size
-      });
+    expect(result.hideAdditionalHelp).toBeTrue();
+    expect(result.helperSettings).toEqual({
+      content: tooltip,
+      type: 'help',
+      size: size
     });
+  });
 
-    it('should return helperSettings with poHelperComponent when label and poHelperComponent are provided', () => {
-      const label = 'Label';
-      const tooltip = 'Tooltip';
-      const poHelperComponent = { content: 'custom', type: 'custom' };
+  it('should return helperSettings with poHelperComponent when label and poHelperComponent are provided', () => {
+    const label = 'Label';
+    const tooltip = 'Tooltip';
+    const poHelperComponent = { content: 'custom', type: 'custom', size: 'medium' };
 
-      const result = UtilFunctions.setHelperSettings(label, tooltip, poHelperComponent);
+    const result = UtilFunctions.setHelperSettings(label, tooltip, poHelperComponent);
 
-      expect(result.hideAdditionalHelp).toBeTrue();
-      expect(result.helperSettings).toBe(poHelperComponent);
+    expect(result.hideAdditionalHelp).toBeTrue();
+    expect(result.helperSettings).toEqual(poHelperComponent);
+  });
+
+  it('should return hideAdditionalHelp false when label is missing', () => {
+    const result = UtilFunctions.setHelperSettings(undefined, 'Tooltip');
+    expect(result.hideAdditionalHelp).toBeFalse();
+    expect(result.helperSettings).toBeNull();
+  });
+
+  it('should return hideAdditionalHelp false when additionalHelpTooltip is missing', () => {
+    const result = UtilFunctions.setHelperSettings('Label', undefined);
+    expect(result.hideAdditionalHelp).toBeFalse();
+    expect(result.helperSettings).toBeNull();
+  });
+
+  it('should return hideAdditionalHelp false when neither label nor additionalHelpTooltip nor poHelperComponent are provided', () => {
+    const result = UtilFunctions.setHelperSettings(undefined, undefined);
+    expect(result.hideAdditionalHelp).toBeFalse();
+    expect(result.helperSettings).toBeNull();
+  });
+
+  it('should replace size "large" with "medium"', () => {
+    const label = 'Label';
+    const tooltip = 'Tooltip';
+    const size = 'large';
+
+    const result = UtilFunctions.setHelperSettings(label, tooltip, undefined, size);
+
+    expect(result.hideAdditionalHelp).toBeTrue();
+    expect(result.helperSettings).toEqual({
+      content: tooltip,
+      type: 'help',
+      size: 'medium'
     });
+  });
 
-    it('should return hideAdditionalHelp false when label is missing', () => {
-      const result = UtilFunctions.setHelperSettings(undefined, 'Tooltip');
-      expect(result.hideAdditionalHelp).toBeFalse();
-      expect(result.helperSettings).toBeUndefined();
+  it('should return helperSettings with eventOnClick when onClick is provided', () => {
+    const label = 'Label';
+    const tooltip = 'Tooltip';
+    const onClick = jasmine.createSpy('onClick');
+
+    const result = UtilFunctions.setHelperSettings(label, tooltip, undefined, undefined, onClick);
+
+    expect(result.hideAdditionalHelp).toBeTrue();
+    expect(result.helperSettings).toEqual({
+      type: 'help',
+      eventOnClick: onClick
     });
+  });
 
-    it('should return hideAdditionalHelp false when additionalHelpTooltip is missing', () => {
-      const result = UtilFunctions.setHelperSettings('Label', undefined);
-      expect(result.hideAdditionalHelp).toBeFalse();
-      expect(result.helperSettings).toBeUndefined();
+  it('should return helperSettings with eventOnClick and default size "medium" when poHelperComponent.eventOnClick is provided without size', () => {
+    const label = 'Label';
+    const poHelperComponent = { eventOnClick: jasmine.createSpy('onClick') };
+
+    const result = UtilFunctions.setHelperSettings(label, undefined, poHelperComponent);
+
+    expect(result.hideAdditionalHelp).toBeTrue();
+    expect(result.helperSettings).toEqual({
+      type: 'help',
+      eventOnClick: poHelperComponent.eventOnClick,
+      size: 'medium'
     });
+  });
 
-    it('should return hideAdditionalHelp false when neither label nor additionalHelpTooltip nor poHelperComponent are provided', () => {
-      const result = UtilFunctions.setHelperSettings(undefined, undefined);
-      expect(result.hideAdditionalHelp).toBeFalse();
-      expect(result.helperSettings).toBeUndefined();
+  it('should return helperSettings with content when poHelperComponent is a non-empty string', () => {
+    const label = 'Label';
+    const poHelperComponent = 'Custom helper';
+
+    const result = UtilFunctions.setHelperSettings(label, undefined, poHelperComponent);
+
+    expect(result.hideAdditionalHelp).toBeTrue();
+    expect(result.helperSettings).toEqual({
+      content: poHelperComponent,
+      size: 'medium'
     });
+  });
+});
 
-    it('should replace size "large" with "medium"', () => {
-      const label = 'Label';
-      const tooltip = 'Tooltip';
-      const size = 'large';
+describe('updateTooltip', () => {
+  function createElementRef(
+    scrollWidth: number,
+    clientWidth: number,
+    opts?: { inner?: { scrollWidth: number; clientWidth: number } }
+  ): ElementRef<HTMLElement> {
+    const inner = opts?.inner
+      ? ({
+          scrollWidth: opts.inner.scrollWidth,
+          clientWidth: opts.inner.clientWidth
+        } as unknown as HTMLElement)
+      : null;
 
-      const result = UtilFunctions.setHelperSettings(label, tooltip, undefined, size);
+    const host = {
+      scrollWidth,
+      clientWidth,
+      querySelector: jasmine.createSpy('querySelector').and.returnValue(inner)
+    } as unknown as HTMLElement;
 
-      expect(result.hideAdditionalHelp).toBeTrue();
-      expect(result.helperSettings).toEqual({
-        content: tooltip,
-        type: 'help',
-        size: 'medium'
-      });
-    });
+    return { nativeElement: host } as ElementRef<HTMLElement>;
+  }
+
+  it('should return false when measurable element is not available', () => {
+    const labelEl = { nativeElement: null } as unknown as ElementRef<HTMLElement>;
+    const result = UtilFunctions.updateTooltip(false, labelEl);
+
+    expect(result).toBeFalse();
+  });
+
+  it('should activate tooltip when text is ellipsed and it was previously inactive', () => {
+    const labelEl = createElementRef(120, 100);
+    const result = UtilFunctions.updateTooltip(false, labelEl);
+    expect(result).toBeTrue();
+  });
+
+  it('should keep tooltip active when text remains ellipsed and it was already active', () => {
+    const labelEl = createElementRef(200, 150);
+    const result = UtilFunctions.updateTooltip(true, labelEl);
+    expect(result).toBeTrue();
+  });
+
+  it('should deactivate tooltip when text is not ellipsed and it was previously active', () => {
+    const labelEl = createElementRef(100, 120);
+    const result = UtilFunctions.updateTooltip(true, labelEl);
+    expect(result).toBeFalse();
+  });
+
+  it('should keep tooltip inactive when text is not ellipsed and it was already inactive', () => {
+    const labelEl = createElementRef(80, 80);
+    const result = UtilFunctions.updateTooltip(false, labelEl);
+    expect(result).toBeFalse();
+  });
+
+  it('should measure inner element when available (prefers inner over host)', () => {
+    const labelEl = createElementRef(80, 120, { inner: { scrollWidth: 150, clientWidth: 100 } });
+    const result = UtilFunctions.updateTooltip(false, labelEl);
+    expect(result).toBeTrue();
+  });
+
+  it('should return previous state when there is no state change needed (ellipsed + already active)', () => {
+    const labelEl = createElementRef(300, 100);
+    const result = UtilFunctions.updateTooltip(true, labelEl);
+    expect(result).toBeTrue();
+  });
+
+  it('should return previous state when there is no state change needed (not ellipsed + already inactive)', () => {
+    const labelEl = createElementRef(90, 120);
+    const result = UtilFunctions.updateTooltip(false, labelEl);
+    expect(result).toBeFalse();
   });
 });

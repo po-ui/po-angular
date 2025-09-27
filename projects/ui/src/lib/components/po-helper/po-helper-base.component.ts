@@ -128,6 +128,9 @@ export class PoHelperBaseComponent {
         type: 'help'
       };
     }
+    if (!value.type) {
+      value.type = 'help';
+    }
     if (value.type === 'info' && value.footerAction) {
       delete value.footerAction;
     }

@@ -37,6 +37,10 @@ export interface PoHelperOptions {
    *
    * Tipo do ícone exibido: `info` ou `help`.
    *
+   * Quando o valor é `info`, o popover exibe apenas informações e não permite ações customizadas.
+   *
+   * Quando o valor é `help`, o popover pode exibir ações customizadas no rodapé.
+   *
    * @default `help`
    */
   type?: 'info' | 'help';
@@ -48,6 +52,7 @@ export interface PoHelperOptions {
    * @description
    *
    * Ação customizada exibida no rodapé do popover.
+   * Compatível apenas com a propriedade type com o valor `help` e desconsiderada quando o type for `info`.
    *
    * Deve ser um objeto com as propriedades:
    * - `label`: Texto do botão.
@@ -65,16 +70,20 @@ export interface PoHelperOptions {
    *
    * @description
    * Evento disparado ao clicar no ícone do helper.
+   *
+   * O conteúdo do popover não é exibido quando esta propriedade é definida, para controle total do evento pelo desenvolvedor.
+   *
+   * Pode ser uma função ou um `EventEmitter`.
+   *
+   * Exemplo:
+   * ```
+   * eventOnClick: (event) => {
+   *  alert('Clicou no helper');
+   *  console.log(event);
+   * }
+   * ```
    */
   eventOnClick?: Function;
 
-  /**
-   *
-   * @optional
-   *
-   * @description
-   *
-   * Tamanho do componente definido dinamicamente.
-   */
   size?: string;
 }

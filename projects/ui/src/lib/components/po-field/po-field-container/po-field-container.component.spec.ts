@@ -171,63 +171,6 @@ describe('PoFieldContainerComponent:', () => {
     });
   });
 
-  describe('updateTooltip:', () => {
-    it('should set showTip to true if text is ellipsed', () => {
-      const mockEl = {
-        scrollWidth: 120,
-        clientWidth: 100
-      } as any;
-      spyOn<any>(component, 'getMeasurableEl').and.returnValue(mockEl);
-      component.showTip = false;
-      spyOn(component['cdr'], 'markForCheck');
-
-      component.updateTooltip();
-
-      expect(component.showTip).toBeTrue();
-      expect(component['cdr'].markForCheck).toHaveBeenCalled();
-    });
-
-    it('should set showTip to false if text is not ellipsed', () => {
-      const mockEl = {
-        scrollWidth: 100,
-        clientWidth: 120
-      } as any;
-      spyOn<any>(component, 'getMeasurableEl').and.returnValue(mockEl);
-      component.showTip = true;
-      spyOn(component['cdr'], 'markForCheck');
-
-      component.updateTooltip();
-
-      expect(component.showTip).toBeFalse();
-      expect(component['cdr'].markForCheck).toHaveBeenCalled();
-    });
-
-    it('should not change showTip if isEllipsed equals showTip', () => {
-      const mockEl = {
-        scrollWidth: 100,
-        clientWidth: 120
-      } as any;
-      spyOn<any>(component, 'getMeasurableEl').and.returnValue(mockEl);
-      component.showTip = false;
-      spyOn(component['cdr'], 'markForCheck');
-
-      component.updateTooltip();
-
-      expect(component.showTip).toBeFalse();
-      expect(component['cdr'].markForCheck).toHaveBeenCalled();
-    });
-
-    it('should return if getMeasurableEl returns null', () => {
-      spyOn<any>(component, 'getMeasurableEl').and.returnValue(null);
-      component.showTip = false;
-      const markForCheckSpy = spyOn(component['cdr'], 'markForCheck');
-
-      component.updateTooltip();
-
-      expect(component.showTip).toBeFalse();
-      expect(markForCheckSpy).not.toHaveBeenCalled();
-    });
-  });
   describe('ngOnChanges (helper popover):', () => {
     it('should call `openHelperPopover` when `showHelperComponent` changes and `showHelperComponent()` returns true', () => {
       component['helperEl'] = {
@@ -273,6 +216,53 @@ describe('PoFieldContainerComponent:', () => {
 
       expect(component['helperEl'].closeHelperPopover).toHaveBeenCalled();
       expect(component['helperEl'].openHelperPopover).not.toHaveBeenCalled();
+    });
+
+    it('should call `poHelperComponent.eventOnClick` and not open/close popover when it is a function', () => {
+      const openSpy = jasmine.createSpy('openHelperPopover');
+      const closeSpy = jasmine.createSpy('closeHelperPopover');
+      component['helperEl'] = { openHelperPopover: openSpy, closeHelperPopover: closeSpy } as any;
+
+      const eventOnClickSpy = jasmine.createSpy('eventOnClick');
+
+      spyOn(component as any, 'showHelperComponent').and.returnValue(true);
+      spyOn(component as any, 'poHelperComponent').and.returnValue({ eventOnClick: eventOnClickSpy });
+
+      const changes: any = {
+        showHelperComponent: {
+          previousValue: false,
+          currentValue: true,
+          firstChange: false,
+          isFirstChange: () => false
+        }
+      };
+
+      component.ngOnChanges(changes);
+
+      expect(eventOnClickSpy).toHaveBeenCalled();
+      expect(openSpy).not.toHaveBeenCalled();
+      expect(closeSpy).not.toHaveBeenCalled();
+    });
+
+    it('should open popover when `eventOnClick` is not a function', () => {
+      const openSpy = jasmine.createSpy('openHelperPopover');
+      const closeSpy = jasmine.createSpy('closeHelperPopover');
+      component['helperEl'] = { openHelperPopover: openSpy, closeHelperPopover: closeSpy } as any;
+
+      spyOn(component as any, 'showHelperComponent').and.returnValue(true);
+      spyOn(component as any, 'poHelperComponent').and.returnValue({ eventOnClick: undefined });
+
+      const changes: any = {
+        showHelperComponent: {
+          previousValue: false,
+          currentValue: true,
+          firstChange: false,
+          isFirstChange: () => false
+        }
+      };
+      component.ngOnChanges(changes);
+      expect(openSpy).toHaveBeenCalled();
+      expect(closeSpy).not.toHaveBeenCalled();
     });
   });
 });

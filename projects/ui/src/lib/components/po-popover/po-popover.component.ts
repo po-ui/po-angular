@@ -53,8 +53,8 @@ export class PoPopoverComponent extends PoPopoverBaseComponent implements AfterV
 
   constructor(
     private renderer: Renderer2,
-    private poControlPosition: PoControlPositionService,
-    private cd: ChangeDetectorRef
+    private readonly poControlPosition: PoControlPositionService,
+    private readonly cd: ChangeDetectorRef
   ) {
     super();
   }
@@ -99,10 +99,8 @@ export class PoPopoverComponent extends PoPopoverBaseComponent implements AfterV
 
   open(): void {
     this.addScrollEventListener();
-
-    this.isHidden = false;
     this.setOpacity(0);
-
+    this.isHidden = false;
     setTimeout(() => {
       this.setElementsControlPosition();
       this.setPopoverPosition();
@@ -110,6 +108,14 @@ export class PoPopoverComponent extends PoPopoverBaseComponent implements AfterV
       this.cd.detectChanges();
     });
     this.cd.detectChanges();
+  }
+
+  public ensurePopoverPosition(): void {
+    setTimeout(() => {
+      this.setElementsControlPosition();
+      this.setPopoverPosition();
+      this.cd.detectChanges();
+    });
   }
 
   setOpacity(value: number): void {

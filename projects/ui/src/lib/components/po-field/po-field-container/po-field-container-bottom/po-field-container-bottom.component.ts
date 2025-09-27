@@ -75,7 +75,7 @@ export class PoFieldContainerBottomComponent implements OnChanges {
   ngOnChanges(changes: SimpleChanges) {
     if (changes.showAdditionalHelp) {
       if (!this.isInitialChange) {
-        if (this.additionalHelpTooltip) {
+        if (this.additionalHelpTooltip && this.poTooltip) {
           this.poTooltip.toggleTooltipVisibility(this.showAdditionalHelp);
         } else {
           this.additionalHelp.emit();

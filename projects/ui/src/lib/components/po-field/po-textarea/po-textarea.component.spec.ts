@@ -6,6 +6,7 @@ import { PoFieldContainerComponent } from '../po-field-container/po-field-contai
 import { PoFieldContainerBottomComponent } from './../po-field-container/po-field-container-bottom/po-field-container-bottom.component';
 import { PoTextareaBaseComponent } from './po-textarea-base.component';
 import { PoTextareaComponent } from './po-textarea.component';
+import { EventEmitter } from '@angular/core';
 
 describe('PoTextareaComponent:', () => {
   let component: PoTextareaComponent;
@@ -205,6 +206,15 @@ describe('PoTextareaComponent:', () => {
         component.emitAdditionalHelp();
 
         expect(component.additionalHelp.emit).not.toHaveBeenCalled();
+      });
+
+      it('should include additionalHelp when event is triggered', () => {
+        spyOn(component as any, 'isAdditionalHelpEventTriggered').and.returnValue(true);
+        component.additionalHelp = new EventEmitter<any>();
+
+        const result = component.setHelper('label', 'tooltip');
+
+        expect(result).toBeDefined();
       });
     });
 

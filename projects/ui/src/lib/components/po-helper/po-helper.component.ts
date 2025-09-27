@@ -1,7 +1,6 @@
 import {
   Component,
   ElementRef,
-  OnInit,
   ViewChild,
   AfterViewInit,
   OnDestroy,
@@ -46,9 +45,10 @@ export class PoHelperComponent extends PoHelperBaseComponent implements AfterVie
 
   private static instances: Array<PoHelperComponent> = [];
   private static idCounter = 0;
+  protected popoverPosition = 'right';
   public id: string;
   private boundFocusIn: (e: FocusEvent) => void;
-  private poHelperLiterals = {
+  private readonly poHelperLiterals = {
     en: {
       info: 'Show Information',
       help: 'Show Help'
@@ -67,15 +67,28 @@ export class PoHelperComponent extends PoHelperBaseComponent implements AfterVie
     }
   };
 
-  constructor(private cdr: ChangeDetectorRef) {
+  constructor(private readonly cdr: ChangeDetectorRef) {
     super();
     this.id = 'po-helper-' + PoHelperComponent.idCounter++;
   }
-
   ngAfterViewInit(): void {
     PoHelperComponent.instances.push(this);
     this.boundFocusIn = this.closePopoverOnFocusOut.bind(this);
     window.addEventListener('focusin', this.boundFocusIn, true);
+    queueMicrotask(() => {
+      this.setPopoverPositionByScreen();
+    });
+  }
+
+  public setPopoverPositionByScreen(): void {
+    if (!this.target?.nativeElement) return;
+    const rect = this.target.nativeElement.getBoundingClientRect();
+    const screenWidth = window.innerWidth || document.documentElement.clientWidth;
+    if (rect.right + 400 > screenWidth) {
+      this.popoverPosition = 'left';
+    } else {
+      this.popoverPosition = 'right';
+    }
   }
 
   ngOnChanges(changes: SimpleChanges): void {
@@ -93,7 +106,10 @@ export class PoHelperComponent extends PoHelperBaseComponent implements AfterVie
 
   openHelperPopover(): void {
     requestAnimationFrame(() => {
-      if (this.popover.isHidden) {
+      if (
+        this.popover.isHidden &&
+        (this.helper()['content'] || typeof this.helper() === 'string' || this.helper()['title'])
+      ) {
         this.popover.open();
       }
     });
@@ -107,15 +123,15 @@ export class PoHelperComponent extends PoHelperBaseComponent implements AfterVie
     });
   }
 
-  emitClick(event) {
+  emitClick(event: MouseEvent): void {
     if (this.disabled()) {
       event.preventDefault();
       return;
     }
-    const helper = this.helper();
-    if (helper && typeof helper !== 'string' && typeof helper.eventOnClick === 'function') {
-      helper.eventOnClick(helper);
+    if (!this.helper() || typeof this.helper() === 'string') {
+      return;
     }
+    this.handleEmitEvent(event);
   }
 
   onKeyDown(event: KeyboardEvent) {
@@ -136,13 +152,33 @@ export class PoHelperComponent extends PoHelperBaseComponent implements AfterVie
         }
       });
 
-      if (this.popover.isHidden) {
+      if (
+        this.popover.isHidden &&
+        (this.helper()['content'] || typeof this.helper() === 'string' || this.helper()['title'])
+      ) {
         this.popover.open();
-        return;
       } else {
         this.popover.close();
-        return;
       }
+      this.handleEmitEvent(event);
+    }
+  }
+
+  private handleEmitEvent(event: any): void {
+    const helper = this.helper();
+    const onClick = (helper as any).eventOnClick;
+
+    if (typeof onClick === 'function') {
+      onClick(helper);
+      event.preventDefault();
+      event.stopPropagation();
+      return;
+    }
+
+    if (onClick && typeof onClick.emit === 'function') {
+      onClick.emit(helper);
+      event.preventDefault();
+      event.stopPropagation();
     }
   }
 
@@ -153,7 +189,7 @@ export class PoHelperComponent extends PoHelperBaseComponent implements AfterVie
     const targetEl = this.target?.nativeElement;
     const popEl = (this.popover as any).popoverElement?.nativeElement;
     const focusNode = event.target as Node;
-    if (focusNode && !targetEl.contains(focusNode) && !(popEl && popEl.contains(focusNode))) {
+    if (focusNode && !targetEl.contains(focusNode) && !popEl?.contains(focusNode)) {
       this.popover.close();
     }
   }

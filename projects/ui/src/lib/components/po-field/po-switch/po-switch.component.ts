@@ -294,7 +294,21 @@ export class PoSwitchComponent extends PoFieldModel<any> implements Validator, A
    * > Caso o `p-label` não esteja definido, o componente po-helper não será exibido.
    * Ao configurar esta propriedade, o antigo ícone de ajuda adicional (`p-additional-help-tooltip` e `p-additional-help`) será ignorado.
    */
-  poHelperComponent = input<PoHelperOptions>(undefined, { alias: 'p-helper' });
+  poHelperComponent = input<PoHelperOptions | string>(undefined, { alias: 'p-helper' });
+
+  /**
+   * @Input
+   *
+   * @optional
+   *
+   * @description
+   * Habilita a quebra automática do texto da propriedade `p-label`. Quando `p-label-text-wrap` for verdadeiro, o texto que excede
+   * o espaço disponível é transferido para a próxima linha em pontos apropriados para uma
+   * leitura clara.
+   *
+   * @default `false`
+   */
+  labelTextWrap = input<boolean>(false, { alias: 'p-label-text-wrap' });
 
   private readonly el: ElementRef = inject(ElementRef);
   private readonly injectOptions: InjectOptions = {
@@ -434,6 +448,12 @@ export class PoSwitchComponent extends PoFieldModel<any> implements Validator, A
   }
 
   setHelper(label?: string, additionalHelpTooltip?: string) {
-    return setHelperSettings(label, additionalHelpTooltip, this.poHelperComponent(), this.size);
+    return setHelperSettings(
+      label,
+      additionalHelpTooltip,
+      this.poHelperComponent(),
+      this.size,
+      this.isAdditionalHelpEventTriggered() ? this.additionalHelp : undefined
+    );
   }
 }

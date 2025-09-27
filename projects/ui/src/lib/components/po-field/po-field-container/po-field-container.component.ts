@@ -13,7 +13,7 @@ import {
 } from '@angular/core';
 
 import { PoLanguageService } from '../../../services/po-language/po-language.service';
-import { convertToBoolean } from '../../../utils/util';
+import { convertToBoolean, updateTooltip } from '../../../utils/util';
 import { poFieldContainerLiterals } from './po-field-container-literals';
 import { PoHelperComponent, PoHelperOptions } from '../../po-helper';
 
@@ -89,7 +89,7 @@ export class PoFieldContainerComponent implements OnInit, OnChanges {
   /** Define se a indicação de campo obrigatório será exibida. */
   @Input('p-show-required') showRequired: boolean = false;
 
-  constructor(private cdr: ChangeDetectorRef) {
+  constructor(private readonly cdr: ChangeDetectorRef) {
     const languageService = inject(PoLanguageService);
 
     const language = languageService.getShortLanguage();
@@ -101,7 +101,7 @@ export class PoFieldContainerComponent implements OnInit, OnChanges {
 
   ngOnInit(): void {
     this.setRequirement();
-    this.updateTooltip();
+    this.handleLabelTooltip();
   }
 
   ngOnChanges(changes: SimpleChanges): void {
@@ -114,26 +114,19 @@ export class PoFieldContainerComponent implements OnInit, OnChanges {
       changes.textWrap
     ) {
       this.setRequirement();
-      queueMicrotask(() => this.updateTooltip());
+      queueMicrotask(() => this.handleLabelTooltip());
       this.cdr.detectChanges();
     }
 
     if (changes.showHelperComponent && this.showHelperComponent()) {
+      if (typeof this.poHelperComponent()?.eventOnClick === 'function') {
+        this.poHelperComponent()?.eventOnClick();
+        return;
+      }
       this.helperEl?.openHelperPopover();
     } else if (changes.showHelperComponent && !this.showHelperComponent()) {
       this.helperEl?.closeHelperPopover();
     }
-  }
-
-  updateTooltip(): void {
-    const el = this.getMeasurableEl();
-    if (!el) return;
-
-    const isEllipsed = el.scrollWidth > el.clientWidth;
-    if (this.showTip !== isEllipsed) {
-      this.showTip = isEllipsed;
-    }
-    this.cdr.markForCheck();
   }
 
   private setRequirement(): void {
@@ -148,11 +141,8 @@ export class PoFieldContainerComponent implements OnInit, OnChanges {
     }
   }
 
-  private getMeasurableEl() {
-    const host = this.labelEl?.nativeElement;
-    if (!host) return null;
-    const inner = host.querySelector('.po-label, label, .po-label-title, .po-field-title');
-
-    return inner ?? host;
+  public handleLabelTooltip(): void {
+    this.showTip = updateTooltip(this.showTip, this.labelEl);
+    this.cdr.markForCheck();
   }
 }

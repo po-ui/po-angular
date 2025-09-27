@@ -40,14 +40,16 @@ describe('PoHelperComponent', () => {
   describe('emitClick', () => {
     it('should prevent default if disabled', () => {
       spyOn(component, 'disabled').and.returnValue(true);
-      const event = { preventDefault: jasmine.createSpy() };
+      const event = new MouseEvent('click', { bubbles: true, cancelable: true });
+      spyOn(event, 'preventDefault');
       component.emitClick(event);
       expect(event.preventDefault).toHaveBeenCalled();
     });
 
     it('should call eventOnClick if defined', () => {
       spyOn(component, 'disabled').and.returnValue(false);
-      const event = { preventDefault: jasmine.createSpy() };
+      const event = new MouseEvent('click', { bubbles: true, cancelable: true });
+      spyOn(event, 'preventDefault');
       const eventOnClick = jasmine.createSpy();
       const options: PoHelperOptions = {
         title: 'Ajuda',
@@ -63,10 +65,55 @@ describe('PoHelperComponent', () => {
 
     it('should not throw if helper is string', () => {
       spyOn(component, 'disabled').and.returnValue(false);
-      const event = { preventDefault: jasmine.createSpy() };
+      const event = new MouseEvent('click', { bubbles: true, cancelable: true });
+      spyOn(event, 'preventDefault');
       const text = 'Texto explicativo';
       fixture.componentRef.setInput('p-helper', text);
       expect(() => component.emitClick(event)).not.toThrow();
+    });
+
+    it('should return early when helper is falsy (undefined) and not call handleEmitEvent', () => {
+      spyOn(component, 'disabled').and.returnValue(false);
+      const event = new MouseEvent('click', { bubbles: true, cancelable: true });
+
+      (component as any).helper = () => undefined;
+
+      const handleSpy = spyOn<any>(component, 'handleEmitEvent');
+
+      component.emitClick(event);
+
+      expect(handleSpy).not.toHaveBeenCalled();
+    });
+
+    it('should return early when helper is a string and not call handleEmitEvent', () => {
+      spyOn(component, 'disabled').and.returnValue(false);
+      const event = new MouseEvent('click', { bubbles: true, cancelable: true });
+
+      (component as any).helper = () => 'Texto explicativo';
+
+      const handleSpy = spyOn<any>(component, 'handleEmitEvent');
+      expect(() => component.emitClick(event)).not.toThrow();
+      expect(handleSpy).not.toHaveBeenCalled();
+    });
+    it('should call emit when eventOnClick is an object with emit function', () => {
+      spyOn(component, 'disabled').and.returnValue(false);
+
+      const event: any = {
+        preventDefault: jasmine.createSpy('preventDefault'),
+        stopPropagation: jasmine.createSpy('stopPropagation')
+      };
+
+      const emitSpy = jasmine.createSpy('emit');
+      (component as any).helper = () => ({
+        content: 'conteúdo',
+        eventOnClick: { emit: emitSpy }
+      });
+
+      component.emitClick(event as MouseEvent);
+
+      expect(emitSpy).toHaveBeenCalledWith(jasmine.objectContaining({ content: 'conteúdo' }));
+      expect(event.preventDefault).toHaveBeenCalled();
+      expect(event.stopPropagation).toHaveBeenCalled();
     });
   });
 
@@ -74,6 +121,7 @@ describe('PoHelperComponent', () => {
     let popover: jasmine.SpyObj<PoPopoverComponent>;
 
     beforeEach(() => {
+      (component as any).helper = () => ({ content: 'texto de ajuda' });
       popover = jasmine.createSpyObj<PoPopoverComponent>('Popover', ['open', 'close']);
       (popover as any).isHidden = true;
       component.popover = popover as any;
@@ -148,6 +196,39 @@ describe('PoHelperComponent', () => {
       component.onKeyDown(event);
       expect(otherPopover.close).toHaveBeenCalled();
       (PoHelperComponent as any).instances.pop();
+    });
+
+    it('should open popover when helper is a string (Enter)', () => {
+      (component as any).helper = () => 'ajuda simples';
+
+      const event = new KeyboardEvent('keydown', { code: 'Enter' });
+
+      component.onKeyDown(event);
+
+      expect(component.popover.open).toHaveBeenCalled();
+      expect(component.popover.close).not.toHaveBeenCalled();
+    });
+
+    it('should open popover when helper has only title (no content)', () => {
+      (component as any).helper = () => ({ title: 'Título de ajuda' });
+
+      const event = new KeyboardEvent('keydown', { code: 'Enter' });
+
+      component.onKeyDown(event);
+
+      expect(component.popover.open).toHaveBeenCalled();
+      expect(component.popover.close).not.toHaveBeenCalled();
+    });
+
+    it('should close popover when helper has no content and no title', () => {
+      (component as any).helper = () => ({});
+
+      const event = new KeyboardEvent('keydown', { code: 'Enter' });
+
+      component.onKeyDown(event);
+
+      expect(component.popover.close).toHaveBeenCalled();
+      expect(component.popover.open).not.toHaveBeenCalled();
     });
   });
 
@@ -299,6 +380,14 @@ describe('PoHelperComponent', () => {
       popover = jasmine.createSpyObj<PoPopoverComponent>('Popover', ['open', 'close']);
       (popover as any).isHidden = true;
       component.popover = popover as any;
+
+      (component as any).helper = () => ({ content: 'texto de ajuda' });
+    });
+
+    afterEach(() => {
+      popover.open.calls.reset();
+      popover.close.calls.reset();
+      (window.requestAnimationFrame as jasmine.Spy).calls.reset();
     });
 
     it('openHelperPopover: It should call open when popover.isHidden is true', () => {
@@ -337,6 +426,98 @@ describe('PoHelperComponent', () => {
 
       expect(window.requestAnimationFrame).toHaveBeenCalled();
       expect(component.popover.close).not.toHaveBeenCalled();
+    });
+
+    it('openHelperPopover: It should call open when helper returns a string', () => {
+      (component.popover as any).isHidden = true;
+      (component as any).helper = () => 'texto simples';
+
+      component.openHelperPopover();
+
+      expect(window.requestAnimationFrame).toHaveBeenCalled();
+      expect(component.popover.open).toHaveBeenCalled();
+      expect(component.popover.close).not.toHaveBeenCalled();
+    });
+
+    it('openHelperPopover: It should call open when helper returns an object with title (no content)', () => {
+      (component.popover as any).isHidden = true;
+      (component as any).helper = () => ({ title: 'Ajuda' });
+
+      component.openHelperPopover();
+
+      expect(window.requestAnimationFrame).toHaveBeenCalled();
+      expect(component.popover.open).toHaveBeenCalled();
+      expect(component.popover.close).not.toHaveBeenCalled();
+    });
+
+    it('openHelperPopover: It should NOT call open when helper returns empty object (no content/title)', () => {
+      (component.popover as any).isHidden = true;
+      (component as any).helper = () => ({});
+
+      component.openHelperPopover();
+
+      expect(window.requestAnimationFrame).toHaveBeenCalled();
+      expect(component.popover.open).not.toHaveBeenCalled();
+    });
+  });
+
+  describe('setPopoverPositionByScreen', () => {
+    let originalInnerWidth: number;
+
+    beforeEach(() => {
+      originalInnerWidth = window.innerWidth;
+    });
+
+    afterEach(() => {
+      Object.defineProperty(window, 'innerWidth', { configurable: true, value: originalInnerWidth });
+    });
+
+    it('should not change popoverPosition when target or nativeElement are falsy', () => {
+      (component as any).popoverPosition = 'left';
+      component.target = undefined as any;
+      expect(() => component.setPopoverPositionByScreen()).not.toThrow();
+      expect((component as any).popoverPosition).toBe('left');
+
+      (component as any).popoverPosition = 'right';
+      (component as any).target = {} as any;
+      expect(() => component.setPopoverPositionByScreen()).not.toThrow();
+      expect((component as any).popoverPosition).toBe('right');
+    });
+
+    it('should set popoverPosition to "left" when rect.right + 400 > screenWidth', () => {
+      Object.defineProperty(window, 'innerWidth', { configurable: true, value: 1000 });
+      const rect = { right: 700 } as DOMRect;
+      (component as any).target = {
+        nativeElement: { getBoundingClientRect: () => rect }
+      };
+
+      component.setPopoverPositionByScreen();
+      expect((component as any).popoverPosition).toBe('left');
+    });
+
+    it('should set popoverPosition to "right" when rect.right + 400 <= screenWidth', () => {
+      Object.defineProperty(window, 'innerWidth', { configurable: true, value: 1000 });
+      const rect = { right: 500 } as DOMRect;
+      (component as any).target = {
+        nativeElement: { getBoundingClientRect: () => rect }
+      };
+      component.setPopoverPositionByScreen();
+      expect((component as any).popoverPosition).toBe('right');
+    });
+
+    it('should use document.documentElement.clientWidth when window.innerWidth is falsy', () => {
+      Object.defineProperty(window, 'innerWidth', { configurable: true, value: 0 });
+
+      spyOnProperty(document.documentElement, 'clientWidth', 'get').and.returnValue(900);
+
+      const rect = { right: 400 } as DOMRect;
+      (component as any).target = {
+        nativeElement: { getBoundingClientRect: () => rect }
+      };
+
+      component.setPopoverPositionByScreen();
+
+      expect((component as any).popoverPosition).toBe('right');
     });
   });
 });

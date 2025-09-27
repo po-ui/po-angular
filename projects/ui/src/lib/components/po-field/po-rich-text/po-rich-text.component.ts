@@ -157,16 +157,26 @@ export class PoRichTextComponent
   }
 
   /**
-   * @deprecated v23.x.x
-   *
    * Método que exibe `p-additionalHelpTooltip` ou executa a ação definida em `p-additionalHelp`.
    * Para isso, será necessário configurar uma tecla de atalho utilizando o evento `p-keydown`.
+   *
+   * > Exibe ou oculta o conteúdo do componente `po-helper` quando o componente estiver com foco e com label visível.
    *
    * ```
    * <po-rich-text
    *  #richtext
    *  ...
    *  p-additional-help-tooltip="Mensagem de ajuda complementar"
+   *  (p-keydown)="onKeyDown($event, richtext)"
+   * ></po-rich-text>
+   * ```
+   * ```
+   * // Exemplo com p-label e p-helper
+   * <po-rich-text
+   *  #richtext
+   *  ...
+   *  p-label="Label do richtext"
+   *  [p-helper]="helperOptions"
    *  (p-keydown)="onKeyDown($event, richtext)"
    * ></po-rich-text>
    * ```
@@ -238,6 +248,12 @@ export class PoRichTextComponent
   }
 
   setHelper(label?: string, additionalHelpTooltip?: string) {
-    return setHelperSettings(label, additionalHelpTooltip, this.poHelperComponent(), this.size);
+    return setHelperSettings(
+      label,
+      additionalHelpTooltip,
+      this.poHelperComponent(),
+      this.size,
+      this.additionalHelp.observed ? this.additionalHelp : undefined
+    );
   }
 }

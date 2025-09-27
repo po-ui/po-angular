@@ -5,6 +5,7 @@ import {
   Component,
   ElementRef,
   OnChanges,
+  OnInit,
   SimpleChanges,
   ViewChild,
   forwardRef,
@@ -16,8 +17,8 @@ import { AnimaliaIconDictionary, ICONS_DICTIONARY } from '../../po-icon';
 import { PoKeyCodeEnum } from './../../../enums/po-key-code.enum';
 
 import { PoCheckboxBaseComponent } from './po-checkbox-base.component';
-import { setHelperSettings } from '../../../utils/util';
-import { PoHelperOptions } from '../../po-helper';
+import { setHelperSettings, updateTooltip } from '../../../utils/util';
+import { PoHelperComponent, PoHelperOptions } from '../../po-helper';
 
 /**
  * @docsExtends PoCheckboxBaseComponent
@@ -52,15 +53,17 @@ import { PoHelperOptions } from '../../po-helper';
   ],
   standalone: false
 })
-export class PoCheckboxComponent extends PoCheckboxBaseComponent implements AfterViewInit, OnChanges {
-  private changeDetector = inject(ChangeDetectorRef);
+export class PoCheckboxComponent extends PoCheckboxBaseComponent implements AfterViewInit, OnChanges, OnInit {
+  private readonly changeDetector = inject(ChangeDetectorRef);
 
   private _iconToken: { [key: string]: string };
 
   helperSettings: PoHelperOptions;
+  showTip = false;
 
   @ViewChild('checkboxLabel', { static: false }) checkboxLabel: ElementRef;
-
+  @ViewChild('labelEl', { read: ElementRef }) labelEl!: ElementRef<HTMLElement>;
+  @ViewChild('helperEl', { read: PoHelperComponent, static: false }) helperEl?: PoHelperComponent;
   constructor() {
     const value = inject<{
       [key: string]: string;
@@ -106,16 +109,22 @@ export class PoCheckboxComponent extends PoCheckboxBaseComponent implements Afte
 
   ngAfterViewInit() {
     this.helperSettings = this.setHelper(this.label, this.additionalHelpTooltip).helperSettings;
+    this.handleLabelTooltip();
     if (this.autoFocus) {
       this.focus();
     }
   }
 
   ngOnChanges(changes: SimpleChanges): void {
-    if (changes.label || changes.additionalHelpTooltip) {
+    if (changes.label || changes.additionalHelpTooltip || changes.helper || changes.size) {
+      queueMicrotask(() => this.handleLabelTooltip());
       this.helperSettings = this.setHelper(this.label, this.additionalHelpTooltip).helperSettings;
       this.changeDetector.detectChanges();
     }
+  }
+
+  ngOnInit(): void {
+    this.handleLabelTooltip();
   }
 
   emitAdditionalHelp() {
@@ -143,16 +152,26 @@ export class PoCheckboxComponent extends PoCheckboxBaseComponent implements Afte
   }
 
   /**
-   * @deprecated v23.x.x
-   *
    * Método que exibe `p-additionalHelpTooltip` ou executa a ação definida em `p-additionalHelp`.
    * Para isso, será necessário configurar uma tecla de atalho utilizando o evento `p-keydown`.
+   *
+   * > Exibe ou oculta o conteúdo do componente `po-helper` quando o componente estiver com foco e com label visível.
    *
    * ```
    * <po-checkbox
    *  #checkbox
    *  ...
    *  p-additional-help-tooltip="Mensagem de ajuda complementar"
+   *  (p-keydown)="onKeyDown($event, checkbox)"
+   * ></po-checkbox>
+   * ```
+   * ```
+   * //Exemplo com label e p-helper
+   * <po-checkbox
+   *  #checkbox
+   *  ...
+   *  p-label="Label do checkbox"
+   *  [p-helper]="helperOptions"
    *  (p-keydown)="onKeyDown($event, checkbox)"
    * ></po-checkbox>
    * ```
@@ -167,6 +186,12 @@ export class PoCheckboxComponent extends PoCheckboxBaseComponent implements Afte
    */
   showAdditionalHelp(): boolean {
     this.displayAdditionalHelp = !this.displayAdditionalHelp;
+
+    if (this.displayAdditionalHelp && this.helperEl) {
+      this.helperEl?.openHelperPopover();
+    } else if (!this.displayAdditionalHelp || !this.helperEl) {
+      this.helperEl?.closeHelperPopover();
+    }
     return this.displayAdditionalHelp;
   }
 
@@ -192,6 +217,11 @@ export class PoCheckboxComponent extends PoCheckboxBaseComponent implements Afte
       this.additionalHelpEventTrigger === 'event' ||
       (this.additionalHelpEventTrigger === undefined && this.additionalHelp.observed)
     );
+  }
+
+  public handleLabelTooltip(): void {
+    this.showTip = updateTooltip(this.showTip, this.labelEl);
+    this.changeDetector.markForCheck();
   }
 
   get iconNameLib() {

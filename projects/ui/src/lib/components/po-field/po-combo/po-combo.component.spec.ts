@@ -19,7 +19,7 @@ import { PoComboOption } from './interfaces/po-combo-option.interface';
 import { PoCleanComponent } from '../po-clean/po-clean.component';
 import { OverlayModule } from '@angular/cdk/overlay';
 import { PoControlPositionService } from '../../../services/po-control-position/po-control-position.service';
-import { ElementRef } from '@angular/core';
+import { ElementRef, EventEmitter } from '@angular/core';
 import { PoKeyCodeEnum } from '../../../enums/po-key-code.enum';
 
 const eventKeyBoard = document.createEvent('KeyboardEvent');
@@ -1987,6 +1987,14 @@ describe('PoComboComponent - with service:', () => {
 
   describe('Methods:', () => {
     const fakeSubscription = <any>{ unsubscribe: () => {}, subscribe: () => {} };
+    it('should include additionalHelp when event is triggered', () => {
+      spyOn(component as any, 'isAdditionalHelpEventTriggered').and.returnValue(true);
+      component.additionalHelp = new EventEmitter<any>();
+
+      const result = component.setHelper('label', 'tooltip');
+
+      expect(result).toBeDefined();
+    });
 
     it('prepareOptions: should be called', () => {
       const items = [

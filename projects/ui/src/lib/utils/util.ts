@@ -1,6 +1,7 @@
 import { PoThemeService } from '../services/po-theme/po-theme.service';
 import { PoThemeA11yEnum } from '../services/po-theme/enum/po-theme-a11y.enum';
 import { poLocaleDefault, poLocales } from '../services/po-language/po-language.constant';
+import { ElementRef } from '@angular/core';
 
 /**
  * Converte e formata os bytes em formato mais legível para o usuário.
@@ -738,28 +739,92 @@ export function getA11yLevel(): PoThemeA11yEnum {
   return a11yLevel === 'AA' ? PoThemeA11yEnum.AA : PoThemeA11yEnum.AAA;
 }
 
+/**
+ * Realiza a tradução das propriedades de ajuda dos componentes.
+ * Type do Helper default é 'help' e size 'medium'.
+ * @returns Objeto {helperSettings} com as propriedades do helper
+ * @returns Propriedade {hideAdditionalHelp} para controle ao esconder o ícone de ajuda adicional depreciado.
+ */
 export function setHelperSettings(
   label: string,
   additionalHelpTooltip: string,
   poHelperComponent?: any,
-  size?: string
+  size?: string,
+  onClick?: any
 ): { hideAdditionalHelp: boolean; helperSettings?: any } {
-  if (label && additionalHelpTooltip && !poHelperComponent) {
-    size = size === 'large' ? 'medium' : size;
+  const defaulWithoutLabel = { hideAdditionalHelp: false, helperSettings: null };
+  if (!label) return defaulWithoutLabel;
+
+  if (onClick) {
+    return {
+      hideAdditionalHelp: true,
+      helperSettings: {
+        type: 'help',
+        eventOnClick: onClick
+      }
+    };
+  }
+  if (additionalHelpTooltip && !poHelperComponent) {
     return {
       hideAdditionalHelp: true,
       helperSettings: {
         content: additionalHelpTooltip,
         type: 'help',
-        size: size
+        size: size === 'large' ? 'medium' : size
       }
     };
-  } else if (label && poHelperComponent) {
+  }
+  if (poHelperComponent) {
+    const resolvedSize = size || poHelperComponent.size || 'medium';
+    if (poHelperComponent.eventOnClick) {
+      return {
+        hideAdditionalHelp: true,
+        helperSettings: {
+          type: poHelperComponent.type || 'help',
+          eventOnClick: poHelperComponent.eventOnClick,
+          size: resolvedSize
+        }
+      };
+    }
+    if (typeof poHelperComponent === 'string' && poHelperComponent.trim() !== '') {
+      return {
+        hideAdditionalHelp: true,
+        helperSettings: { content: poHelperComponent, size: resolvedSize }
+      };
+    }
     return {
       hideAdditionalHelp: true,
-      helperSettings: poHelperComponent
+      helperSettings: { ...poHelperComponent, size: resolvedSize }
     };
-  } else {
-    return { hideAdditionalHelp: false };
   }
+  return defaulWithoutLabel;
+}
+
+/** Atualiza o estado do tooltip baseado na propriedade scrollWidth e clientWidth do labelElement.
+ * @param isTooltipActive Indica se o tooltip já está ativo
+ * @param labelElement ElementRef do label que será verificado se está com ellipsis
+ * @returns boolean indicando se o tooltip deve ser ativado ou desativado
+ */
+export function updateTooltip(isTooltipActive: boolean, labelElement: ElementRef<HTMLElement>): boolean {
+  const el = getMeasurableEl(labelElement);
+  if (!el) return false;
+
+  const isEllipsed = el.scrollWidth > el.clientWidth;
+  if (isTooltipActive !== isEllipsed) {
+    return isEllipsed;
+  } else {
+    return isTooltipActive;
+  }
+}
+
+/**
+ * Retorna o elemento label que deve ser medido para verificar se está com ellipsis.
+ * @param labelElement ElementRef do label que será verificado se está com ellipsis
+ * @returns O elemento que deve ser medido para verificar se está com ellipsis.
+ */
+export function getMeasurableEl(labelElement: ElementRef<HTMLElement>): Element {
+  const host = labelElement?.nativeElement;
+  if (!host) return null;
+  const inner = host.querySelector('.po-label, label, .po-label-title, .po-field-title .po-checkbox-label');
+  return inner ?? host;
 }

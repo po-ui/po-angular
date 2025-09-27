@@ -50,16 +50,22 @@
 
       @if (label) {
         <po-label
+          #labelEl
           class="po-checkbox-label"
           [class.po-checkbox-label-aa]="size === 'small'"
           tabindex="-1"
           [p-disabled]="disabled"
           [p-for]="id"
           [p-label]="label"
+          [p-text-wrap]="labelTextWrap()"
+          [p-tooltip]="showTip ? label : null"
+          (mouseenter)="handleLabelTooltip()"
+          (focus)="handleLabelTooltip()"
         >
         </po-label>
         @if (helperSettings) {
           <po-helper
+            #helperEl
             class="po-checkbox-helper"
             [p-helper]="helperSettings"
             [p-disabled]="disabled"

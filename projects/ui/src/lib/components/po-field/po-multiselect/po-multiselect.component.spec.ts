@@ -6,7 +6,7 @@ import { Observable, of, throwError } from 'rxjs';
 
 import * as UtilsFunction from '../../../utils/util';
 
-import { Renderer2 } from '@angular/core';
+import { EventEmitter, Renderer2 } from '@angular/core';
 import { PoKeyCodeEnum } from '../../../enums/po-key-code.enum';
 import { PoControlPositionService } from '../../../services/po-control-position/po-control-position.service';
 import { PoTagComponent } from '../../po-tag/po-tag.component';
@@ -710,6 +710,15 @@ describe('PoMultiselectComponent:', () => {
 
         expect(result).toBeUndefined();
       });
+    });
+
+    it('should include additionalHelp when event is triggered', () => {
+      spyOn(component as any, 'isAdditionalHelpEventTriggered').and.returnValue(true);
+      component.additionalHelp = new EventEmitter<any>();
+
+      const result = component.setHelper('label', 'tooltip');
+
+      expect(result).toBeDefined();
     });
 
     it(`calculateVisibleItems: should calc visible items and not set 'isCalculateVisibleItems' to false when

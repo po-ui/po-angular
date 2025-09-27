@@ -9,6 +9,7 @@ import { PoFieldContainerComponent } from '../po-field-container/po-field-contai
 import { PoRadioComponent } from '../po-radio/po-radio.component';
 import { PoRadioGroupBaseComponent } from './po-radio-group-base.component';
 import { PoRadioGroupComponent } from './po-radio-group.component';
+import { EventEmitter } from '@angular/core';
 
 describe('PoRadioGroupComponent:', () => {
   let component: PoRadioGroupComponent;
@@ -161,6 +162,15 @@ describe('PoRadioGroupComponent:', () => {
         component.emitAdditionalHelp();
 
         expect(component.additionalHelp.emit).not.toHaveBeenCalled();
+      });
+
+      it('should include additionalHelp when event is triggered', () => {
+        spyOn(component as any, 'isAdditionalHelpEventTriggered').and.returnValue(true);
+        component.additionalHelp = new EventEmitter<any>();
+
+        const result = component.setHelper('label', 'tooltip');
+
+        expect(result).toBeDefined();
       });
     });
 

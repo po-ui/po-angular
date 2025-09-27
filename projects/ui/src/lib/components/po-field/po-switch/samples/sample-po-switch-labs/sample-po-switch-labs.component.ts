@@ -30,7 +30,8 @@ export class SamplePoSwitchLabsComponent implements OnInit {
     { value: 'formatModel', label: 'Format Model' },
     { value: 'hideLabelStatus', label: 'Hide label status' },
     { value: 'errorLimit', label: 'Limit Error Message' },
-    { value: 'invalidValue', label: 'Invalid Value is On/True' }
+    { value: 'invalidValue', label: 'Invalid Value is On/True' },
+    { value: 'labelTextWrap', label: 'Label Text Wrap' }
   ];
 
   public readonly sizeOptions: Array<PoRadioGroupOption> = [

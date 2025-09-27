@@ -187,16 +187,26 @@ export class PoTextareaComponent extends PoTextareaBaseComponent implements Afte
   }
 
   /**
-   * @deprecated v23.x.x
-   *
    * Método que exibe `p-additionalHelpTooltip` ou executa a ação definida em `p-additionalHelp`.
    * Para isso, será necessário configurar uma tecla de atalho utilizando o evento `p-keydown`.
+   *
+   * > Exibe ou oculta o conteúdo do componente `po-helper` quando o componente estiver com foco e com label visível.
    *
    * ```
    * <po-textarea
    *  #textarea
    *  ...
    *  p-additional-help-tooltip="Mensagem de ajuda complementar"
+   *  (p-keydown)="onKeyDown($event, textarea)"
+   * ></po-textarea>
+   * ```
+   * ```
+   * //Exemplo com p-label e p-helper
+   * <po-textarea
+   *  #textarea
+   *  ...
+   *  p-label="Label do textarea"
+   *  [p-helper]="helperOptions"
    *  (p-keydown)="onKeyDown($event, textarea)"
    * ></po-textarea>
    * ```
@@ -226,6 +236,12 @@ export class PoTextareaComponent extends PoTextareaBaseComponent implements Afte
   }
 
   setHelper(label?: string, additionalHelpTooltip?: string) {
-    return setHelperSettings(label, additionalHelpTooltip, this.poHelperComponent(), this.size);
+    return setHelperSettings(
+      label,
+      additionalHelpTooltip,
+      this.poHelperComponent(),
+      this.size,
+      this.isAdditionalHelpEventTriggered() ? this.additionalHelp : undefined
+    );
   }
 }

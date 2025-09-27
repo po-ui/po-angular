@@ -8,6 +8,7 @@ import { PoFieldContainerComponent } from './../po-field-container/po-field-cont
 import { PoSwitchLabelPosition } from './po-switch-label-position.enum';
 import { PoSwitchComponent } from './po-switch.component';
 import { AbstractControl } from '@angular/forms';
+import { EventEmitter } from '@angular/core';
 
 describe('PoSwitchComponent', () => {
   let component: PoSwitchComponent;
@@ -263,6 +264,15 @@ describe('PoSwitchComponent', () => {
         setupTest('Mensagem de apoio adicional.', true, { observed: true });
         component.onBlur();
         expect(component.showAdditionalHelp).not.toHaveBeenCalled();
+      });
+
+      it('should include additionalHelp when event is triggered', () => {
+        spyOn(component as any, 'isAdditionalHelpEventTriggered').and.returnValue(true);
+        component.additionalHelp = new EventEmitter<any>();
+
+        const result = component.setHelper('label', 'tooltip');
+
+        expect(result).toBeDefined();
       });
     });
 

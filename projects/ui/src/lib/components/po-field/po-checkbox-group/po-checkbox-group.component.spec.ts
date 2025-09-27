@@ -1,4 +1,4 @@
-import { ChangeDetectorRef, NO_ERRORS_SCHEMA } from '@angular/core';
+import { ChangeDetectorRef, EventEmitter, NO_ERRORS_SCHEMA } from '@angular/core';
 import { ComponentFixture, TestBed } from '@angular/core/testing';
 
 import { PoCheckboxComponent } from '../po-checkbox/po-checkbox.component';
@@ -135,6 +135,15 @@ describe('PoCheckboxGroupComponent:', () => {
         component.emitAdditionalHelp();
 
         expect(component.additionalHelp.emit).not.toHaveBeenCalled();
+      });
+
+      it('should include additionalHelp when event is triggered', () => {
+        spyOn(component as any, 'isAdditionalHelpEventTriggered').and.returnValue(true);
+        component.additionalHelp = new EventEmitter<any>();
+
+        const result = component.setHelper('label', 'tooltip');
+
+        expect(result).toBeDefined();
       });
     });
 
