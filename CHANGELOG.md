@@ -2,6 +2,18 @@
 
 All notable changes to this project will be documented in this file. See [standard-version](https://github.com/conventional-changelog/standard-version) for commit guidelines.
 
+## [19.29.0](https://github.com/po-ui/po-angular/compare/v19.28.1...v19.29.0) (2025-09-30)
+
+
+### Features
+
+* **scroll:** implementa definições do AnimaliaDS ([2f82142](https://github.com/po-ui/po-angular/commit/2f82142303dcaa00580bfcf7610c7f8bbe27d142))
+
+
+### Bug Fixes
+
+* **components:** ajusta detecção do estado disable via `FormControl` ([34bbb55](https://github.com/po-ui/po-angular/commit/34bbb557f5c6b2546087d41617dbc7cbbd5ed349))
+
 ### [19.28.1](https://github.com/po-ui/po-angular/compare/v19.28.0...v19.28.1) (2025-09-22)
 
 
