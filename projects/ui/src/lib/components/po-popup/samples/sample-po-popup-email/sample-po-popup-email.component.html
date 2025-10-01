@@ -55,14 +55,14 @@
     <po-info class="po-md-6" p-label="To:" [p-value]="to"> </po-info>
   </div>
 
-  <hr />
+  <po-divider />
 
   @if (cc !== '') {
     <div>
       <div class="po-row">
         <po-info class="po-md-12" p-label="CC:" [p-value]="cc"> </po-info>
       </div>
-      <hr />
+      <po-divider />
     </div>
   }
 
@@ -70,7 +70,7 @@
     <po-info class="po-md-12" p-label="subject:" [p-value]="subject"> </po-info>
   </div>
 
-  <hr />
+  <po-divider />
 
   <div class="po-row">
     <po-textarea

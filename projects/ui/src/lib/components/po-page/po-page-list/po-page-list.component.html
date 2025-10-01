@@ -6,6 +6,7 @@
       [p-breadcrumb]="breadcrumb"
       [p-title]="title"
       [p-subtitle]="subtitle"
+      [attr.p-components-size]="componentsSize"
     >
       <div class="po-page-list-container">
         <!-- OPERATIONS -->
@@ -52,8 +53,10 @@
           @if (filter) {
             <div
               class="po-page-list-filter-wrapper"
-              [class.po-page-list-filter-wrapper-aa]="componentsSize === 'small'"
-              [ngClass]="hasCustomFilterSize() ? filterSizeClass(filter.width) : ''"
+              [ngClass]="[
+                hasCustomFilterSize() ? filterSizeClass(filter.width) : '',
+                (visibleActions?.length > 0 || subtitle) && title ? 'po-page-list-filter-extra-margin-top' : ''
+              ]"
             >
               <div
                 class="po-field-container-content po-page-filter-content"
@@ -62,8 +65,7 @@
                     ? filter.advancedAction
                       ? 'po-page-filter-input-variable-size'
                       : 'po-page-filter-input-variable-size-wo-adv-search'
-                    : '',
-                  componentsSize === 'small' ? 'po-page-filter-content-aa' : ''
+                    : ''
                 ]"
               >
                 <div class="po-field-icon-container-right">

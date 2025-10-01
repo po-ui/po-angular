@@ -771,7 +771,7 @@ export class PoTableComponent extends PoTableBaseComponent implements AfterViewI
   protected changeSizeLoading() {
     const tableHeight = this.tableWrapperElement?.nativeElement?.offsetHeight;
 
-    if (tableHeight <= 150) {
+    if (tableHeight <= 150 || this.componentsSize === PoFieldSize.Small) {
       this.sizeLoading = 'sm';
     } else if (tableHeight > 150 && tableHeight < 260) {
       this.sizeLoading = 'md';

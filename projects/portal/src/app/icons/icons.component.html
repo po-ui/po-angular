@@ -101,7 +101,7 @@
 
       <div class="grid grid-flow gap-16 po-pt-3 po-pb-3">
         @if (loading) {
-          <po-loading-overlay p-text="Carregando ícones" p-size="lg"> </po-loading-overlay>
+          <po-loading-overlay p-text="Carregando ícones"> </po-loading-overlay>
         } @else {
           @for (icon of filteredItems; track icon) {
             <div class="icon-list" (click)="copyClipboard(icon.code)">
