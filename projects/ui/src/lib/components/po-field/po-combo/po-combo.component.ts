@@ -171,6 +171,13 @@ export class PoComboComponent extends PoComboBaseComponent implements AfterViewI
     }
 
     this.setContainerWidth();
+
+    // Necessário para edição fluída
+    setTimeout(() => {
+      if (this.inputEl?.nativeElement?.classList?.contains('enable-append-box')) {
+        this.appendBox = true;
+      }
+    }, 300);
   }
 
   ngOnChanges(changes: SimpleChanges) {

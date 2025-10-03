@@ -1,4 +1,4 @@
-import { ComponentFixture, TestBed } from '@angular/core/testing';
+import { ComponentFixture, fakeAsync, TestBed, tick } from '@angular/core/testing';
 
 import { expectPropertiesValues, expectSettersMethod } from './../../../util-test/util-expect.spec';
 
@@ -33,6 +33,21 @@ describe('PoSwitchComponent', () => {
   it('should create a po-label for po-switch', () => {
     expect(labelField).toBeTruthy();
   });
+
+  it("ngAfterViewInit: should set appendBox true if contains class 'enable-append-box'", fakeAsync(() => {
+    component.switchContainer = {
+      nativeElement: {
+        classList: {
+          contains: (cls: string) => cls === 'enable-append-box'
+        }
+      }
+    };
+    component.ngAfterViewInit();
+
+    tick(300);
+
+    expect(component.appendBox).toBeTrue();
+  }));
 
   describe('Properties:', () => {
     it('should be update property p-label-on', () => {
