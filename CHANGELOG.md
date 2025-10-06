@@ -2,6 +2,10 @@
 
 All notable changes to this project will be documented in this file. See [standard-version](https://github.com/conventional-changelog/standard-version) for commit guidelines.
 
+## [20.4.0](https://github.com/po-ui/po-angular/compare/v20.3.0...v20.4.0) (2025-10-06)
+
+[Compatibilidade com @po-ui/ng-components@19.30.0](https://github.com/po-ui/po-angular/compare/v19.29.0...v19.30.0)
+
 ## [20.3.0](https://github.com/po-ui/po-angular/compare/v20.2.1...v20.3.0) (2025-09-30)
 
 [Compatibilidade com @po-ui/ng-components@19.29.0](https://github.com/po-ui/po-angular/compare/v19.28.1...v19.29.0)
