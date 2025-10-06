@@ -19,7 +19,7 @@ import { PoComboOption } from './interfaces/po-combo-option.interface';
 import { PoCleanComponent } from '../po-clean/po-clean.component';
 import { OverlayModule } from '@angular/cdk/overlay';
 import { PoControlPositionService } from '../../../services/po-control-position/po-control-position.service';
-import { ElementRef, provideNgReflectAttributes } from '@angular/core';
+import { ElementRef, EventEmitter, provideNgReflectAttributes } from '@angular/core';
 import { PoKeyCodeEnum } from '../../../enums/po-key-code.enum';
 
 const eventKeyBoard = document.createEvent('KeyboardEvent');
