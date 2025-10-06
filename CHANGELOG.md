@@ -2,6 +2,14 @@
 
 All notable changes to this project will be documented in this file. See [standard-version](https://github.com/conventional-changelog/standard-version) for commit guidelines.
 
+## [19.30.0](https://github.com/po-ui/po-angular/compare/v19.29.0...v19.30.0) (2025-10-06)
+
+
+### Features
+
+* **components:** cria atributos para compatibilidade com edição fluída ([f783554](https://github.com/po-ui/po-angular/commit/f783554493194c53082facb36ade92a331326c65))
+* **helper:** implementa novo componente de ajuda ([cbbe272](https://github.com/po-ui/po-angular/commit/cbbe272e695f3269243bdb604bd1803d7d448a8a))
+
 ## [19.29.0](https://github.com/po-ui/po-angular/compare/v19.28.1...v19.29.0) (2025-09-30)
 
 
