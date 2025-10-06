@@ -3,7 +3,7 @@ import { UntypedFormControl } from '@angular/forms';
 
 import { expectPropertiesValues } from '../../../util-test/util-expect.spec';
 
-import { ElementRef, provideNgReflectAttributes } from '@angular/core';
+import { ElementRef, EventEmitter, provideNgReflectAttributes } from '@angular/core';
 import { of, Subscription } from 'rxjs';
 import { PoLanguageService } from '../../../services';
 import { PoIconModule } from '../../po-icon';
