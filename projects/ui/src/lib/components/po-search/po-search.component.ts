@@ -1,4 +1,5 @@
 import {
+  AfterViewInit,
   ChangeDetectionStrategy,
   ChangeDetectorRef,
   Component,
@@ -77,7 +78,7 @@ const ID_SEARCH_BUTTON_CLEAN = 'search-button-clean';
   changeDetection: ChangeDetectionStrategy.OnPush,
   standalone: false
 })
-export class PoSearchComponent extends PoSearchBaseComponent implements OnInit, OnDestroy, OnChanges {
+export class PoSearchComponent extends PoSearchBaseComponent implements AfterViewInit, OnInit, OnDestroy, OnChanges {
   languageService: PoLanguageService;
   protected renderer = inject(Renderer2);
   protected changeDetector = inject(ChangeDetectorRef);
@@ -136,6 +137,12 @@ export class PoSearchComponent extends PoSearchBaseComponent implements OnInit, 
     const languageService = inject(PoLanguageService);
     super(languageService);
     this.languageService = languageService;
+  }
+
+  ngAfterViewInit() {
+    if (this.autoFocus) {
+      this.poSearchInput.nativeElement.focus();
+    }
   }
 
   ngOnInit(): void {
@@ -383,6 +390,10 @@ export class PoSearchComponent extends PoSearchBaseComponent implements OnInit, 
       this.updatePaddingRightLocate(false);
     }
 
+    if (this.focusEvent.observed) {
+      this.focusEvent.emit();
+    }
+
     this.openListboxFooterAction();
   }
 
@@ -401,6 +412,8 @@ export class PoSearchComponent extends PoSearchBaseComponent implements OnInit, 
 
   onKeyDown(event?: KeyboardEvent) {
     const key = event.keyCode;
+
+    this.keydown.emit(event);
 
     if (event.shiftKey && key === PoKeyCodeEnum.tab) {
       this.closeListbox();
@@ -465,7 +478,7 @@ export class PoSearchComponent extends PoSearchBaseComponent implements OnInit, 
   }
 
   private adjustContainerPosition() {
-    if (this.poListboxContainerElement && this.poSearchInput) {
+    if (this.poListboxContainerElement && this.poSearchInput && this.showListbox) {
       this.controlPosition.adjustPosition(poSearchContainerPositionDefault);
     }
   }
