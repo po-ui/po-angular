@@ -116,6 +116,19 @@ export class PoSearchBaseComponent {
    *
    * @description
    *
+   * Aplica foco no elemento ao ser iniciado.
+   *
+   * > Caso mais de um elemento seja configurado com essa propriedade, apenas o último elemento declarado com ela terá o foco.
+   *
+   * @default `false`
+   */
+  @Input({ alias: 'p-auto-focus', transform: convertToBoolean }) autoFocus: boolean = false;
+
+  /**
+   * @optional
+   *
+   * @description
+   *
    * Desabilita o po-search e não permite que o usuário interaja com o mesmo.
    *
    * @default `false`
@@ -416,6 +429,24 @@ export class PoSearchBaseComponent {
    * > Incompatível com a propriedade `p-search-type` do tipo `locate`.
    */
   @Output('p-filtered-items-change') filteredItemsChange = new EventEmitter<Array<any>>();
+
+  /**
+   * @optional
+   *
+   * @description
+   *
+   * Evento emitido quando o campo de entrada (input) recebe foco.
+   */
+  @Output('p-focus') focusEvent: EventEmitter<any> = new EventEmitter<any>();
+
+  /**
+   * @optional
+   *
+   * @description
+   * Evento disparado quando uma tecla é pressionada enquanto o foco está no componente.
+   * Retorna um objeto `KeyboardEvent` com informações sobre a tecla.
+   */
+  @Output('p-keydown') keydown: EventEmitter<KeyboardEvent> = new EventEmitter<KeyboardEvent>();
 
   /**
    * @optional
