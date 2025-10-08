@@ -1,4 +1,4 @@
-import { ElementRef, SimpleChange, SimpleChanges } from '@angular/core';
+import { ElementRef, EventEmitter, SimpleChange, SimpleChanges } from '@angular/core';
 import { ComponentFixture, TestBed, fakeAsync, tick } from '@angular/core/testing';
 
 import { PoControlPositionService } from '../../services/po-control-position/po-control-position.service';
@@ -318,6 +318,28 @@ describe('PoSearchComponent', () => {
 
       expect(component['updateShowSearchLocateControls']).not.toHaveBeenCalled();
       expect(component['updatePaddingRightLocate']).not.toHaveBeenCalled();
+    });
+
+    it('should emit focusEvent when it is observed', () => {
+      component.focusEvent = new EventEmitter<void>();
+      spyOn(component.focusEvent, 'emit');
+
+      Object.defineProperty(component.focusEvent, 'observed', { value: true });
+
+      component.onFocus();
+
+      expect(component.focusEvent.emit).toHaveBeenCalled();
+    });
+
+    it('should not emit focusEvent when it is not observed', () => {
+      component.focusEvent = new EventEmitter<void>();
+      spyOn(component.focusEvent, 'emit');
+
+      Object.defineProperty(component.focusEvent, 'observed', { value: false });
+
+      component.onFocus();
+
+      expect(component.focusEvent.emit).not.toHaveBeenCalled();
     });
   });
 
@@ -1126,6 +1148,30 @@ describe('PoSearchComponent', () => {
       const result = component.locateCounter;
 
       expect(result).toBe(mockRef);
+    });
+  });
+
+  describe('ngAfterViewInit', () => {
+    it('should call focus() when autoFocus is true', () => {
+      component.autoFocus = true;
+
+      const focusSpy = jasmine.createSpy('focus');
+      component.poSearchInput = new ElementRef({ focus: focusSpy });
+
+      component.ngAfterViewInit();
+
+      expect(focusSpy).toHaveBeenCalled();
+    });
+
+    it('should not call focus() when autoFocus is false', () => {
+      component.autoFocus = false;
+
+      const focusSpy = jasmine.createSpy('focus');
+      component.poSearchInput = new ElementRef({ focus: focusSpy });
+
+      component.ngAfterViewInit();
+
+      expect(focusSpy).not.toHaveBeenCalled();
     });
   });
 
