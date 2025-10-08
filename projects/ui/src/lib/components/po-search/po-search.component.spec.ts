@@ -1,4 +1,4 @@
-import { ElementRef, SimpleChange, SimpleChanges } from '@angular/core';
+import { ElementRef, EventEmitter, SimpleChange, SimpleChanges } from '@angular/core';
 import { ComponentFixture, TestBed, fakeAsync, tick } from '@angular/core/testing';
 
 import { PoControlPositionService } from '../../services/po-control-position/po-control-position.service';
@@ -318,6 +318,28 @@ describe('PoSearchComponent', () => {
 
       expect(component['updateShowSearchLocateControls']).not.toHaveBeenCalled();
       expect(component['updatePaddingRightLocate']).not.toHaveBeenCalled();
+    });
+
+    it('should emit focusEvent when it is observed', () => {
+      component.focusEvent = new EventEmitter<void>();
+      spyOn(component.focusEvent, 'emit');
+
+      Object.defineProperty(component.focusEvent, 'observed', { value: true });
+
+      component.onFocus();
+
+      expect(component.focusEvent.emit).toHaveBeenCalled();
+    });
+
+    it('should not emit focusEvent when it is not observed', () => {
+      component.focusEvent = new EventEmitter<void>();
+      spyOn(component.focusEvent, 'emit');
+
+      Object.defineProperty(component.focusEvent, 'observed', { value: false });
+
+      component.onFocus();
+
+      expect(component.focusEvent.emit).not.toHaveBeenCalled();
     });
   });
 
@@ -910,7 +932,7 @@ describe('PoSearchComponent', () => {
 
       component['createDropdownFilterSelect']();
 
-      expect(changeFilterSelectSpy).toHaveBeenCalledWith({ label: 'All', value: ['name', 'gender'] });
+      expect(changeFilterSelectSpy).toHaveBeenCalledWith({ label: 'All', value: ['name', 'gender'] }, false);
     });
 
     it('should set `filterSelect` to undefined when values is not provided or empty', () => {
