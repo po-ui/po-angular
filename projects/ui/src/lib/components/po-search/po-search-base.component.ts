@@ -422,6 +422,24 @@ export class PoSearchBaseComponent {
    *
    * @description
    *
+   * Evento emitido quando o campo de entrada (input) recebe foco.
+   */
+  @Output('p-focus') focusEvent: EventEmitter<any> = new EventEmitter<any>();
+
+  /**
+   * @optional
+   *
+   * @description
+   * Evento disparado quando uma tecla é pressionada enquanto o foco está no componente.
+   * Retorna um objeto `KeyboardEvent` com informações sobre a tecla.
+   */
+  @Output('p-keydown') keydown: EventEmitter<KeyboardEvent> = new EventEmitter<KeyboardEvent>();
+
+  /**
+   * @optional
+   *
+   * @description
+   *
    * Pode ser informada uma função que será disparada quando houver click no listbox.
    *
    * > Incompatível com a propriedade `p-search-type` do tipo `locate`.

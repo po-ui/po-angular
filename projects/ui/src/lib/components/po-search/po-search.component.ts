@@ -383,6 +383,10 @@ export class PoSearchComponent extends PoSearchBaseComponent implements OnInit, 
       this.updatePaddingRightLocate(false);
     }
 
+    if (this.focusEvent.observed) {
+      this.focusEvent.emit();
+    }
+
     this.openListboxFooterAction();
   }
 
@@ -401,6 +405,8 @@ export class PoSearchComponent extends PoSearchBaseComponent implements OnInit, 
 
   onKeyDown(event?: KeyboardEvent) {
     const key = event.keyCode;
+
+    this.keydown.emit(event);
 
     if (event.shiftKey && key === PoKeyCodeEnum.tab) {
       this.closeListbox();
@@ -465,7 +471,7 @@ export class PoSearchComponent extends PoSearchBaseComponent implements OnInit, 
   }
 
   private adjustContainerPosition() {
-    if (this.poListboxContainerElement && this.poSearchInput) {
+    if (this.poListboxContainerElement && this.poSearchInput && this.showListbox) {
       this.controlPosition.adjustPosition(poSearchContainerPositionDefault);
     }
   }
@@ -572,14 +578,14 @@ export class PoSearchComponent extends PoSearchBaseComponent implements OnInit, 
       this.searchFilterSelectActions.push(selectOption);
     });
 
-    this.changeFilterSelect(this.filterSelect[0]);
+    this.changeFilterSelect(this.filterSelect[0], false);
   }
 
   isSelected(filterOption: PoSearchFilterSelect): boolean {
     return this.searchFilterSelectLabel === filterOption.label;
   }
 
-  changeFilterSelect(filterOption: PoSearchFilterSelect) {
+  changeFilterSelect(filterOption: PoSearchFilterSelect, focus = true) {
     this.searchFilterSelectLabel = filterOption.label;
     this.filterKeys = Array.isArray(filterOption.value) ? [...filterOption.value] : [filterOption.value];
 
@@ -595,9 +601,10 @@ export class PoSearchComponent extends PoSearchBaseComponent implements OnInit, 
       filter: filterOption.label === this.literals.all ? ['all'] : filterOption.value
     };
 
-    if (this.poSearchInput?.nativeElement) {
+    if (this.poSearchInput?.nativeElement && focus) {
       this.poSearchInput.nativeElement.focus();
     }
+
     if (this.type === 'action') {
       this.onSearchChange(this.getInputValue(), true);
     }
