@@ -20,17 +20,22 @@
   [p-optional]="properties.includes('optional')"
   [p-required]="properties.includes('required')"
   [p-show-required]="properties.includes('showRequired')"
+  [p-show-thumbnail]="properties.includes('showThumbnail')"
   [p-restrictions]="restrictions"
   [p-size]="size"
   [p-url]="url"
   [p-headers]="headers"
   [p-custom-action]="action"
   [p-label-text-wrap]="properties?.includes('labelTextWrap')"
+  [p-custom-modal-actions]="customModalActions"
   (p-custom-action-click)="changeEvent('p-custom-action-click')"
   (p-error)="changeEvent('p-error')"
   (p-keydown)="changeEvent('p-keydown')"
   (p-success)="changeEvent('p-success')"
   (p-upload)="changeEvent('p-upload')"
+  (p-upload)="changeEvent('p-upload')"
+  (p-open-modal-preview)="changeEvent('p-open-modal-preview')"
+  (p-remove)="changeEvent('p-remove')"
 >
 </po-upload>
 
@@ -137,6 +142,17 @@
       p-help='Ex.: {"selectFile": "Select file", "deleteFile": "Delete file", "cancel": "Cancel sending"}'
       p-label="Literals"
       (p-change)="changeLiterals()"
+    >
+    </po-input>
+
+    <po-input
+      class="po-md-12 po-lg-6"
+      name="customModalActions"
+      [(ngModel)]="modalActions"
+      [p-disabled]="!properties.includes('showThumbnail')"
+      p-help='Ex.: [{"label": "Label", "disabled": false}]'
+      p-label="Custom Modal Actions"
+      (p-change)="changeModalActions()"
     >
     </po-input>
 

@@ -57,6 +57,7 @@ import { PoSwitchModule } from './po-switch/po-switch.module';
 import { PoLabelModule } from '../po-label';
 import { PoTagModule } from '../po-tag';
 import { PoHelperModule } from '../po-helper';
+import { PoLinkModule } from '../po-link';
 
 /**
  * @description
@@ -97,6 +98,7 @@ import { PoHelperModule } from '../po-helper';
     PoCheckboxModule,
     PoRadioModule,
     PoLabelModule,
+    PoLinkModule,
     PoListBoxModule,
     PoSwitchModule,
     PoTagModule,

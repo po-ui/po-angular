@@ -1,12 +1,21 @@
 import { ChangeDetectorRef, Directive, EventEmitter, HostBinding, input, Input, Output } from '@angular/core';
 import { AbstractControl, ControlValueAccessor, Validator } from '@angular/forms';
 
-import { convertToBoolean, getDefaultSizeFn, isEquals, isIE, isMobile, validateSizeFn } from '../../../utils/util';
+import {
+  convertImageToBase64,
+  convertToBoolean,
+  getDefaultSizeFn,
+  isEquals,
+  isIE,
+  isMobile,
+  validateSizeFn
+} from '../../../utils/util';
 import { requiredFailed } from '../validators';
 
 import { PoFieldSize } from '../../../enums/po-field-size.enum';
 import { poLocaleDefault } from '../../../services/po-language/po-language.constant';
 import { PoLanguageService } from '../../../services/po-language/po-language.service';
+import { PoModalAction } from '../../po-modal';
 import { PoProgressAction } from '../../po-progress';
 import { PoUploadFileRestrictions } from './interfaces/po-upload-file-restriction.interface';
 import { PoUploadLiterals } from './interfaces/po-upload-literals.interface';
@@ -40,7 +49,14 @@ export const poUploadLiteralsDefault = {
     maxFileSizeAllowed: 'Size limit per file: {0} maximum',
     minFileSizeAllowed: 'Size limit per file: {0} minimum',
     errorOccurred: 'An error has occurred',
-    sentWithSuccess: 'Sent with success'
+    sentWithSuccess: 'Sent with success',
+    doneText: 'Done',
+    uploadingText: 'Uploading',
+    tryAgain: 'Try again',
+    close: 'Close file',
+    preview: 'Preview',
+    thumbnail: 'thumbnail',
+    continue: 'Continue'
   },
   es: <PoUploadLiterals>{
     files: 'archivos',
@@ -66,7 +82,14 @@ export const poUploadLiteralsDefault = {
     maxFileSizeAllowed: 'Limite de tamaño de archivo: hasta {0}',
     minFileSizeAllowed: 'Limite de tamaño de archivo: minimo {0}',
     errorOccurred: 'Ocurrio un error',
-    sentWithSuccess: 'Enviado con éxito'
+    sentWithSuccess: 'Enviado con éxito',
+    doneText: 'Hecho',
+    uploadingText: 'Subiendo',
+    tryAgain: 'Inténtalo de nuevo',
+    close: 'Cerrar archivo',
+    preview: 'Vista previa',
+    thumbnail: 'miniatura',
+    continue: 'Continuar'
   },
   pt: <PoUploadLiterals>{
     files: 'arquivos',
@@ -92,7 +115,14 @@ export const poUploadLiteralsDefault = {
     maxFileSizeAllowed: 'Limite de tamanho por arquivo: até {0}',
     minFileSizeAllowed: 'Limite de tamanho por arquivo: no mínimo {0}',
     errorOccurred: 'Ocorreu um erro',
-    sentWithSuccess: 'Enviado com sucesso'
+    sentWithSuccess: 'Enviado com sucesso',
+    doneText: 'Concluido',
+    uploadingText: 'Enviando',
+    tryAgain: 'Tente novamente',
+    close: 'Fechar arquivo',
+    preview: 'Pré-visualizar',
+    thumbnail: 'miniatura',
+    continue: 'Continuar'
   },
   ru: <PoUploadLiterals>{
     files: 'файлы',
@@ -118,7 +148,14 @@ export const poUploadLiteralsDefault = {
     maxFileSizeAllowed: 'Ограничение размера файла: до {0}',
     minFileSizeAllowed: 'Ограничение размера файла: не менее {0}',
     errorOccurred: 'Произошла ошибка.',
-    sentWithSuccess: 'Успешно отправлено'
+    sentWithSuccess: 'Успешно отправлено',
+    doneText: 'Сделанный',
+    uploadingText: 'Загрузка',
+    tryAgain: 'Попробуйте еще раз',
+    close: 'Закрыть файл',
+    preview: 'Просмотр',
+    thumbnail: 'миниатюра',
+    continue: 'Продолжить'
   }
 };
 
@@ -140,6 +177,44 @@ const poUploadMinFileSize = 0;
  *  - Função de sucesso que será disparada quando os arquivos forem enviados com sucesso.
  *  - Função de erro que será disparada quando houver erro no envio dos arquivos.
  *  - Permite habilitar uma área onde os arquivos podem ser arrastados.
+ *
+ * #### Tokens customizáveis
+ *
+ * É possível alterar o estilo do componente usando os seguintes tokens (CSS):
+ *
+ * > Para maiores informações, acesse o guia [Personalizando o Tema Padrão com Tokens CSS](https://po-ui.io/guides/theme-customization).
+ *
+ * | Propriedade                            | Descrição                                             | Valor Padrão                                      |
+ * |----------------------------------------|-------------------------------------------------------|---------------------------------------------------|
+ * | **TEXT SUPPORT**                       |                                                       |                                                   |
+ * | `--font-family-text-support`           | Família tipográfica usada no texto de suporte         | `var(--font-family-theme)`                        |
+ * | `--text-color-text-support`            | Cor da fonte no texto de suporte                      | `var(--color-neutral-dark-90)`                    |
+ * | **UPLOAD CONTENT**                     |                                                       |                                                   |
+ * | `--background-color-content` &nbsp;    | Cor de fundo                                          | `var(--color-neutral-light-10)`                   |
+ * | `--border-color-content`               | Cor da borda                                          | `var(--color-neutral-light-20)`                   |
+ * | `--border-radius-content`              | Contém o valor do raio dos cantos do elemento         | `var(--border-radius-md)`                         |
+ * | `--text-color-file-name`               | Cor do texto do nome do arquivo                       | `var(--color-neutral-dark-90)`                    |
+ * | `--font-family-file-name`              | Família tipográfica usada no texto do arquivo         | `var(--font-family-theme)`                        |
+ * | `--text-color-info-bar`                | Cor do texto de informação                            | `var(--color-neutral-mid-60)`                     |
+ * | `--font-family-info-bar`               | Família tipográfica usada no texto de informação      | `var(--font-family-theme)`                        |
+ * | **ERROR STATE**                        |                                                       |                                                   |
+ * | `--background-color-content-error`     | Cor de fundo do container de erro                     | `var(--color-neutral-light-00)`                   |
+ * | `--border-color-content-error`         | Cor da borda do container de erro                     | `var(--color-feedback-negative-base)`             |
+ * | `--text-color-error`                   | Cor do texto do container de erro                     | `var(--color-feedback-negative-dark)`             |
+ * | `--color-icon-error`                   | Cor do ícone no estado de erro                        | `var(--color-feedback-negative-base)`             |
+ * | `--font-family-error`                  | Família tipográfica usada no texto de erro            | `var(--font-family-theme)`                        |
+ * | **UPLOADED STATE**                     |                                                       |                                                   |
+ * | `--background-color-content-uploaded`  | Cor de fundo do container com status de enviado       | `var(--color-neutral-light-00)`                   |
+ * | `--border-color-content-uploaded`      | Cor da borda do container com status de enviado       | `var(--color-neutral-light-20)`                   |
+ * | **INTERACTIVE STATE**                  |                                                       |                                                   |
+ * | `--text-color-file-name-interactive`   | Cor do texto do nome do arquivo quando interativo     | `var(--color-action-default)`                     |
+ * | **THUMBNAIL**                          |                                                       |                                                   |
+ * | `--color-icon-thumbnail`               | Cor do ícone na thumbnail                             | `var(--color-action-default)`                     |
+ * | `--border-width-thumbnail`             | Tamanho da fonte na thumbnail                         | `var(--border-width-sm)`                          |
+ * | `--border-radius-thumbnail`            | Contém o valor do raio dos cantos na thumbnail        | `var(--border-radius-md)`                         |
+ * | `--background-color-thumbnail`         | Cor de fundo na thumbnail                             | `var(--color-neutral-light-05)`                   |
+ * | **Focused**                            |                                                       |                                                   |
+ * | `--outline-color-focused`              | Cor do outline do estado de focus                     | `var(--color-action-focus)`                       |
  */
 @Directive()
 export abstract class PoUploadBaseComponent implements ControlValueAccessor, Validator {
@@ -254,6 +329,20 @@ export abstract class PoUploadBaseComponent implements ControlValueAccessor, Val
    */
   @Input('p-optional') optional: boolean;
 
+  /**
+   * @optional
+   *
+   * @description
+   *
+   * Exibe a pré-visualização de imagens ao anexá-las.
+   *
+   * > Propriedade funciona apenas em arquivos de formato de imagem (`.png`, `.jpg`, `.jpeg` e `.gif`).
+   * Será ignorada em outros tipos de arquivo.
+   *
+   * @default `true`
+   */
+  @Input('p-show-thumbnail') showThumbnail: boolean = true;
+
   /** Objeto que contém os cabeçalhos que será enviado na requisição dos arquivos. */
   @Input('p-headers') headers: { [name: string]: string | Array<string> };
 
@@ -363,6 +452,39 @@ export abstract class PoUploadBaseComponent implements ControlValueAccessor, Val
    *
    * @description
    *
+   * Define uma ou duas ações personalizadas do modal de pré-visualização, adicionando um botão ou dois botões no canto inferior direito
+   * do modal.
+   *
+   * A ação deve implementar a interface **PoModalAction**, permitindo configurar propriedades como:
+   * - `label`: Texto do botão.
+   * - `action`: Ícone a ser exibido no botão.
+   * - `danger`: Define a propriedade `p-danger` do botão.
+   * - `disabled`: Indica se o botão deve estar desabilitado.
+   * - `visible`: Indica se o botão deve estar visível.
+   *
+   * **Exemplo de uso:**
+   *
+   * ```html
+   * <po-upload
+   *  [p-custom-modal-actions]="customActions"
+   * </po-upload>
+   * ```
+   *
+   * ```typescript
+   * customActions:  Array<PoModalAction> = [
+   *  { label: 'Confirmar', action: this.confirmModal.bind(this) },
+   *  { label: 'Cancelar', action: this.closeModal.bind(this) }
+   *];
+   *
+   * ```
+   */
+  @Input('p-custom-modal-actions') customModalActions?: Array<PoModalAction>;
+
+  /**
+   * @optional
+   *
+   * @description
+   *
    * Evento emitido ao clicar na ação personalizada configurada no `p-custom-action`.
    *
    * O evento retorna o arquivo associado à barra de progresso onde a ação foi clicada,
@@ -430,6 +552,36 @@ export abstract class PoUploadBaseComponent implements ControlValueAccessor, Val
    * ```
    */
   @Output('p-upload') onUpload: EventEmitter<any> = new EventEmitter<any>();
+
+  /**
+   * @optional
+   *
+   * @description
+   *
+   * Evento será disparado ao clicar no ícone de fechar.
+   * > Por parâmetro será passado o objeto do arquivo.
+   */
+  @Output('p-cancel') onCancel: EventEmitter<any> = new EventEmitter<any>();
+
+  /**
+   * @optional
+   *
+   * @description
+   *
+   * Evento será disparado ao abrir o modal de pré-visualização.
+   * > Por parâmetro será passado o objeto do arquivo.
+   */
+  @Output('p-open-modal-preview') onOpenModalPreview: EventEmitter<any> = new EventEmitter<any>();
+
+  /**
+   * @optional
+   *
+   * @description
+   *
+   * Evento será disparado ao clicar no ícone de remover.
+   * > Por parâmetro será passado o objeto do arquivo.
+   */
+  @Output('p-remove') onRemove: EventEmitter<any> = new EventEmitter<any>();
 
   /**
    * @optional
@@ -825,10 +977,31 @@ export abstract class PoUploadBaseComponent implements ControlValueAccessor, Val
         break;
       }
       const file = new PoUploadFile(files[i]);
+      let currentFile: any = file;
 
-      if (this.checkRestrictions(file)) {
-        poUploadFiles = this.insertFileInFiles(file, poUploadFiles);
+      if (!this.checkRestrictions(file)) {
+        currentFile = {
+          uid: file.uid,
+          displayName: file.displayName,
+          name: file.name,
+          extension: file.extension,
+          size: file.size,
+          status: 2,
+          sizeNotAllowed: file.sizeNotAllowed,
+          extensionNotAllowed: file.extensionNotAllowed,
+          errorMessage: ''
+        };
       }
+
+      if (this.showThumbnail && currentFile.rawFile?.type?.startsWith('image/')) {
+        convertImageToBase64(currentFile.rawFile).then(base64 => {
+          currentFile.thumbnailUrl = base64;
+          this.cd.detectChanges();
+        });
+      }
+
+      poUploadFiles = this.insertFileInFiles(currentFile, poUploadFiles);
+      this.sendFeedback(currentFile);
     }
     this.sendFeedback();
     return poUploadFiles;
@@ -853,7 +1026,12 @@ export abstract class PoUploadBaseComponent implements ControlValueAccessor, Val
       const isAcceptSize = file.size >= minFileSize && file.size <= maxFileSize;
 
       if (!isAcceptSize) {
+        file.sizeNotAllowed = true;
         this.sizeNotAllowed = this.sizeNotAllowed + 1;
+      }
+
+      if (!isAccept) {
+        file.extensionNotAllowed = true;
       }
 
       return isAccept && isAcceptSize;
@@ -925,7 +1103,7 @@ export abstract class PoUploadBaseComponent implements ControlValueAccessor, Val
     return files;
   }
 
-  abstract sendFeedback(): void;
+  abstract sendFeedback(file?): void;
 
   abstract setDirectoryAttribute(value: boolean);
 }

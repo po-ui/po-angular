@@ -4,7 +4,10 @@ import {
   ChangeDetectorRef,
   Component,
   ElementRef,
+  OnChanges,
+  OnDestroy,
   Renderer2,
+  SimpleChanges,
   ViewChild,
   forwardRef,
   inject
@@ -14,10 +17,11 @@ import { NG_VALIDATORS, NG_VALUE_ACCESSOR } from '@angular/forms';
 import { PoI18nPipe } from '../../../services/po-i18n/po-i18n.pipe';
 import { PoLanguageService } from '../../../services/po-language/po-language.service';
 import { PoNotificationService } from '../../../services/po-notification/po-notification.service';
-import { formatBytes, isMobile, setHelperSettings, uuid } from '../../../utils/util';
+import { formatBytes, isMobile, setHelperSettings, isTypeof, uuid } from '../../../utils/util';
 import { PoProgressStatus } from '../../po-progress/enums/po-progress-status.enum';
 import { PoButtonComponent } from './../../po-button/po-button.component';
 
+import { PoModalAction, PoModalComponent } from '../../po-modal';
 import { PoUploadBaseComponent } from './po-upload-base.component';
 import { PoUploadDragDropComponent } from './po-upload-drag-drop/po-upload-drag-drop.component';
 import { PoUploadFile } from './po-upload-file';
@@ -53,6 +57,11 @@ import { PoUploadService } from './po-upload.service';
  *   <file name="sample-po-upload-download/sample-po-upload-download.component.html"> </file>
  *   <file name="sample-po-upload-download/sample-po-upload-download.component.ts"> </file>
  * </example>
+ *
+ * <example name="po-upload-preview" title="PO Upload - with Preview">
+ *   <file name="sample-po-upload-preview/sample-po-upload-preview.component.html"> </file>
+ *   <file name="sample-po-upload-preview/sample-po-upload-preview.component.ts"> </file>
+ * </example>
  */
 @Component({
   selector: 'po-upload',
@@ -74,7 +83,7 @@ import { PoUploadService } from './po-upload.service';
   ],
   standalone: false
 })
-export class PoUploadComponent extends PoUploadBaseComponent implements AfterViewInit {
+export class PoUploadComponent extends PoUploadBaseComponent implements AfterViewInit, OnChanges, OnDestroy {
   renderer = inject(Renderer2);
   private i18nPipe = inject(PoI18nPipe);
   private notification = inject(PoNotificationService);
@@ -82,6 +91,7 @@ export class PoUploadComponent extends PoUploadBaseComponent implements AfterVie
   @ViewChild('inputFile', { read: ElementRef, static: true }) private inputFile: ElementRef;
   @ViewChild(PoUploadDragDropComponent) private poUploadDragDropComponent: PoUploadDragDropComponent;
   @ViewChild('uploadButton') uploadButton: PoButtonComponent;
+  @ViewChild('modal') modalComponent: PoModalComponent;
 
   id = `po-upload[${uuid()}]`;
 
@@ -104,6 +114,13 @@ export class PoUploadComponent extends PoUploadBaseComponent implements AfterVie
   };
 
   private calledByCleanInputValue: boolean = false;
+
+  protected modalPrimaryAction: PoModalAction;
+  protected modalSecondaryAction: PoModalAction;
+  protected errorMessage: string;
+  protected tooltipTitle = '';
+  protected modalImageUrl = '';
+  protected errorModalImage: boolean = false;
 
   constructor() {
     const uploadService = inject(PoUploadService);
@@ -144,7 +161,9 @@ export class PoUploadComponent extends PoUploadBaseComponent implements AfterVie
 
   get hasFileNotUploaded(): boolean {
     if (Array.isArray(this.currentFiles)) {
-      return this.currentFiles.some(file => file.status !== PoUploadStatus.Uploaded);
+      return this.currentFiles.some(
+        file => file.status !== PoUploadStatus.Uploaded && file.status !== PoUploadStatus.Error
+      );
     }
 
     return false;
@@ -172,18 +191,48 @@ export class PoUploadComponent extends PoUploadBaseComponent implements AfterVie
     return this.isMultiple && this.fileRestrictions && this.fileRestrictions.maxFiles;
   }
 
-  cancel(file: PoUploadFile) {
+  cancel(file: PoUploadFile, keydown?: KeyboardEvent) {
+    if (this.disabledRemoveFile || (keydown && keydown.code !== 'Enter' && keydown.code !== 'Space')) return;
+
     if (file.status === PoUploadStatus.Uploading) {
       return this.stopUpload(file);
     }
 
     this.removeFile(file);
+    if (file.status !== PoUploadStatus.Uploaded) {
+      this.onCancel.emit(file);
+    } else {
+      this.onRemove.emit(file);
+    }
+  }
+
+  ngOnChanges(changes: SimpleChanges): void {
+    if (changes['customModalActions']) {
+      if (this.customModalActions?.length > 0) {
+        this.modalPrimaryAction = this.customModalActions[0];
+        this.modalSecondaryAction = this.customModalActions[1] || undefined;
+      } else {
+        this.setPrimaryActionModal();
+      }
+    }
   }
 
   ngAfterViewInit() {
+    if (!this.customModalActions?.length) {
+      this.setPrimaryActionModal();
+    }
+
     if (this.autoFocus) {
       this.focus();
     }
+  }
+
+  ngOnDestroy() {
+    this.currentFiles?.forEach(file => {
+      if (file.thumbnailUrl) {
+        URL.revokeObjectURL(file.thumbnailUrl);
+      }
+    });
   }
 
   /** Método responsável por **limpar** o(s) arquivo(s) selecionado(s). */
@@ -275,9 +324,32 @@ export class PoUploadComponent extends PoUploadBaseComponent implements AfterVie
     }
   }
 
+  /**
+   * Método responsável por fechar o modal.
+   */
+  closeModal() {
+    this.errorModalImage = false;
+    this.modalComponent.close();
+    this.modalImageUrl = '';
+  }
+
+  openModal(file: PoUploadFile, keydown?: KeyboardEvent) {
+    if (keydown && keydown.code !== 'Enter' && keydown.code !== 'Space') return;
+
+    if (file?.thumbnailUrl && !file.errorMessage) {
+      this.errorModalImage = false;
+      this.modalComponent.open();
+      this.modalImageUrl = file.thumbnailUrl;
+      this.onOpenModalPreview.emit(file);
+    }
+  }
+
+  // Remove o arquivo passado por parâmetro da lista dos arquivos correntes.
   removeFile(file): void {
-    const index = this.currentFiles.indexOf(file);
-    this.currentFiles.splice(index, 1);
+    const index = this.currentFiles.findIndex(f => f.uid === file.uid);
+    if (index !== -1) {
+      this.currentFiles.splice(index, 1);
+    }
 
     this.updateModel([...this.currentFiles]);
   }
@@ -289,23 +361,32 @@ export class PoUploadComponent extends PoUploadBaseComponent implements AfterVie
     this.inputFile.nativeElement.click();
   }
 
-  sendFeedback(): void {
-    if (this.sizeNotAllowed > 0) {
+  sendFeedback(file?): void {
+    let sizeNotAllowed = this.sizeNotAllowed;
+    let extensionNotAllowed = this.extensionNotAllowed;
+    let quantityNotAllowed = this.quantityNotAllowed;
+    if (file) {
+      sizeNotAllowed = file.sizeNotAllowed ? 1 : undefined;
+      extensionNotAllowed = file.extensionNotAllowed ? 1 : undefined;
+      quantityNotAllowed = undefined;
+    }
+
+    if (sizeNotAllowed > 0) {
       const minFileSize = formatBytes(this.fileRestrictions.minFileSize);
       const maxFileSize = formatBytes(this.fileRestrictions.maxFileSize);
       const args = [this.sizeNotAllowed, minFileSize || '0', maxFileSize];
-      this.setPipeArguments('invalidSize', args);
+      this.setPipeArguments('invalidSize', args, file);
       this.sizeNotAllowed = 0;
     }
 
-    if (this.extensionNotAllowed > 0) {
+    if (extensionNotAllowed > 0) {
       const allowedExtensionsFormatted = this.fileRestrictions.allowedExtensions.join(', ').toUpperCase();
       const args = [this.extensionNotAllowed, allowedExtensionsFormatted];
-      this.setPipeArguments('invalidFormat', args);
+      this.setPipeArguments('invalidFormat', args, file);
       this.extensionNotAllowed = 0;
     }
 
-    if (this.quantityNotAllowed > 0) {
+    if (quantityNotAllowed > 0) {
       const args = [this.quantityNotAllowed];
       this.setPipeArguments('invalidAmount', args);
       this.quantityNotAllowed = 0;
@@ -384,7 +465,10 @@ export class PoUploadComponent extends PoUploadBaseComponent implements AfterVie
   }
 
   uploadFiles(files: Array<PoUploadFile>) {
-    const filesFiltered = files.filter(file => file.status !== PoUploadStatus.Uploaded);
+    const filesFiltered = files.filter(
+      file => file.status !== PoUploadStatus.Uploaded && !file.sizeNotAllowed && !file.extensionNotAllowed
+    );
+    if (files.length === 0) return;
     this.uploadService.upload(
       this.url,
       filesFiltered,
@@ -398,6 +482,15 @@ export class PoUploadComponent extends PoUploadBaseComponent implements AfterVie
         // SUCCESS
         this.responseHandler(file, PoUploadStatus.Uploaded);
         this.onSuccess.emit(eventResponse);
+
+        // esconde o status de sucesso após 500ms
+        setTimeout(() => {
+          const currentFile = this.currentFiles.find(f => f.uid === file.uid);
+          if (currentFile) {
+            currentFile.hideDoneContent = true;
+            this.cd.detectChanges();
+          }
+        }, 500);
       },
       (file, eventError): any => {
         // Error
@@ -423,6 +516,40 @@ export class PoUploadComponent extends PoUploadBaseComponent implements AfterVie
     );
   }
 
+  protected actionIsDisabled(action: any) {
+    return isTypeof(action.disabled, 'function') ? action.disabled(action) : action.disabled;
+  }
+
+  protected isActionVisible(action: any): boolean {
+    if (!action || (!action.label && !action.icon)) {
+      return false;
+    }
+
+    if (action.visible === undefined) {
+      return true;
+    }
+
+    if (isTypeof(action.visible, 'function')) {
+      return action.visible();
+    }
+
+    return !!action.visible;
+  }
+
+  protected onImageError(file: any): void {
+    file.imageError = true;
+  }
+
+  protected showTooltipText(e: MouseEvent, text: string) {
+    const element = e.target as HTMLElement;
+
+    if (element.offsetWidth < element.scrollWidth) {
+      this.tooltipTitle = text;
+    } else {
+      this.tooltipTitle = undefined;
+    }
+  }
+
   private cleanInputValue() {
     this.calledByCleanInputValue = true;
     this.inputFile.nativeElement.value = '';
@@ -446,11 +573,28 @@ export class PoUploadComponent extends PoUploadBaseComponent implements AfterVie
     this.cd.markForCheck();
   }
 
-  private setPipeArguments(literalAttributes: string, literalArguments?) {
+  // método responsável por setar os argumentos do i18nPipe de acordo com a restrição.
+  private setPipeArguments(literalAttributes: string, literalArguments?, file?) {
     const pipeArguments = this.i18nPipe.transform(this.literals[literalAttributes], literalArguments);
-    this.notification.information(pipeArguments);
+    this.errorMessage = pipeArguments;
+    if (literalAttributes === 'invalidAmount') {
+      this.notification.information(pipeArguments);
+    }
+
+    if (file) {
+      file.errorMessage = pipeArguments;
+    }
   }
 
+  private setPrimaryActionModal() {
+    this.modalPrimaryAction = {
+      label: this.literals.continue,
+      action: this.closeModal.bind(this)
+    };
+    this.modalSecondaryAction = undefined;
+  }
+
+  // Função disparada ao parar um envio de arquivo.
   private stopUploadHandler(file: PoUploadFile) {
     file.status = PoUploadStatus.None;
     file.percent = 0;
@@ -481,6 +625,7 @@ export class PoUploadComponent extends PoUploadBaseComponent implements AfterVie
   private mapCleanUploadFiles(files: Array<PoUploadFile>): Array<PoUploadFile> {
     const mapedByUploadFile = progressFile => {
       const { percent, displayName, ...uploadFile } = progressFile;
+      delete uploadFile.thumbnailUrl;
 
       return uploadFile;
     };

@@ -36,6 +36,19 @@
         </po-upload-drag-drop>
       }
 
+      @if (fileRestrictions && !hideRestrictionsInfo) {
+        <po-upload-file-restrictions
+          class="po-upload-file-restrictions"
+          [ngClass]="{ 'po-upload-file-restrictions-drag-drop': displayDragDrop }"
+          [class.po-pb-1]="!displayDragDrop"
+          [p-allowed-extensions]="fileRestrictions?.allowedExtensions"
+          [p-max-files]="maxFiles"
+          [p-max-file-size]="fileRestrictions?.maxFileSize"
+          [p-min-file-size]="fileRestrictions?.minFileSize"
+        >
+        </po-upload-file-restrictions>
+      }
+
       @if (!hideSelectButton && !displayDragDrop) {
         <po-button
           #uploadButton
@@ -51,44 +64,129 @@
         </po-button>
       }
 
-      @if (fileRestrictions && !hideRestrictionsInfo) {
-        <po-upload-file-restrictions
-          class="po-upload-file-restrictions"
-          [ngClass]="{ 'po-upload-file-restrictions-drag-drop': displayDragDrop }"
-          [p-allowed-extensions]="fileRestrictions?.allowedExtensions"
-          [p-max-files]="maxFiles"
-          [p-max-file-size]="fileRestrictions?.maxFileSize"
-          [p-min-file-size]="fileRestrictions?.minFileSize"
-        >
-        </po-upload-file-restrictions>
-      }
-
       @if (currentFiles && currentFiles.length) {
-        <div class="po-upload-progress-container">
-          <po-container
-            [p-height]="hasMoreThanFourItems ? 280 : 'auto'"
-            [p-no-border]="!hasMoreThanFourItems"
-            [p-no-padding]="!hasMoreThanFourItems"
-          >
-            <div [ngClass]="{ 'po-upload-progress-container-area po-pt-2 po-pl-1': hasMoreThanFourItems }">
-              @for (file of currentFiles; track trackByFn($index, file)) {
-                <po-progress
-                  [p-disabled-cancel]="disabledRemoveFile"
-                  [p-info]="infoByUploadStatus[file.status]?.text(file.percent)"
-                  [p-info-icon]="infoByUploadStatus[file.status]?.icon"
-                  [p-status]="progressStatusByFileStatus[file.status]"
-                  [p-text]="file.displayName"
-                  [p-value]="file.percent"
-                  [p-custom-action]="customAction"
-                  (p-custom-action-click)="customClick(file)"
-                  (p-cancel)="cancel(file)"
-                  (p-retry)="uploadFiles([file])"
-                  [p-size-actions]="size"
+        <div class="po-upload-files-content">
+          @for (file of currentFiles; track trackByFn($index, file)) {
+            <div
+              class="po-upload-progress-container"
+              [class.po-upload-container-error]="file.status === 2"
+              [class.po-upload-progress-container-aa]="size === 'small'"
+              [class.po-upload-status-uploaded]="file.hideDoneContent"
+            >
+              <po-container>
+                <div
+                  [ngClass]="showThumbnail && file.thumbnailUrl ? 'po-upload-content-thumbnail' : 'po-upload-content'"
+                  class="po-upload-content"
                 >
-                </po-progress>
-              }
+                  <div class="po-upload-file-name" [class.po-upload-file-name-aa]="size === 'small'">
+                    <div class="po-upload-file-name-display">
+                      @if (showThumbnail && file.thumbnailUrl) {
+                        <div class="po-upload-thumbnail" (click)="openModal(file)" (keydown)="openModal(file, $event)">
+                          @if (!file.imageError) {
+                            <div class="po-upload-thumbnail-icon">
+                              <po-icon p-icon="ICON_PICTURE"></po-icon>
+                            </div>
+                            <img
+                              class="po-upload-thumbnail-img"
+                              [src]="file.thumbnailUrl"
+                              [alt]="literals.thumbnail"
+                              (error)="onImageError(file)"
+                            />
+                          } @else {
+                            <div class="po-upload-thumbnail-broken">
+                              <po-icon p-icon="ICON_PICTURE_BROKEN"></po-icon>
+                            </div>
+                          }
+                        </div>
+                      }
+                      <span
+                        class="po-upload-display-name"
+                        [class.po-upload-name-interactive]="showThumbnail && file.thumbnailUrl"
+                        [p-tooltip]="tooltipTitle"
+                        (keydown)="openModal(file, $event)"
+                        (click)="openModal(file)"
+                        (mouseover)="showTooltipText($event, file?.displayName)"
+                        (focus)="showTooltipText($event, file?.displayName)"
+                        >{{ file.displayName }}</span
+                      >
+                    </div>
+                    <div class="po-upload-buttons-content">
+                      @if (isActionVisible(customAction)) {
+                        <po-button
+                          class="po-upload-custom-action-button"
+                          [p-danger]="customAction.type === 'danger'"
+                          [p-disabled]="actionIsDisabled(customAction)"
+                          [p-label]="customAction.label || ''"
+                          [p-icon]="customAction.icon"
+                          [p-size]="size"
+                          (p-click)="customClick(file)"
+                        >
+                        </po-button>
+                      }
+                      @if (file.status !== 0 || onRemove?.observers?.length > 0) {
+                        <div
+                          class="po-upload-icon-focus"
+                          [class.po-upload-cancel-disabled]="disabledRemoveFile"
+                          [class.po-upload-icon-focus-aa]="size === 'small'"
+                          [attr.aria-label]="literals.close"
+                          [tabindex]="disabledRemoveFile ? -1 : 0"
+                          (keydown)="cancel(file, $event)"
+                          (click)="cancel(file)"
+                        >
+                          <po-icon
+                            class="po-upload-icon-close"
+                            [class.po-upload-icon-remove]="file.status === 0"
+                            [p-icon]="file.status === 0 ? 'ICON_DELETE' : 'ICON_CLOSE'"
+                          >
+                          </po-icon>
+                        </div>
+                      }
+                    </div>
+                  </div>
+                  @if (!file.hideDoneContent) {
+                    <div class="po-upload-info-bar" [class.fade-out]="file.status === 0">
+                      @if (file.status === 0) {
+                        <span> {{ literals.doneText }} </span>
+                      } @else if (file.status === 2) {
+                        <div class="po-upload-content-error">
+                          <po-icon class="po-upload-icon-error" p-icon="ICON_EXCLAMATION"></po-icon
+                          ><span class="po-upload-content-error-text">
+                            {{ file?.errorMessage || literals?.errorOccurred }}
+                          </span>
+                          @if (!file.errorMessage) {
+                            <po-link
+                              class="po-upload-retry-link"
+                              [p-label]="literals.tryAgain"
+                              (p-action)="uploadFiles([file])"
+                            ></po-link>
+                          }
+                        </div>
+                      } @else if (file.status === 1) {
+                        <span>{{ literals.uploadingText }}</span>
+                      } @else if (file.status === 3) {
+                        <span>{{ literals.startSending }}</span>
+                      }
+                      @if (file.status !== 2) {
+                        <span class="po-upload-value-percent">{{ file.percent || 0 }}%</span>
+                      }
+                    </div>
+                  }
+                </div>
+                @if (file.status !== 2 && !file.hideDoneContent) {
+                  <po-progress
+                    [class.fade-out]="file.status === 0"
+                    class="po-upload-progress"
+                    p-size="medium"
+                    [p-disabled-cancel]="disabledRemoveFile"
+                    [p-value]="file.percent"
+                    [p-status]="progressStatusByFileStatus[file.status]"
+                    [p-size-actions]="size"
+                  >
+                  </po-progress>
+                }
+              </po-container>
             </div>
-          </po-container>
+          }
         </div>
       }
 
@@ -116,3 +214,21 @@
     (p-additional-help)="emitAdditionalHelp()"
   ></po-field-container-bottom>
 </po-field-container>
+
+<po-modal
+  #modal
+  [p-components-size]="size"
+  [p-primary-action]="modalPrimaryAction"
+  [p-secondary-action]="modalSecondaryAction"
+  [p-title]="literals.preview"
+  [p-click-out]="true"
+  (p-close)="closeModal.bind(this)"
+>
+  @if (!errorModalImage) {
+    <img [src]="modalImageUrl" [alt]="literals.thumbnail" (error)="errorModalImage = true" />
+  } @else {
+    <div class="po-upload-thumbnail-broken">
+      <po-icon p-icon="ICON_PICTURE_BROKEN"></po-icon>
+    </div>
+  }
+</po-modal>

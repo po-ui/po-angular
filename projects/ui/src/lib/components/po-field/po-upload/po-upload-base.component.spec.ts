@@ -1,6 +1,6 @@
 import { HttpClient, HttpHandler } from '@angular/common/http';
 import { ChangeDetectorRef, Component, inject } from '@angular/core';
-import { ComponentFixture, TestBed } from '@angular/core/testing';
+import { ComponentFixture, fakeAsync, TestBed, tick } from '@angular/core/testing';
 import { FormsModule, UntypedFormControl } from '@angular/forms';
 
 import { expectPropertiesValues } from '../../../util-test/util-expect.spec';
@@ -225,26 +225,27 @@ describe('PoUploadBaseComponent:', () => {
     });
 
     describe('parseFiles:', () => {
-      it('should call `insertFileInFiles` and return array of PoUploadFile', () => {
-        const files = [new PoUploadFile({})];
+      it('should call `convertImageToBase64` and set `thumbnailUrl` when showThumbnail is true', fakeAsync(() => {
+        const mockBase64 = 'data:image/png;base64,mockValue';
+        const mockFile = new File(['mock-content'], 'mock.png', { type: 'image/png' });
 
-        const checkRestritions = spyOn(component, <any>'checkRestrictions').and.returnValue(true);
-        spyOn(component, <any>'insertFileInFiles').and.returnValue(files);
+        const files = [new PoUploadFile(mockFile)];
 
-        expect(component['parseFiles']([fileMock])).toEqual(files);
+        spyOn(component as any, 'checkRestrictions').and.returnValue(true);
+        spyOn(component as any, 'insertFileInFiles').and.returnValue(files);
+        spyOn(utilsFunctions, 'convertImageToBase64').and.returnValue(Promise.resolve(mockBase64));
+        spyOn(component['cd'], 'detectChanges');
 
-        expect(checkRestritions).toHaveBeenCalled();
-        expect(component['insertFileInFiles']).toHaveBeenCalled();
-      });
+        component.showThumbnail = true;
 
-      it('should not call `insertFileInFiles`', () => {
-        const checkRestritions = spyOn(component, <any>'checkRestrictions').and.returnValue(false);
-        spyOn(component, <any>'insertFileInFiles');
+        const result = component['parseFiles']([mockFile]);
 
-        expect(component['parseFiles']([fileMock])).toBeTruthy();
-        expect(checkRestritions).toHaveBeenCalled();
-        expect(component['insertFileInFiles']).not.toHaveBeenCalled();
-      });
+        tick();
+
+        expect(utilsFunctions.convertImageToBase64).toHaveBeenCalledWith(mockFile);
+        expect(component['cd'].detectChanges).toHaveBeenCalled();
+        expect(result).toEqual(files);
+      }));
 
       it('should return three files if upload limit is three', () => {
         const files = [
@@ -310,6 +311,44 @@ describe('PoUploadBaseComponent:', () => {
       });
     });
 
+    it('parseFiles: should create currentFile with status 2 when checkRestrictions returns false', () => {
+      const mockFile = new File(['content'], 'test.jpg', { type: 'image/jpeg' });
+
+      const poUploadFileInstance = { uid: 1, name: 'test.jpg', displayName: 'test.jpg', extension: 'jpg', size: 1000 };
+
+      const spyCheckRestrictions = spyOn(component as any, 'checkRestrictions').and.returnValue(false);
+      const spyInsertFileInFiles = spyOn(component as any, 'insertFileInFiles').and.callFake((file, files) => [
+        ...files,
+        file
+      ]);
+      const spySendFeedback = spyOn(component as any, 'sendFeedback');
+
+      component.currentFiles = [];
+      component.showThumbnail = false;
+      component.fileRestrictions = { maxFiles: 10 };
+
+      const result = component['parseFiles']([mockFile]);
+
+      expect(spyCheckRestrictions).toHaveBeenCalled();
+      expect(spyInsertFileInFiles).toHaveBeenCalled();
+      expect(spySendFeedback).toHaveBeenCalled();
+
+      expect(result.length).toBe(1);
+      expect(result[0].status).toBe(2);
+
+      expect(result[0]).toEqual(
+        jasmine.objectContaining({
+          uid: result[0].uid,
+          displayName: 'test.jpg - 1 KB',
+          name: poUploadFileInstance.name,
+          extension: '.jpg',
+          size: 7,
+          status: 2,
+          errorMessage: ''
+        })
+      );
+    });
+
     it('checkRestrictions: should be check restrictions', () => {
       let isTruthy;
 
@@ -363,6 +402,21 @@ describe('PoUploadBaseComponent:', () => {
       component['checkRestrictions'](<any>mockFile);
 
       expect(component['sizeNotAllowed']).toBe(3);
+    });
+
+    it('checkRestrictions: should sum `extensionNotAllowed ` if `isAccept` is `false`', () => {
+      const mockFile = {
+        size: 2,
+        extension: '.pdf'
+      };
+
+      spyOn(component, <any>'isAllowedExtension').and.returnValue(false);
+      component['fileRestrictions'] = { maxFileSize: 2, allowedExtensions: ['.png'] };
+      component['sizeNotAllowed'] = 2;
+
+      const response = component['checkRestrictions'](<any>mockFile);
+
+      expect(response).toBeFalse();
     });
 
     it('checkRestrictions: shouldn`t sum `sizeNotAllowed` if `isAcceptSize` is `true`', () => {
