@@ -222,6 +222,7 @@ export const AnimaliaIconDictionary: { [key: string]: string } = {
   ICON_OK: 'an an-check',
   ICON_PARAMETERS: 'an an-sliders-horizontal',
   ICON_PICTURE: 'an an-image',
+  ICON_PICTURE_BROKEN: 'an an-image-broken',
   ICON_PUSH_PIN: 'an an-push-pin',
   ICON_PUSH_PIN_SLASH: 'an an-push-pin-slash',
   ICON_REFRESH: 'an an-arrow-clockwise',
