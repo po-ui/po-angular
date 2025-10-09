@@ -14,7 +14,7 @@ import { NG_VALIDATORS, NG_VALUE_ACCESSOR } from '@angular/forms';
 import { PoI18nPipe } from '../../../services/po-i18n/po-i18n.pipe';
 import { PoLanguageService } from '../../../services/po-language/po-language.service';
 import { PoNotificationService } from '../../../services/po-notification/po-notification.service';
-import { formatBytes, isMobile, uuid } from '../../../utils/util';
+import { formatBytes, isMobile, isTypeof, uuid } from '../../../utils/util';
 import { PoProgressStatus } from '../../po-progress/enums/po-progress-status.enum';
 import { PoButtonComponent } from './../../po-button/po-button.component';
 
@@ -72,6 +72,14 @@ import { PoUploadService } from './po-upload.service';
       multi: true
     }
   ],
+  // animations: [
+  //   trigger('fadeOutContainer', [
+  //     transition(':leave', [
+  //       style({ opacity: 1, height: '*' }),
+  //       animate('400ms Cubic-Bezier(0.3, 0, 1, 0.8)', style({ opacity: 0, height: 0 }))
+  //     ])
+  //   ])
+  // ],
   standalone: false
 })
 export class PoUploadComponent extends PoUploadBaseComponent implements AfterViewInit {
@@ -104,6 +112,8 @@ export class PoUploadComponent extends PoUploadBaseComponent implements AfterVie
   };
 
   private calledByCleanInputValue: boolean = false;
+  protected errorMessage: string;
+  protected tooltipTitle = '';
 
   constructor() {
     const uploadService = inject(PoUploadService);
@@ -172,12 +182,19 @@ export class PoUploadComponent extends PoUploadBaseComponent implements AfterVie
     return this.isMultiple && this.fileRestrictions && this.fileRestrictions.maxFiles;
   }
 
-  cancel(file: PoUploadFile) {
+  cancel(file: PoUploadFile, keydown?: KeyboardEvent) {
+    if (keydown && keydown.code !== 'Enter' && keydown.code !== 'Space') return;
+
     if (file.status === PoUploadStatus.Uploading) {
       return this.stopUpload(file);
     }
 
     this.removeFile(file);
+    if (file.status !== PoUploadStatus.Uploaded) {
+      this.onCancel.emit(file);
+    } else {
+      this.onRemove.emit(file);
+    }
   }
 
   ngAfterViewInit() {
@@ -279,8 +296,10 @@ export class PoUploadComponent extends PoUploadBaseComponent implements AfterVie
 
   // Remove o arquivo passado por parâmetro da lista dos arquivos correntes.
   removeFile(file): void {
-    const index = this.currentFiles.indexOf(file);
-    this.currentFiles.splice(index, 1);
+    const index = this.currentFiles.findIndex(f => f.uid === file.uid);
+    if (index !== -1) {
+      this.currentFiles.splice(index, 1);
+    }
 
     this.updateModel([...this.currentFiles]);
   }
@@ -292,23 +311,32 @@ export class PoUploadComponent extends PoUploadBaseComponent implements AfterVie
     this.inputFile.nativeElement.click();
   }
 
-  sendFeedback(): void {
-    if (this.sizeNotAllowed > 0) {
+  sendFeedback(file?): void {
+    let sizeNotAllowed = this.sizeNotAllowed;
+    let extensionNotAllowed = this.extensionNotAllowed;
+    let quantityNotAllowed = this.quantityNotAllowed;
+    if (file) {
+      sizeNotAllowed = file.sizeNotAllowed ? 1 : undefined;
+      extensionNotAllowed = file.extensionNotAllowed ? 1 : undefined;
+      quantityNotAllowed = undefined;
+    }
+
+    if (sizeNotAllowed > 0) {
       const minFileSize = formatBytes(this.fileRestrictions.minFileSize);
       const maxFileSize = formatBytes(this.fileRestrictions.maxFileSize);
       const args = [this.sizeNotAllowed, minFileSize || '0', maxFileSize];
-      this.setPipeArguments('invalidSize', args);
+      this.setPipeArguments('invalidSize', args, file);
       this.sizeNotAllowed = 0;
     }
 
-    if (this.extensionNotAllowed > 0) {
+    if (extensionNotAllowed > 0) {
       const allowedExtensionsFormatted = this.fileRestrictions.allowedExtensions.join(', ').toUpperCase();
       const args = [this.extensionNotAllowed, allowedExtensionsFormatted];
-      this.setPipeArguments('invalidFormat', args);
+      this.setPipeArguments('invalidFormat', args, file);
       this.extensionNotAllowed = 0;
     }
 
-    if (this.quantityNotAllowed > 0) {
+    if (quantityNotAllowed > 0) {
       const args = [this.quantityNotAllowed];
       this.setPipeArguments('invalidAmount', args);
       this.quantityNotAllowed = 0;
@@ -378,7 +406,10 @@ export class PoUploadComponent extends PoUploadBaseComponent implements AfterVie
 
   // Envia os arquivos passados por parâmetro, exceto os que já foram enviados ao serviço.
   uploadFiles(files: Array<PoUploadFile>) {
-    const filesFiltered = files.filter(file => file.status !== PoUploadStatus.Uploaded);
+    const filesFiltered = files.filter(
+      file => file.status !== PoUploadStatus.Uploaded && !file.sizeNotAllowed && !file.extensionNotAllowed
+    );
+    if (files.length === 0) return;
     this.uploadService.upload(
       this.url,
       filesFiltered,
@@ -392,9 +423,17 @@ export class PoUploadComponent extends PoUploadBaseComponent implements AfterVie
         // SUCCESS
         this.responseHandler(file, PoUploadStatus.Uploaded);
         this.onSuccess.emit(eventResponse);
+
+        setTimeout(() => {
+          const teste = this.currentFiles.find(f => f.uid === file.uid);
+          teste.hideDoneContent = true;
+          this.cd.detectChanges();
+          console.log('teste: ', teste);
+        }, 500);
       },
       (file, eventError): any => {
         // Error
+        console.log('deu erro: ');
         this.responseHandler(file, PoUploadStatus.Error);
         this.onError.emit(eventError);
       }
@@ -405,6 +444,36 @@ export class PoUploadComponent extends PoUploadBaseComponent implements AfterVie
     if (this.customAction) {
       this.customActionClick.emit(file);
     }
+  }
+
+  protected showTooltipTitle(e: MouseEvent, title: string) {
+    const element = e.target as HTMLElement;
+
+    if (element.offsetWidth < element.scrollWidth) {
+      this.tooltipTitle = title;
+    } else {
+      this.tooltipTitle = undefined;
+    }
+  }
+
+  protected actionIsDisabled(action: any) {
+    return isTypeof(action.disabled, 'function') ? action.disabled(action) : action.disabled;
+  }
+
+  protected isActionVisible(action: any): boolean {
+    if (!action || (!action.label && !action.icon)) {
+      return false;
+    }
+
+    if (action.visible === undefined) {
+      return true;
+    }
+
+    if (isTypeof(action.visible, 'function')) {
+      return action.visible();
+    }
+
+    return !!action.visible;
   }
 
   private cleanInputValue() {
@@ -432,9 +501,16 @@ export class PoUploadComponent extends PoUploadBaseComponent implements AfterVie
   }
 
   // método responsável por setar os argumentos do i18nPipe de acordo com a restrição.
-  private setPipeArguments(literalAttributes: string, literalArguments?) {
+  private setPipeArguments(literalAttributes: string, literalArguments?, file?) {
     const pipeArguments = this.i18nPipe.transform(this.literals[literalAttributes], literalArguments);
-    this.notification.information(pipeArguments);
+    this.errorMessage = pipeArguments;
+    if (literalAttributes === 'invalidAmount') {
+      this.notification.information(pipeArguments);
+    }
+
+    if (file) {
+      file.errorMessage = pipeArguments;
+    }
   }
 
   // Função disparada ao parar um envio de arquivo.

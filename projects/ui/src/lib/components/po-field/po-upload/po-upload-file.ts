@@ -21,6 +21,15 @@ export class PoUploadFile {
   // porcentagem utilizada para repassar ao componente progress
   percent?: number;
 
+  // indica que o tamanho do arquivo não é permitido
+  sizeNotAllowed?: boolean;
+
+  // indica que a extensão do arquivo não é permitida
+  extensionNotAllowed?: boolean;
+
+  //
+  hideDoneContent?: boolean;
+
   constructor(file: any) {
     if (file) {
       this.name = file.name;

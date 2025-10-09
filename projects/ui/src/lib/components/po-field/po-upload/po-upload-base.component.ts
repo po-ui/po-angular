@@ -39,7 +39,11 @@ export const poUploadLiteralsDefault = {
     maxFileSizeAllowed: 'Size limit per file: {0} maximum',
     minFileSizeAllowed: 'Size limit per file: {0} minimum',
     errorOccurred: 'An error has occurred',
-    sentWithSuccess: 'Sent with success'
+    sentWithSuccess: 'Sent with success',
+    doneText: 'Done',
+    uploadingText: 'Uploading',
+    tryAgain: 'Try again',
+    close: 'Close file'
   },
   es: <PoUploadLiterals>{
     files: 'archivos',
@@ -65,7 +69,11 @@ export const poUploadLiteralsDefault = {
     maxFileSizeAllowed: 'Limite de tamaño de archivo: hasta {0}',
     minFileSizeAllowed: 'Limite de tamaño de archivo: minimo {0}',
     errorOccurred: 'Ocurrio un error',
-    sentWithSuccess: 'Enviado con éxito'
+    sentWithSuccess: 'Enviado con éxito',
+    doneText: 'Hecho',
+    uploadingText: 'Subiendo',
+    tryAgain: 'Inténtalo de nuevo',
+    close: 'Cerrar archivo'
   },
   pt: <PoUploadLiterals>{
     files: 'arquivos',
@@ -91,7 +99,11 @@ export const poUploadLiteralsDefault = {
     maxFileSizeAllowed: 'Limite de tamanho por arquivo: até {0}',
     minFileSizeAllowed: 'Limite de tamanho por arquivo: no mínimo {0}',
     errorOccurred: 'Ocorreu um erro',
-    sentWithSuccess: 'Enviado com sucesso'
+    sentWithSuccess: 'Enviado com sucesso',
+    doneText: 'Concluido',
+    uploadingText: 'Enviando',
+    tryAgain: 'Tente novamente',
+    close: 'Fechar arquivo'
   },
   ru: <PoUploadLiterals>{
     files: 'файлы',
@@ -117,7 +129,11 @@ export const poUploadLiteralsDefault = {
     maxFileSizeAllowed: 'Ограничение размера файла: до {0}',
     minFileSizeAllowed: 'Ограничение размера файла: не менее {0}',
     errorOccurred: 'Произошла ошибка.',
-    sentWithSuccess: 'Успешно отправлено'
+    sentWithSuccess: 'Успешно отправлено',
+    doneText: 'Сделанный',
+    uploadingText: 'Загрузка',
+    tryAgain: 'Попробуйте еще раз',
+    close: 'Закрыть файл'
   }
 };
 
@@ -390,6 +406,26 @@ export abstract class PoUploadBaseComponent implements ControlValueAccessor, Val
    * ```
    */
   @Output('p-upload') onUpload: EventEmitter<any> = new EventEmitter<any>();
+
+  /**
+   * @optional
+   *
+   * @description
+   *
+   * Evento será disparado ao clicar no ícone de fechar.
+   * > Por parâmetro será passado o objeto do arquivo.
+   */
+  @Output('p-cancel') onCancel: EventEmitter<any> = new EventEmitter<any>();
+
+  /**
+   * @optional
+   *
+   * @description
+   *
+   * Evento será disparado ao clicar no ícone de remover.
+   * > Por parâmetro será passado o objeto do arquivo.
+   */
+  @Output('p-remove') onRemove: EventEmitter<any> = new EventEmitter<any>();
 
   /**
    * @optional
@@ -785,10 +821,23 @@ export abstract class PoUploadBaseComponent implements ControlValueAccessor, Val
         break;
       }
       const file = new PoUploadFile(files[i]);
+      let currentFile: any = file;
 
-      if (this.checkRestrictions(file)) {
-        poUploadFiles = this.insertFileInFiles(file, poUploadFiles);
+      if (!this.checkRestrictions(file)) {
+        currentFile = {
+          uid: file.uid,
+          displayName: file.displayName,
+          name: file.name,
+          extension: file.extension,
+          size: file.size,
+          status: 2,
+          sizeNotAllowed: file.sizeNotAllowed,
+          extensionNotAllowed: file.extensionNotAllowed,
+          errorMessage: ''
+        };
       }
+      poUploadFiles = this.insertFileInFiles(currentFile, poUploadFiles);
+      this.sendFeedback(currentFile);
     }
     this.sendFeedback();
     return poUploadFiles;
@@ -813,7 +862,12 @@ export abstract class PoUploadBaseComponent implements ControlValueAccessor, Val
       const isAcceptSize = file.size >= minFileSize && file.size <= maxFileSize;
 
       if (!isAcceptSize) {
+        file.sizeNotAllowed = true;
         this.sizeNotAllowed = this.sizeNotAllowed + 1;
+      }
+
+      if (!isAccept) {
+        file.extensionNotAllowed = true;
       }
 
       return isAccept && isAcceptSize;
@@ -885,7 +939,7 @@ export abstract class PoUploadBaseComponent implements ControlValueAccessor, Val
     return files;
   }
 
-  abstract sendFeedback(): void;
+  abstract sendFeedback(file?): void;
 
   abstract setDirectoryAttribute(value: boolean);
 }
