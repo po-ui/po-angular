@@ -21,6 +21,24 @@ export class PoUploadFile {
   // porcentagem utilizada para repassar ao componente progress
   percent?: number;
 
+  // indica que o tamanho do arquivo não é permitido
+  sizeNotAllowed?: boolean;
+
+  // indica que a extensão do arquivo não é permitida
+  extensionNotAllowed?: boolean;
+
+  // Propriedade interna que indica que o status de sucesso deve estar oculto
+  hideDoneContent?: boolean;
+
+  // Propriedade interna para mensagem de erro
+  errorMessage?: string;
+
+  // Propriedade interna para url da thumbnail
+  thumbnailUrl?: string;
+
+  // Propriedade interna para controlar se houve erro ao carregar a imagem da thumbnail.
+  imageError?: boolean;
+
   constructor(file: any) {
     if (file) {
       this.name = file.name;

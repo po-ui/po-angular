@@ -7,7 +7,8 @@ import {
   PoSelectOption,
   PoRadioGroupOption,
   PoUploadFileRestrictions,
-  PoUploadLiterals
+  PoUploadLiterals,
+  PoModalAction
 } from '@po-ui/ng-components';
 
 @Component({
@@ -27,6 +28,7 @@ export class SamplePoUploadLabsComponent implements OnInit {
   help: string;
   label: string;
   literals: string;
+  modalActions: string;
   maxFiles: number;
   maxSize: number;
   minSize: number;
@@ -37,6 +39,7 @@ export class SamplePoUploadLabsComponent implements OnInit {
   headers: { [name: string]: string | Array<string> };
   headersLabs: string;
   action: PoProgressAction;
+  customModalActions: Array<PoModalAction>;
   actionForm: FormGroup;
   size: string;
 
@@ -55,7 +58,8 @@ export class SamplePoUploadLabsComponent implements OnInit {
     { value: 'selectButton', label: 'Hide Select Files Button' },
     { value: 'sendButton', label: 'Hide Send Files Button' },
     { value: 'showCustomAction', label: 'Add Custom Action to Progress' },
-    { value: 'labelTextWrap', label: 'Label Text Wrap' }
+    { value: 'labelTextWrap', label: 'Label Text Wrap' },
+    { value: 'showThumbnail', label: 'Show Thumbnail' }
   ];
 
   public readonly sizeOptions: Array<PoRadioGroupOption> = [
@@ -112,6 +116,14 @@ export class SamplePoUploadLabsComponent implements OnInit {
     }
   }
 
+  changeModalActions() {
+    try {
+      this.customModalActions = JSON.parse(this.modalActions);
+    } catch {
+      this.customModalActions = undefined;
+    }
+  }
+
   onChangeHeaders(headers) {
     try {
       this.headers = JSON.parse(headers);
@@ -146,6 +158,7 @@ export class SamplePoUploadLabsComponent implements OnInit {
     this.label = undefined;
     this.help = undefined;
     this.literals = '';
+    this.modalActions = '';
     this.maxFiles = undefined;
     this.maxSize = undefined;
     this.minSize = undefined;
@@ -157,6 +170,7 @@ export class SamplePoUploadLabsComponent implements OnInit {
     this.headersLabs = undefined;
     this.actionForm.reset({ type: 'default', visible: true });
     this.action = { label: '', type: 'default' };
+    this.customModalActions = [];
     this.size = 'medium';
   }
 

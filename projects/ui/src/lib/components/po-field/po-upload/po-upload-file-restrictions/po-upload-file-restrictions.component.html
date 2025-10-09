@@ -1,17 +1,17 @@
 @if (maxFiles > 1) {
-  <p class="po-font-text-small">
+  <p>
     {{ literals?.numberOfFilesAllowed | poI18n: maxFiles }}
   </p>
 }
 
 @if (allowedExtensions) {
-  <p class="po-font-text-small">
+  <p>
     {{ literals?.allowedFormats | poI18n: allowedExtensions }}
   </p>
 }
 
 @if (minFileSize || maxFileSize) {
-  <p class="po-font-text-small">
+  <p>
     <span>{{ literals?.allowedSizes }}</span>
     @if (minFileSize && maxFileSize) {
       <span>
