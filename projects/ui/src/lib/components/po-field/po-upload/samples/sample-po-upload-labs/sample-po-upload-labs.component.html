@@ -1,7 +1,7 @@
 <po-upload
   name="upload"
   [(ngModel)]="upload"
-  [p-additional-help-tooltip]="additionalHelpTooltip"
+  [p-helper]="helperText"
   [p-auto-upload]="properties.includes('autoupload')"
   [p-directory]="properties.includes('directory')"
   [p-disabled]="properties.includes('disabled')"
@@ -112,14 +112,7 @@
 
     <po-input class="po-md-6" name="help" [(ngModel)]="help" p-clean p-label="Help"> </po-input>
 
-    <po-input
-      class="po-md-6"
-      name="additionalHelpTooltip"
-      [(ngModel)]="additionalHelpTooltip"
-      p-clean
-      p-label="Additional Help"
-    >
-    </po-input>
+    <po-input class="po-md-6" name="helperText" [(ngModel)]="helperText" p-clean p-label="Additional Help"> </po-input>
 
     <po-input class="po-md-6" name="formField" [(ngModel)]="formField" p-clean p-label="Form Field"> </po-input>
 

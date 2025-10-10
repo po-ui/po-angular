@@ -93,5 +93,10 @@ describe('PoHelperBaseComponent:', () => {
       expect('footerAction' in options).toBeTrue();
       expect(typeof options.footerAction).toBe('function');
     });
+
+    it('should return undefined when value is falsy', () => {
+      const result = (component as any).transformHelper(undefined);
+      expect(result).toBeUndefined();
+    });
   });
 });

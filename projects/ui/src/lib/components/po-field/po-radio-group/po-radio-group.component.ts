@@ -11,7 +11,9 @@ import {
   QueryList,
   ViewChild,
   ViewChildren,
-  inject
+  inject,
+  OnChanges,
+  SimpleChanges
 } from '@angular/core';
 import { NG_VALIDATORS, NG_VALUE_ACCESSOR } from '@angular/forms';
 
@@ -19,6 +21,7 @@ import { removeDuplicatedOptions, setHelperSettings } from '../../../utils/util'
 
 import { PoRadioComponent } from '../po-radio/po-radio.component';
 import { PoRadioGroupBaseComponent } from './po-radio-group-base.component';
+import { PoHelperComponent } from '../../po-helper';
 
 /**
  * @docsExtends PoRadioGroupBaseComponent
@@ -64,7 +67,7 @@ import { PoRadioGroupBaseComponent } from './po-radio-group-base.component';
   ],
   standalone: false
 })
-export class PoRadioGroupComponent extends PoRadioGroupBaseComponent implements AfterViewInit, DoCheck {
+export class PoRadioGroupComponent extends PoRadioGroupBaseComponent implements AfterViewInit, DoCheck, OnChanges {
   private el = inject(ElementRef);
   private cd = inject(ChangeDetectorRef);
 
@@ -76,6 +79,7 @@ export class PoRadioGroupComponent extends PoRadioGroupBaseComponent implements 
 
   @ViewChild('inp', { read: ElementRef, static: true }) inputEl: ElementRef;
   @ViewChildren('inputRadio') radioLabels: QueryList<PoRadioComponent>;
+  @ViewChild('helperEl', { read: PoHelperComponent, static: false }) helperEl?: PoHelperComponent;
 
   differ: any;
 
@@ -100,8 +104,14 @@ export class PoRadioGroupComponent extends PoRadioGroupBaseComponent implements 
     this.cd.markForCheck();
   }
 
+  ngOnChanges(changes: SimpleChanges): void {
+    if (changes.label) {
+      this.displayAdditionalHelp = false;
+    }
+  }
+
   emitAdditionalHelp() {
-    if (this.isAdditionalHelpEventTriggered()) {
+    if (this.label && this.isAdditionalHelpEventTriggered()) {
       this.additionalHelp.emit();
     }
   }
@@ -180,19 +190,11 @@ export class PoRadioGroupComponent extends PoRadioGroupBaseComponent implements 
 
   /**
    *
-   * Método que exibe `p-additionalHelpTooltip` ou executa a ação definida em `p-additionalHelp`.
+   * Método que exibe `p-helper` ou executa a ação definida em `p-helper{eventOnClick}` ou em `p-additionalHelp`.
    * Para isso, será necessário configurar uma tecla de atalho utilizando o evento `p-keydown`.
    *
-   * > Exibe ou oculta o conteúdo do componente `po-helper` quando o componente estiver com foco e com label visível.
+   * > Exibe ou oculta o conteúdo do componente `po-helper` quando o componente estiver com foco.
    *
-   * ```
-   * <po-radio-group
-   *  #radioGroup
-   *  ...
-   *  p-additional-help-tooltip="Mensagem de ajuda complementar"
-   *  (p-keydown)="onKeyDown($event, radioGroup)"
-   * ></po-radio-group>
-   * ```
    * ```
    * // Exemplo com p-label e p-helper
    * <po-radio-group
@@ -214,6 +216,23 @@ export class PoRadioGroupComponent extends PoRadioGroupBaseComponent implements 
    */
   showAdditionalHelp(): boolean {
     this.displayAdditionalHelp = !this.displayAdditionalHelp;
+    const helper = this.poHelperComponent();
+    const isHelpEvt = this.isAdditionalHelpEventTriggered();
+    if (!this.label && (helper || this.additionalHelpTooltip || isHelpEvt)) {
+      if (isHelpEvt) {
+        this.additionalHelp.emit();
+      }
+      if (typeof helper !== 'string' && typeof helper?.eventOnClick === 'function') {
+        helper.eventOnClick();
+        return;
+      }
+      if (this.helperEl?.helperIsVisible()) {
+        this.helperEl?.closeHelperPopover();
+        return;
+      }
+      this.helperEl?.openHelperPopover();
+      return;
+    }
     return this.displayAdditionalHelp;
   }
 

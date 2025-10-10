@@ -22,7 +22,7 @@ import { PoDateService } from './../../../services/po-date/po-date.service';
 import { replaceFormatSeparator, setHelperSettings } from './../../../utils/util';
 import { PoDatepickerRange } from './interfaces/po-datepicker-range.interface';
 import { PoDatepickerRangeBaseComponent } from './po-datepicker-range-base.component';
-import { PoHelperOptions } from '../../po-helper';
+import { PoHelperComponent } from '../../po-helper';
 
 const arrowLeftKey = 37;
 const arrowRightKey = 39;
@@ -96,9 +96,9 @@ export class PoDatepickerRangeComponent
   @ViewChild('startDateInput', { read: ElementRef, static: true }) startDateInput: ElementRef;
   @ViewChild('iconCalendar', { read: ElementRef, static: true }) iconCalendar: ElementRef;
   @ViewChild('calendarPicker', { read: ElementRef }) calendarPicker: ElementRef;
+  @ViewChild('helperEl', { read: PoHelperComponent, static: false }) helperEl?: PoHelperComponent;
 
   isCalendarVisible = false;
-  helperSettings: PoHelperOptions;
 
   private clickListener;
   private eventResizeListener;
@@ -175,7 +175,6 @@ export class PoDatepickerRangeComponent
   }
 
   ngAfterViewInit() {
-    this.helperSettings = this.setHelper(this.label, this.additionalHelpTooltip).helperSettings;
     if (this.autoFocus) {
       this.focus();
     }
@@ -200,6 +199,9 @@ export class PoDatepickerRangeComponent
         replaceFormatSeparator(this.format, this.poLanguageService.getDateSeparator(this.locale))
       );
     }
+    if (changes.label) {
+      this.displayAdditionalHelp = false;
+    }
   }
 
   ngOnDestroy() {
@@ -215,7 +217,7 @@ export class PoDatepickerRangeComponent
   }
 
   emitAdditionalHelp() {
-    if (this.isAdditionalHelpEventTriggered()) {
+    if (this.label && this.isAdditionalHelpEventTriggered()) {
       this.additionalHelp.emit();
     }
   }
@@ -253,9 +255,6 @@ export class PoDatepickerRangeComponent
 
   onBlur(event: any) {
     this.onTouchedModel?.();
-    if (this.getAdditionalHelpTooltip() && this.displayAdditionalHelp) {
-      this.showAdditionalHelp();
-    }
 
     const isStartDateTargetEvent = event.target.name === this.startDateInputName;
 
@@ -325,19 +324,11 @@ export class PoDatepickerRangeComponent
   }
 
   /**
-   * Método que exibe `p-additionalHelpTooltip` ou executa a ação definida em `p-additionalHelp`.
+   * Método que exibe `p-helper` ou executa a ação definida em `p-helper{eventOnClick}` ou em `p-additionalHelp`.
    * Para isso, será necessário configurar uma tecla de atalho utilizando o evento `p-keydown`.
    *
-   * > Exibe ou oculta o conteúdo do componente `po-helper` quando o componente estiver com foco e com label visível.
+   * > Exibe ou oculta o conteúdo do componente `po-helper` quando o componente estiver com foco.
    *
-   * ```
-   * <po-datepicker-range
-   *  #datepickerRange
-   *  ...
-   *  p-additional-help-tooltip="Mensagem de ajuda complementar"
-   *  (p-keydown)="onKeyDown($event, datepickerRange)"
-   * ></po-datepicker-range>
-   * ```
    * ```
    * // Exemplo com p-label e p-helper
    * <po-datepicker-range
@@ -359,6 +350,23 @@ export class PoDatepickerRangeComponent
    */
   showAdditionalHelp(): boolean {
     this.displayAdditionalHelp = !this.displayAdditionalHelp;
+    const helper = this.poHelperComponent();
+    const isHelpEvt = this.isAdditionalHelpEventTriggered();
+    if (!this.label && (helper || this.additionalHelpTooltip || isHelpEvt)) {
+      if (isHelpEvt) {
+        this.additionalHelp.emit();
+      }
+      if (typeof helper !== 'string' && typeof helper?.eventOnClick === 'function') {
+        helper.eventOnClick();
+        return;
+      }
+      if (this.helperEl?.helperIsVisible()) {
+        this.helperEl?.closeHelperPopover();
+        return;
+      }
+      this.helperEl?.openHelperPopover();
+      return;
+    }
     return this.displayAdditionalHelp;
   }
 

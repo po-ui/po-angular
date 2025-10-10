@@ -1,7 +1,7 @@
 <po-lookup
   name="lookup"
   [(ngModel)]="lookup"
-  [p-additional-help-tooltip]="additionalHelpTooltip"
+  [p-helper]="helperText"
   [p-advanced-filters]="customAdvancedFilters"
   [p-auto-height]="properties.includes('autoHeight')"
   [p-clean]="properties.includes('clean')"
@@ -103,14 +103,7 @@
 
   <po-input class="po-md-6" name="help" [(ngModel)]="help" p-clean p-label="Help"> </po-input>
 
-  <po-input
-    class="po-md-6"
-    name="additionalHelpTooltip"
-    [(ngModel)]="additionalHelpTooltip"
-    p-clean
-    p-label="Additional Help"
-  >
-  </po-input>
+  <po-input class="po-md-6" name="helperText" [(ngModel)]="helperText" p-clean p-label="Additional Help"> </po-input>
 
   <po-input class="po-md-6" name="placeholder" [(ngModel)]="placeholder" p-clean p-label="Placeholder"> </po-input>
 

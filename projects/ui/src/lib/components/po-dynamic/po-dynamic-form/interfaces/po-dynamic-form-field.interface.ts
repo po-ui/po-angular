@@ -25,6 +25,7 @@ import { ForceBooleanComponentEnum, ForceOptionComponentEnum } from '../../enums
 
 import { Observable } from 'rxjs';
 import { PoDynamicField } from '../../po-dynamic-field.interface';
+import { PoHelperOptions } from '../../../po-helper';
 
 /**
  * @usedBy PoDynamicFormComponent, PoAdvancedFilterComponent, PoPageDynamicSearchComponent
@@ -38,23 +39,25 @@ import { PoDynamicField } from '../../po-dynamic-field.interface';
 export interface PoDynamicFormField extends PoDynamicField {
   /**
    * Evento disparado ao clicar no ícone de ajuda adicional.
-   * Este evento ativa automaticamente a exibição do ícone de ajuda adicional ao `p-help`.
+   *
+   * > Essa propriedade está depreciada e será removida na versão 23.x.x. Recomendamos utilizar a propriedade p-helper que oferece mais recursos e flexibilidade.
    */
   additionalHelp?: Function;
 
   /**
-   * Exibe um ícone de ajuda adicional ao `p-help`, com o texto desta propriedade no tooltip.
-   * Se o evento `p-additional-help` estiver definido, o tooltip não será exibido.
+   * Exibe um ícone de ajuda adicional, com o texto desta propriedade sendo passado para o popover do componente `po-helper`.
    * **Como boa prática, indica-se utilizar um texto com até 140 caracteres.**
+   *
+   * > Essa propriedade está depreciada e será removida na versão 23.x.x. Recomendamos utilizar a propriedade p-helper que oferece mais recursos e flexibilidade.
    */
   additionalHelpTooltip?: string;
 
   /**
-   * Define que o `listbox` e/ou tooltip (`p-additional-help-tooltip` e/ou `p-error-limit`) serão incluídos no body da
+   * Define que o `listbox` e/ou popover (`p-helper` e/ou `p-error-limit`) serão incluídos no body da
    * página e não dentro do componente. Essa opção é necessária para cenários com containers que possuem scroll ou
    * overflow escondido, garantindo o posicionamento correto de ambos próximo ao elemento.
    *
-   * > Quando utilizado com `p-additional-help-tooltip`, leitores de tela como o NVDA podem não ler o conteúdo do tooltip.
+   * > Quando utilizado com `p-helper`, leitores de tela como o NVDA podem não ler o conteúdo do popover.
    */
   appendBox?: boolean;
 
@@ -199,6 +202,9 @@ export interface PoDynamicFormField extends PoDynamicField {
 
   /** Texto de ajuda. */
   help?: string;
+
+  /** Texto simples que será apresentado como auxílio ao campo ou objeto com as definições do po-helper. */
+  helper?: string | PoHelperOptions;
 
   /** Texto exibido quando o valor do componente for *true*. */
   booleanTrue?: string;

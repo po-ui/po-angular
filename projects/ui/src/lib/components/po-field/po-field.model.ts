@@ -2,6 +2,7 @@ import { ChangeDetectorRef, Directive, EventEmitter, Input, Output } from '@angu
 import { ControlValueAccessor } from '@angular/forms';
 
 import { convertToBoolean } from '../../utils/util';
+import { PoHelperComponent, PoHelperOptions } from '../po-helper';
 
 @Directive()
 export abstract class PoFieldModel<T> implements ControlValueAccessor {
@@ -15,8 +16,7 @@ export abstract class PoFieldModel<T> implements ControlValueAccessor {
    * @optional
    *
    * @description
-   * Exibe um ícone de ajuda adicional ao `p-help`, com o texto desta propriedade no tooltip.
-   * Se o evento `p-additional-help` estiver definido, o tooltip não será exibido.
+   * Exibe um ícone de ajuda adicional, com o texto desta propriedade sendo passado para o popover do componente `po-helper`.
    * **Como boa prática, indica-se utilizar um texto com até 140 caracteres.**
    * > Requer um recuo mínimo de 8px se o componente estiver próximo à lateral da tela.
    *
@@ -29,11 +29,11 @@ export abstract class PoFieldModel<T> implements ControlValueAccessor {
    *
    * @description
    *
-   * Define que o tooltip (`p-additional-help-tooltip` e/ou `p-error-limit`) será incluído no body da página e não
+   * Define que o popover (`p-helper` e/ou `p-error-limit`) será incluído no body da página e não
    * dentro do componente. Essa opção pode ser necessária em cenários com containers que possuem scroll ou overflow
    * escondido, garantindo o posicionamento correto do tooltip próximo ao elemento.
    *
-   * > Quando utilizado com `p-additional-help-tooltip`, leitores de tela como o NVDA podem não ler o conteúdo do tooltip.
+   * > Quando utilizado com `p-helper`, leitores de tela como o NVDA podem não ler o conteúdo do popover.
    *
    * @default `false`
    */
@@ -67,7 +67,6 @@ export abstract class PoFieldModel<T> implements ControlValueAccessor {
    *
    * @description
    * Evento disparado ao clicar no ícone de ajuda adicional.
-   * Este evento ativa automaticamente a exibição do ícone de ajuda adicional ao `p-help`.
    *
    * > Essa propriedade está **depreciada** e será removida na versão `23.x.x`. Recomendamos utilizar a propriedade `p-helper` que oferece mais recursos e flexibilidade.
    */
@@ -120,7 +119,7 @@ export abstract class PoFieldModel<T> implements ControlValueAccessor {
   }
 
   emitAdditionalHelp() {
-    if (this.isAdditionalHelpEventTriggered()) {
+    if (this.label && this.isAdditionalHelpEventTriggered()) {
       this.additionalHelp.emit();
     }
   }
@@ -133,19 +132,11 @@ export abstract class PoFieldModel<T> implements ControlValueAccessor {
   }
 
   /**
-   * Método que exibe `p-additionalHelpTooltip` ou executa a ação definida em `p-additionalHelp`.
+   * Método que exibe `p-helper` ou executa a ação definida em `p-helper{eventOnClick}` ou em `p-additionalHelp`.
    * Para isso, será necessário configurar uma tecla de atalho utilizando o evento `p-keydown`.
    *
-   * > Exibe ou oculta o conteúdo do componente `po-helper` quando o componente estiver com foco e com label visível.
+   * > Exibe ou oculta o conteúdo do componente `po-helper` quando o componente estiver com foco.
    *
-   * ```
-   * <po-nome-component
-   *  #component
-   *  ...
-   *  p-additional-help-tooltip="Mensagem de ajuda complementar"
-   *  (p-keydown)="onKeyDown($event, component)"
-   * ></po-nome-component>
-   * ```
    * ```
    * // Exemplo com p-label e p-helper
    * <po-nome-component
@@ -165,8 +156,25 @@ export abstract class PoFieldModel<T> implements ControlValueAccessor {
    * }
    * ```
    */
-  showAdditionalHelp(): boolean {
+  showAdditionalHelp(helperHtmlElement?: PoHelperComponent, poHelperComponent?: string | PoHelperOptions): boolean {
     this.displayAdditionalHelp = !this.displayAdditionalHelp;
+    const helper = poHelperComponent;
+    const isHelpEvt = this.isAdditionalHelpEventTriggered();
+    if (!this.label && (helper || this.additionalHelpTooltip || isHelpEvt || helperHtmlElement)) {
+      if (isHelpEvt) {
+        this.additionalHelp.emit();
+      }
+      if (typeof helper !== 'string' && typeof helper?.eventOnClick === 'function') {
+        helper.eventOnClick();
+        return;
+      }
+      if (helperHtmlElement?.helperIsVisible()) {
+        helperHtmlElement?.closeHelperPopover();
+        return;
+      }
+      helperHtmlElement?.openHelperPopover();
+      return;
+    }
     return this.displayAdditionalHelp;
   }
 

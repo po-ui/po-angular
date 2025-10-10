@@ -6,7 +6,7 @@ import { PoRadioGroupOption } from '@po-ui/ng-components';
   standalone: false
 })
 export class SamplePoCheckboxLabsComponent implements OnInit {
-  additionalHelpTooltip: string;
+  helperText: string;
   checkbox: boolean | null;
   disabled: boolean;
   help: string;
@@ -30,7 +30,7 @@ export class SamplePoCheckboxLabsComponent implements OnInit {
   }
 
   restore() {
-    this.additionalHelpTooltip = '';
+    this.helperText = '';
     this.checkbox = undefined;
     this.disabled = false;
     this.event = undefined;

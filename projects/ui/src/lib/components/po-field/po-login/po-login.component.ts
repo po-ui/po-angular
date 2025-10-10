@@ -5,7 +5,9 @@ import {
   ElementRef,
   forwardRef,
   Input,
-  inject
+  inject,
+  OnChanges,
+  SimpleChanges
 } from '@angular/core';
 import { AbstractControl, NG_VALIDATORS, NG_VALUE_ACCESSOR } from '@angular/forms';
 
@@ -60,7 +62,7 @@ const providers = [
   providers,
   standalone: false
 })
-export class PoLoginComponent extends PoInputGeneric {
+export class PoLoginComponent extends PoInputGeneric implements OnChanges {
   id = `po-login[${uuid()}]`;
   type = 'text';
   private _noAutocompleteLogin?: boolean = true;
@@ -83,6 +85,12 @@ export class PoLoginComponent extends PoInputGeneric {
     const cd = inject(ChangeDetectorRef);
 
     super(el, cd);
+  }
+
+  ngOnChanges(changes: SimpleChanges): void {
+    if (changes.label) {
+      this.displayAdditionalHelp = false;
+    }
   }
 
   extraValidation(c: AbstractControl): { [key: string]: any } {
