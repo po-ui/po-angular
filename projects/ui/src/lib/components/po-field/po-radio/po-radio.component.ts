@@ -57,6 +57,16 @@ export class PoRadioComponent extends PoFieldModel<boolean> {
 
   @Input({ alias: 'p-required', transform: convertToBoolean }) required?: boolean;
 
+  /**
+   *
+   * Habilita a quebra automática do texto da propriedade `p-label`. Quando `p-label-text-wrap` for verdadeiro, o texto que excede
+   * o espaço disponível é transferido para a próxima linha em pontos apropriados para uma
+   * leitura clara.
+   *
+   * @default `false`
+   */
+  @Input({ alias: 'p-label-text-wrap', transform: convertToBoolean }) labelTextWrap?: boolean = false;
+
   /** Define o status do *radio* */
   @Input('p-checked') checked: boolean = false;
 

@@ -22,7 +22,7 @@ import { SamplePoLookupService } from '../sample-po-lookup.service';
 export class SamplePoLookupLabsComponent implements OnInit {
   sampleFilterService = inject(SamplePoLookupService);
 
-  additionalHelpTooltip: string;
+  helperText: string;
   columns: Array<PoLookupColumn>;
   columnsName: Array<string>;
   customLiterals: PoLookupLiterals;
@@ -128,7 +128,7 @@ export class SamplePoLookupLabsComponent implements OnInit {
   }
 
   restore() {
-    this.additionalHelpTooltip = '';
+    this.helperText = '';
     this.columnsName = ['id', 'name'];
     this.customLiterals = undefined;
     this.updateColumns();

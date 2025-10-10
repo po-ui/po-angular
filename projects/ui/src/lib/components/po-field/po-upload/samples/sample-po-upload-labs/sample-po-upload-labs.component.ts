@@ -19,7 +19,7 @@ import {
 export class SamplePoUploadLabsComponent implements OnInit {
   private fb = inject(FormBuilder);
 
-  additionalHelpTooltip: string;
+  helperText: string;
   allowedExtensions: string;
   customLiterals: PoUploadLiterals;
   dragDropHeight: number;
@@ -149,7 +149,7 @@ export class SamplePoUploadLabsComponent implements OnInit {
   }
 
   restore() {
-    this.additionalHelpTooltip = '';
+    this.helperText = '';
     this.allowedExtensions = undefined;
     this.customLiterals = undefined;
     this.dragDropHeight = undefined;

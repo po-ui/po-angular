@@ -1,7 +1,7 @@
 <po-switch
   name="switch"
   [(ngModel)]="switch"
-  [p-additional-help-tooltip]="additionalHelpTooltip"
+  [p-helper]="helperText"
   [p-disabled]="properties.includes('disabled')"
   [p-error-limit]="properties?.includes('errorLimit')"
   [p-field-error-message]="fieldErrorMessage"
@@ -35,14 +35,7 @@
 
   <po-input class="po-md-6" name="help" [(ngModel)]="help" p-label="Help"> </po-input>
 
-  <po-input
-    class="po-md-6"
-    name="additionalHelpTooltip"
-    [(ngModel)]="additionalHelpTooltip"
-    p-clean
-    p-label="Additional Help"
-  >
-  </po-input>
+  <po-input class="po-md-6" name="helperText" [(ngModel)]="helperText" p-clean p-label="Additional Help"> </po-input>
 
   <po-input
     class="po-md-6"

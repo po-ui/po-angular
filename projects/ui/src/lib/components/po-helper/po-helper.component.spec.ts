@@ -199,7 +199,7 @@ describe('PoHelperComponent', () => {
     });
 
     it('should open popover when helper is a string (Enter)', () => {
-      (component as any).helper = () => 'ajuda simples';
+      (component as any).helper = () => ({ content: 'ajuda simples' });
 
       const event = new KeyboardEvent('keydown', { code: 'Enter' });
 
@@ -229,6 +229,45 @@ describe('PoHelperComponent', () => {
 
       expect(component.popover.close).toHaveBeenCalled();
       expect(component.popover.open).not.toHaveBeenCalled();
+    });
+  });
+
+  describe('onKeyDown - eventOnClick branch', () => {
+    let popover: jasmine.SpyObj<PoPopoverComponent>;
+
+    beforeEach(() => {
+      popover = jasmine.createSpyObj<PoPopoverComponent>('Popover', ['open', 'close']);
+      (popover as any).isHidden = true;
+      component.popover = popover as any;
+      (component as any).disabled = () => false;
+    });
+
+    it('should call handleEmitEvent and return early when helper has eventOnClick (function)', () => {
+      const event = new KeyboardEvent('keydown', { code: 'Enter' });
+      const handleSpy = spyOn<any>(component, 'handleEmitEvent').and.callThrough();
+      (component as any).helper = () => ({
+        content: 'help',
+        eventOnClick: jasmine.createSpy('eventOnClick')
+      });
+
+      component.onKeyDown(event);
+      expect(handleSpy).toHaveBeenCalledWith(event);
+      expect(component.popover.open).not.toHaveBeenCalled();
+      expect(component.popover.close).not.toHaveBeenCalled();
+    });
+
+    it('should call handleEmitEvent and return early when helper has eventOnClick as an object (emit)', () => {
+      const event = new KeyboardEvent('keydown', { code: 'Enter' });
+      const handleSpy = spyOn<any>(component, 'handleEmitEvent').and.callThrough();
+      (component as any).helper = () => ({
+        content: 'help',
+        eventOnClick: { emit: jasmine.createSpy('emit') }
+      });
+
+      component.onKeyDown(event);
+      expect(handleSpy).toHaveBeenCalledWith(event);
+      expect(component.popover.open).not.toHaveBeenCalled();
+      expect(component.popover.close).not.toHaveBeenCalled();
     });
   });
 
@@ -518,6 +557,26 @@ describe('PoHelperComponent', () => {
       component.setPopoverPositionByScreen();
 
       expect((component as any).popoverPosition).toBe('right');
+    });
+  });
+
+  describe('helperIsVisible', () => {
+    it('should return falsy when popover is undefined', () => {
+      component.popover = undefined as any;
+      const visible = (component as any).helperIsVisible();
+      expect(visible).toBeFalsy();
+    });
+
+    it('should return false when popover.isHidden = true', () => {
+      component.popover = { isHidden: true } as any;
+      const visible = (component as any).helperIsVisible();
+      expect(visible).toBeFalse();
+    });
+
+    it('should return true when popover.isHidden = false', () => {
+      component.popover = { isHidden: false } as any;
+      const visible = (component as any).helperIsVisible();
+      expect(visible).toBeTrue();
     });
   });
 });

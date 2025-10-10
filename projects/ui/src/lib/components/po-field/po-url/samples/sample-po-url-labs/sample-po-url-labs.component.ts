@@ -8,7 +8,7 @@ import { PoCheckboxGroupOption, PoRadioGroupOption } from '@po-ui/ng-components'
   standalone: false
 })
 export class SamplePoUrlLabsComponent implements OnInit {
-  additionalHelpTooltip: string;
+  helperText: string;
   errorPattern: string;
   event: string;
   help: string;
@@ -47,7 +47,7 @@ export class SamplePoUrlLabsComponent implements OnInit {
   }
 
   restore() {
-    this.additionalHelpTooltip = '';
+    this.helperText = '';
     this.properties = [];
 
     this.label = undefined;

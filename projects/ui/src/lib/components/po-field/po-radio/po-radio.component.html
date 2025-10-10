@@ -12,7 +12,12 @@
       (blur)="onBlur()"
     />
     @if (label) {
-      <po-label [class.line-height-aa]="size === 'small'" [p-disabled]="disabled" [p-label]="label"></po-label>
+      <po-label
+        [p-text-wrap]="labelTextWrap"
+        [class.line-height-aa]="size === 'small'"
+        [p-disabled]="disabled"
+        [p-label]="label"
+      ></po-label>
     }
   </label>
 </div>

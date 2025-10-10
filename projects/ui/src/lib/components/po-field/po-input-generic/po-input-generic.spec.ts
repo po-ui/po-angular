@@ -656,12 +656,6 @@ describe('PoInputGeneric:', () => {
         };
       });
 
-      it('should call showAdditionalHelp when the tooltip is displayed', () => {
-        setupTest('Mensagem de apoio adicional.', true, { observed: false });
-        component.eventOnBlur(fakeEvent);
-        expect(component.showAdditionalHelp).toHaveBeenCalled();
-      });
-
       it('should not call showAdditionalHelp when tooltip is not displayed', () => {
         setupTest('Mensagem de apoio adicional.', false, { observed: false });
         component.eventOnBlur(fakeEvent);

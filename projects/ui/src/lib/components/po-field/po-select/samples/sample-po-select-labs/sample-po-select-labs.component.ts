@@ -10,7 +10,7 @@ import { PoCheckboxGroupOption, PoRadioGroupOption, PoSelectOption, PoSelectOpti
 export class SamplePoSelectLabsComponent implements OnInit {
   private readonly cdr = inject(ChangeDetectorRef);
 
-  additionalHelpTooltip: string;
+  helperText: string;
   event: string;
   help: string;
   label: string;
@@ -60,7 +60,7 @@ export class SamplePoSelectLabsComponent implements OnInit {
   }
 
   restore() {
-    this.additionalHelpTooltip = '';
+    this.helperText = '';
     this.event = '';
     this.help = undefined;
     this.label = undefined;

@@ -18,7 +18,7 @@ import { PoKeyCodeEnum } from './../../../enums/po-key-code.enum';
 
 import { PoCheckboxBaseComponent } from './po-checkbox-base.component';
 import { setHelperSettings, updateTooltip } from '../../../utils/util';
-import { PoHelperComponent, PoHelperOptions } from '../../po-helper';
+import { PoHelperComponent } from '../../po-helper';
 
 /**
  * @docsExtends PoCheckboxBaseComponent
@@ -58,7 +58,6 @@ export class PoCheckboxComponent extends PoCheckboxBaseComponent implements Afte
 
   private _iconToken: { [key: string]: string };
 
-  helperSettings: PoHelperOptions;
   showTip = false;
 
   @ViewChild('checkboxLabel', { static: false }) checkboxLabel: ElementRef;
@@ -103,14 +102,10 @@ export class PoCheckboxComponent extends PoCheckboxBaseComponent implements Afte
 
   onBlur() {
     this.onTouched?.();
-    if (this.getAdditionalHelpTooltip() && this.displayAdditionalHelp) {
-      this.showAdditionalHelp();
-    }
     this.blur.emit();
   }
 
   ngAfterViewInit() {
-    this.helperSettings = this.setHelper(this.label, this.additionalHelpTooltip).helperSettings;
     this.handleLabelTooltip();
     if (this.autoFocus) {
       this.focus();
@@ -127,8 +122,8 @@ export class PoCheckboxComponent extends PoCheckboxBaseComponent implements Afte
 
   ngOnChanges(changes: SimpleChanges): void {
     if (changes.label || changes.additionalHelpTooltip || changes.helper || changes.size) {
+      this.displayAdditionalHelp = false;
       queueMicrotask(() => this.handleLabelTooltip());
-      this.helperSettings = this.setHelper(this.label, this.additionalHelpTooltip).helperSettings;
       this.changeDetector.detectChanges();
     }
   }
@@ -138,7 +133,7 @@ export class PoCheckboxComponent extends PoCheckboxBaseComponent implements Afte
   }
 
   emitAdditionalHelp() {
-    if (this.isAdditionalHelpEventTriggered()) {
+    if (this.label && this.isAdditionalHelpEventTriggered()) {
       this.additionalHelp.emit();
     }
   }
@@ -162,19 +157,11 @@ export class PoCheckboxComponent extends PoCheckboxBaseComponent implements Afte
   }
 
   /**
-   * Método que exibe `p-additionalHelpTooltip` ou executa a ação definida em `p-additionalHelp`.
+   * Método que exibe `p-helper` ou executa a ação definida em `p-helper{eventOnClick}` ou em `p-additionalHelp`.
    * Para isso, será necessário configurar uma tecla de atalho utilizando o evento `p-keydown`.
    *
-   * > Exibe ou oculta o conteúdo do componente `po-helper` quando o componente estiver com foco e com label visível.
+   * > Exibe ou oculta o conteúdo do componente `po-helper` quando o componente estiver com foco.
    *
-   * ```
-   * <po-checkbox
-   *  #checkbox
-   *  ...
-   *  p-additional-help-tooltip="Mensagem de ajuda complementar"
-   *  (p-keydown)="onKeyDown($event, checkbox)"
-   * ></po-checkbox>
-   * ```
    * ```
    * //Exemplo com label e p-helper
    * <po-checkbox
@@ -196,16 +183,22 @@ export class PoCheckboxComponent extends PoCheckboxBaseComponent implements Afte
    */
   showAdditionalHelp(): boolean {
     this.displayAdditionalHelp = !this.displayAdditionalHelp;
-
-    if (this.displayAdditionalHelp && this.helperEl) {
+    if (this.helperEl?.helperIsVisible()) {
+      this.helperEl?.closeHelperPopover();
+      return;
+    }
+    if (this.helperEl) {
       const helper = this.poHelperComponent();
+      const isHelpEvt = this.isAdditionalHelpEventTriggered();
+      if (isHelpEvt) {
+        this.additionalHelp.emit();
+        return;
+      }
       if (helper && typeof helper !== 'string' && helper.eventOnClick) {
         helper.eventOnClick();
         return;
       }
       this.helperEl?.openHelperPopover();
-    } else if (!this.displayAdditionalHelp && this.helperEl) {
-      this.helperEl?.closeHelperPopover();
     }
     return this.displayAdditionalHelp;
   }

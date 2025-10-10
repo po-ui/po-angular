@@ -1,3 +1,4 @@
+@let poHelper = setHelper(label, additionalHelpTooltip);
 <po-field-container
   [p-disabled]="isDisabled"
   [p-id]="id"
@@ -5,8 +6,8 @@
   [p-optional]="optional"
   [p-required]="required"
   [p-show-required]="showRequired"
-  [p-show-helper]="displayAdditionalHelp"
-  [p-helper]="setHelper(this.label, this.additionalHelpTooltip).helperSettings"
+  [p-helper]="label ? poHelper.helperSettings : undefined"
+  [p-show-helper]="label ? displayAdditionalHelp : undefined"
   [p-text-wrap]="labelTextWrap()"
 >
   <div class="po-field-container-content">
@@ -57,7 +58,6 @@
           [p-disabled]="isDisabled"
           [p-label]="selectFileButtonLabel"
           [p-size]="size"
-          (p-blur)="onBlur()"
           (p-click)="selectFiles()"
           (keydown)="onKeyDown($event)"
         >
@@ -203,16 +203,29 @@
       }
     </div>
   </div>
-  <po-field-container-bottom
-    [p-additional-help-tooltip]="getAdditionalHelpTooltip()"
-    [p-append-in-body]="appendBox"
-    [p-help]="help"
-    [p-disabled]="disabled"
-    [p-hide-additional-help-by-label]="setHelper(this.label, this.additionalHelpTooltip).hideAdditionalHelp"
-    [p-show-additional-help]="displayAdditionalHelp"
-    [p-show-additional-help-icon]="showAdditionalHelpIcon()"
-    (p-additional-help)="emitAdditionalHelp()"
-  ></po-field-container-bottom>
+
+  <div class="po-row po-footer-group">
+    <po-field-container-bottom
+      [p-additional-help-tooltip]="getAdditionalHelpTooltip()"
+      [p-append-in-body]="appendBox"
+      [p-help]="help"
+      [p-disabled]="disabled"
+      [p-hide-additional-help-by-label]="poHelper.hideAdditionalHelp"
+      [p-show-additional-help]="displayAdditionalHelp"
+      [p-show-additional-help-icon]="showAdditionalHelpIcon()"
+      (p-additional-help)="emitAdditionalHelp()"
+    ></po-field-container-bottom>
+    @if ((!label && poHelperComponent()) || (!label && poHelper.hideAdditionalHelp)) {
+      <po-helper
+        #helperEl
+        [p-size]="size"
+        [p-helper]="poHelper.helperSettings"
+        [p-disabled]="disabled"
+        [p-append-in-body]="appendBox"
+      >
+      </po-helper>
+    }
+  </div>
 </po-field-container>
 
 <po-modal

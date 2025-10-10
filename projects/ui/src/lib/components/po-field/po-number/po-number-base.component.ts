@@ -36,10 +36,6 @@ export abstract class PoNumberBaseComponent extends PoInputGeneric {
     const target = event.target;
     this.invalidInputValueOnBlur = target.value === '' && !target.validity.valid;
 
-    if (this.getAdditionalHelpTooltip() && this.displayAdditionalHelp) {
-      this.showAdditionalHelp();
-    }
-
     if (this.invalidInputValueOnBlur) {
       this.callOnChange('Valor Inválido');
     }
