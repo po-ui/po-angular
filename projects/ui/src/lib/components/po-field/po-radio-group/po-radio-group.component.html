@@ -7,32 +7,36 @@
   [p-show-required]="showRequired"
   [p-helper]="label ? poHelper.helperSettings : undefined"
   [p-show-helper]="label ? displayAdditionalHelp : undefined"
+  [p-size]="size"
   [p-text-wrap]="labelTextWrap()"
 >
-  <div class="po-field-container-content" [attr.name]="name" [attr.p-size]="size">
-    <div #inp class="po-radio-group" role="radiogroup" [attr.aria-label]="label" [attr.data-options]="options.length">
-      @for (option of options; track option) {
-        <div class="po-radio-group-item po-md-{{ mdColumns }} po-lg-{{ columns }}">
-          <po-radio
-            #inputRadio
-            [name]="name"
-            [p-checked]="value === option.value"
-            [p-disabled]="option.disabled === true || disabled"
-            [p-label]="option.label"
-            [p-label-text-wrap]="true"
-            [p-required]="required"
-            [p-size]="size"
-            [p-value]="option.value"
-            (p-blur)="onBlur(inputRadio)"
-            (keydown)="onKeyDown($event, inputRadio)"
-            (keyup)="onKeyUp($event, option.value)"
-            (click)="eventClick(option.value, option.disabled === true || disabled)"
-          >
-          </po-radio>
-        </div>
-      }
+  <div #inp role="radiogroup" [attr.aria-label]="label" [attr.data-options]="options.length">
+    <div class="po-field-container-content" [attr.p-size]="size">
+      <div class="po-radio-group" [attr.name]="name" [attr.p-size]="size">
+        @for (option of options; track option) {
+          <div class="po-radio-group-item po-md-{{ mdColumns }} po-lg-{{ columns }}">
+            <po-radio
+              #inputRadio
+              [name]="name"
+              [p-checked]="value === option.value"
+              [p-disabled]="option.disabled === true || disabled"
+              [p-label]="option.label"
+              [p-label-text-wrap]="true"
+              [p-required]="required"
+              [p-size]="size"
+              [p-value]="option.value"
+              (p-blur)="onBlur(inputRadio)"
+              (keydown)="onKeyDown($event, inputRadio)"
+              (keyup)="onKeyUp($event, option.value)"
+              (click)="eventClick(option.value, option.disabled === true || disabled)"
+            >
+            </po-radio>
+          </div>
+        }
+      </div>
     </div>
   </div>
+
   <div class="po-row po-footer-group">
     <po-field-container-bottom
       [p-additional-help-tooltip]="getAdditionalHelpTooltip()"
@@ -44,6 +48,7 @@
       [p-hide-additional-help-by-label]="poHelper.hideAdditionalHelp"
       [p-show-additional-help]="displayAdditionalHelp"
       [p-show-additional-help-icon]="showAdditionalHelpIcon()"
+      [p-size]="size"
       (p-additional-help)="emitAdditionalHelp()"
     ></po-field-container-bottom>
     @if ((!label && poHelperComponent()) || (!label && poHelper.hideAdditionalHelp)) {

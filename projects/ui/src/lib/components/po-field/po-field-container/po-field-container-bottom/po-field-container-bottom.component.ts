@@ -1,20 +1,17 @@
 import {
   booleanAttribute,
   ChangeDetectionStrategy,
-  ChangeDetectorRef,
   Component,
-  ElementRef,
   EventEmitter,
-  HostListener,
-  Input,
   input,
+  Input,
   OnChanges,
   Output,
   SimpleChanges,
   ViewChild
 } from '@angular/core';
-import { convertToBoolean } from '../../../../utils/util';
 import { PoTooltipDirective } from '../../../../directives';
+import { convertToBoolean } from '../../../../utils/util';
 
 /**
  * @docsPrivate
@@ -60,6 +57,9 @@ export class PoFieldContainerBottomComponent implements OnChanges {
 
   /** Exibe o ícone de ajuda adicional. */
   @Input('p-show-additional-help-icon') showAdditionalHelpIcon: boolean = false;
+
+  /** Define o tamanho do componente. */
+  @Input('p-size') size?: string;
 
   /** Evento disparado ao clicar no ícone de ajuda adicional. */
   /** @deprecated v23.x.x */

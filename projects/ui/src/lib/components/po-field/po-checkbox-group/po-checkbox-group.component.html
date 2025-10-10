@@ -7,10 +7,11 @@
   [p-show-required]="showRequired"
   [p-helper]="label ? poHelper.helperSettings : undefined"
   [p-show-helper]="label ? displayAdditionalHelp : undefined"
+  [p-size]="size"
   [p-text-wrap]="labelTextWrap()"
 >
-  <div class="po-field-container-content" [attr.name]="name" [attr.p-size]="size">
-    <div role="group" [attr.aria-label]="label" class="po-checkbox-group-content">
+  <div role="group" class="po-checkbox-group-content" [attr.aria-label]="label" [attr.p-size]="size">
+    <div class="po-field-container-content" [attr.name]="name" [attr.p-size]="size">
       <ul class="po-row">
         @for (option of checkboxGroupOptionsView; track trackByFn($index)) {
           <li
@@ -46,6 +47,7 @@
       [p-hide-additional-help-by-label]="poHelper.hideAdditionalHelp"
       [p-show-additional-help]="displayAdditionalHelp"
       [p-show-additional-help-icon]="showAdditionalHelpIcon()"
+      [p-size]="size"
       (p-additional-help)="emitAdditionalHelp()"
     ></po-field-container-bottom>
     @if ((!label && poHelperComponent()) || (!label && poHelper.hideAdditionalHelp)) {

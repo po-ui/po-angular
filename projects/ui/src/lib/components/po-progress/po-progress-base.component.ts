@@ -1,4 +1,4 @@
-import { Directive, EventEmitter, Input, Output, TemplateRef } from '@angular/core';
+import { Directive, EventEmitter, HostBinding, Input, Output, TemplateRef } from '@angular/core';
 
 import { convertToBoolean, convertToInt, getDefaultSizeFn, validateSizeFn } from '../../utils/util';
 
@@ -283,7 +283,9 @@ export class PoProgressBaseComponent {
    *
    * @default `medium`
    */
-  @Input('p-size-actions') set sizeActions(value: string) {
+  @HostBinding('attr.p-size-actions')
+  @Input('p-size-actions')
+  set sizeActions(value: string) {
     this._sizeActions = validateSizeFn(value, PoFieldSize);
   }
 

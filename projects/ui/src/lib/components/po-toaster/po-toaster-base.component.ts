@@ -1,4 +1,4 @@
-import { Directive, EventEmitter, Input, Output } from '@angular/core';
+import { Directive, EventEmitter, HostBinding, Input, Output } from '@angular/core';
 import { PoFieldSize } from '../../enums/po-field-size.enum';
 import { convertToBoolean, getDefaultSizeFn, validateSizeFn } from '../../utils/util';
 import { PoToasterMode } from './enum/po-toaster-mode.enum';
@@ -131,7 +131,9 @@ export abstract class PoToasterBaseComponent {
    *
    * @default `medium`
    */
-  @Input('p-size-actions') set sizeActions(value: string) {
+  @HostBinding('attr.p-size-actions')
+  @Input('p-size-actions')
+  set sizeActions(value: string) {
     this._sizeActions = validateSizeFn(value, PoFieldSize);
   }
 

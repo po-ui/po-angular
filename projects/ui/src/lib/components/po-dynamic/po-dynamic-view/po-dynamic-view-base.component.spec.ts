@@ -6,6 +6,7 @@ import { PoTimePipe } from '../../../pipes/po-time/po-time.pipe';
 import { expectArraysSameOrdering, expectPropertiesValues } from '../../../util-test/util-expect.spec';
 
 import { Observable, mergeMap, of, timer } from 'rxjs';
+import { PoThemeA11yEnum } from '../../../services';
 import { PoComboOption } from '../../po-field';
 import { PoComboFilter } from '../../po-field/po-combo/interfaces/po-combo-filter.interface';
 import { PoComboFilterService } from '../../po-field/po-combo/po-combo-filter.service';
@@ -162,6 +163,60 @@ describe('PoDynamicViewBaseComponent:', () => {
       const invalidValues = [undefined, null, 2, 'string', 0, NaN];
 
       expectPropertiesValues(component, 'showAllValue', invalidValues, false);
+    });
+
+    describe('p-components-size', () => {
+      beforeEach(() => {
+        document.documentElement.removeAttribute('data-a11y');
+        localStorage.removeItem('po-default-size');
+      });
+
+      afterEach(() => {
+        document.documentElement.removeAttribute('data-a11y');
+        localStorage.removeItem('po-default-size');
+      });
+
+      it('should set property with valid values for accessibility level is AA', () => {
+        document.documentElement.setAttribute('data-a11y', PoThemeA11yEnum.AA);
+
+        component.componentsSize = 'small';
+        expect(component.componentsSize).toBe('small');
+
+        component.componentsSize = 'medium';
+        expect(component.componentsSize).toBe('medium');
+      });
+
+      it('should set property with valid values for accessibility level is AAA', () => {
+        document.documentElement.setAttribute('data-a11y', PoThemeA11yEnum.AAA);
+
+        component.componentsSize = 'small';
+        expect(component.componentsSize).toBe('medium');
+
+        component.componentsSize = 'medium';
+        expect(component.componentsSize).toBe('medium');
+      });
+
+      it('should return small when accessibility is AA and getA11yDefaultSize is small', () => {
+        document.documentElement.setAttribute('data-a11y', PoThemeA11yEnum.AA);
+        localStorage.setItem('po-default-size', 'small');
+
+        component['_componentsSize'] = undefined;
+        expect(component.componentsSize).toBe('small');
+      });
+
+      it('should return medium when accessibility is AA and getA11yDefaultSize is medium', () => {
+        document.documentElement.setAttribute('data-a11y', PoThemeA11yEnum.AA);
+        localStorage.setItem('po-default-size', 'medium');
+
+        component['_componentsSize'] = undefined;
+        expect(component.componentsSize).toBe('medium');
+      });
+
+      it('should return medium when accessibility is AAA, regardless of getA11yDefaultSize', () => {
+        document.documentElement.setAttribute('data-a11y', PoThemeA11yEnum.AAA);
+        component['_componentsSize'] = undefined;
+        expect(component.componentsSize).toBe('medium');
+      });
     });
   });
 

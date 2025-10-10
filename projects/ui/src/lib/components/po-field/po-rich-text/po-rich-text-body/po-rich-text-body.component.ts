@@ -56,6 +56,8 @@ export class PoRichTextBodyComponent implements OnInit, OnDestroy {
 
   @Output('p-selected-link') selectedLink = new EventEmitter<any>();
 
+  @Input('p-size') size: string;
+
   @Output('p-shortcut-command') shortcutCommand = new EventEmitter<any>();
 
   @Output('p-value') value = new EventEmitter<any>();

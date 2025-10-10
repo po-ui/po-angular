@@ -14,8 +14,8 @@ import {
 
 import { PoLanguageService } from '../../../services/po-language/po-language.service';
 import { convertToBoolean, updateTooltip } from '../../../utils/util';
-import { poFieldContainerLiterals } from './po-field-container-literals';
 import { PoHelperComponent, PoHelperOptions } from '../../po-helper';
+import { poFieldContainerLiterals } from './po-field-container-literals';
 
 /**
  * @docsPrivate
@@ -88,6 +88,9 @@ export class PoFieldContainerComponent implements OnInit, OnChanges {
 
   /** Define se a indicação de campo obrigatório será exibida. */
   @Input('p-show-required') showRequired: boolean = false;
+
+  /** Define o tamanho do componente. */
+  @Input('p-size') size?: string;
 
   constructor(private readonly cdr: ChangeDetectorRef) {
     const languageService = inject(PoLanguageService);

@@ -8,10 +8,10 @@
   [p-show-required]="showRequired"
   [p-helper]="label ? poHelper.helperSettings : undefined"
   [p-show-helper]="label ? displayAdditionalHelp : undefined"
+  [p-size]="size"
   [p-text-wrap]="labelTextWrap()"
-  [attr.p-size]="size"
 >
-  <div class="po-field-container-content">
+  <div class="po-field-container-content" [attr.p-size]="size">
     <div class="po-upload" [attr.p-size]="size">
       <input
         #inputFile
@@ -214,6 +214,7 @@
       [p-hide-additional-help-by-label]="poHelper.hideAdditionalHelp"
       [p-show-additional-help]="displayAdditionalHelp"
       [p-show-additional-help-icon]="showAdditionalHelpIcon()"
+      [p-size]="size"
       (p-additional-help)="emitAdditionalHelp()"
     ></po-field-container-bottom>
     @if ((!label && poHelperComponent()) || (!label && poHelper.hideAdditionalHelp)) {

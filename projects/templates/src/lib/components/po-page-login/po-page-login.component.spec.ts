@@ -1065,7 +1065,7 @@ describe('PoPageLoginComponent: ', () => {
       expect(divs.length).toBe(2);
       divs.forEach(div => {
         expect(div.outerHTML).toContain('ICON_EXCLAMATION');
-        expect(div.outerHTML).toContain('po-field-container-error-text');
+        expect(div.outerHTML).toContain('po-field-error-message');
       });
     });
 

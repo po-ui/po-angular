@@ -1,4 +1,4 @@
-import { Directive, EventEmitter, Input, OnDestroy, Output } from '@angular/core';
+import { Directive, EventEmitter, HostBinding, Input, OnDestroy, Output } from '@angular/core';
 import { Router } from '@angular/router';
 import { Subscription } from 'rxjs';
 
@@ -385,7 +385,9 @@ export abstract class PoPageLoginBaseComponent implements OnDestroy {
    *
    * @default `medium`
    */
-  @Input('p-components-size') set componentsSize(value: string) {
+  @HostBinding('attr.p-components-size')
+  @Input('p-components-size')
+  set componentsSize(value: string) {
     this._componentsSize = validateSizeFn(value);
   }
 

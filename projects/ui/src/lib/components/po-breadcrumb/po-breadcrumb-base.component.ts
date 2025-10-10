@@ -1,5 +1,7 @@
-import { Input, Directive } from '@angular/core';
+import { Directive, HostBinding, Input } from '@angular/core';
 
+import { PoFieldSize } from '../../enums/po-field-size.enum';
+import { getDefaultSizeFn, validateSizeFn } from '../../utils/util';
 import { PoBreadcrumbItem } from './po-breadcrumb-item.interface';
 
 /**
@@ -113,6 +115,7 @@ export class PoBreadcrumbBaseComponent {
   protected resizeListener: () => void;
 
   private _items: Array<PoBreadcrumbItem> = [];
+  private _size?: string = undefined;
 
   /**
    * @description
@@ -134,6 +137,28 @@ export class PoBreadcrumbBaseComponent {
 
   get items() {
     return this._items;
+  }
+
+  /**
+   * @optional
+   *
+   * @description
+   *
+   * Define o tamanho do componente entre `small` ou `medium`.
+   *
+   * > Caso a acessibilidade AA não esteja configurada, o tamanho `medium` será mantido.
+   * Para mais detalhes, consulte a documentação do [po-theme](https://po-ui.io/documentation/po-theme).
+   *
+   * @default `medium`
+   */
+  @HostBinding('attr.p-size')
+  @Input('p-size')
+  set size(value: string) {
+    this._size = validateSizeFn(value, PoFieldSize);
+  }
+
+  get size(): string {
+    return this._size ?? getDefaultSizeFn(PoFieldSize);
   }
 
   private transformToArrayPopup(items: Array<PoBreadcrumbItem>) {

@@ -1,4 +1,4 @@
-import { Directive, EventEmitter, Input, Output } from '@angular/core';
+import { Directive, EventEmitter, HostBinding, Input, Output } from '@angular/core';
 
 import { PoFieldSize } from '../../enums/po-field-size.enum';
 import { poLocaleDefault } from '../../services/po-language/po-language.constant';
@@ -133,7 +133,9 @@ export class PoListViewBaseComponent {
    *
    * @default `medium`
    */
-  @Input('p-components-size') set componentsSize(value: string) {
+  @HostBinding('attr.p-components-size')
+  @Input('p-components-size')
+  set componentsSize(value: string) {
     this._componentsSize = validateSizeFn(value, PoFieldSize);
   }
 

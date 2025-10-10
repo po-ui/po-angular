@@ -1,5 +1,5 @@
 @if (visibleFields.length) {
-  <div class="po-row" [class.po-dynamic]="hasContainers">
+  <div class="po-row po-dynamic-view" [class.po-dynamic]="hasContainers">
     <ng-container
       *ngTemplateOutlet="
         hasContainers ? poContentContainer : poContent;
@@ -33,6 +33,7 @@
     [ngClass]="field.cssClass"
     [class.po-info-value-pre]="textWrap && containsLineBreak(setFieldValue(field))"
     [p-label]="field.label"
+    [p-size]="componentsSize"
     [p-value]="setFieldValue(field)"
   >
   </po-info

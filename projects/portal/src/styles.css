@@ -10,7 +10,7 @@
 
 body {
   background-color: #fafbfb;
-  color: #333;
+  color: var(--color-neutral-dark-90);
 }
 
 html.potheme-dark-AA #logo-totvs,
@@ -255,7 +255,7 @@ pre code {
 }
 
 .docs-sample-container {
-  background: var(--color-neutral-light-00);
+  background: var(--color-neutral-light-05);
   box-shadow: 0 10px 6px -6px rgba(0, 0, 0, 0.2);
   -moz-box-shadow: 0 10px 6px -6px rgba(0, 0, 0, 0.2);
   -webkit-box-shadow: 0 10px 6px -6px rgba(0, 0, 0, 0.2);
@@ -633,7 +633,7 @@ blockquote {
 }
 
 .app-portal-home .po-page .po-page-content {
-  padding: 0;
+  padding: 0 0 4.5rem;
 }
 
 .guides-grid-system-box {

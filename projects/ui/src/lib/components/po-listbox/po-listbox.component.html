@@ -3,6 +3,7 @@
   class="po-listbox"
   [class.po-listbox-check]="type === 'check' || type === 'option'"
   [attr.data-type]="type"
+  [attr.p-size]="size"
   [hidden]="visible"
 >
   <div #popupHeaderContainer>
@@ -99,13 +100,13 @@
 
       @if (footerActionListbox) {
         @if (placeholderListbox) {
-          <div class="po-item-list" [class.po-item-list-aa]="size === 'small'" aria-hidden="true">
+          <div class="po-item-list" aria-hidden="true">
             <span>{{ placeholderListbox }}</span>
           </div>
         }
 
         @if (!placeholderListbox && !items.length) {
-          <div class="po-item-list" [class.po-item-list-aa]="size === 'small'" aria-hidden="true">
+          <div class="po-item-list" aria-hidden="true">
             <span>{{ literals.noItems }}</span>
           </div>
         }

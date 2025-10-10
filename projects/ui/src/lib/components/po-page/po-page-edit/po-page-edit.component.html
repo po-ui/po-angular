@@ -1,7 +1,7 @@
 <po-page>
   <!-- HEADER -->
   @if (hasPageHeader()) {
-    <po-page-header [p-breadcrumb]="breadcrumb" [p-title]="title" [p-subtitle]="subtitle">
+    <po-page-header [p-breadcrumb]="breadcrumb" [p-size]="componentsSize" [p-subtitle]="subtitle" [p-title]="title">
       <!-- OPERATIONS -->
       @if (hasAnyAction()) {
         <div class="po-page-header-actions">

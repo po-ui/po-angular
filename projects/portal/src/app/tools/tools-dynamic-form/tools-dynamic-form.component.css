@@ -7,3 +7,8 @@
   background-color: #060402c7;
   color: #f7f6f5;
 }
+
+po-button {
+  margin-top: auto;
+  padding-bottom: var(--spacing-xs);
+}

@@ -12,6 +12,7 @@
         [p-show-required]="showRequired"
         [p-helper]="label ? poHelper.helperSettings : undefined"
         [p-show-helper]="label ? displayAdditionalHelp : undefined"
+        [p-size]="size"
         [p-text-wrap]="labelTextWrap()"
       >
         <div
@@ -19,6 +20,7 @@
           cdkOverlayOrigin
           #trigger="cdkOverlayOrigin"
           class="po-field-container-content po-combo-container-content"
+          [attr.p-size]="size"
         >
           <div class="po-combo-container-wrapper">
             @if (icon) {
@@ -57,6 +59,7 @@
               [placeholder]="disabled ? '' : placeholder"
               [required]="required"
               [attr.data-append-in-body]="appendBox"
+              [attr.p-size]="size"
               (click)="toggleComboVisibility()"
               (keyup)="onKeyUp($event)"
               (blur)="onBlur($event)"
@@ -124,6 +127,7 @@
           [p-hide-additional-help-by-label]="poHelper.hideAdditionalHelp"
           [p-show-additional-help]="displayAdditionalHelp"
           [p-show-additional-help-icon]="showAdditionalHelpIcon()"
+          [p-size]="size"
           (p-additional-help)="emitAdditionalHelp()"
         ></po-field-container-bottom>
       </po-field-container>

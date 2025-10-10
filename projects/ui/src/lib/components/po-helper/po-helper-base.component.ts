@@ -1,4 +1,4 @@
-import { Component, input } from '@angular/core';
+import { Component, HostBinding, input } from '@angular/core';
 import { PoHelperOptions } from './interfaces/po-helper.interface';
 /**
  * @description
@@ -102,6 +102,7 @@ export class PoHelperBaseComponent {
    *
    * @default `medium`
    */
+  @HostBinding('attr.p-size')
   size = input<string>(undefined, { alias: 'p-size' });
 
   /**

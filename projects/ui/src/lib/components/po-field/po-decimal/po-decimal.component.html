@@ -8,9 +8,10 @@
   [p-show-required]="showRequired"
   [p-helper]="label ? poHelper.helperSettings : undefined"
   [p-show-helper]="label ? displayAdditionalHelp : undefined"
+  [p-size]="size"
   [p-text-wrap]="labelTextWrap()"
 >
-  <div class="po-field-container-content">
+  <div class="po-field-container-content po-field-container-input" [attr.p-size]="size">
     @if (icon) {
       <div class="po-field-icon-container-left">
         <po-icon
@@ -82,6 +83,7 @@
       [p-hide-additional-help-by-label]="poHelper.hideAdditionalHelp"
       [p-show-additional-help]="displayAdditionalHelp"
       [p-show-additional-help-icon]="showAdditionalHelpIcon()"
+      [p-size]="size"
       (p-additional-help)="emitAdditionalHelp()"
     ></po-field-container-bottom>
   }

@@ -12,6 +12,7 @@
         [p-show-required]="showRequired"
         [p-helper]="label ? poHelper.helperSettings : undefined"
         [p-show-helper]="label ? displayAdditionalHelp : undefined"
+        [p-size]="size"
         [p-text-wrap]="labelTextWrap()"
       >
         <div
@@ -19,6 +20,7 @@
           #trigger="cdkOverlayOrigin"
           class="po-field-container-content"
           [class.po-multiselect-show]="dropdownOpen"
+          [attr.p-size]="size"
         >
           <div
             #inputElement
@@ -95,6 +97,7 @@
           [p-hide-additional-help-by-label]="poHelper.hideAdditionalHelp"
           [p-show-additional-help]="displayAdditionalHelp"
           [p-show-additional-help-icon]="showAdditionalHelpIcon()"
+          [p-size]="size"
           (p-additional-help)="emitAdditionalHelp()"
         ></po-field-container-bottom>
       </po-field-container>
