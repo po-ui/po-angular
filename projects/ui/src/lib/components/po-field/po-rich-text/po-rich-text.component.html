@@ -6,6 +6,7 @@
   [p-show-required]="showRequired"
   [p-helper]="label ? poHelper.helperSettings : undefined"
   [p-show-helper]="label ? displayAdditionalHelp : undefined"
+  [p-size]="size"
   [p-text-wrap]="labelTextWrap()"
 >
   <div class="po-field-container-content" [attr.p-size]="size">
@@ -16,6 +17,7 @@
       [p-model-value]="value"
       [p-placeholder]="placeholder"
       [p-readonly]="readonly"
+      [p-size]="size"
       (p-change)="onChangeValue($event)"
       (p-commands)="richTextToolbar?.setButtonsStates($event)"
       (p-selected-link)="richTextToolbar?.selectedLink($event)"
@@ -47,6 +49,7 @@
         [p-error-limit]="errorLimit"
         [p-error-pattern]="errorMsg"
         [p-hide-additional-help-by-label]="poHelper.hideAdditionalHelp"
+        [p-size]="size"
       ></po-field-container-bottom>
     }
     @if ((!label && poHelperComponent()) || (!label && poHelper.hideAdditionalHelp)) {

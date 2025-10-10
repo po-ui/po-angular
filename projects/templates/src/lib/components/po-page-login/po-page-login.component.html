@@ -75,7 +75,7 @@
           @for (error of allLoginErrors; track error) {
             <div class="po-field-container-bottom-text-error po-field-container-error-item">
               <po-icon p-icon="ICON_EXCLAMATION"></po-icon>
-              <span class="po-field-container-error-text">{{ error }}</span>
+              <span class="po-field-error-message">{{ error }}</span>
             </div>
           }
         </div>
@@ -120,7 +120,7 @@
           @for (error of allPasswordErrors; track error) {
             <div class="po-field-container-bottom-text-error po-field-container-error-item">
               <po-icon p-icon="ICON_EXCLAMATION"></po-icon>
-              <span class="po-field-container-error-text">{{ error }}</span>
+              <span class="po-field-error-message">{{ error }}</span>
             </div>
           }
         </div>

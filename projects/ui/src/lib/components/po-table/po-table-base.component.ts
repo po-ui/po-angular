@@ -1,4 +1,13 @@
-import { Directive, EventEmitter, Input, OnChanges, OnDestroy, Output, SimpleChanges } from '@angular/core';
+import {
+  Directive,
+  EventEmitter,
+  HostBinding,
+  Input,
+  OnChanges,
+  OnDestroy,
+  Output,
+  SimpleChanges
+} from '@angular/core';
 import { Observable, Subscription } from 'rxjs';
 
 import { PoDateService } from '../../services/po-date/po-date.service';
@@ -536,7 +545,9 @@ export abstract class PoTableBaseComponent implements OnChanges, OnDestroy {
    *
    * @default `medium`
    */
-  @Input('p-components-size') set componentsSize(value: string) {
+  @HostBinding('attr.p-components-size')
+  @Input('p-components-size')
+  set componentsSize(value: string) {
     this._componentsSize = validateSizeFn(value, PoFieldSize);
   }
 

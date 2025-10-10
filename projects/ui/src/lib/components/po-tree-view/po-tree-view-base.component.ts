@@ -1,4 +1,4 @@
-import { Directive, EventEmitter, Input, Output } from '@angular/core';
+import { Directive, EventEmitter, HostBinding, Input, Output } from '@angular/core';
 
 import { convertToBoolean, convertToInt, getDefaultSizeFn, validateSizeFn } from '../../utils/util';
 
@@ -89,7 +89,9 @@ export class PoTreeViewBaseComponent {
    *
    * @default `medium`
    */
-  @Input('p-components-size') set componentsSize(value: string) {
+  @HostBinding('attr.p-components-size')
+  @Input('p-components-size')
+  set componentsSize(value: string) {
     this._componentsSize = validateSizeFn(value, PoFieldSize);
   }
 

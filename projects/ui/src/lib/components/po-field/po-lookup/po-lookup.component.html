@@ -11,10 +11,11 @@
       [p-show-required]="showRequired"
       [p-helper]="label ? poHelper.helperSettings : undefined"
       [p-show-helper]="label ? displayAdditionalHelp : undefined"
+      [p-size]="size"
       [p-text-wrap]="labelTextWrap()"
     >
       @if (!disclaimers.length) {
-        <div class="po-field-container-content po-lookup" [class.po-lookup-disabled]="disabled">
+        <div class="po-field-container-content po-lookup" [class.po-lookup-disabled]="disabled" [attr.p-size]="size">
           <div class="po-search-container-wrapper">
             <input
               #inp
@@ -76,7 +77,7 @@
           </div>
         </div>
       } @else {
-        <div class="po-field-container-content po-lookup" [class.po-lookup-disabled]="disabled">
+        <div class="po-field-container-content po-lookup" [class.po-lookup-disabled]="disabled" [attr.p-size]="size">
           <div class="po-search-container-wrapper">
             <div
               #inp
@@ -155,6 +156,7 @@
         [p-hide-additional-help-by-label]="poHelper.hideAdditionalHelp"
         [p-show-additional-help]="label ? displayAdditionalHelp : undefined"
         [p-show-additional-help-icon]="showAdditionalHelpIcon()"
+        [p-size]="size"
         (p-additional-help)="emitAdditionalHelp()"
       ></po-field-container-bottom>
     </po-field-container>

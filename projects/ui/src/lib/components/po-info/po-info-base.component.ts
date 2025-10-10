@@ -1,6 +1,8 @@
 import { Input, Directive } from '@angular/core';
 
 import { PoInfoOrientation } from './po-info-orietation.enum';
+import { getDefaultSizeFn, validateSizeFn } from '../../utils/util';
+import { PoFieldSize } from '../../enums/po-field-size.enum';
 
 const poInfoOrientationDefault = PoInfoOrientation.Vertical;
 
@@ -25,6 +27,7 @@ export class PoInfoBaseComponent {
 
   private _labelSize: number;
   private _orientation: PoInfoOrientation = poInfoOrientationDefault;
+  private _size?: string = undefined;
 
   /**
    * @optional
@@ -67,7 +70,28 @@ export class PoInfoBaseComponent {
   @Input('p-orientation') set orientation(value: PoInfoOrientation) {
     this._orientation = (<any>Object).values(PoInfoOrientation).includes(value) ? value : poInfoOrientationDefault;
   }
+
   get orientation(): PoInfoOrientation {
     return this._orientation;
+  }
+
+  /**
+   * @optional
+   *
+   * @description
+   *
+   * Define o tamanho do componente entre `small` ou `medium`.
+   *
+   * > Caso a acessibilidade AA não esteja configurada, o tamanho `medium` será mantido.
+   * Para mais detalhes, consulte a documentação do [po-theme](https://po-ui.io/documentation/po-theme).
+   *
+   * @default `medium`
+   */
+  @Input('p-size') set size(value: string) {
+    this._size = validateSizeFn(value, PoFieldSize);
+  }
+
+  get size(): string {
+    return this._size ?? getDefaultSizeFn(PoFieldSize);
   }
 }

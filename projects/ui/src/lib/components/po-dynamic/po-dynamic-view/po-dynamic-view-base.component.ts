@@ -1,8 +1,8 @@
 import { CurrencyPipe, DatePipe, DecimalPipe, TitleCasePipe } from '@angular/common';
-import { Directive, Input } from '@angular/core';
+import { Directive, HostBinding, Input } from '@angular/core';
 
 import { PoTimePipe } from '../../../pipes/po-time/po-time.pipe';
-import { convertToBoolean, isTypeof, sortFields } from '../../../utils/util';
+import { convertToBoolean, getDefaultSizeFn, isTypeof, sortFields, validateSizeFn } from '../../../utils/util';
 
 import { Observable, catchError, map, of } from 'rxjs';
 import { getGridColumnsClasses, isVisibleField } from '../po-dynamic.util';
@@ -11,6 +11,7 @@ import { PoDynamicViewService } from './services/po-dynamic-view.service';
 import { PoComboFilterService } from '../../po-field/po-combo/po-combo-filter.service';
 import { PoMultiselectFilterService } from '../../po-field/po-multiselect/po-multiselect-filter.service';
 import { PoDynamicSharedBase } from '../shared/po-dynamic-shared-base';
+import { PoFieldSize } from '../../../enums/po-field-size.enum';
 
 /**
  *
@@ -58,10 +59,32 @@ export class PoDynamicViewBaseComponent extends PoDynamicSharedBase {
   @Input('p-load') load: string | Function;
 
   service: any;
-
+  private _componentsSize?: string = undefined;
   private _fields: Array<PoDynamicViewField> = [];
   private _showAllValue: boolean = false;
   private _value = {};
+
+  /**
+   * @optional
+   *
+   * @description
+   *
+   * Define o tamanho dos componentes no template entre `small` ou `medium`.
+   *
+   * > Caso a acessibilidade AA não esteja configurada, o tamanho `medium` será mantido.
+   * Para mais detalhes, consulte a documentação do [po-theme](https://po-ui.io/documentation/po-theme).
+   *
+   * @default `medium`
+   */
+  @HostBinding('attr.p-components-size')
+  @Input('p-components-size')
+  set componentsSize(value: string) {
+    this._componentsSize = validateSizeFn(value, PoFieldSize);
+  }
+
+  get componentsSize(): string {
+    return this._componentsSize ?? getDefaultSizeFn(PoFieldSize);
+  }
 
   /**
    * @optional
