@@ -1,4 +1,4 @@
-<div class="po-info" [class.po-row]="orientation === poInfoOrientation.Horizontal && labelSize">
+<div class="po-info" [class.po-row]="orientation === poInfoOrientation.Horizontal && labelSize" [attr.p-size]="size">
   <div
     class="po-info-container-title"
     [ngClass]="labelSize && orientation === poInfoOrientation.Horizontal ? 'po-sm-' + labelSize : ''"

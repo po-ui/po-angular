@@ -15,13 +15,7 @@
             >
             </po-input>
 
-            <button
-              class="po-button po-button-primary po-sm-4 po-md-2 po-mt-4 po-mb-1"
-              type="submit"
-              [disabled]="generatorForm.invalid"
-            >
-              Adicionar
-            </button>
+            <po-button [p-disabled]="generatorForm.invalid" p-label="Adicionar" [p-type]="buttonAddType"></po-button>
           </div>
 
           <div class="po-row">

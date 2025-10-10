@@ -1,4 +1,4 @@
-import { Directive, Input, ViewChild } from '@angular/core';
+import { Directive, HostBinding, Input, ViewChild } from '@angular/core';
 
 import { poLocaleDefault } from './../../../services/po-language/po-language.constant';
 import { PoLanguageService } from './../../../services/po-language/po-language.service';
@@ -92,7 +92,9 @@ export abstract class PoPageDefaultBaseComponent {
    *
    * @default `medium`
    */
-  @Input('p-components-size') set componentsSize(value: string) {
+  @HostBinding('attr.p-components-size')
+  @Input('p-components-size')
+  set componentsSize(value: string) {
     this._componentsSize = validateSizeFn(value, PoFieldSize);
   }
 
