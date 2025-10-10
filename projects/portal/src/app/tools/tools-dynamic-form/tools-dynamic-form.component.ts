@@ -11,6 +11,7 @@ import {
   PoTableColumn,
   PoToasterOrientation
 } from '@po-ui/ng-components';
+import { PoButtonType } from 'projects/ui/src/lib';
 
 @Component({
   selector: 'app-tools-dynamic-form',
@@ -38,6 +39,8 @@ export class ToolsDynamicFormComponent {
 
   quickField = <any>{};
   editFieldId;
+
+  buttonAddType: PoButtonType = PoButtonType.Submit;
 
   readonly columns: Array<PoTableColumn> = [
     { property: 'property' },

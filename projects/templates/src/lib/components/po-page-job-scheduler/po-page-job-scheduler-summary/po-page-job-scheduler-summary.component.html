@@ -1,26 +1,62 @@
 <div class="po-md-12">
   @if (!noParameters) {
-    <po-info [p-label]="literals.process" [p-orientation]="infoOrientation" [p-value]="value.processID"> </po-info>
+    <po-info
+      [p-label]="literals.process"
+      [p-orientation]="infoOrientation"
+      [p-size]="componentsSize"
+      [p-value]="value.processID"
+    >
+    </po-info>
   }
 
-  <po-info [p-label]="literals.periodicity" [p-orientation]="infoOrientation" [p-value]="periodicityValue"> </po-info>
+  <po-info
+    [p-label]="literals.periodicity"
+    [p-orientation]="infoOrientation"
+    [p-size]="componentsSize"
+    [p-value]="periodicityValue"
+  >
+  </po-info>
 
   @if (frequencyValue !== '') {
-    <po-info [p-label]="literals.frequency" [p-orientation]="infoOrientation" [p-value]="frequencyValue"> </po-info>
+    <po-info
+      [p-label]="literals.frequency"
+      [p-orientation]="infoOrientation"
+      [p-size]="componentsSize"
+      [p-value]="frequencyValue"
+    >
+    </po-info>
   }
 
   @if (value.periodicity !== 'single') {
-    <po-info [p-label]="literals.execution" [p-orientation]="infoOrientation" [p-value]="executionValue"> </po-info>
+    <po-info
+      [p-label]="literals.execution"
+      [p-orientation]="infoOrientation"
+      [p-size]="componentsSize"
+      [p-value]="executionValue"
+    >
+    </po-info>
   }
 
-  <po-info [p-label]="literals.recurrent" [p-orientation]="infoOrientation" [p-value]="recurrentValue"> </po-info>
+  <po-info
+    [p-label]="literals.recurrent"
+    [p-orientation]="infoOrientation"
+    [p-size]="componentsSize"
+    [p-value]="recurrentValue"
+  >
+  </po-info>
 
-  <po-info [p-label]="literals.firstExecution" [p-orientation]="infoOrientation" [p-value]="firstExecutionValue">
+  <po-info
+    [p-label]="literals.firstExecution"
+    [p-orientation]="infoOrientation"
+    [p-size]="componentsSize"
+    [p-value]="firstExecutionValue"
+  >
   </po-info>
 </div>
 @if (parameters && parameters.length && !jobSchedulerSummaryTemplate) {
-  <po-widget class="po-pt-1 po-pb-1 po-md-12" [p-title]="literals.parameters">
-    <po-dynamic-view [p-fields]="parameters" [p-value]="value.executionParameter"> </po-dynamic-view>
+  <po-widget class="po-pt-1 po-pb-1 po-md-12" [p-size]="componentsSize" [p-title]="literals.parameters">
+    <po-dynamic-view [p-components-size]="componentsSize" [p-fields]="parameters" [p-value]="value.executionParameter">
+    </po-dynamic-view>
   </po-widget>
 }
 @if (jobSchedulerSummaryTemplate) {

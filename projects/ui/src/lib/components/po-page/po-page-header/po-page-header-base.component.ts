@@ -1,4 +1,4 @@
-import { Input, Directive } from '@angular/core';
+import { Directive, Input } from '@angular/core';
 
 import { PoBreadcrumb } from '../../po-breadcrumb/po-breadcrumb.interface';
 
@@ -14,6 +14,9 @@ import { PoBreadcrumb } from '../../po-breadcrumb/po-breadcrumb.interface';
 export class PoPageHeaderBaseComponent {
   /** Título da página. */
   @Input('p-title') title: string;
+
+  /** Define o tamanho dos componentes no header. */
+  @Input('p-size') size: string;
 
   /** Subtítulo da página. */
   @Input('p-subtitle') subtitle: string;
