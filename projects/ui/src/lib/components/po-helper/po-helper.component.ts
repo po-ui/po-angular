@@ -151,11 +151,20 @@ export class PoHelperComponent extends PoHelperBaseComponent implements AfterVie
           instance.popover.close();
         }
       });
-
-      if (
-        this.popover.isHidden &&
-        (this.helper()['content'] || typeof this.helper() === 'string' || this.helper()['title'])
-      ) {
+      // corrige um problema onde o popover abre quando o helper tem ação customizada via eventOnClick
+      if (typeof this.helper() !== 'string') {
+        const helperObj = this.helper();
+        if (
+          helperObj &&
+          typeof helperObj === 'object' &&
+          'eventOnClick' in helperObj &&
+          typeof helperObj.eventOnClick !== 'undefined'
+        ) {
+          this.handleEmitEvent(event);
+          return;
+        }
+      }
+      if (this.popover.isHidden && (this.helper()['content'] || this.helper()['title'])) {
         this.popover.open();
       } else {
         this.popover.close();

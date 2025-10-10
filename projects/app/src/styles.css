@@ -1,1 +1,46 @@
-/* You can add global styles to this file, and also import other style files */
+po-input .po-field-container-content:has(po-helper) {
+  padding-right: 8px;
+}
+
+/* habilita layout em linha dentro do content quando houver helper ao lado */
+.po-field-container-content:has(po-helper) {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+}
+
+/* garante que o bloco do input ocupe o restante do espaço */
+.po-field-container-content:has(po-helper) .po-field-container-input {
+  flex: 1;
+  display: flex;
+  align-items: center;
+}
+
+[data-a11y='AA']
+  .po-field-container-content:has(po-helper .po-helper-container[p-size='small'])
+  .po-field-icon-container-right {
+  right: 42px;
+}
+
+.po-field-container-content:has(po-helper) .po-field-icon-container-right {
+  right: 50px;
+}
+/* o input cresce para preencher */
+.po-field-container-content:has(po-helper) .po-input {
+  flex: 1;
+}
+
+.po-input-helper-button {
+  padding-top: 4px;
+}
+
+/* botão/ícone do helper com altura compatível ao input */
+/* .po-input-helper-button .po-helper-container {
+  display: inline-flex;
+  align-items: center;
+  height: 100%;
+} */
+/* 
+.pedro-teste {
+  width: 207px;
+} */

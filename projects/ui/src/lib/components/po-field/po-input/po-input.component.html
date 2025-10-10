@@ -1,3 +1,4 @@
+@let poHelper = setHelper(label, additionalHelpTooltip);
 <po-field-container
   #fieldContainer
   [p-disabled]="disabled"
@@ -6,7 +7,7 @@
   [p-optional]="optional"
   [p-required]="required"
   [p-show-required]="showRequired"
-  [p-helper]="setHelper(this.label, this.additionalHelpTooltip).helperSettings"
+  [p-helper]="poHelper.helperSettings"
   [p-show-helper]="displayAdditionalHelp"
   [p-text-wrap]="labelTextWrap()"
 >
@@ -46,7 +47,6 @@
       (input)="eventOnInput($event)"
       (keydown)="onKeyDown($event)"
     />
-
     <div class="po-field-icon-container-right">
       @if (clean && !disabled && !readonly) {
         <po-clean
@@ -58,6 +58,15 @@
         </po-clean>
       }
     </div>
+    @if ((!this.label && poHelperComponent()) || (!this.label && poHelper.hideAdditionalHelp)) {
+      <po-helper
+        class="po-input-helper-button"
+        [p-size]="size"
+        [p-helper]="poHelper.helperSettings"
+        [p-disabled]="disabled"
+      >
+      </po-helper>
+    }
   </div>
 
   @if (!readonly) {
@@ -67,7 +76,7 @@
       [p-disabled]="disabled"
       [p-error-pattern]="getErrorPattern()"
       [p-error-limit]="errorLimit"
-      [p-hide-additional-help-by-label]="setHelper(this.label, this.additionalHelpTooltip).hideAdditionalHelp"
+      [p-hide-additional-help-by-label]="poHelper.hideAdditionalHelp"
       [p-additional-help-tooltip]="getAdditionalHelpTooltip()"
       [p-show-additional-help]="displayAdditionalHelp"
       [p-show-additional-help-icon]="showAdditionalHelpIcon()"
