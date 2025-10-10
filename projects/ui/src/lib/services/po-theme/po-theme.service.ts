@@ -167,12 +167,8 @@ export class PoThemeService {
 
     localStorage.removeItem('po-default-size');
     document.documentElement.removeAttribute('data-default-size');
-    //   localStorage.setItem('po-default-size', PoFieldSize.Small);
-    // } else {
-    //   localStorage.setItem('po-default-size', PoFieldSize.Medium);
-    // }
 
-    // return a11yLevel === PoThemeA11yEnum.AA && enable;
+    return false;
   }
 
   /**

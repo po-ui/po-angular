@@ -7,10 +7,10 @@
   [p-show-required]="showRequired"
   [p-show-helper]="displayAdditionalHelp"
   [p-helper]="setHelper(this.label, this.additionalHelpTooltip).helperSettings"
+  [p-size]="size"
   [p-text-wrap]="labelTextWrap()"
-  [attr.p-size]="size"
 >
-  <div class="po-field-container-content">
+  <div class="po-field-container-content" [attr.p-size]="size">
     <div class="po-upload" [attr.p-size]="size">
       <input
         #inputFile
@@ -114,6 +114,7 @@
     [p-hide-additional-help-by-label]="setHelper(this.label, this.additionalHelpTooltip).hideAdditionalHelp"
     [p-show-additional-help]="displayAdditionalHelp"
     [p-show-additional-help-icon]="showAdditionalHelpIcon()"
+    [p-size]="size"
     (p-additional-help)="emitAdditionalHelp()"
   ></po-field-container-bottom>
 </po-field-container>
