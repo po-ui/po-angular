@@ -6,13 +6,16 @@ import {
   ElementRef,
   forwardRef,
   ViewChild,
-  inject
+  inject,
+  OnChanges,
+  SimpleChanges
 } from '@angular/core';
 import { NG_VALIDATORS, NG_VALUE_ACCESSOR } from '@angular/forms';
 
 import { setHelperSettings, uuid } from '../../../utils/util';
 
 import { PoTextareaBaseComponent } from './po-textarea-base.component';
+import { PoHelperComponent } from '../../po-helper';
 
 /**
  * @docsExtends PoTextareaBaseComponent
@@ -58,10 +61,11 @@ import { PoTextareaBaseComponent } from './po-textarea-base.component';
   ],
   standalone: false
 })
-export class PoTextareaComponent extends PoTextareaBaseComponent implements AfterViewInit {
+export class PoTextareaComponent extends PoTextareaBaseComponent implements AfterViewInit, OnChanges {
   private el = inject(ElementRef);
 
   @ViewChild('inp', { read: ElementRef, static: true }) inputEl: ElementRef;
+  @ViewChild('helperEl', { read: PoHelperComponent, static: false }) helperEl?: PoHelperComponent;
 
   id = `po-textarea[${uuid()}]`;
   valueBeforeChange: any;
@@ -74,7 +78,7 @@ export class PoTextareaComponent extends PoTextareaBaseComponent implements Afte
   }
 
   emitAdditionalHelp() {
-    if (this.isAdditionalHelpEventTriggered()) {
+    if (this.label && this.isAdditionalHelpEventTriggered()) {
       this.additionalHelp.emit();
     }
   }
@@ -105,6 +109,12 @@ export class PoTextareaComponent extends PoTextareaBaseComponent implements Afte
   ngAfterViewInit() {
     if (this.autoFocus) {
       this.focus();
+    }
+  }
+
+  ngOnChanges(changes: SimpleChanges): void {
+    if (changes.label) {
+      this.displayAdditionalHelp = false;
     }
   }
 
@@ -164,10 +174,6 @@ export class PoTextareaComponent extends PoTextareaBaseComponent implements Afte
     this.onTouched?.();
     this.blur.emit();
     this.controlChangeEmitter();
-
-    if (this.getAdditionalHelpTooltip() && this.displayAdditionalHelp) {
-      this.showAdditionalHelp();
-    }
   }
 
   controlChangeEmitter() {
@@ -187,19 +193,11 @@ export class PoTextareaComponent extends PoTextareaBaseComponent implements Afte
   }
 
   /**
-   * Método que exibe `p-additionalHelpTooltip` ou executa a ação definida em `p-additionalHelp`.
+   * Método que exibe `p-helper` ou executa a ação definida em `p-helper{eventOnClick}` ou em `p-additionalHelp`.
    * Para isso, será necessário configurar uma tecla de atalho utilizando o evento `p-keydown`.
    *
-   * > Exibe ou oculta o conteúdo do componente `po-helper` quando o componente estiver com foco e com label visível.
+   * > Exibe ou oculta o conteúdo do componente `po-helper` quando o componente estiver com foco.
    *
-   * ```
-   * <po-textarea
-   *  #textarea
-   *  ...
-   *  p-additional-help-tooltip="Mensagem de ajuda complementar"
-   *  (p-keydown)="onKeyDown($event, textarea)"
-   * ></po-textarea>
-   * ```
    * ```
    * //Exemplo com p-label e p-helper
    * <po-textarea
@@ -221,6 +219,23 @@ export class PoTextareaComponent extends PoTextareaBaseComponent implements Afte
    */
   showAdditionalHelp(): boolean {
     this.displayAdditionalHelp = !this.displayAdditionalHelp;
+    const helper = this.poHelperComponent();
+    const isHelpEvt = this.isAdditionalHelpEventTriggered();
+    if (!this.label && (helper || this.additionalHelpTooltip || isHelpEvt)) {
+      if (isHelpEvt) {
+        this.additionalHelp.emit();
+      }
+      if (typeof helper !== 'string' && typeof helper?.eventOnClick === 'function') {
+        helper.eventOnClick();
+        return;
+      }
+      if (this.helperEl?.helperIsVisible()) {
+        this.helperEl?.closeHelperPopover();
+        return;
+      }
+      this.helperEl?.openHelperPopover();
+      return;
+    }
     return this.displayAdditionalHelp;
   }
 

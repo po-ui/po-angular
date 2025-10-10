@@ -7,7 +7,10 @@ import {
   ElementRef,
   forwardRef,
   inject,
+  OnChanges,
   QueryList,
+  SimpleChanges,
+  ViewChild,
   ViewChildren
 } from '@angular/core';
 import { NG_VALIDATORS, NG_VALUE_ACCESSOR } from '@angular/forms';
@@ -16,6 +19,7 @@ import { PoCheckboxComponent } from '../po-checkbox/po-checkbox.component';
 import { PoCheckboxGroupOption } from './interfaces/po-checkbox-group-option.interface';
 import { PoCheckboxGroupBaseComponent } from './po-checkbox-group-base.component';
 import { setHelperSettings } from '../../../utils/util';
+import { PoHelperComponent } from '../../po-helper';
 
 /**
  * @docsExtends PoCheckboxGroupBaseComponent
@@ -55,12 +59,21 @@ import { setHelperSettings } from '../../../utils/util';
   ],
   standalone: false
 })
-export class PoCheckboxGroupComponent extends PoCheckboxGroupBaseComponent implements AfterViewChecked, AfterViewInit {
+export class PoCheckboxGroupComponent
+  extends PoCheckboxGroupBaseComponent
+  implements AfterViewChecked, AfterViewInit, OnChanges
+{
   private changeDetector = inject(ChangeDetectorRef);
 
   @ViewChildren('checkboxLabel') checkboxLabels: QueryList<PoCheckboxComponent>;
-
+  @ViewChild('helperEl', { read: PoHelperComponent, static: false }) helperEl?: PoHelperComponent;
   private el: ElementRef = inject(ElementRef);
+
+  ngOnChanges(changes: SimpleChanges): void {
+    if (changes.label) {
+      this.displayAdditionalHelp = false;
+    }
+  }
 
   ngAfterViewChecked(): void {
     this.changeDetector.detectChanges();
@@ -79,7 +92,7 @@ export class PoCheckboxGroupComponent extends PoCheckboxGroupBaseComponent imple
   }
 
   emitAdditionalHelp() {
-    if (this.isAdditionalHelpEventTriggered()) {
+    if (this.label && this.isAdditionalHelpEventTriggered()) {
       this.additionalHelp.emit();
     }
   }
@@ -140,19 +153,11 @@ export class PoCheckboxGroupComponent extends PoCheckboxGroupBaseComponent imple
   }
 
   /**
-   * Método que exibe `p-additionalHelpTooltip` ou executa a ação definida em `p-additionalHelp`.
+   * Método que exibe `p-helper` ou executa a ação definida em `p-helper{eventOnClick}` ou em `p-additionalHelp`.
    * Para isso, será necessário configurar uma tecla de atalho utilizando o evento `p-keydown`.
    *
-   * > Exibe ou oculta o conteúdo do componente `po-helper` quando o componente estiver com foco e com label visível.
+   * > Exibe ou oculta o conteúdo do componente `po-helper` quando o componente estiver com foco.
    *
-   * ```
-   * <po-checkbox-group
-   *  #checkboxGroup
-   *  ...
-   *  p-additional-help-tooltip="Mensagem de ajuda complementar"
-   *  (p-keydown)="onKeyDown($event, checkboxGroup)"
-   * ></po-checkbox-group>
-   * ```
    * ```
    * //Exemplo com p-label e p-helper
    * <po-checkbox-group
@@ -174,6 +179,23 @@ export class PoCheckboxGroupComponent extends PoCheckboxGroupBaseComponent imple
    */
   showAdditionalHelp(): boolean {
     this.displayAdditionalHelp = !this.displayAdditionalHelp;
+    const helper = this.poHelperComponent();
+    const isHelpEvt = this.isAdditionalHelpEventTriggered();
+    if (!this.label && (helper || this.additionalHelpTooltip || isHelpEvt)) {
+      if (isHelpEvt) {
+        this.additionalHelp.emit();
+      }
+      if (typeof helper !== 'string' && typeof helper?.eventOnClick === 'function') {
+        helper.eventOnClick();
+        return;
+      }
+      if (this.helperEl?.helperIsVisible()) {
+        this.helperEl?.closeHelperPopover();
+        return;
+      }
+      this.helperEl?.openHelperPopover();
+      return;
+    }
     return this.displayAdditionalHelp;
   }
 

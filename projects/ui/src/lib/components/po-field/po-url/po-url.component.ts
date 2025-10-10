@@ -6,7 +6,9 @@ import {
   ElementRef,
   forwardRef,
   OnDestroy,
-  inject
+  inject,
+  OnChanges,
+  SimpleChanges
 } from '@angular/core';
 import { AbstractControl, NG_VALIDATORS, NG_VALUE_ACCESSOR } from '@angular/forms';
 import { uuid } from '../../../utils/util';
@@ -56,7 +58,7 @@ import { PoInputGeneric } from '../po-input-generic/po-input-generic';
   ],
   standalone: false
 })
-export class PoUrlComponent extends PoInputGeneric implements AfterViewInit, OnDestroy {
+export class PoUrlComponent extends PoInputGeneric implements AfterViewInit, OnDestroy, OnChanges {
   id = `po-url[${uuid()}]`;
   icon = 'ICON_WORLD';
 
@@ -96,6 +98,12 @@ export class PoUrlComponent extends PoInputGeneric implements AfterViewInit, OnD
   ngOnDestroy() {
     if (!this.onChangePropagate) {
       this.inputEl.nativeElement.removeEventListener('keyup', this.listener);
+    }
+  }
+
+  ngOnChanges(changes: SimpleChanges): void {
+    if (changes.label) {
+      this.displayAdditionalHelp = false;
     }
   }
 

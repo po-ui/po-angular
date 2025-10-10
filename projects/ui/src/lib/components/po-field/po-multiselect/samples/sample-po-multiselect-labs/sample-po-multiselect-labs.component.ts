@@ -13,7 +13,7 @@ import {
   standalone: false
 })
 export class SamplePoMultiselectLabsComponent implements OnInit {
-  additionalHelpTooltip: string;
+  helperText: string;
   customLiterals: PoMultiselectLiterals;
   event: string;
   filterMode: string;
@@ -84,7 +84,7 @@ export class SamplePoMultiselectLabsComponent implements OnInit {
   }
 
   restore() {
-    this.additionalHelpTooltip = '';
+    this.helperText = '';
     this.customLiterals = undefined;
     this.help = '';
     this.filterMode = undefined;

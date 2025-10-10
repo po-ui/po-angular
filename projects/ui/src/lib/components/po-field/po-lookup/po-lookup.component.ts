@@ -11,7 +11,9 @@ import {
   OnInit,
   Renderer2,
   ViewChild,
-  inject
+  inject,
+  SimpleChanges,
+  OnChanges
 } from '@angular/core';
 import { NG_VALIDATORS, NG_VALUE_ACCESSOR, NgControl } from '@angular/forms';
 import { Subscription } from 'rxjs';
@@ -24,7 +26,7 @@ import { PoTableColumnSpacing } from '../../po-table';
 import { PoLookupBaseComponent } from './po-lookup-base.component';
 import { PoLookupFilterService } from './services/po-lookup-filter.service';
 import { PoLookupModalService } from './services/po-lookup-modal.service';
-import { PoHelperOptions } from '../../po-helper';
+import { PoHelperComponent } from '../../po-helper';
 
 /* istanbul ignore next */
 const providers = [
@@ -145,13 +147,17 @@ const providers = [
   providers,
   standalone: false
 })
-export class PoLookupComponent extends PoLookupBaseComponent implements AfterViewInit, OnDestroy, OnInit, DoCheck {
+export class PoLookupComponent
+  extends PoLookupBaseComponent
+  implements AfterViewInit, OnDestroy, OnInit, DoCheck, OnChanges
+{
   private renderer = inject(Renderer2);
   private cd = inject(ChangeDetectorRef);
   private el = inject(ElementRef);
 
   @ViewChild('inp', { read: ElementRef, static: false }) inputEl: ElementRef;
 
+  @ViewChild('helperEl', { read: PoHelperComponent, static: false }) helperEl?: PoHelperComponent;
   initialized = false;
   timeoutResize;
   visibleElement = false;
@@ -161,8 +167,6 @@ export class PoLookupComponent extends PoLookupBaseComponent implements AfterVie
   visibleDisclaimers = [];
 
   id = `po-lookup[${uuid()}]`;
-
-  helperSettings: PoHelperOptions;
 
   private modalSubscription: Subscription;
   private isCalculateVisibleItems: boolean = true;
@@ -182,7 +186,6 @@ export class PoLookupComponent extends PoLookupBaseComponent implements AfterVie
 
   ngAfterViewInit() {
     super.ngAfterViewInit();
-    this.helperSettings = this.setHelper(this.label, this.additionalHelpTooltip).helperSettings;
 
     if (this.autoFocus) {
       this.focus();
@@ -212,6 +215,11 @@ export class PoLookupComponent extends PoLookupBaseComponent implements AfterVie
     this.initializeListeners();
   }
 
+  ngOnChanges(changes: SimpleChanges): void {
+    if (changes.label) {
+      this.displayAdditionalHelp = false;
+    }
+  }
   /**
    * Função que atribui foco ao componente.
    *
@@ -236,7 +244,7 @@ export class PoLookupComponent extends PoLookupBaseComponent implements AfterVie
   }
 
   emitAdditionalHelp() {
-    if (this.isAdditionalHelpEventTriggered()) {
+    if (this.label && this.isAdditionalHelpEventTriggered()) {
       this.additionalHelp.emit();
     }
   }
@@ -350,10 +358,6 @@ export class PoLookupComponent extends PoLookupBaseComponent implements AfterVie
 
   onBlur(): void {
     this.onTouched?.();
-
-    if (this.getAdditionalHelpTooltip() && this.displayAdditionalHelp) {
-      this.showAdditionalHelp();
-    }
   }
 
   searchEvent() {
@@ -460,18 +464,11 @@ export class PoLookupComponent extends PoLookupBaseComponent implements AfterVie
 
   /**
    *
-   * Método que exibe `p-additionalHelpTooltip` ou executa a ação definida em `p-additionalHelp`.
+   * Método que exibe `p-helper` ou executa a ação definida em `p-helper{eventOnClick}` ou em `p-additionalHelp`.
    * Para isso, será necessário configurar uma tecla de atalho utilizando o evento `p-keydown`.
    *
-   * > Exibe ou oculta o conteúdo do componente `po-helper` quando o componente estiver com foco e com label visível.
-   * ```
-   * <po-lookup
-   *  #lookup
-   *  ...
-   *  p-additional-help-tooltip="Mensagem de ajuda complementar"
-   *  (p-keydown)="onKeyDown($event, lookup)"
-   * ></po-lookup>
-   * ```
+   * > Exibe ou oculta o conteúdo do componente `po-helper` quando o componente estiver com foco.
+   *
    * ```
    * // Exemplo com p-label e p-helper
    * <po-lookup
@@ -493,6 +490,24 @@ export class PoLookupComponent extends PoLookupBaseComponent implements AfterVie
    */
   showAdditionalHelp(): boolean {
     this.displayAdditionalHelp = !this.displayAdditionalHelp;
+    const helper = this.poHelperComponent();
+    const isHelpEvt = this.isAdditionalHelpEventTriggered();
+    if (!this.label && (helper || this.additionalHelpTooltip || isHelpEvt)) {
+      if (isHelpEvt) {
+        this.additionalHelp.emit();
+      }
+      if (typeof helper !== 'string' && typeof helper?.eventOnClick === 'function') {
+        console.trace('Chamando eventOnClick do helper');
+        helper.eventOnClick();
+        return;
+      }
+      if (this.helperEl?.helperIsVisible()) {
+        this.helperEl?.closeHelperPopover();
+        return;
+      }
+      this.helperEl?.openHelperPopover();
+      return;
+    }
     return this.displayAdditionalHelp;
   }
 

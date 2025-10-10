@@ -1,9 +1,10 @@
+@let poHelper = setHelper(label, additionalHelpTooltip);
 <po-field-container
   [p-disabled]="disabled"
   [p-id]="id"
   [p-label]="label"
-  [p-helper]="setHelper(this.label, this.additionalHelpTooltip).helperSettings"
-  [p-show-helper]="displayAdditionalHelp"
+  [p-helper]="label ? poHelper.helperSettings : undefined"
+  [p-show-helper]="label ? displayAdditionalHelp : undefined"
   [p-text-wrap]="labelTextWrap()"
 >
   <div class="po-field-container-content" [attr.name]="name">
@@ -47,6 +48,16 @@
         </po-label>
       }
     </div>
+    @if ((!this.label && poHelperComponent()) || (!this.label && poHelper.hideAdditionalHelp)) {
+      <po-helper
+        #helperEl
+        [p-size]="size"
+        [p-helper]="poHelper.helperSettings"
+        [p-disabled]="disabled"
+        [p-append-in-body]="appendBox"
+      >
+      </po-helper>
+    }
   </div>
   <po-field-container-bottom
     [p-additional-help-tooltip]="getAdditionalHelpTooltip()"
@@ -55,7 +66,7 @@
     [p-disabled]="disabled"
     [p-error-limit]="errorLimit"
     [p-error-pattern]="getErrorPattern()"
-    [p-hide-additional-help-by-label]="setHelper(this.label, this.additionalHelpTooltip).hideAdditionalHelp"
+    [p-hide-additional-help-by-label]="poHelper.hideAdditionalHelp"
     [p-show-additional-help]="displayAdditionalHelp"
     [p-show-additional-help-icon]="showAdditionalHelpIcon()"
     (p-additional-help)="emitAdditionalHelp()"

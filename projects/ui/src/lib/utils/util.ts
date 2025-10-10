@@ -755,7 +755,6 @@ export function setHelperSettings(
   const baseSize = size ?? poHelperComponent?.size ?? 'medium';
   const resolvedSize = baseSize === 'large' ? 'medium' : baseSize;
   const defaulWithoutLabel = { hideAdditionalHelp: false, helperSettings: null };
-  if (!label) return defaulWithoutLabel;
 
   if (onClick) {
     return {

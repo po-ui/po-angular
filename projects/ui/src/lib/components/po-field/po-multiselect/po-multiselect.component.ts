@@ -29,7 +29,7 @@ import { PoMultiselectOption } from './interfaces/po-multiselect-option.interfac
 import { PoMultiselectBaseComponent } from './po-multiselect-base.component';
 import { PoMultiselectFilterService } from './po-multiselect-filter.service';
 import { PoMultiselectOptionTemplateDirective } from './po-multiselect-option-template/po-multiselect-option-template.directive';
-import { PoHelperOptions } from '../../po-helper';
+import { PoHelperComponent } from '../../po-helper';
 
 const poMultiselectContainerOffset = 8;
 const poMultiselectInputPaddingRight = 52;
@@ -135,6 +135,7 @@ export class PoMultiselectComponent
   @ViewChild('iconElement', { read: ElementRef, static: true }) iconElement: ElementRef;
   @ViewChild('inputElement', { read: ElementRef, static: true }) inputElement: ElementRef;
   @ViewChild('outerContainer ', { read: ElementRef }) outerContainer: ElementRef;
+  @ViewChild('helperEl', { read: PoHelperComponent, static: false }) helperEl?: PoHelperComponent;
 
   literalsTag;
   dropdownIcon: string = 'ICON_ARROW_DOWN';
@@ -144,7 +145,6 @@ export class PoMultiselectComponent
   timeoutResize;
   visibleElement = false;
   containerWidth: number;
-  helperSettings: PoHelperOptions;
 
   private subscription: Subscription = new Subscription();
   private enterCloseTag = false;
@@ -168,7 +168,6 @@ export class PoMultiselectComponent
   }
 
   ngAfterViewInit() {
-    this.helperSettings = this.setHelper(this.label, this.additionalHelpTooltip).helperSettings;
     if (this.autoFocus) {
       this.focus();
     }
@@ -184,6 +183,9 @@ export class PoMultiselectComponent
   }
 
   ngOnChanges(changes: SimpleChanges) {
+    if (changes.label) {
+      this.displayAdditionalHelp = false;
+    }
     if (this.filterService && (changes.filterService || changes.fieldValue || changes.fieldLabel)) {
       this.setService(this.filterService);
     }
@@ -207,7 +209,7 @@ export class PoMultiselectComponent
   }
 
   emitAdditionalHelp() {
-    if (this.isAdditionalHelpEventTriggered()) {
+    if (this.label && this.isAdditionalHelpEventTriggered()) {
       this.additionalHelp.emit();
     }
   }
@@ -345,10 +347,6 @@ export class PoMultiselectComponent
   }
 
   onBlur(event: any) {
-    if (this.getAdditionalHelpTooltip() && this.displayAdditionalHelp) {
-      this.showAdditionalHelp();
-    }
-
     if (
       typeof this.inputElement.nativeElement.getAttribute('aria-label') === 'string' &&
       this.inputElement.nativeElement.getAttribute('aria-label').includes('Unselected')
@@ -519,19 +517,11 @@ export class PoMultiselectComponent
   }
 
   /**
-   * Método que exibe `p-additionalHelpTooltip` ou executa a ação definida em `p-additionalHelp`.
+   * Método que exibe `p-helper` ou executa a ação definida em `p-helper{eventOnClick}` ou em `p-additionalHelp`.
    * Para isso, será necessário configurar uma tecla de atalho utilizando o evento `p-keydown`.
    *
-   * > Exibe ou oculta o conteúdo do componente `po-helper` quando o componente estiver com foco e com label visível.
+   * > Exibe ou oculta o conteúdo do componente `po-helper` quando o componente estiver com foco.
    *
-   * ```
-   * <po-multiselect
-   *  #multiselect
-   *  ...
-   *  p-additional-help-tooltip="Mensagem de ajuda complementar"
-   *  (p-keydown)="onKeyDown($event, multiselect)"
-   * ></po-multiselect>
-   * ```
    * ```
    * // Exemplo com p-label e p-helper
    * <po-multiselect
@@ -553,6 +543,23 @@ export class PoMultiselectComponent
    */
   showAdditionalHelp(): boolean {
     this.displayAdditionalHelp = !this.displayAdditionalHelp;
+    const helper = this.poHelperComponent();
+    const isHelpEvt = this.isAdditionalHelpEventTriggered();
+    if (!this.label && (helper || this.additionalHelpTooltip || isHelpEvt)) {
+      if (isHelpEvt) {
+        this.additionalHelp.emit();
+      }
+      if (typeof helper !== 'string' && typeof helper?.eventOnClick === 'function') {
+        helper.eventOnClick();
+        return;
+      }
+      if (this.helperEl?.helperIsVisible()) {
+        this.helperEl?.closeHelperPopover();
+        return;
+      }
+      this.helperEl?.openHelperPopover();
+      return;
+    }
     return this.displayAdditionalHelp;
   }
 

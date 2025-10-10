@@ -228,8 +228,7 @@ export abstract class PoUploadBaseComponent implements ControlValueAccessor, Val
    * @optional
    *
    * @description
-   * Exibe um ícone de ajuda adicional ao `p-help`, com o texto desta propriedade no tooltip.
-   * Se o evento `p-additional-help` estiver definido, o tooltip não será exibido.
+   * Exibe um ícone de ajuda adicional, com o texto desta propriedade sendo passado para o popover do componente `po-helper`.
    * **Como boa prática, indica-se utilizar um texto com até 140 caracteres.**
    * > Requer um recuo mínimo de 8px se o componente estiver próximo à lateral da tela.
    *
@@ -242,11 +241,11 @@ export abstract class PoUploadBaseComponent implements ControlValueAccessor, Val
    *
    * @description
    *
-   * Define que o tooltip (`p-additional-help-tooltip`) será incluído no body da página e não dentro do componente. Essa
+   * Define que o popover (`p-helper`) será incluído no body da página e não dentro do componente. Essa
    * opção pode ser necessária em cenários com containers que possuem scroll ou overflow escondido, garantindo o
    * posicionamento correto do tooltip próximo ao elemento.
    *
-   * > Quando utilizado com `p-additional-help-tooltip`, leitores de tela como o NVDA podem não ler o conteúdo do tooltip.
+   * > Quando utilizado com `p-helper`, leitores de tela como o NVDA podem não ler o conteúdo do popover.
    *
    * @default `false`
    */
@@ -372,10 +371,10 @@ export abstract class PoUploadBaseComponent implements ControlValueAccessor, Val
    *
    * @description
    *
-   * Define as opções do componente de ajuda (po-helper) que será exibido ao lado do label.
+   * Define as opções do componente de ajuda (po-helper) que será exibido ao lado do label quando a propriedade `p-label` for definida, ou, ao lado do componente na ausência da propriedade `p-label`.
+   * > Para mais informações acesse: https://po-ui.io/documentation/po-helper.
    *
-   * > Caso o `p-label` não esteja definido, o componente po-helper não será exibido.
-   * Ao configurar esta propriedade, o antigo ícone de ajuda adicional (`p-additional-help-tooltip` e `p-additional-help`) será ignorado.
+   * > Ao configurar esta propriedade, o antigo ícone de ajuda adicional (`p-additional-help-tooltip` e `p-additional-help`) será ignorado.
    */
   poHelperComponent = input<PoHelperOptions | string>(undefined, { alias: 'p-helper' });
 
@@ -402,7 +401,6 @@ export abstract class PoUploadBaseComponent implements ControlValueAccessor, Val
    *
    * @description
    * Evento disparado ao clicar no ícone de ajuda adicional.
-   * Este evento ativa automaticamente a exibição do ícone de ajuda adicional ao `p-help`.
    *
    * > Essa propriedade está **depreciada** e será removida na versão `23.x.x`. Recomendamos utilizar a propriedade `p-helper` que oferece mais recursos e flexibilidade.
    */

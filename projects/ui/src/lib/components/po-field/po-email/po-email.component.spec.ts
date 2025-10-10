@@ -101,6 +101,16 @@ describe('PoEmailComponent:', () => {
 
       expect(component.inputEl.nativeElement.removeEventListener).not.toHaveBeenCalled();
     });
+
+    it(`ngOnChanges: should set displayAdditionalHelp false when label changes`, () => {
+      const changes: any = {
+        label: 'new label'
+      };
+
+      component.ngOnChanges(changes);
+
+      expect(component.displayAdditionalHelp).toBeFalse();
+    });
   });
 
   describe('Templates:', () => {

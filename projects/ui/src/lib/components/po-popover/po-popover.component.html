@@ -1,5 +1,10 @@
 @if (appendBox) {
-  <ng-template cdkConnectedOverlay [cdkConnectedOverlayOrigin]="target" [cdkConnectedOverlayOpen]="true">
+  <ng-template
+    cdkConnectedOverlay
+    [cdkConnectedOverlayOrigin]="target"
+    [cdkConnectedOverlayOpen]="true"
+    [cdkConnectedOverlayDisableClose]="true"
+  >
     <ng-container *ngTemplateOutlet="sharedPopoverContent"></ng-container>
   </ng-template>
 } @else {
@@ -7,7 +12,7 @@
 }
 
 <ng-template #sharedPopoverContent>
-  <div [hidden]="isHidden" class="po-popover" #popoverElement>
+  <div #popoverElement [hidden]="isHidden" class="po-popover" [ngClass]="customClasses()">
     @if (!hideArrow) {
       <div class="po-popover-arrow po-arrow-{{ arrowDirection }}"></div>
     }

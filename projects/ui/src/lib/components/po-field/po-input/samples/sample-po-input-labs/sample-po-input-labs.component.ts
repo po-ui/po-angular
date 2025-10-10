@@ -8,7 +8,7 @@ import { PoCheckboxGroupOption, PoRadioGroupOption, PoSelectOption } from '@po-u
   standalone: false
 })
 export class SamplePoInputLabsComponent implements OnInit {
-  additionalHelpTooltip: string;
+  helperText: string;
   input: string;
   errorPattern: string;
   event: string;
@@ -59,7 +59,7 @@ export class SamplePoInputLabsComponent implements OnInit {
   }
 
   restore() {
-    this.additionalHelpTooltip = '';
+    this.helperText = '';
     this.input = undefined;
     this.size = 'medium';
   }

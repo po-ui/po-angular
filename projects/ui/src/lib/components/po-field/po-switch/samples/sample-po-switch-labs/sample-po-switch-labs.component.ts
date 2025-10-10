@@ -8,7 +8,7 @@ import { PoCheckboxGroupOption, PoRadioGroupOption, PoSwitchLabelPosition } from
   standalone: false
 })
 export class SamplePoSwitchLabsComponent implements OnInit {
-  additionalHelpTooltip: string;
+  helperText: string;
   event: string;
   fieldErrorMessage: string;
   help: string;
@@ -48,7 +48,7 @@ export class SamplePoSwitchLabsComponent implements OnInit {
   }
 
   restore() {
-    this.additionalHelpTooltip = '';
+    this.helperText = '';
     this.event = '';
     this.help = undefined;
     this.label = undefined;

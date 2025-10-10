@@ -5,7 +5,9 @@ import {
   ElementRef,
   forwardRef,
   Input,
-  inject
+  inject,
+  OnChanges,
+  SimpleChanges
 } from '@angular/core';
 import { AbstractControl, NG_VALIDATORS, NG_VALUE_ACCESSOR } from '@angular/forms';
 
@@ -53,7 +55,7 @@ import { PoInputGeneric } from '../po-input-generic/po-input-generic';
   ],
   standalone: false
 })
-export class PoPasswordComponent extends PoInputGeneric {
+export class PoPasswordComponent extends PoInputGeneric implements OnChanges {
   id = `po-password[${uuid()}]`;
   type = 'password';
   visiblePassword = false;
@@ -100,6 +102,12 @@ export class PoPasswordComponent extends PoInputGeneric {
     const cd = inject(ChangeDetectorRef);
 
     super(el, cd);
+  }
+
+  ngOnChanges(changes: SimpleChanges): void {
+    if (changes.label) {
+      this.displayAdditionalHelp = false;
+    }
   }
 
   extraValidation(c: AbstractControl): { [key: string]: any } {

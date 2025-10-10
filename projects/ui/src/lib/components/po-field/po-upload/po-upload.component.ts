@@ -26,6 +26,7 @@ import { PoUploadDragDropComponent } from './po-upload-drag-drop/po-upload-drag-
 import { PoUploadFile } from './po-upload-file';
 import { PoUploadStatus } from './po-upload-status.enum';
 import { PoUploadService } from './po-upload.service';
+import { PoHelperComponent } from '../../po-helper';
 
 /**
  * @docsExtends PoUploadBaseComponent
@@ -91,6 +92,7 @@ export class PoUploadComponent extends PoUploadBaseComponent implements AfterVie
   @ViewChild(PoUploadDragDropComponent) private poUploadDragDropComponent: PoUploadDragDropComponent;
   @ViewChild('uploadButton') uploadButton: PoButtonComponent;
   @ViewChild('modal') modalComponent: PoModalComponent;
+  @ViewChild('helperEl', { read: PoHelperComponent, static: false }) helperEl?: PoHelperComponent;
 
   id = `po-upload[${uuid()}]`;
 
@@ -206,6 +208,9 @@ export class PoUploadComponent extends PoUploadBaseComponent implements AfterVie
   }
 
   ngOnChanges(changes: SimpleChanges): void {
+    if (changes['label']) {
+      this.displayAdditionalHelp = false;
+    }
     if (changes['customModalActions']) {
       if (this.customModalActions?.length > 0) {
         this.modalPrimaryAction = this.customModalActions[0];
@@ -234,7 +239,7 @@ export class PoUploadComponent extends PoUploadBaseComponent implements AfterVie
   }
 
   emitAdditionalHelp() {
-    if (this.isAdditionalHelpEventTriggered()) {
+    if (this.label && this.isAdditionalHelpEventTriggered()) {
       this.additionalHelp.emit();
     }
   }
@@ -284,12 +289,6 @@ export class PoUploadComponent extends PoUploadBaseComponent implements AfterVie
 
   isAllowCancelEvent(status: PoUploadStatus) {
     return status !== PoUploadStatus.Uploaded;
-  }
-
-  onBlur(): void {
-    if (!this.isUploadButtonFocused() && this.getAdditionalHelpTooltip() && this.displayAdditionalHelp) {
-      this.showAdditionalHelp();
-    }
   }
 
   onFileChange(event): void {
@@ -400,18 +399,11 @@ export class PoUploadComponent extends PoUploadBaseComponent implements AfterVie
   }
 
   /**
-   * Método que exibe `p-additionalHelpTooltip` ou executa a ação definida em `p-additionalHelp`.
+   * Método que exibe `p-helper` ou executa a ação definida em `p-helper{eventOnClick}` ou em `p-additionalHelp`.
    * Para isso, será necessário configurar uma tecla de atalho utilizando o evento `p-keydown`.
    *
-   * > Exibe ou oculta o conteúdo do componente `po-helper` quando o componente estiver com foco e com label visível.
-   * ```
-   * <po-upload
-   *  #upload
-   *  ...
-   *  p-additional-help-tooltip="Mensagem de ajuda complementar"
-   *  (p-keydown)="onKeyDown($event, upload)"
-   * ></po-upload>
-   * ```
+   * > Exibe ou oculta o conteúdo do componente `po-helper` quando o componente estiver com foco.
+   *
    * ```
    * //Exemplo com p-label e p-helper
    * <po-upload
@@ -433,6 +425,23 @@ export class PoUploadComponent extends PoUploadBaseComponent implements AfterVie
    */
   showAdditionalHelp(): boolean {
     this.displayAdditionalHelp = !this.displayAdditionalHelp;
+    const helper = this.poHelperComponent();
+    const isHelpEvt = this.isAdditionalHelpEventTriggered();
+    if (!this.label && (helper || this.additionalHelpTooltip || isHelpEvt)) {
+      if (isHelpEvt) {
+        this.additionalHelp.emit();
+      }
+      if (typeof helper !== 'string' && typeof helper?.eventOnClick === 'function') {
+        helper.eventOnClick();
+        return;
+      }
+      if (this.helperEl?.helperIsVisible()) {
+        this.helperEl?.closeHelperPopover();
+        return;
+      }
+      this.helperEl?.openHelperPopover();
+      return;
+    }
     return this.displayAdditionalHelp;
   }
 

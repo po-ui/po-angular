@@ -1,18 +1,10 @@
-@if (help || showAdditionalHelpIcon()) {
+@let poHelper = setHelper(label, additionalHelpTooltip);
+@if (help) {
   <po-field-container [p-disabled]="disabled">
     <div class="po-field-container-content">
       <ng-container *ngTemplateOutlet="checkboxContent"></ng-container>
     </div>
-    <po-field-container-bottom
-      [p-additional-help-tooltip]="getAdditionalHelpTooltip()"
-      [p-append-in-body]="appendBox"
-      [p-disabled]="disabled"
-      [p-help]="help"
-      [p-hide-additional-help-by-label]="setHelper(this.label, this.additionalHelpTooltip).hideAdditionalHelp"
-      [p-show-additional-help]="displayAdditionalHelp"
-      [p-show-additional-help-icon]="showAdditionalHelpIcon()"
-      (p-additional-help)="emitAdditionalHelp()"
-    ></po-field-container-bottom>
+    <po-field-container-bottom [p-help]="help"></po-field-container-bottom>
   </po-field-container>
 } @else {
   <ng-container *ngTemplateOutlet="checkboxContent"></ng-container>
@@ -65,16 +57,17 @@
           (focus)="handleLabelTooltip()"
         >
         </po-label>
-        @if (helperSettings) {
-          <po-helper
-            #helperEl
-            class="po-checkbox-helper"
-            [p-helper]="helperSettings"
-            [p-disabled]="disabled"
-            [p-size]="size === 'large' ? 'medium' : size"
-          >
-          </po-helper>
-        }
+      }
+      @if (poHelperComponent() || poHelper.hideAdditionalHelp) {
+        <po-helper
+          #helperEl
+          class="po-checkbox-helper"
+          [p-helper]="poHelper.helperSettings"
+          [p-disabled]="disabled"
+          [p-append-in-body]="appendBox"
+          [p-size]="size === 'large' ? 'medium' : size"
+        >
+        </po-helper>
       }
     </div>
   </div>
