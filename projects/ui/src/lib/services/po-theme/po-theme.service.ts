@@ -3,8 +3,7 @@ import { Inject, Injectable, Optional, Renderer2, RendererFactory2 } from '@angu
 import { AnimaliaIconDictionary, ICONS_DICTIONARY } from '../../components/po-icon/index';
 
 import { PoDensityMode } from '../../enums/po-density-mode.enum';
-import { PoFieldSize } from '../../enums/po-field-size.enum';
-import { getA11yDefaultSize, getDensityMode, getA11yLevel } from '../../utils/util';
+import { getA11yDefaultSize, getA11yLevel, getDensityMode } from '../../utils/util';
 import { PoThemeA11yEnum } from './enum/po-theme-a11y.enum';
 import { PoThemeTypeEnum } from './enum/po-theme-type.enum';
 import { poThemeDefaultAA } from './helpers/accessibilities/po-theme-default-aa.constant';
@@ -176,12 +175,8 @@ export class PoThemeService {
 
     localStorage.removeItem('po-default-size');
     document.documentElement.removeAttribute('data-default-size');
-    //   localStorage.setItem('po-default-size', PoFieldSize.Small);
-    // } else {
-    //   localStorage.setItem('po-default-size', PoFieldSize.Medium);
-    // }
 
-    // return a11yLevel === PoThemeA11yEnum.AA && enable;
+    return false;
   }
 
   /**
@@ -404,16 +399,13 @@ export class PoThemeService {
     const _theme = this.getThemeActive();
     const activeA11y = this.getActiveA11yFromTheme(_theme.active);
     this.setTheme(_theme, this.getActiveTypeFromTheme(_theme.active), activeA11y);
+
     const defaultSize = this.getA11yDefaultSize();
     localStorage.setItem('po-default-size', defaultSize);
     this.setDataDefaultSizeHTML(defaultSize, activeA11y);
-    // this.setTheme(_theme, this.getActiveTypeFromTheme(_theme.active), this.getActiveA11yFromTheme(_theme.active));
 
-    // const defaultSize = this.getA11yDefaultSize();
-    // localStorage.setItem('po-default-size', defaultSize);
-
-    // const densityMode = localStorage.getItem('po-density-mode');
-    // localStorage.setItem('po-density-mode', densityMode);
+    const densityMode = localStorage.getItem('po-density-mode');
+    localStorage.setItem('po-density-mode', densityMode);
 
     return _theme;
   }

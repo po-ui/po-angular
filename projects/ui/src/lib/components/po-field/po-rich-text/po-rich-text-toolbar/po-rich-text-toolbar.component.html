@@ -1,4 +1,4 @@
-<div class="po-rich-text-toolbar" [class.po-rich-text-toolbar-aa]="size === 'small'" #toolbarElement>
+<div class="po-rich-text-toolbar" [attr.p-size]="size" #toolbarElement>
   @if (!isActionHidden(formatToolbarAction)) {
     <div class="po-rich-text-toolbar-button-align" data-rich-text-toolbar="format">
       <po-button-group p-toggle="multiple" [p-buttons]="formatButtons" [p-size]="size"> </po-button-group>

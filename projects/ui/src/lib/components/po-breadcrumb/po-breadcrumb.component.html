@@ -1,4 +1,4 @@
-<nav class="po-breadcrumb" #breadcrumb>
+<nav class="po-breadcrumb" #breadcrumb [attr.p-size]="size">
   <div class="po-breadcrumb-items">
     @if (showDropdownToggle && itemsView.length >= 4) {
       <ul #dropdownIcon class="po-breadcrumb-item po-clickable po-breadcrumb-tooltip">
